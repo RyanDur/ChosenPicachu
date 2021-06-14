@@ -1,0 +1,43 @@
+.fancy-table {
+  width: 50%;
+  height: 25%;
+  border-collapse: collapse;
+}
+
+.fancy-table .header .row {
+  border-bottom: 0.3rem solid black;
+}
+
+.fancy-table .body .row {
+  border-bottom: 0.1rem solid black;
+}
+
+.fancy-table .body .row:last-child {
+  border-bottom: none;
+}
+
+.fancy-table .body .row:nth-child(even) {
+  background: lightgray;
+}
+
+.fancy-table .body .row:hover:nth-child(even),
+.fancy-table .body .row:hover {
+  background: aquamarine;
+}
+
+.fancy-table .cell {
+  border-right: 0.1rem solid black;
+  padding: 1rem;
+}
+
+.fancy-table .cell {
+  border-top: none;
+}
+
+.fancy-table .cell:last-child {
+  border-right: none;
+}
+
+.fancy-table .column-name {
+  text-align: start;
+}
