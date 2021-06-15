@@ -1,4 +1,4 @@
-import {act, render, screen} from '@testing-library/react';
+import {act, render, screen, fireEvent} from '@testing-library/react';
 import {Table} from '../index';
 import faker from 'faker';
 import {
@@ -106,5 +106,37 @@ describe('A Table', () => {
     test('should be able to add an id', () => {
         const table = screen.getByTestId('table');
         expect(table.id).toBe(tableId);
+    });
+
+    describe('with drag sortable rows', () => {
+        let trs;
+        let firstRow: HTMLElement;
+
+        beforeEach(() => {
+            trs = screen.getAllByTestId('tr');
+            firstRow = trs[1];
+        });
+
+        test('on drag', () => {
+            fireEvent.drag(firstRow);
+            expect(firstRow.classList.contains('dragging')).toBe(true);
+        });
+
+        test('onDrop', () => {
+            const oldFirstRowValues = screen.getAllByTestId(/cell-[\d]-0/)
+                .map(element => element.innerHTML.replaceAll(htmlTag, '')).join(' ');
+
+            fireEvent.drop(firstRow, {
+                dataTransfer: {getData: () => '1'}
+            });
+
+            const newSecondRowValues = screen.getAllByTestId(/cell-[\d]-1/)
+                .map(element => element.innerHTML.replaceAll(htmlTag, '')).join(' ');
+            const newFirstRowValues = screen.getAllByTestId(/cell-[\d]-0/)
+                .map(element => element.innerHTML.replaceAll(htmlTag, '')).join(' ');
+
+            expect(oldFirstRowValues).toEqual(newSecondRowValues);
+            expect(oldFirstRowValues).not.toEqual(newFirstRowValues);
+        });
     });
 });

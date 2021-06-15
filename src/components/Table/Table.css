@@ -27,14 +27,17 @@
   background: var(--mint);
 }
 
-.fancy-table .cell {
-  border-right: 0.1rem solid var(--charcoal);
-  padding: 1rem;
+.fancy-table .body .row.dragging,
+.fancy-table .body .row.dragging .cell {
+  border: none;
+  opacity: 0;
+  background: none;
 }
 
 .fancy-table .cell {
   border-right: 0.1rem solid var(--charcoal);
   border-top: none;
+  padding: 1rem;
 }
 
 .fancy-table .cell:last-child {
