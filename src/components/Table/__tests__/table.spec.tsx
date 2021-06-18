@@ -1,101 +1,29 @@
 import {act, render, screen} from '@testing-library/react';
 import {Table} from '../index';
-import {Column, Row} from '../types';
 import faker from 'faker';
+import {
+    column1Display,
+    column2Name,
+    column3Display,
+    columns,
+    row0Col0Display,
+    row0Col1Display,
+    row0Col2Display,
+    row1Col0Value,
+    row1Col1Display,
+    row1Col2Display,
+    rows
+} from '../../../__tests__/dummyData';
 
 describe('A Table', () => {
-    const tableId = faker.lorem.word();
-    const column1Name = faker.lorem.word();
-    const column2Name = faker.lorem.word();
-    const column3Name = faker.lorem.word();
-
-    const column1Display = faker.lorem.word();
-    const column3Display = faker.lorem.word();
-
-    const row0Col0Value = faker.lorem.word();
-    const row0Col1Value = faker.lorem.word();
-    const row0Col2Value = faker.lorem.word();
-
-    const row1Col0Value = faker.lorem.word();
-    const row1Col1Value = faker.lorem.word();
-    const row1Col2Value = faker.lorem.word();
-
-    const row2Col0Value = faker.lorem.word();
-    const row2Col1Value = faker.lorem.word();
-    const row2Col2Value = faker.lorem.word();
-
-    const row0Col0Display = faker.lorem.word();
-    const row0Col1Display = faker.lorem.word();
-
-    const row0Col2Display = faker.lorem.word();
-
-    const row1Col1Display = faker.lorem.word();
-    const row1Col2Display = faker.lorem.word();
-
-    const row2Col0Display = faker.lorem.word();
-    const row2Col1Display = faker.lorem.word();
-    const row2Col2Display = faker.lorem.word();
-
-    const columns: Column[] = [
-        {name: column1Name, display: <h2 data-testid="column1">{column1Display}</h2>},
-        {name: column2Name},
-        {name: column3Name, display: column3Display},
-    ];
-
-    const rows: Row<string>[] = [{
-        [column1Name]: {
-            value: row0Col0Value,
-            display: <h3>{row0Col0Display}</h3>
-        },
-        [column2Name]: {
-            value: row0Col1Value,
-            display: <h3>{row0Col1Display}</h3>
-        },
-        [column3Name]: {
-            value: row0Col2Value,
-            display: row0Col2Display
-        }
-    }, {
-        [column1Name]: {
-            value: row1Col0Value,
-        },
-        [column2Name]: {
-            value: row1Col1Value,
-            display: <h3>{row1Col1Display}</h3>
-        },
-        [column3Name]: {
-            value: row1Col2Value,
-            display: <h3>{row1Col2Display}</h3>
-        }
-    }, {
-        [column1Name]: {
-            value: row2Col0Value,
-            display: row2Col0Display
-        },
-        [column2Name]: {
-            value: row2Col1Value,
-            display: <h3>{row2Col1Display}</h3>
-        },
-        [column3Name]: {
-            value: row2Col2Value,
-            display: <h3>{row2Col2Display}</h3>
-        }
-    }];
-
     const htmlTag = /<.*?>/g;
-
+    const tableId = faker.lorem.word();
     const tableClassName = faker.lorem.word();
-
     const theadClassName = faker.lorem.word();
-
     const trClassName = faker.lorem.word();
-
     const thClassName = faker.lorem.word();
-
     const headerClassName = faker.lorem.word();
-
     const rowClassName = faker.lorem.word();
-
     const tdClassName = faker.lorem.word();
 
     beforeEach(() => {

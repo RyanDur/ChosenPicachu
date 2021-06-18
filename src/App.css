@@ -1,20 +1,44 @@
-html {
-  font-size: 62.5%;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-.App {
+#root {
+  min-height: 100vh;
   width: 100%;
-  height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 60% 1fr;
+  grid-template-rows: 8rem 4rem 1fr;
+  grid-template-areas:
+    "header header header"
+    ". nav ."
+    ". main .";
+}
+
+#root #app-header {
+  grid-area: header;
+  height: 100%;
+  background: cadetblue;
+}
+
+#root .navigation {
+  grid-area: nav;
+}
+
+#root main {
+  grid-area: main;
+}
+
+#app-header.grid {
+  display: grid;
+  grid-template-columns: 1fr 30% 30% 1fr;
+  grid-template-areas:
+    ". title . ."
+}
+
+#app-header .title {
+  grid-area: title;
+}
+#app-header .navigation {
+  grid-area: navigation;
 }
 
 .container {
-  height: 100%;
   width: 100%;
 }
 
