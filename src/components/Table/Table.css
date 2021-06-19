@@ -5,11 +5,13 @@
 }
 
 .fancy-table .header .row {
-  border-bottom: 0.3rem solid black;
+  border-bottom: 0.3rem solid var(--charcoal);
 }
 
 .fancy-table .body .row {
-  border-bottom: 0.1rem solid black;
+  border-bottom: 0.1rem solid var(--charcoal);
+  position: relative;
+  right: 0;
 }
 
 .fancy-table .body .row:last-child {
@@ -17,20 +19,21 @@
 }
 
 .fancy-table .body .row:nth-child(even) {
-  background: lightgray;
+  background: var(--faded-leather);
 }
 
 .fancy-table .body .row:hover:nth-child(even),
 .fancy-table .body .row:hover {
-  background: aquamarine;
+  background: var(--mint);
 }
 
 .fancy-table .cell {
-  border-right: 0.1rem solid black;
+  border-right: 0.1rem solid var(--charcoal);
   padding: 1rem;
 }
 
 .fancy-table .cell {
+  border-right: 0.1rem solid var(--charcoal);
   border-top: none;
 }
 

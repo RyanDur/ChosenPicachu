@@ -10,8 +10,23 @@ body, p, h1, h2, h3, h4, h5, h6 {
   margin: 0;
 }
 
+a {
+  text-underline: none;
+  text-decoration: none;
+}
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
+}
+
+:root {
+  --charcoal: rgb(55, 55, 55);
+  --pale-gold: rgb(192, 178, 131);
+  --silk: rgb(220, 208, 192);
+  --paper: rgb(244, 244, 244);
+  --shadow: rgba(0, 0, 0, 0.16);
+  --mint: rgb(180, 219, 192);
+  --faded-leather: rgba(171, 152, 122, 0.2);
 }

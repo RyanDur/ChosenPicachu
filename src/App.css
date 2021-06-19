@@ -1,8 +1,7 @@
 #root {
   min-height: 100vh;
-  width: 100%;
+  background: var(--charcoal);
   display: grid;
-  background: rgba(250, 235, 215, 0.5);
   grid-template-columns: 1fr 60% 1fr;
   grid-template-rows: 8rem 4rem 1fr;
   grid-template-areas:
@@ -13,8 +12,19 @@
 
 #app-header {
   grid-area: header;
-  height: 100%;
-  background: rgba(95, 158, 160, 1);
+}
+
+#app-navigation {
+  grid-area: nav;
+}
+
+main {
+  grid-area: main;
+}
+
+#app-header {
+  background: var(--charcoal);
+  color: #d7cec7;
   display: grid;
   align-items: center;
   grid-template-columns: 1fr 60% 1fr;
@@ -22,33 +32,39 @@
     ". middle ."
 }
 
+#app-header .title {
+  grid-area: middle;
+}
+
 #app-navigation {
-  grid-area: nav;
-  background: rgba(127, 255, 212, 1);
-  height: 100%;
+  background: var(--silk);
   display: grid;
   align-items: center;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
   grid-template-columns: 1fr repeat(12, 5%) 1fr;
   grid-template-areas:
     ". home about . . . . . . ."
 }
 
-#app-navigation #home-path {
+#app-navigation #navigate-home {
   grid-area: home;
 }
 
-#app-navigation #about-path {
+#app-navigation #navigate-about {
   grid-area: about;
 }
 
-main {
-  grid-area: main;
-  background: white;
-  padding: 3rem;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+#app-navigation .path {
+  color: var(--charcoal);
+  font-weight: bold;
 }
 
-#app-header .title {
-  grid-area: middle;
+main {
+  background: var(--paper);
+  padding: 3rem;
+}
+
+.overhang {
+  box-shadow:
+    0 0.3rem 0.6rem var(--shadow),
+    0 0.3rem 0.6rem var(--pale-gold);
 }
