@@ -1,5 +1,8 @@
 import * as faker from 'faker';
 
 export const About = () => {
-    return <div>{faker.lorem.sentence()}</div>;
+    return <section className="gutter">
+        <p>{faker.lorem.paragraphs(2)}</p>
+        <p>{faker.lorem.paragraphs(2)}</p>
+    </section>;
 };

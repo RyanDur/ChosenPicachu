@@ -2,38 +2,58 @@
   min-height: 100vh;
   width: 100%;
   display: grid;
+  background: rgba(250, 235, 215, 0.5);
   grid-template-columns: 1fr 60% 1fr;
   grid-template-rows: 8rem 4rem 1fr;
   grid-template-areas:
     "header header header"
-    ". nav ."
+    "nav nav nav"
     ". main .";
+}
+
+.gutter {
+  padding: 3rem;
 }
 
 #root #app-header {
   grid-area: header;
   height: 100%;
-  background: cadetblue;
+  background: rgba(95, 158, 160, 1);
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1fr 60% 1fr;
+  grid-template-areas:
+    ". middle ."
 }
 
 #root .navigation {
   grid-area: nav;
+  background: rgba(127, 255, 212, 1);
+  height: 100%;
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1fr repeat(8, 7.5%) 1fr;
+  grid-template-areas:
+    ". home about . . . . . . ."
+}
+
+#root .navigation #home-path {
+  grid-area: home;
+}
+
+#root .navigation #about-path {
+  grid-area: about;
 }
 
 #root main {
   grid-area: main;
-}
-
-#app-header.grid {
-  display: grid;
-  grid-template-columns: 1fr 30% 30% 1fr;
-  grid-template-areas:
-    ". title . ."
+  background: white;
 }
 
 #app-header .title {
-  grid-area: title;
+  grid-area: middle;
 }
+
 #app-header .navigation {
   grid-area: navigation;
 }

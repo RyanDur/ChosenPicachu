@@ -18,19 +18,19 @@ export const App = () => {
     }];
 
     return <>
-        <header id="app-header" className="grid">
+        <header id="app-header" className="main-grid">
             <h1 className="title">{pageTitles.find(({page}) => page?.isExact)?.title}</h1>
         </header>
-        <nav className="navigation">
-            <Link to={Paths.home}>Home</Link>
-            <Link to={Paths.about}>About</Link>
+        <nav className="navigation main-grid">
+            <Link id="home-path" to={Paths.home}>Home</Link>
+            <Link id="about-path" to={Paths.about}>About</Link>
         </nav>
-        <main className="component center">
+        <main className="component">
             <Switch>
-                <Route path={Paths.home}>
+                <Route path={Paths.home} exact>
                     <Home/>
                 </Route>
-                <Route path={Paths.about}>
+                <Route path={Paths.about} exact>
                     <About/>
                 </Route>
             </Switch>
