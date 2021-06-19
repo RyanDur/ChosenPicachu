@@ -24,7 +24,6 @@ main {
 
 #app-header {
   background: var(--charcoal);
-  color: #d7cec7;
   display: grid;
   align-items: center;
   grid-template-columns: 1fr 60% 1fr;
@@ -34,6 +33,7 @@ main {
 
 #app-header .title {
   grid-area: middle;
+  color: var(--paper);
 }
 
 #app-navigation {
@@ -56,6 +56,7 @@ main {
 #app-navigation .path {
   color: var(--charcoal);
   font-weight: bold;
+  font-size: 1.8rem;
 }
 
 main {
@@ -66,5 +67,5 @@ main {
 .overhang {
   box-shadow:
     0 0.3rem 0.6rem var(--shadow),
-    0 0.3rem 0.6rem var(--pale-gold);
+    0 0.3rem 0.6rem var(--void);
 }
