@@ -68,5 +68,5 @@
   opacity: 0;
   padding-bottom: 0;
   transform: translate(0, 50%);
-  transition:all 500ms ease;
+  transition:all 250ms ease;
 }
