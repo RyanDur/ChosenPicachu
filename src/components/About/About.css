@@ -1,0 +1,72 @@
+
+.about {
+  background: var(--charcoal);
+}
+
+.fold {
+  overflow: hidden;
+  margin-bottom: 1rem;
+  border-bottom: 0.1rem solid var(--charcoal);
+  width: 100%;
+  vertical-align: middle;
+  border-radius: 2rem;
+}
+
+.fold:last-child {
+  overflow: hidden;
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+.fold .info-label {
+  display: flex;
+  height: 5rem;
+  padding: 0 var(--gutter);
+  justify-content: space-between;
+  align-items: center;
+  color: var(--paper);
+  background: var(--charcoal);
+}
+.fold .info-label:after {
+  content: "";
+  position: relative;
+  width: 0.8rem;
+  height: 0.8rem;
+  border-right: 0.2rem solid var(--paper);
+  border-top: 0.2rem solid var(--paper);
+  transform: rotate(45deg);
+  margin-right: 0.5em;
+  padding: 0.25rem;
+  display: flex;
+  justify-self: center;
+  align-self: center;
+}
+
+.fold .info {
+  position: relative;
+  overflow: hidden;
+  max-height: 80rem;
+  opacity: 1;
+  transform: translate(0, 0);
+  margin-top: 14px;
+  z-index: 2;
+  transition:all 500ms ease;
+  padding: 0 var(--gutter) var(--gutter);
+}
+
+.fold .info-toggle:checked ~ .info-label:after {
+  transform: rotate(135deg);
+}
+
+.fold .info-toggle ~ .info-label:after {
+  transition:all 500ms ease;
+}
+
+.fold .info-toggle:not(:checked) ~ .info {
+  margin-top: 0;
+  max-height: 0;
+  opacity: 0;
+  padding-bottom: 0;
+  transform: translate(0, 50%);
+  transition:all 500ms ease;
+}

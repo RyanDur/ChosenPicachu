@@ -4,10 +4,18 @@ html {
 
 body {
   font-size: 1.6rem;
+  color: var(--void);
 }
 
-body, p, h1, h2, h3, h4, h5, h6 {
+body, p, ul, li, h1, h2, h3, h4, h5, h6 {
   margin: 0;
+}
+li {
+  vertical-align: bottom;
+}
+
+ul {
+  padding: 0;
 }
 
 a {
@@ -20,7 +28,23 @@ a {
   box-sizing: border-box;
 }
 
+.card {
+  box-shadow: 0 10px 20px var(--shadow), 0 6px 6px var(--dark-shadow);
+  border-radius: 2rem;
+}
+
+.off-screen {
+  position: absolute;
+  opacity: 0;
+  z-index: -1;
+}
+
+.gutter {
+  padding: var(--gutter);
+}
+
 :root {
+  /* colors */
   --paper: rgb(244, 244, 244);
   --silk: rgb(220, 208, 192);
   --mint: rgb(180, 219, 192);
@@ -29,5 +53,10 @@ a {
   --void: rgb(14, 11, 22);
 
   --faded-leather: rgba(171, 152, 122, 0.2);
-  --shadow: rgba(0, 0, 0, 0.16);
+  --light-shadow: rgba(0, 0, 0, 0.16);
+  --shadow: rgba(0, 0, 0, 0.19);
+  --dark-shadow: rgba(0, 0, 0, 0.23);
+
+  /* spacing */
+  --gutter: 3rem;
 }

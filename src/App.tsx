@@ -25,7 +25,7 @@ export const App = () => {
             <Link id="navigate-home" className="path" to={Paths.home}>Home</Link>
             <Link id="navigate-about" className="path" to={Paths.about}>About</Link>
         </nav>
-        <main className="overhang">
+        <main className="overhang gutter">
             <Switch>
                 <Route path={Paths.home} exact>
                     <Home/>

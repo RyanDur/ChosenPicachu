@@ -2,7 +2,7 @@
   min-height: 100vh;
   background: var(--charcoal);
   display: grid;
-  grid-template-columns: 1fr 60% 1fr;
+  grid-template-columns: 1fr 70% 1fr;
   grid-template-rows: 8rem 4rem 1fr;
   grid-template-areas:
     "header header header"
@@ -26,7 +26,7 @@ main {
   background: var(--charcoal);
   display: grid;
   align-items: center;
-  grid-template-columns: 1fr 60% 1fr;
+  grid-template-columns: 1fr 70% 1fr;
   grid-template-areas:
     ". middle ."
 }
@@ -40,7 +40,7 @@ main {
   background: var(--silk);
   display: grid;
   align-items: center;
-  grid-template-columns: 1fr repeat(12, 5%) 1fr;
+  grid-template-columns: 1fr repeat(14, 5%) 1fr;
   grid-template-areas:
     ". home about . . . . . . ."
 }
@@ -61,11 +61,8 @@ main {
 
 main {
   background: var(--paper);
-  padding: 3rem;
 }
 
 .overhang {
-  box-shadow:
-    0 0.3rem 0.6rem var(--shadow),
-    0 0.3rem 0.6rem var(--void);
+  box-shadow: 0 0.3rem 0.6rem var(--light-shadow), 0 0.3rem 0.6rem var(--dark-shadow);
 }
