@@ -11,7 +11,7 @@
     ". main .";
 }
 
-#root #app-header {
+#app-header {
   grid-area: header;
   height: 100%;
   background: rgba(95, 158, 160, 1);
@@ -22,7 +22,7 @@
     ". middle ."
 }
 
-#root .navigation {
+#app-navigation {
   grid-area: nav;
   background: rgba(127, 255, 212, 1);
   height: 100%;
@@ -34,15 +34,15 @@
     ". home about . . . . . . ."
 }
 
-#root .navigation #home-path {
+#app-navigation #home-path {
   grid-area: home;
 }
 
-#root .navigation #about-path {
+#app-navigation #about-path {
   grid-area: about;
 }
 
-#root main {
+main {
   grid-area: main;
   background: white;
   padding: 3rem;
@@ -51,18 +51,4 @@
 
 #app-header .title {
   grid-area: middle;
-}
-
-#app-header .navigation {
-  grid-area: navigation;
-}
-
-.container {
-  width: 100%;
-}
-
-.center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
