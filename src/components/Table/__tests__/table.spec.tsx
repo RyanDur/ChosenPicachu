@@ -13,7 +13,7 @@ import {
     row1Col1Display,
     row1Col2Display,
     rows
-} from '../../../__tests__/dummyData';
+} from '../../../__tests__/util/dummyData';
 
 describe('A Table', () => {
     const htmlTag = /<.*?>/g;

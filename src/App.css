@@ -11,10 +11,6 @@
     ". main .";
 }
 
-.gutter {
-  padding: 3rem;
-}
-
 #root #app-header {
   grid-area: header;
   height: 100%;
@@ -32,7 +28,8 @@
   height: 100%;
   display: grid;
   align-items: center;
-  grid-template-columns: 1fr repeat(8, 7.5%) 1fr;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  grid-template-columns: 1fr repeat(12, 5%) 1fr;
   grid-template-areas:
     ". home about . . . . . . ."
 }
@@ -48,6 +45,8 @@
 #root main {
   grid-area: main;
   background: white;
+  padding: 3rem;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
 
 #app-header .title {

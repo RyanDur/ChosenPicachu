@@ -2,7 +2,7 @@ import {ReactElement} from 'react';
 import {act, render, RenderResult} from '@testing-library/react';
 import {MemoryRouter, Route} from 'react-router-dom';
 import * as H from 'history';
-import {Paths} from '../App';
+import {Paths} from '../../App';
 
 interface Rendered {
     rendered?: RenderResult;
@@ -28,3 +28,5 @@ export const renderWithRouter = (component: ReactElement, path: TestPaths = '/in
     });
     return {rendered, testHistory, testLocation};
 };
+
+export * from './dummyData';

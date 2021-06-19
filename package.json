@@ -39,6 +39,11 @@
       ]
     }
   },
+  "jest": {
+    "testMatch": [
+      "**/__tests__/?(*.)+(spec).[jt]s?(x)"
+    ]
+  },
   "browserslist": {
     "production": [
       ">0.2%",

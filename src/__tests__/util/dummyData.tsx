@@ -1,4 +1,4 @@
-import {Column, Row} from '../components/Table/types';
+import {Column, Row} from '../../components/Table/types';
 import React from 'react';
 import faker from 'faker';
 
