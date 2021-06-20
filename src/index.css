@@ -10,12 +10,11 @@ body {
 body, p, ul, li, h1, h2, h3, h4, h5, h6 {
   margin: 0;
 }
-li {
-  vertical-align: bottom;
-}
 
 ul {
   padding: 0;
+  margin: 0;
+  list-style-type: none;
 }
 
 a {
@@ -48,6 +47,8 @@ a {
   --paper: rgb(244, 244, 244);
   --silk: rgb(220, 208, 192);
   --mint: rgb(180, 219, 192);
+  --internationl-orange-engineering: rgb(186, 45, 11);
+  --field-drab: rgb(106, 88, 55);
 
   --charcoal: rgb(55, 55, 55);
   --void: rgb(14, 11, 22);

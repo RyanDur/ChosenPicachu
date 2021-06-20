@@ -59,6 +59,10 @@ main {
   font-size: 1.8rem;
 }
 
+#app-navigation .path:hover {
+  color: var(--internationl-orange-engineering);
+}
+
 main {
   background: var(--paper);
 }

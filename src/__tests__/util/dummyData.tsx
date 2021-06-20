@@ -2,36 +2,36 @@ import {Column, Row} from '../../components/Table/types';
 import React from 'react';
 import faker from 'faker';
 
-export const column1Name = faker.lorem.word();
-export const column2Name = faker.lorem.word();
-export const column3Name = faker.lorem.word();
+export const column1Name = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
+export const column2Name = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
+export const column3Name = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
 
-export const column1Display = faker.lorem.word();
-export const column3Display = faker.lorem.word();
+export const column1Display = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
+export const column3Display = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
 
-export const row0Col0Value = faker.lorem.word();
-export const row0Col1Value = faker.lorem.word();
-export const row0Col2Value = faker.lorem.word();
+export const row0Col0Value = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
+export const row0Col1Value = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
+export const row0Col2Value = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
 
-export const row1Col0Value = faker.lorem.word();
-export const row1Col1Value = faker.lorem.word();
-export const row1Col2Value = faker.lorem.word();
+export const row1Col0Value = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
+export const row1Col1Value = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
+export const row1Col2Value = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
 
-export const row2Col0Value = faker.lorem.word();
-export const row2Col1Value = faker.lorem.word();
-export const row2Col2Value = faker.lorem.word();
+export const row2Col0Value = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
+export const row2Col1Value = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
+export const row2Col2Value = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
 
-export const row0Col0Display = faker.lorem.word();
-export const row0Col1Display = faker.lorem.word();
+export const row0Col0Display = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
+export const row0Col1Display = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
 
-export const row0Col2Display = faker.lorem.word();
+export const row0Col2Display = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
 
-export const row1Col1Display = faker.lorem.word();
-export const row1Col2Display = faker.lorem.word();
+export const row1Col1Display = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
+export const row1Col2Display = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
 
-export const row2Col0Display = faker.lorem.word();
-export const row2Col1Display = faker.lorem.word();
-export const row2Col2Display = faker.lorem.word();
+export const row2Col0Display = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
+export const row2Col1Display = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
+export const row2Col2Display = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
 
 export const columns: Column[] = [
     {name: column1Name, display: <h2 data-testid="column1">{column1Display}</h2>},
