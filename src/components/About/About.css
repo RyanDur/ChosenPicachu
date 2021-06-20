@@ -1,5 +1,7 @@
 .accordion {
   margin-bottom: 5rem;
+  background: var(--silk);
+  border-radius: 2rem;
 }
 .accordion:last-child {
   margin-bottom: 0;
@@ -14,10 +16,11 @@
   height: 4rem;
   width: 100%;
   background: var(--charcoal);
-  border-radius: 8rem 8rem 0 0;
+  border-radius: 2rem 2rem 0 0;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 0.1rem;
 }
 
 .close .info-label {
@@ -31,6 +34,7 @@
   width: 100%;
   vertical-align: middle;
   border-radius: 0;
+  margin-bottom: 0.1rem;
 }
 
 .fold:last-child {
