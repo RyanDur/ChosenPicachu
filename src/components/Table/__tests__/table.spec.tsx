@@ -24,8 +24,9 @@ describe('A Table', () => {
     const thClassName = faker.lorem.word();
     const headerRowClassName = faker.lorem.word();
     const tbodyClassName = faker.lorem.word();
-    const rowClassName = faker.lorem.word();
     const tdClassName = faker.lorem.word();
+    const rowClassName = faker.lorem.word();
+    const cellClassName = faker.lorem.word();
 
     beforeEach(() => {
         act(() => {
@@ -37,10 +38,11 @@ describe('A Table', () => {
                 theadClassName={theadClassName}
                 trClassName={trClassName}
                 thClassName={thClassName}
-                headerRowClassName={headerRowClassName}
                 tbodyClassName={tbodyClassName}
-                rowClassName={rowClassName}
                 tdClassName={tdClassName}
+                headerRowClassName={headerRowClassName}
+                rowClassName={rowClassName}
+                cellClassName={cellClassName}
             />);
         });
     });
@@ -85,9 +87,11 @@ describe('A Table', () => {
 
         const columns = screen.getAllByTestId('th');
         columns.forEach(column => expect(column.classList.contains(thClassName)).toBe(true));
+        columns.forEach(column => expect(column.classList.contains(cellClassName)).toBe(true));
 
-        const cells = screen.getAllByTestId(/column-\d-row-\d/);
+        const cells = screen.getAllByTestId('td');
         cells.forEach(cell => expect(cell.classList.contains(tdClassName)).toBe(true));
+        cells.forEach(cell => expect(cell.classList.contains(cellClassName)).toBe(true));
     });
 
     test('should be able to add an id', () => {

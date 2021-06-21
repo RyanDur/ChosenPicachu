@@ -26,4 +26,5 @@ export interface TableProps<CELL> {
     tdClassName?: string;
     headerRowClassName?: string;
     rowClassName?: string;
+    cellClassName?: string;
 }

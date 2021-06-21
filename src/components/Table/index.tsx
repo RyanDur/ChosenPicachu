@@ -16,12 +16,13 @@ export const Table = <ROW_CELL_VALUE_TYPE extends Object>(
         thClassName,
         tdClassName,
         headerRowClassName,
-        rowClassName
+        rowClassName,
+        cellClassName
     }: TableProps<ROW_CELL_VALUE_TYPE>) =>
     <table id={id} className={tableClassName} data-testid="table">
         <thead className={theadClassName} data-testid="thead">
         <tr className={join(trClassName, headerRowClassName)} data-testid="tr">{columns.map(column =>
-            <th className={join(thClassName)} key={nanoid()} scope="col" data-testid="th">
+            <th className={join(thClassName, cellClassName)} key={nanoid()} scope="col" data-testid="th">
                 {column.display || column.name}
             </th>
         )}</tr>
@@ -30,9 +31,7 @@ export const Table = <ROW_CELL_VALUE_TYPE extends Object>(
             <tr className={join(trClassName, rowClassName)} key={nanoid()} data-testid="tr">
                 {columns.map((column, x) => {
                     const cell = row[column.name];
-                    return <td className={join(tdClassName)}
-                               data-testid={`column-${x}-row-${y}`}
-                               key={nanoid()}>
+                    return <td className={join(tdClassName, cellClassName)} key={nanoid()} data-testid="td">
                         {cell.display || cell.value}
                     </td>;
                 })}</tr>
