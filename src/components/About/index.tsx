@@ -72,6 +72,5 @@ export const About = () => {
                 <p className="info">{faker.lorem.paragraphs(Math.floor(Math.random() * 6) + 1)}</p>
             </li>
         </ul>
-
     </section>;
 };
