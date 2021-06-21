@@ -13,7 +13,7 @@ import {
     row1Col1Display,
     row1Col2Display,
     rows
-} from '../../../__tests__/util/dummyData';
+} from '../../../__tests__/util';
 
 describe('A Table', () => {
     const htmlTag = /<.*?>/g;
@@ -22,7 +22,8 @@ describe('A Table', () => {
     const theadClassName = faker.lorem.word();
     const trClassName = faker.lorem.word();
     const thClassName = faker.lorem.word();
-    const headerClassName = faker.lorem.word();
+    const headerRowClassName = faker.lorem.word();
+    const tbodyClassName = faker.lorem.word();
     const rowClassName = faker.lorem.word();
     const tdClassName = faker.lorem.word();
 
@@ -36,7 +37,8 @@ describe('A Table', () => {
                 theadClassName={theadClassName}
                 trClassName={trClassName}
                 thClassName={thClassName}
-                headerClassName={headerClassName}
+                headerRowClassName={headerRowClassName}
+                tbodyClassName={tbodyClassName}
                 rowClassName={rowClassName}
                 tdClassName={tdClassName}
             />);
@@ -68,17 +70,18 @@ describe('A Table', () => {
         const table = screen.getByTestId('table');
         expect(table.classList.contains(tableClassName)).toBe(true);
 
-        const thead = screen.getByTestId('thead');
-        expect(thead.classList.contains(theadClassName)).toBe(true);
-        expect(thead.classList.contains(headerClassName)).toBe(true);
+        expect(screen.getByTestId('thead').classList.contains(theadClassName)).toBe(true);
 
-        const trs = screen.getAllByTestId('tr');
-        trs.forEach(tr => expect(tr.classList.contains(trClassName)).toBe(true));
+        const tbody = screen.getByTestId('tbody');
+        expect(tbody.classList.contains(tbodyClassName)).toBe(true);
+        expect(tbody.classList.contains(tbodyClassName)).toBe(true);
 
-        const IAmARow = trs;
-        expect(IAmARow[0].classList.contains(rowClassName)).toBe(false);
-        expect(IAmARow[1].classList.contains(rowClassName)).toBe(true);
-        expect(IAmARow[2].classList.contains(rowClassName)).toBe(true);
+        const [header, ...body] = screen.getAllByTestId('tr');
+        [header, ...body].forEach(tr => expect(tr.classList.contains(trClassName)).toBe(true));
+        expect(header.classList.contains(headerRowClassName)).toBe(true);
+        expect(header.classList.contains(rowClassName)).toBe(false);
+        body.forEach(row => expect(row.classList.contains(trClassName)).toBe(true));
+        body.forEach(row => expect(row.classList.contains(headerRowClassName)).toBe(false));
 
         const columns = screen.getAllByTestId('th');
         columns.forEach(column => expect(column.classList.contains(thClassName)).toBe(true));

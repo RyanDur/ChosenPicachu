@@ -20,9 +20,10 @@ export interface TableProps<CELL> {
     id?: string;
     tableClassName?: string;
     theadClassName?: string;
+    tbodyClassName?: string;
     trClassName?: string;
     thClassName?: string;
-    headerClassName?: string;
-    rowClassName?: string;
     tdClassName?: string;
+    headerRowClassName?: string;
+    rowClassName?: string;
 }

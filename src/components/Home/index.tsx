@@ -3,7 +3,13 @@ import {columns, rows} from '../../__tests__/util';
 import './Home.css';
 
 export const Home = () => {
-    return <article className="card gutter">
-        <Table tableClassName="home-table" columns={columns} rows={rows}/>
+    return <article id="home" className="card gutter">
+        <Table tableClassName="fancy-table home-table"
+               theadClassName="header"
+               trClassName="row"
+               tbodyClassName="body"
+               thClassName="cell"
+               tdClassName="cell"
+               columns={columns} rows={rows}/>
     </article>;
 };
