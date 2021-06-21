@@ -1,11 +1,12 @@
 import React from 'react';
 import {Link, Route, Switch, useRouteMatch} from 'react-router-dom';
 import './App.css';
-import {About, Home} from './components';
+import {About, Form, Home} from './components';
 
 export enum Paths {
     home = '/',
-    about = '/about'
+    about = '/about',
+    form = '/form'
 }
 
 export const App = () => {
@@ -15,6 +16,9 @@ export const App = () => {
     }, {
         page: useRouteMatch(Paths.about),
         title: 'About Page'
+    }, {
+        page: useRouteMatch(Paths.form),
+        title: 'Form Page'
     }];
 
     return <>
@@ -24,6 +28,7 @@ export const App = () => {
         <nav id="app-navigation" className="overhang">
             <Link id="navigate-home" className="path" to={Paths.home}>Home</Link>
             <Link id="navigate-about" className="path" to={Paths.about}>About</Link>
+            <Link id="navigate-form" className="path" to={Paths.form}>Form</Link>
         </nav>
         <main className="overhang gutter">
             <Switch>
@@ -32,6 +37,9 @@ export const App = () => {
                 </Route>
                 <Route path={Paths.about} exact>
                     <About/>
+                </Route>
+                <Route path={Paths.form} exact>
+                    <Form/>
                 </Route>
             </Switch>
         </main>

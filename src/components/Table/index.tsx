@@ -27,9 +27,9 @@ export const Table = <ROW_CELL_VALUE_TYPE extends Object>(
             </th>
         )}</tr>
         </thead>
-        <tbody className={tbodyClassName} data-testid="tbody">{rows.map((row, y) =>
+        <tbody className={tbodyClassName} data-testid="tbody">{rows.map((row) =>
             <tr className={join(trClassName, rowClassName)} key={nanoid()} data-testid="tr">
-                {columns.map((column, x) => {
+                {columns.map((column) => {
                     const cell = row[column.name];
                     return <td className={join(tdClassName, cellClassName)} key={nanoid()} data-testid="td">
                         {cell.display || cell.value}
