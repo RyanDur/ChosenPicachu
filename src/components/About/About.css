@@ -1,7 +1,6 @@
 .accordion {
-  margin-bottom: 5rem;
+  margin-bottom: var(--base-x-6);
   background: var(--silk);
-  border-radius: 2rem;
 }
 .accordion:last-child {
   margin-bottom: 0;
@@ -9,11 +8,11 @@
 
 .bar {
   border: 0.1rem solid var(--charcoal);
-  margin-bottom: 5rem;
+  margin-bottom: var(--base-x-6);
 }
 
 .close {
-  height: 4rem;
+  height: var(--base-x-5);
   width: 100%;
   background: var(--charcoal);
   border-radius: 2rem 2rem 0 0;
@@ -25,6 +24,7 @@
 
 .close .info-label {
   width: 100%;
+  height: 100%;
   text-align: center;
   color: var(--paper);
 }
@@ -47,7 +47,7 @@
 .fold .info-label {
   display: flex;
   height: 5rem;
-  padding: 0 var(--gutter);
+  padding: 0 var(--base-x-4);
   justify-content: space-between;
   align-items: center;
   color: var(--paper);
@@ -76,13 +76,13 @@
 .fold .info {
   position: relative;
   overflow: hidden;
-  max-height: 80rem;
+  max-height: var(--base-x-100);
   opacity: 1;
   transform: translate(0, 0);
-  margin-top: 14px;
+  margin-top: var(--base-x-4);
   z-index: 2;
   transition: all 500ms ease;
-  padding: 0 var(--gutter) var(--gutter);
+  padding: 0 var(--base-x-4) var(--base-x-4);
 }
 
 .fold .info-toggle:checked ~ .info-label:after {

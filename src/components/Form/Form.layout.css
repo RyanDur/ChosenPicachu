@@ -1,0 +1,80 @@
+#fancy-form {
+  display: grid;
+  column-gap: var(--base-x-2);
+  row-gap: var(--base-x-2);
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-areas:
+  "name ."
+  "addresses addresses"
+  "details details"
+  ". submit"
+}
+
+.name {
+  grid-area: name;
+}
+
+#addresses {
+  grid-area: addresses;
+}
+
+#submit {
+  grid-area: submit;
+}
+
+#details-cell {
+  grid-area: details;
+}
+
+.name {
+  display: grid;
+  column-gap: var(--base-x-2);
+  row-gap: var(--base-x-0_5);
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-areas:
+    "title ."
+    "first_name_cell last_name_cell"
+}
+
+.name .title {
+  grid-area: title;
+}
+
+#first-name-cell {
+  grid-area: first_name_cell;
+}
+
+#last-name-cell {
+  grid-area: last_name_cell;
+}
+
+#addresses {
+  display: grid;
+  column-gap: var(--base-x-2);
+  row-gap: var(--base-x-0_5);
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-areas:
+    "home_address_title work_address_title"
+    "home_address work_address";
+}
+
+#home-address-title {
+  grid-area: home_address_title;
+}
+
+#home-address {
+  grid-area: home_address;
+}
+
+#work-address-title {
+  grid-area: work_address_title;
+}
+
+#work-address {
+  grid-area: work_address;
+}
+
+#work-address-title {
+  display: flex;
+}
+

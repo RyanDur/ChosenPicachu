@@ -1,0 +1,57 @@
+#root {
+  display: grid;
+  grid-template-columns: 1fr 70% 1fr;
+  grid-template-rows: var(--base-x-10) var(--base-x-5) 1fr;
+  grid-template-areas:
+    "header header header"
+    "nav nav nav"
+    ". main .";
+}
+
+#app-header {
+  grid-area: header;
+}
+
+#app-navigation {
+  grid-area: nav;
+}
+
+main {
+  grid-area: main;
+}
+
+#app-header {
+  display: grid;
+}
+
+#app-header {
+  background: var(--charcoal);
+  align-items: center;
+  grid-template-columns: 1fr 70% 1fr;
+  grid-template-areas:
+    ". middle ."
+}
+
+#app-header .title {
+  grid-area: middle;
+}
+
+#app-navigation {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1fr repeat(14, 5%) 1fr;
+  grid-template-areas:
+    ". home about form . . . . . ."
+}
+
+#app-navigation #navigate-home {
+  grid-area: home;
+}
+
+#app-navigation #navigate-about {
+  grid-area: about;
+}
+
+#app-navigation #navigate-form {
+  grid-area: form;
+}

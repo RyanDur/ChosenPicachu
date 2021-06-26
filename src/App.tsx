@@ -1,7 +1,8 @@
 import React from 'react';
 import {Link, Route, Switch, useRouteMatch} from 'react-router-dom';
-import './App.css';
 import {About, Form, Home} from './components';
+import './App.css';
+import './App.layout.css';
 
 export enum Paths {
     home = '/',

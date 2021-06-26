@@ -2,8 +2,8 @@ import * as faker from 'faker';
 import './About.css';
 
 export const About = () => {
-    return <section>
-        <ul className="accordion">
+    return <>
+        <ul className="accordion card overhang">
             <li className="fold">
                 <input id="first-checkbox" className="info-toggle off-screen" type="checkbox"/>
                 <label className="info-label" htmlFor="first-checkbox">{faker.lorem.word()}</label>
@@ -37,10 +37,10 @@ export const About = () => {
 
         <hr className="bar"/>
 
-        <ul className="accordion">
+        <ul className="accordion card overhang">
             <li className="close">
                 <input id="close-radio" className="info-toggle off-screen" type="radio" name="group"/>
-                <label className="info-label" htmlFor="close-radio">Close</label>
+                <label className="info-label center" htmlFor="close-radio">Close</label>
             </li>
             <li className="fold">
                 <input id="first-radio" className="info-toggle off-screen" type="radio" name="group"/>
@@ -72,5 +72,5 @@ export const About = () => {
                 <p className="info">{faker.lorem.paragraphs(Math.floor(Math.random() * 6) + 1)}</p>
             </li>
         </ul>
-    </section>;
+    </>;
 };

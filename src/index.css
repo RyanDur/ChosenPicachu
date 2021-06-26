@@ -3,7 +3,7 @@ html {
 }
 
 body {
-  font-size: 1.6rem;
+  font-size: var(--base-x-2);
   color: var(--void);
 }
 
@@ -28,8 +28,8 @@ a {
 }
 
 .card {
-  box-shadow: 0 10px 20px var(--shadow), 0 6px 6px var(--dark-shadow);
   border-radius: 2rem;
+  background: white;
 }
 
 .off-screen {
@@ -39,7 +39,28 @@ a {
 }
 
 .gutter {
-  padding: var(--gutter);
+  padding: var(--base-x-4);
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.center-horizontal {
+  display: flex;
+  align-items: center;
+}
+
+.spread {
+  display: flex;
+  justify-content: space-between;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
 }
 
 :root {
@@ -59,5 +80,15 @@ a {
   --dark-shadow: rgba(0, 0, 0, 0.23);
 
   /* spacing */
-  --gutter: 3rem;
+  --base-x-0_5: 0.4rem;
+  --base: 0.8rem;
+  --base-x-2: 1.6rem;
+  --base-x-2_5: 2rem;
+  --base-x-4: 3.2rem;
+  --base-x-5: 4rem;
+  --base-x-5_5: 4.4rem;
+  --base-x-6: 4.8rem;
+  --base-x-6_5: 5.2rem;
+  --base-x-10: 8rem;
+  --base-x-100: 80rem;
 }

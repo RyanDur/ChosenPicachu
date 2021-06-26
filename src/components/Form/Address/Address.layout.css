@@ -1,0 +1,37 @@
+.address {
+  display: grid;
+  column-gap: var(--base-x-2);
+  row-gap: var(--base-x-0_5);
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas:
+    "street_address street_address street_address"
+    "street_address_2 street_address_2 street_address_2"
+    "city state zip";
+}
+
+.street-address-cell {
+  grid-area: street_address;
+}
+
+.street-address-2-cell {
+  grid-area: street_address_2;
+}
+
+.city-cell {
+  grid-area: city;
+}
+
+.state-cell {
+  grid-area: state;
+}
+
+.zip-cell {
+  grid-area: zip;
+}
+
+@media only screen and (max-width: 1610px) {
+  .address {
+    display: flex;
+    flex-direction: column;
+  }
+}
