@@ -19,7 +19,7 @@ describe('a form', () => {
             userEvent.type(firstNameInput, firstName);
             expect(firstNameInput.hasAttribute('required')).toBe(true);
 
-            const surnameInput = screen.getByLabelText('Surname');
+            const surnameInput = screen.getByLabelText('Last Name');
             userEvent.type(surnameInput, lastName);
             expect(surnameInput.hasAttribute('required')).toBe(true);
 
@@ -38,7 +38,7 @@ describe('a form', () => {
         });
 
         it('should not be valid if no first name', () => {
-            const surnameInput = screen.getByLabelText('Surname');
+            const surnameInput = screen.getByLabelText('Last Name');
             userEvent.type(surnameInput, lastName);
 
             const form = document.querySelector('form');
