@@ -1,5 +1,6 @@
 import './Address.layout.css';
 import React from 'react';
+import states from 'states-us/dist';
 
 interface AddressProps {
     kind: string;
@@ -22,7 +23,12 @@ export const Address = ({kind, id}: AddressProps) => {
         </article>
         <article className="state-cell stack">
             <label htmlFor={`${kind}-state`}>State / Province</label>
-            <input id={`${kind}-state`} className="state" type="text"/>
+            <select name="state-abbreviations" id={`${kind}-state`} className="state">
+                {[<option key="asdfasdfasdf"  disabled selected hidden>Select</option>,
+                    ...states.map(({abbreviation}) =>
+                        <option key={abbreviation}>{abbreviation}</option>)
+                ]}
+            </select>
         </article>
         <article className="zip-cell stack">
             <label htmlFor={`${kind}-zip`}>Postal / Zip code</label>
