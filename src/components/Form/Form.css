@@ -1,6 +1,41 @@
-#fancy-form {
-}
-
 #fancy-form #details {
   resize: vertical;
+}
+
+#fancy-form .address {
+  display: grid;
+  column-gap: var(--base-x-2);
+  row-gap: var(--base-x-0_5);
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas:
+    "street_address street_address street_address"
+    "street_address_2 street_address_2 street_address_2"
+    "city state zip";
+}
+
+#fancy-form .street-address-cell {
+  grid-area: street_address;
+}
+
+#fancy-form .street-address-2-cell {
+  grid-area: street_address_2;
+}
+
+#fancy-form .city-cell {
+  grid-area: city;
+}
+
+#fancy-form .state-cell {
+  grid-area: state;
+}
+
+#fancy-form .zip-cell {
+  grid-area: zip;
+}
+
+@media only screen and (max-width: 1610px) {
+  #fancy-form .address {
+    display: flex;
+    flex-direction: column;
+  }
 }
