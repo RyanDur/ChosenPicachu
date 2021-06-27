@@ -1,11 +1,12 @@
-import React, {FormEvent, useEffect, useState} from 'react';
+import React, {FC, FormEvent, useEffect, useState} from 'react';
 import {data} from '../../data';
 import {AddressInfo, User} from './types';
 import states from 'states-us/dist';
 import './Form.layout.css';
 import './Form.css';
+import {FancyTextInput} from './FancyTextInput';
 
-export const Form = () => {
+export const Form: FC = () => {
     const initialAddress: AddressInfo = {
         city: '',
         state: '',
@@ -38,64 +39,42 @@ export const Form = () => {
     return <section className="card overhang gutter">
         <form id="fancy-form" onSubmit={handleSubmit}>
             <h3 id="name-title">Name</h3>
-            <article id="first-name-cell" className="stack">
-                <input type="text" id="first-name" required
-                       onChange={event => updateUser({...user, firstName: event.currentTarget.value})}/>
-                <label id="first-name-label" htmlFor="first-name">First Name</label>
-            </article>
-            <article id="last-name-cell" className="stack">
-                <input type="text" id="last-name" required
-                       onChange={event => updateUser({...user, lastName: event.currentTarget.value})}/>
-                <label id="last-name-label" htmlFor="last-name">Last Name</label>
-            </article>
+            <FancyTextInput id="first-name-cell" inputId="first-name" label="First Name" required={true}
+                            onChange={event => updateUser({...user, firstName: event.currentTarget.value})}/>
+            <FancyTextInput id="last-name-cell" inputId="last-name" label="Last Name" required={true}
+                            onChange={event => updateUser({...user, lastName: event.currentTarget.value})}/>
 
             <h3 id="home-address-title">Home Address</h3>
-            <article id="home-street-address-cell" className="stack">
-                <input id="home-street-address" type="text" required data-testid={'home-street-address'}
-                       onChange={event => updateHomeAddress({
-                           ...homeAddress,
-                           streetAddress: event.currentTarget.value
-                       })}/>
-                <label htmlFor={'home-street-address'}>Street Address</label>
-            </article>
-            <article id="home-street-address-2-cell" className="stack">
-                <input id={'home-street-address-2'} type="text" data-testid={'home-street-address-2'}
-                       onChange={event => updateHomeAddress({
-                           ...homeAddress,
-                           streetAddressTwo: event.currentTarget.value
-                       })}/>
-                <label htmlFor={'home-street-address-2'}>Street Address Line 2</label>
-            </article>
-            <article id="home-city-cell" className="stack">
-                <input id={'home-city'} type="text" required data-testid={'home-city'}
-                       onChange={event => updateHomeAddress({
-                           ...homeAddress,
-                           city: event.currentTarget.value
-                       })}/>
-                <label htmlFor={'home-city'}>City</label>
-            </article>
+            <FancyTextInput id="home-street-address-cell" inputId="home-street-address"
+                            label="Street Address" required={true} testId="home-street-address"
+                            onChange={event => updateHomeAddress({
+                                ...homeAddress,
+                                streetAddress: event.currentTarget.value
+                            })}/>
+            <FancyTextInput id="home-street-address-2-cell" inputId="home-street-address-2"
+                            label="Street Address Line 2" testId="home-street-address-2"
+                            onChange={event => updateHomeAddress({
+                                ...homeAddress,
+                                streetAddressTwo: event.currentTarget.value
+                            })}/>
+
+            <FancyTextInput id="home-city-cell" inputId="home-city" label="City" required={true} testId="home-city"
+                            onChange={event => updateHomeAddress({...homeAddress, city: event.currentTarget.value})}/>
+
             <article id="home-state-cell" className="stack">
-                <select id={'home-state'}
-                        className="state"
-                        required
-                        defaultValue=""
-                        data-testid={'home-state'}
-                        onChange={event => updateHomeAddress({
-                            ...homeAddress,
-                            state: event.currentTarget.value
-                        })}>
+                <label htmlFor="home-state">State / Province</label>
+                <select id="home-state" className="state" required defaultValue="" data-testid="home-state"
+                        onChange={event => updateHomeAddress({...homeAddress, state: event.currentTarget.value})}>
                     {[<option key="placeholder" value="" disabled hidden>Select</option>,
                         ...states.map(({abbreviation}) =>
                             <option key={abbreviation}>{abbreviation}</option>)
                     ]}
                 </select>
-                <label htmlFor="home-state">State / Province</label>
             </article>
-            <article id="home-zip-cell" className="stack">
-                <input id={'home-zip'} type="text" required data-testid={'home-zip'}
-                       onChange={event => updateHomeAddress({...homeAddress, zip: event.currentTarget.value})}/>
-                <label htmlFor={'home-zip'}>Postal / Zip code</label>
-            </article>
+
+            <FancyTextInput id="home-zip-cell" inputId="home-zip"
+                            label="Postal / Zip code" required={true} testId="home-zip"
+                            onChange={event => updateHomeAddress({...homeAddress, zip: event.currentTarget.value})}/>
 
             <h3 id="work-address-title">Work Address</h3>
             <article id="same-as-home-cell" className="center-horizontal">
@@ -104,48 +83,35 @@ export const Form = () => {
                        onChange={event => updateSameAsHome(event.currentTarget.checked)}/>
             </article>
 
-            <article id="work-street-address-cell" className="stack">
-                <input id="work-street-address"
-                       type="text"
-                       value={workAddress.streetAddress}
-                       readOnly={sameAsHome}
-                       data-testid="work-street-address"
-                       onChange={event => updateWorkAddress({
-                           ...workAddress,
-                           streetAddress: event.currentTarget.value
-                       })}/>
-                <label htmlFor="work-street-address">Street Address</label>
-            </article>
-            <article id="work-street-address-2-cell" className="stack">
-                <input id="work-street-address-2"
-                       type="text"
-                       value={workAddress.streetAddressTwo || ''}
-                       readOnly={sameAsHome}
-                       data-testid="work-street-address-2"
-                       onChange={event => updateWorkAddress({
-                           ...workAddress,
-                           streetAddressTwo: event.currentTarget.value
-                       })}/>
-                <label htmlFor="work-street-address-2">Street Address Line 2</label>
-            </article>
-            <article id="work-city-cell" className="stack">
-                <input id="work-city"
-                       type="text"
-                       value={workAddress.city}
-                       readOnly={sameAsHome}
-                       data-testid="work-city"
-                       onChange={event => updateWorkAddress({
-                           ...workAddress,
-                           city: event.currentTarget.value
-                       })}/>
-                <label htmlFor="work-city">City</label>
-            </article>
+            <FancyTextInput id="work-street-address-cell" inputId="work-street-address"
+                            label="Street Address" value={workAddress.streetAddress}
+                            readOnly={sameAsHome} testId="work-street-address"
+                            onChange={event => updateWorkAddress({
+                                ...workAddress,
+                                streetAddress: event.currentTarget.value
+                            })}/>
+
+            <FancyTextInput id="work-street-address-2-cell" inputId="work-street-address-2"
+                            label="Street Address Line 2" value={workAddress.streetAddressTwo || ''}
+                            readOnly={sameAsHome} testId="work-street-address-2"
+                            onChange={event => updateWorkAddress({
+                                ...workAddress,
+                                streetAddressTwo: event.currentTarget.value
+                            })}/>
+
+            <FancyTextInput id="work-city-cell" inputId="work-city" label="City" value={workAddress.city}
+                            readOnly={sameAsHome} testId="work-city"
+                            onChange={event => updateWorkAddress({
+                                ...workAddress,
+                                city: event.currentTarget.value
+                            })}/>
+
             <article id="work-state-cell" className="stack">
-                <select id='work-state'
-                        className="state"
+                <label htmlFor="work-state">State / Province</label>
+                <select id="work-state"
                         value={workAddress.state}
                         disabled={sameAsHome}
-                        data-testid={'work-state'}
+                        data-testid="work-state"
                         onChange={event => updateWorkAddress({
                             ...workAddress,
                             state: event.currentTarget.value
@@ -155,21 +121,15 @@ export const Form = () => {
                             <option key={abbreviation}>{abbreviation}</option>)
                     ]}
                 </select>
-                <label htmlFor="work-state">State / Province</label>
-            </article>
-            <article id="work-zip-cell" className="stack">
-                <input id="work-zip"
-                       type="text"
-                       value={workAddress.zip}
-                       readOnly={sameAsHome}
-                       data-testid="work-zip"
-                       onChange={event => updateWorkAddress({...workAddress, zip: event.currentTarget.value})}/>
-                <label htmlFor="work-zip">Postal / Zip code</label>
             </article>
 
+            <FancyTextInput id="work-zip-cell" inputId="work-zip" label="Postal / Zip code" value={workAddress.zip}
+                            readOnly={sameAsHome} testId="work-zip"
+                            onChange={event => updateWorkAddress({...workAddress, zip: event.currentTarget.value})}/>
+
             <section id="details-cell" className="stack">
-                <textarea name="details" id="details" onChange={event => updateDetails(event.currentTarget.value)}/>
                 <label id="details-label" htmlFor="details">Details</label>
+                <textarea name="details" id="details" onChange={event => updateDetails(event.currentTarget.value)}/>
             </section>
 
             <button id="submit">Submit</button>
