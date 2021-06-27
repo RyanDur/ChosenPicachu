@@ -2,20 +2,74 @@
   display: grid;
   column-gap: var(--base-x-2);
   row-gap: var(--base-x-2);
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   grid-template-areas:
-  "name ."
-  "addresses addresses"
-  "details details"
-  ". submit"
+  "name_title . . . . ."
+  "first_name first_name last_name last_name . ."
+  "home_address_title . . work_address_title . same_as_home"
+  "home_street_address home_street_address home_street_address work_street_address work_street_address work_street_address"
+  "home_street_address_2 home_street_address_2 home_street_address_2 work_street_address_2 work_street_address_2 work_street_address_2"
+  "home_city home_state home_zip work_city work_state work_zip"
+  "details details details details details details"
+  ". . . . submit submit"
 }
 
-.name {
-  grid-area: name;
+#name-title {
+  grid-area: name_title;
 }
 
-#addresses {
-  grid-area: addresses;
+#first-name-cell {
+  grid-area: first_name;
+}
+#last-name-cell {
+  grid-area: last_name;
+}
+
+#home-address-title {
+  grid-area: home_address_title;
+}
+#work-address-title {
+  grid-area: work_address_title;
+}
+
+#same-as-home {
+  grid-area: same_as_home;
+  justify-content: flex-end;;
+}
+
+#home-street-address-cell {
+  grid-area: home_street_address;
+}
+#work-street-address-cell {
+  grid-area: work_street_address;
+}
+
+#home-street-address-2-cell {
+  grid-area: home_street_address_2;
+}
+#work-street-address-2-cell {
+  grid-area: work_street_address_2;
+}
+
+#home-city-cell {
+  grid-area: home_city;
+}
+#work-city-cell {
+  grid-area: work_city;
+}
+
+#home-state-cell {
+  grid-area: home_state;
+}
+#work-state-cell {
+  grid-area: work_state;
+}
+
+#home-zip-cell {
+  grid-area: home_zip;
+}
+#work-zip-cell {
+  grid-area: work_zip;
 }
 
 #submit {
@@ -26,55 +80,10 @@
   grid-area: details;
 }
 
-.name {
-  display: grid;
-  column-gap: var(--base-x-2);
-  row-gap: var(--base-x-0_5);
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-areas:
-    "title ."
-    "first_name_cell last_name_cell"
-}
-
-.name .title {
-  grid-area: title;
-}
-
-#first-name-cell {
-  grid-area: first_name_cell;
-}
-
-#last-name-cell {
-  grid-area: last_name_cell;
-}
-
-#addresses {
-  display: grid;
-  column-gap: var(--base-x-2);
-  row-gap: var(--base-x-0_5);
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-areas:
-    "home_address_title work_address_title"
-    "home_address work_address";
-}
-
-#home-address-title {
-  grid-area: home_address_title;
-}
-
-#home-address {
-  grid-area: home_address;
-}
-
-#work-address-title {
-  grid-area: work_address_title;
-}
-
-#work-address {
-  grid-area: work_address;
-}
-
-#work-address-title {
-  display: flex;
+@media only screen and (max-width: 1610px) {
+  #fancy-form .address {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
