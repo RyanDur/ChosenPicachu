@@ -1,10 +1,26 @@
 import {nanoid} from 'nanoid';
-import {TableProps} from './types';
+import {Column, Row} from './types';
 import './Table.css';
+import {FC} from 'react';
+
+export interface TableProps {
+    columns: Column[];
+    rows: Row[];
+    id?: string;
+    tableClassName?: string;
+    theadClassName?: string;
+    tbodyClassName?: string;
+    trClassName?: string;
+    thClassName?: string;
+    tdClassName?: string;
+    headerRowClassName?: string;
+    rowClassName?: string;
+    cellClassName?: string;
+}
 
 const join = (...names: Partial<string[]>) => names.join(' ').trim();
 
-export const Table = <ROW_CELL_VALUE_TYPE extends Object>(
+export const Table: FC<TableProps> = (
     {
         columns,
         rows,
@@ -18,19 +34,19 @@ export const Table = <ROW_CELL_VALUE_TYPE extends Object>(
         headerRowClassName,
         rowClassName,
         cellClassName
-    }: TableProps<ROW_CELL_VALUE_TYPE>) =>
+    }) =>
     <table id={id} className={tableClassName} data-testid="table">
         <thead className={theadClassName} data-testid="thead">
         <tr className={join(trClassName, headerRowClassName)} data-testid="tr">{columns.map(column =>
             <th className={join(thClassName, cellClassName)} key={nanoid()} scope="col" data-testid="th">
-                {column.display || column.name}
+                {column.display || column.value}
             </th>
         )}</tr>
         </thead>
         <tbody className={tbodyClassName} data-testid="tbody">{rows.map((row) =>
             <tr className={join(trClassName, rowClassName)} key={nanoid()} data-testid="tr">
                 {columns.map((column) => {
-                    const cell = row[column.name];
+                    const cell = row[column.value];
                     return <td className={join(tdClassName, cellClassName)} key={nanoid()} data-testid="td">
                         {cell.display || cell.value}
                     </td>;

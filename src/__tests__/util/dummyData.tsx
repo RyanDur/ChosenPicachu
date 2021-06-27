@@ -34,12 +34,12 @@ export const row2Col1Display = faker.lorem.words(Math.floor(Math.random() * 6) +
 export const row2Col2Display = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
 
 export const columns: Column[] = [
-    {name: column1Name, display: <h2 data-testid="column1">{column1Display}</h2>},
-    {name: column2Name},
-    {name: column3Name, display: column3Display},
+    {value: column1Name, display: <h2 data-testid="column1">{column1Display}</h2>},
+    {value: column2Name},
+    {value: column3Name, display: column3Display},
 ];
 
-export const rows: Row<string>[] = [{
+export const rows: Row[] = [{
     [column1Name]: {
         value: row0Col0Value,
         display: <h3>{row0Col0Display}</h3>

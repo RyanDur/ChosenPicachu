@@ -63,6 +63,11 @@ a {
   flex-direction: column;
 }
 
+*:required + label:after {
+  content: '*';
+  color: var(--internationl-orange-engineering);
+}
+
 :root {
   /* colors */
   --paper: rgb(244, 244, 244);

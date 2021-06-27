@@ -1,3 +1,5 @@
+import {UserInfo} from '../components/Form';
+
 export const data = {
-    post: (p: { name: string }) => void p
+    post: (user: UserInfo) => void user
 };

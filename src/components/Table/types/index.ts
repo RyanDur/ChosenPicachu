@@ -1,30 +1,12 @@
 import {ReactNode} from 'react';
 
-export interface Column {
-    name: string;
-    display?: ReactNode;
+export type Column = Cell<string | number>
+
+export interface Row {
+    [column: string]: Cell;
 }
 
-export interface Row<T> {
-    [column: string]: Cell<T>;
-}
-
-export interface Cell<T> {
+export interface Cell<T = Object> {
     value: T;
     display?: ReactNode;
-}
-
-export interface TableProps<CELL> {
-    columns: Column[];
-    rows: Row<CELL>[];
-    id?: string;
-    tableClassName?: string;
-    theadClassName?: string;
-    tbodyClassName?: string;
-    trClassName?: string;
-    thClassName?: string;
-    tdClassName?: string;
-    headerRowClassName?: string;
-    rowClassName?: string;
-    cellClassName?: string;
 }
