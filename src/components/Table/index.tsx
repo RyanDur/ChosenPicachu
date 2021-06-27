@@ -43,11 +43,11 @@ export const Table: FC<TableProps> = (
             </th>
         )}</tr>
         </thead>
-        <tbody className={tbodyClassName} data-testid="tbody">{rows.map((row) =>
+        <tbody className={tbodyClassName} data-testid="tbody">{rows.map((row, y) =>
             <tr className={join(trClassName, rowClassName)} key={nanoid()} data-testid="tr">
-                {columns.map((column) => {
+                {columns.map((column, x) => {
                     const cell = row[column.value];
-                    return <td className={join(tdClassName, cellClassName)} key={nanoid()} data-testid="td">
+                    return <td className={join(tdClassName, cellClassName)} key={nanoid()} data-testid={`cell-${x}-${y}`}>
                         {cell.display || cell.value}
                     </td>;
                 })}</tr>

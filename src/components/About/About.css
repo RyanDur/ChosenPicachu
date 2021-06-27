@@ -9,6 +9,7 @@
 .bar {
   border: 0.1rem solid var(--charcoal);
   margin-bottom: var(--base-x-6);
+  opacity: 0.5;
 }
 
 .close {

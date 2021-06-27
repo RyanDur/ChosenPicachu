@@ -64,7 +64,7 @@ describe('A Table', () => {
     ${2}   | ${1} | ${row1Col2Display}
     `('should put the value "$expected" into cell ( column: $column,  row: $row )',
         ({column, row, expected}) => {
-            const element = screen.getByTestId(`column-${column}-row-${row}`);
+            const element = screen.getByTestId(`cell-${column}-${row}`);
             expect(element.innerHTML.replaceAll(htmlTag, '')).toEqual(expected);
         });
 
@@ -89,7 +89,7 @@ describe('A Table', () => {
         columns.forEach(column => expect(column.classList.contains(thClassName)).toBe(true));
         columns.forEach(column => expect(column.classList.contains(cellClassName)).toBe(true));
 
-        const cells = screen.getAllByTestId('td');
+        const cells = screen.getAllByTestId(/cell/i);
         cells.forEach(cell => expect(cell.classList.contains(tdClassName)).toBe(true));
         cells.forEach(cell => expect(cell.classList.contains(cellClassName)).toBe(true));
     });
