@@ -32,7 +32,7 @@
   grid-area: work_address_title;
 }
 
-#same-as-home {
+#same-as-home-cell {
   grid-area: same_as_home;
   justify-content: flex-end;;
 }

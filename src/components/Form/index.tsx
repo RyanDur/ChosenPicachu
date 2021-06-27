@@ -98,7 +98,7 @@ export const Form = () => {
             </article>
 
             <h3 id="work-address-title">Work Address</h3>
-            <article id="same-as-home" className="center-horizontal">
+            <article id="same-as-home-cell" className="center-horizontal">
                 <label htmlFor="same-as-home">Same as Home</label>
                 <input id="same-as-home" type="checkbox"
                        onChange={event => updateSameAsHome(event.currentTarget.checked)}/>
