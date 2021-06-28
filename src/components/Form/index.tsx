@@ -5,6 +5,7 @@ import states from 'states-us/dist';
 import './Form.layout.css';
 import './Form.css';
 import {FancyTextInput} from './FancyTextInput';
+import {FancySelect} from './FancySelect';
 
 export const Form: FC = () => {
     const initialAddress: AddressInfo = {
@@ -61,16 +62,17 @@ export const Form: FC = () => {
             <FancyTextInput id="home-city-cell" inputId="home-city" label="City" required={true} testId="home-city"
                             onChange={event => updateHomeAddress({...homeAddress, city: event.currentTarget.value})}/>
 
-            <article id="home-state-cell" className="stack">
-                <label htmlFor="home-state">State / Province</label>
-                <select id="home-state" className="state" required defaultValue="" data-testid="home-state"
-                        onChange={event => updateHomeAddress({...homeAddress, state: event.currentTarget.value})}>
-                    {[<option key="placeholder" value="" disabled hidden>Select</option>,
-                        ...states.map(({abbreviation}) =>
-                            <option key={abbreviation}>{abbreviation}</option>)
-                    ]}
-                </select>
-            </article>
+            <FancySelect
+                id="home-state-cell"
+                className="stack"
+                selectClassName="state"
+                selectId="home-state"
+                required={true}
+                optionValues={new Set(states.map(({abbreviation}) => abbreviation))}
+                testId="home-state"
+                onChange={event => updateHomeAddress({...homeAddress, state: event.currentTarget.value})}>
+                State / Province
+            </FancySelect>
 
             <FancyTextInput id="home-zip-cell" inputId="home-zip"
                             label="Postal / Zip code" required={true} testId="home-zip"
@@ -106,22 +108,20 @@ export const Form: FC = () => {
                                 city: event.currentTarget.value
                             })}/>
 
-            <article id="work-state-cell" className="stack">
-                <label htmlFor="work-state">State / Province</label>
-                <select id="work-state"
-                        value={workAddress.state}
-                        disabled={sameAsHome}
-                        data-testid="work-state"
-                        onChange={event => updateWorkAddress({
-                            ...workAddress,
-                            state: event.currentTarget.value
-                        })}>
-                    {[<option key="placeholder" value="" disabled hidden>Select</option>,
-                        ...states.map(({abbreviation}) =>
-                            <option key={abbreviation}>{abbreviation}</option>)
-                    ]}
-                </select>
-            </article>
+            <FancySelect
+                id="work-state-cell"
+                className="stack"
+                selectClassName="state"
+                selectId="work-state"
+                value={workAddress.state}
+                required={true}
+                disabled={sameAsHome}
+                optionValues={new Set(states.map(({abbreviation}) => abbreviation))}
+                testId="work-state"
+                onChange={event => updateWorkAddress({...workAddress, state: event.currentTarget.value})}>
+                State / Province
+            </FancySelect>
+
 
             <FancyTextInput id="work-zip-cell" inputId="work-zip" label="Postal / Zip code" value={workAddress.zip}
                             readOnly={sameAsHome} testId="work-zip"

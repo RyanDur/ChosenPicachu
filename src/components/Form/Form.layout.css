@@ -87,13 +87,6 @@
   grid-area: details;
 }
 
-@media only screen and (max-width: 1610px) {
-  #fancy-form .address {
-    display: flex;
-    flex-direction: column;
-  }
-}
-
 @media only screen and (max-width: 1505px) {
   #fancy-form {
     grid-template-columns: repeat(3, 1fr);
