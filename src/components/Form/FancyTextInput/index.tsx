@@ -2,7 +2,6 @@ import React, {FC, FormEvent, useState} from 'react';
 import './FancyTextInput.css';
 
 interface FancyTextInputProps {
-    label: string
     id?: string;
     inputId?: string;
     required?: boolean;
@@ -11,7 +10,6 @@ interface FancyTextInputProps {
     inputClass?: string;
     labelId?: string;
     labelClass?: string;
-    testId?: string;
     value?: string;
     readOnly?: boolean
 }
@@ -20,7 +18,7 @@ const join = (...classes: Partial<string[]>) => classes.join(' ').trim();
 
 export const FancyTextInput: FC<FancyTextInputProps> = (
     {
-        label,
+        children,
         id,
         required = false,
         onChange,
@@ -29,7 +27,6 @@ export const FancyTextInput: FC<FancyTextInputProps> = (
         inputClass,
         labelId,
         labelClass,
-        testId,
         value,
         readOnly
     }
@@ -37,11 +34,11 @@ export const FancyTextInput: FC<FancyTextInputProps> = (
     const [data, updateData] = useState(value);
     return <article id={id} className={join('fancy-input', (value || data) && 'not-empty', articleClass)}>
         <input id={inputId} className={join('fancy-text', inputClass)}
-               value={value} readOnly={readOnly} data-testid={testId} required={required}
+               value={value} readOnly={readOnly} data-testid={inputId} required={required}
                onChange={event => {
                    updateData(event.currentTarget.value);
                    onChange?.(event);
                }}/>
-        <label id={labelId} className={join('fancy-title', labelClass)} htmlFor={inputId}>{label}</label>
+        <label id={labelId} className={join('fancy-title', labelClass)} htmlFor={inputId}>{children}</label>
     </article>;
 };
