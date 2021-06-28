@@ -10,7 +10,6 @@ interface FancySelectProps {
     selectClassName?: string;
     required?: boolean;
     disabled?: boolean;
-    testId: string;
 }
 
 export const FancySelect: FC<FancySelectProps> = (
@@ -24,8 +23,7 @@ export const FancySelect: FC<FancySelectProps> = (
         onChange,
         selectId,
         required,
-        disabled,
-        testId
+        disabled
     }
 ) => <article id={id} className={className}>
     <label htmlFor={selectId}>{children}</label>
@@ -34,7 +32,7 @@ export const FancySelect: FC<FancySelectProps> = (
             required={required}
             value={value}
             disabled={disabled}
-            data-testid={testId}
+            data-testid={selectId}
             onChange={onChange}>
         {[<option key="placeholder" value="" disabled hidden/>,
             ...Array.from(optionValues).map((value) =>

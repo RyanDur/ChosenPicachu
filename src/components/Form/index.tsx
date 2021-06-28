@@ -74,7 +74,6 @@ export const Form: FC = () => {
                 selectId="home-state"
                 required={true}
                 optionValues={new Set(states.map(({abbreviation}) => abbreviation))}
-                testId="home-state"
                 onChange={event => updateHomeAddress({...homeAddress, state: event.currentTarget.value})}>
                 State / Province
             </FancySelect>
@@ -123,7 +122,6 @@ export const Form: FC = () => {
                 required={true}
                 disabled={sameAsHome}
                 optionValues={new Set(states.map(({abbreviation}) => abbreviation))}
-                testId="work-state"
                 onChange={event => updateWorkAddress({...workAddress, state: event.currentTarget.value})}>
                 State / Province
             </FancySelect>
