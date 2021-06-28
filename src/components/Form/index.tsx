@@ -126,7 +126,6 @@ export const Form: FC = () => {
                 State / Province
             </FancySelect>
 
-
             <FancyTextInput id="work-zip-cell" inputId="work-zip" value={workAddress.zip} readOnly={sameAsHome}
                             onChange={event => updateWorkAddress({...workAddress, zip: event.currentTarget.value})}>
                 Postal / Zip code
