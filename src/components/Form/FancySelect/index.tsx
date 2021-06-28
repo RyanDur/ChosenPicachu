@@ -16,7 +16,7 @@ export const FancySelect: FC<FancySelectProps> = (
     {
         id,
         children,
-        value = '',
+        value,
         optionValues,
         className,
         selectClassName,
@@ -30,7 +30,7 @@ export const FancySelect: FC<FancySelectProps> = (
     <select id={selectId}
             className={selectClassName}
             required={required}
-            value={value}
+            {...(value ? {value} : {defaultValue: ''})}
             disabled={disabled}
             data-testid={selectId}
             onChange={onChange}>

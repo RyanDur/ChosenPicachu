@@ -2,8 +2,8 @@ import React, {FC, FormEvent, useState} from 'react';
 import './FancyTextInput.css';
 
 interface FancyTextInputProps {
+    inputId: string;
     id?: string;
-    inputId?: string;
     required?: boolean;
     onChange?: (event: FormEvent<HTMLInputElement>) => void;
     articleClass?: string;
@@ -18,12 +18,12 @@ const join = (...classes: Partial<string[]>) => classes.join(' ').trim();
 
 export const FancyTextInput: FC<FancyTextInputProps> = (
     {
+        inputId,
         children,
         id,
         required = false,
         onChange,
         articleClass,
-        inputId,
         inputClass,
         labelId,
         labelClass,
