@@ -21,6 +21,7 @@
 #first-name-cell {
   grid-area: first_name;
 }
+
 #last-name-cell {
   grid-area: last_name;
 }
@@ -28,6 +29,7 @@
 #home-address-title {
   grid-area: home_address_title;
 }
+
 #work-address-title {
   grid-area: work_address_title;
 }
@@ -40,6 +42,7 @@
 #home-street-address-cell {
   grid-area: home_street_address;
 }
+
 #work-street-address-cell {
   grid-area: work_street_address;
 }
@@ -47,6 +50,7 @@
 #home-street-address-2-cell {
   grid-area: home_street_address_2;
 }
+
 #work-street-address-2-cell {
   grid-area: work_street_address_2;
 }
@@ -54,6 +58,7 @@
 #home-city-cell {
   grid-area: home_city;
 }
+
 #work-city-cell {
   grid-area: work_city;
 }
@@ -61,6 +66,7 @@
 #home-state-cell {
   grid-area: home_state;
 }
+
 #work-state-cell {
   grid-area: work_state;
 }
@@ -68,6 +74,7 @@
 #home-zip-cell {
   grid-area: home_zip;
 }
+
 #work-zip-cell {
   grid-area: work_zip;
 }
@@ -84,6 +91,62 @@
   #fancy-form .address {
     display: flex;
     flex-direction: column;
+  }
+}
+
+@media only screen and (max-width: 1505px) {
+  #fancy-form {
+    display: grid;
+    column-gap: var(--base-x-2);
+    row-gap: var(--base-x-2);
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-areas:
+    "name_title . ."
+    "first_name first_name first_name"
+    "last_name last_name last_name"
+
+    "home_address_title . . "
+    "home_street_address home_street_address home_street_address"
+    "home_street_address_2 home_street_address_2 home_street_address_2"
+    "home_city home_state home_zip"
+
+    "work_address_title . same_as_home"
+    "work_street_address work_street_address work_street_address"
+    "work_street_address_2 work_street_address_2 work_street_address_2"
+    "work_city work_state work_zip"
+
+    "details details details"
+    ". submit submit"
+  }
+}
+
+@media only screen and (max-width: 832px) {
+  #fancy-form {
+    display: grid;
+    column-gap: var(--base-x-2);
+    row-gap: var(--base-x-2);
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-areas:
+    "name_title ."
+    "first_name first_name"
+    "last_name last_name"
+
+    "home_address_title ."
+    "home_street_address home_street_address"
+    "home_street_address_2 home_street_address_2"
+    "home_city home_city"
+    "home_state ."
+    "home_zip home_zip"
+
+    "work_address_title same_as_home"
+    "work_street_address work_street_address"
+    "work_street_address_2 work_street_address_2"
+    "work_city work_city"
+    "work_state ."
+    "work_zip work_zip"
+
+    "details details"
+    "submit submit"
   }
 }
 
