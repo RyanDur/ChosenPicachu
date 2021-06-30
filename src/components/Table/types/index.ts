@@ -1,12 +1,15 @@
 import {ReactNode} from 'react';
 
-export type Column = Cell<string | number>
+type ColumnValue = string | number;
 
-export interface Row {
-    [column: string]: Cell;
-}
+export type Column = Cell<ColumnValue>
 
-export interface Cell<T = Object> {
+export type Row = {
+    [column in ColumnValue]: Cell;
+};
+
+export interface Cell<T = ReactNode> {
     value: T;
     display?: ReactNode;
+    className?: string;
 }

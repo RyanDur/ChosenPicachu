@@ -70,28 +70,37 @@ describe('A Table', () => {
 
     test('should be able to add more class names where needed', () => {
         const table = screen.getByTestId('table');
-        expect(table.classList.contains(tableClassName)).toBe(true);
+        expect(table.classList).toContain(tableClassName);
 
-        expect(screen.getByTestId('thead').classList.contains(theadClassName)).toBe(true);
+        expect(screen.getByTestId('thead').classList).toContain(theadClassName);
 
         const tbody = screen.getByTestId('tbody');
-        expect(tbody.classList.contains(tbodyClassName)).toBe(true);
-        expect(tbody.classList.contains(tbodyClassName)).toBe(true);
+        expect(tbody.classList).toContain(tbodyClassName);
+        expect(tbody.classList).toContain(tbodyClassName);
 
         const [header, ...body] = screen.getAllByTestId('tr');
-        [header, ...body].forEach(tr => expect(tr.classList.contains(trClassName)).toBe(true));
-        expect(header.classList.contains(headerRowClassName)).toBe(true);
-        expect(header.classList.contains(rowClassName)).toBe(false);
-        body.forEach(row => expect(row.classList.contains(trClassName)).toBe(true));
-        body.forEach(row => expect(row.classList.contains(headerRowClassName)).toBe(false));
+        [header, ...body].forEach(tr => expect(tr.classList).toContain(trClassName));
+        expect(header.classList).toContain(headerRowClassName);
+        expect(header.classList).not.toContain(rowClassName);
+        body.forEach(row => expect(row.classList).toContain(trClassName));
+        body.forEach(row => expect(row.classList).not.toContain(headerRowClassName));
 
         const columns = screen.getAllByTestId('th');
-        columns.forEach(column => expect(column.classList.contains(thClassName)).toBe(true));
-        columns.forEach(column => expect(column.classList.contains(cellClassName)).toBe(true));
+        columns.forEach(column => expect(column.classList).toContain(thClassName));
+        columns.forEach(column => expect(column.classList).toContain(thClassName));
+
+        const [firstColumn, ...otherColumns] = columns;
+        expect(firstColumn.classList).toContain('aClassName');
+        otherColumns.forEach(column => expect(column.classList).not.toContain('aClassName'));
 
         const cells = screen.getAllByTestId(/cell/i);
-        cells.forEach(cell => expect(cell.classList.contains(tdClassName)).toBe(true));
-        cells.forEach(cell => expect(cell.classList.contains(cellClassName)).toBe(true));
+        cells.forEach(cell => expect(cell.classList).toContain(tdClassName));
+        cells.forEach(cell => expect(cell.classList).toContain(cellClassName));
+
+        const cell = screen.getByTestId('cell-2-0');
+        expect(cell.classList).toContain('aSingleClassName');
+        const otherCells = screen.getAllByTestId(/cell/i).filter(cell => cell.dataset.testid !== 'cell-2-0');
+        otherCells.forEach(cell => expect(cell.classList).not.toContain('aSingleClassName'));
     });
 
     test('should be able to add an id', () => {

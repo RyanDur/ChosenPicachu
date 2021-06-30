@@ -34,7 +34,11 @@ export const row2Col1Display = faker.lorem.words(Math.floor(Math.random() * 6) +
 export const row2Col2Display = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
 
 export const columns: Column[] = [
-    {value: column1Name, display: <h2 data-testid="column1">{column1Display}</h2>},
+    {
+        value: column1Name,
+        display: <h2 data-testid="column1">{column1Display}</h2>,
+        className: 'aClassName'
+    },
     {value: column2Name},
     {value: column3Name, display: column3Display},
 ];
@@ -50,8 +54,9 @@ export const rows: Row[] = [{
     },
     [column3Name]: {
         value: row0Col2Value,
-        display: row0Col2Display
-    }
+        display: row0Col2Display,
+        className: 'aSingleClassName'
+    },
 }, {
     [column1Name]: {
         value: row1Col0Value,
