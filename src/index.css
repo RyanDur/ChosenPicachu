@@ -83,6 +83,7 @@ a {
   --light-shadow: rgba(0, 0, 0, 0.16);
   --shadow: rgba(0, 0, 0, 0.19);
   --dark-shadow: rgba(0, 0, 0, 0.23);
+  --disabled-gray:  rgba(239, 239, 239, 0.3);
 
   /* spacing */
   --base-x-0_5: 0.4rem;

@@ -75,7 +75,7 @@ export const Form: FC = () => {
                 required={true}
                 optionValues={new Set(states.map(({abbreviation}) => abbreviation))}
                 onChange={event => updateHomeAddress({...homeAddress, state: event.currentTarget.value})}>
-                State / Province
+                State
             </FancySelect>
 
             <FancyTextInput id="home-zip-cell" inputId="home-zip" required={true}
@@ -91,7 +91,7 @@ export const Form: FC = () => {
             </article>
 
             <FancyTextInput id="work-street-address-cell" inputId="work-street-address"
-                            value={workAddress.streetAddress} readOnly={sameAsHome}
+                            value={workAddress.streetAddress} disabled={sameAsHome}
                             onChange={event => updateWorkAddress({
                                 ...workAddress, streetAddress: event.currentTarget.value
                             })}>
@@ -99,14 +99,14 @@ export const Form: FC = () => {
             </FancyTextInput>
 
             <FancyTextInput id="work-street-address-2-cell" inputId="work-street-address-2"
-                            value={workAddress.streetAddressTwo || ''} readOnly={sameAsHome}
+                            value={workAddress.streetAddressTwo || ''} disabled={sameAsHome}
                             onChange={event => updateWorkAddress({
                                 ...workAddress, streetAddressTwo: event.currentTarget.value
                             })}>
                 Street Address Line 2
             </FancyTextInput>
 
-            <FancyTextInput id="work-city-cell" inputId="work-city" value={workAddress.city} readOnly={sameAsHome}
+            <FancyTextInput id="work-city-cell" inputId="work-city" value={workAddress.city} disabled={sameAsHome}
                             onChange={event => updateWorkAddress({
                                 ...workAddress, city: event.currentTarget.value
                             })}>
@@ -119,14 +119,13 @@ export const Form: FC = () => {
                 selectClassName="state"
                 selectId="work-state"
                 value={workAddress.state}
-                required={true}
                 disabled={sameAsHome}
                 optionValues={new Set(states.map(({abbreviation}) => abbreviation))}
                 onChange={event => updateWorkAddress({...workAddress, state: event.currentTarget.value})}>
-                State / Province
+                State
             </FancySelect>
 
-            <FancyTextInput id="work-zip-cell" inputId="work-zip" value={workAddress.zip} readOnly={sameAsHome}
+            <FancyTextInput id="work-zip-cell" inputId="work-zip" value={workAddress.zip} disabled={sameAsHome}
                             onChange={event => updateWorkAddress({...workAddress, zip: event.currentTarget.value})}>
                 Postal / Zip code
             </FancyTextInput>

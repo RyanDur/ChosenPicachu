@@ -105,15 +105,15 @@ describe('a form', () => {
 
             const workStreetNameInput = screen.getByTestId('work-street-address');
             expect(workStreetNameInput).toHaveValue(homeStreetName);
-            expect(workStreetNameInput).toHaveAttribute('readonly');
+            expect(workStreetNameInput).toHaveAttribute('disabled');
 
             const workStreetName2Input = screen.getByTestId('work-street-address-2');
             expect(workStreetName2Input).toHaveValue(homeStreetName2);
-            expect(workStreetName2Input).toHaveAttribute('readonly');
+            expect(workStreetName2Input).toHaveAttribute('disabled');
 
             const workCityInout = screen.getByTestId('work-city');
             expect(workCityInout).toHaveValue(homeCity);
-            expect(workCityInout).toHaveAttribute('readonly');
+            expect(workCityInout).toHaveAttribute('disabled');
 
             const workStateInput = screen.getByTestId('work-state');
             expect(workStateInput).toHaveValue(homeState);
@@ -121,7 +121,7 @@ describe('a form', () => {
 
             const workZipInput = screen.getByTestId('work-zip');
             expect(workZipInput).toHaveValue(homeZip);
-            expect(workZipInput).toHaveAttribute('readonly');
+            expect(workZipInput).toHaveAttribute('disabled');
 
             const submit = screen.getByText('Submit');
             userEvent.click(submit);

@@ -1,0 +1,1 @@
+export const joinClassNames = (...classes: Partial<string[]>) => classes.join(' ').trim();

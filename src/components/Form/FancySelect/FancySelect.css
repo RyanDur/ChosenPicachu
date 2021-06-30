@@ -1,0 +1,60 @@
+.fancy-select {
+  border: 1px solid rgba(30, 118, 224, 0.68);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  border-radius: 2rem;
+  height: 4rem;
+  position: relative;
+}
+
+.fancy-select.not-empty .fancy-select-title,
+.fancy-select .fancy-select-box:disabled ~ .fancy-select-title,
+.fancy-select .fancy-select-box:focus + .fancy-select-title {
+  opacity: 1;
+  bottom: 3rem;
+  background: linear-gradient(#00000000, #00000000),
+  linear-gradient(#00000000, rgb(255, 255, 255), #00000000),
+  linear-gradient(#00000000, #00000000);
+}
+
+.fancy-select .fancy-select-box:disabled {
+  background: var(--disabled-gray)
+}
+
+.fancy-select .fancy-select-box:focus {
+  border-radius: 4rem;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+.fancy-select .fancy-select-title {
+  pointer-events: none;
+  position: absolute;
+  margin-left: 1.75rem;
+  padding: 0 0.25rem;
+  bottom: 1.15rem;
+  opacity: 0.6;
+  transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+}
+
+.fancy-select .fancy-select-box {
+  all: unset;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding-left: 2rem;
+  text-overflow: ellipsis;
+  margin: 0;
+  border-radius: 2rem;
+}
+
+.fancy-select .fancy-select-box.minimal {
+  background-image: linear-gradient(45deg, transparent 50%, gray 50%),
+  linear-gradient(135deg, gray 50%, transparent 50%),
+  linear-gradient(to right, #ccc, #ccc);
+  background-position: calc(100% - 2rem) calc(1.6rem + 0.2rem),
+  calc(100% - 1.5rem) calc(1.6rem + 0.2rem),
+  calc(100% - 3.5rem) 0.65rem;
+  background-size: 0.5rem 0.5rem,
+  0.5rem 0.5rem,
+  0.1rem 2.5rem;
+  background-repeat: no-repeat;
+}
