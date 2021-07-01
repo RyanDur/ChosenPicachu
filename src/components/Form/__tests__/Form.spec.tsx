@@ -22,6 +22,15 @@ describe('a form', () => {
 
     const description = faker.lorem.sentences(Math.floor(Math.random() * 10) + 1);
 
+    let firstNameInput: HTMLElement;
+    let surnameInput: HTMLElement;
+    let homeStreetNameInput: HTMLElement;
+    let homeStreetName2Input: HTMLElement;
+    let homeCityInout: HTMLElement;
+    let homeStateInput: HTMLElement;
+    let homeZipInput: HTMLElement;
+    let details: HTMLElement;
+
     const homeAddress = {
         city: homeCity,
         state: homeState,
@@ -34,35 +43,32 @@ describe('a form', () => {
         data.post = jest.fn();
         render(<Form/>);
 
-        const firstNameInput = screen.getByLabelText('First Name');
+        firstNameInput = screen.getByLabelText('First Name');
+        surnameInput = screen.getByLabelText('Last Name');
+        homeStreetNameInput = screen.getByTestId('home-street-address');
+        homeStreetName2Input = screen.getByTestId('home-street-address-2');
+        homeCityInout = screen.getByTestId('home-city');
+        homeStateInput = screen.getByTestId('home-state');
+        homeZipInput = screen.getByTestId('home-zip');
+        details = screen.getByLabelText('Details');
+
         userEvent.type(firstNameInput, firstName);
-        expect(firstNameInput.hasAttribute('required')).toBe(true);
-
-        const surnameInput = screen.getByLabelText('Last Name');
         userEvent.type(surnameInput, lastName);
-        expect(surnameInput.hasAttribute('required')).toBe(true);
-
-        const homeStreetNameInput = screen.getByTestId('home-street-address');
         userEvent.type(homeStreetNameInput, homeStreetName);
-        expect(homeStreetNameInput.hasAttribute('required')).toBe(true);
-
-        const homeStreetName2Input = screen.getByTestId('home-street-address-2');
         userEvent.type(homeStreetName2Input, homeStreetName2);
-
-        const homeCityInout = screen.getByTestId('home-city');
         userEvent.type(homeCityInout, homeCity);
-        expect(homeCityInout.hasAttribute('required')).toBe(true);
-
-        const homeStateInput = screen.getByTestId('home-state');
         userEvent.selectOptions(homeStateInput, homeState);
-        expect(homeStateInput.hasAttribute('required')).toBe(true);
-
-        const homeZipInput = screen.getByTestId('home-zip');
         userEvent.type(homeZipInput, homeZip);
-        expect(homeZipInput.hasAttribute('required')).toBe(true);
-
-        const details = screen.getByLabelText('Details');
         userEvent.type(details, description);
+    });
+
+    it('should have some required fields', () => {
+        expect(firstNameInput).toHaveAttribute('required');
+        expect(surnameInput).toHaveAttribute('required');
+        expect(homeStreetNameInput).toHaveAttribute('required');
+        expect(homeCityInout).toHaveAttribute('required');
+        expect(homeStateInput).toHaveAttribute('required');
+        expect(homeZipInput).toHaveAttribute('required');
     });
 
     it('should submit all the data', () => {
@@ -81,8 +87,7 @@ describe('a form', () => {
         const workZipInput = screen.getByTestId('work-zip');
         userEvent.type(workZipInput, workZip);
 
-        const submit = screen.getByText('Submit');
-        userEvent.click(submit);
+        userEvent.click(screen.getByText('Submit'));
 
         expect(data.post).toHaveBeenCalledWith({
             user: {firstName, lastName},
@@ -99,29 +104,27 @@ describe('a form', () => {
     });
 
     describe('work address', () => {
+        let workStreetNameInput: HTMLElement;
+        let workStreetName2Input: HTMLElement;
+        let workCityInout: HTMLElement;
+        let workStateInput: HTMLElement;
+        let workZipInput: HTMLElement;
+
+        beforeEach(() => {
+            userEvent.click(screen.getByLabelText('Same as Home'));
+            workStreetNameInput = screen.getByTestId('work-street-address');
+            workStreetName2Input = screen.getByTestId('work-street-address-2');
+            workCityInout = screen.getByTestId('work-city');
+            workStateInput = screen.getByTestId('work-state');
+            workZipInput = screen.getByTestId('work-zip');
+        });
+
         test('should allow the user to auto copy the home address', () => {
-            const sameAsHome = screen.getByLabelText('Same as Home');
-            userEvent.click(sameAsHome);
-
-            const workStreetNameInput = screen.getByTestId('work-street-address');
             expect(workStreetNameInput).toHaveValue(homeStreetName);
-            expect(workStreetNameInput).toHaveAttribute('disabled');
-
-            const workStreetName2Input = screen.getByTestId('work-street-address-2');
             expect(workStreetName2Input).toHaveValue(homeStreetName2);
-            expect(workStreetName2Input).toHaveAttribute('disabled');
-
-            const workCityInout = screen.getByTestId('work-city');
             expect(workCityInout).toHaveValue(homeCity);
-            expect(workCityInout).toHaveAttribute('disabled');
-
-            const workStateInput = screen.getByTestId('work-state');
             expect(workStateInput).toHaveValue(homeState);
-            expect(workStateInput).toHaveAttribute('disabled');
-
-            const workZipInput = screen.getByTestId('work-zip');
             expect(workZipInput).toHaveValue(homeZip);
-            expect(workZipInput).toHaveAttribute('disabled');
 
             const submit = screen.getByText('Submit');
             userEvent.click(submit);
@@ -132,6 +135,14 @@ describe('a form', () => {
                 workAddress: homeAddress,
                 details: description
             });
+        });
+
+        test('inputs should be disabled', () => {
+            expect(workStreetNameInput).toHaveAttribute('disabled');
+            expect(workStreetName2Input).toHaveAttribute('disabled');
+            expect(workCityInout).toHaveAttribute('disabled');
+            expect(workStateInput).toHaveAttribute('disabled');
+            expect(workZipInput).toHaveAttribute('disabled');
         });
     });
 });

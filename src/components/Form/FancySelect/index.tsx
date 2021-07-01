@@ -10,7 +10,6 @@ interface FancySelectProps {
     id?: string;
     className?: string;
     selectClassName?: string;
-    optionClassName?: string;
     required?: boolean;
     disabled?: boolean;
 }
@@ -23,7 +22,6 @@ export const FancySelect: FC<FancySelectProps> = (
         optionValues,
         className,
         selectClassName,
-        optionClassName,
         onChange,
         selectId,
         required,
@@ -34,20 +32,16 @@ export const FancySelect: FC<FancySelectProps> = (
     return <article id={id} className={joinClassNames('fancy-select', (value || data) && 'not-empty', className)}>
         <select id={selectId}
                 className={joinClassNames('fancy-select-box', 'minimal', selectClassName)}
-                required={required}
                 {...(value ? {value} : {defaultValue: ''})}
+                required={required}
                 disabled={disabled}
                 data-testid={selectId}
                 onChange={event => {
                     updateData(event.target.value);
                     onChange?.(event);
                 }}>
-            {[<option key="placeholder" className={joinClassNames('fancy-option', optionClassName)}
-                      value="" disabled hidden/>,
-                ...Array.from(optionValues).map((value) =>
-                    <option className={joinClassNames('fancy-option', optionClassName)} key={value}>
-                        {value}
-                    </option>)
+            {[<option key="placeholder" value="" disabled hidden/>,
+                ...Array.from(optionValues).map(value => <option key={value}>{value}</option>)
             ]}
         </select>
         <label className={joinClassNames('fancy-select-title', selectClassName)} htmlFor={selectId}>{children}</label>
