@@ -5,22 +5,28 @@ import * as faker from 'faker';
 import {data} from '../../../data';
 
 describe('a form', () => {
-    const firstName = faker.name.firstName();
-    const lastName = faker.name.lastName();
+    const user = {
+        firstName: faker.name.firstName(),
+        lastName: faker.name.lastName()
+    };
 
-    const homeStreetName = faker.address.streetName();
-    const homeStreetName2 = faker.address.secondaryAddress();
-    const homeCity = faker.address.city();
-    const homeState = faker.address.stateAbbr();
-    const homeZip = faker.address.zipCodeByState(homeState);
+    const homeAddress = {
+        city: faker.address.city(),
+        state: faker.address.stateAbbr(),
+        streetAddress: faker.address.streetName(),
+        streetAddressTwo: faker.address.secondaryAddress(),
+        zip: faker.address.zipCode()
+    };
 
-    const workStreetName = faker.address.streetName();
-    const workStreetName2 = faker.address.secondaryAddress();
-    const workCity = faker.address.city();
-    const workState = faker.address.stateAbbr();
-    const workZip = faker.address.zipCode(workState);
+    const workAddress = {
+        city: faker.address.city(),
+        state: faker.address.stateAbbr(),
+        streetAddress: faker.address.streetName(),
+        streetAddressTwo: faker.address.secondaryAddress(),
+        zip: faker.address.zipCode()
+    };
 
-    const description = faker.lorem.sentences(Math.floor(Math.random() * 10) + 1);
+    const details = faker.lorem.sentences(Math.floor(Math.random() * 10) + 1);
 
     let firstNameInput: HTMLElement;
     let surnameInput: HTMLElement;
@@ -29,15 +35,14 @@ describe('a form', () => {
     let homeCityInout: HTMLElement;
     let homeStateInput: HTMLElement;
     let homeZipInput: HTMLElement;
-    let details: HTMLElement;
+    let workStreetNameInput: HTMLElement;
 
-    const homeAddress = {
-        city: homeCity,
-        state: homeState,
-        streetAddress: homeStreetName,
-        streetAddressTwo: homeStreetName2,
-        zip: homeZip
-    };
+    let workStreetName2Input: HTMLElement;
+    let workCityInout: HTMLElement;
+    let workStateInput: HTMLElement;
+    let workZipInput: HTMLElement;
+
+    let userDetails: HTMLElement;
 
     beforeEach(() => {
         data.post = jest.fn();
@@ -45,21 +50,37 @@ describe('a form', () => {
 
         firstNameInput = screen.getByLabelText('First Name');
         surnameInput = screen.getByLabelText('Last Name');
+
         homeStreetNameInput = screen.getByTestId('home-street-address');
         homeStreetName2Input = screen.getByTestId('home-street-address-2');
         homeCityInout = screen.getByTestId('home-city');
         homeStateInput = screen.getByTestId('home-state');
         homeZipInput = screen.getByTestId('home-zip');
-        details = screen.getByLabelText('Details');
 
-        userEvent.type(firstNameInput, firstName);
-        userEvent.type(surnameInput, lastName);
-        userEvent.type(homeStreetNameInput, homeStreetName);
-        userEvent.type(homeStreetName2Input, homeStreetName2);
-        userEvent.type(homeCityInout, homeCity);
-        userEvent.selectOptions(homeStateInput, homeState);
-        userEvent.type(homeZipInput, homeZip);
-        userEvent.type(details, description);
+        workStreetNameInput = screen.getByTestId('work-street-address');
+        workStreetName2Input = screen.getByTestId('work-street-address-2');
+        workCityInout = screen.getByTestId('work-city');
+        workStateInput = screen.getByTestId('work-state');
+        workZipInput = screen.getByTestId('work-zip');
+
+        userDetails = screen.getByLabelText('Details');
+
+        userEvent.type(firstNameInput, user.firstName);
+        userEvent.type(surnameInput, user.lastName);
+
+        userEvent.type(homeStreetNameInput, homeAddress.streetAddress);
+        userEvent.type(homeStreetName2Input, homeAddress.streetAddressTwo);
+        userEvent.type(homeCityInout, homeAddress.city);
+        userEvent.selectOptions(homeStateInput, homeAddress.state);
+
+        userEvent.type(workStreetNameInput, workAddress.streetAddress);
+        userEvent.type(workStreetName2Input, workAddress.streetAddressTwo);
+        userEvent.type(workCityInout, workAddress.city);
+        userEvent.selectOptions(workStateInput, workAddress.state);
+        userEvent.type(workZipInput, workAddress.zip);
+
+        userEvent.type(homeZipInput, homeAddress.zip);
+        userEvent.type(userDetails, details);
     });
 
     it('should have some required fields', () => {
@@ -72,71 +93,37 @@ describe('a form', () => {
     });
 
     it('should submit all the data', () => {
-        const workStreetNameInput = screen.getByTestId('work-street-address');
-        userEvent.type(workStreetNameInput, workStreetName);
-
-        const workStreetName2Input = screen.getByTestId('work-street-address-2');
-        userEvent.type(workStreetName2Input, workStreetName2);
-
-        const workCityInout = screen.getByTestId('work-city');
-        userEvent.type(workCityInout, workCity);
-
-        const workStateInput = screen.getByTestId('work-state');
-        userEvent.selectOptions(workStateInput, workState);
-
-        const workZipInput = screen.getByTestId('work-zip');
-        userEvent.type(workZipInput, workZip);
-
         userEvent.click(screen.getByText('Submit'));
 
         expect(data.post).toHaveBeenCalledWith({
-            user: {firstName, lastName},
+            user,
             homeAddress,
-            workAddress: {
-                city: workCity,
-                state: workState,
-                streetAddress: workStreetName,
-                streetAddressTwo: workStreetName2,
-                zip: workZip
-            },
-            details: description
+            workAddress,
+            details
         });
     });
 
     describe('work address', () => {
-        let workStreetNameInput: HTMLElement;
-        let workStreetName2Input: HTMLElement;
-        let workCityInout: HTMLElement;
-        let workStateInput: HTMLElement;
-        let workZipInput: HTMLElement;
-
-        beforeEach(() => {
-            userEvent.click(screen.getByLabelText('Same as Home'));
-            workStreetNameInput = screen.getByTestId('work-street-address');
-            workStreetName2Input = screen.getByTestId('work-street-address-2');
-            workCityInout = screen.getByTestId('work-city');
-            workStateInput = screen.getByTestId('work-state');
-            workZipInput = screen.getByTestId('work-zip');
-        });
+        beforeEach(() => userEvent.click(screen.getByLabelText('Same as Home')));
 
         test('should allow the user to auto copy the home address', () => {
-            expect(workStreetNameInput).toHaveValue(homeStreetName);
-            expect(workStreetName2Input).toHaveValue(homeStreetName2);
-            expect(workCityInout).toHaveValue(homeCity);
-            expect(workStateInput).toHaveValue(homeState);
-            expect(workZipInput).toHaveValue(homeZip);
+            expect(workStreetNameInput).toHaveValue(homeAddress.streetAddress);
+            expect(workStreetName2Input).toHaveValue(homeAddress.streetAddressTwo);
+            expect(workCityInout).toHaveValue(homeAddress.city);
+            expect(workStateInput).toHaveValue(homeAddress.state);
+            expect(workZipInput).toHaveValue(homeAddress.zip);
 
             userEvent.click(screen.getByText('Submit'));
 
             expect(data.post).toHaveBeenCalledWith({
-                user: {firstName, lastName},
+                user,
                 homeAddress,
                 workAddress: homeAddress,
-                details: description
+                details
             });
         });
 
-        test('inputs should be disabled', () => {
+        test('work address should be disabled', () => {
             expect(workStreetNameInput).toHaveAttribute('disabled');
             expect(workStreetName2Input).toHaveAttribute('disabled');
             expect(workCityInout).toHaveAttribute('disabled');
