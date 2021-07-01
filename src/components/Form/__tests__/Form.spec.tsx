@@ -126,8 +126,7 @@ describe('a form', () => {
             expect(workStateInput).toHaveValue(homeState);
             expect(workZipInput).toHaveValue(homeZip);
 
-            const submit = screen.getByText('Submit');
-            userEvent.click(submit);
+            userEvent.click(screen.getByText('Submit'));
 
             expect(data.post).toHaveBeenCalledWith({
                 user: {firstName, lastName},
