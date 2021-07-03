@@ -1,5 +1,4 @@
 import React, {FC, FormEvent, useState} from 'react';
-import './FancyTextInput.css';
 import {joinClassNames} from '../../util';
 
 interface FancyTextInputProps {
@@ -33,13 +32,23 @@ export const FancyTextInput: FC<FancyTextInputProps> = (
     }
 ) => {
     const [data, updateData] = useState(value);
-    return <article id={id} className={joinClassNames('fancy-input', (value || data) && 'not-empty', articleClass)}>
+    const [focused, updateFocus] = useState(false);
+    return <article id={id} className={joinClassNames(
+        'fancy-select fancy',
+        (value || data) && 'not-empty',
+        disabled && 'disabled',
+        readOnly && 'read-only',
+        focused && 'focus',
+        articleClass
+    )}>
+        <label id={labelId} className={joinClassNames('fancy-title', labelClass)} htmlFor={inputId}>{children}</label>
         <input id={inputId} className={joinClassNames('fancy-text', inputClass)}
+               onFocus={() => updateFocus(true)}
+               onBlur={() => updateFocus(false)}
                value={value} readOnly={readOnly} disabled={disabled} required={required} data-testid={inputId}
                onChange={event => {
                    updateData(event.currentTarget.value);
                    onChange?.(event);
                }}/>
-        <label id={labelId} className={joinClassNames('fancy-title', labelClass)} htmlFor={inputId}>{children}</label>
     </article>;
 };

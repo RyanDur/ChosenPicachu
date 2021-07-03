@@ -29,13 +29,23 @@ export const FancySelect: FC<FancySelectProps> = (
     }
 ) => {
     const [data, updateData] = useState(value);
-    return <article id={id} className={joinClassNames('fancy-select', (value || data) && 'not-empty', className)}>
+    const [focused, updateFocus] = useState(false);
+    return <article id={id} className={joinClassNames(
+        'fancy fancy-select',
+        (value || data) && 'not-empty',
+        disabled && 'disabled',
+        focused && 'focus',
+        className
+    )}>
+        <label className={joinClassNames('fancy-title', selectClassName)} htmlFor={selectId}>{children}</label>
         <select id={selectId}
-                className={joinClassNames('fancy-select-box', 'minimal', selectClassName)}
+                className={joinClassNames('fancy-select-box fancy-text', selectClassName)}
                 {...(value ? {value} : {defaultValue: ''})}
                 required={required}
                 disabled={disabled}
                 data-testid={selectId}
+                onFocus={() => updateFocus(true)}
+                onBlur={() => updateFocus(false)}
                 onChange={event => {
                     updateData(event.target.value);
                     onChange?.(event);
@@ -44,6 +54,5 @@ export const FancySelect: FC<FancySelectProps> = (
                 ...Array.from(optionValues).map(value => <option key={value}>{value}</option>)
             ]}
         </select>
-        <label className={joinClassNames('fancy-select-title', selectClassName)} htmlFor={selectId}>{children}</label>
     </article>;
 };

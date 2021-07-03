@@ -2,10 +2,11 @@ import React, {FC, FormEvent, useEffect, useState} from 'react';
 import {data} from '../../data';
 import {AddressInfo, User} from './types';
 import states from 'states-us/dist';
-import './Form.layout.css';
-import './Form.css';
 import {FancyTextInput} from './FancyTextInput';
 import {FancySelect} from './FancySelect';
+import './Form.layout.css';
+import './Form.css';
+import {joinClassNames} from '../util';
 
 export const Form: FC = () => {
     const initialAddress: AddressInfo = {
@@ -20,6 +21,7 @@ export const Form: FC = () => {
     const [workAddress, updateWorkAddress] = useState<AddressInfo>(initialAddress);
     const [details, updateDetails] = useState<string>();
     const [sameAsHome, updateSameAsHome] = useState(false);
+    const [focused, updateDetailsFocus] = useState(false);
 
     useEffect(() => {
         if (sameAsHome) {
@@ -69,7 +71,6 @@ export const Form: FC = () => {
 
             <FancySelect
                 id="home-state-cell"
-                className="stack"
                 selectClassName="state"
                 selectId="home-state"
                 required={true}
@@ -115,7 +116,6 @@ export const Form: FC = () => {
 
             <FancySelect
                 id="work-state-cell"
-                className="stack"
                 selectClassName="state"
                 selectId="work-state"
                 value={workAddress.state}
@@ -130,12 +130,19 @@ export const Form: FC = () => {
                 Postal / Zip code
             </FancyTextInput>
 
-            <section id="details-cell" className="stack">
-                <label id="details-label" htmlFor="details">Details</label>
-                <textarea name="details" id="details" onChange={event => updateDetails(event.currentTarget.value)}/>
+            <section id="details-cell" className={joinClassNames(
+                'fancy',
+                focused && 'focus',
+                details && 'not-empty'
+            )}>
+                <label id="details-label" className="fancy-title" htmlFor="details">Details</label>
+                <textarea name="details" className="fancy-text" id="details"
+                          onFocus={() => updateDetailsFocus(true)}
+                          onBlur={() => updateDetailsFocus(false)}
+                          onChange={event => updateDetails(event.currentTarget.value)}/>
             </section>
 
-            <button id="submit">Submit</button>
+            <button id="submit" className="primary ripple">Submit</button>
         </form>
     </section>;
 };
