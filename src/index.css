@@ -88,6 +88,7 @@ a {
   /* spacing */
   --base-x-0_5: 0.4rem;
   --base: 0.8rem;
+  --base-x-1_5: 1.2rem;
   --base-x-2: 1.6rem;
   --base-x-2_5: 2rem;
   --base-x-4: 3.2rem;
@@ -96,5 +97,6 @@ a {
   --base-x-6: 4.8rem;
   --base-x-6_5: 5.2rem;
   --base-x-10: 8rem;
+  --base-x-15: 12rem;
   --base-x-100: 80rem;
 }

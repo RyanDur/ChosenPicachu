@@ -6,7 +6,7 @@
 
 #fancy-form .fancy {
   border-radius: 2rem;
-  height: 4rem;
+  min-height: 4rem;
   position: relative;
   transition: all 0.5s cubic-bezier(.25, .8, .25, 1);
 }

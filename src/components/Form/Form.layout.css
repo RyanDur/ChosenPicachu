@@ -2,7 +2,7 @@
   display: grid;
   column-gap: var(--base-x-2);
   row-gap: var(--base-x-2);
-  grid-template-columns: repeat(2, 1fr) 9.8rem repeat(4, 1fr) 9.8rem repeat(2, 1fr);
+  grid-template-columns: repeat(2, 1fr) var(--base-x-15) repeat(4, 1fr) var(--base-x-15) repeat(2, 1fr);
   grid-template-areas:
   "name_title . . . . . . . . ."
   "first_name first_name first_name last_name last_name last_name . . . ."

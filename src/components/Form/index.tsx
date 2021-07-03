@@ -50,13 +50,13 @@ export const Form: FC = () => {
                             onChange={event => updateUser({
                                 ...user, firstName: event.currentTarget.value
                             })}>
-                First Name
+                First
             </FancyTextInput>
             <FancyTextInput id="last-name-cell" inputId="last-name" required={true}
                             onChange={event => updateUser({
                                 ...user, lastName: event.currentTarget.value
                             })}>
-                Last Name
+                Last
             </FancyTextInput>
 
             <h3 id="home-address-title">Home Address</h3>
@@ -64,13 +64,13 @@ export const Form: FC = () => {
                             onChange={event => updateHomeAddress({
                                 ...homeAddress, streetAddress: event.currentTarget.value
                             })}>
-                Street Address
+                Street
             </FancyTextInput>
             <FancyTextInput id="home-street-address-2-cell" inputId="home-street-address-2"
                             onChange={event => updateHomeAddress({
                                 ...homeAddress, streetAddressTwo: event.currentTarget.value
                             })}>
-                Street Address Line 2
+                Street Line 2
             </FancyTextInput>
             <FancyTextInput id="home-city-cell" inputId="home-city" required={true}
                             onChange={event => updateHomeAddress({
@@ -109,7 +109,7 @@ export const Form: FC = () => {
                             onChange={event => updateWorkAddress({
                                 ...workAddress, streetAddress: event.currentTarget.value
                             })}>
-                Street Address
+                Street
             </FancyTextInput>
 
             <FancyTextInput id="work-street-address-2-cell" inputId="work-street-address-2"
@@ -117,7 +117,7 @@ export const Form: FC = () => {
                             onChange={event => updateWorkAddress({
                                 ...workAddress, streetAddressTwo: event.currentTarget.value
                             })}>
-                Street Address Line 2
+                Street Line 2
             </FancyTextInput>
 
             <FancyTextInput id="work-city-cell" inputId="work-city" value={workAddress.city} disabled={sameAsHome}
