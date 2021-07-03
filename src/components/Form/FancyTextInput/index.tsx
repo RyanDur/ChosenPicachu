@@ -21,32 +21,33 @@ export const FancyTextInput: FC<FancyTextInputProps> = (
         inputId,
         children,
         id,
-        required = false,
         onChange,
         articleClass,
         inputClass,
         labelId,
         labelClass,
-        value,
-        readOnly,
-        disabled,
-        pattern
+        required = false,
+        readOnly = false,
+        disabled = false,
+        pattern,
+        value
     }
 ) => {
-    const [data, updateData] = useState(value);
+    const [data, updateData] = useState(value || '');
 
     return <article id={id} className={joinClassNames(
         'fancy-select fancy',
-        (value || data) && 'not-empty',
+        data && 'not-empty',
         articleClass
     )}>
-        <input id={inputId} className={joinClassNames('fancy-text', inputClass)}
+        <input id={inputId}
+               className={joinClassNames('fancy-text', inputClass)}
                pattern={pattern}
-               value={value}
                readOnly={readOnly}
                disabled={disabled}
                required={required}
                data-testid={inputId}
+               value={value || data}
                onChange={event => {
                    updateData(event.currentTarget.value);
                    onChange?.(event);

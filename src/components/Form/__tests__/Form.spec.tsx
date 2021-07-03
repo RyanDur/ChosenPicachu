@@ -48,8 +48,8 @@ describe('a form', () => {
         data.post = jest.fn();
         render(<Form/>);
 
-        firstNameInput = screen.getByLabelText('First Name');
-        surnameInput = screen.getByLabelText('Last Name');
+        firstNameInput = screen.getByLabelText('First');
+        surnameInput = screen.getByLabelText('Last');
 
         homeStreetNameInput = screen.getByTestId('home-street-address');
         homeStreetName2Input = screen.getByTestId('home-street-address-2');
@@ -139,39 +139,41 @@ describe('a form', () => {
         });
 
         describe('for a zip code', () => {
-            test('for home', () =>
-                validate(screen.getByTestId('home-zip')));
+            describe('for home', () => testZip('home'));
+            describe('for work', () => testZip('work'));
 
-            test('for work', () =>
-                validate(screen.getByTestId('work-zip')));
+            function testZip(kind: string) {
 
-            const validate = (element: HTMLElement) => {
-                userEvent.clear(element);
+                let element: HTMLElement;
+                beforeEach(() => {
+                    element = screen.getByTestId(`${kind}-zip`);
+                    userEvent.clear(element);
 
-                userEvent.type(element, 'a');
-                expect(element).not.toBeValid();
+                });
 
-                userEvent.clear(element);
+                test('a non-numeric', () => {
+                    userEvent.type(element, 'a');
+                    expect(element).toHaveDisplayValue('a');
+                    expect(element).not.toBeValid();
+                });
 
-                userEvent.type(element, '1');
-                expect(element).not.toBeValid();
-                userEvent.clear(element);
+                test('a partial numeric', () => {
+                    userEvent.type(element, '1');
+                    expect(element).toHaveDisplayValue('1');
+                    expect(element).not.toBeValid();
+                });
 
-                userEvent.type(element, '60012');
-                expect(element).toBeValid();
-                userEvent.clear(element);
-
-                userEvent.type(element, '60012-4567');
-                expect(element).toBeValid();
-                userEvent.clear(element);
-
-                userEvent.type(element, '60232-467');
-                expect(element).not.toBeValid();
-                userEvent.clear(element);
-
-                userEvent.type(element, faker.address.zipCode());
-                expect(element).toBeValid();
-            };
+                test('partial zip', () => {
+                    userEvent.type(element, '60012');
+                    expect(element).toHaveDisplayValue('60012');
+                    expect(element).toBeValid();
+                });
+                test('full zip', () => {
+                    userEvent.type(element, '12345-1234');
+                    expect(element).toHaveDisplayValue('12345-1234');
+                    expect(element).toBeValid();
+                });
+            }
         });
     });
 
