@@ -34,21 +34,13 @@ export const FancyTextInput: FC<FancyTextInputProps> = (
     }
 ) => {
     const [data, updateData] = useState(value);
-    const [focused, updateFocus] = useState(false);
 
     return <article id={id} className={joinClassNames(
         'fancy-select fancy',
         (value || data) && 'not-empty',
-        disabled && 'disabled',
-        readOnly && 'read-only',
-        focused && 'focus',
-        required && 'required',
         articleClass
     )}>
-        <label id={labelId} className={joinClassNames('fancy-title', labelClass)} htmlFor={inputId}>{children}</label>
         <input id={inputId} className={joinClassNames('fancy-text', inputClass)}
-               onFocus={() => updateFocus(true)}
-               onBlur={() => updateFocus(false)}
                pattern={pattern}
                value={value}
                readOnly={readOnly}
@@ -59,5 +51,6 @@ export const FancyTextInput: FC<FancyTextInputProps> = (
                    updateData(event.currentTarget.value);
                    onChange?.(event);
                }}/>
+        <label id={labelId} className={joinClassNames('fancy-title', labelClass)} htmlFor={inputId}>{children}</label>
     </article>;
 };
