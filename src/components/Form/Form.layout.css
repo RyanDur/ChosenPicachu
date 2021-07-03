@@ -2,16 +2,16 @@
   display: grid;
   column-gap: var(--base-x-2);
   row-gap: var(--base-x-2);
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(2, 1fr) 9.8rem repeat(4, 1fr) 9.8rem repeat(2, 1fr);
   grid-template-areas:
-  "name_title . . . . ."
-  "first_name first_name last_name last_name . ."
-  "home_address_title . . work_address_title . same_as_home"
-  "home_street_address home_street_address home_street_address work_street_address work_street_address work_street_address"
-  "home_street_address_2 home_street_address_2 home_street_address_2 work_street_address_2 work_street_address_2 work_street_address_2"
-  "home_city home_state home_zip work_city work_state work_zip"
-  "details details details details details details"
-  ". . . . submit submit"
+  "name_title . . . . . . . . ."
+  "first_name first_name first_name last_name last_name last_name . . . ."
+  "home_address_title home_address_title . . . work_address_title work_address_title .  same_as_home same_as_home"
+  "home_street_address home_street_address home_street_address home_street_address home_street_address work_street_address work_street_address work_street_address work_street_address work_street_address"
+  "home_street_address_2 home_street_address_2 home_street_address_2 home_street_address_2 home_street_address_2 work_street_address_2 work_street_address_2 work_street_address_2 work_street_address_2 work_street_address_2"
+  "home_city home_city home_state home_zip home_zip work_city work_city work_state work_zip work_zip"
+  "details details details details details details details details details details"
+  ". . . . . . submit submit submit submit"
 }
 
 #name-title {
@@ -73,10 +73,12 @@
 
 #home-zip-cell {
   grid-area: home_zip;
+  min-width: 9.8rem;
 }
 
 #work-zip-cell {
   grid-area: work_zip;
+  min-width: 9.8rem;
 }
 
 #submit {

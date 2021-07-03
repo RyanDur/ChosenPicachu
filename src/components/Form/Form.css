@@ -55,6 +55,12 @@
   linear-gradient(#00000000, #00000000);
 }
 
+#fancy-form .fancy.required .fancy-title:after {
+  content: "*";
+  color: var(--internationl-orange-engineering);
+}
+
+
 button.primary {
   height: 4rem;
   border-radius: 4rem;

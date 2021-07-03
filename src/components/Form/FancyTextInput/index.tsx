@@ -42,6 +42,7 @@ export const FancyTextInput: FC<FancyTextInputProps> = (
         disabled && 'disabled',
         readOnly && 'read-only',
         focused && 'focus',
+        required && 'required',
         articleClass
     )}>
         <label id={labelId} className={joinClassNames('fancy-title', labelClass)} htmlFor={inputId}>{children}</label>

@@ -36,6 +36,7 @@ export const FancySelect: FC<FancySelectProps> = (
         (value || data) && 'not-empty',
         disabled && 'disabled',
         focused && 'focus',
+        required && 'required',
         className
     )}>
         <label className={joinClassNames('fancy-title', selectClassName)} htmlFor={selectId}>{children}</label>
