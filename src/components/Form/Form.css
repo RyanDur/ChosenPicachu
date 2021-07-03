@@ -25,6 +25,10 @@
   background: var(--disabled-gray)
 }
 
+#fancy-form.invalid .fancy .fancy-text:invalid {
+  border: 1px solid var(--internationl-orange-engineering)
+}
+
 #fancy-form .fancy .fancy-text:focus {
   border-radius: 4rem;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);

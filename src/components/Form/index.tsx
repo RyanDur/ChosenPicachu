@@ -22,6 +22,7 @@ export const Form: FC = () => {
     const [details, updateDetails] = useState<string>();
     const [sameAsHome, updateSameAsHome] = useState(false);
     const [focused, updateDetailsFocus] = useState(false);
+    const [isInvalid, updateValidity] = useState(false);
 
     useEffect(() => {
         if (sameAsHome) {
@@ -40,14 +41,21 @@ export const Form: FC = () => {
     };
 
     return <section className="card overhang gutter">
-        <form id="fancy-form" onSubmit={handleSubmit}>
+        <form id="fancy-form"
+              className={joinClassNames(isInvalid && 'invalid')}
+              onSubmit={handleSubmit}
+              onInvalid={() => updateValidity(true)}>
             <h3 id="name-title">Name</h3>
             <FancyTextInput id="first-name-cell" inputId="first-name" required={true}
-                            onChange={event => updateUser({...user, firstName: event.currentTarget.value})}>
+                            onChange={event => updateUser({
+                                ...user, firstName: event.currentTarget.value
+                            })}>
                 First Name
             </FancyTextInput>
             <FancyTextInput id="last-name-cell" inputId="last-name" required={true}
-                            onChange={event => updateUser({...user, lastName: event.currentTarget.value})}>
+                            onChange={event => updateUser({
+                                ...user, lastName: event.currentTarget.value
+                            })}>
                 Last Name
             </FancyTextInput>
 
@@ -65,7 +73,9 @@ export const Form: FC = () => {
                 Street Address Line 2
             </FancyTextInput>
             <FancyTextInput id="home-city-cell" inputId="home-city" required={true}
-                            onChange={event => updateHomeAddress({...homeAddress, city: event.currentTarget.value})}>
+                            onChange={event => updateHomeAddress({
+                                ...homeAddress, city: event.currentTarget.value
+                            })}>
                 City
             </FancyTextInput>
 
@@ -79,7 +89,10 @@ export const Form: FC = () => {
                 State
             </FancySelect>
 
-            <FancyTextInput id="home-zip-cell" inputId="home-zip" required={true}
+            <FancyTextInput id="home-zip-cell"
+                            inputId="home-zip"
+                            pattern="^[0-9]{5}(?:-[0-9]{4})?$"
+                            required={true}
                             onChange={event => updateHomeAddress({...homeAddress, zip: event.currentTarget.value})}>
                 Postal / Zip code
             </FancyTextInput>
@@ -125,7 +138,11 @@ export const Form: FC = () => {
                 State
             </FancySelect>
 
-            <FancyTextInput id="work-zip-cell" inputId="work-zip" value={workAddress.zip} disabled={sameAsHome}
+            <FancyTextInput id="work-zip-cell"
+                            inputId="work-zip"
+                            pattern="^[0-9]{5}(?:-[0-9]{4})?$"
+                            value={workAddress.zip}
+                            disabled={sameAsHome}
                             onChange={event => updateWorkAddress({...workAddress, zip: event.currentTarget.value})}>
                 Postal / Zip code
             </FancyTextInput>

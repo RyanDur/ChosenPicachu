@@ -64,71 +64,115 @@ describe('a form', () => {
         workZipInput = screen.getByTestId('work-zip');
 
         userDetails = screen.getByLabelText('Details');
-
-        userEvent.type(firstNameInput, user.firstName);
-        userEvent.type(surnameInput, user.lastName);
-
-        userEvent.type(homeStreetNameInput, homeAddress.streetAddress);
-        userEvent.type(homeStreetName2Input, homeAddress.streetAddressTwo);
-        userEvent.type(homeCityInout, homeAddress.city);
-        userEvent.selectOptions(homeStateInput, homeAddress.state);
-
-        userEvent.type(workStreetNameInput, workAddress.streetAddress);
-        userEvent.type(workStreetName2Input, workAddress.streetAddressTwo);
-        userEvent.type(workCityInout, workAddress.city);
-        userEvent.selectOptions(workStateInput, workAddress.state);
-        userEvent.type(workZipInput, workAddress.zip);
-
-        userEvent.type(homeZipInput, homeAddress.zip);
-        userEvent.type(userDetails, details);
     });
 
-    it('should have some required fields', () => {
-        expect(firstNameInput).toHaveAttribute('required');
-        expect(surnameInput).toHaveAttribute('required');
-        expect(homeStreetNameInput).toHaveAttribute('required');
-        expect(homeCityInout).toHaveAttribute('required');
-        expect(homeStateInput).toHaveAttribute('required');
-        expect(homeZipInput).toHaveAttribute('required');
-    });
 
-    it('should submit all the data', () => {
-        userEvent.click(screen.getByText('Submit'));
+    describe('filled out', () => {
+        beforeEach(() => {
+            userEvent.type(firstNameInput, user.firstName);
+            userEvent.type(surnameInput, user.lastName);
 
-        expect(data.post).toHaveBeenCalledWith({
-            user,
-            homeAddress,
-            workAddress,
-            details
+            userEvent.type(homeStreetNameInput, homeAddress.streetAddress);
+            userEvent.type(homeStreetName2Input, homeAddress.streetAddressTwo);
+            userEvent.type(homeCityInout, homeAddress.city);
+            userEvent.selectOptions(homeStateInput, homeAddress.state);
+
+            userEvent.type(workStreetNameInput, workAddress.streetAddress);
+            userEvent.type(workStreetName2Input, workAddress.streetAddressTwo);
+            userEvent.type(workCityInout, workAddress.city);
+            userEvent.selectOptions(workStateInput, workAddress.state);
+            userEvent.type(workZipInput, workAddress.zip);
+
+            userEvent.type(homeZipInput, homeAddress.zip);
+            userEvent.type(userDetails, details);
         });
-    });
 
-    describe('work address', () => {
-        beforeEach(() => userEvent.click(screen.getByLabelText('Same as Home')));
-
-        test('should allow the user to auto copy the home address', () => {
-            expect(workStreetNameInput).toHaveValue(homeAddress.streetAddress);
-            expect(workStreetName2Input).toHaveValue(homeAddress.streetAddressTwo);
-            expect(workCityInout).toHaveValue(homeAddress.city);
-            expect(workStateInput).toHaveValue(homeAddress.state);
-            expect(workZipInput).toHaveValue(homeAddress.zip);
-
+        it('should submit all the data', () => {
             userEvent.click(screen.getByText('Submit'));
 
             expect(data.post).toHaveBeenCalledWith({
                 user,
                 homeAddress,
-                workAddress: homeAddress,
+                workAddress,
                 details
             });
         });
 
-        test('work address should be disabled', () => {
-            expect(workStreetNameInput).toHaveAttribute('disabled');
-            expect(workStreetName2Input).toHaveAttribute('disabled');
-            expect(workCityInout).toHaveAttribute('disabled');
-            expect(workStateInput).toHaveAttribute('disabled');
-            expect(workZipInput).toHaveAttribute('disabled');
+        describe('work address', () => {
+            beforeEach(() => userEvent.click(screen.getByLabelText('Same as Home')));
+
+            test('should allow the user to auto copy the home address', () => {
+                expect(workStreetNameInput).toHaveValue(homeAddress.streetAddress);
+                expect(workStreetName2Input).toHaveValue(homeAddress.streetAddressTwo);
+                expect(workCityInout).toHaveValue(homeAddress.city);
+                expect(workStateInput).toHaveValue(homeAddress.state);
+                expect(workZipInput).toHaveValue(homeAddress.zip);
+
+                userEvent.click(screen.getByText('Submit'));
+
+                expect(data.post).toHaveBeenCalledWith({
+                    user,
+                    homeAddress,
+                    workAddress: homeAddress,
+                    details
+                });
+            });
+
+            test('work address should be disabled', () => {
+                expect(workStreetNameInput).toHaveAttribute('disabled');
+                expect(workStreetName2Input).toHaveAttribute('disabled');
+                expect(workCityInout).toHaveAttribute('disabled');
+                expect(workStateInput).toHaveAttribute('disabled');
+                expect(workZipInput).toHaveAttribute('disabled');
+            });
         });
     });
+
+    describe('validity', () => {
+        it('should have some required fields', () => {
+            expect(firstNameInput).not.toBeValid();
+            expect(surnameInput).not.toBeValid();
+            expect(homeStreetNameInput).not.toBeValid();
+            expect(homeCityInout).not.toBeValid();
+            expect(homeStateInput).not.toBeValid();
+            expect(homeZipInput).not.toBeValid();
+        });
+
+        describe('for a zip code', () => {
+            test('for home', () =>
+                validate(screen.getByTestId('home-zip')));
+
+            test('for work', () =>
+                validate(screen.getByTestId('work-zip')));
+
+            const validate = (element: HTMLElement) => {
+                userEvent.clear(element);
+
+                userEvent.type(element, 'a');
+                expect(element).not.toBeValid();
+
+                userEvent.clear(element);
+
+                userEvent.type(element, '1');
+                expect(element).not.toBeValid();
+                userEvent.clear(element);
+
+                userEvent.type(element, '60012');
+                expect(element).toBeValid();
+                userEvent.clear(element);
+
+                userEvent.type(element, '60012-4567');
+                expect(element).toBeValid();
+                userEvent.clear(element);
+
+                userEvent.type(element, '60232-467');
+                expect(element).not.toBeValid();
+                userEvent.clear(element);
+
+                userEvent.type(element, faker.address.zipCode());
+                expect(element).toBeValid();
+            };
+        });
+    });
+
 });

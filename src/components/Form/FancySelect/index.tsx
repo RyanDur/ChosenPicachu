@@ -30,6 +30,7 @@ export const FancySelect: FC<FancySelectProps> = (
 ) => {
     const [data, updateData] = useState(value);
     const [focused, updateFocus] = useState(false);
+
     return <article id={id} className={joinClassNames(
         'fancy fancy-select',
         (value || data) && 'not-empty',
