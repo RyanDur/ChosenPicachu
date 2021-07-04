@@ -108,6 +108,9 @@
   #user-info {
     grid-template-columns: 1fr var(--base-x-13) 1fr;
     grid-template-areas:
+    "avatar avatar avatar"
+    "avatar avatar avatar"
+    "avatar avatar avatar"
     "name_title . ."
     "first_name first_name first_name"
     "last_name last_name last_name"
@@ -130,8 +133,10 @@
 
 @media only screen and (max-width: 832px) {
   #user-info {
-    grid-template-columns: 1fr var(--base-x-13) 1fr;
     grid-template-areas:
+    "avatar avatar avatar"
+    "avatar avatar avatar"
+    "avatar avatar avatar"
     "name_title name_title name_title"
     "first_name first_name first_name"
     "last_name last_name last_name"
