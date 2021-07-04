@@ -58,8 +58,7 @@ export const UserInformation: FC<FormProps> = ({onAdd}) => {
                         onChange={event => dispatch(updateLastName(event.currentTarget.value))}>
                 Last Name
             </FancyInput>
-            <FancyInput id="email-cell" inputId="email" required={true}
-                        value={userInfo.user.email} type="email"
+            <FancyInput id="email-cell" inputId="email" value={userInfo.user.email} type="email"
                         onChange={event => dispatch(updateEmail(event.currentTarget.value))}>
                 Email
             </FancyInput>
