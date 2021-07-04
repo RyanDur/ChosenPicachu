@@ -19,7 +19,7 @@ export const App = () => {
         title: 'About Page'
     }, {
         page: useRouteMatch(Paths.form),
-        title: 'Form Page'
+        title: 'UserInfo Page'
     }];
 
     return <>

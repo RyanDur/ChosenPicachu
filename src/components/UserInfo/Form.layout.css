@@ -1,4 +1,4 @@
-#fancy-form {
+#user-info {
   display: grid;
   column-gap: var(--base-x-2);
   row-gap: var(--base-x-2);
@@ -90,7 +90,7 @@
 }
 
 @media only screen and (max-width: 1505px) {
-  #fancy-form {
+  #user-info {
     grid-template-columns: repeat(3, 1fr);
     grid-template-areas:
     "name_title . ."
@@ -113,7 +113,7 @@
 }
 
 @media only screen and (max-width: 832px) {
-  #fancy-form {
+  #user-info {
     grid-template-columns: repeat(2, 1fr);
     grid-template-areas:
     "name_title ."

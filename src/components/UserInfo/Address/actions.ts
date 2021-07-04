@@ -1,13 +1,11 @@
+import {Action} from '../types';
+
 export enum AddressActions {
     UPDATE_STREET_ADDRESS = 'streetAddress',
     UPDATE_STREET_ADDRESS_2 = 'streetAddress2',
     UPDATE_CITY = 'city',
     UPDATE_STATE = 'state',
     UPDATE_ZIP = 'zip'
-}
-
-interface Action<T> {
-    type: T
 }
 
 type UpdateStreetAddress = Action<AddressActions.UPDATE_STREET_ADDRESS> & {

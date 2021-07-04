@@ -1,8 +1,8 @@
 import {Form} from '../index';
-import {render, screen} from '@testing-library/react';
+import {act, render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import * as faker from 'faker';
-import {data} from '../../../data';
+import {Consumer, UserInfo} from '../types';
 
 describe('a form', () => {
     const user = {
@@ -29,7 +29,7 @@ describe('a form', () => {
     const details = faker.lorem.sentences(Math.floor(Math.random() * 10) + 1);
 
     let firstNameInput: HTMLElement;
-    let surnameInput: HTMLElement;
+    let lastNameInput: HTMLElement;
     let homeStreetNameInput: HTMLElement;
     let homeStreetName2Input: HTMLElement;
     let homeCityInout: HTMLElement;
@@ -43,13 +43,14 @@ describe('a form', () => {
     let workZipInput: HTMLElement;
 
     let userDetails: HTMLElement;
+    let consumer: Consumer<UserInfo>;
 
     beforeEach(() => {
-        data.post = jest.fn();
-        render(<Form/>);
+        consumer = jest.fn();
+        render(<Form onSubmit={consumer}/>);
 
-        firstNameInput = screen.getByLabelText('First');
-        surnameInput = screen.getByLabelText('Last');
+        firstNameInput = screen.getByLabelText('First Name');
+        lastNameInput = screen.getByLabelText('Last Name');
 
         homeStreetNameInput = screen.getByTestId('home-street-address');
         homeStreetName2Input = screen.getByTestId('home-street-address-2');
@@ -66,11 +67,10 @@ describe('a form', () => {
         userDetails = screen.getByLabelText('Details');
     });
 
-
     describe('filled out', () => {
         beforeEach(() => {
             userEvent.type(firstNameInput, user.firstName);
-            userEvent.type(surnameInput, user.lastName);
+            userEvent.type(lastNameInput, user.lastName);
 
             userEvent.type(homeStreetNameInput, homeAddress.streetAddress);
             userEvent.type(homeStreetName2Input, homeAddress.streetAddressTwo);
@@ -88,9 +88,11 @@ describe('a form', () => {
         });
 
         it('should submit all the data', () => {
-            userEvent.click(screen.getByText('Submit'));
+            act(() => {
+                userEvent.click(screen.getByText('Add'));
+            });
 
-            expect(data.post).toHaveBeenCalledWith({
+            expect(consumer).toHaveBeenCalledWith({
                 user,
                 homeAddress,
                 workAddress,
@@ -98,19 +100,61 @@ describe('a form', () => {
             });
         });
 
-        describe('work address', () => {
-            beforeEach(() => userEvent.click(screen.getByLabelText('Same as Home')));
+        it('should reset the form', () => {
+            expect(firstNameInput).toHaveDisplayValue(user.firstName);
+            expect(lastNameInput).toHaveDisplayValue(user.lastName);
 
-            test('should allow the user to auto copy the home address', () => {
-                expect(workStreetNameInput).toHaveValue(homeAddress.streetAddress);
+            expect(homeStreetNameInput).toHaveDisplayValue(homeAddress.streetAddress);
+            expect(homeStreetName2Input).toHaveDisplayValue(homeAddress.streetAddressTwo);
+            expect(homeCityInout).toHaveDisplayValue(homeAddress.city);
+            expect(homeStateInput).toHaveDisplayValue(homeAddress.state);
+            expect(homeZipInput).toHaveDisplayValue(homeAddress.zip);
+
+            expect(workStreetNameInput).toHaveDisplayValue(workAddress.streetAddress);
+            expect(workStreetName2Input).toHaveDisplayValue(workAddress.streetAddressTwo);
+            expect(workCityInout).toHaveDisplayValue(workAddress.city);
+            expect(workStateInput).toHaveDisplayValue(workAddress.state);
+            expect(workZipInput).toHaveDisplayValue(workAddress.zip);
+            expect(userDetails).toHaveDisplayValue(details);
+
+            act(() => {
+                userEvent.click(screen.getByText('Add'));
+            });
+
+            expect(firstNameInput).not.toHaveDisplayValue(user.firstName);
+            expect(lastNameInput).not.toHaveDisplayValue(user.lastName);
+
+            expect(homeStreetNameInput).not.toHaveDisplayValue(homeAddress.streetAddress);
+            expect(homeStreetName2Input).not.toHaveDisplayValue(homeAddress.streetAddressTwo);
+            expect(homeCityInout).not.toHaveDisplayValue(homeAddress.city);
+            expect(homeStateInput).not.toHaveDisplayValue(homeAddress.state);
+            expect(homeZipInput).not.toHaveDisplayValue(homeAddress.zip);
+
+            expect(workStreetNameInput).not.toHaveDisplayValue(workAddress.streetAddress);
+            expect(workStreetName2Input).not.toHaveDisplayValue(workAddress.streetAddressTwo);
+            expect(workCityInout).not.toHaveDisplayValue(workAddress.city);
+            expect(workStateInput).not.toHaveDisplayValue(workAddress.state);
+            expect(workZipInput).not.toHaveDisplayValue(workAddress.zip);
+            expect(userDetails).not.toHaveDisplayValue(details);
+        });
+
+        describe('work address', () => {
+            beforeEach(() => {
+                act(() => {
+                    userEvent.click(screen.getByLabelText('Same as Home'));
+                });
+            });
+
+            test('should allow the user to auto copy the home address', async () => {
+                await waitFor(() => expect(workStreetNameInput).toHaveValue(homeAddress.streetAddress));
                 expect(workStreetName2Input).toHaveValue(homeAddress.streetAddressTwo);
                 expect(workCityInout).toHaveValue(homeAddress.city);
                 expect(workStateInput).toHaveValue(homeAddress.state);
                 expect(workZipInput).toHaveValue(homeAddress.zip);
 
-                userEvent.click(screen.getByText('Submit'));
+                userEvent.click(screen.getByText('Add'));
 
-                expect(data.post).toHaveBeenCalledWith({
+                expect(consumer).toHaveBeenCalledWith({
                     user,
                     homeAddress,
                     workAddress: homeAddress,
@@ -131,7 +175,7 @@ describe('a form', () => {
     describe('validity', () => {
         it('should have some required fields', () => {
             expect(firstNameInput).not.toBeValid();
-            expect(surnameInput).not.toBeValid();
+            expect(lastNameInput).not.toBeValid();
             expect(homeStreetNameInput).not.toBeValid();
             expect(homeCityInout).not.toBeValid();
             expect(homeStateInput).not.toBeValid();
@@ -143,7 +187,6 @@ describe('a form', () => {
             describe('for work', () => testZip('work'));
 
             function testZip(kind: string) {
-
                 let element: HTMLElement;
                 beforeEach(() => {
                     element = screen.getByTestId(`${kind}-zip`);
