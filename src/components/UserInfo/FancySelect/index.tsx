@@ -36,9 +36,7 @@ export const FancySelect: FC<FancySelectProps> = (
             disabled={disabled}
             data-testid={selectId}
             onChange={onChange}>
-        {[<option key="placeholder" value="" disabled hidden/>,
-            ...Array.from(optionValues).map(value => <option key={value}>{value}</option>)
-        ]}
+        {Array.from(optionValues).map(state => <option key={state}>{state}</option>)}
     </select>
     <label className={joinClassNames('fancy-title', selectClassName)} htmlFor={selectId}>{children}</label>
 </article>;

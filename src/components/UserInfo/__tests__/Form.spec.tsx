@@ -47,7 +47,7 @@ describe('a user form', () => {
 
     beforeEach(() => {
         consumer = jest.fn();
-        render(<UserInformation onSubmit={consumer}/>);
+        render(<UserInformation onAdd={consumer}/>);
 
         firstNameInput = screen.getByLabelText('First Name');
         lastNameInput = screen.getByLabelText('Last Name');

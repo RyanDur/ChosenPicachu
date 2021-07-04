@@ -17,10 +17,10 @@ import './Form.layout.css';
 import './Form.css';
 
 interface FormProps {
-    onSubmit?: Consumer<UserInfo>;
+    onAdd?: Consumer<UserInfo>;
 }
 
-export const UserInformation: FC<FormProps> = ({onSubmit}) => {
+export const UserInformation: FC<FormProps> = ({onAdd}) => {
     const [userInfo, dispatch] = useReducer(formReducer, initialState);
     const [sameAsHome, updateSameAsHome] = useState(false);
     const [isInvalid, updateValidity] = useState(false);
@@ -31,7 +31,7 @@ export const UserInformation: FC<FormProps> = ({onSubmit}) => {
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        onSubmit?.(userInfo);
+        onAdd?.(userInfo);
         reset();
     };
 
@@ -46,7 +46,7 @@ export const UserInformation: FC<FormProps> = ({onSubmit}) => {
         <form id="user-info"
               className={joinClassNames(isInvalid && 'invalid')}
               onSubmit={handleSubmit}
-              onReset={reset}
+              onReset={() => reset()}
               onInvalid={() => updateValidity(true)}>
             <h3 id="name-title">User</h3>
             <FancyTextInput id="first-name-cell" inputId="first-name" required={true}
