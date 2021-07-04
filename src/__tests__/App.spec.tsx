@@ -6,7 +6,7 @@ import {renderWithRouter} from './util';
 jest.mock('../components', () => ({
     Home: () => 'Test Home Component',
     About: () => 'Test About Component',
-    Form: () => 'Test UserInfo Component'
+    Users: () => 'Test UserInfo Component'
 }));
 
 describe('the App', () => {
@@ -23,7 +23,7 @@ describe('the App', () => {
 
         test('for the form page', () => {
             renderWithRouter(<App/>, Paths.form);
-            expect(screen.getByText('UserInfo Page')).toBeInTheDocument();
+            expect(screen.getByText('Users Page')).toBeInTheDocument();
         });
     });
 

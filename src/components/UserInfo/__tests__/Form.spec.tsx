@@ -1,4 +1,4 @@
-import {Form} from '../index';
+import {UserInformation} from '../index';
 import {act, render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import * as faker from 'faker';
@@ -47,7 +47,7 @@ describe('a form', () => {
 
     beforeEach(() => {
         consumer = jest.fn();
-        render(<Form onSubmit={consumer}/>);
+        render(<UserInformation onSubmit={consumer}/>);
 
         firstNameInput = screen.getByLabelText('First Name');
         lastNameInput = screen.getByLabelText('Last Name');

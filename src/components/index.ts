@@ -1,3 +1,3 @@
 export {Home} from './Home';
 export {About} from './About';
-export {Form} from './UserInfo';
+export {UserInformation as Users} from './UserInfo';

@@ -20,7 +20,7 @@ interface FormProps {
     onSubmit?: Consumer<UserInfo>;
 }
 
-export const Form: FC<FormProps> = ({onSubmit}) => {
+export const UserInformation: FC<FormProps> = ({onSubmit}) => {
     const [userInfo, dispatch] = useReducer(formReducer, initialState);
     const [sameAsHome, updateSameAsHome] = useState(false);
     const [isInvalid, updateValidity] = useState(false);

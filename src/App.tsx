@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link, Route, Switch, useRouteMatch} from 'react-router-dom';
-import {About, Form, Home} from './components';
+import {About, Users, Home} from './components';
 import './App.css';
 import './App.layout.css';
 
@@ -19,7 +19,7 @@ export const App = () => {
         title: 'About Page'
     }, {
         page: useRouteMatch(Paths.form),
-        title: 'UserInfo Page'
+        title: 'Users Page'
     }];
 
     return <>
@@ -40,7 +40,7 @@ export const App = () => {
                     <About/>
                 </Route>
                 <Route path={Paths.form} exact>
-                    <Form/>
+                    <Users/>
                 </Route>
             </Switch>
         </main>
