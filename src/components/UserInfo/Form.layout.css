@@ -5,7 +5,7 @@
   grid-template-columns: repeat(2, 1fr) var(--base-x-15) repeat(4, 1fr) var(--base-x-15) repeat(2, 1fr);
   grid-template-areas:
   "name_title . . . . . . . . ."
-  "first_name first_name first_name last_name last_name last_name . . . ."
+  "first_name first_name first_name last_name last_name last_name email email email email"
   "home_address_title home_address_title . . . work_address_title work_address_title .  same_as_home same_as_home"
   "home_street_address home_street_address home_street_address home_street_address home_street_address work_street_address work_street_address work_street_address work_street_address work_street_address"
   "home_street_address_2 home_street_address_2 home_street_address_2 home_street_address_2 home_street_address_2 work_street_address_2 work_street_address_2 work_street_address_2 work_street_address_2 work_street_address_2"
@@ -20,6 +20,10 @@
 
 #first-name-cell {
   grid-area: first_name;
+}
+
+#email-cell {
+  grid-area: email;
 }
 
 #last-name-cell {

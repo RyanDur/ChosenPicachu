@@ -9,6 +9,7 @@ export interface AddressInfo {
 export interface User {
     firstName: string;
     lastName: string;
+    email?: string;
 }
 
 export interface UserInfo {
@@ -27,6 +28,7 @@ export interface Action<T> {
 export enum FormActions {
     UPDATE_FIRST_NAME = 'UPDATE_FIRST_NAME',
     UPDATE_LAST_NAME = 'UPDATE_LAST_NAME',
+    UPDATE_EMAIL = 'UPDATE_EMAIL',
     UPDATE_HOME_ADDRESS = 'UPDATE_HOME_ADDRESS',
     UPDATE_WORK_ADDRESS = 'UPDATE_WORK_ADDRESS',
     UPDATE_DETAILS = 'UPDATED_DETAILS',
@@ -39,6 +41,9 @@ export type UpdateFirstName = Action<FormActions.UPDATE_FIRST_NAME> & {
 export type UpdateLastName = Action<FormActions.UPDATE_LAST_NAME> & {
     lastName: string;
 }
+export type UpdateEmail = Action<FormActions.UPDATE_EMAIL> & {
+    email: string;
+}
 export type UpdateHomeAddress = Action<FormActions.UPDATE_HOME_ADDRESS> & {
     homeAddress: AddressInfo;
 }
@@ -50,4 +55,11 @@ export type UpdateDetails = Action<FormActions.UPDATE_DETAILS> & {
 }
 export type ResetForm = Action<FormActions.RESET_FORM>
 
-export type FormAction = UpdateFirstName | UpdateLastName | UpdateHomeAddress | UpdateWorkAddress | UpdateDetails | ResetForm;
+export type FormAction =
+    | UpdateFirstName
+    | UpdateLastName
+    | UpdateEmail
+    | UpdateHomeAddress
+    | UpdateWorkAddress
+    | UpdateDetails
+    | ResetForm;

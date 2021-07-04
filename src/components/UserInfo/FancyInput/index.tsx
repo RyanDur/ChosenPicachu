@@ -3,6 +3,7 @@ import {joinClassNames} from '../../util';
 
 interface FancyTextInputProps {
     inputId: string;
+    type?: string;
     id?: string;
     required?: boolean;
     onChange?: (event: FormEvent<HTMLInputElement>) => void;
@@ -16,9 +17,10 @@ interface FancyTextInputProps {
     pattern?: string;
 }
 
-export const FancyTextInput: FC<FancyTextInputProps> = (
+export const FancyInput: FC<FancyTextInputProps> = (
     {
         inputId,
+        type = 'text',
         children,
         id,
         onChange,
@@ -45,6 +47,7 @@ export const FancyTextInput: FC<FancyTextInputProps> = (
            required={required}
            data-testid={inputId}
            value={value}
+           type={type}
            onChange={onChange}/>
     <label id={labelId} className={joinClassNames('fancy-title', labelClass)} htmlFor={inputId}>{children}</label>
 </article>;

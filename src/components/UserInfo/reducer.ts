@@ -16,6 +16,8 @@ export const formReducer = (state: UserInfo, action: FormAction): UserInfo => {
             return {...state, user: {...state.user, firstName: action.firstName}};
         case FormActions.UPDATE_LAST_NAME:
             return {...state, user: {...state.user, lastName: action.lastName}};
+        case FormActions.UPDATE_EMAIL:
+            return {...state, user: {...state.user, email: action.email}};
         case FormActions.UPDATE_HOME_ADDRESS:
             return {...state, homeAddress: action.homeAddress};
         case FormActions.UPDATE_WORK_ADDRESS:
