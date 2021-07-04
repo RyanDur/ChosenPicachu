@@ -1,11 +1,12 @@
-import React, {FC, FormEvent, useEffect, useReducer, useState} from 'react';
+import React, {FC, useEffect, useReducer, useState} from 'react';
 import {Consumer, UserInfo} from './types';
-import {FancyTextInput} from './FancyTextInput';
+import {FancyInput} from './FancyInput';
 import {joinClassNames} from '../util';
 import {FancyTextarea} from './FancyTextarea';
 import {
     resetForm,
     updateDetails,
+    updateEmail,
     updateFirstName,
     updateHomeAddress,
     updateLastName,
@@ -29,12 +30,6 @@ export const UserInformation: FC<FormProps> = ({onAdd}) => {
         if (sameAsHome) dispatch(updateWorkAddress(userInfo.homeAddress));
     }, [sameAsHome, userInfo.homeAddress]);
 
-    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        onAdd?.(userInfo);
-        reset();
-    };
-
     const reset = () => {
         dispatch(resetForm());
         updateSameAsHome(false);
@@ -45,20 +40,29 @@ export const UserInformation: FC<FormProps> = ({onAdd}) => {
         <h2 className="title">User Information</h2>
         <form id="user-info"
               className={joinClassNames(isInvalid && 'invalid')}
-              onSubmit={handleSubmit}
-              onReset={() => reset()}
+              onSubmit={event => {
+                  event.preventDefault();
+                  onAdd?.(userInfo);
+                  reset();
+              }}
+              onReset={reset}
               onInvalid={() => updateValidity(true)}>
             <h3 id="name-title">User</h3>
-            <FancyTextInput id="first-name-cell" inputId="first-name" required={true}
-                            value={userInfo.user.firstName}
-                            onChange={event => dispatch(updateFirstName(event.currentTarget.value))}>
+            <FancyInput id="first-name-cell" inputId="first-name" required={true}
+                        value={userInfo.user.firstName}
+                        onChange={event => dispatch(updateFirstName(event.currentTarget.value))}>
                 First Name
-            </FancyTextInput>
-            <FancyTextInput id="last-name-cell" inputId="last-name" required={true}
-                            value={userInfo.user.lastName}
-                            onChange={event => dispatch(updateLastName(event.currentTarget.value))}>
+            </FancyInput>
+            <FancyInput id="last-name-cell" inputId="last-name" required={true}
+                        value={userInfo.user.lastName}
+                        onChange={event => dispatch(updateLastName(event.currentTarget.value))}>
                 Last Name
-            </FancyTextInput>
+            </FancyInput>
+            <FancyInput id="email-cell" inputId="email" required={true}
+                        value={userInfo.user.email} type="email"
+                        onChange={event => dispatch(updateEmail(event.currentTarget.value))}>
+                Email
+            </FancyInput>
 
             <h3 id="home-address-title">Home Address</h3>
             <Address required={true} kind="home" value={userInfo.homeAddress}

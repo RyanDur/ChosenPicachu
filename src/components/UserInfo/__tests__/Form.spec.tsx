@@ -7,7 +7,8 @@ import {Consumer, UserInfo} from '../types';
 describe('a user form', () => {
     const user = {
         firstName: faker.name.firstName(),
-        lastName: faker.name.lastName()
+        lastName: faker.name.lastName(),
+        email: faker.internet.email()
     };
 
     const homeAddress = {
@@ -30,6 +31,8 @@ describe('a user form', () => {
 
     let firstNameInput: HTMLElement;
     let lastNameInput: HTMLElement;
+    let emailInput: HTMLElement;
+
     let homeStreetNameInput: HTMLElement;
     let homeStreetName2Input: HTMLElement;
     let homeCityInout: HTMLElement;
@@ -51,6 +54,7 @@ describe('a user form', () => {
 
         firstNameInput = screen.getByLabelText('First Name');
         lastNameInput = screen.getByLabelText('Last Name');
+        emailInput = screen.getByLabelText('Email');
 
         homeStreetNameInput = screen.getByTestId('home-street-address');
         homeStreetName2Input = screen.getByTestId('home-street-address-2');
@@ -71,6 +75,7 @@ describe('a user form', () => {
         beforeEach(() => {
             userEvent.type(firstNameInput, user.firstName);
             userEvent.type(lastNameInput, user.lastName);
+            userEvent.type(emailInput, user.email);
 
             userEvent.type(homeStreetNameInput, homeAddress.streetAddress);
             userEvent.type(homeStreetName2Input, homeAddress.streetAddressTwo);
@@ -90,6 +95,7 @@ describe('a user form', () => {
         it('should be resettable', () => {
             expect(firstNameInput).toHaveDisplayValue(user.firstName);
             expect(lastNameInput).toHaveDisplayValue(user.lastName);
+            expect(emailInput).toHaveDisplayValue(user.email);
 
             expect(homeStreetNameInput).toHaveDisplayValue(homeAddress.streetAddress);
             expect(homeStreetName2Input).toHaveDisplayValue(homeAddress.streetAddressTwo);
@@ -110,6 +116,7 @@ describe('a user form', () => {
 
             expect(firstNameInput).not.toHaveDisplayValue(user.firstName);
             expect(lastNameInput).not.toHaveDisplayValue(user.lastName);
+            expect(emailInput).not.toHaveDisplayValue(user.email);
 
             expect(homeStreetNameInput).not.toHaveDisplayValue(homeAddress.streetAddress);
             expect(homeStreetName2Input).not.toHaveDisplayValue(homeAddress.streetAddressTwo);
@@ -142,6 +149,7 @@ describe('a user form', () => {
             it('should reset the form', () => {
                 expect(firstNameInput).toHaveDisplayValue(user.firstName);
                 expect(lastNameInput).toHaveDisplayValue(user.lastName);
+                expect(emailInput).toHaveDisplayValue(user.email);
 
                 expect(homeStreetNameInput).toHaveDisplayValue(homeAddress.streetAddress);
                 expect(homeStreetName2Input).toHaveDisplayValue(homeAddress.streetAddressTwo);
@@ -162,6 +170,7 @@ describe('a user form', () => {
 
                 expect(firstNameInput).not.toHaveDisplayValue(user.firstName);
                 expect(lastNameInput).not.toHaveDisplayValue(user.lastName);
+                expect(emailInput).not.toHaveDisplayValue(user.email);
 
                 expect(homeStreetNameInput).not.toHaveDisplayValue(homeAddress.streetAddress);
                 expect(homeStreetName2Input).not.toHaveDisplayValue(homeAddress.streetAddressTwo);

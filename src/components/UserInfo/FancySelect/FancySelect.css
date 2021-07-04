@@ -1,7 +1,3 @@
-.fancy-select:not(.not-empty) .fancy-select-box {
-  color: transparent;
-}
-
 .fancy-select .fancy-select-box {
   all: unset;
   height: 100%;
