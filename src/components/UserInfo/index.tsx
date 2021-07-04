@@ -32,6 +32,10 @@ export const UserInformation: FC<FormProps> = ({onSubmit}) => {
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         onSubmit?.(userInfo);
+        reset();
+    };
+
+    const reset = () => {
         dispatch(resetForm());
         updateSameAsHome(false);
         updateValidity(false);
@@ -42,6 +46,7 @@ export const UserInformation: FC<FormProps> = ({onSubmit}) => {
         <form id="user-info"
               className={joinClassNames(isInvalid && 'invalid')}
               onSubmit={handleSubmit}
+              onReset={reset}
               onInvalid={() => updateValidity(true)}>
             <h3 id="name-title">User</h3>
             <FancyTextInput id="first-name-cell" inputId="first-name" required={true}
@@ -70,7 +75,9 @@ export const UserInformation: FC<FormProps> = ({onSubmit}) => {
 
             <FancyTextarea value={userInfo.details}
                            onChange={event => dispatch(updateDetails(event.currentTarget.value))}/>
-            <button id="submit" className="primary ripple">Add</button>
+
+            <button id="reset" type="reset" className="secondary ripple">Reset</button>
+            <button id="submit" type="submit" className="primary ripple">Add</button>
         </form>
     </section>;
 };

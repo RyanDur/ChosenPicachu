@@ -11,7 +11,7 @@
   "home_street_address_2 home_street_address_2 home_street_address_2 home_street_address_2 home_street_address_2 work_street_address_2 work_street_address_2 work_street_address_2 work_street_address_2 work_street_address_2"
   "home_city home_city home_state home_zip home_zip work_city work_city work_state work_zip work_zip"
   "details details details details details details details details details details"
-  ". . . . . . submit submit submit submit"
+  "reset reset reset reset . . submit submit submit submit"
 }
 
 #name-title {
@@ -81,12 +81,16 @@
   min-width: 9.8rem;
 }
 
-#submit {
-  grid-area: submit;
-}
-
 #details-cell {
   grid-area: details;
+}
+
+#reset {
+  grid-area: reset;
+}
+
+#submit {
+  grid-area: submit;
 }
 
 @media only screen and (max-width: 1505px) {
@@ -108,7 +112,7 @@
     "work_city work_state work_zip"
 
     "details details details"
-    ". submit submit"
+    "reset submit submit"
   }
 }
 
@@ -135,7 +139,7 @@
     "work_zip work_zip"
 
     "details details"
-    "submit submit"
+    "reset submit"
   }
 }
 

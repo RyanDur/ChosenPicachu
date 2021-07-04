@@ -75,18 +75,24 @@
   color: var(--internationl-orange-engineering);
 }
 
-button.primary {
+button {
   height: 4rem;
   border-radius: 4rem;
-  border: none;
+  text-transform: uppercase;
   padding: 12px 18px;
   font-size: 16px;
-  text-transform: uppercase;
   cursor: pointer;
-  color: white;
-  background-color: #007bff;
   box-shadow: 0 0 4px #999;
   outline: none;
+}
+
+button.primary {
+  border: none;
+  color: white;
+  background-color: #007bff;
+}
+button.secondary {
+  border: 1px solid #007bff;
 }
 
 .ripple {

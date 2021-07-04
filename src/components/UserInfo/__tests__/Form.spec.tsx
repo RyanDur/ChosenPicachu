@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import * as faker from 'faker';
 import {Consumer, UserInfo} from '../types';
 
-describe('a form', () => {
+describe('a user form', () => {
     const user = {
         firstName: faker.name.firstName(),
         lastName: faker.name.lastName()
@@ -87,20 +87,7 @@ describe('a form', () => {
             userEvent.type(userDetails, details);
         });
 
-        it('should submit all the data', () => {
-            act(() => {
-                userEvent.click(screen.getByText('Add'));
-            });
-
-            expect(consumer).toHaveBeenCalledWith({
-                user,
-                homeAddress,
-                workAddress,
-                details
-            });
-        });
-
-        it('should reset the form', () => {
+        it('should be resettable', () => {
             expect(firstNameInput).toHaveDisplayValue(user.firstName);
             expect(lastNameInput).toHaveDisplayValue(user.lastName);
 
@@ -118,7 +105,7 @@ describe('a form', () => {
             expect(userDetails).toHaveDisplayValue(details);
 
             act(() => {
-                userEvent.click(screen.getByText('Add'));
+                userEvent.click(screen.getByText('Reset'));
             });
 
             expect(firstNameInput).not.toHaveDisplayValue(user.firstName);
@@ -136,6 +123,59 @@ describe('a form', () => {
             expect(workStateInput).not.toHaveDisplayValue(workAddress.state);
             expect(workZipInput).not.toHaveDisplayValue(workAddress.zip);
             expect(userDetails).not.toHaveDisplayValue(details);
+        });
+
+        describe('when adding a user', () => {
+            it('should submit all the data', () => {
+            act(() => {
+                userEvent.click(screen.getByText('Add'));
+            });
+
+            expect(consumer).toHaveBeenCalledWith({
+                user,
+                homeAddress,
+                workAddress,
+                details
+            });
+        });
+
+            it('should reset the form', () => {
+                expect(firstNameInput).toHaveDisplayValue(user.firstName);
+                expect(lastNameInput).toHaveDisplayValue(user.lastName);
+
+                expect(homeStreetNameInput).toHaveDisplayValue(homeAddress.streetAddress);
+                expect(homeStreetName2Input).toHaveDisplayValue(homeAddress.streetAddressTwo);
+                expect(homeCityInout).toHaveDisplayValue(homeAddress.city);
+                expect(homeStateInput).toHaveDisplayValue(homeAddress.state);
+                expect(homeZipInput).toHaveDisplayValue(homeAddress.zip);
+
+                expect(workStreetNameInput).toHaveDisplayValue(workAddress.streetAddress);
+                expect(workStreetName2Input).toHaveDisplayValue(workAddress.streetAddressTwo);
+                expect(workCityInout).toHaveDisplayValue(workAddress.city);
+                expect(workStateInput).toHaveDisplayValue(workAddress.state);
+                expect(workZipInput).toHaveDisplayValue(workAddress.zip);
+                expect(userDetails).toHaveDisplayValue(details);
+
+                act(() => {
+                    userEvent.click(screen.getByText('Add'));
+                });
+
+                expect(firstNameInput).not.toHaveDisplayValue(user.firstName);
+                expect(lastNameInput).not.toHaveDisplayValue(user.lastName);
+
+                expect(homeStreetNameInput).not.toHaveDisplayValue(homeAddress.streetAddress);
+                expect(homeStreetName2Input).not.toHaveDisplayValue(homeAddress.streetAddressTwo);
+                expect(homeCityInout).not.toHaveDisplayValue(homeAddress.city);
+                expect(homeStateInput).not.toHaveDisplayValue(homeAddress.state);
+                expect(homeZipInput).not.toHaveDisplayValue(homeAddress.zip);
+
+                expect(workStreetNameInput).not.toHaveDisplayValue(workAddress.streetAddress);
+                expect(workStreetName2Input).not.toHaveDisplayValue(workAddress.streetAddressTwo);
+                expect(workCityInout).not.toHaveDisplayValue(workAddress.city);
+                expect(workStateInput).not.toHaveDisplayValue(workAddress.state);
+                expect(workZipInput).not.toHaveDisplayValue(workAddress.zip);
+                expect(userDetails).not.toHaveDisplayValue(details);
+            });
         });
 
         describe('work address', () => {
