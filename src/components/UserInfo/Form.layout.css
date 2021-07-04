@@ -4,14 +4,21 @@
   row-gap: var(--base-x-2);
   grid-template-columns: repeat(2, 1fr) var(--base-x-13) repeat(4, 1fr) var(--base-x-13) repeat(2, 1fr);
   grid-template-areas:
-  "name_title . . . . . . . . ."
-  "first_name first_name first_name last_name last_name last_name email email email email"
+  "name_title . . . . . . . avatar avatar"
+  "first_name first_name first_name first_name last_name last_name last_name last_name avatar avatar"
+  "email email email email email email email email avatar avatar"
   "home_address_title home_address_title . . . work_address_title work_address_title .  same_as_home same_as_home"
   "home_street_address home_street_address home_street_address home_street_address home_street_address work_street_address work_street_address work_street_address work_street_address work_street_address"
   "home_street_address_2 home_street_address_2 home_street_address_2 home_street_address_2 home_street_address_2 work_street_address_2 work_street_address_2 work_street_address_2 work_street_address_2 work_street_address_2"
   "home_city home_city home_state home_zip home_zip work_city work_city work_state work_zip work_zip"
   "details details details details details details details details details details"
   "reset reset reset reset . . submit submit submit submit"
+}
+
+#avatar {
+  grid-area: avatar;
+  width: 60%;
+  justify-self: center;
 }
 
 #name-title {

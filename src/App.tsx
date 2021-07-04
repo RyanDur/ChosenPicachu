@@ -7,7 +7,7 @@ import './App.layout.css';
 export enum Paths {
     home = '/',
     about = '/about',
-    form = '/form'
+    form = '/users'
 }
 
 export const App = () => {
@@ -29,7 +29,7 @@ export const App = () => {
         <nav id="app-navigation" className="overhang">
             <Link id="navigate-home" className="path" to={Paths.home}>Home</Link>
             <Link id="navigate-about" className="path" to={Paths.about}>About</Link>
-            <Link id="navigate-form" className="path" to={Paths.form}>Form</Link>
+            <Link id="navigate-form" className="path" to={Paths.form}>Users</Link>
         </nav>
         <main className="overhang gutter">
             <Switch>

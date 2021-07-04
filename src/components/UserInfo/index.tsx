@@ -1,4 +1,5 @@
 import React, {FC, useEffect, useReducer, useState} from 'react';
+import {AvatarGenerator} from 'random-avatar-generator';
 import {Consumer, UserInfo} from './types';
 import {FancyInput} from './FancyInput';
 import {joinClassNames} from '../util';
@@ -25,6 +26,7 @@ export const UserInformation: FC<FormProps> = ({onAdd}) => {
     const [userInfo, dispatch] = useReducer(formReducer, initialState);
     const [sameAsHome, updateSameAsHome] = useState(false);
     const [isInvalid, updateValidity] = useState(false);
+    const generator = new AvatarGenerator();
 
     useEffect(() => {
         if (sameAsHome) dispatch(updateWorkAddress(userInfo.homeAddress));
@@ -62,6 +64,8 @@ export const UserInformation: FC<FormProps> = ({onAdd}) => {
                         onChange={event => dispatch(updateEmail(event.currentTarget.value))}>
                 Email
             </FancyInput>
+
+            <img src={generator.generateRandomAvatar()} alt="avatar" id="avatar"/>
 
             <h3 id="home-address-title">Home Address</h3>
             <Address required={true} kind="home" value={userInfo.homeAddress}
