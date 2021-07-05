@@ -12,3 +12,15 @@
 #user-info.card:last-child {
   margin-bottom: 0;
 }
+
+.last-column {
+  display: flex;
+  justify-content: space-between;
+}
+.last-column .menu {
+  outline: none;
+  width: 2rem;
+  height: 2rem;
+  background-image: radial-gradient(circle, black 0.2rem, transparent 0.1rem);
+  background-size: 100% 33.33%;
+}

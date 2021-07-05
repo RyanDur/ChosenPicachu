@@ -29,7 +29,10 @@ export const Users: FC = () => {
                 rows={users.map(({user, homeAddress, workAddress}) => ({
                     fullName: {display: `${user.firstName} ${user.lastName}`},
                     homeCity: {display: homeAddress.city},
-                    worksFromHome: {display: homeAddress === workAddress ? 'Yes' : 'No'}
+                    worksFromHome: {display: <section className="last-column">
+                            {homeAddress === workAddress ? 'Yes' : 'No'}
+                            <article tabIndex={0} className="menu card"/>
+                    </section>}
                 }))}
             />
         </section>
