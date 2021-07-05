@@ -1,7 +1,7 @@
-import {act, render, screen, within} from '@testing-library/react';
+import {render, screen, within} from '@testing-library/react';
 import {Users} from '../index';
 import userEvent from '@testing-library/user-event';
-import {users} from '../../../__tests__/util';
+import {fillOutAddress, fillOutUser, users} from '../../../__tests__/util';
 
 describe('the users page', () => {
     const [userInfo, anotherUserInfo] = users;
@@ -11,35 +11,16 @@ describe('the users page', () => {
 
     describe('adding a user', () => {
         beforeEach(() => {
-            userEvent.type(screen.getByLabelText('First Name'), userInfo.user.firstName);
-            userEvent.type(screen.getByLabelText('Last Name'), userInfo.user.lastName);
-            userEvent.type(screen.getByLabelText('Email'), userInfo.user.email!);
-            userEvent.type(screen.getByTestId('home-street-address'), userInfo.homeAddress.streetAddress);
-            userEvent.type(screen.getByTestId('home-street-address-2'), userInfo.homeAddress.streetAddressTwo!);
-            userEvent.type(screen.getByTestId('home-city'), userInfo.homeAddress.city);
-            userEvent.type(screen.getByTestId('home-state'), userInfo.homeAddress.state);
-            userEvent.type(screen.getByTestId('home-zip'), userInfo.homeAddress.zip);
-            userEvent.type(screen.getByTestId('work-street-address'), userInfo.workAddress!.streetAddress);
-            userEvent.type(screen.getByTestId('work-street-address-2'), userInfo.workAddress!.streetAddressTwo!);
-            userEvent.type(screen.getByTestId('work-city'), userInfo.workAddress!.city);
-            userEvent.type(screen.getByTestId('work-state'), userInfo.workAddress!.state);
-            userEvent.type(screen.getByTestId('work-zip'), userInfo.workAddress!.zip);
+            fillOutUser(userInfo);
+            fillOutAddress(userInfo, 'home');
+            fillOutAddress(userInfo, 'work');
             userEvent.type(screen.getByLabelText('Details'), userInfo.details!);
-
             userEvent.click(screen.getByText('Add'));
 
-            userEvent.type(screen.getByLabelText('First Name'), anotherUserInfo.user.firstName);
-            userEvent.type(screen.getByLabelText('Last Name'), anotherUserInfo.user.lastName);
-            userEvent.type(screen.getByTestId('home-street-address'), anotherUserInfo.homeAddress.streetAddress);
-            userEvent.type(screen.getByTestId('home-street-address-2'), anotherUserInfo.homeAddress.streetAddressTwo!);
-            userEvent.type(screen.getByTestId('home-city'), anotherUserInfo.homeAddress.city);
-            userEvent.type(screen.getByTestId('home-state'), anotherUserInfo.homeAddress.state);
-            userEvent.type(screen.getByTestId('home-zip'), anotherUserInfo.homeAddress.zip);
+            fillOutUser(anotherUserInfo);
+            fillOutAddress(anotherUserInfo, 'home');
             userEvent.click(screen.getByLabelText('Same as Home'));
-
-            act(() => {
-                userEvent.click(screen.getByText('Add'));
-            });
+            userEvent.click(screen.getByText('Add'));
         });
 
         test('user info in table in descending order', () => {
