@@ -146,5 +146,5 @@ export const users = [
     userInfo()
 ];
 
-export const createRandomUsers = (num = 3): UserInfo[] =>
+export const createRandomUsers = (num = randomNumberFrom1(10)): UserInfo[] =>
     [...Array(num)].map(() => userInfo(Math.random() > 0.5));
