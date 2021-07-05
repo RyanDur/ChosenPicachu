@@ -32,18 +32,21 @@ export const FancySelect: FC<FancySelectProps> = (
         required,
         disabled
     }
-) => <article id={id} className={joinClassNames('fancy fancy-select', value && 'not-empty', className)}>
-    <select id={selectId}
-            className={joinClassNames('fancy-select-box fancy-text', selectClassName)}
-            {...(value ? {value} : {defaultValue: ''})}
-            key={value}
-            required={required}
-            disabled={disabled}
-            data-testid={selectId}
-            onChange={onChange}>
-        {[<option key="placeholder" value="" disabled hidden/>,
-            ...Array.from(optionValues).map(state => <option key={state}>{state}</option>)
-        ]}
-    </select>
-    <label className={joinClassNames('fancy-title', selectClassName)} htmlFor={selectId}>{children}</label>
-</article>;
+) => {
+    const key = value ? 'stable' : 'reset';
+    return <article id={id} className={joinClassNames('fancy fancy-select', value && 'not-empty', className)}>
+        <select id={selectId}
+                className={joinClassNames('fancy-select-box fancy-text', selectClassName)}
+                {...(value ? {value} : {defaultValue: ''})}
+                key={key}
+                required={required}
+                disabled={disabled}
+                data-testid={selectId}
+                onChange={onChange}>
+            {[<option key="placeholder" value="" disabled hidden/>,
+                ...Array.from(optionValues).map(state => <option key={state}>{state}</option>)
+            ]}
+        </select>
+        <label className={joinClassNames('fancy-title', selectClassName)} htmlFor={selectId}>{children}</label>
+    </article>;
+};

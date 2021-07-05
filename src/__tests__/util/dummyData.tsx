@@ -1,30 +1,34 @@
 import {Columns, Row} from '../../components/Table/types';
 import React from 'react';
 import faker from 'faker';
-import {UserInfo} from '../../components/UserInfo/types';
+import {AddressInfo, User, UserInfo} from '../../components/UserInfo/types';
 
-export const column1Name = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
-export const column2Name = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
-export const column3Name = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
+export const randomNumberFrom1 = (num = 6) => Math.floor(Math.random() * num) + 1;
 
-export const column1Display = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
-export const column3Display = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
+export const words = (num = 6) => faker.lorem.words(randomNumberFrom1(num));
 
-export const row0Col0Value = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
+export const column1Name = words();
+export const column2Name = words();
+export const column3Name = words();
 
-export const row1Col0Value = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
+export const column1Display = words();
+export const column3Display = words();
 
-export const row0Col0Display = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
-export const row0Col1Display = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
+export const row0Col0Value = words();
 
-export const row0Col2Display = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
+export const row1Col0Value = words();
 
-export const row1Col1Display = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
-export const row1Col2Display = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
+export const row0Col0Display = words();
+export const row0Col1Display = words();
 
-export const row2Col0Display = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
-export const row2Col1Display = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
-export const row2Col2Display = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
+export const row0Col2Display = words();
+
+export const row1Col1Display = words();
+export const row1Col2Display = words();
+
+export const row2Col0Display = words();
+export const row2Col1Display = words();
+export const row2Col2Display = words();
 
 export const columns: Columns = {
     [column1Name]: {
@@ -109,79 +113,36 @@ export const rows: Row[] = [{
     }
 }];
 
-export const user = {
+const createUser = (): User => ({
     firstName: faker.name.firstName(),
     lastName: faker.name.lastName(),
     email: faker.internet.email()
-};
-
-export const homeAddress = {
+});
+const createAddress = (): AddressInfo => ({
     city: faker.address.city(),
     state: faker.address.stateAbbr(),
     streetAddress: faker.address.streetName(),
     streetAddressTwo: faker.address.secondaryAddress(),
     zip: faker.address.zipCode()
+});
+const createDetails = (num = 10) => faker.lorem.sentences(randomNumberFrom1(num));
+
+
+const userInfo = (worksFromHome = false): UserInfo => {
+    const homeAddress = createAddress();
+    return ({
+        user: createUser(),
+        homeAddress,
+        workAddress: worksFromHome ? homeAddress : createAddress(),
+        details: createDetails()
+    });
 };
 
-export const workAddress = {
-    city: faker.address.city(),
-    state: faker.address.stateAbbr(),
-    streetAddress: faker.address.streetName(),
-    streetAddressTwo: faker.address.secondaryAddress(),
-    zip: faker.address.zipCode()
-};
+export const users = [
+    userInfo(),
+    userInfo(true),
+    userInfo()
+];
 
-export const details = faker.lorem.sentences(Math.floor(Math.random() * 10) + 1);
-
-export const anotherUser = {
-    firstName: faker.name.firstName(),
-    lastName: faker.name.lastName(),
-    email: faker.internet.email()
-};
-
-export const anotherHomeAddress = {
-    city: faker.address.city(),
-    state: faker.address.stateAbbr(),
-    streetAddress: faker.address.streetName(),
-    streetAddressTwo: faker.address.secondaryAddress(),
-    zip: faker.address.zipCode()
-};
-
-export const anotherWorkAddress = anotherHomeAddress;
-
-export const moreDetails = faker.lorem.sentences(Math.floor(Math.random() * 10) + 1);
-
-export const yetAnotherUser = {
-    firstName: faker.name.firstName(),
-    lastName: faker.name.lastName(),
-    email: faker.internet.email()
-};
-
-export const yetAnotherHomeAddress = {
-    city: faker.address.city(),
-    state: faker.address.stateAbbr(),
-    streetAddress: faker.address.streetName(),
-    streetAddressTwo: faker.address.secondaryAddress(),
-    zip: faker.address.zipCode()
-};
-
-export const yetAnotherWorkAddress = anotherHomeAddress;
-
-export const yetMoreDetails = faker.lorem.sentences(Math.floor(Math.random() * 10) + 1);
-
-export const users: UserInfo[] = [{
-    user,
-    homeAddress,
-    workAddress,
-    details
-}, {
-    user: anotherUser,
-    homeAddress: anotherHomeAddress,
-    workAddress: anotherWorkAddress,
-    details: moreDetails
-}, {
-    user: yetAnotherUser,
-    homeAddress: yetAnotherHomeAddress,
-    workAddress: yetAnotherWorkAddress,
-    details: yetMoreDetails
-}];
+export const createRandomUsers = (num = 3): UserInfo[] =>
+    [...Array(num)].map(() => userInfo(Math.random() > 0.5));
