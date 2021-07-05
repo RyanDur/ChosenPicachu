@@ -1,7 +1,7 @@
 import {
     AddressInfo,
     FormActions,
-    ResetForm,
+    ResetForm, UpdateAvatar,
     UpdateDetails,
     UpdateEmail,
     UpdateFirstName,
@@ -25,5 +25,6 @@ export const updateWorkAddress = (workAddress: AddressInfo): UpdateWorkAddress =
     workAddress
 });
 export const updateDetails = (details: string): UpdateDetails => ({type: FormActions.UPDATE_DETAILS, details});
+export const updateAvatar = (avatar: string): UpdateAvatar => ({type: FormActions.UPDATE_AVATAR, avatar});
 export const resetForm = (): ResetForm => ({type: FormActions.RESET_FORM});
 

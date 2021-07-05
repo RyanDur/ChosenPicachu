@@ -5,8 +5,13 @@ import {Consumer, UserInfo} from '../types';
 import {fillOutAddress, fillOutUser, users} from '../../../__tests__/util';
 import {initialState} from '../reducer';
 
+jest.mock('../../../avatars', () => ({
+    generateAvatar: () => 'some random url'
+}));
+
 describe('a user form', () => {
     const [userInfo] = users;
+    userInfo.avatar = 'some random url';
     let firstNameInput: HTMLElement;
     let lastNameInput: HTMLElement;
 

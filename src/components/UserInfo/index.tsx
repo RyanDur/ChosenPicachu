@@ -1,11 +1,11 @@
 import React, {FC, useEffect, useReducer, useState} from 'react';
-import {AvatarGenerator} from 'random-avatar-generator';
 import {Consumer, UserInfo} from './types';
 import {FancyInput} from './FancyInput';
 import {joinClassNames} from '../util';
 import {FancyTextarea} from './FancyTextarea';
 import {
     resetForm,
+    updateAvatar,
     updateDetails,
     updateEmail,
     updateFirstName,
@@ -17,13 +17,11 @@ import {Address} from './Address';
 import {formReducer, initialState} from './reducer';
 import './Form.layout.css';
 import './Form.css';
+import {generateAvatar} from '../../avatars';
 
 interface FormProps {
     onAdd?: Consumer<UserInfo>;
 }
-
-const generator = new AvatarGenerator();
-const avatar = generator.generateRandomAvatar();
 
 export const UserInformation: FC<FormProps> = ({onAdd}) => {
     const [userInfo, dispatch] = useReducer(formReducer, initialState);
@@ -65,7 +63,9 @@ export const UserInformation: FC<FormProps> = ({onAdd}) => {
             Email
         </FancyInput>
 
-        <img src={avatar} alt="avatar" id="avatar"/>
+        <article id="avatar-cell" className="card" onClick={() => dispatch(updateAvatar(generateAvatar()))}>
+            <img id="avatar" src={userInfo.avatar} alt="avatar"/>
+        </article>
 
         <h3 id="home-address-title">Home Address</h3>
         <Address required={true} kind="home" value={userInfo.homeAddress}

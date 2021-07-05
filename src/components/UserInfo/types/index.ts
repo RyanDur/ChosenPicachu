@@ -15,6 +15,7 @@ export interface User {
 export interface UserInfo {
     user: User;
     homeAddress: AddressInfo;
+    avatar: string;
     workAddress?: AddressInfo;
     details?: string;
 }
@@ -32,6 +33,7 @@ export enum FormActions {
     UPDATE_HOME_ADDRESS = 'UPDATE_HOME_ADDRESS',
     UPDATE_WORK_ADDRESS = 'UPDATE_WORK_ADDRESS',
     UPDATE_DETAILS = 'UPDATED_DETAILS',
+    UPDATE_AVATAR = 'UPDATED_AVATAR',
     RESET_FORM = 'RESET_FORM'
 }
 
@@ -53,6 +55,9 @@ export type UpdateWorkAddress = Action<FormActions.UPDATE_WORK_ADDRESS> & {
 export type UpdateDetails = Action<FormActions.UPDATE_DETAILS> & {
     details: string;
 }
+export type UpdateAvatar = Action<FormActions.UPDATE_AVATAR> & {
+    avatar: string;
+}
 export type ResetForm = Action<FormActions.RESET_FORM>
 
 export type FormAction =
@@ -62,4 +67,5 @@ export type FormAction =
     | UpdateHomeAddress
     | UpdateWorkAddress
     | UpdateDetails
+    | UpdateAvatar
     | ResetForm;

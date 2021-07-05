@@ -1,4 +1,5 @@
 import {FormAction, FormActions, UserInfo} from './types';
+import {generateAvatar} from '../../avatars';
 
 export const initialState: UserInfo = {
     user: {firstName: '', lastName: ''},
@@ -7,7 +8,8 @@ export const initialState: UserInfo = {
         state: '',
         streetAddress: '',
         zip: ''
-    }
+    },
+    avatar: generateAvatar()
 };
 
 export const formReducer = (state: UserInfo, action: FormAction): UserInfo => {
@@ -24,6 +26,8 @@ export const formReducer = (state: UserInfo, action: FormAction): UserInfo => {
             return {...state, workAddress: action.workAddress};
         case FormActions.UPDATE_DETAILS:
             return {...state, details: action.details};
+        case FormActions.UPDATE_AVATAR:
+            return {...state, avatar: action.avatar};
         case FormActions.RESET_FORM:
             return initialState;
     }

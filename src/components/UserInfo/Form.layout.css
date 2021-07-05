@@ -15,10 +15,8 @@
   "reset reset reset reset . . submit submit submit submit"
 }
 
-#user-info-form #avatar {
+#user-info-form #avatar-cell {
   grid-area: avatar;
-  width: 60%;
-  justify-self: center;
 }
 
 #user-info-form #name-title {
