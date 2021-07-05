@@ -22,7 +22,7 @@ describe('the App', () => {
         });
 
         test('for the form page', () => {
-            renderWithRouter(<App/>, Paths.form);
+            renderWithRouter(<App/>, Paths.users);
             expect(screen.getByText('Users Page')).toBeInTheDocument();
         });
     });
