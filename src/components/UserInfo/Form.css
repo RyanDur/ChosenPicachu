@@ -1,8 +1,8 @@
-#user-info-page {
+#user-info {
   display: flex;
   flex-direction: column;
 }
-#user-info-page .title {
+#user-info .title {
   align-self: flex-end;
 }
 #user-info .fancy {
