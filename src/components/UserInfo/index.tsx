@@ -21,6 +21,7 @@ import './Form.css';
 interface FormProps {
     onAdd?: Consumer<UserInfo>;
 }
+
 const generator = new AvatarGenerator();
 const avatar = generator.generateRandomAvatar();
 
@@ -39,53 +40,50 @@ export const UserInformation: FC<FormProps> = ({onAdd}) => {
         updateValidity(false);
     };
 
-    return <>
-        <h2 className="title">User Information</h2>
-        <form id="user-info"
-              className={joinClassNames(isInvalid && 'invalid')}
-              onSubmit={event => {
-                  event.preventDefault();
-                  onAdd?.(userInfo);
-                  reset();
-              }}
-              onReset={reset}
-              onInvalid={() => updateValidity(true)}>
-            <h3 id="name-title">User</h3>
-            <FancyInput id="first-name-cell" inputId="first-name" required={true}
-                        value={userInfo.user.firstName}
-                        onChange={event => dispatch(updateFirstName(event.currentTarget.value))}>
-                First Name
-            </FancyInput>
-            <FancyInput id="last-name-cell" inputId="last-name" required={true}
-                        value={userInfo.user.lastName}
-                        onChange={event => dispatch(updateLastName(event.currentTarget.value))}>
-                Last Name
-            </FancyInput>
-            <FancyInput id="email-cell" inputId="email" value={userInfo.user.email} type="email"
-                        onChange={event => dispatch(updateEmail(event.currentTarget.value))}>
-                Email
-            </FancyInput>
+    return <form id="user-info-form"
+                 className={joinClassNames(isInvalid && 'invalid')}
+                 onSubmit={event => {
+                     event.preventDefault();
+                     onAdd?.(userInfo);
+                     reset();
+                 }}
+                 onReset={reset}
+                 onInvalid={() => updateValidity(true)}>
+        <h3 id="name-title">User</h3>
+        <FancyInput id="first-name-cell" inputId="first-name" required={true}
+                    value={userInfo.user.firstName}
+                    onChange={event => dispatch(updateFirstName(event.currentTarget.value))}>
+            First Name
+        </FancyInput>
+        <FancyInput id="last-name-cell" inputId="last-name" required={true}
+                    value={userInfo.user.lastName}
+                    onChange={event => dispatch(updateLastName(event.currentTarget.value))}>
+            Last Name
+        </FancyInput>
+        <FancyInput id="email-cell" inputId="email" value={userInfo.user.email} type="email"
+                    onChange={event => dispatch(updateEmail(event.currentTarget.value))}>
+            Email
+        </FancyInput>
 
-            <img src={avatar} alt="avatar" id="avatar"/>
+        <img src={avatar} alt="avatar" id="avatar"/>
 
-            <h3 id="home-address-title">Home Address</h3>
-            <Address required={true} kind="home" value={userInfo.homeAddress}
-                     onChange={address => dispatch(updateHomeAddress(address))}/>
+        <h3 id="home-address-title">Home Address</h3>
+        <Address required={true} kind="home" value={userInfo.homeAddress}
+                 onChange={address => dispatch(updateHomeAddress(address))}/>
 
-            <h3 id="work-address-title">Work Address</h3>
-            <article id="same-as-home-cell" className="center-horizontal">
-                <label htmlFor="same-as-home">Same as Home</label>
-                <input id="same-as-home" type="checkbox" checked={sameAsHome}
-                       onChange={event => updateSameAsHome(event.currentTarget.checked)}/>
-            </article>
-            <Address disabled={sameAsHome} kind="work" value={userInfo.workAddress}
-                     onChange={address => dispatch(updateWorkAddress(address))}/>
+        <h3 id="work-address-title">Work Address</h3>
+        <article id="same-as-home-cell" className="center-horizontal">
+            <label htmlFor="same-as-home">Same as Home</label>
+            <input id="same-as-home" type="checkbox" checked={sameAsHome}
+                   onChange={event => updateSameAsHome(event.currentTarget.checked)}/>
+        </article>
+        <Address disabled={sameAsHome} kind="work" value={userInfo.workAddress}
+                 onChange={address => dispatch(updateWorkAddress(address))}/>
 
-            <FancyTextarea value={userInfo.details}
-                           onChange={event => dispatch(updateDetails(event.currentTarget.value))}/>
+        <FancyTextarea value={userInfo.details}
+                       onChange={event => dispatch(updateDetails(event.currentTarget.value))}/>
 
-            <button id="reset" type="reset" className="secondary ripple">Reset</button>
-            <button id="submit" type="submit" className="primary ripple">Add</button>
-        </form>
-    </>;
+        <button id="reset" type="reset" className="secondary ripple">Reset</button>
+        <button id="submit" type="submit" className="primary ripple">Add</button>
+    </form>;
 };

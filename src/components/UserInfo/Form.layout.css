@@ -1,4 +1,4 @@
-#user-info {
+#user-info-form {
   display: grid;
   column-gap: var(--base-x-2);
   row-gap: var(--base-x-2);
@@ -105,7 +105,7 @@
 }
 
 @media only screen and (max-width: 1505px) {
-  #user-info {
+  #user-info-form {
     grid-template-columns: 1fr var(--base-x-13) 1fr;
     grid-template-areas:
     "avatar avatar avatar"
@@ -132,7 +132,7 @@
 }
 
 @media only screen and (max-width: 832px) {
-  #user-info {
+  #user-info-form {
     grid-template-areas:
     "avatar avatar avatar"
     "avatar avatar avatar"

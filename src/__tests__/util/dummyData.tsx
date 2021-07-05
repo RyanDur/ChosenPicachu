@@ -1,6 +1,7 @@
 import {Columns, Row} from '../../components/Table/types';
 import React from 'react';
 import faker from 'faker';
+import {UserInfo} from '../../components/UserInfo/types';
 
 export const column1Name = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
 export const column2Name = faker.lorem.words(Math.floor(Math.random() * 6) + 1);
@@ -149,3 +150,38 @@ export const anotherHomeAddress = {
 export const anotherWorkAddress = anotherHomeAddress;
 
 export const moreDetails = faker.lorem.sentences(Math.floor(Math.random() * 10) + 1);
+
+export const yetAnotherUser = {
+    firstName: faker.name.firstName(),
+    lastName: faker.name.lastName(),
+    email: faker.internet.email()
+};
+
+export const yetAnotherHomeAddress = {
+    city: faker.address.city(),
+    state: faker.address.stateAbbr(),
+    streetAddress: faker.address.streetName(),
+    streetAddressTwo: faker.address.secondaryAddress(),
+    zip: faker.address.zipCode()
+};
+
+export const yetAnotherWorkAddress = anotherHomeAddress;
+
+export const yetMoreDetails = faker.lorem.sentences(Math.floor(Math.random() * 10) + 1);
+
+export const users: UserInfo[] = [{
+    user,
+    homeAddress,
+    workAddress,
+    details
+}, {
+    user: anotherUser,
+    homeAddress: anotherHomeAddress,
+    workAddress: anotherWorkAddress,
+    details: moreDetails
+}, {
+    user: yetAnotherUser,
+    homeAddress: yetAnotherHomeAddress,
+    workAddress: yetAnotherWorkAddress,
+    details: yetMoreDetails
+}];

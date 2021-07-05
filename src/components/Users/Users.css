@@ -1,0 +1,6 @@
+.card {
+  margin-bottom: var(--base-x-4);
+}
+.card:last-child {
+  margin-bottom: 0;
+}
