@@ -1,34 +1,10 @@
 import {UserInformation} from '../index';
 import {act, render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import * as faker from 'faker';
 import {Consumer, UserInfo} from '../types';
+import {details, homeAddress, user, workAddress} from '../../../__tests__/util';
 
 describe('a user form', () => {
-    const user = {
-        firstName: faker.name.firstName(),
-        lastName: faker.name.lastName(),
-        email: faker.internet.email()
-    };
-
-    const homeAddress = {
-        city: faker.address.city(),
-        state: faker.address.stateAbbr(),
-        streetAddress: faker.address.streetName(),
-        streetAddressTwo: faker.address.secondaryAddress(),
-        zip: faker.address.zipCode()
-    };
-
-    const workAddress = {
-        city: faker.address.city(),
-        state: faker.address.stateAbbr(),
-        streetAddress: faker.address.streetName(),
-        streetAddressTwo: faker.address.secondaryAddress(),
-        zip: faker.address.zipCode()
-    };
-
-    const details = faker.lorem.sentences(Math.floor(Math.random() * 10) + 1);
-
     let firstNameInput: HTMLElement;
     let lastNameInput: HTMLElement;
     let emailInput: HTMLElement;

@@ -21,12 +21,13 @@ import './Form.css';
 interface FormProps {
     onAdd?: Consumer<UserInfo>;
 }
+const generator = new AvatarGenerator();
+const avatar = generator.generateRandomAvatar();
 
 export const UserInformation: FC<FormProps> = ({onAdd}) => {
     const [userInfo, dispatch] = useReducer(formReducer, initialState);
     const [sameAsHome, updateSameAsHome] = useState(false);
     const [isInvalid, updateValidity] = useState(false);
-    const generator = new AvatarGenerator();
 
     useEffect(() => {
         if (sameAsHome) dispatch(updateWorkAddress(userInfo.homeAddress));
@@ -38,7 +39,7 @@ export const UserInformation: FC<FormProps> = ({onAdd}) => {
         updateValidity(false);
     };
 
-    return <section id="user-info-page" className="card overhang gutter">
+    return <>
         <h2 className="title">User Information</h2>
         <form id="user-info"
               className={joinClassNames(isInvalid && 'invalid')}
@@ -65,7 +66,7 @@ export const UserInformation: FC<FormProps> = ({onAdd}) => {
                 Email
             </FancyInput>
 
-            <img src={generator.generateRandomAvatar()} alt="avatar" id="avatar"/>
+            <img src={avatar} alt="avatar" id="avatar"/>
 
             <h3 id="home-address-title">Home Address</h3>
             <Address required={true} kind="home" value={userInfo.homeAddress}
@@ -86,5 +87,5 @@ export const UserInformation: FC<FormProps> = ({onAdd}) => {
             <button id="reset" type="reset" className="secondary ripple">Reset</button>
             <button id="submit" type="submit" className="primary ripple">Add</button>
         </form>
-    </section>;
+    </>;
 };
