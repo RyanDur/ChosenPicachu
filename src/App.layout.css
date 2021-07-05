@@ -37,6 +37,7 @@ main {
 }
 
 #app-navigation {
+  position: relative;
   display: grid;
   align-items: center;
   grid-template-columns: 1fr repeat(14, 5%) 1fr;
