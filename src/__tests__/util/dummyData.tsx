@@ -2,6 +2,7 @@ import {Columns, Row} from '../../components/Table/types';
 import React from 'react';
 import faker from 'faker';
 import {AddressInfo, User, UserInfo} from '../../components/UserInfo/types';
+import {AvatarGenerator} from 'random-avatar-generator';
 
 export const randomNumberFrom1 = (num = 6) => Math.floor(Math.random() * num) + 1;
 
@@ -126,7 +127,7 @@ const createAddress = (): AddressInfo => ({
     zip: faker.address.zipCode()
 });
 const createDetails = (num = 10) => faker.lorem.sentences(randomNumberFrom1(num));
-
+const generator = new AvatarGenerator();
 
 const userInfo = (worksFromHome = false): UserInfo => {
     const homeAddress = createAddress();
@@ -134,7 +135,8 @@ const userInfo = (worksFromHome = false): UserInfo => {
         user: createUser(),
         homeAddress,
         workAddress: worksFromHome ? homeAddress : createAddress(),
-        details: createDetails()
+        details: createDetails(),
+        avatar: generator.generateRandomAvatar()
     });
 };
 
