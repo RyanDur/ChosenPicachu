@@ -1,6 +1,14 @@
-.card {
+#user-info {
+  display: flex;
+  flex-direction: column;
+}
+#user-info .title {
+  align-self: flex-end;
+}
+
+#user-info.card {
   margin-bottom: var(--base-x-4);
 }
-.card:last-child {
+#user-info.card:last-child {
   margin-bottom: 0;
 }
