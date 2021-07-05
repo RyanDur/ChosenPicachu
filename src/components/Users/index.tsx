@@ -10,7 +10,7 @@ export const Users: FC = () => {
     return <>
         <section id="user-info" className="card overhang gutter">
             <h2 className="title">User Information</h2>
-            <UserInformation className="user-page-card" onAdd={user => updateNewUsers([...newUsers, user])}/>
+            <UserInformation onAdd={user => updateNewUsers([...newUsers, user])}/>
         </section>
 
         <section id="users" className="card overhang gutter">
