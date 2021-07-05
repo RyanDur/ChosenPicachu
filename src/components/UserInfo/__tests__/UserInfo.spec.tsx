@@ -28,7 +28,6 @@ describe('a user form', () => {
         homeCityInout = screen.getByTestId('home-city');
         homeStateInput = screen.getByTestId('home-state');
         homeZipInput = screen.getByTestId('home-zip');
-
     });
 
     describe('filled out', () => {

@@ -31,11 +31,12 @@ export const renderWithRouter = (component: ReactElement, path: TestPaths = '/in
 };
 
 export const fillOutAddress = (info: UserInfo, kind: string) => {
-    userEvent.type(screen.getByTestId(`${kind}-street-address`), info.homeAddress.streetAddress);
-    userEvent.type(screen.getByTestId(`${kind}-street-address-2`), info.homeAddress.streetAddressTwo!);
-    userEvent.type(screen.getByTestId(`${kind}-city`), info.homeAddress.city);
-    userEvent.type(screen.getByTestId(`${kind}-state`), info.homeAddress.state);
-    userEvent.type(screen.getByTestId(`${kind}-zip`), info.homeAddress.zip);
+    const address = kind === 'home' ? info.homeAddress : info.workAddress!;
+    userEvent.type(screen.getByTestId(`${kind}-street-address`), address.streetAddress);
+    userEvent.type(screen.getByTestId(`${kind}-street-address-2`), address.streetAddressTwo!);
+    userEvent.type(screen.getByTestId(`${kind}-city`), address.city);
+    userEvent.selectOptions(screen.getByTestId(`${kind}-state`), address.state);
+    userEvent.type(screen.getByTestId(`${kind}-zip`), address.zip);
 };
 
 export const fillOutUser = (info: UserInfo) => {
