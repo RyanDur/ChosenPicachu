@@ -15,97 +15,97 @@
   "reset reset reset reset . . submit submit submit submit"
 }
 
-#avatar {
+#user-info-form #avatar {
   grid-area: avatar;
   width: 60%;
   justify-self: center;
 }
 
-#name-title {
+#user-info-form #name-title {
   grid-area: name_title;
 }
 
-#first-name-cell {
+#user-info-form #first-name-cell {
   grid-area: first_name;
 }
 
-#email-cell {
+#user-info-form #email-cell {
   grid-area: email;
 }
 
-#last-name-cell {
+#user-info-form #last-name-cell {
   grid-area: last_name;
 }
 
-#home-address-title {
+#user-info-form #home-address-title {
   grid-area: home_address_title;
 }
 
-#work-address-title {
+#user-info-form #work-address-title {
   grid-area: work_address_title;
 }
 
-#same-as-home-cell {
+#user-info-form #same-as-home-cell {
   grid-area: same_as_home;
   justify-content: flex-end;;
 }
 
-#home-street-address-cell {
+#user-info-form #home-street-address-cell {
   grid-area: home_street_address;
 }
 
-#work-street-address-cell {
+#user-info-form #work-street-address-cell {
   grid-area: work_street_address;
 }
 
-#home-street-address-2-cell {
+#user-info-form #home-street-address-2-cell {
   grid-area: home_street_address_2;
 }
 
-#work-street-address-2-cell {
+#user-info-form #work-street-address-2-cell {
   grid-area: work_street_address_2;
 }
 
-#home-city-cell {
+#user-info-form #home-city-cell {
   grid-area: home_city;
 }
 
-#work-city-cell {
+#user-info-form #work-city-cell {
   grid-area: work_city;
 }
 
-#home-state-cell {
+#user-info-form #home-state-cell {
   grid-area: home_state;
 }
 
-#work-state-cell {
+#user-info-form #work-state-cell {
   grid-area: work_state;
 }
 
-#home-zip-cell {
+#user-info-form #home-zip-cell {
   grid-area: home_zip;
   min-width: 9.8rem;
 }
 
-#work-zip-cell {
+#user-info-form #work-zip-cell {
   grid-area: work_zip;
   min-width: 9.8rem;
 }
 
-#details-cell {
+#user-info-form #details-cell {
   grid-area: details;
 }
 
-#reset {
+#user-info-form #reset {
   grid-area: reset;
 }
 
-#submit {
+#user-info-form #submit {
   grid-area: submit;
 }
 
 @media only screen and (max-width: 1505px) {
-  #user-info-form {
+  #user-info-form #user-info-form {
     grid-template-columns: 1fr var(--base-x-13) 1fr;
     grid-template-areas:
     "avatar avatar avatar"
