@@ -7,7 +7,7 @@ import './App.layout.css';
 export enum Paths {
     home = '/',
     about = '/about',
-    form = '/users'
+    users = '/users'
 }
 
 export const App = () => {
@@ -18,7 +18,7 @@ export const App = () => {
         page: useRouteMatch(Paths.about),
         title: 'About Page'
     }, {
-        page: useRouteMatch(Paths.form),
+        page: useRouteMatch(Paths.users),
         title: 'Users Page'
     }];
 
@@ -29,7 +29,7 @@ export const App = () => {
         <nav id="app-navigation" className="overhang">
             <Link id="navigate-home" className="path" to={Paths.home}>Home</Link>
             <Link id="navigate-about" className="path" to={Paths.about}>About</Link>
-            <Link id="navigate-form" className="path" to={Paths.form}>Users</Link>
+            <Link id="navigate-form" className="path" to={Paths.users}>Users</Link>
         </nav>
         <main className="overhang gutter">
             <Switch>
@@ -39,7 +39,7 @@ export const App = () => {
                 <Route path={Paths.about} exact>
                     <About/>
                 </Route>
-                <Route path={Paths.form} exact>
+                <Route path={Paths.users} exact>
                     <Users/>
                 </Route>
             </Switch>
