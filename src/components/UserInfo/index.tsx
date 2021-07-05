@@ -63,7 +63,12 @@ export const UserInformation: FC<FormProps> = ({onAdd}) => {
             Email
         </FancyInput>
 
-        <article id="avatar-cell" className="card" onClick={() => dispatch(updateAvatar(generateAvatar()))}>
+        <article tabIndex={0} id="avatar-cell" className="card"
+                 onKeyPress={event => {
+                     event.preventDefault();
+                     if (event.code === 'Space') dispatch(updateAvatar(generateAvatar()));
+                 }}
+                 onClick={() => dispatch(updateAvatar(generateAvatar()))}>
             <img id="avatar" src={userInfo.avatar} alt="avatar"/>
         </article>
 
