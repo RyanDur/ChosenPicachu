@@ -51,6 +51,8 @@ button:focus,
 #avatar-cell:hover,
 .last-column .menu:focus,
 .last-column .menu:hover,
+.last-column .menu:hover .menu-list,
+.last-column .menu.open .menu-list,
 #avatar-cell:hover,
 #avatar-cell:focus,
 #user-info-form.invalid .fancy .fancy-text:invalid,
@@ -68,6 +70,7 @@ button {
   font-size: 16px;
   cursor: pointer;
   box-shadow: 0 0 4px #999;
+  text-align: center;
   outline: none;
 }
 
