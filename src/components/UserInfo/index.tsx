@@ -20,11 +20,13 @@ import './Form.css';
 import {generateAvatar} from '../../avatars';
 
 interface FormProps {
+    currentUserInfo?: UserInfo;
     onAdd?: Consumer<UserInfo>;
+    readonly?: boolean;
 }
 
-export const UserInformation: FC<FormProps> = ({onAdd}) => {
-    const [userInfo, dispatch] = useReducer(formReducer, initialState);
+export const UserInformation: FC<FormProps> = ({onAdd, currentUserInfo = initialState}) => {
+    const [userInfo, dispatch] = useReducer(formReducer, initialState, () => currentUserInfo);
     const [sameAsHome, updateSameAsHome] = useState(false);
     const [isInvalid, updateValidity] = useState(false);
 
@@ -39,6 +41,7 @@ export const UserInformation: FC<FormProps> = ({onAdd}) => {
     };
 
     return <form id="user-info-form"
+                 data-testid="user-info-form"
                  className={joinClassNames(isInvalid && 'invalid')}
                  onSubmit={event => {
                      event.preventDefault();

@@ -1,12 +1,13 @@
-import {render, screen, within} from '@testing-library/react';
+import {act, screen, within} from '@testing-library/react';
 import {Users} from '../index';
 import userEvent from '@testing-library/user-event';
-import {fillOutAddress, fillOutUser, users} from '../../../__tests__/util';
+import {fillOutAddress, fillOutUser, renderWithRouter, users} from '../../../__tests__/util';
 
 describe('the users page', () => {
     const [userInfo, anotherUserInfo] = users;
+
     beforeEach(() => {
-        render(<Users/>);
+        renderWithRouter(<Users/>);
     });
 
     describe('adding a user', () => {
@@ -46,6 +47,19 @@ describe('the users page', () => {
             expect(secondRowFirstCell).toHaveTextContent(`${userInfo.user.firstName} ${userInfo.user.lastName}`);
             expect(secondRowSecondCell).toHaveTextContent(userInfo.homeAddress.city);
             expect(secondRowThirdCell).toHaveTextContent('No');
+        });
+
+        test('user can view a user', async () => {
+            const table = screen.getByTestId('table');
+            const firstRowThirdCell = within(table).getByTestId('cell-2-0');
+
+            act(() => {
+                userEvent.click(within(firstRowThirdCell).getByText('View'));
+            });
+            const form = screen.getByTestId('user-info-form');
+            expect(within(form).getByLabelText('First Name')).toHaveDisplayValue(anotherUserInfo.user.firstName);
+            expect(within(form).getByLabelText('Last Name')).toHaveDisplayValue(anotherUserInfo.user.lastName);
+            expect(within(form).getByLabelText('Email')).toHaveDisplayValue(anotherUserInfo.user.email!);
         });
     });
 });
