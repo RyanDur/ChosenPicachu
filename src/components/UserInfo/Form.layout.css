@@ -45,7 +45,8 @@
 
 #user-info-form #same-as-home-cell {
   grid-area: same_as_home;
-  justify-content: flex-end;;
+  display: flex;
+  justify-content: flex-end;
 }
 
 #user-info-form #home-street-address-cell {
