@@ -6,7 +6,7 @@ import {Paths} from '../../App';
 import {UserInfo} from '../../components/UserInfo/types';
 import userEvent from '@testing-library/user-event';
 
-interface Rendered {
+export interface Rendered {
     rendered?: RenderResult;
     testHistory?: H.History;
     testLocation?: H.Location;

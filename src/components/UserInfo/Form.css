@@ -63,43 +63,6 @@
   color: var(--internationl-orange-engineering);
 }
 
-button {
-  height: 4rem;
-  border-radius: 4rem;
-  text-transform: uppercase;
-  padding: 12px 18px;
-  font-size: 16px;
-  cursor: pointer;
-  box-shadow: 0 0 4px #999;
-  outline: none;
-}
-
-button.primary {
-  border: none;
-  color: white;
-  background-color: #007bff;
-}
-button.secondary {
-  border: 1px solid #007bff;
-  background-color: var(--paper);
-}
-
-.ripple {
-  background-position: center;
-  transition: background 0.5s;
-}
-
-.ripple:hover {
-  color: white;
-  background: #275c8d radial-gradient(circle, transparent 1%, #1e5eac 1%) center/15000%;
-}
-
-.ripple:active {
-  background-color: #6eb9f7;
-  background-size: 100%;
-  transition: background 0s;
-}
-
 #avatar-cell {
   outline: none;
   display: flex;

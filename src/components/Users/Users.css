@@ -19,8 +19,36 @@
 }
 .last-column .menu {
   outline: none;
+  position: relative;
   width: 2rem;
   height: 2rem;
   background-image: radial-gradient(circle, black 0.2rem, transparent 0.1rem);
   background-size: 100% 33.33%;
+}
+
+.last-column .menu .menu-list {
+  position: absolute;
+  display: none;
+  border-radius: 2rem;
+}
+
+.last-column .menu:hover .menu-list {
+  display: block;
+  width: 8rem;
+  right: 2rem;
+}
+
+.last-column .menu:hover .menu-list .item {
+  background: var(--faded-leather);
+  height: 4rem;
+}
+
+.last-column .menu:hover .menu-list .item:first-child {
+  border-top-left-radius: 2rem;
+  border-top-right-radius: 2rem;
+}
+
+.last-column .menu:hover .menu-list .item:last-child {
+  border-bottom-left-radius: 2rem;
+  border-bottom-right-radius: 2rem;
 }

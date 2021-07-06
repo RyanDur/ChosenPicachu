@@ -3,14 +3,26 @@ import {UserInfo} from '../UserInfo/types';
 import {UserInformation} from '../UserInfo';
 import {Table} from '../Table';
 import {createRandomUsers} from '../../__tests__/util';
+import {Link, useLocation} from 'react-router-dom';
+import {Paths} from '../../App';
 import './Users.css';
 
+const useQuery = <T extends Object>(): T => useLocation().search
+    .replace('?', '')
+    .split('&')
+    .map(param => param.split('='))
+    .reduce((acc, [key, value]) => ({...acc, [key]: value}), {} as T);
+
 export const Users: FC = () => {
+    const {user} = useQuery<{ user: string }>();
     const [users, updateNewUsers] = useState<UserInfo[]>(createRandomUsers());
+    const currentUser = users.find(info => info.user.firstName === user);
+
     return <>
-        <section id="user-info" className="card overhang gutter">
+        <section id="user-info" className="card overhang gutter" key={currentUser?.user.email}>
             <h2 className="title">User Information</h2>
-            <UserInformation onAdd={user => updateNewUsers([user, ...users])}/>
+            <UserInformation currentUserInfo={currentUser}
+                             onAdd={user => updateNewUsers([user, ...users])}/>
         </section>
 
         <section id="users" className="card overhang gutter">
@@ -29,10 +41,20 @@ export const Users: FC = () => {
                 rows={users.map(({user, homeAddress, workAddress}) => ({
                     fullName: {display: `${user.firstName} ${user.lastName}`},
                     homeCity: {display: homeAddress.city},
-                    worksFromHome: {display: <section className="last-column">
+                    worksFromHome: {
+                        display: <section className="last-column">
                             {homeAddress === workAddress ? 'Yes' : 'No'}
-                            <article tabIndex={0} className="menu card"/>
-                    </section>}
+                            <article tabIndex={0} className="menu card">
+                                <ul className="menu-list">
+                                    <li className="item">
+                                        <Link to={`${Paths.users}?user=${user.firstName}`}
+                                              className='button secondary'
+                                              data-testid="view">View</Link>
+                                    </li>
+                                </ul>
+                            </article>
+                        </section>
+                    }
                 }))}
             />
         </section>
