@@ -44,14 +44,21 @@ export const Users: FC = () => {
                     worksFromHome: {
                         display: <section className="last-column">
                             {homeAddress === workAddress ? 'Yes' : 'No'}
-                            <article tabIndex={0} className="menu card">
-                                <ul className="menu-list">
-                                    <li className="item">
-                                        <Link to={`${Paths.users}?user=${user.firstName}`}
-                                              className='button secondary'
-                                              data-testid="view">View</Link>
-                                    </li>
-                                </ul>
+                            <article tabIndex={0} className="menu card" onKeyPress={event => {
+                                event.preventDefault();
+                                if (event.code === 'Space') {
+                                    event.currentTarget.classList.toggle('open');
+                                }
+                            }} onBlur={event => {
+                                if(!event.currentTarget.contains(event.relatedTarget as Node)) {
+                                    event.currentTarget.classList.remove('open');
+                                }
+                            }} onClick={event => event.currentTarget.classList.remove('open')}>
+                                <nav className="menu-list">
+                                    <Link to={`${Paths.users}?user=${user.firstName}`}
+                                          className='item'
+                                          data-testid="view">View</Link>
+                                </nav>
                             </article>
                         </section>
                     }

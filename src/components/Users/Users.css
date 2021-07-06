@@ -32,23 +32,37 @@
   border-radius: 2rem;
 }
 
+.last-column .menu.open .menu-list,
 .last-column .menu:hover .menu-list {
-  display: block;
-  width: 8rem;
-  right: 2rem;
+  display: inline-grid;
+  z-index: 1;
+  width: 20rem;
+  right: 1rem;
+  background: white;
+  background: var(--paper);
 }
 
+.last-column .menu.open .menu-list .item,
 .last-column .menu:hover .menu-list .item {
-  background: var(--faded-leather);
   height: 4rem;
+  display: flex;
+  font-size: 2rem;
+  color: black;
+  justify-content: center;
+  align-items: center;
 }
 
-.last-column .menu:hover .menu-list .item:first-child {
+.last-column .menu .menu-list .item:focus {
+  outline: none;
+  border: 4px solid var(--mint);
+}
+
+.last-column .menu .menu-list .item:first-child {
   border-top-left-radius: 2rem;
   border-top-right-radius: 2rem;
 }
 
-.last-column .menu:hover .menu-list .item:last-child {
+.last-column .menu .menu-list .item:last-child {
   border-bottom-left-radius: 2rem;
   border-bottom-right-radius: 2rem;
 }
