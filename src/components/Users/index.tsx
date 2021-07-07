@@ -16,7 +16,7 @@ const useQuery = <T extends Object>(): T => useLocation().search
 export const Users: FC = () => {
     const {user} = useQuery<{ user: string }>();
     const [users, updateNewUsers] = useState<UserInfo[]>(createRandomUsers());
-    const currentUser = users.find(info => info.user.firstName === user);
+    const currentUser = users.find(info => info.user.email === user);
 
     return <>
         <section id="user-info" className="card overhang gutter" key={currentUser?.user.email}>
@@ -54,8 +54,8 @@ export const Users: FC = () => {
                                     event.currentTarget.classList.remove('open');
                                 }
                             }} onClick={event => event.currentTarget.classList.remove('open')}>
-                                <nav className="menu-list">
-                                    <Link to={`${Paths.users}?user=${user.firstName}`}
+                                <nav className="menu-list card">
+                                    <Link to={`${Paths.users}?user=${user.email}`}
                                           className='item'
                                           data-testid="view">View</Link>
                                 </nav>

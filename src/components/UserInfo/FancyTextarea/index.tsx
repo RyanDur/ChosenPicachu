@@ -5,9 +5,15 @@ import {Consumer} from '../types';
 interface FancyTextareaProps {
     onChange: Consumer<FormEvent<HTMLTextAreaElement>>;
     value?: string;
+    readOnly?: boolean
 }
 
-export const FancyTextarea: FC<FancyTextareaProps> = ({onChange, value = ''}) => {
+export const FancyTextarea: FC<FancyTextareaProps> = (
+    {
+        onChange,
+        value = '',
+        readOnly
+    }) => {
     const [focused, updateDetailsFocus] = useState(false);
 
     return <article id="details-cell" className={joinClassNames(
@@ -20,6 +26,7 @@ export const FancyTextarea: FC<FancyTextareaProps> = ({onChange, value = ''}) =>
                   onFocus={() => updateDetailsFocus(true)}
                   onBlur={() => updateDetailsFocus(false)}
                   value={value}
+                  readOnly={readOnly}
                   onChange={onChange}/>
     </article>;
 };
