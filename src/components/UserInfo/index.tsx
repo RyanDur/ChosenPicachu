@@ -50,7 +50,10 @@ export const UserInformation: FC<FormProps> = ({onAdd, readOnly, currentUserInfo
     return <form id="user-info-form"
                  key={resetFormKey}
                  data-testid="user-info-form"
-                 className={joinClassNames(isInvalid && 'invalid')}
+                 className={joinClassNames(
+                     isInvalid && 'invalid',
+                     readOnly && 'read-only'
+                 )}
                  onSubmit={event => {
                      event.preventDefault();
                      onAdd?.(userInfo);
@@ -76,11 +79,10 @@ export const UserInformation: FC<FormProps> = ({onAdd, readOnly, currentUserInfo
             Email
         </FancyInput>
 
-        <article tabIndex={0} id="avatar-cell" className="card"
-                 onKeyPress={event => {
-                     event.preventDefault();
-                     if (!readOnly && event.code === 'Space') dispatch(updateAvatar(generateAvatar()));
-                 }}
+        <article tabIndex={0} id="avatar-cell"
+                 className={joinClassNames('card', readOnly && 'read-only')}
+                 data-testid="avatar-cell"
+                 onKeyPress={event => event.preventDefault()}
                  onClick={() => {
                      if (!readOnly) {
                          dispatch(updateAvatar(generateAvatar()));
@@ -94,9 +96,10 @@ export const UserInformation: FC<FormProps> = ({onAdd, readOnly, currentUserInfo
                  onChange={address => dispatch(updateHomeAddress(address))}/>
 
         <h3 id="work-address-title">Work Address</h3>
-        <article id="same-as-home-cell" className="center-horizontal">
+        <article id="same-as-home-cell"
+                 className={joinClassNames('center-horizontal', readOnly && 'read-only')}>
             <label htmlFor="same-as-home">Same as Home</label>
-            <input id="same-as-home" type="checkbox" checked={sameAsHome} readOnly={readOnly}
+            <input id="same-as-home" type="checkbox" checked={sameAsHome} disabled={readOnly}
                    onChange={event => updateSameAsHome(event.currentTarget.checked)}/>
         </article>
         <Address disabled={sameAsHome} kind="work" value={userInfo.workAddress} readOnly={readOnly}
@@ -105,7 +108,7 @@ export const UserInformation: FC<FormProps> = ({onAdd, readOnly, currentUserInfo
         <FancyTextarea value={userInfo.details} readOnly={readOnly}
                        onChange={event => dispatch(updateDetails(event.currentTarget.value))}/>
 
-        <button id="reset" type="reset" className="secondary ripple">Reset</button>
-        <button id="submit" type="submit" className="primary ripple">Add</button>
+        <button id="reset" type="reset" disabled={readOnly} className="secondary ripple">Reset</button>
+        <button id="submit" type="submit" disabled={readOnly} className="primary ripple">Add</button>
     </form>;
 };

@@ -49,17 +49,51 @@ describe('the users page', () => {
             expect(secondRowThirdCell).toHaveTextContent('No');
         });
 
-        test('user can view a user', async () => {
-            const table = screen.getByTestId('table');
-            const firstRowThirdCell = within(table).getByTestId('cell-2-0');
+        describe('viewing a user', () => {
+            let table: HTMLElement;
+            let firstRowThirdCell: HTMLElement;
 
-            act(() => {
-                userEvent.click(within(firstRowThirdCell).getByText('View'));
+            beforeEach(() => {
+                table = screen.getByTestId('table');
+                firstRowThirdCell = within(table).getByTestId('cell-2-0');
+
+                act(() => {
+                    userEvent.click(within(firstRowThirdCell).getByText('View'));
+                });
             });
-            const form = screen.getByTestId('user-info-form');
-            expect(within(form).getByLabelText('First Name')).toHaveDisplayValue(anotherUserInfo.user.firstName);
-            expect(within(form).getByLabelText('Last Name')).toHaveDisplayValue(anotherUserInfo.user.lastName);
-            expect(within(form).getByLabelText('Email')).toHaveDisplayValue(anotherUserInfo.user.email!);
+
+            test('populating the form with the chosen user', async () => {
+                const form = screen.getByTestId('user-info-form');
+                expect(within(form).getByLabelText('First Name')).toHaveDisplayValue(anotherUserInfo.user.firstName);
+                expect(within(form).getByLabelText('Last Name')).toHaveDisplayValue(anotherUserInfo.user.lastName);
+                expect(within(form).getByLabelText('Email')).toHaveDisplayValue(anotherUserInfo.user.email!);
+            });
+
+            test('should not be able to change the uses data', async () => {
+                const form = screen.getByTestId('user-info-form');
+                expect(within(form).getByLabelText('First Name')).toHaveAttribute('readonly');
+                expect(within(form).getByLabelText('Last Name')).toHaveAttribute('readonly');
+                expect(within(form).getByLabelText('Email')).toHaveAttribute('readonly');
+
+                const avatarImage: HTMLImageElement = form.querySelector('#avatar')!;
+                const imageSrc = avatarImage.src;
+                userEvent.click(within(form).getByTestId('avatar-cell'));
+                expect(avatarImage.src).toEqual(imageSrc);
+
+                expect(within(form).getByTestId('home-street-address')).toHaveAttribute('readonly');
+                expect(within(form).getByTestId('home-street-address-2')).toHaveAttribute('readonly');
+                expect(within(form).getByTestId('home-city')).toHaveAttribute('readonly');
+                expect(within(form).getByTestId('home-state')).toBeDisabled();
+                expect(within(form).getByTestId('home-zip')).toHaveAttribute('readonly');
+
+                expect(within(form).getByTestId('work-street-address')).toHaveAttribute('readonly');
+                expect(within(form).getByTestId('work-street-address-2')).toHaveAttribute('readonly');
+                expect(within(form).getByTestId('work-city')).toHaveAttribute('readonly');
+                expect(within(form).getByTestId('work-state')).toBeDisabled();
+                expect(within(form).getByTestId('work-zip')).toHaveAttribute('readonly');
+
+                expect(within(form).getByLabelText('Details')).toHaveAttribute('readonly');
+            });
         });
     });
 });
