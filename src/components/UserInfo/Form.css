@@ -15,7 +15,8 @@
   border-radius: 2rem;
   position: absolute;
 }
-#user-info-form .fancy .fancy-text:read-only {
+
+#user-info-form.read-only .fancy .fancy-text:read-only {
   border: none;
   border-bottom: 1px solid rgba(30, 118, 224, 0.68);
   box-shadow: none;
@@ -39,7 +40,6 @@
   opacity: 0.6;
   transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
 }
-
 
 #user-info-form .fancy .fancy-text:read-only ~ .fancy-title,
 #user-info-form .fancy.not-empty .fancy-title,
