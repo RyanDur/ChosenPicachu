@@ -1,0 +1,21 @@
+#users {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  row-gap: 4rem;
+  grid-template-areas:
+  "title button"
+  "table table";
+}
+
+#users #title {
+  grid-area: title;
+}
+
+#users #add-new-user {
+  grid-area: button;
+  justify-self: flex-end;
+}
+
+#users #users-table {
+  grid-area: table;
+}

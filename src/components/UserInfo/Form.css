@@ -41,7 +41,7 @@
   transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
 }
 
-#user-info-form .fancy .fancy-text:read-only ~ .fancy-title,
+#user-info-form.read-only .fancy .fancy-text:read-only ~ .fancy-title,
 #user-info-form .fancy.not-empty .fancy-title,
 #user-info-form .fancy .fancy-text:disabled ~ .fancy-title,
 #user-info-form .fancy:not(.fancy-select) .fancy-text:read-only ~ .fancy-title,

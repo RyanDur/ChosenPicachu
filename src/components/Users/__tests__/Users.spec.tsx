@@ -94,6 +94,27 @@ describe('the users page', () => {
 
                 expect(within(form).getByLabelText('Details')).toHaveAttribute('readonly');
             });
+
+            test('adding a new user', () => {
+                userEvent.click(screen.getByText('Add New User'));
+                fillOutUser(anotherUserInfo);
+                fillOutAddress(anotherUserInfo, 'home');
+                userEvent.click(screen.getByLabelText('Same as Home'));
+
+                const firstRowFirstCell = within(table).getByTestId('cell-0-0');
+                const firstRowSecondCell = within(table).getByTestId('cell-1-0');
+                const firstRowThirdCell = within(table).getByTestId('cell-2-0');
+
+                expect(firstRowFirstCell).toHaveTextContent(`${anotherUserInfo.user.firstName} ${anotherUserInfo.user.lastName}`);
+                expect(firstRowSecondCell).toHaveTextContent(anotherUserInfo.homeAddress.city);
+                expect(firstRowThirdCell).toHaveTextContent('Yes');
+            });
+
+            test('should remove button if able to add a new user', () => {
+                userEvent.click(screen.getByText('Add New User'));
+
+                expect(screen.queryByText('Add New User')).not.toBeInTheDocument();
+            });
         });
     });
 });
