@@ -6,6 +6,7 @@ import {createRandomUsers} from '../../__tests__/util';
 import {Link, useLocation} from 'react-router-dom';
 import {Paths} from '../../App';
 import './Users.css';
+import './Users.layout.css';
 
 const useQuery = <T extends Object>(): T => useLocation().search
     .replace('?', '')
@@ -27,7 +28,10 @@ export const Users: FC = () => {
 
         <section id="users" className="card overhang gutter">
             <h2 className="title">Users</h2>
+            {mode === 'view' &&
+            <Link to={Paths.users} id="add-new-user" className="button primary ripple">Add New User</Link>}
             <Table
+                id="users-table"
                 tableClassName="fancy-table home-table"
                 theadClassName="header"
                 trClassName="row"
@@ -50,7 +54,7 @@ export const Users: FC = () => {
                                     event.currentTarget.classList.toggle('open');
                                 }
                             }} onBlur={event => {
-                                if(!event.currentTarget.contains(event.relatedTarget as Node)) {
+                                if (!event.currentTarget.contains(event.relatedTarget as Node)) {
                                     event.currentTarget.classList.remove('open');
                                 }
                             }} onClick={event => event.currentTarget.classList.remove('open')}>
