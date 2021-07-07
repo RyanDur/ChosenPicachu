@@ -42,7 +42,7 @@ a {
   padding: var(--base-x-4);
 }
 
-*:required + label:after {
+*:required:not(:read-only) + label:after {
   content: '*';
   color: var(--internationl-orange-engineering);
 }
@@ -53,12 +53,21 @@ button:focus,
 .last-column .menu:hover,
 .last-column .menu:hover .menu-list,
 .last-column .menu.open .menu-list,
-#avatar-cell:hover,
-#avatar-cell:focus,
-#user-info-form.invalid .fancy .fancy-text:invalid,
-#user-info-form .fancy .fancy-text:hover,
-#user-info-form .fancy .fancy-text:focus {
+#avatar-cell:hover:not(.read-only),
+#avatar-cell:focus:not(.read-only),
+#user-info-form.invalid .fancy .fancy-text:not(:read-only):invalid,
+#user-info-form .fancy .fancy-text:not(:read-only):hover,
+#user-info-form .fancy .fancy-text:not(:read-only):focus {
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+#avatar-cell.read-only:hover,
+#avatar-cell.read-only:focus {
+  box-shadow: none;
+}
+
+#same-as-home-cell.read-only {
+  opacity: 0;
 }
 
 a.button,

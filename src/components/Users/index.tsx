@@ -14,14 +14,14 @@ const useQuery = <T extends Object>(): T => useLocation().search
     .reduce((acc, [key, value]) => ({...acc, [key]: value}), {} as T);
 
 export const Users: FC = () => {
-    const {user} = useQuery<{ user: string }>();
+    const {user, mode} = useQuery<{ user: string, mode: string }>();
     const [users, updateNewUsers] = useState<UserInfo[]>(createRandomUsers());
     const currentUser = users.find(info => info.user.email === user);
 
     return <>
         <section id="user-info" className="card overhang gutter" key={currentUser?.user.email}>
             <h2 className="title">User Information</h2>
-            <UserInformation currentUserInfo={currentUser}
+            <UserInformation currentUserInfo={currentUser} readOnly={mode === 'view'}
                              onAdd={user => updateNewUsers([user, ...users])}/>
         </section>
 
@@ -55,7 +55,7 @@ export const Users: FC = () => {
                                 }
                             }} onClick={event => event.currentTarget.classList.remove('open')}>
                                 <nav className="menu-list card">
-                                    <Link to={`${Paths.users}?user=${user.email}`}
+                                    <Link to={`${Paths.users}?user=${user.email}&mode=view`}
                                           className='item'
                                           data-testid="view">View</Link>
                                 </nav>
