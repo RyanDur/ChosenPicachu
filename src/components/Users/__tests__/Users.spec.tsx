@@ -5,9 +5,17 @@ import {fillOutAddress, fillOutUser, renderWithRouter, users} from '../../../__t
 
 describe('the users page', () => {
     const [userInfo, anotherUserInfo] = users;
+    let table: HTMLElement,
+        firstRowFirstCell: HTMLElement,
+        firstRowSecondCell: HTMLElement,
+        firstRowThirdCell: HTMLElement;
 
     beforeEach(() => {
         renderWithRouter(<Users/>);
+        table = screen.getByTestId('table');
+        firstRowFirstCell = within(table).getByTestId('cell-0-0');
+        firstRowSecondCell = within(table).getByTestId('cell-1-0');
+        firstRowThirdCell = within(table).getByTestId('cell-2-0');
     });
 
     describe('adding a user', () => {
@@ -25,24 +33,19 @@ describe('the users page', () => {
         });
 
         test('user info in table in descending order', () => {
-            const table = screen.getByTestId('table');
             const [column1, column2, column3] = screen.getAllByTestId('th');
 
             expect(column1).toHaveTextContent('Full Name');
             expect(column2).toHaveTextContent('Home City');
             expect(column3).toHaveTextContent('Works from Home');
 
-            const firstRowFirstCell = within(table).getByTestId('cell-0-0');
-            const firstRowSecondCell = within(table).getByTestId('cell-1-0');
-            const firstRowThirdCell = within(table).getByTestId('cell-2-0');
-
             expect(firstRowFirstCell).toHaveTextContent(`${anotherUserInfo.user.firstName} ${anotherUserInfo.user.lastName}`);
             expect(firstRowSecondCell).toHaveTextContent(anotherUserInfo.homeAddress.city);
             expect(firstRowThirdCell).toHaveTextContent('Yes');
 
-            const secondRowFirstCell = within(table).getByTestId('cell-0-1');
-            const secondRowSecondCell = within(table).getByTestId('cell-1-1');
-            const secondRowThirdCell = within(table).getByTestId('cell-2-1');
+            const secondRowFirstCell = within(table).getByTestId('cell-0-1'),
+                secondRowSecondCell = within(table).getByTestId('cell-1-1'),
+                secondRowThirdCell = within(table).getByTestId('cell-2-1');
 
             expect(secondRowFirstCell).toHaveTextContent(`${userInfo.user.firstName} ${userInfo.user.lastName}`);
             expect(secondRowSecondCell).toHaveTextContent(userInfo.homeAddress.city);
@@ -50,9 +53,6 @@ describe('the users page', () => {
         });
 
         describe('viewing a user', () => {
-            let table: HTMLElement;
-            let firstRowThirdCell: HTMLElement;
-
             beforeEach(() => {
                 table = screen.getByTestId('table');
                 firstRowThirdCell = within(table).getByTestId('cell-2-0');
@@ -100,10 +100,6 @@ describe('the users page', () => {
                 fillOutUser(anotherUserInfo);
                 fillOutAddress(anotherUserInfo, 'home');
                 userEvent.click(screen.getByLabelText('Same as Home'));
-
-                const firstRowFirstCell = within(table).getByTestId('cell-0-0');
-                const firstRowSecondCell = within(table).getByTestId('cell-1-0');
-                const firstRowThirdCell = within(table).getByTestId('cell-2-0');
 
                 expect(firstRowFirstCell).toHaveTextContent(`${anotherUserInfo.user.firstName} ${anotherUserInfo.user.lastName}`);
                 expect(firstRowSecondCell).toHaveTextContent(anotherUserInfo.homeAddress.city);
