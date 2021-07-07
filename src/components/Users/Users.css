@@ -56,13 +56,3 @@
   outline: none;
   border: 4px solid var(--mint);
 }
-
-.last-column .menu .menu-list .item:first-child {
-  border-top-left-radius: 2rem;
-  border-top-right-radius: 2rem;
-}
-
-.last-column .menu .menu-list .item:last-child {
-  border-bottom-left-radius: 2rem;
-  border-bottom-right-radius: 2rem;
-}
