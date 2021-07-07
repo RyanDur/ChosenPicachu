@@ -83,13 +83,13 @@ describe('the users page', () => {
                 expect(within(form).getByTestId('home-street-address')).toHaveAttribute('readonly');
                 expect(within(form).getByTestId('home-street-address-2')).toHaveAttribute('readonly');
                 expect(within(form).getByTestId('home-city')).toHaveAttribute('readonly');
-                expect(within(form).getByTestId('home-state')).toBeDisabled();
+                expect(within(form).getByTestId('home-state')).toHaveAttribute('readonly');
                 expect(within(form).getByTestId('home-zip')).toHaveAttribute('readonly');
 
                 expect(within(form).getByTestId('work-street-address')).toHaveAttribute('readonly');
                 expect(within(form).getByTestId('work-street-address-2')).toHaveAttribute('readonly');
                 expect(within(form).getByTestId('work-city')).toHaveAttribute('readonly');
-                expect(within(form).getByTestId('work-state')).toBeDisabled();
+                expect(within(form).getByTestId('work-state')).toHaveAttribute('readonly');
                 expect(within(form).getByTestId('work-zip')).toHaveAttribute('readonly');
 
                 expect(within(form).getByLabelText('Details')).toHaveAttribute('readonly');

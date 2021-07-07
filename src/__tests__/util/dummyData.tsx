@@ -4,9 +4,9 @@ import faker from 'faker';
 import {AddressInfo, User, UserInfo} from '../../components/UserInfo/types';
 import {AvatarGenerator} from 'random-avatar-generator';
 
-export const randomNumberFrom1 = (num = 6) => Math.floor(Math.random() * num) + 1;
+export const randomNumberFromRange = (min: number, max = 6) => Math.floor(Math.random() * max) + min;
 
-export const words = (num = 6) => faker.lorem.words(randomNumberFrom1(num));
+export const words = (num = 6) => faker.lorem.words(randomNumberFromRange(1, num));
 
 export const column1Name = words();
 export const column2Name = words();
@@ -126,25 +126,29 @@ const createAddress = (): AddressInfo => ({
     streetAddressTwo: faker.address.secondaryAddress(),
     zip: faker.address.zipCode()
 });
-const createDetails = (num = 10) => faker.lorem.sentences(randomNumberFrom1(num));
+
+const maybeCreateAddress = (): AddressInfo | undefined =>
+    Math.random() < 0.5 ? undefined : createAddress();
+
+const createDetails = (num = 10) => faker.lorem.sentences(randomNumberFromRange(2, num));
 const generator = new AvatarGenerator();
 
-const userInfo = (worksFromHome = false): UserInfo => {
+const userInfo = (address?: AddressInfo, worksFromHome = false): UserInfo => {
     const homeAddress = createAddress();
     return ({
         user: createUser(),
         homeAddress,
-        workAddress: worksFromHome ? homeAddress : createAddress(),
+        workAddress: worksFromHome ? homeAddress : address,
         details: createDetails(),
         avatar: generator.generateRandomAvatar()
     });
 };
 
 export const users = [
-    userInfo(),
-    userInfo(true),
-    userInfo()
+    userInfo(createAddress()),
+    userInfo(createAddress(), true),
+    userInfo(createAddress())
 ];
 
-export const createRandomUsers = (num = randomNumberFrom1(10)): UserInfo[] =>
-    [...Array(num)].map(() => userInfo(Math.random() > 0.5));
+export const createRandomUsers = (num = randomNumberFromRange(3, 15)): UserInfo[] =>
+    [...Array(num)].map(() => userInfo(maybeCreateAddress(), Math.random() > 0.5));
