@@ -37,11 +37,17 @@
   display: inline-grid;
   z-index: 1;
   width: 20rem;
-  right: 1rem;
+  right: 2rem;
+  bottom: -4rem;
   background: white;
   background: var(--paper);
 }
 
+.last-column .menu .menu-list .item:hover,
+.last-column .menu .menu-list .item:focus {
+  outline: none;
+  box-shadow: inset 0 0 5px var(--charcoal);
+}
 .last-column .menu.open .menu-list .item,
 .last-column .menu:hover .menu-list .item {
   height: 4rem;
@@ -50,11 +56,6 @@
   color: black;
   justify-content: center;
   align-items: center;
-}
-.last-column .menu .menu-list .item:hover,
-.last-column .menu .menu-list .item:focus {
-  outline: none;
-  box-shadow: inset 0 0 5px var(--charcoal);
 }
 
 .last-column .menu .menu-list .item:not(:last-child) {
