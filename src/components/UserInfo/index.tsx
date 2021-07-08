@@ -59,6 +59,12 @@ export const UserInformation: FC<FormProps> = (
         updateValidity(false);
     };
 
+    const handleUpdate = () => {
+        onUpdate?.(userInfo);
+        reset();
+        triggerFormReset(nanoid());
+    };
+
     return <form id="user-info-form"
                  key={resetFormKey}
                  data-testid="user-info-form"
@@ -68,10 +74,8 @@ export const UserInformation: FC<FormProps> = (
                  )}
                  onSubmit={event => {
                      event.preventDefault();
-                     !editing && onAdd?.(userInfo);
-                     editing && onUpdate?.(userInfo);
+                     onAdd?.(userInfo);
                      reset();
-                     triggerFormReset(nanoid());
                  }}
                  onReset={reset}
                  onInvalid={() => updateValidity(true)}>
@@ -123,10 +127,9 @@ export const UserInformation: FC<FormProps> = (
 
         <button id="reset" type="reset" disabled={readOnly} className="secondary ripple">Reset</button>
         {!editing && <button id="submit" type="submit" disabled={readOnly} className="primary ripple">Add</button>}
-        {editing &&
-        <Link id="cancel" to={`${Paths.users}?user=${userInfo.user.email}&mode=view`}
-              className="button secondary ripple"
-              onClick={reset}>Cancel</Link>}
-        {editing && <button id="submit" type="submit" disabled={readOnly} className="primary ripple">Update</button>}
+        {editing && <Link id="cancel" to={`${Paths.users}?user=${userInfo.user.email}&mode=view`}
+                          className="button secondary ripple"
+                          onClick={reset}>Cancel</Link>}
+        {editing && <Link to={Paths.users} id="submit" onClick={handleUpdate} className="button primary ripple">Update</Link>}
     </form>;
 };

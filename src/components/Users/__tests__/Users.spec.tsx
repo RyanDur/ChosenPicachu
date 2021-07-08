@@ -140,21 +140,6 @@ describe('the users page', () => {
             expect(within(form).getByLabelText('Details')).toHaveDisplayValue(userInfo.details!);
         });
 
-        test('after edit it should update the user', () => {
-            const rows = screen.getAllByTestId('tr');
-            const rowsOriginalLength = rows.length;
-            const form = screen.getByTestId('user-info-form');
-            const lastName = within(form).getByLabelText('Last Name');
-            userEvent.type(lastName, ' more name');
-            userEvent.click(screen.getByText('Update'));
-
-            expect(firstRowFirstCell).toHaveTextContent(
-                `${userInfo.user.firstName} ${userInfo.user.lastName} more name`
-            );
-
-            expect(rowsOriginalLength).toEqual(screen.getAllByTestId('tr').length);
-        });
-
         test('should be able to reset the form to the original information before updating', () => {
             const form = screen.getByTestId('user-info-form');
             const lastName = within(form).getByLabelText('Last Name');
@@ -171,10 +156,38 @@ describe('the users page', () => {
 
             expect(lastName).toHaveDisplayValue(`${userInfo.user.lastName} more name`);
 
-            userEvent.click(screen.getByText('Cancel'));
+            act(() => userEvent.click(screen.getByText('Cancel')));
 
             expect(lastName).toHaveDisplayValue(userInfo.user.lastName);
             await waitFor(() => expect(within(form).getByLabelText('Last Name')).toHaveAttribute('readonly'));
+        });
+
+        describe('on update', () => {
+            beforeEach(() => {
+                const form = screen.getByTestId('user-info-form');
+                const lastName = within(form).getByLabelText('Last Name');
+                userEvent.type(lastName, ' more name');
+            });
+
+            test('should put the user in first row', () => {
+                userEvent.click(screen.getByText('Update'));
+                expect(firstRowFirstCell).toHaveTextContent(
+                    `${userInfo.user.firstName} ${userInfo.user.lastName} more name`
+                );
+            });
+
+            it('should effect the number of rows', () => {
+                const rows = screen.getAllByTestId('tr');
+                const rowsOriginalLength = rows.length;
+                userEvent.click(screen.getByText('Update'));
+                expect(rowsOriginalLength).toEqual(screen.getAllByTestId('tr').length);
+            });
+
+            it('should reset from the form on update', () => {
+                userEvent.click(screen.getByText('Update'));
+                const form = screen.getByTestId('user-info-form');
+                expect(within(form).getByLabelText('Last Name')).not.toHaveDisplayValue(userInfo.user.lastName);
+            });
         });
     });
 })
