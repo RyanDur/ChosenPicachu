@@ -78,6 +78,9 @@ export const Users: FC = () => {
                                           className='item'
                                           onClick={() => updateNewUsers(remove(userInfo, users))}
                                           data-testid="remove">Remove</Link>
+                                    <Link to={`${Paths.users}?user=${userInfo.user.email}`}
+                                          className='item'
+                                          data-testid="clone">Clone</Link>
                                 </nav>
                             </article>
                         </section>

@@ -174,7 +174,7 @@ describe('the users page', () => {
                 );
             });
 
-            it('should effect the number of rows', () => {
+            it('should not effect the number of rows', () => {
                 const rows = screen.getAllByTestId('tr');
                 const rowsOriginalLength = rows.length;
                 userEvent.click(screen.getByText('Update'));
@@ -193,5 +193,30 @@ describe('the users page', () => {
         expect(firstRowFirstCell).toHaveTextContent(`${userInfo.user.firstName} ${userInfo.user.lastName}`);
         userEvent.click(within(firstRowThirdCell).getByText('Remove'));
         expect(firstRowFirstCell).not.toHaveTextContent(`${userInfo.user.firstName} ${userInfo.user.lastName}`);
+    });
+
+    describe('cloning a user', () => {
+        beforeEach(() => {
+            userEvent.click(within(firstRowThirdCell).getByText('Clone'));
+            const form = screen.getByTestId('user-info-form');
+            const lastName = within(form).getByLabelText('Last Name');
+            userEvent.type(lastName, ' more name');
+        });
+
+        test('add a user', () => {
+            expect(firstRowFirstCell).toHaveTextContent(`${userInfo.user.firstName} ${userInfo.user.lastName}`);
+            userEvent.click(screen.getByText('Add'));
+
+            expect(firstRowFirstCell).toHaveTextContent(
+                `${userInfo.user.firstName} ${userInfo.user.lastName} more name`
+            );
+        });
+
+        it('should effect the number of rows', () => {
+            const rows = screen.getAllByTestId('tr');
+            const rowsOriginalLength = rows.length;
+            userEvent.click(screen.getByText('Add'));
+            expect(rowsOriginalLength + 1).toEqual(screen.getAllByTestId('tr').length);
+        });
     });
 });
