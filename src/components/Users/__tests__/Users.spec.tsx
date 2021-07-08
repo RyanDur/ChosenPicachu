@@ -1,4 +1,4 @@
-import {act, screen, within} from '@testing-library/react';
+import {act, screen, waitFor, within} from '@testing-library/react';
 import {Users} from '../index';
 import userEvent from '@testing-library/user-event';
 import {fillOutAddress, fillOutUser, renderWithRouter, users} from '../../../__tests__/util';
@@ -163,5 +163,19 @@ describe('the users page', () => {
             userEvent.click(screen.getByText('Reset'));
             expect(lastName).toHaveDisplayValue(userInfo.user.lastName);
         });
+
+        test('should be able to cancel the form to the original information before updating', async () => {
+            const form = screen.getByTestId('user-info-form');
+            const lastName = within(form).getByLabelText('Last Name');
+            userEvent.type(lastName, ' more name');
+
+            expect(lastName).toHaveDisplayValue(`${userInfo.user.lastName} more name`);
+
+            userEvent.click(screen.getByText('Cancel'));
+
+            expect(lastName).toHaveDisplayValue(userInfo.user.lastName);
+            await waitFor(() => expect(within(form).getByLabelText('Last Name')).toHaveAttribute('readonly'));
+        });
     });
-});
+})
+;
