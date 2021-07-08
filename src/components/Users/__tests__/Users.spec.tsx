@@ -55,9 +55,6 @@ describe('the users page', () => {
 
     describe('viewing a user', () => {
         beforeEach(() => {
-            table = screen.getByTestId('table');
-            firstRowThirdCell = within(table).getByTestId('cell-2-0');
-
             act(() => {
                 userEvent.click(within(firstRowThirdCell).getByText('View'));
             });
@@ -112,6 +109,59 @@ describe('the users page', () => {
             userEvent.click(screen.getByText('Add New User'));
 
             expect(screen.queryByText('Add New User')).not.toBeInTheDocument();
+        });
+    });
+
+    describe('editing a user', () => {
+        beforeEach(() => {
+            act(() => {
+                userEvent.click(within(firstRowThirdCell).getByText('Edit'));
+            });
+        });
+
+        test('should populate the form', () => {
+            const form = screen.getByTestId('user-info-form');
+            expect(within(form).getByLabelText('First Name')).toHaveDisplayValue(userInfo.user.firstName);
+            expect(within(form).getByLabelText('Last Name')).toHaveDisplayValue(userInfo.user.lastName);
+            expect(within(form).getByLabelText('Email')).toHaveDisplayValue(userInfo.user.email!);
+
+            expect(within(form).getByTestId('home-street-address')).toHaveDisplayValue(userInfo.homeAddress.streetAddress);
+            expect(within(form).getByTestId('home-street-address-2')).toHaveDisplayValue(userInfo.homeAddress.streetAddressTwo!);
+            expect(within(form).getByTestId('home-city')).toHaveDisplayValue(userInfo.homeAddress.city);
+            expect(within(form).getByTestId('home-state')).toHaveDisplayValue(userInfo.homeAddress.state);
+            expect(within(form).getByTestId('home-zip')).toHaveDisplayValue(userInfo.homeAddress.zip);
+
+            expect(within(form).getByTestId('work-street-address')).toHaveDisplayValue(userInfo.workAddress?.streetAddress!);
+            expect(within(form).getByTestId('work-street-address-2')).toHaveDisplayValue(userInfo.workAddress?.streetAddressTwo!);
+            expect(within(form).getByTestId('work-city')).toHaveDisplayValue(userInfo.workAddress?.city!);
+            expect(within(form).getByTestId('work-state')).toHaveDisplayValue(userInfo.workAddress?.state!);
+            expect(within(form).getByTestId('work-zip')).toHaveDisplayValue(userInfo.workAddress?.zip!);
+
+            expect(within(form).getByLabelText('Details')).toHaveDisplayValue(userInfo.details!);
+        });
+
+        test('after edit it should update the user', () => {
+            const rows = screen.getAllByTestId('tr');
+            const rowsOriginalLength = rows.length;
+            const form = screen.getByTestId('user-info-form');
+            const lastName = within(form).getByLabelText('Last Name');
+            userEvent.type(lastName, ' more name');
+            userEvent.click(screen.getByText('Update'));
+
+            expect(firstRowFirstCell).toHaveTextContent(
+                `${userInfo.user.firstName} ${userInfo.user.lastName} more name`
+            );
+
+            expect(rowsOriginalLength).toEqual(screen.getAllByTestId('tr').length);
+        });
+
+        test('should be able to reset the form to the original information before updating', () => {
+            const form = screen.getByTestId('user-info-form');
+            const lastName = within(form).getByLabelText('Last Name');
+            userEvent.type(lastName, ' more name');
+            expect(lastName).toHaveDisplayValue(`${userInfo.user.lastName} more name`);
+            userEvent.click(screen.getByText('Reset'));
+            expect(lastName).toHaveDisplayValue(userInfo.user.lastName);
         });
     });
 });

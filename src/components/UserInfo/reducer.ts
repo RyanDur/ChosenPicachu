@@ -29,7 +29,7 @@ export const formReducer = (state: UserInfo, action: FormAction): UserInfo => {
         case FormActions.UPDATE_AVATAR:
             return {...state, avatar: action.avatar};
         case FormActions.RESET_FORM:
-            return initialState;
+            return action.userInfo || initialState;
     }
     return state;
 };
