@@ -55,9 +55,7 @@ describe('the users page', () => {
 
     describe('viewing a user', () => {
         beforeEach(() => {
-            act(() => {
-                userEvent.click(within(firstRowThirdCell).getByText('View'));
-            });
+            userEvent.click(within(firstRowThirdCell).getByText('View'));
         });
 
         test('populating the form with the chosen user', async () => {
@@ -190,5 +188,10 @@ describe('the users page', () => {
             });
         });
     });
-})
-;
+
+    test('removing a user', async () => {
+        expect(firstRowFirstCell).toHaveTextContent(`${userInfo.user.firstName} ${userInfo.user.lastName}`);
+        userEvent.click(within(firstRowThirdCell).getByText('Remove'));
+        expect(firstRowFirstCell).not.toHaveTextContent(`${userInfo.user.firstName} ${userInfo.user.lastName}`);
+    });
+});
