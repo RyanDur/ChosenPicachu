@@ -51,12 +51,12 @@ export const Users: FC = () => {
                     homeCity: {display: 'Home City', key: 'homeCity'},
                     worksFromHome: {display: 'Works from Home', key: 'worksFromHome'}
                 }}
-                rows={users.map(({user, homeAddress, workAddress}) => ({
-                    fullName: {display: `${user.firstName} ${user.lastName}`},
-                    homeCity: {display: homeAddress.city},
+                rows={users.map((userInfo) => ({
+                    fullName: {display: `${userInfo.user.firstName} ${userInfo.user.lastName}`},
+                    homeCity: {display: userInfo.homeAddress.city},
                     worksFromHome: {
                         display: <section className="last-column">
-                            {homeAddress === workAddress ? 'Yes' : 'No'}
+                            {userInfo.homeAddress === userInfo.workAddress ? 'Yes' : 'No'}
                             <article tabIndex={0} className="menu card" onKeyPress={event => {
                                 event.preventDefault();
                                 if (event.code === 'Space') {
@@ -68,12 +68,16 @@ export const Users: FC = () => {
                                 }
                             }} onClick={event => event.currentTarget.classList.remove('open')}>
                                 <nav className="menu-list card">
-                                    <Link to={`${Paths.users}?user=${user.email}&mode=view`}
+                                    <Link to={`${Paths.users}?user=${userInfo.user.email}&mode=view`}
                                           className='item'
                                           data-testid="view">View</Link>
-                                    <Link to={`${Paths.users}?user=${user.email}&mode=edit`}
+                                    <Link to={`${Paths.users}?user=${userInfo.user.email}&mode=edit`}
                                           className='item'
                                           data-testid="view">Edit</Link>
+                                    <Link to={Paths.users}
+                                          className='item'
+                                          onClick={() => updateNewUsers(remove(userInfo, users))}
+                                          data-testid="remove">Remove</Link>
                                 </nav>
                             </article>
                         </section>
