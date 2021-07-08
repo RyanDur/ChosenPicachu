@@ -117,6 +117,12 @@ a.button.ripple:hover,
   transition: background 0s;
 }
 
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 :root {
   /* colors */
   --paper: rgb(244, 244, 244);
