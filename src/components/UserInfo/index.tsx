@@ -23,7 +23,9 @@ import './Form.css';
 interface FormProps {
     currentUserInfo?: UserInfo;
     onAdd?: Consumer<UserInfo>;
+    onUpdate?: Consumer<UserInfo>;
     readOnly?: boolean;
+    editing?: boolean;
 }
 
 /*
@@ -31,7 +33,14 @@ interface FormProps {
 * feels a bit hacky but is a workaround for now. Need to reevaluate later if performance becomes a concern
 * https://medium.com/@albertogasparin/forcing-state-reset-on-a-react-component-by-using-the-key-prop-14b36cd7448e
 * */
-export const UserInformation: FC<FormProps> = ({onAdd, readOnly, currentUserInfo = initialState}) => {
+export const UserInformation: FC<FormProps> = (
+    {
+        onAdd,
+        onUpdate,
+        readOnly = false,
+        editing = false,
+        currentUserInfo = initialState
+    }) => {
     const [userInfo, dispatch] = useReducer(formReducer, initialState, () => currentUserInfo);
     const [sameAsHome, updateSameAsHome] = useState(false);
     const [isInvalid, updateValidity] = useState(false);
@@ -42,7 +51,8 @@ export const UserInformation: FC<FormProps> = ({onAdd, readOnly, currentUserInfo
     }, [sameAsHome, userInfo.homeAddress]);
 
     const reset = () => {
-        dispatch(resetForm());
+        if (editing) dispatch(resetForm(currentUserInfo));
+        else dispatch(resetForm());
         updateSameAsHome(false);
         updateValidity(false);
     };
@@ -56,7 +66,8 @@ export const UserInformation: FC<FormProps> = ({onAdd, readOnly, currentUserInfo
                  )}
                  onSubmit={event => {
                      event.preventDefault();
-                     onAdd?.(userInfo);
+                     !editing && onAdd?.(userInfo);
+                     editing && onUpdate?.(userInfo);
                      reset();
                      triggerFormReset(nanoid());
                  }}
@@ -109,6 +120,7 @@ export const UserInformation: FC<FormProps> = ({onAdd, readOnly, currentUserInfo
                        onChange={event => dispatch(updateDetails(event.currentTarget.value))}/>
 
         <button id="reset" type="reset" disabled={readOnly} className="secondary ripple">Reset</button>
-        <button id="submit" type="submit" disabled={readOnly} className="primary ripple">Add</button>
+        {!editing && <button id="submit" type="submit" disabled={readOnly} className="primary ripple">Add</button>}
+        {editing && <button id="submit" type="submit" disabled={readOnly} className="primary ripple">Update</button>}
     </form>;
 };

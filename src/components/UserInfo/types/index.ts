@@ -58,7 +58,9 @@ export type UpdateDetails = Action<FormActions.UPDATE_DETAILS> & {
 export type UpdateAvatar = Action<FormActions.UPDATE_AVATAR> & {
     avatar: string;
 }
-export type ResetForm = Action<FormActions.RESET_FORM>
+export type ResetForm = Action<FormActions.RESET_FORM> & {
+    userInfo?: UserInfo;
+}
 
 export type FormAction =
     | UpdateFirstName

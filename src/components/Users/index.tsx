@@ -17,13 +17,22 @@ const useQuery = <T extends Object>(): T => useLocation().search
 export const Users: FC = () => {
     const {user, mode} = useQuery<{ user: string, mode: string }>();
     const [users, updateNewUsers] = useState<UserInfo[]>(createRandomUsers());
-    const currentUser = users.find(info => info.user.email === user);
+    const currentUser: UserInfo | undefined = users.find(info => info.user.email === user);
+    const remove = <T extends Object>(item: T, list: T[] = []): T[] => {
+        const index = list.indexOf(item);
+        return [...list.slice(0, index), ...list.slice(index + 1)];
+    };
 
     return <>
         <section id="user-info" className="card overhang gutter" key={currentUser?.user.email}>
             <h2 className="title">User Information</h2>
-            <UserInformation currentUserInfo={currentUser} readOnly={mode === 'view'}
-                             onAdd={user => updateNewUsers([user, ...users])}/>
+            <UserInformation currentUserInfo={currentUser}
+                             readOnly={mode === 'view'}
+                             editing={mode === 'edit'}
+                             onAdd={user => updateNewUsers([user, ...users])}
+                             onUpdate={user => {
+                                 if (currentUser) updateNewUsers([user, ...remove(currentUser, users)]);
+                             }}/>
         </section>
 
         <section id="users" className="card overhang gutter">
@@ -62,6 +71,9 @@ export const Users: FC = () => {
                                     <Link to={`${Paths.users}?user=${user.email}&mode=view`}
                                           className='item'
                                           data-testid="view">View</Link>
+                                    <Link to={`${Paths.users}?user=${user.email}&mode=edit`}
+                                          className='item'
+                                          data-testid="view">Edit</Link>
                                 </nav>
                             </article>
                         </section>
