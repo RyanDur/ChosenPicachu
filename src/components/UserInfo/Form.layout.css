@@ -12,7 +12,7 @@
   "home_street_address_2 home_street_address_2 home_street_address_2 home_street_address_2 home_street_address_2 work_street_address_2 work_street_address_2 work_street_address_2 work_street_address_2 work_street_address_2"
   "home_city home_city home_state home_zip home_zip work_city work_city work_state work_zip work_zip"
   "details details details details details details details details details details"
-  "reset reset reset reset . . submit submit submit submit"
+  "reset reset reset cancel cancel cancel submit submit submit submit"
 }
 
 #user-info-form #avatar-cell {
@@ -97,6 +97,10 @@
 
 #user-info-form #reset {
   grid-area: reset;
+}
+
+#user-info-form #cancel {
+  grid-area: cancel;
 }
 
 #user-info-form #submit {

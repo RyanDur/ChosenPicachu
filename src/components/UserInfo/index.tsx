@@ -19,6 +19,8 @@ import {generateAvatar} from '../../avatars';
 import {nanoid} from 'nanoid';
 import './Form.layout.css';
 import './Form.css';
+import {Link} from 'react-router-dom';
+import {Paths} from '../../App';
 
 interface FormProps {
     currentUserInfo?: UserInfo;
@@ -121,6 +123,10 @@ export const UserInformation: FC<FormProps> = (
 
         <button id="reset" type="reset" disabled={readOnly} className="secondary ripple">Reset</button>
         {!editing && <button id="submit" type="submit" disabled={readOnly} className="primary ripple">Add</button>}
+        {editing &&
+        <Link id="cancel" to={`${Paths.users}?user=${userInfo.user.email}&mode=view`}
+              className="button secondary ripple"
+              onClick={reset}>Cancel</Link>}
         {editing && <button id="submit" type="submit" disabled={readOnly} className="primary ripple">Update</button>}
     </form>;
 };

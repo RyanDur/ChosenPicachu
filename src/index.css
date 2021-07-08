@@ -70,6 +70,10 @@ button:focus,
   opacity: 0;
 }
 
+a {
+  color: black;
+}
+
 a.button,
 button {
   height: var(--base-x-5);
@@ -101,6 +105,7 @@ button.secondary {
   transition: background 0.5s;
 }
 
+a.button.ripple:hover,
 .ripple:hover {
   color: white;
   background: #275c8d radial-gradient(circle, transparent 1%, #1e5eac 1%) center/15000%;
