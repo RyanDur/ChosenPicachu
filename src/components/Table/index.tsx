@@ -1,10 +1,10 @@
-import {Columns, Row} from './types';
+import {Column, Row} from './types';
 import {FC} from 'react';
 import {joinClassNames} from '../util';
 import './Table.css';
 
 export interface TableProps {
-    columns: Columns;
+    columns: Column[];
     rows: Row[];
     id?: string;
     tableClassName?: string;
@@ -33,31 +33,28 @@ export const Table: FC<TableProps> = (
         rowClassName,
         cellClassName
     }
-) => {
-    const headers = Object.entries(columns);
-    return <table id={id} className={tableClassName} data-testid="table">
-        <thead className={theadClassName} data-testid="thead">
-        <tr className={joinClassNames(
-            trClassName,
-            headerRowClassName
-        )} data-testid="tr">{headers.map(([header, {display, className}]) =>
-            <th className={joinClassNames(thClassName, cellClassName, className)}
-                key={header}
-                scope="col"
-                data-testid="th">
-                {display}
-            </th>
-        )}</tr>
-        </thead>
-        <tbody className={tbodyClassName} data-testid="tbody">{rows.map((row, y) =>
-            <tr className={joinClassNames(trClassName, rowClassName)} key={y} data-testid="tr">
-                {headers.map(([column], x) => {
-                    const cell = row[column];
-                    return <td className={joinClassNames(tdClassName, cellClassName, cell.className)} key={x}
-                               data-testid={`cell-${x}-${y}`}>
-                        {cell.display}
-                    </td>;
-                })}</tr>
-        )}</tbody>
-    </table>;
-};
+) => <table id={id} className={tableClassName} data-testid="table">
+    <thead className={theadClassName} data-testid="thead">
+    <tr className={joinClassNames(
+        trClassName,
+        headerRowClassName
+    )} data-testid="tr">{columns.map(({display, column, className}) =>
+        <th className={joinClassNames(thClassName, cellClassName, className)}
+            key={column}
+            scope="col"
+            data-testid="th">
+            {display}
+        </th>
+    )}</tr>
+    </thead>
+    <tbody className={tbodyClassName} data-testid="tbody">{rows.map((row, rowNumber) =>
+        <tr className={joinClassNames(trClassName, rowClassName)} key={rowNumber} data-testid="tr">
+            {columns.map(({column}, columnNumber) => {
+                const cell = row[column];
+                return <td className={joinClassNames(tdClassName, cellClassName, cell.className)} key={columnNumber}
+                           data-testid={`cell-${columnNumber}-${rowNumber}`}>
+                    {cell.display}
+                </td>;
+            })}</tr>
+    )}</tbody>
+</table>;

@@ -1,17 +1,12 @@
 import {ReactNode} from 'react';
 
-type ColumnValue = string | number;
-
-export type Columns = {
-    [column in ColumnValue]: Cell
-}
-
 export type Row = {
-    [column in ColumnValue]: Cell;
+    [column in string | number]: Cell;
 };
+
+export type Column = Cell & { column: keyof Row; }
 
 export interface Cell {
     display: ReactNode;
-    key?: ColumnValue;
     className?: string;
 }
