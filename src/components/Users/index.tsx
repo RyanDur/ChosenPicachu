@@ -32,7 +32,7 @@ export const Users: FC = () => {
                              editing={mode === 'edit'}
                              onAdd={user => updateNewUsers([user, ...users])}
                              onUpdate={user => {
-                                 if (currentUser) updateNewUsers([user, ...remove(currentUser, users)]);
+                                 currentUser && updateNewUsers([user, ...remove(currentUser, users)]);
                                  history.push(Paths.users);
                              }}/>
         </section>
@@ -76,7 +76,7 @@ export const Users: FC = () => {
                                     <Link to={`${Paths.users}?user=${userInfo.user.email}&mode=edit`}
                                           className='item'
                                           data-testid="view">Edit</Link>
-                                    <Link to={Paths.users}
+                                    <Link to={history.location.pathname + history.location.search}
                                           className='item'
                                           onClick={() => updateNewUsers(remove(userInfo, users))}
                                           data-testid="remove">Remove</Link>

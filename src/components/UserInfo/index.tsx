@@ -70,6 +70,7 @@ export const UserInformation: FC<FormProps> = (
                      event.preventDefault();
                      !editing && onAdd?.(userInfo);
                      editing && onUpdate?.(userInfo);
+                     triggerFormReset(nanoid());
                      reset();
                  }}
                  onReset={reset}
