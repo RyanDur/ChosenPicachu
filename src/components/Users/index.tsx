@@ -43,16 +43,16 @@ export const Users: FC = () => {
             <Link to={Paths.users} id="add-new-user" className="button primary ripple">Add New User</Link>}
             <Table
                 id="users-table"
-                tableClassName="fancy-table home-table"
+                tableClassName="fancy-table"
                 theadClassName="header"
                 trClassName="row"
                 tbodyClassName="body"
                 cellClassName="cell"
-                columns={{
-                    fullName: {display: 'Full Name', key: 'fullName'},
-                    homeCity: {display: 'Home City', key: 'homeCity'},
-                    worksFromHome: {display: 'Works from Home', key: 'worksFromHome'}
-                }}
+                columns={[
+                    {display: 'Full Name', column: 'fullName'},
+                    {display: 'Home City', column: 'homeCity'},
+                    {display: 'Works from Home', column: 'worksFromHome'}
+                ]}
                 rows={users.map((userInfo) => ({
                     fullName: {display: `${userInfo.user.firstName} ${userInfo.user.lastName}`},
                     homeCity: {display: userInfo.homeAddress.city},

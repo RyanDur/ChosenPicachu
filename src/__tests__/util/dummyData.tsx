@@ -1,4 +1,4 @@
-import {Columns, Row} from '../../components/Table/types';
+import {Column, Row} from '../../components/Table/types';
 import React from 'react';
 import faker from 'faker';
 import {AddressInfo, User, UserInfo} from '../../components/UserInfo/types';
@@ -31,15 +31,15 @@ export const row2Col0Display = words();
 export const row2Col1Display = words();
 export const row2Col2Display = words();
 
-export const columns: Columns = {
-    [column1Name]: {
-        key: column1Name,
+export const columns: Column[] = [
+    {
+        column: column1Name,
         display: <h2 data-testid="column1">{column1Display}</h2>,
         className: 'aClassName'
     },
-    [column2Name]: {display: column2Name, key: column2Name},
-    [column3Name]: {key: column3Name, display: column3Display},
-};
+    {display: column2Name, column: column2Name},
+    {column: column3Name, display: column3Display},
+];
 
 export const rows: Row[] = [{
     [column1Name]: {
