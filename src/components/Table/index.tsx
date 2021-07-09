@@ -1,9 +1,9 @@
 import {Column, Row} from './types';
 import {FC} from 'react';
 import {joinClassNames} from '../util';
-import './Table.css';
 import React, {useState} from 'react';
 import {add, remove} from '../../util';
+import './Table.css';
 
 export interface TableProps {
     columns: Column[];
