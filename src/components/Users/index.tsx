@@ -3,7 +3,7 @@ import {UserInfo} from '../UserInfo/types';
 import {UserInformation} from '../UserInfo';
 import {Table} from '../Table';
 import {createRandomUsers} from '../../__tests__/util';
-import {Link, useLocation} from 'react-router-dom';
+import {Link, useHistory, useLocation} from 'react-router-dom';
 import {Paths} from '../../App';
 import './Users.css';
 import './Users.layout.css';
@@ -15,6 +15,7 @@ const useQuery = <T extends Object>(): T => useLocation().search
     .reduce((acc, [key, value]) => ({...acc, [key]: value}), {} as T);
 
 export const Users: FC = () => {
+    const history = useHistory();
     const {user, mode} = useQuery<{ user: string, mode: string }>();
     const [users, updateNewUsers] = useState<UserInfo[]>(createRandomUsers());
     const currentUser: UserInfo | undefined = users.find(info => info.user.email === user);
@@ -32,6 +33,7 @@ export const Users: FC = () => {
                              onAdd={user => updateNewUsers([user, ...users])}
                              onUpdate={user => {
                                  if (currentUser) updateNewUsers([user, ...remove(currentUser, users)]);
+                                 history.push(Paths.users);
                              }}/>
         </section>
 
