@@ -47,8 +47,10 @@ a {
   color: var(--internationl-orange-engineering);
 }
 
+#same-as-home:hover ~ #same-as-home-title,
 #same-as-home:focus ~ #same-as-home-title,
 #same-as-home:focus,
+#same-as-home:hover,
 button:focus,
 #avatar-cell:hover,
 .last-column .menu:focus,
