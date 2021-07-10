@@ -7,7 +7,8 @@ import './App.layout.css';
 export enum Paths {
     home = '/',
     about = '/about',
-    users = '/users'
+    users = '/users',
+    repo = 'https://github.com/RyanDur/ChosenPicachu'
 }
 
 export const App = () => {
@@ -30,6 +31,7 @@ export const App = () => {
             <Link id="navigate-home" className="path" to={Paths.home}>Home</Link>
             <Link id="navigate-about" className="path" to={Paths.about}>About</Link>
             <Link id="navigate-form" className="path" to={Paths.users}>Users</Link>
+            <Link id="navigate-repo" className="path" to={{pathname: Paths.repo}} target="_blank">Repo</Link>
         </nav>
         <main className="gutter">
             <Switch>
