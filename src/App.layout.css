@@ -15,18 +15,6 @@ main {
   grid-area: main;
 }
 
-#app-header {
-  background: var(--charcoal);
-  align-items: center;
-  grid-template-columns: 1fr 70% 1fr;
-  grid-template-areas:
-    "middle . ."
-}
-
-#app-header .title {
-  grid-area: middle;
-}
-
 #app-navigation {
   position: sticky;
   top: -1px;
