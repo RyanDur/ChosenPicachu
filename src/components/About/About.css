@@ -67,11 +67,10 @@
 }
 
 .close:hover,
-.fold .info-label:hover,
+.fold .info-toggle:hover ~ .info-label,
 .fold .info-toggle:focus ~ .info-label,
 .close .info-toggle:focus ~ .info-label,
-.fold .info-toggle:checked ~ .info-label,
-.fold .info-label:hover {
+.fold .info-toggle:checked ~ .info-label {
   background: var(--internationl-orange-engineering);
 }
 
