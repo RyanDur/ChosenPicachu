@@ -6,8 +6,10 @@
   align-self: flex-end;
 }
 
+#users.card,
 #user-info.card {
   margin-bottom: var(--base-x-4);
+  background: var(--paper);
 }
 #user-info.card:last-child {
   margin-bottom: 0;

@@ -1,11 +1,10 @@
 #root {
   display: grid;
-  grid-template-columns: 1fr 70% 1fr;
-  grid-template-rows: var(--base-x-10) var(--base-x-5) 1fr;
+  grid-template-columns: 13.4rem 1fr 70% 1fr 13.4rem;
+  grid-template-rows: var(--base-x-10) 1fr;
   grid-template-areas:
-    "header header header"
-    "nav nav nav"
-    ". main .";
+    "nav . header header header header"
+    "nav .  main main . .";
 }
 
 #app-header {
@@ -21,15 +20,11 @@ main {
 }
 
 #app-header {
-  display: grid;
-}
-
-#app-header {
   background: var(--charcoal);
   align-items: center;
   grid-template-columns: 1fr 70% 1fr;
   grid-template-areas:
-    ". middle ."
+    "middle . ."
 }
 
 #app-header .title {
@@ -38,11 +33,10 @@ main {
 
 #app-navigation {
   position: relative;
-  display: grid;
+  padding: 10rem 0;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  grid-template-columns: 1fr repeat(14, 5%) 1fr;
-  grid-template-areas:
-    ". home about form . . . . . ."
 }
 
 #app-navigation #navigate-home {
@@ -55,4 +49,23 @@ main {
 
 #app-navigation #navigate-form {
   grid-area: form;
+}
+
+@media only screen and (max-width: 1024px) {
+  #root {
+    grid-template-columns: 13.4rem 1fr 80% 1fr;
+    grid-template-areas:
+    "nav header header header"
+    "nav main main main";
+  }
+}
+
+@media only screen and (max-width: 832px) {
+  #root {
+    grid-template-columns: 13.4rem 1fr;
+    grid-template-areas:
+    "nav header"
+    "nav main"
+    "nav main";
+  }
 }

@@ -31,7 +31,7 @@ export const App = () => {
             <Link id="navigate-about" className="path" to={Paths.about}>About</Link>
             <Link id="navigate-form" className="path" to={Paths.users}>Users</Link>
         </nav>
-        <main className="overhang gutter">
+        <main className="gutter">
             <Switch>
                 <Route path={Paths.home} exact>
                     <Home/>

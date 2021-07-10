@@ -35,15 +35,13 @@ export const About = () => {
             </li>
         </ul>
 
-        <hr className="bar"/>
-
         <ul className="accordion card overhang">
             <li className="close">
-                <input id="close-radio" className="info-toggle off-screen" type="radio" name="group"/>
+                <input id="close-radio" defaultChecked={true} className="info-toggle off-screen" type="radio" name="group"/>
                 <label className="info-label center" htmlFor="close-radio">Close</label>
             </li>
             <li className="fold">
-                <input id="first-radio" className="info-toggle off-screen" type="radio" name="group"/>
+                <input tabIndex={0} id="first-radio" className="info-toggle off-screen" type="radio" name="group"/>
                 <label className="info-label" htmlFor="first-radio">{faker.lorem.word()}</label>
                 <p className="info">{faker.lorem.paragraphs(Math.floor(Math.random() * 6) + 1)}</p>
             </li>
