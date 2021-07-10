@@ -107,9 +107,9 @@ export const UserInformation: FC<FormProps> = (
         <h3 id="work-address-title">Work Address</h3>
         <article id="same-as-home-cell"
                  className={joinClassNames('center-horizontal', readOnly && 'read-only')}>
-            <label id="same-as-home-title" htmlFor="same-as-home">Same as Home</label>
             <input id="same-as-home" type="checkbox" checked={sameAsHome} disabled={readOnly}
                    onChange={event => updateSameAsHome(event.currentTarget.checked)}/>
+            <label id="same-as-home-title" htmlFor="same-as-home">Same as Home</label>
         </article>
         <Address disabled={sameAsHome} kind="work" value={userInfo.workAddress} readOnly={readOnly}
                  onChange={address => dispatch(updateWorkAddress(address))}/>
