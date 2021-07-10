@@ -107,6 +107,7 @@
   outline: none;
 }
 
+#same-as-home:hover ~ #same-as-home-title,
 #same-as-home:focus ~ #same-as-home-title {
   border-radius: 8rem;
   height: 2rem;
