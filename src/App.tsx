@@ -26,7 +26,7 @@ export const App = () => {
         <header id="app-header">
             <h1 className="title">{pageTitles.find(({page}) => page?.isExact)?.title}</h1>
         </header>
-        <nav id="app-navigation" className="overhang">
+        <nav id="app-navigation" className="inset-right">
             <Link id="navigate-home" className="path" to={Paths.home}>Home</Link>
             <Link id="navigate-about" className="path" to={Paths.about}>About</Link>
             <Link id="navigate-form" className="path" to={Paths.users}>Users</Link>

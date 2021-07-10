@@ -94,6 +94,24 @@
   display: none;
 }
 
+#same-as-home-cell {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
 #same-as-home-title {
   font-size: 1.4rem;
+}
+
+#same-as-home:focus {
+  outline: none;
+}
+
+#same-as-home:focus ~ #same-as-home-title {
+  border-radius: 8rem;
+  height: 2rem;
+  text-align: center;
+  width: 12rem;
+  font-size: 1.6rem;
+  font-weight: bold;
 }
