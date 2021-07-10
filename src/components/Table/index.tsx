@@ -1,5 +1,5 @@
 import {Column, Row} from './types';
-import {FC} from 'react';
+import {FC, useEffect} from 'react';
 import {joinClassNames} from '../util';
 import React, {useState} from 'react';
 import {add, remove} from '../../util';
@@ -36,6 +36,7 @@ export const Table: FC<TableProps> = (
         cellClassName
     }: TableProps) => {
     const [currentRows, setCurrentRows] = useState<Array<Row>>(rows);
+    useEffect(() => setCurrentRows(rows), [rows]);
     return <table id={id} className={tableClassName} data-testid="table">
         <thead className={theadClassName} data-testid="thead">
         <tr className={joinClassNames(
