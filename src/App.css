@@ -4,7 +4,6 @@
 }
 
 #app-header {
-  background: var(--charcoal);
   padding: var(--base-x-4) var(--base-x-4) 0;
 }
 
@@ -32,15 +31,11 @@
   color: var(--internationl-orange-engineering);
 }
 
-main {
-  background: var(--charcoal);
-}
-
 .inset-right {
   box-shadow: inset -7px 0 9px -7px rgb(0, 0, 0);
   border-right: 2px solid black;
 }
 
 .overhang {
-  box-shadow: 0 0.3rem 0.6rem var(--light-shadow), 0 0.3rem 0.6rem var(--dark-shadow);
+  box-shadow: 0 0.3rem 0.6rem var(--void), 0 0.3rem 0.6rem var(--void);
 }

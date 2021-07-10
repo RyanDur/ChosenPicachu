@@ -116,7 +116,7 @@ button.secondary {
 a.button.ripple:hover,
 .ripple:hover {
   color: white;
-  background: #275c8d radial-gradient(circle, transparent 1%, #1e5eac 1%) center/15000%;
+  background: var(--void) radial-gradient(circle, transparent 1%, var(--void) 1%) center/15000%;
 }
 
 .ripple:active {
