@@ -69,13 +69,8 @@
 .close:hover,
 .fold .info-toggle:hover ~ .info-label,
 .fold .info-toggle:focus ~ .info-label,
-.close .info-toggle:focus ~ .info-label,
-.fold .info-toggle:checked ~ .info-label {
+.close .info-toggle:focus ~ .info-label {
   background: var(--internationl-orange-engineering);
-}
-
-.fold input[type='radio']:focus ~ .info-label {
-  background: blue;
 }
 
 .fold .info-label:after {
