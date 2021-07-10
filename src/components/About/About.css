@@ -2,6 +2,11 @@
   margin-bottom: var(--base-x-6);
   background: var(--silk);
 }
+
+.accordion.overhang {
+  box-shadow: 0 0.3rem 0.6rem var(--light-shadow), 0 0.3rem 0.6rem var(--silk);
+}
+
 .accordion:last-child {
   margin-bottom: 0;
 }
@@ -41,8 +46,14 @@
 .fold:last-child {
   border-radius: 0 0 2rem 2rem;
 }
+
 .fold:first-of-type {
   border-radius: 2rem 2rem 0 0;
+}
+
+.close .info-label {
+  border-top-right-radius: var(--base-x-2);
+  border-top-left-radius: var(--base-x-2);
 }
 
 .fold .info-label {
@@ -54,9 +65,18 @@
   color: var(--paper);
   background: var(--charcoal);
 }
+
 .close:hover,
+.fold .info-label:hover,
+.fold .info-toggle:focus ~ .info-label,
+.close .info-toggle:focus ~ .info-label,
+.fold .info-toggle:checked ~ .info-label,
 .fold .info-label:hover {
   background: var(--internationl-orange-engineering);
+}
+
+.fold input[type='radio']:focus ~ .info-label {
+  background: blue;
 }
 
 .fold .info-label:after {
