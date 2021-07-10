@@ -7,7 +7,7 @@
   "name_title . . . . . . . avatar avatar"
   "first_name first_name first_name first_name last_name last_name last_name last_name avatar avatar"
   "email email email email email email email email avatar avatar"
-  "home_address_title home_address_title . . . work_address_title work_address_title .  same_as_home same_as_home"
+  "home_address_title home_address_title . . . work_address_title work_address_title same_as_home avatar avatar"
   "home_street_address home_street_address home_street_address home_street_address home_street_address work_street_address work_street_address work_street_address work_street_address work_street_address"
   "home_street_address_2 home_street_address_2 home_street_address_2 home_street_address_2 home_street_address_2 work_street_address_2 work_street_address_2 work_street_address_2 work_street_address_2 work_street_address_2"
   "home_city home_city home_state home_zip home_zip work_city work_city work_state work_zip work_zip"
@@ -45,8 +45,7 @@
 
 #user-info-form #same-as-home-cell {
   grid-area: same_as_home;
-  display: flex;
-  justify-content: flex-end;
+  justify-self: flex-end;
 }
 
 #user-info-form #home-street-address-cell {

@@ -86,10 +86,14 @@
 }
 
 #avatar {
-  width: 55%;
+  width: 80%;
 }
 
 #user-info-form.read-only .primary,
 #user-info-form.read-only .secondary {
   display: none;
+}
+
+#same-as-home-title {
+  font-size: 1.4rem;
 }
