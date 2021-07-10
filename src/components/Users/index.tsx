@@ -16,9 +16,9 @@ const useQuery = <T extends Object>(): T => useLocation().search
 
 export const Users: FC = () => {
     const history = useHistory();
-    const {user, mode} = useQuery<{ user: string, mode: string }>();
+    const {email, mode} = useQuery<{ email: string, mode: string }>();
     const [users, updateNewUsers] = useState<UserInfo[]>(createRandomUsers());
-    const currentUser: UserInfo | undefined = users.find(info => info.user.email === user);
+    const currentUser: UserInfo | undefined = users.find(info => info.user.email === email);
     const remove = <T extends Object>(item: T, list: T[] = []): T[] => {
         const index = list.indexOf(item);
         return [...list.slice(0, index), ...list.slice(index + 1)];
@@ -70,17 +70,17 @@ export const Users: FC = () => {
                                 }
                             }} onClick={event => event.currentTarget.classList.remove('open')}>
                                 <nav className="menu-list card">
-                                    <Link to={`${Paths.users}?user=${userInfo.user.email}&mode=view`}
+                                    <Link to={`${Paths.users}?email=${userInfo.user.email}&mode=view`}
                                           className='item'
                                           data-testid="view">View</Link>
-                                    <Link to={`${Paths.users}?user=${userInfo.user.email}&mode=edit`}
+                                    <Link to={`${Paths.users}?email=${userInfo.user.email}&mode=edit`}
                                           className='item'
                                           data-testid="view">Edit</Link>
-                                    <Link to={history.location.pathname + history.location.search}
+                                    <Link to={email === userInfo.user.email ? Paths.users : history.location}
                                           className='item'
                                           onClick={() => updateNewUsers(remove(userInfo, users))}
                                           data-testid="remove">Remove</Link>
-                                    <Link to={`${Paths.users}?user=${userInfo.user.email}`}
+                                    <Link to={`${Paths.users}?email=${userInfo.user.email}`}
                                           className='item'
                                           data-testid="clone">Clone</Link>
                                 </nav>

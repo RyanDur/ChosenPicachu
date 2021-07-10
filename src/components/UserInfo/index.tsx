@@ -45,7 +45,6 @@ export const UserInformation: FC<FormProps> = (
     }) => {
     const [userInfo, dispatch] = useReducer(formReducer, initialState, () => currentUserInfo);
     const [sameAsHome, updateSameAsHome] = useState(false);
-    const [isInvalid, updateValidity] = useState(false);
     const [resetFormKey, triggerFormReset] = useState(nanoid());
 
     useEffect(() => {
@@ -56,32 +55,29 @@ export const UserInformation: FC<FormProps> = (
         if (editing) dispatch(resetForm(currentUserInfo));
         else dispatch(resetForm());
         updateSameAsHome(false);
-        updateValidity(false);
     };
 
     return <form id="user-info-form"
                  key={resetFormKey}
                  data-testid="user-info-form"
-                 className={joinClassNames(
-                     isInvalid && 'invalid',
-                     readOnly && 'read-only'
-                 )}
+                 className={joinClassNames(readOnly && 'read-only')}
                  onSubmit={event => {
                      event.preventDefault();
+                     event.currentTarget.classList.remove('invalid');
                      !editing && onAdd?.(userInfo);
                      editing && onUpdate?.(userInfo);
                      triggerFormReset(nanoid());
                      reset();
                  }}
                  onReset={reset}
-                 onInvalid={() => updateValidity(true)}>
+                 onInvalid={event => event.currentTarget.classList.add('invalid')}>
         <h3 id="name-title">User</h3>
-        <FancyInput id="first-name-cell" inputId="first-name" required={true}
+        <FancyInput id="first-name-cell" inputId="first-name" required
                     value={userInfo.user.firstName} readOnly={readOnly}
                     onChange={event => dispatch(updateFirstName(event.currentTarget.value))}>
             First Name
         </FancyInput>
-        <FancyInput id="last-name-cell" inputId="last-name" required={true}
+        <FancyInput id="last-name-cell" inputId="last-name" required
                     value={userInfo.user.lastName} readOnly={readOnly}
                     onChange={event => dispatch(updateLastName(event.currentTarget.value))}>
             Last Name
@@ -105,7 +101,7 @@ export const UserInformation: FC<FormProps> = (
         </article>
 
         <h3 id="home-address-title">Home Address</h3>
-        <Address required={true} kind="home" value={userInfo.homeAddress} readOnly={readOnly}
+        <Address required kind="home" value={userInfo.homeAddress} readOnly={readOnly}
                  onChange={address => dispatch(updateHomeAddress(address))}/>
 
         <h3 id="work-address-title">Work Address</h3>
@@ -123,7 +119,7 @@ export const UserInformation: FC<FormProps> = (
 
         <button id="reset" type="reset" disabled={readOnly} className="secondary ripple">Reset</button>
         {!editing && <button id="submit" type="submit" disabled={readOnly} className="primary ripple">Add</button>}
-        {editing && <Link id="cancel" to={`${Paths.users}?user=${userInfo.user.email}&mode=view`}
+        {editing && <Link id="cancel" to={`${Paths.users}?email=${userInfo.user.email}&mode=view`}
                           className="button secondary ripple"
                           onClick={reset}>Cancel</Link>}
         {editing && <button id="submit" type="submit" className="primary ripple">Update</button>}
