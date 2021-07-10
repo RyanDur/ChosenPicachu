@@ -97,22 +97,20 @@
 #same-as-home-cell {
   display: flex;
   flex-direction: row-reverse;
-}
-
-#same-as-home-title {
+  align-items: center;
+  border-radius: 8rem;
+  height: 2rem;
+  text-align: center;
+  width: 100%;
   font-size: 1.4rem;
 }
 
 #same-as-home:focus {
   outline: none;
+  font-size: 1.6rem;
 }
 
 #same-as-home:hover ~ #same-as-home-title,
 #same-as-home:focus ~ #same-as-home-title {
-  border-radius: 8rem;
-  height: 2rem;
-  text-align: center;
-  width: 11rem;
-  font-size: 1.6rem;
   font-weight: bold;
 }

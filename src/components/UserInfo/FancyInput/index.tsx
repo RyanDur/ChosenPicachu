@@ -7,7 +7,7 @@ interface FancyTextInputProps {
     id?: string;
     required?: boolean;
     onChange?: (event: FormEvent<HTMLInputElement>) => void;
-    articleClass?: string;
+    className?: string;
     inputClass?: string;
     labelId?: string;
     labelClass?: string;
@@ -24,7 +24,7 @@ export const FancyInput: FC<FancyTextInputProps> = (
         children,
         id,
         onChange,
-        articleClass,
+        className,
         inputClass,
         labelId,
         labelClass,
@@ -37,7 +37,7 @@ export const FancyInput: FC<FancyTextInputProps> = (
 ) => <article id={id} className={joinClassNames(
     'fancy-select fancy',
     value && 'not-empty',
-    articleClass
+    className
 )}>
     <input id={inputId}
            className={joinClassNames('fancy-text', inputClass)}
