@@ -3,10 +3,11 @@ import {FancySelect} from '../FancySelect';
 import states from 'states-us/dist';
 import React, {FC} from 'react';
 import {AddressInfo} from '../types';
+import './Address.layout.css';
 
 interface AddressProps {
-    kind: string;
     onChange: (address: AddressInfo) => void;
+    id: string;
     value?: AddressInfo;
     required?: boolean;
     disabled?: boolean;
@@ -15,32 +16,32 @@ interface AddressProps {
 
 export const Address: FC<AddressProps> = (
     {
-        kind,
         onChange,
+        id,
         required,
         disabled,
         readOnly,
         value = {} as AddressInfo
-    }) => <>
-    <FancyInput id={`${kind}-street-address-cell`} inputId={`${kind}-street-address`}
+    }) => <article id={id} className="address">
+    <FancyInput inputId={`${id}-street`} className="street"
                 required={required} disabled={disabled} value={value.streetAddress} readOnly={readOnly}
                 onChange={event => onChange({...value, streetAddress: event.currentTarget.value})}>
         Street
     </FancyInput>
-    <FancyInput id={`${kind}-street-address-2-cell`} inputId={`${kind}-street-address-2`}
+    <FancyInput inputId={`${id}-street-2`} className="street-2"
                 disabled={disabled} value={value.streetAddressTwo} readOnly={readOnly}
                 onChange={event => onChange({...value, streetAddressTwo: event.currentTarget.value})}>
         Street Line 2
     </FancyInput>
-    <FancyInput id={`${kind}-city-cell`} inputId={`${kind}-city`}
+    <FancyInput inputId={`${id}-city`} className="city"
                 required={required} disabled={disabled} value={value.city} readOnly={readOnly}
                 onChange={event => onChange({...value, city: event.currentTarget.value})}>
         City
     </FancyInput>
 
     <FancySelect
-        id={`${kind}-state-cell`}
-        selectId={`${kind}-state`}
+        className="state"
+        selectId={`${id}-state`}
         required={required}
         disabled={disabled}
         readOnly={readOnly}
@@ -50,8 +51,8 @@ export const Address: FC<AddressProps> = (
         State
     </FancySelect>
 
-    <FancyInput id={`${kind}-zip-cell`}
-                inputId={`${kind}-zip`}
+    <FancyInput className="zip"
+                inputId={`${id}-zip`}
                 pattern="^[0-9]{5}(?:-[0-9]{4})?$"
                 value={value.zip}
                 readOnly={readOnly}
@@ -59,4 +60,4 @@ export const Address: FC<AddressProps> = (
                 onChange={event => onChange({...value, zip: event.currentTarget.value})}>
         Postal / Zip code
     </FancyInput>
-</>;
+</article>;

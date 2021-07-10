@@ -1,0 +1,45 @@
+.address {
+  display: grid;
+  column-gap: var(--base-x-2);
+  row-gap: var(--base-x-2);
+  grid-template-columns: 1fr var(--base-x-13) 1fr;
+  grid-template-areas:
+  "street_address street_address street_address"
+  "street_address_2 street_address_2 street_address_2"
+  "city state zip"
+}
+
+.address .street {
+  grid-area: street_address;
+}
+
+.address .street-2 {
+  grid-area: street_address_2;
+}
+
+.address .city {
+  grid-area: city;
+}
+
+.address .state {
+  grid-area: state;
+}
+
+.address .zip {
+  grid-area: zip;
+}
+
+@media only screen and (max-width: 832px) {
+  .address {
+    display: grid;
+    column-gap: var(--base-x-2);
+    row-gap: var(--base-x-2);
+    grid-template-columns: 1fr var(--base-x-13) 1fr;
+    grid-template-areas:
+    "street_address street_address street_address"
+    "street_address_2 street_address_2 street_address_2"
+    "city city city"
+    ". state . "
+    "zip zip zip"
+  }
+}

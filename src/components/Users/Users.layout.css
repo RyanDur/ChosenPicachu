@@ -1,6 +1,7 @@
 #users {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  column-gap: var(--base-x-2);
   row-gap: 4rem;
   grid-template-areas:
   "title button"
@@ -9,6 +10,7 @@
 
 #users #title {
   grid-area: title;
+  align-self: center;
 }
 
 #users #add-new-user {

@@ -101,17 +101,16 @@ export const UserInformation: FC<FormProps> = (
         </article>
 
         <h3 id="home-address-title">Home Address</h3>
-        <Address required kind="home" value={userInfo.homeAddress} readOnly={readOnly}
+        <Address id="home-address" value={userInfo.homeAddress} readOnly={readOnly} required
                  onChange={address => dispatch(updateHomeAddress(address))}/>
 
         <h3 id="work-address-title">Work Address</h3>
-        <article id="same-as-home-cell"
-                 className={joinClassNames('center-horizontal', readOnly && 'read-only')}>
+        <article id="same-as-home-cell" className={joinClassNames('center-horizontal', readOnly && 'read-only')}>
             <input id="same-as-home" type="checkbox" checked={sameAsHome} disabled={readOnly}
                    onChange={event => updateSameAsHome(event.currentTarget.checked)}/>
             <label id="same-as-home-title" htmlFor="same-as-home">Same as Home</label>
         </article>
-        <Address disabled={sameAsHome} kind="work" value={userInfo.workAddress} readOnly={readOnly}
+        <Address id="work-address" value={userInfo.workAddress} readOnly={readOnly} disabled={sameAsHome}
                  onChange={address => dispatch(updateWorkAddress(address))}/>
 
         <FancyTextarea value={userInfo.details} readOnly={readOnly}

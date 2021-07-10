@@ -2,17 +2,15 @@
   display: grid;
   column-gap: var(--base-x-2);
   row-gap: var(--base-x-2);
-  grid-template-columns: repeat(2, 1fr) var(--base-x-13) repeat(4, 1fr) var(--base-x-13) repeat(2, 1fr);
+  grid-template-columns: repeat(12, 1fr);
   grid-template-areas:
-  "name_title . . . . . . . avatar avatar"
-  "first_name first_name first_name first_name last_name last_name last_name last_name avatar avatar"
-  "email email email email email email email email avatar avatar"
-  "home_address_title home_address_title . . . work_address_title work_address_title same_as_home avatar avatar"
-  "home_street_address home_street_address home_street_address home_street_address home_street_address work_street_address work_street_address work_street_address work_street_address work_street_address"
-  "home_street_address_2 home_street_address_2 home_street_address_2 home_street_address_2 home_street_address_2 work_street_address_2 work_street_address_2 work_street_address_2 work_street_address_2 work_street_address_2"
-  "home_city home_city home_state home_zip home_zip work_city work_city work_state work_zip work_zip"
-  "details details details details details details details details details details"
-  "reset reset reset cancel cancel cancel submit submit submit submit"
+  "name_title . . . . . . . . . avatar avatar"
+  "first_name first_name first_name first_name first_name last_name last_name last_name last_name last_name avatar avatar"
+  "email email email email email email email email email email avatar avatar"
+  "home_address_title home_address_title home_address_title . . . work_address_title work_address_title same_as_home same_as_home avatar avatar"
+  "home_address home_address home_address home_address home_address home_address work_address work_address work_address work_address work_address work_address"
+  "details details details details details details details details details details details details"
+  "reset reset reset cancel cancel cancel submit submit submit submit submit submit"
 }
 
 #user-info-form #avatar-cell {
@@ -27,12 +25,11 @@
   grid-area: first_name;
 }
 
-#user-info-form #email-cell {
-  grid-area: email;
-}
-
 #user-info-form #last-name-cell {
   grid-area: last_name;
+}
+#user-info-form #email-cell {
+  grid-area: email;
 }
 
 #user-info-form #home-address-title {
@@ -48,46 +45,12 @@
   justify-self: flex-end;
 }
 
-#user-info-form #home-street-address-cell {
-  grid-area: home_street_address;
+#user-info-form #home-address {
+  grid-area: home_address;
 }
 
-#user-info-form #work-street-address-cell {
-  grid-area: work_street_address;
-}
-
-#user-info-form #home-street-address-2-cell {
-  grid-area: home_street_address_2;
-}
-
-#user-info-form #work-street-address-2-cell {
-  grid-area: work_street_address_2;
-}
-
-#user-info-form #home-city-cell {
-  grid-area: home_city;
-}
-
-#user-info-form #work-city-cell {
-  grid-area: work_city;
-}
-
-#user-info-form #home-state-cell {
-  grid-area: home_state;
-}
-
-#user-info-form #work-state-cell {
-  grid-area: work_state;
-}
-
-#user-info-form #home-zip-cell {
-  grid-area: home_zip;
-  min-width: 9.8rem;
-}
-
-#user-info-form #work-zip-cell {
-  grid-area: work_zip;
-  min-width: 9.8rem;
+#user-info-form #work-address {
+  grid-area: work_address;
 }
 
 #user-info-form #details-cell {
@@ -108,7 +71,7 @@
 
 @media only screen and (max-width: 1505px) {
   #user-info-form {
-    grid-template-columns: 1fr var(--base-x-13) 1fr;
+    grid-template-columns: repeat(3, 1fr);
     grid-template-areas:
     "avatar avatar avatar"
     "avatar avatar avatar"
@@ -119,17 +82,13 @@
     "email email email"
 
     "home_address_title . . "
-    "home_street_address home_street_address home_street_address"
-    "home_street_address_2 home_street_address_2 home_street_address_2"
-    "home_city home_state home_zip"
+    "home_address home_address home_address"
 
     "work_address_title . same_as_home"
-    "work_street_address work_street_address work_street_address"
-    "work_street_address_2 work_street_address_2 work_street_address_2"
-    "work_city work_state work_zip"
+    "work_address work_address work_address"
 
     "details details details"
-    "reset submit submit"
+    "reset cancel submit"
   }
 }
 
@@ -145,21 +104,13 @@
     "email email email"
 
     "home_address_title home_address_title home_address_title"
-    "home_street_address home_street_address home_street_address"
-    "home_street_address_2 home_street_address_2 home_street_address_2"
-    "home_city home_city home_city"
-    ". home_state ."
-    "home_zip home_zip home_zip"
+    "home_address home_address home_address"
 
     "work_address_title work_address_title same_as_home"
-    "work_street_address work_street_address work_street_address"
-    "work_street_address_2 work_street_address_2 work_street_address_2"
-    "work_city work_city work_city"
-    ". work_state ."
-    "work_zip work_zip work_zip"
+    "work_address work_address work_address"
 
     "details details details"
-    "reset submit submit"
+    "reset cancel submit"
   }
 }
 
