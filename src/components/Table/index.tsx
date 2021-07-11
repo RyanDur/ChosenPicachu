@@ -1,6 +1,6 @@
 import {Column, Row} from './types';
 import {FC} from 'react';
-import {joinClassNames} from '../util';
+import {join} from '../util';
 import './Table.css';
 
 export interface TableProps {
@@ -35,11 +35,11 @@ export const Table: FC<TableProps> = (
     }
 ) => <table id={id} className={tableClassName} data-testid="table">
     <thead className={theadClassName} data-testid="thead">
-    <tr className={joinClassNames(
+    <tr className={join(
         trClassName,
         headerRowClassName
     )} data-testid="tr">{columns.map(({display, column, className}) =>
-        <th className={joinClassNames(thClassName, cellClassName, className)}
+        <th className={join(thClassName, cellClassName, className)}
             key={column}
             scope="col"
             data-testid="th">
@@ -48,10 +48,10 @@ export const Table: FC<TableProps> = (
     )}</tr>
     </thead>
     <tbody className={tbodyClassName} data-testid="tbody">{rows.map((row, rowNumber) =>
-        <tr className={joinClassNames(trClassName, rowClassName)} key={rowNumber} data-testid="tr">
+        <tr className={join(trClassName, rowClassName)} key={rowNumber} data-testid="tr">
             {columns.map(({column}, columnNumber) => {
                 const cell = row[column];
-                return <td className={joinClassNames(tdClassName, cellClassName, cell.className)} key={columnNumber}
+                return <td className={join(tdClassName, cellClassName, cell.className)} key={columnNumber}
                            data-testid={`cell-${columnNumber}-${rowNumber}`}>
                     {cell.display}
                 </td>;
