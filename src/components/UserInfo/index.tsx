@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useReducer, useState} from 'react';
 import {Consumer, UserInfo} from './types';
 import {FancyInput} from './FancyInput';
-import {joinClassNames} from '../util';
+import {join} from '../util';
 import {FancyTextarea} from './FancyTextarea';
 import {
     resetForm,
@@ -52,7 +52,7 @@ export const UserInformation: FC<FormProps> = (
 
     return <form id="user-info-form"
                  data-testid="user-info-form"
-                 className={joinClassNames(readOnly && 'read-only')}
+                 className={join(readOnly && 'read-only')}
                  onSubmit={event => {
                      event.preventDefault();
                      if (editing) onUpdate?.(userInfo);
@@ -82,7 +82,7 @@ export const UserInformation: FC<FormProps> = (
         </FancyInput>
 
         <article tabIndex={0} id="avatar-cell"
-                 className={joinClassNames('card', readOnly && 'read-only')}
+                 className={join('card', readOnly && 'read-only')}
                  data-testid="avatar-cell"
                  onKeyPress={event => event.preventDefault()}
                  onClick={() => readOnly || dispatch(updateAvatar(generateAvatar()))}>
@@ -94,7 +94,7 @@ export const UserInformation: FC<FormProps> = (
                  onChange={address => dispatch(updateHomeAddress(address))}/>
 
         <h3 id="work-address-title">Work Address</h3>
-        <article id="same-as-home-cell" className={joinClassNames('center-horizontal', readOnly && 'read-only')}>
+        <article id="same-as-home-cell" className={join('center-horizontal', readOnly && 'read-only')}>
             <input id="same-as-home" type="checkbox" checked={sameAsHome} disabled={readOnly}
                    onChange={event => updateSameAsHome(event.currentTarget.checked)}/>
             <label id="same-as-home-title" htmlFor="same-as-home">Same as Home</label>

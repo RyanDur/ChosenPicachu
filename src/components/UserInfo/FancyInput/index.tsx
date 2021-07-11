@@ -1,5 +1,5 @@
 import React, {FC, FormEvent} from 'react';
-import {joinClassNames} from '../../util';
+import {join} from '../../util';
 
 interface FancyTextInputProps {
     inputId: string;
@@ -34,13 +34,13 @@ export const FancyInput: FC<FancyTextInputProps> = (
         pattern,
         value = ''
     }
-) => <article id={id} className={joinClassNames(
+) => <article id={id} className={join(
     'fancy-select fancy',
     value && 'not-empty',
     className
 )}>
     <input id={inputId}
-           className={joinClassNames('fancy-text', inputClass)}
+           className={join('fancy-text', inputClass)}
            pattern={pattern}
            readOnly={readOnly}
            disabled={disabled}
@@ -49,5 +49,5 @@ export const FancyInput: FC<FancyTextInputProps> = (
            value={value}
            type={type}
            onChange={onChange}/>
-    <label id={labelId} className={joinClassNames('fancy-title', labelClass)} htmlFor={inputId}>{children}</label>
+    <label id={labelId} className={join('fancy-title', labelClass)} htmlFor={inputId}>{children}</label>
 </article>;

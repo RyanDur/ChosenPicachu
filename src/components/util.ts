@@ -1,4 +1,4 @@
-export const joinClassNames =
+export const join =
     (...classes: Partial<(string | boolean)[]>) => classes.filter(className => className).join(' ').trim();
 
 
