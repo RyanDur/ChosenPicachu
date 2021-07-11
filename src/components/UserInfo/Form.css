@@ -86,6 +86,7 @@
 }
 
 #avatar {
+  height: auto;
   width: 80%;
 }
 
