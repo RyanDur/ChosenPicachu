@@ -3,7 +3,7 @@ import React from 'react';
 import faker from 'faker';
 import {AddressInfo, User, UserInfo} from '../../components/UserInfo/types';
 import {AvatarGenerator} from 'random-avatar-generator';
-import {toISOWithoutTime} from '../../components/UserInfo/FancyInput';
+import {toISOWithoutTime} from '../../components/util';
 
 export const randomNumberFromRange = (min: number, max = 6) => Math.floor(Math.random() * max) + min;
 
@@ -119,7 +119,7 @@ const createUser = (): User => ({
     firstName: faker.name.firstName(),
     lastName: faker.name.lastName(),
     email: faker.internet.email(),
-    dob: new Date(toISOWithoutTime(faker.date.past()))
+    dob: new Date(toISOWithoutTime(faker.date.past(Math.random() * 80)))
 });
 const createAddress = (): AddressInfo => ({
     city: faker.address.city(),

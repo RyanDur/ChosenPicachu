@@ -5,7 +5,7 @@ import * as H from 'history';
 import {Paths} from '../../App';
 import {UserInfo} from '../../components/UserInfo/types';
 import userEvent from '@testing-library/user-event';
-import {toISOWithoutTime} from '../../components/UserInfo/FancyInput';
+import {toISOWithoutTime} from '../../components/util';
 
 export interface Rendered {
     rendered?: RenderResult;

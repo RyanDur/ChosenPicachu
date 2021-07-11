@@ -16,6 +16,8 @@ describe('the users page', () => {
         secondRowFirstCell: HTMLElement,
         secondRowSecondCell: HTMLElement,
         secondRowThirdCell: HTMLElement,
+        firstRowFourthCell: HTMLElement,
+        secondRowFourthCell: HTMLElement,
         testLocation: H.Location;
 
     beforeEach(() => {
@@ -33,10 +35,16 @@ describe('the users page', () => {
         firstRowFirstCell = within(table).getByTestId('cell-0-0');
         firstRowSecondCell = within(table).getByTestId('cell-1-0');
         firstRowThirdCell = within(table).getByTestId('cell-2-0');
+        firstRowFourthCell = within(table).getByTestId('cell-3-0');
 
         secondRowFirstCell = within(table).getByTestId('cell-0-1');
         secondRowSecondCell = within(table).getByTestId('cell-1-1');
         secondRowThirdCell = within(table).getByTestId('cell-2-1');
+        secondRowFourthCell = within(table).getByTestId('cell-3-1');
+
+        Date.now = () => new Date('2021-07-11').getTime();
+        userInfo.user.dob = new Date('1980-11-28');
+        anotherUserInfo.user.dob = new Date('1978-11-28');
 
         fillOutUser(userInfo);
         fillOutAddress(userInfo, 'home');
@@ -54,19 +62,22 @@ describe('the users page', () => {
         });
 
         test('user info in table in descending order', () => {
-            const [column1, column2, column3] = screen.getAllByTestId('th');
+            const [column1, column2, column3, column4] = screen.getAllByTestId('th');
 
             expect(column1).toHaveTextContent('Full Name');
             expect(column2).toHaveTextContent('Home City');
-            expect(column3).toHaveTextContent('Works from Home');
+            expect(column3).toHaveTextContent('Age');
+            expect(column4).toHaveTextContent('Works from Home');
 
             expect(firstRowFirstCell).toHaveTextContent(`${anotherUserInfo.user.firstName} ${anotherUserInfo.user.lastName}`);
             expect(firstRowSecondCell).toHaveTextContent(anotherUserInfo.homeAddress.city);
-            expect(firstRowThirdCell).toHaveTextContent('Yes');
+            expect(firstRowThirdCell).toHaveTextContent('42 years old');
+            expect(firstRowFourthCell).toHaveTextContent('Yes');
 
             expect(secondRowFirstCell).toHaveTextContent(`${userInfo.user.firstName} ${userInfo.user.lastName}`);
             expect(secondRowSecondCell).toHaveTextContent(userInfo.homeAddress.city);
-            expect(secondRowThirdCell).toHaveTextContent('No');
+            expect(secondRowThirdCell).toHaveTextContent('40 years old');
+            expect(secondRowFourthCell).toHaveTextContent('No');
         });
     });
 

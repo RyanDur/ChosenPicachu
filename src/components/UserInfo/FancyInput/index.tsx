@@ -1,5 +1,5 @@
 import React, {FC, FormEvent} from 'react';
-import {join} from '../../util';
+import {join, toISOWithoutTime} from '../../util';
 
 interface FancyTextInputProps {
     inputId: string;
@@ -16,8 +16,6 @@ interface FancyTextInputProps {
     disabled?: boolean;
     pattern?: string;
 }
-
-export const toISOWithoutTime = (date: Date): string => date.toISOString().split('T')[0];
 
 export const FancyInput: FC<FancyTextInputProps> = (
     {

@@ -7,6 +7,7 @@ import {Link, useHistory, useLocation} from 'react-router-dom';
 import {Paths} from '../../App';
 import './Users.css';
 import './Users.layout.css';
+import {age, formatAge} from '../util';
 
 const useQuery = <T extends Object>(): T => useLocation().search
     .replace('?', '')
@@ -51,11 +52,13 @@ export const Users: FC = () => {
                 columns={[
                     {display: 'Full Name', column: 'fullName'},
                     {display: 'Home City', column: 'homeCity'},
+                    {display: 'Age', column: 'age'},
                     {display: 'Works from Home', column: 'worksFromHome'}
                 ]}
                 rows={users.map((userInfo) => ({
                     fullName: {display: `${userInfo.user.firstName} ${userInfo.user.lastName}`},
                     homeCity: {display: userInfo.homeAddress.city},
+                    age: {display: formatAge(age(userInfo.user.dob))},
                     worksFromHome: {
                         display: <section className="last-column">
                             {userInfo.homeAddress === userInfo.workAddress ? 'Yes' : 'No'}
