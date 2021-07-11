@@ -5,7 +5,7 @@ import * as H from 'history';
 import {Paths} from '../../App';
 import {UserInfo} from '../../components/UserInfo/types';
 import userEvent from '@testing-library/user-event';
-import {format} from '../../components/UserInfo/FancyInput';
+import {toISOWithoutTime} from '../../components/UserInfo/FancyInput';
 
 export interface Rendered {
     rendered?: RenderResult;
@@ -44,7 +44,7 @@ export const fillOutUser = (info: UserInfo) => {
     userEvent.type(screen.getByLabelText('First Name'), info.user.firstName);
     userEvent.type(screen.getByLabelText('Last Name'), info.user.lastName);
     userEvent.type(screen.getByLabelText('Email'), info.user.email!);
-    userEvent.type(screen.getByLabelText('Date Of Birth'), format(info.user.dob!));
+    userEvent.type(screen.getByLabelText('Date Of Birth'), toISOWithoutTime(info.user.dob!));
 };
 
 export * from './dummyData';

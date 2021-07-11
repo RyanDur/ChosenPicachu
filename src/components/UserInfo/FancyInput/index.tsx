@@ -17,7 +17,7 @@ interface FancyTextInputProps {
     pattern?: string;
 }
 
-export const format = (date: Date): string => date.toISOString().split('T')[0];
+export const toISOWithoutTime = (date: Date): string => date.toISOString().split('T')[0];
 
 export const FancyInput: FC<FancyTextInputProps> = (
     {
@@ -48,7 +48,7 @@ export const FancyInput: FC<FancyTextInputProps> = (
            disabled={disabled}
            required={required}
            data-testid={inputId}
-           value={value instanceof Date ? format(value) : value}
+           value={value instanceof Date ? toISOWithoutTime(value) : value}
            type={type}
            onChange={onChange}/>
     <label id={labelId} className={join('fancy-title', labelClass)} htmlFor={inputId}>{children}</label>
