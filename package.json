@@ -2,7 +2,7 @@
   "name": "table",
   "version": "0.1.0",
   "private": true,
-  "homepage": "hhttps://ryandur.github.io/ChosenPicachu/",
+  "homepage": ".",
   "dependencies": {
     "random-avatar-generator": "^2.0.0",
     "faker": "^5.5.3",
