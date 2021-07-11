@@ -13,11 +13,16 @@
 #root {
   display: block;
 }
+
 #app-navigation {
   background: var(--silk);
-  height: 100vh;
-  width: 13.4rem;
+  position: sticky;
+  top: -1px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 11rem 0;
+  height: 100vh;
 }
 
 #app-navigation .path {

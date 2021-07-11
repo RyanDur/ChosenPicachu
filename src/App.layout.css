@@ -3,8 +3,8 @@
   grid-template-columns: 13.4rem 1fr 70% 2fr;
   grid-template-rows: var(--base-x-10) 1fr;
   grid-template-areas:
-    ". . header header"
-    ". . main .";
+    "nav . header header"
+    "nav . main .";
 }
 
 #app-header {
@@ -15,12 +15,8 @@ main {
   grid-area: main;
 }
 
-#app-navigation {
-  position: sticky;
-  top: -1px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+#side-nav {
+  grid-area: nav;
 }
 
 @media only screen and (max-width: 1024px) {
