@@ -90,6 +90,14 @@
   width: 80%;
 }
 
+#dob-cell #dob:invalid {
+  color: transparent;
+}
+
+#dob-cell #dob:focus {
+  color: black;
+}
+
 #user-info-form.read-only .primary,
 #user-info-form.read-only .secondary {
   display: none;

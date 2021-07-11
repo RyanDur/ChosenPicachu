@@ -14,6 +14,7 @@ describe('a user form', () => {
     userInfo.avatar = 'some random url';
     let firstNameInput: HTMLElement;
     let lastNameInput: HTMLElement;
+    let dobInput: HTMLElement;
 
     let homeStreetNameInput: HTMLElement;
     let homeCityInout: HTMLElement;
@@ -28,6 +29,7 @@ describe('a user form', () => {
 
         firstNameInput = screen.getByLabelText('First Name');
         lastNameInput = screen.getByLabelText('Last Name');
+        dobInput = screen.getByLabelText('Date Of Birth');
 
         homeStreetNameInput = screen.getByTestId('home-address-street');
         homeCityInout = screen.getByTestId('home-address-city');
@@ -90,6 +92,7 @@ describe('a user form', () => {
         it('should have some required fields', () => {
             expect(firstNameInput).not.toBeValid();
             expect(lastNameInput).not.toBeValid();
+            expect(dobInput).not.toBeValid();
             expect(homeStreetNameInput).not.toBeValid();
             expect(homeCityInout).not.toBeValid();
             expect(homeStateInput).not.toBeValid();

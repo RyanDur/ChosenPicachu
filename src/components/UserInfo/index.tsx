@@ -7,6 +7,7 @@ import {
     resetForm,
     updateAvatar,
     updateDetails,
+    updateDOB,
     updateEmail,
     updateFirstName,
     updateHomeAddress,
@@ -79,6 +80,11 @@ export const UserInformation: FC<FormProps> = (
                     type="email" readOnly={readOnly}
                     onChange={event => dispatch(updateEmail(event.currentTarget.value))}>
             Email
+        </FancyInput>
+        <FancyInput id="dob-cell" inputId="dob" value={userInfo.user.dob}
+                    type="date" readOnly={readOnly} required
+                    onChange={event => dispatch(updateDOB(new Date(event.currentTarget.value)))}>
+            Date Of Birth
         </FancyInput>
 
         <article tabIndex={0} id="avatar-cell"
