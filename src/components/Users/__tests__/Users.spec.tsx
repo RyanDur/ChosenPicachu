@@ -90,17 +90,17 @@ describe('the users page', () => {
             userEvent.click(within(form).getByTestId('avatar-cell'));
             expect(avatarImage.src).toEqual(imageSrc);
 
-            expect(within(form).getByTestId('home-street-address')).toHaveAttribute('readonly');
-            expect(within(form).getByTestId('home-street-address-2')).toHaveAttribute('readonly');
-            expect(within(form).getByTestId('home-city')).toHaveAttribute('readonly');
-            expect(within(form).getByTestId('home-state')).toHaveAttribute('readonly');
-            expect(within(form).getByTestId('home-zip')).toHaveAttribute('readonly');
+            expect(within(form).getByTestId('home-address-street')).toHaveAttribute('readonly');
+            expect(within(form).getByTestId('home-address-street-2')).toHaveAttribute('readonly');
+            expect(within(form).getByTestId('home-address-city')).toHaveAttribute('readonly');
+            expect(within(form).getByTestId('home-address-state')).toHaveAttribute('readonly');
+            expect(within(form).getByTestId('home-address-zip')).toHaveAttribute('readonly');
 
-            expect(within(form).getByTestId('work-street-address')).toHaveAttribute('readonly');
-            expect(within(form).getByTestId('work-street-address-2')).toHaveAttribute('readonly');
-            expect(within(form).getByTestId('work-city')).toHaveAttribute('readonly');
-            expect(within(form).getByTestId('work-state')).toHaveAttribute('readonly');
-            expect(within(form).getByTestId('work-zip')).toHaveAttribute('readonly');
+            expect(within(form).getByTestId('work-address-street')).toHaveAttribute('readonly');
+            expect(within(form).getByTestId('work-address-street-2')).toHaveAttribute('readonly');
+            expect(within(form).getByTestId('work-address-city')).toHaveAttribute('readonly');
+            expect(within(form).getByTestId('work-address-state')).toHaveAttribute('readonly');
+            expect(within(form).getByTestId('work-address-zip')).toHaveAttribute('readonly');
 
             expect(within(form).getByLabelText('Details')).toHaveAttribute('readonly');
         });
@@ -135,17 +135,17 @@ describe('the users page', () => {
             const form = screen.getByTestId('user-info-form');
             userSection(form, userInfo);
 
-            expect(within(form).getByTestId('home-street-address')).toHaveDisplayValue(userInfo.homeAddress.streetAddress);
-            expect(within(form).getByTestId('home-street-address-2')).toHaveDisplayValue(userInfo.homeAddress.streetAddressTwo!);
-            expect(within(form).getByTestId('home-city')).toHaveDisplayValue(userInfo.homeAddress.city);
-            expect(within(form).getByTestId('home-state')).toHaveDisplayValue(userInfo.homeAddress.state);
-            expect(within(form).getByTestId('home-zip')).toHaveDisplayValue(userInfo.homeAddress.zip);
+            expect(within(form).getByTestId('home-address-street')).toHaveDisplayValue(userInfo.homeAddress.streetAddress);
+            expect(within(form).getByTestId('home-address-street-2')).toHaveDisplayValue(userInfo.homeAddress.streetAddressTwo!);
+            expect(within(form).getByTestId('home-address-city')).toHaveDisplayValue(userInfo.homeAddress.city);
+            expect(within(form).getByTestId('home-address-state')).toHaveDisplayValue(userInfo.homeAddress.state);
+            expect(within(form).getByTestId('home-address-zip')).toHaveDisplayValue(userInfo.homeAddress.zip);
 
-            expect(within(form).getByTestId('work-street-address')).toHaveDisplayValue(userInfo.workAddress?.streetAddress!);
-            expect(within(form).getByTestId('work-street-address-2')).toHaveDisplayValue(userInfo.workAddress?.streetAddressTwo!);
-            expect(within(form).getByTestId('work-city')).toHaveDisplayValue(userInfo.workAddress?.city!);
-            expect(within(form).getByTestId('work-state')).toHaveDisplayValue(userInfo.workAddress?.state!);
-            expect(within(form).getByTestId('work-zip')).toHaveDisplayValue(userInfo.workAddress?.zip!);
+            expect(within(form).getByTestId('work-address-street')).toHaveDisplayValue(userInfo.workAddress?.streetAddress!);
+            expect(within(form).getByTestId('work-address-street-2')).toHaveDisplayValue(userInfo.workAddress?.streetAddressTwo!);
+            expect(within(form).getByTestId('work-address-city')).toHaveDisplayValue(userInfo.workAddress?.city!);
+            expect(within(form).getByTestId('work-address-state')).toHaveDisplayValue(userInfo.workAddress?.state!);
+            expect(within(form).getByTestId('work-address-zip')).toHaveDisplayValue(userInfo.workAddress?.zip!);
 
             expect(within(form).getByLabelText('Details')).toHaveDisplayValue(userInfo.details!);
         });
