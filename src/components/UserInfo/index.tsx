@@ -92,7 +92,7 @@ export const UserInformation: FC<FormProps> = (
                  data-testid="avatar-cell"
                  onKeyPress={event => event.preventDefault()}
                  onClick={() => readOnly || dispatch(updateAvatar(generateAvatar()))}>
-            <img id="avatar" src={userInfo.avatar} alt="avatar"/>
+            <img id="avatar" src={userInfo.avatar} loading="lazy" alt="avatar"/>
         </article>
 
         <h3 id="home-address-title">Home Address</h3>
