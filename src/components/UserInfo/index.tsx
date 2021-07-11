@@ -16,11 +16,10 @@ import {
 import {Address} from './Address';
 import {formReducer, initialState} from './reducer';
 import {generateAvatar} from '../../avatars';
-import {nanoid} from 'nanoid';
-import './Form.layout.css';
-import './Form.css';
 import {Link} from 'react-router-dom';
 import {Paths} from '../../App';
+import './Form.layout.css';
+import './Form.css';
 
 interface FormProps {
     currentUserInfo?: UserInfo;
@@ -30,11 +29,6 @@ interface FormProps {
     editing?: boolean;
 }
 
-/*
-* using the key to force a rerender of component to make sure the default value is set on reset or when the value is ''
-* feels a bit hacky but is a workaround for now. Need to reevaluate later if performance becomes a concern
-* https://medium.com/@albertogasparin/forcing-state-reset-on-a-react-component-by-using-the-key-prop-14b36cd7448e
-* */
 export const UserInformation: FC<FormProps> = (
     {
         onAdd,
@@ -45,7 +39,6 @@ export const UserInformation: FC<FormProps> = (
     }) => {
     const [userInfo, dispatch] = useReducer(formReducer, initialState, () => currentUserInfo);
     const [sameAsHome, updateSameAsHome] = useState(false);
-    const [resetFormKey, triggerFormReset] = useState(nanoid());
 
     useEffect(() => {
         if (sameAsHome) dispatch(updateWorkAddress(userInfo.homeAddress));
@@ -58,18 +51,18 @@ export const UserInformation: FC<FormProps> = (
     };
 
     return <form id="user-info-form"
-                 key={resetFormKey}
                  data-testid="user-info-form"
                  className={joinClassNames(readOnly && 'read-only')}
                  onSubmit={event => {
                      event.preventDefault();
-                     event.currentTarget.classList.remove('invalid');
-                     !editing && onAdd?.(userInfo);
-                     editing && onUpdate?.(userInfo);
-                     triggerFormReset(nanoid());
-                     reset();
+                     if (editing) onUpdate?.(userInfo);
+                     else onAdd?.(userInfo);
+                     event.currentTarget.reset?.();
                  }}
-                 onReset={reset}
+                 onReset={event => {
+                     reset();
+                     event.currentTarget.classList.remove('invalid');
+                 }}
                  onInvalid={event => event.currentTarget.classList.add('invalid')}>
         <h3 id="name-title">User</h3>
         <FancyInput id="first-name-cell" inputId="first-name" required
@@ -92,11 +85,7 @@ export const UserInformation: FC<FormProps> = (
                  className={joinClassNames('card', readOnly && 'read-only')}
                  data-testid="avatar-cell"
                  onKeyPress={event => event.preventDefault()}
-                 onClick={() => {
-                     if (!readOnly) {
-                         dispatch(updateAvatar(generateAvatar()));
-                     }
-                 }}>
+                 onClick={() => readOnly || dispatch(updateAvatar(generateAvatar()))}>
             <img id="avatar" src={userInfo.avatar} alt="avatar"/>
         </article>
 
