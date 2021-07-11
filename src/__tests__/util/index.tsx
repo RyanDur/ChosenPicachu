@@ -32,11 +32,11 @@ export const renderWithRouter = (component: ReactElement, path: TestPaths = '/in
 
 export const fillOutAddress = (info: UserInfo, kind: string) => {
     const address = kind === 'home' ? info.homeAddress : info.workAddress!;
-    userEvent.type(screen.getByTestId(`${kind}-street-address`), address.streetAddress);
-    userEvent.type(screen.getByTestId(`${kind}-street-address-2`), address.streetAddressTwo!);
-    userEvent.type(screen.getByTestId(`${kind}-city`), address.city);
-    userEvent.selectOptions(screen.getByTestId(`${kind}-state`), address.state);
-    userEvent.type(screen.getByTestId(`${kind}-zip`), address.zip);
+    userEvent.type(screen.getByTestId(`${kind}-address-street`), address.streetAddress);
+    userEvent.type(screen.getByTestId(`${kind}-address-street-2`), address.streetAddressTwo!);
+    userEvent.type(screen.getByTestId(`${kind}-address-city`), address.city);
+    userEvent.selectOptions(screen.getByTestId(`${kind}-address-state`), address.state);
+    userEvent.type(screen.getByTestId(`${kind}-address-zip`), address.zip);
 };
 
 export const fillOutUser = (info: UserInfo) => {

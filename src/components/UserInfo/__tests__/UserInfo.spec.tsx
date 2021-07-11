@@ -29,10 +29,10 @@ describe('a user form', () => {
         firstNameInput = screen.getByLabelText('First Name');
         lastNameInput = screen.getByLabelText('Last Name');
 
-        homeStreetNameInput = screen.getByTestId('home-street-address');
-        homeCityInout = screen.getByTestId('home-city');
-        homeStateInput = screen.getByTestId('home-state');
-        homeZipInput = screen.getByTestId('home-zip');
+        homeStreetNameInput = screen.getByTestId('home-address-street');
+        homeCityInout = screen.getByTestId('home-address-city');
+        homeStateInput = screen.getByTestId('home-address-state');
+        homeZipInput = screen.getByTestId('home-address-zip');
     });
 
     describe('filled out', () => {
@@ -103,7 +103,7 @@ describe('a user form', () => {
             function testZip(kind: string) {
                 let element: HTMLElement;
                 beforeEach(() => {
-                    element = screen.getByTestId(`${kind}-zip`);
+                    element = screen.getByTestId(`${kind}-address-zip`);
                     userEvent.clear(element);
                 });
 
