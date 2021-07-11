@@ -32,7 +32,7 @@ export const App = () => {
                 <Link id="navigate-home" className="path" to={Paths.home}>Home</Link>
                 <Link id="navigate-about" className="path" to={Paths.about}>About</Link>
                 <Link id="navigate-form" className="path" to={Paths.users}>Users</Link>
-                <Link id="navigate-repo" className="path" to={{pathname: Paths.repo}} target="_blank">Repo</Link>
+                <Link id="navigate-repo" className="path" to={{pathname: Paths.repo}} rel="noopener" target="_blank">Repo</Link>
             </nav>
         </aside>
         <main className="gutter">
