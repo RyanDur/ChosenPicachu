@@ -30,6 +30,7 @@ a {
 .card {
   border-radius: 2rem;
   background: white;
+  overflow: auto;
 }
 
 .off-screen {
@@ -93,6 +94,7 @@ button {
   text-align: center;
   outline: none;
   width: 100%;
+  white-space: nowrap;
 }
 
 a.button.primary,
