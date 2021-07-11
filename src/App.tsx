@@ -5,9 +5,9 @@ import './App.css';
 import './App.layout.css';
 
 export enum Paths {
-    home = '/ChosenPicachu',
-    about = '/ChosenPicachu/about',
-    users = '/ChosenPicachu/users',
+    home = '/',
+    about = '/about',
+    users = '/users',
     repo = 'https://github.com/RyanDur/ChosenPicachu'
 }
 
