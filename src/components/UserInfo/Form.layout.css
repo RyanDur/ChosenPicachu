@@ -6,15 +6,11 @@
   grid-template-areas:
   "name_title . . . . . . . . . avatar avatar"
   "first_name first_name first_name first_name first_name last_name last_name last_name last_name last_name avatar avatar"
-  "email email email email email email email email email email avatar avatar"
+  "email email email email email email email dob dob dob avatar avatar"
   "home_address_title home_address_title home_address_title . . . work_address_title work_address_title same_as_home same_as_home avatar avatar"
   "home_address home_address home_address home_address home_address home_address work_address work_address work_address work_address work_address work_address"
   "details details details details details details details details details details details details"
   "reset reset reset cancel cancel cancel submit submit submit submit submit submit"
-}
-
-#user-info-form #avatar-cell {
-  grid-area: avatar;
 }
 
 #user-info-form #name-title {
@@ -24,22 +20,26 @@
 #user-info-form #first-name-cell {
   grid-area: first_name;
 }
-
 #user-info-form #last-name-cell {
   grid-area: last_name;
 }
 #user-info-form #email-cell {
   grid-area: email;
 }
+#user-info-form #dob-cell {
+  grid-area: dob;
+}
+
+#user-info-form #avatar-cell {
+  grid-area: avatar;
+}
 
 #user-info-form #home-address-title {
   grid-area: home_address_title;
 }
-
 #user-info-form #work-address-title {
   grid-area: work_address_title;
 }
-
 #user-info-form #same-as-home-cell {
   grid-area: same_as_home;
   justify-self: flex-end;
@@ -48,7 +48,6 @@
 #user-info-form #home-address {
   grid-area: home_address;
 }
-
 #user-info-form #work-address {
   grid-area: work_address;
 }
@@ -60,11 +59,9 @@
 #user-info-form #reset-form {
   grid-area: reset;
 }
-
 #user-info-form #cancel {
   grid-area: cancel;
 }
-
 #user-info-form #submit {
   grid-area: submit;
 }
