@@ -57,7 +57,7 @@
   grid-area: details;
 }
 
-#user-info-form #reset {
+#user-info-form #reset-form {
   grid-area: reset;
 }
 
