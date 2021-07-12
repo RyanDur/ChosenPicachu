@@ -1,9 +1,13 @@
+@import "./styles/button.css";
+@import "./styles/shared.css";
+
 html {
   font-size: 62.5%;
 }
 
 body {
   font-size: var(--base-x-2);
+  font-family: Arial, sans-serif;
   color: var(--void);
 }
 
@@ -19,6 +23,12 @@ ul {
 
 a {
   text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+a:visited {
+  color: var(--void);
 }
 
 *,
@@ -27,122 +37,14 @@ a {
   box-sizing: border-box;
 }
 
-.card {
-  border-radius: 2rem;
-  background: white;
-}
-
-.overflow {
-  overflow: auto;
-}
-
-.off-screen {
-  position: absolute;
-  opacity: 0;
-  z-index: -1;
-}
-
-.gutter {
-  padding: var(--base-x-4);
-}
-
-#home-address-state:required + label:after,
-*:required:not(:read-only) + label:after {
-  content: '*';
-  color: var(--internationl-orange-engineering);
-}
-
-#same-as-home:hover ~ #same-as-home-title,
-#same-as-home:focus ~ #same-as-home-title,
-#same-as-home:focus,
-#same-as-home:hover,
-button:focus,
-button:hover,
-a.button:focus,
-a.button:hover,
-#avatar-cell:hover,
-.last-column .menu:focus,
-.last-column .menu:hover,
-.last-column .menu:hover .menu-list,
-.last-column .menu.open .menu-list,
-#avatar-cell:hover:not(.read-only),
-#avatar-cell:focus:not(.read-only),
-#user-info-form.invalid .fancy-text:invalid,
-#user-info-form .fancy .fancy-text:hover,
-#user-info-form .fancy .fancy-text:focus {
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-}
-
-#avatar-cell.read-only:hover,
-#avatar-cell.read-only:focus {
-  box-shadow: none;
-}
-
-#same-as-home-cell.read-only {
-  opacity: 0;
-}
-
-/*a {*/
-/*  color: black;*/
-/*}*/
-
-a.button,
-button {
-  height: var(--base-x-5);
-  border-radius: var(--base-x-5);
-  text-transform: uppercase;
-  padding: 1.2rem 1.8rem;
-  font-size: 1.6rem;
-  cursor: pointer;
-  box-shadow: 0 0 var(--base-x-0_5) #999;
-  text-align: center;
-  outline: none;
-  width: 100%;
-  white-space: nowrap;
-}
-
-a.button.primary,
-button.primary {
-  border: none;
-  color: white;
-  background-color: #007bff;
-}
-
-a.button.secondary,
-button.secondary {
-  border: 0.1rem solid #007bff;
-  background-color: var(--faded-leather);
-}
-
-.ripple {
-  background-position: center;
-  transition: background 0.5s;
-}
-
-a.button.ripple:hover,
-.ripple:hover {
-  color: white;
-  background: #275c8d radial-gradient(circle, transparent 1%, #1e5eac 1%) center/15000%;
-}
-
-.ripple:active {
-  background-color: #6eb9f7;
-  background-size: 100%;
-  transition: background 0s;
-}
-
-.center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 :root {
   /* colors */
   --paper: rgb(244, 244, 244);
   --silk: rgb(220, 208, 192);
   --mint: rgb(180, 219, 192);
   --internationl-orange-engineering: rgb(186, 45, 11);
+  --primary-blue: rgb(0, 123, 255);
+  --primary-dark-blue: rgb(3, 54, 109);
   --field-drab: rgb(106, 88, 55);
 
   --charcoal: rgb(55, 55, 55);
@@ -153,6 +55,8 @@ a.button.ripple:hover,
   --shadow: rgba(0, 0, 0, 0.19);
   --dark-shadow: rgba(0, 0, 0, 0.23);
   --disabled-gray: rgba(239, 239, 239, 0.3);
+
+  --base-box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 
   /* spacing */
   --base-x-0_5: 0.4rem;
