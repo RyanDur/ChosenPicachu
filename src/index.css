@@ -46,7 +46,7 @@ a {
   padding: var(--base-x-4);
 }
 
-*:required:not(:read-only) + label:after {
+*:required + label:after {
   content: '*';
   color: var(--internationl-orange-engineering);
 }
