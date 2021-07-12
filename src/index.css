@@ -46,7 +46,8 @@ a {
   padding: var(--base-x-4);
 }
 
-*:required + label:after {
+#home-address-state:required + label:after,
+*:required:not(:read-only) + label:after {
   content: '*';
   color: var(--internationl-orange-engineering);
 }
