@@ -111,10 +111,10 @@ export const UserInformation: FC<FormProps> = (
         <FancyTextarea value={userInfo.details} readOnly={readOnly}
                        onChange={event => dispatch(updateDetails(event.currentTarget.value))}/>
 
-        <button id="reset-form" type="reset" disabled={readOnly} className="secondary ripple">Reset</button>
-        {!editing && <button id="submit" type="submit" disabled={readOnly} className="primary ripple">Add</button>}
+        <button id="reset-form" type="reset" disabled={readOnly} className="secondary">Reset</button>
+        {!editing && <button id="submit" type="submit" disabled={readOnly} className="primary">Add</button>}
         {editing && <Link id="cancel" to={`${Paths.users}?email=${userInfo.user.email}&mode=view`}
-                          className="button secondary ripple" onClick={reset}>Cancel</Link>}
-        {editing && <button id="submit" type="submit" className="primary ripple">Update</button>}
+                          className="button secondary" onClick={reset}>Cancel</Link>}
+        {editing && <button id="submit" type="submit" className="primary">Update</button>}
     </form>;
 };
