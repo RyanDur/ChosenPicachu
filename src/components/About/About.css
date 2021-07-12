@@ -3,21 +3,17 @@
   background: var(--silk);
 }
 
-.accordion.overhang {
-  box-shadow: 0 0.3rem 0.6rem var(--light-shadow), 0 0.3rem 0.6rem var(--silk);
-}
-
 .accordion:last-child {
   margin-bottom: 0;
 }
 
-.bar {
+.accordion .bar {
   border: 0.1rem solid var(--charcoal);
   margin-bottom: var(--base-x-6);
   opacity: 0.5;
 }
 
-.close {
+.accordion .close {
   height: var(--base-x-5);
   width: 100%;
   background: var(--charcoal);
@@ -27,36 +23,29 @@
   align-items: center;
   margin-bottom: 0.1rem;
 }
-
-.close .info-label {
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  color: var(--paper);
-}
-
-.fold {
+.accordion .fold {
   overflow: hidden;
   width: 100%;
   vertical-align: middle;
   border-radius: 0;
   margin-bottom: 0.1rem;
 }
-
-.fold:last-child {
+.accordion .fold:last-child {
   border-radius: 0 0 2rem 2rem;
 }
-
-.fold:first-of-type {
+.accordion .fold:first-of-type {
   border-radius: 2rem 2rem 0 0;
 }
 
-.close .info-label {
+.accordion .close .info-label {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  color: var(--paper);
   border-top-right-radius: var(--base-x-2);
   border-top-left-radius: var(--base-x-2);
 }
-
-.fold .info-label {
+.accordion .fold .info-label {
   display: flex;
   height: 5rem;
   padding: 0 var(--base-x-4);
@@ -65,15 +54,7 @@
   color: var(--paper);
   background: var(--charcoal);
 }
-
-.close:hover,
-.fold .info-toggle:hover ~ .info-label,
-.fold .info-toggle:focus ~ .info-label,
-.close .info-toggle:focus ~ .info-label {
-  background: var(--internationl-orange-engineering);
-}
-
-.fold .info-label:after {
+.accordion .fold .info-label:after {
   content: "";
   position: relative;
   width: 0.8rem;
@@ -88,7 +69,14 @@
   align-self: center;
 }
 
-.fold .info {
+.accordion .close:hover,
+.accordion .fold .info-toggle:hover ~ .info-label,
+.accordion .fold .info-toggle:focus ~ .info-label,
+.accordion .close .info-toggle:focus ~ .info-label {
+  background: var(--internationl-orange-engineering);
+}
+
+.accordion .fold .info {
   position: relative;
   overflow: hidden;
   max-height: var(--base-x-100);
@@ -100,15 +88,13 @@
   padding: 0 var(--base-x-4) var(--base-x-4);
 }
 
-.fold .info-toggle:checked ~ .info-label:after {
+.accordion .fold .info-toggle:checked ~ .info-label:after {
   transform: rotate(135deg);
 }
-
-.fold .info-toggle ~ .info-label:after {
+.accordion .fold .info-toggle ~ .info-label:after {
   transition: all 500ms ease;
 }
-
-.fold .info-toggle:not(:checked) ~ .info {
+.accordion .fold .info-toggle:not(:checked) ~ .info {
   margin-top: 0;
   max-height: 0;
   opacity: 0;
