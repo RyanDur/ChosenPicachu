@@ -85,7 +85,7 @@ describe('the users page', () => {
         let form: HTMLElement;
 
         beforeEach(() => {
-            userEvent.click(within(firstRowThirdCell).getByText('View'));
+            userEvent.click(within(firstRowFourthCell).getByText('View'));
             form = screen.getByTestId('user-info-form');
         });
 
@@ -125,7 +125,8 @@ describe('the users page', () => {
 
             expect(firstRowFirstCell).toHaveTextContent(`${anotherUserInfo.user.firstName} ${anotherUserInfo.user.lastName}`);
             expect(firstRowSecondCell).toHaveTextContent(anotherUserInfo.homeAddress.city);
-            expect(firstRowThirdCell).toHaveTextContent('Yes');
+            expect(firstRowThirdCell).toHaveTextContent('42 years old');
+            expect(firstRowFourthCell).toHaveTextContent('Yes');
         });
 
         test('should remove button if able to add a new user', () => {
@@ -138,7 +139,7 @@ describe('the users page', () => {
     describe('editing a user', () => {
         beforeEach(() => {
             act(() => {
-                userEvent.click(within(firstRowThirdCell).getByText('Edit'));
+                userEvent.click(within(firstRowFourthCell).getByText('Edit'));
             });
         });
 
@@ -219,7 +220,7 @@ describe('the users page', () => {
 
             expect(firstRowFirstCell).toHaveTextContent(`${userInfo.user.firstName} ${userInfo.user.lastName}`);
 
-            userEvent.click(within(firstRowThirdCell).getByText('Remove'));
+            userEvent.click(within(firstRowFourthCell).getByText('Remove'));
 
             expect(firstRowFirstCell).not.toHaveTextContent(`${userInfo.user.firstName} ${userInfo.user.lastName}`);
             expect(screen.getAllByTestId('tr').length).toEqual(originalLength - 1);
@@ -227,20 +228,20 @@ describe('the users page', () => {
 
         describe('when a user is being viewed', () => {
             beforeEach(() => {
-                userEvent.click(within(firstRowThirdCell).getByText('View'));
+                userEvent.click(within(firstRowFourthCell).getByText('View'));
                 expect(testLocation?.pathname).toEqual(`${Paths.users}`);
                 expect(testLocation?.search).toEqual(`?email=${userInfo.user.email}&mode=view`);
             });
 
             it('should update the url when removing the viewed user', () => {
-                userEvent.click(within(firstRowThirdCell).getByText('Remove'));
+                userEvent.click(within(firstRowFourthCell).getByText('Remove'));
 
                 expect(testLocation?.pathname).toEqual(`${Paths.users}`);
                 expect(testLocation?.search).toEqual('');
             });
 
             it('should not update the url when removing a user other than the viewed one', () => {
-                userEvent.click(within(secondRowThirdCell).getByText('Remove'));
+                userEvent.click(within(secondRowFourthCell).getByText('Remove'));
 
                 expect(testLocation?.pathname).toEqual(`${Paths.users}`);
                 expect(testLocation?.search).toEqual(`?email=${userInfo.user.email}&mode=view`);
@@ -249,13 +250,13 @@ describe('the users page', () => {
 
         describe('when a user is being edited', () => {
             beforeEach(() => {
-                userEvent.click(within(firstRowThirdCell).getByText('Edit'));
+                userEvent.click(within(firstRowFourthCell).getByText('Edit'));
                 expect(testLocation?.pathname).toEqual(`${Paths.users}`);
                 expect(testLocation?.search).toEqual(`?email=${userInfo.user.email}&mode=edit`);
             });
 
             it('should reset the form when removing the user being edited', async () => {
-                userEvent.click(within(firstRowThirdCell).getByText('Remove'));
+                userEvent.click(within(firstRowFourthCell).getByText('Remove'));
 
                 userSection(screen.getByTestId('user-info-form'));
                 expect(testLocation?.pathname).toEqual(`${Paths.users}`);
@@ -263,7 +264,7 @@ describe('the users page', () => {
             });
 
             it('should not reset the form when removing a user other than the one being edited', () => {
-                userEvent.click(within(secondRowThirdCell).getByText('Remove'));
+                userEvent.click(within(secondRowFourthCell).getByText('Remove'));
 
                 userSection(screen.getByTestId('user-info-form'), userInfo);
                 expect(testLocation?.pathname).toEqual(`${Paths.users}`);
@@ -274,7 +275,7 @@ describe('the users page', () => {
 
     describe('cloning a user', () => {
         beforeEach(() => {
-            userEvent.click(within(firstRowThirdCell).getByText('Clone'));
+            userEvent.click(within(firstRowFourthCell).getByText('Clone'));
             const form = screen.getByTestId('user-info-form');
             const lastName = within(form).getByLabelText('Last Name');
             userEvent.type(lastName, ' more name');
