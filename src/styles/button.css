@@ -3,11 +3,11 @@ button {
   height: var(--base-x-5);
   border-radius: var(--base-x-5);
   text-transform: uppercase;
-  font-size: 1.6rem;
-  cursor: pointer;
+  font-size: 1.8rem;
   box-shadow: 0 0 var(--base-x-0_5) #999;
-  text-align: center;
+  cursor: pointer;
   outline: none;
+  padding: 0 var(--base-x-4);
   width: 100%;
   white-space: nowrap;
   font-weight: bold;

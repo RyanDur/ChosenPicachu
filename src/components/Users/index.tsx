@@ -41,7 +41,7 @@ export const Users: FC = () => {
         <section id="users" className="card">
             <h2 className="title">Users</h2>
             {mode === 'view' &&
-            <Link to={Paths.users} id="add-new-user" className="button primary ripple">Add New User</Link>}
+            <Link to={Paths.users} id="add-new-user" className="button primary">Add New User</Link>}
             <Table
                 id="users-table"
                 tableClassName="fancy-table"

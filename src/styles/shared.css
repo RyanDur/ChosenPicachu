@@ -1,6 +1,7 @@
 .card {
   background: var(--paper);
   border-radius: 2rem;
+  box-shadow: var(--base-box-shadow);
   padding: var(--base-x-4);
   overflow: auto;
 }
