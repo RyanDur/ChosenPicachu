@@ -7,7 +7,8 @@ import {Link, useHistory, useLocation} from 'react-router-dom';
 import {Paths} from '../../App';
 import {age, formatAge} from '../util';
 import './Users.css';
-import './Users.layout.css';
+import './user_candidates.css';
+import './user_candidates.layout.css';
 
 const useQuery = <T extends Object>(): T => useLocation().search
     .replace('?', '')
@@ -26,7 +27,7 @@ export const Users: FC = () => {
     };
 
     return <>
-        <section id="user-info" className="card" key={currentUser?.user.email}>
+        <section id="user-info" className="card users" key={currentUser?.user.email}>
             <h2 className="title">User Information</h2>
             <UserInformation currentUserInfo={currentUser}
                              readOnly={mode === 'view'}
@@ -38,8 +39,8 @@ export const Users: FC = () => {
                              }}/>
         </section>
 
-        <section id="users" className="card">
-            <h2 className="title">Users</h2>
+        <section id="user-candidates" className="card users">
+            <h2 className="title">User Candidates</h2>
             {mode === 'view' &&
             <Link to={Paths.users} id="add-new-user" className="button primary">Add New User</Link>}
             <Table

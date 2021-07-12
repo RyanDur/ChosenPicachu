@@ -97,8 +97,7 @@
   box-shadow: var(--base-box-shadow);
 }
 
-#avatar-cell.read-only:hover,
-#avatar-cell.read-only:focus {
+#avatar-cell.read-only {
   box-shadow: none;
 }
 
