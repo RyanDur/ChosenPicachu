@@ -38,7 +38,7 @@ export const Users: FC = () => {
                              }}/>
         </section>
 
-        <section id="users" className="card overhang gutter">
+        <section id="users" className="card overhang gutter overflow">
             <h2 className="title">Users</h2>
             {mode === 'view' &&
             <Link to={Paths.users} id="add-new-user" className="button primary ripple">Add New User</Link>}
