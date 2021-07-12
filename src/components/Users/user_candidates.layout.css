@@ -1,4 +1,4 @@
-#users {
+#user-candidates {
   display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: var(--base-x-2);
@@ -8,16 +8,16 @@
   "table table";
 }
 
-#users #title {
+#user-candidates #title {
   grid-area: title;
   align-self: center;
 }
 
-#users #add-new-user {
+#user-candidates #add-new-user {
   grid-area: button;
   justify-self: flex-end;
 }
 
-#users #users-table {
+#user-candidates #users-table {
   grid-area: table;
 }

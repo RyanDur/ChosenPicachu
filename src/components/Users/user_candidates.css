@@ -1,0 +1,61 @@
+#user-candidates .last-column {
+  display: flex;
+  justify-content: space-between;
+}
+
+#user-candidates .last-column .menu {
+  outline: none;
+  position: relative;
+  background: var(--paper);
+  width: 2rem;
+  height: 2rem;
+  background-image: radial-gradient(circle, black 0.2rem, transparent 0.1rem);
+  background-size: 100% 33.33%;
+}
+#user-candidates .last-column .menu:focus,
+#user-candidates .last-column .menu:hover,
+#user-candidates .last-column .menu:hover .menu-list,
+#user-candidates .last-column .menu.open .menu-list {
+  box-shadow: var(--base-box-shadow);
+}
+
+#user-candidates .last-column .menu .menu-list {
+  position: absolute;
+  display: none;
+}
+#user-candidates .last-column .menu.open .menu-list,
+#user-candidates .last-column .menu:hover .menu-list {
+  display: inline-grid;
+  z-index: 1;
+  width: 20rem;
+  right: 2rem;
+  bottom: -4rem;
+  background: white;
+  background: var(--paper);
+}
+
+#user-candidates .last-column .menu .menu-list .item:hover,
+#user-candidates .last-column .menu .menu-list .item:focus {
+  outline: none;
+  box-shadow: inset 0 0 5px var(--charcoal);
+}
+#user-candidates .last-column .menu.open .menu-list .item,
+#user-candidates .last-column .menu:hover .menu-list .item {
+  height: 4rem;
+  display: flex;
+  font-size: 2rem;
+  color: black;
+  justify-content: center;
+  align-items: center;
+}
+#user-candidates .last-column .menu .menu-list .item:not(:last-child) {
+  border-bottom: 1px solid var(--charcoal);
+}
+#user-candidates .last-column .menu .menu-list .item:first-child {
+  border-top-right-radius: 2rem;
+  border-top-left-radius: 2rem;
+}
+#user-candidates .last-column .menu .menu-list .item:last-child {
+  border-bottom-right-radius: 2rem;
+  border-bottom-left-radius: 2rem;
+}
