@@ -15,29 +15,18 @@
   border-radius: 2rem;
   position: absolute;
 }
-
-#home-address-state:required + label:after,
-#user-info-form *:required:not(:read-only) + label:after {
-  content: '*';
-  color: var(--internationl-orange-engineering);
-}
-
-
 #user-info-form.read-only .fancy .fancy-text:read-only {
   border: none;
   border-bottom: 1px solid rgba(30, 118, 224, 0.68);
   box-shadow: none;
   border-radius: 0;
 }
-
 #user-info-form .fancy .fancy-text:disabled {
   background: var(--disabled-gray)
 }
-
 #user-info-form.invalid .fancy .fancy-text:invalid {
   border: 1px solid var(--internationl-orange-engineering)
 }
-
 #user-info-form .fancy .fancy-title {
   pointer-events: none;
   position: absolute;
@@ -49,6 +38,81 @@
   transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
 }
 
+#user-info-form #details-cell .fancy-title {
+  position: absolute;
+  z-index: 1;
+}
+#user-info-form #details {
+  resize: vertical;
+  border-radius: 1rem;
+  min-height: var(--base-x-0_5);
+  position: relative;
+}
+
+#user-info-form #details:read-only {
+  resize: none;
+  border-radius: 0;
+}
+#user-info-form #avatar-cell {
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: var(--faded-leather);
+}
+#user-info-form #avatar-cell,
+#user-info-form #avatar-cell.read-only {
+  box-shadow: none;
+}
+#user-info-form #avatar {
+  height: auto;
+  width: 80%;
+}
+
+#user-info-form #dob-cell #dob:invalid {
+  color: transparent;
+}
+#user-info-form #dob-cell #dob:focus {
+  color: black;
+}
+
+#user-info-form #same-as-home-cell {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  border-radius: 8rem;
+  height: 2rem;
+  text-align: center;
+  width: 100%;
+  font-size: 1.4rem;
+}
+#user-info-form #same-as-home-cell.read-only {
+  opacity: 0;
+}
+#user-info-form #same-as-home:focus {
+  outline: none;
+  font-size: 1.6rem;
+}
+#same-as-home:hover ~ #same-as-home-title,
+#same-as-home:focus ~ #same-as-home-title {
+  font-weight: bold;
+}
+
+#user-info-form.read-only .primary,
+#user-info-form.read-only .secondary {
+  display: none;
+}
+#user-info-form .fancy .fancy-text:hover,
+#user-info-form .fancy .fancy-text:focus,
+#user-info-form #same-as-home:hover ~ #same-as-home-title,
+#user-info-form #same-as-home:focus ~ #same-as-home-title,
+#user-info-form #same-as-home:focus,
+#user-info-form #same-as-home:hover,
+#user-info-form #avatar-cell:hover,
+#user-info-form.invalid .fancy-text:invalid {
+  box-shadow: var(--base-box-shadow);
+}
 #user-info-form.read-only .fancy .fancy-text:read-only ~ .fancy-title,
 #user-info-form .fancy.not-empty .fancy-title,
 #user-info-form .fancy .fancy-text:disabled ~ .fancy-title,
@@ -62,93 +126,8 @@
   linear-gradient(#00000000, #00000000);
 }
 
-#user-info-form #details {
-  resize: vertical;
-  border-radius: 1rem;
-  min-height: var(--base-x-0_5);
-  position: relative;
-}
-
-#user-info-form #details:read-only {
-  resize: none;
-  border-radius: 0;
-}
-
-#user-info-form #details-cell .fancy-title {
-  position: absolute;
-  z-index: 1;
-}
-
-#user-info-form .fancy .fancy-text:required .fancy-title:after {
-  content: "*";
+#user-info-form:not(.read-only) *:required + label:after {
+  content: '*';
   color: var(--internationl-orange-engineering);
 }
 
-#user-info-form .fancy .fancy-text:hover,
-#user-info-form .fancy .fancy-text:focus,
-#avatar-cell:hover:not(.read-only),
-#avatar-cell:focus:not(.read-only),
-#same-as-home:hover ~ #same-as-home-title,
-#same-as-home:focus ~ #same-as-home-title,
-#same-as-home:focus,
-#same-as-home:hover,
-#avatar-cell:hover,
-#user-info-form.invalid .fancy-text:invalid {
-  box-shadow: var(--base-box-shadow);
-}
-
-#avatar-cell.read-only {
-  box-shadow: none;
-}
-
-#same-as-home-cell.read-only {
-  opacity: 0;
-}
-
-#avatar-cell {
-  outline: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  background: var(--faded-leather);
-}
-
-#avatar {
-  height: auto;
-  width: 80%;
-}
-
-#dob-cell #dob:invalid {
-  color: transparent;
-}
-
-#dob-cell #dob:focus {
-  color: black;
-}
-
-#user-info-form.read-only .primary,
-#user-info-form.read-only .secondary {
-  display: none;
-}
-
-#same-as-home-cell {
-  display: flex;
-  flex-direction: row-reverse;
-  align-items: center;
-  border-radius: 8rem;
-  height: 2rem;
-  text-align: center;
-  width: 100%;
-  font-size: 1.4rem;
-}
-
-#same-as-home:focus {
-  outline: none;
-  font-size: 1.6rem;
-}
-
-#same-as-home:hover ~ #same-as-home-title,
-#same-as-home:focus ~ #same-as-home-title {
-  font-weight: bold;
-}
