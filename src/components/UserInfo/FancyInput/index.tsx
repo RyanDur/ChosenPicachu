@@ -35,7 +35,7 @@ export const FancyInput: FC<FancyTextInputProps> = (
         value = ''
     }
 ) => <article id={id} className={join(
-    'fancy-select fancy',
+    'fancy',
     value && 'not-empty',
     className
 )}>
