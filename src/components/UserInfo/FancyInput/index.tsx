@@ -14,6 +14,7 @@ interface FancyTextInputProps {
     value?: string | Date;
     readOnly?: boolean;
     disabled?: boolean;
+    autoFocus?: boolean;
     pattern?: string;
 }
 
@@ -31,6 +32,7 @@ export const FancyInput: FC<FancyTextInputProps> = (
         required = false,
         readOnly = false,
         disabled = false,
+        autoFocus = false,
         pattern,
         value = ''
     }
@@ -46,6 +48,7 @@ export const FancyInput: FC<FancyTextInputProps> = (
            disabled={disabled}
            required={required}
            data-testid={inputId}
+           autoFocus={autoFocus}
            value={value instanceof Date ? toISOWithoutTime(value) : value}
            type={type}
            onChange={onChange}/>

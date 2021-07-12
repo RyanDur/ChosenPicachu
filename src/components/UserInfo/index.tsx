@@ -67,7 +67,7 @@ export const UserInformation: FC<FormProps> = (
                  onInvalid={event => event.currentTarget.classList.add('invalid')}>
         <h3 id="name-title">User</h3>
         <FancyInput id="first-name-cell" inputId="first-name" required
-                    value={userInfo.user.firstName} readOnly={readOnly}
+                    value={userInfo.user.firstName} readOnly={readOnly} autoFocus
                     onChange={event => dispatch(updateFirstName(event.currentTarget.value))}>
             First Name
         </FancyInput>
