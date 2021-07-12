@@ -5,9 +5,9 @@ import {Table} from '../Table';
 import {createRandomUsers} from '../../__tests__/util';
 import {Link, useHistory, useLocation} from 'react-router-dom';
 import {Paths} from '../../App';
+import {age, formatAge} from '../util';
 import './Users.css';
 import './Users.layout.css';
-import {age, formatAge} from '../util';
 
 const useQuery = <T extends Object>(): T => useLocation().search
     .replace('?', '')
