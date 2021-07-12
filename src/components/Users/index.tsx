@@ -26,7 +26,7 @@ export const Users: FC = () => {
     };
 
     return <>
-        <section id="user-info" className="card overhang gutter" key={currentUser?.user.email}>
+        <section id="user-info" className="card" key={currentUser?.user.email}>
             <h2 className="title">User Information</h2>
             <UserInformation currentUserInfo={currentUser}
                              readOnly={mode === 'view'}
@@ -38,7 +38,7 @@ export const Users: FC = () => {
                              }}/>
         </section>
 
-        <section id="users" className="card overhang gutter overflow">
+        <section id="users" className="card">
             <h2 className="title">Users</h2>
             {mode === 'view' &&
             <Link to={Paths.users} id="add-new-user" className="button primary ripple">Add New User</Link>}
@@ -62,7 +62,7 @@ export const Users: FC = () => {
                     worksFromHome: {
                         display: <section className="last-column">
                             {userInfo.homeAddress === userInfo.workAddress ? 'Yes' : 'No'}
-                            <article tabIndex={0} className="menu card" onKeyPress={event => {
+                            <article tabIndex={0} className="menu rounded-corners" onKeyPress={event => {
                                 event.preventDefault();
                                 if (event.code === 'Space') {
                                     event.currentTarget.classList.toggle('open');
@@ -72,7 +72,7 @@ export const Users: FC = () => {
                                     event.currentTarget.classList.remove('open');
                                 }
                             }} onClick={event => event.currentTarget.classList.remove('open')}>
-                                <nav className="menu-list card">
+                                <nav className="menu-list rounded-corners">
                                     <Link to={`${Paths.users}?email=${userInfo.user.email}&mode=view`}
                                           className='item'
                                           data-testid="view">View</Link>

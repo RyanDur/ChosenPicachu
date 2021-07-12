@@ -3,7 +3,7 @@ import {columns, rows} from '../../__tests__/util';
 import './Home.css';
 
 export const Home = () => {
-    return <article className="card overhang gutter">
+    return <article className="card">
         <Table tableClassName="fancy-table home-table"
                theadClassName="header"
                trClassName="row"

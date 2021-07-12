@@ -1,6 +1,8 @@
 .card {
+  background: var(--paper);
   border-radius: 2rem;
-  background: white;
+  padding: var(--base-x-4);
+  overflow: auto;
 }
 
 .center {
@@ -9,14 +11,14 @@
   align-items: center;
 }
 
-.overflow {
-  overflow: auto;
-}
-
 .off-screen {
   position: absolute;
   opacity: 0;
   z-index: -1;
+}
+
+.rounded-corners {
+  border-radius: 2rem;
 }
 
 .gutter {

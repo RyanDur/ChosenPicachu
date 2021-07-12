@@ -22,6 +22,7 @@
 .last-column .menu {
   outline: none;
   position: relative;
+  background: var(--paper);
   width: 2rem;
   height: 2rem;
   background-image: radial-gradient(circle, black 0.2rem, transparent 0.1rem);
@@ -31,7 +32,6 @@
 .last-column .menu .menu-list {
   position: absolute;
   display: none;
-  border-radius: 2rem;
 }
 
 .last-column .menu:focus,
