@@ -23,10 +23,6 @@ button {
     background: var(--faded-leather);
   }
 
-  &:hover {
-    background: var(--primary-dark-blue);
-  }
-
   &:hover,
   &:focus {
     box-shadow: var(--base-box-shadow);
@@ -35,9 +31,6 @@ button {
   &:hover,
   &:active {
     color: white;
-  }
-
-  &:active {
     background-color: var(--primary-dark-blue);
   }
 
