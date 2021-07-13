@@ -90,6 +90,11 @@
 #user-info-form #same-as-home-cell.read-only {
   opacity: 0;
 }
+
+#user-info-form #same-as-home {
+  margin-left: 1rem;
+}
+
 #user-info-form #same-as-home:focus {
   outline: none;
   font-size: 1.6rem;
