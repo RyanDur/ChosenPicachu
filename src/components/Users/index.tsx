@@ -7,6 +7,7 @@ import {Link, useHistory, useLocation} from 'react-router-dom';
 import {Paths} from '../../App';
 import {age, formatAge} from '../util';
 import './Users.css';
+import './user_info.css';
 import './user_candidates.css';
 import './user_candidates.layout.css';
 

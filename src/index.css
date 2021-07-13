@@ -1,6 +1,8 @@
 @import "./styles/button.css";
 @import "./styles/shared.css";
 
+@import-normalize;
+
 html {
   font-size: 62.5%;
 }
