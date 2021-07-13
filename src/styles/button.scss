@@ -1,16 +1,16 @@
 a.button,
 button {
   height: var(--base-x-5);
-  border-radius: var(--base-x-5);
-  text-transform: uppercase;
-  font-size: 1.8rem;
-  box-shadow: 0 0 var(--base-x-0_5) #999;
-  cursor: pointer;
-  outline: none;
-  padding: 0 var(--base-x-4);
   width: 100%;
-  white-space: nowrap;
+  padding: 0 var(--base-x-4);
+  outline: none;
+  cursor: pointer;
+  font-size: 1.8rem;
   font-weight: bold;
+  white-space: nowrap;
+  text-transform: uppercase;
+  border-radius: var(--base-x-5);
+  box-shadow: 0 0 var(--base-x-0_5) #999;
 
   &.primary {
     border: none;
@@ -34,8 +34,7 @@ button {
     background-color: var(--primary-dark-blue);
   }
 
-  &:active,
-  &:not(:hover) {
-    box-shadow: none;
+  &:active {
+    box-shadow: initial;
   }
 }
