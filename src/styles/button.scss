@@ -38,7 +38,11 @@ button {
   }
 
   &:active {
-    box-shadow: none;
     background-color: var(--primary-dark-blue);
+  }
+
+  &:active,
+  &:not(:hover) {
+    box-shadow: none;
   }
 }
