@@ -11,15 +11,14 @@ button {
   text-transform: uppercase;
   border-radius: var(--base-x-5);
   box-shadow: 0 0 var(--base-x-0_5) #999;
+  border: 0.1rem solid var(--primary-blue);
 
   &.primary {
-    border: none;
     color: white;
     background: var(--primary-blue);
   }
 
   &.secondary {
-    border: 0.1rem solid var(--primary-blue);
     background: var(--faded-leather);
   }
 
