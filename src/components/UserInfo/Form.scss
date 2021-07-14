@@ -1,13 +1,6 @@
 @import "FancyFormElements/fancy";
 
 #user-info-form {
-  &.read-only {
-    .primary,
-    .secondary {
-      display: none;
-    }
-  }
-
   &.invalid *:invalid {
     border: 1px solid var(--internationl-orange-engineering);
     box-shadow: var(--base-box-shadow);
