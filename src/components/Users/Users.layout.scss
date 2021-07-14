@@ -1,34 +1,32 @@
-.users {
-  #user-info {
-    display: flex;
-    flex-direction: column;
+#user-info {
+  display: flex;
+  flex-direction: column;
 
-    .title {
-      align-self: flex-end;
-    }
+  .title {
+    align-self: flex-end;
   }
+}
 
-  #user-candidates {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: var(--base-x-2);
-    row-gap: 4rem;
-    grid-template-areas:
+#user-candidates {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: var(--base-x-2);
+  row-gap: 4rem;
+  grid-template-areas:
   "title button"
   "table table";
 
-    #title {
-      grid-area: title;
-      align-self: center;
-    }
+  #title {
+    grid-area: title;
+    align-self: center;
+  }
 
-    #add-new-user {
-      grid-area: button;
-      justify-self: flex-end;
-    }
+  #add-new-user {
+    grid-area: button;
+    justify-self: flex-end;
+  }
 
-    #users-table {
-      grid-area: table;
-    }
+  #users-table {
+    grid-area: table;
   }
 }
