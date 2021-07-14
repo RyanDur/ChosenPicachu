@@ -38,7 +38,7 @@ export const UserInformation: FC<FormProps> = (
         editing = false,
         currentUserInfo = initialState
     }) => {
-    const [userInfo, dispatch] = useReducer(formReducer, initialState, () => currentUserInfo);
+    const [userInfo, dispatch] = useReducer(formReducer, currentUserInfo, () => currentUserInfo);
     const [sameAsHome, updateSameAsHome] = useState(false);
 
     useEffect(() => {
@@ -113,7 +113,7 @@ export const UserInformation: FC<FormProps> = (
 
         {!readOnly && <button id="reset-form" type="reset" disabled={readOnly} className="secondary">Reset</button>}
         {readOnly && <Link id="reset-form" to={`${Paths.users}?email=${userInfo.user.email}&mode=edit`}
-                           className="button secondary" onClick={reset}>Edit</Link>}
+                           className="button secondary">Edit</Link>}
         {!editing && !readOnly &&
         <button id="submit" type="submit" disabled={readOnly} className="primary">Add</button>}
         {editing && <Link id="cancel" to={`${Paths.users}?email=${userInfo.user.email}&mode=view`}
