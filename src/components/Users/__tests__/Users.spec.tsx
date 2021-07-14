@@ -89,7 +89,7 @@ describe('the users page', () => {
             form = screen.getByTestId('user-info-form');
         });
 
-        test('populating the form with the chosen user', async () => userSection(form, userInfo));
+        test('populating the form with the chosen user', () => containsUser(form, userInfo));
 
         test('should not be able to change the uses data', async () => {
             expect(within(form).getByLabelText('First Name')).toHaveAttribute('readonly');
@@ -137,23 +137,26 @@ describe('the users page', () => {
 
         test('should be able to edit', () => {
             userEvent.click(within(form).getByText('Edit'));
-            expect(within(form).getByLabelText('First Name')).not.toHaveAttribute('readonly');
-            expect(within(form).getByLabelText('Last Name')).not.toHaveAttribute('readonly');
-            expect(within(form).getByLabelText('Email')).not.toHaveAttribute('readonly');
+            const userForm = getUserFormElements(form);
 
-            expect(within(form).getByTestId('home-address-street')).not.toHaveAttribute('readonly');
-            expect(within(form).getByTestId('home-address-street-2')).not.toHaveAttribute('readonly');
-            expect(within(form).getByTestId('home-address-city')).not.toHaveAttribute('readonly');
-            expect(within(form).getByTestId('home-address-state')).not.toHaveAttribute('readonly');
-            expect(within(form).getByTestId('home-address-zip')).not.toHaveAttribute('readonly');
+            expect(userForm.firstName).not.toHaveAttribute('readonly');
+            expect(userForm.lastName).not.toHaveAttribute('readonly');
+            expect(userForm.email).not.toHaveAttribute('readonly');
+            expect(userForm.dob).not.toHaveAttribute('readonly');
 
-            expect(within(form).getByTestId('work-address-street')).not.toHaveAttribute('readonly');
-            expect(within(form).getByTestId('work-address-street-2')).not.toHaveAttribute('readonly');
-            expect(within(form).getByTestId('work-address-city')).not.toHaveAttribute('readonly');
-            expect(within(form).getByTestId('work-address-state')).not.toHaveAttribute('readonly');
-            expect(within(form).getByTestId('work-address-zip')).not.toHaveAttribute('readonly');
+            expect(userForm.dob).toHaveDisplayValue('1980-11-28');
+            expect(userForm.homeAddressStreet).not.toHaveAttribute('readonly');
+            expect(userForm.homeAddressStreet2).not.toHaveAttribute('readonly');
+            expect(userForm.homeAddressCity).not.toHaveAttribute('readonly');
+            expect(userForm.homeAddressState).not.toHaveAttribute('readonly');
+            expect(userForm.homeAddressZip).not.toHaveAttribute('readonly');
+            expect(userForm.workAddressStreet).not.toHaveAttribute('readonly');
+            expect(userForm.workAddressStreet2).not.toHaveAttribute('readonly');
+            expect(userForm.workAddressCity).not.toHaveAttribute('readonly');
+            expect(userForm.workAddressState).not.toHaveAttribute('readonly');
 
-            expect(within(form).getByLabelText('Details')).not.toHaveAttribute('readonly');
+            expect(userForm.workAddressZip).not.toHaveAttribute('readonly');
+            expect(userForm.details).not.toHaveAttribute('readonly');
         });
     });
 
@@ -166,7 +169,7 @@ describe('the users page', () => {
 
         test('should populate the form', () => {
             const form = screen.getByTestId('user-info-form');
-            userSection(form, userInfo);
+            containsUser(form, userInfo);
 
             expect(within(form).getByTestId('home-address-street')).toHaveDisplayValue(userInfo.homeAddress.streetAddress);
             expect(within(form).getByTestId('home-address-street-2')).toHaveDisplayValue(userInfo.homeAddress.streetAddressTwo!);
@@ -279,7 +282,7 @@ describe('the users page', () => {
             it('should reset the form when removing the user being edited', async () => {
                 userEvent.click(within(firstRowFourthCell).getByText('Remove'));
 
-                userSection(screen.getByTestId('user-info-form'));
+                containsUser(screen.getByTestId('user-info-form'));
                 expect(testLocation?.pathname).toEqual(`${Paths.users}`);
                 expect(testLocation?.search).toEqual('');
             });
@@ -287,7 +290,7 @@ describe('the users page', () => {
             it('should not reset the form when removing a user other than the one being edited', () => {
                 userEvent.click(within(secondRowFourthCell).getByText('Remove'));
 
-                userSection(screen.getByTestId('user-info-form'), userInfo);
+                containsUser(screen.getByTestId('user-info-form'), userInfo);
                 expect(testLocation?.pathname).toEqual(`${Paths.users}`);
                 expect(testLocation?.search).toEqual(`?email=${userInfo.user.email}&mode=edit`);
             });
@@ -319,9 +322,40 @@ describe('the users page', () => {
         });
     });
 
-    const userSection = (form: HTMLElement, has?: UserInfo) => {
-        expect(within(form).getByLabelText('First Name')).toHaveDisplayValue(has?.user.firstName || '');
-        expect(within(form).getByLabelText('Last Name')).toHaveDisplayValue(has?.user.lastName || '');
-        expect(within(form).getByLabelText('Email')).toHaveDisplayValue(has?.user.email! || '');
+    const getUserFormElements = (form: HTMLElement) => ({
+        firstName: within(form).getByLabelText('First Name'),
+        lastName: within(form).getByLabelText('Last Name'),
+        email: within(form).getByLabelText('Email'),
+        dob: within(form).getByLabelText('Date Of Birth'),
+        homeAddressStreet: within(form).getByTestId('home-address-street'),
+        homeAddressStreet2: within(form).getByTestId('home-address-street-2'),
+        homeAddressCity: within(form).getByTestId('home-address-city'),
+        homeAddressState: within(form).getByTestId('home-address-state'),
+        homeAddressZip: within(form).getByTestId('home-address-zip'),
+        workAddressStreet: within(form).getByTestId('work-address-street'),
+        workAddressStreet2: within(form).getByTestId('work-address-street-2'),
+        workAddressCity: within(form).getByTestId('work-address-city'),
+        workAddressState: within(form).getByTestId('work-address-state'),
+        workAddressZip: within(form).getByTestId('work-address-zip'),
+        details: within(form).getByLabelText('Details')
+    });
+
+    const containsUser = (form: HTMLElement, userInfo?: UserInfo) => {
+        const userForm = getUserFormElements(form);
+        expect(userForm.firstName).toHaveDisplayValue(userInfo?.user.firstName || '');
+        expect(userForm.lastName).toHaveDisplayValue(userInfo?.user.lastName || '');
+        expect(userForm.email).toHaveDisplayValue(userInfo?.user.email! || '');
+        expect(userForm.homeAddressStreet).toHaveDisplayValue(userInfo?.homeAddress.streetAddress || '');
+        expect(userForm.homeAddressStreet2).toHaveDisplayValue(userInfo?.homeAddress.streetAddressTwo! || '');
+        expect(userForm.homeAddressCity).toHaveDisplayValue(userInfo?.homeAddress.city || '');
+        expect(userForm.homeAddressState).toHaveDisplayValue(userInfo?.homeAddress.state || '');
+        expect(userForm.homeAddressZip).toHaveDisplayValue(userInfo?.homeAddress.zip || '');
+
+        expect(userForm.workAddressStreet).toHaveDisplayValue(userInfo?.workAddress?.streetAddress! || '');
+        expect(userForm.workAddressStreet2).toHaveDisplayValue(userInfo?.workAddress?.streetAddressTwo! || '');
+        expect(userForm.workAddressCity).toHaveDisplayValue(userInfo?.workAddress?.city! || '');
+        expect(userForm.workAddressState).toHaveDisplayValue(userInfo?.workAddress?.state! || '');
+        expect(userForm.workAddressZip).toHaveDisplayValue(userInfo?.workAddress?.zip! || '');
+        expect(userForm.details).toHaveDisplayValue(userInfo?.details! || '');
     };
 });
