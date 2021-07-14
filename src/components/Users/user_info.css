@@ -1,7 +1,0 @@
-#user-info {
-  display: flex;
-  flex-direction: column;
-}
-#user-info .title {
-  align-self: flex-end;
-}

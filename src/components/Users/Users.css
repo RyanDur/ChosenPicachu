@@ -1,7 +1,0 @@
-.users.card {
-  margin-bottom: var(--base-x-4);
-  background: var(--paper);
-}
-.users.card:last-child {
-  margin-bottom: 0;
-}

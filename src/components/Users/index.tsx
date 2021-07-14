@@ -6,10 +6,8 @@ import {createRandomUsers} from '../../__tests__/util';
 import {Link, useHistory, useLocation} from 'react-router-dom';
 import {Paths} from '../../App';
 import {age, formatAge} from '../util';
-import './Users.css';
-import './user_info.css';
-import './user_candidates.scss';
-import './user_candidates.layout.scss';
+import './Users.scss';
+import './Users.layout.scss';
 
 const useQuery = <T extends Object>(): T => useLocation().search
     .replace('?', '')
