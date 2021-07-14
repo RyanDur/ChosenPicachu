@@ -47,21 +47,19 @@ describe('the users page', () => {
         anotherUserInfo.user.dob = new Date('1978-11-28');
 
         fillOutUser(userInfo);
-        fillOutAddress(userInfo, 'home');
-        fillOutAddress(userInfo, 'work');
+        fillOutAddress(userInfo.homeAddress, 'home');
+        fillOutAddress(userInfo.workAddress!, 'work');
         userEvent.type(screen.getByLabelText('Details'), userInfo.details!);
         userEvent.click(screen.getByText('Add'));
     });
 
     describe('adding a user', () => {
-        beforeEach(() => {
+        test('user info in table in descending order', () => {
             fillOutUser(anotherUserInfo);
-            fillOutAddress(anotherUserInfo, 'home');
+            fillOutAddress(anotherUserInfo.homeAddress, 'home');
             userEvent.click(screen.getByLabelText('Same as Home'));
             userEvent.click(screen.getByText('Add'));
-        });
 
-        test('user info in table in descending order', () => {
             const [column1, column2, column3, column4] = screen.getAllByTestId('th');
 
             expect(column1).toHaveTextContent('Full Name');
@@ -78,6 +76,14 @@ describe('the users page', () => {
             expect(secondRowSecondCell).toHaveTextContent(userInfo.homeAddress.city);
             expect(secondRowThirdCell).toHaveTextContent('40 years old');
             expect(secondRowFourthCell).toHaveTextContent('No');
+        });
+
+        test('when user types in the same address as home it should indicate they work from home', () => {
+            fillOutUser(userInfo);
+            fillOutAddress(userInfo.homeAddress, 'home');
+            fillOutAddress(userInfo.homeAddress, 'work');
+            userEvent.click(screen.getByText('Add'));
+            expect(firstRowFourthCell).toHaveTextContent('Yes');
         });
     });
 
@@ -119,7 +125,7 @@ describe('the users page', () => {
         test('adding a new user', () => {
             userEvent.click(screen.getByText('Add New User'));
             fillOutUser(anotherUserInfo);
-            fillOutAddress(anotherUserInfo, 'home');
+            fillOutAddress(anotherUserInfo.homeAddress, 'home');
             userEvent.click(screen.getByLabelText('Same as Home'));
             userEvent.click(screen.getByText('Add'));
 

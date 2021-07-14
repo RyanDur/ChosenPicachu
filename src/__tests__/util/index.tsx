@@ -3,7 +3,7 @@ import {render, RenderResult, screen} from '@testing-library/react';
 import {MemoryRouter, Route} from 'react-router-dom';
 import * as H from 'history';
 import {Paths} from '../../App';
-import {UserInfo} from '../../components/UserInfo/types';
+import {AddressInfo, UserInfo} from '../../components/UserInfo/types';
 import userEvent from '@testing-library/user-event';
 import {toISOWithoutTime} from '../../components/util';
 
@@ -31,8 +31,7 @@ export const renderWithRouter = (component: ReactElement, path: TestPaths = '/in
     return {rendered, testHistory, testLocation};
 };
 
-export const fillOutAddress = (info: UserInfo, kind: string) => {
-    const address = kind === 'home' ? info.homeAddress : info.workAddress!;
+export const fillOutAddress = (address: AddressInfo, kind: string) => {
     userEvent.type(screen.getByTestId(`${kind}-address-street`), address.streetAddress);
     userEvent.type(screen.getByTestId(`${kind}-address-street-2`), address.streetAddressTwo!);
     userEvent.type(screen.getByTestId(`${kind}-address-city`), address.city);

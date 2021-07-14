@@ -1,5 +1,5 @@
 import React, {FC, useState} from 'react';
-import {UserInfo} from '../UserInfo/types';
+import {AddressInfo, UserInfo} from '../UserInfo/types';
 import {UserInformation} from '../UserInfo';
 import {Table} from '../Table';
 import {createRandomUsers} from '../../__tests__/util';
@@ -20,10 +20,14 @@ export const Users: FC = () => {
     const {email, mode} = useQuery<{ email: string, mode: string }>();
     const [users, updateNewUsers] = useState<UserInfo[]>(createRandomUsers());
     const currentUser: UserInfo | undefined = users.find(info => info.user.email === email);
-    const remove = <T extends Object>(item: T, list: T[] = []): T[] => {
+
+    const removeUserInfo = (item: UserInfo, list: UserInfo[] = []): UserInfo[] => {
         const index = list.indexOf(item);
         return [...list.slice(0, index), ...list.slice(index + 1)];
     };
+
+    const equalAddresses = (address1: AddressInfo, address2: AddressInfo = {} as AddressInfo): boolean =>
+        Object.keys(address1).reduce((acc, key) => address1[key] === address2[key], Boolean());
 
     return <>
         <section id="user-info" className="card users" key={currentUser?.user.email}>
@@ -33,7 +37,7 @@ export const Users: FC = () => {
                              editing={mode === 'edit'}
                              onAdd={user => updateNewUsers([user, ...users])}
                              onUpdate={user => {
-                                 currentUser && updateNewUsers([user, ...remove(currentUser, users)]);
+                                 currentUser && updateNewUsers([user, ...removeUserInfo(currentUser, users)]);
                                  history.push(Paths.users);
                              }}/>
         </section>
@@ -61,7 +65,7 @@ export const Users: FC = () => {
                     age: {display: formatAge(age(userInfo.user.dob))},
                     worksFromHome: {
                         display: <section className="last-column">
-                            {userInfo.homeAddress === userInfo.workAddress ? 'Yes' : 'No'}
+                            {equalAddresses(userInfo.homeAddress, userInfo.workAddress) ? 'Yes' : 'No'}
                             <article tabIndex={0} className="menu-toggle rounded-corners" onKeyPress={event => {
                                 event.preventDefault();
                                 if (event.code === 'Space') {
@@ -81,7 +85,7 @@ export const Users: FC = () => {
                                           data-testid="view">Edit</Link>
                                     <Link to={email === userInfo.user.email ? Paths.users : history.location}
                                           className='item'
-                                          onClick={() => updateNewUsers(remove(userInfo, users))}
+                                          onClick={() => updateNewUsers(removeUserInfo(userInfo, users))}
                                           data-testid="remove">Remove</Link>
                                     <Link to={`${Paths.users}?email=${userInfo.user.email}`}
                                           className='item'
