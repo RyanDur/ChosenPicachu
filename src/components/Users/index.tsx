@@ -64,7 +64,7 @@ export const Users: FC = () => {
                     worksFromHome: {
                         display: <section className="last-column">
                             {userInfo.homeAddress === userInfo.workAddress ? 'Yes' : 'No'}
-                            <article tabIndex={0} className="menu rounded-corners" onKeyPress={event => {
+                            <article tabIndex={0} className="menu-toggle rounded-corners" onKeyPress={event => {
                                 event.preventDefault();
                                 if (event.code === 'Space') {
                                     event.currentTarget.classList.toggle('open');
@@ -74,7 +74,7 @@ export const Users: FC = () => {
                                     event.currentTarget.classList.remove('open');
                                 }
                             }} onClick={event => event.currentTarget.classList.remove('open')}>
-                                <nav className="menu-list rounded-corners">
+                                <nav className="menu rounded-corners">
                                     <Link to={`${Paths.users}?email=${userInfo.user.email}&mode=view`}
                                           className='item'
                                           data-testid="view">View</Link>
