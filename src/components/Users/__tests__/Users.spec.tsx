@@ -134,6 +134,27 @@ describe('the users page', () => {
 
             expect(screen.queryByText('Add New User')).not.toBeInTheDocument();
         });
+
+        test('should be able to edit', () => {
+            userEvent.click(within(form).getByText('Edit'));
+            expect(within(form).getByLabelText('First Name')).not.toHaveAttribute('readonly');
+            expect(within(form).getByLabelText('Last Name')).not.toHaveAttribute('readonly');
+            expect(within(form).getByLabelText('Email')).not.toHaveAttribute('readonly');
+
+            expect(within(form).getByTestId('home-address-street')).not.toHaveAttribute('readonly');
+            expect(within(form).getByTestId('home-address-street-2')).not.toHaveAttribute('readonly');
+            expect(within(form).getByTestId('home-address-city')).not.toHaveAttribute('readonly');
+            expect(within(form).getByTestId('home-address-state')).not.toHaveAttribute('readonly');
+            expect(within(form).getByTestId('home-address-zip')).not.toHaveAttribute('readonly');
+
+            expect(within(form).getByTestId('work-address-street')).not.toHaveAttribute('readonly');
+            expect(within(form).getByTestId('work-address-street-2')).not.toHaveAttribute('readonly');
+            expect(within(form).getByTestId('work-address-city')).not.toHaveAttribute('readonly');
+            expect(within(form).getByTestId('work-address-state')).not.toHaveAttribute('readonly');
+            expect(within(form).getByTestId('work-address-zip')).not.toHaveAttribute('readonly');
+
+            expect(within(form).getByLabelText('Details')).not.toHaveAttribute('readonly');
+        });
     });
 
     describe('editing a user', () => {
