@@ -19,7 +19,7 @@ import {formReducer, initialState} from './reducer';
 import {generateAvatar} from '../../avatars';
 import {Link} from 'react-router-dom';
 import {Paths} from '../../App';
-import './Form.layout.css';
+import './Form.layout.scss';
 import './Form.scss';
 
 interface FormProps {
