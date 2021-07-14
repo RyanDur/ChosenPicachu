@@ -63,6 +63,7 @@
     top: -1rem;
   }
 
+  &.read-only .fancy-title,
   &.focus .fancy-title {
     opacity: 1;
     top: -1rem;

@@ -19,7 +19,8 @@ export const FancyTextarea: FC<FancyTextareaProps> = (
     return <article id="details-cell" className={join(
         'fancy',
         focused && 'focus',
-        value && 'not-empty'
+        value && 'not-empty',
+        readOnly && 'read-only'
     )}>
         <label id="details-label" className="fancy-title" htmlFor="details">Details</label>
         <textarea name="details" className="fancy-text" id="details"
