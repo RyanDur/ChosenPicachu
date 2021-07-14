@@ -9,7 +9,7 @@ import {age, formatAge} from '../util';
 import './Users.css';
 import './user_info.css';
 import './user_candidates.scss';
-import './user_candidates.layout.css';
+import './user_candidates.layout.scss';
 
 const useQuery = <T extends Object>(): T => useLocation().search
     .replace('?', '')
