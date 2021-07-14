@@ -1,4 +1,8 @@
-export interface AddressInfo {
+interface Indexable {
+    readonly [x: string]: string | undefined;
+}
+
+export interface AddressInfo extends Indexable {
     streetAddress: string;
     streetAddressTwo?: string;
     city: string;

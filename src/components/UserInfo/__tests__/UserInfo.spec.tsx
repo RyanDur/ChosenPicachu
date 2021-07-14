@@ -40,8 +40,8 @@ describe('a user form', () => {
     describe('filled out', () => {
         beforeEach(() => {
             fillOutUser(userInfo);
-            fillOutAddress(userInfo, 'home');
-            fillOutAddress(userInfo, 'work');
+            fillOutAddress(userInfo.homeAddress, 'home');
+            fillOutAddress(userInfo.workAddress!, 'work');
             userEvent.type(screen.getByLabelText('Details'), userInfo.details!);
         });
 

@@ -16,8 +16,6 @@ export const column3Name = words();
 export const column1Display = words();
 export const column3Display = words();
 
-export const row0Col0Value = words();
-
 export const row1Col0Value = words();
 
 export const row0Col0Display = words();
