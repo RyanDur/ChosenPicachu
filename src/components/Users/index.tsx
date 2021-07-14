@@ -8,7 +8,7 @@ import {Paths} from '../../App';
 import {age, formatAge} from '../util';
 import './Users.css';
 import './user_info.css';
-import './user_candidates.css';
+import './user_candidates.scss';
 import './user_candidates.layout.css';
 
 const useQuery = <T extends Object>(): T => useLocation().search
