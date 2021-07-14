@@ -1,6 +1,6 @@
 import React, {FC, FormEvent} from 'react';
-import {join} from '../../util';
-import {Consumer} from '../types';
+import {join} from '../../../util';
+import {Consumer} from '../../types';
 import './FancySelect.css';
 import {FancyInput} from '../FancyInput';
 

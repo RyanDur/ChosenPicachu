@@ -1,8 +1,8 @@
 import React, {FC, useEffect, useReducer, useState} from 'react';
 import {Consumer, UserInfo} from './types';
-import {FancyInput} from './FancyInput';
+import {FancyInput} from './FancyFormElements/FancyInput';
 import {join} from '../util';
-import {FancyTextarea} from './FancyTextarea';
+import {FancyTextarea} from './FancyFormElements/FancyTextarea';
 import {
     resetForm,
     updateAvatar,
@@ -20,7 +20,7 @@ import {generateAvatar} from '../../avatars';
 import {Link} from 'react-router-dom';
 import {Paths} from '../../App';
 import './Form.layout.css';
-import './Form.css';
+import './Form.scss';
 
 interface FormProps {
     currentUserInfo?: UserInfo;
@@ -111,8 +111,7 @@ export const UserInformation: FC<FormProps> = (
         <FancyTextarea value={userInfo.details} readOnly={readOnly}
                        onChange={event => dispatch(updateDetails(event.currentTarget.value))}/>
 
-        <button id="reset-form" type="reset" disabled={readOnly} className="secondary">Reset
-        </button>
+        <button id="reset-form" type="reset" disabled={readOnly} className="secondary">Reset</button>
         {!editing && <button id="submit" type="submit" disabled={readOnly} className="primary">Add</button>}
         {editing && <Link id="cancel" to={`${Paths.users}?email=${userInfo.user.email}&mode=view`}
                           className="button secondary" onClick={reset}>Cancel</Link>}
