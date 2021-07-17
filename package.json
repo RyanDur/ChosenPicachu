@@ -4,6 +4,7 @@
   "private": true,
   "homepage": ".",
   "dependencies": {
+    "@ryandur/sand": "^0.4.0",
     "date-fns": "^2.22.1",
     "faker": "^5.5.3",
     "node-sass": "^6.0.1",
@@ -80,8 +81,10 @@
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@types/react-router-dom": "^5.1.7",
+    "@types/whatwg-fetch": "^0.0.33",
     "eslint-plugin-jest-dom": "^3.9.0",
     "eslint-plugin-testing-library": "^3.10.1",
-    "gh-pages": "^3.2.3"
+    "gh-pages": "^3.2.3",
+    "whatwg-fetch": "^3.6.2"
   }
 }

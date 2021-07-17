@@ -1,18 +1,26 @@
-import {Consumer, UserInfo} from '../components/UserInfo/types';
-import {Art} from './types';
+import {Consumer} from '../components/UserInfo/types';
+import {Art, ArtResponse} from './types';
+
+const responseToArt = (response: ArtResponse): Art => ({
+    pagination: {
+        total: response.pagination.total,
+        limit: response.pagination.limit,
+        offset: response.pagination.offset,
+        totalPages: response.pagination.total_pages,
+        currentPage: response.pagination.current_page,
+        nextUrl: response.pagination.next_url
+    },
+    pieces: response.data.map(piece => ({
+        id: piece.id,
+        title: piece.title,
+        imageId: piece.image_id
+    })),
+    baseUrl: response.config.website_url
+});
 
 export const data = {
-    getArt: (updateArtWork: Consumer<Art>): void => void ({
-        pagination: {
-            total: 0,
-            limit: 0,
-            offset: 0,
-            total_pages: 0,
-            current_page: 0,
-            next_url: 'string'
-        },
-        artwork: [],
-        baseUrl: ''
-    }),
-    post: (user: UserInfo) => void user
+    getAllArt: (onSuccess: Consumer<Art>, domain = 'https://api.artic.edu'): void =>
+        void fetch(`${domain}/api/v1/artworks`)
+            .then<ArtResponse>(response => response.json())
+            .then(response => onSuccess(responseToArt(response))),
 };

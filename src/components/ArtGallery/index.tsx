@@ -6,10 +6,10 @@ export const ArtGallery: FC = () => {
     const [art, updateArtWork] = useState<Art>();
 
     useEffect(() => {
-        data.getArt(updateArtWork);
+        data.getAllArt(updateArtWork);
     }, []);
-    return <article>{
-        art?.pieces
-        .map(piece => <article key={piece.image_id} data-testid="art"/>)
+
+    return <article>{art?.pieces
+        .map(piece => <article key={piece.imageId} data-testid="art"/>)
     }</article>;
 };

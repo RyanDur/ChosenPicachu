@@ -4,6 +4,8 @@ import faker from 'faker';
 import {AddressInfo, User, UserInfo} from '../../components/UserInfo/types';
 import {AvatarGenerator} from 'random-avatar-generator';
 import {toISOWithoutTime} from '../../components/util';
+import {Art} from '../../data/types';
+import {nanoid} from 'nanoid';
 
 export const randomNumberFromRange = (min: number, max = 6) => Math.floor(Math.random() * max) + min;
 
@@ -152,3 +154,28 @@ export const users = [
 
 export const createRandomUsers = (num = randomNumberFromRange(3, 15)): UserInfo[] =>
     [...Array(num)].map(() => userInfo(maybeCreateAddress(), Math.random() > 0.5));
+
+export const pagination = {
+    total: 100,
+    limit: randomNumberFromRange(10, 100),
+    offset: 0,
+    total_pages: 10,
+    current_page: 1,
+    next_url: faker.internet.url()
+};
+export const art: Art = {
+    pagination: {
+        total: pagination.total,
+        limit: pagination.limit,
+        offset: pagination.offset,
+        totalPages: pagination.total_pages,
+        currentPage: pagination.current_page,
+        nextUrl: pagination.next_url
+    },
+    pieces: [...Array(pagination.limit)].map(() => ({
+        id: randomNumberFromRange(100, 1000),
+        title: faker.lorem.sentence(),
+        imageId: nanoid()
+    })),
+    baseUrl: faker.internet.url()
+};
