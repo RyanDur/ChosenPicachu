@@ -1,4 +1,4 @@
-export interface Pagination {
+export interface PaginationResponse {
     total: number;
     limit: number;
     offset: number;
@@ -7,10 +7,25 @@ export interface Pagination {
     next_url: string;
 }
 
-export interface ArtWork {
+export type Pagination =  {
+    total: number;
+    limit: number;
+    offset: number;
+    totalPages: number;
+    currentPage: number;
+    nextUrl: string;
+}
+
+export interface ArtWorkResponse {
+    id: number;
+    title: string;
+    image_id: string;
+}
+
+export type ArtWork = {
     id: number,
     title: string,
-    image_id: string
+    imageId: string
 }
 
 export interface Info {
@@ -24,9 +39,9 @@ export interface Config {
     website_url: string;
 }
 
-export interface ArtICResponse {
-    pagination: Pagination;
-    data: ArtWork[];
+export interface ArtResponse {
+    pagination: PaginationResponse;
+    data: ArtWorkResponse[];
     info: Info;
     config: Config;
 }
