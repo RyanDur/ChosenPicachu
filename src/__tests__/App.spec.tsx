@@ -6,7 +6,8 @@ import {renderWithRouter} from './util';
 jest.mock('../components', () => ({
     Home: () => 'Test Home Component',
     About: () => 'Test About Component',
-    Users: () => 'Test Users Component'
+    Users: () => 'Test Users Component',
+    ArtGallery: () => 'Art Gallery Component'
 }));
 
 describe('the App', () => {
@@ -24,6 +25,11 @@ describe('the App', () => {
         test('for the form page', () => {
             renderWithRouter(<App/>, Paths.users);
             expect(screen.getByText('Users Page')).toBeInTheDocument();
+        });
+
+        test('for the Art Gallery page', () => {
+            renderWithRouter(<App/>, Paths.artGallery);
+            expect(screen.getByText('Art Gallery Page')).toBeInTheDocument();
         });
     });
 
@@ -45,6 +51,11 @@ describe('the App', () => {
         test('to users', () => {
             userEvent.click(screen.getByText('Users'));
             expect(screen.getByText('Test Users Component')).toBeInTheDocument();
+        });
+
+        test('to art gallery', () => {
+            userEvent.click(screen.getByText('Art'));
+            expect(screen.getByText('Art Gallery Component')).toBeInTheDocument();
         });
     });
 });
