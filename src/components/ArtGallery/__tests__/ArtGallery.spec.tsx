@@ -12,6 +12,6 @@ describe('the art gallery', () => {
     });
 
     it('should contain art', () => {
-        expect(screen.getAllByTestId('art').length).toEqual(art.pagination.limit);
+        expect(screen.getAllByTestId('piece').length).toEqual(art.pagination.limit);
     });
 });

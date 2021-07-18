@@ -175,7 +175,8 @@ export const art: Art = {
     pieces: [...Array(pagination.limit)].map(() => ({
         id: randomNumberFromRange(100, 1000),
         title: faker.lorem.sentence(),
-        imageId: nanoid()
+        imageId: nanoid(),
+        altText: faker.lorem.words(randomNumberFromRange(1))
     })),
     baseUrl: faker.internet.url()
 };

@@ -13,7 +13,8 @@ export const ArtGallery: FC = () => {
     return <section id="art-gallery">{art?.pieces
         .map(piece => <img className="card loading" key={piece.imageId}
                            onLoad={event => event.currentTarget.classList.remove('loading')}
-                           alt={piece.title} loading="lazy" data-testid="piece" tabIndex={0}
+                           alt={piece.altText} loading="lazy" data-testid="piece" tabIndex={0}
+                           title={piece.title}
                            src={`https://www.artic.edu/iiif/2/${piece.imageId}/full/200,/0/default.jpg`}/>)
     }</section>;
 };
