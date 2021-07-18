@@ -3,17 +3,12 @@ import {AddressInfo, UserInfo} from '../UserInfo/types';
 import {UserInformation} from '../UserInfo';
 import {Table} from '../Table';
 import {createRandomUsers} from '../../__tests__/util';
-import {Link, useHistory, useLocation} from 'react-router-dom';
+import {Link, useHistory} from 'react-router-dom';
 import {Paths} from '../../App';
 import {age, formatAge} from '../util';
+import {useQuery} from '../hooks';
 import './Users.scss';
 import './Users.layout.scss';
-
-const useQuery = <T extends Object>(): T => useLocation().search
-    .replace('?', '')
-    .split('&')
-    .map(param => param.split('='))
-    .reduce((acc, [key, value]) => ({...acc, [key]: value}), {} as T);
 
 export const Users: FC = () => {
     const history = useHistory();

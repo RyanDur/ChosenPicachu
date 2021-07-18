@@ -21,13 +21,13 @@ describe('data', () => {
                 const recordedRequest = await server.lastRequest();
                 expect(data).toEqual(art);
                 expect(recordedRequest.method).toEqual('GET');
-                expect(recordedRequest.url).toEqual('/api/v1/artworks');
+                expect(recordedRequest.url).toEqual('/api/v1/artworks?page=1');
                 done();
             };
 
             server.stubResponse(200, artResponse);
 
-            data.getAllArt(consumer, server.path());
+            data.getAllArt(consumer, 1, server.path());
         });
 
         const artResponse: ArtResponse = {
@@ -43,9 +43,7 @@ describe('data', () => {
                 id: piece.id,
                 title: piece.title,
                 image_id: piece.imageId,
-                thumbnail: {
-                    alt_text: piece.altText
-                }
+                term_titles: piece.altText.split(' ')
             })),
             info: {
                 license_text: faker.lorem.sentence(),
