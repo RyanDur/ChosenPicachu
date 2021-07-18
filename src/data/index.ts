@@ -13,7 +13,8 @@ const responseToArt = (response: ArtResponse): Art => ({
     pieces: response.data.map(piece => ({
         id: piece.id,
         title: piece.title,
-        imageId: piece.image_id
+        imageId: piece.image_id,
+        altText: piece.thumbnail.alt_text
     })),
     baseUrl: response.config.website_url
 });

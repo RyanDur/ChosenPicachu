@@ -42,7 +42,10 @@ describe('data', () => {
             data: art.pieces.map(piece => ({
                 id: piece.id,
                 title: piece.title,
-                image_id: piece.imageId
+                image_id: piece.imageId,
+                thumbnail: {
+                    alt_text: piece.altText
+                }
             })),
             info: {
                 license_text: faker.lorem.sentence(),
