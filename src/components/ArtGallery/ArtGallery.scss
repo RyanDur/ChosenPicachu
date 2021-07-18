@@ -30,4 +30,18 @@
       color: var(--paper);
     }
   }
+
+  .pagination {
+    position: sticky;
+    bottom: 0;
+    height: var(--base-x-10);
+    width: 100%;
+    display: flex;
+    justify-self: center;
+    background-color: rgba(14, 11, 22, .35);
+    backdrop-filter: blur(5px);
+    box-shadow: 0 0 100px  rgba(14, 11, 22, .35);
+    filter: blur(10px);
+    border-radius: var(--base-x-5);
+  }
 }

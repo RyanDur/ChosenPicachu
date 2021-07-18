@@ -18,6 +18,7 @@ export const ArtGallery: FC = () => {
                  alt={piece.altText} loading="lazy" data-testid="piece" tabIndex={0}
                  title={piece.title}
                  src={`https://www.artic.edu/iiif/2/${piece.imageId}/full/200,/0/default.jpg`}/>
-        </figure>)
-    }</section>;
+        </figure>)}
+        <nav className="pagination"/>
+    </section>;
 };
