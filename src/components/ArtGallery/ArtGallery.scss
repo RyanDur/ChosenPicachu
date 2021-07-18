@@ -4,7 +4,8 @@
   justify-content: space-between;
 
   .card {
-    margin-bottom: var(--base-x-5);
+    display: table;
+    margin: 0 0 var(--base-x-5);
     background: var(--faded-leather);
     outline: none;
     height: fit-content;
@@ -12,13 +13,21 @@
 
     &:focus,
     &:hover,
-    &.loading {
+    & .loading {
       background: var(--faded-mint);
     }
 
-    &.loading {
+    .loading {
       width: 20rem;
       height: 20rem;
+    }
+
+    .title {
+      display: table-caption;
+      caption-side: top;
+      text-align: center;
+      width: 100%;
+      color: var(--paper);
     }
   }
 }
