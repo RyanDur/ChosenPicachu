@@ -14,14 +14,15 @@ const responseToArt = (response: ArtResponse): Art => ({
         id: piece.id,
         title: piece.title,
         imageId: piece.image_id,
-        altText: piece.thumbnail.alt_text
+        altText: piece.term_titles.join(' ')
     })),
     baseUrl: response.config.website_url
 });
 
 export const data = {
-    getAllArt: (onSuccess: Consumer<Art>, domain = 'https://api.artic.edu'): void =>
-        void fetch(`${domain}/api/v1/artworks`)
+    getAllArt: (onSuccess: Consumer<Art>, page: number,
+                domain = 'https://api.artic.edu'): void =>
+        void fetch(`${domain}/api/v1/artworks?page=${page}`)
             .then<ArtResponse>(response => response.json())
             .then(response => onSuccess(responseToArt(response))),
 };

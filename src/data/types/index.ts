@@ -16,15 +16,11 @@ export type Pagination =  {
     nextUrl: string;
 }
 
-export interface Thumbnail {
-    alt_text: string;
-}
-
 export interface ArtWorkResponse {
     id: number;
     title: string;
     image_id: string;
-    thumbnail: Thumbnail;
+    term_titles: string[];
 }
 
 export type ArtWork = {
