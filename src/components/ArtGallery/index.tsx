@@ -32,7 +32,7 @@ export const ArtGallery: FC = () => {
         </figure>)}
         <nav className="pagination">
             {hasPrevPage && <Link to={`${Paths.artGallery}?page=1`}
-                                  id="prev" className="page" data-testid="first-page">
+                                  id="first" className="page" data-testid="first-page">
               FIRST
             </Link>}
             {hasPrevPage && <Link to={`${Paths.artGallery}?page=${prevPage()}`}
@@ -44,7 +44,7 @@ export const ArtGallery: FC = () => {
               NEXT
             </Link>}
             {hasNextPage && <Link to={`${Paths.artGallery}?page=${art?.pagination.totalPages}`}
-                                  id="next" className="page" data-testid="last-page">
+                                  id="last" className="page" data-testid="last-page">
               LAST
             </Link>}
         </nav>
