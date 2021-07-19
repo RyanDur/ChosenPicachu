@@ -37,37 +37,60 @@ describe('the art gallery', () => {
         expect(screen.getAllByTestId('piece').length).toEqual(art.pagination.limit));
 
     describe('pagination', () => {
-        it('should be able to goto the next page', () => {
-            act(() => userEvent.click(screen.getByTestId('next-page')));
-
-            expect(testLocation.search).toEqual('?page=2');
-            expect(pageNumber).toEqual(2);
-
-            act(() => userEvent.click(screen.getByTestId('next-page')));
-
-            expect(testLocation.search).toEqual('?page=3');
-            expect(pageNumber).toEqual(3);
-        });
-
-        it('should not go past the last page', () => {
-            [...Array(art.pagination.totalPages - 1)].forEach(() => {
+        describe('from the first page', () => {
+            it('should be able to goto the next page', () => {
                 act(() => userEvent.click(screen.getByTestId('next-page')));
+
+                expect(testLocation.search).toEqual('?page=2');
+                expect(pageNumber).toEqual(2);
+
+                act(() => userEvent.click(screen.getByTestId('next-page')));
+
+                expect(testLocation.search).toEqual('?page=3');
+                expect(pageNumber).toEqual(3);
             });
 
-            expect(pageNumber).toEqual(art.pagination.totalPages);
+            it('should be able to go to the last page', () => {
+                act(() => userEvent.click(screen.getByTestId('last-page')));
 
-            expect(screen.queryByTestId('next-page')).not.toBeInTheDocument();
+                expect(pageNumber).toEqual(art.pagination.totalPages);
+            });
+
+            it('should not go to the previous page', () => {
+                expect(screen.queryByTestId('prev-page')).not.toBeInTheDocument();
+            });
+
+            it('should not be able to jump to the first page', () => {
+                expect(screen.queryByTestId('first-page')).not.toBeInTheDocument();
+            });
         });
 
-        it('should not go to the previous page', () => {
-            expect(screen.queryByTestId('prev-page')).not.toBeInTheDocument();
-        });
+        describe('from the last page', () => {
+            beforeEach(() => {
+                [...Array(art.pagination.totalPages - 1)].forEach(() => {
+                    act(() => userEvent.click(screen.getByTestId('next-page')));
+                });
+            });
 
-        it('should go to the previous page from the next', () => {
-            act(() => userEvent.click(screen.getByTestId('next-page')));
-            expect(pageNumber).toEqual(2);
-            act(() => userEvent.click(screen.getByTestId('prev-page')));
-            expect(pageNumber).toEqual(1);
+            it('should be able to go to the previous page', () => {
+                act(() => userEvent.click(screen.getByTestId('prev-page')));
+                expect(pageNumber).toEqual(art.pagination.totalPages - 1);
+            });
+
+            it('should not go past the last page', () => {
+                expect(pageNumber).toEqual(art.pagination.totalPages);
+                expect(screen.queryByTestId('next-page')).not.toBeInTheDocument();
+            });
+
+            it('should not be able to jump to the last page', () => {
+                expect(screen.queryByTestId('last-page')).not.toBeInTheDocument();
+            });
+
+            it('should be able to go to the first page', () => {
+                act(() => userEvent.click(screen.getByTestId('first-page')));
+
+                expect(pageNumber).toEqual(1);
+            });
         });
     });
 });

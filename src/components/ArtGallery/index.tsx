@@ -31,6 +31,10 @@ export const ArtGallery: FC = () => {
             <figcaption className="title">{piece.title}</figcaption>
         </figure>)}
         <nav className="pagination">
+            {hasPrevPage && <Link to={`${Paths.artGallery}?page=1`}
+                                  id="prev" className="page" data-testid="first-page">
+              FIRST
+            </Link>}
             {hasPrevPage && <Link to={`${Paths.artGallery}?page=${prevPage()}`}
                                   id="prev" className="page" data-testid="prev-page">
               PREV
@@ -38,6 +42,10 @@ export const ArtGallery: FC = () => {
             {hasNextPage && <Link to={`${Paths.artGallery}?page=${nextPage()}`}
                                   id="next" className="page" data-testid="next-page">
               NEXT
+            </Link>}
+            {hasNextPage && <Link to={`${Paths.artGallery}?page=${art?.pagination.totalPages}`}
+                                  id="next" className="page" data-testid="last-page">
+              LAST
             </Link>}
         </nav>
     </section>;
