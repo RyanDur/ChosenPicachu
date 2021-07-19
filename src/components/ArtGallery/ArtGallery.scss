@@ -2,6 +2,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  height: 100%;
 
   .card {
     display: table;
@@ -41,6 +42,7 @@
     justify-content: center;
     align-items: center;
     border-radius: var(--base-x-5);
+    align-self: flex-end;
 
     .page {
       background: var(--paper);
@@ -63,11 +65,21 @@
         border-radius: initial;
       }
 
+      &#next {
+        margin-left: var(--base-x-0_5);
+      }
+
+      &#prev {
+        margin-right: var(--base-x-0_5);
+      }
+
+
       &:first-child {
         border-top-left-radius: var(--base-x-5);
         border-bottom-left-radius: var(--base-x-5);
         border-right: 1px solid var(--void);
       }
+
       &:last-child {
         border-top-right-radius: var(--base-x-5);
         border-bottom-right-radius: var(--base-x-5);
