@@ -14,10 +14,10 @@ export const ArtWork = () => {
     }, [id]);
 
     if (piece?.imageId) {
-        return <figure className="card">
-            <img className="loading piece"
-                 onError={event => event.currentTarget.classList.remove('loading')}
-                 onLoad={event => event.currentTarget.classList.remove('loading')}
+        return <figure className="card loading">
+            <img className="piece"
+                 onError={event => event.currentTarget.parentElement?.classList.remove('loading')}
+                 onLoad={event => event.currentTarget.parentElement?.classList.remove('loading')}
                  alt={piece?.altText} title={piece?.title}
                  loading="lazy" data-testid={`piece-${piece?.imageId}`}
                  src={`https://www.artic.edu/iiif/2/${piece?.imageId}/full/,2000/0/default.jpg`}/>
