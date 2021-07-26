@@ -7,7 +7,7 @@ import {useQuery} from '../hooks';
 import './ArtGallery.scss';
 
 export const ArtGallery: FC = () => {
-    const [art, updateArtWork] = useState<Art>();
+    const [art, updateArtWork] = useState<Partial<Art>>();
     const firstPage = 1;
     const {page} = useQuery<{ page: number }>({page: firstPage});
     const currentPage = +page;
@@ -16,13 +16,13 @@ export const ArtGallery: FC = () => {
         data.getAllArt(updateArtWork, currentPage);
     }, [currentPage]);
 
-    const hasNextPage = currentPage < (art?.pagination.totalPages || Number.MAX_VALUE);
+    const hasNextPage = currentPage < (art?.pagination?.totalPages ?? Number.MAX_VALUE);
     const nextPage = () => hasNextPage ? currentPage + 1 : currentPage;
     const hasPrevPage = currentPage > firstPage;
     const prevPage = () => hasPrevPage ? currentPage - 1 : currentPage;
 
     return <section id="art-gallery">{art?.pieces
-        .map(piece => <figure key={piece.imageId} className="card" tabIndex={0}>
+        ?.map(piece => <figure key={piece.imageId} className="card" tabIndex={0}>
             <img className="loading"
                  onLoad={event => event.currentTarget.classList.remove('loading')}
                  alt={piece.altText} loading="lazy" data-testid="piece"
@@ -30,7 +30,7 @@ export const ArtGallery: FC = () => {
                  src={`https://www.artic.edu/iiif/2/${piece.imageId}/full/200,/0/default.jpg`}/>
             <figcaption className="title">{piece.title}</figcaption>
         </figure>)}
-        <nav className="pagination">
+        <nav className="pagination" onClick={() => updateArtWork({pieces: []})}>
             {hasPrevPage && <Link to={`${Paths.artGallery}?page=1`}
                                   id="first" className="page" data-testid="first-page">
               FIRST
@@ -43,7 +43,7 @@ export const ArtGallery: FC = () => {
                                   id="next" className="page" data-testid="next-page">
               NEXT
             </Link>}
-            {hasNextPage && <Link to={`${Paths.artGallery}?page=${art?.pagination.totalPages}`}
+            {hasNextPage && <Link to={`${Paths.artGallery}?page=${art?.pagination?.totalPages}`}
                                   id="last" className="page" data-testid="last-page">
               LAST
             </Link>}
