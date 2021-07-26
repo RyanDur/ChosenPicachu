@@ -3,7 +3,7 @@ import {Link, Route, Switch, useRouteMatch} from 'react-router-dom';
 import {About, Users, Home, ArtGallery} from './components';
 import './App.css';
 import './App.layout.css';
-import {Piece} from './components/ArtGallery/Piece';
+import {ArtWork} from './components/ArtGallery/ArtWork';
 
 export enum Paths {
     home = '/',
@@ -56,7 +56,7 @@ export const App = () => {
                     <ArtGallery/>
                 </Route>
                 <Route exact path={`${Paths.artGallery}/:id`}>
-                    <Piece/>
+                    <ArtWork/>
                 </Route>
             </Switch>
         </main>

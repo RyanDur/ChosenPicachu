@@ -23,11 +23,25 @@ export interface ArtWorkResponse {
     term_titles: string[];
 }
 
-export type ArtWork = {
+export type Piece = {
     id: number,
     title: string,
     imageId: string,
     altText: string;
+}
+
+export type Thumbnail = {
+    alt_text: string;
+}
+
+export type PieceResponse = {
+    data: {
+        id: number;
+        title: string;
+        image_id: string;
+        term_titles: string[];
+        thumbnail?: Thumbnail;
+    }
 }
 
 export interface Info {
@@ -50,6 +64,6 @@ export interface ArtResponse {
 
 export interface Art {
     pagination: Pagination;
-    pieces: ArtWork[];
+    pieces: Piece[];
     baseUrl: string;
 }
