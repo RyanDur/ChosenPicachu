@@ -9,10 +9,6 @@ import {MemoryRouter, Route} from 'react-router-dom';
 import {Paths} from '../../../App';
 import * as H from 'history';
 
-jest.mock('../piece', () => ({
-    Piece: () => 'Test Piece'
-}));
-
 describe('the art gallery', () => {
     let testLocation: H.Location;
     let pageNumber: number | undefined;
@@ -37,12 +33,11 @@ describe('the art gallery', () => {
     afterEach(() => pageNumber = 0);
 
     it('should contain art', () =>
-        expect(screen.getAllByTestId('piece').length).toEqual(art.pagination.limit));
+        expect(screen.getAllByTestId(/piece/).length).toEqual(art.pagination.limit));
 
     it('should allow a user to take a closer look at the art', () => {
         userEvent.click(screen.getByTestId(`piece-${art.pieces[0].imageId}`));
-        expect(testLocation.pathname).toEqual(`${Paths.artGallery}/${art.pieces[0].imageId}`);
-        expect(screen.getByText('Test Piece')).toBeInTheDocument();
+        expect(testLocation.pathname).toEqual(`${Paths.artGallery}/${art.pieces[0].id}`);
     });
 
     describe('pagination', () => {
