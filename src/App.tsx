@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link, Route, Switch, useRouteMatch} from 'react-router-dom';
 import {About, Users, Home, ArtGallery} from './components';
-import './App.css';
+import './App.scss';
 import './App.layout.css';
 import {ArtWork} from './components/ArtGallery/ArtWork';
 
