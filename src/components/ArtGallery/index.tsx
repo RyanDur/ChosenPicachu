@@ -5,6 +5,7 @@ import {Link} from 'react-router-dom';
 import {Paths} from '../../App';
 import {useQuery} from '../hooks';
 import './ArtGallery.scss';
+import {Loading} from '../Loading';
 
 export const ArtGallery: FC = () => {
     const [art, updateArtWork] = useState<Partial<Art>>();
@@ -53,7 +54,5 @@ export const ArtGallery: FC = () => {
                 </Link>}
             </nav>
         </section>;
-    } else {
-        return <article className="loading"/>;
-    }
+    } else return <Loading/>;
 };
