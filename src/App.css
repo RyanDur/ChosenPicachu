@@ -3,12 +3,6 @@
   background: var(--charcoal);
 }
 
-main {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 #app-header {
   padding: var(--base-x-4) var(--base-x-4) 0;
 }
@@ -49,6 +43,14 @@ main {
 
 .overhang {
   box-shadow: 0 0.3rem 0.6rem var(--void), 0 0.3rem 0.6rem var(--void);
+}
+
+.loading-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
 }
 
 .loading {
