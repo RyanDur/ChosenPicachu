@@ -22,14 +22,16 @@ export const ArtGallery: FC = () => {
     const prevPage = () => hasPrevPage ? currentPage - 1 : currentPage;
 
     return <section id="art-gallery">{art?.pieces
-        ?.map(piece => <figure key={piece.imageId} className="card" tabIndex={0}>
-            <img className="loading"
-                 onLoad={event => event.currentTarget.classList.remove('loading')}
-                 alt={piece.altText} loading="lazy" data-testid="piece"
-                 title={piece.title}
-                 src={`https://www.artic.edu/iiif/2/${piece.imageId}/full/200,/0/default.jpg`}/>
-            <figcaption className="title">{piece.title}</figcaption>
-        </figure>)}
+        ?.map(piece => <Link to={`${Paths.artGallery}/${piece.imageId}`} key={piece.imageId}>
+            <figure className="card" tabIndex={0}>
+                <img className="loading"
+                     onLoad={event => event.currentTarget.classList.remove('loading')}
+                     alt={piece.altText} title={piece.title}
+                     loading="lazy" data-testid={`piece-${piece.imageId}`}
+                     src={`https://www.artic.edu/iiif/2/${piece.imageId}/full/200,/0/default.jpg`}/>
+                <figcaption className="title">{piece.title}</figcaption>
+            </figure>
+        </Link>)}
         <nav className="pagination" onClick={() => updateArtWork({pieces: []})}>
             {hasPrevPage && <Link to={`${Paths.artGallery}?page=1`}
                                   id="first" className="page" data-testid="first-page">
