@@ -1,7 +1,7 @@
 #root {
   display: grid;
   grid-template-columns: 13.4rem 1fr 70% 2fr;
-  grid-template-rows: var(--base-x-10) 1fr;
+  grid-template-rows: var(--base-x-15) 1fr;
   grid-template-areas:
     "nav . header header"
     "nav . main .";

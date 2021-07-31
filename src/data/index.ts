@@ -14,6 +14,7 @@ const responseToArt = (response: ArtResponse): Art => ({
         id: piece.id,
         title: piece.title,
         imageId: piece.image_id,
+        artistInfo: piece.artist_display,
         altText: piece.term_titles.join(' ')
     })),
     baseUrl: response.config.website_url
@@ -23,6 +24,7 @@ const responseToArtWork = ({data}: PieceResponse): Piece => ({
     id: data.id,
     title: data.title,
     imageId: data.image_id,
+    artistInfo: data.artist_display,
     altText: data.thumbnail?.alt_text || ''
 });
 

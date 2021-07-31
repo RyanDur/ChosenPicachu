@@ -20,14 +20,16 @@ export interface ArtWorkResponse {
     id: number;
     title: string;
     image_id: string;
+    artist_display: string;
     term_titles: string[];
 }
 
 export type Piece = {
-    id: number,
-    title: string,
-    imageId: string,
+    id: number;
+    title: string;
+    imageId: string;
     altText: string;
+    artistInfo: string;
 }
 
 export type Thumbnail = {
@@ -40,6 +42,7 @@ export type PieceResponse = {
         title: string;
         image_id: string;
         term_titles: string[];
+        artist_display: string;
         thumbnail?: Thumbnail;
     }
 }

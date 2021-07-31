@@ -23,8 +23,7 @@ export const ArtGallery: FC = () => {
     const prevPage = () => hasPrevPage ? currentPage - 1 : currentPage;
 
     if (art?.pieces?.length) {
-        return <section id="art-gallery">{art?.pieces
-            ?.filter(piece => piece.imageId)
+        return <section id="art-gallery">{art?.pieces.filter(piece => piece.imageId)
             .map(piece => <Link to={`${Paths.artGallery}/${piece.id}`} key={piece.id}>
                 <figure className="card" tabIndex={0}>
                     <img className="loading"

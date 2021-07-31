@@ -1,64 +1,50 @@
 import React from 'react';
-import {Link, Route, Switch, useRouteMatch} from 'react-router-dom';
-import {About, Users, Home, ArtGallery} from './components';
+import {Link, Route, Switch} from 'react-router-dom';
+import {About, ArtGallery, Home, Users} from './components';
+import {ArtPiece} from './components/ArtGallery/ArtPiece';
+import {ArtPieceContext, useArtPieceContext} from './components/ArtGallery/ArtPiece/Context';
+import {Header} from './components/Header';
 import './App.scss';
 import './App.layout.css';
-import {ArtWork} from './components/ArtGallery/ArtWork';
 
 export enum Paths {
     home = '/',
     about = '/about',
     users = '/users',
-    repo = 'https://github.com/RyanDur/ChosenPicachu',
     artGallery = '/art',
+    artGalleryPiece = '/art/:id',
+    repo = 'https://github.com/RyanDur/ChosenPicachu',
 }
 
-export const App = () => {
-    const pageTitles = [{
-        page: useRouteMatch(Paths.home),
-        title: 'Home Page'
-    }, {
-        page: useRouteMatch(Paths.about),
-        title: 'About Page'
-    }, {
-        page: useRouteMatch(Paths.users),
-        title: 'Users Page'
-    }, {
-        page: useRouteMatch(Paths.artGallery),
-        title: 'Art Gallery Page'
-    }];
-
-    return <>
-        <header id="app-header">
-            <h1 className="title">{pageTitles.find(({page}) => page?.isExact)?.title}</h1>
-        </header>
-        <aside id="side-nav">
-            <nav id="app-navigation" className="inset-right">
-                <Link id="navigate-home" className="path" to={Paths.home}>Home</Link>
-                <Link id="navigate-about" className="path" to={Paths.about}>About</Link>
-                <Link id="navigate-form" className="path" to={Paths.users}>Users</Link>
-                <Link id="navigate-form" className="path" to={Paths.artGallery}>Art</Link>
-                <Link id="navigate-repo" className="path" to={{pathname: Paths.repo}} rel="noopener" target="_blank">Repo</Link>
-            </nav>
-        </aside>
-        <main className="gutter">
-            <Switch>
-                <Route path={Paths.home} exact>
-                    <Home/>
-                </Route>
-                <Route path={Paths.about} exact>
-                    <About/>
-                </Route>
-                <Route path={Paths.users} exact>
-                    <Users/>
-                </Route>
-                <Route path={Paths.artGallery} exact>
-                    <ArtGallery/>
-                </Route>
-                <Route exact path={`${Paths.artGallery}/:id`}>
-                    <ArtWork/>
-                </Route>
-            </Switch>
-        </main>
-    </>;
-};
+export const App = () => <ArtPieceContext.Provider value={useArtPieceContext()}>
+    <Header/>
+    <aside id="side-nav">
+        <nav id="app-navigation" className="inset-right">
+            <Link id="navigate-home" className="path" to={Paths.home}>Home</Link>
+            <Link id="navigate-about" className="path" to={Paths.about}>About</Link>
+            <Link id="navigate-form" className="path" to={Paths.users}>Users</Link>
+            <Link id="navigate-form" className="path" to={Paths.artGallery}>Art</Link>
+            <a id="navigate-repo" className="path" href={Paths.repo}
+               rel="noopener noreferrer" target="_blank">Repo</a>
+        </nav>
+    </aside>
+    <main>
+        <Switch>
+            <Route path={Paths.home} exact>
+                <Home/>
+            </Route>
+            <Route path={Paths.about} exact>
+                <About/>
+            </Route>
+            <Route path={Paths.users} exact>
+                <Users/>
+            </Route>
+            <Route path={Paths.artGallery} exact>
+                <ArtGallery/>
+            </Route>
+            <Route path={Paths.artGalleryPiece} exact>
+                <ArtPiece/>
+            </Route>
+        </Switch>
+    </main>
+</ArtPieceContext.Provider>;
