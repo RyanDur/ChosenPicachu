@@ -49,6 +49,7 @@ describe('data', () => {
                 title: faker.lorem.words(),
                 image_id: nanoid(),
                 term_titles: [faker.lorem.words()],
+                artist_display: faker.lorem.sentence(),
                 thumbnail: {alt_text: faker.lorem.sentence()}
             }};
 
@@ -56,7 +57,8 @@ describe('data', () => {
             id: pieceResponse.data.id,
             title: pieceResponse.data.title,
             imageId: pieceResponse.data.image_id,
-            altText: pieceResponse.data.thumbnail?.alt_text!
+            altText: pieceResponse.data.thumbnail?.alt_text!,
+            artistInfo: pieceResponse.data.artist_display
         };
 
         const artResponse: ArtResponse = {
@@ -72,6 +74,7 @@ describe('data', () => {
                 id: piece.id,
                 title: piece.title,
                 image_id: piece.imageId,
+                artist_display: piece.artistInfo,
                 term_titles: piece.altText.split(' ')
             })),
             info: {

@@ -4,7 +4,9 @@
 }
 
 #app-header {
-  padding: var(--base-x-4) var(--base-x-4) 0;
+  display: flex;
+  align-items: center;
+  height: 100%;
 }
 
 #app-header .title {
@@ -13,6 +15,10 @@
 
 #root {
   display: block;
+}
+
+main {
+  padding-bottom: var(--base-x-10);
 }
 
 #app-navigation {
