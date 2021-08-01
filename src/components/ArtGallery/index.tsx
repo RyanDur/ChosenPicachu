@@ -4,8 +4,9 @@ import {data} from '../../data';
 import {Link} from 'react-router-dom';
 import {Paths} from '../../App';
 import {useQuery} from '../hooks';
-import './ArtGallery.scss';
 import {Loading} from '../Loading';
+import {Image} from './Image';
+import './ArtGallery.scss';
 
 export const ArtGallery: FC = () => {
     const [art, updateArtWork] = useState<Partial<Art>>();
@@ -26,11 +27,7 @@ export const ArtGallery: FC = () => {
         return <section id="art-gallery">{art?.pieces.filter(piece => piece.imageId)
             .map(piece => <Link to={`${Paths.artGallery}/${piece.id}`} key={piece.id}>
                 <figure className="card" tabIndex={0}>
-                    <img className="loading"
-                         onLoad={event => event.currentTarget.classList.remove('loading')}
-                         alt={piece.altText} title={piece.title}
-                         loading="lazy" data-testid={`piece-${piece.imageId}`}
-                         src={`https://www.artic.edu/iiif/2/${piece.imageId}/full/200,/0/default.jpg`}/>
+                    <Image piece={piece} width={200}/>
                     <figcaption className="title">{piece.title}</figcaption>
                 </figure>
             </Link>)}

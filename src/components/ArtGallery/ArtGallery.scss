@@ -13,14 +13,12 @@
     transition: background .35s ease;
 
     &:focus,
-    &:hover,
-    & .loading {
+    &:hover {
       background: var(--faded-mint);
     }
 
-    .loading {
+    .loading-screen {
       width: 20rem;
-      height: 20rem;
     }
 
     .title {
