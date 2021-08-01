@@ -25,17 +25,43 @@ describe('the image', () => {
         expect(screen.queryByTestId('loading')).toBeInTheDocument();
     });
 
+    it('should not be errored', () => {
+        expect(screen.queryByTestId('error')).not.toBeInTheDocument();
+    });
+
     describe('on image load', () => {
-        it('should not be loading', () => {
+        beforeEach(() => {
             fireEvent.load(screen.getByTestId(image));
+        });
+
+        it('should not be loading', () => {
             expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
+        });
+
+        it('should contain the image', () => {
+            expect(screen.queryByTestId(image)).toBeInTheDocument();
+        });
+
+        it('should not be errored', () => {
+            expect(screen.queryByTestId('error')).not.toBeInTheDocument();
         });
     });
 
     describe('on image load error', () => {
-        it('should not contain the piece', () => {
+        beforeEach(() => {
             fireEvent.error(screen.getByTestId(image));
+        });
+
+        it('should not contain the piece', () => {
             expect(screen.queryByTestId(image)).not.toBeInTheDocument();
+        });
+
+        it('should be errored', () => {
+            expect(screen.queryByTestId('error')).toBeInTheDocument();
+        });
+
+        it('should not be loading', () => {
+            expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
         });
     });
 });
