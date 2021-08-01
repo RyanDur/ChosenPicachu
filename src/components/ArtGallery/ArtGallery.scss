@@ -1,18 +1,24 @@
 #art-gallery {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
   min-height: calc(100vh - var(--base-x-15) - var(--base-x-10));
   height: 100%;
   width: 100%;
 
-  .card {
+  .frame {
     display: table;
     margin: 0 0 var(--base-x-5);
     background: var(--faded-leather);
     outline: none;
     height: fit-content;
     transition: background .35s ease;
+
+    &,
+    .piece {
+      border-radius: 2rem;
+    }
+
+    .piece {
+      box-shadow: var(--base-box-shadow);
+    }
 
     &:focus,
     &:hover {
