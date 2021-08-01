@@ -27,7 +27,7 @@ export const ArtGallery: FC = () => {
         {art?.pieces?.length ? art?.pieces
             .map(piece => <figure className="card" tabIndex={0}  key={piece.id}>
                 <Image piece={piece} width={200}/>
-                <p className="title">{piece.title}</p>
+                <figcaption className="title">{piece.title}</figcaption>
             </figure>) : <Loading/>}
         <nav className="pagination" onClick={() => {
             window.scrollTo(0, 0);
