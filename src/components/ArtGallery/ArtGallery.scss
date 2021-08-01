@@ -20,7 +20,8 @@
     }
 
     .loading-screen {
-      width: 20rem;
+      width: 100%;
+      min-width: var(--base-x-25);
     }
 
     .title {
