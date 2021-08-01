@@ -37,7 +37,7 @@ export const Image: FC<ImageProps> = ({piece, className, width = '', height = ''
         {errored &&
         <a href="https://icons8.com/icon/j1UxMbqzPi7n/no-image" rel="noopener noreferrer" target="_blank"
            className="error">
-          <img alt="oops" src="https://img.icons8.com/ios/100/000000/no-image.png"/>
+          <img alt="oops" src="https://img.icons8.com/ios/100/000000/no-image.png" data-testid="error"/>
           No Image icon by Icons8
         </a>}
     </>;
