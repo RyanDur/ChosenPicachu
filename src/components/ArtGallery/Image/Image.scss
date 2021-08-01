@@ -1,3 +1,12 @@
 .image {
   width: 100%;
 }
+
+.error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: var(--base-x-25);
+  height: var(--base-x-25);
+}

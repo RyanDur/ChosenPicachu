@@ -172,10 +172,11 @@ export const art: Art = {
         currentPage: pagination.current_page,
         nextUrl: pagination.next_url
     },
-    pieces: [...Array(pagination.limit)].map(() => ({
-        id: randomNumberFromRange(100, 1000),
+    pieces: [...Array(pagination.limit)].map((a, index) => ({
+        id: index,
         title: faker.lorem.sentence(),
         imageId: nanoid(),
+        artistInfo: faker.lorem.sentence(),
         altText: faker.lorem.words(randomNumberFromRange(1))
     })),
     baseUrl: faker.internet.url()
