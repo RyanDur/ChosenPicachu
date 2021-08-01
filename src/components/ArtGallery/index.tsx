@@ -7,6 +7,7 @@ import {useQuery} from '../hooks';
 import {Loading} from '../Loading';
 import {Image} from './Image';
 import './ArtGallery.scss';
+import './ArtGallery.layout.scss';
 
 export const ArtGallery: FC = () => {
     const [art, updateArtWork] = useState<Partial<Art>>();
@@ -25,10 +26,10 @@ export const ArtGallery: FC = () => {
 
     return <section id="art-gallery">
         {art?.pieces?.length ? art?.pieces
-            .map(piece => <figure className="card" tabIndex={0}  key={piece.id}>
-                <Image piece={piece} width={200}/>
+            .map(piece => <figure className="frame" key={piece.id} tabIndex={0}>
+                <Image className="piece" piece={piece} width={200}/>
                 <figcaption className="title">{piece.title}</figcaption>
-            </figure>) : <Loading/>}
+            </figure>) : <Loading className="loader"/>}
         <nav className="pagination" onClick={() => {
             window.scrollTo(0, 0);
             updateArtWork({pieces: []});
