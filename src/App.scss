@@ -2,16 +2,6 @@
   min-height: 100vh;
 }
 
-#app-header {
-  display: flex;
-  align-items: center;
-  height: 100%;
-}
-
-#app-header .title {
-  color: var(--paper);
-}
-
 #root {
   display: block;
 }

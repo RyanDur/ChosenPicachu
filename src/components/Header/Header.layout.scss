@@ -1,0 +1,11 @@
+#app-header {
+  display: grid;
+  align-content: center;
+  grid-template-columns: 82% 1fr;
+  grid-template-areas:
+  "title .";
+
+  .title {
+    grid-area: title;
+  }
+}
