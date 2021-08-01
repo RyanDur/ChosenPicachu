@@ -52,20 +52,6 @@ main {
   box-shadow: 0 0.3rem 0.6rem var(--void), 0 0.3rem 0.6rem var(--void);
 }
 
-.loading {
-  color: var(--void);
-  font-size: 90px;
-  text-indent: -9999em;
-  overflow: hidden;
-  width: 1em;
-  height: 1em;
-  border-radius: 50%;
-  margin: 72px auto;
-  position: relative;
-  transform: translateZ(0);
-  animation: load6 1.7s infinite ease, round 1.7s infinite ease;
-}
-
 @-webkit-keyframes load6 {
   0% {
     box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;

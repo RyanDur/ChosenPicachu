@@ -1,5 +1,12 @@
 import './Loading.scss';
+import {FC} from 'react';
+import {join} from '../util';
 
-export const Loading = () => <section className="loading-screen">
-    <article className="loading"/>
-</section>;
+interface LoadingProps {
+    className?: string;
+}
+
+export const Loading: FC<LoadingProps> = ({className}) =>
+    <section className={join('loading-screen', className)}>
+        <article className="loading"/>
+    </section>;
