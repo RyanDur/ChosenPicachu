@@ -19,14 +19,15 @@ export const Image: FC<ImageProps> = ({piece, className, width = '', height = ''
 
     return <>
         <Link to={`${Paths.artGallery}/${piece.id}`}>
-            {!errored && <img className={join('image', className)}
+            {!errored && <img className={join('image', 'off-screen', className)}
                               onError={() => {
                                   isComplete(true);
                                   isError(true);
                               }}
-                              onLoad={() => {
+                              onLoad={event => {
                                   isComplete(true);
                                   isError(false);
+                                  event.currentTarget.classList.remove('off-screen');
                               }}
                               alt={piece.altText} title={piece.title}
                               loading="lazy"
