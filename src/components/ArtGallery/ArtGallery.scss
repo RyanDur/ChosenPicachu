@@ -11,18 +11,21 @@
     height: fit-content;
     transition: background .35s ease;
 
-    &,
-    .piece {
-      border-radius: 2rem;
-    }
-
-    .piece {
-      box-shadow: var(--base-box-shadow);
-    }
-
-    &:focus,
+    &:focus-within,
     &:hover {
       background: var(--faded-mint);
+      box-shadow: var(--base-box-shadow-red);
+      outline: none;
+    }
+
+    &,
+    .piece {
+      border-radius: var(--base-x-2);
+    }
+
+    .piece {
+      box-shadow: var(--light-box-shadow);
+      outline: none;
     }
 
     .loading-screen {

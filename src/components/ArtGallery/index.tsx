@@ -26,7 +26,7 @@ export const ArtGallery: FC = () => {
 
     return <section id="art-gallery">
         {art?.pieces?.length ? art?.pieces
-            .map(piece => <figure className="frame" key={piece.id} tabIndex={0}>
+            .map(piece => <figure className="frame" key={piece.id}>
                 <Image className="piece" piece={piece} width={200}/>
                 <figcaption className="title">{piece.title}</figcaption>
             </figure>) : <Loading className="loader"/>}

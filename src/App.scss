@@ -22,14 +22,9 @@ main {
 }
 
 #app-navigation .path {
-  color: var(--charcoal);
   font-weight: bold;
   font-size: var(--base-x-4);
   margin-bottom: var(--base-x-4);
-}
-
-#app-navigation .path:hover {
-  color: var(--internationl-orange-engineering);
 }
 
 .inset-right {
