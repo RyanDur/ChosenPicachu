@@ -1,6 +1,8 @@
 @import "FancyFormElements/fancy";
 
 #user-info-form {
+  width: 100%;
+
   &.invalid *:invalid {
     border: 1px solid var(--internationl-orange-engineering);
     box-shadow: var(--base-box-shadow);
@@ -26,6 +28,7 @@
     align-items: center;
     justify-content: center;
     padding: 1rem;
+    min-width: 18.5rem;
     background: var(--faded-leather);
     box-shadow: none;
 
