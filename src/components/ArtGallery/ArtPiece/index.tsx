@@ -3,8 +3,8 @@ import {useEffect} from 'react';
 import {data} from '../../../data';
 import {Loading} from '../../Loading';
 import {useArtPiece} from './Context';
-import './Piece.scss';
 import {Image} from '../Image';
+import './Piece.scss';
 
 export const ArtPiece = () => {
 
@@ -18,7 +18,7 @@ export const ArtPiece = () => {
 
     if (piece?.imageId) {
         return <figure className="card">
-            <Image piece={piece} height={2000}/>
+            <Image piece={piece} height={2000} className="piece"/>
             <figcaption className="artist-display">{piece.artistInfo}</figcaption>
         </figure>;
     } else return <Loading/>;
