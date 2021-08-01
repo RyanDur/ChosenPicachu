@@ -2,9 +2,9 @@ import {Loading} from '../../Loading';
 import {FC, useState} from 'react';
 import {Piece} from '../../../data/types';
 import {join} from '../../util';
-import './Image.scss';
 import {Link} from 'react-router-dom';
 import {Paths} from '../../../App';
+import './Image.scss';
 
 interface ImageProps {
     piece: Partial<Piece>;
