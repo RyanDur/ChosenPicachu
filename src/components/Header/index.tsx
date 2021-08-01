@@ -2,6 +2,8 @@ import React from 'react';
 import {useRouteMatch} from 'react-router-dom';
 import {Paths} from '../../App';
 import {useArtPiece} from '../ArtGallery/ArtPiece/Context';
+import './Header.scss';
+import './Header.layout.scss';
 
 export const Header = () => {
     const {piece} = useArtPiece();
