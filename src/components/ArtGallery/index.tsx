@@ -31,7 +31,10 @@ export const ArtGallery: FC = () => {
                     <figcaption className="title">{piece.title}</figcaption>
                 </figure>
             </Link>) : <Loading/>}
-        <nav className="pagination" onClick={() => updateArtWork({pieces: []})}>
+        <nav className="pagination" onClick={() => {
+            window.scrollTo(0, 0);
+            updateArtWork({pieces: []});
+        }}>
             {hasPrevPage && <Link to={`${Paths.artGallery}?page=1`}
                                   id="first" className="page" data-testid="first-page">
               FIRST
