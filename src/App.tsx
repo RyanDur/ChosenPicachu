@@ -22,7 +22,7 @@ export const App = () => <ArtPieceContext.Provider value={useArtPieceContext()}>
         <nav id="app-navigation" className="inset-right">
             <Link id="navigate-home" className="path" to={Paths.home}>Home</Link>
             <Link id="navigate-about" className="path" to={Paths.about}>About</Link>
-            <Link id="navigate-form" className="path" to={Paths.users}>Users</Link>
+            <Link id="navigate-users" className="path" to={Paths.users}>Users</Link>
             <Link id="navigate-form" className="path" to={Paths.artGallery}>Art</Link>
             <a id="navigate-repo" className="path" href={Paths.repo}
                rel="noopener noreferrer" target="_blank">Repo</a>
