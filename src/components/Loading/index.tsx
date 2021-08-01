@@ -1,6 +1,6 @@
-import './Loading.scss';
 import {FC} from 'react';
 import {join} from '../util';
+import './Loading.scss';
 
 interface LoadingProps {
     className?: string;

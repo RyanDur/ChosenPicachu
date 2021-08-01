@@ -2,7 +2,8 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  min-height: 100%;
+  min-height: calc(100vh - var(--base-x-15) - var(--base-x-10));
+  height: 100%;
 
   .card {
     display: table;
@@ -32,15 +33,14 @@
   }
 
   .pagination {
-    position: sticky;
+    position: fixed;
     bottom: 0;
-    height: var(--base-x-10);
-    width: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    height: var(--base-x-20);
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: var(--base-x-5);
-    align-self: flex-end;
 
     .page {
       background: var(--paper);
