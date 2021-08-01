@@ -25,6 +25,11 @@ main {
   font-weight: bold;
   font-size: var(--base-x-4);
   margin-bottom: var(--base-x-4);
+
+  &:focus,
+  &:hover {
+    color: var(--internationl-orange-engineering);
+  }
 }
 
 .inset-right {
