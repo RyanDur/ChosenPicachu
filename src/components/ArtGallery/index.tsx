@@ -24,13 +24,11 @@ export const ArtGallery: FC = () => {
     const prevPage = () => hasPrevPage ? currentPage - 1 : currentPage;
 
     return <section id="art-gallery">
-        {art?.pieces?.length ? art?.pieces.filter(piece => piece.imageId)
-            .map(piece => <Link to={`${Paths.artGallery}/${piece.id}`} key={piece.id}>
-                <figure className="card" tabIndex={0}>
-                    <Image piece={piece} width={200}/>
-                    <figcaption className="title">{piece.title}</figcaption>
-                </figure>
-            </Link>) : <Loading/>}
+        {art?.pieces?.length ? art?.pieces
+            .map(piece => <figure className="card" tabIndex={0}  key={piece.id}>
+                <Image piece={piece} width={200}/>
+                <p className="title">{piece.title}</p>
+            </figure>) : <Loading/>}
         <nav className="pagination" onClick={() => {
             window.scrollTo(0, 0);
             updateArtWork({pieces: []});

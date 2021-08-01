@@ -1,8 +1,10 @@
 import {Loading} from '../../Loading';
 import {FC, useState} from 'react';
 import {Piece} from '../../../data/types';
-import './Image.scss';
 import {join} from '../../util';
+import './Image.scss';
+import {Paths} from '../../../App';
+import {Link} from 'react-router-dom';
 
 interface ImageProps {
     piece: Partial<Piece>;
@@ -12,16 +14,31 @@ interface ImageProps {
 }
 
 export const Image: FC<ImageProps> = ({piece, className, width = '', height = ''}) => {
-    const [loaded, loading] = useState(true);
-    const onComplete = () => loading(false);
+    const [completed, isComplete] = useState(false);
+    const [errored, isError] = useState(false);
 
     return <>
-        <img className={join('image', className)}
-            onError={onComplete}
-             onLoad={onComplete}
-             alt={piece.altText} title={piece.title}
-             loading="lazy" data-testid={`piece-${piece.imageId}`}
-             src={`https://www.artic.edu/iiif/2/${piece.imageId}/full/${width},${height}/0/default.jpg`}/>
-        {loaded && <Loading/>}
+        <Link to={`${Paths.artGallery}/${piece.id}`}>
+            {!errored && <img className={join('image', className)}
+                              onError={() => {
+                                  isComplete(true);
+                                  isError(true);
+                              }}
+                              onLoad={() => {
+                                  isComplete(true);
+                                  isError(false);
+                              }}
+                              alt={piece.altText} title={piece.title}
+                              loading="lazy"
+                              data-testid={`piece-${piece.imageId}`}
+                              src={`https://www.artic.edu/iiif/2/${piece.imageId}/full/${width},${height}/0/default.jpg`}/>}
+            {completed || <Loading/>}
+        </Link>
+        {errored &&
+        <a href="https://icons8.com/icon/j1UxMbqzPi7n/no-image" rel="noopener noreferrer" target="_blank"
+           className="error">
+          <img alt="oops" src="https://img.icons8.com/ios/100/000000/no-image.png"/>
+          No Image icon by Icons8
+        </a>}
     </>;
 };

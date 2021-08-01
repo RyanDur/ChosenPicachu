@@ -7,6 +7,6 @@ interface LoadingProps {
 }
 
 export const Loading: FC<LoadingProps> = ({className}) =>
-    <section className={join('loading-screen', className)}>
+    <section className={join('loading-screen', className)} data-testid="loading">
         <article className="loading"/>
     </section>;

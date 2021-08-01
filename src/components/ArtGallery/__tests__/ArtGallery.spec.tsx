@@ -1,4 +1,4 @@
-import {act, render, screen} from '@testing-library/react';
+import {act, cleanup, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {ArtGallery} from '..';
 import {data} from '../../../data';
@@ -8,6 +8,8 @@ import {art} from '../../../__tests__/util';
 import {MemoryRouter, Route} from 'react-router-dom';
 import {Paths} from '../../../App';
 import * as H from 'history';
+
+window.scrollTo = () => void 0;
 
 describe('the art gallery', () => {
     let testLocation: H.Location;
@@ -30,7 +32,10 @@ describe('the art gallery', () => {
         </MemoryRouter>);
     });
 
-    afterEach(() => pageNumber = 0);
+    afterEach(() => {
+        cleanup();
+        pageNumber = 0;
+    });
 
     it('should contain art', () =>
         expect(screen.getAllByTestId(/piece/).length).toEqual(art.pagination.limit));
