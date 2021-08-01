@@ -23,32 +23,31 @@ export const ArtGallery: FC = () => {
     const hasPrevPage = currentPage > firstPage;
     const prevPage = () => hasPrevPage ? currentPage - 1 : currentPage;
 
-    if (art?.pieces?.length) {
-        return <section id="art-gallery">{art?.pieces.filter(piece => piece.imageId)
+    return <section id="art-gallery">
+        {art?.pieces?.length ? art?.pieces.filter(piece => piece.imageId)
             .map(piece => <Link to={`${Paths.artGallery}/${piece.id}`} key={piece.id}>
                 <figure className="card" tabIndex={0}>
                     <Image piece={piece} width={200}/>
                     <figcaption className="title">{piece.title}</figcaption>
                 </figure>
-            </Link>)}
-            <nav className="pagination" onClick={() => updateArtWork({pieces: []})}>
-                {hasPrevPage && <Link to={`${Paths.artGallery}?page=1`}
-                                      id="first" className="page" data-testid="first-page">
-                  FIRST
-                </Link>}
-                {hasPrevPage && <Link to={`${Paths.artGallery}?page=${prevPage()}`}
-                                      id="prev" className="page" data-testid="prev-page">
-                  PREV
-                </Link>}
-                {hasNextPage && <Link to={`${Paths.artGallery}?page=${nextPage()}`}
-                                      id="next" className="page" data-testid="next-page">
-                  NEXT
-                </Link>}
-                {hasNextPage && <Link to={`${Paths.artGallery}?page=${art?.pagination?.totalPages}`}
-                                      id="last" className="page" data-testid="last-page">
-                  LAST
-                </Link>}
-            </nav>
-        </section>;
-    } else return <Loading/>;
+            </Link>) : <Loading/>}
+        <nav className="pagination" onClick={() => updateArtWork({pieces: []})}>
+            {hasPrevPage && <Link to={`${Paths.artGallery}?page=1`}
+                                  id="first" className="page" data-testid="first-page">
+              FIRST
+            </Link>}
+            {hasPrevPage && <Link to={`${Paths.artGallery}?page=${prevPage()}`}
+                                  id="prev" className="page" data-testid="prev-page">
+              PREV
+            </Link>}
+            {hasNextPage && <Link to={`${Paths.artGallery}?page=${nextPage()}`}
+                                  id="next" className="page" data-testid="next-page">
+              NEXT
+            </Link>}
+            {hasNextPage && <Link to={`${Paths.artGallery}?page=${art?.pagination?.totalPages}`}
+                                  id="last" className="page" data-testid="last-page">
+              LAST
+            </Link>}
+        </nav>
+    </section>;
 };
