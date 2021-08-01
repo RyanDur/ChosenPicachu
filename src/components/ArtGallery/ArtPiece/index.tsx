@@ -18,7 +18,7 @@ export const ArtPiece = () => {
 
     if (piece?.imageId) {
         return <figure className="card">
-            <Image piece={piece} height={2000} className="piece"/>
+            <Image piece={piece} height={2000} linkEnabled={false} className="piece"/>
             <figcaption className="artist-display">{piece.artistInfo}</figcaption>
         </figure>;
     } else return <Loading/>;

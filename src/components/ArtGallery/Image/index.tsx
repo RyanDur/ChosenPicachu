@@ -3,22 +3,33 @@ import {FC, useState} from 'react';
 import {Piece} from '../../../data/types';
 import {join} from '../../util';
 import './Image.scss';
-import {Paths} from '../../../App';
 import {Link} from 'react-router-dom';
+import {Paths} from '../../../App';
 
 interface ImageProps {
     piece: Partial<Piece>;
     className?: string;
-    height?: number
-    width?: number
+    height?: number;
+    width?: number;
+    linkEnabled?: boolean;
 }
 
-export const Image: FC<ImageProps> = ({piece, className, width = '', height = ''}) => {
+export const Image: FC<ImageProps> = (
+    {
+        piece,
+        className,
+        width = '',
+        height = '',
+        linkEnabled = true
+    }) => {
     const [completed, isComplete] = useState(false);
     const [errored, isError] = useState(false);
 
+    const ConditionalLink: FC = ({children}) => linkEnabled ?
+        <Link to={`${Paths.artGallery}/${piece.id}`}>{children}</Link> : <>{children}</>;
+
     return <>
-        <Link to={`${Paths.artGallery}/${piece.id}`}>
+        <ConditionalLink>
             {!errored && <img className={join('image', 'off-screen', className)}
                               onError={() => {
                                   isComplete(true);
@@ -34,7 +45,7 @@ export const Image: FC<ImageProps> = ({piece, className, width = '', height = ''
                               data-testid={`piece-${piece.imageId}`}
                               src={`https://www.artic.edu/iiif/2/${piece.imageId}/full/${width},${height}/0/default.jpg`}/>}
             {completed || <Loading/>}
-        </Link>
+        </ConditionalLink>
         {errored &&
         <a href="https://icons8.com/icon/j1UxMbqzPi7n/no-image" rel="noopener noreferrer" target="_blank"
            className="error">
