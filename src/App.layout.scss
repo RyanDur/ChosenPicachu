@@ -4,7 +4,8 @@
   grid-template-rows: var(--base-x-15) 1fr;
   grid-template-areas:
     "nav . header header"
-    "nav . main .";
+    "nav . main ."
+    "nav . footer .";
 
   #app-header {
     grid-area: header;
@@ -19,13 +20,16 @@
     }
   }
 
+  #side-nav {
+    grid-area: nav;
+  }
 
   main {
     grid-area: main;
   }
 
-  #side-nav {
-    grid-area: nav;
+  #app-footer {
+    grid-area: footer;
   }
 }
 

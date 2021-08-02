@@ -8,7 +8,8 @@ jest.mock('../components', () => ({
     About: () => 'Test About Component',
     Users: () => 'Test Users Component',
     ArtGallery: () => 'Art Gallery Component',
-    ArtPiece: () => 'Art Piece Component'
+    ArtPiece: () => 'Art Piece Component',
+    GalleryNav: () => 'Gallery Navigation'
 }));
 
 const title = 'some cool title';
@@ -20,7 +21,8 @@ jest.mock('../components/ArtGallery/ArtPiece/Context', () => ({
 describe('the App', () => {
     describe('the header', () => {
         let header: HTMLElement;
-        let aside: HTMLElement;
+        let navigation: HTMLElement;
+        let footer: HTMLElement;
 
         beforeEach(() => {
             renderWithRouter(<App/>);
@@ -28,27 +30,29 @@ describe('the App', () => {
 
         beforeEach(() => {
             header = screen.getByTestId('header');
-            aside = screen.getByTestId('aside');
+            navigation = screen.getByTestId('navigation');
+            footer = screen.getByTestId('footer');
         });
 
         test('for the home page', () => {
-            userEvent.click(within(aside).getByText('Home'));
+            userEvent.click(within(navigation).getByText('Home'));
             expect(within(header).getByText('Home')).toBeInTheDocument();
         });
 
         test('for the about page', () => {
-            userEvent.click(within(aside).getByText('About'));
+            userEvent.click(within(navigation).getByText('About'));
             expect(within(header).getByText('About')).toBeInTheDocument();
         });
 
         test('for the users page', () => {
-            userEvent.click(within(aside).getByText('Users'));
+            userEvent.click(within(navigation).getByText('Users'));
             expect(within(header).getByText('Users')).toBeInTheDocument();
         });
 
         test('for the Art Gallery page', () => {
-            userEvent.click(within(aside).getByText('Art'));
+            userEvent.click(within(navigation).getByText('Art'));
             expect(within(header).getByText('Art Gallery')).toBeInTheDocument();
+            expect(within(footer).queryByText('Gallery Navigation')).toBeInTheDocument();
         });
     });
 
