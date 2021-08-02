@@ -13,8 +13,8 @@ const ArtGallery: FC = () => {
     const {page} = useQuery<{ page: number }>({page: 1});
 
     useEffect(() => {
-        updateArt({});
         data.getAllArt(updateArt, +page);
+        return () => updateArt({});
     }, [page, updateArt]);
 
     return <section id="art-gallery">
