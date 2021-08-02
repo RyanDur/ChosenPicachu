@@ -14,6 +14,16 @@
   }
 }
 
+#app-footer {
+  min-height: var(--base-x-10);
+}
+
+.stick-to-bottom {
+  position: sticky;
+  bottom: 0;
+  width: 100%;
+}
+
 #app-navigation {
   background: var(--silk);
   position: sticky;

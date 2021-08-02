@@ -1,7 +1,8 @@
 import React from 'react';
-import {Link, Route, Switch} from 'react-router-dom';
-import {About, ArtGallery, ArtPiece, Home, Users} from './components';
+import {Link, Route, Switch, useRouteMatch} from 'react-router-dom';
+import {About, ArtGallery, ArtPiece, GalleryNav, Home, Users} from './components';
 import {useArtPiece} from './components/ArtGallery/ArtPiece';
+import {join} from './components/util';
 import './App.scss';
 import './App.layout.scss';
 
@@ -29,7 +30,7 @@ export const App = () => {
                 </Switch>
             </h1>
         </header>
-        <aside id="side-nav" data-testid="aside">
+        <aside id="side-nav" data-testid="navigation">
             <nav id="app-navigation" className="inset-right">
                 <Link id="navigate-home" className="path" to={Paths.home}>Home</Link>
                 <Link id="navigate-about" className="path" to={Paths.about}>About</Link>
@@ -41,22 +42,19 @@ export const App = () => {
         </aside>
         <main data-testid="main">
             <Switch>
-                <Route path={Paths.home} exact>
-                    <Home/>
-                </Route>
-                <Route path={Paths.about} exact>
-                    <About/>
-                </Route>
-                <Route path={Paths.users} exact>
-                    <Users/>
-                </Route>
-                <Route path={Paths.artGallery} exact>
-                    <ArtGallery/>
-                </Route>
-                <Route path={Paths.artGalleryPiece} exact>
-                    <ArtPiece/>
-                </Route>
+                <Route path={Paths.home} exact><Home/></Route>
+                <Route path={Paths.about} exact><About/></Route>
+                <Route path={Paths.users} exact><Users/></Route>
+                <Route path={Paths.artGallery} exact><ArtGallery/></Route>
+                <Route path={Paths.artGalleryPiece} exact><ArtPiece/></Route>
             </Switch>
         </main>
+        <footer id={'app-footer'}
+                className={join(useRouteMatch(Paths.artGallery)?.isExact && 'stick-to-bottom')}
+                data-testid="footer">
+            <Switch>
+                <Route path={Paths.artGallery} exact><GalleryNav/></Route>
+            </Switch>
+        </footer>
     </>;
 };
