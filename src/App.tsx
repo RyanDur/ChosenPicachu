@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link, Route, Switch} from 'react-router-dom';
-import {About, ArtGallery, ArtPiece, ArtPieceContext, Header, Home, useArtPieceContext, Users} from './components';
+import {About, ArtGallery, ArtPiece, ArtPieceContext, Title, Home, useArtPieceContext, Users} from './components';
 import './App.scss';
 import './App.layout.css';
 
@@ -14,7 +14,9 @@ export enum Paths {
 }
 
 export const App = () => <ArtPieceContext.Provider value={useArtPieceContext()}>
-    <Header/>
+    <header id="app-header">
+        <Title/>
+    </header>
     <aside id="side-nav">
         <nav id="app-navigation" className="inset-right">
             <Link id="navigate-home" className="path" to={Paths.home}>Home</Link>
