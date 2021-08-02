@@ -16,7 +16,7 @@ const ArtPiece = () => {
     }, [id, updatePiece]);
 
     if (piece?.imageId) {
-        return <figure className="card">
+        return <figure className="card art-work">
             <Image piece={piece} height={2000} linkEnabled={false} className="piece"/>
             <figcaption className="artist-display">{piece.artistInfo}</figcaption>
         </figure>;
