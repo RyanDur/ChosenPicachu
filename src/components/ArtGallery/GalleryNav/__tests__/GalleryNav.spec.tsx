@@ -32,10 +32,12 @@ describe('Gallery Navigation', () => {
             act(() => userEvent.click(screen.getByTestId('next-page')));
 
             expect(testLocation.search).toEqual('?page=2');
+            expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
 
             act(() => userEvent.click(screen.getByTestId('next-page')));
 
             expect(testLocation.search).toEqual('?page=3');
+            expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
         });
 
         it('should not go to the previous page', () => {
@@ -48,6 +50,7 @@ describe('Gallery Navigation', () => {
 
         it('should be able to go to the last page', () => {
             act(() => userEvent.click(screen.getByTestId('last-page')));
+            expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
             expect(testLocation.search).toEqual(`?page=${art.pagination.totalPages}`);
             expect(screen.queryByTestId('last-page')).not.toBeInTheDocument();
             expect(screen.queryByTestId('next-page')).not.toBeInTheDocument();
@@ -65,10 +68,12 @@ describe('Gallery Navigation', () => {
             act(() => userEvent.click(screen.getByTestId('prev-page')));
 
             expect(testLocation.search).toEqual(`?page=${art.pagination.totalPages - 1}`);
+            expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
 
             act(() => userEvent.click(screen.getByTestId('prev-page')));
 
             expect(testLocation.search).toEqual(`?page=${art.pagination.totalPages - 2}`);
+            expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
         });
 
         it('should not go past the last page', () => {
@@ -81,6 +86,7 @@ describe('Gallery Navigation', () => {
 
         it('should be able to go to the first page', () => {
             act(() => userEvent.click(screen.getByTestId('first-page')));
+            expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
             expect(testLocation.search).toEqual('?page=1');
             expect(screen.queryByTestId('last-page')).toBeInTheDocument();
             expect(screen.queryByTestId('next-page')).toBeInTheDocument();

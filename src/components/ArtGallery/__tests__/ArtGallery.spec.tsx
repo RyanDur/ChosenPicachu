@@ -9,7 +9,6 @@ import {MemoryRouter, Route} from 'react-router-dom';
 import {Paths} from '../../../App';
 import * as H from 'history';
 
-window.scrollTo = () => void 0;
 const mockUseArtGallery = {art, updateArt: jest.fn()};
 jest.mock('../Context', () => {
     return ({
