@@ -1,30 +1,19 @@
 import React from 'react';
-import {useRouteMatch} from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 import {Paths} from '../../App';
 import {useArtPiece} from '../ArtGallery/ArtPiece/Context';
 import './Header.scss';
 import './Header.layout.scss';
 
-export const Header = () => {
-    const {piece} = useArtPiece();
-    const pageTitles = [{
-        page: useRouteMatch(Paths.home),
-        title: 'Home Page'
-    }, {
-        page: useRouteMatch(Paths.about),
-        title: 'About Page'
-    }, {
-        page: useRouteMatch(Paths.users),
-        title: 'Users Page'
-    }, {
-        page: useRouteMatch(Paths.artGallery),
-        title: 'Art Gallery Page'
-    }, {
-        page: useRouteMatch(Paths.artGalleryPiece),
-        title: piece.title
-    }];
-
-    return <header id="app-header">
-        <h1 className="title">{pageTitles.find(({page}) => page?.isExact)?.title}</h1>
+export const Header = () =>
+    <header id="app-header">
+        <h1 className="title">
+            <Switch>
+                <Route path={Paths.home} exact>Home</Route>
+                <Route path={Paths.about} exact>About</Route>
+                <Route path={Paths.users} exact>Users</Route>
+                <Route path={Paths.artGallery} exact>Art Gallery</Route>
+                <Route path={Paths.artGalleryPiece} exact>{useArtPiece().piece.title}</Route>
+            </Switch>
+        </h1>
     </header>;
-};

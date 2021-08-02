@@ -12,22 +12,22 @@ jest.mock('../../ArtGallery/ArtPiece/Context', () => ({
 describe('the header', () => {
     test('for the home page', () => {
         renderWithRouter(<Header/>, Paths.home);
-        expect(screen.getByText('Home Page')).toBeInTheDocument();
+        expect(screen.getByText('Home')).toBeInTheDocument();
     });
 
     test('for the about page', () => {
         renderWithRouter(<Header/>, Paths.about);
-        expect(screen.getByText('About Page')).toBeInTheDocument();
+        expect(screen.getByText('About')).toBeInTheDocument();
     });
 
     test('for the users page', () => {
         renderWithRouter(<Header/>, Paths.users);
-        expect(screen.getByText('Users Page')).toBeInTheDocument();
+        expect(screen.getByText('Users')).toBeInTheDocument();
     });
 
     test('for the Art Gallery page', () => {
         renderWithRouter(<Header/>, Paths.artGallery);
-        expect(screen.getByText('Art Gallery Page')).toBeInTheDocument();
+        expect(screen.getByText('Art Gallery')).toBeInTheDocument();
     });
 
     test('for the Art work page', () => {
