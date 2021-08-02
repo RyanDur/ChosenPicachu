@@ -1,9 +1,6 @@
 import React from 'react';
 import {Link, Route, Switch} from 'react-router-dom';
-import {About, ArtGallery, Home, Users} from './components';
-import {ArtPiece} from './components/ArtGallery/ArtPiece';
-import {ArtPieceContext, useArtPieceContext} from './components/ArtGallery/ArtPiece/Context';
-import {Header} from './components/Header';
+import {About, ArtGallery, ArtPiece, ArtPieceContext, Header, Home, useArtPieceContext, Users} from './components';
 import './App.scss';
 import './App.layout.css';
 
