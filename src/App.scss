@@ -6,8 +6,12 @@
   display: block;
 }
 
-main {
-  padding-bottom: var(--base-x-10);
+#app-header {
+  height: 100%;
+
+  .title {
+    color: var(--paper);
+  }
 }
 
 #app-navigation {
