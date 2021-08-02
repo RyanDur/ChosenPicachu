@@ -1,7 +1,7 @@
 import React from 'react';
 import {Route, Switch} from 'react-router-dom';
 import {Paths} from '../../App';
-import {useArtPiece} from '../ArtGallery/ArtPiece/Context';
+import {useArtPiece} from '../ArtGallery/ArtPiece';
 import './Header.scss';
 import './Header.layout.scss';
 
