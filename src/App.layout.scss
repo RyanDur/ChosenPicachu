@@ -5,18 +5,28 @@
   grid-template-areas:
     "nav . header header"
     "nav . main .";
-}
 
-#app-header {
-  grid-area: header;
-}
+  #app-header {
+    grid-area: header;
+    display: grid;
+    align-content: center;
+    grid-template-columns: 82% 1fr;
+    grid-template-areas:
+  "title .";
 
-main {
-  grid-area: main;
-}
+    .title {
+      grid-area: title;
+    }
+  }
 
-#side-nav {
-  grid-area: nav;
+
+  main {
+    grid-area: main;
+  }
+
+  #side-nav {
+    grid-area: nav;
+  }
 }
 
 @media only screen and (max-width: 1024px) {
