@@ -1,7 +1,7 @@
 import {screen} from '@testing-library/react';
 import {renderWithRouter} from '../../../__tests__/util';
 import {Paths} from '../../../App';
-import {Header} from '../index';
+import {Title} from '../index';
 
 const title = 'some cool title';
 
@@ -11,27 +11,27 @@ jest.mock('../../ArtGallery/ArtPiece/Context', () => ({
 
 describe('the header', () => {
     test('for the home page', () => {
-        renderWithRouter(<Header/>, Paths.home);
+        renderWithRouter(<Title/>, Paths.home);
         expect(screen.getByText('Home')).toBeInTheDocument();
     });
 
     test('for the about page', () => {
-        renderWithRouter(<Header/>, Paths.about);
+        renderWithRouter(<Title/>, Paths.about);
         expect(screen.getByText('About')).toBeInTheDocument();
     });
 
     test('for the users page', () => {
-        renderWithRouter(<Header/>, Paths.users);
+        renderWithRouter(<Title/>, Paths.users);
         expect(screen.getByText('Users')).toBeInTheDocument();
     });
 
     test('for the Art Gallery page', () => {
-        renderWithRouter(<Header/>, Paths.artGallery);
+        renderWithRouter(<Title/>, Paths.artGallery);
         expect(screen.getByText('Art Gallery')).toBeInTheDocument();
     });
 
     test('for the Art work page', () => {
-        renderWithRouter(<Header/>, Paths.artGalleryPiece);
+        renderWithRouter(<Title/>, Paths.artGalleryPiece);
         expect(screen.getByText(title)).toBeInTheDocument();
     });
 });
