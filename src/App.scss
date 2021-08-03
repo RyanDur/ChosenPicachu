@@ -24,25 +24,46 @@
   width: 100%;
 }
 
-#app-navigation {
+#side-nav {
   background: var(--silk);
-  position: sticky;
-  top: -1px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 11rem 0;
-  height: 100vh;
+  height: 100%;
+
+  #app-navigation {
+    position: sticky;
+    top: -1px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 11rem 0;
+    height: 100vh;
+  }
+
+  #app-navigation .path {
+    font-weight: bold;
+    font-size: var(--base-x-4);
+    margin-bottom: var(--base-x-4);
+
+    &:focus,
+    &:hover {
+      color: var(--internationl-orange-engineering);
+    }
+  }
 }
 
-#app-navigation .path {
-  font-weight: bold;
-  font-size: var(--base-x-4);
-  margin-bottom: var(--base-x-4);
+@media (max-width: 832px) {
+  #side-nav {
+    #app-navigation {
+      height: 4rem;
+      flex-direction: row;
+      justify-content: space-around;
+      align-content: center;
+      padding: 0;
 
-  &:focus,
-  &:hover {
-    color: var(--internationl-orange-engineering);
+      .path {
+        font-size: 1.6rem;
+        margin-bottom: 0;
+      }
+    }
   }
 }
 

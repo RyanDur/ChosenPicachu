@@ -13,7 +13,7 @@
     align-content: center;
     grid-template-columns: 82% 1fr;
     grid-template-areas:
-  "title .";
+      "title .";
 
     .title {
       grid-area: title;
@@ -33,21 +33,23 @@
   }
 }
 
-@media only screen and (max-width: 1024px) {
-  #root {
-    grid-template-columns: 13.4rem 1fr 80% 1fr;
-    grid-template-areas:
-    "nav header header header"
-    "nav main main main";
-  }
-}
-
-@media only screen and (max-width: 832px) {
+@media (max-width: 1024px) {
   #root {
     grid-template-columns: 13.4rem 1fr;
     grid-template-areas:
     "nav header"
     "nav main"
-    "nav main";
+    "nav footer";
+  }
+}
+
+@media (max-width: 832px) {
+  #root {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+    "header"
+    "main"
+    "footer"
+    "nav";
   }
 }
