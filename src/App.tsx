@@ -31,7 +31,7 @@ export const App = () => {
             </h1>
         </header>
         <aside id="side-nav" data-testid="navigation">
-            <nav id="app-navigation" className="inset-right">
+            <nav id="app-navigation">
                 <Link id="navigate-home" className="path" to={Paths.home}>Home</Link>
                 <Link id="navigate-about" className="path" to={Paths.about}>About</Link>
                 <Link id="navigate-users" className="path" to={Paths.users}>Users</Link>
