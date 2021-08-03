@@ -18,3 +18,15 @@
     grid-area: loading;
   }
 }
+
+@media (max-width: 1024px) {
+  #art-gallery {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-areas:
+  "loading loading"
+  "loading loading"
+  "loading loading"
+          "nav nav";
+
+  }
+}
