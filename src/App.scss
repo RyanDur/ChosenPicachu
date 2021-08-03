@@ -40,7 +40,7 @@
 
   #app-navigation .path {
     font-weight: bold;
-    font-size: var(--base-x-4);
+    font-size: 3.2rem;
     margin-bottom: var(--base-x-4);
 
     &:focus,
@@ -51,16 +51,29 @@
 }
 
 @media (max-width: 832px) {
+  #app-header {
+    position: sticky;
+    top: 0;
+    background: var(--charcoal);
+    padding: 0 2rem;
+  }
+  .stick-to-bottom {
+    bottom: 6.8rem;
+  }
+
   #side-nav {
+    position: sticky;
+    bottom: 0;
+
     #app-navigation {
-      height: 4rem;
+      height: 100%;
       flex-direction: row;
       justify-content: space-around;
       align-content: center;
       padding: 0;
 
       .path {
-        font-size: 1.6rem;
+        font-size: 1.8rem;
         margin-bottom: 0;
       }
     }

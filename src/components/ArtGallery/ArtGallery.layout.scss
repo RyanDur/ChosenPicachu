@@ -30,3 +30,14 @@
 
   }
 }
+
+@media (max-width: 832px) {
+  #art-gallery {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+        "loading"
+        "loading"
+        "loading"
+          " nav";
+  }
+}

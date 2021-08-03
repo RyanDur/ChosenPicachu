@@ -46,6 +46,7 @@
 @media (max-width: 832px) {
   #root {
     grid-template-columns: 1fr;
+    grid-template-rows: var(--base-x-10) 1fr var(--base-x-15) var(--base-x-10);
     grid-template-areas:
     "header"
     "main"
