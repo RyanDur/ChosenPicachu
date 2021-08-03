@@ -8,6 +8,7 @@
 
 #app-header {
   height: 100%;
+  z-index: 2;
 
   .title {
     color: var(--paper);
@@ -27,6 +28,9 @@
 #side-nav {
   background: var(--silk);
   height: 100%;
+  z-index: 2;
+  box-shadow: inset -7px 0 9px -7px rgb(0, 0, 0);
+  border-right: 2px solid black;
 
   #app-navigation {
     position: sticky;
@@ -36,16 +40,16 @@
     align-items: center;
     padding: 11rem 0;
     height: 100vh;
-  }
 
-  #app-navigation .path {
-    font-weight: bold;
-    font-size: 3.2rem;
-    margin-bottom: var(--base-x-4);
+    .path {
+      font-weight: bold;
+      font-size: 3.2rem;
+      margin-bottom: var(--base-x-4);
 
-    &:focus,
-    &:hover {
-      color: var(--internationl-orange-engineering);
+      &:focus,
+      &:hover {
+        color: var(--internationl-orange-engineering);
+      }
     }
   }
 }
@@ -64,6 +68,9 @@
   #side-nav {
     position: sticky;
     bottom: 0;
+    box-shadow: inset 0 7px 9px -7px rgb(0, 0, 0);
+    border-right: none;
+    border-top: 2px solid black;
 
     #app-navigation {
       height: 100%;
@@ -78,11 +85,6 @@
       }
     }
   }
-}
-
-.inset-right {
-  box-shadow: inset -7px 0 9px -7px rgb(0, 0, 0);
-  border-right: 2px solid black;
 }
 
 .overhang {
