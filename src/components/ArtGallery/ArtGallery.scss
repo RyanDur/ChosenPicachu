@@ -4,6 +4,7 @@
   width: 100%;
 
   .frame {
+    width: 100%;
     display: table;
     margin: 0 0 var(--base-x-5);
     background: var(--faded-leather);
@@ -42,4 +43,8 @@
       color: var(--paper);
     }
   }
+}
+
+@media (max-width: 832px) {
+
 }
