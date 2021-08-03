@@ -2,7 +2,7 @@
   "name": "table",
   "version": "0.1.0",
   "private": true,
-  "homepage": ".",
+  "homepage": "/",
   "dependencies": {
     "@ryandur/sand": "^0.4.0",
     "date-fns": "^2.22.1",
