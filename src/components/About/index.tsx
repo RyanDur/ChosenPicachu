@@ -1,5 +1,5 @@
 import * as faker from 'faker';
-import './About.css';
+import './About.scss';
 
 export const About = () => {
     return <>
