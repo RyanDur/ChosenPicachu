@@ -1,0 +1,119 @@
+.accordion {
+  margin-bottom: var(--base-x-6);
+  background: var(--silk);
+  position: relative;
+  z-index: 0;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .bar {
+    border: 0.1rem solid var(--charcoal);
+    margin-bottom: var(--base-x-6);
+    opacity: 0.5;
+  }
+
+  .close {
+    height: var(--base-x-5);
+    width: 100%;
+    background: var(--charcoal);
+    border-radius: 2rem 2rem 0 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0.1rem;
+
+    &:hover {
+      background: var(--internationl-orange-engineering);
+    }
+
+    .info-label {
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      color: var(--paper);
+      border-top-right-radius: var(--base-x-2);
+      border-top-left-radius: var(--base-x-2);
+    }
+
+    .info-toggle:focus ~ .info-label {
+      background: var(--internationl-orange-engineering);
+    }
+  }
+
+  .fold {
+    overflow: hidden;
+    width: 100%;
+    vertical-align: middle;
+    border-radius: 0;
+    margin-bottom: 0.1rem;
+
+    &:last-child {
+      border-radius: 0 0 2rem 2rem;
+    }
+
+    &:first-of-type {
+      border-radius: 2rem 2rem 0 0;
+    }
+
+    .info {
+      position: relative;
+      overflow: hidden;
+      max-height: var(--base-x-100);
+      opacity: 1;
+      transform: translate(0, 0);
+      margin-top: var(--base-x-4);
+      z-index: 2;
+      transition: all 500ms ease;
+      padding: 0 var(--base-x-4) var(--base-x-4);
+    }
+
+    .info-label {
+      display: flex;
+      height: 5rem;
+      padding: 0 var(--base-x-4);
+      justify-content: space-between;
+      align-items: center;
+      color: var(--paper);
+      background: var(--charcoal);
+
+      &:after {
+        content: "";
+        position: relative;
+        width: 0.8rem;
+        height: 0.8rem;
+        border-right: 0.2rem solid var(--paper);
+        border-top: 0.2rem solid var(--paper);
+        transform: rotate(45deg);
+        margin-right: 0.5em;
+        padding: 0.25rem;
+        display: flex;
+        justify-self: center;
+        align-self: center;
+      }
+    }
+
+    .info-toggle:hover ~ .info-label,
+    .info-toggle:focus ~ .info-label {
+      background: var(--internationl-orange-engineering);
+    }
+
+    .info-toggle:checked ~ .info-label:after {
+      transform: rotate(135deg);
+    }
+
+    .info-toggle ~ .info-label:after {
+      transition: all 500ms ease;
+    }
+
+    .info-toggle:not(:checked) ~ .info {
+      margin-top: 0;
+      max-height: 0;
+      opacity: 0;
+      padding-bottom: 0;
+      transform: translate(0, 50%);
+      transition: all 250ms ease;
+    }
+  }
+}
