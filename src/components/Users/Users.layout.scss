@@ -8,7 +8,8 @@
 }
 
 #user-candidates {
-  display: grid;
+  width: 100%;
+  display: inline-grid;
   grid-template-columns: 1fr 1fr;
   column-gap: var(--base-x-2);
   row-gap: 4rem;
