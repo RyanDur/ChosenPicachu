@@ -1,9 +1,11 @@
 #root {
   min-height: 100vh;
-}
-
-#root {
   display: block;
+
+  main {
+    width: 100%;
+    overflow: auto;
+  }
 }
 
 #app-header {
