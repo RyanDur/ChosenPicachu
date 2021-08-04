@@ -26,3 +26,9 @@
 .gutter {
   padding: var(--base-x-4);
 }
+
+@media (max-width: 832px) {
+  .card {
+    padding: var(--base-x-2) var(--base-x-0_5);
+  }
+}
