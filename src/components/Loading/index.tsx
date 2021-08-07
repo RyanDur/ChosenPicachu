@@ -4,9 +4,11 @@ import './Loading.scss';
 
 interface LoadingProps {
     className?: string;
+    testId?: string
 }
 
-export const Loading: FC<LoadingProps> = ({className}) =>
-    <section className={join('loading-screen', className)} data-testid="loading">
+export const Loading: FC<LoadingProps> = ({className, testId}) =>
+    <section className={join('loading-screen', className)}
+             data-testid={testId || 'loading'}>
         <article className="loading"/>
     </section>;

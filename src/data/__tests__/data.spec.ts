@@ -5,6 +5,7 @@ import {Art, ArtResponse, Piece, PieceResponse} from '../types';
 import faker from 'faker';
 import {art} from '../../__tests__/util';
 import {nanoid} from 'nanoid';
+import {waitFor} from '@testing-library/react';
 
 describe('data', () => {
     describe('getting the art', () => {
@@ -17,18 +18,21 @@ describe('data', () => {
 
         afterEach(() => server.stop());
 
-        it('should consume all the artwork', (done) => {
-            const consumer = async (data: Art) => {
-                const recordedRequest = await server.lastRequest();
-                expect(data).toEqual(art);
-                expect(recordedRequest.method).toEqual('GET');
-                expect(recordedRequest.url).toEqual('/api/v1/artworks?page=1');
-                done();
-            };
+        it('should consume all the artwork', async () => {
+            const onLoading = jest.fn();
+            const onSuccess = (data: Art) => expect(data).toEqual(art);
 
             server.stubResponse(200, artResponse);
 
-            data.getAllArt(consumer, 1, server.path());
+            data.getAllArt(1, {onSuccess, onLoading}, server.path());
+
+            const recordedRequest = await server.lastRequest();
+            await waitFor(() => {
+                expect(recordedRequest.method).toEqual('GET');
+                expect(recordedRequest.url).toEqual('/api/v1/artworks?page=1');
+                expect(onLoading).toHaveBeenNthCalledWith(1, true);
+                expect(onLoading).toHaveBeenNthCalledWith(2, false);
+            });
         });
 
         it('should consume an artwork', (done) => {

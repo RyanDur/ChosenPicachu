@@ -28,12 +28,22 @@ const responseToArtWork = ({data}: PieceResponse): Piece => ({
     altText: data.thumbnail?.alt_text || ''
 });
 
+export interface StateChange<T> {
+    onSuccess: Consumer<T>;
+    onLoading: Consumer<boolean>;
+}
+
 export const data = {
-    getAllArt: (onSuccess: Consumer<Art>, page: number,
-                domain = 'https://api.artic.edu'): void =>
-        void fetch(`${domain}/api/v1/artworks?page=${page}`)
+    getAllArt: (page: number, {onSuccess, onLoading}: StateChange<Art>,
+                domain = 'https://api.artic.edu') => {
+        onLoading(true);
+        fetch(`${domain}/api/v1/artworks?page=${page}`)
             .then<ArtResponse>(response => response.json())
-            .then(response => onSuccess(responseToArt(response))),
+            .then(response => {
+                onSuccess(responseToArt(response));
+                onLoading(false);
+            });
+    },
 
     getPiece(id: string, onSuccess: Consumer<Piece>,
              domain = 'https://api.artic.edu') {
