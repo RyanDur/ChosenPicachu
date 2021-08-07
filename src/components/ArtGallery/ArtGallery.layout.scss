@@ -8,7 +8,7 @@
   "field field field field"
   "field field field field"
   "field field field field"
-          ". nav nav .";
+        ". nav nav .";
 
   .pagination {
     grid-area: nav;
@@ -29,9 +29,9 @@
   #art-gallery {
     grid-template-columns: repeat(2, 1fr);
     grid-template-areas:
-  "loading loading"
-  "loading loading"
-  "loading loading"
+        "field field"
+        "field field"
+        "field field"
           "nav nav";
 
   }
@@ -41,9 +41,9 @@
   #art-gallery {
     grid-template-columns: 1fr;
     grid-template-areas:
-        "loading"
-        "loading"
-        "loading"
-          "nav";
+        "field"
+        "field"
+        "field"
+         "nav";
   }
 }

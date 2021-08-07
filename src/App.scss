@@ -56,16 +56,12 @@
   }
 
   #borrowed-assets {
-    font-size: 1.2rem;
-    position: fixed;
+    font-size: var(--base);
+    position: relative;
     bottom: 0;
     display: flex;
     flex-direction: column;
     width: 100%;
-
-    .attribution {
-      display: block;
-    }
   }
 }
 

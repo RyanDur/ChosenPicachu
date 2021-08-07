@@ -19,7 +19,7 @@ const ArtGallery: FC = () => {
             onLoading: isLoading
         });
         return reset;
-    }, [page]);
+    }, [page, updateArt]);
 
     return <section id="art-gallery">
         {loading ? <Loading className="loader" testId="gallery-loading"/> :
