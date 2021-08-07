@@ -41,8 +41,9 @@ export const App = () => {
             </nav>
 
             <nav id="borrowed-assets">
-                <a href="https://icons8.com/icon/622/detective">Detective icon by Icons8</a>
-                <a href="https://icons8.com/icon/j1UxMbqzPi7n/no-image">No Image icon by Icons8</a>
+                <a href="https://icons8.com/icon/622/detective" className="attribution">Detective icon by Icons8</a>
+                <a href="https://icons8.com/icon/j1UxMbqzPi7n/no-image" className="attribution">No Image icon by Icons8</a>
+                <a href="https://icons8.com/icon/EJK2FdL08858/no-image-gallery" className="attribution">No Image Gallery icon by Icons8</a>
             </nav>
         </aside>
         <main data-testid="main">

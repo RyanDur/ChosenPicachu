@@ -59,6 +59,13 @@
     font-size: 1.2rem;
     position: fixed;
     bottom: 0;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .attribution {
+      display: block;
+    }
   }
 }
 
@@ -91,6 +98,11 @@
         font-size: 1.8rem;
         margin-bottom: 0;
       }
+    }
+
+    #borrowed-assets {
+      flex-direction: row;
+      justify-content: space-around;
     }
   }
 }

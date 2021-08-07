@@ -6,9 +6,10 @@ import {Art} from '../../../data/types';
 import {art} from '../../../__tests__/util';
 import {MemoryRouter, Route} from 'react-router-dom';
 import {Paths} from '../../../App';
+import {galleryInitialState} from '../Context';
 import * as H from 'history';
 
-const mockUseArtGallery = {art, updateArt: jest.fn(), reset: jest.fn()};
+const mockUseArtGallery = {art: {pieces: []}, updateArt: jest.fn(), reset: jest.fn()};
 jest.mock('../Context', () => {
     return ({
         useArtGallery: () => mockUseArtGallery
@@ -40,7 +41,7 @@ describe('The art gallery.', () => {
             expect(screen.getByTestId('gallery-loading')).toBeInTheDocument();
         });
 
-        it('should contain art', () =>
+        it('should not contain art', () =>
             expect(screen.queryAllByTestId(/piece/).length).toEqual(0));
     });
 
@@ -62,9 +63,8 @@ describe('The art gallery.', () => {
         });
 
 
-        it('should not signify that it is loading', () => {
-            expect(screen.queryByTestId('gallery-loading')).not.toBeInTheDocument();
-        });
+        it('should not signify that it is loading', () =>
+            expect(screen.queryByTestId('gallery-loading')).not.toBeInTheDocument());
 
         it('should contain art', () =>
             expect(screen.getAllByTestId(/piece/).length).toEqual(art.pagination.limit));
@@ -78,5 +78,32 @@ describe('The art gallery.', () => {
             rendered.unmount();
             expect(mockUseArtGallery.reset).toHaveBeenCalled();
         });
+    });
+
+    describe('when there is no art to show', () => {
+        beforeEach(() => {
+            data.getAllArt = (page: number, {onSuccess}: StateChange<Art>) => {
+                onSuccess(galleryInitialState);
+            };
+            rendered = render(<MemoryRouter initialEntries={[`${Paths.artGallery}`]}>
+                <ArtGallery/>
+                <Route
+                    path="*"
+                    render={({location}) => {
+                        testLocation = location;
+                        return null;
+                    }}
+                />
+            </MemoryRouter>);
+        });
+
+        it('should not contain art', () =>
+            expect(screen.queryAllByTestId(/piece/).length).toEqual(0));
+
+        it('should not signify that it is loading', () =>
+            expect(screen.queryByTestId('gallery-loading')).not.toBeInTheDocument());
+
+        it('should signify that the gallery is empty', () =>
+            expect(screen.queryByTestId('empty-gallery')).toBeInTheDocument());
     });
 });

@@ -5,9 +5,9 @@
   grid-template-rows: 1fr auto;
   align-items: start;
   grid-template-areas:
-  "loading loading loading loading"
-  "loading loading loading loading"
-  "loading loading loading loading"
+  "field field field field"
+  "field field field field"
+  "field field field field"
           ". nav nav .";
 
   .pagination {
@@ -15,7 +15,13 @@
   }
 
   .loader {
-    grid-area: loading;
+    grid-area: field;
+  }
+
+  #empty-gallery {
+    display: block;
+    margin: auto;
+    grid-area: field;
   }
 }
 
