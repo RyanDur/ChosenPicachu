@@ -98,27 +98,28 @@
         margin-bottom: 0;
       }
     }
-
-    #borrowed-assets {
-
-    }
   }
 }
 
-.drop-down {
+.icons {
   position: sticky;
   bottom: 0;
 
-  &:hover .drop-down-content {
+  &:focus-within .icons-content,
+  &:hover .icons-content {
     display: block;
   }
 
-  .drop-down-title {
+  .attribution:focus {
+    color: var(--internationl-orange-engineering);
+  }
+
+  .icons-title {
     display: flex;
     justify-content: center;
   }
 
-  .drop-down-content {
+  .icons-content {
     display: none;
   }
 }
