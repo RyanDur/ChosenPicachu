@@ -1,14 +1,39 @@
+.scrim {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+
+  &:focus,
+  &:hover {
+    &:before,
+    &:after {
+      content: '';
+      height: inherit;
+      width: inherit;
+      position: absolute;
+      border-radius: var(--base-x-2);
+    }
+
+    &:before {
+      background: rgba(0, 0, 0, 0.4);
+    }
+
+    &:after {
+      margin: 0 auto;
+      background: url("https://img.icons8.com/ios/50/ffffff/detective.png") no-repeat center;
+    }
+  }
+}
+
 .image {
   width: 100%;
 }
 
 .error {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  text-align: center;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
   padding: var(--base-x-5);
-  width: 100%;
   height: var(--base-x-25);
 }

@@ -4,6 +4,7 @@
   width: 100%;
 
   .frame {
+    position: relative;
     width: 100%;
     display: table;
     margin: 0 0 var(--base-x-5);
@@ -14,8 +15,6 @@
 
     &:focus-within,
     &:hover {
-      background: var(--faded-mint);
-      box-shadow: var(--base-box-shadow-red);
       outline: none;
     }
 

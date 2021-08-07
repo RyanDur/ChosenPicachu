@@ -39,6 +39,11 @@ export const App = () => {
                 <a id="navigate-repo" className="path" href={Paths.repo}
                    rel="noopener noreferrer" target="_blank">Repo</a>
             </nav>
+
+            <nav id="borrowed-assets">
+                <a href="https://icons8.com/icon/622/detective">Detective icon by Icons8</a>
+                <a href="https://icons8.com/icon/j1UxMbqzPi7n/no-image">No Image icon by Icons8</a>
+            </nav>
         </aside>
         <main data-testid="main">
             <Switch>
