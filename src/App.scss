@@ -54,6 +54,12 @@
       }
     }
   }
+
+  #borrowed-assets {
+    font-size: 1.2rem;
+    position: fixed;
+    bottom: 0;
+  }
 }
 
 @media (max-width: 832px) {

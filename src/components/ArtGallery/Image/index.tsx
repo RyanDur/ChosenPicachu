@@ -1,9 +1,9 @@
-import {Loading} from '../../Loading';
 import {FC, useState} from 'react';
 import {Piece} from '../../../data/types';
 import {join} from '../../util';
-import {Link} from 'react-router-dom';
+import {Loading} from '../../Loading';
 import {Paths} from '../../../App';
+import {Link} from 'react-router-dom';
 import './Image.scss';
 
 interface ImageProps {
@@ -24,33 +24,31 @@ export const Image: FC<ImageProps> = (
     }) => {
     const [completed, isComplete] = useState(false);
     const [errored, isError] = useState(false);
-
     const ConditionalLink: FC = ({children}) => linkEnabled ?
-        <Link to={`${Paths.artGallery}/${piece.id}`}>{children}</Link> : <>{children}</>;
+        <Link to={`${Paths.artGallery}/${piece.id}`} className="scrim">{children}</Link> : <>{children}</>;
 
-    return <>
-        <ConditionalLink>
-            {!errored && <img className={join('image', 'off-screen', className)}
-                              onError={() => {
-                                  isComplete(true);
-                                  isError(true);
-                              }}
-                              onLoad={event => {
-                                  isComplete(true);
-                                  isError(false);
-                                  event.currentTarget.classList.remove('off-screen');
-                              }}
-                              alt={piece.altText} title={piece.title}
-                              loading="lazy"
-                              data-testid={`piece-${piece.imageId}`}
-                              src={`https://www.artic.edu/iiif/2/${piece.imageId}/full/${width},${height}/0/default.jpg`}/>}
+    return errored ?
+        <img alt="oops"
+             className="error"
+             src="https://img.icons8.com/ios/100/000000/no-image.png"
+             data-testid="error"/> :
+        (<>
+            <ConditionalLink>
+                <img className={join('image', 'off-screen', className)}
+                     onError={() => {
+                         isComplete(true);
+                         isError(true);
+                     }}
+                     onLoad={event => {
+                         isComplete(true);
+                         isError(false);
+                         event.currentTarget.classList.remove('off-screen');
+                     }}
+                     alt={piece.altText} title={piece.title}
+                     loading="lazy"
+                     data-testid={`piece-${piece.imageId}`}
+                     src={`https://www.artic.edu/iiif/2/${piece.imageId}/full/${width},${height}/0/default.jpg`}/>
+            </ConditionalLink>
             {completed || <Loading/>}
-        </ConditionalLink>
-        {errored &&
-        <a href="https://icons8.com/icon/j1UxMbqzPi7n/no-image" rel="noopener noreferrer" target="_blank"
-           className="error">
-          <img alt="oops" src="https://img.icons8.com/ios/100/000000/no-image.png" data-testid="error"/>
-          No Image icon by Icons8
-        </a>}
-    </>;
+        </>);
 };
