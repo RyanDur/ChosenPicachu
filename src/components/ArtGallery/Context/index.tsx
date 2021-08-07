@@ -1,20 +1,22 @@
-import {Art} from '../../../data/types';
+import {Art, Piece} from '../../../data/types';
 import {Consumer} from '../../UserInfo/types';
 import {createContext, useContext, useMemo, useState} from 'react';
 
 interface GalleryContext {
-    art: Partial<Art>;
+    art: Art;
     updateArt: Consumer<Art>;
     reset: Consumer<void>;
 }
 
+export const galleryInitialState: Art = {pieces: [] as Piece[]} as Art;
+
 export const ArtGalleryContext = createContext<GalleryContext>({
-    art: {},
-    updateArt: (art: Partial<Art> = {}) => void art,
+    art: galleryInitialState,
+    updateArt: (art: Art = galleryInitialState) => void art,
     reset: () => void 0
 });
 export const useArtGallery = () => useContext(ArtGalleryContext);
 export const useArtGalleryContext = (): GalleryContext => {
-    const [art, updateArt] = useState<Partial<Art>>({});
-    return useMemo(() => ({art, updateArt, reset: () => updateArt({})}), [art]);
+    const [art, updateArt] = useState<Art>(galleryInitialState);
+    return useMemo(() => ({art, updateArt, reset: () => updateArt(galleryInitialState)}), [art]);
 };
