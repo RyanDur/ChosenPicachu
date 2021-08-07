@@ -1,4 +1,4 @@
-import {data} from '../index';
+import {data, StateChange} from '../index';
 import {mockServer, MockWebServer} from './mockServer';
 import 'whatwg-fetch';
 import {Art, ArtResponse, Piece, PieceResponse} from '../types';
@@ -18,20 +18,22 @@ describe('data', () => {
 
         afterEach(() => server.stop());
 
-        it('should consume all the artwork', async () => {
-            const onLoading = jest.fn();
-            const onSuccess = (data: Art) => expect(data).toEqual(art);
-
+        test('retrieving the artwork', async () => {
+            const stateChange: StateChange<Art> = {
+                onLoading: jest.fn(),
+                onSuccess: jest.fn()
+            };
             server.stubResponse(200, artResponse);
 
-            data.getAllArt(1, {onSuccess, onLoading}, server.path());
+            data.getAllArt(1, stateChange, server.path());
 
             const recordedRequest = await server.lastRequest();
             await waitFor(() => {
                 expect(recordedRequest.method).toEqual('GET');
                 expect(recordedRequest.url).toEqual('/api/v1/artworks?page=1');
-                expect(onLoading).toHaveBeenNthCalledWith(1, true);
-                expect(onLoading).toHaveBeenNthCalledWith(2, false);
+                expect(stateChange.onSuccess).toHaveBeenCalledWith(art);
+                expect(stateChange.onLoading).toHaveBeenNthCalledWith(1, true);
+                expect(stateChange.onLoading).toHaveBeenNthCalledWith(2, false);
             });
         });
 
