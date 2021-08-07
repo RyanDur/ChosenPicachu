@@ -1,9 +1,9 @@
 import {Table} from '../Table';
 import {columns, rows} from '../../__tests__/util';
-import './Home.css';
+import './Home.scss';
 
 export const Home = () => {
-    return <article className="card">
+    return <article className="card home">
         <Table tableClassName="fancy-table home-table"
                theadClassName="header"
                trClassName="row"
