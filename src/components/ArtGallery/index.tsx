@@ -23,7 +23,7 @@ const ArtGallery: FC = () => {
 
     return <section id="art-gallery">
         {loading ? <Loading className="loader" testId="gallery-loading"/> :
-            art?.pieces?.map(piece => <figure
+            art.pieces.map(piece => <figure
                 className="frame" key={piece.id}>
                 <Image className="piece" piece={piece} width={200}/>
                 <figcaption className="title">{piece.title}</figcaption>

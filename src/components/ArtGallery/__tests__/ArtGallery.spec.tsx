@@ -8,7 +8,7 @@ import {MemoryRouter, Route} from 'react-router-dom';
 import {Paths} from '../../../App';
 import * as H from 'history';
 
-const mockUseArtGallery = {art, updateArt: jest.fn()};
+const mockUseArtGallery = {art, updateArt: jest.fn(), reset: jest.fn()};
 jest.mock('../Context', () => {
     return ({
         useArtGallery: () => mockUseArtGallery
@@ -42,7 +42,6 @@ describe('The art gallery.', () => {
 
         it('should contain art', () =>
             expect(screen.queryAllByTestId(/piece/).length).toEqual(0));
-
     });
 
     describe('When the art has loaded', () => {
@@ -75,9 +74,9 @@ describe('The art gallery.', () => {
             expect(testLocation.pathname).toEqual(`${Paths.artGallery}/${art.pieces[0].id}`);
         });
 
-        it('should remove the art when leaving', () => {
+        it('should reset the art when leaving', () => {
             rendered.unmount();
-            expect(mockUseArtGallery.updateArt).toHaveBeenCalledWith({});
+            expect(mockUseArtGallery.reset).toHaveBeenCalled();
         });
     });
 });
