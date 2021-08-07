@@ -33,6 +33,9 @@
   z-index: 2;
   box-shadow: inset -7px 0 9px -7px rgb(0, 0, 0);
   border-right: 2px solid black;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   #app-navigation {
     position: sticky;
@@ -97,9 +100,26 @@
     }
 
     #borrowed-assets {
-      flex-direction: row;
-      justify-content: space-around;
+
     }
+  }
+}
+
+.drop-down {
+  position: sticky;
+  bottom: 0;
+
+  &:hover .drop-down-content {
+    display: block;
+  }
+
+  .drop-down-title {
+    display: flex;
+    justify-content: center;
+  }
+
+  .drop-down-content {
+    display: none;
   }
 }
 
