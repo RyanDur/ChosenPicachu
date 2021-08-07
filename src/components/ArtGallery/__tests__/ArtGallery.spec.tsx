@@ -1,4 +1,4 @@
-import {render, RenderResult, screen, waitFor} from '@testing-library/react';
+import {render, RenderResult, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {ArtGallery} from '..';
 import {data, StateChange} from '../../../data';
