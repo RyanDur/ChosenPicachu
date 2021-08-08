@@ -1,5 +1,6 @@
 import {Art, ArtResponse, Loaded, Loading, Piece, PieceResponse} from './types';
 import {loading, onSuccess} from './actions';
+import {Consumer} from '../components/UserInfo/types';
 
 export type GetPieceState = Loading | Loaded<Piece>;
 export type GetArtState = Loading | Loaded<Art>;
@@ -7,7 +8,7 @@ export type GetArtState = Loading | Loaded<Art>;
 export const data = {
     getAllArt: (
         page: number,
-        state: (state: GetArtState) => void,
+        state: Consumer<GetArtState>,
         domain = 'https://api.artic.edu') => {
         state(loading());
         fetch(`${domain}/api/v1/artworks?page=${page}`)
@@ -17,7 +18,7 @@ export const data = {
 
     getPiece: (
         id: string,
-        state: (state: GetPieceState) => void,
+        state: Consumer<GetPieceState>,
         domain = 'https://api.artic.edu') => {
         state(loading());
         fetch(`${domain}/api/v1/artworks/${id}`)
