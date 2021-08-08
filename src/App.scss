@@ -68,6 +68,33 @@
   }
 }
 
+.icons {
+  position: sticky;
+  bottom: 0;
+
+  &:focus-within .icons-content,
+  &:hover .icons-content {
+    display: block;
+  }
+
+  .attribution:focus {
+    color: var(--internationl-orange-engineering);
+  }
+
+  .icons-title {
+    display: flex;
+    justify-content: center;
+  }
+
+  .icons-content {
+    display: none;
+  }
+}
+
+.overhang {
+  box-shadow: 0 0.3rem 0.6rem var(--void), 0 0.3rem 0.6rem var(--void);
+}
+
 @media (max-width: 832px) {
   #app-header {
     position: sticky;
@@ -98,34 +125,12 @@
         margin-bottom: 0;
       }
     }
+
+    #borrowed-assets {
+      flex-direction: row;
+      justify-content: space-around;
+    }
   }
-}
-
-.icons {
-  position: sticky;
-  bottom: 0;
-
-  &:focus-within .icons-content,
-  &:hover .icons-content {
-    display: block;
-  }
-
-  .attribution:focus {
-    color: var(--internationl-orange-engineering);
-  }
-
-  .icons-title {
-    display: flex;
-    justify-content: center;
-  }
-
-  .icons-content {
-    display: none;
-  }
-}
-
-.overhang {
-  box-shadow: 0 0.3rem 0.6rem var(--void), 0 0.3rem 0.6rem var(--void);
 }
 
 @-webkit-keyframes load6 {

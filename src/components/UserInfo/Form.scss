@@ -52,7 +52,13 @@
     cursor: initial;
   }
 
+  #dob-cell {
+    display: flex;
+  }
+
   #dob {
+    min-width: 50%;
+
     &:invalid {
       color: transparent;
     }
