@@ -21,6 +21,7 @@ import {Link} from 'react-router-dom';
 import {Paths} from '../../App';
 import './Form.layout.scss';
 import './Form.scss';
+import {FancyDateInput} from './FancyFormElements/FancyDateInput';
 
 interface FormProps {
     currentUserInfo?: UserInfo;
@@ -81,11 +82,11 @@ export const UserInformation: FC<FormProps> = (
                     onChange={event => dispatch(updateEmail(event.currentTarget.value))}>
             Email
         </FancyInput>
-        <FancyInput id="dob-cell" inputId="dob" value={userInfo.user.dob}
-                    type="date" readOnly={readOnly} required
-                    onChange={event => dispatch(updateDOB(new Date(event.currentTarget.value)))}>
+        <FancyDateInput id="dob-cell" inputId="dob" value={userInfo.user.dob}
+                        readOnly={readOnly} required
+                        onChange={event => dispatch(updateDOB(new Date(event.currentTarget.value)))}>
             Date Of Birth
-        </FancyInput>
+        </FancyDateInput>
 
         <article tabIndex={0} id="avatar-cell"
                  className={join('card', readOnly && 'read-only')}
