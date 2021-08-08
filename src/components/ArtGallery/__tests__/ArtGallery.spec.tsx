@@ -1,13 +1,13 @@
 import {render, RenderResult, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {ArtGallery} from '..';
-import {data} from '../../../data';
-import {Art, StateChange} from '../../../data/types';
+import {data, GetArtState} from '../../../data';
 import {art} from '../../../__tests__/util';
 import {MemoryRouter, Route} from 'react-router-dom';
 import {Paths} from '../../../App';
 import {artInitialState, useArtGallery} from '../Context';
 import * as H from 'history';
+import {loading, onSuccess} from '../../../data/actions';
 
 jest.mock('../Context', () => {
     return ({
@@ -22,9 +22,8 @@ describe('The art gallery.', () => {
 
     describe('When the art has not loaded yet', () => {
         beforeEach(() => {
-            data.getAllArt = (page: number, {onLoading, onSuccess}: StateChange<Art>) => {
-                onLoading(true);
-                onSuccess(artInitialState);
+            data.getAllArt = (page: number, state: (state: GetArtState) => void) => {
+                state(loading());
             };
             mockUseArtGallery.mockReturnValue({
                 art: {pieces: []},
@@ -53,9 +52,8 @@ describe('The art gallery.', () => {
 
     describe('When the art has loaded', () => {
         beforeEach(() => {
-            data.getAllArt = (page: number, {onSuccess, onLoading}: StateChange<Art>) => {
-                onLoading(false);
-                onSuccess(art);
+            data.getAllArt = (page: number, state: (state: GetArtState) => void,) => {
+                state(onSuccess(art));
             };
             mockUseArtGallery.mockReturnValue({
                 art,
@@ -94,9 +92,8 @@ describe('The art gallery.', () => {
 
     describe('when there is no art to show', () => {
         beforeEach(() => {
-            data.getAllArt = (page: number, {onSuccess, onLoading}: StateChange<Art>) => {
-                onLoading(false);
-                onSuccess(artInitialState);
+            data.getAllArt = (page: number, state: (state: GetArtState) => void) => {
+                state(onSuccess(artInitialState));
             };
             mockUseArtGallery.mockReturnValue({
                 art: {pieces: []},

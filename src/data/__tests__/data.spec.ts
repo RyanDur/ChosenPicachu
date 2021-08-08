@@ -1,12 +1,12 @@
 import {data} from '../index';
 import {mockServer, MockWebServer} from './mockServer';
 import 'whatwg-fetch';
-import {Art, ArtResponse, Piece, PieceResponse, StateChange} from '../types';
+import {ArtResponse, Piece, PieceResponse} from '../types';
 import faker from 'faker';
 import {art} from '../../__tests__/util';
 import {nanoid} from 'nanoid';
 import {waitFor} from '@testing-library/react';
-import {loaded, loading} from '../actions';
+import {loading, onSuccess} from '../actions';
 
 describe('data', () => {
     describe('getting the art', () => {
@@ -20,21 +20,18 @@ describe('data', () => {
         afterEach(() => server.stop());
 
         test('retrieving the artwork', async () => {
-            const stateChange: StateChange<Art> = {
-                onLoading: jest.fn(),
-                onSuccess: jest.fn()
-            };
+            const state = jest.fn();
+
             server.stubResponse(200, artResponse);
 
-            data.getAllArt(1, stateChange, server.path());
+            data.getAllArt(1, state, server.path());
 
             const recordedRequest = await server.lastRequest();
             await waitFor(() => {
                 expect(recordedRequest.method).toEqual('GET');
                 expect(recordedRequest.url).toEqual('/api/v1/artworks?page=1');
-                expect(stateChange.onSuccess).toHaveBeenCalledWith(art);
-                expect(stateChange.onLoading).toHaveBeenNthCalledWith(1, true);
-                expect(stateChange.onLoading).toHaveBeenNthCalledWith(2, false);
+                expect(state).toHaveBeenNthCalledWith(1, loading());
+                expect(state).toHaveBeenNthCalledWith(2, onSuccess(art));
             });
         });
 
@@ -50,7 +47,7 @@ describe('data', () => {
                 expect(recordedRequest.method).toEqual('GET');
                 expect(recordedRequest.url).toEqual(`/api/v1/artworks/${pieceResponse.data.id}`);
                 expect(state).toHaveBeenNthCalledWith(1, loading());
-                expect(state).toHaveBeenNthCalledWith(2, loaded(piece));
+                expect(state).toHaveBeenNthCalledWith(2, onSuccess(piece));
             });
         });
 

@@ -14,12 +14,10 @@ const ArtPiece = () => {
 
     useEffect(() => {
         id && data.getPiece(id, (state: GetPieceState) => {
-            switch (state.type) {
-                case AsyncState.LOADING:
-                    return isLoading(true);
-                case AsyncState.LOADED:
-                    isLoading(false);
-                    return updatePiece(state.value);
+            if (state.type === AsyncState.LOADING) isLoading(true);
+            else if (state.type === AsyncState.LOADED) {
+                isLoading(false);
+                updatePiece(state.value);
             }
         });
         return reset;

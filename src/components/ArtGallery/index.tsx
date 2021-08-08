@@ -1,5 +1,5 @@
 import {FC, useEffect, useState} from 'react';
-import {data} from '../../data';
+import {data, GetArtState} from '../../data';
 import {useQuery} from '../hooks';
 import {Loading} from '../Loading';
 import {Image} from './Image';
@@ -7,6 +7,7 @@ import {GalleryNav} from './GalleryNav';
 import {useArtGallery} from './Context';
 import './ArtGallery.scss';
 import './ArtGallery.layout.scss';
+import {AsyncState} from '../../data/types';
 
 const ArtGallery: FC = () => {
     const {art, updateArt, reset} = useArtGallery();
@@ -14,9 +15,12 @@ const ArtGallery: FC = () => {
     const {page} = useQuery<{ page: number }>({page: 1});
 
     useEffect(() => {
-        data.getAllArt(page, {
-            onSuccess: updateArt,
-            onLoading: isLoading
+        data.getAllArt(page, (state: GetArtState) => {
+            if (state.type === AsyncState.LOADING) isLoading(true);
+            else if (state.type === AsyncState.LOADED) {
+                isLoading(false);
+                updateArt(state.value);
+            }
         });
         return reset;
     }, [page, updateArt]);
