@@ -6,7 +6,7 @@ import {data} from '../../../../data';
 import {nanoid} from 'nanoid';
 import * as faker from 'faker';
 import {Piece} from '../../../../data/types';
-import {onSuccess, loading, GetPieceAction} from '../../../../data/actions';
+import {onSuccess, loading, GetPieceAction, onError} from '../../../../data/actions';
 import {Dispatch} from '../../../UserInfo/types';
 
 jest.mock('../Context', () => ({
@@ -33,10 +33,7 @@ describe('viewing a piece', () => {
 
     describe('loading the piece of art', () => {
         beforeEach(() => {
-            data.getPiece = (id, dispatch: Dispatch<GetPieceAction>) => {
-                mockGetPieceId(id);
-                dispatch(loading());
-            };
+            data.getPiece = (id, dispatch: Dispatch<GetPieceAction>) => dispatch(loading());
             rendered = render(<MemoryRouter initialEntries={[`${Paths.artGallery}/1234`]}>
                 <Route path={Paths.artGalleryPiece}>
                     <ArtPiece/>
@@ -67,9 +64,32 @@ describe('viewing a piece', () => {
         it('should get the correct piece', () =>
             expect(mockGetPieceId).toHaveBeenCalledWith('1234'));
 
+        it('should not have the error image', () =>
+            expect(screen.queryByTestId('image-error')).not.toBeInTheDocument());
+
         it('should clean up the art-piece after unmounting', async () => {
             rendered.unmount();
             expect(mockUsePieceGallery().reset).toHaveBeenCalled();
         });
+    });
+
+    describe('when getting the piece has errored', () => {
+        beforeEach(() => {
+            data.getPiece = (id, dispatch: Dispatch<GetPieceAction>) => dispatch(onError());
+            rendered = render(<MemoryRouter initialEntries={[`${Paths.artGallery}/1234`]}>
+                <Route path={Paths.artGalleryPiece}>
+                    <ArtPiece/>
+                </Route>
+            </MemoryRouter>);
+        });
+
+        it('should have teh error image', () =>
+            expect(screen.queryByTestId('image-error')).toBeInTheDocument());
+
+        it('should not contain ab image', () =>
+            expect(screen.queryByTestId('image-figure')).not.toBeInTheDocument());
+
+        it('should not be loading', () =>
+            expect(screen.queryByTestId('loading-piece')).not.toBeInTheDocument());
     });
 });

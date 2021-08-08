@@ -11,21 +11,27 @@ import './Piece.scss';
 const ArtPiece = () => {
     const {piece, updatePiece, reset} = useArtPiece();
     const [loading, isLoading] = useState(false);
+    const [errored, isErrored] = useState(false);
     const {id} = useParams<{ id: string }>();
 
     useEffect(() => {
         id && data.getPiece(id, (action: GetPieceAction) => {
             isLoading(action.type === AsyncState.LOADING);
+            isErrored(action.type === AsyncState.ERROR);
             if (action.type === AsyncState.SUCCESS) updatePiece(action.value);
         });
         return reset;
     }, [id, updatePiece]);
 
-    return loading ? <Loading testId="loading-piece"/> :
-        <figure className="card art-work">
-            <Image piece={piece} height={2000} linkEnabled={false} className="piece"/>
-            <figcaption className="artist-display">{piece.artistInfo}</figcaption>
-        </figure>;
+    return <>
+        {loading && <Loading testId="loading-piece"/>}
+        {!loading && !errored && piece && <figure className="card art-work" data-testid="image-figure">
+          <Image piece={piece} height={2000} linkEnabled={false} className="piece"/>
+          <figcaption className="artist-display">{piece.artistInfo}</figcaption>
+        </figure>}
+        {errored && <img src="https://img.icons8.com/ios/50/ffffff/no-image.png"
+                         alt="Load Error" data-testid="image-error"/>}
+    </>;
 };
 
 export {

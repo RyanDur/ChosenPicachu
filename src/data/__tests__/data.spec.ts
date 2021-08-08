@@ -6,7 +6,7 @@ import faker from 'faker';
 import {art} from '../../__tests__/util';
 import {nanoid} from 'nanoid';
 import {waitFor} from '@testing-library/react';
-import {loading, onSuccess} from '../actions';
+import {loading, onError, onSuccess} from '../actions';
 
 describe('data', () => {
     let server: MockWebServer;
@@ -18,33 +18,67 @@ describe('data', () => {
 
     afterEach(() => server.stop());
 
-    test('retrieving all the artwork', async () => {
-        const dispatch = jest.fn();
-        server.stubResponse(200, artResponse);
+    describe('retrieving all the artwork', () => {
+        test('when it is successful', async () => {
+            const dispatch = jest.fn();
+            server.stubResponse(200, artResponse);
 
-        data.getAllArt(1, dispatch, server.path());
+            data.getAllArt(1, dispatch, server.path());
 
-        const recordedRequest = await server.lastRequest();
-        await waitFor(() => {
-            expect(recordedRequest.method).toEqual('GET');
-            expect(recordedRequest.url).toEqual('/api/v1/artworks?page=1');
-            expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-            expect(dispatch).toHaveBeenNthCalledWith(2, onSuccess(art));
+            const recordedRequest = await server.lastRequest();
+            await waitFor(() => {
+                expect(recordedRequest.method).toEqual('GET');
+                expect(recordedRequest.url).toEqual('/api/v1/artworks?page=1');
+                expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+                expect(dispatch).toHaveBeenNthCalledWith(2, onSuccess(art));
+            });
+        });
+
+        test('when it is not successful', async () => {
+            const dispatch = jest.fn();
+            server.stubResponse(500, {});
+
+            data.getAllArt(1, dispatch, server.path());
+
+            const recordedRequest = await server.lastRequest();
+            await waitFor(() => {
+                expect(recordedRequest.method).toEqual('GET');
+                expect(recordedRequest.url).toEqual('/api/v1/artworks?page=1');
+                expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+                expect(dispatch).toHaveBeenNthCalledWith(2, onError());
+            });
         });
     });
 
-    test('retrieving an artwork', async () => {
-        const dispatch = jest.fn();
-        server.stubResponse(200, pieceResponse);
+    describe('retrieving an artwork', () => {
+        test('when it is successful', async () => {
+            const dispatch = jest.fn();
+            server.stubResponse(200, pieceResponse);
 
-        data.getPiece(String(piece.id), dispatch, server.path());
+            data.getPiece(String(piece.id), dispatch, server.path());
 
-        const recordedRequest = await server.lastRequest();
-        await waitFor(() => {
-            expect(recordedRequest.method).toEqual('GET');
-            expect(recordedRequest.url).toEqual(`/api/v1/artworks/${pieceResponse.data.id}`);
-            expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-            expect(dispatch).toHaveBeenNthCalledWith(2, onSuccess(piece));
+            const recordedRequest = await server.lastRequest();
+            await waitFor(() => {
+                expect(recordedRequest.method).toEqual('GET');
+                expect(recordedRequest.url).toEqual(`/api/v1/artworks/${pieceResponse.data.id}`);
+                expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+                expect(dispatch).toHaveBeenNthCalledWith(2, onSuccess(piece));
+            });
+        });
+
+        test('when it is not successful', async () => {
+            const dispatch = jest.fn();
+            server.stubResponse(500, {});
+
+            data.getPiece(String(piece.id), dispatch, server.path());
+
+            const recordedRequest = await server.lastRequest();
+            await waitFor(() => {
+                expect(recordedRequest.method).toEqual('GET');
+                expect(recordedRequest.url).toEqual(`/api/v1/artworks/${pieceResponse.data.id}`);
+                expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+                expect(dispatch).toHaveBeenNthCalledWith(2, onError());
+            });
         });
     });
 

@@ -26,7 +26,7 @@ export const App = () => {
                     <Route path={Paths.about} exact>About</Route>
                     <Route path={Paths.users} exact>Users</Route>
                     <Route path={Paths.artGallery} exact>Art Gallery</Route>
-                    <Route path={Paths.artGalleryPiece} exact>{piece.title}</Route>
+                    <Route path={Paths.artGalleryPiece} exact>{piece && piece.title}</Route>
                 </Switch>
             </h1>
         </header>

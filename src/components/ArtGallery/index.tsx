@@ -13,26 +13,32 @@ import './ArtGallery.layout.scss';
 const ArtGallery: FC = () => {
     const {art, updateArt, reset} = useArtGallery();
     const [loading, isLoading] = useState(false);
+    const [errored, hasErrored] = useState(false);
     const {page} = useQuery<{ page: number }>({page: 1});
 
     useEffect(() => {
         data.getAllArt(page, (action: GetArtAction) => {
             isLoading(action.type === AsyncState.LOADING);
+            hasErrored(action.type === AsyncState.ERROR);
             if (action.type === AsyncState.SUCCESS) updateArt(action.value);
         });
         return reset;
     }, [page, updateArt]);
 
+    const showGallery = !loading && art?.pieces.length;
+    const showError = !(loading || art?.pieces.length) || errored;
+
     return <section id="art-gallery">
         {loading && <Loading className="loader" testId="gallery-loading"/>}
-        {!loading && art.pieces.length ? art.pieces.map(piece => <figure
+        {showGallery && art?.pieces.map(piece => <figure
             className="frame" key={piece.id}>
             <Image className="piece" piece={piece} width={200}/>
             <figcaption className="title">{piece.title}</figcaption>
-        </figure>) : <img src="https://img.icons8.com/ios/100/ffffff/no-image-gallery.png"
-                          id="empty-gallery"
-                          alt="empty gallery"
-                          data-testid="empty-gallery"/>}
+        </figure>)}
+        {showError && <img src="https://img.icons8.com/ios/100/ffffff/no-image-gallery.png"
+                                                id="empty-gallery"
+                                                alt="empty gallery"
+                                                data-testid="empty-gallery"/>}
     </section>;
 };
 

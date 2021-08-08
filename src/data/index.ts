@@ -1,5 +1,5 @@
 import {Art, ArtResponse, Piece, PieceResponse} from './types';
-import {GetArtAction, GetPieceAction, loading, onSuccess} from './actions';
+import {GetArtAction, GetPieceAction, loading, onError, onSuccess} from './actions';
 import {Dispatch} from '../components/UserInfo/types';
 
 export const data = {
@@ -8,9 +8,10 @@ export const data = {
         dispatch: Dispatch<GetArtAction>,
         domain = 'https://api.artic.edu') => {
         dispatch(loading());
-        fetch(`${domain}/api/v1/artworks?page=${page}`)
-            .then(response => response.json())
-            .then(response => dispatch(onSuccess(responseToArt(response))));
+        fetch(`${domain}/api/v1/artworks?page=${page}`).then(async response => {
+            if (response.status === 200) dispatch(onSuccess(responseToArt(await response.json())));
+            else dispatch(onError());
+        });
     },
 
     getPiece: (
@@ -18,9 +19,10 @@ export const data = {
         dispatch: Dispatch<GetPieceAction>,
         domain = 'https://api.artic.edu') => {
         dispatch(loading());
-        fetch(`${domain}/api/v1/artworks/${id}`)
-            .then(response => response.json())
-            .then(response => dispatch(onSuccess(responseToArtWork(response))));
+        fetch(`${domain}/api/v1/artworks/${id}`).then(async response => {
+            if (response.status === 200) dispatch(onSuccess(responseToArtWork(await response.json())));
+            else dispatch(onError());
+        });
     }
 };
 

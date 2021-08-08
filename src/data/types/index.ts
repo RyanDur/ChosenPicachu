@@ -73,7 +73,8 @@ export interface Art {
 
 export enum AsyncState {
     LOADING = 'LOADING',
-    SUCCESS = 'SUCCESS'
+    SUCCESS = 'SUCCESS',
+    ERROR = 'ERROR'
 }
 
 export interface Action<T> {
@@ -84,3 +85,4 @@ export type Loading = Action<AsyncState.LOADING>;
 export type Loaded<T> = Action<AsyncState.SUCCESS> & {
     value: T;
 };
+export type Error = Action<AsyncState.ERROR>;
