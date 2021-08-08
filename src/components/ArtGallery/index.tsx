@@ -5,9 +5,9 @@ import {Loading} from '../Loading';
 import {Image} from './Image';
 import {GalleryNav} from './GalleryNav';
 import {useArtGallery} from './Context';
+import {AsyncState} from '../../data/types';
 import './ArtGallery.scss';
 import './ArtGallery.layout.scss';
-import {AsyncState} from '../../data/types';
 
 const ArtGallery: FC = () => {
     const {art, updateArt, reset} = useArtGallery();
@@ -16,11 +16,8 @@ const ArtGallery: FC = () => {
 
     useEffect(() => {
         data.getAllArt(page, (state: GetArtState) => {
-            if (state.type === AsyncState.LOADING) isLoading(true);
-            else if (state.type === AsyncState.LOADED) {
-                isLoading(false);
-                updateArt(state.value);
-            }
+            isLoading(state.type === AsyncState.LOADING);
+            if (state.type === AsyncState.LOADED) updateArt(state.value);
         });
         return reset;
     }, [page, updateArt]);
