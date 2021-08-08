@@ -15,7 +15,7 @@ const ArtPiece = () => {
     useEffect(() => {
         id && data.getPiece(id, (state: GetPieceState) => {
             isLoading(state.type === AsyncState.LOADING);
-            if (state.type === AsyncState.LOADED) updatePiece(state.value);
+            if (state.type === AsyncState.SUCCESS) updatePiece(state.value);
         });
         return reset;
     }, [id, updatePiece]);

@@ -17,7 +17,7 @@ const ArtGallery: FC = () => {
     useEffect(() => {
         data.getAllArt(page, (state: GetArtState) => {
             isLoading(state.type === AsyncState.LOADING);
-            if (state.type === AsyncState.LOADED) updateArt(state.value);
+            if (state.type === AsyncState.SUCCESS) updateArt(state.value);
         });
         return reset;
     }, [page, updateArt]);

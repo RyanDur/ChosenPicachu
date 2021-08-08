@@ -80,7 +80,7 @@ export interface StateChange<T> {
 
 export enum AsyncState {
     LOADING = 'LOADING',
-    LOADED = 'LOADED'
+    SUCCESS = 'SUCCESS'
 }
 
 export interface State<T> {
@@ -88,6 +88,6 @@ export interface State<T> {
 }
 
 export type Loading = State<AsyncState.LOADING>;
-export type Loaded<T> = State<AsyncState.LOADED> & {
+export type Loaded<T> = State<AsyncState.SUCCESS> & {
     value: T;
 };
