@@ -2,11 +2,11 @@ import {render, RenderResult, screen} from '@testing-library/react';
 import {Paths} from '../../../../App';
 import {MemoryRouter, Route} from 'react-router-dom';
 import {ArtPiece, useArtPiece} from '../index';
-import {data, GetPieceAction} from '../../../../data';
+import {data} from '../../../../data';
 import {nanoid} from 'nanoid';
 import * as faker from 'faker';
 import {Piece} from '../../../../data/types';
-import {onSuccess, loading} from '../../../../data/actions';
+import {onSuccess, loading, GetPieceAction} from '../../../../data/actions';
 import {Dispatch} from '../../../UserInfo/types';
 
 jest.mock('../Context', () => ({

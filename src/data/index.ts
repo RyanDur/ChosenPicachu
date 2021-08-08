@@ -1,9 +1,6 @@
-import {Art, ArtResponse, Loaded, Loading, Piece, PieceResponse} from './types';
-import {loading, onSuccess} from './actions';
+import {Art, ArtResponse, Piece, PieceResponse} from './types';
+import {GetArtAction, GetPieceAction, loading, onSuccess} from './actions';
 import {Dispatch} from '../components/UserInfo/types';
-
-export type GetPieceAction = Loading | Loaded<Piece>;
-export type GetArtAction = Loading | Loaded<Art>;
 
 export const data = {
     getAllArt: (

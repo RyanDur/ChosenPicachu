@@ -1,10 +1,11 @@
 import {useParams} from 'react-router-dom';
 import {useEffect, useState} from 'react';
-import { data, GetPieceAction} from '../../../data';
+import {data} from '../../../data';
 import {Loading} from '../../Loading';
 import {ArtPieceContext, useArtPiece, useArtPieceContext} from './Context';
 import {Image} from '../Image';
 import {AsyncState} from '../../../data/types';
+import {GetPieceAction} from '../../../data/actions';
 import './Piece.scss';
 
 const ArtPiece = () => {

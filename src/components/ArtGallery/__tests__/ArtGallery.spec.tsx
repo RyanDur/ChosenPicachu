@@ -1,13 +1,13 @@
 import {render, RenderResult, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {ArtGallery} from '..';
-import {data, GetArtAction} from '../../../data';
+import {data} from '../../../data';
 import {art} from '../../../__tests__/util';
 import {MemoryRouter, Route} from 'react-router-dom';
 import {Paths} from '../../../App';
 import {artInitialState, useArtGallery} from '../Context';
 import * as H from 'history';
-import {loading, onSuccess} from '../../../data/actions';
+import {GetArtAction, loading, onSuccess} from '../../../data/actions';
 import {Dispatch} from '../../UserInfo/types';
 
 jest.mock('../Context', () => {

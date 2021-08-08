@@ -1,11 +1,12 @@
 import {FC, useEffect, useState} from 'react';
-import {data, GetArtAction} from '../../data';
+import {data} from '../../data';
 import {useQuery} from '../hooks';
 import {Loading} from '../Loading';
 import {Image} from './Image';
 import {GalleryNav} from './GalleryNav';
 import {useArtGallery} from './Context';
 import {AsyncState} from '../../data/types';
+import {GetArtAction} from '../../data/actions';
 import './ArtGallery.scss';
 import './ArtGallery.layout.scss';
 
@@ -23,15 +24,15 @@ const ArtGallery: FC = () => {
     }, [page, updateArt]);
 
     return <section id="art-gallery">
-        {loading ? <Loading className="loader" testId="gallery-loading"/> :
-            art.pieces.length ? art.pieces.map(piece => <figure
-                className="frame" key={piece.id}>
-                <Image className="piece" piece={piece} width={200}/>
-                <figcaption className="title">{piece.title}</figcaption>
-            </figure>) : <img src="https://img.icons8.com/ios/100/ffffff/no-image-gallery.png"
-                              id="empty-gallery"
-                              alt="empty gallery"
-                              data-testid="empty-gallery"/>}
+        {loading && <Loading className="loader" testId="gallery-loading"/>}
+        {!loading && art.pieces.length ? art.pieces.map(piece => <figure
+            className="frame" key={piece.id}>
+            <Image className="piece" piece={piece} width={200}/>
+            <figcaption className="title">{piece.title}</figcaption>
+        </figure>) : <img src="https://img.icons8.com/ios/100/ffffff/no-image-gallery.png"
+                          id="empty-gallery"
+                          alt="empty gallery"
+                          data-testid="empty-gallery"/>}
     </section>;
 };
 
