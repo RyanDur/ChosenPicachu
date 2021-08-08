@@ -2,7 +2,7 @@ import {render, RenderResult, screen} from '@testing-library/react';
 import {Paths} from '../../../../App';
 import {MemoryRouter, Route} from 'react-router-dom';
 import {ArtPiece, useArtPiece} from '../index';
-import {data, GetPieceState} from '../../../../data';
+import {data, GetPieceAction} from '../../../../data';
 import {nanoid} from 'nanoid';
 import * as faker from 'faker';
 import {Piece} from '../../../../data/types';
@@ -32,7 +32,7 @@ describe('viewing a piece', () => {
 
     describe('loading the piece of art', () => {
         beforeEach(() => {
-            data.getPiece = (id, state: (state: GetPieceState) => void) => {
+            data.getPiece = (id, state: (state: GetPieceAction) => void) => {
                 mockGetPieceId(id);
                 state(loading());
             };
@@ -49,7 +49,7 @@ describe('viewing a piece', () => {
 
     describe('when the art piece is loaded', () => {
         beforeEach(() => {
-            data.getPiece = (id, state: (state: GetPieceState) => void) => {
+            data.getPiece = (id, state: (state: GetPieceAction) => void) => {
                 mockGetPieceId(id);
                 state(onSuccess(mockPiece));
             };

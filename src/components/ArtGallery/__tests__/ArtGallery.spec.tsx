@@ -1,13 +1,14 @@
 import {render, RenderResult, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {ArtGallery} from '..';
-import {data, GetArtState} from '../../../data';
+import {data, GetArtAction} from '../../../data';
 import {art} from '../../../__tests__/util';
 import {MemoryRouter, Route} from 'react-router-dom';
 import {Paths} from '../../../App';
 import {artInitialState, useArtGallery} from '../Context';
 import * as H from 'history';
 import {loading, onSuccess} from '../../../data/actions';
+import {Consumer} from '../../UserInfo/types';
 
 jest.mock('../Context', () => {
     return ({
@@ -22,7 +23,7 @@ describe('The art gallery.', () => {
 
     describe('When the art has not loaded yet', () => {
         beforeEach(() => {
-            data.getAllArt = (page: number, state: (state: GetArtState) => void) => {
+            data.getAllArt = (page: number, state: Consumer<GetArtAction>) => {
                 state(loading());
             };
             mockUseArtGallery.mockReturnValue({
@@ -52,7 +53,7 @@ describe('The art gallery.', () => {
 
     describe('When the art has loaded', () => {
         beforeEach(() => {
-            data.getAllArt = (page: number, state: (state: GetArtState) => void,) => {
+            data.getAllArt = (page: number, state: Consumer<GetArtAction>) => {
                 state(onSuccess(art));
             };
             mockUseArtGallery.mockReturnValue({
@@ -92,7 +93,7 @@ describe('The art gallery.', () => {
 
     describe('when there is no art to show', () => {
         beforeEach(() => {
-            data.getAllArt = (page: number, state: (state: GetArtState) => void) => {
+            data.getAllArt = (page: number, state: Consumer<GetArtAction>) => {
                 state(onSuccess(artInitialState));
             };
             mockUseArtGallery.mockReturnValue({

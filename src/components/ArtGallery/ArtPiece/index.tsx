@@ -1,6 +1,6 @@
 import {useParams} from 'react-router-dom';
 import {useEffect, useState} from 'react';
-import { data, GetPieceState} from '../../../data';
+import { data, GetPieceAction} from '../../../data';
 import {Loading} from '../../Loading';
 import {ArtPieceContext, useArtPiece, useArtPieceContext} from './Context';
 import {Image} from '../Image';
@@ -13,9 +13,9 @@ const ArtPiece = () => {
     const {id} = useParams<{ id: string }>();
 
     useEffect(() => {
-        id && data.getPiece(id, (state: GetPieceState) => {
-            isLoading(state.type === AsyncState.LOADING);
-            if (state.type === AsyncState.SUCCESS) updatePiece(state.value);
+        id && data.getPiece(id, (action: GetPieceAction) => {
+            isLoading(action.type === AsyncState.LOADING);
+            if (action.type === AsyncState.SUCCESS) updatePiece(action.value);
         });
         return reset;
     }, [id, updatePiece]);
