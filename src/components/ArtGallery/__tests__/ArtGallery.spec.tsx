@@ -1,8 +1,8 @@
 import {render, RenderResult, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {ArtGallery} from '..';
-import {data, StateChange} from '../../../data';
-import {Art} from '../../../data/types';
+import {data} from '../../../data';
+import {Art, StateChange} from '../../../data/types';
 import {art} from '../../../__tests__/util';
 import {MemoryRouter, Route} from 'react-router-dom';
 import {Paths} from '../../../App';

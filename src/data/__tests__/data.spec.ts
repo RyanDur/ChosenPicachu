@@ -1,11 +1,12 @@
-import {data, StateChange} from '../index';
+import {data} from '../index';
 import {mockServer, MockWebServer} from './mockServer';
 import 'whatwg-fetch';
-import {Art, ArtResponse, Piece, PieceResponse} from '../types';
+import {Art, ArtResponse, Piece, PieceResponse, StateChange} from '../types';
 import faker from 'faker';
 import {art} from '../../__tests__/util';
 import {nanoid} from 'nanoid';
 import {waitFor} from '@testing-library/react';
+import {loaded, loading} from '../actions';
 
 describe('data', () => {
     describe('getting the art', () => {
@@ -37,17 +38,20 @@ describe('data', () => {
             });
         });
 
-        it('should consume an artwork', (done) => {
-            const consumer = async (data: Piece) => {
-                const recordedRequest = await server.lastRequest();
-                expect(data).toEqual(piece);
-                expect(recordedRequest.method).toEqual('GET');
-                expect(recordedRequest.url).toEqual(`/api/v1/artworks/${pieceResponse.data.id}`);
-                done();
-            };
+        it('should consume an artwork', async () => {
+            const state = jest.fn();
 
             server.stubResponse(200, pieceResponse);
-            data.getPiece(String(piece.id), consumer, server.path());
+
+            data.getPiece(String(piece.id), state, server.path());
+
+            const recordedRequest = await server.lastRequest();
+            await waitFor(() => {
+                expect(recordedRequest.method).toEqual('GET');
+                expect(recordedRequest.url).toEqual(`/api/v1/artworks/${pieceResponse.data.id}`);
+                expect(state).toHaveBeenNthCalledWith(1, loading());
+                expect(state).toHaveBeenNthCalledWith(2, loaded(piece));
+            });
         });
 
         const pieceResponse: PieceResponse = { data: {

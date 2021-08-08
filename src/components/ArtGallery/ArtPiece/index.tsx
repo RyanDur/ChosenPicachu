@@ -1,26 +1,35 @@
 import {useParams} from 'react-router-dom';
-import {useEffect} from 'react';
-import {data} from '../../../data';
+import {useEffect, useState} from 'react';
+import { data, GetPieceState} from '../../../data';
 import {Loading} from '../../Loading';
-import {ArtPieceContext, useArtPieceContext, useArtPiece} from './Context';
+import {ArtPieceContext, useArtPiece, useArtPieceContext} from './Context';
 import {Image} from '../Image';
+import {AsyncState} from '../../../data/types';
 import './Piece.scss';
 
 const ArtPiece = () => {
-    const {piece, updatePiece} = useArtPiece();
+    const {piece, updatePiece, reset} = useArtPiece();
+    const [loading, isLoading] = useState(false);
     const {id} = useParams<{ id: string }>();
 
     useEffect(() => {
-        id && data.getPiece(id, updatePiece);
-        return () => updatePiece({});
+        id && data.getPiece(id, (state: GetPieceState) => {
+            switch (state.type) {
+                case AsyncState.LOADING:
+                    return isLoading(true);
+                case AsyncState.LOADED:
+                    isLoading(false);
+                    return updatePiece(state.value);
+            }
+        });
+        return reset;
     }, [id, updatePiece]);
 
-    if (piece?.imageId) {
-        return <figure className="card art-work">
+    return loading ? <Loading testId="loading-piece"/> :
+        <figure className="card art-work">
             <Image piece={piece} height={2000} linkEnabled={false} className="piece"/>
             <figcaption className="artist-display">{piece.artistInfo}</figcaption>
         </figure>;
-    } else return <Loading/>;
 };
 
 export {
