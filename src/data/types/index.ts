@@ -1,3 +1,5 @@
+import {Consumer} from '../../components/UserInfo/types';
+
 export interface PaginationResponse {
     total: number;
     limit: number;
@@ -70,3 +72,22 @@ export interface Art {
     pieces: Piece[];
     baseUrl: string;
 }
+
+export interface StateChange<T> {
+    onSuccess: Consumer<T>;
+    onLoading: Consumer<boolean>;
+}
+
+export enum AsyncState {
+    LOADING = 'LOADING',
+    LOADED = 'LOADED'
+}
+
+export interface State<T> {
+    type: T;
+}
+
+export type Loading = State<AsyncState.LOADING>;
+export type Loaded<T> = State<AsyncState.LOADED> & {
+    value: T;
+};

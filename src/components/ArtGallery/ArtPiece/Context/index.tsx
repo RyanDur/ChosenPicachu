@@ -3,16 +3,22 @@ import {Consumer} from '../../../UserInfo/types';
 import {createContext, useContext, useMemo, useState} from 'react';
 
 interface PieceContext {
-    piece: Partial<Piece>;
-    updatePiece: Consumer<Partial<Piece>>;
+    piece: Piece;
+    updatePiece: Consumer<Piece>;
+    reset: Consumer<void>;
 }
 
 export const ArtPieceContext = createContext<PieceContext>({
-    piece: {},
-    updatePiece: (piece: Partial<Piece> = {}) => void piece
+    piece: {} as Piece,
+    updatePiece: (piece: Piece = {} as Piece) => void piece,
+    reset: () => void 0
 });
 export const useArtPiece = () => useContext(ArtPieceContext);
 export const useArtPieceContext = (): PieceContext => {
-    const [piece, updatePiece] = useState<Partial<Piece>>({});
-    return useMemo(() => ({piece, updatePiece}), [piece]);
+    const [piece, updatePiece] = useState<Piece>({} as Piece);
+    return useMemo(() => ({
+        piece,
+        updatePiece,
+        reset: () => updatePiece({} as Piece)
+    }), [piece]);
 };
