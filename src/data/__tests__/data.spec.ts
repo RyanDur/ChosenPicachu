@@ -19,32 +19,32 @@ describe('data', () => {
     afterEach(() => server.stop());
 
     test('retrieving all the artwork', async () => {
-        const state = jest.fn();
+        const dispatch = jest.fn();
         server.stubResponse(200, artResponse);
 
-        data.getAllArt(1, state, server.path());
+        data.getAllArt(1, dispatch, server.path());
 
         const recordedRequest = await server.lastRequest();
         await waitFor(() => {
             expect(recordedRequest.method).toEqual('GET');
             expect(recordedRequest.url).toEqual('/api/v1/artworks?page=1');
-            expect(state).toHaveBeenNthCalledWith(1, loading());
-            expect(state).toHaveBeenNthCalledWith(2, onSuccess(art));
+            expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+            expect(dispatch).toHaveBeenNthCalledWith(2, onSuccess(art));
         });
     });
 
     test('retrieving an artwork', async () => {
-        const state = jest.fn();
+        const dispatch = jest.fn();
         server.stubResponse(200, pieceResponse);
 
-        data.getPiece(String(piece.id), state, server.path());
+        data.getPiece(String(piece.id), dispatch, server.path());
 
         const recordedRequest = await server.lastRequest();
         await waitFor(() => {
             expect(recordedRequest.method).toEqual('GET');
             expect(recordedRequest.url).toEqual(`/api/v1/artworks/${pieceResponse.data.id}`);
-            expect(state).toHaveBeenNthCalledWith(1, loading());
-            expect(state).toHaveBeenNthCalledWith(2, onSuccess(piece));
+            expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+            expect(dispatch).toHaveBeenNthCalledWith(2, onSuccess(piece));
         });
     });
 

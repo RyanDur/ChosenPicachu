@@ -26,6 +26,7 @@ export interface UserInfo {
 }
 
 export type Consumer<T> = (value: T) => void
+export type Dispatch<T> = Consumer<T>
 
 export interface Action<T> {
     type: T
