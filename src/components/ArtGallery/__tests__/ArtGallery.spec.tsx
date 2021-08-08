@@ -8,7 +8,7 @@ import {Paths} from '../../../App';
 import {artInitialState, useArtGallery} from '../Context';
 import * as H from 'history';
 import {loading, onSuccess} from '../../../data/actions';
-import {Consumer} from '../../UserInfo/types';
+import {Dispatch} from '../../UserInfo/types';
 
 jest.mock('../Context', () => {
     return ({
@@ -23,9 +23,7 @@ describe('The art gallery.', () => {
 
     describe('When the art has not loaded yet', () => {
         beforeEach(() => {
-            data.getAllArt = (page: number, state: Consumer<GetArtAction>) => {
-                state(loading());
-            };
+            data.getAllArt = (page: number, dispatch: Dispatch<GetArtAction>) => dispatch(loading());
             mockUseArtGallery.mockReturnValue({
                 art: {pieces: []},
                 updateArt: jest.fn(),
@@ -53,9 +51,7 @@ describe('The art gallery.', () => {
 
     describe('When the art has loaded', () => {
         beforeEach(() => {
-            data.getAllArt = (page: number, state: Consumer<GetArtAction>) => {
-                state(onSuccess(art));
-            };
+            data.getAllArt = (page: number, dispatch: Dispatch<GetArtAction>) => dispatch(onSuccess(art));
             mockUseArtGallery.mockReturnValue({
                 art,
                 updateArt: jest.fn(),
@@ -93,9 +89,7 @@ describe('The art gallery.', () => {
 
     describe('when there is no art to show', () => {
         beforeEach(() => {
-            data.getAllArt = (page: number, state: Consumer<GetArtAction>) => {
-                state(onSuccess(artInitialState));
-            };
+            data.getAllArt = (page: number, dispatch: Dispatch<GetArtAction>) => dispatch(onSuccess(artInitialState));
             mockUseArtGallery.mockReturnValue({
                 art: {pieces: []},
                 updateArt: jest.fn(),

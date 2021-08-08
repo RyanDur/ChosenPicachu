@@ -1,6 +1,6 @@
 import {Art, ArtResponse, Loaded, Loading, Piece, PieceResponse} from './types';
 import {loading, onSuccess} from './actions';
-import {Consumer} from '../components/UserInfo/types';
+import {Dispatch} from '../components/UserInfo/types';
 
 export type GetPieceAction = Loading | Loaded<Piece>;
 export type GetArtAction = Loading | Loaded<Art>;
@@ -8,22 +8,22 @@ export type GetArtAction = Loading | Loaded<Art>;
 export const data = {
     getAllArt: (
         page: number,
-        state: Consumer<GetArtAction>,
+        dispatch: Dispatch<GetArtAction>,
         domain = 'https://api.artic.edu') => {
-        state(loading());
+        dispatch(loading());
         fetch(`${domain}/api/v1/artworks?page=${page}`)
             .then(response => response.json())
-            .then(response => state(onSuccess(responseToArt(response))));
+            .then(response => dispatch(onSuccess(responseToArt(response))));
     },
 
     getPiece: (
         id: string,
-        state: Consumer<GetPieceAction>,
+        dispatch: Dispatch<GetPieceAction>,
         domain = 'https://api.artic.edu') => {
-        state(loading());
+        dispatch(loading());
         fetch(`${domain}/api/v1/artworks/${id}`)
             .then(response => response.json())
-            .then(response => state(onSuccess(responseToArtWork(response))));
+            .then(response => dispatch(onSuccess(responseToArtWork(response))));
     }
 };
 
