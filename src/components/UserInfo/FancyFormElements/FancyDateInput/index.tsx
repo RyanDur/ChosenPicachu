@@ -17,6 +17,5 @@ interface FancyDateInputProps {
     pattern?: string;
 }
 
-export const FancyDateInput: FC<FancyDateInputProps> = ({readOnly, ...rest}) => {
-    return readOnly ? <FancyInput type="text" readOnly={readOnly} {...rest}/> : <FancyInput type="date" {...rest}/>;
-};
+export const FancyDateInput: FC<FancyDateInputProps> = ({readOnly, ...rest}) => readOnly ?
+    <FancyInput type="text" readOnly={readOnly} {...rest}/> : <FancyInput type="date" {...rest}/>;
