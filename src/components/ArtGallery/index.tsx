@@ -33,12 +33,12 @@ const ArtGallery: FC = () => {
     const showError = not(loading) && (empty(art?.pieces) || errored);
 
     return <section id="art-gallery">
-        {loading && <Loading className="loader" testId="gallery-loading"/>}
         {showGallery && art?.pieces.map(piece => <figure
             className="frame" key={piece.id}>
             <Image className="piece" piece={piece} width={200}/>
             <figcaption className="title">{piece.title}</figcaption>
         </figure>)}
+        {loading && <Loading className="loader" testId="gallery-loading"/>}
         {showError && <img src="https://img.icons8.com/ios/100/ffffff/no-image-gallery.png"
                            id="empty-gallery"
                            alt="empty gallery"
