@@ -29,8 +29,8 @@ const ArtGallery: FC = () => {
         return reset;
     }, [page, updateArt]);
 
-    const showGallery = !loading && has(art?.pieces);
-    const showError = !loading && (empty(art?.pieces) || errored);
+    const showGallery = not(loading) && has(art?.pieces);
+    const showError = not(loading) && (empty(art?.pieces) || errored);
 
     return <section id="art-gallery">
         {loading && <Loading className="loader" testId="gallery-loading"/>}
