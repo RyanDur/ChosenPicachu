@@ -16,7 +16,7 @@ describe('Gallery Navigation', () => {
 
     beforeEach(() => {
         render(<MemoryRouter initialEntries={[`${Paths.artGallery}`]}>
-            <GalleryNav/>
+            <Route path={Paths.artGallery}><GalleryNav/></Route>
             <Route
                 path="*"
                 render={({location}) => {
