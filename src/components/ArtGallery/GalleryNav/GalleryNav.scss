@@ -5,6 +5,34 @@
   align-items: center;
   pointer-events: none;
 
+  #go-to-page {
+    pointer-events: all;
+    width: var(--base-x-10);
+
+    .control {
+      width: 100%;
+    }
+
+    #go-to {
+      height: 4rem;
+      border-radius: 2rem 2rem 0 0;
+      padding-left: 1rem;
+      outline: none;
+    }
+
+    #submit-page-number {
+      border-radius: 0 0 2rem 2rem;
+      border: 1px solid var(--void);
+      padding: 0;
+      background: var(--paper);
+
+      &:hover {
+        color: inherit;
+        background: var(--mint)
+      }
+    }
+  }
+
   .page {
     background: var(--paper);
     width: var(--base-x-10);

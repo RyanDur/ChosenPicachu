@@ -1,5 +1,5 @@
-import {Link} from 'react-router-dom';
-import React from 'react';
+import {Link, useHistory} from 'react-router-dom';
+import React, {FormEvent, useState} from 'react';
 import {Paths} from '../../../App';
 import {useQuery} from '../../hooks';
 import {useArtGallery} from '../Context';
@@ -7,7 +7,9 @@ import './GalleryNav.scss';
 
 export const GalleryNav = () => {
     const {art} = useArtGallery();
-    const {page} = useQuery<{ page: number }>({page: 1});
+    const history = useHistory();
+    const {page} = useQuery<{ page: string }>({page: '1'});
+    const [pageNumber, updatePageNumber] = useState(page);
     const firstPage = 1;
     const lastPage = art?.pagination?.totalPages ?? Number.MAX_VALUE;
     const currentPage = +page;
@@ -17,7 +19,15 @@ export const GalleryNav = () => {
     const hasPrevPage = currentPage > firstPage;
     const prevPage = () => hasPrevPage ? currentPage - 1 : currentPage;
 
-    return <nav className="pagination" onClick={() => window.scrollTo(0, 0)}>
+    const onSubmit = (event: FormEvent) => {
+        event.preventDefault();
+        history.push({
+            pathname: history.location.pathname,
+            search: `?page=${pageNumber}`
+        });
+    };
+
+    return <nav className="pagination">
         {hasPrevPage && <Link to={`${Paths.artGallery}?page=${firstPage}`}
                               id="first" className="page" data-testid="first-page">
           FIRST
@@ -26,6 +36,16 @@ export const GalleryNav = () => {
                               id="prev" className="page" data-testid="prev-page">
           PREV
         </Link>}
+        <form onSubmit={onSubmit} id="go-to-page">
+            <input type="number"
+                   id="go-to"
+                   min={firstPage}
+                   max={lastPage}
+                   className="control"
+                   placeholder="page #"
+                   onChange={event => updatePageNumber(event.currentTarget.value)}/>
+            <button type="submit" id="submit-page-number" className="control">Go</button>
+        </form>
         {hasNextPage && <Link to={`${Paths.artGallery}?page=${nextPage()}`}
                               id="next" className="page" data-testid="next-page">
           NEXT
