@@ -9,7 +9,7 @@ export const GalleryNav = () => {
     const {art} = useArtGallery();
     const {page} = useQuery<{ page: number }>({page: 1});
     const firstPage = 1;
-    const lastPage = art?.pagination?.totalPages ?? Number.MAX_VALUE;
+    const lastPage = art?.pagination?.totalPages ?? firstPage;
     const currentPage = +page;
 
     const hasNextPage = currentPage < lastPage;

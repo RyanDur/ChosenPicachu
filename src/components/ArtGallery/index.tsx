@@ -10,6 +10,10 @@ import {GetArtAction} from '../../data/actions';
 import './ArtGallery.scss';
 import './ArtGallery.layout.scss';
 
+const not = (value: unknown): boolean => !value;
+const empty = (value: unknown[] = []): boolean => value.length === 0;
+const has = (value: unknown[] = []): boolean => not(empty(value));
+
 const ArtGallery: FC = () => {
     const {art, updateArt, reset} = useArtGallery();
     const [loading, isLoading] = useState(false);
@@ -25,8 +29,8 @@ const ArtGallery: FC = () => {
         return reset;
     }, [page, updateArt]);
 
-    const showGallery = !loading && art?.pieces.length;
-    const showError = !(loading || art?.pieces.length) || errored;
+    const showGallery = !loading && has(art?.pieces);
+    const showError = !loading && (empty(art?.pieces) || errored);
 
     return <section id="art-gallery">
         {loading && <Loading className="loader" testId="gallery-loading"/>}
@@ -36,9 +40,9 @@ const ArtGallery: FC = () => {
             <figcaption className="title">{piece.title}</figcaption>
         </figure>)}
         {showError && <img src="https://img.icons8.com/ios/100/ffffff/no-image-gallery.png"
-                                                id="empty-gallery"
-                                                alt="empty gallery"
-                                                data-testid="empty-gallery"/>}
+                           id="empty-gallery"
+                           alt="empty gallery"
+                           data-testid="empty-gallery"/>}
     </section>;
 };
 
