@@ -94,4 +94,22 @@ describe('Gallery Navigation', () => {
             expect(screen.queryByTestId('prev-page')).not.toBeInTheDocument();
         });
     });
+
+    describe('going to a specific page', () => {
+        it('go to the specified page', () => {
+            const pageNumber = String(Math.floor(Math.random() * 1000));
+            userEvent.type(screen.getByLabelText('Go To:'), pageNumber);
+            userEvent.click(screen.getByText('Go'));
+
+            expect(testLocation.search).toEqual(`?page=${pageNumber}`);
+        });
+
+        it('should not allow a user to go to a page lower than the first', () =>
+            expect(screen.getByLabelText('Go To:')).toHaveAttribute('min', '1'));
+
+        it('should not allow a user to go to a page higher than the last', () =>
+            expect(screen.getByLabelText('Go To:'))
+                .toHaveAttribute('max', `${art.pagination.totalPages}`));
+    });
+
 });
