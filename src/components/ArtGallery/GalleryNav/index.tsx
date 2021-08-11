@@ -29,10 +29,12 @@ export const GalleryNav = () => {
 
     return <nav className="pagination">
         {hasPrevPage && <Link to={`${Paths.artGallery}?page=${firstPage}`}
+                              onClick={() => window.scrollTo(0, 0)}
                               id="first" className="page" data-testid="first-page">
           FIRST
         </Link>}
         {hasPrevPage && <Link to={`${Paths.artGallery}?page=${prevPage()}`}
+                              onClick={() => window.scrollTo(0, 0)}
                               id="prev" className="page" data-testid="prev-page">
           PREV
         </Link>}
@@ -43,14 +45,17 @@ export const GalleryNav = () => {
                    max={lastPage}
                    className="control"
                    placeholder="page #"
+                   data-testid="go-to"
                    onChange={event => updatePageNumber(event.currentTarget.value)}/>
             <button type="submit" id="submit-page-number" className="control">Go</button>
         </form>
         {hasNextPage && <Link to={`${Paths.artGallery}?page=${nextPage()}`}
+                              onClick={() => window.scrollTo(0, 0)}
                               id="next" className="page" data-testid="next-page">
           NEXT
         </Link>}
         {hasNextPage && <Link to={`${Paths.artGallery}?page=${lastPage}`}
+                              onClick={() => window.scrollTo(0, 0)}
                               id="last" className="page" data-testid="last-page">
           LAST
         </Link>}
