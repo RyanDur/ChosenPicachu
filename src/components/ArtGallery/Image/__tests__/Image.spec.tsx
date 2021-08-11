@@ -8,6 +8,7 @@ import userEvent from '@testing-library/user-event';
 import * as H from 'history';
 
 describe('the image', () => {
+    window.scrollTo = jest.fn();
     let testLocation: H.Location;
     const piece = {
         id: Math.random(),
@@ -50,6 +51,11 @@ describe('the image', () => {
                 userEvent.click(screen.getByTestId(image));
                 expect(testLocation.pathname).toEqual(`${Paths.artGallery}/${piece.id}`);
             });
+
+            it('should scroll to the top of the page', () => {
+                userEvent.click(screen.getByTestId(image));
+                expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
+            });
         });
 
         describe('on image load error', () => {
@@ -79,6 +85,11 @@ describe('the image', () => {
         it('should not change location when clicked', () => {
             userEvent.click(screen.getByTestId(image));
             expect(testLocation.pathname).toEqual(Paths.artGallery);
+        });
+
+        it('should not scroll to the top of the page', () => {
+            userEvent.click(screen.getByTestId(image));
+            expect(window.scrollTo).not.toHaveBeenCalled();
         });
     });
 });

@@ -24,8 +24,9 @@ export const Image: FC<ImageProps> = (
     }) => {
     const [completed, isComplete] = useState(false);
     const [errored, isError] = useState(false);
+    const gotoTopOfPage = () => window.scrollTo(0, 0);
     const ConditionalLink: FC = ({children}) => linkEnabled ?
-        <Link to={`${Paths.artGallery}/${piece.id}`} className="scrim">{children}</Link> : <>{children}</>;
+        <Link onClick={gotoTopOfPage} to={`${Paths.artGallery}/${piece.id}`} className="scrim">{children}</Link> : <>{children}</>;
 
     return errored ?
         <img alt="oops"
