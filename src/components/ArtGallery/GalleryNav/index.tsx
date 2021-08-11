@@ -25,10 +25,7 @@ export const GalleryNav = () => {
         event.preventDefault();
         gotoTopOfPage();
         event.currentTarget.reset();
-        history.push({
-            pathname: history.location.pathname,
-            search: `?page=${pageNumber}`
-        });
+        history.push({search: `?page=${pageNumber}`});
     };
 
     return <nav className="pagination">
