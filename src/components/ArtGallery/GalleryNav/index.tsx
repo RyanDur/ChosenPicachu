@@ -19,8 +19,11 @@ export const GalleryNav = () => {
     const hasPrevPage = currentPage > firstPage;
     const prevPage = () => hasPrevPage ? currentPage - 1 : currentPage;
 
+    const gotoTopOfPage = () => window.scrollTo(0, 0);
+
     const onSubmit = (event: FormEvent) => {
         event.preventDefault();
+        gotoTopOfPage();
         history.push({
             pathname: history.location.pathname,
             search: `?page=${pageNumber}`
@@ -29,12 +32,12 @@ export const GalleryNav = () => {
 
     return <nav className="pagination">
         {hasPrevPage && <Link to={`${Paths.artGallery}?page=${firstPage}`}
-                              onClick={() => window.scrollTo(0, 0)}
+                              onClick={gotoTopOfPage}
                               id="first" className="page" data-testid="first-page">
           FIRST
         </Link>}
         {hasPrevPage && <Link to={`${Paths.artGallery}?page=${prevPage()}`}
-                              onClick={() => window.scrollTo(0, 0)}
+                              onClick={gotoTopOfPage}
                               id="prev" className="page" data-testid="prev-page">
           PREV
         </Link>}
@@ -50,12 +53,12 @@ export const GalleryNav = () => {
             <button type="submit" id="submit-page-number" className="control">Go</button>
         </form>
         {hasNextPage && <Link to={`${Paths.artGallery}?page=${nextPage()}`}
-                              onClick={() => window.scrollTo(0, 0)}
+                              onClick={gotoTopOfPage}
                               id="next" className="page" data-testid="next-page">
           NEXT
         </Link>}
         {hasNextPage && <Link to={`${Paths.artGallery}?page=${lastPage}`}
-                              onClick={() => window.scrollTo(0, 0)}
+                              onClick={gotoTopOfPage}
                               id="last" className="page" data-testid="last-page">
           LAST
         </Link>}
