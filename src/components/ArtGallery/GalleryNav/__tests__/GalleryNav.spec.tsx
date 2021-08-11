@@ -101,7 +101,13 @@ describe('Gallery Navigation', () => {
             userEvent.type(screen.getByTestId('go-to'), pageNumber);
             userEvent.click(screen.getByText('Go'));
 
+            expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
             expect(testLocation.search).toEqual(`?page=${pageNumber}`);
+        });
+
+        it('should not go to the top of page when clicking on page number input', () => {
+            userEvent.click(screen.getByTestId('go-to'));
+            expect(window.scrollTo).not.toHaveBeenCalled();
         });
 
         it('should not allow a user to go to a page lower than the first', () =>
