@@ -98,18 +98,17 @@ describe('Gallery Navigation', () => {
     describe('going to a specific page', () => {
         it('go to the specified page', () => {
             const pageNumber = String(Math.floor(Math.random() * 1000));
-            userEvent.type(screen.getByLabelText('Go To:'), pageNumber);
+            userEvent.type(screen.getByTestId('go-to'), pageNumber);
             userEvent.click(screen.getByText('Go'));
 
             expect(testLocation.search).toEqual(`?page=${pageNumber}`);
         });
 
         it('should not allow a user to go to a page lower than the first', () =>
-            expect(screen.getByLabelText('Go To:')).toHaveAttribute('min', '1'));
+            expect(screen.getByTestId('go-to')).toHaveAttribute('min', '1'));
 
         it('should not allow a user to go to a page higher than the last', () =>
-            expect(screen.getByLabelText('Go To:'))
+            expect(screen.getByTestId('go-to'))
                 .toHaveAttribute('max', `${art.pagination.totalPages}`));
     });
-
 });

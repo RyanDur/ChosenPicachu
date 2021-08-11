@@ -26,6 +26,7 @@
       padding: 0;
       background: var(--paper);
 
+      &:focus,
       &:hover {
         color: inherit;
         background: var(--mint)
