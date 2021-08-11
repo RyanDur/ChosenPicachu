@@ -96,13 +96,14 @@ describe('Gallery Navigation', () => {
     });
 
     describe('going to a specific page', () => {
-        it('go to the specified page', () => {
+        test('submitting the specified page', () => {
             const pageNumber = String(Math.floor(Math.random() * 1000));
             userEvent.type(screen.getByTestId('go-to'), pageNumber);
             userEvent.click(screen.getByText('Go'));
 
             expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
             expect(testLocation.search).toEqual(`?page=${pageNumber}`);
+            expect(screen.getByTestId('go-to')).not.toHaveValue(+pageNumber);
         });
 
         it('should not go to the top of page when clicking on page number input', () => {
@@ -116,5 +117,9 @@ describe('Gallery Navigation', () => {
         it('should not allow a user to go to a page higher than the last', () =>
             expect(screen.getByTestId('go-to'))
                 .toHaveAttribute('max', `${art.pagination.totalPages}`));
+
+        it('should clear the input when submitting', () => {
+
+        });
     });
 });

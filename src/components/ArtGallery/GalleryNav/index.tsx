@@ -21,9 +21,10 @@ export const GalleryNav = () => {
 
     const gotoTopOfPage = () => window.scrollTo(0, 0);
 
-    const onSubmit = (event: FormEvent) => {
+    const onSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         gotoTopOfPage();
+        event.currentTarget.reset();
         history.push({
             pathname: history.location.pathname,
             search: `?page=${pageNumber}`
