@@ -47,6 +47,7 @@ export const GalleryNav = () => {
                    className="control"
                    placeholder="page #"
                    data-testid="go-to"
+                   onWheel={e => e.currentTarget.blur()}
                    onChange={event => updatePageNumber(event.currentTarget.value)}/>
             <button type="submit" id="submit-page-number" className="control">Go</button>
         </form>
