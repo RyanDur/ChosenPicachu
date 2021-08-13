@@ -7,7 +7,7 @@ export interface PaginationResponse {
     next_url: string;
 }
 
-export type Pagination =  {
+export type Pagination = {
     total: number;
     limit: number;
     offset: number;
@@ -36,15 +36,17 @@ export type Thumbnail = {
     alt_text: string;
 }
 
+export interface PieceData {
+    id: number;
+    title: string;
+    image_id: string;
+    term_titles: string[];
+    artist_display: string;
+    thumbnail?: Thumbnail;
+}
+
 export type PieceResponse = {
-    data: {
-        id: number;
-        title: string;
-        image_id: string;
-        term_titles: string[];
-        artist_display: string;
-        thumbnail?: Thumbnail;
-    }
+    data: PieceData;
 }
 
 export interface Info {
@@ -70,6 +72,8 @@ export interface Art {
     pieces: Piece[];
     baseUrl: string;
 }
+
+export type ArtSuggestion = string;
 
 export enum AsyncState {
     LOADING = 'LOADING',

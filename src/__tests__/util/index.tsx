@@ -15,20 +15,19 @@ export interface Rendered {
 
 type TestPaths = Paths | '/initial/route';
 
-export const renderWithRouter = (component: ReactElement, path: TestPaths = '/initial/route'): Rendered => {
-    let testHistory, testLocation, rendered;
-    rendered = render(<MemoryRouter initialEntries={[path as string]}>
-        {component}
-        <Route
-            path="*"
-            render={({history, location}) => {
-                testHistory = history;
-                testLocation = location;
-                return null;
-            }}
-        />
-    </MemoryRouter>);
-    return {rendered, testHistory, testLocation};
+export const renderWithRouter = (component: ReactElement, path: TestPaths = '/initial/route'): () => Rendered => {
+    let testHistory: H.History, testLocation: H.Location,
+        rendered = render(<MemoryRouter initialEntries={[path as string]}>
+            <Route path={path.valueOf()}>{component}</Route>
+            <Route
+                path="*"
+                render={({history, location}) => {
+                    testHistory = history;
+                    testLocation = location;
+                    return null;
+                }}/>
+        </MemoryRouter>);
+    return () => ({rendered, testHistory, testLocation});
 };
 
 export const fillOutAddress = (address: AddressInfo, kind: string) => {
