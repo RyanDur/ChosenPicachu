@@ -4,7 +4,7 @@ import {useQuery} from '../hooks';
 import {Loading} from '../Loading';
 import {Image} from './Image';
 import {GalleryNav} from './Nav';
-import {useArtGallery} from './Context';
+import {useGallery} from './Context';
 import {AsyncState} from '../../data/types';
 import {GetArtAction} from '../../data/actions';
 import './Gallery.scss';
@@ -15,7 +15,7 @@ const empty = (value: unknown[] = []): boolean => value.length === 0;
 const has = (value: unknown[] = []): boolean => not(empty(value));
 
 const ArtGallery: FC = () => {
-    const {art, updateArt, reset} = useArtGallery();
+    const {art, updateArt, reset} = useGallery();
     const [loading, isLoading] = useState(false);
     const [errored, hasErrored] = useState(false);
     const {page} = useQuery<{ page: number }>({page: 1});

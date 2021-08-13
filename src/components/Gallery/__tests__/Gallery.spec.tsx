@@ -5,7 +5,7 @@ import {data} from '../../../data';
 import {art} from '../../../__tests__/util';
 import {MemoryRouter, Route} from 'react-router-dom';
 import {Paths} from '../../../App';
-import {useArtGallery} from '../Context';
+import {useGallery} from '../Context';
 import * as H from 'history';
 import {GetArtAction, loading, onError, onSuccess} from '../../../data/actions';
 import {Dispatch} from '../../UserInfo/types';
@@ -13,14 +13,14 @@ import {Art, Piece} from '../../../data/types';
 
 jest.mock('../Context', () => {
     return ({
-        useArtGallery: jest.fn()
+        useGallery: jest.fn()
     });
 });
 
-describe('The art gallery.', () => {
+describe('The gallery.', () => {
     let testLocation: H.Location;
     let rendered: RenderResult;
-    const mockUseArtGallery = useArtGallery as jest.Mock;
+    const mockUseArtGallery = useGallery as jest.Mock;
     window.scrollTo = jest.fn();
     afterEach(cleanup);
 
@@ -89,7 +89,7 @@ describe('The art gallery.', () => {
 
         it('should reset the art when leaving', () => {
             rendered.unmount();
-            expect(useArtGallery().reset).toHaveBeenCalled();
+            expect(useGallery().reset).toHaveBeenCalled();
         });
     });
 

@@ -8,7 +8,7 @@ import {GalleryNav} from '../../';
 
 const mockArt = art;
 jest.mock('../../Context', () => ({
-    useArtGallery: () => ({art: mockArt})
+    useGallery: () => ({art: mockArt})
 }));
 window.scrollTo = jest.fn();
 describe('Gallery Navigation', () => {
