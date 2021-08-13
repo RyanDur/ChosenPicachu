@@ -2,11 +2,11 @@ import {Link, useHistory} from 'react-router-dom';
 import React, {FormEvent, useState} from 'react';
 import {Paths} from '../../../App';
 import {useQuery} from '../../hooks';
-import {useArtGallery} from '../Context';
+import {useGallery} from '../Context';
 import './GalleryNav.scss';
 
 export const GalleryNav = () => {
-    const {art} = useArtGallery();
+    const {art} = useGallery();
     const history = useHistory();
     const {page} = useQuery<{ page: string }>({page: '1'});
     const [pageNumber, updatePageNumber] = useState(page);
