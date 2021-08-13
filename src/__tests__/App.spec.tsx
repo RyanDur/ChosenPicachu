@@ -14,7 +14,7 @@ jest.mock('../components', () => ({
 
 const title = 'some cool title';
 
-jest.mock('../components/ArtGallery/ArtPiece/Context', () => ({
+jest.mock('../components/Gallery/ArtPiece/Context', () => ({
     useArtPiece: () => ({piece: {title}})
 }));
 

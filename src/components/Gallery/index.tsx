@@ -3,12 +3,12 @@ import {data} from '../../data';
 import {useQuery} from '../hooks';
 import {Loading} from '../Loading';
 import {Image} from './Image';
-import {GalleryNav} from './GalleryNav';
+import {GalleryNav} from './Nav';
 import {useArtGallery} from './Context';
 import {AsyncState} from '../../data/types';
 import {GetArtAction} from '../../data/actions';
-import './ArtGallery.scss';
-import './ArtGallery.layout.scss';
+import './Gallery.scss';
+import './Gallery.layout.scss';
 
 const not = (value: unknown): boolean => !value;
 const empty = (value: unknown[] = []): boolean => value.length === 0;

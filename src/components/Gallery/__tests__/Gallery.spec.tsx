@@ -21,7 +21,7 @@ describe('The art gallery.', () => {
     let testLocation: H.Location;
     let rendered: RenderResult;
     const mockUseArtGallery = useArtGallery as jest.Mock;
-
+    window.scrollTo = jest.fn();
     afterEach(cleanup);
 
     describe('When the art has not loaded yet', () => {
