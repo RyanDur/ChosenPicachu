@@ -2,13 +2,16 @@ import {Art, ArtResponse, Piece, PieceResponse} from './types';
 import {GetArtAction, GetPieceAction, loading, onError, onSuccess} from './actions';
 import {Dispatch} from '../components/UserInfo/types';
 
+export const fields = 'fields=id,title,image_id,artist_display,term_titles,thumbnail';
+const artInstituteOfChicago = 'https://api.artic.edu';
+
 export const data = {
     getAllArt: (
         page: number,
         dispatch: Dispatch<GetArtAction>,
-        domain = 'https://api.artic.edu') => {
+        domain = artInstituteOfChicago) => {
         dispatch(loading());
-        fetch(`${domain}/api/v1/artworks?page=${page}`).then(async response => {
+        fetch(`${domain}/api/v1/artworks?page=${page}&${fields}`).then(async response => {
             if (response.status === 200) dispatch(onSuccess(responseToArt(await response.json())));
             else dispatch(onError());
         });
@@ -17,9 +20,9 @@ export const data = {
     getPiece: (
         id: string,
         dispatch: Dispatch<GetPieceAction>,
-        domain = 'https://api.artic.edu') => {
+        domain = artInstituteOfChicago) => {
         dispatch(loading());
-        fetch(`${domain}/api/v1/artworks/${id}`).then(async response => {
+        fetch(`${domain}/api/v1/artworks/${id}?${fields}`).then(async response => {
             if (response.status === 200) dispatch(onSuccess(responseToArtWork(await response.json())));
             else dispatch(onError());
         });
