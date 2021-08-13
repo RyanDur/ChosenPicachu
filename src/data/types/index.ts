@@ -75,6 +75,21 @@ export interface Art {
 
 export type ArtSuggestion = string;
 
+export interface ArtOption {
+    input: ArtSuggestion[];
+}
+
+type Tuple<A, B> = [A, B]
+
+export interface Autocomplete {
+    suggest_autocomplete_all: Tuple<unknown, ArtOption>
+}
+
+export interface AutoCompleteResponse {
+    pagination: PaginationResponse;
+    data: Autocomplete[]
+}
+
 export enum AsyncState {
     LOADING = 'LOADING',
     SUCCESS = 'SUCCESS',

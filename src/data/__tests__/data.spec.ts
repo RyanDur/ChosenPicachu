@@ -1,7 +1,7 @@
 import {data, fields} from '../index';
 import {mockServer, MockWebServer} from './mockServer';
 import 'whatwg-fetch';
-import {ArtResponse, Piece, PieceResponse} from '../types';
+import {ArtResponse, ArtSuggestion, AutoCompleteResponse, Piece, PieceResponse} from '../types';
 import faker from 'faker';
 import {art} from '../../__tests__/util';
 import {nanoid} from 'nanoid';
@@ -82,6 +82,23 @@ describe('data', () => {
         });
     });
 
+    describe('searching for art', () => {
+        test('when it is successful', async () => {
+            const dispatch = jest.fn();
+            server.stubResponse(200, artOptions);
+            const searchString = faker.lorem.word();
+
+            data.searchForArtOptions(searchString, dispatch, server.path());
+
+            const recordedRequest = await server.lastRequest();
+            await waitFor(() => {
+                expect(recordedRequest.method).toEqual('GET');
+                expect(recordedRequest.url).toEqual(`/api/v1/artworks?q=${searchString}&fields=suggest_autocomplete_all`);
+                expect(dispatch).toHaveBeenCalledWith(onSuccess(options));
+            });
+        });
+    });
+
     const pieceResponse: PieceResponse = {
         data: {
             id: Math.random(),
@@ -101,15 +118,17 @@ describe('data', () => {
         artistInfo: pieceResponse.data.artist_display
     };
 
+    const pagination = {
+        total: art.pagination.total,
+        limit: art.pagination.limit,
+        offset: art.pagination.offset,
+        total_pages: art.pagination.totalPages,
+        current_page: art.pagination.currentPage,
+        next_url: art.pagination.nextUrl
+    };
+
     const artResponse: ArtResponse = {
-        pagination: {
-            total: art.pagination.total,
-            limit: art.pagination.limit,
-            offset: art.pagination.offset,
-            total_pages: art.pagination.totalPages,
-            current_page: art.pagination.currentPage,
-            next_url: art.pagination.nextUrl
-        },
+        pagination,
         data: art.pieces.map(piece => ({
             id: piece.id,
             title: piece.title,
@@ -126,5 +145,24 @@ describe('data', () => {
             iiif_url: faker.internet.url(),
             website_url: art.baseUrl
         }
+    };
+
+    const options: ArtSuggestion[] = [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()];
+    const artOptions: AutoCompleteResponse = {
+        pagination,
+        data: options.map(option => ({
+            suggest_autocomplete_all: [{
+                input: [faker.lorem.word()],
+                contexts: {
+                    groupings: [faker.lorem.word()]
+                }
+            }, {
+                input: [option],
+                weight: Math.floor(Math.random() * 10_000),
+                contexts: {
+                    groupings: [faker.lorem.word()]
+                }
+            }]
+        }))
     };
 });
