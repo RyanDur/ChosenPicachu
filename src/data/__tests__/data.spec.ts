@@ -1,4 +1,4 @@
-import {data} from '../index';
+import {data, fields} from '../index';
 import {mockServer, MockWebServer} from './mockServer';
 import 'whatwg-fetch';
 import {ArtResponse, Piece, PieceResponse} from '../types';
@@ -28,7 +28,7 @@ describe('data', () => {
             const recordedRequest = await server.lastRequest();
             await waitFor(() => {
                 expect(recordedRequest.method).toEqual('GET');
-                expect(recordedRequest.url).toEqual('/api/v1/artworks?page=1');
+                expect(recordedRequest.url).toEqual(`/api/v1/artworks?page=1&${fields}`);
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 expect(dispatch).toHaveBeenNthCalledWith(2, onSuccess(art));
             });
@@ -43,7 +43,7 @@ describe('data', () => {
             const recordedRequest = await server.lastRequest();
             await waitFor(() => {
                 expect(recordedRequest.method).toEqual('GET');
-                expect(recordedRequest.url).toEqual('/api/v1/artworks?page=1');
+                expect(recordedRequest.url).toEqual(`/api/v1/artworks?page=1&${fields}`);
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 expect(dispatch).toHaveBeenNthCalledWith(2, onError());
             });
@@ -60,7 +60,7 @@ describe('data', () => {
             const recordedRequest = await server.lastRequest();
             await waitFor(() => {
                 expect(recordedRequest.method).toEqual('GET');
-                expect(recordedRequest.url).toEqual(`/api/v1/artworks/${pieceResponse.data.id}`);
+                expect(recordedRequest.url).toEqual(`/api/v1/artworks/${pieceResponse.data.id}?${fields}`);
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 expect(dispatch).toHaveBeenNthCalledWith(2, onSuccess(piece));
             });
@@ -75,7 +75,7 @@ describe('data', () => {
             const recordedRequest = await server.lastRequest();
             await waitFor(() => {
                 expect(recordedRequest.method).toEqual('GET');
-                expect(recordedRequest.url).toEqual(`/api/v1/artworks/${pieceResponse.data.id}`);
+                expect(recordedRequest.url).toEqual(`/api/v1/artworks/${pieceResponse.data.id}?${fields}`);
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 expect(dispatch).toHaveBeenNthCalledWith(2, onError());
             });
