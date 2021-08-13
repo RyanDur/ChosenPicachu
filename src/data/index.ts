@@ -1,11 +1,16 @@
-import {Art, ArtResponse, Piece, PieceResponse} from './types';
-import {GetArtAction, GetPieceAction, loading, onError, onSuccess} from './actions';
+import {Art, ArtResponse, Piece, PieceData, PieceResponse} from './types';
+import {GetArtAction, GetPieceAction, loading, onError, onSuccess, SearchArtAction} from './actions';
 import {Dispatch} from '../components/UserInfo/types';
 
 export const fields = 'fields=id,title,image_id,artist_display,term_titles,thumbnail';
 const artInstituteOfChicago = 'https://api.artic.edu';
 
 export const data = {
+    searchForArtOptions: (
+        searchString: string,
+        dispatch: Dispatch<SearchArtAction>
+    ): void => {
+    },
     getAllArt: (
         page: number,
         dispatch: Dispatch<GetArtAction>,
@@ -38,20 +43,16 @@ const responseToArt = (response: ArtResponse): Art => ({
         currentPage: response.pagination.current_page,
         nextUrl: response.pagination.next_url
     },
-    pieces: response.data.map(piece => ({
-        id: piece.id,
-        title: piece.title,
-        imageId: piece.image_id,
-        artistInfo: piece.artist_display,
-        altText: piece.term_titles.join(' ')
-    })),
+    pieces: response.data.map(toPiece),
     baseUrl: response.config.website_url
 });
 
-const responseToArtWork = ({data}: PieceResponse): Piece => ({
+const responseToArtWork = ({data}: PieceResponse): Piece => toPiece(data);
+
+const toPiece = (data: PieceData) => ({
     id: data.id,
     title: data.title,
     imageId: data.image_id,
     artistInfo: data.artist_display,
-    altText: data.thumbnail?.alt_text || ''
+    altText: data.thumbnail?.alt_text || data.term_titles.join(' ') || ''
 });
