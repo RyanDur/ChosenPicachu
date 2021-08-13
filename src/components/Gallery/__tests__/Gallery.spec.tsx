@@ -1,12 +1,10 @@
-import {cleanup, render, RenderResult, screen} from '@testing-library/react';
+import {cleanup, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {ArtGallery} from '..';
 import {data} from '../../../data';
-import {art} from '../../../__tests__/util';
-import {MemoryRouter, Route} from 'react-router-dom';
+import {art, Rendered, renderWithRouter} from '../../../__tests__/util';
 import {Paths} from '../../../App';
 import {useGallery} from '../Context';
-import * as H from 'history';
 import {GetArtAction, loading, onError, onSuccess} from '../../../data/actions';
 import {Dispatch} from '../../UserInfo/types';
 import {Art, Piece} from '../../../data/types';
@@ -18,8 +16,7 @@ jest.mock('../Context', () => {
 });
 
 describe('The gallery.', () => {
-    let testLocation: H.Location;
-    let rendered: RenderResult;
+    let rendered: () => Rendered;
     const mockUseArtGallery = useGallery as jest.Mock;
     window.scrollTo = jest.fn();
     afterEach(cleanup);
@@ -33,16 +30,7 @@ describe('The gallery.', () => {
                 reset: jest.fn()
             });
 
-            render(<MemoryRouter initialEntries={[`${Paths.artGallery}`]}>
-                <ArtGallery/>
-                <Route
-                    path="*"
-                    render={({location}) => {
-                        testLocation = location;
-                        return null;
-                    }}
-                />
-            </MemoryRouter>);
+            renderWithRouter(<ArtGallery/>);
         });
 
         it('should signify that it is loading', () =>
@@ -60,16 +48,7 @@ describe('The gallery.', () => {
                 updateArt: jest.fn(),
                 reset: jest.fn()
             });
-            rendered = render(<MemoryRouter initialEntries={[`${Paths.artGallery}`]}>
-                <ArtGallery/>
-                <Route
-                    path="*"
-                    render={({location}) => {
-                        testLocation = location;
-                        return null;
-                    }}
-                />
-            </MemoryRouter>);
+            rendered = renderWithRouter(<ArtGallery/>);
         });
 
         it('should not signify that it is loading', () =>
@@ -84,11 +63,11 @@ describe('The gallery.', () => {
 
         it('should allow a user to take a closer look at the art', () => {
             userEvent.click(screen.getByTestId(`piece-${art.pieces[0].imageId}`));
-            expect(testLocation.pathname).toEqual(`${Paths.artGallery}/${art.pieces[0].id}`);
+            expect(rendered().testLocation?.pathname).toEqual(`${Paths.artGallery}/${art.pieces[0].id}`);
         });
 
         it('should reset the art when leaving', () => {
-            rendered.unmount();
+            rendered().result.unmount();
             expect(useGallery().reset).toHaveBeenCalled();
         });
     });
@@ -100,16 +79,7 @@ describe('The gallery.', () => {
                 updateArt: jest.fn(),
                 reset: jest.fn()
             });
-            rendered = render(<MemoryRouter initialEntries={[`${Paths.artGallery}`]}>
-                <ArtGallery/>
-                <Route
-                    path="*"
-                    render={({location}) => {
-                        testLocation = location;
-                        return null;
-                    }}
-                />
-            </MemoryRouter>);
+            renderWithRouter(<ArtGallery/>);
         });
 
         it('should not contain art', () =>
@@ -130,16 +100,7 @@ describe('The gallery.', () => {
                 updateArt: jest.fn(),
                 reset: jest.fn()
             });
-            render(<MemoryRouter initialEntries={[`${Paths.artGallery}`]}>
-                <ArtGallery/>
-                <Route
-                    path="*"
-                    render={({location}) => {
-                        testLocation = location;
-                        return null;
-                    }}
-                />
-            </MemoryRouter>);
+            renderWithRouter(<ArtGallery/>);
         });
 
         it('should indicate that something went wrong', () =>

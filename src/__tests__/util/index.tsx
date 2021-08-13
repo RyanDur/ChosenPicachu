@@ -8,7 +8,7 @@ import userEvent from '@testing-library/user-event';
 import {toISOWithoutTime} from '../../components/util';
 
 export interface Rendered {
-    rendered?: RenderResult;
+    result: RenderResult;
     testHistory?: H.History;
     testLocation?: H.Location;
 }
@@ -17,7 +17,7 @@ type TestPaths = Paths | '/initial/route';
 
 export const renderWithRouter = (component: ReactElement, path: TestPaths = '/initial/route'): () => Rendered => {
     let testHistory: H.History, testLocation: H.Location,
-        rendered = render(<MemoryRouter initialEntries={[path as string]}>
+        result = render(<MemoryRouter initialEntries={[path as string]}>
             <Route path={path.valueOf()}>{component}</Route>
             <Route
                 path="*"
@@ -27,7 +27,7 @@ export const renderWithRouter = (component: ReactElement, path: TestPaths = '/in
                     return null;
                 }}/>
         </MemoryRouter>);
-    return () => ({rendered, testHistory, testLocation});
+    return () => ({result, testHistory, testLocation});
 };
 
 export const fillOutAddress = (address: AddressInfo, kind: string) => {
