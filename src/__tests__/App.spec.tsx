@@ -24,9 +24,7 @@ describe('the App', () => {
         let navigation: HTMLElement;
         let footer: HTMLElement;
 
-        beforeEach(() => {
-            renderWithRouter(<App/>);
-        });
+        beforeEach(() => renderWithRouter(<App/>, Paths.home));
 
         beforeEach(() => {
             header = screen.getByTestId('header');

@@ -1,4 +1,12 @@
-import {Art, ArtResponse, Piece, PieceData, PieceResponse} from './types';
+import {
+    Art,
+    ArtOption,
+    ArtResponse,
+    ArtSuggestion, Autocomplete, AutoCompleteResponse,
+    Piece,
+    PieceData,
+    PieceResponse
+} from './types';
 import {GetArtAction, GetPieceAction, loading, onError, onSuccess, SearchArtAction} from './actions';
 import {Dispatch} from '../components/UserInfo/types';
 
@@ -8,9 +16,15 @@ const artInstituteOfChicago = 'https://api.artic.edu';
 export const data = {
     searchForArtOptions: (
         searchString: string,
-        dispatch: Dispatch<SearchArtAction>
+        dispatch: Dispatch<SearchArtAction>,
+        domain = artInstituteOfChicago
     ): void => {
+        fetch(`${domain}/api/v1/artworks?q=${searchString}&fields=suggest_autocomplete_all`)
+            .then(async response => {
+                if (response.status === 200) dispatch(onSuccess(responseToArtOptions(await response.json())));
+            });
     },
+
     getAllArt: (
         page: number,
         dispatch: Dispatch<GetArtAction>,
@@ -56,3 +70,8 @@ const toPiece = (data: PieceData) => ({
     artistInfo: data.artist_display,
     altText: data.thumbnail?.alt_text || data.term_titles.join(' ') || ''
 });
+
+const responseToArtOptions = ({data}: AutoCompleteResponse): ArtSuggestion[] => {
+    return data.map(({suggest_autocomplete_all}: Autocomplete) => suggest_autocomplete_all[1])
+        .flatMap((option: ArtOption) => option.input);
+};
