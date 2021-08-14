@@ -1,0 +1,40 @@
+.search {
+  display: flex;
+
+  .query {
+    width: 50%;
+    padding: 0 var(--base-x-2);
+  }
+
+  .submit-query,
+  .reset-query {
+    height: 100%;
+    width: var(--base-x-5);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 2rem;
+    background-color: white;
+
+    &:hover,
+    &:focus {
+      background-color: var(--mint);
+    }
+
+    &:active {
+      box-shadow: inset 0 0 5px var(--void);
+    }
+  }
+
+  .submit-query {
+    background-image: url("https://img.icons8.com/ios/50/000000/search--v1.png");
+
+  }
+
+  .reset-query {
+    background-image: url("https://img.icons8.com/material-outlined/24/000000/recurring-appointment.png");
+  }
+
+  .search-options {
+    background: var(--paper);
+  }
+}

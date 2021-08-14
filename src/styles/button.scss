@@ -1,17 +1,36 @@
 a.button,
 button {
-  height: var(--base-x-5);
-  width: 100%;
-  padding: 0 var(--base-x-4);
   outline: none;
   cursor: pointer;
-  font-size: 1.8rem;
-  font-weight: bold;
-  white-space: nowrap;
-  text-transform: uppercase;
-  border-radius: var(--base-x-5);
-  box-shadow: 0 0 var(--base-x-0_5) #999;
-  border: 0.1rem solid var(--primary-blue);
+
+  &.primary,
+  &.secondary {
+    width: 100%;
+    font-size: 1.8rem;
+    font-weight: bold;
+    white-space: nowrap;
+    text-transform: uppercase;
+    height: var(--base-x-5);
+    padding: 0 var(--base-x-4);
+    border-radius: var(--base-x-5);
+    box-shadow: 0 0 var(--base-x-0_5) #999;
+    border: 0.1rem solid var(--primary-blue);
+
+    &:hover,
+    &:focus {
+      box-shadow: var(--base-box-shadow);
+    }
+
+    &:hover,
+    &:active {
+      color: white;
+      background-color: var(--primary-dark-blue);
+    }
+
+    &:active {
+      box-shadow: initial;
+    }
+  }
 
   &.primary {
     color: white;
@@ -20,20 +39,5 @@ button {
 
   &.secondary {
     background: var(--faded-leather);
-  }
-
-  &:hover,
-  &:focus {
-    box-shadow: var(--base-box-shadow);
-  }
-
-  &:hover,
-  &:active {
-    color: white;
-    background-color: var(--primary-dark-blue);
-  }
-
-  &:active {
-    box-shadow: initial;
   }
 }

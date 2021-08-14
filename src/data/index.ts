@@ -19,7 +19,7 @@ export const data = {
         dispatch: Dispatch<SearchArtAction>,
         domain = artInstituteOfChicago
     ): void => {
-        fetch(`${domain}/api/v1/artworks?q=${searchString}&fields=suggest_autocomplete_all`)
+        fetch(`${domain}/api/v1/artworks/search?query[term][title]=${searchString}&fields=suggest_autocomplete_all&limit=5`)
             .then(async response => {
                 if (response.status === 200) dispatch(onSuccess(responseToArtOptions(await response.json())));
             });

@@ -93,7 +93,7 @@ describe('data', () => {
             const recordedRequest = await server.lastRequest();
             await waitFor(() => {
                 expect(recordedRequest.method).toEqual('GET');
-                expect(recordedRequest.url).toEqual(`/api/v1/artworks?q=${searchString}&fields=suggest_autocomplete_all`);
+                expect(recordedRequest.url).toEqual(`/api/v1/artworks/search?query[term][title]=${searchString}&fields=suggest_autocomplete_all&limit=5`);
                 expect(dispatch).toHaveBeenCalledWith(onSuccess(options));
             });
         });

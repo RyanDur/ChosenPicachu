@@ -15,9 +15,9 @@ export interface Rendered {
 
 type TestPaths = Paths | '/initial/route';
 
-export const renderWithRouter = (component: ReactElement, path: TestPaths = '/initial/route'): () => Rendered => {
+export const renderWithRouter = (component: ReactElement, path: TestPaths = '/initial/route', params?: string): () => Rendered => {
     let testHistory: H.History, testLocation: H.Location,
-        result = render(<MemoryRouter initialEntries={[path as string]}>
+        result = render(<MemoryRouter initialEntries={[`${path as string}${params ? `?${params}` : ''}`]}>
             <Route path={path.valueOf()}>{component}</Route>
             <Route
                 path="*"
