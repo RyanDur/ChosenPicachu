@@ -51,6 +51,8 @@ export const App = () => {
                     <a href="https://icons8.com/icon/622/detective" className="attribution">Detective icon by Icons8</a>
                     <a href="https://icons8.com/icon/j1UxMbqzPi7n/no-image" className="attribution">No Image icon by Icons8</a>
                     <a href="https://icons8.com/icon/EJK2FdL08858/no-image-gallery" className="attribution">No Image Gallery icon by Icons8</a>
+                    <a href="https://icons8.com/icon/86209/reset">Reset icon by Icons8</a>
+                    <a href="https://icons8.com/icon/59878/search">Search icon by Icons8</a>
                 </nav>
             </article>
         </aside>
