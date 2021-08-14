@@ -178,6 +178,5 @@ export const art: Art = {
         imageId: nanoid(),
         artistInfo: faker.lorem.sentence(),
         altText: faker.lorem.words(randomNumberFromRange(1))
-    })),
-    baseUrl: faker.internet.url()
+    }))
 };

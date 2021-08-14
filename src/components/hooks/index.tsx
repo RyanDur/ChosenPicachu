@@ -1,7 +1,5 @@
 import {useLocation} from 'react-router-dom';
+import {URLHelpers} from '../../util/URL';
 
-export const useQuery = <T extends Object>(val?: T): T => useLocation().search
-    .replace('?', '')
-    .split('&')
-    .map(param => param.split('='))
-    .reduce((acc, [key, value]) => ({...acc, [key]: value}), val as T);
+export const useQuery = <T extends { [key: string]: unknown }>(val?: T): T =>
+    URLHelpers.toQueryObj(useLocation().search, val) as T;

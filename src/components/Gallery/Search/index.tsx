@@ -36,8 +36,8 @@ export const Search: FC<Props> = ({id}) => {
         <button className='reset-query' data-testid="reset-query" type="reset"/>
         <button className='submit-query' data-testid="submit-query" type="submit"/>
         <datalist id="search-options" data-testid="search-options">
-            {searchOptions.map(searchOption =>
-                <option value={searchOption} id={searchOption} key={searchOption}>{searchOption}</option>)}
+            {searchOptions.map((searchOption, index) =>
+                <option value={searchOption} id={searchOption} key={index}>{searchOption}</option>)}
         </datalist>
     </form>;
 };
