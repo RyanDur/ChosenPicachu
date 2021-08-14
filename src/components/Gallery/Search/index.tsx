@@ -31,9 +31,9 @@ export const Search: FC<Props> = ({id}) => {
     const handleReset = () => history.push({search: ''});
 
     return <form id={id} className="search" onSubmit={handleSubmit} onReset={handleReset} data-testid="search">
+        <button className='reset-query' data-testid="reset-query" type="reset"/>
         <input list="search-options" placeholder="Search For" className="query" id={`query-${id}`}
                onInput={event => updateQuery(event.currentTarget.value)}/>
-        <button className='reset-query' data-testid="reset-query" type="reset"/>
         <button className='submit-query' data-testid="submit-query" type="submit"/>
         <datalist id="search-options" data-testid="search-options">
             {searchOptions.map((searchOption, index) =>
