@@ -1,10 +1,8 @@
-import {act, render, screen, waitFor, within} from '@testing-library/react';
+import {act, screen, waitFor, within} from '@testing-library/react';
 import {Users} from '../index';
 import userEvent from '@testing-library/user-event';
-import {fillOutAddress, fillOutUser, users} from '../../../__tests__/util';
+import {fillOutAddress, fillOutUser, Rendered, renderWithRouter, users} from '../../../__tests__/util';
 import {Paths} from '../../../App';
-import {MemoryRouter, Route} from 'react-router-dom';
-import * as H from 'history';
 import {UserInfo} from '../../UserInfo/types';
 
 describe('the users page', () => {
@@ -18,19 +16,10 @@ describe('the users page', () => {
         secondRowThirdCell: HTMLElement,
         firstRowFourthCell: HTMLElement,
         secondRowFourthCell: HTMLElement,
-        testLocation: H.Location;
+        rendered: () => Rendered;
 
     beforeEach(() => {
-        render(<MemoryRouter initialEntries={[`/${Paths.users}`]}>
-            <Users/>
-            <Route
-                path="*"
-                render={({location}) => {
-                    testLocation = location;
-                    return null;
-                }}
-            />
-        </MemoryRouter>);
+        rendered = renderWithRouter(<Users/>, Paths.users);
         table = screen.getByTestId('table');
         firstRowFirstCell = within(table).getByTestId('cell-0-0');
         firstRowSecondCell = within(table).getByTestId('cell-1-0');
@@ -259,46 +248,46 @@ describe('the users page', () => {
         describe('when a user is being viewed', () => {
             beforeEach(() => {
                 userEvent.click(within(firstRowFourthCell).getByText('View'));
-                expect(testLocation?.pathname).toEqual(`${Paths.users}`);
-                expect(testLocation?.search).toEqual(`?email=${userInfo.user.email}&mode=view`);
+                expect(rendered().testLocation?.pathname).toEqual(`${Paths.users}`);
+                expect(rendered().testLocation?.search).toEqual(`?email=${userInfo.user.email}&mode=view`);
             });
 
             it('should update the url when removing the viewed user', () => {
                 userEvent.click(within(firstRowFourthCell).getByText('Remove'));
 
-                expect(testLocation?.pathname).toEqual(`${Paths.users}`);
-                expect(testLocation?.search).toEqual('');
+                expect(rendered().testLocation?.pathname).toEqual(`${Paths.users}`);
+                expect(rendered().testLocation?.search).toEqual('');
             });
 
             it('should not update the url when removing a user other than the viewed one', () => {
                 userEvent.click(within(secondRowFourthCell).getByText('Remove'));
 
-                expect(testLocation?.pathname).toEqual(`${Paths.users}`);
-                expect(testLocation?.search).toEqual(`?email=${userInfo.user.email}&mode=view`);
+                expect(rendered().testLocation?.pathname).toEqual(`${Paths.users}`);
+                expect(rendered().testLocation?.search).toEqual(`?email=${userInfo.user.email}&mode=view`);
             });
         });
 
         describe('when a user is being edited', () => {
             beforeEach(() => {
                 userEvent.click(within(firstRowFourthCell).getByText('Edit'));
-                expect(testLocation?.pathname).toEqual(`${Paths.users}`);
-                expect(testLocation?.search).toEqual(`?email=${userInfo.user.email}&mode=edit`);
+                expect(rendered().testLocation?.pathname).toEqual(`${Paths.users}`);
+                expect(rendered().testLocation?.search).toEqual(`?email=${userInfo.user.email}&mode=edit`);
             });
 
             it('should reset the form when removing the user being edited', async () => {
                 userEvent.click(within(firstRowFourthCell).getByText('Remove'));
 
                 containsUser(screen.getByTestId('user-info-form'));
-                expect(testLocation?.pathname).toEqual(`${Paths.users}`);
-                expect(testLocation?.search).toEqual('');
+                expect(rendered().testLocation?.pathname).toEqual(`${Paths.users}`);
+                expect(rendered().testLocation?.search).toEqual('');
             });
 
             it('should not reset the form when removing a user other than the one being edited', () => {
                 userEvent.click(within(secondRowFourthCell).getByText('Remove'));
 
                 containsUser(screen.getByTestId('user-info-form'), userInfo);
-                expect(testLocation?.pathname).toEqual(`${Paths.users}`);
-                expect(testLocation?.search).toEqual(`?email=${userInfo.user.email}&mode=edit`);
+                expect(rendered().testLocation?.pathname).toEqual(`${Paths.users}`);
+                expect(rendered().testLocation?.search).toEqual(`?email=${userInfo.user.email}&mode=edit`);
             });
         });
     });

@@ -18,16 +18,16 @@ const ArtGallery: FC = () => {
     const {art, updateArt, reset} = useGallery();
     const [loading, isLoading] = useState(false);
     const [errored, hasErrored] = useState(false);
-    const {page} = useQuery<{ page: number }>({page: 1});
+    const {page, search} = useQuery<{ page: number, search?: string }>({page: 1});
 
     useEffect(() => {
-        data.getAllArt(page, (action: GetArtAction) => {
+        data.getAllArt({page, search}, (action: GetArtAction) => {
             isLoading(action.type === AsyncState.LOADING);
             hasErrored(action.type === AsyncState.ERROR);
             if (action.type === AsyncState.SUCCESS) updateArt(action.value);
         });
         return reset;
-    }, [page, updateArt]);
+    }, [page, updateArt, search]);
 
     const showGallery = not(loading) && has(art?.pieces);
     const showError = not(loading) && (empty(art?.pieces) || errored);

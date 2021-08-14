@@ -9,9 +9,11 @@ import {
 } from './types';
 import {GetArtAction, GetPieceAction, loading, onError, onSuccess, SearchArtAction} from './actions';
 import {Dispatch} from '../components/UserInfo/types';
+import {URLHelpers} from '../util/URL';
 
 export const fields = 'fields=id,title,image_id,artist_display,term_titles,thumbnail';
 const artInstituteOfChicago = 'https://api.artic.edu';
+const {toQueryString} = URLHelpers;
 
 export const data = {
     searchForArtOptions: (
@@ -26,11 +28,15 @@ export const data = {
     },
 
     getAllArt: (
-        page: number,
+        {search, page}: Record<string, unknown>,
         dispatch: Dispatch<GetArtAction>,
         domain = artInstituteOfChicago) => {
         dispatch(loading());
-        fetch(`${domain}/api/v1/artworks?page=${page}&${fields}`).then(async response => {
+        const apiBase = '/api/v1/artworks';
+        const url = search ?
+            `${domain}${apiBase}/search${toQueryString({q: search, page})}&${fields}&limit=12` :
+            `${domain}${apiBase}${toQueryString({page})}&${fields}`;
+        fetch(url).then(async response => {
             if (response.status === 200) dispatch(onSuccess(responseToArt(await response.json())));
             else dispatch(onError());
         });
@@ -57,8 +63,7 @@ const responseToArt = (response: ArtResponse): Art => ({
         currentPage: response.pagination.current_page,
         nextUrl: response.pagination.next_url
     },
-    pieces: response.data.map(toPiece),
-    baseUrl: response.config.website_url
+    pieces: response.data.map(toPiece)
 });
 
 const responseToArtWork = ({data}: PieceResponse): Piece => toPiece(data);

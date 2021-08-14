@@ -23,7 +23,7 @@ describe('data', () => {
             const dispatch = jest.fn();
             server.stubResponse(200, artResponse);
 
-            data.getAllArt(1, dispatch, server.path());
+            data.getAllArt({page: 1}, dispatch, server.path());
 
             const recordedRequest = await server.lastRequest();
             await waitFor(() => {
@@ -34,11 +34,25 @@ describe('data', () => {
             });
         });
 
+        test('when it has a search term', async () => {
+            const dispatch = jest.fn();
+            server.stubResponse(200, artResponse);
+
+            data.getAllArt({page: 1, search: 'rad'}, dispatch, server.path());
+            const recordedRequest = await server.lastRequest();
+            await waitFor(() => {
+                expect(recordedRequest.method).toEqual('GET');
+                expect(recordedRequest.url).toEqual(`/api/v1/artworks/search?q=rad&page=1&${fields}&limit=12`);
+                expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+                expect(dispatch).toHaveBeenNthCalledWith(2, onSuccess(art));
+            });
+        });
+
         test('when it is not successful', async () => {
             const dispatch = jest.fn();
             server.stubResponse(500, {});
 
-            data.getAllArt(1, dispatch, server.path());
+            data.getAllArt({page: 1}, dispatch, server.path());
 
             const recordedRequest = await server.lastRequest();
             await waitFor(() => {
@@ -142,8 +156,7 @@ describe('data', () => {
             version: '1.1'
         },
         config: {
-            iiif_url: faker.internet.url(),
-            website_url: art.baseUrl
+            iiif_url: faker.internet.url()
         }
     };
 

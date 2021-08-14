@@ -57,7 +57,6 @@ export interface Info {
 
 export interface Config {
     iiif_url: string;
-    website_url: string;
 }
 
 export interface ArtResponse {
@@ -70,7 +69,6 @@ export interface ArtResponse {
 export interface Art {
     pagination: Pagination;
     pieces: Piece[];
-    baseUrl: string;
 }
 
 export type ArtSuggestion = string;

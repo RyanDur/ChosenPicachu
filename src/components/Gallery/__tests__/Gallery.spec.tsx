@@ -23,7 +23,10 @@ describe('The gallery.', () => {
 
     describe('When the art has not loaded yet', () => {
         beforeEach(() => {
-            data.getAllArt = (page: number, dispatch: Dispatch<GetArtAction>) => dispatch(loading());
+            data.getAllArt = (
+                query: Record<string, unknown>,
+                dispatch: Dispatch<GetArtAction>
+            ) => dispatch(loading());
             mockUseArtGallery.mockReturnValue({
                 art: {pieces: []},
                 updateArt: jest.fn(),
@@ -42,7 +45,10 @@ describe('The gallery.', () => {
 
     describe('When the art has loaded', () => {
         beforeEach(() => {
-            data.getAllArt = (page: number, dispatch: Dispatch<GetArtAction>) => dispatch(onSuccess(art));
+            data.getAllArt = (
+                query: Record<string, unknown>,
+                dispatch: Dispatch<GetArtAction>
+            ) => dispatch(onSuccess(art));
             mockUseArtGallery.mockReturnValue({
                 art,
                 updateArt: jest.fn(),
@@ -74,7 +80,10 @@ describe('The gallery.', () => {
 
     describe('when there is no art to show', () => {
         beforeEach(() => {
-            data.getAllArt = (page: number, dispatch: Dispatch<GetArtAction>) => dispatch(onSuccess({pieces: [] as Piece[]} as Art));
+            data.getAllArt = jest.fn((
+                query: Record<string, unknown>,
+                dispatch: Dispatch<GetArtAction>
+            ) => dispatch(onSuccess({pieces: [] as Piece[]} as Art)));
             mockUseArtGallery.mockReturnValue({
                 updateArt: jest.fn(),
                 reset: jest.fn()
@@ -94,7 +103,10 @@ describe('The gallery.', () => {
 
     describe('when the art has errored', () => {
         beforeEach(() => {
-            data.getAllArt = (page: number, dispatch: Dispatch<GetArtAction>) => dispatch(onError());
+            data.getAllArt = (
+                query: Record<string, unknown>,
+                dispatch: Dispatch<GetArtAction>
+            ) => dispatch(onError());
             mockUseArtGallery.mockReturnValue({
                 art,
                 updateArt: jest.fn(),
@@ -105,5 +117,21 @@ describe('The gallery.', () => {
 
         it('should indicate that something went wrong', () =>
             expect(screen.queryByTestId('empty-gallery')).toBeInTheDocument());
+    });
+
+    test('when filtering results by search', () => {
+        data.getAllArt = jest.fn((
+            query: Record<string, unknown>,
+            dispatch: Dispatch<GetArtAction>
+        ) => dispatch(onError()));
+        mockUseArtGallery.mockReturnValue({
+            art,
+            updateArt: jest.fn(),
+            reset: jest.fn()
+        });
+
+        renderWithRouter(<ArtGallery/>, Paths.artGallery, 'page=23&search=g');
+
+        expect(data.getAllArt).toHaveBeenCalledWith({page: '23', search: 'g'}, expect.anything());
     });
 });

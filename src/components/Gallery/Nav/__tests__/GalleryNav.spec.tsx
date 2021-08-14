@@ -1,10 +1,9 @@
 import {screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {art, Rendered, renderWithRouter} from '../../../../__tests__/util';
+import {art as mockArt, Rendered, renderWithRouter} from '../../../../__tests__/util';
 import {Paths} from '../../../../App';
 import {GalleryNav} from '../../';
 
-const mockArt = art;
 jest.mock('../../Context', () => ({
     useGallery: () => ({art: mockArt})
 }));
@@ -37,7 +36,7 @@ describe('Gallery Navigation', () => {
             it('should be able to go to the last page', () => {
                 userEvent.click(screen.getByTestId('last-page'));
                 expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
-                expect(rendered().testLocation?.search).toEqual(`?page=${art.pagination.totalPages}`);
+                        expect(rendered().testLocation?.search).toEqual(`?page=${mockArt.pagination.totalPages}`);
                 expect(screen.queryByTestId('last-page')).not.toBeInTheDocument();
                 expect(screen.queryByTestId('next-page')).not.toBeInTheDocument();
                 expect(screen.queryByTestId('first-page')).toBeInTheDocument();
@@ -52,12 +51,12 @@ describe('Gallery Navigation', () => {
             it('should be able to go to the previous page', () => {
                 userEvent.click(screen.getByTestId('prev-page'));
 
-                expect(rendered().testLocation?.search).toEqual(`?page=${art.pagination.totalPages - 1}`);
+                        expect(rendered().testLocation?.search).toEqual(`?page=${mockArt.pagination.totalPages - 1}`);
                 expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
 
                 userEvent.click(screen.getByTestId('prev-page'));
 
-                expect(rendered().testLocation?.search).toEqual(`?page=${art.pagination.totalPages - 2}`);
+                        expect(rendered().testLocation?.search).toEqual(`?page=${mockArt.pagination.totalPages - 2}`);
                 expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
             });
 
@@ -99,12 +98,12 @@ describe('Gallery Navigation', () => {
 
             it('should not allow a user to go to a page higher than the last', () =>
                 expect(screen.getByTestId('go-to'))
-                    .toHaveAttribute('max', `${art.pagination.totalPages}`));
+                            .toHaveAttribute('max', `${mockArt.pagination.totalPages}`));
         });
     });
 
     describe('with existing params', () => {
-        beforeEach(() => rendered = renderWithRouter(<GalleryNav/>, Paths.artGallery, 'search=q'));
+                beforeEach(() => rendered = renderWithRouter(<GalleryNav/>, Paths.artGallery, 'search=q'));
 
         it('should only update the page query', () => {
             userEvent.click(screen.getByTestId('next-page'));
@@ -114,13 +113,13 @@ describe('Gallery Navigation', () => {
             expect(rendered().testLocation?.search).toEqual('?search=q&page=3');
 
             userEvent.click(screen.getByTestId('last-page'));
-            expect(rendered().testLocation?.search).toEqual(`?search=q&page=${art.pagination.totalPages}`);
+                    expect(rendered().testLocation?.search).toEqual(`?search=q&page=${mockArt.pagination.totalPages}`);
 
             userEvent.click(screen.getByTestId('prev-page'));
-            expect(rendered().testLocation?.search).toEqual(`?search=q&page=${art.pagination.totalPages - 1}`);
+            expect(rendered().testLocation?.search).toEqual(`?search=q&page=${mockArt.pagination.totalPages - 1}`);
 
             userEvent.click(screen.getByTestId('prev-page'));
-            expect(rendered().testLocation?.search).toEqual(`?search=q&page=${art.pagination.totalPages - 2}`);
+            expect(rendered().testLocation?.search).toEqual(`?search=q&page=${mockArt.pagination.totalPages - 2}`);
 
             userEvent.click(screen.getByTestId('first-page'));
             expect(rendered().testLocation?.search).toEqual('?search=q&page=1');
