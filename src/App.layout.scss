@@ -3,7 +3,7 @@
   grid-template-columns: 13.4rem 1fr 70% 2fr;
   grid-template-rows: var(--base-x-15) 1fr;
   grid-template-areas:
-    "nav . header header"
+    "nav . header ."
     "nav . main ."
     "nav . footer .";
 
@@ -11,12 +11,17 @@
     grid-area: header;
     display: grid;
     align-content: center;
-    grid-template-columns: 82% 1fr;
+    grid-template-columns: 1fr 1fr;
     grid-template-areas:
-      "title .";
+      "title search";
 
     .title {
       grid-area: title;
+    }
+
+    #gallery-search {
+      grid-area: search;
+      justify-content: flex-end;
     }
   }
 
