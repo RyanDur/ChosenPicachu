@@ -3,6 +3,7 @@ import {ArtSuggestion, AsyncState} from '../../../data/types';
 import {data} from '../../../data';
 import {SearchArtAction} from '../../../data/actions';
 import {useHistory} from 'react-router-dom';
+import {URLHelpers} from '../../../util/URL';
 import './Search.scss';
 
 interface Props {
@@ -20,13 +21,10 @@ export const Search: FC<Props> = ({id}) => {
         });
     }, [searchString]);
 
-    const toQueryString = (params: { [k: string]: unknown } = {}): string => '?' + Object.entries(params)
-        .map(([key, value]) => `${key}=${value}`).join('&');
-
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         searchString && history.push({
-            search: toQueryString({search: searchString})
+            search: URLHelpers.toQueryString({search: searchString})
         });
     };
 
