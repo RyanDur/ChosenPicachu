@@ -3,6 +3,11 @@
   width: 30%;
   background-color: var(--void);
 
+  .fill {
+    width: 100%;
+    background-color: var(--paper);
+  }
+
   #go-to-page {
     pointer-events: all;
     width: 8rem;

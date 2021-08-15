@@ -4,12 +4,8 @@
   background-color: var(--void);
 
   #app-header {
-    z-index: 2;
     background-color: var(--paper);
     margin: 0 0 var(--base) 0;
-
-    #gallery-search {
-    }
   }
 
   main {

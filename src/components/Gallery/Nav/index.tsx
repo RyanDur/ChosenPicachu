@@ -37,6 +37,8 @@ export const GalleryNav: FC<Props> = ({id}) => {
     };
 
     return <nav className="pagination" id={id}>
+        {!hasPrevPage && <article className="fill"/> }
+        {!hasPrevPage && <article className="fill"/> }
         {hasPrevPage && <Link to={`${Paths.artGallery}${toQueryString({...currentQuery, page: firstPage})}`}
                               onClick={gotoTopOfPage}
                               id="first" className="page" data-testid="first-page">
@@ -69,5 +71,7 @@ export const GalleryNav: FC<Props> = ({id}) => {
                               id="last" className="page" data-testid="last-page">
           LAST
         </Link>}
+        {!hasNextPage && <article className="fill"/> }
+        {!hasNextPage && <article className="fill"/> }
     </nav>;
 };
