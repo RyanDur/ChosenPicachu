@@ -26,6 +26,8 @@
 
       .path {
         margin-bottom: var(--base-x-4);
+        font-size: var(--base-x-4);
+        font-weight: bold;
 
         &:focus,
         &:hover {
@@ -38,6 +40,7 @@
       position: sticky;
       bottom: 0;
       padding: var(--base);
+      font-size: var(--base-x-1_5);
 
       .icons-content {
         display: none;
