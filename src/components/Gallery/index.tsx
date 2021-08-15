@@ -39,7 +39,7 @@ const ArtGallery: FC = () => {
             <figcaption className="title">{piece.title}</figcaption>
         </figure>)}
         {loading && <Loading className="loader" testId="gallery-loading"/>}
-        {showError && <img src="https://img.icons8.com/ios/100/ffffff/no-image-gallery.png"
+        {showError && <img src="https://img.icons8.com/ios/100/000000/no-image-gallery.png"
                            id="empty-gallery"
                            alt="empty gallery"
                            data-testid="empty-gallery"/>}
