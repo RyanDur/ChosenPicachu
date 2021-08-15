@@ -2,6 +2,7 @@
   display: block;
   min-height: 100vh;
   background-color: var(--void);
+  width: 100%;
 
   #app-header {
     background-color: var(--paper);
@@ -71,9 +72,11 @@
 @media (max-width: 832px) {
   #root {
     #app-header {
-      position: sticky;
-      top: 0;
       padding: 0 2rem;
+    }
+
+    #app-footer {
+      height: 8rem;
     }
 
     .stick-to-bottom {
@@ -83,9 +86,6 @@
     #side-nav {
       position: sticky;
       bottom: 0;
-      box-shadow: inset 0 7px 9px -7px rgb(0, 0, 0);
-      border-right: none;
-      border-top: 2px solid black;
 
       #app-navigation {
         flex-direction: row;
