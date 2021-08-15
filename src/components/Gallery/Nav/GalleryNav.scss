@@ -1,46 +1,35 @@
 .pagination {
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   pointer-events: none;
+  width: 30%;
+  background-color: var(--void);
 
   #go-to-page {
     pointer-events: all;
-    width: var(--base-x-10);
-
-    .control {
-      width: 100%;
-    }
+    width: 8rem;
 
     #go-to {
-      height: 4rem;
-      border-radius: 2rem 2rem 0 0;
-      padding-left: 1rem;
       outline: none;
+      height: 50%;
+      border: none;
+      padding: 0 0 0 var(--base);
     }
 
     #submit-page-number {
-      border-radius: 0 0 2rem 2rem;
-      border: 1px solid var(--void);
+      height: 50%;
+      border: none;
       padding: 0;
-      background: var(--paper);
 
       &:focus,
       &:hover {
-        color: inherit;
         background: var(--mint)
       }
     }
   }
 
   .page {
-    background: var(--paper);
-    width: var(--base-x-10);
-    height: var(--base-x-5);
     outline: none;
-    font-weight: bold;
     pointer-events: all;
+    background-color: var(--paper);
 
     &:active {
       box-shadow: inset 0 0 5px var(--void);
@@ -51,37 +40,20 @@
       background: var(--mint);
     }
 
-    &#prev,
     &#next {
-      border-radius: initial;
-    }
-
-    &#next {
-      margin-left: var(--base-x-0_5);
+      margin: 0 0 0 var(--base);
     }
 
     &#prev {
-      margin-right: var(--base-x-0_5);
+      margin: 0 var(--base) 0 0;
     }
 
-
-    &:first-child {
-      border-top-left-radius: var(--base-x-5);
-      border-bottom-left-radius: var(--base-x-5);
-      border-right: 1px solid var(--void);
+    &:first-of-type {
+      margin: 0 var(--base) 0 0;
     }
 
-    &:last-child {
-      border-top-right-radius: var(--base-x-5);
-      border-bottom-right-radius: var(--base-x-5);
-      border-left: 1px solid var(--void);
+    &:last-of-type {
+      margin: 0 0 0 var(--base);
     }
-  }
-}
-
-
-@media (max-width: 832px) {
-  .pagination {
-    width: 100%;
   }
 }

@@ -3,7 +3,7 @@ import './About.scss';
 
 export const About = () => {
     return <>
-        <ul className="accordion rounded-corners overhang">
+        <ul className="accordion">
             <li className="fold">
                 <input id="first-checkbox" className="info-toggle off-screen" type="checkbox"/>
                 <label className="info-label" htmlFor="first-checkbox">{faker.lorem.word()}</label>
@@ -35,7 +35,7 @@ export const About = () => {
             </li>
         </ul>
 
-        <ul className="accordion rounded-corners overhang">
+        <ul className="accordion">
             <li className="close">
                 <input id="close-radio" defaultChecked={true} className="info-toggle off-screen" type="radio" name="group"/>
                 <label className="info-label center" htmlFor="close-radio">Close</label>

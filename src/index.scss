@@ -10,7 +10,6 @@ body {
   font-size: var(--base-x-2);
   font-family: Arial, sans-serif;
   color: var(--void);
-  background: var(--charcoal);
 }
 
 input, select, textarea {
@@ -95,6 +94,7 @@ figure {
   --base-x-12: 9.6rem;
   --base-x-13: 10.4rem;
   --base-x-15: 12rem;
+  --base-x-16_5: 13.2rem;
   --base-x-20: 16rem;
   --base-x-25: 20rem;
   --base-x-100: 80rem;

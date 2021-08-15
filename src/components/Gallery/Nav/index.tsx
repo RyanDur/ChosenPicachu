@@ -1,12 +1,17 @@
 import {Link, useHistory} from 'react-router-dom';
-import React, {FormEvent, useState} from 'react';
+import React, {FC, FormEvent, useState} from 'react';
 import {Paths} from '../../../App';
 import {useQuery} from '../../hooks';
 import {useGallery} from '../Context';
 import {toQueryObj, toQueryString} from '../../../util/URL';
 import './GalleryNav.scss';
+import './GalleryNav.layout.scss';
 
-export const GalleryNav = () => {
+interface Props {
+    id?: string;
+}
+
+export const GalleryNav: FC<Props> = ({id}) => {
     const {art} = useGallery();
     const history = useHistory();
     const {page} = useQuery<{ page: string }>({page: '1'});
@@ -31,7 +36,7 @@ export const GalleryNav = () => {
         history.push({search: toQueryString({...currentQuery, page: pageNumber})});
     };
 
-    return <nav className="pagination">
+    return <nav className="pagination" id={id}>
         {hasPrevPage && <Link to={`${Paths.artGallery}${toQueryString({...currentQuery, page: firstPage})}`}
                               onClick={gotoTopOfPage}
                               id="first" className="page" data-testid="first-page">

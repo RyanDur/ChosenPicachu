@@ -1,49 +1,16 @@
 #art-gallery {
-  min-height: calc(100vh - var(--base-x-15) - var(--base-x-10));
   height: 100%;
-  width: 100%;
 
   .frame {
-    position: relative;
-    width: 100%;
-    display: table;
     margin: 0 0 var(--base-x-5);
-    background: var(--faded-leather);
     outline: none;
-    height: fit-content;
-    transition: background .35s ease;
-
-    &:focus-within,
-    &:hover {
-      outline: none;
-    }
-
-    &,
-    .piece {
-      border-radius: var(--base-x-2);
-    }
 
     .piece {
-      box-shadow: var(--light-box-shadow);
-      outline: none;
-    }
-
-    .loading-screen {
       width: 100%;
-      min-width: var(--base-x-25);
     }
 
     .title {
-      display: table-caption;
-
-      caption-side: top;
       text-align: center;
-      width: 100%;
-      color: var(--paper);
     }
   }
-}
-
-@media (max-width: 832px) {
-
 }

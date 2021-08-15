@@ -1,0 +1,29 @@
+.pagination {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-areas:
+    "first prev go-to next last";
+
+  #first {
+    grid-area: first;
+  }
+
+  #last {
+    grid-area: prev;
+  }
+
+  #go-to-page {
+    grid-area: go-to;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #next {
+    grid-area: next;
+  }
+
+  #last {
+    grid-area: last;
+  }
+}

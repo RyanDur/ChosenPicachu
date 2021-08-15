@@ -25,7 +25,7 @@ const ArtPiece = () => {
 
     return <>
         {loading && <Loading testId="loading-piece"/>}
-        {!loading && !errored && piece && <figure className="card art-work" data-testid="image-figure">
+        {!loading && !errored && piece && <figure className="art-work" data-testid="image-figure">
           <Image piece={piece} height={2000} linkEnabled={false} className="piece"/>
           <figcaption className="artist-display">{piece.artistInfo}</figcaption>
         </figure>}
