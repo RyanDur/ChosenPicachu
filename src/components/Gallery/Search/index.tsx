@@ -29,10 +29,10 @@ export const Search: FC<Props> = ({id}) => {
     const handleReset = () => history.push({search: ''});
 
     return <form id={id} className="search" onSubmit={handleSubmit} onReset={handleReset} data-testid="search">
-        <button className='reset-query' data-testid="reset-query" type="reset"/>
+        <button className='reset-query' data-testid="reset-query" type="reset" aria-label="reset search"/>
         <input autoComplete="off" list="search-options" placeholder="Search For" className="query" id={`query-${id}`}
                onInput={event => updateQuery(event.currentTarget.value)}/>
-        <button className='submit-query' data-testid="submit-query" type="submit"/>
+        <button className='submit-query' data-testid="submit-query" type="submit" aria-label="submit search"/>
         <datalist id="search-options" data-testid="search-options">
             {searchOptions.map((searchOption, index) =>
                 <option value={searchOption} key={index}>{searchOption}</option>)}

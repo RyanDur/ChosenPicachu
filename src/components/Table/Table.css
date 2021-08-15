@@ -1,6 +1,4 @@
 .fancy-table {
-  width: 100%;
-  height: 100%;
   border-collapse: collapse;
 }
 
@@ -16,10 +14,6 @@
 
 .fancy-table .body .row:last-child {
   border-bottom: none;
-}
-
-.fancy-table .body .row:nth-child(even) {
-  background: var(--faded-leather);
 }
 
 .fancy-table .body .row:hover:nth-child(even),

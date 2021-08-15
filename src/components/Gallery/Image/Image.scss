@@ -12,7 +12,6 @@
       height: inherit;
       width: inherit;
       position: absolute;
-      border-radius: var(--base-x-2);
     }
 
     &:before {
@@ -26,14 +25,9 @@
   }
 }
 
-.image {
-  width: 100%;
-}
-
 .error {
   display: block;
   margin-left: auto;
   margin-right: auto;
   padding: var(--base-x-5);
-  height: var(--base-x-25);
 }

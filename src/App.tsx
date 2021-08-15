@@ -37,12 +37,12 @@ export const App = () => {
         </header>
         <aside id="side-nav" data-testid="navigation">
             <nav id="app-navigation">
-                <Link id="navigate-home" className="path" to={Paths.home}>Home</Link>
-                <Link id="navigate-about" className="path" to={Paths.about}>About</Link>
-                <Link id="navigate-users" className="path" to={Paths.users}>Users</Link>
-                <Link id="navigate-form" className="path" to={Paths.artGallery}>Art</Link>
-                <a id="navigate-repo" className="path" href={Paths.repo}
-                   rel="noopener noreferrer" target="_blank">Repo</a>
+                <h2><Link id="navigate-home" className="path" to={Paths.home}>Home</Link></h2>
+                <h2><Link id="navigate-about" className="path" to={Paths.about}>About</Link></h2>
+                <h2><Link id="navigate-users" className="path" to={Paths.users}>Users</Link></h2>
+                <h2><Link id="navigate-form" className="path" to={Paths.artGallery}>Art</Link></h2>
+                <h2><a id="navigate-repo" className="path" href={Paths.repo}
+                       rel="noopener noreferrer" target="_blank">Repo</a></h2>
             </nav>
 
             <article className="icons borrowed-assets" tabIndex={0}>
@@ -69,7 +69,7 @@ export const App = () => {
                 className={join(useRouteMatch(Paths.artGallery)?.isExact && 'stick-to-bottom')}
                 data-testid="footer">
             <Switch>
-                <Route path={Paths.artGallery} exact><GalleryNav/></Route>
+                <Route path={Paths.artGallery} exact><GalleryNav id="gallery-nav"/></Route>
             </Switch>
         </footer>
     </>;

@@ -1,137 +1,109 @@
 #root {
-  min-height: 100vh;
   display: block;
+  min-height: 100vh;
+  background-color: var(--void);
+
+  #app-header {
+    z-index: 2;
+    background-color: var(--paper);
+    margin: 0 0 var(--base) 0;
+
+    #gallery-search {
+    }
+  }
 
   main {
-    width: 100%;
-  }
-}
-
-#app-header {
-  height: 100%;
-  z-index: 2;
-
-  .title {
-    color: var(--paper);
+    padding: var(--base-x-5);
+    background-color: var(--paper);
   }
 
-  #gallery-search {
-    height: 100%;
-  }
-}
+  #side-nav {
+    background-color: var(--paper);
+    margin: 0 var(--base) 0 0;
 
-#app-footer {
-  min-height: var(--base-x-10);
-}
+    min-height: 100%;
 
-.stick-to-bottom {
-  position: sticky;
-  bottom: 0;
-  width: 100%;
-}
+    #app-navigation {
+      position: sticky;
+      top: -1px;
+      padding: var(--base-x-5);
 
-#side-nav {
-  background: var(--silk);
-  height: 100%;
-  z-index: 2;
-  box-shadow: inset -7px 0 9px -7px rgb(0, 0, 0);
-  border-right: 2px solid black;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+      .path {
+        margin-bottom: var(--base-x-4);
 
-  #app-navigation {
-    position: sticky;
-    top: -1px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 11rem 0;
-    height: 100vh;
+        &:focus,
+        &:hover {
+          color: var(--internationl-orange-engineering);
+        }
+      }
+    }
 
-    .path {
-      font-weight: bold;
-      font-size: 3.2rem;
-      margin-bottom: var(--base-x-4);
+    .icons {
+      position: sticky;
+      bottom: 0;
+      padding: var(--base);
 
-      &:focus,
-      &:hover {
+      .icons-content {
+        display: none;
+      }
+
+      &:focus-within .icons-content,
+      &:hover .icons-content {
+        display: block;
+      }
+
+      .attribution:focus {
         color: var(--internationl-orange-engineering);
       }
     }
   }
 
-  #borrowed-assets {
-    font-size: var(--base);
-    position: relative;
-    bottom: 0;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+  #app-footer {
+    background-color: var(--paper);
+    margin: var(--base) 0 0;
   }
 }
 
-.icons {
+.stick-to-bottom {
   position: sticky;
   bottom: 0;
-
-  &:focus-within .icons-content,
-  &:hover .icons-content {
-    display: block;
-  }
-
-  .attribution:focus {
-    color: var(--internationl-orange-engineering);
-  }
-
-  .icons-title {
-    display: flex;
-    justify-content: center;
-  }
-
-  .icons-content {
-    display: none;
-  }
-}
-
-.overhang {
-  box-shadow: 0 0.3rem 0.6rem var(--void), 0 0.3rem 0.6rem var(--void);
 }
 
 @media (max-width: 832px) {
-  #app-header {
-    position: sticky;
-    top: 0;
-    background: var(--charcoal);
-    padding: 0 2rem;
-  }
-  .stick-to-bottom {
-    bottom: 6.8rem;
-  }
-
-  #side-nav {
-    position: sticky;
-    bottom: 0;
-    box-shadow: inset 0 7px 9px -7px rgb(0, 0, 0);
-    border-right: none;
-    border-top: 2px solid black;
-
-    #app-navigation {
-      height: 100%;
-      flex-direction: row;
-      justify-content: space-around;
-      align-content: center;
-      padding: 0;
-
-      .path {
-        font-size: 1.8rem;
-        margin-bottom: 0;
-      }
+  #root {
+    #app-header {
+      position: sticky;
+      top: 0;
+      padding: 0 2rem;
     }
 
-    #borrowed-assets {
-      flex-direction: row;
-      justify-content: space-around;
+    .stick-to-bottom {
+      bottom: 6.8rem;
+    }
+
+    #side-nav {
+      position: sticky;
+      bottom: 0;
+      box-shadow: inset 0 7px 9px -7px rgb(0, 0, 0);
+      border-right: none;
+      border-top: 2px solid black;
+
+      #app-navigation {
+        flex-direction: row;
+        justify-content: space-around;
+        align-content: center;
+        padding: 0;
+
+        .path {
+          font-size: 1.8rem;
+          margin-bottom: 0;
+        }
+      }
+
+      #borrowed-assets {
+        flex-direction: row;
+        justify-content: space-around;
+      }
     }
   }
 }
@@ -184,22 +156,18 @@
 
 @-webkit-keyframes round {
   0% {
-    -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
   }
   100% {
-    -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
 }
 
 @keyframes round {
   0% {
-    -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
   }
   100% {
-    -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
 }

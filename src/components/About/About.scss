@@ -18,7 +18,7 @@
     height: var(--base-x-5);
     width: 100%;
     background: var(--charcoal);
-    border-radius: 2rem 2rem 0 0;
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -46,15 +46,15 @@
     overflow: hidden;
     width: 100%;
     vertical-align: middle;
-    border-radius: 0;
+
     margin-bottom: 0.1rem;
 
     &:last-child {
-      border-radius: 0 0 2rem 2rem;
+
     }
 
     &:first-of-type {
-      border-radius: 2rem 2rem 0 0;
+
     }
 
     .info {
