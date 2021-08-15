@@ -9,9 +9,11 @@
   "field field field field"
   "field field field field";
 
+  .loader,
   #empty-gallery {
     grid-area: field;
     align-self: center;
+    justify-self: center;
   }
 }
 
