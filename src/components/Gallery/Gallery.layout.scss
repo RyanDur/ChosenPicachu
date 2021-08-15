@@ -7,16 +7,7 @@
   grid-template-areas:
   "field field field field"
   "field field field field"
-  "field field field field"
-        ". nav nav .";
-
-  .pagination {
-    grid-area: nav;
-  }
-
-  .loader {
-    grid-area: field;
-  }
+  "field field field field";
 
   #empty-gallery {
     grid-area: field;
