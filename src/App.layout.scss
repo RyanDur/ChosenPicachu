@@ -85,19 +85,27 @@
 @media (max-width: 832px) {
   #root {
     grid-template-columns: 1fr;
-    grid-template-rows: var(--base-x-10) 1fr var(--base-x-15) var(--base-x-10);
+    grid-template-rows: var(--base-x-10) var(--base-x-4) 1fr  var(--base-x-10);
     grid-template-areas:
     "header"
+    "nav"
     "main"
-    "footer"
-    "nav";
+    "footer";
 
     #app-header {
-      grid-area: header;
-      display: grid;
       grid-template-columns: 1fr 1fr;
       grid-template-areas:
       "title search";
+    }
+
+    #side-nav {
+      flex-direction: row;
+      justify-content: unset;
+      width: 100%;
+      #app-navigation {
+        width: 100%;
+        display: flex;
+      }
     }
 
     #app-footer {
