@@ -3,11 +3,10 @@ import React, {FormEvent, useState} from 'react';
 import {Paths} from '../../../App';
 import {useQuery} from '../../hooks';
 import {useGallery} from '../Context';
-import {URLHelpers} from '../../../util/URL';
+import {toQueryObj, toQueryString} from '../../../util/URL';
 import './GalleryNav.scss';
 
 export const GalleryNav = () => {
-    const {toQueryString, toQueryObj} = URLHelpers;
     const {art} = useGallery();
     const history = useHistory();
     const {page} = useQuery<{ page: string }>({page: '1'});
