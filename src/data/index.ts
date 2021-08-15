@@ -9,11 +9,10 @@ import {
 } from './types';
 import {GetArtAction, GetPieceAction, loading, onError, onSuccess, SearchArtAction} from './actions';
 import {Dispatch} from '../components/UserInfo/types';
-import {URLHelpers} from '../util/URL';
+import {toQueryString} from '../util/URL';
 
 export const fields = 'fields=id,title,image_id,artist_display,term_titles,thumbnail';
 const artInstituteOfChicago = 'https://api.artic.edu';
-const {toQueryString} = URLHelpers;
 
 export const data = {
     searchForArtOptions: (
