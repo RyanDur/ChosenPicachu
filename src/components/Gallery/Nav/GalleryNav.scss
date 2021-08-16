@@ -1,6 +1,6 @@
 .pagination {
   pointer-events: none;
-  width: 40rem;
+  width: var(--base-x-50);
   background-color: var(--void);
 
   .fill {
