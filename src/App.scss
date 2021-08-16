@@ -12,13 +12,11 @@
   main {
     padding: var(--base-x-5);
     background-color: var(--paper);
-
   }
 
   #side-nav {
     background-color: var(--paper);
     margin: 0 var(--base) 0 0;
-
     min-height: 100%;
 
     #app-navigation {
@@ -68,7 +66,7 @@
 
   #app-footer {
     background-color: var(--paper);
-    margin: var(--base) 0 0;
+    margin: var(--base) 0 0 0;
   }
 }
 
@@ -87,6 +85,14 @@
   #root {
     #app-header {
       padding: 0 2rem;
+
+      #gallery-search {
+        width: 100%;
+      }
+    }
+
+    main {
+      padding: var(--base);
     }
 
     #app-footer {
@@ -94,8 +100,9 @@
     }
 
     #side-nav {
-      position: sticky;
-      bottom: 0;
+      width: 100%;
+      display: flex;
+      align-items: center;
 
       #app-navigation {
         flex-direction: row;
@@ -106,6 +113,7 @@
         .path {
           font-size: 1.8rem;
           margin-bottom: 0;
+          height: unset;
         }
       }
 
