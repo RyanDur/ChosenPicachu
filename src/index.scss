@@ -1,4 +1,5 @@
 @import-normalize;
+
 @import "styles/button";
 @import "styles/shared";
 
@@ -12,11 +13,22 @@ body {
   color: var(--void);
 }
 
-input, select, textarea {
+input,
+select,
+textarea {
   font-size: var(--base-x-2);
 }
 
-body, p, ul, li, h1, h2, h3, h4, h5, h6 {
+body,
+p,
+ul,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin: 0;
 }
 
@@ -57,7 +69,6 @@ figure {
   margin: 0;
 }
 
-
 :root {
   /* colors */
   --paper: rgb(244, 244, 244);
@@ -66,19 +77,16 @@ figure {
   --faded-mint: rgba(180, 219, 192, 0.5);
   --internationl-orange-engineering: rgb(186, 45, 11);
   --faded-internationl-orange-engineering: rgba(186, 45, 11, 0.4);
-  --primary-blue: rgb(33, 150, 243);;
+  --primary-blue: rgb(33, 150, 243);
   --primary-dark-blue: rgb(13, 71, 161);
   --field-drab: rgb(106, 88, 55);
-
   --charcoal: rgb(55, 55, 55);
   --void: rgb(14, 11, 22);
-
   --faded-leather: rgba(171, 152, 122, 0.2);
   --light-shadow: rgba(0, 0, 0, 0.16);
   --shadow: rgba(0, 0, 0, 0.19);
   --dark-shadow: rgba(0, 0, 0, 0.23);
   --disabled-gray: rgba(239, 239, 239, 0.3);
-
   --base-box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   --light-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   --base-box-shadow-red: 0 2px 15px 15px rgb(186, 45, 11), 0 1px 2px rgba(255, 255, 255, 1);

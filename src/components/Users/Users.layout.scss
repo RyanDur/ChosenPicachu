@@ -15,8 +15,8 @@
   row-gap: 4rem;
   grid-auto-rows: 4rem 1fr;
   grid-template-areas:
-  "title button"
-  "table table";
+    "title button"
+    "table table";
 
   #title {
     grid-area: title;

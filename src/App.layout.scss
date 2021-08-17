@@ -11,8 +11,7 @@
     grid-area: header;
     display: grid;
     grid-template-columns: var(--base-x-16_5) var(--base-x-16_5)  1fr 1fr var(--base-x-16_5);
-    grid-template-areas:
-      ". . title search .";
+    grid-template-areas: ". . title search .";
 
     .title {
       grid-area: title;
@@ -51,8 +50,7 @@
     display: grid;
     justify-items: center;
     grid-template-columns: var(--base-x-16_5) 1fr var(--base-x-16_5) var(--base-x-16_5);
-    grid-template-areas:
-    ". center . .";
+    grid-template-areas: ". center . .";
 
     #gallery-nav {
       grid-area: center;
@@ -64,14 +62,13 @@
   #root {
     grid-template-columns: 13.4rem 1fr;
     grid-template-areas:
-    "nav header"
-    "nav main"
-    "nav footer";
+      "nav header"
+      "nav main"
+      "nav footer";
 
     #app-header {
       grid-template-columns: 1fr 1fr;
-      grid-template-areas:
-      "title search";
+      grid-template-areas: "title search";
 
       .title {
         grid-area: title;
@@ -84,8 +81,7 @@
       display: grid;
       justify-items: center;
       grid-template-columns: var(--base-x-16_5) 1fr var(--base-x-16_5);
-      grid-template-areas:
-    ". center .";
+      grid-template-areas: ". center .";
 
       #gallery-nav {
         grid-area: center;
@@ -99,15 +95,14 @@
     grid-template-columns: 1fr;
     grid-template-rows: var(--base-x-10) var(--base-x-4) 1fr var(--base);
     grid-template-areas:
-    "header"
-    "nav"
-    "main"
-    "footer";
+      "header"
+      "nav"
+      "main"
+      "footer";
 
     #app-header {
       grid-template-columns: 1fr 1fr;
-      grid-template-areas:
-      "title search";
+      grid-template-areas: "title search";
     }
 
     #side-nav {
@@ -121,8 +116,7 @@
 
     #app-footer {
       grid-template-columns: 1fr;
-      grid-template-areas:
-    "center";
+      grid-template-areas: "center";
 
       #gallery-nav {
         grid-area: center;

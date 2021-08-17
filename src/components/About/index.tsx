@@ -36,7 +36,7 @@ export const About = () => {
         </ul>
 
         <ul className="accordion">
-            <li className="close">
+            <li className="close fold">
                 <input id="close-radio" defaultChecked={true} className="info-toggle off-screen" type="radio" name="group"/>
                 <label className="info-label center" htmlFor="close-radio">Close</label>
             </li>

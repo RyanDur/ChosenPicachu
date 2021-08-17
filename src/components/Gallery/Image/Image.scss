@@ -6,19 +6,19 @@
 
   &:focus,
   &:hover {
-    &:before,
-    &:after {
+    &::before,
+    &::after {
       content: '';
       height: inherit;
       width: inherit;
       position: absolute;
     }
 
-    &:before {
+    &::before {
       background: rgba(0, 0, 0, 0.4);
     }
 
-    &:after {
+    &::after {
       margin: 0 auto;
       background: url("https://img.icons8.com/ios/50/ffffff/detective.png") no-repeat center;
     }
