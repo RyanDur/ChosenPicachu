@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link, Route, Switch} from 'react-router-dom';
+import {Link, Route, Switch, useRouteMatch} from 'react-router-dom';
 import {About, ArtGallery, ArtPiece, GalleryNav, Home, Search, Users} from './components';
 import {useArtPiece} from './components/Gallery/ArtPiece';
 import './App.scss';
@@ -57,7 +57,7 @@ export const App = () => {
                 </nav>
             </article>
         </aside>
-        <main data-testid="main">
+        <main data-testid="main" className={useRouteMatch(Paths.artGallery) ? 'fill' : 'fit'}>
             <Switch>
                 <Route path={Paths.home} exact><Home/></Route>
                 <Route path={Paths.about} exact><About/></Route>
