@@ -6,6 +6,7 @@ import {useHistory} from 'react-router-dom';
 import {toQueryString} from '../../../util/URL';
 import './Search.scss';
 import './Search.layout.scss';
+import {Paths} from '../../../App';
 
 interface Props {
     id?: string;
@@ -24,10 +25,16 @@ export const Search: FC<Props> = ({id}) => {
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        searchString && history.push({search: toQueryString({search: searchString})});
+        searchString && history.push({
+            pathname: Paths.artGallery,
+            search: toQueryString({search: searchString})
+        });
     };
 
-    const handleReset = () => history.push({search: ''});
+    const handleReset = () => history.push({
+        pathname: Paths.artGallery,
+        search: ''
+    });
 
     return <form id={id} className="search" onSubmit={handleSubmit} onReset={handleReset} data-testid="search">
         <button className='reset-query' data-testid="reset-query" type="reset" aria-label="reset search"/>
