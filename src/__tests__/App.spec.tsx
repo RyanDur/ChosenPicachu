@@ -9,7 +9,8 @@ jest.mock('../components', () => ({
     Users: () => 'Test Users Component',
     ArtGallery: () => 'Art Gallery Component',
     ArtPiece: () => 'Art Piece Component',
-    GalleryNav: () => 'Gallery Navigation'
+    GalleryNav: () => 'Gallery Navigation',
+    Search: () => 'Search'
 }));
 
 const title = 'some cool title';
@@ -51,6 +52,7 @@ describe('the App', () => {
             userEvent.click(within(navigation).getByText('Art'));
             expect(within(header).getByText('Art Gallery')).toBeInTheDocument();
             expect(within(footer).queryByText('Gallery Navigation')).toBeInTheDocument();
+            expect(within(header).getByText('Search')).toBeInTheDocument();
         });
     });
 
@@ -59,6 +61,7 @@ describe('the App', () => {
             renderWithRouter(<App/>, Paths.artGalleryPiece);
             const header = screen.getByTestId('header');
             expect(within(header).getByText(title)).toBeInTheDocument();
+            expect(within(header).getByText('Search')).toBeInTheDocument();
         });
     });
 });

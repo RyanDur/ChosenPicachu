@@ -1,9 +1,8 @@
 import React from 'react';
 import {Link, Route, Switch, useRouteMatch} from 'react-router-dom';
-import {About, ArtGallery, ArtPiece, GalleryNav, Home, Users} from './components';
+import {About, ArtGallery, ArtPiece, GalleryNav, Home, Search, Users} from './components';
 import {useArtPiece} from './components/Gallery/ArtPiece';
 import {join} from './components/util';
-import {Search} from './components/Gallery/Search';
 import './App.scss';
 import './App.layout.scss';
 
@@ -33,6 +32,7 @@ export const App = () => {
 
             <Switch>
                 <Route path={Paths.artGallery} exact><Search id="gallery-search"/></Route>
+                <Route path={Paths.artGalleryPiece} exact><Search id="gallery-search"/></Route>
             </Switch>
         </header>
         <aside id="side-nav" data-testid="navigation">
