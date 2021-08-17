@@ -7,6 +7,13 @@
   #app-header {
     background-color: var(--paper);
     margin: 0 0 var(--base) 0;
+
+    .title {
+      text-overflow: ellipsis;
+      width: 100%;
+      overflow:hidden;
+      white-space:nowrap;
+    }
   }
 
   main {
@@ -36,6 +43,7 @@
         &:last-of-type {
           margin-bottom: 0;
         }
+
         &:focus,
         &:hover {
           background-color: var(--mint);
@@ -74,6 +82,7 @@
   position: sticky;
   bottom: 0;
 }
+
 @media (max-width: 1366px) {
   #root {
     #app-header {
@@ -81,6 +90,7 @@
     }
   }
 }
+
 @media (max-width: 832px) {
   #root {
     #app-header {
@@ -88,6 +98,7 @@
 
       #gallery-search {
         width: 100%;
+        height: inherit;
       }
     }
 
