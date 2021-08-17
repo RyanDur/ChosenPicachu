@@ -1,5 +1,4 @@
 .search {
-  display: flex;
   width: var(--base-x-50);
   height: 100%;
   background-color: var(--void);
@@ -40,5 +39,21 @@
 
   .search-options {
     background: var(--paper);
+  }
+}
+
+@media (max-width: 832px) {
+  .search {
+    margin: 0;
+    .query,
+    .submit-query,
+    .reset-query {
+      margin: 0;
+      width: 100%;
+    }
+
+    .submit-query {
+      margin-left: var(--base);
+    }
   }
 }

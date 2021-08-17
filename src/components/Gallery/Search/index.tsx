@@ -5,6 +5,7 @@ import {SearchArtAction} from '../../../data/actions';
 import {useHistory} from 'react-router-dom';
 import {toQueryString} from '../../../util/URL';
 import './Search.scss';
+import './Search.layout.scss';
 
 interface Props {
     id?: string;
