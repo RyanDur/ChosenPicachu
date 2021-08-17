@@ -1,8 +1,7 @@
 import React from 'react';
-import {Link, Route, Switch, useRouteMatch} from 'react-router-dom';
+import {Link, Route, Switch} from 'react-router-dom';
 import {About, ArtGallery, ArtPiece, GalleryNav, Home, Search, Users} from './components';
 import {useArtPiece} from './components/Gallery/ArtPiece';
-import {join} from './components/util';
 import './App.scss';
 import './App.layout.scss';
 
@@ -42,15 +41,17 @@ export const App = () => {
                 <Link id="navigate-users" className="path" to={Paths.users}>Users</Link>
                 <Link id="navigate-form" className="path" to={Paths.artGallery}>Art</Link>
                 <a id="navigate-repo" className="path" href={Paths.repo}
-                       rel="noopener noreferrer" target="_blank">Repo</a>
+                   rel="noopener noreferrer" target="_blank">Repo</a>
             </nav>
 
             <article className="icons borrowed-assets" tabIndex={0}>
                 <h2 className="icons-title">ICONS</h2>
                 <nav className="icons-content">
                     <a href="https://icons8.com/icon/622/detective" className="attribution">Detective icon by Icons8</a>
-                    <a href="https://icons8.com/icon/j1UxMbqzPi7n/no-image" className="attribution">No Image icon by Icons8</a>
-                    <a href="https://icons8.com/icon/EJK2FdL08858/no-image-gallery" className="attribution">No Image Gallery icon by Icons8</a>
+                    <a href="https://icons8.com/icon/j1UxMbqzPi7n/no-image" className="attribution">No Image icon by
+                        Icons8</a>
+                    <a href="https://icons8.com/icon/EJK2FdL08858/no-image-gallery" className="attribution">No Image
+                        Gallery icon by Icons8</a>
                     <a href="https://icons8.com/icon/86209/reset">Reset icon by Icons8</a>
                     <a href="https://icons8.com/icon/59878/search">Search icon by Icons8</a>
                 </nav>
@@ -65,12 +66,10 @@ export const App = () => {
                 <Route path={Paths.artGalleryPiece} exact><ArtPiece/></Route>
             </Switch>
         </main>
-        <footer id={'app-footer'}
-                className={join(useRouteMatch(Paths.artGallery)?.isExact && 'stick-to-bottom')}
-                data-testid="footer">
-            <Switch>
-                <Route path={Paths.artGallery} exact><GalleryNav id="gallery-nav"/></Route>
-            </Switch>
-        </footer>
+        <Switch><Route path={Paths.artGallery} exact>
+            <footer id={'app-footer'} className={'stick-to-bottom'} data-testid="footer">
+                <GalleryNav id="gallery-nav"/>
+            </footer>
+        </Route></Switch>
     </>;
 };

@@ -43,6 +43,7 @@
     display: flex;
     align-items: center;
     flex-direction: column;
+    justify-content: space-between;
   }
 
   #app-footer {
@@ -96,7 +97,7 @@
 @media (max-width: 832px) {
   #root {
     grid-template-columns: 1fr;
-    grid-template-rows: var(--base-x-10) var(--base-x-4) 1fr  var(--base-x-10);
+    grid-template-rows: var(--base-x-10) var(--base-x-4) 1fr var(--base);
     grid-template-areas:
     "header"
     "nav"
