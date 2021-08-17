@@ -9,26 +9,28 @@ import * as faker from 'faker';
 import {Paths} from '../../../../App';
 
 describe('search', () => {
-    const searchWord = faker.lorem.word();
+    const searchWord = faker.lorem.word().toUpperCase();
 
     beforeEach(() => {
-        data.searchForArtOptions = (searchString: string, dispatch: Dispatch<SearchArtAction>) =>
+        data.searchForArtOptions = jest.fn((searchString: string, dispatch: Dispatch<SearchArtAction>) => {
             dispatch(onSuccess([searchWord]));
+        });
     });
 
     it('should give suggestions for completion', () => {
         renderWithRouter(<Search/>);
-        userEvent.type(screen.getByPlaceholderText('Search For'), 'a');
+        userEvent.type(screen.getByPlaceholderText('Search For'), searchWord);
         expect(screen.getByTestId('search-options')).toHaveTextContent(searchWord);
+        expect(data.searchForArtOptions).toHaveBeenNthCalledWith(searchWord.length, searchWord.toLowerCase(), expect.anything());
     });
 
     it('should update the url when the user wants to search', () => {
         const rendered = renderWithRouter(<Search/>);
         userEvent.click(screen.getByTestId('submit-query'));
         expect(rendered().testLocation?.search).toEqual('');
-        userEvent.type(screen.getByPlaceholderText('Search For'), 'a');
+        userEvent.type(screen.getByPlaceholderText('Search For'), 'A');
         userEvent.click(screen.getByTestId('submit-query'));
-        expect(rendered().testLocation?.search).toEqual('?search=a');
+        expect(rendered().testLocation?.search).toEqual('?search=A');
     });
 
     it('should remove the original query params', () => {
