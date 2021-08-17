@@ -24,17 +24,17 @@ export const Address: FC<AddressProps> = (
         value = {} as AddressInfo
     }) => <article id={id} className="address">
     <FancyInput inputId={`${id}-street`} className="street"
-                required={required}  value={value.streetAddress} readOnly={readOnly || disabled}
+                required={required} disabled={disabled} value={value.streetAddress} readOnly={readOnly}
                 onChange={event => onChange({...value, streetAddress: event.currentTarget.value})}>
         Street
     </FancyInput>
     <FancyInput inputId={`${id}-street-2`} className="street-2"
-                 value={value.streetAddressTwo} readOnly={readOnly || disabled}
+                disabled={disabled} value={value.streetAddressTwo} readOnly={readOnly}
                 onChange={event => onChange({...value, streetAddressTwo: event.currentTarget.value})}>
         Street Line 2
     </FancyInput>
     <FancyInput inputId={`${id}-city`} className="city"
-                required={required}  value={value.city} readOnly={readOnly || disabled}
+                required={required} disabled={disabled} value={value.city} readOnly={readOnly}
                 onChange={event => onChange({...value, city: event.currentTarget.value})}>
         City
     </FancyInput>
@@ -43,7 +43,8 @@ export const Address: FC<AddressProps> = (
         className="state"
         selectId={`${id}-state`}
         required={required}
-        readOnly={readOnly || disabled}
+        disabled={disabled}
+        readOnly={readOnly}
         value={value.state}
         optionValues={new Set(states.map(({abbreviation}) => abbreviation))}
         onChange={event => onChange({...value, state: event.currentTarget.value})}>
@@ -54,8 +55,8 @@ export const Address: FC<AddressProps> = (
                 inputId={`${id}-zip`}
                 pattern="^[0-9]{5}(?:-[0-9]{4})?$"
                 value={value.zip}
-                readOnly={readOnly || disabled}
-                required={required}
+                readOnly={readOnly}
+                required={required} disabled={disabled}
                 onChange={event => onChange({...value, zip: event.currentTarget.value})}>
         Postal / Zip code
     </FancyInput>

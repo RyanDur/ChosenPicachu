@@ -14,6 +14,7 @@
     border-radius: 2rem;
     position: absolute;
 
+    &:disabled,
     &:read-only:not(.fancy-select-box) {
       border: none;
       border-bottom: 1px solid rgba(30, 118, 224, 0.68);
@@ -25,10 +26,6 @@
         top: -1rem;
         z-index: 1;
       }
-    }
-
-    &:disabled {
-      background: var(--disabled-gray)
     }
 
     &:focus,
@@ -64,6 +61,7 @@
   }
 
   &.read-only .fancy-title,
+  &.disabled .fancy-title,
   &.focus .fancy-title {
     opacity: 1;
     top: -1rem;
