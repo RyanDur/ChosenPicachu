@@ -4,9 +4,9 @@
   row-gap: var(--base-x-2);
   grid-template-columns: 1fr var(--base-x-13) 1fr;
   grid-template-areas:
-  "street_address street_address street_address"
-  "street_address_2 street_address_2 street_address_2"
-  "city state zip"
+    "street_address street_address street_address"
+    "street_address_2 street_address_2 street_address_2"
+    "city state zip";
 }
 
 .address .street {
@@ -36,10 +36,10 @@
     row-gap: var(--base-x-2);
     grid-template-columns: 1fr var(--base-x-13) 1fr;
     grid-template-areas:
-    "street_address street_address street_address"
-    "street_address_2 street_address_2 street_address_2"
-    "city city city"
-    ". state . "
-    "zip zip zip"
+      "street_address street_address street_address"
+      "street_address_2 street_address_2 street_address_2"
+      "city city city"
+      ". state . "
+      "zip zip zip";
   }
 }

@@ -16,18 +16,13 @@
   border-bottom: none;
 }
 
-.fancy-table .body .row:hover:nth-child(even),
-.fancy-table .body .row:hover {
+.fancy-table .body .row:hover:hover:nth-child(even) {
   background: var(--mint);
 }
 
 .fancy-table .cell {
   border-right: 0.1rem solid var(--charcoal);
   padding: 1rem;
-}
-
-.fancy-table .cell {
-  border-right: 0.1rem solid var(--charcoal);
   border-top: none;
 }
 
