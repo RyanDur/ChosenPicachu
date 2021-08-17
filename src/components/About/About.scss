@@ -33,8 +33,6 @@
       height: 100%;
       text-align: center;
       color: var(--paper);
-      border-top-right-radius: var(--base-x-2);
-      border-top-left-radius: var(--base-x-2);
     }
 
     .info-toggle:focus ~ .info-label {
@@ -46,16 +44,7 @@
     overflow: hidden;
     width: 100%;
     vertical-align: middle;
-
     margin-bottom: 0.1rem;
-
-    &:last-child {
-
-    }
-
-    &:first-of-type {
-
-    }
 
     .info {
       position: relative;

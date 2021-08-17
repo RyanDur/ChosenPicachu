@@ -11,14 +11,15 @@
     .title {
       text-overflow: ellipsis;
       width: 100%;
-      overflow:hidden;
-      white-space:nowrap;
+      overflow: hidden;
+      white-space: nowrap;
     }
   }
 
   main {
     padding: var(--base-x-5);
     background-color: var(--paper);
+    height: 100%;
   }
 
   #side-nav {
@@ -104,6 +105,7 @@
 
     main {
       padding: var(--base);
+      margin-top: var(--base);
       overflow: auto;
     }
 

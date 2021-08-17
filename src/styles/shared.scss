@@ -20,6 +20,11 @@
   z-index: -1;
 }
 
+.hide {
+  display: none;
+  height: 0;
+}
+
 .rounded-corners {
   border-radius: 2rem;
 }
