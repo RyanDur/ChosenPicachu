@@ -17,7 +17,7 @@ export const Search: FC<Props> = ({id}) => {
     const history = useHistory();
 
     useEffect(() => {
-        searchString && data.searchForArtOptions(searchString, (action: SearchArtAction) => {
+        searchString && data.searchForArtOptions(searchString.toLowerCase(), (action: SearchArtAction) => {
             if (action.type === AsyncState.SUCCESS) updateSearchOptions(action.value);
         });
     }, [searchString]);
