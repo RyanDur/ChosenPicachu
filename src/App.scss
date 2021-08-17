@@ -19,7 +19,7 @@
   main {
     padding: var(--base-x-5);
     background-color: var(--paper);
-    height: 100%;
+    height: fit-content;
   }
 
   #side-nav {
@@ -107,6 +107,7 @@
       padding: var(--base);
       margin-top: var(--base);
       overflow: auto;
+      height: auto;
     }
 
     #app-footer {
