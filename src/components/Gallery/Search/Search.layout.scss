@@ -1,0 +1,25 @@
+.search {
+  display: flex;
+}
+
+@media (max-width: 832px) {
+  .search {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "query query"
+      "reset submit";
+
+    .reset-query {
+      grid-area: reset;
+    }
+
+    .query {
+      grid-area: query;
+    }
+
+    .submit-query {
+      grid-area: submit;
+    }
+  }
+}
