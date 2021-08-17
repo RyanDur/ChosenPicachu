@@ -5,9 +5,9 @@
   grid-template-rows: 1fr auto;
   align-items: start;
   grid-template-areas:
-  "field field field field"
-  "field field field field"
-  "field field field field";
+    "field field field field"
+    "field field field field"
+    "field field field field";
 
   .loader,
   #empty-gallery {
@@ -21,11 +21,10 @@
   #art-gallery {
     grid-template-columns: repeat(2, 1fr);
     grid-template-areas:
-        "field field"
-        "field field"
-        "field field"
-          "nav nav";
-
+      "field field"
+      "field field"
+      "field field"
+      "nav nav";
   }
 }
 
@@ -33,9 +32,9 @@
   #art-gallery {
     grid-template-columns: 1fr;
     grid-template-areas:
-        "field"
-        "field"
-        "field"
-         "nav";
+      "field"
+      "field"
+      "field"
+      "nav";
   }
 }

@@ -4,16 +4,14 @@
   row-gap: var(--base-x-2);
   grid-template-columns: repeat(12, 1fr);
   grid-template-areas:
-  "name_title . . . . . . . . . avatar avatar"
-  "first_name first_name first_name first_name first_name last_name last_name last_name last_name last_name avatar avatar"
-  "email email email email email email email dob dob dob avatar avatar"
-  "home_address_title home_address_title home_address_title . . . work_address_title work_address_title same_as_home same_as_home avatar avatar"
-  "home_address home_address home_address home_address home_address home_address work_address work_address work_address work_address work_address work_address"
-  "details details details details details details details details details details details details"
-  "reset reset reset cancel cancel cancel submit submit submit submit submit submit"
-}
+    "name_title . . . . . . . . . avatar avatar"
+    "first_name first_name first_name first_name first_name last_name last_name last_name last_name last_name avatar avatar"
+    "email email email email email email email dob dob dob avatar avatar"
+    "home_address_title home_address_title home_address_title . . . work_address_title work_address_title same_as_home same_as_home avatar avatar"
+    "home_address home_address home_address home_address home_address home_address work_address work_address work_address work_address work_address work_address"
+    "details details details details details details details details details details details details"
+    "reset reset reset cancel cancel cancel submit submit submit submit submit submit";
 
-#user-info-form {
   #name-title {
     grid-area: name_title;
   }
@@ -80,24 +78,20 @@
   #user-info-form {
     grid-template-columns: repeat(3, 1fr);
     grid-template-areas:
-    "name_title . ."
-    "first_name first_name first_name"
-    "last_name last_name last_name"
-    "email email email"
-    "dob . ."
-
-    "avatar avatar avatar"
-    "avatar avatar avatar"
-    "avatar avatar avatar"
-
-    "home_address_title . . "
-    "home_address home_address home_address"
-
-    "work_address_title . same_as_home"
-    "work_address work_address work_address"
-
-    "details details details"
-    "reset cancel submit"
+      "name_title . ."
+      "first_name first_name first_name"
+      "last_name last_name last_name"
+      "email email email"
+      "dob . ."
+      "avatar avatar avatar"
+      "avatar avatar avatar"
+      "avatar avatar avatar"
+      "home_address_title . . "
+      "home_address home_address home_address"
+      "work_address_title . same_as_home"
+      "work_address work_address work_address"
+      "details details details"
+      "reset cancel submit";
   }
 }
 
@@ -107,4 +101,3 @@
     flex-direction: column;
   }
 }
-

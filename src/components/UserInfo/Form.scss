@@ -3,25 +3,6 @@
 #user-info-form {
   width: 100%;
 
-  &.invalid *:invalid {
-    border: 1px solid var(--internationl-orange-engineering);
-    box-shadow: var(--base-box-shadow);
-  }
-
-  #details-cell {
-    #details {
-      resize: vertical;
-      border-radius: 1rem;
-      min-height: var(--base-x-0_5);
-      position: relative;
-
-      &:read-only {
-        resize: none;
-        border-radius: 0;
-      }
-    }
-  }
-
   #avatar-cell {
     outline: none;
     display: flex;
@@ -50,6 +31,25 @@
   &.read-only #avatar-cell {
     box-shadow: none;
     cursor: initial;
+  }
+
+  &.invalid *:invalid {
+    border: 1px solid var(--internationl-orange-engineering);
+    box-shadow: var(--base-box-shadow);
+  }
+
+  #details-cell {
+    #details {
+      resize: vertical;
+      border-radius: 1rem;
+      min-height: var(--base-x-0_5);
+      position: relative;
+
+      &:read-only {
+        resize: none;
+        border-radius: 0;
+      }
+    }
   }
 
   #dob-cell {
@@ -104,7 +104,7 @@
     }
   }
 
-  &:not(.read-only) *:required + label:after {
+  &:not(.read-only) *:required + label::after {
     content: '*';
     color: var(--internationl-orange-engineering);
   }

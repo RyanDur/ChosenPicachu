@@ -9,6 +9,7 @@
 
   &#user-candidates {
     overflow: auto;
+
     .title {
       position: sticky;
       left: 0;
@@ -31,12 +32,6 @@
         &:hover,
         &:focus {
           box-shadow: var(--base-box-shadow);
-        }
-
-        &.open .menu,
-        &:hover .menu {
-          z-index: 1;
-          display: initial;
         }
 
         .menu {
@@ -78,8 +73,13 @@
             }
           }
         }
+
+        &.open .menu,
+        &:hover .menu {
+          z-index: 1;
+          display: initial;
+        }
       }
     }
   }
-
 }

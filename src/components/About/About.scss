@@ -14,51 +14,29 @@
     opacity: 0.5;
   }
 
-  .close {
-    height: var(--base-x-5);
-    width: 100%;
-    background: var(--charcoal);
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 0.1rem;
-
-    &:hover {
-      background: var(--internationl-orange-engineering);
-    }
-
-    .info-label {
-      width: 100%;
-      height: 100%;
-      text-align: center;
-      color: var(--paper);
-    }
-
-    .info-toggle:focus ~ .info-label {
-      background: var(--internationl-orange-engineering);
-    }
-  }
-
   .fold {
     overflow: hidden;
     width: 100%;
     vertical-align: middle;
     margin-bottom: 0.1rem;
 
-    .info {
-      position: relative;
-      overflow: hidden;
-      max-height: var(--base-x-100);
-      opacity: 1;
-      transform: translate(0, 0);
-      margin-top: var(--base-x-4);
-      z-index: 2;
-      transition: all 500ms ease;
-      padding: 0 var(--base-x-4) var(--base-x-4);
+    &.close {
+      width: 100%;
+      height: var(--base-x-5);
+      background: var(--charcoal);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .info-label {
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        color: var(--paper);
+      }
     }
 
-    .info-label {
+    &:not(.close) .info-label {
       display: flex;
       height: 5rem;
       padding: 0 var(--base-x-4);
@@ -67,7 +45,7 @@
       color: var(--paper);
       background: var(--charcoal);
 
-      &:after {
+      &::after {
         content: "";
         position: relative;
         width: 0.8rem;
@@ -83,17 +61,29 @@
       }
     }
 
+    .info {
+      position: relative;
+      overflow: hidden;
+      max-height: var(--base-x-100);
+      opacity: 1;
+      transform: translate(0, 0);
+      margin-top: var(--base-x-4);
+      z-index: 2;
+      transition: all 500ms ease;
+      padding: 0 var(--base-x-4) var(--base-x-4);
+    }
+
     .info-toggle:hover ~ .info-label,
     .info-toggle:focus ~ .info-label {
       background: var(--internationl-orange-engineering);
     }
 
-    .info-toggle:checked ~ .info-label:after {
-      transform: rotate(135deg);
+    &:not(.close) .info-toggle ~ .info-label::after {
+      transition: all 500ms ease;
     }
 
-    .info-toggle ~ .info-label:after {
-      transition: all 500ms ease;
+    .info-toggle:checked ~ .info-label::after {
+      transform: rotate(135deg);
     }
 
     .info-toggle:not(:checked) ~ .info {

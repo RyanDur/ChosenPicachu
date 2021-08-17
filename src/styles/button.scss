@@ -3,6 +3,15 @@ button {
   outline: none;
   cursor: pointer;
 
+  &.primary {
+    color: white;
+    background: var(--primary-blue);
+  }
+
+  &.secondary {
+    background: var(--faded-leather);
+  }
+
   &.primary,
   &.secondary {
     font-size: 1.8rem;
@@ -29,14 +38,5 @@ button {
     &:active {
       box-shadow: initial;
     }
-  }
-
-  &.primary {
-    color: white;
-    background: var(--primary-blue);
-  }
-
-  &.secondary {
-    background: var(--faded-leather);
   }
 }

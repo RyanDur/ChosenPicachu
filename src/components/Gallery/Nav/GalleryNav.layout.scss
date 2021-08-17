@@ -1,14 +1,13 @@
 .pagination {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  grid-template-areas:
-    "first prev go-to next last";
+  grid-template-areas: "first prev go-to next last";
 
   #first {
     grid-area: first;
   }
 
-  #last {
+  #prev {
     grid-area: prev;
   }
 
