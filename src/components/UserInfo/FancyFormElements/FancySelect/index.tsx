@@ -1,8 +1,8 @@
 import React, {FC, FormEvent} from 'react';
 import {join} from '../../../util';
 import {Consumer} from '../../types';
-import './FancySelect.css';
 import {FancyInput} from '../FancyInput';
+import './FancySelect.css';
 
 interface FancySelectProps {
     selectId: string;
@@ -31,7 +31,7 @@ export const FancySelect: FC<FancySelectProps> = (
         disabled,
         readOnly
     }
-) => readOnly ? <FancyInput className={className} id={id} value={value} readOnly={readOnly} inputId={selectId}>{children}</FancyInput> :
+) => (readOnly || disabled) ? <FancyInput className={className} id={id} value={value} readOnly={readOnly} disabled={disabled} inputId={selectId}>{children}</FancyInput> :
     <article id={id} className={join('fancy fancy-select', value && 'not-empty', className)}>
         <select id={selectId}
                 className={join('fancy-select-box fancy-text', selectClassName)}
