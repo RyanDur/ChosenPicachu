@@ -30,6 +30,7 @@ describe('search', () => {
         expect(rendered().testLocation?.search).toEqual('');
         userEvent.type(screen.getByPlaceholderText('Search For'), 'A');
         userEvent.click(screen.getByTestId('submit-query'));
+        expect(rendered().testLocation?.pathname).toEqual(Paths.artGallery);
         expect(rendered().testLocation?.search).toEqual('?search=A');
     });
 
@@ -37,6 +38,7 @@ describe('search', () => {
         const rendered = renderWithRouter(<Search/>, Paths.home, 'page=1');
         userEvent.type(screen.getByPlaceholderText('Search For'), 'a');
         userEvent.click(screen.getByTestId('submit-query'));
+        expect(rendered().testLocation?.pathname).toEqual(Paths.artGallery);
         expect(rendered().testLocation?.search).toEqual('?search=a');
     });
 
@@ -50,6 +52,7 @@ describe('search', () => {
     it('should be able to reset the query', () => {
         const rendered = renderWithRouter(<Search/>, Paths.home, 'search=cat');
         userEvent.click(screen.getByTestId('reset-query'));
+        expect(rendered().testLocation?.pathname).toEqual(Paths.artGallery);
         expect(rendered().testLocation?.search).toEqual('');
     });
 });
