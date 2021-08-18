@@ -5,7 +5,7 @@ import {data} from '../../../data';
 import {art, Rendered, renderWithRouter} from '../../../__tests__/util';
 import {Paths} from '../../../App';
 import {useGallery} from '../Context';
-import {GetArtAction, loading, onError, onSuccess} from '../../../data/actions';
+import {GetArtAction, loading, error, success} from '../../../data/actions';
 import {Dispatch} from '../../UserInfo/types';
 import {Art, Piece} from '../../../data/types';
 
@@ -48,7 +48,7 @@ describe('The gallery.', () => {
             data.getAllArt = (
                 query: Record<string, unknown>,
                 dispatch: Dispatch<GetArtAction>
-            ) => dispatch(onSuccess(art));
+            ) => dispatch(success(art));
             mockUseArtGallery.mockReturnValue({
                 art,
                 updateArt: jest.fn(),
@@ -83,7 +83,7 @@ describe('The gallery.', () => {
             data.getAllArt = jest.fn((
                 query: Record<string, unknown>,
                 dispatch: Dispatch<GetArtAction>
-            ) => dispatch(onSuccess({pieces: [] as Piece[]} as Art)));
+            ) => dispatch(success({pieces: [] as Piece[]} as Art)));
             mockUseArtGallery.mockReturnValue({
                 updateArt: jest.fn(),
                 reset: jest.fn()
@@ -106,7 +106,7 @@ describe('The gallery.', () => {
             data.getAllArt = (
                 query: Record<string, unknown>,
                 dispatch: Dispatch<GetArtAction>
-            ) => dispatch(onError());
+            ) => dispatch(error());
             mockUseArtGallery.mockReturnValue({
                 art,
                 updateArt: jest.fn(),
@@ -123,7 +123,7 @@ describe('The gallery.', () => {
         data.getAllArt = jest.fn((
             query: Record<string, unknown>,
             dispatch: Dispatch<GetArtAction>
-        ) => dispatch(onError()));
+        ) => dispatch(error()));
         mockUseArtGallery.mockReturnValue({
             art,
             updateArt: jest.fn(),

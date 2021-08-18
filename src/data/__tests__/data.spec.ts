@@ -6,7 +6,7 @@ import faker from 'faker';
 import {art} from '../../__tests__/util';
 import {nanoid} from 'nanoid';
 import {waitFor} from '@testing-library/react';
-import {loading, onError, onSuccess} from '../actions';
+import {loading, error, success} from '../actions';
 
 describe('data', () => {
     let server: MockWebServer;
@@ -30,7 +30,7 @@ describe('data', () => {
                 expect(recordedRequest.method).toEqual('GET');
                 expect(recordedRequest.url).toEqual(`/api/v1/artworks?page=1&${fields}`);
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-                expect(dispatch).toHaveBeenNthCalledWith(2, onSuccess(art));
+                expect(dispatch).toHaveBeenNthCalledWith(2, success(art));
             });
         });
 
@@ -44,7 +44,7 @@ describe('data', () => {
                 expect(recordedRequest.method).toEqual('GET');
                 expect(recordedRequest.url).toEqual(`/api/v1/artworks/search?q=rad&page=1&${fields}&limit=12`);
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-                expect(dispatch).toHaveBeenNthCalledWith(2, onSuccess(art));
+                expect(dispatch).toHaveBeenNthCalledWith(2, success(art));
             });
         });
 
@@ -59,7 +59,7 @@ describe('data', () => {
                 expect(recordedRequest.method).toEqual('GET');
                 expect(recordedRequest.url).toEqual(`/api/v1/artworks?page=1&${fields}`);
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-                expect(dispatch).toHaveBeenNthCalledWith(2, onError());
+                expect(dispatch).toHaveBeenNthCalledWith(2, error());
             });
         });
     });
@@ -76,7 +76,7 @@ describe('data', () => {
                 expect(recordedRequest.method).toEqual('GET');
                 expect(recordedRequest.url).toEqual(`/api/v1/artworks/${pieceResponse.data.id}?${fields}`);
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-                expect(dispatch).toHaveBeenNthCalledWith(2, onSuccess(piece));
+                expect(dispatch).toHaveBeenNthCalledWith(2, success(piece));
             });
         });
 
@@ -91,7 +91,7 @@ describe('data', () => {
                 expect(recordedRequest.method).toEqual('GET');
                 expect(recordedRequest.url).toEqual(`/api/v1/artworks/${pieceResponse.data.id}?${fields}`);
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-                expect(dispatch).toHaveBeenNthCalledWith(2, onError());
+                expect(dispatch).toHaveBeenNthCalledWith(2, error());
             });
         });
     });
@@ -108,7 +108,7 @@ describe('data', () => {
             await waitFor(() => {
                 expect(recordedRequest.method).toEqual('GET');
                 expect(recordedRequest.url).toEqual(`/api/v1/artworks/search?query[term][title]=${searchString}&fields=suggest_autocomplete_all&limit=5`);
-                expect(dispatch).toHaveBeenCalledWith(onSuccess(options));
+                expect(dispatch).toHaveBeenCalledWith(success(options));
             });
         });
     });

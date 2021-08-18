@@ -5,5 +5,5 @@ export type GetArtAction = Loading | Loaded<Art> | Error;
 export type SearchArtAction = Loaded<ArtSuggestion[]>
 
 export const loading = (): Loading => ({type: AsyncState.LOADING});
-export const onSuccess = <T>(value: T): Loaded<T> => ({type: AsyncState.SUCCESS, value});
-export const onError = (): Error => ({type: AsyncState.ERROR});
+export const success = <T>(value: T): Loaded<T> => ({type: AsyncState.SUCCESS, value});
+export const error = (): Error => ({type: AsyncState.ERROR});
