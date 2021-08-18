@@ -1,6 +1,11 @@
 #root {
   display: grid;
-  grid-template-columns: var(--base-x-16_5) var(--base-x-16_5) 1fr var(--base-x-16_5) var(--base-x-16_5);
+  grid-template-columns:
+    var(--base-x-16_5)
+    var(--base-x-16_5)
+    1fr
+    var(--base-x-16_5)
+    var(--base-x-16_5);
   grid-template-rows: var(--base-x-12) 1fr var(--base-x-12);
   grid-template-areas:
     "header header header header ."
@@ -10,7 +15,11 @@
   #app-header {
     grid-area: header;
     display: grid;
-    grid-template-columns: var(--base-x-16_5) var(--base-x-16_5)  1fr 1fr var(--base-x-16_5);
+    grid-template-columns:
+      var(--base-x-16_5)
+      var(--base-x-16_5)
+      1fr
+      1fr var(--base-x-16_5);
     grid-template-areas: ". . title search .";
 
     .title {
@@ -49,7 +58,10 @@
     grid-area: footer;
     display: grid;
     justify-items: center;
-    grid-template-columns: var(--base-x-16_5) 1fr var(--base-x-16_5) var(--base-x-16_5);
+    grid-template-columns:
+      var(--base-x-16_5)
+      1fr
+      var(--base-x-16_5) var(--base-x-16_5);
     grid-template-areas: ". center . .";
 
     #gallery-nav {

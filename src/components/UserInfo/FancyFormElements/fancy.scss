@@ -2,7 +2,38 @@
   border-radius: 2rem;
   min-height: 4rem;
   position: relative;
-  transition: all 0.5s cubic-bezier(.25, .8, .25, 1);
+  transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+  .fancy-title {
+    pointer-events: none;
+    position: absolute;
+    margin-left: 1.75rem;
+    padding: 0 0.25rem;
+    top: 1rem;
+    font-weight: bold;
+    opacity: 0.6;
+    z-index: 1;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)),
+      linear-gradient(
+        rgba(255, 255, 255, 0),
+        rgb(255, 255, 255),
+        rgba(255, 255, 255, 0)
+      ),
+      linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0));
+  }
+
+  &.not-empty .fancy-title {
+    opacity: 1;
+    top: -1rem;
+  }
+
+  &.read-only .fancy-title,
+  &.disabled .fancy-title,
+  &.focus .fancy-title {
+    opacity: 1;
+    top: -1rem;
+  }
 
   .fancy-text {
     border: 1px solid rgba(30, 118, 224, 0.68);
@@ -13,6 +44,17 @@
     height: 100%;
     border-radius: 2rem;
     position: absolute;
+
+    &:focus,
+    &:hover {
+      box-shadow: var(--base-box-shadow);
+    }
+
+    &:focus ~ .fancy-title,
+    &:disabled ~ .fancy-title {
+      opacity: 1;
+      top: -1rem;
+    }
 
     &:disabled,
     &:read-only:not(.fancy-select-box) {
@@ -27,43 +69,5 @@
         z-index: 1;
       }
     }
-
-    &:focus,
-    &:hover {
-      box-shadow: var(--base-box-shadow);
-    }
-
-    &:focus ~ .fancy-title,
-    &:disabled ~ .fancy-title {
-      opacity: 1;
-      top: -1rem;
-    }
-  }
-
-  .fancy-title {
-    pointer-events: none;
-    position: absolute;
-    margin-left: 1.75rem;
-    padding: 0 0.25rem;
-    top: 1rem;
-    font-weight: bold;
-    opacity: 0.6;
-    z-index: 1;
-    transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
-    background: linear-gradient(rgba(255,255,255,0), rgba(255,255,255,0)),
-    linear-gradient(rgba(255,255,255,0), rgb(255, 255, 255), rgba(255,255,255,0)),
-    linear-gradient(rgba(255,255,255,0), rgba(255,255,255,0));
-  }
-
-  &.not-empty .fancy-title {
-    opacity: 1;
-    top: -1rem;
-  }
-
-  &.read-only .fancy-title,
-  &.disabled .fancy-title,
-  &.focus .fancy-title {
-    opacity: 1;
-    top: -1rem;
   }
 }

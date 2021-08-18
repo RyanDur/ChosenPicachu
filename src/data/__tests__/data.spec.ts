@@ -108,7 +108,7 @@ describe('data', () => {
             await waitFor(() => {
                 expect(recordedRequest.method).toEqual('GET');
                 expect(recordedRequest.url).toEqual(`/api/v1/artworks/search?query[term][title]=${searchString}&fields=suggest_autocomplete_all&limit=5`);
-                expect(dispatch).toHaveBeenCalledWith(success(options));
+                expect(dispatch).toHaveBeenNthCalledWith(2, success(options));
             });
         });
     });
