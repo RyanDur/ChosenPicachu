@@ -1,4 +1,4 @@
-import {data, fields} from '../index';
+import {data} from '../index';
 import {mockServer, MockWebServer} from './mockServer';
 import 'whatwg-fetch';
 import {ArtResponse, ArtSuggestion, AutoCompleteResponse, Piece, PieceResponse} from '../types';
@@ -6,14 +6,23 @@ import faker from 'faker';
 import {art} from '../../__tests__/util';
 import {nanoid} from 'nanoid';
 import {waitFor} from '@testing-library/react';
-import {loading, error, success} from '../actions';
+import {error, loading, success} from '../actions';
+
+const mockConfig = jest.fn();
+jest.mock('../../config', () => ({
+    get domain() {
+        return mockConfig();
+    }
+}));
 
 describe('data', () => {
+    const fields = 'fields=id,title,image_id,artist_display,term_titles,thumbnail';
     let server: MockWebServer;
 
     beforeEach(() => {
         server = mockServer();
         server.start();
+        mockConfig.mockReturnValue(server.path());
     });
 
     afterEach(() => server.stop());
@@ -23,12 +32,12 @@ describe('data', () => {
             const dispatch = jest.fn();
             server.stubResponse(200, artResponse);
 
-            data.getAllArt({page: 1}, dispatch, server.path());
+            data.getAllArt({page: 1}, dispatch);
 
             const recordedRequest = await server.lastRequest();
             await waitFor(() => {
                 expect(recordedRequest.method).toEqual('GET');
-                expect(recordedRequest.url).toEqual(`/api/v1/artworks?page=1&${fields}`);
+                expect(recordedRequest.url).toEqual(`/api/v1/artworks?page=1&${fields}&limit=12`);
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 expect(dispatch).toHaveBeenNthCalledWith(2, success(art));
             });
@@ -38,7 +47,7 @@ describe('data', () => {
             const dispatch = jest.fn();
             server.stubResponse(200, artResponse);
 
-            data.getAllArt({page: 1, search: 'rad'}, dispatch, server.path());
+            data.getAllArt({page: 1, search: 'rad'}, dispatch);
             const recordedRequest = await server.lastRequest();
             await waitFor(() => {
                 expect(recordedRequest.method).toEqual('GET');
@@ -52,12 +61,12 @@ describe('data', () => {
             const dispatch = jest.fn();
             server.stubResponse(500, {});
 
-            data.getAllArt({page: 1}, dispatch, server.path());
+            data.getAllArt({page: 1}, dispatch);
 
             const recordedRequest = await server.lastRequest();
             await waitFor(() => {
                 expect(recordedRequest.method).toEqual('GET');
-                expect(recordedRequest.url).toEqual(`/api/v1/artworks?page=1&${fields}`);
+                expect(recordedRequest.url).toEqual(`/api/v1/artworks?page=1&${fields}&limit=12`);
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 expect(dispatch).toHaveBeenNthCalledWith(2, error());
             });
@@ -69,7 +78,7 @@ describe('data', () => {
             const dispatch = jest.fn();
             server.stubResponse(200, pieceResponse);
 
-            data.getPiece(String(piece.id), dispatch, server.path());
+            data.getPiece(String(piece.id), dispatch);
 
             const recordedRequest = await server.lastRequest();
             await waitFor(() => {
@@ -84,7 +93,7 @@ describe('data', () => {
             const dispatch = jest.fn();
             server.stubResponse(500, {});
 
-            data.getPiece(String(piece.id), dispatch, server.path());
+            data.getPiece(String(piece.id), dispatch);
 
             const recordedRequest = await server.lastRequest();
             await waitFor(() => {
@@ -102,13 +111,13 @@ describe('data', () => {
             server.stubResponse(200, artOptions);
             const searchString = faker.lorem.word();
 
-            data.searchForArtOptions(searchString, dispatch, server.path());
+            data.searchForArtOptions(searchString, dispatch);
 
             const recordedRequest = await server.lastRequest();
             await waitFor(() => {
                 expect(recordedRequest.method).toEqual('GET');
                 expect(recordedRequest.url).toEqual(`/api/v1/artworks/search?query[term][title]=${searchString}&fields=suggest_autocomplete_all&limit=5`);
-                expect(dispatch).toHaveBeenNthCalledWith(2, success(options));
+                expect(dispatch).toHaveBeenNthCalledWith(1, success(options));
             });
         });
     });

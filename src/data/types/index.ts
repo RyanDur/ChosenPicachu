@@ -106,4 +106,8 @@ export type Loading = Action<AsyncState.LOADING>;
 export type Loaded<T> = Action<AsyncState.SUCCESS> & {
     value: T;
 };
+
+export type Success<T> = Action<AsyncState.SUCCESS> & {
+    value: T;
+};
 export type Error = Action<AsyncState.ERROR>;
