@@ -2,7 +2,8 @@ import {Art, ArtSuggestion, AsyncState, Error, Loaded, Loading, Piece} from './t
 
 export type GetPieceAction = Loading | Loaded<Piece> | Error;
 export type GetArtAction = Loading | Loaded<Art> | Error;
-export type SearchArtAction = Loaded<ArtSuggestion[]>
+export type SearchArtAction = Loaded<ArtSuggestion[]>;
+export type HTTPAction = GetPieceAction | GetArtAction | SearchArtAction;
 
 export const loading = (): Loading => ({type: AsyncState.LOADING});
 export const success = <T>(value: T): Loaded<T> => ({type: AsyncState.SUCCESS, value});

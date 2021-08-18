@@ -1,3 +1,5 @@
+import {Consumer} from '../../components/UserInfo/types';
+
 export interface PaginationResponse {
     total: number;
     limit: number;
@@ -97,6 +99,8 @@ export enum AsyncState {
 export interface Action<T> {
     type: T;
 }
+
+export type Dispatch<T> = Consumer<T>;
 
 export type Loading = Action<AsyncState.LOADING>;
 export type Loaded<T> = Action<AsyncState.SUCCESS> & {
