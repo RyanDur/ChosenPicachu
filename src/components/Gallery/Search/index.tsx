@@ -4,9 +4,11 @@ import {data} from '../../../data';
 import {SearchArtAction} from '../../../data/actions';
 import {useHistory} from 'react-router-dom';
 import {toQueryString} from '../../../util/URL';
+import {Paths} from '../../../App';
+import {debounce} from 'lodash';
+import {Consumer} from '../../UserInfo/types';
 import './Search.scss';
 import './Search.layout.scss';
-import {Paths} from '../../../App';
 
 interface Props {
     id?: string;
@@ -16,9 +18,11 @@ export const Search: FC<Props> = ({id}) => {
     const [searchOptions, updateSearchOptions] = useState<ArtSuggestion[]>([]);
     const [searchString, updateQuery] = useState<string>('');
     const history = useHistory();
+    const debounceSearch = debounce((query: string, consumer: Consumer<SearchArtAction>) =>
+        data.searchForArtOptions(query, consumer), 300);
 
     useEffect(() => {
-        searchString && data.searchForArtOptions(searchString.toLowerCase(), (action: SearchArtAction) => {
+        searchString && debounceSearch(searchString.toLowerCase(), (action: SearchArtAction) => {
             if (action.type === AsyncState.SUCCESS) updateSearchOptions(action.value);
         });
     }, [searchString]);

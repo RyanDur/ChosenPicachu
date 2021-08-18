@@ -1,10 +1,10 @@
-import {screen} from '@testing-library/react';
+import {screen, waitFor} from '@testing-library/react';
 import {Search} from '../index';
 import userEvent from '@testing-library/user-event';
 import {renderWithRouter} from '../../../../__tests__/util';
 import {data} from '../../../../data';
 import {Dispatch} from '../../../UserInfo/types';
-import {onSuccess, SearchArtAction} from '../../../../data/actions';
+import {success, SearchArtAction} from '../../../../data/actions';
 import * as faker from 'faker';
 import {Paths} from '../../../../App';
 
@@ -12,16 +12,16 @@ describe('search', () => {
     const searchWord = faker.lorem.word().toUpperCase();
 
     beforeEach(() => {
-        data.searchForArtOptions = jest.fn((searchString: string, dispatch: Dispatch<SearchArtAction>) => {
-            dispatch(onSuccess([searchWord]));
-        });
+        data.searchForArtOptions = jest.fn((searchString: string, dispatch: Dispatch<SearchArtAction>) =>
+            dispatch(success([searchWord])));
     });
 
-    it('should give suggestions for completion', () => {
+    it('should give suggestions for completion', async () => {
         renderWithRouter(<Search/>);
         userEvent.type(screen.getByPlaceholderText('Search For'), searchWord);
-        expect(screen.getByTestId('search-options')).toHaveTextContent(searchWord);
-        expect(data.searchForArtOptions).toHaveBeenNthCalledWith(searchWord.length, searchWord.toLowerCase(), expect.anything());
+        await waitFor(() => expect(screen.getByTestId('search-options')).toHaveTextContent(searchWord));
+        await waitFor(() => expect(data.searchForArtOptions)
+            .toHaveBeenNthCalledWith(searchWord.length, searchWord.toLowerCase(), expect.anything()));
     });
 
     it('should update the url when the user wants to search', () => {

@@ -7,12 +7,13 @@ import {
     PieceData,
     PieceResponse
 } from './types';
-import {GetArtAction, GetPieceAction, loading, onError, onSuccess, SearchArtAction} from './actions';
+import {GetArtAction, GetPieceAction, loading, error, success, SearchArtAction} from './actions';
 import {Dispatch} from '../components/UserInfo/types';
 import {toQueryString} from '../util/URL';
 
 export const fields = 'fields=id,title,image_id,artist_display,term_titles,thumbnail';
 const artInstituteOfChicago = 'https://api.artic.edu';
+const apiBase = '/api/v1/artworks';
 
 export const data = {
     searchForArtOptions: (
@@ -20,9 +21,14 @@ export const data = {
         dispatch: Dispatch<SearchArtAction>,
         domain = artInstituteOfChicago
     ): void => {
-        fetch(`${domain}/api/v1/artworks/search?query[term][title]=${searchString}&fields=suggest_autocomplete_all&limit=5`)
+        const params = {
+            'query[term][title]': searchString,
+            fields: 'suggest_autocomplete_all',
+            limit: 5
+        };
+        fetch(`${domain}${apiBase}/search${toQueryString(params)}`)
             .then(async response => {
-                if (response.status === 200) dispatch(onSuccess(responseToArtOptions(await response.json())));
+                if (response.status === 200) dispatch(success(responseToArtOptions(await response.json())));
             });
     },
 
@@ -31,13 +37,12 @@ export const data = {
         dispatch: Dispatch<GetArtAction>,
         domain = artInstituteOfChicago) => {
         dispatch(loading());
-        const apiBase = '/api/v1/artworks';
         const url = search ?
             `${domain}${apiBase}/search${toQueryString({q: search, page})}&${fields}&limit=12` :
             `${domain}${apiBase}${toQueryString({page})}&${fields}`;
         fetch(url).then(async response => {
-            if (response.status === 200) dispatch(onSuccess(responseToArt(await response.json())));
-            else dispatch(onError());
+            if (response.status === 200) dispatch(success(responseToArt(await response.json())));
+            else dispatch(error());
         });
     },
 
@@ -46,9 +51,9 @@ export const data = {
         dispatch: Dispatch<GetPieceAction>,
         domain = artInstituteOfChicago) => {
         dispatch(loading());
-        fetch(`${domain}/api/v1/artworks/${id}?${fields}`).then(async response => {
-            if (response.status === 200) dispatch(onSuccess(responseToArtWork(await response.json())));
-            else dispatch(onError());
+        fetch(`${domain}${apiBase}/${id}?${fields}`).then(async response => {
+            if (response.status === 200) dispatch(success(responseToArtWork(await response.json())));
+            else dispatch(error());
         });
     }
 };
