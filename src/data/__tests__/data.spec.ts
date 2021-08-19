@@ -8,87 +8,77 @@ import {error, loaded, loading} from '../actions';
 import {failure, success} from '../http/actions';
 import {http} from '../http';
 import {HTTPError} from '../http/types';
+import {waitFor} from '@testing-library/react';
 
 jest.mock('../http', () => ({
     http: jest.fn(),
 }));
 
 describe('data', () => {
-    const mockHttp = http as jest.Mock<typeof http>;
+    const mockHttp = http as jest.Mock;
     describe('retrieving all the artwork', () => {
-        test('when it is successful', () => {
+        test('when it is successful', async () => {
             const dispatch = jest.fn();
-            mockHttp.mockImplementation((...args: any[]) => {
-                return args[1](success(artResponse));
-            });
+            mockHttp.mockReturnValue(Promise.resolve(success(artResponse)));
+
             data.getAllArt({page: 1}, dispatch);
 
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-            expect(dispatch).toHaveBeenNthCalledWith(2, loaded(art));
+            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(art)));
         });
 
-        test('when it has a search term', () => {
+        test('when it has a search term', async () => {
             const dispatch = jest.fn();
-            mockHttp.mockImplementation((...args: any[]) => {
-                return args[1](success(artResponse));
-            });
+            mockHttp.mockReturnValue(Promise.resolve(success(artResponse)));
 
             data.getAllArt({page: 1, search: 'rad'}, dispatch);
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-            expect(dispatch).toHaveBeenNthCalledWith(2, loaded(art));
-        });
-
-        test('when it is not successful', () => {
-            const dispatch = jest.fn();
-            mockHttp.mockImplementation((...args: any[]) => {
-                return args[1](failure(HTTPError.UNKNOWN));
-            });
-
-            data.getAllArt({page: 1}, dispatch);
-
-            expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-            expect(dispatch).toHaveBeenNthCalledWith(2, error());
-        });
-    });
-
-    describe('retrieving an artwork', () => {
-        test('when it is successful', () => {
-            const dispatch = jest.fn();
-            mockHttp.mockImplementation((...args: any[]) => {
-                return args[1](success(pieceResponse));
-            });
-
-            data.getPiece(String(piece.id), dispatch);
-
-            expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-            expect(dispatch).toHaveBeenNthCalledWith(2, loaded(piece));
+            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(art)));
         });
 
         test('when it is not successful', async () => {
             const dispatch = jest.fn();
-            mockHttp.mockImplementation((...args: any[]) => {
-                return args[1](failure(HTTPError.UNKNOWN));
-            });
+            mockHttp.mockReturnValue(Promise.resolve(failure(HTTPError.UNKNOWN)));
+
+            data.getAllArt({page: 1}, dispatch);
+
+            expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
+        });
+    });
+
+    describe('retrieving an artwork', () => {
+        test('when it is successful', async () => {
+            const dispatch = jest.fn();
+            mockHttp.mockReturnValue(Promise.resolve(success(pieceResponse)));
 
             data.getPiece(String(piece.id), dispatch);
 
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-            expect(dispatch).toHaveBeenNthCalledWith(2, error());
+            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(piece)));
+        });
+
+        test('when it is not successful', async () => {
+            const dispatch = jest.fn();
+            mockHttp.mockReturnValue(Promise.resolve(failure(HTTPError.UNKNOWN)));
+
+            data.getPiece(String(piece.id), dispatch);
+
+            expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
         });
     });
 
     describe('searching for art', () => {
         test('when it is successful', async () => {
             const dispatch = jest.fn();
-            mockHttp.mockImplementation((...args: any[]) => {
-                return args[1](success(artOptions));
-            });
+            mockHttp.mockReturnValue(Promise.resolve(success(artOptions)));
             const searchString = faker.lorem.word();
 
             data.searchForArtOptions(searchString, dispatch);
 
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-            expect(dispatch).toHaveBeenNthCalledWith(2, loaded(options));
+            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(options)));
         });
     });
 

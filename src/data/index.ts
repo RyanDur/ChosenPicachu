@@ -8,10 +8,7 @@ const apiBase = '/api/v1/artworks';
 const shapeOfResponse = ['id', 'title', 'image_id', 'artist_display', 'term_titles', 'thumbnail'];
 
 export const data = {
-    searchForArtOptions: (
-        searchString: string,
-        dispatch: Dispatch<SearchArtAction>
-    ): void => {
+    searchForArtOptions: (searchString: string, dispatch: Dispatch<SearchArtAction>): void => {
         dispatch(loading());
         http({
             path: `${apiBase}/search`,
@@ -20,7 +17,7 @@ export const data = {
                 fields: 'suggest_autocomplete_all',
                 limit: 5
             }
-        }, (action: HTTPAction<AutoCompleteResponse>) => {
+        }).then((action: HTTPAction<AutoCompleteResponse>) => {
             if (action.type === HTTPStatus.SUCCESS) {
                 dispatch(loaded(action.value.data
                     .map(({suggest_autocomplete_all}: Autocomplete) => suggest_autocomplete_all[1])
@@ -29,34 +26,27 @@ export const data = {
         });
     },
 
-    getAllArt: (
-        {search, page}: Record<string, unknown>,
-        dispatch: Dispatch<GetArtAction>
-    ): void => {
+    getAllArt: ({search, page}: Record<string, unknown>, dispatch: Dispatch<GetArtAction>): void => {
         const queryParams = {page, fields: shapeOfResponse, limit: 12};
         dispatch(loading());
         http(search ?
-                {path: `${apiBase}/search`, queryParams: {q: search, ...queryParams}} :
-                {path: apiBase, queryParams},
-            (action: HTTPAction<ArtResponse>) => {
-                switch (action.type) {
-                    case HTTPStatus.FAILURE:
-                        return dispatch(error());
-                    case HTTPStatus.SUCCESS:
-                        return dispatch(loaded(toArt(action.value)));
-                }
-            });
+            {path: `${apiBase}/search`, queryParams: {q: search, ...queryParams}} :
+            {path: apiBase, queryParams}).then((action: HTTPAction<ArtResponse>) => {
+            switch (action.type) {
+                case HTTPStatus.FAILURE:
+                    return dispatch(error());
+                case HTTPStatus.SUCCESS:
+                    return dispatch(loaded(toArt(action.value)));
+            }
+        });
     },
 
-    getPiece: (
-        id: string,
-        dispatch: Dispatch<GetPieceAction>
-    ): void => {
+    getPiece: (id: string, dispatch: Dispatch<GetPieceAction>): void => {
         dispatch(loading());
         http({
             path: `${apiBase}/${id}`,
             queryParams: {fields: shapeOfResponse}
-        }, (action: HTTPAction<PieceResponse>) => {
+        }).then((action: HTTPAction<PieceResponse>) => {
             switch (action.type) {
                 case HTTPStatus.FAILURE:
                     return dispatch(error());
