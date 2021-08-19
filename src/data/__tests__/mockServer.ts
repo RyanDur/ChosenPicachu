@@ -6,7 +6,7 @@ export interface MockWebServer {
     start: () => void;
     stop: () => void;
     path: (path?: string) => string,
-    stubResponse: <T extends {} | []>(newCode: number, newResponse: T) => void;
+    stubResponse: <T extends {} | []>(newCode: number, newResponse?: T) => void;
     lastRequest: () => Promise<RecordedRequest>;
 }
 

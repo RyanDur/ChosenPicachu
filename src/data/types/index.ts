@@ -92,7 +92,7 @@ export interface AutoCompleteResponse {
 
 export enum AsyncState {
     LOADING = 'LOADING',
-    SUCCESS = 'SUCCESS',
+    LOADED = 'LOADED',
     ERROR = 'ERROR'
 }
 
@@ -102,12 +102,9 @@ export interface Action<T> {
 
 export type Dispatch<T> = Consumer<T>;
 
+export type Loaded<T> = Action<AsyncState.LOADED> & {
+    value: T;
+};
 export type Loading = Action<AsyncState.LOADING>;
-export type Loaded<T> = Action<AsyncState.SUCCESS> & {
-    value: T;
-};
 
-export type Success<T> = Action<AsyncState.SUCCESS> & {
-    value: T;
-};
 export type Error = Action<AsyncState.ERROR>;

@@ -1,124 +1,94 @@
 import {data} from '../index';
-import {mockServer, MockWebServer} from './mockServer';
 import 'whatwg-fetch';
 import {ArtResponse, ArtSuggestion, AutoCompleteResponse, Piece, PieceResponse} from '../types';
 import faker from 'faker';
 import {art} from '../../__tests__/util';
 import {nanoid} from 'nanoid';
-import {waitFor} from '@testing-library/react';
-import {error, loading, success} from '../actions';
+import {error, loaded, loading} from '../actions';
+import {failure, success} from '../http/actions';
+import {http} from '../http';
+import {HTTPError} from '../http/types';
 
-const mockConfig = jest.fn();
-jest.mock('../../config', () => ({
-    get domain() {
-        return mockConfig();
-    }
+jest.mock('../http', () => ({
+    http: jest.fn(),
 }));
 
 describe('data', () => {
-    const fields = 'fields=id,title,image_id,artist_display,term_titles,thumbnail';
-    let server: MockWebServer;
-
-    beforeEach(() => {
-        server = mockServer();
-        server.start();
-        mockConfig.mockReturnValue(server.path());
-    });
-
-    afterEach(() => server.stop());
-
+    const mockHttp = http as jest.Mock<typeof http>;
     describe('retrieving all the artwork', () => {
-        test('when it is successful', async () => {
+        test('when it is successful', () => {
             const dispatch = jest.fn();
-            server.stubResponse(200, artResponse);
-
+            mockHttp.mockImplementation((...args: any[]) => {
+                return args[1](success(artResponse));
+            });
             data.getAllArt({page: 1}, dispatch);
 
-            const recordedRequest = await server.lastRequest();
-            await waitFor(() => {
-                expect(recordedRequest.method).toEqual('GET');
-                expect(recordedRequest.url).toEqual(`/api/v1/artworks?page=1&${fields}&limit=12`);
-                expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-                expect(dispatch).toHaveBeenNthCalledWith(2, success(art));
-            });
+            expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+            expect(dispatch).toHaveBeenNthCalledWith(2, loaded(art));
         });
 
-        test('when it has a search term', async () => {
+        test('when it has a search term', () => {
             const dispatch = jest.fn();
-            server.stubResponse(200, artResponse);
+            mockHttp.mockImplementation((...args: any[]) => {
+                return args[1](success(artResponse));
+            });
 
             data.getAllArt({page: 1, search: 'rad'}, dispatch);
-            const recordedRequest = await server.lastRequest();
-            await waitFor(() => {
-                expect(recordedRequest.method).toEqual('GET');
-                expect(recordedRequest.url).toEqual(`/api/v1/artworks/search?q=rad&page=1&${fields}&limit=12`);
-                expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-                expect(dispatch).toHaveBeenNthCalledWith(2, success(art));
-            });
+            expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+            expect(dispatch).toHaveBeenNthCalledWith(2, loaded(art));
         });
 
-        test('when it is not successful', async () => {
+        test('when it is not successful', () => {
             const dispatch = jest.fn();
-            server.stubResponse(500, {});
+            mockHttp.mockImplementation((...args: any[]) => {
+                return args[1](failure(HTTPError.UNKNOWN));
+            });
 
             data.getAllArt({page: 1}, dispatch);
 
-            const recordedRequest = await server.lastRequest();
-            await waitFor(() => {
-                expect(recordedRequest.method).toEqual('GET');
-                expect(recordedRequest.url).toEqual(`/api/v1/artworks?page=1&${fields}&limit=12`);
-                expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-                expect(dispatch).toHaveBeenNthCalledWith(2, error());
-            });
+            expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+            expect(dispatch).toHaveBeenNthCalledWith(2, error());
         });
     });
 
     describe('retrieving an artwork', () => {
-        test('when it is successful', async () => {
+        test('when it is successful', () => {
             const dispatch = jest.fn();
-            server.stubResponse(200, pieceResponse);
+            mockHttp.mockImplementation((...args: any[]) => {
+                return args[1](success(pieceResponse));
+            });
 
             data.getPiece(String(piece.id), dispatch);
 
-            const recordedRequest = await server.lastRequest();
-            await waitFor(() => {
-                expect(recordedRequest.method).toEqual('GET');
-                expect(recordedRequest.url).toEqual(`/api/v1/artworks/${pieceResponse.data.id}?${fields}`);
-                expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-                expect(dispatch).toHaveBeenNthCalledWith(2, success(piece));
-            });
+            expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+            expect(dispatch).toHaveBeenNthCalledWith(2, loaded(piece));
         });
 
         test('when it is not successful', async () => {
             const dispatch = jest.fn();
-            server.stubResponse(500, {});
+            mockHttp.mockImplementation((...args: any[]) => {
+                return args[1](failure(HTTPError.UNKNOWN));
+            });
 
             data.getPiece(String(piece.id), dispatch);
 
-            const recordedRequest = await server.lastRequest();
-            await waitFor(() => {
-                expect(recordedRequest.method).toEqual('GET');
-                expect(recordedRequest.url).toEqual(`/api/v1/artworks/${pieceResponse.data.id}?${fields}`);
-                expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-                expect(dispatch).toHaveBeenNthCalledWith(2, error());
-            });
+            expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+            expect(dispatch).toHaveBeenNthCalledWith(2, error());
         });
     });
 
     describe('searching for art', () => {
         test('when it is successful', async () => {
             const dispatch = jest.fn();
-            server.stubResponse(200, artOptions);
+            mockHttp.mockImplementation((...args: any[]) => {
+                return args[1](success(artOptions));
+            });
             const searchString = faker.lorem.word();
 
             data.searchForArtOptions(searchString, dispatch);
 
-            const recordedRequest = await server.lastRequest();
-            await waitFor(() => {
-                expect(recordedRequest.method).toEqual('GET');
-                expect(recordedRequest.url).toEqual(`/api/v1/artworks/search?query[term][title]=${searchString}&fields=suggest_autocomplete_all&limit=5`);
-                expect(dispatch).toHaveBeenNthCalledWith(1, success(options));
-            });
+            expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+            expect(dispatch).toHaveBeenNthCalledWith(2, loaded(options));
         });
     });
 

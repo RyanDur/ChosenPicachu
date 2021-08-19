@@ -18,7 +18,7 @@ const ArtPiece = () => {
         id && data.getPiece(id, (action: GetPieceAction) => {
             isLoading(action.type === AsyncState.LOADING);
             isErrored(action.type === AsyncState.ERROR);
-            if (action.type === AsyncState.SUCCESS) updatePiece(action.value);
+            if (action.type === AsyncState.LOADED) updatePiece(action.value);
         });
         return reset;
     }, [id, updatePiece]);

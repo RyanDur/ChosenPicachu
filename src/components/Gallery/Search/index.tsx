@@ -23,7 +23,7 @@ export const Search: FC<Props> = ({id}) => {
 
     useEffect(() => {
         searchString && debounceSearch(searchString.toLowerCase(), (action: SearchArtAction) => {
-            if (action.type === AsyncState.SUCCESS) updateSearchOptions(action.value);
+            if (action.type === AsyncState.LOADED) updateSearchOptions(action.value);
         });
     }, [searchString]);
 
