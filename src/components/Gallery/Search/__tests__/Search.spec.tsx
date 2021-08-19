@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import {renderWithRouter} from '../../../../__tests__/util';
 import {data} from '../../../../data';
 import {Dispatch} from '../../../UserInfo/types';
-import {success, SearchArtAction} from '../../../../data/actions';
+import {loaded, SearchArtAction} from '../../../../data/actions';
 import * as faker from 'faker';
 import {Paths} from '../../../../App';
 
@@ -13,7 +13,7 @@ describe('search', () => {
 
     beforeEach(() => {
         data.searchForArtOptions = jest.fn((searchString: string, dispatch: Dispatch<SearchArtAction>) =>
-            dispatch(success([searchWord])));
+            dispatch(loaded([searchWord])));
     });
 
     it('should give suggestions for completion', async () => {

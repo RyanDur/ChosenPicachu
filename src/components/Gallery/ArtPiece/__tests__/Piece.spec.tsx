@@ -6,7 +6,7 @@ import {data} from '../../../../data';
 import {nanoid} from 'nanoid';
 import * as faker from 'faker';
 import {Piece} from '../../../../data/types';
-import {success, loading, GetPieceAction, error} from '../../../../data/actions';
+import {loaded, loading, GetPieceAction, error} from '../../../../data/actions';
 import {Dispatch} from '../../../UserInfo/types';
 
 jest.mock('../Context', () => ({
@@ -49,7 +49,7 @@ describe('viewing a piece', () => {
         beforeEach(() => {
             data.getPiece = (id, dispatch: Dispatch<GetPieceAction>) => {
                 mockGetPieceId(id);
-                dispatch(success(mockPiece));
+                dispatch(loaded(mockPiece));
             };
             rendered = render(<MemoryRouter initialEntries={[`${Paths.artGallery}/1234`]}>
                 <Route path={Paths.artGalleryPiece}>

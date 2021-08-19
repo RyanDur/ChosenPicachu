@@ -24,7 +24,7 @@ const ArtGallery: FC = () => {
         data.getAllArt({page, search}, (action: GetArtAction) => {
             isLoading(action.type === AsyncState.LOADING);
             hasErrored(action.type === AsyncState.ERROR);
-            if (action.type === AsyncState.SUCCESS) updateArt(action.value);
+            if (action.type === AsyncState.LOADED) updateArt(action.value);
         });
         return reset;
     }, [page, updateArt, search]);

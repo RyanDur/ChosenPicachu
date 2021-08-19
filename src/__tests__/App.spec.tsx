@@ -23,14 +23,12 @@ describe('the App', () => {
     describe('the header', () => {
         let header: HTMLElement;
         let navigation: HTMLElement;
-        let footer: HTMLElement;
 
         beforeEach(() => renderWithRouter(<App/>, Paths.home));
 
         beforeEach(() => {
             header = screen.getByTestId('header');
             navigation = screen.getByTestId('navigation');
-            footer = screen.getByTestId('footer');
         });
 
         test('for the home page', () => {
@@ -50,6 +48,7 @@ describe('the App', () => {
 
         test('for the Art Gallery page', () => {
             userEvent.click(within(navigation).getByText('Art'));
+            const footer = screen.getByTestId('footer');
             expect(within(header).getByText('Art Gallery')).toBeInTheDocument();
             expect(within(footer).queryByText('Gallery Navigation')).toBeInTheDocument();
             expect(within(header).getByText('Search')).toBeInTheDocument();
