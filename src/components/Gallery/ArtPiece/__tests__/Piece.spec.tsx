@@ -1,13 +1,13 @@
-import {render, RenderResult, screen} from '@testing-library/react';
+import {screen} from '@testing-library/react';
 import {Paths} from '../../../../App';
-import {MemoryRouter, Route} from 'react-router-dom';
 import {ArtPiece, useArtPiece} from '../index';
 import {data} from '../../../../data';
 import {nanoid} from 'nanoid';
 import * as faker from 'faker';
-import {Piece} from '../../../../data/types';
-import {loaded, loading, GetPieceAction, error} from '../../../../data/actions';
-import {Dispatch} from '../../../UserInfo/types';
+import {Dispatch, Piece} from '../../../../data/types';
+import {error, GetPieceAction, loaded, loading} from '../../../../data/actions';
+import {Rendered, renderWithRouter} from '../../../../__tests__/util';
+import {GalleryPath} from '../../index';
 
 jest.mock('../Context', () => ({
     useArtPiece: jest.fn()
@@ -23,7 +23,7 @@ describe('viewing a piece', () => {
         altText: faker.lorem.sentence(),
         artistInfo: faker.lorem.paragraph()
     };
-    let rendered: RenderResult;
+    let rendered: () => Rendered;
 
     beforeEach(() => mockUsePieceGallery.mockReturnValue({
         piece: mockPiece,
@@ -34,11 +34,10 @@ describe('viewing a piece', () => {
     describe('loading the piece of art', () => {
         beforeEach(() => {
             data.getPiece = (id, dispatch: Dispatch<GetPieceAction>) => dispatch(loading());
-            rendered = render(<MemoryRouter initialEntries={[`${Paths.artGallery}/1234`]}>
-                <Route path={Paths.artGalleryPiece}>
-                    <ArtPiece/>
-                </Route>
-            </MemoryRouter>);
+            renderWithRouter(<ArtPiece/>, {
+                initialRoute: `${Paths.artGallery}/1234`,
+                path: `${Paths.artGallery}${GalleryPath.piece}`
+            });
         });
 
         it('should be loading', () =>
@@ -51,11 +50,10 @@ describe('viewing a piece', () => {
                 mockGetPieceId(id);
                 dispatch(loaded(mockPiece));
             };
-            rendered = render(<MemoryRouter initialEntries={[`${Paths.artGallery}/1234`]}>
-                <Route path={Paths.artGalleryPiece}>
-                    <ArtPiece/>
-                </Route>
-            </MemoryRouter>);
+            rendered = renderWithRouter(<ArtPiece/>, {
+                initialRoute: `${Paths.artGallery}/1234`,
+                path: `${Paths.artGallery}${GalleryPath.piece}`
+            });
         });
 
         it("should display the artist's info", () =>
@@ -68,7 +66,7 @@ describe('viewing a piece', () => {
             expect(screen.queryByTestId('image-error')).not.toBeInTheDocument());
 
         it('should clean up the art-piece after unmounting', async () => {
-            rendered.unmount();
+            rendered().result.unmount();
             expect(mockUsePieceGallery().reset).toHaveBeenCalled();
         });
     });
@@ -76,11 +74,10 @@ describe('viewing a piece', () => {
     describe('when getting the piece has errored', () => {
         beforeEach(() => {
             data.getPiece = (id, dispatch: Dispatch<GetPieceAction>) => dispatch(error());
-            rendered = render(<MemoryRouter initialEntries={[`${Paths.artGallery}/1234`]}>
-                <Route path={Paths.artGalleryPiece}>
-                    <ArtPiece/>
-                </Route>
-            </MemoryRouter>);
+            renderWithRouter(<ArtPiece/>, {
+                initialRoute: `${Paths.artGallery}/1234`,
+                path: `${Paths.artGallery}${GalleryPath.piece}`
+            });
         });
 
         it('should have teh error image', () =>

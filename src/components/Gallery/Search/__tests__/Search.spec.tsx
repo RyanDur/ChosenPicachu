@@ -3,10 +3,9 @@ import {Search} from '../index';
 import userEvent from '@testing-library/user-event';
 import {renderWithRouter} from '../../../../__tests__/util';
 import {data} from '../../../../data';
-import {Dispatch} from '../../../UserInfo/types';
 import {loaded, SearchArtAction} from '../../../../data/actions';
 import * as faker from 'faker';
-import {Paths} from '../../../../App';
+import {Dispatch} from '../../../../data/types';
 
 describe('search', () => {
     const searchWord = faker.lorem.word().toUpperCase();
@@ -30,29 +29,26 @@ describe('search', () => {
         expect(rendered().testLocation?.search).toEqual('');
         userEvent.type(screen.getByPlaceholderText('Search For'), 'A');
         userEvent.click(screen.getByTestId('submit-query'));
-        expect(rendered().testLocation?.pathname).toEqual(Paths.artGallery);
         expect(rendered().testLocation?.search).toEqual('?search=A');
     });
 
     it('should remove the original query params', () => {
-        const rendered = renderWithRouter(<Search/>, Paths.home, 'page=1');
+        const rendered = renderWithRouter(<Search/>, {params: {page: 1}});
         userEvent.type(screen.getByPlaceholderText('Search For'), 'a');
         userEvent.click(screen.getByTestId('submit-query'));
-        expect(rendered().testLocation?.pathname).toEqual(Paths.artGallery);
         expect(rendered().testLocation?.search).toEqual('?search=a');
     });
 
     it('should leave the original query alone when search is empty', () => {
-        const rendered = renderWithRouter(<Search/>, Paths.home, 'page=1&search=cat');
+        const rendered = renderWithRouter(<Search/>, {params: {page: 1, search: 'cat'}});
         userEvent.type(screen.getByPlaceholderText('Search For'), '');
         userEvent.click(screen.getByTestId('submit-query'));
         expect(rendered().testLocation?.search).toEqual('?page=1&search=cat');
     });
 
     it('should be able to reset the query', () => {
-        const rendered = renderWithRouter(<Search/>, Paths.home, 'search=cat');
+        const rendered = renderWithRouter(<Search/>, {params: {search: 'cat'}});
         userEvent.click(screen.getByTestId('reset-query'));
-        expect(rendered().testLocation?.pathname).toEqual(Paths.artGallery);
         expect(rendered().testLocation?.search).toEqual('');
     });
 });

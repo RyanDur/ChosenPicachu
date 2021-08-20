@@ -5,6 +5,7 @@ import * as H from 'history';
 import {AddressInfo, UserInfo} from '../../components/UserInfo/types';
 import userEvent from '@testing-library/user-event';
 import {toISOWithoutTime} from '../../components/util';
+import {toQueryString} from '../../util/URL';
 
 export interface Rendered {
     result: RenderResult;
@@ -12,18 +13,30 @@ export interface Rendered {
     testLocation?: H.Location;
 }
 
-export const renderWithRouter = (component: ReactElement, path: string = '/initial/route', params?: string): () => Rendered => {
+interface URLContext {
+    path?: string;
+    initialRoute?: string;
+    params?: Record<string, unknown>;
+}
+
+const defaultUrlContext: URLContext = {initialRoute: '/initial/route', params: {}};
+export const renderWithRouter = (component: ReactElement, {
+    initialRoute = defaultUrlContext.path,
+    path,
+    params = defaultUrlContext.params
+} = defaultUrlContext): () => Rendered => {
     let testHistory: H.History, testLocation: H.Location,
-        result = render(<MemoryRouter initialEntries={[`${path}${params ? `?${params}` : ''}`]}>
-            <Route path={path.valueOf()}>{component}</Route>
-            <Route
-                path="*"
-                render={({history, location}) => {
-                    testHistory = history;
-                    testLocation = location;
-                    return null;
-                }}/>
-        </MemoryRouter>);
+        result = render(
+            <MemoryRouter initialEntries={[`${initialRoute}${toQueryString(params)}`]}>
+                <Route path={path || initialRoute}>{component}</Route>
+                <Route
+                    path="*"
+                    render={({history, location}) => {
+                        testHistory = history;
+                        testLocation = location;
+                        return null;
+                    }}/>
+            </MemoryRouter>);
     return () => ({result, testHistory, testLocation});
 };
 

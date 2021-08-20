@@ -4,7 +4,7 @@ import {data} from '../../../../data';
 import {art, Rendered, renderWithRouter} from '../../../../__tests__/util';
 import {Paths} from '../../../../App';
 import {useGallery} from '../../Context';
-import {GetArtAction, loading, error, loaded} from '../../../../data/actions';
+import {error, GetArtAction, loaded, loading} from '../../../../data/actions';
 import {Art, Dispatch, Piece} from '../../../../data/types';
 import {ArtGallery} from '../index';
 
@@ -16,7 +16,7 @@ jest.mock('../../Context', () => {
 
 describe('The gallery.', () => {
     let rendered: () => Rendered;
-    const mockUseArtGallery = useGallery as jest.Mock;
+    const mockUseGallery = useGallery as jest.Mock;
     window.scrollTo = jest.fn();
     afterEach(cleanup);
 
@@ -26,7 +26,7 @@ describe('The gallery.', () => {
                 query: Record<string, unknown>,
                 dispatch: Dispatch<GetArtAction>
             ) => dispatch(loading());
-            mockUseArtGallery.mockReturnValue({
+            mockUseGallery.mockReturnValue({
                 art: {pieces: []},
                 updateArt: jest.fn(),
                 reset: jest.fn()
@@ -48,7 +48,7 @@ describe('The gallery.', () => {
                 query: Record<string, unknown>,
                 dispatch: Dispatch<GetArtAction>
             ) => dispatch(loaded(art));
-            mockUseArtGallery.mockReturnValue({
+            mockUseGallery.mockReturnValue({
                 art,
                 updateArt: jest.fn(),
                 reset: jest.fn()
@@ -83,7 +83,7 @@ describe('The gallery.', () => {
                 query: Record<string, unknown>,
                 dispatch: Dispatch<GetArtAction>
             ) => dispatch(loaded({pieces: [] as Piece[]} as Art)));
-            mockUseArtGallery.mockReturnValue({
+            mockUseGallery.mockReturnValue({
                 updateArt: jest.fn(),
                 reset: jest.fn()
             });
@@ -106,7 +106,7 @@ describe('The gallery.', () => {
                 query: Record<string, unknown>,
                 dispatch: Dispatch<GetArtAction>
             ) => dispatch(error());
-            mockUseArtGallery.mockReturnValue({
+            mockUseGallery.mockReturnValue({
                 art,
                 updateArt: jest.fn(),
                 reset: jest.fn()
@@ -118,19 +118,26 @@ describe('The gallery.', () => {
             expect(screen.queryByTestId('empty-gallery')).toBeInTheDocument());
     });
 
-    test('when filtering results by search', () => {
-        data.getAllArt = jest.fn((
-            query: Record<string, unknown>,
-            dispatch: Dispatch<GetArtAction>
-        ) => dispatch(error()));
-        mockUseArtGallery.mockReturnValue({
-            art,
-            updateArt: jest.fn(),
-            reset: jest.fn()
+    describe('when filtering results by search', () => {
+        beforeEach(() => {
+            data.getAllArt = jest.fn((
+                query: Record<string, unknown>,
+                dispatch: Dispatch<GetArtAction>
+            ) => dispatch(loaded(art)));
+
+            mockUseGallery.mockReturnValue({
+                art,
+                updateArt: jest.fn(),
+                reset: jest.fn()
+            });
+
+            renderWithRouter(<ArtGallery/>, {params: {page: 23, search: 'g'}});
         });
 
-        renderWithRouter(<ArtGallery/>, Paths.artGallery, 'page=23&search=g');
-
-        expect(data.getAllArt).toHaveBeenCalledWith({page: '23', search: 'g'}, expect.anything());
+        it('should pass the criteria', () =>
+            expect(data.getAllArt).toHaveBeenCalledWith({
+                page: '23',
+                search: 'g'
+            }, expect.anything()));
     });
 });

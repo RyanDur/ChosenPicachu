@@ -10,7 +10,7 @@ jest.mock('../components', () => ({
     Gallery: () => 'Art Gallery',
     GalleryTitle: () => 'Art Gallery Title',
     GalleryNav: () => 'Art Navigation',
-    Search: () => 'Search'
+    SearchRoutes: () => 'Search'
 }));
 
 describe('the App', () => {
@@ -19,7 +19,7 @@ describe('the App', () => {
     let main: HTMLElement;
 
     beforeEach(() => {
-        renderWithRouter(<App/>, Paths.home);
+        renderWithRouter(<App/>, {initialRoute: Paths.home});
         header = screen.getByTestId('header');
         navigation = screen.getByTestId('navigation');
         main = screen.getByTestId('main');
