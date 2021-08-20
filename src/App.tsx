@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link, Route, Switch, useRouteMatch} from 'react-router-dom';
-import {About, Gallery, GalleryNav, GalleryTitle, Home, Search, Users} from './components';
+import {About, Gallery, GalleryNav, GalleryTitle, Home, SearchRoutes, Users} from './components';
 import './App.scss';
 import './App.layout.scss';
 
@@ -9,7 +9,6 @@ export enum Paths {
     about = '/about',
     users = '/users',
     artGallery = '/gallery',
-    artGalleryPiece = '/gallery/:id',
     repo = 'https://github.com/RyanDur/ChosenPicachu',
 }
 
@@ -26,8 +25,7 @@ export const App = () => {
             </h1>
 
             <Switch>
-                <Route path={Paths.artGallery} exact><Search id="gallery-search"/></Route>
-                <Route path={Paths.artGalleryPiece} exact><Search id="gallery-search"/></Route>
+                <Route path={Paths.artGallery}><SearchRoutes/></Route>
             </Switch>
         </header>
         <aside id="side-nav" data-testid="navigation">
