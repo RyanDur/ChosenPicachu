@@ -1,7 +1,6 @@
 import React from 'react';
 import {Link, Route, Switch, useRouteMatch} from 'react-router-dom';
-import {About, ArtGallery, ArtPiece, GalleryNav, Home, Search, Users} from './components';
-import {useArtPiece} from './components/Gallery/ArtPiece';
+import {About, Gallery, GalleryNav, GalleryTitle, Home, Search, Users} from './components';
 import './App.scss';
 import './App.layout.scss';
 
@@ -9,14 +8,12 @@ export enum Paths {
     home = '/',
     about = '/about',
     users = '/users',
-    artGallery = '/art',
-    artGalleryPiece = '/art/:id',
+    artGallery = '/gallery',
+    artGalleryPiece = '/gallery/:id',
     repo = 'https://github.com/RyanDur/ChosenPicachu',
 }
 
 export const App = () => {
-    const {piece} = useArtPiece();
-
     return <>
         <header id="app-header" data-testid="header">
             <h1 className="title">
@@ -24,8 +21,7 @@ export const App = () => {
                     <Route path={Paths.home} exact>Home</Route>
                     <Route path={Paths.about} exact>About</Route>
                     <Route path={Paths.users} exact>Users</Route>
-                    <Route path={Paths.artGallery} exact>Art Gallery</Route>
-                    <Route path={Paths.artGalleryPiece} exact>{piece && piece.title}</Route>
+                    <Route path={Paths.artGallery}><GalleryTitle/></Route>
                 </Switch>
             </h1>
 
@@ -62,8 +58,7 @@ export const App = () => {
                 <Route path={Paths.home} exact><Home/></Route>
                 <Route path={Paths.about} exact><About/></Route>
                 <Route path={Paths.users} exact><Users/></Route>
-                <Route path={Paths.artGallery} exact><ArtGallery/></Route>
-                <Route path={Paths.artGalleryPiece} exact><ArtPiece/></Route>
+                <Route path={Paths.artGallery}><Gallery/></Route>
             </Switch>
         </main>
         <Switch><Route path={Paths.artGallery} exact>

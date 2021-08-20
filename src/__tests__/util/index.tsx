@@ -2,7 +2,6 @@ import {ReactElement} from 'react';
 import {render, RenderResult, screen} from '@testing-library/react';
 import {MemoryRouter, Route} from 'react-router-dom';
 import * as H from 'history';
-import {Paths} from '../../App';
 import {AddressInfo, UserInfo} from '../../components/UserInfo/types';
 import userEvent from '@testing-library/user-event';
 import {toISOWithoutTime} from '../../components/util';
@@ -13,11 +12,9 @@ export interface Rendered {
     testLocation?: H.Location;
 }
 
-type TestPaths = Paths | '/initial/route';
-
-export const renderWithRouter = (component: ReactElement, path: TestPaths = '/initial/route', params?: string): () => Rendered => {
+export const renderWithRouter = (component: ReactElement, path: string = '/initial/route', params?: string): () => Rendered => {
     let testHistory: H.History, testLocation: H.Location,
-        result = render(<MemoryRouter initialEntries={[`${path as string}${params ? `?${params}` : ''}`]}>
+        result = render(<MemoryRouter initialEntries={[`${path}${params ? `?${params}` : ''}`]}>
             <Route path={path.valueOf()}>{component}</Route>
             <Route
                 path="*"
