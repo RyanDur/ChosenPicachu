@@ -1,6 +1,9 @@
 import {FC} from 'react';
-import {Link, useRouteMatch} from 'react-router-dom';
+import {Link, useLocation} from 'react-router-dom';
 import {toQueryString} from '../../util/URL';
+import {join} from '../util';
+import {useQuery} from '../hooks';
+import './Tabs.scss';
 
 interface Tab {
     display: string;
@@ -9,12 +12,17 @@ interface Tab {
 
 interface Props {
     values: Tab[];
+    id?: string;
 }
 
-export const Tabs: FC<Props> = ({values}) => {
-    const {path} = useRouteMatch();
+export const Tabs: FC<Props> = ({values, id}) => {
+    const {pathname} = useLocation();
+    const {tab} = useQuery<{ tab: string }>();
 
-    return <nav>{values.map(({param, display}) =>
-        <Link to={`${path}${toQueryString({tab: param})}`} key={param}>{display}</Link>
+    return <nav id={id} className="tabs">{values.map(({param, display}) =>
+        <h3 className={join('tab', tab === param && 'current')} key={param}>
+            <Link to={`${pathname}${toQueryString({tab: param})}`}
+                  className="path">{display}</Link>
+        </h3>
     )}</nav>;
 };

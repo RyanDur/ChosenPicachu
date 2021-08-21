@@ -1,10 +1,19 @@
 .pagination {
   display: grid;
+  column-gap: var(--base);
   grid-template-columns: repeat(5, 1fr);
   grid-template-areas: "first prev go-to next last";
 
   #first {
     grid-area: first;
+  }
+
+  .fill-left {
+    grid-column: 1 / span 2;
+  }
+
+  .fill-right {
+    grid-column: 4 / span 2;
   }
 
   #prev {

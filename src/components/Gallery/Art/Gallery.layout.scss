@@ -2,12 +2,15 @@
   display: grid;
   gap: 4rem;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: 1fr auto;
   align-items: start;
   grid-template-areas:
     "field field field field"
     "field field field field"
     "field field field field";
+
+  #gallery-tabs {
+    grid-area: tabs;
+  }
 
   .loader,
   #empty-gallery {
