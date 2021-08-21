@@ -9,6 +9,7 @@ import {debounce} from 'lodash';
 import {Consumer} from '../../UserInfo/types';
 import './Search.scss';
 import './Search.layout.scss';
+import {useQuery} from '../../hooks';
 
 interface Props {
     id?: string;
@@ -18,6 +19,7 @@ export const Search: FC<Props> = ({id}) => {
     const [searchOptions, updateSearchOptions] = useState<ArtSuggestion[]>([]);
     const [searchString, updateQuery] = useState<string>('');
     const history = useHistory();
+    const {tab} = useQuery<{tab: string}>();
     const debounceSearch = debounce((query: string, consumer: Consumer<SearchArtAction>) =>
         data.searchForArtOptions(query, consumer), 300);
 
@@ -31,13 +33,13 @@ export const Search: FC<Props> = ({id}) => {
         event.preventDefault();
         searchString && history.push({
             pathname: Paths.artGallery,
-            search: toQueryString({search: searchString})
+            search: toQueryString({tab, search: searchString})
         });
     };
 
     const handleReset = () => history.push({
         pathname: Paths.artGallery,
-        search: ''
+        search: toQueryString({tab})
     });
 
     return <form id={id} className="search" onSubmit={handleSubmit} onReset={handleReset} data-testid="search">

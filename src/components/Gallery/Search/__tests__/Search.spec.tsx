@@ -32,11 +32,11 @@ describe('search', () => {
         expect(rendered().testLocation?.search).toEqual('?search=A');
     });
 
-    it('should remove the original query params', () => {
-        const rendered = renderWithRouter(<Search/>, {params: {page: 1}});
+    it('should remove the page query param', () => {
+        const rendered = renderWithRouter(<Search/>, {params: {page: 1, tab: 'aic'}});
         userEvent.type(screen.getByPlaceholderText('Search For'), 'a');
         userEvent.click(screen.getByTestId('submit-query'));
-        expect(rendered().testLocation?.search).toEqual('?search=a');
+        expect(rendered().testLocation?.search).toEqual('?tab=aic&search=a');
     });
 
     it('should leave the original query alone when search is empty', () => {
@@ -47,8 +47,8 @@ describe('search', () => {
     });
 
     it('should be able to reset the query', () => {
-        const rendered = renderWithRouter(<Search/>, {params: {search: 'cat'}});
+        const rendered = renderWithRouter(<Search/>, {params: {search: 'cat', tab: 'bat'}});
         userEvent.click(screen.getByTestId('reset-query'));
-        expect(rendered().testLocation?.search).toEqual('');
+        expect(rendered().testLocation?.search).toEqual('?tab=bat');
     });
 });
