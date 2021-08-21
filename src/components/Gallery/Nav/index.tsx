@@ -37,8 +37,7 @@ export const GalleryNav: FC<Props> = ({id}) => {
     };
 
     return <nav className="pagination" id={id}>
-        {!hasPrevPage && <article className="fill"/> }
-        {!hasPrevPage && <article className="fill"/> }
+        {!hasPrevPage && <article className="fill-left"/> }
         {hasPrevPage && <Link to={`${Paths.artGallery}${toQueryString({...currentQuery, page: firstPage})}`}
                               onClick={gotoTopOfPage}
                               id="first" className="page" data-testid="first-page">
@@ -49,7 +48,7 @@ export const GalleryNav: FC<Props> = ({id}) => {
                               id="prev" className="page" data-testid="prev-page">
           PREV
         </Link>}
-        <form onSubmit={onSubmit} id="go-to-page">
+        <form onSubmit={onSubmit} id="go-to-page" className="page">
             <input type="number"
                    id="go-to"
                    min={firstPage}
@@ -71,7 +70,6 @@ export const GalleryNav: FC<Props> = ({id}) => {
                               id="last" className="page" data-testid="last-page">
           LAST
         </Link>}
-        {!hasNextPage && <article className="fill"/> }
-        {!hasNextPage && <article className="fill"/> }
+        {!hasNextPage && <article className="fill-right"/> }
     </nav>;
 };

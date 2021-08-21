@@ -8,7 +8,7 @@ export const GalleryTitle: FC = () => {
     const {path} = useRouteMatch();
 
     return <Switch>
-        <Route path={path} exact>Art Gallery</Route>
+        <Route path={path} exact>Gallery</Route>
         <Route path={`${path}${GalleryPath.piece}`} exact>{piece.title}</Route>
     </Switch>;
 };

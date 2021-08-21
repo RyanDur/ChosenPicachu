@@ -3,6 +3,7 @@ import {Link, Route, Switch, useRouteMatch} from 'react-router-dom';
 import {About, Gallery, GalleryNav, GalleryTitle, Home, SearchRoutes, Users} from './components';
 import './App.scss';
 import './App.layout.scss';
+import {toQueryString} from './util/URL';
 
 export enum Paths {
     home = '/',
@@ -33,7 +34,7 @@ export const App = () => {
                 <Link id="navigate-home" className="path" to={Paths.home}>Home</Link>
                 <Link id="navigate-about" className="path" to={Paths.about}>About</Link>
                 <Link id="navigate-users" className="path" to={Paths.users}>Users</Link>
-                <Link id="navigate-form" className="path" to={Paths.artGallery}>Art</Link>
+                <Link id="navigate-form" className="path" to={`${Paths.artGallery}${toQueryString({page: 1, tab: 'aic'})}`}>Gallery</Link>
                 <a id="navigate-repo" className="path" href={Paths.repo}
                    rel="noopener noreferrer" target="_blank">Repo</a>
             </nav>
@@ -51,7 +52,7 @@ export const App = () => {
                 </nav>
             </article>
         </aside>
-        <main data-testid="main" className={useRouteMatch(Paths.artGallery) ? 'fill' : 'fit'}>
+        <main data-testid="main" className={useRouteMatch(Paths.artGallery) ? 'gallery-in-view' : ''}>
             <Switch>
                 <Route path={Paths.home} exact><Home/></Route>
                 <Route path={Paths.about} exact><About/></Route>

@@ -16,7 +16,7 @@ jest.mock('react-router-dom', () => ({
 describe('gallery title', () => {
     test('viewing', () => {
         renderWithRouter(<GalleryTitle/>, {initialRoute});
-        expect(screen.getByText('Art Gallery')).toBeInTheDocument();
+        expect(screen.getByText('Gallery')).toBeInTheDocument();
     });
 
     test('viewing a piece', () => {

@@ -3,7 +3,8 @@
   width: var(--base-x-50);
   background-color: var(--void);
 
-  .fill {
+  .fill-left,
+  .fill-right {
     width: 100%;
     background-color: var(--paper);
   }
@@ -47,22 +48,6 @@
     &:hover,
     &:focus {
       background: var(--mint);
-    }
-
-    &#next {
-      margin: 0 0 0 var(--base);
-    }
-
-    &#prev {
-      margin: 0 var(--base) 0 0;
-    }
-
-    &:first-of-type {
-      margin: 0 var(--base) 0 0;
-    }
-
-    &:last-of-type {
-      margin: 0 0 0 var(--base);
     }
   }
 }

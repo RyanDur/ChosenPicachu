@@ -41,7 +41,7 @@ describe('the App', () => {
     });
 
     test('for the Art Gallery page', () => {
-        userEvent.click(within(navigation).getByText('Art'));
+        userEvent.click(within(navigation).getByText('Gallery'));
         const footer = screen.getByTestId('footer');
         expect(within(header).getByText('Art Gallery Title')).toBeInTheDocument();
         expect(within(footer).queryByText('Art Navigation')).toBeInTheDocument();
