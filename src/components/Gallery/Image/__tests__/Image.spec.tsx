@@ -1,15 +1,12 @@
-import {fireEvent, render, screen} from '@testing-library/react';
+import {fireEvent, screen} from '@testing-library/react';
 import {Image} from '../index';
 import * as faker from 'faker';
 import {nanoid} from 'nanoid';
-import {MemoryRouter, Route} from 'react-router-dom';
 import {Paths} from '../../../../App';
 import userEvent from '@testing-library/user-event';
-import * as H from 'history';
+import {Rendered, renderWithRouter} from '../../../../__tests__/util';
 
 describe('the image', () => {
-    window.scrollTo = jest.fn();
-    let testLocation: H.Location;
     const piece = {
         id: Math.random(),
         title: faker.lorem.words(),
@@ -18,16 +15,11 @@ describe('the image', () => {
         artistInfo: faker.lorem.sentence()
     };
     const image = `piece-${piece.imageId}`;
+    window.scrollTo = jest.fn();
+    let rendered: () => Rendered;
 
     describe('with link enabled', () => {
-        beforeEach(() => render(<MemoryRouter initialEntries={[Paths.artGallery]}>
-            <Image piece={piece}/>
-            <Route path="*"
-                   render={({location}) => {
-                       testLocation = location;
-                       return null;
-                   }}/>
-        </MemoryRouter>));
+        beforeEach(() => rendered = renderWithRouter(<Image piece={piece}/>, {params: {page: 3, tab: 'aic'}}));
 
         it('should be loading', () =>
             expect(screen.queryByTestId('loading')).toBeInTheDocument());
@@ -49,7 +41,7 @@ describe('the image', () => {
 
             it('should change location when clicked', () => {
                 userEvent.click(screen.getByTestId(image));
-                expect(testLocation.pathname).toEqual(`${Paths.artGallery}/${piece.id}`);
+                expect(rendered().testLocation?.pathname).toEqual(`${Paths.artGallery}/${piece.id}`);
             });
 
             it('should scroll to the top of the page', () => {
@@ -73,18 +65,13 @@ describe('the image', () => {
     });
 
     describe('disabling the link', () => {
-        beforeEach(() => render(<MemoryRouter initialEntries={[Paths.artGallery]}>
-            <Image piece={piece} linkEnabled={false}/>
-            <Route path="*"
-                   render={({location}) => {
-                       testLocation = location;
-                       return null;
-                   }}/>
-        </MemoryRouter>));
+        beforeEach(() => rendered =
+            renderWithRouter(<Image piece={piece} linkEnabled={false}/>,
+                {initialRoute: Paths.artGallery}));
 
         it('should not change location when clicked', () => {
             userEvent.click(screen.getByTestId(image));
-            expect(testLocation.pathname).toEqual(Paths.artGallery);
+            expect(rendered().testLocation?.pathname).toEqual(Paths.artGallery);
         });
 
         it('should not scroll to the top of the page', () => {

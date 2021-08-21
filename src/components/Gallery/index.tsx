@@ -12,16 +12,16 @@ export enum GalleryPath {
 
 const Gallery: FC = () => {
     const {path} = useRouteMatch();
-    return <>
-        <Tabs values={[
-            {display: 'The Art Institute of Chicago', param: 'aic'},
-            {display: 'The Smithsonian', param: 'smithsonian'}
-        ]}/>
-        <Switch>
-            <Route path={path} exact><ArtGallery/></Route>
+    return <Switch>
+            <Route path={path} exact>
+                <Tabs values={[
+                    {display: 'The Art Institute of Chicago', param: 'aic'},
+                    {display: 'The Smithsonian', param: 'smithsonian'}
+                ]}/>
+                <ArtGallery/>
+            </Route>
             <Route path={`${path}${GalleryPath.piece}`} exact><ArtPiece/></Route>
-        </Switch>
-    </>;
+        </Switch>;
 };
 
 export {
