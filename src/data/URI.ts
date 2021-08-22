@@ -17,8 +17,8 @@ export const URI = {
         const domain = source === Source.AIC ? aicDomain : harvardDomain;
         const {search, ...rest} = params;
         params = source === Source.AIC ?
-            {q: search, fields: shapeOfAICResponse, ...rest} :
-            {q: search, fields: shapeOfHarvardResponse,...rest, apikey: harvardAPIKey};
+            {q: search, fields: shapeOfAICResponse, ...rest, limit: 12} :
+            {q: search, fields: shapeOfHarvardResponse,...rest, apikey: harvardAPIKey, size: 12};
 
         if (source === Source.HARVARD || !search) {
             return [domain, path, toQueryString(params)].join('');

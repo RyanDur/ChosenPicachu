@@ -4,7 +4,14 @@ import faker from 'faker';
 import {AddressInfo, User, UserInfo} from '../../components/UserInfo/types';
 import {AvatarGenerator} from 'random-avatar-generator';
 import {toISOWithoutTime} from '../../components/util';
-import {AICArtResponse, AICPieceResponse, Art} from '../../data/types';
+import {
+    AICArtResponse,
+    AICPieceResponse,
+    Art,
+    HarvardArtResponse,
+    InfoResponse, PeopleResponse, Piece,
+    RecordResponse
+} from '../../data/types';
 import {nanoid} from 'nanoid';
 
 export const randomNumberFromRange = (min: number, max = 6) => Math.floor(Math.random() * max) + min;
@@ -164,13 +171,13 @@ export const pagination = {
     next_url: faker.internet.url()
 };
 
-export const artResponse: AICArtResponse = {
+export const aicArtResponse: AICArtResponse = {
     pagination,
     data: [...Array(pagination.limit)].map((a, index): AICPieceResponse => ({
         id: index,
         title: faker.lorem.sentence(),
         image_id: nanoid(),
-        artist_display:  faker.lorem.sentence(),
+        artist_display: faker.lorem.sentence(),
         term_titles: faker.lorem.words(randomNumberFromRange(1)).split(' ')
     })),
     info: {
@@ -183,20 +190,79 @@ export const artResponse: AICArtResponse = {
     }
 };
 
-export const art: Art = {
+const info: InfoResponse = {
+    totalrecordsperquery: Math.floor(Math.random() * 10),
+    totalrecords: Math.floor(Math.random() * 10000),
+    pages: Math.floor(Math.random() * 1000),
+    page: Math.floor(Math.random() * 10),
+    next: faker.internet.url()
+};
+
+export const person = (): PeopleResponse => ({
+    role: 'Artist',
+    gender: faker.lorem.word(),
+    displaydate: faker.lorem.word(),
+    culture: faker.lorem.word(),
+    displayname: faker.lorem.word(),
+    alphasort: faker.lorem.word(),
+    name: faker.lorem.word(),
+    personid: Math.floor(Math.random() * 1000),
+    displayorder: Math.floor(Math.random() * 1000),
+});
+
+const harvardToPieceResponse = (_: unknown, index: number): RecordResponse => ({
+    id: index,
+    title: faker.lorem.sentence(),
+    people: [person()],
+    primaryimageurl: faker.internet.url()
+});
+
+export const harvardPieceResponse = harvardToPieceResponse(undefined, Math.floor(Math.random() * 1000));
+
+export const harvardPiece: Piece = {
+    id: harvardPieceResponse.id,
+    title: harvardPieceResponse.title,
+    image: harvardPieceResponse.primaryimageurl,
+    altText: harvardPieceResponse.title,
+    artistInfo: harvardPieceResponse.people[0].displayname
+};
+
+export const harvardArtResponse: HarvardArtResponse = {
+    info: info,
+    records: [...Array(info.totalrecordsperquery)].map(harvardToPieceResponse),
+};
+
+export const fromAICArt: Art = {
     pagination: {
-        total: artResponse.pagination.total,
-        limit: artResponse.pagination.limit,
-        offset: artResponse.pagination.offset,
-        totalPages: artResponse.pagination.total_pages,
-        currentPage: artResponse.pagination.current_page,
-        nextUrl: artResponse.pagination.next_url
+        total: aicArtResponse.pagination.total,
+        limit: aicArtResponse.pagination.limit,
+        offset: aicArtResponse.pagination.offset,
+        totalPages: aicArtResponse.pagination.total_pages,
+        currentPage: aicArtResponse.pagination.current_page,
+        nextUrl: aicArtResponse.pagination.next_url
     },
-    pieces: artResponse.data.map(piece => ({
+    pieces: aicArtResponse.data.map(piece => ({
         id: piece.id,
         title: piece.title,
         image: `https://www.artic.edu/iiif/2/${piece.image_id}/full/2000,/0/default.jpg`,
         artistInfo: piece.artist_display,
         altText: piece.term_titles.join(' ')
+    }))
+};
+export const fromHarvardArt: Art = {
+    pagination: {
+        total: harvardArtResponse.info.totalrecords,
+        limit: harvardArtResponse.info.totalrecordsperquery,
+        offset: harvardArtResponse.info.totalrecordsperquery * (harvardArtResponse.info.page - 1),
+        totalPages: harvardArtResponse.info.pages,
+        currentPage: harvardArtResponse.info.page,
+        nextUrl: harvardArtResponse.info.next
+    },
+    pieces: harvardArtResponse.records.map(piece => ({
+        id: piece.id,
+        title: piece.title,
+        image: piece.primaryimageurl,
+        artistInfo: piece.people[0].displayname,
+        altText: piece.title
     }))
 };
