@@ -3,6 +3,7 @@ import {
     AICArtResponse,
     AICAutocomplete,
     AICAutoCompleteResponse,
+    AICPieceData,
     AICPieceResponse,
     ArtQuery,
     ArtResponse,
@@ -72,7 +73,7 @@ export const data = {
                     return dispatch(error());
                 case HTTPStatus.SUCCESS: {
                     if (source === Source.AIC) {
-                        return dispatch(loaded(aicToPiece(action.value)));
+                        return dispatch(loaded(aicDataToPiece(action.value)));
                     } else {
                         return dispatch(loaded(harvardToPiece(action.value)));
                     }
@@ -101,6 +102,8 @@ const aicToPiece = (data: AICPieceResponse): Piece => ({
     artistInfo: data.artist_display,
     altText: data.thumbnail?.alt_text || data.term_titles.join(' ') || ''
 });
+
+const aicDataToPiece = ({data}: AICPieceData): Piece => aicToPiece(data);
 
 const harvardToArt = ({info, records}: HarvardArtResponse) => ({
     pagination: {

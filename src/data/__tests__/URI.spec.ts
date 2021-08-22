@@ -32,11 +32,11 @@ describe('the URI', () => {
         const searchQuery = {params: {search: faker.lorem.words(), page: 1}, source: Source.AIC};
         const {search, ...rest} = searchQuery.params;
         expect(URI.from(searchQuery))
-            .toEqual(`${aicDomain}/search${toQueryString({q: search, fields: shapeOfAICResponse, ...rest})}`);
+            .toEqual(`${aicDomain}/search${toQueryString({q: search, fields: shapeOfAICResponse, ...rest, limit: 12})}`);
 
         const query = {params: {page: 1}, source: Source.AIC};
         expect(URI.from(query))
-            .toEqual(`${aicDomain}${toQueryString({fields: shapeOfAICResponse, page: query.params.page})}`);
+            .toEqual(`${aicDomain}${toQueryString({fields: shapeOfAICResponse, page: query.params.page, limit: 12})}`);
     });
 
     it('should create the appropriate URI for Harvard', () => {
@@ -47,11 +47,11 @@ describe('the URI', () => {
         const {search, ...rest} = searchQuery.params;
 
         expect(URI.from(searchQuery))
-            .toEqual(`${harvardDomain}${toQueryString({q: search, fields: shapeOfHarvardResponse, ...rest})}`);
+            .toEqual(`${harvardDomain}${toQueryString({q: search, fields: shapeOfHarvardResponse, ...rest, size: 12})}`);
 
         const query = {params: {page: 1, apikey: harvardAPIKey}, source: Source.HARVARD};
         expect(URI.from(query))
-            .toEqual(`${harvardDomain}${toQueryString({fields: shapeOfHarvardResponse, ...query.params})}`);
+            .toEqual(`${harvardDomain}${toQueryString({fields: shapeOfHarvardResponse, ...query.params, size: 12})}`);
     });
 
     it('should allow to add a path', () => {
@@ -59,13 +59,14 @@ describe('the URI', () => {
         expect(URI.from(query))
             .toEqual(`${aicDomain}${query.path}${toQueryString({
                 fields: shapeOfAICResponse,
-                page: query.params.page
+                page: query.params.page,
+                limit: 12
             })}`);
     });
 
     it('should be able to override the fields', () => {
         const query = {params: {page: 1, fields: ['blah']}, path: '/more/path', source: Source.AIC};
         expect(URI.from(query))
-            .toEqual(`${aicDomain}${query.path}${toQueryString({fields: ['blah'], page: query.params.page})}`);
+            .toEqual(`${aicDomain}${query.path}${toQueryString({fields: ['blah'], page: query.params.page, limit: 12})}`);
     });
 });
