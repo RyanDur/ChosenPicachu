@@ -4,7 +4,7 @@ import {useQuery} from '../../hooks';
 import {Loading} from '../../Loading';
 import {Image} from '../Image';
 import {useGallery} from '../Context';
-import {AsyncState} from '../../../data/types';
+import {AsyncState, toSource} from '../../../data/types';
 import {GetArtAction} from '../../../data/actions';
 import './Gallery.scss';
 import './Gallery.layout.scss';
@@ -17,14 +17,15 @@ export const ArtGallery: FC = () => {
     const {art, updateArt, reset} = useGallery();
     const [loading, isLoading] = useState(false);
     const [errored, hasErrored] = useState(false);
-    const {page, search} = useQuery<{ page: number, search?: string }>({page: 1});
+    const {page, search, tab} = useQuery<{ page: number, tab: string, search?: string }>();
 
     useEffect(() => {
-        data.getAllArt({page, search}, (action: GetArtAction) => {
-            isLoading(action.type === AsyncState.LOADING);
-            hasErrored(action.type === AsyncState.ERROR);
-            if (action.type === AsyncState.LOADED) updateArt(action.value);
-        });
+        data.getAllArt({page, search, source: toSource(tab)},
+            (action: GetArtAction) => {
+                isLoading(action.type === AsyncState.LOADING);
+                hasErrored(action.type === AsyncState.ERROR);
+                if (action.type === AsyncState.LOADED) updateArt(action.value);
+            });
         return reset;
     }, [page, updateArt, search]);
 

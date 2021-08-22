@@ -1,6 +1,6 @@
 import {data} from '../index';
 import 'whatwg-fetch';
-import {ArtResponse, ArtSuggestion, AutoCompleteResponse, Piece, PieceResponse} from '../types';
+import {ArtResponse, ArtSuggestion, AutoCompleteResponse, Piece, PieceResponse, Source} from '../types';
 import faker from 'faker';
 import {art} from '../../__tests__/util';
 import {nanoid} from 'nanoid';
@@ -21,7 +21,7 @@ describe('data', () => {
             const dispatch = jest.fn();
             mockHttp.mockReturnValue(Promise.resolve(success(artResponse)));
 
-            data.getAllArt({page: 1}, dispatch);
+            data.getAllArt({page: 1, source: Source.AIC}, dispatch);
 
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
             await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(art)));
@@ -31,7 +31,7 @@ describe('data', () => {
             const dispatch = jest.fn();
             mockHttp.mockReturnValue(Promise.resolve(success(artResponse)));
 
-            data.getAllArt({page: 1, search: 'rad'}, dispatch);
+            data.getAllArt({page: 1, search: 'rad', source: Source.HARVARD}, dispatch);
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
             await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(art)));
         });
@@ -40,7 +40,7 @@ describe('data', () => {
             const dispatch = jest.fn();
             mockHttp.mockReturnValue(Promise.resolve(failure(HTTPError.UNKNOWN)));
 
-            data.getAllArt({page: 1}, dispatch);
+            data.getAllArt({page: 1, source: Source.AIC}, dispatch);
 
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
             await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
