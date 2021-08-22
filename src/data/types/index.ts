@@ -17,7 +17,7 @@ import {
 } from './Harvard';
 
 export type ArtResponse = AICArtResponse & HarvardArtResponse
-export type PieceResponse = AICPieceResponse & RecordResponse
+export type PieceResponse = AICPieceData & AICPieceResponse & RecordResponse
 
 export type {
     AICArtOption,
