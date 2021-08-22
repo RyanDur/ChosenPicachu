@@ -67,7 +67,7 @@ describe('The gallery.', () => {
             expect(screen.queryByTestId('empty-gallery')).not.toBeInTheDocument());
 
         it('should allow a user to take a closer look at the art', () => {
-            userEvent.click(screen.getByTestId(`piece-${art.pieces[0].imageId}`));
+            userEvent.click(screen.getByTestId(`piece-${art.pieces[0].id}`));
             expect(rendered().testLocation?.pathname).toEqual(`${Paths.artGallery}/${art.pieces[0].id}`);
         });
 

@@ -1,13 +1,12 @@
 import {
-    ArtOption,
+    AICArtOption,
+    AICArtResponse,
+    AICAutocomplete,
+    AICAutoCompleteResponse, AICPieceData,
+    AICPieceResponse,
     ArtQuery,
-    ArtResponse,
-    Autocomplete,
-    AutoCompleteResponse,
-    Dispatch,
-    PieceData,
-    PieceResponse,
-    Source
+    Dispatch, Piece,
+    toSource
 } from './types';
 import {error, GetArtAction, GetPieceAction, loaded, loading, SearchArtAction} from './actions';
 import {HTTPAction} from './http/actions';
@@ -19,23 +18,23 @@ export const apiBase = '/api/v1/artworks';
 export const shapeOfResponse = ['id', 'title', 'image_id', 'artist_display', 'term_titles', 'thumbnail'];
 
 export const data = {
-    searchForArtOptions: (search: string, dispatch: Dispatch<SearchArtAction>): void => {
+    searchForArtOptions: (query: { search: string, source: string }, dispatch: Dispatch<SearchArtAction>): void => {
         dispatch(loading());
         http({
             url: URI.from({
-                source: Source.AIC,
+                source: toSource(query.source),
                 path: '/search',
                 params: {
-                    'query[term][title]': search,
+                    'query[term][title]': query.search,
                     fields: 'suggest_autocomplete_all',
                     limit: 5
                 }
             })
-        }).then((action: HTTPAction<AutoCompleteResponse>) => {
+        }).then((action: HTTPAction<AICAutoCompleteResponse>) => {
             if (action.type === HTTPStatus.SUCCESS) {
                 dispatch(loaded(action.value.data
-                    .map(({suggest_autocomplete_all}: Autocomplete) => suggest_autocomplete_all[1])
-                    .flatMap((option: ArtOption) => option.input)));
+                    .map(({suggest_autocomplete_all}: AICAutocomplete) => suggest_autocomplete_all[1])
+                    .flatMap((option: AICArtOption) => option.input)));
             }
         });
     },
@@ -45,7 +44,7 @@ export const data = {
         http({
                 url: URI.from({source, params: {page, search, limit: 12}})
             }
-        ).then((action: HTTPAction<ArtResponse>) => {
+        ).then((action: HTTPAction<AICArtResponse>) => {
             switch (action.type) {
                 case HTTPStatus.FAILURE:
                     return dispatch(error());
@@ -55,11 +54,12 @@ export const data = {
         });
     },
 
-    getPiece: (id: string, dispatch: Dispatch<GetPieceAction>): void => {
+    getPiece: ({id, source}: { id: string, source: string }, dispatch: Dispatch<GetPieceAction>): void => {
         dispatch(loading());
         http({
-            url: URI.from({source: Source.AIC, path: `/${id}`})
-        }).then((action: HTTPAction<PieceResponse>) => {
+            url: URI.from({source: toSource(source), path: `/${id}`})
+
+        }).then((action: HTTPAction<AICPieceData>) => {
             switch (action.type) {
                 case HTTPStatus.FAILURE:
                     return dispatch(error());
@@ -70,7 +70,7 @@ export const data = {
     }
 };
 
-const toArt = ({pagination, data}: ArtResponse) => ({
+const toArt = ({pagination, data}: AICArtResponse) => ({
     pagination: {
         total: pagination.total,
         limit: pagination.limit,
@@ -82,10 +82,10 @@ const toArt = ({pagination, data}: ArtResponse) => ({
     pieces: data.map(toPiece)
 });
 
-const toPiece = (data: PieceData) => ({
+const toPiece = (data: AICPieceResponse): Piece => ({
     id: data.id,
     title: data.title,
-    imageId: data.image_id,
+    image: `https://www.artic.edu/iiif/2/${data.image_id}/full/2000,/0/default.jpg`,
     artistInfo: data.artist_display,
     altText: data.thumbnail?.alt_text || data.term_titles.join(' ') || ''
 });

@@ -1,8 +1,8 @@
 import {data} from '../index';
 import 'whatwg-fetch';
-import {ArtResponse, ArtSuggestion, AutoCompleteResponse, Piece, PieceResponse, Source} from '../types';
+import {AICArtSuggestion, AICAutoCompleteResponse, AICPieceData, Piece, Source} from '../types';
 import faker from 'faker';
-import {art} from '../../__tests__/util';
+import {art, artResponse} from '../../__tests__/util';
 import {nanoid} from 'nanoid';
 import {error, loaded, loading} from '../actions';
 import {failure, success} from '../http/actions';
@@ -48,24 +48,26 @@ describe('data', () => {
     });
 
     describe('retrieving an artwork', () => {
-        test('when it is successful', async () => {
-            const dispatch = jest.fn();
-            mockHttp.mockReturnValue(Promise.resolve(success(pieceResponse)));
+        describe('for AIC', () => {
+            test('when it is successful', async () => {
+                const dispatch = jest.fn();
+                mockHttp.mockReturnValue(Promise.resolve(success(pieceAICResponse)));
 
-            data.getPiece(String(piece.id), dispatch);
+                data.getPiece({id: String(piece.id), source: Source.AIC}, dispatch);
 
-            expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(piece)));
-        });
+                expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+                await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(piece)));
+            });
 
-        test('when it is not successful', async () => {
-            const dispatch = jest.fn();
-            mockHttp.mockReturnValue(Promise.resolve(failure(HTTPError.UNKNOWN)));
+            test('when it is not successful', async () => {
+                const dispatch = jest.fn();
+                mockHttp.mockReturnValue(Promise.resolve(failure(HTTPError.UNKNOWN)));
 
-            data.getPiece(String(piece.id), dispatch);
+                data.getPiece({id: String(piece.id), source: Source.AIC}, dispatch);
 
-            expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
+                expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+                await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
+            });
         });
     });
 
@@ -73,16 +75,16 @@ describe('data', () => {
         test('when it is successful', async () => {
             const dispatch = jest.fn();
             mockHttp.mockReturnValue(Promise.resolve(success(artOptions)));
-            const searchString = faker.lorem.word();
+            const search = faker.lorem.word();
 
-            data.searchForArtOptions(searchString, dispatch);
+            data.searchForArtOptions({search, source: Source.AIC}, dispatch);
 
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
             await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(options)));
         });
     });
 
-    const pieceResponse: PieceResponse = {
+    const pieceAICResponse: AICPieceData = {
         data: {
             id: Math.random(),
             title: faker.lorem.words(),
@@ -94,11 +96,11 @@ describe('data', () => {
     };
 
     const piece: Piece = {
-        id: pieceResponse.data.id,
-        title: pieceResponse.data.title,
-        imageId: pieceResponse.data.image_id,
-        altText: pieceResponse.data.thumbnail?.alt_text!,
-        artistInfo: pieceResponse.data.artist_display
+        id: pieceAICResponse.data.id,
+        title: pieceAICResponse.data.title,
+        image: `https://www.artic.edu/iiif/2/${pieceAICResponse.data.image_id}/full/2000,/0/default.jpg`,
+        altText: pieceAICResponse.data.thumbnail?.alt_text!,
+        artistInfo: pieceAICResponse.data.artist_display
     };
 
     const pagination = {
@@ -110,27 +112,8 @@ describe('data', () => {
         next_url: art.pagination.nextUrl
     };
 
-    const artResponse: ArtResponse = {
-        pagination,
-        data: art.pieces.map(piece => ({
-            id: piece.id,
-            title: piece.title,
-            image_id: piece.imageId,
-            artist_display: piece.artistInfo,
-            term_titles: piece.altText.split(' ')
-        })),
-        info: {
-            license_text: faker.lorem.sentence(),
-            license_links: [faker.internet.url()],
-            version: '1.1'
-        },
-        config: {
-            iiif_url: faker.internet.url()
-        }
-    };
-
-    const options: ArtSuggestion[] = [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()];
-    const artOptions: AutoCompleteResponse = {
+    const options: AICArtSuggestion[] = [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()];
+    const artOptions: AICAutoCompleteResponse = {
         pagination,
         data: options.map(option => ({
             suggest_autocomplete_all: [{

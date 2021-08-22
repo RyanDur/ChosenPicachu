@@ -1,5 +1,5 @@
 import {FC, FormEvent, useEffect, useState} from 'react';
-import {ArtSuggestion, AsyncState} from '../../../data/types';
+import {AICArtSuggestion, AsyncState} from '../../../data/types';
 import {data} from '../../../data';
 import {SearchArtAction} from '../../../data/actions';
 import {useHistory} from 'react-router-dom';
@@ -16,15 +16,15 @@ interface Props {
 }
 
 export const Search: FC<Props> = ({id}) => {
-    const [searchOptions, updateSearchOptions] = useState<ArtSuggestion[]>([]);
+    const [searchOptions, updateSearchOptions] = useState<AICArtSuggestion[]>([]);
     const [searchString, updateQuery] = useState<string>('');
     const history = useHistory();
     const {tab} = useQuery<{tab: string}>();
-    const debounceSearch = debounce((query: string, consumer: Consumer<SearchArtAction>) =>
+    const debounceSearch = debounce((query: {search: string, source: string}, consumer: Consumer<SearchArtAction>) =>
         data.searchForArtOptions(query, consumer), 300);
 
     useEffect(() => {
-        searchString && debounceSearch(searchString.toLowerCase(), (action: SearchArtAction) => {
+        searchString && debounceSearch({search: searchString.toLowerCase(), source: tab}, (action: SearchArtAction) => {
             if (action.type === AsyncState.LOADED) updateSearchOptions(action.value);
         });
     }, [searchString]);

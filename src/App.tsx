@@ -42,13 +42,13 @@ export const App = () => {
             <article className="icons borrowed-assets" tabIndex={0}>
                 <h2 className="icons-title">ICONS</h2>
                 <nav className="icons-content">
-                    <a href="https://icons8.com/icon/622/detective" className="attribution">Detective icon by Icons8</a>
-                    <a href="https://icons8.com/icon/j1UxMbqzPi7n/no-image" className="attribution">No Image icon by
+                    <a href="https://icons8.com/icon/622/detective" rel="noopener noreferrer" target="_blank" className="attribution">Detective icon by Icons8</a>
+                    <a href="https://icons8.com/icon/j1UxMbqzPi7n/no-image" rel="noopener noreferrer" target="_blank" className="attribution">No Image icon by
                         Icons8</a>
-                    <a href="https://icons8.com/icon/EJK2FdL08858/no-image-gallery" className="attribution">No Image
+                    <a href="https://icons8.com/icon/EJK2FdL08858/no-image-gallery" rel="noopener noreferrer" target="_blank" className="attribution">No Image
                         Gallery icon by Icons8</a>
-                    <a href="https://icons8.com/icon/86209/reset">Reset icon by Icons8</a>
-                    <a href="https://icons8.com/icon/59878/search">Search icon by Icons8</a>
+                    <a href="https://icons8.com/icon/86209/reset" rel="noopener noreferrer" target="_blank" className="attribution">Reset icon by Icons8</a>
+                    <a href="https://icons8.com/icon/59878/search" rel="noopener noreferrer" target="_blank" className="attribution">Search icon by Icons8</a>
                 </nav>
             </article>
         </aside>
