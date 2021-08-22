@@ -2,7 +2,6 @@ import {screen} from '@testing-library/react';
 import {Paths} from '../../../../App';
 import {ArtPiece, useArtPiece} from '../index';
 import {data} from '../../../../data';
-import {nanoid} from 'nanoid';
 import * as faker from 'faker';
 import {Dispatch, Piece} from '../../../../data/types';
 import {error, GetPieceAction, loaded, loading} from '../../../../data/actions';
@@ -18,7 +17,7 @@ describe('viewing a piece', () => {
     const mockUsePieceGallery = useArtPiece as jest.Mock;
     const mockPiece: Piece = {
         id: 1234,
-        imageId: nanoid(),
+        image: faker.internet.url(),
         title: faker.lorem.words(),
         altText: faker.lorem.sentence(),
         artistInfo: faker.lorem.paragraph()
@@ -60,7 +59,7 @@ describe('viewing a piece', () => {
             expect(screen.getByText(mockPiece.artistInfo)).toBeInTheDocument());
 
         it('should get the correct piece', () =>
-            expect(mockGetPieceId).toHaveBeenCalledWith('1234'));
+            expect(mockGetPieceId).toHaveBeenCalledWith({id: '1234'}));
 
         it('should not have the error image', () =>
             expect(screen.queryByTestId('image-error')).not.toBeInTheDocument());

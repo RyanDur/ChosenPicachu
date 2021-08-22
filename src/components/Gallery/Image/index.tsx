@@ -18,8 +18,6 @@ export const Image: FC<ImageProps> = (
     {
         piece,
         className,
-        width = '',
-        height = '',
         linkEnabled = true
     }) => {
     const [completed, isComplete] = useState(false);
@@ -47,8 +45,8 @@ export const Image: FC<ImageProps> = (
                      }}
                      alt={piece.altText} title={piece.title}
                      loading="lazy"
-                     data-testid={`piece-${piece.imageId}`}
-                     src={`https://www.artic.edu/iiif/2/${piece.imageId}/full/${width},${height}/0/default.jpg`}/>
+                     data-testid={`piece-${piece.id}`}
+                     src={piece.image}/>
             </ConditionalLink>
             {completed || <Loading/>}
         </>);

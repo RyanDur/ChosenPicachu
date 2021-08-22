@@ -1,4 +1,4 @@
-import {shapeOfResponse, URI} from '../URI';
+import {shapeOfAICResponse, shapeOfHarvardResponse, URI} from '../URI';
 import * as faker from 'faker';
 import {Source} from '../types';
 import {toQueryString} from '../../util/URL';
@@ -32,29 +32,35 @@ describe('the URI', () => {
         const searchQuery = {params: {search: faker.lorem.words(), page: 1}, source: Source.AIC};
         const {search, ...rest} = searchQuery.params;
         expect(URI.from(searchQuery))
-            .toEqual(`${aicDomain}/search${toQueryString({q:search, ...rest, fields: shapeOfResponse})}`);
+            .toEqual(`${aicDomain}/search${toQueryString({q: search, fields: shapeOfAICResponse, ...rest})}`);
 
         const query = {params: {page: 1}, source: Source.AIC};
         expect(URI.from(query))
-            .toEqual(`${aicDomain}${toQueryString({page: query.params.page, fields: shapeOfResponse})}`);
+            .toEqual(`${aicDomain}${toQueryString({fields: shapeOfAICResponse, page: query.params.page})}`);
     });
 
     it('should create the appropriate URI for Harvard', () => {
-        const searchQuery = {params: {page: 1, apikey: harvardAPIKey, search: faker.lorem.words()}, source: Source.HARVARD};
+        const searchQuery = {
+            params: {page: 1, apikey: harvardAPIKey, search: faker.lorem.words()},
+            source: Source.HARVARD
+        };
         const {search, ...rest} = searchQuery.params;
 
         expect(URI.from(searchQuery))
-            .toEqual(`${harvardDomain}${toQueryString({q: search, ...rest})}`);
+            .toEqual(`${harvardDomain}${toQueryString({q: search, fields: shapeOfHarvardResponse, ...rest})}`);
 
         const query = {params: {page: 1, apikey: harvardAPIKey}, source: Source.HARVARD};
         expect(URI.from(query))
-            .toEqual(`${harvardDomain}${toQueryString(query.params)}`);
+            .toEqual(`${harvardDomain}${toQueryString({fields: shapeOfHarvardResponse, ...query.params})}`);
     });
 
     it('should allow to add a path', () => {
         const query = {params: {page: 1}, path: '/more/path', source: Source.AIC};
         expect(URI.from(query))
-            .toEqual(`${aicDomain}${query.path}${toQueryString({page: query.params.page, fields: shapeOfResponse})}`);
+            .toEqual(`${aicDomain}${query.path}${toQueryString({
+                fields: shapeOfAICResponse,
+                page: query.params.page
+            })}`);
     });
 
     it('should be able to override the fields', () => {

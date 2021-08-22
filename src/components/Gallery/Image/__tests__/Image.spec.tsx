@@ -14,7 +14,7 @@ describe('the image', () => {
         altText: faker.lorem.sentence(),
         artistInfo: faker.lorem.sentence()
     };
-    const image = `piece-${piece.imageId}`;
+    const image = `piece-${piece.id}`;
     window.scrollTo = jest.fn();
     let rendered: () => Rendered;
 

@@ -27,7 +27,7 @@ export const ArtGallery: FC = () => {
                 if (action.type === AsyncState.LOADED) updateArt(action.value);
             });
         return reset;
-    }, [page, updateArt, search]);
+    }, [page, updateArt, search, tab]);
 
     const showGallery = not(loading) && has(art?.pieces);
     const showError = not(loading) && (empty(art?.pieces) || errored);

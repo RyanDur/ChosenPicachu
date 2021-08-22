@@ -5,6 +5,7 @@ import {ArtPiece} from './ArtPiece';
 import {GalleryTitle} from './GalleryTitle';
 import {GalleryNav} from './Nav';
 import {Tabs} from '../Tabs';
+import {Source} from '../../data/types';
 
 export enum GalleryPath {
     piece = '/:id'
@@ -15,8 +16,8 @@ const Gallery: FC = () => {
     return <Switch>
             <Route path={path} exact>
                 <Tabs values={[
-                    {display: 'The Art Institute of Chicago', param: 'aic'},
-                    {display: 'The Smithsonian', param: 'smithsonian'}
+                    {display: 'The Art Institute of Chicago', param: Source.AIC},
+                    {display: 'Harvard Art Museums', param: Source.HARVARD}
                 ]}/>
                 <ArtGallery/>
             </Route>

@@ -4,7 +4,7 @@ import faker from 'faker';
 import {AddressInfo, User, UserInfo} from '../../components/UserInfo/types';
 import {AvatarGenerator} from 'random-avatar-generator';
 import {toISOWithoutTime} from '../../components/util';
-import {Art} from '../../data/types';
+import {AICArtResponse, AICPieceResponse, Art} from '../../data/types';
 import {nanoid} from 'nanoid';
 
 export const randomNumberFromRange = (min: number, max = 6) => Math.floor(Math.random() * max) + min;
@@ -163,20 +163,40 @@ export const pagination = {
     current_page: 1,
     next_url: faker.internet.url()
 };
-export const art: Art = {
-    pagination: {
-        total: pagination.total,
-        limit: pagination.limit,
-        offset: pagination.offset,
-        totalPages: pagination.total_pages,
-        currentPage: pagination.current_page,
-        nextUrl: pagination.next_url
-    },
-    pieces: [...Array(pagination.limit)].map((a, index) => ({
+
+export const artResponse: AICArtResponse = {
+    pagination,
+    data: [...Array(pagination.limit)].map((a, index): AICPieceResponse => ({
         id: index,
         title: faker.lorem.sentence(),
-        imageId: nanoid(),
-        artistInfo: faker.lorem.sentence(),
-        altText: faker.lorem.words(randomNumberFromRange(1))
+        image_id: nanoid(),
+        artist_display:  faker.lorem.sentence(),
+        term_titles: faker.lorem.words(randomNumberFromRange(1)).split(' ')
+    })),
+    info: {
+        license_text: faker.lorem.sentence(),
+        license_links: [faker.internet.url()],
+        version: '1.1'
+    },
+    config: {
+        iiif_url: faker.internet.url()
+    }
+};
+
+export const art: Art = {
+    pagination: {
+        total: artResponse.pagination.total,
+        limit: artResponse.pagination.limit,
+        offset: artResponse.pagination.offset,
+        totalPages: artResponse.pagination.total_pages,
+        currentPage: artResponse.pagination.current_page,
+        nextUrl: artResponse.pagination.next_url
+    },
+    pieces: artResponse.data.map(piece => ({
+        id: piece.id,
+        title: piece.title,
+        image: `https://www.artic.edu/iiif/2/${piece.image_id}/full/2000,/0/default.jpg`,
+        artistInfo: piece.artist_display,
+        altText: piece.term_titles.join(' ')
     }))
 };
