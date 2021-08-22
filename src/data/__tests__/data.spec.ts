@@ -2,7 +2,14 @@ import {data} from '../index';
 import 'whatwg-fetch';
 import {AICArtSuggestion, AICAutoCompleteResponse, AICPieceData, Piece, Source} from '../types';
 import faker from 'faker';
-import {art, artResponse} from '../../__tests__/util';
+import {
+    aicArtResponse,
+    fromAICArt,
+    fromHarvardArt,
+    harvardArtResponse,
+    harvardPiece,
+    harvardPieceResponse
+} from '../../__tests__/util';
 import {nanoid} from 'nanoid';
 import {error, loaded, loading} from '../actions';
 import {failure, success} from '../http/actions';
@@ -17,34 +24,70 @@ jest.mock('../http', () => ({
 describe('data', () => {
     const mockHttp = http as jest.Mock;
     describe('retrieving all the artwork', () => {
-        test('when it is successful', async () => {
-            const dispatch = jest.fn();
-            mockHttp.mockReturnValue(Promise.resolve(success(artResponse)));
+        describe('when the source is AIC', () => {
+            test('when it is successful', async () => {
+                const dispatch = jest.fn();
+                mockHttp.mockReturnValue(Promise.resolve(success(aicArtResponse)));
 
-            data.getAllArt({page: 1, source: Source.AIC}, dispatch);
+                data.getAllArt({page: 1, source: Source.AIC}, dispatch);
 
-            expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(art)));
+                expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+                await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(fromAICArt)));
+            });
+
+            test('when it has a search term', async () => {
+                const dispatch = jest.fn();
+                mockHttp.mockReturnValue(Promise.resolve(success(aicArtResponse)));
+
+                data.getAllArt({page: 1, search: 'rad', source: Source.AIC}, dispatch);
+
+                expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+                await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(fromAICArt)));
+            });
+
+            test('when it is not successful', async () => {
+                const dispatch = jest.fn();
+                mockHttp.mockReturnValue(Promise.resolve(failure(HTTPError.UNKNOWN)));
+
+                data.getAllArt({page: 1, source: Source.AIC}, dispatch);
+
+                expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+                await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
+            });
         });
 
-        test('when it has a search term', async () => {
-            const dispatch = jest.fn();
-            mockHttp.mockReturnValue(Promise.resolve(success(artResponse)));
+        describe('when the source is Harvard', () => {
+            test('when it is successful', async () => {
+                const dispatch = jest.fn();
+                mockHttp.mockReturnValue(Promise.resolve(success(harvardArtResponse)));
 
-            data.getAllArt({page: 1, search: 'rad', source: Source.HARVARD}, dispatch);
-            expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(art)));
+                data.getAllArt({page: 1, source: Source.HARVARD}, dispatch);
+
+                expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+                await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(fromHarvardArt)));
+            });
+
+            test('when it has a search term', async () => {
+                const dispatch = jest.fn();
+                mockHttp.mockReturnValue(Promise.resolve(success(harvardArtResponse)));
+
+                data.getAllArt({page: 1, search: 'rad', source: Source.HARVARD}, dispatch);
+
+                expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+                await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(fromHarvardArt)));
+            });
+
+            test('when it is not successful', async () => {
+                const dispatch = jest.fn();
+                mockHttp.mockReturnValue(Promise.resolve(failure(HTTPError.UNKNOWN)));
+
+                data.getAllArt({page: 1, source: Source.HARVARD}, dispatch);
+
+                expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+                await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
+            });
         });
 
-        test('when it is not successful', async () => {
-            const dispatch = jest.fn();
-            mockHttp.mockReturnValue(Promise.resolve(failure(HTTPError.UNKNOWN)));
-
-            data.getAllArt({page: 1, source: Source.AIC}, dispatch);
-
-            expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
-        });
     });
 
     describe('retrieving an artwork', () => {
@@ -53,17 +96,39 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockHttp.mockReturnValue(Promise.resolve(success(pieceAICResponse)));
 
-                data.getPiece({id: String(piece.id), source: Source.AIC}, dispatch);
+                data.getPiece({id: String(aicPiece.id), source: Source.AIC}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-                await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(piece)));
+                await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(aicPiece)));
             });
 
             test('when it is not successful', async () => {
                 const dispatch = jest.fn();
                 mockHttp.mockReturnValue(Promise.resolve(failure(HTTPError.UNKNOWN)));
 
-                data.getPiece({id: String(piece.id), source: Source.AIC}, dispatch);
+                data.getPiece({id: String(aicPiece.id), source: Source.AIC}, dispatch);
+
+                expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+                await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
+            });
+        });
+
+        describe('for Harvard', () => {
+            test('when it is successful', async () => {
+                const dispatch = jest.fn();
+                mockHttp.mockReturnValue(Promise.resolve(success(harvardPieceResponse)));
+
+                data.getPiece({id: String(aicPiece.id), source: Source.HARVARD}, dispatch);
+
+                expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+                await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(harvardPiece)));
+            });
+
+            test('when it is not successful', async () => {
+                const dispatch = jest.fn();
+                mockHttp.mockReturnValue(Promise.resolve(failure(HTTPError.UNKNOWN)));
+
+                data.getPiece({id: String(aicPiece.id), source: Source.HARVARD}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
@@ -95,7 +160,7 @@ describe('data', () => {
         }
     };
 
-    const piece: Piece = {
+    const aicPiece: Piece = {
         id: pieceAICResponse.data.id,
         title: pieceAICResponse.data.title,
         image: `https://www.artic.edu/iiif/2/${pieceAICResponse.data.image_id}/full/2000,/0/default.jpg`,
@@ -104,12 +169,12 @@ describe('data', () => {
     };
 
     const pagination = {
-        total: art.pagination.total,
-        limit: art.pagination.limit,
-        offset: art.pagination.offset,
-        total_pages: art.pagination.totalPages,
-        current_page: art.pagination.currentPage,
-        next_url: art.pagination.nextUrl
+        total: fromAICArt.pagination.total,
+        limit: fromAICArt.pagination.limit,
+        offset: fromAICArt.pagination.offset,
+        total_pages: fromAICArt.pagination.totalPages,
+        current_page: fromAICArt.pagination.currentPage,
+        next_url: fromAICArt.pagination.nextUrl
     };
 
     const options: AICArtSuggestion[] = [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()];

@@ -1,7 +1,7 @@
 import {cleanup, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {data} from '../../../../data';
-import {art, Rendered, renderWithRouter} from '../../../../__tests__/util';
+import {fromAICArt, Rendered, renderWithRouter} from '../../../../__tests__/util';
 import {Paths} from '../../../../App';
 import {useGallery} from '../../Context';
 import {error, GetArtAction, loaded, loading} from '../../../../data/actions';
@@ -47,9 +47,9 @@ describe('The gallery.', () => {
             data.getAllArt = (
                 query: ArtQuery,
                 dispatch: Dispatch<GetArtAction>
-            ) => dispatch(loaded(art));
+            ) => dispatch(loaded(fromAICArt));
             mockUseGallery.mockReturnValue({
-                art,
+                art: fromAICArt,
                 updateArt: jest.fn(),
                 reset: jest.fn()
             });
@@ -60,15 +60,15 @@ describe('The gallery.', () => {
             expect(screen.queryByTestId('gallery-loading')).not.toBeInTheDocument());
 
         it('should contain art', async () => {
-            expect(screen.getAllByTestId(/piece/).length).toEqual(art.pagination.limit);
+            expect(screen.getAllByTestId(/piece/).length).toEqual(fromAICArt.pagination.limit);
         });
 
         it('should not signify that the gallery is empty', () =>
             expect(screen.queryByTestId('empty-gallery')).not.toBeInTheDocument());
 
         it('should allow a user to take a closer look at the art', () => {
-            userEvent.click(screen.getByTestId(`piece-${art.pieces[0].id}`));
-            expect(rendered().testLocation?.pathname).toEqual(`${Paths.artGallery}/${art.pieces[0].id}`);
+            userEvent.click(screen.getByTestId(`piece-${fromAICArt.pieces[0].id}`));
+            expect(rendered().testLocation?.pathname).toEqual(`${Paths.artGallery}/${fromAICArt.pieces[0].id}`);
         });
 
         it('should reset the art when leaving', () => {
@@ -107,7 +107,7 @@ describe('The gallery.', () => {
                 dispatch: Dispatch<GetArtAction>
             ) => dispatch(error());
             mockUseGallery.mockReturnValue({
-                art,
+                art: fromAICArt,
                 updateArt: jest.fn(),
                 reset: jest.fn()
             });
@@ -123,10 +123,10 @@ describe('The gallery.', () => {
             data.getAllArt = jest.fn((
                 query: ArtQuery,
                 dispatch: Dispatch<GetArtAction>
-            ) => dispatch(loaded(art)));
+            ) => dispatch(loaded(fromAICArt)));
 
             mockUseGallery.mockReturnValue({
-                art,
+                art: fromAICArt,
                 updateArt: jest.fn(),
                 reset: jest.fn()
             });

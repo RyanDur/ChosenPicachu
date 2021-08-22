@@ -1,6 +1,6 @@
 import {screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {art as mockArt, Rendered, renderWithRouter} from '../../../../__tests__/util';
+import {fromAICArt as mockArt, Rendered, renderWithRouter} from '../../../../__tests__/util';
 import {GalleryNav} from '../../';
 import {Paths} from '../../../../App';
 

@@ -1,6 +1,6 @@
 import {Consumer} from '../../components/UserInfo/types';
 
-export type  {
+import {
     AICArtOption,
     AICArtResponse,
     AICAutocomplete,
@@ -9,6 +9,30 @@ export type  {
     AICPieceResponse,
     AICArtSuggestion
 } from './AIC';
+import {
+    HarvardArtResponse,
+    InfoResponse,
+    PeopleResponse,
+    RecordResponse
+} from './Harvard';
+
+export type ArtResponse = AICArtResponse & HarvardArtResponse
+export type PieceResponse = AICPieceResponse & RecordResponse
+
+export type {
+    AICArtOption,
+    AICArtResponse,
+    AICAutocomplete,
+    AICAutoCompleteResponse,
+    AICPieceData,
+    AICPieceResponse,
+    AICArtSuggestion,
+
+    HarvardArtResponse,
+    InfoResponse,
+    PeopleResponse,
+    RecordResponse
+};
 
 export type Pagination = {
     total: number;
