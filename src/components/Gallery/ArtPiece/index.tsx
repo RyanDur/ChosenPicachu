@@ -14,7 +14,7 @@ const ArtPiece = () => {
     const [loading, isLoading] = useState(false);
     const [errored, isErrored] = useState(false);
     const {id} = useParams<{ id: string }>();
-    const {tab} = useQuery<{tab: string}>();
+    const {tab} = useQuery<{ tab: string }>();
 
     useEffect(() => {
         id && data.getPiece({id, source: tab}, (action: GetPieceAction) => {
@@ -28,7 +28,7 @@ const ArtPiece = () => {
     return <>
         {loading && <Loading testId="loading-piece"/>}
         {!loading && !errored && piece && <figure className="art-work" data-testid="image-figure">
-          <Image piece={piece} height={2000} linkEnabled={false} className="piece"/>
+          <Image piece={piece} linkEnabled={false} className="piece"/>
           <figcaption className="artist-display">{piece.artistInfo}</figcaption>
         </figure>}
         {errored && <img src="https://img.icons8.com/ios/50/ffffff/no-image.png"
