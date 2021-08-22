@@ -1,24 +1,17 @@
-import {domain} from '../../config';
-import {toQueryString} from '../../util/URL';
 import {failure, success} from './actions';
 import {HTTPError, HTTPMethod} from './types';
 
-const toUrl = (path: string, queryParams?: Record<string, unknown>) =>
-    `${domain}${path}${toQueryString(queryParams)}`;
-
 export interface Request {
-    path: string;
+    url: string;
     method?: string;
-    queryParams?: Record<string, unknown>
 }
 
 export const http = (
     {
-        path,
-        method = HTTPMethod.GET,
-        queryParams
+        url,
+        method = HTTPMethod.GET
     }: Request) =>
-    fetch(toUrl(path, queryParams), {method}).then(async response => {
+    fetch(url, {method}).then(async response => {
         switch (response.status) {
             case 200:
             case 201:

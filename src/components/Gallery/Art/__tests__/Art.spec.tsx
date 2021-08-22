@@ -5,7 +5,7 @@ import {art, Rendered, renderWithRouter} from '../../../../__tests__/util';
 import {Paths} from '../../../../App';
 import {useGallery} from '../../Context';
 import {error, GetArtAction, loaded, loading} from '../../../../data/actions';
-import {Art, Dispatch, Piece} from '../../../../data/types';
+import {Art, ArtQuery, Dispatch, Piece, Source} from '../../../../data/types';
 import {ArtGallery} from '../index';
 
 jest.mock('../../Context', () => {
@@ -23,7 +23,7 @@ describe('The gallery.', () => {
     describe('When the art has not loaded yet', () => {
         beforeEach(() => {
             data.getAllArt = (
-                query: Record<string, unknown>,
+                query: ArtQuery,
                 dispatch: Dispatch<GetArtAction>
             ) => dispatch(loading());
             mockUseGallery.mockReturnValue({
@@ -45,7 +45,7 @@ describe('The gallery.', () => {
     describe('When the art has loaded', () => {
         beforeEach(() => {
             data.getAllArt = (
-                query: Record<string, unknown>,
+                query: ArtQuery,
                 dispatch: Dispatch<GetArtAction>
             ) => dispatch(loaded(art));
             mockUseGallery.mockReturnValue({
@@ -80,7 +80,7 @@ describe('The gallery.', () => {
     describe('when there is no art to show', () => {
         beforeEach(() => {
             data.getAllArt = jest.fn((
-                query: Record<string, unknown>,
+                query: ArtQuery,
                 dispatch: Dispatch<GetArtAction>
             ) => dispatch(loaded({pieces: [] as Piece[]} as Art)));
             mockUseGallery.mockReturnValue({
@@ -103,7 +103,7 @@ describe('The gallery.', () => {
     describe('when the art has errored', () => {
         beforeEach(() => {
             data.getAllArt = (
-                query: Record<string, unknown>,
+                query: ArtQuery,
                 dispatch: Dispatch<GetArtAction>
             ) => dispatch(error());
             mockUseGallery.mockReturnValue({
@@ -121,7 +121,7 @@ describe('The gallery.', () => {
     describe('when filtering results by search', () => {
         beforeEach(() => {
             data.getAllArt = jest.fn((
-                query: Record<string, unknown>,
+                query: ArtQuery,
                 dispatch: Dispatch<GetArtAction>
             ) => dispatch(loaded(art)));
 
@@ -137,7 +137,8 @@ describe('The gallery.', () => {
         it('should pass the criteria', () =>
             expect(data.getAllArt).toHaveBeenCalledWith({
                 page: '23',
-                search: 'g'
+                search: 'g',
+                source: Source.HARVARD
             }, expect.anything()));
     });
 });

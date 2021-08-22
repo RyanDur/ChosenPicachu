@@ -1,22 +1,36 @@
-import {ArtOption, ArtResponse, Autocomplete, AutoCompleteResponse, Dispatch, PieceData, PieceResponse} from './types';
+import {
+    ArtOption,
+    ArtQuery,
+    ArtResponse,
+    Autocomplete,
+    AutoCompleteResponse,
+    Dispatch,
+    PieceData,
+    PieceResponse,
+    Source
+} from './types';
 import {error, GetArtAction, GetPieceAction, loaded, loading, SearchArtAction} from './actions';
 import {HTTPAction} from './http/actions';
 import {HTTPStatus} from './http/types';
 import {http} from './http';
+import {URI} from './URI';
 
-const apiBase = '/api/v1/artworks';
-const shapeOfResponse = ['id', 'title', 'image_id', 'artist_display', 'term_titles', 'thumbnail'];
+export const apiBase = '/api/v1/artworks';
+export const shapeOfResponse = ['id', 'title', 'image_id', 'artist_display', 'term_titles', 'thumbnail'];
 
 export const data = {
-    searchForArtOptions: (searchString: string, dispatch: Dispatch<SearchArtAction>): void => {
+    searchForArtOptions: (search: string, dispatch: Dispatch<SearchArtAction>): void => {
         dispatch(loading());
         http({
-            path: `${apiBase}/search`,
-            queryParams: {
-                'query[term][title]': searchString,
-                fields: 'suggest_autocomplete_all',
-                limit: 5
-            }
+            url: URI.from({
+                source: Source.AIC,
+                path: '/search',
+                params: {
+                    'query[term][title]': search,
+                    fields: 'suggest_autocomplete_all',
+                    limit: 5
+                }
+            })
         }).then((action: HTTPAction<AutoCompleteResponse>) => {
             if (action.type === HTTPStatus.SUCCESS) {
                 dispatch(loaded(action.value.data
@@ -26,12 +40,12 @@ export const data = {
         });
     },
 
-    getAllArt: ({search, page}: Record<string, unknown>, dispatch: Dispatch<GetArtAction>): void => {
-        const queryParams = {page, fields: shapeOfResponse, limit: 12};
+    getAllArt: ({search, page, source}: ArtQuery, dispatch: Dispatch<GetArtAction>): void => {
         dispatch(loading());
-        http(search ?
-            {path: `${apiBase}/search`, queryParams: {q: search, ...queryParams}} :
-            {path: apiBase, queryParams}).then((action: HTTPAction<ArtResponse>) => {
+        http({
+                url: URI.from({source, params: {page, search, limit: 12}})
+            }
+        ).then((action: HTTPAction<ArtResponse>) => {
             switch (action.type) {
                 case HTTPStatus.FAILURE:
                     return dispatch(error());
@@ -44,8 +58,7 @@ export const data = {
     getPiece: (id: string, dispatch: Dispatch<GetPieceAction>): void => {
         dispatch(loading());
         http({
-            path: `${apiBase}/${id}`,
-            queryParams: {fields: shapeOfResponse}
+            url: URI.from({source: Source.AIC, path: `/${id}`})
         }).then((action: HTTPAction<PieceResponse>) => {
             switch (action.type) {
                 case HTTPStatus.FAILURE:

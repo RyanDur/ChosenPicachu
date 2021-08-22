@@ -1,2 +1,3 @@
-export const domain = process.env.REACT_APP_AIC;
-export const dataGov = process.env.REACT_APP_DATA_GOV_API_KEY;
+export const aicDomain = process.env.REACT_APP_API_AIC;
+export const harvardDomain = process.env.REACT_APP_HARVARD_API;
+export const harvardAPIKey = process.env.REACT_APP_HARVARD_API_KEY;
