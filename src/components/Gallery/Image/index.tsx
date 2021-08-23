@@ -22,22 +22,23 @@ export const Image: FC<ImageProps> = (
     }) => {
     const [completed, isComplete] = useState(false);
     const [errored, isError] = useState(false);
-    const [timedOut, updateTimedOut] = useState(false);
-    const {tab} = useQuery<{tab: string}>();
+    const [retries, updateRetries] = useState(3);
+    const {tab} = useQuery<{ tab: string }>();
     const gotoTopOfPage = () => window.scrollTo(0, 0);
     const ConditionalLink: FC = ({children}) => linkEnabled ?
-        <Link onClick={gotoTopOfPage} to={`${Paths.artGallery}/${piece.id}${toQueryString({tab})}`} className="scrim">{children}</Link> : <>{children}</>;
+        <Link onClick={gotoTopOfPage} to={`${Paths.artGallery}/${piece.id}${toQueryString({tab})}`}
+              className="scrim">{children}</Link> : <>{children}</>;
 
     useEffect(() => {
-        if (!completed) {
-            const timeoutId = setTimeout(() => {
-                updateTimedOut(true);
-            }, 5000);
-            return () => clearTimeout(timeoutId);
-        }
-    },[completed]);
+        const intervalId = setInterval(() => {
+            if (!completed) updateRetries(retries - 1);
+            else clearInterval(intervalId);
+        }, 2000);
+        if (retries < 1) clearInterval(intervalId);
+        return () => clearInterval(intervalId);
+    }, [completed, retries]);
 
-    return (errored || timedOut) ?
+    return (errored || retries < 1) ?
         <img alt="oops"
              className="error"
              src="https://img.icons8.com/ios/100/000000/no-image.png"
@@ -59,6 +60,6 @@ export const Image: FC<ImageProps> = (
                      data-testid={`piece-${piece.id}`}
                      src={piece.image}/>
             </ConditionalLink>
-            {(completed && !timedOut) || <Loading/>}
+            {(completed && retries > 0) || <Loading/>}
         </>);
 };

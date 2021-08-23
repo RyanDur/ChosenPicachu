@@ -79,11 +79,11 @@ describe('the image', () => {
                 expect(screen.queryByTestId('loading')).not.toBeInTheDocument());
         });
 
-        describe('timing out', () => {
+        describe('retrying', () => {
             beforeEach(() => {
                 act(() => {
-                    jest.setTimeout(0);
                     jest.advanceTimersByTime(10000);
+                    jest.runAllTimers();
                 });
             });
 
