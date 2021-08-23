@@ -46,7 +46,7 @@ export type Pagination = {
 export type Piece = {
     id: number;
     title: string;
-    image: string;
+    image?: string;
     altText: string;
     artistInfo: string;
 }

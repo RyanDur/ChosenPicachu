@@ -98,7 +98,7 @@ const aicToArt = ({pagination, data}: AICArtResponse) => ({
 const aicToPiece = (data: AICPieceResponse): Piece => ({
     id: data.id,
     title: data.title,
-    image: `https://www.artic.edu/iiif/2/${data.image_id}/full/2000,/0/default.jpg`,
+    image: data.image_id ? `https://www.artic.edu/iiif/2/${data.image_id}/full/2000,/0/default.jpg` : undefined,
     artistInfo: data.artist_display,
     altText: data.thumbnail?.alt_text || data.term_titles.join(' ') || ''
 });
