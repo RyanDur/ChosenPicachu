@@ -4,6 +4,7 @@ import * as faker from 'faker';
 import {Paths} from '../../../../App';
 import userEvent from '@testing-library/user-event';
 import {Rendered, renderWithRouter} from '../../../../__tests__/util';
+import {Source} from '../../../../data/types';
 
 describe('the image', () => {
     const piece = {
@@ -77,6 +78,22 @@ describe('the image', () => {
             it('should not be loading', () =>
                 expect(screen.queryByTestId('loading')).not.toBeInTheDocument());
         });
+    });
+
+    describe('without an image', () => {
+        beforeEach(() =>
+            rendered = renderWithRouter(<Image piece={{...piece, image: undefined}}/>, {
+                params: {page: 3, tab: Source.AIC}
+            }));
+
+        it('should be loading', () =>
+            expect(screen.queryByTestId('loading')).not.toBeInTheDocument());
+
+        it('should contain the image', () =>
+            expect(screen.queryByTestId(image)).not.toBeInTheDocument());
+
+        it('should not be errored', () =>
+            expect(screen.queryByTestId('error')).toBeInTheDocument());
     });
 
     describe('disabling the link', () => {
