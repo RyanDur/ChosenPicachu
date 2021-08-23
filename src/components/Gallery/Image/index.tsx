@@ -1,4 +1,4 @@
-import {FC, useState} from 'react';
+import {FC, useEffect, useState} from 'react';
 import {Piece} from '../../../data/types';
 import {join} from '../../util';
 import {Loading} from '../../Loading';
@@ -22,12 +22,22 @@ export const Image: FC<ImageProps> = (
     }) => {
     const [completed, isComplete] = useState(false);
     const [errored, isError] = useState(false);
+    const [timedOut, updateTimedOut] = useState(false);
     const {tab} = useQuery<{tab: string}>();
     const gotoTopOfPage = () => window.scrollTo(0, 0);
     const ConditionalLink: FC = ({children}) => linkEnabled ?
         <Link onClick={gotoTopOfPage} to={`${Paths.artGallery}/${piece.id}${toQueryString({tab})}`} className="scrim">{children}</Link> : <>{children}</>;
 
-    return errored ?
+    useEffect(() => {
+        if (!completed) {
+            const timeoutId = setTimeout(() => {
+                updateTimedOut(true);
+            }, 5000);
+            return () => clearTimeout(timeoutId);
+        }
+    },[completed]);
+
+    return (errored || timedOut) ?
         <img alt="oops"
              className="error"
              src="https://img.icons8.com/ios/100/000000/no-image.png"
@@ -49,6 +59,6 @@ export const Image: FC<ImageProps> = (
                      data-testid={`piece-${piece.id}`}
                      src={piece.image}/>
             </ConditionalLink>
-            {completed || <Loading/>}
+            {(completed && !timedOut) || <Loading/>}
         </>);
 };

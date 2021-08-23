@@ -1,4 +1,4 @@
-import {fireEvent, screen} from '@testing-library/react';
+import {act, fireEvent, screen} from '@testing-library/react';
 import {Image} from '../index';
 import * as faker from 'faker';
 import {nanoid} from 'nanoid';
@@ -19,7 +19,15 @@ describe('the image', () => {
     let rendered: () => Rendered;
 
     describe('with link enabled', () => {
-        beforeEach(() => rendered = renderWithRouter(<Image piece={piece}/>, {params: {page: 3, tab: 'aic'}}));
+        beforeEach(() => {
+            jest.useFakeTimers();
+            rendered = renderWithRouter(<Image piece={piece}/>, {params: {page: 3, tab: 'aic'}});
+        });
+
+        afterEach(() => {
+            jest.runOnlyPendingTimers();
+            jest.useRealTimers();
+        });
 
         it('should be loading', () =>
             expect(screen.queryByTestId('loading')).toBeInTheDocument());
@@ -28,7 +36,11 @@ describe('the image', () => {
             expect(screen.queryByTestId('error')).not.toBeInTheDocument());
 
         describe('on image load', () => {
-            beforeEach(() => fireEvent.load(screen.getByTestId(image)));
+            beforeEach(() => {
+                act(() => {
+                    fireEvent.load(screen.getByTestId(image));
+                });
+            });
 
             it('should not be loading', () =>
                 expect(screen.queryByTestId('loading')).not.toBeInTheDocument());
@@ -51,7 +63,29 @@ describe('the image', () => {
         });
 
         describe('on image load error', () => {
-            beforeEach(() => fireEvent.error(screen.getByTestId(image)));
+            beforeEach(() => {
+                act(() => {
+                    fireEvent.error(screen.getByTestId(image));
+                });
+            });
+
+            it('should not contain the piece', () =>
+                expect(screen.queryByTestId(image)).not.toBeInTheDocument());
+
+            it('should be errored', () =>
+                expect(screen.queryByTestId('error')).toBeInTheDocument());
+
+            it('should not be loading', () =>
+                expect(screen.queryByTestId('loading')).not.toBeInTheDocument());
+        });
+
+        describe('timing out', () => {
+            beforeEach(() => {
+                act(() => {
+                    jest.setTimeout(0);
+                    jest.advanceTimersByTime(10000);
+                });
+            });
 
             it('should not contain the piece', () =>
                 expect(screen.queryByTestId(image)).not.toBeInTheDocument());
