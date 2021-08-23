@@ -1,4 +1,4 @@
-import {FC, useEffect, useState} from 'react';
+import {FC, useState} from 'react';
 import {Piece} from '../../../data/types';
 import {join} from '../../util';
 import {Loading} from '../../Loading';
@@ -22,26 +22,13 @@ export const Image: FC<ImageProps> = (
     }) => {
     const [completed, isComplete] = useState(false);
     const [errored, isError] = useState(false);
-    const [retries, updateRetries] = useState(3);
     const {tab} = useQuery<{ tab: string }>();
     const gotoTopOfPage = () => window.scrollTo(0, 0);
     const ConditionalLink: FC = ({children}) => linkEnabled ?
         <Link onClick={gotoTopOfPage} to={`${Paths.artGallery}/${piece.id}${toQueryString({tab})}`}
               className="scrim">{children}</Link> : <>{children}</>;
 
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-            if (!completed) updateRetries(retries - 1);
-            else clearInterval(intervalId);
-        }, 2000);
-        if (retries < 1) {
-            isError(true);
-            clearInterval(intervalId);
-        }
-        return () => clearInterval(intervalId);
-    }, [completed, retries]);
-
-    return (errored) ?
+    return (errored || !piece.image) ?
         <img alt="oops"
              className="error"
              src="https://img.icons8.com/ios/100/000000/no-image.png"
