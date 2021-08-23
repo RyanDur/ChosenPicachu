@@ -1,7 +1,6 @@
 import {act, fireEvent, screen} from '@testing-library/react';
 import {Image} from '../index';
 import * as faker from 'faker';
-import {nanoid} from 'nanoid';
 import {Paths} from '../../../../App';
 import userEvent from '@testing-library/user-event';
 import {Rendered, renderWithRouter} from '../../../../__tests__/util';
@@ -10,7 +9,7 @@ describe('the image', () => {
     const piece = {
         id: Math.random(),
         title: faker.lorem.words(),
-        imageId: nanoid(),
+        image: faker.image.imageUrl(),
         altText: faker.lorem.sentence(),
         artistInfo: faker.lorem.sentence()
     };
@@ -66,24 +65,6 @@ describe('the image', () => {
             beforeEach(() => {
                 act(() => {
                     fireEvent.error(screen.getByTestId(image));
-                });
-            });
-
-            it('should not contain the piece', () =>
-                expect(screen.queryByTestId(image)).not.toBeInTheDocument());
-
-            it('should be errored', () =>
-                expect(screen.queryByTestId('error')).toBeInTheDocument());
-
-            it('should not be loading', () =>
-                expect(screen.queryByTestId('loading')).not.toBeInTheDocument());
-        });
-
-        describe('retrying', () => {
-            beforeEach(() => {
-                act(() => {
-                    jest.advanceTimersByTime(10000);
-                    jest.runAllTimers();
                 });
             });
 
