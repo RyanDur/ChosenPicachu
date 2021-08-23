@@ -87,19 +87,30 @@ describe('data', () => {
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
             });
         });
-
     });
 
     describe('retrieving an artwork', () => {
         describe('for AIC', () => {
-            test('when it is successful', async () => {
-                const dispatch = jest.fn();
-                mockHttp.mockReturnValue(Promise.resolve(success(pieceAICResponse)));
+            describe('when it is successful', () => {
+                test('for a full response', async () => {
+                    const dispatch = jest.fn();
+                    mockHttp.mockReturnValue(Promise.resolve(success(pieceAICResponse)));
 
-                data.getPiece({id: String(aicPiece.id), source: Source.AIC}, dispatch);
+                    data.getPiece({id: String(aicPiece.id), source: Source.AIC}, dispatch);
 
-                expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-                await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(aicPiece)));
+                    expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+                    await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(aicPiece)));
+                });
+
+                test('for a response without an image id', async () => {
+                    const dispatch = jest.fn();
+                    mockHttp.mockReturnValue(Promise.resolve(success(pieceAICResponseWithoutAnImageID)));
+
+                    data.getPiece({id: String(aicPiece.id), source: Source.AIC}, dispatch);
+
+                    expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+                    await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(aicPieceWithoutAnImage)));
+                });
             });
 
             test('when it is not successful', async () => {
@@ -159,6 +170,15 @@ describe('data', () => {
             thumbnail: {alt_text: faker.lorem.sentence()}
         }
     };
+    const pieceAICResponseWithoutAnImageID: AICPieceData = {
+        data: {
+            id: Math.random(),
+            title: faker.lorem.words(),
+            term_titles: [faker.lorem.words()],
+            artist_display: faker.lorem.sentence(),
+            thumbnail: {alt_text: faker.lorem.sentence()}
+        }
+    };
 
     const aicPiece: Piece = {
         id: pieceAICResponse.data.id,
@@ -166,6 +186,13 @@ describe('data', () => {
         image: `https://www.artic.edu/iiif/2/${pieceAICResponse.data.image_id}/full/2000,/0/default.jpg`,
         altText: pieceAICResponse.data.thumbnail?.alt_text!,
         artistInfo: pieceAICResponse.data.artist_display
+    };
+
+    const aicPieceWithoutAnImage: Piece = {
+        id: pieceAICResponseWithoutAnImageID.data.id,
+        title: pieceAICResponseWithoutAnImageID.data.title,
+        altText: pieceAICResponseWithoutAnImageID.data.thumbnail?.alt_text!,
+        artistInfo: pieceAICResponseWithoutAnImageID.data.artist_display
     };
 
     const pagination = {

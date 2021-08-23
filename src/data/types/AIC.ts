@@ -46,7 +46,7 @@ export type AICThumbnail = {
 export interface AICPieceResponse {
     id: number;
     title: string;
-    image_id: string;
+    image_id?: string;
     term_titles: string[];
     artist_display: string;
     thumbnail?: AICThumbnail;
