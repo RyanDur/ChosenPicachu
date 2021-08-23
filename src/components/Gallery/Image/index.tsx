@@ -34,11 +34,14 @@ export const Image: FC<ImageProps> = (
             if (!completed) updateRetries(retries - 1);
             else clearInterval(intervalId);
         }, 2000);
-        if (retries < 1) clearInterval(intervalId);
+        if (retries < 1) {
+            isError(true);
+            clearInterval(intervalId);
+        }
         return () => clearInterval(intervalId);
     }, [completed, retries]);
 
-    return (errored || retries < 1) ?
+    return (errored) ?
         <img alt="oops"
              className="error"
              src="https://img.icons8.com/ios/100/000000/no-image.png"
@@ -60,6 +63,6 @@ export const Image: FC<ImageProps> = (
                      data-testid={`piece-${piece.id}`}
                      src={piece.image}/>
             </ConditionalLink>
-            {(completed && retries > 0) || <Loading/>}
+            {completed || <Loading/>}
         </>);
 };
