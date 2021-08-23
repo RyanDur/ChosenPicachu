@@ -170,15 +170,8 @@ describe('data', () => {
             thumbnail: {alt_text: faker.lorem.sentence()}
         }
     };
-    const pieceAICResponseWithoutAnImageID: AICPieceData = {
-        data: {
-            id: Math.random(),
-            title: faker.lorem.words(),
-            term_titles: [faker.lorem.words()],
-            artist_display: faker.lorem.sentence(),
-            thumbnail: {alt_text: faker.lorem.sentence()}
-        }
-    };
+
+    const pieceAICResponseWithoutAnImageID: AICPieceData = {data: {...pieceAICResponse.data, image_id: undefined}};
 
     const aicPiece: Piece = {
         id: pieceAICResponse.data.id,
@@ -188,12 +181,7 @@ describe('data', () => {
         artistInfo: pieceAICResponse.data.artist_display
     };
 
-    const aicPieceWithoutAnImage: Piece = {
-        id: pieceAICResponseWithoutAnImageID.data.id,
-        title: pieceAICResponseWithoutAnImageID.data.title,
-        altText: pieceAICResponseWithoutAnImageID.data.thumbnail?.alt_text!,
-        artistInfo: pieceAICResponseWithoutAnImageID.data.artist_display
-    };
+    const aicPieceWithoutAnImage: Piece = {...aicPiece, image: undefined};
 
     const pagination = {
         total: fromAICArt.pagination.total,
