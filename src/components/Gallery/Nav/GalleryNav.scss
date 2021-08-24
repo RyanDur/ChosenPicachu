@@ -1,6 +1,7 @@
 .pagination {
   pointer-events: none;
-  width: var(--base-x-50);
+  max-width: var(--base-x-50);
+  width: 100%;
   background-color: var(--void);
 
   .fill-left,
@@ -49,11 +50,5 @@
     &:focus {
       background: var(--mint);
     }
-  }
-}
-
-@media (max-width: 832px) {
-  .pagination {
-    width: 100%;
   }
 }
