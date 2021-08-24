@@ -9,7 +9,7 @@ import {
     HarvardArtResponse,
     Piece,
     PieceResponse,
-    RecordResponse,
+    HarvardRecordResponse,
     Source,
     toSource
 } from './types';
@@ -110,7 +110,7 @@ const harvardToArt = ({info, records}: HarvardArtResponse) => ({
     pieces: records.map(harvardToPiece)
 });
 
-const harvardToPiece = (record: RecordResponse): Piece => ({
+const harvardToPiece = (record: HarvardRecordResponse): Piece => ({
     id: record.id,
     title: record.title,
     image: record.primaryimageurl,
