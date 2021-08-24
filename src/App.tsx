@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link, Route, Switch, useRouteMatch} from 'react-router-dom';
+import {Link, Redirect, Route, Switch, useRouteMatch} from 'react-router-dom';
 import {About, Gallery, GalleryNav, GalleryTitle, Home, SearchRoutes, Users} from './components';
 import './App.scss';
 import './App.layout.scss';
@@ -58,6 +58,7 @@ export const App = () => {
                 <Route path={Paths.about} exact><About/></Route>
                 <Route path={Paths.users} exact><Users/></Route>
                 <Route path={Paths.artGallery}><Gallery/></Route>
+                <Route path="*"><Redirect to={Paths.home}/></Route>
             </Switch>
         </main>
         <Switch><Route path={Paths.artGallery} exact>
