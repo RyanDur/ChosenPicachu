@@ -2,7 +2,7 @@ type Tuple<A, B> = [A, B]
 
 export interface AICArtResponse {
     pagination: AICPaginationResponse;
-    data: AICArtWorkResponse[];
+    data: AICPieceResponse[];
     info: AICInfo;
     config: AICConfig;
 }
@@ -29,14 +29,6 @@ export interface AICPaginationResponse {
     total_pages: number;
     current_page: number;
     next_url: string;
-}
-
-export interface AICArtWorkResponse {
-    id: number;
-    title: string;
-    image_id: string;
-    artist_display: string;
-    term_titles: string[];
 }
 
 export type AICThumbnail = {

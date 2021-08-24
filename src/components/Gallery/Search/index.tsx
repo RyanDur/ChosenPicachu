@@ -7,9 +7,9 @@ import {toQueryString} from '../../../util/URL';
 import {Paths} from '../../../App';
 import {debounce} from 'lodash';
 import {Consumer} from '../../UserInfo/types';
+import {useQuery} from '../../hooks';
 import './Search.scss';
 import './Search.layout.scss';
-import {useQuery} from '../../hooks';
 
 interface Props {
     id?: string;

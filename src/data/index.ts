@@ -1,15 +1,14 @@
 import {
-    AICArtOption,
     AICArtResponse,
-    AICAutocomplete,
-    AICAutoCompleteResponse,
     AICPieceData,
     AICPieceResponse,
     ArtQuery,
     ArtResponse,
+    AutocompleteResponse,
     Dispatch,
     HarvardArtResponse,
-    Piece, PieceResponse,
+    Piece,
+    PieceResponse,
     RecordResponse,
     Source,
     toSource
@@ -23,21 +22,16 @@ import {URI} from './URI';
 export const data = {
     searchForArtOptions: (query: { search: string, source: string }, dispatch: Dispatch<SearchArtAction>): void => {
         dispatch(loading());
+        const sourced = toSource(query.source);
         http({
-            url: URI.from({
-                source: toSource(query.source),
-                path: '/search',
-                params: {
-                    'query[term][title]': query.search,
-                    fields: 'suggest_autocomplete_all',
-                    limit: 5
-                }
-            })
-        }).then((action: HTTPAction<AICAutoCompleteResponse>) => {
+            url: URI.createSearchFrom(query.search, sourced)
+        }).then((action: HTTPAction<AutocompleteResponse>) => {
             if (action.type === HTTPStatus.SUCCESS) {
-                dispatch(loaded(action.value.data
-                    .map(({suggest_autocomplete_all}: AICAutocomplete) => suggest_autocomplete_all[1])
-                    .flatMap((option: AICArtOption) => option.input)));
+                const options = sourced === Source.AIC ? action.value.data
+                        .map(({suggest_autocomplete_all}) => suggest_autocomplete_all[1])
+                        .flatMap(option => option.input) :
+                    action.value.records.map(({title}) => title);
+                dispatch(loaded(options));
             }
         });
     },
@@ -109,7 +103,7 @@ const harvardToArt = ({info, records}: HarvardArtResponse) => ({
     pagination: {
         total: info.totalrecords,
         limit: info.totalrecordsperquery,
-        offset: info.totalrecordsperquery * (info.page -1),
+        offset: info.totalrecordsperquery * (info.page - 1),
         totalPages: info.pages,
         currentPage: info.page,
         nextUrl: info.next

@@ -1,14 +1,16 @@
 import {data} from '../index';
 import 'whatwg-fetch';
-import {AICArtSuggestion, AICAutoCompleteResponse, AICPieceData, Piece, Source} from '../types';
+import {AICAutoCompleteResponse, AICPieceData, Piece, Source} from '../types';
 import faker from 'faker';
 import {
     aicArtResponse,
     fromAICArt,
     fromHarvardArt,
+    harvardArtOptions,
     harvardArtResponse,
     harvardPiece,
-    harvardPieceResponse
+    harvardPieceResponse,
+    options
 } from '../../__tests__/util';
 import {nanoid} from 'nanoid';
 import {error, loaded, loading} from '../actions';
@@ -148,15 +150,30 @@ describe('data', () => {
     });
 
     describe('searching for art', () => {
-        test('when it is successful', async () => {
-            const dispatch = jest.fn();
-            mockHttp.mockReturnValue(Promise.resolve(success(artOptions)));
-            const search = faker.lorem.word();
+        describe('for AIC', () => {
+            test('when it is successful', async () => {
+                const dispatch = jest.fn();
+                mockHttp.mockReturnValue(Promise.resolve(success(aicArtOptions)));
+                const search = faker.lorem.word();
 
-            data.searchForArtOptions({search, source: Source.AIC}, dispatch);
+                data.searchForArtOptions({search, source: Source.AIC}, dispatch);
 
-            expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(options)));
+                expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+                await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(options)));
+            });
+        });
+
+        describe('for Harvard', () => {
+            test('when it is successful', async () => {
+                const dispatch = jest.fn();
+                mockHttp.mockReturnValue(Promise.resolve(success(harvardArtOptions)));
+                const search = faker.lorem.word();
+
+                data.searchForArtOptions({search, source: Source.HARVARD}, dispatch);
+
+                expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+                await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(options)));
+            });
         });
     });
 
@@ -192,8 +209,7 @@ describe('data', () => {
         next_url: fromAICArt.pagination.nextUrl
     };
 
-    const options: AICArtSuggestion[] = [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()];
-    const artOptions: AICAutoCompleteResponse = {
+    const aicArtOptions: AICAutoCompleteResponse = {
         pagination,
         data: options.map(option => ({
             suggest_autocomplete_all: [{
