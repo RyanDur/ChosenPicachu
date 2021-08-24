@@ -39,9 +39,8 @@ export const data = {
     getAllArt: ({search, page, source}: ArtQuery, dispatch: Dispatch<GetArtAction>): void => {
         dispatch(loading());
         http({
-                url: URI.from({source, params: {page, search, limit: 12}})
-            }
-        ).then((action: HTTPAction<ArtResponse>) => {
+            url: URI.from({source, params: {page, search, limit: 12}})
+        }).then((action: HTTPAction<ArtResponse>) => {
             switch (action.type) {
                 case HTTPStatus.FAILURE:
                     return dispatch(error());
