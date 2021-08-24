@@ -32,7 +32,6 @@ export const URI = {
         })}` : `${harvardDomain}${toQueryString({
             title: search,
             fields: 'title',
-            limit: 5,
             apikey: harvardAPIKey,
             size: 5
         })}`

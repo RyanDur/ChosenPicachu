@@ -10,10 +10,10 @@ import {
     Art,
     ArtSuggestion,
     HarvardArtResponse,
-    InfoResponse,
-    PeopleResponse,
+    HarvardInfoResponse,
+    HarvardPeopleResponse,
     Piece,
-    RecordResponse
+    HarvardRecordResponse
 } from '../../data/types';
 import {nanoid} from 'nanoid';
 import {HarvardAutoCompleteResponse} from '../../data/types/Harvard';
@@ -194,7 +194,7 @@ export const aicArtResponse: AICArtResponse = {
     }
 };
 
-const info: InfoResponse = {
+const info: HarvardInfoResponse = {
     totalrecordsperquery: Math.floor(Math.random() * 10),
     totalrecords: Math.floor(Math.random() * 10000),
     pages: Math.floor(Math.random() * 1000),
@@ -202,7 +202,7 @@ const info: InfoResponse = {
     next: faker.internet.url()
 };
 
-export const person = (): PeopleResponse => ({
+export const person = (): HarvardPeopleResponse => ({
     role: 'Artist',
     gender: faker.lorem.word(),
     displaydate: faker.lorem.word(),
@@ -214,7 +214,7 @@ export const person = (): PeopleResponse => ({
     displayorder: Math.floor(Math.random() * 1000),
 });
 
-const harvardToPieceResponse = (_: unknown, index: number): RecordResponse => ({
+const harvardToPieceResponse = (_: unknown, index: number): HarvardRecordResponse => ({
     id: index,
     title: faker.lorem.sentence(),
     people: [person()],

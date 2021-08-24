@@ -1,16 +1,16 @@
 export interface HarvardArtResponse {
-    info: InfoResponse;
-    records: RecordResponse[];
+    info: HarvardInfoResponse;
+    records: HarvardRecordResponse[];
 }
 
-export interface RecordResponse {
+export interface HarvardRecordResponse {
     id: number;
     title: string;
-    people: PeopleResponse[];
+    people: HarvardPeopleResponse[];
     primaryimageurl: string;
 }
 
-export interface PeopleResponse {
+export interface HarvardPeopleResponse {
     role: string;
     birthplace?: string;
     gender: string;
@@ -25,7 +25,7 @@ export interface PeopleResponse {
     displayorder: number;
 }
 
-export interface InfoResponse {
+export interface HarvardInfoResponse {
     totalrecordsperquery: number;
     totalrecords: number;
     pages: number;
@@ -40,6 +40,6 @@ export interface HarvardArtOption {
 }
 
 export interface HarvardAutoCompleteResponse {
-    info: InfoResponse;
+    info: HarvardInfoResponse;
     records: HarvardArtOption[]
 }

@@ -1,5 +1,5 @@
 import {Consumer} from '../../components/UserInfo/types';
-
+import {Source, toSource} from './Source';
 import {
     AICArtOption,
     AICArtResponse,
@@ -11,14 +11,14 @@ import {
 } from './AIC';
 import {
     HarvardArtResponse, HarvardArtSuggestion, HarvardAutoCompleteResponse,
-    InfoResponse,
-    PeopleResponse,
-    RecordResponse
+    HarvardInfoResponse,
+    HarvardPeopleResponse,
+    HarvardRecordResponse
 } from './Harvard';
+import {Loaded, Loading, Error, AsyncState} from './AsyncState';
 
 export type ArtResponse = AICArtResponse & HarvardArtResponse
-export type PieceResponse = AICPieceData & AICPieceResponse & RecordResponse
-
+export type PieceResponse = AICPieceData & AICPieceResponse & HarvardRecordResponse
 export type {
     AICArtOption,
     AICArtResponse,
@@ -29,9 +29,19 @@ export type {
     AICArtSuggestion,
 
     HarvardArtResponse,
-    InfoResponse,
-    PeopleResponse,
-    RecordResponse
+    HarvardInfoResponse,
+    HarvardPeopleResponse,
+    HarvardRecordResponse,
+
+    Loaded,
+    Loading,
+    Error
+};
+
+export {
+    Source,
+    toSource,
+    AsyncState
 };
 
 export type Pagination = {
@@ -58,37 +68,15 @@ export interface Art {
 
 export type ArtSuggestion = AICArtSuggestion | HarvardArtSuggestion;
 export type AutocompleteResponse = AICAutoCompleteResponse & HarvardAutoCompleteResponse
-export enum AsyncState {
-    LOADING = 'LOADING',
-    LOADED = 'LOADED',
-    ERROR = 'ERROR'
-}
 
 export interface Action<T> {
     type: T;
 }
+
+export type Dispatch<T> = Consumer<T>;
 
 export interface ArtQuery {
     search?: string;
     page: number;
     source: Source;
 }
-
-export enum Source {
-    AIC = 'aic',
-    HARVARD = 'harvard',
-}
-
-export const toSource = (value: string): Source => {
-    if (value === Source.AIC.valueOf()) return Source.AIC;
-    else return Source.HARVARD;
-};
-
-export type Dispatch<T> = Consumer<T>;
-
-export type Loaded<T> = Action<AsyncState.LOADED> & {
-    value: T;
-};
-export type Loading = Action<AsyncState.LOADING>;
-
-export type Error = Action<AsyncState.ERROR>;
