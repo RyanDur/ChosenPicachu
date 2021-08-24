@@ -8,11 +8,15 @@ import {
     AICArtResponse,
     AICPieceResponse,
     Art,
+    ArtSuggestion,
     HarvardArtResponse,
-    InfoResponse, PeopleResponse, Piece,
+    InfoResponse,
+    PeopleResponse,
+    Piece,
     RecordResponse
 } from '../../data/types';
 import {nanoid} from 'nanoid';
+import {HarvardAutoCompleteResponse} from '../../data/types/Harvard';
 
 export const randomNumberFromRange = (min: number, max = 6) => Math.floor(Math.random() * max) + min;
 
@@ -228,8 +232,13 @@ export const harvardPiece: Piece = {
 };
 
 export const harvardArtResponse: HarvardArtResponse = {
-    info: info,
+    info,
     records: [...Array(info.totalrecordsperquery)].map(harvardToPieceResponse),
+};
+export const options: ArtSuggestion[] = [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()];
+export const harvardArtOptions: HarvardAutoCompleteResponse = {
+    info,
+    records: options.map(option => ({title: option}))
 };
 
 export const fromAICArt: Art = {

@@ -32,3 +32,14 @@ export interface InfoResponse {
     page: number;
     next: string;
 }
+
+export type HarvardArtSuggestion = string;
+
+export interface HarvardArtOption {
+    title: HarvardArtSuggestion;
+}
+
+export interface HarvardAutoCompleteResponse {
+    info: InfoResponse;
+    records: HarvardArtOption[]
+}

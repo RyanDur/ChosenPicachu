@@ -10,7 +10,7 @@ import {
     AICArtSuggestion
 } from './AIC';
 import {
-    HarvardArtResponse,
+    HarvardArtResponse, HarvardArtSuggestion, HarvardAutoCompleteResponse,
     InfoResponse,
     PeopleResponse,
     RecordResponse
@@ -56,6 +56,8 @@ export interface Art {
     pieces: Piece[];
 }
 
+export type ArtSuggestion = AICArtSuggestion | HarvardArtSuggestion;
+export type AutocompleteResponse = AICAutoCompleteResponse & HarvardAutoCompleteResponse
 export enum AsyncState {
     LOADING = 'LOADING',
     LOADED = 'LOADED',
