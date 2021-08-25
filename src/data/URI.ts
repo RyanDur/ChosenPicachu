@@ -14,14 +14,15 @@ interface Query {
 export const URI = {
     from: ({source, path, params = {}}: Query): string => {
         const domain = source === Source.AIC ? aicDomain : harvardDomain;
-        const {search, ...rest} = params;
+        const {search, limit, ...rest} = params;
         params = source === Source.AIC ?
-            {q: search, fields: shapeOfAICResponse, ...rest, limit: 12} :
-            {q: search, fields: shapeOfHarvardResponse, ...rest, apikey: harvardAPIKey, size: 12};
+            {q: search, fields: shapeOfAICResponse, ...rest, limit} :
+            {q: search, fields: shapeOfHarvardResponse, ...rest, apikey: harvardAPIKey, size: limit};
 
+        const queryString = toQueryString(params);
         if (source === Source.HARVARD || !search) {
-            return [domain, path, toQueryString(params)].join('');
-        } else return [domain, '/search', toQueryString(params)].join('');
+            return [domain, path, queryString].join('');
+        } else return [domain, '/search', queryString].join('');
     },
 
     createSearchFrom: (search: string, source: Source) =>

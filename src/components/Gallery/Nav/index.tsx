@@ -14,8 +14,9 @@ interface Props {
 export const GalleryNav: FC<Props> = ({id}) => {
     const {art} = useGallery();
     const history = useHistory();
-    const {page} = useQuery<{ page: string }>({page: '1'});
+    const {page, size} = useQuery<{ page: string, size: string }>({page: '1', size: '12'});
     const [pageNumber, updatePageNumber] = useState(page);
+    const [pageSize, updatePageSize] = useState(size);
 
     const currentQuery = toQueryObj(history.location.search);
     const firstPage = 1;
@@ -33,11 +34,11 @@ export const GalleryNav: FC<Props> = ({id}) => {
         event.preventDefault();
         gotoTopOfPage();
         event.currentTarget.reset();
-        history.push({search: toQueryString({...currentQuery, page: pageNumber})});
+        history.push({search: toQueryString({...currentQuery, page: pageNumber, size: pageSize})});
     };
 
     return <nav className="pagination" id={id}>
-        {!hasPrevPage && <article className="fill-left"/> }
+        {!hasPrevPage && <article className="fill-left"/>}
         {hasPrevPage && <Link to={`${Paths.artGallery}${toQueryString({...currentQuery, page: firstPage})}`}
                               onClick={gotoTopOfPage}
                               id="first" className="page" data-testid="first-page">
@@ -58,6 +59,11 @@ export const GalleryNav: FC<Props> = ({id}) => {
                    data-testid="go-to"
                    onWheel={e => e.currentTarget.blur()}
                    onChange={event => updatePageNumber(event.currentTarget.value)}/>
+            <input type="number"
+                   data-testid="per-page"
+                   id="per-page"
+                   placeholder="per page"
+                   onChange={event => updatePageSize(event.currentTarget.value)}/>
             <button type="submit" id="submit-page-number" className="control">Go</button>
         </form>
         {hasNextPage && <Link to={`${Paths.artGallery}${toQueryString({...currentQuery, page: nextPage})}`}
@@ -70,6 +76,6 @@ export const GalleryNav: FC<Props> = ({id}) => {
                               id="last" className="page" data-testid="last-page">
           LAST
         </Link>}
-        {!hasNextPage && <article className="fill-right"/> }
+        {!hasNextPage && <article className="fill-right"/>}
     </nav>;
 };

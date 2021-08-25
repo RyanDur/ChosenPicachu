@@ -2,6 +2,7 @@
   pointer-events: none;
   max-width: var(--base-x-50);
   width: 100%;
+  height: 100%;
   background-color: var(--void);
 
   .fill-left,
@@ -12,11 +13,12 @@
 
   #go-to-page {
     pointer-events: all;
-    width: 8rem;
+    width: var(--base-x-10_5);
 
+    #per-page,
     #go-to {
       outline: none;
-      height: 50%;
+      height: 25%;
       border: none;
       padding: 0 0 0 var(--base);
     }

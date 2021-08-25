@@ -36,10 +36,10 @@ export const data = {
         });
     },
 
-    getAllArt: ({search, page, source}: ArtQuery, dispatch: Dispatch<GetArtAction>): void => {
+    getAllArt: ({page, size, source, search}: ArtQuery, dispatch: Dispatch<GetArtAction>): void => {
         dispatch(loading());
         http({
-            url: URI.from({source, params: {page, search, limit: 12}})
+            url: URI.from({source, params: {page, search, limit: size}})
         }).then((action: HTTPAction<ArtResponse>) => {
             switch (action.type) {
                 case HTTPStatus.FAILURE:

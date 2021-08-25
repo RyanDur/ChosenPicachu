@@ -78,5 +78,6 @@ export type Dispatch<T> = Consumer<T>;
 export interface ArtQuery {
     search?: string;
     page: number;
+    size: number;
     source: Source;
 }
