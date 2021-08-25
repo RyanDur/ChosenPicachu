@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import {fromAICArt as mockArt, Rendered, renderWithRouter} from '../../../../__tests__/util';
 import {GalleryNav} from '../../';
 import {Paths} from '../../../../App';
+import {toQueryObj} from '../../../../util/URL';
 
 jest.mock('../../Context', () => ({
     useGallery: () => ({art: mockArt})
@@ -100,6 +101,16 @@ describe('Gallery Navigation', () => {
                 expect(screen.getByTestId('go-to'))
                     .toHaveAttribute('max', `${mockArt.pagination.totalPages}`));
         });
+
+        test('changing the number of elements', () => {
+            userEvent.type(screen.getByTestId('per-page'), '2');
+            userEvent.click(screen.getByText('Go'));
+            expect(toQueryObj(rendered().testLocation?.search || '')).toEqual({page: '1', size: '2'});
+
+            userEvent.type(screen.getByTestId('per-page'), '45');
+            userEvent.click(screen.getByText('Go'));
+            expect(toQueryObj(rendered().testLocation?.search || '')).toEqual({page: '1', size: '45'});
+        });
     });
 
     describe('with existing params', () => {
@@ -130,5 +141,4 @@ describe('Gallery Navigation', () => {
             expect(rendered().testLocation?.search).toEqual(`?search=q&page=${pageNumber}`);
         });
     });
-
 });

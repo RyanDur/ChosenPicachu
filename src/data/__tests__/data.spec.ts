@@ -31,7 +31,7 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockHttp.mockReturnValue(Promise.resolve(success(aicArtResponse)));
 
-                data.getAllArt({page: 1, source: Source.AIC}, dispatch);
+                data.getAllArt({page: 1, size: 12, source: Source.AIC}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(fromAICArt)));
@@ -41,7 +41,7 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockHttp.mockReturnValue(Promise.resolve(success(aicArtResponse)));
 
-                data.getAllArt({page: 1, search: 'rad', source: Source.AIC}, dispatch);
+                data.getAllArt({page: 1, size: 12, search: 'rad', source: Source.AIC}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(fromAICArt)));
@@ -51,7 +51,7 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockHttp.mockReturnValue(Promise.resolve(failure(HTTPError.UNKNOWN)));
 
-                data.getAllArt({page: 1, source: Source.AIC}, dispatch);
+                data.getAllArt({page: 1, size: 12, source: Source.AIC}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
@@ -63,7 +63,7 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockHttp.mockReturnValue(Promise.resolve(success(harvardArtResponse)));
 
-                data.getAllArt({page: 1, source: Source.HARVARD}, dispatch);
+                data.getAllArt({page: 1, size: 12, source: Source.HARVARD}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(fromHarvardArt)));
@@ -73,7 +73,7 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockHttp.mockReturnValue(Promise.resolve(success(harvardArtResponse)));
 
-                data.getAllArt({page: 1, search: 'rad', source: Source.HARVARD}, dispatch);
+                data.getAllArt({page: 1, size: 12, search: 'rad', source: Source.HARVARD}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(fromHarvardArt)));
@@ -83,7 +83,7 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockHttp.mockReturnValue(Promise.resolve(failure(HTTPError.UNKNOWN)));
 
-                data.getAllArt({page: 1, source: Source.HARVARD}, dispatch);
+                data.getAllArt({page: 1, size: 12, source: Source.HARVARD}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));

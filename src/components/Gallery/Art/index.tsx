@@ -17,17 +17,17 @@ export const ArtGallery: FC = () => {
     const {art, updateArt, reset} = useGallery();
     const [loading, isLoading] = useState(false);
     const [errored, hasErrored] = useState(false);
-    const {page, search, tab} = useQuery<{ page: number, tab: string, search?: string }>();
+    const {page, size, search, tab} = useQuery<{ page: number, size: number, tab: string, search?: string }>();
 
     useEffect(() => {
-        data.getAllArt({page, search, source: toSource(tab)},
+        data.getAllArt({page, size, search, source: toSource(tab)},
             (action: GetArtAction) => {
                 isLoading(action.type === AsyncState.LOADING);
                 hasErrored(action.type === AsyncState.ERROR);
                 if (action.type === AsyncState.LOADED) updateArt(action.value);
             });
         return reset;
-    }, [page, updateArt, search, tab]);
+    }, [page, updateArt, search, tab, size]);
 
     const showGallery = not(loading) && has(art?.pieces);
     const showError = not(loading) && (empty(art?.pieces) || errored);
