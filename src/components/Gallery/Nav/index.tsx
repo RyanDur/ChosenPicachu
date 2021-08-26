@@ -3,7 +3,7 @@ import React, {FC, FormEvent, useState} from 'react';
 import {Paths} from '../../../App';
 import {useQuery} from '../../hooks';
 import {useGallery} from '../Context';
-import {toQueryObj, toQueryString} from '../../../util/URL';
+import {toQueryString} from '../../../util/URL';
 import './GalleryNav.scss';
 import './GalleryNav.layout.scss';
 
@@ -14,11 +14,10 @@ interface Props {
 export const GalleryNav: FC<Props> = ({id}) => {
     const {art} = useGallery();
     const history = useHistory();
-    const {page, size} = useQuery<{ page: string, size: string }>({page: '1', size: '12'});
+    const {page, size, ...rest} = useQuery<{ page: string, size: string }>({page: '1', size: '12'});
     const [pageNumber, updatePageNumber] = useState(page);
     const [pageSize, updatePageSize] = useState(size);
 
-    const currentQuery = toQueryObj(history.location.search);
     const firstPage = 1;
     const lastPage = art?.pagination?.totalPages ?? Number.MAX_VALUE;
     const currentPage = +page;
@@ -35,17 +34,17 @@ export const GalleryNav: FC<Props> = ({id}) => {
         event.preventDefault();
         gotoTopOfPage();
         event.currentTarget.reset();
-        history.push({search: toQueryString({...currentQuery, page: pageNumber, size: pageSize})});
+        history.push({search: toQueryString({...rest, page: pageNumber, size: pageSize})});
     };
 
     return <nav className="pagination" id={id}>
         {!hasPrevPage && <article className="fill-left"/>}
-        {hasPrevPage && <Link to={`${Paths.artGallery}${toQueryString({...currentQuery, page: firstPage})}`}
+        {hasPrevPage && <Link to={`${Paths.artGallery}${toQueryString({...rest, page: firstPage})}`}
                               onClick={gotoTopOfPage}
                               id="first" className="page" data-testid="first-page">
           FIRST
         </Link>}
-        {hasPrevPage && <Link to={`${Paths.artGallery}${toQueryString({...currentQuery, page: prevPage})}`}
+        {hasPrevPage && <Link to={`${Paths.artGallery}${toQueryString({...rest, page: prevPage})}`}
                               onClick={gotoTopOfPage}
                               id="prev" className="page" data-testid="prev-page">
           PREV
@@ -69,12 +68,12 @@ export const GalleryNav: FC<Props> = ({id}) => {
                    onChange={event => updatePageSize(event.currentTarget.value)}/>
             <button type="submit" id="submit-page-number" className="control">Go</button>
         </form>
-        {hasNextPage && <Link to={`${Paths.artGallery}${toQueryString({...currentQuery, page: nextPage})}`}
+        {hasNextPage && <Link to={`${Paths.artGallery}${toQueryString({...rest, page: nextPage})}`}
                               onClick={gotoTopOfPage}
                               id="next" className="page" data-testid="next-page">
           NEXT
         </Link>}
-        {hasNextPage && <Link to={`${Paths.artGallery}${toQueryString({...currentQuery, page: lastPage})}`}
+        {hasNextPage && <Link to={`${Paths.artGallery}${toQueryString({...rest, page: lastPage})}`}
                               onClick={gotoTopOfPage}
                               id="last" className="page" data-testid="last-page">
           LAST
