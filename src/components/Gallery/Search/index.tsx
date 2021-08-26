@@ -19,8 +19,8 @@ export const Search: FC<Props> = ({id}) => {
     const [searchOptions, updateSearchOptions] = useState<AICArtSuggestion[]>([]);
     const [searchString, updateQuery] = useState<string>('');
     const history = useHistory();
-    const {tab} = useQuery<{tab: string}>();
-    const debounceSearch = debounce((query: {search: string, source: string}, consumer: Consumer<SearchArtAction>) =>
+    const {tab, ...rest} = useQuery<{ tab: string }>();
+    const debounceSearch = debounce((query: { search: string, source: string }, consumer: Consumer<SearchArtAction>) =>
         data.searchForArtOptions(query, consumer), 300);
 
     useEffect(() => {
@@ -33,7 +33,7 @@ export const Search: FC<Props> = ({id}) => {
         event.preventDefault();
         searchString && history.push({
             pathname: Paths.artGallery,
-            search: toQueryString({tab, search: searchString})
+            search: toQueryString({...rest, tab, search: searchString})
         });
     };
 
