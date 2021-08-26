@@ -22,6 +22,7 @@ export const GalleryNav: FC<Props> = ({id}) => {
     const firstPage = 1;
     const lastPage = art?.pagination?.totalPages ?? Number.MAX_VALUE;
     const currentPage = +page;
+    const totalRecords = art?.pagination?.total ?? Number.MAX_VALUE;
 
     const hasNextPage = currentPage < lastPage;
     const nextPage = hasNextPage ? currentPage + 1 : currentPage;
@@ -61,6 +62,8 @@ export const GalleryNav: FC<Props> = ({id}) => {
                    onChange={event => updatePageNumber(event.currentTarget.value)}/>
             <input type="number"
                    data-testid="per-page"
+                   min={1}
+                   max={totalRecords}
                    id="per-page"
                    placeholder="per page"
                    onChange={event => updatePageSize(event.currentTarget.value)}/>
