@@ -4,7 +4,7 @@ import {join} from '../../util';
 import {Loading} from '../../Loading';
 import {Paths} from '../../../App';
 import {Link} from 'react-router-dom';
-import {useURL} from '../../hooks';
+import {useQuery} from '../../hooks';
 import {toQueryString} from '../../../util/URL';
 import './Image.scss';
 
@@ -22,7 +22,7 @@ export const Image: FC<ImageProps> = (
     }) => {
     const [completed, isComplete] = useState(false);
     const [errored, isError] = useState(false);
-    const {queryObj: {tab}} = useURL<{ tab: string }>();
+    const {queryObj: {tab}} = useQuery<{ tab: string }>();
     const gotoTopOfPage = () => window.scrollTo(0, 0);
     const ConditionalLink: FC = ({children}) => linkEnabled ?
         <Link onClick={gotoTopOfPage} to={`${Paths.artGallery}/${piece.id}${toQueryString({tab})}`}

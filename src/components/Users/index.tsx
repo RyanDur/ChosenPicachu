@@ -6,13 +6,13 @@ import {createRandomUsers} from '../../__tests__/util';
 import {Link, useHistory} from 'react-router-dom';
 import {Paths} from '../../App';
 import {age, formatAge} from '../util';
-import {useURL} from '../hooks';
+import {useQuery} from '../hooks';
 import './Users.scss';
 import './Users.layout.scss';
 
 export const Users: FC = () => {
     const history = useHistory();
-    const {queryObj: {email, mode}, nextQueryString, path} = useURL<{ email: string, mode: string }>();
+    const {queryObj: {email, mode}, nextQueryString, path} = useQuery<{ email: string, mode: string }>();
     const [users, updateNewUsers] = useState<UserInfo[]>(createRandomUsers());
     const currentUser: UserInfo | undefined = users.find(info => info.user.email === email);
 
