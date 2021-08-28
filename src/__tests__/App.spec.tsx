@@ -21,7 +21,7 @@ describe('the App', () => {
 
     describe('navigating to know paths', () => {
         beforeEach(() => {
-            renderWithRouter(<App/>, {initialRoute: Paths.home});
+            renderWithRouter(<App/>, {path: Paths.home});
             header = screen.getByTestId('header');
             navigation = screen.getByTestId('navigation');
             main = screen.getByTestId('main');
@@ -53,7 +53,7 @@ describe('the App', () => {
     });
 
     test('default path', () => {
-        const rendered = renderWithRouter(<App/>, {initialRoute: `/${faker.lorem.word()}`});
+        const rendered = renderWithRouter(<App/>, {path: `/${faker.lorem.word()}`});
         expect(rendered().testLocation?.pathname).toEqual(Paths.home);
     });
 });

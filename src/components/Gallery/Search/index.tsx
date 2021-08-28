@@ -2,9 +2,6 @@ import {FC, FormEvent, useEffect, useState} from 'react';
 import {AICArtSuggestion, AsyncState} from '../../../data/types';
 import {data} from '../../../data';
 import {SearchArtAction} from '../../../data/actions';
-import {useHistory} from 'react-router-dom';
-import {toQueryString} from '../../../util/URL';
-import {Paths} from '../../../App';
 import {debounce} from 'lodash';
 import {Consumer} from '../../UserInfo/types';
 import {useQuery} from '../../hooks';
@@ -18,29 +15,22 @@ interface Props {
 export const Search: FC<Props> = ({id}) => {
     const [searchOptions, updateSearchOptions] = useState<AICArtSuggestion[]>([]);
     const [searchString, updateQuery] = useState<string>('');
-    const history = useHistory();
-    const {tab, ...rest} = useQuery<{ tab: string }>();
+    const {queryObj: {tab}, updateQueryString} = useQuery<{ tab?: string, search?: string }>();
     const debounceSearch = debounce((query: { search: string, source: string }, consumer: Consumer<SearchArtAction>) =>
         data.searchForArtOptions(query, consumer), 300);
 
     useEffect(() => {
-        searchString && debounceSearch({search: searchString.toLowerCase(), source: tab}, (action: SearchArtAction) => {
+        searchString && debounceSearch({search: searchString.toLowerCase(), source: tab || ''}, (action: SearchArtAction) => {
             if (action.type === AsyncState.LOADED) updateSearchOptions(action.value);
         });
     }, [searchString]);
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        searchString && history.push({
-            pathname: Paths.artGallery,
-            search: toQueryString({...rest, tab, search: searchString})
-        });
+        searchString && updateQueryString({search: searchString});
     };
 
-    const handleReset = () => history.push({
-        pathname: Paths.artGallery,
-        search: toQueryString({tab})
-    });
+    const handleReset = () => updateQueryString({search: undefined});
 
     return <form id={id} className="search" onSubmit={handleSubmit} onReset={handleReset} data-testid="search">
         <button className='reset-query' data-testid="reset-query" type="reset" aria-label="reset search"/>

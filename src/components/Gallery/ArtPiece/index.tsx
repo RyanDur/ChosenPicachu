@@ -6,15 +6,15 @@ import {ArtPieceContext, useArtPiece, useArtPieceContext} from './Context';
 import {Image} from '../Image';
 import {AsyncState} from '../../../data/types';
 import {GetPieceAction} from '../../../data/actions';
-import './Piece.scss';
 import {useQuery} from '../../hooks';
+import './Piece.scss';
 
 const ArtPiece = () => {
     const {piece, updatePiece, reset} = useArtPiece();
     const [loading, isLoading] = useState(false);
     const [errored, isErrored] = useState(false);
     const {id} = useParams<{ id: string }>();
-    const {tab} = useQuery<{ tab: string }>();
+    const {queryObj: {tab}} = useQuery<{ tab: string }>();
 
     useEffect(() => {
         id && data.getPiece({id, source: tab}, (action: GetPieceAction) => {

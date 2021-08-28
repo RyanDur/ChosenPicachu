@@ -17,7 +17,7 @@ export const ArtGallery: FC = () => {
     const {art, updateArt, reset} = useGallery();
     const [loading, isLoading] = useState(false);
     const [errored, hasErrored] = useState(false);
-    const {page, size, search, tab} = useQuery<{ page: number, size: number, tab: string, search?: string }>();
+    const {queryObj: {page, size, search, tab}} = useQuery<{ page: number, size: number, tab: string, search?: string }>();
 
     useEffect(() => {
         data.getAllArt({page, size, search, source: toSource(tab)},
