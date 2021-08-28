@@ -99,7 +99,7 @@ describe('the image', () => {
     describe('disabling the link', () => {
         beforeEach(() => rendered =
             renderWithRouter(<Image piece={piece} linkEnabled={false}/>,
-                {initialRoute: Paths.artGallery}));
+                {path: Paths.artGallery}));
 
         it('should not change location when clicked', () => {
             userEvent.click(screen.getByTestId(image));

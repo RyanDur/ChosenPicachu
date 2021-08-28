@@ -132,7 +132,7 @@ const createUser = (): User => ({
     email: faker.internet.email(),
     dob: new Date(toISOWithoutTime(faker.date.past(Math.random() * 80)))
 });
-const createAddress = (): AddressInfo => ({
+export const createAddress = (): AddressInfo => ({
     city: faker.address.city(),
     state: faker.address.stateAbbr(),
     streetAddress: faker.address.streetName(),
@@ -146,7 +146,7 @@ const maybeCreateAddress = (): AddressInfo | undefined =>
 const createDetails = (num = 10) => faker.lorem.sentences(randomNumberFromRange(2, num));
 const generator = new AvatarGenerator();
 
-const userInfo = (address?: AddressInfo, worksFromHome = false): UserInfo => {
+export const userInfo = (address?: AddressInfo, worksFromHome = false): UserInfo => {
     const homeAddress = createAddress();
     return ({
         user: createUser(),

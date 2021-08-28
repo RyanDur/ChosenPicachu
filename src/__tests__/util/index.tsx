@@ -14,21 +14,21 @@ export interface Rendered {
 }
 
 interface URLContext {
-    path?: string;
     initialRoute?: string;
+    path?: string;
     params?: Record<string, unknown>;
 }
 
-const defaultUrlContext: URLContext = {initialRoute: '/initial/route', params: {}};
+const defaultUrlContext: URLContext = {path: '/initial/route', params: {}};
 export const renderWithRouter = (component: ReactElement, {
-    initialRoute = defaultUrlContext.path,
-    path,
+    initialRoute,
+    path = defaultUrlContext.path,
     params = defaultUrlContext.params
 } = defaultUrlContext): () => Rendered => {
     let testHistory: H.History, testLocation: H.Location,
         result = render(
-            <MemoryRouter initialEntries={[`${initialRoute}${toQueryString(params)}`]}>
-                <Route path={path || initialRoute}>{component}</Route>
+            <MemoryRouter initialEntries={[`${initialRoute || path}${toQueryString(params)}`]}>
+                <Route path={path}>{component}</Route>
                 <Route
                     path="*"
                     render={({history, location}) => {

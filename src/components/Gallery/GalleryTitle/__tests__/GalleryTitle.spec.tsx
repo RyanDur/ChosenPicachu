@@ -7,21 +7,20 @@ jest.mock('../../ArtPiece/Context', () => ({
     useArtPiece: () => ({piece: {title}})
 }));
 
-const initialRoute = '/a/path';
+const path = '/a/path';
 jest.mock('react-router-dom', () => ({
     ...jest.requireActual('react-router-dom'),
-    useRouteMatch: () => ({path: initialRoute})
+    useRouteMatch: () => ({path: path})
 }));
 
 describe('gallery title', () => {
     test('viewing', () => {
-        renderWithRouter(<GalleryTitle/>, {initialRoute});
+        renderWithRouter(<GalleryTitle/>, {path});
         expect(screen.getByText('Gallery')).toBeInTheDocument();
     });
 
     test('viewing a piece', () => {
-        renderWithRouter(<GalleryTitle/>, {initialRoute: `${initialRoute}/123`
-    });
+        renderWithRouter(<GalleryTitle/>, {path, initialRoute: `${path}/123`});
         expect(screen.getByText(title)).toBeInTheDocument();
     });
 });

@@ -12,7 +12,7 @@ import './Users.layout.scss';
 
 export const Users: FC = () => {
     const history = useHistory();
-    const {email, mode} = useQuery<{ email: string, mode: string }>();
+    const {queryObj: {email, mode}, nextQueryString, path} = useQuery<{ email: string, mode: string }>();
     const [users, updateNewUsers] = useState<UserInfo[]>(createRandomUsers());
     const currentUser: UserInfo | undefined = users.find(info => info.user.email === email);
 
@@ -72,17 +72,23 @@ export const Users: FC = () => {
                                 }
                             }} onClick={event => event.currentTarget.classList.remove('open')}>
                                 <nav className="menu rounded-corners">
-                                    <Link to={`${Paths.users}?email=${userInfo.user.email}&mode=view`}
+                                    <Link to={`${path}${nextQueryString({
+                                        email: userInfo.user.email,
+                                        mode: 'view'
+                                    })}`}
                                           className='item'
                                           data-testid="view">View</Link>
-                                    <Link to={`${Paths.users}?email=${userInfo.user.email}&mode=edit`}
+                                    <Link to={`${path}${nextQueryString({
+                                        email: userInfo.user.email,
+                                        mode: 'edit'
+                                    })}`}
                                           className='item'
                                           data-testid="view">Edit</Link>
-                                    <Link to={email === userInfo.user.email ? Paths.users : history.location}
+                                    <Link to={email === userInfo.user.email ? path : history.location}
                                           className='item'
                                           onClick={() => updateNewUsers(removeUserInfo(userInfo, users))}
                                           data-testid="remove">Remove</Link>
-                                    <Link to={`${Paths.users}?email=${userInfo.user.email}`}
+                                    <Link to={`${path}${nextQueryString({email: userInfo.user.email})}`}
                                           className='item'
                                           data-testid="clone">Clone</Link>
                                 </nav>
