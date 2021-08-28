@@ -8,7 +8,7 @@ type Query<T extends { [key: string]: unknown }> = {
     updateQueryString: Consumer<T>,
     nextQueryString: (params: Partial<T>) => string
 };
-export const useQuery = <T extends { [key: string]: unknown }>(val?: T): Query<T> => {
+export const useURL = <T extends { [key: string]: unknown }>(val?: T): Query<T> => {
     const history = useHistory();
     const location = useLocation();
     const nextQueryString = (params: Partial<T>): string => {

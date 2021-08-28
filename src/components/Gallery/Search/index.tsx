@@ -4,7 +4,7 @@ import {data} from '../../../data';
 import {SearchArtAction} from '../../../data/actions';
 import {debounce} from 'lodash';
 import {Consumer} from '../../UserInfo/types';
-import {useQuery} from '../../hooks';
+import {useURL} from '../../hooks';
 import './Search.scss';
 import './Search.layout.scss';
 
@@ -15,7 +15,7 @@ interface Props {
 export const Search: FC<Props> = ({id}) => {
     const [searchOptions, updateSearchOptions] = useState<AICArtSuggestion[]>([]);
     const [searchString, updateQuery] = useState<string>('');
-    const {queryObj: {tab}, updateQueryString} = useQuery<{ tab?: string, search?: string }>();
+    const {queryObj: {tab}, updateQueryString} = useURL<{ tab?: string, search?: string }>();
     const debounceSearch = debounce((query: { search: string, source: string }, consumer: Consumer<SearchArtAction>) =>
         data.searchForArtOptions(query, consumer), 300);
 
