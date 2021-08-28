@@ -1,6 +1,6 @@
 import {Link} from 'react-router-dom';
 import React, {FC, FormEvent, useState} from 'react';
-import {useURL} from '../../hooks';
+import {useQuery} from '../../hooks';
 import {useGallery} from '../Context';
 import './GalleryNav.scss';
 import './GalleryNav.layout.scss';
@@ -16,7 +16,7 @@ export const GalleryNav: FC<Props> = ({id}) => {
         path,
         updateQueryString,
         nextQueryString
-    } = useURL<{ page: number, size: number }>({page: 1, size: 12});
+    } = useQuery<{ page: number, size: number }>({page: 1, size: 12});
     const [pageNumber, updatePageNumber] = useState(page);
     const [pageSize, updatePageSize] = useState(size);
 

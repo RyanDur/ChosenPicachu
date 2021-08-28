@@ -1,6 +1,6 @@
 import {FC, useEffect, useState} from 'react';
 import {data} from '../../../data';
-import {useURL} from '../../hooks';
+import {useQuery} from '../../hooks';
 import {Loading} from '../../Loading';
 import {Image} from '../Image';
 import {useGallery} from '../Context';
@@ -17,7 +17,7 @@ export const ArtGallery: FC = () => {
     const {art, updateArt, reset} = useGallery();
     const [loading, isLoading] = useState(false);
     const [errored, hasErrored] = useState(false);
-    const {queryObj: {page, size, search, tab}} = useURL<{ page: number, size: number, tab: string, search?: string }>();
+    const {queryObj: {page, size, search, tab}} = useQuery<{ page: number, size: number, tab: string, search?: string }>();
 
     useEffect(() => {
         data.getAllArt({page, size, search, source: toSource(tab)},
