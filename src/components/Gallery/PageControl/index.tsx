@@ -21,7 +21,7 @@ export const PageControl = () => {
         updateQueryString({page: pageNumber, size: pageSize});
     };
 
-    return <form onSubmit={onSubmit} id="page-control" className="page stick-to-bottom">
+    return <form onSubmit={onSubmit} id="page-control">
         <input type="number"
                id="go-to"
                min={firstPage}
