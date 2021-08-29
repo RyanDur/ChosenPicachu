@@ -5,37 +5,17 @@
   height: 100%;
   background-color: var(--void);
 
+  #info,
   .fill-left,
   .fill-right {
     width: 100%;
     background-color: var(--paper);
   }
 
-  #go-to-page {
+  #info {
     pointer-events: all;
+    text-align: center;
     width: var(--base-x-10_5);
-
-    #per-page,
-    #go-to {
-      outline: none;
-      height: 25%;
-      border: none;
-      padding: 0 0 0 var(--base);
-    }
-
-    #submit-page-number {
-      height: 50%;
-      border: none;
-      padding: 0;
-      font-size: var(--base-x-2);
-      font-weight: bold;
-      background-color: var(--paper);
-
-      &:focus,
-      &:hover {
-        background: var(--mint);
-      }
-    }
   }
 
   .page {

@@ -11,7 +11,8 @@ jest.mock('../components', () => ({
     Gallery: () => 'Art Gallery',
     GalleryTitle: () => 'Art Gallery Title',
     GalleryNav: () => 'Art Navigation',
-    SearchRoutes: () => 'Search'
+    SearchRoutes: () => 'Search',
+    GalleryFilter: () => 'Gallery Filter'
 }));
 
 describe('the App', () => {
@@ -19,7 +20,7 @@ describe('the App', () => {
     let navigation: HTMLElement;
     let main: HTMLElement;
 
-    describe('navigating to know paths', () => {
+    describe('navigating to known paths', () => {
         beforeEach(() => {
             renderWithRouter(<App/>, {path: Paths.home});
             header = screen.getByTestId('header');
@@ -45,9 +46,11 @@ describe('the App', () => {
         test('for the Art Gallery page', () => {
             userEvent.click(within(navigation).getByText('Gallery'));
             const footer = screen.getByTestId('footer');
+            const galleryFilter = screen.getByTestId('filter');
             expect(within(header).getByText('Art Gallery Title')).toBeInTheDocument();
             expect(within(footer).queryByText('Art Navigation')).toBeInTheDocument();
             expect(within(main).queryByText('Art Gallery')).toBeInTheDocument();
+            expect(within(galleryFilter).queryByText('Gallery Filter')).toBeInTheDocument();
             expect(within(header).getByText('Search')).toBeInTheDocument();
         });
     });

@@ -15,18 +15,6 @@
       white-space: nowrap;
     }
   }
-
-  main {
-    padding: var(--base-x-5);
-    background-color: var(--paper);
-    height: fit-content;
-
-    &.gallery-in-view {
-      padding: 0;
-      height: 100%;
-    }
-  }
-
   #side-nav {
     background-color: var(--paper);
     margin: 0 var(--base) 0 0;
@@ -65,6 +53,7 @@
 
       .icons-content {
         display: none;
+        padding: 0;
       }
 
       &:focus-within .icons-content,
@@ -72,10 +61,35 @@
         display: block;
       }
 
+      .attribution {
+        height: unset;
+      }
+
       .attribution:focus {
         color: var(--internationl-orange-engineering);
       }
     }
+  }
+
+  main {
+    padding: var(--base-x-5);
+    background-color: var(--paper);
+    height: fit-content;
+
+    &.gallery-in-view {
+      padding: 0;
+      height: 100%;
+    }
+  }
+
+  #filter {
+    background-color: var(--paper);
+    margin: 0 0 0 var(--base);
+    position: fixed;
+    bottom: var(--base-x-12);
+    top: 0;
+    right: 0;
+    width: var(--base-x-15_5);
   }
 
   #app-footer {
@@ -93,6 +107,16 @@
   #root {
     #app-header {
       padding-left: var(--base-x-5);
+    }
+
+    #filter {
+      background-color: var(--paper);
+      margin: 0 0 0 var(--base);
+      position: sticky;
+      bottom: 0;
+      top: 0;
+      right: 0;
+      width: var(--base-x-15_5);
     }
   }
 }
@@ -115,11 +139,22 @@
       height: auto;
     }
 
+    #filter {
+      bottom: unset;
+      top: unset;
+      right: unset;
+      position: relative;
+      width: 100%;
+      margin: 0;
+      height: fit-content;
+    }
+
     #app-footer {
       height: 8rem;
     }
 
     #side-nav {
+      margin: 0 0 var(--base) 0;
       width: 100%;
       display: flex;
       align-items: center;

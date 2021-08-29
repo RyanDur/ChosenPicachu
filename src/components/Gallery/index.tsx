@@ -6,6 +6,7 @@ import {GalleryTitle} from './GalleryTitle';
 import {GalleryNav} from './Nav';
 import {Tabs} from '../Tabs';
 import {Source} from '../../data/types';
+import { PageControl } from './PageControl';
 
 export enum GalleryPath {
     piece = '/:id'
@@ -28,5 +29,6 @@ const Gallery: FC = () => {
 export {
     Gallery,
     GalleryNav,
-    GalleryTitle
+    GalleryTitle,
+    PageControl
 };

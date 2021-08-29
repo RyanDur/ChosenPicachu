@@ -136,7 +136,7 @@ describe('The gallery.', () => {
 
         it('should pass the criteria', () =>
             expect(data.getAllArt).toHaveBeenCalledWith({
-                page: '23',
+                page: 23,
                 search: 'g',
                 source: Source.HARVARD
             }, expect.anything()));

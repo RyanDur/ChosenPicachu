@@ -8,8 +8,8 @@
     var(--base-x-16_5);
   grid-template-rows: var(--base-x-12) 1fr var(--base-x-12);
   grid-template-areas:
-    "header header header header ."
-    "nav . main . ."
+    "header header header header filter"
+    "nav . main . filter"
     "nav footer footer footer footer";
 
   #app-header {
@@ -19,8 +19,9 @@
       var(--base-x-16_5)
       var(--base-x-16_5)
       1fr
-      1fr var(--base-x-16_5);
-    grid-template-areas: ". . title search .";
+      1fr
+      var(--base-x-16_5);
+    grid-template-areas: ". . title title search";
 
     .title {
       grid-area: title;
@@ -58,6 +59,12 @@
     }
   }
 
+  #filter {
+    grid-area: filter;
+    display: flex;
+    align-items: flex-end;
+  }
+
   #app-footer {
     grid-area: footer;
     display: grid;
@@ -76,11 +83,11 @@
 
 @media (max-width: 1366px) {
   #root {
-    grid-template-columns: 13.4rem 1fr;
+    grid-template-columns: 13.4rem 1fr 13.4rem;
     grid-template-areas:
-      "nav header"
-      "nav main"
-      "nav footer";
+      "nav header filter"
+      "nav main filter"
+      "nav footer filter";
 
     #app-header {
       grid-template-columns: 1fr 1fr;
@@ -109,10 +116,13 @@
 @media (max-width: 832px) {
   #root {
     grid-template-columns: 1fr;
-    grid-template-rows: var(--base-x-10) var(--base-x-4) 1fr var(--base);
+    grid-template-rows: var(--base-x-10) var(--base-x-4) var(--base-x-4) 1fr var(
+        --base
+      );
     grid-template-areas:
       "header"
       "nav"
+      "filter"
       "main"
       "footer";
 

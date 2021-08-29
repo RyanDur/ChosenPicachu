@@ -97,8 +97,7 @@ describe('the URI', () => {
             expect(URI.createSearchFrom(search, Source.AIC))
                 .toEqual(`${aicDomain}/search${toQueryString({
                     'query[term][title]': search,
-                    fields: 'suggest_autocomplete_all',
-                    limit: 5
+                    fields: 'suggest_autocomplete_all'
                 })}`);
         });
 
@@ -108,8 +107,7 @@ describe('the URI', () => {
                 .toEqual(`${harvardDomain}${toQueryString({
                     title: search,
                     fields: 'title',
-                    apikey: harvardAPIKey,
-                    size: 5
+                    apikey: harvardAPIKey
                 })}`);
         });
     });

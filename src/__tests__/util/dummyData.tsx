@@ -167,10 +167,10 @@ export const createRandomUsers = (num = randomNumberFromRange(3, 15)): UserInfo[
     [...Array(num)].map(() => userInfo(maybeCreateAddress(), Math.random() > 0.5));
 
 export const pagination = {
-    total: 100,
-    limit: randomNumberFromRange(10, 100),
+    total: 1000,
+    limit: 12,
     offset: 0,
-    total_pages: 10,
+    total_pages: 84,
     current_page: 1,
     next_url: faker.internet.url()
 };
