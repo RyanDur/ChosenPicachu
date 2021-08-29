@@ -2,7 +2,7 @@
   display: grid;
   column-gap: var(--base);
   grid-template-columns: repeat(5, 1fr);
-  grid-template-areas: "first prev go-to next last";
+  grid-template-areas: "first prev info next last";
 
   #first {
     grid-area: first;
@@ -20,11 +20,12 @@
     grid-area: prev;
   }
 
-  #go-to-page {
-    grid-area: go-to;
+  #info {
+    grid-area: info;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
   }
 
   #next {

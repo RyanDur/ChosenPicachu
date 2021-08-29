@@ -1,0 +1,53 @@
+#page-control {
+  width: 100%;
+  background-color: var(--void);
+
+  .control {
+    width: 100%;
+    height: var(--base-x-8);
+    border: 0;
+    border-radius: 0;
+    margin-bottom: var(--base);
+
+    &.input {
+      padding-left: var(--base-x-2);
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  #per-page,
+  #go-to {
+    outline: none;
+    border: none;
+    padding: 0 0 0 var(--base);
+  }
+
+  #submit-page-number {
+    border: none;
+    font-size: var(--base-x-2);
+    font-weight: bold;
+    background-color: var(--paper);
+
+    &:focus,
+    &:hover {
+      background: var(--mint);
+    }
+  }
+}
+
+@media (max-width: 832px) {
+  #page-control {
+    display: flex;
+    .control {
+      height: var(--base-x-4);
+      margin: 0 var(--base) 0 0;
+
+      &:last-child {
+        margin: 0;
+      }
+    }
+  }
+}
