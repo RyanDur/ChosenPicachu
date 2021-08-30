@@ -2,8 +2,8 @@ import userEvent from '@testing-library/user-event';
 import {screen} from '@testing-library/react';
 import {toQueryObj} from '../../../../util/URL';
 import {fromAICArt as mockArt, Rendered, renderWithRouter} from '../../../../__tests__/util';
-import {GalleryNav} from '../../Nav';
 import {Paths} from '../../../../App';
+import {PageControl} from '../index';
 
 jest.mock('../../Context', () => ({
     useGallery: () => ({art: mockArt})
@@ -12,7 +12,7 @@ window.scrollTo = jest.fn();
 describe('The page controls', () => {
     let rendered: () => Rendered;
 
-    beforeEach(() => rendered = renderWithRouter(<GalleryNav/>, {path: Paths.artGallery}));
+    beforeEach(() => rendered = renderWithRouter(<PageControl/>, {path: Paths.artGallery}));
 
     describe('going to a specific page', () => {
         test('submitting the specified page', () => {

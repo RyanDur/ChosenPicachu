@@ -1,9 +1,10 @@
 import React from 'react';
 import {Link, Redirect, Route, Switch, useRouteMatch} from 'react-router-dom';
 import {About, Gallery, GalleryNav, GalleryTitle, Home, PageControl, SearchRoutes, Users} from './components';
+import {toQueryString} from './util/URL';
+import {Source} from './data/types';
 import './App.scss';
 import './App.layout.scss';
-import {toQueryString} from './util/URL';
 
 export enum Paths {
     home = '/',
@@ -35,7 +36,7 @@ export const App = () => {
                 <Link id="navigate-about" className="path" to={Paths.about}>About</Link>
                 <Link id="navigate-users" className="path" to={Paths.users}>Users</Link>
                 <Link id="navigate-form" className="path"
-                      to={`${Paths.artGallery}${toQueryString({page: 1, size: 12, tab: 'aic'})}`}>Gallery</Link>
+                      to={`${Paths.artGallery}${toQueryString({page: 1, size: 12, tab: Source.AIC})}`}>Gallery</Link>
                 <a id="navigate-repo" className="path" href={Paths.repo}
                    rel="noopener noreferrer" target="_blank">Repo</a>
             </nav>

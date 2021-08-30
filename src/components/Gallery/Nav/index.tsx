@@ -1,5 +1,5 @@
 import {Link} from 'react-router-dom';
-import React, {FC, useMemo} from 'react';
+import React, {FC, useEffect, useRef} from 'react';
 import {useQuery} from '../../hooks';
 import {useGallery} from '../Context';
 import './GalleryNav.scss';
@@ -9,6 +9,14 @@ interface Props {
     id?: string;
 }
 
+const usePrevious = <T extends unknown>(value: T) => {
+    const ref = useRef<T>();
+    useEffect(() => {
+        ref.current = value;
+    }, [value]);
+    return ref.current;
+};
+
 export const GalleryNav: FC<Props> = ({id}) => {
     const {art} = useGallery();
     const {
@@ -16,7 +24,7 @@ export const GalleryNav: FC<Props> = ({id}) => {
         path,
         nextQueryString
     } = useQuery<{ page: number, size: number }>({page: 1, size: 0});
-    const foo = useMemo(() => art?.pagination.total, [art?.pagination.total]);
+    const previous = usePrevious(art?.pagination.total);
     const firstPage = 1;
     const lastPage = art?.pagination?.totalPages ?? Number.MAX_VALUE;
     const currentPage = +page;
@@ -26,7 +34,7 @@ export const GalleryNav: FC<Props> = ({id}) => {
     const hasPrevPage = currentPage > firstPage;
     const prevPage = hasPrevPage ? currentPage - 1 : currentPage;
 
-    const totalRecords = foo;
+    const totalRecords = art?.pagination.total ?? previous;
     const firstRecord = 1 + (size * (page - 1));
     const lastRecord = art?.pagination.totalPages === page ? totalRecords : size * page;
 
