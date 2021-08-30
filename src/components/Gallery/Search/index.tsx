@@ -7,6 +7,8 @@ import {Consumer} from '../../UserInfo/types';
 import {useQuery} from '../../hooks';
 import './Search.scss';
 import './Search.layout.scss';
+import {useHistory} from 'react-router-dom';
+import {Paths} from '../../../App';
 
 interface Props {
     id?: string;
@@ -15,7 +17,8 @@ interface Props {
 export const Search: FC<Props> = ({id}) => {
     const [searchOptions, updateSearchOptions] = useState<AICArtSuggestion[]>([]);
     const [searchString, updateQuery] = useState<string>('');
-    const {queryObj: {tab}, updateQueryString} = useQuery<{ tab?: string, search?: string }>();
+    const history = useHistory();
+    const {queryObj: {tab}, updateQueryString, nextQueryString} = useQuery<{ tab?: string, search?: string }>();
     const debounceSearch = debounce((query: { search: string, source: string }, consumer: Consumer<SearchArtAction>) =>
         data.searchForArtOptions(query, consumer), 300);
 
@@ -27,7 +30,10 @@ export const Search: FC<Props> = ({id}) => {
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        searchString && updateQueryString({search: searchString});
+        searchString && history.push({
+            pathname: Paths.artGallery,
+            search: nextQueryString({search: searchString})
+        });
     };
 
     const handleReset = () => updateQueryString({search: undefined});
