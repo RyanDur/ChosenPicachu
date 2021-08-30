@@ -6,6 +6,7 @@ import {data} from '../../../../data';
 import {loaded, SearchArtAction} from '../../../../data/actions';
 import * as faker from 'faker';
 import {Dispatch, Source} from '../../../../data/types';
+import {Paths} from '../../../../App';
 
 describe('search', () => {
     const searchWord = faker.lorem.word().toUpperCase();
@@ -30,6 +31,7 @@ describe('search', () => {
         userEvent.type(screen.getByPlaceholderText('Search For'), 'A');
         userEvent.click(screen.getByTestId('submit-query'));
         expect(rendered().testLocation?.search).toEqual('?search=A');
+        expect(rendered().testLocation?.pathname).toEqual(Paths.artGallery);
     });
 
     it('should remove the page query param', () => {
