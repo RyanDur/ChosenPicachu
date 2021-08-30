@@ -12,7 +12,7 @@ jest.mock('../components', () => ({
     GalleryTitle: () => 'Art Gallery Title',
     GalleryNav: () => 'Art Navigation',
     SearchRoutes: () => 'Search',
-    GalleryFilter: () => 'Gallery Filter'
+    PageControl: () => 'Gallery Filter'
 }));
 
 describe('the App', () => {
