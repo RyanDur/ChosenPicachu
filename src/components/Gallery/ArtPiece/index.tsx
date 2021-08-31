@@ -18,6 +18,7 @@ const ArtPiece = () => {
 
     useEffect(() => {
         id && data.getPiece({id, source: tab}, (action: GetPieceAction) => {
+            console.log(action);
             isLoading(action.type === AsyncState.LOADING);
             isErrored(action.type === AsyncState.ERROR);
             if (action.type === AsyncState.LOADED) updatePiece(action.value);
@@ -31,8 +32,8 @@ const ArtPiece = () => {
           <Image piece={piece} linkEnabled={false} className="piece"/>
           <figcaption className="artist-display">{piece.artistInfo}</figcaption>
         </figure>}
-        {errored && <img src="https://img.icons8.com/ios/50/ffffff/no-image.png"
-                         alt="Load Error" data-testid="image-error"/>}
+        {errored && <article className="err"><img src="https://img.icons8.com/ios/100/000000/no-image.png"
+                                  alt="Load Error" data-testid="image-error"/></article>}
     </>;
 };
 

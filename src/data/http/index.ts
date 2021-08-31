@@ -11,7 +11,7 @@ export const http = (
         url,
         method = HTTPMethod.GET
     }: Request) =>
-    fetch(url, {method}).then(async response => {
+    fetch(url, {method, mode: 'cors'}).then(async response => {
         switch (response.status) {
             case 200:
             case 201:
@@ -23,4 +23,7 @@ export const http = (
             default:
                 return failure(HTTPError.UNKNOWN);
         }
+    }).catch((e) => {
+        console.log(e);
+        return failure(HTTPError.THROWN);
     });

@@ -1,6 +1,14 @@
 import {Source} from './types';
 import {toQueryString} from '../util/URL';
-import {aicDomain, defaultAutocompleteLimit, defaultRecordLimit, harvardAPIKey, harvardDomain} from '../config';
+import {
+    aicDomain,
+    defaultAutocompleteLimit,
+    defaultRecordLimit,
+    harvardAPIKey,
+    harvardDomain,
+    rijksAPIKey,
+    rijksDomain
+} from '../config';
 
 export const shapeOfAICResponse = ['id', 'title', 'image_id', 'artist_display', 'term_titles', 'thumbnail'];
 export const shapeOfHarvardResponse = ['id', 'title', 'people', 'primaryimageurl'];
@@ -13,27 +21,66 @@ interface Query {
 
 export const URI = {
     from: ({source, path, params = {}}: Query): string => {
-        const domain = source === Source.AIC ? aicDomain : harvardDomain;
-        const {search, limit = defaultRecordLimit, ...rest} = params;
-        params = source === Source.AIC ?
-            {q: search, fields: shapeOfAICResponse, ...rest, limit} :
-            {q: search, fields: shapeOfHarvardResponse, ...rest, apikey: harvardAPIKey, size: limit};
-
-        const queryString = toQueryString(params);
-        if (source === Source.HARVARD || !search) {
-            return [domain, path, queryString].join('');
-        } else return [domain, '/search', queryString].join('');
+        const {search, limit = defaultRecordLimit, page, ...rest} = params;
+        switch (source) {
+            case Source.AIC: {
+                const queryString = toQueryString({
+                    q: search,
+                    fields: shapeOfAICResponse,
+                    page,
+                    ...rest,
+                    limit
+                });
+                return search ? [aicDomain, '/search', queryString].join('') : [aicDomain, path, queryString].join('');
+            }
+            case Source.HARVARD: {
+                return [harvardDomain, path,
+                    toQueryString({
+                        q: search,
+                        fields: shapeOfHarvardResponse,
+                        page,
+                        ...rest,
+                        apikey: harvardAPIKey,
+                        size: limit
+                    })].join('');
+            }
+            default: {
+                return [rijksDomain, path,
+                    toQueryString({
+                        q: search,
+                        p: page,
+                        ps: limit,
+                        imgonly: true,
+                        key: rijksAPIKey
+                    })].join('');
+            }
+        }
     },
 
-    createSearchFrom: (search: string, source: Source) =>
-        source === Source.AIC ? `${aicDomain}/search${toQueryString({
-            'query[term][title]': search,
-            fields: 'suggest_autocomplete_all',
-            limit: defaultAutocompleteLimit
-        })}` : `${harvardDomain}${toQueryString({
-            title: search,
-            fields: 'title',
-            apikey: harvardAPIKey,
-            size: defaultAutocompleteLimit
-        })}`
+    createSearchFrom: (search: string, source: Source) => {
+        switch (source) {
+            case Source.AIC:
+                return `${aicDomain}/search${toQueryString({
+                    'query[term][title]': search,
+                    fields: 'suggest_autocomplete_all',
+                    limit: defaultAutocompleteLimit
+                })}`;
+            case Source.HARVARD:
+                return `${harvardDomain}${toQueryString({
+                    title: search,
+                    fields: 'title',
+                    apikey: harvardAPIKey,
+                    size: defaultAutocompleteLimit
+                })}`;
+            default:
+                return [rijksDomain,
+                    toQueryString({
+                        q: search,
+                        p: 1,
+                        ps: 5,
+                        imgonly: true,
+                        key: rijksAPIKey
+                    })].join('');
+        }
+    }
 };

@@ -6,11 +6,15 @@ import {
     aicArtResponse,
     fromAICArt,
     fromHarvardArt,
+    fromRIJKArt,
+    fromRIJKArtOptionsResponse,
+    fromRIJKArtResponse,
+    fromRIJKToPiece,
     harvardArtOptions,
     harvardArtResponse,
-    harvardPiece,
-    harvardPieceResponse,
-    options
+    harvardPiece, harvardPieceResponse,
+    options,
+    rijkArtObjectResponse
 } from '../../__tests__/util';
 import {nanoid} from 'nanoid';
 import {error, loaded, loading} from '../actions';
@@ -89,6 +93,38 @@ describe('data', () => {
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
             });
         });
+
+        describe('when the source is RIJKS', () => {
+            test('when it is successful', async () => {
+                const dispatch = jest.fn();
+                mockHttp.mockReturnValue(Promise.resolve(success(fromRIJKArtResponse)));
+
+                data.getAllArt({page: 1, size: 12, source: Source.RIJK}, dispatch);
+
+                expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+                await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(fromRIJKArt(1, 12))));
+            });
+
+            test('when it has a search term', async () => {
+                const dispatch = jest.fn();
+                mockHttp.mockReturnValue(Promise.resolve(success(fromRIJKArtResponse)));
+
+                data.getAllArt({page: 1, size: 12, search: 'rad', source: Source.RIJK}, dispatch);
+
+                expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+                await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(fromRIJKArt(1, 12))));
+            });
+
+            test('when it is not successful', async () => {
+                const dispatch = jest.fn();
+                mockHttp.mockReturnValue(Promise.resolve(failure(HTTPError.UNKNOWN)));
+
+                data.getAllArt({page: 1, size: 12, source: Source.RIJK}, dispatch);
+
+                expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+                await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
+            });
+        });
     });
 
     describe('retrieving an artwork', () => {
@@ -147,6 +183,28 @@ describe('data', () => {
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
             });
         });
+
+        describe('for RIJKS', () => {
+            test('when it is successful', async () => {
+                const dispatch = jest.fn();
+                mockHttp.mockReturnValue(Promise.resolve(success(rijkArtObjectResponse)));
+
+                data.getPiece({id: String(aicPiece.id), source: Source.RIJK}, dispatch);
+
+                expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+                await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(fromRIJKToPiece(rijkArtObjectResponse.artObject))));
+            });
+
+            test('when it is not successful', async () => {
+                const dispatch = jest.fn();
+                mockHttp.mockReturnValue(Promise.resolve(failure(HTTPError.UNKNOWN)));
+
+                data.getPiece({id: String(aicPiece.id), source: Source.RIJK}, dispatch);
+
+                expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+                await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
+            });
+        });
     });
 
     describe('searching for art', () => {
@@ -175,6 +233,19 @@ describe('data', () => {
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(options)));
             });
         });
+
+        describe('for RIJKS', () => {
+            test('when it is successful', async () => {
+                const dispatch = jest.fn();
+                mockHttp.mockReturnValue(Promise.resolve(success(fromRIJKArtOptionsResponse)));
+                const search = faker.lorem.word();
+
+                data.searchForArtOptions({search, source: Source.RIJK}, dispatch);
+
+                expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+                await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(options)));
+            });
+        });
     });
 
     const pieceAICResponse: AICPieceData = {
@@ -191,7 +262,7 @@ describe('data', () => {
     const pieceAICResponseWithoutAnImageID: AICPieceData = {data: {...pieceAICResponse.data, image_id: undefined}};
 
     const aicPiece: Piece = {
-        id: pieceAICResponse.data.id,
+        id: String(pieceAICResponse.data.id),
         title: pieceAICResponse.data.title,
         image: `https://www.artic.edu/iiif/2/${pieceAICResponse.data.image_id}/full/2000,/0/default.jpg`,
         altText: pieceAICResponse.data.thumbnail?.alt_text!,
@@ -203,10 +274,8 @@ describe('data', () => {
     const pagination = {
         total: fromAICArt.pagination.total,
         limit: fromAICArt.pagination.limit,
-        offset: fromAICArt.pagination.offset,
         total_pages: fromAICArt.pagination.totalPages,
         current_page: fromAICArt.pagination.currentPage,
-        next_url: fromAICArt.pagination.nextUrl
     };
 
     const aicArtOptions: AICAutoCompleteResponse = {

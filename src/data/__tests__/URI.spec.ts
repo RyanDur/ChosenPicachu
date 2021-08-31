@@ -2,12 +2,14 @@ import {shapeOfAICResponse, shapeOfHarvardResponse, URI} from '../URI';
 import * as faker from 'faker';
 import {Source} from '../types';
 import {toQueryString} from '../../util/URL';
-import {aicDomain, harvardAPIKey, harvardDomain} from '../../config';
+import {aicDomain, harvardAPIKey, harvardDomain, rijksAPIKey, rijksDomain} from '../../config';
 import {nanoid} from 'nanoid';
 
 const mockHarvardDomain = jest.fn();
 const mockAICDomain = jest.fn();
 const mockHarvardAPIKey = jest.fn();
+const mockRijksDomain = jest.fn();
+const mockRijksAPIKey = jest.fn();
 
 jest.mock('../../config', () => ({
     get aicDomain() {
@@ -18,14 +20,22 @@ jest.mock('../../config', () => ({
     },
     get harvardAPIKey() {
         return mockHarvardAPIKey();
+    },
+    get rijksDomain() {
+        return mockRijksDomain();
+    },
+    get rijksAPIKey() {
+        return mockRijksAPIKey();
     }
 }));
 
 describe('the URI', () => {
     beforeEach(() => {
-        mockAICDomain.mockReturnValue('/art/institute');
+        mockAICDomain.mockReturnValue('/from/art/institute');
         mockHarvardDomain.mockReturnValue('/from/harvard');
+        mockRijksDomain.mockReturnValue('/from/rijks');
         mockHarvardAPIKey.mockReturnValue(nanoid());
+        mockRijksAPIKey.mockReturnValue(nanoid());
     });
 
     it('should create the appropriate URI for the Art Institute', () => {
@@ -71,6 +81,32 @@ describe('the URI', () => {
             })}`);
     });
 
+    it('should create the appropriate URI for RIJKS', () => {
+        const searchQuery = {
+            params: {page: 1, limit: 4, apikey: rijksAPIKey, search: faker.lorem.words()},
+            source: Source.RIJK
+        };
+        const {search, limit, apikey, page} = searchQuery.params;
+
+        expect(URI.from(searchQuery))
+            .toEqual(`${rijksDomain}${toQueryString({
+                q: search,
+                p: page,
+                ps: limit,
+                imgonly: true,
+                key: apikey
+            })}`);
+
+        const query = {params: {page: 1, apikey: rijksAPIKey, limit}, source: Source.RIJK};
+        expect(URI.from(query))
+            .toEqual(`${rijksDomain}${toQueryString({
+                p: query.params.page,
+                ps: query.params.limit,
+                imgonly: true,
+                key: query.params.apikey
+            })}`);
+    });
+
     it('should allow to add a path', () => {
         const query = {params: {page: 1, limit: 456}, path: '/more/path', source: Source.AIC};
         expect(URI.from(query))
@@ -108,6 +144,18 @@ describe('the URI', () => {
                     title: search,
                     fields: 'title',
                     apikey: harvardAPIKey
+                })}`);
+        });
+
+        it('should create the rijks search url', () => {
+            const search = faker.lorem.words();
+            expect(URI.createSearchFrom(search, Source.RIJK))
+                .toEqual(`${rijksDomain}${toQueryString({
+                    q: search,
+                    p: 1,
+                    ps: 5,
+                    imgonly: true,
+                    key: rijksAPIKey
                 })}`);
         });
     });

@@ -16,9 +16,10 @@ import {
     HarvardRecordResponse
 } from './Harvard';
 import {Loaded, Loading, Error, AsyncState} from './AsyncState';
+import {RIJKAllArtResponse, RIJKAllPieceResponse} from './RIJK';
 
-export type ArtResponse = AICArtResponse & HarvardArtResponse
-export type PieceResponse = AICPieceData & AICPieceResponse & HarvardRecordResponse
+export type ArtResponse = AICArtResponse & HarvardArtResponse & RIJKAllArtResponse
+export type PieceResponse = AICPieceData & AICPieceResponse & HarvardRecordResponse & RIJKAllPieceResponse
 export type {
     AICArtOption,
     AICArtResponse,
@@ -47,14 +48,12 @@ export {
 export type Pagination = {
     total: number;
     limit: number;
-    offset: number;
     totalPages: number;
     currentPage: number;
-    nextUrl: string;
 }
 
 export type Piece = {
-    id: number;
+    id: string;
     title: string;
     image?: string;
     altText: string;
@@ -67,7 +66,7 @@ export interface Art {
 }
 
 export type ArtSuggestion = AICArtSuggestion | HarvardArtSuggestion;
-export type AutocompleteResponse = AICAutoCompleteResponse & HarvardAutoCompleteResponse
+export type AutocompleteResponse = AICAutoCompleteResponse & HarvardAutoCompleteResponse & RIJKAllArtResponse
 
 export interface Action<T> {
     type: T;

@@ -18,7 +18,8 @@ const Gallery: FC = () => {
             <Route path={path} exact>
                 <Tabs values={[
                     {display: 'The Art Institute of Chicago', param: Source.AIC},
-                    {display: 'Harvard Art Museums', param: Source.HARVARD}
+                    {display: 'Harvard Art Museums', param: Source.HARVARD},
+                    {display: 'Rijksstudio', param: Source.RIJK}
                 ]}/>
                 <ArtGallery/>
             </Route>

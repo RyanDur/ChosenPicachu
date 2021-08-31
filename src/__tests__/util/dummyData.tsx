@@ -17,6 +17,7 @@ import {
 } from '../../data/types';
 import {nanoid} from 'nanoid';
 import {HarvardAutoCompleteResponse} from '../../data/types/Harvard';
+import {RIJKAllArtResponse, RIJKArtObject, RIJKArtObjectResponse} from '../../data/types/RIJK';
 
 export const randomNumberFromRange = (min: number, max = 6) => Math.floor(Math.random() * max) + min;
 
@@ -224,7 +225,7 @@ const harvardToPieceResponse = (_: unknown, index: number): HarvardRecordRespons
 export const harvardPieceResponse = harvardToPieceResponse(undefined, Math.floor(Math.random() * 1000));
 
 export const harvardPiece: Piece = {
-    id: harvardPieceResponse.id,
+    id: String(harvardPieceResponse.id),
     title: harvardPieceResponse.title,
     image: harvardPieceResponse.primaryimageurl,
     altText: harvardPieceResponse.title,
@@ -240,18 +241,26 @@ export const harvardArtOptions: HarvardAutoCompleteResponse = {
     info,
     records: options.map(option => ({title: option}))
 };
+export const fromRIJKArtOptionsResponse = {
+    count: options.length,
+    artObjects: options.map(title => ({
+        id: faker.lorem.word(),
+        title,
+        artistInfo: faker.lorem.word(),
+        image: faker.lorem.word(),
+        altText: faker.lorem.word()
+    }))
+};
 
 export const fromAICArt: Art = {
     pagination: {
         total: aicArtResponse.pagination.total,
         limit: aicArtResponse.pagination.limit,
-        offset: aicArtResponse.pagination.offset,
         totalPages: aicArtResponse.pagination.total_pages,
         currentPage: aicArtResponse.pagination.current_page,
-        nextUrl: aicArtResponse.pagination.next_url
     },
     pieces: aicArtResponse.data.map(piece => ({
-        id: piece.id,
+        id: String(piece.id),
         title: piece.title,
         image: `https://www.artic.edu/iiif/2/${piece.image_id}/full/2000,/0/default.jpg`,
         artistInfo: piece.artist_display,
@@ -262,16 +271,51 @@ export const fromHarvardArt: Art = {
     pagination: {
         total: harvardArtResponse.info.totalrecords,
         limit: harvardArtResponse.info.totalrecordsperquery,
-        offset: harvardArtResponse.info.totalrecordsperquery * (harvardArtResponse.info.page - 1),
         totalPages: harvardArtResponse.info.pages,
         currentPage: harvardArtResponse.info.page,
-        nextUrl: harvardArtResponse.info.next
     },
     pieces: harvardArtResponse.records.map(piece => ({
-        id: piece.id,
+        id: String(piece.id),
         title: piece.title,
         image: piece.primaryimageurl,
         artistInfo: piece.people[0].displayname,
         altText: piece.title
     }))
 };
+
+const rijkPieceResponse = (): RIJKArtObject => ({
+    id: faker.lorem.words(),
+    objectNumber: faker.lorem.word(),
+    title: faker.lorem.words(),
+    principalOrFirstMaker: faker.lorem.words(),
+    longTitle: faker.lorem.words(),
+    webImage: {
+        url: faker.lorem.words()
+    }
+});
+export const fromRIJKArtResponse: RIJKAllArtResponse = {
+    count: Math.floor(Math.random() * 100) + 1,
+    artObjects: [...Array(pagination.limit)].map(rijkPieceResponse)
+};
+
+export const fromRIJKToPiece = (piece: RIJKArtObject): Piece => ({
+    id: piece.objectNumber,
+    title: piece.title,
+    artistInfo: piece.longTitle,
+    image: piece.webImage.url,
+    altText: piece.longTitle
+});
+
+export const rijkArtObjectResponse: RIJKArtObjectResponse = {
+    artObject: rijkPieceResponse()
+};
+
+export const fromRIJKArt = (currentPage: number, limit: number): Art => ({
+    pagination: {
+        total: fromRIJKArtResponse.count,
+        limit,
+        totalPages: fromRIJKArtResponse.artObjects.length,
+        currentPage,
+    },
+    pieces: fromRIJKArtResponse.artObjects.map(fromRIJKToPiece)
+});

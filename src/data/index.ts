@@ -1,15 +1,15 @@
 import {
     AICArtResponse,
     AICPieceData,
-    AICPieceResponse,
+    AICPieceResponse, Art,
     ArtQuery,
     ArtResponse,
     AutocompleteResponse,
     Dispatch,
     HarvardArtResponse,
+    HarvardRecordResponse,
     Piece,
     PieceResponse,
-    HarvardRecordResponse,
     Source,
     toSource
 } from './types';
@@ -18,20 +18,25 @@ import {HTTPAction} from './http/actions';
 import {HTTPStatus} from './http/types';
 import {http} from './http';
 import {URI} from './URI';
+import {RIJKAllArtResponse, RIJKArtObject, RIJKArtObjectResponse} from './types/RIJK';
 
 export const data = {
-    searchForArtOptions: (query: { search: string, source: string }, dispatch: Dispatch<SearchArtAction>): void => {
+    searchForArtOptions: ({search, source}: { search: string, source: string }, dispatch: Dispatch<SearchArtAction>): void => {
         dispatch(loading());
-        const sourced = toSource(query.source);
         http({
-            url: URI.createSearchFrom(query.search, sourced)
+            url: URI.createSearchFrom(search, toSource(source))
         }).then((action: HTTPAction<AutocompleteResponse>) => {
             if (action.type === HTTPStatus.SUCCESS) {
-                const options = sourced === Source.AIC ? action.value.data
-                        .map(({suggest_autocomplete_all}) => suggest_autocomplete_all[1])
-                        .flatMap(option => option.input) :
-                    action.value.records.map(({title}) => title);
-                dispatch(loaded(options));
+                switch (source) {
+                    case Source.AIC:
+                        return dispatch(loaded(action.value.data
+                            .map(({suggest_autocomplete_all}) => suggest_autocomplete_all[1])
+                            .flatMap(option => option.input)));
+                    case Source.HARVARD:
+                        return dispatch(loaded(action.value.records.map(({title}) => title)));
+                    default:
+                        return dispatch(loaded(action.value.artObjects.map(({title}) => title)));
+                }
             }
         });
     },
@@ -41,55 +46,53 @@ export const data = {
         http({
             url: URI.from({source, params: {page, search, limit: size}})
         }).then((action: HTTPAction<ArtResponse>) => {
-            switch (action.type) {
-                case HTTPStatus.FAILURE:
-                    return dispatch(error());
-                case HTTPStatus.SUCCESS: {
-                    if (source === Source.AIC) {
+            if (action.type === HTTPStatus.SUCCESS) {
+                switch (source) {
+                    case Source.AIC:
                         return dispatch(loaded(aicToArt(action.value)));
-                    } else {
+                    case Source.HARVARD:
                         return dispatch(loaded(harvardToArt(action.value)));
-                    }
+                    default:
+                        return dispatch(loaded(rijkToArt(action.value, size, page)));
                 }
-            }
+            } else return dispatch(error());
         });
     },
 
     getPiece: ({id, source}: { id: string, source: string }, dispatch: Dispatch<GetPieceAction>): void => {
         dispatch(loading());
-        const aSource = toSource(source);
         http({
-            url: URI.from({source: aSource, path: `/${id}`})
+            url: URI.from({source: toSource(source), path: `/${id}`})
         }).then((action: HTTPAction<PieceResponse>) => {
-            switch (action.type) {
-                case HTTPStatus.FAILURE:
-                    return dispatch(error());
-                case HTTPStatus.SUCCESS: {
-                    if (source === Source.AIC) {
+            if (action.type === HTTPStatus.SUCCESS) {
+                switch (source) {
+                    case Source.AIC:
                         return dispatch(loaded(aicDataToPiece(action.value)));
-                    } else {
+                    case Source.HARVARD:
                         return dispatch(loaded(harvardToPiece(action.value)));
-                    }
+                    default:
+                        return dispatch(loaded(toRijkToPiece(action.value)));
                 }
+            } else {
+                console.log('failure');
+                return dispatch(error());
             }
         });
     }
 };
 
-const aicToArt = ({pagination, data}: AICArtResponse) => ({
+const aicToArt = ({pagination, data}: AICArtResponse): Art => ({
     pagination: {
         total: pagination.total,
         limit: pagination.limit,
-        offset: pagination.offset,
         totalPages: pagination.total_pages,
         currentPage: pagination.current_page,
-        nextUrl: pagination.next_url
     },
     pieces: data.map(aicToPiece)
 });
 
 const aicToPiece = (data: AICPieceResponse): Piece => ({
-    id: data.id,
+    id: String(data.id),
     title: data.title,
     image: data.image_id ? `https://www.artic.edu/iiif/2/${data.image_id}/full/2000,/0/default.jpg` : undefined,
     artistInfo: data.artist_display,
@@ -98,22 +101,40 @@ const aicToPiece = (data: AICPieceResponse): Piece => ({
 
 const aicDataToPiece = ({data}: AICPieceData): Piece => aicToPiece(data);
 
-const harvardToArt = ({info, records}: HarvardArtResponse) => ({
+const harvardToArt = ({info, records}: HarvardArtResponse): Art => ({
     pagination: {
         total: info.totalrecords,
         limit: info.totalrecordsperquery,
-        offset: info.totalrecordsperquery * (info.page - 1),
         totalPages: info.pages,
         currentPage: info.page,
-        nextUrl: info.next
     },
     pieces: records.map(harvardToPiece)
 });
 
 const harvardToPiece = (record: HarvardRecordResponse): Piece => ({
-    id: record.id,
+    id: String(record.id),
     title: record.title,
     image: record.primaryimageurl,
     artistInfo: record.people?.find(person => person.role === 'Artist')?.displayname || 'Unknown',
     altText: record.title
 });
+
+const rijkToArt = (data: RIJKAllArtResponse, limit: number, page: number): Art => ({
+    pagination: {
+        total: data.count,
+        limit: data.artObjects.length,
+        totalPages: data.artObjects.length,
+        currentPage: page,
+    },
+    pieces: data.artObjects.map(rijkToPiece)
+});
+
+const rijkToPiece = (data: RIJKArtObject): Piece => ({
+    id: data.objectNumber,
+    title: data.title,
+    image: data.webImage.url,
+    artistInfo: data.longTitle,
+    altText: data.longTitle
+});
+
+const toRijkToPiece = ({artObject}: RIJKArtObjectResponse): Piece => rijkToPiece(artObject);
