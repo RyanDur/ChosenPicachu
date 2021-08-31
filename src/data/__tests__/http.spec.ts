@@ -69,4 +69,10 @@ describe('http calls', () => {
         await http({url: someUrl, method: HTTPMethod.GET})
             .then(resp => expect(resp).toEqual(failure(HTTPError.FORBIDDEN)));
     });
+
+    it('should catch thrown', async () => {
+        server.stubResponse(200, undefined);
+        await http({url: someUrl, method: HTTPMethod.GET})
+            .then(resp => expect(resp).toEqual(failure(HTTPError.THROWN)));
+    });
 });

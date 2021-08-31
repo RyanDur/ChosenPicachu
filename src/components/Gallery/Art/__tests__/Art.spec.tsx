@@ -131,7 +131,7 @@ describe('The gallery.', () => {
                 reset: jest.fn()
             });
 
-            renderWithRouter(<ArtGallery/>, {params: {page: 23, search: 'g'}});
+            renderWithRouter(<ArtGallery/>, {params: {page: 23, search: 'g', tab: Source.HARVARD}});
         });
 
         it('should pass the criteria', () =>

@@ -6,13 +6,16 @@
   .piece {
     margin-bottom: var(--base-x-5);
     width: 100%;
-
-    .loading {
-      display: none;
-    }
   }
 
   .artist-display {
     text-align: center;
   }
+}
+
+.err {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

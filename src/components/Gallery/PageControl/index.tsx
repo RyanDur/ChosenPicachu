@@ -11,7 +11,6 @@ export const PageControl = () => {
 
     const firstPage = 1;
     const lastPage = art?.pagination?.totalPages ?? Number.MAX_VALUE;
-    const totalRecords = art?.pagination?.total ?? Number.MAX_VALUE;
 
     const gotoTopOfPage = () => window.scrollTo(0, 0);
     const onSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -35,7 +34,7 @@ export const PageControl = () => {
                className="control input"
                data-testid="per-page"
                min={1}
-               max={totalRecords}
+               max={100}
                id="per-page"
                placeholder="per page"
                onChange={event => updatePageSize(+event.currentTarget.value)}/>
