@@ -3,20 +3,12 @@
   gap: 4rem;
   grid-template-columns: repeat(4, 1fr);
   align-items: start;
-  grid-template-areas:
-    "field field field field"
-    "field field field field"
-    "field field field field";
-
-  #gallery-tabs {
-    grid-area: tabs;
-  }
 
   .loader,
   #empty-gallery {
-    grid-area: field;
     align-self: center;
     justify-self: center;
+    grid-column: 1 / span 4;
   }
 }
 
