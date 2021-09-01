@@ -6,7 +6,6 @@
 
   #app-header {
     background-color: var(--paper);
-    margin: 0 0 var(--base) 0;
 
     .title {
       text-overflow: ellipsis;
@@ -17,7 +16,6 @@
   }
   #side-nav {
     background-color: var(--paper);
-    margin: 0 var(--base) 0 0;
     min-height: 100%;
 
     #app-navigation {
@@ -84,17 +82,15 @@
 
   #filter {
     background-color: var(--paper);
-    margin: 0 0 0 var(--base);
     position: fixed;
-    bottom: var(--base-x-12);
+    bottom: var(--base-x-13);
     top: 0;
     right: 0;
-    width: var(--base-x-15_5);
+    width: var(--base-x-16_5);
   }
 
   #app-footer {
     background-color: var(--paper);
-    margin: var(--base) 0 0 0;
   }
 }
 
@@ -111,7 +107,6 @@
 
     #filter {
       background-color: var(--paper);
-      margin: 0 0 0 var(--base);
       position: sticky;
       bottom: 0;
       top: 0;
@@ -134,7 +129,6 @@
 
     main {
       padding: var(--base);
-      margin-top: var(--base);
       overflow: auto;
       height: auto;
     }
@@ -154,7 +148,6 @@
     }
 
     #side-nav {
-      margin: 0 0 var(--base) 0;
       width: 100%;
       display: flex;
       align-items: center;
