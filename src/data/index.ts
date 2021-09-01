@@ -53,7 +53,7 @@ export const data = {
                     case Source.HARVARD:
                         return dispatch(loaded(harvardToArt(action.value)));
                     default:
-                        return dispatch(loaded(rijkToArt(action.value, size, page)));
+                        return dispatch(loaded(rijkToArt(action.value, page)));
                 }
             } else return dispatch(error());
         });
@@ -119,11 +119,11 @@ const harvardToPiece = (record: HarvardRecordResponse): Piece => ({
     altText: record.title
 });
 
-const rijkToArt = (data: RIJKAllArtResponse, limit: number, page: number): Art => ({
+const rijkToArt = (data: RIJKAllArtResponse, page: number): Art => ({
     pagination: {
         total: data.count,
         limit: data.artObjects.length,
-        totalPages: data.artObjects.length,
+        totalPages: data.count / data.artObjects.length,
         currentPage: page,
     },
     pieces: data.artObjects.map(rijkToPiece)
