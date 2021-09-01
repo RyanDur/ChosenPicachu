@@ -5,7 +5,7 @@ import {Consumer} from '../UserInfo/types';
 type Query<T extends { [key: string]: unknown }> = {
     queryObj: T,
     path: string,
-    updateQueryString: Consumer<T>,
+    updateQueryString: Consumer<Partial<T>>,
     nextQueryString: (params: Partial<T>) => string
 };
 export const useQuery = <T extends { [key: string]: unknown }>(val?: T): Query<T> => {
@@ -16,7 +16,7 @@ export const useQuery = <T extends { [key: string]: unknown }>(val?: T): Query<T
         return toQueryString({...currentParams, ...params});
     };
 
-    const updateQueryString = (params: T) => {
+    const updateQueryString = (params: Partial<T>) => {
         history.push({search: nextQueryString(params)});
     };
 

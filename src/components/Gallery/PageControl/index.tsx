@@ -2,10 +2,11 @@ import React, {FormEvent, useState} from 'react';
 import {useGallery} from '../Context';
 import {useQuery} from '../../hooks';
 import './PageControl.scss';
+import {Source} from '../../../data/types';
 
 export const PageControl = () => {
     const {art} = useGallery();
-    const {queryObj: {page, size}, updateQueryString} = useQuery<{ page: number, size: number }>({page: 1, size: 12});
+    const {queryObj: {page, size, tab}, updateQueryString} = useQuery<{ page: number, size: number, tab: string }>();
     const [pageNumber, updatePageNumber] = useState(page);
     const [pageSize, updatePageSize] = useState(size);
 
@@ -37,6 +38,12 @@ export const PageControl = () => {
                max={100}
                id="per-page"
                placeholder="per page"
+               onInput={event => {
+                   const number = +event.currentTarget.value;
+                   if (number > 10 && tab === Source.RIJK) {
+                       event.currentTarget.value = String(Math.round(number / 10) * 10);
+                   }
+               }}
                onChange={event => updatePageSize(+event.currentTarget.value)}/>
         <button type="submit" id="submit-page-number" className="control">Go</button>
     </form>;
