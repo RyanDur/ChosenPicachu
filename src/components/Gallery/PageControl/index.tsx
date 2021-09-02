@@ -30,6 +30,7 @@ export const PageControl = () => {
                max={lastPage}
                className="control input"
                data-testid="go-to"
+               placeholder={String(page)}
                onWheel={e => e.currentTarget.blur()}
                onChange={event => updatePageNumber(+event.currentTarget.value)}/>
         <label id="per-page-label" className="title" htmlFor="per-page">Per Page</label>
@@ -38,6 +39,7 @@ export const PageControl = () => {
                data-testid="per-page"
                min={1}
                max={100}
+               placeholder={String(size)}
                id="per-page"
                onInput={event => {
                    const number = +event.currentTarget.value;
