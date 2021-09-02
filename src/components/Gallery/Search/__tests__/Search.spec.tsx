@@ -43,7 +43,7 @@ describe('search', () => {
 
     it('should leave the original query alone when search is empty', () => {
         const rendered = renderWithRouter(<Search/>, {params: {page: 1, search: 'cat', tab: 'some-tab'}});
-        userEvent.type(screen.getByLabelText('Search For'), '');
+        userEvent.type(screen.getByLabelText(/Search For/), '');
         userEvent.click(screen.getByTestId('submit-query'));
         expect(rendered().testLocation?.search).toEqual('?page=1&search=cat&tab=some-tab');
     });

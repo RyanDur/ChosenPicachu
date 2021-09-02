@@ -23,23 +23,21 @@ export const PageControl = () => {
     };
 
     return <form onSubmit={onSubmit} id="page-control">
-        <label id="go-to-label" className="title" htmlFor="go-to">Page #</label>
+        <label id="go-to-label" className="title" htmlFor="go-to">Page #{page}</label>
         <input type="number"
                id="go-to"
                min={firstPage}
                max={lastPage}
                className="control input"
                data-testid="go-to"
-               placeholder={String(page)}
                onWheel={e => e.currentTarget.blur()}
                onChange={event => updatePageNumber(+event.currentTarget.value)}/>
-        <label id="per-page-label" className="title" htmlFor="per-page">Per Page</label>
+        <label id="per-page-label" className="title" htmlFor="per-page">{size} Per Page</label>
         <input type="number"
                className="control input"
                data-testid="per-page"
                min={1}
                max={100}
-               placeholder={String(size)}
                id="per-page"
                onInput={event => {
                    const number = +event.currentTarget.value;
