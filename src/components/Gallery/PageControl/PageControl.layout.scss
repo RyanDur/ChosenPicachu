@@ -1,0 +1,33 @@
+#page-control {
+  display: grid;
+  grid-gap: var(--base);
+  grid-template-rows: repeat(3, var(--base-x-8));
+  grid-template-areas:
+    "go-to"
+    "per-page"
+    "submit";
+
+  #go-to-label {
+    grid-area: go-to;
+    align-self: flex-start;
+  }
+
+  #go-to {
+    grid-area: go-to;
+    align-self: flex-end;
+  }
+
+  #per-page-label {
+    grid-area: per-page;
+    align-self: flex-start;
+  }
+
+  #per-page {
+    grid-area: per-page;
+    align-self: flex-end;
+  }
+
+  #submit-page-number {
+    grid-area: submit;
+  }
+}

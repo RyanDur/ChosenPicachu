@@ -1,8 +1,9 @@
 import React, {FormEvent, useState} from 'react';
 import {useGallery} from '../Context';
 import {useQuery} from '../../hooks';
-import './PageControl.scss';
 import {Source} from '../../../data/types';
+import './PageControl.scss';
+import './PageControl.layout.scss';
 
 export const PageControl = () => {
     const {art} = useGallery();
@@ -22,22 +23,22 @@ export const PageControl = () => {
     };
 
     return <form onSubmit={onSubmit} id="page-control">
+        <label id="go-to-label" className="title" htmlFor="go-to">Page #</label>
         <input type="number"
                id="go-to"
                min={firstPage}
                max={lastPage}
                className="control input"
-               placeholder="page #"
                data-testid="go-to"
                onWheel={e => e.currentTarget.blur()}
                onChange={event => updatePageNumber(+event.currentTarget.value)}/>
+        <label id="per-page-label" className="title" htmlFor="per-page">Per Page</label>
         <input type="number"
                className="control input"
                data-testid="per-page"
                min={1}
                max={100}
                id="per-page"
-               placeholder="per page"
                onInput={event => {
                    const number = +event.currentTarget.value;
                    if (number > 10 && tab === Source.RIJK) {
