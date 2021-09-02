@@ -3,10 +3,16 @@
   height: 100%;
   background-color: var(--void);
 
-  .query {
+  #query-label {
+    display: flex;
+    align-items: center;
+  }
+
+  #query-label,
+  #query {
+    background-color: white;
     padding: 0 var(--base-x-2);
     border: none;
-    margin: 0 var(--base);
     width: 100%;
   }
 
@@ -25,7 +31,6 @@
   .submit-query,
   .reset-query {
     border: none;
-    width: 8rem;
     background-repeat: no-repeat;
     background-position: center;
     background-size: 2rem;
@@ -46,7 +51,7 @@
   .search {
     margin: 0;
 
-    .query,
+    #query,
     .submit-query,
     .reset-query {
       margin: 0;

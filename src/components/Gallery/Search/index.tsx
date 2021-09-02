@@ -5,10 +5,10 @@ import {SearchArtAction} from '../../../data/actions';
 import {debounce} from 'lodash';
 import {Consumer} from '../../UserInfo/types';
 import {useQuery} from '../../hooks';
-import './Search.scss';
-import './Search.layout.scss';
 import {useHistory} from 'react-router-dom';
 import {Paths} from '../../../App';
+import './Search.scss';
+import './Search.layout.scss';
 
 interface Props {
     id?: string;
@@ -39,9 +39,10 @@ export const Search: FC<Props> = ({id}) => {
     const handleReset = () => updateQueryString({search: undefined});
 
     return <form id={id} className="search" onSubmit={handleSubmit} onReset={handleReset} data-testid="search">
-        <button className='reset-query' data-testid="reset-query" type="reset" aria-label="reset search"/>
-        <input autoComplete="off" list="search-options" placeholder="Search For" className="query" id={`query-${id}`}
+        <label id="query-label" htmlFor="query">Search For</label>
+        <input autoComplete="off" list="search-options" id="query"
                onInput={event => updateQuery(event.currentTarget.value)}/>
+        <button className='reset-query' data-testid="reset-query" type="reset" aria-label="reset search"/>
         <button className='submit-query' data-testid="submit-query" type="submit" aria-label="submit search"/>
         <datalist id="search-options" data-testid="search-options">
             {searchOptions.map((searchOption, index) =>
