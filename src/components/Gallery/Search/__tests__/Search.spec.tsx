@@ -18,7 +18,7 @@ describe('search', () => {
 
     it('should give suggestions for completion', async () => {
         renderWithRouter(<Search/>, {params: {tab: Source.AIC}});
-        userEvent.paste(screen.getByPlaceholderText('Search For'), searchWord);
+        userEvent.paste(screen.getByLabelText('Search For'), searchWord);
         await waitFor(() => expect(screen.getByTestId('search-options')).toHaveTextContent(searchWord));
         expect(data.searchForArtOptions)
             .toHaveBeenCalledWith({search: searchWord.toLowerCase(), source: Source.AIC}, expect.anything());
@@ -28,7 +28,7 @@ describe('search', () => {
         const rendered = renderWithRouter(<Search/>);
         userEvent.click(screen.getByTestId('submit-query'));
         expect(rendered().testLocation?.search).toEqual('');
-        userEvent.type(screen.getByPlaceholderText('Search For'), 'A');
+        userEvent.type(screen.getByLabelText('Search For'), 'A');
         userEvent.click(screen.getByTestId('submit-query'));
         expect(rendered().testLocation?.search).toEqual('?search=A');
         expect(rendered().testLocation?.pathname).toEqual(Paths.artGallery);
@@ -36,14 +36,14 @@ describe('search', () => {
 
     it('should remove the page query param', () => {
         const rendered = renderWithRouter(<Search/>, {params: {page: 1, tab: 'aic'}});
-        userEvent.type(screen.getByPlaceholderText('Search For'), 'a');
+        userEvent.type(screen.getByLabelText('Search For'), 'a');
         userEvent.click(screen.getByTestId('submit-query'));
         expect(rendered().testLocation?.search).toEqual('?page=1&tab=aic&search=a');
     });
 
     it('should leave the original query alone when search is empty', () => {
         const rendered = renderWithRouter(<Search/>, {params: {page: 1, search: 'cat', tab: 'some-tab'}});
-        userEvent.type(screen.getByPlaceholderText('Search For'), '');
+        userEvent.type(screen.getByLabelText('Search For'), '');
         userEvent.click(screen.getByTestId('submit-query'));
         expect(rendered().testLocation?.search).toEqual('?page=1&search=cat&tab=some-tab');
     });
