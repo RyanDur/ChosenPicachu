@@ -6,11 +6,15 @@
   #query-label {
     display: flex;
     align-items: center;
+    background-color: var(--paper);
+  }
+
+  #query {
+    background-color: white;
   }
 
   #query-label,
   #query {
-    background-color: white;
     padding: 0 var(--base-x-2);
     border: none;
     width: 100%;

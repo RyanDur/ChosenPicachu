@@ -18,12 +18,15 @@ export const Search: FC<Props> = ({id}) => {
     const [searchOptions, updateSearchOptions] = useState<AICArtSuggestion[]>([]);
     const [searchString, updateQuery] = useState<string>('');
     const history = useHistory();
-    const {queryObj: {tab}, updateQueryString, nextQueryString} = useQuery<{ tab?: string, search?: string }>();
+    const {queryObj: {tab, search}, updateQueryString, nextQueryString} = useQuery<{ tab?: string, search?: string }>();
     const debounceSearch = debounce((query: { search: string, source: string }, consumer: Consumer<SearchArtAction>) =>
         data.searchForArtOptions(query, consumer), 300);
 
     useEffect(() => {
-        searchString && debounceSearch({search: searchString.toLowerCase(), source: tab || ''}, (action: SearchArtAction) => {
+        searchString && debounceSearch({
+            search: searchString.toLowerCase(),
+            source: tab || ''
+        }, (action: SearchArtAction) => {
             if (action.type === AsyncState.LOADED) updateSearchOptions(action.value);
         });
     }, [searchString]);
@@ -39,7 +42,7 @@ export const Search: FC<Props> = ({id}) => {
     const handleReset = () => updateQueryString({search: undefined});
 
     return <form id={id} className="search" onSubmit={handleSubmit} onReset={handleReset} data-testid="search">
-        <label id="query-label" htmlFor="query">Search For</label>
+        <label id="query-label" htmlFor="query">Search For {decodeURI(search || '')}</label>
         <input autoComplete="off" list="search-options" id="query"
                onInput={event => updateQuery(event.currentTarget.value)}/>
         <button className='reset-query' data-testid="reset-query" type="reset" aria-label="reset search"/>
