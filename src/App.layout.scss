@@ -16,6 +16,7 @@
   #app-header {
     grid-area: header;
     display: grid;
+    grid-gap: var(--base);
     grid-template-columns:
       var(--base-x-16_5)
       var(--base-x-16_5)
