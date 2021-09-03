@@ -31,3 +31,12 @@
     grid-area: submit;
   }
 }
+
+@media (max-width: 832px) {
+  #page-control {
+    grid-template-rows: repeat(2, var(--base-x-8));
+    grid-template-areas:
+      "go-to per-page"
+      "submit submit";
+  }
+}
