@@ -35,6 +35,7 @@
 @media (max-width: 832px) {
   #page-control {
     grid-template-rows: repeat(2, var(--base-x-8));
+    grid-template-columns: 1fr 1fr;
     grid-template-areas:
       "go-to per-page"
       "submit submit";
