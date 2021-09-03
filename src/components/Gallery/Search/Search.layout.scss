@@ -27,8 +27,11 @@
 @media (max-width: 832px) {
   .search {
     display: grid;
+    column-gap: unset;
     grid-template-columns: 1fr 1fr;
+    grid-template-rows: 20% 30% 1fr;
     grid-template-areas:
+      "query-label query-label"
       "query query"
       "reset submit";
   }
