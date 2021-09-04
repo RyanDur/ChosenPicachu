@@ -1,45 +1,54 @@
-export interface HarvardArtResponse {
-    info: HarvardInfoResponse;
-    records: HarvardRecordResponse[];
-}
+import * as D from 'schemawax';
 
-export interface HarvardRecordResponse {
-    id: number;
-    title: string;
-    people: HarvardPeopleResponse[];
-    primaryimageurl: string;
-}
+const HarvardPeopleResponseDecoder = D.object({
+    required: {
+        role: D.string,
+        displayname: D.string
+    }
+});
 
-export interface HarvardPeopleResponse {
-    role: string;
-    birthplace?: string;
-    gender: string;
-    displaydate: string;
-    prefix?:string;
-    culture: string;
-    displayname: string;
-    alphasort: string;
-    name: string;
-    personid: number;
-    deathplace?: string;
-    displayorder: number;
-}
+export const HarvardRecordResponseDecoder = D.object({
+    required: {
+        id: D.number,
+        title: D.string,
+    },
+    optional: {
+        people: D.array(HarvardPeopleResponseDecoder),
+        primaryimageurl: D.string
+    }
+});
 
-export interface HarvardInfoResponse {
-    totalrecordsperquery: number;
-    totalrecords: number;
-    pages: number;
-    page: number;
-    next: string;
-}
+const HarvardInfoResponseDecoder = D.object({
+    required: {
+        totalrecordsperquery: D.number,
+        totalrecords: D.number,
+        pages: D.number,
+        page: D.number
+    }
+});
 
-export type HarvardArtSuggestion = string;
+export const HarvardArtResponseDecoder = D.object({
+    required: {
+        info: HarvardInfoResponseDecoder,
+        records: D.array(HarvardRecordResponseDecoder)
+    }
+});
+const HarvardArtSuggestionDecoder = D.string;
+const HarvardArtOptionDecoder = D.object({
+    required: {
+        title: HarvardArtSuggestionDecoder
+    }
+});
+export const HarvardAutoCompleteResponseDecoder = D.object({
+    required: {
+        info: HarvardInfoResponseDecoder,
+        records: D.array(HarvardArtOptionDecoder)
+    }
+});
 
-export interface HarvardArtOption {
-    title: HarvardArtSuggestion;
-}
-
-export interface HarvardAutoCompleteResponse {
-    info: HarvardInfoResponse;
-    records: HarvardArtOption[]
-}
+export type HarvardArtResponse = D.Output<typeof HarvardArtResponseDecoder>
+export type HarvardInfoResponse = D.Output<typeof HarvardInfoResponseDecoder>;
+export type HarvardRecordResponse = D.Output<typeof HarvardRecordResponseDecoder>
+export type HarvardPeopleResponse = D.Output<typeof HarvardPeopleResponseDecoder>
+export type HarvardArtSuggestion = D.Output<typeof HarvardArtSuggestionDecoder>;
+export type HarvardAutoCompleteResponse = D.Output<typeof HarvardAutoCompleteResponseDecoder>;

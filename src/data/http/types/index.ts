@@ -14,5 +14,6 @@ export enum HTTPStatus {
 export enum HTTPError {
     FORBIDDEN = 'FORBIDDEN',
     UNKNOWN = 'UNKNOWN',
+    MALFORMED_RESPONSE = 'MALFORMED_RESPONSE',
     THROWN = 'THROWN'
 }

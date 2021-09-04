@@ -1,30 +1,41 @@
 import {
-    AICArtResponse,
+    AICAllArtResponse,
+    AICAllArtResponseDecoder,
     AICPieceData,
-    AICPieceResponse, Art,
+    AICPieceResponse,
+    Art,
     ArtQuery,
     ArtResponse,
     AutocompleteResponse,
     Dispatch,
     HarvardArtResponse,
+    HarvardArtResponseDecoder,
     HarvardRecordResponse,
     Piece,
     PieceResponse,
+    RIJKAllArtResponseDecoder,
     Source,
     toSource
 } from './types';
 import {error, GetArtAction, GetPieceAction, loaded, loading, SearchArtAction} from './actions';
 import {HTTPAction} from './http/actions';
 import {HTTPStatus} from './http/types';
-import {http} from './http';
+import {request} from './http';
 import {URI} from './URI';
-import {RIJKAllArtResponse, RIJKArtObject, RIJKArtObjectResponse} from './types/RIJK';
+import {RIJKAllArtResponse, RIJKArtObject, RIJKArtObjectResponse, RIJKArtObjectResponseDecoder} from './types/RIJK';
+import {Decoder} from 'schemawax';
+import {AICArtResponseDecoder, AICAutoCompleteResponseDecoder} from './types/AIC';
+import {HarvardAutoCompleteResponseDecoder, HarvardRecordResponseDecoder} from './types/Harvard';
 
 export const data = {
-    searchForArtOptions: ({search, source}: { search: string, source: string }, dispatch: Dispatch<SearchArtAction>): void => {
+    searchForArtOptions: ({
+        search,
+        source
+    }: { search: string, source: string }, dispatch: Dispatch<SearchArtAction>): void => {
         dispatch(loading());
-        http({
-            url: URI.createSearchFrom(search, toSource(source))
+        request({
+            url: URI.createSearchFrom(search, toSource(source)),
+            decoder: gwtSearchDecoder(toSource(source))
         }).then((action: HTTPAction<AutocompleteResponse>) => {
             if (action.type === HTTPStatus.SUCCESS) {
                 switch (source) {
@@ -43,8 +54,9 @@ export const data = {
 
     getAllArt: ({page, size, source, search}: ArtQuery, dispatch: Dispatch<GetArtAction>): void => {
         dispatch(loading());
-        http({
-            url: URI.from({source, params: {page, search, limit: size}})
+        request({
+            url: URI.from({source, params: {page, search, limit: size}}),
+            decoder: gwtAllDecoder(source)
         }).then((action: HTTPAction<ArtResponse>) => {
             if (action.type === HTTPStatus.SUCCESS) {
                 switch (source) {
@@ -61,8 +73,9 @@ export const data = {
 
     getPiece: ({id, source}: { id: string, source: string }, dispatch: Dispatch<GetPieceAction>): void => {
         dispatch(loading());
-        http({
-            url: URI.from({source: toSource(source), path: `/${id}`})
+        request({
+            url: URI.from({source: toSource(source), path: `/${id}`}),
+            decoder: gwtPieceDecoder(toSource(source))
         }).then((action: HTTPAction<PieceResponse>) => {
             if (action.type === HTTPStatus.SUCCESS) {
                 switch (source) {
@@ -73,15 +86,43 @@ export const data = {
                     default:
                         return dispatch(loaded(toRijkToPiece(action.value)));
                 }
-            } else {
-                console.log('failure');
-                return dispatch(error());
-            }
+            } else return dispatch(error());
         });
     }
 };
 
-const aicToArt = ({pagination, data}: AICArtResponse): Art => ({
+const gwtAllDecoder = (source: Source): Decoder<any> => {
+    switch (source) {
+        case Source.AIC:
+            return AICAllArtResponseDecoder;
+        case Source.HARVARD:
+            return HarvardArtResponseDecoder;
+        default:
+            return RIJKAllArtResponseDecoder;
+    }
+};
+const gwtPieceDecoder = (source: Source): Decoder<any> => {
+    switch (source) {
+        case Source.AIC:
+            return AICArtResponseDecoder;
+        case Source.HARVARD:
+            return HarvardRecordResponseDecoder;
+        default:
+            return RIJKArtObjectResponseDecoder;
+    }
+};
+const gwtSearchDecoder = (source: Source): Decoder<any> => {
+    switch (source) {
+        case Source.AIC:
+            return AICAutoCompleteResponseDecoder;
+        case Source.HARVARD:
+            return HarvardAutoCompleteResponseDecoder;
+        default:
+            return RIJKArtObjectResponseDecoder;
+    }
+};
+
+const aicToArt = ({pagination, data}: AICAllArtResponse): Art => ({
     pagination: {
         total: pagination.total,
         limit: pagination.limit,
@@ -94,7 +135,7 @@ const aicToArt = ({pagination, data}: AICArtResponse): Art => ({
 const aicToPiece = (data: AICPieceResponse): Piece => ({
     id: String(data.id),
     title: data.title,
-    image: data.image_id ? `https://www.artic.edu/iiif/2/${data.image_id}/full/2000,/0/default.jpg` : undefined,
+    image: `https://www.artic.edu/iiif/2/${data.image_id}/full/2000,/0/default.jpg`,
     artistInfo: data.artist_display,
     altText: data.thumbnail?.alt_text || data.term_titles.join(' ') || ''
 });

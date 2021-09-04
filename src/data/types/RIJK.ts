@@ -1,25 +1,38 @@
-export interface RIJKArtObject {
-    id: string;
-    objectNumber: string;
-    title: string;
-    principalOrFirstMaker: string;
-    longTitle: string;
-    webImage: RIJKImageResponse;
-}
+import * as D from 'schemawax';
 
-export interface RIJKArtObjectResponse {
-    artObject: RIJKArtObject;
-}
+const RIJKImageResponseDecoder = D.object({
+  required: {
+      url: D.string
+  }
+});
 
-export interface RIJKImageResponse {
-    url: string;
-}
+export const RIJKArtObjectDecoder = D.object({
+    required: {
+        id: D.string,
+        objectNumber: D.string,
+        title: D.string,
+        longTitle: D.string,
+        webImage: RIJKImageResponseDecoder
+    },
+    optional: {
+        principalOrFirstMaker: D.string
+    }
+});
 
-export interface RIJKAllArtResponse {
-    count: number;
-    artObjects: RIJKArtObject[]
-}
+export const RIJKAllArtResponseDecoder = D.object({
+    required: {
+        count: D.number,
+        artObjects: D.array(RIJKArtObjectDecoder)
+    }
+});
 
-export interface RIJKAllPieceResponse {
-    artObject: RIJKArtObject;
-}
+export const RIJKArtObjectResponseDecoder = D.object({
+    required: {
+        artObject: RIJKArtObjectDecoder
+    }
+});
+
+export type RIJKArtObject = D.Output<typeof RIJKArtObjectDecoder>;
+export type RIJKAllArtResponse = D.Output<typeof RIJKAllArtResponseDecoder>;
+export type RIJKArtObjectResponse = D.Output<typeof RIJKArtObjectResponseDecoder>;
+export type RIJKAllPieceResponse = D.Output<typeof RIJKArtObjectResponseDecoder>;

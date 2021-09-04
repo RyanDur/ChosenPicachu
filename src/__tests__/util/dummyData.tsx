@@ -5,7 +5,7 @@ import {AddressInfo, User, UserInfo} from '../../components/UserInfo/types';
 import {AvatarGenerator} from 'random-avatar-generator';
 import {toISOWithoutTime} from '../../components/util';
 import {
-    AICArtResponse,
+    AICAllArtResponse,
     AICPieceResponse,
     Art,
     ArtSuggestion,
@@ -176,7 +176,7 @@ export const pagination = {
     next_url: faker.internet.url()
 };
 
-export const aicArtResponse: AICArtResponse = {
+export const aicArtResponse: AICAllArtResponse = {
     pagination,
     data: [...Array(pagination.limit)].map((a, index): AICPieceResponse => ({
         id: index,
@@ -184,35 +184,19 @@ export const aicArtResponse: AICArtResponse = {
         image_id: nanoid(),
         artist_display: faker.lorem.sentence(),
         term_titles: faker.lorem.words(randomNumberFromRange(1)).split(' ')
-    })),
-    info: {
-        license_text: faker.lorem.sentence(),
-        license_links: [faker.internet.url()],
-        version: '1.1'
-    },
-    config: {
-        iiif_url: faker.internet.url()
-    }
+    }))
 };
 
-const info: HarvardInfoResponse = {
+export const info: HarvardInfoResponse = {
     totalrecordsperquery: Math.floor(Math.random() * 10),
     totalrecords: Math.floor(Math.random() * 10000),
     pages: Math.floor(Math.random() * 1000),
-    page: Math.floor(Math.random() * 10),
-    next: faker.internet.url()
+    page: Math.floor(Math.random() * 10)
 };
 
 export const person = (): HarvardPeopleResponse => ({
     role: 'Artist',
-    gender: faker.lorem.word(),
-    displaydate: faker.lorem.word(),
-    culture: faker.lorem.word(),
     displayname: faker.lorem.word(),
-    alphasort: faker.lorem.word(),
-    name: faker.lorem.word(),
-    personid: Math.floor(Math.random() * 1000),
-    displayorder: Math.floor(Math.random() * 1000),
 });
 
 const harvardToPieceResponse = (_: unknown, index: number): HarvardRecordResponse => ({
@@ -314,7 +298,7 @@ export const fromRIJKArt = (currentPage: number, limit: number): Art => ({
     pagination: {
         total: fromRIJKArtResponse.count,
         limit,
-        totalPages: fromRIJKArtResponse.artObjects.length,
+        totalPages: fromRIJKArtResponse.count / fromRIJKArtResponse.artObjects.length,
         currentPage,
     },
     pieces: fromRIJKArtResponse.artObjects.map(fromRIJKToPiece)
