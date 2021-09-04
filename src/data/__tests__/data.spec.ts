@@ -1,11 +1,8 @@
 import {data} from '../index';
 import 'whatwg-fetch';
 import {
-    AICAllArtResponseDecoder,
     AICPieceData,
-    HarvardArtResponseDecoder,
     Piece,
-    RIJKAllArtResponseDecoder,
     Source
 } from '../types';
 import faker from 'faker';
@@ -27,20 +24,20 @@ import {
 import {nanoid} from 'nanoid';
 import {error, loaded, loading} from '../actions';
 import {failure, success} from '../http/actions';
-import {request} from '../http';
+import {http} from '../http';
 import {HTTPError} from '../http/types';
 import {waitFor} from '@testing-library/react';
 import {URI} from '../URI';
-import {AICArtResponseDecoder, AICAutoCompleteResponseDecoder} from '../types/AIC';
-import {HarvardAutoCompleteResponseDecoder, HarvardRecordResponseDecoder} from '../types/Harvard';
-import {RIJKArtObjectResponseDecoder} from '../types/RIJK';
+import {AICAllArtResponseDecoder, AICArtResponseDecoder, AICAutoCompleteResponseDecoder} from '../types/AIC';
+import {HarvardAutoCompleteDecoder, HarvardArtDecoder, HarvardAllArtDecoder} from '../types/Harvard';
+import {RIJKAllArtDecoder, RIJKArtDecoder} from '../types/RIJK';
 
 jest.mock('../http', () => ({
-    request: jest.fn(),
+    http: jest.fn(),
 }));
 
 describe('data', () => {
-    const mockHttp = request as jest.Mock;
+    const mockHttp = http as jest.Mock;
     const mockURIFrom = faker.lorem.word();
     beforeEach(() => {
         URI.from = () => mockURIFrom;
@@ -88,7 +85,7 @@ describe('data', () => {
 
                 data.getAllArt({page: 1, size: 12, source: Source.HARVARD}, dispatch);
 
-                expect(mockHttp).toHaveBeenCalledWith({url: mockURIFrom, decoder: HarvardArtResponseDecoder});
+                expect(mockHttp).toHaveBeenCalledWith({url: mockURIFrom, decoder: HarvardAllArtDecoder});
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(fromHarvardArt)));
             });
@@ -121,7 +118,7 @@ describe('data', () => {
 
                 data.getAllArt({page: 1, size: 12, source: Source.RIJK}, dispatch);
 
-                expect(mockHttp).toHaveBeenCalledWith({url: mockURIFrom, decoder: RIJKAllArtResponseDecoder});
+                expect(mockHttp).toHaveBeenCalledWith({url: mockURIFrom, decoder: RIJKAllArtDecoder});
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(fromRIJKArt(1, 12))));
             });
@@ -182,7 +179,7 @@ describe('data', () => {
                 data.getPiece({id: String(aicPiece.id), source: Source.HARVARD}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-                expect(mockHttp).toHaveBeenCalledWith({url: mockURIFrom, decoder: HarvardRecordResponseDecoder});
+                expect(mockHttp).toHaveBeenCalledWith({url: mockURIFrom, decoder: HarvardArtDecoder});
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(harvardPiece)));
             });
 
@@ -205,7 +202,7 @@ describe('data', () => {
                 data.getPiece({id: String(aicPiece.id), source: Source.RIJK}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-                expect(mockHttp).toHaveBeenCalledWith({url: mockURIFrom, decoder: RIJKArtObjectResponseDecoder});
+                expect(mockHttp).toHaveBeenCalledWith({url: mockURIFrom, decoder: RIJKArtDecoder});
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(fromRIJKToPiece(rijkArtObjectResponse.artObject))));
             });
 
@@ -245,7 +242,7 @@ describe('data', () => {
                 data.searchForArtOptions({search, source: Source.HARVARD}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-                expect(mockHttp).toHaveBeenCalledWith({url: mockURIFrom, decoder: HarvardAutoCompleteResponseDecoder});
+                expect(mockHttp).toHaveBeenCalledWith({url: mockURIFrom, decoder: HarvardAutoCompleteDecoder});
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(options)));
             });
         });
@@ -259,7 +256,7 @@ describe('data', () => {
                 data.searchForArtOptions({search, source: Source.RIJK}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-                expect(mockHttp).toHaveBeenCalledWith({url: mockURIFrom, decoder: RIJKArtObjectResponseDecoder});
+                expect(mockHttp).toHaveBeenCalledWith({url: mockURIFrom, decoder: RIJKArtDecoder});
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(options)));
             });
         });

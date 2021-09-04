@@ -1,38 +1,38 @@
 import * as D from 'schemawax';
 
-const RIJKImageResponseDecoder = D.object({
+const RIJKImageDecoder = D.object({
   required: {
       url: D.string
   }
 });
 
-export const RIJKArtObjectDecoder = D.object({
+export const RIJKPieceDecoder = D.object({
     required: {
         id: D.string,
         objectNumber: D.string,
         title: D.string,
         longTitle: D.string,
-        webImage: RIJKImageResponseDecoder
+        webImage: RIJKImageDecoder
     },
     optional: {
         principalOrFirstMaker: D.string
     }
 });
 
-export const RIJKAllArtResponseDecoder = D.object({
+export const RIJKAllArtDecoder = D.object({
     required: {
         count: D.number,
-        artObjects: D.array(RIJKArtObjectDecoder)
+        artObjects: D.array(RIJKPieceDecoder)
     }
 });
 
-export const RIJKArtObjectResponseDecoder = D.object({
+export const RIJKArtDecoder = D.object({
     required: {
-        artObject: RIJKArtObjectDecoder
+        artObject: RIJKPieceDecoder
     }
 });
 
-export type RIJKArtObject = D.Output<typeof RIJKArtObjectDecoder>;
-export type RIJKAllArtResponse = D.Output<typeof RIJKAllArtResponseDecoder>;
-export type RIJKArtObjectResponse = D.Output<typeof RIJKArtObjectResponseDecoder>;
-export type RIJKAllPieceResponse = D.Output<typeof RIJKArtObjectResponseDecoder>;
+export type RIJKArtObject = D.Output<typeof RIJKPieceDecoder>;
+export type RIJKAllArt = D.Output<typeof RIJKAllArtDecoder>;
+export type RIJKArtResponse = D.Output<typeof RIJKArtDecoder>;
+export type RIJKPiece = D.Output<typeof RIJKArtDecoder>;

@@ -5,19 +5,16 @@ import {AddressInfo, User, UserInfo} from '../../components/UserInfo/types';
 import {AvatarGenerator} from 'random-avatar-generator';
 import {toISOWithoutTime} from '../../components/util';
 import {
-    AICAllArtResponse,
-    AICPieceResponse,
+    AICAllArt,
+    AICArt,
     Art,
-    ArtSuggestion,
-    HarvardArtResponse,
-    HarvardInfoResponse,
-    HarvardPeopleResponse,
+    HarvardAllArt,
     Piece,
-    HarvardRecordResponse
+    HarvardPiece
 } from '../../data/types';
 import {nanoid} from 'nanoid';
-import {HarvardAutoCompleteResponse} from '../../data/types/Harvard';
-import {RIJKAllArtResponse, RIJKArtObject, RIJKArtObjectResponse} from '../../data/types/RIJK';
+import {HarvardAutoCompleteResponse, HarvardInfo, HarvardPeople} from '../../data/types/Harvard';
+import {RIJKAllArt, RIJKArtObject, RIJKArtResponse} from '../../data/types/RIJK';
 
 export const randomNumberFromRange = (min: number, max = 6) => Math.floor(Math.random() * max) + min;
 
@@ -176,9 +173,9 @@ export const pagination = {
     next_url: faker.internet.url()
 };
 
-export const aicArtResponse: AICAllArtResponse = {
+export const aicArtResponse: AICAllArt = {
     pagination,
-    data: [...Array(pagination.limit)].map((a, index): AICPieceResponse => ({
+    data: [...Array(pagination.limit)].map((a, index): AICArt => ({
         id: index,
         title: faker.lorem.sentence(),
         image_id: nanoid(),
@@ -187,19 +184,19 @@ export const aicArtResponse: AICAllArtResponse = {
     }))
 };
 
-export const info: HarvardInfoResponse = {
+export const info: HarvardInfo = {
     totalrecordsperquery: Math.floor(Math.random() * 10),
     totalrecords: Math.floor(Math.random() * 10000),
     pages: Math.floor(Math.random() * 1000),
     page: Math.floor(Math.random() * 10)
 };
 
-export const person = (): HarvardPeopleResponse => ({
+export const person = (): HarvardPeople => ({
     role: 'Artist',
     displayname: faker.lorem.word(),
 });
 
-const harvardToPieceResponse = (_: unknown, index: number): HarvardRecordResponse => ({
+const harvardToPieceResponse = (_: unknown, index: number): HarvardPiece => ({
     id: index,
     title: faker.lorem.sentence(),
     people: [person()],
@@ -213,14 +210,14 @@ export const harvardPiece: Piece = {
     title: harvardPieceResponse.title,
     image: harvardPieceResponse.primaryimageurl,
     altText: harvardPieceResponse.title,
-    artistInfo: harvardPieceResponse.people[0].displayname
+    artistInfo: harvardPieceResponse.people?.[0].displayname || ''
 };
 
-export const harvardArtResponse: HarvardArtResponse = {
+export const harvardArtResponse: HarvardAllArt = {
     info,
     records: [...Array(info.totalrecordsperquery)].map(harvardToPieceResponse),
 };
-export const options: ArtSuggestion[] = [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()];
+export const options: string[] = [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()];
 export const harvardArtOptions: HarvardAutoCompleteResponse = {
     info,
     records: options.map(option => ({title: option}))
@@ -262,7 +259,7 @@ export const fromHarvardArt: Art = {
         id: String(piece.id),
         title: piece.title,
         image: piece.primaryimageurl,
-        artistInfo: piece.people[0].displayname,
+        artistInfo: piece.people?.[0].displayname || '',
         altText: piece.title
     }))
 };
@@ -277,7 +274,7 @@ const rijkPieceResponse = (): RIJKArtObject => ({
         url: faker.lorem.words()
     }
 });
-export const fromRIJKArtResponse: RIJKAllArtResponse = {
+export const fromRIJKArtResponse: RIJKAllArt = {
     count: Math.floor(Math.random() * 100) + 1,
     artObjects: [...Array(pagination.limit)].map(rijkPieceResponse)
 };
@@ -290,7 +287,7 @@ export const fromRIJKToPiece = (piece: RIJKArtObject): Piece => ({
     altText: piece.longTitle
 });
 
-export const rijkArtObjectResponse: RIJKArtObjectResponse = {
+export const rijkArtObjectResponse: RIJKArtResponse = {
     artObject: rijkPieceResponse()
 };
 

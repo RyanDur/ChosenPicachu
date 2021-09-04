@@ -18,7 +18,6 @@ const ArtPiece = () => {
 
     useEffect(() => {
         id && data.getPiece({id, source: tab}, (action: GetPieceAction) => {
-            console.log(action);
             isLoading(action.type === AsyncState.LOADING);
             isErrored(action.type === AsyncState.ERROR);
             if (action.type === AsyncState.LOADED) updatePiece(action.value);

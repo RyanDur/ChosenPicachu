@@ -8,7 +8,7 @@ export interface Request {
     method?: string;
 }
 
-export const request = (
+export const http = (
     {
         url,
         decoder,
@@ -19,6 +19,8 @@ export const request = (
             case 200:
             case 201: {
                 const body = await response.json();
+                console.log('body', body);
+                console.log('validated', decoder?.validate(body));
                 const decoded = decoder?.decode(body);
                 return decoded ? success(decoded) : failure(HTTPError.MALFORMED_RESPONSE);
             }
