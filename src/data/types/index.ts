@@ -1,40 +1,36 @@
 import {Consumer} from '../../components/UserInfo/types';
 import {Source, toSource} from './Source';
 import {
+    AICAllArt,
+    AICArt,
     AICArtOption,
-    AICAllArtResponse,
+    AICArtSuggestion,
     AICAutocomplete,
     AICAutoCompleteResponse,
-    AICPieceData,
-    AICPieceResponse,
-    AICArtSuggestion, AICAllArtResponseDecoder
+    AICPieceData
 } from './AIC';
-import {
-    HarvardArtResponse, HarvardArtResponseDecoder,
-    HarvardArtSuggestion,
-    HarvardAutoCompleteResponse,
-    HarvardInfoResponse,
-    HarvardPeopleResponse,
-    HarvardRecordResponse
-} from './Harvard';
-import {Loaded, Loading, Error, AsyncState} from './AsyncState';
-import {RIJKAllArtResponse, RIJKAllArtResponseDecoder, RIJKAllPieceResponse} from './RIJK';
 
-export type ArtResponse = AICAllArtResponse & HarvardArtResponse & RIJKAllArtResponse
-export type PieceResponse = AICPieceData & AICPieceResponse & HarvardRecordResponse & RIJKAllPieceResponse
+import {AsyncState, Error, Loaded, Loading} from './AsyncState';
+import {RIJKAllArt, RIJKPiece} from './RIJK';
+import {Art, Piece} from './Art';
+import {HarvardAllArt, HarvardAutoCompleteResponse, HarvardPiece} from './Harvard';
+
+export type AllArtResponse = AICAllArt & HarvardAllArt & RIJKAllArt
+export type PieceResponse = AICPieceData & AICArt & HarvardPiece & RIJKPiece
 export type {
     AICArtOption,
-    AICAllArtResponse,
+    AICAllArt,
     AICAutocomplete,
     AICAutoCompleteResponse,
     AICPieceData,
-    AICPieceResponse,
+    AICArt,
     AICArtSuggestion,
 
-    HarvardArtResponse,
-    HarvardInfoResponse,
-    HarvardPeopleResponse,
-    HarvardRecordResponse,
+    HarvardAllArt,
+    HarvardPiece,
+
+    Art,
+    Piece,
 
     Loaded,
     Loading,
@@ -47,28 +43,8 @@ export {
     AsyncState
 };
 
-export type Pagination = {
-    total: number;
-    limit: number;
-    totalPages: number;
-    currentPage: number;
-}
 
-export type Piece = {
-    id: string;
-    title: string;
-    image?: string;
-    altText: string;
-    artistInfo: string;
-}
-
-export interface Art {
-    pagination: Pagination;
-    pieces: Piece[];
-}
-
-export type ArtSuggestion = AICArtSuggestion | HarvardArtSuggestion;
-export type AutocompleteResponse = AICAutoCompleteResponse & HarvardAutoCompleteResponse & RIJKAllArtResponse
+export type AutocompleteResponse = AICAutoCompleteResponse & HarvardAutoCompleteResponse & RIJKAllArt
 
 export interface Action<T> {
     type: T;
@@ -82,9 +58,3 @@ export interface ArtQuery {
     size: number;
     source: Source;
 }
-
-export {
-    RIJKAllArtResponseDecoder,
-    AICAllArtResponseDecoder,
-    HarvardArtResponseDecoder
-};

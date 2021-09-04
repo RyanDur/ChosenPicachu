@@ -1,24 +1,13 @@
 import * as D from 'schemawax';
 
-const HarvardPeopleResponseDecoder = D.object({
+const HarvardPeopleDecoder = D.object({
     required: {
         role: D.string,
         displayname: D.string
     }
 });
 
-export const HarvardRecordResponseDecoder = D.object({
-    required: {
-        id: D.number,
-        title: D.string,
-    },
-    optional: {
-        people: D.array(HarvardPeopleResponseDecoder),
-        primaryimageurl: D.string
-    }
-});
-
-const HarvardInfoResponseDecoder = D.object({
+const HarvardInfoDecoder = D.object({
     required: {
         totalrecordsperquery: D.number,
         totalrecords: D.number,
@@ -27,28 +16,39 @@ const HarvardInfoResponseDecoder = D.object({
     }
 });
 
-export const HarvardArtResponseDecoder = D.object({
-    required: {
-        info: HarvardInfoResponseDecoder,
-        records: D.array(HarvardRecordResponseDecoder)
-    }
-});
-const HarvardArtSuggestionDecoder = D.string;
 const HarvardArtOptionDecoder = D.object({
     required: {
-        title: HarvardArtSuggestionDecoder
+        title: D.string
     }
 });
-export const HarvardAutoCompleteResponseDecoder = D.object({
+
+export const HarvardArtDecoder = D.object({
     required: {
-        info: HarvardInfoResponseDecoder,
+        id: D.number,
+        title: D.string,
+    },
+    optional: {
+        people: D.array(HarvardPeopleDecoder),
+        primaryimageurl: D.nullable(D.string)
+    }
+});
+
+export const HarvardAllArtDecoder = D.object({
+    required: {
+        info: HarvardInfoDecoder,
+        records: D.array(HarvardArtDecoder)
+    }
+});
+
+export const HarvardAutoCompleteDecoder = D.object({
+    required: {
+        info: HarvardInfoDecoder,
         records: D.array(HarvardArtOptionDecoder)
     }
 });
 
-export type HarvardArtResponse = D.Output<typeof HarvardArtResponseDecoder>
-export type HarvardInfoResponse = D.Output<typeof HarvardInfoResponseDecoder>;
-export type HarvardRecordResponse = D.Output<typeof HarvardRecordResponseDecoder>
-export type HarvardPeopleResponse = D.Output<typeof HarvardPeopleResponseDecoder>
-export type HarvardArtSuggestion = D.Output<typeof HarvardArtSuggestionDecoder>;
-export type HarvardAutoCompleteResponse = D.Output<typeof HarvardAutoCompleteResponseDecoder>;
+export type HarvardPeople = D.Output<typeof HarvardPeopleDecoder>;
+export type HarvardInfo = D.Output<typeof HarvardInfoDecoder>;
+export type HarvardAllArt = D.Output<typeof HarvardAllArtDecoder>
+export type HarvardPiece = D.Output<typeof HarvardArtDecoder>
+export type HarvardAutoCompleteResponse = D.Output<typeof HarvardAutoCompleteDecoder>;

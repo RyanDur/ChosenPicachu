@@ -1,7 +1,7 @@
 import * as D from 'schemawax';
 
 const AICThumbnailDecoder = D.object({
-    required: {
+    optional: {
         alt_text: D.string
     }
 });
@@ -18,11 +18,11 @@ export const AICPieceResponseDecoder = D.object({
         id: D.number,
         title: D.string,
         term_titles: D.array(D.string),
-        image_id: D.string,
         artist_display: D.string
     },
     optional: {
-        thumbnail: AICThumbnailDecoder
+        image_id: D.nullable(D.string),
+        thumbnail: D.nullable(AICThumbnailDecoder)
     }
 });
 export const AICAllArtResponseDecoder = D.object({
@@ -57,13 +57,14 @@ export const AICAutoCompleteResponseDecoder = D.object({
 });
 
 export type AICPieceData = {
-    data: AICPieceResponse;
+    data: AICArt;
 }
 
 export type AICArtOption = D.Output<typeof AICArtOptionDecoder>
 export type AICAutocomplete = D.Output<typeof AICAutocompleteDecoder>;
 export type AICAutoCompleteResponse = D.Output<typeof AICAutoCompleteResponseDecoder>
-export type AICPieceResponse = D.Output<typeof AICPieceResponseDecoder>
-export type AICAllArtResponse = D.Output<typeof AICAllArtResponseDecoder>
-export type AICArtResponse = D.Output<typeof AICArtResponseDecoder>
+
+export type AICArt = D.Output<typeof AICPieceResponseDecoder>
+
+export type AICAllArt = D.Output<typeof AICAllArtResponseDecoder>
 export type AICArtSuggestion = D.Output<typeof AICArtSuggestionDecoder>;
