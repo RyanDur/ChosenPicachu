@@ -2,27 +2,29 @@ import {Consumer} from '../../components/UserInfo/types';
 import {Source, toSource} from './Source';
 import {
     AICArtOption,
-    AICArtResponse,
+    AICAllArtResponse,
     AICAutocomplete,
     AICAutoCompleteResponse,
     AICPieceData,
     AICPieceResponse,
-    AICArtSuggestion
+    AICArtSuggestion, AICAllArtResponseDecoder
 } from './AIC';
 import {
-    HarvardArtResponse, HarvardArtSuggestion, HarvardAutoCompleteResponse,
+    HarvardArtResponse, HarvardArtResponseDecoder,
+    HarvardArtSuggestion,
+    HarvardAutoCompleteResponse,
     HarvardInfoResponse,
     HarvardPeopleResponse,
     HarvardRecordResponse
 } from './Harvard';
 import {Loaded, Loading, Error, AsyncState} from './AsyncState';
-import {RIJKAllArtResponse, RIJKAllPieceResponse} from './RIJK';
+import {RIJKAllArtResponse, RIJKAllArtResponseDecoder, RIJKAllPieceResponse} from './RIJK';
 
-export type ArtResponse = AICArtResponse & HarvardArtResponse & RIJKAllArtResponse
+export type ArtResponse = AICAllArtResponse & HarvardArtResponse & RIJKAllArtResponse
 export type PieceResponse = AICPieceData & AICPieceResponse & HarvardRecordResponse & RIJKAllPieceResponse
 export type {
     AICArtOption,
-    AICArtResponse,
+    AICAllArtResponse,
     AICAutocomplete,
     AICAutoCompleteResponse,
     AICPieceData,
@@ -80,3 +82,9 @@ export interface ArtQuery {
     size: number;
     source: Source;
 }
+
+export {
+    RIJKAllArtResponseDecoder,
+    AICAllArtResponseDecoder,
+    HarvardArtResponseDecoder
+};

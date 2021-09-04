@@ -1,57 +1,69 @@
-type Tuple<A, B> = [A, B]
+import * as D from 'schemawax';
 
-export interface AICArtResponse {
-    pagination: AICPaginationResponse;
-    data: AICPieceResponse[];
-    info: AICInfo;
-    config: AICConfig;
-}
+const AICThumbnailDecoder = D.object({
+    required: {
+        alt_text: D.string
+    }
+});
+const AICPaginationResponseDecoder = D.object({
+    required: {
+        total: D.number,
+        limit: D.number,
+        total_pages: D.number,
+        current_page: D.number
+    }
+});
+export const AICPieceResponseDecoder = D.object({
+    required: {
+        id: D.number,
+        title: D.string,
+        term_titles: D.array(D.string),
+        image_id: D.string,
+        artist_display: D.string
+    },
+    optional: {
+        thumbnail: AICThumbnailDecoder
+    }
+});
+export const AICAllArtResponseDecoder = D.object({
+    required: {
+        pagination: AICPaginationResponseDecoder,
+        data: D.array(AICPieceResponseDecoder)
+    }
+});
+export const AICArtResponseDecoder = D.object({
+    required: {
+        data: AICPieceResponseDecoder
+    }
+});
 
-export type AICArtSuggestion = string;
+const AICArtSuggestionDecoder = D.string;
 
-export interface AICAutoCompleteResponse {
-    pagination: AICPaginationResponse;
-    data: AICAutocomplete[]
-}
-
-export interface AICArtOption {
-    input: AICArtSuggestion[];
-}
-
-export interface AICAutocomplete {
-    suggest_autocomplete_all: Tuple<unknown, AICArtOption>
-}
-
-export interface AICPaginationResponse {
-    total: number;
-    limit: number;
-    total_pages: number;
-    current_page: number;
-}
-
-export type AICThumbnail = {
-    alt_text: string;
-}
-
-export interface AICPieceResponse {
-    id: number;
-    title: string;
-    image_id?: string;
-    term_titles: string[];
-    artist_display: string;
-    thumbnail?: AICThumbnail;
-}
+const AICArtOptionDecoder = D.object({
+   required:  {
+       input: AICArtSuggestionDecoder
+   }
+});
+const AICAutocompleteDecoder = D.object({
+    required: {
+        suggest_autocomplete_all: D.tuple(D.unknown, AICArtOptionDecoder)
+    }
+});
+export const AICAutoCompleteResponseDecoder = D.object({
+    required: {
+        pagination: AICPaginationResponseDecoder,
+        data: D.array(AICAutocompleteDecoder)
+    }
+});
 
 export type AICPieceData = {
     data: AICPieceResponse;
 }
 
-export interface AICInfo {
-    license_text: string,
-    license_links: string[],
-    version: string
-}
-
-export interface AICConfig {
-    iiif_url: string;
-}
+export type AICArtOption = D.Output<typeof AICArtOptionDecoder>
+export type AICAutocomplete = D.Output<typeof AICAutocompleteDecoder>;
+export type AICAutoCompleteResponse = D.Output<typeof AICAutoCompleteResponseDecoder>
+export type AICPieceResponse = D.Output<typeof AICPieceResponseDecoder>
+export type AICAllArtResponse = D.Output<typeof AICAllArtResponseDecoder>
+export type AICArtResponse = D.Output<typeof AICArtResponseDecoder>
+export type AICArtSuggestion = D.Output<typeof AICArtSuggestionDecoder>;
