@@ -36,7 +36,7 @@ export const App = () => {
                 <Link id="navigate-about" className="path" to={Paths.about}>About</Link>
                 <Link id="navigate-users" className="path" to={Paths.users}>Users</Link>
                 <Link id="navigate-form" className="path"
-                      to={`${Paths.artGallery}${toQueryString({page: 1, size: 12, tab: Source.AIC})}`}>Gallery</Link>
+                      to={`${Paths.artGallery}${toQueryString({page: 1, size: 8, tab: Source.AIC})}`}>Gallery</Link>
                 <a id="navigate-repo" className="path" href={Paths.repo}
                    rel="noopener noreferrer" target="_blank">Repo</a>
             </nav>
