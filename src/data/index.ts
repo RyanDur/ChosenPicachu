@@ -40,9 +40,8 @@ export const data = {
         search
     }: { search?: string; page: number; size: number; source: Source; }, dispatch: Dispatch<GetArtAction>): void => {
         dispatch(loading());
-        http({
-            url: URI.from({source, params: {page, search, limit: size}}),
-        }).onFailure(() => dispatch(error()))
+        http({url: URI.from({source, params: {page, search, limit: size}})})
+            .onFailure(() => dispatch(error()))
             .map(result => maybe.of(provideAllArtDecoder(source)
                 .decode(result.orNull()))
                 .map(response => {
@@ -65,9 +64,8 @@ export const data = {
         source
     }: { id: string, source: Source }, dispatch: Dispatch<GetPieceAction>): void => {
         dispatch(loading());
-        http({
-            url: URI.from({source: source, path: `/${id}`}),
-        }).onFailure(() => dispatch(error()))
+        http({url: URI.from({source: source, path: `/${id}`})})
+            .onFailure(() => dispatch(error()))
             .map(result => maybe.of(provideArtDecoder(source)
                 .decode(result.orNull()))
                 .map(response => {
