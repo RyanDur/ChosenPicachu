@@ -75,6 +75,6 @@ describe('http calls', () => {
 
         const actual = await http({url: someUrl, method: HTTPMethod.GET}).value();
 
-        expect(actual.orNull()?.orElseErr(HTTPError.UNKNOWN)).toEqual(HTTPError.THROWN);
+        expect(actual.orNull()).toBeNull();
     });
 });

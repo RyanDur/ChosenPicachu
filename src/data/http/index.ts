@@ -14,11 +14,12 @@ export const http = ({
         switch (response.status) {
             case 200:
             case 201:
-            case 204:
                 return result.ok(await response.json());
+            case 204:
+                return result.ok(null);
             case 403:
                 return result.err(HTTPError.FORBIDDEN);
             default:
                 return result.err(HTTPError.UNKNOWN);
         }
-    }).catch(() => result.err(HTTPError.THROWN)));
+    }));
