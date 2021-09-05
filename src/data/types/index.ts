@@ -11,12 +11,10 @@ import {
 } from './AIC';
 
 import {AsyncState, Error, Loaded, Loading} from './AsyncState';
-import {RIJKAllArt, RIJKPiece} from './RIJK';
+import {RIJKAllArt} from './RIJK';
 import {Art, Piece} from './Art';
 import {HarvardAllArt, HarvardAutoCompleteResponse, HarvardPiece} from './Harvard';
 
-export type AllArtResponse = AICAllArt & HarvardAllArt & RIJKAllArt
-export type PieceResponse = AICPieceData & AICArt & HarvardPiece & RIJKPiece
 export type {
     AICArtOption,
     AICAllArt,
