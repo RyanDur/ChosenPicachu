@@ -75,6 +75,7 @@ describe('http calls', () => {
 
         const actual = await http({url: someUrl, method: HTTPMethod.GET}).value();
 
+        expect(actual.isOk).toBe(false);
         expect(actual.orNull()).toBeNull();
     });
 });
