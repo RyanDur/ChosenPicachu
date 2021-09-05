@@ -2,7 +2,7 @@ import * as D from 'schemawax';
 
 const RIJKImageDecoder = D.object({
   required: {
-      url: D.string
+      url: D.nullable(D.string)
   }
 });
 
