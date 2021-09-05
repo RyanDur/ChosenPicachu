@@ -1,5 +1,5 @@
 import {FC, FormEvent, useEffect, useState} from 'react';
-import {AICArtSuggestion, AsyncState} from '../../../data/types';
+import {AICArtSuggestion, AsyncState, Source} from '../../../data/types';
 import {data} from '../../../data';
 import {SearchArtAction} from '../../../data/actions';
 import {debounce} from 'lodash';
@@ -18,14 +18,14 @@ export const Search: FC<Props> = ({id}) => {
     const [searchOptions, updateSearchOptions] = useState<AICArtSuggestion[]>([]);
     const [searchString, updateQuery] = useState<string>('');
     const history = useHistory();
-    const {queryObj: {tab, search}, updateQueryString, nextQueryString} = useQuery<{ tab?: string, search?: string }>();
-    const debounceSearch = debounce((query: { search: string, source: string }, consumer: Consumer<SearchArtAction>) =>
+    const {queryObj: {tab, search}, updateQueryString, nextQueryString} = useQuery<{ tab?: Source, search?: string }>();
+    const debounceSearch = debounce((query: { search: string, source: Source }, consumer: Consumer<SearchArtAction>) =>
         data.searchForArtOptions(query, consumer), 300);
 
     useEffect(() => {
         searchString && debounceSearch({
             search: searchString.toLowerCase(),
-            source: tab || ''
+            source: tab || '' as Source
         }, (action: SearchArtAction) => {
             if (action.type === AsyncState.LOADED) updateSearchOptions(action.value);
         });
