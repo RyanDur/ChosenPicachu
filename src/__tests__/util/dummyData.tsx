@@ -222,14 +222,14 @@ export const harvardArtOptions: HarvardAutoCompleteResponse = {
     info,
     records: options.map(option => ({title: option}))
 };
-export const fromRIJKArtOptionsResponse = {
+export const fromRIJKArtOptionsResponse: RIJKAllArt = {
     count: options.length,
     artObjects: options.map(title => ({
         id: faker.lorem.word(),
+        objectNumber: faker.lorem.word(),
         title,
-        artistInfo: faker.lorem.word(),
-        image: faker.lorem.word(),
-        altText: faker.lorem.word()
+        longTitle: title,
+        webImage: {url: faker.lorem.word()},
     }))
 };
 

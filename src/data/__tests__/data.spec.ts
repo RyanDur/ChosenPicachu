@@ -1,10 +1,6 @@
 import {data} from '../index';
 import 'whatwg-fetch';
-import {
-    AICPieceData,
-    Piece,
-    Source
-} from '../types';
+import {AICAutoCompleteResponse, AICPieceData, Piece, Source} from '../types';
 import faker from 'faker';
 import {
     aicArtResponse,
@@ -23,14 +19,11 @@ import {
 } from '../../__tests__/util';
 import {nanoid} from 'nanoid';
 import {error, loaded, loading} from '../actions';
-import {failure, success} from '../http/actions';
 import {http} from '../http';
 import {HTTPError} from '../http/types';
 import {waitFor} from '@testing-library/react';
 import {URI} from '../URI';
-import {AICAllArtResponseDecoder, AICArtResponseDecoder, AICAutoCompleteResponseDecoder} from '../types/AIC';
-import {HarvardAutoCompleteDecoder, HarvardArtDecoder, HarvardAllArtDecoder} from '../types/Harvard';
-import {RIJKAllArtDecoder, RIJKArtDecoder} from '../types/RIJK';
+import {asyncResult, result} from '@ryandur/sand';
 
 jest.mock('../http', () => ({
     http: jest.fn(),
@@ -48,18 +41,17 @@ describe('data', () => {
         describe('when the source is AIC', () => {
             test('when it is successful', async () => {
                 const dispatch = jest.fn();
-                mockHttp.mockReturnValue(Promise.resolve(success(aicArtResponse)));
+                mockHttp.mockReturnValue(asyncResult.success(result.ok(aicArtResponse)));
 
                 data.getAllArt({page: 1, size: 12, source: Source.AIC}, dispatch);
 
-                expect(mockHttp).toHaveBeenCalledWith({url: mockURIFrom, decoder: AICAllArtResponseDecoder});
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(fromAICArt)));
             });
 
             test('when it has a search term', async () => {
                 const dispatch = jest.fn();
-                mockHttp.mockReturnValue(Promise.resolve(success(aicArtResponse)));
+                mockHttp.mockReturnValue(asyncResult.success(result.ok(aicArtResponse)));
 
                 data.getAllArt({page: 1, size: 12, search: 'rad', source: Source.AIC}, dispatch);
 
@@ -69,7 +61,7 @@ describe('data', () => {
 
             test('when it is not successful', async () => {
                 const dispatch = jest.fn();
-                mockHttp.mockReturnValue(Promise.resolve(failure(HTTPError.UNKNOWN)));
+                mockHttp.mockReturnValue(asyncResult.success(result.err(HTTPError.UNKNOWN)));
 
                 data.getAllArt({page: 1, size: 12, source: Source.AIC}, dispatch);
 
@@ -81,18 +73,17 @@ describe('data', () => {
         describe('when the source is Harvard', () => {
             test('when it is successful', async () => {
                 const dispatch = jest.fn();
-                mockHttp.mockReturnValue(Promise.resolve(success(harvardArtResponse)));
+                mockHttp.mockReturnValue(asyncResult.success(result.ok(harvardArtResponse)));
 
                 data.getAllArt({page: 1, size: 12, source: Source.HARVARD}, dispatch);
 
-                expect(mockHttp).toHaveBeenCalledWith({url: mockURIFrom, decoder: HarvardAllArtDecoder});
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(fromHarvardArt)));
             });
 
             test('when it has a search term', async () => {
                 const dispatch = jest.fn();
-                mockHttp.mockReturnValue(Promise.resolve(success(harvardArtResponse)));
+                mockHttp.mockReturnValue(asyncResult.success(result.ok(harvardArtResponse)));
 
                 data.getAllArt({page: 1, size: 12, search: 'rad', source: Source.HARVARD}, dispatch);
 
@@ -102,7 +93,7 @@ describe('data', () => {
 
             test('when it is not successful', async () => {
                 const dispatch = jest.fn();
-                mockHttp.mockReturnValue(Promise.resolve(failure(HTTPError.UNKNOWN)));
+                mockHttp.mockReturnValue(asyncResult.success(result.err(HTTPError.UNKNOWN)));
 
                 data.getAllArt({page: 1, size: 12, source: Source.HARVARD}, dispatch);
 
@@ -114,18 +105,17 @@ describe('data', () => {
         describe('when the source is RIJKS', () => {
             test('when it is successful', async () => {
                 const dispatch = jest.fn();
-                mockHttp.mockReturnValue(Promise.resolve(success(fromRIJKArtResponse)));
+                mockHttp.mockReturnValue(asyncResult.success(result.ok(fromRIJKArtResponse)));
 
                 data.getAllArt({page: 1, size: 12, source: Source.RIJK}, dispatch);
 
-                expect(mockHttp).toHaveBeenCalledWith({url: mockURIFrom, decoder: RIJKAllArtDecoder});
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(fromRIJKArt(1, 12))));
             });
 
             test('when it has a search term', async () => {
                 const dispatch = jest.fn();
-                mockHttp.mockReturnValue(Promise.resolve(success(fromRIJKArtResponse)));
+                mockHttp.mockReturnValue(asyncResult.success(result.ok(fromRIJKArtResponse)));
 
                 data.getAllArt({page: 1, size: 12, search: 'rad', source: Source.RIJK}, dispatch);
 
@@ -135,13 +125,37 @@ describe('data', () => {
 
             test('when it is not successful', async () => {
                 const dispatch = jest.fn();
-                mockHttp.mockReturnValue(Promise.resolve(failure(HTTPError.UNKNOWN)));
+                mockHttp.mockReturnValue(asyncResult.success(result.err(HTTPError.UNKNOWN)));
 
                 data.getAllArt({page: 1, size: 12, source: Source.RIJK}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
             });
+        });
+
+        test('when the source does not exist', async () => {
+            const dispatch = jest.fn();
+            mockHttp.mockReturnValue(asyncResult.success(result.ok(fromRIJKArtResponse)));
+
+            data.getAllArt({page: 1, size: 12, source: 'I do not exist' as Source}, dispatch);
+
+            expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
+        });
+
+        test.each`
+        source
+        ${Source.AIC}
+        ${Source.HARVARD}
+        ${Source.RIJK}
+        `('with a malformed response', async ({source}) => {
+            const dispatch = jest.fn();
+            mockHttp.mockReturnValue(asyncResult.success(result.ok({I: 'am wrong'})));
+
+            data.getAllArt({page: 1, size: 12, source}, dispatch);
+            expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
         });
     });
 
@@ -150,19 +164,18 @@ describe('data', () => {
             describe('when it is successful', () => {
                 test('for a full response', async () => {
                     const dispatch = jest.fn();
-                    mockHttp.mockReturnValue(Promise.resolve(success(pieceAICResponse)));
+                    mockHttp.mockReturnValue(asyncResult.success(result.ok(pieceAICResponse)));
 
                     data.getPiece({id: String(aicPiece.id), source: Source.AIC}, dispatch);
 
                     expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-                    expect(mockHttp).toHaveBeenCalledWith({url: mockURIFrom, decoder: AICArtResponseDecoder});
                     await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(aicPiece)));
                 });
             });
 
             test('when it is not successful', async () => {
                 const dispatch = jest.fn();
-                mockHttp.mockReturnValue(Promise.resolve(failure(HTTPError.UNKNOWN)));
+                mockHttp.mockReturnValue(asyncResult.success(result.err(HTTPError.UNKNOWN)));
 
                 data.getPiece({id: String(aicPiece.id), source: Source.AIC}, dispatch);
 
@@ -174,18 +187,17 @@ describe('data', () => {
         describe('for Harvard', () => {
             test('when it is successful', async () => {
                 const dispatch = jest.fn();
-                mockHttp.mockReturnValue(Promise.resolve(success(harvardPieceResponse)));
+                mockHttp.mockReturnValue(asyncResult.success(result.ok(harvardPieceResponse)));
 
                 data.getPiece({id: String(aicPiece.id), source: Source.HARVARD}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-                expect(mockHttp).toHaveBeenCalledWith({url: mockURIFrom, decoder: HarvardArtDecoder});
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(harvardPiece)));
             });
 
             test('when it is not successful', async () => {
                 const dispatch = jest.fn();
-                mockHttp.mockReturnValue(Promise.resolve(failure(HTTPError.UNKNOWN)));
+                mockHttp.mockReturnValue(asyncResult.success(result.err(HTTPError.UNKNOWN)));
 
                 data.getPiece({id: String(aicPiece.id), source: Source.HARVARD}, dispatch);
 
@@ -197,24 +209,47 @@ describe('data', () => {
         describe('for RIJKS', () => {
             test('when it is successful', async () => {
                 const dispatch = jest.fn();
-                mockHttp.mockReturnValue(Promise.resolve(success(rijkArtObjectResponse)));
+                mockHttp.mockReturnValue(asyncResult.success(result.ok(rijkArtObjectResponse)));
 
                 data.getPiece({id: String(aicPiece.id), source: Source.RIJK}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-                expect(mockHttp).toHaveBeenCalledWith({url: mockURIFrom, decoder: RIJKArtDecoder});
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(fromRIJKToPiece(rijkArtObjectResponse.artObject))));
             });
 
             test('when it is not successful', async () => {
                 const dispatch = jest.fn();
-                mockHttp.mockReturnValue(Promise.resolve(failure(HTTPError.UNKNOWN)));
+                mockHttp.mockReturnValue(asyncResult.success(result.err(HTTPError.UNKNOWN)));
 
                 data.getPiece({id: String(aicPiece.id), source: Source.RIJK}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
             });
+        });
+
+        test('when the source does not exist', async () => {
+            const dispatch = jest.fn();
+            mockHttp.mockReturnValue(asyncResult.success(result.ok(pieceAICResponse)));
+
+            data.getPiece({id: '1', source: 'I do not exist' as Source}, dispatch);
+
+            expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
+        });
+
+        test.each`
+        source
+        ${Source.AIC}
+        ${Source.HARVARD}
+        ${Source.RIJK}
+        `('with a malformed response', async ({source}) => {
+            const dispatch = jest.fn();
+            mockHttp.mockReturnValue(asyncResult.success(result.ok({I: 'am wrong'})));
+
+            data.getPiece({id: '1', source}, dispatch);
+            expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
         });
     });
 
@@ -222,13 +257,12 @@ describe('data', () => {
         describe('for AIC', () => {
             test('when it is successful', async () => {
                 const dispatch = jest.fn();
-                mockHttp.mockReturnValue(Promise.resolve(success(aicArtOptions)));
+                mockHttp.mockReturnValue(asyncResult.success(result.ok(aicArtOptions)));
                 const search = faker.lorem.word();
 
                 data.searchForArtOptions({search, source: Source.AIC}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-                expect(mockHttp).toHaveBeenCalledWith({url: mockURIFrom, decoder: AICAutoCompleteResponseDecoder});
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(options)));
             });
         });
@@ -236,13 +270,12 @@ describe('data', () => {
         describe('for Harvard', () => {
             test('when it is successful', async () => {
                 const dispatch = jest.fn();
-                mockHttp.mockReturnValue(Promise.resolve(success(harvardArtOptions)));
+                mockHttp.mockReturnValue(asyncResult.success(result.ok(harvardArtOptions)));
                 const search = faker.lorem.word();
 
                 data.searchForArtOptions({search, source: Source.HARVARD}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-                expect(mockHttp).toHaveBeenCalledWith({url: mockURIFrom, decoder: HarvardAutoCompleteDecoder});
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(options)));
             });
         });
@@ -250,15 +283,40 @@ describe('data', () => {
         describe('for RIJKS', () => {
             test('when it is successful', async () => {
                 const dispatch = jest.fn();
-                mockHttp.mockReturnValue(Promise.resolve(success(fromRIJKArtOptionsResponse)));
+                mockHttp.mockReturnValue(asyncResult.success(result.ok(fromRIJKArtOptionsResponse)));
                 const search = faker.lorem.word();
 
                 data.searchForArtOptions({search, source: Source.RIJK}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-                expect(mockHttp).toHaveBeenCalledWith({url: mockURIFrom, decoder: RIJKArtDecoder});
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(options)));
             });
+        });
+
+        test('when the source does not exist', async () => {
+            const dispatch = jest.fn();
+            mockHttp.mockReturnValue(asyncResult.success(result.ok(harvardArtOptions)));
+            const search = faker.lorem.word();
+
+            data.searchForArtOptions({search, source: 'I do not exist' as Source}, dispatch);
+
+            expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
+        });
+
+        test.each`
+        source
+        ${Source.AIC}
+        ${Source.HARVARD}
+        ${Source.RIJK}
+        `('with a malformed response', async ({source}) => {
+            const dispatch = jest.fn();
+            const search = faker.lorem.word();
+            mockHttp.mockReturnValue(asyncResult.success(result.ok({I: 'am wrong'})));
+
+            data.searchForArtOptions({search, source}, dispatch);
+            expect(dispatch).toHaveBeenNthCalledWith(1, loading());
+            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
         });
     });
 
@@ -288,7 +346,8 @@ describe('data', () => {
         current_page: fromAICArt.pagination.currentPage,
     };
 
-    const aicArtOptions = {
+
+    const aicArtOptions: AICAutoCompleteResponse = {
         pagination,
         data: options.map(option => ({
             suggest_autocomplete_all: [{

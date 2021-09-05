@@ -1,32 +1,24 @@
-import {failure, success} from './actions';
 import {HTTPError, HTTPMethod} from './types';
-import {Decoder} from 'schemawax';
+import {asyncResult, result} from '@ryandur/sand';
 
 export interface Request {
     url: string;
-    decoder?: Decoder<any>;
     method?: string;
 }
 
-export const http = (
-    {
-        url,
-        decoder,
-        method = HTTPMethod.GET
-    }: Request) =>
-    fetch(url, {method, mode: 'cors'}).then(async response => {
+export const http = ({
+    url,
+    method = HTTPMethod.GET
+}: Request) =>
+    asyncResult.of(fetch(url, {method, mode: 'cors'}).then(async response => {
         switch (response.status) {
             case 200:
-            case 201: {
-                const body = await response.json();
-                const decoded = decoder?.decode(body);
-                return decoded ? success(decoded) : failure(HTTPError.MALFORMED_RESPONSE);
-            }
+            case 201:
             case 204:
-                return success();
+                return result.ok(await response.json());
             case 403:
-                return failure(HTTPError.FORBIDDEN);
+                return result.err(HTTPError.FORBIDDEN);
             default:
-                return failure(HTTPError.UNKNOWN);
+                return result.err(HTTPError.UNKNOWN);
         }
-    }).catch(() => failure(HTTPError.THROWN));
+    }).catch(() => result.err(HTTPError.THROWN)));
