@@ -1,4 +1,4 @@
-import {AllArtResponse, ArtQuery, AutocompleteResponse, Dispatch, Source, toSource} from './types';
+import {AllArtResponse, AutocompleteResponse, Dispatch, Source} from './types';
 import {error, GetArtAction, GetPieceAction, loaded, loading, SearchArtAction} from './actions';
 import {aicDataToPiece, aicToArt, harvardToArt, harvardToPiece, rijkToArt, toRijkToPiece} from './translators';
 import {provideAllArtDecoder, provideArtDecoder, provideSearchDecoder} from './decoders';
@@ -10,11 +10,11 @@ export const data = {
     searchForArtOptions: ({
         search,
         source
-    }: { search: string, source: string }, dispatch: Dispatch<SearchArtAction>): void => {
+    }: { search: string, source: Source }, dispatch: Dispatch<SearchArtAction>): void => {
         dispatch(loading());
-        http({url: URI.createSearchFrom(search, toSource(source))})
+        http({url: URI.createSearchFrom(search, source)})
             .mapFailure(error)
-            .map(result => maybe.of(provideSearchDecoder(toSource(source))
+            .map(result => maybe.of(provideSearchDecoder(source)
                 .decode(result.orNull()))
                 .map((response: AutocompleteResponse) => {
                     switch (source) {
@@ -33,7 +33,12 @@ export const data = {
             .onComplete(result => result.map(dispatch));
     },
 
-    getAllArt: ({page, size, source, search}: ArtQuery, dispatch: Dispatch<GetArtAction>): void => {
+    getAllArt: ({
+        page,
+        size,
+        source,
+        search
+    }: { search?: string; page: number; size: number; source: Source; }, dispatch: Dispatch<GetArtAction>): void => {
         dispatch(loading());
         http({
             url: URI.from({source, params: {page, search, limit: size}}),
@@ -55,12 +60,15 @@ export const data = {
             .onComplete(result => result.map(dispatch));
     },
 
-    getPiece: ({id, source}: { id: string, source: string }, dispatch: Dispatch<GetPieceAction>): void => {
+    getPiece: ({
+        id,
+        source
+    }: { id: string, source: Source }, dispatch: Dispatch<GetPieceAction>): void => {
         dispatch(loading());
         http({
-            url: URI.from({source: toSource(source), path: `/${id}`}),
+            url: URI.from({source: source, path: `/${id}`}),
         }).mapFailure(() => dispatch(error()))
-            .map(result => maybe.of(provideArtDecoder(toSource(source))
+            .map(result => maybe.of(provideArtDecoder(source)
                 .decode(result.orNull()))
                 .map(response => {
                     switch (source) {
