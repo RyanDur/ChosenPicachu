@@ -1,5 +1,15 @@
-import {AICAllArt, AICArt, AICPieceData, Art, HarvardAllArt, HarvardPiece, Piece} from './types';
+import {
+    AICAllArt,
+    AICArt,
+    AICAutoCompleteResponse,
+    AICPieceData,
+    Art,
+    HarvardAllArt,
+    HarvardPiece,
+    Piece
+} from './types';
 import {RIJKAllArt, RIJKArtObject, RIJKArtResponse} from './types/RIJK';
+import {HarvardAutoCompleteResponse} from './types/Harvard';
 
 export const aicToArt = ({pagination, data}: AICAllArt): Art => ({
     pagination: {
@@ -58,3 +68,13 @@ const rijkToPiece = (data: RIJKArtObject): Piece => ({
 });
 
 export const toRijkToPiece = ({artObject}: RIJKArtResponse): Piece => rijkToPiece(artObject);
+
+export const aicAutocompleteToOptions = ({data}: AICAutoCompleteResponse) => data
+    .map(({suggest_autocomplete_all}) => suggest_autocomplete_all[1])
+    .flatMap(option => option.input);
+
+export const harverdAutocompleteToOptions = ({records}: HarvardAutoCompleteResponse) =>
+    records.map(({title}) => title);
+
+export const rijksAutocompleteToOptions = ({artObjects}: RIJKAllArt) =>
+    artObjects.map(({title}) => title);

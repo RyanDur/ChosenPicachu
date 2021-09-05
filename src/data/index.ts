@@ -1,6 +1,16 @@
-import {AutocompleteResponse, Dispatch, Source} from './types';
+import {Dispatch, Source} from './types';
 import {error, GetArtAction, GetPieceAction, loaded, loading, SearchArtAction} from './actions';
-import {aicDataToPiece, aicToArt, harvardToArt, harvardToPiece, rijkToArt, toRijkToPiece} from './translators';
+import {
+    aicAutocompleteToOptions,
+    aicDataToPiece,
+    aicToArt,
+    harvardToArt,
+    harvardToPiece,
+    harverdAutocompleteToOptions,
+    rijksAutocompleteToOptions,
+    rijkToArt,
+    toRijkToPiece
+} from './translators';
 import {allArtSchema, artSchema, searchSchema} from './schemas';
 import {http} from './http';
 import {URI} from './URI';
@@ -32,16 +42,14 @@ export const data = {
         http({url: URI.createSearchFrom(search, source)})
             .onFailure(() => dispatch(error()))
             .map(result => maybe.of(searchSchema(source).decode(result.orNull()))
-                .map((response: AutocompleteResponse) => {
+                .map(response => {
                     switch (source) {
                         case Source.AIC:
-                            return loaded(response.data
-                                .map(({suggest_autocomplete_all}) => suggest_autocomplete_all[1])
-                                .flatMap(option => option.input));
+                            return loaded(aicAutocompleteToOptions(response));
                         case Source.HARVARD:
-                            return loaded(response.records.map(({title}) => title));
+                            return loaded(harverdAutocompleteToOptions(response));
                         case Source.RIJK:
-                            return loaded(response.artObjects.map(({title}) => title));
+                            return loaded(rijksAutocompleteToOptions(response));
                         default:
                             return error();
                     }

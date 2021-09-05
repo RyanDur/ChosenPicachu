@@ -17,3 +17,7 @@ export interface Art {
     pagination: Pagination;
     pieces: Piece[];
 }
+
+type AutocompleteOptions = string[];
+
+export type Gallery = Pagination | Art | Piece | AutocompleteOptions;
