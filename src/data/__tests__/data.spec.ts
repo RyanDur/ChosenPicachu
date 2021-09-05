@@ -22,7 +22,6 @@ import {error, loaded, loading} from '../actions';
 import {http} from '../http';
 import {HTTPError} from '../http/types';
 import {waitFor} from '@testing-library/react';
-import {URI} from '../URI';
 import {asyncResult, result} from '@ryandur/sand';
 
 jest.mock('../http', () => ({
@@ -31,11 +30,6 @@ jest.mock('../http', () => ({
 
 describe('data', () => {
     const mockHttp = http as jest.Mock;
-    const mockURIFrom = faker.lorem.word();
-    beforeEach(() => {
-        URI.from = () => mockURIFrom;
-        URI.createSearchFrom = () => mockURIFrom;
-    });
 
     describe('retrieving all the artwork', () => {
         describe('when the source is AIC', () => {
