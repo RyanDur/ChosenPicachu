@@ -11,9 +11,8 @@ import {
 } from './AIC';
 
 import {AsyncState, Error, Loaded, Loading} from './AsyncState';
-import {RIJKAllArt} from './RIJK';
 import {Art, Piece} from './Art';
-import {HarvardAllArt, HarvardAutoCompleteResponse, HarvardPiece} from './Harvard';
+import {HarvardAllArt, HarvardPiece} from './Harvard';
 
 export type {
     AICArtOption,
@@ -40,9 +39,6 @@ export {
     toSource,
     AsyncState
 };
-
-
-export type AutocompleteResponse = AICAutoCompleteResponse & HarvardAutoCompleteResponse & RIJKAllArt
 
 export interface Action<T> {
     type: T;
