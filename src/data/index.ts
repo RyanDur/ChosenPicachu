@@ -1,7 +1,7 @@
 import {AutocompleteResponse, Dispatch, Source} from './types';
 import {error, GetArtAction, GetPieceAction, loaded, loading, SearchArtAction} from './actions';
 import {aicDataToPiece, aicToArt, harvardToArt, harvardToPiece, rijkToArt, toRijkToPiece} from './translators';
-import {provideAllArtDecoder, provideArtDecoder, provideSearchDecoder} from './decoders';
+import {allArtSchema, artSchema, searchSchema} from './schemas';
 import {http} from './http';
 import {URI} from './URI';
 import {maybe} from '@ryandur/sand';
@@ -31,8 +31,7 @@ export const data = {
         dispatch(loading());
         http({url: URI.createSearchFrom(search, source)})
             .onFailure(() => dispatch(error()))
-            .map(result => maybe.of(provideSearchDecoder(source)
-                .decode(result.orNull()))
+            .map(result => maybe.of(searchSchema(source).decode(result.orNull()))
                 .map((response: AutocompleteResponse) => {
                     switch (source) {
                         case Source.AIC:
@@ -57,8 +56,7 @@ export const data = {
         dispatch(loading());
         http({url: URI.from({source, params: {page, search, limit: size}})})
             .onFailure(() => dispatch(error()))
-            .map(result => maybe.of(provideAllArtDecoder(source)
-                .decode(result.orNull()))
+            .map(result => maybe.of(allArtSchema(source).decode(result.orNull()))
                 .map(response => {
                     switch (source) {
                         case Source.AIC:
@@ -81,8 +79,7 @@ export const data = {
         dispatch(loading());
         http({url: URI.from({source: source, path: `/${id}`})})
             .onFailure(() => dispatch(error()))
-            .map(result => maybe.of(provideArtDecoder(source)
-                .decode(result.orNull()))
+            .map(result => maybe.of(artSchema(source).decode(result.orNull()))
                 .map(response => {
                     switch (source) {
                         case Source.AIC:

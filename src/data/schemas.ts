@@ -4,7 +4,7 @@ import {AICAllArtResponseDecoder, AICArtResponseDecoder, AICAutoCompleteResponse
 import {HarvardAllArtDecoder, HarvardArtDecoder, HarvardAutoCompleteDecoder} from './types/Harvard';
 import {RIJKAllArtDecoder, RIJKArtDecoder} from './types/RIJK';
 
-export const provideAllArtDecoder = (source: Source): Decoder<any> => {
+export const allArtSchema = (source: Source): Decoder<any> => {
     switch (source) {
         case Source.AIC:
             return AICAllArtResponseDecoder;
@@ -14,7 +14,7 @@ export const provideAllArtDecoder = (source: Source): Decoder<any> => {
             return RIJKAllArtDecoder;
     }
 };
-export const provideArtDecoder = (source: Source): Decoder<any> => {
+export const artSchema = (source: Source): Decoder<any> => {
     switch (source) {
         case Source.AIC:
             return AICArtResponseDecoder;
@@ -24,7 +24,7 @@ export const provideArtDecoder = (source: Source): Decoder<any> => {
             return RIJKArtDecoder;
     }
 };
-export const provideSearchDecoder = (source: Source): Decoder<any> => {
+export const searchSchema = (source: Source): Decoder<any> => {
     switch (source) {
         case Source.AIC:
             return AICAutoCompleteResponseDecoder;
