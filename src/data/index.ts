@@ -13,7 +13,7 @@ export const data = {
     }: { search: string, source: Source }, dispatch: Dispatch<SearchArtAction>): void => {
         dispatch(loading());
         http({url: URI.createSearchFrom(search, source)})
-            .mapFailure(error)
+            .onFailure(() => dispatch(error()))
             .map(result => maybe.of(provideSearchDecoder(source)
                 .decode(result.orNull()))
                 .map((response: AutocompleteResponse) => {
@@ -30,7 +30,7 @@ export const data = {
                             return error();
                     }
                 }).orElse(error()))
-            .onComplete(result => result.map(dispatch));
+            .onSuccess(dispatch);
     },
 
     getAllArt: ({
@@ -42,7 +42,7 @@ export const data = {
         dispatch(loading());
         http({
             url: URI.from({source, params: {page, search, limit: size}}),
-        }).mapFailure(error)
+        }).onFailure(() => dispatch(error()))
             .map(result => maybe.of(provideAllArtDecoder(source)
                 .decode(result.orNull()))
                 .map((response: AllArtResponse) => {
@@ -57,7 +57,7 @@ export const data = {
                             return error();
                     }
                 }).orElse(error()))
-            .onComplete(result => result.map(dispatch));
+            .onSuccess(dispatch);
     },
 
     getPiece: ({
@@ -67,7 +67,7 @@ export const data = {
         dispatch(loading());
         http({
             url: URI.from({source: source, path: `/${id}`}),
-        }).mapFailure(() => dispatch(error()))
+        }).onFailure(() => dispatch(error()))
             .map(result => maybe.of(provideArtDecoder(source)
                 .decode(result.orNull()))
                 .map(response => {
@@ -82,6 +82,6 @@ export const data = {
                             return error();
                     }
                 }).orElse(error()))
-            .onComplete(result => result.map(dispatch));
+            .onSuccess(dispatch);
     }
 };
