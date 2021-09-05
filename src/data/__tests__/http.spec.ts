@@ -26,15 +26,14 @@ describe('http calls', () => {
     afterEach(() => server.stop());
 
     it('should perform a get by default', async () => {
-        const newResponse = {I: 'am a response'};
-        server.stubResponse(200, newResponse);
+        server.stubResponse(200, testResponse);
 
         await http({url: someUrl, decoder: testDecoder})
-            .then(async (response) => {
+            .then(async response => {
                 const recordedRequest = await server.lastRequest();
                 expect(recordedRequest.method).toEqual('GET');
                 expect(recordedRequest.url).toEqual(somePath);
-                expect(response).toEqual(success(newResponse));
+                expect(response).toEqual(success(testResponse));
             });
     });
 
@@ -91,7 +90,7 @@ describe('http calls', () => {
     });
 
     it('should catch thrown', async () => {
-        server.stubResponse(200, undefined);
+        server.stubResponse(200, () => Error());
         await http({url: someUrl, method: HTTPMethod.GET})
             .then(resp => expect(resp).toEqual(failure(HTTPError.THROWN)));
     });
