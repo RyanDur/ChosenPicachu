@@ -1,4 +1,4 @@
-import {AllArtResponse, AutocompleteResponse, Dispatch, Source} from './types';
+import {AutocompleteResponse, Dispatch, Source} from './types';
 import {error, GetArtAction, GetPieceAction, loaded, loading, SearchArtAction} from './actions';
 import {aicDataToPiece, aicToArt, harvardToArt, harvardToPiece, rijkToArt, toRijkToPiece} from './translators';
 import {provideAllArtDecoder, provideArtDecoder, provideSearchDecoder} from './decoders';
@@ -45,7 +45,7 @@ export const data = {
         }).onFailure(() => dispatch(error()))
             .map(result => maybe.of(provideAllArtDecoder(source)
                 .decode(result.orNull()))
-                .map((response: AllArtResponse) => {
+                .map(response => {
                     switch (source) {
                         case Source.AIC:
                             return loaded(aicToArt(response));
