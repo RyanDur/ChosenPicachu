@@ -31,6 +31,6 @@ export const provideSearchDecoder = (source: Source): Decoder<any> => {
         case Source.HARVARD:
             return HarvardAutoCompleteDecoder;
         default:
-            return RIJKArtDecoder;
+            return RIJKAllArtDecoder;
     }
 };

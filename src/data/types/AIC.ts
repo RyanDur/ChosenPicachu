@@ -40,13 +40,14 @@ export const AICArtResponseDecoder = D.object({
 const AICArtSuggestionDecoder = D.string;
 
 const AICArtOptionDecoder = D.object({
-   required:  {
-       input: AICArtSuggestionDecoder
-   }
+    required: {
+        input: D.array(AICArtSuggestionDecoder)
+    }
 });
+
 const AICAutocompleteDecoder = D.object({
     required: {
-        suggest_autocomplete_all: D.tuple(D.unknown, AICArtOptionDecoder)
+        suggest_autocomplete_all: D.tuple(D.object({}), AICArtOptionDecoder)
     }
 });
 export const AICAutoCompleteResponseDecoder = D.object({

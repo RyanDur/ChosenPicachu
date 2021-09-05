@@ -1,16 +1,9 @@
 import {mockServer, MockWebServer} from './mockServer';
 import {http} from '../http';
-import {failure, success} from '../http/actions';
 import {HTTPError, HTTPMethod} from '../http/types';
 import * as faker from 'faker';
-import * as D from 'schemawax';
 
 describe('http calls', () => {
-    const testDecoder = D.object({
-        required: {
-            I: D.string
-        }
-    });
     const testResponse = {I: 'am a response'};
     let server: MockWebServer;
     let someUrl = '';
@@ -28,70 +21,60 @@ describe('http calls', () => {
     it('should perform a get by default', async () => {
         server.stubResponse(200, testResponse);
 
-        await http({url: someUrl, decoder: testDecoder})
-            .then(async response => {
-                const recordedRequest = await server.lastRequest();
-                expect(recordedRequest.method).toEqual('GET');
-                expect(recordedRequest.url).toEqual(somePath);
-                expect(response).toEqual(success(testResponse));
-            });
+        const actual = await http({url: someUrl}).value();
+
+        const recordedRequest = await server.lastRequest();
+        expect(recordedRequest.method).toEqual('GET');
+        expect(recordedRequest.url).toEqual(somePath);
+        expect(actual.orNull()?.orNull()).toEqual(testResponse);
     });
 
     it('should be able to post to an endpoint', async () => {
         server.stubResponse(201, testResponse);
-        await http({url: someUrl, decoder: testDecoder, method: HTTPMethod.POST})
-            .then(async resp => {
-                const recordedRequest = await server.lastRequest();
-                expect(recordedRequest.method).toEqual('POST');
-                expect(recordedRequest.url).toEqual(somePath);
-                expect(resp).toEqual(success(testResponse));
-            });
+
+        const actual = await http({url: someUrl, method: HTTPMethod.POST}).value();
+
+        const recordedRequest = await server.lastRequest();
+        expect(recordedRequest.method).toEqual('POST');
+        expect(recordedRequest.url).toEqual(somePath);
+        expect(actual.orNull()?.orNull()).toEqual(testResponse);
     });
 
     it('should be able to put to an endpoint', async () => {
         server.stubResponse(204);
-        await http({url: someUrl, method: HTTPMethod.PUT})
-            .then(async resp => {
-                const recordedRequest = await server.lastRequest();
-                expect(recordedRequest.method).toEqual('PUT');
-                expect(recordedRequest.url).toEqual(somePath);
-                expect(resp).toEqual(success());
-            });
+
+        const actual = await http({url: someUrl, method: HTTPMethod.PUT}).value();
+
+        const recordedRequest = await server.lastRequest();
+        expect(recordedRequest.method).toEqual('PUT');
+        expect(recordedRequest.url).toEqual(somePath);
+        expect(actual.orNull()?.orNull()).toEqual(null);
     });
 
     it('should be able to delete to an endpoint', async () => {
         server.stubResponse(204);
-        await http({url: someUrl, method: HTTPMethod.DELETE})
-            .then(async resp => {
-                const recordedRequest = await server.lastRequest();
-                expect(recordedRequest.method).toEqual('DELETE');
-                expect(recordedRequest.url).toEqual(somePath);
-                expect(resp).toEqual(success());
-            });
-    });
 
-    it('should fail if shape of response is wrong', async () => {
-        const testFailDecoder = D.object({
-            required: {
-                I: D.number
-            }
-        });
+        const actual = await http({url: someUrl, method: HTTPMethod.DELETE}).value();
 
-        server.stubResponse(200, testResponse);
-
-        await http({url: someUrl, decoder: testFailDecoder})
-            .then(response => expect(response).toEqual(failure(HTTPError.MALFORMED_RESPONSE)));
+        const recordedRequest = await server.lastRequest();
+        expect(recordedRequest.method).toEqual('DELETE');
+        expect(recordedRequest.url).toEqual(somePath);
+        expect(actual.orNull()?.orNull()).toEqual(null);
     });
 
     it('should notify when forbidden', async () => {
         server.stubResponse(403);
-        await http({url: someUrl, method: HTTPMethod.GET})
-            .then(resp => expect(resp).toEqual(failure(HTTPError.FORBIDDEN)));
+
+        const actual = await http({url: someUrl, method: HTTPMethod.GET}).value();
+
+        expect(actual.orNull()?.orElseErr(HTTPError.UNKNOWN)).toEqual(HTTPError.FORBIDDEN);
     });
 
     it('should catch thrown', async () => {
         server.stubResponse(200, () => Error());
-        await http({url: someUrl, method: HTTPMethod.GET})
-            .then(resp => expect(resp).toEqual(failure(HTTPError.THROWN)));
+
+        const actual = await http({url: someUrl, method: HTTPMethod.GET}).value();
+
+        expect(actual.orNull()?.orElseErr(HTTPError.UNKNOWN)).toEqual(HTTPError.THROWN);
     });
 });
