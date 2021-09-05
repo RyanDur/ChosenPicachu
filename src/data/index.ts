@@ -6,11 +6,28 @@ import {http} from './http';
 import {URI} from './URI';
 import {maybe} from '@ryandur/sand';
 
+interface SearchArt {
+    search: string;
+    source: Source;
+}
+
+interface GetAllArt {
+    search?: string;
+    page: number;
+    size: number;
+    source: Source;
+}
+
+interface GetArt {
+    id: string;
+    source: Source;
+}
+
 export const data = {
-    searchForArtOptions: ({
-        search,
-        source
-    }: { search: string, source: Source }, dispatch: Dispatch<SearchArtAction>): void => {
+    searchForArtOptions: (
+        {search, source}: SearchArt,
+        dispatch: Dispatch<SearchArtAction>
+    ): void => {
         dispatch(loading());
         http({url: URI.createSearchFrom(search, source)})
             .onFailure(() => dispatch(error()))
@@ -33,12 +50,10 @@ export const data = {
             .onSuccess(dispatch);
     },
 
-    getAllArt: ({
-        page,
-        size,
-        source,
-        search
-    }: { search?: string; page: number; size: number; source: Source; }, dispatch: Dispatch<GetArtAction>): void => {
+    getAllArt: (
+        {page, size, source, search}: GetAllArt,
+        dispatch: Dispatch<GetArtAction>
+    ): void => {
         dispatch(loading());
         http({url: URI.from({source, params: {page, search, limit: size}})})
             .onFailure(() => dispatch(error()))
@@ -59,10 +74,10 @@ export const data = {
             .onSuccess(dispatch);
     },
 
-    getPiece: ({
-        id,
-        source
-    }: { id: string, source: Source }, dispatch: Dispatch<GetPieceAction>): void => {
+    getPiece: (
+        {id, source}: GetArt,
+        dispatch: Dispatch<GetPieceAction>
+    ): void => {
         dispatch(loading());
         http({url: URI.from({source: source, path: `/${id}`})})
             .onFailure(() => dispatch(error()))
