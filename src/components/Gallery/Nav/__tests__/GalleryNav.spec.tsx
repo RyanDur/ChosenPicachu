@@ -103,16 +103,9 @@ describe('Gallery Navigation', () => {
     });
 
     describe('page information', () => {
-        it.each `
-        page | size | first | last
-        ${1} | ${12}| ${1}  | ${12} 
-        ${2} | ${12}| ${13} | ${24} 
-        ${3} | ${12}| ${25} | ${36} 
-        ${83} | ${12}| ${985} | ${996} 
-        ${84} | ${12}| ${997} | ${1000} 
-        `('should inform what records are displayed', ({page, size, first, last}) => {
-            renderWithRouter(<GalleryNav/>, {params: {page, size}});
-            expect(screen.getByTestId('info')).toHaveTextContent(`${first} - ${last}of${mockArt.pagination.total}`);
+        it('should inform what records are displayed', () => {
+            renderWithRouter(<GalleryNav/>, {params: {page: 1, size: mockArt.pagination.limit}});
+            expect(screen.getByTestId('info')).toHaveTextContent(`${1} - ${mockArt.pagination.limit}of${mockArt.pagination.total}`);
         });
     });
 });

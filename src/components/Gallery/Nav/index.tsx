@@ -35,7 +35,7 @@ export const GalleryNav: FC<Props> = ({id}) => {
     const prevPage = hasPrevPage ? currentPage - 1 : currentPage;
 
     const totalRecords = art?.pagination.total ?? previous;
-    const firstRecord = 1 + (size * (page - 1));
+    const firstRecord = 1 + ((art?.pagination.limit || size) * ((art?.pagination.currentPage || page) - 1));
     const lastRecord = art?.pagination.totalPages === page ? totalRecords : (art?.pagination.limit || size) * page;
 
     const gotoTopOfPage = () => window.scrollTo(0, 0);
