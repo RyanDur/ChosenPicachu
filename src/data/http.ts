@@ -11,7 +11,7 @@ export const http = ({
     url,
     method = HTTPMethod.GET
 }: Request) =>
-    asyncResult.of<any, HTTPError>(fetch(url, {method, mode: 'cors'}))
+    asyncResult.of(fetch(url, {method, mode: 'cors'}))
         .mapFailure(() => HTTPError.SERVER_ERROR)
         .flatMap((response: Response) => {
             switch (response.status) {
@@ -19,10 +19,10 @@ export const http = ({
                 case 201:
                     return asyncResult.of(response.json());
                 case 204:
-                    return success<any, HTTPError>(undefined);
+                    return success(undefined);
                 case 403:
-                    return failure<any, HTTPError>(HTTPError.FORBIDDEN);
+                    return failure<unknown, HTTPError>(HTTPError.FORBIDDEN);
                 default:
-                    return failure<any, HTTPError>(HTTPError.UNKNOWN);
+                    return failure<unknown, HTTPError>(HTTPError.UNKNOWN);
             }
         });
