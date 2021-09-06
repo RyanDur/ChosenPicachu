@@ -12,7 +12,7 @@ export const http = ({
     method = HTTPMethod.GET
 }: Request) =>
     asyncResult.of<any, HTTPError>(fetch(url, {method, mode: 'cors'}))
-        .flatMapFailure(() => failure(HTTPError.SERVER_ERROR))
+        .mapFailure(() => HTTPError.SERVER_ERROR)
         .flatMap((response: Response) => {
             switch (response.status) {
                 case 200:
