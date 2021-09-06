@@ -1,5 +1,5 @@
 import {HarvardAllArt, HarvardSearchResponse, HarvardArt} from './types';
-import {AllArt, Art} from '../types';
+import {AllArt, Art, SearchOptions} from '../types';
 
 export const harvardToArt = ({info, records}: HarvardAllArt): AllArt => ({
     pagination: {
@@ -19,5 +19,5 @@ export const harvardArtToPiece = (record: HarvardArt): Art => ({
     altText: record.title
 });
 
-export const harverdSearchToOptions = ({records}: HarvardSearchResponse) =>
+export const harverdSearchToOptions = ({records}: HarvardSearchResponse): SearchOptions =>
     records.map(({title}) => title);

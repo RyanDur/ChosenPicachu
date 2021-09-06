@@ -18,7 +18,7 @@ const ArtPiece = () => {
     const {queryObj: {tab}} = useQuery<{ tab: Source }>();
 
     useEffect(() => {
-        id && data.artGallery.getPiece({id, source: tab}, (action: GetArtAction) => {
+        id && data.artGallery.getArt({id, source: tab}, (action: GetArtAction) => {
             isLoading(action.type === AsyncState.LOADING);
             isErrored(action.type === AsyncState.ERROR);
             if (action.type === AsyncState.LOADED) updatePiece(action.value);
