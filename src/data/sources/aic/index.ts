@@ -1,11 +1,11 @@
 import {AICAllArt, AICArt, AICSearchResponse, AICPieceData} from './types';
-import {Art, Piece} from '../types';
+import {AllArt, Art} from '../types';
 
 export const aicSearchToOptions = ({data}: AICSearchResponse) => data
     .map(({suggest_autocomplete_all}) => suggest_autocomplete_all[1])
     .flatMap(option => option.input);
 
-export const aicToArt = ({pagination, data}: AICAllArt): Art => ({
+export const aicToArt = ({pagination, data}: AICAllArt): AllArt => ({
     pagination: {
         total: pagination.total,
         limit: pagination.limit,
@@ -15,7 +15,7 @@ export const aicToArt = ({pagination, data}: AICAllArt): Art => ({
     pieces: data.map(aicToPiece)
 });
 
-const aicToPiece = (data: AICArt): Piece => ({
+const aicToPiece = (data: AICArt): Art => ({
     id: String(data.id),
     title: data.title,
     image: `https://www.artic.edu/iiif/2/${data.image_id}/full/2000,/0/default.jpg`,
@@ -23,5 +23,5 @@ const aicToPiece = (data: AICArt): Piece => ({
     altText: data.thumbnail?.alt_text || data.term_titles.join(' ') || ''
 });
 
-export const aicDataToPiece = ({data}: AICPieceData): Piece => aicToPiece(data);
+export const aicArtToPiece = ({data}: AICPieceData): Art => aicToPiece(data);
 

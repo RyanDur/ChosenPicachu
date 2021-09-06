@@ -7,7 +7,7 @@ import {useGallery} from '../../Context';
 import {error, GetAllArtAction, loaded, loading} from '../../../../data/actions';
 import {ArtGallery} from '../index';
 import {Dispatch} from '../../../../data/types';
-import {Art, Piece, Source} from '../../../../data/sources/types';
+import {AllArt, Art, Source} from '../../../../data/sources/types';
 
 jest.mock('../../Context', () => {
     return ({
@@ -83,7 +83,7 @@ describe('The gallery.', () => {
             data.getAllArt = jest.fn((
                 query: GetAllArt,
                 dispatch: Dispatch<GetAllArtAction>
-            ) => dispatch(loaded({pieces: [] as Piece[]} as Art)));
+            ) => dispatch(loaded({pieces: [] as Art[]} as AllArt)));
             mockUseGallery.mockReturnValue({
                 updateArt: jest.fn(),
                 reset: jest.fn()

@@ -7,7 +7,7 @@ import {Dispatch} from '../../../../data/types';
 import {error, GetArtAction, loaded, loading} from '../../../../data/actions';
 import {Rendered, renderWithRouter} from '../../../../__tests__/util';
 import {GalleryPath} from '../../index';
-import {Piece} from '../../../../data/sources/types';
+import {Art} from '../../../../data/sources/types';
 
 jest.mock('../Context', () => ({
     useArtPiece: jest.fn()
@@ -16,7 +16,7 @@ jest.mock('../Context', () => ({
 describe('viewing a piece', () => {
     const mockGetPieceId = jest.fn();
     const mockUsePieceGallery = useArtPiece as jest.Mock;
-    const mockPiece: Piece = {
+    const mockPiece: Art = {
         id: faker.lorem.word(),
         image: faker.internet.url(),
         title: faker.lorem.words(),

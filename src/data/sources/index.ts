@@ -1,13 +1,13 @@
-import {AllArtResponse, Art, ArtResponse, Piece, SearchOptions, SearchResponse, Source} from './types';
+import {AllArtResponse, AllArt, ArtResponse, Art, SearchOptions, SearchResponse, Source} from './types';
 import {AICAllArtResponseDecoder, AICArtResponseDecoder, AICSearchResponseDecoder} from './aic/types';
 import {HarvardAllArtDecoder, HarvardArtDecoder, HarvardSearchDecoder} from './harvard/types';
 import {RIJKAllArtDecoder, RIJKArtDecoder} from './rijks/types';
 import {maybe, Maybe} from '@ryandur/sand';
-import {aicSearchToOptions, aicDataToPiece, aicToArt} from './aic';
-import {harvardToArt, harvardToPiece, harverdSearchToOptions} from './harvard';
+import {aicSearchToOptions, aicArtToPiece, aicToArt} from './aic';
+import {harvardToArt, harvardArtToPiece, harverdSearchToOptions} from './harvard';
 import {rijksSearchToOptions, rijkToArt, rijkArtObjectToPiece} from './rijks';
 
-export const translateAllArtResponseFor = (source: Source, page: number) => (response: AllArtResponse): Maybe<Art> => {
+export const translateAllArtResponseFor = (source: Source, page: number) => (response: AllArtResponse): Maybe<AllArt> => {
     switch (source) {
         case Source.AIC:
             return maybe.of(AICAllArtResponseDecoder.decode(response))
@@ -23,14 +23,14 @@ export const translateAllArtResponseFor = (source: Source, page: number) => (res
     }
 };
 
-export const translateArtResponseFor = (source: Source) => (response: ArtResponse): Maybe<Piece> => {
+export const translateArtResponseFor = (source: Source) => (response: ArtResponse): Maybe<Art> => {
     switch (source) {
         case Source.AIC:
             return maybe.of(AICArtResponseDecoder.decode(response))
-                .map(aicDataToPiece);
+                .map(aicArtToPiece);
         case Source.HARVARD:
             return maybe.of(HarvardArtDecoder.decode(response))
-                .map(harvardToPiece);
+                .map(harvardArtToPiece);
         case Source.RIJK:
             return maybe.of(RIJKArtDecoder.decode(response))
                 .map(rijkArtObjectToPiece);

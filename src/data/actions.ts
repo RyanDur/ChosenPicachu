@@ -1,8 +1,8 @@
 import {AsyncState, Error, Loaded, Loading} from './types';
-import {Art, SearchOptions, Piece} from './sources/types';
+import {AllArt, SearchOptions, Art} from './sources/types';
 
-export type GetArtAction = Loading | Loaded<Piece> | Error;
-export type GetAllArtAction = Loading | Loaded<Art> | Error;
+export type GetArtAction = Loading | Loaded<Art> | Error;
+export type GetAllArtAction = Loading | Loaded<AllArt> | Error;
 export type SearchArtAction = Loading | Loaded<SearchOptions> | Error;
 
 export const loading = (): Loading => ({type: AsyncState.LOADING});
