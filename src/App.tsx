@@ -2,9 +2,9 @@ import React from 'react';
 import {Link, Redirect, Route, Switch, useRouteMatch} from 'react-router-dom';
 import {About, Gallery, GalleryNav, GalleryTitle, Home, PageControl, SearchRoutes, Users} from './components';
 import {toQueryString} from './util/URL';
+import {Source} from './data/artGallery/types';
 import './App.scss';
 import './App.layout.scss';
-import {Source} from './data/sources/types';
 
 export enum Paths {
     home = '/',

@@ -1,4 +1,4 @@
-import {toQueryString} from '../util/URL';
+import {toQueryString} from '../../util/URL';
 import {
     aicDomain,
     defaultAutocompleteLimit,
@@ -7,8 +7,8 @@ import {
     harvardDomain,
     rijksAPIKey,
     rijksDomain
-} from '../config';
-import {Source} from './sources/types';
+} from '../../config';
+import {Source} from './types';
 
 export const shapeOfAICResponse = ['id', 'title', 'image_id', 'artist_display', 'term_titles', 'thumbnail'];
 export const shapeOfHarvardResponse = ['id', 'title', 'people', 'primaryimageurl'];

@@ -5,8 +5,8 @@ import {Loading} from '../../Loading';
 import {Image} from '../Image';
 import {useGallery} from '../Context';
 import {AsyncState} from '../../../data/types';
-import {GetAllArtAction} from '../../../data/actions';
-import {toSource} from '../../../data/sources/types';
+import {GetAllArtAction} from '../../../data/artGallery/actions';
+import {toSource} from '../../../data/artGallery/types';
 import './Gallery.scss';
 import './Gallery.layout.scss';
 
@@ -21,7 +21,7 @@ export const ArtGallery: FC = () => {
     const {queryObj: {page, size, search, tab}} = useQuery<{ page: number, size: number, tab: string, search?: string }>();
 
     useEffect(() => {
-        data.getAllArt({page, size, search, source: toSource(tab)},
+        data.artGallery.getAllArt({page, size, search, source: toSource(tab)},
             (action: GetAllArtAction) => {
                 isLoading(action.type === AsyncState.LOADING);
                 hasErrored(action.type === AsyncState.ERROR);

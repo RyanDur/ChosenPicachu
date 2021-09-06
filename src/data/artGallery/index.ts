@@ -1,11 +1,26 @@
-import {AllArtResponse, AllArt, ArtResponse, Art, SearchOptions, SearchResponse, Source} from './types';
+import {
+    AllArt,
+    AllArtResponse,
+    Art,
+    ArtResponse,
+    GetAllArt,
+    GetArt,
+    SearchArt,
+    SearchOptions,
+    SearchResponse,
+    Source
+} from './types';
 import {AICAllArtResponseDecoder, AICArtResponseDecoder, AICSearchResponseDecoder} from './aic/types';
 import {HarvardAllArtDecoder, HarvardArtDecoder, HarvardSearchDecoder} from './harvard/types';
 import {RIJKAllArtDecoder, RIJKArtDecoder} from './rijks/types';
 import {maybe, Maybe} from '@ryandur/sand';
-import {aicSearchToOptions, aicArtToPiece, aicToArt} from './aic';
-import {harvardToArt, harvardArtToPiece, harverdSearchToOptions} from './harvard';
-import {rijksSearchToOptions, rijkToArt, rijkArtObjectToPiece} from './rijks';
+import {aicArtToPiece, aicSearchToOptions, aicToArt} from './aic';
+import {harvardArtToPiece, harvardToArt, harverdSearchToOptions} from './harvard';
+import {rijkArtObjectToPiece, rijksSearchToOptions, rijkToArt} from './rijks';
+import {Dispatch} from '../types';
+import {error, GetAllArtAction, GetArtAction, loaded, loading, SearchArtAction} from './actions';
+import {http} from '../http';
+import {URI} from './URI';
 
 export const translateAllArtResponseFor = (source: Source, page: number) => (response: AllArtResponse): Maybe<AllArt> => {
     switch (source) {
@@ -53,4 +68,46 @@ export const translateSearchResponseFor = (source: Source) => (response: SearchR
         default:
             return maybe.none();
     }
+};
+
+const searchForArt = (
+    {search, source}: SearchArt,
+    dispatch: Dispatch<SearchArtAction>
+): void => {
+    dispatch(loading());
+    http({url: URI.createSearchFrom(search, source)})
+        .onFailure(() => dispatch(error()))
+        .map(translateSearchResponseFor(source))
+        .onSuccess(search =>
+            dispatch(search.map<SearchArtAction>(loaded).orElse(error())));
+};
+
+const getAllArt = (
+    {page, size, source, search}: GetAllArt,
+    dispatch: Dispatch<GetAllArtAction>
+): void => {
+    dispatch(loading());
+    http({url: URI.from({source, params: {page, search, limit: size}})})
+        .onFailure(() => dispatch(error()))
+        .map(translateAllArtResponseFor(source, page))
+        .onSuccess(allArt =>
+            dispatch(allArt.map<GetAllArtAction>(loaded).orElse(error())));
+};
+
+const getPiece = (
+    {id, source}: GetArt,
+    dispatch: Dispatch<GetArtAction>
+): void => {
+    dispatch(loading());
+    http({url: URI.from({source: source, path: `/${id}`})})
+        .onFailure(() => dispatch(error()))
+        .map(translateArtResponseFor(source))
+        .onSuccess(art =>
+            dispatch(art.map<GetArtAction>(loaded).orElse(error())));
+};
+
+export const artGallery = {
+    getPiece,
+    getAllArt,
+    searchForArt
 };

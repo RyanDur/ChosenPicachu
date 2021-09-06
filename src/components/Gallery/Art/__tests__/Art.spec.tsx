@@ -1,13 +1,13 @@
 import {cleanup, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {data, GetAllArt} from '../../../../data';
+import {data} from '../../../../data';
 import {fromAICArt, Rendered, renderWithRouter} from '../../../../__tests__/util';
 import {Paths} from '../../../../App';
 import {useGallery} from '../../Context';
-import {error, GetAllArtAction, loaded, loading} from '../../../../data/actions';
+import {error, GetAllArtAction, loaded, loading} from '../../../../data/artGallery/actions';
 import {ArtGallery} from '../index';
 import {Dispatch} from '../../../../data/types';
-import {AllArt, Art, Source} from '../../../../data/sources/types';
+import {AllArt, Art, GetAllArt, Source} from '../../../../data/artGallery/types';
 
 jest.mock('../../Context', () => {
     return ({
@@ -23,7 +23,7 @@ describe('The gallery.', () => {
 
     describe('When the art has not loaded yet', () => {
         beforeEach(() => {
-            data.getAllArt = (
+            data.artGallery.getAllArt = (
                 query: GetAllArt,
                 dispatch: Dispatch<GetAllArtAction>
             ) => dispatch(loading());
@@ -45,7 +45,7 @@ describe('The gallery.', () => {
 
     describe('When the art has loaded', () => {
         beforeEach(() => {
-            data.getAllArt = (
+            data.artGallery.getAllArt = (
                 query: GetAllArt,
                 dispatch: Dispatch<GetAllArtAction>
             ) => dispatch(loaded(fromAICArt));
@@ -80,7 +80,7 @@ describe('The gallery.', () => {
 
     describe('when there is no art to show', () => {
         beforeEach(() => {
-            data.getAllArt = jest.fn((
+            data.artGallery.getAllArt = jest.fn((
                 query: GetAllArt,
                 dispatch: Dispatch<GetAllArtAction>
             ) => dispatch(loaded({pieces: [] as Art[]} as AllArt)));
@@ -103,7 +103,7 @@ describe('The gallery.', () => {
 
     describe('when the art has errored', () => {
         beforeEach(() => {
-            data.getAllArt = (
+            data.artGallery.getAllArt = (
                 query: GetAllArt,
                 dispatch: Dispatch<GetAllArtAction>
             ) => dispatch(error());
@@ -121,7 +121,7 @@ describe('The gallery.', () => {
 
     describe('when filtering results by search', () => {
         beforeEach(() => {
-            data.getAllArt = jest.fn((
+            data.artGallery.getAllArt = jest.fn((
                 query: GetAllArt,
                 dispatch: Dispatch<GetAllArtAction>
             ) => dispatch(loaded(fromAICArt)));
@@ -136,7 +136,7 @@ describe('The gallery.', () => {
         });
 
         it('should pass the criteria', () =>
-            expect(data.getAllArt).toHaveBeenCalledWith({
+            expect(data.artGallery.getAllArt).toHaveBeenCalledWith({
                 page: 23,
                 search: 'g',
                 source: Source.HARVARD

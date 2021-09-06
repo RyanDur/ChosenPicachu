@@ -6,16 +6,16 @@ import {AvatarGenerator} from 'random-avatar-generator';
 import {toISOWithoutTime} from '../../components/util';
 
 import {nanoid} from 'nanoid';
-import {AICAllArt, AICArt} from '../../data/sources/aic/types';
+import {AICAllArt, AICArt} from '../../data/artGallery/aic/types';
 import {
     HarvardAllArt,
     HarvardSearchResponse,
     HarvardInfo,
     HarvardPeople,
     HarvardArt
-} from '../../data/sources/harvard/types';
-import {AllArt, Art} from '../../data/sources/types';
-import {RIJKAllArt, RIJKArtObject, RIJKArt} from '../../data/sources/rijks/types';
+} from '../../data/artGallery/harvard/types';
+import {AllArt, Art} from '../../data/artGallery/types';
+import {RIJKAllArt, RIJKArtObject, RIJKArt} from '../../data/artGallery/rijks/types';
 
 export const randomNumberFromRange = (min: number, max = 6) => Math.floor(Math.random() * max) + min;
 

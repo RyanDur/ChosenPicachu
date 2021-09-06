@@ -1,4 +1,3 @@
-import {data} from '../index';
 import 'whatwg-fetch';
 import faker from 'faker';
 import {
@@ -15,17 +14,18 @@ import {
     harvardPieceResponse,
     options,
     rijkArtObjectResponse
-} from '../../__tests__/util';
+} from '../../../__tests__/util';
 import {nanoid} from 'nanoid';
 import {error, loaded, loading} from '../actions';
-import {http} from '../http';
+import {http} from '../../http';
 import {waitFor} from '@testing-library/react';
 import {asyncResult} from '@ryandur/sand';
-import {Art, Source} from '../sources/types';
-import {AICSearchResponse, AICPieceData} from '../sources/aic/types';
-import {HTTPError} from '../types';
+import {Art, Source} from '../types';
+import {AICSearchResponse, AICPieceData} from '../aic/types';
+import {HTTPError} from '../../types';
+import {artGallery} from '../index';
 
-jest.mock('../http', () => ({
+jest.mock('../../http', () => ({
     http: jest.fn(),
 }));
 
@@ -43,7 +43,7 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockSuccess(aicArtResponse);
 
-                data.getAllArt({page: 1, size: 12, source: Source.AIC}, dispatch);
+                artGallery.getAllArt({page: 1, size: 12, source: Source.AIC}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(fromAICArt)));
@@ -53,7 +53,7 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockSuccess(aicArtResponse);
 
-                data.getAllArt({page: 1, size: 12, search: 'rad', source: Source.AIC}, dispatch);
+                artGallery.getAllArt({page: 1, size: 12, search: 'rad', source: Source.AIC}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(fromAICArt)));
@@ -63,7 +63,7 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockFailure(HTTPError.UNKNOWN);
 
-                data.getAllArt({page: 1, size: 12, source: Source.AIC}, dispatch);
+                artGallery.getAllArt({page: 1, size: 12, source: Source.AIC}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
@@ -75,7 +75,7 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockSuccess(harvardArtResponse);
 
-                data.getAllArt({page: 1, size: 12, source: Source.HARVARD}, dispatch);
+                artGallery.getAllArt({page: 1, size: 12, source: Source.HARVARD}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(fromHarvardArt)));
@@ -85,7 +85,7 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockSuccess(harvardArtResponse);
 
-                data.getAllArt({page: 1, size: 12, search: 'rad', source: Source.HARVARD}, dispatch);
+                artGallery.getAllArt({page: 1, size: 12, search: 'rad', source: Source.HARVARD}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(fromHarvardArt)));
@@ -95,7 +95,7 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockFailure(HTTPError.UNKNOWN);
 
-                data.getAllArt({page: 1, size: 12, source: Source.HARVARD}, dispatch);
+                artGallery.getAllArt({page: 1, size: 12, source: Source.HARVARD}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
@@ -107,7 +107,7 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockSuccess(fromRIJKArtResponse);
 
-                data.getAllArt({page: 1, size: 12, source: Source.RIJK}, dispatch);
+                artGallery.getAllArt({page: 1, size: 12, source: Source.RIJK}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(fromRIJKArt(1, 12))));
@@ -117,7 +117,7 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockSuccess(fromRIJKArtResponse);
 
-                data.getAllArt({page: 1, size: 12, search: 'rad', source: Source.RIJK}, dispatch);
+                artGallery.getAllArt({page: 1, size: 12, search: 'rad', source: Source.RIJK}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(fromRIJKArt(1, 12))));
@@ -127,7 +127,7 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockFailure(HTTPError.UNKNOWN);
 
-                data.getAllArt({page: 1, size: 12, source: Source.RIJK}, dispatch);
+                artGallery.getAllArt({page: 1, size: 12, source: Source.RIJK}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
@@ -138,7 +138,7 @@ describe('data', () => {
             const dispatch = jest.fn();
             mockSuccess(fromRIJKArtResponse);
 
-            data.getAllArt({page: 1, size: 12, source: 'I do not exist' as Source}, dispatch);
+            artGallery.getAllArt({page: 1, size: 12, source: 'I do not exist' as Source}, dispatch);
 
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
             await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
@@ -153,7 +153,7 @@ describe('data', () => {
             const dispatch = jest.fn();
             mockSuccess({I: 'am wrong'});
 
-            data.getAllArt({page: 1, size: 12, source}, dispatch);
+            artGallery.getAllArt({page: 1, size: 12, source}, dispatch);
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
             await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
         });
@@ -167,7 +167,7 @@ describe('data', () => {
             const dispatch = jest.fn();
             mockHttp.mockReturnValue(asyncResult.of(Promise.reject(fromRIJKArtResponse)));
 
-            data.getAllArt({page: 1, size: 12, source}, dispatch);
+            artGallery.getAllArt({page: 1, size: 12, source}, dispatch);
 
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
             await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
@@ -182,7 +182,7 @@ describe('data', () => {
                     const dispatch = jest.fn();
                     mockSuccess(pieceAICResponse);
 
-                    data.getPiece({id: String(aicPiece.id), source: Source.AIC}, dispatch);
+                    artGallery.getPiece({id: String(aicPiece.id), source: Source.AIC}, dispatch);
 
                     expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                     await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(aicPiece)));
@@ -193,7 +193,7 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockFailure(HTTPError.UNKNOWN);
 
-                data.getPiece({id: String(aicPiece.id), source: Source.AIC}, dispatch);
+                artGallery.getPiece({id: String(aicPiece.id), source: Source.AIC}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
@@ -205,7 +205,7 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockSuccess(harvardPieceResponse);
 
-                data.getPiece({id: String(aicPiece.id), source: Source.HARVARD}, dispatch);
+                artGallery.getPiece({id: String(aicPiece.id), source: Source.HARVARD}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(harvardPiece)));
@@ -215,7 +215,7 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockFailure(HTTPError.UNKNOWN);
 
-                data.getPiece({id: String(aicPiece.id), source: Source.HARVARD}, dispatch);
+                artGallery.getPiece({id: String(aicPiece.id), source: Source.HARVARD}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
@@ -227,7 +227,7 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockSuccess(rijkArtObjectResponse);
 
-                data.getPiece({id: String(aicPiece.id), source: Source.RIJK}, dispatch);
+                artGallery.getPiece({id: String(aicPiece.id), source: Source.RIJK}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(fromRIJKToPiece(rijkArtObjectResponse.artObject))));
@@ -237,7 +237,7 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockFailure(HTTPError.UNKNOWN);
 
-                data.getPiece({id: String(aicPiece.id), source: Source.RIJK}, dispatch);
+                artGallery.getPiece({id: String(aicPiece.id), source: Source.RIJK}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
@@ -248,7 +248,7 @@ describe('data', () => {
             const dispatch = jest.fn();
             mockFailure(pieceAICResponse);
 
-            data.getPiece({id: '1', source: 'I do not exist' as Source}, dispatch);
+            artGallery.getPiece({id: '1', source: 'I do not exist' as Source}, dispatch);
 
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
             await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
@@ -263,7 +263,7 @@ describe('data', () => {
             const dispatch = jest.fn();
             mockSuccess({I: 'am wrong'});
 
-            data.getPiece({id: '1', source}, dispatch);
+            artGallery.getPiece({id: '1', source}, dispatch);
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
             await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
         });
@@ -277,7 +277,7 @@ describe('data', () => {
             const dispatch = jest.fn();
             mockHttp.mockReturnValue(asyncResult.of(Promise.reject(fromRIJKArtResponse)));
 
-            data.getPiece({id: String(aicPiece.id), source}, dispatch);
+            artGallery.getPiece({id: String(aicPiece.id), source}, dispatch);
 
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
             await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
@@ -292,7 +292,7 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockSuccess(aicArtOptions);
 
-                data.searchForArtOptions({search, source: Source.AIC}, dispatch);
+                artGallery.searchForArt({search, source: Source.AIC}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(options)));
@@ -304,7 +304,7 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockSuccess(harvardArtOptions);
 
-                data.searchForArtOptions({search, source: Source.HARVARD}, dispatch);
+                artGallery.searchForArt({search, source: Source.HARVARD}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(options)));
@@ -316,7 +316,7 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockSuccess(fromRIJKArtOptionsResponse);
 
-                data.searchForArtOptions({search, source: Source.RIJK}, dispatch);
+                artGallery.searchForArt({search, source: Source.RIJK}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(options)));
@@ -327,7 +327,7 @@ describe('data', () => {
             const dispatch = jest.fn();
             mockFailure(harvardArtOptions);
 
-            data.searchForArtOptions({search, source: 'I do not exist' as Source}, dispatch);
+            artGallery.searchForArt({search, source: 'I do not exist' as Source}, dispatch);
 
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
             await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
@@ -342,7 +342,7 @@ describe('data', () => {
             const dispatch = jest.fn();
             mockSuccess({I: 'am wrong'});
 
-            data.searchForArtOptions({search, source}, dispatch);
+            artGallery.searchForArt({search, source}, dispatch);
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
             await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
         });
@@ -356,7 +356,7 @@ describe('data', () => {
             const dispatch = jest.fn();
             mockHttp.mockReturnValue(asyncResult.of(Promise.reject(fromRIJKArtResponse)));
 
-            data.searchForArtOptions({search, source}, dispatch);
+            artGallery.searchForArt({search, source}, dispatch);
 
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
             await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
