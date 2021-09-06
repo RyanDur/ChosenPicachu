@@ -5,11 +5,11 @@ import {Paths} from '../../../App';
 import {Link} from 'react-router-dom';
 import {useQuery} from '../../hooks';
 import {toQueryString} from '../../../util/URL';
-import {Piece} from '../../../data/sources/types';
+import {Art} from '../../../data/sources/types';
 import './Image.scss';
 
 interface ImageProps {
-    piece: Partial<Piece>;
+    piece: Partial<Art>;
     className?: string;
     linkEnabled?: boolean;
 }

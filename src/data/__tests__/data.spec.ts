@@ -21,7 +21,7 @@ import {error, loaded, loading} from '../actions';
 import {http} from '../http';
 import {waitFor} from '@testing-library/react';
 import {asyncResult} from '@ryandur/sand';
-import {Piece, Source} from '../sources/types';
+import {Art, Source} from '../sources/types';
 import {AICSearchResponse, AICPieceData} from '../sources/aic/types';
 import {HTTPError} from '../types';
 
@@ -375,7 +375,7 @@ describe('data', () => {
         }
     };
 
-    const aicPiece: Piece = {
+    const aicPiece: Art = {
         id: String(pieceAICResponse.data.id),
         title: pieceAICResponse.data.title,
         image: `https://www.artic.edu/iiif/2/${pieceAICResponse.data.image_id}/full/2000,/0/default.jpg`,

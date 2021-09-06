@@ -14,7 +14,7 @@ import {
     HarvardPeople,
     HarvardArt
 } from '../../data/sources/harvard/types';
-import {Art, Piece} from '../../data/sources/types';
+import {AllArt, Art} from '../../data/sources/types';
 import {RIJKAllArt, RIJKArtObject, RIJKArt} from '../../data/sources/rijks/types';
 
 export const randomNumberFromRange = (min: number, max = 6) => Math.floor(Math.random() * max) + min;
@@ -206,7 +206,7 @@ const harvardToPieceResponse = (_: unknown, index: number): HarvardArt => ({
 
 export const harvardPieceResponse = harvardToPieceResponse(undefined, Math.floor(Math.random() * 1000));
 
-export const harvardPiece: Piece = {
+export const harvardPiece: Art = {
     id: String(harvardPieceResponse.id),
     title: harvardPieceResponse.title,
     image: harvardPieceResponse.primaryimageurl,
@@ -234,7 +234,7 @@ export const fromRIJKArtOptionsResponse: RIJKAllArt = {
     }))
 };
 
-export const fromAICArt: Art = {
+export const fromAICArt: AllArt = {
     pagination: {
         total: aicArtResponse.pagination.total,
         limit: aicArtResponse.pagination.limit,
@@ -249,7 +249,7 @@ export const fromAICArt: Art = {
         altText: piece.term_titles.join(' ')
     }))
 };
-export const fromHarvardArt: Art = {
+export const fromHarvardArt: AllArt = {
     pagination: {
         total: harvardArtResponse.info.totalrecords,
         limit: harvardArtResponse.info.totalrecordsperquery,
@@ -280,7 +280,7 @@ export const fromRIJKArtResponse: RIJKAllArt = {
     artObjects: [...Array(pagination.limit)].map(rijkPieceResponse)
 };
 
-export const fromRIJKToPiece = (piece: RIJKArtObject): Piece => ({
+export const fromRIJKToPiece = (piece: RIJKArtObject): Art => ({
     id: piece.objectNumber,
     title: piece.title,
     artistInfo: piece.longTitle,
@@ -292,7 +292,7 @@ export const rijkArtObjectResponse: RIJKArt = {
     artObject: rijkPieceResponse()
 };
 
-export const fromRIJKArt = (currentPage: number, limit: number): Art => ({
+export const fromRIJKArt = (currentPage: number, limit: number): AllArt => ({
     pagination: {
         total: fromRIJKArtResponse.count,
         limit,

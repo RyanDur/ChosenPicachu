@@ -21,7 +21,7 @@ export type Pagination = {
     currentPage: number;
 }
 
-export type Piece = {
+export type Art = {
     id: string;
     title: string;
     image?: string | null;
@@ -29,9 +29,9 @@ export type Piece = {
     artistInfo: string;
 }
 
-export interface Art {
+export interface AllArt {
     pagination: Pagination;
-    pieces: Piece[];
+    pieces: Art[];
 }
 
 export type SearchOptions = string[];
@@ -39,4 +39,4 @@ export type SearchOptions = string[];
 export type AllArtResponse = AICAllArt | HarvardAllArt | RIJKAllArt;
 export type ArtResponse = AICArt | HarvardArt | RIJKArt;
 export type SearchResponse = AICSearchResponse | HarvardSearchResponse | RIJKAllArt;
-export type Gallery = Pagination | Art | Piece | SearchOptions;
+export type Gallery = Pagination | AllArt | Art | SearchOptions;
