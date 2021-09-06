@@ -41,8 +41,8 @@ const searchForArt = (
                     return maybe.none();
             }
         })
-        .onSuccess(search =>
-            dispatch(search.map<SearchArtAction>(loaded).orElse(error())));
+        .map(search => search.map<SearchArtAction>(loaded).orElse(error()))
+        .onSuccess(dispatch);
 };
 
 const getAllArt = (
@@ -64,8 +64,8 @@ const getAllArt = (
                     return maybe.none();
             }
         })
-        .onSuccess(allArt =>
-            dispatch(allArt.map<GetAllArtAction>(loaded).orElse(error())));
+        .map(allArt => allArt.map<GetAllArtAction>(loaded).orElse(error()))
+        .onSuccess(dispatch);
 };
 
 const getArt = (
@@ -87,8 +87,8 @@ const getArt = (
                     return maybe.none();
             }
         })
-        .onSuccess(art =>
-            dispatch(art.map<GetArtAction>(loaded).orElse(error())));
+        .map(art => art.map<GetArtAction>(loaded).orElse(error()))
+        .onSuccess(dispatch);
 };
 
 export const artGallery = {
