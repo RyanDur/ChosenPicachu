@@ -1,8 +1,4 @@
-import {Action} from '../../../data/types';
-
-interface Indexable {
-    readonly [x: string]: string | undefined;
-}
+import {Action, Indexable} from '../../../data/types';
 
 export interface AddressInfo extends Indexable {
     streetAddress: string;
@@ -26,8 +22,6 @@ export interface UserInfo {
     workAddress?: AddressInfo;
     details?: string;
 }
-
-export type Consumer<T> = (value: T) => void
 
 export enum FormActions {
     UPDATE_FIRST_NAME = 'UPDATE_FIRST_NAME',

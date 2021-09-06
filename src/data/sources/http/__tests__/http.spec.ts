@@ -1,6 +1,6 @@
-import {mockServer, MockWebServer} from './mockServer';
-import {http} from '../http';
-import {HTTPError, HTTPMethod} from '../http/types';
+import {mockServer, MockWebServer} from '../../../__tests__/mockServer';
+import {http} from '../index';
+import {HTTPError, HTTPMethod} from '../types';
 import * as faker from 'faker';
 
 describe('http calls', () => {

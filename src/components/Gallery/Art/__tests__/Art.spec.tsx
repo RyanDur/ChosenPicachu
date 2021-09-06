@@ -1,12 +1,13 @@
 import {cleanup, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {data} from '../../../../data';
+import {data, GetAllArt} from '../../../../data';
 import {fromAICArt, Rendered, renderWithRouter} from '../../../../__tests__/util';
 import {Paths} from '../../../../App';
 import {useGallery} from '../../Context';
 import {error, GetArtAction, loaded, loading} from '../../../../data/actions';
-import {Art, ArtQuery, Dispatch, Piece, Source} from '../../../../data/types';
 import {ArtGallery} from '../index';
+import {Dispatch} from '../../../../data/types';
+import {Art, Piece, Source} from '../../../../data/sources/types';
 
 jest.mock('../../Context', () => {
     return ({
@@ -23,7 +24,7 @@ describe('The gallery.', () => {
     describe('When the art has not loaded yet', () => {
         beforeEach(() => {
             data.getAllArt = (
-                query: ArtQuery,
+                query: GetAllArt,
                 dispatch: Dispatch<GetArtAction>
             ) => dispatch(loading());
             mockUseGallery.mockReturnValue({
@@ -45,7 +46,7 @@ describe('The gallery.', () => {
     describe('When the art has loaded', () => {
         beforeEach(() => {
             data.getAllArt = (
-                query: ArtQuery,
+                query: GetAllArt,
                 dispatch: Dispatch<GetArtAction>
             ) => dispatch(loaded(fromAICArt));
             mockUseGallery.mockReturnValue({
@@ -80,7 +81,7 @@ describe('The gallery.', () => {
     describe('when there is no art to show', () => {
         beforeEach(() => {
             data.getAllArt = jest.fn((
-                query: ArtQuery,
+                query: GetAllArt,
                 dispatch: Dispatch<GetArtAction>
             ) => dispatch(loaded({pieces: [] as Piece[]} as Art)));
             mockUseGallery.mockReturnValue({
@@ -103,7 +104,7 @@ describe('The gallery.', () => {
     describe('when the art has errored', () => {
         beforeEach(() => {
             data.getAllArt = (
-                query: ArtQuery,
+                query: GetAllArt,
                 dispatch: Dispatch<GetArtAction>
             ) => dispatch(error());
             mockUseGallery.mockReturnValue({
@@ -121,7 +122,7 @@ describe('The gallery.', () => {
     describe('when filtering results by search', () => {
         beforeEach(() => {
             data.getAllArt = jest.fn((
-                query: ArtQuery,
+                query: GetAllArt,
                 dispatch: Dispatch<GetArtAction>
             ) => dispatch(loaded(fromAICArt)));
 

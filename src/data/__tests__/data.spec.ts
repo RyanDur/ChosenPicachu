@@ -1,6 +1,5 @@
 import {data} from '../index';
 import 'whatwg-fetch';
-import {AICAutoCompleteResponse, AICPieceData, Piece, Source} from '../types';
 import faker from 'faker';
 import {
     aicArtResponse,
@@ -19,12 +18,14 @@ import {
 } from '../../__tests__/util';
 import {nanoid} from 'nanoid';
 import {error, loaded, loading} from '../actions';
-import {http} from '../http';
-import {HTTPError} from '../http/types';
+import {http} from '../sources/http';
+import {HTTPError} from '../sources/http/types';
 import {waitFor} from '@testing-library/react';
 import {asyncResult, result} from '@ryandur/sand';
+import {Piece, Source} from '../sources/types';
+import {AICAutoCompleteResponse, AICPieceData} from '../sources/aic/types';
 
-jest.mock('../http', () => ({
+jest.mock('../sources/http', () => ({
     http: jest.fn(),
 }));
 

@@ -3,10 +3,11 @@ import {Paths} from '../../../../App';
 import {ArtPiece, useArtPiece} from '../index';
 import {data} from '../../../../data';
 import * as faker from 'faker';
-import {Dispatch, Piece} from '../../../../data/types';
+import {Dispatch} from '../../../../data/types';
 import {error, GetPieceAction, loaded, loading} from '../../../../data/actions';
 import {Rendered, renderWithRouter} from '../../../../__tests__/util';
 import {GalleryPath} from '../../index';
+import {Piece} from '../../../../data/sources/types';
 
 jest.mock('../Context', () => ({
     useArtPiece: jest.fn()
@@ -16,7 +17,7 @@ describe('viewing a piece', () => {
     const mockGetPieceId = jest.fn();
     const mockUsePieceGallery = useArtPiece as jest.Mock;
     const mockPiece: Piece = {
-        id: 1234,
+        id: faker.lorem.word(),
         image: faker.internet.url(),
         title: faker.lorem.words(),
         altText: faker.lorem.sentence(),

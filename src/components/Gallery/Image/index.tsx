@@ -1,11 +1,11 @@
 import {FC, useState} from 'react';
-import {Piece} from '../../../data/types';
 import {join} from '../../util';
 import {Loading} from '../../Loading';
 import {Paths} from '../../../App';
 import {Link} from 'react-router-dom';
 import {useQuery} from '../../hooks';
 import {toQueryString} from '../../../util/URL';
+import {Piece} from '../../../data/sources/types';
 import './Image.scss';
 
 interface ImageProps {

@@ -1,6 +1,6 @@
-import {Art} from '../../../data/types';
-import {Consumer} from '../../UserInfo/types';
 import {createContext, useContext, useMemo, useState} from 'react';
+import {Art} from '../../../data/sources/types';
+import {Consumer} from '../../../data/types';
 
 export interface GalleryContextState {
     art?: Art;

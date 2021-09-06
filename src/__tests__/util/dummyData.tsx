@@ -4,17 +4,18 @@ import faker from 'faker';
 import {AddressInfo, User, UserInfo} from '../../components/UserInfo/types';
 import {AvatarGenerator} from 'random-avatar-generator';
 import {toISOWithoutTime} from '../../components/util';
-import {
-    AICAllArt,
-    AICArt,
-    Art,
-    HarvardAllArt,
-    Piece,
-    HarvardPiece
-} from '../../data/types';
+
 import {nanoid} from 'nanoid';
-import {HarvardAutoCompleteResponse, HarvardInfo, HarvardPeople} from '../../data/types/Harvard';
-import {RIJKAllArt, RIJKArtObject, RIJKArtResponse} from '../../data/types/RIJK';
+import {AICAllArt, AICArt} from '../../data/sources/aic/types';
+import {
+    HarvardAllArt,
+    HarvardAutoCompleteResponse,
+    HarvardInfo,
+    HarvardPeople,
+    HarvardPiece
+} from '../../data/sources/harvard/types';
+import {Art, Piece} from '../../data/sources/types';
+import {RIJKAllArt, RIJKArtObject, RIJKArtResponse} from '../../data/sources/rijks/types';
 
 export const randomNumberFromRange = (min: number, max = 6) => Math.floor(Math.random() * max) + min;
 

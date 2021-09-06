@@ -5,8 +5,8 @@ import {ArtPiece} from './ArtPiece';
 import {GalleryTitle} from './GalleryTitle';
 import {GalleryNav} from './Nav';
 import {Tabs} from '../Tabs';
-import {Source} from '../../data/types';
 import { PageControl } from './PageControl';
+import {Source} from '../../data/sources/types';
 
 export enum GalleryPath {
     piece = '/:id'

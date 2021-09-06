@@ -1,3 +1,15 @@
+export enum Source {
+    AIC = 'aic',
+    HARVARD = 'harvard',
+    RIJK = 'rijksstudio',
+}
+
+export const toSource = (value: string): Source => {
+    if (value === Source.AIC) return Source.AIC;
+    if (value === Source.HARVARD) return Source.HARVARD;
+    else return Source.RIJK;
+};
+
 export type Pagination = {
     total: number;
     limit: number;
@@ -18,6 +30,6 @@ export interface Art {
     pieces: Piece[];
 }
 
-type AutocompleteOptions = string[];
+export type AutocompleteOptions = string[];
 
 export type Gallery = Pagination | Art | Piece | AutocompleteOptions;

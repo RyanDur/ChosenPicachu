@@ -1,12 +1,13 @@
 import {FC, FormEvent, useEffect, useState} from 'react';
-import {AICArtSuggestion, AsyncState, Source} from '../../../data/types';
 import {data} from '../../../data';
 import {SearchArtAction} from '../../../data/actions';
 import {debounce} from 'lodash';
-import {Consumer} from '../../UserInfo/types';
 import {useQuery} from '../../hooks';
 import {useHistory} from 'react-router-dom';
 import {Paths} from '../../../App';
+import {AICArtSuggestion} from '../../../data/sources/aic/types';
+import {Source} from '../../../data/sources/types';
+import {AsyncState, Consumer} from '../../../data/types';
 import './Search.scss';
 import './Search.layout.scss';
 

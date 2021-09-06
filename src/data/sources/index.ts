@@ -1,8 +1,8 @@
-import {Source} from './types';
 import {Decoder} from 'schemawax';
-import {AICAllArtResponseDecoder, AICArtResponseDecoder, AICAutoCompleteResponseDecoder} from './types/AIC';
-import {HarvardAllArtDecoder, HarvardArtDecoder, HarvardAutoCompleteDecoder} from './types/Harvard';
-import {RIJKAllArtDecoder, RIJKArtDecoder} from './types/RIJK';
+import {Source} from './types';
+import {AICAllArtResponseDecoder, AICArtResponseDecoder, AICAutoCompleteResponseDecoder} from './aic/types';
+import {HarvardAllArtDecoder, HarvardArtDecoder, HarvardAutoCompleteDecoder} from './harvard/types';
+import {RIJKAllArtDecoder, RIJKArtDecoder} from './rijks/types';
 
 export const allArtSchema = (source: Source): Decoder<any> => {
     switch (source) {

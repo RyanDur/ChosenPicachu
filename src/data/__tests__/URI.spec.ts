@@ -1,9 +1,9 @@
 import {shapeOfAICResponse, shapeOfHarvardResponse, URI} from '../URI';
 import * as faker from 'faker';
-import {Source} from '../types';
 import {toQueryString} from '../../util/URL';
 import {aicDomain, harvardAPIKey, harvardDomain, rijksAPIKey, rijksDomain} from '../../config';
 import {nanoid} from 'nanoid';
+import {Source} from '../sources/types';
 
 const mockHarvardDomain = jest.fn();
 const mockAICDomain = jest.fn();
