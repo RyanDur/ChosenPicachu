@@ -17,19 +17,12 @@ export const http = ({
             switch (response.status) {
                 case 200:
                 case 201:
+                    return success<any, HTTPError>(Promise.resolve(response.json()));
                 case 204:
-                    return success<any, HTTPError>(parse(response));
+                    return success<any, HTTPError>(undefined);
                 case 403:
                     return failure<any, HTTPError>(HTTPError.FORBIDDEN);
                 default:
                     return failure<any, HTTPError>(HTTPError.UNKNOWN);
             }
         });
-
-const parse = async (response: Response) => {
-    try {
-        return await response.json();
-    } catch (e) {
-        return undefined;
-    }
-};

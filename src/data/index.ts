@@ -80,7 +80,7 @@ export const data = {
         dispatch(loading());
         http({url: URI.from({source: source, path: `/${id}`})})
             .onFailure(() => dispatch(error()))
-            .onSuccess(async response => maybe.of(artSchema(source).decode(await response))
+            .onSuccess(async result => maybe.of(artSchema(source).decode(await result))
                 .map(response => {
                     switch (source) {
                         case Source.AIC:
