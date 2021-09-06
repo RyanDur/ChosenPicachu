@@ -4,7 +4,7 @@ import {data, GetAllArt} from '../../../../data';
 import {fromAICArt, Rendered, renderWithRouter} from '../../../../__tests__/util';
 import {Paths} from '../../../../App';
 import {useGallery} from '../../Context';
-import {error, GetArtAction, loaded, loading} from '../../../../data/actions';
+import {error, GetAllArtAction, loaded, loading} from '../../../../data/actions';
 import {ArtGallery} from '../index';
 import {Dispatch} from '../../../../data/types';
 import {Art, Piece, Source} from '../../../../data/sources/types';
@@ -25,7 +25,7 @@ describe('The gallery.', () => {
         beforeEach(() => {
             data.getAllArt = (
                 query: GetAllArt,
-                dispatch: Dispatch<GetArtAction>
+                dispatch: Dispatch<GetAllArtAction>
             ) => dispatch(loading());
             mockUseGallery.mockReturnValue({
                 art: {pieces: []},
@@ -47,7 +47,7 @@ describe('The gallery.', () => {
         beforeEach(() => {
             data.getAllArt = (
                 query: GetAllArt,
-                dispatch: Dispatch<GetArtAction>
+                dispatch: Dispatch<GetAllArtAction>
             ) => dispatch(loaded(fromAICArt));
             mockUseGallery.mockReturnValue({
                 art: fromAICArt,
@@ -82,7 +82,7 @@ describe('The gallery.', () => {
         beforeEach(() => {
             data.getAllArt = jest.fn((
                 query: GetAllArt,
-                dispatch: Dispatch<GetArtAction>
+                dispatch: Dispatch<GetAllArtAction>
             ) => dispatch(loaded({pieces: [] as Piece[]} as Art)));
             mockUseGallery.mockReturnValue({
                 updateArt: jest.fn(),
@@ -105,7 +105,7 @@ describe('The gallery.', () => {
         beforeEach(() => {
             data.getAllArt = (
                 query: GetAllArt,
-                dispatch: Dispatch<GetArtAction>
+                dispatch: Dispatch<GetAllArtAction>
             ) => dispatch(error());
             mockUseGallery.mockReturnValue({
                 art: fromAICArt,
@@ -123,7 +123,7 @@ describe('The gallery.', () => {
         beforeEach(() => {
             data.getAllArt = jest.fn((
                 query: GetAllArt,
-                dispatch: Dispatch<GetArtAction>
+                dispatch: Dispatch<GetAllArtAction>
             ) => dispatch(loaded(fromAICArt)));
 
             mockUseGallery.mockReturnValue({

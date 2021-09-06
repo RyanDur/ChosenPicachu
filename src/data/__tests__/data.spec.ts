@@ -22,7 +22,7 @@ import {http} from '../http';
 import {waitFor} from '@testing-library/react';
 import {asyncResult} from '@ryandur/sand';
 import {Piece, Source} from '../sources/types';
-import {AICAutoCompleteResponse, AICPieceData} from '../sources/aic/types';
+import {AICSearchResponse, AICPieceData} from '../sources/aic/types';
 import {HTTPError} from '../types';
 
 jest.mock('../http', () => ({
@@ -391,7 +391,7 @@ describe('data', () => {
     };
 
 
-    const aicArtOptions: AICAutoCompleteResponse = {
+    const aicArtOptions: AICSearchResponse = {
         pagination,
         data: options.map(option => ({
             suggest_autocomplete_all: [{

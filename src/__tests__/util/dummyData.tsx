@@ -9,13 +9,13 @@ import {nanoid} from 'nanoid';
 import {AICAllArt, AICArt} from '../../data/sources/aic/types';
 import {
     HarvardAllArt,
-    HarvardAutoCompleteResponse,
+    HarvardSearchResponse,
     HarvardInfo,
     HarvardPeople,
-    HarvardPiece
+    HarvardArt
 } from '../../data/sources/harvard/types';
 import {Art, Piece} from '../../data/sources/types';
-import {RIJKAllArt, RIJKArtObject, RIJKArtResponse} from '../../data/sources/rijks/types';
+import {RIJKAllArt, RIJKArtObject, RIJKArt} from '../../data/sources/rijks/types';
 
 export const randomNumberFromRange = (min: number, max = 6) => Math.floor(Math.random() * max) + min;
 
@@ -197,7 +197,7 @@ export const person = (): HarvardPeople => ({
     displayname: faker.lorem.word(),
 });
 
-const harvardToPieceResponse = (_: unknown, index: number): HarvardPiece => ({
+const harvardToPieceResponse = (_: unknown, index: number): HarvardArt => ({
     id: index,
     title: faker.lorem.sentence(),
     people: [person()],
@@ -219,7 +219,7 @@ export const harvardArtResponse: HarvardAllArt = {
     records: [...Array(info.totalrecordsperquery)].map(harvardToPieceResponse),
 };
 export const options: string[] = [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()];
-export const harvardArtOptions: HarvardAutoCompleteResponse = {
+export const harvardArtOptions: HarvardSearchResponse = {
     info,
     records: options.map(option => ({title: option}))
 };
@@ -288,7 +288,7 @@ export const fromRIJKToPiece = (piece: RIJKArtObject): Piece => ({
     altText: piece.longTitle
 });
 
-export const rijkArtObjectResponse: RIJKArtResponse = {
+export const rijkArtObjectResponse: RIJKArt = {
     artObject: rijkPieceResponse()
 };
 

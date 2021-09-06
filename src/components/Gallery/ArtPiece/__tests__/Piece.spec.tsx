@@ -4,7 +4,7 @@ import {ArtPiece, useArtPiece} from '../index';
 import {data} from '../../../../data';
 import * as faker from 'faker';
 import {Dispatch} from '../../../../data/types';
-import {error, GetPieceAction, loaded, loading} from '../../../../data/actions';
+import {error, GetArtAction, loaded, loading} from '../../../../data/actions';
 import {Rendered, renderWithRouter} from '../../../../__tests__/util';
 import {GalleryPath} from '../../index';
 import {Piece} from '../../../../data/sources/types';
@@ -33,7 +33,7 @@ describe('viewing a piece', () => {
 
     describe('loading the piece of art', () => {
         beforeEach(() => {
-            data.getPiece = (id, dispatch: Dispatch<GetPieceAction>) => dispatch(loading());
+            data.getPiece = (id, dispatch: Dispatch<GetArtAction>) => dispatch(loading());
             renderWithRouter(<ArtPiece/>, {
                 initialRoute: `${Paths.artGallery}/1234`,
                 path: `${Paths.artGallery}${GalleryPath.piece}`
@@ -46,7 +46,7 @@ describe('viewing a piece', () => {
 
     describe('when the art piece is loaded', () => {
         beforeEach(() => {
-            data.getPiece = (id, dispatch: Dispatch<GetPieceAction>) => {
+            data.getPiece = (id, dispatch: Dispatch<GetArtAction>) => {
                 mockGetPieceId(id);
                 dispatch(loaded(mockPiece));
             };
@@ -73,7 +73,7 @@ describe('viewing a piece', () => {
 
     describe('when getting the piece has errored', () => {
         beforeEach(() => {
-            data.getPiece = (id, dispatch: Dispatch<GetPieceAction>) => dispatch(error());
+            data.getPiece = (id, dispatch: Dispatch<GetArtAction>) => dispatch(error());
             renderWithRouter(<ArtPiece/>, {
                 initialRoute: `${Paths.artGallery}/1234`,
                 path: `${Paths.artGallery}${GalleryPath.piece}`

@@ -37,11 +37,9 @@ export const AICArtResponseDecoder = D.object({
     }
 });
 
-const AICArtSuggestionDecoder = D.string;
-
 const AICArtOptionDecoder = D.object({
     required: {
-        input: D.array(AICArtSuggestionDecoder)
+        input: D.array(D.string)
     }
 });
 
@@ -50,7 +48,7 @@ const AICAutocompleteDecoder = D.object({
         suggest_autocomplete_all: D.tuple(D.object({}), AICArtOptionDecoder)
     }
 });
-export const AICAutoCompleteResponseDecoder = D.object({
+export const AICSearchResponseDecoder = D.object({
     required: {
         pagination: AICPaginationResponseDecoder,
         data: D.array(AICAutocompleteDecoder)
@@ -61,11 +59,8 @@ export type AICPieceData = {
     data: AICArt;
 }
 
-export type AICArtOption = D.Output<typeof AICArtOptionDecoder>
-export type AICAutocomplete = D.Output<typeof AICAutocompleteDecoder>;
-export type AICAutoCompleteResponse = D.Output<typeof AICAutoCompleteResponseDecoder>
+export type AICArtOption = D.Output<typeof AICArtOptionDecoder>;
+export type AICSearchResponse = D.Output<typeof AICSearchResponseDecoder>;
+export type AICArt = D.Output<typeof AICPieceResponseDecoder>;
+export type AICAllArt = D.Output<typeof AICAllArtResponseDecoder>;
 
-export type AICArt = D.Output<typeof AICPieceResponseDecoder>
-
-export type AICAllArt = D.Output<typeof AICAllArtResponseDecoder>
-export type AICArtSuggestion = D.Output<typeof AICArtSuggestionDecoder>;

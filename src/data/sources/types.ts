@@ -1,3 +1,7 @@
+import {AICAllArt, AICArt, AICSearchResponse} from './aic/types';
+import {HarvardAllArt, HarvardArt, HarvardSearchResponse} from './harvard/types';
+import {RIJKAllArt, RIJKArt} from './rijks/types';
+
 export enum Source {
     AIC = 'aic',
     HARVARD = 'harvard',
@@ -30,6 +34,9 @@ export interface Art {
     pieces: Piece[];
 }
 
-export type AutocompleteOptions = string[];
+export type SearchOptions = string[];
 
-export type Gallery = Pagination | Art | Piece | AutocompleteOptions;
+export type AllArtResponse = AICAllArt | HarvardAllArt | RIJKAllArt;
+export type ArtResponse = AICArt | HarvardArt | RIJKArt;
+export type SearchResponse = AICSearchResponse | HarvardSearchResponse | RIJKAllArt;
+export type Gallery = Pagination | Art | Piece | SearchOptions;
