@@ -151,7 +151,7 @@ describe('data', () => {
         ${Source.RIJK}
         `('with a malformed response', async ({source}) => {
             const dispatch = jest.fn();
-            mockFailure({I: 'am wrong'});
+            mockSuccess({I: 'am wrong'});
 
             data.getAllArt({page: 1, size: 12, source}, dispatch);
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
@@ -261,7 +261,7 @@ describe('data', () => {
         ${Source.RIJK}
         `('with a malformed response', async ({source}) => {
             const dispatch = jest.fn();
-            mockFailure({I: 'am wrong'});
+            mockSuccess({I: 'am wrong'});
 
             data.getPiece({id: '1', source}, dispatch);
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
@@ -340,7 +340,7 @@ describe('data', () => {
         ${Source.RIJK}
         `('with a malformed response', async ({source}) => {
             const dispatch = jest.fn();
-            mockFailure({I: 'am wrong'});
+            mockSuccess({I: 'am wrong'});
 
             data.searchForArtOptions({search, source}, dispatch);
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
