@@ -1,4 +1,4 @@
-import {mockServer, MockWebServer} from '../../../__tests__/mockServer';
+import {mockServer, MockWebServer} from './mockServer';
 import {http} from '../index';
 import {HTTPError, HTTPMethod} from '../types';
 import * as faker from 'faker';
