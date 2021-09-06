@@ -25,13 +25,13 @@ export const AICPieceResponseDecoder = D.object({
         thumbnail: D.nullable(AICThumbnailDecoder)
     }
 });
-export const AICAllArtResponseSchema = D.object({
+export const AICAllArtSchema = D.object({
     required: {
         pagination: AICPaginationResponseDecoder,
         data: D.array(AICPieceResponseDecoder)
     }
 });
-export const AICArtResponseSchema = D.object({
+export const AICArtSchema = D.object({
     required: {
         data: AICPieceResponseDecoder
     }
@@ -48,7 +48,7 @@ const AICAutocompleteDecoder = D.object({
         suggest_autocomplete_all: D.tuple(D.object({}), AICArtOptionDecoder)
     }
 });
-export const AICSearchResponseSchema = D.object({
+export const AICSearchSchema = D.object({
     required: {
         pagination: AICPaginationResponseDecoder,
         data: D.array(AICAutocompleteDecoder)
@@ -60,7 +60,7 @@ export type AICPieceData = {
 }
 
 export type AICArtOption = D.Output<typeof AICArtOptionDecoder>;
-export type AICSearchResponse = D.Output<typeof AICSearchResponseSchema>;
+export type AICSearchResponse = D.Output<typeof AICSearchSchema>;
 export type AICArt = D.Output<typeof AICPieceResponseDecoder>;
-export type AICAllArt = D.Output<typeof AICAllArtResponseSchema>;
+export type AICAllArt = D.Output<typeof AICAllArtSchema>;
 

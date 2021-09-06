@@ -10,13 +10,13 @@ import {
     SearchResponse,
     Source
 } from './types';
-import {AICAllArtResponseSchema, AICArtResponseSchema, AICSearchResponseSchema} from './aic/types';
+import {AICAllArtSchema, AICArtSchema, AICSearchSchema} from './aic/types';
 import {HarvardAllArtSchema, HarvardArtSchema, HarvardSearchSchema} from './harvard/types';
-import {RIJKAllArtSchema, RIJKSearchOptions, RIJKArtSchema} from './rijks/types';
+import {RIJKAllArtSchema, RIJKSSearchSchema, RIJKArtSchema} from './rijks/types';
 import {maybe, Maybe} from '@ryandur/sand';
-import {aicArtToArt, aicSearchToOptions, aicToAllArt} from './aic';
-import {harvardArtToArt, harvardToAllArt, harverdSearchToOptions} from './harvard';
-import {rijkArtToArt, rijksSearchToOptions, rijkToAllArt} from './rijks';
+import {aicArtToArt, aicSearchToSearch, aicToAllArt} from './aic';
+import {harvardArtToArt, harvardToAllArt, harverdSearchToSearch} from './harvard';
+import {rijkArtToArt, rijksSearchToSearch, rijkToAllArt} from './rijks';
 import {error, GetAllArtAction, GetArtAction, loaded, loading, SearchArtAction} from './actions';
 import {http} from '../http';
 import {URI} from './URI';
@@ -32,11 +32,11 @@ const searchForArt = (
         .map((response: SearchResponse): Maybe<SearchOptions> => {
             switch (source) {
                 case Source.AIC:
-                    return maybe.of(AICSearchResponseSchema.decode(response)).map(aicSearchToOptions);
+                    return maybe.of(AICSearchSchema.decode(response)).map(aicSearchToSearch);
                 case Source.HARVARD:
-                    return maybe.of(HarvardSearchSchema.decode(response)).map(harverdSearchToOptions);
+                    return maybe.of(HarvardSearchSchema.decode(response)).map(harverdSearchToSearch);
                 case Source.RIJKS:
-                    return maybe.of(RIJKSearchOptions.decode(response)).map(rijksSearchToOptions);
+                    return maybe.of(RIJKSSearchSchema.decode(response)).map(rijksSearchToSearch);
                 default:
                     return maybe.none();
             }
@@ -55,7 +55,7 @@ const getAllArt = (
         .map((response: AllArtResponse): Maybe<AllArt> => {
             switch (source) {
                 case Source.AIC:
-                    return maybe.of(AICAllArtResponseSchema.decode(response)).map(aicToAllArt);
+                    return maybe.of(AICAllArtSchema.decode(response)).map(aicToAllArt);
                 case Source.HARVARD:
                     return maybe.of(HarvardAllArtSchema.decode(response)).map(harvardToAllArt);
                 case Source.RIJKS:
@@ -78,7 +78,7 @@ const getArt = (
         .map((response: ArtResponse): Maybe<Art> => {
             switch (source) {
                 case Source.AIC:
-                    return maybe.of(AICArtResponseSchema.decode(response)).map(aicArtToArt);
+                    return maybe.of(AICArtSchema.decode(response)).map(aicArtToArt);
                 case Source.HARVARD:
                     return maybe.of(HarvardArtSchema.decode(response)).map(harvardArtToArt);
                 case Source.RIJKS:
