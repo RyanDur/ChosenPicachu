@@ -13,9 +13,8 @@ export const data = {
         http({url: URI.createSearchFrom(search, source)})
             .onFailure(() => dispatch(error()))
             .map(translateSearchResponseFor(source))
-            .map(search =>
-                search.map<SearchArtAction>(loaded).orElse(error()))
-            .onSuccess(dispatch);
+            .onSuccess(search =>
+                dispatch(search.map<SearchArtAction>(loaded).orElse(error())));
     },
 
     getAllArt: (
@@ -26,9 +25,8 @@ export const data = {
         http({url: URI.from({source, params: {page, search, limit: size}})})
             .onFailure(() => dispatch(error()))
             .map(translateAllArtResponseFor(source, page))
-            .map(allArt =>
-                allArt.map<GetAllArtAction>(loaded).orElse(error()))
-            .onSuccess(dispatch);
+            .onSuccess(allArt =>
+                dispatch(allArt.map<GetAllArtAction>(loaded).orElse(error())));
     },
 
     getPiece: (
@@ -39,8 +37,7 @@ export const data = {
         http({url: URI.from({source: source, path: `/${id}`})})
             .onFailure(() => dispatch(error()))
             .map(translateArtResponseFor(source))
-            .map(art =>
-                art.map<GetArtAction>(loaded).orElse(error()))
-            .onSuccess(dispatch);
+            .onSuccess(art =>
+                dispatch(art.map<GetArtAction>(loaded).orElse(error())));
     }
 };
