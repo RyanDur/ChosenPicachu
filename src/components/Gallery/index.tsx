@@ -19,7 +19,7 @@ const Gallery: FC = () => {
                 <Tabs values={[
                     {display: 'The Art Institute of Chicago', param: Source.AIC},
                     {display: 'Harvard Art Museums', param: Source.HARVARD},
-                    {display: 'Rijksstudio', param: Source.RIJK}
+                    {display: 'Rijksstudio', param: Source.RIJKS}
                 ]}/>
                 <ArtGallery/>
             </Route>

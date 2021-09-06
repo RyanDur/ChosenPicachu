@@ -35,7 +35,7 @@ const searchForArt = (
                     return maybe.of(AICSearchResponseDecoder.decode(response)).map(aicSearchToOptions);
                 case Source.HARVARD:
                     return maybe.of(HarvardSearchDecoder.decode(response)).map(harverdSearchToOptions);
-                case Source.RIJK:
+                case Source.RIJKS:
                     return maybe.of(RIJKAllArtDecoder.decode(response)).map(rijksSearchToOptions);
                 default:
                     return maybe.none();
@@ -58,7 +58,7 @@ const getAllArt = (
                     return maybe.of(AICAllArtResponseDecoder.decode(response)).map(aicToArt);
                 case Source.HARVARD:
                     return maybe.of(HarvardAllArtDecoder.decode(response)).map(harvardToArt);
-                case Source.RIJK:
+                case Source.RIJKS:
                     return maybe.of(RIJKAllArtDecoder.decode(response)).map(rijkToArt(page));
                 default:
                     return maybe.none();
@@ -81,7 +81,7 @@ const getArt = (
                     return maybe.of(AICArtResponseDecoder.decode(response)).map(aicArtToPiece);
                 case Source.HARVARD:
                     return maybe.of(HarvardArtDecoder.decode(response)).map(harvardArtToPiece);
-                case Source.RIJK:
+                case Source.RIJKS:
                     return maybe.of(RIJKArtDecoder.decode(response)).map(rijkArtObjectToPiece);
                 default:
                     return maybe.none();

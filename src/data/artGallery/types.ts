@@ -5,13 +5,13 @@ import {RIJKAllArt, RIJKArt} from './rijks/types';
 export enum Source {
     AIC = 'aic',
     HARVARD = 'harvard',
-    RIJK = 'rijksstudio',
+    RIJKS = 'rijksstudio',
 }
 
 export const toSource = (value: string): Source => {
     if (value === Source.AIC) return Source.AIC;
     if (value === Source.HARVARD) return Source.HARVARD;
-    else return Source.RIJK;
+    else return Source.RIJKS;
 };
 
 export type Pagination = {

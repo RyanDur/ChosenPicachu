@@ -85,7 +85,7 @@ describe('The page controls', () => {
         `('should change input: $input to size: $size when rikjs', ({input, size}) => {
             rendered = renderWithRouter(<PageControl/>, {
                 path: Paths.artGallery,
-                params: {tab: Source.RIJK, page: 1}
+                params: {tab: Source.RIJKS, page: 1}
             });
             userEvent.type(screen.getByTestId('per-page'), `${input}`);
             expect(screen.getByTestId('per-page')).toHaveDisplayValue(size);
@@ -93,7 +93,7 @@ describe('The page controls', () => {
             expect(toQueryObj(rendered().testLocation?.search || '')).toEqual({
                 page: 1,
                 size,
-                tab: Source.RIJK
+                tab: Source.RIJKS
             });
         });
     });

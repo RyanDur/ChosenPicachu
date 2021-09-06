@@ -84,7 +84,7 @@ describe('the URI', () => {
     it('should create the appropriate URI for RIJKS', () => {
         const searchQuery = {
             params: {page: 1, limit: 4, apikey: rijksAPIKey, search: faker.lorem.words()},
-            source: Source.RIJK
+            source: Source.RIJKS
         };
         const {search, limit, apikey, page} = searchQuery.params;
 
@@ -97,7 +97,7 @@ describe('the URI', () => {
                 key: apikey
             })}`);
 
-        const query = {params: {page: 1, apikey: rijksAPIKey, limit}, source: Source.RIJK};
+        const query = {params: {page: 1, apikey: rijksAPIKey, limit}, source: Source.RIJKS};
         expect(URI.from(query))
             .toEqual(`${rijksDomain}${toQueryString({
                 p: query.params.page,
@@ -149,7 +149,7 @@ describe('the URI', () => {
 
         it('should create the rijks search url', () => {
             const search = faker.lorem.words();
-            expect(URI.createSearchFrom(search, Source.RIJK))
+            expect(URI.createSearchFrom(search, Source.RIJKS))
                 .toEqual(`${rijksDomain}${toQueryString({
                     q: search,
                     p: 1,
