@@ -19,19 +19,28 @@ export const RIJKPieceDecoder = D.object({
     }
 });
 
-export const RIJKAllArtDecoder = D.object({
+export const RIJKAllArtSchema = D.object({
     required: {
         count: D.number,
         artObjects: D.array(RIJKPieceDecoder)
     }
 });
 
-export const RIJKArtDecoder = D.object({
+export const RIJKSearchOptions = D.object({
+    required: {
+        count: D.number,
+        artObjects: D.array(RIJKPieceDecoder)
+    }
+});
+
+
+export const RIJKArtSchema = D.object({
     required: {
         artObject: RIJKPieceDecoder
     }
 });
 
 export type RIJKArtObject = D.Output<typeof RIJKPieceDecoder>;
-export type RIJKAllArt = D.Output<typeof RIJKAllArtDecoder>;
-export type RIJKArt = D.Output<typeof RIJKArtDecoder>;
+export type RIJKAllArt = D.Output<typeof RIJKAllArtSchema>;
+export type RIJKArt = D.Output<typeof RIJKArtSchema>;
+export type RIJSearchOptions = D.Output<typeof RIJKSearchOptions>;

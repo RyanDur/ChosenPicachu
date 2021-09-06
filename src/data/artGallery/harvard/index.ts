@@ -1,17 +1,17 @@
 import {HarvardAllArt, HarvardSearchResponse, HarvardArt} from './types';
 import {AllArt, Art, SearchOptions} from '../types';
 
-export const harvardToArt = ({info, records}: HarvardAllArt): AllArt => ({
+export const harvardToAllArt = ({info, records}: HarvardAllArt): AllArt => ({
     pagination: {
         total: info.totalrecords,
         limit: info.totalrecordsperquery,
         totalPages: info.pages,
         currentPage: info.page,
     },
-    pieces: records.map(harvardArtToPiece)
+    pieces: records.map(harvardArtToArt)
 });
 
-export const harvardArtToPiece = (record: HarvardArt): Art => ({
+export const harvardArtToArt = (record: HarvardArt): Art => ({
     id: String(record.id),
     title: record.title,
     image: record.primaryimageurl,

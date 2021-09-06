@@ -10,13 +10,13 @@ import {
     SearchResponse,
     Source
 } from './types';
-import {AICAllArtResponseDecoder, AICArtResponseDecoder, AICSearchResponseDecoder} from './aic/types';
-import {HarvardAllArtDecoder, HarvardArtDecoder, HarvardSearchDecoder} from './harvard/types';
-import {RIJKAllArtDecoder, RIJKArtDecoder} from './rijks/types';
+import {AICAllArtResponseSchema, AICArtResponseSchema, AICSearchResponseSchema} from './aic/types';
+import {HarvardAllArtSchema, HarvardArtSchema, HarvardSearchSchema} from './harvard/types';
+import {RIJKAllArtSchema, RIJKSearchOptions, RIJKArtSchema} from './rijks/types';
 import {maybe, Maybe} from '@ryandur/sand';
-import {aicArtToPiece, aicSearchToOptions, aicToArt} from './aic';
-import {harvardArtToPiece, harvardToArt, harverdSearchToOptions} from './harvard';
-import {rijkArtObjectToPiece, rijksSearchToOptions, rijkToArt} from './rijks';
+import {aicArtToArt, aicSearchToOptions, aicToAllArt} from './aic';
+import {harvardArtToArt, harvardToAllArt, harverdSearchToOptions} from './harvard';
+import {rijkArtToArt, rijksSearchToOptions, rijkToAllArt} from './rijks';
 import {error, GetAllArtAction, GetArtAction, loaded, loading, SearchArtAction} from './actions';
 import {http} from '../http';
 import {URI} from './URI';
@@ -32,11 +32,11 @@ const searchForArt = (
         .map((response: SearchResponse): Maybe<SearchOptions> => {
             switch (source) {
                 case Source.AIC:
-                    return maybe.of(AICSearchResponseDecoder.decode(response)).map(aicSearchToOptions);
+                    return maybe.of(AICSearchResponseSchema.decode(response)).map(aicSearchToOptions);
                 case Source.HARVARD:
-                    return maybe.of(HarvardSearchDecoder.decode(response)).map(harverdSearchToOptions);
+                    return maybe.of(HarvardSearchSchema.decode(response)).map(harverdSearchToOptions);
                 case Source.RIJKS:
-                    return maybe.of(RIJKAllArtDecoder.decode(response)).map(rijksSearchToOptions);
+                    return maybe.of(RIJKSearchOptions.decode(response)).map(rijksSearchToOptions);
                 default:
                     return maybe.none();
             }
@@ -55,11 +55,11 @@ const getAllArt = (
         .map((response: AllArtResponse): Maybe<AllArt> => {
             switch (source) {
                 case Source.AIC:
-                    return maybe.of(AICAllArtResponseDecoder.decode(response)).map(aicToArt);
+                    return maybe.of(AICAllArtResponseSchema.decode(response)).map(aicToAllArt);
                 case Source.HARVARD:
-                    return maybe.of(HarvardAllArtDecoder.decode(response)).map(harvardToArt);
+                    return maybe.of(HarvardAllArtSchema.decode(response)).map(harvardToAllArt);
                 case Source.RIJKS:
-                    return maybe.of(RIJKAllArtDecoder.decode(response)).map(rijkToArt(page));
+                    return maybe.of(RIJKAllArtSchema.decode(response)).map(rijkToAllArt(page));
                 default:
                     return maybe.none();
             }
@@ -78,11 +78,11 @@ const getArt = (
         .map((response: ArtResponse): Maybe<Art> => {
             switch (source) {
                 case Source.AIC:
-                    return maybe.of(AICArtResponseDecoder.decode(response)).map(aicArtToPiece);
+                    return maybe.of(AICArtResponseSchema.decode(response)).map(aicArtToArt);
                 case Source.HARVARD:
-                    return maybe.of(HarvardArtDecoder.decode(response)).map(harvardArtToPiece);
+                    return maybe.of(HarvardArtSchema.decode(response)).map(harvardArtToArt);
                 case Source.RIJKS:
-                    return maybe.of(RIJKArtDecoder.decode(response)).map(rijkArtObjectToPiece);
+                    return maybe.of(RIJKArtSchema.decode(response)).map(rijkArtToArt);
                 default:
                     return maybe.none();
             }
