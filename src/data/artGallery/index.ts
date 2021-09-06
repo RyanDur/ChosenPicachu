@@ -41,7 +41,7 @@ const searchForArt = (
                     return maybe.none();
             }
         })
-        .map(search => search.map<SearchArtAction>(loaded).orElse(error()))
+        .map(options => options.map<SearchArtAction>(loaded).orElse(error()))
         .onSuccess(dispatch);
 };
 
