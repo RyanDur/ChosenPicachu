@@ -7,7 +7,7 @@ import './PageControl.layout.scss';
 
 export const PageControl = () => {
     const {art} = useGallery();
-    const {queryObj: {page, size, tab}, updateQueryString} = useQuery<{ page: number, size: number, tab: string }>();
+    const {queryObj: {page, size, tab}, updateQueryString} = useQuery<{ page: number, size: number, tab: Source }>();
     const [pageNumber, updatePageNumber] = useState(page);
     const [pageSize, updatePageSize] = useState(size);
 

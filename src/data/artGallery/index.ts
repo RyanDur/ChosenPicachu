@@ -17,10 +17,10 @@ import {maybe, Maybe} from '@ryandur/sand';
 import {aicArtToPiece, aicSearchToOptions, aicToArt} from './aic';
 import {harvardArtToPiece, harvardToArt, harverdSearchToOptions} from './harvard';
 import {rijkArtObjectToPiece, rijksSearchToOptions, rijkToArt} from './rijks';
-import {Dispatch} from '../types';
 import {error, GetAllArtAction, GetArtAction, loaded, loading, SearchArtAction} from './actions';
 import {http} from '../http';
 import {URI} from './URI';
+import {Dispatch} from '../types';
 
 const searchForArt = (
     {search, source}: SearchArt,

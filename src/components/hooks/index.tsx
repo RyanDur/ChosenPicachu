@@ -1,6 +1,6 @@
 import {useHistory, useLocation} from 'react-router-dom';
 import {toQueryObj, toQueryString} from '../../util/URL';
-import {Consumer} from '../../data/types';
+import {Consumer} from '@ryandur/sand';
 
 type Query<T extends { [key: string]: unknown }> = {
     queryObj: T,

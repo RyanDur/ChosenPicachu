@@ -1,7 +1,7 @@
 import React, {FC, FormEvent} from 'react';
 import {join} from '../../../util';
 import {FancyInput} from '../FancyInput';
-import {Consumer} from '../../../../data/types';
+import {Consumer} from '@ryandur/sand';
 import './FancySelect.css';
 
 interface FancySelectProps {

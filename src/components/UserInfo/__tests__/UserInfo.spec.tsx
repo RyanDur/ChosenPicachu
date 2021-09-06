@@ -1,9 +1,10 @@
 import {UserInformation} from '../index';
 import {act, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {Consumer, UserInfo} from '../types';
+import {UserInfo} from '../types';
 import {fillOutAddress, fillOutUser, users} from '../../../__tests__/util';
 import {initialState} from '../reducer';
+import {Consumer} from '@ryandur/sand';
 
 jest.mock('../../../avatars', () => ({
     generateAvatar: () => 'some random url'
