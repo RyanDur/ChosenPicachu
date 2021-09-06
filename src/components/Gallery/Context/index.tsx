@@ -1,5 +1,5 @@
 import {createContext, useContext, useMemo, useState} from 'react';
-import {AllArt} from '../../../data/sources/types';
+import {AllArt} from '../../../data/artGallery/types';
 import {Consumer} from '../../../data/types';
 
 export interface GalleryContextState {

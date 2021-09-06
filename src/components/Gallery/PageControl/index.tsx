@@ -1,9 +1,9 @@
 import React, {FormEvent, useState} from 'react';
 import {useGallery} from '../Context';
 import {useQuery} from '../../hooks';
+import {Source} from '../../../data/artGallery/types';
 import './PageControl.scss';
 import './PageControl.layout.scss';
-import {Source} from '../../../data/sources/types';
 
 export const PageControl = () => {
     const {art} = useGallery();

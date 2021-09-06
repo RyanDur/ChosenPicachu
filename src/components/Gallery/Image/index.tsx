@@ -5,7 +5,7 @@ import {Paths} from '../../../App';
 import {Link} from 'react-router-dom';
 import {useQuery} from '../../hooks';
 import {toQueryString} from '../../../util/URL';
-import {Art} from '../../../data/sources/types';
+import {Art} from '../../../data/artGallery/types';
 import './Image.scss';
 
 interface ImageProps {

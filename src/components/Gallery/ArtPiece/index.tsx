@@ -5,10 +5,10 @@ import {Loading} from '../../Loading';
 import {ArtPieceContext, useArtPiece, useArtPieceContext} from './Context';
 import {Image} from '../Image';
 import {AsyncState} from '../../../data/types';
-import {GetArtAction} from '../../../data/actions';
+import {GetArtAction} from '../../../data/artGallery/actions';
 import {useQuery} from '../../hooks';
+import {Source} from '../../../data/artGallery/types';
 import './Piece.scss';
-import {Source} from '../../../data/sources/types';
 
 const ArtPiece = () => {
     const {piece, updatePiece, reset} = useArtPiece();
@@ -18,7 +18,7 @@ const ArtPiece = () => {
     const {queryObj: {tab}} = useQuery<{ tab: Source }>();
 
     useEffect(() => {
-        id && data.getPiece({id, source: tab}, (action: GetArtAction) => {
+        id && data.artGallery.getPiece({id, source: tab}, (action: GetArtAction) => {
             isLoading(action.type === AsyncState.LOADING);
             isErrored(action.type === AsyncState.ERROR);
             if (action.type === AsyncState.LOADED) updatePiece(action.value);
@@ -33,7 +33,7 @@ const ArtPiece = () => {
           <figcaption className="artist-display">{piece.artistInfo}</figcaption>
         </figure>}
         {errored && <article className="err"><img src="https://img.icons8.com/ios/100/000000/no-image.png"
-                                  alt="Load Error" data-testid="image-error"/></article>}
+                                                  alt="Load Error" data-testid="image-error"/></article>}
     </>;
 };
 

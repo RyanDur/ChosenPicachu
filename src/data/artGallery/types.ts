@@ -36,6 +36,23 @@ export interface AllArt {
 
 export type SearchOptions = string[];
 
+export interface SearchArt {
+    search: string;
+    source: Source;
+}
+
+export interface GetAllArt {
+    search?: string;
+    page: number;
+    size: number;
+    source: Source;
+}
+
+export interface GetArt {
+    id: string;
+    source: Source;
+}
+
 export type AllArtResponse = AICAllArt | HarvardAllArt | RIJKAllArt;
 export type ArtResponse = AICArt | HarvardArt | RIJKArt;
 export type SearchResponse = AICSearchResponse | HarvardSearchResponse | RIJKAllArt;

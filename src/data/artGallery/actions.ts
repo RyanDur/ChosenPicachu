@@ -1,5 +1,5 @@
-import {AsyncState, Error, Loaded, Loading} from './types';
-import {AllArt, SearchOptions, Art} from './sources/types';
+import {AsyncState, Error, Loaded, Loading} from '../types';
+import {AllArt, SearchOptions, Art} from './types';
 
 export type GetArtAction = Loading | Loaded<Art> | Error;
 export type GetAllArtAction = Loading | Loaded<AllArt> | Error;

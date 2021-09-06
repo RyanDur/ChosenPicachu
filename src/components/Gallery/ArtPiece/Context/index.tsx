@@ -1,5 +1,5 @@
 import {createContext, useContext, useMemo, useState} from 'react';
-import {Art} from '../../../../data/sources/types';
+import {Art} from '../../../../data/artGallery/types';
 import {Consumer} from '../../../../data/types';
 
 interface PieceContext {
