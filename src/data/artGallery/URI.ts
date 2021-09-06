@@ -1,7 +1,7 @@
 import {toQueryString} from '../../util/URL';
 import {
     aicDomain,
-    defaultAutocompleteLimit,
+    defaultSearchLimit,
     defaultRecordLimit,
     harvardAPIKey,
     harvardDomain,
@@ -63,21 +63,21 @@ export const URI = {
                 return `${aicDomain}/search${toQueryString({
                     'query[term][title]': search,
                     fields: 'suggest_autocomplete_all',
-                    limit: defaultAutocompleteLimit
+                    limit: defaultSearchLimit
                 })}`;
             case Source.HARVARD:
                 return `${harvardDomain}${toQueryString({
                     title: search,
                     fields: 'title',
                     apikey: harvardAPIKey,
-                    size: defaultAutocompleteLimit
+                    size: defaultSearchLimit
                 })}`;
             default:
                 return [rijksDomain,
                     toQueryString({
                         q: search,
                         p: 1,
-                        ps: 5,
+                        ps: defaultSearchLimit,
                         imgonly: true,
                         key: rijksAPIKey
                     })].join('');

@@ -20,7 +20,7 @@ import {generateAvatar} from '../../avatars';
 import {Link} from 'react-router-dom';
 import {Paths} from '../../App';
 import {FancyDateInput} from './FancyFormElements/FancyDateInput';
-import {Consumer} from '../../data/types';
+import {Consumer} from '@ryandur/sand';
 import './Form.layout.scss';
 import './Form.scss';
 

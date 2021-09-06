@@ -6,7 +6,8 @@ import {useQuery} from '../../hooks';
 import {useHistory} from 'react-router-dom';
 import {Paths} from '../../../App';
 import {SearchOptions, Source} from '../../../data/artGallery/types';
-import {AsyncState, Consumer} from '../../../data/types';
+import {AsyncState} from '../../../data/types';
+import {Consumer} from '@ryandur/sand';
 import './Search.scss';
 import './Search.layout.scss';
 
