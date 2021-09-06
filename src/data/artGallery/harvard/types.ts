@@ -22,7 +22,7 @@ const HarvardArtOptionDecoder = D.object({
     }
 });
 
-export const HarvardArtDecoder = D.object({
+export const HarvardArtSchema = D.object({
     required: {
         id: D.number,
         title: D.string,
@@ -33,14 +33,14 @@ export const HarvardArtDecoder = D.object({
     }
 });
 
-export const HarvardAllArtDecoder = D.object({
+export const HarvardAllArtSchema = D.object({
     required: {
         info: HarvardInfoDecoder,
-        records: D.array(HarvardArtDecoder)
+        records: D.array(HarvardArtSchema)
     }
 });
 
-export const HarvardSearchDecoder = D.object({
+export const HarvardSearchSchema = D.object({
     required: {
         info: HarvardInfoDecoder,
         records: D.array(HarvardArtOptionDecoder)
@@ -49,6 +49,6 @@ export const HarvardSearchDecoder = D.object({
 
 export type HarvardPeople = D.Output<typeof HarvardPeopleDecoder>;
 export type HarvardInfo = D.Output<typeof HarvardInfoDecoder>;
-export type HarvardAllArt = D.Output<typeof HarvardAllArtDecoder>
-export type HarvardArt = D.Output<typeof HarvardArtDecoder>
-export type HarvardSearchResponse = D.Output<typeof HarvardSearchDecoder>;
+export type HarvardAllArt = D.Output<typeof HarvardAllArtSchema>
+export type HarvardArt = D.Output<typeof HarvardArtSchema>
+export type HarvardSearchResponse = D.Output<typeof HarvardSearchSchema>;

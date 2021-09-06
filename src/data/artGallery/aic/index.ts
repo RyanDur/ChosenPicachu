@@ -5,7 +5,7 @@ export const aicSearchToOptions = ({data}: AICSearchResponse): SearchOptions => 
     .map(({suggest_autocomplete_all}) => suggest_autocomplete_all[1])
     .flatMap(option => option.input);
 
-export const aicToArt = ({pagination, data}: AICAllArt): AllArt => ({
+export const aicToAllArt = ({pagination, data}: AICAllArt): AllArt => ({
     pagination: {
         total: pagination.total,
         limit: pagination.limit,
@@ -23,5 +23,5 @@ const aicToPiece = (data: AICArt): Art => ({
     altText: data.thumbnail?.alt_text || data.term_titles.join(' ') || ''
 });
 
-export const aicArtToPiece = ({data}: AICPieceData): Art => aicToPiece(data);
+export const aicArtToArt = ({data}: AICPieceData): Art => aicToPiece(data);
 
