@@ -1,9 +1,9 @@
 import * as D from 'schemawax';
 
 const RIJKImageDecoder = D.object({
-  required: {
-      url: D.nullable(D.string)
-  }
+    required: {
+        url: D.nullable(D.string)
+    }
 });
 
 export const RIJKPieceDecoder = D.object({

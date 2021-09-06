@@ -4,10 +4,11 @@ import {data} from '../../../data';
 import {Loading} from '../../Loading';
 import {ArtPieceContext, useArtPiece, useArtPieceContext} from './Context';
 import {Image} from '../Image';
-import {AsyncState, Source} from '../../../data/types';
+import {AsyncState} from '../../../data/types';
 import {GetPieceAction} from '../../../data/actions';
 import {useQuery} from '../../hooks';
 import './Piece.scss';
+import {Source} from '../../../data/sources/types';
 
 const ArtPiece = () => {
     const {piece, updatePiece, reset} = useArtPiece();

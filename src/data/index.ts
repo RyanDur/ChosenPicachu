@@ -1,34 +1,27 @@
-import {Dispatch, Source} from './types';
+import {Dispatch} from './types';
 import {error, GetArtAction, GetPieceAction, loaded, loading, SearchArtAction} from './actions';
-import {
-    aicAutocompleteToOptions,
-    aicDataToPiece,
-    aicToArt,
-    harvardToArt,
-    harvardToPiece,
-    harverdAutocompleteToOptions,
-    rijksAutocompleteToOptions,
-    rijkToArt,
-    toRijkToPiece
-} from './translators';
-import {allArtSchema, artSchema, searchSchema} from './schemas';
-import {http} from './http';
-import {URI} from './URI';
+import {aicAutocompleteToOptions, aicDataToPiece, aicToArt} from './sources/aic';
+import {harvardToArt, harvardToPiece, harverdAutocompleteToOptions} from './sources/harvard';
+import {rijksAutocompleteToOptions, rijkToArt, toRijkToPiece} from './sources/rijks';
+import {allArtSchema, artSchema, searchSchema} from './sources';
+import {Source} from './sources/types';
 import {maybe} from '@ryandur/sand';
+import {http} from './sources/http';
+import {URI} from './URI';
 
-interface SearchArt {
+export interface SearchArt {
     search: string;
     source: Source;
 }
 
-interface GetAllArt {
+export interface GetAllArt {
     search?: string;
     page: number;
     size: number;
     source: Source;
 }
 
-interface GetArt {
+export interface GetArt {
     id: string;
     source: Source;
 }

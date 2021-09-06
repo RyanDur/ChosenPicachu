@@ -4,11 +4,11 @@ import * as faker from 'faker';
 import {Paths} from '../../../../App';
 import userEvent from '@testing-library/user-event';
 import {Rendered, renderWithRouter} from '../../../../__tests__/util';
-import {Source} from '../../../../data/types';
+import {Piece, Source} from '../../../../data/sources/types';
 
 describe('the image', () => {
-    const piece = {
-        id: Math.random(),
+    const piece: Piece = {
+        id: faker.lorem.word(),
         title: faker.lorem.words(),
         image: faker.image.imageUrl(),
         altText: faker.lorem.sentence(),

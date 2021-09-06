@@ -5,8 +5,9 @@ import {renderWithRouter} from '../../../../__tests__/util';
 import {data} from '../../../../data';
 import {loaded, SearchArtAction} from '../../../../data/actions';
 import * as faker from 'faker';
-import {Dispatch, Source} from '../../../../data/types';
 import {Paths} from '../../../../App';
+import {Dispatch} from '../../../../data/types';
+import { Source } from '../../../../data/sources/types';
 
 describe('search', () => {
     const searchWord = faker.lorem.word().toUpperCase();

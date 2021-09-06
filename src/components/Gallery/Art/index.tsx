@@ -4,8 +4,9 @@ import {useQuery} from '../../hooks';
 import {Loading} from '../../Loading';
 import {Image} from '../Image';
 import {useGallery} from '../Context';
-import {AsyncState, toSource} from '../../../data/types';
+import {AsyncState} from '../../../data/types';
 import {GetArtAction} from '../../../data/actions';
+import {toSource} from '../../../data/sources/types';
 import './Gallery.scss';
 import './Gallery.layout.scss';
 

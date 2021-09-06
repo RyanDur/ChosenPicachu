@@ -1,6 +1,6 @@
-import {Piece} from '../../../../data/types';
-import {Consumer} from '../../../UserInfo/types';
 import {createContext, useContext, useMemo, useState} from 'react';
+import {Piece} from '../../../../data/sources/types';
+import {Consumer} from '../../../../data/types';
 
 interface PieceContext {
     piece: Partial<Piece>;

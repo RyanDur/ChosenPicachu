@@ -1,4 +1,3 @@
-import {Source} from './types';
 import {toQueryString} from '../util/URL';
 import {
     aicDomain,
@@ -9,6 +8,7 @@ import {
     rijksAPIKey,
     rijksDomain
 } from '../config';
+import {Source} from './sources/types';
 
 export const shapeOfAICResponse = ['id', 'title', 'image_id', 'artist_display', 'term_titles', 'thumbnail'];
 export const shapeOfHarvardResponse = ['id', 'title', 'people', 'primaryimageurl'];
