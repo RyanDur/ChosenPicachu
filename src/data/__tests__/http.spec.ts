@@ -1,6 +1,6 @@
 import {mockServer, MockWebServer} from './mockServer';
-import {http} from '../index';
 import {HTTPError, HTTPMethod} from '../types';
+import {http} from '../http';
 import * as faker from 'faker';
 
 describe('http calls', () => {
@@ -10,6 +10,7 @@ describe('http calls', () => {
     let somePath = '';
 
     beforeEach(() => {
+        console.error = () => {};
         server = mockServer();
         server.start();
         somePath = `/${faker.lorem.word()}/${faker.lorem.word()}`;
@@ -26,7 +27,7 @@ describe('http calls', () => {
         const recordedRequest = await server.lastRequest();
         expect(recordedRequest.method).toEqual('GET');
         expect(recordedRequest.url).toEqual(somePath);
-        expect(actual.orNull()?.orNull()).toEqual(testResponse);
+        expect(await actual.orNull()).toEqual(testResponse);
     });
 
     it('should be able to post to an endpoint', async () => {
@@ -37,7 +38,7 @@ describe('http calls', () => {
         const recordedRequest = await server.lastRequest();
         expect(recordedRequest.method).toEqual('POST');
         expect(recordedRequest.url).toEqual(somePath);
-        expect(actual.orNull()?.orNull()).toEqual(testResponse);
+        expect(await actual.orNull()).toEqual(testResponse);
     });
 
     it('should be able to put to an endpoint', async () => {
@@ -48,7 +49,7 @@ describe('http calls', () => {
         const recordedRequest = await server.lastRequest();
         expect(recordedRequest.method).toEqual('PUT');
         expect(recordedRequest.url).toEqual(somePath);
-        expect(actual.orNull()?.orNull()).toEqual(null);
+        expect(await actual.orNull()).toBeUndefined();
     });
 
     it('should be able to delete to an endpoint', async () => {
@@ -59,7 +60,7 @@ describe('http calls', () => {
         const recordedRequest = await server.lastRequest();
         expect(recordedRequest.method).toEqual('DELETE');
         expect(recordedRequest.url).toEqual(somePath);
-        expect(actual.orNull()?.orNull()).toEqual(null);
+        expect(await actual.orNull()).toBeUndefined();
     });
 
     it('should notify when forbidden', async () => {
@@ -67,15 +68,17 @@ describe('http calls', () => {
 
         const actual = await http({url: someUrl, method: HTTPMethod.GET}).value();
 
-        expect(actual.orNull()?.orElseErr(HTTPError.UNKNOWN)).toEqual(HTTPError.FORBIDDEN);
+        // @ts-ignore
+        expect(actual.explanation).toEqual(HTTPError.FORBIDDEN);
     });
 
-    it('should catch thrown', async () => {
-        server.stubResponse(200, () => Error());
+    it('should handle server stop', async () => {
+        server.stop();
 
         const actual = await http({url: someUrl, method: HTTPMethod.GET}).value();
 
         expect(actual.isOk).toBe(false);
-        expect(actual.orNull()).toBeNull();
+        // @ts-ignore
+        expect(actual.explanation).toEqual(HTTPError.SERVER_ERROR);
     });
 });

@@ -21,3 +21,17 @@ export type Loaded<T> = Action<AsyncState.LOADED> & {
 export type Loading = Action<AsyncState.LOADING>;
 
 export type Error = Action<AsyncState.ERROR>;
+
+export enum HTTPMethod {
+    GET = 'GET',
+    POST = 'POST',
+    PUT = 'PUT',
+    DELETE = 'DELETE'
+}
+
+export enum HTTPError {
+    FORBIDDEN = 'FORBIDDEN',
+    UNKNOWN = 'UNKNOWN',
+    SERVER_ERROR = 'SERVER_ERROR',
+    THROWN = 'THROWN'
+}

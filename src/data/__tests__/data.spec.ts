@@ -18,14 +18,14 @@ import {
 } from '../../__tests__/util';
 import {nanoid} from 'nanoid';
 import {error, loaded, loading} from '../actions';
-import {http} from '../sources/http';
-import {HTTPError} from '../sources/http/types';
+import {http} from '../http';
 import {waitFor} from '@testing-library/react';
-import {asyncResult, result} from '@ryandur/sand';
+import {asyncResult} from '@ryandur/sand';
 import {Piece, Source} from '../sources/types';
 import {AICAutoCompleteResponse, AICPieceData} from '../sources/aic/types';
+import {HTTPError} from '../types';
 
-jest.mock('../sources/http', () => ({
+jest.mock('../http', () => ({
     http: jest.fn(),
 }));
 
@@ -33,9 +33,9 @@ describe('data', () => {
     const mockHttp = http as jest.Mock;
 
     const mockSuccess = (response: any) =>
-        mockHttp.mockReturnValue(asyncResult.success(result.ok(response)));
+        mockHttp.mockReturnValue(asyncResult.success(response));
     const mockFailure = (response: any) =>
-        mockHttp.mockReturnValue(asyncResult.success(result.err(response)));
+        mockHttp.mockReturnValue(asyncResult.failure(response));
 
     describe('retrieving all the artwork', () => {
         describe('when the source is AIC', () => {
@@ -151,7 +151,7 @@ describe('data', () => {
         ${Source.RIJK}
         `('with a malformed response', async ({source}) => {
             const dispatch = jest.fn();
-            mockSuccess({I: 'am wrong'});
+            mockFailure({I: 'am wrong'});
 
             data.getAllArt({page: 1, size: 12, source}, dispatch);
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
@@ -325,7 +325,7 @@ describe('data', () => {
 
         test('when the source does not exist', async () => {
             const dispatch = jest.fn();
-            mockSuccess(harvardArtOptions);
+            mockFailure(harvardArtOptions);
 
             data.searchForArtOptions({search, source: 'I do not exist' as Source}, dispatch);
 
@@ -340,7 +340,7 @@ describe('data', () => {
         ${Source.RIJK}
         `('with a malformed response', async ({source}) => {
             const dispatch = jest.fn();
-            mockSuccess({I: 'am wrong'});
+            mockFailure({I: 'am wrong'});
 
             data.searchForArtOptions({search, source}, dispatch);
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
