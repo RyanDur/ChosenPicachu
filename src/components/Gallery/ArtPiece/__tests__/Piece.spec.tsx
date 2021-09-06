@@ -33,7 +33,7 @@ describe('viewing a piece', () => {
 
     describe('loading the piece of art', () => {
         beforeEach(() => {
-            data.artGallery.getPiece = (id, dispatch: Dispatch<GetArtAction>) => dispatch(loading());
+            data.artGallery.getArt = (id, dispatch: Dispatch<GetArtAction>) => dispatch(loading());
             renderWithRouter(<ArtPiece/>, {
                 initialRoute: `${Paths.artGallery}/1234`,
                 path: `${Paths.artGallery}${GalleryPath.piece}`
@@ -46,7 +46,7 @@ describe('viewing a piece', () => {
 
     describe('when the art piece is loaded', () => {
         beforeEach(() => {
-            data.artGallery.getPiece = (id, dispatch: Dispatch<GetArtAction>) => {
+            data.artGallery.getArt = (id, dispatch: Dispatch<GetArtAction>) => {
                 mockGetPieceId(id);
                 dispatch(loaded(mockPiece));
             };
@@ -73,7 +73,7 @@ describe('viewing a piece', () => {
 
     describe('when getting the piece has errored', () => {
         beforeEach(() => {
-            data.artGallery.getPiece = (id, dispatch: Dispatch<GetArtAction>) => dispatch(error());
+            data.artGallery.getArt = (id, dispatch: Dispatch<GetArtAction>) => dispatch(error());
             renderWithRouter(<ArtPiece/>, {
                 initialRoute: `${Paths.artGallery}/1234`,
                 path: `${Paths.artGallery}${GalleryPath.piece}`

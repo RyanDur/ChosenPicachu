@@ -182,7 +182,7 @@ describe('data', () => {
                     const dispatch = jest.fn();
                     mockSuccess(pieceAICResponse);
 
-                    artGallery.getPiece({id: String(aicPiece.id), source: Source.AIC}, dispatch);
+                    artGallery.getArt({id: String(aicPiece.id), source: Source.AIC}, dispatch);
 
                     expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                     await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(aicPiece)));
@@ -193,7 +193,7 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockFailure(HTTPError.UNKNOWN);
 
-                artGallery.getPiece({id: String(aicPiece.id), source: Source.AIC}, dispatch);
+                artGallery.getArt({id: String(aicPiece.id), source: Source.AIC}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
@@ -205,7 +205,7 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockSuccess(harvardPieceResponse);
 
-                artGallery.getPiece({id: String(aicPiece.id), source: Source.HARVARD}, dispatch);
+                artGallery.getArt({id: String(aicPiece.id), source: Source.HARVARD}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(harvardPiece)));
@@ -215,7 +215,7 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockFailure(HTTPError.UNKNOWN);
 
-                artGallery.getPiece({id: String(aicPiece.id), source: Source.HARVARD}, dispatch);
+                artGallery.getArt({id: String(aicPiece.id), source: Source.HARVARD}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
@@ -227,7 +227,7 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockSuccess(rijkArtObjectResponse);
 
-                artGallery.getPiece({id: String(aicPiece.id), source: Source.RIJK}, dispatch);
+                artGallery.getArt({id: String(aicPiece.id), source: Source.RIJK}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(fromRIJKToPiece(rijkArtObjectResponse.artObject))));
@@ -237,7 +237,7 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockFailure(HTTPError.UNKNOWN);
 
-                artGallery.getPiece({id: String(aicPiece.id), source: Source.RIJK}, dispatch);
+                artGallery.getArt({id: String(aicPiece.id), source: Source.RIJK}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
@@ -248,7 +248,7 @@ describe('data', () => {
             const dispatch = jest.fn();
             mockFailure(pieceAICResponse);
 
-            artGallery.getPiece({id: '1', source: 'I do not exist' as Source}, dispatch);
+            artGallery.getArt({id: '1', source: 'I do not exist' as Source}, dispatch);
 
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
             await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
@@ -263,7 +263,7 @@ describe('data', () => {
             const dispatch = jest.fn();
             mockSuccess({I: 'am wrong'});
 
-            artGallery.getPiece({id: '1', source}, dispatch);
+            artGallery.getArt({id: '1', source}, dispatch);
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
             await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
         });
@@ -277,7 +277,7 @@ describe('data', () => {
             const dispatch = jest.fn();
             mockHttp.mockReturnValue(asyncResult.of(Promise.reject(fromRIJKArtResponse)));
 
-            artGallery.getPiece({id: String(aicPiece.id), source}, dispatch);
+            artGallery.getArt({id: String(aicPiece.id), source}, dispatch);
 
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
             await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));

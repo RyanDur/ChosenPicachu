@@ -22,54 +22,6 @@ import {error, GetAllArtAction, GetArtAction, loaded, loading, SearchArtAction} 
 import {http} from '../http';
 import {URI} from './URI';
 
-export const translateAllArtResponseFor = (source: Source, page: number) => (response: AllArtResponse): Maybe<AllArt> => {
-    switch (source) {
-        case Source.AIC:
-            return maybe.of(AICAllArtResponseDecoder.decode(response))
-                .map(aicToArt);
-        case Source.HARVARD:
-            return maybe.of(HarvardAllArtDecoder.decode(response))
-                .map(harvardToArt);
-        case Source.RIJK:
-            return maybe.of(RIJKAllArtDecoder.decode(response))
-                .map(rijkToArt(page));
-        default:
-            return maybe.none();
-    }
-};
-
-export const translateArtResponseFor = (source: Source) => (response: ArtResponse): Maybe<Art> => {
-    switch (source) {
-        case Source.AIC:
-            return maybe.of(AICArtResponseDecoder.decode(response))
-                .map(aicArtToPiece);
-        case Source.HARVARD:
-            return maybe.of(HarvardArtDecoder.decode(response))
-                .map(harvardArtToPiece);
-        case Source.RIJK:
-            return maybe.of(RIJKArtDecoder.decode(response))
-                .map(rijkArtObjectToPiece);
-        default:
-            return maybe.none();
-    }
-};
-
-export const translateSearchResponseFor = (source: Source) => (response: SearchResponse): Maybe<SearchOptions> => {
-    switch (source) {
-        case Source.AIC:
-            return maybe.of(AICSearchResponseDecoder.decode(response))
-                .map(aicSearchToOptions);
-        case Source.HARVARD:
-            return maybe.of(HarvardSearchDecoder.decode(response))
-                .map(harverdSearchToOptions);
-        case Source.RIJK:
-            return maybe.of(RIJKAllArtDecoder.decode(response))
-                .map(rijksSearchToOptions);
-        default:
-            return maybe.none();
-    }
-};
-
 const searchForArt = (
     {search, source}: SearchArt,
     dispatch: Dispatch<SearchArtAction>
@@ -77,7 +29,18 @@ const searchForArt = (
     dispatch(loading());
     http({url: URI.createSearchFrom(search, source)})
         .onFailure(() => dispatch(error()))
-        .map(translateSearchResponseFor(source))
+        .map((response: SearchResponse): Maybe<SearchOptions> => {
+            switch (source) {
+                case Source.AIC:
+                    return maybe.of(AICSearchResponseDecoder.decode(response)).map(aicSearchToOptions);
+                case Source.HARVARD:
+                    return maybe.of(HarvardSearchDecoder.decode(response)).map(harverdSearchToOptions);
+                case Source.RIJK:
+                    return maybe.of(RIJKAllArtDecoder.decode(response)).map(rijksSearchToOptions);
+                default:
+                    return maybe.none();
+            }
+        })
         .onSuccess(search =>
             dispatch(search.map<SearchArtAction>(loaded).orElse(error())));
 };
@@ -89,25 +52,47 @@ const getAllArt = (
     dispatch(loading());
     http({url: URI.from({source, params: {page, search, limit: size}})})
         .onFailure(() => dispatch(error()))
-        .map(translateAllArtResponseFor(source, page))
+        .map((response: AllArtResponse): Maybe<AllArt> => {
+            switch (source) {
+                case Source.AIC:
+                    return maybe.of(AICAllArtResponseDecoder.decode(response)).map(aicToArt);
+                case Source.HARVARD:
+                    return maybe.of(HarvardAllArtDecoder.decode(response)).map(harvardToArt);
+                case Source.RIJK:
+                    return maybe.of(RIJKAllArtDecoder.decode(response)).map(rijkToArt(page));
+                default:
+                    return maybe.none();
+            }
+        })
         .onSuccess(allArt =>
             dispatch(allArt.map<GetAllArtAction>(loaded).orElse(error())));
 };
 
-const getPiece = (
+const getArt = (
     {id, source}: GetArt,
     dispatch: Dispatch<GetArtAction>
 ): void => {
     dispatch(loading());
     http({url: URI.from({source: source, path: `/${id}`})})
         .onFailure(() => dispatch(error()))
-        .map(translateArtResponseFor(source))
+        .map((response: ArtResponse): Maybe<Art> => {
+            switch (source) {
+                case Source.AIC:
+                    return maybe.of(AICArtResponseDecoder.decode(response)).map(aicArtToPiece);
+                case Source.HARVARD:
+                    return maybe.of(HarvardArtDecoder.decode(response)).map(harvardArtToPiece);
+                case Source.RIJK:
+                    return maybe.of(RIJKArtDecoder.decode(response)).map(rijkArtObjectToPiece);
+                default:
+                    return maybe.none();
+            }
+        })
         .onSuccess(art =>
             dispatch(art.map<GetArtAction>(loaded).orElse(error())));
 };
 
 export const artGallery = {
-    getPiece,
+    getArt,
     getAllArt,
     searchForArt
 };

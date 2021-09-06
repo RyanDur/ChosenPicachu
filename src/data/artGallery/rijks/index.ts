@@ -1,5 +1,5 @@
 import {RIJKAllArt, RIJKArtObject, RIJKArt} from './types';
-import {AllArt, Art} from '../types';
+import {AllArt, Art, SearchOptions} from '../types';
 
 export const rijkToArt = (page: number) => (data: RIJKAllArt): AllArt => ({
     pagination: {
@@ -22,5 +22,5 @@ const rijkToPiece = (data: RIJKArtObject): Art => ({
 
 export const rijkArtObjectToPiece = ({artObject}: RIJKArt): Art => rijkToPiece(artObject);
 
-export const rijksSearchToOptions = ({artObjects}: RIJKAllArt) =>
+export const rijksSearchToOptions = ({artObjects}: RIJKAllArt): SearchOptions =>
     artObjects.map(({title}) => title);
