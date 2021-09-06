@@ -41,7 +41,7 @@ export const PageControl = () => {
                id="per-page"
                onInput={event => {
                    const number = +event.currentTarget.value;
-                   if (number > 10 && tab === Source.RIJK) {
+                   if (number > 10 && tab === Source.RIJKS) {
                        event.currentTarget.value = String(Math.round(number / 10) * 10);
                    }
                }}

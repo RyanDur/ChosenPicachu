@@ -107,7 +107,7 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockSuccess(fromRIJKArtResponse);
 
-                artGallery.getAllArt({page: 1, size: 12, source: Source.RIJK}, dispatch);
+                artGallery.getAllArt({page: 1, size: 12, source: Source.RIJKS}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(fromRIJKArt(1, 12))));
@@ -117,7 +117,7 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockSuccess(fromRIJKArtResponse);
 
-                artGallery.getAllArt({page: 1, size: 12, search: 'rad', source: Source.RIJK}, dispatch);
+                artGallery.getAllArt({page: 1, size: 12, search: 'rad', source: Source.RIJKS}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(fromRIJKArt(1, 12))));
@@ -127,7 +127,7 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockFailure(HTTPError.UNKNOWN);
 
-                artGallery.getAllArt({page: 1, size: 12, source: Source.RIJK}, dispatch);
+                artGallery.getAllArt({page: 1, size: 12, source: Source.RIJKS}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
@@ -148,7 +148,7 @@ describe('data', () => {
         source
         ${Source.AIC}
         ${Source.HARVARD}
-        ${Source.RIJK}
+        ${Source.RIJKS}
         `('with a malformed response', async ({source}) => {
             const dispatch = jest.fn();
             mockSuccess({I: 'am wrong'});
@@ -162,7 +162,7 @@ describe('data', () => {
         source
         ${Source.AIC}
         ${Source.HARVARD}
-        ${Source.RIJK}
+        ${Source.RIJKS}
         `('when the call fails', async ({source}) => {
             const dispatch = jest.fn();
             mockHttp.mockReturnValue(asyncResult.of(Promise.reject(fromRIJKArtResponse)));
@@ -227,7 +227,7 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockSuccess(rijkArtObjectResponse);
 
-                artGallery.getArt({id: String(aicPiece.id), source: Source.RIJK}, dispatch);
+                artGallery.getArt({id: String(aicPiece.id), source: Source.RIJKS}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(fromRIJKToPiece(rijkArtObjectResponse.artObject))));
@@ -237,7 +237,7 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockFailure(HTTPError.UNKNOWN);
 
-                artGallery.getArt({id: String(aicPiece.id), source: Source.RIJK}, dispatch);
+                artGallery.getArt({id: String(aicPiece.id), source: Source.RIJKS}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error()));
@@ -258,7 +258,7 @@ describe('data', () => {
         source
         ${Source.AIC}
         ${Source.HARVARD}
-        ${Source.RIJK}
+        ${Source.RIJKS}
         `('with a malformed response', async ({source}) => {
             const dispatch = jest.fn();
             mockSuccess({I: 'am wrong'});
@@ -272,7 +272,7 @@ describe('data', () => {
         source
         ${Source.AIC}
         ${Source.HARVARD}
-        ${Source.RIJK}
+        ${Source.RIJKS}
         `('when the call fails', async ({source}) => {
             const dispatch = jest.fn();
             mockHttp.mockReturnValue(asyncResult.of(Promise.reject(fromRIJKArtResponse)));
@@ -316,7 +316,7 @@ describe('data', () => {
                 const dispatch = jest.fn();
                 mockSuccess(fromRIJKArtOptionsResponse);
 
-                artGallery.searchForArt({search, source: Source.RIJK}, dispatch);
+                artGallery.searchForArt({search, source: Source.RIJKS}, dispatch);
 
                 expect(dispatch).toHaveBeenNthCalledWith(1, loading());
                 await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, loaded(options)));
@@ -337,7 +337,7 @@ describe('data', () => {
         source
         ${Source.AIC}
         ${Source.HARVARD}
-        ${Source.RIJK}
+        ${Source.RIJKS}
         `('with a malformed response', async ({source}) => {
             const dispatch = jest.fn();
             mockSuccess({I: 'am wrong'});
@@ -351,7 +351,7 @@ describe('data', () => {
         source
         ${Source.AIC}
         ${Source.HARVARD}
-        ${Source.RIJK}
+        ${Source.RIJKS}
         `('when the call fails', async ({source}) => {
             const dispatch = jest.fn();
             mockHttp.mockReturnValue(asyncResult.of(Promise.reject(fromRIJKArtResponse)));
