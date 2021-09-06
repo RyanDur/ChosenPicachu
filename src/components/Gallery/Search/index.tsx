@@ -5,8 +5,7 @@ import {debounce} from 'lodash';
 import {useQuery} from '../../hooks';
 import {useHistory} from 'react-router-dom';
 import {Paths} from '../../../App';
-import {AICArtSuggestion} from '../../../data/sources/aic/types';
-import {Source} from '../../../data/sources/types';
+import {SearchOptions, Source} from '../../../data/sources/types';
 import {AsyncState, Consumer} from '../../../data/types';
 import './Search.scss';
 import './Search.layout.scss';
@@ -16,7 +15,7 @@ interface Props {
 }
 
 export const Search: FC<Props> = ({id}) => {
-    const [searchOptions, updateSearchOptions] = useState<AICArtSuggestion[]>([]);
+    const [searchOptions, updateSearchOptions] = useState<SearchOptions>([]);
     const [searchString, updateQuery] = useState<string>('');
     const history = useHistory();
     const {queryObj: {tab, search}, updateQueryString, nextQueryString} = useQuery<{ tab?: Source, search?: string }>();

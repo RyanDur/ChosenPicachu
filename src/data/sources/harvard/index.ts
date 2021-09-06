@@ -1,4 +1,4 @@
-import {HarvardAllArt, HarvardAutoCompleteResponse, HarvardPiece} from './types';
+import {HarvardAllArt, HarvardSearchResponse, HarvardArt} from './types';
 import {Art, Piece} from '../types';
 
 export const harvardToArt = ({info, records}: HarvardAllArt): Art => ({
@@ -11,7 +11,7 @@ export const harvardToArt = ({info, records}: HarvardAllArt): Art => ({
     pieces: records.map(harvardToPiece)
 });
 
-export const harvardToPiece = (record: HarvardPiece): Piece => ({
+export const harvardToPiece = (record: HarvardArt): Piece => ({
     id: String(record.id),
     title: record.title,
     image: record.primaryimageurl,
@@ -19,5 +19,5 @@ export const harvardToPiece = (record: HarvardPiece): Piece => ({
     altText: record.title
 });
 
-export const harverdAutocompleteToOptions = ({records}: HarvardAutoCompleteResponse) =>
+export const harverdAutocompleteToOptions = ({records}: HarvardSearchResponse) =>
     records.map(({title}) => title);

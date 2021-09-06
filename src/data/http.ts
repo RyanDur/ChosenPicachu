@@ -17,7 +17,7 @@ export const http = ({
             switch (response.status) {
                 case 200:
                 case 201:
-                    return success<any, HTTPError>(Promise.resolve(response.json()));
+                    return asyncResult.of(response.json());
                 case 204:
                     return success<any, HTTPError>(undefined);
                 case 403:

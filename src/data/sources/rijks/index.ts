@@ -1,7 +1,7 @@
-import {RIJKAllArt, RIJKArtObject, RIJKArtResponse} from './types';
+import {RIJKAllArt, RIJKArtObject, RIJKArt} from './types';
 import {Art, Piece} from '../types';
 
-export const rijkToArt = (data: RIJKAllArt, page: number): Art => ({
+export const rijkToArt = (page: number) => (data: RIJKAllArt): Art => ({
     pagination: {
         total: data.count,
         limit: data.artObjects.length,
@@ -20,8 +20,7 @@ const rijkToPiece = (data: RIJKArtObject): Piece => ({
 });
 
 
-
-export const toRijkToPiece = ({artObject}: RIJKArtResponse): Piece => rijkToPiece(artObject);
+export const toRijkToPiece = ({artObject}: RIJKArt): Piece => rijkToPiece(artObject);
 
 export const rijksAutocompleteToOptions = ({artObjects}: RIJKAllArt) =>
     artObjects.map(({title}) => title);

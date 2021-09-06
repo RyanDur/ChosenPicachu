@@ -40,7 +40,7 @@ export const HarvardAllArtDecoder = D.object({
     }
 });
 
-export const HarvardAutoCompleteDecoder = D.object({
+export const HarvardSearchDecoder = D.object({
     required: {
         info: HarvardInfoDecoder,
         records: D.array(HarvardArtOptionDecoder)
@@ -50,5 +50,5 @@ export const HarvardAutoCompleteDecoder = D.object({
 export type HarvardPeople = D.Output<typeof HarvardPeopleDecoder>;
 export type HarvardInfo = D.Output<typeof HarvardInfoDecoder>;
 export type HarvardAllArt = D.Output<typeof HarvardAllArtDecoder>
-export type HarvardPiece = D.Output<typeof HarvardArtDecoder>
-export type HarvardAutoCompleteResponse = D.Output<typeof HarvardAutoCompleteDecoder>;
+export type HarvardArt = D.Output<typeof HarvardArtDecoder>
+export type HarvardSearchResponse = D.Output<typeof HarvardSearchDecoder>;

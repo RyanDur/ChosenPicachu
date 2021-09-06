@@ -34,5 +34,4 @@ export const RIJKArtDecoder = D.object({
 
 export type RIJKArtObject = D.Output<typeof RIJKPieceDecoder>;
 export type RIJKAllArt = D.Output<typeof RIJKAllArtDecoder>;
-export type RIJKArtResponse = D.Output<typeof RIJKArtDecoder>;
-export type RIJKPiece = D.Output<typeof RIJKArtDecoder>;
+export type RIJKArt = D.Output<typeof RIJKArtDecoder>;

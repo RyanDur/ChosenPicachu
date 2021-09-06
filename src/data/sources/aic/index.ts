@@ -1,7 +1,7 @@
-import {AICAllArt, AICArt, AICAutoCompleteResponse, AICPieceData} from './types';
+import {AICAllArt, AICArt, AICSearchResponse, AICPieceData} from './types';
 import {Art, Piece} from '../types';
 
-export const aicAutocompleteToOptions = ({data}: AICAutoCompleteResponse) => data
+export const aicAutocompleteToOptions = ({data}: AICSearchResponse) => data
     .map(({suggest_autocomplete_all}) => suggest_autocomplete_all[1])
     .flatMap(option => option.input);
 

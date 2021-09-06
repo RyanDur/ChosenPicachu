@@ -5,7 +5,7 @@ import {Loading} from '../../Loading';
 import {ArtPieceContext, useArtPiece, useArtPieceContext} from './Context';
 import {Image} from '../Image';
 import {AsyncState} from '../../../data/types';
-import {GetPieceAction} from '../../../data/actions';
+import {GetArtAction} from '../../../data/actions';
 import {useQuery} from '../../hooks';
 import './Piece.scss';
 import {Source} from '../../../data/sources/types';
@@ -18,7 +18,7 @@ const ArtPiece = () => {
     const {queryObj: {tab}} = useQuery<{ tab: Source }>();
 
     useEffect(() => {
-        id && data.getPiece({id, source: tab}, (action: GetPieceAction) => {
+        id && data.getPiece({id, source: tab}, (action: GetArtAction) => {
             isLoading(action.type === AsyncState.LOADING);
             isErrored(action.type === AsyncState.ERROR);
             if (action.type === AsyncState.LOADED) updatePiece(action.value);

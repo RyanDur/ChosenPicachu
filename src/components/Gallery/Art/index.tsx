@@ -5,7 +5,7 @@ import {Loading} from '../../Loading';
 import {Image} from '../Image';
 import {useGallery} from '../Context';
 import {AsyncState} from '../../../data/types';
-import {GetArtAction} from '../../../data/actions';
+import {GetAllArtAction} from '../../../data/actions';
 import {toSource} from '../../../data/sources/types';
 import './Gallery.scss';
 import './Gallery.layout.scss';
@@ -22,7 +22,7 @@ export const ArtGallery: FC = () => {
 
     useEffect(() => {
         data.getAllArt({page, size, search, source: toSource(tab)},
-            (action: GetArtAction) => {
+            (action: GetAllArtAction) => {
                 isLoading(action.type === AsyncState.LOADING);
                 hasErrored(action.type === AsyncState.ERROR);
                 if (action.type === AsyncState.LOADED) updateArt(action.value);

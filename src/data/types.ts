@@ -1,3 +1,5 @@
+import {Source} from './sources/types';
+
 export interface Indexable {
     readonly [x: string]: string | undefined;
 }
@@ -33,5 +35,22 @@ export enum HTTPError {
     FORBIDDEN = 'FORBIDDEN',
     UNKNOWN = 'UNKNOWN',
     SERVER_ERROR = 'SERVER_ERROR',
-    THROWN = 'THROWN'
+}
+
+
+export interface SearchArt {
+    search: string;
+    source: Source;
+}
+
+export interface GetAllArt {
+    search?: string;
+    page: number;
+    size: number;
+    source: Source;
+}
+
+export interface GetArt {
+    id: string;
+    source: Source;
 }
