@@ -1,7 +1,7 @@
 import {shapeOfAICResponse, shapeOfHarvardResponse, URI} from '../artGallery/URI';
 import * as faker from 'faker';
 import {toQueryString} from '../../util/URL';
-import {aicDomain, harvardAPIKey, harvardDomain, rijksAPIKey, rijksDomain} from '../../config';
+import {aicDomain, defaultSearchLimit, harvardAPIKey, harvardDomain, rijksAPIKey, rijksDomain} from '../../config';
 import {nanoid} from 'nanoid';
 import {Source} from '../artGallery/types';
 
@@ -26,6 +26,9 @@ jest.mock('../../config', () => ({
     },
     get rijksAPIKey() {
         return mockRijksAPIKey();
+    },
+    get defaultSearchLimit() {
+        return 5;
     }
 }));
 
@@ -133,7 +136,8 @@ describe('the URI', () => {
             expect(URI.createSearchFrom(search, Source.AIC))
                 .toEqual(`${aicDomain}/search${toQueryString({
                     'query[term][title]': search,
-                    fields: 'suggest_autocomplete_all'
+                    fields: 'suggest_autocomplete_all',
+                    limit: defaultSearchLimit
                 })}`);
         });
 
@@ -143,7 +147,8 @@ describe('the URI', () => {
                 .toEqual(`${harvardDomain}${toQueryString({
                     title: search,
                     fields: 'title',
-                    apikey: harvardAPIKey
+                    apikey: harvardAPIKey,
+                    size: defaultSearchLimit
                 })}`);
         });
 
