@@ -19,5 +19,5 @@ export const harvardToPiece = (record: HarvardArt): Piece => ({
     altText: record.title
 });
 
-export const harverdAutocompleteToOptions = ({records}: HarvardSearchResponse) =>
+export const harverdSearchToOptions = ({records}: HarvardSearchResponse) =>
     records.map(({title}) => title);

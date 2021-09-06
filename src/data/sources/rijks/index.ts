@@ -20,7 +20,7 @@ const rijkToPiece = (data: RIJKArtObject): Piece => ({
 });
 
 
-export const toRijkToPiece = ({artObject}: RIJKArt): Piece => rijkToPiece(artObject);
+export const rijkArtObjectToPiece = ({artObject}: RIJKArt): Piece => rijkToPiece(artObject);
 
-export const rijksAutocompleteToOptions = ({artObjects}: RIJKAllArt) =>
+export const rijksSearchToOptions = ({artObjects}: RIJKAllArt) =>
     artObjects.map(({title}) => title);

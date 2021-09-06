@@ -3,9 +3,9 @@ import {AICAllArtResponseDecoder, AICArtResponseDecoder, AICSearchResponseDecode
 import {HarvardAllArtDecoder, HarvardArtDecoder, HarvardSearchDecoder} from './harvard/types';
 import {RIJKAllArtDecoder, RIJKArtDecoder} from './rijks/types';
 import {maybe, Maybe} from '@ryandur/sand';
-import {aicAutocompleteToOptions, aicDataToPiece, aicToArt} from './aic';
-import {harvardToArt, harvardToPiece, harverdAutocompleteToOptions} from './harvard';
-import {rijksAutocompleteToOptions, rijkToArt, toRijkToPiece} from './rijks';
+import {aicSearchToOptions, aicDataToPiece, aicToArt} from './aic';
+import {harvardToArt, harvardToPiece, harverdSearchToOptions} from './harvard';
+import {rijksSearchToOptions, rijkToArt, rijkArtObjectToPiece} from './rijks';
 
 export const translateAllArtResponseFor = (source: Source, page: number) => (response: AllArtResponse): Maybe<Art> => {
     switch (source) {
@@ -22,6 +22,7 @@ export const translateAllArtResponseFor = (source: Source, page: number) => (res
             return maybe.none();
     }
 };
+
 export const translateArtResponseFor = (source: Source) => (response: ArtResponse): Maybe<Piece> => {
     switch (source) {
         case Source.AIC:
@@ -32,22 +33,23 @@ export const translateArtResponseFor = (source: Source) => (response: ArtRespons
                 .map(harvardToPiece);
         case Source.RIJK:
             return maybe.of(RIJKArtDecoder.decode(response))
-                .map(toRijkToPiece);
+                .map(rijkArtObjectToPiece);
         default:
             return maybe.none();
     }
 };
+
 export const translateSearchResponseFor = (source: Source) => (response: SearchResponse): Maybe<SearchOptions> => {
     switch (source) {
         case Source.AIC:
             return maybe.of(AICSearchResponseDecoder.decode(response))
-                .map(aicAutocompleteToOptions);
+                .map(aicSearchToOptions);
         case Source.HARVARD:
             return maybe.of(HarvardSearchDecoder.decode(response))
-                .map(harverdAutocompleteToOptions);
+                .map(harverdSearchToOptions);
         case Source.RIJK:
             return maybe.of(RIJKAllArtDecoder.decode(response))
-                .map(rijksAutocompleteToOptions);
+                .map(rijksSearchToOptions);
         default:
             return maybe.none();
     }
