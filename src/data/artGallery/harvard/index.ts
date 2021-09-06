@@ -19,5 +19,5 @@ export const harvardArtToArt = (record: HarvardArt): Art => ({
     altText: record.title
 });
 
-export const harverdSearchToOptions = ({records}: HarvardSearchResponse): SearchOptions =>
+export const harverdSearchToSearch = ({records}: HarvardSearchResponse): SearchOptions =>
     records.map(({title}) => title);

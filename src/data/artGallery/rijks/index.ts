@@ -22,5 +22,5 @@ const rijkToPiece = (data: RIJKArtObject): Art => ({
 
 export const rijkArtToArt = ({artObject}: RIJKArt): Art => rijkToPiece(artObject);
 
-export const rijksSearchToOptions = ({artObjects}: RIJKAllArt): SearchOptions =>
+export const rijksSearchToSearch = ({artObjects}: RIJKAllArt): SearchOptions =>
     artObjects.map(({title}) => title);

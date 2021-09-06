@@ -26,7 +26,7 @@ export const RIJKAllArtSchema = D.object({
     }
 });
 
-export const RIJKSearchOptions = D.object({
+export const RIJKSSearchSchema = D.object({
     required: {
         count: D.number,
         artObjects: D.array(RIJKPieceDecoder)
@@ -43,4 +43,4 @@ export const RIJKArtSchema = D.object({
 export type RIJKArtObject = D.Output<typeof RIJKPieceDecoder>;
 export type RIJKAllArt = D.Output<typeof RIJKAllArtSchema>;
 export type RIJKArt = D.Output<typeof RIJKArtSchema>;
-export type RIJSearchOptions = D.Output<typeof RIJKSearchOptions>;
+export type RIJSearchOptions = D.Output<typeof RIJKSSearchSchema>;
