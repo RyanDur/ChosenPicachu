@@ -1,6 +1,6 @@
 import {join} from '../../../util';
 import React, {FC, FormEvent, useState} from 'react';
-import {Consumer} from '../../types';
+import {Consumer} from '../../../../data/types';
 
 interface FancyTextareaProps {
     onChange: Consumer<FormEvent<HTMLTextAreaElement>>;

@@ -1,6 +1,6 @@
-import http from 'http';
 import net from 'net';
 import {RequestListener} from 'http';
+import * as http from 'http';
 
 export interface MockWebServer {
     start: () => void;

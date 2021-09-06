@@ -6,7 +6,7 @@ import {rijksAutocompleteToOptions, rijkToArt, toRijkToPiece} from './sources/ri
 import {allArtSchema, artSchema, searchSchema} from './sources';
 import {Source} from './sources/types';
 import {maybe} from '@ryandur/sand';
-import {http} from './sources/http';
+import {http} from './http';
 import {URI} from './URI';
 
 export interface SearchArt {
@@ -34,7 +34,7 @@ export const data = {
         dispatch(loading());
         http({url: URI.createSearchFrom(search, source)})
             .onFailure(() => dispatch(error()))
-            .map(result => maybe.of(searchSchema(source).decode(result.orNull()))
+            .onSuccess(async response => maybe.of(searchSchema(source).decode(await response))
                 .map(response => {
                     switch (source) {
                         case Source.AIC:
@@ -46,8 +46,7 @@ export const data = {
                         default:
                             return error();
                     }
-                }).orElse(error()))
-            .onSuccess(dispatch);
+                }).map(dispatch));
     },
 
     getAllArt: (
@@ -57,20 +56,21 @@ export const data = {
         dispatch(loading());
         http({url: URI.from({source, params: {page, search, limit: size}})})
             .onFailure(() => dispatch(error()))
-            .map(result => maybe.of(allArtSchema(source).decode(result.orNull()))
-                .map(response => {
-                    switch (source) {
-                        case Source.AIC:
-                            return loaded(aicToArt(response));
-                        case Source.HARVARD:
-                            return loaded(harvardToArt(response));
-                        case Source.RIJK:
-                            return loaded(rijkToArt(response, page));
-                        default:
-                            return error();
-                    }
-                }).orElse(error()))
-            .onSuccess(dispatch);
+            .onSuccess(async response => {
+                return maybe.of(allArtSchema(source).decode(await response))
+                    .map(response => {
+                        switch (source) {
+                            case Source.AIC:
+                                return loaded(aicToArt(response));
+                            case Source.HARVARD:
+                                return loaded(harvardToArt(response));
+                            case Source.RIJK:
+                                return loaded(rijkToArt(response, page));
+                            default:
+                                return error();
+                        }
+                    }).map(dispatch);
+            });
     },
 
     getPiece: (
@@ -80,7 +80,7 @@ export const data = {
         dispatch(loading());
         http({url: URI.from({source: source, path: `/${id}`})})
             .onFailure(() => dispatch(error()))
-            .map(result => maybe.of(artSchema(source).decode(result.orNull()))
+            .onSuccess(async response => maybe.of(artSchema(source).decode(await response))
                 .map(response => {
                     switch (source) {
                         case Source.AIC:
@@ -92,7 +92,6 @@ export const data = {
                         default:
                             return error();
                     }
-                }).orElse(error()))
-            .onSuccess(dispatch);
+                }).map(dispatch));
     }
 };

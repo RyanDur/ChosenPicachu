@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useReducer, useState} from 'react';
-import {Consumer, UserInfo} from './types';
+import {UserInfo} from './types';
 import {FancyInput} from './FancyFormElements/FancyInput';
 import {join} from '../util';
 import {FancyTextarea} from './FancyFormElements/FancyTextarea';
@@ -19,9 +19,10 @@ import {formReducer, initialState} from './reducer';
 import {generateAvatar} from '../../avatars';
 import {Link} from 'react-router-dom';
 import {Paths} from '../../App';
+import {FancyDateInput} from './FancyFormElements/FancyDateInput';
+import {Consumer} from '../../data/types';
 import './Form.layout.scss';
 import './Form.scss';
-import {FancyDateInput} from './FancyFormElements/FancyDateInput';
 
 interface FormProps {
     currentUserInfo?: UserInfo;
