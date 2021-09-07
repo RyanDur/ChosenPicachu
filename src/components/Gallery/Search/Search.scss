@@ -1,3 +1,5 @@
+@import "../../../styles/varabiles";
+
 .search {
   width: var(--base-x-50);
   height: 100%;
@@ -51,7 +53,7 @@
   }
 }
 
-@media (max-width: 832px) {
+@media (max-width: $mobile) {
   .search {
     #query,
     .submit-query,

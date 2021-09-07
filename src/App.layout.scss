@@ -1,3 +1,5 @@
+@import "styles/varabiles";
+
 #root {
   display: grid;
   grid-gap: var(--base);
@@ -83,7 +85,7 @@
   }
 }
 
-@media (max-width: 1366px) {
+@media (max-width: $tablet) {
   #root {
     grid-template-columns: 13.4rem 1fr 13.4rem;
     grid-template-areas:
@@ -115,7 +117,7 @@
   }
 }
 
-@media (max-width: 832px) {
+@media (max-width: $mobile) {
   #root {
     grid-template-columns: 1fr;
     grid-template-rows:
