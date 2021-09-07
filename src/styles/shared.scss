@@ -29,6 +29,12 @@
   height: fit-content;
 }
 
+.ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
 .fill {
   height: 100%;
 }

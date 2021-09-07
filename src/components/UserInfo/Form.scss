@@ -9,6 +9,7 @@
     align-items: center;
     justify-content: center;
     padding: 1rem;
+    width: 18.8rem;
     background: var(--faded-leather);
     box-shadow: none;
 
@@ -23,7 +24,7 @@
 
     #avatar {
       height: auto;
-      width: 80%;
+      width: 15.2rem;
     }
   }
 
@@ -105,8 +106,19 @@
   }
 
   &:not(.read-only) *:required + label::after {
-    content: '*';
+    content: "*";
     color: var(--internationl-orange-engineering);
+  }
+}
+
+@media (max-width: 1635px) {
+  #user-info-form {
+    #avatar-cell {
+      width: 100%;
+      #avatar {
+        width: 80%;
+      }
+    }
   }
 }
 

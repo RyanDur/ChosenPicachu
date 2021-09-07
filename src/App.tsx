@@ -18,7 +18,7 @@ export enum Paths {
 export const App = () => {
     return <>
         <header id="app-header" data-testid="header">
-            <h1 className="title">
+            <h1 className="title ellipsis">
                 <Switch>
                     <Route path={Paths.home} exact>Home</Route>
                     <Route path={Paths.about} exact>About</Route>
