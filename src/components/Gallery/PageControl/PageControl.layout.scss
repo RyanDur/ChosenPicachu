@@ -1,3 +1,5 @@
+@import "../../../styles/varabiles";
+
 #page-control {
   display: grid;
   grid-gap: var(--base);
@@ -32,7 +34,7 @@
   }
 }
 
-@media (max-width: 832px) {
+@media (max-width: $mobile) {
   #page-control {
     grid-template-rows: repeat(2, var(--base-x-8));
     grid-template-columns: 1fr 1fr;

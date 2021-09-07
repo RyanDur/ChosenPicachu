@@ -1,5 +1,5 @@
 @import "FancyFormElements/fancy";
-
+@import "../../styles/varabiles";
 #user-info-form {
   width: 100%;
 
@@ -9,7 +9,7 @@
     align-items: center;
     justify-content: center;
     padding: 1rem;
-    width: 18.8rem;
+    width: 20rem;
     background: var(--faded-leather);
     box-shadow: none;
 
@@ -111,7 +111,7 @@
   }
 }
 
-@media (max-width: 1635px) {
+@media (max-width: $tablet) {
   #user-info-form {
     #avatar-cell {
       width: 100%;
@@ -122,7 +122,7 @@
   }
 }
 
-@media (max-width: 832px) {
+@media (max-width: $mobile) {
   #user-info-form {
     #dob {
       width: 50%;

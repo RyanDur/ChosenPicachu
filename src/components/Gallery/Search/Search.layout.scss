@@ -1,3 +1,5 @@
+@import "../../../styles/varabiles";
+
 .search {
   display: grid;
   column-gap: var(--base);
@@ -24,7 +26,7 @@
   }
 }
 
-@media (max-width: 832px) {
+@media (max-width: $mobile) {
   .search {
     display: grid;
     column-gap: unset;

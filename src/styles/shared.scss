@@ -1,3 +1,5 @@
+@import "varabiles";
+
 .card {
   width: 100%;
   background: var(--paper);
@@ -47,7 +49,7 @@
   padding: var(--base-x-4);
 }
 
-@media (max-width: 832px) {
+@media (max-width: $mobile) {
   .card {
     padding: var(--base-x-2) var(--base-x-0_5);
   }

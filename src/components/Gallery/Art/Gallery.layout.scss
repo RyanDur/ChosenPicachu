@@ -1,3 +1,5 @@
+@import "../../../styles/varabiles";
+
 #art-gallery {
   display: grid;
   gap: 4rem;
@@ -12,7 +14,7 @@
   }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: $tablet) {
   #art-gallery {
     grid-template-columns: repeat(2, 1fr);
     grid-template-areas:
@@ -23,7 +25,7 @@
   }
 }
 
-@media (max-width: 832px) {
+@media (max-width: $mobile) {
   #art-gallery {
     grid-template-columns: 1fr;
     grid-template-areas:

@@ -1,3 +1,5 @@
+@import "../../../styles/varabiles";
+
 #page-control {
   width: 100%;
   background-color: var(--void);
@@ -48,14 +50,14 @@
   }
 }
 
-@media (max-width: 1366px) {
+@media (max-width: $tablet) {
   #page-control {
     position: sticky;
     bottom: 0;
   }
 }
 
-@media (max-width: 832px) {
+@media (max-width: $mobile) {
   #page-control {
     display: flex;
     .control {

@@ -1,3 +1,7 @@
+#user-info {
+  max-width: 138rem;
+}
+
 .users {
   &.card {
     background: var(--paper);
@@ -26,7 +30,11 @@
         outline: none;
         position: relative;
         background: var(--paper);
-        background-image: radial-gradient(circle, black 0.2rem, transparent 0.1rem);
+        background-image: radial-gradient(
+          circle,
+          black 0.2rem,
+          transparent 0.1rem
+        );
         background-size: 100% 33.33%;
 
         &:hover,

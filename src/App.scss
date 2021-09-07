@@ -1,3 +1,5 @@
+@import "styles/varabiles";
+
 #root {
   display: block;
   min-height: 100vh;
@@ -96,7 +98,7 @@
   bottom: 0;
 }
 
-@media (max-width: 1366px) {
+@media (max-width: $tablet) {
   #root {
     #app-header {
       padding-left: var(--base-x-5);
@@ -112,7 +114,7 @@
   }
 }
 
-@media (max-width: 832px) {
+@media (max-width: $mobile) {
   #root {
     #app-header {
       padding: 0 2rem;
