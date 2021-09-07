@@ -8,10 +8,7 @@
     background-color: var(--paper);
 
     .title {
-      text-overflow: ellipsis;
       width: 100%;
-      overflow: hidden;
-      white-space: nowrap;
     }
   }
   #side-nav {

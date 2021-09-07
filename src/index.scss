@@ -13,6 +13,12 @@ body {
   color: var(--void);
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 input,
 select,
 textarea {
@@ -28,7 +34,8 @@ h2,
 h3,
 h4,
 h5,
-h6 {
+h6,
+figure {
   margin: 0;
 }
 
@@ -59,16 +66,6 @@ a {
   &:focus {
     outline: none;
   }
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-figure {
-  margin: 0;
 }
 
 :root {

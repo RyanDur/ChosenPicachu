@@ -34,6 +34,7 @@
 
   #avatar-cell {
     grid-area: avatar;
+    justify-self: flex-end;
   }
 
   #home-address-title {
@@ -74,7 +75,7 @@
   }
 }
 
-@media (max-width: 1505px) {
+@media (max-width: 1635px) {
   #user-info-form {
     grid-template-columns: repeat(3, 1fr);
     grid-template-areas:

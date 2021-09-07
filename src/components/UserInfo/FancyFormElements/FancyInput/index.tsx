@@ -52,5 +52,5 @@ export const FancyInput: FC<FancyTextInputProps> = (
            value={value instanceof Date ? toISOWithoutTime(value) : value}
            type={type}
            onChange={onChange}/>
-    <label id={labelId} className={join('fancy-title', labelClass)} htmlFor={inputId}>{children}</label>
+    <label id={labelId} className={join('fancy-title', 'ellipsis', labelClass)} htmlFor={inputId}>{children}</label>
 </article>;
