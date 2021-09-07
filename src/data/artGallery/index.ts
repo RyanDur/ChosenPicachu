@@ -7,7 +7,7 @@ import {
     GetArt,
     SearchArt,
     SearchOptions,
-    SearchResponse,
+    ArtSearchResponse,
     Source
 } from './types';
 import {AICAllArtSchema, AICArtSchema, AICSearchSchema} from './aic/types';
@@ -29,7 +29,7 @@ const searchForArt = (
     dispatch(loading());
     http({url: URI.createSearchFrom(search, source)})
         .onFailure(() => dispatch(error()))
-        .map((response: SearchResponse): Maybe<SearchOptions> => {
+        .map((response: ArtSearchResponse): Maybe<SearchOptions> => {
             switch (source) {
                 case Source.AIC:
                     return maybe.of(AICSearchSchema.decode(response)).map(aicSearchToSearch);
