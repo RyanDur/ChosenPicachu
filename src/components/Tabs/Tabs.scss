@@ -10,12 +10,11 @@
   .tab {
     margin-right: var(--base);
     background-color: var(--paper);
-    width: fit-content;
     display: flex;
+    width: 100%;
     flex-direction: column;
     justify-content: center;
     box-shadow: inset 0 -0.8rem 0 var(--void);
-    overflow: auto;
 
     &:last-of-type {
       margin-right: 0;
@@ -34,8 +33,7 @@
 @media (max-width: 832px) {
   .tabs {
     .tab {
-      font-size: var(--base-x-1_5);
-      padding: 0 var(--base);
+      font-size: var(--base-x-2);
     }
   }
 }
