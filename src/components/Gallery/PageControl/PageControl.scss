@@ -19,6 +19,7 @@
       padding-left: var(--base-x-2);
     }
 
+    &:hover + .title,
     &:focus + .title {
       background-color: var(--mint);
     }
