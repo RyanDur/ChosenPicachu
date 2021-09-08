@@ -1,9 +1,9 @@
-import {shapeOfAICResponse, shapeOfHarvardResponse, URI} from '../artGallery/URI';
 import * as faker from 'faker';
-import {toQueryString} from '../../util/URL';
-import {aicDomain, defaultSearchLimit, harvardAPIKey, harvardDomain, rijksAPIKey, rijksDomain} from '../../config';
+import {aicDomain, defaultSearchLimit, harvardAPIKey, harvardDomain, rijksAPIKey, rijksDomain} from '../../../config';
 import {nanoid} from 'nanoid';
-import {Source} from '../artGallery/types';
+import {shapeOfAICResponse, shapeOfHarvardResponse, URI} from '../URI';
+import {toQueryString} from '../../../util/URL';
+import {Source} from '../types';
 
 const mockHarvardDomain = jest.fn();
 const mockAICDomain = jest.fn();
@@ -11,7 +11,7 @@ const mockHarvardAPIKey = jest.fn();
 const mockRijksDomain = jest.fn();
 const mockRijksAPIKey = jest.fn();
 
-jest.mock('../../config', () => ({
+jest.mock('../../../config', () => ({
     get aicDomain() {
         return mockAICDomain();
     },
