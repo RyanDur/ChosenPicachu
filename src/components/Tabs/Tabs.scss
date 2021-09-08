@@ -35,10 +35,15 @@
   }
 }
 
-@media (max-width: 832px) {
+@media (max-width: $mobile) {
   .tabs {
     .tab {
       font-size: var(--base-x-2);
+      padding: 0 var(--base);
+
+      .path {
+        padding: 0 var(--base);
+      }
     }
   }
 }
