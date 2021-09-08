@@ -22,6 +22,7 @@
     width: 100%;
   }
 
+  #query:hover ~ #query-label,
   #query:focus ~ #query-label {
     background-color: var(--mint);
   }
