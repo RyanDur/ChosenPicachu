@@ -22,6 +22,10 @@
     width: 100%;
   }
 
+  #query:focus ~ #query-label {
+    background-color: var(--mint);
+  }
+
   .submit-query {
     background-image: url("https://img.icons8.com/ios/50/000000/search--v1.png");
   }

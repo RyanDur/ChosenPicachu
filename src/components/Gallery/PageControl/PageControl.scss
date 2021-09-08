@@ -9,15 +9,19 @@
     border: 0;
     border-radius: 0;
 
+    & + .title {
+      width: 100%;
+      background-color: var(--paper);
+      display: block;
+    }
+
     &.input {
       padding-left: var(--base-x-2);
     }
-  }
 
-  .title {
-    width: 100%;
-    background-color: var(--paper);
-    display: block;
+    &:focus + .title {
+      background-color: var(--mint);
+    }
   }
 
   #per-page-label,
