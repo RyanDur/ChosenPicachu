@@ -43,9 +43,9 @@ export const Search: FC<Props> = ({id}) => {
     const handleReset = () => updateQueryString({search: undefined});
 
     return <form id={id} className="search" onSubmit={handleSubmit} onReset={handleReset} data-testid="search">
-        <label id="query-label" htmlFor="query">Search For {decodeURI(search || '')}</label>
         <input autoComplete="off" list="search-options" id="query"
                onInput={event => updateQuery(event.currentTarget.value)}/>
+        <label id="query-label" htmlFor="query">Search For {decodeURI(search || '')}</label>
         <button className='reset-query' data-testid="reset-query" type="reset" aria-label="reset search"/>
         <button className='submit-query' data-testid="submit-query" type="submit" aria-label="submit search"/>
         <datalist id="search-options" data-testid="search-options">
