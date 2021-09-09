@@ -1,4 +1,5 @@
 import {Consumer} from '@ryandur/sand';
+import {ArtRequestError} from './artGallery/actions';
 
 export interface Indexable {
     readonly [x: string]: string | undefined;
@@ -20,7 +21,9 @@ export type Loaded<T> = Action<AsyncState.LOADED> & {
 };
 export type Loading = Action<AsyncState.LOADING>;
 
-export type Error = Action<AsyncState.ERROR>;
+export type Error<E> = Action<AsyncState.ERROR> & {
+    reason?: E;
+};
 
 export enum HTTPMethod {
     GET = 'GET',
@@ -34,3 +37,5 @@ export enum HTTPError {
     UNKNOWN = 'UNKNOWN',
     SERVER_ERROR = 'SERVER_ERROR',
 }
+
+export type AppError = HTTPError | ArtRequestError;

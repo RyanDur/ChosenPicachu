@@ -1,8 +1,8 @@
 import {toQueryString} from '../../util/URL';
 import {
     aicDomain,
-    defaultSearchLimit,
     defaultRecordLimit,
+    defaultSearchLimit,
     harvardAPIKey,
     harvardDomain,
     rijksAPIKey,

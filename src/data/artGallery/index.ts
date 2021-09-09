@@ -3,24 +3,26 @@ import {
     AllArtResponse,
     Art,
     ArtResponse,
+    ArtSearchResponse,
     GetAllArt,
     GetArt,
     SearchArt,
     SearchOptions,
-    ArtSearchResponse,
     Source
 } from './types';
 import {AICAllArtSchema, AICArtSchema, AICSearchSchema} from './aic/types';
 import {HarvardAllArtSchema, HarvardArtSchema, HarvardSearchSchema} from './harvard/types';
-import {RIJKAllArtSchema, RIJKSSearchSchema, RIJKArtSchema} from './rijks/types';
-import {maybe, Maybe} from '@ryandur/sand';
+import {RIJKAllArtSchema, RIJKArtSchema, RIJKSSearchSchema} from './rijks/types';
+import {asyncResult, maybe, Result} from '@ryandur/sand';
 import {aicArtToArt, aicSearchToSearch, aicToAllArt} from './aic';
 import {harvardArtToArt, harvardToAllArt, harverdSearchToSearch} from './harvard';
 import {rijkArtToArt, rijksSearchToSearch, rijkToAllArt} from './rijks';
-import {error, GetAllArtAction, GetArtAction, loaded, loading, SearchArtAction} from './actions';
+import {ArtRequestError, error, GetAllArtAction, GetArtAction, loaded, loading, SearchArtAction} from './actions';
 import {http} from '../http';
 import {URI} from './URI';
 import {Dispatch} from '../types';
+
+const {success, failure} = asyncResult;
 
 const searchForArt = (
     {search, source}: SearchArt,
@@ -28,21 +30,28 @@ const searchForArt = (
 ): void => {
     dispatch(loading());
     http({url: URI.createSearchFrom(search, source)})
-        .onFailure(() => dispatch(error()))
-        .map((response: ArtSearchResponse): Maybe<SearchOptions> => {
+        .flatMap((response: ArtSearchResponse): Result.Async<SearchOptions, any> => {
             switch (source) {
                 case Source.AIC:
-                    return maybe.of(AICSearchSchema.decode(response)).map(aicSearchToSearch);
+                    return maybe.of(AICSearchSchema.decode(response))
+                        .map(verified => success<SearchOptions, ArtRequestError>(aicSearchToSearch(verified)))
+                        .orElse(failure<SearchOptions, ArtRequestError>(ArtRequestError.CANNOT_DESERIALIZE));
                 case Source.HARVARD:
-                    return maybe.of(HarvardSearchSchema.decode(response)).map(harverdSearchToSearch);
+                    return maybe.of(HarvardSearchSchema.decode(response))
+                        .map(verified => success<SearchOptions, ArtRequestError>(harverdSearchToSearch(verified)))
+                        .orElse(failure<SearchOptions, ArtRequestError>(ArtRequestError.CANNOT_DESERIALIZE));
                 case Source.RIJKS:
-                    return maybe.of(RIJKSSearchSchema.decode(response)).map(rijksSearchToSearch);
+                    return maybe.of(RIJKSSearchSchema.decode(response))
+                        .map(verified => success<SearchOptions, ArtRequestError>(rijksSearchToSearch(verified)))
+                        .orElse(failure<SearchOptions, ArtRequestError>(ArtRequestError.CANNOT_DESERIALIZE));
                 default:
-                    return maybe.none();
+                    return failure<SearchOptions, ArtRequestError>(ArtRequestError.UNKNOWN_SOURCE);
             }
         })
-        .map(options => options.map<SearchArtAction>(loaded).orElse(error()))
-        .onSuccess(dispatch);
+        .onComplete(result => {
+            if (result.isOk) dispatch(loaded(result.data));
+            else dispatch(error(result.explanation));
+        });
 };
 
 const getAllArt = (
@@ -51,21 +60,28 @@ const getAllArt = (
 ): void => {
     dispatch(loading());
     http({url: URI.from({source, params: {page, search, limit: size}})})
-        .onFailure(() => dispatch(error()))
-        .map((response: AllArtResponse): Maybe<AllArt> => {
+        .flatMap((response: AllArtResponse): Result.Async<AllArt, any> => {
             switch (source) {
                 case Source.AIC:
-                    return maybe.of(AICAllArtSchema.decode(response)).map(aicToAllArt);
+                    return maybe.of(AICAllArtSchema.decode(response))
+                        .map(verified => success<AllArt, ArtRequestError>(aicToAllArt(verified)))
+                        .orElse(failure<AllArt, ArtRequestError>(ArtRequestError.CANNOT_DESERIALIZE));
                 case Source.HARVARD:
-                    return maybe.of(HarvardAllArtSchema.decode(response)).map(harvardToAllArt);
+                    return maybe.of(HarvardAllArtSchema.decode(response))
+                        .map(verified => success<AllArt, ArtRequestError>(harvardToAllArt(verified)))
+                        .orElse(failure<AllArt, ArtRequestError>(ArtRequestError.CANNOT_DESERIALIZE));
                 case Source.RIJKS:
-                    return maybe.of(RIJKAllArtSchema.decode(response)).map(rijkToAllArt(page));
+                    return maybe.of(RIJKAllArtSchema.decode(response))
+                        .map(verified => success<AllArt, ArtRequestError>(rijkToAllArt(page, verified)))
+                        .orElse(failure<AllArt, ArtRequestError>(ArtRequestError.CANNOT_DESERIALIZE));
                 default:
-                    return maybe.none();
+                    return failure<AllArt, ArtRequestError>(ArtRequestError.UNKNOWN_SOURCE);
             }
         })
-        .map(allArt => allArt.map<GetAllArtAction>(loaded).orElse(error()))
-        .onSuccess(dispatch);
+        .onComplete(result => {
+            if (result.isOk) dispatch(loaded(result.data));
+            else dispatch(error(result.explanation));
+        });
 };
 
 const getArt = (
@@ -74,21 +90,28 @@ const getArt = (
 ): void => {
     dispatch(loading());
     http({url: URI.from({source: source, path: `/${id}`})})
-        .onFailure(() => dispatch(error()))
-        .map((response: ArtResponse): Maybe<Art> => {
+        .flatMap((response: ArtResponse): Result.Async<Art, any> => {
             switch (source) {
                 case Source.AIC:
-                    return maybe.of(AICArtSchema.decode(response)).map(aicArtToArt);
+                    return maybe.of(AICArtSchema.decode(response))
+                        .map(verified => success<Art, ArtRequestError>(aicArtToArt(verified)))
+                        .orElse(failure<Art, ArtRequestError>(ArtRequestError.CANNOT_DESERIALIZE));
                 case Source.HARVARD:
-                    return maybe.of(HarvardArtSchema.decode(response)).map(harvardArtToArt);
+                    return maybe.of(HarvardArtSchema.decode(response))
+                        .map(verified => success<Art, ArtRequestError>(harvardArtToArt(verified)))
+                        .orElse(failure<Art, ArtRequestError>(ArtRequestError.CANNOT_DESERIALIZE));
                 case Source.RIJKS:
-                    return maybe.of(RIJKArtSchema.decode(response)).map(rijkArtToArt);
+                    return maybe.of(RIJKArtSchema.decode(response))
+                        .map(verified => success<Art, ArtRequestError>(rijkArtToArt(verified)))
+                        .orElse(failure<Art, ArtRequestError>(ArtRequestError.CANNOT_DESERIALIZE));
                 default:
-                    return maybe.none();
+                    return failure<Art, ArtRequestError>(ArtRequestError.UNKNOWN_SOURCE);
             }
         })
-        .map(art => art.map<GetArtAction>(loaded).orElse(error()))
-        .onSuccess(dispatch);
+        .onComplete(result => {
+            if (result.isOk) dispatch(loaded(result.data));
+            else dispatch(error(result.explanation));
+        });
 };
 
 export const artGallery = {
