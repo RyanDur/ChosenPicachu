@@ -21,8 +21,8 @@ export const http = ({
             case 204:
                 return success(undefined);
             case 403:
-                return failure<unknown, HTTPError>(HTTPError.FORBIDDEN);
+                return failure<Response, HTTPError>(HTTPError.FORBIDDEN);
             default:
-                return failure<unknown, HTTPError>(HTTPError.UNKNOWN);
+                return failure<Response, HTTPError>(HTTPError.UNKNOWN);
         }
     });
