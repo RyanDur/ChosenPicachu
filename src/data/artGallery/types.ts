@@ -56,4 +56,5 @@ export interface GetArt {
 export type AllArtResponse = AICAllArt | HarvardAllArt | RIJKAllArt;
 export type ArtResponse = AICArt | HarvardArt | RIJKArt;
 export type ArtSearchResponse = AICSearchResponse | HarvardSearchResponse | RIJSearchOptions;
+export type GalleryResponse = AllArtResponse | ArtResponse | ArtSearchResponse;
 export type Gallery = Pagination | AllArt | Art | SearchOptions;
