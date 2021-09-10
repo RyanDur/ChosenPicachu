@@ -16,7 +16,7 @@ import {
     rijkArtObjectResponse
 } from '../../../__tests__/util';
 import {nanoid} from 'nanoid';
-import {ArtRequestError, error, loaded, loading} from '../actions';
+import {error, loaded, loading} from '../actions';
 import {http} from '../../http';
 import {waitFor} from '@testing-library/react';
 import {asyncResult} from '@ryandur/sand';
@@ -141,7 +141,7 @@ describe('data', () => {
             artGallery.getAllArt({page: 1, size: 12, source: 'I do not exist' as Source}, dispatch);
 
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error(ArtRequestError.UNKNOWN_SOURCE)));
+            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error(HTTPError.UNKNOWN_SOURCE)));
         });
 
         test.each`
@@ -155,7 +155,7 @@ describe('data', () => {
 
             artGallery.getAllArt({page: 1, size: 12, source}, dispatch);
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error(ArtRequestError.CANNOT_DESERIALIZE)));
+            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error(HTTPError.CANNOT_DESERIALIZE)));
         });
 
         test.each`
@@ -251,7 +251,7 @@ describe('data', () => {
             artGallery.getArt({id: '1', source: 'I do not exist' as Source}, dispatch);
 
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error(ArtRequestError.UNKNOWN_SOURCE)));
+            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error(HTTPError.UNKNOWN_SOURCE)));
         });
 
         test.each`
@@ -265,7 +265,7 @@ describe('data', () => {
 
             artGallery.getArt({id: '1', source}, dispatch);
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error(ArtRequestError.CANNOT_DESERIALIZE)));
+            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error(HTTPError.CANNOT_DESERIALIZE)));
         });
 
         test.each`
@@ -330,7 +330,7 @@ describe('data', () => {
             artGallery.searchForArt({search, source: 'I do not exist' as Source}, dispatch);
 
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error(ArtRequestError.UNKNOWN_SOURCE)));
+            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error(HTTPError.UNKNOWN_SOURCE)));
         });
 
         test.each`
@@ -344,7 +344,7 @@ describe('data', () => {
 
             artGallery.searchForArt({search, source}, dispatch);
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error(ArtRequestError.CANNOT_DESERIALIZE)));
+            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error(HTTPError.CANNOT_DESERIALIZE)));
         });
 
         test.each`
