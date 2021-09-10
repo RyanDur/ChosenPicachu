@@ -1,6 +1,7 @@
 import {AICAllArt, AICArt, AICSearchResponse} from './aic/types';
 import {HarvardAllArt, HarvardArt, HarvardSearchResponse} from './harvard/types';
 import {RIJKAllArt, RIJKArt, RIJSearchOptions} from './rijks/types';
+import {Error, HTTPError, Loaded, Loading} from '../types';
 
 export enum Source {
     AIC = 'aic',
@@ -53,8 +54,11 @@ export interface GetArt {
     source: Source;
 }
 
+export type GetArtAction = Loading | Loaded<Art> | Error<HTTPError>;
+export type GetAllArtAction = Loading | Loaded<AllArt> | Error<HTTPError>;
+export type SearchArtAction = Loading | Loaded<SearchOptions> | Error<HTTPError>;
+
 export type AllArtResponse = AICAllArt | HarvardAllArt | RIJKAllArt;
-export type ArtResponse = AICArt | HarvardArt | RIJKArt;
+export type ArtResponse = AICArt | HarvardArt | RIJKArt | undefined;
 export type ArtSearchResponse = AICSearchResponse | HarvardSearchResponse | RIJSearchOptions;
-export type GalleryResponse = AllArtResponse | ArtResponse | ArtSearchResponse;
-export type Gallery = Pagination | AllArt | Art | SearchOptions;
+export type Gallery = AllArt | Art | SearchOptions;

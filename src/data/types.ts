@@ -1,5 +1,4 @@
 import {Consumer} from '@ryandur/sand';
-import {ArtRequestError} from './artGallery/actions';
 
 export interface Indexable {
     readonly [x: string]: string | undefined;
@@ -36,6 +35,6 @@ export enum HTTPError {
     FORBIDDEN = 'FORBIDDEN',
     UNKNOWN = 'UNKNOWN',
     SERVER_ERROR = 'SERVER_ERROR',
+    CANNOT_DESERIALIZE = 'CANNOT_DESERIALIZE',
+    UNKNOWN_SOURCE = 'UNKNOWN_SOURCE'
 }
-
-export type AppError = HTTPError | ArtRequestError;
