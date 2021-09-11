@@ -5,8 +5,7 @@ import {Loading} from '../../Loading';
 import {Image} from '../Image';
 import {useGallery} from '../Context';
 import {AsyncState} from '../../../data/types';
-import {GetAllArtAction} from '../../../data/artGallery/actions';
-import {toSource} from '../../../data/artGallery/types';
+import {GetAllArtAction, toSource} from '../../../data/artGallery/types';
 import './Gallery.scss';
 import './Gallery.layout.scss';
 

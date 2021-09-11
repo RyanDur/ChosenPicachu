@@ -5,9 +5,8 @@ import {Loading} from '../../Loading';
 import {ArtPieceContext, useArtPiece, useArtPieceContext} from './Context';
 import {Image} from '../Image';
 import {AsyncState} from '../../../data/types';
-import {GetArtAction} from '../../../data/artGallery/actions';
 import {useQuery} from '../../hooks';
-import {Source} from '../../../data/artGallery/types';
+import {GetArtAction, Source} from '../../../data/artGallery/types';
 import './Piece.scss';
 
 const ArtPiece = () => {
