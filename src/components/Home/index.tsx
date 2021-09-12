@@ -1,11 +1,6 @@
-import {Table} from '../Table';
+import {OldTable as Table} from '../Table';
 import {columns, rows} from '../../__tests__/util';
 import './Home.scss';
 
 export const Home = () =>
-    <Table tableClassName="fancy-table home-table"
-           theadClassName="header"
-           trClassName="row"
-           tbodyClassName="body"
-           cellClassName="cell"
-           columns={columns} rows={rows}/>;
+    <Table columns={columns} rows={rows}/>;

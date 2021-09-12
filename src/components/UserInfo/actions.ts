@@ -18,7 +18,7 @@ export const updateFirstName = (firstName: string): UpdateFirstName => ({
 });
 export const updateLastName = (lastName: string): UpdateLastName => ({type: FormActions.UPDATE_LAST_NAME, lastName});
 export const updateEmail = (email: string): UpdateEmail => ({type: FormActions.UPDATE_EMAIL, email});
-export const updateDOB = (dob: Date): UpdateDob => ({type: FormActions.UPDATE_DATE_OF_BIRTH, dob});
+export const updateDOB = (dob?: Date): UpdateDob => ({type: FormActions.UPDATE_DATE_OF_BIRTH, dob});
 export const updateHomeAddress = (homeAddress: AddressInfo): UpdateHomeAddress => ({
     type: FormActions.UPDATE_HOME_ADDRESS,
     homeAddress

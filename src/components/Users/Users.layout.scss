@@ -1,15 +1,21 @@
 #user-info {
   display: flex;
   flex-direction: column;
+  margin: 0 0 var(--base);
 
   .title {
     align-self: flex-end;
   }
 }
 
+.users {
+  padding: var(--base-x-2);
+  width: 100%;
+}
+
 #user-candidates {
   width: 100%;
-  display: inline-grid;
+  display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: var(--base-x-2);
   row-gap: 4rem;
@@ -18,7 +24,7 @@
     "title button"
     "table table";
 
-  #title {
+  .title {
     grid-area: title;
     align-self: center;
   }
@@ -26,9 +32,16 @@
   #add-new-user {
     grid-area: button;
     justify-self: flex-end;
+    align-self: center;
   }
 
   #users-table {
     grid-area: table;
+  }
+
+  .last-column {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 }

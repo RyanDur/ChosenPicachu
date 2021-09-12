@@ -1,60 +1,38 @@
 import {Column, Row} from './types';
 import {FC} from 'react';
-import {join} from '../util';
-import './Table.css';
+import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from '@material-ui/core';
 
 export interface TableProps {
     columns: Column[];
     rows: Row[];
     id?: string;
-    tableClassName?: string;
-    theadClassName?: string;
-    tbodyClassName?: string;
-    trClassName?: string;
-    thClassName?: string;
-    tdClassName?: string;
-    headerRowClassName?: string;
-    rowClassName?: string;
-    cellClassName?: string;
 }
 
-export const Table: FC<TableProps> = (
+export const OldTable: FC<TableProps> = (
     {
         columns,
         rows,
-        id,
-        tableClassName,
-        theadClassName,
-        tbodyClassName,
-        trClassName,
-        thClassName,
-        tdClassName,
-        headerRowClassName,
-        rowClassName,
-        cellClassName
+        id
     }
-) => <table id={id} className={tableClassName} data-testid="table">
-    <thead className={theadClassName} data-testid="thead">
-    <tr className={join(
-        trClassName,
-        headerRowClassName
-    )} data-testid="tr">{columns.map(({display, column, className}) =>
-        <th className={join(thClassName, cellClassName, className)}
-            key={column}
-            scope="col"
-            data-testid="th">
-            {display}
-        </th>
-    )}</tr>
-    </thead>
-    <tbody className={tbodyClassName} data-testid="tbody">{rows.map((row, rowNumber) =>
-        <tr className={join(trClassName, rowClassName)} key={rowNumber} data-testid="tr">
-            {columns.map(({column}, columnNumber) => {
-                const cell = row[column];
-                return <td className={join(tdClassName, cellClassName, cell.className)} key={columnNumber}
-                           data-testid={`cell-${columnNumber}-${rowNumber}`}>
-                    {cell.display}
-                </td>;
-            })}</tr>
-    )}</tbody>
-</table>;
+) => <TableContainer component={Paper} id={id}>
+    <Table data-testid="table">
+        <TableHead data-testid="thead">
+        <TableRow data-testid="tr">{columns.map(({display, column}) =>
+            <TableCell key={column}
+                scope="col"
+                data-testid="th">
+                {display}
+            </TableCell>
+        )}</TableRow>
+        </TableHead>
+        <TableBody data-testid="tbody">{rows.map((row, rowNumber) =>
+            <TableRow key={rowNumber} data-testid="tr">
+                {columns.map(({column}, columnNumber) => {
+                    const cell = row[column];
+                    return <TableCell key={columnNumber} data-testid={`cell-${columnNumber}-${rowNumber}`}>
+                        {cell.display}
+                    </TableCell>;
+                })}</TableRow>
+        )}</TableBody>
+    </Table>
+</TableContainer>;

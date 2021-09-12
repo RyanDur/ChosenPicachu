@@ -22,7 +22,7 @@ import {Paths} from '../../App';
 import {FancyDateInput} from './FancyFormElements/FancyDateInput';
 import {Consumer} from '@ryandur/sand';
 import './Form.layout.scss';
-import './Form.scss';
+import {Avatar, Button} from '@material-ui/core';
 
 interface FormProps {
     currentUserInfo?: UserInfo;
@@ -70,32 +70,32 @@ export const UserInformation: FC<FormProps> = (
         <h3 id="name-title">User</h3>
         <FancyInput id="first-name-cell" inputId="first-name" required
                     value={userInfo.user.firstName} readOnly={readOnly} autoFocus
-                    onChange={event => dispatch(updateFirstName(event.currentTarget.value))}>
+                    onChange={event => dispatch(updateFirstName(event.currentTarget.value as string))}>
             First Name
         </FancyInput>
         <FancyInput id="last-name-cell" inputId="last-name" required
                     value={userInfo.user.lastName} readOnly={readOnly}
-                    onChange={event => dispatch(updateLastName(event.currentTarget.value))}>
+                    onChange={event => dispatch(updateLastName(event.currentTarget.value as string))}>
             Last Name
         </FancyInput>
         <FancyInput id="email-cell" inputId="email" value={userInfo.user.email}
                     type="email" readOnly={readOnly}
-                    onChange={event => dispatch(updateEmail(event.currentTarget.value))}>
+                    onChange={event => dispatch(updateEmail(event.currentTarget.value as string))}>
             Email
         </FancyInput>
         <FancyDateInput id="dob-cell" inputId="dob" value={userInfo.user.dob}
                         readOnly={readOnly} required
-                        onChange={event => dispatch(updateDOB(new Date(event.currentTarget.value)))}>
+                        onChange={date => dispatch(updateDOB(date || undefined))}>
             Date Of Birth
         </FancyDateInput>
 
-        <article tabIndex={0} id="avatar-cell"
-                 className={join('card', readOnly && 'read-only')}
-                 data-testid="avatar-cell"
-                 onKeyPress={event => event.preventDefault()}
-                 onClick={() => readOnly || dispatch(updateAvatar(generateAvatar()))}>
-            <img id="avatar" src={userInfo.avatar} loading="lazy" alt="avatar"/>
-        </article>
+        <Avatar tabIndex={0} id="avatar-cell"
+                className={join('card', readOnly && 'read-only')}
+                data-testid="avatar-cell"
+                onKeyPress={event => event.preventDefault()}
+                src={userInfo.avatar}
+                alt="avatar"
+                onClick={() => readOnly || dispatch(updateAvatar(generateAvatar()))}/>
 
         <h3 id="home-address-title">Home Address</h3>
         <Address id="home-address" value={userInfo.homeAddress} readOnly={readOnly} required
@@ -111,16 +111,16 @@ export const UserInformation: FC<FormProps> = (
                  onChange={address => dispatch(updateWorkAddress(address))}/>
 
         <FancyTextarea value={userInfo.details} readOnly={readOnly}
-                       onChange={event => dispatch(updateDetails(event.currentTarget.value))}/>
+                       onChange={event => dispatch(updateDetails(event.currentTarget.value as string))}/>
 
-        {!readOnly && <button id="reset-form" type="reset" disabled={readOnly} className="secondary">Reset</button>}
-        {readOnly && <Link id="reset-form" to={`${Paths.users}?email=${userInfo.user.email}&mode=edit`}
-                           className="button secondary">Edit</Link>}
+        {!readOnly && <Button id="reset-form" type="reset" disabled={readOnly} color="default" variant="contained">Reset</Button>}
+        {readOnly && <Button component={Link}  id="reset-form" to={`${Paths.users}?email=${userInfo.user.email}&mode=edit`}
+                           color="secondary" variant="contained">Edit</Button>}
         {!editing && !readOnly &&
-        <button id="submit" type="submit" disabled={readOnly} className="primary">Add</button>}
-        {editing && <Link id="cancel" to={`${Paths.users}?email=${userInfo.user.email}&mode=view`}
-                          className="button secondary" onClick={reset}>Cancel</Link>}
-        {editing && <button id="submit" type="submit" className="primary">Update</button>}
+        <Button id="submit" type="submit" disabled={readOnly} color="primary" variant="contained">Add</Button>}
+        {editing && <Button component={Link} id="cancel" to={`${Paths.users}?email=${userInfo.user.email}&mode=view`}
+                          color="secondary" variant="contained" onClick={reset}>Cancel</Button>}
+        {editing && <Button id="submit" type="submit" color="primary" variant="contained">Update</Button>}
 
     </form>;
 };

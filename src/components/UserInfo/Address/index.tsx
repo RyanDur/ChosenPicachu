@@ -25,17 +25,17 @@ export const Address: FC<AddressProps> = (
     }) => <article id={id} className="address">
     <FancyInput inputId={`${id}-street`} className="street"
                 required={required} disabled={disabled} value={value.streetAddress} readOnly={readOnly}
-                onChange={event => onChange({...value, streetAddress: event.currentTarget.value})}>
+                onChange={event => onChange({...value, streetAddress: event.currentTarget.value as string})}>
         Street
     </FancyInput>
     <FancyInput inputId={`${id}-street-2`} className="street-2"
                 disabled={disabled} value={value.streetAddressTwo} readOnly={readOnly}
-                onChange={event => onChange({...value, streetAddressTwo: event.currentTarget.value})}>
+                onChange={event => onChange({...value, streetAddressTwo: event.currentTarget.value as string})}>
         Street Line 2
     </FancyInput>
     <FancyInput inputId={`${id}-city`} className="city"
                 required={required} disabled={disabled} value={value.city} readOnly={readOnly}
-                onChange={event => onChange({...value, city: event.currentTarget.value})}>
+                onChange={event => onChange({...value, city: event.currentTarget.value as string})}>
         City
     </FancyInput>
 
@@ -47,7 +47,7 @@ export const Address: FC<AddressProps> = (
         readOnly={readOnly}
         value={value.state}
         optionValues={new Set(states.map(({abbreviation}) => abbreviation))}
-        onChange={event => onChange({...value, state: event.currentTarget.value})}>
+        onChange={event => onChange({...value, state: event.currentTarget.value as string})}>
         State
     </FancySelect>
 
@@ -57,7 +57,7 @@ export const Address: FC<AddressProps> = (
                 value={value.zip}
                 readOnly={readOnly}
                 required={required} disabled={disabled}
-                onChange={event => onChange({...value, zip: event.currentTarget.value})}>
+                onChange={event => onChange({...value, zip: event.currentTarget.value as string})}>
         Postal / Zip code
     </FancyInput>
 </article>;

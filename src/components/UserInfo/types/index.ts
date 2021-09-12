@@ -45,7 +45,7 @@ export type UpdateEmail = Action<FormActions.UPDATE_EMAIL> & {
     email: string;
 }
 export type UpdateDob = Action<FormActions.UPDATE_DATE_OF_BIRTH> & {
-    dob: Date;
+    dob?: Date;
 }
 export type UpdateHomeAddress = Action<FormActions.UPDATE_HOME_ADDRESS> & {
     homeAddress: AddressInfo;

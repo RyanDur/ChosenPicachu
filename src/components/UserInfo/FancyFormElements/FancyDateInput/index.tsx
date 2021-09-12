@@ -1,11 +1,13 @@
-import React, {FC, FormEvent} from 'react';
-import {FancyInput} from '../FancyInput';
+import React, {FC} from 'react';
+import {DatePicker, MuiPickersUtilsProvider} from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
+import {MaterialUiPickersDate} from '@material-ui/pickers/typings/date';
 
 interface FancyDateInputProps {
     inputId: string;
     id?: string;
     required?: boolean;
-    onChange?: (event: FormEvent<HTMLInputElement>) => void;
+    onChange: (date: MaterialUiPickersDate) => void;
     className?: string;
     inputClass?: string;
     labelId?: string;
@@ -17,5 +19,19 @@ interface FancyDateInputProps {
     pattern?: string;
 }
 
-export const FancyDateInput: FC<FancyDateInputProps> = ({readOnly, ...rest}) => readOnly ?
-    <FancyInput type="text" readOnly={readOnly} {...rest}/> : <FancyInput type="date" {...rest}/>;
+export const FancyDateInput: FC<FancyDateInputProps> = ({id, inputId, disabled, readOnly, value, onChange}) => {
+    return <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <article id={id}>
+            <DatePicker
+                inputVariant={readOnly ? 'standard' : 'outlined'}
+                id={inputId}
+                placeholder="mm/dd/yyyy"
+                label="Date of Birth"
+                onChange={onChange}
+                disabled={disabled}
+                readOnly={readOnly}
+                value={value || null}/>
+        </article>
+    </MuiPickersUtilsProvider>;
+};
+

@@ -57,6 +57,7 @@
     align-items: center;
     flex-direction: column;
     justify-content: space-evenly;
+    background-color: var(--void);
 
     &.gallery-in-view {
       justify-content: space-between;

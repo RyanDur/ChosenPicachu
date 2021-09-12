@@ -4,13 +4,16 @@ import {App} from './App';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from 'react-router-dom';
 import {AppContext} from './AppContext';
+import {CssBaseline} from '@material-ui/core';
 import './index.scss';
 
 ReactDOM.render(
     <React.StrictMode>
         <BrowserRouter>
             <AppContext>
-                <App/>
+                <CssBaseline>
+                    <App/>
+                </CssBaseline>
             </AppContext>
         </BrowserRouter>
     </React.StrictMode>,

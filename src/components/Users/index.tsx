@@ -1,13 +1,14 @@
 import React, {FC, useState} from 'react';
 import {AddressInfo, UserInfo} from '../UserInfo/types';
 import {UserInformation} from '../UserInfo';
-import {Table} from '../Table';
 import {createRandomUsers} from '../../__tests__/util';
 import {Link, useHistory} from 'react-router-dom';
 import {Paths} from '../../App';
 import {age, formatAge} from '../util';
 import {useQuery} from '../hooks';
-import './Users.scss';
+import {OldTable} from '../Table';
+import {MyMenu} from '../MyMenu';
+import {Button, Card} from '@material-ui/core';
 import './Users.layout.scss';
 
 export const Users: FC = () => {
@@ -25,7 +26,7 @@ export const Users: FC = () => {
         Object.keys(address1).reduce((acc, key) => address1[key] === address2[key], Boolean());
 
     return <>
-        <section id="user-info" className="card users" key={currentUser?.user.email}>
+        <Card component="section" id="user-info" className="users" key={currentUser?.user.email}>
             <h2 className="title">User Information</h2>
             <UserInformation currentUserInfo={currentUser}
                              readOnly={mode === 'view'}
@@ -35,19 +36,14 @@ export const Users: FC = () => {
                                  currentUser && updateNewUsers([user, ...removeUserInfo(currentUser, users)]);
                                  history.push(Paths.users);
                              }}/>
-        </section>
+        </Card>
 
-        <section id="user-candidates" className="card users">
+        <Card component="section" id="user-candidates" className="card users">
             <h2 className="title">User Candidates</h2>
             {mode === 'view' &&
-            <Link to={Paths.users} id="add-new-user" className="button primary">Add New User</Link>}
-            <Table
+            <Button component={Link} to={Paths.users} id="add-new-user" color="primary" variant="contained">Add New User</Button>}
+            <OldTable
                 id="users-table"
-                tableClassName="fancy-table"
-                theadClassName="header"
-                trClassName="row"
-                tbodyClassName="body"
-                cellClassName="cell"
                 columns={[
                     {display: 'Full Name', column: 'fullName'},
                     {display: 'Home City', column: 'homeCity'},
@@ -61,42 +57,27 @@ export const Users: FC = () => {
                     worksFromHome: {
                         display: <section className="last-column">
                             {equalAddresses(userInfo.homeAddress, userInfo.workAddress) ? 'Yes' : 'No'}
-                            <article tabIndex={0} className="menu-toggle rounded-corners" onKeyPress={event => {
-                                event.preventDefault();
-                                if (event.code === 'Space') {
-                                    event.currentTarget.classList.toggle('open');
-                                }
-                            }} onBlur={event => {
-                                if (!event.currentTarget.contains(event.relatedTarget as Node)) {
-                                    event.currentTarget.classList.remove('open');
-                                }
-                            }} onClick={event => event.currentTarget.classList.remove('open')}>
-                                <nav className="menu rounded-corners">
+                            <MyMenu>
                                     <Link to={`${path}${nextQueryString({
                                         email: userInfo.user.email,
                                         mode: 'view'
                                     })}`}
-                                          className='item'
                                           data-testid="view">View</Link>
                                     <Link to={`${path}${nextQueryString({
                                         email: userInfo.user.email,
                                         mode: 'edit'
                                     })}`}
-                                          className='item'
                                           data-testid="view">Edit</Link>
                                     <Link to={email === userInfo.user.email ? path : history.location}
-                                          className='item'
                                           onClick={() => updateNewUsers(removeUserInfo(userInfo, users))}
                                           data-testid="remove">Remove</Link>
                                     <Link to={`${path}${nextQueryString({email: userInfo.user.email})}`}
-                                          className='item'
                                           data-testid="clone">Clone</Link>
-                                </nav>
-                            </article>
+                            </MyMenu>
                         </section>
                     }
                 }))}
             />
-        </section>
+        </Card>
     </>;
 };

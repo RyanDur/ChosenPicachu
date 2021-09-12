@@ -1,13 +1,13 @@
-import React, {FC, FormEvent} from 'react';
+import React, {ChangeEvent, FC} from 'react';
 import {join} from '../../../util';
-import {FancyInput} from '../FancyInput';
 import {Consumer} from '@ryandur/sand';
 import './FancySelect.css';
+import {FormControl, InputLabel, Select} from '@material-ui/core';
 
 interface FancySelectProps {
     selectId: string;
     optionValues: Set<string>;
-    onChange: Consumer<FormEvent<HTMLSelectElement>>;
+    onChange: Consumer<ChangeEvent<{ name?: string; value: unknown }>>;
     value?: string;
     id?: string;
     className?: string;
@@ -31,18 +31,23 @@ export const FancySelect: FC<FancySelectProps> = (
         disabled,
         readOnly
     }
-) => (readOnly || disabled) ? <FancyInput className={className} id={id} value={value} readOnly={readOnly} disabled={disabled} inputId={selectId}>{children}</FancyInput> :
-    <article id={id} className={join('fancy fancy-select', value && 'not-empty', className)}>
-        <select id={selectId}
-                className={join('fancy-select-box fancy-text', selectClassName)}
-                {...(value ? {value} : {defaultValue: ''})}
-                required={required}
-                disabled={disabled || readOnly}
-                data-testid={selectId}
-                onChange={onChange}>
-            {[<option key="placeholder" value="" disabled hidden/>,
-                ...Array.from(optionValues).map(state => <option key={state}>{state}</option>)
-            ]}
-        </select>
-        <label className={join('fancy-title', selectClassName)} htmlFor={selectId}>{children}</label>
-    </article>;
+) => <FormControl className={className} variant={readOnly ? 'standard' : 'outlined'}>
+    <InputLabel htmlFor={selectId}>State</InputLabel>
+    <Select className={join('fancy-select-box fancy-text', selectClassName)}
+            {...(value ? {value} : {defaultValue: ''})}
+            native
+            readOnly={readOnly}
+            required={required}
+            disabled={disabled || readOnly}
+            inputProps={{
+                name: 'state',
+                id: selectId,
+            }}
+            label="State"
+            data-testid={selectId}
+            onChange={onChange}>
+        {[<option key="placeholder" value="" disabled hidden/>,
+            ...Array.from(optionValues).map(state => <option key={state}>{state}</option>)
+        ]}
+    </Select>
+</FormControl>;

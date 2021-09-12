@@ -2,6 +2,7 @@
 
 #user-info-form {
   display: grid;
+  min-width: 100%;
   column-gap: var(--base-x-2);
   row-gap: var(--base-x-2);
   grid-template-columns: repeat(12, 1fr);
@@ -37,6 +38,8 @@
   #avatar-cell {
     grid-area: avatar;
     justify-self: flex-end;
+    width: 100%;
+    height: 100%;
   }
 
   #home-address-title {
@@ -50,6 +53,7 @@
   #same-as-home-cell {
     grid-area: same_as_home;
     justify-self: flex-end;
+    align-self: center;
   }
 
   #home-address {

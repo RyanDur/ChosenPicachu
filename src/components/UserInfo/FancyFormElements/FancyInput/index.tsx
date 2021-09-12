@@ -1,12 +1,13 @@
-import React, {FC, FormEvent} from 'react';
+import React, {ChangeEvent, FC} from 'react';
 import {join, toISOWithoutTime} from '../../../util';
+import {FormControl, Input, InputLabel} from '@material-ui/core';
 
 interface FancyTextInputProps {
     inputId: string;
     type?: string;
     id?: string;
     required?: boolean;
-    onChange?: (event: FormEvent<HTMLInputElement>) => void;
+    onChange?: (event: ChangeEvent<{ value: unknown }>) => void;
     className?: string;
     inputClass?: string;
     labelId?: string;
@@ -36,21 +37,21 @@ export const FancyInput: FC<FancyTextInputProps> = (
         pattern,
         value = ''
     }
-) => <article id={id} className={join(
-    'fancy',
-    value && 'not-empty',
-    className
-)}>
-    <input id={inputId}
-           className={join('fancy-text', inputClass)}
-           pattern={pattern}
+) => <FormControl id={id} className={className} variant={readOnly ? 'standard' : 'outlined'}>
+    <InputLabel id={labelId} className={join(labelClass)} htmlFor={inputId}>{children}</InputLabel>
+    <Input id={inputId}
+           inputComponent="input"
+           className={inputClass}
            readOnly={readOnly}
            disabled={disabled}
            required={required}
            data-testid={inputId}
            autoFocus={autoFocus}
+           inputProps={{
+               pattern
+           }}
            value={value instanceof Date ? toISOWithoutTime(value) : value}
            type={type}
-           onChange={onChange}/>
-    <label id={labelId} className={join('fancy-title', 'ellipsis', labelClass)} htmlFor={inputId}>{children}</label>
-</article>;
+           onChange={onChange}
+    />
+</FormControl>;

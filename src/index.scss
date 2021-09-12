@@ -1,71 +1,7 @@
-@import-normalize;
-
-@import "styles/button";
-@import "styles/shared";
 @import "styles/varabiles";
 
-html {
-  font-size: 62.5%;
-}
-
-body {
-  font-size: var(--base-x-2);
-  font-family: Arial, sans-serif;
-  color: var(--void);
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-input,
-select,
-textarea {
-  font-size: var(--base-x-2);
-}
-
-body,
-p,
-ul,
-li,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-figure {
-  margin: 0;
-  padding: 0;
-}
-
-ul {
-  list-style-type: none;
-}
-
-input {
-  border-radius: 0;
-}
-
-a {
-  height: 100%;
-  width: 100%;
-  text-decoration: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  &,
-  &:visited {
-    color: var(--void);
-  }
-
-  &:hover,
-  &:focus {
-    outline: none;
-  }
+#root {
+  background-color: var(--void);
 }
 
 :root {
@@ -94,32 +30,32 @@ a {
     0 1px 2px rgba(255, 255, 255, 1);
 
   /* spacing */
-  --base-x-0_5: 0.4rem;
-  --base: 0.8rem;
-  --base-x-1_5: 1.2rem;
-  --base-x-2: 1.6rem;
-  --base-x-2_5: 2rem;
-  --base-x-4: 3.2rem;
-  --base-x-5: 4rem;
-  --base-x-5_5: 4.4rem;
-  --base-x-6: 4.8rem;
-  --base-x-6_5: 5.2rem;
-  --base-x-7: 5.6rem;
-  --base-x-8: 6.4rem;
-  --base-x-9: 7.2rem;
-  --base-x-10: 8rem;
-  --base-x-10_5: 8.4rem;
-  --base-x-11: 8.8rem;
-  --base-x-11_5: 9.2rem;
-  --base-x-12: 9.6rem;
-  --base-x-12_5: 10rem;
-  --base-x-13: 10.4rem;
-  --base-x-15: 12rem;
-  --base-x-15_5: 12.4rem;
-  --base-x-16: 12.8rem;
-  --base-x-16_5: 13.2rem;
-  --base-x-20: 16rem;
-  --base-x-25: 20rem;
-  --base-x-50: 40rem;
-  --base-x-100: 80rem;
+  --base-x-0_5: 0.25rem;
+  --base: 0.5rem;
+  --base-x-1_5: 7.5rem;
+  --base-x-2: 1rem;
+  --base-x-2_5: 1.25rem;
+  --base-x-4: 2rem;
+  --base-x-5: 2.5rem;
+  --base-x-5_5: 2.75rem;
+  --base-x-6: 3rem;
+  --base-x-6_5: 3.25rem;
+  --base-x-7: 3.5rem;
+  --base-x-8: 4rem;
+  --base-x-9: 4.5rem;
+  --base-x-10: 5rem;
+  --base-x-10_5: 5.25rem;
+  --base-x-11: 5.5rem;
+  --base-x-11_5: 5.75rem;
+  --base-x-12: 6rem;
+  --base-x-12_5: 6.25rem;
+  --base-x-13: 6.5rem;
+  --base-x-15: 7.5rem;
+  --base-x-15_5: 7.75rem;
+  --base-x-16: 8rem;
+  --base-x-16_5: 8.25rem;
+  --base-x-20: 10rem;
+  --base-x-25: 12.5rem;
+  --base-x-50: 25rem;
+  --base-x-100: 50rem;
 }
