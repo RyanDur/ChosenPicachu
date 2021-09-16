@@ -1,5 +1,5 @@
-import {FancyInput} from '../FancyFormElements/FancyInput';
-import {FancySelect} from '../FancyFormElements/FancySelect';
+import {FancyInput} from '../../FancyFormElements/FancyInput';
+import {FancySelect} from '../../FancyFormElements/FancySelect';
 import states from 'states-us/dist';
 import React, {FC} from 'react';
 import {AddressInfo} from '../types';
@@ -23,17 +23,17 @@ export const Address: FC<AddressProps> = (
         readOnly,
         value = {} as AddressInfo
     }) => <article id={id} className="address">
-    <FancyInput inputId={`${id}-street`} className="street"
+    <FancyInput className="street"
                 required={required} disabled={disabled} value={value.streetAddress} readOnly={readOnly}
                 onChange={event => onChange({...value, streetAddress: event.currentTarget.value as string})}>
         Street
     </FancyInput>
-    <FancyInput inputId={`${id}-street-2`} className="street-2"
+    <FancyInput className="street-2"
                 disabled={disabled} value={value.streetAddressTwo} readOnly={readOnly}
                 onChange={event => onChange({...value, streetAddressTwo: event.currentTarget.value as string})}>
         Street Line 2
     </FancyInput>
-    <FancyInput inputId={`${id}-city`} className="city"
+    <FancyInput className="city"
                 required={required} disabled={disabled} value={value.city} readOnly={readOnly}
                 onChange={event => onChange({...value, city: event.currentTarget.value as string})}>
         City
@@ -52,7 +52,6 @@ export const Address: FC<AddressProps> = (
     </FancySelect>
 
     <FancyInput className="zip"
-                inputId={`${id}-zip`}
                 pattern="^[0-9]{5}(?:-[0-9]{4})?$"
                 value={value.zip}
                 readOnly={readOnly}

@@ -2,6 +2,7 @@
 
 #root {
   background-color: var(--void);
+  min-height: 100vh;
 }
 
 :root {
@@ -35,6 +36,8 @@
   --base-x-1_5: 7.5rem;
   --base-x-2: 1rem;
   --base-x-2_5: 1.25rem;
+  --base-x-3: 1.5rem;
+  --base-x-3_5: 1.75rem;
   --base-x-4: 2rem;
   --base-x-5: 2.5rem;
   --base-x-5_5: 2.75rem;

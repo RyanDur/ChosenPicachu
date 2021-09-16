@@ -51,7 +51,7 @@ const searchForArt = (
         .onComplete(result => {
             if (result.isOk) dispatch(loaded(result.data));
             else dispatch(error(result.explanation));
-        });
+        }).inspect();
 };
 
 const getAllArt = (

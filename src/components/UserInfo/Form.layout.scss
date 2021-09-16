@@ -15,23 +15,23 @@
     "details details details details details details details details details details details details"
     "reset reset reset cancel cancel cancel submit submit submit submit submit submit";
 
-  #name-title {
+  .name-title {
     grid-area: name_title;
   }
 
-  #first-name-cell {
+  .first-name-cell {
     grid-area: first_name;
   }
 
-  #last-name-cell {
+  .last-name-cell {
     grid-area: last_name;
   }
 
-  #email-cell {
+  .email-cell {
     grid-area: email;
   }
 
-  #dob-cell {
+  .dob-cell {
     grid-area: dob;
   }
 
@@ -64,7 +64,7 @@
     grid-area: work_address;
   }
 
-  #details-cell {
+  .details {
     grid-area: details;
   }
 

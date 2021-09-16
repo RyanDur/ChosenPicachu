@@ -1,8 +1,8 @@
 import React, {FC, useEffect, useReducer, useState} from 'react';
 import {UserInfo} from './types';
-import {FancyInput} from './FancyFormElements/FancyInput';
+import {FancyInput} from '../FancyFormElements/FancyInput';
 import {join} from '../util';
-import {FancyTextarea} from './FancyFormElements/FancyTextarea';
+import {FancyTextarea} from '../FancyFormElements/FancyTextarea';
 import {
     resetForm,
     updateAvatar,
@@ -19,10 +19,11 @@ import {formReducer, initialState} from './reducer';
 import {generateAvatar} from '../../avatars';
 import {Link} from 'react-router-dom';
 import {Paths} from '../../App';
-import {FancyDateInput} from './FancyFormElements/FancyDateInput';
+import {FancyDateInput} from '../FancyFormElements/FancyDateInput';
 import {Consumer} from '@ryandur/sand';
-import './Form.layout.scss';
 import {Avatar, Button} from '@material-ui/core';
+import './Form.layout.scss';
+import './Form.scss';
 
 interface FormProps {
     currentUserInfo?: UserInfo;
@@ -68,24 +69,24 @@ export const UserInformation: FC<FormProps> = (
                  }}
                  onInvalid={event => event.currentTarget.classList.add('invalid')}>
         <h3 id="name-title">User</h3>
-        <FancyInput id="first-name-cell" inputId="first-name" required
+        <FancyInput className="first-name-cell" required
                     value={userInfo.user.firstName} readOnly={readOnly} autoFocus
                     onChange={event => dispatch(updateFirstName(event.currentTarget.value as string))}>
             First Name
         </FancyInput>
-        <FancyInput id="last-name-cell" inputId="last-name" required
+        <FancyInput className="last-name-cell" required
                     value={userInfo.user.lastName} readOnly={readOnly}
                     onChange={event => dispatch(updateLastName(event.currentTarget.value as string))}>
             Last Name
         </FancyInput>
-        <FancyInput id="email-cell" inputId="email" value={userInfo.user.email}
+        <FancyInput className="email-cell" value={userInfo.user.email}
                     type="email" readOnly={readOnly}
                     onChange={event => dispatch(updateEmail(event.currentTarget.value as string))}>
             Email
         </FancyInput>
-        <FancyDateInput id="dob-cell" inputId="dob" value={userInfo.user.dob}
+        <FancyDateInput className="dob-cell" inputId="dob" value={userInfo.user.dob}
                         readOnly={readOnly} required
-                        onChange={date => dispatch(updateDOB(date || undefined))}>
+                        onChange={event => dispatch(updateDOB(event.currentTarget.value as Date))}>
             Date Of Birth
         </FancyDateInput>
 

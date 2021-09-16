@@ -32,19 +32,19 @@ export const App = () => {
             </Switch>
         </Card>
         <Card component="aside" id="side-nav" data-testid="navigation">
-            <Grid container component="nav" id="app-navigation">
-                <Grid item component={Link} xs={12} id="navigate-home" className="path" to={Paths.home}>Home</Grid>
-                <Grid item component={Link} xs={12} id="navigate-about" className="path" to={Paths.about}>About</Grid>
-                <Grid item component={Link} xs={12} id="navigate-users" className="path" to={Paths.users}>Users</Grid>
-                <Grid item component={Link} xs={12} id="navigate-form" className="path"
+            <nav id="app-navigation">
+                <Link id="navigate-home" className="path" to={Paths.home}>Home</Link>
+                <Link id="navigate-about" className="path" to={Paths.about}>About</Link>
+                <Link id="navigate-users" className="path" to={Paths.users}>Users</Link>
+                <Link id="navigate-form" className="path"
                       to={`${Paths.artGallery}${toQueryString({
                           page: 1,
                           size: defaultRecordLimit,
                           tab: Source.AIC
-                      })}`}>Gallery</Grid>
-                <Grid item component="a" xs={12} id="navigate-repo" className="path" href={Paths.repo}
-                      rel="noopener noreferrer" target="_blank">Repo</Grid>
-            </Grid>
+                      })}`}>Gallery</Link>
+                <a id="navigate-repo" className="path" href={Paths.repo}
+                      rel="noopener noreferrer" target="_blank">Repo</a>
+            </nav>
 
             <Grid container component="article" className="icons borrowed-assets" tabIndex={0}>
                 <Grid item component="h2" className="icons-title">ICONS</Grid>

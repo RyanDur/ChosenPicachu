@@ -1,0 +1,7 @@
+#user-info-form {
+  &.read-only {
+    #same-as-home-cell {
+      display: none;
+    }
+  }
+}
