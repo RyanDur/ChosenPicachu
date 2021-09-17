@@ -4,9 +4,10 @@ import {data} from '../../../data';
 import {Loading} from '../../Loading';
 import {ArtPieceContext, useArtPiece, useArtPieceContext} from './Context';
 import {Image} from '../Image';
-import {AsyncState} from '../../../data/types';
+import {AsyncState, HTTPError} from '../../../data/types';
 import {useQuery} from '../../hooks';
-import {GetArtAction, Source} from '../../../data/artGallery/types';
+import {Art, Source} from '../../../data/artGallery/types';
+import {AsyncEvent} from '@ryandur/sand';
 import './Piece.scss';
 
 const ArtPiece = () => {
@@ -17,11 +18,12 @@ const ArtPiece = () => {
     const {queryObj: {tab}} = useQuery<{ tab: Source }>();
 
     useEffect(() => {
-        id && data.artGallery.getArt({id, source: tab}, (action: GetArtAction) => {
-            isLoading(action.type === AsyncState.LOADING);
-            isErrored(action.type === AsyncState.ERROR);
-            if (action.type === AsyncState.LOADED) updatePiece(action.value);
-        });
+        id && data.artGallery.getArt({id, source: tab})
+            .on((event: AsyncEvent<Art, HTTPError>) => {
+                isLoading(event.type === AsyncState.LOADING);
+                isErrored(event.type === AsyncState.ERROR);
+                if (event.type === AsyncState.LOADED) updatePiece(event.data);
+            });
         return reset;
     }, [id, updatePiece]);
 

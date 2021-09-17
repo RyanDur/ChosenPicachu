@@ -3,18 +3,18 @@ import {Search} from '../index';
 import userEvent from '@testing-library/user-event';
 import {renderWithRouter} from '../../../../__tests__/util';
 import {data} from '../../../../data';
-import {loaded, SearchArtAction} from '../../../../data/artGallery/actions';
 import * as faker from 'faker';
 import {Paths} from '../../../../App';
-import {Dispatch} from '../../../../data/types';
-import { Source } from '../../../../data/artGallery/types';
+import {Source} from '../../../../data/artGallery/types';
+import {loaded} from '@ryandur/sand';
 
 describe('search', () => {
     const searchWord = faker.lorem.word().toUpperCase();
 
     beforeEach(() => {
-        data.artGallery.searchForArt = jest.fn((query: {search: string, source: string}, dispatch: Dispatch<SearchArtAction>) =>
-            dispatch(loaded([searchWord])));
+        data.artGallery.searchForArt = jest.fn(() => ({
+            on: (dispatch) => dispatch(loaded([searchWord]))
+        }));
     });
 
     it('should give suggestions for completion', async () => {
@@ -22,7 +22,7 @@ describe('search', () => {
         userEvent.paste(screen.getByLabelText('Search For'), searchWord);
         await waitFor(() => expect(screen.getByTestId('search-options')).toHaveTextContent(searchWord));
         expect(data.artGallery.searchForArt)
-            .toHaveBeenCalledWith({search: searchWord.toLowerCase(), source: Source.AIC}, expect.anything());
+            .toHaveBeenCalledWith({search: searchWord.toLowerCase(), source: Source.AIC});
     });
 
     it('should update the url when the user wants to search', () => {
