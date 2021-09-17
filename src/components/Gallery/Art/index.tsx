@@ -4,30 +4,28 @@ import {useQuery} from '../../hooks';
 import {Loading} from '../../Loading';
 import {Image} from '../Image';
 import {useGallery} from '../Context';
-import {AsyncState} from '../../../data/types';
-import {GetAllArtAction, toSource} from '../../../data/artGallery/types';
+import {AsyncState, HTTPError} from '../../../data/types';
+import {AllArt, toSource} from '../../../data/artGallery/types';
+import {AsyncEvent, empty, has, not} from '@ryandur/sand';
 import './Gallery.scss';
 import './Gallery.layout.scss';
-
-const not = (value: unknown): boolean => !value;
-const empty = (value: unknown[] = []): boolean => value.length === 0;
-const has = (value: unknown[] = []): boolean => not(empty(value));
 
 export const ArtGallery: FC = () => {
     const {art, updateArt, reset} = useGallery();
     const [loading, isLoading] = useState(false);
     const [errored, hasErrored] = useState(false);
-    const {queryObj: {page, size, search, tab}} = useQuery<{ page: number, size: number, tab: string, search?: string }>();
+    const {queryObj: {page, size, search, tab}} =
+        useQuery<{ page: number, size: number, tab: string, search?: string }>();
 
     useEffect(() => {
-        data.artGallery.getAllArt({page, size, search, source: toSource(tab)},
-            (action: GetAllArtAction) => {
-                isLoading(action.type === AsyncState.LOADING);
-                hasErrored(action.type === AsyncState.ERROR);
-                if (action.type === AsyncState.LOADED) updateArt(action.value);
+        data.artGallery.getAllArt({page, size, search, source: toSource(tab)})
+            .on((event: AsyncEvent<AllArt, HTTPError>) => {
+                isLoading(event.type === AsyncState.LOADING);
+                hasErrored(event.type === AsyncState.ERROR);
+                if (event.type === AsyncState.LOADED) updateArt(event.data);
             });
         return reset;
-    }, [page, updateArt, search, tab, size]);
+    }, [page, search, tab, size]);
 
     const showGallery = not(loading) && has(art?.pieces);
     const showError = not(loading) && (empty(art?.pieces) || errored);

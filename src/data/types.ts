@@ -15,9 +15,6 @@ export enum AsyncState {
     ERROR = 'ERROR'
 }
 
-export type Loaded<T> = Action<AsyncState.LOADED> & {
-    value: T;
-};
 export type Loading = Action<AsyncState.LOADING>;
 
 export type Error<E> = Action<AsyncState.ERROR> & {

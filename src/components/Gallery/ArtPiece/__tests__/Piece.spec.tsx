@@ -3,11 +3,10 @@ import {Paths} from '../../../../App';
 import {ArtPiece, useArtPiece} from '../index';
 import {data} from '../../../../data';
 import * as faker from 'faker';
-import {Dispatch} from '../../../../data/types';
-import {error, GetArtAction, loaded, loading} from '../../../../data/artGallery/actions';
 import {Rendered, renderWithRouter} from '../../../../__tests__/util';
 import {GalleryPath} from '../../index';
 import {Art} from '../../../../data/artGallery/types';
+import {error, loaded, loading} from '@ryandur/sand';
 
 jest.mock('../Context', () => ({
     useArtPiece: jest.fn()
@@ -33,7 +32,9 @@ describe('viewing a piece', () => {
 
     describe('loading the piece of art', () => {
         beforeEach(() => {
-            data.artGallery.getArt = (id, dispatch: Dispatch<GetArtAction>) => dispatch(loading());
+            data.artGallery.getArt = () => ({
+                on: (dispatch) => dispatch(loading())
+            });
             renderWithRouter(<ArtPiece/>, {
                 initialRoute: `${Paths.artGallery}/1234`,
                 path: `${Paths.artGallery}${GalleryPath.piece}`
@@ -46,9 +47,11 @@ describe('viewing a piece', () => {
 
     describe('when the art piece is loaded', () => {
         beforeEach(() => {
-            data.artGallery.getArt = (id, dispatch: Dispatch<GetArtAction>) => {
+            data.artGallery.getArt = (id) => {
                 mockGetPieceId(id);
-                dispatch(loaded(mockPiece));
+                return {
+                    on: (dispatch) => dispatch(loaded(mockPiece))
+                };
             };
             rendered = renderWithRouter(<ArtPiece/>, {
                 initialRoute: `${Paths.artGallery}/1234`,
@@ -73,7 +76,9 @@ describe('viewing a piece', () => {
 
     describe('when getting the piece has errored', () => {
         beforeEach(() => {
-            data.artGallery.getArt = (id, dispatch: Dispatch<GetArtAction>) => dispatch(error());
+            data.artGallery.getArt = () => ({
+                on: (dispatch) => dispatch(error())
+            });
             renderWithRouter(<ArtPiece/>, {
                 initialRoute: `${Paths.artGallery}/1234`,
                 path: `${Paths.artGallery}${GalleryPath.piece}`

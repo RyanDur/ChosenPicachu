@@ -4,10 +4,9 @@ import {data} from '../../../../data';
 import {fromAICArt, Rendered, renderWithRouter} from '../../../../__tests__/util';
 import {Paths} from '../../../../App';
 import {useGallery} from '../../Context';
-import {error, GetAllArtAction, loaded, loading} from '../../../../data/artGallery/actions';
 import {ArtGallery} from '../index';
-import {Dispatch} from '../../../../data/types';
-import {AllArt, Art, GetAllArt, Source} from '../../../../data/artGallery/types';
+import {AllArt, Art, Source} from '../../../../data/artGallery/types';
+import {error, loaded, loading} from '@ryandur/sand';
 
 jest.mock('../../Context', () => {
     return ({
@@ -23,10 +22,9 @@ describe('The gallery.', () => {
 
     describe('When the art has not loaded yet', () => {
         beforeEach(() => {
-            data.artGallery.getAllArt = (
-                query: GetAllArt,
-                dispatch: Dispatch<GetAllArtAction>
-            ) => dispatch(loading());
+            data.artGallery.getAllArt = () => ({
+                on: (dispatch) => dispatch(loading())
+            });
             mockUseGallery.mockReturnValue({
                 art: {pieces: []},
                 updateArt: jest.fn(),
@@ -45,10 +43,10 @@ describe('The gallery.', () => {
 
     describe('When the art has loaded', () => {
         beforeEach(() => {
-            data.artGallery.getAllArt = (
-                query: GetAllArt,
-                dispatch: Dispatch<GetAllArtAction>
-            ) => dispatch(loaded(fromAICArt));
+            data.artGallery.getAllArt = () => ({
+                on: (dispatch) => dispatch(loaded(fromAICArt))
+            });
+
             mockUseGallery.mockReturnValue({
                 art: fromAICArt,
                 updateArt: jest.fn(),
@@ -80,10 +78,9 @@ describe('The gallery.', () => {
 
     describe('when there is no art to show', () => {
         beforeEach(() => {
-            data.artGallery.getAllArt = jest.fn((
-                query: GetAllArt,
-                dispatch: Dispatch<GetAllArtAction>
-            ) => dispatch(loaded({pieces: [] as Art[]} as AllArt)));
+            data.artGallery.getAllArt = () => ({
+                on: (dispatch) => dispatch(loaded({pieces: [] as Art[]} as AllArt))
+            });
             mockUseGallery.mockReturnValue({
                 updateArt: jest.fn(),
                 reset: jest.fn()
@@ -103,43 +100,28 @@ describe('The gallery.', () => {
 
     describe('when the art has errored', () => {
         beforeEach(() => {
-            data.artGallery.getAllArt = (
-                query: GetAllArt,
-                dispatch: Dispatch<GetAllArtAction>
-            ) => dispatch(error());
+            data.artGallery.getAllArt = (query) => {
+                expect(query).toEqual({
+                    page: 23,
+                    search: 'g',
+                    size: 8,
+                    source: Source.HARVARD
+                });
+
+                return ({
+                    on: (dispatch) => dispatch(error())
+                });
+            };
+
             mockUseGallery.mockReturnValue({
                 art: fromAICArt,
                 updateArt: jest.fn(),
                 reset: jest.fn()
             });
-            renderWithRouter(<ArtGallery/>);
+            renderWithRouter(<ArtGallery/>, {params: {page: 23,search: 'g', size: 8, tab: Source.HARVARD }});
         });
 
         it('should indicate that something went wrong', () =>
             expect(screen.queryByTestId('empty-gallery')).toBeInTheDocument());
-    });
-
-    describe('when filtering results by search', () => {
-        beforeEach(() => {
-            data.artGallery.getAllArt = jest.fn((
-                query: GetAllArt,
-                dispatch: Dispatch<GetAllArtAction>
-            ) => dispatch(loaded(fromAICArt)));
-
-            mockUseGallery.mockReturnValue({
-                art: fromAICArt,
-                updateArt: jest.fn(),
-                reset: jest.fn()
-            });
-
-            renderWithRouter(<ArtGallery/>, {params: {page: 23, search: 'g', tab: Source.HARVARD}});
-        });
-
-        it('should pass the criteria', () =>
-            expect(data.artGallery.getAllArt).toHaveBeenCalledWith({
-                page: 23,
-                search: 'g',
-                source: Source.HARVARD
-            }, expect.anything()));
     });
 });

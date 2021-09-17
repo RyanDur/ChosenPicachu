@@ -4,32 +4,27 @@ import {
     Art,
     ArtResponse,
     ArtSearchResponse,
-    GetAllArt, GetAllArtAction,
-    GetArt, GetArtAction,
-    SearchArt, SearchArtAction,
+    GetAllArt,
+    GetArt,
+    SearchArt,
     SearchOptions,
     Source
 } from './types';
 import {AICAllArtSchema, AICArtSchema, AICSearchSchema} from './aic/types';
 import {HarvardAllArtSchema, HarvardArtSchema, HarvardSearchSchema} from './harvard/types';
 import {RIJKAllArtSchema, RIJKArtSchema, RIJKSSearchSchema} from './rijks/types';
-import {asyncResult, maybe} from '@ryandur/sand';
+import {asyncEvent, asyncResult, maybe, OnEvent} from '@ryandur/sand';
 import {aicArtToArt, aicSearchToSearch, aicToAllArt} from './aic';
 import {harvardArtToArt, harvardToAllArt, harverdSearchToSearch} from './harvard';
 import {rijkArtToArt, rijksSearchToSearch, rijkToAllArt} from './rijks';
-import {error, loaded, loading} from './actions';
 import {http} from '../http';
 import {URI} from './URI';
-import {Dispatch, HTTPError} from '../types';
+import {HTTPError} from '../types';
 
 const {success, failure} = asyncResult;
 
-const searchForArt = (
-    {search, source}: SearchArt,
-    dispatch: Dispatch<SearchArtAction>
-): void => {
-    dispatch(loading());
-    http({url: URI.createSearchFrom(search, source)})
+const searchForArt = ({search, source}: SearchArt): OnEvent<SearchOptions, HTTPError> =>
+    asyncEvent(http({url: URI.createSearchFrom(search, source)})
         .flatMap((response: ArtSearchResponse) => {
             switch (source) {
                 case Source.AIC:
@@ -47,19 +42,10 @@ const searchForArt = (
                 default:
                     return failure<SearchOptions, HTTPError>(HTTPError.UNKNOWN_SOURCE);
             }
-        })
-        .onComplete(result => {
-            if (result.isOk) dispatch(loaded(result.data));
-            else dispatch(error(result.explanation));
-        });
-};
+        }));
 
-const getAllArt = (
-    {page, size, source, search}: GetAllArt,
-    dispatch: Dispatch<GetAllArtAction>
-): void => {
-    dispatch(loading());
-    http({url: URI.from({source, params: {page, search, limit: size}})})
+const getAllArt = ({page, size, source, search}: GetAllArt): OnEvent<AllArt, HTTPError> =>
+    asyncEvent(http({url: URI.from({source, params: {page, search, limit: size}})})
         .flatMap((response: AllArtResponse) => {
             switch (source) {
                 case Source.AIC:
@@ -77,19 +63,10 @@ const getAllArt = (
                 default:
                     return failure<AllArt, HTTPError>(HTTPError.UNKNOWN_SOURCE);
             }
-        })
-        .onComplete(result => {
-            if (result.isOk) dispatch(loaded(result.data));
-            else dispatch(error(result.explanation));
-        });
-};
+        }));
 
-const getArt = (
-    {id, source}: GetArt,
-    dispatch: Dispatch<GetArtAction>
-): void => {
-    dispatch(loading());
-    http({url: URI.from({source: source, path: `/${id}`})})
+const getArt = ({id, source}: GetArt): OnEvent<Art, HTTPError> =>
+    asyncEvent(http({url: URI.from({source: source, path: `/${id}`})})
         .flatMap((response: ArtResponse) => {
             switch (source) {
                 case Source.AIC:
@@ -107,12 +84,7 @@ const getArt = (
                 default:
                     return failure<Art, HTTPError>(HTTPError.UNKNOWN_SOURCE);
             }
-        })
-        .onComplete(result => {
-            if (result.isOk) dispatch(loaded(result.data));
-            else dispatch(error(result.explanation));
-        });
-};
+        }));
 
 export const artGallery = {
     getArt,
