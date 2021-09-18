@@ -10,30 +10,26 @@ export const validate = <T>(schema: Decoder<T>) => (result: unknown): Result.Asy
         .orElse(failure<T, HTTPError>(HTTPError.CANNOT_DECODE));
 
 export const http = {
-    get: <T>(uri: URI) => request(uri)
-        .flatMap((response: Response): Result.Async<T, HTTPError> =>
-            response.status === 200 ?
-                asyncResult.of<T, HTTPError>(response.json()) :
-                failResponse<T>(response)),
+    get: (uri: URI) => request(uri)
+        .flatMap((response: Response) => response.status === 200 ?
+            asyncResult.of(response.json()) :
+            failResponse(response)),
 
     // the rest of these are not needed. They are just here for an example
-    post: <T>(uri: URI, body: unknown) => request(uri, HTTPMethod.POST, body)
-        .flatMap((response: Response): Result.Async<T, HTTPError> =>
-            response.status === 201 ?
-                asyncResult.of<T, HTTPError>(response.json()) :
-                failResponse<T>(response)),
+    post: (uri: URI, body: unknown) => request(uri, HTTPMethod.POST, body)
+        .flatMap((response: Response) => response.status === 201 ?
+            asyncResult.of(response.json()) :
+            failResponse(response)),
 
     put: (uri: URI, body: unknown) => request(uri, HTTPMethod.PUT, body)
-        .flatMap((response: Response): Result.Async<unknown, HTTPError> =>
-            response.status === 204 ?
-                success<unknown, HTTPError>(undefined) :
-                failResponse(response)),
+        .flatMap((response: Response) => response.status === 204 ?
+            success<unknown, HTTPError>(undefined) :
+            failResponse(response)),
 
     delete: (uri: URI) => request(uri, HTTPMethod.DELETE)
-        .flatMap((response: Response): Result.Async<unknown, HTTPError> =>
-            response.status === 204 ?
-                success<unknown, HTTPError>(undefined) :
-                failResponse(response))
+        .flatMap((response: Response) => response.status === 204 ?
+            success<unknown, HTTPError>(undefined) :
+            failResponse(response))
 };
 
 const request = (uri: URI, method = HTTPMethod.GET, body?: unknown) =>
