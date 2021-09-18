@@ -9,6 +9,7 @@ import {
     rijksDomain
 } from '../../config';
 import {Source} from './types';
+import {URI as URIType} from '../types';
 
 export const shapeOfAICResponse = ['id', 'title', 'image_id', 'artist_display', 'term_titles', 'thumbnail'];
 export const shapeOfHarvardResponse = ['id', 'title', 'people', 'primaryimageurl'];
@@ -20,7 +21,7 @@ interface Query {
 }
 
 export const URI = {
-    from: ({source, path, params = {}}: Query): string => {
+    from: ({source, path, params = {}}: Query): URIType => {
         const {search, limit = defaultRecordLimit, page, ...rest} = params;
         switch (source) {
             case Source.AIC: {
@@ -57,7 +58,7 @@ export const URI = {
         }
     },
 
-    createSearchFrom: (search: string, source: Source) => {
+    createSearchFrom: (search: string, source: Source): URIType => {
         switch (source) {
             case Source.AIC:
                 return `${aicDomain}/search${toQueryString({

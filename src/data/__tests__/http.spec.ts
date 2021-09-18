@@ -1,16 +1,10 @@
 import {mockServer, MockWebServer} from './mockServer';
-import {HTTPError, HTTPMethod} from '../types';
+import {HTTPError} from '../types';
 import {http} from '../http';
-import * as D from 'schemawax';
 import * as faker from 'faker';
 
 describe('http calls', () => {
-    const testResponse = {I: 'am a response'};
-    const someSchema = D.object({
-        required: {
-            I: D.string
-        }
-    });
+    const testObject = {foo: faker.lorem.words()};
     let server: MockWebServer;
     let someUrl = '';
     let somePath = '';
@@ -26,68 +20,59 @@ describe('http calls', () => {
 
     afterEach(() => server.stop());
 
-    it('should perform a get by default', async () => {
-        server.stubResponse(200, testResponse);
+    test.each`
+    method         | httpMethod  | body          | code   | response
+    ${http.get}    | ${'GET'}    | ${undefined}  | ${200} | ${testObject}    
+    ${http.post}   | ${'POST'}   | ${testObject} | ${201} | ${testObject}    
+    ${http.put}    | ${'PUT'}    | ${testObject} | ${204} | ${undefined}    
+    ${http.delete} | ${'DELETE'} | ${undefined}  | ${204} | ${undefined}    
+    `('$httpMethod success', async ({method, httpMethod, body, code, response}) => {
+        server.stubResponse(code, response);
 
-        const actual = await http({
-            url: someUrl, schema: someSchema
-        }).value();
-
-        const recordedRequest = await server.lastRequest();
-        expect(recordedRequest.method).toEqual('GET');
-        expect(recordedRequest.url).toEqual(somePath);
-        expect(await actual.orNull()).toEqual(testResponse);
-    });
-
-    it('should be able to post to an endpoint', async () => {
-        server.stubResponse(201, testResponse);
-
-        const actual = await http({url: someUrl, method: HTTPMethod.POST, schema: someSchema}).value();
+        const actual = await method(someUrl, body).value();
 
         const recordedRequest = await server.lastRequest();
-        expect(recordedRequest.method).toEqual('POST');
+        expect(recordedRequest.method).toEqual(httpMethod);
         expect(recordedRequest.url).toEqual(somePath);
-        expect(await actual.orNull()).toEqual(testResponse);
+        expect(parse(recordedRequest.body)).toEqual(body);
+        expect(await actual.orNull()).toEqual(response);
     });
 
-    it('should be able to put to an endpoint', async () => {
-        server.stubResponse(204);
+    test.each`
+    method         | httpMethod  | body          
+    ${http.get}    | ${'GET'}    | ${undefined}  
+    ${http.post}   | ${'POST'}   | ${testObject}
+    ${http.put}    | ${'PUT'}    | ${testObject}
+    ${http.delete} | ${'DELETE'} | ${undefined}  
+    `('$httpMethod failure is FORBIDDEN', async ({method, body}) => {
+        server.stubResponse(403, HTTPError.FORBIDDEN);
 
-        const actual = await http({url: someUrl, method: HTTPMethod.PUT}).value();
-
-        const recordedRequest = await server.lastRequest();
-        expect(recordedRequest.method).toEqual('PUT');
-        expect(recordedRequest.url).toEqual(somePath);
-        expect(await actual.orNull()).toBeUndefined();
-    });
-
-    it('should be able to delete to an endpoint', async () => {
-        server.stubResponse(204);
-
-        const actual = await http({url: someUrl, method: HTTPMethod.DELETE}).value();
-
-        const recordedRequest = await server.lastRequest();
-        expect(recordedRequest.method).toEqual('DELETE');
-        expect(recordedRequest.url).toEqual(somePath);
-        expect(await actual.orNull()).toBeUndefined();
-    });
-
-    it('should notify when forbidden', async () => {
-        server.stubResponse(403);
-
-        const actual = await http({url: someUrl, method: HTTPMethod.GET}).value();
+        const actual = await method(someUrl, body).value();
 
         // @ts-ignore
         expect(actual.explanation).toEqual(HTTPError.FORBIDDEN);
     });
 
-    it('should handle server stop', async () => {
+    test.each`
+    method         | httpMethod  | body          
+    ${http.get}    | ${'GET'}    | ${undefined}  
+    ${http.post}   | ${'POST'}   | ${testObject}
+    ${http.put}    | ${'PUT'}    | ${testObject}
+    ${http.delete} | ${'DELETE'} | ${undefined}        
+    `('$httpMethod failure is SERVER_ERROR', async ({method, body}) => {
         server.stop();
 
-        const actual = await http({url: someUrl, method: HTTPMethod.GET}).value();
+        const actual = await method(someUrl, body).value();
 
-        expect(actual.isOk).toBe(false);
         // @ts-ignore
         expect(actual.explanation).toEqual(HTTPError.SERVER_ERROR);
     });
 });
+
+const parse = (body: any): any => {
+    try {
+        return JSON.parse(body);
+    } catch (e) {
+        return undefined;
+    }
+};

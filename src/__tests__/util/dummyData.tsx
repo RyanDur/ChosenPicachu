@@ -9,13 +9,13 @@ import {nanoid} from 'nanoid';
 import {AICAllArt, AICArt} from '../../data/artGallery/aic/types';
 import {
     HarvardAllArt,
-    HarvardSearchResponse,
+    HarvardSearch,
     HarvardInfo,
     HarvardPeople,
     HarvardArt
 } from '../../data/artGallery/harvard/types';
 import {AllArt, Art} from '../../data/artGallery/types';
-import {RIJKAllArt, RIJKArtObject, RIJKArt} from '../../data/artGallery/rijks/types';
+import {RIJKSAllArt, RIJKArtObject, RIJKSArt} from '../../data/artGallery/rijks/types';
 
 export const randomNumberFromRange = (min: number, max = 6) => Math.floor(Math.random() * max) + min;
 
@@ -219,11 +219,11 @@ export const harvardArtResponse: HarvardAllArt = {
     records: [...Array(info.totalrecordsperquery)].map(harvardToPieceResponse),
 };
 export const options: string[] = [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()];
-export const harvardArtOptions: HarvardSearchResponse = {
+export const harvardArtOptions: HarvardSearch = {
     info,
     records: options.map(option => ({title: option}))
 };
-export const fromRIJKArtOptionsResponse: RIJKAllArt = {
+export const fromRIJKArtOptionsResponse: RIJKSAllArt = {
     count: options.length,
     artObjects: options.map(title => ({
         id: faker.lorem.word(),
@@ -275,7 +275,7 @@ const rijkPieceResponse = (): RIJKArtObject => ({
         url: faker.lorem.words()
     }
 });
-export const fromRIJKArtResponse: RIJKAllArt = {
+export const fromRIJKArtResponse: RIJKSAllArt = {
     count: Math.floor(Math.random() * 100) + 1,
     artObjects: [...Array(pagination.limit)].map(rijkPieceResponse)
 };
@@ -288,7 +288,7 @@ export const fromRIJKToPiece = (piece: RIJKArtObject): Art => ({
     altText: piece.longTitle
 });
 
-export const rijkArtObjectResponse: RIJKArt = {
+export const rijkArtObjectResponse: RIJKSArt = {
     artObject: rijkPieceResponse()
 };
 

@@ -6,79 +6,55 @@ import {asyncEvent, asyncResult, OnAsyncEvent} from '@ryandur/sand';
 import {aicArtToArt, aicSearchToSearch, aicToAllArt} from './aic';
 import {harvardArtToArt, harvardToAllArt, harverdSearchToSearch} from './harvard';
 import {rijkArtToArt, rijksSearchToSearch, rijkToAllArt} from './rijks';
-import {http} from '../http';
+import {http, validate} from '../http';
 import {URI} from './URI';
 import {HTTPError} from '../types';
 
-const {failure} = asyncResult;
+const unknownSource = <T>() => asyncResult.failure<T, HTTPError>(HTTPError.UNKNOWN_SOURCE);
 
 export const artGallery = {
-    getAllArt: ({page, size, source, search}: GetAllArt): OnAsyncEvent<AllArt, HTTPError> => {
-        const url = URI.from({source, params: {page, search, limit: size}});
-        switch (source) {
-            case Source.AIC:
-                return asyncEvent(http({
-                    url,
-                    schema: AICAllArtSchema
-                }).map(aicToAllArt));
-            case Source.HARVARD:
-                return asyncEvent(http({
-                    url,
-                    schema: HarvardAllArtSchema
-                }).map(harvardToAllArt));
-            case Source.RIJKS:
-                return asyncEvent(http({
-                    url,
-                    schema: RIJKAllArtSchema
-                }).map(rijkToAllArt(page)));
-            default:
-                return asyncEvent(failure<AllArt, HTTPError>(HTTPError.UNKNOWN_SOURCE));
-        }
-    },
+    getAllArt: ({page, size, source, search}: GetAllArt): OnAsyncEvent<AllArt, HTTPError> =>
+        asyncEvent(http.get(URI.from({source, params: {page, search, limit: size}}))
+            .flatMap(response => {
+                switch (source) {
+                    case Source.AIC:
+                        return validate(AICAllArtSchema, response).map(aicToAllArt);
+                    case Source.HARVARD:
+                        return validate(HarvardAllArtSchema, response).map(harvardToAllArt);
+                    case Source.RIJKS:
+                        return validate(RIJKAllArtSchema, response).map(rijkToAllArt(page));
+                    default:
+                        return unknownSource();
+                }
+            })),
 
-    getArt: ({id, source}: GetArt): OnAsyncEvent<Art, HTTPError> => {
-        const url = URI.from({source: source, path: `/${id}`});
-        switch (source) {
-            case Source.AIC:
-                return asyncEvent(http({
-                    url,
-                    schema: AICArtSchema
-                }).map(aicArtToArt));
-            case Source.HARVARD:
-                return asyncEvent(http({
-                    url,
-                    schema: HarvardArtSchema
-                }).map(harvardArtToArt));
-            case Source.RIJKS:
-                return asyncEvent(http({
-                    url,
-                    schema: RIJKArtSchema
-                }).map(rijkArtToArt));
-            default:
-                return asyncEvent(failure<Art, HTTPError>(HTTPError.UNKNOWN_SOURCE));
-        }
-    },
+    getArt: ({id, source}: GetArt): OnAsyncEvent<Art, HTTPError> =>
+        asyncEvent(http.get(URI.from({source: source, path: `/${id}`}))
+            .flatMap(response => {
+                switch (source) {
+                    case Source.AIC:
+                        return validate(AICArtSchema, response).map(aicArtToArt);
+                    case Source.HARVARD:
+                        return validate(HarvardArtSchema, response).map(harvardArtToArt);
+                    case Source.RIJKS:
+                        return validate(RIJKArtSchema, response).map(rijkArtToArt);
+                    default:
+                        return unknownSource();
+                }
+            })),
 
-    searchForArt: ({search, source}: SearchArt): OnAsyncEvent<SearchOptions, HTTPError> => {
-        const url = URI.createSearchFrom(search, source);
-        switch (source) {
-            case Source.AIC:
-                return asyncEvent(http({
-                    url,
-                    schema: AICSearchSchema
-                }).map(aicSearchToSearch));
-            case Source.HARVARD:
-                return asyncEvent(http({
-                    url,
-                    schema: HarvardSearchSchema
-                }).map(harverdSearchToSearch));
-            case Source.RIJKS:
-                return asyncEvent(http({
-                    url,
-                    schema: RIJKSSearchSchema
-                }).map(rijksSearchToSearch));
-            default:
-                return asyncEvent(failure<SearchOptions, HTTPError>(HTTPError.UNKNOWN_SOURCE));
-        }
-    }
+    searchForArt: ({search, source}: SearchArt): OnAsyncEvent<SearchOptions, HTTPError> =>
+        asyncEvent(http.get(URI.createSearchFrom(search, source))
+            .flatMap(response => {
+                switch (source) {
+                    case Source.AIC:
+                        return validate(AICSearchSchema, response).map(aicSearchToSearch);
+                    case Source.HARVARD:
+                        return validate(HarvardSearchSchema, response).map(harverdSearchToSearch);
+                    case Source.RIJKS:
+                        return validate(RIJKSSearchSchema, response).map(rijksSearchToSearch);
+                    default:
+                        return unknownSource();
+                }
+            }))
 };

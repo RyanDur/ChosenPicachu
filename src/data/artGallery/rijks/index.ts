@@ -1,7 +1,7 @@
-import {RIJKAllArt, RIJKArtObject, RIJKArt} from './types';
+import {RIJKSAllArt, RIJKArtObject, RIJKSArt} from './types';
 import {AllArt, Art, SearchOptions} from '../types';
 
-export const rijkToAllArt = (page: number) => (data: RIJKAllArt): AllArt => ({
+export const rijkToAllArt = (page: number) => (data: RIJKSAllArt): AllArt => ({
     pagination: {
         total: data.count,
         limit: data.artObjects.length,
@@ -20,7 +20,7 @@ const rijkToPiece = (data: RIJKArtObject): Art => ({
 });
 
 
-export const rijkArtToArt = ({artObject}: RIJKArt): Art => rijkToPiece(artObject);
+export const rijkArtToArt = ({artObject}: RIJKSArt): Art => rijkToPiece(artObject);
 
-export const rijksSearchToSearch = ({artObjects}: RIJKAllArt): SearchOptions =>
+export const rijksSearchToSearch = ({artObjects}: RIJKSAllArt): SearchOptions =>
     artObjects.map(({title}) => title);
