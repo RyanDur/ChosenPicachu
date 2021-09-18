@@ -13,7 +13,7 @@ import {
 import {AICAllArtSchema, AICArtSchema, AICSearchSchema} from './aic/types';
 import {HarvardAllArtSchema, HarvardArtSchema, HarvardSearchSchema} from './harvard/types';
 import {RIJKAllArtSchema, RIJKArtSchema, RIJKSSearchSchema} from './rijks/types';
-import {asyncEvent, asyncResult, maybe, OnEvent} from '@ryandur/sand';
+import {asyncEvent, asyncResult, maybe, OnAsyncEvent} from '@ryandur/sand';
 import {aicArtToArt, aicSearchToSearch, aicToAllArt} from './aic';
 import {harvardArtToArt, harvardToAllArt, harverdSearchToSearch} from './harvard';
 import {rijkArtToArt, rijksSearchToSearch, rijkToAllArt} from './rijks';
@@ -23,7 +23,7 @@ import {HTTPError} from '../types';
 const {success, failure} = asyncResult;
 
 export const artGallery = {
-    getAllArt: ({page, size, source, search}: GetAllArt): OnEvent<AllArt, HTTPError> =>
+    getAllArt: ({page, size, source, search}: GetAllArt): OnAsyncEvent<AllArt, HTTPError> =>
         asyncEvent(http({url: URI.from({source, params: {page, search, limit: size}})})
             .flatMap((response: AllArtResponse) => {
                 switch (source) {
@@ -44,7 +44,7 @@ export const artGallery = {
                 }
             })),
 
-    getArt: ({id, source}: GetArt): OnEvent<Art, HTTPError> =>
+    getArt: ({id, source}: GetArt): OnAsyncEvent<Art, HTTPError> =>
         asyncEvent(http({url: URI.from({source: source, path: `/${id}`})})
             .flatMap((response: ArtResponse) => {
                 switch (source) {
@@ -65,7 +65,7 @@ export const artGallery = {
                 }
             })),
 
-    searchForArt: ({search, source}: SearchArt): OnEvent<SearchOptions, HTTPError> =>
+    searchForArt: ({search, source}: SearchArt): OnAsyncEvent<SearchOptions, HTTPError> =>
         asyncEvent(http({url: URI.createSearchFrom(search, source)})
             .flatMap((response: ArtSearchResponse) => {
                 switch (source) {

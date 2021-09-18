@@ -23,7 +23,7 @@ describe('The gallery.', () => {
     describe('When the art has not loaded yet', () => {
         beforeEach(() => {
             data.artGallery.getAllArt = () => ({
-                on: (dispatch) => dispatch(loading())
+                onAsyncEvent: (dispatch) => dispatch(loading())
             });
             mockUseGallery.mockReturnValue({
                 art: {pieces: []},
@@ -44,7 +44,7 @@ describe('The gallery.', () => {
     describe('When the art has loaded', () => {
         beforeEach(() => {
             data.artGallery.getAllArt = () => ({
-                on: (dispatch) => dispatch(loaded(fromAICArt))
+                onAsyncEvent: (dispatch) => dispatch(loaded(fromAICArt))
             });
 
             mockUseGallery.mockReturnValue({
@@ -79,7 +79,7 @@ describe('The gallery.', () => {
     describe('when there is no art to show', () => {
         beforeEach(() => {
             data.artGallery.getAllArt = () => ({
-                on: (dispatch) => dispatch(loaded({pieces: [] as Art[]} as AllArt))
+                onAsyncEvent: (dispatch) => dispatch(loaded({pieces: [] as Art[]} as AllArt))
             });
             mockUseGallery.mockReturnValue({
                 updateArt: jest.fn(),
@@ -109,7 +109,7 @@ describe('The gallery.', () => {
                 });
 
                 return ({
-                    on: (dispatch) => dispatch(error())
+                    onAsyncEvent: (dispatch) => dispatch(error())
                 });
             };
 

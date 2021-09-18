@@ -19,7 +19,7 @@ const ArtPiece = () => {
 
     useEffect(() => {
         id && data.artGallery.getArt({id, source: tab})
-            .on((event: AsyncEvent<Art, HTTPError>) => {
+            .onAsyncEvent((event: AsyncEvent<Art, HTTPError>) => {
                 isLoading(event.type === AsyncState.LOADING);
                 isErrored(event.type === AsyncState.ERROR);
                 if (event.type === AsyncState.LOADED) updatePiece(event.data);
