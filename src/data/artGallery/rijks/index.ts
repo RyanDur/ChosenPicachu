@@ -1,7 +1,7 @@
 import {RIJKAllArt, RIJKArtObject, RIJKArt} from './types';
 import {AllArt, Art, SearchOptions} from '../types';
 
-export const rijkToAllArt = (page: number, data: RIJKAllArt): AllArt => ({
+export const rijkToAllArt = (page: number) => (data: RIJKAllArt): AllArt => ({
     pagination: {
         total: data.count,
         limit: data.artObjects.length,

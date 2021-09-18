@@ -1,16 +1,23 @@
 import {mockServer, MockWebServer} from './mockServer';
 import {HTTPError, HTTPMethod} from '../types';
 import {http} from '../http';
+import * as D from 'schemawax';
 import * as faker from 'faker';
 
 describe('http calls', () => {
     const testResponse = {I: 'am a response'};
+    const someSchema = D.object({
+        required: {
+            I: D.string
+        }
+    });
     let server: MockWebServer;
     let someUrl = '';
     let somePath = '';
 
     beforeEach(() => {
-        console.error = () => {};
+        console.error = () => {
+        };
         server = mockServer();
         server.start();
         somePath = `/${faker.lorem.word()}/${faker.lorem.word()}`;
@@ -22,7 +29,9 @@ describe('http calls', () => {
     it('should perform a get by default', async () => {
         server.stubResponse(200, testResponse);
 
-        const actual = await http({url: someUrl}).value();
+        const actual = await http({
+            url: someUrl, schema: someSchema
+        }).value();
 
         const recordedRequest = await server.lastRequest();
         expect(recordedRequest.method).toEqual('GET');
@@ -33,7 +42,7 @@ describe('http calls', () => {
     it('should be able to post to an endpoint', async () => {
         server.stubResponse(201, testResponse);
 
-        const actual = await http({url: someUrl, method: HTTPMethod.POST}).value();
+        const actual = await http({url: someUrl, method: HTTPMethod.POST, schema: someSchema}).value();
 
         const recordedRequest = await server.lastRequest();
         expect(recordedRequest.method).toEqual('POST');

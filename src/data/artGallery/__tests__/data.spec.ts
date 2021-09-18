@@ -148,21 +148,6 @@ describe('data', () => {
         ${Source.AIC}
         ${Source.HARVARD}
         ${Source.RIJKS}
-        `('with a malformed response', async ({source}) => {
-            const dispatch = jest.fn();
-            mockSuccess({I: 'am wrong'});
-
-            artGallery.getAllArt({page: 1, size: 12, source}).onAsyncEvent(dispatch);
-
-            expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error(HTTPError.CANNOT_DESERIALIZE)));
-        });
-
-        test.each`
-        source
-        ${Source.AIC}
-        ${Source.HARVARD}
-        ${Source.RIJKS}
         `('when the call fails', async ({source}) => {
             const dispatch = jest.fn();
             mockHttp.mockReturnValue(asyncResult.of(Promise.reject(HTTPError.UNKNOWN)));
@@ -259,21 +244,6 @@ describe('data', () => {
         ${Source.AIC}
         ${Source.HARVARD}
         ${Source.RIJKS}
-        `('with a malformed response', async ({source}) => {
-            const dispatch = jest.fn();
-            mockSuccess({I: 'am wrong'});
-
-            artGallery.getArt({id: '1', source}).onAsyncEvent(dispatch);
-
-            expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error(HTTPError.CANNOT_DESERIALIZE)));
-        });
-
-        test.each`
-        source
-        ${Source.AIC}
-        ${Source.HARVARD}
-        ${Source.RIJKS}
         `('when the call fails', async ({source}) => {
             const dispatch = jest.fn();
             mockHttp.mockReturnValue(asyncResult.of(Promise.reject(HTTPError.UNKNOWN)));
@@ -332,21 +302,6 @@ describe('data', () => {
 
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
             await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error(HTTPError.UNKNOWN_SOURCE)));
-        });
-
-        test.each`
-        source
-        ${Source.AIC}
-        ${Source.HARVARD}
-        ${Source.RIJKS}
-        `('with a malformed response', async ({source}) => {
-            const dispatch = jest.fn();
-            mockSuccess({I: 'am wrong'});
-
-            artGallery.searchForArt({search, source}).onAsyncEvent(dispatch);
-
-            expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error(HTTPError.CANNOT_DESERIALIZE)));
         });
 
         test.each`
