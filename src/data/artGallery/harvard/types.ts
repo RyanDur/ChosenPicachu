@@ -51,4 +51,4 @@ export type HarvardPeople = D.Output<typeof HarvardPeopleDecoder>;
 export type HarvardInfo = D.Output<typeof HarvardInfoDecoder>;
 export type HarvardAllArt = D.Output<typeof HarvardAllArtSchema>
 export type HarvardArt = D.Output<typeof HarvardArtSchema>
-export type HarvardSearchResponse = D.Output<typeof HarvardSearchSchema>;
+export type HarvardSearch = D.Output<typeof HarvardSearchSchema>;

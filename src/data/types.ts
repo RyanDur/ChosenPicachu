@@ -1,5 +1,7 @@
 import {Consumer} from '@ryandur/sand';
 
+export type URI = string;
+
 export interface Indexable {
     readonly [x: string]: string | undefined;
 }

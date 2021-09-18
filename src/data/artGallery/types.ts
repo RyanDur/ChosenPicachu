@@ -1,7 +1,3 @@
-import {AICAllArt, AICArt, AICSearchResponse} from './aic/types';
-import {HarvardAllArt, HarvardArt, HarvardSearchResponse} from './harvard/types';
-import {RIJKAllArt, RIJKArt, RIJSearchOptions} from './rijks/types';
-
 export enum Source {
     AIC = 'aic',
     HARVARD = 'harvard',
@@ -53,7 +49,4 @@ export interface GetArt {
     source: Source;
 }
 
-export type AllArtResponse = AICAllArt | HarvardAllArt | RIJKAllArt;
-export type ArtResponse = AICArt | HarvardArt | RIJKArt | undefined;
-export type ArtSearchResponse = AICSearchResponse | HarvardSearchResponse | RIJSearchOptions;
 export type Gallery = AllArt | Art | SearchOptions;

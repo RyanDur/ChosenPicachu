@@ -60,7 +60,7 @@ export type AICPieceData = {
 }
 
 export type AICArtOption = D.Output<typeof AICArtOptionDecoder>;
-export type AICSearchResponse = D.Output<typeof AICSearchSchema>;
+export type AICSearch = D.Output<typeof AICSearchSchema>;
 export type AICArt = D.Output<typeof AICPieceResponseDecoder>;
 export type AICAllArt = D.Output<typeof AICAllArtSchema>;
 

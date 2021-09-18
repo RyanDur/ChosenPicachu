@@ -20,21 +20,24 @@ import {http} from '../../http';
 import {waitFor} from '@testing-library/react';
 import {asyncResult, error, loaded, loading} from '@ryandur/sand';
 import {Art, Source} from '../types';
-import {AICPieceData, AICSearchResponse} from '../aic/types';
+import {AICPieceData, AICSearch} from '../aic/types';
 import {HTTPError} from '../../types';
 import {artGallery} from '../index';
 
 jest.mock('../../http', () => ({
-    http: jest.fn(),
+    ...jest.requireActual('../../http'),
+    http: {
+        get: jest.fn()
+    },
 }));
 
 describe('data', () => {
-    const mockHttp = http as jest.Mock;
+    const mockHttp = http as { get: jest.Mock };
 
     const mockSuccess = (response: any) =>
-        mockHttp.mockReturnValue(asyncResult.success(response));
+        mockHttp.get.mockReturnValue(asyncResult.success(response));
     const mockFailure = (response: any) =>
-        mockHttp.mockReturnValue(asyncResult.failure(response));
+        mockHttp.get.mockReturnValue(asyncResult.failure(response));
 
     describe('retrieving all the artwork', () => {
         describe('when the source is AIC', () => {
@@ -142,22 +145,6 @@ describe('data', () => {
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
             await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error(HTTPError.UNKNOWN_SOURCE)));
         });
-
-        test.each`
-        source
-        ${Source.AIC}
-        ${Source.HARVARD}
-        ${Source.RIJKS}
-        `('when the call fails', async ({source}) => {
-            const dispatch = jest.fn();
-            mockHttp.mockReturnValue(asyncResult.of(Promise.reject(HTTPError.UNKNOWN)));
-
-            artGallery.getAllArt({page: 1, size: 12, source}).onAsyncEvent(dispatch);
-
-            expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error(HTTPError.UNKNOWN)));
-
-        });
     });
 
     describe('retrieving an artwork', () => {
@@ -237,21 +224,6 @@ describe('data', () => {
 
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
             await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error(HTTPError.UNKNOWN_SOURCE)));
-        });
-
-        test.each`
-        source
-        ${Source.AIC}
-        ${Source.HARVARD}
-        ${Source.RIJKS}
-        `('when the call fails', async ({source}) => {
-            const dispatch = jest.fn();
-            mockHttp.mockReturnValue(asyncResult.of(Promise.reject(HTTPError.UNKNOWN)));
-
-            artGallery.getArt({id: String(aicPiece.id), source}).onAsyncEvent(dispatch);
-
-            expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error(HTTPError.UNKNOWN)));
         });
     });
 
@@ -348,7 +320,7 @@ describe('data', () => {
     };
 
 
-    const aicArtOptions: AICSearchResponse = {
+    const aicArtOptions: AICSearch = {
         pagination,
         data: options.map(option => ({
             suggest_autocomplete_all: [{
