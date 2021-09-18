@@ -1,19 +1,6 @@
-import {AICAllArt, AICArt, AICSearch, AICPieceData} from './types';
+import {AICAllArt, AICAllArtSchema, AICArt, AICArtSchema, AICPieceData, AICSearch, AICSearchSchema} from './types';
 import {AllArt, Art, SearchOptions} from '../types';
-
-export const aicSearchToSearch = ({data}: AICSearch): SearchOptions => data
-    .map(({suggest_autocomplete_all}) => suggest_autocomplete_all[1])
-    .flatMap(option => option.input);
-
-export const aicToAllArt = ({pagination, data}: AICAllArt): AllArt => ({
-    pagination: {
-        total: pagination.total,
-        limit: pagination.limit,
-        totalPages: pagination.total_pages,
-        currentPage: pagination.current_page,
-    },
-    pieces: data.map(aicToPiece)
-});
+import {validate} from '../../http';
 
 const aicToPiece = (data: AICArt): Art => ({
     id: String(data.id),
@@ -23,5 +10,24 @@ const aicToPiece = (data: AICArt): Art => ({
     altText: data.thumbnail?.alt_text || data.term_titles.join(' ') || ''
 });
 
-export const aicArtToArt = ({data}: AICPieceData): Art => aicToPiece(data);
+export const aic = {
+    toAllArt: ({pagination, data}: AICAllArt): AllArt => ({
+        pagination: {
+            total: pagination.total,
+            limit: pagination.limit,
+            totalPages: pagination.total_pages,
+            currentPage: pagination.current_page,
+        },
+        pieces: data.map(aicToPiece)
+    }),
 
+    toArt: ({data}: AICPieceData): Art => aicToPiece(data),
+
+    toSearch: ({data}: AICSearch): SearchOptions => data
+        .map(({suggest_autocomplete_all}) => suggest_autocomplete_all[1])
+        .flatMap(option => option.input),
+
+    validateArt: validate(AICArtSchema),
+    validateAllArt: validate(AICAllArtSchema),
+    validateSearch: validate(AICSearchSchema)
+};

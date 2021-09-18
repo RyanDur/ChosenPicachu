@@ -43,4 +43,3 @@ export const RIJKArtSchema = D.object({
 export type RIJKArtObject = D.Output<typeof RIJKPieceDecoder>;
 export type RIJKSAllArt = D.Output<typeof RIJKAllArtSchema>;
 export type RIJKSArt = D.Output<typeof RIJKArtSchema>;
-export type RIJSearch = D.Output<typeof RIJKSSearchSchema>;

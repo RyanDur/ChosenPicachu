@@ -1,15 +1,6 @@
-import {RIJKSAllArt, RIJKArtObject, RIJKSArt} from './types';
+import {RIJKSAllArt, RIJKArtObject, RIJKSArt, RIJKAllArtSchema, RIJKArtSchema, RIJKSSearchSchema} from './types';
 import {AllArt, Art, SearchOptions} from '../types';
-
-export const rijkToAllArt = (page: number) => (data: RIJKSAllArt): AllArt => ({
-    pagination: {
-        total: data.count,
-        limit: data.artObjects.length,
-        totalPages: data.count / data.artObjects.length,
-        currentPage: page,
-    },
-    pieces: data.artObjects.map(rijkToPiece)
-});
+import {validate} from '../../http';
 
 const rijkToPiece = (data: RIJKArtObject): Art => ({
     id: data.objectNumber,
@@ -19,8 +10,23 @@ const rijkToPiece = (data: RIJKArtObject): Art => ({
     altText: data.longTitle
 });
 
+export const rijks = {
+    toAllArt: (page: number) => (data: RIJKSAllArt): AllArt => ({
+        pagination: {
+            total: data.count,
+            limit: data.artObjects.length,
+            totalPages: data.count / data.artObjects.length,
+            currentPage: page,
+        },
+        pieces: data.artObjects.map(rijkToPiece)
+    }),
 
-export const rijkArtToArt = ({artObject}: RIJKSArt): Art => rijkToPiece(artObject);
+    toArt: ({artObject}: RIJKSArt): Art => rijkToPiece(artObject),
 
-export const rijksSearchToSearch = ({artObjects}: RIJKSAllArt): SearchOptions =>
-    artObjects.map(({title}) => title);
+    toSearch: ({artObjects}: RIJKSAllArt): SearchOptions =>
+        artObjects.map(({title}) => title),
+
+    validateAllArt: validate(RIJKAllArtSchema),
+    validateArt: validate(RIJKArtSchema),
+    validateSearch: validate(RIJKSSearchSchema)
+};
