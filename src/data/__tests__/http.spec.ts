@@ -45,7 +45,7 @@ describe('http calls', () => {
     ${http.put}    | ${'PUT'}    | ${testObject}
     ${http.delete} | ${'DELETE'} | ${undefined}  
     `('$httpMethod failure is FORBIDDEN', async ({method, body}) => {
-        server.stubResponse(403, HTTPError.FORBIDDEN);
+        server.stubResponse(403);
 
         const actual = await method(someUrl, body).value();
 
@@ -59,8 +59,23 @@ describe('http calls', () => {
     ${http.post}   | ${'POST'}   | ${testObject}
     ${http.put}    | ${'PUT'}    | ${testObject}
     ${http.delete} | ${'DELETE'} | ${undefined}        
-    `('$httpMethod failure is SERVER_ERROR', async ({method, body}) => {
+    `('$httpMethod when the network is down', async ({method, body}) => {
         server.stop();
+
+        const actual = await method(someUrl, body).value();
+
+        // @ts-ignore
+        expect(actual.explanation).toEqual(HTTPError.NETWORK_ERROR);
+    });
+
+    test.each`
+    method         | httpMethod  | body          
+    ${http.get}    | ${'GET'}    | ${undefined}  
+    ${http.post}   | ${'POST'}   | ${testObject}
+    ${http.put}    | ${'PUT'}    | ${testObject}
+    ${http.delete} | ${'DELETE'} | ${undefined}        
+    `('$httpMethod failure is SERVER_ERROR', async ({method, body}) => {
+        server.stubResponse(500);
 
         const actual = await method(someUrl, body).value();
 

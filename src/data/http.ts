@@ -27,23 +27,25 @@ export const http = {
         .flatMap((response: Response): Result.Async<unknown, HTTPError> =>
             response.status === 204 ?
                 success<unknown, HTTPError>(undefined) :
-                failResponse<unknown>(response)),
+                failResponse(response)),
 
     delete: (uri: URI) => request(uri, HTTPMethod.DELETE)
         .flatMap((response: Response): Result.Async<unknown, HTTPError> =>
             response.status === 204 ?
                 success<unknown, HTTPError>(undefined) :
-                failResponse<unknown>(response))
+                failResponse(response))
 };
 
 const request = (uri: URI, method = HTTPMethod.GET, body?: unknown) =>
     asyncResult.of(fetch(uri, {method, mode: 'cors', ...{body: (body ? JSON.stringify(body) : undefined)}}))
-        .mapFailure(() => HTTPError.SERVER_ERROR);
+        .mapFailure(() => HTTPError.NETWORK_ERROR);
 
 const failResponse = <T>(response: Response): Result.Async<T, HTTPError> => {
     switch (response.status) {
         case 403:
             return failure<T, HTTPError>(HTTPError.FORBIDDEN);
+        case 500:
+            return failure<T, HTTPError>(HTTPError.SERVER_ERROR);
         default:
             return failure<T, HTTPError>(HTTPError.UNKNOWN);
     }
