@@ -45,7 +45,7 @@ export const URI = {
                         size: limit
                     })].join('');
             }
-            default: {
+            case Source.RIJKS: {
                 return [rijksDomain, path,
                     toQueryString({
                         q: search,
@@ -55,6 +55,8 @@ export const URI = {
                         key: rijksAPIKey
                     })].join('');
             }
+            default:
+                return '';
         }
     },
 
@@ -73,7 +75,7 @@ export const URI = {
                     apikey: harvardAPIKey,
                     size: defaultSearchLimit
                 })}`;
-            default:
+            case Source.RIJKS:
                 return [rijksDomain,
                     toQueryString({
                         q: search,
@@ -82,6 +84,8 @@ export const URI = {
                         imgonly: true,
                         key: rijksAPIKey
                     })].join('');
+            default:
+                return '';
         }
     }
 };

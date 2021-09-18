@@ -2,12 +2,14 @@ export enum Source {
     AIC = 'aic',
     HARVARD = 'harvard',
     RIJKS = 'rijksstudio',
+    UNKNOWN = 'UNKNOWN'
 }
 
 export const toSource = (value: string): Source => {
     if (value === Source.AIC) return Source.AIC;
     if (value === Source.HARVARD) return Source.HARVARD;
-    else return Source.RIJKS;
+    if (value === Source.RIJKS) return Source.RIJKS;
+    else return Source.UNKNOWN;
 };
 
 export type Pagination = {
