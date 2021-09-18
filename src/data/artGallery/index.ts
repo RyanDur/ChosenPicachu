@@ -11,47 +11,29 @@ const unknownSource = <T>() => asyncResult.failure<T, HTTPError>(HTTPError.UNKNO
 
 export const artGallery = {
     getAllArt: ({page, size, source, search}: GetAllArt): OnAsyncEvent<AllArt, HTTPError> =>
-        asyncEvent(http.get(URI.from({source, params: {page, search, limit: size}}))
-            .flatMap(response => {
-                switch (source) {
-                    case Source.AIC:
-                        return aic.validateAllArt(response).map(aic.toAllArt);
-                    case Source.HARVARD:
-                        return harvard.validateAllArt(response).map(harvard.toAllArt);
-                    case Source.RIJKS:
-                        return rijks.validateAllArt(response).map(rijks.toAllArt(page));
-                    default:
-                        return unknownSource();
-                }
-            })),
+        asyncEvent(URI.from({source, params: {page, search, limit: size}})
+            .map(uri => http.get(uri).flatMap(response => ({
+                [Source.AIC]: aic.validateAllArt(response).map(aic.toAllArt),
+                [Source.HARVARD]: harvard.validateAllArt(response).map(harvard.toAllArt),
+                [Source.RIJKS]: rijks.validateAllArt(response).map(rijks.toAllArt(page)),
+                [Source.UNKNOWN]: unknownSource<AllArt>()
+            })[source])).orElse(unknownSource<AllArt>())),
 
     getArt: ({id, source}: GetArt): OnAsyncEvent<Art, HTTPError> =>
-        asyncEvent(http.get(URI.from({source: source, path: `/${id}`}))
-            .flatMap(response => {
-                switch (source) {
-                    case Source.AIC:
-                        return aic.validateArt(response).map(aic.toArt);
-                    case Source.HARVARD:
-                        return harvard.validateArt(response).map(harvard.toArt);
-                    case Source.RIJKS:
-                        return rijks.validateArt(response).map(rijks.toArt);
-                    default:
-                        return unknownSource();
-                }
-            })),
+        asyncEvent(URI.from({source: source, path: `/${id}`})
+            .map(uri => http.get(uri).flatMap(response => ({
+                [Source.AIC]: aic.validateArt(response).map(aic.toArt),
+                [Source.HARVARD]: harvard.validateArt(response).map(harvard.toArt),
+                [Source.RIJKS]: rijks.validateArt(response).map(rijks.toArt),
+                [Source.UNKNOWN]: unknownSource<Art>()
+            })[source])).orElse(unknownSource<Art>())),
 
     searchForArt: ({search, source}: SearchArt): OnAsyncEvent<SearchOptions, HTTPError> =>
-        asyncEvent(http.get(URI.createSearchFrom(search, source))
-            .flatMap(response => {
-                switch (source) {
-                    case Source.AIC:
-                        return aic.validateSearch(response).map(aic.toSearch);
-                    case Source.HARVARD:
-                        return harvard.validateSearch(response).map(harvard.toSearch);
-                    case Source.RIJKS:
-                        return rijks.validateSearch(response).map(rijks.toSearch);
-                    default:
-                        return unknownSource();
-                }
-            }))
+        asyncEvent(URI.createSearchFrom(search, source).map(uri => http.get(uri)
+            .flatMap(response => ({
+                [Source.AIC]: aic.validateSearch(response).map(aic.toSearch),
+                [Source.HARVARD]: harvard.validateSearch(response).map(harvard.toSearch),
+                [Source.RIJKS]: rijks.validateSearch(response).map(rijks.toSearch),
+                [Source.UNKNOWN]: unknownSource<SearchOptions>()
+            })[source])).orElse(unknownSource<SearchOptions>()))
 };

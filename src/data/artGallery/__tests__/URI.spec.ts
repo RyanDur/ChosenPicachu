@@ -44,7 +44,7 @@ describe('the URI', () => {
     it('should create the appropriate URI for the Art Institute', () => {
         const searchQuery = {params: {search: faker.lorem.words(), page: 1, limit: 56}, source: Source.AIC};
         const {search, limit, ...rest} = searchQuery.params;
-        expect(URI.from(searchQuery))
+        expect(URI.from(searchQuery).orNull())
             .toEqual(`${aicDomain}/search${toQueryString({
                 q: search,
                 fields: shapeOfAICResponse, ...rest,
@@ -52,7 +52,7 @@ describe('the URI', () => {
             })}`);
 
         const query = {params: {page: 1, limit: 123}, source: Source.AIC};
-        expect(URI.from(query))
+        expect(URI.from(query).orNull())
             .toEqual(`${aicDomain}${toQueryString({
                 fields: shapeOfAICResponse,
                 page: query.params.page,
@@ -67,7 +67,7 @@ describe('the URI', () => {
         };
         const {search, limit, ...rest} = searchQuery.params;
 
-        expect(URI.from(searchQuery))
+        expect(URI.from(searchQuery).orNull())
             .toEqual(`${harvardDomain}${toQueryString({
                 q: search,
                 fields: shapeOfHarvardResponse, ...rest,
@@ -75,7 +75,7 @@ describe('the URI', () => {
             })}`);
 
         const query = {params: {page: 1, apikey: harvardAPIKey, limit}, source: Source.HARVARD};
-        expect(URI.from(query))
+        expect(URI.from(query).orNull())
             .toEqual(`${harvardDomain}${toQueryString({
                 fields: shapeOfHarvardResponse,
                 page: query.params.page,
@@ -91,7 +91,7 @@ describe('the URI', () => {
         };
         const {search, limit, apikey, page} = searchQuery.params;
 
-        expect(URI.from(searchQuery))
+        expect(URI.from(searchQuery).orNull())
             .toEqual(`${rijksDomain}${toQueryString({
                 q: search,
                 p: page,
@@ -101,7 +101,7 @@ describe('the URI', () => {
             })}`);
 
         const query = {params: {page: 1, apikey: rijksAPIKey, limit}, source: Source.RIJKS};
-        expect(URI.from(query))
+        expect(URI.from(query).orNull())
             .toEqual(`${rijksDomain}${toQueryString({
                 p: query.params.page,
                 ps: query.params.limit,
@@ -112,7 +112,7 @@ describe('the URI', () => {
 
     it('should allow to add a path', () => {
         const query = {params: {page: 1, limit: 456}, path: '/more/path', source: Source.AIC};
-        expect(URI.from(query))
+        expect(URI.from(query).orNull())
             .toEqual(`${aicDomain}${query.path}${toQueryString({
                 fields: shapeOfAICResponse,
                 page: query.params.page,
@@ -122,7 +122,7 @@ describe('the URI', () => {
 
     it('should be able to override the fields', () => {
         const query = {params: {page: 1, fields: ['blah'], limit: 23}, path: '/more/path', source: Source.AIC};
-        expect(URI.from(query))
+        expect(URI.from(query).orNull())
             .toEqual(`${aicDomain}${query.path}${toQueryString({
                 fields: ['blah'],
                 page: query.params.page,
@@ -133,7 +133,7 @@ describe('the URI', () => {
     describe('createSearchFrom', () => {
         it('should create the aic search url', () => {
             const search = faker.lorem.words();
-            expect(URI.createSearchFrom(search, Source.AIC))
+            expect(URI.createSearchFrom(search, Source.AIC).orNull())
                 .toEqual(`${aicDomain}/search${toQueryString({
                     'query[term][title]': search,
                     fields: 'suggest_autocomplete_all',
@@ -143,7 +143,7 @@ describe('the URI', () => {
 
         it('should create the harvard search url', () => {
             const search = faker.lorem.words();
-            expect(URI.createSearchFrom(search, Source.HARVARD))
+            expect(URI.createSearchFrom(search, Source.HARVARD).orNull())
                 .toEqual(`${harvardDomain}${toQueryString({
                     title: search,
                     fields: 'title',
@@ -154,7 +154,7 @@ describe('the URI', () => {
 
         it('should create the rijks search url', () => {
             const search = faker.lorem.words();
-            expect(URI.createSearchFrom(search, Source.RIJKS))
+            expect(URI.createSearchFrom(search, Source.RIJKS).orNull())
                 .toEqual(`${rijksDomain}${toQueryString({
                     q: search,
                     p: 1,

@@ -10,6 +10,7 @@ import {
 } from '../../config';
 import {Source} from './types';
 import {URI as URIType} from '../types';
+import {maybe, Maybe} from '@ryandur/sand';
 
 export const shapeOfAICResponse = ['id', 'title', 'image_id', 'artist_display', 'term_titles', 'thumbnail'];
 export const shapeOfHarvardResponse = ['id', 'title', 'people', 'primaryimageurl'];
@@ -21,7 +22,7 @@ interface Query {
 }
 
 export const URI = {
-    from: ({source, path, params = {}}: Query): URIType => {
+    from: ({source, path, params = {}}: Query): Maybe<URIType> => {
         const {search, limit = defaultRecordLimit, page, ...rest} = params;
         switch (source) {
             case Source.AIC: {
@@ -32,10 +33,10 @@ export const URI = {
                     ...rest,
                     limit
                 });
-                return search ? [aicDomain, '/search', queryString].join('') : [aicDomain, path, queryString].join('');
+                return maybe.some(search ? [aicDomain, '/search', queryString].join('') : [aicDomain, path, queryString].join(''));
             }
             case Source.HARVARD: {
-                return [harvardDomain, path,
+                return maybe.some([harvardDomain, path,
                     toQueryString({
                         q: search,
                         fields: shapeOfHarvardResponse,
@@ -43,49 +44,49 @@ export const URI = {
                         ...rest,
                         apikey: harvardAPIKey,
                         size: limit
-                    })].join('');
+                    })].join(''));
             }
             case Source.RIJKS: {
-                return [rijksDomain, path,
+                return maybe.some([rijksDomain, path,
                     toQueryString({
                         q: search,
                         p: page,
                         ps: limit,
                         imgonly: true,
                         key: rijksAPIKey
-                    })].join('');
+                    })].join(''));
             }
             default:
-                return '';
+                return maybe.none();
         }
     },
 
-    createSearchFrom: (search: string, source: Source): URIType => {
+    createSearchFrom: (search: string, source: Source): Maybe<URIType> => {
         switch (source) {
             case Source.AIC:
-                return `${aicDomain}/search${toQueryString({
+                return maybe.some(`${aicDomain}/search${toQueryString({
                     'query[term][title]': search,
                     fields: 'suggest_autocomplete_all',
                     limit: defaultSearchLimit
-                })}`;
+                })}`);
             case Source.HARVARD:
-                return `${harvardDomain}${toQueryString({
+                return maybe.some(`${harvardDomain}${toQueryString({
                     title: search,
                     fields: 'title',
                     apikey: harvardAPIKey,
                     size: defaultSearchLimit
-                })}`;
+                })}`);
             case Source.RIJKS:
-                return [rijksDomain,
+                return maybe.some([rijksDomain,
                     toQueryString({
                         q: search,
                         p: 1,
                         ps: defaultSearchLimit,
                         imgonly: true,
                         key: rijksAPIKey
-                    })].join('');
+                    })].join(''));
             default:
-                return '';
+                return maybe.none();
         }
     }
 };
