@@ -33,7 +33,7 @@ describe('viewing a piece', () => {
     describe('loading the piece of art', () => {
         beforeEach(() => {
             data.artGallery.getArt = () => ({
-                on: (dispatch) => dispatch(loading())
+                onAsyncEvent: (dispatch) => dispatch(loading())
             });
             renderWithRouter(<ArtPiece/>, {
                 initialRoute: `${Paths.artGallery}/1234`,
@@ -50,7 +50,7 @@ describe('viewing a piece', () => {
             data.artGallery.getArt = (id) => {
                 mockGetPieceId(id);
                 return {
-                    on: (dispatch) => dispatch(loaded(mockPiece))
+                    onAsyncEvent: (dispatch) => dispatch(loaded(mockPiece))
                 };
             };
             rendered = renderWithRouter(<ArtPiece/>, {
@@ -77,7 +77,7 @@ describe('viewing a piece', () => {
     describe('when getting the piece has errored', () => {
         beforeEach(() => {
             data.artGallery.getArt = () => ({
-                on: (dispatch) => dispatch(error())
+                onAsyncEvent: (dispatch) => dispatch(error())
             });
             renderWithRouter(<ArtPiece/>, {
                 initialRoute: `${Paths.artGallery}/1234`,

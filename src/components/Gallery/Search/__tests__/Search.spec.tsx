@@ -13,7 +13,7 @@ describe('search', () => {
 
     beforeEach(() => {
         data.artGallery.searchForArt = jest.fn(() => ({
-            on: (dispatch) => dispatch(loaded([searchWord]))
+            onAsyncEvent: (dispatch) => dispatch(loaded([searchWord]))
         }));
     });
 
