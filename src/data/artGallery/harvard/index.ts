@@ -1,15 +1,13 @@
-import {HarvardAllArt, HarvardSearch, HarvardArt} from './types';
+import {
+    HarvardAllArt,
+    HarvardAllArtSchema,
+    HarvardArt,
+    HarvardArtSchema,
+    HarvardSearch,
+    HarvardSearchSchema
+} from './types';
 import {AllArt, Art, SearchOptions} from '../types';
-
-export const harvardToAllArt = ({info, records}: HarvardAllArt): AllArt => ({
-    pagination: {
-        total: info.totalrecords,
-        limit: info.totalrecordsperquery,
-        totalPages: info.pages,
-        currentPage: info.page,
-    },
-    pieces: records.map(harvardArtToArt)
-});
+import {validate} from '../../http';
 
 export const harvardArtToArt = (record: HarvardArt): Art => ({
     id: String(record.id),
@@ -19,5 +17,23 @@ export const harvardArtToArt = (record: HarvardArt): Art => ({
     altText: record.title
 });
 
-export const harverdSearchToSearch = ({records}: HarvardSearch): SearchOptions =>
-    records.map(({title}) => title);
+export const harvard = {
+    toAllArt: ({info, records}: HarvardAllArt): AllArt => ({
+        pagination: {
+            total: info.totalrecords,
+            limit: info.totalrecordsperquery,
+            totalPages: info.pages,
+            currentPage: info.page,
+        },
+        pieces: records.map(harvardArtToArt)
+    }),
+
+    toArt: harvardArtToArt,
+
+    toSearch: ({records}: HarvardSearch): SearchOptions =>
+        records.map(({title}) => title),
+
+    validateAllArt: validate(HarvardAllArtSchema),
+    validateArt: validate(HarvardArtSchema),
+    validateSearch: validate(HarvardSearchSchema)
+};

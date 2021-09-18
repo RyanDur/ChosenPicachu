@@ -1,14 +1,11 @@
 import {AllArt, Art, GetAllArt, GetArt, SearchArt, SearchOptions, Source} from './types';
-import {AICAllArtSchema, AICArtSchema, AICSearchSchema} from './aic/types';
-import {HarvardAllArtSchema, HarvardArtSchema, HarvardSearchSchema} from './harvard/types';
-import {RIJKAllArtSchema, RIJKArtSchema, RIJKSSearchSchema} from './rijks/types';
 import {asyncEvent, asyncResult, OnAsyncEvent} from '@ryandur/sand';
-import {aicArtToArt, aicSearchToSearch, aicToAllArt} from './aic';
-import {harvardArtToArt, harvardToAllArt, harverdSearchToSearch} from './harvard';
-import {rijkArtToArt, rijksSearchToSearch, rijkToAllArt} from './rijks';
-import {http, validate} from '../http';
-import {URI} from './URI';
 import {HTTPError} from '../types';
+import {aic} from './aic';
+import {harvard} from './harvard';
+import {rijks} from './rijks';
+import {http} from '../http';
+import {URI} from './URI';
 
 const unknownSource = <T>() => asyncResult.failure<T, HTTPError>(HTTPError.UNKNOWN_SOURCE);
 
@@ -18,11 +15,11 @@ export const artGallery = {
             .flatMap(response => {
                 switch (source) {
                     case Source.AIC:
-                        return validate(AICAllArtSchema, response).map(aicToAllArt);
+                        return aic.validateAllArt(response).map(aic.toAllArt);
                     case Source.HARVARD:
-                        return validate(HarvardAllArtSchema, response).map(harvardToAllArt);
+                        return harvard.validateAllArt(response).map(harvard.toAllArt);
                     case Source.RIJKS:
-                        return validate(RIJKAllArtSchema, response).map(rijkToAllArt(page));
+                        return rijks.validateAllArt(response).map(rijks.toAllArt(page));
                     default:
                         return unknownSource();
                 }
@@ -33,11 +30,11 @@ export const artGallery = {
             .flatMap(response => {
                 switch (source) {
                     case Source.AIC:
-                        return validate(AICArtSchema, response).map(aicArtToArt);
+                        return aic.validateArt(response).map(aic.toArt);
                     case Source.HARVARD:
-                        return validate(HarvardArtSchema, response).map(harvardArtToArt);
+                        return harvard.validateArt(response).map(harvard.toArt);
                     case Source.RIJKS:
-                        return validate(RIJKArtSchema, response).map(rijkArtToArt);
+                        return rijks.validateArt(response).map(rijks.toArt);
                     default:
                         return unknownSource();
                 }
@@ -48,11 +45,11 @@ export const artGallery = {
             .flatMap(response => {
                 switch (source) {
                     case Source.AIC:
-                        return validate(AICSearchSchema, response).map(aicSearchToSearch);
+                        return aic.validateSearch(response).map(aic.toSearch);
                     case Source.HARVARD:
-                        return validate(HarvardSearchSchema, response).map(harverdSearchToSearch);
+                        return harvard.validateSearch(response).map(harvard.toSearch);
                     case Source.RIJKS:
-                        return validate(RIJKSSearchSchema, response).map(rijksSearchToSearch);
+                        return rijks.validateSearch(response).map(rijks.toSearch);
                     default:
                         return unknownSource();
                 }
