@@ -32,7 +32,12 @@ jest.mock('../../http', () => ({
 }));
 
 describe('data', () => {
-    const mockHttp = http as { get: jest.Mock };
+    const mockHttp = http as {
+        get: jest.Mock
+        post: any
+        put: any
+        delete: any
+    };
 
     const mockSuccess = (response: any) =>
         mockHttp.get.mockReturnValue(asyncResult.success(response));
