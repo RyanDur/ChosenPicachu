@@ -29,8 +29,8 @@ export const artGallery = {
             })[source])).orElse(unknownSource<Art>())),
 
     searchForArt: ({search, source}: SearchArt): OnAsyncEvent<SearchOptions, HTTPError> =>
-        asyncEvent(URI.createSearchFrom(search, source).map(uri => http.get(uri)
-            .flatMap(response => ({
+        asyncEvent(URI.createSearchFrom(search, source)
+            .map(uri => http.get(uri).flatMap(response => ({
                 [Source.AIC]: aic.validateSearch(response).map(aic.toSearch),
                 [Source.HARVARD]: harvard.validateSearch(response).map(harvard.toSearch),
                 [Source.RIJKS]: rijks.validateSearch(response).map(rijks.toSearch),
