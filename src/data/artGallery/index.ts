@@ -20,7 +20,7 @@ export const artGallery = {
             })[source])).orElse(unknownSource<AllArt>())),
 
     getArt: ({id, source}: GetArt): OnAsyncEvent<Art, HTTPError> =>
-        asyncEvent(URI.from({source: source, path: `/${id}`})
+        asyncEvent(URI.from({source: source, path: [id]})
             .map(uri => http.get(uri).flatMap(response => ({
                 [Source.AIC]: aic.validateArt(response).map(aic.toArt),
                 [Source.HARVARD]: harvard.validateArt(response).map(harvard.toArt),

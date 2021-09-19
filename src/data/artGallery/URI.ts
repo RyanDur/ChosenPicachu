@@ -17,7 +17,7 @@ export const shapeOfHarvardResponse = ['id', 'title', 'people', 'primaryimageurl
 
 interface Query {
     source: Source,
-    path?: string;
+    path?: unknown[];
     params?: Record<string, unknown>
 }
 
@@ -33,7 +33,9 @@ export const URI = {
                     ...rest,
                     limit
                 });
-                return maybe.some(search ? [aicDomain, '/search', queryString].join('') : [aicDomain, path, queryString].join(''));
+                return maybe.some(search ?
+                    [[aicDomain, 'search'].join('/'), queryString].join('') :
+                    [[aicDomain, path?.join('/')].join(''), queryString].join(''));
             }
             case Source.HARVARD: {
                 return maybe.some([harvardDomain, path,
