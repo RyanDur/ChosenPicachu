@@ -21,7 +21,7 @@ import {waitFor} from '@testing-library/react';
 import {asyncResult, error, loaded, loading} from '@ryandur/sand';
 import {Art, Source} from '../types';
 import {AICPieceData, AICSearch} from '../aic/types';
-import {explanation, HTTPError} from '../../types';
+import {HTTPError} from '../../types';
 import {artGallery} from '../index';
 
 jest.mock('../../http', () => ({
@@ -148,7 +148,7 @@ describe('data', () => {
             artGallery.getAllArt({page: 1, size: 12, source: 'I do not exist' as Source}).onAsyncEvent(dispatch);
 
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error(explanation(HTTPError.UNKNOWN_SOURCE))));
+            await waitFor(() => expect(dispatch.mock.calls[1][0].reason.reason).toStrictEqual(HTTPError.UNKNOWN_SOURCE));
         });
     });
 
@@ -228,7 +228,7 @@ describe('data', () => {
             artGallery.getArt({id: '1', source: 'I do not exist' as Source}).onAsyncEvent(dispatch);
 
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error(explanation(HTTPError.UNKNOWN_SOURCE))));
+            await waitFor(() => expect(dispatch.mock.calls[1][0].reason.reason).toStrictEqual(HTTPError.UNKNOWN_SOURCE));
         });
     });
 
@@ -278,7 +278,7 @@ describe('data', () => {
             artGallery.searchForArt({search, source: 'I do not exist' as Source}).onAsyncEvent(dispatch);
 
             expect(dispatch).toHaveBeenNthCalledWith(1, loading());
-            await waitFor(() => expect(dispatch).toHaveBeenNthCalledWith(2, error(explanation(HTTPError.UNKNOWN_SOURCE))));
+            await waitFor(() => expect(dispatch.mock.calls[1][0].reason.reason).toStrictEqual(HTTPError.UNKNOWN_SOURCE));
         });
 
         test.each`
