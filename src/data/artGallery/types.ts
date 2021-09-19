@@ -7,13 +7,12 @@ export enum Source {
     UNKNOWN = 'UNKNOWN'
 }
 
-export const toSource = (value: string): Source => ({
+export const matchSource = matchOn((value: string): Source => ({
     [Source.AIC]: Source.AIC,
     [Source.HARVARD]: Source.HARVARD,
     [Source.RIJKS]: Source.RIJKS,
     [Source.UNKNOWN]: Source.UNKNOWN
-})[value] || Source.UNKNOWN;
-export const matchSource = matchOn(toSource);
+})[value] || Source.UNKNOWN);
 
 export type Pagination = {
     total: number;

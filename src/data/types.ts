@@ -46,10 +46,8 @@ export enum FailStatusCode {
     UNKNOWN = HTTPStatus.UNKNOWN
 }
 
-export const toFailStatusCode = (code: number): FailStatusCode => ({
+export const matchFailStatusCode = matchOn((code: number): FailStatusCode => ({
     [FailStatusCode.FORBIDDEN]: FailStatusCode.FORBIDDEN,
     [FailStatusCode.SERVER_ERROR]: FailStatusCode.SERVER_ERROR,
     [FailStatusCode.UNKNOWN]: FailStatusCode.UNKNOWN
-})[code] || FailStatusCode.UNKNOWN;
-
-export const matchFailStatusCode = matchOn(toFailStatusCode);
+})[code] || FailStatusCode.UNKNOWN);

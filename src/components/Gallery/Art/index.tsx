@@ -5,7 +5,7 @@ import {Loading} from '../../Loading';
 import {Image} from '../Image';
 import {useGallery} from '../Context';
 import {Explanation, HTTPError} from '../../../data/types';
-import {AllArt, toSource} from '../../../data/artGallery/types';
+import {AllArt, Source} from '../../../data/artGallery/types';
 import {AsyncEvent, AsyncState, empty, has, not} from '@ryandur/sand';
 import './Gallery.scss';
 import './Gallery.layout.scss';
@@ -15,10 +15,10 @@ export const ArtGallery: FC = () => {
     const [loading, isLoading] = useState(false);
     const [errored, hasErrored] = useState(false);
     const {queryObj: {page, size, search, tab}} =
-        useQuery<{ page: number, size: number, tab: string, search?: string }>();
+        useQuery<{ page: number, size: number, tab: Source, search?: string }>();
 
     useEffect(() => {
-        data.artGallery.getAllArt({page, size, search, source: toSource(tab)})
+        data.artGallery.getAllArt({page, size, search, source: tab})
             .onAsyncEvent((event: AsyncEvent<AllArt, Explanation<HTTPError>>) => {
                 isLoading(event.type === AsyncState.LOADING);
                 hasErrored(event.type === AsyncState.ERROR);
