@@ -1,4 +1,4 @@
-import {AllArt, Art, GetAllArt, GetArt, SearchArt, SearchOptions, Source} from './types';
+import {AllArt, Art, GetAllArt, GetArt, SearchArt, SearchOptions, Source, toSource} from './types';
 import {asyncEvent, asyncResult, OnAsyncEvent} from '@ryandur/sand';
 import {HTTPError} from '../types';
 import {aic} from './aic';
@@ -17,7 +17,7 @@ export const artGallery = {
                 [Source.HARVARD]: harvard.validateAllArt(response).map(harvard.toAllArt),
                 [Source.RIJKS]: rijks.validateAllArt(response).map(rijks.toAllArt(page)),
                 [Source.UNKNOWN]: unknownSource<AllArt>()
-            })[source])).orElse(unknownSource<AllArt>())),
+            })[toSource(source)])).orElse(unknownSource<AllArt>())),
 
     getArt: ({id, source}: GetArt): OnAsyncEvent<Art, HTTPError> =>
         asyncEvent(URI.from({source: source, path: [id]})
@@ -26,7 +26,7 @@ export const artGallery = {
                 [Source.HARVARD]: harvard.validateArt(response).map(harvard.toArt),
                 [Source.RIJKS]: rijks.validateArt(response).map(rijks.toArt),
                 [Source.UNKNOWN]: unknownSource<Art>()
-            })[source])).orElse(unknownSource<Art>())),
+            })[toSource(source)])).orElse(unknownSource<Art>())),
 
     searchForArt: ({search, source}: SearchArt): OnAsyncEvent<SearchOptions, HTTPError> =>
         asyncEvent(URI.createSearchFrom(search, source)
@@ -35,5 +35,5 @@ export const artGallery = {
                 [Source.HARVARD]: harvard.validateSearch(response).map(harvard.toSearch),
                 [Source.RIJKS]: rijks.validateSearch(response).map(rijks.toSearch),
                 [Source.UNKNOWN]: unknownSource<SearchOptions>()
-            })[source])).orElse(unknownSource<SearchOptions>()))
+            })[toSource(source)])).orElse(unknownSource<SearchOptions>()))
 };
