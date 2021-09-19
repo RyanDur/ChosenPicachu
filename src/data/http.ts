@@ -38,11 +38,11 @@ export const http = {
 };
 
 const request = (uri: PATH, method?: HTTPMethod, body?: unknown) =>
-    asyncResult.of(fetch(uri, {
+    asyncResult.of<Response, Error>(fetch(uri, {
         method,
         mode: 'cors',
         ...{body: (body ? JSON.stringify(body) : undefined)}
-    })).mapFailure(err => explanation(HTTPError.NETWORK_ERROR, maybe.some(err as Error)));
+    })).mapFailure(err => explanation(HTTPError.NETWORK_ERROR, maybe.some(err)));
 
 const fail = <T>(response: Response) => matchFailStatusCode(response.status, {
     [FailStatusCode.FORBIDDEN]: () => failure<T, Explanation<HTTPError>>(explanation(HTTPError.FORBIDDEN)),
