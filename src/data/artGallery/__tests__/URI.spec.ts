@@ -111,9 +111,9 @@ describe('the URI', () => {
     });
 
     it('should allow to add a path', () => {
-        const query = {params: {page: 1, limit: 456}, path: '/more/path', source: Source.AIC};
+        const query = {params: {page: 1, limit: 456}, path: ['more', 'path'], source: Source.AIC};
         expect(URI.from(query).orNull())
-            .toEqual(`${aicDomain}${query.path}${toQueryString({
+            .toEqual(`${aicDomain}${query.path.join('/')}${toQueryString({
                 fields: shapeOfAICResponse,
                 page: query.params.page,
                 limit: 456
@@ -121,9 +121,9 @@ describe('the URI', () => {
     });
 
     it('should be able to override the fields', () => {
-        const query = {params: {page: 1, fields: ['blah'], limit: 23}, path: '/more/path', source: Source.AIC};
+        const query = {params: {page: 1, fields: ['blah'], limit: 23}, path: ['more', 'path'], source: Source.AIC};
         expect(URI.from(query).orNull())
-            .toEqual(`${aicDomain}${query.path}${toQueryString({
+            .toEqual(`${aicDomain}${query.path.join('/')}${toQueryString({
                 fields: ['blah'],
                 page: query.params.page,
                 limit: 23

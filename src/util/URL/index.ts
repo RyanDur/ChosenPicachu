@@ -1,7 +1,9 @@
-export const toQueryString = (queryObj?: Record<string, unknown>): string =>
-    queryObj ? `?${Object.entries(queryObj)
+import {maybe} from '@ryandur/sand';
+
+export const toQueryString = (queryObj = {}): string =>
+    maybe.of(Object.entries(queryObj)
         .filter(([, value]) => !!value)
-        .map(([key, value]) => `${key}=${value}`).join('&')}` : '';
+        .map(([key, value]) => `${key}=${value}`).join('&')).map(query => `?${query}`).orElse('');
 
 export const toQueryObj = (queryString: string, defaultObj = {}) =>
     queryString ? queryString.replace('?', '')
