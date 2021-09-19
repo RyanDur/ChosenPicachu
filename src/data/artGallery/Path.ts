@@ -31,10 +31,10 @@ export const Path = {
                     page, limit, ...rest
                 });
                 return maybe.some(
-                    maybe.of(search).map(() => [
-                        [aicDomain, 'search'].join('/'),
-                        queryString
-                    ].join('')).orElse([[
+                    maybe.of(search).map(() => [[
+                        aicDomain,
+                        'search'
+                    ].join('/'), queryString].join('')).orElse([[
                         aicDomain,
                         path?.filter(has).join('/')
                     ].filter(has).join('/'), queryString].join('')));
