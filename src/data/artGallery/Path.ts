@@ -21,7 +21,7 @@ interface Query {
     params?: Record<string, unknown>
 }
 
-export const URI = {
+export const Path = {
     from: ({source, path, params = {}}: Query): Maybe<URIType> => {
         const {search, limit = defaultRecordLimit, page, ...rest} = params;
         return ({
