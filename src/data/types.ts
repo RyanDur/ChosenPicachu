@@ -1,4 +1,5 @@
 import {matchOn} from '../util';
+import {maybe, Maybe} from '@ryandur/sand';
 
 export type PATH = string;
 
@@ -8,11 +9,11 @@ export interface Indexable {
 
 export type Explanation<E> = {
     reason: E,
-    errs?: Error[]
+    err: Maybe<Error>
 }
 
-export const explanation = <T>(reason: T, errs: Error[] = []): Explanation<T> =>
-    ({reason, errs});
+export const explanation = <T>(reason: T, err: Maybe<Error> = maybe.nothing()): Explanation<T> =>
+    ({reason, err});
 
 export enum HTTPMethod {
     GET = 'GET',

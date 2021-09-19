@@ -42,7 +42,7 @@ const request = (uri: PATH, method?: HTTPMethod, body?: unknown) =>
         method,
         mode: 'cors',
         ...{body: (body ? JSON.stringify(body) : undefined)}
-    })).mapFailure(err => explanation(HTTPError.NETWORK_ERROR, [err as Error]));
+    })).mapFailure(err => explanation(HTTPError.NETWORK_ERROR, maybe.some(err as Error)));
 
 const fail = <T>(response: Response) => matchFailStatusCode(response.status, {
     [FailStatusCode.FORBIDDEN]: () => failure<T, Explanation<HTTPError>>(explanation(HTTPError.FORBIDDEN)),

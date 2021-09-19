@@ -1,4 +1,4 @@
-type MATCH = string | number;
-
-export const matchOn = <T>(matcher: (value: T) => MATCH) =>
-    <V>(on: T, cases: { [k: MATCH]: () => V }): V => cases[matcher(on)]();
+export const matchOn = <MATCH_ON extends string | number, T>(matcher: (value: T) => MATCH_ON) => <V>(
+        on: T,
+        cases: Record<MATCH_ON, () => V>
+): V => cases[matcher(on)]();
