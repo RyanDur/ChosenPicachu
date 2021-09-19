@@ -10,14 +10,14 @@ import {
 } from '../../config';
 import {Source, toSource} from './types';
 import {URI as URIType} from '../types';
-import {maybe, Maybe} from '@ryandur/sand';
+import {has, maybe, Maybe} from '@ryandur/sand';
 
 export const shapeOfAICResponse = ['id', 'title', 'image_id', 'artist_display', 'term_titles', 'thumbnail'];
 export const shapeOfHarvardResponse = ['id', 'title', 'people', 'primaryimageurl'];
 
 interface Query {
     source: Source,
-    path?: unknown[];
+    path?: (string | number)[];
     params?: Record<string, unknown>
 }
 
@@ -33,14 +33,18 @@ export const URI = {
                     ...rest,
                     limit
                 })].join('') :
-                [[aicDomain, path?.join('/')].join(''), toQueryString({
+                [[aicDomain, path?.filter(has).join('/')].filter(has).join('/'), toQueryString({
                     q: search,
                     fields: shapeOfAICResponse,
                     page,
                     ...rest,
                     limit
                 })].join('')),
-            [Source.HARVARD]: () => maybe.some([harvardDomain, path,
+            [Source.HARVARD]: () => maybe.some([
+                [
+                    harvardDomain,
+                    path?.filter(has).join('/')
+                ].filter(has).join('/'),
                 toQueryString({
                     q: search,
                     fields: shapeOfHarvardResponse,
@@ -49,7 +53,8 @@ export const URI = {
                     apikey: harvardAPIKey,
                     size: limit
                 })].join('')),
-            [Source.RIJKS]: () => maybe.some([rijksDomain, path,
+            [Source.RIJKS]: () => maybe.some([
+                [rijksDomain, path?.filter(has).join('/')].filter(has).join('/'),
                 toQueryString({
                     q: search,
                     p: page,
