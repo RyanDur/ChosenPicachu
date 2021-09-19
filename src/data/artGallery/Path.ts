@@ -9,7 +9,7 @@ import {
     rijksDomain
 } from '../../config';
 import {Source, toSource} from './types';
-import {URI as URIType} from '../types';
+import {PATH as URIType} from '../types';
 import {has, maybe, Maybe} from '@ryandur/sand';
 
 export const shapeOfAICResponse = ['id', 'title', 'image_id', 'artist_display', 'term_titles', 'thumbnail'];
