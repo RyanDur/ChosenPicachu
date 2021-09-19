@@ -20,13 +20,17 @@ export const validate = <T>(schema: Decoder<T>) => (result: unknown): Result.Asy
 
 export const http = {
     get: <T>(path: PATH): Result.Async<T, Explanation<HTTPError>> =>
-        request(path).flatMap((response: Response) =>
-            response.status === HTTPStatus.OK ? asyncResult.of(response.json()) : fail(response)),
+        request(path).flatMap((response: Response) => response.status === HTTPStatus.OK ?
+            asyncResult.of<T, Error>(response.json()).mapFailure<Explanation<HTTPError>>(
+                err => explanation(HTTPError.JSON_BODY_ERROR, maybe.some(err))
+            ) : fail(response)),
 
     // the rest of these are not needed. They are just here for an example
     post: <T>(path: PATH, body: unknown): Result.Async<T, Explanation<HTTPError>> =>
-        request(path, HTTPMethod.POST, body).flatMap((response: Response) =>
-            response.status === HTTPStatus.CREATED ? asyncResult.of(response.json()) : fail(response)),
+        request(path, HTTPMethod.POST, body).flatMap((response: Response) => response.status === HTTPStatus.CREATED ?
+            asyncResult.of<T, Error>(response.json()).mapFailure<Explanation<HTTPError>>(
+                err => explanation(HTTPError.JSON_BODY_ERROR, maybe.some(err))
+            ) : fail(response)),
 
     put: (path: PATH, body: unknown): Result.Async<typeof undefined, Explanation<HTTPError>> =>
         request(path, HTTPMethod.PUT, body).flatMap((response: Response) =>
