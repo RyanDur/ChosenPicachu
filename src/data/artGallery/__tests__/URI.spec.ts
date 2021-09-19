@@ -58,6 +58,14 @@ describe('the URI', () => {
                 page: query.params.page,
                 limit: query.params.limit
             })}`);
+
+        const anotherQuery = {params: {page: 1, limit: 123}, path: [1], source: Source.AIC};
+        expect(URI.from(anotherQuery).orNull())
+            .toEqual(`${aicDomain}/${anotherQuery.path.join('/')}${toQueryString({
+                fields: shapeOfAICResponse,
+                page: query.params.page,
+                limit: query.params.limit
+            })}`);
     });
 
     it('should create the appropriate URI for Harvard', () => {
@@ -77,6 +85,15 @@ describe('the URI', () => {
         const query = {params: {page: 1, apikey: harvardAPIKey, limit}, source: Source.HARVARD};
         expect(URI.from(query).orNull())
             .toEqual(`${harvardDomain}${toQueryString({
+                fields: shapeOfHarvardResponse,
+                page: query.params.page,
+                apikey: query.params.apikey,
+                size: query.params.limit
+            })}`);
+
+        const anotherQuery = {params: {page: 1, apikey: harvardAPIKey, limit}, path: [1], source: Source.HARVARD};
+        expect(URI.from(anotherQuery).orNull())
+            .toEqual(`${harvardDomain}/${anotherQuery.path.join('/')}${toQueryString({
                 fields: shapeOfHarvardResponse,
                 page: query.params.page,
                 apikey: query.params.apikey,
@@ -108,12 +125,21 @@ describe('the URI', () => {
                 imgonly: true,
                 key: query.params.apikey
             })}`);
+
+        const anotherQuery = {params: {page: 1, apikey: rijksAPIKey, limit}, path: [1], source: Source.RIJKS};
+        expect(URI.from(anotherQuery).orNull())
+            .toEqual(`${rijksDomain}/${anotherQuery.path.join('/')}${toQueryString({
+                p: query.params.page,
+                ps: query.params.limit,
+                imgonly: true,
+                key: query.params.apikey
+            })}`);
     });
 
     it('should allow to add a path', () => {
         const query = {params: {page: 1, limit: 456}, path: ['more', 'path'], source: Source.AIC};
         expect(URI.from(query).orNull())
-            .toEqual(`${aicDomain}${query.path.join('/')}${toQueryString({
+            .toEqual(`${[aicDomain, query.path.join('/')].join('/')}${toQueryString({
                 fields: shapeOfAICResponse,
                 page: query.params.page,
                 limit: 456
@@ -123,7 +149,7 @@ describe('the URI', () => {
     it('should be able to override the fields', () => {
         const query = {params: {page: 1, fields: ['blah'], limit: 23}, path: ['more', 'path'], source: Source.AIC};
         expect(URI.from(query).orNull())
-            .toEqual(`${aicDomain}${query.path.join('/')}${toQueryString({
+            .toEqual(`${[aicDomain, query.path.join('/')].join('/')}${toQueryString({
                 fields: ['blah'],
                 page: query.params.page,
                 limit: 23

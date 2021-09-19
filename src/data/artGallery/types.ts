@@ -5,12 +5,12 @@ export enum Source {
     UNKNOWN = 'UNKNOWN'
 }
 
-export const toSource = (value: string): Source => {
-    if (value === Source.AIC) return Source.AIC;
-    if (value === Source.HARVARD) return Source.HARVARD;
-    if (value === Source.RIJKS) return Source.RIJKS;
-    else return Source.UNKNOWN;
-};
+export const toSource = (value: string): Source => ({
+    [Source.AIC]: Source.AIC,
+    [Source.HARVARD]: Source.HARVARD,
+    [Source.RIJKS]: Source.RIJKS,
+    [Source.UNKNOWN]: Source.UNKNOWN
+})[value] || Source.UNKNOWN;
 
 export type Pagination = {
     total: number;
