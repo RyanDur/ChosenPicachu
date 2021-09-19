@@ -1,4 +1,4 @@
-import {FailStatusCode, HTTPError, HTTPMethod, HTTPStatus, toFailStatusCode, URI} from './types';
+import {FailStatusCode, HTTPError, HTTPMethod, HTTPStatus, toFailStatusCode, PATH} from './types';
 import {asyncResult, maybe, Result} from '@ryandur/sand';
 import {Decoder} from 'schemawax';
 
@@ -10,25 +10,25 @@ export const validate = <T>(schema: Decoder<T>) => (result: unknown): Result.Asy
         .orElse(failure<T, HTTPError>(HTTPError.CANNOT_DECODE));
 
 export const http = {
-    get: <T>(uri: URI): Result.Async<T, HTTPError> =>
-        request(uri).flatMap((response: Response) =>
+    get: <T>(path: PATH): Result.Async<T, HTTPError> =>
+        request(path).flatMap((response: Response) =>
             response.status === HTTPStatus.OK ? asyncResult.of(response.json()) : fail(response)),
 
     // the rest of these are not needed. They are just here for an example
-    post: <T>(uri: URI, body: unknown): Result.Async<T, HTTPError> =>
-        request(uri, HTTPMethod.POST, body).flatMap((response: Response) =>
+    post: <T>(path: PATH, body: unknown): Result.Async<T, HTTPError> =>
+        request(path, HTTPMethod.POST, body).flatMap((response: Response) =>
             response.status === HTTPStatus.CREATED ? asyncResult.of(response.json()) : fail(response)),
 
-    put: (uri: URI, body: unknown): Result.Async<typeof undefined, HTTPError> =>
-        request(uri, HTTPMethod.PUT, body).flatMap((response: Response) =>
+    put: (path: PATH, body: unknown): Result.Async<typeof undefined, HTTPError> =>
+        request(path, HTTPMethod.PUT, body).flatMap((response: Response) =>
             response.status === HTTPStatus.NO_CONTENT ? success(undefined) : fail(response)),
 
-    delete: (uri: URI): Result.Async<typeof undefined, HTTPError> =>
-        request(uri, HTTPMethod.DELETE).flatMap((response: Response) =>
+    delete: (path: PATH): Result.Async<typeof undefined, HTTPError> =>
+        request(path, HTTPMethod.DELETE).flatMap((response: Response) =>
             response.status === HTTPStatus.NO_CONTENT ? success(undefined) : fail(response))
 };
 
-const request = (uri: URI, method?: HTTPMethod, body?: unknown) =>
+const request = (uri: PATH, method?: HTTPMethod, body?: unknown) =>
     asyncResult.of(fetch(uri, {
         method,
         mode: 'cors',
