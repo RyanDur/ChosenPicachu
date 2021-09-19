@@ -62,7 +62,7 @@ export const URI = {
                     imgonly: true,
                     key: rijksAPIKey
                 })].join('')),
-            [Source.UNKNOWN]: () => maybe.none<string>()
+            [Source.UNKNOWN]: () => maybe.nothing<string>()
         })[toSource(source)]();
     },
 
@@ -87,6 +87,6 @@ export const URI = {
                 imgonly: true,
                 key: rijksAPIKey
             })].join('')),
-        [Source.UNKNOWN]: () => maybe.none<string>()
+        [Source.UNKNOWN]: () => maybe.nothing<string>()
     })[toSource(source)]()
 };
