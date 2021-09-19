@@ -58,7 +58,7 @@ export const URI = {
                     key: rijksAPIKey
                 })].join('')),
             [Source.UNKNOWN]: () => maybe.none<string>()
-        })[source]();
+        })[toSource(source)]();
     },
 
     createSearchFrom: (search: string, source: Source): Maybe<URIType> => ({
