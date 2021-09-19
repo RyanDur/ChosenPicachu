@@ -45,7 +45,7 @@ describe.each`
         const actual = await method(someUrl, body).value();
 
         // @ts-ignore
-        expect(actual.explanation).toEqual(HTTPError.FORBIDDEN);
+        expect(actual.explanation.reason).toEqual(HTTPError.FORBIDDEN);
     });
 
     test(`${httpMethod} when the network is down`, async () => {
@@ -54,7 +54,7 @@ describe.each`
         const actual = await method(someUrl, body).value();
 
         // @ts-ignore
-        expect(actual.explanation).toEqual(HTTPError.NETWORK_ERROR);
+        expect(actual.explanation.reason).toEqual(HTTPError.NETWORK_ERROR);
     });
 
     test(`${httpMethod} failure is SERVER_ERROR`, async () => {
@@ -63,7 +63,7 @@ describe.each`
         const actual = await method(someUrl, body).value();
 
         // @ts-ignore
-        expect(actual.explanation).toEqual(HTTPError.SERVER_ERROR);
+        expect(actual.explanation.reason).toEqual(HTTPError.SERVER_ERROR);
     });
 });
 

@@ -1,16 +1,16 @@
 import {AllArt, Art, GetAllArt, GetArt, SearchArt, SearchOptions, Source, toSource} from './types';
 import {asyncEvent, asyncResult, OnAsyncEvent} from '@ryandur/sand';
-import {HTTPError} from '../types';
+import {explanation, Explanation, HTTPError} from '../types';
 import {aic} from './aic';
 import {harvard} from './harvard';
 import {rijks} from './rijks';
 import {http} from '../http';
 import {Path} from './Path';
 
-const unknownSource = <T>() => asyncResult.failure<T, HTTPError>(HTTPError.UNKNOWN_SOURCE);
+const unknownSource = <T>() => asyncResult.failure<T, Explanation<HTTPError>>(explanation(HTTPError.UNKNOWN_SOURCE));
 
 export const artGallery = {
-    getAllArt: ({page, size, source, search}: GetAllArt): OnAsyncEvent<AllArt, HTTPError> =>
+    getAllArt: ({page, size, source, search}: GetAllArt): OnAsyncEvent<AllArt, Explanation<HTTPError>> =>
         asyncEvent(Path.from({source, params: {page, search, limit: size}})
             .map(path => http.get(path).flatMap(response => ({
                 [Source.AIC]: () => aic.validateAllArt(response).map(aic.toAllArt),
@@ -19,7 +19,7 @@ export const artGallery = {
                 [Source.UNKNOWN]: () => unknownSource<AllArt>()
             })[toSource(source)]())).orElse(unknownSource<AllArt>())),
 
-    getArt: ({id, source}: GetArt): OnAsyncEvent<Art, HTTPError> =>
+    getArt: ({id, source}: GetArt): OnAsyncEvent<Art, Explanation<HTTPError>> =>
         asyncEvent(Path.from({source: source, path: [id]})
             .map(path => http.get(path).flatMap(response => ({
                 [Source.AIC]: () => aic.validateArt(response).map(aic.toArt),
@@ -28,7 +28,7 @@ export const artGallery = {
                 [Source.UNKNOWN]: () => unknownSource<Art>()
             })[toSource(source)]())).orElse(unknownSource<Art>())),
 
-    searchForArt: ({search, source}: SearchArt): OnAsyncEvent<SearchOptions, HTTPError> =>
+    searchForArt: ({search, source}: SearchArt): OnAsyncEvent<SearchOptions, Explanation<HTTPError>> =>
         asyncEvent(Path.createSearchFrom(search, source)
             .map(path => http.get(path).flatMap(response => ({
                 [Source.AIC]: () => aic.validateSearch(response).map(aic.toSearch),
