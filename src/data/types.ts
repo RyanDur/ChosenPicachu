@@ -1,5 +1,4 @@
-import {matches, matchOn} from '../util';
-import {maybe, Maybe} from '@ryandur/sand';
+import {matches, matchOn, maybe, Maybe} from '@ryandur/sand';
 
 export type PATH = string;
 

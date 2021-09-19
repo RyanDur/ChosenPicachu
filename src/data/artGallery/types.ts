@@ -1,4 +1,4 @@
-import {matches, matchOn} from '../../util';
+import {matches, matchOn} from '@ryandur/sand';
 
 export enum Source {
     AIC = 'aic',
