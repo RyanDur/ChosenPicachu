@@ -1,3 +1,5 @@
+import {matchOn} from '../util';
+
 export type PATH = string;
 
 export interface Indexable {
@@ -48,3 +50,5 @@ export const toFailStatusCode = (code: number): FailStatusCode => ({
     [FailStatusCode.SERVER_ERROR]: FailStatusCode.SERVER_ERROR,
     [FailStatusCode.UNKNOWN]: FailStatusCode.UNKNOWN
 })[code] || FailStatusCode.UNKNOWN;
+
+export const matchFailStatusCode = matchOn(toFailStatusCode);

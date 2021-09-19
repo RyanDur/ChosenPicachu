@@ -1,3 +1,5 @@
+import {matchOn} from '../../util';
+
 export enum Source {
     AIC = 'aic',
     HARVARD = 'harvard',
@@ -11,6 +13,7 @@ export const toSource = (value: string): Source => ({
     [Source.RIJKS]: Source.RIJKS,
     [Source.UNKNOWN]: Source.UNKNOWN
 })[value] || Source.UNKNOWN;
+export const matchSource = matchOn(toSource);
 
 export type Pagination = {
     total: number;
