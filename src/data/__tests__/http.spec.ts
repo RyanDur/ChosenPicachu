@@ -1,10 +1,17 @@
 import {mockServer, MockWebServer} from './mockServer';
-import {HTTPError} from '../types';
+import {HTTPError, HTTPMethod, HTTPStatus} from '../types';
 import {http} from '../http';
 import * as faker from 'faker';
 
-describe('http calls', () => {
-    const testObject = {foo: faker.lorem.words()};
+const testObject = {foo: faker.lorem.words()};
+
+describe.each`
+    method         | httpMethod           | body          | code                     | response
+    ${http.get}    | ${HTTPMethod.GET}    | ${undefined}  | ${HTTPStatus.OK}         | ${testObject}    
+    ${http.post}   | ${HTTPMethod.POST}   | ${testObject} | ${HTTPStatus.CREATED}    | ${testObject}    
+    ${http.put}    | ${HTTPMethod.PUT}    | ${testObject} | ${HTTPStatus.NO_CONTENT} | ${undefined}     
+    ${http.delete} | ${HTTPMethod.DELETE} | ${undefined}  | ${HTTPStatus.NO_CONTENT} | ${undefined}    
+`('http $httpMethod', ({method, httpMethod, body, code, response}) => {
     let server: MockWebServer;
     let someUrl = '';
     let somePath = '';
@@ -20,13 +27,7 @@ describe('http calls', () => {
 
     afterEach(() => server.stop());
 
-    test.each`
-    method         | httpMethod  | body          | code   | response
-    ${http.get}    | ${'GET'}    | ${undefined}  | ${200} | ${testObject}    
-    ${http.post}   | ${'POST'}   | ${testObject} | ${201} | ${testObject}    
-    ${http.put}    | ${'PUT'}    | ${testObject} | ${204} | ${undefined}    
-    ${http.delete} | ${'DELETE'} | ${undefined}  | ${204} | ${undefined}    
-    `('$httpMethod success', async ({method, httpMethod, body, code, response}) => {
+    test(`${httpMethod} success`, async () => {
         server.stubResponse(code, response);
 
         const actual = await method(someUrl, body).value();
@@ -38,14 +39,8 @@ describe('http calls', () => {
         expect(await actual.orNull()).toEqual(response);
     });
 
-    test.each`
-    method         | httpMethod  | body          
-    ${http.get}    | ${'GET'}    | ${undefined}  
-    ${http.post}   | ${'POST'}   | ${testObject}
-    ${http.put}    | ${'PUT'}    | ${testObject}
-    ${http.delete} | ${'DELETE'} | ${undefined}  
-    `('$httpMethod failure is FORBIDDEN', async ({method, body}) => {
-        server.stubResponse(403);
+    test(`${httpMethod} failure is FORBIDDEN`, async () => {
+        server.stubResponse(HTTPStatus.FORBIDDEN);
 
         const actual = await method(someUrl, body).value();
 
@@ -53,13 +48,7 @@ describe('http calls', () => {
         expect(actual.explanation).toEqual(HTTPError.FORBIDDEN);
     });
 
-    test.each`
-    method         | httpMethod  | body          
-    ${http.get}    | ${'GET'}    | ${undefined}  
-    ${http.post}   | ${'POST'}   | ${testObject}
-    ${http.put}    | ${'PUT'}    | ${testObject}
-    ${http.delete} | ${'DELETE'} | ${undefined}        
-    `('$httpMethod when the network is down', async ({method, body}) => {
+    test(`${httpMethod} when the network is down`, async () => {
         server.stop();
 
         const actual = await method(someUrl, body).value();
@@ -68,14 +57,8 @@ describe('http calls', () => {
         expect(actual.explanation).toEqual(HTTPError.NETWORK_ERROR);
     });
 
-    test.each`
-    method         | httpMethod  | body          
-    ${http.get}    | ${'GET'}    | ${undefined}  
-    ${http.post}   | ${'POST'}   | ${testObject}
-    ${http.put}    | ${'PUT'}    | ${testObject}
-    ${http.delete} | ${'DELETE'} | ${undefined}        
-    `('$httpMethod failure is SERVER_ERROR', async ({method, body}) => {
-        server.stubResponse(500);
+    test(`${httpMethod} failure is SERVER_ERROR`, async () => {
+        server.stubResponse(HTTPStatus.SERVER_ERROR);
 
         const actual = await method(someUrl, body).value();
 

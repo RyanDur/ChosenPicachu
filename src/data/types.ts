@@ -38,3 +38,24 @@ export enum HTTPError {
     UNKNOWN_SOURCE = 'UNKNOWN_SOURCE',
     NETWORK_ERROR = 'NETWORK_ERROR'
 }
+
+export enum HTTPStatus {
+    OK = 200,
+    CREATED = 201,
+    NO_CONTENT = 204,
+    FORBIDDEN = 403,
+    SERVER_ERROR = 500,
+    UNKNOWN = 0
+}
+
+export enum FailStatusCode {
+    FORBIDDEN = HTTPStatus.FORBIDDEN,
+    SERVER_ERROR = HTTPStatus.SERVER_ERROR,
+    UNKNOWN = HTTPStatus.UNKNOWN
+}
+
+export const toFailStatusCode = (code: number): FailStatusCode => ({
+    [FailStatusCode.FORBIDDEN]: FailStatusCode.FORBIDDEN,
+    [FailStatusCode.SERVER_ERROR]: FailStatusCode.SERVER_ERROR,
+    [FailStatusCode.UNKNOWN]: FailStatusCode.UNKNOWN
+})[code] || FailStatusCode.UNKNOWN;
