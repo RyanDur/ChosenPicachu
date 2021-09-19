@@ -25,34 +25,34 @@ export const URI = {
     from: ({source, path, params = {}}: Query): Maybe<URIType> => {
         const {search, limit = defaultRecordLimit, page, ...rest} = params;
         return ({
-            [Source.AIC]: () => maybe.some(search ?
-                [[aicDomain, 'search'].join('/'), toQueryString({
-                    q: search,
-                    fields: shapeOfAICResponse,
-                    page,
-                    ...rest,
-                    limit
-                })].join('') :
-                [[aicDomain, path?.filter(has).join('/')].filter(has).join('/'), toQueryString({
-                    q: search,
-                    fields: shapeOfAICResponse,
-                    page,
-                    ...rest,
-                    limit
-                })].join('')),
-            [Source.HARVARD]: () => maybe.some([
-                [
-                    harvardDomain,
-                    path?.filter(has).join('/')
-                ].filter(has).join('/'),
-                toQueryString({
-                    q: search,
-                    fields: shapeOfHarvardResponse,
-                    page,
-                    ...rest,
-                    apikey: harvardAPIKey,
-                    size: limit
-                })].join('')),
+            [Source.AIC]: () => {
+                const queryString = toQueryString({
+                    q: search, fields: shapeOfAICResponse,
+                    page, limit, ...rest
+                });
+                return maybe.some(
+                    maybe.of(search).map(() => [
+                        [aicDomain, 'search'].join('/'),
+                        queryString
+                    ].join('')).orElse([[
+                        aicDomain,
+                        path?.filter(has).join('/')
+                    ].filter(has).join('/'), queryString].join('')));
+            },
+            [Source.HARVARD]: () =>
+                maybe.some([
+                    [
+                        harvardDomain,
+                        path?.filter(has).join('/')
+                    ].filter(has).join('/'),
+                    toQueryString({
+                        q: search,
+                        fields: shapeOfHarvardResponse,
+                        page,
+                        apikey: harvardAPIKey,
+                        size: limit,
+                        ...rest
+                    })].join('')),
             [Source.RIJKS]: () => maybe.some([
                 [rijksDomain, path?.filter(has).join('/')].filter(has).join('/'),
                 toQueryString({
