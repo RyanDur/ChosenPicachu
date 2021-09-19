@@ -8,7 +8,7 @@ import {
     rijksAPIKey,
     rijksDomain
 } from '../../config';
-import {Source, toSource} from './types';
+import {matchSource, Source} from './types';
 import {PATH as URIType} from '../types';
 import {has, maybe, Maybe} from '@ryandur/sand';
 
@@ -24,7 +24,7 @@ interface Query {
 export const Path = {
     from: ({source, path, params = {}}: Query): Maybe<URIType> => {
         const {search, limit = defaultRecordLimit, page, ...rest} = params;
-        return ({
+        return matchSource(source, {
             [Source.AIC]: () => {
                 const queryString = toQueryString({
                     q: search, fields: shapeOfAICResponse,
@@ -63,10 +63,10 @@ export const Path = {
                     key: rijksAPIKey
                 })].join('')),
             [Source.UNKNOWN]: () => maybe.nothing<string>()
-        })[toSource(source)]();
+        });
     },
 
-    createSearchFrom: (search: string, source: Source): Maybe<URIType> => ({
+    createSearchFrom: (search: string, source: Source): Maybe<URIType> => matchSource(source,{
         [Source.AIC]: () => maybe.some(`${aicDomain}/search${toQueryString({
             'query[term][title]': search,
             fields: 'suggest_autocomplete_all',
@@ -88,5 +88,5 @@ export const Path = {
                 key: rijksAPIKey
             })].join('')),
         [Source.UNKNOWN]: () => maybe.nothing<string>()
-    })[toSource(source)]()
+    })
 };
