@@ -1,4 +1,4 @@
-import {matchOn} from '../util';
+import {matches, matchOn} from '../util';
 import {maybe, Maybe} from '@ryandur/sand';
 
 export type PATH = string;
@@ -47,8 +47,8 @@ export enum FailStatusCode {
     UNKNOWN = HTTPStatus.UNKNOWN
 }
 
-export const matchFailStatusCode = matchOn((code: number): FailStatusCode => ({
-    [FailStatusCode.FORBIDDEN]: FailStatusCode.FORBIDDEN,
-    [FailStatusCode.SERVER_ERROR]: FailStatusCode.SERVER_ERROR,
-    [FailStatusCode.UNKNOWN]: FailStatusCode.UNKNOWN
-})[code] || FailStatusCode.UNKNOWN);
+export const matchFailStatusCode = matchOn(matches([
+    FailStatusCode.FORBIDDEN,
+    FailStatusCode.SERVER_ERROR,
+    FailStatusCode.UNKNOWN
+], FailStatusCode.UNKNOWN));
