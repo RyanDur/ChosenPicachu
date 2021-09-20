@@ -12,7 +12,7 @@ const unknownSource = <T>() => asyncResult.failure<T, Explanation<HTTPError>>(ex
 export const artGallery = {
     getAllArt: ({page, size, source, search}: GetAllArt): OnAsyncEvent<AllArt, Explanation<HTTPError>> =>
         asyncEvent(Path.from({source, params: {page, search, limit: size}})
-            .map(path => http.get(path).flatMap(response => matchSource(source, {
+            .map(endpoint => http.get({endpoint}).flatMap(response => matchSource(source, {
                 [Source.AIC]: () => aic.validate.allArt(response).map(aic.response.toAllArt),
                 [Source.HARVARD]: () => harvard.validate.allArt(response).map(harvard.response.toAllArt),
                 [Source.RIJKS]: () => rijks.validate.allArt(response).map(rijks.response.toAllArt(page)),
@@ -20,7 +20,7 @@ export const artGallery = {
 
     getArt: ({id, source}: GetArt): OnAsyncEvent<Art, Explanation<HTTPError>> =>
         asyncEvent(Path.from({source: source, path: [id]})
-            .map(path => http.get(path).flatMap(response => matchSource(source, {
+            .map(endpoint => http.get({endpoint}).flatMap(response => matchSource(source, {
                 [Source.AIC]: () => aic.validate.art(response).map(aic.response.toArt),
                 [Source.HARVARD]: () => harvard.validate.art(response).map(harvard.response.toArt),
                 [Source.RIJKS]: () => rijks.validate.art(response).map(rijks.response.toArt),
@@ -28,7 +28,7 @@ export const artGallery = {
 
     searchForArt: ({search, source}: SearchArt): OnAsyncEvent<SearchOptions, Explanation<HTTPError>> =>
         asyncEvent(Path.createSearchFrom(search, source)
-            .map(path => http.get(path).flatMap(response => matchSource(source, {
+            .map(endpoint => http.get({endpoint}).flatMap(response => matchSource(source, {
                 [Source.AIC]: () => aic.validate.search(response).map(aic.response.toSearch),
                 [Source.HARVARD]: () => harvard.validate.search(response).map(harvard.response.toSearch),
                 [Source.RIJKS]: () => rijks.validate.search(response).map(rijks.response.toSearch),
