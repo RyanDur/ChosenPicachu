@@ -6,11 +6,7 @@ export enum Source {
     RIJKS = 'rijksstudio'
 }
 
-export const matchSource = matchOn(matches([
-    Source.AIC,
-    Source.HARVARD,
-    Source.RIJKS
-]));
+export const matchSource = matchOn(matches(Object.values(Source)));
 
 export type Pagination = {
     total: number;
