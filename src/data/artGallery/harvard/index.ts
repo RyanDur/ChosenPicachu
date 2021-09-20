@@ -18,22 +18,25 @@ export const harvardArtToArt = (record: HarvardArt): Art => ({
 });
 
 export const harvard = {
-    toAllArt: ({info, records}: HarvardAllArt): AllArt => ({
-        pagination: {
-            total: info.totalrecords,
-            limit: info.totalrecordsperquery,
-            totalPages: info.pages,
-            currentPage: info.page,
-        },
-        pieces: records.map(harvardArtToArt)
-    }),
+    response: {
+        toAllArt: ({info, records}: HarvardAllArt): AllArt => ({
+            pagination: {
+                total: info.totalrecords,
+                limit: info.totalrecordsperquery,
+                totalPages: info.pages,
+                currentPage: info.page,
+            },
+            pieces: records.map(harvardArtToArt)
+        }),
 
-    toArt: harvardArtToArt,
+        toArt: harvardArtToArt,
 
-    toSearch: ({records}: HarvardSearch): SearchOptions =>
-        records.map(({title}) => title),
-
-    validateAllArt: validate(HarvardAllArtSchema),
-    validateArt: validate(HarvardArtSchema),
-    validateSearch: validate(HarvardSearchSchema)
+        toSearch: ({records}: HarvardSearch): SearchOptions =>
+            records.map(({title}) => title),
+    },
+    validate: {
+        allArt: validate(HarvardAllArtSchema),
+        art: validate(HarvardArtSchema),
+        search: validate(HarvardSearchSchema)
+    }
 };

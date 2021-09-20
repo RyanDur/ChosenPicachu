@@ -11,23 +11,26 @@ const aicToPiece = (data: AICArt): Art => ({
 });
 
 export const aic = {
-    toAllArt: ({pagination, data}: AICAllArt): AllArt => ({
-        pagination: {
-            total: pagination.total,
-            limit: pagination.limit,
-            totalPages: pagination.total_pages,
-            currentPage: pagination.current_page,
-        },
-        pieces: data.map(aicToPiece)
-    }),
+    response: {
+        toAllArt: ({pagination, data}: AICAllArt): AllArt => ({
+            pagination: {
+                total: pagination.total,
+                limit: pagination.limit,
+                totalPages: pagination.total_pages,
+                currentPage: pagination.current_page,
+            },
+            pieces: data.map(aicToPiece)
+        }),
 
-    toArt: ({data}: AICPieceData): Art => aicToPiece(data),
+        toArt: ({data}: AICPieceData): Art => aicToPiece(data),
 
-    toSearch: ({data}: AICSearch): SearchOptions => data
-        .map(({suggest_autocomplete_all}) => suggest_autocomplete_all[1])
-        .flatMap(option => option.input),
-
-    validateArt: validate(AICArtSchema),
-    validateAllArt: validate(AICAllArtSchema),
-    validateSearch: validate(AICSearchSchema)
+        toSearch: ({data}: AICSearch): SearchOptions => data
+            .map(({suggest_autocomplete_all}) => suggest_autocomplete_all[1])
+            .flatMap(option => option.input),
+    },
+    validate: {
+        art: validate(AICArtSchema),
+        allArt: validate(AICAllArtSchema),
+        search: validate(AICSearchSchema)
+    }
 };

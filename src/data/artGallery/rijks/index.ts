@@ -11,22 +11,26 @@ const rijkToPiece = (data: RIJKArtObject): Art => ({
 });
 
 export const rijks = {
-    toAllArt: (page: number) => (data: RIJKSAllArt): AllArt => ({
-        pagination: {
-            total: data.count,
-            limit: data.artObjects.length,
-            totalPages: data.count / data.artObjects.length,
-            currentPage: page,
-        },
-        pieces: data.artObjects.map(rijkToPiece)
-    }),
+    response: {
+        toAllArt: (page: number) => (data: RIJKSAllArt): AllArt => ({
+            pagination: {
+                total: data.count,
+                limit: data.artObjects.length,
+                totalPages: data.count / data.artObjects.length,
+                currentPage: page,
+            },
+            pieces: data.artObjects.map(rijkToPiece)
+        }),
 
-    toArt: ({artObject}: RIJKSArt): Art => rijkToPiece(artObject),
+        toArt: ({artObject}: RIJKSArt): Art => rijkToPiece(artObject),
 
-    toSearch: ({artObjects}: RIJKSAllArt): SearchOptions =>
-        artObjects.map(({title}) => title),
+        toSearch: ({artObjects}: RIJKSAllArt): SearchOptions =>
+            artObjects.map(({title}) => title),
 
-    validateAllArt: validate(RIJKAllArtSchema),
-    validateArt: validate(RIJKArtSchema),
-    validateSearch: validate(RIJKSSearchSchema)
+    },
+    validate: {
+        allArt: validate(RIJKAllArtSchema),
+        art: validate(RIJKArtSchema),
+        search: validate(RIJKSSearchSchema)
+    }
 };
