@@ -43,11 +43,9 @@ export enum HTTPStatus {
 export enum FailStatusCode {
     FORBIDDEN = HTTPStatus.FORBIDDEN,
     SERVER_ERROR = HTTPStatus.SERVER_ERROR,
-    UNKNOWN = HTTPStatus.UNKNOWN
 }
 
 export const matchFailStatusCode = matchOn(matches([
     FailStatusCode.FORBIDDEN,
-    FailStatusCode.SERVER_ERROR,
-    FailStatusCode.UNKNOWN
-], FailStatusCode.UNKNOWN));
+    FailStatusCode.SERVER_ERROR
+]));

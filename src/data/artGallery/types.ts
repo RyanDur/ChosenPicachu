@@ -3,16 +3,14 @@ import {matches, matchOn} from '@ryandur/sand';
 export enum Source {
     AIC = 'aic',
     HARVARD = 'harvard',
-    RIJKS = 'rijksstudio',
-    UNKNOWN = 'UNKNOWN'
+    RIJKS = 'rijksstudio'
 }
 
 export const matchSource = matchOn(matches([
     Source.AIC,
     Source.HARVARD,
-    Source.RIJKS,
-    Source.UNKNOWN
-], Source.UNKNOWN));
+    Source.RIJKS
+]));
 
 export type Pagination = {
     total: number;
