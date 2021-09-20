@@ -20,9 +20,9 @@ export const ArtGallery: FC = () => {
     useEffect(() => {
         data.artGallery.getAllArt({page, size, search, source: tab})
             .onAsyncEvent((event: AsyncEvent<AllArt, Explanation<HTTPError>>) => {
-                isLoading(event.type === AsyncState.LOADING);
-                hasErrored(event.type === AsyncState.ERROR);
-                if (event.type === AsyncState.LOADED) updateArt(event.data);
+                isLoading(event.state === AsyncState.LOADING);
+                hasErrored(event.state === AsyncState.ERROR);
+                if (event.state === AsyncState.LOADED) updateArt(event.data);
             });
         return reset;
     }, [page, search, tab, size]);

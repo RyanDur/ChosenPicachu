@@ -20,7 +20,7 @@ export const Search: FC<Props> = ({id}) => {
     const {queryObj: {tab, search}, updateQueryString, nextQueryString} = useQuery<{ tab?: Source, search?: string }>();
     const debounceSearch = debounce((query: { search: string, source: Source }, consumer: Consumer<SearchOptions>) =>
         data.artGallery.searchForArt(query).onAsyncEvent(event => {
-            if (event.type === AsyncState.LOADED) {
+            if (event.state === AsyncState.LOADED) {
                 consumer(event.data);
             }
         }), 300);
