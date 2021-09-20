@@ -15,7 +15,7 @@ export const artGallery = {
             .map(endpoint => http.get({endpoint}).flatMap(response => matchSource(source, {
                 [Source.AIC]: () => aic.validate.allArt(response).map(aic.response.toAllArt),
                 [Source.HARVARD]: () => harvard.validate.allArt(response).map(harvard.response.toAllArt),
-                [Source.RIJKS]: () => rijks.validate.allArt(response).map(rijks.response.toAllArt(page)),
+                [Source.RIJKS]: () => rijks.validate.allArt(response).map(rijks.response.toAllArt(page))
             }))).orElse(unknownSource<AllArt>())),
 
     getArt: ({id, source}: GetArt): OnAsyncEvent<Art, Explanation<HTTPError>> =>
@@ -23,7 +23,7 @@ export const artGallery = {
             .map(endpoint => http.get({endpoint}).flatMap(response => matchSource(source, {
                 [Source.AIC]: () => aic.validate.art(response).map(aic.response.toArt),
                 [Source.HARVARD]: () => harvard.validate.art(response).map(harvard.response.toArt),
-                [Source.RIJKS]: () => rijks.validate.art(response).map(rijks.response.toArt),
+                [Source.RIJKS]: () => rijks.validate.art(response).map(rijks.response.toArt)
             }))).orElse(unknownSource<Art>())),
 
     searchForArt: ({search, source}: SearchArt): OnAsyncEvent<SearchOptions, Explanation<HTTPError>> =>
@@ -31,6 +31,6 @@ export const artGallery = {
             .map(endpoint => http.get({endpoint}).flatMap(response => matchSource(source, {
                 [Source.AIC]: () => aic.validate.search(response).map(aic.response.toSearch),
                 [Source.HARVARD]: () => harvard.validate.search(response).map(harvard.response.toSearch),
-                [Source.RIJKS]: () => rijks.validate.search(response).map(rijks.response.toSearch),
+                [Source.RIJKS]: () => rijks.validate.search(response).map(rijks.response.toSearch)
             }))).orElse(unknownSource<SearchOptions>()))
 };
