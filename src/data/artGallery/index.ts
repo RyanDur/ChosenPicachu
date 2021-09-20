@@ -1,5 +1,5 @@
 import {AllArt, Art, GetAllArt, GetArt, matchSource, SearchArt, SearchOptions, Source} from './types';
-import {asyncEvent, asyncResult, OnAsyncEvent} from '@ryandur/sand';
+import {asyncEvent, asyncResult, MatchOn, OnAsyncEvent} from '@ryandur/sand';
 import {explanation, Explanation, HTTPError} from '../types';
 import {aic} from './aic';
 import {harvard} from './harvard';
@@ -16,7 +16,7 @@ export const artGallery = {
                 [Source.AIC]: () => aic.validate.allArt(response).map(aic.response.toAllArt),
                 [Source.HARVARD]: () => harvard.validate.allArt(response).map(harvard.response.toAllArt),
                 [Source.RIJKS]: () => rijks.validate.allArt(response).map(rijks.response.toAllArt(page)),
-                [Source.UNKNOWN]: () => unknownSource<AllArt>()
+                [MatchOn.DEFAULT]: () => unknownSource<AllArt>()
             }))).orElse(unknownSource<AllArt>())),
 
     getArt: ({id, source}: GetArt): OnAsyncEvent<Art, Explanation<HTTPError>> =>
@@ -25,7 +25,7 @@ export const artGallery = {
                 [Source.AIC]: () => aic.validate.art(response).map(aic.response.toArt),
                 [Source.HARVARD]: () => harvard.validate.art(response).map(harvard.response.toArt),
                 [Source.RIJKS]: () => rijks.validate.art(response).map(rijks.response.toArt),
-                [Source.UNKNOWN]: () => unknownSource<Art>()
+                [MatchOn.DEFAULT]: () => unknownSource<Art>()
             }))).orElse(unknownSource<Art>())),
 
     searchForArt: ({search, source}: SearchArt): OnAsyncEvent<SearchOptions, Explanation<HTTPError>> =>
@@ -34,6 +34,6 @@ export const artGallery = {
                 [Source.AIC]: () => aic.validate.search(response).map(aic.response.toSearch),
                 [Source.HARVARD]: () => harvard.validate.search(response).map(harvard.response.toSearch),
                 [Source.RIJKS]: () => rijks.validate.search(response).map(rijks.response.toSearch),
-                [Source.UNKNOWN]: () => unknownSource<SearchOptions>()
+                [MatchOn.DEFAULT]: () => unknownSource<SearchOptions>()
             }))).orElse(unknownSource<SearchOptions>()))
 };

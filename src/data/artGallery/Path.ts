@@ -10,7 +10,7 @@ import {
 } from '../../config';
 import {matchSource, Source} from './types';
 import {PATH as URIType} from '../types';
-import {has, maybe, Maybe} from '@ryandur/sand';
+import {has, MatchOn, maybe, Maybe} from '@ryandur/sand';
 
 export const shapeOfAICResponse = ['id', 'title', 'image_id', 'artist_display', 'term_titles', 'thumbnail'];
 export const shapeOfHarvardResponse = ['id', 'title', 'people', 'primaryimageurl'];
@@ -62,7 +62,7 @@ export const Path = {
                     imgonly: true,
                     key: rijksAPIKey
                 })].join('')),
-            [Source.UNKNOWN]: () => maybe.nothing<string>()
+            [MatchOn.DEFAULT]: () => maybe.nothing<string>()
         });
     },
 
@@ -87,6 +87,6 @@ export const Path = {
                 imgonly: true,
                 key: rijksAPIKey
             })].join('')),
-        [Source.UNKNOWN]: () => maybe.nothing<string>()
+        [MatchOn.DEFAULT]: () => maybe.nothing<string>()
     })
 };
