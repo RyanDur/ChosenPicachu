@@ -31,12 +31,12 @@ export const harvard = {
 
         toArt: harvardArtToArt,
 
-        toSearch: ({records}: HarvardSearch): SearchOptions =>
+        toSearchOptions: ({records}: HarvardSearch): SearchOptions =>
             records.map(({title}) => title),
     },
     validate: {
         allArt: validate(HarvardAllArtSchema),
         art: validate(HarvardArtSchema),
-        search: validate(HarvardSearchSchema)
+        searchOptions: validate(HarvardSearchSchema)
     }
 };

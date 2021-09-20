@@ -24,13 +24,13 @@ export const rijks = {
 
         toArt: ({artObject}: RIJKSArt): Art => rijkToPiece(artObject),
 
-        toSearch: ({artObjects}: RIJKSAllArt): SearchOptions =>
+        toSearchOptions: ({artObjects}: RIJKSAllArt): SearchOptions =>
             artObjects.map(({title}) => title),
 
     },
     validate: {
         allArt: validate(RIJKAllArtSchema),
         art: validate(RIJKArtSchema),
-        search: validate(RIJKSSearchSchema)
+        searchOptions: validate(RIJKSSearchSchema)
     }
 };
