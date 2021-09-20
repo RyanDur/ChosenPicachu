@@ -33,12 +33,12 @@ export const http = {
             ) : fail(response)),
 
     put: (path: PATH, body: unknown): Result.Async<typeof undefined, Explanation<HTTPError>> =>
-        request(path, HTTPMethod.PUT, body).flatMap(response =>
-            response.status === HTTPStatus.NO_CONTENT ? success(undefined) : fail(response)),
+        request(path, HTTPMethod.PUT, body).flatMap(response => response.status === HTTPStatus.NO_CONTENT ?
+            success(undefined) : fail(response)),
 
     delete: (path: PATH): Result.Async<typeof undefined, Explanation<HTTPError>> =>
-        request(path, HTTPMethod.DELETE).flatMap(response =>
-            response.status === HTTPStatus.NO_CONTENT ? success(undefined) : fail(response))
+        request(path, HTTPMethod.DELETE).flatMap(response => response.status === HTTPStatus.NO_CONTENT ?
+            success(undefined) : fail(response))
 };
 
 const request = (uri: PATH, method?: HTTPMethod, body?: unknown) =>
