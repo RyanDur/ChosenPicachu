@@ -13,9 +13,9 @@ import {Decoder} from 'schemawax';
 
 const {success, failure} = asyncResult;
 
-export const validate = <T>(schema: Decoder<T>) => (result: unknown): Result.Async<T, Explanation<HTTPError>> =>
-    maybe.of(schema.decode(result))
-        .map(response => success<T, Explanation<HTTPError>>(response))
+export const validate = <T>(schema: Decoder<T>) => (response: unknown): Result.Async<T, Explanation<HTTPError>> =>
+    maybe.of(schema.decode(response))
+        .map(result => success<T, Explanation<HTTPError>>(result))
         .orElse(failure<T, Explanation<HTTPError>>(explanation(HTTPError.CANNOT_DECODE)));
 
 export const http = {

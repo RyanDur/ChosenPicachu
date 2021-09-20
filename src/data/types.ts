@@ -31,21 +31,23 @@ export enum HTTPError {
     JSON_BODY_ERROR = 'JSON_BODY_ERROR'
 }
 
-export enum HTTPStatus {
+export enum SuccessStatusCode {
     OK = 200,
     CREATED = 201,
     NO_CONTENT = 204,
-    FORBIDDEN = 403,
-    SERVER_ERROR = 500,
-    UNKNOWN = 0
 }
 
 export enum FailStatusCode {
-    FORBIDDEN = HTTPStatus.FORBIDDEN,
-    SERVER_ERROR = HTTPStatus.SERVER_ERROR,
+    FORBIDDEN = 403,
+    SERVER_ERROR = 500,
 }
 
-export const matchFailStatusCode = matchOn(matches([
-    FailStatusCode.FORBIDDEN,
-    FailStatusCode.SERVER_ERROR
-]));
+export enum HTTPStatus {
+    OK = SuccessStatusCode.OK,
+    CREATED = SuccessStatusCode.CREATED,
+    NO_CONTENT = SuccessStatusCode.NO_CONTENT,
+    FORBIDDEN = FailStatusCode.FORBIDDEN,
+    SERVER_ERROR = FailStatusCode.SERVER_ERROR
+}
+
+export const matchFailStatusCode = matchOn(matches(Object.values(FailStatusCode)));
