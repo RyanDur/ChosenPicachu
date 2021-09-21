@@ -1,10 +1,10 @@
 import {RIJKAllArtSchema, RIJKArtObject, RIJKArtSchema, RIJKSAllArt, RIJKSArt, RIJKSSearchSchema} from './types';
-import {AllArt, Art, SearchOptions} from '../types';
+import {AllArt, Art, Query, SearchOptions} from '../types';
 import {validate} from '../../http';
 import {has} from '@ryandur/sand';
 import {defaultRecordLimit, defaultSearchLimit, rijksAPIKey, rijksDomain} from '../../../config';
 import {toQueryString} from '../../../util/URL';
-import {PATH as URIType} from '../../types';
+import {PATH} from '../../types';
 
 const rijkToPiece = (data: RIJKArtObject): Art => ({
     id: data.objectNumber,
@@ -14,12 +14,7 @@ const rijkToPiece = (data: RIJKArtObject): Art => ({
     altText: data.longTitle
 });
 
-interface Query {
-    path?: (string | number)[];
-    params?: Record<string, unknown>
-}
-
-const endpoint = ({path, params = {}}: Query): URIType => {
+const endpoint = ({path, params = {}}: Query): PATH => {
     const {search, limit = defaultRecordLimit, page} = params;
     return [
         [rijksDomain, path?.filter(has).join('/')].filter(has).join('/'),
@@ -32,10 +27,10 @@ const endpoint = ({path, params = {}}: Query): URIType => {
         })].join('');
 };
 export const rijks = {
-    allArt: {
+    allArt: (page: number) => ({
         endpoint,
         validate: validate(RIJKAllArtSchema),
-        toAllArt: (page: number) => (data: RIJKSAllArt): AllArt => ({
+        toAllArt: (data: RIJKSAllArt): AllArt => ({
             pagination: {
                 total: data.count,
                 limit: data.artObjects.length,
@@ -44,7 +39,7 @@ export const rijks = {
             },
             pieces: data.artObjects.map(rijkToPiece)
         })
-    },
+    }),
     art: {
         endpoint,
         validate: validate(RIJKArtSchema),

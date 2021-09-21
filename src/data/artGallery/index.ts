@@ -1,5 +1,17 @@
-import {AllArt, Art, GetAllArt, GetArt, matchSource, SearchArt, SearchOptions, Source} from './types';
-import {asyncEvent, asyncResult, MatchOn, OnAsyncEvent} from '@ryandur/sand';
+import {
+    AllArt,
+    AllArtRequests,
+    Art,
+    ArtRequests,
+    GetAllArt,
+    GetArt,
+    matchSource,
+    SearchArt,
+    SearchOptions,
+    SearchOptionsRequests,
+    Source
+} from './types';
+import {asyncEvent, asyncResult, MatchOn, maybe, OnAsyncEvent} from '@ryandur/sand';
 import {explanation, Explanation, HTTPError} from '../types';
 import {aic} from './aic';
 import {harvard} from './harvard';
@@ -10,53 +22,35 @@ const unknownSource = <T>() => asyncResult.failure<T, Explanation<HTTPError>>(ex
 
 export const artGallery = {
     getAllArt: ({page, size, source, search}: GetAllArt): OnAsyncEvent<AllArt, Explanation<HTTPError>> =>
-        asyncEvent(matchSource(source, {
-            [Source.AIC]: () =>
-                http.get(aic.allArt.endpoint({params: {page, size, search}}))
-                    .flatMap(aic.allArt.validate)
-                    .map(aic.allArt.toAllArt),
-            [Source.HARVARD]: () =>
-                http.get(harvard.allArt.endpoint({params: {page, size, search}}))
-                    .flatMap(harvard.allArt.validate)
-                    .map(harvard.allArt.toAllArt),
-            [Source.RIJKS]: () =>
-                http.get(rijks.allArt.endpoint({params: {page, size, search}}))
-                    .flatMap(rijks.allArt.validate)
-                    .map(rijks.allArt.toAllArt(page)),
-            [MatchOn.DEFAULT]: () => unknownSource<AllArt>()
-        })),
+        asyncEvent(maybe.of(matchSource<AllArtRequests | undefined>(source, {
+            [Source.AIC]: () => aic.allArt,
+            [Source.HARVARD]: () => harvard.allArt,
+            [Source.RIJKS]: () => rijks.allArt(page),
+            [MatchOn.DEFAULT]: () => undefined
+        })).map(resource => http.get(resource.endpoint({params: {page, size, search}}))
+            .flatMap(resource.validate)
+            .map(resource.toAllArt))
+            .orElse(unknownSource<AllArt>())),
 
     getArt: ({id, source}: GetArt): OnAsyncEvent<Art, Explanation<HTTPError>> =>
-        asyncEvent(matchSource(source, {
-            [Source.AIC]: () =>
-                http.get(aic.art.endpoint({path: [id]}))
-                    .flatMap(aic.art.validate)
-                    .map(aic.art.toArt),
-            [Source.HARVARD]: () =>
-                http.get(harvard.art.endpoint({path: [id]}))
-                    .flatMap(harvard.art.validate)
-                    .map(harvard.art.toArt),
-            [Source.RIJKS]: () =>
-                http.get(rijks.art.endpoint({path: [id]}))
-                    .flatMap(rijks.art.validate)
-                    .map(rijks.art.toArt),
-            [MatchOn.DEFAULT]: () => unknownSource<Art>()
-        })),
+        asyncEvent(maybe.of(matchSource<ArtRequests | undefined>(source, {
+            [Source.AIC]: () => aic.art,
+            [Source.HARVARD]: () => harvard.art,
+            [Source.RIJKS]: () => rijks.art,
+            [MatchOn.DEFAULT]: () => undefined
+        })).map(resource => http.get(resource.endpoint({path: [id]}))
+            .flatMap(resource.validate)
+            .map(resource.toArt))
+            .orElse(unknownSource<Art>())),
 
     searchForArt: ({search, source}: SearchArt): OnAsyncEvent<SearchOptions, Explanation<HTTPError>> =>
-        asyncEvent(matchSource(source, {
-            [Source.AIC]: () =>
-                http.get(aic.searchOptions.endpoint(search))
-                    .flatMap(aic.searchOptions.validate)
-                    .map(aic.searchOptions.toSearchOptions),
-            [Source.HARVARD]: () =>
-                http.get(harvard.searchOptions.endpoint(search))
-                    .flatMap(harvard.searchOptions.validate)
-                    .map(harvard.searchOptions.toSearchOptions),
-            [Source.RIJKS]: () =>
-                http.get(rijks.searchOptions.endpoint(search))
-                    .flatMap(rijks.searchOptions.validate)
-                    .map(rijks.searchOptions.toSearchOptions),
-            [MatchOn.DEFAULT]: () => unknownSource<SearchOptions>()
-        }))
+        asyncEvent(maybe.of(matchSource<SearchOptionsRequests | undefined>(source, {
+            [Source.AIC]: () => aic.searchOptions,
+            [Source.HARVARD]: () => harvard.searchOptions,
+            [Source.RIJKS]: () => rijks.searchOptions,
+            [MatchOn.DEFAULT]: () => undefined
+        })).map(resource => http.get(resource.endpoint(search))
+            .flatMap(resource.validate)
+            .map(resource.toSearchOptions))
+            .orElse(unknownSource<SearchOptions>()))
 };
