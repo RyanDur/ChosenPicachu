@@ -4,10 +4,9 @@ import {data} from '../../../data';
 import {Loading} from '../../Loading';
 import {ArtPieceContext, useArtPiece, useArtPieceContext} from './Context';
 import {Image} from '../Image';
-import {Explanation, HTTPError} from '../../../data/types';
 import {useQuery} from '../../hooks';
-import {Art, Source} from '../../../data/artGallery/types';
-import {AsyncEvent, AsyncState} from '@ryandur/sand';
+import {Source} from '../../../data/artGallery/types';
+import {AsyncState} from '@ryandur/sand';
 import './Piece.scss';
 
 const ArtPiece = () => {
@@ -19,7 +18,7 @@ const ArtPiece = () => {
 
     useEffect(() => {
         id && data.artGallery.getArt({id, source: tab})
-            .onAsyncEvent((event: AsyncEvent<Art, Explanation<HTTPError>>) => {
+            .onAsyncEvent(event => {
                 isLoading(event.state === AsyncState.LOADING);
                 isErrored(event.state === AsyncState.ERROR);
                 if (event.state === AsyncState.LOADED) updatePiece(event.data);
