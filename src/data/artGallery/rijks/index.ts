@@ -35,7 +35,7 @@ export const rijks = {
     allArt: {
         endpoint,
         validate: validate(RIJKAllArtSchema),
-        transform: (page: number) => (data: RIJKSAllArt): AllArt => ({
+        toAllArt: (page: number) => (data: RIJKSAllArt): AllArt => ({
             pagination: {
                 total: data.count,
                 limit: data.artObjects.length,
@@ -48,7 +48,7 @@ export const rijks = {
     art: {
         endpoint,
         validate: validate(RIJKArtSchema),
-        transform: ({artObject}: RIJKSArt): Art => rijkToPiece(artObject)
+        toArt: ({artObject}: RIJKSArt): Art => rijkToPiece(artObject)
     },
     searchOptions: {
         endpoint: (search: string) => [
@@ -61,7 +61,7 @@ export const rijks = {
                 key: rijksAPIKey
             })].join(''),
         validate: validate(RIJKSSearchSchema),
-        transform: ({artObjects}: RIJKSAllArt): SearchOptions =>
+        toSearchOptions: ({artObjects}: RIJKSAllArt): SearchOptions =>
             artObjects.map(({title}) => title)
     }
 };

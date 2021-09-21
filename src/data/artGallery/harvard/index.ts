@@ -47,7 +47,7 @@ export const harvard = {
     allArt: {
         endpoint,
         validate: validate(HarvardAllArtSchema),
-        transform: ({info, records}: HarvardAllArt): AllArt => ({
+        toAllArt: ({info, records}: HarvardAllArt): AllArt => ({
             pagination: {
                 total: info.totalrecords,
                 limit: info.totalrecordsperquery,
@@ -60,7 +60,7 @@ export const harvard = {
     art: {
         endpoint,
         validate: validate(HarvardArtSchema),
-        transform: harvardArtToArt
+        toArt: harvardArtToArt
     },
     searchOptions: {
         endpoint: (search: string) => `${harvardDomain}${toQueryString({
@@ -70,7 +70,7 @@ export const harvard = {
             size: defaultSearchLimit
         })}`,
         validate: validate(HarvardSearchSchema),
-        transform: ({records}: HarvardSearch): SearchOptions =>
+        toSearchOptions: ({records}: HarvardSearch): SearchOptions =>
             records.map(({title}) => title)
     }
 };
