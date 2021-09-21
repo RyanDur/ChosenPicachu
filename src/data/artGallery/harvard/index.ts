@@ -11,7 +11,7 @@ import {validate} from '../../http';
 import {has} from '@ryandur/sand';
 import {defaultRecordLimit, defaultSearchLimit, harvardAPIKey, harvardDomain} from '../../../config';
 import {toQueryString} from '../../../util/URL';
-import {PATH as URIType} from '../../types';
+import {PATH} from '../../types';
 
 export const shapeOfHarvardResponse = ['id', 'title', 'people', 'primaryimageurl'];
 export const harvardArtToArt = (record: HarvardArt): Art => ({
@@ -26,7 +26,7 @@ interface Query {
     params?: Record<string, unknown>
 }
 
-const endpoint = ({path, params = {}}: Query): URIType => {
+const endpoint = ({path, params = {}}: Query): PATH => {
     const {search, limit = defaultRecordLimit, page, ...rest} = params;
     return [
         [
