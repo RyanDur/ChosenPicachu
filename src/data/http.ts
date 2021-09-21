@@ -7,7 +7,6 @@ import {
     HTTPStatus,
     matchFailStatusCode,
     PATH,
-    Request
 } from './types';
 import {asyncResult, MatchOn, maybe, Result} from '@ryandur/sand';
 import {Decoder} from 'schemawax';
@@ -20,24 +19,24 @@ export const validate = <T>(schema: Decoder<T>) => (response: unknown): Result.A
         .orElse(failure<T, Explanation<HTTPError>>(explanation(HTTPError.CANNOT_DECODE)));
 
 export const http = {
-    get: <T>({endpoint}: Request): Result.Async<T, Explanation<HTTPError>> =>
+    get: <T>(endpoint: string): Result.Async<T, Explanation<HTTPError>> =>
         request(endpoint).flatMap(response => response.status === HTTPStatus.OK ?
             asyncResult.of<T, Error>(response.json()).mapFailure<Explanation<HTTPError>>(
                 err => explanation(HTTPError.JSON_BODY_ERROR, maybe.some(err))
             ) : fail(response)),
 
     // the rest of these are not needed. They are just here for an example
-    post: <T>({endpoint, body}: Request): Result.Async<T, Explanation<HTTPError>> =>
+    post: <T>(endpoint: string, body: unknown): Result.Async<T, Explanation<HTTPError>> =>
         request(endpoint, HTTPMethod.POST, body).flatMap(response => response.status === HTTPStatus.CREATED ?
             asyncResult.of<T, Error>(response.json()).mapFailure<Explanation<HTTPError>>(
                 err => explanation(HTTPError.JSON_BODY_ERROR, maybe.some(err))
             ) : fail(response)),
 
-    put: ({endpoint, body}: Request): Result.Async<typeof undefined, Explanation<HTTPError>> =>
+    put: (endpoint: string, body: unknown): Result.Async<typeof undefined, Explanation<HTTPError>> =>
         request(endpoint, HTTPMethod.PUT, body).flatMap(response => response.status === HTTPStatus.NO_CONTENT ?
             success(undefined) : fail(response)),
 
-    delete: ({endpoint}: Request): Result.Async<typeof undefined, Explanation<HTTPError>> =>
+    delete: (endpoint: string): Result.Async<typeof undefined, Explanation<HTTPError>> =>
         request(endpoint, HTTPMethod.DELETE).flatMap(response => response.status === HTTPStatus.NO_CONTENT ?
             success(undefined) : fail(response))
 };
