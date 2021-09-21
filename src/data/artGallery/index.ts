@@ -16,7 +16,7 @@ export const artGallery = {
                 [Source.AIC]: () => aic.validate.allArt(response).map(aic.response.toAllArt),
                 [Source.HARVARD]: () => harvard.validate.allArt(response).map(harvard.response.toAllArt),
                 [Source.RIJKS]: () => rijks.validate.allArt(response).map(rijks.response.toAllArt(page))
-            }))).orElse(unknownSource<AllArt>())),
+            }))).orElse(unknownSource())),
 
     getArt: ({id, source}: GetArt): OnAsyncEvent<Art, Explanation<HTTPError>> =>
         asyncEvent(Path.from({source: source, path: [id]})
@@ -24,7 +24,7 @@ export const artGallery = {
                 [Source.AIC]: () => aic.validate.art(response).map(aic.response.toArt),
                 [Source.HARVARD]: () => harvard.validate.art(response).map(harvard.response.toArt),
                 [Source.RIJKS]: () => rijks.validate.art(response).map(rijks.response.toArt)
-            }))).orElse(unknownSource<Art>())),
+            }))).orElse(unknownSource())),
 
     searchForArt: ({search, source}: SearchArt): OnAsyncEvent<SearchOptions, Explanation<HTTPError>> =>
         asyncEvent(Path.createSearchFrom(search, source)
@@ -32,5 +32,5 @@ export const artGallery = {
                 [Source.AIC]: () => aic.validate.searchOptions(response).map(aic.response.toSearchOptions),
                 [Source.HARVARD]: () => harvard.validate.searchOptions(response).map(harvard.response.toSearchOptions),
                 [Source.RIJKS]: () => rijks.validate.searchOptions(response).map(rijks.response.toSearchOptions)
-            }))).orElse(unknownSource<SearchOptions>()))
+            }))).orElse(unknownSource()))
 };
