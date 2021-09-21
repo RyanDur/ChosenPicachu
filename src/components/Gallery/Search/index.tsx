@@ -5,7 +5,7 @@ import {useQuery} from '../../hooks';
 import {useHistory} from 'react-router-dom';
 import {Paths} from '../../../App';
 import {SearchOptions, Source} from '../../../data/artGallery/types';
-import {AsyncState, Consumer} from '@ryandur/sand';
+import {AsyncState} from '@ryandur/sand';
 import './Search.scss';
 import './Search.layout.scss';
 
@@ -17,17 +17,14 @@ export const Search: FC<Props> = ({id}) => {
     const [searchOptions, updateSearchOptions] = useState<SearchOptions>([]);
     const [searchString, updateQuery] = useState<string>('');
     const history = useHistory();
-    const {queryObj: {tab, search}, updateQueryString, nextQueryString} = useQuery<{ tab?: Source, search?: string }>();
-    const debounceSearch = debounce((query: { search: string, source: Source }, consumer: Consumer<SearchOptions>) =>
-        data.artGallery.searchForArt(query).onAsyncEvent(event =>
-            event.state === AsyncState.LOADED && consumer(event.data)
+    const {queryObj: {tab, search}, updateQueryString, nextQueryString} = useQuery<{ tab: Source, search?: string }>();
+    const debounceSearch = debounce(search =>
+        data.artGallery.searchForArt({search, source: tab}).onAsyncEvent(event =>
+            event.state === AsyncState.LOADED && updateSearchOptions(event.data)
         ), 300);
 
     useEffect(() => {
-        searchString && debounceSearch({
-            search: searchString.toLowerCase(),
-            source: tab || '' as Source
-        }, updateSearchOptions);
+        searchString && debounceSearch(searchString.toLowerCase());
     }, [searchString]);
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
