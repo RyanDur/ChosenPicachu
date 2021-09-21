@@ -39,7 +39,7 @@ export const aic = {
     allArt: {
         endpoint,
         validate: validate(AICAllArtSchema),
-        transform: ({pagination, data}: AICAllArt): AllArt => ({
+        toAllArt: ({pagination, data}: AICAllArt): AllArt => ({
             pagination: {
                 total: pagination.total,
                 limit: pagination.limit,
@@ -52,7 +52,7 @@ export const aic = {
     art: {
         endpoint,
         validate: validate(AICArtSchema),
-        transform: ({data}: AICPieceData): Art => aicToPiece(data)
+        toArt: ({data}: AICPieceData): Art => aicToPiece(data)
     },
     searchOptions: {
         endpoint: (search: string): URIType => `${aicDomain}/search${toQueryString({
@@ -61,7 +61,7 @@ export const aic = {
             limit: defaultSearchLimit
         })}`,
         validate: validate(AICSearchSchema),
-        transform: ({data}: AICSearch): SearchOptions => data
+        toSearchOptions: ({data}: AICSearch): SearchOptions => data
             .map(({suggest_autocomplete_all}) => suggest_autocomplete_all[1])
             .flatMap(option => option.input)
     }

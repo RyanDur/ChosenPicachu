@@ -14,15 +14,15 @@ export const artGallery = {
             [Source.AIC]: () =>
                 http.get(aic.allArt.endpoint({params: {page, size, search}}))
                     .flatMap(aic.allArt.validate)
-                    .map(aic.allArt.transform),
+                    .map(aic.allArt.toAllArt),
             [Source.HARVARD]: () =>
                 http.get(harvard.allArt.endpoint({params: {page, size, search}}))
                     .flatMap(harvard.allArt.validate)
-                    .map(harvard.allArt.transform),
+                    .map(harvard.allArt.toAllArt),
             [Source.RIJKS]: () =>
                 http.get(rijks.allArt.endpoint({params: {page, size, search}}))
                     .flatMap(rijks.allArt.validate)
-                    .map(rijks.allArt.transform(page)),
+                    .map(rijks.allArt.toAllArt(page)),
             [MatchOn.DEFAULT]: () => unknownSource<AllArt>()
         })),
 
@@ -31,15 +31,15 @@ export const artGallery = {
             [Source.AIC]: () =>
                 http.get(aic.art.endpoint({path: [id]}))
                     .flatMap(aic.art.validate)
-                    .map(aic.art.transform),
+                    .map(aic.art.toArt),
             [Source.HARVARD]: () =>
                 http.get(harvard.art.endpoint({path: [id]}))
                     .flatMap(harvard.art.validate)
-                    .map(harvard.art.transform),
+                    .map(harvard.art.toArt),
             [Source.RIJKS]: () =>
                 http.get(rijks.art.endpoint({path: [id]}))
                     .flatMap(rijks.art.validate)
-                    .map(rijks.art.transform),
+                    .map(rijks.art.toArt),
             [MatchOn.DEFAULT]: () => unknownSource<Art>()
         })),
 
@@ -48,15 +48,15 @@ export const artGallery = {
             [Source.AIC]: () =>
                 http.get(aic.searchOptions.endpoint(search))
                     .flatMap(aic.searchOptions.validate)
-                    .map(aic.searchOptions.transform),
+                    .map(aic.searchOptions.toSearchOptions),
             [Source.HARVARD]: () =>
                 http.get(harvard.searchOptions.endpoint(search))
                     .flatMap(harvard.searchOptions.validate)
-                    .map(harvard.searchOptions.transform),
+                    .map(harvard.searchOptions.toSearchOptions),
             [Source.RIJKS]: () =>
                 http.get(rijks.searchOptions.endpoint(search))
                     .flatMap(rijks.searchOptions.validate)
-                    .map(rijks.searchOptions.transform),
+                    .map(rijks.searchOptions.toSearchOptions),
             [MatchOn.DEFAULT]: () => unknownSource<SearchOptions>()
         }))
 };
