@@ -51,8 +51,3 @@ export enum HTTPStatus {
 }
 
 export const matchFailStatusCode = matchOn(matches(Object.values(FailStatusCode)));
-
-export interface Request {
-    endpoint: string;
-    body?: unknown;
-}
