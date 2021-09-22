@@ -8,7 +8,7 @@ import {
     matchFailStatusCode,
     PATH,
 } from './types';
-import {asyncResult, MatchOn, maybe, Result} from '@ryandur/sand';
+import {asyncResult, maybe, Result} from '@ryandur/sand';
 import {Decoder} from 'schemawax';
 
 const {success, failure} = asyncResult;
@@ -51,5 +51,4 @@ const request = (uri: PATH, method?: HTTPMethod, body?: unknown) =>
 const fail = <T>(response: Response) => matchFailStatusCode(response.status, {
     [FailStatusCode.FORBIDDEN]: () => failure<T, Explanation<HTTPError>>(explanation(HTTPError.FORBIDDEN)),
     [FailStatusCode.SERVER_ERROR]: () => failure<T, Explanation<HTTPError>>(explanation(HTTPError.SERVER_ERROR)),
-    [MatchOn.DEFAULT]: () => failure<T, Explanation<HTTPError>>(explanation(HTTPError.UNKNOWN))
-});
+}).orElse(failure<T, Explanation<HTTPError>>(explanation(HTTPError.UNKNOWN)));
