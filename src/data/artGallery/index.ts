@@ -1,17 +1,13 @@
-import {asyncEvent, asyncResult, OnAsyncEvent} from '@ryandur/sand';
-import {explanation, Explanation, HTTPError} from '../types';
-import {AllArtRequests, ArtRequests, SearchOptionsRequests} from './types/request';
-import {GetAllArt, GetArt, matchSource, SearchArt, Source} from './types/resource';
-import {AllArt, Art, SearchOptions} from './types/response';
-import {http} from '../http';
+import {AllArtRequests, ArtGallery, ArtRequests, SearchOptionsRequests} from './types';
+import {asyncEvent} from '@ryandur/sand';
+import {matchSource, Source} from './types/resource';
+import {http, unknownSource} from '../http';
 import {aic} from './aic';
 import {harvard} from './harvard';
 import {rijks} from './rijks';
 
-const unknownSource = <T>() => asyncResult.failure<T, Explanation<HTTPError>>(explanation(HTTPError.UNKNOWN_SOURCE));
-
-export const artGallery = {
-    getAllArt: ({page, size, source, search}: GetAllArt): OnAsyncEvent<AllArt, Explanation<HTTPError>> =>
+export const artGallery: ArtGallery = {
+    getAllArt: ({page, size, source, search}) =>
         asyncEvent(matchSource<AllArtRequests>(source, {
             [Source.AIC]: () => aic.allArt,
             [Source.HARVARD]: () => harvard.allArt,
@@ -20,7 +16,7 @@ export const artGallery = {
             http.get(endpoint({params: {page, size, search}})).flatMap(validate).map(toAllArt)
         ).orElse(unknownSource())),
 
-    getArt: ({id, source}: GetArt): OnAsyncEvent<Art, Explanation<HTTPError>> =>
+    getArt: ({id, source}) =>
         asyncEvent(matchSource<ArtRequests>(source, {
             [Source.AIC]: () => aic.art,
             [Source.HARVARD]: () => harvard.art,
@@ -29,7 +25,7 @@ export const artGallery = {
             http.get(endpoint({path: [id]})).flatMap(validate).map(toArt)
         ).orElse(unknownSource())),
 
-    searchForArt: ({search, source}: SearchArt): OnAsyncEvent<SearchOptions, Explanation<HTTPError>> =>
+    searchForArt: ({search, source}) =>
         asyncEvent(matchSource<SearchOptionsRequests>(source, {
             [Source.AIC]: () => aic.searchOptions,
             [Source.HARVARD]: () => harvard.searchOptions,
