@@ -19,5 +19,3 @@ export interface AllArt {
 }
 
 export type SearchOptions = string[];
-
-export type Gallery = AllArt | Art | SearchOptions;
