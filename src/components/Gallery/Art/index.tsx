@@ -4,8 +4,8 @@ import {useQuery} from '../../hooks';
 import {Loading} from '../../Loading';
 import {Image} from '../Image';
 import {useGallery} from '../Context';
-import {Source} from '../../../data/artGallery/types';
 import {AsyncState, empty, has, not} from '@ryandur/sand';
+import {Source} from '../../../data/artGallery/types/resource';
 import './Gallery.scss';
 import './Gallery.layout.scss';
 

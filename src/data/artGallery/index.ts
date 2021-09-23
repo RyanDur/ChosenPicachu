@@ -1,14 +1,15 @@
 import {AllArtRequests, ArtRequests, SearchOptionsRequests} from './types/request';
-import {ArtGallery, OnAllArtAsyncEvent, OnArtAsyncEvent, OnSearchOptionsAsyncEvent} from './types';
-import {asyncEvent} from '@ryandur/sand';
-import {matchSource, Source} from './types/resource';
+import {asyncEvent, OnAsyncEvent} from '@ryandur/sand';
+import {GetAllArt, GetArt, matchSource, SearchArt, Source} from './types/resource';
+import {AllArt, Art, SearchOptions} from './types/response';
+import {Explanation, HTTPError} from '../types';
 import {http, unknownSource} from '../http';
 import {aic} from './aic';
 import {harvard} from './harvard';
 import {rijks} from './rijks';
 
-export const artGallery: ArtGallery = {
-    getAllArt: ({page, size, source, search}): OnAllArtAsyncEvent =>
+export const artGallery = {
+    getAllArt: ({page, size, source, search}: GetAllArt): OnAsyncEvent<AllArt, Explanation<HTTPError>> =>
         asyncEvent(matchSource<AllArtRequests>(source, {
             [Source.AIC]: () => aic.allArt,
             [Source.HARVARD]: () => harvard.allArt,
@@ -17,7 +18,7 @@ export const artGallery: ArtGallery = {
             http.get(endpoint({params: {page, size, search}})).flatMap(validate).map(toAllArt)
         ).orElse(unknownSource())),
 
-    getArt: ({id, source}): OnArtAsyncEvent =>
+    getArt: ({id, source}: GetArt): OnAsyncEvent<Art, Explanation<HTTPError>> =>
         asyncEvent(matchSource<ArtRequests>(source, {
             [Source.AIC]: () => aic.art,
             [Source.HARVARD]: () => harvard.art,
@@ -26,7 +27,7 @@ export const artGallery: ArtGallery = {
             http.get(endpoint({path: [id]})).flatMap(validate).map(toArt)
         ).orElse(unknownSource())),
 
-    searchForArt: ({search, source}): OnSearchOptionsAsyncEvent =>
+    searchForArt: ({search, source}: SearchArt): OnAsyncEvent<SearchOptions, Explanation<HTTPError>> =>
         asyncEvent(matchSource<SearchOptionsRequests>(source, {
             [Source.AIC]: () => aic.searchOptions,
             [Source.HARVARD]: () => harvard.searchOptions,
