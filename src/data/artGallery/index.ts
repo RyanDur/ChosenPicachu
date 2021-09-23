@@ -1,22 +1,12 @@
-import {
-    AllArt,
-    AllArtRequests,
-    Art,
-    ArtRequests,
-    GetAllArt,
-    GetArt,
-    matchSource,
-    SearchArt,
-    SearchOptions,
-    SearchOptionsRequests,
-    Source
-} from './types';
 import {asyncEvent, asyncResult, OnAsyncEvent} from '@ryandur/sand';
 import {explanation, Explanation, HTTPError} from '../types';
+import {AllArtRequests, ArtRequests, SearchOptionsRequests} from './types/request';
+import {GetAllArt, GetArt, matchSource, SearchArt, Source} from './types/resource';
+import {AllArt, Art, SearchOptions} from './types/response';
+import {http} from '../http';
 import {aic} from './aic';
 import {harvard} from './harvard';
 import {rijks} from './rijks';
-import {http} from '../http';
 
 const unknownSource = <T>() => asyncResult.failure<T, Explanation<HTTPError>>(explanation(HTTPError.UNKNOWN_SOURCE));
 

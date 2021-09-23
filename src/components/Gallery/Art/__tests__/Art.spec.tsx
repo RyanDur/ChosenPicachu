@@ -5,8 +5,9 @@ import {fromAICArt, Rendered, renderWithRouter} from '../../../../__tests__/util
 import {Paths} from '../../../../App';
 import {useGallery} from '../../Context';
 import {ArtGallery} from '../index';
-import {AllArt, Art, Source} from '../../../../data/artGallery/types';
 import {error, loaded, loading} from '@ryandur/sand';
+import {AllArt, Art} from '../../../../data/artGallery/types/response';
+import {Source} from '../../../../data/artGallery/types/resource';
 
 jest.mock('../../Context', () => {
     return ({

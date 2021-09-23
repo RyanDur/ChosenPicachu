@@ -19,10 +19,11 @@ import {nanoid} from 'nanoid';
 import {http} from '../../http';
 import {waitFor} from '@testing-library/react';
 import {asyncResult, error, loaded, loading} from '@ryandur/sand';
-import {Art, Source} from '../types';
 import {AICPieceData, AICSearch} from '../aic/types';
 import {HTTPError} from '../../types';
 import {artGallery} from '../index';
+import {Art} from '../types/response';
+import {Source} from '../types/resource';
 
 jest.mock('../../http', () => ({
     ...jest.requireActual('../../http'),

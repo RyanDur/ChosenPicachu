@@ -1,10 +1,11 @@
 import {RIJKAllArtSchema, RIJKArtObject, RIJKArtSchema, RIJKSAllArt, RIJKSArt, RIJKSSearchSchema} from './types';
-import {AllArt, Art, Query, SearchOptions} from '../types';
 import {validate} from '../../http';
 import {has} from '@ryandur/sand';
 import {defaultRecordLimit, defaultSearchLimit, rijksAPIKey, rijksDomain} from '../../../config';
 import {toQueryString} from '../../../util/URL';
 import {PATH} from '../../types';
+import {AllArt, Art, SearchOptions} from '../types/response';
+import {Query} from '../types/resource';
 
 const rijkToPiece = (data: RIJKArtObject): Art => ({
     id: data.objectNumber,
