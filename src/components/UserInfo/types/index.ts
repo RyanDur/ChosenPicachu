@@ -1,6 +1,4 @@
-import {Indexable} from '../../../data/types';
-
-export interface AddressInfo extends Indexable {
+export interface AddressInfo {
     streetAddress: string;
     streetAddressTwo?: string;
     city: string;
