@@ -1,4 +1,5 @@
-import {AllArtRequests, ArtGallery, ArtRequests, SearchOptionsRequests} from './types';
+import {AllArtRequests, ArtRequests, SearchOptionsRequests} from './types/request';
+import {ArtGallery} from './types';
 import {asyncEvent} from '@ryandur/sand';
 import {matchSource, Source} from './types/resource';
 import {http, unknownSource} from '../http';
