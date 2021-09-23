@@ -22,7 +22,8 @@ export const Users: FC = () => {
     };
 
     const equalAddresses = (address1: AddressInfo, address2: AddressInfo = {} as AddressInfo): boolean =>
-        Object.keys(address1).reduce((acc, key) => address1[key] === address2[key], Boolean());
+        Object.keys(address1).reduce((acc, key) =>
+            address1[key as keyof AddressInfo] === address2[key as keyof AddressInfo], Boolean());
 
     return <>
         <section id="user-info" className="card users" key={currentUser?.user.email}>

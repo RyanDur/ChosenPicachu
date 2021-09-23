@@ -2,10 +2,6 @@ import {matches, matchOn, maybe, Maybe} from '@ryandur/sand';
 
 export type PATH = string;
 
-export interface Indexable {
-    readonly [x: string]: string | undefined;
-}
-
 export type Explanation<E> = {
     reason: E,
     err: Maybe<Error>
