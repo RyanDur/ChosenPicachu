@@ -4,7 +4,8 @@ import * as faker from 'faker';
 import {Paths} from '../../../../App';
 import userEvent from '@testing-library/user-event';
 import {Rendered, renderWithRouter} from '../../../../__tests__/util';
-import {Art, Source} from '../../../../data/artGallery/types';
+import {Art} from '../../../../data/artGallery/types/response';
+import {Source} from '../../../../data/artGallery/types/resource';
 
 describe('the image', () => {
     const piece: Art = {

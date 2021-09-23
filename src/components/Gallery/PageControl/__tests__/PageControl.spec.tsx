@@ -4,7 +4,7 @@ import {toQueryObj} from '../../../../util/URL';
 import {fromAICArt as mockArt, Rendered, renderWithRouter} from '../../../../__tests__/util';
 import {Paths} from '../../../../App';
 import {PageControl} from '../index';
-import { Source } from '../../../../data/artGallery/types';
+import {Source} from '../../../../data/artGallery/types/resource';
 
 jest.mock('../../Context', () => ({
     useGallery: () => ({art: mockArt})

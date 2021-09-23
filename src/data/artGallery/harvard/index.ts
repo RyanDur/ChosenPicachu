@@ -6,12 +6,12 @@ import {
     HarvardSearch,
     HarvardSearchSchema
 } from './types';
-import {AllArt, Art, SearchOptions} from '../types';
 import {validate} from '../../http';
 import {has} from '@ryandur/sand';
 import {defaultRecordLimit, defaultSearchLimit, harvardAPIKey, harvardDomain} from '../../../config';
 import {toQueryString} from '../../../util/URL';
 import {PATH} from '../../types';
+import {AllArt, Art, SearchOptions} from '../types/response';
 
 export const shapeOfHarvardResponse = ['id', 'title', 'people', 'primaryimageurl'];
 export const harvardArtToArt = (record: HarvardArt): Art => ({
