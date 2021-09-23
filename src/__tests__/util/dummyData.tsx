@@ -14,8 +14,8 @@ import {
     HarvardPeople,
     HarvardArt
 } from '../../data/artGallery/harvard/types';
-import {AllArt, Art} from '../../data/artGallery/types';
 import {RIJKSAllArt, RIJKArtObject, RIJKSArt} from '../../data/artGallery/rijks/types';
+import {AllArt, Art} from '../../data/artGallery/types/response';
 
 export const randomNumberFromRange = (min: number, max = 6) => Math.floor(Math.random() * max) + min;
 

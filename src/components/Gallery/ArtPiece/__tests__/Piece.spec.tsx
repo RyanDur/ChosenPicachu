@@ -5,8 +5,8 @@ import {data} from '../../../../data';
 import * as faker from 'faker';
 import {Rendered, renderWithRouter} from '../../../../__tests__/util';
 import {GalleryPath} from '../../index';
-import {Art} from '../../../../data/artGallery/types';
 import {error, loaded, loading} from '@ryandur/sand';
+import {Art} from '../../../../data/artGallery/types/response';
 
 jest.mock('../Context', () => ({
     useArtPiece: jest.fn()

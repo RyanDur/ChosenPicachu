@@ -4,8 +4,9 @@ import {debounce} from 'lodash';
 import {useQuery} from '../../hooks';
 import {useHistory} from 'react-router-dom';
 import {Paths} from '../../../App';
-import {SearchOptions, Source} from '../../../data/artGallery/types';
 import {AsyncState} from '@ryandur/sand';
+import {SearchOptions} from '../../../data/artGallery/types/response';
+import {Source} from '../../../data/artGallery/types/resource';
 import './Search.scss';
 import './Search.layout.scss';
 
