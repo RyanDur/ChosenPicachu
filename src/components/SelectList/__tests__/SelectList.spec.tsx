@@ -50,4 +50,10 @@ describe('the friends list', () => {
 
         expect(selectFriend).not.toHaveTextContent(`${secondUser.firstName} ${secondUser.lastName}`);
     });
+
+    it('should not be able to select no one', async () => {
+        render(<FriendsList users={[]} onChange={consumer}/>);
+
+        expect(screen.queryByTestId('select-friend')).not.toBeInTheDocument();
+    });
 });

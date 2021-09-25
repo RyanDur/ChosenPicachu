@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from 'react';
-import {Consumer, maybe} from '@ryandur/sand';
+import {Consumer, has, maybe} from '@ryandur/sand';
 import {UserInfo, User} from '../UserInfo/types';
 import './fiends-list.scss';
 
@@ -31,17 +31,17 @@ export const FriendsList: FC<Props> = ({users, onChange, friends = []}) => {
                 </li>
             )
         }</ul>
-        <select defaultValue="" onChange={event => {
+        {has(users.filter(({info}) => !newFriends.includes(info))) && <select defaultValue="" onChange={event => {
             updateFriends([...newFriends, ...maybe.of(
                 users.find(({info}) => info.email === event.currentTarget.value)
             ).map(({info}) => [info]).orElse([])]);
             event.currentTarget.selectedIndex = 0;
-        }} data-testid="select-friend" >{[
+        }} data-testid="select-friend">{[
             <option key="placeholder" value="" disabled hidden>Select Friend</option>,
             ...users.filter(({info}) => !newFriends.includes(info)).map(({info}, index) =>
                 <option key={info.email} value={info.email} data-testid={`friend-option-${index}`}>{
                     displayFullName(info)
                 }</option>)
-        ]}</select>
+        ]}</select>}
     </article>;
 };
