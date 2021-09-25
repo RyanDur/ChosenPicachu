@@ -1,5 +1,5 @@
 import React, {FC, useState} from 'react';
-import {AddressInfo, UserInfo} from '../UserInfo/types';
+import {AddressInfo, User} from '../UserInfo/types';
 import {UserInformation} from '../UserInfo';
 import {Table} from '../Table';
 import {createRandomUsers} from '../../__tests__/util';
@@ -14,10 +14,10 @@ import './Users.layout.scss';
 export const Users: FC = () => {
     const history = useHistory();
     const {queryObj: {email, mode}, nextQueryString, path} = useQuery<{ email: string, mode: string }>();
-    const [users, updateNewUsers] = useState<UserInfo[]>(createRandomUsers());
-    const currentUser: UserInfo | undefined = users.find(info => info.user.email === email);
+    const [users, updateNewUsers] = useState<User[]>(createRandomUsers());
+    const currentUser: User | undefined = users.find(info => info.info.email === email);
 
-    const removeUserInfo = (item: UserInfo, list: UserInfo[] = []): UserInfo[] => {
+    const removeUserInfo = (item: User, list: User[] = []): User[] => {
         const index = list.indexOf(item);
         return [...list.slice(0, index), ...list.slice(index + 1)];
     };
@@ -27,7 +27,7 @@ export const Users: FC = () => {
             address1[key as keyof AddressInfo] === address2[key as keyof AddressInfo], Boolean());
 
     return <>
-        <section id="user-info" className="card users" key={currentUser?.user.email}>
+        <section id="user-info" className="card users" key={currentUser?.info.email}>
             <h2 className="title">User Information</h2>
             <UserInformation currentUserInfo={currentUser}
                              readOnly={mode === 'view'}
@@ -57,22 +57,22 @@ export const Users: FC = () => {
                     {display: 'Friends', column: 'friends'},
                     {display: 'Works from Home', column: 'worksFromHome'}
                 ]}
-                rows={users.map((userInfo) => {
+                rows={users.map(user => {
                     const displayFullName = (user: { firstName: string, lastName: string }) => `${user.firstName} ${user.lastName}`;
                     return ({
-                        fullName: {display: displayFullName(userInfo.user)},
-                        homeCity: {display: userInfo.homeAddress.city},
-                        age: {display: formatAge(age(userInfo.user.dob))},
+                        fullName: {display: displayFullName(user.info)},
+                        homeCity: {display: user.homeAddress.city},
+                        age: {display: formatAge(age(user.info.dob))},
                         friends: {
-                            display: <FriendsList users={users.filter(user => user !== userInfo)}
-                                                  friends={userInfo.user.friends}
-                                                  onChange={(newFriends) => {
-                                                      userInfo.user.friends = newFriends;
+                            display: <FriendsList users={users.filter(({info}) => info !== user.info)}
+                                                  friends={user.friends}
+                                                  onChange={newFriends => {
+                                                      user.friends = newFriends;
                                                   }}/>
                         },
                         worksFromHome: {
                             display: <section className="last-column">
-                                {equalAddresses(userInfo.homeAddress, userInfo.workAddress) ? 'Yes' : 'No'}
+                                {equalAddresses(user.homeAddress, user.workAddress) ? 'Yes' : 'No'}
                                 <article tabIndex={0} className="menu-toggle rounded-corners" onKeyPress={event => {
                                     event.preventDefault();
                                     if (event.code === 'Space') {
@@ -85,22 +85,22 @@ export const Users: FC = () => {
                                 }} onClick={event => event.currentTarget.classList.remove('open')}>
                                     <nav className="menu rounded-corners">
                                         <Link to={`${path}${nextQueryString({
-                                            email: userInfo.user.email,
+                                            email: user.info.email,
                                             mode: 'view'
                                         })}`}
                                               className='item'
                                               data-testid="view">View</Link>
                                         <Link to={`${path}${nextQueryString({
-                                            email: userInfo.user.email,
+                                            email: user.info.email,
                                             mode: 'edit'
                                         })}`}
                                               className='item'
                                               data-testid="view">Edit</Link>
-                                        <Link to={email === userInfo.user.email ? path : history.location}
+                                        <Link to={email === user.info.email ? path : history.location}
                                               className='item'
-                                              onClick={() => updateNewUsers(removeUserInfo(userInfo, users))}
+                                              onClick={() => updateNewUsers(removeUserInfo(user, users))}
                                               data-testid="remove">Remove</Link>
-                                        <Link to={`${path}${nextQueryString({email: userInfo.user.email})}`}
+                                        <Link to={`${path}${nextQueryString({email: user.info.email})}`}
                                               className='item'
                                               data-testid="clone">Clone</Link>
                                     </nav>

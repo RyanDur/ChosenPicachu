@@ -2,7 +2,7 @@ import {ReactElement} from 'react';
 import {render, RenderResult, screen} from '@testing-library/react';
 import {MemoryRouter, Route} from 'react-router-dom';
 import * as H from 'history';
-import {AddressInfo, UserInfo} from '../../components/UserInfo/types';
+import {AddressInfo, User} from '../../components/UserInfo/types';
 import userEvent from '@testing-library/user-event';
 import {toISOWithoutTime} from '../../components/util';
 import {toQueryString} from '../../util/URL';
@@ -48,11 +48,11 @@ export const fillOutAddress = (address: AddressInfo, kind: string) => {
     userEvent.type(screen.getByTestId(`${kind}-address-zip`), address.zip);
 };
 
-export const fillOutUser = (info: UserInfo) => {
-    userEvent.type(screen.getByLabelText('First Name'), info.user.firstName);
-    userEvent.type(screen.getByLabelText('Last Name'), info.user.lastName);
-    userEvent.type(screen.getByLabelText('Email'), info.user.email!);
-    userEvent.type(screen.getByLabelText('Date Of Birth'), toISOWithoutTime(info.user.dob!));
+export const fillOutUser = (info: User) => {
+    userEvent.type(screen.getByLabelText('First Name'), info.info.firstName);
+    userEvent.type(screen.getByLabelText('Last Name'), info.info.lastName);
+    userEvent.type(screen.getByLabelText('Email'), info.info.email!);
+    userEvent.type(screen.getByLabelText('Date Of Birth'), toISOWithoutTime(info.info.dob!));
 };
 
 export * from './dummyData';

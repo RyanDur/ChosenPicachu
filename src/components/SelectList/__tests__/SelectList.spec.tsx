@@ -5,8 +5,8 @@ import {users} from '../../../__tests__/util';
 
 describe('the friends list', () => {
     const consumer = jest.fn();
-    const firstUser = users[0].user;
-    const secondUser = users[1].user;
+    const firstUser = users[0].info;
+    const secondUser = users[1].info;
 
     afterEach(() => jest.resetAllMocks());
 
