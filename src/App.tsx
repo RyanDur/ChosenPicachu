@@ -61,6 +61,7 @@ export const App = () => {
                        className="attribution">Reset icon by Icons8</a>
                     <a href="https://icons8.com/icon/59878/search" rel="noopener noreferrer" target="_blank"
                        className="attribution">Search icon by Icons8</a>
+                    <a href="https://icons8.com/icon/82764/cancel">Cancel icon by Icons8</a>
                 </nav>
             </article>
         </aside>
