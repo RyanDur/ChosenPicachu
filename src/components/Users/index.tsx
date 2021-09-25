@@ -7,6 +7,7 @@ import {Link, useHistory} from 'react-router-dom';
 import {Paths} from '../../App';
 import {age, formatAge} from '../util';
 import {useQuery} from '../hooks';
+import {FriendsList} from '../SelectList';
 import './Users.scss';
 import './Users.layout.scss';
 
@@ -53,50 +54,61 @@ export const Users: FC = () => {
                     {display: 'Full Name', column: 'fullName'},
                     {display: 'Home City', column: 'homeCity'},
                     {display: 'Age', column: 'age'},
+                    {display: 'Friends', column: 'friends'},
                     {display: 'Works from Home', column: 'worksFromHome'}
                 ]}
-                rows={users.map((userInfo) => ({
-                    fullName: {display: `${userInfo.user.firstName} ${userInfo.user.lastName}`},
-                    homeCity: {display: userInfo.homeAddress.city},
-                    age: {display: formatAge(age(userInfo.user.dob))},
-                    worksFromHome: {
-                        display: <section className="last-column">
-                            {equalAddresses(userInfo.homeAddress, userInfo.workAddress) ? 'Yes' : 'No'}
-                            <article tabIndex={0} className="menu-toggle rounded-corners" onKeyPress={event => {
-                                event.preventDefault();
-                                if (event.code === 'Space') {
-                                    event.currentTarget.classList.toggle('open');
-                                }
-                            }} onBlur={event => {
-                                if (!event.currentTarget.contains(event.relatedTarget as Node)) {
-                                    event.currentTarget.classList.remove('open');
-                                }
-                            }} onClick={event => event.currentTarget.classList.remove('open')}>
-                                <nav className="menu rounded-corners">
-                                    <Link to={`${path}${nextQueryString({
-                                        email: userInfo.user.email,
-                                        mode: 'view'
-                                    })}`}
-                                          className='item'
-                                          data-testid="view">View</Link>
-                                    <Link to={`${path}${nextQueryString({
-                                        email: userInfo.user.email,
-                                        mode: 'edit'
-                                    })}`}
-                                          className='item'
-                                          data-testid="view">Edit</Link>
-                                    <Link to={email === userInfo.user.email ? path : history.location}
-                                          className='item'
-                                          onClick={() => updateNewUsers(removeUserInfo(userInfo, users))}
-                                          data-testid="remove">Remove</Link>
-                                    <Link to={`${path}${nextQueryString({email: userInfo.user.email})}`}
-                                          className='item'
-                                          data-testid="clone">Clone</Link>
-                                </nav>
-                            </article>
-                        </section>
-                    }
-                }))}
+                rows={users.map((userInfo) => {
+                    const displayFullName = (user: { firstName: string, lastName: string }) => `${user.firstName} ${user.lastName}`;
+                    return ({
+                        fullName: {display: displayFullName(userInfo.user)},
+                        homeCity: {display: userInfo.homeAddress.city},
+                        age: {display: formatAge(age(userInfo.user.dob))},
+                        friends: {
+                            display: <FriendsList users={users.filter(user => user !== userInfo)}
+                                                  friends={userInfo.user.friends}
+                                                  onChange={(newFriends) => {
+                                                      userInfo.user.friends = newFriends;
+                                                  }}/>
+                        },
+                        worksFromHome: {
+                            display: <section className="last-column">
+                                {equalAddresses(userInfo.homeAddress, userInfo.workAddress) ? 'Yes' : 'No'}
+                                <article tabIndex={0} className="menu-toggle rounded-corners" onKeyPress={event => {
+                                    event.preventDefault();
+                                    if (event.code === 'Space') {
+                                        event.currentTarget.classList.toggle('open');
+                                    }
+                                }} onBlur={event => {
+                                    if (!event.currentTarget.contains(event.relatedTarget as Node)) {
+                                        event.currentTarget.classList.remove('open');
+                                    }
+                                }} onClick={event => event.currentTarget.classList.remove('open')}>
+                                    <nav className="menu rounded-corners">
+                                        <Link to={`${path}${nextQueryString({
+                                            email: userInfo.user.email,
+                                            mode: 'view'
+                                        })}`}
+                                              className='item'
+                                              data-testid="view">View</Link>
+                                        <Link to={`${path}${nextQueryString({
+                                            email: userInfo.user.email,
+                                            mode: 'edit'
+                                        })}`}
+                                              className='item'
+                                              data-testid="view">Edit</Link>
+                                        <Link to={email === userInfo.user.email ? path : history.location}
+                                              className='item'
+                                              onClick={() => updateNewUsers(removeUserInfo(userInfo, users))}
+                                              data-testid="remove">Remove</Link>
+                                        <Link to={`${path}${nextQueryString({email: userInfo.user.email})}`}
+                                              className='item'
+                                              data-testid="clone">Clone</Link>
+                                    </nav>
+                                </article>
+                            </section>
+                        }
+                    });
+                })}
             />
         </section>
     </>;

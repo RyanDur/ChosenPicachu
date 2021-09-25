@@ -32,9 +32,11 @@ describe('the users page', () => {
         firstRowFirstCell: HTMLElement,
         firstRowSecondCell: HTMLElement,
         firstRowThirdCell: HTMLElement,
+        firstRowFifthCell: HTMLElement,
         firstRowFourthCell: HTMLElement,
-        secondRowFourthCell: HTMLElement,
+        secondRowFifthCell: HTMLElement,
         rendered: () => Rendered;
+
     beforeEach(() => {
         rendered = renderWithRouter(<Users/>, {path: Paths.users});
         table = screen.getByTestId('table');
@@ -42,8 +44,9 @@ describe('the users page', () => {
         firstRowSecondCell = within(table).getByTestId('cell-1-0');
         firstRowThirdCell = within(table).getByTestId('cell-2-0');
         firstRowFourthCell = within(table).getByTestId('cell-3-0');
+        firstRowFifthCell = within(table).getByTestId('cell-4-0');
 
-        secondRowFourthCell = within(table).getByTestId('cell-3-1');
+        secondRowFifthCell = within(table).getByTestId('cell-4-1');
 
         Date.now = () => new Date('2021-07-11').getTime();
         aUserInfo.user.dob = new Date('1980-11-28');
@@ -63,7 +66,7 @@ describe('the users page', () => {
             expect(firstRowFirstCell).toHaveTextContent(`${anotherUserInfo.user.firstName} ${anotherUserInfo.user.lastName}`);
             expect(firstRowSecondCell).toHaveTextContent(anotherUserInfo.homeAddress.city);
             expect(firstRowThirdCell).toHaveTextContent('42 years old');
-            expect(firstRowFourthCell).toHaveTextContent('Yes');
+            expect(firstRowFifthCell).toHaveTextContent('Yes');
         });
 
         test('when user types in the same address as home it should indicate they work from home', () => {
@@ -71,7 +74,7 @@ describe('the users page', () => {
             fillOutAddress(aUserInfo.homeAddress, 'home');
             fillOutAddress(aUserInfo.homeAddress, 'work');
             userEvent.click(screen.getByText('Add'));
-            expect(firstRowFourthCell).toHaveTextContent('Yes');
+            expect(firstRowFifthCell).toHaveTextContent('Yes');
         });
     });
 
@@ -79,7 +82,7 @@ describe('the users page', () => {
         let form: HTMLElement;
 
         beforeEach(() => {
-            userEvent.click(within(firstRowFourthCell).getByText('View'));
+            userEvent.click(within(firstRowFifthCell).getByText('View'));
             form = screen.getByTestId('user-info-form');
         });
 
@@ -119,7 +122,7 @@ describe('the users page', () => {
             expect(firstRowFirstCell).toHaveTextContent(`${anotherUserInfo.user.firstName} ${anotherUserInfo.user.lastName}`);
             expect(firstRowSecondCell).toHaveTextContent(anotherUserInfo.homeAddress.city);
             expect(firstRowThirdCell).toHaveTextContent('42 years old');
-            expect(firstRowFourthCell).toHaveTextContent('Yes');
+            expect(firstRowFifthCell).toHaveTextContent('Yes');
         });
 
         test('should remove button if able to add a new user', () => {
@@ -156,7 +159,7 @@ describe('the users page', () => {
     describe('editing a user', () => {
         beforeEach(() => {
             act(() => {
-                userEvent.click(within(firstRowFourthCell).getByText('Edit'));
+                userEvent.click(within(firstRowFifthCell).getByText('Edit'));
             });
         });
 
@@ -237,7 +240,7 @@ describe('the users page', () => {
 
             expect(firstRowFirstCell).toHaveTextContent(`${aUserInfo.user.firstName} ${aUserInfo.user.lastName}`);
 
-            userEvent.click(within(firstRowFourthCell).getByText('Remove'));
+            userEvent.click(within(firstRowFifthCell).getByText('Remove'));
 
             expect(firstRowFirstCell).not.toHaveTextContent(`${aUserInfo.user.firstName} ${aUserInfo.user.lastName}`);
             expect(screen.getAllByTestId('tr').length).toEqual(originalLength - 1);
@@ -245,20 +248,20 @@ describe('the users page', () => {
 
         describe('when a user is being viewed', () => {
             beforeEach(() => {
-                userEvent.click(within(firstRowFourthCell).getByText('View'));
+                userEvent.click(within(firstRowFifthCell).getByText('View'));
                 expect(rendered().testLocation?.pathname).toEqual(`${Paths.users}`);
                 expect(rendered().testLocation?.search).toEqual(`?email=${aUserInfo.user.email}&mode=view`);
             });
 
             it('should update the url when removing the viewed user', () => {
-                userEvent.click(within(firstRowFourthCell).getByText('Remove'));
+                userEvent.click(within(firstRowFifthCell).getByText('Remove'));
 
                 expect(rendered().testLocation?.pathname).toEqual(`${Paths.users}`);
                 expect(rendered().testLocation?.search).toEqual('');
             });
 
             it('should not update the url when removing a user other than the viewed one', () => {
-                userEvent.click(within(secondRowFourthCell).getByText('Remove'));
+                userEvent.click(within(secondRowFifthCell).getByText('Remove'));
 
                 expect(rendered().testLocation?.pathname).toEqual(`${Paths.users}`);
                 expect(rendered().testLocation?.search).toEqual(`?email=${aUserInfo.user.email}&mode=view`);
@@ -267,13 +270,13 @@ describe('the users page', () => {
 
         describe('when a user is being edited', () => {
             beforeEach(() => {
-                userEvent.click(within(firstRowFourthCell).getByText('Edit'));
+                userEvent.click(within(firstRowFifthCell).getByText('Edit'));
                 expect(rendered().testLocation?.pathname).toEqual(`${Paths.users}`);
                 expect(rendered().testLocation?.search).toEqual(`?email=${aUserInfo.user.email}&mode=edit`);
             });
 
             it('should reset the form when removing the user being edited', async () => {
-                userEvent.click(within(firstRowFourthCell).getByText('Remove'));
+                userEvent.click(within(firstRowFifthCell).getByText('Remove'));
 
                 containsUser(screen.getByTestId('user-info-form'));
                 expect(rendered().testLocation?.pathname).toEqual(`${Paths.users}`);
@@ -281,7 +284,7 @@ describe('the users page', () => {
             });
 
             it('should not reset the form when removing a user other than the one being edited', () => {
-                userEvent.click(within(secondRowFourthCell).getByText('Remove'));
+                userEvent.click(within(secondRowFifthCell).getByText('Remove'));
 
                 containsUser(screen.getByTestId('user-info-form'), aUserInfo);
                 expect(rendered().testLocation?.pathname).toEqual(`${Paths.users}`);
@@ -292,7 +295,7 @@ describe('the users page', () => {
 
     describe('cloning a user', () => {
         beforeEach(() => {
-            userEvent.click(within(firstRowFourthCell).getByText('Clone'));
+            userEvent.click(within(firstRowFifthCell).getByText('Clone'));
             const form = screen.getByTestId('user-info-form');
             const lastName = within(form).getByLabelText('Last Name');
             userEvent.type(lastName, ' more name');
@@ -312,6 +315,15 @@ describe('the users page', () => {
             const rowsOriginalLength = rows.length;
             userEvent.click(screen.getByText('Add'));
             expect(rowsOriginalLength + 1).toEqual(screen.getAllByTestId('tr').length);
+        });
+    });
+
+    describe('user friends', () => {
+        it('should not add the user to the same users friend list', () => {
+            expect(within(firstRowFourthCell)
+                .getAllByTestId(/friend-option/)
+                .map(elem => elem.innerHTML)
+            ).not.toContain(firstRowFirstCell.innerHTML);
         });
     });
 

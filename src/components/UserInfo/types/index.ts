@@ -7,6 +7,7 @@ export interface AddressInfo {
 }
 
 export interface User {
+    friends?: User[];
     firstName: string;
     lastName: string;
     email?: string;
