@@ -31,12 +31,12 @@ export const FriendsList: FC<Props> = ({users, onChange, friends = []}) => {
                 </li>
             )
         }</ul>
-        <select data-testid="select-friend" defaultValue="" onChange={event => {
+        <select defaultValue="" onChange={event => {
             updateFriends([...newFriends, ...maybe.of(
                 users.find(({info}) => info.email === event.currentTarget.value)
             ).map(({info}) => [info]).orElse([])]);
             event.currentTarget.selectedIndex = 0;
-        }}>{[
+        }} data-testid="select-friend" >{[
             <option key="placeholder" value="" disabled hidden>Select Friend</option>,
             ...users.filter(({info}) => !newFriends.includes(info)).map(({info}, index) =>
                 <option key={info.email} value={info.email} data-testid={`friend-option-${index}`}>{
