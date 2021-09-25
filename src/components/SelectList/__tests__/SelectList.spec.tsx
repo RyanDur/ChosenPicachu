@@ -1,5 +1,5 @@
 import userEvent from '@testing-library/user-event';
-import {render, screen, within} from '@testing-library/react';
+import {render, screen} from '@testing-library/react';
 import {FriendsList} from '../index';
 import {users} from '../../../__tests__/util';
 
@@ -35,8 +35,7 @@ describe('the friends list', () => {
 
     it('should allow a way to remove a friend', () => {
         render(<FriendsList users={users} friends={[firstUser, secondUser]} onChange={consumer}/>);
-        const firstFriend = screen.getByTestId(firstUser.email || '');
-        userEvent.click(within(firstFriend).getByTestId(/remove/));
+        userEvent.click(screen.getByTestId(firstUser.email || ''));
         expect(screen.getByTestId('friends-list')).not.toHaveTextContent(`${firstUser.firstName} ${firstUser.lastName}`);
         expect(screen.getByTestId('friends-list')).toHaveTextContent(`${secondUser.firstName} ${secondUser.lastName}`);
     });
