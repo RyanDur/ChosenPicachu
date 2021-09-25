@@ -1,0 +1,17 @@
+.friends-list {
+  .friend {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &:focus,
+    &:hover {
+      background-color: var(--faded-internationl-orange-engineering);
+    }
+
+    .remove {
+      border: none;
+      background-color: transparent;
+    }
+  }
+}
