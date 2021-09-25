@@ -5,11 +5,11 @@ import './fiends-list.scss';
 
 interface Props {
     users: User[];
-    friends?: UserInfo[];
     onChange: Consumer<UserInfo[]>
+    friends?: UserInfo[];
 }
 
-export const FriendsList: FC<Props> = ({users, friends = [], onChange}) => {
+export const FriendsList: FC<Props> = ({users, onChange, friends = []}) => {
     const displayFullName = (user: { firstName: string, lastName: string }) => `${user.firstName} ${user.lastName}`;
     const [newFriends, updateFriends] = useState<UserInfo[]>(friends);
 
