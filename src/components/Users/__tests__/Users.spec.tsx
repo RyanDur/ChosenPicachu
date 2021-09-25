@@ -11,9 +11,9 @@ import {
     users
 } from '../../../__tests__/util';
 import {Paths} from '../../../App';
-import {UserInfo} from '../../UserInfo/types';
+import {User} from '../../UserInfo/types';
 
-const addUser = (anotherUserInfo: UserInfo) => {
+const addUser = (anotherUserInfo: User) => {
     fillOutUser(anotherUserInfo);
     fillOutAddress(anotherUserInfo.homeAddress, 'home');
     userEvent.click(screen.getByLabelText('Same as Home'));
@@ -49,8 +49,8 @@ describe('the users page', () => {
         secondRowFifthCell = within(table).getByTestId('cell-4-1');
 
         Date.now = () => new Date('2021-07-11').getTime();
-        aUserInfo.user.dob = new Date('1980-11-28');
-        anotherUserInfo.user.dob = new Date('1978-11-28');
+        aUserInfo.info.dob = new Date('1980-11-28');
+        anotherUserInfo.info.dob = new Date('1978-11-28');
 
         fillOutUser(aUserInfo);
         fillOutAddress(aUserInfo.homeAddress, 'home');
@@ -63,7 +63,7 @@ describe('the users page', () => {
         test('user info in table in descending order', () => {
             addUser(anotherUserInfo);
 
-            expect(firstRowFirstCell).toHaveTextContent(`${anotherUserInfo.user.firstName} ${anotherUserInfo.user.lastName}`);
+            expect(firstRowFirstCell).toHaveTextContent(`${anotherUserInfo.info.firstName} ${anotherUserInfo.info.lastName}`);
             expect(firstRowSecondCell).toHaveTextContent(anotherUserInfo.homeAddress.city);
             expect(firstRowThirdCell).toHaveTextContent('42 years old');
             expect(firstRowFifthCell).toHaveTextContent('Yes');
@@ -119,7 +119,7 @@ describe('the users page', () => {
             userEvent.click(screen.getByText('Add New User'));
             addUser(anotherUserInfo);
 
-            expect(firstRowFirstCell).toHaveTextContent(`${anotherUserInfo.user.firstName} ${anotherUserInfo.user.lastName}`);
+            expect(firstRowFirstCell).toHaveTextContent(`${anotherUserInfo.info.firstName} ${anotherUserInfo.info.lastName}`);
             expect(firstRowSecondCell).toHaveTextContent(anotherUserInfo.homeAddress.city);
             expect(firstRowThirdCell).toHaveTextContent('42 years old');
             expect(firstRowFifthCell).toHaveTextContent('Yes');
@@ -186,9 +186,9 @@ describe('the users page', () => {
             const form = screen.getByTestId('user-info-form');
             const lastName = within(form).getByLabelText('Last Name');
             userEvent.type(lastName, ' more name');
-            expect(lastName).toHaveDisplayValue(`${aUserInfo.user.lastName} more name`);
+            expect(lastName).toHaveDisplayValue(`${aUserInfo.info.lastName} more name`);
             userEvent.click(screen.getByText('Reset'));
-            expect(lastName).toHaveDisplayValue(aUserInfo.user.lastName);
+            expect(lastName).toHaveDisplayValue(aUserInfo.info.lastName);
         });
 
         test('should be able to cancel the form to the original information before updating', async () => {
@@ -196,11 +196,11 @@ describe('the users page', () => {
             const lastName = within(form).getByLabelText('Last Name');
             userEvent.type(lastName, ' more name');
 
-            expect(lastName).toHaveDisplayValue(`${aUserInfo.user.lastName} more name`);
+            expect(lastName).toHaveDisplayValue(`${aUserInfo.info.lastName} more name`);
 
             act(() => userEvent.click(screen.getByText('Cancel')));
 
-            expect(lastName).toHaveDisplayValue(aUserInfo.user.lastName);
+            expect(lastName).toHaveDisplayValue(aUserInfo.info.lastName);
             await waitFor(() => expect(within(form).getByLabelText('Last Name')).toHaveAttribute('readonly'));
         });
 
@@ -214,7 +214,7 @@ describe('the users page', () => {
             test('should put the user in first row', () => {
                 userEvent.click(screen.getByText('Update'));
                 expect(firstRowFirstCell).toHaveTextContent(
-                    `${aUserInfo.user.firstName} ${aUserInfo.user.lastName} more name`
+                    `${aUserInfo.info.firstName} ${aUserInfo.info.lastName} more name`
                 );
             });
 
@@ -228,7 +228,7 @@ describe('the users page', () => {
             it('should reset from the form on update', () => {
                 userEvent.click(screen.getByText('Update'));
                 const form = screen.getByTestId('user-info-form');
-                expect(within(form).getByLabelText('Last Name')).not.toHaveDisplayValue(aUserInfo.user.lastName);
+                expect(within(form).getByLabelText('Last Name')).not.toHaveDisplayValue(aUserInfo.info.lastName);
             });
         });
     });
@@ -238,11 +238,11 @@ describe('the users page', () => {
             const trs = screen.getAllByTestId('tr');
             const originalLength = trs.length;
 
-            expect(firstRowFirstCell).toHaveTextContent(`${aUserInfo.user.firstName} ${aUserInfo.user.lastName}`);
+            expect(firstRowFirstCell).toHaveTextContent(`${aUserInfo.info.firstName} ${aUserInfo.info.lastName}`);
 
             userEvent.click(within(firstRowFifthCell).getByText('Remove'));
 
-            expect(firstRowFirstCell).not.toHaveTextContent(`${aUserInfo.user.firstName} ${aUserInfo.user.lastName}`);
+            expect(firstRowFirstCell).not.toHaveTextContent(`${aUserInfo.info.firstName} ${aUserInfo.info.lastName}`);
             expect(screen.getAllByTestId('tr').length).toEqual(originalLength - 1);
         });
 
@@ -250,7 +250,7 @@ describe('the users page', () => {
             beforeEach(() => {
                 userEvent.click(within(firstRowFifthCell).getByText('View'));
                 expect(rendered().testLocation?.pathname).toEqual(`${Paths.users}`);
-                expect(rendered().testLocation?.search).toEqual(`?email=${aUserInfo.user.email}&mode=view`);
+                expect(rendered().testLocation?.search).toEqual(`?email=${aUserInfo.info.email}&mode=view`);
             });
 
             it('should update the url when removing the viewed user', () => {
@@ -264,7 +264,7 @@ describe('the users page', () => {
                 userEvent.click(within(secondRowFifthCell).getByText('Remove'));
 
                 expect(rendered().testLocation?.pathname).toEqual(`${Paths.users}`);
-                expect(rendered().testLocation?.search).toEqual(`?email=${aUserInfo.user.email}&mode=view`);
+                expect(rendered().testLocation?.search).toEqual(`?email=${aUserInfo.info.email}&mode=view`);
             });
         });
 
@@ -272,7 +272,7 @@ describe('the users page', () => {
             beforeEach(() => {
                 userEvent.click(within(firstRowFifthCell).getByText('Edit'));
                 expect(rendered().testLocation?.pathname).toEqual(`${Paths.users}`);
-                expect(rendered().testLocation?.search).toEqual(`?email=${aUserInfo.user.email}&mode=edit`);
+                expect(rendered().testLocation?.search).toEqual(`?email=${aUserInfo.info.email}&mode=edit`);
             });
 
             it('should reset the form when removing the user being edited', async () => {
@@ -288,7 +288,7 @@ describe('the users page', () => {
 
                 containsUser(screen.getByTestId('user-info-form'), aUserInfo);
                 expect(rendered().testLocation?.pathname).toEqual(`${Paths.users}`);
-                expect(rendered().testLocation?.search).toEqual(`?email=${aUserInfo.user.email}&mode=edit`);
+                expect(rendered().testLocation?.search).toEqual(`?email=${aUserInfo.info.email}&mode=edit`);
             });
         });
     });
@@ -302,11 +302,11 @@ describe('the users page', () => {
         });
 
         test('add a user', () => {
-            expect(firstRowFirstCell).toHaveTextContent(`${aUserInfo.user.firstName} ${aUserInfo.user.lastName}`);
+            expect(firstRowFirstCell).toHaveTextContent(`${aUserInfo.info.firstName} ${aUserInfo.info.lastName}`);
             userEvent.click(screen.getByText('Add'));
 
             expect(firstRowFirstCell).toHaveTextContent(
-                `${aUserInfo.user.firstName} ${aUserInfo.user.lastName} more name`
+                `${aUserInfo.info.firstName} ${aUserInfo.info.lastName} more name`
             );
         });
 
@@ -345,11 +345,11 @@ describe('the users page', () => {
         details: within(form).getByLabelText('Details')
     });
 
-    const containsUser = (form: HTMLElement, userInfo?: UserInfo) => {
+    const containsUser = (form: HTMLElement, userInfo?: User) => {
         const userForm = getUserFormElements(form);
-        expect(userForm.firstName).toHaveDisplayValue(userInfo?.user.firstName || '');
-        expect(userForm.lastName).toHaveDisplayValue(userInfo?.user.lastName || '');
-        expect(userForm.email).toHaveDisplayValue(userInfo?.user.email! || '');
+        expect(userForm.firstName).toHaveDisplayValue(userInfo?.info.firstName || '');
+        expect(userForm.lastName).toHaveDisplayValue(userInfo?.info.lastName || '');
+        expect(userForm.email).toHaveDisplayValue(userInfo?.info.email! || '');
         expect(userForm.homeAddressStreet).toHaveDisplayValue(userInfo?.homeAddress.streetAddress || '');
         expect(userForm.homeAddressStreet2).toHaveDisplayValue(userInfo?.homeAddress.streetAddressTwo! || '');
         expect(userForm.homeAddressCity).toHaveDisplayValue(userInfo?.homeAddress.city || '');

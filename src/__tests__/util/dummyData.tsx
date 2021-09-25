@@ -1,7 +1,7 @@
 import {Column, Row} from '../../components/Table/types';
 import React from 'react';
 import faker from 'faker';
-import {AddressInfo, User, UserInfo} from '../../components/UserInfo/types';
+import {AddressInfo, UserInfo, User} from '../../components/UserInfo/types';
 import {AvatarGenerator} from 'random-avatar-generator';
 import {toISOWithoutTime} from '../../components/util';
 
@@ -125,7 +125,7 @@ export const rows: Row[] = [{
     }
 }];
 
-const createUser = (): User => ({
+const createUser = (): UserInfo => ({
     firstName: faker.name.firstName(),
     lastName: faker.name.lastName(),
     email: faker.internet.email(),
@@ -145,10 +145,10 @@ const maybeCreateAddress = (): AddressInfo | undefined =>
 const createDetails = (num = 10) => faker.lorem.sentences(randomNumberFromRange(2, num));
 const generator = new AvatarGenerator();
 
-export const userInfo = (address?: AddressInfo, worksFromHome = false): UserInfo => {
+export const userInfo = (address?: AddressInfo, worksFromHome = false): User => {
     const homeAddress = createAddress();
     return ({
-        user: createUser(),
+        info: createUser(),
         homeAddress,
         workAddress: worksFromHome ? homeAddress : address,
         details: createDetails(),
@@ -162,7 +162,7 @@ export const users = [
     userInfo(createAddress())
 ];
 
-export const createRandomUsers = (num = randomNumberFromRange(3, 15)): UserInfo[] =>
+export const createRandomUsers = (num = randomNumberFromRange(3, 15)): User[] =>
     [...Array(num)].map(() => userInfo(maybeCreateAddress(), Math.random() > 0.5));
 
 export const pagination = {

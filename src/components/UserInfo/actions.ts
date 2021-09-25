@@ -9,7 +9,7 @@ import {
     UpdateFirstName,
     UpdateHomeAddress,
     UpdateLastName,
-    UpdateWorkAddress, UserInfo
+    UpdateWorkAddress, User
 } from './types';
 
 export const updateFirstName = (firstName: string): UpdateFirstName => ({
@@ -29,5 +29,5 @@ export const updateWorkAddress = (workAddress: AddressInfo): UpdateWorkAddress =
 });
 export const updateDetails = (details: string): UpdateDetails => ({type: FormActions.UPDATE_DETAILS, details});
 export const updateAvatar = (avatar: string): UpdateAvatar => ({type: FormActions.UPDATE_AVATAR, avatar});
-export const resetForm = (userInfo?: UserInfo): ResetForm => ({type: FormActions.RESET_FORM, userInfo});
+export const resetForm = (userInfo?: User): ResetForm => ({type: FormActions.RESET_FORM, userInfo});
 

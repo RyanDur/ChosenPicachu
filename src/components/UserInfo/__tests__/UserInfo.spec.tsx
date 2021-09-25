@@ -1,7 +1,7 @@
 import {UserInformation} from '../index';
 import {act, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {UserInfo} from '../types';
+import {User} from '../types';
 import {fillOutAddress, fillOutUser, users} from '../../../__tests__/util';
 import {initialState} from '../reducer';
 import {Consumer} from '@ryandur/sand';
@@ -22,7 +22,7 @@ describe('a user form', () => {
     let homeStateInput: HTMLElement;
     let homeZipInput: HTMLElement;
 
-    let consumer: Consumer<UserInfo>;
+    let consumer: Consumer<User>;
 
     beforeEach(() => {
         consumer = jest.fn();
@@ -101,10 +101,7 @@ describe('a user form', () => {
         });
 
         describe('for a zip code', () => {
-            describe('for home', () => testZip('home'));
-            describe('for work', () => testZip('work'));
-
-            function testZip(kind: string) {
+            const testZip = (kind: string): void => {
                 let element: HTMLElement;
                 beforeEach(() => {
                     element = screen.getByTestId(`${kind}-address-zip`);
@@ -133,7 +130,14 @@ describe('a user form', () => {
                     expect(element).toHaveDisplayValue('12345-1234');
                     expect(element).toBeValid();
                 });
-            }
+            };
+
+            describe('for home', () => {
+                testZip('home');
+            });
+            describe('for work', () => {
+                testZip('work');
+            });
         });
     });
 });

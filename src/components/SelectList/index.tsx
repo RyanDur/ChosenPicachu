@@ -1,21 +1,21 @@
 import React, {FC, useEffect, useState} from 'react';
 import {Consumer, maybe} from '@ryandur/sand';
-import {User, UserInfo} from '../UserInfo/types';
+import {UserInfo, User} from '../UserInfo/types';
 import './fiends-list.scss';
 
 interface Props {
-    users: UserInfo[];
-    friends?: User[];
-    onChange: Consumer<User[]>
+    users: User[];
+    friends?: UserInfo[];
+    onChange: Consumer<UserInfo[]>
 }
 
 export const FriendsList: FC<Props> = ({users, friends = [], onChange}) => {
     const displayFullName = (user: { firstName: string, lastName: string }) => `${user.firstName} ${user.lastName}`;
-    const [newFriends, updateFriends] = useState<User[]>(friends);
+    const [newFriends, updateFriends] = useState<UserInfo[]>(friends);
 
     useEffect(() => onChange(newFriends), [newFriends]);
 
-    const remove = (friend: User) => () =>
+    const remove = (friend: UserInfo) => () =>
         updateFriends(newFriends.filter(newFriend => friend !== newFriend));
 
     return <article>
@@ -33,14 +33,14 @@ export const FriendsList: FC<Props> = ({users, friends = [], onChange}) => {
         }</ul>
         <select data-testid="select-friend" defaultValue="" onChange={event => {
             updateFriends([...newFriends, ...maybe.of(
-                users.find(({user}) => user.email === event.currentTarget.value)
-            ).map(({user}) => [user]).orElse([])]);
+                users.find(({info}) => info.email === event.currentTarget.value)
+            ).map(({info}) => [info]).orElse([])]);
             event.currentTarget.selectedIndex = 0;
         }}>{[
             <option key="placeholder" value="" disabled hidden>Select Friend</option>,
-            ...users.filter(({user}) => !newFriends.includes(user)).map(({user}, index) =>
-                <option key={user.email} value={user.email} data-testid={`friend-option-${index}`}>{
-                    displayFullName(user)
+            ...users.filter(({info}) => !newFriends.includes(info)).map(({info}, index) =>
+                <option key={info.email} value={info.email} data-testid={`friend-option-${index}`}>{
+                    displayFullName(info)
                 }</option>)
         ]}</select>
     </article>;

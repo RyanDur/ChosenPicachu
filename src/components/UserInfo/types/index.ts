@@ -6,16 +6,16 @@ export interface AddressInfo {
     zip: string;
 }
 
-export interface User {
-    friends?: User[];
+export interface UserInfo {
     firstName: string;
     lastName: string;
     email?: string;
     dob?: Date;
 }
 
-export interface UserInfo {
-    user: User;
+export interface User {
+    info: UserInfo;
+    friends?: UserInfo[];
     homeAddress: AddressInfo;
     avatar: string;
     workAddress?: AddressInfo;
@@ -63,7 +63,7 @@ export type UpdateAvatar = Action<FormActions.UPDATE_AVATAR> & {
     avatar: string;
 }
 export type ResetForm = Action<FormActions.RESET_FORM> & {
-    userInfo?: UserInfo;
+    userInfo?: User;
 }
 
 export type FormAction =

@@ -1,8 +1,8 @@
-import {FormAction, FormActions, UserInfo} from './types';
+import {FormAction, FormActions, User} from './types';
 import {generateAvatar} from '../../avatars';
 
-export const initialState: UserInfo = {
-    user: {firstName: '', lastName: ''},
+export const initialState: User = {
+    info: {firstName: '', lastName: ''},
     homeAddress: {
         city: '',
         state: '',
@@ -12,16 +12,16 @@ export const initialState: UserInfo = {
     avatar: generateAvatar()
 };
 
-export const formReducer = (state: UserInfo, action: FormAction): UserInfo => {
+export const formReducer = (state: User, action: FormAction): User => {
     switch (action.type) {
         case FormActions.UPDATE_FIRST_NAME:
-            return {...state, user: {...state.user, firstName: action.firstName}};
+            return {...state, info: {...state.info, firstName: action.firstName}};
         case FormActions.UPDATE_LAST_NAME:
-            return {...state, user: {...state.user, lastName: action.lastName}};
+            return {...state, info: {...state.info, lastName: action.lastName}};
         case FormActions.UPDATE_EMAIL:
-            return {...state, user: {...state.user, email: action.email}};
+            return {...state, info: {...state.info, email: action.email}};
         case FormActions.UPDATE_DATE_OF_BIRTH:
-            return {...state, user: {...state.user, dob: action.dob}};
+            return {...state, info: {...state.info, dob: action.dob}};
         case FormActions.UPDATE_HOME_ADDRESS:
             return {...state, homeAddress: action.homeAddress};
         case FormActions.UPDATE_WORK_ADDRESS:
