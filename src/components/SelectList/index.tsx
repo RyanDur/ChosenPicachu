@@ -21,9 +21,13 @@ export const FriendsList: FC<Props> = ({users, onChange, friends = []}) => {
     return <article>
         <ul className="friends-list" data-testid="friends-list">{
             newFriends.map((friend) =>
-                <li className="friend" key={friend.email} onClick={remove(friend)} data-testid={friend.email}>
-                    <label htmlFor={friend.email}>{displayFullName(friend)}</label>
-                    <img id={friend.email} className="remove" src="https://img.icons8.com/material-outlined/24/000000/cancel--v1.png"
+                <li tabIndex={0} className="friend" key={friend.email} onKeyPress={event => {
+                    event.preventDefault();
+                    if (event.code === 'Enter') remove(friend)();
+                }} onClick={remove(friend)} data-testid={friend.email}>
+                    <label className="friend-title" htmlFor={friend.email}>{displayFullName(friend)}</label>
+                    <img id={friend.email} className="remove"
+                         src="https://img.icons8.com/material-outlined/24/000000/cancel--v1.png"
                          alt="remove"/>
                 </li>
             )
