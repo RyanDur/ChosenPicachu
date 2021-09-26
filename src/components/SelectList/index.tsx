@@ -6,13 +6,13 @@ import {join} from '../util';
 
 interface Props {
     users: User[];
+    user: User;
     onChange: Consumer<User[]>
-    friends?: User[];
 }
 
-export const FriendsList: FC<Props> = ({users, onChange, friends = []}) => {
+export const FriendsList: FC<Props> = ({users, user, onChange}) => {
     const displayFullName = ({info}: User) => `${info.firstName} ${info.lastName}`;
-    const [newFriends, updateFriends] = useState<User[]>(friends);
+    const [newFriends, updateFriends] = useState<User[]>(user.friends);
 
     useEffect(() => onChange(newFriends), [newFriends]);
 
@@ -28,13 +28,14 @@ export const FriendsList: FC<Props> = ({users, onChange, friends = []}) => {
     };
     return <article className={join('friends-list', has(newFriends) && 'not-empty')}>
         <ul className="friends" data-testid="friends-list">{
-            newFriends.map((friend) =>
-                <li tabIndex={0} className="friend" key={friend.info.email} data-testid={friend.info.email}>
+            newFriends.map(friend =>
+                <li className="friend" key={friend.info.email} data-testid={friend.info.email}>
                     <label className="friend-title ellipsis"
                            htmlFor={friend.info.email}>{displayFullName(friend)}</label>
                     <img id={friend.info.email} className="remove"
                          src="https://img.icons8.com/material-outlined/24/000000/cancel--v1.png"
                          alt="remove"
+                         tabIndex={0}
                          onKeyPress={event => {
                              event.preventDefault();
                              if (event.code === 'Enter') remove(friend)();
@@ -42,9 +43,10 @@ export const FriendsList: FC<Props> = ({users, onChange, friends = []}) => {
                 </li>
             )
         }</ul>
-        {hasFriendsToChooseFrom && <select className="select-friend button" defaultValue="" onChange={add} data-testid="select-friend">{[
+        {hasFriendsToChooseFrom &&
+        <select className="select-friend button" defaultValue="" onChange={add} data-testid="select-friend">{[
             <option key="placeholder" value="" disabled hidden>Add a Friend</option>,
-            ...users.filter(user => !newFriends.includes(user)).map((user, index) =>
+            ...users.filter(aUser => user !== aUser).filter(aUser => !newFriends.includes(aUser)).map((user, index) =>
                 <option key={user.info.email} value={user.info.email} data-testid={`friend-option-${index}`}>{
                     displayFullName(user)
                 }</option>)
