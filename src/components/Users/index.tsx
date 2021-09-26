@@ -18,11 +18,9 @@ export const Users: FC = () => {
     const [users, updateNewUsers] = useState<User[]>([]);
     const currentUser: User | undefined = users.find(({info}) => info.email === email);
 
-    useEffect(() => {
-        data.users.getAll().onAsyncEvent(event => {
-            if (event.state === AsyncState.LOADED) updateNewUsers(event.data);
-        });
-    }, []);
+    useEffect(() => data.users.getAll().onAsyncEvent(event => {
+        if (event.state === AsyncState.LOADED) updateNewUsers(event.data);
+    }), []);
 
     const removeUserInfo = (item: User, list: User[] = []): User[] => {
         const index = list.indexOf(item);
