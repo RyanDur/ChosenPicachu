@@ -18,7 +18,7 @@ export const FriendsList: FC<Props> = ({users, onChange, friends = []}) => {
     const remove = (friend: UserInfo) => () =>
         updateFriends(newFriends.filter(newFriend => friend !== newFriend));
 
-    return <article>
+    return <>
         <ul className="friends-list" data-testid="friends-list">{
             newFriends.map((friend) =>
                 <li tabIndex={0} className="friend" key={friend.email} onKeyPress={event => {
@@ -44,5 +44,5 @@ export const FriendsList: FC<Props> = ({users, onChange, friends = []}) => {
                     displayFullName(info)
                 }</option>)
         ]}</select>}
-    </article>;
+    </>;
 };
