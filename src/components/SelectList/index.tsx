@@ -1,51 +1,52 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {ChangeEvent, FC, useEffect, useState} from 'react';
 import {Consumer, has, maybe} from '@ryandur/sand';
-import {UserInfo, User} from '../UserInfo/types';
+import {User} from '../UserInfo/types';
 import './fiends-list.scss';
 import {join} from '../util';
 
 interface Props {
     users: User[];
-    onChange: Consumer<UserInfo[]>
-    friends?: UserInfo[];
+    onChange: Consumer<User[]>
+    friends?: User[];
 }
 
 export const FriendsList: FC<Props> = ({users, onChange, friends = []}) => {
-    const displayFullName = (user: { firstName: string, lastName: string }) => `${user.firstName} ${user.lastName}`;
-    const [newFriends, updateFriends] = useState<UserInfo[]>(friends);
+    const displayFullName = ({info}: User) => `${info.firstName} ${info.lastName}`;
+    const [newFriends, updateFriends] = useState<User[]>(friends);
 
     useEffect(() => onChange(newFriends), [newFriends]);
 
-    const remove = (friend: UserInfo) => () =>
+    const remove = (friend: User) => () =>
         updateFriends(newFriends.filter(newFriend => friend !== newFriend));
 
-    const hasFriendsToChooseFrom = has(users.filter(({info}) => !newFriends.includes(info)));
+    const hasFriendsToChooseFrom = has(users.filter(user => !newFriends.includes(user)));
 
+    const add = (event: ChangeEvent<HTMLSelectElement>) => {
+        maybe.of(users.find(({info}) => info.email === event.currentTarget.value))
+            .map(friend => updateFriends([...newFriends, friend]));
+        event.currentTarget.selectedIndex = 0;
+    };
     return <article className={join('friends-list', has(newFriends) && 'not-empty')}>
         <ul className="friends" data-testid="friends-list">{
             newFriends.map((friend) =>
-                <li tabIndex={0} className="friend" key={friend.email} data-testid={friend.email}>
-                    <label className="friend-title ellipsis" htmlFor={friend.email}>{displayFullName(friend)}</label>
-                    <img id={friend.email} className="remove"
+                <li tabIndex={0} className="friend" key={friend.info.email} data-testid={friend.info.email}>
+                    <label className="friend-title ellipsis"
+                           htmlFor={friend.info.email}>{displayFullName(friend)}</label>
+                    <img id={friend.info.email} className="remove"
                          src="https://img.icons8.com/material-outlined/24/000000/cancel--v1.png"
                          alt="remove"
                          onKeyPress={event => {
                              event.preventDefault();
                              if (event.code === 'Enter') remove(friend)();
-                         }} onClick={remove(friend)} data-testid={`remove-${friend.email}`}/>
+                         }} onClick={remove(friend)} data-testid={`remove-${friend.info.email}`}/>
                 </li>
             )
         }</ul>
-        {hasFriendsToChooseFrom && <select className="select-friend button" defaultValue="" onChange={event => {
-            updateFriends([...newFriends, ...maybe.of(
-                users.find(({info}) => info.email === event.currentTarget.value)
-            ).map(({info}) => [info]).orElse([])]);
-            event.currentTarget.selectedIndex = 0;
-        }} data-testid="select-friend">{[
+        {hasFriendsToChooseFrom && <select className="select-friend button" defaultValue="" onChange={add} data-testid="select-friend">{[
             <option key="placeholder" value="" disabled hidden>Add a Friend</option>,
-            ...users.filter(({info}) => !newFriends.includes(info)).map(({info}, index) =>
-                <option key={info.email} value={info.email} data-testid={`friend-option-${index}`}>{
-                    displayFullName(info)
+            ...users.filter(user => !newFriends.includes(user)).map((user, index) =>
+                <option key={user.info.email} value={user.info.email} data-testid={`friend-option-${index}`}>{
+                    displayFullName(user)
                 }</option>)
         ]}</select>}
     </article>;

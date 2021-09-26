@@ -5,32 +5,32 @@ import {users} from '../../../__tests__/util';
 
 describe('the friends list', () => {
     const consumer = jest.fn();
-    const firstUser = users[0].info;
-    const secondUser = users[1].info;
+    const firstUser = users[0];
+    const secondUser = users[1];
 
     afterEach(() => jest.resetAllMocks());
 
     it('should be able to add friends', () => {
         render(<FriendsList users={users} friends={[]} onChange={consumer}/>);
         userEvent.selectOptions(screen.getByTestId('select-friend'), [
-            `${secondUser.firstName} ${secondUser.lastName}`
+            `${secondUser.info.firstName} ${secondUser.info.lastName}`
         ]);
 
-        expect(screen.getByTestId('friends-list')).toHaveTextContent(`${secondUser.firstName} ${secondUser.lastName}`);
+        expect(screen.getByTestId('friends-list')).toHaveTextContent(`${secondUser.info.firstName} ${secondUser.info.lastName}`);
         expect(consumer).toHaveBeenCalledWith([secondUser]);
 
         userEvent.selectOptions(screen.getByTestId('select-friend'), [
-            `${firstUser.firstName} ${firstUser.lastName}`
+            `${firstUser.info.firstName} ${firstUser.info.lastName}`
         ]);
 
-        expect(screen.getByTestId('friends-list')).toHaveTextContent(`${firstUser.firstName} ${firstUser.lastName}`);
+        expect(screen.getByTestId('friends-list')).toHaveTextContent(`${firstUser.info.firstName} ${firstUser.info.lastName}`);
         expect(consumer).toHaveBeenCalledWith([secondUser, firstUser]);
     });
 
     it('should display the friends the user already has', () => {
         render(<FriendsList users={users} friends={[firstUser, secondUser]} onChange={consumer}/>);
-        expect(screen.getByTestId('friends-list')).toHaveTextContent(`${firstUser.firstName} ${firstUser.lastName}`);
-        expect(screen.getByTestId('friends-list')).toHaveTextContent(`${secondUser.firstName} ${secondUser.lastName}`);
+        expect(screen.getByTestId('friends-list')).toHaveTextContent(`${firstUser.info.firstName} ${firstUser.info.lastName}`);
+        expect(screen.getByTestId('friends-list')).toHaveTextContent(`${secondUser.info.firstName} ${secondUser.info.lastName}`);
     });
 
     describe('removing a friend from the list', () => {
@@ -39,15 +39,15 @@ describe('the friends list', () => {
         });
 
         test('on mouse click', () => {
-            userEvent.click(screen.getByTestId(`remove-${firstUser.email}` || ''));
-            expect(screen.getByTestId('friends-list')).not.toHaveTextContent(`${firstUser.firstName} ${firstUser.lastName}`);
-            expect(screen.getByTestId('friends-list')).toHaveTextContent(`${secondUser.firstName} ${secondUser.lastName}`);
+            userEvent.click(screen.getByTestId(`remove-${firstUser.info.email}` || ''));
+            expect(screen.getByTestId('friends-list')).not.toHaveTextContent(`${firstUser.info.firstName} ${firstUser.info.lastName}`);
+            expect(screen.getByTestId('friends-list')).toHaveTextContent(`${secondUser.info.firstName} ${secondUser.info.lastName}`);
         });
 
         test('on enter', () => {
-            userEvent.type(screen.getByTestId(`remove-${firstUser.email}` || ''), '{enter}');
-            expect(screen.getByTestId('friends-list')).not.toHaveTextContent(`${firstUser.firstName} ${firstUser.lastName}`);
-            expect(screen.getByTestId('friends-list')).toHaveTextContent(`${secondUser.firstName} ${secondUser.lastName}`);
+            userEvent.type(screen.getByTestId(`remove-${firstUser.info.email}` || ''), '{enter}');
+            expect(screen.getByTestId('friends-list')).not.toHaveTextContent(`${firstUser.info.firstName} ${firstUser.info.lastName}`);
+            expect(screen.getByTestId('friends-list')).toHaveTextContent(`${secondUser.info.firstName} ${secondUser.info.lastName}`);
         });
     });
 
@@ -55,10 +55,10 @@ describe('the friends list', () => {
         render(<FriendsList users={users} friends={[]} onChange={consumer}/>);
         const selectFriend = screen.getByTestId('select-friend');
         userEvent.selectOptions(selectFriend, [
-            `${secondUser.firstName} ${secondUser.lastName}`
+            `${secondUser.info.firstName} ${secondUser.info.lastName}`
         ]);
 
-        expect(selectFriend).not.toHaveTextContent(`${secondUser.firstName} ${secondUser.lastName}`);
+        expect(selectFriend).not.toHaveTextContent(`${secondUser.info.firstName} ${secondUser.info.lastName}`);
     });
 
     it('should not be able to select no one', async () => {
