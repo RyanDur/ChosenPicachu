@@ -39,13 +39,13 @@ describe('the friends list', () => {
         });
 
         test('on mouse click', () => {
-            userEvent.click(screen.getByTestId(firstUser.email || ''));
+            userEvent.click(screen.getByTestId(`remove-${firstUser.email}` || ''));
             expect(screen.getByTestId('friends-list')).not.toHaveTextContent(`${firstUser.firstName} ${firstUser.lastName}`);
             expect(screen.getByTestId('friends-list')).toHaveTextContent(`${secondUser.firstName} ${secondUser.lastName}`);
         });
 
         test('on enter', () => {
-            userEvent.type(screen.getByTestId(firstUser.email || ''), '{enter}');
+            userEvent.type(screen.getByTestId(`remove-${firstUser.email}` || ''), '{enter}');
             expect(screen.getByTestId('friends-list')).not.toHaveTextContent(`${firstUser.firstName} ${firstUser.lastName}`);
             expect(screen.getByTestId('friends-list')).toHaveTextContent(`${secondUser.firstName} ${secondUser.lastName}`);
         });
