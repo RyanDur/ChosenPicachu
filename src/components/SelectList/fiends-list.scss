@@ -1,23 +1,37 @@
 .friends-list {
-  .friend-title {
-    line-height: 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--base);
+
+  .friends {
+    display: flex;
+    flex-direction: column;
+    gap: var(--base-x-0_5);
+
+    .friend-title {
+      line-height: var(--base-x-2);
+    }
+
+    .friend {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      &:focus-within,
+      &:hover {
+        background-color: var(--faded-internationl-orange-engineering);
+      }
+
+      .remove {
+        border: none;
+        background-color: transparent;
+        padding: 0;
+        display: flex;
+      }
+    }
   }
 
-  .friend {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    &:focus-within,
-    &:hover {
-      background-color: var(--faded-internationl-orange-engineering);
-    }
-
-    .remove {
-      border: none;
-      background-color: transparent;
-      padding: 0;
-      display: flex;
-    }
+  .select-friend {
+    width: 100%;
   }
 }
