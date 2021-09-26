@@ -1,7 +1,10 @@
 .friends-list {
   display: flex;
   flex-direction: column;
-  gap: var(--base);
+
+  &.not-empty {
+    gap: var(--base);
+  }
 
   .friends {
     display: flex;
