@@ -33,11 +33,22 @@ describe('the friends list', () => {
         expect(screen.getByTestId('friends-list')).toHaveTextContent(`${secondUser.firstName} ${secondUser.lastName}`);
     });
 
-    it('should allow a way to remove a friend', () => {
-        render(<FriendsList users={users} friends={[firstUser, secondUser]} onChange={consumer}/>);
-        userEvent.click(screen.getByTestId(firstUser.email || ''));
-        expect(screen.getByTestId('friends-list')).not.toHaveTextContent(`${firstUser.firstName} ${firstUser.lastName}`);
-        expect(screen.getByTestId('friends-list')).toHaveTextContent(`${secondUser.firstName} ${secondUser.lastName}`);
+    describe('removing a friend from the list', () => {
+        beforeEach(() => {
+            render(<FriendsList users={users} friends={[firstUser, secondUser]} onChange={consumer}/>);
+        });
+
+        test('on mouse click', () => {
+            userEvent.click(screen.getByTestId(firstUser.email || ''));
+            expect(screen.getByTestId('friends-list')).not.toHaveTextContent(`${firstUser.firstName} ${firstUser.lastName}`);
+            expect(screen.getByTestId('friends-list')).toHaveTextContent(`${secondUser.firstName} ${secondUser.lastName}`);
+        });
+
+        test('on enter', () => {
+            userEvent.type(screen.getByTestId(firstUser.email || ''), '{enter}');
+            expect(screen.getByTestId('friends-list')).not.toHaveTextContent(`${firstUser.firstName} ${firstUser.lastName}`);
+            expect(screen.getByTestId('friends-list')).toHaveTextContent(`${secondUser.firstName} ${secondUser.lastName}`);
+        });
     });
 
     it('should not allow a user to select something twice', () => {
