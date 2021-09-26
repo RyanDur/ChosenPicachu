@@ -36,7 +36,7 @@ export const FriendsList: FC<Props> = ({users, onChange, friends = []}) => {
                 </li>
             )
         }</ul>
-        {hasFriendsToChooseFrom && <select className="select-friend" defaultValue="" onChange={event => {
+        {hasFriendsToChooseFrom && <select className="select-friend button" defaultValue="" onChange={event => {
             updateFriends([...newFriends, ...maybe.of(
                 users.find(({info}) => info.email === event.currentTarget.value)
             ).map(({info}) => [info]).orElse([])]);
