@@ -69,11 +69,9 @@ export const Users: FC = () => {
                         homeCity: {display: user.homeAddress.city},
                         age: {display: formatAge(age(user.info.dob))},
                         friends: {
-                            display: <FriendsList users={users.filter(({info}) => info !== user.info)}
-                                                  friends={user.friends}
-                                                  onChange={newFriends => {
-                                                      user.friends = newFriends;
-                                                  }}/>
+                            display: <FriendsList user={user} users={users} onChange={newFriends => {
+                                user.friends = newFriends;
+                            }}/>
                         },
                         worksFromHome: {
                             display: <section className="last-column">
