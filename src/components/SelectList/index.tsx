@@ -16,16 +16,17 @@ export const FriendsList: FC<Props> = ({users, user, onChange}) => {
 
     useEffect(() => onChange(newFriends), [newFriends]);
 
-    const remove = (friend: User) => () =>
-        updateFriends(newFriends.filter(newFriend => friend !== newFriend));
-
-    const hasFriendsToChooseFrom = has(users.filter(user => !newFriends.includes(user)));
-
     const add = (event: ChangeEvent<HTMLSelectElement>) => {
         maybe.of(users.find(({info}) => info.email === event.currentTarget.value))
             .map(friend => updateFriends([...newFriends, friend]));
         event.currentTarget.selectedIndex = 0;
     };
+
+    const remove = (friend: User) => () =>
+        updateFriends(newFriends.filter(newFriend => friend !== newFriend));
+
+    const hasFriendsToChooseFrom = has(users.filter(user => !newFriends.includes(user)));
+
     return <article className={join('friends-list', has(newFriends) && 'not-empty')}>
         <ul className="friends" data-testid="friends-list">{
             newFriends.map(friend =>
