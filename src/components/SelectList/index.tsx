@@ -18,8 +18,8 @@ export const FriendsList: FC<Props> = ({users, onChange, friends = []}) => {
     const remove = (friend: UserInfo) => () =>
         updateFriends(newFriends.filter(newFriend => friend !== newFriend));
 
-    return <>
-        <ul className="friends-list" data-testid="friends-list">{
+    return <article className='friends-list'>
+        <ul className="friends" data-testid="friends-list">{
             newFriends.map((friend) =>
                 <li tabIndex={0} className="friend" key={friend.email} onKeyPress={event => {
                     event.preventDefault();
@@ -32,7 +32,7 @@ export const FriendsList: FC<Props> = ({users, onChange, friends = []}) => {
                 </li>
             )
         }</ul>
-        {has(users.filter(({info}) => !newFriends.includes(info))) && <select defaultValue="" onChange={event => {
+        {has(users.filter(({info}) => !newFriends.includes(info))) && <select className="select-friend" defaultValue="" onChange={event => {
             updateFriends([...newFriends, ...maybe.of(
                 users.find(({info}) => info.email === event.currentTarget.value)
             ).map(({info}) => [info]).orElse([])]);
@@ -44,5 +44,5 @@ export const FriendsList: FC<Props> = ({users, onChange, friends = []}) => {
                     displayFullName(info)
                 }</option>)
         ]}</select>}
-    </>;
+    </article>;
 };
