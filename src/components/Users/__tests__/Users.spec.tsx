@@ -12,6 +12,9 @@ import {
 } from '../../../__tests__/util';
 import {Paths} from '../../../App';
 import {User} from '../../UserInfo/types';
+import {data} from '../../../data';
+import {loaded, OnAsyncEvent} from '@ryandur/sand';
+import {Explanation, HTTPError} from '../../../data/types';
 
 const addUser = (anotherUserInfo: User) => {
     fillOutUser(anotherUserInfo);
@@ -19,11 +22,6 @@ const addUser = (anotherUserInfo: User) => {
     userEvent.click(screen.getByLabelText('Same as Home'));
     userEvent.click(screen.getByText('Add'));
 };
-const mockUsers = users;
-jest.mock('../../../__tests__/util', () => ({
-    ...jest.requireActual('../../../__tests__/util'),
-    createRandomUsers: () => jest.fn(() => mockUsers)
-}));
 
 describe('the users page', () => {
     const anotherUserInfo = userInfo(createAddress());
@@ -38,6 +36,9 @@ describe('the users page', () => {
         rendered: () => Rendered;
 
     beforeEach(() => {
+        data.users.getAll = (): OnAsyncEvent<User[], Explanation<HTTPError>> => ({
+            onAsyncEvent: dispatch => dispatch(loaded(users))
+        });
         rendered = renderWithRouter(<Users/>, {path: Paths.users});
         table = screen.getByTestId('table');
         firstRowFirstCell = within(table).getByTestId('cell-0-0');

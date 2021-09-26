@@ -1,21 +1,28 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {AddressInfo, User} from '../UserInfo/types';
 import {UserInformation} from '../UserInfo';
 import {Table} from '../Table';
-import {createRandomUsers} from '../../__tests__/util';
 import {Link, useHistory} from 'react-router-dom';
 import {Paths} from '../../App';
 import {age, formatAge} from '../util';
 import {useQuery} from '../hooks';
 import {FriendsList} from '../SelectList';
+import {data} from '../../data';
+import {AsyncState} from '@ryandur/sand';
 import './Users.scss';
 import './Users.layout.scss';
 
 export const Users: FC = () => {
     const history = useHistory();
     const {queryObj: {email, mode}, nextQueryString, path} = useQuery<{ email: string, mode: string }>();
-    const [users, updateNewUsers] = useState<User[]>(createRandomUsers());
+    const [users, updateNewUsers] = useState<User[]>([]);
     const currentUser: User | undefined = users.find(info => info.info.email === email);
+
+    useEffect(() => {
+        data.users.getAll().onAsyncEvent(event => {
+            if (event.state === AsyncState.LOADED) updateNewUsers(event.data);
+        });
+    }, []);
 
     const removeUserInfo = (item: User, list: User[] = []): User[] => {
         const index = list.indexOf(item);
