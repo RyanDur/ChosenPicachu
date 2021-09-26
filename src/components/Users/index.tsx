@@ -16,7 +16,7 @@ export const Users: FC = () => {
     const history = useHistory();
     const {queryObj: {email, mode}, nextQueryString, path} = useQuery<{ email: string, mode: string }>();
     const [users, updateNewUsers] = useState<User[]>([]);
-    const currentUser: User | undefined = users.find(info => info.info.email === email);
+    const currentUser: User | undefined = users.find(({info}) => info.email === email);
 
     useEffect(() => {
         data.users.getAll().onAsyncEvent(event => {
