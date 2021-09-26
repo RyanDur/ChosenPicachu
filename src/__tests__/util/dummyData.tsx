@@ -149,6 +149,7 @@ export const userInfo = (address?: AddressInfo, worksFromHome = false): User => 
     const homeAddress = createAddress();
     return ({
         info: createUser(),
+        friends: [],
         homeAddress,
         workAddress: worksFromHome ? homeAddress : address,
         details: createDetails(),

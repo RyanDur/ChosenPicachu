@@ -3,6 +3,7 @@ import {generateAvatar} from '../../avatars';
 
 export const initialState: User = {
     info: {firstName: '', lastName: ''},
+    friends: [],
     homeAddress: {
         city: '',
         state: '',

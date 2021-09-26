@@ -15,7 +15,7 @@ export interface UserInfo {
 
 export interface User {
     info: UserInfo;
-    friends?: UserInfo[];
+    friends: User[];
     homeAddress: AddressInfo;
     avatar: string;
     workAddress?: AddressInfo;
