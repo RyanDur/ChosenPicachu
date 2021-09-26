@@ -1,7 +1,7 @@
 import {Column, Row} from './types';
 import {FC} from 'react';
 import {join} from '../util';
-import './Table.css';
+import './Table.scss';
 
 export interface TableProps {
     columns: Column[];
