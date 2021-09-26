@@ -2,6 +2,7 @@ import React, {FC, useEffect, useState} from 'react';
 import {Consumer, has, maybe} from '@ryandur/sand';
 import {UserInfo, User} from '../UserInfo/types';
 import './fiends-list.scss';
+import {join} from '../util';
 
 interface Props {
     users: User[];
@@ -18,7 +19,7 @@ export const FriendsList: FC<Props> = ({users, onChange, friends = []}) => {
     const remove = (friend: UserInfo) => () =>
         updateFriends(newFriends.filter(newFriend => friend !== newFriend));
 
-    return <article className='friends-list'>
+    return <article className={join('friends-list', has(newFriends) && 'not-empty')}>
         <ul className="friends" data-testid="friends-list">{
             newFriends.map((friend) =>
                 <li tabIndex={0} className="friend" key={friend.email} data-testid={friend.email}>
