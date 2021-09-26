@@ -19,6 +19,8 @@ export const FriendsList: FC<Props> = ({users, onChange, friends = []}) => {
     const remove = (friend: UserInfo) => () =>
         updateFriends(newFriends.filter(newFriend => friend !== newFriend));
 
+    const hasFriendsToChooseFrom = has(users.filter(({info}) => !newFriends.includes(info)));
+
     return <article className={join('friends-list', has(newFriends) && 'not-empty')}>
         <ul className="friends" data-testid="friends-list">{
             newFriends.map((friend) =>
@@ -34,13 +36,13 @@ export const FriendsList: FC<Props> = ({users, onChange, friends = []}) => {
                 </li>
             )
         }</ul>
-        {has(users.filter(({info}) => !newFriends.includes(info))) && <select className="select-friend" defaultValue="" onChange={event => {
+        {hasFriendsToChooseFrom && <select className="select-friend" defaultValue="" onChange={event => {
             updateFriends([...newFriends, ...maybe.of(
                 users.find(({info}) => info.email === event.currentTarget.value)
             ).map(({info}) => [info]).orElse([])]);
             event.currentTarget.selectedIndex = 0;
         }} data-testid="select-friend">{[
-            <option key="placeholder" value="" disabled hidden>Select Friend</option>,
+            <option key="placeholder" value="" disabled hidden>Add a Friend</option>,
             ...users.filter(({info}) => !newFriends.includes(info)).map(({info}, index) =>
                 <option key={info.email} value={info.email} data-testid={`friend-option-${index}`}>{
                     displayFullName(info)
