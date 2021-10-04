@@ -13,14 +13,14 @@ describe('the friends list', () => {
 
     it('should be able to add friends', () => {
         render(<FriendsList users={users} user={firstUser} onChange={consumer}/>);
-        userEvent.selectOptions(screen.getByTestId('select-friend'), [
+        userEvent.selectOptions(screen.getByTestId(/select-friend/), [
             `${secondUser.info.firstName} ${secondUser.info.lastName}`
         ]);
 
         expect(screen.getByTestId('friends-list')).toHaveTextContent(`${secondUser.info.firstName} ${secondUser.info.lastName}`);
         expect(consumer).toHaveBeenCalledWith([secondUser]);
 
-        userEvent.selectOptions(screen.getByTestId('select-friend'), [
+        userEvent.selectOptions(screen.getByTestId(/select-friend/), [
             `${thirdUser.info.firstName} ${thirdUser.info.lastName}`
         ]);
 
@@ -30,7 +30,7 @@ describe('the friends list', () => {
 
     it('should not allow you to pick yourself', () => {
         render(<FriendsList users={users} user={firstUser} onChange={consumer}/>);
-        expect(screen.getByTestId('select-friend')).not.toHaveTextContent(`${firstUser.info.firstName} ${firstUser.info.lastName}`);
+        expect(screen.getByTestId(/select-friend/)).not.toHaveTextContent(`${firstUser.info.firstName} ${firstUser.info.lastName}`);
     });
 
     it('should display the friends the user already has', () => {
@@ -61,11 +61,24 @@ describe('the friends list', () => {
 
     it('should not allow a user to select something twice', () => {
         render(<FriendsList users={users} user={firstUser} onChange={consumer}/>);
-        const selectFriend = screen.getByTestId('select-friend');
+        const selectFriend = screen.getByTestId(/select-friend/);
         userEvent.selectOptions(selectFriend, [
             `${secondUser.info.firstName} ${secondUser.info.lastName}`
         ]);
 
         expect(selectFriend).not.toHaveTextContent(`${secondUser.info.firstName} ${secondUser.info.lastName}`);
+    });
+
+    it('should not allow to select a friend if no more friends are left', () => {
+        render(<FriendsList users={[firstUser, secondUser, thirdUser]} user={firstUser} onChange={consumer}/>);
+        const selectFriend = screen.getByTestId(/select-friend/);
+
+        [secondUser, thirdUser].forEach(user => {
+            userEvent.selectOptions(selectFriend, [
+                `${user.info.firstName} ${user.info.lastName}`
+            ]);
+        });
+
+        expect(screen.queryByTestId(/select-friend/)).not.toBeInTheDocument();
     });
 });

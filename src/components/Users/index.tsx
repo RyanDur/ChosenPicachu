@@ -8,40 +8,43 @@ import {age, formatAge} from '../util';
 import {useQuery} from '../hooks';
 import {FriendsList} from '../SelectList';
 import {data} from '../../data';
-import {AsyncState} from '@ryandur/sand';
 import './Users.scss';
 import './Users.layout.scss';
 
 export const Users: FC = () => {
     const history = useHistory();
     const {queryObj: {email, mode}, nextQueryString, path} = useQuery<{ email: string, mode: string }>();
-    const [users, updateNewUsers] = useState<User[]>([]);
-    const currentUser: User | undefined = users.find(({info}) => info.email === email);
+    const [users, updateUsers] = useState<User[]>([]);
+    const [currentUser, updateCurrentUser] = useState<User>();
 
-    useEffect(() => data.users.getAll().onAsyncEvent(event => {
-        if (event.state === AsyncState.LOADED) updateNewUsers(event.data);
-    }), []);
+    useEffect(() => {
+        data.users.getAll().onLoad(updateUsers);
+    }, []);
 
-    const removeUserInfo = (item: User, list: User[] = []): User[] => {
-        const index = list.indexOf(item);
-        return [...list.slice(0, index), ...list.slice(index + 1)];
-    };
+    useEffect(() => {
+        email && data.users.get(email).onLoad(updateCurrentUser);
+    }, [email]);
 
     const equalAddresses = (address1: AddressInfo, address2: AddressInfo = {} as AddressInfo): boolean =>
         Object.keys(address1).reduce((acc, key) =>
             address1[key as keyof AddressInfo] === address2[key as keyof AddressInfo], Boolean());
 
+    const update = (user: User) => (newFriends: User[]) =>
+        data.users.update({...user, friends: newFriends})
+            .onLoad(updateUsers);
+
     return <>
         <section id="user-info" className="card users" key={currentUser?.info.email}>
             <h2 className="title">User Information</h2>
-            <UserInformation currentUserInfo={currentUser}
+            <UserInformation currentUser={currentUser}
                              readOnly={mode === 'view'}
                              editing={mode === 'edit'}
-                             onAdd={user => updateNewUsers([user, ...users])}
-                             onUpdate={user => {
-                                 currentUser && updateNewUsers([user, ...removeUserInfo(currentUser, users)]);
-                                 history.push(Paths.users);
-                             }}/>
+                             onAdd={user => data.users.add(user).onLoad(updateUsers)}
+                             onUpdate={user => data.users.update(user)
+                                 .onLoad(updateUsers)
+                                 .onLoad(() => {
+                                     history.push(Paths.users);
+                                 })}/>
         </section>
 
         <section id="user-candidates" className="card users">
@@ -69,9 +72,7 @@ export const Users: FC = () => {
                         homeCity: {display: user.homeAddress.city},
                         age: {display: formatAge(age(user.info.dob))},
                         friends: {
-                            display: <FriendsList user={user} users={users} onChange={newFriends => {
-                                user.friends = newFriends;
-                            }}/>
+                            display: <FriendsList user={user} users={users} onChange={update(user)}/>
                         },
                         worksFromHome: {
                             display: <section className="last-column">
@@ -101,7 +102,10 @@ export const Users: FC = () => {
                                               data-testid="view">Edit</Link>
                                         <Link to={email === user.info.email ? path : history.location}
                                               className='item'
-                                              onClick={() => updateNewUsers(removeUserInfo(user, users))}
+                                              onClick={() => data.users.delete(user).onLoad(data => {
+                                                  updateUsers(data);
+                                                  history.push(Paths.users);
+                                              })}
                                               data-testid="remove">Remove</Link>
                                         <Link to={`${path}${nextQueryString({email: user.info.email})}`}
                                               className='item'

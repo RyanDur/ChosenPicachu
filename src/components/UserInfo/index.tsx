@@ -25,7 +25,7 @@ import './Form.layout.scss';
 import './Form.scss';
 
 interface FormProps {
-    currentUserInfo?: User;
+    currentUser?: User;
     onAdd?: Consumer<User>;
     onUpdate?: Consumer<User>;
     readOnly?: boolean;
@@ -38,9 +38,9 @@ export const UserInformation: FC<FormProps> = (
         onUpdate,
         readOnly = false,
         editing = false,
-        currentUserInfo = initialState
+        currentUser = initialState
     }) => {
-    const [user, dispatch] = useReducer(formReducer, currentUserInfo, () => currentUserInfo);
+    const [user, dispatch] = useReducer(formReducer, currentUser, () => currentUser);
     const [sameAsHome, updateSameAsHome] = useState(false);
 
     useEffect(() => {
@@ -48,7 +48,7 @@ export const UserInformation: FC<FormProps> = (
     }, [sameAsHome, user.homeAddress]);
 
     const reset = () => {
-        if (editing) dispatch(resetForm(currentUserInfo));
+        if (editing) dispatch(resetForm(currentUser));
         else dispatch(resetForm());
         updateSameAsHome(false);
     };
@@ -58,9 +58,12 @@ export const UserInformation: FC<FormProps> = (
                  className={join(readOnly && 'read-only')}
                  onSubmit={event => {
                      event.preventDefault();
+
                      if (editing) onUpdate?.(user);
                      else onAdd?.(user);
-                     event.currentTarget.reset();
+
+                     updateSameAsHome(false);
+                     dispatch(resetForm());
                  }}
                  onReset={event => {
                      reset();
