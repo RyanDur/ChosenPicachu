@@ -11,7 +11,9 @@ interface Props {
 }
 
 export const FriendsList: FC<Props> = ({users, user, onChange}) => {
-    const possibleFriends = users.filter(aUser => user !== aUser).filter(aUser => !user.friends.includes(aUser));
+    const possibleFriends = users
+        .filter(aUser => user !== aUser)
+        .filter(aUser => !user.friends.includes(aUser));
     const [friends, updateFriends] = useState<User[]>(user.friends);
 
     useEffect(() => onChange(friends), [friends]);
@@ -19,15 +21,13 @@ export const FriendsList: FC<Props> = ({users, user, onChange}) => {
     const displayFullName = ({info}: User) => `${info.firstName} ${info.lastName}`;
 
     const add = (event: ChangeEvent<HTMLSelectElement>) => {
-        maybe.of(users.find(({info}) => info.email === event.currentTarget.value))
+        maybe.of(possibleFriends.find(({info}) => info.email === event.currentTarget.value))
             .map(friend => updateFriends([...friends, friend]));
         event.currentTarget.selectedIndex = 0;
     };
 
     const remove = (friend: User) => () =>
         updateFriends(friends.filter(newFriend => friend !== newFriend));
-
-    const hasFriendsToChooseFrom = has(possibleFriends.filter(user => !friends.includes(user)));
 
     return <article className={join('friends-list', has(friends) && 'not-empty')}>
         <ul className="friends" data-testid="friends-list">{
@@ -46,7 +46,7 @@ export const FriendsList: FC<Props> = ({users, user, onChange}) => {
                 </li>
             )
         }</ul>
-        {hasFriendsToChooseFrom &&
+        {has(possibleFriends) &&
         <select className="select-friend button" defaultValue="" onChange={add} data-testid="select-friend">{[
             <option key="placeholder" value="" disabled hidden>Add a Friend</option>,
             ...possibleFriends.filter(friend => !friends.includes(friend)).map((user, index) =>
