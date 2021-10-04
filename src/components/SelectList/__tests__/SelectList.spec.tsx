@@ -70,14 +70,8 @@ describe('the friends list', () => {
     });
 
     it('should not allow to select a friend if no more friends are left', () => {
+        firstUser.friends = [secondUser, thirdUser];
         render(<FriendsList users={[firstUser, secondUser, thirdUser]} user={firstUser} onChange={consumer}/>);
-        const selectFriend = screen.getByTestId(/select-friend/);
-
-        [secondUser, thirdUser].forEach(user => {
-            userEvent.selectOptions(selectFriend, [
-                `${user.info.firstName} ${user.info.lastName}`
-            ]);
-        });
 
         expect(screen.queryByTestId(/select-friend/)).not.toBeInTheDocument();
     });
