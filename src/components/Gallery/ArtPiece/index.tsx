@@ -5,30 +5,26 @@ import {Loading} from '../../Loading';
 import {ArtPieceContext, useArtPiece, useArtPieceContext} from './Context';
 import {Image} from '../Image';
 import {useQuery} from '../../hooks';
-import {AsyncState} from '@ryandur/sand';
 import {Source} from '../../../data/artGallery/types/resource';
 import './Piece.scss';
+import {has} from '@ryandur/sand';
 
 const ArtPiece = () => {
     const {piece, updatePiece, reset} = useArtPiece();
-    const [loading, isLoading] = useState(false);
-    const [errored, isErrored] = useState(false);
+    const [errored, hasErrored] = useState(false);
     const {id} = useParams<{ id: string }>();
     const {queryObj: {tab}} = useQuery<{ tab: Source }>();
 
     useEffect(() => {
         id && data.artGallery.getArt({id, source: tab})
-            .onAsyncEvent(event => {
-                isLoading(event.state === AsyncState.LOADING);
-                isErrored(event.state === AsyncState.ERROR);
-                if (event.state === AsyncState.LOADED) updatePiece(event.data);
-            });
-        return reset;
+            .onLoading(reset)
+            .onLoad(updatePiece)
+            .onError(() => hasErrored(true));
     }, [id, updatePiece]);
 
     return <>
-        {loading && <Loading testId="loading-piece"/>}
-        {!loading && !errored && piece && <figure className="art-work" data-testid="image-figure">
+        {has(piece) || <Loading testId="loading-piece"/>}
+        {has(piece) && !errored && piece && <figure className="art-work" data-testid="image-figure">
           <Image piece={piece} linkEnabled={false} className="piece"/>
           <figcaption className="artist-display">{piece.artistInfo}</figcaption>
         </figure>}

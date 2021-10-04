@@ -5,16 +5,15 @@ import {renderWithRouter} from '../../../../__tests__/util';
 import {data} from '../../../../data';
 import * as faker from 'faker';
 import {Paths} from '../../../../App';
-import {loaded} from '@ryandur/sand';
+import {asyncEvent, asyncResult} from '@ryandur/sand';
 import {Source} from '../../../../data/artGallery/types/resource';
 
 describe('search', () => {
     const searchWord = faker.lorem.word().toUpperCase();
 
     beforeEach(() => {
-        data.artGallery.searchForArt = jest.fn(() => ({
-            onAsyncEvent: (dispatch) => dispatch(loaded([searchWord]))
-        }));
+        data.artGallery.searchForArt = jest.fn(() =>
+            asyncEvent(asyncResult.success([searchWord])));
     });
 
     it('should give suggestions for completion', async () => {

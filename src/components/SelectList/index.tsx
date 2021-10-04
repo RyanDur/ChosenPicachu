@@ -11,25 +11,27 @@ interface Props {
 }
 
 export const FriendsList: FC<Props> = ({users, user, onChange}) => {
-    const displayFullName = ({info}: User) => `${info.firstName} ${info.lastName}`;
-    const [newFriends, updateFriends] = useState<User[]>(user.friends);
+    const possibleFriends = users.filter(aUser => user !== aUser).filter(aUser => !user.friends.includes(aUser));
+    const [friends, updateFriends] = useState<User[]>(user.friends);
 
-    useEffect(() => onChange(newFriends), [newFriends]);
+    useEffect(() => onChange(friends), [friends]);
+
+    const displayFullName = ({info}: User) => `${info.firstName} ${info.lastName}`;
 
     const add = (event: ChangeEvent<HTMLSelectElement>) => {
         maybe.of(users.find(({info}) => info.email === event.currentTarget.value))
-            .map(friend => updateFriends([...newFriends, friend]));
+            .map(friend => updateFriends([...friends, friend]));
         event.currentTarget.selectedIndex = 0;
     };
 
     const remove = (friend: User) => () =>
-        updateFriends(newFriends.filter(newFriend => friend !== newFriend));
+        updateFriends(friends.filter(newFriend => friend !== newFriend));
 
-    const hasFriendsToChooseFrom = has(users.filter(user => !newFriends.includes(user)));
+    const hasFriendsToChooseFrom = has(possibleFriends.filter(user => !friends.includes(user)));
 
-    return <article className={join('friends-list', has(newFriends) && 'not-empty')}>
+    return <article className={join('friends-list', has(friends) && 'not-empty')}>
         <ul className="friends" data-testid="friends-list">{
-            newFriends.map(friend =>
+            friends.map(friend =>
                 <li className="friend" key={friend.info.email} data-testid={friend.info.email}>
                     <label className="friend-title ellipsis"
                            htmlFor={friend.info.email}>{displayFullName(friend)}</label>
@@ -47,7 +49,7 @@ export const FriendsList: FC<Props> = ({users, user, onChange}) => {
         {hasFriendsToChooseFrom &&
         <select className="select-friend button" defaultValue="" onChange={add} data-testid="select-friend">{[
             <option key="placeholder" value="" disabled hidden>Add a Friend</option>,
-            ...users.filter(aUser => user !== aUser).filter(aUser => !newFriends.includes(aUser)).map((user, index) =>
+            ...possibleFriends.filter(friend => !friends.includes(friend)).map((user, index) =>
                 <option key={user.info.email} value={user.info.email} data-testid={`friend-option-${index}`}>{
                     displayFullName(user)
                 }</option>)

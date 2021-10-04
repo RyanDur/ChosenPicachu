@@ -4,7 +4,6 @@ import {debounce} from 'lodash';
 import {useQuery} from '../../hooks';
 import {useHistory} from 'react-router-dom';
 import {Paths} from '../../../App';
-import {AsyncState} from '@ryandur/sand';
 import {SearchOptions} from '../../../data/artGallery/types/response';
 import {Source} from '../../../data/artGallery/types/resource';
 import './Search.scss';
@@ -20,9 +19,8 @@ export const Search: FC<Props> = ({id}) => {
     const history = useHistory();
     const {queryObj: {tab, search}, updateQueryString, nextQueryString} = useQuery<{ tab: Source, search?: string }>();
     const debounceSearch = debounce(search =>
-        data.artGallery.searchForArt({search, source: tab}).onAsyncEvent(event =>
-            event.state === AsyncState.LOADED && updateSearchOptions(event.data)
-        ), 300);
+        data.artGallery.searchForArt({search, source: tab})
+            .onLoad(updateSearchOptions), 300);
 
     useEffect(() => {
         searchString && debounceSearch(searchString.toLowerCase());

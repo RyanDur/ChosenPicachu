@@ -1,7 +1,7 @@
 import {Column, Row} from '../../components/Table/types';
 import React from 'react';
 import faker from 'faker';
-import {AddressInfo, UserInfo, User} from '../../components/UserInfo/types';
+import {AddressInfo, User, UserInfo} from '../../components/UserInfo/types';
 import {AvatarGenerator} from 'random-avatar-generator';
 import {toISOWithoutTime} from '../../components/util';
 
@@ -9,13 +9,15 @@ import {nanoid} from 'nanoid';
 import {AICAllArt, AICArt} from '../../data/artGallery/aic/types';
 import {
     HarvardAllArt,
-    HarvardSearch,
+    HarvardArt,
     HarvardInfo,
     HarvardPeople,
-    HarvardArt
+    HarvardSearch
 } from '../../data/artGallery/harvard/types';
-import {RIJKSAllArt, RIJKArtObject, RIJKSArt} from '../../data/artGallery/rijks/types';
+import {RIJKArtObject, RIJKSAllArt, RIJKSArt} from '../../data/artGallery/rijks/types';
 import {AllArt, Art} from '../../data/artGallery/types/response';
+import {OnAsyncEvent} from '@ryandur/sand';
+import {Explanation, HTTPError} from '../../data/types';
 
 export const randomNumberFromRange = (min: number, max = 6) => Math.floor(Math.random() * max) + min;
 
@@ -125,10 +127,10 @@ export const rows: Row[] = [{
     }
 }];
 
-const createUser = (): UserInfo => ({
+const createUserInfo = (): UserInfo => ({
     firstName: faker.name.firstName(),
     lastName: faker.name.lastName(),
-    email: faker.internet.email(),
+    email: nanoid() + faker.internet.email(),
     dob: new Date(toISOWithoutTime(faker.date.past(Math.random() * 80)))
 });
 export const createAddress = (): AddressInfo => ({
@@ -145,10 +147,14 @@ const maybeCreateAddress = (): AddressInfo | undefined =>
 const createDetails = (num = 10) => faker.lorem.sentences(randomNumberFromRange(2, num));
 const generator = new AvatarGenerator();
 
-export const userInfo = (address?: AddressInfo, worksFromHome = false): User => {
+export const createUser = (
+    address?: AddressInfo,
+    info: UserInfo = createUserInfo(),
+    worksFromHome = false
+): User => {
     const homeAddress = createAddress();
     return ({
-        info: createUser(),
+        info,
         friends: [],
         homeAddress,
         workAddress: worksFromHome ? homeAddress : address,
@@ -158,13 +164,13 @@ export const userInfo = (address?: AddressInfo, worksFromHome = false): User => 
 };
 
 export const users = [
-    userInfo(createAddress()),
-    userInfo(createAddress(), true),
-    userInfo(createAddress())
+    createUser(createAddress(), createUserInfo()),
+    createUser(createAddress(), createUserInfo(), true),
+    createUser(createAddress(), createUserInfo())
 ];
 
 export const createRandomUsers = (num = randomNumberFromRange(3, 15)): User[] =>
-    [...Array(num)].map(() => userInfo(maybeCreateAddress(), Math.random() > 0.5));
+    [...Array(num)].map(() => createUser(maybeCreateAddress(), createUserInfo(), Math.random() > 0.5));
 
 export const pagination = {
     total: 1000,
@@ -301,4 +307,10 @@ export const fromRIJKArt = (currentPage: number, limit: number): AllArt => ({
         currentPage,
     },
     pieces: fromRIJKArtResponse.artObjects.map(fromRIJKToPiece)
+});
+
+export const fakeAsyncEvent = <T extends unknown>(): OnAsyncEvent<T, Explanation<HTTPError>> => ({
+    onLoad: jest.fn(() => fakeAsyncEvent()),
+    onLoading: jest.fn(() => fakeAsyncEvent()),
+    onError: jest.fn(() => fakeAsyncEvent())
 });

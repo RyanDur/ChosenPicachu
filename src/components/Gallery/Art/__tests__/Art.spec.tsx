@@ -1,13 +1,14 @@
-import {cleanup, screen} from '@testing-library/react';
+import {act, cleanup, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {data} from '../../../../data';
-import {fromAICArt, Rendered, renderWithRouter} from '../../../../__tests__/util';
+import {fakeAsyncEvent, fromAICArt, Rendered, renderWithRouter} from '../../../../__tests__/util';
 import {Paths} from '../../../../App';
 import {useGallery} from '../../Context';
 import {ArtGallery} from '../index';
-import {error, loaded, loading} from '@ryandur/sand';
+import {asyncEvent, asyncResult} from '@ryandur/sand';
 import {AllArt, Art} from '../../../../data/artGallery/types/response';
 import {Source} from '../../../../data/artGallery/types/resource';
+import {explanation, HTTPError} from '../../../../data/types';
 
 jest.mock('../../Context', () => {
     return ({
@@ -21,39 +22,39 @@ describe('The gallery.', () => {
     window.scrollTo = jest.fn();
     afterEach(cleanup);
 
-    describe('When the art has not loaded yet', () => {
-        beforeEach(() => {
-            data.artGallery.getAllArt = () => ({
-                onAsyncEvent: (dispatch) => dispatch(loading())
-            });
-            mockUseGallery.mockReturnValue({
-                art: {pieces: []},
-                updateArt: jest.fn(),
-                reset: jest.fn()
-            });
-
-            renderWithRouter(<ArtGallery/>);
+    test('When the art has not loaded yet', () => {
+        data.artGallery.getAllArt = () => ({
+            ...fakeAsyncEvent(),
+            onLoading: loading => {
+                loading();
+                return fakeAsyncEvent();
+            }
         });
 
-        it('should signify that it is loading', () =>
-            expect(screen.getByTestId('gallery-loading')).toBeInTheDocument());
+        mockUseGallery.mockReturnValue({
+            art: {pieces: []},
+            updateArt: jest.fn(),
+            reset: jest.fn()
+        });
 
-        it('should not contain art', () =>
-            expect(screen.queryAllByTestId(/piece/).length).toEqual(0));
+        act(() => void renderWithRouter(<ArtGallery/>));
+
+        expect(screen.getByTestId('gallery-loading')).toBeInTheDocument();
+        expect(screen.queryAllByTestId(/piece/).length).toEqual(0);
     });
 
     describe('When the art has loaded', () => {
-        beforeEach(() => {
-            data.artGallery.getAllArt = () => ({
-                onAsyncEvent: (dispatch) => dispatch(loaded(fromAICArt))
-            });
+        beforeEach(async () => {
+            data.artGallery.getAllArt = () => asyncEvent(asyncResult.success(fromAICArt));
 
             mockUseGallery.mockReturnValue({
                 art: fromAICArt,
                 updateArt: jest.fn(),
                 reset: jest.fn()
             });
-            rendered = renderWithRouter(<ArtGallery/>);
+            await act(async () => await act(async () => {
+                rendered = renderWithRouter(<ArtGallery/>);
+            }));
         });
 
         it('should not signify that it is loading', () =>
@@ -77,52 +78,41 @@ describe('The gallery.', () => {
         });
     });
 
-    describe('when there is no art to show', () => {
-        beforeEach(() => {
-            data.artGallery.getAllArt = () => ({
-                onAsyncEvent: (dispatch) => dispatch(loaded({pieces: [] as Art[]} as AllArt))
-            });
-            mockUseGallery.mockReturnValue({
-                updateArt: jest.fn(),
-                reset: jest.fn()
-            });
-            renderWithRouter(<ArtGallery/>);
+    test('when there is no art to show', async () => {
+        const pieces = [] as Art[];
+        data.artGallery.getAllArt = () => asyncEvent(asyncResult.success({pieces} as AllArt));
+        mockUseGallery.mockReturnValue({
+            art: {pieces},
+            updateArt: jest.fn(),
+            reset: jest.fn()
         });
-
-        it('should not contain art', () =>
-            expect(screen.queryAllByTestId(/piece/).length).toEqual(0));
-
-        it('should not signify that it is loading', () =>
-            expect(screen.queryByTestId('gallery-loading')).not.toBeInTheDocument());
-
-        it('should signify that the gallery is empty', () =>
-            expect(screen.queryByTestId('empty-gallery')).toBeInTheDocument());
+        await act(async () => await act(async () => {
+            renderWithRouter(<ArtGallery/>);
+        }));
+        expect(screen.queryAllByTestId(/piece/).length).toEqual(0);
+        expect(screen.queryByTestId('gallery-loading')).not.toBeInTheDocument();
+        expect(screen.queryByTestId('empty-gallery')).toBeInTheDocument();
     });
 
-    describe('when the art has errored', () => {
-        beforeEach(() => {
-            data.artGallery.getAllArt = (query) => {
-                expect(query).toEqual({
-                    page: 23,
-                    search: 'g',
-                    size: 8,
-                    source: Source.HARVARD
-                });
-
-                return ({
-                    onAsyncEvent: (dispatch) => dispatch(error())
-                });
-            };
-
-            mockUseGallery.mockReturnValue({
-                art: fromAICArt,
-                updateArt: jest.fn(),
-                reset: jest.fn()
+    test('when the art has errored', async () => {
+        data.artGallery.getAllArt = (query) => {
+            expect(query).toEqual({
+                page: 23,
+                search: 'g',
+                size: 8,
+                source: Source.HARVARD
             });
-            renderWithRouter(<ArtGallery/>, {params: {page: 23,search: 'g', size: 8, tab: Source.HARVARD }});
-        });
 
-        it('should indicate that something went wrong', () =>
-            expect(screen.queryByTestId('empty-gallery')).toBeInTheDocument());
+            return asyncEvent(asyncResult.failure(explanation(HTTPError.UNKNOWN)));
+        };
+
+        mockUseGallery.mockReturnValue({
+            art: fromAICArt,
+            updateArt: jest.fn(),
+            reset: jest.fn()
+        });
+        renderWithRouter(<ArtGallery/>, {params: {page: 23, search: 'g', size: 8, tab: Source.HARVARD}});
+
+        expect(await screen.findByTestId('empty-gallery')).toBeInTheDocument();
     });
 });
