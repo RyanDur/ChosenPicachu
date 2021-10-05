@@ -2,7 +2,7 @@ import {FormAction, FormActions, User} from './types';
 import {generateAvatar} from '../../avatars';
 
 export const initialState: User = {
-    info: {firstName: '', lastName: ''},
+    info: {firstName: '', lastName: '', email: ''},
     friends: [],
     homeAddress: {
         city: '',

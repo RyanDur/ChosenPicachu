@@ -22,7 +22,7 @@ export const Address: FC<AddressProps> = (
         disabled,
         readOnly,
         value = {} as AddressInfo
-    }) => <article id={id} className="address">
+    }) => <article id={id} className="address" data-testid={id}>
     <FancyInput inputId={`${id}-street`} className="street"
                 required={required} disabled={disabled} value={value.streetAddress} readOnly={readOnly}
                 onChange={event => onChange({...value, streetAddress: event.currentTarget.value})}>

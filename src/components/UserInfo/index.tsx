@@ -117,11 +117,11 @@ export const UserInformation: FC<FormProps> = (
                        onChange={event => dispatch(updateDetails(event.currentTarget.value))}/>
 
         {!readOnly && <button id="reset-form" type="reset" disabled={readOnly} className="secondary">Reset</button>}
-        {readOnly && <Link id="reset-form" to={`${Paths.users}?email=${user.info.email}&mode=edit`}
+        {readOnly && <Link id="reset-form" to={`${Paths.users}?id=${user.info.id}&mode=edit`}
                            className="button secondary">Edit</Link>}
         {!editing && !readOnly &&
         <button id="submit" type="submit" disabled={readOnly} className="primary">Add</button>}
-        {editing && <Link id="cancel" to={`${Paths.users}?email=${user.info.email}&mode=view`}
+        {editing && <Link id="cancel" to={`${Paths.users}?id=${user.info.id}&mode=view`}
                           className="button secondary" onClick={reset}>Cancel</Link>}
         {editing && <button id="submit" type="submit" className="primary">Update</button>}
 
