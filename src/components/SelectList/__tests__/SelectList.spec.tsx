@@ -17,15 +17,7 @@ describe('the friends list', () => {
             `${secondUser.info.firstName} ${secondUser.info.lastName}`
         ]);
 
-        expect(screen.getByTestId('friends-list')).toHaveTextContent(`${secondUser.info.firstName} ${secondUser.info.lastName}`);
         expect(consumer).toHaveBeenCalledWith([secondUser]);
-
-        userEvent.selectOptions(screen.getByTestId(/select-friend/), [
-            `${thirdUser.info.firstName} ${thirdUser.info.lastName}`
-        ]);
-
-        expect(screen.getByTestId('friends-list')).toHaveTextContent(`${thirdUser.info.firstName} ${thirdUser.info.lastName}`);
-        expect(consumer).toHaveBeenCalledWith([secondUser, thirdUser]);
     });
 
     it('should not allow you to pick yourself', () => {
@@ -60,13 +52,9 @@ describe('the friends list', () => {
     });
 
     it('should not allow a user to select something twice', () => {
-        render(<FriendsList users={users} user={firstUser} onChange={consumer}/>);
-        const selectFriend = screen.getByTestId(/select-friend/);
-        userEvent.selectOptions(selectFriend, [
-            `${secondUser.info.firstName} ${secondUser.info.lastName}`
-        ]);
-
-        expect(selectFriend).not.toHaveTextContent(`${secondUser.info.firstName} ${secondUser.info.lastName}`);
+        const userWithFriends = {...firstUser, friends: [secondUser]};
+        render(<FriendsList users={users} user={userWithFriends} onChange={consumer}/>);
+        expect(screen.getByTestId(/select-friend/)).not.toHaveTextContent(`${secondUser.info.firstName} ${secondUser.info.lastName}`);
     });
 
     it('should not allow to select a friend if no more friends are left', () => {

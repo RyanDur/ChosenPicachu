@@ -5,11 +5,11 @@ import {User} from '../types';
 import {fillOutAddress, fillOutUser, users} from '../../../__tests__/util';
 import {initialState} from '../reducer';
 import {Consumer} from '@ryandur/sand';
-
+import {nanoid} from 'nanoid';
 jest.mock('../../../avatars', () => ({
     generateAvatar: () => 'some random url'
 }));
-
+jest.mock('nanoid');
 describe('a user form', () => {
     const [userInfo] = users;
     userInfo.avatar = 'some random url';
@@ -25,6 +25,7 @@ describe('a user form', () => {
     let consumer: Consumer<User>;
 
     beforeEach(() => {
+        (nanoid as jest.Mock).mockReturnValue(userInfo.info.id);
         consumer = jest.fn();
         render(<UserInformation onAdd={consumer}/>);
 

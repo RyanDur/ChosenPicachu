@@ -9,7 +9,8 @@ export interface AddressInfo {
 export interface UserInfo {
     firstName: string;
     lastName: string;
-    email?: string;
+    email: string;
+    id?: string;
     dob?: Date;
 }
 

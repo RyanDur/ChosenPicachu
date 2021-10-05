@@ -127,10 +127,11 @@ export const rows: Row[] = [{
     }
 }];
 
-const createUserInfo = (): UserInfo => ({
+export const createUserInfo = (): UserInfo => ({
     firstName: faker.name.firstName(),
     lastName: faker.name.lastName(),
-    email: nanoid() + faker.internet.email(),
+    email: faker.internet.email(),
+    id: nanoid(),
     dob: new Date(toISOWithoutTime(faker.date.past(Math.random() * 80)))
 });
 export const createAddress = (): AddressInfo => ({
@@ -141,36 +142,34 @@ export const createAddress = (): AddressInfo => ({
     zip: faker.address.zipCode()
 });
 
-const maybeCreateAddress = (): AddressInfo | undefined =>
-    Math.random() < 0.5 ? undefined : createAddress();
-
 const createDetails = (num = 10) => faker.lorem.sentences(randomNumberFromRange(2, num));
 const generator = new AvatarGenerator();
 
 export const createUser = (
-    address?: AddressInfo,
-    info: UserInfo = createUserInfo(),
-    worksFromHome = false
+    worksFromHome = false,
+    address: () => AddressInfo = createAddress,
+    info: () => UserInfo = createUserInfo
 ): User => {
-    const homeAddress = createAddress();
+    const homeAddress = address();
     return ({
-        info,
+        info: info(),
         friends: [],
         homeAddress,
-        workAddress: worksFromHome ? homeAddress : address,
+        workAddress: worksFromHome ? homeAddress : address(),
         details: createDetails(),
         avatar: generator.generateRandomAvatar()
     });
 };
 
 export const users = [
-    createUser(createAddress(), createUserInfo()),
-    createUser(createAddress(), createUserInfo(), true),
-    createUser(createAddress(), createUserInfo())
+    createUser(),
+    createUser( true),
+    createUser()
 ];
 
 export const createRandomUsers = (num = randomNumberFromRange(3, 15)): User[] =>
-    [...Array(num)].map(() => createUser(maybeCreateAddress(), createUserInfo(), Math.random() > 0.5));
+    [...Array(num)].map(() => createUser(Math.random() > 0.5)
+    );
 
 export const pagination = {
     total: 1000,

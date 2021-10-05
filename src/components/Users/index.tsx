@@ -13,7 +13,7 @@ import './Users.layout.scss';
 
 export const Users: FC = () => {
     const history = useHistory();
-    const {queryObj: {email, mode}, nextQueryString, path} = useQuery<{ email: string, mode: string }>();
+    const {queryObj: {id, mode}, nextQueryString, path} = useQuery<{ id: string, mode: string }>();
     const [users, updateUsers] = useState<User[]>([]);
     const [currentUser, updateCurrentUser] = useState<User>();
 
@@ -22,8 +22,8 @@ export const Users: FC = () => {
     }, []);
 
     useEffect(() => {
-        email && data.users.get(email).onLoad(updateCurrentUser);
-    }, [email]);
+        id && data.users.get(id).onLoad(updateCurrentUser);
+    }, [id]);
 
     const equalAddresses = (address1: AddressInfo, address2: AddressInfo = {} as AddressInfo): boolean =>
         Object.keys(address1).reduce((acc, key) =>
@@ -34,17 +34,16 @@ export const Users: FC = () => {
             .onLoad(updateUsers);
 
     return <>
-        <section id="user-info" className="card users" key={currentUser?.info.email}>
+        <section id="user-info" className="card users" key={currentUser?.info.id}>
             <h2 className="title">User Information</h2>
             <UserInformation currentUser={currentUser}
                              readOnly={mode === 'view'}
                              editing={mode === 'edit'}
-                             onAdd={user => data.users.add(user).onLoad(updateUsers)}
+                             onAdd={user => data.users.add(user)
+                                 .onLoad(updateUsers)}
                              onUpdate={user => data.users.update(user)
                                  .onLoad(updateUsers)
-                                 .onLoad(() => {
-                                     history.push(Paths.users);
-                                 })}/>
+                                 .onLoad(() => history.push(Paths.users))}/>
         </section>
 
         <section id="user-candidates" className="card users">
@@ -89,25 +88,25 @@ export const Users: FC = () => {
                                 }} onClick={event => event.currentTarget.classList.remove('open')}>
                                     <nav className="menu rounded-corners">
                                         <Link to={`${path}${nextQueryString({
-                                            email: user.info.email,
+                                            id: user.info.id,
                                             mode: 'view'
                                         })}`}
                                               className='item'
                                               data-testid="view">View</Link>
                                         <Link to={`${path}${nextQueryString({
-                                            email: user.info.email,
+                                            id: user.info.id,
                                             mode: 'edit'
                                         })}`}
                                               className='item'
                                               data-testid="view">Edit</Link>
-                                        <Link to={email === user.info.email ? path : history.location}
+                                        <Link to={id === user.info.id ? path : history.location}
                                               className='item'
                                               onClick={() => data.users.delete(user).onLoad(data => {
                                                   updateUsers(data);
                                                   history.push(Paths.users);
                                               })}
                                               data-testid="remove">Remove</Link>
-                                        <Link to={`${path}${nextQueryString({email: user.info.email})}`}
+                                        <Link to={`${path}${nextQueryString({id: user.info.id})}`}
                                               className='item'
                                               data-testid="clone">Clone</Link>
                                     </nav>
