@@ -101,10 +101,9 @@ export const Users: FC = () => {
                                               data-testid="view">Edit</Link>
                                         <Link to={id === user.info.id ? path : history.location}
                                               className='item'
-                                              onClick={() => data.users.delete(user).onLoad(data => {
-                                                  updateUsers(data);
-                                                  history.push(Paths.users);
-                                              })}
+                                              onClick={() => data.users.delete(user)
+                                                  .onLoad(updateUsers)
+                                                  .onLoad(() => history.push(Paths.users))}
                                               data-testid="remove">Remove</Link>
                                         <Link to={`${path}${nextQueryString({id: user.info.id})}`}
                                               className='item'
