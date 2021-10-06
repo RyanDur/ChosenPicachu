@@ -50,7 +50,7 @@ describe('users data', () => {
 
         usersApi.add(user).onLoad(data => {
             expect(data.length).toEqual(allUsers.length + 1);
-            expect(data[0].info.id).not.toBeUndefined();
+            expect(data[0].id).not.toBeUndefined();
             done();
         });
 
@@ -65,13 +65,13 @@ describe('users data', () => {
         const firstUser = allUsers[0];
         const lastUser = allUsers[allUsers.length - 1];
 
-        usersApi.get(firstUser.info.id || '').onLoad(data => {
+        usersApi.get(firstUser.id || '').onLoad(data => {
             expect(data).toEqual(firstUser);
             expect(data).not.toBeUndefined();
             done();
         });
 
-        usersApi.get(lastUser.info.id || '').onLoad(data => {
+        usersApi.get(lastUser.id || '').onLoad(data => {
             expect(data).toEqual(lastUser);
             expect(data).not.toBeUndefined();
             done();
@@ -80,18 +80,18 @@ describe('users data', () => {
 
     test('updating a user', done => {
         usersApi.update({...allUsers[0], friends: [allUsers[allUsers.length - 1]]}).onLoad(data => {
-            const firstUsersFriends = data[0].friends.map(f => f.info.id);
-            expect(firstUsersFriends).toContain(data[data.length - 1].info.id);
+            const firstUsersFriends = data[0].friends.map(f => f.id);
+            expect(firstUsersFriends).toContain(data[data.length - 1].id);
 
-            const lastUsersFriends = data[data.length - 1].friends.map(f => f.info.id);
-            expect(lastUsersFriends).toContain(data[0].info.id);
+            const lastUsersFriends = data[data.length - 1].friends.map(f => f.id);
+            expect(lastUsersFriends).toContain(data[0].id);
         }).onLoad(() => {
             usersApi.update({...allUsers[0], friends: []}).onLoad(data => {
-                const firstUsersFriends = data[0].friends.map(f => f.info.id);
-                expect(firstUsersFriends).not.toContain(data[data.length - 1].info.id);
+                const firstUsersFriends = data[0].friends.map(f => f.id);
+                expect(firstUsersFriends).not.toContain(data[data.length - 1].id);
 
-                const lastUsersFriends = data[data.length - 1].friends.map(f => f.info.id);
-                expect(lastUsersFriends).not.toContain(data[0].info.id);
+                const lastUsersFriends = data[data.length - 1].friends.map(f => f.id);
+                expect(lastUsersFriends).not.toContain(data[0].id);
                 done();
             });
         });
@@ -112,8 +112,8 @@ describe('users data', () => {
             usersApi
                 .update({...firstUser, friends: [allUsers[allUsers.length - 1]]})
                 .onLoad(() => usersApi.delete(firstUser).onLoad(data => {
-                    const lastUsersFriends = data[data.length - 1].friends.map(f => f.info.id);
-                    expect(lastUsersFriends).not.toContain(firstUser.info.id);
+                    const lastUsersFriends = data[data.length - 1].friends.map(f => f.id);
+                    expect(lastUsersFriends).not.toContain(firstUser.id);
                     done();
                 }));
         });

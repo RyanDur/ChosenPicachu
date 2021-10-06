@@ -131,7 +131,6 @@ export const createUserInfo = (): UserInfo => ({
     firstName: faker.name.firstName(),
     lastName: faker.name.lastName(),
     email: faker.internet.email(),
-    id: nanoid(),
     dob: new Date(toISOWithoutTime(faker.date.past(Math.random() * 80)))
 });
 export const createAddress = (): AddressInfo => ({
@@ -152,6 +151,7 @@ export const createUser = (
 ): User => {
     const homeAddress = address();
     return ({
+        id: nanoid(),
         info: info(),
         friends: [],
         homeAddress,
