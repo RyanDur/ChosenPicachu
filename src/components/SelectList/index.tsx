@@ -12,16 +12,17 @@ interface Props {
 
 export const FriendsList: FC<Props> = ({users, user, onChange}) => {
     const [friends, updateFriends] = useState(user.friends);
-    const [potentialFriends, updatePotentialFriends] = useState(users
-        .filter(possibleFriend => user !== possibleFriend)
-        .filter(possibleFriend => !user.friends.includes(possibleFriend)));
+    const [potentialFriends, updatePotentialFriends] = useState<User[]>([]);
 
     useEffect(() => {
         updateFriends(user.friends);
-        updatePotentialFriends(users
-            .filter(possibleFriend => user !== possibleFriend)
-            .filter(possibleFriend => !user.friends.includes(possibleFriend)));
     }, [user.friends]);
+
+    useEffect(() => {
+        updatePotentialFriends(users
+            .filter(possibleFriend => user.info.id !== possibleFriend.info.id)
+            .filter(possibleFriend => !friends.map(friend => friend.info.id).includes(possibleFriend.info.id)));
+    }, [friends]);
 
     const displayFullName = ({info}: User) => `${info.firstName} ${info.lastName}`;
 
