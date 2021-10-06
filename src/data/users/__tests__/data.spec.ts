@@ -2,6 +2,8 @@ import {users, UsersAPI} from '../index';
 import {createRandomUsers, createUser, users as allUsers} from '../../../__tests__/util';
 import {User} from '../../../components/UserInfo/types';
 import * as faker from 'faker';
+import {OnAsyncEvent} from '@ryandur/sand';
+import {Explanation, HTTPError} from '../../types';
 
 jest.mock('../../../__tests__/util', () => ({
     ...jest.requireActual('../../../__tests__/util'),
@@ -78,21 +80,90 @@ describe('users data', () => {
         });
     });
 
-    test('updating a user', done => {
-        usersApi.update({...allUsers[0], friends: [allUsers[allUsers.length - 1]]}).onLoad(data => {
-            const firstUsersFriends = data[0].friends.map(f => f.id);
-            expect(firstUsersFriends).toContain(data[data.length - 1].id);
+    describe('updating a user and friends', () => {
+        let users: OnAsyncEvent<User[], Explanation<HTTPError>>;
+        const [firstUser, secondUser, thirdUser] = allUsers;
 
-            const lastUsersFriends = data[data.length - 1].friends.map(f => f.id);
-            expect(lastUsersFriends).toContain(data[0].id);
-        }).onLoad(() => {
-            usersApi.update({...allUsers[0], friends: []}).onLoad(data => {
-                const firstUsersFriends = data[0].friends.map(f => f.id);
-                expect(firstUsersFriends).not.toContain(data[data.length - 1].id);
+        beforeEach(() => {
+            users = usersApi.update({...firstUser, friends: [secondUser]});
+        });
 
-                const lastUsersFriends = data[data.length - 1].friends.map(f => f.id);
-                expect(lastUsersFriends).not.toContain(data[0].id);
+        it('should add the user to friends list al well as the friend to the user', done => {
+            users.onLoad(([first, second]) => {
+                const firstUsersFriends = first.friends.map(f => f.id);
+                expect(firstUsersFriends).toContain(second.id);
+
+                const thirdUsersFriends = second.friends.map(f => f.id);
+                expect(thirdUsersFriends).toContain(first.id);
                 done();
+            });
+        });
+
+        it('should remove the user from the friends list when the user has removed them', done => {
+            users.onLoad(() => usersApi.update({...firstUser, friends: []}).onLoad(([first, second]) => {
+                const firstUsersFriends = first.friends.map(f => f.id);
+                expect(firstUsersFriends).not.toContain(second.id);
+
+                const thirdUsersFriends = second.friends.map(f => f.id);
+                expect(thirdUsersFriends).not.toContain(first.id);
+                done();
+            }));
+        });
+
+        it('should not add a friend twice', done => {
+            users.onLoad(() => usersApi.update({
+                ...firstUser,
+                friends: [secondUser, thirdUser]
+            }).onLoad(([first, second, third]) => {
+                const firstUsersFriends = first.friends.map(f => f.id);
+                expect(firstUsersFriends.length).toEqual(2);
+
+                const secondUsersFriends = second.friends.map(f => f.id);
+                expect(secondUsersFriends.length).toEqual(1);
+
+                const thirdUsersFriends = third.friends.map(f => f.id);
+                expect(thirdUsersFriends.length).toEqual(1);
+            })).onLoad(([first, second, third])  => {
+                users.onLoad(() => usersApi.update({
+                    ...third,
+                    friends: [first, second]
+                }).onLoad( ([firstAgain, secondAgain, thirdAgain]) => {
+                    const firstUsersFriends = firstAgain.friends.map(f => f.id);
+                    expect(firstUsersFriends.length).toEqual(2);
+                    expect(firstUsersFriends).toContain(secondAgain.id);
+                    expect(firstUsersFriends).toContain(thirdAgain.id);
+
+                    const secondUsersFriends = secondAgain.friends.map(f => f.id);
+                    expect(secondUsersFriends.length).toEqual(2);
+                    expect(secondUsersFriends).toContain(firstAgain.id);
+                    expect(secondUsersFriends).toContain(thirdAgain.id);
+
+                    const thirdUsersFriends = thirdAgain.friends.map(f => f.id);
+                    expect(thirdUsersFriends.length).toEqual(2);
+                    expect(thirdUsersFriends).toContain(firstAgain.id);
+                    expect(thirdUsersFriends).toContain(secondAgain.id);
+                })).onLoad(([moreFirst, moreSecond, morethird])  => {
+                    users.onLoad(() => usersApi.update({
+                        ...morethird,
+                        friends: [moreFirst, moreSecond]
+                    }).onLoad( ([moreFirstAgain, moreSecondAgain, morethirdAgain]) => {
+                        const moreFirstUsersFriends = moreFirstAgain.friends.map(f => f.id);
+                        expect(moreFirstUsersFriends.length).toEqual(2);
+                        expect(moreFirstUsersFriends).toContain(moreSecondAgain.id);
+                        expect(moreFirstUsersFriends).toContain(morethirdAgain.id);
+
+                        const moreSecondUsersFriends = moreSecondAgain.friends.map(f => f.id);
+                        expect(moreSecondUsersFriends.length).toEqual(2);
+                        expect(moreSecondUsersFriends).toContain(moreFirstAgain.id);
+                        expect(moreSecondUsersFriends).toContain(morethirdAgain.id);
+
+                        const morethirdUsersFriends = morethirdAgain.friends.map(f => f.id);
+                        expect(morethirdUsersFriends.length).toEqual(2);
+                        expect(morethirdUsersFriends).toContain(moreFirstAgain.id);
+                        expect(morethirdUsersFriends).toContain(moreSecondAgain.id);
+                        done();
+                    }));
+                });
             });
         });
     });
