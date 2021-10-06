@@ -32,22 +32,20 @@ export const FriendsList: FC<Props> = ({users, user, onChange}) => {
         onChange(friends.filter(newFriend => friend !== newFriend));
 
     return <article className={join('friends-list', has(friends) && 'not-empty')}>
-        <ul className="friends" data-testid="friends-list">{
-            friends.map(friend =>
-                <li className="friend" key={friend.id} data-testid={friend.info.email}>
-                    <label className="friend-title ellipsis"
-                           htmlFor={friend.info.email}>{displayFullName(friend)}</label>
-                    <img id={friend.info.email} className="remove"
-                         src="https://img.icons8.com/material-outlined/24/000000/cancel--v1.png"
-                         alt="remove"
-                         tabIndex={0}
-                         onKeyPress={event => {
-                             event.preventDefault();
-                             if (event.code === 'Enter') remove(friend)();
-                         }} onClick={remove(friend)} data-testid={`remove-${friend.info.email}`}/>
-                </li>
-            )
-        }</ul>
+        <ul className="friends" data-testid="friends-list">{friends.map(friend =>
+            <li className="friend" key={friend.id} data-testid={friend.info.email}>
+                <label className="friend-title ellipsis"
+                       htmlFor={friend.info.email}>{displayFullName(friend)}</label>
+                <img id={friend.info.email} className="remove"
+                     src="https://img.icons8.com/material-outlined/24/000000/cancel--v1.png"
+                     alt="remove"
+                     tabIndex={0}
+                     onKeyPress={event => {
+                         event.preventDefault();
+                         if (event.code === 'Enter') remove(friend)();
+                     }} onClick={remove(friend)} data-testid={`remove-${friend.info.email}`}/>
+            </li>
+        )}</ul>
         {has(potentialFriends) &&
         <select className="select-friend button" defaultValue=""
                 onChange={add}
