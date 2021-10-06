@@ -34,7 +34,7 @@ export const Users: FC = () => {
             .onLoad(updateUsers);
 
     return <>
-        <section id="user-info" className="card users" key={currentUser?.info.id}>
+        <section id="user-info" className="card users" key={currentUser?.id}>
             <h2 className="title">User Information</h2>
             <UserInformation currentUser={currentUser}
                              readOnly={mode === 'view'}
@@ -88,24 +88,24 @@ export const Users: FC = () => {
                                 }} onClick={event => event.currentTarget.classList.remove('open')}>
                                     <nav className="menu rounded-corners">
                                         <Link to={`${path}${nextQueryString({
-                                            id: user.info.id,
+                                            id: user.id,
                                             mode: 'view'
                                         })}`}
                                               className='item'
                                               data-testid="view">View</Link>
                                         <Link to={`${path}${nextQueryString({
-                                            id: user.info.id,
+                                            id: user.id,
                                             mode: 'edit'
                                         })}`}
                                               className='item'
                                               data-testid="view">Edit</Link>
-                                        <Link to={id === user.info.id ? path : history.location}
+                                        <Link to={id === user.id ? path : history.location}
                                               className='item'
                                               onClick={() => data.users.delete(user)
                                                   .onLoad(updateUsers)
                                                   .onLoad(() => history.push(Paths.users))}
                                               data-testid="remove">Remove</Link>
-                                        <Link to={`${path}${nextQueryString({id: user.info.id})}`}
+                                        <Link to={`${path}${nextQueryString({id: user.id})}`}
                                               className='item'
                                               data-testid="clone">Clone</Link>
                                     </nav>

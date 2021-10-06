@@ -10,11 +10,11 @@ export interface UserInfo {
     firstName: string;
     lastName: string;
     email: string;
-    id?: string;
     dob?: Date;
 }
 
 export interface User {
+    id?: string;
     info: UserInfo;
     friends: User[];
     homeAddress: AddressInfo;

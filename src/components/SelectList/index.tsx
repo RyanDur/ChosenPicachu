@@ -14,20 +14,16 @@ export const FriendsList: FC<Props> = ({users, user, onChange}) => {
     const [friends, updateFriends] = useState(user.friends);
     const [potentialFriends, updatePotentialFriends] = useState<User[]>([]);
 
-    useEffect(() => {
-        updateFriends(user.friends);
-    }, [user.friends]);
+    useEffect(() => updateFriends(user.friends), [user.friends]);
 
-    useEffect(() => {
-        updatePotentialFriends(users
-            .filter(possibleFriend => user.info.id !== possibleFriend.info.id)
-            .filter(possibleFriend => !friends.map(friend => friend.info.id).includes(possibleFriend.info.id)));
-    }, [friends]);
+    useEffect(() => updatePotentialFriends(users
+        .filter(possibleFriend => user.id !== possibleFriend.id)
+        .filter(possibleFriend => !friends.map(friend => friend.id).includes(possibleFriend.id))), [friends]);
 
     const displayFullName = ({info}: User) => `${info.firstName} ${info.lastName}`;
 
     const add = (event: ChangeEvent<HTMLSelectElement>) => {
-        maybe.of(potentialFriends.find(({info}) => info.id === event.currentTarget.value))
+        maybe.of(potentialFriends.find(user => user.id === event.currentTarget.value))
             .map(friend => onChange([...friends, friend]));
         event.currentTarget.selectedIndex = 0;
     };
@@ -38,7 +34,7 @@ export const FriendsList: FC<Props> = ({users, user, onChange}) => {
     return <article className={join('friends-list', has(friends) && 'not-empty')}>
         <ul className="friends" data-testid="friends-list">{
             friends.map(friend =>
-                <li className="friend" key={friend.info.id} data-testid={friend.info.email}>
+                <li className="friend" key={friend.id} data-testid={friend.info.email}>
                     <label className="friend-title ellipsis"
                            htmlFor={friend.info.email}>{displayFullName(friend)}</label>
                     <img id={friend.info.email} className="remove"
@@ -58,9 +54,9 @@ export const FriendsList: FC<Props> = ({users, user, onChange}) => {
                 data-testid="select-friend">{[
             <option key="placeholder" value="" disabled hidden>Add a Friend</option>,
             ...potentialFriends.map((potentialFriend, index) =>
-                    <option key={index} value={potentialFriend.info.id} data-testid={`friend-option-${index}`}>{
-                        displayFullName(potentialFriend)
-                    }</option>)
+                <option key={index} value={potentialFriend.id} data-testid={`friend-option-${index}`}>{
+                    displayFullName(potentialFriend)
+                }</option>)
         ]}</select>}
     </article>;
 };

@@ -17,14 +17,14 @@ export interface UsersAPI {
 export const users = (randomUsers: User[] = createRandomUsers()): UsersAPI => ({
     getAll: () => asyncEvent(success(randomUsers)),
     get: id => {
-        const onAsyncEvent = asyncEvent(maybe.of(randomUsers.find(user => user.info.id === id))
+        const onAsyncEvent = asyncEvent(maybe.of(randomUsers.find(user => user.id === id))
             .map(user => success<User, Explanation<HTTPError>>(user))
             .orElse(failure<User, Explanation<HTTPError>>(explanation(HTTPError.UNKNOWN))));
-        console.log('user', randomUsers.find(user => user.info.id === id));
+        console.log('user', randomUsers.find(user => user.id === id));
         return onAsyncEvent;
     },
     add: user => {
-        randomUsers = [{...user, info: {...user.info, id: nanoid()}}, ...randomUsers];
+        randomUsers = [{...user, id: nanoid()}, ...randomUsers];
         return asyncEvent(success(randomUsers));
     },
     update: user => {
@@ -35,9 +35,9 @@ export const users = (randomUsers: User[] = createRandomUsers()): UsersAPI => ({
 
         randomUsers = randomUsers.map(randomUser => ({
             ...randomUser,
-            friends: randomUser.friends.filter(friend => friend.info.id !== user.info.id)
+            friends: randomUser.friends.filter(friend => friend.id !== user.id)
         })).map(randomUser => maybe.of(
-            friends.find(friend => friend.info.id === randomUser.info.id)
+            friends.find(friend => friend.id === randomUser.id)
         ).orElse(randomUser));
 
         return asyncEvent(success(randomUsers));
@@ -45,8 +45,8 @@ export const users = (randomUsers: User[] = createRandomUsers()): UsersAPI => ({
     delete: user => {
         randomUsers = randomUsers.map(randomUser => ({
             ...randomUser,
-            friends: randomUser.friends.filter(friend => friend.info.id !== user.info.id)
-        })).filter(randomUser => randomUser.info.id !== user.info.id);
+            friends: randomUser.friends.filter(friend => friend.id !== user.id)
+        })).filter(randomUser => randomUser.id !== user.id);
         return asyncEvent(success(randomUsers));
     }
 });

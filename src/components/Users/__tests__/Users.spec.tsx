@@ -29,7 +29,7 @@ describe('the users page', () => {
     beforeEach(() => {
         currentUsers = users;
         data.users.getAll = () => asyncEvent(success(currentUsers));
-        data.users.get = id => asyncEvent(maybe.of(currentUsers.find(user => user.info.id === id))
+        data.users.get = id => asyncEvent(maybe.of(currentUsers.find(user => user.id === id))
             .map(user => success<User, Explanation<HTTPError>>(user))
             .orElse(failure<User, Explanation<HTTPError>>(explanation(HTTPError.UNKNOWN))));
         data.users.add = jest.fn((user: User) => {
@@ -37,11 +37,11 @@ describe('the users page', () => {
             return asyncEvent(success(currentUsers));
         });
         data.users.update = jest.fn((user: User) => {
-            currentUsers = currentUsers.map(currentUser => currentUser.info.id === user.info.id ? user : currentUser);
+            currentUsers = currentUsers.map(currentUser => currentUser.id === user.id ? user : currentUser);
             return asyncEvent(success(currentUsers));
         });
         data.users.delete = jest.fn((user: User) => {
-            currentUsers = currentUsers.filter(currentUser => currentUser.info.id !== user.info.id);
+            currentUsers = currentUsers.filter(currentUser => currentUser.id !== user.id);
             return asyncEvent(success(currentUsers));
         });
     });
@@ -117,7 +117,7 @@ describe('the users page', () => {
         it('should be able to cancel the form to the original information', () => {
             const form = screen.getByTestId('user-info-form');
             userEvent.click(within(form).getByText('Cancel'));
-            expect(rendered().testLocation?.search).toEqual(`?id=${firstUser.info.id}&mode=view`);
+            expect(rendered().testLocation?.search).toEqual(`?id=${firstUser.id}&mode=view`);
         });
     });
 
