@@ -16,13 +16,9 @@ export interface UsersAPI {
 
 export const users = (randomUsers: User[] = createRandomUsers()): UsersAPI => ({
     getAll: () => asyncEvent(success(randomUsers)),
-    get: id => {
-        const onAsyncEvent = asyncEvent(maybe.of(randomUsers.find(user => user.id === id))
-            .map(user => success<User, Explanation<HTTPError>>(user))
-            .orElse(failure<User, Explanation<HTTPError>>(explanation(HTTPError.UNKNOWN))));
-        console.log('user', randomUsers.find(user => user.id === id));
-        return onAsyncEvent;
-    },
+    get: id => asyncEvent(maybe.of(randomUsers.find(user => user.id === id))
+        .map(user => success<User, Explanation<HTTPError>>(user))
+        .orElse(failure<User, Explanation<HTTPError>>(explanation(HTTPError.UNKNOWN)))),
     add: user => {
         randomUsers = [{...user, id: nanoid()}, ...randomUsers];
         return asyncEvent(success(randomUsers));
