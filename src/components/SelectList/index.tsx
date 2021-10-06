@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const FriendsList: FC<Props> = ({users, user, onChange}) => {
-    const [friends, updateFriends] = useState(user.friends);
+    const [friends, updateFriends] = useState<User[]>([]);
     const [potentialFriends, updatePotentialFriends] = useState<User[]>([]);
 
     useEffect(() => updateFriends(user.friends), [user.friends]);
