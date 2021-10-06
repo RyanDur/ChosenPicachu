@@ -1,5 +1,5 @@
 import userEvent from '@testing-library/user-event';
-import {render, screen} from '@testing-library/react';
+import {cleanup, render, screen} from '@testing-library/react';
 import {FriendsList} from '../index';
 import {users} from '../../../__tests__/util';
 
@@ -9,7 +9,10 @@ describe('the friends list', () => {
     const secondUser = users[1];
     const thirdUser = users[2];
 
-    afterEach(() => jest.resetAllMocks());
+    afterEach(() => {
+        cleanup();
+        jest.resetAllMocks();
+    });
 
     it('should be able to add friends', () => {
         render(<FriendsList users={users} user={firstUser} onChange={consumer}/>);
@@ -39,13 +42,13 @@ describe('the friends list', () => {
         });
 
         test('on mouse click', () => {
-            userEvent.click(screen.getByTestId(`remove-${thirdUser.info.email}` || ''));
+            userEvent.click(screen.getByTestId(`remove-${thirdUser.id}`));
             expect(screen.getByTestId('friends-list')).not.toHaveTextContent(`${thirdUser.info.firstName} ${firstUser.info.lastName}`);
             expect(screen.getByTestId('friends-list')).toHaveTextContent(`${secondUser.info.firstName} ${secondUser.info.lastName}`);
         });
 
         test('on enter', () => {
-            userEvent.type(screen.getByTestId(`remove-${thirdUser.info.email}` || ''), '{enter}');
+            userEvent.type(screen.getByTestId(`remove-${thirdUser.id}`), '{enter}');
             expect(screen.getByTestId('friends-list')).not.toHaveTextContent(`${thirdUser.info.firstName} ${firstUser.info.lastName}`);
             expect(screen.getByTestId('friends-list')).toHaveTextContent(`${secondUser.info.firstName} ${secondUser.info.lastName}`);
         });
