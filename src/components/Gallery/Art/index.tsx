@@ -19,10 +19,8 @@ export const ArtGallery: FC = () => {
     useEffect(() => {
         data.artGallery.getAllArt({page, size, search, source: tab})
             .onLoading(isLoading)
-            .onLoad(data => {
-                hasErrored(empty(data.pieces));
-                updateArt(data);
-            })
+            .onLoad(updateArt)
+            .onLoad(data => hasErrored(empty(data.pieces)))
             .onError(() => hasErrored(true));
         return reset;
     }, [page, search, tab, size]);
