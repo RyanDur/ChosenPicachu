@@ -6,19 +6,19 @@ import {ArtPieceContext, useArtPiece, useArtPieceContext} from './Context';
 import {Image} from '../Image';
 import {useQuery} from '../../hooks';
 import {Source} from '../../../data/artGallery/types/resource';
-import './Piece.scss';
 import {has} from '@ryandur/sand';
+import './Piece.scss';
 
 const ArtPiece = () => {
     const {piece, updatePiece, reset} = useArtPiece();
-    const [errored, hasErrored] = useState(false);
+    const [errored, hasErrored] = useState<unknown>();
     const {id} = useParams<{ id: string }>();
     const {queryObj: {tab}} = useQuery<{ tab: Source }>();
 
     useEffect(() => {
         id && data.artGallery.getArt({id, source: tab})
             .onLoad(updatePiece)
-            .onError(() => hasErrored(true));
+            .onError(hasErrored);
         return reset;
     }, [id, updatePiece]);
 
