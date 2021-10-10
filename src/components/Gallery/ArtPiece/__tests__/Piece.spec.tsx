@@ -3,7 +3,7 @@ import {Paths} from '../../../../App';
 import {ArtPiece, useArtPiece} from '../index';
 import {data} from '../../../../data';
 import * as faker from 'faker';
-import {fakeAsyncEvent, Rendered, renderWithRouter} from '../../../../__tests__/util';
+import {Rendered, renderWithRouter} from '../../../../__tests__/util';
 import {GalleryPath} from '../../index';
 import {Art} from '../../../../data/artGallery/types/response';
 import {explanation, HTTPError} from '../../../../data/types';
@@ -29,27 +29,6 @@ describe('viewing a piece', () => {
         updatePiece: jest.fn(),
         reset: jest.fn()
     }));
-
-    describe('loading the piece of art', () => {
-        beforeEach(() => {
-            data.artGallery.getArt = () => ({
-                ...fakeAsyncEvent(),
-                onLoading: dispatch => {
-                    dispatch();
-                    return fakeAsyncEvent();
-                }
-            });
-
-            renderWithRouter(<ArtPiece/>, {
-                initialRoute: `${Paths.artGallery}/1234`,
-                path: `${Paths.artGallery}${GalleryPath.piece}`
-            });
-        });
-
-        it('should be loading', async () => {
-            expect(useArtPiece().reset).toHaveBeenCalledTimes(1);
-        });
-    });
 
     describe('when the art piece is loaded', () => {
         beforeEach(() => {

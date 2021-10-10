@@ -123,11 +123,11 @@ describe('users data', () => {
 
                 const thirdUsersFriends = third.friends.map(f => f.id);
                 expect(thirdUsersFriends.length).toEqual(1);
-            })).onLoad(([first, second, third])  => {
+            })).onLoad(([first, second, third]) => {
                 users.onLoad(() => usersApi.update({
                     ...third,
                     friends: [first, second]
-                }).onLoad( ([firstAgain, secondAgain, thirdAgain]) => {
+                }).onLoad(([firstAgain, secondAgain, thirdAgain]) => {
                     const firstUsersFriends = firstAgain.friends.map(f => f.id);
                     expect(firstUsersFriends.length).toEqual(2);
                     expect(firstUsersFriends).toContain(secondAgain.id);
@@ -142,11 +142,11 @@ describe('users data', () => {
                     expect(thirdUsersFriends.length).toEqual(2);
                     expect(thirdUsersFriends).toContain(firstAgain.id);
                     expect(thirdUsersFriends).toContain(secondAgain.id);
-                })).onLoad(([moreFirst, moreSecond, morethird])  => {
+                })).onLoad(([moreFirst, moreSecond, morethird]) => {
                     users.onLoad(() => usersApi.update({
                         ...morethird,
                         friends: [moreFirst, moreSecond]
-                    }).onLoad( ([moreFirstAgain, moreSecondAgain, morethirdAgain]) => {
+                    }).onLoad(([moreFirstAgain, moreSecondAgain, morethirdAgain]) => {
                         const moreFirstUsersFriends = moreFirstAgain.friends.map(f => f.id);
                         expect(moreFirstUsersFriends.length).toEqual(2);
                         expect(moreFirstUsersFriends).toContain(moreSecondAgain.id);

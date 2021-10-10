@@ -18,16 +18,12 @@ export const ArtGallery: FC = () => {
 
     useEffect(() => {
         data.artGallery.getAllArt({page, size, search, source: tab})
-            .onLoading(() => isLoading(true))
+            .onLoading(isLoading)
             .onLoad(data => {
-                isLoading(false);
                 hasErrored(empty(data.pieces));
                 updateArt(data);
             })
-            .onError(() => {
-                isLoading(false);
-                hasErrored(true);
-            });
+            .onError(() => hasErrored(true));
         return reset;
     }, [page, search, tab, size]);
 
@@ -38,7 +34,7 @@ export const ArtGallery: FC = () => {
             <figcaption className="title">{piece.title}</figcaption>
         </figure>)}
         {loading && <Loading className="loader" testId="gallery-loading"/>}
-        {errored && <img src="https://img.icons8.com/ios/100/000000/no-image-gallery.png"
+        {!loading && errored && <img src="https://img.icons8.com/ios/100/000000/no-image-gallery.png"
                            id="empty-gallery"
                            alt="empty gallery"
                            data-testid="empty-gallery"/>}

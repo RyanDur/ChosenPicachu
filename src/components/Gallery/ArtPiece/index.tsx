@@ -17,9 +17,9 @@ const ArtPiece = () => {
 
     useEffect(() => {
         id && data.artGallery.getArt({id, source: tab})
-            .onLoading(reset)
             .onLoad(updatePiece)
             .onError(() => hasErrored(true));
+        return reset;
     }, [id, updatePiece]);
 
     return <>

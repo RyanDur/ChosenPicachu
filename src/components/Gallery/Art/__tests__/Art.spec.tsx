@@ -1,7 +1,7 @@
 import {act, cleanup, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {data} from '../../../../data';
-import {fakeAsyncEvent, fromAICArt, Rendered, renderWithRouter} from '../../../../__tests__/util';
+import {fromAICArt, Rendered, renderWithRouter} from '../../../../__tests__/util';
 import {Paths} from '../../../../App';
 import {useGallery} from '../../Context';
 import {ArtGallery} from '../index';
@@ -21,27 +21,6 @@ describe('The gallery.', () => {
     const mockUseGallery = useGallery as jest.Mock;
     window.scrollTo = jest.fn();
     afterEach(cleanup);
-
-    test('When the art has not loaded yet', () => {
-        data.artGallery.getAllArt = () => ({
-            ...fakeAsyncEvent(),
-            onLoading: loading => {
-                loading();
-                return fakeAsyncEvent();
-            }
-        });
-
-        mockUseGallery.mockReturnValue({
-            art: {pieces: []},
-            updateArt: jest.fn(),
-            reset: jest.fn()
-        });
-
-        act(() => void renderWithRouter(<ArtGallery/>));
-
-        expect(screen.getByTestId('gallery-loading')).toBeInTheDocument();
-        expect(screen.queryAllByTestId(/piece/).length).toEqual(0);
-    });
 
     describe('When the art has loaded', () => {
         beforeEach(async () => {
