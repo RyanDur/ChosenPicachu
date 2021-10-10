@@ -163,7 +163,7 @@ export const createUser = (
 
 export const users = [
     createUser(),
-    createUser( true),
+    createUser(true),
     createUser()
 ];
 
