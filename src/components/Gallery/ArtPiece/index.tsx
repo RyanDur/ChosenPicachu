@@ -6,25 +6,27 @@ import {ArtPieceContext, useArtPiece, useArtPieceContext} from './Context';
 import {Image} from '../Image';
 import {useQuery} from '../../hooks';
 import {Source} from '../../../data/artGallery/types/resource';
-import {has} from '@ryandur/sand';
+import {has, not} from '@ryandur/sand';
 import './Piece.scss';
 
 const ArtPiece = () => {
     const {piece, updatePiece, reset} = useArtPiece();
     const [errored, hasErrored] = useState<unknown>();
+    const [loading, isLoading] = useState<boolean>(false);
     const {id} = useParams<{ id: string }>();
     const {queryObj: {tab}} = useQuery<{ tab: Source }>();
 
     useEffect(() => {
         id && data.artGallery.getArt({id, source: tab})
+            .onLoading(isLoading)
             .onLoad(updatePiece)
             .onError(hasErrored);
         return reset;
     }, [id, updatePiece]);
 
     return <>
-        {has(piece) || <Loading testId="loading-piece"/>}
-        {has(piece) && !errored && piece && <figure className="art-work" data-testid="image-figure">
+        {loading && <Loading testId="loading-piece"/>}
+        {has(piece) && not(errored) && <figure className="art-work" data-testid="image-figure">
           <Image piece={piece} linkEnabled={false} className="piece"/>
           <figcaption className="artist-display">{piece.artistInfo}</figcaption>
         </figure>}

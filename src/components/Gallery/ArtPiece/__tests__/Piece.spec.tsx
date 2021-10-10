@@ -1,9 +1,9 @@
-import {screen, waitFor} from '@testing-library/react';
+import {act, screen, waitFor} from '@testing-library/react';
 import {Paths} from '../../../../App';
 import {ArtPiece, useArtPiece} from '../index';
 import {data} from '../../../../data';
 import * as faker from 'faker';
-import {Rendered, renderWithRouter} from '../../../../__tests__/util';
+import {fakeAsyncEvent, Rendered, renderWithRouter} from '../../../../__tests__/util';
 import {GalleryPath} from '../../index';
 import {Art} from '../../../../data/artGallery/types/response';
 import {explanation, HTTPError} from '../../../../data/types';
@@ -30,15 +30,36 @@ describe('viewing a piece', () => {
         reset: jest.fn()
     }));
 
+    describe('loading the piece of art', () => {
+        it('should be loading', () => {
+            data.artGallery.getArt = () => ({
+                ...fakeAsyncEvent(),
+                onLoading: dispatch => {
+                    dispatch(true);
+                    return fakeAsyncEvent();
+                }
+            });
+
+            act(() => void renderWithRouter(<ArtPiece/>, {
+                initialRoute: `${Paths.artGallery}/1234`,
+                path: `${Paths.artGallery}${GalleryPath.piece}`
+            }));
+
+            expect(screen.getByTestId('loading-piece')).toBeInTheDocument();
+        });
+    });
+
     describe('when the art piece is loaded', () => {
-        beforeEach(() => {
+        beforeEach(async () => {
             data.artGallery.getArt =
                 jest.fn(() => asyncEvent(asyncResult.success(mockPiece)));
 
-            rendered = renderWithRouter(<ArtPiece/>, {
-                initialRoute: `${Paths.artGallery}/1234`,
-                path: `${Paths.artGallery}${GalleryPath.piece}`
-            });
+            await act(async () => await act(async () => {
+                rendered = renderWithRouter(<ArtPiece/>, {
+                    initialRoute: `${Paths.artGallery}/1234`,
+                    path: `${Paths.artGallery}${GalleryPath.piece}`
+                });
+            }));
         });
 
         it("should display the artist's info", () =>
@@ -51,7 +72,7 @@ describe('viewing a piece', () => {
             expect(screen.queryByTestId('image-error')).not.toBeInTheDocument());
 
         it('should clean up the art-piece after unmounting', (done) => {
-            rendered().result.unmount();
+            act(() => rendered().result.unmount());
             expect(mockUsePieceGallery().reset).toHaveBeenCalled();
             done();
         });
