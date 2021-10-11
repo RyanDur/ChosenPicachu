@@ -11,8 +11,8 @@ import './Piece.scss';
 
 const ArtPiece = () => {
     const {piece, updatePiece, reset} = useArtPiece();
-    const [errored, hasErrored] = useState<unknown>();
-    const [loading, isLoading] = useState<boolean>(false);
+    const [errored, hasErrored] = useState(false);
+    const [loading, isLoading] = useState(false);
     const {id} = useParams<{ id: string }>();
     const {queryObj: {tab}} = useQuery<{ tab: Source }>();
 
@@ -20,7 +20,7 @@ const ArtPiece = () => {
         id && data.artGallery.getArt({id, source: tab})
             .onLoading(isLoading)
             .onLoad(updatePiece)
-            .onError(hasErrored);
+            .onError(() => hasErrored(true));
         return reset;
     }, [id, updatePiece]);
 

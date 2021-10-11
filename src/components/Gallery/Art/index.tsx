@@ -12,7 +12,7 @@ import './Gallery.layout.scss';
 export const ArtGallery: FC = () => {
     const {art, updateArt, reset} = useGallery();
     const [loading, isLoading] = useState(false);
-    const [errored, hasErrored] = useState<unknown>();
+    const [errored, hasErrored] = useState(false);
     const {queryObj: {page, size, search, tab}} =
         useQuery<{ page: number, size: number, tab: Source, search?: string }>();
 
@@ -21,7 +21,7 @@ export const ArtGallery: FC = () => {
             .onLoading(isLoading)
             .onLoad(updateArt)
             .onLoad(data => hasErrored(empty(data.pieces)))
-            .onError(hasErrored);
+            .onError(() => hasErrored(true));
         return reset;
     }, [page, search, tab, size]);
 
