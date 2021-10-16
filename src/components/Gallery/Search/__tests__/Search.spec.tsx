@@ -5,7 +5,7 @@ import {renderWithRouter} from '../../../../__tests__/util';
 import {data} from '../../../../data';
 import * as faker from 'faker';
 import {Paths} from '../../../../App';
-import {asyncEvent, asyncResult} from '@ryandur/sand';
+import {asyncResult} from '@ryandur/sand';
 import {Source} from '../../../../data/artGallery/types/resource';
 
 describe('search', () => {
@@ -13,7 +13,7 @@ describe('search', () => {
 
     beforeEach(() => {
         data.artGallery.searchForArt = jest.fn(() =>
-            asyncEvent(asyncResult.success([searchWord])));
+            asyncResult.success([searchWord]));
     });
 
     it('should give suggestions for completion', async () => {

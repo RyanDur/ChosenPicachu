@@ -5,7 +5,7 @@ import {fromAICArt, Rendered, renderWithRouter} from '../../../../__tests__/util
 import {Paths} from '../../../../App';
 import {useGallery} from '../../Context';
 import {ArtGallery} from '../index';
-import {asyncEvent, asyncResult} from '@ryandur/sand';
+import {asyncResult} from '@ryandur/sand';
 import {AllArt, Art} from '../../../../data/artGallery/types/response';
 import {Source} from '../../../../data/artGallery/types/resource';
 import {explanation, HTTPError} from '../../../../data/types';
@@ -24,7 +24,7 @@ describe('The gallery.', () => {
 
     describe('When the art has loaded', () => {
         beforeEach(async () => {
-            data.artGallery.getAllArt = () => asyncEvent(asyncResult.success(fromAICArt));
+            data.artGallery.getAllArt = () => asyncResult.success(fromAICArt);
 
             mockUseGallery.mockReturnValue({
                 art: fromAICArt,
@@ -59,7 +59,7 @@ describe('The gallery.', () => {
 
     test('when there is no art to show', async () => {
         const pieces = [] as Art[];
-        data.artGallery.getAllArt = () => asyncEvent(asyncResult.success({pieces} as AllArt));
+        data.artGallery.getAllArt = () => asyncResult.success({pieces} as AllArt);
         mockUseGallery.mockReturnValue({
             art: {pieces},
             updateArt: jest.fn(),
@@ -82,7 +82,7 @@ describe('The gallery.', () => {
                 source: Source.HARVARD
             });
 
-            return asyncEvent(asyncResult.failure(explanation(HTTPError.UNKNOWN)));
+            return asyncResult.failure(explanation(HTTPError.UNKNOWN as HTTPError));
         };
 
         mockUseGallery.mockReturnValue({

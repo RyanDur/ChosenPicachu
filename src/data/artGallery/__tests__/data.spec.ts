@@ -52,7 +52,7 @@ describe('data', () => {
                 mockSuccess(aicArtResponse);
 
                 artGallery.getAllArt({page: 1, size: 12, source: Source.AIC})
-                    .onLoad(dispatch);
+                    .onSuccess(dispatch);
 
                 await waitFor(() => expect(dispatch).toHaveBeenCalledWith(fromAICArt));
             });
@@ -62,7 +62,7 @@ describe('data', () => {
                 mockSuccess(aicArtResponse);
 
                 artGallery.getAllArt({page: 1, size: 12, search: 'rad', source: Source.AIC})
-                    .onLoad(dispatch);
+                    .onSuccess(dispatch);
 
                 await waitFor(() => expect(dispatch).toHaveBeenCalledWith(fromAICArt));
             });
@@ -72,7 +72,7 @@ describe('data', () => {
                 mockFailure(HTTPError.UNKNOWN);
 
                 artGallery.getAllArt({page: 1, size: 12, source: Source.AIC})
-                    .onError(dispatch);
+                    .onFailure(dispatch);
 
                 await waitFor(() => expect(dispatch).toHaveBeenCalledWith(HTTPError.UNKNOWN));
             });
@@ -84,7 +84,7 @@ describe('data', () => {
                 mockSuccess(harvardArtResponse);
 
                 artGallery.getAllArt({page: 1, size: 12, source: Source.HARVARD})
-                    .onLoad(dispatch);
+                    .onSuccess(dispatch);
 
                 await waitFor(() => expect(dispatch).toHaveBeenCalledWith(fromHarvardArt));
             });
@@ -94,7 +94,7 @@ describe('data', () => {
                 mockSuccess(harvardArtResponse);
 
                 artGallery.getAllArt({page: 1, size: 12, source: Source.HARVARD})
-                    .onLoad(dispatch);
+                    .onSuccess(dispatch);
 
                 await waitFor(() => expect(dispatch).toHaveBeenCalledWith(fromHarvardArt));
             });
@@ -104,7 +104,7 @@ describe('data', () => {
                 mockFailure(HTTPError.UNKNOWN);
 
                 artGallery.getAllArt({page: 1, size: 12, source: Source.HARVARD})
-                    .onError(dispatch);
+                    .onFailure(dispatch);
 
                 await waitFor(() => expect(dispatch).toHaveBeenCalledWith(HTTPError.UNKNOWN));
             });
@@ -116,7 +116,7 @@ describe('data', () => {
                 mockSuccess(fromRIJKArtResponse);
 
                 artGallery.getAllArt({page: 1, size: 12, source: Source.RIJKS})
-                    .onLoad(dispatch);
+                    .onSuccess(dispatch);
 
                 await waitFor(() => expect(dispatch).toHaveBeenCalledWith(fromRIJKArt(1, 12)));
             });
@@ -126,7 +126,7 @@ describe('data', () => {
                 mockSuccess(fromRIJKArtResponse);
 
                 artGallery.getAllArt({page: 1, size: 12, search: 'rad', source: Source.RIJKS})
-                    .onLoad(dispatch);
+                    .onSuccess(dispatch);
 
                 await waitFor(() => expect(dispatch).toHaveBeenCalledWith(fromRIJKArt(1, 12)));
             });
@@ -136,7 +136,7 @@ describe('data', () => {
                 mockFailure(HTTPError.UNKNOWN);
 
                 artGallery.getAllArt({page: 1, size: 12, source: Source.RIJKS})
-                    .onError(dispatch);
+                    .onFailure(dispatch);
 
                 await waitFor(() => expect(dispatch).toHaveBeenCalledWith(HTTPError.UNKNOWN));
             });
@@ -147,7 +147,7 @@ describe('data', () => {
             mockSuccess(fromRIJKArtResponse);
 
             artGallery.getAllArt({page: 1, size: 12, source: 'I do not exist' as Source})
-                .onError(dispatch);
+                .onFailure(dispatch);
 
             await waitFor(() => expect(dispatch.mock.calls[0][0].reason).toStrictEqual(HTTPError.UNKNOWN_SOURCE));
         });
@@ -161,7 +161,7 @@ describe('data', () => {
                     mockSuccess(pieceAICResponse);
 
                     artGallery.getArt({id: String(aicPiece.id), source: Source.AIC})
-                        .onLoad(dispatch);
+                        .onSuccess(dispatch);
 
                     await waitFor(() => expect(dispatch).toHaveBeenCalledWith(aicPiece));
                 });
@@ -172,7 +172,7 @@ describe('data', () => {
                 mockFailure(HTTPError.UNKNOWN);
 
                 artGallery.getArt({id: String(aicPiece.id), source: Source.AIC})
-                    .onError(dispatch);
+                    .onFailure(dispatch);
 
                 await waitFor(() => expect(dispatch).toHaveBeenCalledWith(HTTPError.UNKNOWN));
             });
@@ -184,7 +184,7 @@ describe('data', () => {
                 mockSuccess(harvardPieceResponse);
 
                 artGallery.getArt({id: String(aicPiece.id), source: Source.HARVARD})
-                    .onLoad(dispatch);
+                    .onSuccess(dispatch);
 
                 await waitFor(() => expect(dispatch).toHaveBeenCalledWith(harvardPiece));
             });
@@ -194,7 +194,7 @@ describe('data', () => {
                 mockFailure(HTTPError.UNKNOWN);
 
                 artGallery.getArt({id: String(aicPiece.id), source: Source.HARVARD})
-                    .onError(dispatch);
+                    .onFailure(dispatch);
 
                 await waitFor(() => expect(dispatch).toHaveBeenCalledWith(HTTPError.UNKNOWN));
             });
@@ -206,7 +206,7 @@ describe('data', () => {
                 mockSuccess(rijkArtObjectResponse);
 
                 artGallery.getArt({id: String(aicPiece.id), source: Source.RIJKS})
-                    .onLoad(dispatch);
+                    .onSuccess(dispatch);
 
                 await waitFor(() => expect(dispatch).toHaveBeenCalledWith(fromRIJKToPiece(rijkArtObjectResponse.artObject)));
             });
@@ -216,7 +216,7 @@ describe('data', () => {
                 mockFailure(HTTPError.UNKNOWN);
 
                 artGallery.getArt({id: String(aicPiece.id), source: Source.RIJKS})
-                    .onError(dispatch);
+                    .onFailure(dispatch);
 
                 await waitFor(() => expect(dispatch).toHaveBeenCalledWith(HTTPError.UNKNOWN));
             });
@@ -227,7 +227,7 @@ describe('data', () => {
             mockSuccess(pieceAICResponse);
 
             artGallery.getArt({id: '1', source: 'I do not exist' as Source})
-                .onError(dispatch);
+                .onFailure(dispatch);
 
             await waitFor(() => expect(dispatch.mock.calls[0][0].reason)
                 .toStrictEqual(HTTPError.UNKNOWN_SOURCE));
@@ -243,7 +243,7 @@ describe('data', () => {
                 mockSuccess(aicArtOptions);
 
                 artGallery.searchForArt({search, source: Source.AIC})
-                    .onLoad(dispatch);
+                    .onSuccess(dispatch);
 
                 await waitFor(() => expect(dispatch).toHaveBeenCalledWith(options));
             });
@@ -255,7 +255,7 @@ describe('data', () => {
                 mockSuccess(harvardArtOptions);
 
                 artGallery.searchForArt({search, source: Source.HARVARD})
-                    .onLoad(dispatch);
+                    .onSuccess(dispatch);
 
                 await waitFor(() => expect(dispatch).toHaveBeenCalledWith(options));
             });
@@ -267,7 +267,7 @@ describe('data', () => {
                 mockSuccess(fromRIJKArtOptionsResponse);
 
                 artGallery.searchForArt({search, source: Source.RIJKS})
-                    .onLoad(dispatch);
+                    .onSuccess(dispatch);
 
                 await waitFor(() => expect(dispatch).toHaveBeenCalledWith(options));
             });
@@ -278,7 +278,7 @@ describe('data', () => {
             mockSuccess({some: 'thing'});
 
             artGallery.searchForArt({search, source: 'I do not exist' as Source})
-                .onError(dispatch);
+                .onFailure(dispatch);
 
             await waitFor(() => expect(dispatch.mock.calls[0][0].reason).toStrictEqual(HTTPError.UNKNOWN_SOURCE));
         });
@@ -292,7 +292,7 @@ describe('data', () => {
             const dispatch = jest.fn();
             mockFailure(HTTPError.SERVER_ERROR);
 
-            artGallery.searchForArt({search, source}).onError(dispatch);
+            artGallery.searchForArt({search, source}).onFailure(dispatch);
 
             await waitFor(() => expect(dispatch).toHaveBeenCalledWith(HTTPError.SERVER_ERROR));
         });

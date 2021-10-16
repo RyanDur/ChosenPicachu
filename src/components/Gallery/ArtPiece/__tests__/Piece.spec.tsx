@@ -3,11 +3,11 @@ import {Paths} from '../../../../App';
 import {ArtPiece, useArtPiece} from '../index';
 import {data} from '../../../../data';
 import * as faker from 'faker';
-import {fakeAsyncEvent, Rendered, renderWithRouter} from '../../../../__tests__/util';
+import {Rendered, renderWithRouter} from '../../../../__tests__/util';
 import {GalleryPath} from '../../index';
 import {Art} from '../../../../data/artGallery/types/response';
 import {explanation, HTTPError} from '../../../../data/types';
-import {asyncEvent, asyncResult} from '@ryandur/sand';
+import {asyncResult} from '@ryandur/sand';
 
 jest.mock('../Context', () => ({
     useArtPiece: jest.fn()
@@ -33,10 +33,10 @@ describe('viewing a piece', () => {
     describe('loading the piece of art', () => {
         it('should be loading', () => {
             data.artGallery.getArt = () => ({
-                ...fakeAsyncEvent(),
+                ...asyncResult.success(mockPiece),
                 onLoading: dispatch => {
                     dispatch(true);
-                    return fakeAsyncEvent();
+                    return asyncResult.success(mockPiece);
                 }
             });
 
@@ -52,7 +52,7 @@ describe('viewing a piece', () => {
     describe('when the art piece is loaded', () => {
         beforeEach(async () => {
             data.artGallery.getArt =
-                jest.fn(() => asyncEvent(asyncResult.success(mockPiece)));
+                jest.fn(() => asyncResult.success(mockPiece));
 
             await act(async () => await act(async () => {
                 rendered = renderWithRouter(<ArtPiece/>, {
@@ -79,7 +79,7 @@ describe('viewing a piece', () => {
     });
 
     test('when getting the piece has errored', async () => {
-        data.artGallery.getArt = () => asyncEvent(asyncResult.failure(explanation(HTTPError.UNKNOWN)));
+        data.artGallery.getArt = () => asyncResult.failure(explanation(HTTPError.UNKNOWN as HTTPError));
         renderWithRouter(<ArtPiece/>, {
             initialRoute: `${Paths.artGallery}/1234`,
             path: `${Paths.artGallery}${GalleryPath.piece}`
