@@ -51,7 +51,7 @@ describe('data', () => {
                 mockSuccess(aicArtResponse);
 
                 await artGallery.getAllArt({page: 1, size: 12, source: Source.AIC})
-                    .onSuccess(dispatch).value();
+                    .onSuccess(dispatch).orNull();
 
                 expect(dispatch).toHaveBeenCalledWith(fromAICArt);
             });
@@ -61,7 +61,7 @@ describe('data', () => {
                 mockSuccess(aicArtResponse);
 
                 await artGallery.getAllArt({page: 1, size: 12, search: 'rad', source: Source.AIC})
-                    .onSuccess(dispatch).value();
+                    .onSuccess(dispatch).orNull();
 
                 expect(dispatch).toHaveBeenCalledWith(fromAICArt);
             });
@@ -71,7 +71,7 @@ describe('data', () => {
                 mockFailure(HTTPError.UNKNOWN);
 
                 await artGallery.getAllArt({page: 1, size: 12, source: Source.AIC})
-                    .onFailure(dispatch).value();
+                    .onFailure(dispatch).orNull();
 
                 expect(dispatch).toHaveBeenCalledWith(HTTPError.UNKNOWN);
             });
@@ -83,7 +83,7 @@ describe('data', () => {
                 mockSuccess(harvardArtResponse);
 
                 await artGallery.getAllArt({page: 1, size: 12, source: Source.HARVARD})
-                    .onSuccess(dispatch).value();
+                    .onSuccess(dispatch).orNull();
 
                 expect(dispatch).toHaveBeenCalledWith(fromHarvardArt);
             });
@@ -93,7 +93,7 @@ describe('data', () => {
                 mockSuccess(harvardArtResponse);
 
                 await artGallery.getAllArt({page: 1, size: 12, source: Source.HARVARD})
-                    .onSuccess(dispatch).value();
+                    .onSuccess(dispatch).orNull();
 
                 expect(dispatch).toHaveBeenCalledWith(fromHarvardArt);
             });
@@ -103,7 +103,7 @@ describe('data', () => {
                 mockFailure(HTTPError.UNKNOWN);
 
                 await artGallery.getAllArt({page: 1, size: 12, source: Source.HARVARD})
-                    .onFailure(dispatch).value();
+                    .onFailure(dispatch).orNull();
 
                 expect(dispatch).toHaveBeenCalledWith(HTTPError.UNKNOWN);
             });
@@ -115,7 +115,7 @@ describe('data', () => {
                 mockSuccess(fromRIJKArtResponse);
 
                 await artGallery.getAllArt({page: 1, size: 12, source: Source.RIJKS})
-                    .onSuccess(dispatch).value();
+                    .onSuccess(dispatch).orNull();
 
                 expect(dispatch).toHaveBeenCalledWith(fromRIJKArt(1, 12));
             });
@@ -125,7 +125,7 @@ describe('data', () => {
                 mockSuccess(fromRIJKArtResponse);
 
                 await artGallery.getAllArt({page: 1, size: 12, search: 'rad', source: Source.RIJKS})
-                    .onSuccess(dispatch).value();
+                    .onSuccess(dispatch).orNull();
 
                 expect(dispatch).toHaveBeenCalledWith(fromRIJKArt(1, 12));
             });
@@ -135,7 +135,7 @@ describe('data', () => {
                 mockFailure(HTTPError.UNKNOWN);
 
                 await artGallery.getAllArt({page: 1, size: 12, source: Source.RIJKS})
-                    .onFailure(dispatch).value();
+                    .onFailure(dispatch).orNull();
 
                 expect(dispatch).toHaveBeenCalledWith(HTTPError.UNKNOWN);
             });
@@ -146,7 +146,7 @@ describe('data', () => {
             mockSuccess(fromRIJKArtResponse);
 
             await artGallery.getAllArt({page: 1, size: 12, source: 'I do not exist' as Source})
-                .onFailure(dispatch).value();
+                .onFailure(dispatch).orNull();
 
             expect(dispatch.mock.calls[0][0].reason).toStrictEqual(HTTPError.UNKNOWN_SOURCE);
         });
@@ -160,7 +160,7 @@ describe('data', () => {
                     mockSuccess(pieceAICResponse);
 
                     await artGallery.getArt({id: String(aicPiece.id), source: Source.AIC})
-                        .onSuccess(dispatch).value();
+                        .onSuccess(dispatch).orNull();
 
                     expect(dispatch).toHaveBeenCalledWith(aicPiece);
                 });
@@ -171,7 +171,7 @@ describe('data', () => {
                 mockFailure(HTTPError.UNKNOWN);
 
                 await artGallery.getArt({id: String(aicPiece.id), source: Source.AIC})
-                    .onFailure(dispatch).value();
+                    .onFailure(dispatch).orNull();
 
                 expect(dispatch).toHaveBeenCalledWith(HTTPError.UNKNOWN);
             });
@@ -183,7 +183,7 @@ describe('data', () => {
                 mockSuccess(harvardPieceResponse);
 
                 await artGallery.getArt({id: String(aicPiece.id), source: Source.HARVARD})
-                    .onSuccess(dispatch).value();
+                    .onSuccess(dispatch).orNull();
 
                 expect(dispatch).toHaveBeenCalledWith(harvardPiece);
             });
@@ -193,7 +193,7 @@ describe('data', () => {
                 mockFailure(HTTPError.UNKNOWN);
 
                 await artGallery.getArt({id: String(aicPiece.id), source: Source.HARVARD})
-                    .onFailure(dispatch).value();
+                    .onFailure(dispatch).orNull();
 
                 expect(dispatch).toHaveBeenCalledWith(HTTPError.UNKNOWN);
             });
@@ -205,7 +205,7 @@ describe('data', () => {
                 mockSuccess(rijkArtObjectResponse);
 
                 await artGallery.getArt({id: String(aicPiece.id), source: Source.RIJKS})
-                    .onSuccess(dispatch).value();
+                    .onSuccess(dispatch).orNull();
 
                 expect(dispatch).toHaveBeenCalledWith(fromRIJKToPiece(rijkArtObjectResponse.artObject));
             });
@@ -215,7 +215,7 @@ describe('data', () => {
                 mockFailure(HTTPError.UNKNOWN);
 
                 await artGallery.getArt({id: String(aicPiece.id), source: Source.RIJKS})
-                    .onFailure(dispatch).value();
+                    .onFailure(dispatch).orNull();
 
                 expect(dispatch).toHaveBeenCalledWith(HTTPError.UNKNOWN);
             });
@@ -226,7 +226,7 @@ describe('data', () => {
             mockSuccess(pieceAICResponse);
 
             await artGallery.getArt({id: '1', source: 'I do not exist' as Source})
-                .onFailure(dispatch).value();
+                .onFailure(dispatch).orNull();
 
             expect(dispatch.mock.calls[0][0].reason).toStrictEqual(HTTPError.UNKNOWN_SOURCE);
         });
@@ -241,7 +241,7 @@ describe('data', () => {
                 mockSuccess(aicArtOptions);
 
                 await artGallery.searchForArt({search, source: Source.AIC})
-                    .onSuccess(dispatch).value();
+                    .onSuccess(dispatch).orNull();
 
                 expect(dispatch).toHaveBeenCalledWith(options);
             });
@@ -253,7 +253,7 @@ describe('data', () => {
                 mockSuccess(harvardArtOptions);
 
                 await artGallery.searchForArt({search, source: Source.HARVARD})
-                    .onSuccess(dispatch).value();
+                    .onSuccess(dispatch).orNull();
 
                 expect(dispatch).toHaveBeenCalledWith(options);
             });
@@ -265,7 +265,7 @@ describe('data', () => {
                 mockSuccess(fromRIJKArtOptionsResponse);
 
                 await artGallery.searchForArt({search, source: Source.RIJKS})
-                    .onSuccess(dispatch).value();
+                    .onSuccess(dispatch).orNull();
 
                 expect(dispatch).toHaveBeenCalledWith(options);
             });
@@ -276,7 +276,7 @@ describe('data', () => {
             mockSuccess({some: 'thing'});
 
             await artGallery.searchForArt({search, source: 'I do not exist' as Source})
-                .onFailure(dispatch).value();
+                .onFailure(dispatch).orNull();
 
             expect(dispatch.mock.calls[0][0].reason).toStrictEqual(HTTPError.UNKNOWN_SOURCE);
         });
@@ -290,7 +290,7 @@ describe('data', () => {
             const dispatch = jest.fn();
             mockFailure(HTTPError.SERVER_ERROR);
 
-            await artGallery.searchForArt({search, source}).onFailure(dispatch).value();
+            await artGallery.searchForArt({search, source}).onFailure(dispatch).orNull();
 
             expect(dispatch).toHaveBeenCalledWith(HTTPError.SERVER_ERROR);
         });
