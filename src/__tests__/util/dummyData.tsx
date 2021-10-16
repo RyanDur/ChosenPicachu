@@ -16,8 +16,6 @@ import {
 } from '../../data/artGallery/harvard/types';
 import {RIJKArtObject, RIJKSAllArt, RIJKSArt} from '../../data/artGallery/rijks/types';
 import {AllArt, Art} from '../../data/artGallery/types/response';
-import {OnAsyncEvent} from '@ryandur/sand';
-import {Explanation, HTTPError} from '../../data/types';
 
 export const randomNumberFromRange = (min: number, max = 6) => Math.floor(Math.random() * max) + min;
 
@@ -306,10 +304,4 @@ export const fromRIJKArt = (currentPage: number, limit: number): AllArt => ({
         currentPage,
     },
     pieces: fromRIJKArtResponse.artObjects.map(fromRIJKToPiece)
-});
-
-export const fakeAsyncEvent = <T extends unknown>(): OnAsyncEvent<T, Explanation<HTTPError>> => ({
-    onLoad: jest.fn(() => fakeAsyncEvent()),
-    onLoading: jest.fn(() => fakeAsyncEvent()),
-    onError: jest.fn(() => fakeAsyncEvent())
 });
