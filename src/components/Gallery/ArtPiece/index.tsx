@@ -11,10 +11,10 @@ import './Piece.scss';
 
 const ArtPiece = () => {
     const {piece, updatePiece, reset} = useArtPiece();
+    const {queryObj: {tab}} = useQuery<{ tab: Source }>();
     const [errored, hasErrored] = useState(false);
     const [loading, isLoading] = useState(false);
     const {id} = useParams<{ id: string }>();
-    const {queryObj: {tab}} = useQuery<{ tab: Source }>();
 
     useEffect(() => {
         id && data.artGallery.getArt({id, source: tab})
@@ -30,8 +30,11 @@ const ArtPiece = () => {
           <Image piece={piece} linkEnabled={false} className="piece"/>
           <figcaption className="artist-display">{piece.artistInfo}</figcaption>
         </figure>}
-        {errored && <article className="err"><img src="https://img.icons8.com/ios/100/000000/no-image.png"
-                                                  alt="Load Error" data-testid="image-error"/></article>}
+        {errored && <article className="err">
+          <img src="https://img.icons8.com/ios/100/000000/no-image.png"
+               alt="Load Error"
+               data-testid="image-error"/>
+        </article>}
     </>;
 };
 
