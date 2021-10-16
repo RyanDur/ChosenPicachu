@@ -2,7 +2,7 @@ import {users, UsersAPI} from '../index';
 import {createRandomUsers, createUser, users as allUsers} from '../../../__tests__/util';
 import {User} from '../../../components/UserInfo/types';
 import * as faker from 'faker';
-import {OnAsyncEvent} from '@ryandur/sand';
+import {Result} from '@ryandur/sand';
 import {Explanation, HTTPError} from '../../types';
 
 jest.mock('../../../__tests__/util', () => ({
@@ -20,13 +20,13 @@ describe('users data', () => {
     });
 
     test('getting the users', done => {
-        usersApi.getAll().onLoad(data => {
+        usersApi.getAll().onSuccess(data => {
             expect(data).toEqual(allUsers);
             expect(data).not.toBeUndefined();
             done();
         });
 
-        usersApi.getAll().onLoad(data => {
+        usersApi.getAll().onSuccess(data => {
             expect(data).toEqual(allUsers);
             expect(data).not.toBeUndefined();
             done();
@@ -50,14 +50,14 @@ describe('users data', () => {
             }
         };
 
-        usersApi.add(user).onLoad(data => {
+        usersApi.add(user).onSuccess(data => {
             expect(data.length).toEqual(allUsers.length + 1);
             expect(data[0].id).not.toBeUndefined();
             done();
         });
 
         const anotherUser = createUser();
-        usersApi.add(anotherUser).onLoad(data => {
+        usersApi.add(anotherUser).onSuccess(data => {
             expect(data.length).toEqual(allUsers.length + 2);
             done();
         });
@@ -67,13 +67,13 @@ describe('users data', () => {
         const firstUser = allUsers[0];
         const lastUser = allUsers[allUsers.length - 1];
 
-        usersApi.get(firstUser.id || '').onLoad(data => {
+        usersApi.get(firstUser.id || '').onSuccess(data => {
             expect(data).toEqual(firstUser);
             expect(data).not.toBeUndefined();
             done();
         });
 
-        usersApi.get(lastUser.id || '').onLoad(data => {
+        usersApi.get(lastUser.id || '').onSuccess(data => {
             expect(data).toEqual(lastUser);
             expect(data).not.toBeUndefined();
             done();
@@ -81,7 +81,7 @@ describe('users data', () => {
     });
 
     describe('updating a user and friends', () => {
-        let users: OnAsyncEvent<User[], Explanation<HTTPError>>;
+        let users: Result.Async<User[], Explanation<HTTPError>>;
         const [firstUser, secondUser, thirdUser] = allUsers;
 
         beforeEach(() => {
@@ -89,7 +89,7 @@ describe('users data', () => {
         });
 
         it('should add the user to friends list al well as the friend to the user', done => {
-            users.onLoad(([first, second]) => {
+            users.onSuccess(([first, second]) => {
                 const firstUsersFriends = first.friends.map(f => f.id);
                 expect(firstUsersFriends).toContain(second.id);
 
@@ -100,7 +100,7 @@ describe('users data', () => {
         });
 
         it('should remove the user from the friends list when the user has removed them', done => {
-            users.onLoad(() => usersApi.update({...firstUser, friends: []}).onLoad(([first, second]) => {
+            users.onSuccess(() => usersApi.update({...firstUser, friends: []}).onSuccess(([first, second]) => {
                 const firstUsersFriends = first.friends.map(f => f.id);
                 expect(firstUsersFriends).not.toContain(second.id);
 
@@ -111,10 +111,10 @@ describe('users data', () => {
         });
 
         it('should not add a friend twice', done => {
-            users.onLoad(() => usersApi.update({
+            users.onSuccess(() => usersApi.update({
                 ...firstUser,
                 friends: [secondUser, thirdUser]
-            }).onLoad(([first, second, third]) => {
+            }).onSuccess(([first, second, third]) => {
                 const firstUsersFriends = first.friends.map(f => f.id);
                 expect(firstUsersFriends.length).toEqual(2);
 
@@ -123,11 +123,11 @@ describe('users data', () => {
 
                 const thirdUsersFriends = third.friends.map(f => f.id);
                 expect(thirdUsersFriends.length).toEqual(1);
-            })).onLoad(([first, second, third]) => {
-                users.onLoad(() => usersApi.update({
+            })).onSuccess(([first, second, third]) => {
+                users.onSuccess(() => usersApi.update({
                     ...third,
                     friends: [first, second]
-                }).onLoad(([firstAgain, secondAgain, thirdAgain]) => {
+                }).onSuccess(([firstAgain, secondAgain, thirdAgain]) => {
                     const firstUsersFriends = firstAgain.friends.map(f => f.id);
                     expect(firstUsersFriends.length).toEqual(2);
                     expect(firstUsersFriends).toContain(secondAgain.id);
@@ -142,11 +142,11 @@ describe('users data', () => {
                     expect(thirdUsersFriends.length).toEqual(2);
                     expect(thirdUsersFriends).toContain(firstAgain.id);
                     expect(thirdUsersFriends).toContain(secondAgain.id);
-                })).onLoad(([moreFirst, moreSecond, morethird]) => {
-                    users.onLoad(() => usersApi.update({
+                })).onSuccess(([moreFirst, moreSecond, morethird]) => {
+                    users.onSuccess(() => usersApi.update({
                         ...morethird,
                         friends: [moreFirst, moreSecond]
-                    }).onLoad(([moreFirstAgain, moreSecondAgain, morethirdAgain]) => {
+                    }).onSuccess(([moreFirstAgain, moreSecondAgain, morethirdAgain]) => {
                         const moreFirstUsersFriends = moreFirstAgain.friends.map(f => f.id);
                         expect(moreFirstUsersFriends.length).toEqual(2);
                         expect(moreFirstUsersFriends).toContain(moreSecondAgain.id);
@@ -172,7 +172,7 @@ describe('users data', () => {
         it('should remove the user', done => {
             const secondUser = allUsers[1];
 
-            usersApi.delete(secondUser).onLoad(data => {
+            usersApi.delete(secondUser).onSuccess(data => {
                 expect(data).not.toContain(secondUser);
                 done();
             });
@@ -182,7 +182,7 @@ describe('users data', () => {
             const firstUser = allUsers[0];
             usersApi
                 .update({...firstUser, friends: [allUsers[allUsers.length - 1]]})
-                .onLoad(() => usersApi.delete(firstUser).onLoad(data => {
+                .onSuccess(() => usersApi.delete(firstUser).onSuccess(data => {
                     const lastUsersFriends = data[data.length - 1].friends.map(f => f.id);
                     expect(lastUsersFriends).not.toContain(firstUser.id);
                     done();

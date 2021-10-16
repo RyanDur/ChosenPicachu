@@ -20,7 +20,7 @@ export const Search: FC<Props> = ({id}) => {
     const {queryObj: {tab, search}, updateQueryString, nextQueryString} = useQuery<{ tab: Source, search?: string }>();
     const debounceSearch = debounce(search =>
         data.artGallery.searchForArt({search, source: tab})
-            .onLoad(updateSearchOptions), 300);
+            .onSuccess(updateSearchOptions), 300);
 
     useEffect(() => {
         searchString && debounceSearch(searchString.toLowerCase());

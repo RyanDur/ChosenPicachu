@@ -3,7 +3,7 @@ import {createUser, Rendered, renderWithRouter, users} from '../../../__tests__/
 import {Users} from '../index';
 import userEvent from '@testing-library/user-event';
 import {toISOWithoutTime} from '../../util';
-import {asyncEvent, asyncResult, maybe} from '@ryandur/sand';
+import {asyncResult, maybe} from '@ryandur/sand';
 import {data} from '../../../data';
 import {AddressInfo, User} from '../../UserInfo/types';
 import {Explanation, explanation, HTTPError} from '../../../data/types';
@@ -28,21 +28,21 @@ describe('the users page', () => {
 
     beforeEach(() => {
         currentUsers = users;
-        data.users.getAll = () => asyncEvent(success(currentUsers));
-        data.users.get = id => asyncEvent(maybe.of(currentUsers.find(user => user.id === id))
+        data.users.getAll = () => success(currentUsers);
+        data.users.get = id => maybe.of(currentUsers.find(user => user.id === id))
             .map(user => success<User, Explanation<HTTPError>>(user))
-            .orElse(failure<User, Explanation<HTTPError>>(explanation(HTTPError.UNKNOWN))));
+            .orElse(failure<User, Explanation<HTTPError>>(explanation(HTTPError.UNKNOWN)));
         data.users.add = jest.fn((user: User) => {
             currentUsers = [user, ...currentUsers];
-            return asyncEvent(success(currentUsers));
+            return success(currentUsers);
         });
         data.users.update = jest.fn((user: User) => {
             currentUsers = currentUsers.map(currentUser => currentUser.id === user.id ? user : currentUser);
-            return asyncEvent(success(currentUsers));
+            return success(currentUsers);
         });
         data.users.delete = jest.fn((user: User) => {
             currentUsers = currentUsers.filter(currentUser => currentUser.id !== user.id);
-            return asyncEvent(success(currentUsers));
+            return success(currentUsers);
         });
     });
 

@@ -18,11 +18,11 @@ export const Users: FC = () => {
     const [currentUser, updateCurrentUser] = useState<User>();
 
     useEffect(() => {
-        data.users.getAll().onLoad(updateUsers);
+        data.users.getAll().onSuccess(updateUsers);
     }, []);
 
     useEffect(() => {
-        id && data.users.get(id).onLoad(updateCurrentUser);
+        id && data.users.get(id).onSuccess(updateCurrentUser);
     }, [id]);
 
     const equalAddresses = (address1: AddressInfo, address2: AddressInfo = {} as AddressInfo): boolean =>
@@ -31,7 +31,7 @@ export const Users: FC = () => {
 
     const update = (user: User) => (newFriends: User[]) =>
         data.users.update({...user, friends: newFriends})
-            .onLoad(updateUsers);
+            .onSuccess(updateUsers);
 
     return <>
         <section id="user-info" className="card users" key={currentUser?.id}>
@@ -40,10 +40,10 @@ export const Users: FC = () => {
                              readOnly={mode === 'view'}
                              editing={mode === 'edit'}
                              onAdd={user => data.users.add(user)
-                                 .onLoad(updateUsers)}
+                                 .onSuccess(updateUsers)}
                              onUpdate={user => data.users.update(user)
-                                 .onLoad(updateUsers)
-                                 .onLoad(() => history.push(Paths.users))}/>
+                                 .onSuccess(updateUsers)
+                                 .onSuccess(() => history.push(Paths.users))}/>
         </section>
 
         <section id="user-candidates" className="card users">
@@ -71,7 +71,8 @@ export const Users: FC = () => {
                         homeCity: {display: user.homeAddress.city},
                         age: {display: formatAge(age(user.info.dob))},
                         friends: {
-                            display: <FriendsList user={user} users={users} onChange={update(user)} key={user.friends.length}/>
+                            display: <FriendsList user={user} users={users} onChange={update(user)}
+                                                  key={user.friends.length}/>
                         },
                         worksFromHome: {
                             display: <section className="last-column">
@@ -102,8 +103,8 @@ export const Users: FC = () => {
                                         <Link to={id === user.id ? path : history.location}
                                               className='item'
                                               onClick={() => data.users.delete(user)
-                                                  .onLoad(updateUsers)
-                                                  .onLoad(() => history.push(Paths.users))}
+                                                  .onSuccess(updateUsers)
+                                                  .onSuccess(() => history.push(Paths.users))}
                                               data-testid="remove">Remove</Link>
                                         <Link to={`${path}${nextQueryString({id: user.id})}`}
                                               className='item'
