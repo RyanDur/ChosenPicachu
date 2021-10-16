@@ -6,6 +6,7 @@ import * as faker from 'faker';
 const testObject = {foo: faker.lorem.words()};
 
 describe('http', () => {
+    const FAIL = 'FAIL';
     let server: MockWebServer;
     let endpoint = '';
     let somePath = '';
@@ -31,40 +32,37 @@ describe('http', () => {
         test(`${httpMethod} success`, async () => {
             server.stubResponse(code, response);
 
-            const actual = await method(endpoint, body).value();
+            const actual = await method(endpoint, body).orNull();
 
             const recordedRequest = await server.lastRequest();
             expect(recordedRequest.method).toEqual(httpMethod);
             expect(recordedRequest.url).toEqual(somePath);
             expect(parse(recordedRequest.body)).toEqual(body);
-            expect(await actual.orNull()).toEqual(response);
+            expect(actual).toEqual(response);
         });
 
         test(`${httpMethod} failure is FORBIDDEN`, async () => {
             server.stubResponse(HTTPStatus.FORBIDDEN);
 
-            const actual = await method(endpoint, body).value();
+            const actual = await method(endpoint, body).failureOrElse(FAIL);
 
-            // @ts-ignore
-            expect(actual.explanation.reason).toEqual(HTTPError.FORBIDDEN);
+            expect(actual.reason).toEqual(HTTPError.FORBIDDEN);
         });
 
         test(`${httpMethod} when the network is down`, async () => {
             server.stop();
 
-            const actual = await method(endpoint, body).value();
+            const actual = await method(endpoint, body).failureOrElse(FAIL);
 
-            // @ts-ignore
-            expect(actual.explanation.reason).toEqual(HTTPError.NETWORK_ERROR);
+            expect(actual.reason).toEqual(HTTPError.NETWORK_ERROR);
         });
 
         test(`${httpMethod} failure is SERVER_ERROR`, async () => {
             server.stubResponse(HTTPStatus.SERVER_ERROR);
 
-            const actual = await method(endpoint, body).value();
+            const actual = await method(endpoint, body).failureOrElse(FAIL);
 
-            // @ts-ignore
-            expect(actual.explanation.reason).toEqual(HTTPError.SERVER_ERROR);
+            expect(actual.reason).toEqual(HTTPError.SERVER_ERROR);
         });
     });
 
@@ -74,8 +72,8 @@ describe('http', () => {
     ${http.post}   | ${HTTPMethod.POST}   | ${testObject} | ${HTTPStatus.CREATED}
     `('$httpMethod can handle improper json', async ({method, body, code}) => {
         server.stubResponse(code, undefined);
-        const actual = await method(endpoint, body).value();
-        expect(actual.explanation.reason).toEqual(HTTPError.JSON_BODY_ERROR);
+        const actual = await method(endpoint, body).failureOrElse(FAIL);
+        expect(actual.reason).toEqual(HTTPError.JSON_BODY_ERROR);
     });
 });
 
