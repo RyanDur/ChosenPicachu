@@ -34,7 +34,7 @@ describe('viewing a piece', () => {
         it('should be loading', () => {
             data.artGallery.getArt = () => ({
                 ...asyncResult.success(mockPiece),
-                onLoading: dispatch => {
+                onPending: dispatch => {
                     dispatch(true);
                     return asyncResult.success(mockPiece);
                 }
