@@ -1,4 +1,4 @@
-import {matches, matchOn} from '@ryandur/sand';
+import {matchOn} from '@ryandur/sand';
 
 export enum Source {
     AIC = 'aic',
@@ -6,7 +6,7 @@ export enum Source {
     RIJKS = 'rijksstudio'
 }
 
-export const matchSource = matchOn(matches(Object.values(Source)));
+export const matchSource = matchOn(Object.values(Source));
 
 export interface SearchArt {
     search: string;

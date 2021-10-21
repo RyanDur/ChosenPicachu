@@ -1,4 +1,4 @@
-import {matches, matchOn, maybe, Maybe} from '@ryandur/sand';
+import {matchOn, maybe, Maybe} from '@ryandur/sand';
 
 export type PATH = string;
 
@@ -46,4 +46,4 @@ export enum HTTPStatus {
     SERVER_ERROR = FailStatusCode.SERVER_ERROR
 }
 
-export const matchFailStatusCode = matchOn(matches(Object.values(FailStatusCode)));
+export const matchFailStatusCode = matchOn(Object.values(FailStatusCode));
