@@ -6,7 +6,6 @@ import * as faker from 'faker';
 const testObject = {foo: faker.lorem.words()};
 
 describe('http', () => {
-    const FAIL = 'FAIL';
     let server: MockWebServer;
     let endpoint = '';
     let somePath = '';
@@ -44,7 +43,7 @@ describe('http', () => {
         test(`${httpMethod} failure is FORBIDDEN`, async () => {
             server.stubResponse(HTTPStatus.FORBIDDEN);
 
-            const actual = await method(endpoint, body).failureOrElse(FAIL);
+            const actual = (await (await method(endpoint, body).value)).value;
 
             expect(actual.reason).toEqual(HTTPError.FORBIDDEN);
         });
@@ -52,7 +51,7 @@ describe('http', () => {
         test(`${httpMethod} when the network is down`, async () => {
             server.stop();
 
-            const actual = await method(endpoint, body).failureOrElse(FAIL);
+            const actual = (await (await method(endpoint, body).value)).value;
 
             expect(actual.reason).toEqual(HTTPError.NETWORK_ERROR);
         });
@@ -60,7 +59,7 @@ describe('http', () => {
         test(`${httpMethod} failure is SERVER_ERROR`, async () => {
             server.stubResponse(HTTPStatus.SERVER_ERROR);
 
-            const actual = await method(endpoint, body).failureOrElse(FAIL);
+            const actual = (await (await method(endpoint, body).value)).value;
 
             expect(actual.reason).toEqual(HTTPError.SERVER_ERROR);
         });
@@ -72,7 +71,7 @@ describe('http', () => {
     ${http.post}   | ${HTTPMethod.POST}   | ${testObject} | ${HTTPStatus.CREATED}
     `('$httpMethod can handle improper json', async ({method, body, code}) => {
         server.stubResponse(code, undefined);
-        const actual = await method(endpoint, body).failureOrElse(FAIL);
+        const actual = (await (await method(endpoint, body).value)).value;
         expect(actual.reason).toEqual(HTTPError.JSON_BODY_ERROR);
     });
 });
