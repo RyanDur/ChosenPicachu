@@ -2,12 +2,12 @@ import {matchOn, maybe, Maybe} from '@ryandur/sand';
 
 export type PATH = string;
 
-export type Explanation<E> = {
-    reason: E,
-    err: Maybe<Error>
+export type Explanation<T, E = any> = {
+    reason: T,
+    err: Maybe<E>
 }
 
-export const explanation = <T>(reason: T, err: Maybe<Error> = maybe.nothing()): Explanation<T> =>
+export const explanation = <T, E = Error>(reason: T, err: Maybe<E> = maybe.nothing<E>()): Explanation<T, E> =>
     ({reason, err});
 
 export enum HTTPMethod {
