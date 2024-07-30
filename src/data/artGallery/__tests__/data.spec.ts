@@ -1,5 +1,4 @@
 import 'whatwg-fetch';
-import faker from 'faker';
 import {
     aicArtResponse,
     fromAICArt,
@@ -17,37 +16,42 @@ import {
 } from '../../../__tests__/util';
 import {nanoid} from 'nanoid';
 import {http} from '../../http';
-import {asyncResult} from '@ryandur/sand';
+import {asyncFailure, asyncSuccess} from '@ryandur/sand';
 import {AICPieceData, AICSearch} from '../aic/types';
 import {HTTPError} from '../../types';
 import {artGallery} from '../index';
 import {Art} from '../types/response';
 import {Source} from '../types/resource';
+import {Mock} from 'vitest';
+import {faker} from '@faker-js/faker';
 
-jest.mock('../../http', () => ({
-    ...jest.requireActual('../../http'),
+vi.mock('../../http', async () => ({
+    ...(await vi.importActual('../../http')),
     http: {
-        get: jest.fn()
+        get: vi.fn()
     },
 }));
 
+const success = asyncSuccess;
+const failure = asyncFailure;
+
 describe('data', () => {
     const mockHttp = http as {
-        get: jest.Mock
-        post: any
-        put: any
-        delete: any
+        get: Mock
+        post: unknown
+        put: unknown
+        delete: unknown
     };
 
-    const mockSuccess = (response: any) =>
-        mockHttp.get.mockReturnValue(asyncResult.success(response));
-    const mockFailure = (response: any) =>
-        mockHttp.get.mockReturnValue(asyncResult.failure(response));
+    const mockSuccess = (response: unknown) =>
+        mockHttp.get.mockReturnValue(success(response));
+    const mockFailure = (response: unknown) =>
+        mockHttp.get.mockReturnValue(failure(response));
 
     describe('retrieving all the artwork', () => {
         describe('when the source is AIC', () => {
             test('when it is successful', async () => {
-                const dispatch = jest.fn();
+                const dispatch = vi.fn();
                 mockSuccess(aicArtResponse);
 
                 await artGallery.getAllArt({page: 1, size: 12, source: Source.AIC})
@@ -57,7 +61,7 @@ describe('data', () => {
             });
 
             test('when it has a search term', async () => {
-                const dispatch = jest.fn();
+                const dispatch = vi.fn();
                 mockSuccess(aicArtResponse);
 
                 await artGallery.getAllArt({page: 1, size: 12, search: 'rad', source: Source.AIC})
@@ -67,7 +71,7 @@ describe('data', () => {
             });
 
             test('when it is not successful', async () => {
-                const dispatch = jest.fn();
+                const dispatch = vi.fn();
                 mockFailure(HTTPError.UNKNOWN);
 
                 await artGallery.getAllArt({page: 1, size: 12, source: Source.AIC})
@@ -79,7 +83,7 @@ describe('data', () => {
 
         describe('when the source is Harvard', () => {
             test('when it is successful', async () => {
-                const dispatch = jest.fn();
+                const dispatch = vi.fn();
                 mockSuccess(harvardArtResponse);
 
                 await artGallery.getAllArt({page: 1, size: 12, source: Source.HARVARD})
@@ -89,7 +93,7 @@ describe('data', () => {
             });
 
             test('when it has a search term', async () => {
-                const dispatch = jest.fn();
+                const dispatch = vi.fn();
                 mockSuccess(harvardArtResponse);
 
                 await artGallery.getAllArt({page: 1, size: 12, source: Source.HARVARD})
@@ -99,7 +103,7 @@ describe('data', () => {
             });
 
             test('when it is not successful', async () => {
-                const dispatch = jest.fn();
+                const dispatch = vi.fn();
                 mockFailure(HTTPError.UNKNOWN);
 
                 await artGallery.getAllArt({page: 1, size: 12, source: Source.HARVARD})
@@ -111,7 +115,7 @@ describe('data', () => {
 
         describe('when the source is RIJKS', () => {
             test('when it is successful', async () => {
-                const dispatch = jest.fn();
+                const dispatch = vi.fn();
                 mockSuccess(fromRIJKArtResponse);
 
                 await artGallery.getAllArt({page: 1, size: 12, source: Source.RIJKS})
@@ -121,7 +125,7 @@ describe('data', () => {
             });
 
             test('when it has a search term', async () => {
-                const dispatch = jest.fn();
+                const dispatch = vi.fn();
                 mockSuccess(fromRIJKArtResponse);
 
                 await artGallery.getAllArt({page: 1, size: 12, search: 'rad', source: Source.RIJKS})
@@ -131,7 +135,7 @@ describe('data', () => {
             });
 
             test('when it is not successful', async () => {
-                const dispatch = jest.fn();
+                const dispatch = vi.fn();
                 mockFailure(HTTPError.UNKNOWN);
 
                 await artGallery.getAllArt({page: 1, size: 12, source: Source.RIJKS})
@@ -142,7 +146,7 @@ describe('data', () => {
         });
 
         test('when the source does not exist', async () => {
-            const dispatch = jest.fn();
+            const dispatch = vi.fn();
             mockSuccess(fromRIJKArtResponse);
 
             await artGallery.getAllArt({page: 1, size: 12, source: 'I do not exist' as Source})
@@ -156,7 +160,7 @@ describe('data', () => {
         describe('for AIC', () => {
             describe('when it is successful', () => {
                 test('for a full response', async () => {
-                    const dispatch = jest.fn();
+                    const dispatch = vi.fn();
                     mockSuccess(pieceAICResponse);
 
                     await artGallery.getArt({id: String(aicPiece.id), source: Source.AIC})
@@ -167,7 +171,7 @@ describe('data', () => {
             });
 
             test('when it is not successful', async () => {
-                const dispatch = jest.fn();
+                const dispatch = vi.fn();
                 mockFailure(HTTPError.UNKNOWN);
 
                 await artGallery.getArt({id: String(aicPiece.id), source: Source.AIC})
@@ -179,7 +183,7 @@ describe('data', () => {
 
         describe('for Harvard', () => {
             test('when it is successful', async () => {
-                const dispatch = jest.fn();
+                const dispatch = vi.fn();
                 mockSuccess(harvardPieceResponse);
 
                 await artGallery.getArt({id: String(aicPiece.id), source: Source.HARVARD})
@@ -189,7 +193,7 @@ describe('data', () => {
             });
 
             test('when it is not successful', async () => {
-                const dispatch = jest.fn();
+                const dispatch = vi.fn();
                 mockFailure(HTTPError.UNKNOWN);
 
                 await artGallery.getArt({id: String(aicPiece.id), source: Source.HARVARD})
@@ -201,7 +205,7 @@ describe('data', () => {
 
         describe('for RIJKS', () => {
             test('when it is successful', async () => {
-                const dispatch = jest.fn();
+                const dispatch = vi.fn();
                 mockSuccess(rijkArtObjectResponse);
 
                 await artGallery.getArt({id: String(aicPiece.id), source: Source.RIJKS})
@@ -211,7 +215,7 @@ describe('data', () => {
             });
 
             test('when it is not successful', async () => {
-                const dispatch = jest.fn();
+                const dispatch = vi.fn();
                 mockFailure(HTTPError.UNKNOWN);
 
                 await artGallery.getArt({id: String(aicPiece.id), source: Source.RIJKS})
@@ -222,7 +226,7 @@ describe('data', () => {
         });
 
         test('when the source does not exist', async () => {
-            const dispatch = jest.fn();
+            const dispatch = vi.fn();
             mockSuccess(pieceAICResponse);
 
             await artGallery.getArt({id: '1', source: 'I do not exist' as Source})
@@ -237,7 +241,7 @@ describe('data', () => {
 
         describe('for AIC', () => {
             test('when it is successful', async () => {
-                const dispatch = jest.fn();
+                const dispatch = vi.fn();
                 mockSuccess(aicArtOptions);
 
                 await artGallery.searchForArt({search, source: Source.AIC})
@@ -249,7 +253,7 @@ describe('data', () => {
 
         describe('for Harvard', () => {
             test('when it is successful', async () => {
-                const dispatch = jest.fn();
+                const dispatch = vi.fn();
                 mockSuccess(harvardArtOptions);
 
                 await artGallery.searchForArt({search, source: Source.HARVARD})
@@ -261,7 +265,7 @@ describe('data', () => {
 
         describe('for RIJKS', () => {
             test('when it is successful', async () => {
-                const dispatch = jest.fn();
+                const dispatch = vi.fn();
                 mockSuccess(fromRIJKArtOptionsResponse);
 
                 await artGallery.searchForArt({search, source: Source.RIJKS})
@@ -272,7 +276,7 @@ describe('data', () => {
         });
 
         test('when the source does not exist', async () => {
-            const dispatch = jest.fn();
+            const dispatch = vi.fn();
             mockSuccess({some: 'thing'});
 
             await artGallery.searchForArt({search, source: 'I do not exist' as Source})
@@ -287,7 +291,7 @@ describe('data', () => {
         ${Source.HARVARD}
         ${Source.RIJKS}
         `('when the call fails', async ({source}) => {
-            const dispatch = jest.fn();
+            const dispatch = vi.fn();
             mockFailure(HTTPError.SERVER_ERROR);
 
             await artGallery.searchForArt({search, source}).onFailure(dispatch).orNull();
@@ -311,7 +315,7 @@ describe('data', () => {
         id: String(pieceAICResponse.data.id),
         title: pieceAICResponse.data.title,
         image: `https://www.artic.edu/iiif/2/${pieceAICResponse.data.image_id}/full/2000,/0/default.jpg`,
-        altText: pieceAICResponse.data.thumbnail?.alt_text!,
+        altText: pieceAICResponse.data.thumbnail?.alt_text || '',
         artistInfo: pieceAICResponse.data.artist_display
     };
 

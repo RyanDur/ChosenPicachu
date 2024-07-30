@@ -1,6 +1,5 @@
 import {act, render, screen} from '@testing-library/react';
 import {Table} from '../index';
-import faker from 'faker';
 import {
     column1Display,
     column2Name,
@@ -14,6 +13,7 @@ import {
     row1Col2Display,
     rows
 } from '../../../__tests__/util';
+import {faker} from '@faker-js/faker';
 
 describe('A Table', () => {
     const htmlTag = /<.*?>/g;
@@ -49,7 +49,7 @@ describe('A Table', () => {
 
     test('should have columns', () => {
         const columnNames = screen.getAllByTestId('th')
-            .map(header => header.innerHTML.replaceAll(htmlTag, ''));
+            .map(header => header.innerHTML.replace(htmlTag, ''));
 
         expect(columnNames.sort()).toEqual([column1Display, column2Name, column3Display].sort());
     });
@@ -65,7 +65,7 @@ describe('A Table', () => {
     `('should put the value "$expected" into cell ( column: $column,  row: $row )',
         ({column, row, expected}) => {
             const element = screen.getByTestId(`cell-${column}-${row}`);
-            expect(element.innerHTML.replaceAll(htmlTag, '')).toEqual(expected);
+            expect(element.innerHTML.replace(htmlTag, '')).toEqual(expected);
         });
 
     test('should be able to add more class names where needed', () => {

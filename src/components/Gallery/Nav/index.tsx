@@ -1,15 +1,15 @@
 import {Link} from 'react-router-dom';
-import React, {FC, useEffect, useRef} from 'react';
+import {FC, useEffect, useRef} from 'react';
 import {useQuery} from '../../hooks';
 import {useGallery} from '../Context';
-import './GalleryNav.scss';
-import './GalleryNav.layout.scss';
+import './GalleryNav.css';
+import './GalleryNav.layout.css';
 
 interface Props {
     id?: string;
 }
 
-const usePrevious = <T extends unknown>(value: T) => {
+const usePrevious = <T = number | unknown>(value: T) => {
     const ref = useRef<T>();
     useEffect(() => {
         ref.current = value;

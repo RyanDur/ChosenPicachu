@@ -1,26 +1,11 @@
-import differenceInYears from 'date-fns/differenceInYears';
-import differenceInMonths from 'date-fns/differenceInMonths';
-import differenceInDays from 'date-fns/differenceInDays';
-
-type Indexable = {
-    [index in (string | number)]: unknown;
-};
-
-export const notEmpty = <T>(obj?: T, ...optional: (string | number)[]): boolean => {
-    if (typeof obj === 'object') {
-        const indexable = obj as Indexable;
-        return !!Object.keys(indexable)
-            .filter(key => !optional.includes(key))
-            .map(key => indexable[key])
-            .filter(value => !!value)
-            .length;
-    } return false;
-};
+import {differenceInDays, differenceInMonths, differenceInYears} from 'date-fns';
 
 export const join =
     (...classes: Partial<(string | boolean)[]>) => classes.filter(className => className).join(' ').trim();
 
-export const toISOWithoutTime = (date: Date): string => date.toISOString().split('T')[0];
+export const toISOWithoutTime = (date: Date): string => {
+    return date.toISOString().split('T')[0];
+};
 
 export enum AgeIn {
     YEARS = 'years',

@@ -6,8 +6,8 @@ import {Image} from '../Image';
 import {useGallery} from '../Context';
 import {empty} from '@ryandur/sand';
 import {Source} from '../../../data/artGallery/types/resource';
-import './Gallery.scss';
-import './Gallery.layout.scss';
+import './Gallery.css';
+import './Gallery.layout.css';
 
 export const ArtGallery: FC = () => {
     const {art, updateArt, reset} = useGallery();

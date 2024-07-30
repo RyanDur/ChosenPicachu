@@ -1,8 +1,8 @@
-import React, {ChangeEvent, FC, useEffect, useState} from 'react';
-import {Consumer, has, maybe} from '@ryandur/sand';
+import {ChangeEvent, FC, useEffect, useState} from 'react';
 import {User} from '../UserInfo/types';
-import './fiends-list.scss';
 import {join} from '../util';
+import {Consumer, has, maybe} from '@ryandur/sand';
+import './fiends-list.css';
 
 interface Props {
     users: User[];
@@ -23,7 +23,7 @@ export const FriendsList: FC<Props> = ({users, user, onChange}) => {
     const displayFullName = ({info}: User) => `${info.firstName} ${info.lastName}`;
 
     const add = (event: ChangeEvent<HTMLSelectElement>) => {
-        maybe.of(potentialFriends.find(user => user.id === event.currentTarget.value))
+        maybe(potentialFriends.find(user => user.id === event.currentTarget.value))
             .map(friend => onChange([...friends, friend]));
         event.currentTarget.selectedIndex = 0;
     };

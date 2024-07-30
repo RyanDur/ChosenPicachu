@@ -1,20 +1,22 @@
 import {act, screen, waitFor} from '@testing-library/react';
-import {Paths} from '../../../../App';
 import {ArtPiece, useArtPiece} from '../index';
 import {data} from '../../../../data';
-import * as faker from 'faker';
 import {Rendered, renderWithRouter} from '../../../../__tests__/util';
-import {GalleryPath} from '../../index';
 import {Art} from '../../../../data/artGallery/types/response';
-import {explanation, HTTPError} from '../../../../data/types';
-import {asyncResult} from '@ryandur/sand';
+import {Explanation, explanation, HTTPError} from '../../../../data/types';
+import {asyncFailure, asyncSuccess} from '@ryandur/sand';
+import {faker} from '@faker-js/faker';
+import {Paths} from '../../../../routes/Paths.ts';
+import {Mock} from 'vitest';
 
-jest.mock('../Context', () => ({
-    useArtPiece: jest.fn()
+vi.mock('../Context', () => ({
+    useArtPiece: vi.fn()
 }));
+const success = asyncSuccess;
+const failure = asyncFailure;
 
 describe('viewing a piece', () => {
-    const mockUsePieceGallery = useArtPiece as jest.Mock;
+    const mockUsePieceGallery = useArtPiece as Mock;
     const mockPiece: Art = {
         id: faker.lorem.word(),
         image: faker.internet.url(),
@@ -26,23 +28,23 @@ describe('viewing a piece', () => {
 
     beforeEach(() => mockUsePieceGallery.mockReturnValue({
         piece: mockPiece,
-        updatePiece: jest.fn(),
-        reset: jest.fn()
+        updatePiece: vi.fn(),
+        reset: vi.fn()
     }));
 
     describe('loading the piece of art', () => {
         it('should be loading', () => {
             data.artGallery.getArt = () => ({
-                ...asyncResult.success(mockPiece),
+                ...success(mockPiece),
                 onPending: dispatch => {
                     dispatch(true);
-                    return asyncResult.success(mockPiece);
+                    return success(mockPiece);
                 }
             });
 
             act(() => void renderWithRouter(<ArtPiece/>, {
                 initialRoute: `${Paths.artGallery}/1234`,
-                path: `${Paths.artGallery}${GalleryPath.piece}`
+                path: `${Paths.artGalleryPiece}`
             }));
 
             expect(screen.getByTestId('loading-piece')).toBeInTheDocument();
@@ -52,12 +54,12 @@ describe('viewing a piece', () => {
     describe('when the art piece is loaded', () => {
         beforeEach(async () => {
             data.artGallery.getArt =
-                jest.fn(() => asyncResult.success(mockPiece));
+                vi.fn(() => success<Art, Explanation<HTTPError>>(mockPiece));
 
             await act(async () => await act(async () => {
                 rendered = renderWithRouter(<ArtPiece/>, {
                     initialRoute: `${Paths.artGallery}/1234`,
-                    path: `${Paths.artGallery}${GalleryPath.piece}`
+                    path: `${Paths.artGalleryPiece}`
                 });
             }));
         });
@@ -71,18 +73,17 @@ describe('viewing a piece', () => {
         it('should not have the error image', () =>
             expect(screen.queryByTestId('image-error')).not.toBeInTheDocument());
 
-        it('should clean up the art-piece after unmounting', (done) => {
+        it('should clean up the art-piece after unmounting', async () => {
             act(() => rendered().result.unmount());
-            expect(mockUsePieceGallery().reset).toHaveBeenCalled();
-            done();
+            await waitFor(() => expect(mockUsePieceGallery().reset).toHaveBeenCalled());
         });
     });
 
     test('when getting the piece has errored', async () => {
-        data.artGallery.getArt = () => asyncResult.failure(explanation(HTTPError.UNKNOWN as HTTPError));
+        data.artGallery.getArt = () => failure(explanation(HTTPError.UNKNOWN as HTTPError));
         renderWithRouter(<ArtPiece/>, {
             initialRoute: `${Paths.artGallery}/1234`,
-            path: `${Paths.artGallery}${GalleryPath.piece}`
+            path: `${Paths.artGalleryPiece}`
         });
 
         await waitFor(() => expect(screen.queryByTestId('image-error')).toBeInTheDocument());

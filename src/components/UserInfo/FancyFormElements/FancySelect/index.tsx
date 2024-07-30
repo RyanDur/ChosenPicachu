@@ -1,4 +1,4 @@
-import React, {FC, FormEvent} from 'react';
+import {FC, FormEvent, PropsWithChildren} from 'react';
 import {join} from '../../../util';
 import {FancyInput} from '../FancyInput';
 import {Consumer} from '@ryandur/sand';
@@ -17,7 +17,7 @@ interface FancySelectProps {
     readOnly?: boolean;
 }
 
-export const FancySelect: FC<FancySelectProps> = (
+export const FancySelect: FC<PropsWithChildren<FancySelectProps>> = (
     {
         id,
         children,

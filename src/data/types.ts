@@ -1,4 +1,4 @@
-import {matchOn, maybe, Maybe} from '@ryandur/sand';
+import {matchOn, Maybe, nothing} from '@ryandur/sand';
 
 export type PATH = string;
 
@@ -7,7 +7,7 @@ export type Explanation<E> = {
     err: Maybe<Error>
 }
 
-export const explanation = <T>(reason: T, err: Maybe<Error> = maybe.nothing()): Explanation<T> =>
+export const explanation = <T>(reason: T, err: Maybe<Error> = nothing()): Explanation<T> =>
     ({reason, err});
 
 export enum HTTPMethod {

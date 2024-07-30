@@ -1,12 +1,12 @@
-import {FC, useState} from 'react';
+import {FC, PropsWithChildren, useState} from 'react';
 import {join} from '../../util';
 import {Loading} from '../../Loading';
-import {Paths} from '../../../App';
 import {Link} from 'react-router-dom';
 import {useQuery} from '../../hooks';
 import {toQueryString} from '../../../util/URL';
 import {Art} from '../../../data/artGallery/types/response';
-import './Image.scss';
+import './Image.css';
+import {Paths} from '../../../routes/Paths.ts';
 
 interface ImageProps {
     piece: Partial<Art>;
@@ -24,7 +24,7 @@ export const Image: FC<ImageProps> = (
     const [errored, isError] = useState(false);
     const {queryObj: {tab}} = useQuery<{ tab: string }>();
     const gotoTopOfPage = () => window.scrollTo(0, 0);
-    const ConditionalLink: FC = ({children}) => linkEnabled ?
+    const ConditionalLink: FC<PropsWithChildren> = ({children}) => linkEnabled ?
         <Link onClick={gotoTopOfPage} to={`${Paths.artGallery}/${piece.id}${toQueryString({tab})}`}
               className="scrim">{children}</Link> : <>{children}</>;
 

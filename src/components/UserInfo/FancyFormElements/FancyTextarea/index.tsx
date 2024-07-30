@@ -1,5 +1,5 @@
 import {join} from '../../../util';
-import React, {FC, FormEvent, useState} from 'react';
+import {FC, FormEvent, useState} from 'react';
 import {Consumer} from '@ryandur/sand';
 
 interface FancyTextareaProps {

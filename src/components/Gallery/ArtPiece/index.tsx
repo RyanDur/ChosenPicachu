@@ -7,7 +7,7 @@ import {Image} from '../Image';
 import {useQuery} from '../../hooks';
 import {Source} from '../../../data/artGallery/types/resource';
 import {has, not} from '@ryandur/sand';
-import './Piece.scss';
+import './Piece.css';
 
 const ArtPiece = () => {
     const {piece, updatePiece, reset} = useArtPiece();

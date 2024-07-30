@@ -2,12 +2,12 @@ import {screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {fromAICArt as mockArt, Rendered, renderWithRouter} from '../../../../__tests__/util';
 import {GalleryNav} from '../../';
-import {Paths} from '../../../../App';
+import {Paths} from '../../../../routes/Paths.ts';
 
-jest.mock('../../Context', () => ({
+vi.mock('../../Context', () => ({
     useGallery: () => ({art: mockArt})
 }));
-window.scrollTo = jest.fn();
+window.scrollTo = vi.fn();
 describe('Gallery Navigation', () => {
     let rendered: () => Rendered;
 
@@ -15,13 +15,13 @@ describe('Gallery Navigation', () => {
         beforeEach(() => rendered = renderWithRouter(<GalleryNav/>, {path: Paths.artGallery}));
 
         describe('from the first page', () => {
-            it('should be able to goto the next page', () => {
-                userEvent.click(screen.getByTestId('next-page'));
+            it('should be able to goto the next page', async () => {
+                await userEvent.click(screen.getByTestId('next-page'));
 
                 expect(rendered().testLocation?.search).toEqual('?page=2');
                 expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
 
-                userEvent.click(screen.getByTestId('next-page'));
+                await userEvent.click(screen.getByTestId('next-page'));
 
                 expect(rendered().testLocation?.search).toEqual('?page=3');
                 expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
@@ -33,8 +33,9 @@ describe('Gallery Navigation', () => {
             it('should not be able to jump to the first page', () =>
                 expect(screen.queryByTestId('first-page')).not.toBeInTheDocument());
 
-            it('should be able to go to the last page', () => {
-                userEvent.click(screen.getByTestId('last-page'));
+            it('should be able to go to the last page', async () => {
+                await userEvent.click(screen.getByTestId('last-page'));
+
                 expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
                 expect(rendered().testLocation?.search).toEqual(`?page=${mockArt.pagination.totalPages}`);
                 expect(screen.queryByTestId('last-page')).not.toBeInTheDocument();
@@ -48,13 +49,13 @@ describe('Gallery Navigation', () => {
             beforeEach(() =>
                 userEvent.click(screen.getByTestId('last-page')));
 
-            it('should be able to go to the previous page', () => {
-                userEvent.click(screen.getByTestId('prev-page'));
+            it('should be able to go to the previous page', async () => {
+                await userEvent.click(screen.getByTestId('prev-page'));
 
                 expect(rendered().testLocation?.search).toEqual(`?page=${mockArt.pagination.totalPages - 1}`);
                 expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
 
-                userEvent.click(screen.getByTestId('prev-page'));
+                await userEvent.click(screen.getByTestId('prev-page'));
 
                 expect(rendered().testLocation?.search).toEqual(`?page=${mockArt.pagination.totalPages - 2}`);
                 expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
@@ -66,8 +67,9 @@ describe('Gallery Navigation', () => {
             it('should not be able to jump to the last page', () =>
                 expect(screen.queryByTestId('last-page')).not.toBeInTheDocument());
 
-            it('should be able to go to the first page', () => {
-                userEvent.click(screen.getByTestId('first-page'));
+            it('should be able to go to the first page', async () => {
+                await userEvent.click(screen.getByTestId('first-page'));
+
                 expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
                 expect(rendered().testLocation?.search).toEqual('?page=1');
                 expect(screen.queryByTestId('last-page')).toBeInTheDocument();
@@ -81,23 +83,23 @@ describe('Gallery Navigation', () => {
     describe('with existing params', () => {
         beforeEach(() => rendered = renderWithRouter(<GalleryNav/>, {params: {search: 'q'}}));
 
-        it('should only update the page query', () => {
-            userEvent.click(screen.getByTestId('next-page'));
+        it('should only update the page query', async () => {
+            await userEvent.click(screen.getByTestId('next-page'));
             expect(rendered().testLocation?.search).toEqual('?page=2&search=q');
 
-            userEvent.click(screen.getByTestId('next-page'));
+            await userEvent.click(screen.getByTestId('next-page'));
             expect(rendered().testLocation?.search).toEqual('?page=3&search=q');
 
-            userEvent.click(screen.getByTestId('last-page'));
+            await userEvent.click(screen.getByTestId('last-page'));
             expect(rendered().testLocation?.search).toEqual(`?page=${mockArt.pagination.totalPages}&search=q`);
 
-            userEvent.click(screen.getByTestId('prev-page'));
+            await userEvent.click(screen.getByTestId('prev-page'));
             expect(rendered().testLocation?.search).toEqual(`?page=${mockArt.pagination.totalPages - 1}&search=q`);
 
-            userEvent.click(screen.getByTestId('prev-page'));
+            await userEvent.click(screen.getByTestId('prev-page'));
             expect(rendered().testLocation?.search).toEqual(`?page=${mockArt.pagination.totalPages - 2}&search=q`);
 
-            userEvent.click(screen.getByTestId('first-page'));
+            await userEvent.click(screen.getByTestId('first-page'));
             expect(rendered().testLocation?.search).toEqual('?page=1&search=q');
         });
     });

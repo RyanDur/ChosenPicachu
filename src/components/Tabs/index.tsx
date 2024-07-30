@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {Link, useLocation} from 'react-router-dom';
 import {join} from '../util';
 import {useQuery} from '../hooks';
-import './Tabs.scss';
+import './Tabs.css';
 
 interface Tab {
     display: string;

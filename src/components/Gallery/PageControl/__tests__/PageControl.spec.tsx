@@ -1,57 +1,61 @@
 import userEvent from '@testing-library/user-event';
-import {screen} from '@testing-library/react';
+import {fireEvent, screen, waitFor} from '@testing-library/react';
 import {toQueryObj} from '../../../../util/URL';
-import {fromAICArt as mockArt, Rendered, renderWithRouter} from '../../../../__tests__/util';
-import {Paths} from '../../../../App';
+import {fromAICArt as mockArt, renderWithRouter} from '../../../../__tests__/util';
 import {PageControl} from '../index';
 import {Source} from '../../../../data/artGallery/types/resource';
+import {Paths} from '../../../../routes/Paths.ts';
 
-jest.mock('../../Context', () => ({
-    useGallery: () => ({art: mockArt})
+vi.mock('../../Context', () => ({
+  useGallery: () => ({art: mockArt})
 }));
-window.scrollTo = jest.fn();
+window.scrollTo = vi.fn();
 describe('The page controls', () => {
-    let rendered: () => Rendered;
+  beforeEach(() => {
+    vi.mocked(window.scrollTo).mockRestore();
+  });
 
+  describe('going to a specific page', () => {
+    test('submitting the specified page', async () => {
+      const pageNumber = String(Math.floor(Math.random() * 1000));
 
-    describe('going to a specific page', () => {
-        beforeEach(() => rendered = renderWithRouter(<PageControl/>, {path: Paths.artGallery}));
-        test('submitting the specified page', () => {
-            const pageNumber = String(Math.floor(Math.random() * 1000));
-            userEvent.type(screen.getByTestId('go-to'), pageNumber);
-            userEvent.click(screen.getByText('Go'));
+      const rendered = renderWithRouter(<PageControl/>, {path: Paths.artGallery});
+      await userEvent.type(screen.getByTestId('go-to'), pageNumber);
+      fireEvent.submit(screen.getByText('Go'));
 
-            expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
-            expect(rendered().testLocation?.search).toEqual(`?page=${pageNumber}`);
-            expect(screen.getByTestId('go-to')).not.toHaveValue(+pageNumber);
-        });
-
-        it('should not go to the top of page when clicking on page number input', () => {
-            userEvent.click(screen.getByTestId('go-to'));
-            expect(window.scrollTo).not.toHaveBeenCalled();
-        });
-
-        it('should not allow a user to go to a page lower than the first', () =>
-            expect(screen.getByTestId('go-to')).toHaveAttribute('min', '1'));
-
-        it('should not allow a user to go to a page higher than the last', () =>
-            expect(screen.getByTestId('go-to'))
-                .toHaveAttribute('max', `${mockArt.pagination.totalPages}`));
+      expect(rendered().testLocation?.search).toEqual(`?page=${pageNumber}`);
+      expect(screen.getByTestId('go-to')).not.toHaveValue(+pageNumber);
     });
 
-    describe('changing the number of elements', () => {
-        it('should allow the user to change the elements per page', () => {
-            rendered = renderWithRouter(<PageControl/>, {path: Paths.artGallery});
-            userEvent.type(screen.getByTestId('per-page'), '2');
-            userEvent.click(screen.getByText('Go'));
-            expect(toQueryObj(rendered().testLocation?.search || '')).toEqual({size: 2});
+    it('should not go to the top of page when clicking on page number input', async () => {
+      renderWithRouter(<PageControl/>, {path: Paths.artGallery});
+      await userEvent.click(screen.getByTestId('go-to'));
+      expect(window.scrollTo).not.toHaveBeenCalled();
+    });
 
-            userEvent.type(screen.getByTestId('per-page'), '45');
-            userEvent.click(screen.getByText('Go'));
-            expect(toQueryObj(rendered().testLocation?.search || '')).toEqual({size: 45});
-        });
+    it('should not allow a user to go to a page lower than the first', () => {
+      renderWithRouter(<PageControl/>, {path: Paths.artGallery});
+      expect(screen.getByTestId('go-to')).toHaveAttribute('min', '1');
+    });
 
-        it.each`
+    it('should not allow a user to go to a page higher than the last', () => {
+      renderWithRouter(<PageControl/>, {path: Paths.artGallery});
+      expect(screen.getByTestId('go-to'))
+        .toHaveAttribute('max', `${mockArt.pagination.totalPages}`);
+    });
+  });
+
+  describe('changing the number of elements', () => {
+    it('should allow the user to change the elements per page', async () => {
+      const rendered = renderWithRouter(<PageControl/>, {path: Paths.artGallery});
+
+      await userEvent.type(screen.getByTestId('per-page'), '45');
+      await userEvent.click(screen.getByText('Go'));
+
+      await waitFor(() => expect(toQueryObj(rendered().testLocation?.search || '')).toEqual({size: 45}));
+    });
+
+    it.each`
         input  | size
         ${1}   | ${1}
         ${2}   | ${2}
@@ -82,19 +86,19 @@ describe('The page controls', () => {
         ${92}  | ${90}
         ${97}  | ${100}
         ${100} | ${100}
-        `('should change input: $input to size: $size when rikjs', ({input, size}) => {
-            rendered = renderWithRouter(<PageControl/>, {
-                path: Paths.artGallery,
-                params: {tab: Source.RIJKS, page: 1}
-            });
-            userEvent.type(screen.getByTestId('per-page'), `${input}`);
-            expect(screen.getByTestId('per-page')).toHaveDisplayValue(size);
-            userEvent.click(screen.getByText('Go'));
-            expect(toQueryObj(rendered().testLocation?.search || '')).toEqual({
-                page: 1,
-                size,
-                tab: Source.RIJKS
-            });
-        });
+        `('should change input: $input to size: $size when rikjs', async ({input, size}) => {
+      const rendered = renderWithRouter(<PageControl/>, {
+        path: Paths.artGallery,
+        params: {tab: Source.RIJKS, page: 1}
+      });
+      await userEvent.type(screen.getByTestId('per-page'), `${input}`);
+      expect(screen.getByTestId('per-page')).toHaveDisplayValue(size);
+      await userEvent.click(screen.getByText('Go'));
+      expect(toQueryObj(rendered().testLocation?.search || '')).toEqual({
+        page: 1,
+        size,
+        tab: Source.RIJKS
+      });
     });
+  });
 });

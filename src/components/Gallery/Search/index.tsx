@@ -1,13 +1,13 @@
 import {FC, FormEvent, useEffect, useState} from 'react';
 import {data} from '../../../data';
-import {debounce} from 'lodash';
 import {useQuery} from '../../hooks';
-import {useHistory} from 'react-router-dom';
-import {Paths} from '../../../App';
+import {useNavigate} from 'react-router-dom';
 import {SearchOptions} from '../../../data/artGallery/types/response';
 import {Source} from '../../../data/artGallery/types/resource';
-import './Search.scss';
-import './Search.layout.scss';
+import {debounce} from 'lodash';
+import './Search.css';
+import './Search.layout.css';
+import {Paths} from '../../../routes/Paths.ts';
 
 interface Props {
     id?: string;
@@ -16,19 +16,19 @@ interface Props {
 export const Search: FC<Props> = ({id}) => {
     const [searchOptions, updateSearchOptions] = useState<SearchOptions>([]);
     const [searchString, updateQuery] = useState<string>('');
-    const history = useHistory();
+    const navigate = useNavigate();
     const {queryObj: {tab, search}, updateQueryString, nextQueryString} = useQuery<{ tab: Source, search?: string }>();
     const debounceSearch = debounce(search =>
         data.artGallery.searchForArt({search, source: tab})
             .onSuccess(updateSearchOptions), 300);
 
     useEffect(() => {
-        searchString && debounceSearch(searchString.toLowerCase());
+        searchString && searchString.length && debounceSearch(searchString.toLowerCase());
     }, [searchString]);
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        searchString && history.push({
+        searchString && navigate({
             pathname: Paths.artGallery,
             search: nextQueryString({search: searchString})
         });
@@ -41,7 +41,7 @@ export const Search: FC<Props> = ({id}) => {
                onInput={event => updateQuery(event.currentTarget.value)}/>
         <label id="query-label" htmlFor="query">Search For {decodeURI(search || '')}</label>
         <button className='reset-query' data-testid="reset-query" type="reset" aria-label="reset search"/>
-        <button className='submit-query' data-testid="submit-query" type="submit" aria-label="submit search"/>
+        <button className='submit-query' data-testid="submit-query" disabled={!searchString.length} type="submit" aria-label="submit search"/>
         <datalist id="search-options" data-testid="search-options">
             {searchOptions.map((searchOption, index) =>
                 <option value={searchOption} key={index}>{searchOption}</option>)}

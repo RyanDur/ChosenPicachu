@@ -1,18 +1,19 @@
-import React, {FC, useEffect, useState} from 'react';
+import {FC, useEffect, useState} from 'react';
 import {AddressInfo, User} from '../UserInfo/types';
 import {UserInformation} from '../UserInfo';
 import {Table} from '../Table';
-import {Link, useHistory} from 'react-router-dom';
-import {Paths} from '../../App';
+import {Link, useLocation, useNavigate} from 'react-router-dom';
 import {age, formatAge} from '../util';
 import {useQuery} from '../hooks';
 import {FriendsList} from '../SelectList';
 import {data} from '../../data';
-import './Users.scss';
-import './Users.layout.scss';
+import './Users.css';
+import './Users.layout.css';
+import {Paths} from '../../routes/Paths.ts';
 
 export const Users: FC = () => {
-    const history = useHistory();
+    const navigate = useNavigate();
+    const location = useLocation();
     const {queryObj: {id, mode}, nextQueryString, path} = useQuery<{ id: string, mode: string }>();
     const [users, updateUsers] = useState<User[]>([]);
     const [currentUser, updateCurrentUser] = useState<User>();
@@ -26,7 +27,7 @@ export const Users: FC = () => {
     }, [id]);
 
     const equalAddresses = (address1: AddressInfo, address2: AddressInfo = {} as AddressInfo): boolean =>
-        Object.keys(address1).reduce((acc, key) =>
+        Object.keys(address1).reduce((_, key) =>
             address1[key as keyof AddressInfo] === address2[key as keyof AddressInfo], Boolean());
 
     const update = (user: User) => (newFriends: User[]) =>
@@ -43,7 +44,7 @@ export const Users: FC = () => {
                                  .onSuccess(updateUsers)}
                              onUpdate={user => data.users.update(user)
                                  .onSuccess(updateUsers)
-                                 .onSuccess(() => history.push(Paths.users))}/>
+                                 .onSuccess(() => navigate(Paths.users))}/>
         </section>
 
         <section id="user-candidates" className="card users">
@@ -77,7 +78,7 @@ export const Users: FC = () => {
                         worksFromHome: {
                             display: <section className="last-column">
                                 {equalAddresses(user.homeAddress, user.workAddress) ? 'Yes' : 'No'}
-                                <article tabIndex={0} className="menu-toggle rounded-corners" onKeyPress={event => {
+                                <article tabIndex={0} className="menu-toggle rounded-corners" onKeyDown={event => {
                                     event.preventDefault();
                                     if (event.code === 'Space') {
                                         event.currentTarget.classList.toggle('open');
@@ -100,11 +101,11 @@ export const Users: FC = () => {
                                         })}`}
                                               className='item'
                                               data-testid="view">Edit</Link>
-                                        <Link to={id === user.id ? path : history.location}
+                                        <Link to={id === user.id ? path : location.pathname}
                                               className='item'
                                               onClick={() => data.users.delete(user)
                                                   .onSuccess(updateUsers)
-                                                  .onSuccess(() => history.push(Paths.users))}
+                                                  .onSuccess(() => navigate(Paths.users))}
                                               data-testid="remove">Remove</Link>
                                         <Link to={`${path}${nextQueryString({id: user.id})}`}
                                               className='item'

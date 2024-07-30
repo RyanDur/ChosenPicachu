@@ -1,4 +1,4 @@
-import React, {FC, FormEvent} from 'react';
+import {FC, FormEvent, PropsWithChildren} from 'react';
 import {FancyInput} from '../FancyInput';
 
 interface FancyDateInputProps {
@@ -17,5 +17,5 @@ interface FancyDateInputProps {
     pattern?: string;
 }
 
-export const FancyDateInput: FC<FancyDateInputProps> = ({readOnly, ...rest}) => readOnly ?
+export const FancyDateInput: FC<PropsWithChildren<FancyDateInputProps>> = ({readOnly, ...rest}) => readOnly ?
     <FancyInput type="text" readOnly={readOnly} {...rest}/> : <FancyInput type="date" {...rest}/>;

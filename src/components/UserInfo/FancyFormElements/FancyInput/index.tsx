@@ -1,4 +1,4 @@
-import React, {FC, FormEvent} from 'react';
+import {FC, FormEvent, PropsWithChildren} from 'react';
 import {join, toISOWithoutTime} from '../../../util';
 
 interface FancyTextInputProps {
@@ -18,7 +18,7 @@ interface FancyTextInputProps {
     pattern?: string;
 }
 
-export const FancyInput: FC<FancyTextInputProps> = (
+export const FancyInput: FC<PropsWithChildren<FancyTextInputProps>> = (
     {
         inputId,
         type = 'text',
