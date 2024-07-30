@@ -4,19 +4,19 @@ import {FriendsList} from '../index';
 import {users} from '../../../__tests__/util';
 
 describe('the friends list', () => {
-    const consumer = jest.fn();
+    const consumer = vi.fn();
     const firstUser = users[0];
     const secondUser = users[1];
     const thirdUser = users[2];
 
     afterEach(() => {
         cleanup();
-        jest.resetAllMocks();
+        vi.resetAllMocks();
     });
 
-    it('should be able to add friends', () => {
+    it('should be able to add friends', async () => {
         render(<FriendsList users={users} user={firstUser} onChange={consumer}/>);
-        userEvent.selectOptions(screen.getByTestId(/select-friend/), [
+        await userEvent.selectOptions(screen.getByTestId(/select-friend/), [
             `${secondUser.info.firstName} ${secondUser.info.lastName}`
         ]);
 
@@ -41,14 +41,16 @@ describe('the friends list', () => {
             render(<FriendsList users={users} user={userWithFriends} onChange={consumer}/>);
         });
 
-        test('on mouse click', () => {
-            userEvent.click(screen.getByTestId(`remove-${thirdUser.id}`));
+        test('on mouse click', async () => {
+            await userEvent.click(screen.getByTestId(`remove-${thirdUser.id}`));
+
             expect(screen.getByTestId('friends-list')).not.toHaveTextContent(`${thirdUser.info.firstName} ${firstUser.info.lastName}`);
             expect(screen.getByTestId('friends-list')).toHaveTextContent(`${secondUser.info.firstName} ${secondUser.info.lastName}`);
         });
 
-        test('on enter', () => {
-            userEvent.type(screen.getByTestId(`remove-${thirdUser.id}`), '{enter}');
+        test('on enter', async () => {
+            await userEvent.type(screen.getByTestId(`remove-${thirdUser.id}`), '{enter}');
+
             expect(screen.getByTestId('friends-list')).not.toHaveTextContent(`${thirdUser.info.firstName} ${firstUser.info.lastName}`);
             expect(screen.getByTestId('friends-list')).toHaveTextContent(`${secondUser.info.firstName} ${secondUser.info.lastName}`);
         });

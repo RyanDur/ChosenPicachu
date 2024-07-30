@@ -1,14 +1,11 @@
 import {FC} from 'react';
-import {Route, Switch, useRouteMatch} from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 import {useArtPiece} from '../ArtPiece';
-import {GalleryPath} from '../index';
+import {Paths} from '../../../routes/Paths.ts';
 
 export const GalleryTitle: FC = () => {
-    const {piece} = useArtPiece();
-    const {path} = useRouteMatch();
-
-    return <Switch>
-        <Route path={path} exact>Gallery</Route>
-        <Route path={`${path}${GalleryPath.piece}`} exact>{piece.title}</Route>
-    </Switch>;
+  const location = useLocation();
+  const {piece} = useArtPiece();
+  const title = location.pathname === Paths.artGallery ? 'Gallery' : piece.title;
+  return <>{title}</>;
 };

@@ -1,7 +1,7 @@
 import {maybe} from '@ryandur/sand';
 
 export const toQueryString = (queryObj = {}): string =>
-    maybe.of(Object.entries(queryObj)
+    maybe(Object.entries(queryObj)
         .filter(([, value]) => !!value)
         .map(([key, value]) => `${key}=${value}`).join('&')).map(query => `?${query}`).orElse('');
 

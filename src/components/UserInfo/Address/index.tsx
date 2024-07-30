@@ -1,7 +1,7 @@
+import {FC} from 'react';
 import {FancyInput} from '../FancyFormElements/FancyInput';
 import {FancySelect} from '../FancyFormElements/FancySelect';
 import states from 'states-us/dist';
-import React, {FC} from 'react';
 import {AddressInfo} from '../types';
 import './Address.layout.css';
 

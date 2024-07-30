@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useReducer, useState} from 'react';
+import {FC, useEffect, useReducer, useState} from 'react';
 import {User} from './types';
 import {FancyInput} from './FancyFormElements/FancyInput';
 import {join} from '../util';
@@ -18,11 +18,11 @@ import {Address} from './Address';
 import {formReducer, initialState} from './reducer';
 import {generateAvatar} from '../../avatars';
 import {Link} from 'react-router-dom';
-import {Paths} from '../../App';
 import {FancyDateInput} from './FancyFormElements/FancyDateInput';
 import {Consumer} from '@ryandur/sand';
-import './Form.layout.scss';
-import './Form.scss';
+import {Paths} from '../../routes/Paths.ts';
+import './Form.layout.css';
+import './Form.css';
 
 interface FormProps {
     currentUser?: User;
@@ -95,7 +95,7 @@ export const UserInformation: FC<FormProps> = (
         <article tabIndex={0} id="avatar-cell"
                  className={join('card', readOnly && 'read-only')}
                  data-testid="avatar-cell"
-                 onKeyPress={event => event.preventDefault()}
+                 onKeyDown={event => event.preventDefault()}
                  onClick={() => readOnly || dispatch(updateAvatar(generateAvatar()))}>
             <img id="avatar" src={user.avatar} loading="lazy" alt="avatar"/>
         </article>

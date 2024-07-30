@@ -1,15 +1,16 @@
 import {renderWithRouter} from '../../../../__tests__/util';
 import {GalleryTitle} from '../';
 import {screen} from '@testing-library/react';
+import {Paths} from '../../../../routes/Paths.ts';
 
 const title = 'some cool title';
-jest.mock('../../ArtPiece/Context', () => ({
+vi.mock('../../ArtPiece/Context', () => ({
     useArtPiece: () => ({piece: {title}})
 }));
 
-const path = '/a/path';
-jest.mock('react-router-dom', () => ({
-    ...jest.requireActual('react-router-dom'),
+const path = Paths.artGallery;
+vi.mock('react-router-dom', async () => ({
+    ...(await vi.importActual('react-router-dom')),
     useRouteMatch: () => ({path: path})
 }));
 
@@ -20,7 +21,7 @@ describe('gallery title', () => {
     });
 
     test('viewing a piece', () => {
-        renderWithRouter(<GalleryTitle/>, {path, initialRoute: `${path}/123`});
+        renderWithRouter(<GalleryTitle/>, {path:`${path}/123`});
         expect(screen.getByText(title)).toBeInTheDocument();
     });
 });

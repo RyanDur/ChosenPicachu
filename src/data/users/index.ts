@@ -1,10 +1,11 @@
-import {asyncResult, maybe, Result} from '@ryandur/sand';
+import {asyncFailure, asyncSuccess, maybe, Result} from '@ryandur/sand';
 import {explanation, Explanation, HTTPError} from '../types';
 import {User} from '../../components/UserInfo/types';
 import {createRandomUsers} from '../../__tests__/util';
 import {nanoid} from 'nanoid';
 
-const {success, failure} = asyncResult;
+const success = asyncSuccess;
+const failure = asyncFailure;
 
 export interface UsersAPI {
     getAll: () => Result.Async<User[], Explanation<HTTPError>>;
@@ -16,7 +17,7 @@ export interface UsersAPI {
 
 export const users = (randomUsers: User[] = createRandomUsers()): UsersAPI => ({
     getAll: () => success(randomUsers),
-    get: id => maybe.of(randomUsers.find(user => user.id === id))
+    get: id => maybe(randomUsers.find(user => user.id === id))
         .map(user => success<User, Explanation<HTTPError>>(user))
         .orElse(failure<User, Explanation<HTTPError>>(explanation(HTTPError.UNKNOWN))),
     add: user => {
@@ -32,7 +33,7 @@ export const users = (randomUsers: User[] = createRandomUsers()): UsersAPI => ({
         randomUsers = randomUsers.map(randomUser => ({
             ...randomUser,
             friends: randomUser.friends.filter(friend => friend.id !== user.id)
-        })).map(randomUser => maybe.of(
+        })).map(randomUser => maybe(
             friends.find(friend => friend.id === randomUser.id)
         ).orElse(randomUser));
 
