@@ -1,0 +1,38 @@
+.search {
+  display: grid;
+  column-gap: var(--base);
+  grid-template-columns: var(--base-x-8) auto var(--base-x-8);
+  grid-template-rows: 40% 1fr;
+  grid-template-areas:
+    "reset query-label submit"
+    "reset query submit";
+
+  #query-label {
+    grid-area: query-label;
+  }
+
+  #query {
+    grid-area: query;
+  }
+
+  .reset-query {
+    grid-area: reset;
+  }
+
+  .submit-query {
+    grid-area: submit;
+  }
+}
+
+@media (max-width: 1000px) {
+  .search {
+    display: grid;
+    column-gap: unset;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 20% 30% 1fr;
+    grid-template-areas:
+      "query-label query-label"
+      "query query"
+      "reset submit";
+  }
+}
