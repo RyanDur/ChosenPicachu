@@ -1,0 +1,131 @@
+@import "FancyFormElements/fancy.css";
+
+#user-info-form {
+  width: 100%;
+
+  #avatar-cell {
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    width: 20rem;
+    background: var(--faded-leather);
+    box-shadow: none;
+
+    &:focus,
+    &:hover {
+      box-shadow: var(--base-box-shadow);
+    }
+
+    &:active {
+      box-shadow: initial;
+    }
+
+    #avatar {
+      height: auto;
+      width: 15.2rem;
+    }
+  }
+
+  &.read-only *,
+  &.read-only #avatar-cell {
+    box-shadow: none;
+    cursor: initial;
+  }
+
+  &.invalid *:invalid {
+    border: 1px solid var(--internationl-orange-engineering);
+    box-shadow: var(--base-box-shadow);
+  }
+
+  #details-cell {
+    #details {
+      resize: vertical;
+      border-radius: 1rem;
+      min-height: var(--base-x-0_5);
+      position: relative;
+
+      &:read-only {
+        resize: none;
+        border-radius: 0;
+      }
+    }
+  }
+
+  #dob-cell {
+    display: flex;
+  }
+
+  #dob {
+    min-width: 50%;
+    background-color: white;
+
+    &:invalid {
+      color: transparent;
+    }
+
+    &:focus {
+      color: var(--void);
+    }
+  }
+
+  #same-as-home-cell {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    border-radius: 8rem;
+    height: 2rem;
+    text-align: center;
+    width: 100%;
+    font-size: 1.4rem;
+
+    #same-as-home {
+      margin-left: 1rem;
+
+      &:focus {
+        outline: none;
+        font-size: 1.6rem;
+      }
+
+      &:hover,
+      &:focus {
+        box-shadow: var(--base-box-shadow);
+      }
+
+      &:hover ~ #same-as-home-title,
+      &:focus ~ #same-as-home-title {
+        font-weight: bold;
+        box-shadow: var(--base-box-shadow);
+      }
+    }
+
+    &.read-only {
+      opacity: 0;
+    }
+  }
+
+  &:not(.read-only) *:required + label::after {
+    content: "*";
+    color: var(--internationl-orange-engineering);
+  }
+}
+
+@media (max-width: 1547px) {
+  #user-info-form {
+    #avatar-cell {
+      width: 100%;
+      #avatar {
+        width: 80%;
+      }
+    }
+  }
+}
+
+@media (max-width: 1000px) {
+  #user-info-form {
+    #dob {
+      width: 50%;
+    }
+  }
+}

@@ -1,0 +1,35 @@
+#art-gallery {
+  display: grid;
+  gap: 4rem;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: start;
+
+  .loader,
+  #empty-gallery {
+    align-self: center;
+    justify-self: center;
+    grid-column: 1 / span 4;
+  }
+}
+
+@media (max-width: 1547px) {
+  #art-gallery {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-areas:
+      "field field"
+      "field field"
+      "field field"
+      "nav nav";
+  }
+}
+
+@media (max-width: 1000px) {
+  #art-gallery {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "field"
+      "field"
+      "field"
+      "nav";
+  }
+}

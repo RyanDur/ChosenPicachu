@@ -1,0 +1,38 @@
+.pagination {
+  display: grid;
+  column-gap: var(--base);
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-areas: "first prev info next last";
+
+  #first {
+    grid-area: first;
+  }
+
+  .fill-left {
+    grid-column: 1 / span 2;
+  }
+
+  .fill-right {
+    grid-column: 4 / span 2;
+  }
+
+  #prev {
+    grid-area: prev;
+  }
+
+  #info {
+    grid-area: info;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #next {
+    grid-area: next;
+  }
+
+  #last {
+    grid-area: last;
+  }
+}
