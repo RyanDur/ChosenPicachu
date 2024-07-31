@@ -2,7 +2,7 @@ name: Build Test
 on:
   push:
     branches:
-      - main
+      - other
 env:
   VITE_APP_API_AIC: ${{ vars.VITE_APP_API_AIC }}
   VITE_APP_HARVARD_API: ${{ vars.VITE_APP_HARVARD_API }}
