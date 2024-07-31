@@ -9,7 +9,7 @@ export const HomePage: FC = () =>
     <header id="app-header" data-testid="header">
       <h1 className="title ellipsis">Home</h1>
     </header>
-
+  Some Page
     <SideNav/>
 
     <main data-testid="main"><Home/></main>
