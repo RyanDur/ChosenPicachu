@@ -1,0 +1,55 @@
+name: Build Test
+on:
+  push:
+    branches:
+      - main
+env:
+  VITE_APP_API_AIC: ${{ vars.VITE_APP_API_AIC }}
+  VITE_APP_HARVARD_API: ${{ vars.VITE_APP_HARVARD_API }}
+  VITE_APP_HARVARD_API_KEY: ${{ secrets.VITE_APP_HARVARD_API_KEY }}
+  VITE_APP_RIJKS_API: ${{ vars.VITE_APP_RIJKS_API }}
+  VITE_APP_RIJKS_API_KEY: ${{ secrets.VITE_APP_RIJKS_API_KEY }}
+
+jobs:
+  build_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 'v20'
+          cache: 'npm'
+      - name: Build
+        id: build
+        run: |
+          npm ci
+          npm run build
+      - name: Test
+        run: npm test
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: /dist
+
+  deploy:
+    needs: build_test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download math result for job 1
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: /dist
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v3.0
+        with:
+          publish-dir: './dist'
+          production-branch: main
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: "Deploy from GitHub Actions"
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        timeout-minutes: 1
