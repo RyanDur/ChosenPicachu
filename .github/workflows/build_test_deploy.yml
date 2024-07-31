@@ -3,6 +3,12 @@ on:
   push:
     branches:
       - main
+env:
+  VITE_APP_API_AIC=${{ variables.VITE_APP_API_AIC }}
+  VITE_APP_HARVARD_API=${{ variables.VITE_APP_HARVARD_API }}
+  VITE_APP_HARVARD_API_KEY=${{ secrets.VITE_APP_HARVARD_API_KEY }}
+  VITE_APP_RIJKS_API=${{ variables.VITE_APP_RIJKS_API }}
+  VITE_APP_RIJKS_API_KEY=${{ secrets.VITE_APP_RIJKS_API_KEY }}
 
 jobs:
   build_test_deploy:
