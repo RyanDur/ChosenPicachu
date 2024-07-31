@@ -26,6 +26,7 @@ const endpoint = ({path, params = {}}: Query): PATH => {
         q: search, fields: shapeOfAICResponse,
         page, limit, ...rest
     });
+    console.log('aicDomain', aicDomain);
     return maybe(search).map(() => [[
             aicDomain,
             'search'
