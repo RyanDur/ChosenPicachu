@@ -56,25 +56,22 @@ export const renderWithRouter = (
   return () => ({result, testLocation});
 };
 
-export const fillOutAddress = async (address: AddressInfo, kind: string) => {
-  return await userEvent.type(screen.getByTestId(`${kind}-address-street`), address.streetAddress)
+export const fillOutAddress = (address: AddressInfo, kind: string) =>
+  userEvent.type(screen.getByTestId(`${kind}-address-street`), address.streetAddress)
     .then(() => userEvent.type(screen.getByTestId(`${kind}-address-street-2`), address.streetAddressTwo!))
     .then(() => userEvent.type(screen.getByTestId(`${kind}-address-city`), address.city))
     .then(() => userEvent.selectOptions(screen.getByTestId(`${kind}-address-state`), address.state))
     .then(() => userEvent.type(screen.getByTestId(`${kind}-address-zip`), address.zip));
-};
 
-export const fillOutUser = async (info: User) => {
-  return await userEvent.type(screen.getByLabelText('First Name'), info.info.firstName)
+export const fillOutUser = (info: User) =>
+  userEvent.type(screen.getByLabelText('First Name'), info.info.firstName)
     .then(() => userEvent.type(screen.getByLabelText('Last Name'), info.info.lastName))
     .then(() => userEvent.type(screen.getByLabelText('Email'), info.info.email!))
     .then(() => userEvent.type(screen.getByLabelText('Date Of Birth'), toISOWithoutTime(info.info.dob!)));
-};
 
-export const fillOutForm = async (info: User) => {
-  await fillOutUser(info);
-  await fillOutAddress(info.homeAddress, 'home');
-  await fillOutAddress(info.workAddress!, 'work');
-};
+export const fillOutForm = (info: User) =>
+  fillOutUser(info)
+    .then(() => fillOutAddress(info.homeAddress, 'home'))
+    .then(() => fillOutAddress(info.workAddress!, 'work'));
 
 export * from './dummyData';
