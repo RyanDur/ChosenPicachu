@@ -7,7 +7,6 @@ const title = 'some cool title';
 const path = Paths.artGallery;
 
 describe('gallery title', () => {
-
   test('viewing', async () => {
     renderWithRouter(<GalleryTitle/>, {path, initialRoute: path});
 
@@ -16,6 +15,7 @@ describe('gallery title', () => {
 
   test('viewing a piece', () => {
     renderWithRouter(<GalleryTitle/>, {path: Paths.artGalleryPiece, initialRoute: `${path}/123`, pieceState: {title}});
+
     expect(screen.getByText(title)).toBeInTheDocument();
   });
 });
