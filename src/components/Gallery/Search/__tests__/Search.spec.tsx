@@ -2,22 +2,25 @@ import {screen, waitFor} from '@testing-library/react';
 import {Search} from '../index';
 import userEvent from '@testing-library/user-event';
 import {renderWithRouter} from '../../../../__tests__/util';
-import {data} from '../../../../data';
-import {asyncSuccess} from '@ryandur/sand';
 import {Source} from '../../../../data/artGallery/types/resource';
 import {faker} from '@faker-js/faker';
 import {Paths} from '../../../../routes/Paths.ts';
-import {Explanation, HTTPError} from '../../../../data/types.ts';
-import {SearchOptions} from '../../../../data/artGallery/types/response.ts';
-
-const success = asyncSuccess;
+import {AICSearch} from '../../../../data/artGallery/aic/types.ts';
 
 describe('search', () => {
   const searchWord = faker.lorem.word().toUpperCase();
+  const searchResponse: AICSearch = {
+    pagination: {
+      total: 5,
+      limit: 2,
+      total_pages: 5,
+      current_page: 1
+    },
+    data: [{suggest_autocomplete_all: [{}, {input: [searchWord]}]}]
+  };
 
   beforeEach(() => {
-    data.artGallery.searchForArt = vi.fn(() =>
-      success<SearchOptions, Explanation<HTTPError>>([searchWord]));
+    fetchMock.mockResponse(JSON.stringify(searchResponse));
   });
 
   it('should give suggestions for completion', async () => {
@@ -26,8 +29,6 @@ describe('search', () => {
     await userEvent.type(screen.getByLabelText('Search For'), searchWord);
 
     await waitFor(() => expect(screen.getByTestId('search-options')).toHaveTextContent(searchWord));
-    await waitFor(() => expect(data.artGallery.searchForArt)
-      .toHaveBeenCalledWith({search: searchWord.toLowerCase(), source: Source.AIC}));
   });
 
   it('should update the url when the user wants to search', async () => {

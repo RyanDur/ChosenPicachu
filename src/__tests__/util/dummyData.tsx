@@ -1,11 +1,8 @@
-import {AvatarGenerator} from 'random-avatar-generator';
-
 import {nanoid} from 'nanoid';
 import {faker} from '@faker-js/faker';
 import {Column, Row} from '../../components/Table/types';
 import {AddressInfo, User, UserInfo} from '../../components/UserInfo/types';
-import {toISOWithoutTime} from '../../components/util.js';
-import {AICAllArt, AICArt} from '../../data/artGallery/aic/types.js';
+import {AICAllArt, AICArt} from '../../data/artGallery/aic/types';
 import {
   HarvardAllArt,
   HarvardArt,
@@ -13,11 +10,12 @@ import {
   HarvardPeople,
   HarvardSearch
 } from '../../data/artGallery/harvard/types.js';
-import {AllArt, Art} from '../../data/artGallery/types/response.js';
-import {RIJKArtObject, RIJKSAllArt, RIJKSArt} from '../../data/artGallery/rijks/types.js';
+import {AllArt, Art} from '../../data/artGallery/types/response';
+import {RIJKArtObject, RIJKSAllArt, RIJKSArt} from '../../data/artGallery/rijks/types';
+import {AvatarGenerator} from 'random-avatar-generator';
+import {toDate} from 'date-fns';
 
-export const randomNumberFromRange = (min: number, max = 6) => Math.floor(Math.random() * max) + min;
-
+const randomNumberFromRange = (min: number, max = 6) => Math.floor(Math.random() * max) + min;
 export const words = (num = 6) => faker.lorem.words(randomNumberFromRange(1, num));
 
 export const column1Name = words();
@@ -128,7 +126,7 @@ export const createUserInfo = (): UserInfo => ({
   firstName: faker.person.firstName(),
   lastName: faker.person.lastName(),
   email: faker.internet.email(),
-  dob: new Date(toISOWithoutTime(faker.date.birthdate()))
+  dob: toDate(faker.date.birthdate().toISOString().split('T')[0])
 });
 export const createAddress = (): AddressInfo => ({
   city: faker.location.city(),

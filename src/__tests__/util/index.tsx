@@ -1,11 +1,13 @@
 import {FC, PropsWithChildren, ReactElement} from 'react';
 import {render, RenderResult, screen} from '@testing-library/react';
-import {MemoryRouter, Route, Routes, useLocation, Location} from 'react-router-dom';
+import {Location, MemoryRouter, Route, Routes, useLocation} from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import {toQueryString} from '../../util/URL';
 import {AddressInfo, User} from '../../components/UserInfo/types';
-import {toISOWithoutTime} from '../../components/util.js';
 import {Consumer} from '@ryandur/sand';
+import {AppContext} from '../../AppContext';
+import {AllArt, Art} from '../../data/artGallery/types/response';
+import {toDate} from 'date-fns';
 
 export interface Rendered {
   result: RenderResult;
@@ -24,34 +26,38 @@ const LocationHelper: FC<PropsWithChildren<{ testLocation: Consumer<Location> }>
   return <>{children}</>;
 };
 
-const TestRouter: FC<{
-  component: ReactElement,
+const TestRouter: FC<PropsWithChildren & {
   context: URLContext,
   testLocation: Consumer<Location>
-}> = ({component, context, testLocation}) => {
-  return <MemoryRouter initialEntries={[`${context.initialRoute || context.path}${toQueryString(context.params)}`]}>
+}> = ({children, context, testLocation}) => {
+  return <MemoryRouter initialEntries={[`${(context.initialRoute)}${toQueryString(context.params)}`]}>
     <Routes>
       <Route path={context.path}
-             element={<LocationHelper testLocation={testLocation}>{component}</LocationHelper>}>
+             element={<LocationHelper testLocation={testLocation}>{children}</LocationHelper>}>
       </Route>
       <Route path="*" element={<LocationHelper testLocation={testLocation}/>}/>
     </Routes>
   </MemoryRouter>;
 };
-
+type Defaults = Partial<URLContext & { pieceState: Partial<Art>, galleryState: AllArt }>;
 const defaultUrlContext: URLContext = {path: '/initial/route', params: {}};
 export const renderWithRouter = (
   component: ReactElement, {
-    initialRoute,
+    pieceState,
+    galleryState,
+    initialRoute = defaultUrlContext.path,
     path = defaultUrlContext.path,
     params = defaultUrlContext.params
-  } = defaultUrlContext): () => Rendered => {
+  }: Defaults = {}): () => Rendered => {
   let testLocation: Location;
 
-  const result = render(<TestRouter
-    component={component}
-    context={{initialRoute, path, params}}
-    testLocation={(location) => testLocation = location}/>);
+  const result = render(<AppContext pieceState={pieceState} galleryState={galleryState}>
+    <TestRouter
+      context={{initialRoute, path, params}}
+      testLocation={(location) => testLocation = location}>
+      {component}
+    </TestRouter>
+  </AppContext>);
 
   return () => ({result, testLocation});
 };
@@ -67,11 +73,12 @@ export const fillOutUser = (info: User) =>
   userEvent.type(screen.getByLabelText('First Name'), info.info.firstName)
     .then(() => userEvent.type(screen.getByLabelText('Last Name'), info.info.lastName))
     .then(() => userEvent.type(screen.getByLabelText('Email'), info.info.email!))
-    .then(() => userEvent.type(screen.getByLabelText('Date Of Birth'), toISOWithoutTime(info.info.dob!)));
+    .then(() => {
+      const text = toDate(info.info.dob!).toISOString().split('T')[0];
+      return userEvent.type(screen.getByLabelText('Date Of Birth'), text);
+    });
 
 export const fillOutForm = (info: User) =>
   fillOutUser(info)
     .then(() => fillOutAddress(info.homeAddress, 'home'))
     .then(() => fillOutAddress(info.workAddress!, 'work'));
-
-export * from './dummyData';

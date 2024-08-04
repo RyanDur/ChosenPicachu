@@ -4,24 +4,18 @@ import {screen} from '@testing-library/react';
 import {Paths} from '../../../../routes/Paths.ts';
 
 const title = 'some cool title';
-vi.mock('../../ArtPiece/Context', () => ({
-    useArtPiece: () => ({piece: {title}})
-}));
-
 const path = Paths.artGallery;
-vi.mock('react-router-dom', async () => ({
-    ...(await vi.importActual('react-router-dom')),
-    useRouteMatch: () => ({path: path})
-}));
 
 describe('gallery title', () => {
-    test('viewing', () => {
-        renderWithRouter(<GalleryTitle/>, {path});
-        expect(screen.getByText('Gallery')).toBeInTheDocument();
-    });
 
-    test('viewing a piece', () => {
-        renderWithRouter(<GalleryTitle/>, {path:`${path}/123`});
-        expect(screen.getByText(title)).toBeInTheDocument();
-    });
+  test('viewing', async () => {
+    renderWithRouter(<GalleryTitle/>, {path, initialRoute: path});
+
+    expect(await screen.findByText('Gallery')).toBeInTheDocument();
+  });
+
+  test('viewing a piece', () => {
+    renderWithRouter(<GalleryTitle/>, {path: Paths.artGalleryPiece, initialRoute: `${path}/123`, pieceState: {title}});
+    expect(screen.getByText(title)).toBeInTheDocument();
+  });
 });

@@ -1,14 +1,12 @@
 import userEvent from '@testing-library/user-event';
 import {fireEvent, screen, waitFor} from '@testing-library/react';
 import {toQueryObj} from '../../../../util/URL';
-import {fromAICArt as mockArt, renderWithRouter} from '../../../../__tests__/util';
+import {fromAICArt} from '../../../../__tests__/util/dummyData';
+import {renderWithRouter} from '../../../../__tests__/util';
 import {PageControl} from '../index';
 import {Source} from '../../../../data/artGallery/types/resource';
 import {Paths} from '../../../../routes/Paths.ts';
 
-vi.mock('../../Context', () => ({
-  useGallery: () => ({art: mockArt})
-}));
 window.scrollTo = vi.fn();
 describe('The page controls', () => {
   beforeEach(() => {
@@ -19,7 +17,7 @@ describe('The page controls', () => {
     test('submitting the specified page', async () => {
       const pageNumber = String(Math.floor(Math.random() * 1000));
 
-      const rendered = renderWithRouter(<PageControl/>, {path: Paths.artGallery});
+      const rendered = renderWithRouter(<PageControl/>, {path: Paths.artGallery, initialRoute: Paths.artGallery});
       await userEvent.type(screen.getByTestId('go-to'), pageNumber);
       fireEvent.submit(screen.getByText('Go'));
 
@@ -28,26 +26,26 @@ describe('The page controls', () => {
     });
 
     it('should not go to the top of page when clicking on page number input', async () => {
-      renderWithRouter(<PageControl/>, {path: Paths.artGallery});
+      renderWithRouter(<PageControl/>, {path: Paths.artGallery, initialRoute: Paths.artGallery});
       await userEvent.click(screen.getByTestId('go-to'));
       expect(window.scrollTo).not.toHaveBeenCalled();
     });
 
     it('should not allow a user to go to a page lower than the first', () => {
-      renderWithRouter(<PageControl/>, {path: Paths.artGallery});
+      renderWithRouter(<PageControl/>, {path: Paths.artGallery, initialRoute: Paths.artGallery});
       expect(screen.getByTestId('go-to')).toHaveAttribute('min', '1');
     });
 
-    it('should not allow a user to go to a page higher than the last', () => {
-      renderWithRouter(<PageControl/>, {path: Paths.artGallery});
-      expect(screen.getByTestId('go-to'))
-        .toHaveAttribute('max', `${mockArt.pagination.totalPages}`);
+    it('should not allow a user to go to a page higher than the last', async () => {
+      renderWithRouter(<PageControl/>, {path: Paths.artGallery, initialRoute: Paths.artGallery, galleryState: fromAICArt});
+      expect(await screen.findByTestId('go-to'))
+        .toHaveAttribute('max', `${fromAICArt.pagination.totalPages}`);
     });
   });
 
   describe('changing the number of elements', () => {
     it('should allow the user to change the elements per page', async () => {
-      const rendered = renderWithRouter(<PageControl/>, {path: Paths.artGallery});
+      const rendered = renderWithRouter(<PageControl/>, {path: Paths.artGallery, initialRoute: Paths.artGallery});
 
       await userEvent.type(screen.getByTestId('per-page'), '45');
       await userEvent.click(screen.getByText('Go'));
@@ -89,6 +87,7 @@ describe('The page controls', () => {
         `('should change input: $input to size: $size when rikjs', async ({input, size}) => {
       const rendered = renderWithRouter(<PageControl/>, {
         path: Paths.artGallery,
+        initialRoute: Paths.artGallery,
         params: {tab: Source.RIJKS, page: 1}
       });
       await userEvent.type(screen.getByTestId('per-page'), `${input}`);

@@ -14,8 +14,8 @@ export const ArtPieceContext = createContext<PieceContext>({
     reset: () => void 0
 });
 export const useArtPiece = () => useContext(ArtPieceContext);
-export const useArtPieceContext = (): PieceContext => {
-    const [piece, updatePiece] = useState<Partial<Art>>({});
+export const useArtPieceContext = (pieceState: Partial<Art> = {}): PieceContext => {
+    const [piece, updatePiece] = useState<Partial<Art>>(pieceState);
     return useMemo(() => ({
         piece,
         updatePiece,

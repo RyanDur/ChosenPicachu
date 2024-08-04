@@ -1,22 +1,20 @@
 import {UserInformation} from '../index';
 import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {fillOutForm, users} from '../../../__tests__/util';
+import {users} from '../../../__tests__/util/dummyData';
+import {fillOutForm} from '../../../__tests__/util';
 import {initialState} from '../reducer';
-import {nanoid} from 'nanoid';
-import {Mock} from 'vitest';
 
 vi.mock('../../../avatars', () => ({
   generateAvatar: () => 'some random url'
 }));
-vi.mock('nanoid');
+vi.mock('nanoid', () => ({nanoid: vi.fn().mockReturnValue('yo0r-face')}));
 
 describe('a user form', () => {
   const [userInfo] = users;
   userInfo.avatar = 'some random url';
-  beforeEach(() => {
-    (nanoid as Mock).mockReturnValue(userInfo.id);
-  });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const {id, ...info} = userInfo;
 
   describe('filled out', () => {
     it('should be resettable', async () => {
@@ -34,13 +32,14 @@ describe('a user form', () => {
     describe('when adding a user', () => {
       it('should submit all the data', async () => {
         const consumer = vi.fn();
+
         render(<UserInformation onAdd={consumer}/>);
 
-        await fillOutForm(userInfo);
+        await fillOutForm(info);
         await userEvent.type(screen.getByLabelText('Details'), userInfo.details!);
         fireEvent.submit(screen.getByText('Add'));
 
-        await waitFor(() => expect(consumer).toHaveBeenCalledWith(userInfo));
+        await waitFor(() => expect(consumer).toHaveBeenCalledWith(info));
       });
 
       it('should reset the form', async () => {
@@ -60,14 +59,14 @@ describe('a user form', () => {
         const consumer = vi.fn();
         render(<UserInformation onAdd={consumer}/>);
 
-        await fillOutForm(userInfo);
-        await userEvent.type(screen.getByLabelText('Details'), userInfo.details!);
+        await fillOutForm(info);
+        await userEvent.type(screen.getByLabelText('Details'), info.details!);
         await userEvent.click(screen.getByLabelText('Same as Home'));
         fireEvent.submit(screen.getByText('Add'));
 
         expect(consumer).toHaveBeenCalledWith({
-          ...userInfo,
-          workAddress: userInfo.homeAddress
+          ...info,
+          workAddress: info.homeAddress
         });
       });
     });

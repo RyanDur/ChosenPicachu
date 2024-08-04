@@ -135,16 +135,16 @@ describe('the image', () => {
   describe('disabling the link', () => {
     it('should not change location when clicked', async () => {
       const rendered = renderWithRouter(<Image piece={piece} linkEnabled={false}/>,
-        {path: Paths.artGallery});
+        {path: Paths.artGallery, initialRoute: Paths.artGallery, params: {page: 3, tab: Source.AIC}});
 
-      await userEvent.click(screen.getByTestId(image));
+      await userEvent.click(await screen.findByTestId(image));
 
       expect(rendered().testLocation?.pathname).toEqual(Paths.artGallery);
     });
 
     it('should not scroll to the top of the page', async () => {
       renderWithRouter(<Image piece={piece} linkEnabled={false}/>,
-        {path: Paths.artGallery});
+        {path: Paths.artGallery, initialRoute: Paths.artGallery});
 
       await userEvent.click(screen.getByTestId(image));
 

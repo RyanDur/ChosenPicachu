@@ -3,10 +3,6 @@ import {differenceInDays, differenceInMonths, differenceInYears} from 'date-fns'
 export const join =
     (...classes: Partial<(string | boolean)[]>) => classes.filter(className => className).join(' ').trim();
 
-export const toISOWithoutTime = (date: Date): string => {
-    return date.toISOString().split('T')[0];
-};
-
 export enum AgeIn {
     YEARS = 'years',
     MONTHS = 'months',
@@ -37,6 +33,7 @@ export const formatAge = ({value, unit}: Age): string => {
             return `${value} months old`;
         case AgeIn.DAYS:
             return `${value} days old`;
+        default:
+            return '';
     }
-    return '';
 };
