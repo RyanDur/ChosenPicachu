@@ -1,51 +1,19 @@
 import {fireEvent, screen, waitFor, within} from '@testing-library/react';
-import {createUser, users} from '../../../__tests__/util/dummyData';
+import {format} from 'date-fns';
+import {createUser, users as someUsers} from '../../../__tests__/util/dummyData';
 import {Rendered, renderWithRouter} from '../../../__tests__/util';
 import {Users} from '../index';
 import userEvent from '@testing-library/user-event';
-import {asyncFailure, asyncSuccess, maybe} from '@ryandur/sand';
 import {data} from '../../../data';
 import {AddressInfo, User} from '../../UserInfo/types';
-import {Explanation, explanation, HTTPError} from '../../../data/types';
-import {format} from 'date-fns';
-
-const success = asyncSuccess;
-const failure = asyncFailure;
-
-vi.mock('../../../data', () => ({
-  data: {
-    usersApi: {
-      getAll: vi.fn(),
-      get: vi.fn(),
-      add: vi.fn(),
-      update: vi.fn(),
-      delete: vi.fn()
-    }
-  }
-}));
+import {users} from '../../../data/users';
 
 describe('the users page', () => {
-  let currentUsers = users;
+  const currentUsers = someUsers;
   const firstUser = currentUsers[0];
 
   beforeEach(() => {
-    currentUsers = users;
-    data.usersApi.getAll = () => success(currentUsers);
-    data.usersApi.get = id => maybe(currentUsers.find(user => user.id === id))
-      .map(user => success<User, Explanation<HTTPError>>(user))
-      .orElse(failure<User, Explanation<HTTPError>>(explanation(HTTPError.UNKNOWN)));
-    data.usersApi.add = vi.fn((user: User) => {
-      currentUsers = [user, ...currentUsers];
-      return success<User[], Explanation<HTTPError>>(currentUsers);
-    });
-    data.usersApi.update = vi.fn((user: User) => {
-      currentUsers = currentUsers.map(currentUser => currentUser.id === user.id ? user : currentUser);
-      return success<User[], Explanation<HTTPError>>(currentUsers);
-    });
-    data.usersApi.delete = vi.fn((user: User) => {
-      currentUsers = currentUsers.filter(currentUser => currentUser.id !== user.id);
-      return success<User[], Explanation<HTTPError>>(currentUsers);
-    });
+    data.usersApi = users(currentUsers);
   });
 
   describe('adding a user', () => {
@@ -124,6 +92,8 @@ describe('the users page', () => {
   });
 
   test('updating a user', async () => {
+    const spy = vi.spyOn(data.usersApi, 'update');
+
     renderWithRouter(<Users/>);
 
     await waitFor(() => userEvent.click(within(screen.getByTestId('cell-4-0'))
@@ -132,19 +102,22 @@ describe('the users page', () => {
     await waitFor(() => userEvent.click(within(screen.getByTestId('user-info-form'))
       .getByText('Update')));
 
-    expect(data.usersApi.update).toHaveBeenCalled();
+    expect(spy).toHaveBeenCalled();
   });
 
   test('removing a user', async () => {
+    const spy = vi.spyOn(data.usersApi, 'delete');
+
     renderWithRouter(<Users/>);
 
     await waitFor(() => userEvent.click(within(screen.getByTestId('cell-4-0'))
       .getByText('Remove')));
 
-    expect(data.usersApi.delete).toHaveBeenCalledWith(firstUser);
+    expect(spy).toHaveBeenCalledWith(firstUser);
   });
 
   test('cloning a user', async () => {
+    const spy = vi.spyOn(data.usersApi, 'add');
     renderWithRouter(<Users/>);
 
     await waitFor(() => userEvent.click(within(screen.getByTestId('cell-4-0'))
@@ -153,7 +126,7 @@ describe('the users page', () => {
     await waitFor(() => userEvent.click(within(screen.getByTestId('user-info-form'))
       .getByText('Add')));
 
-    expect(data.usersApi.add).toHaveBeenCalled();
+    expect(spy).toHaveBeenCalled();
   });
 });
 
