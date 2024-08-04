@@ -4,10 +4,10 @@ import {useQuery} from '../../hooks';
 import {useNavigate} from 'react-router-dom';
 import {SearchOptions} from '../../../data/artGallery/types/response';
 import {Source} from '../../../data/artGallery/types/resource';
-import {debounce} from 'lodash';
+import * as debounce from 'debounce';
+import {Paths} from '../../../routes/Paths.ts';
 import './Search.css';
 import './Search.layout.css';
-import {Paths} from '../../../routes/Paths.ts';
 
 interface Props {
     id?: string;
