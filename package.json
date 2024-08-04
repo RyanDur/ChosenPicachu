@@ -14,7 +14,7 @@
     "@faker-js/faker": "8.4.1",
     "@ryandur/sand": "4.1.0",
     "date-fns": "3.6.0",
-    "lodash-es": "file:lodash-es",
+    "debounce": "^2.1.0",
     "normalize.css": "^8.0.1",
     "random-avatar-generator": "^2.0.0",
     "react": "^18.3.1",
