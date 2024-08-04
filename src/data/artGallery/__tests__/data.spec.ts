@@ -13,7 +13,7 @@ import {
     harvardPieceResponse,
     options,
     rijkArtObjectResponse
-} from '../../../__tests__/util';
+} from '../../../__tests__/util/dummyData';
 import {nanoid} from 'nanoid';
 import {http} from '../../http';
 import {asyncFailure, asyncSuccess} from '@ryandur/sand';

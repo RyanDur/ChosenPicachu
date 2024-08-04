@@ -1,5 +1,5 @@
 import {Table} from '../Table';
-import {columns, rows} from '../../__tests__/util';
+import {columns, rows} from '../../__tests__/util/dummyData';
 import './Home.css';
 
 export const Home = () =>

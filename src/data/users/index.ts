@@ -1,8 +1,8 @@
 import {asyncFailure, asyncSuccess, maybe, Result} from '@ryandur/sand';
 import {explanation, Explanation, HTTPError} from '../types';
 import {User} from '../../components/UserInfo/types';
-import {createRandomUsers} from '../../__tests__/util';
 import {nanoid} from 'nanoid';
+import {createRandomUsers} from '../../__tests__/util/dummyData.tsx';
 
 const success = asyncSuccess;
 const failure = asyncFailure;

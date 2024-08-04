@@ -1,19 +1,20 @@
-import {screen, waitFor, within} from '@testing-library/react';
-import {createUser, Rendered, renderWithRouter, users} from '../../../__tests__/util';
+import {fireEvent, screen, waitFor, within} from '@testing-library/react';
+import {createUser, users} from '../../../__tests__/util/dummyData';
+import {Rendered, renderWithRouter} from '../../../__tests__/util';
 import {Users} from '../index';
 import userEvent from '@testing-library/user-event';
-import {toISOWithoutTime} from '../../util';
 import {asyncFailure, asyncSuccess, maybe} from '@ryandur/sand';
 import {data} from '../../../data';
 import {AddressInfo, User} from '../../UserInfo/types';
 import {Explanation, explanation, HTTPError} from '../../../data/types';
+import {format} from 'date-fns';
 
 const success = asyncSuccess;
 const failure = asyncFailure;
 
 vi.mock('../../../data', () => ({
   data: {
-    users: {
+    usersApi: {
       getAll: vi.fn(),
       get: vi.fn(),
       add: vi.fn(),
@@ -29,19 +30,19 @@ describe('the users page', () => {
 
   beforeEach(() => {
     currentUsers = users;
-    data.users.getAll = () => success(currentUsers);
-    data.users.get = id => maybe(currentUsers.find(user => user.id === id))
+    data.usersApi.getAll = () => success(currentUsers);
+    data.usersApi.get = id => maybe(currentUsers.find(user => user.id === id))
       .map(user => success<User, Explanation<HTTPError>>(user))
       .orElse(failure<User, Explanation<HTTPError>>(explanation(HTTPError.UNKNOWN)));
-    data.users.add = vi.fn((user: User) => {
+    data.usersApi.add = vi.fn((user: User) => {
       currentUsers = [user, ...currentUsers];
       return success<User[], Explanation<HTTPError>>(currentUsers);
     });
-    data.users.update = vi.fn((user: User) => {
+    data.usersApi.update = vi.fn((user: User) => {
       currentUsers = currentUsers.map(currentUser => currentUser.id === user.id ? user : currentUser);
       return success<User[], Explanation<HTTPError>>(currentUsers);
     });
-    data.users.delete = vi.fn((user: User) => {
+    data.usersApi.delete = vi.fn((user: User) => {
       currentUsers = currentUsers.filter(currentUser => currentUser.id !== user.id);
       return success<User[], Explanation<HTTPError>>(currentUsers);
     });
@@ -131,7 +132,7 @@ describe('the users page', () => {
     await waitFor(() => userEvent.click(within(screen.getByTestId('user-info-form'))
       .getByText('Update')));
 
-    expect(data.users.update).toHaveBeenCalled();
+    expect(data.usersApi.update).toHaveBeenCalled();
   });
 
   test('removing a user', async () => {
@@ -140,7 +141,7 @@ describe('the users page', () => {
     await waitFor(() => userEvent.click(within(screen.getByTestId('cell-4-0'))
       .getByText('Remove')));
 
-    expect(data.users.delete).toHaveBeenCalledWith(firstUser);
+    expect(data.usersApi.delete).toHaveBeenCalledWith(firstUser);
   });
 
   test('cloning a user', async () => {
@@ -152,7 +153,7 @@ describe('the users page', () => {
     await waitFor(() => userEvent.click(within(screen.getByTestId('user-info-form'))
       .getByText('Add')));
 
-    expect(data.users.add).toHaveBeenCalled();
+    expect(data.usersApi.add).toHaveBeenCalled();
   });
 });
 
@@ -160,7 +161,7 @@ const addUser = async (user: User) => {
   await userEvent.type(screen.getByLabelText('First Name'), user.info.firstName);
   await userEvent.type(screen.getByLabelText('Last Name'), user.info.lastName);
   await userEvent.type(screen.getByLabelText('Email'), user.info.email);
-  await userEvent.type(screen.getByLabelText('Date Of Birth'), toISOWithoutTime(user.info.dob!));
+  await userEvent.type(screen.getByLabelText('Date Of Birth'), format(user.info.dob!, 'P'));
 
   await addAddress(user.homeAddress, screen.getByTestId('home-address'));
 
@@ -168,7 +169,7 @@ const addUser = async (user: User) => {
 
   await userEvent.type(screen.getByLabelText('Details'), user.details || '');
 
-  await waitFor(async () => await userEvent.click(screen.getByText('Add')));
+  await waitFor(() => fireEvent.submit(screen.getByText('Add')));
 };
 
 const addAddress = async (address: AddressInfo, element: HTMLElement) => {

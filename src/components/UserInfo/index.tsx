@@ -4,21 +4,22 @@ import {FancyInput} from './FancyFormElements/FancyInput';
 import {join} from '../util';
 import {FancyTextarea} from './FancyFormElements/FancyTextarea';
 import {
-    resetForm,
-    updateAvatar,
-    updateDetails,
-    updateDOB,
-    updateEmail,
-    updateFirstName,
-    updateHomeAddress,
-    updateLastName,
-    updateWorkAddress
+  resetForm,
+  updateAvatar,
+  updateDetails,
+  updateDOB,
+  updateEmail,
+  updateFirstName,
+  updateHomeAddress,
+  updateLastName,
+  updateWorkAddress
 } from './actions';
 import {Address} from './Address';
 import {formReducer, initialState} from './reducer';
 import {generateAvatar} from '../../avatars';
 import {Link} from 'react-router-dom';
 import {FancyDateInput} from './FancyFormElements/FancyDateInput';
+import {toDate} from 'date-fns';
 import {Consumer} from '@ryandur/sand';
 import {Paths} from '../../routes/Paths.ts';
 import './Form.layout.css';
@@ -88,7 +89,9 @@ export const UserInformation: FC<FormProps> = (
         </FancyInput>
         <FancyDateInput id="dob-cell" inputId="dob" value={user.info.dob}
                         readOnly={readOnly} required
-                        onChange={event => dispatch(updateDOB(new Date(event.currentTarget.value)))}>
+                        onChange={event => {
+                            dispatch(updateDOB(toDate(event.currentTarget.value)));
+                        }}>
             Date Of Birth
         </FancyDateInput>
 

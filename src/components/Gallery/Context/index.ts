@@ -3,20 +3,20 @@ import {Consumer} from '@ryandur/sand';
 import {AllArt} from '../../../data/artGallery/types/response';
 
 export interface GalleryContextState {
-    art?: AllArt;
-    updateArt: Consumer<AllArt>;
-    reset: Consumer<void>;
+  art?: AllArt;
+  updateArt: Consumer<AllArt>;
+  reset: Consumer<void>;
 }
 
 export const artInitialState: AllArt = {} as AllArt;
 
 export const GalleryContext = createContext<GalleryContextState>({
-    art: artInitialState,
-    updateArt: (art: AllArt) => void art,
-    reset: () => void 0
+  art: artInitialState,
+  updateArt: (art: AllArt) => void art,
+  reset: () => void 0
 });
 export const useGallery = () => useContext(GalleryContext);
-export const useGalleryContext = (): GalleryContextState => {
-    const [art, updateArt] = useState<AllArt>();
-    return useMemo(() => ({art, updateArt, reset: () => updateArt(undefined)}), [art]);
+export const useGalleryContext = (defaultArt?: AllArt): GalleryContextState => {
+  const [art, updateArt] = useState<AllArt | undefined>(defaultArt);
+  return useMemo(() => ({art, updateArt, reset: () => updateArt(undefined)}), [art]);
 };
