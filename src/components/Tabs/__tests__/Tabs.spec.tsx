@@ -4,10 +4,6 @@ import {Tabs} from '../index';
 import userEvent from '@testing-library/user-event';
 
 const path = '/a/path';
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual('react-router-dom')),
-  useRouteMatch: () => ({path})
-}));
 describe('Tabs', () => {
   const tab1 = {display: 'Tab 1', param: 'tab1'};
   const tab2 = {display: 'Tab 2', param: 'tab2'};
