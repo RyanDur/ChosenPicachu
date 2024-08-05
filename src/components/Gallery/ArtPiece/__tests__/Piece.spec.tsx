@@ -29,28 +29,17 @@ describe('viewing a piece', () => {
     await waitFor(() => expect(screen.getByTestId('loading-piece')).toBeInTheDocument());
   });
 
-  describe('when the art piece is loaded', () => {
-    const params = {
+  test('when the art piece is loaded', async () => {
+    fetchMock.mockResponse(JSON.stringify(aicArtResponse));
+
+    renderWithRouter(<ArtPiece/>, {
       initialRoute: `${Paths.artGallery}/${aicArtResponse.data.id}`,
       path: Paths.artGalleryPiece,
       params: {tab: Source.AIC}
-    };
-
-    beforeEach(async () => {
-      fetchMock.mockResponse(JSON.stringify(aicArtResponse));
     });
 
-    it("should display the artist's info", async () => {
-      renderWithRouter(<ArtPiece/>, params);
-
-      expect(await screen.findByText(aicArtResponse.data.artist_display)).toBeInTheDocument();
-    });
-
-    it('should not have the error image', async () => {
-      renderWithRouter(<ArtPiece/>, params);
-
-      await waitFor(() => expect(screen.queryByTestId('image-error')).not.toBeInTheDocument());
-    });
+    expect(await screen.findByText(aicArtResponse.data.artist_display)).toBeInTheDocument();
+    await waitFor(() => expect(screen.queryByTestId('image-error')).not.toBeInTheDocument());
   });
 
   test('when getting the piece has errored', async () => {
