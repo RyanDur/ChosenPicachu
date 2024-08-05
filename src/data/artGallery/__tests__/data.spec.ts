@@ -27,23 +27,19 @@ describe('data', () => {
   describe('retrieving all the artwork', () => {
     describe('when the source is AIC', () => {
       test('when it is successful', async () => {
-        const consumer = vi.fn();
         fetchMock.mockResponse(JSON.stringify(aicArtResponse));
 
-        await artGallery.getAllArt({page: 1, size: 12, source: Source.AIC})
-          .onSuccess(consumer).orNull();
+        const actual = await artGallery.getAllArt({page: 1, size: 12, source: Source.AIC}).orNull();
 
-        expect(consumer).toHaveBeenCalledWith(fromAICArt);
+        expect(actual).toEqual(fromAICArt);
       });
 
       test('when it has a search term', async () => {
-        const consumer = vi.fn();
         fetchMock.mockResponse(JSON.stringify(aicArtResponse));
 
-        await artGallery.getAllArt({page: 1, size: 12, search: 'rad', source: Source.AIC})
-          .onSuccess(consumer).orNull();
+        const actual = await artGallery.getAllArt({page: 1, size: 12, search: 'rad', source: Source.AIC}).orNull();
 
-        expect(consumer).toHaveBeenCalledWith(fromAICArt);
+        expect(actual).toEqual(fromAICArt);
       });
 
       test('when it is not successful', async () => {
@@ -59,23 +55,19 @@ describe('data', () => {
 
     describe('when the source is Harvard', () => {
       test('when it is successful', async () => {
-        const consumer = vi.fn();
         fetchMock.mockResponse(JSON.stringify(harvardArtResponse));
 
-        await artGallery.getAllArt({page: 1, size: 12, source: Source.HARVARD})
-          .onSuccess(consumer).orNull();
+        const actual = await artGallery.getAllArt({page: 1, size: 12, source: Source.HARVARD}).orNull();
 
-        expect(consumer).toHaveBeenCalledWith(fromHarvardArt);
+        expect(actual).toEqual(fromHarvardArt);
       });
 
       test('when it has a search term', async () => {
-        const consumer = vi.fn();
         fetchMock.mockResponse(JSON.stringify(harvardArtResponse));
 
-        await artGallery.getAllArt({page: 1, size: 12, source: Source.HARVARD})
-          .onSuccess(consumer).orNull();
+        const actual = await artGallery.getAllArt({page: 1, size: 12, source: Source.HARVARD}).orNull();
 
-        expect(consumer).toHaveBeenCalledWith(fromHarvardArt);
+        expect(actual).toEqual(fromHarvardArt);
       });
 
       test('when it is not successful', async () => {
@@ -91,23 +83,19 @@ describe('data', () => {
 
     describe('when the source is RIJKS', () => {
       test('when it is successful', async () => {
-        const consumer = vi.fn();
         fetchMock.mockResponse(JSON.stringify(fromRIJKArtResponse));
 
-        await artGallery.getAllArt({page: 1, size: 12, source: Source.RIJKS})
-          .onSuccess(consumer).orNull();
+        const actual = await artGallery.getAllArt({page: 1, size: 12, source: Source.RIJKS}).orNull();
 
-        expect(consumer).toHaveBeenCalledWith(fromRIJKArt(1, 12));
+        expect(actual).toEqual(fromRIJKArt(1, 12));
       });
 
       test('when it has a search term', async () => {
-        const consumer = vi.fn();
         fetchMock.mockResponse(JSON.stringify(fromRIJKArtResponse));
 
-        await artGallery.getAllArt({page: 1, size: 12, search: 'rad', source: Source.RIJKS})
-          .onSuccess(consumer).orNull();
+        const actual = await artGallery.getAllArt({page: 1, size: 12, search: 'rad', source: Source.RIJKS}).orNull();
 
-        expect(consumer).toHaveBeenCalledWith(fromRIJKArt(1, 12));
+        expect(actual).toEqual(fromRIJKArt(1, 12));
       });
 
       test('when it is not successful', async () => {
@@ -136,13 +124,11 @@ describe('data', () => {
     describe('for AIC', () => {
       describe('when it is successful', () => {
         test('for a full response', async () => {
-          const consumer = vi.fn();
           fetchMock.mockResponse(JSON.stringify(pieceAICResponse));
 
-          await artGallery.getArt({id: String(aicPiece.id), source: Source.AIC})
-            .onSuccess(consumer).orNull();
+          const actual = await artGallery.getArt({id: String(aicPiece.id), source: Source.AIC}).orNull();
 
-          expect(consumer).toHaveBeenCalledWith(aicPiece);
+          expect(actual).toEqual(aicPiece);
         });
       });
 
@@ -162,10 +148,10 @@ describe('data', () => {
         const consumer = vi.fn();
         fetchMock.mockResponse(JSON.stringify(harvardPieceResponse));
 
-        await artGallery.getArt({id: String(aicPiece.id), source: Source.HARVARD})
+        const actual = await artGallery.getArt({id: String(aicPiece.id), source: Source.HARVARD})
           .onSuccess(consumer).orNull();
 
-        expect(consumer).toHaveBeenCalledWith(harvardPiece);
+        expect(actual).toEqual(harvardPiece);
       });
 
       test('when it is not successful', async () => {
@@ -181,13 +167,11 @@ describe('data', () => {
 
     describe('for RIJKS', () => {
       test('when it is successful', async () => {
-        const consumer = vi.fn();
         fetchMock.mockResponse(JSON.stringify(rijkArtObjectResponse));
 
-        await artGallery.getArt({id: String(aicPiece.id), source: Source.RIJKS})
-          .onSuccess(consumer).orNull();
+        const actual = await artGallery.getArt({id: String(aicPiece.id), source: Source.RIJKS}).orNull();
 
-        expect(consumer).toHaveBeenCalledWith(fromRIJKToPiece(rijkArtObjectResponse.artObject));
+        expect(actual).toEqual(fromRIJKToPiece(rijkArtObjectResponse.artObject));
       });
 
       test('when it is not successful', async () => {
@@ -217,37 +201,31 @@ describe('data', () => {
 
     describe('for AIC', () => {
       test('when it is successful', async () => {
-        const consumer = vi.fn();
         fetchMock.mockResponse(JSON.stringify(aicArtOptions));
 
-        await artGallery.searchForArt({search, source: Source.AIC})
-          .onSuccess(consumer).orNull();
+        const actual = await artGallery.searchForArt({search, source: Source.AIC}).orNull();
 
-        expect(consumer).toHaveBeenCalledWith(options);
+        expect(actual).toEqual(options);
       });
     });
 
     describe('for Harvard', () => {
       test('when it is successful', async () => {
-        const consumer = vi.fn();
         fetchMock.mockResponse(JSON.stringify(harvardArtOptions));
 
-        await artGallery.searchForArt({search, source: Source.HARVARD})
-          .onSuccess(consumer).orNull();
+        const actual = await artGallery.searchForArt({search, source: Source.HARVARD}).orNull();
 
-        expect(consumer).toHaveBeenCalledWith(options);
+        expect(actual).toEqual(options);
       });
     });
 
     describe('for RIJKS', () => {
       test('when it is successful', async () => {
-        const consumer = vi.fn();
         fetchMock.mockResponse(JSON.stringify(fromRIJKArtOptionsResponse));
 
-        await artGallery.searchForArt({search, source: Source.RIJKS})
-          .onSuccess(consumer).orNull();
+        const actual = await artGallery.searchForArt({search, source: Source.RIJKS}).orNull();
 
-        expect(consumer).toHaveBeenCalledWith(options);
+        expect(actual).toEqual(options);
       });
     });
 
