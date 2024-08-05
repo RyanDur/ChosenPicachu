@@ -9,8 +9,14 @@ window.scrollTo = vi.fn();
 describe('Gallery Navigation', () => {
   describe('without params', () => {
     describe('from the first page', () => {
+      const options = {
+        path: Paths.artGallery,
+        initialRoute: Paths.artGallery,
+        galleryState: fromAICArt
+      };
+
       it('should be able to goto the next page', async () => {
-        const rendered = renderWithRouter(<GalleryNav/>, {initialRoute: Paths.artGallery, path: Paths.artGallery});
+        const rendered = renderWithRouter(<GalleryNav/>, options);
         await userEvent.click(screen.getByTestId('next-page'));
 
         expect(rendered().testLocation?.search).toEqual('?page=2');
@@ -22,22 +28,15 @@ describe('Gallery Navigation', () => {
         expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
       });
 
-      it('should not go to the previous page', () => {
-        renderWithRouter(<GalleryNav/>, {initialRoute: Paths.artGallery, path: Paths.artGallery});
-        expect(screen.queryByTestId('prev-page')).not.toBeInTheDocument();
-      });
+      test('when on the first page', () => {
+        renderWithRouter(<GalleryNav/>, options);
 
-      it('should not be able to jump to the first page', () => {
-        renderWithRouter(<GalleryNav/>, {initialRoute: Paths.artGallery, path: Paths.artGallery});
+        expect(screen.queryByTestId('prev-page')).not.toBeInTheDocument();
         expect(screen.queryByTestId('first-page')).not.toBeInTheDocument();
       });
 
-      it('should be able to go to the last page', async () => {
-        const rendered = renderWithRouter(<GalleryNav/>, {
-          path: Paths.artGallery,
-          initialRoute: Paths.artGallery,
-          galleryState: fromAICArt
-        });
+      test('when jumping to the last page', async () => {
+        const rendered = renderWithRouter(<GalleryNav/>, options);
         await userEvent.click(screen.getByTestId('last-page'));
 
         expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
@@ -51,7 +50,11 @@ describe('Gallery Navigation', () => {
 
     describe('from the last page', () => {
       it('should be able to go to the previous page', async () => {
-        const rendered = renderWithRouter(<GalleryNav/>, {initialRoute: Paths.artGallery, path: Paths.artGallery, galleryState: fromAICArt});
+        const rendered = renderWithRouter(<GalleryNav/>, {
+          initialRoute: Paths.artGallery,
+          path: Paths.artGallery,
+          galleryState: fromAICArt
+        });
 
         await userEvent.click(screen.getByTestId('last-page'));
         await userEvent.click(screen.getByTestId('prev-page'));
@@ -66,7 +69,11 @@ describe('Gallery Navigation', () => {
       });
 
       it('should not go past the last page', async () => {
-        renderWithRouter(<GalleryNav/>, {initialRoute: Paths.artGallery, path: Paths.artGallery, galleryState: fromAICArt});
+        renderWithRouter(<GalleryNav/>, {
+          initialRoute: Paths.artGallery,
+          path: Paths.artGallery,
+          galleryState: fromAICArt
+        });
 
         await userEvent.click(screen.getByTestId('last-page'));
 
@@ -74,7 +81,11 @@ describe('Gallery Navigation', () => {
       });
 
       it('should not be able to jump to the last page', async () => {
-        renderWithRouter(<GalleryNav/>, {initialRoute: Paths.artGallery, path: Paths.artGallery, galleryState: fromAICArt});
+        renderWithRouter(<GalleryNav/>, {
+          initialRoute: Paths.artGallery,
+          path: Paths.artGallery,
+          galleryState: fromAICArt
+        });
 
         await userEvent.click(screen.getByTestId('last-page'));
 
@@ -82,7 +93,11 @@ describe('Gallery Navigation', () => {
       });
 
       it('should be able to go to the first page', async () => {
-        const rendered = renderWithRouter(<GalleryNav/>, {initialRoute: Paths.artGallery, path: Paths.artGallery, galleryState: fromAICArt});
+        const rendered = renderWithRouter(<GalleryNav/>, {
+          initialRoute: Paths.artGallery,
+          path: Paths.artGallery,
+          galleryState: fromAICArt
+        });
 
         await userEvent.click(screen.getByTestId('last-page'));
         await userEvent.click(screen.getByTestId('first-page'));
@@ -97,44 +112,40 @@ describe('Gallery Navigation', () => {
     });
   });
 
-  describe('with existing params', () => {
-    it('should only update the page query', async () => {
-      const rendered = renderWithRouter(<GalleryNav/>, {
-        params: {search: 'q'},
-        path: Paths.artGallery,
-        initialRoute: Paths.artGallery,
-        galleryState: fromAICArt
-      });
-
-      await userEvent.click(screen.getByTestId('next-page'));
-      expect(rendered().testLocation?.search).toEqual('?page=2&search=q');
-
-      await userEvent.click(screen.getByTestId('next-page'));
-      expect(rendered().testLocation?.search).toEqual('?page=3&search=q');
-
-      await userEvent.click(screen.getByTestId('last-page'));
-      expect(rendered().testLocation?.search).toEqual(`?page=${fromAICArt.pagination.totalPages}&search=q`);
-
-      await userEvent.click(screen.getByTestId('prev-page'));
-      expect(rendered().testLocation?.search).toEqual(`?page=${fromAICArt.pagination.totalPages - 1}&search=q`);
-
-      await userEvent.click(screen.getByTestId('prev-page'));
-      expect(rendered().testLocation?.search).toEqual(`?page=${fromAICArt.pagination.totalPages - 2}&search=q`);
-
-      await userEvent.click(screen.getByTestId('first-page'));
-      expect(rendered().testLocation?.search).toEqual('?page=1&search=q');
+  test('with existing params', async () => {
+    const rendered = renderWithRouter(<GalleryNav/>, {
+      params: {search: 'q'},
+      path: Paths.artGallery,
+      initialRoute: Paths.artGallery,
+      galleryState: fromAICArt
     });
+
+    await userEvent.click(screen.getByTestId('next-page'));
+    expect(rendered().testLocation?.search).toEqual('?page=2&search=q');
+
+    await userEvent.click(screen.getByTestId('next-page'));
+    expect(rendered().testLocation?.search).toEqual('?page=3&search=q');
+
+    await userEvent.click(screen.getByTestId('last-page'));
+    expect(rendered().testLocation?.search).toEqual(`?page=${fromAICArt.pagination.totalPages}&search=q`);
+
+    await userEvent.click(screen.getByTestId('prev-page'));
+    expect(rendered().testLocation?.search).toEqual(`?page=${fromAICArt.pagination.totalPages - 1}&search=q`);
+
+    await userEvent.click(screen.getByTestId('prev-page'));
+    expect(rendered().testLocation?.search).toEqual(`?page=${fromAICArt.pagination.totalPages - 2}&search=q`);
+
+    await userEvent.click(screen.getByTestId('first-page'));
+    expect(rendered().testLocation?.search).toEqual('?page=1&search=q');
   });
 
-  describe('page information', () => {
-    it('should inform what records are displayed', () => {
-      renderWithRouter(<GalleryNav/>, {
-        params: {page: 1, size: fromAICArt.pagination.limit},
-        path: Paths.artGallery,
-        initialRoute: Paths.artGallery,
-        galleryState: fromAICArt
-      });
-      expect(screen.getByTestId('info')).toHaveTextContent(`${1} - ${fromAICArt.pagination.limit}of${fromAICArt.pagination.total}`);
+  test('page information', () => {
+    renderWithRouter(<GalleryNav/>, {
+      params: {page: 1, size: fromAICArt.pagination.limit},
+      path: Paths.artGallery,
+      initialRoute: Paths.artGallery,
+      galleryState: fromAICArt
     });
+    expect(screen.getByTestId('info')).toHaveTextContent(`${1} - ${fromAICArt.pagination.limit}of${fromAICArt.pagination.total}`);
   });
 });
