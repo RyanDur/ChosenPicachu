@@ -21,7 +21,8 @@ describe('viewing a piece', () => {
       id: faker.number.int(),
       title: faker.lorem.words(),
       term_titles: [faker.lorem.sentence()],
-      artist_display: faker.lorem.paragraph()
+      artist_display: faker.lorem.paragraph(),
+      image_id: faker.lorem.word(),
     }
   };
 
