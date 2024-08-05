@@ -99,13 +99,11 @@ describe('data', () => {
       });
 
       test('when it is not successful', async () => {
-        const consumer = vi.fn();
         fetchMock.mockResponse(HTTPError.UNKNOWN, {status: 400});
 
-        await artGallery.getAllArt({page: 1, size: 12, source: Source.RIJKS})
-          .onFailure(consumer).orNull();
+        const actual = (await artGallery.getAllArt({page: 1, size: 12, source: Source.RIJKS}).identity).identity;
 
-        expect(consumer).toHaveBeenCalledWith(expect.objectContaining({reason: HTTPError.UNKNOWN}));
+        expect(actual).toEqual(expect.objectContaining({reason: HTTPError.UNKNOWN}));
       });
     });
 
@@ -116,7 +114,7 @@ describe('data', () => {
       await artGallery.getAllArt({page: 1, size: 12, source: 'I do not exist' as Source})
         .onFailure(consumer).orNull();
 
-      expect(consumer.mock.calls[0][0].reason).toStrictEqual(HTTPError.UNKNOWN_SOURCE);
+      expect(consumer).toHaveBeenCalledWith(expect.objectContaining({reason: HTTPError.UNKNOWN_SOURCE}));
     });
   });
 
