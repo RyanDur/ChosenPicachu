@@ -14,21 +14,19 @@ describe('viewing a piece', () => {
       title: faker.lorem.words(),
       term_titles: [faker.lorem.sentence()],
       artist_display: faker.lorem.paragraph(),
-      image_id: faker.lorem.word(),
+      image_id: faker.lorem.word()
     }
   };
 
-  describe('loading the piece of art', () => {
-    it('should be loading', async () => {
-      fetchMock.mockResponse(JSON.stringify(aicArtResponse));
+  test('when loading the piece of art', async () => {
+    fetchMock.mockResponse(JSON.stringify(aicArtResponse));
 
-      renderWithRouter(<ArtPiece/>, {
-        initialRoute: `${Paths.artGallery}/1234`,
-        path: `${Paths.artGalleryPiece}`
-      });
-
-      await waitFor(() => expect(screen.getByTestId('loading-piece')).toBeInTheDocument());
+    renderWithRouter(<ArtPiece/>, {
+      initialRoute: `${Paths.artGallery}/1234`,
+      path: `${Paths.artGalleryPiece}`
     });
+
+    await waitFor(() => expect(screen.getByTestId('loading-piece')).toBeInTheDocument());
   });
 
   describe('when the art piece is loaded', () => {
