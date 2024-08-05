@@ -9,14 +9,14 @@ import {AICArtResponse} from '../../../../data/artGallery/aic/types.ts';
 import {Art} from '../../../../data/artGallery/types/response.ts';
 
 describe('viewing a piece', () => {
-  const mockPiece: Art = {
+  const artPiece: Art = {
     id: faker.lorem.word(),
     image: faker.internet.url(),
     title: faker.lorem.words(),
     altText: faker.lorem.sentence(),
     artistInfo: faker.lorem.paragraph()
   };
-  const aicPieceResponse: AICArtResponse = {
+  const aicArtResponse: AICArtResponse = {
     data: {
       id: faker.number.int(),
       title: faker.lorem.words(),
@@ -27,7 +27,7 @@ describe('viewing a piece', () => {
 
   describe('loading the piece of art', () => {
     it('should be loading', async () => {
-      fetchMock.mockResponse(JSON.stringify(aicPieceResponse));
+      fetchMock.mockResponse(JSON.stringify(aicArtResponse));
 
       renderWithRouter(<ArtPiece/>, {
         initialRoute: `${Paths.artGallery}/1234`,
@@ -40,20 +40,20 @@ describe('viewing a piece', () => {
 
   describe('when the art piece is loaded', () => {
     const params = {
-      initialRoute: `${Paths.artGallery}/${mockPiece.id}`,
+      initialRoute: `${Paths.artGallery}/${artPiece.id}`,
       path: Paths.artGalleryPiece,
-      pieceState: mockPiece,
+      pieceState: artPiece,
       params: {tab: Source.AIC}
     };
 
     beforeEach(async () => {
-      fetchMock.mockResponse(JSON.stringify(aicPieceResponse));
+      fetchMock.mockResponse(JSON.stringify(aicArtResponse));
     });
 
     it("should display the artist's info", async () => {
       renderWithRouter(<ArtPiece/>, params);
 
-      expect(await screen.findByText(mockPiece.artistInfo)).toBeInTheDocument();
+      expect(await screen.findByText(artPiece.artistInfo)).toBeInTheDocument();
     });
 
     it('should not have the error image', async () => {
