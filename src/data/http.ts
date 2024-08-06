@@ -13,7 +13,7 @@ export const http = {
       .map((resp) => asyncResult(resp.json()).or(() => asyncFailure(HTTPError.JSON_BODY_ERROR)))
       .orElse(fail(response))),
 
-  put: <T = undefined>(endpoint: string, body: unknown): Result.Async<T, HTTPError> =>
+  put: <T>(endpoint: string, body: unknown): Result.Async<T | undefined, HTTPError> =>
     request(endpoint, HTTPMethod.PUT, body).mBind(response => maybe(response, isNoContent)
       .map(() => asyncSuccess<undefined, HTTPError>(undefined))
       .or(() => maybe(response, isCreated)
