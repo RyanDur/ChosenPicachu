@@ -12,7 +12,7 @@ describe('http', () => {
     method         | httpMethod           | body          | code                     | response
     ${http.get}    | ${HTTPMethod.GET}    | ${undefined}  | ${HTTPStatus.OK}         | ${testObject}    
     ${http.post}   | ${HTTPMethod.POST}   | ${testObject} | ${HTTPStatus.CREATED}    | ${testObject}    
-    ${http.put}    | ${HTTPMethod.PUT}    | ${testObject} | ${HTTPStatus.NO_CONTENT} | ${undefined}     
+    ${http.put}    | ${HTTPMethod.PUT}    | ${testObject} | ${HTTPStatus.CREATED}    | ${testObject}     
     ${http.delete} | ${HTTPMethod.DELETE} | ${undefined}  | ${HTTPStatus.NO_CONTENT} | ${undefined}    
     `('$httpMethod', ({method, httpMethod, body, code, response}) => {
     test(`${httpMethod} success`, async () => {
@@ -32,7 +32,7 @@ describe('http', () => {
 
       const actual = (await method(endpoint, body).identity).identity;
 
-      expect(actual.reason).toEqual(HTTPError.FORBIDDEN);
+      expect(actual).toEqual(HTTPError.FORBIDDEN);
     });
 
     test(`${httpMethod} when the network is down`, async () => {
@@ -40,7 +40,7 @@ describe('http', () => {
 
       const actual = (await method(endpoint, body).identity).identity;
 
-      expect(actual.reason).toEqual(HTTPError.NETWORK_ERROR);
+      expect(actual).toEqual(HTTPError.NETWORK_ERROR);
     });
 
     test(`${httpMethod} failure is SERVER_ERROR`, async () => {
@@ -49,7 +49,7 @@ describe('http', () => {
 
       const actual = (await method(endpoint, body).identity).identity;
 
-      expect(actual.reason).toEqual(HTTPError.SERVER_ERROR);
+      expect(actual).toEqual(HTTPError.SERVER_ERROR);
     });
   });
 
@@ -57,11 +57,12 @@ describe('http', () => {
     method         | httpMethod           | body          | code
     ${http.get}    | ${HTTPMethod.GET}    | ${undefined}  | ${HTTPStatus.OK}
     ${http.post}   | ${HTTPMethod.POST}   | ${testObject} | ${HTTPStatus.CREATED}
+    ${http.put}    | ${HTTPMethod.PUT}    | ${testObject} | ${HTTPStatus.CREATED}
     `('$httpMethod can handle improper json', async ({method, body, code}) => {
     fetchMock.mockResponse('', {status: code});
 
     const actual = (await method(endpoint, body).identity).identity;
 
-    expect(actual.reason).toEqual(HTTPError.JSON_BODY_ERROR);
+    expect(actual).toEqual(HTTPError.JSON_BODY_ERROR);
   });
 });
