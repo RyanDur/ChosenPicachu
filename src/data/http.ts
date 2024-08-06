@@ -3,28 +3,30 @@ import {asyncFailure, asyncResult, asyncSuccess, maybe, Result} from '@ryandur/s
 
 export const http = {
   get: <T>(endpoint: string): Result.Async<T, HTTPError> =>
-    request(endpoint).mBind(response => maybe(response, isOk)
-      .map((resp) => asyncResult(resp.json()).or(() => asyncFailure(HTTPError.JSON_BODY_ERROR)))
-      .orElse(fail(response))),
+    request(endpoint).mBind(response =>
+      maybe(response, isOk).map(bodyResult)
+        .orElse(fail(response))),
 
   // the rest of these are not needed. They are just here for an example
   post: <T>(endpoint: string, body: unknown): Result.Async<T, HTTPError> =>
-    request(endpoint, HTTPMethod.POST, body).mBind(response => maybe(response, isCreated)
-      .map((resp) => asyncResult(resp.json()).or(() => asyncFailure(HTTPError.JSON_BODY_ERROR)))
-      .orElse(fail(response))),
+    request(endpoint, HTTPMethod.POST, body).mBind(response =>
+      maybe(response, isCreated).map(bodyResult)
+        .orElse(fail(response))),
 
   put: <T>(endpoint: string, body: unknown): Result.Async<T | undefined, HTTPError> =>
-    request(endpoint, HTTPMethod.PUT, body).mBind(response => maybe(response, isNoContent)
-      .map(() => asyncSuccess<undefined, HTTPError>(undefined))
-      .or(() => maybe(response, isCreated)
-        .map((resp) => asyncResult(resp.json()).or(() => asyncFailure(HTTPError.JSON_BODY_ERROR))))
-      .orElse(fail(response))),
+    request(endpoint, HTTPMethod.PUT, body).mBind(response =>
+      maybe(response, isNoContent).map(emptySuccess)
+        .or(() => maybe(response, isCreated).map(bodyResult))
+        .orElse(fail(response))),
 
   delete: (endpoint: string): Result.Async<undefined, HTTPError> =>
-    request(endpoint, HTTPMethod.DELETE).mBind(response => maybe(response, isNoContent)
-      .map(() => asyncSuccess<undefined, HTTPError>(undefined))
-      .orElse(fail(response)))
+    request(endpoint, HTTPMethod.DELETE).mBind(response =>
+      maybe(response, isNoContent).map(emptySuccess)
+        .orElse(fail(response)))
 };
+
+const bodyResult = (resp: Response) => asyncResult(resp.json()).or(() => asyncFailure(HTTPError.JSON_BODY_ERROR));
+const emptySuccess = () => asyncSuccess<undefined, HTTPError>(undefined);
 
 const request = (uri: PATH, method?: HTTPMethod, body?: unknown) =>
   asyncResult(fetch(uri, {
