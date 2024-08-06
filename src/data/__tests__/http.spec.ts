@@ -53,6 +53,7 @@ describe('http', () => {
     method         | httpMethod           | body          | code
     ${http.get}    | ${HTTPMethod.GET}    | ${undefined}  | ${HTTPStatus.OK}
     ${http.post}   | ${HTTPMethod.POST}   | ${testObject} | ${HTTPStatus.CREATED}
+    ${http.put}    | ${HTTPMethod.PUT}    | ${testObject} | ${HTTPStatus.CREATED}
     `('$httpMethod can handle improper json', async ({method, body, code}) => {
     fetchMock.mockResponse('', {status: code});
 
