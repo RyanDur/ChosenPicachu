@@ -1,10 +1,10 @@
 import {AICAllArt, AICAllArtSchema, AICArt, AICArtSchema, AICPieceData, AICSearch, AICSearchSchema} from './types';
-import {validate} from '../../http';
 import {toQueryString} from '../../../util/URL';
 import {has, maybe} from '@ryandur/sand';
 import {aicDomain, defaultRecordLimit, defaultSearchLimit} from '../../../config';
 import {PATH as URIType, PATH} from '../../types';
 import {AllArt, Art, SearchOptions} from '../types/response';
+import {validate} from '../../validate';
 
 export const shapeOfAICResponse = ['id', 'title', 'image_id', 'artist_display', 'term_titles', 'thumbnail'];
 export const aicToPiece = (data: AICArt): Art => ({
