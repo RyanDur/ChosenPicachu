@@ -7,7 +7,7 @@ import {PATH as URIType, PATH} from '../../types';
 import {AllArt, Art, SearchOptions} from '../types/response';
 
 export const shapeOfAICResponse = ['id', 'title', 'image_id', 'artist_display', 'term_titles', 'thumbnail'];
-const aicToPiece = (data: AICArt): Art => ({
+export const aicToPiece = (data: AICArt): Art => ({
     id: String(data.id),
     title: data.title,
     image: `https://www.artic.edu/iiif/2/${data.image_id}/full/2000,/0/default.jpg`,
