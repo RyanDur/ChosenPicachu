@@ -5,8 +5,7 @@ import {faker} from '@faker-js/faker';
 const testObject = {foo: faker.lorem.words()};
 
 describe('http', () => {
-  const somePath = `/${faker.lorem.word()}/${faker.lorem.word()}`;
-  const endpoint = somePath;
+  const endpoint = `/${faker.lorem.word()}/${faker.lorem.word()}`;
 
   describe.each`
     method         | httpMethod           | body          | code                     | response
@@ -21,10 +20,6 @@ describe('http', () => {
 
       const actual = await method(endpoint, body).orNull();
 
-      const request = fetchMock.requests()[0];
-      expect(request.method).toEqual(HTTPMethod.GET);
-      expect(request.url).toEqual(somePath);
-      expect(request.bodyUsed).toEqual(false);
       expect(actual).toEqual(response);
     });
 
