@@ -49,7 +49,7 @@ describe('data', () => {
         await artGallery.getAllArt({page: 1, size: 12, source: Source.AIC})
           .onFailure(consumer).orNull();
 
-        expect(consumer).toHaveBeenCalledWith(expect.objectContaining({reason: HTTPError.UNKNOWN}));
+        expect(consumer).toHaveBeenCalledWith(HTTPError.UNKNOWN);
       });
     });
 
@@ -77,7 +77,7 @@ describe('data', () => {
         await artGallery.getAllArt({page: 1, size: 12, source: Source.HARVARD})
           .onFailure(consumer).orNull();
 
-        expect(consumer).toHaveBeenCalledWith(expect.objectContaining({reason: HTTPError.UNKNOWN}));
+        expect(consumer).toHaveBeenCalledWith(HTTPError.UNKNOWN);
       });
     });
 
@@ -103,7 +103,7 @@ describe('data', () => {
 
         const actual = (await artGallery.getAllArt({page: 1, size: 12, source: Source.RIJKS}).identity).identity;
 
-        expect(actual).toEqual(expect.objectContaining({reason: HTTPError.UNKNOWN}));
+        expect(actual).toEqual(HTTPError.UNKNOWN);
       });
     });
 
@@ -114,7 +114,7 @@ describe('data', () => {
       await artGallery.getAllArt({page: 1, size: 12, source: 'I do not exist' as Source})
         .onFailure(consumer).orNull();
 
-      expect(consumer).toHaveBeenCalledWith(expect.objectContaining({reason: HTTPError.UNKNOWN_SOURCE}));
+      expect(consumer).toHaveBeenCalledWith(HTTPError.UNKNOWN_SOURCE);
     });
   });
 
@@ -137,7 +137,7 @@ describe('data', () => {
         await artGallery.getArt({id: String(aicPiece.id), source: Source.AIC})
           .onFailure(consumer).orNull();
 
-        expect(consumer).toHaveBeenCalledWith(expect.objectContaining({reason: HTTPError.UNKNOWN}));
+        expect(consumer).toHaveBeenCalledWith(HTTPError.UNKNOWN);
       });
     });
 
@@ -159,7 +159,7 @@ describe('data', () => {
         await artGallery.getArt({id: String(aicPiece.id), source: Source.HARVARD})
           .onFailure(consumer).orNull();
 
-        expect(consumer).toHaveBeenCalledWith(expect.objectContaining({reason: HTTPError.UNKNOWN}));
+        expect(consumer).toHaveBeenCalledWith(HTTPError.UNKNOWN);
       });
     });
 
@@ -179,7 +179,7 @@ describe('data', () => {
         await artGallery.getArt({id: String(aicPiece.id), source: Source.RIJKS})
           .onFailure(consumer).orNull();
 
-        expect(consumer).toHaveBeenCalledWith(expect.objectContaining({reason: HTTPError.UNKNOWN}));
+        expect(consumer).toHaveBeenCalledWith(HTTPError.UNKNOWN);
       });
     });
 
@@ -190,7 +190,7 @@ describe('data', () => {
       await artGallery.getArt({id: '1', source: 'I do not exist' as Source})
         .onFailure(consumer).orNull();
 
-      expect(consumer).toHaveBeenCalledWith(expect.objectContaining({reason: HTTPError.UNKNOWN_SOURCE}));
+      expect(consumer).toHaveBeenCalledWith(HTTPError.UNKNOWN_SOURCE);
     });
   });
 
@@ -234,7 +234,7 @@ describe('data', () => {
       await artGallery.searchForArt({search, source: 'I do not exist' as Source})
         .onFailure(consumer).orNull();
 
-      expect(consumer).toHaveBeenCalledWith(expect.objectContaining({reason: HTTPError.UNKNOWN_SOURCE}));
+      expect(consumer).toHaveBeenCalledWith(HTTPError.UNKNOWN_SOURCE);
     });
 
     test.each`
@@ -248,7 +248,7 @@ describe('data', () => {
 
       await artGallery.searchForArt({search, source}).onFailure(consumer).orNull();
 
-      expect(consumer).toHaveBeenCalledWith(expect.objectContaining({reason: HTTPError.SERVER_ERROR}));
+      expect(consumer).toHaveBeenCalledWith(HTTPError.SERVER_ERROR);
     });
   });
 
