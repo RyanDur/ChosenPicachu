@@ -101,9 +101,9 @@ describe('data', () => {
       test('when it is not successful', async () => {
         fetchMock.mockResponse(HTTPError.UNKNOWN, {status: 400});
 
-        const actual = (await artGallery.getAllArt({page: 1, size: 12, source: Source.RIJKS}).identity).identity;
+        const actual = (await artGallery.getAllArt({page: 1, size: 12, source: Source.RIJKS}).value);
 
-        expect(actual).toEqual(HTTPError.UNKNOWN);
+        expect(actual).toEqual(expect.objectContaining({reason: HTTPError.UNKNOWN}));
       });
     });
 

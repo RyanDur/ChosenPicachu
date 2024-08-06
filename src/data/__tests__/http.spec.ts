@@ -12,7 +12,7 @@ describe('http', () => {
     method         | httpMethod           | body          | code                     | response
     ${http.get}    | ${HTTPMethod.GET}    | ${undefined}  | ${HTTPStatus.OK}         | ${testObject}    
     ${http.post}   | ${HTTPMethod.POST}   | ${testObject} | ${HTTPStatus.CREATED}    | ${testObject}    
-    ${http.put}    | ${HTTPMethod.PUT}    | ${testObject} | ${HTTPStatus.CREATED}    | ${testObject}     
+    ${http.put}    | ${HTTPMethod.PUT}    | ${testObject} | ${HTTPStatus.NO_CONTENT} | ${undefined}     
     ${http.delete} | ${HTTPMethod.DELETE} | ${undefined}  | ${HTTPStatus.NO_CONTENT} | ${undefined}    
     `('$httpMethod', ({method, httpMethod, body, code, response}) => {
     test(`${httpMethod} success`, async () => {
@@ -30,7 +30,7 @@ describe('http', () => {
     test(`${httpMethod} failure is FORBIDDEN`, async () => {
       fetchMock.mockResponse(JSON.stringify(testObject), {status: HTTPStatus.FORBIDDEN});
 
-      const actual = (await method(endpoint, body).identity).identity;
+      const actual = (await method(endpoint, body).value).reason;
 
       expect(actual).toEqual(HTTPError.FORBIDDEN);
     });
@@ -38,7 +38,7 @@ describe('http', () => {
     test(`${httpMethod} when the network is down`, async () => {
       fetchMock.mockReject(new Error('Network Error'));
 
-      const actual = (await method(endpoint, body).identity).identity;
+      const actual = (await method(endpoint, body).value).reason;
 
       expect(actual).toEqual(HTTPError.NETWORK_ERROR);
     });
@@ -47,7 +47,7 @@ describe('http', () => {
       fetchMock.mockReject(new Error('Network Error'));
       fetchMock.mockResponse('', {status: HTTPStatus.SERVER_ERROR});
 
-      const actual = (await method(endpoint, body).identity).identity;
+      const actual = (await method(endpoint, body).value).reason;
 
       expect(actual).toEqual(HTTPError.SERVER_ERROR);
     });
@@ -57,11 +57,10 @@ describe('http', () => {
     method         | httpMethod           | body          | code
     ${http.get}    | ${HTTPMethod.GET}    | ${undefined}  | ${HTTPStatus.OK}
     ${http.post}   | ${HTTPMethod.POST}   | ${testObject} | ${HTTPStatus.CREATED}
-    ${http.put}    | ${HTTPMethod.PUT}    | ${testObject} | ${HTTPStatus.CREATED}
     `('$httpMethod can handle improper json', async ({method, body, code}) => {
     fetchMock.mockResponse('', {status: code});
 
-    const actual = (await method(endpoint, body).identity).identity;
+    const actual = (await method(endpoint, body).value).reason;
 
     expect(actual).toEqual(HTTPError.JSON_BODY_ERROR);
   });
