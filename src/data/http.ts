@@ -13,9 +13,11 @@ export const http = {
       .map((resp) => asyncResult(resp.json()).or(() => asyncFailure(HTTPError.JSON_BODY_ERROR)))
       .orElse(fail(response))),
 
-  put: (endpoint: string, body: unknown): Result.Async<undefined, HTTPError> =>
+  put: <T = undefined>(endpoint: string, body: unknown): Result.Async<T, HTTPError> =>
     request(endpoint, HTTPMethod.PUT, body).mBind(response => maybe(response, isNoContent)
       .map(() => asyncSuccess<undefined, HTTPError>(undefined))
+      .or(() => maybe(response, isCreated)
+        .map((resp) => asyncResult(resp.json()).or(() => asyncFailure(HTTPError.JSON_BODY_ERROR))))
       .orElse(fail(response))),
 
   delete: (endpoint: string): Result.Async<undefined, HTTPError> =>
