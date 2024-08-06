@@ -1,6 +1,5 @@
 import {FailStatusCode, HTTPError, HTTPMethod, isCreated, isNoContent, isOk, matchFailStatusCode, PATH} from './types';
 import {asyncFailure, asyncResult, asyncSuccess, maybe, Result} from '@ryandur/sand';
-import {Decoder} from 'schemawax';
 
 export const http = {
   get: <T>(endpoint: string): Result.Async<T, HTTPError> =>
@@ -24,11 +23,6 @@ export const http = {
       .map(() => asyncSuccess<undefined, HTTPError>(undefined))
       .orElse(fail(response)))
 };
-
-export const validate = <T>(schema: Decoder<T>) => (response: unknown): Result.Async<T, HTTPError> =>
-  maybe(schema.decode(response))
-    .map(result => asyncSuccess<T, HTTPError>(result))
-    .orElse(asyncFailure(HTTPError.CANNOT_DECODE));
 
 const request = (uri: PATH, method?: HTTPMethod, body?: unknown) =>
   asyncResult(fetch(uri, {
