@@ -37,5 +37,9 @@ export enum HTTPStatus {
     FORBIDDEN = FailStatusCode.FORBIDDEN,
     SERVER_ERROR = FailStatusCode.SERVER_ERROR
 }
+export const isOk = (response: Response): boolean => response.status === HTTPStatus.OK;
+export const isCreated = (response: Response): boolean => response.status === HTTPStatus.CREATED;
+export const isNoContent = (response: Response): boolean => response.status === HTTPStatus.NO_CONTENT;
+
 
 export const matchFailStatusCode = matchOn(Object.values(FailStatusCode));
