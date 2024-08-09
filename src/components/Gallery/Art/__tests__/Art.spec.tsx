@@ -31,7 +31,7 @@ describe('The gallery.', () => {
     fetchMock.mockResponse(JSON.stringify({...aicArtResponse, data: []}));
     renderWithRouter(<ArtGallery/>, {params: {page: 0, search: 'g', size: 8, tab: Source.AIC}});
 
-    await waitFor(() => expect(screen.queryAllByTestId(/piece/).length).toEqual(0));
+    await waitFor(() => expect(screen.queryByTestId(/piece/)).not.toBeInTheDocument());
     expect(screen.queryByTestId('gallery-loading')).not.toBeInTheDocument();
     expect(screen.queryByTestId('empty-gallery')).toBeInTheDocument();
   });
