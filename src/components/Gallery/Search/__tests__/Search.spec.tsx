@@ -2,10 +2,10 @@ import {screen, waitFor} from '@testing-library/react';
 import {Search} from '../index';
 import userEvent from '@testing-library/user-event';
 import {renderWithRouter} from '../../../../__tests__/util';
-import {Source} from '../../../../data/artGallery/types/resource';
+import {Source} from '../../resource/types/resource';
 import {faker} from '@faker-js/faker';
 import {Paths} from '../../../../routes/Paths.ts';
-import {AICSearch} from '../../../../data/artGallery/aic/types.ts';
+import {AICSearch} from '../../resource/aic/types.ts';
 
 describe('search', () => {
   const searchWord = faker.lorem.word().toUpperCase();

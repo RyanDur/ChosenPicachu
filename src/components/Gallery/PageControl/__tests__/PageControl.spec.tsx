@@ -4,7 +4,7 @@ import {toQueryObj} from '../../../../util/URL';
 import {fromAICArt} from '../../../../__tests__/util/dummyData';
 import {renderWithRouter} from '../../../../__tests__/util';
 import {PageControl} from '../index';
-import {Source} from '../../../../data/artGallery/types/resource';
+import {Source} from '../../resource/types/resource';
 import {Paths} from '../../../../routes/Paths.ts';
 
 window.scrollTo = vi.fn();

@@ -1,11 +1,11 @@
 import {FC, useEffect, useState} from 'react';
-import {data} from '../../../data';
 import {useQuery} from '../../hooks';
 import {Loading} from '../../Loading';
 import {Image} from '../Image';
 import {useGallery} from '../Context';
 import {empty} from '@ryandur/sand';
-import {Source} from '../../../data/artGallery/types/resource';
+import {Source} from '../resource/types/resource';
+import {resource} from '../resource';
 import './Gallery.css';
 import './Gallery.layout.css';
 
@@ -17,7 +17,7 @@ export const ArtGallery: FC = () => {
         useQuery<{ page: number, size: number, tab: Source, search?: string }>();
 
     useEffect(() => {
-        data.artGallery.getAllArt({page, size, search, source: tab})
+        resource.getAllArt({page, size, search, source: tab})
             .onPending(isLoading)
             .onSuccess(updateArt)
             .onSuccess(data => hasErrored(empty(data.pieces)))

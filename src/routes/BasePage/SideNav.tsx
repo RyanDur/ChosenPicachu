@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {Link} from 'react-router-dom';
 import {toQueryString} from '../../util/URL';
 import {defaultRecordLimit} from '../../config.ts';
-import {Source} from '../../data/artGallery/types/resource.ts';
+import {Source} from '../../components/Gallery/resource/types/resource.ts';
 import {Paths} from '../Paths.ts';
 
 export const SideNav: FC = () =>

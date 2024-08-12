@@ -2,7 +2,7 @@ import {screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {renderWithRouter} from '../../../../__tests__/util';
 import {ArtGallery} from '../index';
-import {Source} from '../../../../data/artGallery/types/resource';
+import {Source} from '../../resource/types/resource';
 import {Paths} from '../../../../routes/Paths.ts';
 import {aicArtResponse, fromAICArt} from '../../../../__tests__/util/dummyData.tsx';
 

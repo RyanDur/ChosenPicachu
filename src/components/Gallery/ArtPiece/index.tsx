@@ -1,13 +1,13 @@
 import {useParams} from 'react-router-dom';
 import {useEffect, useState} from 'react';
-import {data} from '../../../data';
 import {Loading} from '../../Loading';
 import {ArtPieceContext, useArtPiece, useArtPieceContext} from './Context';
 import {Image} from '../Image';
 import {useQuery} from '../../hooks';
-import {Source} from '../../../data/artGallery/types/resource';
+import {Source} from '../resource/types/resource';
 import {has, not} from '@ryandur/sand';
 import './Piece.css';
+import {resource} from '../resource';
 
 const ArtPiece = () => {
     const {piece, updatePiece, reset} = useArtPiece();
@@ -17,12 +17,12 @@ const ArtPiece = () => {
     const {id} = useParams<{ id: string }>();
 
     useEffect(() => {
-        id && data.artGallery.getArt({id, source: tab})
+        id && resource.getArt({id, source: tab})
             .onPending(isLoading)
             .onSuccess(updatePiece)
             .onFailure(() => hasErrored(true));
         return reset;
-    }, [id, updatePiece]);
+    }, [id, updatePiece, tab]);
 
     return <>
         {loading && <Loading testId="loading-piece"/>}

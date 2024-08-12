@@ -2,8 +2,8 @@ import {fireEvent, screen} from '@testing-library/react';
 import {Image} from '../index';
 import userEvent from '@testing-library/user-event';
 import {renderWithRouter} from '../../../../__tests__/util';
-import {Art} from '../../../../data/artGallery/types/response';
-import {Source} from '../../../../data/artGallery/types/resource';
+import {Art} from '../../resource/types/response';
+import {Source} from '../../resource/types/resource';
 import {faker} from '@faker-js/faker';
 import {Paths} from '../../../../routes/Paths.ts';
 

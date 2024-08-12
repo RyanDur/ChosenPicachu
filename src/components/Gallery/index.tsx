@@ -4,7 +4,7 @@ import {GalleryTitle} from './GalleryTitle';
 import {GalleryNav} from './Nav';
 import {Tabs} from '../Tabs';
 import {PageControl} from './PageControl';
-import {Source} from '../../data/artGallery/types/resource';
+import {Source} from './resource/types/resource';
 
 const Gallery: FC = () =>
   <>

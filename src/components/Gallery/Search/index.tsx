@@ -1,11 +1,11 @@
 import {FC, FormEvent, useEffect, useState} from 'react';
-import {data} from '../../../data';
 import {useQuery} from '../../hooks';
 import {useNavigate} from 'react-router-dom';
-import {SearchOptions} from '../../../data/artGallery/types/response';
-import {Source} from '../../../data/artGallery/types/resource';
+import {SearchOptions} from '../resource/types/response';
+import {Source} from '../resource/types/resource';
 import {Paths} from '../../../routes/Paths.ts';
 import {debounce} from 'throttle-debounce';
+import {resource} from '../resource';
 import './Search.css';
 import './Search.layout.css';
 
@@ -19,7 +19,7 @@ export const Search: FC<Props> = ({id}) => {
   const navigate = useNavigate();
   const {queryObj: {tab, search}, updateQueryString, nextQueryString} = useQuery<{ tab: Source, search?: string }>();
   const debounceSearch = debounce(300, search =>
-    data.artGallery.searchForArt({search, source: tab})
+    resource.searchForArt({search, source: tab})
       .onSuccess(updateSearchOptions));
 
   useEffect(() => {
