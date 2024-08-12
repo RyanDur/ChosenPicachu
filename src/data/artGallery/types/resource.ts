@@ -20,6 +20,8 @@ export interface GetAllArt {
     source: Source;
 }
 
+export type GetAllArtRequest = Omit<GetAllArt, 'source'>
+
 export interface GetArt {
     id: string;
     source: Source;
