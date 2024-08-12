@@ -2,16 +2,16 @@ import {nanoid} from 'nanoid';
 import {faker} from '@faker-js/faker';
 import {Column, Row} from '../../components/Table/types';
 import {AddressInfo, User, UserInfo} from '../../components/UserInfo/types';
-import {AICAllArt, AICArt} from '../../data/artGallery/aic/types';
+import {AICAllArt, AICArt} from '../../components/Gallery/resource/aic/types';
 import {
   HarvardAllArt,
   HarvardArt,
   HarvardInfo,
   HarvardPeople,
   HarvardSearch
-} from '../../data/artGallery/harvard/types.js';
-import {AllArt, Art} from '../../data/artGallery/types/response';
-import {RIJKArtObject, RIJKSAllArt, RIJKSArt} from '../../data/artGallery/rijks/types';
+} from '../../components/Gallery/resource/harvard/types.js';
+import {AllArt, Art} from '../../components/Gallery/resource/types/response';
+import {RIJKArtObject, RIJKSAllArt, RIJKSArt} from '../../components/Gallery/resource/rijks/types';
 import {AvatarGenerator} from 'random-avatar-generator';
 import {toDate} from 'date-fns';
 

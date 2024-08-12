@@ -1,6 +1,6 @@
 import {createContext, useContext, useMemo, useState} from 'react';
 import {Consumer} from '@ryandur/sand';
-import {Art} from '../../../../data/artGallery/types/response';
+import {Art} from '../../resource/types/response';
 
 interface PieceContext {
     piece: Partial<Art>;

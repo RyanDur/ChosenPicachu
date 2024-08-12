@@ -6,7 +6,7 @@ import {toQueryString} from '../../util/URL';
 import {AddressInfo, User} from '../../components/UserInfo/types';
 import {Consumer} from '@ryandur/sand';
 import {AppContext} from '../../AppContext';
-import {AllArt, Art} from '../../data/artGallery/types/response';
+import {AllArt, Art} from '../../components/Gallery/resource/types/response';
 import {toDate} from 'date-fns';
 
 export interface Rendered {

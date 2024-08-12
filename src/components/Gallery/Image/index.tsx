@@ -4,7 +4,7 @@ import {join} from '../../util';
 import {Loading} from '../../Loading';
 import {useQuery} from '../../hooks';
 import {toQueryString} from '../../../util/URL';
-import {Art} from '../../../data/artGallery/types/response';
+import {Art} from '../resource/types/response';
 import {Paths} from '../../../routes/Paths';
 import './Image.css';
 

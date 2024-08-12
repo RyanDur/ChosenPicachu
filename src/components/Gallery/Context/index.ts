@@ -1,6 +1,6 @@
 import {createContext, useContext, useMemo, useState} from 'react';
 import {Consumer} from '@ryandur/sand';
-import {AllArt} from '../../../data/artGallery/types/response';
+import {AllArt} from '../resource/types/response';
 
 export interface GalleryContextState {
   art?: AllArt;
