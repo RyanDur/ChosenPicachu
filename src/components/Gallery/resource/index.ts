@@ -7,7 +7,7 @@ import {harvard} from './harvard';
 import {rijks} from './rijks';
 
 const matchSource = <T>(source: Source, options: Record<Source, () => T>): Maybe<T> =>
-  maybe(options[source]?.());
+  maybe(options[source]).map(fn => fn());
 
 export const resource = {
   getAllArt: ({source, ...request}: GetAllArt): Result.Async<AllArt, HTTPError> =>
