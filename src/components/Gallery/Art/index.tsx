@@ -5,7 +5,7 @@ import {Image} from '../Image';
 import {useGallery} from '../Context';
 import {empty} from '@ryandur/sand';
 import {Source} from '../resource/types/resource';
-import {resource} from '../resource';
+import {art as artResource} from '../resource';
 import './Gallery.css';
 import './Gallery.layout.css';
 
@@ -17,7 +17,7 @@ export const ArtGallery: FC = () => {
         useQuery<{ page: number, size: number, tab: Source, search?: string }>();
 
     useEffect(() => {
-        resource.getAllArt({page, size, search, source: tab})
+        artResource.getAll({page, size, search, source: tab})
             .onPending(isLoading)
             .onSuccess(updateArt)
             .onSuccess(data => hasErrored(empty(data.pieces)))

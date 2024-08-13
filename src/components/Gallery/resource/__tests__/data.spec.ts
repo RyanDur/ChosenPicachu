@@ -17,7 +17,7 @@ import {
 import {nanoid} from 'nanoid';
 import {AICPieceData, AICSearch} from '../aic/types';
 import {HTTPError} from '../../../../data/types';
-import {resource} from '../index';
+import {art} from '../index';
 import {Art} from '../types/response';
 import {Source} from '../types/resource';
 import {faker} from '@faker-js/faker';
@@ -29,7 +29,7 @@ describe('data', () => {
       test('when it is successful', async () => {
         fetchMock.mockResponse(JSON.stringify(aicArtResponse));
 
-        const actual = await resource.getAllArt({page: 1, size: 12, source: Source.AIC}).orNull();
+        const actual = await art.getAll({page: 1, size: 12, source: Source.AIC}).orNull();
 
         expect(actual).toEqual(fromAICArt);
       });
@@ -37,7 +37,7 @@ describe('data', () => {
       test('when it has a search term', async () => {
         fetchMock.mockResponse(JSON.stringify(aicArtResponse));
 
-        const actual = await resource.getAllArt({page: 1, size: 12, search: 'rad', source: Source.AIC}).orNull();
+        const actual = await art.getAll({page: 1, size: 12, search: 'rad', source: Source.AIC}).orNull();
 
         expect(actual).toEqual(fromAICArt);
       });
@@ -46,7 +46,7 @@ describe('data', () => {
         const consumer = vi.fn();
         fetchMock.mockResponse('response', {status: 400});
 
-        await resource.getAllArt({page: 1, size: 12, source: Source.AIC})
+        await art.getAll({page: 1, size: 12, source: Source.AIC})
           .onFailure(consumer).orNull();
 
         expect(consumer).toHaveBeenCalledWith(HTTPError.UNKNOWN);
@@ -57,7 +57,7 @@ describe('data', () => {
       test('when it is successful', async () => {
         fetchMock.mockResponse(JSON.stringify(harvardArtResponse));
 
-        const actual = await resource.getAllArt({page: 1, size: 12, source: Source.HARVARD}).orNull();
+        const actual = await art.getAll({page: 1, size: 12, source: Source.HARVARD}).orNull();
 
         expect(actual).toEqual(fromHarvardArt);
       });
@@ -65,7 +65,7 @@ describe('data', () => {
       test('when it has a search term', async () => {
         fetchMock.mockResponse(JSON.stringify(harvardArtResponse));
 
-        const actual = await resource.getAllArt({page: 1, size: 12, source: Source.HARVARD}).orNull();
+        const actual = await art.getAll({page: 1, size: 12, source: Source.HARVARD}).orNull();
 
         expect(actual).toEqual(fromHarvardArt);
       });
@@ -74,7 +74,7 @@ describe('data', () => {
         const consumer = vi.fn();
         fetchMock.mockResponse(HTTPError.UNKNOWN, {status: 400});
 
-        await resource.getAllArt({page: 1, size: 12, source: Source.HARVARD})
+        await art.getAll({page: 1, size: 12, source: Source.HARVARD})
           .onFailure(consumer).orNull();
 
         expect(consumer).toHaveBeenCalledWith(HTTPError.UNKNOWN);
@@ -85,7 +85,7 @@ describe('data', () => {
       test('when it is successful', async () => {
         fetchMock.mockResponse(JSON.stringify(fromRIJKArtResponse));
 
-        const actual = await resource.getAllArt({page: 1, size: 12, source: Source.RIJKS}).orNull();
+        const actual = await art.getAll({page: 1, size: 12, source: Source.RIJKS}).orNull();
 
         expect(actual).toEqual(fromRIJKArt(1, 12));
       });
@@ -93,7 +93,7 @@ describe('data', () => {
       test('when it has a search term', async () => {
         fetchMock.mockResponse(JSON.stringify(fromRIJKArtResponse));
 
-        const actual = await resource.getAllArt({page: 1, size: 12, search: 'rad', source: Source.RIJKS}).orNull();
+        const actual = await art.getAll({page: 1, size: 12, search: 'rad', source: Source.RIJKS}).orNull();
 
         expect(actual).toEqual(fromRIJKArt(1, 12));
       });
@@ -101,7 +101,7 @@ describe('data', () => {
       test('when it is not successful', async () => {
         fetchMock.mockResponse(HTTPError.UNKNOWN, {status: 400});
 
-        const actual = (await resource.getAllArt({page: 1, size: 12, source: Source.RIJKS}).value);
+        const actual = (await art.getAll({page: 1, size: 12, source: Source.RIJKS}).value);
 
         expect(actual).toEqual(expect.objectContaining({reason: HTTPError.UNKNOWN}));
       });
@@ -111,7 +111,7 @@ describe('data', () => {
       const consumer = vi.fn();
       fetchMock.mockResponse(JSON.stringify(fromRIJKArtResponse));
 
-      await resource.getAllArt({page: 1, size: 12, source: 'I do not exist' as Source})
+      await art.getAll({page: 1, size: 12, source: 'I do not exist' as Source})
         .onFailure(consumer).orNull();
 
       expect(consumer).toHaveBeenCalledWith(HTTPError.UNKNOWN_SOURCE);
@@ -124,7 +124,7 @@ describe('data', () => {
         test('for a full response', async () => {
           fetchMock.mockResponse(JSON.stringify(pieceAICResponse));
 
-          const actual = await resource.getArt({id: String(aicPiece.id), source: Source.AIC}).orNull();
+          const actual = await art.get({id: String(aicPiece.id), source: Source.AIC}).orNull();
 
           expect(actual).toEqual(aicPiece);
         });
@@ -134,7 +134,7 @@ describe('data', () => {
         const consumer = vi.fn();
         fetchMock.mockResponse('some error', {status: 400});
 
-        await resource.getArt({id: String(aicPiece.id), source: Source.AIC})
+        await art.get({id: String(aicPiece.id), source: Source.AIC})
           .onFailure(consumer).orNull();
 
         expect(consumer).toHaveBeenCalledWith(HTTPError.UNKNOWN);
@@ -146,7 +146,7 @@ describe('data', () => {
         const consumer = vi.fn();
         fetchMock.mockResponse(JSON.stringify(harvardPieceResponse));
 
-        const actual = await resource.getArt({id: String(aicPiece.id), source: Source.HARVARD})
+        const actual = await art.get({id: String(aicPiece.id), source: Source.HARVARD})
           .onSuccess(consumer).orNull();
 
         expect(actual).toEqual(harvardPiece);
@@ -156,7 +156,7 @@ describe('data', () => {
         const consumer = vi.fn();
         fetchMock.mockResponse(HTTPError.UNKNOWN, {status: 400});
 
-        await resource.getArt({id: String(aicPiece.id), source: Source.HARVARD})
+        await art.get({id: String(aicPiece.id), source: Source.HARVARD})
           .onFailure(consumer).orNull();
 
         expect(consumer).toHaveBeenCalledWith(HTTPError.UNKNOWN);
@@ -167,7 +167,7 @@ describe('data', () => {
       test('when it is successful', async () => {
         fetchMock.mockResponse(JSON.stringify(rijkArtObjectResponse));
 
-        const actual = await resource.getArt({id: String(aicPiece.id), source: Source.RIJKS}).orNull();
+        const actual = await art.get({id: String(aicPiece.id), source: Source.RIJKS}).orNull();
 
         expect(actual).toEqual(fromRIJKToPiece(rijkArtObjectResponse.artObject));
       });
@@ -176,7 +176,7 @@ describe('data', () => {
         const consumer = vi.fn();
         fetchMock.mockResponse(HTTPError.UNKNOWN, {status: 400});
 
-        await resource.getArt({id: String(aicPiece.id), source: Source.RIJKS})
+        await art.get({id: String(aicPiece.id), source: Source.RIJKS})
           .onFailure(consumer).orNull();
 
         expect(consumer).toHaveBeenCalledWith(HTTPError.UNKNOWN);
@@ -187,7 +187,7 @@ describe('data', () => {
       const consumer = vi.fn();
       fetchMock.mockResponse(JSON.stringify(pieceAICResponse));
 
-      await resource.getArt({id: '1', source: 'I do not exist' as Source})
+      await art.get({id: '1', source: 'I do not exist' as Source})
         .onFailure(consumer).orNull();
 
       expect(consumer).toHaveBeenCalledWith(HTTPError.UNKNOWN_SOURCE);
@@ -201,7 +201,7 @@ describe('data', () => {
       test('when it is successful', async () => {
         fetchMock.mockResponse(JSON.stringify(aicArtOptions));
 
-        const actual = await resource.searchForArt({search, source: Source.AIC}).orNull();
+        const actual = await art.search({search, source: Source.AIC}).orNull();
 
         expect(actual).toEqual(options);
       });
@@ -211,7 +211,7 @@ describe('data', () => {
       test('when it is successful', async () => {
         fetchMock.mockResponse(JSON.stringify(harvardArtOptions));
 
-        const actual = await resource.searchForArt({search, source: Source.HARVARD}).orNull();
+        const actual = await art.search({search, source: Source.HARVARD}).orNull();
 
         expect(actual).toEqual(options);
       });
@@ -221,7 +221,7 @@ describe('data', () => {
       test('when it is successful', async () => {
         fetchMock.mockResponse(JSON.stringify(fromRIJKArtOptionsResponse));
 
-        const actual = await resource.searchForArt({search, source: Source.RIJKS}).orNull();
+        const actual = await art.search({search, source: Source.RIJKS}).orNull();
 
         expect(actual).toEqual(options);
       });
@@ -231,7 +231,7 @@ describe('data', () => {
       const consumer = vi.fn();
       fetchMock.mockResponse(JSON.stringify({some: 'thing'}));
 
-      await resource.searchForArt({search, source: 'I do not exist' as Source})
+      await art.search({search, source: 'I do not exist' as Source})
         .onFailure(consumer).orNull();
 
       expect(consumer).toHaveBeenCalledWith(HTTPError.UNKNOWN_SOURCE);
@@ -246,7 +246,7 @@ describe('data', () => {
       const consumer = vi.fn();
       fetchMock.mockResponse(HTTPError.SERVER_ERROR, {status: 500});
 
-      await resource.searchForArt({search, source}).onFailure(consumer).orNull();
+      await art.search({search, source}).onFailure(consumer).orNull();
 
       expect(consumer).toHaveBeenCalledWith(HTTPError.SERVER_ERROR);
     });

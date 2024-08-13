@@ -6,8 +6,8 @@ import {Image} from '../Image';
 import {useQuery} from '../../hooks';
 import {Source} from '../resource/types/resource';
 import {has, not} from '@ryandur/sand';
+import {art} from '../resource';
 import './Piece.css';
-import {resource} from '../resource';
 
 const ArtPiece = () => {
     const {piece, updatePiece, reset} = useArtPiece();
@@ -17,7 +17,7 @@ const ArtPiece = () => {
     const {id} = useParams<{ id: string }>();
 
     useEffect(() => {
-        id && resource.getArt({id, source: tab})
+        id && art.get({id, source: tab})
             .onPending(isLoading)
             .onSuccess(updatePiece)
             .onFailure(() => hasErrored(true));
