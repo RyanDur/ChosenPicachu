@@ -1,8 +1,8 @@
-import {users, UsersAPI} from '../index';
-import {createUser, users as allUsers} from '../../../__tests__/util/dummyData';
-import {User} from '../../../components/UserInfo/types';
+import {users as allUsers} from '../../../../__tests__/util/dummyData.tsx';
+import {User} from '../../../UserInfo/types';
 import {Success} from '@ryandur/sand';
 import {faker} from '@faker-js/faker';
+import {createUser, users, UsersAPI} from '../users.ts';
 
 describe('users data', () => {
   test('getting the users', async () => {

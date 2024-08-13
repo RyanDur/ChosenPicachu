@@ -1,7 +1,6 @@
 import {nanoid} from 'nanoid';
 import {faker} from '@faker-js/faker';
 import {Column, Row} from '../../components/Table/types';
-import {AddressInfo, User, UserInfo} from '../../components/UserInfo/types';
 import {AICAllArt, AICArt} from '../../components/Gallery/resource/aic/types';
 import {
   HarvardAllArt,
@@ -12,8 +11,7 @@ import {
 } from '../../components/Gallery/resource/harvard/types.js';
 import {AllArt, Art} from '../../components/Gallery/resource/types/response';
 import {RIJKArtObject, RIJKSAllArt, RIJKSArt} from '../../components/Gallery/resource/rijks/types';
-import {AvatarGenerator} from 'random-avatar-generator';
-import {toDate} from 'date-fns';
+import {createUser} from '../../components/Users/resource/users.ts';
 
 const randomNumberFromRange = (min: number, max = 6) => Math.floor(Math.random() * max) + min;
 export const words = (num = 6) => faker.lorem.words(randomNumberFromRange(1, num));
@@ -122,49 +120,11 @@ export const rows: Row[] = [{
   }
 }];
 
-export const createUserInfo = (): UserInfo => ({
-  firstName: faker.person.firstName(),
-  lastName: faker.person.lastName(),
-  email: faker.internet.email(),
-  dob: toDate(faker.date.birthdate().toISOString().split('T')[0])
-});
-export const createAddress = (): AddressInfo => ({
-  city: faker.location.city(),
-  state: faker.location.state({ abbreviated: true }),
-  streetAddress: faker.location.street(),
-  streetAddressTwo: faker.location.secondaryAddress(),
-  zip: faker.location.zipCode()
-});
-
-const createDetails = (num = 10) => faker.lorem.sentences(randomNumberFromRange(2, num));
-const generator = new AvatarGenerator();
-
-export const createUser = (
-  worksFromHome = false,
-  address: () => AddressInfo = createAddress,
-  info: () => UserInfo = createUserInfo
-): User => {
-  const homeAddress = address();
-  return ({
-    id: nanoid(),
-    info: info(),
-    friends: [],
-    homeAddress,
-    workAddress: worksFromHome ? homeAddress : address(),
-    details: createDetails(),
-    avatar: generator.generateRandomAvatar()
-  });
-};
-
 export const users = [
   createUser(),
   createUser(true),
   createUser()
 ];
-
-export const createRandomUsers = (num = randomNumberFromRange(3, 15)): User[] =>
-  [...Array(num)].map(() => createUser(Math.random() > 0.5)
-  );
 
 export const pagination = {
   total: 1000,
