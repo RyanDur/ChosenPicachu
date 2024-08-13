@@ -1,5 +1,5 @@
-import {FailStatusCode, HTTPError, HTTPMethod, isCreated, isNoContent, isOk, PATH} from './types';
-import {asyncFailure, asyncResult, asyncSuccess, matchOn, maybe, Result} from '@ryandur/sand';
+import {FailStatusCode, HTTPError, HTTPMethod, isCreated, isNoContent, isOk, matchFailStatusCode, PATH} from './types';
+import {asyncFailure, asyncResult, asyncSuccess, maybe, Result} from '@ryandur/sand';
 
 export const http = {
   get: <T>(endpoint: string): Result.Async<T, HTTPError> =>
@@ -27,7 +27,6 @@ export const http = {
 
 const bodyResult = (resp: Response) => asyncResult(resp.json()).or(() => asyncFailure(HTTPError.JSON_BODY_ERROR));
 const emptySuccess = () => asyncSuccess<undefined, HTTPError>(undefined);
-const matchFailStatusCode = matchOn(Object.values(FailStatusCode));
 
 const request = (uri: PATH, method?: HTTPMethod, body?: unknown) =>
   asyncResult(fetch(uri, {
