@@ -13,38 +13,7 @@ import {PATH} from '../../../../data/types';
 import {AllArt, Art, SearchOptions} from '../types/response';
 import {validate} from '../../../../data/validate';
 import {http} from '../../../../data/http';
-import {GetAllArtRequest} from '../types/resource';
-
-export const shapeOfHarvardResponse = ['id', 'title', 'people', 'primaryimageurl'];
-export const harvardArtToArt = (record: HarvardArt): Art => ({
-  id: String(record.id),
-  title: record.title,
-  image: record.primaryimageurl,
-  artistInfo: record.people?.find(person => person.role === 'Artist')?.displayname || 'Unknown',
-  altText: record.title
-});
-
-interface Query {
-  path?: (string | number)[];
-  params?: Record<string, unknown>
-}
-
-const endpoint = ({path, params = {}}: Query): PATH => {
-  const {search, limit = defaultRecordLimit, page, ...rest} = params;
-  return [
-    [
-      harvardDomain,
-      path?.filter(has).join('/')
-    ].filter(has).join('/'),
-    toQueryString({
-      q: search,
-      fields: shapeOfHarvardResponse,
-      page,
-      apikey: harvardAPIKey,
-      size: limit,
-      ...rest
-    })].join('');
-};
+import {GetAllArtRequest, Query} from '../types/resource';
 
 export const harvard = {
   allArt: ({page, size, search}: GetAllArtRequest) => http
@@ -75,4 +44,29 @@ export const harvard = {
     .mBind(validate(HarvardSearchSchema))
     .map(({records}: HarvardSearch): SearchOptions =>
       records.map(({title}) => title))
+};
+
+const harvardArtToArt = (record: HarvardArt): Art => ({
+  id: String(record.id),
+  title: record.title,
+  image: record.primaryimageurl,
+  artistInfo: record.people?.find(person => person.role === 'Artist')?.displayname || 'Unknown',
+  altText: record.title
+});
+
+const endpoint = ({path, params = {}}: Query): PATH => {
+  const {search, limit = defaultRecordLimit, page, ...rest} = params;
+  return [
+    [
+      harvardDomain,
+      path?.filter(has).join('/')
+    ].filter(has).join('/'),
+    toQueryString({
+      q: search,
+      fields: ['id', 'title', 'people', 'primaryimageurl'],
+      page,
+      apikey: harvardAPIKey,
+      size: limit,
+      ...rest
+    })].join('');
 };
