@@ -1,9 +1,9 @@
 import {FC} from 'react';
 import {Link} from 'react-router-dom';
 import {toQueryString} from '../../util/URL';
-import {defaultRecordLimit} from '../../config.ts';
-import {Source} from '../../components/Gallery/resource/types/resource.ts';
-import {Paths} from '../Paths.ts';
+import {defaultRecordLimit} from '../../config';
+import {Source} from '../../components/Gallery/resource/types/resource';
+import {Paths} from '../Paths';
 
 export const SideNav: FC = () =>
   <aside id="side-nav" data-testid="navigation">

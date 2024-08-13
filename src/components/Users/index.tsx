@@ -6,7 +6,7 @@ import {Link, useLocation, useNavigate} from 'react-router-dom';
 import {age, formatAge} from '../util';
 import {useQuery} from '../hooks';
 import {FriendsList} from '../SelectList';
-import {Paths} from '../../routes/Paths.ts';
+import {Paths} from '../../routes/Paths';
 import {resource} from './resource';
 import './Users.css';
 import './Users.layout.css';

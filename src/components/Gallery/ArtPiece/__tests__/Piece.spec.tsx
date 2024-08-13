@@ -3,9 +3,9 @@ import {ArtPiece} from '../index';
 import {renderWithRouter} from '../../../../__tests__/util';
 import {HTTPError} from '../../../../data/types';
 import {faker} from '@faker-js/faker';
-import {Paths} from '../../../../routes/Paths.ts';
-import {Source} from '../../resource/types/resource.ts';
-import {AICArtResponse} from '../../resource/aic/types.ts';
+import {Paths} from '../../../../routes/Paths';
+import {Source} from '../../resource/types/resource';
+import {AICArtResponse} from '../../resource/aic/types';
 
 describe('viewing a piece', () => {
   const aicArtResponse: AICArtResponse = {

@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {Users} from '../components';
 import './BasePage.css';
 import './BasePage.layout.css';
-import {SideNav} from './BasePage/SideNav.tsx';
+import {SideNav} from './BasePage/SideNav';
 
 export const UsersPage: FC = () =>
   <>

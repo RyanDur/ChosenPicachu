@@ -1,8 +1,8 @@
-import {users as allUsers} from '../../../../__tests__/util/dummyData.tsx';
+import {users as allUsers} from '../../../../__tests__/util/dummyData';
 import {User} from '../../../UserInfo/types';
 import {Success} from '@ryandur/sand';
 import {faker} from '@faker-js/faker';
-import {createUser, users, UsersAPI} from '../users.ts';
+import {createUser, users, UsersAPI} from '../users';
 
 describe('users data', () => {
   test('getting the users', async () => {
@@ -124,10 +124,10 @@ describe('users data', () => {
       expect(moreSecondUsersFriends).toContain(moreFirstAgain.id);
       expect(moreSecondUsersFriends).toContain(moreThirdAgain.id);
 
-      const morethirdUsersFriends = moreThirdAgain.friends.map(f => f.id);
-      expect(morethirdUsersFriends.length).toEqual(2);
-      expect(morethirdUsersFriends).toContain(moreFirstAgain.id);
-      expect(morethirdUsersFriends).toContain(moreSecondAgain.id);
+      const moreThirdUsersFriends = moreThirdAgain.friends.map(f => f.id);
+      expect(moreThirdUsersFriends.length).toEqual(2);
+      expect(moreThirdUsersFriends).toContain(moreFirstAgain.id);
+      expect(moreThirdUsersFriends).toContain(moreSecondAgain.id);
     });
   });
 

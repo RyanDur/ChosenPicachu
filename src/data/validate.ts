@@ -1,6 +1,6 @@
 import {Decoder} from 'schemawax';
 import {asyncFailure, asyncSuccess, maybe, Result} from '@ryandur/sand';
-import {HTTPError} from './types.ts';
+import {HTTPError} from './types';
 
 export const validate = <T>(schema: Decoder<T>) => (response: unknown): Result.Async<T, HTTPError> =>
   maybe(schema.decode(response))

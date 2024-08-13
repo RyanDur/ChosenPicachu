@@ -11,7 +11,7 @@ import {
 } from '../../components/Gallery/resource/harvard/types.js';
 import {AllArt, Art} from '../../components/Gallery/resource/types/response';
 import {RIJKArtObject, RIJKSAllArt, RIJKSArt} from '../../components/Gallery/resource/rijks/types';
-import {createUser} from '../../components/Users/resource/users.ts';
+import {createUser} from '../../components/Users/resource/users';
 
 const randomNumberFromRange = (min: number, max = 6) => Math.floor(Math.random() * max) + min;
 export const words = (num = 6) => faker.lorem.words(randomNumberFromRange(1, num));

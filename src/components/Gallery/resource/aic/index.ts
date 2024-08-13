@@ -1,12 +1,12 @@
-import {AICAllArt, AICAllArtSchema, AICArt, AICArtSchema, AICPieceData, AICSearch, AICSearchSchema} from './types.ts';
+import {AICAllArt, AICAllArtSchema, AICArt, AICArtSchema, AICPieceData, AICSearch, AICSearchSchema} from './types';
 import {toQueryString} from '../../../../util/URL';
 import {has, maybe} from '@ryandur/sand';
-import {aicDomain, defaultRecordLimit, defaultSearchLimit} from '../../../../config.ts';
-import {PATH} from '../../../../data/types.ts';
-import {AllArt, Art, SearchOptions} from '../types/response.ts';
-import {validate} from '../../../../data/validate.ts';
-import {http} from '../../../../data/http.ts';
-import {GetAllArtRequest} from '../types/resource.ts';
+import {aicDomain, defaultRecordLimit, defaultSearchLimit} from '../../../../config';
+import {PATH} from '../../../../data/types';
+import {AllArt, Art, SearchOptions} from '../types/response';
+import {validate} from '../../../../data/validate';
+import {http} from '../../../../data/http';
+import {GetAllArtRequest} from '../types/resource';
 
 export const shapeOfAICResponse = ['id', 'title', 'image_id', 'artist_display', 'term_titles', 'thumbnail'];
 export const aicToPiece = (data: AICArt): Art => ({

@@ -4,8 +4,8 @@ import userEvent from '@testing-library/user-event';
 import {renderWithRouter} from '../../../../__tests__/util';
 import {Source} from '../../resource/types/resource';
 import {faker} from '@faker-js/faker';
-import {Paths} from '../../../../routes/Paths.ts';
-import {AICSearch} from '../../resource/aic/types.ts';
+import {Paths} from '../../../../routes/Paths';
+import {AICSearch} from '../../resource/aic/types';
 
 describe('search', () => {
   const searchWord = faker.lorem.word().toUpperCase();

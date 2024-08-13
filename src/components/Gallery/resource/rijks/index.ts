@@ -1,12 +1,12 @@
-import {RIJKAllArtSchema, RIJKArtObject, RIJKArtSchema, RIJKSAllArt, RIJKSArt, RIJKSSearchSchema} from './types.ts';
+import {RIJKAllArtSchema, RIJKArtObject, RIJKArtSchema, RIJKSAllArt, RIJKSArt, RIJKSSearchSchema} from './types';
 import {has} from '@ryandur/sand';
-import {defaultRecordLimit, defaultSearchLimit, rijksAPIKey, rijksDomain} from '../../../../config.ts';
+import {defaultRecordLimit, defaultSearchLimit, rijksAPIKey, rijksDomain} from '../../../../config';
 import {toQueryString} from '../../../../util/URL';
-import {PATH} from '../../../../data/types.ts';
-import {AllArt, Art, SearchOptions} from '../types/response.ts';
-import {GetAllArtRequest, Query} from '../types/resource.ts';
-import {validate} from '../../../../data/validate.ts';
-import {http} from '../../../../data/http.ts';
+import {PATH} from '../../../../data/types';
+import {AllArt, Art, SearchOptions} from '../types/response';
+import {GetAllArtRequest, Query} from '../types/resource';
+import {validate} from '../../../../data/validate';
+import {http} from '../../../../data/http';
 
 const rijkToPiece = (data: RIJKArtObject): Art => ({
   id: data.objectNumber,

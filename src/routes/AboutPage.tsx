@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {About} from '../components';
-import {SideNav} from './BasePage/SideNav.tsx';
+import {SideNav} from './BasePage/SideNav';
 import './BasePage.css';
 import './BasePage.layout.css';
 

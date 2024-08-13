@@ -3,7 +3,7 @@ import {useQuery} from '../../hooks';
 import {useNavigate} from 'react-router-dom';
 import {SearchOptions} from '../resource/types/response';
 import {Source} from '../resource/types/resource';
-import {Paths} from '../../../routes/Paths.ts';
+import {Paths} from '../../../routes/Paths';
 import {debounce} from 'throttle-debounce';
 import {resource} from '../resource';
 import './Search.css';

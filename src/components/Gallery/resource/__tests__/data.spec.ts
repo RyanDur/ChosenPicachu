@@ -13,13 +13,13 @@ import {
   harvardPieceResponse,
   options,
   rijkArtObjectResponse
-} from '../../../../__tests__/util/dummyData.tsx';
+} from '../../../../__tests__/util/dummyData';
 import {nanoid} from 'nanoid';
-import {AICPieceData, AICSearch} from '../aic/types.ts';
-import {HTTPError} from '../../../../data/types.ts';
-import {resource} from '../index.ts';
-import {Art} from '../types/response.ts';
-import {Source} from '../types/resource.ts';
+import {AICPieceData, AICSearch} from '../aic/types';
+import {HTTPError} from '../../../../data/types';
+import {resource} from '../index';
+import {Art} from '../types/response';
+import {Source} from '../types/resource';
 import {faker} from '@faker-js/faker';
 import {expect} from 'vitest';
 
