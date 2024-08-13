@@ -5,7 +5,7 @@ import {SearchOptions} from '../resource/types/response';
 import {Source} from '../resource/types/resource';
 import {Paths} from '../../../routes/Paths';
 import {debounce} from 'throttle-debounce';
-import {resource} from '../resource';
+import {art} from '../resource';
 import './Search.css';
 import './Search.layout.css';
 
@@ -19,7 +19,7 @@ export const Search: FC<Props> = ({id}) => {
   const navigate = useNavigate();
   const {queryObj: {tab, search}, updateQueryString, nextQueryString} = useQuery<{ tab: Source, search?: string }>();
   const debounceSearch = debounce(300, search =>
-    resource.searchForArt({search, source: tab})
+    art.search({search, source: tab})
       .onSuccess(updateSearchOptions));
 
   useEffect(() => {

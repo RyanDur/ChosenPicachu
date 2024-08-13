@@ -6,8 +6,8 @@ import {aic} from './aic';
 import {harvard} from './harvard';
 import {rijks} from './rijks';
 
-export const resource = {
-  getAllArt: ({source, ...request}: GetAllArt): Result.Async<AllArt, HTTPError> =>
+export const art = {
+  getAll: ({source, ...request}: GetAllArt): Result.Async<AllArt, HTTPError> =>
     maybe({
       [Source.AIC]: () => aic.allArt(request),
       [Source.HARVARD]: () => harvard.allArt(request),
@@ -16,7 +16,7 @@ export const resource = {
       .map(allArt => allArt())
       .orElse(asyncFailure(HTTPError.UNKNOWN_SOURCE)),
 
-  getArt: ({source, id}: GetArt): Result.Async<Art, HTTPError> =>
+  get: ({source, id}: GetArt): Result.Async<Art, HTTPError> =>
     maybe({
       [Source.AIC]: () => aic.art(id),
       [Source.HARVARD]: () => harvard.art(id),
@@ -25,7 +25,7 @@ export const resource = {
       .map(art => art())
       .orElse(asyncFailure(HTTPError.UNKNOWN_SOURCE)),
 
-  searchForArt: ({source, search}: SearchArt): Result.Async<SearchOptions, HTTPError> =>
+  search: ({source, search}: SearchArt): Result.Async<SearchOptions, HTTPError> =>
     maybe({
       [Source.AIC]: () => aic.searchOptions(search),
       [Source.HARVARD]: () => harvard.searchOptions(search),
