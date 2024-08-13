@@ -1,5 +1,5 @@
 import {FC, PropsWithChildren} from 'react';
-import {SideNav} from './BasePage/SideNav.tsx';
+import {SideNav} from './BasePage/SideNav';
 import './BasePage.css';
 import './BasePage.layout.css';
 

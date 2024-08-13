@@ -1,7 +1,7 @@
 import {renderWithRouter} from '../../../../__tests__/util';
 import {GalleryTitle} from '../';
 import {screen} from '@testing-library/react';
-import {Paths} from '../../../../routes/Paths.ts';
+import {Paths} from '../../../../routes/Paths';
 
 const title = 'some cool title';
 const path = Paths.artGallery;

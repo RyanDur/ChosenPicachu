@@ -1,8 +1,8 @@
 import {screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {fromAICArt} from '../../../../__tests__/util/dummyData.tsx';
+import {fromAICArt} from '../../../../__tests__/util/dummyData';
 import {GalleryNav} from '../../';
-import {Paths} from '../../../../routes/Paths.ts';
+import {Paths} from '../../../../routes/Paths';
 import {renderWithRouter} from '../../../../__tests__/util';
 
 window.scrollTo = vi.fn();

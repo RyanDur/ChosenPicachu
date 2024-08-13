@@ -5,15 +5,15 @@ import {
   HarvardArtSchema,
   HarvardSearch,
   HarvardSearchSchema
-} from './types.ts';
+} from './types';
 import {has} from '@ryandur/sand';
-import {defaultRecordLimit, defaultSearchLimit, harvardAPIKey, harvardDomain} from '../../../../config.ts';
+import {defaultRecordLimit, defaultSearchLimit, harvardAPIKey, harvardDomain} from '../../../../config';
 import {toQueryString} from '../../../../util/URL';
-import {PATH} from '../../../../data/types.ts';
-import {AllArt, Art, SearchOptions} from '../types/response.ts';
-import {validate} from '../../../../data/validate.ts';
-import {http} from '../../../../data/http.ts';
-import {GetAllArtRequest} from '../types/resource.ts';
+import {PATH} from '../../../../data/types';
+import {AllArt, Art, SearchOptions} from '../types/response';
+import {validate} from '../../../../data/validate';
+import {http} from '../../../../data/http';
+import {GetAllArtRequest} from '../types/resource';
 
 export const shapeOfHarvardResponse = ['id', 'title', 'people', 'primaryimageurl'];
 export const harvardArtToArt = (record: HarvardArt): Art => ({

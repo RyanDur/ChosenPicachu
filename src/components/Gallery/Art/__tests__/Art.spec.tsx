@@ -3,8 +3,8 @@ import userEvent from '@testing-library/user-event';
 import {renderWithRouter} from '../../../../__tests__/util';
 import {ArtGallery} from '../index';
 import {Source} from '../../resource/types/resource';
-import {Paths} from '../../../../routes/Paths.ts';
-import {aicArtResponse, fromAICArt} from '../../../../__tests__/util/dummyData.tsx';
+import {Paths} from '../../../../routes/Paths';
+import {aicArtResponse, fromAICArt} from '../../../../__tests__/util/dummyData';
 
 describe('The gallery.', () => {
   window.scrollTo = vi.fn();

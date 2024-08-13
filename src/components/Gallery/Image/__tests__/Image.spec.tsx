@@ -5,7 +5,7 @@ import {renderWithRouter} from '../../../../__tests__/util';
 import {Art} from '../../resource/types/response';
 import {Source} from '../../resource/types/resource';
 import {faker} from '@faker-js/faker';
-import {Paths} from '../../../../routes/Paths.ts';
+import {Paths} from '../../../../routes/Paths';
 
 describe('the image', () => {
   const piece: Art = {

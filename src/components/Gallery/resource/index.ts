@@ -1,7 +1,7 @@
 import {asyncFailure, matchOn, Result} from '@ryandur/sand';
-import {GetAllArt, GetArt, SearchArt, Source} from './types/resource.ts';
-import {AllArt, Art, SearchOptions} from './types/response.ts';
-import {HTTPError} from '../../../data/types.ts';
+import {GetAllArt, GetArt, SearchArt, Source} from './types/resource';
+import {AllArt, Art, SearchOptions} from './types/response';
+import {HTTPError} from '../../../data/types';
 import {aic} from './aic';
 import {harvard} from './harvard';
 import {rijks} from './rijks';

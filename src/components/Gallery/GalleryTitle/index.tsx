@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {useLocation} from 'react-router-dom';
 import {useArtPiece} from '../ArtPiece';
-import {Paths} from '../../../routes/Paths.ts';
+import {Paths} from '../../../routes/Paths';
 
 export const GalleryTitle: FC = () => {
   const location = useLocation();
