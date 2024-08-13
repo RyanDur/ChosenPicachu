@@ -21,7 +21,7 @@ import {Link} from 'react-router-dom';
 import {FancyDateInput} from './FancyFormElements/FancyDateInput';
 import {toDate} from 'date-fns';
 import {Consumer} from '@ryandur/sand';
-import {Paths} from '../../routes/Paths.ts';
+import {Paths} from '../../routes/Paths';
 import './Form.layout.css';
 import './Form.css';
 

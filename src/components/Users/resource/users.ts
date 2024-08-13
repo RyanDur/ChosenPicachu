@@ -1,11 +1,10 @@
+import {AddressInfo, User, UserInfo} from '../../UserInfo/types';
 import {asyncFailure, asyncSuccess, maybe, Result} from '@ryandur/sand';
-import {HTTPError} from '../types';
-import {AddressInfo, User, UserInfo} from '../../components/UserInfo/types';
+import {HTTPError} from '../../../data/types.ts';
 import {nanoid} from 'nanoid';
-import {createRandomUsers} from '../../__tests__/util/dummyData.tsx';
-import {AvatarGenerator} from 'random-avatar-generator';
 import {faker} from '@faker-js/faker';
-import {startOfDay} from 'date-fns';
+import {AvatarGenerator} from 'random-avatar-generator';
+import {toDate} from 'date-fns';
 
 export interface UsersAPI {
   getAll: () => Result.Async<User[], HTTPError>;
@@ -15,7 +14,14 @@ export interface UsersAPI {
   delete: (user: User) => Result.Async<User[], HTTPError>;
 }
 
-export const users = (randomUsers: User[] = createRandomUsers()): UsersAPI => ({
+const randomNumberFromRange = (min: number, max = 6) => Math.floor(Math.random() * max) + min;
+const generator = new AvatarGenerator();
+
+export const createRandomUsers = (num = randomNumberFromRange(3, 15)): User[] =>
+  [...Array(num)].map(() => createUser(Math.random() > 0.5)
+  );
+
+export const users = (randomUsers: User[]): UsersAPI => ({
   getAll: () => asyncSuccess(randomUsers),
   get: id => maybe(randomUsers.find(user => user.id === id))
     .map(user => asyncSuccess<User, HTTPError>(user))
@@ -48,23 +54,6 @@ export const users = (randomUsers: User[] = createRandomUsers()): UsersAPI => ({
   }
 });
 
-const generator = new AvatarGenerator();
-
-export const createUserInfo = (): UserInfo => ({
-  firstName: faker.person.firstName(),
-  lastName: faker.person.lastName(),
-  email: faker.internet.email(),
-  dob: startOfDay(faker.date.birthdate())
-});
-
-export const createAddress = (): AddressInfo => ({
-  city: faker.location.city(),
-  state: faker.location.state({ abbreviated: true }),
-  streetAddress: faker.location.street(),
-  streetAddressTwo: faker.location.secondaryAddress(),
-  zip: faker.location.zipCode()
-});
-
 const createDetails = (num = 10) => faker.lorem.sentences(randomNumberFromRange(2, num));
 
 export const createUser = (
@@ -84,7 +73,18 @@ export const createUser = (
   });
 };
 
-export const randomNumberFromRange = (min: number, max = 6) => Math.floor(Math.random() * max) + min;
-export const usersApi = users([
-  ...Array(randomNumberFromRange(3, 15))].map(() => createUser(Math.random() > 0.5)
-));
+
+export const createUserInfo = (): UserInfo => ({
+  firstName: faker.person.firstName(),
+  lastName: faker.person.lastName(),
+  email: faker.internet.email(),
+  dob: toDate(faker.date.birthdate().toISOString().split('T')[0])
+});
+
+export const createAddress = (): AddressInfo => ({
+  city: faker.location.city(),
+  state: faker.location.state({ abbreviated: true }),
+  streetAddress: faker.location.street(),
+  streetAddressTwo: faker.location.secondaryAddress(),
+  zip: faker.location.zipCode()
+});

@@ -6,8 +6,8 @@ import {Link, useLocation, useNavigate} from 'react-router-dom';
 import {age, formatAge} from '../util';
 import {useQuery} from '../hooks';
 import {FriendsList} from '../SelectList';
-import {data} from '../../data';
 import {Paths} from '../../routes/Paths.ts';
+import {resource} from './resource';
 import './Users.css';
 import './Users.layout.css';
 
@@ -19,11 +19,11 @@ export const Users: FC = () => {
   const [currentUser, updateCurrentUser] = useState<User>();
 
   useEffect(() => {
-    data.usersApi.getAll().onSuccess(updateUsers);
+    resource.getAll().onSuccess(updateUsers);
   }, []);
 
   useEffect(() => {
-    id && data.usersApi.get(id).onSuccess(updateCurrentUser);
+    id && resource.get(id).onSuccess(updateCurrentUser);
   }, [id]);
 
   const equalAddresses = (address1: AddressInfo, address2: AddressInfo = {} as AddressInfo): boolean =>
@@ -31,7 +31,7 @@ export const Users: FC = () => {
       address1[key as keyof AddressInfo] === address2[key as keyof AddressInfo], Boolean());
 
   const update = (user: User) => (newFriends: User[]) =>
-    data.usersApi.update({...user, friends: newFriends})
+    resource.update({...user, friends: newFriends})
       .onSuccess(updateUsers);
 
   return <>
@@ -40,9 +40,9 @@ export const Users: FC = () => {
       <UserInformation currentUser={currentUser}
                        readOnly={mode === 'view'}
                        editing={mode === 'edit'}
-                       onAdd={user => data.usersApi.add(user)
+                       onAdd={user => resource.add(user)
                          .onSuccess(updateUsers)}
-                       onUpdate={user => data.usersApi.update(user)
+                       onUpdate={user => resource.update(user)
                          .onSuccess(updateUsers)
                          .onSuccess(() => navigate(Paths.users))}/>
     </section>
@@ -106,7 +106,7 @@ export const Users: FC = () => {
                           data-testid="view">Edit</Link>
                     <Link to={id === user.id ? path : location.pathname}
                           className="item"
-                          onClick={() => data.usersApi.delete(user)
+                          onClick={() => resource.delete(user)
                             .onSuccess(updateUsers)
                             .onSuccess(() => navigate(Paths.users))}
                           data-testid="remove">Remove</Link>
