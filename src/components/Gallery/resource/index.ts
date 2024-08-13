@@ -1,10 +1,13 @@
-import {asyncFailure, Result} from '@ryandur/sand';
-import {GetAllArt, GetArt, matchSource, SearchArt, Source} from './types/resource';
+import {asyncFailure, Maybe, maybe, Result} from '@ryandur/sand';
+import {GetAllArt, GetArt, SearchArt, Source} from './types/resource';
 import {AllArt, Art, SearchOptions} from './types/response';
 import {HTTPError} from '../../../data/types';
 import {aic} from './aic';
 import {harvard} from './harvard';
 import {rijks} from './rijks';
+
+const matchSource = <T>(source: Source, options: Record<Source, () => T>): Maybe<T> =>
+  maybe(options[source]?.());
 
 export const resource = {
   getAllArt: ({source, ...request}: GetAllArt): Result.Async<AllArt, HTTPError> =>
