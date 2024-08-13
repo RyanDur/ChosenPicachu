@@ -1,5 +1,3 @@
-import {matchOn} from '@ryandur/sand';
-
 export type PATH = string;
 
 export enum HTTPMethod {
@@ -41,5 +39,3 @@ export const isOk = (response: Response): boolean => response.status === HTTPSta
 export const isCreated = (response: Response): boolean => response.status === HTTPStatus.CREATED;
 export const isNoContent = (response: Response): boolean => response.status === HTTPStatus.NO_CONTENT;
 
-
-export const matchFailStatusCode = matchOn(Object.values(FailStatusCode));
