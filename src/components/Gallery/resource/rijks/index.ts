@@ -8,27 +8,6 @@ import {GetAllArtRequest, Query} from '../types/resource';
 import {validate} from '../../../../data/validate';
 import {http} from '../../../../data/http';
 
-const rijkToPiece = (data: RIJKArtObject): Art => ({
-  id: data.objectNumber,
-  title: data.title,
-  image: data.webImage.url,
-  artistInfo: data.longTitle,
-  altText: data.longTitle
-});
-
-const endpoint = ({path, params = {}}: Query): PATH => {
-  const {search, limit = defaultRecordLimit, page} = params;
-  return [
-    [rijksDomain, path?.filter(has).join('/')].filter(has).join('/'),
-    toQueryString({
-      q: search,
-      p: page,
-      ps: limit,
-      imgonly: true,
-      key: rijksAPIKey
-    })].join('');
-};
-
 export const rijks = {
   allArt: ({page, size, search}: GetAllArtRequest) => http
     .get(endpoint({params: {page, size, search}}))
@@ -57,4 +36,25 @@ export const rijks = {
     .mBind(validate(RIJKSSearchSchema))
     .map(({artObjects}: RIJKSAllArt): SearchOptions =>
       artObjects.map(({title}) => title))
+};
+
+const rijkToPiece = (data: RIJKArtObject): Art => ({
+  id: data.objectNumber,
+  title: data.title,
+  image: data.webImage.url,
+  artistInfo: data.longTitle,
+  altText: data.longTitle
+});
+
+const endpoint = ({path, params = {}}: Query): PATH => {
+  const {search, limit = defaultRecordLimit, page} = params;
+  return [
+    [rijksDomain, path?.filter(has).join('/')].filter(has).join('/'),
+    toQueryString({
+      q: search,
+      p: page,
+      ps: limit,
+      imgonly: true,
+      key: rijksAPIKey
+    })].join('');
 };
