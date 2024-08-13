@@ -5,20 +5,20 @@ import {Rendered, renderWithRouter} from '../../../__tests__/util';
 import {Users} from '../index';
 import userEvent from '@testing-library/user-event';
 import {AddressInfo, User} from '../../UserInfo/types';
-import {createUser, users} from '../resource/users';
-import {resource} from '../resource';
+import {createUser, usersApi} from '../resource/usersApi';
+import {users} from '../resource/users';
 
 describe('the users page', () => {
   const currentUsers = someUsers;
   const firstUser = currentUsers[0];
 
   beforeEach(() => {
-    const testResource = users(someUsers);
-    resource.getAll = testResource.getAll;
-    resource.get = testResource.get;
-    resource.add = testResource.add;
-    resource.update = testResource.update;
-    resource.delete = testResource.delete;
+    const testResource = usersApi(someUsers);
+    users.getAll = testResource.getAll;
+    users.get = testResource.get;
+    users.add = testResource.add;
+    users.update = testResource.update;
+    users.delete = testResource.delete;
   });
 
   describe('adding a user', () => {
@@ -97,7 +97,7 @@ describe('the users page', () => {
   });
 
   test('updating a user', async () => {
-    const spy = vi.spyOn(resource, 'update');
+    const spy = vi.spyOn(users, 'update');
 
     renderWithRouter(<Users/>);
 
@@ -111,7 +111,7 @@ describe('the users page', () => {
   });
 
   test('removing a user', async () => {
-    const spy = vi.spyOn(resource, 'delete');
+    const spy = vi.spyOn(users, 'delete');
 
     renderWithRouter(<Users/>);
 
@@ -122,7 +122,7 @@ describe('the users page', () => {
   });
 
   test('cloning a user', async () => {
-    const spy = vi.spyOn(resource, 'add');
+    const spy = vi.spyOn(users, 'add');
     renderWithRouter(<Users/>);
 
     await waitFor(() => userEvent.click(within(screen.getByTestId('cell-4-0'))

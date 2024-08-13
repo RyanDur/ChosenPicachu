@@ -2,18 +2,18 @@ import {users as allUsers} from '../../../../__tests__/util/dummyData';
 import {User} from '../../../UserInfo/types';
 import {Success} from '@ryandur/sand';
 import {faker} from '@faker-js/faker';
-import {createUser, users, UsersAPI} from '../users';
+import {createUser, usersApi, UsersAPI} from '../usersApi';
 
 describe('users data', () => {
   test('getting the users', async () => {
-    const usersApi: UsersAPI = users(allUsers);
-    const data = await usersApi.getAll().value;
+    const api: UsersAPI = usersApi(allUsers);
+    const data = await api.getAll().value;
 
     expect(data.orNull()).toEqual(allUsers);
   });
 
   test('adding a user', async () => {
-    const usersApi: UsersAPI = users(allUsers);
+    const api: UsersAPI = usersApi(allUsers);
     const user: User = {
       info: {
         firstName: faker.lorem.word(),
@@ -30,34 +30,34 @@ describe('users data', () => {
       }
     };
 
-    const usersSuccess = await usersApi.add(user).value as Success<User[]>;
+    const usersSuccess = await api.add(user).value as Success<User[]>;
     expect(usersSuccess.orNull().length).toEqual(allUsers.length + 1);
     expect(usersSuccess.orNull()[0].id).not.toBeUndefined();
 
 
     const anotherUser = createUser();
-    const moreUsers = await usersApi.add(anotherUser).value as Success<User[]>;
+    const moreUsers = await api.add(anotherUser).value as Success<User[]>;
     expect(moreUsers.orNull().length).toEqual(allUsers.length + 2);
   });
 
   test('getting a user', async () => {
-    const usersApi: UsersAPI = users(allUsers);
+    const api: UsersAPI = usersApi(allUsers);
     const firstUser = allUsers[0];
     const lastUser = allUsers[allUsers.length - 1];
 
-    const user = await usersApi.get(firstUser.id || '').value;
+    const user = await api.get(firstUser.id || '').value;
     expect(user.orNull()).toEqual(firstUser);
 
-    const nextUser = await usersApi.get(lastUser.id || '').value;
+    const nextUser = await api.get(lastUser.id || '').value;
     expect(nextUser.orNull()).toEqual(lastUser);
   });
 
   describe('updating a user and friends', () => {
-    const usersApi: UsersAPI = users(allUsers);
+    const api: UsersAPI = usersApi(allUsers);
     const [firstUser, secondUser, thirdUser] = allUsers;
 
     it('should add the user to friends list al well as the friend to the user', async () => {
-      const [first, second] = (await usersApi.update({...firstUser, friends: [secondUser]}).value).orNull() as User[];
+      const [first, second] = (await api.update({...firstUser, friends: [secondUser]}).value).orNull() as User[];
       const firstUsersFriends = first.friends.find(f => f.id);
       expect(firstUsersFriends?.id).toEqual(second.id);
 
@@ -66,8 +66,8 @@ describe('users data', () => {
     });
 
     it('should remove the user from the friends list when the user has removed them', async () => {
-      const [first, second] = (await usersApi.update({...firstUser, friends: [secondUser]})
-        .mBind(() => usersApi.update({...firstUser, friends: []})).value).orNull() as User[];
+      const [first, second] = (await api.update({...firstUser, friends: [secondUser]})
+        .mBind(() => api.update({...firstUser, friends: []})).value).orNull() as User[];
 
       const firstUsersFriends = first.friends.find(f => f.id);
       expect(firstUsersFriends?.id).not.toEqual(second.id);
@@ -77,7 +77,7 @@ describe('users data', () => {
     });
 
     it('should not add a friend twice', async () => {
-      const [first, second, third] = (await usersApi.update({
+      const [first, second, third] = (await api.update({
         ...firstUser,
         friends: [secondUser, thirdUser]
       }).value).orNull() as User[];
@@ -90,7 +90,7 @@ describe('users data', () => {
       const thirdUsersFriends = third.friends.map(f => f.id);
       expect(thirdUsersFriends.length).toEqual(1);
 
-      const [firstAgain, secondAgain, thirdAgain] = (await usersApi.update({
+      const [firstAgain, secondAgain, thirdAgain] = (await api.update({
         ...third,
         friends: [first, second]
       }).value).orNull() as User[];
@@ -109,7 +109,7 @@ describe('users data', () => {
       expect(thirdAgainUsersFriends).toContain(firstAgain.id);
       expect(thirdAgainUsersFriends).toContain(secondAgain.id);
 
-      const [moreFirstAgain, moreSecondAgain, moreThirdAgain] = (await usersApi.update({
+      const [moreFirstAgain, moreSecondAgain, moreThirdAgain] = (await api.update({
         ...thirdAgain,
         friends: [firstAgain, secondAgain]
       }).value).orNull() as User[];
@@ -132,18 +132,18 @@ describe('users data', () => {
   });
 
   describe('deleting a user', () => {
-    const usersApi: UsersAPI = users(allUsers);
+    const api: UsersAPI = usersApi(allUsers);
     it('should remove the user', async () => {
       const secondUser = allUsers[1];
 
-      const users = await usersApi.delete(secondUser).value;
+      const users = await api.delete(secondUser).value;
       expect(users).not.toContain(secondUser);
     });
 
     it('should remove the user from the other users friends list', async () => {
       const firstUser = allUsers[0];
-      usersApi.update({...firstUser, friends: [allUsers[allUsers.length - 1]]});
-      const users = (await usersApi.delete(firstUser).value).orNull() as User[];
+      api.update({...firstUser, friends: [allUsers[allUsers.length - 1]]});
+      const users = (await api.delete(firstUser).value).orNull() as User[];
       const lastUsersFriends = users[users.length - 1].friends.find(f => f.id);
 
       expect(lastUsersFriends?.id).not.toEqual(firstUser.id);
