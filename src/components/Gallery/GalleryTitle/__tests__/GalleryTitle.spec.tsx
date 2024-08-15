@@ -1,4 +1,4 @@
-import {renderGalleryWithRouter} from '../../../../__tests__/util';
+import {renderWithRouter} from '../../../../__tests__/util';
 import {GalleryTitle} from '../';
 import {screen} from '@testing-library/react';
 import {Paths} from '../../../../routes/Paths';
@@ -8,13 +8,13 @@ const path = Paths.artGallery;
 
 describe('gallery title', () => {
   test('viewing', async () => {
-    renderGalleryWithRouter(<GalleryTitle/>, {path, initialRoute: path});
+    renderWithRouter(<GalleryTitle/>, {path, initialRoute: path});
 
     expect(await screen.findByText('Gallery')).toBeInTheDocument();
   });
 
   test('viewing a piece', () => {
-    renderGalleryWithRouter(<GalleryTitle/>, {path: Paths.artGalleryPiece, initialRoute: `${path}/123`, pieceState: {title}});
+    renderWithRouter(<GalleryTitle/>, {path: Paths.artGalleryPiece, initialRoute: `${path}/123`, pieceState: {title}});
 
     expect(screen.getByText(title)).toBeInTheDocument();
   });

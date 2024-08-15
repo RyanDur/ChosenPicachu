@@ -1,14 +1,11 @@
 import {FC} from 'react';
-import {ArtPiece, ArtPieceContext, GalleryNav, PageControl, Search, useArtPieceContext} from '../components';
+import {ArtPiece, GalleryNav, PageControl, Search} from '../components';
 import {SideNav} from './BasePage/SideNav';
 import './BasePage.css';
 import './BasePage.layout.css';
-import {Art} from '../components/Gallery/resource/types/response';
 
-export const ArtGalleryPiecePage: FC<Partial<{
-  pieceState: Partial<Art>
-}>> = ({pieceState}) =>
-  <ArtPieceContext.Provider value={useArtPieceContext(pieceState)}>
+export const ArtGalleryPiecePage: FC = () =>
+  <>
     <header id="app-header" data-testid="header">
       <h1 className="title ellipsis">About</h1>
       <Search id="gallery-search"/>
@@ -25,5 +22,5 @@ export const ArtGalleryPiecePage: FC<Partial<{
     <footer id={'app-footer'} className={'stick-to-bottom'} data-testid="footer">
       <GalleryNav id="gallery-nav"/>
     </footer>
-  </ArtPieceContext.Provider>;
+  </>;
 

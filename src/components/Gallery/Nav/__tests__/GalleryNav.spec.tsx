@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import {fromAICArt} from '../../../../__tests__/util/dummyData';
 import {GalleryNav} from '../../';
 import {Paths} from '../../../../routes/Paths';
-import {renderGalleryWithRouter} from '../../../../__tests__/util';
+import {renderWithRouter} from '../../../../__tests__/util';
 
 window.scrollTo = vi.fn();
 describe('Gallery Navigation', () => {
@@ -16,7 +16,7 @@ describe('Gallery Navigation', () => {
       };
 
       it('should be able to goto the next page', async () => {
-        const rendered = renderGalleryWithRouter(<GalleryNav/>, options);
+        const rendered = renderWithRouter(<GalleryNav/>, options);
         await userEvent.click(screen.getByTestId('next-page'));
 
         expect(rendered().testLocation?.search).toEqual('?page=2');
@@ -29,14 +29,14 @@ describe('Gallery Navigation', () => {
       });
 
       test('when on the first page', () => {
-        renderGalleryWithRouter(<GalleryNav/>, options);
+        renderWithRouter(<GalleryNav/>, options);
 
         expect(screen.queryByTestId('prev-page')).not.toBeInTheDocument();
         expect(screen.queryByTestId('first-page')).not.toBeInTheDocument();
       });
 
       test('when jumping to the last page', async () => {
-        const rendered = renderGalleryWithRouter(<GalleryNav/>, options);
+        const rendered = renderWithRouter(<GalleryNav/>, options);
         await userEvent.click(screen.getByTestId('last-page'));
 
         expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
@@ -50,7 +50,7 @@ describe('Gallery Navigation', () => {
 
     describe('from the last page', () => {
       it('should be able to go to the previous page', async () => {
-        const rendered = renderGalleryWithRouter(<GalleryNav/>, {
+        const rendered = renderWithRouter(<GalleryNav/>, {
           initialRoute: Paths.artGallery,
           path: Paths.artGallery,
           galleryState: fromAICArt
@@ -69,7 +69,7 @@ describe('Gallery Navigation', () => {
       });
 
       it('should not go past the last page', async () => {
-        renderGalleryWithRouter(<GalleryNav/>, {
+        renderWithRouter(<GalleryNav/>, {
           initialRoute: Paths.artGallery,
           path: Paths.artGallery,
           galleryState: fromAICArt
@@ -81,7 +81,7 @@ describe('Gallery Navigation', () => {
       });
 
       it('should not be able to jump to the last page', async () => {
-        renderGalleryWithRouter(<GalleryNav/>, {
+        renderWithRouter(<GalleryNav/>, {
           initialRoute: Paths.artGallery,
           path: Paths.artGallery,
           galleryState: fromAICArt
@@ -93,7 +93,7 @@ describe('Gallery Navigation', () => {
       });
 
       it('should be able to go to the first page', async () => {
-        const rendered = renderGalleryWithRouter(<GalleryNav/>, {
+        const rendered = renderWithRouter(<GalleryNav/>, {
           initialRoute: Paths.artGallery,
           path: Paths.artGallery,
           galleryState: fromAICArt
@@ -113,7 +113,7 @@ describe('Gallery Navigation', () => {
   });
 
   test('with existing params', async () => {
-    const rendered = renderGalleryWithRouter(<GalleryNav/>, {
+    const rendered = renderWithRouter(<GalleryNav/>, {
       params: {search: 'q'},
       path: Paths.artGallery,
       initialRoute: Paths.artGallery,
@@ -140,7 +140,7 @@ describe('Gallery Navigation', () => {
   });
 
   test('page information', () => {
-    renderGalleryWithRouter(<GalleryNav/>, {
+    renderWithRouter(<GalleryNav/>, {
       params: {page: 1, size: fromAICArt.pagination.limit},
       path: Paths.artGallery,
       initialRoute: Paths.artGallery,

@@ -1,6 +1,6 @@
 import {screen, waitFor} from '@testing-library/react';
 import {ArtPiece} from '../index';
-import {renderGalleryWithRouter} from '../../../../__tests__/util';
+import {renderWithRouter} from '../../../../__tests__/util';
 import {HTTPError} from '../../../../data/types';
 import {faker} from '@faker-js/faker';
 import {Paths} from '../../../../routes/Paths';
@@ -21,7 +21,7 @@ describe('viewing a piece', () => {
   test('when loading the piece of art', async () => {
     fetchMock.mockResponse(JSON.stringify(aicArtResponse));
 
-    renderGalleryWithRouter(<ArtPiece/>, {
+    renderWithRouter(<ArtPiece/>, {
       initialRoute: `${Paths.artGallery}/1234`,
       path: `${Paths.artGalleryPiece}`
     });
@@ -32,7 +32,7 @@ describe('viewing a piece', () => {
   test('when the art piece is loaded', async () => {
     fetchMock.mockResponse(JSON.stringify(aicArtResponse));
 
-    renderGalleryWithRouter(<ArtPiece/>, {
+    renderWithRouter(<ArtPiece/>, {
       initialRoute: `${Paths.artGallery}/${aicArtResponse.data.id}`,
       path: Paths.artGalleryPiece,
       params: {tab: Source.AIC}
@@ -44,7 +44,7 @@ describe('viewing a piece', () => {
 
   test('when getting the piece has errored', async () => {
     fetchMock.mockResponse(HTTPError.SERVER_ERROR, {status: 500});
-    renderGalleryWithRouter(<ArtPiece/>, {
+    renderWithRouter(<ArtPiece/>, {
       initialRoute: `${Paths.artGallery}/1234`,
       path: `${Paths.artGalleryPiece}`
     });
