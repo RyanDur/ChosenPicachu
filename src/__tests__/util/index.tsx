@@ -5,10 +5,9 @@ import userEvent from '@testing-library/user-event';
 import {toQueryString} from '../../util/URL';
 import {AddressInfo, User} from '../../components/UserInfo/types';
 import {Consumer} from '@ryandur/sand';
+import {AppContext} from '../../AppContext';
 import {AllArt, Art} from '../../components/Gallery/resource/types/response';
 import {toDate} from 'date-fns';
-import {GalleryContext, useGalleryContext} from '../../components/Gallery/Context';
-import {ArtPieceContext, useArtPieceContext} from '../../components';
 
 export interface Rendered {
   result: RenderResult;
@@ -42,44 +41,23 @@ const TestRouter: FC<PropsWithChildren & {
 };
 type Defaults = Partial<URLContext & { pieceState: Partial<Art>, galleryState: AllArt }>;
 const defaultUrlContext: URLContext = {path: '/initial/route', params: {}};
-
-const TestGalleryContext: FC<PropsWithChildren & Partial<{
-  galleryState: AllArt,
-  pieceState: Partial<Art>
-}>> = ({children, galleryState, pieceState}) =>
-  <GalleryContext.Provider value={useGalleryContext(galleryState)}>
-    <ArtPieceContext.Provider value={useArtPieceContext(pieceState)}>
-      {children}
-    </ArtPieceContext.Provider>
-  </GalleryContext.Provider>;
-
-export const renderGalleryWithRouter = (
-  component: ReactElement, {
-    galleryState,
-    pieceState,
-    initialRoute = defaultUrlContext.path,
-    path = defaultUrlContext.path,
-    params = defaultUrlContext.params
-  }: Defaults = {}) =>
-  renderWithRouter(
-    <TestGalleryContext galleryState={galleryState} pieceState={pieceState}>
-      {component}
-    </TestGalleryContext>, {initialRoute, path, params});
-
 export const renderWithRouter = (
   component: ReactElement, {
+    pieceState,
+    galleryState,
     initialRoute = defaultUrlContext.path,
     path = defaultUrlContext.path,
     params = defaultUrlContext.params
   }: Defaults = {}): () => Rendered => {
   let testLocation: Location;
 
-  const result = render(
+  const result = render(<AppContext pieceState={pieceState} galleryState={galleryState}>
     <TestRouter
       context={{initialRoute, path, params}}
       testLocation={(location) => testLocation = location}>
       {component}
-    </TestRouter>);
+    </TestRouter>
+  </AppContext>);
 
   return () => ({result, testLocation});
 };

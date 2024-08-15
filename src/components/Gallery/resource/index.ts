@@ -14,14 +14,14 @@ const sources = {
 
 export const art = {
   getAll: ({source, ...request}: GetAllArt): Result.Async<AllArt, HTTPError> =>
-    maybe(sources[source]).map(api => api.allArt(request))
+    maybe(sources[source]).map(resource => resource.allArt(request))
       .orElse(asyncFailure(HTTPError.UNKNOWN_SOURCE)),
 
   get: ({source, id}: GetArt): Result.Async<Art, HTTPError> =>
-    maybe(sources[source]).map(api => api.art(id))
+    maybe(sources[source]).map(resource => resource.art(id))
       .orElse(asyncFailure(HTTPError.UNKNOWN_SOURCE)),
 
   search: ({source, search}: SearchArt): Result.Async<SearchOptions, HTTPError> =>
-    maybe(sources[source]).map(api => api.searchOptions(search))
+    maybe(sources[source]).map(resource => resource.searchOptions(search))
       .orElse(asyncFailure(HTTPError.UNKNOWN_SOURCE))
 };

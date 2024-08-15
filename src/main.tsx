@@ -1,6 +1,7 @@
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
 import {AboutPage, ArtGalleryPage, ArtGalleryPiecePage, HomePage, UsersPage} from './routes';
-import * as ReactDom from "react-dom/client";
+import {AppContext} from './AppContext';
+import * as ReactDom  from "react-dom/client";
 import {StrictMode} from "react";
 import {Paths} from './routes/Paths';
 import './index.css';
@@ -30,6 +31,8 @@ const router = createBrowserRouter([
 
 ReactDom.createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RouterProvider router={router}/>
+    <AppContext>
+      <RouterProvider router={router}/>
+    </AppContext>
   </StrictMode>
 );
