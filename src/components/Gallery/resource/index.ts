@@ -6,22 +6,21 @@ import {aic} from './aic';
 import {harvard} from './harvard';
 import {rijks} from './rijks';
 
-const sources = {
-  [Source.AIC]: aic,
-  [Source.HARVARD]: harvard,
-  [Source.RIJKS]: rijks
-};
+type ArtResource = typeof aic | typeof harvard | typeof rijks;
+const fromSource = <T>(source: Source, func: (resource: ArtResource) => Result.Async<T, HTTPError>) =>
+  maybe({
+    [Source.AIC]: aic,
+    [Source.HARVARD]: harvard,
+    [Source.RIJKS]: rijks
+  }[source]).map(func).orElse(asyncFailure<T, HTTPError>(HTTPError.UNKNOWN_SOURCE));
 
 export const art = {
   getAll: ({source, ...request}: GetAllArt): Result.Async<AllArt, HTTPError> =>
-    maybe(sources[source]).map(resource => resource.allArt(request))
-      .orElse(asyncFailure(HTTPError.UNKNOWN_SOURCE)),
+    fromSource(source, resource => resource.allArt(request)),
 
   get: ({source, id}: GetArt): Result.Async<Art, HTTPError> =>
-    maybe(sources[source]).map(resource => resource.art(id))
-      .orElse(asyncFailure(HTTPError.UNKNOWN_SOURCE)),
+    fromSource(source, resource => resource.art(id)),
 
   search: ({source, search}: SearchArt): Result.Async<SearchOptions, HTTPError> =>
-    maybe(sources[source]).map(resource => resource.searchOptions(search))
-      .orElse(asyncFailure(HTTPError.UNKNOWN_SOURCE))
+    fromSource(source, resource => resource.searchOptions(search))
 };

@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@faker-js/faker": "8.4.1",
-    "@ryandur/sand": "5.0.2",
+    "@ryandur/sand": "5.0.4",
     "date-fns": "3.6.0",
     "normalize.css": "^8.0.1",
     "random-avatar-generator": "^2.0.0",
