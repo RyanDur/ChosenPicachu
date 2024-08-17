@@ -1,10 +1,11 @@
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
-import {AboutPage, ArtGalleryPage, ArtGalleryPiecePage, HomePage, UsersPage} from './routes';
+import {AboutPage, HomePage, UsersPage} from './routes';
 import {AppContext} from './AppContext';
 import * as ReactDom  from "react-dom/client";
 import {StrictMode} from "react";
 import {Paths} from './routes/Paths';
 import './index.css';
+import {ArtGalleryPage, ArtGalleryPiecePage} from './components/Gallery';
 
 const router = createBrowserRouter([
   {
