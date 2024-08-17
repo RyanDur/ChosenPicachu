@@ -1,24 +1,7 @@
-import {FC} from 'react';
-import {ArtGallery} from './Art';
-import {GalleryTitle} from './GalleryTitle';
-import {GalleryNav} from './Nav';
-import {Tabs} from '../Tabs';
-import {PageControl} from './PageControl';
-import {Source} from './resource/types/resource';
-
-const Gallery: FC = () =>
-  <>
-    <Tabs values={[
-      {display: 'The Art Institute of Chicago', param: Source.AIC},
-      {display: 'Harvard Art Museums', param: Source.HARVARD},
-      {display: 'Rijksstudio', param: Source.RIJKS}
-    ]}/>
-    <ArtGallery/>
-  </>;
+import {ArtGalleryPage} from './ArtGalleryPage';
+import {ArtGalleryPiecePage} from './ArtGalleryPiecePage';
 
 export {
-  Gallery,
-  GalleryNav,
-  GalleryTitle,
-  PageControl
+  ArtGalleryPage,
+  ArtGalleryPiecePage
 };

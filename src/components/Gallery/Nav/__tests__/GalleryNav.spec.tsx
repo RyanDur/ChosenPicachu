@@ -1,9 +1,9 @@
 import {screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {fromAICArt} from '../../../../__tests__/util/dummyData';
-import {GalleryNav} from '../../';
 import {Paths} from '../../../../routes/Paths';
 import {renderWithRouter} from '../../../../__tests__/util';
+import {GalleryNav} from '../index';
 
 window.scrollTo = vi.fn();
 describe('Gallery Navigation', () => {
