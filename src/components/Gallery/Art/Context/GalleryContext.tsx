@@ -1,5 +1,5 @@
 import {FC, PropsWithChildren, useMemo, useState} from 'react';
-import {AllArt} from '../resource/types/response';
+import {AllArt} from '../../resource/types/response';
 import {Consumer} from '@ryandur/sand';
 import {Context} from './useGallery';
 

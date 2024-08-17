@@ -8,7 +8,7 @@ import {Consumer} from '@ryandur/sand';
 import {AppContext} from '../../AppContext';
 import {AllArt, Art} from '../../components/Gallery/resource/types/response';
 import {toDate} from 'date-fns';
-import {GalleryContext} from '../../components/Gallery/Context';
+import {GalleryContext} from '../../components/Gallery/Art/Context';
 
 export interface Rendered {
   result: RenderResult;
@@ -66,14 +66,13 @@ export const renderWithGalleryContext = (
 export const renderWithRouter = (
   component: ReactElement, {
     pieceState,
-    galleryState,
     initialRoute = defaultUrlContext.path,
     path = defaultUrlContext.path,
     params = defaultUrlContext.params
   }: Defaults = {}): () => Rendered => {
   let testLocation: Location;
 
-  const result = render(<AppContext pieceState={pieceState} galleryState={galleryState}>
+  const result = render(<AppContext pieceState={pieceState}>
     <TestRouter
       context={{initialRoute, path, params}}
       testLocation={(location) => testLocation = location}>
