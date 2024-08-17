@@ -1,4 +1,4 @@
-import {AllArt} from '../resource/types/response';
+import {AllArt} from '../../resource/types/response';
 import {createContext, useContext} from 'react';
 import {GalleryContextState} from './GalleryContext';
 

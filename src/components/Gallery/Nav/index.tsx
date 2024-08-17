@@ -1,7 +1,7 @@
 import {Link} from 'react-router-dom';
 import {FC, useEffect, useRef} from 'react';
 import {useQuery} from '../../hooks';
-import {useGallery} from '../Context';
+import {useGallery} from '../Art/Context';
 import './GalleryNav.css';
 import './GalleryNav.layout.css';
 

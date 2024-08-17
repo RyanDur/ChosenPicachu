@@ -1,5 +1,5 @@
 import {FormEvent, useState} from 'react';
-import {useGallery} from '../Context';
+import {useGallery} from '../Art/Context';
 import {useQuery} from '../../hooks';
 import {Source} from '../resource/types/resource';
 import './PageControl.css';

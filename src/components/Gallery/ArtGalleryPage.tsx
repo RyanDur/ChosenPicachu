@@ -6,11 +6,12 @@ import {ArtGallery} from './Art';
 import {Search} from './Search';
 import {PageControl} from './PageControl';
 import {GalleryNav} from './Nav';
+import {GalleryContext} from './Art/Context';
 import '../../routes/BasePage.css';
 import '../../routes/BasePage.layout.css';
 
 export const ArtGalleryPage: FC = () =>
-  <>
+  <GalleryContext>
     <header id="app-header" data-testid="header">
       <h1 className="title ellipsis">About</h1>
       <Search id="gallery-search"/>
@@ -33,5 +34,5 @@ export const ArtGalleryPage: FC = () =>
     <footer id='app-footer' className='stick-to-bottom' data-testid="footer">
       <GalleryNav id="gallery-nav"/>
     </footer>
-  </>;
+  </GalleryContext>;
 

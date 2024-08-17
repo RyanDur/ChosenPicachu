@@ -2,7 +2,7 @@ import {FC, useEffect, useState} from 'react';
 import {useQuery} from '../../hooks';
 import {Loading} from '../../Loading';
 import {Image} from '../Image';
-import {useGallery} from '../Context';
+import {useGallery} from './Context';
 import {empty} from '@ryandur/sand';
 import {Source} from '../resource/types/resource';
 import {art as artResource} from '../resource';
