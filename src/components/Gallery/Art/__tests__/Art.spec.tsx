@@ -1,6 +1,6 @@
 import {screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {renderWithRouter} from '../../../../__tests__/util';
+import {renderWithGalleryContext} from '../../../../__tests__/util';
 import {ArtGallery} from '../index';
 import {Source} from '../../resource/types/resource';
 import {Paths} from '../../../../routes/Paths';
@@ -12,7 +12,7 @@ describe('The gallery.', () => {
   test('When the art has loaded', async () => {
     fetchMock.mockResponse(JSON.stringify(aicArtResponse));
 
-    renderWithRouter(<ArtGallery/>, {params: {page: 23, search: 'g', size: 8, tab: Source.AIC}});
+    renderWithGalleryContext(<ArtGallery/>, {params: {page: 23, search: 'g', size: 8, tab: Source.AIC}});
 
     await waitFor(() => expect(screen.queryByTestId('gallery-loading')).not.toBeInTheDocument());
     await waitFor(() => expect(screen.getAllByTestId(/piece/).length).toEqual(fromAICArt.pagination.limit));
@@ -20,7 +20,7 @@ describe('The gallery.', () => {
   });
 
   it('should allow a user to take a closer look at the art', async () => {
-    const rendered = renderWithRouter(<ArtGallery/>, {params: {page: 0, search: 'g', size: 8, tab: Source.AIC}});
+    const rendered = renderWithGalleryContext(<ArtGallery/>, {params: {page: 0, search: 'g', size: 8, tab: Source.AIC}});
 
     await userEvent.click(await screen.findByTestId(`piece-${fromAICArt.pieces[0].id}`));
 
@@ -29,7 +29,7 @@ describe('The gallery.', () => {
 
   test('when there is no art to show', async () => {
     fetchMock.mockResponse(JSON.stringify({...aicArtResponse, data: []}));
-    renderWithRouter(<ArtGallery/>, {params: {page: 0, search: 'g', size: 8, tab: Source.AIC}});
+    renderWithGalleryContext(<ArtGallery/>, {params: {page: 0, search: 'g', size: 8, tab: Source.AIC}});
 
     await waitFor(() => expect(screen.queryByTestId(/piece/)).not.toBeInTheDocument());
     expect(screen.queryByTestId('gallery-loading')).not.toBeInTheDocument();
@@ -39,7 +39,7 @@ describe('The gallery.', () => {
   test('when the art has errored', async () => {
     fetchMock.mockReject();
 
-    renderWithRouter(<ArtGallery/>, {params: {page: 23, search: 'g', size: 8, tab: Source.HARVARD}});
+    renderWithGalleryContext(<ArtGallery/>, {params: {page: 23, search: 'g', size: 8, tab: Source.HARVARD}});
 
     expect(await screen.findByTestId('empty-gallery')).toBeInTheDocument();
   });

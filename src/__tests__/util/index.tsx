@@ -8,6 +8,7 @@ import {Consumer} from '@ryandur/sand';
 import {AppContext} from '../../AppContext';
 import {AllArt, Art} from '../../components/Gallery/resource/types/response';
 import {toDate} from 'date-fns';
+import {GalleryContext} from '../../components/Gallery/Context';
 
 export interface Rendered {
   result: RenderResult;
@@ -41,6 +42,27 @@ const TestRouter: FC<PropsWithChildren & {
 };
 type Defaults = Partial<URLContext & { pieceState: Partial<Art>, galleryState: AllArt }>;
 const defaultUrlContext: URLContext = {path: '/initial/route', params: {}};
+export const renderWithGalleryContext = (
+  component: ReactElement, {
+    galleryState,
+    initialRoute = defaultUrlContext.path,
+    path = defaultUrlContext.path,
+    params = defaultUrlContext.params
+  }: Omit<Defaults, 'pieceState'> = {}): () => Rendered => {
+  let testLocation: Location;
+
+  const result = render(<GalleryContext galleryState={galleryState}>
+    <TestRouter
+      context={{initialRoute, path, params}}
+      testLocation={(location) => testLocation = location}>
+      {component}
+    </TestRouter>
+  </GalleryContext>);
+
+  return () => ({result, testLocation});
+};
+
+
 export const renderWithRouter = (
   component: ReactElement, {
     pieceState,
