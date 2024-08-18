@@ -40,6 +40,7 @@ describe('The gallery.', () => {
     await userEvent.click(await screen.findByTestId(`piece-${firstPiece.id}`));
 
     expect(await screen.findByText(firstPiece.artist_display)).toBeInTheDocument();
+    expect(await screen.findByTestId('image-figure')).toBeInTheDocument();
   });
 
   test('when there is no art to show', async () => {
