@@ -3,9 +3,12 @@ import {ArtGalleryPiecePage} from './ArtGalleryPiecePage';
 import {Paths} from '../../routes/Paths';
 import {Outlet} from 'react-router-dom';
 import {GalleryPaths} from './GalleryPaths';
+import {GalleryContext} from './Art/Context';
 
 const GalleryRouter = () => (
-  <Outlet/>
+  <GalleryContext>
+    <Outlet/>
+  </GalleryContext>
 );
 
 export const Gallery = {
