@@ -4,10 +4,13 @@ import {Paths} from '../../routes/Paths';
 import {Outlet} from 'react-router-dom';
 import {GalleryPaths} from './GalleryPaths';
 import {GalleryContext} from './Art/Context';
+import {ArtPieceContext} from './ArtPiece/Context';
 
 const GalleryRouter = () => (
   <GalleryContext>
-    <Outlet/>
+    <ArtPieceContext>
+      <Outlet/>
+    </ArtPieceContext>
   </GalleryContext>
 );
 

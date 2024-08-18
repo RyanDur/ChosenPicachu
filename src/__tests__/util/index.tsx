@@ -5,10 +5,10 @@ import userEvent from '@testing-library/user-event';
 import {toQueryString} from '../../util/URL';
 import {AddressInfo, User} from '../../components/UserInfo/types';
 import {Consumer} from '@ryandur/sand';
-import {AppContext} from '../../AppContext';
 import {AllArt, Art} from '../../components/Gallery/resource/types/response';
 import {toDate} from 'date-fns';
 import {GalleryContext} from '../../components/Gallery/Art/Context';
+import {ArtPieceContext} from '../../components/Gallery/ArtPiece/Context';
 
 export interface Rendered {
   result: RenderResult;
@@ -62,23 +62,40 @@ export const renderWithGalleryContext = (
   return () => ({result, testLocation});
 };
 
+export const renderWithArtPieceContext = (
+  component: ReactElement, {
+    pieceState,
+    initialRoute = defaultUrlContext.path,
+    path = defaultUrlContext.path,
+    params = defaultUrlContext.params
+  }: Omit<Defaults, 'galleryState'> = {}): () => Rendered => {
+  let testLocation: Location;
+
+  const result = render(<ArtPieceContext pieceState={pieceState}>
+    <TestRouter
+      context={{initialRoute, path, params}}
+      testLocation={(location) => testLocation = location}>
+      {component}
+    </TestRouter>
+  </ArtPieceContext>);
+
+  return () => ({result, testLocation});
+};
 
 export const renderWithRouter = (
   component: ReactElement, {
-    pieceState,
     initialRoute = defaultUrlContext.path,
     path = defaultUrlContext.path,
     params = defaultUrlContext.params
   }: Defaults = {}): () => Rendered => {
   let testLocation: Location;
 
-  const result = render(<AppContext pieceState={pieceState}>
+  const result = render(
     <TestRouter
       context={{initialRoute, path, params}}
       testLocation={(location) => testLocation = location}>
       {component}
-    </TestRouter>
-  </AppContext>);
+    </TestRouter>);
 
   return () => ({result, testLocation});
 };

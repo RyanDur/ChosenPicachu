@@ -1,7 +1,7 @@
 import {useParams} from 'react-router-dom';
 import {useEffect, useState} from 'react';
 import {Loading} from '../../Loading';
-import {ArtPieceContext, useArtPiece, useArtPieceContext} from './Context';
+import {useArtPiece} from './Context';
 import {Image} from '../Image';
 import {useQuery} from '../../hooks';
 import {Source} from '../resource/types/resource';
@@ -9,7 +9,7 @@ import {has, not} from '@ryandur/sand';
 import {art} from '../resource';
 import './Piece.css';
 
-const ArtPiece = () => {
+export const ArtPiece = () => {
     const {piece, updatePiece, reset} = useArtPiece();
     const {queryObj: {tab}} = useQuery<{ tab: Source }>();
     const [errored, hasErrored] = useState(false);
@@ -36,11 +36,4 @@ const ArtPiece = () => {
                data-testid="image-error"/>
         </article>}
     </>;
-};
-
-export {
-    ArtPiece,
-    ArtPieceContext,
-    useArtPieceContext,
-    useArtPiece
 };
