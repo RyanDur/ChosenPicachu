@@ -1,6 +1,15 @@
 import {FC, PropsWithChildren, ReactElement} from 'react';
 import {render, RenderResult, screen} from '@testing-library/react';
-import {Location, MemoryRouter, Route, Routes, useLocation} from 'react-router-dom';
+import {
+  createMemoryRouter,
+  Location,
+  MemoryRouter,
+  Route,
+  RouteObject,
+  RouterProvider,
+  Routes,
+  useLocation
+} from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import {toQueryString} from '../../util/URL';
 import {AddressInfo, User} from '../../components/UserInfo/types';
@@ -16,9 +25,9 @@ export interface Rendered {
 }
 
 interface URLContext {
-  initialRoute?: string;
-  path?: string;
-  params?: Record<string, unknown>;
+  initialRoute: string;
+  path: string;
+  params: Record<string, unknown>;
 }
 
 const LocationHelper: FC<PropsWithChildren<{ testLocation: Consumer<Location> }>> = ({testLocation, children}) => {
@@ -41,7 +50,7 @@ const TestRouter: FC<PropsWithChildren & {
   </MemoryRouter>;
 };
 type Defaults = Partial<URLContext & { pieceState: Partial<Art>, galleryState: AllArt }>;
-const defaultUrlContext: URLContext = {path: '/initial/route', params: {}};
+const defaultUrlContext: URLContext = {initialRoute: '/initial/route', path: '/initial/route', params: {}};
 export const renderWithGalleryContext = (
   component: ReactElement, {
     galleryState,
@@ -60,6 +69,16 @@ export const renderWithGalleryContext = (
   </GalleryContext>);
 
   return () => ({result, testLocation});
+};
+
+export const renderWithMemoryRouter = (routes: RouteObject, {
+  path = defaultUrlContext.path
+}: { path: string }) => {
+  const router = createMemoryRouter([routes], {
+    initialEntries: [path],
+  });
+
+  return render(<RouterProvider router={router}/>);
 };
 
 export const renderWithArtPieceContext = (
