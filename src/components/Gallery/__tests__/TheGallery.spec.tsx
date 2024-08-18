@@ -23,18 +23,16 @@ describe('The gallery.', () => {
 
   test('When the art has loaded', async () => {
     fetchMock.mockResponseOnce(JSON.stringify(aicArtResponse));
-
     renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
 
-    await waitFor(() => expect(screen.queryByTestId('gallery-loading')).not.toBeInTheDocument());
-    await waitFor(() => expect(screen.queryByTestId('empty-gallery')).not.toBeInTheDocument());
     await waitFor(() => expect(screen.getAllByTestId(/piece/).length).toEqual(aicArtResponse.pagination.limit));
+    expect(screen.queryByTestId('gallery-loading')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('empty-gallery')).not.toBeInTheDocument();
   });
 
   it('should allow a user to take a closer look at the art', async () => {
     fetchMock.mockResponseOnce(JSON.stringify(aicArtResponse));
     fetchMock.mockResponse(JSON.stringify(aicArtPieceResponse));
-
     renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
 
     await userEvent.click(await screen.findByTestId(`piece-${firstPiece.id}`));
@@ -54,7 +52,6 @@ describe('The gallery.', () => {
 
   test('when the art has errored', async () => {
     fetchMock.mockReject();
-
     renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
 
     expect(await screen.findByTestId('empty-gallery')).toBeInTheDocument();
