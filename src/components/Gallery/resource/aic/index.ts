@@ -5,7 +5,7 @@ import {
   AICArtSchema,
   AICPieceData,
   AICSearch,
-  AICSearchSchema,
+  AICSearchSchema
 } from './types';
 import {toQueryString} from '../../../../util/URL';
 import {has, maybe} from '@ryandur/sand';
@@ -55,14 +55,12 @@ const aicToPiece = (data: AICArt): Art => ({
   altText: data.thumbnail?.alt_text || data.term_titles.join(' ') || ''
 });
 
+export const fields = ['id', 'title', 'image_id', 'artist_display', 'term_titles', 'thumbnail'];
+
 const endpoint = ({path, params = {}}: Query): PATH => {
   const {search, limit = defaultRecordLimit, page, ...rest} = params;
   const queryString = toQueryString({
-    q: search,
-    fields: ['id', 'title', 'image_id', 'artist_display', 'term_titles', 'thumbnail'],
-    page,
-    limit,
-    ...rest
+    q: search, fields, page, limit, ...rest
   });
 
   return maybe(search).map(() => [[

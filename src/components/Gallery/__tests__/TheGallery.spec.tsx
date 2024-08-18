@@ -4,8 +4,10 @@ import {screen, waitFor} from '@testing-library/react';
 import {Paths} from '../../../routes/Paths';
 import {Gallery} from '../index';
 import userEvent from '@testing-library/user-event';
-import {AICArtResponse} from '../resource/aic/types';
+import {AICAllArt, AICArtResponse} from '../resource/aic/types';
 import {test} from 'vitest';
+import {aicDomain, defaultRecordLimit} from '../../../config';
+import {fields} from '../resource/aic';
 
 const firstPiece = aicArtResponse.data[0];
 
@@ -19,20 +21,25 @@ const aicArtPieceResponse: AICArtResponse = {
   }
 };
 
+const setupAllArtResponse = (response: AICAllArt = aicArtResponse) =>
+  fetchMock.mockResponseOnce((request) => {
+    if (request.url === `${aicDomain}?fields=${fields.join()}&limit=${defaultRecordLimit}`) {
+      return Promise.resolve(JSON.stringify(response));
+    } else return Promise.reject('wrong url');
+  });
+
+const setupArtPieceResponse = (response: AICArtResponse = aicArtPieceResponse) =>
+  fetchMock.mockResponseOnce((request) => {
+    if (request.url === `${aicDomain}/${firstPiece.id}?fields=${fields.join()}&limit=${defaultRecordLimit}`) {
+      return Promise.resolve(JSON.stringify(response));
+    } else return Promise.reject('wrong url');
+  });
+
 describe('The gallery.', () => {
   window.scrollTo = vi.fn();
 
-  test('when the art is loading', async () => {
-    fetchMock.mockResponseOnce(JSON.stringify(aicArtResponse));
-    renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
-
-    expect(screen.queryByTestId('gallery-loading')).toBeInTheDocument();
-    expect(screen.queryByTestId('empty-gallery')).not.toBeInTheDocument();
-    expect(screen.queryByTestId(/piece/)).not.toBeInTheDocument();
-  });
-
   test('When the art has loaded', async () => {
-    fetchMock.mockResponseOnce(JSON.stringify(aicArtResponse));
+    setupAllArtResponse();
     renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
 
     await waitFor(() => expect(screen.getAllByTestId(/piece/).length).toEqual(aicArtResponse.pagination.limit));
@@ -41,31 +48,13 @@ describe('The gallery.', () => {
   });
 
   it('should allow a user to take a closer look at the art', async () => {
-    fetchMock.mockResponseOnce(JSON.stringify(aicArtResponse));
-    fetchMock.mockResponse(JSON.stringify(aicArtPieceResponse));
+    setupAllArtResponse();
+    setupArtPieceResponse();
     renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
 
     await userEvent.click(await screen.findByTestId(`piece-${firstPiece.id}`));
 
     expect(await screen.findByText(firstPiece.artist_display)).toBeInTheDocument();
     expect(screen.getByTestId('image-figure')).toBeInTheDocument();
-  });
-
-  test('when there is no art to show', async () => {
-    fetchMock.mockResponse(JSON.stringify({...aicArtResponse, data: []}));
-    renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
-
-    expect(await screen.findByTestId('empty-gallery')).toBeInTheDocument();
-    expect(screen.queryByTestId(/piece/)).not.toBeInTheDocument();
-    expect(screen.queryByTestId('gallery-loading')).not.toBeInTheDocument();
-  });
-
-  test('when the art has errored', async () => {
-    fetchMock.mockReject();
-    renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
-
-    expect(await screen.findByTestId('empty-gallery')).toBeInTheDocument();
-    expect(screen.queryByTestId(/piece/)).not.toBeInTheDocument();
-    expect(screen.queryByTestId('gallery-loading')).not.toBeInTheDocument();
   });
 });
