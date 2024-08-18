@@ -5,6 +5,7 @@ import {Paths} from '../../../routes/Paths';
 import {Gallery} from '../index';
 import userEvent from '@testing-library/user-event';
 import {AICArtResponse} from '../resource/aic/types';
+import {test} from 'vitest';
 
 const firstPiece = aicArtResponse.data[0];
 
@@ -20,6 +21,15 @@ const aicArtPieceResponse: AICArtResponse = {
 
 describe('The gallery.', () => {
   window.scrollTo = vi.fn();
+
+  test('when the art is loading', async () => {
+    fetchMock.mockResponseOnce(JSON.stringify(aicArtResponse));
+    renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
+
+    expect(screen.queryByTestId('gallery-loading')).toBeInTheDocument();
+    expect(screen.queryByTestId('empty-gallery')).not.toBeInTheDocument();
+    expect(screen.queryByTestId(/piece/)).not.toBeInTheDocument();
+  });
 
   test('When the art has loaded', async () => {
     fetchMock.mockResponseOnce(JSON.stringify(aicArtResponse));
@@ -38,16 +48,16 @@ describe('The gallery.', () => {
     await userEvent.click(await screen.findByTestId(`piece-${firstPiece.id}`));
 
     expect(await screen.findByText(firstPiece.artist_display)).toBeInTheDocument();
-    expect(await screen.findByTestId('image-figure')).toBeInTheDocument();
+    expect(screen.getByTestId('image-figure')).toBeInTheDocument();
   });
 
   test('when there is no art to show', async () => {
     fetchMock.mockResponse(JSON.stringify({...aicArtResponse, data: []}));
     renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
 
-    await waitFor(() => expect(screen.queryByTestId(/piece/)).not.toBeInTheDocument());
+    expect(await screen.findByTestId('empty-gallery')).toBeInTheDocument();
+    expect(screen.queryByTestId(/piece/)).not.toBeInTheDocument();
     expect(screen.queryByTestId('gallery-loading')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('empty-gallery')).toBeInTheDocument();
   });
 
   test('when the art has errored', async () => {
@@ -55,5 +65,7 @@ describe('The gallery.', () => {
     renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
 
     expect(await screen.findByTestId('empty-gallery')).toBeInTheDocument();
+    expect(screen.queryByTestId(/piece/)).not.toBeInTheDocument();
+    expect(screen.queryByTestId('gallery-loading')).not.toBeInTheDocument();
   });
 });
