@@ -22,18 +22,12 @@ const aicArtPieceResponse: AICArtResponse = {
 };
 
 const setupAllArtResponse = (response: AICAllArt = aicArtResponse) =>
-  fetchMock.mockResponseOnce((request) => {
-    if (request.url === `${aicDomain}?fields=${fields.join()}&limit=${defaultRecordLimit}`) {
-      return Promise.resolve(JSON.stringify(response));
-    } else return Promise.reject('wrong url');
-  });
+  fetchMock.mockOnceIf(`${aicDomain}?fields=${fields.join()}&limit=${defaultRecordLimit}`,
+    () => Promise.resolve(JSON.stringify(response)));
 
 const setupArtPieceResponse = (response: AICArtResponse = aicArtPieceResponse) =>
-  fetchMock.mockResponseOnce((request) => {
-    if (request.url === `${aicDomain}/${firstPiece.id}?fields=${fields.join()}&limit=${defaultRecordLimit}`) {
-      return Promise.resolve(JSON.stringify(response));
-    } else return Promise.reject('wrong url');
-  });
+  fetchMock.mockOnceIf(`${aicDomain}/${firstPiece.id}?fields=${fields.join()}&limit=${defaultRecordLimit}`,
+    () => Promise.resolve(JSON.stringify(response)));
 
 describe('The gallery.', () => {
   window.scrollTo = vi.fn();
