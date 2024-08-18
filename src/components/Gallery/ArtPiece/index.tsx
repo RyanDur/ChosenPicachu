@@ -17,7 +17,7 @@ export const ArtPiece = () => {
     const {id} = useParams<{ id: string }>();
 
     useEffect(() => {
-        id && art.get({id, source: tab})
+        id && art.get({id, source: tab ?? Source.AIC})
             .onPending(isLoading)
             .onSuccess(updatePiece)
             .onFailure(() => hasErrored(true));

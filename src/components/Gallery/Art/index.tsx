@@ -17,7 +17,7 @@ export const ArtGallery: FC = () => {
         useQuery<{ page: number, size: number, tab: Source, search?: string }>();
 
     useEffect(() => {
-        artResource.getAll({page, size, search, source: tab})
+        artResource.getAll({page, size, search, source: tab ?? Source.AIC})
             .onPending(isLoading)
             .onSuccess(updateArt)
             .onSuccess(data => hasErrored(empty(data.pieces)))
