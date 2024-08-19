@@ -15,7 +15,7 @@ import {
   rijkArtObjectResponse
 } from '../../../../__tests__/util/dummyData';
 import {nanoid} from 'nanoid';
-import {AICPieceData, AICSearch} from '../aic/types';
+import {AICPieceData, AICSearchResponse} from '../aic/types';
 import {HTTPError} from '../../../../data/types';
 import {art} from '../index';
 import {Art} from '../types/response';
@@ -279,7 +279,7 @@ describe('data', () => {
   };
 
 
-  const aicArtOptions: AICSearch = {
+  const aicArtOptions: AICSearchResponse = {
     pagination,
     data: options.map(option => ({
       suggest_autocomplete_all: [{

@@ -4,10 +4,12 @@ import {screen, waitFor} from '@testing-library/react';
 import {Paths} from '../../../routes/Paths';
 import {Gallery} from '../index';
 import userEvent from '@testing-library/user-event';
-import {AICAllArt, AICArtResponse} from '../resource/aic/types';
+import {AICAllArtResponse, AICArtResponse} from '../resource/aic/types';
 import {test} from 'vitest';
 import {aicDomain, defaultRecordLimit} from '../../../config';
 import {fields} from '../resource/aic';
+import {HarvardAllArt, HarvardArt} from '../resource/harvard/types';
+import {RIJKSAllArt, RIJKSArt} from '../resource/rijks/types';
 
 const firstPiece = aicArtResponse.data[0];
 
@@ -21,11 +23,13 @@ const aicArtPieceResponse: AICArtResponse = {
   }
 };
 
-const setupAllArtResponse = (response: AICAllArt = aicArtResponse) =>
+type ArtResponse = AICArtResponse | HarvardArt | RIJKSArt;
+type AllArtResponse = AICAllArtResponse | HarvardAllArt | RIJKSAllArt;
+const setupAllArtResponse = (response: AllArtResponse) =>
   fetchMock.mockOnceIf(`${aicDomain}?fields=${fields.join()}&limit=${defaultRecordLimit}`,
     () => Promise.resolve(JSON.stringify(response)));
 
-const setupArtPieceResponse = (response: AICArtResponse = aicArtPieceResponse) =>
+const setupArtPieceResponse = (response: ArtResponse) =>
   fetchMock.mockOnceIf(`${aicDomain}/${firstPiece.id}?fields=${fields.join()}&limit=${defaultRecordLimit}`,
     () => Promise.resolve(JSON.stringify(response)));
 
@@ -33,7 +37,7 @@ describe('The gallery.', () => {
   window.scrollTo = vi.fn();
 
   test('When the art has loaded', async () => {
-    setupAllArtResponse();
+    setupAllArtResponse(aicArtResponse);
     renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
 
     await waitFor(() => expect(screen.getAllByTestId(/piece/).length).toEqual(aicArtResponse.pagination.limit));
@@ -42,8 +46,8 @@ describe('The gallery.', () => {
   });
 
   it('should allow a user to take a closer look at the art', async () => {
-    setupAllArtResponse();
-    setupArtPieceResponse();
+    setupAllArtResponse(aicArtResponse);
+    setupArtPieceResponse(aicArtPieceResponse);
     renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
 
     await userEvent.click(await screen.findByTestId(`piece-${firstPiece.id}`));
