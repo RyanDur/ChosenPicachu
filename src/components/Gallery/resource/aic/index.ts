@@ -17,12 +17,8 @@ import {GetAllArtRequest} from '../types/resource';
 export const fields = ['id', 'title', 'image_id', 'artist_display', 'term_titles', 'thumbnail'];
 
 export const aic = {
-  allArt: ({page, size, search}: GetAllArtRequest) => http
-    .get(
-      `${aicDomain}${toQueryString({
-        q: search, fields: fields.join(), page, limit: defaultRecordLimit, size
-      })}`
-    )
+  allArt: ({page, search, size = defaultRecordLimit}: GetAllArtRequest) => http
+    .get(`${aicDomain}${toQueryString({q: search, fields, page, limit: size})}`)
     .mBind(validate(AICAllArtSchema))
     .map(({pagination, data}: AICAllArtResponse): AllArt => ({
       pagination: {
@@ -35,9 +31,7 @@ export const aic = {
     })),
 
   art: (id: string) => http
-    .get(`${aicDomain}/${id}${toQueryString({
-      fields: fields.join(),
-    })}`)
+    .get(`${aicDomain}/${id}${toQueryString({fields})}`)
     .mBind(validate(AICArtSchema))
     .map(({data}: AICPieceData): Art => aicToPiece(data)),
 
