@@ -1,9 +1,9 @@
 import {
-  HarvardAllArt,
+  HarvardAllArtResponse,
   HarvardAllArtSchema,
-  HarvardArt,
+  HarvardArtResponse,
   HarvardArtSchema,
-  HarvardSearch,
+  HarvardSearchResponse,
   HarvardSearchSchema
 } from './types';
 import {has} from '@ryandur/sand';
@@ -19,7 +19,7 @@ export const harvard = {
   allArt: ({page, size, search}: GetAllArtRequest) => http
     .get(endpoint({params: {page, size, search}}))
     .mBind(validate(HarvardAllArtSchema))
-    .map(({info, records}: HarvardAllArt): AllArt => ({
+    .map(({info, records}: HarvardAllArtResponse): AllArt => ({
       pagination: {
         total: info.totalrecords,
         limit: info.totalrecordsperquery,
@@ -42,11 +42,11 @@ export const harvard = {
       size: defaultSearchLimit
     })}`)
     .mBind(validate(HarvardSearchSchema))
-    .map(({records}: HarvardSearch): SearchOptions =>
+    .map(({records}: HarvardSearchResponse): SearchOptions =>
       records.map(({title}) => title))
 };
 
-const harvardArtToArt = (record: HarvardArt): Art => ({
+const harvardArtToArt = (record: HarvardArtResponse): Art => ({
   id: String(record.id),
   title: record.title,
   image: record.primaryimageurl,
