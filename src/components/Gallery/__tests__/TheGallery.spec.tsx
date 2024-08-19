@@ -27,14 +27,14 @@ const setupAllArtResponse = (response: AllArtResponse, limit = defaultRecordLimi
     () => Promise.resolve(JSON.stringify(response)));
 
 const setupArtPieceResponse = (response: ArtResponse) =>
-  fetchMock.mockOnceIf(`${aicDomain}/${firstPiece.id}?fields=${fields.join()}&limit=${defaultRecordLimit}`,
+  fetchMock.mockOnceIf(`${aicDomain}/${firstPiece.id}?fields=${fields.join()}`,
     () => Promise.resolve(JSON.stringify(response)));
 
 describe('The gallery.', () => {
   window.scrollTo = vi.fn();
 
   test('When the art has loaded', async () => {
-    setupAllArtResponse(aicArtResponse);
+    setupAllArtResponse(aicArtResponse, aicArtResponse.pagination.limit);
     renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
 
     await waitFor(() => expect(screen.getAllByTestId(/piece/).length).toEqual(aicArtResponse.pagination.limit));
