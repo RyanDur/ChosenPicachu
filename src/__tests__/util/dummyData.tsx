@@ -10,7 +10,7 @@ import {
   HarvardSearchResponse
 } from '../../components/Gallery/resource/harvard/types.js';
 import {AllArt, Art} from '../../components/Gallery/resource/types/response';
-import {RIJKArtObject, RIJKSAllArt, RIJKSArt} from '../../components/Gallery/resource/rijks/types';
+import {RIJKArtObjectResponse, RIJKSAllArtResponse, RIJKSArtResponse} from '../../components/Gallery/resource/rijks/types';
 import {createUser} from '../../components/Users/resource/usersApi';
 
 const randomNumberFromRange = (min: number, max = 6) => Math.floor(Math.random() * max) + min;
@@ -184,7 +184,7 @@ export const harvardArtOptions: HarvardSearchResponse = {
   info,
   records: options.map(option => ({title: option}))
 };
-export const fromRIJKArtOptionsResponse: RIJKSAllArt = {
+export const fromRIJKArtOptionsResponse: RIJKSAllArtResponse = {
   count: options.length,
   artObjects: options.map(title => ({
     id: faker.lorem.word(),
@@ -226,7 +226,7 @@ export const fromHarvardArt: AllArt = {
   }))
 };
 
-const rijkPieceResponse = (): RIJKArtObject => ({
+const rijkPieceResponse = (): RIJKArtObjectResponse => ({
   id: faker.lorem.words(),
   objectNumber: faker.lorem.word(),
   title: faker.lorem.words(),
@@ -236,12 +236,12 @@ const rijkPieceResponse = (): RIJKArtObject => ({
     url: faker.lorem.words()
   }
 });
-export const fromRIJKArtResponse: RIJKSAllArt = {
+export const fromRIJKArtResponse: RIJKSAllArtResponse = {
   count: Math.floor(Math.random() * 100) + 1,
   artObjects: [...Array(pagination.limit)].map(rijkPieceResponse)
 };
 
-export const fromRIJKToPiece = (piece: RIJKArtObject): Art => ({
+export const fromRIJKToPiece = (piece: RIJKArtObjectResponse): Art => ({
   id: piece.objectNumber,
   title: piece.title,
   artistInfo: piece.longTitle,
@@ -249,7 +249,7 @@ export const fromRIJKToPiece = (piece: RIJKArtObject): Art => ({
   altText: piece.longTitle
 });
 
-export const rijkArtObjectResponse: RIJKSArt = {
+export const rijkArtObjectResponse: RIJKSArtResponse = {
   artObject: rijkPieceResponse()
 };
 
