@@ -8,17 +8,21 @@ import {
   AICSearchSchema
 } from './types';
 import {toQueryString} from '../../../../util/URL';
-import {has, maybe} from '@ryandur/sand';
 import {aicDomain, defaultRecordLimit, defaultSearchLimit} from '../../../../config';
-import {PATH} from '../../../../data/types';
 import {AllArt, Art, SearchOptions} from '../types/response';
 import {validate} from '../../../../data/validate';
 import {http} from '../../../../data/http';
-import {GetAllArtRequest, Query} from '../types/resource';
+import {GetAllArtRequest} from '../types/resource';
+
+export const fields = ['id', 'title', 'image_id', 'artist_display', 'term_titles', 'thumbnail'];
 
 export const aic = {
   allArt: ({page, size, search}: GetAllArtRequest) => http
-    .get(endpoint({params: {page, size, search}}))
+    .get(
+      `${aicDomain}${toQueryString({
+        q: search, fields: fields.join(), page, limit: defaultRecordLimit, size
+      })}`
+    )
     .mBind(validate(AICAllArtSchema))
     .map(({pagination, data}: AICAllArtResponse): AllArt => ({
       pagination: {
@@ -31,7 +35,9 @@ export const aic = {
     })),
 
   art: (id: string) => http
-    .get(endpoint({path: [id]}))
+    .get(`${aicDomain}/${id}${toQueryString({
+      fields: fields.join(),
+    })}`)
     .mBind(validate(AICArtSchema))
     .map(({data}: AICPieceData): Art => aicToPiece(data)),
 
@@ -54,20 +60,3 @@ const aicToPiece = (data: AICArt): Art => ({
   artistInfo: data.artist_display,
   altText: data.thumbnail?.alt_text || data.term_titles.join(' ') || ''
 });
-
-export const fields = ['id', 'title', 'image_id', 'artist_display', 'term_titles', 'thumbnail'];
-
-const endpoint = ({path, params = {}}: Query): PATH => {
-  const {search, limit = defaultRecordLimit, page, ...rest} = params;
-  const queryString = toQueryString({
-    q: search, fields, page, limit, ...rest
-  });
-
-  return maybe(search).map(() => [[
-    aicDomain,
-    'search'
-  ].join('/'), queryString].join('')).orElse([[
-    aicDomain,
-    path?.filter(has).join('/')
-  ].filter(has).join('/'), queryString].join(''));
-};
