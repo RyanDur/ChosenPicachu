@@ -6,18 +6,19 @@ import {
   HarvardSearchResponse,
   HarvardSearchSchema
 } from './types';
-import {has} from '@ryandur/sand';
-import {defaultRecordLimit, defaultSearchLimit, harvardAPIKey, harvardDomain} from '../../../../config';
+import {defaultSearchLimit, harvardAPIKey, harvardDomain} from '../../../../config';
 import {toQueryString} from '../../../../util/URL';
-import {PATH} from '../../../../data/types';
 import {AllArt, Art, SearchOptions} from '../types/response';
 import {validate} from '../../../../data/validate';
 import {http} from '../../../../data/http';
-import {GetAllArtRequest, Query} from '../types/resource';
+import {GetAllArtRequest} from '../types/resource';
 
+const baseQueryString = {
+  fields: ['id', 'title', 'people', 'primaryimageurl'].join(), apikey: harvardAPIKey
+};
 export const harvard = {
   allArt: ({page, size, search}: GetAllArtRequest) => http
-    .get(endpoint({params: {page, size, search}}))
+    .get(`${harvardDomain}${toQueryString({q: search, page, size, ...baseQueryString})}`)
     .mBind(validate(HarvardAllArtSchema))
     .map(({info, records}: HarvardAllArtResponse): AllArt => ({
       pagination: {
@@ -28,9 +29,9 @@ export const harvard = {
       },
       pieces: records.map(harvardArtToArt)
     })),
-
+  // endpoint({path: [id]})
   art: (id: string) => http
-    .get(endpoint({path: [id]}))
+    .get(`${harvardDomain}/${id}${toQueryString(baseQueryString)}`)
     .mBind(validate(HarvardArtSchema))
     .map(harvardArtToArt),
 
@@ -53,20 +54,3 @@ const harvardArtToArt = (record: HarvardArtResponse): Art => ({
   artistInfo: record.people?.find(person => person.role === 'Artist')?.displayname || 'Unknown',
   altText: record.title
 });
-
-const endpoint = ({path, params = {}}: Query): PATH => {
-  const {search, limit = defaultRecordLimit, page, ...rest} = params;
-  return [
-    [
-      harvardDomain,
-      path?.filter(has).join('/')
-    ].filter(has).join('/'),
-    toQueryString({
-      q: search,
-      fields: ['id', 'title', 'people', 'primaryimageurl'],
-      page,
-      apikey: harvardAPIKey,
-      size: limit,
-      ...rest
-    })].join('');
-};
