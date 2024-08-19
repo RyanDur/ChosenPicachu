@@ -23,3 +23,5 @@ export interface AllArt {
 }
 
 export type SearchOptions = string[];
+export type AllArtResponse = AICAllArtResponse | HarvardAllArtResponse | RIJKSAllArt;
+export type ArtResponse = AICArtResponse | HarvardArtResponse | RIJKSArt;
