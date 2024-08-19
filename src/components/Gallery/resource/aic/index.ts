@@ -1,10 +1,10 @@
 import {
-  AICAllArt,
+  AICAllArtResponse,
   AICAllArtSchema,
   AICArt,
   AICArtSchema,
   AICPieceData,
-  AICSearch,
+  AICSearchResponse,
   AICSearchSchema
 } from './types';
 import {toQueryString} from '../../../../util/URL';
@@ -20,7 +20,7 @@ export const aic = {
   allArt: ({page, size, search}: GetAllArtRequest) => http
     .get(endpoint({params: {page, size, search}}))
     .mBind(validate(AICAllArtSchema))
-    .map(({pagination, data}: AICAllArt): AllArt => ({
+    .map(({pagination, data}: AICAllArtResponse): AllArt => ({
       pagination: {
         total: pagination.total,
         limit: pagination.limit,
@@ -42,7 +42,7 @@ export const aic = {
       limit: defaultSearchLimit
     })}`)
     .mBind(validate(AICSearchSchema))
-    .map(({data}: AICSearch): SearchOptions => data
+    .map(({data}: AICSearchResponse): SearchOptions => data
       .map(({suggest_autocomplete_all}) => suggest_autocomplete_all[1])
       .flatMap(option => option.input))
 };

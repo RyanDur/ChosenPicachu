@@ -5,11 +5,11 @@ import {renderWithRouter} from '../../../../__tests__/util';
 import {Source} from '../../resource/types/resource';
 import {faker} from '@faker-js/faker';
 import {Paths} from '../../../../routes/Paths';
-import {AICSearch} from '../../resource/aic/types';
+import {AICSearchResponse} from '../../resource/aic/types';
 
 describe('search', () => {
   const searchWord = faker.lorem.word().toUpperCase();
-  const searchResponse: AICSearch = {
+  const searchResponse: AICSearchResponse = {
     pagination: {
       total: 5,
       limit: 2,

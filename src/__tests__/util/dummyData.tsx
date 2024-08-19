@@ -1,7 +1,7 @@
 import {nanoid} from 'nanoid';
 import {faker} from '@faker-js/faker';
 import {Column, Row} from '../../components/Table/types';
-import {AICAllArt, AICArt} from '../../components/Gallery/resource/aic/types';
+import {AICAllArtResponse, AICArt} from '../../components/Gallery/resource/aic/types';
 import {
   HarvardAllArt,
   HarvardArt,
@@ -135,7 +135,7 @@ export const pagination = {
   next_url: faker.internet.url()
 };
 
-export const aicArtResponse: AICAllArt = {
+export const aicArtResponse: AICAllArtResponse = {
   pagination,
   data: [...Array(pagination.limit)].map((_, index): AICArt => ({
     id: index,
