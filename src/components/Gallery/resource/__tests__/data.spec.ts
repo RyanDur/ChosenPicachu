@@ -85,17 +85,17 @@ describe('data', () => {
       test('when it is successful', async () => {
         fetchMock.mockResponse(JSON.stringify(fromRIJKArtResponse));
 
-        const actual = await art.getAll({page: 1, size: 12, source: Source.RIJKS}).orNull();
+        const actual = await art.getAll({page: 1, size: 8, source: Source.RIJKS}).orNull();
 
-        expect(actual).toEqual(fromRIJKArt(1, 12));
+        expect(actual).toEqual(fromRIJKArt(1, 8));
       });
 
       test('when it has a search term', async () => {
         fetchMock.mockResponse(JSON.stringify(fromRIJKArtResponse));
 
-        const actual = await art.getAll({page: 1, size: 12, search: 'rad', source: Source.RIJKS}).orNull();
+        const actual = await art.getAll({page: 1, size: 8, search: 'rad', source: Source.RIJKS}).orNull();
 
-        expect(actual).toEqual(fromRIJKArt(1, 12));
+        expect(actual).toEqual(fromRIJKArt(1, 8));
       });
 
       test('when it is not successful', async () => {
