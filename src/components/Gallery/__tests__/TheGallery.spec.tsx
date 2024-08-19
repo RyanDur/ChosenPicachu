@@ -22,8 +22,8 @@ const aicArtPieceResponse: AICArtResponse = {
   }
 };
 
-const setupAllArtResponse = (response: AllArtResponse) =>
-  fetchMock.mockOnceIf(`${aicDomain}?fields=${fields.join()}&limit=${defaultRecordLimit}`,
+const setupAllArtResponse = (response: AllArtResponse, limit = defaultRecordLimit) =>
+  fetchMock.mockOnceIf(`${aicDomain}?fields=${fields.join()}&limit=${limit}`,
     () => Promise.resolve(JSON.stringify(response)));
 
 const setupArtPieceResponse = (response: ArtResponse) =>

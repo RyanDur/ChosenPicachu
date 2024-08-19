@@ -12,6 +12,7 @@ import {
 import {AllArt, Art} from '../../components/Gallery/resource/types/response';
 import {RIJKArtObjectResponse, RIJKSAllArtResponse, RIJKSArtResponse} from '../../components/Gallery/resource/rijks/types';
 import {createUser} from '../../components/Users/resource/usersApi';
+import {defaultRecordLimit} from '../../config';
 
 const randomNumberFromRange = (min: number, max = 6) => Math.floor(Math.random() * max) + min;
 export const words = (num = 6) => faker.lorem.words(randomNumberFromRange(1, num));
@@ -128,7 +129,7 @@ export const users = [
 
 export const pagination = {
   total: 1000,
-  limit: 12,
+  limit: defaultRecordLimit,
   offset: 0,
   total_pages: 84,
   current_page: 1,
