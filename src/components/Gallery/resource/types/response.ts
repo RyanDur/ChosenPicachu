@@ -1,3 +1,7 @@
+import {AICAllArtResponse, AICArtResponse} from '../aic/types';
+import {HarvardAllArtResponse, HarvardArtResponse} from '../harvard/types';
+import {RIJKSAllArt, RIJKSArt} from '../rijks/types';
+
 export type Pagination = {
     total: number;
     limit: number;

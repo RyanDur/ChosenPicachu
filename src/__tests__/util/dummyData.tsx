@@ -3,11 +3,11 @@ import {faker} from '@faker-js/faker';
 import {Column, Row} from '../../components/Table/types';
 import {AICAllArtResponse, AICArt} from '../../components/Gallery/resource/aic/types';
 import {
-  HarvardAllArt,
-  HarvardArt,
+  HarvardAllArtResponse,
+  HarvardArtResponse,
   HarvardInfo,
   HarvardPeople,
-  HarvardSearch
+  HarvardSearchResponse
 } from '../../components/Gallery/resource/harvard/types.js';
 import {AllArt, Art} from '../../components/Gallery/resource/types/response';
 import {RIJKArtObject, RIJKSAllArt, RIJKSArt} from '../../components/Gallery/resource/rijks/types';
@@ -158,7 +158,7 @@ export const person = (): HarvardPeople => ({
   displayname: faker.lorem.word()
 });
 
-const harvardToPieceResponse = (_: unknown, index: number): HarvardArt => ({
+const harvardToPieceResponse = (_: unknown, index: number): HarvardArtResponse => ({
   id: index,
   title: faker.lorem.sentence(),
   people: [person()],
@@ -175,12 +175,12 @@ export const harvardPiece: Art = {
   artistInfo: harvardPieceResponse.people?.[0].displayname || ''
 };
 
-export const harvardArtResponse: HarvardAllArt = {
+export const harvardArtResponse: HarvardAllArtResponse = {
   info,
   records: [...Array(info.totalrecordsperquery)].map(harvardToPieceResponse)
 };
 export const options: string[] = [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()];
-export const harvardArtOptions: HarvardSearch = {
+export const harvardArtOptions: HarvardSearchResponse = {
   info,
   records: options.map(option => ({title: option}))
 };
