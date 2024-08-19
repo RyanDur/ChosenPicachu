@@ -29,7 +29,7 @@ export const harvard = {
       },
       pieces: records.map(harvardArtToArt)
     })),
-  // endpoint({path: [id]})
+
   art: (id: string) => http
     .get(`${harvardDomain}/${id}${toQueryString(baseQueryString)}`)
     .mBind(validate(HarvardArtSchema))
