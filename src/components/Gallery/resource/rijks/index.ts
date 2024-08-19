@@ -1,4 +1,4 @@
-import {RIJKAllArtSchema, RIJKArtObject, RIJKArtSchema, RIJKSAllArt, RIJKSArt, RIJKSSearchSchema} from './types';
+import {RIJKAllArtSchema, RIJKArtObjectResponse, RIJKArtSchema, RIJKSAllArtResponse, RIJKSArtResponse, RIJKSSearchSchema} from './types';
 import {has} from '@ryandur/sand';
 import {defaultRecordLimit, defaultSearchLimit, rijksAPIKey, rijksDomain} from '../../../../config';
 import {toQueryString} from '../../../../util/URL';
@@ -12,7 +12,7 @@ export const rijks = {
   allArt: ({page, size, search}: GetAllArtRequest) => http
     .get(endpoint({params: {page, size, search}}))
     .mBind(validate(RIJKAllArtSchema))
-    .map((data: RIJKSAllArt): AllArt => ({
+    .map((data: RIJKSAllArtResponse): AllArt => ({
       pagination: {
         total: data.count,
         limit: data.artObjects.length,
@@ -25,7 +25,7 @@ export const rijks = {
   art: (id: string) => http
     .get(endpoint({path: [id]}))
     .mBind(validate(RIJKArtSchema))
-    .map(({artObject}: RIJKSArt): Art => rijkToPiece(artObject)),
+    .map(({artObject}: RIJKSArtResponse): Art => rijkToPiece(artObject)),
 
   searchOptions: (search: string) => http
     .get([
@@ -34,11 +34,11 @@ export const rijks = {
         q: search, p: 1, ps: defaultSearchLimit, imgonly: true, key: rijksAPIKey
       })].join(''))
     .mBind(validate(RIJKSSearchSchema))
-    .map(({artObjects}: RIJKSAllArt): SearchOptions =>
+    .map(({artObjects}: RIJKSAllArtResponse): SearchOptions =>
       artObjects.map(({title}) => title))
 };
 
-const rijkToPiece = (data: RIJKArtObject): Art => ({
+const rijkToPiece = (data: RIJKArtObjectResponse): Art => ({
   id: data.objectNumber,
   title: data.title,
   image: data.webImage.url,

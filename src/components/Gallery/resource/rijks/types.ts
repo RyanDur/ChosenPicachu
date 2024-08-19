@@ -40,6 +40,6 @@ export const RIJKArtSchema = D.object({
     }
 });
 
-export type RIJKArtObject = D.Output<typeof RIJKPieceDecoder>;
-export type RIJKSAllArt = D.Output<typeof RIJKAllArtSchema>;
-export type RIJKSArt = D.Output<typeof RIJKArtSchema>;
+export type RIJKArtObjectResponse = D.Output<typeof RIJKPieceDecoder>;
+export type RIJKSAllArtResponse = D.Output<typeof RIJKAllArtSchema>;
+export type RIJKSArtResponse = D.Output<typeof RIJKArtSchema>;
