@@ -4,12 +4,11 @@ import {screen, waitFor} from '@testing-library/react';
 import {Paths} from '../../../routes/Paths';
 import {Gallery} from '../index';
 import userEvent from '@testing-library/user-event';
-import {AICAllArtResponse, AICArtResponse} from '../resource/aic/types';
+import {AICArtResponse} from '../resource/aic/types';
 import {test} from 'vitest';
 import {aicDomain, defaultRecordLimit} from '../../../config';
 import {fields} from '../resource/aic';
-import {HarvardAllArt, HarvardArt} from '../resource/harvard/types';
-import {RIJKSAllArt, RIJKSArt} from '../resource/rijks/types';
+import {AllArtResponse, ArtResponse} from '../resource/types/response';
 
 const firstPiece = aicArtResponse.data[0];
 
@@ -23,8 +22,6 @@ const aicArtPieceResponse: AICArtResponse = {
   }
 };
 
-type ArtResponse = AICArtResponse | HarvardArt | RIJKSArt;
-type AllArtResponse = AICAllArtResponse | HarvardAllArt | RIJKSAllArt;
 const setupAllArtResponse = (response: AllArtResponse) =>
   fetchMock.mockOnceIf(`${aicDomain}?fields=${fields.join()}&limit=${defaultRecordLimit}`,
     () => Promise.resolve(JSON.stringify(response)));
