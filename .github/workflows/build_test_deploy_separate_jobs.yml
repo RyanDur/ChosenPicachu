@@ -27,6 +27,8 @@ jobs:
           npm run build
       - name: Test
         run: npm test
+        with:
+          envfile: .env.test
       - name: Upload
         uses: actions/upload-artifact@v4
         with:
