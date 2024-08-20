@@ -27,7 +27,7 @@ const setupAICAllArtResponse = (response: AICAllArtResponse, limit = defaultReco
   fetchMock.mockOnceIf(`${aicDomain}/?fields=${fields.join()}&limit=${limit}`,
     () => Promise.resolve(JSON.stringify(response)));
 
-const setupHarvardAllArtResponse = (response: HarvardAllArtResponse, limit: number) =>
+const setupHarvardAllArtResponse = (response: HarvardAllArtResponse, limit = defaultRecordLimit) =>
   fetchMock.mockOnceIf(`${harvardDomain}/?page=1&size=${limit}&fields=${harvardFields}&apikey=${harvardAPIKey}`,
     () => Promise.resolve(JSON.stringify(response)));
 
@@ -39,10 +39,10 @@ describe('The gallery.', () => {
   window.scrollTo = vi.fn();
 
   test('When the art has loaded', async () => {
-    setupAICAllArtResponse(aicArtResponse, aicArtResponse.pagination.limit);
+    setupAICAllArtResponse(aicArtResponse);
     renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
 
-    await waitFor(() => expect(screen.getAllByTestId(/piece/).length).toEqual(aicArtResponse.pagination.limit));
+    await waitFor(() => expect(screen.getAllByTestId(/piece/).length).toEqual(defaultRecordLimit));
     expect(screen.queryByTestId('gallery-loading')).not.toBeInTheDocument();
     expect(screen.queryByTestId('empty-gallery')).not.toBeInTheDocument();
   });
@@ -59,8 +59,8 @@ describe('The gallery.', () => {
   });
 
   test('when looking at the harvard gallery', async () => {
-    setupAICAllArtResponse(aicArtResponse, aicArtResponse.pagination.limit);
-    setupHarvardAllArtResponse(harvardArtResponse, harvardArtResponse.info.totalrecordsperquery);
+    setupAICAllArtResponse(aicArtResponse);
+    setupHarvardAllArtResponse(harvardArtResponse);
     renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
 
     await userEvent.click(await screen.findByText(`Harvard Art Museums`));
