@@ -4,16 +4,19 @@ import {Search} from './Search';
 import {ArtPiece} from './ArtPiece';
 import '../../routes/BasePage.css';
 import '../../routes/BasePage.layout.css';
+import {useArtPiece} from "./ArtPiece/Context";
 
-export const ArtGalleryPiecePage: FC = () =>
-  <>
-    <header id="app-header" data-testid="header">
-      <h1 className="title ellipsis">About</h1>
-      <Search id="gallery-search"/>
-    </header>
+export const ArtGalleryPiecePage: FC = () => {
+    const {piece} = useArtPiece();
+    return <>
+        <header id="app-header" data-testid="header">
+            <h1 className="title ellipsis">{piece.title}</h1>
+            <Search id="gallery-search"/>
+        </header>
 
-    <SideNav/>
+        <SideNav/>
 
-    <main data-testid="main" className="gallery-in-view"><ArtPiece/></main>
-  </>;
+        <main data-testid="main" className="gallery-in-view"><ArtPiece/></main>
+    </>;
+};
 
