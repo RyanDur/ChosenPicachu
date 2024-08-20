@@ -19,12 +19,12 @@ describe('Gallery Navigation', () => {
         const rendered = renderWithGalleryContext(<GalleryNav/>, options);
         await userEvent.click(screen.getByTestId('next-page'));
 
-        expect(rendered().testLocation?.search).toEqual('?page=2');
+        expect(rendered().testLocation?.search).toEqual('?page=2&size=0');
         expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
 
         await userEvent.click(screen.getByTestId('next-page'));
 
-        expect(rendered().testLocation?.search).toEqual('?page=3');
+        expect(rendered().testLocation?.search).toEqual('?page=3&size=0');
         expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
       });
 
@@ -40,7 +40,7 @@ describe('Gallery Navigation', () => {
         await userEvent.click(screen.getByTestId('last-page'));
 
         expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
-        expect(rendered().testLocation?.search).toEqual(`?page=${fromAICArt.pagination.totalPages}`);
+        expect(rendered().testLocation?.search).toEqual(`?page=${fromAICArt.pagination.totalPages}&size=0`);
         expect(screen.queryByTestId('last-page')).not.toBeInTheDocument();
         expect(screen.queryByTestId('next-page')).not.toBeInTheDocument();
         expect(screen.queryByTestId('first-page')).toBeInTheDocument();
@@ -59,12 +59,12 @@ describe('Gallery Navigation', () => {
         await userEvent.click(screen.getByTestId('last-page'));
         await userEvent.click(screen.getByTestId('prev-page'));
 
-        expect(rendered().testLocation?.search).toEqual(`?page=${fromAICArt.pagination.totalPages - 1}`);
+        expect(rendered().testLocation?.search).toEqual(`?page=${fromAICArt.pagination.totalPages - 1}&size=0`);
         expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
 
         await userEvent.click(screen.getByTestId('prev-page'));
 
-        expect(rendered().testLocation?.search).toEqual(`?page=${fromAICArt.pagination.totalPages - 2}`);
+        expect(rendered().testLocation?.search).toEqual(`?page=${fromAICArt.pagination.totalPages - 2}&size=0`);
         expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
       });
 
@@ -103,7 +103,7 @@ describe('Gallery Navigation', () => {
         await userEvent.click(screen.getByTestId('first-page'));
 
         expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
-        expect(rendered().testLocation?.search).toEqual('?page=1');
+        expect(rendered().testLocation?.search).toEqual('?page=1&size=0');
         expect(screen.queryByTestId('last-page')).toBeInTheDocument();
         expect(screen.queryByTestId('next-page')).toBeInTheDocument();
         expect(screen.queryByTestId('first-page')).not.toBeInTheDocument();
@@ -121,22 +121,22 @@ describe('Gallery Navigation', () => {
     });
 
     await userEvent.click(screen.getByTestId('next-page'));
-    expect(rendered().testLocation?.search).toEqual('?page=2&search=q');
+    expect(rendered().testLocation?.search).toEqual('?page=2&size=0&search=q');
 
     await userEvent.click(screen.getByTestId('next-page'));
-    expect(rendered().testLocation?.search).toEqual('?page=3&search=q');
+    expect(rendered().testLocation?.search).toEqual('?page=3&size=0&search=q');
 
     await userEvent.click(screen.getByTestId('last-page'));
-    expect(rendered().testLocation?.search).toEqual(`?page=${fromAICArt.pagination.totalPages}&search=q`);
+    expect(rendered().testLocation?.search).toEqual(`?page=${fromAICArt.pagination.totalPages}&size=0&search=q`);
 
     await userEvent.click(screen.getByTestId('prev-page'));
-    expect(rendered().testLocation?.search).toEqual(`?page=${fromAICArt.pagination.totalPages - 1}&search=q`);
+    expect(rendered().testLocation?.search).toEqual(`?page=${fromAICArt.pagination.totalPages - 1}&size=0&search=q`);
 
     await userEvent.click(screen.getByTestId('prev-page'));
-    expect(rendered().testLocation?.search).toEqual(`?page=${fromAICArt.pagination.totalPages - 2}&search=q`);
+    expect(rendered().testLocation?.search).toEqual(`?page=${fromAICArt.pagination.totalPages - 2}&size=0&search=q`);
 
     await userEvent.click(screen.getByTestId('first-page'));
-    expect(rendered().testLocation?.search).toEqual('?page=1&search=q');
+    expect(rendered().testLocation?.search).toEqual('?page=1&size=0&search=q');
   });
 
   test('page information', () => {

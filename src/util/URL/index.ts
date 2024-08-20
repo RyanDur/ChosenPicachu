@@ -1,8 +1,8 @@
-import {maybe} from '@ryandur/sand';
+import {has, maybe} from '@ryandur/sand';
 
 export const toQueryString = (queryObj = {}): string =>
     maybe(Object.entries(queryObj)
-        .filter(([, value]) => !!value)
+        .filter(([, value]) => has(value))
         .map(([key, value]) => `${key}=${value}`).join('&')).map(query => `?${query}`).orElse('');
 
 export const toQueryObj = (queryString: string, defaultObj = {}) =>
