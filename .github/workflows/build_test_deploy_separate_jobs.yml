@@ -25,10 +25,12 @@ jobs:
         run: |
           npm ci
           npm run build
+      - uses: cardinalby/export-env-action@v2
+        with:
+          mask: true
+          envFile: '.env.test'
       - name: Test
         run: npm test
-        with:
-          envfile: .env.test
       - name: Upload
         uses: actions/upload-artifact@v4
         with:
