@@ -5,7 +5,7 @@ import {
   fromHarvardArt,
   fromRIJKArt,
   fromRIJKArtOptionsResponse,
-  fromRIJKArtResponse,
+  rIJKArtResponse,
   fromRIJKToPiece,
   harvardArtOptions,
   harvardArtResponse,
@@ -83,7 +83,7 @@ describe('data', () => {
 
     describe('when the source is RIJKS', () => {
       test('when it is successful', async () => {
-        fetchMock.mockResponse(JSON.stringify(fromRIJKArtResponse));
+        fetchMock.mockResponse(JSON.stringify(rIJKArtResponse));
 
         const actual = await art.getAll({page: 1, size: 8, source: Source.RIJKS}).orNull();
 
@@ -91,7 +91,7 @@ describe('data', () => {
       });
 
       test('when it has a search term', async () => {
-        fetchMock.mockResponse(JSON.stringify(fromRIJKArtResponse));
+        fetchMock.mockResponse(JSON.stringify(rIJKArtResponse));
 
         const actual = await art.getAll({page: 1, size: 8, search: 'rad', source: Source.RIJKS}).orNull();
 
@@ -109,7 +109,7 @@ describe('data', () => {
 
     test('when the source does not exist', async () => {
       const consumer = vi.fn();
-      fetchMock.mockResponse(JSON.stringify(fromRIJKArtResponse));
+      fetchMock.mockResponse(JSON.stringify(rIJKArtResponse));
 
       await art.getAll({page: 1, size: 12, source: 'I do not exist' as Source})
         .onFailure(consumer).orNull();

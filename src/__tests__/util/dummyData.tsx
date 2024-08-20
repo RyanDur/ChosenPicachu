@@ -237,7 +237,7 @@ const rijkPieceResponse = (): RIJKArtObjectResponse => ({
     url: faker.lorem.words()
   }
 });
-export const fromRIJKArtResponse: RIJKSAllArtResponse = {
+export const rIJKArtResponse: RIJKSAllArtResponse = {
   count: Math.floor(Math.random() * 100) + 1,
   artObjects: [...Array(pagination.limit)].map(rijkPieceResponse)
 };
@@ -256,10 +256,10 @@ export const rijkArtObjectResponse: RIJKSArtResponse = {
 
 export const fromRIJKArt = (currentPage: number, limit: number): AllArt => ({
   pagination: {
-    total: fromRIJKArtResponse.count,
+    total: rIJKArtResponse.count,
     limit,
-    totalPages: fromRIJKArtResponse.count / fromRIJKArtResponse.artObjects.length,
+    totalPages: rIJKArtResponse.count / rIJKArtResponse.artObjects.length,
     currentPage
   },
-  pieces: fromRIJKArtResponse.artObjects.map(fromRIJKToPiece)
+  pieces: rIJKArtResponse.artObjects.map(fromRIJKToPiece)
 });

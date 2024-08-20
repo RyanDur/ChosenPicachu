@@ -1,4 +1,4 @@
-import {aicArtResponse, harvardArtResponse} from '../../../__tests__/util/dummyData';
+import {aicArtResponse, harvardArtResponse, rIJKArtResponse} from '../../../__tests__/util/dummyData';
 import {renderWithMemoryRouter} from '../../../__tests__/util';
 import {screen, waitFor} from '@testing-library/react';
 import {Paths} from '../../../routes/Paths';
@@ -6,10 +6,11 @@ import {Gallery} from '../index';
 import userEvent from '@testing-library/user-event';
 import {AICAllArtResponse, AICArtResponse} from '../resource/aic/types';
 import {test} from 'vitest';
-import {aicDomain, defaultRecordLimit, harvardAPIKey, harvardDomain} from '../../../config';
+import {aicDomain, defaultRecordLimit, harvardAPIKey, harvardDomain, rijksAPIKey, rijksDomain} from '../../../config';
 import {fields} from '../resource/aic';
 import {HarvardAllArtResponse} from '../resource/harvard/types';
 import {harvardFields} from '../resource/harvard';
+import {RIJKSAllArtResponse} from "../resource/rijks/types";
 
 const firstPiece = aicArtResponse.data[0];
 
@@ -30,6 +31,10 @@ const setupAICAllArtResponse = (response: AICAllArtResponse, limit = defaultReco
 const setupHarvardAllArtResponse = (response: HarvardAllArtResponse, limit = defaultRecordLimit) =>
   fetchMock.mockOnceIf(`${harvardDomain}/?page=1&size=${limit}&fields=${harvardFields}&apikey=${harvardAPIKey}`,
     () => Promise.resolve(JSON.stringify(response)));
+
+const setupRijksAllArtResponse = (response: RIJKSAllArtResponse, limit = defaultRecordLimit) =>
+    fetchMock.mockOnceIf(`${rijksDomain}/?p=1&ps=${limit}&imgonly=true&key=${rijksAPIKey}`,
+        () => Promise.resolve(JSON.stringify(response)));
 
 const setupAICArtPieceResponse = (response: AICArtResponse) =>
   fetchMock.mockOnceIf(`${aicDomain}/${firstPiece.id}?fields=${fields.join()}`,
@@ -65,7 +70,19 @@ describe('The gallery.', () => {
 
     await userEvent.click(await screen.findByText(`Harvard Art Museums`));
 
-    await waitFor(() => expect(screen.getAllByTestId(/piece/).length).toEqual(harvardArtResponse.info.totalrecordsperquery));
+    await waitFor(() => expect(screen.getAllByTestId(/piece/).length).toEqual(defaultRecordLimit));
+    expect(screen.queryByTestId('gallery-loading')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('empty-gallery')).not.toBeInTheDocument();
+  });
+
+  test('when looking at the rijks gallery', async () => {
+    setupAICAllArtResponse(aicArtResponse);
+    setupRijksAllArtResponse(rIJKArtResponse);
+    renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
+
+    await userEvent.click(await screen.findByText('Rijksstudio'));
+
+    await waitFor(() => expect(screen.getAllByTestId(/piece/).length).toEqual(defaultRecordLimit));
     expect(screen.queryByTestId('gallery-loading')).not.toBeInTheDocument();
     expect(screen.queryByTestId('empty-gallery')).not.toBeInTheDocument();
   });
