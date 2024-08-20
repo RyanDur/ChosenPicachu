@@ -12,7 +12,7 @@ import '../../routes/BasePage.layout.css';
 export const ArtGalleryPage: FC = () =>
   <>
     <header id="app-header" data-testid="header">
-      <h1 className="title ellipsis">About</h1>
+      <h1 className="title ellipsis">Gallery</h1>
       <Search id="gallery-search"/>
     </header>
 
