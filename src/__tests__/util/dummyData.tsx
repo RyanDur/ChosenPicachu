@@ -148,7 +148,7 @@ export const aicArtResponse: AICAllArtResponse = {
 };
 
 export const info: HarvardInfo = {
-  totalrecordsperquery: Math.floor(Math.random() * 10),
+  totalrecordsperquery: defaultRecordLimit,
   totalrecords: Math.floor(Math.random() * 10000),
   pages: Math.floor(Math.random() * 1000),
   page: Math.floor(Math.random() * 10)
