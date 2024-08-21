@@ -6,12 +6,13 @@ import {aicArtResponse} from '../../../../__tests__/util/dummyData';
 import {test} from 'vitest';
 import {Gallery} from '../../index';
 import {Paths} from '../../../../routes/Paths';
+import {setupAICAllArtResponse} from "../../__tests__/galleryApiTestHelper";
 
 describe('The gallery.', () => {
   window.scrollTo = vi.fn();
 
   test('when the art is loading', async () => {
-    fetchMock.mockResponse(JSON.stringify(aicArtResponse));
+    setupAICAllArtResponse(aicArtResponse);
     renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
 
     expect(screen.queryByTestId('gallery-loading')).toBeInTheDocument();
@@ -20,7 +21,7 @@ describe('The gallery.', () => {
   });
 
   test('when there is no art to show', async () => {
-    fetchMock.mockResponse(JSON.stringify({...aicArtResponse, data: []}));
+    setupAICAllArtResponse({...aicArtResponse, data: []});
     renderWithGalleryContext(<ArtGallery/>, {params: {page: 0, search: 'g', size: 8, tab: Source.AIC}});
 
     expect(await screen.findByTestId('empty-gallery')).toBeInTheDocument();
