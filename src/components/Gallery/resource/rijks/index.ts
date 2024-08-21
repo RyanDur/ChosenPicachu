@@ -26,7 +26,7 @@ export const rijks = {
                 totalPages: data.count / data.artObjects.length,
                 currentPage: page
             },
-            pieces: data.artObjects.map(rijkToPiece)
+            pieces: data.artObjects.map(rijksArtResponseToArtPiece)
         })),
 
     art: (id: string) => http
@@ -34,7 +34,7 @@ export const rijks = {
             imgonly: true, key: rijksAPIKey
         })}`)
         .mBind(validate(RIJKArtSchema))
-        .map(({artObject}: RIJKSArtResponse): Art => rijkToPiece(artObject)),
+        .map(({artObject}: RIJKSArtResponse): Art => rijksArtResponseToArtPiece(artObject)),
 
     searchOptions: (search: string) => http
         .get(`${rijksDomain}${toQueryString({
@@ -45,7 +45,7 @@ export const rijks = {
             artObjects.map(({title}) => title))
 };
 
-const rijkToPiece = (data: RIJKArtObjectResponse): Art => ({
+const rijksArtResponseToArtPiece = (data: RIJKArtObjectResponse): Art => ({
     id: data.objectNumber,
     title: data.title,
     image: data.webImage.url,
