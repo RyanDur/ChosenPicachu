@@ -1,6 +1,6 @@
 import {aicArtResponse, harvardArtResponse, rIJKArtResponse} from '../../../__tests__/util/dummyData';
 import {renderWithMemoryRouter} from '../../../__tests__/util';
-import {screen, waitFor} from '@testing-library/react';
+import {screen, waitFor, within} from '@testing-library/react';
 import {Paths} from '../../../routes/Paths';
 import {Gallery} from '../index';
 import userEvent from '@testing-library/user-event';
@@ -51,6 +51,16 @@ describe('The gallery.', () => {
 
       expect(await screen.findByText(firstPiece.artist_display)).toBeInTheDocument();
       expect(screen.getByTestId('image-figure')).toBeInTheDocument();
+    });
+
+    it('should update the header with the piece title', async () => {
+      setupAICArtPieceResponse(aicArtPieceResponse, firstPiece.id);
+      renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
+
+      await userEvent.click(await screen.findByTestId(`piece-${firstPiece.id}`));
+
+      const header = within(screen.getByTestId('header'));
+      expect(await header.findByText(firstPiece.title)).toBeInTheDocument();
     });
   });
 
