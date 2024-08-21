@@ -4,13 +4,14 @@ import {screen, waitFor} from '@testing-library/react';
 import {Paths} from '../../../routes/Paths';
 import {Gallery} from '../index';
 import userEvent from '@testing-library/user-event';
-import {AICAllArtResponse, AICArtResponse} from '../resource/aic/types';
-import {test} from 'vitest';
-import {aicDomain, defaultRecordLimit, harvardAPIKey, harvardDomain, rijksAPIKey, rijksDomain} from '../../../config';
-import {fields} from '../resource/aic';
-import {HarvardAllArtResponse} from '../resource/harvard/types';
-import {harvardFields} from '../resource/harvard';
-import {RIJKSAllArtResponse} from "../resource/rijks/types";
+import {AICArtResponse} from '../resource/aic/types';
+import {defaultRecordLimit} from '../../../config';
+import {
+  setupAICAllArtResponse,
+  setupAICArtPieceResponse,
+  setupHarvardAllArtResponse,
+  setupRijksAllArtResponse
+} from "./galleryApiTestHelper";
 
 const firstPiece = aicArtResponse.data[0];
 
@@ -24,21 +25,6 @@ const aicArtPieceResponse: AICArtResponse = {
   }
 };
 
-const setupAICAllArtResponse = (response: AICAllArtResponse, limit = defaultRecordLimit) =>
-  fetchMock.mockOnceIf(`${aicDomain}/?fields=${fields.join()}&limit=${limit}`,
-    () => Promise.resolve(JSON.stringify(response)));
-
-const setupHarvardAllArtResponse = (response: HarvardAllArtResponse, limit = defaultRecordLimit) =>
-  fetchMock.mockOnceIf(`${harvardDomain}/?page=1&size=${limit}&fields=${harvardFields}&apikey=${harvardAPIKey}`,
-    () => Promise.resolve(JSON.stringify(response)));
-
-const setupRijksAllArtResponse = (response: RIJKSAllArtResponse, limit = defaultRecordLimit) =>
-    fetchMock.mockOnceIf(`${rijksDomain}/?p=1&ps=${limit}&imgonly=true&key=${rijksAPIKey}`,
-        () => Promise.resolve(JSON.stringify(response)));
-
-const setupAICArtPieceResponse = (response: AICArtResponse) =>
-  fetchMock.mockOnceIf(`${aicDomain}/${firstPiece.id}?fields=${fields.join()}`,
-    () => Promise.resolve(JSON.stringify(response)));
 
 describe('The gallery.', () => {
   window.scrollTo = vi.fn();
@@ -52,15 +38,20 @@ describe('The gallery.', () => {
     expect(screen.queryByTestId('empty-gallery')).not.toBeInTheDocument();
   });
 
-  it('should allow a user to take a closer look at the art', async () => {
-    setupAICAllArtResponse(aicArtResponse);
-    setupAICArtPieceResponse(aicArtPieceResponse);
-    renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
+  describe('when looking at an individual piece', () => {
+    beforeEach(() => {
+      setupAICAllArtResponse(aicArtResponse);
+    });
 
-    await userEvent.click(await screen.findByTestId(`piece-${firstPiece.id}`));
+    it('should allow a user to take a closer look at the art', async () => {
+      setupAICArtPieceResponse(aicArtPieceResponse, firstPiece.id);
+      renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
 
-    expect(await screen.findByText(firstPiece.artist_display)).toBeInTheDocument();
-    expect(screen.getByTestId('image-figure')).toBeInTheDocument();
+      await userEvent.click(await screen.findByTestId(`piece-${firstPiece.id}`));
+
+      expect(await screen.findByText(firstPiece.artist_display)).toBeInTheDocument();
+      expect(screen.getByTestId('image-figure')).toBeInTheDocument();
+    });
   });
 
   test('when looking at the harvard gallery', async () => {

@@ -6,6 +6,7 @@ import {faker} from '@faker-js/faker';
 import {Paths} from '../../../../routes/Paths';
 import {Source} from '../../resource/types/resource';
 import {AICArtResponse} from '../../resource/aic/types';
+import {setupAICArtPieceResponse} from "../../__tests__/galleryApiTestHelper";
 
 describe('viewing a piece', () => {
   const aicArtResponse: AICArtResponse = {
@@ -19,7 +20,7 @@ describe('viewing a piece', () => {
   };
 
   test('when loading the piece of art', async () => {
-    fetchMock.mockResponse(JSON.stringify(aicArtResponse));
+    setupAICArtPieceResponse(aicArtResponse, aicArtResponse.data.id);
 
     renderWithArtPieceContext(<ArtPiece/>, {
       initialRoute: `${Paths.artGallery}/1234`,
@@ -30,7 +31,7 @@ describe('viewing a piece', () => {
   });
 
   test('when the art piece is loaded', async () => {
-    fetchMock.mockResponse(JSON.stringify(aicArtResponse));
+    setupAICArtPieceResponse(aicArtResponse, aicArtResponse.data.id);
 
     renderWithArtPieceContext(<ArtPiece/>, {
       initialRoute: `${Paths.artGallery}/${aicArtResponse.data.id}`,
