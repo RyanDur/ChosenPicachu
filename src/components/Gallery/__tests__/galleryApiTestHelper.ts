@@ -4,10 +4,18 @@ import {fields} from "../resource/aic";
 import {HarvardAllArtResponse} from "../resource/harvard/types";
 import {harvardFields} from "../resource/harvard";
 import {RIJKSAllArtResponse} from "../resource/rijks/types";
+import {toQueryString} from "../../../util/URL";
 
-export const setupAICAllArtResponse = (response: AICAllArtResponse, limit = defaultRecordLimit) =>
-    fetchMock.mockOnceIf(`${aicDomain}/?fields=${fields.join()}&limit=${limit}`,
-        () => Promise.resolve(JSON.stringify(response)));
+export const setupAICAllArtResponse = (response: AICAllArtResponse, options: {
+    limit: number,
+    page?: number
+    search?: string,
+} = {limit: defaultRecordLimit}) => {
+    const urlOrPredicate = `${aicDomain}/${toQueryString({
+        q: options.search, fields, page: options.page, limit: options.limit
+    })}`;
+    return fetchMock.mockOnceIf(urlOrPredicate, () => Promise.resolve(JSON.stringify(response)));
+};
 
 export const setupHarvardAllArtResponse = (response: HarvardAllArtResponse, limit = defaultRecordLimit) =>
     fetchMock.mockOnceIf(`${harvardDomain}/?page=1&size=${limit}&fields=${harvardFields}&apikey=${harvardAPIKey}`,
