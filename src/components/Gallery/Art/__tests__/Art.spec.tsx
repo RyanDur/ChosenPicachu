@@ -21,7 +21,7 @@ describe('The gallery.', () => {
   });
 
   test('when there is no art to show', async () => {
-    setupAICAllArtResponse({...aicArtResponse, data: []});
+    setupAICAllArtResponse({...aicArtResponse, data: []}, {page: 0, search: 'g', limit: 8});
     renderWithGalleryContext(<ArtGallery/>, {params: {page: 0, search: 'g', size: 8, tab: Source.AIC}});
 
     expect(await screen.findByTestId('empty-gallery')).toBeInTheDocument();

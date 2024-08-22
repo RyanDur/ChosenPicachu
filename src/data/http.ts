@@ -25,10 +25,7 @@ export const http = {
         .orElse(fail(response)))
 };
 
-const bodyResult = (resp: Response) => asyncResult(resp.json()).or((e) => {
-    console.log(e);
-    return asyncFailure(HTTPError.JSON_BODY_ERROR);
-});
+const bodyResult = (resp: Response) => asyncResult(resp.json()).or(() => asyncFailure(HTTPError.JSON_BODY_ERROR));
 const emptySuccess = () => asyncSuccess<undefined, HTTPError>(undefined);
 
 const request = (uri: PATH, method?: HTTPMethod, body?: unknown) =>
