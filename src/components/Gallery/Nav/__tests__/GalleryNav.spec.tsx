@@ -7,14 +7,20 @@ import {GalleryNav} from '../index';
 
 window.scrollTo = vi.fn();
 describe('Gallery Navigation', () => {
+  const options = {
+    path: Paths.artGallery,
+    initialRoute: Paths.artGallery,
+    galleryState: fromAICArt
+  };
+
+  test('on load', () => {
+    const rendered = renderWithGalleryContext(<GalleryNav/>, options);
+
+    expect(rendered().testLocation?.search).toEqual('?page=1&size=0');
+  });
+
   describe('without params', () => {
     describe('from the first page', () => {
-      const options = {
-        path: Paths.artGallery,
-        initialRoute: Paths.artGallery,
-        galleryState: fromAICArt
-      };
-
       it('should be able to goto the next page', async () => {
         const rendered = renderWithGalleryContext(<GalleryNav/>, options);
         await userEvent.click(screen.getByTestId('next-page'));

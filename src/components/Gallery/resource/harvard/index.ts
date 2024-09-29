@@ -18,20 +18,18 @@ const baseQueryString = {
   fields: harvardFields, apikey: harvardAPIKey
 };
 export const harvard = {
-  allArt: ({page, search, size = defaultRecordLimit}: GetAllArtRequest) => {
-    return http
-      .get(`${harvardDomain}${toQueryString({q: search, page, size, ...baseQueryString})}`)
-      .mBind(validate(HarvardAllArtSchema))
-      .map(({info, records}: HarvardAllArtResponse): AllArt => ({
-        pagination: {
-          total: info.totalrecords,
-          limit: info.totalrecordsperquery,
-          totalPages: info.pages,
-          currentPage: info.page
-        },
-        pieces: records.map(harvardArtToArt)
-      }));
-  },
+  allArt: ({page, search, size = defaultRecordLimit}: GetAllArtRequest) => http
+    .get(`${harvardDomain}${toQueryString({q: search, page, size, ...baseQueryString})}`)
+    .mBind(validate(HarvardAllArtSchema))
+    .map(({info, records}: HarvardAllArtResponse): AllArt => ({
+      pagination: {
+        total: info.totalrecords,
+        limit: info.totalrecordsperquery,
+        totalPages: info.pages,
+        currentPage: info.page
+      },
+      pieces: records.map(harvardArtToArt)
+    })),
 
   art: (id: string) => http
     .get(`${harvardDomain}/${id}${toQueryString(baseQueryString)}`)

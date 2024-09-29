@@ -1,6 +1,7 @@
 import {useNavigate, useLocation} from 'react-router-dom';
 import {toQueryObj, toQueryString} from '../../util/URL';
 import {Consumer} from '@ryandur/sand';
+import {useEffect} from "react";
 
 type Query<T extends { [key: string]: unknown }> = {
     queryObj: T,
@@ -19,6 +20,10 @@ export const useQuery = <T extends { [key: string]: unknown }>(val?: T): Query<T
     const updateQueryString = (params: Partial<T>) => {
         navigate({search: nextQueryString(params)});
     };
+
+    useEffect(() => {
+        if(val) updateQueryString(val);
+    }, []);
 
     return {
         queryObj: toQueryObj(location.search, val) as T,

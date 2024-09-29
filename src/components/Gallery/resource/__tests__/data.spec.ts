@@ -5,14 +5,14 @@ import {
     fromHarvardArt,
     fromRIJKArt,
     fromRIJKArtOptionsResponse,
-    rIJKArtResponse,
     fromRIJKToPiece,
     harvardArtOptions,
     harvardArtResponse,
     harvardPiece,
     harvardPieceResponse,
     options,
-    rijkArtObjectResponse
+    rijkArtObjectResponse,
+    rIJKArtResponse
 } from '../../../../__tests__/util/dummyData';
 import {nanoid} from 'nanoid';
 import {AICPieceData, AICSearchResponse} from '../aic/types';
@@ -25,6 +25,10 @@ import {expect} from 'vitest';
 import {setupAICAllArtResponse} from "../../__tests__/galleryApiTestHelper";
 
 describe('data', () => {
+    beforeEach(() => {
+        fetchMock.resetMocks();
+    });
+
     describe('retrieving all the artwork', () => {
         describe('when the source is AIC', () => {
             test('when it is successful', async () => {
@@ -45,7 +49,7 @@ describe('data', () => {
 
             test('when it is not successful', async () => {
                 const consumer = vi.fn();
-                fetchMock.mockResponse('response', {status: 400});
+                fetchMock.mockResponseOnce('response', {status: 400});
 
                 await art.getAll({page: 1, size: 12, source: Source.AIC})
                     .onFailure(consumer).orNull();

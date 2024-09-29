@@ -1,0 +1,37 @@
+#z-index-demo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+
+    .demo-container {
+        width: 100%;
+        position: relative;
+        min-height: 5rem;
+
+        .card {
+            padding: 2rem;
+        }
+
+        .positioned-relative {
+            position: relative;
+        }
+
+        .positioned-absolute {
+            position: absolute;
+            transition: transform 0.5s ease-in-out;
+        }
+        
+        &:hover {
+            .positioned-absolute {
+                &:first-child {
+                    transform: rotate(10deg);
+                }
+                &:nth-child(2) {
+                    transform: rotate(5deg);
+                }
+            }
+        }
+    }
+}
