@@ -1,9 +1,9 @@
-import {createBrowserRouter, RouterProvider} from 'react-router-dom';
-import {AboutPage, HomePage, UsersPage} from './routes';
-import * as ReactDom from "react-dom/client";
 import {StrictMode} from "react";
+import {createBrowserRouter, RouterProvider} from 'react-router-dom';
+import * as ReactDom from "react-dom/client";
+import {HomePage, UsersPage} from './routes';
+import {AboutPage, Gallery} from './components';
 import {Paths} from './routes/Paths';
-import {Gallery} from './components';
 import './index.css';
 
 const router = createBrowserRouter([

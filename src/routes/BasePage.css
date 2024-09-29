@@ -71,7 +71,7 @@
     background-color: var(--paper);
     height: fit-content;
 
-    &.gallery-in-view {
+    &.in-view {
       padding: 0;
       height: 100%;
     }
