@@ -1,9 +1,9 @@
-import {AboutPage} from "../routes";
 import {renderWithRouter} from "./util";
 import {expect, test} from "vitest";
 import {screen, waitFor, within} from "@testing-library/react";
 import {Paths} from "../routes/Paths";
 import userEvent from "@testing-library/user-event";
+import {AboutPage} from "../components";
 
 describe('The About page', () => {
   test('on initial render', async () => {
