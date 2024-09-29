@@ -1,28 +1,24 @@
-import {NaturalZIndex} from './ZIndexDemo';
-import {ExclusiveAccordion, InclusiveAccordion} from './Accordians';
-import {Tabs} from '../Tabs';
-import './style.css';
-import {useQuery} from "../hooks";
+import {FC} from 'react';
+import {SideNav} from '../../routes/BasePage/SideNav';
+import '../../routes/BasePage.css';
+import '../../routes/BasePage.layout.css';
+import {Tabs} from "../Tabs";
+import {About} from "./About";
 
-type Demos = 'accordions' | 'z-index'
+export const AboutPage: FC = () =>
+  <>
+    <header id="app-header" data-testid="header">
+      <h1 className="title ellipsis">About</h1>
+    </header>
 
-export const About = () => {
-  const {queryObj: {tab}} =
-    useQuery<{ tab: Demos }>();
+    <SideNav/>
 
-  return <section id='about'>
-    <Tabs role='demo-tabs' values={[
-      {display: 'Accordions', param: 'accordions'},
-      {display: 'Z-Index', param: 'z-index'}
-    ]}/>
-    {(tab === 'accordions' || tab === undefined) && <>
-        <article>Different styles of Accordions.</article>
-        <InclusiveAccordion className='card'/>
-        <ExclusiveAccordion className='card'/>
-    </>}
-    {tab === 'z-index' && <>
-        <article>Z-Index Demo.</article>
-        <NaturalZIndex className='card'/>
-    </>}
-  </section>;
-};
+    <main data-testid="main" className='in-view'>
+      <Tabs role='demo-tabs' values={[
+        {display: 'Accordions', param: 'accordions'},
+        {display: 'Z-Index', param: 'z-index'}
+      ]}/>
+      <About/>
+    </main>
+  </>;
+

@@ -56,8 +56,8 @@
     flex-direction: column;
     justify-content: space-evenly;
 
-    &.gallery-in-view {
-      justify-content: space-between;
+    &.in-view {
+      justify-content: start;
     }
   }
 

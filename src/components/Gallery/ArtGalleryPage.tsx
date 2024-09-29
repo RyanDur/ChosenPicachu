@@ -18,7 +18,7 @@ export const ArtGalleryPage: FC = () =>
 
     <SideNav/>
 
-    <main data-testid="main" className="gallery-in-view">
+    <main data-testid="main" className="in-view">
       <Tabs values={[
         {display: 'The Art Institute of Chicago', param: Source.AIC},
         {display: 'Harvard Art Museums', param: Source.HARVARD},

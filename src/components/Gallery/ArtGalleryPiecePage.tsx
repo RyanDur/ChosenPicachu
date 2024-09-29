@@ -16,7 +16,7 @@ export const ArtGalleryPiecePage: FC = () => {
 
         <SideNav/>
 
-        <main data-testid="main" className="gallery-in-view"><ArtPiece/></main>
+        <main data-testid="main" className="in-view"><ArtPiece/></main>
     </>;
 };
 
