@@ -25,7 +25,6 @@ const aicArtPieceResponse: AICArtResponse = {
   }
 };
 
-
 describe('The gallery.', () => {
   window.scrollTo = vi.fn();
 
@@ -33,7 +32,7 @@ describe('The gallery.', () => {
     setupAICAllArtResponse(aicArtResponse);
     renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
 
-    await waitFor(() => expect(screen.getAllByTestId(/piece/).length).toEqual(defaultRecordLimit));
+    expect(await screen.findAllByTestId(/piece/)).toHaveLength(defaultRecordLimit);
     expect(screen.queryByTestId('gallery-loading')).not.toBeInTheDocument();
     expect(screen.queryByTestId('empty-gallery')).not.toBeInTheDocument();
   });

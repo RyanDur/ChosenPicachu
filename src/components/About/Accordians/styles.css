@@ -1,8 +1,6 @@
 .accordion {
-  margin-bottom: var(--base-x-6);
   background: var(--silk);
   position: relative;
-  z-index: 0;
 
   &:last-child {
     margin-bottom: 0;
