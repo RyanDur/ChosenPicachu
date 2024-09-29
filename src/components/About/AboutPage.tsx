@@ -1,17 +1,18 @@
 import {FC} from 'react';
 import {SideNav} from '../../routes/BasePage/SideNav';
-import '../../routes/BasePage.css';
-import '../../routes/BasePage.layout.css';
 import {Tabs} from "../Tabs";
 import {About} from "./About";
+import {useQuery} from "../hooks";
+import './AboutPage.css';
+import '../../routes/BasePage.css';
+import '../../routes/BasePage.layout.css';
 
-export const AboutPage: FC = () =>
-  <>
+export const AboutPage: FC = () => {
+  const {queryObj: {tab}} = useQuery({tab: 'accordions'});
+  return <>
     <header id="app-header" data-testid="header">
-      <h1 className="title ellipsis">About</h1>
+      <h1 className="title ellipsis">About {tab}</h1>
     </header>
-
-    <SideNav/>
 
     <main data-testid="main" className='in-view'>
       <Tabs role='demo-tabs' values={[
@@ -20,5 +21,8 @@ export const AboutPage: FC = () =>
       ]}/>
       <About/>
     </main>
+
+    <SideNav/>
   </>;
+};
 
