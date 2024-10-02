@@ -8,7 +8,7 @@ import '../../routes/BasePage.css';
 import '../../routes/BasePage.layout.css';
 
 export const AboutPage: FC = () => {
-  const {queryObj: {tab}} = useQuery({tab: 'accordions'});
+  const {queryObj: {tab}} = useQuery<{tab: string}>();
   return <>
     <header id="app-header" data-testid="header">
       <h1 className="title ellipsis">About {tab}</h1>
