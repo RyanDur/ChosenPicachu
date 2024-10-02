@@ -8,29 +8,30 @@
     .demo-container {
         width: 100%;
         position: relative;
-        min-height: 5rem;
+        min-height: 8rem;
+        display: flex;
+        gap: 1rem;
+        justify-content: end;
+        flex-direction: column;
 
         .card {
             padding: 2rem;
-        }
-
-        .positioned-relative {
             position: relative;
+            transition: bottom 0.3s;
         }
 
-        .positioned-absolute {
+        .closed {
             position: absolute;
             transition: transform 0.5s ease-in-out;
         }
-        
-        &:hover {
-            .positioned-absolute {
-                &:first-child {
-                    transform: rotate(10deg);
-                }
-                &:nth-child(2) {
-                    transform: rotate(5deg);
-                }
+
+        &:hover .closed {
+            &:first-child {
+                transform: rotate(12deg);
+            }
+
+            &:nth-child(2) {
+                transform: rotate(6deg);
             }
         }
     }
