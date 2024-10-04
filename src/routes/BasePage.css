@@ -79,10 +79,6 @@
 
   #filter {
     background-color: var(--paper);
-    position: fixed;
-    bottom: var(--base-x-13);
-    top: 0;
-    right: 0;
     width: var(--base-x-16_5);
   }
 
