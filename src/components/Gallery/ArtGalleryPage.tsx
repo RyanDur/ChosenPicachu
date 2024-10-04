@@ -1,5 +1,4 @@
 import {FC} from 'react';
-import {SideNav} from '../../routes/BasePage/SideNav';
 import {Tabs} from '../Tabs';
 import {Source} from './resource/types/resource';
 import {ArtGallery} from './Art';
@@ -15,8 +14,6 @@ export const ArtGalleryPage: FC = () =>
       <h1 className="title ellipsis">Gallery</h1>
       <Search id="gallery-search"/>
     </header>
-
-    <SideNav/>
 
     <main data-testid="main" className="in-view">
       <Tabs values={[

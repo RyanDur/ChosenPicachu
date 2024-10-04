@@ -1,5 +1,4 @@
 import {FC} from 'react';
-import {SideNav} from '../../routes/BasePage/SideNav';
 import {Tabs} from "../Tabs";
 import {About} from "./About";
 import {useQuery} from "../hooks";
@@ -21,8 +20,6 @@ export const AboutPage: FC = () => {
       ]}/>
       <About/>
     </main>
-
-    <SideNav/>
   </>;
 };
 
