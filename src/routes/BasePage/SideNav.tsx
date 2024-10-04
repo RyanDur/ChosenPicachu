@@ -1,15 +1,30 @@
-import {FC} from 'react';
-import {Link} from 'react-router-dom';
+import {FC, useEffect, useState} from 'react';
+import {Link, useSearchParams} from 'react-router-dom';
 import {toQueryString} from '../../util/URL';
 import {defaultRecordLimit} from '../../config';
 import {Source} from '../../components/Gallery/resource/types/resource';
 import {Paths} from '../Paths';
+import {aboutTopics} from "../../components/About/types";
+
+const AboutNav: FC = () => {
+  const [searchParams] = useSearchParams();
+  const tab = searchParams.get('tab');
+  const [aboutTab, updateTab] = useState('');
+
+  useEffect(() => {
+    if (tab && Object.values(aboutTopics).includes(tab)) {
+      updateTab(tab);
+    }
+  }, [tab]);
+
+  return <Link id="navigate-about" className="path" to={`${Paths.about}?tab=${aboutTab}`}>About</Link>;
+};
 
 export const SideNav: FC = () =>
   <aside id="side-nav" data-testid="navigation">
     <nav id="app-navigation">
       <Link id="navigate-home" className="path" to={Paths.home}>Home</Link>
-      <Link id="navigate-about" className="path" to={Paths.about}>About</Link>
+      <AboutNav/>
       <Link id="navigate-users" className="path" to={Paths.users}>Users</Link>
       <Link id="navigate-form" className="path"
             to={`${Paths.artGallery}${toQueryString({
