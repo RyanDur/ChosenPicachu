@@ -1,10 +1,9 @@
 import {FC} from 'react';
-import {SideNav} from '../../routes/BasePage/SideNav';
 import {Search} from './Search';
 import {ArtPiece} from './ArtPiece';
+import {useArtPiece} from "./ArtPiece/Context";
 import '../../routes/BasePage.css';
 import '../../routes/BasePage.layout.css';
-import {useArtPiece} from "./ArtPiece/Context";
 
 export const ArtGalleryPiecePage: FC = () => {
     const {piece} = useArtPiece();
@@ -13,8 +12,6 @@ export const ArtGalleryPiecePage: FC = () => {
             <h1 className="title ellipsis">{piece.title}</h1>
             <Search id="gallery-search"/>
         </header>
-
-        <SideNav/>
 
         <main data-testid="main" className="in-view"><ArtPiece/></main>
     </>;
