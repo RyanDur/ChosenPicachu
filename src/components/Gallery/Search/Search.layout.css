@@ -29,7 +29,7 @@
     display: grid;
     column-gap: unset;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 20% 30% 1fr;
+    grid-template-rows: 20% 1fr 30%;
     grid-template-areas:
       "query-label query-label"
       "query query"
