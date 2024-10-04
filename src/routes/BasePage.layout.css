@@ -72,10 +72,8 @@
     display: grid;
     justify-items: center;
     grid-template-columns:
-      var(--base-x-16_5)
-      1fr
-      var(--base-x-16_5) var(--base-x-16_5);
-    grid-template-areas: ". center . .";
+      1fr var(--base-x-16_5);
+    grid-template-areas: "center .";
 
     #gallery-nav {
       grid-area: center;
@@ -105,8 +103,8 @@
       grid-area: footer;
       display: grid;
       justify-items: center;
-      grid-template-columns: var(--base-x-16_5) 1fr var(--base-x-16_5);
-      grid-template-areas: ". center .";
+      grid-template-columns: 1fr var(--base-x-16_5);
+      grid-template-areas: "center .";
 
       #gallery-nav {
         grid-area: center;
