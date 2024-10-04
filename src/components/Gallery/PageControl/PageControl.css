@@ -53,13 +53,6 @@
   }
 }
 
-@media (max-width: 1547px) {
-  #page-control {
-    position: sticky;
-    bottom: 0;
-  }
-}
-
 @media (max-width: 1000px) {
   #page-control {
     display: flex;
