@@ -64,7 +64,7 @@
   #filter {
     grid-area: filter;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
   }
 
   #app-footer {
@@ -90,8 +90,8 @@
       "nav footer footer";
 
     #app-header {
-      grid-template-columns: 1fr 1fr;
-      grid-template-areas: "title search";
+      grid-template-columns: var(--base-x-16_5) 1fr 1fr;
+      grid-template-areas: ". title search";
 
       .title {
         grid-area: title;
