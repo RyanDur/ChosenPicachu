@@ -100,10 +100,6 @@
 
     #filter {
       background-color: var(--paper);
-      position: sticky;
-      bottom: 0;
-      top: 0;
-      right: 0;
     }
   }
 }
