@@ -1,5 +1,5 @@
 import {FC, FormEvent, useEffect, useState} from 'react';
-import {useQuery} from '../../hooks';
+import {useSearchParamsObject} from '../../hooks';
 import {useNavigate} from 'react-router-dom';
 import {SearchOptions} from '../resource/types/response';
 import {Source} from '../resource/types/resource';
@@ -17,24 +17,24 @@ export const Search: FC<Props> = ({id}) => {
   const [searchOptions, updateSearchOptions] = useState<SearchOptions>([]);
   const [searchString, updateQuery] = useState<string>('');
   const navigate = useNavigate();
-  const {queryObj: {tab, search}, updateQueryString, nextQueryString} = useQuery<{ tab: Source, search?: string }>();
+  const {tab, search, updateSearchParams, createSearchParams} = useSearchParamsObject<{ tab: Source, search?: string }>();
   const debounceSearch = debounce(300, search =>
     art.search({search, source: tab})
       .onSuccess(updateSearchOptions));
 
   useEffect(() => {
     searchString && searchString.length && debounceSearch(searchString.toLowerCase());
-  }, [searchString]);
+  }, [searchString, debounceSearch]);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     searchString && navigate({
       pathname: Paths.artGallery,
-      search: nextQueryString({search: searchString})
+      search: createSearchParams({search: searchString})
     });
   };
 
-  const handleReset = () => updateQueryString({search: undefined});
+  const handleReset = () => updateSearchParams({search: undefined});
 
   return <form id={id} className="search" onSubmit={handleSubmit} onReset={handleReset} data-testid="search">
     <input autoComplete="off" list="search-options" id="query"

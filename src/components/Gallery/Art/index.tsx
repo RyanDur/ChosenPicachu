@@ -1,5 +1,5 @@
 import {FC, useEffect, useState} from 'react';
-import {useQuery} from '../../hooks';
+import {useSearchParamsObject} from '../../hooks';
 import {Loading} from '../../Loading';
 import {Image} from '../Image';
 import {useGallery} from './Context';
@@ -14,8 +14,8 @@ export const ArtGallery: FC = () => {
   const {art, updateArt, reset} = useGallery();
   const [loading, isLoading] = useState(false);
   const [errored, hasErrored] = useState(false);
-  const {queryObj: {page, size, search, tab}} =
-    useQuery<{ page: number, size: number, tab: Source, search?: string }>({
+  const {page, size, search, tab} =
+    useSearchParamsObject<{ page: number, size: number, tab: Source, search?: string }>({
       size: defaultRecordLimit,
       page: 1,
       tab: Source.AIC
