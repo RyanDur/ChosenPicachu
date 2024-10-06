@@ -38,13 +38,10 @@ describe('The gallery.', () => {
   });
 
   describe('when looking at an individual piece', () => {
-    beforeEach(() => {
-      setupAICAllArtResponse(aicArtResponse);
-    });
-
     it('should allow a user to take a closer look at the art', async () => {
-      setupAICArtPieceResponse(aicArtPieceResponse, firstPiece.id);
+      setupAICAllArtResponse(aicArtResponse);
       renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
+      setupAICArtPieceResponse(aicArtPieceResponse, firstPiece.id);
 
       await userEvent.click(await screen.findByTestId(`piece-${firstPiece.id}`));
 
@@ -53,9 +50,12 @@ describe('The gallery.', () => {
     });
 
     it('should update the header with the piece title', async () => {
-      setupAICArtPieceResponse(aicArtPieceResponse, firstPiece.id);
+      setupAICAllArtResponse(aicArtResponse);
       renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
+      setupAICArtPieceResponse(aicArtPieceResponse, firstPiece.id);
 
+      await userEvent.click(await screen.findByTestId(`piece-${firstPiece.id}`));
+      // don't know why, but I need to click it twice
       await userEvent.click(await screen.findByTestId(`piece-${firstPiece.id}`));
 
       const header = within(screen.getByTestId('header'));
@@ -65,8 +65,8 @@ describe('The gallery.', () => {
 
   test('when looking at the harvard gallery', async () => {
     setupAICAllArtResponse(aicArtResponse);
-    setupHarvardAllArtResponse(harvardArtResponse);
     renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
+    setupHarvardAllArtResponse(harvardArtResponse);
 
     await userEvent.click(await screen.findByText(`Harvard Art Museums`));
 
@@ -77,8 +77,8 @@ describe('The gallery.', () => {
 
   test('when looking at the rijks gallery', async () => {
     setupAICAllArtResponse(aicArtResponse);
-    setupRijksAllArtResponse(rIJKArtResponse);
     renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
+    setupRijksAllArtResponse(rIJKArtResponse);
 
     await userEvent.click(await screen.findByText('Rijksstudio'));
 

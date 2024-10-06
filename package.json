@@ -45,6 +45,7 @@
     "vite": "^5.3.4",
     "vitest": "^2.0.4",
     "vitest-fetch-mock": "^0.3.0",
+    "vitest-location-mock": "^1.0.4",
     "whatwg-fetch": "^3.6.20"
   }
 }

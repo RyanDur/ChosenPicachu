@@ -17,7 +17,10 @@ export const Search: FC<Props> = ({id}) => {
   const [searchOptions, updateSearchOptions] = useState<SearchOptions>([]);
   const [searchString, updateQuery] = useState<string>('');
   const navigate = useNavigate();
-  const {tab, search, updateSearchParams, createSearchParams} = useSearchParamsObject<{ tab: Source, search?: string }>();
+  const {tab, search, removeSearchParams, createSearchParams} = useSearchParamsObject<{
+    tab: Source,
+    search?: string
+  }>();
   const debounceSearch = debounce(300, search =>
     art.search({search, source: tab})
       .onSuccess(updateSearchOptions));
@@ -34,7 +37,7 @@ export const Search: FC<Props> = ({id}) => {
     });
   };
 
-  const handleReset = () => updateSearchParams({search: undefined});
+  const handleReset = () => removeSearchParams('search');
 
   return <form id={id} className="search" onSubmit={handleSubmit} onReset={handleReset} data-testid="search">
     <input autoComplete="off" list="search-options" id="query"
