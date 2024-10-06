@@ -1,8 +1,8 @@
 import {FC} from 'react';
-import {Tabs} from "../Tabs";
-import {About} from "./About";
-import {useSearchParamsObject} from "../hooks";
-import {AboutTopics} from "./types";
+import {Tabs} from '../Tabs';
+import {About} from './About';
+import {useSearchParamsObject} from '../hooks';
+import {AboutTopics} from './types';
 import './AboutPage.css';
 import '../../routes/BasePage.css';
 import '../../routes/BasePage.layout.css';

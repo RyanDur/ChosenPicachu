@@ -1,3 +1,4 @@
+ 
 export const aicDomain = import.meta.env.VITE_APP_API_AIC;
 export const harvardDomain = import.meta.env.VITE_APP_HARVARD_API;
 export const harvardAPIKey = import.meta.env.VITE_APP_HARVARD_API_KEY;

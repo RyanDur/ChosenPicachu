@@ -6,9 +6,9 @@ import {useGallery} from './Context';
 import {empty, has} from '@ryandur/sand';
 import {Source} from '../resource/types/resource';
 import {art as artResource} from '../resource';
+import {defaultRecordLimit} from '../../../config';
 import './Gallery.css';
 import './Gallery.layout.css';
-import {defaultRecordLimit} from "../../../config";
 
 export const ArtGallery: FC = () => {
   const {art, updateArt, reset} = useGallery();

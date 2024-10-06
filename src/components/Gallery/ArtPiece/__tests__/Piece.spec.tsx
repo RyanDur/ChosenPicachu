@@ -6,7 +6,7 @@ import {faker} from '@faker-js/faker';
 import {Paths} from '../../../../routes/Paths';
 import {Source} from '../../resource/types/resource';
 import {AICArtResponse} from '../../resource/aic/types';
-import {setupAICArtPieceResponse} from "../../__tests__/galleryApiTestHelper";
+import {setupAICArtPieceResponse} from '../../__tests__/galleryApiTestHelper';
 
 describe('viewing a piece', () => {
   const aicArtResponse: AICArtResponse = {

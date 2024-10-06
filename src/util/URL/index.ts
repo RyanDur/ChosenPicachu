@@ -15,7 +15,7 @@ export const toQueryObj = (queryString?: string, defaultObj = {}) =>
 const parse = (value: string) => {
     try {
         return JSON.parse(value);
-    } catch (e) {
+    } catch (_) {
         return value;
     }
 };

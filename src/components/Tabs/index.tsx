@@ -2,8 +2,8 @@ import {FC, useEffect} from 'react';
 import {Link, useLocation} from 'react-router-dom';
 import {join} from '../util';
 import {useSearchParamsObject} from '../hooks';
+import {not} from '@ryandur/sand';
 import './Tabs.css';
-import {not} from "@ryandur/sand";
 
 interface Tab {
   display: string;

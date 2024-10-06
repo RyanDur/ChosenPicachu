@@ -13,7 +13,6 @@ vi.mock('nanoid', () => ({nanoid: vi.fn().mockReturnValue('yo0r-face')}));
 describe('a user form', () => {
   const [userInfo] = users;
   userInfo.avatar = 'some random url';
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const {id, ...info} = userInfo;
 
   describe('filled out', () => {
