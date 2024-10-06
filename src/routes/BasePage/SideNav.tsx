@@ -4,7 +4,7 @@ import {toQueryString} from '../../util/URL';
 import {defaultRecordLimit} from '../../config';
 import {Source} from '../../components/Gallery/resource/types/resource';
 import {Paths} from '../Paths';
-import {aboutTopics} from "../../components/About/types";
+import {AboutTopics} from "../../components/About/types";
 
 const AboutNav: FC = () => {
   const [searchParams] = useSearchParams();
@@ -12,7 +12,7 @@ const AboutNav: FC = () => {
   const [aboutTab, updateTab] = useState('');
 
   useEffect(() => {
-    if (tab && Object.values(aboutTopics).includes(tab)) {
+    if (tab && Object.values<string>(AboutTopics).includes(tab)) {
       updateTab(tab);
     }
   }, [tab]);

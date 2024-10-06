@@ -1,1 +1,0 @@
-export {InclusiveAccordion, ExclusiveAccordion} from './Accordians';
