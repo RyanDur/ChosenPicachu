@@ -45,7 +45,7 @@ export default tsEslint.config(
             ],
             semi: ['error', 'always', {'omitLastInOneLineBlock': true}],
             ...hooksPlugin.configs.recommended.rules,
-            quotes: ['error', 'single', { 'avoidEscape': true }],
+            quotes: ['error', 'single', {'avoidEscape': true}],
             ...vitest.configs.recommended.rules,
             'no-unused-vars': 'off',
             '@typescript-eslint/no-unused-vars': [
@@ -73,19 +73,3 @@ export default tsEslint.config(
         ...tsEslint.configs.disableTypeChecked,
     },
 );
-
-// module.exports = {
-//   root: true,
-//   env: { browser: true, es2020: true },
-//   extends: [
-//     'eslint:recommended',
-//     'plugin:@typescript-eslint/recommended',
-//     'plugin:react-hooks/recommended',
-//   ],
-//   ignorePatterns: ['dist', 'eslint.config.js'],
-//   parser: '@typescript-eslint/parser',
-//   plugins: ['react-refresh'],
-//   rules: {
-
-//   },
-// }
