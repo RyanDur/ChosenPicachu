@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {Tabs} from "../Tabs";
 import {About} from "./About";
 import {useQuery} from "../hooks";
-import {aboutTopics} from "./types";
+import {AboutTopics} from "./types";
 import './AboutPage.css';
 import '../../routes/BasePage.css';
 import '../../routes/BasePage.layout.css';
@@ -16,8 +16,8 @@ export const AboutPage: FC = () => {
 
     <main data-testid="main" className='in-view'>
       <Tabs role='demo-tabs' values={[
-        {display: 'Accordions', param: aboutTopics.accordions},
-        {display: 'Z-Index', param: aboutTopics.zIndex}
+        {display: 'Accordions', param: AboutTopics.accordions},
+        {display: 'Z-Index', param: AboutTopics.zIndex}
       ]}/>
       <About/>
     </main>
