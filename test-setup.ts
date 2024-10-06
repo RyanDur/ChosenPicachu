@@ -3,6 +3,7 @@ import '@testing-library/jest-dom/vitest';
 import {expect, vi} from 'vitest';
 import createFetchMock from 'vitest-fetch-mock';
 import 'vitest-fetch-mock';
+import "vitest-location-mock";
 
 const fetchMocker = createFetchMock(vi);
 

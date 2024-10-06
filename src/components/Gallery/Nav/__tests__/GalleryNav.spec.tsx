@@ -4,6 +4,7 @@ import {fromAICArt} from '../../../../__tests__/util/dummyData';
 import {Paths} from '../../../../routes/Paths';
 import {renderWithGalleryContext} from '../../../../__tests__/util';
 import {GalleryNav} from '../index';
+import {toQueryObj} from "../../../../util/URL";
 
 window.scrollTo = vi.fn();
 describe('Gallery Navigation', () => {
@@ -65,12 +66,16 @@ describe('Gallery Navigation', () => {
         await userEvent.click(screen.getByTestId('last-page'));
         await userEvent.click(screen.getByTestId('prev-page'));
 
-        expect(rendered().testLocation?.search).toEqual(`?page=${fromAICArt.pagination.totalPages - 1}&size=0`);
+        expect(toQueryObj(rendered().testLocation?.search)).toEqual({
+          page: fromAICArt.pagination.totalPages - 1, size: 0
+        });
         expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
 
         await userEvent.click(screen.getByTestId('prev-page'));
 
-        expect(rendered().testLocation?.search).toEqual(`?page=${fromAICArt.pagination.totalPages - 2}&size=0`);
+        expect(toQueryObj(rendered().testLocation?.search)).toEqual({
+          page: fromAICArt.pagination.totalPages - 2, size: 0
+        });
         expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
       });
 
@@ -127,22 +132,34 @@ describe('Gallery Navigation', () => {
     });
 
     await userEvent.click(screen.getByTestId('next-page'));
-    expect(rendered().testLocation?.search).toEqual('?page=2&size=0&search=q');
+    expect(toQueryObj(rendered().testLocation?.search)).toEqual({page: 2, size: 0, search: 'q'});
 
     await userEvent.click(screen.getByTestId('next-page'));
-    expect(rendered().testLocation?.search).toEqual('?page=3&size=0&search=q');
+    expect(toQueryObj(rendered().testLocation?.search)).toEqual({page: 3, size: 0, search: 'q'});
 
     await userEvent.click(screen.getByTestId('last-page'));
-    expect(rendered().testLocation?.search).toEqual(`?page=${fromAICArt.pagination.totalPages}&size=0&search=q`);
+    expect(toQueryObj(rendered().testLocation?.search)).toEqual({
+      page: fromAICArt.pagination.totalPages,
+      size: 0,
+      search: 'q'
+    });
 
     await userEvent.click(screen.getByTestId('prev-page'));
-    expect(rendered().testLocation?.search).toEqual(`?page=${fromAICArt.pagination.totalPages - 1}&size=0&search=q`);
+    expect(toQueryObj(rendered().testLocation?.search)).toEqual({
+      page: fromAICArt.pagination.totalPages - 1,
+      size: 0,
+      search: 'q'
+    });
 
     await userEvent.click(screen.getByTestId('prev-page'));
-    expect(rendered().testLocation?.search).toEqual(`?page=${fromAICArt.pagination.totalPages - 2}&size=0&search=q`);
+    expect(toQueryObj(rendered().testLocation?.search)).toEqual({
+      page: fromAICArt.pagination.totalPages - 2,
+      size: 0,
+      search: 'q'
+    });
 
     await userEvent.click(screen.getByTestId('first-page'));
-    expect(rendered().testLocation?.search).toEqual('?page=1&size=0&search=q');
+    expect(toQueryObj(rendered().testLocation?.search)).toEqual({page: 1, size: 0, search: 'q'});
   });
 
   test('page information', () => {

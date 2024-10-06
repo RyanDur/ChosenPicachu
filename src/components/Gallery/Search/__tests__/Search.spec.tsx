@@ -6,6 +6,7 @@ import {Source} from '../../resource/types/resource';
 import {faker} from '@faker-js/faker';
 import {Paths} from '../../../../routes/Paths';
 import {AICSearchResponse} from '../../resource/aic/types';
+import {toQueryObj} from "../../../../util/URL";
 
 describe('search', () => {
   const searchWord = faker.lorem.word().toUpperCase();
@@ -66,6 +67,6 @@ describe('search', () => {
 
     await userEvent.click(screen.getByTestId('reset-query'));
 
-    expect(rendered().testLocation?.search).toEqual('?tab=bat');
+    await waitFor(() => expect(toQueryObj(rendered().testLocation?.search)).toEqual({tab: 'bat'}));
   });
 });

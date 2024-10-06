@@ -12,9 +12,9 @@ import './Piece.css';
 export const ArtPiece = () => {
     const {piece, updatePiece, reset} = useArtPiece();
     const {tab} = useSearchParamsObject<{ tab: Source }>();
+    const {id} = useParams<{ id: string }>();
     const [errored, hasErrored] = useState(false);
     const [loading, isLoading] = useState(false);
-    const {id} = useParams<{ id: string }>();
 
     useEffect(() => {
         id && art.get({id, source: tab ?? Source.AIC})

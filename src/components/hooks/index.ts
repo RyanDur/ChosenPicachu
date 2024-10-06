@@ -1,30 +1,44 @@
-import {useSearchParams} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import {useEffect} from "react";
-import {toQueryString} from "../../util/URL";
+import {toQueryObj, toQueryString} from "../../util/URL";
+import {has} from "@ryandur/sand";
+
+const filterEmpty = (obj: { [p: string]: string | number }) =>
+  Object.entries(obj).reduce((acc, [key, value]) => has(value) ? {...acc, [key]: value} : acc, {});
 
 type SearchParamsObject<T extends { [key: string]: unknown }> = T & {
   updateSearchParams: (params: Partial<T>) => void,
-  createSearchParams: (params: Partial<T>) => string
+  removeSearchParams: (...params: string[]) => void,
+  createSearchParams: (params: Partial<T>) => string,
 };
-export const useSearchParamsObject = <T extends { [key: string]: unknown }>(val?: T): SearchParamsObject<T> => {
-  const [searchQuery, setSearchQuery] = useSearchParams();
-  const updateSearchParams = (params: Partial<T>) => {
-    const currentParams = Object.fromEntries(searchQuery.entries());
-    setSearchQuery({...currentParams, ...params});
+export const useSearchParamsObject = <T extends { [p: string]: string | number }>(val?: T): SearchParamsObject<T> => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const createSearchParams = (params = {}): string =>
+    toQueryString({...filterEmpty(toQueryObj(location.search)), ...filterEmpty(params)});
+
+  const removeSearchParams = (...params: string[]) => {
+    const newSearch = Object.entries(toQueryObj(location.search))
+      .reduce((acc, [key, value]) => params.includes(key)
+          ? acc
+          : {...acc, [key]: value},
+        {});
+
+    navigate({search: toQueryString(newSearch)});
   };
 
-  const createSearchParams = (params: Partial<T>): string => {
-    const currentParams = Object.fromEntries(searchQuery.entries());
-    return toQueryString({...currentParams, ...params});
-  };
+  const updateSearchParams = (params = {}) =>
+    navigate({search: createSearchParams(params)});
 
   useEffect(() => {
-    if (val) updateSearchParams(val);
+    has(val) && updateSearchParams(val);
   }, []);
 
   return {
-    ...(Object.fromEntries(searchQuery.entries()) as T),
+    ...(toQueryObj(location.search) as T),
     updateSearchParams,
-    createSearchParams
+    createSearchParams,
+    removeSearchParams
   };
 };
