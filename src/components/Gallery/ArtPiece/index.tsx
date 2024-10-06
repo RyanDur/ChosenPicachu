@@ -3,7 +3,7 @@ import {useEffect, useState} from 'react';
 import {Loading} from '../../Loading';
 import {useArtPiece} from './Context';
 import {Image} from '../Image';
-import {useQuery} from '../../hooks';
+import {useSearchParamsObject} from '../../hooks';
 import {Source} from '../resource/types/resource';
 import {has, not} from '@ryandur/sand';
 import {art} from '../resource';
@@ -11,7 +11,7 @@ import './Piece.css';
 
 export const ArtPiece = () => {
     const {piece, updatePiece, reset} = useArtPiece();
-    const {queryObj: {tab}} = useQuery<{ tab: Source }>();
+    const {tab} = useSearchParamsObject<{ tab: Source }>();
     const [errored, hasErrored] = useState(false);
     const [loading, isLoading] = useState(false);
     const {id} = useParams<{ id: string }>();

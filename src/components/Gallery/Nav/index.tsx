@@ -1,6 +1,6 @@
-import {Link} from 'react-router-dom';
+import {Link, useLocation} from 'react-router-dom';
 import {FC, useEffect, useRef} from 'react';
-import {useQuery} from '../../hooks';
+import {useSearchParamsObject} from '../../hooks';
 import {useGallery} from '../Art/Context';
 import './GalleryNav.css';
 import './GalleryNav.layout.css';
@@ -20,10 +20,11 @@ const usePrevious = <T = number | unknown>(value: T) => {
 export const GalleryNav: FC<Props> = ({id}) => {
   const {art} = useGallery();
   const {
-    queryObj: {page, size},
-    path,
-    nextQueryString,
-  } = useQuery<{ page: number, size: number }>({page: 1, size: 0});
+    page, size,
+    createSearchParams,
+  } = useSearchParamsObject<{ page: number, size: number }>({page: 1, size: 0});
+  const location = useLocation();
+  const path = location.pathname;
   const previous = usePrevious(art?.pagination.total);
   const firstPage = 1;
   const lastPage = art?.pagination?.totalPages ?? Number.MAX_VALUE;
@@ -42,12 +43,12 @@ export const GalleryNav: FC<Props> = ({id}) => {
 
   return <nav className="pagination" id={id}>
     {!hasPrevPage && <article className="fill-left"/>}
-    {hasPrevPage && <Link to={`${path}${nextQueryString({page: firstPage})}`}
+    {hasPrevPage && <Link to={`${path}${createSearchParams({page: firstPage})}`}
                           onClick={gotoTopOfPage}
                           id="first" className="page" data-testid="first-page">
         FIRST
     </Link>}
-    {hasPrevPage && <Link to={`${path}${nextQueryString({page: prevPage})}`}
+    {hasPrevPage && <Link to={`${path}${createSearchParams({page: prevPage})}`}
                           onClick={gotoTopOfPage}
                           id="prev" className="page" data-testid="prev-page">
         PREV
@@ -57,12 +58,12 @@ export const GalleryNav: FC<Props> = ({id}) => {
       <article>of</article>
       <article>{totalRecords || '—'}</article>
     </article>
-    {hasNextPage && <Link to={`${path}${nextQueryString({page: nextPage})}`}
+    {hasNextPage && <Link to={`${path}${createSearchParams({page: nextPage})}`}
                           onClick={gotoTopOfPage}
                           id="next" className="page" data-testid="next-page">
         NEXT
     </Link>}
-    {hasNextPage && <Link to={`${path}${nextQueryString({page: lastPage})}`}
+    {hasNextPage && <Link to={`${path}${createSearchParams({page: lastPage})}`}
                           onClick={gotoTopOfPage}
                           id="last" className="page" data-testid="last-page">
         LAST

@@ -2,7 +2,7 @@ import {FC, PropsWithChildren, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {join} from '../../util';
 import {Loading} from '../../Loading';
-import {useQuery} from '../../hooks';
+import {useSearchParamsObject} from '../../hooks';
 import {toQueryString} from '../../../util/URL';
 import {Art} from '../resource/types/response';
 import {Paths} from '../../../routes/Paths';
@@ -22,7 +22,7 @@ export const Image: FC<ImageProps> = (
   }) => {
   const [completed, isComplete] = useState(false);
   const [errored, isError] = useState(false);
-  const {queryObj: {tab}} = useQuery<{ tab: string }>();
+  const {tab} = useSearchParamsObject<{ tab: string }>();
   const gotoTopOfPage = () => window.scrollTo(0, 0);
   const ConditionalLink: FC<PropsWithChildren & { enabled: boolean, area: string }> =
     ({children, enabled, area}) => enabled ?

@@ -4,7 +4,7 @@ import {UserInformation} from '../UserInfo';
 import {Table} from '../Table';
 import {Link, useLocation, useNavigate} from 'react-router-dom';
 import {age, formatAge} from '../util';
-import {useQuery} from '../hooks';
+import {useSearchParamsObject} from '../hooks';
 import {users as usersApi} from './resource/users';
 import {FriendsList} from '../SelectList';
 import {Paths} from '../../routes/Paths';
@@ -14,9 +14,10 @@ import './Users.layout.css';
 export const Users: FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const {queryObj: {id, mode}, nextQueryString, path} = useQuery<{ id: string, mode: string }>();
+  const {id, mode, createSearchParams} = useSearchParamsObject<{ id: string, mode: string }>();
   const [users, updateUsers] = useState<User[]>([]);
   const [currentUser, updateCurrentUser] = useState<User>();
+  const path = location.pathname;
 
   useEffect(() => {
     usersApi.getAll().onSuccess(updateUsers);
@@ -92,13 +93,13 @@ export const Users: FC = () => {
                   }
                 }} onClick={event => event.currentTarget.classList.remove('open')}>
                   <nav className="menu rounded-corners">
-                    <Link to={`${path}${nextQueryString({
+                    <Link to={`${path}${createSearchParams({
                       id: user.id,
                       mode: 'view'
                     })}`}
                           className="item"
                           data-testid="view">View</Link>
-                    <Link to={`${path}${nextQueryString({
+                    <Link to={`${path}${createSearchParams({
                       id: user.id,
                       mode: 'edit'
                     })}`}
@@ -110,7 +111,7 @@ export const Users: FC = () => {
                             .onSuccess(updateUsers)
                             .onSuccess(() => navigate(Paths.users))}
                           data-testid="remove">Remove</Link>
-                    <Link to={`${path}${nextQueryString({id: user.id})}`}
+                    <Link to={`${path}${createSearchParams({id: user.id})}`}
                           className="item"
                           data-testid="clone">Clone</Link>
                   </nav>

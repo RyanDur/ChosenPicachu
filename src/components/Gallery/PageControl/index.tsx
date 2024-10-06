@@ -1,13 +1,13 @@
 import {FormEvent, useState} from 'react';
 import {useGallery} from '../Art/Context';
-import {useQuery} from '../../hooks';
+import {useSearchParamsObject} from '../../hooks';
 import {Source} from '../resource/types/resource';
 import './PageControl.css';
 import './PageControl.layout.css';
 
 export const PageControl = () => {
     const {art} = useGallery();
-    const {queryObj: {page, size, tab}, updateQueryString} = useQuery<{ page: number, size: number, tab: Source }>();
+    const {page, size, tab, updateSearchParams} = useSearchParamsObject<{ page: number, size: number, tab: Source }>();
     const [pageNumber, updatePageNumber] = useState(page);
     const [pageSize, updatePageSize] = useState(size);
 
@@ -19,7 +19,7 @@ export const PageControl = () => {
         event.preventDefault();
         gotoTopOfPage();
         event.currentTarget.reset();
-        updateQueryString({page: pageNumber, size: pageSize});
+        updateSearchParams({page: pageNumber, size: pageSize});
     };
 
     return <form onSubmit={onSubmit} id="page-control">

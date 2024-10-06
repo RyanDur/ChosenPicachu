@@ -1,7 +1,7 @@
 import {FC, useEffect} from 'react';
 import {Link, useLocation} from 'react-router-dom';
 import {join} from '../util';
-import {useQuery} from '../hooks';
+import {useSearchParamsObject} from '../hooks';
 import './Tabs.css';
 import {not} from "@ryandur/sand";
 
@@ -18,15 +18,15 @@ interface Props {
 
 export const Tabs: FC<Props> = ({values, id, role}) => {
   const {pathname} = useLocation();
-  const {queryObj: {tab}, nextQueryString, updateQueryString} = useQuery<{ tab: string }>();
+  const {tab, updateSearchParams, createSearchParams} = useSearchParamsObject<{ tab: string }>();
 
   useEffect(() => {
-    if (not(tab)) updateQueryString({tab: values[0].param});
-  }, [tab, updateQueryString, values]);
+    if (not(tab)) updateSearchParams({tab: values[0].param});
+  }, [tab, updateSearchParams, values]);
 
   return <nav role={role} id={id} className="tabs">{values.map(({param, display}) =>
     <h3 className={join('tab', tab === param && 'current')} key={param}>
-      <Link to={`${pathname}${nextQueryString({tab: param})}`}
+      <Link to={`${pathname}${createSearchParams({tab: param})}`}
             className="path">{display}</Link>
     </h3>
   )}</nav>;
