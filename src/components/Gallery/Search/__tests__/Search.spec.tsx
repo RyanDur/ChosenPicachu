@@ -6,7 +6,7 @@ import {Source} from '../../resource/types/resource';
 import {faker} from '@faker-js/faker';
 import {Paths} from '../../../../routes/Paths';
 import {AICSearchResponse} from '../../resource/aic/types';
-import {toQueryObj} from "../../../../util/URL";
+import {toQueryObj} from '../../../../util/URL';
 
 describe('search', () => {
   const searchWord = faker.lorem.word().toUpperCase();
@@ -36,7 +36,7 @@ describe('search', () => {
     const rendered = renderWithRouter(<Search/>);
     await userEvent.click(screen.getByTestId('submit-query'));
 
-    expect(rendered().testLocation?.search).toEqual('?');
+    expect(rendered().testLocation?.search).toEqual('');
 
     await userEvent.type(screen.getByLabelText('Search For'), 'A');
     await userEvent.click(screen.getByTestId('submit-query'));

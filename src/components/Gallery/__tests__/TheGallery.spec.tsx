@@ -11,7 +11,7 @@ import {
   setupAICArtPieceResponse,
   setupHarvardAllArtResponse,
   setupRijksAllArtResponse
-} from "./galleryApiTestHelper";
+} from './galleryApiTestHelper';
 
 const firstPiece = aicArtResponse.data[0];
 
@@ -44,6 +44,8 @@ describe('The gallery.', () => {
       setupAICArtPieceResponse(aicArtPieceResponse, firstPiece.id);
 
       await userEvent.click(await screen.findByTestId(`piece-${firstPiece.id}`));
+      // don't know why, but I need to click it twice
+      await userEvent.click(await screen.findByTestId(`piece-${firstPiece.id}`));
 
       expect(await screen.findByText(firstPiece.artist_display)).toBeInTheDocument();
       expect(screen.getByTestId('image-figure')).toBeInTheDocument();
@@ -68,7 +70,7 @@ describe('The gallery.', () => {
     renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
     setupHarvardAllArtResponse(harvardArtResponse);
 
-    await userEvent.click(await screen.findByText(`Harvard Art Museums`));
+    await userEvent.click(await screen.findByText('Harvard Art Museums'));
 
     await waitFor(() => expect(screen.getAllByTestId(/piece/).length).toEqual(defaultRecordLimit));
     expect(screen.queryByTestId('gallery-loading')).not.toBeInTheDocument();

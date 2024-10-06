@@ -1,7 +1,7 @@
 import {useSearchParams} from 'react-router-dom';
-import {useEffect} from "react";
-import {toQueryString} from "../../util/URL";
-import {has} from "@ryandur/sand";
+import {useEffect} from 'react';
+import {toQueryString} from '../../util/URL';
+import {has} from '@ryandur/sand';
 
 const filterEmpty = (obj: { [p: string]: string | number }) =>
   Object.entries(obj).reduce((acc, [key, value]) => has(value) ? {...acc, [key]: value} : acc, {});
@@ -17,18 +17,15 @@ export const useSearchParamsObject = <T extends { [p: string]: string | number }
   const createSearchParams = (params = {}): string =>
     toQueryString({...Object.fromEntries(searchParams.entries()), ...filterEmpty(params)});
 
-  const removeSearchParams = (...params: string[]) => {
-    for (const [key] of searchParams.entries()) {
-      if (params.includes(key)) searchParams.delete(key);
-    }
-    setSearchParams(searchParams);
-  };
+  const removeSearchParams = (...params: string[]) =>
+    setSearchParams(Array.from(searchParams.entries())
+      .filter(([key]) => !params.includes(key)));
 
   const updateSearchParams = (params = {}) =>
     setSearchParams({...Object.fromEntries(searchParams.entries()), ...filterEmpty(params)});
 
   useEffect(() => {
-    has(val) && updateSearchParams(val);
+    updateSearchParams(val);
   }, []);
 
   return {
