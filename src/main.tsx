@@ -1,10 +1,10 @@
-import {StrictMode} from "react";
+import {StrictMode} from 'react';
 import {createBrowserRouter, Outlet, RouterProvider} from 'react-router-dom';
-import * as ReactDom from "react-dom/client";
+import * as ReactDom from 'react-dom/client';
 import {HomePage, UsersPage} from './routes';
 import {AboutPage, Gallery} from './components';
 import {Paths} from './routes/Paths';
-import {SideNav} from "./routes/BasePage/SideNav";
+import {SideNav} from './routes/BasePage/SideNav';
 import './index.css';
 
 const router = createBrowserRouter([{

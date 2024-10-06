@@ -17,7 +17,10 @@ describe('The page controls', () => {
     test('submitting the specified page', async () => {
       const pageNumber = String(Math.floor(Math.random() * 1000));
 
-      const rendered = renderWithGalleryContext(<PageControl/>, {path: Paths.artGallery, initialRoute: Paths.artGallery});
+      const rendered = renderWithGalleryContext(<PageControl/>, {
+        path: Paths.artGallery,
+        initialRoute: Paths.artGallery
+      });
       await userEvent.type(screen.getByTestId('go-to'), pageNumber);
       fireEvent.submit(screen.getByText('Go'));
 
@@ -37,7 +40,11 @@ describe('The page controls', () => {
     });
 
     it('should not allow a user to go to a page higher than the last', async () => {
-      renderWithGalleryContext(<PageControl/>, {path: Paths.artGallery, initialRoute: Paths.artGallery, galleryState: fromAICArt});
+      renderWithGalleryContext(<PageControl/>, {
+        path: Paths.artGallery,
+        initialRoute: Paths.artGallery,
+        galleryState: fromAICArt
+      });
       expect(await screen.findByTestId('go-to'))
         .toHaveAttribute('max', `${fromAICArt.pagination.totalPages}`);
     });
@@ -45,7 +52,10 @@ describe('The page controls', () => {
 
   describe('changing the number of elements', () => {
     it('should allow the user to change the elements per page', async () => {
-      const rendered = renderWithGalleryContext(<PageControl/>, {path: Paths.artGallery, initialRoute: Paths.artGallery});
+      const rendered = renderWithGalleryContext(<PageControl/>, {
+        path: Paths.artGallery,
+        initialRoute: Paths.artGallery
+      });
 
       await userEvent.type(screen.getByTestId('per-page'), '45');
       await userEvent.click(screen.getByText('Go'));
@@ -84,20 +94,24 @@ describe('The page controls', () => {
         ${92}  | ${90}
         ${97}  | ${100}
         ${100} | ${100}
-        `('should change input: $input to size: $size when rikjs', async ({input, size}) => {
-      const rendered = renderWithGalleryContext(<PageControl/>, {
-        path: Paths.artGallery,
-        initialRoute: Paths.artGallery,
-        params: {tab: Source.RIJKS, page: 1}
+        `('should change input: $input to size: $size when rikjs',
+      async ({input, size}: { input: number, size: number }) => {
+        const rendered = renderWithGalleryContext(<PageControl/>, {
+          path: Paths.artGallery,
+          initialRoute: Paths.artGallery,
+          params: {tab: Source.RIJKS, page: 1}
+        });
+        await userEvent.type(screen.getByTestId('per-page'), `${input}`);
+
+        expect(screen.getByTestId('per-page')).toHaveDisplayValue(String(size));
+
+        await userEvent.click(screen.getByText('Go'));
+
+        expect(toQueryObj(rendered().testLocation?.search || '')).toEqual({
+          page: 1,
+          size,
+          tab: Source.RIJKS
+        });
       });
-      await userEvent.type(screen.getByTestId('per-page'), `${input}`);
-      expect(screen.getByTestId('per-page')).toHaveDisplayValue(size);
-      await userEvent.click(screen.getByText('Go'));
-      expect(toQueryObj(rendered().testLocation?.search || '')).toEqual({
-        page: 1,
-        size,
-        tab: Source.RIJKS
-      });
-    });
   });
 });

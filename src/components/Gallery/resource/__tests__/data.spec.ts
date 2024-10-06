@@ -22,7 +22,7 @@ import {Art} from '../types/response';
 import {Source} from '../types/resource';
 import {faker} from '@faker-js/faker';
 import {expect} from 'vitest';
-import {setupAICAllArtResponse} from "../../__tests__/galleryApiTestHelper";
+import {setupAICAllArtResponse} from '../../__tests__/galleryApiTestHelper';
 
 describe('data', () => {
     beforeEach(() => {

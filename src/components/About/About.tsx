@@ -1,9 +1,9 @@
 import {NaturalZIndex} from './ZIndexDemo';
 import {ExclusiveAccordion, InclusiveAccordion} from './Accordions';
-import {faker} from "@faker-js/faker";
-import {AboutTopics, isATopic} from "./types";
-import {useSearchParams} from "react-router-dom";
-import {maybe, nothing, some} from "@ryandur/sand";
+import {faker} from '@faker-js/faker';
+import {AboutTopics, isATopic} from './types';
+import {useSearchParams} from 'react-router-dom';
+import {maybe, nothing, some} from '@ryandur/sand';
 import './style.css';
 
 const paragraphs = (count: number) =>

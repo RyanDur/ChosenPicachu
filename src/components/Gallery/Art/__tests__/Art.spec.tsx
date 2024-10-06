@@ -6,7 +6,7 @@ import {aicArtResponse} from '../../../../__tests__/util/dummyData';
 import {test} from 'vitest';
 import {Gallery} from '../../index';
 import {Paths} from '../../../../routes/Paths';
-import {setupAICAllArtResponse} from "../../__tests__/galleryApiTestHelper";
+import {setupAICAllArtResponse} from '../../__tests__/galleryApiTestHelper';
 
 describe('The gallery.', () => {
   window.scrollTo = vi.fn();

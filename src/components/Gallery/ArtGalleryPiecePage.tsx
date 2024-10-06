@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {Search} from './Search';
 import {ArtPiece} from './ArtPiece';
-import {useArtPiece} from "./ArtPiece/Context";
+import {useArtPiece} from './ArtPiece/Context';
 import '../../routes/BasePage.css';
 import '../../routes/BasePage.layout.css';
 

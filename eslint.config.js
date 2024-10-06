@@ -4,6 +4,7 @@ import hooksPlugin from 'eslint-plugin-react-hooks';
 import reactRefreshPlugin from 'eslint-plugin-react-refresh';
 import vitest from 'eslint-plugin-vitest';
 import react from 'eslint-plugin-react';
+import globals from 'globals';
 
 export default tsEslint.config(
     {ignores: ['dist']},
@@ -25,18 +26,16 @@ export default tsEslint.config(
             },
             globals: {
                 ...vitest.environments.env.globals,
+                ...globals.browser,
                 fetchMock: false,
-                window: false
             },
             ecmaVersion: 2023,
             sourceType: 'module',
         },
         rules: {
             '@typescript-eslint/no-unsafe-argument': 'error',
-            '@typescript-eslint/no-unsafe-assignment': 'error',
             '@typescript-eslint/no-unsafe-call': 'error',
             '@typescript-eslint/no-unsafe-member-access': 'error',
-            '@typescript-eslint/no-unsafe-return': 'error',
             'react/jsx-uses-react': 'off',
             'react/react-in-jsx-scope': 'off',
             'react-refresh/only-export-components': [

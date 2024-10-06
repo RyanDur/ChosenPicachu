@@ -1,9 +1,9 @@
-import {AICAllArtResponse, AICArtResponse} from "../resource/aic/types";
-import {aicDomain, defaultRecordLimit, harvardAPIKey, harvardDomain, rijksAPIKey, rijksDomain} from "../../../config";
-import {fields} from "../resource/aic";
-import {HarvardAllArtResponse} from "../resource/harvard/types";
-import {harvardFields} from "../resource/harvard";
-import {RIJKSAllArtResponse} from "../resource/rijks/types";
+import {AICAllArtResponse, AICArtResponse} from '../resource/aic/types';
+import {aicDomain, defaultRecordLimit, harvardAPIKey, harvardDomain, rijksAPIKey, rijksDomain} from '../../../config';
+import {fields} from '../resource/aic';
+import {HarvardAllArtResponse} from '../resource/harvard/types';
+import {harvardFields} from '../resource/harvard';
+import {RIJKSAllArtResponse} from '../resource/rijks/types';
 
 export const setupAICAllArtResponse = (response: AICAllArtResponse, options: {
     limit: number,

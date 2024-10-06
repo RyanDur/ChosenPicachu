@@ -4,7 +4,7 @@ import {toQueryString} from '../../util/URL';
 import {defaultRecordLimit} from '../../config';
 import {Source} from '../../components/Gallery/resource/types/resource';
 import {Paths} from '../Paths';
-import {AboutTopics} from "../../components/About/types";
+import {AboutTopics} from '../../components/About/types';
 
 const AboutNav: FC = () => {
   const [searchParams] = useSearchParams();

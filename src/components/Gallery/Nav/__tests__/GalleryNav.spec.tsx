@@ -4,7 +4,7 @@ import {fromAICArt} from '../../../../__tests__/util/dummyData';
 import {Paths} from '../../../../routes/Paths';
 import {renderWithGalleryContext} from '../../../../__tests__/util';
 import {GalleryNav} from '../index';
-import {toQueryObj} from "../../../../util/URL";
+import {toQueryObj} from '../../../../util/URL';
 
 window.scrollTo = vi.fn();
 describe('Gallery Navigation', () => {
