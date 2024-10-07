@@ -27,7 +27,7 @@ describe('search', () => {
   it('should give suggestions for completion', async () => {
     renderWithRouter(<Search/>, {params: {tab: Source.AIC}});
 
-    await userEvent.type(screen.getByLabelText('Search For'), searchWord);
+    await userEvent.type(screen.getByLabelText(/Search For/), searchWord);
 
     await waitFor(() => expect(screen.getByTestId('search-options')).toHaveTextContent(searchWord));
   });
@@ -38,7 +38,7 @@ describe('search', () => {
 
     expect(rendered().testLocation?.search).toEqual('');
 
-    await userEvent.type(screen.getByLabelText('Search For'), 'A');
+    await userEvent.type(screen.getByLabelText(/Search For/), 'A');
     await userEvent.click(screen.getByTestId('submit-query'));
 
     await waitFor(() => expect(rendered().testLocation?.search).toEqual('?search=A'));
@@ -48,7 +48,7 @@ describe('search', () => {
   it('should remove the page query param', async () => {
     const rendered = renderWithRouter(<Search/>, {params: {page: 1, tab: 'aic'}});
 
-    await userEvent.type(screen.getByLabelText('Search For'), 'a');
+    await userEvent.type(screen.getByLabelText(/Search For/), 'a');
     await userEvent.click(screen.getByTestId('submit-query'));
 
     expect(rendered().testLocation?.search).toEqual('?page=1&tab=aic&search=a');
