@@ -80,9 +80,9 @@
     #root {
         grid-template-columns: 13.4rem 1fr 13.4rem;
         grid-template-areas:
-      "header header filter"
+      "nav header filter"
       "nav main filter"
-      "nav footer footer";
+      "nav footer filter";
 
         #app-header {
             grid-template-columns: var(--base-x-16_5) 1fr 1fr;
