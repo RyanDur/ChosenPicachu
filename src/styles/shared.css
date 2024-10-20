@@ -20,11 +20,6 @@
   z-index: -1;
 }
 
-.hide {
-  display: none;
-  height: 0;
-}
-
 .fit {
   height: fit-content;
 }
