@@ -1,0 +1,50 @@
+.sortable-list {
+    display: flex;
+    height: fit-content;
+    gap: var(--base);
+
+    .item {
+        width: 100%;
+    }
+
+    .draggable {
+        box-shadow: none;
+        border: 1px solid black;
+
+        &.visible {
+            transition: opacity 50ms;
+            opacity: 1;
+        }
+
+        &.invisible {
+            opacity: 0.1%;
+        }
+    }
+
+    .card {
+        display: flex;
+        padding-top: 0;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--base);
+        width: 100%;
+    }
+
+    .value {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 8rem;
+    }
+
+    .grip {
+        width: 2rem;
+        cursor: grab;
+
+        &:active {
+            cursor: grabbing;
+        }
+    }
+}

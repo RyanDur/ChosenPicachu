@@ -23,7 +23,8 @@
     "react-router-dom": "^6.25.1",
     "schemawax": "^1.0.6",
     "states-us": "^1.0.1",
-    "throttle-debounce": "^5.0.2"
+    "throttle-debounce": "^5.0.2",
+    "vite-plugin-svgr": "^4.2.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.12.0",
