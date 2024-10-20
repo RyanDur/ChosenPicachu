@@ -13,12 +13,12 @@
         background: var(--paper);
         border: 1px solid black;
 
-        &.visible {
+        &.hidable {
             transition: opacity 50ms;
             opacity: 1;
         }
 
-        &.invisible {
+        &.hide {
             opacity: 0.1%;
         }
 

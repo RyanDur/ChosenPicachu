@@ -38,14 +38,14 @@ export const HideOnDrag: FC<{ children: ReactElement<DraggableListItemProps> }> 
 
   return cloneElement(children, {
     ...props,
-    className: classNames('visible', hide && 'invisible', className),
+    className: classNames('hidable', hide && 'hide', className),
     onDragStart: (event: DragEvent<HTMLElement>) => {
-      updateHide(true);
       onDragStart(event);
+      updateHide(true);
     },
     onDragEnd: (event: DragEvent<HTMLElement>) => {
-      updateHide(false);
       onDragEnd(event);
+      updateHide(false);
     }
   });
 };
