@@ -17,7 +17,8 @@ export const AboutPage: FC = () => {
     <main data-testid="main" className='in-view'>
       <Tabs role='demo-tabs' values={[
         {display: 'Accordions', param: AboutTopics.accordions},
-        {display: 'Z-Index', param: AboutTopics.zIndex}
+        {display: 'Z-Index', param: AboutTopics.zIndex},
+        {display: 'Drag and Drop', param: AboutTopics.dragAndDrop}
       ]}/>
       <About/>
     </main>

@@ -4,6 +4,7 @@ import {faker} from '@faker-js/faker';
 import {AboutTopics, isATopic} from './types';
 import {useSearchParams} from 'react-router-dom';
 import {maybe, nothing, some} from '@ryandur/sand';
+import {DefaultSortableList, HideElemOnDragSortableList} from './DragAndDrop';
 import './style.css';
 
 const paragraphs = (count: number) =>
@@ -30,6 +31,11 @@ export const About = () => {
         [AboutTopics.zIndex]: <>
           <article>Z-Index Demo.</article>
           <NaturalZIndex className='card'/>
+        </>,
+        [AboutTopics.dragAndDrop]: <>
+          <article>Sortable List</article>
+          <DefaultSortableList list={new Set(['A', 'B', 'C'])}/>
+          <HideElemOnDragSortableList list={new Set(['A', 'B', 'C'])}/>
         </>
       }[tab])).orNull()}
   </section>;
