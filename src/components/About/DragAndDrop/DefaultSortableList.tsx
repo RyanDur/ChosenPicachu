@@ -2,6 +2,7 @@ import {FC, useState} from 'react';
 import {array} from '../../../helpers';
 import {Draggable} from './Draggable';
 import './styles.css';
+import './styles.layout.css';
 
 export const DefaultSortableList: FC<{ list: Set<string> }> = ({list}) => {
   const [currentList, updateList] = useState<string[]>([...list]);
@@ -20,8 +21,7 @@ export const DefaultSortableList: FC<{ list: Set<string> }> = ({list}) => {
           }}
           onDragStart={() => updateDraggedItem(item)}
           onDragOver={() => updateIndex(index)}
-          label={item}
-          className='card'>{item}</Draggable>
+          label={item}>{item}</Draggable>
       </li>)
   }</ul>;
 };

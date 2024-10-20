@@ -1,0 +1,17 @@
+.sortable-list {
+    display: flex;
+    gap: var(--base);
+
+    .draggable {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--base);
+    }
+
+    .value {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
