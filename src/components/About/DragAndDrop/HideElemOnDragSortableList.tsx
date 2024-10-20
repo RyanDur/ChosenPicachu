@@ -3,6 +3,7 @@ import {Draggable, DraggableListItemProps} from './Draggable';
 import {array} from '../../../helpers';
 import {classNames} from '../../../util/classNames';
 import './styles.css';
+import './styles.layout.css';
 
 export const HideElemOnDragSortableList: FC<{ list: Set<string> }> = ({list}) => {
   const [currentList, updateList] = useState<string[]>([...list]);
@@ -25,7 +26,6 @@ export const HideElemOnDragSortableList: FC<{ list: Set<string> }> = ({list}) =>
             onDragStart={() => updateDraggedItem(item)}
             onDragOver={() => updateIndex(index)}
             label={item}
-            className='card'
           >{item}</Draggable>
         </HideOnDrag>
       </li>
