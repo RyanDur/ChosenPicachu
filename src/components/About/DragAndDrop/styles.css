@@ -1,5 +1,5 @@
 .sortable-list {
-    --width: var(--base-x-50);
+    --width: var(--base-x-40);
     height: fit-content;
 
     .item {
@@ -21,8 +21,8 @@
             opacity: 0.1%;
         }
 
-        .dragging {
-            display: inline-block;
+        &.dragging {
+            cursor: grabbing;
         }
     }
 
