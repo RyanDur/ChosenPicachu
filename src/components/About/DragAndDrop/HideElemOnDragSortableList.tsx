@@ -34,11 +34,12 @@ const HideOnDrag: FC<DraggableListItemProps> = ({
   label,
   onDragStart,
   onDragEnd,
-  onDragOver
+  ...rest
 }) => {
   const [hide, updateHide] = useState<'hide'>();
 
   return <Draggable
+    {...rest}
     className={classNames(hide, className)}
     onDragEnd={(event) => {
       onDragEnd(event);
@@ -48,7 +49,6 @@ const HideOnDrag: FC<DraggableListItemProps> = ({
       onDragStart(event);
       updateHide('hide');
     }}
-    onDragOver={(event) => onDragOver(event)}
     label={label}
   >{children}</Draggable>;
 };
