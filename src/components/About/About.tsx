@@ -4,7 +4,7 @@ import {faker} from '@faker-js/faker';
 import {AboutTopics, isATopic} from './types';
 import {useSearchParams} from 'react-router-dom';
 import {maybe, nothing, some} from '@ryandur/sand';
-import {DefaultSortableList, HideElemOnDragSortableList} from './DragAndDrop';
+import {DefaultSortableList, HideElemOnDragSortableList, SlideElemOnDragSortableList} from './DragAndDrop';
 import './style.css';
 
 const paragraphs = (count: number) =>
@@ -36,6 +36,7 @@ export const About = () => {
           <article>Sortable List</article>
           <DefaultSortableList list={new Set(['A', 'B', 'C'])}/>
           <HideElemOnDragSortableList list={new Set(['A', 'B', 'C'])}/>
+          <SlideElemOnDragSortableList list={new Set(['A', 'B', 'C'])}/>
         </>
       }[tab])).orNull()}
   </section>;

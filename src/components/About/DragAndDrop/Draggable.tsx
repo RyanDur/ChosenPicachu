@@ -6,9 +6,9 @@ import {is} from '@ryandur/sand';
 
 export type DraggableListItemProps = PropsWithChildren & PropsWithClassName & {
   label: string;
-  onDragOver: DragEventHandler<HTMLElement>;
-  onDragStart: DragEventHandler<HTMLElement>;
-  onDragEnd: DragEventHandler<HTMLElement>;
+  onDragOver?: DragEventHandler<HTMLElement>;
+  onDragStart?: DragEventHandler<HTMLElement>;
+  onDragEnd?: DragEventHandler<HTMLElement>;
 };
 
 export const Draggable: FC<DraggableListItemProps> = ({
@@ -26,17 +26,16 @@ export const Draggable: FC<DraggableListItemProps> = ({
     className={classNames('draggable', dragging, className)}
     onDragOver={event => {
       event.preventDefault();
-      onDragOver(event);
+      onDragOver?.(event);
     }}
     onDragEnd={(event: DragEvent<HTMLElement>) => {
       event.preventDefault();
-      updateDragging(undefined);
-      onDragEnd(event);
+      onDragEnd?.(event);
     }}
+    onDrop={() => updateDragging(undefined)}
     draggable={is(dragging)} key={label}>
     <Grip
       label={label}
-      onMouseUp={() => updateDragging(undefined)}
       onMouseDown={() => updateDragging('dragging')}/>
     <article className='value'>{children}</article>
   </article>;
@@ -44,18 +43,15 @@ export const Draggable: FC<DraggableListItemProps> = ({
 
 type GripProps = {
   label: string,
-  onMouseUp: () => void,
   onMouseDown: () => void
 };
 const Grip: FC<GripProps> = ({
   label,
   onMouseDown,
-  onMouseUp,
 }) =>
   <article
     className='grip'
     aria-label={`grip for ${label}`}
-    onMouseUp={onMouseUp}
     onMouseDown={onMouseDown}>
     <Handle/>
   </article>;
