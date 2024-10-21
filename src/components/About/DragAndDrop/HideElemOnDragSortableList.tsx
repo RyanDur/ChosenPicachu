@@ -33,19 +33,19 @@ export const HideElemOnDragSortableList: FC<{ list: Set<string> }> = ({list}) =>
 };
 
 export const HideOnDrag: FC<{ children: ReactElement<DraggableListItemProps> }> = ({children}) => {
-  const [hide, updateHide] = useState(false);
+  const [hide, updateHide] = useState<'hide'>();
   const {className, onDragStart, onDragEnd, ...props} = children.props;
 
   return cloneElement(children, {
     ...props,
-    className: classNames('hidable', hide && 'hide', className),
+    className: classNames(hide, className),
     onDragStart: (event: DragEvent<HTMLElement>) => {
       onDragStart(event);
-      updateHide(true);
+      updateHide('hide');
     },
     onDragEnd: (event: DragEvent<HTMLElement>) => {
       onDragEnd(event);
-      updateHide(false);
+      updateHide(undefined);
     }
   });
 };
