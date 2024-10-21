@@ -8,7 +8,7 @@
     }
 
     .draggable {
-        width: var(--width);
+        max-width: var(--width);
         padding: var(--base-x-4);
         padding-top: var(--base);
         border-radius: 2rem;
