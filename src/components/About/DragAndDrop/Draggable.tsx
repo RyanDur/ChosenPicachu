@@ -2,6 +2,7 @@ import {DragEvent, FC, PropsWithChildren, useState} from 'react';
 import {classNames} from '../../../util/classNames';
 import Handle from './grip.svg';
 import {PropsWithClassName} from '../../_types';
+import {is} from '@ryandur/sand';
 
 export type DraggableListItemProps = PropsWithChildren & PropsWithClassName & {
   label: string;
@@ -18,10 +19,10 @@ export const Draggable: FC<DraggableListItemProps> = ({
   children,
   className
 }) => {
-  const [draggable, updateDraggable] = useState(false);
+  const [dragging, updateDragging] = useState<'dragging'>();
 
   return <article
-    className={classNames('draggable', draggable && 'dragging', className)}
+    className={classNames('draggable', dragging, className)}
     onDragStart={(event: DragEvent<HTMLElement>) => {
       onDragStart(event);
     }}
@@ -30,18 +31,21 @@ export const Draggable: FC<DraggableListItemProps> = ({
       onDragOver(event);
     }}
     onDragEnd={(event: DragEvent<HTMLElement>) => {
-      updateDraggable(false);
+      event.preventDefault();
+      updateDragging(undefined);
       onDragEnd(event);
     }}
-    draggable={draggable} key={label}>
-    <Grip label={label}
-          onMouseUp={() => updateDraggable(false)}
-          onMouseDown={() => updateDraggable(true)}/>
+    draggable={is(dragging)} key={label}>
+    <Grip
+      label={label}
+      onMouseUp={() => updateDragging(undefined)}
+      onMouseDown={() => updateDragging('dragging')}/>
     <article className='value'>{children}</article>
   </article>;
 };
 
-const Grip: FC<{ label: string,
+const Grip: FC<{
+  label: string,
   onMouseUp: () => void,
   onMouseDown: () => void
 }> = ({
