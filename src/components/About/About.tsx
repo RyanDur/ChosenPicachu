@@ -4,7 +4,12 @@ import {faker} from '@faker-js/faker';
 import {AboutTopics, isATopic} from './types';
 import {useSearchParams} from 'react-router-dom';
 import {maybe, nothing, some} from '@ryandur/sand';
-import {DefaultSortableList, HideElemOnDragSortableList, SlideElemOnDragSortableList} from './DragAndDrop';
+import {
+  SortableListLazyMove,
+  HideElemOnDragSortableListLazyMove,
+  HideElemOnDragSortableListEagerMove,
+  SortableListEagerMove
+} from './DragAndDrop';
 import './style.css';
 
 const paragraphs = (count: number) =>
@@ -37,6 +42,10 @@ export const About = () => {
           <DefaultSortableList list={new Set(['A', 'B', 'C'])}/>
           <HideElemOnDragSortableList list={new Set(['A', 'B', 'C'])}/>
           <SlideElemOnDragSortableList list={new Set(['A', 'B', 'C'])}/>
+          <SortableListLazyMove list={new Set(['A', 'B', 'C'])}/>
+          <SortableListEagerMove list={new Set(['A', 'B', 'C'])}/>
+          <HideElemOnDragSortableListLazyMove list={new Set(['A', 'B', 'C'])}/>
+          <HideElemOnDragSortableListEagerMove list={new Set(['A', 'B', 'C'])}/>
         </>
       }[tab])).orNull()}
   </section>;

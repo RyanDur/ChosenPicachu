@@ -1,18 +1,17 @@
 import {FC, useState} from 'react';
 import {array} from '../../../helpers';
-import {HideOnDrag} from './HideOnDrag';
+import {Draggable} from './Draggable';
 import './styles.css';
 import './styles.layout.css';
 
-export const SlideElemOnDragSortableList: FC<{ list: Set<string> }> = ({list}) => {
+export const SortableListEagerMove: FC<{ list: Set<string> }> = ({list}) => {
   const [currentList, updateList] = useState<string[]>([...list]);
   const [draggedItem, updateDraggedItem] = useState<string>();
 
-  return <ul
-    className='sortable-list'>{
+  return <ul className='sortable-list'>{
     currentList.map((item, index) =>
       <li className='item' key={item}>
-        <HideOnDrag
+        <Draggable
           onDragStart={() => updateDraggedItem(item)}
           onDragOver={() => {
             if (draggedItem) {
@@ -20,9 +19,7 @@ export const SlideElemOnDragSortableList: FC<{ list: Set<string> }> = ({list}) =
                 .moveToIndex(index, draggedItem, oldList));
             }
           }}
-          label={item}
-        >{item}</HideOnDrag>
-      </li>
-    )}</ul>;
+          label={item}>{item}</Draggable>
+      </li>)
+  }</ul>;
 };
-

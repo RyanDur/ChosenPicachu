@@ -4,25 +4,25 @@ import {HideOnDrag} from './HideOnDrag';
 import './styles.css';
 import './styles.layout.css';
 
-export const HideElemOnDragSortableList: FC<{ list: Set<string> }> = ({list}) => {
+export const HideElemOnDragSortableListEagerMove: FC<{ list: Set<string> }> = ({list}) => {
   const [currentList, updateList] = useState<string[]>([...list]);
-  const [dragOverIndex, updateIndex] = useState<number>(-1);
   const [draggedItem, updateDraggedItem] = useState<string>();
 
-  return <ul onDragLeave={() => updateIndex(-1)} className='sortable-list'>{
+  return <ul
+    className='sortable-list'>{
     currentList.map((item, index) =>
       <li className='item' key={item}>
         <HideOnDrag
-          onDragEnd={() => {
-            if (draggedItem && dragOverIndex >= 0) {
+          onDragStart={() => updateDraggedItem(item)}
+          onDragOver={() => {
+            if (draggedItem) {
               updateList((oldList) => array
-                .moveToIndex(dragOverIndex, draggedItem, oldList));
+                .moveToIndex(index, draggedItem, oldList));
             }
           }}
-          onDragStart={() => updateDraggedItem(item)}
-          onDragOver={() => updateIndex(index)}
           label={item}
         >{item}</HideOnDrag>
       </li>
     )}</ul>;
 };
+
