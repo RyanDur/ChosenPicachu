@@ -1,7 +1,6 @@
 import {FC, useState} from 'react';
-import {Draggable, DraggableListItemProps} from './Draggable';
 import {array} from '../../../helpers';
-import {classNames} from '../../../util/classNames';
+import {HideOnDrag} from './HideOnDrag';
 import './styles.css';
 import './styles.layout.css';
 
@@ -27,27 +26,3 @@ export const SlideElemOnDragSortableList: FC<{ list: Set<string> }> = ({list}) =
     )}</ul>;
 };
 
-const HideOnDrag: FC<DraggableListItemProps> = ({
-  children,
-  className,
-  label,
-  onDragStart,
-  onDragEnd,
-  ...rest
-}) => {
-  const [hide, updateHide] = useState<'hide'>();
-
-  return <Draggable
-    {...rest}
-    className={classNames(hide, className)}
-    onDragEnd={(event) => {
-      onDragEnd?.(event);
-      updateHide(undefined);
-    }}
-    onDragStart={(event) => {
-      onDragStart?.(event);
-      updateHide('hide');
-    }}
-    label={label}
-  >{children}</Draggable>;
-};
