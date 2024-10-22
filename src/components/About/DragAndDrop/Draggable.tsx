@@ -15,6 +15,7 @@ export const Draggable: FC<DraggableListItemProps> = ({
   label,
   onDragOver,
   onDragEnd,
+  onDragStart,
   children,
   className,
   ...rest
@@ -24,6 +25,10 @@ export const Draggable: FC<DraggableListItemProps> = ({
   return <article
     {...rest}
     className={classNames('draggable', dragging, className)}
+    onDragStart={event => {
+      event.dataTransfer.effectAllowed = 'move';
+      onDragStart?.(event);
+    }}
     onDragOver={event => {
       event.preventDefault();
       onDragOver?.(event);
@@ -31,8 +36,8 @@ export const Draggable: FC<DraggableListItemProps> = ({
     onDragEnd={(event: DragEvent<HTMLElement>) => {
       event.preventDefault();
       onDragEnd?.(event);
+      event.currentTarget.blur();
     }}
-    onDrop={() => updateDragging(undefined)}
     draggable={is(dragging)} key={label}>
     <Grip
       label={label}
