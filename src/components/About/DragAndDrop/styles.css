@@ -1,5 +1,4 @@
 .sortable-list {
-    --width: var(--base-x-40);
     height: fit-content;
 
     .item {
@@ -8,7 +7,7 @@
     }
 
     .draggable {
-        max-width: var(--width);
+        max-width: var(--base-x-40);
         padding: var(--base-x-4);
         padding-top: var(--base);
         border-radius: 2rem;
