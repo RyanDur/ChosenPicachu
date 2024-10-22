@@ -24,7 +24,7 @@ export const Draggable: FC<DraggableListItemProps> = ({
 
   return <article
     {...rest}
-    className={classNames('draggable', dragging, className)}
+    className={classNames('draggable', className)}
     onDragStart={event => {
       event.dataTransfer.effectAllowed = 'move';
       onDragStart?.(event);
