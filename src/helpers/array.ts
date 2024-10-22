@@ -1,12 +1,13 @@
 export const array = {
-  removeFrom: <T>(itemToRemove: T, list: T[]) => list.filter(item => item !== itemToRemove),
+  removeFrom: <T>(itemToRemove: T, list: T[]) => {
+    const index = list.indexOf(itemToRemove);
+    return [...list.slice(0, index), ...list.slice(index + 1)];
+  },
   insertAt: <T>(
     index: number,
     item: T,
     list: T[]
-  ): T[] => {
-    return [...list.slice(0, index), item, ...list.slice(index)];
-  },
+  ): T[] => [...list.slice(0, index), item, ...list.slice(index)],
   moveToIndex: <T>(
     index: number,
     item: T,
