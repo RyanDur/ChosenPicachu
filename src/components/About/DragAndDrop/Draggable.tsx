@@ -34,9 +34,8 @@ export const Draggable: FC<DraggableListItemProps> = ({
       onDragOver?.(event);
     }}
     onDragEnd={(event: DragEvent<HTMLElement>) => {
-      event.preventDefault();
       onDragEnd?.(event);
-      event.currentTarget.blur();
+      updateDragging(undefined);
     }}
     draggable={is(dragging)} key={label}>
     <Grip
