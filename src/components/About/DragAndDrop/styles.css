@@ -20,6 +20,16 @@
         &.hide {
             opacity: 0.1%;
         }
+
+        &:hover {
+            box-shadow: 0 10px 14px rgba(0, 0, 0, 0.12);
+        }
+    }
+
+    &.dragging {
+        box-shadow: none;
+        transform: translate(0, 0);
+        display: inline-block;
     }
 
     .value {
@@ -30,10 +40,5 @@
 
     .grip {
         width: 2rem;
-        cursor: grab;
-
-        &:active {
-            cursor: grabbing;
-        }
     }
 }
