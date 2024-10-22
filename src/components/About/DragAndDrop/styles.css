@@ -17,12 +17,12 @@
         opacity: 1;
         transition: opacity 50ms;
 
-        &.hide {
-            opacity: 0.1%;
+        &:has(.grip:hover) {
+            box-shadow: 0 10px 14px rgba(0, 0, 0, 0.12);
         }
 
-        &:hover {
-            box-shadow: 0 10px 14px rgba(0, 0, 0, 0.12);
+        &.hide {
+            opacity: 0.1%;
         }
     }
 
