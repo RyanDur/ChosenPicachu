@@ -2,7 +2,7 @@ import {not} from '@ryandur/sand';
 
 const empty = <T>(list: T[] = []): boolean =>
   list.length === 0;
-const has = <T>(list: T[]) =>
+const has = <T>(list: T[] = []) =>
   not(empty(list));
 
 const removeFrom = <T>(list: T[], itemToRemove: T) => {
