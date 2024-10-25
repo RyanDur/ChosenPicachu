@@ -33,7 +33,7 @@ const addToGrid = <T>(
   item: T,
   grid: T[][]
 ) => {
-  const safeRow = row >= 0 ? row : 0;
+  const safeRow = row < 0 ? 0 : row;
   const currentRow = grid[safeRow] ?? [];
   if (empty(currentRow)) {
     return insertAt(safeRow, [item], grid);
