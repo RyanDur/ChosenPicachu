@@ -1,6 +1,11 @@
-import {empty, has} from '@ryandur/sand';
+import {not} from '@ryandur/sand';
 
-const removeFrom = <T>(itemToRemove: T, list: T[]) => {
+const empty = <T>(list: T[] = []): boolean =>
+  list.length === 0;
+const has = <T>(list: T[]) =>
+  not(empty(list));
+
+const removeFrom = <T>(list: T[], itemToRemove: T) => {
   const index = list.indexOf(itemToRemove);
   return [...list.slice(0, index), ...list.slice(index + 1)];
 };
@@ -16,15 +21,13 @@ const moveToIndex = <T>(
   item: T,
   list: T[]
 ): T[] =>
-  list.includes(item)
-    ? insertAt(index, item, removeFrom(item, list))
-    : list;
+  !list.includes(item) ? list : insertAt(index, item, removeFrom(list, item));
 
 const removeFromGrid = <T>(
   item: T,
   grid: T[][]
 ): T[][] => grid
-  .map(row => row.includes(item) ? removeFrom(item, row) : row)
+  .map(row => row.includes(item) ? removeFrom(row, item) : row)
   .filter(has);
 
 const addToGrid = <T>(
@@ -38,7 +41,7 @@ const addToGrid = <T>(
   if (empty(currentRow)) {
     return insertAt(safeRow, [item], grid);
   } else {
-    const newGrid = removeFrom(currentRow, grid);
+    const newGrid = removeFrom(grid, currentRow);
     const newRow = insertAt(column, item, currentRow);
     return insertAt(safeRow, newRow, newGrid);
   }
