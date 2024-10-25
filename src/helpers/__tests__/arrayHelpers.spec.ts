@@ -7,15 +7,15 @@ describe('array helpers', () => {
 
   describe('removeFrom', () => {
     test('when it receives an empty list', () => {
-      expect(array.removeFrom('some item', [])).toEqual([]);
+      expect(array.removeFrom([], 'some item')).toEqual([]);
     });
 
     test('when the item is not in the list', () => {
-      expect(array.removeFrom('some item', ['some other item'])).toEqual(['some other item']);
+      expect(array.removeFrom(['some other item'], 'some item')).toEqual(['some other item']);
     });
 
     test('when the item is in the list', () => {
-      expect(array.removeFrom('some item', ['some item'])).toEqual([]);
+      expect(array.removeFrom(['some item'], 'some item')).toEqual([]);
     });
   });
 
