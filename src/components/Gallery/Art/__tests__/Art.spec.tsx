@@ -1,4 +1,4 @@
-import {screen} from '@testing-library/react';
+import {screen, waitFor} from '@testing-library/react';
 import {renderWithGalleryContext, renderWithMemoryRouter} from '../../../../__tests__/util';
 import {ArtGallery} from '../index';
 import {Source} from '../../resource/types/resource';
@@ -16,8 +16,8 @@ describe('The gallery.', () => {
     renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
 
     expect(screen.queryByTestId('gallery-loading')).toBeInTheDocument();
-    expect(screen.queryByTestId('empty-gallery')).not.toBeInTheDocument();
     expect(screen.queryByTestId(/piece/)).not.toBeInTheDocument();
+    await waitFor(() => expect(screen.queryByTestId('empty-gallery')).not.toBeInTheDocument());
   });
 
   test('when there is no art to show', async () => {

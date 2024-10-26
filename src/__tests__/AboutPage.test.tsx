@@ -7,7 +7,8 @@ import {AboutPage} from '../components';
 
 describe('The About page', () => {
   test('on initial render', async () => {
-    renderWithRouter(<AboutPage/>, {initialRoute: Paths.about, path: Paths.about});
+    const options = {initialRoute: Paths.about, path: Paths.about};
+    renderWithRouter(<AboutPage/>, options);
 
     await waitFor(() => {
       const main = screen.getByRole('main');
@@ -16,7 +17,7 @@ describe('The About page', () => {
   });
 
   test('when going to the z-index demo', async () => {
-    const rendered = renderWithRouter(<AboutPage/>, {initialRoute: Paths.about, path: Paths.about});
+    renderWithRouter(<AboutPage/>, {initialRoute: Paths.about, path: Paths.about});
 
     const demoTabs = screen.getByRole('demo-tabs');
     await userEvent.click(within(demoTabs).getByText('Z-Index'));
@@ -26,6 +27,6 @@ describe('The About page', () => {
       expect(within(main).getByText('Z-Index Demo.')).toBeInTheDocument();
     });
 
-    expect(rendered().testLocation?.search).toEqual('?tab=z-index');
+    expect(screen.getByTestId('subject-url-search')).toHaveTextContent('tab=z-index');
   });
 });

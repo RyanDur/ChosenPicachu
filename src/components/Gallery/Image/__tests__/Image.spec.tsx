@@ -37,12 +37,12 @@ describe('the image', () => {
   });
 
   test('when choosing an image', async () => {
-    const rendered = renderWithRouter(<Image piece={piece}/>, {params: {page: 3, tab: 'aic'}});
+    renderWithRouter(<Image piece={piece}/>, {params: {page: 3, tab: 'aic'}});
 
     fireEvent.load(screen.getByTestId(image));
     await userEvent.click(screen.getByTestId(image));
 
-    expect(rendered().testLocation?.pathname).toEqual(`${Paths.artGallery}/${piece.id}`);
+    expect(screen.getByTestId('subject-url-path').innerHTML).toEqual(`${Paths.artGallery}/${piece.id}`);
     expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
   });
 
@@ -67,13 +67,13 @@ describe('the image', () => {
   });
 
   test('when the image is disabled', async () => {
-    const rendered = renderWithRouter(<Image piece={piece} linkEnabled={false}/>,
+    renderWithRouter(<Image piece={piece} linkEnabled={false}/>,
       {path: Paths.artGallery, initialRoute: Paths.artGallery, params: {page: 3, tab: Source.AIC}});
 
     fireEvent.load(screen.getByTestId(image));
     await userEvent.click(await screen.findByTestId(image));
 
-    expect(rendered().testLocation?.pathname).toEqual(Paths.artGallery);
+    expect(screen.getByTestId('subject-url-path').innerHTML).toEqual(Paths.artGallery);
     expect(window.scrollTo).not.toHaveBeenCalled();
   });
 });

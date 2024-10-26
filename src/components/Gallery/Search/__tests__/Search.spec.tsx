@@ -6,7 +6,6 @@ import {Source} from '../../resource/types/resource';
 import {faker} from '@faker-js/faker';
 import {Paths} from '../../../../routes/Paths';
 import {AICSearchResponse} from '../../resource/aic/types';
-import {toQueryObj} from '../../../../util/URL';
 
 describe('search', () => {
   const searchWord = faker.lorem.word().toUpperCase();
@@ -33,40 +32,40 @@ describe('search', () => {
   });
 
   it('should update the url when the user wants to search', async () => {
-    const rendered = renderWithRouter(<Search/>);
+    renderWithRouter(<Search/>);
     await userEvent.click(screen.getByTestId('submit-query'));
 
-    expect(rendered().testLocation?.search).toEqual('');
+    expect(screen.getByTestId('subject-url-search')).toHaveTextContent('');
 
     await userEvent.type(screen.getByLabelText(/Search For/), 'A');
     await userEvent.click(screen.getByTestId('submit-query'));
 
-    await waitFor(() => expect(rendered().testLocation?.search).toEqual('?search=A'));
-    expect(rendered().testLocation?.pathname).toEqual(Paths.artGallery);
+    await waitFor(() => expect(screen.getByTestId('subject-url-search')).toHaveTextContent('?search=A'));
+    expect(screen.getByTestId('subject-url-path').innerHTML).toEqual(Paths.artGallery);
   });
 
   it('should remove the page query param', async () => {
-    const rendered = renderWithRouter(<Search/>, {params: {page: 1, tab: 'aic'}});
+    renderWithRouter(<Search/>, {params: {page: 1, tab: 'aic'}});
 
     await userEvent.type(screen.getByLabelText(/Search For/), 'a');
     await userEvent.click(screen.getByTestId('submit-query'));
 
-    expect(rendered().testLocation?.search).toEqual('?page=1&tab=aic&search=a');
+    expect(screen.getByTestId('subject-url-search')).toHaveTextContent('?page=1&tab=aic&search=a');
   });
 
   it('should leave the original query alone when search is empty', async () => {
-    const rendered = renderWithRouter(<Search/>, {params: {page: 1, search: 'cat', tab: 'some-tab'}});
+    renderWithRouter(<Search/>, {params: {page: 1, search: 'cat', tab: 'some-tab'}});
 
     await userEvent.click(screen.getByTestId('submit-query'));
 
-    expect(rendered().testLocation?.search).toEqual('?page=1&search=cat&tab=some-tab');
+    expect(screen.getByTestId('subject-url-search')).toHaveTextContent('?page=1&search=cat&tab=some-tab');
   });
 
   it('should be able to reset the query', async () => {
-    const rendered = renderWithRouter(<Search/>, {params: {search: 'cat', tab: 'bat'}});
+    renderWithRouter(<Search/>, {params: {search: 'cat', tab: 'bat'}});
 
     await userEvent.click(screen.getByTestId('reset-query'));
 
-    await waitFor(() => expect(toQueryObj(rendered().testLocation?.search)).toEqual({tab: 'bat'}));
+    await waitFor(() => expect(screen.getByTestId('subject-url-search')).toHaveTextContent('tab=bat'));
   });
 });

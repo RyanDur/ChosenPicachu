@@ -1,7 +1,7 @@
 import {fireEvent, screen, waitFor, within} from '@testing-library/react';
 import {format} from 'date-fns';
 import {users as someUsers} from '../../../__tests__/util/dummyData';
-import {Rendered, renderWithRouter} from '../../../__tests__/util';
+import {renderWithRouter} from '../../../__tests__/util';
 import {Users} from '../index';
 import userEvent from '@testing-library/user-event';
 import {AddressInfo, User} from '../../UserInfo/types';
@@ -63,9 +63,9 @@ describe('the users page', () => {
   });
 
   describe('editing a user', () => {
-    let rendered: () => Rendered;
     beforeEach(async () => {
-      rendered = renderWithRouter(<Users/>);
+
+      renderWithRouter(<Users/>);
       await waitFor(() => userEvent.click(within(screen.getByTestId('cell-4-0'))
         .getByText('Edit')));
     });
@@ -92,7 +92,7 @@ describe('the users page', () => {
     it('should be able to cancel the form to the original information', async () => {
       const form = screen.getByTestId('user-info-form');
       await userEvent.click(within(form).getByText('Cancel'));
-      expect(rendered().testLocation?.search).toEqual(`?id=${firstUser.id}&mode=view`);
+      expect(screen.getByTestId('subject-url-search')).toHaveTextContent(`id=${firstUser.id}&mode=view`);
     });
   });
 

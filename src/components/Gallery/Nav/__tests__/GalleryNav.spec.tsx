@@ -4,7 +4,6 @@ import {fromAICArt} from '../../../../__tests__/util/dummyData';
 import {Paths} from '../../../../routes/Paths';
 import {renderWithGalleryContext} from '../../../../__tests__/util';
 import {GalleryNav} from '../index';
-import {toQueryObj} from '../../../../util/URL';
 
 window.scrollTo = vi.fn();
 describe('Gallery Navigation', () => {
@@ -15,23 +14,23 @@ describe('Gallery Navigation', () => {
   };
 
   test('on load', () => {
-    const rendered = renderWithGalleryContext(<GalleryNav/>, options);
+    renderWithGalleryContext(<GalleryNav/>, options);
 
-    expect(rendered().testLocation?.search).toEqual('?page=1&size=0');
+    expect(screen.getByTestId('subject-url-search')).toHaveTextContent('page=1&size=0');
   });
 
   describe('without params', () => {
     describe('from the first page', () => {
       it('should be able to goto the next page', async () => {
-        const rendered = renderWithGalleryContext(<GalleryNav/>, options);
+        renderWithGalleryContext(<GalleryNav/>, options);
         await userEvent.click(screen.getByTestId('next-page'));
 
-        expect(rendered().testLocation?.search).toEqual('?page=2&size=0');
+        expect(screen.getByTestId('subject-url-search')).toHaveTextContent('page=2&size=0');
         expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
 
         await userEvent.click(screen.getByTestId('next-page'));
 
-        expect(rendered().testLocation?.search).toEqual('?page=3&size=0');
+        expect(screen.getByTestId('subject-url-search')).toHaveTextContent('page=3&size=0');
         expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
       });
 
@@ -43,11 +42,11 @@ describe('Gallery Navigation', () => {
       });
 
       test('when jumping to the last page', async () => {
-        const rendered = renderWithGalleryContext(<GalleryNav/>, options);
+        renderWithGalleryContext(<GalleryNav/>, options);
         await userEvent.click(screen.getByTestId('last-page'));
 
         expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
-        expect(rendered().testLocation?.search).toEqual(`?page=${fromAICArt.pagination.totalPages}&size=0`);
+        expect(screen.getByTestId('subject-url-search')).toHaveTextContent(`?page=${fromAICArt.pagination.totalPages}&size=0`);
         expect(screen.queryByTestId('last-page')).not.toBeInTheDocument();
         expect(screen.queryByTestId('next-page')).not.toBeInTheDocument();
         expect(screen.queryByTestId('first-page')).toBeInTheDocument();
@@ -57,7 +56,7 @@ describe('Gallery Navigation', () => {
 
     describe('from the last page', () => {
       it('should be able to go to the previous page', async () => {
-        const rendered = renderWithGalleryContext(<GalleryNav/>, {
+        renderWithGalleryContext(<GalleryNav/>, {
           initialRoute: Paths.artGallery,
           path: Paths.artGallery,
           galleryState: fromAICArt
@@ -66,16 +65,16 @@ describe('Gallery Navigation', () => {
         await userEvent.click(screen.getByTestId('last-page'));
         await userEvent.click(screen.getByTestId('prev-page'));
 
-        expect(toQueryObj(rendered().testLocation?.search)).toEqual({
-          page: fromAICArt.pagination.totalPages - 1, size: 0
-        });
+        expect(screen.getByTestId('subject-url-search')).toHaveTextContent(
+          `page=${fromAICArt.pagination.totalPages - 1}&size=0`
+        );
         expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
 
         await userEvent.click(screen.getByTestId('prev-page'));
 
-        expect(toQueryObj(rendered().testLocation?.search)).toEqual({
-          page: fromAICArt.pagination.totalPages - 2, size: 0
-        });
+        expect(screen.getByTestId('subject-url-search')).toHaveTextContent(
+          `page=${fromAICArt.pagination.totalPages - 2}&size=0`
+        );
         expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
       });
 
@@ -104,7 +103,7 @@ describe('Gallery Navigation', () => {
       });
 
       it('should be able to go to the first page', async () => {
-        const rendered = renderWithGalleryContext(<GalleryNav/>, {
+        renderWithGalleryContext(<GalleryNav/>, {
           initialRoute: Paths.artGallery,
           path: Paths.artGallery,
           galleryState: fromAICArt
@@ -114,7 +113,7 @@ describe('Gallery Navigation', () => {
         await userEvent.click(screen.getByTestId('first-page'));
 
         expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
-        expect(rendered().testLocation?.search).toEqual('?page=1&size=0');
+        expect(screen.getByTestId('subject-url-search')).toHaveTextContent('page=1&size=0');
         expect(screen.queryByTestId('last-page')).toBeInTheDocument();
         expect(screen.queryByTestId('next-page')).toBeInTheDocument();
         expect(screen.queryByTestId('first-page')).not.toBeInTheDocument();
@@ -124,7 +123,7 @@ describe('Gallery Navigation', () => {
   });
 
   test('with existing params', async () => {
-    const rendered = renderWithGalleryContext(<GalleryNav/>, {
+    renderWithGalleryContext(<GalleryNav/>, {
       params: {search: 'q'},
       path: Paths.artGallery,
       initialRoute: Paths.artGallery,
@@ -132,34 +131,30 @@ describe('Gallery Navigation', () => {
     });
 
     await userEvent.click(screen.getByTestId('next-page'));
-    expect(toQueryObj(rendered().testLocation?.search)).toEqual({page: 2, size: 0, search: 'q'});
+    expect(screen.getByTestId('subject-url-search')).toHaveTextContent('search=q&page=2&size=0');
 
     await userEvent.click(screen.getByTestId('next-page'));
-    expect(toQueryObj(rendered().testLocation?.search)).toEqual({page: 3, size: 0, search: 'q'});
+    expect(screen.getByTestId('subject-url-search')).toHaveTextContent('search=q&page=3&size=0');
 
     await userEvent.click(screen.getByTestId('last-page'));
-    expect(toQueryObj(rendered().testLocation?.search)).toEqual({
-      page: fromAICArt.pagination.totalPages,
-      size: 0,
-      search: 'q'
-    });
+    expect(screen.getByTestId('subject-url-search')).toHaveTextContent(
+      `search=q&page=${fromAICArt.pagination.totalPages}&size=0`
+    );
 
     await userEvent.click(screen.getByTestId('prev-page'));
-    expect(toQueryObj(rendered().testLocation?.search)).toEqual({
-      page: fromAICArt.pagination.totalPages - 1,
-      size: 0,
-      search: 'q'
-    });
+    expect(screen.getByTestId('subject-url-search')).toHaveTextContent(
+      `search=q&page=${fromAICArt.pagination.totalPages - 1}&size=0`
+    );
 
     await userEvent.click(screen.getByTestId('prev-page'));
-    expect(toQueryObj(rendered().testLocation?.search)).toEqual({
-      page: fromAICArt.pagination.totalPages - 2,
-      size: 0,
-      search: 'q'
-    });
+    expect(screen.getByTestId('subject-url-search')).toHaveTextContent(
+      `search=q&page=${fromAICArt.pagination.totalPages - 2}&size=0`
+    );
 
     await userEvent.click(screen.getByTestId('first-page'));
-    expect(toQueryObj(rendered().testLocation?.search)).toEqual({page: 1, size: 0, search: 'q'});
+    expect(screen.getByTestId('subject-url-search')).toHaveTextContent(
+      'search=q&page=1&size=0'
+    );
   });
 
   test('page information', () => {
