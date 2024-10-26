@@ -1,6 +1,5 @@
 import userEvent from '@testing-library/user-event';
-import {fireEvent, screen, waitFor} from '@testing-library/react';
-import {toQueryObj} from '../../../../util/URL';
+import {fireEvent, screen} from '@testing-library/react';
 import {fromAICArt} from '../../../../__tests__/util/dummyData';
 import {renderWithGalleryContext} from '../../../../__tests__/util';
 import {PageControl} from '../index';
@@ -17,14 +16,14 @@ describe('The page controls', () => {
     test('submitting the specified page', async () => {
       const pageNumber = String(Math.floor(Math.random() * 1000));
 
-      const rendered = renderWithGalleryContext(<PageControl/>, {
+      renderWithGalleryContext(<PageControl/>, {
         path: Paths.artGallery,
         initialRoute: Paths.artGallery
       });
       await userEvent.type(screen.getByTestId('go-to'), pageNumber);
       fireEvent.submit(screen.getByText('Go'));
 
-      expect(rendered().testLocation?.search).toEqual(`?page=${pageNumber}`);
+      expect(screen.getByTestId('subject-url-search')).toHaveTextContent(`?page=${pageNumber}`);
       expect(screen.getByTestId('go-to')).not.toHaveValue(+pageNumber);
     });
 
@@ -52,7 +51,7 @@ describe('The page controls', () => {
 
   describe('changing the number of elements', () => {
     it('should allow the user to change the elements per page', async () => {
-      const rendered = renderWithGalleryContext(<PageControl/>, {
+      renderWithGalleryContext(<PageControl/>, {
         path: Paths.artGallery,
         initialRoute: Paths.artGallery
       });
@@ -60,7 +59,7 @@ describe('The page controls', () => {
       await userEvent.type(screen.getByTestId('per-page'), '45');
       await userEvent.click(screen.getByText('Go'));
 
-      await waitFor(() => expect(toQueryObj(rendered().testLocation?.search || '')).toEqual({size: 45}));
+      expect(await screen.findByTestId('subject-url-search')).toHaveTextContent('size=45');
     });
 
     it.each`
@@ -96,7 +95,7 @@ describe('The page controls', () => {
         ${100} | ${100}
         `('should change input: $input to size: $size when rikjs',
       async ({input, size}: { input: number, size: number }) => {
-        const rendered = renderWithGalleryContext(<PageControl/>, {
+        renderWithGalleryContext(<PageControl/>, {
           path: Paths.artGallery,
           initialRoute: Paths.artGallery,
           params: {tab: Source.RIJKS, page: 1}
@@ -107,11 +106,7 @@ describe('The page controls', () => {
 
         await userEvent.click(screen.getByText('Go'));
 
-        expect(toQueryObj(rendered().testLocation?.search || '')).toEqual({
-          page: 1,
-          size,
-          tab: Source.RIJKS
-        });
+        expect(screen.getByTestId('subject-url-search')).toHaveTextContent(`tab=${Source.RIJKS}&page=1&size=${size}`);
       });
   });
 });

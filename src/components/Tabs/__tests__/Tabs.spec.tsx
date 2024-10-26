@@ -19,25 +19,25 @@ describe('Tabs', () => {
   });
 
   it('should update the url', async () => {
-    const rendered = renderWithRouter(
+    renderWithRouter(
       <Tabs defaultTab={tab1.param} values={[tab1, tab2, tab3]}/>,
       {path, initialRoute: path});
 
     await userEvent.click(screen.getByText(tab1.display));
-    expect(rendered().testLocation?.search).toEqual(`?tab=${tab1.param}`);
+    expect(screen.getByTestId('subject-url-search')).toHaveTextContent(`?tab=${tab1.param}`);
 
     await userEvent.click(screen.getByText(tab2.display));
-    expect(rendered().testLocation?.search).toEqual(`?tab=${tab2.param}`);
+    expect(screen.getByTestId('subject-url-search')).toHaveTextContent(`?tab=${tab2.param}`);
 
     await userEvent.click(screen.getByText(tab3.display));
-    expect(rendered().testLocation?.search).toEqual(`?tab=${tab3.param}`);
+    expect(screen.getByTestId('subject-url-search')).toHaveTextContent(`?tab=${tab3.param}`);
   });
 
   it('should default to the first choice if the param is not present', async () => {
-    const rendered = renderWithRouter(
+    renderWithRouter(
       <Tabs defaultTab={tab1.param} values={[tab1, tab2, tab3]}/>,
       {path, initialRoute: path});
 
-    expect(rendered().testLocation?.search).toEqual(`?tab=${tab1.param}`);
+    expect(screen.getByTestId('subject-url-search')).toHaveTextContent(`?tab=${tab1.param}`);
   });
 });

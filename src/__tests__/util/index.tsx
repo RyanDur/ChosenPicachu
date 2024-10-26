@@ -13,7 +13,6 @@ import {
 import userEvent from '@testing-library/user-event';
 import {toQueryString} from '../../util/URL';
 import {AddressInfo, User} from '../../components/UserInfo/types';
-import {Consumer} from '@ryandur/sand';
 import {AllArt, Art} from '../../components/Gallery/resource/types/response';
 import {toDate} from 'date-fns';
 import {GalleryContext} from '../../components/Gallery/Art/Context';
@@ -30,9 +29,9 @@ interface URLContext {
   params: Record<string, unknown>;
 }
 
-const LocationHelper: FC<PropsWithChildren<{ testLocation: Consumer<Location> }>> = ({testLocation, children}) => {
+const LocationHelper: FC<PropsWithChildren> = ({children}) => {
   const location = useLocation();
-  testLocation(location);
+
   return <>
     <article data-testid='subject-url-path'>{location.pathname}</article>
     <article data-testid='subject-url-search'>{location.search}</article>
@@ -42,37 +41,40 @@ const LocationHelper: FC<PropsWithChildren<{ testLocation: Consumer<Location> }>
 
 const TestRouter: FC<PropsWithChildren & {
   context: URLContext,
-  testLocation: Consumer<Location>
-}> = ({children, context, testLocation}) => {
+}> = ({children, context}) => {
   return <MemoryRouter initialEntries={[`${(context.initialRoute)}${toQueryString(context.params)}`]}>
     <Routes>
       <Route path={context.path}
-             element={<LocationHelper testLocation={testLocation}>{children}</LocationHelper>}>
+             element={<LocationHelper>{children}</LocationHelper>}>
       </Route>
-      <Route path="*" element={<LocationHelper testLocation={testLocation}/>}/>
+      <Route path="*" element={<LocationHelper/>}/>
     </Routes>
   </MemoryRouter>;
 };
 type Defaults = Partial<URLContext & { pieceState: Partial<Art>, galleryState: AllArt }>;
 const defaultUrlContext: URLContext = {initialRoute: '/initial/route', path: '/initial/route', params: {}};
-export const renderWithGalleryContext = (
-  component: ReactElement, {
-    galleryState,
-    initialRoute = defaultUrlContext.path,
-    path = defaultUrlContext.path,
-    params = defaultUrlContext.params
-  }: Omit<Defaults, 'pieceState'> = {}): () => Rendered => {
-  let testLocation: Location;
 
-  const result = render(<GalleryContext galleryState={galleryState}>
+type RenderWithRouter<STATE_TO_OMIT extends string = never> = (
+  children: ReactElement,
+  options?: Partial<Omit<Defaults, STATE_TO_OMIT>>
+) => RenderResult;
+
+export const renderWithGalleryContext: RenderWithRouter<'pieceState'> = (
+  children,
+  options = {}): RenderResult => {
+  const {initialRoute, path, galleryState, params} = {
+    initialRoute: defaultUrlContext.path,
+    path: defaultUrlContext.path,
+    params: defaultUrlContext.params
+    , ...options
+  };
+
+  return render(<GalleryContext galleryState={galleryState}>
     <TestRouter
-      context={{initialRoute, path, params}}
-      testLocation={(location) => testLocation = location}>
-      {component}
+      context={{initialRoute, path, params}}>
+      {children}
     </TestRouter>
   </GalleryContext>);
-
-  return () => ({result, testLocation});
 };
 
 export const renderWithMemoryRouter = (routes: RouteObject, {
@@ -85,42 +87,40 @@ export const renderWithMemoryRouter = (routes: RouteObject, {
   return render(<RouterProvider router={router}/>);
 };
 
-export const renderWithArtPieceContext = (
-  component: ReactElement, {
-    pieceState,
-    initialRoute = defaultUrlContext.path,
-    path = defaultUrlContext.path,
-    params = defaultUrlContext.params
-  }: Omit<Defaults, 'galleryState'> = {}): () => Rendered => {
-  let testLocation: Location;
+export const renderWithArtPieceContext: RenderWithRouter<'galleryState'> = (
+  children,
+  options = {}) => {
+  const {pieceState, initialRoute, path, params} = {
+    initialRoute: defaultUrlContext.path,
+    path: defaultUrlContext.path,
+    params: defaultUrlContext.params
+    , ...options
+  };
 
-  const result = render(<ArtPieceContext pieceState={pieceState}>
+  return render(<ArtPieceContext pieceState={pieceState}>
     <TestRouter
-      context={{initialRoute, path, params}}
-      testLocation={(location) => testLocation = location}>
-      {component}
+      context={{initialRoute, path, params}}>
+      {children}
     </TestRouter>
   </ArtPieceContext>);
-
-  return () => ({result, testLocation});
 };
 
-export const renderWithRouter = (
-  component: ReactElement, {
-    initialRoute = defaultUrlContext.path,
-    path = defaultUrlContext.path,
-    params = defaultUrlContext.params
-  }: Defaults = {}): () => Rendered => {
-  let testLocation: Location;
+export const renderWithRouter: RenderWithRouter<'galleryState' | 'pieceState'> = (
+  children,
+  options = {}
+) => {
+  const context = {
+    initialRoute: defaultUrlContext.path,
+    path: defaultUrlContext.path,
+    params: defaultUrlContext.params
+    , ...options
+  };
 
-  const result = render(
+  return render(
     <TestRouter
-      context={{initialRoute, path, params}}
-      testLocation={(location) => testLocation = location}>
-      {component}
+      context={context}>
+      {children}
     </TestRouter>);
-
-  return () => ({result, testLocation});
 };
 
 export const fillOutAddress = (address: AddressInfo, kind: string) =>
