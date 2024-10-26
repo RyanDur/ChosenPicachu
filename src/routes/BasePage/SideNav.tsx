@@ -32,6 +32,7 @@ export const SideNav: FC = () =>
               size: defaultRecordLimit,
               tab: Source.AIC
             })}`}>Gallery</Link>
+      <Link id="navigate-games" className="path" to={Paths.games}>Games</Link>
       <a id="navigate-repo" className="path" href={Paths.repo}
          rel="noopener noreferrer" target="_blank">Repo</a>
     </nav>
