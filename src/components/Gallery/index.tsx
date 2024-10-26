@@ -4,7 +4,7 @@ import {Paths} from '../../routes/Paths';
 import {GalleryPaths, GalleryRouter} from './GalleryRouter';
 
 export const Gallery = {
-  path: `${Paths.artGallery}/*`,
+  path: Paths.artGallery,
   element: <GalleryRouter/>,
   children: [
     {
