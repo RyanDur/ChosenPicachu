@@ -1,7 +1,7 @@
 import {StrictMode} from 'react';
 import {createBrowserRouter, Outlet, RouterProvider} from 'react-router-dom';
 import * as ReactDom from 'react-dom/client';
-import {About, Gallery, Games, Home, Users} from './components';
+import {About, Gallery, Home, Users} from './components';
 import {SideNav} from './routes/BasePage/SideNav';
 import './index.css';
 
@@ -15,8 +15,7 @@ const router = createBrowserRouter([{
     Home,
     About,
     Users,
-    Gallery,
-    Games
+    Gallery
   ]
 }]);
 
