@@ -11,18 +11,19 @@ interface Tab {
 }
 
 interface Props {
+  defaultTab: string;
   values: Tab[];
   id?: string;
   role?: string;
 }
 
-export const Tabs: FC<Props> = ({values, id, role}) => {
+export const Tabs: FC<Props> = ({values, id, role, defaultTab}) => {
   const {pathname} = useLocation();
   const {tab, updateSearchParams, createSearchParams} = useSearchParamsObject<{ tab: string }>();
 
   useEffect(() => {
-    if (not(tab)) updateSearchParams({tab: values[0].param});
-  }, [tab, updateSearchParams, values]);
+    if (not(tab)) updateSearchParams({tab: defaultTab});
+  }, [tab, updateSearchParams, values, defaultTab]);
 
   return <nav role={role} id={id} className="tabs">{values.map(({param, display}) =>
     <h3 className={join('tab', tab === param && 'current')} key={param}>

@@ -8,18 +8,21 @@ import '../../routes/BasePage.css';
 import '../../routes/BasePage.layout.css';
 
 export const AboutPage: FC = () => {
-  const {tab} = useSearchParamsObject<{tab: string}>();
+  const {tab} = useSearchParamsObject<{ tab: string }>();
   return <>
     <header id="app-header" data-testid="header">
       <h1 className="title ellipsis">About {tab}</h1>
     </header>
 
     <main data-testid="main" className='in-view'>
-      <Tabs role='demo-tabs' values={[
-        {display: 'Accordions', param: AboutTopics.accordions},
-        {display: 'Z-Index', param: AboutTopics.zIndex},
-        {display: 'Drag and Drop', param: AboutTopics.dragAndDrop}
-      ]}/>
+      <Tabs
+        role='demo-tabs'
+        defaultTab={AboutTopics.accordions}
+        values={[
+          {display: 'Accordions', param: AboutTopics.accordions},
+          {display: 'Z-Index', param: AboutTopics.zIndex},
+          {display: 'Drag and Drop', param: AboutTopics.dragAndDrop}
+        ]}/>
       <About/>
     </main>
   </>;

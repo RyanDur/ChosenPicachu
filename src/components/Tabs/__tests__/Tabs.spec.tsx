@@ -2,6 +2,7 @@ import {screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {renderWithRouter} from '../../../__tests__/util';
 import {Tabs} from '../index';
+import {expect} from 'vitest';
 
 const path = '/a/path';
 describe('Tabs', () => {
@@ -9,8 +10,19 @@ describe('Tabs', () => {
   const tab2 = {display: 'Tab 2', param: 'tab2'};
   const tab3 = {display: 'Tab 3', param: 'tab3'};
 
+  it('should start with the default', () => {
+    renderWithRouter(
+      <Tabs defaultTab={tab1.param} values={[tab1, tab2, tab3]}/>,
+      {path, initialRoute: path});
+
+    expect(screen.getByTestId('subject-url-search')).toHaveTextContent(tab1.param);
+  });
+
   it('should update the url', async () => {
-    const rendered = renderWithRouter(<Tabs values={[tab1, tab2, tab3]}/>, {path, initialRoute: path});
+    const rendered = renderWithRouter(
+      <Tabs defaultTab={tab1.param} values={[tab1, tab2, tab3]}/>,
+      {path, initialRoute: path});
+
     await userEvent.click(screen.getByText(tab1.display));
     expect(rendered().testLocation?.search).toEqual(`?tab=${tab1.param}`);
 
@@ -22,7 +34,9 @@ describe('Tabs', () => {
   });
 
   it('should default to the first choice if the param is not present', async () => {
-    const rendered = renderWithRouter(<Tabs values={[tab1, tab2, tab3]}/>, {path, initialRoute: path});
+    const rendered = renderWithRouter(
+      <Tabs defaultTab={tab1.param} values={[tab1, tab2, tab3]}/>,
+      {path, initialRoute: path});
 
     expect(rendered().testLocation?.search).toEqual(`?tab=${tab1.param}`);
   });

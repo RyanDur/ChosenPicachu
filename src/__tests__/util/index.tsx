@@ -33,7 +33,11 @@ interface URLContext {
 const LocationHelper: FC<PropsWithChildren<{ testLocation: Consumer<Location> }>> = ({testLocation, children}) => {
   const location = useLocation();
   testLocation(location);
-  return <>{children}</>;
+  return <>
+    <article data-testid='subject-url-path'>{location.pathname}</article>
+    <article data-testid='subject-url-search'>{location.search}</article>
+    {children}
+  </>;
 };
 
 const TestRouter: FC<PropsWithChildren & {
