@@ -9,6 +9,6 @@ describe('Games', () => {
 
     await userEvent.click(screen.getByRole('link', { name: 'Games' }));
 
-    expect(await screen.findByText('Play Three in a Row')).toBeInTheDocument();
+    expect(await screen.findByText('Play Games')).toBeInTheDocument();
   });
 });
