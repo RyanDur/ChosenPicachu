@@ -16,11 +16,13 @@ export const ArtGalleryPage: FC = () =>
     </header>
 
     <main data-testid="main" className="in-view">
-      <Tabs values={[
-        {display: 'The Art Institute of Chicago', param: Source.AIC},
-        {display: 'Harvard Art Museums', param: Source.HARVARD},
-        {display: 'Rijksstudio', param: Source.RIJKS}
-      ]}/>
+      <Tabs
+        defaultTab={Source.AIC}
+        values={[
+          {display: 'The Art Institute of Chicago', param: Source.AIC},
+          {display: 'Harvard Art Museums', param: Source.HARVARD},
+          {display: 'Rijksstudio', param: Source.RIJKS}
+        ]}/>
       <ArtGallery/></main>
 
     <article id="filter" data-testid="filter">
