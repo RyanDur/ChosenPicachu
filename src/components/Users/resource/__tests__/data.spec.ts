@@ -1,4 +1,4 @@
-import {users as allUsers} from '../../../../__tests__/util/dummyData';
+import {users as allUsers} from '../../../../dummyData';
 import {User} from '../../../UserInfo/types';
 import {Success} from '@ryandur/sand';
 import {faker} from '@faker-js/faker';

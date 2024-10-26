@@ -1,12 +1,12 @@
 import {fireEvent, screen, waitFor, within} from '@testing-library/react';
 import {format} from 'date-fns';
-import {users as someUsers} from '../../../__tests__/util/dummyData';
+import {users as someUsers} from '../../../dummyData';
 import {renderWithRouter} from '../../../__tests__/util';
-import {Users} from '../index';
 import userEvent from '@testing-library/user-event';
 import {AddressInfo, User} from '../../UserInfo/types';
 import {createUser, usersApi} from '../resource/usersApi';
 import {users} from '../resource/users';
+import {UsersPage} from '../component';
 
 describe('the users page', () => {
   const currentUsers = someUsers;
@@ -26,7 +26,7 @@ describe('the users page', () => {
     const anotherUser = createUser(false);
 
     beforeEach(async () => {
-      renderWithRouter(<Users/>, {});
+      renderWithRouter(<UsersPage/>, {});
       await addUser(aUser);
       await addUser(anotherUser);
     });
@@ -45,7 +45,7 @@ describe('the users page', () => {
 
   describe('viewing a user', () => {
     beforeEach(async () => {
-      renderWithRouter(<Users/>);
+      renderWithRouter(<UsersPage/>);
       await waitFor(() => userEvent.click(within(screen.getByTestId('cell-4-0')).getByText('View')));
     });
 
@@ -65,7 +65,7 @@ describe('the users page', () => {
   describe('editing a user', () => {
     beforeEach(async () => {
 
-      renderWithRouter(<Users/>);
+      renderWithRouter(<UsersPage/>);
       await waitFor(() => userEvent.click(within(screen.getByTestId('cell-4-0'))
         .getByText('Edit')));
     });
@@ -99,7 +99,7 @@ describe('the users page', () => {
   test('updating a user', async () => {
     const spy = vi.spyOn(users, 'update');
 
-    renderWithRouter(<Users/>);
+    renderWithRouter(<UsersPage/>);
 
     await waitFor(() => userEvent.click(within(screen.getByTestId('cell-4-0'))
       .getByText('Edit')));
@@ -113,7 +113,7 @@ describe('the users page', () => {
   test('removing a user', async () => {
     const spy = vi.spyOn(users, 'delete');
 
-    renderWithRouter(<Users/>);
+    renderWithRouter(<UsersPage/>);
 
     await waitFor(() => userEvent.click(within(screen.getByTestId('cell-4-0'))
       .getByText('Remove')));
@@ -123,7 +123,7 @@ describe('the users page', () => {
 
   test('cloning a user', async () => {
     const spy = vi.spyOn(users, 'add');
-    renderWithRouter(<Users/>);
+    renderWithRouter(<UsersPage/>);
 
     await waitFor(() => userEvent.click(within(screen.getByTestId('cell-4-0'))
       .getByText('Clone')));

@@ -13,7 +13,7 @@ import {
     options,
     rijkArtObjectResponse,
     rIJKArtResponse
-} from '../../../../__tests__/util/dummyData';
+} from '../../../../dummyData';
 import {nanoid} from 'nanoid';
 import {AICPieceData, AICSearchResponse} from '../aic/types';
 import {HTTPError} from '../../../../data/types';

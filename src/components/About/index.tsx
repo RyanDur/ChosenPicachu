@@ -1,2 +1,7 @@
-export {About} from './About';
-export {AboutPage} from './AboutPage';
+import {Paths} from '../../routes/Paths';
+import {AboutPage} from './component';
+
+export const About = {
+  path: Paths.about,
+  element: <AboutPage/>
+};

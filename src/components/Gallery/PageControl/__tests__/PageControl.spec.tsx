@@ -1,6 +1,6 @@
 import userEvent from '@testing-library/user-event';
 import {fireEvent, screen} from '@testing-library/react';
-import {fromAICArt} from '../../../../__tests__/util/dummyData';
+import {fromAICArt} from '../../../../dummyData';
 import {renderWithGalleryContext} from '../../../../__tests__/util';
 import {PageControl} from '../index';
 import {Source} from '../../resource/types/resource';
