@@ -2,7 +2,7 @@ import {screen, waitFor} from '@testing-library/react';
 import {renderWithGalleryContext, renderWithMemoryRouter} from '../../../../__tests__/util';
 import {ArtGallery} from '../index';
 import {Source} from '../../resource/types/resource';
-import {aicArtResponse} from '../../../../__tests__/util/dummyData';
+import {aicArtResponse} from '../../../../dummyData';
 import {test} from 'vitest';
 import {Gallery} from '../../index';
 import {Paths} from '../../../../routes/Paths';

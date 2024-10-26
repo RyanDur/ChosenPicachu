@@ -1,18 +1,18 @@
 import {nanoid} from 'nanoid';
 import {faker} from '@faker-js/faker';
-import {Column, Row} from '../../components/Table/types';
-import {AICAllArtResponse, AICArt} from '../../components/Gallery/resource/aic/types';
+import {Column, Row} from './components/Table/types';
+import {AICAllArtResponse, AICArt} from './components/Gallery/resource/aic/types';
 import {
   HarvardAllArtResponse,
   HarvardArtResponse,
   HarvardInfo,
   HarvardPeople,
   HarvardSearchResponse
-} from '../../components/Gallery/resource/harvard/types.js';
-import {AllArt, Art} from '../../components/Gallery/resource/types/response';
-import {RIJKArtObjectResponse, RIJKSAllArtResponse, RIJKSArtResponse} from '../../components/Gallery/resource/rijks/types';
-import {createUser} from '../../components/Users/resource/usersApi';
-import {defaultRecordLimit} from '../../config';
+} from './components/Gallery/resource/harvard/types';
+import {AllArt, Art} from './components/Gallery/resource/types/response';
+import {RIJKArtObjectResponse, RIJKSAllArtResponse, RIJKSArtResponse} from './components/Gallery/resource/rijks/types';
+import {createUser} from './components/Users/resource/usersApi';
+import {defaultRecordLimit} from './config';
 
 const randomNumberFromRange = (min: number, max = 6) => Math.floor(Math.random() * max) + min;
 export const words = (num = 6) => faker.lorem.words(randomNumberFromRange(1, num));

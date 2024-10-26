@@ -1,4 +1,4 @@
-import {aicArtResponse, harvardArtResponse, rIJKArtResponse} from '../../../__tests__/util/dummyData';
+import {aicArtResponse, harvardArtResponse, rIJKArtResponse} from '../../../dummyData';
 import {renderWithMemoryRouter} from '../../../__tests__/util';
 import {screen, waitFor, within} from '@testing-library/react';
 import {Paths} from '../../../routes/Paths';

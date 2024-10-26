@@ -1,4 +1,5 @@
 export {Home} from './Home';
-export {AboutPage} from './About';
+export {About} from './About';
 export {Users} from './Users';
+export {Games} from './Games';
 export {Gallery} from './Gallery';

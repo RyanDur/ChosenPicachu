@@ -4,5 +4,6 @@ export enum Paths {
   users = '/users',
   artGallery = '/gallery',
   artGalleryPiece = '/gallery/:id',
+  games = '/games',
   repo = 'https://github.com/RyanDur/ChosenPicachu',
 }
