@@ -1,0 +1,1 @@
+export {ThreeInARow} from './component';
