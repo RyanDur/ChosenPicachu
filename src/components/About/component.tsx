@@ -1,25 +1,29 @@
-import {NaturalZIndex} from './ZIndexDemo';
-import {ExclusiveAccordion, InclusiveAccordion} from './Accordions';
 import {faker} from '@faker-js/faker';
-import {AboutTopics, isATopic} from './types';
-import {useSearchParams} from 'react-router-dom';
 import {maybe, nothing, some} from '@ryandur/sand';
-import {
-  SortableListLazyMove,
-  HideElemOnDragSortableListLazyMove,
-  HideElemOnDragSortableListEagerMove,
-  SortableListEagerMove
-} from './DragAndDrop';
-import {Tabs} from '../Tabs';
+import {useSearchParams} from 'react-router-dom';
 import {useSearchParamsObject} from '../hooks';
 import './style.css';
 import './AboutPage.css';
 import '../../routes/BasePage.css';
+import {Tabs} from '../Tabs';
+import {
+  ExclusiveAccordion,
+  ExclusiveToggleAccordion,
+  InclusiveAccordion
+} from './Accordions';
+import {
+  HideElemOnDragSortableListEagerMove,
+  HideElemOnDragSortableListLazyMove,
+  SortableListEagerMove,
+  SortableListLazyMove
+} from './DragAndDrop';
+import {AboutTopics, isATopic} from './types';
+import {NaturalZIndex} from './ZIndexDemo';
 import '../../routes/BasePage.layout.css';
 
 const paragraphs = (count: number) =>
-  [...Array(count)].map((_, id) => ({
-    key: String(id),
+  [...Array(count)].map(() => ({
+    key: faker.lorem.word(),
     value: faker.lorem.paragraphs(Math.floor(Math.random() * 6) + 1)
   }));
 
@@ -52,6 +56,7 @@ export const AboutPage = () => {
               <article>Different styles of Accordions.</article>
               <InclusiveAccordion className='card' content={paragraphs(5)}/>
               <ExclusiveAccordion className='card' content={paragraphs(5)}/>
+              <ExclusiveToggleAccordion className='card' content={paragraphs(5)}/>
             </>,
             [AboutTopics.zIndex]: <>
               <article>Z-Index Demo.</article>
