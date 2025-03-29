@@ -5,7 +5,6 @@
   box-shadow: var(--base-box-shadow);
   padding: var(--base-x-4);
   overflow: auto;
-  display: inline-block;
 }
 
 .center {

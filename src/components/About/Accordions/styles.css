@@ -113,11 +113,14 @@
     }
   }
 
-  .fold-animated {
+  .exclusive-fold {
     overflow: hidden;
     display: grid;
     grid-template-rows: min-content 0fr;
-    transition: grid-template-rows .35s ease-in-out;
+
+    &.animated {
+      transition: grid-template-rows .3s ease-in-out;
+    }
 
     &:has(:checked) {
       grid-template-rows: min-content 1fr;
@@ -169,4 +172,11 @@
       }
     }
   }
+}
+
+.exclusive-checkbox-toggle-accordion {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
 }
