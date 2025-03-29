@@ -117,7 +117,7 @@
     overflow: hidden;
     display: grid;
     grid-template-rows: min-content 0fr;
-    transition: grid-template-rows 1s;
+    transition: grid-template-rows .35s ease-in-out;
 
     &:has(:checked) {
       grid-template-rows: min-content 1fr;
