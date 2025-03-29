@@ -33,6 +33,51 @@
   }
 }
 
+.pill-tabs {
+  --chosen-color: var(--charcoal);
+  --not-chosen-color: var(--paper);
+
+  display: flex;
+  border-radius: 8px;
+  width: fit-content;
+
+  .pill-tab {
+    align-content: center;
+    text-align: center;
+    height: 4rem;
+    width: 8rem;
+    border: 1px solid var(--chosen-color);
+    color: var(--chosen-color);
+    background: var(--not-chosen-color);
+    transition: font-size 0.2s;
+
+    &:first-child {
+      border-radius: 8px 0 0 8px;
+    }
+
+    &:last-child {
+      border-radius: 0 8px 8px 0;
+    }
+
+    &:hover {
+      font-size: 18px;
+    }
+
+    &:has(:checked) {
+      outline: 1px solid var(--not-chosen-color);
+      outline-offset: -4px;
+
+      &:first-child:has(:checked) {
+        outline-color: var(--chosen-color);
+      }
+
+      &:last-child:has(:checked) {
+        outline-color: var(--chosen-color);
+      }
+    }
+  }
+}
+
 @media (max-width: 1000px) {
   .tabs {
     .tab {

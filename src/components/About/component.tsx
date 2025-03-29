@@ -9,7 +9,7 @@ import {Tabs} from '../Tabs';
 import {
   ExclusiveAccordion,
   ExclusiveToggleAccordion,
-  ExclusiveToggleAnimatedAccordion,
+  ExclusiveCheckboxToggleAccordion,
   InclusiveAccordion
 } from './Accordions';
 import {
@@ -58,7 +58,7 @@ export const AboutPage = () => {
               <InclusiveAccordion className='card' content={paragraphs(5)}/>
               <ExclusiveAccordion className='card' content={paragraphs(5)}/>
               <ExclusiveToggleAccordion className='card' content={paragraphs(5)}/>
-              <ExclusiveToggleAnimatedAccordion className='card' content={paragraphs(5)}/>
+              <ExclusiveCheckboxToggleAccordion className='card' content={paragraphs(5)}/>
             </>,
             [AboutTopics.zIndex]: <>
               <article>Z-Index Demo.</article>
