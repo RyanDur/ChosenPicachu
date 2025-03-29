@@ -94,3 +94,22 @@
     }
   }
 }
+
+.new-accordion {
+  .fold {
+    .info-label {
+      display: flex;
+      height: 100%;
+      padding: 1.6rem;
+      align-items: center;
+      list-style: none;
+      color: var(--paper);
+      background: var(--charcoal);
+      border: 0.1rem solid white;
+    }
+
+    .info {
+      padding: 1.6rem;
+    }
+  }
+}

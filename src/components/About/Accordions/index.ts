@@ -1,1 +1,5 @@
-export {InclusiveAccordion, ExclusiveAccordion} from './Accordions';
+export {
+  InclusiveAccordion,
+  ExclusiveAccordion,
+  ExclusiveToggleAccordion,
+} from './Accordions';

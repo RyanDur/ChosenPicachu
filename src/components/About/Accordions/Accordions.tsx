@@ -1,7 +1,7 @@
-import {FC, ReactNode} from 'react';
 import {faker} from '@faker-js/faker';
-import {PropsWithClassName} from '../../_types';
+import {FC, ReactNode} from 'react';
 import {classNames} from '../../../util/classNames';
+import {PropsWithClassName} from '../../_types';
 import './styles.css';
 
 type ContentProps = { content: { value: ReactNode, key: string }[] };
@@ -32,5 +32,19 @@ export const ExclusiveAccordion: FC<PropsWithClassName & ContentProps> = ({
         <input id={`${id}-radio`} className="info-toggle off-screen" type="radio" name="group"/>
         <label className="info-label" htmlFor={`${id}-radio`}>{faker.lorem.word()}</label>
         <p className="info">{value}</p>
+      </li>)}
+  </ul>;
+
+export const ExclusiveToggleAccordion: FC<PropsWithClassName & ContentProps> = ({
+  className,
+  content
+}) =>
+  <ul className={classNames('new-accordion', className)}>
+    {content.map(({value, key}) =>
+      <li key={key}>
+        <details className="fold" name="exclusive-toggle-accordian">
+          <summary className="info-label">{faker.lorem.word()}</summary>
+          <p className="info">{value}</p>
+        </details>
       </li>)}
   </ul>;
