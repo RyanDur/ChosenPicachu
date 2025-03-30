@@ -60,20 +60,20 @@
     }
 
     &:hover {
-      font-size: 18px;
+      background: var(--chosen-color);
+      color: var(--not-chosen-color);
+    }
+
+    &:hover:has(:checked){
+      outline: 1px solid var(--not-chosen-color);
+      background: var(--chosen-color);
+      color: var(--not-chosen-color);
+      outline-offset: -4px;
     }
 
     &:has(:checked) {
-      outline: 1px solid var(--not-chosen-color);
+      outline: 1px solid var(--chosen-color);
       outline-offset: -4px;
-
-      &:first-child:has(:checked) {
-        outline-color: var(--chosen-color);
-      }
-
-      &:last-child:has(:checked) {
-        outline-color: var(--chosen-color);
-      }
     }
   }
 }
