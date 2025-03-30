@@ -63,7 +63,7 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
           Animate
           <input type="radio"
                  className='off-screen'
-                 name="animate-or-static-tab"
+                 name="checkbox-animate-or-static-tab"
                  checked={tab === 'animated'}
                  value='animated'
                  onChange={(event) => updateChecked(event.currentTarget.value)}
@@ -74,7 +74,7 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
           Static
           <input type="radio"
                  className='off-screen'
-                 name="animate-or-static-tab"
+                 name="checkbox-animate-or-static-tab"
                  checked={tab === 'static'}
                  value='static'
                  onChange={(event) => updateChecked(event.currentTarget.value)}
@@ -124,7 +124,7 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
           Animate
           <input type="radio"
                  className='off-screen'
-                 name="animate-or-static-tab"
+                 name="radio-animate-or-static-tab"
                  checked={tab === 'animated'}
                  value='animated'
                  onChange={(event) => updateChecked(event.currentTarget.value)}
@@ -135,7 +135,7 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
           Static
           <input type="radio"
                  className='off-screen'
-                 name="animate-or-static-tab"
+                 name="radio-animate-or-static-tab"
                  checked={tab === 'static'}
                  value='static'
                  onChange={(event) => updateChecked(event.currentTarget.value)}
