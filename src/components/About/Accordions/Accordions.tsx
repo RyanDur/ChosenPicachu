@@ -62,8 +62,10 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
         Animate
         <input type="radio"
                className='off-screen'
-               name="animate-or-static"
+               name="animate-or-static-tab"
                checked={tab === 'animated'}
+               value='animated'
+               onChange={(event) => updateChecked(event.currentTarget.value)}
                onClick={() => updateTab('animated')}/>
       </label>
 
@@ -71,11 +73,11 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
         Static
         <input type="radio"
                className='off-screen'
-               name="animate-or-static"
+               name="animate-or-static-tab"
                checked={tab === 'static'}
-               onClick={() => {
-          updateTab('static');
-        }}/>
+               value='static'
+               onChange={(event) => updateChecked(event.currentTarget.value)}
+               onClick={() => updateTab('static')}/>
       </label>
     </article>
 
@@ -88,10 +90,11 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
               <label className="info-label">
                 {key === checked ? 'Close' : 'Open'}
                 <input
-                  type="checkbox"
+                  type="radio"
+                  name="exclusive-checkbox-toggle"
                   checked={key === checked}
+                  onChange={() => updateChecked(key)}
                   onClick={() => checked === key && updateChecked(undefined)}
-                  onChange={() => checked !== key && updateChecked(key)}
                   className="off-screen"/>
               </label>
             </header>
