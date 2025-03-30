@@ -159,7 +159,7 @@
 
     .info-header {
       display: grid;
-      grid-template-columns: 1fr 16rem;
+      grid-template-columns: 1fr min-content;
       background: var(--charcoal);
       border: 0.1rem solid var(--paper);
       padding: 0.8rem;

@@ -54,14 +54,25 @@ export const AboutPage = () => {
             : nothing())
           .or(() => some(AboutTopics.accordions))
           .map(tab => ({
-            [AboutTopics.accordions]: <>
-              <article>Different styles of Accordions.</article>
-              <InclusiveAccordion className='card' content={paragraphs(5)}/>
-              <ExclusiveAccordion className='card' content={paragraphs(5)}/>
-              <ExclusiveToggleAccordion className='card' content={paragraphs(5)}/>
-              <ExclusiveCheckboxToggleAccordion className='card' content={paragraphs(5)}/>
-              <ExclusiveRadioToggleAccordion className='card' content={paragraphs(5)}/>
-            </>,
+            [AboutTopics.accordions]:
+              <ul className='accordions'>
+                <li className='title'>Different styles of Accordions.</li>
+                <li>
+                  <InclusiveAccordion className='card' content={paragraphs(5)}/>
+                </li>
+                <li>
+                  <ExclusiveAccordion className='card' content={paragraphs(5)}/>
+                </li>
+                <li className="exclusive">
+                  <ExclusiveToggleAccordion className='card' content={paragraphs(5)}/>
+                </li>
+                <li>
+                  <ExclusiveCheckboxToggleAccordion className='card' content={paragraphs(5)}/>
+                </li>
+                <li>
+                  <ExclusiveRadioToggleAccordion className='card' content={paragraphs(5)}/>
+                </li>
+              </ul>,
             [AboutTopics.zIndex]: <>
               <article>Z-Index Demo.</article>
               <NaturalZIndex className='card'/>

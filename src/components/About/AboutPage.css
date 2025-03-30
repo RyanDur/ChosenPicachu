@@ -10,4 +10,20 @@
     flex-direction: column;
     gap: var(--base-x-6);
     padding: var(--base-x-5);
+
+    .accordions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--base-x-5);
+        grid-template-areas:
+          "title title";
+
+        .title {
+            grid-area: title;
+        }
+
+        .exclusive {
+            grid-column: 1 / span 2;
+        }
+    }
 }
