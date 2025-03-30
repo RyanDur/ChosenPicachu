@@ -15,7 +15,7 @@
 
 .off-screen {
   position: absolute;
-  z-index: -1;
+  right: 1000vw;
 }
 
 .fit {

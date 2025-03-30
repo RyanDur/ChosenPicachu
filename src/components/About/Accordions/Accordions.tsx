@@ -55,6 +55,7 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
 }) => {
   const [checked, updateChecked] = useState<string>();
   const [tab, updateTab] = useState<'animated' | 'static'>('animated');
+
   return <article className={classNames('exclusive-checkbox-toggle-accordion', className)}>
     <header className="exclusive-checkbox-header">
       <h3>Checkbox</h3>
@@ -86,7 +87,7 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
     <ul className={'new-accordion'}>
       {content.map(({value, key}) =>
         <li key={key}>
-          <article className={classNames('exclusive-fold', tab)}>
+          <article className={classNames('exclusive-fold', tab, 'reveal')}>
             <header className="info-header">
               <h4 className="heading">{key}</h4>
               <label className="info-label">
@@ -101,8 +102,11 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
               </label>
             </header>
 
+
             <article className="info-animated">
-              <article className="info">{value}</article>
+              <article className="info-animation-wraper">
+                <article className="info ">{value}</article>
+              </article>
             </article>
           </article>
         </li>)}
@@ -147,7 +151,7 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
     <ul className={'new-accordion'}>
       {content.map(({value, key}) =>
         <li key={key}>
-          <article className={classNames('exclusive-fold', tab === 'animated' && 'animated')}>
+          <article className={classNames('exclusive-fold', tab === 'animated' && 'animated drawer')}>
             <header className="info-header">
               <h4 className="heading">{key}</h4>
               <label className="info-label">
@@ -163,8 +167,12 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
               </label>
             </header>
 
-            <article className="info-animated">
-              <article className="info">{value}</article>
+            <article className="info-animated-wrapper">
+              <article className="info-animated">
+                <article className="info-transform-wrapper">
+                  <article className="info">{value}</article>
+                </article>
+              </article>
             </article>
           </article>
         </li>)}
