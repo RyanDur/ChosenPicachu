@@ -38,8 +38,11 @@ export const ExclusiveAccordion: FC<PropsWithClassName & ContentProps> = ({
 export const ExclusiveToggleAccordion: FC<PropsWithClassName & ContentProps> = ({
   className,
   content
-}) =>
-  <ul className={classNames('new-accordion', className)}>
+}) => <article className={className}>
+  <header className="exclusive-checkbox-header">
+    <h4 className="heading">Exclusive accordion using details elements</h4>
+  </header>
+  <ul className='new-accordion'>
     {content.map(({value, key}) =>
       <li key={key}>
         <details className="fold" name="exclusive-toggle-accordian">
@@ -47,7 +50,8 @@ export const ExclusiveToggleAccordion: FC<PropsWithClassName & ContentProps> = (
           <p className="info">{value}</p>
         </details>
       </li>)}
-  </ul>;
+  </ul>
+</article>;
 
 export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentProps> = ({
   className,
@@ -58,7 +62,7 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
 
   return <article className={classNames('exclusive-checkbox-toggle-accordion', className)}>
     <header className="exclusive-checkbox-header">
-      <h3>Checkbox</h3>
+      <h3>Exclusive accordion using checkboxes</h3>
       <article className='pill-tabs'>
         <label className='pill-tab'>
           Animate
@@ -122,7 +126,7 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
   const [tab, updateTab] = useState<'animated' | 'static'>('animated');
   return <article className={classNames('exclusive-checkbox-toggle-accordion', className)}>
     <header className="exclusive-checkbox-header">
-      <h3>Radio</h3>
+      <h3>Exclusive accordion using <article>radio group</article></h3>
       <article className='pill-tabs'>
         <label className='pill-tab'>
           Animate
