@@ -8,21 +8,30 @@ type ContentProps = { content: { value: ReactNode, key: string }[] };
 export const InclusiveAccordion: FC<PropsWithClassName & ContentProps> = ({
   className,
   content
-}) =>
-  <ul className={classNames('accordion', className)}>
+}) => <article className={className}>
+  <header>
+    <h4>Accordion using checkboxes</h4>
+    <aside><p>no Javascript needed to pull this off.</p></aside>
+  </header>
+  <ul className='accordion'>
     {content.map(({value, key}, id) =>
       <li key={key} className="fold">
         <input id={`${id}-checkbox`} className="info-toggle off-screen" type="checkbox"/>
         <label className="info-label" htmlFor={`${id}-checkbox`}>{faker.lorem.word()}</label>
         <p className="info">{value}</p>
       </li>)}
-  </ul>;
+  </ul>
+</article>;
 
 export const ExclusiveAccordion: FC<PropsWithClassName & ContentProps> = ({
   className,
   content
-}) =>
-  <ul className={classNames('accordion', className)}>
+}) => <article className={className}>
+  <header>
+    <h4>Accordion using a radio group</h4>
+    <aside><p>no Javascript needed to pull this off.</p></aside>
+  </header>
+  <ul className="accordion">
     <li className="close fold">
       <input id="close-radio" defaultChecked={true} className="info-toggle off-screen" type="radio" name="group"/>
       <label className="info-label center" htmlFor="close-radio">Close</label>
@@ -33,7 +42,8 @@ export const ExclusiveAccordion: FC<PropsWithClassName & ContentProps> = ({
         <label className="info-label" htmlFor={`${id}-radio`}>{faker.lorem.word()}</label>
         <p className="info">{value}</p>
       </li>)}
-  </ul>;
+  </ul>
+</article>;
 
 export const ExclusiveToggleAccordion: FC<PropsWithClassName & ContentProps> = ({
   className,
@@ -62,7 +72,7 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
 
   return <article className={classNames('exclusive-checkbox-toggle-accordion', className)}>
     <header className="exclusive-checkbox-header">
-      <h3>Exclusive accordion using checkboxes</h3>
+      <h4>Exclusive accordion using checkboxes</h4>
       <article className='pill-tabs'>
         <label className='pill-tab'>
           Animate
@@ -126,7 +136,7 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
   const [tab, updateTab] = useState<'animated' | 'static'>('animated');
   return <article className={classNames('exclusive-checkbox-toggle-accordion', className)}>
     <header className="exclusive-checkbox-header">
-      <h3>Exclusive accordion using <article>radio group</article></h3>
+      <h4>Exclusive accordion using radio group</h4>
       <article className='pill-tabs'>
         <label className='pill-tab'>
           Animate
