@@ -10,7 +10,8 @@ import {
   ExclusiveAccordion,
   ExclusiveToggleAccordion,
   ExclusiveCheckboxToggleAccordion,
-  InclusiveAccordion
+  InclusiveAccordion,
+  ExclusiveRadioToggleAccordion
 } from './Accordions';
 import {
   HideElemOnDragSortableListEagerMove,
@@ -59,6 +60,7 @@ export const AboutPage = () => {
               <ExclusiveAccordion className='card' content={paragraphs(5)}/>
               <ExclusiveToggleAccordion className='card' content={paragraphs(5)}/>
               <ExclusiveCheckboxToggleAccordion className='card' content={paragraphs(5)}/>
+              <ExclusiveRadioToggleAccordion className='card' content={paragraphs(5)}/>
             </>,
             [AboutTopics.zIndex]: <>
               <article>Z-Index Demo.</article>
