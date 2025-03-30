@@ -2,5 +2,6 @@ export {
   InclusiveAccordion,
   ExclusiveAccordion,
   ExclusiveToggleAccordion,
-  ExclusiveCheckboxToggleAccordion
+  ExclusiveCheckboxToggleAccordion,
+  ExclusiveRadioToggleAccordion
 } from './Accordions';
