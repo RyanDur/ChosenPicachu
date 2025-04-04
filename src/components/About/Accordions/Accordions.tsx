@@ -74,6 +74,7 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
     <header className="exclusive-checkbox-header">
       <h4>Exclusive accordion using checkboxes</h4>
       <article className='pill-tabs-with-glider'>
+        <article className='glider'/>
         <label className='pill-tab-left'>
           Animate
           <input type="radio"
@@ -94,7 +95,6 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
                  onChange={(event) => updateChecked(event.currentTarget.value)}
                  onClick={() => updateTab('static')}/>
         </label>
-        <article className='glider'/>
       </article>
     </header>
 

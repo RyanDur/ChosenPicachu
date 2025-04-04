@@ -91,7 +91,7 @@
 
   .pill-tab-right,
   .pill-tab-left {
-    z-index: 1;
+    position: relative;
     align-content: center;
     text-align: center;
     height: 4rem;
@@ -115,7 +115,6 @@
       color: white;
     }
   }
-
 
   &:has(.pill-tab-left > input:checked) .glider {
     transform: translateX(0);
