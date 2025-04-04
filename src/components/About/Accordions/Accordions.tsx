@@ -73,8 +73,8 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
   return <article className={classNames('exclusive-checkbox-toggle-accordion', className)}>
     <header className="exclusive-checkbox-header">
       <h4>Exclusive accordion using checkboxes</h4>
-      <article className='pill-tabs'>
-        <label className='pill-tab'>
+      <article className='pill-tabs-with-glider'>
+        <label className='pill-tab-left'>
           Animate
           <input type="radio"
                  className='off-screen'
@@ -84,8 +84,7 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
                  onChange={(event) => updateChecked(event.currentTarget.value)}
                  onClick={() => updateTab('animated')}/>
         </label>
-
-        <label className='pill-tab'>
+        <label className='pill-tab-right'>
           Static
           <input type="radio"
                  className='off-screen'
@@ -95,6 +94,7 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
                  onChange={(event) => updateChecked(event.currentTarget.value)}
                  onClick={() => updateTab('static')}/>
         </label>
+        <article className='glider'/>
       </article>
     </header>
 
