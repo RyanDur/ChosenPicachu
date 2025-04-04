@@ -65,7 +65,7 @@
     }
 
     &:focus-within:has(:checked),
-    &:hover:has(:checked){
+    &:hover:has(:checked) {
       outline: 1px solid var(--not-chosen-color);
       background: var(--chosen-color);
       color: var(--not-chosen-color);
@@ -76,6 +76,63 @@
       outline: 1px solid var(--chosen-color);
       outline-offset: -4px;
     }
+  }
+}
+
+.pill-tabs-with-glider {
+  --chosen-color: var(--charcoal);
+  --not-chosen-color: var(--paper);
+  outline: 2px solid var(--chosen-color);
+  outline-offset: -2px;
+  position: relative;
+  display: flex;
+  border-radius: 8px;
+  width: fit-content;
+
+  .pill-tab-right,
+  .pill-tab-left {
+    z-index: 1;
+    align-content: center;
+    text-align: center;
+    height: 4rem;
+    width: 8rem;
+    border-radius: 8px;
+    background: transparent;
+    transition: font-size 0.2s;
+
+    &:focus-within,
+    &:hover {
+      font-size: 18px;
+    }
+
+    &:hover {
+      background: rgba(55, 55, 55, 0.5);
+      color: white;
+    }
+
+    &:has(:checked) {
+      transition: color 0.2s;
+      color: white;
+    }
+  }
+
+
+  &:has(.pill-tab-left > input:checked) .glider {
+    transform: translateX(0);
+  }
+
+  &:has(.pill-tab-right > input:checked) .glider {
+    transform: translateX(100%);
+  }
+
+  .glider {
+    border-radius: 8px;
+    background: black;
+    pointer-events: none;
+    position: absolute;
+    height: 4rem;
+    width: 8rem;
+    transition: transform 0.2s;
   }
 }
 
