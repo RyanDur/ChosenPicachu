@@ -88,6 +88,11 @@
   display: flex;
   border-radius: 8px;
   width: fit-content;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background: rgba(55, 55, 55, 0.5);
+  }
 
   .pill-tab-right,
   .pill-tab-left {
@@ -98,20 +103,18 @@
     width: 8rem;
     border-radius: 8px;
     background: transparent;
-    transition: font-size 0.2s;
+    transition: font-size 0.2s, color 0.3s 0.05s;
 
-    &:focus-within,
-    &:hover {
+    &:has(:focus-visible) {
       font-size: 18px;
     }
 
     &:hover {
-      background: rgba(55, 55, 55, 0.5);
       color: white;
+      transition: color 0.3s 0s;
     }
 
     &:has(:checked) {
-      transition: color 0.2s;
       color: white;
     }
   }
@@ -131,7 +134,19 @@
     position: absolute;
     height: 4rem;
     width: 8rem;
-    transition: transform 0.2s;
+    transition: transform 0.3s cubic-bezier(1, -0.8, .08, 1.4);
+  }
+}
+
+@keyframes glider {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-1rem);
+  }
+  100% {
+    transform: translateY(0);
   }
 }
 
