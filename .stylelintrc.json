@@ -1,0 +1,23 @@
+{
+  "extends": [
+    "stylelint-config-recommended"
+  ],
+  "rules": {
+    "function-no-unknown": [
+      false,
+      {
+        "ignoreFunctions": [
+          "/linear/"
+        ]
+      }
+    ],
+    "declaration-property-value-no-unknown": [
+      true,
+      {
+        "typesSyntax": {
+          "linear()": "| <any-value>"
+        }
+      }
+    ]
+  }
+}
