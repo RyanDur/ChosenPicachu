@@ -21,7 +21,8 @@ export const ArtGalleryPage: FC = () =>
         values={[
           {display: 'The Art Institute of Chicago', param: Source.AIC},
           {display: 'Harvard Art Museums', param: Source.HARVARD},
-          {display: 'Rijksstudio', param: Source.RIJKS}
+          {display: 'Rijksstudio', param: Source.RIJKS},
+          {display: 'The Victoria and Albert Museum', param: Source.VAM}
         ]}/>
       <ArtGallery/></main>
 

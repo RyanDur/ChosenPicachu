@@ -1,7 +1,8 @@
 export enum Source {
     AIC = 'aic',
     HARVARD = 'harvard',
-    RIJKS = 'rijksstudio'
+    RIJKS = 'rijksstudio',
+    VAM = 'vam'
 }
 
 export interface SearchArt {
