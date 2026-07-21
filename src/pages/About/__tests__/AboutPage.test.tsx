@@ -1,4 +1,4 @@
-import {renderWithRouter} from '../../../__tests__/util';
+import {renderWithRouter} from '@test-support';
 import {expect, test} from 'vitest';
 import userEvent from '@testing-library/user-event';
 import {screen, waitFor, within} from '@testing-library/react';

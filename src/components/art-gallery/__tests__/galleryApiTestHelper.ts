@@ -1,5 +1,5 @@
 import {http, HttpResponse} from 'msw';
-import {server} from '../../../__tests__/util/server';
+import {server} from '@test-support/server';
 import {AICAllArtResponse, AICArtResponse} from '@components/art-gallery/museums/aic/types';
 import {aicDomain, defaultRecordLimit, harvardAPIKey, harvardDomain, vamDomain} from '@components/art-gallery/museums/config';
 import {fields} from '@components/art-gallery/museums/aic';

@@ -1,4 +1,4 @@
-import {anyRequestRespondsWith} from '../../../../__tests__/util/server';
+import {anyRequestRespondsWith} from '@test-support/server';
 import {
     aicArtResponse,
     fromAICArt,
@@ -13,7 +13,7 @@ import {
     vamArtOptions,
     vamArtResponse,
     vamPieceResponse
-} from '../../../../dummyData';
+} from '@test-support/fixtures';
 import {nanoid} from 'nanoid';
 import {AICPieceData, AICSearchResponse} from '@components/art-gallery/museums/aic/types';
 import {HTTPError} from '@transport/types';

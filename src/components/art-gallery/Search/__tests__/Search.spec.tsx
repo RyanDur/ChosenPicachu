@@ -1,8 +1,8 @@
-import {anyRequestRespondsWith} from '../../../../__tests__/util/server';
+import {anyRequestRespondsWith} from '@test-support/server';
 import {screen, waitFor} from '@testing-library/react';
 import {Search} from '@components/art-gallery/Search/index';
 import userEvent from '@testing-library/user-event';
-import {renderWithRouter} from '../../../../__tests__/util';
+import {renderWithRouter} from '@test-support';
 import {Source} from '@components/art-gallery/museums/types/resource';
 import {faker} from '@faker-js/faker';
 import {Paths} from '@libraries/routing/Paths';

@@ -1,4 +1,4 @@
-import {users as allUsers} from '../../../../dummyData';
+import {users as allUsers} from '@test-support/fixtures';
 import {User} from '../../../UserInfo/types';
 import {Success} from '@ryandur/sand';
 import {faker} from '@faker-js/faker';

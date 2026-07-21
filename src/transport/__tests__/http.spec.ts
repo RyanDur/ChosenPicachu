@@ -3,7 +3,7 @@ import {HTTPError, HTTPMethod, HTTPStatus} from '../types';
 import {http} from '../http';
 import {faker} from '@faker-js/faker';
 import {failure, Result} from '@ryandur/sand';
-import {server} from '../../__tests__/util/server';
+import {server} from '@test-support/server';
 
 const testObject = {foo: faker.lorem.words()};
 

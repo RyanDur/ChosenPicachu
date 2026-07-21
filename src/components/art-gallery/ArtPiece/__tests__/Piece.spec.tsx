@@ -1,7 +1,7 @@
-import {anyRequestRespondsWith} from '../../../../__tests__/util/server';
+import {anyRequestRespondsWith} from '@test-support/server';
 import {screen, waitFor} from '@testing-library/react';
 import {ArtPiece} from '@components/art-gallery/ArtPiece/index';
-import {renderWithArtPieceContext} from '../../../../__tests__/util';
+import {renderWithArtPieceContext} from '@test-support';
 import {HTTPError} from '@transport/types';
 import {faker} from '@faker-js/faker';
 import {Paths} from '@libraries/routing/Paths';

@@ -5,6 +5,7 @@
       "@components/*": ["./src/components/*"],
       "@transport/*": ["./src/transport/*"],
       "@libraries/*": ["./src/libraries/*"],
+      "@test-support": ["./src/test-support/index.tsx"],
       "@test-support/*": ["./src/test-support/*"]
     },
     "composite": true,

@@ -5,7 +5,7 @@ import {useSearchParamsObject} from '@libraries/search-params';
 import './style.css';
 import './AboutPage.css';
 import '../../routes/BasePage.css';
-import {Tabs} from '../Tabs';
+import {Tabs} from '@components/Tabs';
 import {
   ExclusiveAccordion,
   ExclusiveToggleAccordion,

@@ -1,15 +1,15 @@
 import {FC, useEffect, useState} from 'react';
 import {Link, useLocation, useNavigate} from 'react-router-dom';
 import {useSearchParamsObject} from '@libraries/search-params';
-import {AddressInfo, User} from '../UserInfo/types';
-import {users as usersApi} from './resource/users';
-import {UserInformation} from '../UserInfo';
+import {AddressInfo, User} from '@components/UserInfo/types';
+import {users as usersApi} from '@components/Users/resource/users';
+import {UserInformation} from '@components/UserInfo';
 import {Paths} from '@libraries/routing/Paths';
-import {Table} from '../Table';
+import {Table} from '@components/Table';
 import {age, formatAge} from '@components/Users/age';
 import {FriendsList} from '@components/Users/SelectList';
 import './styles.css';
-import './styles.layout.css';
+import '@components/Users/styles.layout.css';
 
 export const UsersPage: FC = () => {
   const navigate = useNavigate();

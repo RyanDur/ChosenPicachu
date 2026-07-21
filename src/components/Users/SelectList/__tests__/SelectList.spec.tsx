@@ -1,7 +1,7 @@
 import userEvent from '@testing-library/user-event';
 import {cleanup, render, screen} from '@testing-library/react';
 import {FriendsList} from '@components/Users/SelectList/index';
-import {users} from '../../../../dummyData';
+import {users} from '@test-support/fixtures';
 
 describe('the friends list', () => {
     const consumer = vi.fn();

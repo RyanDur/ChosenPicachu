@@ -1,6 +1,5 @@
 import {nanoid} from 'nanoid';
 import {faker} from '@faker-js/faker';
-import {Column, Row} from './components/Table/types';
 import {AICAllArtResponse, AICArt} from '@components/art-gallery/museums/aic/types';
 import {
   HarvardAllArtResponse,
@@ -11,115 +10,12 @@ import {
 } from '@components/art-gallery/museums/harvard/types';
 import {AllArt, Art} from '@components/art-gallery/museums/types/response';
 import {VAMAllArtResponse, VAMArtResponse} from '@components/art-gallery/museums/vam/types';
-import {createUser} from './components/Users/resource/usersApi';
+import {createUser} from '@components/Users/resource/usersApi';
 import {defaultRecordLimit} from '@components/art-gallery/museums/config';
 
 const randomNumberFromRange = (min: number, max = 6) => Math.floor(Math.random() * max) + min;
 export const words = (num = 6) => faker.lorem.words(randomNumberFromRange(1, num));
 
-export const column1Name = words();
-export const column2Name = words();
-export const column3Name = words();
-
-export const column1Display = words();
-export const column3Display = words();
-
-export const row1Col0Value = words();
-
-export const row0Col0Display = words();
-export const row0Col1Display = words();
-
-export const row0Col2Display = words();
-
-export const row1Col1Display = words();
-export const row1Col2Display = words();
-
-export const row2Col0Display = words();
-export const row2Col1Display = words();
-export const row2Col2Display = words();
-
-export const columns: Column[] = [
-  {
-    column: column1Name,
-    display: <h2 data-testid="column1">{column1Display}</h2>,
-    className: 'aClassName'
-  },
-  {display: column2Name, column: column2Name},
-  {column: column3Name, display: column3Display}
-];
-
-export const rows: Row[] = [{
-  [column1Name]: {
-    display: <h3>{row0Col0Display}</h3>
-  },
-  [column2Name]: {
-    display: <h3>{row0Col1Display}</h3>
-  },
-  [column3Name]: {
-    display: row0Col2Display,
-    className: 'aSingleClassName'
-  }
-}, {
-  [column1Name]: {
-    display: row1Col0Value
-  },
-  [column2Name]: {
-    display: <h3>{row1Col1Display}</h3>
-  },
-  [column3Name]: {
-    display: <h3>{row1Col2Display}</h3>
-  }
-}, {
-  [column1Name]: {
-    display: row2Col0Display
-  },
-  [column2Name]: {
-    display: <h3>{row2Col1Display}</h3>
-  },
-  [column3Name]: {
-    display: <h3>{row2Col2Display}</h3>
-  }
-}, {
-  [column1Name]: {
-    display: faker.lorem.word()
-  },
-  [column2Name]: {
-    display: <h3>{faker.lorem.word()}</h3>
-  },
-  [column3Name]: {
-    display: <h3>{faker.lorem.word()}</h3>
-  }
-}, {
-  [column1Name]: {
-    display: faker.lorem.word()
-  },
-  [column2Name]: {
-    display: <h3>{faker.lorem.word()}</h3>
-  },
-  [column3Name]: {
-    display: <h3>{faker.lorem.word()}</h3>
-  }
-}, {
-  [column1Name]: {
-    display: faker.lorem.word()
-  },
-  [column2Name]: {
-    display: <h3>{faker.lorem.word()}</h3>
-  },
-  [column3Name]: {
-    display: <h3>{faker.lorem.word()}</h3>
-  }
-}, {
-  [column1Name]: {
-    display: faker.lorem.word()
-  },
-  [column2Name]: {
-    display: <h3>{faker.lorem.word()}</h3>
-  },
-  [column3Name]: {
-    display: <h3>{faker.lorem.word()}</h3>
-  }
-}];
 
 export const users = [
   createUser(),

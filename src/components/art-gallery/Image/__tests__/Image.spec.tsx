@@ -1,7 +1,7 @@
 import {fireEvent, screen} from '@testing-library/react';
 import {Image} from '@components/art-gallery/Image/index';
 import userEvent from '@testing-library/user-event';
-import {renderWithRouter} from '../../../../__tests__/util';
+import {renderWithRouter} from '@test-support';
 import {Art} from '@components/art-gallery/museums/types/response';
 import {Source} from '@components/art-gallery/museums/types/resource';
 import {faker} from '@faker-js/faker';
