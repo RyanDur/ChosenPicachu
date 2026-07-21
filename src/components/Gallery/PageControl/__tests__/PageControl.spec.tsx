@@ -20,7 +20,7 @@ describe('The page controls', () => {
         initialRoute: Paths.artGallery
       });
       await userEvent.type(screen.getByTestId('go-to'), pageNumber);
-      fireEvent.submit(screen.getByText('Go'));
+      await userEvent.click(screen.getByText('Go'));
 
       expect(screen.getByTestId('subject-url-search')).toHaveTextContent(`?page=${pageNumber}`);
       expect(screen.getByTestId('go-to')).not.toHaveValue(+pageNumber);

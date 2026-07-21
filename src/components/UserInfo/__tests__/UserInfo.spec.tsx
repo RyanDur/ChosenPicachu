@@ -18,9 +18,10 @@ describe('a user form', () => {
 
       await userEvent.type(screen.getByLabelText('Details'), userInfo.details!);
       await userEvent.click(screen.getByText('Reset'));
-      fireEvent.submit(screen.getByText('Add'));
+      await userEvent.click(screen.getByText('Add'));
 
-      expect(consumer).toHaveBeenCalledWith(initialState);
+      expect(screen.getByLabelText('First Name')).toHaveValue('');
+      expect(consumer).not.toHaveBeenCalled();
     });
 
     describe('when adding a user', () => {
@@ -31,7 +32,7 @@ describe('a user form', () => {
 
         await fillOutForm(info);
         await userEvent.type(screen.getByLabelText('Details'), userInfo.details!);
-        fireEvent.submit(screen.getByText('Add'));
+        await userEvent.click(screen.getByText('Add'));
 
         await waitFor(() => expect(consumer).toHaveBeenCalledWith(info));
       });
@@ -41,10 +42,11 @@ describe('a user form', () => {
         render(<UserInformation onAdd={consumer}/>);
         await fillOutForm(userInfo);
 
-        fireEvent.submit(screen.getByText('Add'));
-        fireEvent.submit(screen.getByText('Add'));
+        await userEvent.click(screen.getByText('Add'));
+        await userEvent.click(screen.getByText('Add'));
 
-        expect(consumer).toHaveBeenCalledWith(initialState);
+        expect(screen.getByLabelText('First Name')).toHaveValue('');
+        expect(consumer).toHaveBeenCalledTimes(1);
       });
     });
 
@@ -56,7 +58,7 @@ describe('a user form', () => {
         await fillOutForm(info);
         await userEvent.type(screen.getByLabelText('Details'), info.details!);
         await userEvent.click(screen.getByLabelText('Same as Home'));
-        fireEvent.submit(screen.getByText('Add'));
+        await userEvent.click(screen.getByText('Add'));
 
         expect(consumer).toHaveBeenCalledWith({
           ...info,
