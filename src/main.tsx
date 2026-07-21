@@ -6,6 +6,6 @@ import './index.css';
 
 ReactDom.createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RouterProvider router={createBrowserRouter([router])}/>
+    <RouterProvider router={createBrowserRouter([router], {basename: import.meta.env.BASE_URL})}/>
   </StrictMode>
 );
