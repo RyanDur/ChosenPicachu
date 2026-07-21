@@ -261,7 +261,7 @@ describe('data', () => {
     const aicPiece: Art = {
         id: String(pieceAICResponse.data.id),
         title: pieceAICResponse.data.title,
-        image: `https://www.artic.edu/iiif/2/${pieceAICResponse.data.image_id}/full/2000,/0/default.jpg`,
+        image: `https://www.artic.edu/iiif/2/${pieceAICResponse.data.image_id}/full/843,/0/default.jpg`,
         altText: pieceAICResponse.data.thumbnail?.alt_text || '',
         artistInfo: pieceAICResponse.data.artist_display
     };

@@ -27,13 +27,13 @@ export const aic = {
         totalPages: pagination.total_pages,
         currentPage: pagination.current_page
       },
-      pieces: data.map(aicToPiece)
+      pieces: data.map(aicToPiece(400))
     })),
 
   art: (id: string) => http
     .get(`${aicDomain}/${id}${toQueryString({fields})}`)
     .mBind(validate(AICArtSchema))
-    .map(({data}: AICPieceData): Art => aicToPiece(data)),
+    .map(({data}: AICPieceData): Art => aicToPiece(843)(data)),
 
   searchOptions: (search: string) => http
     .get(`${aicDomain}/search${toQueryString({
@@ -47,10 +47,13 @@ export const aic = {
       .flatMap(option => option.input))
 };
 
-const aicToPiece = (data: AICArt): Art => ({
+const aicImage = (imageId: string | null | undefined, width: number) =>
+  `https://www.artic.edu/iiif/2/${imageId}/full/${width},/0/default.jpg`;
+
+const aicToPiece = (width: number) => (data: AICArt): Art => ({
   id: String(data.id),
   title: data.title,
-  image: `https://www.artic.edu/iiif/2/${data.image_id}/full/2000,/0/default.jpg`,
+  image: aicImage(data.image_id, width),
   artistInfo: data.artist_display,
   altText: data.thumbnail?.alt_text || data.term_titles.join(' ') || ''
 });

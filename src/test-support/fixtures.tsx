@@ -99,7 +99,7 @@ export const fromVAMArt: AllArt = {
   pieces: vamSearchRecords.map(record => ({
     id: record.systemNumber,
     title: record._primaryTitle || 'Untitled',
-    image: `${record._images._iiif_image_base_url}full/!2000,2000/0/default.jpg`,
+    image: `${record._images._iiif_image_base_url}full/!400,400/0/default.jpg`,
     artistInfo: record._primaryMaker.name,
     altText: record._primaryTitle || 'Untitled'
   }))
@@ -134,7 +134,7 @@ export const fromAICArt: AllArt = {
   pieces: aicArtResponse.data.map(piece => ({
     id: String(piece.id),
     title: piece.title,
-    image: `https://www.artic.edu/iiif/2/${piece.image_id}/full/2000,/0/default.jpg`,
+    image: `https://www.artic.edu/iiif/2/${piece.image_id}/full/400,/0/default.jpg`,
     artistInfo: piece.artist_display,
     altText: piece.term_titles.join(' ')
   }))

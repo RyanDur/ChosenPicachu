@@ -6,12 +6,12 @@ import {validate} from '@transport/validate';
 import {http} from '@transport/http';
 import {GetAllArtRequest} from '@components/art-gallery/museums/types/resource';
 
-const iiifImage = (base: string) => `${base}full/!2000,2000/0/default.jpg`;
+const iiifImage = (base: string, size: number) => `${base}full/!${size},${size}/0/default.jpg`;
 
 const vamRecordToArt = (record: VAMSearchRecord): Art => ({
   id: record.systemNumber,
   title: record._primaryTitle || 'Untitled',
-  image: record._images && iiifImage(record._images._iiif_image_base_url),
+  image: record._images && iiifImage(record._images._iiif_image_base_url, 400),
   artistInfo: record._primaryMaker?.name || 'Unknown',
   altText: record._primaryTitle || 'Untitled'
 });
@@ -36,7 +36,7 @@ export const vam = {
     .map(({record}: VAMArtResponse): Art => ({
       id: record.systemNumber,
       title: record.titles?.[0]?.title || record.objectType,
-      image: record.images?.[0] && iiifImage(`https://framemark.vam.ac.uk/collections/${record.images[0]}/`),
+      image: record.images?.[0] && iiifImage(`https://framemark.vam.ac.uk/collections/${record.images[0]}/`, 2000),
       artistInfo: record.artistMakerPerson?.[0]?.name.text || 'Unknown',
       altText: record.titles?.[0]?.title || record.objectType
     })),
