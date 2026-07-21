@@ -5,14 +5,9 @@ import {users} from '../../../dummyData';
 import {fillOutForm} from '../../../__tests__/util';
 import {initialState} from '../reducer';
 
-vi.mock('../../../avatars', () => ({
-  generateAvatar: () => 'some random url'
-}));
-vi.mock('nanoid', () => ({nanoid: vi.fn().mockReturnValue('yo0r-face')}));
-
 describe('a user form', () => {
   const [userInfo] = users;
-  userInfo.avatar = 'some random url';
+  userInfo.avatar = initialState.avatar;
   const {id, ...info} = userInfo;
 
   describe('filled out', () => {
