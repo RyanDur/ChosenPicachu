@@ -7,6 +7,7 @@ env:
   VITE_APP_API_AIC: ${{ vars.VITE_APP_API_AIC }}
   VITE_APP_HARVARD_API: ${{ vars.VITE_APP_HARVARD_API }}
   VITE_APP_HARVARD_API_KEY: ${{ secrets.VITE_APP_HARVARD_API_KEY }}
+  VITE_APP_VAM_API: ${{ vars.VITE_APP_VAM_API }}
 
 jobs:
   build_test_deploy:
@@ -16,9 +17,12 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 'v20'
+          node-version: '22'
           cache: 'npm'
+          registry-url: 'https://npm.pkg.github.com'
       - name: Build and test
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           npm ci
           npm run build
