@@ -17,11 +17,12 @@ export const setupAICAllArtResponse = (response: AICAllArtResponse, options: {
   page: number
   search?: string,
 } = {limit: defaultRecordLimit, page: 1}) =>
-  server.use(http.get(aicDomain, ({request}) =>
+  server.use(http.get(`${aicDomain}${options.search ? '/search' : ''}`, ({request}) =>
     paramsMatch(request, {
       fields: fields.join(),
       page: String(options.page),
-      limit: String(options.limit)
+      limit: String(options.limit),
+      ...(options.search ? {q: options.search} : {})
     }) ? HttpResponse.json(response) : undefined));
 
 export const setupHarvardAllArtResponse = (response: HarvardAllArtResponse, limit = defaultRecordLimit) =>
