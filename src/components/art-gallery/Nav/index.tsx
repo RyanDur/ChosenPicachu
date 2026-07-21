@@ -1,4 +1,4 @@
-import {Link, useLocation} from 'react-router-dom';
+import {Link, useLocation} from 'react-router';
 import {FC, useEffect, useRef} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
 import {useGallery} from '@components/art-gallery/Art/Context';

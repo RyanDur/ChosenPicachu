@@ -17,7 +17,7 @@ import {
 import {Address} from './Address';
 import {formReducer, initialState} from './reducer';
 import {generateAvatar} from './avatars';
-import {Link} from 'react-router-dom';
+import {Link} from 'react-router';
 import {FancyDateInput} from './FancyFormElements/FancyDateInput';
 import {toDate} from 'date-fns';
 import {Consumer} from '@ryandur/sand';

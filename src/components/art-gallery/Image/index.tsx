@@ -1,5 +1,5 @@
 import {FC, PropsWithChildren, useContext, useState} from 'react';
-import {Link} from 'react-router-dom';
+import {Link} from 'react-router';
 import {join} from '@components/class-names';
 import {Loading} from '@components/art-gallery/Loading';
 import {useSearchParamsObject} from '@components/search-params';

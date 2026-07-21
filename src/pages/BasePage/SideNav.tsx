@@ -1,5 +1,5 @@
 import {FC, useEffect, useState} from 'react';
-import {Link, useSearchParams} from 'react-router-dom';
+import {Link, useSearchParams} from 'react-router';
 import {toQueryString} from '@transport/url';
 import {defaultRecordLimit} from '@components/art-gallery/museums/config';
 import {Source} from '@components/art-gallery/museums/types/resource';

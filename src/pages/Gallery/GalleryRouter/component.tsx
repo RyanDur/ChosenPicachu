@@ -1,5 +1,5 @@
 import {ArtPieceContext, GalleryContext, Loading} from '@components/art-gallery';
-import {Outlet} from 'react-router-dom';
+import {Outlet} from 'react-router';
 import {Suspense} from 'react';
 
 export const GalleryRouter = () => (

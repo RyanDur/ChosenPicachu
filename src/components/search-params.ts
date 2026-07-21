@@ -1,4 +1,4 @@
-import {useSearchParams} from 'react-router-dom';
+import {useSearchParams} from 'react-router';
 import {toQueryString} from '@transport/url';
 import {has} from '@ryandur/sand';
 

@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Outlet} from 'react-router-dom';
+import {Outlet} from 'react-router';
 
 export const GamesPage: FC = () => {
   return <>

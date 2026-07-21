@@ -1,6 +1,6 @@
 import {FC, FormEvent, useContext, useEffect, useState} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router';
 import {SearchOptions} from '@components/art-gallery/museums/types/response';
 import {Source} from '@components/art-gallery/museums/types/resource';
 import {GalleryLinks} from '@components/art-gallery/Links';

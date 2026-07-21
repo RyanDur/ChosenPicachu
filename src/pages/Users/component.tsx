@@ -1,5 +1,5 @@
 import {FC, useEffect, useState} from 'react';
-import {Link, useLocation, useNavigate} from 'react-router-dom';
+import {Link, useLocation, useNavigate} from 'react-router';
 import {useSearchParamsObject} from '@components/search-params';
 import {AddressInfo, User, UserInformation, users as usersApi, UsersLinks} from '@components/Users';
 import {Paths} from '@pages/Paths';
