@@ -38,6 +38,7 @@ export const Image: FC<ImageProps> = (
         (<>
             <ConditionalLink enabled={linkEnabled} area={tab}>
                 <img className={join('image', 'off-screen', className)}
+                     referrerPolicy="no-referrer"
                      onError={() => {
                          isComplete(true);
                          isError(true);
