@@ -1,9 +1,9 @@
-import {FC, FormEvent, useEffect, useState} from 'react';
-import {useSearchParamsObject} from '@routing/searchParams';
+import {FC, FormEvent, useContext, useEffect, useState} from 'react';
+import {useSearchParamsObject} from '@components/search-params';
 import {useNavigate} from 'react-router-dom';
 import {SearchOptions} from '@components/art-gallery/museums/types/response';
 import {Source} from '@components/art-gallery/museums/types/resource';
-import {Paths} from '@routing/Paths';
+import {GalleryLinks} from '@components/art-gallery/Links';
 import {debounce} from 'throttle-debounce';
 import {art} from '@components/art-gallery/museums';
 import './Search.css';
@@ -17,6 +17,7 @@ export const Search: FC<Props> = ({id}) => {
   const [searchOptions, updateSearchOptions] = useState<SearchOptions>([]);
   const [searchString, updateQuery] = useState<string>('');
   const navigate = useNavigate();
+  const {gallery} = useContext(GalleryLinks);
   const {tab, search, removeSearchParams, createSearchParams} = useSearchParamsObject<{
     tab: Source,
     search?: string
@@ -32,7 +33,7 @@ export const Search: FC<Props> = ({id}) => {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (searchString) void navigate({
-      pathname: Paths.artGallery,
+      pathname: gallery,
       search: createSearchParams({search: searchString})
     });
   };

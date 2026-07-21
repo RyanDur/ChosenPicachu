@@ -1,6 +1,6 @@
 import {FormEvent, useState} from 'react';
 import {useGallery} from '@components/art-gallery/Art/Context';
-import {useSearchParamsObject} from '@routing/searchParams';
+import {useSearchParamsObject} from '@components/search-params';
 import './PageControl.css';
 import './PageControl.layout.css';
 

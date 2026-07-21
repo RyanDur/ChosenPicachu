@@ -1,4 +1,4 @@
-import {FC, useEffect, useReducer, useState} from 'react';
+import {FC, useEffect, useReducer, useState, useContext} from 'react';
 import {User} from './types';
 import {FancyInput} from './FancyFormElements/FancyInput';
 import {join} from '@components/class-names';
@@ -21,7 +21,7 @@ import {Link} from 'react-router-dom';
 import {FancyDateInput} from './FancyFormElements/FancyDateInput';
 import {toDate} from 'date-fns';
 import {Consumer} from '@ryandur/sand';
-import {Paths} from '@routing/Paths';
+import {UsersLinks} from './Links';
 import './Form.layout.css';
 import './Form.css';
 
@@ -41,6 +41,7 @@ export const UserInformation: FC<FormProps> = (
         editing = false,
         currentUser = initialState
     }) => {
+    const {users} = useContext(UsersLinks);
     const [user, dispatch] = useReducer(formReducer, currentUser, () => currentUser);
     const [sameAsHome, updateSameAsHome] = useState(false);
 
@@ -120,11 +121,11 @@ export const UserInformation: FC<FormProps> = (
                        onChange={event => dispatch(updateDetails(event.currentTarget.value))}/>
 
         {!readOnly && <button id="reset-form" type="reset" disabled={readOnly} className="secondary">Reset</button>}
-        {readOnly && <Link id="reset-form" to={`${Paths.users}?id=${user.id}&mode=edit`}
+        {readOnly && <Link id="reset-form" to={`${users}?id=${user.id}&mode=edit`}
                            className="button secondary">Edit</Link>}
         {!editing && !readOnly &&
         <button id="submit" type="submit" disabled={readOnly} className="primary">Add</button>}
-        {editing && <Link id="cancel" to={`${Paths.users}?id=${user.id}&mode=view`}
+        {editing && <Link id="cancel" to={`${users}?id=${user.id}&mode=view`}
                           className="button secondary" onClick={reset}>Cancel</Link>}
         {editing && <button id="submit" type="submit" className="primary">Update</button>}
 

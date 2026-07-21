@@ -3,7 +3,7 @@ import {Link, useSearchParams} from 'react-router-dom';
 import {toQueryString} from '@transport/url';
 import {defaultRecordLimit} from '@components/art-gallery/museums/config';
 import {Source} from '@components/art-gallery/museums/types/resource';
-import {Paths} from '@routing/Paths';
+import {Paths} from '@pages/Paths';
 import {AboutTopics} from '@pages/About/types';
 
 const AboutNav: FC = () => {
