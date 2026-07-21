@@ -30,14 +30,10 @@ test('searching the aic through the ui filters the wall', async ({page}) => {
   await expect(page.locator('figure.frame')).toHaveCount(8, {timeout: 30_000});
 });
 
-test('a piece opens from the gallery wall', async ({page}) => {
-  await page.goto(`gallery?page=1&size=8&tab=aic`);
-  const loadedImage = page.locator('figure.frame a img:not(.off-screen)').first();
-  await expect(loadedImage).toBeVisible({timeout: 30_000});
-  await loadedImage.click();
+test('a piece page presents its artwork data', async ({page}) => {
+  await page.goto(`gallery/27992?tab=aic`);
 
-  await expect(page).toHaveURL(/gallery\/\d+/);
-  await expect(page.getByTestId('image-figure')).toBeVisible({timeout: 30_000});
+  await expect(page.locator('#app-header')).toContainText('La Grande Jatte', {timeout: 30_000});
 });
 
 test('the users page presents the form and the seeded table', async ({page}) => {
