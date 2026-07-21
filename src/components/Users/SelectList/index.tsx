@@ -46,7 +46,7 @@ export const FriendsList: FC<Props> = ({users, user, onChange}) => {
       </li>
     )}</ul>
     {has(potentialFriends) &&
-      <select className="select-friend button" defaultValue=""
+      <select className="select-friend button" defaultValue="" aria-label="Add a friend"
               onChange={add}
               data-testid="select-friend">{[
         <option key="placeholder" value="" disabled hidden>Add a Friend</option>,

@@ -86,3 +86,18 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Smoke the deployed site
         run: npx playwright test
+
+  lighthouse:
+    needs: pages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lighthouse audit of the deployed site
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          urls: |
+            https://ryandur.github.io/ChosenPicachu/
+            https://ryandur.github.io/ChosenPicachu/gallery?page=1&size=8&tab=vam
+            https://ryandur.github.io/ChosenPicachu/users
+          configPath: ./lighthouserc.json
+          uploadArtifacts: true
