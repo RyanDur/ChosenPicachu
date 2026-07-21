@@ -3,16 +3,11 @@ import {
     aicArtResponse,
     fromAICArt,
     fromHarvardArt,
-    fromRIJKArt,
-    fromRIJKArtOptionsResponse,
-    fromRIJKToPiece,
     harvardArtOptions,
     harvardArtResponse,
     harvardPiece,
     harvardPieceResponse,
     options,
-    rijkArtObjectResponse,
-    rIJKArtResponse,
     fromVAMArt,
     fromVAMToPiece,
     vamArtOptions,
@@ -87,35 +82,9 @@ describe('data', () => {
             });
         });
 
-        describe('when the source is RIJKS', () => {
-            test('when it is successful', async () => {
-                anyRequestRespondsWith(JSON.stringify(rIJKArtResponse));
-
-                const actual = await art.getAll({page: 1, size: 8, source: Source.RIJKS}).orNull();
-
-                expect(actual).toEqual(fromRIJKArt(1, 8));
-            });
-
-            test('when it has a search term', async () => {
-                anyRequestRespondsWith(JSON.stringify(rIJKArtResponse));
-
-                const actual = await art.getAll({page: 1, size: 8, search: 'rad', source: Source.RIJKS}).orNull();
-
-                expect(actual).toEqual(fromRIJKArt(1, 8));
-            });
-
-            test('when it is not successful', async () => {
-                anyRequestRespondsWith(HTTPError.UNKNOWN, 400);
-
-                const actual = (await art.getAll({page: 1, size: 12, source: Source.RIJKS}).value);
-
-                expect(actual).toEqual(expect.objectContaining({reason: HTTPError.UNKNOWN}));
-            });
-        });
-
         test('when the source does not exist', async () => {
             const consumer = vi.fn();
-            anyRequestRespondsWith(JSON.stringify(rIJKArtResponse));
+            anyRequestRespondsWith(JSON.stringify(vamArtResponse));
 
             await art.getAll({page: 1, size: 12, source: 'I do not exist' as Source})
                 .onFailure(consumer).orNull();
@@ -189,26 +158,6 @@ describe('data', () => {
             });
         });
 
-        describe('for RIJKS', () => {
-            test('when it is successful', async () => {
-                anyRequestRespondsWith(JSON.stringify(rijkArtObjectResponse));
-
-                const actual = await art.get({id: String(aicPiece.id), source: Source.RIJKS}).orNull();
-
-                expect(actual).toEqual(fromRIJKToPiece(rijkArtObjectResponse.artObject));
-            });
-
-            test('when it is not successful', async () => {
-                const consumer = vi.fn();
-                anyRequestRespondsWith(HTTPError.UNKNOWN, 400);
-
-                await art.get({id: String(aicPiece.id), source: Source.RIJKS})
-                    .onFailure(consumer).orNull();
-
-                expect(consumer).toHaveBeenCalledWith(HTTPError.UNKNOWN);
-            });
-        });
-
         test('when the source does not exist', async () => {
             const consumer = vi.fn();
             anyRequestRespondsWith(JSON.stringify(pieceAICResponse));
@@ -263,16 +212,6 @@ describe('data', () => {
             });
         });
 
-        describe('for RIJKS', () => {
-            test('when it is successful', async () => {
-                anyRequestRespondsWith(JSON.stringify(fromRIJKArtOptionsResponse));
-
-                const actual = await art.search({search, source: Source.RIJKS}).orNull();
-
-                expect(actual).toEqual(options);
-            });
-        });
-
         describe('for VAM', () => {
             test('when it is successful', async () => {
                 anyRequestRespondsWith(JSON.stringify(vamArtOptions));
@@ -297,7 +236,6 @@ describe('data', () => {
         source
         ${Source.AIC}
         ${Source.HARVARD}
-        ${Source.RIJKS}
         ${Source.VAM}
         `('when the call fails', async ({source}) => {
             const consumer = vi.fn();

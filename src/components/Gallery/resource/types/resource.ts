@@ -1,7 +1,6 @@
 export enum Source {
     AIC = 'aic',
     HARVARD = 'harvard',
-    RIJKS = 'rijksstudio',
     VAM = 'vam'
 }
 
