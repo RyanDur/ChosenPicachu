@@ -139,7 +139,7 @@ const addUser = async (user: User) => {
   await userEvent.type(screen.getByLabelText('First Name'), user.info.firstName);
   await userEvent.type(screen.getByLabelText('Last Name'), user.info.lastName);
   await userEvent.type(screen.getByLabelText('Email'), user.info.email);
-  await userEvent.type(screen.getByLabelText('Date Of Birth'), format(user.info.dob!, 'P'));
+  await userEvent.type(screen.getByLabelText('Date Of Birth'), format(user.info.dob!, 'yyyy-MM-dd'));
 
   await addAddress(user.homeAddress, screen.getByTestId('home-address'));
 
@@ -147,7 +147,7 @@ const addUser = async (user: User) => {
 
   await userEvent.type(screen.getByLabelText('Details'), user.details || '');
 
-  await waitFor(() => fireEvent.submit(screen.getByText('Add')));
+  await userEvent.click(await screen.findByText('Add'));
 };
 
 const addAddress = async (address: AddressInfo, element: HTMLElement) => {
