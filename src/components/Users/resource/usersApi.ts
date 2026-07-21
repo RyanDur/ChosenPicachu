@@ -25,7 +25,7 @@ export const usersApi = (randomUsers: User[]): UsersAPI => ({
   getAll: () => asyncSuccess(randomUsers),
   get: id => maybe(randomUsers.find(user => user.id === id))
     .map(user => asyncSuccess<User, HTTPError>(user))
-    .orElse(asyncFailure<User, HTTPError>(HTTPError.UNKNOWN)),
+    .orElse(asyncFailure(HTTPError.UNKNOWN)),
   add: user => {
     randomUsers = [{...user, id: nanoid()}, ...randomUsers];
     return asyncSuccess(randomUsers);

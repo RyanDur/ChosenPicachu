@@ -35,7 +35,7 @@ const request = (uri: PATH, method?: HTTPMethod, body?: unknown) =>
     ...{body: (body ? JSON.stringify(body) : undefined)}
   })).or(() => asyncFailure(HTTPError.NETWORK_ERROR));
 
-const fail = <T>(response: Response) => matchFailStatusCode(response.status, {
-  [FailStatusCode.FORBIDDEN]: () => asyncFailure<T, HTTPError>(HTTPError.FORBIDDEN),
-  [FailStatusCode.SERVER_ERROR]: () => asyncFailure<T, HTTPError>(HTTPError.SERVER_ERROR)
-}).orElse(asyncFailure<T, HTTPError>(HTTPError.UNKNOWN));
+const fail = (response: Response) => matchFailStatusCode(response.status, {
+  [FailStatusCode.FORBIDDEN]: () => asyncFailure(HTTPError.FORBIDDEN),
+  [FailStatusCode.SERVER_ERROR]: () => asyncFailure(HTTPError.SERVER_ERROR)
+}).orElse(asyncFailure(HTTPError.UNKNOWN));
