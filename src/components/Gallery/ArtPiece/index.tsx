@@ -3,7 +3,7 @@ import {useEffect, useState} from 'react';
 import {Loading} from '../../Loading';
 import {useArtPiece} from './Context';
 import {Image} from '../Image';
-import {useSearchParamsObject} from '../../hooks';
+import {useSearchParamsObject} from '@libraries/search-params';
 import {Source} from '../resource/types/resource';
 import {has, not} from '@ryandur/sand';
 import {art} from '../resource';

@@ -1,5 +1,5 @@
 import {FC, FormEvent, PropsWithChildren} from 'react';
-import {join} from '../../../util';
+import {join} from '@libraries/class-names';
 import {format} from 'date-fns';
 
 interface FancyTextInputProps {

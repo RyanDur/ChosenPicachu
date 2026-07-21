@@ -7,11 +7,11 @@ import {
   AICSearchResponse,
   AICSearchSchema
 } from './types';
-import {toQueryString} from '../../../../util/URL';
+import {toQueryString} from '@libraries/url-support';
 import {aicDomain, defaultRecordLimit, defaultSearchLimit} from '../../../../config';
 import {AllArt, Art, SearchOptions} from '../types/response';
-import {validate} from '../../../../data/validate';
-import {http} from '../../../../data/http';
+import {validate} from '@transport/validate';
+import {http} from '@transport/http';
 import {GetAllArtRequest} from '../types/resource';
 
 export const fields = ['id', 'title', 'image_id', 'artist_display', 'term_titles', 'thumbnail'];

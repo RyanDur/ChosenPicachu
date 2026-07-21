@@ -1,1 +1,0 @@
-export {array} from './array';

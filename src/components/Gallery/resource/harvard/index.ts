@@ -7,10 +7,10 @@ import {
   HarvardSearchSchema
 } from './types';
 import {defaultRecordLimit, defaultSearchLimit, harvardAPIKey, harvardDomain} from '../../../../config';
-import {toQueryString} from '../../../../util/URL';
+import {toQueryString} from '@libraries/url-support';
 import {AllArt, Art, SearchOptions} from '../types/response';
-import {validate} from '../../../../data/validate';
-import {http} from '../../../../data/http';
+import {validate} from '@transport/validate';
+import {http} from '@transport/http';
 import {GetAllArtRequest} from '../types/resource';
 
 export const harvardFields = ['id', 'title', 'people', 'primaryimageurl'].join();

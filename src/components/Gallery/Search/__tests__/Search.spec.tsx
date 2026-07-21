@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 import {renderWithRouter} from '../../../../__tests__/util';
 import {Source} from '../../resource/types/resource';
 import {faker} from '@faker-js/faker';
-import {Paths} from '../../../../routes/Paths';
+import {Paths} from '@libraries/routing/Paths';
 import {AICSearchResponse} from '../../resource/aic/types';
 
 describe('search', () => {

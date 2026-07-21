@@ -11,7 +11,7 @@ import {
   useLocation
 } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
-import {toQueryString} from '../../util/URL';
+import {toQueryString} from '@libraries/url-support';
 import {AddressInfo, User} from '../../components/UserInfo/types';
 import {AllArt, Art} from '../../components/Gallery/resource/types/response';
 import {toDate} from 'date-fns';

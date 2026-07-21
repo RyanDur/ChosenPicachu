@@ -1,7 +1,7 @@
 import {aicArtResponse, harvardArtResponse, vamArtResponse} from '../../../dummyData';
 import {renderWithMemoryRouter} from '../../../__tests__/util';
 import {screen, waitFor, within} from '@testing-library/react';
-import {Paths} from '../../../routes/Paths';
+import {Paths} from '@libraries/routing/Paths';
 import {Gallery} from '../index';
 import userEvent from '@testing-library/user-event';
 import {AICArtResponse} from '../resource/aic/types';

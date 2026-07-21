@@ -1,7 +1,7 @@
 import {FC, useState} from 'react';
 import {not as toggle} from '@ryandur/sand';
-import {PropsWithClassName} from '../../_types';
-import {classNames} from '../../../util/classNames';
+import {PropsWithClassName} from '@libraries/react-support';
+import {classNames} from '@libraries/class-names';
 import './styles.css';
 
 export const NaturalZIndex: FC<PropsWithClassName> = ({className}) => {

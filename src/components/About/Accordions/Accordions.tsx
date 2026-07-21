@@ -1,7 +1,7 @@
 import {faker} from '@faker-js/faker';
 import {FC, ReactNode, useState} from 'react';
-import {classNames} from '../../../util/classNames';
-import {PropsWithClassName} from '../../_types';
+import {classNames} from '@libraries/class-names';
+import {PropsWithClassName} from '@libraries/react-support';
 import './styles.css';
 
 type ContentProps = { content: { value: ReactNode, key: string }[] };

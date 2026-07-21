@@ -1,8 +1,5 @@
 import {differenceInDays, differenceInMonths, differenceInYears} from 'date-fns';
 
-export const join =
-    (...classes: Partial<(string | boolean)[]>) => classes.filter(className => className).join(' ').trim();
-
 export enum AgeIn {
     YEARS = 'years',
     MONTHS = 'months',

@@ -1,5 +1,5 @@
 import {FC, FormEvent, PropsWithChildren} from 'react';
-import {join} from '../../../util';
+import {join} from '@libraries/class-names';
 import {FancyInput} from '../FancyInput';
 import {Consumer} from '@ryandur/sand';
 import './FancySelect.css';
