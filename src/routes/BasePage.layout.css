@@ -1,6 +1,6 @@
 #root {
     display: grid;
-    grid-gap: var(--base);
+    gap: var(--base);
     grid-template-columns: repeat(2, var(--base-x-16_5)) 1fr repeat(2, var(--base-x-16_5));
     grid-template-rows:
           var(--base-x-12)
@@ -14,7 +14,7 @@
     #app-header {
         grid-area: header;
         display: grid;
-        grid-gap: var(--base);
+        gap: var(--base);
         grid-template-columns:
       var(--base-x-16_5)
       1fr
