@@ -31,7 +31,7 @@ export const Search: FC<Props> = ({id}) => {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    searchString && navigate({
+    if (searchString) void navigate({
       pathname: Paths.artGallery,
       search: createSearchParams({search: searchString})
     });

@@ -32,7 +32,7 @@ const request = (uri: PATH, method?: HTTPMethod, body?: unknown) =>
   asyncResult(fetch(uri, {
     method,
     mode: 'cors',
-    ...{body: (body ? JSON.stringify(body) : undefined)}
+    body: body ? JSON.stringify(body) : undefined
   })).or(() => asyncFailure(HTTPError.NETWORK_ERROR));
 
 const fail = (response: Response) => matchFailStatusCode(response.status, {

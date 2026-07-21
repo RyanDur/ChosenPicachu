@@ -10,7 +10,7 @@ export interface PieceContext {
 
 export const Context = createContext<PieceContext>({
   piece: {},
-  updatePiece: (piece: Art = {} as Art) => void piece,
+  updatePiece: (piece: Art) => void piece,
   reset: () => void 0
 });
 export const useArtPiece = () => useContext(Context);
