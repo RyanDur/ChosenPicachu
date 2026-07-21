@@ -1,7 +1,7 @@
 import {faker} from '@faker-js/faker';
 import {maybe, nothing, some} from '@ryandur/sand';
 import {useSearchParams} from 'react-router-dom';
-import {useSearchParamsObject} from '@libraries/search-params';
+import {useSearchParamsObject} from '@routing/searchParams';
 import './style.css';
 import './AboutPage.css';
 import '../../routes/BasePage.css';

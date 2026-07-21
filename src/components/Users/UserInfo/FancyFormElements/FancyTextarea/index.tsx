@@ -1,4 +1,4 @@
-import {join} from '@libraries/class-names';
+import {join} from '@components/class-names';
 import {FC, FormEvent, useState} from 'react';
 import {Consumer} from '@ryandur/sand';
 

@@ -1,10 +1,10 @@
 import {FC, useEffect, useState} from 'react';
 import {Link, useLocation, useNavigate} from 'react-router-dom';
-import {useSearchParamsObject} from '@libraries/search-params';
-import {AddressInfo, User} from '@components/UserInfo/types';
+import {useSearchParamsObject} from '@routing/searchParams';
+import {AddressInfo, User} from '@components/Users/UserInfo/types';
 import {users as usersApi} from '@components/Users/resource/users';
-import {UserInformation} from '@components/UserInfo';
-import {Paths} from '@libraries/routing/Paths';
+import {UserInformation} from '@components/Users/UserInfo';
+import {Paths} from '@routing/Paths';
 import {Table} from '@components/Table';
 import {age, formatAge} from '@components/Users/age';
 import {FriendsList} from '@components/Users/SelectList';

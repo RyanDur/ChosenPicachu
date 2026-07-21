@@ -1,5 +1,5 @@
 import {users as allUsers} from '@test-support/fixtures';
-import {User} from '../../../UserInfo/types';
+import {User} from '@components/Users/UserInfo/types';
 import {Success} from '@ryandur/sand';
 import {faker} from '@faker-js/faker';
 import {createUser, usersApi, UsersAPI} from '../usersApi';

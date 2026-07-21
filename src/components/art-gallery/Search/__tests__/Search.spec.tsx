@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 import {renderWithRouter} from '@test-support';
 import {Source} from '@components/art-gallery/museums/types/resource';
 import {faker} from '@faker-js/faker';
-import {Paths} from '@libraries/routing/Paths';
+import {Paths} from '@routing/Paths';
 import {AICSearchResponse} from '@components/art-gallery/museums/aic/types';
 
 describe('search', () => {

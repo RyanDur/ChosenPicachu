@@ -4,7 +4,7 @@ import {ArtPiece} from '@components/art-gallery/ArtPiece/index';
 import {renderWithArtPieceContext} from '@test-support';
 import {HTTPError} from '@transport/types';
 import {faker} from '@faker-js/faker';
-import {Paths} from '@libraries/routing/Paths';
+import {Paths} from '@routing/Paths';
 import {Source} from '@components/art-gallery/museums/types/resource';
 import {AICArtResponse} from '@components/art-gallery/museums/aic/types';
 import {setupAICArtPieceResponse} from '@components/art-gallery/__tests__/galleryApiTestHelper';

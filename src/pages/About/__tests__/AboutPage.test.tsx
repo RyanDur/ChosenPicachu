@@ -2,7 +2,7 @@ import {renderWithRouter} from '@test-support';
 import {expect, test} from 'vitest';
 import userEvent from '@testing-library/user-event';
 import {screen, waitFor, within} from '@testing-library/react';
-import {Paths} from '@libraries/routing/Paths';
+import {Paths} from '@routing/Paths';
 import {AboutPage} from '../component';
 
 describe('The About page', () => {

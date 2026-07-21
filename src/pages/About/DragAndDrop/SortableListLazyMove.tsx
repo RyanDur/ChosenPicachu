@@ -1,5 +1,5 @@
 import {FC, useState} from 'react';
-import {array} from '@libraries/list-support';
+import {array} from './array';
 import {Draggable} from './Draggable';
 import './styles.css';
 import './styles.layout.css';
