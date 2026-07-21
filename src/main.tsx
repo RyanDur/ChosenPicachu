@@ -1,5 +1,6 @@
 import {StrictMode} from 'react';
-import {createBrowserRouter, RouterProvider} from 'react-router-dom';
+import {createBrowserRouter} from 'react-router';
+import {RouterProvider} from 'react-router/dom';
 import * as ReactDom from 'react-dom/client';
 import {router} from './router';
 import './index.css';

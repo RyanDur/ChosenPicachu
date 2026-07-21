@@ -1,4 +1,4 @@
-import {useParams} from 'react-router-dom';
+import {useParams} from 'react-router';
 import {useEffect, useState} from 'react';
 import {Loading} from '@components/art-gallery/Loading';
 import {useArtPiece} from '@components/art-gallery/ArtPiece/Context';
