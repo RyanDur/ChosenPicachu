@@ -188,7 +188,7 @@ export const harvardArtOptions: HarvardSearchResponse = {
 const vamInfo = {record_count: 500, pages: 42, page: 1, page_size: defaultRecordLimit};
 const vamSearchRecords = [...Array(vamInfo.page_size)].map((_, index) => ({
   systemNumber: `O${index}`,
-  _primaryTitle: faker.lorem.words(),
+  _primaryTitle: index === 0 ? '' : faker.lorem.words(),
   _primaryMaker: {name: faker.person.fullName()},
   _images: {_iiif_image_base_url: `https://framemark.vam.ac.uk/collections/${faker.lorem.word()}${index}/`}
 }));
@@ -202,10 +202,10 @@ export const fromVAMArt: AllArt = {
   },
   pieces: vamSearchRecords.map(record => ({
     id: record.systemNumber,
-    title: record._primaryTitle,
+    title: record._primaryTitle || 'Untitled',
     image: `${record._images._iiif_image_base_url}full/!2000,2000/0/default.jpg`,
     artistInfo: record._primaryMaker.name,
-    altText: record._primaryTitle
+    altText: record._primaryTitle || 'Untitled'
   }))
 };
 const vamPieceRecord = {

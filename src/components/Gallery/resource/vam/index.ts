@@ -10,10 +10,10 @@ const iiifImage = (base: string) => `${base}full/!2000,2000/0/default.jpg`;
 
 const vamRecordToArt = (record: VAMSearchRecord): Art => ({
   id: record.systemNumber,
-  title: record._primaryTitle,
+  title: record._primaryTitle || 'Untitled',
   image: record._images && iiifImage(record._images._iiif_image_base_url),
   artistInfo: record._primaryMaker?.name || 'Unknown',
-  altText: record._primaryTitle
+  altText: record._primaryTitle || 'Untitled'
 });
 
 export const vam = {
