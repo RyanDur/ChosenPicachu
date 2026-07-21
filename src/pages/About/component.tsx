@@ -4,7 +4,6 @@ import {useSearchParams} from 'react-router';
 import {useSearchParamsObject} from '@components/search-params';
 import './style.css';
 import './AboutPage.css';
-import '../BasePage.css';
 import {Tabs} from '@components/Tabs';
 import {
   ExclusiveAccordion,
@@ -21,7 +20,6 @@ import {
 } from './DragAndDrop';
 import {AboutTopics, isATopic} from './types';
 import {NaturalZIndex} from './ZIndexDemo';
-import '../BasePage.layout.css';
 
 const paragraphs = (count: number) =>
   faker.helpers.uniqueArray(() => faker.lorem.word(), count).map((key) => ({

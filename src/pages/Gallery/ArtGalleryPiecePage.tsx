@@ -1,7 +1,5 @@
 import {FC} from 'react';
 import {ArtPiece, Search, useArtPiece} from '@components/art-gallery';
-import '../BasePage.css';
-import '../BasePage.layout.css';
 
 export const ArtGalleryPiecePage: FC = () => {
     const {piece} = useArtPiece();
