@@ -161,7 +161,7 @@ export const person = (): HarvardPeople => ({
 
 const harvardToPieceResponse = (_: unknown, index: number): HarvardArtResponse => ({
   id: index,
-  title: faker.lorem.sentence(),
+  title: index === 0 ? null : faker.lorem.sentence(),
   people: [person()],
   primaryimageurl: faker.internet.url()
 });
@@ -170,9 +170,9 @@ export const harvardPieceResponse = harvardToPieceResponse(undefined, Math.floor
 
 export const harvardPiece: Art = {
   id: String(harvardPieceResponse.id),
-  title: harvardPieceResponse.title,
+  title: harvardPieceResponse.title || 'Untitled',
   image: harvardPieceResponse.primaryimageurl,
-  altText: harvardPieceResponse.title,
+  altText: harvardPieceResponse.title || 'Untitled',
   artistInfo: harvardPieceResponse.people?.[0].displayname || ''
 };
 
@@ -252,10 +252,10 @@ export const fromHarvardArt: AllArt = {
   },
   pieces: harvardArtResponse.records.map(piece => ({
     id: String(piece.id),
-    title: piece.title,
+    title: piece.title || 'Untitled',
     image: piece.primaryimageurl,
     artistInfo: piece.people?.[0].displayname || '',
-    altText: piece.title
+    altText: piece.title || 'Untitled'
   }))
 };
 

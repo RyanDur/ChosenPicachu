@@ -50,8 +50,8 @@ export const harvard = {
 
 const harvardArtToArt = (record: HarvardArtResponse): Art => ({
   id: String(record.id),
-  title: record.title,
+  title: record.title || 'Untitled',
   image: record.primaryimageurl,
   artistInfo: record.people?.find(person => person.role === 'Artist')?.displayname || 'Unknown',
-  altText: record.title
+  altText: record.title || 'Untitled'
 });
