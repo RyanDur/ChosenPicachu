@@ -9,7 +9,8 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint --type-aware --deny-warnings",
     "preview": "vite preview",
-    "tsc": "tsc -b"
+    "tsc": "tsc -b",
+    "lint:css": "stylelint 'src/**/*.css'"
   },
   "dependencies": {
     "@faker-js/faker": "10.5.0",
