@@ -25,9 +25,9 @@ const HarvardArtOptionDecoder = D.object({
 export const HarvardArtSchema = D.object({
     required: {
         id: D.number,
-        title: D.string,
     },
     optional: {
+        title: D.nullable(D.string),
         people: D.array(HarvardPeopleDecoder),
         primaryimageurl: D.nullable(D.string)
     }
