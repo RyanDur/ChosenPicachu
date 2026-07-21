@@ -1,6 +1,5 @@
 import {AICAllArtResponse, AICArtResponse} from '../aic/types';
 import {HarvardAllArtResponse, HarvardArtResponse} from '../harvard/types';
-import {RIJKSAllArtResponse, RIJKSArtResponse} from '../rijks/types';
 
 export type Pagination = {
     total: number;
@@ -23,5 +22,5 @@ export interface AllArt {
 }
 
 export type SearchOptions = string[];
-export type AllArtResponse = AICAllArtResponse | HarvardAllArtResponse | RIJKSAllArtResponse;
-export type ArtResponse = AICArtResponse | HarvardArtResponse | RIJKSArtResponse;
+export type AllArtResponse = AICAllArtResponse | HarvardAllArtResponse;
+export type ArtResponse = AICArtResponse | HarvardArtResponse;

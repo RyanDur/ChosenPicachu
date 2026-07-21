@@ -1,4 +1,4 @@
-import {aicArtResponse, harvardArtResponse, rIJKArtResponse, vamArtResponse} from '../../../dummyData';
+import {aicArtResponse, harvardArtResponse, vamArtResponse} from '../../../dummyData';
 import {renderWithMemoryRouter} from '../../../__tests__/util';
 import {screen, waitFor, within} from '@testing-library/react';
 import {Paths} from '../../../routes/Paths';
@@ -10,7 +10,6 @@ import {
   setupAICAllArtResponse,
   setupAICArtPieceResponse,
   setupHarvardAllArtResponse,
-  setupRijksAllArtResponse,
   setupVAMAllArtResponse
 } from './galleryApiTestHelper';
 
@@ -72,18 +71,6 @@ describe('The gallery.', () => {
     setupHarvardAllArtResponse(harvardArtResponse);
 
     await userEvent.click(await screen.findByText('Harvard Art Museums'));
-
-    await waitFor(() => expect(screen.getAllByTestId(/piece/).length).toEqual(defaultRecordLimit));
-    expect(screen.queryByTestId('gallery-loading')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('empty-gallery')).not.toBeInTheDocument();
-  });
-
-  test('when looking at the rijks gallery', async () => {
-    setupAICAllArtResponse(aicArtResponse);
-    renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
-    setupRijksAllArtResponse(rIJKArtResponse);
-
-    await userEvent.click(await screen.findByText('Rijksstudio'));
 
     await waitFor(() => expect(screen.getAllByTestId(/piece/).length).toEqual(defaultRecordLimit));
     expect(screen.queryByTestId('gallery-loading')).not.toBeInTheDocument();

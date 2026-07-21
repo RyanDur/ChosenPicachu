@@ -1,11 +1,10 @@
 import {http, HttpResponse} from 'msw';
 import {server} from '../../../__tests__/util/server';
 import {AICAllArtResponse, AICArtResponse} from '../resource/aic/types';
-import {aicDomain, defaultRecordLimit, harvardAPIKey, harvardDomain, rijksAPIKey, rijksDomain, vamDomain} from '../../../config';
+import {aicDomain, defaultRecordLimit, harvardAPIKey, harvardDomain, vamDomain} from '../../../config';
 import {fields} from '../resource/aic';
 import {HarvardAllArtResponse} from '../resource/harvard/types';
 import {harvardFields} from '../resource/harvard';
-import {RIJKSAllArtResponse} from '../resource/rijks/types';
 import {VAMAllArtResponse} from '../resource/vam/types';
 
 const paramsMatch = (request: Request, expected: Record<string, string>) => {
@@ -32,15 +31,6 @@ export const setupHarvardAllArtResponse = (response: HarvardAllArtResponse, limi
       size: String(limit),
       fields: harvardFields,
       apikey: harvardAPIKey
-    }) ? HttpResponse.json(response) : undefined));
-
-export const setupRijksAllArtResponse = (response: RIJKSAllArtResponse, limit = defaultRecordLimit) =>
-  server.use(http.get(rijksDomain, ({request}) =>
-    paramsMatch(request, {
-      p: '1',
-      ps: String(limit),
-      imgonly: 'true',
-      key: rijksAPIKey
     }) ? HttpResponse.json(response) : undefined));
 
 export const setupAICArtPieceResponse = (response: AICArtResponse, id: number) =>

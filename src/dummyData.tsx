@@ -10,7 +10,6 @@ import {
   HarvardSearchResponse
 } from './components/Gallery/resource/harvard/types';
 import {AllArt, Art} from './components/Gallery/resource/types/response';
-import {RIJKArtObjectResponse, RIJKSAllArtResponse, RIJKSArtResponse} from './components/Gallery/resource/rijks/types';
 import {VAMAllArtResponse, VAMArtResponse} from './components/Gallery/resource/vam/types';
 import {createUser} from './components/Users/resource/usersApi';
 import {defaultRecordLimit} from './config';
@@ -186,17 +185,6 @@ export const harvardArtOptions: HarvardSearchResponse = {
   info,
   records: options.map(option => ({title: option}))
 };
-export const fromRIJKArtOptionsResponse: RIJKSAllArtResponse = {
-  count: options.length,
-  artObjects: options.map(title => ({
-    id: faker.lorem.word(),
-    objectNumber: faker.lorem.word(),
-    title,
-    longTitle: title,
-    webImage: {url: faker.lorem.word()}
-  }))
-};
-
 const vamInfo = {record_count: 500, pages: 42, page: 1, page_size: defaultRecordLimit};
 const vamSearchRecords = [...Array(vamInfo.page_size)].map((_, index) => ({
   systemNumber: `O${index}`,
@@ -271,39 +259,3 @@ export const fromHarvardArt: AllArt = {
   }))
 };
 
-const rijkPieceResponse = (): RIJKArtObjectResponse => ({
-  id: faker.lorem.words(),
-  objectNumber: faker.lorem.word(),
-  title: faker.lorem.words(),
-  principalOrFirstMaker: faker.lorem.words(),
-  longTitle: faker.lorem.words(),
-  webImage: {
-    url: faker.lorem.words()
-  }
-});
-export const rIJKArtResponse: RIJKSAllArtResponse = {
-  count: Math.floor(Math.random() * 100) + 1,
-  artObjects: [...Array(pagination.limit)].map(rijkPieceResponse)
-};
-
-export const fromRIJKToPiece = (piece: RIJKArtObjectResponse): Art => ({
-  id: piece.objectNumber,
-  title: piece.title,
-  artistInfo: piece.longTitle,
-  image: piece.webImage.url,
-  altText: piece.longTitle
-});
-
-export const rijkArtObjectResponse: RIJKSArtResponse = {
-  artObject: rijkPieceResponse()
-};
-
-export const fromRIJKArt = (currentPage: number, limit: number): AllArt => ({
-  pagination: {
-    total: rIJKArtResponse.count,
-    limit,
-    totalPages: rIJKArtResponse.count / rIJKArtResponse.artObjects.length,
-    currentPage
-  },
-  pieces: rIJKArtResponse.artObjects.map(fromRIJKToPiece)
-});

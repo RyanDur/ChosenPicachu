@@ -1,13 +1,12 @@
 import {FormEvent, useState} from 'react';
 import {useGallery} from '../Art/Context';
 import {useSearchParamsObject} from '../../hooks';
-import {Source} from '../resource/types/resource';
 import './PageControl.css';
 import './PageControl.layout.css';
 
 export const PageControl = () => {
   const {art} = useGallery();
-  const {page, size, tab, updateSearchParams} = useSearchParamsObject<{ page: number, size: number, tab: Source }>();
+  const {page, size, updateSearchParams} = useSearchParamsObject<{ page: number, size: number }>();
   const [pageNumber, updatePageNumber] = useState(page);
   const [pageSize, updatePageSize] = useState(size);
 
@@ -38,12 +37,6 @@ export const PageControl = () => {
            min={1}
            max={100}
            id="per-page"
-           onInput={event => {
-             const number = +event.currentTarget.value;
-             if (number > 10 && tab === Source.RIJKS) {
-               event.currentTarget.value = String(Math.round(number / 10) * 10);
-             }
-           }}
            onChange={event => updatePageSize(+event.currentTarget.value)}/>
     <label id="per-page-label" className="title" htmlFor="per-page">{size} Per Page</label>
     <button type="submit" id="submit-page-number" className="control">Go</button>
