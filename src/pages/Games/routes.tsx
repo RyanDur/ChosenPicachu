@@ -1,4 +1,5 @@
 import {Paths} from '@pages/Paths';
+import {PageError} from '@pages/PageError';
 import {lazy} from 'react';
 
 const ThreeInARow = lazy(() => import('./ThreeInARow').then(m => ({default: m.ThreeInARow})));
@@ -9,6 +10,7 @@ export enum GamePaths {
 }
 export const Games = {
   path: `${Paths.games}/*`,
+  errorElement: <PageError/>,
   element: <GamesPage/>,
   children: [
     {
