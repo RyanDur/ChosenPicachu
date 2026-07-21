@@ -15,6 +15,19 @@ import {setupAICAllArtResponse} from '@components/art-gallery/__tests__/galleryA
 describe('The gallery.', () => {
   window.scrollTo = vi.fn();
 
+  test('loads the wall exactly once on mount', async () => {
+    let hits = 0;
+    const count = () => hits++;
+    server.events.on('request:start', count);
+    setupAICAllArtResponse(aicArtResponse);
+    renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
+
+    await screen.findAllByTestId(/piece-/);
+    server.events.removeListener('request:start', count);
+
+    expect(hits).toEqual(1);
+  });
+
   test('when the art is loading', async () => {
     server.use(handle.get(aicDomain, async () => {
       await delay(150);
