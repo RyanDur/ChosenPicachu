@@ -26,6 +26,8 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           npm ci
+          npm run lint
+          npm run lint:css
           npm run build
       - name: Export env for test
         uses: cardinalby/export-env-action@v2
