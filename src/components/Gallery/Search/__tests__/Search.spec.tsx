@@ -1,3 +1,4 @@
+import {anyRequestRespondsWith} from '../../../../__tests__/util/server';
 import {screen, waitFor} from '@testing-library/react';
 import {Search} from '../index';
 import userEvent from '@testing-library/user-event';
@@ -20,7 +21,7 @@ describe('search', () => {
   };
 
   beforeEach(() => {
-    fetchMock.mockResponse(JSON.stringify(searchResponse));
+    anyRequestRespondsWith(JSON.stringify(searchResponse));
   });
 
   it('should give suggestions for completion', async () => {
@@ -35,7 +36,7 @@ describe('search', () => {
     renderWithRouter(<Search/>);
     await userEvent.click(screen.getByTestId('submit-query'));
 
-    expect(screen.getByTestId('subject-url-search')).toHaveTextContent('');
+    expect(screen.getByTestId('subject-url-search')).not.toHaveTextContent('search');
 
     await userEvent.type(screen.getByLabelText(/Search For/), 'A');
     await userEvent.click(screen.getByTestId('submit-query'));

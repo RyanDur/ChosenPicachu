@@ -1,5 +1,4 @@
 import {useSearchParams} from 'react-router-dom';
-import {useEffect} from 'react';
 import {toQueryString} from '../../util/URL';
 import {has} from '@ryandur/sand';
 
@@ -11,7 +10,7 @@ type SearchParamsObject<T extends { [key: string]: unknown }> = T & {
   removeSearchParams: (...params: string[]) => void,
   createSearchParams: (params: Partial<T>) => string,
 };
-export const useSearchParamsObject = <T extends { [p: string]: string | number }>(val?: T): SearchParamsObject<T> => {
+export const useSearchParamsObject = <T extends { [p: string]: string | number }>(defaults?: Partial<T>): SearchParamsObject<T> => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const createSearchParams = (params = {}): string =>
@@ -24,12 +23,8 @@ export const useSearchParamsObject = <T extends { [p: string]: string | number }
   const updateSearchParams = (params = {}) =>
     setSearchParams({...Object.fromEntries(searchParams.entries()), ...filterEmpty(params)});
 
-  useEffect(() => {
-    updateSearchParams(val);
-    // oxlint-disable-next-line react-hooks/exhaustive-deps -- syncs initial params to the URL once, on mount only
-  }, []);
-
   return {
+    ...defaults,
     ...(Object.fromEntries(searchParams.entries()) as T),
     updateSearchParams,
     createSearchParams,
