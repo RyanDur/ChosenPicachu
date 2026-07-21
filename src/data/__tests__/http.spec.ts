@@ -23,7 +23,7 @@ describe('http', () => {
     response: unknown
   }) => {
     test(`${httpMethod} success`, async () => {
-      fetchMock.mockResponse(JSON.stringify(testObject), {status: code});
+      fetchMock.mockResponse(response === undefined ? null : JSON.stringify(testObject), {status: code});
 
       const actual = await method(endpoint, body).orNull();
 

@@ -10,7 +10,7 @@ interface Props {
 }
 
 const usePrevious = <T = number | unknown>(value: T) => {
-  const ref = useRef<T>();
+  const ref = useRef<T | undefined>(undefined);
   useEffect(() => {
     ref.current = value;
   }, [value]);
