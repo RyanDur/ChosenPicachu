@@ -1,0 +1,56 @@
+import {
+  AICAllArtResponse,
+  AICAllArtSchema,
+  AICArt,
+  AICArtSchema,
+  AICPieceData,
+  AICSearchResponse,
+  AICSearchSchema
+} from '@components/art-gallery/museums/aic/types';
+import {toQueryString} from '@libraries/url-support';
+import {aicDomain, defaultRecordLimit, defaultSearchLimit} from '@components/art-gallery/museums/config';
+import {AllArt, Art, SearchOptions} from '@components/art-gallery/museums/types/response';
+import {validate} from '@transport/validate';
+import {http} from '@transport/http';
+import {GetAllArtRequest} from '@components/art-gallery/museums/types/resource';
+
+export const fields = ['id', 'title', 'image_id', 'artist_display', 'term_titles', 'thumbnail'];
+
+export const aic = {
+  allArt: ({page, search, size = defaultRecordLimit}: GetAllArtRequest) => http
+    .get(`${aicDomain}${search ? '/search' : ''}${toQueryString({q: search, fields, page, limit: size})}`)
+    .mBind(validate(AICAllArtSchema))
+    .map(({pagination, data}: AICAllArtResponse): AllArt => ({
+      pagination: {
+        total: pagination.total,
+        limit: pagination.limit,
+        totalPages: pagination.total_pages,
+        currentPage: pagination.current_page
+      },
+      pieces: data.map(aicToPiece)
+    })),
+
+  art: (id: string) => http
+    .get(`${aicDomain}/${id}${toQueryString({fields})}`)
+    .mBind(validate(AICArtSchema))
+    .map(({data}: AICPieceData): Art => aicToPiece(data)),
+
+  searchOptions: (search: string) => http
+    .get(`${aicDomain}/search${toQueryString({
+      'query[term][title]': search,
+      fields: 'suggest_autocomplete_all',
+      limit: defaultSearchLimit
+    })}`)
+    .mBind(validate(AICSearchSchema))
+    .map(({data}: AICSearchResponse): SearchOptions => data
+      .map(({suggest_autocomplete_all}) => suggest_autocomplete_all[1])
+      .flatMap(option => option.input))
+};
+
+const aicToPiece = (data: AICArt): Art => ({
+  id: String(data.id),
+  title: data.title,
+  image: `https://www.artic.edu/iiif/2/${data.image_id}/full/2000,/0/default.jpg`,
+  artistInfo: data.artist_display,
+  altText: data.thumbnail?.alt_text || data.term_titles.join(' ') || ''
+});

@@ -13,10 +13,10 @@ import {
 import userEvent from '@testing-library/user-event';
 import {toQueryString} from '@libraries/url-support';
 import {AddressInfo, User} from '../../components/UserInfo/types';
-import {AllArt, Art} from '../../components/Gallery/resource/types/response';
+import {AllArt, Art} from '@components/art-gallery/museums/types/response';
 import {toDate} from 'date-fns';
-import {GalleryContext} from '../../components/Gallery/Art/Context';
-import {ArtPieceContext} from '../../components/Gallery/ArtPiece/Context';
+import {GalleryContext} from '@components/art-gallery/Art/Context';
+import {ArtPieceContext} from '@components/art-gallery/ArtPiece/Context';
 
 export interface Rendered {
   result: RenderResult;

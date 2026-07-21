@@ -1,8 +1,8 @@
 import {FC, useEffect, useState} from 'react';
 import {Link, useSearchParams} from 'react-router-dom';
 import {toQueryString} from '@libraries/url-support';
-import {defaultRecordLimit} from '../../config';
-import {Source} from '../../components/Gallery/resource/types/resource';
+import {defaultRecordLimit} from '@components/art-gallery/museums/config';
+import {Source} from '@components/art-gallery/museums/types/resource';
 import {Paths} from '@libraries/routing/Paths';
 import {AboutTopics} from '../../components/About/types';
 
