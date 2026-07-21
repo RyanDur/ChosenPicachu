@@ -7,7 +7,7 @@ import {UserInformation} from '../UserInfo';
 import {Paths} from '@libraries/routing/Paths';
 import {Table} from '../Table';
 import {age, formatAge} from '@components/Users/age';
-import {FriendsList} from '../SelectList';
+import {FriendsList} from '@components/Users/SelectList';
 import './styles.css';
 import './styles.layout.css';
 

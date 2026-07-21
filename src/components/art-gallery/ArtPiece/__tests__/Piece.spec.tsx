@@ -1,0 +1,58 @@
+import {anyRequestRespondsWith} from '../../../../__tests__/util/server';
+import {screen, waitFor} from '@testing-library/react';
+import {ArtPiece} from '@components/art-gallery/ArtPiece/index';
+import {renderWithArtPieceContext} from '../../../../__tests__/util';
+import {HTTPError} from '@transport/types';
+import {faker} from '@faker-js/faker';
+import {Paths} from '@libraries/routing/Paths';
+import {Source} from '@components/art-gallery/museums/types/resource';
+import {AICArtResponse} from '@components/art-gallery/museums/aic/types';
+import {setupAICArtPieceResponse} from '@components/art-gallery/__tests__/galleryApiTestHelper';
+
+describe('viewing a piece', () => {
+  const aicArtResponse: AICArtResponse = {
+    data: {
+      id: faker.number.int(),
+      title: faker.lorem.words(),
+      term_titles: [faker.lorem.sentence()],
+      artist_display: faker.lorem.paragraph(),
+      image_id: faker.lorem.word()
+    }
+  };
+
+  test('when loading the piece of art', async () => {
+    setupAICArtPieceResponse(aicArtResponse, aicArtResponse.data.id);
+
+    renderWithArtPieceContext(<ArtPiece/>, {
+      initialRoute: `${Paths.artGallery}/1234`,
+      path: `${Paths.artGalleryPiece}`
+    });
+
+    await waitFor(() => expect(screen.getByTestId('loading-piece')).toBeInTheDocument());
+  });
+
+  test('when the art piece is loaded', async () => {
+    setupAICArtPieceResponse(aicArtResponse, aicArtResponse.data.id);
+
+    renderWithArtPieceContext(<ArtPiece/>, {
+      initialRoute: `${Paths.artGallery}/${aicArtResponse.data.id}`,
+      path: Paths.artGalleryPiece,
+      params: {tab: Source.AIC}
+    });
+
+    expect(await screen.findByText(aicArtResponse.data.artist_display)).toBeInTheDocument();
+    await waitFor(() => expect(screen.queryByTestId('image-error')).not.toBeInTheDocument());
+  });
+
+  test('when getting the piece has errored', async () => {
+    anyRequestRespondsWith(HTTPError.SERVER_ERROR, 500);
+    renderWithArtPieceContext(<ArtPiece/>, {
+      initialRoute: `${Paths.artGallery}/1234`,
+      path: `${Paths.artGalleryPiece}`
+    });
+
+    await waitFor(() => expect(screen.queryByTestId('image-error')).toBeInTheDocument());
+    expect(screen.queryByTestId('image-figure')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('loading-piece')).not.toBeInTheDocument();
+  });
+});
