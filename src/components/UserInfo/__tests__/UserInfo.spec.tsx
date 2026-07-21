@@ -1,5 +1,5 @@
 import {UserInformation} from '../index';
-import {fireEvent, render, screen, waitFor} from '@testing-library/react';
+import {render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {users} from '../../../dummyData';
 import {fillOutForm} from '../../../__tests__/util';

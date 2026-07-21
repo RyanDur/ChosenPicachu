@@ -1,4 +1,4 @@
-import {fireEvent, screen, waitFor, within} from '@testing-library/react';
+import {screen, waitFor, within} from '@testing-library/react';
 import {format} from 'date-fns';
 import {users as someUsers} from '../../../dummyData';
 import {renderWithRouter} from '../../../__tests__/util';

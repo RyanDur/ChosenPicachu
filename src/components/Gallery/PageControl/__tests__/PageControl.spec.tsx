@@ -1,5 +1,5 @@
 import userEvent from '@testing-library/user-event';
-import {fireEvent, screen} from '@testing-library/react';
+import {screen} from '@testing-library/react';
 import {fromAICArt} from '../../../../dummyData';
 import {renderWithGalleryContext} from '../../../../__tests__/util';
 import {PageControl} from '../index';
