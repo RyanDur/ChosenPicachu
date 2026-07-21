@@ -22,7 +22,7 @@ export const ArtPiece = () => {
             .onSuccess(updatePiece)
             .onFailure(() => hasErrored(true));
         return reset;
-    }, [id, updatePiece, tab]);
+    }, [id, updatePiece, tab, reset]);
 
     return <>
         {loading && <Loading testId="loading-piece"/>}

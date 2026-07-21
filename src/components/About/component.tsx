@@ -24,7 +24,7 @@ import {NaturalZIndex} from './ZIndexDemo';
 import '../../routes/BasePage.layout.css';
 
 const paragraphs = (count: number) =>
-  faker.helpers.uniqueArray(faker.lorem.word, count).map((key) => ({
+  faker.helpers.uniqueArray(() => faker.lorem.word(), count).map((key) => ({
     key,
     value: faker.lorem.paragraphs(Math.floor(Math.random() * 6) + 1)
   }));

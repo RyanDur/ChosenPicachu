@@ -26,6 +26,7 @@ export const useSearchParamsObject = <T extends { [p: string]: string | number }
 
   useEffect(() => {
     updateSearchParams(val);
+    // oxlint-disable-next-line react-hooks/exhaustive-deps -- syncs initial params to the URL once, on mount only
   }, []);
 
   return {

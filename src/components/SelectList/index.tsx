@@ -18,7 +18,7 @@ export const FriendsList: FC<Props> = ({users, user, onChange}) => {
 
   useEffect(() => updatePotentialFriends(users
     .filter(possibleFriend => user.id !== possibleFriend.id)
-    .filter(possibleFriend => !friends.map(friend => friend.id).includes(possibleFriend.id))), [friends]);
+    .filter(possibleFriend => !friends.map(friend => friend.id).includes(possibleFriend.id))), [friends, users, user.id]);
 
   const displayFullName = ({info}: User) => `${info.firstName} ${info.lastName}`;
 
