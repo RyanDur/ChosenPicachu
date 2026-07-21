@@ -22,7 +22,7 @@ export const GalleryNav: FC<Props> = ({id}) => {
   const {
     page, size,
     createSearchParams,
-  } = useSearchParamsObject<{ page: number, size: number }>({page: 1, size: 0});
+  } = useSearchParamsObject<{ page: number, size: number }>({page: 1});
   const location = useLocation();
   const path = location.pathname;
   const previous = usePrevious(art?.pagination.total);

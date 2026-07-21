@@ -1,12 +1,12 @@
 import * as matchers from '@testing-library/jest-dom/matchers';
 import '@testing-library/jest-dom/vitest';
-import {expect, vi} from 'vitest';
-import createFetchMock from 'vitest-fetch-mock';
-import 'vitest-fetch-mock';
+import {afterAll, afterEach, beforeAll, expect} from 'vitest';
 import 'vitest-location-mock';
+import {server} from './src/__tests__/util/server';
 
-const fetchMocker = createFetchMock(vi);
+beforeAll(() => server.listen({onUnhandledRequest: 'error'}));
+server.events.on('request:start', ({request}) => console.error('REQ:', request.method, request.url));
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
 
-// sets globalThis.fetch and globalThis.fetchMock to our mocked version
-fetchMocker.enableMocks();
 expect.extend(matchers);

@@ -1,20 +1,35 @@
+import {http as handle, HttpResponse} from 'msw';
 import {HTTPError, HTTPMethod, HTTPStatus} from '../types';
 import {http} from '../http';
 import {faker} from '@faker-js/faker';
 import {failure, Result} from '@ryandur/sand';
+import {server} from '../../__tests__/util/server';
 
 const testObject = {foo: faker.lorem.words()};
 
 describe('http', () => {
   const endpoint = `/${faker.lorem.word()}/${faker.lorem.word()}`;
 
+  const handlers = {
+    [HTTPMethod.GET]: handle.get,
+    [HTTPMethod.POST]: handle.post,
+    [HTTPMethod.PUT]: handle.put,
+    [HTTPMethod.DELETE]: handle.delete
+  };
+
+  const respondWith = (method: HTTPMethod, status: HTTPStatus, body: string | null = null) =>
+    server.use(handlers[method](endpoint, () => new HttpResponse(body, {status})));
+
+  const networkFailsFor = (method: HTTPMethod) =>
+    server.use(handlers[method](endpoint, () => HttpResponse.error()));
+
   describe.each`
     method         | httpMethod           | body          | code                     | response
-    ${http.get}    | ${HTTPMethod.GET}    | ${undefined}  | ${HTTPStatus.OK}         | ${testObject}    
-    ${http.post}   | ${HTTPMethod.POST}   | ${testObject} | ${HTTPStatus.CREATED}    | ${testObject}    
-    ${http.put}    | ${HTTPMethod.PUT}    | ${testObject} | ${HTTPStatus.NO_CONTENT} | ${undefined}     
-    ${http.put}    | ${HTTPMethod.PUT}    | ${testObject} | ${HTTPStatus.CREATED}    | ${testObject}     
-    ${http.delete} | ${HTTPMethod.DELETE} | ${undefined}  | ${HTTPStatus.NO_CONTENT} | ${undefined}    
+    ${http.get}    | ${HTTPMethod.GET}    | ${undefined}  | ${HTTPStatus.OK}         | ${testObject}
+    ${http.post}   | ${HTTPMethod.POST}   | ${testObject} | ${HTTPStatus.CREATED}    | ${testObject}
+    ${http.put}    | ${HTTPMethod.PUT}    | ${testObject} | ${HTTPStatus.NO_CONTENT} | ${undefined}
+    ${http.put}    | ${HTTPMethod.PUT}    | ${testObject} | ${HTTPStatus.CREATED}    | ${testObject}
+    ${http.delete} | ${HTTPMethod.DELETE} | ${undefined}  | ${HTTPStatus.NO_CONTENT} | ${undefined}
     `('$httpMethod', ({method, httpMethod, body, code, response}: {
     method: (endpoint: string, body?: unknown) => Result.Async<unknown, HTTPError>,
     httpMethod: HTTPMethod,
@@ -23,7 +38,7 @@ describe('http', () => {
     response: unknown
   }) => {
     test(`${httpMethod} success`, async () => {
-      fetchMock.mockResponse(response === undefined ? null : JSON.stringify(testObject), {status: code});
+      respondWith(httpMethod, code, response === undefined ? null : JSON.stringify(testObject));
 
       const actual = await method(endpoint, body).orNull();
 
@@ -31,7 +46,7 @@ describe('http', () => {
     });
 
     test(`${httpMethod} failure is FORBIDDEN`, async () => {
-      fetchMock.mockResponse(JSON.stringify(testObject), {status: HTTPStatus.FORBIDDEN});
+      respondWith(httpMethod, HTTPStatus.FORBIDDEN, JSON.stringify(testObject));
 
       const actual = (await method(endpoint, body).value).inspect();
 
@@ -39,7 +54,7 @@ describe('http', () => {
     });
 
     test(`${httpMethod} when the network is down`, async () => {
-      fetchMock.mockReject(new Error('Network Error'));
+      networkFailsFor(httpMethod);
 
       const actual = (await method(endpoint, body).value).inspect();
 
@@ -47,8 +62,7 @@ describe('http', () => {
     });
 
     test(`${httpMethod} failure is SERVER_ERROR`, async () => {
-      fetchMock.mockReject(new Error('Network Error'));
-      fetchMock.mockResponse('', {status: HTTPStatus.SERVER_ERROR});
+      respondWith(httpMethod, HTTPStatus.SERVER_ERROR, '');
 
       const actual = (await method(endpoint, body).value).inspect();
 
@@ -61,13 +75,13 @@ describe('http', () => {
     ${http.get}    | ${HTTPMethod.GET}    | ${undefined}  | ${HTTPStatus.OK}
     ${http.post}   | ${HTTPMethod.POST}   | ${testObject} | ${HTTPStatus.CREATED}
     ${http.put}    | ${HTTPMethod.PUT}    | ${testObject} | ${HTTPStatus.CREATED}
-    `('$httpMethod can handle improper json', async ({method, body, code}: {
+    `('$httpMethod can handle improper json', async ({method, httpMethod, body, code}: {
     method: (endpoint: string, body?: unknown) => Result.Async<unknown, HTTPError>,
     httpMethod: HTTPMethod,
     body: unknown,
     code: HTTPStatus,
   }) => {
-    fetchMock.mockResponse('', {status: code});
+    respondWith(httpMethod, code, '');
 
     const actual = (await method(endpoint, body).value).inspect();
 

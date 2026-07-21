@@ -1,3 +1,4 @@
+import {anyRequestRespondsWith} from '../../../../__tests__/util/server';
 import {screen, waitFor} from '@testing-library/react';
 import {ArtPiece} from '../index';
 import {renderWithArtPieceContext} from '../../../../__tests__/util';
@@ -44,7 +45,7 @@ describe('viewing a piece', () => {
   });
 
   test('when getting the piece has errored', async () => {
-    fetchMock.mockResponse(HTTPError.SERVER_ERROR, {status: 500});
+    anyRequestRespondsWith(HTTPError.SERVER_ERROR, 500);
     renderWithArtPieceContext(<ArtPiece/>, {
       initialRoute: `${Paths.artGallery}/1234`,
       path: `${Paths.artGalleryPiece}`

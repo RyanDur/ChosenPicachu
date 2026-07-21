@@ -1,3 +1,4 @@
+import {anyRequestFailsToConnect} from '../../../../__tests__/util/server';
 import {screen, waitFor} from '@testing-library/react';
 import {renderWithGalleryContext, renderWithMemoryRouter} from '../../../../__tests__/util';
 import {ArtGallery} from '../index';
@@ -30,7 +31,7 @@ describe('The gallery.', () => {
   });
 
   test('when the art has errored', async () => {
-    fetchMock.mockReject();
+    anyRequestFailsToConnect();
 
     renderWithGalleryContext(<ArtGallery/>, {params: {page: 23, search: 'g', size: 8, tab: Source.HARVARD}});
 

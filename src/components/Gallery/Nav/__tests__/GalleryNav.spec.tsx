@@ -16,7 +16,7 @@ describe('Gallery Navigation', () => {
   test('on load', () => {
     renderWithGalleryContext(<GalleryNav/>, options);
 
-    expect(screen.getByTestId('subject-url-search')).toHaveTextContent('page=1&size=0');
+    expect(screen.getByTestId('subject-url-search')).not.toHaveTextContent('page');
   });
 
   describe('without params', () => {
@@ -25,12 +25,12 @@ describe('Gallery Navigation', () => {
         renderWithGalleryContext(<GalleryNav/>, options);
         await userEvent.click(screen.getByTestId('next-page'));
 
-        expect(screen.getByTestId('subject-url-search')).toHaveTextContent('page=2&size=0');
+        expect(screen.getByTestId('subject-url-search')).toHaveTextContent('page=2');
         expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
 
         await userEvent.click(screen.getByTestId('next-page'));
 
-        expect(screen.getByTestId('subject-url-search')).toHaveTextContent('page=3&size=0');
+        expect(screen.getByTestId('subject-url-search')).toHaveTextContent('page=3');
         expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
       });
 
@@ -46,7 +46,7 @@ describe('Gallery Navigation', () => {
         await userEvent.click(screen.getByTestId('last-page'));
 
         expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
-        expect(screen.getByTestId('subject-url-search')).toHaveTextContent(`?page=${fromAICArt.pagination.totalPages}&size=0`);
+        expect(screen.getByTestId('subject-url-search')).toHaveTextContent(`?page=${fromAICArt.pagination.totalPages}`);
         expect(screen.queryByTestId('last-page')).not.toBeInTheDocument();
         expect(screen.queryByTestId('next-page')).not.toBeInTheDocument();
         expect(screen.queryByTestId('first-page')).toBeInTheDocument();
@@ -66,14 +66,14 @@ describe('Gallery Navigation', () => {
         await userEvent.click(screen.getByTestId('prev-page'));
 
         expect(screen.getByTestId('subject-url-search')).toHaveTextContent(
-          `page=${fromAICArt.pagination.totalPages - 1}&size=0`
+          `page=${fromAICArt.pagination.totalPages - 1}`
         );
         expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
 
         await userEvent.click(screen.getByTestId('prev-page'));
 
         expect(screen.getByTestId('subject-url-search')).toHaveTextContent(
-          `page=${fromAICArt.pagination.totalPages - 2}&size=0`
+          `page=${fromAICArt.pagination.totalPages - 2}`
         );
         expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
       });
@@ -113,7 +113,7 @@ describe('Gallery Navigation', () => {
         await userEvent.click(screen.getByTestId('first-page'));
 
         expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
-        expect(screen.getByTestId('subject-url-search')).toHaveTextContent('page=1&size=0');
+        expect(screen.getByTestId('subject-url-search')).toHaveTextContent('page=1');
         expect(screen.queryByTestId('last-page')).toBeInTheDocument();
         expect(screen.queryByTestId('next-page')).toBeInTheDocument();
         expect(screen.queryByTestId('first-page')).not.toBeInTheDocument();
@@ -131,29 +131,29 @@ describe('Gallery Navigation', () => {
     });
 
     await userEvent.click(screen.getByTestId('next-page'));
-    expect(screen.getByTestId('subject-url-search')).toHaveTextContent('search=q&page=2&size=0');
+    expect(screen.getByTestId('subject-url-search')).toHaveTextContent('search=q&page=2');
 
     await userEvent.click(screen.getByTestId('next-page'));
-    expect(screen.getByTestId('subject-url-search')).toHaveTextContent('search=q&page=3&size=0');
+    expect(screen.getByTestId('subject-url-search')).toHaveTextContent('search=q&page=3');
 
     await userEvent.click(screen.getByTestId('last-page'));
     expect(screen.getByTestId('subject-url-search')).toHaveTextContent(
-      `search=q&page=${fromAICArt.pagination.totalPages}&size=0`
+      `search=q&page=${fromAICArt.pagination.totalPages}`
     );
 
     await userEvent.click(screen.getByTestId('prev-page'));
     expect(screen.getByTestId('subject-url-search')).toHaveTextContent(
-      `search=q&page=${fromAICArt.pagination.totalPages - 1}&size=0`
+      `search=q&page=${fromAICArt.pagination.totalPages - 1}`
     );
 
     await userEvent.click(screen.getByTestId('prev-page'));
     expect(screen.getByTestId('subject-url-search')).toHaveTextContent(
-      `search=q&page=${fromAICArt.pagination.totalPages - 2}&size=0`
+      `search=q&page=${fromAICArt.pagination.totalPages - 2}`
     );
 
     await userEvent.click(screen.getByTestId('first-page'));
     expect(screen.getByTestId('subject-url-search')).toHaveTextContent(
-      'search=q&page=1&size=0'
+      'search=q&page=1'
     );
   });
 
