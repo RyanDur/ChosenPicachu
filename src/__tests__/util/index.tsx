@@ -79,7 +79,7 @@ export const renderWithGalleryContext: RenderWithRouter<'pieceState'> = (
 
 export const renderWithMemoryRouter = (routes: RouteObject, {
   path = defaultUrlContext.path
-}: { path: string }) => {
+}: { path?: string }) => {
   const router = createMemoryRouter([routes], {
     initialEntries: [path],
   });

@@ -9,7 +9,7 @@ interface Props {
   id?: string;
 }
 
-const usePrevious = <T = number | unknown>(value: T) => {
+const usePrevious = <T,>(value: T) => {
   const ref = useRef<T | undefined>(undefined);
   useEffect(() => {
     ref.current = value;
