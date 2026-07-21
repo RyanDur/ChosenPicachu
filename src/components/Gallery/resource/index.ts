@@ -12,7 +12,7 @@ const fromSource = <T>(source: Source, func: (resource: ArtResource) => Result.A
     [Source.AIC]: aic,
     [Source.HARVARD]: harvard,
     [Source.RIJKS]: rijks
-  }[source]).map(func).orElse(asyncFailure<T, HTTPError>(HTTPError.UNKNOWN_SOURCE));
+  }[source]).map(func).orElse(asyncFailure(HTTPError.UNKNOWN_SOURCE));
 
 export const art = {
   getAll: ({source, ...request}: GetAllArt): Result.Async<AllArt, HTTPError> =>
