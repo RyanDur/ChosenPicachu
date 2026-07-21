@@ -1,7 +1,7 @@
 import {FC, useEffect} from 'react';
 import {Link, useLocation} from 'react-router-dom';
-import {join} from '../util';
-import {useSearchParamsObject} from '../hooks';
+import {join} from '@libraries/class-names';
+import {useSearchParamsObject} from '@libraries/search-params';
 import {not} from '@ryandur/sand';
 import './Tabs.css';
 

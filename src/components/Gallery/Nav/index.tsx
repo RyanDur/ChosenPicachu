@@ -1,6 +1,6 @@
 import {Link, useLocation} from 'react-router-dom';
 import {FC, useEffect, useRef} from 'react';
-import {useSearchParamsObject} from '../../hooks';
+import {useSearchParamsObject} from '@libraries/search-params';
 import {useGallery} from '../Art/Context';
 import './GalleryNav.css';
 import './GalleryNav.layout.css';

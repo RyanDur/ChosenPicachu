@@ -1,6 +1,6 @@
 import {AddressInfo, User, UserInfo} from '../../UserInfo/types';
 import {asyncFailure, asyncSuccess, maybe, Result} from '@ryandur/sand';
-import {HTTPError} from '../../../data/types';
+import {HTTPError} from '@transport/types';
 import {nanoid} from 'nanoid';
 import {faker} from '@faker-js/faker';
 import {AvatarGenerator} from 'random-avatar-generator';

@@ -6,7 +6,7 @@ import {Source} from '../../resource/types/resource';
 import {aicArtResponse} from '../../../../dummyData';
 import {test} from 'vitest';
 import {Gallery} from '../../index';
-import {Paths} from '../../../../routes/Paths';
+import {Paths} from '@libraries/routing/Paths';
 import {setupAICAllArtResponse} from '../../__tests__/galleryApiTestHelper';
 
 describe('The gallery.', () => {

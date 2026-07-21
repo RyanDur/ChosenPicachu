@@ -1,9 +1,9 @@
 import {FC, useEffect, useState} from 'react';
 import {Link, useSearchParams} from 'react-router-dom';
-import {toQueryString} from '../../util/URL';
+import {toQueryString} from '@libraries/url-support';
 import {defaultRecordLimit} from '../../config';
 import {Source} from '../../components/Gallery/resource/types/resource';
-import {Paths} from '../Paths';
+import {Paths} from '@libraries/routing/Paths';
 import {AboutTopics} from '../../components/About/types';
 
 const AboutNav: FC = () => {

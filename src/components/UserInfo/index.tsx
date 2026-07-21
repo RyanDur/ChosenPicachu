@@ -1,7 +1,7 @@
 import {FC, useEffect, useReducer, useState} from 'react';
 import {User} from './types';
 import {FancyInput} from './FancyFormElements/FancyInput';
-import {join} from '../util';
+import {join} from '@libraries/class-names';
 import {FancyTextarea} from './FancyFormElements/FancyTextarea';
 import {
   resetForm,
@@ -21,7 +21,7 @@ import {Link} from 'react-router-dom';
 import {FancyDateInput} from './FancyFormElements/FancyDateInput';
 import {toDate} from 'date-fns';
 import {Consumer} from '@ryandur/sand';
-import {Paths} from '../../routes/Paths';
+import {Paths} from '@libraries/routing/Paths';
 import './Form.layout.css';
 import './Form.css';
 

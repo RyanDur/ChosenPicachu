@@ -1,4 +1,4 @@
-import {Paths} from '../../routes/Paths';
+import {Paths} from '@libraries/routing/Paths';
 import {ThreeInARow} from './ThreeInARow';
 import {GamesPage} from './GamesPage';
 

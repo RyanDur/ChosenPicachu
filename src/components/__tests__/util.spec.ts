@@ -1,4 +1,4 @@
-import {age, AgeIn} from '../util';
+import {age, AgeIn} from '@components/Users/age';
 
 describe('util', () => {
   test('age', () => {

@@ -1,6 +1,6 @@
 import {ArtGalleryPage} from './ArtGalleryPage';
 import {ArtGalleryPiecePage} from './ArtGalleryPiecePage';
-import {Paths} from '../../routes/Paths';
+import {Paths} from '@libraries/routing/Paths';
 import {GalleryPaths, GalleryRouter} from './GalleryRouter';
 
 export const Gallery = {

@@ -1,7 +1,7 @@
 import {asyncFailure, maybe, Result} from '@ryandur/sand';
 import {GetAllArt, GetArt, SearchArt, Source} from './types/resource';
 import {AllArt, Art, SearchOptions} from './types/response';
-import {HTTPError} from '../../../data/types';
+import {HTTPError} from '@transport/types';
 import {aic} from './aic';
 import {harvard} from './harvard';
 import {vam} from './vam';

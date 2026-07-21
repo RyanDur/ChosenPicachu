@@ -1,6 +1,6 @@
 import {FC, useState} from 'react';
 import {Draggable, DraggableListItemProps} from './Draggable';
-import {classNames} from '../../../util/classNames';
+import {classNames} from '@libraries/class-names';
 
 export const HideOnDrag: FC<DraggableListItemProps> = ({
   children,

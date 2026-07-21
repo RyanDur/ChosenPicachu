@@ -1,4 +1,4 @@
-import {Paths} from '../../routes/Paths';
+import {Paths} from '@libraries/routing/Paths';
 import {AboutPage} from './component';
 
 export const About = {

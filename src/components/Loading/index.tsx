@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {join} from '../util';
+import {join} from '@libraries/class-names';
 import './Loading.css';
 
 interface LoadingProps {

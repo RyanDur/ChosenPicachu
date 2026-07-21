@@ -1,9 +1,9 @@
 import {FC, FormEvent, useEffect, useState} from 'react';
-import {useSearchParamsObject} from '../../hooks';
+import {useSearchParamsObject} from '@libraries/search-params';
 import {useNavigate} from 'react-router-dom';
 import {SearchOptions} from '../resource/types/response';
 import {Source} from '../resource/types/resource';
-import {Paths} from '../../../routes/Paths';
+import {Paths} from '@libraries/routing/Paths';
 import {debounce} from 'throttle-debounce';
 import {art} from '../resource';
 import './Search.css';

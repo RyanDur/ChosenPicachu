@@ -16,7 +16,7 @@ import {
 } from '../../../../dummyData';
 import {nanoid} from 'nanoid';
 import {AICPieceData, AICSearchResponse} from '../aic/types';
-import {HTTPError} from '../../../../data/types';
+import {HTTPError} from '@transport/types';
 import {art} from '../index';
 import {Art} from '../types/response';
 import {Source} from '../types/resource';

@@ -1,6 +1,6 @@
 import {FormEvent, useState} from 'react';
 import {useGallery} from '../Art/Context';
-import {useSearchParamsObject} from '../../hooks';
+import {useSearchParamsObject} from '@libraries/search-params';
 import './PageControl.css';
 import './PageControl.layout.css';
 

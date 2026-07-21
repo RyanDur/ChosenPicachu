@@ -1,7 +1,7 @@
 import {DragEvent, DragEventHandler, FC, PropsWithChildren, useState} from 'react';
-import {classNames} from '../../../util/classNames';
+import {classNames} from '@libraries/class-names';
 import Handle from './grip.svg';
-import {PropsWithClassName} from '../../_types';
+import {PropsWithClassName} from '@libraries/react-support';
 import {is} from '@ryandur/sand';
 
 export type DraggableListItemProps = PropsWithChildren & PropsWithClassName & {
