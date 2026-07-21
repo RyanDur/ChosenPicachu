@@ -1,8 +1,6 @@
-import {GalleryContext} from '@components/art-gallery/Art/Context';
-import {ArtPieceContext} from '@components/art-gallery/ArtPiece/Context';
+import {ArtPieceContext, GalleryContext, Loading} from '@components/art-gallery';
 import {Outlet} from 'react-router-dom';
 import {Suspense} from 'react';
-import {Loading} from '@components/art-gallery/Loading';
 
 export const GalleryRouter = () => (
   <GalleryContext>

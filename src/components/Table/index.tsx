@@ -58,3 +58,5 @@ export const Table: FC<TableProps> = (
             })}</tr>
     )}</tbody>
 </table>;
+
+export type {Column, Row} from './types';
