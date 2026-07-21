@@ -4,7 +4,7 @@ const ArtGalleryPage = lazy(() => import('./ArtGalleryPage').then(m => ({default
 const ArtGalleryPiecePage = lazy(() => import('./ArtGalleryPiecePage').then(m => ({default: m.ArtGalleryPiecePage})));
 import {Paths} from '@pages/Paths';
 import {GalleryPaths, GalleryRouter} from './GalleryRouter';
-import {GalleryLinks} from '@components/art-gallery/Links';
+import {GalleryLinks} from '@components/art-gallery';
 
 export const Gallery = {
   path: Paths.artGallery,

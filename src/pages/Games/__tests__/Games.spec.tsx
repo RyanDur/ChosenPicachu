@@ -1,7 +1,7 @@
 import {screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {renderWithMemoryRouter} from '@test-support';
-import {router} from '../router';
+import {router} from '../../../router';
 
 describe('Games', () => {
   test('can see the games page', async () => {

@@ -1,10 +1,6 @@
 import {FC} from 'react';
 import {Tabs} from '@components/Tabs';
-import {Source} from '@components/art-gallery/museums/types/resource';
-import {ArtGallery} from '@components/art-gallery/Art';
-import {Search} from '@components/art-gallery/Search';
-import {PageControl} from '@components/art-gallery/PageControl';
-import {GalleryNav} from '@components/art-gallery/Nav';
+import {ArtGallery, GalleryNav, PageControl, Search, Source} from '@components/art-gallery';
 import '../BasePage.css';
 import '../BasePage.layout.css';
 

@@ -1,6 +1,6 @@
 import {age, AgeIn} from '@components/Users/age';
 
-describe('util', () => {
+describe('age', () => {
   test('age', () => {
     Date.now = () => new Date('2021-07-11').getTime();
     const dob = new Date('1978-11-28');

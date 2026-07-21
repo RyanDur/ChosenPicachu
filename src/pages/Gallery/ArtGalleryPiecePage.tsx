@@ -1,7 +1,5 @@
 import {FC} from 'react';
-import {Search} from '@components/art-gallery/Search';
-import {ArtPiece} from '@components/art-gallery/ArtPiece';
-import {useArtPiece} from '@components/art-gallery/ArtPiece/Context';
+import {ArtPiece, Search, useArtPiece} from '@components/art-gallery';
 import '../BasePage.css';
 import '../BasePage.layout.css';
 
