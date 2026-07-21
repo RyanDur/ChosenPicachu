@@ -1,5 +1,5 @@
 import {Outlet} from 'react-router-dom';
-import {SideNav} from './routes/BasePage/SideNav';
+import {SideNav} from './pages/BasePage/SideNav';
 import {About, Gallery, Games, Home, Users} from './pages';
 
 export const router = {

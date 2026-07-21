@@ -5,8 +5,8 @@ import {ArtGallery} from '@components/art-gallery/Art';
 import {Search} from '@components/art-gallery/Search';
 import {PageControl} from '@components/art-gallery/PageControl';
 import {GalleryNav} from '@components/art-gallery/Nav';
-import '../../routes/BasePage.css';
-import '../../routes/BasePage.layout.css';
+import '../BasePage.css';
+import '../BasePage.layout.css';
 
 export const ArtGalleryPage: FC = () =>
   <>

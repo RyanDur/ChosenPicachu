@@ -2,8 +2,8 @@ import {FC} from 'react';
 import {Search} from '@components/art-gallery/Search';
 import {ArtPiece} from '@components/art-gallery/ArtPiece';
 import {useArtPiece} from '@components/art-gallery/ArtPiece/Context';
-import '../../routes/BasePage.css';
-import '../../routes/BasePage.layout.css';
+import '../BasePage.css';
+import '../BasePage.layout.css';
 
 export const ArtGalleryPiecePage: FC = () => {
     const {piece} = useArtPiece();
