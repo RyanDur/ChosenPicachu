@@ -1,8 +1,6 @@
 import {FC} from 'react';
 import {Tabs} from '@components/Tabs';
 import {ArtGallery, GalleryNav, PageControl, Search, Source} from '@components/art-gallery';
-import '../BasePage.css';
-import '../BasePage.layout.css';
 
 export const ArtGalleryPage: FC = () =>
   <>

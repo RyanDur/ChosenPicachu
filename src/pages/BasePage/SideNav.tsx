@@ -1,4 +1,6 @@
 import {FC, useEffect, useState} from 'react';
+import '../BasePage.css';
+import '../BasePage.layout.css';
 import {Link, useSearchParams} from 'react-router';
 import {toQueryString} from '@transport/url';
 import {defaultRecordLimit} from '@components/art-gallery/museums/config';
