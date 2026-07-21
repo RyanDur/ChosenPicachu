@@ -1,11 +1,11 @@
-import {FC, PropsWithChildren, useState} from 'react';
+import {FC, PropsWithChildren, useContext, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {join} from '@components/class-names';
 import {Loading} from '@components/art-gallery/Loading';
-import {useSearchParamsObject} from '@routing/searchParams';
+import {useSearchParamsObject} from '@components/search-params';
 import {toQueryString} from '@transport/url';
 import {Art} from '@components/art-gallery/museums/types/response';
-import {Paths} from '@routing/Paths';
+import {GalleryLinks} from '@components/art-gallery/Links';
 import './Image.css';
 
 interface ImageProps {
@@ -23,10 +23,11 @@ export const Image: FC<ImageProps> = (
   const [completed, isComplete] = useState(false);
   const [errored, isError] = useState(false);
   const {tab} = useSearchParamsObject<{ tab: string }>();
+  const {gallery} = useContext(GalleryLinks);
   const gotoTopOfPage = () => window.scrollTo(0, 0);
   const ConditionalLink: FC<PropsWithChildren & { enabled: boolean, area: string }> =
     ({children, enabled, area}) => enabled ?
-      <Link onClick={gotoTopOfPage} to={`${Paths.artGallery}/${piece.id}${toQueryString({tab: area})}`}
+      <Link onClick={gotoTopOfPage} to={`${gallery}/${piece.id}${toQueryString({tab: area})}`}
             className="scrim">{children}</Link> : <>{children}</>;
 
     return (errored || !piece.image) ?

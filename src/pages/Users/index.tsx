@@ -1,4 +1,4 @@
-import {Paths} from '@routing/Paths';
+import {Paths} from '@pages/Paths';
 import {UsersPage} from '@pages/Users/component';
 
 export const Users ={

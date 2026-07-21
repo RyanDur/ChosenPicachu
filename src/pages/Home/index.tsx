@@ -1,4 +1,4 @@
-import {Paths} from '@routing/Paths';
+import {Paths} from '@pages/Paths';
 import {HomePage} from './component';
 
 export const Home = {

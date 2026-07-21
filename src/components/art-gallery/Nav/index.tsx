@@ -1,6 +1,6 @@
 import {Link, useLocation} from 'react-router-dom';
 import {FC, useEffect, useRef} from 'react';
-import {useSearchParamsObject} from '@routing/searchParams';
+import {useSearchParamsObject} from '@components/search-params';
 import {useGallery} from '@components/art-gallery/Art/Context';
 import './GalleryNav.css';
 import './GalleryNav.layout.css';

@@ -1,4 +1,4 @@
-import {Paths} from '@routing/Paths';
+import {Paths} from '@pages/Paths';
 import {ThreeInARow} from './ThreeInARow';
 import {GamesPage} from './GamesPage';
 

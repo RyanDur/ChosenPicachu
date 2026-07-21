@@ -1,10 +1,11 @@
 import {FC, useEffect, useState} from 'react';
 import {Link, useLocation, useNavigate} from 'react-router-dom';
-import {useSearchParamsObject} from '@routing/searchParams';
+import {useSearchParamsObject} from '@components/search-params';
 import {AddressInfo, User} from '@components/Users/UserInfo/types';
 import {users as usersApi} from '@components/Users/resource/users';
 import {UserInformation} from '@components/Users/UserInfo';
-import {Paths} from '@routing/Paths';
+import {UsersLinks} from '@components/Users/UserInfo/Links';
+import {Paths} from '@pages/Paths';
 import {Table} from '@components/Table';
 import {age, formatAge} from '@components/Users/age';
 import {FriendsList} from '@components/Users/SelectList';
@@ -43,14 +44,14 @@ export const UsersPage: FC = () => {
     <main data-testid="main">
       <section id="user-info" className="card users" key={currentUser?.id}>
         <h2 className="title">User Information</h2>
-        <UserInformation currentUser={currentUser}
+        <UsersLinks.Provider value={{users: Paths.users}}><UserInformation currentUser={currentUser}
                          readOnly={mode === 'view'}
                          editing={mode === 'edit'}
                          onAdd={user => usersApi.add(user)
                            .onSuccess(updateUsers)}
                          onUpdate={user => usersApi.update(user)
                            .onSuccess(updateUsers)
-                           .onSuccess(() => navigate(Paths.users))}/>
+                           .onSuccess(() => navigate(Paths.users))}/></UsersLinks.Provider>
       </section>
 
       <section id="user-candidates" className="card users">

@@ -12,6 +12,8 @@ import {
 } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import {toQueryString} from '@transport/url';
+import {GalleryLinks} from '@components/art-gallery/Links';
+import {Paths} from '@pages/Paths';
 import {AddressInfo, User} from '@components/Users/UserInfo/types';
 import {AllArt, Art} from '@components/art-gallery/museums/types/response';
 import {toDate} from 'date-fns';
@@ -45,7 +47,7 @@ const TestRouter: FC<PropsWithChildren & {
   return <MemoryRouter initialEntries={[`${(context.initialRoute)}${toQueryString(context.params)}`]}>
     <Routes>
       <Route path={context.path}
-             element={<LocationHelper>{children}</LocationHelper>}>
+             element={<LocationHelper><GalleryLinks.Provider value={{gallery: Paths.artGallery}}>{children}</GalleryLinks.Provider></LocationHelper>}>
       </Route>
       <Route path="*" element={<LocationHelper/>}/>
     </Routes>
