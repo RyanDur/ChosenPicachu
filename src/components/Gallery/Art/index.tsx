@@ -28,7 +28,7 @@ export const ArtGallery: FC = () => {
       .onSuccess(data => hasErrored(empty(data.pieces)))
       .onFailure(() => hasErrored(true));
     return reset;
-  }, [page, search, tab, size]);
+  }, [page, search, tab, size, reset, updateArt]);
 
   return <section id="art-gallery">
     {art?.pieces.map(piece => <figure

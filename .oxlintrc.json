@@ -2,6 +2,7 @@
   "$schema": "./node_modules/oxlint/configuration_schema.json",
   "plugins": ["typescript", "react", "unicorn", "oxc", "vitest"],
   "rules": {
+    "vitest/require-mock-type-parameters": "off",
     "no-unused-expressions": ["error", {"allowShortCircuit": true, "allowTernary": true}],
     "no-unused-vars": ["error", {
       "argsIgnorePattern": "^_",

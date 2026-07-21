@@ -12,7 +12,7 @@ export interface SearchArt {
 export interface GetAllArt {
     search?: string;
     page: number;
-    size: number;
+    size?: number;
     source: Source;
 }
 
