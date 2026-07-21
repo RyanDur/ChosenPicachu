@@ -11,6 +11,7 @@ import {
 } from './components/Gallery/resource/harvard/types';
 import {AllArt, Art} from './components/Gallery/resource/types/response';
 import {RIJKArtObjectResponse, RIJKSAllArtResponse, RIJKSArtResponse} from './components/Gallery/resource/rijks/types';
+import {VAMAllArtResponse, VAMArtResponse} from './components/Gallery/resource/vam/types';
 import {createUser} from './components/Users/resource/usersApi';
 import {defaultRecordLimit} from './config';
 
@@ -194,6 +195,49 @@ export const fromRIJKArtOptionsResponse: RIJKSAllArtResponse = {
     longTitle: title,
     webImage: {url: faker.lorem.word()}
   }))
+};
+
+const vamInfo = {record_count: 500, pages: 42, page: 1, page_size: defaultRecordLimit};
+const vamSearchRecords = [...Array(vamInfo.page_size)].map((_, index) => ({
+  systemNumber: `O${index}`,
+  _primaryTitle: faker.lorem.words(),
+  _primaryMaker: {name: faker.person.fullName()},
+  _images: {_iiif_image_base_url: `https://framemark.vam.ac.uk/collections/${faker.lorem.word()}${index}/`}
+}));
+export const vamArtResponse: VAMAllArtResponse = {info: vamInfo, records: vamSearchRecords};
+export const fromVAMArt: AllArt = {
+  pagination: {
+    total: vamInfo.record_count,
+    limit: vamInfo.page_size,
+    totalPages: vamInfo.pages,
+    currentPage: vamInfo.page
+  },
+  pieces: vamSearchRecords.map(record => ({
+    id: record.systemNumber,
+    title: record._primaryTitle,
+    image: `${record._images._iiif_image_base_url}full/!2000,2000/0/default.jpg`,
+    artistInfo: record._primaryMaker.name,
+    altText: record._primaryTitle
+  }))
+};
+const vamPieceRecord = {
+  systemNumber: `O${randomNumberFromRange(1, 1000)}`,
+  objectType: faker.lorem.word(),
+  titles: [{title: faker.lorem.words()}],
+  artistMakerPerson: [{name: {text: faker.person.fullName()}}],
+  images: [faker.lorem.word()]
+};
+export const vamPieceResponse: VAMArtResponse = {record: vamPieceRecord};
+export const fromVAMToPiece: Art = {
+  id: vamPieceRecord.systemNumber,
+  title: vamPieceRecord.titles[0].title,
+  image: `https://framemark.vam.ac.uk/collections/${vamPieceRecord.images[0]}/full/!2000,2000/0/default.jpg`,
+  artistInfo: vamPieceRecord.artistMakerPerson[0].name.text,
+  altText: vamPieceRecord.titles[0].title
+};
+export const vamArtOptions: VAMAllArtResponse = {
+  info: vamInfo,
+  records: options.map(title => ({systemNumber: faker.lorem.word(), _primaryTitle: title}))
 };
 
 export const fromAICArt: AllArt = {

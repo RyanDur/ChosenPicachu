@@ -5,13 +5,15 @@ import {HTTPError} from '../../../data/types';
 import {aic} from './aic';
 import {harvard} from './harvard';
 import {rijks} from './rijks';
+import {vam} from './vam';
 
-type ArtResource = typeof aic | typeof harvard | typeof rijks;
+type ArtResource = typeof aic | typeof harvard | typeof rijks | typeof vam;
 const fromSource = <T>(source: Source, func: (resource: ArtResource) => Result.Async<T, HTTPError>) =>
   maybe({
     [Source.AIC]: aic,
     [Source.HARVARD]: harvard,
-    [Source.RIJKS]: rijks
+    [Source.RIJKS]: rijks,
+    [Source.VAM]: vam
   }[source]).map(func).orElse(asyncFailure(HTTPError.UNKNOWN_SOURCE));
 
 export const art = {
