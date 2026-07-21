@@ -1,7 +1,7 @@
 import {aicArtResponse, harvardArtResponse, vamArtResponse} from '@test-support/fixtures';
 import {renderWithMemoryRouter} from '@test-support';
 import {screen, waitFor, within} from '@testing-library/react';
-import {Paths} from '@libraries/routing/Paths';
+import {Paths} from '@routing/Paths';
 import {Gallery} from '@pages/Gallery';
 import userEvent from '@testing-library/user-event';
 import {AICArtResponse} from '@components/art-gallery/museums/aic/types';

@@ -1,5 +1,5 @@
 import {useSearchParams} from 'react-router-dom';
-import {toQueryString} from '@libraries/url-support';
+import {toQueryString} from '@transport/url';
 import {has} from '@ryandur/sand';
 
 const filterEmpty = (obj: { [p: string]: string | number }) =>

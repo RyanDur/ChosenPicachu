@@ -6,7 +6,7 @@ import {Source} from '@components/art-gallery/museums/types/resource';
 import {aicArtResponse} from '@test-support/fixtures';
 import {test} from 'vitest';
 import {Gallery} from '@pages/Gallery';
-import {Paths} from '@libraries/routing/Paths';
+import {Paths} from '@routing/Paths';
 import {setupAICAllArtResponse} from '@components/art-gallery/__tests__/galleryApiTestHelper';
 
 describe('The gallery.', () => {

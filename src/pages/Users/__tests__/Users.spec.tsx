@@ -3,7 +3,7 @@ import {format} from 'date-fns';
 import {users as someUsers} from '@test-support/fixtures';
 import {renderWithRouter} from '@test-support';
 import userEvent from '@testing-library/user-event';
-import {AddressInfo, User} from '@components/UserInfo/types';
+import {AddressInfo, User} from '@components/Users/UserInfo/types';
 import {createUser, usersApi} from '@components/Users/resource/usersApi';
 import {users} from '@components/Users/resource/users';
 import {UsersPage} from '@pages/Users/component';

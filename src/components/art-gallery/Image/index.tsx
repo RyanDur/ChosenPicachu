@@ -1,11 +1,11 @@
 import {FC, PropsWithChildren, useState} from 'react';
 import {Link} from 'react-router-dom';
-import {join} from '@libraries/class-names';
+import {join} from '@components/class-names';
 import {Loading} from '@components/art-gallery/Loading';
-import {useSearchParamsObject} from '@libraries/search-params';
-import {toQueryString} from '@libraries/url-support';
+import {useSearchParamsObject} from '@routing/searchParams';
+import {toQueryString} from '@transport/url';
 import {Art} from '@components/art-gallery/museums/types/response';
-import {Paths} from '@libraries/routing/Paths';
+import {Paths} from '@routing/Paths';
 import './Image.css';
 
 interface ImageProps {

@@ -1,6 +1,6 @@
 import {ChangeEvent, FC, useEffect, useState} from 'react';
-import {User} from '../../UserInfo/types';
-import {join} from '@libraries/class-names';
+import {User} from '@components/Users/UserInfo/types';
+import {join} from '@components/class-names';
 import {Consumer, has, maybe} from '@ryandur/sand';
 import './fiends-list.css';
 

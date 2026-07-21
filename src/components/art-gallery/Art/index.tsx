@@ -1,5 +1,5 @@
 import {FC, useEffect, useState} from 'react';
-import {useSearchParamsObject} from '@libraries/search-params';
+import {useSearchParamsObject} from '@routing/searchParams';
 import {Loading} from '@components/art-gallery/Loading';
 import {Image} from '@components/art-gallery/Image';
 import {useGallery} from '@components/art-gallery/Art/Context';

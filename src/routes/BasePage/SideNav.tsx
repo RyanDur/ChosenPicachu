@@ -1,9 +1,9 @@
 import {FC, useEffect, useState} from 'react';
 import {Link, useSearchParams} from 'react-router-dom';
-import {toQueryString} from '@libraries/url-support';
+import {toQueryString} from '@transport/url';
 import {defaultRecordLimit} from '@components/art-gallery/museums/config';
 import {Source} from '@components/art-gallery/museums/types/resource';
-import {Paths} from '@libraries/routing/Paths';
+import {Paths} from '@routing/Paths';
 import {AboutTopics} from '@pages/About/types';
 
 const AboutNav: FC = () => {

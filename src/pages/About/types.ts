@@ -6,3 +6,4 @@ export enum AboutTopics {
 
 export const isATopic = (value: unknown): value is AboutTopics =>
   Object.values<unknown>(AboutTopics).includes(value);
+export type PropsWithClassName = { className?: string };

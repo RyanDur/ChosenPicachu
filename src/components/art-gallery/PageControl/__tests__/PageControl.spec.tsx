@@ -3,7 +3,7 @@ import {screen} from '@testing-library/react';
 import {fromAICArt} from '@test-support/fixtures';
 import {renderWithGalleryContext} from '@test-support';
 import {PageControl} from '@components/art-gallery/PageControl/index';
-import {Paths} from '@libraries/routing/Paths';
+import {Paths} from '@routing/Paths';
 
 window.scrollTo = vi.fn();
 describe('The page controls', () => {

@@ -1,6 +1,6 @@
 import {Column, Row} from './types';
 import {FC} from 'react';
-import {join} from '@libraries/class-names';
+import {join} from '@components/class-names';
 import './Table.css';
 
 export interface TableProps {

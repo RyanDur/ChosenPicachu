@@ -3,7 +3,7 @@ import {useEffect, useState} from 'react';
 import {Loading} from '@components/art-gallery/Loading';
 import {useArtPiece} from '@components/art-gallery/ArtPiece/Context';
 import {Image} from '@components/art-gallery/Image';
-import {useSearchParamsObject} from '@libraries/search-params';
+import {useSearchParamsObject} from '@routing/searchParams';
 import {Source} from '@components/art-gallery/museums/types/resource';
 import {has, not} from '@ryandur/sand';
 import {art} from '@components/art-gallery/museums';

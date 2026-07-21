@@ -1,6 +1,6 @@
 import {VAMAllArtResponse, VAMAllArtSchema, VAMArtResponse, VAMArtSchema, VAMSearchRecord} from '@components/art-gallery/museums/vam/types';
 import {defaultRecordLimit, defaultSearchLimit, vamDomain} from '@components/art-gallery/museums/config';
-import {toQueryString} from '@libraries/url-support';
+import {toQueryString} from '@transport/url';
 import {AllArt, Art, SearchOptions} from '@components/art-gallery/museums/types/response';
 import {validate} from '@transport/validate';
 import {http} from '@transport/http';

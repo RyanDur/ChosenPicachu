@@ -1,4 +1,4 @@
-import {array} from '@libraries/list-support/array';
+import {array} from '../array';
 import {describe} from 'vitest';
 import {faker} from '@faker-js/faker';
 

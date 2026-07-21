@@ -4,7 +4,7 @@
       "@pages/*": ["./src/pages/*"],
       "@components/*": ["./src/components/*"],
       "@transport/*": ["./src/transport/*"],
-      "@libraries/*": ["./src/libraries/*"],
+      "@routing/*": ["./src/routing/*"],
       "@test-support": ["./src/test-support/index.tsx"],
       "@test-support/*": ["./src/test-support/*"]
     },

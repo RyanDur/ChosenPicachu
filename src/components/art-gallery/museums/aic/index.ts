@@ -7,7 +7,7 @@ import {
   AICSearchResponse,
   AICSearchSchema
 } from '@components/art-gallery/museums/aic/types';
-import {toQueryString} from '@libraries/url-support';
+import {toQueryString} from '@transport/url';
 import {aicDomain, defaultRecordLimit, defaultSearchLimit} from '@components/art-gallery/museums/config';
 import {AllArt, Art, SearchOptions} from '@components/art-gallery/museums/types/response';
 import {validate} from '@transport/validate';
