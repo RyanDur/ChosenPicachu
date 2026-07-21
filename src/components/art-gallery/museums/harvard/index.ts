@@ -17,9 +17,12 @@ export const harvardFields = ['id', 'title', 'people', 'primaryimageurl'].join()
 const baseQueryString = {
   fields: harvardFields, apikey: harvardAPIKey
 };
+const withImages = (search?: string) =>
+  [search && `(${search})`, 'imagepermissionlevel:0', '_exists_:primaryimageurl'].filter(Boolean).join(' AND ');
+
 export const harvard = {
   allArt: ({page, search, size = defaultRecordLimit}: GetAllArtRequest) => http
-    .get(`${harvardDomain}${toQueryString({q: search, page, size, ...baseQueryString})}`)
+    .get(`${harvardDomain}${toQueryString({q: withImages(search), page, size, ...baseQueryString})}`)
     .mBind(validate(HarvardAllArtSchema))
     .map(({info, records}: HarvardAllArtResponse): AllArt => ({
       pagination: {

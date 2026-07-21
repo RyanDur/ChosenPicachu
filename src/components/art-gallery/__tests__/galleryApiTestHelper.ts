@@ -17,8 +17,9 @@ export const setupAICAllArtResponse = (response: AICAllArtResponse, options: {
   page: number
   search?: string,
 } = {limit: defaultRecordLimit, page: 1}) =>
-  server.use(http.get(`${aicDomain}${options.search ? '/search' : ''}`, ({request}) =>
+  server.use(http.get(`${aicDomain}/search`, ({request}) =>
     paramsMatch(request, {
+      'query[exists][field]': 'image_id',
       fields: fields.join(),
       page: String(options.page),
       limit: String(options.limit),
@@ -28,6 +29,7 @@ export const setupAICAllArtResponse = (response: AICAllArtResponse, options: {
 export const setupHarvardAllArtResponse = (response: HarvardAllArtResponse, limit = defaultRecordLimit) =>
   server.use(http.get(harvardDomain, ({request}) =>
     paramsMatch(request, {
+      q: 'imagepermissionlevel:0 AND _exists_:primaryimageurl',
       page: '1',
       size: String(limit),
       fields: harvardFields,

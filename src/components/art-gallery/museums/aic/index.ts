@@ -18,7 +18,7 @@ export const fields = ['id', 'title', 'image_id', 'artist_display', 'term_titles
 
 export const aic = {
   allArt: ({page, search, size = defaultRecordLimit}: GetAllArtRequest) => http
-    .get(`${aicDomain}${search ? '/search' : ''}${toQueryString({q: search, fields, page, limit: size})}`)
+    .get(`${aicDomain}/search${toQueryString({q: search, 'query[exists][field]': 'image_id', fields, page, limit: size})}`)
     .mBind(validate(AICAllArtSchema))
     .map(({pagination, data}: AICAllArtResponse): AllArt => ({
       pagination: {

@@ -29,7 +29,7 @@ describe('The gallery.', () => {
   });
 
   test('when the art is loading', async () => {
-    server.use(handle.get(aicDomain, async () => {
+    server.use(handle.get(`${aicDomain}/search`, async () => {
       await delay(150);
       return HttpResponse.json(aicArtResponse);
     }));
