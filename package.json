@@ -22,7 +22,6 @@
     "react-dom": "^19.2.7",
     "react-router-dom": "^7.18.1",
     "schemawax": "^1.0.12",
-    "states-us": "^1.1.1",
     "throttle-debounce": "^5.0.2"
   },
   "devDependencies": {

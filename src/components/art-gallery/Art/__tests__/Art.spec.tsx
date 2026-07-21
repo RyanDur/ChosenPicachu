@@ -1,4 +1,7 @@
 import {anyRequestFailsToConnect} from '@test-support/server';
+import {delay, http as handle, HttpResponse} from 'msw';
+import {server} from '@test-support/server';
+import {aicDomain} from '@components/art-gallery/museums/config';
 import {screen, waitFor} from '@testing-library/react';
 import {renderWithGalleryContext, renderWithMemoryRouter} from '@test-support';
 import {ArtGallery} from '@components/art-gallery/Art/index';
@@ -13,12 +16,15 @@ describe('The gallery.', () => {
   window.scrollTo = vi.fn();
 
   test('when the art is loading', async () => {
-    setupAICAllArtResponse(aicArtResponse);
+    server.use(handle.get(aicDomain, async () => {
+      await delay(150);
+      return HttpResponse.json(aicArtResponse);
+    }));
     renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
 
-    expect(screen.queryByTestId('gallery-loading')).toBeInTheDocument();
-    expect(screen.queryByTestId(/piece/)).not.toBeInTheDocument();
-    await waitFor(() => expect(screen.queryByTestId('empty-gallery')).not.toBeInTheDocument());
+    expect(await screen.findByTestId('gallery-loading')).toBeInTheDocument();
+    expect(screen.queryByTestId(/piece-/)).not.toBeInTheDocument();
+    await waitFor(() => expect(screen.queryByTestId('gallery-loading')).not.toBeInTheDocument());
   });
 
   test('when there is no art to show', async () => {

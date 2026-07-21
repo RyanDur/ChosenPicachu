@@ -1,5 +1,7 @@
 import {Paths} from '@pages/Paths';
-import {HomePage} from './component';
+import {lazy} from 'react';
+
+const HomePage = lazy(() => import('./component').then(m => ({default: m.HomePage})));
 
 export const Home = {
   path: Paths.home,
