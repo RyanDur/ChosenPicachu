@@ -1,5 +1,7 @@
 import {Paths} from '@pages/Paths';
-import {UsersPage} from '@pages/Users/component';
+import {lazy} from 'react';
+
+const UsersPage = lazy(() => import('@pages/Users/component').then(m => ({default: m.UsersPage})));
 
 export const Users ={
   path: Paths.users,

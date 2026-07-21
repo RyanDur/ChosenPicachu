@@ -1,6 +1,8 @@
 import {Paths} from '@pages/Paths';
-import {ThreeInARow} from './ThreeInARow';
-import {GamesPage} from './GamesPage';
+import {lazy} from 'react';
+
+const ThreeInARow = lazy(() => import('./ThreeInARow').then(m => ({default: m.ThreeInARow})));
+const GamesPage = lazy(() => import('./GamesPage').then(m => ({default: m.GamesPage})));
 
 export enum GamePaths {
   colorGame = 'colorGame',

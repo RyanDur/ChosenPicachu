@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {FancyInput} from '../FancyFormElements/FancyInput';
 import {FancySelect} from '../FancyFormElements/FancySelect';
-import states from 'states-us/dist';
+import {stateAbbreviations} from './states';
 import {AddressInfo} from '../types';
 import './Address.layout.css';
 
@@ -46,7 +46,7 @@ export const Address: FC<AddressProps> = (
         disabled={disabled}
         readOnly={readOnly}
         value={value.state}
-        optionValues={new Set(states.map(({abbreviation}) => abbreviation))}
+        optionValues={new Set(stateAbbreviations)}
         onChange={event => onChange({...value, state: event.currentTarget.value})}>
         State
     </FancySelect>
