@@ -44,8 +44,6 @@ test('a piece page presents its artwork data', async ({page}) => {
   await expect(page.getByTestId('image-figure')).toBeVisible({timeout: 30_000});
 });
 
-});
-
 test('the users page presents the form and the seeded table', async ({page}) => {
   await page.goto(`users`);
 
