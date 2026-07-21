@@ -48,7 +48,6 @@ export const Image: FC<ImageProps> = (
                      }}
                      width={100}
                      alt={piece.altText} title={piece.title}
-                     loading="lazy"
                      data-testid={`piece-${piece.id}`}
                      src={piece.image}/>
             </ConditionalLink>
