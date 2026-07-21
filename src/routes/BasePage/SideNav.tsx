@@ -4,7 +4,7 @@ import {toQueryString} from '@libraries/url-support';
 import {defaultRecordLimit} from '@components/art-gallery/museums/config';
 import {Source} from '@components/art-gallery/museums/types/resource';
 import {Paths} from '@libraries/routing/Paths';
-import {AboutTopics} from '../../components/About/types';
+import {AboutTopics} from '@pages/About/types';
 
 const AboutNav: FC = () => {
   const [searchParams] = useSearchParams();

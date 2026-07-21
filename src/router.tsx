@@ -1,6 +1,6 @@
 import {Outlet} from 'react-router-dom';
 import {SideNav} from './routes/BasePage/SideNav';
-import {About, Gallery, Games, Home, Users} from './components';
+import {About, Gallery, Games, Home, Users} from './pages';
 
 export const router = {
   path: '/',

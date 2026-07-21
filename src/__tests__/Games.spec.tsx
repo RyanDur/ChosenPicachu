@@ -1,6 +1,6 @@
 import {screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {renderWithMemoryRouter} from './util';
+import {renderWithMemoryRouter} from '@test-support';
 import {router} from '../router';
 
 describe('Games', () => {

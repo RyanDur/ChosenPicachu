@@ -1,12 +1,12 @@
 import {screen, waitFor, within} from '@testing-library/react';
 import {format} from 'date-fns';
-import {users as someUsers} from '../../../dummyData';
-import {renderWithRouter} from '../../../__tests__/util';
+import {users as someUsers} from '@test-support/fixtures';
+import {renderWithRouter} from '@test-support';
 import userEvent from '@testing-library/user-event';
-import {AddressInfo, User} from '../../UserInfo/types';
-import {createUser, usersApi} from '../resource/usersApi';
-import {users} from '../resource/users';
-import {UsersPage} from '../component';
+import {AddressInfo, User} from '@components/UserInfo/types';
+import {createUser, usersApi} from '@components/Users/resource/usersApi';
+import {users} from '@components/Users/resource/users';
+import {UsersPage} from '@pages/Users/component';
 
 describe('the users page', () => {
   const currentUsers = someUsers;

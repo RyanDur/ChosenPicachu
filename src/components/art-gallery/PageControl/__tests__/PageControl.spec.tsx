@@ -1,7 +1,7 @@
 import userEvent from '@testing-library/user-event';
 import {screen} from '@testing-library/react';
-import {fromAICArt} from '../../../../dummyData';
-import {renderWithGalleryContext} from '../../../../__tests__/util';
+import {fromAICArt} from '@test-support/fixtures';
+import {renderWithGalleryContext} from '@test-support';
 import {PageControl} from '@components/art-gallery/PageControl/index';
 import {Paths} from '@libraries/routing/Paths';
 

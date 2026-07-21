@@ -12,7 +12,7 @@ import {
 } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import {toQueryString} from '@libraries/url-support';
-import {AddressInfo, User} from '../../components/UserInfo/types';
+import {AddressInfo, User} from '@components/UserInfo/types';
 import {AllArt, Art} from '@components/art-gallery/museums/types/response';
 import {toDate} from 'date-fns';
 import {GalleryContext} from '@components/art-gallery/Art/Context';

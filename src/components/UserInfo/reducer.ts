@@ -1,5 +1,5 @@
 import {FormAction, FormActions, User} from './types';
-import {generateAvatar} from '../../avatars';
+import {generateAvatar} from './avatars';
 
 export const initialState: User = {
     info: {firstName: '', lastName: '', email: ''},

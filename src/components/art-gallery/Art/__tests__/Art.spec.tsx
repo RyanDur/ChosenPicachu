@@ -1,11 +1,11 @@
-import {anyRequestFailsToConnect} from '../../../../__tests__/util/server';
+import {anyRequestFailsToConnect} from '@test-support/server';
 import {screen, waitFor} from '@testing-library/react';
-import {renderWithGalleryContext, renderWithMemoryRouter} from '../../../../__tests__/util';
+import {renderWithGalleryContext, renderWithMemoryRouter} from '@test-support';
 import {ArtGallery} from '@components/art-gallery/Art/index';
 import {Source} from '@components/art-gallery/museums/types/resource';
-import {aicArtResponse} from '../../../../dummyData';
+import {aicArtResponse} from '@test-support/fixtures';
 import {test} from 'vitest';
-import {Gallery} from '@components/art-gallery/index';
+import {Gallery} from '@pages/Gallery';
 import {Paths} from '@libraries/routing/Paths';
 import {setupAICAllArtResponse} from '@components/art-gallery/__tests__/galleryApiTestHelper';
 

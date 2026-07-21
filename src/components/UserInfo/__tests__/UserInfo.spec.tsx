@@ -1,8 +1,8 @@
 import {UserInformation} from '../index';
 import {render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {users} from '../../../dummyData';
-import {fillOutForm} from '../../../__tests__/util';
+import {users} from '@test-support/fixtures';
+import {fillOutForm} from '@test-support';
 import {initialState} from '../reducer';
 
 describe('a user form', () => {

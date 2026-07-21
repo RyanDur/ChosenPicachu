@@ -1,5 +1,5 @@
-import {Table} from '../Table';
-import {columns, rows} from '../../dummyData';
+import {Table} from '@components/Table';
+import {columns, rows} from './demoData';
 import './Home.css';
 
 export const HomePage = () =>

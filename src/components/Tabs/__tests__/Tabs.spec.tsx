@@ -1,6 +1,6 @@
 import {screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {renderWithRouter} from '../../../__tests__/util';
+import {renderWithRouter} from '@test-support';
 import {Tabs} from '../index';
 import {expect} from 'vitest';
 

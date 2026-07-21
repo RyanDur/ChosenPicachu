@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Tabs} from '../Tabs';
+import {Tabs} from '@components/Tabs';
 import {Source} from '@components/art-gallery/museums/types/resource';
 import {ArtGallery} from '@components/art-gallery/Art';
 import {Search} from '@components/art-gallery/Search';
