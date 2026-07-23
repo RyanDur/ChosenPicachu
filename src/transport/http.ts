@@ -1,5 +1,5 @@
 import {FailStatusCode, HTTPError, HTTPMethod, isCreated, isNoContent, isOk, matchFailStatusCode, PATH} from './types';
-import {asyncFailure, asyncResult, asyncSuccess, maybe, Result} from '@ryandur/sand';
+import {asyncFailure, asyncResult, asyncSuccess, maybe, requesting, Result} from '@ryandur/sand';
 
 export const http = {
   get: <T>(endpoint: string): Result.Async<T, HTTPError> =>
@@ -29,11 +29,7 @@ const bodyResult = (resp: Response) => asyncResult(resp.json()).or(() => asyncFa
 const emptySuccess = () => asyncSuccess<undefined, HTTPError>(undefined);
 
 const request = (uri: PATH, method?: HTTPMethod, body?: unknown) =>
-  asyncResult(fetch(uri, {
-    method,
-    mode: 'cors',
-    body: body ? JSON.stringify(body) : undefined
-  })).or(() => asyncFailure(HTTPError.NETWORK_ERROR));
+  requesting(uri, {method, mode: 'cors', body}, () => HTTPError.NETWORK_ERROR);
 
 const fail = (response: Response) => matchFailStatusCode(response.status, {
   [FailStatusCode.FORBIDDEN]: () => asyncFailure(HTTPError.FORBIDDEN),
