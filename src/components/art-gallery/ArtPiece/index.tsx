@@ -17,11 +17,15 @@ export const ArtPiece = () => {
     const [loading, isLoading] = useState(false);
 
     useEffect(() => {
-        id && art.get({id, source: tab ?? Source.AIC})
+        if (!id) return reset;
+        const {cancel} = art.get({id, source: tab ?? Source.AIC})
             .onPending(isLoading)
             .onSuccess(updatePiece)
             .onFailure(() => hasErrored(true));
-        return reset;
+        return () => {
+            cancel();
+            reset();
+        };
     }, [id, updatePiece, tab, reset]);
 
     return <>

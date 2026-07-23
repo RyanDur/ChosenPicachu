@@ -22,12 +22,16 @@ export const ArtGallery: FC = () => {
     });
 
   useEffect(() => {
-    if (has(page) && has(size)) artResource.getAll({page, size: size || defaultRecordLimit, search, source: tab})
+    if (!has(page) || !has(size)) return reset;
+    const {cancel} = artResource.getAll({page, size: size || defaultRecordLimit, search, source: tab})
       .onPending(isLoading)
       .onSuccess(updateArt)
       .onSuccess(data => hasErrored(empty(data.pieces)))
       .onFailure(() => hasErrored(true));
-    return reset;
+    return () => {
+      cancel();
+      reset();
+    };
   }, [page, search, tab, size, reset, updateArt]);
 
   return <section id="art-gallery">
