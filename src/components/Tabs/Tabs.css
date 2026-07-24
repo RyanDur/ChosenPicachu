@@ -6,7 +6,6 @@
   background-color: var(--void);
 
   .tab {
-    margin-block: 1em;
     font-size: 1.17em;
     font-weight: bold;
     margin-right: var(--base);
