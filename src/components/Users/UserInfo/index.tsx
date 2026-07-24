@@ -96,20 +96,14 @@ export const UserInformation: FC<FormProps> = (
             Date Of Birth
         </FancyDateInput>
 
-        <article tabIndex={0} id="avatar-cell"
-                 role="button"
-                 aria-label="Generate a new avatar"
-                 className={join('card', readOnly && 'read-only')}
-                 data-testid="avatar-cell"
-                 onKeyDown={event => {
-                     if (event.code === 'Enter' || event.code === 'Space') {
-                         event.preventDefault();
-                         if (!readOnly) dispatch(updateAvatar(generateAvatar()));
-                     }
-                 }}
-                 onClick={() => readOnly || dispatch(updateAvatar(generateAvatar()))}>
+        <button type="button" id="avatar-cell"
+                aria-label="Generate a new avatar"
+                className={join('card', readOnly && 'read-only')}
+                data-testid="avatar-cell"
+                disabled={readOnly}
+                onClick={() => dispatch(updateAvatar(generateAvatar()))}>
             <img id="avatar" src={user.avatar} loading="lazy" alt="avatar"/>
-        </article>
+        </button>
 
         <h3 id="home-address-title">Home Address</h3>
         <Address id="home-address" value={user.homeAddress} readOnly={readOnly} required

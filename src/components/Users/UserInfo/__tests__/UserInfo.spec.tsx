@@ -145,6 +145,7 @@ describe('the avatar control plays fair with the keyboard', () => {
     const tabWasAllowed = fireEvent.keyDown(avatar, {code: 'Tab', key: 'Tab'});
 
     expect(tabWasAllowed).toBe(true);
+    expect(avatar.tagName).toBe('BUTTON');
   });
 
   test('enter and space regenerate the avatar, like a click does', async () => {
@@ -153,7 +154,7 @@ describe('the avatar control plays fair with the keyboard', () => {
     const before = screen.getByAltText<HTMLImageElement>('avatar').src;
     avatar.focus();
 
-    fireEvent.keyDown(avatar, {code: 'Enter', key: 'Enter'});
+    await userEvent.keyboard('{enter}');
 
     expect(screen.getByAltText<HTMLImageElement>('avatar').src).not.toEqual(before);
   });
