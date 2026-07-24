@@ -4,6 +4,7 @@
   width: 100%;
 
   #avatar-cell {
+    border: none;
     outline: none;
     display: flex;
     align-items: center;
