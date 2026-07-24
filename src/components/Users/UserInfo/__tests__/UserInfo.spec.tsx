@@ -159,3 +159,22 @@ describe('the avatar control plays fair with the keyboard', () => {
     expect(screen.getByAltText<HTMLImageElement>('avatar').src).not.toEqual(before);
   });
 });
+
+describe('the keyboard walks the whole form', () => {
+  test('tab visits each control once and always gets out the other side', async () => {
+    render(<UserInformation onAdd={vi.fn()}/>);
+    const form = screen.getByTestId('user-info-form');
+
+    const visited: Element[] = [];
+    let guard = 0;
+    while (document.activeElement !== null && form.contains(document.activeElement) && guard < 50) {
+      expect(visited, 'tab revisited a control — a trap').not.toContain(document.activeElement);
+      visited.push(document.activeElement);
+      await userEvent.tab();
+      guard += 1;
+    }
+
+    expect(form.contains(document.activeElement), 'tab never escaped the form').toBe(false);
+    expect(visited.length).toBeGreaterThanOrEqual(10);
+  });
+});

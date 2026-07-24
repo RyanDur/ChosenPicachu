@@ -88,7 +88,7 @@ export const UsersPage: FC = () => {
                           popoverTarget={`menu-${user.id}`}
                           aria-label={`Actions for ${displayFullName(user.info)}`}/>
                   <nav id={`menu-${user.id}`} popover="auto" className="menu rounded-corners"
-                       onClick={event => event.currentTarget.hidePopover()}>
+                       onClick={event => event.currentTarget.hidePopover?.()}>
                       <Link to={`${path}${createSearchParams({
                         id: user.id,
                         mode: 'view'
