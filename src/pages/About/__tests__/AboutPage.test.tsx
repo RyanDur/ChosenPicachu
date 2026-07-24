@@ -19,7 +19,7 @@ describe('The About page', () => {
   test('when going to the z-index demo', async () => {
     renderWithRouter(<AboutPage/>, {initialRoute: Paths.about, path: Paths.about});
 
-    const demoTabs = screen.getByRole('demo-tabs');
+    const demoTabs = screen.getByRole('navigation', {name: 'demos'});
     await userEvent.click(within(demoTabs).getByText('Z-Index'));
 
     await waitFor(() => {

@@ -14,11 +14,11 @@ type Tab = {
 type Props = {
   defaultTab: string;
   values: Tab[];
+  label: string;
   id?: string;
-  role?: string;
 }
 
-export const Tabs: FC<Props> = ({values, id, role, defaultTab}) => {
+export const Tabs: FC<Props> = ({values, id, label, defaultTab}) => {
   const {pathname} = useLocation();
   const {tab, updateSearchParams, createSearchParams} = useSearchParamsObject({tab: D.string});
 
@@ -26,10 +26,10 @@ export const Tabs: FC<Props> = ({values, id, role, defaultTab}) => {
     if (not(tab)) updateSearchParams({tab: defaultTab});
   }, [tab, updateSearchParams, values, defaultTab]);
 
-  return <nav role={role} id={id} className="tabs">{values.map(({param, display}) =>
-    <h3 className={join('tab', tab === param && 'current')} key={param}>
+  return <nav aria-label={label} id={id} className="tabs">{values.map(({param, display}) =>
+    <span className={join('tab', tab === param && 'current')} key={param}>
       <Link to={`${pathname}${createSearchParams({tab: param})}`}
             className="path">{display}</Link>
-    </h3>
+    </span>
   )}</nav>;
 };

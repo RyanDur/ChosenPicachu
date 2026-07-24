@@ -12,7 +12,7 @@ describe('Tabs', () => {
 
   it('should start with the default', () => {
     renderWithRouter(
-      <Tabs defaultTab={tab1.param} values={[tab1, tab2, tab3]}/>,
+      <Tabs label="tabs under test" defaultTab={tab1.param} values={[tab1, tab2, tab3]}/>,
       {path, initialRoute: path});
 
     expect(screen.getByTestId('subject-url-search')).toHaveTextContent(tab1.param);
@@ -20,7 +20,7 @@ describe('Tabs', () => {
 
   it('should update the url', async () => {
     renderWithRouter(
-      <Tabs defaultTab={tab1.param} values={[tab1, tab2, tab3]}/>,
+      <Tabs label="tabs under test" defaultTab={tab1.param} values={[tab1, tab2, tab3]}/>,
       {path, initialRoute: path});
 
     await userEvent.click(screen.getByText(tab1.display));
@@ -35,7 +35,7 @@ describe('Tabs', () => {
 
   it('should default to the first choice if the param is not present', async () => {
     renderWithRouter(
-      <Tabs defaultTab={tab1.param} values={[tab1, tab2, tab3]}/>,
+      <Tabs label="tabs under test" defaultTab={tab1.param} values={[tab1, tab2, tab3]}/>,
       {path, initialRoute: path});
 
     expect(screen.getByTestId('subject-url-search')).toHaveTextContent(`?tab=${tab1.param}`);

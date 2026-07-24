@@ -11,6 +11,7 @@ export const ArtGalleryPage: FC = () =>
 
     <main data-testid="main" className="in-view">
       <Tabs
+        label="museums"
         defaultTab={Source.AIC}
         values={[
           {display: 'The Art Institute of Chicago', param: Source.AIC},

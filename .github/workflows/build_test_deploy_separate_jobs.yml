@@ -97,6 +97,8 @@ jobs:
             https://ryandur.github.io/ChosenPicachu/
             https://ryandur.github.io/ChosenPicachu/gallery?page=1&size=8&tab=vam
             https://ryandur.github.io/ChosenPicachu/users
+            https://ryandur.github.io/ChosenPicachu/about
+            https://ryandur.github.io/ChosenPicachu/games
           configPath: ./lighthouserc.json
           runs: 3
           uploadArtifacts: true

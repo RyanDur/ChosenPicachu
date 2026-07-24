@@ -35,7 +35,7 @@ export const AboutPage = () => {
 
     <main data-testid="main" className='in-view'>
       <Tabs
-        role='demo-tabs'
+        label='demos'
         defaultTab={AboutTopics.accordions}
         values={[
           {display: 'Accordions', param: AboutTopics.accordions},
