@@ -1,12 +1,40 @@
-import {copyFileSync, mkdirSync, readFileSync} from 'fs';
+import {copyFileSync, mkdirSync, readFileSync, writeFileSync} from 'fs';
 
 const paths = readFileSync('src/pages/Paths.ts', 'utf-8');
-const staticRoutes = [...paths.matchAll(/= '(\/[^':]+)'/g)]
-  .map(([, route]) => route);
+const staticRoutes = [...paths.matchAll(/= '(\/[^':]+)'/g)].map(([, route]) => route);
 
+const manifest = JSON.parse(readFileSync('dist/.vite/manifest.json', 'utf-8'));
+const routeModules = {
+  '': 'src/pages/Home/component.tsx',
+  '/about': 'src/pages/About/component.tsx',
+  '/users': 'src/pages/Users/component.tsx',
+  '/gallery': 'src/pages/Gallery/ArtGalleryPage.tsx',
+  '/games': 'src/pages/Games/GamesPage.tsx'
+};
+
+const chunkFiles = (moduleId, visited = new Set(), files = new Set()) => {
+  const entry = manifest[moduleId];
+  if (entry === undefined || visited.has(moduleId)) return files;
+  visited.add(moduleId);
+  files.add(entry.file);
+  (entry.imports ?? []).forEach(dep => chunkFiles(dep, visited, files));
+  return files;
+};
+
+const indexHtml = readFileSync('dist/index.html', 'utf-8');
+const withPreloads = (moduleId) => {
+  if (moduleId === undefined) return indexHtml;
+  const links = [...chunkFiles(moduleId)]
+    .filter(file => file.endsWith('.js') && !indexHtml.includes(file))
+    .map(file => `    <link rel="modulepreload" href="/ChosenPicachu/${file}" />`)
+    .join('\n');
+  return indexHtml.replace('  </head>', `${links}\n  </head>`);
+};
+
+writeFileSync('dist/index.html', withPreloads(routeModules['']));
 copyFileSync('dist/index.html', 'dist/404.html');
 for (const route of staticRoutes) {
   mkdirSync(`dist${route}`, {recursive: true});
-  copyFileSync('dist/index.html', `dist${route}/index.html`);
+  writeFileSync(`dist${route}/index.html`, withPreloads(routeModules[route]));
 }
-console.log(`SPA entry points: 404.html, ${staticRoutes.join(', ')}`);
+console.log(`SPA entry points: 404.html, ${staticRoutes.join(', ')} (chunk preloads injected)`);

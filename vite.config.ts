@@ -6,6 +6,7 @@ import svgr from 'vite-plugin-svgr';
 // https://vitejs.dev/config/
 export default defineConfig({
   base: '/ChosenPicachu/',
+  build: {manifest: true},
   resolve: {
     alias: {
       '@pages': fileURLToPath(new URL('./src/pages', import.meta.url)),
