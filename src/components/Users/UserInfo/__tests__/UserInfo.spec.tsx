@@ -1,5 +1,5 @@
 import {UserInformation} from '../index';
-import {render, screen, waitFor} from '@testing-library/react';
+import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {users} from '@test-support/fixtures';
 import {fillOutForm} from '@test-support';
@@ -133,5 +133,28 @@ describe('a user form', () => {
         testZip('work');
       });
     });
+  });
+});
+
+describe('the avatar control plays fair with the keyboard', () => {
+  test('tab is never swallowed — no keyboard trap', async () => {
+    render(<UserInformation onAdd={vi.fn()}/>);
+    const avatar = screen.getByTestId('avatar-cell');
+    avatar.focus();
+
+    const tabWasAllowed = fireEvent.keyDown(avatar, {code: 'Tab', key: 'Tab'});
+
+    expect(tabWasAllowed).toBe(true);
+  });
+
+  test('enter and space regenerate the avatar, like a click does', async () => {
+    render(<UserInformation onAdd={vi.fn()}/>);
+    const avatar = screen.getByTestId('avatar-cell');
+    const before = screen.getByAltText<HTMLImageElement>('avatar').src;
+    avatar.focus();
+
+    fireEvent.keyDown(avatar, {code: 'Enter', key: 'Enter'});
+
+    expect(screen.getByAltText<HTMLImageElement>('avatar').src).not.toEqual(before);
   });
 });
