@@ -84,17 +84,11 @@ export const UsersPage: FC = () => {
               worksFromHome: {
                 display: <section className="last-column">
                   {equalAddresses(user.homeAddress, user.workAddress) ? 'Yes' : 'No'}
-                  <article tabIndex={0} className="menu-toggle rounded-corners" onKeyDown={event => {
-                    if (event.code === 'Space' || event.code === 'Enter') {
-                      event.preventDefault();
-                      event.currentTarget.classList.toggle('open');
-                    }
-                  }} onBlur={event => {
-                    if (!event.currentTarget.contains(event.relatedTarget as Node)) {
-                      event.currentTarget.classList.remove('open');
-                    }
-                  }} onClick={event => event.currentTarget.classList.remove('open')}>
-                    <nav className="menu rounded-corners">
+                  <button type="button" className="menu-toggle rounded-corners"
+                          popoverTarget={`menu-${user.id}`}
+                          aria-label={`Actions for ${displayFullName(user.info)}`}/>
+                  <nav id={`menu-${user.id}`} popover="auto" className="menu rounded-corners"
+                       onClick={event => event.currentTarget.hidePopover()}>
                       <Link to={`${path}${createSearchParams({
                         id: user.id,
                         mode: 'view'
@@ -116,8 +110,7 @@ export const UsersPage: FC = () => {
                       <Link to={`${path}${createSearchParams({id: user.id})}`}
                             className="item"
                             data-testid="clone">Clone</Link>
-                    </nav>
-                  </article>
+                  </nav>
                 </section>
               }
             });
