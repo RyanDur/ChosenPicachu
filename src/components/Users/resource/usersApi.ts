@@ -1,4 +1,4 @@
-import {AddressInfo, User, UserInfo} from '@components/Users/UserInfo/types';
+import {AddressInfo, NewUser, User, UserInfo} from '@components/Users/UserInfo/types';
 import {asyncFailure, asyncSuccess, maybe, Result} from '@ryandur/sand';
 import {HTTPError} from '@transport/types';
 import {nanoid} from 'nanoid';
@@ -6,10 +6,10 @@ import {faker} from '@faker-js/faker';
 import {AvatarGenerator} from 'random-avatar-generator';
 import {toDate} from 'date-fns';
 
-export interface UsersAPI {
+export type UsersAPI = {
   getAll: () => Result.Async<User[], HTTPError>;
   get: (id: string) => Result.Async<User, HTTPError>;
-  add: (user: User) => Result.Async<User[], HTTPError>;
+  add: (user: NewUser) => Result.Async<User[], HTTPError>;
   update: (user: User) => Result.Async<User[], HTTPError>;
   delete: (user: User) => Result.Async<User[], HTTPError>;
 }
@@ -30,20 +30,20 @@ export const usersApi = (randomUsers: User[]): UsersAPI => ({
     randomUsers = [{...user, id: nanoid()}, ...randomUsers];
     return asyncSuccess(randomUsers);
   },
-  update: user => maybe(user.id).map(userId => {
+  update: user => {
     const friendIds = new Set(user.friends);
     randomUsers = randomUsers.map(randomUser => {
-      if (randomUser.id === userId) return {...user, friends: [...friendIds]};
-      if (friendIds.has(randomUser.id ?? '')) return {
+      if (randomUser.id === user.id) return {...user, friends: [...friendIds]};
+      if (friendIds.has(randomUser.id)) return {
         ...randomUser,
-        friends: randomUser.friends.includes(userId)
+        friends: randomUser.friends.includes(user.id)
           ? randomUser.friends
-          : [...randomUser.friends, userId]
+          : [...randomUser.friends, user.id]
       };
-      return {...randomUser, friends: randomUser.friends.filter(id => id !== userId)};
+      return {...randomUser, friends: randomUser.friends.filter(id => id !== user.id)};
     });
-    return asyncSuccess<User[], HTTPError>(randomUsers);
-  }).orElse(asyncFailure(HTTPError.UNKNOWN)),
+    return asyncSuccess(randomUsers);
+  },
   delete: user => {
     randomUsers = randomUsers.map(randomUser => ({
       ...randomUser,

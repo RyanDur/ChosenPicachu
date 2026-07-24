@@ -28,7 +28,7 @@ describe('the friends list', () => {
     });
 
     it('should display the friends the user already has', () => {
-        const userWithFriends = {...firstUser, friends: [secondUser.id!, thirdUser.id!]};
+        const userWithFriends = {...firstUser, friends: [secondUser.id, thirdUser.id]};
         render(<FriendsList users={users} user={userWithFriends} onChange={consumer}/>);
         expect(screen.getByTestId('friends-list')).toHaveTextContent(fullName(thirdUser));
         expect(screen.getByTestId('friends-list')).toHaveTextContent(fullName(secondUser));
@@ -39,7 +39,7 @@ describe('the friends list', () => {
             ...secondUser,
             info: {...secondUser.info, firstName: 'Renamed', lastName: 'Person'}
         };
-        const userWithFriends = {...firstUser, friends: [secondUser.id!]};
+        const userWithFriends = {...firstUser, friends: [secondUser.id]};
         render(<FriendsList users={[firstUser, renamedSecond, thirdUser]} user={userWithFriends}
                             onChange={consumer}/>);
         expect(screen.getByTestId('friends-list')).toHaveTextContent('Renamed Person');
@@ -47,7 +47,7 @@ describe('the friends list', () => {
 
     describe('removing a friend from the list', () => {
         beforeEach(() => {
-            const userWithFriends = {...firstUser, friends: [secondUser.id!, thirdUser.id!]};
+            const userWithFriends = {...firstUser, friends: [secondUser.id, thirdUser.id]};
             render(<FriendsList users={users} user={userWithFriends} onChange={consumer}/>);
         });
 
@@ -73,13 +73,13 @@ describe('the friends list', () => {
     });
 
     it('should not allow a user to select something twice', () => {
-        const userWithFriends = {...firstUser, friends: [secondUser.id!]};
+        const userWithFriends = {...firstUser, friends: [secondUser.id]};
         render(<FriendsList users={users} user={userWithFriends} onChange={consumer}/>);
         expect(screen.getByTestId(/select-friend/)).not.toHaveTextContent(fullName(secondUser));
     });
 
     it('should not allow to select a friend if no more friends are left', () => {
-        const userWithFriends = {...firstUser, friends: [secondUser.id!, thirdUser.id!]};
+        const userWithFriends = {...firstUser, friends: [secondUser.id, thirdUser.id]};
         render(<FriendsList users={[firstUser, secondUser, thirdUser]} user={userWithFriends}
                             onChange={consumer}/>);
 

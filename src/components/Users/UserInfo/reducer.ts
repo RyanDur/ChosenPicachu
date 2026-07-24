@@ -1,7 +1,7 @@
-import {FormAction, FormActions, User} from './types';
+import {FormAction, FormActions, NewUser, User} from './types';
 import {generateAvatar} from './avatars';
 
-export const initialState: User = {
+export const initialState: NewUser = {
     info: {firstName: '', lastName: '', email: ''},
     friends: [],
     homeAddress: {
@@ -13,7 +13,7 @@ export const initialState: User = {
     avatar: generateAvatar()
 };
 
-export const formReducer = (state: User, action: FormAction): User => {
+export const formReducer = (state: NewUser | User, action: FormAction): NewUser | User => {
     switch (action.type) {
         case FormActions.UPDATE_FIRST_NAME:
             return {...state, info: {...state.info, firstName: action.firstName}};

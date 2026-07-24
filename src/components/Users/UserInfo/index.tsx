@@ -1,5 +1,5 @@
 import {FC, useEffect, useReducer, useState, useContext} from 'react';
-import {User} from './types';
+import {isPersisted, NewUser, User} from './types';
 import {FancyInput} from './FancyFormElements/FancyInput';
 import {join} from '@components/class-names';
 import {FancyTextarea} from './FancyFormElements/FancyTextarea';
@@ -25,9 +25,9 @@ import {UsersLinks} from './Links';
 import './Form.layout.css';
 import './Form.css';
 
-interface FormProps {
+type FormProps = {
     currentUser?: User;
-    onAdd?: Consumer<User>;
+    onAdd?: Consumer<NewUser>;
     onUpdate?: Consumer<User>;
     readOnly?: boolean;
     editing?: boolean;
@@ -61,7 +61,7 @@ export const UserInformation: FC<FormProps> = (
                  onSubmit={event => {
                      event.preventDefault();
 
-                     if (editing) onUpdate?.(user);
+                     if (editing && isPersisted(user)) onUpdate?.(user);
                      else onAdd?.(user);
 
                      updateSameAsHome(false);
@@ -121,11 +121,11 @@ export const UserInformation: FC<FormProps> = (
                        onChange={event => dispatch(updateDetails(event.currentTarget.value))}/>
 
         {!readOnly && <button id="reset-form" type="reset" disabled={readOnly} className="secondary">Reset</button>}
-        {readOnly && <Link id="reset-form" to={`${users}?id=${user.id}&mode=edit`}
+        {readOnly && isPersisted(user) && <Link id="reset-form" to={`${users}?id=${user.id}&mode=edit`}
                            className="button secondary">Edit</Link>}
         {!editing && !readOnly &&
         <button id="submit" type="submit" disabled={readOnly} className="primary">Add</button>}
-        {editing && <Link id="cancel" to={`${users}?id=${user.id}&mode=view`}
+        {editing && isPersisted(user) && <Link id="cancel" to={`${users}?id=${user.id}&mode=view`}
                           className="button secondary" onClick={reset}>Cancel</Link>}
         {editing && <button id="submit" type="submit" className="primary">Update</button>}
 

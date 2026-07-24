@@ -1,4 +1,4 @@
-export interface AddressInfo {
+export type AddressInfo = {
     streetAddress: string;
     streetAddressTwo?: string;
     city: string;
@@ -6,15 +6,14 @@ export interface AddressInfo {
     zip: string;
 }
 
-export interface UserInfo {
+export type UserInfo = {
     firstName: string;
     lastName: string;
     email: string;
     dob?: Date;
 }
 
-export interface User {
-    id?: string;
+export type NewUser = {
     info: UserInfo;
     friends: string[];
     homeAddress: AddressInfo;
@@ -22,6 +21,12 @@ export interface User {
     workAddress?: AddressInfo;
     details?: string;
 }
+
+export type User = {
+    id: string;
+} & NewUser
+
+export const isPersisted = (user: NewUser | User): user is User => 'id' in user;
 
 export enum FormActions {
     UPDATE_FIRST_NAME = 'UPDATE_FIRST_NAME',
@@ -35,7 +40,7 @@ export enum FormActions {
     RESET_FORM = 'RESET_FORM'
 }
 
-interface Action<T> {
+type Action<T> = {
     type: T;
 }
 
@@ -64,7 +69,7 @@ export type UpdateAvatar = Action<FormActions.UPDATE_AVATAR> & {
     avatar: string;
 }
 export type ResetForm = Action<FormActions.RESET_FORM> & {
-    userInfo?: User;
+    userInfo?: NewUser | User;
 }
 
 export type FormAction =
