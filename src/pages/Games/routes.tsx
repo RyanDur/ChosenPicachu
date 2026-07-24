@@ -2,9 +2,7 @@ import {Outlet} from 'react-router';
 import {Paths} from '@pages/Paths';
 import {PageError} from '@pages/PageError';
 import {Header} from '@pages/BasePage/Header';
-import {lazy} from 'react';
-
-const ThreeInARow = lazy(() => import('./ThreeInARow').then(m => ({default: m.ThreeInARow})));
+import {ThreeInARow} from './ThreeInARow';
 
 export enum GamePaths {
   colorGame = 'colorGame',

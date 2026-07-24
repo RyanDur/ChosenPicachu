@@ -1,7 +1,6 @@
 import {Outlet, useMatches} from 'react-router';
-import {Fragment, Suspense} from 'react';
-import {SideNav} from './pages/BasePage/SideNav';
-import {Loading} from '@components/art-gallery/Loading';
+import {Fragment} from 'react';
+import {SideNav} from '@pages/BasePage/SideNav';
 import {isRegions, Regions} from '@pages/regions';
 import {About, Gallery, Games, Home, Users} from './pages';
 
@@ -17,15 +16,13 @@ export const Shell = () => {
   return <Provider>
     <HeaderRegion/>
     <main data-testid="main" className={mainClassName}>
-      <Suspense fallback={<Loading testId="page-loading"/>}>
-        <Outlet/>
-      </Suspense>
+      <Outlet/>
     </main>
     {AsideRegion !== undefined && <article id="filter" data-testid="filter">
-      <Suspense fallback={null}><AsideRegion/></Suspense>
+      <AsideRegion/>
     </article>}
     {FooterRegion !== undefined && <footer id="app-footer" className="stick-to-bottom" data-testid="footer">
-      <Suspense fallback={null}><FooterRegion/></Suspense>
+      <FooterRegion/>
     </footer>}
     <SideNav/>
   </Provider>;

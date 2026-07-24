@@ -1,9 +1,7 @@
 import {Paths} from '@pages/Paths';
 import {PageError} from '@pages/PageError';
 import {Header} from '@pages/BasePage/Header';
-import {lazy} from 'react';
-
-const HomePage = lazy(() => import('./component').then(m => ({default: m.HomePage})));
+import {HomePage} from './component';
 
 const HomeHeader = () => <Header title="Home"/>;
 

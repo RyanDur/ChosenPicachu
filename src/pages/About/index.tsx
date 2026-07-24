@@ -3,9 +3,7 @@ import {PageError} from '@pages/PageError';
 import {Header} from '@pages/BasePage/Header';
 import {useSearchParamsObject} from '@components/search-params';
 import {AboutTopics, aboutTopicParam} from './types';
-import {lazy} from 'react';
-
-const AboutPage = lazy(() => import('./component').then(m => ({default: m.AboutPage})));
+import {AboutPage} from './component';
 
 const AboutHeader = () => {
   const {tab} = useSearchParamsObject({tab: aboutTopicParam}, {tab: AboutTopics.accordions});
