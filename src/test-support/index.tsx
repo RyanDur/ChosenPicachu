@@ -11,6 +11,8 @@ import {
   useLocation
 } from 'react-router';
 import userEvent from '@testing-library/user-event';
+
+const swiftKeys = userEvent.setup({delay: null});
 import {toQueryString} from '@transport/url';
 import {GalleryLinks} from '@components/art-gallery/Links';
 import {Paths} from '@pages/Paths';
@@ -126,19 +128,19 @@ export const renderWithRouter: RenderWithRouter<'galleryState' | 'pieceState'> =
 };
 
 export const fillOutAddress = (address: AddressInfo, kind: string) =>
-  userEvent.type(screen.getByTestId(`${kind}-address-street`), address.streetAddress)
-    .then(() => userEvent.type(screen.getByTestId(`${kind}-address-street-2`), address.streetAddressTwo!))
-    .then(() => userEvent.type(screen.getByTestId(`${kind}-address-city`), address.city))
-    .then(() => userEvent.selectOptions(screen.getByTestId(`${kind}-address-state`), address.state))
-    .then(() => userEvent.type(screen.getByTestId(`${kind}-address-zip`), address.zip));
+  swiftKeys.type(screen.getByTestId(`${kind}-address-street`), address.streetAddress)
+    .then(() => swiftKeys.type(screen.getByTestId(`${kind}-address-street-2`), address.streetAddressTwo!))
+    .then(() => swiftKeys.type(screen.getByTestId(`${kind}-address-city`), address.city))
+    .then(() => swiftKeys.selectOptions(screen.getByTestId(`${kind}-address-state`), address.state))
+    .then(() => swiftKeys.type(screen.getByTestId(`${kind}-address-zip`), address.zip));
 
 export const fillOutUser = (info: NewUser) =>
-  userEvent.type(screen.getByLabelText('First Name'), info.info.firstName)
-    .then(() => userEvent.type(screen.getByLabelText('Last Name'), info.info.lastName))
-    .then(() => userEvent.type(screen.getByLabelText('Email'), info.info.email!))
+  swiftKeys.type(screen.getByLabelText('First Name'), info.info.firstName)
+    .then(() => swiftKeys.type(screen.getByLabelText('Last Name'), info.info.lastName))
+    .then(() => swiftKeys.type(screen.getByLabelText('Email'), info.info.email!))
     .then(() => {
       const text = toDate(info.info.dob!).toISOString().split('T')[0];
-      return userEvent.type(screen.getByLabelText('Date Of Birth'), text);
+      return swiftKeys.type(screen.getByLabelText('Date Of Birth'), text);
     });
 
 export const fillOutForm = (info: NewUser) =>
