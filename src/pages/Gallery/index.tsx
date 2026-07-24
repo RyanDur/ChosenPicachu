@@ -1,4 +1,4 @@
-import {lazy, PropsWithChildren, Suspense} from 'react';
+import {PropsWithChildren} from 'react';
 import {Outlet} from 'react-router';
 import {Paths} from '@pages/Paths';
 import {PageError} from '@pages/PageError';
@@ -8,11 +8,11 @@ import {GalleryContext} from '@components/art-gallery/Art/Context';
 import {ArtPieceContext, useArtPiece} from '@components/art-gallery/ArtPiece/Context';
 import {GalleryPaths} from './GalleryRouter/GalleryPaths';
 
-const ArtGalleryPage = lazy(() => import('./ArtGalleryPage').then(m => ({default: m.ArtGalleryPage})));
-const ArtGalleryPiecePage = lazy(() => import('./ArtGalleryPiecePage').then(m => ({default: m.ArtGalleryPiecePage})));
-const Search = lazy(() => import('@components/art-gallery/Search').then(m => ({default: m.Search})));
-const PageControl = lazy(() => import('@components/art-gallery/PageControl').then(m => ({default: m.PageControl})));
-const GalleryNav = lazy(() => import('@components/art-gallery/Nav').then(m => ({default: m.GalleryNav})));
+import {ArtGalleryPage} from './ArtGalleryPage';
+import {ArtGalleryPiecePage} from './ArtGalleryPiecePage';
+import {Search} from '@components/art-gallery/Search';
+import {PageControl} from '@components/art-gallery/PageControl';
+import {GalleryNav} from '@components/art-gallery/Nav';
 
 const GalleryProviders = ({children}: PropsWithChildren) =>
   <GalleryLinks.Provider value={{gallery: Paths.artGallery}}>
@@ -23,13 +23,13 @@ const GalleryProviders = ({children}: PropsWithChildren) =>
 
 const GalleryHeader = () =>
   <Header title="Gallery">
-    <Suspense fallback={null}><Search id="gallery-search"/></Suspense>
+    <Search id="gallery-search"/>
   </Header>;
 
 const PieceHeader = () => {
   const {piece} = useArtPiece();
   return <Header title={piece.title ?? ''}>
-    <Suspense fallback={null}><Search id="gallery-search"/></Suspense>
+    <Search id="gallery-search"/>
   </Header>;
 };
 
