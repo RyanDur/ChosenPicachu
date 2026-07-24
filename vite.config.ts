@@ -15,8 +15,10 @@ export default defineConfig({
         './src/pages/Users/component.tsx',
         './src/pages/Gallery/ArtGalleryPage.tsx',
         './src/pages/Gallery/ArtGalleryPiecePage.tsx',
-        './src/pages/Games/GamesPage.tsx',
-        './src/pages/Games/ThreeInARow/index.tsx'
+        './src/components/art-gallery/Search/index.tsx',
+        './src/components/art-gallery/PageControl/index.tsx',
+        './src/components/art-gallery/Nav/index.tsx',
+        './src/pages/Games/ThreeInARow/index.ts'
       ]
     }
   },

@@ -1,3 +1,4 @@
+import {Shell} from '../router';
 import {FC, PropsWithChildren, ReactElement} from 'react';
 import {render, RenderResult, screen} from '@testing-library/react';
 import {
@@ -84,7 +85,7 @@ export const renderWithGalleryContext: RenderWithRouter<'pieceState'> = (
 export const renderWithMemoryRouter = (routes: RouteObject, {
   path = defaultUrlContext.path
 }: { path?: string }) => {
-  const router = createMemoryRouter([routes], {
+  const router = createMemoryRouter([{path: '/', element: <Shell/>, children: [routes]}], {
     initialEntries: [path],
   });
 

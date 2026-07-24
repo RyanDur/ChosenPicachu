@@ -34,12 +34,7 @@ export const UsersPage: FC = () => {
     users.find(({id: userId}) => userId === user.id)?.friends ?? user.friends;
 
   return <>
-    <header id="app-header" data-testid="header">
-      <h1 className="title ellipsis">Users</h1>
-    </header>
-
-    <main data-testid="main">
-      <section id="user-info" className="card users" key={currentUser?.id}>
+    <section id="user-info" className="card users" key={currentUser?.id}>
         <h2 className="title">User Information</h2>
         <UsersLinks.Provider value={{users: Paths.users}}><UserInformation currentUser={currentUser}
                          readOnly={mode === 'view'}
@@ -117,6 +112,5 @@ export const UsersPage: FC = () => {
           })}
         />
       </section>
-    </main>
   </>;
 };

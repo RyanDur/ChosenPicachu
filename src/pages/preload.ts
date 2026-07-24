@@ -4,7 +4,9 @@ export const pageChunks: ReadonlyArray<() => Promise<unknown>> = [
   () => import('@pages/Users/component'),
   () => import('@pages/Gallery/ArtGalleryPage'),
   () => import('@pages/Gallery/ArtGalleryPiecePage'),
-  () => import('@pages/Games/GamesPage'),
+  () => import('@components/art-gallery/Search'),
+  () => import('@components/art-gallery/PageControl'),
+  () => import('@components/art-gallery/Nav'),
   () => import('@pages/Games/ThreeInARow')
 ];
 
