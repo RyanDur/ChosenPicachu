@@ -24,11 +24,11 @@
   }
 
   .submit-query {
-    background-image: url("https://img.icons8.com/ios/50/000000/search--v1.png");
+    background-image: url("../../../assets/icons/search.png");
   }
 
   .reset-query {
-    background-image: url("https://img.icons8.com/material-outlined/24/000000/recurring-appointment.png");
+    background-image: url("../../../assets/icons/reset.png");
   }
 
   .search-options {

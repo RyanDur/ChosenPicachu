@@ -7,6 +7,7 @@ import {useSearchParamsObject} from '@components/search-params';
 import {Source, sourceParam} from '@components/art-gallery/museums/types/resource';
 import {has, not} from '@ryandur/sand';
 import {art} from '@components/art-gallery/museums';
+import noImage from '../../../assets/icons/no-image.png';
 import './Piece.css';
 
 export const ArtPiece = () => {
@@ -35,7 +36,7 @@ export const ArtPiece = () => {
           <figcaption className="artist-display">{piece.artistInfo}</figcaption>
         </figure>}
         {errored && <article className="err">
-          <img src="https://img.icons8.com/ios/100/000000/no-image.png"
+          <img src={noImage}
                alt="Load Error"
                data-testid="image-error"/>
         </article>}

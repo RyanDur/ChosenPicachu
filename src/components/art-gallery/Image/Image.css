@@ -20,7 +20,7 @@
 
     &::after {
       margin: 0 auto;
-      background: url("https://img.icons8.com/ios/50/ffffff/detective.png")
+      background: url("../../../assets/icons/detective.png")
         no-repeat center;
     }
   }
