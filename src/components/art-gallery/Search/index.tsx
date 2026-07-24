@@ -6,6 +6,7 @@ import {sourceParam} from '@components/art-gallery/museums/types/resource';
 import * as D from 'schemawax';
 import {GalleryLinks} from '@components/art-gallery/Links';
 import {debounce} from 'throttle-debounce';
+import {has} from '@ryandur/sand';
 import {art} from '@components/art-gallery/museums';
 import './Search.css';
 import './Search.layout.css';
@@ -21,8 +22,7 @@ export const Search: FC<Props> = ({id}) => {
   const {gallery} = useContext(GalleryLinks);
   const {tab, search, removeSearchParams, createSearchParams} = useSearchParamsObject({tab: sourceParam, search: D.string});
   const debounceSearch = debounce(300, (search: string) => {
-    if (tab === undefined) return;
-    art.search({search, source: tab})
+    if (has(tab)) art.search({search, source: tab})
       .onSuccess(updateSearchOptions);
   });
 
