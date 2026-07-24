@@ -7,6 +7,19 @@ import svgr from 'vite-plugin-svgr';
 export default defineConfig({
   base: '/ChosenPicachu/',
   build: {manifest: true},
+  server: {
+    warmup: {
+      clientFiles: [
+        './src/pages/Home/component.tsx',
+        './src/pages/About/component.tsx',
+        './src/pages/Users/component.tsx',
+        './src/pages/Gallery/ArtGalleryPage.tsx',
+        './src/pages/Gallery/ArtGalleryPiecePage.tsx',
+        './src/pages/Games/GamesPage.tsx',
+        './src/pages/Games/ThreeInARow/index.tsx'
+      ]
+    }
+  },
   resolve: {
     alias: {
       '@pages': fileURLToPath(new URL('./src/pages', import.meta.url)),
