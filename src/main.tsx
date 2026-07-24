@@ -3,6 +3,7 @@ import {createBrowserRouter} from 'react-router';
 import {RouterProvider} from 'react-router/dom';
 import * as ReactDom from 'react-dom/client';
 import {router} from './router';
+import {preloadPagesWhenIdle} from '@pages/preload';
 import './index.css';
 
 ReactDom.createRoot(document.getElementById('root')!).render(
@@ -10,3 +11,5 @@ ReactDom.createRoot(document.getElementById('root')!).render(
     <RouterProvider router={createBrowserRouter([router], {basename: import.meta.env.BASE_URL})}/>
   </StrictMode>
 );
+
+preloadPagesWhenIdle();
