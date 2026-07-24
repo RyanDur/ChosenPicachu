@@ -2,6 +2,7 @@ import {ChangeEvent, FC} from 'react';
 import {User} from '@components/Users/UserInfo/types';
 import {join} from '@components/class-names';
 import {Consumer, has} from '@ryandur/sand';
+import cancelIcon from '../../../assets/icons/cancel.png';
 import './fiends-list.css';
 
 type Props = {
@@ -33,7 +34,7 @@ export const FriendsList: FC<Props> = ({users, user, onChange}) => {
                htmlFor={`remove-${friend.id}`}>{displayFullName(friend)}</label>
         <button id={`remove-${friend.id}`} className="remove" type="button"
                 onClick={() => remove(friend)} data-testid={`remove-${friend.id}`}>
-          <img src="https://img.icons8.com/material-outlined/24/000000/cancel--v1.png"
+          <img src={cancelIcon}
                alt="remove"/>
         </button>
       </li>

@@ -7,6 +7,7 @@ import * as D from 'schemawax';
 import {toQueryString} from '@transport/url';
 import {Art} from '@components/art-gallery/museums/types/response';
 import {GalleryLinks} from '@components/art-gallery/Links';
+import noImage from '../../../assets/icons/no-image.png';
 import './Image.css';
 
 type ImageProps = {
@@ -34,7 +35,7 @@ export const Image: FC<ImageProps> = (
     return (errored || !piece.image) ?
         <img alt="oops"
              className="error"
-             src="https://img.icons8.com/ios/100/000000/no-image.png"
+             src={noImage}
              data-testid="error"/> :
         (<>
             <ConditionalLink enabled={linkEnabled} area={tab ?? ''}>
