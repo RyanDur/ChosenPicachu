@@ -17,6 +17,7 @@ const chunkFiles = (moduleId, visited = new Set(), files = new Set()) => {
   if (entry === undefined || visited.has(moduleId)) return files;
   visited.add(moduleId);
   files.add(entry.file);
+  (entry.css ?? []).forEach(sheet => files.add(sheet));
   (entry.imports ?? []).forEach(dep => chunkFiles(dep, visited, files));
   return files;
 };
@@ -25,8 +26,10 @@ const indexHtml = readFileSync('dist/index.html', 'utf-8');
 const withPreloads = (moduleId) => {
   if (moduleId === undefined) return indexHtml;
   const links = [...chunkFiles(moduleId)]
-    .filter(file => file.endsWith('.js') && !indexHtml.includes(file))
-    .map(file => `    <link rel="modulepreload" href="/ChosenPicachu/${file}" />`)
+    .filter(file => !indexHtml.includes(file))
+    .map(file => file.endsWith('.js')
+      ? `    <link rel="modulepreload" href="/ChosenPicachu/${file}" />`
+      : `    <link rel="preload" as="style" href="/ChosenPicachu/${file}" />`)
     .join('\n');
   return indexHtml.replace('  </head>', `${links}\n  </head>`);
 };
