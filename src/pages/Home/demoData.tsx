@@ -1,12 +1,23 @@
-import {faker} from '@faker-js/faker';
 import {Column, Row} from '@components/Table';
 
-const randomNumberFromRange = (min: number, max = 6) => Math.floor(Math.random() * max) + min;
-export const words = (num = 6) => faker.lorem.words(randomNumberFromRange(1, num));
+const lorem = [
+  'lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 'adipiscing', 'elit',
+  'sed', 'eiusmod', 'tempor', 'incididunt', 'labore', 'dolore', 'magna', 'aliqua',
+  'veniam', 'quis', 'nostrud', 'exercitation', 'ullamco', 'laboris', 'nisi', 'aliquip'
+];
 
-export const column1Name = words();
-export const column2Name = words();
-export const column3Name = words();
+const randomNumberFromRange = (min: number, max = 6) => Math.floor(Math.random() * max) + min;
+const word = () => lorem[Math.floor(Math.random() * lorem.length)];
+export const words = (num = 6) => Array.from({length: randomNumberFromRange(1, num)}, word).join(' ');
+
+const wordsDistinctFrom = (taken: string[]): string => {
+  const candidate = words();
+  return taken.includes(candidate) ? wordsDistinctFrom(taken) : candidate;
+};
+
+export const column1Name = wordsDistinctFrom([]);
+export const column2Name = wordsDistinctFrom([column1Name]);
+export const column3Name = wordsDistinctFrom([column1Name, column2Name]);
 
 export const column1Display = words();
 export const column3Display = words();
@@ -68,42 +79,42 @@ export const rows: Row[] = [{
   }
 }, {
   [column1Name]: {
-    display: faker.lorem.word()
+    display: word()
   },
   [column2Name]: {
-    display: <h3>{faker.lorem.word()}</h3>
+    display: <h3>{word()}</h3>
   },
   [column3Name]: {
-    display: <h3>{faker.lorem.word()}</h3>
+    display: <h3>{word()}</h3>
   }
 }, {
   [column1Name]: {
-    display: faker.lorem.word()
+    display: word()
   },
   [column2Name]: {
-    display: <h3>{faker.lorem.word()}</h3>
+    display: <h3>{word()}</h3>
   },
   [column3Name]: {
-    display: <h3>{faker.lorem.word()}</h3>
+    display: <h3>{word()}</h3>
   }
 }, {
   [column1Name]: {
-    display: faker.lorem.word()
+    display: word()
   },
   [column2Name]: {
-    display: <h3>{faker.lorem.word()}</h3>
+    display: <h3>{word()}</h3>
   },
   [column3Name]: {
-    display: <h3>{faker.lorem.word()}</h3>
+    display: <h3>{word()}</h3>
   }
 }, {
   [column1Name]: {
-    display: faker.lorem.word()
+    display: word()
   },
   [column2Name]: {
-    display: <h3>{faker.lorem.word()}</h3>
+    display: <h3>{word()}</h3>
   },
   [column3Name]: {
-    display: <h3>{faker.lorem.word()}</h3>
+    display: <h3>{word()}</h3>
   }
 }];
