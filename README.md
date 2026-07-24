@@ -34,3 +34,16 @@ npm install
 npm run dev
 npm test
 ```
+
+## Git hooks
+
+Activate the repo's quality gates once per clone:
+
+```bash
+git config core.hooksPath scripts/git-hooks
+```
+
+`pre-commit` runs lint, typecheck, and the unit suite in seconds;
+`pre-push` adds stylelint and the production build. CI audits the
+deployed site (smoke, axe, Lighthouse) — the hooks catch everything
+catchable before the round-trip.

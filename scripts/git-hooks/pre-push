@@ -1,0 +1,15 @@
+#!/bin/bash
+# Full local gate: everything pre-commit runs, plus stylelint and the
+# production build. CI still audits the deployed site (smoke, axe,
+# Lighthouse) — this hook catches what a build can catch before the
+# round-trip.
+set -euo pipefail
+cd "$(git rev-parse --show-toplevel)"
+
+echo "pre-push: oxlint + stylelint + tsc + vitest + build..."
+npm run lint
+npm run lint:css
+npx tsc -b
+npx vitest run --reporter=dot
+npm run build
+echo "pre-push: clean."

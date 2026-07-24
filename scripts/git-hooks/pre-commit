@@ -1,0 +1,12 @@
+#!/bin/bash
+# Fast commit-time loop: lint, types, unit tests. The pre-push hook is
+# the full gate; this one exists to fail in seconds, not minutes.
+# Activate per-clone: git config core.hooksPath scripts/git-hooks
+set -euo pipefail
+cd "$(git rev-parse --show-toplevel)"
+
+echo "pre-commit: oxlint + tsc + vitest..."
+npm run lint
+npx tsc -b
+npx vitest run --reporter=dot
+echo "pre-commit: clean."
