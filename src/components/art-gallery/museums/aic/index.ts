@@ -50,10 +50,14 @@ export const aic = {
 const aicImage = (imageId: string | null | undefined, width: number) =>
   `https://www.artic.edu/iiif/2/${imageId}/full/${width},/0/default.jpg`;
 
+const aicSrcSet = (imageId: string | null | undefined) =>
+  [400, 800, 1200].map(width => `${aicImage(imageId, width)} ${width}w`).join(', ');
+
 const aicToPiece = (width: number) => (data: AICArt): Art => ({
   id: String(data.id),
   title: data.title,
   image: aicImage(data.image_id, width),
+  srcSet: aicSrcSet(data.image_id),
   artistInfo: data.artist_display,
   altText: data.thumbnail?.alt_text || data.term_titles.join(' ') || ''
 });

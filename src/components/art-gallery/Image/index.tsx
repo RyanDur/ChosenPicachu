@@ -53,6 +53,8 @@ export const Image: FC<ImageProps> = (
                          event.currentTarget.classList.remove('off-screen');
                      }}
                      fetchPriority={priority ? 'high' : 'auto'}
+                     srcSet={piece.srcSet ?? undefined}
+                     sizes="(max-width: 600px) 85vw, (max-width: 1100px) 45vw, 33vw"
                      alt={piece.altText} title={piece.title}
                      data-testid={`piece-${piece.id}`}
                      src={piece.image}/>

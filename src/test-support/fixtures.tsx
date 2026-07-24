@@ -100,6 +100,7 @@ export const fromVAMArt: AllArt = {
     id: record.systemNumber,
     title: record._primaryTitle || 'Untitled',
     image: `${record._images._iiif_image_base_url}full/!800,800/0/default.jpg`,
+    srcSet: [400, 800, 1200].map(size => `${record._images._iiif_image_base_url}full/!${size},${size}/0/default.jpg ${size}w`).join(', '),
     artistInfo: record._primaryMaker.name,
     altText: record._primaryTitle || 'Untitled'
   }))
@@ -135,6 +136,7 @@ export const fromAICArt: AllArt = {
     id: String(piece.id),
     title: piece.title,
     image: `https://www.artic.edu/iiif/2/${piece.image_id}/full/800,/0/default.jpg`,
+    srcSet: [400, 800, 1200].map(width => `https://www.artic.edu/iiif/2/${piece.image_id}/full/${width},/0/default.jpg ${width}w`).join(', '),
     artistInfo: piece.artist_display,
     altText: piece.term_titles.join(' ')
   }))

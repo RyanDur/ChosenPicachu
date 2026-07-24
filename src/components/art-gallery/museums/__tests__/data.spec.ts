@@ -235,6 +235,7 @@ describe('data', () => {
         id: String(pieceAICResponse.data.id),
         title: pieceAICResponse.data.title,
         image: `https://www.artic.edu/iiif/2/${pieceAICResponse.data.image_id}/full/843,/0/default.jpg`,
+        srcSet: [400, 800, 1200].map(width => `https://www.artic.edu/iiif/2/${pieceAICResponse.data.image_id}/full/${width},/0/default.jpg ${width}w`).join(', '),
         altText: pieceAICResponse.data.thumbnail?.alt_text || '',
         artistInfo: pieceAICResponse.data.artist_display
     };

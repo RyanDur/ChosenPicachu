@@ -12,6 +12,7 @@ export type Art = {
     id: string;
     title: string;
     image?: string | null;
+    srcSet?: string | null;
     altText: string;
     artistInfo: string;
 }
