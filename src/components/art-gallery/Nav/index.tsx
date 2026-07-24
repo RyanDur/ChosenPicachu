@@ -1,7 +1,8 @@
 import {Link, useLocation} from 'react-router';
 import {FC, useEffect, useRef} from 'react';
-import {useSearchParamsObject} from '@components/search-params';
+import {numberParam, useSearchParamsObject} from '@components/search-params';
 import {useGallery} from '@components/art-gallery/Art/Context';
+import {defaultRecordLimit} from '@components/art-gallery/museums/config';
 import './GalleryNav.css';
 import './GalleryNav.layout.css';
 
@@ -22,13 +23,13 @@ export const GalleryNav: FC<Props> = ({id}) => {
   const {
     page, size,
     createSearchParams,
-  } = useSearchParamsObject<{ page: number, size: number }>({page: 1});
+  } = useSearchParamsObject({page: numberParam, size: numberParam}, {page: 1});
   const location = useLocation();
   const path = location.pathname;
   const previous = usePrevious(art?.pagination.total);
   const firstPage = 1;
   const lastPage = art?.pagination?.totalPages ?? Number.MAX_VALUE;
-  const currentPage = +page;
+  const currentPage = page ?? firstPage;
 
   const hasNextPage = currentPage < lastPage;
   const nextPage = hasNextPage ? currentPage + 1 : currentPage;
@@ -36,8 +37,9 @@ export const GalleryNav: FC<Props> = ({id}) => {
   const prevPage = hasPrevPage ? currentPage - 1 : currentPage;
 
   const totalRecords = art?.pagination.total ?? previous;
-  const firstRecord = 1 + ((art?.pagination.limit || size) * ((art?.pagination.currentPage || page) - 1));
-  const lastRecord = art?.pagination.totalPages === page ? totalRecords : (art?.pagination.limit || size) * page;
+  const pageSize = art?.pagination.limit ?? size ?? defaultRecordLimit;
+  const firstRecord = 1 + pageSize * ((art?.pagination.currentPage ?? currentPage) - 1);
+  const lastRecord = art?.pagination.totalPages === currentPage ? totalRecords : pageSize * currentPage;
 
   const gotoTopOfPage = () => window.scrollTo(0, 0);
 

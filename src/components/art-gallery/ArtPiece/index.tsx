@@ -4,14 +4,14 @@ import {Loading} from '@components/art-gallery/Loading';
 import {useArtPiece} from '@components/art-gallery/ArtPiece/Context';
 import {Image} from '@components/art-gallery/Image';
 import {useSearchParamsObject} from '@components/search-params';
-import {Source} from '@components/art-gallery/museums/types/resource';
+import {Source, sourceParam} from '@components/art-gallery/museums/types/resource';
 import {has, not} from '@ryandur/sand';
 import {art} from '@components/art-gallery/museums';
 import './Piece.css';
 
 export const ArtPiece = () => {
     const {piece, updatePiece, reset} = useArtPiece();
-    const {tab} = useSearchParamsObject<{ tab: Source }>();
+    const {tab} = useSearchParamsObject({tab: sourceParam});
     const {id} = useParams<{ id: string }>();
     const [errored, hasErrored] = useState(false);
     const [loading, isLoading] = useState(false);

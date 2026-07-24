@@ -1,6 +1,7 @@
 import {FC, useEffect, useState} from 'react';
 import {Link, useLocation, useNavigate} from 'react-router';
 import {useSearchParamsObject} from '@components/search-params';
+import * as D from 'schemawax';
 import {User, UserInformation, users as usersApi, UsersLinks} from '@components/Users';
 import {equalAddresses} from './addresses';
 import {Paths} from '@pages/Paths';
@@ -12,7 +13,7 @@ import './styles.layout.css';
 export const UsersPage: FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const {id, mode, createSearchParams} = useSearchParamsObject<{ id: string, mode: string }>();
+  const {id, mode, createSearchParams} = useSearchParamsObject({id: D.string, mode: D.string});
   const [users, updateUsers] = useState<User[]>([]);
   const [currentUser, updateCurrentUser] = useState<User>();
   const path = location.pathname;

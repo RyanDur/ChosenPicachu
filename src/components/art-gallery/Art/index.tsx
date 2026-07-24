@@ -1,10 +1,11 @@
 import {FC, useEffect, useState} from 'react';
-import {useSearchParamsObject} from '@components/search-params';
+import {numberParam, useSearchParamsObject} from '@components/search-params';
+import * as D from 'schemawax';
 import {Loading} from '@components/art-gallery/Loading';
 import {Image} from '@components/art-gallery/Image';
 import {useGallery} from '@components/art-gallery/Art/Context';
-import {empty, has} from '@ryandur/sand';
-import {Source} from '@components/art-gallery/museums/types/resource';
+import {empty} from '@ryandur/sand';
+import {Source, sourceParam} from '@components/art-gallery/museums/types/resource';
 import {art as artResource} from '@components/art-gallery/museums';
 import {defaultRecordLimit} from '@components/art-gallery/museums/config';
 import './Gallery.css';
@@ -15,15 +16,15 @@ export const ArtGallery: FC = () => {
   const [loading, isLoading] = useState(false);
   const [errored, hasErrored] = useState(false);
   const {page, size, search, tab} =
-    useSearchParamsObject<{ page: number, size: number, tab: Source, search?: string }>({
+    useSearchParamsObject({page: numberParam, size: numberParam, tab: sourceParam, search: D.string}, {
       size: defaultRecordLimit,
       page: 1,
       tab: Source.AIC
     });
 
   useEffect(() => {
-    if (!has(page) || !has(size)) return reset;
-    const {cancel} = artResource.getAll({page, size: size || defaultRecordLimit, search, source: tab})
+    if (page === undefined || size === undefined || tab === undefined) return reset;
+    const {cancel} = artResource.getAll({page, size, search, source: tab})
       .onPending(isLoading)
       .onSuccess(updateArt)
       .onSuccess(data => hasErrored(empty(data.pieces)))
