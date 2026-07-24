@@ -1,7 +1,8 @@
 import {FC, useEffect, useState} from 'react';
 import {Link, useLocation, useNavigate} from 'react-router';
 import {useSearchParamsObject} from '@components/search-params';
-import {AddressInfo, User, UserInformation, users as usersApi, UsersLinks} from '@components/Users';
+import {User, UserInformation, users as usersApi, UsersLinks} from '@components/Users';
+import {equalAddresses} from './addresses';
 import {Paths} from '@pages/Paths';
 import {Table} from '@components/Table';
 import {age, formatAge, FriendsList} from '@components/Users';
@@ -24,13 +25,12 @@ export const UsersPage: FC = () => {
     id && usersApi.get(id).onSuccess(updateCurrentUser);
   }, [id]);
 
-  const equalAddresses = (address1: AddressInfo, address2: AddressInfo = {} as AddressInfo): boolean =>
-    Object.keys(address1).reduce((_, key) =>
-      address1[key as keyof AddressInfo] === address2[key as keyof AddressInfo], Boolean());
-
-  const update = (user: User) => (newFriends: User[]) =>
+  const update = (user: User) => (newFriends: string[]) =>
     usersApi.update({...user, friends: newFriends})
       .onSuccess(updateUsers);
+
+  const currentFriendsOf = (user: User): string[] =>
+    users.find(({id: userId}) => userId === user.id)?.friends ?? user.friends;
 
   return <>
     <header id="app-header" data-testid="header">
@@ -45,7 +45,7 @@ export const UsersPage: FC = () => {
                          editing={mode === 'edit'}
                          onAdd={user => usersApi.add(user)
                            .onSuccess(updateUsers)}
-                         onUpdate={user => usersApi.update(user)
+                         onUpdate={user => usersApi.update({...user, friends: currentFriendsOf(user)})
                            .onSuccess(updateUsers)
                            .onSuccess(() => navigate(Paths.users))}/></UsersLinks.Provider>
       </section>
@@ -78,15 +78,14 @@ export const UsersPage: FC = () => {
               homeCity: {display: user.homeAddress.city},
               age: {display: formatAge(age(user.info.dob))},
               friends: {
-                display: <FriendsList user={user} users={users} onChange={update(user)}
-                                      key={user.friends.length}/>
+                display: <FriendsList user={user} users={users} onChange={update(user)}/>
               },
               worksFromHome: {
                 display: <section className="last-column">
                   {equalAddresses(user.homeAddress, user.workAddress) ? 'Yes' : 'No'}
                   <article tabIndex={0} className="menu-toggle rounded-corners" onKeyDown={event => {
-                    event.preventDefault();
-                    if (event.code === 'Space') {
+                    if (event.code === 'Space' || event.code === 'Enter') {
+                      event.preventDefault();
                       event.currentTarget.classList.toggle('open');
                     }
                   }} onBlur={event => {
@@ -106,8 +105,8 @@ export const UsersPage: FC = () => {
                         mode: 'edit'
                       })}`}
                             className="item"
-                            data-testid="view">Edit</Link>
-                      <Link to={id === user.id ? path : location.pathname}
+                            data-testid="edit">Edit</Link>
+                      <Link to={path}
                             className="item"
                             onClick={() => usersApi.delete(user)
                               .onSuccess(updateUsers)

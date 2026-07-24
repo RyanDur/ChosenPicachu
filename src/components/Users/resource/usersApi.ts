@@ -30,25 +30,24 @@ export const usersApi = (randomUsers: User[]): UsersAPI => ({
     randomUsers = [{...user, id: nanoid()}, ...randomUsers];
     return asyncSuccess(randomUsers);
   },
-  update: user => {
-    const friends: User[] = [user, ...user.friends.map(friend => ({
-      ...friend,
-      friends: [...friend.friends, user]
-    }))];
-
-    randomUsers = randomUsers.map(randomUser => ({
-      ...randomUser,
-      friends: randomUser.friends.filter(friend => friend.id !== user.id)
-    })).map(randomUser => maybe(
-      friends.find(friend => friend.id === randomUser.id)
-    ).orElse(randomUser));
-
-    return asyncSuccess(randomUsers);
-  },
+  update: user => maybe(user.id).map(userId => {
+    const friendIds = new Set(user.friends);
+    randomUsers = randomUsers.map(randomUser => {
+      if (randomUser.id === userId) return {...user, friends: [...friendIds]};
+      if (friendIds.has(randomUser.id ?? '')) return {
+        ...randomUser,
+        friends: randomUser.friends.includes(userId)
+          ? randomUser.friends
+          : [...randomUser.friends, userId]
+      };
+      return {...randomUser, friends: randomUser.friends.filter(id => id !== userId)};
+    });
+    return asyncSuccess<User[], HTTPError>(randomUsers);
+  }).orElse(asyncFailure(HTTPError.UNKNOWN)),
   delete: user => {
     randomUsers = randomUsers.map(randomUser => ({
       ...randomUser,
-      friends: randomUser.friends.filter(friend => friend.id !== user.id)
+      friends: randomUser.friends.filter(id => id !== user.id)
     })).filter(randomUser => randomUser.id !== user.id);
     return asyncSuccess(randomUsers);
   }
