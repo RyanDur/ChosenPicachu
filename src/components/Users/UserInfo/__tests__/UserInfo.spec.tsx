@@ -1,14 +1,38 @@
 import {UserInformation} from '../index';
 import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {users} from '@test-support/fixtures';
 import {fillOutForm} from '@test-support';
 import {initialState} from '../reducer';
+import {NewUser} from '../types';
+import {toDate} from 'date-fns';
 
 describe('a user form', () => {
-  const [userInfo] = users;
-  userInfo.avatar = initialState.avatar;
-  const {id, ...info} = userInfo;
+  const info: NewUser = {
+    info: {
+      firstName: 'Teruko',
+      lastName: 'Okada',
+      email: 'teruko@example.com',
+      dob: toDate('1984-06-02')
+    },
+    friends: [],
+    homeAddress: {
+      streetAddress: '12 Elm St',
+      streetAddressTwo: 'Apt. 3',
+      city: 'Springfield',
+      state: 'IL',
+      zip: '62704'
+    },
+    workAddress: {
+      streetAddress: '9 Oak Ave',
+      streetAddressTwo: 'Suite 2',
+      city: 'Chatham',
+      state: 'IL',
+      zip: '62629'
+    },
+    details: 'short notes',
+    avatar: initialState.avatar
+  };
+  const userInfo = info;
 
   describe('filled out', () => {
     it('should be resettable', async () => {
