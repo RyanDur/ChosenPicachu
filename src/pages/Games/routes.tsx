@@ -11,7 +11,7 @@ export enum GamePaths {
 const GamesHeader = () => <Header title="Play Games"/>;
 
 export const Games = {
-  path: `${Paths.games}/*`,
+  path: `${Paths.games}*`,
   errorElement: <PageError/>,
   handle: {header: GamesHeader},
   element: <Outlet/>,
