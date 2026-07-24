@@ -46,7 +46,8 @@ describe('the users page', () => {
   describe('viewing a user', () => {
     beforeEach(async () => {
       renderWithRouter(<UsersPage/>);
-      await waitFor(() => userEvent.click(within(screen.getByTestId('cell-4-0')).getByText('View')));
+      const view = await waitFor(() => within(screen.getByTestId('cell-4-0')).getByText('View'));
+      await userEvent.click(view);
     });
 
     test('populating the form with the chosen user', () => {
@@ -66,8 +67,8 @@ describe('the users page', () => {
     beforeEach(async () => {
 
       renderWithRouter(<UsersPage/>);
-      await waitFor(() => userEvent.click(within(screen.getByTestId('cell-4-0'))
-        .getByText('Edit')));
+      const edit = await waitFor(() => within(screen.getByTestId('cell-4-0')).getByText('Edit'));
+      await userEvent.click(edit);
     });
 
     it('should populate the form', () => {
@@ -101,11 +102,11 @@ describe('the users page', () => {
 
     renderWithRouter(<UsersPage/>);
 
-    await waitFor(() => userEvent.click(within(screen.getByTestId('cell-4-0'))
-      .getByText('Edit')));
+    const editControl = await waitFor(() => within(screen.getByTestId('cell-4-0')).getByText('Edit'));
+    await userEvent.click(editControl);
 
-    await waitFor(() => userEvent.click(within(screen.getByTestId('user-info-form'))
-      .getByText('Update')));
+    const updateControl = await waitFor(() => within(screen.getByTestId('user-info-form')).getByText('Update'));
+    await userEvent.click(updateControl);
 
     expect(spy).toHaveBeenCalled();
   });
@@ -115,8 +116,8 @@ describe('the users page', () => {
 
     renderWithRouter(<UsersPage/>);
 
-    await waitFor(() => userEvent.click(within(screen.getByTestId('cell-4-0'))
-      .getByText('Remove')));
+    const removeControl = await waitFor(() => within(screen.getByTestId('cell-4-0')).getByText('Remove'));
+    await userEvent.click(removeControl);
 
     expect(spy).toHaveBeenCalledWith(firstUser);
   });
@@ -125,11 +126,11 @@ describe('the users page', () => {
     const spy = vi.spyOn(users, 'add');
     renderWithRouter(<UsersPage/>);
 
-    await waitFor(() => userEvent.click(within(screen.getByTestId('cell-4-0'))
-      .getByText('Clone')));
+    const cloneControl = await waitFor(() => within(screen.getByTestId('cell-4-0')).getByText('Clone'));
+    await userEvent.click(cloneControl);
 
-    await waitFor(() => userEvent.click(within(screen.getByTestId('user-info-form'))
-      .getByText('Add')));
+    const addControl = await waitFor(() => within(screen.getByTestId('user-info-form')).getByText('Add'));
+    await userEvent.click(addControl);
 
     expect(spy).toHaveBeenCalled();
   });

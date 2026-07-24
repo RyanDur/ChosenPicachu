@@ -1,14 +1,11 @@
 export const pageChunks: ReadonlyArray<() => Promise<unknown>> = [
   () => import('@pages/Home/component'),
+  () => import('@pages/About/component'),
+  () => import('@pages/Users/component'),
   () => import('@pages/Gallery/ArtGalleryPage'),
   () => import('@pages/Gallery/ArtGalleryPiecePage'),
   () => import('@pages/Games/GamesPage'),
   () => import('@pages/Games/ThreeInARow')
-];
-
-export const fakerHeavyPages: ReadonlyArray<string> = [
-  '@pages/About/component',
-  '@pages/Users/component'
 ];
 
 export const preloadPagesWhenIdle = (): void => {

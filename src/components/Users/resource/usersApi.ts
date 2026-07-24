@@ -2,7 +2,7 @@ import {AddressInfo, NewUser, User, UserInfo} from '@components/Users/UserInfo/t
 import {asyncFailure, asyncSuccess, maybe, Result} from '@ryandur/sand';
 import {HTTPError} from '@transport/types';
 import {nanoid} from 'nanoid';
-import {faker} from '@faker-js/faker';
+import {randBetweenDate, randCity, randEmail, randFirstName, randLastName, randNumber, randSentence, randStateAbbr, randStreetName, randZipCode} from '@ngneat/falso';
 import {AvatarGenerator} from 'random-avatar-generator';
 import {toDate} from 'date-fns';
 
@@ -53,7 +53,8 @@ export const usersApi = (randomUsers: User[]): UsersAPI => ({
   }
 });
 
-const createDetails = (num = 10) => faker.lorem.sentences(randomNumberFromRange(2, num));
+const createDetails = (num = 10) =>
+  Array.from({length: randomNumberFromRange(2, num)}, () => randSentence()).join(' ');
 
 export const createUser = (
   worksFromHome = false,
@@ -74,16 +75,19 @@ export const createUser = (
 
 
 export const createUserInfo = (): UserInfo => ({
-  firstName: faker.person.firstName(),
-  lastName: faker.person.lastName(),
-  email: faker.internet.email(),
-  dob: toDate(faker.date.birthdate().toISOString().split('T')[0])
+  firstName: randFirstName(),
+  lastName: randLastName(),
+  email: randEmail(),
+  dob: toDate(randBetweenDate({
+    from: new Date(1946, 0, 1),
+    to: new Date(2006, 0, 1)
+  }).toISOString().split('T')[0])
 });
 
 export const createAddress = (): AddressInfo => ({
-  city: faker.location.city(),
-  state: faker.location.state({ abbreviated: true }),
-  streetAddress: faker.location.street(),
-  streetAddressTwo: faker.location.secondaryAddress(),
-  zip: faker.location.zipCode()
+  city: randCity(),
+  state: randStateAbbr(),
+  streetAddress: randStreetName(),
+  streetAddressTwo: `Apt. ${randNumber({min: 1, max: 999})}`,
+  zip: randZipCode()
 });
