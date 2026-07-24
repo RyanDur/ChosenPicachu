@@ -1,12 +1,13 @@
 import {FormEvent, useState} from 'react';
 import {useGallery} from '@components/art-gallery/Art/Context';
-import {useSearchParamsObject} from '@components/search-params';
+import {numberParam, useSearchParamsObject} from '@components/search-params';
+import {defaultRecordLimit} from '@components/art-gallery/museums/config';
 import './PageControl.css';
 import './PageControl.layout.css';
 
 export const PageControl = () => {
   const {art} = useGallery();
-  const {page, size, updateSearchParams} = useSearchParamsObject<{ page: number, size: number }>();
+  const {page, size, updateSearchParams} = useSearchParamsObject({page: numberParam, size: numberParam}, {page: 1, size: defaultRecordLimit});
   const [pageNumber, updatePageNumber] = useState(page);
   const [pageSize, updatePageSize] = useState(size);
 

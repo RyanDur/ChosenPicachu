@@ -1,6 +1,4 @@
 import {faker} from '@faker-js/faker';
-import {maybe, nothing, some} from '@ryandur/sand';
-import {useSearchParams} from 'react-router';
 import {useSearchParamsObject} from '@components/search-params';
 import './style.css';
 import './AboutPage.css';
@@ -18,7 +16,7 @@ import {
   SortableListEagerMove,
   SortableListLazyMove
 } from './DragAndDrop';
-import {AboutTopics, isATopic} from './types';
+import {AboutTopics, aboutTopicParam} from './types';
 import {NaturalZIndex} from './ZIndexDemo';
 
 const paragraphs = (count: number) =>
@@ -28,8 +26,7 @@ const paragraphs = (count: number) =>
   }));
 
 export const AboutPage = () => {
-  const [searchParams] = useSearchParams();
-  const {tab} = useSearchParamsObject<{ tab: string }>();
+  const {tab} = useSearchParamsObject({tab: aboutTopicParam}, {tab: AboutTopics.accordions});
 
   return <>
     <header id="app-header" data-testid="header">
@@ -46,12 +43,7 @@ export const AboutPage = () => {
           {display: 'Drag and Drop', param: AboutTopics.dragAndDrop}
         ]}/>
       <section id='about'>
-        {maybe(searchParams.get('tab'))
-          .mBind(possibleTopic => isATopic(possibleTopic)
-            ? some(possibleTopic as AboutTopics)
-            : nothing())
-          .or(() => some(AboutTopics.accordions))
-          .map(tab => ({
+        {({
             [AboutTopics.accordions]:
               <ul className='accordions'>
                 <li className='title'>Different styles of Accordions.</li>
@@ -86,7 +78,7 @@ export const AboutPage = () => {
               <h3>Hide and Eager Move</h3>
               <HideElemOnDragSortableListEagerMove list={new Set(['A', 'B', 'C'])}/>
             </>
-          }[tab])).orNull()}
+        })[tab ?? AboutTopics.accordions]}
       </section>
     </main>
   </>;

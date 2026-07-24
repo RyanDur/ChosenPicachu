@@ -2,6 +2,7 @@ import {FC, useEffect} from 'react';
 import {Link, useLocation} from 'react-router';
 import {join} from '@components/class-names';
 import {useSearchParamsObject} from '@components/search-params';
+import * as D from 'schemawax';
 import {not} from '@ryandur/sand';
 import './Tabs.css';
 
@@ -19,7 +20,7 @@ type Props = {
 
 export const Tabs: FC<Props> = ({values, id, role, defaultTab}) => {
   const {pathname} = useLocation();
-  const {tab, updateSearchParams, createSearchParams} = useSearchParamsObject<{ tab: string }>();
+  const {tab, updateSearchParams, createSearchParams} = useSearchParamsObject({tab: D.string});
 
   useEffect(() => {
     if (not(tab)) updateSearchParams({tab: defaultTab});

@@ -82,15 +82,6 @@ describe('data', () => {
             });
         });
 
-        test('when the source does not exist', async () => {
-            const consumer = vi.fn();
-            anyRequestRespondsWith(JSON.stringify(vamArtResponse));
-
-            await art.getAll({page: 1, size: 12, source: 'I do not exist' as Source})
-                .onFailure(consumer).orNull();
-
-            expect(consumer).toHaveBeenCalledWith(HTTPError.UNKNOWN_SOURCE);
-        });
     });
 
         describe('when the source is VAM', () => {
@@ -158,15 +149,6 @@ describe('data', () => {
             });
         });
 
-        test('when the source does not exist', async () => {
-            const consumer = vi.fn();
-            anyRequestRespondsWith(JSON.stringify(pieceAICResponse));
-
-            await art.get({id: '1', source: 'I do not exist' as Source})
-                .onFailure(consumer).orNull();
-
-            expect(consumer).toHaveBeenCalledWith(HTTPError.UNKNOWN_SOURCE);
-        });
     });
 
     describe('retrieving a VAM artwork', () => {
@@ -222,15 +204,6 @@ describe('data', () => {
             });
         });
 
-        test('when the source does not exist', async () => {
-            const consumer = vi.fn();
-            anyRequestRespondsWith(JSON.stringify({some: 'thing'}));
-
-            await art.search({search, source: 'I do not exist' as Source})
-                .onFailure(consumer).orNull();
-
-            expect(consumer).toHaveBeenCalledWith(HTTPError.UNKNOWN_SOURCE);
-        });
 
         test.each`
         source

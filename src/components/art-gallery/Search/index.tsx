@@ -2,7 +2,8 @@ import {FC, FormEvent, useContext, useEffect, useState} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
 import {useNavigate} from 'react-router';
 import {SearchOptions} from '@components/art-gallery/museums/types/response';
-import {Source} from '@components/art-gallery/museums/types/resource';
+import {sourceParam} from '@components/art-gallery/museums/types/resource';
+import * as D from 'schemawax';
 import {GalleryLinks} from '@components/art-gallery/Links';
 import {debounce} from 'throttle-debounce';
 import {art} from '@components/art-gallery/museums';
@@ -18,13 +19,12 @@ export const Search: FC<Props> = ({id}) => {
   const [searchString, updateQuery] = useState<string>('');
   const navigate = useNavigate();
   const {gallery} = useContext(GalleryLinks);
-  const {tab, search, removeSearchParams, createSearchParams} = useSearchParamsObject<{
-    tab: Source,
-    search?: string
-  }>();
-  const debounceSearch = debounce(300, search =>
+  const {tab, search, removeSearchParams, createSearchParams} = useSearchParamsObject({tab: sourceParam, search: D.string});
+  const debounceSearch = debounce(300, (search: string) => {
+    if (tab === undefined) return;
     art.search({search, source: tab})
-      .onSuccess(updateSearchOptions));
+      .onSuccess(updateSearchOptions);
+  });
 
   useEffect(() => {
     searchString && searchString.length && debounceSearch(searchString.toLowerCase());

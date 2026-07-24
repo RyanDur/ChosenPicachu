@@ -1,4 +1,4 @@
-import {asyncFailure, maybe, Result} from '@ryandur/sand';
+import {Result} from '@ryandur/sand';
 import {GetAllArt, GetArt, SearchArt, Source} from '@components/art-gallery/museums/types/resource';
 import {AllArt, Art, SearchOptions} from '@components/art-gallery/museums/types/response';
 import {HTTPError} from '@transport/types';
@@ -7,12 +7,13 @@ import {harvard} from '@components/art-gallery/museums/harvard';
 import {vam} from '@components/art-gallery/museums/vam';
 
 type ArtResource = typeof aic | typeof harvard | typeof vam;
+const resources: Record<Source, ArtResource> = {
+  [Source.AIC]: aic,
+  [Source.HARVARD]: harvard,
+  [Source.VAM]: vam
+};
 const fromSource = <T>(source: Source, func: (resource: ArtResource) => Result.Async<T, HTTPError>) =>
-  maybe({
-    [Source.AIC]: aic,
-    [Source.HARVARD]: harvard,
-    [Source.VAM]: vam
-  }[source]).map(func).orElse(asyncFailure(HTTPError.UNKNOWN_SOURCE));
+  func(resources[source]);
 
 export const art = {
   getAll: ({source, ...request}: GetAllArt): Result.Async<AllArt, HTTPError> =>
