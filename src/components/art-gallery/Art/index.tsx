@@ -4,7 +4,7 @@ import * as D from 'schemawax';
 import {Loading} from '@components/art-gallery/Loading';
 import {Image} from '@components/art-gallery/Image';
 import {useGallery} from '@components/art-gallery/Art/Context';
-import {empty} from '@ryandur/sand';
+import {empty, has} from '@ryandur/sand';
 import {Source, sourceParam} from '@components/art-gallery/museums/types/resource';
 import {art as artResource} from '@components/art-gallery/museums';
 import {defaultRecordLimit} from '@components/art-gallery/museums/config';
@@ -23,7 +23,7 @@ export const ArtGallery: FC = () => {
     });
 
   useEffect(() => {
-    if (page === undefined || size === undefined || tab === undefined) return reset;
+    if (!has(page) || !has(size) || !has(tab)) return reset;
     const {cancel} = artResource.getAll({page, size, search, source: tab})
       .onPending(isLoading)
       .onSuccess(updateArt)
