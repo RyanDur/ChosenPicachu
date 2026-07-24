@@ -3,7 +3,7 @@ import {AllArt} from '@components/art-gallery/museums/types/response';
 import {Consumer} from '@ryandur/sand';
 import {Context} from '@components/art-gallery/Art/Context/useGallery';
 
-export interface GalleryContextState {
+export type GalleryContextState = {
   art?: AllArt;
   updateArt: Consumer<AllArt>;
   reset: Consumer<void>;

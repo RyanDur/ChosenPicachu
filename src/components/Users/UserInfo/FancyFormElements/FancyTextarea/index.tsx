@@ -2,7 +2,7 @@ import {join} from '@components/class-names';
 import {FC, FormEvent, useState} from 'react';
 import {Consumer} from '@ryandur/sand';
 
-interface FancyTextareaProps {
+type FancyTextareaProps = {
     onChange: Consumer<FormEvent<HTMLTextAreaElement>>;
     value?: string;
     readOnly?: boolean

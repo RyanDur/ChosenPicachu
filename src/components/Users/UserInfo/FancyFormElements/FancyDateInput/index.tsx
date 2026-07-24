@@ -1,7 +1,7 @@
 import {FC, FormEvent, PropsWithChildren} from 'react';
 import {FancyInput} from '../FancyInput';
 
-interface FancyDateInputProps {
+type FancyDateInputProps = {
     inputId: string;
     id?: string;
     required?: boolean;

@@ -9,7 +9,7 @@ import {art} from '@components/art-gallery/museums';
 import './Search.css';
 import './Search.layout.css';
 
-interface Props {
+type Props = {
   id?: string;
 }
 

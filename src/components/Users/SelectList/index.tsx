@@ -4,7 +4,7 @@ import {join} from '@components/class-names';
 import {Consumer, has} from '@ryandur/sand';
 import './fiends-list.css';
 
-interface Props {
+type Props = {
   users: User[];
   user: User;
   onChange: Consumer<string[]>

@@ -6,7 +6,7 @@ export type Row = {
 
 export type Column = Cell & { column: keyof Row; }
 
-export interface Cell {
+export type Cell = {
     display: ReactNode;
     className?: string;
 }

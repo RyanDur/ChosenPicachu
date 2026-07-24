@@ -5,12 +5,12 @@ import {useSearchParamsObject} from '@components/search-params';
 import {not} from '@ryandur/sand';
 import './Tabs.css';
 
-interface Tab {
+type Tab = {
   display: string;
   param: string;
 }
 
-interface Props {
+type Props = {
   defaultTab: string;
   values: Tab[];
   id?: string;

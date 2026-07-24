@@ -3,7 +3,7 @@ import {FC} from 'react';
 import {join} from '@components/class-names';
 import './Table.css';
 
-export interface TableProps {
+export type TableProps = {
     columns: Column[];
     rows: Row[];
     id?: string;
