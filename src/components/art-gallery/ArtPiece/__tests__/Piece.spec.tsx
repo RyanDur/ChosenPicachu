@@ -24,7 +24,7 @@ describe('viewing a piece', () => {
     setupAICArtPieceResponse(aicArtResponse, aicArtResponse.data.id);
 
     renderWithArtPieceContext(<ArtPiece/>, {
-      initialRoute: `${Paths.artGallery}/1234`,
+      initialRoute: `${Paths.artGallery}1234`,
       path: `${Paths.artGalleryPiece}`
     });
 
@@ -35,7 +35,7 @@ describe('viewing a piece', () => {
     setupAICArtPieceResponse(aicArtResponse, aicArtResponse.data.id);
 
     renderWithArtPieceContext(<ArtPiece/>, {
-      initialRoute: `${Paths.artGallery}/${aicArtResponse.data.id}`,
+      initialRoute: `${Paths.artGallery}${aicArtResponse.data.id}`,
       path: Paths.artGalleryPiece,
       params: {tab: Source.AIC}
     });
@@ -47,7 +47,7 @@ describe('viewing a piece', () => {
   test('when getting the piece has errored', async () => {
     anyRequestRespondsWith(HTTPError.SERVER_ERROR, 500);
     renderWithArtPieceContext(<ArtPiece/>, {
-      initialRoute: `${Paths.artGallery}/1234`,
+      initialRoute: `${Paths.artGallery}1234`,
       path: `${Paths.artGalleryPiece}`
     });
 

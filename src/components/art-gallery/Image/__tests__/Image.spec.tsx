@@ -42,7 +42,7 @@ describe('the image', () => {
     fireEvent.load(screen.getByTestId(image));
     await userEvent.click(screen.getByTestId(image));
 
-    expect(screen.getByTestId('subject-url-path').innerHTML).toEqual(`${Paths.artGallery}/${piece.id}`);
+    expect(screen.getByTestId('subject-url-path').innerHTML).toEqual(`${Paths.artGallery}${piece.id}`);
     expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
   });
 
