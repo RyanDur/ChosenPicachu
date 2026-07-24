@@ -2,7 +2,7 @@ import {FC, FormEvent, PropsWithChildren} from 'react';
 import {join} from '@components/class-names';
 import {format} from 'date-fns';
 
-interface FancyTextInputProps {
+type FancyTextInputProps = {
   inputId: string;
   type?: string;
   id?: string;

@@ -6,7 +6,7 @@ export enum AgeIn {
     DAYS = 'days'
 }
 
-interface Age {
+type Age = {
     value: number;
     unit: AgeIn
 }

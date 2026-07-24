@@ -5,7 +5,7 @@ import {stateAbbreviations} from './states';
 import {AddressInfo} from '../types';
 import './Address.layout.css';
 
-interface AddressProps {
+type AddressProps = {
     onChange: (address: AddressInfo) => void;
     id: string;
     value?: AddressInfo;

@@ -4,7 +4,7 @@ import {FancyInput} from '../FancyInput';
 import {Consumer} from '@ryandur/sand';
 import './FancySelect.css';
 
-interface FancySelectProps {
+type FancySelectProps = {
     selectId: string;
     optionValues: Set<string>;
     onChange: Consumer<FormEvent<HTMLSelectElement>>;

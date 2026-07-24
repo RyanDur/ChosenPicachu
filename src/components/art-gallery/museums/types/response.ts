@@ -16,7 +16,7 @@ export type Art = {
     artistInfo: string;
 }
 
-export interface AllArt {
+export type AllArt = {
     pagination: Pagination;
     pieces: Art[];
 }

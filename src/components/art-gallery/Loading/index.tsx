@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {join} from '@components/class-names';
 import './Loading.css';
 
-interface LoadingProps {
+type LoadingProps = {
     className?: string;
     testId?: string
 }

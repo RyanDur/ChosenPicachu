@@ -5,7 +5,7 @@ import {useGallery} from '@components/art-gallery/Art/Context';
 import './GalleryNav.css';
 import './GalleryNav.layout.css';
 
-interface Props {
+type Props = {
   id?: string;
 }
 

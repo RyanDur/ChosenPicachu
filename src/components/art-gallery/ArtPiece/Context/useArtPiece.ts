@@ -2,7 +2,7 @@ import {Art} from '@components/art-gallery/museums/types/response';
 import {Consumer} from '@ryandur/sand';
 import {createContext, useContext} from 'react';
 
-export interface PieceContext {
+export type PieceContext = {
   piece: Partial<Art>;
   updatePiece: Consumer<Art>;
   reset: Consumer<void>;

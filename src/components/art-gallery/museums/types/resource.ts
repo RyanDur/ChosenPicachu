@@ -4,12 +4,12 @@ export enum Source {
     VAM = 'vam'
 }
 
-export interface SearchArt {
+export type SearchArt = {
     search: string;
     source: Source;
 }
 
-export interface GetAllArt {
+export type GetAllArt = {
     search?: string;
     page: number;
     size?: number;
@@ -18,12 +18,12 @@ export interface GetAllArt {
 
 export type GetAllArtRequest = Omit<GetAllArt, 'source'>
 
-export interface GetArt {
+export type GetArt = {
     id: string;
     source: Source;
 }
 
-export interface Query {
+export type Query = {
     path?: (string | number)[];
     params?: Record<string, unknown>
 }

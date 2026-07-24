@@ -8,7 +8,7 @@ import {Art} from '@components/art-gallery/museums/types/response';
 import {GalleryLinks} from '@components/art-gallery/Links';
 import './Image.css';
 
-interface ImageProps {
+type ImageProps = {
   piece: Partial<Art>;
   className?: string;
   linkEnabled?: boolean;
