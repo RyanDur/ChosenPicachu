@@ -27,7 +27,7 @@ export const aic = {
         totalPages: pagination.total_pages,
         currentPage: pagination.current_page
       },
-      pieces: data.map(aicToPiece(400))
+      pieces: data.map(aicToPiece(800))
     })),
 
   art: (id: string) => http

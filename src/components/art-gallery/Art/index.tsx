@@ -37,9 +37,9 @@ export const ArtGallery: FC = () => {
   }, [page, search, tab, size, reset, updateArt]);
 
   return <section id="art-gallery">
-    {art?.pieces.map(piece => <figure
+    {art?.pieces.map((piece, index) => <figure
       className="frame" key={piece.id}>
-      <Image className="piece" piece={piece}/>
+      <Image className="piece" piece={piece} priority={index < 4}/>
       <figcaption className="title">{piece.title}</figcaption>
     </figure>)}
     {loading && <Loading className="loader" testId="gallery-loading"/>}

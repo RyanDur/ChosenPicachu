@@ -14,13 +14,15 @@ type ImageProps = {
   piece: Partial<Art>;
   className?: string;
   linkEnabled?: boolean;
+  priority?: boolean;
 }
 
 export const Image: FC<ImageProps> = (
   {
     piece,
     className,
-    linkEnabled = true
+    linkEnabled = true,
+    priority = false
   }) => {
   const [completed, isComplete] = useState(false);
   const [errored, isError] = useState(false);
@@ -50,7 +52,7 @@ export const Image: FC<ImageProps> = (
                          isError(false);
                          event.currentTarget.classList.remove('off-screen');
                      }}
-                     width={100}
+                     fetchPriority={priority ? 'high' : 'auto'}
                      alt={piece.altText} title={piece.title}
                      data-testid={`piece-${piece.id}`}
                      src={piece.image}/>

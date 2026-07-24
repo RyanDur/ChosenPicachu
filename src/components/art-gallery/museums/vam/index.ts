@@ -11,7 +11,7 @@ const iiifImage = (base: string, size: number) => `${base}full/!${size},${size}/
 const vamRecordToArt = (record: VAMSearchRecord): Art => ({
   id: record.systemNumber,
   title: record._primaryTitle || 'Untitled',
-  image: record._images && iiifImage(record._images._iiif_image_base_url, 400),
+  image: record._images && iiifImage(record._images._iiif_image_base_url, 800),
   artistInfo: record._primaryMaker?.name || 'Unknown',
   altText: record._primaryTitle || 'Untitled'
 });
