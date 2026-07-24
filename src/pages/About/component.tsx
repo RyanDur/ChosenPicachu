@@ -1,4 +1,4 @@
-import {faker} from '@faker-js/faker';
+import {randParagraph, randWord} from '@ngneat/falso';
 import {useSearchParamsObject} from '@components/search-params';
 import './style.css';
 import './AboutPage.css';
@@ -20,9 +20,9 @@ import {AboutTopics, aboutTopicParam} from './types';
 import {NaturalZIndex} from './ZIndexDemo';
 
 const paragraphs = (count: number) =>
-  faker.helpers.uniqueArray(() => faker.lorem.word(), count).map((key) => ({
+  [...new Set(Array.from({length: count * 3}, () => randWord()))].slice(0, count).map((key) => ({
     key,
-    value: faker.lorem.paragraphs(Math.floor(Math.random() * 6) + 1)
+    value: Array.from({length: Math.floor(Math.random() * 6) + 1}, () => randParagraph()).join('\n\n')
   }));
 
 export const AboutPage = () => {
