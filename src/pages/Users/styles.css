@@ -27,8 +27,10 @@
       .menu-toggle {
         width: 2rem;
         height: 2rem;
+        border: none;
+        padding: 0;
+        cursor: pointer;
         outline: none;
-        position: relative;
         background: var(--paper);
         background-image: radial-gradient(
           circle,
@@ -41,17 +43,20 @@
         &:focus {
           box-shadow: var(--base-box-shadow);
         }
+      }
 
-        .menu {
-          position: absolute;
-          display: none;
-          width: 20rem;
-          right: 2rem;
-          bottom: -4rem;
-          background: var(--paper);
-          box-shadow: var(--base-box-shadow);
+      .menu {
+        inset: auto;
+        position-area: block-end span-inline-start;
+        position-try-fallbacks: flip-block;
+        margin: 0;
+        width: 20rem;
+        border: none;
+        padding: 0;
+        background: var(--paper);
+        box-shadow: var(--base-box-shadow);
 
-          .item {
+        .item {
             outline: none;
             height: 4rem;
             font-size: 2rem;
@@ -82,10 +87,11 @@
           }
         }
 
-        &.open .menu,
-        &:hover .menu {
-          z-index: 1;
-          display: initial;
+      @supports not (position-area: block-end) {
+        .menu:popover-open {
+          inset: 0;
+          margin: auto;
+          height: fit-content;
         }
       }
     }
