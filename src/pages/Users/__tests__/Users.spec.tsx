@@ -22,8 +22,35 @@ describe('the users page', () => {
   });
 
   describe('adding a user', () => {
-    const aUser = createUser(true);
-    const anotherUser = createUser(false);
+    const conciseUser = (firstName: string, worksFromHome: boolean): User => {
+      const homeAddress: AddressInfo = {
+        streetAddress: '12 Elm St',
+        streetAddressTwo: 'Apt. 3',
+        city: 'Springfield',
+        state: 'IL',
+        zip: '62704'
+      };
+      return {
+        ...createUser(worksFromHome),
+        info: {
+          firstName,
+          lastName: 'Tester',
+          email: `${firstName.toLowerCase()}@example.com`,
+          dob: new Date(1984, 5, 2)
+        },
+        homeAddress,
+        workAddress: worksFromHome ? homeAddress : {
+          streetAddress: '9 Oak Ave',
+          streetAddressTwo: 'Suite 2',
+          city: 'Chatham',
+          state: 'IL',
+          zip: '62629'
+        },
+        details: 'short notes'
+      };
+    };
+    const aUser = conciseUser('Aiko', true);
+    const anotherUser = conciseUser('Bram', false);
 
     beforeEach(async () => {
       renderWithRouter(<UsersPage/>, {});
