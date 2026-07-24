@@ -1,5 +1,5 @@
 import {users as allUsers} from '@test-support/fixtures';
-import {User} from '@components/Users/UserInfo/types';
+import {NewUser, User} from '@components/Users/UserInfo/types';
 import {Success} from '@ryandur/sand';
 import {faker} from '@faker-js/faker';
 import {createUser, usersApi, UsersAPI} from '../usersApi';
@@ -14,7 +14,7 @@ describe('users data', () => {
 
   test('adding a user', async () => {
     const api: UsersAPI = usersApi(allUsers);
-    const user: User = {
+    const user: NewUser = {
       info: {
         firstName: faker.lorem.word(),
         lastName: faker.lorem.word(),
@@ -63,7 +63,7 @@ describe('users data', () => {
     it('adds the friendship on both sides', async () => {
       const [api, a, b] = freshTrio();
 
-      const users = (await api.update({...a, friends: [b.id!]}).value).orNull()!;
+      const users = (await api.update({...a, friends: [b.id]}).value).orNull()!;
 
       expect(friendsOf(users, a.id)).toEqual([b.id]);
       expect(friendsOf(users, b.id)).toEqual([a.id]);
@@ -72,7 +72,7 @@ describe('users data', () => {
     it('removes the friendship on both sides', async () => {
       const [api, a, b] = freshTrio();
 
-      const users = (await api.update({...a, friends: [b.id!]})
+      const users = (await api.update({...a, friends: [b.id]})
         .mBind(() => api.update({...a, friends: []})).value).orNull()!;
 
       expect(friendsOf(users, a.id)).toEqual([]);
@@ -82,10 +82,10 @@ describe('users data', () => {
     it('never duplicates an existing friendship when another one forms', async () => {
       const [api, a, b, c] = freshTrio();
 
-      const users = (await api.update({...a, friends: [b.id!]})
+      const users = (await api.update({...a, friends: [b.id]})
         .mBind(latest => api.update({
           ...latest.find(user => user.id === b.id)!,
-          friends: [...friendsOf(latest, b.id), c.id!]
+          friends: [...friendsOf(latest, b.id), c.id]
         })).value).orNull()!;
 
       expect(friendsOf(users, a.id)).toEqual([b.id]);
@@ -96,10 +96,10 @@ describe('users data', () => {
     it('leaves friendships the update did not touch intact', async () => {
       const [api, a, b, c] = freshTrio();
 
-      const users = (await api.update({...a, friends: [b.id!]})
+      const users = (await api.update({...a, friends: [b.id]})
         .mBind(latest => api.update({
           ...latest.find(user => user.id === b.id)!,
-          friends: [...friendsOf(latest, b.id), c.id!]
+          friends: [...friendsOf(latest, b.id), c.id]
         }))
         .mBind(latest => api.update({
           ...latest.find(user => user.id === a.id)!,
@@ -111,14 +111,7 @@ describe('users data', () => {
       expect(friendsOf(users, c.id)).toEqual([b.id]);
     });
 
-    it('refuses a user with no identity', async () => {
-      const [api, , b] = freshTrio();
-
-      const result = await api.update({...createUser(), id: undefined, friends: [b.id!]}).value;
-
-      expect(result.isSuccess).toBe(false);
-    });
-  });
+ });
 
   describe('deleting a user', () => {
     it('removes the user', async () => {
@@ -134,7 +127,7 @@ describe('users data', () => {
       const [a, b, c] = [createUser(), createUser(), createUser()];
       const api = usersApi([a, b, c]);
 
-      const users = (await api.update({...a, friends: [c.id!]})
+      const users = (await api.update({...a, friends: [c.id]})
         .mBind(() => api.delete(a)).value).orNull()!;
 
       expect(users.find(user => user.id === c.id)?.friends).toEqual([]);

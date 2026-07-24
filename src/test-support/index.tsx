@@ -14,18 +14,18 @@ import userEvent from '@testing-library/user-event';
 import {toQueryString} from '@transport/url';
 import {GalleryLinks} from '@components/art-gallery/Links';
 import {Paths} from '@pages/Paths';
-import {AddressInfo, User} from '@components/Users/UserInfo/types';
+import {AddressInfo, NewUser} from '@components/Users/UserInfo/types';
 import {AllArt, Art} from '@components/art-gallery/museums/types/response';
 import {toDate} from 'date-fns';
 import {GalleryContext} from '@components/art-gallery/Art/Context';
 import {ArtPieceContext} from '@components/art-gallery/ArtPiece/Context';
 
-export interface Rendered {
+export type Rendered = {
   result: RenderResult;
   testLocation?: Location;
 }
 
-interface URLContext {
+type URLContext = {
   initialRoute: string;
   path: string;
   params: Record<string, unknown>;
@@ -132,7 +132,7 @@ export const fillOutAddress = (address: AddressInfo, kind: string) =>
     .then(() => userEvent.selectOptions(screen.getByTestId(`${kind}-address-state`), address.state))
     .then(() => userEvent.type(screen.getByTestId(`${kind}-address-zip`), address.zip));
 
-export const fillOutUser = (info: User) =>
+export const fillOutUser = (info: NewUser) =>
   userEvent.type(screen.getByLabelText('First Name'), info.info.firstName)
     .then(() => userEvent.type(screen.getByLabelText('Last Name'), info.info.lastName))
     .then(() => userEvent.type(screen.getByLabelText('Email'), info.info.email!))
@@ -141,7 +141,7 @@ export const fillOutUser = (info: User) =>
       return userEvent.type(screen.getByLabelText('Date Of Birth'), text);
     });
 
-export const fillOutForm = (info: User) =>
+export const fillOutForm = (info: NewUser) =>
   fillOutUser(info)
     .then(() => fillOutAddress(info.homeAddress, 'home'))
     .then(() => fillOutAddress(info.workAddress!, 'work'));
