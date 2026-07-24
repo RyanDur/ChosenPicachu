@@ -97,9 +97,16 @@ export const UserInformation: FC<FormProps> = (
         </FancyDateInput>
 
         <article tabIndex={0} id="avatar-cell"
+                 role="button"
+                 aria-label="Generate a new avatar"
                  className={join('card', readOnly && 'read-only')}
                  data-testid="avatar-cell"
-                 onKeyDown={event => event.preventDefault()}
+                 onKeyDown={event => {
+                     if (event.code === 'Enter' || event.code === 'Space') {
+                         event.preventDefault();
+                         if (!readOnly) dispatch(updateAvatar(generateAvatar()));
+                     }
+                 }}
                  onClick={() => readOnly || dispatch(updateAvatar(generateAvatar()))}>
             <img id="avatar" src={user.avatar} loading="lazy" alt="avatar"/>
         </article>
