@@ -5,11 +5,16 @@ const staticRoutes = [...paths.matchAll(/= '(\/[^':]+)'/g)].map(([, route]) => r
 
 const manifest = JSON.parse(readFileSync('dist/.vite/manifest.json', 'utf-8'));
 const routeModules = {
-  '': 'src/pages/Home/component.tsx',
-  '/about': 'src/pages/About/component.tsx',
-  '/users': 'src/pages/Users/component.tsx',
-  '/gallery': 'src/pages/Gallery/ArtGalleryPage.tsx',
-  '/games': 'src/pages/Games/GamesPage.tsx'
+  '': ['src/pages/Home/component.tsx'],
+  '/about': ['src/pages/About/component.tsx'],
+  '/users': ['src/pages/Users/component.tsx'],
+  '/gallery': [
+    'src/pages/Gallery/ArtGalleryPage.tsx',
+    'src/components/art-gallery/Search/index.tsx',
+    'src/components/art-gallery/PageControl/index.tsx',
+    'src/components/art-gallery/Nav/index.tsx'
+  ],
+  '/games': []
 };
 
 const chunkFiles = (moduleId, visited = new Set(), files = new Set()) => {
@@ -23,9 +28,12 @@ const chunkFiles = (moduleId, visited = new Set(), files = new Set()) => {
 };
 
 const indexHtml = readFileSync('dist/index.html', 'utf-8');
-const withPreloads = (moduleId) => {
-  if (moduleId === undefined) return indexHtml;
-  const links = [...chunkFiles(moduleId)]
+const withPreloads = (moduleIds) => {
+  if (moduleIds === undefined || moduleIds.length === 0) return indexHtml;
+  const files = new Set();
+  const visited = new Set();
+  moduleIds.forEach(id => chunkFiles(id, visited, files));
+  const links = [...files]
     .filter(file => !indexHtml.includes(file))
     .map(file => file.endsWith('.js')
       ? `    <link rel="modulepreload" href="/ChosenPicachu/${file}" />`

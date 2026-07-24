@@ -29,11 +29,6 @@ export const AboutPage = () => {
   const {tab} = useSearchParamsObject({tab: aboutTopicParam}, {tab: AboutTopics.accordions});
 
   return <>
-    <header id="app-header" data-testid="header">
-      <h1 className="title ellipsis">About {tab}</h1>
-    </header>
-
-    <main data-testid="main" className='in-view'>
       <Tabs
         label='demos'
         defaultTab={AboutTopics.accordions}
@@ -80,6 +75,5 @@ export const AboutPage = () => {
             </>
         })[tab ?? AboutTopics.accordions]}
       </section>
-    </main>
   </>;
 };

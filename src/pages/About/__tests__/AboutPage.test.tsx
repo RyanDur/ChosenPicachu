@@ -1,14 +1,13 @@
-import {renderWithRouter} from '@test-support';
+import {renderWithMemoryRouter} from '@test-support';
 import {expect, test} from 'vitest';
 import userEvent from '@testing-library/user-event';
 import {screen, waitFor, within} from '@testing-library/react';
 import {Paths} from '@pages/Paths';
-import {AboutPage} from '../component';
+import {About} from '@pages/About';
 
 describe('The About page', () => {
   test('on initial render', async () => {
-    const options = {initialRoute: Paths.about, path: Paths.about};
-    renderWithRouter(<AboutPage/>, options);
+    renderWithMemoryRouter(About, {path: Paths.about});
 
     await waitFor(() => {
       const main = screen.getByRole('main');
@@ -17,9 +16,9 @@ describe('The About page', () => {
   });
 
   test('when going to the z-index demo', async () => {
-    renderWithRouter(<AboutPage/>, {initialRoute: Paths.about, path: Paths.about});
+    renderWithMemoryRouter(About, {path: Paths.about});
 
-    const demoTabs = screen.getByRole('navigation', {name: 'demos'});
+    const demoTabs = await screen.findByRole('navigation', {name: 'demos'});
     await userEvent.click(within(demoTabs).getByText('Z-Index'));
 
     await waitFor(() => {
@@ -27,6 +26,6 @@ describe('The About page', () => {
       expect(within(main).getByText('Z-Index Demo.')).toBeInTheDocument();
     });
 
-    expect(screen.getByTestId('subject-url-search')).toHaveTextContent('tab=z-index');
+    expect(screen.getByTestId('header')).toHaveTextContent('About z-index');
   });
 });

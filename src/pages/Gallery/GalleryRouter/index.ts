@@ -1,7 +1,1 @@
-export {
-  GalleryRouter
-} from './component';
-
-export {
-  GalleryPaths
-} from './GalleryPaths';
+export {GalleryPaths} from './GalleryPaths';
