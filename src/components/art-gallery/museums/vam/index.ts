@@ -8,10 +8,14 @@ import {GetAllArtRequest} from '@components/art-gallery/museums/types/resource';
 
 const iiifImage = (base: string, size: number) => `${base}full/!${size},${size}/0/default.jpg`;
 
+const iiifSrcSet = (base: string) =>
+  [400, 800, 1200].map(size => `${iiifImage(base, size)} ${size}w`).join(', ');
+
 const vamRecordToArt = (record: VAMSearchRecord): Art => ({
   id: record.systemNumber,
   title: record._primaryTitle || 'Untitled',
   image: record._images && iiifImage(record._images._iiif_image_base_url, 800),
+  srcSet: record._images && iiifSrcSet(record._images._iiif_image_base_url),
   artistInfo: record._primaryMaker?.name || 'Unknown',
   altText: record._primaryTitle || 'Untitled'
 });
