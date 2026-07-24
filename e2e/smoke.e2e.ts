@@ -53,3 +53,12 @@ test('the users page presents the form and the seeded table', async ({page}) => 
   await expect(page.getByLabel('First Name')).toBeVisible({timeout: 15_000});
   await expect(page.getByTestId('table')).toBeVisible();
 });
+
+for (const entry of ['users', 'about', 'games', 'gallery?page=1&size=8&tab=vam']) {
+  test(`arriving directly at ${entry} is a real 200, not a fallback`, async ({page}) => {
+    const response = await page.goto(entry);
+
+    expect(response?.status()).toBe(200);
+    await expect(page.getByTestId('navigation').first()).toBeVisible({timeout: 30_000});
+  });
+}
