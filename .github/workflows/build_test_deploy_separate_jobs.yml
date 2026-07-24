@@ -45,6 +45,9 @@ jobs:
   pages:
     needs: build_test
     runs-on: ubuntu-latest
+    concurrency:
+      group: github-pages
+      cancel-in-progress: false
     permissions:
       pages: write
       id-token: write
