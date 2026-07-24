@@ -102,7 +102,7 @@ export const UserInformation: FC<FormProps> = (
                 data-testid="avatar-cell"
                 disabled={readOnly}
                 onClick={() => dispatch(updateAvatar(generateAvatar()))}>
-            <img id="avatar" src={user.avatar} loading="lazy" alt="avatar"/>
+            <img id="avatar" src={user.avatar} width="244" height="244" fetchPriority="high" alt="avatar"/>
         </button>
 
         <h3 id="home-address-title">Home Address</h3>
