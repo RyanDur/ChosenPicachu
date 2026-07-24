@@ -57,8 +57,6 @@ jobs:
         with:
           name: dist
           path: ./dist
-      - name: SPA fallback
-        run: cp ./dist/index.html ./dist/404.html
       - name: Upload pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
