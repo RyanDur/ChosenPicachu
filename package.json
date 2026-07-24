@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@ngneat/falso": "^8.0.2",
-    "@ryandur/sand": "^5.4.0",
+    "@ryandur/sand": "^5.4.2",
     "date-fns": "4.1.0",
     "normalize.css": "^8.0.1",
     "random-avatar-generator": "^2.0.0",
