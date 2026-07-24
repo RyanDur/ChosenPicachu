@@ -21,7 +21,7 @@ export const Address: FC<AddressProps> = (
         required,
         disabled,
         readOnly,
-        value = {} as AddressInfo
+        value = {streetAddress: '', city: '', state: '', zip: ''}
     }) => <article id={id} className="address" data-testid={id}>
     <FancyInput inputId={`${id}-street`} className="street"
                 required={required} disabled={disabled} value={value.streetAddress} readOnly={readOnly}

@@ -12,4 +12,11 @@ npm run lint:css
 npx tsc -b
 npx vitest run --reporter=dot
 npm run build
+
+echo "pre-push: axe sweep against the built app..."
+npm run preview >/dev/null 2>&1 &
+preview_pid=$!
+trap 'kill $preview_pid 2>/dev/null' EXIT
+sleep 2
+SMOKE_URL=http://localhost:4173/ChosenPicachu/ npx playwright test a11y --reporter=line
 echo "pre-push: clean."
