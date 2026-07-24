@@ -53,100 +53,92 @@ describe('users data', () => {
   });
 
   describe('updating a user and friends', () => {
-    const api: UsersAPI = usersApi(allUsers);
-    const [firstUser, secondUser, thirdUser] = allUsers;
+    const freshTrio = (): [UsersAPI, User, User, User] => {
+      const [a, b, c] = [createUser(), createUser(), createUser()];
+      return [usersApi([a, b, c]), a, b, c];
+    };
+    const friendsOf = (users: User[], id?: string): string[] =>
+      users.find(user => user.id === id)?.friends ?? [];
 
-    it('should add the user to friends list al well as the friend to the user', async () => {
-      const [first, second] = (await api.update({...firstUser, friends: [secondUser]}).value).orNull() as User[];
-      const firstUsersFriends = first.friends.find(f => f.id);
-      expect(firstUsersFriends?.id).toEqual(second.id);
+    it('adds the friendship on both sides', async () => {
+      const [api, a, b] = freshTrio();
 
-      const thirdUsersFriends = second.friends.find(f => f.id);
-      expect(thirdUsersFriends?.id).toEqual(first.id);
+      const users = (await api.update({...a, friends: [b.id!]}).value).orNull()!;
+
+      expect(friendsOf(users, a.id)).toEqual([b.id]);
+      expect(friendsOf(users, b.id)).toEqual([a.id]);
     });
 
-    it('should remove the user from the friends list when the user has removed them', async () => {
-      const [first, second] = (await api.update({...firstUser, friends: [secondUser]})
-        .mBind(() => api.update({...firstUser, friends: []})).value).orNull() as User[];
+    it('removes the friendship on both sides', async () => {
+      const [api, a, b] = freshTrio();
 
-      const firstUsersFriends = first.friends.find(f => f.id);
-      expect(firstUsersFriends?.id).not.toEqual(second.id);
+      const users = (await api.update({...a, friends: [b.id!]})
+        .mBind(() => api.update({...a, friends: []})).value).orNull()!;
 
-      const thirdUsersFriends = second.friends.find(f => f.id);
-      expect(thirdUsersFriends?.id).not.toEqual(first.id);
+      expect(friendsOf(users, a.id)).toEqual([]);
+      expect(friendsOf(users, b.id)).toEqual([]);
     });
 
-    it('should not add a friend twice', async () => {
-      const [first, second, third] = (await api.update({
-        ...firstUser,
-        friends: [secondUser, thirdUser]
-      }).value).orNull() as User[];
-      const firstUsersFriends = first.friends.map(f => f.id);
-      expect(firstUsersFriends.length).toEqual(2);
+    it('never duplicates an existing friendship when another one forms', async () => {
+      const [api, a, b, c] = freshTrio();
 
-      const secondUsersFriends = second.friends.map(f => f.id);
-      expect(secondUsersFriends.length).toEqual(1);
+      const users = (await api.update({...a, friends: [b.id!]})
+        .mBind(latest => api.update({
+          ...latest.find(user => user.id === b.id)!,
+          friends: [...friendsOf(latest, b.id), c.id!]
+        })).value).orNull()!;
 
-      const thirdUsersFriends = third.friends.map(f => f.id);
-      expect(thirdUsersFriends.length).toEqual(1);
+      expect(friendsOf(users, a.id)).toEqual([b.id]);
+      expect(friendsOf(users, b.id)).toEqual([a.id, c.id]);
+      expect(friendsOf(users, c.id)).toEqual([b.id]);
+    });
 
-      const [firstAgain, secondAgain, thirdAgain] = (await api.update({
-        ...third,
-        friends: [first, second]
-      }).value).orNull() as User[];
-      const firstAgainUsersFriends = firstAgain.friends.map(f => f.id);
-      expect(firstAgainUsersFriends.length).toEqual(3);
-      expect(firstAgainUsersFriends).toContain(secondAgain.id);
-      expect(firstAgainUsersFriends).toContain(thirdAgain.id);
+    it('leaves friendships the update did not touch intact', async () => {
+      const [api, a, b, c] = freshTrio();
 
-      const secondAgainUsersFriends = secondAgain.friends.map(f => f.id);
-      expect(secondAgainUsersFriends.length).toEqual(2);
-      expect(secondAgainUsersFriends).toContain(firstAgain.id);
-      expect(secondAgainUsersFriends).toContain(thirdAgain.id);
+      const users = (await api.update({...a, friends: [b.id!]})
+        .mBind(latest => api.update({
+          ...latest.find(user => user.id === b.id)!,
+          friends: [...friendsOf(latest, b.id), c.id!]
+        }))
+        .mBind(latest => api.update({
+          ...latest.find(user => user.id === a.id)!,
+          friends: []
+        })).value).orNull()!;
 
-      const thirdAgainUsersFriends = thirdAgain.friends.map(f => f.id);
-      expect(thirdAgainUsersFriends.length).toEqual(2);
-      expect(thirdAgainUsersFriends).toContain(firstAgain.id);
-      expect(thirdAgainUsersFriends).toContain(secondAgain.id);
+      expect(friendsOf(users, a.id)).toEqual([]);
+      expect(friendsOf(users, b.id)).toEqual([c.id]);
+      expect(friendsOf(users, c.id)).toEqual([b.id]);
+    });
 
-      const [moreFirstAgain, moreSecondAgain, moreThirdAgain] = (await api.update({
-        ...thirdAgain,
-        friends: [firstAgain, secondAgain]
-      }).value).orNull() as User[];
+    it('refuses a user with no identity', async () => {
+      const [api, , b] = freshTrio();
 
-      const moreFirstUsersFriends = moreFirstAgain.friends.map(f => f.id);
-      expect(moreFirstUsersFriends.length).toEqual(4);
-      expect(moreFirstUsersFriends).toContain(moreSecondAgain.id);
-      expect(moreFirstUsersFriends).toContain(moreThirdAgain.id);
+      const result = await api.update({...createUser(), id: undefined, friends: [b.id!]}).value;
 
-      const moreSecondUsersFriends = moreSecondAgain.friends.map(f => f.id);
-      expect(moreSecondUsersFriends.length).toEqual(3);
-      expect(moreSecondUsersFriends).toContain(moreFirstAgain.id);
-      expect(moreSecondUsersFriends).toContain(moreThirdAgain.id);
-
-      const moreThirdUsersFriends = moreThirdAgain.friends.map(f => f.id);
-      expect(moreThirdUsersFriends.length).toEqual(2);
-      expect(moreThirdUsersFriends).toContain(moreFirstAgain.id);
-      expect(moreThirdUsersFriends).toContain(moreSecondAgain.id);
+      expect(result.isSuccess).toBe(false);
     });
   });
 
   describe('deleting a user', () => {
-    const api: UsersAPI = usersApi(allUsers);
-    it('should remove the user', async () => {
-      const secondUser = allUsers[1];
+    it('removes the user', async () => {
+      const [a, b, c] = [createUser(), createUser(), createUser()];
+      const api = usersApi([a, b, c]);
 
-      const users = await api.delete(secondUser).value;
-      expect(users).not.toContain(secondUser);
+      const users = (await api.delete(b).value).orNull()!;
+
+      expect(users.map(user => user.id)).toEqual([a.id, c.id]);
     });
 
-    it('should remove the user from the other users friends list', async () => {
-      const firstUser = allUsers[0];
-      api.update({...firstUser, friends: [allUsers[allUsers.length - 1]]});
-      const users = (await api.delete(firstUser).value).orNull() as User[];
-      const lastUsersFriends = users[users.length - 1].friends.find(f => f.id);
+    it('removes the user from the other users friends lists', async () => {
+      const [a, b, c] = [createUser(), createUser(), createUser()];
+      const api = usersApi([a, b, c]);
 
-      expect(lastUsersFriends?.id).not.toEqual(firstUser.id);
+      const users = (await api.update({...a, friends: [c.id!]})
+        .mBind(() => api.delete(a)).value).orNull()!;
+
+      expect(users.find(user => user.id === c.id)?.friends).toEqual([]);
+      expect(users.map(user => user.id)).toEqual([b.id, c.id]);
     });
   });
 });
