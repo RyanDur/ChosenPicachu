@@ -40,11 +40,11 @@ const addToGrid = <T>(
   const currentRow = grid[safeRow] ?? [];
   if (empty(currentRow)) {
     return insertAt(safeRow, [item], grid);
-  } else {
+  }
     const newGrid = removeFrom(grid, currentRow);
     const newRow = insertAt(column, item, currentRow);
     return insertAt(safeRow, newRow, newGrid);
-  }
+  
 };
 
 const moveToRowColumn = <T>(

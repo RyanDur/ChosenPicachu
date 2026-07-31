@@ -18,8 +18,8 @@ export const age = (dob: Date = new Date()): Age => {
         const months = differenceInMonths(today, dob);
         if (months === 0) {
             return {value: differenceInDays(today, dob), unit: AgeIn.DAYS};
-        } else return {value: months, unit: AgeIn.MONTHS};
-    } else return {value: years, unit: AgeIn.YEARS};
+        }return {value: months, unit: AgeIn.MONTHS};
+    }return {value: years, unit: AgeIn.YEARS};
 };
 
 export const formatAge = ({value, unit}: Age): string => {
