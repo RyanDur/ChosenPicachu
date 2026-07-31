@@ -29,6 +29,42 @@
     "typescript/consistent-type-definitions": [
       "error",
       "type"
-    ]
-  }
+    ],
+    "eslint/max-depth": [
+      "error",
+      {
+        "max": 3
+      }
+    ],
+    "eslint/max-params": [
+      "error",
+      {
+        "max": 4
+      }
+    ],
+    "eslint/max-nested-callbacks": [
+      "error",
+      {
+        "max": 3
+      }
+    ],
+    "eslint/no-extra-boolean-cast": "error"
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/__tests__/**",
+        "**/*.test.*",
+        "**/*.spec.*"
+      ],
+      "rules": {
+        "eslint/max-nested-callbacks": [
+          "error",
+          {
+            "max": 6
+          }
+        ]
+      }
+    }
+  ]
 }
