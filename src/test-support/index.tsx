@@ -46,16 +46,16 @@ const LocationHelper: FC<PropsWithChildren> = ({children}) => {
 
 const TestRouter: FC<PropsWithChildren & {
   context: URLContext,
-}> = ({children, context}) => {
-  return <MemoryRouter initialEntries={[`${(context.initialRoute)}${toQueryString(context.params)}`]}>
+}> = ({children, context}) => 
+  <MemoryRouter initialEntries={[`${(context.initialRoute)}${toQueryString(context.params)}`]}>
     <Routes>
       <Route path={context.path}
              element={<LocationHelper><GalleryLinks.Provider value={{gallery: Paths.artGallery}}>{children}</GalleryLinks.Provider></LocationHelper>}>
       </Route>
       <Route path="*" element={<LocationHelper/>}/>
     </Routes>
-  </MemoryRouter>;
-};
+  </MemoryRouter>
+;
 type Defaults = Partial<URLContext & { pieceState: Partial<Art>, galleryState: AllArt }>;
 const defaultUrlContext: URLContext = {initialRoute: '/initial/route', path: '/initial/route', params: {}};
 

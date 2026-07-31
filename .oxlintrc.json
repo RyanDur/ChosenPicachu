@@ -48,7 +48,23 @@
         "max": 3
       }
     ],
-    "eslint/no-extra-boolean-cast": "error"
+    "eslint/no-extra-boolean-cast": "error",
+    "eslint/arrow-body-style": [
+      "error",
+      "as-needed"
+    ],
+    "eslint/object-shorthand": [
+      "error",
+      "always"
+    ],
+    "eslint/no-lonely-if": "error",
+    "eslint/no-else-return": [
+      "error",
+      {
+        "allowElseIf": false
+      }
+    ],
+    "eslint/no-useless-rename": "error"
   },
   "overrides": [
     {
