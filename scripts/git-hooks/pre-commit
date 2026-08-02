@@ -5,8 +5,9 @@
 set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
 
-echo "pre-commit: oxlint + tsc + vitest..."
+echo "pre-commit: oxlint + stylelint + tsc + vitest..."
 npm run lint
+npm run lint:css
 npx tsc -b
 npx vitest run --reporter=dot
 echo "pre-commit: clean."
