@@ -27,3 +27,9 @@
         }
     }
 }
+
+.charts-heading {
+  margin: 0 0 var(--base-x-2);
+  font-size: var(--base-x-3);
+  color: var(--void);
+}
