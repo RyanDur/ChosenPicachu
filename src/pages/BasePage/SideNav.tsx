@@ -38,8 +38,8 @@ export const SideNav: FC = () =>
          rel="noopener noreferrer" target="_blank">Repo</a>
     </nav>
 
-    <article className="borrowed-assets icons" tabIndex={0}>
-      <h2 className="heading">ICONS</h2>
+    <details className="borrowed-assets icons">
+      <summary className="heading">ICONS</summary>
       <nav className="icons-content" aria-label="icon credits">
         <a href="https://icons8.com/icon/622/detective" rel="noopener noreferrer" target="_blank"
            className="attribution">Detective icon by Icons8</a>
@@ -55,5 +55,5 @@ export const SideNav: FC = () =>
            className="attribution">Search icon by Icons8</a>
         <a href="https://icons8.com/icon/82764/cancel" className="attribution">Cancel icon by Icons8</a>
       </nav>
-    </article>
+    </details>
   </aside>;
