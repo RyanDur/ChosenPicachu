@@ -1,6 +1,6 @@
 import {FC, PropsWithChildren} from 'react';
 import {format} from 'date-fns';
-import {dollars} from './money';
+import {dollars} from '../money';
 import './Axes.css';
 
 type Props = PropsWithChildren<{

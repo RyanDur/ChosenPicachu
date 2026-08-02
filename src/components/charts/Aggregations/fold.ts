@@ -1,5 +1,5 @@
-import {Trade} from '@transport/coinbase';
-import {cents, deltaLabel} from './money';
+import {Trade} from '../coinbase';
+import {cents, deltaLabel} from '../money';
 
 export type Aggregation = {
   measure: string;

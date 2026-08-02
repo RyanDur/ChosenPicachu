@@ -1,4 +1,4 @@
-import {Trade} from '@transport/coinbase';
+import {Trade} from '../coinbase';
 
 export type Candle = {
   openedAt: number;

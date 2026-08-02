@@ -3,7 +3,7 @@ import {Result} from '@ryandur/sand';
 import {http} from '@transport/http';
 import {validate} from '@transport/validate';
 import {HTTPError} from '@transport/types';
-import {Candle} from './Candles/shapes';
+import {Candle} from '../Candles/shapes';
 
 const HistoryRowsDecoder = D.array(D.array(D.number));
 

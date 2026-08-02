@@ -18,10 +18,8 @@ import {
 } from './DragAndDrop';
 import {DemoTopics, demoTopicParam} from './types';
 import {NaturalZIndex} from './ZIndexDemo';
-import {LiveTrades} from '@components/live-trades';
-import {Candles} from '@components/live-trades/Candles';
-import {Aggregations} from '@components/live-trades/Aggregations';
-import {statusCopy, useLiveTrades} from '@components/live-trades/useLiveTrades';
+import {Aggregations, Candles, PriceChart} from '@components/charts';
+import {statusCopy, useLiveTrades} from '@components/charts/useLiveTrades';
 import {useEnv} from '@components/Env';
 
 const paragraphs = (count: number) =>
@@ -75,7 +73,7 @@ export const DemosPage = () => {
                 <h2>{`Bitcoin, live — every ${tradeProduct} trade on Coinbase`}</h2>
                 <output data-status={liveTrades.status}>{statusCopy[liveTrades.status]}</output>
               </header>
-              <LiveTrades trades={liveTrades.trades}/>
+              <PriceChart trades={liveTrades.trades}/>
               <Candles trades={liveTrades.trades}/>
               <Aggregations trades={liveTrades.trades}/>
             </>,

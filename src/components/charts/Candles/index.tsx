@@ -1,7 +1,7 @@
 import {FC, useState} from 'react';
 import {notEmpty} from '@ryandur/sand';
 import {Menu} from '@components/Menu';
-import {Trade} from '@transport/coinbase';
+import {Trade} from '../coinbase';
 import {bucketTrades, candleShapes, mergeLive, volumeShapes} from './shapes';
 import {usePeriodCandles} from '../usePeriodCandles';
 import {Loading} from '@components/Loading';
