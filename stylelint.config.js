@@ -10,6 +10,10 @@ export default {
     'stylelint-value-no-unknown-custom-properties'
   ],
   rules: {
+    'selector-disallowed-list': [
+      ['/(^|[\\s>+~,])(applet|acronym|big|blink|center|font|marquee|strike|tt)(?![\\w-])/'],
+      {message: 'obsolete element — this is a strict html5 site'}
+    ],
     'property-no-vendor-prefix': true,
     'value-no-vendor-prefix': true,
     'csstools/value-no-unknown-custom-properties': [true, {
