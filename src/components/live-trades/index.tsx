@@ -10,12 +10,6 @@ import {bucketTrades, Candle, mergeLive} from './Candles/shapes';
 import './chart-card.css';
 import './LiveTrades.css';
 
-const statusCopy: Record<LiveTradesState['status'], string> = {
-  connecting: 'connecting to the live feed…',
-  streaming: 'live',
-  failed: 'live feed unavailable'
-};
-
 const CHART_WIDTH = 240;
 const CHART_HEIGHT = 60;
 
@@ -47,11 +41,11 @@ const candlesView = (candles: readonly Candle[], bucket: string): PriceView => (
   caption: `${candles.length} candles · ${bucket}`
 });
 
-type Props = LiveTradesState & {
+type Props = Pick<LiveTradesState, 'trades'> & {
   seed: readonly Candle[];
 };
 
-export const LiveTrades: FC<Props> = ({status, trades, seed}) => {
+export const LiveTrades: FC<Props> = ({trades, seed}) => {
   const [period, setPeriod] = useState<Period>(Period.live);
   const history = usePeriodCandles(period);
   const live = period === Period.live;
@@ -69,7 +63,6 @@ export const LiveTrades: FC<Props> = ({status, trades, seed}) => {
   const trend = showing && view.last >= view.first ? 'rising' : 'falling';
   return <section aria-label="live trades" className="card chart live-trades" data-trend={trend}>
     <header>
-      {live && <output data-status={status}>{statusCopy[status]}</output>}
       <Menu id="price-period" label="price period" toggle={period} toggleClassName="period-toggle">
         {Object.values(Period).map(option =>
           <button type="button" key={option} className="item"

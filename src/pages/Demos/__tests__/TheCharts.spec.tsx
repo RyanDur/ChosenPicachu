@@ -182,7 +182,7 @@ describe('the demos page', () => {
       expect(connections).toBe(1);
     });
 
-    test('a connected feed tells the user the stream is live', async () => {
+    test('a connected feed tells the user the stream is live beside the title', async () => {
       const feed = await streamingFeed();
 
       renderCharts(urlOf(feed));
