@@ -51,7 +51,7 @@ export const PriceChart: FC<Props> = ({trades}) => {
   const line = points.map(point => `${point.x},${point.y}`).join(' ');
   const trend = showing && view.last >= view.first ? 'rising' : 'falling';
   return <section aria-label="live trades" className="card chart price-chart" data-trend={trend}>
-    <header>
+    <header className="chart-header">
       <Menu id="price-period" label="price period" toggle={period} toggleClassName="period-toggle">
         {Object.values(Period).map(option =>
           <button type="button" key={option} className="item"
@@ -60,23 +60,24 @@ export const PriceChart: FC<Props> = ({trades}) => {
       </Menu>
     </header>
     <section className="chart-stage">
-      <figure>
+      <figure className="graph">
         <Axes high={view.high} low={view.low} times={view.series.map(timed => timed.at)}
               pattern={timePattern[period]} tickEvery={tickEveryMs[period]}
               headroomMs={2 * bucketMs[period]}>
-          <svg aria-hidden="true"
+          <svg className="sparkline" aria-hidden="true"
                viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
                preserveAspectRatio="none">
             {notEmpty(points) && <line className="baseline"
                                        x1={0} y1={points[0].y}
                                        x2={CHART_WIDTH} y2={points[0].y}/>}
-            <polyline points={line} fill="none" vectorEffect="non-scaling-stroke"/>
-            {notEmpty(points) && <circle cx={points[points.length - 1].x}
+            <polyline className="trend" points={line} fill="none" vectorEffect="non-scaling-stroke"/>
+            {notEmpty(points) && <circle className="marker"
+                                         cx={points[points.length - 1].x}
                                          cy={points[points.length - 1].y}
                                          r={3}/>}
           </svg>
         </Axes>
-        <figcaption>
+        <figcaption className="caption">
           <small className="span">
             {showing ? view.caption : history.unavailable && 'history unavailable'}
           </small>
@@ -84,15 +85,15 @@ export const PriceChart: FC<Props> = ({trades}) => {
       </figure>
       <p className="headline">
         {showing && <>
-          <data value={view.last}>{cents.format(view.last)}</data>
+          <data className="price" value={view.last}>{cents.format(view.last)}</data>
           <data className="delta" value={view.last - view.first}>{deltaLabel(view.first, view.last)}</data>
         </>}
       </p>
       {history.pending && <Loading className="chart-loading"/>}
     </section>
-    <details>
-      <summary>what am I looking at?</summary>
-      <p>
+    <details className="explainer">
+      <summary className="prompt">what am I looking at?</summary>
+      <p className="explanation">
         This measures the price of one bitcoin in US dollars, live. The line is
         the closing price of each bucket in the window, seeded from Coinbase&apos;s
         history, with new trades folding into the newest bucket as they happen.

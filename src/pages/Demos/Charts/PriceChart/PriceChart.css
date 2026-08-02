@@ -1,14 +1,16 @@
 .price-chart {
   margin-bottom: var(--base-x-4);
 
-  figure {
+  .graph {
     position: relative;
     margin: var(--base-x-2) 0 0;
 
-    svg {
+    .sparkline {
       display: block;
       width: 100%;
       height: 24rem;
+      padding: 0.8rem 0 0.4rem;
+      box-sizing: border-box;
 
       .baseline {
         stroke: var(--charcoal);
@@ -18,19 +20,19 @@
         vector-effect: non-scaling-stroke;
       }
 
-      polyline {
+      .trend {
         stroke: var(--primary-blue);
         stroke-width: 0.2rem;
         stroke-linejoin: round;
         stroke-linecap: round;
       }
 
-      circle {
+      .marker {
         fill: var(--primary-blue);
       }
     }
 
-    figcaption {
+    .caption {
       .span {
         display: block;
         width: fit-content;
@@ -43,24 +45,24 @@
     }
   }
 
-  &[data-trend='rising'] figure svg {
-    polyline {
+  &[data-trend='rising'] .graph .sparkline {
+    .trend {
       stroke: var(--mint);
       filter: brightness(0.75);
     }
 
-    circle {
+    .marker {
       fill: var(--mint);
       filter: brightness(0.75);
     }
   }
 
-  &[data-trend='falling'] figure svg {
-    polyline {
+  &[data-trend='falling'] .graph .sparkline {
+    .trend {
       stroke: var(--internationl-orange-engineering);
     }
 
-    circle {
+    .marker {
       fill: var(--internationl-orange-engineering);
     }
   }
@@ -74,7 +76,7 @@
     margin-top: var(--base-x-2);
     font-family: 'SF Mono', 'Fira Code', monospace;
 
-    data {
+    .price {
       font-size: var(--base-x-3);
       font-weight: bold;
       color: var(--void);
@@ -92,25 +94,5 @@
 
   &[data-trend='falling'] .headline .delta {
     color: var(--internationl-orange-engineering);
-  }
-
-
-  details {
-    margin-top: var(--base-x-2);
-
-    summary {
-      cursor: pointer;
-      font-size: 1.1rem;
-      color: var(--charcoal);
-      opacity: 0.7;
-    }
-
-    p {
-      margin-top: 0.6rem;
-      font-size: 1.2rem;
-      line-height: 1.5;
-      color: var(--charcoal);
-      max-width: 48rem;
-    }
   }
 }

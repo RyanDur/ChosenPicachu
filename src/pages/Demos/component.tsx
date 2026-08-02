@@ -70,8 +70,8 @@ export const DemosPage = () => {
             </>,
             [DemoTopics.charts]: <>
               <header className="charts-heading">
-                <h2>{`Bitcoin, live — every ${tradeProduct} trade on Coinbase`}</h2>
-                <output data-status={liveTrades.status}>{statusCopy[liveTrades.status]}</output>
+                <h2 className="headline">{`Bitcoin, live — every ${tradeProduct} trade on Coinbase`}</h2>
+                <output className="status" data-status={liveTrades.status}>{statusCopy[liveTrades.status]}</output>
               </header>
               <PriceChart trades={liveTrades.trades}/>
               <Candles trades={liveTrades.trades}/>

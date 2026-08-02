@@ -101,7 +101,7 @@ jobs:
         with:
           urls: |
             https://ryandur.github.io/ChosenPicachu/
-            https://ryandur.github.io/ChosenPicachu/gallery/
+            https://ryandur.github.io/ChosenPicachu/gallery/?tab=vam
             https://ryandur.github.io/ChosenPicachu/users/
             https://ryandur.github.io/ChosenPicachu/demos/
             https://ryandur.github.io/ChosenPicachu/games/
