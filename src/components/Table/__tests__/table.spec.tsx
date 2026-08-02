@@ -191,8 +191,11 @@ describe('drag sortable columns', () => {
     name: {display: 'Ada'}, age: {display: '36'}, city: {display: 'London'}, job: {display: 'Analyst'}
   }];
 
-  const headerTexts = () => screen.getAllByRole('columnheader').map(header => header.textContent);
-  const header = (name: string) => screen.getByRole('columnheader', {name: new RegExp(`^${name}`)});
+  const sourceTable = () => screen.getAllByRole('table')[0];
+  const headerTexts = () => within(sourceTable()).getAllByRole('columnheader').map(header => header.textContent);
+  const header = (name: string) => within(sourceTable()).getByRole('columnheader', {name: new RegExp(`^${name}`)});
+
+  afterEach(() => document.body.querySelector(':scope > table')?.remove());
   const drag = (name: string) => {
     fireEvent.mouseDown(header(name));
     fireEvent.dragStart(header(name));
@@ -249,6 +252,26 @@ describe('drag sortable columns', () => {
     drag('city');
     fireEvent.dragOver(header('name'));
     expect(headerTexts()).toEqual(['name', 'city', 'age', 'job']);
+  });
+
+  test('the travelling ghost carries the whole column', () => {
+    render(<Table columns={sized} rows={people} draggableColumns="eager-move"/>);
+
+    fireEvent.mouseDown(header('age'));
+    fireEvent.dragStart(header('age'), {
+      dataTransfer: {effectAllowed: '', setDragImage: vi.fn()}
+    });
+
+    const ghost = document.body.querySelector(':scope > table');
+    expect(ghost).not.toBeNull();
+    expect([...(ghost?.children ?? [])].map(section => section.tagName)).toEqual(['THEAD', 'TBODY']);
+    expect(ghost?.querySelectorAll('thead tr')).toHaveLength(1);
+    expect(ghost?.querySelectorAll('tbody tr')).toHaveLength(1);
+    expect(ghost?.textContent).toContain('age');
+    expect(ghost?.textContent).toContain('36');
+
+    fireEvent.dragEnd(header('age'));
+    expect(document.body.querySelector(':scope > table')).toBeNull();
   });
 
   test('columns hold still without the opt-in', () => {
