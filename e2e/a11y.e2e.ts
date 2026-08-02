@@ -6,7 +6,7 @@ type A11yPage = {name: string, path: string, ready: Role, loaded?: string};
 const pages: A11yPage[] = [
   {name: 'root', path: '', ready: 'navigation'},
   {name: 'demos', path: 'demos?tab=accordions', ready: 'navigation'},
-  {name: 'charts', path: 'demos?tab=charts', ready: 'navigation'},
+  {name: 'charts', path: 'demos?tab=charts', ready: 'navigation', loaded: '.price-chart .delta'},
   {name: 'users', path: 'users', ready: 'table'},
   {name: 'gallery', path: 'gallery', ready: 'navigation', loaded: 'figure.frame'},
   {name: 'games', path: 'games', ready: 'banner'},
