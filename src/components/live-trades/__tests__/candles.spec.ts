@@ -44,7 +44,7 @@ describe('mergeLive', () => {
     const seed = [candleAt(0, 50001), candleAt(60000, 50002), candleAt(120000, 50003)];
     const streamed = [candleAt(120000, 50009), candleAt(180000, 50010)];
 
-    expect(mergeLive(seed, streamed)).toEqual([
+    expect(mergeLive(seed, streamed, 60)).toEqual([
       candleAt(0, 50001),
       candleAt(60000, 50002),
       candleAt(120000, 50009),
@@ -55,7 +55,7 @@ describe('mergeLive', () => {
   test('the window keeps only the last sixty candles', () => {
     const seed = Array.from({length: 70}, (_, index) => candleAt(index * 60000, 50000 + index));
 
-    expect(mergeLive(seed, [])).toHaveLength(60);
-    expect(mergeLive(seed, [])[0]).toEqual(candleAt(10 * 60000, 50010));
+    expect(mergeLive(seed, [], 60)).toHaveLength(60);
+    expect(mergeLive(seed, [], 60)[0]).toEqual(candleAt(10 * 60000, 50010));
   });
 });

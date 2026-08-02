@@ -28,10 +28,11 @@ const openedBy = (trade: Trade, bucketMs: number): Candle => ({
 
 export const mergeLive = (
   seed: readonly Candle[],
-  streamed: readonly Candle[]
+  streamed: readonly Candle[],
+  cap: number
 ): readonly Candle[] => {
   const cut = streamed[0]?.openedAt ?? Number.POSITIVE_INFINITY;
-  return [...seed.filter(candle => candle.openedAt < cut), ...streamed].slice(-60);
+  return [...seed.filter(candle => candle.openedAt < cut), ...streamed].slice(-cap);
 };
 
 export const bucketTrades = (trades: readonly Trade[], bucketMs: number): readonly Candle[] =>

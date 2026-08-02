@@ -2,9 +2,9 @@ import {FC, useState} from 'react';
 import {notEmpty} from '@ryandur/sand';
 import {Menu} from '@components/Menu';
 import {Trade} from '@transport/coinbase';
-import {bucketTrades, Candle, candleShapes, mergeLive, volumeShapes} from './shapes';
+import {bucketTrades, candleShapes, mergeLive, volumeShapes} from './shapes';
 import {usePeriodCandles} from '../usePeriodCandles';
-import {bucketLabel, bucketMs, Period, tickEveryMs, timePattern} from '../period';
+import {bucketLabel, bucketMs, Period, periodCap, tickEveryMs, timePattern} from '../period';
 import {Axes} from '../Axes';
 import '../chart-card.css';
 import './Candles.css';
@@ -12,22 +12,18 @@ import './Candles.css';
 const CHART_WIDTH = 240;
 const CANDLE_HEIGHT = 80;
 const VOLUME_HEIGHT = 24;
-const BUCKET_MS = 60000;
 
 type Props = {
   trades: readonly Trade[];
-  seed: readonly Candle[];
 };
 
 const captionFor = (period: Period, count: number): string =>
   `${count} candles · ${bucketLabel[period]}`;
 
-export const Candles: FC<Props> = ({trades, seed}) => {
-  const [period, setPeriod] = useState<Period>(Period.live);
+export const Candles: FC<Props> = ({trades}) => {
+  const [period, setPeriod] = useState<Period>(Period.hour);
   const history = usePeriodCandles(period);
-  const candles = period === Period.live
-    ? mergeLive(seed, bucketTrades(trades, BUCKET_MS))
-    : history.candles;
+  const candles = mergeLive(history.candles, bucketTrades(trades, bucketMs[period]), periodCap[period]);
   const bodies = candleShapes(candles, CHART_WIDTH, CANDLE_HEIGHT, bucketMs[period]);
   const bars = volumeShapes(candles, CHART_WIDTH, VOLUME_HEIGHT, bucketMs[period]);
   return <section aria-label="candles" className="card chart candles">
@@ -59,15 +55,15 @@ export const Candles: FC<Props> = ({trades, seed}) => {
       </svg>
     </Axes>
     {notEmpty(candles) && <small>{captionFor(period, candles.length)}</small>}
-    {history.unavailable && period !== Period.live && <small>history unavailable</small>}
+    {history.unavailable && <small>history unavailable</small>}
     <details>
       <summary>what am I looking at?</summary>
       <p>
-        The same measurement, bundled: each candle summarizes a minute of trades —
+        The same measurement, bundled: each candle summarizes one bucket of trades —
         the body spans the first to the last price (green when it rose, orange when
         it fell) and the wicks reach the extremes. The bars beneath show how much
-        bitcoin changed hands in each bundle. The period menu swaps the live window
-        for Coinbase&apos;s history.
+        bitcoin changed hands in each bundle. New trades keep filling the newest
+        candle; the period menu resizes the window — every size stays live.
       </p>
     </details>
   </section>;

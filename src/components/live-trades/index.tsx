@@ -3,7 +3,7 @@ import {notEmpty} from '@ryandur/sand';
 import {Menu} from '@components/Menu';
 import {LiveTradesState} from './useLiveTrades';
 import {usePeriodCandles} from './usePeriodCandles';
-import {bucketLabel, Period, tickEveryMs, timePattern} from './period';
+import {bucketLabel, bucketMs, Period, periodCap, tickEveryMs, timePattern} from './period';
 import {sparklinePoints, TimedPrice} from './sparkline';
 import {Axes} from './Axes';
 import {bucketTrades, Candle, mergeLive} from './Candles/shapes';
@@ -41,22 +41,17 @@ const candlesView = (candles: readonly Candle[], bucket: string): PriceView => (
   caption: `${candles.length} candles · ${bucket}`
 });
 
-type Props = Pick<LiveTradesState, 'trades'> & {
-  seed: readonly Candle[];
-};
+type Props = Pick<LiveTradesState, 'trades'>;
 
-export const LiveTrades: FC<Props> = ({trades, seed}) => {
-  const [period, setPeriod] = useState<Period>(Period.live);
+export const LiveTrades: FC<Props> = ({trades}) => {
+  const [period, setPeriod] = useState<Period>(Period.hour);
   const history = usePeriodCandles(period);
-  const live = period === Period.live;
-  const candles = live
-    ? mergeLive(seed, bucketTrades(trades, 60000))
-    : history.candles;
+  const candles = mergeLive(history.candles, bucketTrades(trades, bucketMs[period]), periodCap[period]);
   const showing = candles.length > 0;
   const windowed = candlesView(candles, bucketLabel[period]);
   const lastTrade = trades[trades.length - 1];
   const view = showing
-    ? {...windowed, last: live && lastTrade !== undefined ? lastTrade.price : windowed.last}
+    ? {...windowed, last: lastTrade !== undefined ? lastTrade.price : windowed.last}
     : emptyView;
   const points = sparklinePoints(view.series, CHART_WIDTH, CHART_HEIGHT);
   const line = points.map(point => `${point.x},${point.y}`).join(' ');
@@ -88,7 +83,7 @@ export const LiveTrades: FC<Props> = ({trades, seed}) => {
       {showing && <figcaption>
         <small className="span">{view.caption}</small>
       </figcaption>}
-      {history.unavailable && !live && <figcaption>
+      {history.unavailable && <figcaption>
         <small className="span">history unavailable</small>
       </figcaption>}
     </figure>
@@ -99,12 +94,13 @@ export const LiveTrades: FC<Props> = ({trades, seed}) => {
     <details>
       <summary>what am I looking at?</summary>
       <p>
-        This measures the price of one bitcoin in US dollars. Each point is one
-        live trade — someone paid that price — newest at the right. The dotted
-        line marks the first price in the window and the color shows the trend
-        against it. High and low mark the window&apos;s range; the headline is
-        the latest price paid and how far it has moved. The period menu swaps
-        the live window for Coinbase&apos;s history.
+        This measures the price of one bitcoin in US dollars, live. The line is
+        the closing price of each bucket in the window, seeded from Coinbase&apos;s
+        history, with new trades folding into the newest bucket as they happen.
+        The dotted line marks the first price in the window and the color shows
+        the trend against it. High and low mark the window&apos;s range; the
+        headline is the latest price paid and how far it has moved. The period
+        menu resizes the window — every size stays live.
       </p>
     </details>
   </section>;

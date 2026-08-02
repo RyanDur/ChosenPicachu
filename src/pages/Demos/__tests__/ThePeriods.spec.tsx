@@ -99,6 +99,7 @@ describe('the chart periods', () => {
     renderCharts();
 
     await userEvent.click(within(menuFor('candle period')).getByText('week'));
-    await waitFor(() => expect(screen.getByText('history unavailable')).toBeVisible());
+    const candleCard = screen.getByRole('region', {name: 'candles'});
+    await waitFor(() => expect(within(candleCard).getByText('history unavailable')).toBeVisible());
   });
 });
