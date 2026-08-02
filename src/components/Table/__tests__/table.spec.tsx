@@ -164,9 +164,18 @@ describe('resizable columns', () => {
     expect(nameHeader()).toHaveStyle({width: '5%'});
   });
 
+  test('narrow columns truncate their values and clip their titles', () => {
+    render(<Table columns={sized} rows={people}/>);
+
+    expect(nameHeader().classList).toContain('clipped');
+    within(screen.getAllByRole('rowgroup')[1]).getAllByRole('cell')
+      .forEach(cell => expect(cell.classList).toContain('ellipsis'));
+  });
+
   test('columns without widths stay plain', () => {
     render(<Table columns={columns} rows={rows}/>);
 
     expect(screen.queryAllByRole('separator')).toHaveLength(0);
+    screen.getAllByRole('cell').forEach(cell => expect(cell.classList).not.toContain('ellipsis'));
   });
 });
