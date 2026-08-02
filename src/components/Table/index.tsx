@@ -52,25 +52,11 @@ const columnGhost = (source: HTMLTableElement, position: number): HTMLTableEleme
     }
     ghost.style.position = 'fixed';
     ghost.style.top = '0';
-    ghost.style.left = '0';
+    ghost.style.left = '-100vw';
     ghost.style.width = `${width}px`;
     ghost.style.background = 'var(--paper)';
-    ghost.style.pointerEvents = 'none';
-    ghost.style.zIndex = '1000';
     ghost.style.boxShadow = 'var(--lift-box-shadow)';
     return ghost;
-};
-
-const blankImage = (): HTMLImageElement => {
-    const blank = new Image(1, 1);
-    blank.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-    return blank;
-};
-
-const follow = (ghost: HTMLTableElement | null, x: number, y: number): void => {
-    if (has(ghost)) {
-        ghost.style.transform = `translate(${x - ghost.offsetWidth / 2}px, ${y + 16}px)`;
-    }
 };
 
 const STEP_SHARE = 2;
@@ -195,10 +181,7 @@ export const Table: FC<TableProps> = (
     };
 
     return <table id={id}
-                  onDragOver={event => {
-                      event.preventDefault();
-                      follow(ghost.current, event.clientX, event.clientY);
-                  }}
+                  onDragOver={event => event.preventDefault()}
                   className={join(
                       tableClassName,
                       notEmpty(apportioned) && 'apportioned',
@@ -223,17 +206,14 @@ export const Table: FC<TableProps> = (
                        draggable={travels && armed === key}
                        onMouseDown={travels ? () => setArmed(key) : undefined}
                        onDragStart={travels ? event => {
-                           if (has(event.dataTransfer)) {
-                               event.dataTransfer.effectAllowed = 'move';
-                               event.dataTransfer.setDragImage(blankImage(), 0, 0);
-                               const surface = event.currentTarget.closest('table');
-                               if (has(surface)) {
-                                   ghost.current = columnGhost(surface, position);
-                                   document.body.appendChild(ghost.current);
-                                   follow(ghost.current, event.clientX, event.clientY);
-                               }
-                           }
                            setDragged(key);
+                           const surface = event.currentTarget.closest('table');
+                           if (has(event.dataTransfer) && has(surface)) {
+                               ghost.current = columnGhost(surface, position);
+                               document.body.appendChild(ghost.current);
+                               event.dataTransfer.effectAllowed = 'move';
+                               event.dataTransfer.setDragImage(ghost.current, ghost.current.offsetWidth / 2, 16);
+                           }
                        } : undefined}
                        onDragOver={event => {
                            event.preventDefault();

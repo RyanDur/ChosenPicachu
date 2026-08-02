@@ -258,9 +258,8 @@ describe('drag sortable columns', () => {
     render(<Table columns={sized} rows={people} draggableColumns="eager-move"/>);
 
     fireEvent.mouseDown(header('age'));
-    fireEvent.dragStart(header('age'), {
-      dataTransfer: {effectAllowed: '', setDragImage: vi.fn()}
-    });
+    const dataTransfer = {effectAllowed: '', setDragImage: vi.fn()};
+    fireEvent.dragStart(header('age'), {dataTransfer});
 
     const ghost = document.body.querySelector(':scope > table');
     expect(ghost).not.toBeNull();
@@ -269,6 +268,7 @@ describe('drag sortable columns', () => {
     expect(ghost?.querySelectorAll('tbody tr')).toHaveLength(1);
     expect(ghost?.textContent).toContain('age');
     expect(ghost?.textContent).toContain('36');
+    expect(dataTransfer.setDragImage).toHaveBeenCalledWith(ghost, expect.any(Number), 16);
 
     fireEvent.dragEnd(header('age'));
     expect(document.body.querySelector(':scope > table')).toBeNull();
