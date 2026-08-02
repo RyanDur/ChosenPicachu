@@ -30,7 +30,7 @@ export const Candles: FC<Props> = ({trades}) => {
   const bars = volumeShapes(candles, CHART_WIDTH, VOLUME_HEIGHT);
   return <section aria-label="candles" className="card chart candles">
     <header>
-      <RangePicker value={isRange(chartWindow) ? chartWindow : null} onPick={setChartWindow}/>
+      <RangePicker idPrefix="candle" value={isRange(chartWindow) ? chartWindow : null} onPick={setChartWindow}/>
       <Menu id="candle-period" label="candle period"
             toggle={isRange(chartWindow) ? 'range' : chartWindow} toggleClassName="period-toggle">
         {Object.values(Period).map(option =>
