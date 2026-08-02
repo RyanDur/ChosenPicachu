@@ -29,3 +29,43 @@ for (const {name, path, ready, loaded} of pages) {
     }))).toEqual([]);
   });
 }
+
+const tradeFrame = (id: number, price: number): string => JSON.stringify({
+  type: 'match',
+  trade_id: id,
+  price: `${price}`,
+  size: '0.01',
+  side: 'buy',
+  time: new Date().toISOString()
+});
+
+const scriptedMarket = async (page: Page, prices: number[]): Promise<void> => {
+  await page.route(/\/products\/.*\/candles/, route =>
+    route.fulfill({json: [], headers: {'access-control-allow-origin': '*'}}));
+  await page.routeWebSocket(/ws-feed/, socket => {
+    socket.onMessage(() => prices.forEach((price, id) => socket.send(tradeFrame(id, price))));
+  });
+};
+
+const markets = [
+  {trend: 'rising', prices: [50000, 50100]},
+  {trend: 'falling', prices: [50100, 50000]},
+];
+
+for (const {trend, prices} of markets) {
+  test(`the ${trend} price card has no accessibility violations`, async ({page}) => {
+    await scriptedMarket(page, prices);
+    await page.goto('demos?tab=charts');
+
+    await expect(page.locator(`.price-chart[data-trend='${trend}'] .delta`)).toBeVisible({timeout: 30_000});
+
+    const results = await new AxeBuilder({page}).include('.price-chart').withTags(['wcag2a', 'wcag2aa']).analyze();
+
+    expect(results.violations.map(v => ({
+      id: v.id,
+      impact: v.impact,
+      nodes: v.nodes.length,
+      sample: v.nodes[0]?.html.slice(0, 120)
+    }))).toEqual([]);
+  });
+}
