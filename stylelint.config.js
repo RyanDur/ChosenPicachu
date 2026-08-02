@@ -33,7 +33,7 @@ export default {
         ignoreValues: [
           '0', 'auto', 'inherit', 'initial', 'normal', 'unset', 'none',
           '62.5%', '100%', 'transparent', 'currentcolor', 'no-repeat', 'center', 'cover',
-          'solid', 'dashed', 'dotted', 'collapse', '50%',
+          'solid', 'dashed', 'dotted', 'collapse', 'separate', '50%',
           '/^calc\\(/', '/^url\\(/', '/^linear-gradient/', '/^radial-gradient/'
         ]
       }
