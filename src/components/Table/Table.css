@@ -33,3 +33,26 @@
     }
   }
 }
+
+.fancy-table th {
+  position: relative;
+}
+
+.resize-handle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0.8rem;
+  height: 100%;
+  cursor: col-resize;
+  touch-action: none;
+
+  &:focus {
+    background: var(--faded-mint);
+    outline: none;
+  }
+
+  &:hover {
+    background: var(--faded-leather);
+  }
+}
