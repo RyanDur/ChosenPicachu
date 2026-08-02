@@ -1,6 +1,7 @@
 import {FC, useState} from 'react';
 import {notEmpty} from '@ryandur/sand';
 import {Menu} from '@components/Menu';
+import {Loading} from '@components/Loading';
 import {LiveTradesState} from './useLiveTrades';
 import {usePeriodCandles} from './usePeriodCandles';
 import {bucketLabel, bucketMs, Period, periodCap, tickEveryMs, timePattern} from './period';
@@ -65,6 +66,7 @@ export const LiveTrades: FC<Props> = ({trades}) => {
         )}
       </Menu>
     </header>
+    {history.pending ? <Loading className="chart-loading"/> : <>
     <figure>
       <Axes high={view.high} low={view.low} times={view.series.map(timed => timed.at)}
             pattern={timePattern[period]} tickEvery={tickEveryMs[period]}>
@@ -91,6 +93,7 @@ export const LiveTrades: FC<Props> = ({trades}) => {
       <data value={view.last}>{cents.format(view.last)}</data>
       <data className="delta" value={view.last - view.first}>{deltaLabel(view.first, view.last)}</data>
     </p>}
+    </>}
     <details>
       <summary>what am I looking at?</summary>
       <p>

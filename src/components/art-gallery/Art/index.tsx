@@ -1,7 +1,7 @@
 import {FC, useEffect, useState} from 'react';
 import {numberParam, useSearchParamsObject} from '@components/search-params';
 import * as D from 'schemawax';
-import {Loading} from '@components/art-gallery/Loading';
+import {Loading} from '@components/Loading';
 import {Image} from '@components/art-gallery/Image';
 import {useGallery} from '@components/art-gallery/Art/Context';
 import {empty, has} from '@ryandur/sand';

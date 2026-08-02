@@ -20,4 +20,9 @@
     }
   }
 
+
+  .chart-loading {
+    min-height: 24rem;
+    position: relative;
+  }
 }
