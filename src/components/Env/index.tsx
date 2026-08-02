@@ -2,6 +2,7 @@ import {createContext, FC, PropsWithChildren, useContext} from 'react';
 
 export type Env = {
   tradeFeed: string;
+  tradeProduct: string;
   aicDomain: string;
   harvardDomain: string;
   harvardAPIKey: string;
@@ -10,6 +11,7 @@ export type Env = {
 
 export const env: Env = {
   tradeFeed: import.meta.env.VITE_APP_TRADE_FEED,
+  tradeProduct: import.meta.env.VITE_APP_TRADE_PRODUCT,
   aicDomain: import.meta.env.VITE_APP_API_AIC,
   harvardDomain: import.meta.env.VITE_APP_HARVARD_API,
   harvardAPIKey: import.meta.env.VITE_APP_HARVARD_API_KEY,

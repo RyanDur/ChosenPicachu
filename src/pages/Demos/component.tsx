@@ -30,7 +30,8 @@ const paragraphs = (count: number) =>
 
 export const DemosPage = () => {
   const {tab} = useSearchParamsObject({tab: demoTopicParam}, {tab: DemoTopics.accordions});
-  const liveTrades = useLiveTrades(useEnv().tradeFeed);
+  const {tradeFeed, tradeProduct} = useEnv();
+  const liveTrades = useLiveTrades(tradeFeed, tradeProduct);
 
   return <>
       <Tabs
