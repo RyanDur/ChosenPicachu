@@ -9,7 +9,7 @@
   }
 
   #query {
-    background-color: white;
+    background-color: var(--white);
   }
 
   #query-label,

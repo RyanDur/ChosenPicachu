@@ -12,12 +12,12 @@
         padding-top: var(--base);
         border-radius: var(--radius-card);
         background: var(--paper);
-        border: var(--hairline) solid black;
+        border: var(--hairline) solid var(--black);
         opacity: 1;
         transition: opacity 50ms;
 
         &:has(.grip:hover) {
-            box-shadow: 0 10px 14px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 10px 14px var(--faint-shadow);
         }
 
         &.hide {

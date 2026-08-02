@@ -15,13 +15,13 @@
     opacity: 0.6;
     z-index: 1;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)),
+    background: linear-gradient(var(--white-clear), var(--white-clear)),
       linear-gradient(
-        rgba(255, 255, 255, 0),
-        rgb(255, 255, 255),
-        rgba(255, 255, 255, 0)
+        var(--white-clear),
+        var(--white),
+        var(--white-clear)
       ),
-      linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0));
+      linear-gradient(var(--white-clear), var(--white-clear));
   }
 
   &.not-empty .fancy-title {
@@ -37,7 +37,7 @@
   }
 
   .fancy-text {
-    border: var(--hairline) solid rgba(30, 118, 224, 0.68);
+    border: var(--hairline) solid var(--focus-blue);
     box-shadow: var(--light-box-shadow);
     outline: none;
     padding: var(--base-x-1_25) var(--base-x-2_5);
@@ -60,7 +60,7 @@
     &:disabled,
     &:read-only:not(.fancy-select-box) {
       border: none;
-      border-bottom: var(--hairline) solid rgba(30, 118, 224, 0.68);
+      border-bottom: var(--hairline) solid var(--focus-blue);
       box-shadow: none;
       border-radius: 0;
 
