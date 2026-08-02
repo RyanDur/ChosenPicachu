@@ -20,7 +20,7 @@ export const bucketLabel: Record<HistoryPeriod, string> = {
 };
 
 export const timePattern: Record<Period, string> = {
-  [Period.live]: 'HH:mm:ss',
+  [Period.live]: 'HH:mm',
   [Period.hour]: 'HH:mm',
   [Period.day]: 'HH:mm',
   [Period.week]: 'MMM d'
@@ -74,11 +74,11 @@ const rangeTickEvery = (range: DateRange): number => {
   return spanMs <= 172800000 ? 3600000 : DAY_MS;
 };
 
-export const windowTickEvery = (chartWindow: ChartWindow): number | undefined => {
+export const windowTickEvery = (chartWindow: ChartWindow): number => {
   if (isRange(chartWindow)) {
     return rangeTickEvery(chartWindow);
   }
-  return chartWindow === Period.live ? undefined : tickIntervalMs[chartWindow];
+  return chartWindow === Period.live ? 600000 : tickIntervalMs[chartWindow];
 };
 
 export const windowPattern = (chartWindow: ChartWindow): string =>
@@ -90,5 +90,12 @@ export const windowBucketLabel = (chartWindow: ChartWindow): string => {
   if (isRange(chartWindow)) {
     return granularityLabel[rangeGranularity(chartWindow)];
   }
-  return chartWindow === Period.live ? '5s each' : bucketLabel[chartWindow];
+  return chartWindow === Period.live ? '1m each' : bucketLabel[chartWindow];
+};
+
+export const windowBucketMs = (chartWindow: ChartWindow): number => {
+  if (isRange(chartWindow)) {
+    return rangeGranularity(chartWindow) * 1000;
+  }
+  return chartWindow === Period.live ? 60000 : granularitySeconds[chartWindow] * 1000;
 };

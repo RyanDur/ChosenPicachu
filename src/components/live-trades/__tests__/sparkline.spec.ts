@@ -1,20 +1,32 @@
-import {sparklinePath} from '../sparkline';
+import {sparklinePoints} from '../sparkline';
 
-describe('sparklinePath', () => {
+describe('sparklinePoints', () => {
   test('fewer than two prices draw no line', () => {
-    expect(sparklinePath([], 100, 40)).toBe('');
-    expect(sparklinePath([50000], 100, 40)).toBe('');
+    expect(sparklinePoints([], 100, 40)).toEqual([]);
+    expect(sparklinePoints([{at: 0, price: 50000}], 100, 40)).toEqual([]);
   });
 
-  test('a rising pair spans the box corner to corner', () => {
-    expect(sparklinePath([1, 2], 100, 40)).toBe('0,40 100,0');
+  test('points spread by time, not by index', () => {
+    expect(sparklinePoints([
+      {at: 0, price: 1},
+      {at: 1000, price: 2},
+      {at: 4000, price: 5}
+    ], 100, 40)).toEqual([
+      {x: 0, y: 40},
+      {x: 25, y: 30},
+      {x: 100, y: 0}
+    ]);
   });
 
   test('a flat series draws along the midline', () => {
-    expect(sparklinePath([5, 5, 5], 100, 40)).toBe('0,20 50,20 100,20');
-  });
-
-  test('prices spread evenly across the width and scale to the height', () => {
-    expect(sparklinePath([0, 10, 5], 100, 40)).toBe('0,40 50,0 100,20');
+    expect(sparklinePoints([
+      {at: 0, price: 5},
+      {at: 500, price: 5},
+      {at: 1000, price: 5}
+    ], 100, 40)).toEqual([
+      {x: 0, y: 20},
+      {x: 50, y: 20},
+      {x: 100, y: 20}
+    ]);
   });
 });

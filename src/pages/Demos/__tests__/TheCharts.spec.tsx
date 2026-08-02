@@ -105,7 +105,7 @@ const drawnPoints = (): string[] => {
 
 const chartsRoute = (feedUrl: string) => ({
   path: Paths.demos,
-  element: <EnvProvider env={{tradeFeed: feedUrl}}><DemosPage/></EnvProvider>
+  element: <EnvProvider env={{tradeFeed: feedUrl, tradeHistory: 'http://127.0.0.1:9'}}><DemosPage/></EnvProvider>
 });
 
 const renderCharts = (feedUrl: string) =>
@@ -211,13 +211,14 @@ describe('the demos page', () => {
         expect(screen.getByRole('status')).toHaveTextContent('live feed unavailable'));
     });
 
-    test('the user sees the price trend drawn from every recent trade', async () => {
+    test('the user sees the price trend drawn from every recent minute', async () => {
       const feed = await streamingFeed();
 
       renderCharts(urlOf(feed));
 
       await feedIsLive();
-      broadcast(feed, [50001, 50002, 50003, 50004, 50005].map(price => tradeFrame(price)));
+      broadcast(feed, [50001, 50002, 50003, 50004, 50005]
+        .map((price, minute) => tradeFrame(price, 1700000000000 + minute * 60000)));
       await waitFor(() => expect(drawnPoints()).toHaveLength(5));
     });
 
@@ -253,8 +254,8 @@ describe('the demos page', () => {
         tradeFrame(50001, bucketStart, '0.01'),
         tradeFrame(50003, bucketStart + 1000, '0.02'),
         tradeFrame(50002, bucketStart + 2000, '0.01'),
-        tradeFrame(50004, bucketStart + 5000, '0.03'),
-        tradeFrame(50000, bucketStart + 6000, '0.01')
+        tradeFrame(50004, bucketStart + 60000, '0.03'),
+        tradeFrame(50000, bucketStart + 61000, '0.01')
       ]);
       await waitFor(() => expect(drawnCandleParts('rect.body')).toBe(2));
       expect(drawnCandleParts('rect.volume')).toBe(2);
@@ -262,21 +263,22 @@ describe('the demos page', () => {
 
     test('the chart tells the user its price and time range', async () => {
       const feed = await streamingFeed();
-      const firstTradedAt = 1700000000000;
+      const tenMinutes = 600000;
+      const firstTradedAt = Math.ceil(1700000000000 / tenMinutes) * tenMinutes;
 
       renderCharts(urlOf(feed));
 
       await feedIsLive();
       broadcast(feed, [50001, 50002, 50003, 50004, 50005]
-        .map((price, index) => tradeFrame(price, firstTradedAt + index * 10000)));
+        .map((price, index) => tradeFrame(price, firstTradedAt + index * tenMinutes)));
       const priceCard = screen.getByRole('region', {name: 'live trades'});
       await waitFor(() => expect(within(priceCard).getByText('$50,005')).toBeVisible());
       expect(within(priceCard).getByText('$50,003')).toBeVisible();
       expect(within(priceCard).getByText('$50,001')).toBeVisible();
-      expect(within(priceCard).getByText('5 trades · 40s')).toBeVisible();
-      expect(within(priceCard).getByText(format(firstTradedAt, 'HH:mm:ss'))).toBeVisible();
-      expect(within(priceCard).getByText(format(firstTradedAt + 20000, 'HH:mm:ss'))).toBeVisible();
-      expect(within(priceCard).getByText(format(firstTradedAt + 40000, 'HH:mm:ss'))).toBeVisible();
+      expect(within(priceCard).getByText('5 candles · 1m each')).toBeVisible();
+      const ticks = within(priceCard).getAllByRole('time');
+      expect(ticks.map(tick => tick.textContent))
+        .toEqual([0, 1, 2, 3, 4].map(step => format(firstTradedAt + step * tenMinutes, 'HH:mm')));
     });
 
     test('a feed that dies mid-stream tells the user, keeping the last trades', async () => {

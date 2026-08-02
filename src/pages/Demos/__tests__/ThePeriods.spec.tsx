@@ -54,9 +54,9 @@ const drawnPoints = (): string[] => {
 
 describe('the chart periods', () => {
   test('choosing the hour draws its candles from history', async () => {
-    const asked: string[] = [];
+    const asked: URL[] = [];
     server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, ({request}) => {
-      asked.push(new URL(request.url).searchParams.get('granularity') ?? '');
+      asked.push(new URL(request.url));
       return HttpResponse.json(rowsSpaced(60));
     }));
 
@@ -65,11 +65,13 @@ describe('the chart periods', () => {
     await userEvent.click(within(menuFor('candle period')).getByText('hour'));
     await waitFor(() => expect(drawnCandleParts('rect.body')).toBe(5));
     expect(drawnCandleParts('rect.volume')).toBe(5);
-    expect(asked).toEqual(['60']);
-    expect(screen.getByText('5 candles · 1m each')).toBeVisible();
-    expect(screen.getByText('$50,010')).toBeVisible();
-    expect(screen.getByText('$49,970')).toBeVisible();
+    const chosen = asked[asked.length - 1].searchParams;
+    expect(chosen.get('granularity')).toBe('60');
+    expect(chosen.get('start')).toBeNull();
     const candleCard = screen.getByRole('region', {name: 'candles'});
+    expect(within(candleCard).getByText('5 candles · 1m each')).toBeVisible();
+    expect(within(candleCard).getByText('$50,010')).toBeVisible();
+    expect(within(candleCard).getByText('$49,970')).toBeVisible();
     const hourTicks = within(candleCard).getAllByRole('time');
     expect(hourTicks.map(tick => tick.textContent))
       .toEqual([format(HOUR_ALIGNED * 1000, 'HH:mm')]);
@@ -119,7 +121,7 @@ describe('the chart date range', () => {
 
     pickRange(screen.getByRole('region', {name: 'candles'}), '2023-11-01');
     await waitFor(() => expect(drawnCandleParts('rect.body')).toBe(5));
-    const query = asked[0].searchParams;
+    const query = asked[asked.length - 1].searchParams;
     expect(query.get('granularity')).toBe('300');
     expect(query.get('start')).toBe(new Date('2023-11-01T00:00:00').toISOString());
     expect(query.get('end')).toBe(new Date('2023-11-02T00:00:00').toISOString());

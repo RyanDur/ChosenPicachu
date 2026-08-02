@@ -1,29 +1,29 @@
+export type TimedPrice = {
+  at: number;
+  price: number;
+};
+
 export type Point = {
   x: number;
   y: number;
 };
 
 export const sparklinePoints = (
-  prices: readonly number[],
+  series: readonly TimedPrice[],
   width: number,
   height: number
 ): readonly Point[] => {
-  if (prices.length < 2) {
+  if (series.length < 2) {
     return [];
   }
+  const prices = series.map(timed => timed.price);
   const lowest = Math.min(...prices);
   const highest = Math.max(...prices);
-  const spanX = width / (prices.length - 1);
+  const from = series[0].at;
+  const span = series[series.length - 1].at - from;
   const scaleY = (price: number): number =>
     highest === lowest ? height / 2 : height - ((price - lowest) / (highest - lowest)) * height;
-  return prices.map((price, index) => ({x: index * spanX, y: scaleY(price)}));
+  const scaleX = (at: number): number =>
+    span === 0 ? width / 2 : ((at - from) / span) * width;
+  return series.map(timed => ({x: scaleX(timed.at), y: scaleY(timed.price)}));
 };
-
-export const sparklinePath = (
-  prices: readonly number[],
-  width: number,
-  height: number
-): string =>
-  sparklinePoints(prices, width, height)
-    .map(point => `${point.x},${point.y}`)
-    .join(' ');
