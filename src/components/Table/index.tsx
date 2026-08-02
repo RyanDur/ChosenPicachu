@@ -51,11 +51,10 @@ const columnGhost = (source: HTMLTableElement, position: number): HTMLTableEleme
         }
     }
     ghost.style.position = 'fixed';
-    ghost.style.top = '0';
-    ghost.style.left = '-100vw';
     ghost.style.width = `${width}px`;
     ghost.style.background = 'var(--paper)';
     ghost.style.boxShadow = 'var(--lift-box-shadow)';
+    ghost.style.pointerEvents = 'none';
     return ghost;
 };
 
@@ -209,10 +208,15 @@ export const Table: FC<TableProps> = (
                            setDragged(key);
                            const surface = event.currentTarget.closest('table');
                            if (has(event.dataTransfer) && has(surface)) {
-                               ghost.current = columnGhost(surface, position);
-                               document.body.appendChild(ghost.current);
+                               const shade = columnGhost(surface, position);
+                               shade.style.left = `${event.clientX - shade.offsetWidth / 2}px`;
+                               shade.style.top = `${event.clientY - 16}px`;
+                               document.body.appendChild(shade);
+                               shade.style.left = `${event.clientX - shade.offsetWidth / 2}px`;
                                event.dataTransfer.effectAllowed = 'move';
-                               event.dataTransfer.setDragImage(ghost.current, ghost.current.offsetWidth / 2, 16);
+                               event.dataTransfer.setDragImage(shade, shade.offsetWidth / 2, 16);
+                               ghost.current = shade;
+                               setTimeout(() => shade.remove());
                            }
                        } : undefined}
                        onDragOver={event => {
