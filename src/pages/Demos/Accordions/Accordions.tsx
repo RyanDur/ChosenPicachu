@@ -15,8 +15,8 @@ export const InclusiveAccordion: FC<PropsWithClassName & ContentProps> = ({
   <ul className='accordion'>
     {content.map(({value, key}, id) =>
       <li key={key} className="fold">
-        <input id={`${id}-checkbox`} className="info-toggle off-screen" type="checkbox"/>
-        <label className="info-label" htmlFor={`${id}-checkbox`}>{key}</label>
+        <input id={`fold-${id}-checkbox`} className="info-toggle off-screen" type="checkbox"/>
+        <label className="info-label" htmlFor={`fold-${id}-checkbox`}>{key}</label>
         <p className="info">{value}</p>
       </li>)}
   </ul>
@@ -37,8 +37,8 @@ export const ExclusiveAccordion: FC<PropsWithClassName & ContentProps> = ({
     </li>
     {content.map(({value, key}, id) =>
       <li className="fold" key={key}>
-        <input id={`${id}-radio`} className="info-toggle off-screen" type="radio" name="group"/>
-        <label className="info-label" htmlFor={`${id}-radio`}>{key}</label>
+        <input id={`fold-${id}-radio`} className="info-toggle off-screen" type="radio" name="group"/>
+        <label className="info-label" htmlFor={`fold-${id}-radio`}>{key}</label>
         <p className="info">{value}</p>
       </li>)}
   </ul>

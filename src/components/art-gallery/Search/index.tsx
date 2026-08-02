@@ -41,7 +41,7 @@ export const Search: FC<Props> = ({id}) => {
   const handleReset = () => removeSearchParams('search');
 
   return <form id={id} className="search" onSubmit={handleSubmit} onReset={handleReset}>
-    <input autoComplete="off" list="search-options" id="query"
+    <input type="search" autoComplete="off" list="search-options" id="query"
            onInput={event => updateQuery(event.currentTarget.value)}/>
     <label id="query-label" className='ellipsis' htmlFor="query"><span className='bold'>Search For:</span> {decodeURI(search || '')}</label>
     <button className="reset-query" type="reset" aria-label="reset search"/>

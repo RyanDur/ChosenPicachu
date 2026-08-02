@@ -1,5 +1,18 @@
 import {expect, Page, test} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import {HtmlValidate} from 'html-validate';
+
+const validator = new HtmlValidate({
+  extends: ['html-validate:recommended'],
+  rules: {
+    'attribute-boolean-style': 'off',
+    'attribute-empty-style': 'off',
+    'no-trailing-whitespace': 'off',
+    'no-inline-style': 'off',
+    'unique-landmark': 'off',
+    'form-dup-name': ['error', {shared: ['radio', 'checkbox']}]
+  }
+});
 
 type Role = Parameters<Page['getByRole']>[0];
 type A11yPage = {name: string, path: string, ready: Role, loaded?: string};
@@ -46,6 +59,21 @@ const scriptedMarket = async (page: Page, prices: number[]): Promise<void> => {
     socket.onMessage(() => prices.forEach((price, id) => socket.send(tradeFrame(id, price))));
   });
 };
+
+for (const {name, path, ready, loaded} of pages) {
+  test(`the ${name} page is conforming html`, async ({page, browserName}) => {
+    test.skip(browserName !== 'chromium', 'the serialized DOM is engine-independent');
+    await page.goto(path);
+    await expect(page.getByRole(ready).first()).toBeVisible({timeout: 30_000});
+    if (loaded) await expect(page.locator(loaded).first()).toBeVisible({timeout: 30_000});
+
+    const report = await validator.validateString(await page.content());
+
+    expect(report.results.flatMap(result => result.messages.map(message =>
+      `${message.ruleId}: ${message.message} (line ${message.line})`
+    ))).toEqual([]);
+  });
+}
 
 test('the period menu stays hidden until asked', async ({page}) => {
   await scriptedMarket(page, [50000, 50100]);
