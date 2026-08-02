@@ -8,6 +8,9 @@ env:
   VITE_APP_HARVARD_API: ${{ vars.VITE_APP_HARVARD_API }}
   VITE_APP_HARVARD_API_KEY: ${{ secrets.VITE_APP_HARVARD_API_KEY }}
   VITE_APP_VAM_API: ${{ vars.VITE_APP_VAM_API }}
+  VITE_APP_TRADE_FEED: wss://ws-feed.exchange.coinbase.com
+  VITE_APP_TRADE_PRODUCT: BTC-USD
+  VITE_APP_TRADE_HISTORY: https://api.exchange.coinbase.com
 
 jobs:
   build_test:
@@ -100,7 +103,7 @@ jobs:
             https://ryandur.github.io/ChosenPicachu/
             https://ryandur.github.io/ChosenPicachu/gallery/?page=1&size=8&tab=vam
             https://ryandur.github.io/ChosenPicachu/users/
-            https://ryandur.github.io/ChosenPicachu/about/
+            https://ryandur.github.io/ChosenPicachu/demos/
             https://ryandur.github.io/ChosenPicachu/games/
           configPath: ./lighthouserc.json
           runs: 3
