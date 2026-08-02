@@ -17,16 +17,18 @@ const interceptedNetwork = () => {
 beforeAll(realSockets);
 afterAll(interceptedNetwork);
 
-const tradeFrame = (price: number): string => JSON.stringify({
+const tradeFrameWith = (p: string, id: number): string => JSON.stringify({
   e: 'trade',
   E: 1700000000001,
   s: 'BTCUSDT',
-  t: 900000 + price,
-  p: String(price),
+  t: id,
+  p,
   q: '0.10',
   T: 1700000000000,
   m: false
 });
+
+const tradeFrame = (price: number): string => tradeFrameWith(String(price), 900000 + price);
 
 const nonTradeFrame = (price: number): string => JSON.stringify({
   e: 'aggTrade',
@@ -124,6 +126,30 @@ describe('the home page', () => {
 
       await waitFor(() =>
         expect(screen.getByRole('status')).toHaveTextContent('live feed unavailable'));
+    });
+
+    test('a feed that dies mid-stream tells the user, keeping the last trades', async () => {
+      const feed = await streamingFeed();
+
+      renderHome(urlOf(feed));
+
+      await feedIsLive();
+      broadcast(feed, [tradeFrame(50001)]);
+      await waitFor(() => expect(shownPrices()).toEqual(['50001']));
+      feed.clients.forEach(socket => socket.close());
+      await waitFor(() =>
+        expect(screen.getByRole('status')).toHaveTextContent('live feed unavailable'));
+      expect(shownPrices()).toEqual(['50001']);
+    });
+
+    test('a trade whose price is not a number never reaches the user', async () => {
+      const feed = await streamingFeed();
+
+      renderHome(urlOf(feed));
+
+      await feedIsLive();
+      broadcast(feed, [tradeFrameWith('not a number', 900042), tradeFrame(50001)]);
+      await waitFor(() => expect(shownPrices()).toEqual(['50001']));
     });
 
     test('leaving the page closes the socket', async () => {

@@ -29,6 +29,7 @@ const onFrame = (setLiveTrades: SetLiveTrades) => (event: MessageEvent): void =>
 
 const beginStreaming = (setLiveTrades: SetLiveTrades) => (socket: WebSocket): void => {
   socket.addEventListener('message', onFrame(setLiveTrades));
+  socket.addEventListener('close', () => setLiveTrades(failed));
   setLiveTrades(streaming);
 };
 
