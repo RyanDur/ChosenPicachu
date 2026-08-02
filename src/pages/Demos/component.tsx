@@ -70,6 +70,7 @@ export const DemosPage = () => {
               <NaturalZIndex className='card'/>
             </>,
             [DemoTopics.charts]: <>
+              <h2 className="charts-heading">{`Bitcoin, live — every ${tradeProduct} trade on Coinbase`}</h2>
               <LiveTrades {...liveTrades}/>
               <Candles trades={liveTrades.trades}/>
             </>,

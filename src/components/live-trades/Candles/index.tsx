@@ -35,9 +35,10 @@ export const Candles: FC<Props> = ({trades}) => {
     <details>
       <summary>what am I looking at?</summary>
       <p>
-        Each candle bundles 5 seconds of trades: the body spans open to close
-        (green when rising, orange when falling) and the wicks reach the high and low.
-        The bars beneath show how much was traded in each bundle.
+        The same measurement, bundled: each candle summarizes 5 seconds of trades —
+        the body spans the first to the last price (green when it rose, orange when
+        it fell) and the wicks reach the extremes. The bars beneath show how much
+        bitcoin changed hands in each bundle.
       </p>
     </details>
   </section>;

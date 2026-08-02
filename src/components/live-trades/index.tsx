@@ -66,10 +66,11 @@ export const LiveTrades: FC<LiveTradesState> = ({status, trades}) => {
     <details>
       <summary>what am I looking at?</summary>
       <p>
-        Each point is one live trade, newest at the right. The dotted line marks
-        the first price in the window and the color shows the trend against it.
-        High and low mark the window&apos;s range; the headline is the latest
-        price and how far it has moved.
+        This measures the price of one bitcoin in US dollars. Each point is one
+        live trade — someone paid that price — newest at the right. The dotted
+        line marks the first price in the window and the color shows the trend
+        against it. High and low mark the window&apos;s range; the headline is
+        the latest price paid and how far it has moved.
       </p>
     </details>
   </section>;

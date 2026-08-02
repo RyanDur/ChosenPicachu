@@ -220,6 +220,14 @@ describe('the demos page', () => {
       await waitFor(() => expect(drawnPoints()).toHaveLength(5));
     });
 
+    test('the charts name what they measure', async () => {
+      const feed = await streamingFeed();
+
+      renderCharts(urlOf(feed));
+
+      expect(await screen.findByRole('heading', {name: /BTC-USD/})).toBeVisible();
+    });
+
     test('the charts explain what they show', async () => {
       const feed = await streamingFeed();
 
@@ -228,9 +236,9 @@ describe('the demos page', () => {
       const explainers = await screen.findAllByText('what am I looking at?');
       expect(explainers).toHaveLength(2);
       await userEvent.click(explainers[0]);
-      expect(screen.getByText(/Each point is one live trade/)).toBeVisible();
+      expect(screen.getByText(/price of one bitcoin in US dollars/)).toBeVisible();
       await userEvent.click(explainers[1]);
-      expect(screen.getByText(/Each candle bundles 5 seconds/)).toBeVisible();
+      expect(screen.getByText(/how much bitcoin changed hands/)).toBeVisible();
     });
 
     test('the user reads the window as candles with their traded volume', async () => {
