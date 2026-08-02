@@ -1,4 +1,4 @@
-import {has, is, notEmpty} from '@ryandur/sand';
+import {has, notEmpty} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {Column, Row} from './types';
 import {Dispatch, FC, KeyboardEvent, PointerEvent, SetStateAction, useRef, useState} from 'react';
@@ -40,9 +40,6 @@ const columnSlice = (section: HTMLTableSectionElement, position: number): HTMLTa
     }
     return group;
 };
-
-const blankCarriage = new Image(1, 1);
-blankCarriage.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
 const columnGhost = (source: HTMLTableElement, position: number): HTMLTableElement => {
     const ghost = document.createElement('table');
@@ -146,11 +143,9 @@ export const Table: FC<TableProps> = (
     const [shares, setShares] = useState<Shares>(() => seededShares(columns));
     const [grip, setGrip] = useState<Grip>(null);
     const [order, setOrder] = useState<string[]>(() => columns.map(({column}) => String(column)));
-    const [armed, setArmed] = useState<string>();
     const [dragged, setDragged] = useState<string>();
-    const [overIndex, setOverIndex] = useState(-1);
+    const landing = useRef(-1);
     const ghost = useRef<HTMLTableElement>(null);
-    const follower = useRef<(shadowing: DragEvent) => void>(() => undefined);
     const byKey = new Map(columns.map(definition => [String(definition.column), definition]));
     const ordered = order.map(key => byKey.get(key)).filter(has);
     const apportioned = ordered.filter(({width}) => has(width)).map(({column}) => String(column));
@@ -163,29 +158,52 @@ export const Table: FC<TableProps> = (
     };
     const anchored = (position: number): boolean =>
         position === 0 || position === ordered.length - 1;
-    const landedAt = (index: number): void => {
+    const headerUnder = (x: number, y: number): number => {
+        const struck = document.elementFromPoint(x, y)?.closest('th')?.dataset.column;
+        return has(struck) ? order.indexOf(struck) : -1;
+    };
+    const landed = (key: string, index: number): void => {
         const between = Math.min(Math.max(index, 1), ordered.length - 2);
-        if (has(draggableColumns) && has(dragged)) {
-            if (eager) {
-                setOrder(previous => array.moveToIndex(between, dragged, previous));
-            } else {
-                setOverIndex(between);
-            }
+        if (eager) {
+            setOrder(previous => array.moveToIndex(between, key, previous));
+        } else {
+            landing.current = between;
         }
     };
-    const released = (): void => {
-        if (has(draggableColumns) && !eager && has(dragged) && overIndex >= 0) {
-            setOrder(previous => array.moveToIndex(overIndex, dragged, previous));
+    const lifted = (key: string, position: number) => (event: PointerEvent<HTMLElement>): void => {
+        const surface = event.currentTarget.closest('table');
+        if (has(surface)) {
+            const shade = columnGhost(surface, position);
+            document.body.appendChild(shade);
+            shade.style.left = `${event.clientX - shade.offsetWidth / 2}px`;
+            shade.style.top = `${event.clientY - 16}px`;
+            ghost.current = shade;
         }
-        ghost.current?.remove();
-        document.removeEventListener('dragover', follower.current);
-        setDragged(undefined);
-        setArmed(undefined);
-        setOverIndex(-1);
+        setDragged(key);
+        const carried = (moving: globalThis.PointerEvent): void => {
+            ghost.current?.style.setProperty('left', `${moving.clientX - ghost.current.offsetWidth / 2}px`);
+            ghost.current?.style.setProperty('top', `${moving.clientY - 16}px`);
+            const struck = headerUnder(moving.clientX, moving.clientY);
+            if (struck >= 0) {
+                landed(key, struck);
+            }
+        };
+        const released = (): void => {
+            if (!eager && landing.current >= 0) {
+                setOrder(previous => array.moveToIndex(landing.current, key, previous));
+            }
+            ghost.current?.remove();
+            ghost.current = null;
+            landing.current = -1;
+            setDragged(undefined);
+            document.removeEventListener('pointermove', carried);
+            document.removeEventListener('pointerup', released);
+        };
+        document.addEventListener('pointermove', carried);
+        document.addEventListener('pointerup', released);
     };
 
     return <table id={id}
-                  onDragOver={event => event.preventDefault()}
                   className={join(
                       tableClassName,
                       notEmpty(apportioned) && 'apportioned',
@@ -207,32 +225,8 @@ export const Table: FC<TableProps> = (
                        )}
                        key={key}
                        scope="col"
-                       draggable={travels && armed === key}
-                       onMouseDown={travels ? () => setArmed(key) : undefined}
-                       onDragStart={travels ? event => {
-                           setDragged(key);
-                           const surface = event.currentTarget.closest('table');
-                           const carriage = event.dataTransfer ?? event.nativeEvent.dataTransfer;
-                           if (is(carriage) && has(surface)) {
-                               const shade = columnGhost(surface, position);
-                               document.body.appendChild(shade);
-                               const carry = (shadowing: {clientX: number; clientY: number}): void => {
-                                   shade.style.left = `${shadowing.clientX - shade.offsetWidth / 2}px`;
-                                   shade.style.top = `${shadowing.clientY - 16}px`;
-                               };
-                               carry(event);
-                               carriage.effectAllowed = 'move';
-                               carriage.setDragImage(blankCarriage, 0, 0);
-                               ghost.current = shade;
-                               follower.current = carry;
-                               document.addEventListener('dragover', carry);
-                           }
-                       } : undefined}
-                       onDragOver={event => {
-                           event.preventDefault();
-                           landedAt(position);
-                       }}
-                       onDragEnd={travels ? released : undefined}
+                       data-column={key}
+                       onPointerDown={travels ? lifted(key, position) : undefined}
                        style={has(share) ? {width: `${share}%`} : undefined}>
                 {display}
                 {has(share) && apportioned.length > 1 &&

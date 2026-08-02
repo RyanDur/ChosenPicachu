@@ -1,4 +1,4 @@
-import {createEvent, fireEvent, render, screen, within} from '@testing-library/react';
+import {fireEvent, render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {Table} from '../index';
 import {
@@ -194,46 +194,48 @@ describe('drag sortable columns', () => {
   const sourceTable = () => screen.getAllByRole('table')[0];
   const headerTexts = () => within(sourceTable()).getAllByRole('columnheader').map(header => header.textContent);
   const header = (name: string) => within(sourceTable()).getByRole('columnheader', {name: new RegExp(`^${name}`)});
+  const lift = (name: string) => fireEvent.pointerDown(header(name), {clientX: 100, clientY: 50, pointerId: 1});
+  const carryOver = (target: string) => {
+    document.elementFromPoint = () => header(target);
+    fireEvent.pointerMove(document.body, {clientX: 300, clientY: 200, pointerId: 1});
+  };
+  const drop = () => fireEvent.pointerUp(document.body, {pointerId: 1});
 
   afterEach(() => document.body.querySelector(':scope > table')?.remove());
-  const drag = (name: string) => {
-    fireEvent.mouseDown(header(name));
-    fireEvent.dragStart(header(name));
-  };
 
   test('an eager column follows the pointer as it crosses its neighbors', () => {
     render(<Table columns={sized} rows={people} draggableColumns="eager-move"/>);
 
-    drag('age');
-    fireEvent.dragOver(header('city'));
+    lift('age');
+    carryOver('city');
 
     expect(headerTexts()).toEqual(['name', 'city', 'age', 'job']);
-    const cells = within(screen.getAllByRole('rowgroup')[1]).getAllByRole('cell');
+    const cells = within(within(sourceTable()).getAllByRole('rowgroup')[1]).getAllByRole('cell');
     expect(cells.map(cell => cell.textContent)).toEqual(['Ada', 'London', '36', 'Analyst']);
   });
 
   test('a lazy column waits for the drop', () => {
     render(<Table columns={sized} rows={people} draggableColumns="lazy-move"/>);
 
-    drag('age');
-    fireEvent.dragOver(header('city'));
+    lift('age');
+    carryOver('city');
     expect(headerTexts()).toEqual(['name', 'age', 'city', 'job']);
 
-    fireEvent.dragEnd(header('age'));
+    drop();
     expect(headerTexts()).toEqual(['name', 'city', 'age', 'job']);
   });
 
   test('a hiding column vanishes while it travels and returns on arrival', () => {
     render(<Table columns={sized} rows={people} draggableColumns="hide-eager-move"/>);
 
-    drag('city');
+    lift('city');
     expect(header('city').classList).toContain('hide');
-    within(screen.getAllByRole('rowgroup')[1]).getAllByRole('cell')
+    within(within(sourceTable()).getAllByRole('rowgroup')[1]).getAllByRole('cell')
       .filter(cell => cell.textContent === 'London')
       .forEach(cell => expect(cell.classList).toContain('hide'));
 
-    fireEvent.dragOver(header('age'));
-    fireEvent.dragEnd(header('city'));
+    carryOver('age');
+    drop();
     expect(header('city').classList).not.toContain('hide');
     expect(headerTexts()).toEqual(['name', 'city', 'age', 'job']);
   });
@@ -245,21 +247,21 @@ describe('drag sortable columns', () => {
     expect(header('job').classList).not.toContain('grabbable');
     expect(header('age').classList).toContain('grabbable');
 
-    drag('name');
-    fireEvent.dragOver(header('city'));
+    lift('name');
+    carryOver('city');
     expect(headerTexts()).toEqual(['name', 'age', 'city', 'job']);
+    drop();
 
-    drag('city');
-    fireEvent.dragOver(header('name'));
+    lift('city');
+    carryOver('name');
     expect(headerTexts()).toEqual(['name', 'city', 'age', 'job']);
+    drop();
   });
 
   test('the travelling ghost carries the whole column', () => {
     render(<Table columns={sized} rows={people} draggableColumns="eager-move"/>);
 
-    fireEvent.mouseDown(header('age'));
-    const dataTransfer = {effectAllowed: '', setDragImage: vi.fn()};
-    fireEvent.dragStart(header('age'), {dataTransfer});
+    lift('age');
 
     const ghost = document.body.querySelector(':scope > table');
     expect(ghost).not.toBeNull();
@@ -268,24 +270,21 @@ describe('drag sortable columns', () => {
     expect(ghost?.querySelectorAll('tbody tr')).toHaveLength(1);
     expect(ghost?.textContent).toContain('age');
     expect(ghost?.textContent).toContain('36');
-    expect(dataTransfer.setDragImage).toHaveBeenCalledWith(expect.any(Image), 0, 0);
-    const glide = createEvent.dragOver(document.body);
-    Object.defineProperty(glide, 'clientX', {value: 300});
-    Object.defineProperty(glide, 'clientY', {value: 200});
-    fireEvent(document.body, glide);
+
+    document.elementFromPoint = () => null;
+    fireEvent.pointerMove(document.body, {clientX: 300, clientY: 200, pointerId: 1});
     expect(ghost).toHaveStyle({top: '184px'});
 
-    fireEvent.dragEnd(header('age'));
+    drop();
     expect(document.body.querySelector(':scope > table')).toBeNull();
   });
 
   test('columns hold still without the opt-in', () => {
     render(<Table columns={sized} rows={people}/>);
 
-    fireEvent.mouseDown(header('age'));
-    fireEvent.dragStart(header('age'));
-    fireEvent.dragOver(header('city'));
-    fireEvent.dragEnd(header('age'));
+    lift('age');
+    carryOver('city');
+    drop();
 
     expect(headerTexts()).toEqual(['name', 'age', 'city', 'job']);
   });

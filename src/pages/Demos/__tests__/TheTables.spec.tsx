@@ -95,10 +95,10 @@ describe('the tables demo', () => {
 
     const header = (name: string) =>
       within(card).getByRole('columnheader', {name: new RegExp(`^${name}`)});
-    fireEvent.mouseDown(header('vwap'));
-    fireEvent.dragStart(header('vwap'));
-    fireEvent.dragOver(header('window'));
-    fireEvent.dragEnd(header('vwap'));
+    fireEvent.pointerDown(header('vwap'), {clientX: 100, clientY: 50, pointerId: 1});
+    document.elementFromPoint = () => header('window');
+    fireEvent.pointerMove(document.body, {clientX: 40, clientY: 50, pointerId: 1});
+    fireEvent.pointerUp(document.body, {pointerId: 1});
 
     const headerTexts = within(card).getAllByRole('columnheader').map(head => head.textContent);
     expect(headerTexts).toEqual(['window', 'vwap', 'trades', 'buys', 'sells', 'volume', 'change']);
