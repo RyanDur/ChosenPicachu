@@ -3,6 +3,9 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "browserslist": [
+    "defaults"
+  ],
   "scripts": {
     "dev": "vite",
     "test": "vitest",
@@ -38,6 +41,7 @@
     "@types/throttle-debounce": "^5.0.2",
     "@types/ws": "^8.18.1",
     "@vitejs/plugin-react": "^6.0.3",
+    "autoprefixer": "^10.5.4",
     "jsdom": "^29.1.1",
     "msw": "^2.15.0",
     "oxlint": "^1.74.0",
