@@ -46,7 +46,7 @@ blankCarriage.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAAL
 
 const columnGhost = (source: HTMLTableElement, position: number): HTMLTableElement => {
     const ghost = document.createElement('table');
-    ghost.className = source.className;
+    ghost.className = join(source.className, 'column-ghost');
     const width = source.rows[0]?.cells[position]?.offsetWidth ?? 0;
     for (const section of [source.tHead, ...source.tBodies]) {
         if (has(section)) {
@@ -218,7 +218,7 @@ export const Table: FC<TableProps> = (
                                document.body.appendChild(shade);
                                const carry = (shadowing: {clientX: number; clientY: number}): void => {
                                    shade.style.left = `${shadowing.clientX - shade.offsetWidth / 2}px`;
-                                   shade.style.top = `${shadowing.clientY + 16}px`;
+                                   shade.style.top = `${shadowing.clientY - 16}px`;
                                };
                                carry(event);
                                carriage.effectAllowed = 'move';
