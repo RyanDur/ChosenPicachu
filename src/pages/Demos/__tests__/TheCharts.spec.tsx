@@ -20,21 +20,21 @@ const interceptedNetwork = () => {
 beforeAll(realSockets);
 afterAll(interceptedNetwork);
 
-const tradeFrameWith = (price: string, id: number, at = 1700000000000): string => JSON.stringify({
+const tradeFrameWith = (price: string, id: number, at = 1700000000000, size = '0.01'): string => JSON.stringify({
   type: 'match',
   trade_id: id,
   maker_order_id: 'maker',
   taker_order_id: 'taker',
   side: 'buy',
-  size: '0.01',
+  size,
   price,
   product_id: 'BTC-USD',
   sequence: id,
   time: new Date(at).toISOString()
 });
 
-const tradeFrame = (price: number, at = 1700000000000): string =>
-  tradeFrameWith(String(price), 900000 + price, at);
+const tradeFrame = (price: number, at = 1700000000000, size = '0.01'): string =>
+  tradeFrameWith(String(price), 900000 + price, at, size);
 
 const nonTradeFrame = (price: number): string => JSON.stringify({
   type: 'ticker',
@@ -92,6 +92,11 @@ const feedIsLive = async (): Promise<void> => {
 
 
 
+const drawnCandleParts = (selector: string): number => {
+  const region = screen.getByRole('region', {name: 'candles'});
+  return region.querySelectorAll(selector).length;
+};
+
 const drawnPoints = (): string[] => {
   const region = screen.getByRole('region', {name: 'live trades'});
   return region.querySelector('polyline')?.getAttribute('points')?.split(' ') ?? [];
@@ -129,7 +134,7 @@ describe('the demos page', () => {
 
       expect(screen.getByRole('status')).toHaveTextContent('connecting to the live feed…');
       await feedIsLive();
-      broadcast(feed, [50001, 50002, 50003, 50004, 50005].map(tradeFrame));
+      broadcast(feed, [50001, 50002, 50003, 50004, 50005].map(price => tradeFrame(price)));
       await waitFor(() => expect(screen.getByText('$50,005.00')).toBeVisible());
       expect(screen.getByText('+$4.00')).toBeVisible();
     });
@@ -211,8 +216,39 @@ describe('the demos page', () => {
       renderCharts(urlOf(feed));
 
       await feedIsLive();
-      broadcast(feed, [50001, 50002, 50003, 50004, 50005].map(tradeFrame));
+      broadcast(feed, [50001, 50002, 50003, 50004, 50005].map(price => tradeFrame(price)));
       await waitFor(() => expect(drawnPoints()).toHaveLength(5));
+    });
+
+    test('the charts explain what they show', async () => {
+      const feed = await streamingFeed();
+
+      renderCharts(urlOf(feed));
+
+      const explainers = await screen.findAllByText('what am I looking at?');
+      expect(explainers).toHaveLength(2);
+      await userEvent.click(explainers[0]);
+      expect(screen.getByText(/Each point is one live trade/)).toBeVisible();
+      await userEvent.click(explainers[1]);
+      expect(screen.getByText(/Each candle bundles 5 seconds/)).toBeVisible();
+    });
+
+    test('the user reads the window as candles with their traded volume', async () => {
+      const feed = await streamingFeed();
+      const bucketStart = 1700000000000;
+
+      renderCharts(urlOf(feed));
+
+      await feedIsLive();
+      broadcast(feed, [
+        tradeFrame(50001, bucketStart, '0.01'),
+        tradeFrame(50003, bucketStart + 1000, '0.02'),
+        tradeFrame(50002, bucketStart + 2000, '0.01'),
+        tradeFrame(50004, bucketStart + 5000, '0.03'),
+        tradeFrame(50000, bucketStart + 6000, '0.01')
+      ]);
+      await waitFor(() => expect(drawnCandleParts('rect.body')).toBe(2));
+      expect(drawnCandleParts('rect.volume')).toBe(2);
     });
 
     test('the chart tells the user its price and time range', async () => {
