@@ -19,7 +19,7 @@
     outline: none;
     border: none;
     height: var(--base-x-5);
-    font-size: var(--text-x-2_5);
+    font-size: var(--base-x-2_5);
     color: var(--void);
 
     &:active {

@@ -7,7 +7,7 @@ html {
 }
 
 body {
-  font-size: var(--text-x-2);
+  font-size: var(--base-x-2);
   font-family: Arial, sans-serif;
   color: var(--void);
 }
@@ -23,7 +23,7 @@ datalist {
 input,
 select,
 textarea {
-  font-size: var(--text-x-2);
+  font-size: var(--base-x-2);
 }
 
 body,
@@ -115,6 +115,7 @@ a {
   --base: 0.8rem;
   --base-x-1_25: 1rem;
   --base-x-1_5: 1.2rem;
+  --base-x-1_75: 1.4rem;
   --base-x-2: 1.6rem;
   --base-x-2_25: 1.8rem;
   --base-x-2_5: 2rem;
@@ -153,21 +154,11 @@ a {
   --base-x-100: 80rem;
   --base-x-172_5: 138rem;
 
-  /* type — same rhythm as spacing; aliases state the intention */
-  --text: 0.8rem;
-  --text-x-1_5: 1.2rem;
-  --text-x-1_75: 1.4rem;
-  --text-x-2: 1.6rem;
-  --text-x-2_25: 1.8rem;
-  --text-x-2_5: 2rem;
-  --text-x-3: 2.4rem;
-  --text-x-4: 3.2rem;
-  --text-x-10: 8rem;
-  --text-x-11: 8.8rem;
-  --text-caption: var(--text-x-1_5);
-  --text-body: var(--text-x-1_75);
-  --text-title: var(--text-x-2_25);
-  --text-headline: var(--text-x-3);
+  /* type — the one scale, renamed for intent */
+  --text-caption: var(--base-x-1_5);
+  --text-body: var(--base-x-1_75);
+  --text-title: var(--base-x-2_25);
+  --text-headline: var(--base-x-3);
 
   /* chrome — px on purpose: hairlines and radii must not scale with text */
   --hairline: 1px;

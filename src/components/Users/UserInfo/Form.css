@@ -86,7 +86,7 @@
 
       &:focus {
         outline: none;
-        font-size: var(--text-x-2);
+        font-size: var(--base-x-2);
       }
 
       &:hover,
