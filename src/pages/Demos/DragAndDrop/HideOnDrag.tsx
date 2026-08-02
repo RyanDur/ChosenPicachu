@@ -14,7 +14,7 @@ export const HideOnDrag: FC<DraggableListItemProps> = ({
 
   return <Draggable
     {...rest}
-    className={classNames(hide, className)}
+    className={classNames('hide-on-drag', hide, className)}
     onDragEnd={(event) => {
       onDragEnd?.(event);
       updateHide(undefined);

@@ -38,6 +38,7 @@ export const FancyInput: FC<PropsWithChildren<FancyTextInputProps>> = (
     value = ''
   }
 ) => <article id={id} className={join(
+  'fancy-input',
   'fancy',
   value && 'not-empty',
   className

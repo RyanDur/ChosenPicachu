@@ -8,7 +8,7 @@ export const SortableListEagerMove: FC<{ list: Set<string> }> = ({list}) => {
   const [currentList, updateList] = useState<string[]>([...list]);
   const [draggedItem, updateDraggedItem] = useState<string>();
 
-  return <ul className='sortable-list'>{
+  return <ul className='sortable-list-eager-move sortable-list'>{
     currentList.map((item, index) =>
       <li className='item' key={item}>
         <Draggable

@@ -23,7 +23,7 @@
     color: var(--void);
 
     &:active {
-      box-shadow: inset 0 0 5px var(--charcoal);
+      box-shadow: var(--press-glow-soft);
     }
 
     &:hover,

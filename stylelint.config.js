@@ -22,13 +22,14 @@ export default {
     'scale-unlimited/declaration-strict-value': [
       [
         'font-size', '/^padding/', '/^margin/', '/gap$/',
-        'color', '/-color$/', 'fill', 'stroke', 'background', 'background-image'
+        'color', '/-color$/', 'fill', 'stroke', 'background', 'background-image', '/^border/'
       ],
       {
         ignoreFunctions: false,
         ignoreValues: [
           '0', 'auto', 'inherit', 'initial', 'normal', 'unset', 'none',
           '62.5%', '100%', 'transparent', 'currentcolor', 'no-repeat', 'center', 'cover',
+          'solid', 'dashed', 'dotted', 'collapse', '50%',
           '/^calc\\(/', '/^url\\(/', '/^linear-gradient/', '/^radial-gradient/'
         ]
       }

@@ -36,7 +36,7 @@ export const Image: FC<ImageProps> = (
 
     return (errored || !piece.image) ?
         <img alt="oops"
-             className="error"
+             className="image error"
              src={noImage}/> :
         (<>
             <ConditionalLink enabled={linkEnabled} area={tab ?? ''}>

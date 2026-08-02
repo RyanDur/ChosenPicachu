@@ -43,7 +43,7 @@
   #details-cell {
     #details {
       resize: vertical;
-      border-radius: 1rem;
+      border-radius: var(--radius);
       min-height: var(--base-x-0_5);
       position: relative;
 
@@ -106,7 +106,7 @@
     }
   }
 
-  &:not(.read-only) *:required + label::after {
+  &:not(.read-only) *:required + .fancy-title::after {
     content: "*";
     color: var(--internationl-orange-engineering);
   }

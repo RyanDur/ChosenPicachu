@@ -1,3 +1,4 @@
+import {join} from '@components/class-names';
 import {Navigate, Outlet, useMatches} from 'react-router';
 import {Fragment} from 'react';
 import {SideNav} from '@pages/BasePage/SideNav';
@@ -16,7 +17,7 @@ export const Shell = () => {
 
   return <Provider>
     <HeaderRegion/>
-    <main className={mainClassName}>
+    <main className={join('app-main', mainClassName)}>
       <Outlet/>
     </main>
     {AsideRegion !== undefined && <article id="filter">

@@ -9,7 +9,7 @@ export const HideElemOnDragSortableListEagerMove: FC<{ list: Set<string> }> = ({
   const [draggedItem, updateDraggedItem] = useState<string>();
 
   return <ul
-    className='sortable-list'>{
+    className='hide-elem-on-drag-sortable-list-eager-move sortable-list'>{
     currentList.map((item, index) =>
       <li className='item' key={item}>
         <HideOnDrag

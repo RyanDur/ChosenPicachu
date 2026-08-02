@@ -49,7 +49,7 @@ export const ExclusiveToggleAccordion: FC<PropsWithClassName & ContentProps> = (
   content
 }) => <article className={className}>
   <header className="exclusive-checkbox-header">
-    <h2 className="heading">Exclusive accordion using details elements</h2>
+    <h2>Exclusive accordion using details elements</h2>
   </header>
   <ul className='new-accordion'>
     {content.map(({value, key}) =>
@@ -69,7 +69,7 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
   const [checked, updateChecked] = useState<string>();
   const [tab, updateTab] = useState<'animated' | 'static'>('animated');
 
-  return <article className={classNames('exclusive-checkbox-toggle-accordion', className)}>
+  return <article className={classNames('exclusive-checkbox-toggle-accordion', 'toggle-accordion', className)}>
     <header className="exclusive-checkbox-header">
       <h2>Exclusive accordion using checkboxes</h2>
       <article className='pill-tabs-with-glider'>
@@ -102,7 +102,7 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
         <li key={key}>
           <article className={classNames('exclusive-fold', tab, 'reveal')}>
             <header className="info-header">
-              <h3 className="heading">{key}</h3>
+              <h3>{key}</h3>
               <label className="info-label">
                 {key === checked ? 'Close' : 'Open'}
                 <input
@@ -133,7 +133,7 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
 }) => {
   const [checked, updateChecked] = useState<string>();
   const [tab, updateTab] = useState<'animated' | 'static'>('animated');
-  return <article className={classNames('exclusive-checkbox-toggle-accordion', className)}>
+  return <article className={classNames('exclusive-radio-toggle-accordion', 'toggle-accordion', className)}>
     <header className="exclusive-checkbox-header">
       <h2>Exclusive accordion using radio group</h2>
       <article className='pill-tabs'>
@@ -166,7 +166,7 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
         <li key={key}>
           <article className={classNames('exclusive-fold', tab === 'animated' && 'animated drawer')}>
             <header className="info-header">
-              <h3 className="heading">{key}</h3>
+              <h3>{key}</h3>
               <label className="info-label">
                 {key === checked ? 'Close' : 'Open'}
                 <input

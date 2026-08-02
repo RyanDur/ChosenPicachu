@@ -45,7 +45,7 @@
         }
     }
 
-    main {
+    .app-main {
         grid-area: main;
         display: flex;
         align-items: center;

@@ -18,9 +18,6 @@
   right: 1000vw;
 }
 
-.fit {
-  height: fit-content;
-}
 
 .ellipsis {
   text-overflow: ellipsis;
@@ -28,17 +25,11 @@
   white-space: nowrap;
 }
 
-.fill {
-  height: 100%;
-}
 
 .rounded-corners {
   border-radius: var(--radius-card);
 }
 
-.gutter {
-  padding: var(--base-x-4);
-}
 
 @media (max-width: 1000px) {
   .card {

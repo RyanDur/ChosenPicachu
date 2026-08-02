@@ -21,6 +21,16 @@
   }
 
 
+  .span {
+    display: block;
+    width: fit-content;
+    min-height: var(--base-x-2);
+    margin: var(--base-x-0_5) auto 0;
+    font-size: var(--text-caption);
+    color: var(--charcoal);
+    opacity: 0.7;
+  }
+
   .chart-stage {
     position: relative;
   }

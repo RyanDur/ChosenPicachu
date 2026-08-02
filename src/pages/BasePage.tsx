@@ -11,5 +11,5 @@ export const BasePage: FC<PropsWithChildren<{ title: string }>> = ({title, child
 
     <SideNav/>
 
-    <main>{children}</main>
+    <main className="app-main">{children}</main>
   </>;

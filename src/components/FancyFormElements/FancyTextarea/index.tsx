@@ -17,6 +17,7 @@ export const FancyTextarea: FC<FancyTextareaProps> = (
     const [focused, updateDetailsFocus] = useState(false);
 
     return <article id="details-cell" className={join(
+        'fancy-textarea',
         'fancy',
         focused && 'focus',
         value && 'not-empty',

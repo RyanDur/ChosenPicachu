@@ -47,7 +47,7 @@ export const Search: FC<Props> = ({id}) => {
     <button className="reset-query" type="reset" aria-label="reset search"/>
     <button className="submit-query" disabled={!searchString.length} type="submit"
             aria-label="submit search"/>
-    <datalist id="search-options">
+    <datalist id="search-options" className="search-options">
       {searchOptions.map((searchOption, index) =>
         <option value={searchOption} key={index}>{searchOption}</option>)}
     </datalist>

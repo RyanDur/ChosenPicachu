@@ -16,6 +16,7 @@ export const Aggregations: FC<Props> = ({trades}) =>
   <section aria-label="live aggregations" className="aggregations card chart">
     <Table tableClassName="fancy-table"
            theadClassName="header"
+           thClassName="column-name"
            trClassName="row"
            tbodyClassName="body"
            cellClassName="cell"
