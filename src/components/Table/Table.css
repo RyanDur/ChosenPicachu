@@ -72,7 +72,8 @@
 }
 
 .sortable .hide {
-  opacity: 0.1%;
+  color: transparent;
+  border-bottom-color: transparent;
 }
 
 .grabbable {
