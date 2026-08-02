@@ -73,6 +73,9 @@
 
 .sortable .hide {
   color: transparent;
+}
+
+.fancy-table.sortable .hide {
   border-bottom-color: transparent;
 }
 
