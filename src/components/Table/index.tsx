@@ -103,6 +103,7 @@ export const Table: FC<TableProps> = (
     const [shares, setShares] = useState<Shares>(() => seededShares(columns));
     const [grip, setGrip] = useState<Grip>(null);
     const apportioned = columns.filter(({width}) => has(width)).map(({column}) => String(column));
+    const clipped = notEmpty(apportioned);
     const neighborOf = (key: string): string => {
         const index = apportioned.indexOf(key);
         return apportioned[index + 1] ?? apportioned[index - 1];
@@ -116,7 +117,7 @@ export const Table: FC<TableProps> = (
         )}>{columns.map(({display, column, className, width}) => {
             const key = String(column);
             const share = has(width) ? shares[key] : undefined;
-            return <th className={join(thClassName, cellClassName, className)}
+            return <th className={join(thClassName, cellClassName, className, clipped && 'clipped')}
                        key={key}
                        scope="col"
                        style={has(share) ? {width: `${share}%`} : undefined}>
@@ -141,7 +142,7 @@ export const Table: FC<TableProps> = (
             <tr className={join(trClassName, rowClassName)} key={rowNumber}>
                 {columns.map(({column}, columnNumber) => {
                     const cell = row[column];
-                    return <td className={join(tdClassName, cellClassName, cell.className)} key={columnNumber}>
+                    return <td className={join(tdClassName, cellClassName, cell.className, clipped && 'ellipsis')} key={columnNumber}>
                         {cell.display}
                     </td>;
                 })}</tr>

@@ -58,3 +58,8 @@
   table-layout: fixed;
   width: 100%;
 }
+
+.clipped {
+  overflow: hidden;
+  overflow-wrap: break-word;
+}
