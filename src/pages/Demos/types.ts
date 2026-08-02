@@ -5,6 +5,7 @@ export enum DemoTopics {
   zIndex = 'z-index',
   dragAndDrop = 'dragAndDrop',
   charts = 'charts',
+  tables = 'tables',
 }
 
 export const demoTopicParam: D.Decoder<DemoTopics> = D.literalUnion(...Object.values(DemoTopics));

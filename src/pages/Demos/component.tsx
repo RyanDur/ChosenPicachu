@@ -19,7 +19,8 @@ import {
 } from './DragAndDrop';
 import {DemoTopics, demoTopicParam} from './types';
 import {NaturalZIndex} from './ZIndexDemo';
-import {Aggregations, Candles, PriceChart} from './Charts';
+import {Candles, PriceChart} from './Charts';
+import {Aggregations} from './Tables';
 import {statusCopy, useLiveTrades} from './Charts/useLiveTrades';
 import {useEnv} from '@components/Env';
 
@@ -43,7 +44,8 @@ export const DemosPage = () => {
           {display: 'Accordions', param: DemoTopics.accordions},
           {display: 'Z-Index', param: DemoTopics.zIndex},
           {display: 'Drag and Drop', param: DemoTopics.dragAndDrop},
-          {display: 'Charts', param: DemoTopics.charts}
+          {display: 'Charts', param: DemoTopics.charts},
+          {display: 'Tables', param: DemoTopics.tables}
         ]}/>
       <section id='about'>
         {({
@@ -77,6 +79,8 @@ export const DemosPage = () => {
               </header>
               <PriceChart trades={liveTrades.trades}/>
               <Candles trades={liveTrades.trades}/>
+            </>,
+            [DemoTopics.tables]: <>
               <Aggregations trades={liveTrades.trades}/>
             </>,
             [DemoTopics.dragAndDrop]: <>
