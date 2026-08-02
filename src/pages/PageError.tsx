@@ -5,7 +5,7 @@ export const PageError = () => {
   console.error(error);
 
   return <main className="page-error in-view">
-    <h2>This room is closed.</h2>
+    <h2 className="heading">This room is closed.</h2>
     <p>Something broke on this page — the rest of the gallery still works.</p>
   </main>;
 };

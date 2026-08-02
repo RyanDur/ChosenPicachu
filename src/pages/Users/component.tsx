@@ -36,7 +36,7 @@ export const UsersPage: FC = () => {
 
   return <>
     <section id="user-info" className="user-info users card" key={currentUser?.id}>
-        <h2 className="title">User Information</h2>
+        <h2 className="title heading">User Information</h2>
         <UsersLinks.Provider value={{users: Paths.users}}><UserInformation currentUser={currentUser}
                          readOnly={mode === 'view'}
                          editing={mode === 'edit'}
@@ -48,7 +48,7 @@ export const UsersPage: FC = () => {
       </section>
 
       <section id="user-candidates" className="user-candidates users card">
-        <h2 className="title">User Candidates</h2>
+        <h2 className="title heading">User Candidates</h2>
         {mode === 'view' &&
             <Link to={Paths.users} id="add-new-user" className="button primary">Add New User</Link>}
         <Table

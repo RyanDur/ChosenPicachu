@@ -57,7 +57,7 @@ export const Candles: FC<Props> = ({trades}) => {
           )}
         </svg>
       </Axes>
-      <small className="span">
+      <small className="caption">
         {notEmpty(candles) ? captionFor(period, candles.length) : history.unavailable && 'history unavailable'}
       </small>
       {history.pending && <Loading className="chart-loading"/>}

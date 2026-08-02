@@ -9,6 +9,8 @@
 
     .title {
       width: 100%;
+      font-size: var(--base-x-4);
+      font-weight: bold;
     }
   }
   #side-nav {

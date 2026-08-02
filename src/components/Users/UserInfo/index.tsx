@@ -72,7 +72,7 @@ export const UserInformation: FC<FormProps> = (
                      event.currentTarget.classList.remove('invalid');
                  }}
                  onInvalid={event => event.currentTarget.classList.add('invalid')}>
-        <h3 id="name-title">User</h3>
+        <h3 id="name-title" className="subheading">User</h3>
         <FancyInput id="first-name-cell" inputId="first-name" required
                     value={user.info.firstName} readOnly={readOnly} autoFocus
                     onChange={event => dispatch(updateFirstName(event.currentTarget.value))}>
@@ -104,11 +104,11 @@ export const UserInformation: FC<FormProps> = (
             <img id="avatar" src={user.avatar} width="244" height="244" fetchPriority="high" alt="avatar"/>
         </button>
 
-        <h3 id="home-address-title">Home Address</h3>
+        <h3 id="home-address-title" className="subheading">Home Address</h3>
         <Address id="home-address" value={user.homeAddress} readOnly={readOnly} required
                  onChange={address => dispatch(updateHomeAddress(address))}/>
 
-        <h3 id="work-address-title">Work Address</h3>
+        <h3 id="work-address-title" className="subheading">Work Address</h3>
         <article id="same-as-home-cell" className={join(readOnly && 'read-only')}>
             <input id="same-as-home" type="checkbox" checked={sameAsHome} disabled={readOnly}
                    onChange={event => updateSameAsHome(event.currentTarget.checked)}/>
