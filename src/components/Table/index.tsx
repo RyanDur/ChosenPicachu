@@ -1,4 +1,4 @@
-import {has, notEmpty} from '@ryandur/sand';
+import {empty, has, notEmpty} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {Column, Row} from './types';
 import {Dispatch, FC, KeyboardEvent, PointerEvent, SetStateAction, useRef, useState} from 'react';
@@ -51,6 +51,9 @@ const columnGhost = (source: HTMLTableElement, position: number): HTMLTableEleme
         }
     }
     ghost.style.position = 'fixed';
+    ghost.style.top = '0';
+    ghost.style.left = '0';
+    ghost.style.willChange = 'transform';
     ghost.style.width = `${width}px`;
     ghost.style.background = 'var(--paper)';
     ghost.style.boxShadow = 'var(--lift-box-shadow)';
@@ -144,7 +147,7 @@ export const Table: FC<TableProps> = (
     const [grip, setGrip] = useState<Grip>(null);
     const [order, setOrder] = useState<string[]>(() => columns.map(({column}) => String(column)));
     const [dragged, setDragged] = useState<string>();
-    const landing = useRef(-1);
+    const landing = useRef('');
     const ghost = useRef<HTMLTableElement>(null);
     const byKey = new Map(columns.map(definition => [String(definition.column), definition]));
     const ordered = order.map(key => byKey.get(key)).filter(has);
@@ -158,50 +161,54 @@ export const Table: FC<TableProps> = (
     };
     const anchored = (position: number): boolean =>
         position === 0 || position === ordered.length - 1;
-    const headerUnder = (x: number, y: number): number => {
-        const struck = document.elementFromPoint(x, y)?.closest('th')?.dataset.column;
-        return has(struck) ? order.indexOf(struck) : -1;
-    };
-    const landed = (key: string, index: number): void => {
-        const between = Math.min(Math.max(index, 1), ordered.length - 2);
-        if (eager) {
-            setOrder(previous => array.moveToIndex(between, key, previous));
-        } else {
-            landing.current = between;
-        }
+    const headerUnder = (x: number, y: number): string =>
+        document.elementFromPoint(x, y)?.closest('th')?.dataset.column ?? '';
+    const rest = (key: string, struck: string) => (previous: string[]): string[] => {
+        const between = Math.min(Math.max(previous.indexOf(struck), 1), previous.length - 2);
+        return array.moveToIndex(between, key, previous);
     };
     const lifted = (key: string, position: number) => (event: PointerEvent<HTMLElement>): void => {
         event.preventDefault();
         const surface = event.currentTarget.closest('table');
+        let grip = 0;
         if (has(surface)) {
             const shade = columnGhost(surface, position);
             document.body.appendChild(shade);
-            shade.style.left = `${event.clientX - shade.offsetWidth / 2}px`;
-            shade.style.top = `${event.clientY - 16}px`;
+            grip = shade.offsetWidth / 2;
+            shade.style.transform = `translate(${event.clientX - grip}px, ${event.clientY - 16}px)`;
             ghost.current = shade;
         }
         setDragged(key);
+        let lastStruck = '';
         const carried = (moving: globalThis.PointerEvent): void => {
-            ghost.current?.style.setProperty('left', `${moving.clientX - ghost.current.offsetWidth / 2}px`);
-            ghost.current?.style.setProperty('top', `${moving.clientY - 16}px`);
+            ghost.current?.style.setProperty('transform',
+                `translate(${moving.clientX - grip}px, ${moving.clientY - 16}px)`);
             const struck = headerUnder(moving.clientX, moving.clientY);
-            if (struck >= 0) {
-                landed(key, struck);
+            if (empty(struck) || struck === key || struck === lastStruck) {
+                return;
+            }
+            lastStruck = struck;
+            if (eager) {
+                setOrder(rest(key, struck));
+            } else {
+                landing.current = struck;
             }
         };
         const released = (): void => {
-            if (!eager && landing.current >= 0) {
-                setOrder(previous => array.moveToIndex(landing.current, key, previous));
+            if (!eager && notEmpty(landing.current)) {
+                setOrder(rest(key, landing.current));
             }
             ghost.current?.remove();
             ghost.current = null;
-            landing.current = -1;
+            landing.current = '';
             setDragged(undefined);
             document.removeEventListener('pointermove', carried);
             document.removeEventListener('pointerup', released);
+            document.removeEventListener('pointercancel', released);
         };
         document.addEventListener('pointermove', carried);
         document.addEventListener('pointerup', released);
+        document.addEventListener('pointercancel', released);
     };
 
     return <table id={id}
