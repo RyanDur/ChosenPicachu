@@ -31,10 +31,24 @@ describe('the pill glider', () => {
     expect(onChoose).toHaveBeenCalledWith('hide-lazy');
   });
 
-  test('the glider slides to the chosen pill', () => {
-    const {container} = render(<PillGlider label="drag style" name="drag-style" options={styles}
-                                           chosen="hide-eager" onChoose={vi.fn()}/>);
+  test('the glider stretches and slides to the chosen pill', () => {
+    const {container, rerender} = render(
+      <PillGlider label="drag style" name="drag-style" options={styles}
+                  chosen="eager" onChoose={vi.fn()}/>);
+    const widths = [60, 50, 90, 80];
+    container.querySelectorAll('label').forEach((pill, index) => {
+      Object.defineProperty(pill, 'offsetWidth', {value: widths[index]});
+      Object.defineProperty(pill, 'offsetLeft', {
+        value: widths.slice(0, index).reduce((sum, width) => sum + width, 0)
+      });
+    });
 
-    expect(container.querySelector('.glider')).toHaveStyle({transform: 'translateX(200%)'});
+    rerender(<PillGlider label="drag style" name="drag-style" options={styles}
+                         chosen="hide-eager" onChoose={vi.fn()}/>);
+
+    expect(container.querySelector('.glider')).toHaveStyle({
+      width: '90px',
+      transform: 'translateX(110px)'
+    });
   });
 });
