@@ -8,18 +8,21 @@
   box-sizing: border-box;
 }
 
-html, body, div, span, iframe,
+/* Elements with load-bearing UA styles stay untouched on purpose:
+   dialog (auto-centering), template and datalist (hidden by default),
+   progress and meter (native widgets), [popover] hiding on any element. */
+html, body, main, div, span, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, address, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
+a, abbr, address, cite, code, data,
+del, dfn, em, img, picture, ins, kbd, q, s, samp,
 small, strike, strong, sub, sup, var,
 b, u, i,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
 article, aside, canvas, details, embed,
-figure, figcaption, footer, header,
-menu, nav, output, ruby, section, summary,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, search, section, summary,
 time, mark, audio, video {
   margin: 0;
   padding: 0;
