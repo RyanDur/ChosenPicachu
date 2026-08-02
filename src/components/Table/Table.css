@@ -1,5 +1,6 @@
 .fancy-table {
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
 
   .cell {
     border-right: var(--hairline) solid var(--charcoal);
