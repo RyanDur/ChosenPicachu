@@ -41,7 +41,8 @@ export const Candles: FC<Props> = ({trades}) => {
             low={notEmpty(candles) ? Math.min(...candles.map(candle => candle.low)) : 0}
             times={candles.map(candle => candle.openedAt)}
             pattern={timePattern[period]}
-            tickEvery={tickEveryMs[period]}>
+            tickEvery={tickEveryMs[period]}
+            headroomMs={2 * bucketMs[period]}>
         <svg aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${CANDLE_HEIGHT}`}>
           {bodies.map(shape => <g key={shape.x} className={shape.direction}>
             <line x1={shape.center} y1={shape.wickTop} x2={shape.center} y2={shape.wickBottom}/>

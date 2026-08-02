@@ -54,7 +54,7 @@ export const LiveTrades: FC<Props> = ({trades}) => {
   const view = showing
     ? {...windowed, last: lastTrade !== undefined ? lastTrade.price : windowed.last}
     : emptyView;
-  const points = sparklinePoints(view.series, CHART_WIDTH, CHART_HEIGHT);
+  const points = sparklinePoints(view.series, CHART_WIDTH, CHART_HEIGHT, 2 * bucketMs[period]);
   const line = points.map(point => `${point.x},${point.y}`).join(' ');
   const trend = showing && view.last >= view.first ? 'rising' : 'falling';
   return <section aria-label="live trades" className="card chart live-trades" data-trend={trend}>
@@ -69,7 +69,8 @@ export const LiveTrades: FC<Props> = ({trades}) => {
     <section className="chart-stage">
       <figure>
         <Axes high={view.high} low={view.low} times={view.series.map(timed => timed.at)}
-              pattern={timePattern[period]} tickEvery={tickEveryMs[period]}>
+              pattern={timePattern[period]} tickEvery={tickEveryMs[period]}
+              headroomMs={2 * bucketMs[period]}>
           <svg aria-hidden="true"
                viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
                preserveAspectRatio="none">

@@ -69,7 +69,7 @@ export const candleShapes = (
   const scaleY = (price: number): number =>
     highest === lowest ? height / 2 : height - ((price - lowest) / (highest - lowest)) * height;
   const from = candles[0].openedAt;
-  const span = candles[candles.length - 1].openedAt + bucketMs - from;
+  const span = candles[candles.length - 1].openedAt + 2 * bucketMs - from;
   const slot = (bucketMs / span) * width;
   const bodyWidth = slot * 0.6;
   return candles.map(candle => {
@@ -107,7 +107,7 @@ export const volumeShapes = (
   }
   const heaviest = Math.max(...candles.map(candle => candle.volume));
   const from = candles[0].openedAt;
-  const span = candles[candles.length - 1].openedAt + bucketMs - from;
+  const span = candles[candles.length - 1].openedAt + 2 * bucketMs - from;
   const slot = (bucketMs / span) * width;
   const barWidth = slot * 0.6;
   return candles.map(candle => {
