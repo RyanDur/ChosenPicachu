@@ -9,7 +9,7 @@ export const SortableListLazyMove: FC<{ list: Set<string> }> = ({list}) => {
   const [dragOverIndex, updateIndex] = useState<number>(-1);
   const [draggedItem, updateDraggedItem] = useState<string>();
 
-  return <ul onDragLeave={() => updateIndex(-1)} className='sortable-list'>{
+  return <ul onDragLeave={() => updateIndex(-1)} className='sortable-list-lazy-move sortable-list'>{
     currentList.map((item, index) =>
       <li className='item' key={item}>
         <Draggable

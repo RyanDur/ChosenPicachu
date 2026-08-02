@@ -9,7 +9,7 @@ export const HideElemOnDragSortableListLazyMove: FC<{ list: Set<string> }> = ({l
   const [dragOverIndex, updateIndex] = useState<number>(-1);
   const [draggedItem, updateDraggedItem] = useState<string>();
 
-  return <ul onDragLeave={() => updateIndex(-1)} className='sortable-list'>{
+  return <ul onDragLeave={() => updateIndex(-1)} className='hide-elem-on-drag-sortable-list-lazy-move sortable-list'>{
     currentList.map((item, index) =>
       <li className='item' key={item}>
         <HideOnDrag

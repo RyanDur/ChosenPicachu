@@ -57,7 +57,7 @@ export const UserInformation: FC<FormProps> = (
 
     return <form id="user-info-form"
                  aria-label="user info"
-                 className={join(readOnly && 'read-only')}
+                 className={join('user-information', readOnly && 'read-only')}
                  onSubmit={event => {
                      event.preventDefault();
 
@@ -109,7 +109,7 @@ export const UserInformation: FC<FormProps> = (
                  onChange={address => dispatch(updateHomeAddress(address))}/>
 
         <h3 id="work-address-title">Work Address</h3>
-        <article id="same-as-home-cell" className={join('center-horizontal', readOnly && 'read-only')}>
+        <article id="same-as-home-cell" className={join(readOnly && 'read-only')}>
             <input id="same-as-home" type="checkbox" checked={sameAsHome} disabled={readOnly}
                    onChange={event => updateSameAsHome(event.currentTarget.checked)}/>
             <label id="same-as-home-title" htmlFor="same-as-home">Same as Home</label>

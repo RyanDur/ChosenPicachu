@@ -43,7 +43,7 @@ export const GalleryNav: FC<Props> = ({id}) => {
 
   const gotoTopOfPage = () => window.scrollTo(0, 0);
 
-  return <nav className="pagination" id={id}>
+  return <nav className="gallery-nav pagination" id={id}>
     {!hasPrevPage && <article className="fill-left"/>}
     {hasPrevPage && <Link to={`${path}${createSearchParams({page: firstPage})}`}
                           onClick={gotoTopOfPage}
@@ -55,7 +55,7 @@ export const GalleryNav: FC<Props> = ({id}) => {
                           id="prev" className="page">
         PREV
     </Link>}
-    <article id="info" className="content">
+    <article id="info">
       <article>{firstRecord} - {lastRecord}</article>
       <article>of</article>
       <article>{totalRecords || '—'}</article>

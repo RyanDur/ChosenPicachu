@@ -39,7 +39,7 @@ export const SideNav: FC = () =>
     </nav>
 
     <article className="borrowed-assets icons" tabIndex={0}>
-      <h2 className="icons-title">ICONS</h2>
+      <h2>ICONS</h2>
       <nav className="icons-content">
         <a href="https://icons8.com/icon/622/detective" rel="noopener noreferrer" target="_blank"
            className="attribution">Detective icon by Icons8</a>

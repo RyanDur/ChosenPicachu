@@ -19,9 +19,6 @@
     }
   }
 
-  .column-name {
-    text-align: start;
-  }
 
   .cell {
     border-right: var(--hairline) solid var(--charcoal);
@@ -34,7 +31,7 @@
   }
 }
 
-.fancy-table th {
+.fancy-table .column-name {
   position: relative;
 }
 

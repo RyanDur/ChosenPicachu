@@ -32,7 +32,7 @@ export const FancySelect: FC<PropsWithChildren<FancySelectProps>> = (
         readOnly
     }
 ) => (readOnly || disabled) ? <FancyInput className={className} id={id} value={value} readOnly={readOnly} disabled={disabled} inputId={selectId}>{children}</FancyInput> :
-    <article id={id} className={join('fancy fancy-select', value && 'not-empty', className)}>
+    <article id={id} className={join('fancy-select', 'fancy', value && 'not-empty', className)}>
         <select id={selectId}
                 className={join('fancy-select-box fancy-text', selectClassName)}
                 {...(value ? {value} : {defaultValue: ''})}

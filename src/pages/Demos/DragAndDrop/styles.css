@@ -17,7 +17,7 @@
         transition: opacity 50ms;
 
         &:has(.grip:hover) {
-            box-shadow: 0 10px 14px var(--faint-shadow);
+            box-shadow: var(--lift-box-shadow);
         }
 
         &.hide {

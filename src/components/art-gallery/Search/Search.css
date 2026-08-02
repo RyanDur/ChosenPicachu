@@ -40,7 +40,7 @@
     border: none;
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 2rem;
+    background-size: var(--base-x-2_5);
     background-color: var(--paper);
 
     &:hover,
@@ -49,7 +49,7 @@
     }
 
     &:active {
-      box-shadow: inset 0 0 5px var(--void);
+      box-shadow: var(--press-glow);
     }
   }
 }
