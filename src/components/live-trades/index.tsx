@@ -66,34 +66,36 @@ export const LiveTrades: FC<Props> = ({trades}) => {
         )}
       </Menu>
     </header>
-    {history.pending ? <Loading className="chart-loading"/> : <>
-    <figure>
-      <Axes high={view.high} low={view.low} times={view.series.map(timed => timed.at)}
-            pattern={timePattern[period]} tickEvery={tickEveryMs[period]}>
-        <svg aria-hidden="true"
-             viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
-             preserveAspectRatio="none">
-          {notEmpty(points) && <line className="baseline"
-                                     x1={0} y1={points[0].y}
-                                     x2={CHART_WIDTH} y2={points[0].y}/>}
-          <polyline points={line} fill="none" vectorEffect="non-scaling-stroke"/>
-          {notEmpty(points) && <circle cx={points[points.length - 1].x}
-                                       cy={points[points.length - 1].y}
-                                       r={3}/>}
-        </svg>
-      </Axes>
-      {showing && <figcaption>
-        <small className="span">{view.caption}</small>
-      </figcaption>}
-      {history.unavailable && <figcaption>
-        <small className="span">history unavailable</small>
-      </figcaption>}
-    </figure>
-    {showing && <p className="headline">
-      <data value={view.last}>{cents.format(view.last)}</data>
-      <data className="delta" value={view.last - view.first}>{deltaLabel(view.first, view.last)}</data>
-    </p>}
-    </>}
+    <section className="chart-stage">
+      <figure>
+        <Axes high={view.high} low={view.low} times={view.series.map(timed => timed.at)}
+              pattern={timePattern[period]} tickEvery={tickEveryMs[period]}>
+          <svg aria-hidden="true"
+               viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
+               preserveAspectRatio="none">
+            {notEmpty(points) && <line className="baseline"
+                                       x1={0} y1={points[0].y}
+                                       x2={CHART_WIDTH} y2={points[0].y}/>}
+            <polyline points={line} fill="none" vectorEffect="non-scaling-stroke"/>
+            {notEmpty(points) && <circle cx={points[points.length - 1].x}
+                                         cy={points[points.length - 1].y}
+                                         r={3}/>}
+          </svg>
+        </Axes>
+        <figcaption>
+          <small className="span">
+            {showing ? view.caption : history.unavailable && 'history unavailable'}
+          </small>
+        </figcaption>
+      </figure>
+      <p className="headline">
+        {showing && <>
+          <data value={view.last}>{cents.format(view.last)}</data>
+          <data className="delta" value={view.last - view.first}>{deltaLabel(view.first, view.last)}</data>
+        </>}
+      </p>
+      {history.pending && <Loading className="chart-loading"/>}
+    </section>
     <details>
       <summary>what am I looking at?</summary>
       <p>

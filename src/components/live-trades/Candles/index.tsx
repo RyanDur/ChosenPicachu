@@ -36,29 +36,31 @@ export const Candles: FC<Props> = ({trades}) => {
         )}
       </Menu>
     </header>
-    {history.pending ? <Loading className="chart-loading"/> : <>
-    <Axes high={notEmpty(candles) ? Math.max(...candles.map(candle => candle.high)) : 0}
-          low={notEmpty(candles) ? Math.min(...candles.map(candle => candle.low)) : 0}
-          times={candles.map(candle => candle.openedAt)}
-          pattern={timePattern[period]}
-          tickEvery={tickEveryMs[period]}>
-      <svg aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${CANDLE_HEIGHT}`}>
-        {bodies.map(shape => <g key={shape.x} className={shape.direction}>
-          <line x1={shape.center} y1={shape.wickTop} x2={shape.center} y2={shape.wickBottom}/>
-          <rect className="body" x={shape.x} y={shape.bodyTop}
-                width={shape.width} height={shape.bodyHeight}/>
-        </g>)}
-      </svg>
-      <svg aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${VOLUME_HEIGHT}`}>
-        {bars.map(shape =>
-          <rect className="volume" key={shape.x} x={shape.x} y={shape.top}
-                width={shape.width} height={shape.height}/>
-        )}
-      </svg>
-    </Axes>
-    {notEmpty(candles) && <small>{captionFor(period, candles.length)}</small>}
-    {history.unavailable && <small>history unavailable</small>}
-    </>}
+    <section className="chart-stage">
+      <Axes high={notEmpty(candles) ? Math.max(...candles.map(candle => candle.high)) : 0}
+            low={notEmpty(candles) ? Math.min(...candles.map(candle => candle.low)) : 0}
+            times={candles.map(candle => candle.openedAt)}
+            pattern={timePattern[period]}
+            tickEvery={tickEveryMs[period]}>
+        <svg aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${CANDLE_HEIGHT}`}>
+          {bodies.map(shape => <g key={shape.x} className={shape.direction}>
+            <line x1={shape.center} y1={shape.wickTop} x2={shape.center} y2={shape.wickBottom}/>
+            <rect className="body" x={shape.x} y={shape.bodyTop}
+                  width={shape.width} height={shape.bodyHeight}/>
+          </g>)}
+        </svg>
+        <svg aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${VOLUME_HEIGHT}`}>
+          {bars.map(shape =>
+            <rect className="volume" key={shape.x} x={shape.x} y={shape.top}
+                  width={shape.width} height={shape.height}/>
+          )}
+        </svg>
+      </Axes>
+      <small>
+        {notEmpty(candles) ? captionFor(period, candles.length) : history.unavailable && 'history unavailable'}
+      </small>
+      {history.pending && <Loading className="chart-loading"/>}
+    </section>
     <details>
       <summary>what am I looking at?</summary>
       <p>
