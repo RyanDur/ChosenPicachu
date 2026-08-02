@@ -1,0 +1,22 @@
+.card.chart {
+  header {
+    display: flex;
+    align-items: center;
+  }
+
+  header .period-toggle {
+    margin-left: auto;
+    width: auto;
+    height: auto;
+    border: none;
+    background: var(--paper);
+    padding: 0.2rem var(--base-x-1);
+    font-size: 1.2rem;
+    color: var(--charcoal);
+    cursor: pointer;
+
+    &::after {
+      content: ' ▾';
+    }
+  }
+}

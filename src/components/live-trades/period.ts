@@ -18,3 +18,10 @@ export const bucketLabel: Record<HistoryPeriod, string> = {
   [Period.day]: '1h each',
   [Period.week]: '6h each'
 };
+
+export const timePattern: Record<Period, string> = {
+  [Period.live]: 'HH:mm:ss',
+  [Period.hour]: 'HH:mm',
+  [Period.day]: 'HH:mm',
+  [Period.week]: 'MMM d'
+};

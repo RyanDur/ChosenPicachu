@@ -6,6 +6,7 @@ import {renderWithMemoryRouter} from '@test-support';
 import {EnvProvider} from '@components/Env';
 import {DemosPage} from '@pages/Demos/component';
 import {Paths} from '@pages/Paths';
+import {format} from 'date-fns';
 
 const realSockets = () => {
   mswServer.close();
@@ -268,9 +269,14 @@ describe('the demos page', () => {
       await feedIsLive();
       broadcast(feed, [50001, 50002, 50003, 50004, 50005]
         .map((price, index) => tradeFrame(price, firstTradedAt + index * 10000)));
-      await waitFor(() => expect(screen.getByText('high $50,005')).toBeVisible());
-      expect(screen.getByText('low $50,001')).toBeVisible();
-      expect(screen.getByText('5 trades · 40s')).toBeVisible();
+      const priceCard = screen.getByRole('region', {name: 'live trades'});
+      await waitFor(() => expect(within(priceCard).getByText('$50,005')).toBeVisible());
+      expect(within(priceCard).getByText('$50,003')).toBeVisible();
+      expect(within(priceCard).getByText('$50,001')).toBeVisible();
+      expect(within(priceCard).getByText('5 trades · 40s')).toBeVisible();
+      expect(within(priceCard).getByText(format(firstTradedAt, 'HH:mm:ss'))).toBeVisible();
+      expect(within(priceCard).getByText(format(firstTradedAt + 20000, 'HH:mm:ss'))).toBeVisible();
+      expect(within(priceCard).getByText(format(firstTradedAt + 40000, 'HH:mm:ss'))).toBeVisible();
     });
 
     test('a feed that dies mid-stream tells the user, keeping the last trades', async () => {

@@ -1,27 +1,6 @@
 .live-trades {
   margin-bottom: var(--base-x-4);
 
-  header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .period-toggle {
-    width: auto;
-    height: auto;
-    border: none;
-    background: var(--paper);
-    padding: 0.2rem var(--base-x-1);
-    font-size: 1.2rem;
-    color: var(--charcoal);
-    cursor: pointer;
-
-    &::after {
-      content: ' ▾';
-    }
-  }
-
   output {
     display: inline-flex;
     align-items: center;
@@ -78,31 +57,11 @@
     }
 
     figcaption {
-      small {
-        position: absolute;
-        font-size: 1.1rem;
-        color: var(--charcoal);
-        background: var(--faded-leather);
-        padding: 0.1rem 0.6rem;
-        border-radius: 0.4rem;
-      }
-
-      .high {
-        top: 0.4rem;
-        right: 0.4rem;
-      }
-
-      .low {
-        bottom: 2.4rem;
-        right: 0.4rem;
-      }
-
       .span {
-        position: static;
         display: block;
         width: fit-content;
         margin: 0.4rem auto 0;
-        background: none;
+        font-size: 1.1rem;
         color: var(--charcoal);
         opacity: 0.7;
       }
