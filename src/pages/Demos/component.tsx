@@ -21,6 +21,8 @@ import {DemoTopics, demoTopicParam} from './types';
 import {NaturalZIndex} from './ZIndexDemo';
 import {Candles, PriceChart} from './Charts';
 import {Aggregations} from './Tables';
+import {PillGlider} from '@components/PillGlider';
+import {ColumnDragStyle} from '@components/Table';
 import {statusCopy, useLiveTrades} from './Charts/useLiveTrades';
 import {useEnv} from '@components/Env';
 
@@ -33,6 +35,7 @@ const paragraphs = (count: number) =>
 export const DemosPage = () => {
   const {tab} = useSearchParamsObject({tab: demoTopicParam}, {tab: DemoTopics.accordions});
   const [accordionContents] = useState(() => Array.from({length: 5}, () => paragraphs(5)));
+  const [dragStyle, setDragStyle] = useState<ColumnDragStyle>('eager-move');
   const {tradeFeed, tradeProduct} = useEnv();
   const liveTrades = useLiveTrades(tradeFeed, tradeProduct);
 
@@ -81,7 +84,17 @@ export const DemosPage = () => {
               <Candles trades={liveTrades.trades}/>
             </>,
             [DemoTopics.tables]: <>
-              <Aggregations trades={liveTrades.trades}/>
+              <PillGlider label="drag style"
+                          name="column-drag-style"
+                          options={[
+                            {display: 'Eager', value: 'eager-move'},
+                            {display: 'Lazy', value: 'lazy-move'},
+                            {display: 'Hide Eager', value: 'hide-eager-move'},
+                            {display: 'Hide Lazy', value: 'hide-lazy-move'}
+                          ]}
+                          chosen={dragStyle}
+                          onChoose={setDragStyle}/>
+              <Aggregations trades={liveTrades.trades} dragStyle={dragStyle}/>
             </>,
             [DemoTopics.dragAndDrop]: <>
               <h2 className="heading">Sortable List</h2>

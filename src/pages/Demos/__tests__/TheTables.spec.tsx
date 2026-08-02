@@ -1,4 +1,4 @@
-import {cleanup, screen, waitFor, within} from '@testing-library/react';
+import {cleanup, fireEvent, screen, waitFor, within} from '@testing-library/react';
 import {
   broadcast,
   interceptedNetwork,
@@ -78,6 +78,30 @@ describe('the tables demo', () => {
       ['this hour', '4', '3', '1', '0.41', '$50,001.93', '+$3.00']);
     expect(texts(rowFor('session'))).toEqual(
       ['session', '4', '3', '1', '0.41', '$50,001.93', '+$3.00']);
+  });
+
+  test('the glider chooses how a dragged column travels', async () => {
+    const feed = await streamingFeed();
+
+    renderTables(urlOf(feed));
+
+    await feedIsSubscribed();
+    const card = screen.getByRole('region', {name: 'live aggregations'});
+    expect(screen.getByRole('group', {name: 'drag style'})).toBeVisible();
+    for (const style of ['Eager', 'Lazy', 'Hide Eager', 'Hide Lazy']) {
+      expect(screen.getByRole('radio', {name: style})).toBeVisible();
+    }
+    expect(screen.getByRole('radio', {name: 'Eager'})).toBeChecked();
+
+    const header = (name: string) =>
+      within(card).getByRole('columnheader', {name: new RegExp(`^${name}`)});
+    fireEvent.mouseDown(header('vwap'));
+    fireEvent.dragStart(header('vwap'));
+    fireEvent.dragOver(header('window'));
+    fireEvent.dragEnd(header('vwap'));
+
+    const headerTexts = within(card).getAllByRole('columnheader').map(head => head.textContent);
+    expect(headerTexts).toEqual(['vwap', 'window', 'trades', 'buys', 'sells', 'volume', 'change']);
   });
 
   test('every column is resizable', async () => {

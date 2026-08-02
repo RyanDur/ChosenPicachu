@@ -1,5 +1,5 @@
 import {FC, useState} from 'react';
-import {array} from './array';
+import {array} from '@components/arrays';
 import {HideOnDrag} from './HideOnDrag';
 import './styles.css';
 import './styles.layout.css';

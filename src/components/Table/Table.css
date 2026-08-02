@@ -63,3 +63,7 @@
   overflow: hidden;
   overflow-wrap: break-word;
 }
+
+.sortable .hide {
+  visibility: hidden;
+}

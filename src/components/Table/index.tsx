@@ -1,12 +1,16 @@
 import {has, notEmpty} from '@ryandur/sand';
+import {array} from '@components/arrays';
 import {Column, Row} from './types';
 import {Dispatch, FC, KeyboardEvent, PointerEvent, SetStateAction, useState} from 'react';
 import {join} from '@components/class-names';
 import './Table.css';
 
+export type ColumnDragStyle = 'eager-move' | 'lazy-move' | 'hide-eager-move' | 'hide-lazy-move';
+
 export type TableProps = {
     columns: Column[];
     rows: Row[];
+    draggableColumns?: ColumnDragStyle;
     id?: string;
     tableClassName?: string;
     theadClassName?: string;
@@ -88,6 +92,7 @@ export const Table: FC<TableProps> = (
     {
         columns,
         rows,
+        draggableColumns,
         id,
         tableClassName,
         theadClassName,
@@ -102,24 +107,71 @@ export const Table: FC<TableProps> = (
 ) => {
     const [shares, setShares] = useState<Shares>(() => seededShares(columns));
     const [grip, setGrip] = useState<Grip>(null);
-    const apportioned = columns.filter(({width}) => has(width)).map(({column}) => String(column));
+    const [order, setOrder] = useState<string[]>(() => columns.map(({column}) => String(column)));
+    const [armed, setArmed] = useState<string>();
+    const [dragged, setDragged] = useState<string>();
+    const [overIndex, setOverIndex] = useState(-1);
+    const byKey = new Map(columns.map(definition => [String(definition.column), definition]));
+    const ordered = order.map(key => byKey.get(key)).filter(has);
+    const apportioned = ordered.filter(({width}) => has(width)).map(({column}) => String(column));
     const clipped = notEmpty(apportioned);
+    const eager = draggableColumns === 'eager-move' || draggableColumns === 'hide-eager-move';
+    const hiding = draggableColumns === 'hide-eager-move' || draggableColumns === 'hide-lazy-move';
     const neighborOf = (key: string): string => {
         const index = apportioned.indexOf(key);
         return apportioned[index + 1] ?? apportioned[index - 1];
     };
+    const landedAt = (index: number): void => {
+        if (has(draggableColumns) && has(dragged)) {
+            if (eager) {
+                setOrder(previous => array.moveToIndex(index, dragged, previous));
+            } else {
+                setOverIndex(index);
+            }
+        }
+    };
+    const released = (): void => {
+        if (has(draggableColumns) && !eager && has(dragged) && overIndex >= 0) {
+            setOrder(previous => array.moveToIndex(overIndex, dragged, previous));
+        }
+        setDragged(undefined);
+        setArmed(undefined);
+        setOverIndex(-1);
+    };
 
-    return <table id={id} className={join(tableClassName, notEmpty(apportioned) && 'apportioned')}>
+    return <table id={id}
+                  className={join(
+                      tableClassName,
+                      notEmpty(apportioned) && 'apportioned',
+                      has(draggableColumns) && 'sortable'
+                  )}>
         <thead className={theadClassName}>
         <tr className={join(
             trClassName,
             headerRowClassName
-        )}>{columns.map(({display, column, className, width}) => {
+        )}>{ordered.map(({display, column, className, width}, position) => {
             const key = String(column);
             const share = has(width) ? shares[key] : undefined;
-            return <th className={join(thClassName, cellClassName, className, clipped && 'clipped')}
+            return <th className={join(
+                           thClassName, cellClassName, className,
+                           clipped && 'clipped',
+                           hiding && dragged === key && 'hide'
+                       )}
                        key={key}
                        scope="col"
+                       draggable={has(draggableColumns) && armed === key}
+                       onMouseDown={() => setArmed(key)}
+                       onDragStart={event => {
+                           if (has(event.dataTransfer)) {
+                               event.dataTransfer.effectAllowed = 'move';
+                           }
+                           setDragged(key);
+                       }}
+                       onDragOver={event => {
+                           event.preventDefault();
+                           landedAt(position);
+                       }}
+                       onDragEnd={released}
                        style={has(share) ? {width: `${share}%`} : undefined}>
                 {display}
                 {has(share) && apportioned.length > 1 &&
@@ -132,6 +184,7 @@ export const Table: FC<TableProps> = (
                        aria-valuemin={SLIMMEST}
                        aria-valuemax={100 - SLIMMEST}
                        onKeyDown={resizeByKey(setShares, key, neighborOf(key))}
+                       onMouseDown={event => event.stopPropagation()}
                        onPointerDown={gripAt(setGrip, key, neighborOf(key), shares)}
                        onPointerMove={dragTo(setShares, grip)}
                        onPointerUp={() => setGrip(null)}/>}
@@ -140,7 +193,7 @@ export const Table: FC<TableProps> = (
         </thead>
         <tbody className={tbodyClassName}>{rows.map((row, rowNumber) =>
             <tr className={join(trClassName, rowClassName)} key={rowNumber}>
-                {columns.map(({column}, columnNumber) => {
+                {ordered.map(({column}, columnNumber) => {
                     const cell = row[column];
                     return <td className={join(tdClassName, cellClassName, cell.className, clipped && 'ellipsis')} key={columnNumber}>
                         {cell.display}
