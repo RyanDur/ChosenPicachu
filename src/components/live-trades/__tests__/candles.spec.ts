@@ -1,4 +1,4 @@
-import {bucketTrades} from '../Candles/shapes';
+import {bucketTrades, mergeLive} from '../Candles/shapes';
 
 describe('bucketTrades', () => {
   test('no trades bucket to no candles', () => {
@@ -33,5 +33,29 @@ describe('bucketTrades', () => {
       {openedAt: 1700000000000, open: 50001, high: 50001, low: 50001, close: 50001, volume: 0.01},
       {openedAt: 1700000005000, open: 50002, high: 50002, low: 50002, close: 50002, volume: 0.02}
     ]);
+  });
+});
+
+describe('mergeLive', () => {
+  const candleAt = (openedAt: number, close: number) =>
+    ({openedAt, open: close, high: close, low: close, close, volume: 1});
+
+  test('streamed buckets replace the seed from their first minute on', () => {
+    const seed = [candleAt(0, 50001), candleAt(60000, 50002), candleAt(120000, 50003)];
+    const streamed = [candleAt(120000, 50009), candleAt(180000, 50010)];
+
+    expect(mergeLive(seed, streamed)).toEqual([
+      candleAt(0, 50001),
+      candleAt(60000, 50002),
+      candleAt(120000, 50009),
+      candleAt(180000, 50010)
+    ]);
+  });
+
+  test('the window keeps only the last sixty candles', () => {
+    const seed = Array.from({length: 70}, (_, index) => candleAt(index * 60000, 50000 + index));
+
+    expect(mergeLive(seed, [])).toHaveLength(60);
+    expect(mergeLive(seed, [])[0]).toEqual(candleAt(10 * 60000, 50010));
   });
 });

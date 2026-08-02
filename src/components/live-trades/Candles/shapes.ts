@@ -26,6 +26,14 @@ const openedBy = (trade: Trade, bucketMs: number): Candle => ({
   volume: trade.size
 });
 
+export const mergeLive = (
+  seed: readonly Candle[],
+  streamed: readonly Candle[]
+): readonly Candle[] => {
+  const cut = streamed[0]?.openedAt ?? Number.POSITIVE_INFINITY;
+  return [...seed.filter(candle => candle.openedAt < cut), ...streamed].slice(-60);
+};
+
 export const bucketTrades = (trades: readonly Trade[], bucketMs: number): readonly Candle[] =>
   trades.reduce<readonly Candle[]>((candles, trade) => {
     const current = candles[candles.length - 1];
@@ -49,7 +57,8 @@ export type CandleShape = {
 export const candleShapes = (
   candles: readonly Candle[],
   width: number,
-  height: number
+  height: number,
+  bucketMs: number
 ): readonly CandleShape[] => {
   if (candles.length === 0) {
     return [];
@@ -58,19 +67,22 @@ export const candleShapes = (
   const lowest = Math.min(...candles.map(candle => candle.low));
   const scaleY = (price: number): number =>
     highest === lowest ? height / 2 : height - ((price - lowest) / (highest - lowest)) * height;
-  const slot = width / candles.length;
+  const from = candles[0].openedAt;
+  const span = candles[candles.length - 1].openedAt + bucketMs - from;
+  const slot = (bucketMs / span) * width;
   const bodyWidth = slot * 0.6;
-  return candles.map((candle, index) => {
+  return candles.map(candle => {
+    const x = ((candle.openedAt - from) / span) * width;
     const bodyTop = scaleY(Math.max(candle.open, candle.close));
     const bodyBottom = scaleY(Math.min(candle.open, candle.close));
     return {
-      x: index * slot + (slot - bodyWidth) / 2,
+      x: x + (slot - bodyWidth) / 2,
       width: bodyWidth,
       bodyTop,
       bodyHeight: Math.max(bodyBottom - bodyTop, 1),
       wickTop: scaleY(candle.high),
       wickBottom: scaleY(candle.low),
-      center: index * slot + slot / 2,
+      center: x + slot / 2,
       direction: candle.close >= candle.open ? 'up' : 'down'
     };
   });
@@ -86,18 +98,21 @@ export type VolumeShape = {
 export const volumeShapes = (
   candles: readonly Candle[],
   width: number,
-  height: number
+  height: number,
+  bucketMs: number
 ): readonly VolumeShape[] => {
   if (candles.length === 0) {
     return [];
   }
   const heaviest = Math.max(...candles.map(candle => candle.volume));
-  const slot = width / candles.length;
+  const from = candles[0].openedAt;
+  const span = candles[candles.length - 1].openedAt + bucketMs - from;
+  const slot = (bucketMs / span) * width;
   const barWidth = slot * 0.6;
-  return candles.map((candle, index) => {
+  return candles.map(candle => {
     const barHeight = heaviest === 0 ? 0 : (candle.volume / heaviest) * height;
     return {
-      x: index * slot + (slot - barWidth) / 2,
+      x: ((candle.openedAt - from) / span) * width + (slot - barWidth) / 2,
       width: barWidth,
       top: height - barHeight,
       height: barHeight
