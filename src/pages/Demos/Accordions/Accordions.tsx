@@ -1,5 +1,6 @@
 import {FC, ReactNode, useState} from 'react';
 import {classNames} from '@components/class-names';
+import {PillGlider} from '@components/PillGlider';
 import {PropsWithClassName} from '../types';
 import './styles.css';
 
@@ -72,29 +73,14 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
   return <article className={classNames('exclusive-checkbox-toggle-accordion', 'toggle-accordion', className)}>
     <header className="exclusive-checkbox-header">
       <h2 className="heading">Exclusive accordion using checkboxes</h2>
-      <article className='pill-tabs-with-glider'>
-        <article className='glider'/>
-        <label className='pill-tab-left'>
-          Animate
-          <input type="radio"
-                 className='off-screen'
-                 name="checkbox-animate-or-static-tab"
-                 checked={tab === 'animated'}
-                 value='animated'
-                 onChange={(event) => updateChecked(event.currentTarget.value)}
-                 onClick={() => updateTab('animated')}/>
-        </label>
-        <label className='pill-tab-right'>
-          Static
-          <input type="radio"
-                 className='off-screen'
-                 name="checkbox-animate-or-static-tab"
-                 checked={tab === 'static'}
-                 value='static'
-                 onChange={(event) => updateChecked(event.currentTarget.value)}
-                 onClick={() => updateTab('static')}/>
-        </label>
-      </article>
+      <PillGlider label="animation style"
+                  name="checkbox-animate-or-static-tab"
+                  options={[{display: 'Animate', value: 'animated'}, {display: 'Static', value: 'static'}]}
+                  chosen={tab}
+                  onChoose={value => {
+                    updateChecked(undefined);
+                    updateTab(value);
+                  }}/>
     </header>
 
     <ul className={'new-accordion'}>
