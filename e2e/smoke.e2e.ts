@@ -20,7 +20,7 @@ test('vam art truly renders and opens into a piece', async ({page}) => {
   await painting.click();
 
   await expect(page).toHaveURL(/gallery\/[A-Za-z]*\d+/);
-  await expect(page.getByRole('figure')).toBeVisible({timeout: 30_000});
+  await expect(page.locator('figure.art-work')).toBeVisible({timeout: 30_000});
 });
 
 test('an aic search still hangs art', async ({page}) => {
