@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {Table} from '@components/Table';
-import {Trade} from '@transport/coinbase';
-import {aggregations} from './aggregate';
+import {Trade} from '../coinbase';
+import {aggregations} from './fold';
 
 type Props = {
   trades: readonly Trade[];

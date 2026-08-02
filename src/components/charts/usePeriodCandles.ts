@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import {useEnv} from '@components/Env';
 import {Candle} from './Candles/shapes';
 import {granularitySeconds, Period, periodSpanMs} from './period';
-import {periodCandles} from './history';
+import {periodCandles} from './coinbase/history';
 
 export type PeriodHistory = {
   candles: readonly Candle[];

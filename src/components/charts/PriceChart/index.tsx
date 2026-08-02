@@ -2,15 +2,15 @@ import {FC, useState} from 'react';
 import {notEmpty} from '@ryandur/sand';
 import {Menu} from '@components/Menu';
 import {Loading} from '@components/Loading';
-import {LiveTradesState} from './useLiveTrades';
-import {cents, deltaLabel} from './money';
-import {usePeriodCandles} from './usePeriodCandles';
-import {bucketLabel, bucketMs, Period, periodCap, tickEveryMs, timePattern} from './period';
-import {sparklinePoints, TimedPrice} from './sparkline';
-import {Axes} from './Axes';
-import {bucketTrades, Candle, mergeLive} from './Candles/shapes';
-import './chart-card.css';
-import './LiveTrades.css';
+import {LiveTradesState} from '../useLiveTrades';
+import {cents, deltaLabel} from '../money';
+import {usePeriodCandles} from '../usePeriodCandles';
+import {bucketLabel, bucketMs, Period, periodCap, tickEveryMs, timePattern} from '../period';
+import {sparklinePoints, TimedPrice} from '../sparkline';
+import {Axes} from '../Axes';
+import {bucketTrades, Candle, mergeLive} from '../Candles/shapes';
+import '../chart-card.css';
+import './PriceChart.css';
 
 const CHART_WIDTH = 240;
 const CHART_HEIGHT = 60;
@@ -37,7 +37,7 @@ const candlesView = (candles: readonly Candle[], bucket: string): PriceView => (
 
 type Props = Pick<LiveTradesState, 'trades'>;
 
-export const LiveTrades: FC<Props> = ({trades}) => {
+export const PriceChart: FC<Props> = ({trades}) => {
   const [period, setPeriod] = useState<Period>(Period.hour);
   const history = usePeriodCandles(period);
   const candles = mergeLive(history.candles, bucketTrades(trades, bucketMs[period]), periodCap[period]);
@@ -50,7 +50,7 @@ export const LiveTrades: FC<Props> = ({trades}) => {
   const points = sparklinePoints(view.series, CHART_WIDTH, CHART_HEIGHT, 2 * bucketMs[period]);
   const line = points.map(point => `${point.x},${point.y}`).join(' ');
   const trend = showing && view.last >= view.first ? 'rising' : 'falling';
-  return <section aria-label="live trades" className="card chart live-trades" data-trend={trend}>
+  return <section aria-label="live trades" className="card chart price-chart" data-trend={trend}>
     <header>
       <Menu id="price-period" label="price period" toggle={period} toggleClassName="period-toggle">
         {Object.values(Period).map(option =>

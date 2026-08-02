@@ -1,6 +1,6 @@
 import {Dispatch, SetStateAction, useEffect, useState} from 'react';
 import {connecting} from '@ryandur/sand';
-import {decodeTrade, subscribeTo, Trade} from '@transport/coinbase';
+import {decodeTrade, subscribeTo, Trade} from './coinbase';
 
 export type LiveTradesState = {
   status: 'connecting' | 'streaming' | 'failed';
