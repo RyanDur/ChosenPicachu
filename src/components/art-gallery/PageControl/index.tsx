@@ -27,17 +27,17 @@ export const PageControl = () => {
            id="go-to"
            min={firstPage}
            max={lastPage}
-           className="go-to control input"
+           className="control input"
            onWheel={e => e.currentTarget.blur()}
            onChange={event => updatePageNumber(+event.currentTarget.value)}/>
     <label id="go-to-label" className="title" htmlFor="go-to">Page #{page}</label>
     <input type="number"
-           className="per-page control input"
+           className="control input"
            min={1}
            max={100}
            id="per-page"
            onChange={event => updatePageSize(+event.currentTarget.value)}/>
     <label id="per-page-label" className="title" htmlFor="per-page">{size} Per Page</label>
-    <button type="submit" id="submit-page-number" className="go control">Go</button>
+    <button type="submit" id="submit-page-number" className="control">Go</button>
   </form>;
 };
