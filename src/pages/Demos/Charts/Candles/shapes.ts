@@ -1,3 +1,4 @@
+import {has} from '@ryandur/sand';
 import {Trade} from '../coinbase';
 
 export type Candle = {
@@ -39,7 +40,7 @@ export const bucketTrades = (trades: readonly Trade[], bucketMs: number): readon
   trades.reduce<readonly Candle[]>((candles, trade) => {
     const current = candles[candles.length - 1];
     const bucket = Math.floor(trade.tradedAt / bucketMs) * bucketMs;
-    return current !== undefined && current.openedAt === bucket
+    return has(current) && current.openedAt === bucket
       ? [...candles.slice(0, -1), fold(current, trade)]
       : [...candles, openedBy(trade, bucketMs)];
   }, []);

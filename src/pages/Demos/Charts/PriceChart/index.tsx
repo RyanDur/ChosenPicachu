@@ -1,5 +1,5 @@
 import {FC, useState} from 'react';
-import {notEmpty} from '@ryandur/sand';
+import {has, notEmpty} from '@ryandur/sand';
 import {Menu} from '@components/Menu';
 import {Loading} from '@components/Loading';
 import {LiveTradesState} from '../useLiveTrades';
@@ -45,7 +45,7 @@ export const PriceChart: FC<Props> = ({trades}) => {
   const windowed = candlesView(candles, bucketLabel[period]);
   const lastTrade = trades[trades.length - 1];
   const view = showing
-    ? {...windowed, last: lastTrade !== undefined ? lastTrade.price : windowed.last}
+    ? {...windowed, last: has(lastTrade) ? lastTrade.price : windowed.last}
     : emptyView;
   const points = sparklinePoints(view.series, CHART_WIDTH, CHART_HEIGHT, 2 * bucketMs[period]);
   const line = points.map(point => `${point.x},${point.y}`).join(' ');
