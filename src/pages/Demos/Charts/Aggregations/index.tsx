@@ -13,7 +13,7 @@ const columns = [
 ];
 
 export const Aggregations: FC<Props> = ({trades}) =>
-  <section aria-label="live aggregations" className="card chart aggregations">
+  <section aria-label="live aggregations" className="aggregations card chart">
     <Table tableClassName="fancy-table"
            theadClassName="header"
            trClassName="row"
