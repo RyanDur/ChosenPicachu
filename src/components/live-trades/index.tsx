@@ -12,13 +12,20 @@ const statusCopy: Record<LiveTradesState['status'], string> = {
 
 const CHART_WIDTH = 240;
 const CHART_HEIGHT = 60;
-const SHOWN_TRADES = 3;
 
 const dollars = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
   maximumFractionDigits: 0
 });
+
+const cents = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD'
+});
+
+const deltaLabel = (first: number, last: number): string =>
+  `${last < first ? '-' : '+'}${cents.format(Math.abs(last - first))}`;
 
 const spanLabel = (from: number, to: number): string => {
   const seconds = Math.round((to - from) / 1000);
@@ -41,7 +48,6 @@ export const LiveTrades: FC<LiveTradesState> = ({status, trades}) => {
         {notEmpty(points) && <line className="baseline"
                                    x1={0} y1={points[0].y}
                                    x2={CHART_WIDTH} y2={points[0].y}/>}
-        {notEmpty(line) && <polygon points={`0,${CHART_HEIGHT} ${line} ${CHART_WIDTH},${CHART_HEIGHT}`}/>}
         <polyline points={line} fill="none" vectorEffect="non-scaling-stroke"/>
         {notEmpty(points) && <circle cx={points[points.length - 1].x}
                                      cy={points[points.length - 1].y}
@@ -53,8 +59,9 @@ export const LiveTrades: FC<LiveTradesState> = ({status, trades}) => {
         <small className="span">{`${trades.length} trades · ${spanLabel(first.tradedAt, last.tradedAt)}`}</small>
       </figcaption>}
     </figure>
-    <ul>{trades.slice(-SHOWN_TRADES).map(trade =>
-      <li key={trade.id}>{trade.price}</li>
-    )}</ul>
+    {notEmpty(trades) && <p className="headline">
+      <data value={last.price}>{cents.format(last.price)}</data>
+      <data className="delta" value={last.price - first.price}>{deltaLabel(first.price, last.price)}</data>
+    </p>}
   </section>;
 };

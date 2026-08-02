@@ -44,10 +44,6 @@
         vector-effect: non-scaling-stroke;
       }
 
-      polygon {
-        fill: var(--faded-mint);
-      }
-
       polyline {
         stroke: var(--primary-blue);
         stroke-width: 0.2rem;
@@ -105,10 +101,6 @@
   }
 
   &[data-trend='falling'] figure svg {
-    polygon {
-      fill: var(--faded-internationl-orange-engineering);
-    }
-
     polyline {
       stroke: var(--internationl-orange-engineering);
     }
@@ -118,25 +110,32 @@
     }
   }
 
-  ul {
+  &[data-trend='rising'] .headline .delta {
+    color: var(--mint);
+    filter: brightness(0.6);
+  }
+
+  &[data-trend='falling'] .headline .delta {
+    color: var(--internationl-orange-engineering);
+  }
+
+  .headline {
     display: flex;
+    align-items: baseline;
     justify-content: flex-end;
     gap: var(--base-x-2);
     margin-top: var(--base-x-2);
+    font-family: 'SF Mono', 'Fira Code', monospace;
 
-    li {
-      font-family: 'SF Mono', 'Fira Code', monospace;
+    data {
+      font-size: var(--base-x-3);
+      font-weight: bold;
+      color: var(--void);
+    }
+
+    .delta {
       font-size: var(--base-x-2);
-      color: var(--charcoal);
-      padding: 0.2rem var(--base-x-1);
-      border-radius: 0.4rem;
-      background: var(--disabled-gray);
-
-      &:last-child {
-        background: var(--mint);
-        color: var(--void);
-        font-weight: bold;
-      }
+      font-weight: normal;
     }
   }
 }

@@ -90,8 +90,7 @@ const feedIsLive = async (): Promise<void> => {
   await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/^live$/));
 };
 
-const shownPrices = (): (string | null)[] =>
-  within(screen.getByRole('list')).getAllByRole('listitem').map(item => item.textContent);
+
 
 const drawnPoints = (): string[] => {
   const region = screen.getByRole('region', {name: 'live trades'});
@@ -131,7 +130,8 @@ describe('the demos page', () => {
       expect(screen.getByRole('status')).toHaveTextContent('connecting to the live feed…');
       await feedIsLive();
       broadcast(feed, [50001, 50002, 50003, 50004, 50005].map(tradeFrame));
-      await waitFor(() => expect(shownPrices()).toEqual(['50003', '50004', '50005']));
+      await waitFor(() => expect(screen.getByText('$50,005.00')).toBeVisible());
+      expect(screen.getByText('+$4.00')).toBeVisible();
     });
 
     test('the user reaches the charts from the tab strip', async () => {
@@ -154,7 +154,7 @@ describe('the demos page', () => {
       broadcast(feed, [tradeFrame(50001)]);
       const demoTabs = await screen.findByRole('navigation', {name: 'demos'});
       await userEvent.click(within(demoTabs).getByText('Charts'));
-      await waitFor(() => expect(shownPrices()).toEqual(['50001']));
+      await waitFor(() => expect(screen.getByText('$50,001.00')).toBeVisible());
     });
 
     test('leaving the charts tab and returning keeps the stream alive', async () => {
@@ -168,11 +168,11 @@ describe('the demos page', () => {
 
       await feedIsLive();
       broadcast(feed, [tradeFrame(50001)]);
-      await waitFor(() => expect(shownPrices()).toEqual(['50001']));
+      await waitFor(() => expect(screen.getByText('$50,001.00')).toBeVisible());
       const demoTabs = await screen.findByRole('navigation', {name: 'demos'});
       await userEvent.click(within(demoTabs).getByText('Accordions'));
       await userEvent.click(within(demoTabs).getByText('Charts'));
-      await waitFor(() => expect(shownPrices()).toEqual(['50001']));
+      await waitFor(() => expect(screen.getByText('$50,001.00')).toBeVisible());
       expect(connections).toBe(1);
     });
 
@@ -191,7 +191,8 @@ describe('the demos page', () => {
 
       await feedIsLive();
       broadcast(feed, ['not even json', nonTradeFrame(99999), tradeFrame(50001)]);
-      await waitFor(() => expect(shownPrices()).toEqual(['50001']));
+      await waitFor(() => expect(screen.getByText('$50,001.00')).toBeVisible());
+      expect(screen.getByText('+$0.00')).toBeVisible();
     });
 
     test('a refused feed tells the user the stream is unavailable', async () => {
@@ -235,11 +236,11 @@ describe('the demos page', () => {
 
       await feedIsLive();
       broadcast(feed, [tradeFrame(50001)]);
-      await waitFor(() => expect(shownPrices()).toEqual(['50001']));
+      await waitFor(() => expect(screen.getByText('$50,001.00')).toBeVisible());
       feed.clients.forEach(socket => socket.close());
       await waitFor(() =>
         expect(screen.getByRole('status')).toHaveTextContent('live feed unavailable'));
-      expect(shownPrices()).toEqual(['50001']);
+      expect(screen.getByText('$50,001.00')).toBeVisible();
     });
 
     test('a trade whose price is not a number never reaches the user', async () => {
@@ -249,7 +250,7 @@ describe('the demos page', () => {
 
       await feedIsLive();
       broadcast(feed, [tradeFrameWith('not a number', 900042), tradeFrame(50001)]);
-      await waitFor(() => expect(shownPrices()).toEqual(['50001']));
+      await waitFor(() => expect(screen.getByText('$50,001.00')).toBeVisible());
     });
 
     test('leaving the page closes the socket', async () => {
