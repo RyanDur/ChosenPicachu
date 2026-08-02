@@ -1,7 +1,6 @@
 import {FC} from 'react';
 import {notEmpty} from '@ryandur/sand';
-import {useEnv} from '@components/Env';
-import {LiveTradesState, useLiveTrades} from './useLiveTrades';
+import {LiveTradesState} from './useLiveTrades';
 import {sparklinePoints} from './sparkline';
 import './LiveTrades.css';
 
@@ -26,9 +25,7 @@ const spanLabel = (from: number, to: number): string => {
   return seconds < 60 ? `${seconds}s` : `${Math.round(seconds / 60)}m`;
 };
 
-export const LiveTrades: FC = () => {
-  const {tradeFeed} = useEnv();
-  const {status, trades} = useLiveTrades(tradeFeed);
+export const LiveTrades: FC<LiveTradesState> = ({status, trades}) => {
   const prices = trades.map(trade => trade.price);
   const points = sparklinePoints(prices, CHART_WIDTH, CHART_HEIGHT);
   const line = points.map(point => `${point.x},${point.y}`).join(' ');

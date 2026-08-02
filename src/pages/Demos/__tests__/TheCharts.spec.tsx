@@ -124,6 +124,37 @@ describe('the demos page', () => {
       expect(await screen.findByRole('region', {name: 'live trades'})).toBeVisible();
     });
 
+    test('trades gathered before the user opens the charts are already waiting', async () => {
+      const feed = await streamingFeed();
+
+      renderWithMemoryRouter(chartsRoute(urlOf(feed)), {path: Paths.demos});
+
+      await waitFor(() => expect(feed.clients.size).toBe(1));
+      broadcast(feed, [tradeFrame(50001)]);
+      const demoTabs = await screen.findByRole('navigation', {name: 'demos'});
+      await userEvent.click(within(demoTabs).getByText('Charts'));
+      await waitFor(() => expect(shownPrices()).toEqual(['50001']));
+    });
+
+    test('leaving the charts tab and returning keeps the stream alive', async () => {
+      const feed = await streamingFeed();
+      let connections = 0;
+      feed.on('connection', () => {
+        connections += 1;
+      });
+
+      renderCharts(urlOf(feed));
+
+      await feedIsLive();
+      broadcast(feed, [tradeFrame(50001)]);
+      await waitFor(() => expect(shownPrices()).toEqual(['50001']));
+      const demoTabs = await screen.findByRole('navigation', {name: 'demos'});
+      await userEvent.click(within(demoTabs).getByText('Accordions'));
+      await userEvent.click(within(demoTabs).getByText('Charts'));
+      await waitFor(() => expect(shownPrices()).toEqual(['50001']));
+      expect(connections).toBe(1);
+    });
+
     test('a connected feed tells the user the stream is live', async () => {
       const feed = await streamingFeed();
 
