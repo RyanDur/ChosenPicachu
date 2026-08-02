@@ -34,7 +34,7 @@ test('searching the aic through the ui filters the wall', async ({page}) => {
   await page.goto(`gallery?page=1&size=8&tab=aic`);
   await expect(page.locator('figure.frame')).toHaveCount(8, {timeout: 30_000});
 
-  await page.locator('#query').fill('monet');
+  await page.getByLabel(/Search For/).fill('monet');
   await page.getByRole('button', {name: 'submit search'}).click();
 
   await expect(page).toHaveURL(/search=monet/);
