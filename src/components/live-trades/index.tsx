@@ -63,5 +63,14 @@ export const LiveTrades: FC<LiveTradesState> = ({status, trades}) => {
       <data value={last.price}>{cents.format(last.price)}</data>
       <data className="delta" value={last.price - first.price}>{deltaLabel(first.price, last.price)}</data>
     </p>}
+    <details>
+      <summary>what am I looking at?</summary>
+      <p>
+        Each point is one live trade, newest at the right. The dotted line marks
+        the first price in the window and the color shows the trend against it.
+        High and low mark the window&apos;s range; the headline is the latest
+        price and how far it has moved.
+      </p>
+    </details>
   </section>;
 };

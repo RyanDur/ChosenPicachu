@@ -19,6 +19,7 @@ import {
 import {DemoTopics, demoTopicParam} from './types';
 import {NaturalZIndex} from './ZIndexDemo';
 import {LiveTrades} from '@components/live-trades';
+import {Candles} from '@components/live-trades/Candles';
 import {useLiveTrades} from '@components/live-trades/useLiveTrades';
 import {useEnv} from '@components/Env';
 
@@ -68,7 +69,10 @@ export const DemosPage = () => {
               <article>Z-Index Demo.</article>
               <NaturalZIndex className='card'/>
             </>,
-            [DemoTopics.charts]: <LiveTrades {...liveTrades}/>,
+            [DemoTopics.charts]: <>
+              <LiveTrades {...liveTrades}/>
+              <Candles trades={liveTrades.trades}/>
+            </>,
             [DemoTopics.dragAndDrop]: <>
               <h2>Sortable List</h2>
               <h3>Lazy Move</h3>

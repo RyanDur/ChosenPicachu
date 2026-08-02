@@ -6,6 +6,7 @@ const MatchDecoder = D.object({
     type: D.literal('match'),
     trade_id: D.number,
     price: D.string,
+    size: D.string,
     time: D.string
   }
 });
@@ -14,6 +15,7 @@ export type Trade = {
   id: number;
   price: number;
   tradedAt: number;
+  size: number;
 };
 
 export const subscribeTo = (product: string): string => JSON.stringify({
@@ -24,9 +26,10 @@ export const subscribeTo = (product: string): string => JSON.stringify({
 const toTrade = (frame: D.Output<typeof MatchDecoder>): Maybe<Trade> => {
   const price = Number(frame.price);
   const tradedAt = Date.parse(frame.time);
-  return Number.isNaN(price) || Number.isNaN(tradedAt)
+  const size = Number(frame.size);
+  return Number.isNaN(price) || Number.isNaN(tradedAt) || Number.isNaN(size)
     ? nothing()
-    : maybe({id: frame.trade_id, price, tradedAt});
+    : maybe({id: frame.trade_id, price, tradedAt, size});
 };
 
 export const decodeTrade = (raw: unknown): Maybe<Trade> =>
