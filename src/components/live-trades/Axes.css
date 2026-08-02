@@ -21,6 +21,11 @@
   .chart-area {
     grid-area: chart;
     min-width: 0;
+
+    svg {
+      padding: 0.8rem 0 0.4rem;
+      box-sizing: border-box;
+    }
   }
 
   .x-labels {

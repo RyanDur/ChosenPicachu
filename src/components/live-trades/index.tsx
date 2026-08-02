@@ -3,6 +3,7 @@ import {notEmpty} from '@ryandur/sand';
 import {Menu} from '@components/Menu';
 import {Loading} from '@components/Loading';
 import {LiveTradesState} from './useLiveTrades';
+import {cents, deltaLabel} from './money';
 import {usePeriodCandles} from './usePeriodCandles';
 import {bucketLabel, bucketMs, Period, periodCap, tickEveryMs, timePattern} from './period';
 import {sparklinePoints, TimedPrice} from './sparkline';
@@ -13,14 +14,6 @@ import './LiveTrades.css';
 
 const CHART_WIDTH = 240;
 const CHART_HEIGHT = 60;
-
-const cents = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD'
-});
-
-const deltaLabel = (first: number, last: number): string =>
-  `${last < first ? '-' : '+'}${cents.format(Math.abs(last - first))}`;
 
 type PriceView = {
   series: readonly TimedPrice[];

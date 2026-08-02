@@ -7,6 +7,7 @@ const MatchDecoder = D.object({
     trade_id: D.number,
     price: D.string,
     size: D.string,
+    side: D.literalUnion('buy', 'sell'),
     time: D.string
   }
 });
@@ -16,6 +17,7 @@ export type Trade = {
   price: number;
   tradedAt: number;
   size: number;
+  side: 'buy' | 'sell';
 };
 
 export const subscribeTo = (product: string): string => JSON.stringify({
@@ -29,7 +31,7 @@ const toTrade = (frame: D.Output<typeof MatchDecoder>): Maybe<Trade> => {
   const size = Number(frame.size);
   return Number.isNaN(price) || Number.isNaN(tradedAt) || Number.isNaN(size)
     ? nothing()
-    : maybe({id: frame.trade_id, price, tradedAt, size});
+    : maybe({id: frame.trade_id, price, tradedAt, size, side: frame.side});
 };
 
 export const decodeTrade = (raw: unknown): Maybe<Trade> =>
