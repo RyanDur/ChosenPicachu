@@ -30,15 +30,14 @@ export const ArtPiece = () => {
     }, [id, updatePiece, tab, reset]);
 
     return <>
-        {loading && <Loading testId="loading-piece"/>}
-        {has(piece) && not(errored) && <figure className="art-work" data-testid="image-figure">
+        {loading && <Loading label="loading piece"/>}
+        {has(piece) && not(errored) && <figure className="art-work">
           <Image piece={piece} linkEnabled={false} className="piece"/>
           <figcaption className="artist-display">{piece.artistInfo}</figcaption>
         </figure>}
         {errored && <article className="err">
           <img src={noImage}
-               alt="Load Error"
-               data-testid="image-error"/>
+               alt="Load Error"/>
         </article>}
     </>;
 };

@@ -47,27 +47,27 @@ export const GalleryNav: FC<Props> = ({id}) => {
     {!hasPrevPage && <article className="fill-left"/>}
     {hasPrevPage && <Link to={`${path}${createSearchParams({page: firstPage})}`}
                           onClick={gotoTopOfPage}
-                          id="first" className="page" data-testid="first-page">
+                          id="first" className="page">
         FIRST
     </Link>}
     {hasPrevPage && <Link to={`${path}${createSearchParams({page: prevPage})}`}
                           onClick={gotoTopOfPage}
-                          id="prev" className="page" data-testid="prev-page">
+                          id="prev" className="page">
         PREV
     </Link>}
-    <article id="info" className="content" data-testid="info">
+    <article id="info" className="content">
       <article>{firstRecord} - {lastRecord}</article>
       <article>of</article>
       <article>{totalRecords || '—'}</article>
     </article>
     {hasNextPage && <Link to={`${path}${createSearchParams({page: nextPage})}`}
                           onClick={gotoTopOfPage}
-                          id="next" className="page" data-testid="next-page">
+                          id="next" className="page">
         NEXT
     </Link>}
     {hasNextPage && <Link to={`${path}${createSearchParams({page: lastPage})}`}
                           onClick={gotoTopOfPage}
-                          id="last" className="page" data-testid="last-page">
+                          id="last" className="page">
         LAST
     </Link>}
     {!hasNextPage && <article className="fill-right"/>}

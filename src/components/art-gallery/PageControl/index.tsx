@@ -28,13 +28,11 @@ export const PageControl = () => {
            min={firstPage}
            max={lastPage}
            className="control input"
-           data-testid="go-to"
            onWheel={e => e.currentTarget.blur()}
            onChange={event => updatePageNumber(+event.currentTarget.value)}/>
     <label id="go-to-label" className="title" htmlFor="go-to">Page #{page}</label>
     <input type="number"
            className="control input"
-           data-testid="per-page"
            min={1}
            max={100}
            id="per-page"

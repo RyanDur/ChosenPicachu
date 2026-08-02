@@ -7,7 +7,7 @@ for (const tab of tabs) {
     await page.goto(`gallery?page=1&size=8&tab=${tab}`);
 
     await expect(page.locator('figure.frame')).toHaveCount(8, {timeout: 30_000});
-    await expect(page.getByTestId('empty-gallery')).toHaveCount(0);
+    await expect(page.getByAltText('empty gallery')).toHaveCount(0);
     await expect(page.locator('figure.frame figcaption').first()).not.toBeEmpty();
   });
 }
@@ -20,14 +20,14 @@ test('vam art truly renders and opens into a piece', async ({page}) => {
   await painting.click();
 
   await expect(page).toHaveURL(/gallery\/[A-Za-z]*\d+/);
-  await expect(page.getByTestId('image-figure')).toBeVisible({timeout: 30_000});
+  await expect(page.getByRole('figure')).toBeVisible({timeout: 30_000});
 });
 
 test('an aic search still hangs art', async ({page}) => {
   await page.goto('gallery?page=1&size=8&tab=aic&search=monet');
 
   await expect(page.locator('figure.frame')).toHaveCount(8, {timeout: 30_000});
-  await expect(page.getByTestId('empty-gallery')).toHaveCount(0);
+  await expect(page.getByAltText('empty gallery')).toHaveCount(0);
 });
 
 test('searching the aic through the ui filters the wall', async ({page}) => {
@@ -35,7 +35,7 @@ test('searching the aic through the ui filters the wall', async ({page}) => {
   await expect(page.locator('figure.frame')).toHaveCount(8, {timeout: 30_000});
 
   await page.locator('#query').fill('monet');
-  await page.getByTestId('submit-query').click();
+  await page.getByRole('button', {name: 'submit search'}).click();
 
   await expect(page).toHaveURL(/search=monet/);
   await expect(page.locator('figure.frame')).toHaveCount(8, {timeout: 30_000});
@@ -59,6 +59,6 @@ for (const entry of ['users', 'demos', 'games', 'gallery']) {
     const response = await page.goto(entry);
 
     expect(response?.status()).toBe(200);
-    await expect(page.getByTestId('navigation').first()).toBeVisible({timeout: 30_000});
+    await expect(page.getByRole('navigation').first()).toBeVisible({timeout: 30_000});
   });
 }

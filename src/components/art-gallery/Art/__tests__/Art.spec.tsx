@@ -24,7 +24,7 @@ describe('The gallery.', () => {
     setupAICAllArtResponse(aicArtResponse);
     renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
 
-    await screen.findAllByTestId(/piece-/);
+    await screen.findAllByRole('figure');
     server.events.removeListener('request:start', count);
 
     expect(hits).toEqual(1);
@@ -37,18 +37,18 @@ describe('The gallery.', () => {
     }));
     renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
 
-    expect(await screen.findByTestId('gallery-loading')).toBeInTheDocument();
-    expect(screen.queryByTestId(/piece-/)).not.toBeInTheDocument();
-    await waitFor(() => expect(screen.queryByTestId('gallery-loading')).not.toBeInTheDocument());
+    expect(await screen.findByRole('progressbar', {name: 'loading gallery'})).toBeInTheDocument();
+    expect(screen.queryByRole('figure')).not.toBeInTheDocument();
+    await waitFor(() => expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument());
   });
 
   test('when there is no art to show', async () => {
     setupAICAllArtResponse({...aicArtResponse, data: []}, {page: 0, search: 'g', limit: 8});
     renderWithGalleryContext(<ArtGallery/>, {params: {page: 0, search: 'g', size: 8, tab: Source.AIC}});
 
-    expect(await screen.findByTestId('empty-gallery')).toBeInTheDocument();
-    expect(screen.queryByTestId(/piece/)).not.toBeInTheDocument();
-    expect(screen.queryByTestId('gallery-loading')).not.toBeInTheDocument();
+    expect(await screen.findByAltText('empty gallery')).toBeInTheDocument();
+    expect(screen.queryByRole('figure')).not.toBeInTheDocument();
+    expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument();
   });
 
   test('when the art has errored', async () => {
@@ -56,8 +56,8 @@ describe('The gallery.', () => {
 
     renderWithGalleryContext(<ArtGallery/>, {params: {page: 23, search: 'g', size: 8, tab: Source.HARVARD}});
 
-    expect(await screen.findByTestId('empty-gallery')).toBeInTheDocument();
-    expect(screen.queryByTestId(/piece/)).not.toBeInTheDocument();
-    expect(screen.queryByTestId('gallery-loading')).not.toBeInTheDocument();
+    expect(await screen.findByAltText('empty gallery')).toBeInTheDocument();
+    expect(screen.queryByRole('figure')).not.toBeInTheDocument();
+    expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument();
   });
 });

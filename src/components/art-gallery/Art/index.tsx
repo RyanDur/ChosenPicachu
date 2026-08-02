@@ -42,10 +42,9 @@ export const ArtGallery: FC = () => {
       <Image className="piece" piece={piece} priority={index < 4}/>
       <figcaption className="title">{piece.title}</figcaption>
     </figure>)}
-    {loading && <Loading className="loader" testId="gallery-loading"/>}
+    {loading && <Loading className="loader" label="loading gallery"/>}
     {!loading && errored && <img src={noImageGallery}
                                  id="empty-gallery"
-                                 alt="empty gallery"
-                                 data-testid="empty-gallery"/>}
+                                 alt="empty gallery"/>}
   </section>;
 };

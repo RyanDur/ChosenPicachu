@@ -37,8 +37,7 @@ export const Image: FC<ImageProps> = (
     return (errored || !piece.image) ?
         <img alt="oops"
              className="error"
-             src={noImage}
-             data-testid="error"/> :
+             src={noImage}/> :
         (<>
             <ConditionalLink enabled={linkEnabled} area={tab ?? ''}>
                 <img className={join('image', 'off-screen', className)}
@@ -56,7 +55,6 @@ export const Image: FC<ImageProps> = (
                      srcSet={piece.srcSet ?? undefined}
                      sizes="(max-width: 600px) 85vw, (max-width: 1100px) 45vw, 33vw"
                      alt={piece.altText} title={piece.title}
-                     data-testid={`piece-${piece.id}`}
                      src={piece.image}/>
             </ConditionalLink>
             {completed || <Loading/>}

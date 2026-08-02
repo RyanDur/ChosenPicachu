@@ -29,17 +29,17 @@ describe('search', () => {
 
     await userEvent.type(screen.getByLabelText(/Search For/), searchWord);
 
-    await waitFor(() => expect(screen.getByTestId('search-options')).toHaveTextContent(searchWord));
+    await waitFor(() => expect(screen.getByRole('listbox', {hidden: true})).toHaveTextContent(searchWord));
   });
 
   it('should update the url when the user wants to search', async () => {
     renderWithRouter(<Search/>);
-    await userEvent.click(screen.getByTestId('submit-query'));
+    await userEvent.click(screen.getByRole('button', {name: 'submit search'}));
 
     expect(screen.getByTestId('subject-url-search')).not.toHaveTextContent('search');
 
     await userEvent.type(screen.getByLabelText(/Search For/), 'A');
-    await userEvent.click(screen.getByTestId('submit-query'));
+    await userEvent.click(screen.getByRole('button', {name: 'submit search'}));
 
     await waitFor(() => expect(screen.getByTestId('subject-url-search')).toHaveTextContent('?search=A'));
     expect(screen.getByTestId('subject-url-path').innerHTML).toEqual(Paths.artGallery);
@@ -49,7 +49,7 @@ describe('search', () => {
     renderWithRouter(<Search/>, {params: {page: 1, tab: 'aic'}});
 
     await userEvent.type(screen.getByLabelText(/Search For/), 'a');
-    await userEvent.click(screen.getByTestId('submit-query'));
+    await userEvent.click(screen.getByRole('button', {name: 'submit search'}));
 
     expect(screen.getByTestId('subject-url-search')).toHaveTextContent('?page=1&tab=aic&search=a');
   });
@@ -57,7 +57,7 @@ describe('search', () => {
   it('should leave the original query alone when search is empty', async () => {
     renderWithRouter(<Search/>, {params: {page: 1, search: 'cat', tab: 'some-tab'}});
 
-    await userEvent.click(screen.getByTestId('submit-query'));
+    await userEvent.click(screen.getByRole('button', {name: 'submit search'}));
 
     expect(screen.getByTestId('subject-url-search')).toHaveTextContent('?page=1&search=cat&tab=some-tab');
   });
@@ -65,7 +65,7 @@ describe('search', () => {
   it('should be able to reset the query', async () => {
     renderWithRouter(<Search/>, {params: {search: 'cat', tab: 'bat'}});
 
-    await userEvent.click(screen.getByTestId('reset-query'));
+    await userEvent.click(screen.getByRole('button', {name: 'reset search'}));
 
     await waitFor(() => expect(screen.getByTestId('subject-url-search')).toHaveTextContent('tab=bat'));
   });
