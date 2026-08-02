@@ -35,7 +35,7 @@ export const UsersPage: FC = () => {
     users.find(({id: userId}) => userId === user.id)?.friends ?? user.friends;
 
   return <>
-    <section id="user-info" className="card users" key={currentUser?.id}>
+    <section id="user-info" className="users card" key={currentUser?.id}>
         <h2 className="title">User Information</h2>
         <UsersLinks.Provider value={{users: Paths.users}}><UserInformation currentUser={currentUser}
                          readOnly={mode === 'view'}
@@ -47,7 +47,7 @@ export const UsersPage: FC = () => {
                            .onSuccess(() => navigate(Paths.users))}/></UsersLinks.Provider>
       </section>
 
-      <section id="user-candidates" className="card users">
+      <section id="user-candidates" className="users card">
         <h2 className="title">User Candidates</h2>
         {mode === 'view' &&
             <Link to={Paths.users} id="add-new-user" className="button primary">Add New User</Link>}

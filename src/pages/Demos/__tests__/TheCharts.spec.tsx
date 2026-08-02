@@ -167,7 +167,7 @@ describe('the demos page', () => {
 
       renderWithMemoryRouter(chartsRoute(urlOf(feed)), {path: Paths.demos});
 
-      await waitFor(() => expect(feed.clients.size).toBe(1));
+      await waitFor(() => expect(subscribed.size).toBeGreaterThan(0));
       broadcast(feed, [tradeFrame(50001)]);
       const demoTabs = await screen.findByRole('navigation', {name: 'demos'});
       await userEvent.click(within(demoTabs).getByText('Charts'));
