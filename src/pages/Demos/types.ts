@@ -1,10 +1,11 @@
 import * as D from 'schemawax';
 
-export enum AboutTopics {
+export enum DemoTopics {
   accordions= 'accordions',
   zIndex = 'z-index',
   dragAndDrop = 'dragAndDrop',
+  charts = 'charts',
 }
 
-export const aboutTopicParam: D.Decoder<AboutTopics> = D.literalUnion(...Object.values(AboutTopics));
+export const demoTopicParam: D.Decoder<DemoTopics> = D.literalUnion(...Object.values(DemoTopics));
 export type PropsWithClassName = { className?: string };

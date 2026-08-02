@@ -1,7 +1,7 @@
 import {randParagraph, randWord} from '@ngneat/falso';
 import {useSearchParamsObject} from '@components/search-params';
 import './style.css';
-import './AboutPage.css';
+import './DemosPage.css';
 import {Tabs} from '@components/Tabs';
 import {
   ExclusiveAccordion,
@@ -16,8 +16,9 @@ import {
   SortableListEagerMove,
   SortableListLazyMove
 } from './DragAndDrop';
-import {AboutTopics, aboutTopicParam} from './types';
+import {DemoTopics, demoTopicParam} from './types';
 import {NaturalZIndex} from './ZIndexDemo';
+import {LiveTrades} from '@components/live-trades';
 
 const paragraphs = (count: number) =>
   [...new Set(Array.from({length: count * 3}, () => randWord()))].slice(0, count).map((key) => ({
@@ -25,21 +26,22 @@ const paragraphs = (count: number) =>
     value: Array.from({length: Math.floor(Math.random() * 6) + 1}, () => randParagraph()).join('\n\n')
   }));
 
-export const AboutPage = () => {
-  const {tab} = useSearchParamsObject({tab: aboutTopicParam}, {tab: AboutTopics.accordions});
+export const DemosPage = () => {
+  const {tab} = useSearchParamsObject({tab: demoTopicParam}, {tab: DemoTopics.accordions});
 
   return <>
       <Tabs
         label='demos'
-        defaultTab={AboutTopics.accordions}
+        defaultTab={DemoTopics.accordions}
         values={[
-          {display: 'Accordions', param: AboutTopics.accordions},
-          {display: 'Z-Index', param: AboutTopics.zIndex},
-          {display: 'Drag and Drop', param: AboutTopics.dragAndDrop}
+          {display: 'Accordions', param: DemoTopics.accordions},
+          {display: 'Z-Index', param: DemoTopics.zIndex},
+          {display: 'Drag and Drop', param: DemoTopics.dragAndDrop},
+          {display: 'Charts', param: DemoTopics.charts}
         ]}/>
       <section id='about'>
         {({
-            [AboutTopics.accordions]:
+            [DemoTopics.accordions]:
               <ul className='accordions'>
                 <li className='title'>Different styles of Accordions.</li>
                 <li>
@@ -58,11 +60,12 @@ export const AboutPage = () => {
                   <ExclusiveRadioToggleAccordion className='card' content={paragraphs(5)}/>
                 </li>
               </ul>,
-            [AboutTopics.zIndex]: <>
+            [DemoTopics.zIndex]: <>
               <article>Z-Index Demo.</article>
               <NaturalZIndex className='card'/>
             </>,
-            [AboutTopics.dragAndDrop]: <>
+            [DemoTopics.charts]: <LiveTrades/>,
+            [DemoTopics.dragAndDrop]: <>
               <h2>Sortable List</h2>
               <h3>Lazy Move</h3>
               <SortableListLazyMove list={new Set(['A', 'B', 'C'])}/>
@@ -73,7 +76,7 @@ export const AboutPage = () => {
               <h3>Hide and Eager Move</h3>
               <HideElemOnDragSortableListEagerMove list={new Set(['A', 'B', 'C'])}/>
             </>
-        })[tab ?? AboutTopics.accordions]}
+        })[tab ?? DemoTopics.accordions]}
       </section>
   </>;
 };

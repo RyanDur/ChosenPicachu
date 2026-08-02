@@ -1,8 +1,11 @@
-import {cleanup, render, screen, waitFor, within} from '@testing-library/react';
+import {cleanup, screen, waitFor, within} from '@testing-library/react';
 import {WebSocket as RealWebSocket, WebSocketServer} from 'ws';
+import userEvent from '@testing-library/user-event';
 import {server as mswServer} from '@test-support/server';
+import {renderWithMemoryRouter} from '@test-support';
 import {EnvProvider} from '@components/Env';
-import {HomePage} from '@pages/Home/component';
+import {DemosPage} from '@pages/Demos/component';
+import {Paths} from '@pages/Paths';
 
 const realSockets = () => {
   mswServer.close();
@@ -75,10 +78,15 @@ const drawnPoints = (): string[] => {
   return region.querySelector('polyline')?.getAttribute('points')?.split(' ') ?? [];
 };
 
-const renderHome = (feedUrl: string) =>
-  render(<EnvProvider env={{tradeFeed: feedUrl}}><HomePage/></EnvProvider>);
+const chartsRoute = (feedUrl: string) => ({
+  path: Paths.demos,
+  element: <EnvProvider env={{tradeFeed: feedUrl}}><DemosPage/></EnvProvider>
+});
 
-describe('the home page', () => {
+const renderCharts = (feedUrl: string) =>
+  renderWithMemoryRouter(chartsRoute(feedUrl), {path: `${Paths.demos}?tab=charts`});
+
+describe('the demos page', () => {
   describe('live trades', () => {
     const feeds: WebSocketServer[] = [];
 
@@ -97,19 +105,29 @@ describe('the home page', () => {
     test('the user watches the latest trades stream in, newest last', async () => {
       const feed = await streamingFeed();
 
-      renderHome(urlOf(feed));
+      renderCharts(urlOf(feed));
 
       expect(screen.getByRole('status')).toHaveTextContent('connecting to the live feed…');
       await feedIsLive();
       broadcast(feed, [50001, 50002, 50003, 50004, 50005].map(tradeFrame));
       await waitFor(() => expect(shownPrices()).toEqual(['50003', '50004', '50005']));
-      expect(screen.getByTestId('table')).toBeVisible();
+    });
+
+    test('the user reaches the charts from the tab strip', async () => {
+      const feed = await streamingFeed();
+
+      renderWithMemoryRouter(chartsRoute(urlOf(feed)), {path: Paths.demos});
+
+      const demoTabs = await screen.findByRole('navigation', {name: 'demos'});
+      await userEvent.click(within(demoTabs).getByText('Charts'));
+
+      expect(await screen.findByRole('region', {name: 'live trades'})).toBeVisible();
     });
 
     test('a connected feed tells the user the stream is live', async () => {
       const feed = await streamingFeed();
 
-      renderHome(urlOf(feed));
+      renderCharts(urlOf(feed));
 
       await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/^live$/));
     });
@@ -117,7 +135,7 @@ describe('the home page', () => {
     test('frames that are not trades never reach the user', async () => {
       const feed = await streamingFeed();
 
-      renderHome(urlOf(feed));
+      renderCharts(urlOf(feed));
 
       await feedIsLive();
       broadcast(feed, ['not even json', nonTradeFrame(99999), tradeFrame(50001)]);
@@ -128,7 +146,7 @@ describe('the home page', () => {
       const feed = await listeningFeed(true);
       feeds.push(feed);
 
-      renderHome(urlOf(feed));
+      renderCharts(urlOf(feed));
 
       await waitFor(() =>
         expect(screen.getByRole('status')).toHaveTextContent('live feed unavailable'));
@@ -137,7 +155,7 @@ describe('the home page', () => {
     test('the user sees the price trend drawn from every recent trade', async () => {
       const feed = await streamingFeed();
 
-      renderHome(urlOf(feed));
+      renderCharts(urlOf(feed));
 
       await feedIsLive();
       broadcast(feed, [50001, 50002, 50003, 50004, 50005].map(tradeFrame));
@@ -148,7 +166,7 @@ describe('the home page', () => {
       const feed = await streamingFeed();
       const firstTradedAt = 1700000000000;
 
-      renderHome(urlOf(feed));
+      renderCharts(urlOf(feed));
 
       await feedIsLive();
       broadcast(feed, [50001, 50002, 50003, 50004, 50005]
@@ -161,7 +179,7 @@ describe('the home page', () => {
     test('a feed that dies mid-stream tells the user, keeping the last trades', async () => {
       const feed = await streamingFeed();
 
-      renderHome(urlOf(feed));
+      renderCharts(urlOf(feed));
 
       await feedIsLive();
       broadcast(feed, [tradeFrame(50001)]);
@@ -175,7 +193,7 @@ describe('the home page', () => {
     test('a trade whose price is not a number never reaches the user', async () => {
       const feed = await streamingFeed();
 
-      renderHome(urlOf(feed));
+      renderCharts(urlOf(feed));
 
       await feedIsLive();
       broadcast(feed, [tradeFrameWith('not a number', 900042), tradeFrame(50001)]);
@@ -187,7 +205,7 @@ describe('the home page', () => {
       const disconnected = new Promise(resolve =>
         feed.on('connection', socket => socket.on('close', () => resolve('closed'))));
 
-      const {unmount} = renderHome(urlOf(feed));
+      const {unmount} = renderCharts(urlOf(feed));
 
       await feedIsLive();
       unmount();

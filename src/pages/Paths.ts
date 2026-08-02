@@ -1,6 +1,6 @@
 export enum Paths {
   home = '/',
-  about = '/about/',
+  demos = '/demos/',
   users = '/users/',
   artGallery = '/gallery/',
   artGalleryPiece = '/gallery/:id',

@@ -12,7 +12,7 @@ import {
     row1Col1Display,
     row1Col2Display,
     rows
-} from '@pages/Home/demoData';
+} from './demoData';
 import {faker} from '@faker-js/faker';
 
 describe('A Table', () => {

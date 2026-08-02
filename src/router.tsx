@@ -1,8 +1,9 @@
-import {Outlet, useMatches} from 'react-router';
+import {Navigate, Outlet, useMatches} from 'react-router';
 import {Fragment} from 'react';
 import {SideNav} from '@pages/BasePage/SideNav';
 import {isRegions, Regions} from '@pages/regions';
-import {About, Gallery, Games, Home, Users} from './pages';
+import {Demos, Gallery, Games, Users} from './pages';
+import {Paths} from '@pages/Paths';
 
 const NoHeader = () => null;
 
@@ -32,8 +33,8 @@ export const router = {
   path: '/',
   element: <Shell/>,
   children: [
-    Home,
-    About,
+    {path: Paths.home, element: <Navigate to={Paths.demos} replace/>},
+    Demos,
     Users,
     Gallery,
     Games
