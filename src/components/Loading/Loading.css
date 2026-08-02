@@ -6,6 +6,14 @@
   height: 100%;
 
   .loading {
+    appearance: none;
+    border: none;
+    background: none;
+
+    &::-webkit-progress-bar {
+      background: none;
+    }
+
     color: var(--void);
     font-size: 90px;
     text-indent: -9999em;

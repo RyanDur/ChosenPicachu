@@ -28,7 +28,7 @@ describe('viewing a piece', () => {
       path: `${Paths.artGalleryPiece}`
     });
 
-    await waitFor(() => expect(screen.getByTestId('loading-piece')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByRole('progressbar', {name: 'loading piece'})).toBeInTheDocument());
   });
 
   test('when the art piece is loaded', async () => {
@@ -41,7 +41,7 @@ describe('viewing a piece', () => {
     });
 
     expect(await screen.findByText(aicArtResponse.data.artist_display)).toBeInTheDocument();
-    await waitFor(() => expect(screen.queryByTestId('image-error')).not.toBeInTheDocument());
+    await waitFor(() => expect(screen.queryByAltText('Load Error')).not.toBeInTheDocument());
   });
 
   test('when getting the piece has errored', async () => {
@@ -51,8 +51,8 @@ describe('viewing a piece', () => {
       path: `${Paths.artGalleryPiece}`
     });
 
-    await waitFor(() => expect(screen.queryByTestId('image-error')).toBeInTheDocument());
-    expect(screen.queryByTestId('image-figure')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('loading-piece')).not.toBeInTheDocument();
+    await waitFor(() => expect(screen.queryByAltText('Load Error')).toBeInTheDocument());
+    expect(screen.queryByRole('figure')).not.toBeInTheDocument();
+    expect(screen.queryByRole('progressbar', {name: 'loading piece'})).not.toBeInTheDocument();
   });
 });

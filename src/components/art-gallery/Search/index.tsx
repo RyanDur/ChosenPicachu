@@ -40,14 +40,14 @@ export const Search: FC<Props> = ({id}) => {
 
   const handleReset = () => removeSearchParams('search');
 
-  return <form id={id} className="search" onSubmit={handleSubmit} onReset={handleReset} data-testid="search">
+  return <form id={id} className="search" onSubmit={handleSubmit} onReset={handleReset}>
     <input autoComplete="off" list="search-options" id="query"
            onInput={event => updateQuery(event.currentTarget.value)}/>
     <label id="query-label" className='ellipsis' htmlFor="query"><span className='bold'>Search For:</span> {decodeURI(search || '')}</label>
-    <button className="reset-query" data-testid="reset-query" type="reset" aria-label="reset search"/>
-    <button className="submit-query" data-testid="submit-query" disabled={!searchString.length} type="submit"
+    <button className="reset-query" type="reset" aria-label="reset search"/>
+    <button className="submit-query" disabled={!searchString.length} type="submit"
             aria-label="submit search"/>
-    <datalist id="search-options" data-testid="search-options">
+    <datalist id="search-options">
       {searchOptions.map((searchOption, index) =>
         <option value={searchOption} key={index}>{searchOption}</option>)}
     </datalist>

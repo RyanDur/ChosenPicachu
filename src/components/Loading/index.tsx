@@ -4,13 +4,10 @@ import './Loading.css';
 
 type LoadingProps = {
     className?: string;
-    testId?: string
+    label?: string;
 }
 
-export const Loading: FC<LoadingProps> = ({className, testId}) =>
-    <section className={join('loading-screen', className)}
-             role="progressbar"
-             aria-label="loading"
-             data-testid={testId || 'loading'}>
-        <article className="loading"/>
+export const Loading: FC<LoadingProps> = ({className, label = 'loading'}) =>
+    <section className={join('loading-screen', className)}>
+        <progress className="loading" aria-label={label}/>
     </section>;

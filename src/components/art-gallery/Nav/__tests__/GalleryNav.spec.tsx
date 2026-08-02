@@ -23,12 +23,12 @@ describe('Gallery Navigation', () => {
     describe('from the first page', () => {
       it('should be able to goto the next page', async () => {
         renderWithGalleryContext(<GalleryNav/>, options);
-        await userEvent.click(screen.getByTestId('next-page'));
+        await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
 
         expect(screen.getByTestId('subject-url-search')).toHaveTextContent('page=2');
         expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
 
-        await userEvent.click(screen.getByTestId('next-page'));
+        await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
 
         expect(screen.getByTestId('subject-url-search')).toHaveTextContent('page=3');
         expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
@@ -37,20 +37,20 @@ describe('Gallery Navigation', () => {
       test('when on the first page', () => {
         renderWithGalleryContext(<GalleryNav/>, options);
 
-        expect(screen.queryByTestId('prev-page')).not.toBeInTheDocument();
-        expect(screen.queryByTestId('first-page')).not.toBeInTheDocument();
+        expect(screen.queryByRole('link', {name: 'PREV'})).not.toBeInTheDocument();
+        expect(screen.queryByRole('link', {name: 'FIRST'})).not.toBeInTheDocument();
       });
 
       test('when jumping to the last page', async () => {
         renderWithGalleryContext(<GalleryNav/>, options);
-        await userEvent.click(screen.getByTestId('last-page'));
+        await userEvent.click(screen.getByRole('link', {name: 'LAST'}));
 
         expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
         expect(screen.getByTestId('subject-url-search')).toHaveTextContent(`?page=${fromAICArt.pagination.totalPages}`);
-        expect(screen.queryByTestId('last-page')).not.toBeInTheDocument();
-        expect(screen.queryByTestId('next-page')).not.toBeInTheDocument();
-        expect(screen.queryByTestId('first-page')).toBeInTheDocument();
-        expect(screen.queryByTestId('prev-page')).toBeInTheDocument();
+        expect(screen.queryByRole('link', {name: 'LAST'})).not.toBeInTheDocument();
+        expect(screen.queryByRole('link', {name: 'NEXT'})).not.toBeInTheDocument();
+        expect(screen.queryByRole('link', {name: 'FIRST'})).toBeInTheDocument();
+        expect(screen.queryByRole('link', {name: 'PREV'})).toBeInTheDocument();
       });
     });
 
@@ -62,15 +62,15 @@ describe('Gallery Navigation', () => {
           galleryState: fromAICArt
         });
 
-        await userEvent.click(screen.getByTestId('last-page'));
-        await userEvent.click(screen.getByTestId('prev-page'));
+        await userEvent.click(screen.getByRole('link', {name: 'LAST'}));
+        await userEvent.click(screen.getByRole('link', {name: 'PREV'}));
 
         expect(screen.getByTestId('subject-url-search')).toHaveTextContent(
           `page=${fromAICArt.pagination.totalPages - 1}`
         );
         expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
 
-        await userEvent.click(screen.getByTestId('prev-page'));
+        await userEvent.click(screen.getByRole('link', {name: 'PREV'}));
 
         expect(screen.getByTestId('subject-url-search')).toHaveTextContent(
           `page=${fromAICArt.pagination.totalPages - 2}`
@@ -85,9 +85,9 @@ describe('Gallery Navigation', () => {
           galleryState: fromAICArt
         });
 
-        await userEvent.click(screen.getByTestId('last-page'));
+        await userEvent.click(screen.getByRole('link', {name: 'LAST'}));
 
-        expect(screen.queryByTestId('next-page')).not.toBeInTheDocument();
+        expect(screen.queryByRole('link', {name: 'NEXT'})).not.toBeInTheDocument();
       });
 
       it('should not be able to jump to the last page', async () => {
@@ -97,9 +97,9 @@ describe('Gallery Navigation', () => {
           galleryState: fromAICArt
         });
 
-        await userEvent.click(screen.getByTestId('last-page'));
+        await userEvent.click(screen.getByRole('link', {name: 'LAST'}));
 
-        expect(screen.queryByTestId('last-page')).not.toBeInTheDocument();
+        expect(screen.queryByRole('link', {name: 'LAST'})).not.toBeInTheDocument();
       });
 
       it('should be able to go to the first page', async () => {
@@ -109,15 +109,15 @@ describe('Gallery Navigation', () => {
           galleryState: fromAICArt
         });
 
-        await userEvent.click(screen.getByTestId('last-page'));
-        await userEvent.click(screen.getByTestId('first-page'));
+        await userEvent.click(screen.getByRole('link', {name: 'LAST'}));
+        await userEvent.click(screen.getByRole('link', {name: 'FIRST'}));
 
         expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
         expect(screen.getByTestId('subject-url-search')).toHaveTextContent('page=1');
-        expect(screen.queryByTestId('last-page')).toBeInTheDocument();
-        expect(screen.queryByTestId('next-page')).toBeInTheDocument();
-        expect(screen.queryByTestId('first-page')).not.toBeInTheDocument();
-        expect(screen.queryByTestId('prev-page')).not.toBeInTheDocument();
+        expect(screen.queryByRole('link', {name: 'LAST'})).toBeInTheDocument();
+        expect(screen.queryByRole('link', {name: 'NEXT'})).toBeInTheDocument();
+        expect(screen.queryByRole('link', {name: 'FIRST'})).not.toBeInTheDocument();
+        expect(screen.queryByRole('link', {name: 'PREV'})).not.toBeInTheDocument();
       });
     });
   });
@@ -130,28 +130,28 @@ describe('Gallery Navigation', () => {
       galleryState: fromAICArt
     });
 
-    await userEvent.click(screen.getByTestId('next-page'));
+    await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
     expect(screen.getByTestId('subject-url-search')).toHaveTextContent('search=q&page=2');
 
-    await userEvent.click(screen.getByTestId('next-page'));
+    await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
     expect(screen.getByTestId('subject-url-search')).toHaveTextContent('search=q&page=3');
 
-    await userEvent.click(screen.getByTestId('last-page'));
+    await userEvent.click(screen.getByRole('link', {name: 'LAST'}));
     expect(screen.getByTestId('subject-url-search')).toHaveTextContent(
       `search=q&page=${fromAICArt.pagination.totalPages}`
     );
 
-    await userEvent.click(screen.getByTestId('prev-page'));
+    await userEvent.click(screen.getByRole('link', {name: 'PREV'}));
     expect(screen.getByTestId('subject-url-search')).toHaveTextContent(
       `search=q&page=${fromAICArt.pagination.totalPages - 1}`
     );
 
-    await userEvent.click(screen.getByTestId('prev-page'));
+    await userEvent.click(screen.getByRole('link', {name: 'PREV'}));
     expect(screen.getByTestId('subject-url-search')).toHaveTextContent(
       `search=q&page=${fromAICArt.pagination.totalPages - 2}`
     );
 
-    await userEvent.click(screen.getByTestId('first-page'));
+    await userEvent.click(screen.getByRole('link', {name: 'FIRST'}));
     expect(screen.getByTestId('subject-url-search')).toHaveTextContent(
       'search=q&page=1'
     );
@@ -164,6 +164,6 @@ describe('Gallery Navigation', () => {
       initialRoute: Paths.artGallery,
       galleryState: fromAICArt
     });
-    expect(screen.getByTestId('info')).toHaveTextContent(`${1} - ${fromAICArt.pagination.limit}of${fromAICArt.pagination.total}`);
+    expect(screen.getByRole('navigation')).toHaveTextContent(`${1} - ${fromAICArt.pagination.limit}of${fromAICArt.pagination.total}`);
   });
 });

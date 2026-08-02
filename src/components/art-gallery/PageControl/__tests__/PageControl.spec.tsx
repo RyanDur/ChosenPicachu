@@ -19,22 +19,22 @@ describe('The page controls', () => {
         path: Paths.artGallery,
         initialRoute: Paths.artGallery
       });
-      await userEvent.type(screen.getByTestId('go-to'), pageNumber);
+      await userEvent.type(screen.getByLabelText(/Page #/), pageNumber);
       await userEvent.click(screen.getByText('Go'));
 
       expect(screen.getByTestId('subject-url-search')).toHaveTextContent(`?page=${pageNumber}`);
-      expect(screen.getByTestId('go-to')).not.toHaveValue(+pageNumber);
+      expect(screen.getByLabelText(/Page #/)).not.toHaveValue(+pageNumber);
     });
 
     it('should not go to the top of page when clicking on page number input', async () => {
       renderWithGalleryContext(<PageControl/>, {path: Paths.artGallery, initialRoute: Paths.artGallery});
-      await userEvent.click(screen.getByTestId('go-to'));
+      await userEvent.click(screen.getByLabelText(/Page #/));
       expect(window.scrollTo).not.toHaveBeenCalled();
     });
 
     it('should not allow a user to go to a page lower than the first', () => {
       renderWithGalleryContext(<PageControl/>, {path: Paths.artGallery, initialRoute: Paths.artGallery});
-      expect(screen.getByTestId('go-to')).toHaveAttribute('min', '1');
+      expect(screen.getByLabelText(/Page #/)).toHaveAttribute('min', '1');
     });
 
     it('should not allow a user to go to a page higher than the last', async () => {
@@ -43,7 +43,7 @@ describe('The page controls', () => {
         initialRoute: Paths.artGallery,
         galleryState: fromAICArt
       });
-      expect(await screen.findByTestId('go-to'))
+      expect(await screen.findByLabelText(/Page #/))
         .toHaveAttribute('max', `${fromAICArt.pagination.totalPages}`);
     });
   });
@@ -55,7 +55,7 @@ describe('The page controls', () => {
         initialRoute: Paths.artGallery
       });
 
-      await userEvent.type(screen.getByTestId('per-page'), '45');
+      await userEvent.type(screen.getByLabelText(/Per Page/), '45');
       await userEvent.click(screen.getByText('Go'));
 
       expect(await screen.findByTestId('subject-url-search')).toHaveTextContent('size=45');
