@@ -120,8 +120,8 @@ describe('resizable columns', () => {
   test('a sized column renders at its width', () => {
     render(<Table columns={sized} rows={people}/>);
 
-    expect(screen.getAllByTestId('th')[0]).toHaveStyle({width: '200px'});
-    expect(screen.getAllByTestId('th')[1]).toHaveStyle({width: '120px'});
+    expect(screen.getByRole('columnheader', {name: /^name/})).toHaveStyle({width: '200px'});
+    expect(screen.getByRole('columnheader', {name: /^age/})).toHaveStyle({width: '120px'});
   });
 
   test('the keyboard widens and narrows a column', async () => {
@@ -130,10 +130,10 @@ describe('resizable columns', () => {
     const handle = screen.getByRole('separator', {name: 'resize name'});
     handle.focus();
     await userEvent.keyboard('{ArrowRight}');
-    expect(screen.getAllByTestId('th')[0]).toHaveStyle({width: '216px'});
+    expect(screen.getByRole('columnheader', {name: /^name/})).toHaveStyle({width: '216px'});
     expect(screen.getByRole('separator', {name: 'resize name'})).toHaveAttribute('aria-valuenow', '216');
     await userEvent.keyboard('{ArrowLeft}{ArrowLeft}');
-    expect(screen.getAllByTestId('th')[0]).toHaveStyle({width: '184px'});
+    expect(screen.getByRole('columnheader', {name: /^name/})).toHaveStyle({width: '184px'});
   });
 
   test('dragging the handle resizes the column', () => {
@@ -144,7 +144,7 @@ describe('resizable columns', () => {
     fireEvent.pointerMove(handle, {clientX: 340, pointerId: 1});
     fireEvent.pointerUp(handle, {pointerId: 1});
 
-    expect(screen.getAllByTestId('th')[0]).toHaveStyle({width: '240px'});
+    expect(screen.getByRole('columnheader', {name: /^name/})).toHaveStyle({width: '240px'});
   });
 
   test('columns without widths stay plain', () => {

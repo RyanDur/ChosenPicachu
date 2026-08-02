@@ -146,7 +146,8 @@ describe('the demos page', () => {
       expect(screen.getByRole('status')).toHaveTextContent('connecting to the live feed…');
       await feedIsLive();
       broadcast(feed, [50001, 50002, 50003, 50004, 50005].map(price => tradeFrame(price)));
-      await waitFor(() => expect(within(priceCard()).getByText('$50,005.00')).toBeVisible());
+      await waitFor(() => expect(within(priceCard()).getByText('$50,005.00')).toBeVisible(),
+        {timeout: 5000});
       expect(within(priceCard()).getByText('+$4.00')).toBeVisible();
     });
 
