@@ -4,7 +4,7 @@ import {Menu} from '@components/Menu';
 import {Trade} from '@transport/coinbase';
 import {bucketTrades, candleShapes, volumeShapes} from './shapes';
 import {usePeriodCandles} from '../usePeriodCandles';
-import {bucketLabel, Period, timePattern} from '../period';
+import {bucketLabel, Period, tickIntervalMs, timePattern} from '../period';
 import {Axes} from '../Axes';
 import '../chart-card.css';
 import './Candles.css';
@@ -39,7 +39,8 @@ export const Candles: FC<Props> = ({trades}) => {
     <Axes high={notEmpty(candles) ? Math.max(...candles.map(candle => candle.high)) : 0}
           low={notEmpty(candles) ? Math.min(...candles.map(candle => candle.low)) : 0}
           times={candles.map(candle => candle.openedAt)}
-          pattern={timePattern[period]}>
+          pattern={timePattern[period]}
+          tickEvery={period === Period.live ? undefined : tickIntervalMs[period]}>
       <svg aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${CANDLE_HEIGHT}`}>
         {bodies.map(shape => <g key={shape.x} className={shape.direction}>
           <line x1={shape.center} y1={shape.wickTop} x2={shape.center} y2={shape.wickBottom}/>

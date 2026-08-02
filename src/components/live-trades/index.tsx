@@ -3,7 +3,7 @@ import {notEmpty} from '@ryandur/sand';
 import {Menu} from '@components/Menu';
 import {LiveTradesState} from './useLiveTrades';
 import {usePeriodCandles} from './usePeriodCandles';
-import {bucketLabel, Period, timePattern} from './period';
+import {bucketLabel, Period, tickIntervalMs, timePattern} from './period';
 import {sparklinePoints} from './sparkline';
 import {Axes} from './Axes';
 import {Trade} from '@transport/coinbase';
@@ -89,7 +89,8 @@ export const LiveTrades: FC<LiveTradesState> = ({status, trades}) => {
       </Menu>
     </header>
     <figure>
-      <Axes high={view.high} low={view.low} times={view.times} pattern={timePattern[period]}>
+      <Axes high={view.high} low={view.low} times={view.times} pattern={timePattern[period]}
+            tickEvery={live ? undefined : tickIntervalMs[period]}>
         <svg aria-hidden="true"
              viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
              preserveAspectRatio="none">
