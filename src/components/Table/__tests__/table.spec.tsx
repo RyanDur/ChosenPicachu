@@ -184,9 +184,12 @@ describe('drag sortable columns', () => {
   const sized = [
     {display: 'name', column: 'name', width: 200},
     {display: 'age', column: 'age', width: 120},
-    {display: 'city', column: 'city', width: 120}
+    {display: 'city', column: 'city', width: 120},
+    {display: 'job', column: 'job', width: 160}
   ];
-  const people = [{name: {display: 'Ada'}, age: {display: '36'}, city: {display: 'London'}}];
+  const people = [{
+    name: {display: 'Ada'}, age: {display: '36'}, city: {display: 'London'}, job: {display: 'Analyst'}
+  }];
 
   const headerTexts = () => screen.getAllByRole('columnheader').map(header => header.textContent);
   const header = (name: string) => screen.getByRole('columnheader', {name: new RegExp(`^${name}`)});
@@ -198,45 +201,61 @@ describe('drag sortable columns', () => {
   test('an eager column follows the pointer as it crosses its neighbors', () => {
     render(<Table columns={sized} rows={people} draggableColumns="eager-move"/>);
 
-    drag('name');
+    drag('age');
     fireEvent.dragOver(header('city'));
 
-    expect(headerTexts()).toEqual(['age', 'city', 'name']);
+    expect(headerTexts()).toEqual(['name', 'city', 'age', 'job']);
     const cells = within(screen.getAllByRole('rowgroup')[1]).getAllByRole('cell');
-    expect(cells.map(cell => cell.textContent)).toEqual(['36', 'London', 'Ada']);
+    expect(cells.map(cell => cell.textContent)).toEqual(['Ada', 'London', '36', 'Analyst']);
   });
 
   test('a lazy column waits for the drop', () => {
     render(<Table columns={sized} rows={people} draggableColumns="lazy-move"/>);
 
-    drag('name');
+    drag('age');
     fireEvent.dragOver(header('city'));
-    expect(headerTexts()).toEqual(['name', 'age', 'city']);
+    expect(headerTexts()).toEqual(['name', 'age', 'city', 'job']);
 
-    fireEvent.dragEnd(header('name'));
-    expect(headerTexts()).toEqual(['age', 'city', 'name']);
+    fireEvent.dragEnd(header('age'));
+    expect(headerTexts()).toEqual(['name', 'city', 'age', 'job']);
   });
 
   test('a hiding column vanishes while it travels and returns on arrival', () => {
     render(<Table columns={sized} rows={people} draggableColumns="hide-eager-move"/>);
 
-    drag('name');
-    expect(header('name').classList).toContain('hide');
+    drag('city');
+    expect(header('city').classList).toContain('hide');
 
     fireEvent.dragOver(header('age'));
-    fireEvent.dragEnd(header('name'));
-    expect(header('name').classList).not.toContain('hide');
-    expect(headerTexts()).toEqual(['age', 'name', 'city']);
+    fireEvent.dragEnd(header('city'));
+    expect(header('city').classList).not.toContain('hide');
+    expect(headerTexts()).toEqual(['name', 'city', 'age', 'job']);
+  });
+
+  test('the first and last columns hold their posts', () => {
+    render(<Table columns={sized} rows={people} draggableColumns="eager-move"/>);
+
+    expect(header('name').classList).not.toContain('grabbable');
+    expect(header('job').classList).not.toContain('grabbable');
+    expect(header('age').classList).toContain('grabbable');
+
+    drag('name');
+    fireEvent.dragOver(header('city'));
+    expect(headerTexts()).toEqual(['name', 'age', 'city', 'job']);
+
+    drag('city');
+    fireEvent.dragOver(header('name'));
+    expect(headerTexts()).toEqual(['name', 'city', 'age', 'job']);
   });
 
   test('columns hold still without the opt-in', () => {
     render(<Table columns={sized} rows={people}/>);
 
-    fireEvent.mouseDown(header('name'));
-    fireEvent.dragStart(header('name'));
+    fireEvent.mouseDown(header('age'));
+    fireEvent.dragStart(header('age'));
     fireEvent.dragOver(header('city'));
-    fireEvent.dragEnd(header('name'));
+    fireEvent.dragEnd(header('age'));
 
-    expect(headerTexts()).toEqual(['name', 'age', 'city']);
+    expect(headerTexts()).toEqual(['name', 'age', 'city', 'job']);
   });
 });

@@ -101,7 +101,7 @@ describe('the tables demo', () => {
     fireEvent.dragEnd(header('vwap'));
 
     const headerTexts = within(card).getAllByRole('columnheader').map(head => head.textContent);
-    expect(headerTexts).toEqual(['vwap', 'window', 'trades', 'buys', 'sells', 'volume', 'change']);
+    expect(headerTexts).toEqual(['window', 'vwap', 'trades', 'buys', 'sells', 'volume', 'change']);
   });
 
   test('every column is resizable', async () => {
