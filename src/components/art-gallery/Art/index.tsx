@@ -7,7 +7,7 @@ import {useGallery} from '@components/art-gallery/Art/Context';
 import {empty, has} from '@ryandur/sand';
 import {Source, sourceParam} from '@components/art-gallery/museums/types/resource';
 import {art as artResource} from '@components/art-gallery/museums';
-import {defaultRecordLimit} from '@components/art-gallery/museums/config';
+import {defaultRecordLimit} from '@components/art-gallery/limits';
 import noImageGallery from '../../../assets/icons/no-image-gallery.png';
 import './Gallery.css';
 import './Gallery.layout.css';

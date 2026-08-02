@@ -5,7 +5,7 @@ import {Paths} from '@pages/Paths';
 import {Gallery} from '@pages/Gallery';
 import userEvent from '@testing-library/user-event';
 import {AICArtResponse} from '@components/art-gallery/museums/aic/types';
-import {defaultRecordLimit} from '@components/art-gallery/museums/config';
+import {defaultRecordLimit} from '@components/art-gallery/limits';
 import {
   setupAICAllArtResponse,
   setupAICArtPieceResponse,

@@ -8,11 +8,14 @@ import {
   AICSearchSchema
 } from '@components/art-gallery/museums/aic/types';
 import {toQueryString} from '@transport/url';
-import {aicDomain, defaultRecordLimit, defaultSearchLimit} from '@components/art-gallery/museums/config';
+import {defaultRecordLimit, defaultSearchLimit} from '@components/art-gallery/limits';
+import {env} from '@components/Env';
 import {AllArt, Art, SearchOptions} from '@components/art-gallery/museums/types/response';
 import {validate} from '@transport/validate';
 import {http} from '@transport/http';
 import {GetAllArtRequest} from '@components/art-gallery/museums/types/resource';
+
+const {aicDomain} = env;
 
 export const fields = ['id', 'title', 'image_id', 'artist_display', 'term_titles', 'thumbnail'];
 
