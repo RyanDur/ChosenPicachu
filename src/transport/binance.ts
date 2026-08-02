@@ -5,18 +5,20 @@ const BinanceTradeDecoder = D.object({
   required: {
     e: D.literal('trade'),
     t: D.number,
-    p: D.string
+    p: D.string,
+    T: D.number
   }
 });
 
 export type Trade = {
   id: number;
   price: number;
+  tradedAt: number;
 };
 
 const toTrade = (frame: D.Output<typeof BinanceTradeDecoder>): Maybe<Trade> => {
   const price = Number(frame.p);
-  return Number.isNaN(price) ? nothing() : maybe({id: frame.t, price});
+  return Number.isNaN(price) ? nothing() : maybe({id: frame.t, price, tradedAt: frame.T});
 };
 
 export const decodeTrade = (raw: unknown): Maybe<Trade> =>
