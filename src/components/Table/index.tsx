@@ -23,25 +23,54 @@ export type TableProps = {
     cellClassName?: string;
 }
 
-const columnGhost = (source: HTMLTableElement, position: number): HTMLTableElement => {
-    const ghost = document.createElement('table');
-    ghost.className = source.className;
-    const width = source.rows[0]?.cells[position]?.offsetWidth ?? 0;
-    for (const row of source.rows) {
+const emptied = (section: HTMLTableSectionElement): HTMLTableSectionElement =>
+    section.tagName === 'THEAD' ? document.createElement('thead') : document.createElement('tbody');
+
+const columnSlice = (section: HTMLTableSectionElement, position: number): HTMLTableSectionElement => {
+    const group = emptied(section);
+    group.className = section.className;
+    for (const row of section.rows) {
         const cell = row.cells[position];
         if (has(cell)) {
             const line = document.createElement('tr');
             line.className = row.className;
             line.appendChild(cell.cloneNode(true));
-            ghost.appendChild(line);
+            group.appendChild(line);
+        }
+    }
+    return group;
+};
+
+const columnGhost = (source: HTMLTableElement, position: number): HTMLTableElement => {
+    const ghost = document.createElement('table');
+    ghost.className = source.className;
+    const width = source.rows[0]?.cells[position]?.offsetWidth ?? 0;
+    for (const section of [source.tHead, ...source.tBodies]) {
+        if (has(section)) {
+            ghost.appendChild(columnSlice(section, position));
         }
     }
     ghost.style.position = 'fixed';
     ghost.style.top = '0';
-    ghost.style.left = '-100vw';
+    ghost.style.left = '0';
     ghost.style.width = `${width}px`;
     ghost.style.background = 'var(--paper)';
+    ghost.style.pointerEvents = 'none';
+    ghost.style.zIndex = '1000';
+    ghost.style.boxShadow = 'var(--lift-box-shadow)';
     return ghost;
+};
+
+const blankImage = (): HTMLImageElement => {
+    const blank = new Image(1, 1);
+    blank.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+    return blank;
+};
+
+const follow = (ghost: HTMLTableElement | null, x: number, y: number): void => {
+    if (has(ghost)) {
+        ghost.style.transform = `translate(${x - ghost.offsetWidth / 2}px, ${y + 16}px)`;
+    }
 };
 
 const STEP_SHARE = 2;
@@ -166,6 +195,10 @@ export const Table: FC<TableProps> = (
     };
 
     return <table id={id}
+                  onDragOver={event => {
+                      event.preventDefault();
+                      follow(ghost.current, event.clientX, event.clientY);
+                  }}
                   className={join(
                       tableClassName,
                       notEmpty(apportioned) && 'apportioned',
@@ -192,11 +225,12 @@ export const Table: FC<TableProps> = (
                        onDragStart={travels ? event => {
                            if (has(event.dataTransfer)) {
                                event.dataTransfer.effectAllowed = 'move';
+                               event.dataTransfer.setDragImage(blankImage(), 0, 0);
                                const surface = event.currentTarget.closest('table');
                                if (has(surface)) {
                                    ghost.current = columnGhost(surface, position);
                                    document.body.appendChild(ghost.current);
-                                   event.dataTransfer.setDragImage(ghost.current, ghost.current.offsetWidth / 2, 16);
+                                   follow(ghost.current, event.clientX, event.clientY);
                                }
                            }
                            setDragged(key);
