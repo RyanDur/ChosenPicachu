@@ -78,7 +78,7 @@ export const PriceChart: FC<Props> = ({trades}) => {
           </svg>
         </Axes>
         <figcaption>
-          <small className="span">
+          <small className="caption">
             {showing ? view.caption : history.unavailable && 'history unavailable'}
           </small>
         </figcaption>

@@ -21,7 +21,7 @@
   }
 
 
-  .span {
+  .caption {
     display: block;
     width: fit-content;
     min-height: var(--base-x-2);

@@ -80,14 +80,14 @@ export const DemosPage = () => {
               <Aggregations trades={liveTrades.trades}/>
             </>,
             [DemoTopics.dragAndDrop]: <>
-              <h2>Sortable List</h2>
-              <h3>Lazy Move</h3>
+              <h2 className="heading">Sortable List</h2>
+              <h3 className="subheading">Lazy Move</h3>
               <SortableListLazyMove list={new Set(['A', 'B', 'C'])}/>
-              <h3>Eager Move</h3>
+              <h3 className="subheading">Eager Move</h3>
               <SortableListEagerMove list={new Set(['A', 'B', 'C'])}/>
-              <h3>Hide and Lazy Move</h3>
+              <h3 className="subheading">Hide and Lazy Move</h3>
               <HideElemOnDragSortableListLazyMove list={new Set(['A', 'B', 'C'])}/>
-              <h3>Hide and Eager Move</h3>
+              <h3 className="subheading">Hide and Eager Move</h3>
               <HideElemOnDragSortableListEagerMove list={new Set(['A', 'B', 'C'])}/>
             </>
         })[tab ?? DemoTopics.accordions]}

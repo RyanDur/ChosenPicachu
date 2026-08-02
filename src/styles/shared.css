@@ -36,3 +36,15 @@
     padding: var(--base-x-2) var(--base-x-0_5);
   }
 }
+
+.heading {
+  font-size: var(--text-headline);
+  font-weight: bold;
+  margin: var(--base-x-2_5) 0;
+}
+
+.subheading {
+  font-size: var(--text-title);
+  font-weight: bold;
+  margin: var(--base-x-2_25) 0;
+}
