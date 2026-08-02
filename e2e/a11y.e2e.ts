@@ -8,7 +8,7 @@ const pages: A11yPage[] = [
   {name: 'demos', path: 'demos?tab=accordions', ready: 'navigation'},
   {name: 'charts', path: 'demos?tab=charts', ready: 'navigation'},
   {name: 'users', path: 'users', ready: 'table'},
-  {name: 'gallery', path: 'gallery?page=1&size=8&tab=vam', ready: 'navigation', loaded: 'figure.frame'},
+  {name: 'gallery', path: 'gallery', ready: 'navigation', loaded: 'figure.frame'},
   {name: 'games', path: 'games', ready: 'banner'},
   {name: 'three-in-a-row', path: 'games/colorGame', ready: 'main'},
 ];
