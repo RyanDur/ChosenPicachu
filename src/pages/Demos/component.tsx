@@ -19,6 +19,8 @@ import {
 import {DemoTopics, demoTopicParam} from './types';
 import {NaturalZIndex} from './ZIndexDemo';
 import {LiveTrades} from '@components/live-trades';
+import {useLiveTrades} from '@components/live-trades/useLiveTrades';
+import {useEnv} from '@components/Env';
 
 const paragraphs = (count: number) =>
   [...new Set(Array.from({length: count * 3}, () => randWord()))].slice(0, count).map((key) => ({
@@ -28,6 +30,7 @@ const paragraphs = (count: number) =>
 
 export const DemosPage = () => {
   const {tab} = useSearchParamsObject({tab: demoTopicParam}, {tab: DemoTopics.accordions});
+  const liveTrades = useLiveTrades(useEnv().tradeFeed);
 
   return <>
       <Tabs
@@ -64,7 +67,7 @@ export const DemosPage = () => {
               <article>Z-Index Demo.</article>
               <NaturalZIndex className='card'/>
             </>,
-            [DemoTopics.charts]: <LiveTrades/>,
+            [DemoTopics.charts]: <LiveTrades {...liveTrades}/>,
             [DemoTopics.dragAndDrop]: <>
               <h2>Sortable List</h2>
               <h3>Lazy Move</h3>
