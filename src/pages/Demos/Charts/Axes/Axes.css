@@ -4,7 +4,7 @@
   grid-template-areas:
     'y chart'
     '. x';
-  column-gap: var(--base-x-1);
+  column-gap: var(--base);
 
   .y-labels {
     grid-area: y;
