@@ -47,6 +47,18 @@ const scriptedMarket = async (page: Page, prices: number[]): Promise<void> => {
   });
 };
 
+test('the period menu stays hidden until asked', async ({page}) => {
+  await scriptedMarket(page, [50000, 50100]);
+  await page.goto('demos?tab=charts');
+
+  await expect(page.locator(`.price-chart[data-trend='rising'] .delta`)).toBeVisible({timeout: 30_000});
+  await expect(page.getByRole('button', {name: 'price period'})).toBeVisible();
+  await expect(page.getByText('week').first()).toBeHidden();
+
+  await page.getByRole('button', {name: 'price period'}).click();
+  await expect(page.getByText('week').first()).toBeVisible();
+});
+
 const markets = [
   {trend: 'rising', prices: [50000, 50100]},
   {trend: 'falling', prices: [50100, 50000]},
