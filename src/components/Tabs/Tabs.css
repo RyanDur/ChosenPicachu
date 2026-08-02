@@ -147,7 +147,7 @@
 @media (width <= 1000px) {
   .tabs {
     .tab {
-      font-size: var(--text-x-2);
+      font-size: var(--base-x-2);
       padding: 0 var(--base);
 
       .path {

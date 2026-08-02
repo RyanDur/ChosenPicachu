@@ -22,7 +22,7 @@
       background-color: var(--void);
 
       .path {
-        font-size: var(--text-x-4);
+        font-size: var(--base-x-4);
         font-weight: bold;
         background-color: var(--paper);
         height: var(--base-x-8);

@@ -28,7 +28,7 @@
     .value {
         height: 100%;
         width: 100%;
-        font-size: var(--text-x-10);
+        font-size: var(--base-x-10);
     }
 
     .grip {

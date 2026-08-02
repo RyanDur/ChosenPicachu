@@ -43,7 +43,7 @@
     display: inline-flex;
     align-items: center;
     gap: var(--base-x-0_75);
-    font-size: var(--text-x-2);
+    font-size: var(--base-x-2);
     color: var(--charcoal);
     letter-spacing: 0.05em;
 
