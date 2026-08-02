@@ -13,7 +13,7 @@
     "lint": "oxlint --type-aware --deny-warnings",
     "preview": "vite preview",
     "tsc": "tsc -b",
-    "lint:css": "stylelint 'src/**/*.css'"
+    "lint:css": "stylelint --max-warnings 0 'src/**/*.css'"
   },
   "dependencies": {
     "@ngneat/falso": "^8.0.2",
