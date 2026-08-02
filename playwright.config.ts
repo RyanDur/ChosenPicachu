@@ -8,5 +8,10 @@ export default defineConfig({
   timeout: 60_000,
   use: {
     baseURL: process.env.SMOKE_URL || 'https://ryandur.github.io/ChosenPicachu/'
-  }
+  },
+  projects: [
+    {name: 'chromium', use: {browserName: 'chromium'}},
+    {name: 'firefox', use: {browserName: 'firefox'}},
+    {name: 'webkit', use: {browserName: 'webkit'}}
+  ]
 });
