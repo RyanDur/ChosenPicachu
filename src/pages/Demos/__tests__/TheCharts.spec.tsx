@@ -151,6 +151,23 @@ describe('the demos page', () => {
       expect(within(priceCard()).getByText('+$4.00')).toBeVisible();
     });
 
+    test('the accordion labels survive a visit to the streaming charts', async () => {
+      const feed = await streamingFeed();
+
+      renderWithMemoryRouter(chartsRoute(urlOf(feed)), {path: Paths.demos});
+
+      const foldLabels = () => screen.getAllByRole<HTMLInputElement>('checkbox')
+        .map(toggle => toggle.labels?.[0]?.textContent);
+      const before = foldLabels();
+      const demoTabs = await screen.findByRole('navigation', {name: 'demos'});
+      await userEvent.click(within(demoTabs).getByText('Charts'));
+      await feedIsLive();
+      broadcast(feed, [tradeFrame(50001)]);
+      expect(await within(priceCard()).findByText('$50,001.00')).toBeVisible();
+      await userEvent.click(within(demoTabs).getByText('Accordions'));
+      expect(foldLabels()).toEqual(before);
+    });
+
     test('the user reaches the charts from the tab strip', async () => {
       const feed = await streamingFeed();
 

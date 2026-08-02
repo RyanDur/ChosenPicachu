@@ -1,4 +1,3 @@
-import {randWord} from '@ngneat/falso';
 import {FC, ReactNode, useState} from 'react';
 import {classNames} from '@components/class-names';
 import {PropsWithClassName} from '../types';
@@ -17,7 +16,7 @@ export const InclusiveAccordion: FC<PropsWithClassName & ContentProps> = ({
     {content.map(({value, key}, id) =>
       <li key={key} className="fold">
         <input id={`${id}-checkbox`} className="info-toggle off-screen" type="checkbox"/>
-        <label className="info-label" htmlFor={`${id}-checkbox`}>{randWord()}</label>
+        <label className="info-label" htmlFor={`${id}-checkbox`}>{key}</label>
         <p className="info">{value}</p>
       </li>)}
   </ul>
@@ -39,7 +38,7 @@ export const ExclusiveAccordion: FC<PropsWithClassName & ContentProps> = ({
     {content.map(({value, key}, id) =>
       <li className="fold" key={key}>
         <input id={`${id}-radio`} className="info-toggle off-screen" type="radio" name="group"/>
-        <label className="info-label" htmlFor={`${id}-radio`}>{randWord()}</label>
+        <label className="info-label" htmlFor={`${id}-radio`}>{key}</label>
         <p className="info">{value}</p>
       </li>)}
   </ul>
@@ -56,7 +55,7 @@ export const ExclusiveToggleAccordion: FC<PropsWithClassName & ContentProps> = (
     {content.map(({value, key}) =>
       <li key={key}>
         <details className="fold" name="exclusive-toggle-accordian">
-          <summary className="info-label">{randWord()}</summary>
+          <summary className="info-label">{key}</summary>
           <p className="info">{value}</p>
         </details>
       </li>)}

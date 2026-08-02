@@ -1,3 +1,4 @@
+import {useState} from 'react';
 import {randParagraph, randWord} from '@ngneat/falso';
 import {useSearchParamsObject} from '@components/search-params';
 import './style.css';
@@ -30,6 +31,7 @@ const paragraphs = (count: number) =>
 
 export const DemosPage = () => {
   const {tab} = useSearchParamsObject({tab: demoTopicParam}, {tab: DemoTopics.accordions});
+  const [accordionContents] = useState(() => Array.from({length: 5}, () => paragraphs(5)));
   const {tradeFeed, tradeProduct} = useEnv();
   const liveTrades = useLiveTrades(tradeFeed, tradeProduct);
 
@@ -49,19 +51,19 @@ export const DemosPage = () => {
               <ul className='accordions'>
                 <li className='title'>Different styles of Accordions.</li>
                 <li>
-                  <InclusiveAccordion className='card' content={paragraphs(5)}/>
+                  <InclusiveAccordion className='card' content={accordionContents[0]}/>
                 </li>
                 <li>
-                  <ExclusiveAccordion className='card' content={paragraphs(5)}/>
+                  <ExclusiveAccordion className='card' content={accordionContents[1]}/>
                 </li>
                 <li className="exclusive">
-                  <ExclusiveToggleAccordion className='card' content={paragraphs(5)}/>
+                  <ExclusiveToggleAccordion className='card' content={accordionContents[2]}/>
                 </li>
                 <li>
-                  <ExclusiveCheckboxToggleAccordion className='card' content={paragraphs(5)}/>
+                  <ExclusiveCheckboxToggleAccordion className='card' content={accordionContents[3]}/>
                 </li>
                 <li>
-                  <ExclusiveRadioToggleAccordion className='card' content={paragraphs(5)}/>
+                  <ExclusiveRadioToggleAccordion className='card' content={accordionContents[4]}/>
                 </li>
               </ul>,
             [DemoTopics.zIndex]: <>
