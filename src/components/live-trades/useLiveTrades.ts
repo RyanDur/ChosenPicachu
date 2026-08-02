@@ -9,7 +9,7 @@ export type LiveTradesState = {
 
 type SetLiveTrades = Dispatch<SetStateAction<LiveTradesState>>;
 
-const LATEST_TRADES_CAP = 3;
+const LATEST_TRADES_CAP = 60;
 
 const opening: LiveTradesState = {status: 'connecting', trades: []};
 

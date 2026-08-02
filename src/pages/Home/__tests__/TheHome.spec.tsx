@@ -128,6 +128,19 @@ describe('the home page', () => {
         expect(screen.getByRole('status')).toHaveTextContent('live feed unavailable'));
     });
 
+    test('the user sees the price trend drawn from every recent trade', async () => {
+      const feed = await streamingFeed();
+
+      renderHome(urlOf(feed));
+
+      await feedIsLive();
+      broadcast(feed, [50001, 50002, 50003, 50004, 50005].map(tradeFrame));
+      await waitFor(() => {
+        const chart = screen.getByRole('img', {name: 'price trend'});
+        expect(chart.querySelector('polyline')?.getAttribute('points')?.split(' ')).toHaveLength(5);
+      });
+    });
+
     test('a feed that dies mid-stream tells the user, keeping the last trades', async () => {
       const feed = await streamingFeed();
 
