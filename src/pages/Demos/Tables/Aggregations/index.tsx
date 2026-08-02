@@ -2,6 +2,7 @@ import {FC} from 'react';
 import {Table} from '@components/Table';
 import {Trade} from '../../Charts/coinbase';
 import {AggregateRow, windowedAggregates} from './fold';
+import {hydrated, useRecentTrades} from './useRecentTrades';
 
 type Props = {
   trades: readonly Trade[];
@@ -20,8 +21,9 @@ const columns = [
 const cells = (row: AggregateRow) =>
   Object.fromEntries(Object.entries(row).map(([measure, value]) => [measure, {display: value}]));
 
-export const Aggregations: FC<Props> = ({trades}) =>
-  <section aria-label="live aggregations" className="aggregations card">
+export const Aggregations: FC<Props> = ({trades}) => {
+  const recent = useRecentTrades();
+  return <section aria-label="live aggregations" className="aggregations card">
     <Table tableClassName="fancy-table"
            theadClassName="header"
            thClassName="column-name"
@@ -29,7 +31,7 @@ export const Aggregations: FC<Props> = ({trades}) =>
            tbodyClassName="body"
            cellClassName="cell"
            columns={columns}
-           rows={windowedAggregates(trades).map(cells)}/>
+           rows={windowedAggregates(hydrated(recent, trades)).map(cells)}/>
     <details className="explainer">
       <summary className="prompt">what am I looking at?</summary>
       <p className="explanation">
@@ -41,3 +43,4 @@ export const Aggregations: FC<Props> = ({trades}) =>
       </p>
     </details>
   </section>;
+};

@@ -53,3 +53,8 @@
     background: var(--faded-leather);
   }
 }
+
+.apportioned {
+  table-layout: fixed;
+  width: 100%;
+}

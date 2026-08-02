@@ -63,7 +63,7 @@ export const UsersPage: FC = () => {
             {display: 'Home City', column: 'homeCity', width: 180},
             {display: 'Age', column: 'age', width: 90},
             {display: 'Friends', column: 'friends', width: 260},
-            {display: 'Works from Home', column: 'worksFromHome'}
+            {display: 'Works from Home', column: 'worksFromHome', width: 250}
           ]}
           rows={users.map(user => {
             const displayFullName = (user: {
