@@ -1,21 +1,22 @@
-import {expect, test} from '@playwright/test';
+import {expect, Page, test} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
-type A11yPage = {name: string, path: string, ready: string, loaded?: string};
+type Role = Parameters<Page['getByRole']>[0];
+type A11yPage = {name: string, path: string, ready: Role, loaded?: string};
 const pages: A11yPage[] = [
   {name: 'root', path: '', ready: 'navigation'},
   {name: 'demos', path: 'demos?tab=accordions', ready: 'navigation'},
   {name: 'charts', path: 'demos?tab=charts', ready: 'navigation'},
   {name: 'users', path: 'users', ready: 'table'},
   {name: 'gallery', path: 'gallery?page=1&size=8&tab=vam', ready: 'navigation', loaded: 'figure.frame'},
-  {name: 'games', path: 'games', ready: 'header'},
+  {name: 'games', path: 'games', ready: 'banner'},
   {name: 'three-in-a-row', path: 'games/colorGame', ready: 'main'},
 ];
 
 for (const {name, path, ready, loaded} of pages) {
   test(`the ${name} page has no accessibility violations`, async ({page}) => {
     await page.goto(path);
-    await expect(page.getByTestId(ready).first()).toBeVisible({timeout: 30_000});
+    await expect(page.getByRole(ready).first()).toBeVisible({timeout: 30_000});
     if (loaded) await expect(page.locator(loaded).first()).toBeVisible({timeout: 30_000});
 
     const results = await new AxeBuilder({page}).withTags(['wcag2a', 'wcag2aa']).analyze();

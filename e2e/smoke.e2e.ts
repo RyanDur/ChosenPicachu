@@ -51,7 +51,7 @@ test('the users page presents the form and the seeded table', async ({page}) => 
   await page.goto(`users`);
 
   await expect(page.getByLabel('First Name')).toBeVisible({timeout: 15_000});
-  await expect(page.getByTestId('table')).toBeVisible();
+  await expect(page.getByRole('table')).toBeVisible();
 });
 
 for (const entry of ['users', 'demos', 'games', 'gallery?page=1&size=8&tab=vam']) {
