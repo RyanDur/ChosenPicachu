@@ -1,32 +1,6 @@
 .live-trades {
   margin-bottom: var(--base-x-4);
 
-  output {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    font-size: var(--base-x-2);
-    color: var(--charcoal);
-    letter-spacing: 0.05em;
-
-    &::before {
-      content: '';
-      width: 0.8rem;
-      height: 0.8rem;
-      border-radius: 50%;
-      background: var(--silk);
-    }
-
-    &[data-status='streaming']::before {
-      background: var(--mint);
-      box-shadow: 0 0 0.6rem var(--mint);
-    }
-
-    &[data-status='failed']::before {
-      background: var(--internationl-orange-engineering);
-    }
-  }
-
   figure {
     position: relative;
     margin: var(--base-x-2) 0 0;

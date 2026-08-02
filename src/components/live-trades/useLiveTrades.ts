@@ -7,6 +7,12 @@ export type LiveTradesState = {
   trades: readonly Trade[];
 };
 
+export const statusCopy: Record<LiveTradesState['status'], string> = {
+  connecting: 'connecting to the live feed…',
+  streaming: 'live',
+  failed: 'live feed unavailable'
+};
+
 type SetLiveTrades = Dispatch<SetStateAction<LiveTradesState>>;
 
 const LATEST_TRADES_CAP = 1500;
