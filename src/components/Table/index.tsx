@@ -1,4 +1,4 @@
-import {has, notEmpty} from '@ryandur/sand';
+import {has, is, notEmpty} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {Column, Row} from './types';
 import {Dispatch, FC, KeyboardEvent, PointerEvent, SetStateAction, useRef, useState} from 'react';
@@ -207,16 +207,19 @@ export const Table: FC<TableProps> = (
                        onDragStart={travels ? event => {
                            setDragged(key);
                            const surface = event.currentTarget.closest('table');
-                           if (has(event.dataTransfer) && has(surface)) {
+                           const carriage = event.dataTransfer ?? event.nativeEvent.dataTransfer;
+                           if (is(carriage) && has(surface)) {
                                const shade = columnGhost(surface, position);
-                               shade.style.left = `${event.clientX - shade.offsetWidth / 2}px`;
-                               shade.style.top = `${event.clientY - 16}px`;
                                document.body.appendChild(shade);
                                shade.style.left = `${event.clientX - shade.offsetWidth / 2}px`;
-                               event.dataTransfer.effectAllowed = 'move';
-                               event.dataTransfer.setDragImage(shade, shade.offsetWidth / 2, 16);
+                               shade.style.top = `${event.clientY - 16}px`;
+                               carriage.effectAllowed = 'move';
+                               carriage.setDragImage(shade, shade.offsetWidth / 2, 16);
                                ghost.current = shade;
-                               setTimeout(() => shade.remove());
+                               requestAnimationFrame(() =>
+                                   requestAnimationFrame(() => {
+                                       shade.style.visibility = 'hidden';
+                                   }));
                            }
                        } : undefined}
                        onDragOver={event => {
