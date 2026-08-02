@@ -86,23 +86,19 @@ export const UsersPage: FC = () => {
                         id: user.id,
                         mode: 'view'
                       })}`}
-                            className="item"
-                            data-testid="view">View</Link>
+                            className="item">View</Link>
                       <Link to={`${path}${createSearchParams({
                         id: user.id,
                         mode: 'edit'
                       })}`}
-                            className="item"
-                            data-testid="edit">Edit</Link>
+                            className="item">Edit</Link>
                       <Link to={path}
                             className="item"
                             onClick={() => usersApi.delete(user)
                               .onSuccess(updateUsers)
-                              .onSuccess(() => navigate(Paths.users))}
-                            data-testid="remove">Remove</Link>
+                              .onSuccess(() => navigate(Paths.users))}>Remove</Link>
                       <Link to={`${path}${createSearchParams({id: user.id})}`}
-                            className="item"
-                            data-testid="clone">Clone</Link>
+                            className="item">Clone</Link>
                   </Menu>
                 </section>
               }

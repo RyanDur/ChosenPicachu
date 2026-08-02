@@ -188,6 +188,7 @@ describe('the keyboard walks the whole form', () => {
   test('tab visits each control once and always gets out the other side', async () => {
     render(<UserInformation onAdd={vi.fn()}/>);
     const form = screen.getByRole('form', {name: 'user info'});
+    await userEvent.click(screen.getByLabelText('First Name'));
 
     const visited: Element[] = [];
     let guard = 0;

@@ -15,8 +15,7 @@ type FancyTextInputProps = {
   value?: string | Date;
   readOnly?: boolean;
   disabled?: boolean;
-  autoFocus?: boolean;
-  pattern?: string;
+    pattern?: string;
 }
 
 export const FancyInput: FC<PropsWithChildren<FancyTextInputProps>> = (
@@ -33,8 +32,7 @@ export const FancyInput: FC<PropsWithChildren<FancyTextInputProps>> = (
     required = false,
     readOnly = false,
     disabled = false,
-    autoFocus = false,
-    pattern,
+        pattern,
     value = ''
   }
 ) => <article id={id} className={join(
@@ -49,7 +47,6 @@ export const FancyInput: FC<PropsWithChildren<FancyTextInputProps>> = (
            readOnly={readOnly}
            disabled={disabled}
            required={required}
-           autoFocus={autoFocus}
            value={value instanceof Date ? format(value, 'yyyy-MM-dd') : value}
            type={type}
            onChange={onChange}/>

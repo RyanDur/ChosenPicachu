@@ -9,7 +9,6 @@ const validator = new HtmlValidate({
     'attribute-empty-style': 'off',
     'no-trailing-whitespace': 'off',
     'no-inline-style': 'off',
-    'unique-landmark': 'off',
     'form-dup-name': ['error', {shared: ['radio', 'checkbox']}]
   }
 });
@@ -70,7 +69,7 @@ for (const {name, path, ready, loaded} of pages) {
     const report = await validator.validateString(await page.content());
 
     expect(report.results.flatMap(result => result.messages.map(message =>
-      `${message.ruleId}: ${message.message} (line ${message.line})`
+      `${message.ruleId}: ${message.message} [${message.selector}]`
     ))).toEqual([]);
   });
 }

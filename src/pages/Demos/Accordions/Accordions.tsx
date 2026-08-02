@@ -10,7 +10,7 @@ export const InclusiveAccordion: FC<PropsWithClassName & ContentProps> = ({
 }) => <article className={className}>
   <header>
     <h2 className="heading">Accordion using checkboxes</h2>
-    <aside><p>no Javascript needed to pull this off.</p></aside>
+    <p>no Javascript needed to pull this off.</p>
   </header>
   <ul className='accordion'>
     {content.map(({value, key}, id) =>
@@ -28,7 +28,7 @@ export const ExclusiveAccordion: FC<PropsWithClassName & ContentProps> = ({
 }) => <article className={className}>
   <header>
     <h2 className="heading">Accordion using a radio group</h2>
-    <aside><p>no Javascript needed to pull this off.</p></aside>
+    <p>no Javascript needed to pull this off.</p>
   </header>
   <ul className="accordion">
     <li className="fold close">
