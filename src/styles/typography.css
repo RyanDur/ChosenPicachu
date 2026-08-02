@@ -1,0 +1,7 @@
+:root {
+  /* type — the one scale, renamed for intent */
+  --text-caption: var(--base-x-1_5);
+  --text-body: var(--base-x-1_75);
+  --text-title: var(--base-x-2_25);
+  --text-headline: var(--base-x-3);
+}

@@ -89,7 +89,7 @@
   }
 
   &[data-trend='rising'] .headline .delta {
-    color: color-mix(in srgb, var(--mint) 45%, black);
+    color: var(--mint-ink);
   }
 
   &[data-trend='falling'] .headline .delta {

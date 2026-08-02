@@ -60,7 +60,7 @@
 
   #dob {
     min-width: 50%;
-    background-color: white;
+    background-color: var(--white);
 
     &:invalid {
       color: transparent;

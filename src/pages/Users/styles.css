@@ -34,7 +34,7 @@
         background: var(--paper);
         background-image: radial-gradient(
           circle,
-          black 0.2rem,
+          var(--black) 0.2rem,
           transparent 0.1rem
         );
         background-size: 100% 33.33%;

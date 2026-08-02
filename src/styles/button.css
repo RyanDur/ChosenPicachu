@@ -4,7 +4,7 @@ button {
   cursor: pointer;
 
   &.primary {
-    color: white;
+    color: var(--white);
     background: var(--primary-blue);
   }
 
@@ -21,7 +21,7 @@ button {
     height: var(--base-x-5);
     padding: 0 var(--base-x-4);
     border-radius: var(--base-x-5);
-    box-shadow: 0 0 var(--base-x-0_5) #999;
+    box-shadow: 0 0 var(--base-x-0_5) var(--smoke);
     border: var(--hairline) solid var(--primary-blue);
 
     &:hover,
@@ -31,7 +31,7 @@ button {
 
     &:hover,
     &:active {
-      color: white;
+      color: var(--white);
       background-color: var(--primary-dark-blue);
     }
 
@@ -51,7 +51,7 @@ select.button {
 
   &:focus,
   &:hover {
-    color: white;
+    color: var(--white);
     background-color: var(--primary-dark-blue);
   }
 }

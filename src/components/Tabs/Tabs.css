@@ -96,7 +96,7 @@
   transition: background-color 0.3s;
 
   &:hover {
-    background: rgb(55 55 55 / 50%);
+    background: var(--charcoal-veil);
   }
 
   .pill-tab-right,
@@ -115,18 +115,18 @@
     }
 
     &:hover {
-      color: white;
+      color: var(--white);
       font-size: var(--text-title);
     }
 
     &:has(:checked) {
-      color: white;
+      color: var(--white);
     }
   }
 
   .glider {
     border-radius: var(--radius);
-    background: black;
+    background: var(--black);
     pointer-events: none;
     position: absolute;
     height: var(--base-x-5);
