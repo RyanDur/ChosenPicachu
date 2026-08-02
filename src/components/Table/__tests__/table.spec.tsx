@@ -179,3 +179,64 @@ describe('resizable columns', () => {
     screen.getAllByRole('cell').forEach(cell => expect(cell.classList).not.toContain('ellipsis'));
   });
 });
+
+describe('drag sortable columns', () => {
+  const sized = [
+    {display: 'name', column: 'name', width: 200},
+    {display: 'age', column: 'age', width: 120},
+    {display: 'city', column: 'city', width: 120}
+  ];
+  const people = [{name: {display: 'Ada'}, age: {display: '36'}, city: {display: 'London'}}];
+
+  const headerTexts = () => screen.getAllByRole('columnheader').map(header => header.textContent);
+  const header = (name: string) => screen.getByRole('columnheader', {name: new RegExp(`^${name}`)});
+  const drag = (name: string) => {
+    fireEvent.mouseDown(header(name));
+    fireEvent.dragStart(header(name));
+  };
+
+  test('an eager column follows the pointer as it crosses its neighbors', () => {
+    render(<Table columns={sized} rows={people} draggableColumns="eager-move"/>);
+
+    drag('name');
+    fireEvent.dragOver(header('city'));
+
+    expect(headerTexts()).toEqual(['age', 'city', 'name']);
+    const cells = within(screen.getAllByRole('rowgroup')[1]).getAllByRole('cell');
+    expect(cells.map(cell => cell.textContent)).toEqual(['36', 'London', 'Ada']);
+  });
+
+  test('a lazy column waits for the drop', () => {
+    render(<Table columns={sized} rows={people} draggableColumns="lazy-move"/>);
+
+    drag('name');
+    fireEvent.dragOver(header('city'));
+    expect(headerTexts()).toEqual(['name', 'age', 'city']);
+
+    fireEvent.dragEnd(header('name'));
+    expect(headerTexts()).toEqual(['age', 'city', 'name']);
+  });
+
+  test('a hiding column vanishes while it travels and returns on arrival', () => {
+    render(<Table columns={sized} rows={people} draggableColumns="hide-eager-move"/>);
+
+    drag('name');
+    expect(header('name').classList).toContain('hide');
+
+    fireEvent.dragOver(header('age'));
+    fireEvent.dragEnd(header('name'));
+    expect(header('name').classList).not.toContain('hide');
+    expect(headerTexts()).toEqual(['age', 'name', 'city']);
+  });
+
+  test('columns hold still without the opt-in', () => {
+    render(<Table columns={sized} rows={people}/>);
+
+    fireEvent.mouseDown(header('name'));
+    fireEvent.dragStart(header('name'));
+    fireEvent.dragOver(header('city'));
+    fireEvent.dragEnd(header('name'));
+
+    expect(headerTexts()).toEqual(['name', 'age', 'city']);
+  });
+});

@@ -1,11 +1,12 @@
 import {FC} from 'react';
-import {Table} from '@components/Table';
+import {ColumnDragStyle, Table} from '@components/Table';
 import {Trade} from '../../Charts/coinbase';
 import {AggregateRow, windowedAggregates} from './fold';
 import {hydrated, useRecentTrades} from './useRecentTrades';
 
 type Props = {
   trades: readonly Trade[];
+  dragStyle: ColumnDragStyle;
 };
 
 const columns = [
@@ -21,10 +22,11 @@ const columns = [
 const cells = (row: AggregateRow) =>
   Object.fromEntries(Object.entries(row).map(([measure, value]) => [measure, {display: value}]));
 
-export const Aggregations: FC<Props> = ({trades}) => {
+export const Aggregations: FC<Props> = ({trades, dragStyle}) => {
   const recent = useRecentTrades();
   return <section aria-label="live aggregations" className="aggregations card">
     <Table tableClassName="fancy-table"
+           draggableColumns={dragStyle}
            theadClassName="header"
            thClassName="column-name"
            trClassName="row"

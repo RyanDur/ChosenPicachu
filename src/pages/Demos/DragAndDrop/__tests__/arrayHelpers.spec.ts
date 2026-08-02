@@ -1,4 +1,4 @@
-import {array} from '../array';
+import {array} from '@components/arrays';
 import {describe} from 'vitest';
 import {faker} from '@faker-js/faker';
 
