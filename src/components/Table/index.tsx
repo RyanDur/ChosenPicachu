@@ -121,12 +121,15 @@ export const Table: FC<TableProps> = (
         const index = apportioned.indexOf(key);
         return apportioned[index + 1] ?? apportioned[index - 1];
     };
+    const anchored = (position: number): boolean =>
+        position === 0 || position === ordered.length - 1;
     const landedAt = (index: number): void => {
+        const between = Math.min(Math.max(index, 1), ordered.length - 2);
         if (has(draggableColumns) && has(dragged)) {
             if (eager) {
-                setOrder(previous => array.moveToIndex(index, dragged, previous));
+                setOrder(previous => array.moveToIndex(between, dragged, previous));
             } else {
-                setOverIndex(index);
+                setOverIndex(between);
             }
         }
     };
@@ -152,26 +155,28 @@ export const Table: FC<TableProps> = (
         )}>{ordered.map(({display, column, className, width}, position) => {
             const key = String(column);
             const share = has(width) ? shares[key] : undefined;
+            const travels = has(draggableColumns) && !anchored(position);
             return <th className={join(
                            thClassName, cellClassName, className,
                            clipped && 'clipped',
+                           travels && 'grabbable',
                            hiding && dragged === key && 'hide'
                        )}
                        key={key}
                        scope="col"
-                       draggable={has(draggableColumns) && armed === key}
-                       onMouseDown={() => setArmed(key)}
-                       onDragStart={event => {
+                       draggable={travels && armed === key}
+                       onMouseDown={travels ? () => setArmed(key) : undefined}
+                       onDragStart={travels ? event => {
                            if (has(event.dataTransfer)) {
                                event.dataTransfer.effectAllowed = 'move';
                            }
                            setDragged(key);
-                       }}
+                       } : undefined}
                        onDragOver={event => {
                            event.preventDefault();
                            landedAt(position);
                        }}
-                       onDragEnd={released}
+                       onDragEnd={travels ? released : undefined}
                        style={has(share) ? {width: `${share}%`} : undefined}>
                 {display}
                 {has(share) && apportioned.length > 1 &&

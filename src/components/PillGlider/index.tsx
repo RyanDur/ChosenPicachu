@@ -19,7 +19,8 @@ export const PillGlider = <T extends string>({label, name, options, chosen, onCh
   return <fieldset className="pill-glider">
     <legend className="off-screen">{label}</legend>
     <article className="pills">
-      <article className="glider" style={{transform: `translateX(${at * 100}%)`}}/>
+      <article className="glider"
+               style={{width: `${100 / options.length}%`, transform: `translateX(${at * 100}%)`}}/>
       {options.map(({display, value}) =>
         <label className="pill" key={value}>
           {display}

@@ -67,3 +67,11 @@
 .sortable .hide {
   visibility: hidden;
 }
+
+.grabbable {
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
+}

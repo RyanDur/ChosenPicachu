@@ -1,7 +1,6 @@
 .tabs {
   width: 100%;
   display: flex;
-  flex-wrap: wrap;
   justify-content: flex-start;
   min-height: var(--base-x-12);
   background-color: var(--void);
@@ -12,8 +11,8 @@
     margin-right: var(--base);
     background-color: var(--paper);
     display: flex;
-    flex: 1;
-    min-width: fit-content;
+    width: 100%;
+    min-width: max-content;
     white-space: nowrap;
     flex-direction: column;
     justify-content: center;
