@@ -25,3 +25,9 @@ export const timePattern: Record<Period, string> = {
   [Period.day]: 'HH:mm',
   [Period.week]: 'MMM d'
 };
+
+export const tickIntervalMs: Record<HistoryPeriod, number> = {
+  [Period.hour]: 600000,
+  [Period.day]: 3600000,
+  [Period.week]: 86400000
+};

@@ -6,14 +6,25 @@ import {renderWithMemoryRouter} from '@test-support';
 import {EnvProvider} from '@components/Env';
 import {DemosPage} from '@pages/Demos/component';
 import {Paths} from '@pages/Paths';
+import {format} from 'date-fns';
 
 const HISTORY = 'https://api.exchange.coinbase.com';
 
-const rows = [
-  [1700000300, 49990, 50010, 50000, 50005, 2.5],
-  [1700000240, 49980, 50000, 49990, 50000, 1.5],
-  [1700000180, 49970, 49995, 49985, 49990, 1.0]
+const HOUR_ALIGNED = 1699995600;
+
+const pricesOldestFirst = [
+  [49970, 49995, 49985, 49990, 1.0],
+  [49980, 50000, 49990, 50000, 1.5],
+  [49985, 50005, 50000, 50002, 2.0],
+  [49990, 50010, 50002, 50004, 1.2],
+  [49990, 50008, 50004, 50005, 2.5]
 ];
+
+const rowsSpaced = (stepSeconds: number): number[][] =>
+  pricesOldestFirst
+    .map(([low, high, open, close, volume], index) =>
+      [HOUR_ALIGNED + index * stepSeconds, low, high, open, close, volume])
+    .reverse();
 
 const renderCharts = () =>
   renderWithMemoryRouter({
@@ -46,29 +57,37 @@ describe('the chart periods', () => {
     const asked: string[] = [];
     server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, ({request}) => {
       asked.push(new URL(request.url).searchParams.get('granularity') ?? '');
-      return HttpResponse.json(rows);
+      return HttpResponse.json(rowsSpaced(60));
     }));
 
     renderCharts();
 
     await userEvent.click(within(menuFor('candle period')).getByText('hour'));
-    await waitFor(() => expect(drawnCandleParts('rect.body')).toBe(3));
-    expect(drawnCandleParts('rect.volume')).toBe(3);
+    await waitFor(() => expect(drawnCandleParts('rect.body')).toBe(5));
+    expect(drawnCandleParts('rect.volume')).toBe(5);
     expect(asked).toEqual(['60']);
-    expect(screen.getByText('3 candles · 1m each')).toBeVisible();
+    expect(screen.getByText('5 candles · 1m each')).toBeVisible();
     expect(screen.getByText('$50,010')).toBeVisible();
     expect(screen.getByText('$49,970')).toBeVisible();
+    const candleCard = screen.getByRole('region', {name: 'candles'});
+    const hourTicks = within(candleCard).getAllByRole('time');
+    expect(hourTicks.map(tick => tick.textContent))
+      .toEqual([format(HOUR_ALIGNED * 1000, 'HH:mm')]);
   });
 
   test('choosing the day draws the price line from history closes', async () => {
-    server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, () => HttpResponse.json(rows)));
+    server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, () => HttpResponse.json(rowsSpaced(3600))));
 
     renderCharts();
 
     await userEvent.click(within(menuFor('price period')).getByText('day'));
-    await waitFor(() => expect(drawnPoints()).toHaveLength(3));
+    await waitFor(() => expect(drawnPoints()).toHaveLength(5));
     expect(screen.getByText('$50,005.00')).toBeVisible();
-    expect(screen.getByText('3 candles · 1h each')).toBeVisible();
+    expect(screen.getByText('5 candles · 1h each')).toBeVisible();
+    const priceCard = screen.getByRole('region', {name: 'live trades'});
+    const dayTicks = within(priceCard).getAllByRole('time');
+    expect(dayTicks.map(tick => tick.textContent))
+      .toEqual([0, 1, 2, 3, 4].map(hour => format((HOUR_ALIGNED + hour * 3600) * 1000, 'HH:mm')));
   });
 
   test('history that cannot load says so', async () => {

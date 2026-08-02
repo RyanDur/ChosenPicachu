@@ -24,11 +24,17 @@
 
   .x-labels {
     grid-area: x;
-    display: flex;
-    justify-content: space-between;
+    position: relative;
+    height: 1.6rem;
     font-size: 1.1rem;
     color: var(--charcoal);
     opacity: 0.8;
     margin-top: 0.2rem;
+
+    time {
+      position: absolute;
+      transform: translateX(-50%);
+      white-space: nowrap;
+    }
   }
 }
