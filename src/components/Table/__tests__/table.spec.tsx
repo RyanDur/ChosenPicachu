@@ -225,6 +225,9 @@ describe('drag sortable columns', () => {
 
     drag('city');
     expect(header('city').classList).toContain('hide');
+    within(screen.getAllByRole('rowgroup')[1]).getAllByRole('cell')
+      .filter(cell => cell.textContent === 'London')
+      .forEach(cell => expect(cell.classList).toContain('hide'));
 
     fireEvent.dragOver(header('age'));
     fireEvent.dragEnd(header('city'));
