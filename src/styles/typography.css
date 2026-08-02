@@ -5,3 +5,38 @@
   --text-title: var(--base-x-2_25);
   --text-headline: var(--base-x-3);
 }
+
+/* text styles — what a run of text is */
+.heading {
+  font-size: var(--text-headline);
+  font-weight: bold;
+  margin: var(--base-x-2_5) 0;
+}
+
+.subheading {
+  font-size: var(--text-title);
+  font-weight: bold;
+  margin: var(--base-x-2_25) 0;
+}
+
+.caption {
+  font-size: var(--text-caption);
+  color: var(--charcoal);
+  opacity: 0.7;
+}
+
+/* modifiers — compose on the same element or on nested runs */
+.bold {
+  font-weight: 600;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.ellipsis {
+  min-width: 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
