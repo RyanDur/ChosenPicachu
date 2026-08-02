@@ -20,36 +20,52 @@ const interceptedNetwork = () => {
 beforeAll(realSockets);
 afterAll(interceptedNetwork);
 
-const tradeFrameWith = (p: string, id: number, at = 1700000000000): string => JSON.stringify({
-  e: 'trade',
-  E: 1700000000001,
-  s: 'BTCUSDT',
-  t: id,
-  p,
-  q: '0.10',
-  T: at,
-  m: false
+const tradeFrameWith = (price: string, id: number, at = 1700000000000): string => JSON.stringify({
+  type: 'match',
+  trade_id: id,
+  maker_order_id: 'maker',
+  taker_order_id: 'taker',
+  side: 'buy',
+  size: '0.01',
+  price,
+  product_id: 'BTC-USD',
+  sequence: id,
+  time: new Date(at).toISOString()
 });
 
 const tradeFrame = (price: number, at = 1700000000000): string =>
   tradeFrameWith(String(price), 900000 + price, at);
 
 const nonTradeFrame = (price: number): string => JSON.stringify({
-  e: 'aggTrade',
-  E: 1700000000001,
-  s: 'BTCUSDT',
-  t: 900000 + price,
-  p: String(price),
-  q: '0.10',
-  T: 1700000000000,
-  m: false
+  type: 'ticker',
+  trade_id: 900000 + price,
+  price: String(price),
+  product_id: 'BTC-USD',
+  time: new Date(1700000000000).toISOString()
 });
+
+const subscribed = new Set<import('ws').WebSocket>();
+
+const subscribesMatches = (raw: unknown): boolean => {
+  const frame: unknown = JSON.parse(String(raw));
+  return typeof frame === 'object' && frame !== null &&
+    Reflect.get(frame, 'type') === 'subscribe' &&
+    JSON.stringify(Reflect.get(frame, 'channels')).includes('matches') &&
+    JSON.stringify(Reflect.get(frame, 'channels')).includes('BTC-USD');
+};
 
 const listeningFeed = async (refusing = false): Promise<WebSocketServer> => {
   const feed = new WebSocketServer({
     host: '127.0.0.1',
     port: 0,
     verifyClient: () => !refusing
+  });
+  feed.on('connection', socket => {
+    socket.on('message', raw => {
+      if (subscribesMatches(raw)) {
+        subscribed.add(socket);
+      }
+    });
   });
   await new Promise(resolve => feed.once('listening', resolve));
   return feed;
@@ -64,7 +80,11 @@ const urlOf = (feed: WebSocketServer): string => {
 };
 
 const broadcast = (feed: WebSocketServer, frames: string[]): void =>
-  feed.clients.forEach(socket => frames.forEach(frame => socket.send(frame)));
+  feed.clients.forEach(socket => {
+    if (subscribed.has(socket)) {
+      frames.forEach(frame => socket.send(frame));
+    }
+  });
 
 const feedIsLive = async (): Promise<void> => {
   await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/^live$/));
@@ -98,6 +118,7 @@ describe('the demos page', () => {
 
     afterEach(async () => {
       cleanup();
+      subscribed.clear();
       await Promise.all(feeds.map(feed => new Promise(resolve => feed.close(resolve))));
       feeds.length = 0;
     });
