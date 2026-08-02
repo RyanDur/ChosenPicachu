@@ -19,6 +19,7 @@ const pages: A11yPage[] = [
   {name: 'root', path: '', ready: 'navigation'},
   {name: 'demos', path: 'demos?tab=accordions', ready: 'navigation'},
   {name: 'charts', path: 'demos?tab=charts', ready: 'navigation', loaded: '.price-chart .delta'},
+  {name: 'tables', path: 'demos?tab=tables', ready: 'navigation', loaded: '.aggregations .column-name'},
   {name: 'users', path: 'users', ready: 'table'},
   {name: 'gallery', path: 'gallery', ready: 'navigation', loaded: 'figure.frame'},
   {name: 'games', path: 'games', ready: 'banner'},
