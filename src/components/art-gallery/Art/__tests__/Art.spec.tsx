@@ -1,7 +1,7 @@
 import {anyRequestFailsToConnect} from '@test-support/server';
 import {delay, http as handle, HttpResponse} from 'msw';
 import {server} from '@test-support/server';
-import {aicDomain} from '@components/art-gallery/museums/config';
+import {env} from '@components/Env';
 import {screen, waitFor} from '@testing-library/react';
 import {renderWithGalleryContext, renderWithMemoryRouter} from '@test-support';
 import {ArtGallery} from '@components/art-gallery/Art/index';
@@ -11,6 +11,8 @@ import {test} from 'vitest';
 import {Gallery} from '@pages/Gallery';
 import {Paths} from '@pages/Paths';
 import {setupAICAllArtResponse} from '@components/art-gallery/__tests__/galleryApiTestHelper';
+
+const {aicDomain} = env;
 
 describe('The gallery.', () => {
   window.scrollTo = vi.fn();

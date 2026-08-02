@@ -11,7 +11,7 @@ import {
 import {AllArt, Art} from '@components/art-gallery/museums/types/response';
 import {VAMAllArtResponse, VAMArtResponse} from '@components/art-gallery/museums/vam/types';
 import {createUser} from '@components/Users/resource/usersApi';
-import {defaultRecordLimit} from '@components/art-gallery/museums/config';
+import {defaultRecordLimit} from '@components/art-gallery/limits';
 
 const randomNumberFromRange = (min: number, max = 6) => Math.floor(Math.random() * max) + min;
 export const words = (num = 6) => faker.lorem.words(randomNumberFromRange(1, num));

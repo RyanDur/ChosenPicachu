@@ -2,7 +2,7 @@ import {Link, useLocation} from 'react-router';
 import {FC, useEffect, useRef} from 'react';
 import {numberParam, useSearchParamsObject} from '@components/search-params';
 import {useGallery} from '@components/art-gallery/Art/Context';
-import {defaultRecordLimit} from '@components/art-gallery/museums/config';
+import {defaultRecordLimit} from '@components/art-gallery/limits';
 import './GalleryNav.css';
 import './GalleryNav.layout.css';
 

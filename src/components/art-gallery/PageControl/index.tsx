@@ -1,7 +1,7 @@
 import {FormEvent, useState} from 'react';
 import {useGallery} from '@components/art-gallery/Art/Context';
 import {numberParam, useSearchParamsObject} from '@components/search-params';
-import {defaultRecordLimit} from '@components/art-gallery/museums/config';
+import {defaultRecordLimit} from '@components/art-gallery/limits';
 import './PageControl.css';
 import './PageControl.layout.css';
 

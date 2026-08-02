@@ -1,11 +1,14 @@
 import {http, HttpResponse} from 'msw';
 import {server} from '@test-support/server';
 import {AICAllArtResponse, AICArtResponse} from '@components/art-gallery/museums/aic/types';
-import {aicDomain, defaultRecordLimit, harvardAPIKey, harvardDomain, vamDomain} from '@components/art-gallery/museums/config';
+import {defaultRecordLimit} from '@components/art-gallery/limits';
+import {env} from '@components/Env';
 import {fields} from '@components/art-gallery/museums/aic';
 import {HarvardAllArtResponse} from '@components/art-gallery/museums/harvard/types';
 import {harvardFields} from '@components/art-gallery/museums/harvard';
 import {VAMAllArtResponse} from '@components/art-gallery/museums/vam/types';
+
+const {aicDomain, harvardAPIKey, harvardDomain, vamDomain} = env;
 
 const paramsMatch = (request: Request, expected: Record<string, string>) => {
   const params = new URL(request.url).searchParams;

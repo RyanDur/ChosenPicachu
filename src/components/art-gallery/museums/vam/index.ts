@@ -1,10 +1,13 @@
 import {VAMAllArtResponse, VAMAllArtSchema, VAMArtResponse, VAMArtSchema, VAMSearchRecord} from '@components/art-gallery/museums/vam/types';
-import {defaultRecordLimit, defaultSearchLimit, vamDomain} from '@components/art-gallery/museums/config';
+import {defaultRecordLimit, defaultSearchLimit} from '@components/art-gallery/limits';
+import {env} from '@components/Env';
 import {toQueryString} from '@transport/url';
 import {AllArt, Art, SearchOptions} from '@components/art-gallery/museums/types/response';
 import {validate} from '@transport/validate';
 import {http} from '@transport/http';
 import {GetAllArtRequest} from '@components/art-gallery/museums/types/resource';
+
+const {vamDomain} = env;
 
 const iiifImage = (base: string, size: number) => `${base}full/!${size},${size}/0/default.jpg`;
 

@@ -3,7 +3,7 @@ import '../BasePage.css';
 import '../BasePage.layout.css';
 import {Link, useSearchParams} from 'react-router';
 import {toQueryString} from '@transport/url';
-import {defaultRecordLimit} from '@components/art-gallery/museums/config';
+import {defaultRecordLimit} from '@components/art-gallery/limits';
 import {Source} from '@components/art-gallery/museums/types/resource';
 import {Paths} from '@pages/Paths';
 import {AboutTopics} from '@pages/About/types';

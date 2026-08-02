@@ -6,12 +6,15 @@ import {
   HarvardSearchResponse,
   HarvardSearchSchema
 } from '@components/art-gallery/museums/harvard/types';
-import {defaultRecordLimit, defaultSearchLimit, harvardAPIKey, harvardDomain} from '@components/art-gallery/museums/config';
+import {defaultRecordLimit, defaultSearchLimit} from '@components/art-gallery/limits';
+import {env} from '@components/Env';
 import {toQueryString} from '@transport/url';
 import {AllArt, Art, SearchOptions} from '@components/art-gallery/museums/types/response';
 import {validate} from '@transport/validate';
 import {http} from '@transport/http';
 import {GetAllArtRequest} from '@components/art-gallery/museums/types/resource';
+
+const {harvardAPIKey, harvardDomain} = env;
 
 export const harvardFields = ['id', 'title', 'people', 'primaryimageurl'].join();
 const baseQueryString = {
