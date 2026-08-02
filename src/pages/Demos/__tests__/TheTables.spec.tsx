@@ -43,26 +43,41 @@ describe('the tables demo', () => {
     feeds.length = 0;
   });
 
-  test('the measures stand as columns and each minute earns a row', async () => {
+  test('the fixed windows hold their rows while the stream fills the cells', async () => {
     const feed = await streamingFeed();
 
     renderTables(urlOf(feed));
 
     await feedIsSubscribed();
     const card = screen.getByRole('region', {name: 'live aggregations'});
-    for (const measure of ['time', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']) {
+    for (const measure of ['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']) {
       expect(within(card).getByRole('columnheader', {name: new RegExp(`^${measure}`)})).toBeVisible();
     }
+    expect(within(card).getAllByRole('row')).toHaveLength(6);
+    const now = 1700000000000;
     broadcast(feed, [
-      tradeFrame(50001, 1700000000000, '0.01', 'buy'),
-      tradeFrame(50002, 1700000030000, '0.25', 'sell'),
-      tradeFrame(50003, 1700000120000, '0.10', 'buy')
+      tradeFrame(50001, now - 30 * 60000, '0.10', 'buy'),
+      tradeFrame(50002, now - 10 * 60000, '0.25', 'sell'),
+      tradeFrame(50003, now - 3 * 60000, '0.05', 'buy'),
+      tradeFrame(50004, now, '0.01', 'buy')
     ]);
-    await waitFor(() => expect(within(card).getAllByRole('row')).toHaveLength(3));
-    const [, newestMinute, olderMinute] = within(card).getAllByRole('row');
     const texts = (row: HTMLElement) => within(row).getAllByRole('cell').map(cell => cell.textContent);
-    expect(texts(newestMinute).slice(1)).toEqual(['1', '1', '0', '0.10', '$50,003.00', '+$0.00']);
-    expect(texts(olderMinute).slice(1)).toEqual(['2', '1', '1', '0.26', '$50,001.96', '+$1.00']);
+    const rowFor = (label: string) => {
+      const cell = within(card).getByText(label);
+      const row = cell.closest('tr');
+      if (row === null) throw new Error(`no row for ${label}`);
+      return row;
+    };
+    await waitFor(() => expect(texts(rowFor('this minute'))).toEqual(
+      ['this minute', '1', '1', '0', '0.01', '$50,004.00', '+$0.00']));
+    expect(texts(rowFor('last 5 minutes'))).toEqual(
+      ['last 5 minutes', '2', '2', '0', '0.06', '$50,003.17', '+$1.00']);
+    expect(texts(rowFor('last 15 minutes'))).toEqual(
+      ['last 15 minutes', '3', '2', '1', '0.31', '$50,002.23', '+$2.00']);
+    expect(texts(rowFor('this hour'))).toEqual(
+      ['this hour', '4', '3', '1', '0.41', '$50,001.93', '+$3.00']);
+    expect(texts(rowFor('session'))).toEqual(
+      ['session', '4', '3', '1', '0.41', '$50,001.93', '+$3.00']);
   });
 
   test('every column is resizable', async () => {
