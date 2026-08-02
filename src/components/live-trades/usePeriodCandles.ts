@@ -7,9 +7,10 @@ import {periodCandles} from './history';
 export type PeriodHistory = {
   candles: readonly Candle[];
   unavailable: boolean;
+  pending: boolean;
 };
 
-const clean: PeriodHistory = {candles: [], unavailable: false};
+const clean: PeriodHistory = {candles: [], unavailable: false, pending: true};
 
 const queryFor = (period: Period): string => {
   const now = new Date();
@@ -26,8 +27,8 @@ export const usePeriodCandles = (period: Period): PeriodHistory => {
   useEffect(() => {
     setHistory(clean);
     const fetching = periodCandles(tradeHistory, tradeProduct, queryFor(period))
-      .onSuccess(candles => setHistory({candles, unavailable: false}))
-      .onFailure(() => setHistory({candles: [], unavailable: true}));
+      .onSuccess(candles => setHistory({candles, unavailable: false, pending: false}))
+      .onFailure(() => setHistory({candles: [], unavailable: true, pending: false}));
     return () => fetching.cancel();
   }, [tradeHistory, tradeProduct, period]);
 

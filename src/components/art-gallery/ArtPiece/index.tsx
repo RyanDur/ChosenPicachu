@@ -1,6 +1,6 @@
 import {useParams} from 'react-router';
 import {useEffect, useState} from 'react';
-import {Loading} from '@components/art-gallery/Loading';
+import {Loading} from '@components/Loading';
 import {useArtPiece} from '@components/art-gallery/ArtPiece/Context';
 import {Image} from '@components/art-gallery/Image';
 import {useSearchParamsObject} from '@components/search-params';

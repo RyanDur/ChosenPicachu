@@ -4,6 +4,7 @@ import {Menu} from '@components/Menu';
 import {Trade} from '@transport/coinbase';
 import {bucketTrades, candleShapes, mergeLive, volumeShapes} from './shapes';
 import {usePeriodCandles} from '../usePeriodCandles';
+import {Loading} from '@components/Loading';
 import {bucketLabel, bucketMs, Period, periodCap, tickEveryMs, timePattern} from '../period';
 import {Axes} from '../Axes';
 import '../chart-card.css';
@@ -35,6 +36,7 @@ export const Candles: FC<Props> = ({trades}) => {
         )}
       </Menu>
     </header>
+    {history.pending ? <Loading className="chart-loading"/> : <>
     <Axes high={notEmpty(candles) ? Math.max(...candles.map(candle => candle.high)) : 0}
           low={notEmpty(candles) ? Math.min(...candles.map(candle => candle.low)) : 0}
           times={candles.map(candle => candle.openedAt)}
@@ -56,6 +58,7 @@ export const Candles: FC<Props> = ({trades}) => {
     </Axes>
     {notEmpty(candles) && <small>{captionFor(period, candles.length)}</small>}
     {history.unavailable && <small>history unavailable</small>}
+    </>}
     <details>
       <summary>what am I looking at?</summary>
       <p>

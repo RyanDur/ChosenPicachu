@@ -1,6 +1,6 @@
 import {screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {http, HttpResponse} from 'msw';
+import {delay, http, HttpResponse} from 'msw';
 import {server} from '@test-support/server';
 import {renderWithMemoryRouter} from '@test-support';
 import {EnvProvider} from '@components/Env';
@@ -101,5 +101,20 @@ describe('the chart periods', () => {
     await userEvent.click(within(menuFor('candle period')).getByText('week'));
     const candleCard = screen.getByRole('region', {name: 'candles'});
     await waitFor(() => expect(within(candleCard).getByText('history unavailable')).toBeVisible());
+  });
+
+  test('switching the window shows the loading view until history arrives', async () => {
+    server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, async () => {
+      await delay(150);
+      return HttpResponse.json(rowsSpaced(3600));
+    }));
+
+    renderCharts();
+
+    await userEvent.click(within(menuFor('candle period')).getByText('day'));
+    const candleCard = screen.getByRole('region', {name: 'candles'});
+    expect(await within(candleCard).findByTestId('loading')).toBeVisible();
+    await waitFor(() => expect(drawnCandleParts('rect.body')).toBe(5));
+    expect(within(candleCard).queryByTestId('loading')).toBeNull();
   });
 });

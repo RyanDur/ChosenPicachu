@@ -6,7 +6,7 @@ export {GalleryNav} from './Nav';
 export {PageControl} from './PageControl';
 export {Search} from './Search';
 export {Image} from './Image';
-export {Loading} from './Loading';
+export {Loading} from '@components/Loading';
 export {GalleryLinks} from './Links';
 export {art} from './museums';
 export {Source} from './museums/types/resource';
