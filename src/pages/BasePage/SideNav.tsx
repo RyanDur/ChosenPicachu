@@ -6,7 +6,7 @@ import {toQueryString} from '@transport/url';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
 import {Source} from '@components/art-gallery/museums/types/resource';
 import {Paths} from '@pages/Paths';
-import {AboutTopics} from '@pages/About/types';
+import {DemoTopics} from '@pages/Demos/types';
 
 const AboutNav: FC = () => {
   const [searchParams] = useSearchParams();
@@ -14,18 +14,17 @@ const AboutNav: FC = () => {
   const [aboutTab, updateTab] = useState('');
 
   useEffect(() => {
-    if (tab && Object.values<string>(AboutTopics).includes(tab)) {
+    if (tab && Object.values<string>(DemoTopics).includes(tab)) {
       updateTab(tab);
     }
   }, [tab]);
 
-  return <Link id="navigate-about" className="path" to={`${Paths.about}?tab=${aboutTab}`}>About</Link>;
+  return <Link id="navigate-demos" className="path" to={`${Paths.demos}?tab=${aboutTab}`}>Demos</Link>;
 };
 
 export const SideNav: FC = () =>
   <aside id="side-nav" data-testid="navigation">
     <nav id="app-navigation">
-      <Link id="navigate-home" className="path" to={Paths.home}>Home</Link>
       <AboutNav/>
       <Link id="navigate-users" className="path" to={Paths.users}>Users</Link>
       <Link id="navigate-form" className="path"

@@ -3,11 +3,11 @@ import {expect, test} from 'vitest';
 import userEvent from '@testing-library/user-event';
 import {screen, waitFor, within} from '@testing-library/react';
 import {Paths} from '@pages/Paths';
-import {About} from '@pages/About';
+import {Demos} from '@pages/Demos';
 
-describe('The About page', () => {
+describe('The Demos page', () => {
   test('on initial render', async () => {
-    renderWithMemoryRouter(About, {path: Paths.about});
+    renderWithMemoryRouter(Demos, {path: Paths.demos});
 
     await waitFor(() => {
       const main = screen.getByRole('main');
@@ -16,7 +16,7 @@ describe('The About page', () => {
   });
 
   test('when going to the z-index demo', async () => {
-    renderWithMemoryRouter(About, {path: Paths.about});
+    renderWithMemoryRouter(Demos, {path: Paths.demos});
 
     const demoTabs = await screen.findByRole('navigation', {name: 'demos'});
     await userEvent.click(within(demoTabs).getByText('Z-Index'));
@@ -26,6 +26,6 @@ describe('The About page', () => {
       expect(within(main).getByText('Z-Index Demo.')).toBeInTheDocument();
     });
 
-    expect(screen.getByTestId('header')).toHaveTextContent('About z-index');
+    expect(screen.getByTestId('header')).toHaveTextContent('Demos z-index');
   });
 });
