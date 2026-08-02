@@ -22,7 +22,7 @@
       background-color: var(--void);
 
       .path {
-        font-size: var(--base-x-4);
+        font-size: var(--text-x-4);
         font-weight: bold;
         background-color: var(--paper);
         height: var(--base-x-8);
@@ -44,7 +44,7 @@
       position: sticky;
       bottom: 0;
       padding: var(--base);
-      font-size: var(--base-x-1_5);
+      font-size: var(--text-caption);
 
       .icons-content {
         display: none;
@@ -107,7 +107,7 @@
 @media (max-width: 1000px) {
   #root {
     #app-header {
-      padding: 0 2rem;
+      padding: 0 var(--base-x-2_5);
 
       #gallery-search {
         width: 100%;
@@ -132,7 +132,7 @@
     }
 
     #app-footer {
-      height: 8rem;
+      height: var(--base-x-10);
     }
 
     #side-nav {
@@ -148,7 +148,7 @@
         background-color: var(--paper);
 
         .path {
-          font-size: 1.8rem;
+          font-size: var(--text-title);
           margin-bottom: 0;
           height: unset;
           width: fit-content;

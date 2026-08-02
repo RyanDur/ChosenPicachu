@@ -41,7 +41,7 @@
 
   #submit-page-number {
     border: none;
-    font-size: var(--base-x-2);
+    font-size: var(--text-x-2);
     font-weight: bold;
     background-color: var(--paper);
     height: 100%;

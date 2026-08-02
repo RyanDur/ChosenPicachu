@@ -19,13 +19,13 @@
     }
 
     color: var(--void);
-    font-size: 90px;
+    font-size: var(--text-x-11);
     text-indent: -9999em;
     overflow: hidden;
     width: 1em;
     height: 1em;
     border-radius: 50%;
-    margin: 72px auto;
+    margin: var(--base-x-9) auto;
     position: relative;
     transform: translateZ(0);
     animation: load6 1.7s infinite ease, round 1.7s infinite ease;

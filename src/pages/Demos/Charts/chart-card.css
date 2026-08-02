@@ -10,8 +10,8 @@
     height: auto;
     border: none;
     background: var(--paper);
-    padding: 0.2rem var(--base);
-    font-size: 1.2rem;
+    padding: var(--base-x-0_25) var(--base);
+    font-size: var(--text-caption);
     color: var(--charcoal);
     cursor: pointer;
 
@@ -39,17 +39,17 @@
 
     .prompt {
       cursor: pointer;
-      font-size: 1.1rem;
+      font-size: var(--text-caption);
       color: var(--charcoal);
       opacity: 0.7;
     }
 
     .explanation {
-      margin-top: 0.6rem;
-      font-size: 1.2rem;
+      margin-top: var(--base-x-0_75);
+      font-size: var(--text-caption);
       line-height: 1.5;
       color: var(--charcoal);
-      max-width: 48rem;
+      max-width: var(--measure);
     }
   }
 }

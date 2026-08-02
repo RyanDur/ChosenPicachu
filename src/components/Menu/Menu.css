@@ -3,7 +3,7 @@
   position-area: block-end span-inline-start;
   position-try-fallbacks: flip-block;
   margin: 0;
-  width: 20rem;
+  width: var(--base-x-25);
   border: none;
   padding: 0;
   background: var(--paper);
@@ -18,8 +18,8 @@
     cursor: pointer;
     outline: none;
     border: none;
-    height: 4rem;
-    font-size: 2rem;
+    height: var(--base-x-5);
+    font-size: var(--text-x-2_5);
     color: var(--void);
 
     &:active {
@@ -28,21 +28,21 @@
 
     &:hover,
     &:focus {
-      border: 2px solid var(--shadow);
+      border: var(--hairline-x-2) solid var(--shadow);
     }
 
     &:not(:last-child) {
-      border-bottom: 1px solid var(--charcoal);
+      border-bottom: var(--hairline) solid var(--charcoal);
     }
 
     &:first-child {
-      border-top-right-radius: 2rem;
-      border-top-left-radius: 2rem;
+      border-top-right-radius: var(--radius-card);
+      border-top-left-radius: var(--radius-card);
     }
 
     &:last-child {
-      border-bottom-right-radius: 2rem;
-      border-bottom-left-radius: 2rem;
+      border-bottom-right-radius: var(--radius-card);
+      border-bottom-left-radius: var(--radius-card);
     }
   }
 }

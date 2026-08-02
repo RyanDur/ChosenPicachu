@@ -78,7 +78,7 @@
 
 @media (max-width: 1547px) {
     #root {
-        grid-template-columns: 13.4rem 1fr 13.4rem;
+        grid-template-columns: var(--base-x-16_75) 1fr var(--base-x-16_75);
         grid-template-areas:
       "nav header filter"
       "nav main filter"
@@ -126,7 +126,7 @@
 
         #app-header {
             grid-template-columns: 1fr 1fr;
-            grid-auto-rows: 8rem;
+            grid-auto-rows: var(--base-x-10);
             grid-template-areas: "title search";
         }
 

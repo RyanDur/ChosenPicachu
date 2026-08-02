@@ -9,8 +9,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1rem;
-    width: 20rem;
+    padding: var(--base-x-1_25);
+    width: var(--base-x-25);
     background: var(--faded-leather);
     box-shadow: none;
 
@@ -25,7 +25,7 @@
 
     #avatar {
       height: auto;
-      width: 15.2rem;
+      width: var(--base-x-19);
     }
   }
 
@@ -36,7 +36,7 @@
   }
 
   &.invalid *:invalid {
-    border: 1px solid var(--internationl-orange-engineering);
+    border: var(--hairline) solid var(--internationl-orange-engineering);
     box-shadow: var(--base-box-shadow);
   }
 
@@ -75,18 +75,18 @@
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
-    border-radius: 8rem;
-    height: 2rem;
+    border-radius: var(--radius-pill);
+    height: var(--base-x-2_5);
     text-align: center;
     width: 100%;
-    font-size: 1.4rem;
+    font-size: var(--text-body);
 
     #same-as-home {
-      margin-left: 1rem;
+      margin-left: var(--base-x-1_25);
 
       &:focus {
         outline: none;
-        font-size: 1.6rem;
+        font-size: var(--text-x-2);
       }
 
       &:hover,

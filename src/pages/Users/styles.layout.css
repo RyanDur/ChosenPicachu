@@ -12,8 +12,8 @@
   display: inline-grid;
   grid-template-columns: 1fr 1fr;
   column-gap: var(--base-x-2);
-  row-gap: 4rem;
-  grid-auto-rows: 4rem 1fr;
+  row-gap: var(--base-x-5);
+  grid-auto-rows: var(--base-x-5) 1fr;
   grid-template-areas:
     "title button"
     "table table";
