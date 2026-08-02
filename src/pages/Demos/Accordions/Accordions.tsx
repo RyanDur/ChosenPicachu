@@ -32,7 +32,7 @@ export const ExclusiveAccordion: FC<PropsWithClassName & ContentProps> = ({
     <aside><p>no Javascript needed to pull this off.</p></aside>
   </header>
   <ul className="accordion">
-    <li className="close fold">
+    <li className="fold close">
       <input id="close-radio" defaultChecked={true} className="info-toggle off-screen" type="radio" name="group"/>
       <label className="info-label center" htmlFor="close-radio">Close</label>
     </li>
@@ -118,8 +118,8 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
 
 
             <article className="info-animated">
-              <article className="info-animation-wraper">
-                <article className="info ">{value}</article>
+              <article className="info-animated-wrapper">
+                <article className="info">{value}</article>
               </article>
             </article>
           </article>

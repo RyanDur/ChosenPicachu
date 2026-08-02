@@ -155,7 +155,7 @@
         }
       }
 
-      #borrowed-assets {
+      .borrowed-assets {
         flex-direction: row;
         justify-content: space-around;
       }
