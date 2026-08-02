@@ -41,6 +41,9 @@ const columnSlice = (section: HTMLTableSectionElement, position: number): HTMLTa
     return group;
 };
 
+const blankCarriage = new Image(1, 1);
+blankCarriage.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+
 const columnGhost = (source: HTMLTableElement, position: number): HTMLTableElement => {
     const ghost = document.createElement('table');
     ghost.className = source.className;
@@ -147,6 +150,7 @@ export const Table: FC<TableProps> = (
     const [dragged, setDragged] = useState<string>();
     const [overIndex, setOverIndex] = useState(-1);
     const ghost = useRef<HTMLTableElement>(null);
+    const follower = useRef<(shadowing: DragEvent) => void>(() => undefined);
     const byKey = new Map(columns.map(definition => [String(definition.column), definition]));
     const ordered = order.map(key => byKey.get(key)).filter(has);
     const apportioned = ordered.filter(({width}) => has(width)).map(({column}) => String(column));
@@ -174,6 +178,7 @@ export const Table: FC<TableProps> = (
             setOrder(previous => array.moveToIndex(overIndex, dragged, previous));
         }
         ghost.current?.remove();
+        document.removeEventListener('dragover', follower.current);
         setDragged(undefined);
         setArmed(undefined);
         setOverIndex(-1);
@@ -211,15 +216,16 @@ export const Table: FC<TableProps> = (
                            if (is(carriage) && has(surface)) {
                                const shade = columnGhost(surface, position);
                                document.body.appendChild(shade);
-                               shade.style.left = `${event.clientX - shade.offsetWidth / 2}px`;
-                               shade.style.top = `${event.clientY - 16}px`;
+                               const carry = (shadowing: {clientX: number; clientY: number}): void => {
+                                   shade.style.left = `${shadowing.clientX - shade.offsetWidth / 2}px`;
+                                   shade.style.top = `${shadowing.clientY + 16}px`;
+                               };
+                               carry(event);
                                carriage.effectAllowed = 'move';
-                               carriage.setDragImage(shade, shade.offsetWidth / 2, 16);
+                               carriage.setDragImage(blankCarriage, 0, 0);
                                ghost.current = shade;
-                               requestAnimationFrame(() =>
-                                   requestAnimationFrame(() => {
-                                       shade.style.visibility = 'hidden';
-                                   }));
+                               follower.current = carry;
+                               document.addEventListener('dragover', carry);
                            }
                        } : undefined}
                        onDragOver={event => {

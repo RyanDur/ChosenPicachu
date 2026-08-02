@@ -1,4 +1,4 @@
-import {fireEvent, render, screen, within} from '@testing-library/react';
+import {createEvent, fireEvent, render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {Table} from '../index';
 import {
@@ -268,7 +268,12 @@ describe('drag sortable columns', () => {
     expect(ghost?.querySelectorAll('tbody tr')).toHaveLength(1);
     expect(ghost?.textContent).toContain('age');
     expect(ghost?.textContent).toContain('36');
-    expect(dataTransfer.setDragImage).toHaveBeenCalledWith(ghost, expect.any(Number), 16);
+    expect(dataTransfer.setDragImage).toHaveBeenCalledWith(expect.any(Image), 0, 0);
+    const glide = createEvent.dragOver(document.body);
+    Object.defineProperty(glide, 'clientX', {value: 300});
+    Object.defineProperty(glide, 'clientY', {value: 200});
+    fireEvent(document.body, glide);
+    expect(ghost).toHaveStyle({top: '216px'});
 
     fireEvent.dragEnd(header('age'));
     expect(document.body.querySelector(':scope > table')).toBeNull();

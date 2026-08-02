@@ -1,25 +1,6 @@
 .fancy-table {
   border-collapse: collapse;
 
-  .header .row {
-    border-bottom: var(--hairline-x-3) solid var(--charcoal);
-  }
-
-  .body .row {
-    border-bottom: var(--hairline) solid var(--charcoal);
-    position: relative;
-    right: 0;
-
-    &:hover {
-      background: var(--mint);
-    }
-
-    &:last-child {
-      border-bottom: none;
-    }
-  }
-
-
   .cell {
     border-right: var(--hairline) solid var(--charcoal);
     padding: var(--base-x-1_25);
@@ -29,10 +10,31 @@
       border-right: none;
     }
   }
-}
 
-.fancy-table .column-name {
-  position: relative;
+  .column-name {
+    position: relative;
+  }
+
+  .header .column-name {
+    border-bottom: var(--hairline-x-3) solid var(--charcoal);
+  }
+
+  .body .cell {
+    border-bottom: var(--hairline) solid var(--charcoal);
+  }
+
+  .body .row {
+    position: relative;
+    right: 0;
+
+    &:hover {
+      background: var(--mint);
+    }
+
+    &:last-child .cell {
+      border-bottom: none;
+    }
+  }
 }
 
 .resize-handle {
