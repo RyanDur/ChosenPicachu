@@ -113,34 +113,55 @@ describe('resizable columns', () => {
   ];
   const people = [{name: {display: 'Ada'}, age: {display: '36'}}];
 
-  test('a sized column renders at its width', () => {
+  const nameHeader = () => screen.getByRole('columnheader', {name: /^name/});
+  const ageHeader = () => screen.getByRole('columnheader', {name: /^age/});
+
+  test('sized columns share the container by their weights', () => {
     render(<Table columns={sized} rows={people}/>);
 
-    expect(screen.getByRole('columnheader', {name: /^name/})).toHaveStyle({width: '200px'});
-    expect(screen.getByRole('columnheader', {name: /^age/})).toHaveStyle({width: '120px'});
+    expect(screen.getByRole('table').classList).toContain('apportioned');
+    expect(nameHeader()).toHaveStyle({width: '62.5%'});
+    expect(ageHeader()).toHaveStyle({width: '37.5%'});
   });
 
-  test('the keyboard widens and narrows a column', async () => {
+  test('the keyboard moves the boundary and the total holds', async () => {
     render(<Table columns={sized} rows={people}/>);
 
     const handle = screen.getByRole('separator', {name: 'resize name'});
     handle.focus();
     await userEvent.keyboard('{ArrowRight}');
-    expect(screen.getByRole('columnheader', {name: /^name/})).toHaveStyle({width: '216px'});
-    expect(screen.getByRole('separator', {name: 'resize name'})).toHaveAttribute('aria-valuenow', '216');
+    expect(nameHeader()).toHaveStyle({width: '64.5%'});
+    expect(ageHeader()).toHaveStyle({width: '35.5%'});
+    expect(screen.getByRole('separator', {name: 'resize name'})).toHaveAttribute('aria-valuenow', '65');
     await userEvent.keyboard('{ArrowLeft}{ArrowLeft}');
-    expect(screen.getByRole('columnheader', {name: /^name/})).toHaveStyle({width: '184px'});
+    expect(nameHeader()).toHaveStyle({width: '60.5%'});
+    expect(ageHeader()).toHaveStyle({width: '39.5%'});
   });
 
-  test('dragging the handle resizes the column', () => {
+  test('dragging the handle trades share between neighbors', () => {
     render(<Table columns={sized} rows={people}/>);
+    const table = screen.getByRole('table');
+    table.getBoundingClientRect = () => ({
+      width: 1000, height: 0, x: 0, y: 0, top: 0, left: 0, right: 1000, bottom: 0, toJSON: () => ({})
+    });
 
     const handle = screen.getByRole('separator', {name: 'resize name'});
     fireEvent.pointerDown(handle, {clientX: 300, pointerId: 1});
     fireEvent.pointerMove(handle, {clientX: 340, pointerId: 1});
     fireEvent.pointerUp(handle, {pointerId: 1});
 
-    expect(screen.getByRole('columnheader', {name: /^name/})).toHaveStyle({width: '240px'});
+    expect(nameHeader()).toHaveStyle({width: '66.5%'});
+    expect(ageHeader()).toHaveStyle({width: '33.5%'});
+  });
+
+  test('a boundary can never starve a column', async () => {
+    render(<Table columns={sized} rows={people}/>);
+
+    const handle = screen.getByRole('separator', {name: 'resize age'});
+    handle.focus();
+    await userEvent.keyboard('{ArrowRight}'.repeat(30));
+    expect(ageHeader()).toHaveStyle({width: '95%'});
+    expect(nameHeader()).toHaveStyle({width: '5%'});
   });
 
   test('columns without widths stay plain', () => {

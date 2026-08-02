@@ -1,4 +1,4 @@
-import {has} from '@ryandur/sand';
+import {has, notEmpty} from '@ryandur/sand';
 import {Column, Row} from './types';
 import {Dispatch, FC, KeyboardEvent, PointerEvent, SetStateAction, useState} from 'react';
 import {join} from '@components/class-names';
@@ -19,43 +19,69 @@ export type TableProps = {
     cellClassName?: string;
 }
 
-const STEP = 16;
-const NARROWEST = 60;
-const WIDEST = 640;
+const STEP_SHARE = 2;
+const SLIMMEST = 5;
 
-type Widths = Readonly<Record<string, number>>;
-type SetWidths = Dispatch<SetStateAction<Widths>>;
-type Grip = {column: string; fromX: number; fromWidth: number} | null;
+type Shares = Readonly<Record<string, number>>;
+type SetShares = Dispatch<SetStateAction<Shares>>;
+type Grip = {
+    column: string;
+    neighbor: string;
+    fromX: number;
+    columnShare: number;
+    neighborShare: number;
+    pxPerShare: number;
+} | null;
 type SetGrip = Dispatch<SetStateAction<Grip>>;
 
-const clamp = (width: number): number => Math.min(WIDEST, Math.max(NARROWEST, width));
-
-const seededWidths = (columns: Column[]): Widths =>
-    columns.reduce<Widths>((widths, {column, width}) =>
-        has(width) ? {...widths, [String(column)]: width} : widths, {});
-
-const widen = (column: string, delta: number) => (previous: Widths): Widths =>
-    ({...previous, [column]: clamp((previous[column] ?? NARROWEST) + delta)});
-
-const resizeByKey = (setWidths: SetWidths, column: string) => (event: KeyboardEvent<HTMLElement>): void => {
-    if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') {
-        return;
-    }
-    event.preventDefault();
-    setWidths(widen(column, event.key === 'ArrowRight' ? STEP : -STEP));
+const seededShares = (columns: Column[]): Shares => {
+    const sized = columns.filter(({width}) => has(width));
+    const total = sized.reduce((sum, {width}) => sum + (width ?? 0), 0);
+    return sized.reduce<Shares>((shares, {column, width}) =>
+        ({...shares, [String(column)]: (width ?? 0) / total * 100}), {});
 };
 
-const gripAt = (setGrip: SetGrip, column: string, width: number) => (event: PointerEvent<HTMLElement>): void => {
-    event.currentTarget.setPointerCapture?.(event.pointerId);
-    setGrip({column, fromX: event.clientX, fromWidth: width});
+const between = (column: number, neighbor: number, delta: number): number =>
+    Math.min(Math.max(delta, SLIMMEST - column), neighbor - SLIMMEST);
+
+const shifted = (column: string, neighbor: string, delta: number) => (previous: Shares): Shares => {
+    const given = between(previous[column], previous[neighbor], delta);
+    return {...previous, [column]: previous[column] + given, [neighbor]: previous[neighbor] - given};
 };
 
-const dragTo = (setWidths: SetWidths, grip: Grip) => (event: PointerEvent<HTMLElement>): void => {
-    if (grip === null) {
+const resizeByKey = (setShares: SetShares, column: string, neighbor: string) =>
+    (event: KeyboardEvent<HTMLElement>): void => {
+        if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') {
+            return;
+        }
+        event.preventDefault();
+        setShares(shifted(column, neighbor, event.key === 'ArrowRight' ? STEP_SHARE : -STEP_SHARE));
+    };
+
+const gripAt = (setGrip: SetGrip, column: string, neighbor: string, shares: Shares) =>
+    (event: PointerEvent<HTMLElement>): void => {
+        event.currentTarget.setPointerCapture?.(event.pointerId);
+        const surface = event.currentTarget.closest('table')?.getBoundingClientRect().width ?? 0;
+        setGrip({
+            column,
+            neighbor,
+            fromX: event.clientX,
+            columnShare: shares[column],
+            neighborShare: shares[neighbor],
+            pxPerShare: surface / 100
+        });
+    };
+
+const dragTo = (setShares: SetShares, grip: Grip) => (event: PointerEvent<HTMLElement>): void => {
+    if (grip === null || grip.pxPerShare === 0) {
         return;
     }
-    setWidths(previous =>
-        ({...previous, [grip.column]: clamp(grip.fromWidth + event.clientX - grip.fromX)}));
+    const given = between(grip.columnShare, grip.neighborShare, (event.clientX - grip.fromX) / grip.pxPerShare);
+    setShares(previous => ({
+        ...previous,
+        [grip.column]: grip.columnShare + given,
+        [grip.neighbor]: grip.neighborShare - given
+    }));
 };
 
 export const Table: FC<TableProps> = (
@@ -74,34 +100,39 @@ export const Table: FC<TableProps> = (
         cellClassName
     }
 ) => {
-    const [widths, setWidths] = useState<Widths>(() => seededWidths(columns));
+    const [shares, setShares] = useState<Shares>(() => seededShares(columns));
     const [grip, setGrip] = useState<Grip>(null);
+    const apportioned = columns.filter(({width}) => has(width)).map(({column}) => String(column));
+    const neighborOf = (key: string): string => {
+        const index = apportioned.indexOf(key);
+        return apportioned[index + 1] ?? apportioned[index - 1];
+    };
 
-    return <table id={id} className={tableClassName}>
+    return <table id={id} className={join(tableClassName, notEmpty(apportioned) && 'apportioned')}>
         <thead className={theadClassName}>
         <tr className={join(
             trClassName,
             headerRowClassName
         )}>{columns.map(({display, column, className, width}) => {
             const key = String(column);
-            const sized = has(width) ? widths[key] : undefined;
+            const share = has(width) ? shares[key] : undefined;
             return <th className={join(thClassName, cellClassName, className)}
                        key={key}
                        scope="col"
-                       style={has(sized) ? {width: sized} : undefined}>
+                       style={has(share) ? {width: `${share}%`} : undefined}>
                 {display}
-                {has(sized) &&
+                {has(share) && apportioned.length > 1 &&
                     <i role="separator"
                        tabIndex={0}
                        className="resize-handle"
                        aria-orientation="vertical"
                        aria-label={`resize ${key}`}
-                       aria-valuenow={sized}
-                       aria-valuemin={NARROWEST}
-                       aria-valuemax={WIDEST}
-                       onKeyDown={resizeByKey(setWidths, key)}
-                       onPointerDown={gripAt(setGrip, key, sized)}
-                       onPointerMove={dragTo(setWidths, grip)}
+                       aria-valuenow={Math.round(share)}
+                       aria-valuemin={SLIMMEST}
+                       aria-valuemax={100 - SLIMMEST}
+                       onKeyDown={resizeByKey(setShares, key, neighborOf(key))}
+                       onPointerDown={gripAt(setGrip, key, neighborOf(key), shares)}
+                       onPointerMove={dragTo(setShares, grip)}
                        onPointerUp={() => setGrip(null)}/>}
             </th>;
         })}</tr>
