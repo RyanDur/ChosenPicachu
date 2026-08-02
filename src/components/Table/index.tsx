@@ -1,7 +1,7 @@
 import {has, notEmpty} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {Column, Row} from './types';
-import {Dispatch, FC, KeyboardEvent, PointerEvent, SetStateAction, useState} from 'react';
+import {Dispatch, FC, KeyboardEvent, PointerEvent, SetStateAction, useRef, useState} from 'react';
 import {join} from '@components/class-names';
 import './Table.css';
 
@@ -40,6 +40,7 @@ const columnGhost = (source: HTMLTableElement, position: number): HTMLTableEleme
     ghost.style.top = '0';
     ghost.style.left = '-100vw';
     ghost.style.width = `${width}px`;
+    ghost.style.background = 'var(--paper)';
     return ghost;
 };
 
@@ -131,6 +132,7 @@ export const Table: FC<TableProps> = (
     const [armed, setArmed] = useState<string>();
     const [dragged, setDragged] = useState<string>();
     const [overIndex, setOverIndex] = useState(-1);
+    const ghost = useRef<HTMLTableElement>(null);
     const byKey = new Map(columns.map(definition => [String(definition.column), definition]));
     const ordered = order.map(key => byKey.get(key)).filter(has);
     const apportioned = ordered.filter(({width}) => has(width)).map(({column}) => String(column));
@@ -157,6 +159,7 @@ export const Table: FC<TableProps> = (
         if (has(draggableColumns) && !eager && has(dragged) && overIndex >= 0) {
             setOrder(previous => array.moveToIndex(overIndex, dragged, previous));
         }
+        ghost.current?.remove();
         setDragged(undefined);
         setArmed(undefined);
         setOverIndex(-1);
@@ -191,10 +194,9 @@ export const Table: FC<TableProps> = (
                                event.dataTransfer.effectAllowed = 'move';
                                const surface = event.currentTarget.closest('table');
                                if (has(surface)) {
-                                   const ghost = columnGhost(surface, position);
-                                   document.body.appendChild(ghost);
-                                   event.dataTransfer.setDragImage(ghost, ghost.offsetWidth / 2, 16);
-                                   setTimeout(() => ghost.remove());
+                                   ghost.current = columnGhost(surface, position);
+                                   document.body.appendChild(ghost.current);
+                                   event.dataTransfer.setDragImage(ghost.current, ghost.current.offsetWidth / 2, 16);
                                }
                            }
                            setDragged(key);
