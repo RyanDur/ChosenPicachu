@@ -20,6 +20,7 @@ import {DemoTopics, demoTopicParam} from './types';
 import {NaturalZIndex} from './ZIndexDemo';
 import {LiveTrades} from '@components/live-trades';
 import {Candles} from '@components/live-trades/Candles';
+import {Aggregations} from '@components/live-trades/Aggregations';
 import {statusCopy, useLiveTrades} from '@components/live-trades/useLiveTrades';
 import {useEnv} from '@components/Env';
 
@@ -76,6 +77,7 @@ export const DemosPage = () => {
               </header>
               <LiveTrades trades={liveTrades.trades}/>
               <Candles trades={liveTrades.trades}/>
+              <Aggregations trades={liveTrades.trades}/>
             </>,
             [DemoTopics.dragAndDrop]: <>
               <h2>Sortable List</h2>

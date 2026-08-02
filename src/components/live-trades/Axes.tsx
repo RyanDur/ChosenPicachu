@@ -1,12 +1,7 @@
 import {FC, PropsWithChildren} from 'react';
 import {format} from 'date-fns';
+import {dollars} from './money';
 import './Axes.css';
-
-const dollars = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-  maximumFractionDigits: 0
-});
 
 type Props = PropsWithChildren<{
   high: number;
