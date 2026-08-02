@@ -11,7 +11,7 @@ export type PeriodHistory = {
 
 const clean: PeriodHistory = {candles: [], unavailable: false};
 
-const queryFor = (period: Exclude<Period, Period.live>): string => {
+const queryFor = (period: Period): string => {
   const now = new Date();
   const start = new Date(now.getTime() - periodSpanMs[period]);
   return `granularity=${granularitySeconds[period]}` +
@@ -25,9 +25,6 @@ export const usePeriodCandles = (period: Period): PeriodHistory => {
 
   useEffect(() => {
     setHistory(clean);
-    if (period === Period.live) {
-      return;
-    }
     const fetching = periodCandles(tradeHistory, tradeProduct, queryFor(period))
       .onSuccess(candles => setHistory({candles, unavailable: false}))
       .onFailure(() => setHistory({candles: [], unavailable: true}));

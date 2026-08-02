@@ -21,7 +21,6 @@ import {NaturalZIndex} from './ZIndexDemo';
 import {LiveTrades} from '@components/live-trades';
 import {Candles} from '@components/live-trades/Candles';
 import {statusCopy, useLiveTrades} from '@components/live-trades/useLiveTrades';
-import {useLiveSeed} from '@components/live-trades/useLiveSeed';
 import {useEnv} from '@components/Env';
 
 const paragraphs = (count: number) =>
@@ -34,7 +33,6 @@ export const DemosPage = () => {
   const {tab} = useSearchParamsObject({tab: demoTopicParam}, {tab: DemoTopics.accordions});
   const {tradeFeed, tradeProduct} = useEnv();
   const liveTrades = useLiveTrades(tradeFeed, tradeProduct);
-  const liveSeed = useLiveSeed();
 
   return <>
       <Tabs
@@ -76,8 +74,8 @@ export const DemosPage = () => {
                 <h2>{`Bitcoin, live — every ${tradeProduct} trade on Coinbase`}</h2>
                 <output data-status={liveTrades.status}>{statusCopy[liveTrades.status]}</output>
               </header>
-              <LiveTrades trades={liveTrades.trades} seed={liveSeed}/>
-              <Candles trades={liveTrades.trades} seed={liveSeed}/>
+              <LiveTrades trades={liveTrades.trades}/>
+              <Candles trades={liveTrades.trades}/>
             </>,
             [DemoTopics.dragAndDrop]: <>
               <h2>Sortable List</h2>
