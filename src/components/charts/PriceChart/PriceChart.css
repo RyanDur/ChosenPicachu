@@ -65,15 +65,6 @@
     }
   }
 
-  &[data-trend='rising'] .headline .delta {
-    color: var(--mint);
-    filter: brightness(0.6);
-  }
-
-  &[data-trend='falling'] .headline .delta {
-    color: var(--internationl-orange-engineering);
-  }
-
   .headline {
     min-height: 3.4rem;
     display: flex;
@@ -94,6 +85,16 @@
       font-weight: normal;
     }
   }
+
+  &[data-trend='rising'] .headline .delta {
+    color: var(--mint);
+    filter: brightness(0.6);
+  }
+
+  &[data-trend='falling'] .headline .delta {
+    color: var(--internationl-orange-engineering);
+  }
+
 
   details {
     margin-top: var(--base-x-2);
