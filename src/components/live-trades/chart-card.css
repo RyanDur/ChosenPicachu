@@ -22,25 +22,13 @@
 
   header .range-picker {
     display: flex;
-    gap: var(--base-x-1);
+    gap: var(--base-x-2);
     margin-left: auto;
     border: none;
-    padding: 0;
+    padding: 0.5rem 0 0;
 
-    label {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 1.1rem;
-      color: var(--charcoal);
-    }
-
-    input {
-      font-size: 1.1rem;
-      border: none;
-      background: var(--paper);
-      color: var(--charcoal);
-      padding: 0.2rem;
+    .fancy {
+      width: 16rem;
     }
   }
 

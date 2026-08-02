@@ -83,7 +83,7 @@ export const LiveTrades: FC<LiveTradesState> = ({status, trades}) => {
   return <section aria-label="live trades" className="card chart live-trades" data-trend={trend}>
     <header>
       {live && <output data-status={status}>{statusCopy[status]}</output>}
-      <RangePicker value={isRange(chartWindow) ? chartWindow : null} onPick={setChartWindow}/>
+      <RangePicker idPrefix="price" value={isRange(chartWindow) ? chartWindow : null} onPick={setChartWindow}/>
       <Menu id="price-period" label="price period"
             toggle={isRange(chartWindow) ? 'range' : chartWindow} toggleClassName="period-toggle">
         {Object.values(Period).map(option =>

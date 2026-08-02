@@ -1,8 +1,8 @@
 import {FC, useEffect, useReducer, useState, useContext} from 'react';
 import {isPersisted, NewUser, User} from './types';
-import {FancyInput} from './FancyFormElements/FancyInput';
+import {FancyInput} from '@components/FancyFormElements/FancyInput';
 import {join} from '@components/class-names';
-import {FancyTextarea} from './FancyFormElements/FancyTextarea';
+import {FancyTextarea} from '@components/FancyFormElements/FancyTextarea';
 import {
   resetForm,
   updateAvatar,
@@ -18,7 +18,7 @@ import {Address} from './Address';
 import {formReducer, initialState} from './reducer';
 import {generateAvatar} from './avatars';
 import {Link} from 'react-router';
-import {FancyDateInput} from './FancyFormElements/FancyDateInput';
+import {FancyDateInput} from '@components/FancyFormElements/FancyDateInput';
 import {toDate} from 'date-fns';
 import {Consumer} from '@ryandur/sand';
 import {UsersLinks} from './Links';
