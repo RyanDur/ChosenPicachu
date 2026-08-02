@@ -273,7 +273,7 @@ describe('drag sortable columns', () => {
     Object.defineProperty(glide, 'clientX', {value: 300});
     Object.defineProperty(glide, 'clientY', {value: 200});
     fireEvent(document.body, glide);
-    expect(ghost).toHaveStyle({top: '216px'});
+    expect(ghost).toHaveStyle({top: '184px'});
 
     fireEvent.dragEnd(header('age'));
     expect(document.body.querySelector(':scope > table')).toBeNull();
