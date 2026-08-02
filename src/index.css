@@ -71,14 +71,3 @@ a {
   }
 }
 
-.ellipsis {
-  min-width: 0;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.bold {
-  font-weight: 600;
-}
-

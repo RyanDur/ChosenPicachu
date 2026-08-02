@@ -18,18 +18,15 @@
   right: 1000vw;
 }
 
-
 .ellipsis {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 }
 
-
 .rounded-corners {
   border-radius: var(--radius-card);
 }
-
 
 @media (max-width: 1000px) {
   .card {
@@ -37,14 +34,3 @@
   }
 }
 
-.heading {
-  font-size: var(--text-headline);
-  font-weight: bold;
-  margin: var(--base-x-2_5) 0;
-}
-
-.subheading {
-  font-size: var(--text-title);
-  font-weight: bold;
-  margin: var(--base-x-2_25) 0;
-}
