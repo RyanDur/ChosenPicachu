@@ -56,6 +56,8 @@ describe('the chart periods', () => {
     expect(drawnCandleParts('rect.volume')).toBe(3);
     expect(asked).toEqual(['60']);
     expect(screen.getByText('3 candles · 1m each')).toBeVisible();
+    expect(screen.getByText('$50,010')).toBeVisible();
+    expect(screen.getByText('$49,970')).toBeVisible();
   });
 
   test('choosing the day draws the price line from history closes', async () => {

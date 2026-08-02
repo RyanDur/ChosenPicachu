@@ -1,25 +1,6 @@
 .candles {
   margin-bottom: var(--base-x-4);
 
-  header {
-    display: flex;
-    justify-content: flex-end;
-  }
-
-  .period-toggle {
-    width: auto;
-    height: auto;
-    border: none;
-    background: var(--paper);
-    padding: 0.2rem var(--base-x-1);
-    font-size: 1.2rem;
-    color: var(--charcoal);
-    cursor: pointer;
-
-    &::after {
-      content: ' ▾';
-    }
-  }
 
   svg {
     display: block;

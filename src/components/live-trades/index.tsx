@@ -3,10 +3,12 @@ import {notEmpty} from '@ryandur/sand';
 import {Menu} from '@components/Menu';
 import {LiveTradesState} from './useLiveTrades';
 import {usePeriodCandles} from './usePeriodCandles';
-import {bucketLabel, Period} from './period';
+import {bucketLabel, Period, timePattern} from './period';
 import {sparklinePoints} from './sparkline';
+import {Axes} from './Axes';
 import {Trade} from '@transport/coinbase';
 import {Candle} from './Candles/shapes';
+import './chart-card.css';
 import './LiveTrades.css';
 
 const statusCopy: Record<LiveTradesState['status'], string> = {
@@ -17,12 +19,6 @@ const statusCopy: Record<LiveTradesState['status'], string> = {
 
 const CHART_WIDTH = 240;
 const CHART_HEIGHT = 60;
-
-const dollars = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-  maximumFractionDigits: 0
-});
 
 const cents = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -43,6 +39,7 @@ type PriceView = {
   low: number;
   first: number;
   last: number;
+  times: readonly number[];
   caption: string;
 };
 
@@ -54,11 +51,12 @@ const liveView = (trades: readonly Trade[]): PriceView => {
     low: Math.min(...prices),
     first: prices[0],
     last: prices[prices.length - 1],
+    times: trades.map(trade => trade.tradedAt),
     caption: `${trades.length} trades · ${spanLabel(trades[0].tradedAt, trades[trades.length - 1].tradedAt)}`
   };
 };
 
-const emptyView: PriceView = {prices: [], high: 0, low: 0, first: 0, last: 0, caption: ''};
+const emptyView: PriceView = {prices: [], high: 0, low: 0, first: 0, last: 0, times: [], caption: ''};
 
 const historyView = (candles: readonly Candle[], period: Period): PriceView => ({
   prices: candles.map(candle => candle.close),
@@ -66,6 +64,7 @@ const historyView = (candles: readonly Candle[], period: Period): PriceView => (
   low: Math.min(...candles.map(candle => candle.low)),
   first: candles[0]?.close ?? 0,
   last: candles[candles.length - 1]?.close ?? 0,
+  times: candles.map(candle => candle.openedAt),
   caption: `${candles.length} candles · ${period === Period.live ? '' : bucketLabel[period]}`
 });
 
@@ -79,7 +78,7 @@ export const LiveTrades: FC<LiveTradesState> = ({status, trades}) => {
   const points = sparklinePoints(view.prices, CHART_WIDTH, CHART_HEIGHT);
   const line = points.map(point => `${point.x},${point.y}`).join(' ');
   const trend = showing && view.last >= view.first ? 'rising' : 'falling';
-  return <section aria-label="live trades" className="card live-trades" data-trend={trend}>
+  return <section aria-label="live trades" className="card chart live-trades" data-trend={trend}>
     <header>
       {live && <output data-status={status}>{statusCopy[status]}</output>}
       <Menu id="price-period" label="price period" toggle={period} toggleClassName="period-toggle">
@@ -90,20 +89,20 @@ export const LiveTrades: FC<LiveTradesState> = ({status, trades}) => {
       </Menu>
     </header>
     <figure>
-      <svg aria-hidden="true"
-           viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
-           preserveAspectRatio="none">
-        {notEmpty(points) && <line className="baseline"
-                                   x1={0} y1={points[0].y}
-                                   x2={CHART_WIDTH} y2={points[0].y}/>}
-        <polyline points={line} fill="none" vectorEffect="non-scaling-stroke"/>
-        {notEmpty(points) && <circle cx={points[points.length - 1].x}
-                                     cy={points[points.length - 1].y}
-                                     r={3}/>}
-      </svg>
+      <Axes high={view.high} low={view.low} times={view.times} pattern={timePattern[period]}>
+        <svg aria-hidden="true"
+             viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
+             preserveAspectRatio="none">
+          {notEmpty(points) && <line className="baseline"
+                                     x1={0} y1={points[0].y}
+                                     x2={CHART_WIDTH} y2={points[0].y}/>}
+          <polyline points={line} fill="none" vectorEffect="non-scaling-stroke"/>
+          {notEmpty(points) && <circle cx={points[points.length - 1].x}
+                                       cy={points[points.length - 1].y}
+                                       r={3}/>}
+        </svg>
+      </Axes>
       {showing && <figcaption>
-        <small className="high">{`high ${dollars.format(view.high)}`}</small>
-        <small className="low">{`low ${dollars.format(view.low)}`}</small>
         <small className="span">{view.caption}</small>
       </figcaption>}
       {history.unavailable && <figcaption>
