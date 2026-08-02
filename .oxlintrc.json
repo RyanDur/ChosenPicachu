@@ -5,7 +5,8 @@
     "react",
     "unicorn",
     "oxc",
-    "vitest"
+    "vitest",
+    "jsx-a11y"
   ],
   "rules": {
     "vitest/require-mock-type-parameters": "off",
@@ -64,7 +65,12 @@
         "allowElseIf": false
       }
     ],
-    "eslint/no-useless-rename": "error"
+    "eslint/no-useless-rename": "error",
+    "jsx-a11y/control-has-associated-label": "off",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "jsx-a11y/no-noninteractive-element-interactions": "off",
+    "jsx-a11y/prefer-tag-over-role": "off",
+    "jsx-a11y/no-noninteractive-tabindex": "off"
   },
   "overrides": [
     {

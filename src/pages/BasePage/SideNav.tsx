@@ -23,8 +23,8 @@ const AboutNav: FC = () => {
 };
 
 export const SideNav: FC = () =>
-  <aside id="side-nav">
-    <nav id="app-navigation">
+  <aside id="side-nav" aria-label="sidebar">
+    <nav id="app-navigation" aria-label="site">
       <AboutNav/>
       <Link id="navigate-users" className="path" to={Paths.users}>Users</Link>
       <Link id="navigate-form" className="path"
@@ -40,7 +40,7 @@ export const SideNav: FC = () =>
 
     <article className="borrowed-assets icons" tabIndex={0}>
       <h2 className="heading">ICONS</h2>
-      <nav className="icons-content">
+      <nav className="icons-content" aria-label="icon credits">
         <a href="https://icons8.com/icon/622/detective" rel="noopener noreferrer" target="_blank"
            className="attribution">Detective icon by Icons8</a>
         <a href="https://icons8.com/icon/j1UxMbqzPi7n/no-image" rel="noopener noreferrer" target="_blank"

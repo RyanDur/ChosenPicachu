@@ -15,7 +15,7 @@ export const Menu: FC<Props> = ({id, label, toggle, toggleClassName, children}) 
             className={join('menu-toggle', 'rounded-corners', toggleClassName)}
             popoverTarget={id}
             aria-label={label}>{toggle}</button>
-    <nav id={id} popover="auto" className="menu rounded-corners"
+    <nav id={id} popover="auto" aria-label={label} className="menu rounded-corners"
          onClick={event => event.currentTarget.hidePopover?.()}>
       {children}
     </nav>

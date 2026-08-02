@@ -43,7 +43,7 @@ export const GalleryNav: FC<Props> = ({id}) => {
 
   const gotoTopOfPage = () => window.scrollTo(0, 0);
 
-  return <nav className="gallery-nav pagination" id={id}>
+  return <nav className="gallery-nav pagination" aria-label="pagination" id={id}>
     {!hasPrevPage && <article className="fill-left"/>}
     {hasPrevPage && <Link to={`${path}${createSearchParams({page: firstPage})}`}
                           onClick={gotoTopOfPage}
