@@ -11,7 +11,8 @@ export type Point = {
 export const sparklinePoints = (
   series: readonly TimedPrice[],
   width: number,
-  height: number
+  height: number,
+  headroomMs = 0
 ): readonly Point[] => {
   if (series.length < 2) {
     return [];
@@ -20,7 +21,7 @@ export const sparklinePoints = (
   const lowest = Math.min(...prices);
   const highest = Math.max(...prices);
   const from = series[0].at;
-  const span = series[series.length - 1].at - from;
+  const span = series[series.length - 1].at - from + headroomMs;
   const scaleY = (price: number): number =>
     highest === lowest ? height / 2 : height - ((price - lowest) / (highest - lowest)) * height;
   const scaleX = (at: number): number =>
