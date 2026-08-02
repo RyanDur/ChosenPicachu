@@ -49,13 +49,11 @@
       font-size: var(--text-caption);
 
       .icons-content {
-        display: none;
         padding: 0;
       }
 
-      &:focus-within .icons-content,
-      &:hover .icons-content {
-        display: block;
+      .heading {
+        cursor: pointer;
       }
 
       .attribution {
