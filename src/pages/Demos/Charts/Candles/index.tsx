@@ -28,7 +28,7 @@ export const Candles: FC<Props> = ({trades}) => {
   const bodies = candleShapes(candles, CHART_WIDTH, CANDLE_HEIGHT, bucketMs[period]);
   const bars = volumeShapes(candles, CHART_WIDTH, VOLUME_HEIGHT, bucketMs[period]);
   return <section aria-label="candles" className="card chart candles">
-    <header>
+    <header className="chart-header">
       <Menu id="candle-period" label="candle period" toggle={period} toggleClassName="period-toggle">
         {Object.values(Period).map(option =>
           <button type="button" key={option} className="item"
@@ -43,28 +43,28 @@ export const Candles: FC<Props> = ({trades}) => {
             pattern={timePattern[period]}
             tickEvery={tickEveryMs[period]}
             headroomMs={2 * bucketMs[period]}>
-        <svg aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${CANDLE_HEIGHT}`}>
+        <svg className="candlesticks" aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${CANDLE_HEIGHT}`}>
           {bodies.map(shape => <g key={shape.x} className={shape.direction}>
-            <line x1={shape.center} y1={shape.wickTop} x2={shape.center} y2={shape.wickBottom}/>
+            <line className="wick" x1={shape.center} y1={shape.wickTop} x2={shape.center} y2={shape.wickBottom}/>
             <rect className="body" x={shape.x} y={shape.bodyTop}
                   width={shape.width} height={shape.bodyHeight}/>
           </g>)}
         </svg>
-        <svg aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${VOLUME_HEIGHT}`}>
+        <svg className="volumes" aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${VOLUME_HEIGHT}`}>
           {bars.map(shape =>
             <rect className="volume" key={shape.x} x={shape.x} y={shape.top}
                   width={shape.width} height={shape.height}/>
           )}
         </svg>
       </Axes>
-      <small>
+      <small className="span">
         {notEmpty(candles) ? captionFor(period, candles.length) : history.unavailable && 'history unavailable'}
       </small>
       {history.pending && <Loading className="chart-loading"/>}
     </section>
-    <details>
-      <summary>what am I looking at?</summary>
-      <p>
+    <details className="explainer">
+      <summary className="prompt">what am I looking at?</summary>
+      <p className="explanation">
         The same measurement, bundled: each candle summarizes one bucket of trades —
         the body spans the first to the last price (green when it rose, orange when
         it fell) and the wicks reach the extremes. The bars beneath show how much

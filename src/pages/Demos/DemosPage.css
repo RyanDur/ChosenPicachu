@@ -34,12 +34,12 @@
   gap: var(--base-x-3);
   margin: 0 0 var(--base-x-2);
 
-  h2 {
+  .headline {
     font-size: var(--base-x-3);
     color: var(--void);
   }
 
-  output {
+  .status {
     display: inline-flex;
     align-items: center;
     gap: 0.6rem;
