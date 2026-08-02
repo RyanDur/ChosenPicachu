@@ -18,8 +18,8 @@ import {
 } from './DragAndDrop';
 import {DemoTopics, demoTopicParam} from './types';
 import {NaturalZIndex} from './ZIndexDemo';
-import {Aggregations, Candles, PriceChart} from '@components/charts';
-import {statusCopy, useLiveTrades} from '@components/charts/useLiveTrades';
+import {Aggregations, Candles, PriceChart} from './Charts';
+import {statusCopy, useLiveTrades} from './Charts/useLiveTrades';
 import {useEnv} from '@components/Env';
 
 const paragraphs = (count: number) =>
