@@ -8,6 +8,11 @@ import {createUser, usersApi} from '@components/Users/resource/usersApi';
 import {users} from '@components/Users/resource/users';
 import {UsersPage} from '@pages/Users/component';
 
+const cellAt = (column: number, row: number): HTMLElement => {
+  const [, tbody] = screen.getAllByRole('rowgroup');
+  return within(within(tbody).getAllByRole('row')[row]).getAllByRole('cell')[column];
+};
+
 describe('the users page', () => {
   const currentUsers = someUsers;
   const firstUser = currentUsers[0];
@@ -59,21 +64,20 @@ describe('the users page', () => {
     });
 
     it('should display the new user', async () => {
-      const table = screen.getByTestId('table');
-      expect(within(table).getByTestId('tbody')).toHaveTextContent(`${aUser.info.firstName} ${aUser.info.lastName}`);
+      const [, tbody] = screen.getAllByRole('rowgroup');
+      expect(tbody).toHaveTextContent(`${aUser.info.firstName} ${aUser.info.lastName}`);
     });
 
     it('should indicate a user works from home when there work and home address match', () => {
-      const table = screen.getByTestId('table');
-      expect(within(table).getByTestId('cell-4-0')).toHaveTextContent('No');
-      expect(within(table).getByTestId('cell-4-1')).toHaveTextContent('Yes');
+      expect(cellAt(4, 0)).toHaveTextContent('No');
+      expect(cellAt(4, 1)).toHaveTextContent('Yes');
     });
   });
 
   describe('viewing a user', () => {
     beforeEach(async () => {
       renderWithRouter(<UsersPage/>);
-      const view = await waitFor(() => within(screen.getByTestId('cell-4-0')).getByText('View'));
+      const view = await waitFor(() => within(cellAt(4, 0)).getByText('View'));
       await userEvent.click(view);
     });
 
@@ -94,7 +98,7 @@ describe('the users page', () => {
     beforeEach(async () => {
 
       renderWithRouter(<UsersPage/>);
-      const edit = await waitFor(() => within(screen.getByTestId('cell-4-0')).getByText('Edit'));
+      const edit = await waitFor(() => within(cellAt(4, 0)).getByText('Edit'));
       await userEvent.click(edit);
     });
 
@@ -129,7 +133,7 @@ describe('the users page', () => {
 
     renderWithRouter(<UsersPage/>);
 
-    const editControl = await waitFor(() => within(screen.getByTestId('cell-4-0')).getByText('Edit'));
+    const editControl = await waitFor(() => within(cellAt(4, 0)).getByText('Edit'));
     await userEvent.click(editControl);
 
     const updateControl = await waitFor(() => within(screen.getByTestId('user-info-form')).getByText('Update'));
@@ -143,7 +147,7 @@ describe('the users page', () => {
 
     renderWithRouter(<UsersPage/>);
 
-    const removeControl = await waitFor(() => within(screen.getByTestId('cell-4-0')).getByText('Remove'));
+    const removeControl = await waitFor(() => within(cellAt(4, 0)).getByText('Remove'));
     await userEvent.click(removeControl);
 
     expect(spy).toHaveBeenCalledWith(firstUser);
@@ -153,7 +157,7 @@ describe('the users page', () => {
     const spy = vi.spyOn(users, 'add');
     renderWithRouter(<UsersPage/>);
 
-    const cloneControl = await waitFor(() => within(screen.getByTestId('cell-4-0')).getByText('Clone'));
+    const cloneControl = await waitFor(() => within(cellAt(4, 0)).getByText('Clone'));
     await userEvent.click(cloneControl);
 
     const addControl = await waitFor(() => within(screen.getByTestId('user-info-form')).getByText('Add'));

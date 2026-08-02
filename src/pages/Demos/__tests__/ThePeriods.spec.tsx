@@ -100,7 +100,7 @@ describe('the chart periods', () => {
 
     await userEvent.click(within(menuFor('candle period')).getByText('week'));
     const candleCard = screen.getByRole('region', {name: 'candles'});
-    await waitFor(() => expect(within(candleCard).getByText('history unavailable')).toBeVisible());
+    expect(await within(candleCard).findByText('history unavailable')).toBeVisible();
   });
 
   test('switching the window shows the loading view until history arrives', async () => {
@@ -113,8 +113,8 @@ describe('the chart periods', () => {
 
     await userEvent.click(within(menuFor('candle period')).getByText('day'));
     const candleCard = screen.getByRole('region', {name: 'candles'});
-    expect(await within(candleCard).findByTestId('loading')).toBeVisible();
+    expect(await within(candleCard).findByRole('progressbar')).toBeVisible();
     await waitFor(() => expect(drawnCandleParts('rect.body')).toBe(5));
-    expect(within(candleCard).queryByTestId('loading')).toBeNull();
+    expect(within(candleCard).queryByRole('progressbar')).toBeNull();
   });
 });

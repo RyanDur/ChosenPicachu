@@ -1,3 +1,4 @@
+import {has} from '@ryandur/sand';
 import {Column, Row} from './types';
 import {Dispatch, FC, KeyboardEvent, PointerEvent, SetStateAction, useState} from 'react';
 import {join} from '@components/class-names';
@@ -31,7 +32,7 @@ const clamp = (width: number): number => Math.min(WIDEST, Math.max(NARROWEST, wi
 
 const seededWidths = (columns: Column[]): Widths =>
     columns.reduce<Widths>((widths, {column, width}) =>
-        width === undefined ? widths : {...widths, [String(column)]: width}, {});
+        has(width) ? {...widths, [String(column)]: width} : widths, {});
 
 const widen = (column: string, delta: number) => (previous: Widths): Widths =>
     ({...previous, [column]: clamp((previous[column] ?? NARROWEST) + delta)});
@@ -76,21 +77,20 @@ export const Table: FC<TableProps> = (
     const [widths, setWidths] = useState<Widths>(() => seededWidths(columns));
     const [grip, setGrip] = useState<Grip>(null);
 
-    return <table id={id} className={tableClassName} data-testid="table">
-        <thead className={theadClassName} data-testid="thead">
+    return <table id={id} className={tableClassName}>
+        <thead className={theadClassName}>
         <tr className={join(
             trClassName,
             headerRowClassName
-        )} data-testid="tr">{columns.map(({display, column, className, width}) => {
+        )}>{columns.map(({display, column, className, width}) => {
             const key = String(column);
-            const sized = width === undefined ? undefined : widths[key];
+            const sized = has(width) ? widths[key] : undefined;
             return <th className={join(thClassName, cellClassName, className)}
                        key={key}
                        scope="col"
-                       style={sized === undefined ? undefined : {width: sized}}
-                       data-testid="th">
+                       style={has(sized) ? {width: sized} : undefined}>
                 {display}
-                {sized !== undefined &&
+                {has(sized) &&
                     <i role="separator"
                        tabIndex={0}
                        className="resize-handle"
@@ -106,12 +106,11 @@ export const Table: FC<TableProps> = (
             </th>;
         })}</tr>
         </thead>
-        <tbody className={tbodyClassName} data-testid="tbody">{rows.map((row, rowNumber) =>
-            <tr className={join(trClassName, rowClassName)} key={rowNumber} data-testid="tr">
+        <tbody className={tbodyClassName}>{rows.map((row, rowNumber) =>
+            <tr className={join(trClassName, rowClassName)} key={rowNumber}>
                 {columns.map(({column}, columnNumber) => {
                     const cell = row[column];
-                    return <td className={join(tdClassName, cellClassName, cell.className)} key={columnNumber}
-                               data-testid={`cell-${columnNumber}-${rowNumber}`}>
+                    return <td className={join(tdClassName, cellClassName, cell.className)} key={columnNumber}>
                         {cell.display}
                     </td>;
                 })}</tr>

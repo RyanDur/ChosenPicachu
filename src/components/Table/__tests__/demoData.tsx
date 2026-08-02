@@ -39,7 +39,7 @@ export const row2Col2Display = words();
 export const columns: Column[] = [
   {
     column: column1Name,
-    display: <h2 data-testid="column1">{column1Display}</h2>,
+    display: <h2>{column1Display}</h2>,
     className: 'aClassName'
   },
   {display: column2Name, column: column2Name},

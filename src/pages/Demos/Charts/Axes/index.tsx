@@ -1,4 +1,5 @@
 import {FC, PropsWithChildren} from 'react';
+import {has} from '@ryandur/sand';
 import {format} from 'date-fns';
 import {dollars} from '../money';
 import './Axes.css';
@@ -17,9 +18,9 @@ const firstMidLast = (times: readonly number[]): readonly number[] =>
     .map(index => times[index]);
 
 const chosenTicks = (times: readonly number[], tickEvery?: number): readonly number[] =>
-  tickEvery === undefined
-    ? firstMidLast(times)
-    : times.filter(at => at % tickEvery === 0);
+  has(tickEvery)
+    ? times.filter(at => at % tickEvery === 0)
+    : firstMidLast(times);
 
 const placed = (
   times: readonly number[],

@@ -9,6 +9,8 @@ type LoadingProps = {
 
 export const Loading: FC<LoadingProps> = ({className, testId}) =>
     <section className={join('loading-screen', className)}
+             role="progressbar"
+             aria-label="loading"
              data-testid={testId || 'loading'}>
         <article className="loading"/>
     </section>;
