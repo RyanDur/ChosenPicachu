@@ -1,7 +1,7 @@
 .card {
   width: 100%;
   background: var(--paper);
-  border-radius: 2rem;
+  border-radius: var(--radius-card);
   box-shadow: var(--base-box-shadow);
   padding: var(--base-x-4);
   overflow: auto;
@@ -33,7 +33,7 @@
 }
 
 .rounded-corners {
-  border-radius: 2rem;
+  border-radius: var(--radius-card);
 }
 
 .gutter {

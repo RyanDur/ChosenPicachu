@@ -1,6 +1,6 @@
 #art-gallery {
   display: grid;
-  gap: 4rem;
+  gap: var(--base-x-5);
   grid-template-columns: repeat(4, 1fr);
   align-items: start;
 

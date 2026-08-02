@@ -7,7 +7,7 @@ html {
 }
 
 body {
-  font-size: var(--base-x-2);
+  font-size: var(--text-x-2);
   font-family: Arial, sans-serif;
   color: var(--void);
 }
@@ -23,7 +23,7 @@ datalist {
 input,
 select,
 textarea {
-  font-size: var(--base-x-2);
+  font-size: var(--text-x-2);
 }
 
 body,
@@ -109,18 +109,25 @@ a {
   --mobile: 1000px;
 
   /* spacing */
+  --base-x-0_25: 0.2rem;
   --base-x-0_5: 0.4rem;
+  --base-x-0_75: 0.6rem;
   --base: 0.8rem;
+  --base-x-1_25: 1rem;
   --base-x-1_5: 1.2rem;
   --base-x-2: 1.6rem;
+  --base-x-2_25: 1.8rem;
   --base-x-2_5: 2rem;
   --base-x-3: 2.4rem;
   --base-x-4: 3.2rem;
+  --base-x-4_25: 3.4rem;
   --base-x-5: 4rem;
   --base-x-5_5: 4.4rem;
   --base-x-6: 4.8rem;
+  --base-x-6_25: 5rem;
   --base-x-6_5: 5.2rem;
   --base-x-7: 5.6rem;
+  --base-x-7_5: 6rem;
   --base-x-8: 6.4rem;
   --base-x-9: 7.2rem;
   --base-x-10: 8rem;
@@ -135,9 +142,41 @@ a {
   --base-x-15_5: 12.4rem;
   --base-x-16: 12.8rem;
   --base-x-16_5: 13.2rem;
+  --base-x-16_75: 13.4rem;
+  --base-x-19: 15.2rem;
   --base-x-20: 16rem;
   --base-x-25: 20rem;
+  --base-x-30: 24rem;
+  --base-x-32_5: 26rem;
   --base-x-40: 32rem;
   --base-x-50: 40rem;
   --base-x-100: 80rem;
+  --base-x-172_5: 138rem;
+
+  /* type — same rhythm as spacing; aliases state the intention */
+  --text: 0.8rem;
+  --text-x-1_5: 1.2rem;
+  --text-x-1_75: 1.4rem;
+  --text-x-2: 1.6rem;
+  --text-x-2_25: 1.8rem;
+  --text-x-2_5: 2rem;
+  --text-x-3: 2.4rem;
+  --text-x-4: 3.2rem;
+  --text-x-10: 8rem;
+  --text-x-11: 8.8rem;
+  --text-caption: var(--text-x-1_5);
+  --text-body: var(--text-x-1_75);
+  --text-title: var(--text-x-2_25);
+  --text-headline: var(--text-x-3);
+
+  /* chrome — px on purpose: hairlines and radii must not scale with text */
+  --hairline: 1px;
+  --hairline-x-2: 2px;
+  --hairline-x-3: 3px;
+  --radius: 8px;
+  --radius-card: 2rem;
+  --radius-pill: 8rem;
+
+  /* prose — a line length stated in characters */
+  --measure: 75ch;
 }

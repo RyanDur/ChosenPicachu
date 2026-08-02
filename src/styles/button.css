@@ -14,7 +14,7 @@ button {
 
   &.primary,
   &.secondary {
-    font-size: 1.8rem;
+    font-size: var(--text-title);
     font-weight: bold;
     white-space: nowrap;
     text-transform: uppercase;
@@ -22,7 +22,7 @@ button {
     padding: 0 var(--base-x-4);
     border-radius: var(--base-x-5);
     box-shadow: 0 0 var(--base-x-0_5) #999;
-    border: 0.1rem solid var(--primary-blue);
+    border: var(--hairline) solid var(--primary-blue);
 
     &:hover,
     &:focus {

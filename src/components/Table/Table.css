@@ -2,11 +2,11 @@
   border-collapse: collapse;
 
   .header .row {
-    border-bottom: 0.3rem solid var(--charcoal);
+    border-bottom: var(--hairline-x-3) solid var(--charcoal);
   }
 
   .body .row {
-    border-bottom: 0.1rem solid var(--charcoal);
+    border-bottom: var(--hairline) solid var(--charcoal);
     position: relative;
     right: 0;
 
@@ -24,8 +24,8 @@
   }
 
   .cell {
-    border-right: 0.1rem solid var(--charcoal);
-    padding: 1rem;
+    border-right: var(--hairline) solid var(--charcoal);
+    padding: var(--base-x-1_25);
     border-top: none;
 
     &:last-child {
@@ -42,7 +42,7 @@
   position: absolute;
   top: 0;
   right: 0;
-  width: 0.8rem;
+  width: var(--base);
   height: 100%;
   cursor: col-resize;
   touch-action: none;

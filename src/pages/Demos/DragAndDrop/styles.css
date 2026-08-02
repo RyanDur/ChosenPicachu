@@ -10,9 +10,9 @@
         max-width: var(--base-x-40);
         padding: var(--base-x-4);
         padding-top: var(--base);
-        border-radius: 2rem;
+        border-radius: var(--radius-card);
         background: var(--paper);
-        border: 1px solid black;
+        border: var(--hairline) solid black;
         opacity: 1;
         transition: opacity 50ms;
 
@@ -28,10 +28,10 @@
     .value {
         height: 100%;
         width: 100%;
-        font-size: 8rem;
+        font-size: var(--text-x-10);
     }
 
     .grip {
-        width: 2rem;
+        width: var(--base-x-2_5);
     }
 }

@@ -3,19 +3,19 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 1rem;
+    gap: var(--base-x-1_25);
 
     .demo-container {
         width: 100%;
         position: relative;
-        min-height: 8rem;
+        min-height: var(--base-x-10);
         display: flex;
-        gap: 1rem;
+        gap: var(--base-x-1_25);
         justify-content: end;
         flex-direction: column;
 
         .card {
-            padding: 2rem;
+            padding: var(--base-x-2_5);
             position: relative;
             transition: bottom 0.3s;
         }

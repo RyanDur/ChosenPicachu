@@ -8,12 +8,12 @@
 
   .y-labels {
     grid-area: y;
-    min-width: 6.5rem;
+    min-width: var(--base-x-8);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-end;
-    font-size: 1.1rem;
+    font-size: var(--text-caption);
     color: var(--charcoal);
     opacity: 0.8;
   }
@@ -26,11 +26,11 @@
   .x-labels {
     grid-area: x;
     position: relative;
-    height: 1.6rem;
-    font-size: 1.1rem;
+    height: var(--base-x-2);
+    font-size: var(--text-caption);
     color: var(--charcoal);
     opacity: 0.8;
-    margin-top: 0.2rem;
+    margin-top: var(--base-x-0_25);
 
     .tick {
       position: absolute;

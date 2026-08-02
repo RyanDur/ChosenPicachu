@@ -35,29 +35,29 @@
   margin: 0 0 var(--base-x-2);
 
   .headline {
-    font-size: var(--base-x-3);
+    font-size: var(--text-headline);
     color: var(--void);
   }
 
   .status {
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
-    font-size: var(--base-x-2);
+    gap: var(--base-x-0_75);
+    font-size: var(--text-x-2);
     color: var(--charcoal);
     letter-spacing: 0.05em;
 
     &::before {
       content: '';
-      width: 0.8rem;
-      height: 0.8rem;
+      width: var(--base);
+      height: var(--base);
       border-radius: 50%;
       background: var(--silk);
     }
 
     &[data-status='streaming']::before {
       background: var(--mint);
-      box-shadow: 0 0 0.6rem var(--mint);
+      box-shadow: 0 0 var(--base-x-0_75) var(--mint);
     }
 
     &[data-status='failed']::before {
