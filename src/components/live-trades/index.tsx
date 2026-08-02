@@ -3,7 +3,8 @@ import {notEmpty} from '@ryandur/sand';
 import {Menu} from '@components/Menu';
 import {LiveTradesState} from './useLiveTrades';
 import {usePeriodCandles} from './usePeriodCandles';
-import {bucketLabel, Period, tickIntervalMs, timePattern} from './period';
+import {ChartWindow, isRange, Period, windowBucketLabel, windowPattern, windowTickEvery} from './period';
+import {RangePicker} from './RangePicker';
 import {sparklinePoints} from './sparkline';
 import {Axes} from './Axes';
 import {Trade} from '@transport/coinbase';
@@ -58,22 +59,23 @@ const liveView = (trades: readonly Trade[]): PriceView => {
 
 const emptyView: PriceView = {prices: [], high: 0, low: 0, first: 0, last: 0, times: [], caption: ''};
 
-const historyView = (candles: readonly Candle[], period: Period): PriceView => ({
+const historyView = (candles: readonly Candle[], bucket: string): PriceView => ({
   prices: candles.map(candle => candle.close),
   high: Math.max(...candles.map(candle => candle.high)),
   low: Math.min(...candles.map(candle => candle.low)),
   first: candles[0]?.close ?? 0,
   last: candles[candles.length - 1]?.close ?? 0,
   times: candles.map(candle => candle.openedAt),
-  caption: `${candles.length} candles · ${period === Period.live ? '' : bucketLabel[period]}`
+  caption: `${candles.length} candles · ${bucket}`
 });
 
 export const LiveTrades: FC<LiveTradesState> = ({status, trades}) => {
-  const [period, setPeriod] = useState<Period>(Period.live);
-  const history = usePeriodCandles(period);
-  const live = period === Period.live;
+  const [chartWindow, setChartWindow] = useState<ChartWindow>(Period.live);
+  const history = usePeriodCandles(chartWindow);
+  const live = chartWindow === Period.live;
   const showing = live ? trades.length > 0 : history.candles.length > 0;
-  const chosenView = (): PriceView => live ? liveView(trades) : historyView(history.candles, period);
+  const chosenView = (): PriceView =>
+    live ? liveView(trades) : historyView(history.candles, windowBucketLabel(chartWindow));
   const view = showing ? chosenView() : emptyView;
   const points = sparklinePoints(view.prices, CHART_WIDTH, CHART_HEIGHT);
   const line = points.map(point => `${point.x},${point.y}`).join(' ');
@@ -81,16 +83,18 @@ export const LiveTrades: FC<LiveTradesState> = ({status, trades}) => {
   return <section aria-label="live trades" className="card chart live-trades" data-trend={trend}>
     <header>
       {live && <output data-status={status}>{statusCopy[status]}</output>}
-      <Menu id="price-period" label="price period" toggle={period} toggleClassName="period-toggle">
+      <RangePicker value={isRange(chartWindow) ? chartWindow : null} onPick={setChartWindow}/>
+      <Menu id="price-period" label="price period"
+            toggle={isRange(chartWindow) ? 'range' : chartWindow} toggleClassName="period-toggle">
         {Object.values(Period).map(option =>
           <button type="button" key={option} className="item"
-                  onClick={() => setPeriod(option)}>{option}</button>
+                  onClick={() => setChartWindow(option)}>{option}</button>
         )}
       </Menu>
     </header>
     <figure>
-      <Axes high={view.high} low={view.low} times={view.times} pattern={timePattern[period]}
-            tickEvery={live ? undefined : tickIntervalMs[period]}>
+      <Axes high={view.high} low={view.low} times={view.times} pattern={windowPattern(chartWindow)}
+            tickEvery={windowTickEvery(chartWindow)}>
         <svg aria-hidden="true"
              viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
              preserveAspectRatio="none">

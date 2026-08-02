@@ -22,8 +22,8 @@ const toCandles = (rows: readonly (readonly number[])[]): readonly Candle[] =>
 export const periodCandles = (
   base: string,
   product: string,
-  granularity: number
+  query: string
 ): Result.Async<readonly Candle[], HTTPError> =>
-  http.get<unknown>(`${base}/products/${product}/candles?granularity=${granularity}`)
+  http.get<unknown>(`${base}/products/${product}/candles?${query}`)
     .mBind(validate(HistoryRowsDecoder))
     .map(toCandles);
