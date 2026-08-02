@@ -41,7 +41,7 @@ describe('the image', () => {
     fireEvent.load(screen.getByAltText(piece.altText));
     await userEvent.click(screen.getByAltText(piece.altText));
 
-    expect(screen.getByTestId('subject-url-path').innerHTML).toEqual(`${Paths.artGallery}${piece.id}`);
+    expect(screen.getByLabelText('url path').innerHTML).toEqual(`${Paths.artGallery}${piece.id}`);
     expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
   });
 
@@ -72,7 +72,7 @@ describe('the image', () => {
     fireEvent.load(screen.getByAltText(piece.altText));
     await userEvent.click(await screen.findByAltText(piece.altText));
 
-    expect(screen.getByTestId('subject-url-path').innerHTML).toEqual(Paths.artGallery);
+    expect(screen.getByLabelText('url path').innerHTML).toEqual(Paths.artGallery);
     expect(window.scrollTo).not.toHaveBeenCalled();
   });
 });

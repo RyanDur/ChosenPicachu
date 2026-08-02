@@ -56,7 +56,7 @@ export const UserInformation: FC<FormProps> = (
     };
 
     return <form id="user-info-form"
-                 data-testid="user-info-form"
+                 aria-label="user info"
                  className={join(readOnly && 'read-only')}
                  onSubmit={event => {
                      event.preventDefault();
@@ -99,7 +99,6 @@ export const UserInformation: FC<FormProps> = (
         <button type="button" id="avatar-cell"
                 aria-label="Generate a new avatar"
                 className={join('card', readOnly && 'read-only')}
-                data-testid="avatar-cell"
                 disabled={readOnly}
                 onClick={() => dispatch(updateAvatar(generateAvatar()))}>
             <img id="avatar" src={user.avatar} width="244" height="244" fetchPriority="high" alt="avatar"/>

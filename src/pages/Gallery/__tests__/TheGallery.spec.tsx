@@ -64,7 +64,7 @@ describe('The gallery.', () => {
 
       await userEvent.click(within(await frameTitled(firstPiece.title)).getByRole('img'));
 
-      const header = within(screen.getByTestId('header'));
+      const header = within(screen.getByRole('banner'));
       expect(await header.findByText(firstPiece.title)).toBeInTheDocument();
     });
   });

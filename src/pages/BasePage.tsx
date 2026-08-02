@@ -5,11 +5,11 @@ import './BasePage.layout.css';
 
 export const BasePage: FC<PropsWithChildren<{ title: string }>> = ({title, children}) =>
   <>
-    <header id="app-header" data-testid="header">
+    <header id="app-header">
       <h1 className="title ellipsis">{title}</h1>
     </header>
 
     <SideNav/>
 
-    <main data-testid="main">{children}</main>
+    <main>{children}</main>
   </>;

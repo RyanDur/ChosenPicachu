@@ -17,7 +17,7 @@ describe('page error boundaries', () => {
     };
     renderWithMemoryRouter({path: '/', element: <Boom/>, errorElement: <PageError/>}, {path: '/'});
 
-    expect(await screen.findByTestId('page-error')).toHaveTextContent('This room is closed.');
+    expect(await screen.findByText('This room is closed.')).toBeVisible();
   });
 });
 

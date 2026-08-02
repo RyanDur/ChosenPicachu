@@ -1,7 +1,7 @@
 import {UserInformation} from '../index';
 import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {fillOutForm} from '@test-support';
+import {addressGroup, fillOutForm} from '@test-support';
 import {initialState} from '../reducer';
 import {NewUser} from '../types';
 import {toDate} from 'date-fns';
@@ -100,17 +100,17 @@ describe('a user form', () => {
       expect(screen.getByLabelText('First Name')).not.toBeValid();
       expect(screen.getByLabelText('Last Name')).not.toBeValid();
       expect(screen.getByLabelText('Date Of Birth')).not.toBeValid();
-      expect(screen.getByTestId('home-address-street')).not.toBeValid();
-      expect(screen.getByTestId('home-address-city')).not.toBeValid();
-      expect(screen.getByTestId('home-address-state')).not.toBeValid();
-      expect(screen.getByTestId('home-address-zip')).not.toBeValid();
+      expect(addressGroup('home').getByLabelText('Street')).not.toBeValid();
+      expect(addressGroup('home').getByLabelText('City')).not.toBeValid();
+      expect(addressGroup('home').getByLabelText('State')).not.toBeValid();
+      expect(addressGroup('home').getByLabelText('Postal / Zip code')).not.toBeValid();
     });
 
     describe('for a zip code', () => {
       const testZip = (kind: string): void => {
         test('a non-numeric', async () => {
           render(<UserInformation onAdd={vi.fn()}/>);
-          const element = screen.getByTestId(`${kind}-address-zip`);
+          const element = addressGroup(kind).getByLabelText('Postal / Zip code');
 
           await userEvent.type(element, 'a');
 
@@ -120,7 +120,7 @@ describe('a user form', () => {
 
         test('a partial numeric', async () => {
           render(<UserInformation onAdd={vi.fn()}/>);
-          const element = screen.getByTestId(`${kind}-address-zip`);
+          const element = addressGroup(kind).getByLabelText('Postal / Zip code');
 
           await userEvent.type(element, '1');
 
@@ -130,7 +130,7 @@ describe('a user form', () => {
 
         test('partial zip', async () => {
           render(<UserInformation onAdd={vi.fn()}/>);
-          const element = screen.getByTestId(`${kind}-address-zip`);
+          const element = addressGroup(kind).getByLabelText('Postal / Zip code');
 
           await userEvent.type(element, '60012');
 
@@ -140,7 +140,7 @@ describe('a user form', () => {
 
         test('full zip', async () => {
           render(<UserInformation onAdd={vi.fn()}/>);
-          const element = screen.getByTestId(`${kind}-address-zip`);
+          const element = addressGroup(kind).getByLabelText('Postal / Zip code');
 
           await userEvent.type(element, '12345-1234');
 
@@ -163,7 +163,7 @@ describe('a user form', () => {
 describe('the avatar control plays fair with the keyboard', () => {
   test('tab is never swallowed — no keyboard trap', async () => {
     render(<UserInformation onAdd={vi.fn()}/>);
-    const avatar = screen.getByTestId('avatar-cell');
+    const avatar = screen.getByRole('button', {name: 'Generate a new avatar'});
     avatar.focus();
 
     const tabWasAllowed = fireEvent.keyDown(avatar, {code: 'Tab', key: 'Tab'});
@@ -174,7 +174,7 @@ describe('the avatar control plays fair with the keyboard', () => {
 
   test('enter and space regenerate the avatar, like a click does', async () => {
     render(<UserInformation onAdd={vi.fn()}/>);
-    const avatar = screen.getByTestId('avatar-cell');
+    const avatar = screen.getByRole('button', {name: 'Generate a new avatar'});
     const before = screen.getByAltText<HTMLImageElement>('avatar').src;
     avatar.focus();
 
@@ -187,7 +187,7 @@ describe('the avatar control plays fair with the keyboard', () => {
 describe('the keyboard walks the whole form', () => {
   test('tab visits each control once and always gets out the other side', async () => {
     render(<UserInformation onAdd={vi.fn()}/>);
-    const form = screen.getByTestId('user-info-form');
+    const form = screen.getByRole('form', {name: 'user info'});
 
     const visited: Element[] = [];
     let guard = 0;

@@ -16,7 +16,7 @@ describe('Gallery Navigation', () => {
   test('on load', () => {
     renderWithGalleryContext(<GalleryNav/>, options);
 
-    expect(screen.getByTestId('subject-url-search')).not.toHaveTextContent('page');
+    expect(screen.getByLabelText('url search')).not.toHaveTextContent('page');
   });
 
   describe('without params', () => {
@@ -25,12 +25,12 @@ describe('Gallery Navigation', () => {
         renderWithGalleryContext(<GalleryNav/>, options);
         await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
 
-        expect(screen.getByTestId('subject-url-search')).toHaveTextContent('page=2');
+        expect(screen.getByLabelText('url search')).toHaveTextContent('page=2');
         expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
 
         await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
 
-        expect(screen.getByTestId('subject-url-search')).toHaveTextContent('page=3');
+        expect(screen.getByLabelText('url search')).toHaveTextContent('page=3');
         expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
       });
 
@@ -46,7 +46,7 @@ describe('Gallery Navigation', () => {
         await userEvent.click(screen.getByRole('link', {name: 'LAST'}));
 
         expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
-        expect(screen.getByTestId('subject-url-search')).toHaveTextContent(`?page=${fromAICArt.pagination.totalPages}`);
+        expect(screen.getByLabelText('url search')).toHaveTextContent(`?page=${fromAICArt.pagination.totalPages}`);
         expect(screen.queryByRole('link', {name: 'LAST'})).not.toBeInTheDocument();
         expect(screen.queryByRole('link', {name: 'NEXT'})).not.toBeInTheDocument();
         expect(screen.queryByRole('link', {name: 'FIRST'})).toBeInTheDocument();
@@ -65,14 +65,14 @@ describe('Gallery Navigation', () => {
         await userEvent.click(screen.getByRole('link', {name: 'LAST'}));
         await userEvent.click(screen.getByRole('link', {name: 'PREV'}));
 
-        expect(screen.getByTestId('subject-url-search')).toHaveTextContent(
+        expect(screen.getByLabelText('url search')).toHaveTextContent(
           `page=${fromAICArt.pagination.totalPages - 1}`
         );
         expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
 
         await userEvent.click(screen.getByRole('link', {name: 'PREV'}));
 
-        expect(screen.getByTestId('subject-url-search')).toHaveTextContent(
+        expect(screen.getByLabelText('url search')).toHaveTextContent(
           `page=${fromAICArt.pagination.totalPages - 2}`
         );
         expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
@@ -113,7 +113,7 @@ describe('Gallery Navigation', () => {
         await userEvent.click(screen.getByRole('link', {name: 'FIRST'}));
 
         expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
-        expect(screen.getByTestId('subject-url-search')).toHaveTextContent('page=1');
+        expect(screen.getByLabelText('url search')).toHaveTextContent('page=1');
         expect(screen.queryByRole('link', {name: 'LAST'})).toBeInTheDocument();
         expect(screen.queryByRole('link', {name: 'NEXT'})).toBeInTheDocument();
         expect(screen.queryByRole('link', {name: 'FIRST'})).not.toBeInTheDocument();
@@ -131,28 +131,28 @@ describe('Gallery Navigation', () => {
     });
 
     await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
-    expect(screen.getByTestId('subject-url-search')).toHaveTextContent('search=q&page=2');
+    expect(screen.getByLabelText('url search')).toHaveTextContent('search=q&page=2');
 
     await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
-    expect(screen.getByTestId('subject-url-search')).toHaveTextContent('search=q&page=3');
+    expect(screen.getByLabelText('url search')).toHaveTextContent('search=q&page=3');
 
     await userEvent.click(screen.getByRole('link', {name: 'LAST'}));
-    expect(screen.getByTestId('subject-url-search')).toHaveTextContent(
+    expect(screen.getByLabelText('url search')).toHaveTextContent(
       `search=q&page=${fromAICArt.pagination.totalPages}`
     );
 
     await userEvent.click(screen.getByRole('link', {name: 'PREV'}));
-    expect(screen.getByTestId('subject-url-search')).toHaveTextContent(
+    expect(screen.getByLabelText('url search')).toHaveTextContent(
       `search=q&page=${fromAICArt.pagination.totalPages - 1}`
     );
 
     await userEvent.click(screen.getByRole('link', {name: 'PREV'}));
-    expect(screen.getByTestId('subject-url-search')).toHaveTextContent(
+    expect(screen.getByLabelText('url search')).toHaveTextContent(
       `search=q&page=${fromAICArt.pagination.totalPages - 2}`
     );
 
     await userEvent.click(screen.getByRole('link', {name: 'FIRST'}));
-    expect(screen.getByTestId('subject-url-search')).toHaveTextContent(
+    expect(screen.getByLabelText('url search')).toHaveTextContent(
       'search=q&page=1'
     );
   });

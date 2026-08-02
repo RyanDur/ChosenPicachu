@@ -16,13 +16,13 @@ export const Shell = () => {
 
   return <Provider>
     <HeaderRegion/>
-    <main data-testid="main" className={mainClassName}>
+    <main className={mainClassName}>
       <Outlet/>
     </main>
-    {AsideRegion !== undefined && <article id="filter" data-testid="filter">
+    {AsideRegion !== undefined && <article id="filter">
       <AsideRegion/>
     </article>}
-    {FooterRegion !== undefined && <footer id="app-footer" className="stick-to-bottom" data-testid="footer">
+    {FooterRegion !== undefined && <footer id="app-footer" className="stick-to-bottom">
       <FooterRegion/>
     </footer>}
     <SideNav/>

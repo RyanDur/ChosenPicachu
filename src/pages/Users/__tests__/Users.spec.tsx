@@ -90,7 +90,7 @@ describe('the users page', () => {
     });
 
     it('should be able to edit', () => {
-      expect(within(screen.getByTestId('user-info-form')).queryByText('Edit')).toBeInTheDocument();
+      expect(within(screen.getByRole('form', {name: 'user info'})).queryByText('Edit')).toBeInTheDocument();
     });
   });
 
@@ -103,13 +103,13 @@ describe('the users page', () => {
     });
 
     it('should populate the form', () => {
-      const form = screen.getByTestId('user-info-form');
+      const form = screen.getByRole('form', {name: 'user info'});
       expect(within(form).getByLabelText('First Name')).toHaveDisplayValue(firstUser.info.firstName);
       expect(within(form).getByLabelText('Last Name')).toHaveDisplayValue(firstUser.info.lastName);
     });
 
     it('should be able to reset the form to the original information', async () => {
-      const form = screen.getByTestId('user-info-form');
+      const form = screen.getByRole('form', {name: 'user info'});
       await userEvent.type(within(form).getByLabelText('First Name'), ' with more text');
 
       expect(within(form).getByLabelText('First Name'))
@@ -122,9 +122,9 @@ describe('the users page', () => {
     });
 
     it('should be able to cancel the form to the original information', async () => {
-      const form = screen.getByTestId('user-info-form');
+      const form = screen.getByRole('form', {name: 'user info'});
       await userEvent.click(within(form).getByText('Cancel'));
-      expect(screen.getByTestId('subject-url-search')).toHaveTextContent(`id=${firstUser.id}&mode=view`);
+      expect(screen.getByLabelText('url search')).toHaveTextContent(`id=${firstUser.id}&mode=view`);
     });
   });
 
@@ -136,7 +136,7 @@ describe('the users page', () => {
     const editControl = await waitFor(() => within(cellAt(4, 0)).getByText('Edit'));
     await userEvent.click(editControl);
 
-    const updateControl = await waitFor(() => within(screen.getByTestId('user-info-form')).getByText('Update'));
+    const updateControl = await waitFor(() => within(screen.getByRole('form', {name: 'user info'})).getByText('Update'));
     await userEvent.click(updateControl);
 
     expect(spy).toHaveBeenCalled();
@@ -160,7 +160,7 @@ describe('the users page', () => {
     const cloneControl = await waitFor(() => within(cellAt(4, 0)).getByText('Clone'));
     await userEvent.click(cloneControl);
 
-    const addControl = await waitFor(() => within(screen.getByTestId('user-info-form')).getByText('Add'));
+    const addControl = await waitFor(() => within(screen.getByRole('form', {name: 'user info'})).getByText('Add'));
     await userEvent.click(addControl);
 
     expect(spy).toHaveBeenCalled();
@@ -173,9 +173,9 @@ const addUser = async (user: User) => {
   await userEvent.type(screen.getByLabelText('Email'), user.info.email);
   await userEvent.type(screen.getByLabelText('Date Of Birth'), format(user.info.dob!, 'yyyy-MM-dd'));
 
-  await addAddress(user.homeAddress, screen.getByTestId('home-address'));
+  await addAddress(user.homeAddress, screen.getByRole('article', {name: 'Home Address'}));
 
-  if (user.workAddress) await addAddress(user.workAddress, screen.getByTestId('work-address'));
+  if (user.workAddress) await addAddress(user.workAddress, screen.getByRole('article', {name: 'Work Address'}));
 
   await userEvent.type(screen.getByLabelText('Details'), user.details || '');
 

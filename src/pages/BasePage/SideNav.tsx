@@ -23,7 +23,7 @@ const AboutNav: FC = () => {
 };
 
 export const SideNav: FC = () =>
-  <aside id="side-nav" data-testid="navigation">
+  <aside id="side-nav">
     <nav id="app-navigation">
       <AboutNav/>
       <Link id="navigate-users" className="path" to={Paths.users}>Users</Link>

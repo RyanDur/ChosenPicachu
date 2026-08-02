@@ -38,7 +38,6 @@ export const FancySelect: FC<PropsWithChildren<FancySelectProps>> = (
                 {...(value ? {value} : {defaultValue: ''})}
                 required={required}
                 disabled={disabled || readOnly}
-                data-testid={selectId}
                 onChange={onChange}>
             {[<option key="placeholder" value="" disabled hidden/>,
                 ...Array.from(optionValues).map(state => <option key={state}>{state}</option>)
