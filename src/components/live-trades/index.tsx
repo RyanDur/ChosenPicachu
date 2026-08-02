@@ -1,7 +1,12 @@
-import {FC} from 'react';
+import {FC, useState} from 'react';
 import {notEmpty} from '@ryandur/sand';
+import {Menu} from '@components/Menu';
 import {LiveTradesState} from './useLiveTrades';
+import {usePeriodCandles} from './usePeriodCandles';
+import {bucketLabel, Period} from './period';
 import {sparklinePoints} from './sparkline';
+import {Trade} from '@transport/coinbase';
+import {Candle} from './Candles/shapes';
 import './LiveTrades.css';
 
 const statusCopy: Record<LiveTradesState['status'], string> = {
@@ -32,15 +37,58 @@ const spanLabel = (from: number, to: number): string => {
   return seconds < 60 ? `${seconds}s` : `${Math.round(seconds / 60)}m`;
 };
 
-export const LiveTrades: FC<LiveTradesState> = ({status, trades}) => {
+type PriceView = {
+  prices: readonly number[];
+  high: number;
+  low: number;
+  first: number;
+  last: number;
+  caption: string;
+};
+
+const liveView = (trades: readonly Trade[]): PriceView => {
   const prices = trades.map(trade => trade.price);
-  const points = sparklinePoints(prices, CHART_WIDTH, CHART_HEIGHT);
+  return {
+    prices,
+    high: Math.max(...prices),
+    low: Math.min(...prices),
+    first: prices[0],
+    last: prices[prices.length - 1],
+    caption: `${trades.length} trades · ${spanLabel(trades[0].tradedAt, trades[trades.length - 1].tradedAt)}`
+  };
+};
+
+const emptyView: PriceView = {prices: [], high: 0, low: 0, first: 0, last: 0, caption: ''};
+
+const historyView = (candles: readonly Candle[], period: Period): PriceView => ({
+  prices: candles.map(candle => candle.close),
+  high: Math.max(...candles.map(candle => candle.high)),
+  low: Math.min(...candles.map(candle => candle.low)),
+  first: candles[0]?.close ?? 0,
+  last: candles[candles.length - 1]?.close ?? 0,
+  caption: `${candles.length} candles · ${period === Period.live ? '' : bucketLabel[period]}`
+});
+
+export const LiveTrades: FC<LiveTradesState> = ({status, trades}) => {
+  const [period, setPeriod] = useState<Period>(Period.live);
+  const history = usePeriodCandles(period);
+  const live = period === Period.live;
+  const showing = live ? trades.length > 0 : history.candles.length > 0;
+  const chosenView = (): PriceView => live ? liveView(trades) : historyView(history.candles, period);
+  const view = showing ? chosenView() : emptyView;
+  const points = sparklinePoints(view.prices, CHART_WIDTH, CHART_HEIGHT);
   const line = points.map(point => `${point.x},${point.y}`).join(' ');
-  const first = trades[0];
-  const last = trades[trades.length - 1];
-  const trend = notEmpty(trades) && last.price >= first.price ? 'rising' : 'falling';
+  const trend = showing && view.last >= view.first ? 'rising' : 'falling';
   return <section aria-label="live trades" className="card live-trades" data-trend={trend}>
-    <output data-status={status}>{statusCopy[status]}</output>
+    <header>
+      {live && <output data-status={status}>{statusCopy[status]}</output>}
+      <Menu id="price-period" label="price period" toggle={period} toggleClassName="period-toggle">
+        {Object.values(Period).map(option =>
+          <button type="button" key={option} className="item"
+                  onClick={() => setPeriod(option)}>{option}</button>
+        )}
+      </Menu>
+    </header>
     <figure>
       <svg aria-hidden="true"
            viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
@@ -53,15 +101,18 @@ export const LiveTrades: FC<LiveTradesState> = ({status, trades}) => {
                                      cy={points[points.length - 1].y}
                                      r={3}/>}
       </svg>
-      {notEmpty(trades) && <figcaption>
-        <small className="high">{`high ${dollars.format(Math.max(...prices))}`}</small>
-        <small className="low">{`low ${dollars.format(Math.min(...prices))}`}</small>
-        <small className="span">{`${trades.length} trades · ${spanLabel(first.tradedAt, last.tradedAt)}`}</small>
+      {showing && <figcaption>
+        <small className="high">{`high ${dollars.format(view.high)}`}</small>
+        <small className="low">{`low ${dollars.format(view.low)}`}</small>
+        <small className="span">{view.caption}</small>
+      </figcaption>}
+      {history.unavailable && <figcaption>
+        <small className="span">history unavailable</small>
       </figcaption>}
     </figure>
-    {notEmpty(trades) && <p className="headline">
-      <data value={last.price}>{cents.format(last.price)}</data>
-      <data className="delta" value={last.price - first.price}>{deltaLabel(first.price, last.price)}</data>
+    {showing && <p className="headline">
+      <data value={view.last}>{cents.format(view.last)}</data>
+      <data className="delta" value={view.last - view.first}>{deltaLabel(view.first, view.last)}</data>
     </p>}
     <details>
       <summary>what am I looking at?</summary>
@@ -70,7 +121,8 @@ export const LiveTrades: FC<LiveTradesState> = ({status, trades}) => {
         live trade — someone paid that price — newest at the right. The dotted
         line marks the first price in the window and the color shows the trend
         against it. High and low mark the window&apos;s range; the headline is
-        the latest price paid and how far it has moved.
+        the latest price paid and how far it has moved. The period menu swaps
+        the live window for Coinbase&apos;s history.
       </p>
     </details>
   </section>;

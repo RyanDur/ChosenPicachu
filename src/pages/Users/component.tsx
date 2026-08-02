@@ -6,6 +6,7 @@ import {User, UserInformation, users as usersApi, UsersLinks} from '@components/
 import {equalAddresses} from './addresses';
 import {Paths} from '@pages/Paths';
 import {Table} from '@components/Table';
+import {Menu} from '@components/Menu';
 import {age, formatAge, FriendsList} from '@components/Users';
 import './styles.css';
 import './styles.layout.css';
@@ -79,11 +80,8 @@ export const UsersPage: FC = () => {
               worksFromHome: {
                 display: <section className="last-column">
                   {equalAddresses(user.homeAddress, user.workAddress) ? 'Yes' : 'No'}
-                  <button type="button" className="menu-toggle rounded-corners"
-                          popoverTarget={`menu-${user.id}`}
-                          aria-label={`Actions for ${displayFullName(user.info)}`}/>
-                  <nav id={`menu-${user.id}`} popover="auto" className="menu rounded-corners"
-                       onClick={event => event.currentTarget.hidePopover?.()}>
+                  <Menu id={`menu-${user.id}`}
+                        label={`Actions for ${displayFullName(user.info)}`}>
                       <Link to={`${path}${createSearchParams({
                         id: user.id,
                         mode: 'view'
@@ -105,7 +103,7 @@ export const UsersPage: FC = () => {
                       <Link to={`${path}${createSearchParams({id: user.id})}`}
                             className="item"
                             data-testid="clone">Clone</Link>
-                  </nav>
+                  </Menu>
                 </section>
               }
             });

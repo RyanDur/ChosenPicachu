@@ -45,55 +45,6 @@
         }
       }
 
-      .menu {
-        inset: auto;
-        position-area: block-end span-inline-start;
-        position-try-fallbacks: flip-block;
-        margin: 0;
-        width: 20rem;
-        border: none;
-        padding: 0;
-        background: var(--paper);
-        box-shadow: var(--base-box-shadow);
 
-        .item {
-            outline: none;
-            height: 4rem;
-            font-size: 2rem;
-            color: var(--void);
-
-            &:active {
-              box-shadow: inset 0 0 5px var(--charcoal);
-            }
-
-            &:hover,
-            &:focus {
-              border: 2px solid var(--shadow);
-            }
-
-            &:not(:last-child) {
-              border-bottom: 1px solid var(--charcoal);
-            }
-
-            &:first-child {
-              border-top-right-radius: 2rem;
-              border-top-left-radius: 2rem;
-            }
-
-            &:last-child {
-              border-bottom-right-radius: 2rem;
-              border-bottom-left-radius: 2rem;
-            }
-          }
-        }
-
-      @supports not (position-area: block-end) {
-        .menu:popover-open {
-          inset: 0;
-          margin: auto;
-          height: fit-content;
-        }
-      }
-    }
   }
 }
