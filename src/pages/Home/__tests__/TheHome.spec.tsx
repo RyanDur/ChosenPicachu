@@ -17,18 +17,19 @@ const interceptedNetwork = () => {
 beforeAll(realSockets);
 afterAll(interceptedNetwork);
 
-const tradeFrameWith = (p: string, id: number): string => JSON.stringify({
+const tradeFrameWith = (p: string, id: number, at = 1700000000000): string => JSON.stringify({
   e: 'trade',
   E: 1700000000001,
   s: 'BTCUSDT',
   t: id,
   p,
   q: '0.10',
-  T: 1700000000000,
+  T: at,
   m: false
 });
 
-const tradeFrame = (price: number): string => tradeFrameWith(String(price), 900000 + price);
+const tradeFrame = (price: number, at = 1700000000000): string =>
+  tradeFrameWith(String(price), 900000 + price, at);
 
 const nonTradeFrame = (price: number): string => JSON.stringify({
   e: 'aggTrade',
@@ -68,6 +69,11 @@ const feedIsLive = async (): Promise<void> => {
 
 const shownPrices = (): (string | null)[] =>
   within(screen.getByRole('list')).getAllByRole('listitem').map(item => item.textContent);
+
+const drawnPoints = (): string[] => {
+  const region = screen.getByRole('region', {name: 'live trades'});
+  return region.querySelector('polyline')?.getAttribute('points')?.split(' ') ?? [];
+};
 
 const renderHome = (feedUrl: string) =>
   render(<EnvProvider env={{tradeFeed: feedUrl}}><HomePage/></EnvProvider>);
@@ -135,10 +141,21 @@ describe('the home page', () => {
 
       await feedIsLive();
       broadcast(feed, [50001, 50002, 50003, 50004, 50005].map(tradeFrame));
-      await waitFor(() => {
-        const chart = screen.getByRole('img', {name: 'price trend'});
-        expect(chart.querySelector('polyline')?.getAttribute('points')?.split(' ')).toHaveLength(5);
-      });
+      await waitFor(() => expect(drawnPoints()).toHaveLength(5));
+    });
+
+    test('the chart tells the user its price and time range', async () => {
+      const feed = await streamingFeed();
+      const firstTradedAt = 1700000000000;
+
+      renderHome(urlOf(feed));
+
+      await feedIsLive();
+      broadcast(feed, [50001, 50002, 50003, 50004, 50005]
+        .map((price, index) => tradeFrame(price, firstTradedAt + index * 10000)));
+      await waitFor(() => expect(screen.getByText('high $50,005')).toBeVisible());
+      expect(screen.getByText('low $50,001')).toBeVisible();
+      expect(screen.getByText('5 trades · 40s')).toBeVisible();
     });
 
     test('a feed that dies mid-stream tells the user, keeping the last trades', async () => {
