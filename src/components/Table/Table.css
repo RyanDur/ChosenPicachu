@@ -79,8 +79,13 @@
   border-bottom-color: transparent;
 }
 
+.sortable {
+  user-select: none;
+}
+
 .grabbable {
   cursor: grab;
+  touch-action: none;
   transition: opacity 50ms;
 
   &:active {
