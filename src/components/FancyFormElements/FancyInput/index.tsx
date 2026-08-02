@@ -48,7 +48,6 @@ export const FancyInput: FC<PropsWithChildren<FancyTextInputProps>> = (
            readOnly={readOnly}
            disabled={disabled}
            required={required}
-           data-testid={inputId}
            autoFocus={autoFocus}
            value={value instanceof Date ? format(value, 'yyyy-MM-dd') : value}
            type={type}

@@ -1,6 +1,6 @@
 import {Shell} from '../router';
 import {FC, PropsWithChildren, ReactElement} from 'react';
-import {render, RenderResult, screen} from '@testing-library/react';
+import {render, RenderResult, screen, within} from '@testing-library/react';
 import {
   createMemoryRouter,
   Location,
@@ -38,8 +38,8 @@ const LocationHelper: FC<PropsWithChildren> = ({children}) => {
   const location = useLocation();
 
   return <>
-    <article data-testid='subject-url-path'>{location.pathname}</article>
-    <article data-testid='subject-url-search'>{location.search}</article>
+    <data aria-label="url path">{location.pathname}</data>
+    <data aria-label="url search">{location.search}</data>
     {children}
   </>;
 };
@@ -128,12 +128,15 @@ export const renderWithRouter: RenderWithRouter<'galleryState' | 'pieceState'> =
     </TestRouter>);
 };
 
+export const addressGroup = (kind: string) =>
+  within(screen.getByRole('article', {name: new RegExp(`${kind} address`, 'i')}));
+
 export const fillOutAddress = (address: AddressInfo, kind: string) =>
-  swiftKeys.type(screen.getByTestId(`${kind}-address-street`), address.streetAddress)
-    .then(() => swiftKeys.type(screen.getByTestId(`${kind}-address-street-2`), address.streetAddressTwo!))
-    .then(() => swiftKeys.type(screen.getByTestId(`${kind}-address-city`), address.city))
-    .then(() => swiftKeys.selectOptions(screen.getByTestId(`${kind}-address-state`), address.state))
-    .then(() => swiftKeys.type(screen.getByTestId(`${kind}-address-zip`), address.zip));
+  swiftKeys.type(addressGroup(kind).getByLabelText('Street'), address.streetAddress)
+    .then(() => swiftKeys.type(addressGroup(kind).getByLabelText('Street Line 2'), address.streetAddressTwo!))
+    .then(() => swiftKeys.type(addressGroup(kind).getByLabelText('City'), address.city))
+    .then(() => swiftKeys.selectOptions(addressGroup(kind).getByLabelText('State'), address.state))
+    .then(() => swiftKeys.type(addressGroup(kind).getByLabelText('Postal / Zip code'), address.zip));
 
 export const fillOutUser = (info: NewUser) =>
   swiftKeys.type(screen.getByLabelText('First Name'), info.info.firstName)

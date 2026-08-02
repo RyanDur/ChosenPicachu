@@ -17,21 +17,21 @@ describe('the friends list', () => {
 
     it('should be able to add friends', async () => {
         render(<FriendsList users={users} user={firstUser} onChange={consumer}/>);
-        await userEvent.selectOptions(screen.getByTestId(/select-friend/), [fullName(secondUser)]);
+        await userEvent.selectOptions(screen.getByRole('combobox', {name: 'Add a friend'}), [fullName(secondUser)]);
 
         expect(consumer).toHaveBeenCalledWith([secondUser.id]);
     });
 
     it('should not allow you to pick yourself', () => {
         render(<FriendsList users={users} user={firstUser} onChange={consumer}/>);
-        expect(screen.getByTestId(/select-friend/)).not.toHaveTextContent(fullName(firstUser));
+        expect(screen.getByRole('combobox', {name: 'Add a friend'})).not.toHaveTextContent(fullName(firstUser));
     });
 
     it('should display the friends the user already has', () => {
         const userWithFriends = {...firstUser, friends: [secondUser.id, thirdUser.id]};
         render(<FriendsList users={users} user={userWithFriends} onChange={consumer}/>);
-        expect(screen.getByTestId('friends-list')).toHaveTextContent(fullName(thirdUser));
-        expect(screen.getByTestId('friends-list')).toHaveTextContent(fullName(secondUser));
+        expect(screen.getByRole('list', {name: 'friends'})).toHaveTextContent(fullName(thirdUser));
+        expect(screen.getByRole('list', {name: 'friends'})).toHaveTextContent(fullName(secondUser));
     });
 
     it('should display friends by their current name, not a snapshot', () => {
@@ -42,7 +42,7 @@ describe('the friends list', () => {
         const userWithFriends = {...firstUser, friends: [secondUser.id]};
         render(<FriendsList users={[firstUser, renamedSecond, thirdUser]} user={userWithFriends}
                             onChange={consumer}/>);
-        expect(screen.getByTestId('friends-list')).toHaveTextContent('Renamed Person');
+        expect(screen.getByRole('list', {name: 'friends'})).toHaveTextContent('Renamed Person');
     });
 
     describe('removing a friend from the list', () => {
@@ -52,20 +52,20 @@ describe('the friends list', () => {
         });
 
         test('on mouse click', async () => {
-            await userEvent.click(screen.getByTestId(`remove-${thirdUser.id}`));
+            await userEvent.click(screen.getByRole('button', {name: fullName(thirdUser)}));
 
             expect(consumer).toHaveBeenCalledWith([secondUser.id]);
         });
 
         test('on enter', async () => {
-            screen.getByTestId(`remove-${thirdUser.id}`).focus();
+            screen.getByRole('button', {name: fullName(thirdUser)}).focus();
             await userEvent.keyboard('{enter}');
 
             expect(consumer).toHaveBeenCalledWith([secondUser.id]);
         });
 
         test('on space', async () => {
-            screen.getByTestId(`remove-${thirdUser.id}`).focus();
+            screen.getByRole('button', {name: fullName(thirdUser)}).focus();
             await userEvent.keyboard(' ');
 
             expect(consumer).toHaveBeenCalledWith([secondUser.id]);
@@ -75,7 +75,7 @@ describe('the friends list', () => {
     it('should not allow a user to select something twice', () => {
         const userWithFriends = {...firstUser, friends: [secondUser.id]};
         render(<FriendsList users={users} user={userWithFriends} onChange={consumer}/>);
-        expect(screen.getByTestId(/select-friend/)).not.toHaveTextContent(fullName(secondUser));
+        expect(screen.getByRole('combobox', {name: 'Add a friend'})).not.toHaveTextContent(fullName(secondUser));
     });
 
     it('should not allow to select a friend if no more friends are left', () => {
@@ -83,6 +83,6 @@ describe('the friends list', () => {
         render(<FriendsList users={[firstUser, secondUser, thirdUser]} user={userWithFriends}
                             onChange={consumer}/>);
 
-        expect(screen.queryByTestId(/select-friend/)).not.toBeInTheDocument();
+        expect(screen.queryByRole('combobox', {name: 'Add a friend'})).not.toBeInTheDocument();
     });
 });

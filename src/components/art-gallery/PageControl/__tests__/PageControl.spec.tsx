@@ -22,7 +22,7 @@ describe('The page controls', () => {
       await userEvent.type(screen.getByLabelText(/Page #/), pageNumber);
       await userEvent.click(screen.getByText('Go'));
 
-      expect(screen.getByTestId('subject-url-search')).toHaveTextContent(`?page=${pageNumber}`);
+      expect(screen.getByLabelText('url search')).toHaveTextContent(`?page=${pageNumber}`);
       expect(screen.getByLabelText(/Page #/)).not.toHaveValue(+pageNumber);
     });
 
@@ -58,7 +58,7 @@ describe('The page controls', () => {
       await userEvent.type(screen.getByLabelText(/Per Page/), '45');
       await userEvent.click(screen.getByText('Go'));
 
-      expect(await screen.findByTestId('subject-url-search')).toHaveTextContent('size=45');
+      expect(await screen.findByLabelText('url search')).toHaveTextContent('size=45');
     });
   });
 });
