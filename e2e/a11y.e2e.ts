@@ -3,8 +3,9 @@ import AxeBuilder from '@axe-core/playwright';
 
 type A11yPage = {name: string, path: string, ready: string, loaded?: string};
 const pages: A11yPage[] = [
-  {name: 'home', path: '', ready: 'table'},
-  {name: 'about', path: 'about?tab=accordions', ready: 'navigation'},
+  {name: 'root', path: '', ready: 'navigation'},
+  {name: 'demos', path: 'demos?tab=accordions', ready: 'navigation'},
+  {name: 'charts', path: 'demos?tab=charts', ready: 'navigation'},
   {name: 'users', path: 'users', ready: 'table'},
   {name: 'gallery', path: 'gallery?page=1&size=8&tab=vam', ready: 'navigation', loaded: 'figure.frame'},
   {name: 'games', path: 'games', ready: 'header'},

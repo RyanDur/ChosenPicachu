@@ -1,4 +1,5 @@
-import {act, render, screen} from '@testing-library/react';
+import {act, fireEvent, render, screen} from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import {Table} from '../index';
 import {
     column1Display,
@@ -107,4 +108,48 @@ describe('A Table', () => {
         const table = screen.getByTestId('table');
         expect(table.id).toBe(tableId);
     });
+});
+
+describe('resizable columns', () => {
+  const sized = [
+    {display: 'name', column: 'name', width: 200},
+    {display: 'age', column: 'age', width: 120}
+  ];
+  const people = [{name: {display: 'Ada'}, age: {display: '36'}}];
+
+  test('a sized column renders at its width', () => {
+    render(<Table columns={sized} rows={people}/>);
+
+    expect(screen.getAllByTestId('th')[0]).toHaveStyle({width: '200px'});
+    expect(screen.getAllByTestId('th')[1]).toHaveStyle({width: '120px'});
+  });
+
+  test('the keyboard widens and narrows a column', async () => {
+    render(<Table columns={sized} rows={people}/>);
+
+    const handle = screen.getByRole('separator', {name: 'resize name'});
+    handle.focus();
+    await userEvent.keyboard('{ArrowRight}');
+    expect(screen.getAllByTestId('th')[0]).toHaveStyle({width: '216px'});
+    expect(screen.getByRole('separator', {name: 'resize name'})).toHaveAttribute('aria-valuenow', '216');
+    await userEvent.keyboard('{ArrowLeft}{ArrowLeft}');
+    expect(screen.getAllByTestId('th')[0]).toHaveStyle({width: '184px'});
+  });
+
+  test('dragging the handle resizes the column', () => {
+    render(<Table columns={sized} rows={people}/>);
+
+    const handle = screen.getByRole('separator', {name: 'resize name'});
+    fireEvent.pointerDown(handle, {clientX: 300, pointerId: 1});
+    fireEvent.pointerMove(handle, {clientX: 340, pointerId: 1});
+    fireEvent.pointerUp(handle, {pointerId: 1});
+
+    expect(screen.getAllByTestId('th')[0]).toHaveStyle({width: '240px'});
+  });
+
+  test('columns without widths stay plain', () => {
+    render(<Table columns={columns} rows={rows}/>);
+
+    expect(screen.queryAllByRole('separator')).toHaveLength(0);
+  });
 });

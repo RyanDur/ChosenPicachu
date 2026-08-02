@@ -59,10 +59,10 @@ export const UsersPage: FC = () => {
           tbodyClassName="body"
           cellClassName="cell"
           columns={[
-            {display: 'Full Name', column: 'fullName'},
-            {display: 'Home City', column: 'homeCity'},
-            {display: 'Age', column: 'age'},
-            {display: 'Friends', column: 'friends'},
+            {display: 'Full Name', column: 'fullName', width: 220},
+            {display: 'Home City', column: 'homeCity', width: 180},
+            {display: 'Age', column: 'age', width: 90},
+            {display: 'Friends', column: 'friends', width: 260},
             {display: 'Works from Home', column: 'worksFromHome'}
           ]}
           rows={users.map(user => {
