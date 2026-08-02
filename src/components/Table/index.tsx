@@ -171,6 +171,7 @@ export const Table: FC<TableProps> = (
         }
     };
     const lifted = (key: string, position: number) => (event: PointerEvent<HTMLElement>): void => {
+        event.preventDefault();
         const surface = event.currentTarget.closest('table');
         if (has(surface)) {
             const shade = columnGhost(surface, position);
