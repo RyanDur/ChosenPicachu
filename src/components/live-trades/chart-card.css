@@ -20,19 +20,4 @@
     }
   }
 
-  header .range-picker {
-    display: flex;
-    gap: var(--base-x-2);
-    margin-left: auto;
-    border: none;
-    padding: 0.5rem 0 0;
-
-    .fancy {
-      width: 16rem;
-    }
-  }
-
-  header .range-picker + .menu-toggle {
-    margin-left: var(--base-x-1);
-  }
 }

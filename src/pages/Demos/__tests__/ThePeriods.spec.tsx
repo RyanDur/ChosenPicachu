@@ -1,4 +1,4 @@
-import {fireEvent, screen, waitFor, within} from '@testing-library/react';
+import {screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {http, HttpResponse} from 'msw';
 import {server} from '@test-support/server';
@@ -67,7 +67,8 @@ describe('the chart periods', () => {
     expect(drawnCandleParts('rect.volume')).toBe(5);
     const chosen = asked[asked.length - 1].searchParams;
     expect(chosen.get('granularity')).toBe('60');
-    expect(chosen.get('start')).toBeNull();
+    expect(chosen.get('start')).not.toBeNull();
+    expect(chosen.get('end')).not.toBeNull();
     const candleCard = screen.getByRole('region', {name: 'candles'});
     expect(within(candleCard).getByText('5 candles · 1m each')).toBeVisible();
     expect(within(candleCard).getByText('$50,010')).toBeVisible();
@@ -99,48 +100,5 @@ describe('the chart periods', () => {
 
     await userEvent.click(within(menuFor('candle period')).getByText('week'));
     await waitFor(() => expect(screen.getByText('history unavailable')).toBeVisible());
-  });
-});
-
-describe('the chart date range', () => {
-  const pickRange = (card: HTMLElement, from: string, to?: string): void => {
-    fireEvent.change(within(card).getByLabelText('from'), {target: {value: from}});
-    if (to !== undefined) {
-      fireEvent.change(within(card).getByLabelText('to'), {target: {value: to}});
-    }
-  };
-
-  test('a single date fetches that day in five-minute candles', async () => {
-    const asked: URL[] = [];
-    server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, ({request}) => {
-      asked.push(new URL(request.url));
-      return HttpResponse.json(rowsSpaced(300));
-    }));
-
-    renderCharts();
-
-    pickRange(screen.getByRole('region', {name: 'candles'}), '2023-11-01');
-    await waitFor(() => expect(drawnCandleParts('rect.body')).toBe(5));
-    const query = asked[asked.length - 1].searchParams;
-    expect(query.get('granularity')).toBe('300');
-    expect(query.get('start')).toBe(new Date('2023-11-01T00:00:00').toISOString());
-    expect(query.get('end')).toBe(new Date('2023-11-02T00:00:00').toISOString());
-    expect(screen.getByText('5 candles · 5m each')).toBeVisible();
-  });
-
-  test('a week-wide range steps up to hour candles', async () => {
-    const asked: URL[] = [];
-    server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, ({request}) => {
-      asked.push(new URL(request.url));
-      return HttpResponse.json(rowsSpaced(3600));
-    }));
-
-    renderCharts();
-
-    const priceCard = screen.getByRole('region', {name: 'live trades'});
-    pickRange(priceCard, '2023-11-01', '2023-11-07');
-    await waitFor(() => expect(drawnPoints()).toHaveLength(5));
-    expect(asked[asked.length - 1].searchParams.get('granularity')).toBe('3600');
-    expect(screen.getByText('5 candles · 1h each')).toBeVisible();
   });
 });

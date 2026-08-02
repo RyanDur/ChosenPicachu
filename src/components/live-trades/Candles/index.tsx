@@ -4,8 +4,7 @@ import {Menu} from '@components/Menu';
 import {Trade} from '@transport/coinbase';
 import {bucketTrades, Candle, candleShapes, mergeLive, volumeShapes} from './shapes';
 import {usePeriodCandles} from '../usePeriodCandles';
-import {ChartWindow, isRange, Period, windowBucketLabel, windowBucketMs, windowPattern, windowTickEvery} from '../period';
-import {RangePicker} from '../RangePicker';
+import {bucketLabel, bucketMs, Period, tickEveryMs, timePattern} from '../period';
 import {Axes} from '../Axes';
 import '../chart-card.css';
 import './Candles.css';
@@ -20,34 +19,31 @@ type Props = {
   seed: readonly Candle[];
 };
 
-const captionFor = (chartWindow: ChartWindow, count: number): string =>
-  `${count} candles · ${windowBucketLabel(chartWindow)}`;
+const captionFor = (period: Period, count: number): string =>
+  `${count} candles · ${bucketLabel[period]}`;
 
 export const Candles: FC<Props> = ({trades, seed}) => {
-  const [chartWindow, setChartWindow] = useState<ChartWindow>(Period.live);
-  const history = usePeriodCandles(chartWindow);
-  const candles = chartWindow === Period.live
+  const [period, setPeriod] = useState<Period>(Period.live);
+  const history = usePeriodCandles(period);
+  const candles = period === Period.live
     ? mergeLive(seed, bucketTrades(trades, BUCKET_MS))
     : history.candles;
-  const bucketMs = windowBucketMs(chartWindow);
-  const bodies = candleShapes(candles, CHART_WIDTH, CANDLE_HEIGHT, bucketMs);
-  const bars = volumeShapes(candles, CHART_WIDTH, VOLUME_HEIGHT, bucketMs);
+  const bodies = candleShapes(candles, CHART_WIDTH, CANDLE_HEIGHT, bucketMs[period]);
+  const bars = volumeShapes(candles, CHART_WIDTH, VOLUME_HEIGHT, bucketMs[period]);
   return <section aria-label="candles" className="card chart candles">
     <header>
-      <RangePicker idPrefix="candle" value={isRange(chartWindow) ? chartWindow : null} onPick={setChartWindow}/>
-      <Menu id="candle-period" label="candle period"
-            toggle={isRange(chartWindow) ? 'range' : chartWindow} toggleClassName="period-toggle">
+      <Menu id="candle-period" label="candle period" toggle={period} toggleClassName="period-toggle">
         {Object.values(Period).map(option =>
           <button type="button" key={option} className="item"
-                  onClick={() => setChartWindow(option)}>{option}</button>
+                  onClick={() => setPeriod(option)}>{option}</button>
         )}
       </Menu>
     </header>
     <Axes high={notEmpty(candles) ? Math.max(...candles.map(candle => candle.high)) : 0}
           low={notEmpty(candles) ? Math.min(...candles.map(candle => candle.low)) : 0}
           times={candles.map(candle => candle.openedAt)}
-          pattern={windowPattern(chartWindow)}
-          tickEvery={windowTickEvery(chartWindow)}>
+          pattern={timePattern[period]}
+          tickEvery={tickEveryMs[period]}>
       <svg aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${CANDLE_HEIGHT}`}>
         {bodies.map(shape => <g key={shape.x} className={shape.direction}>
           <line x1={shape.center} y1={shape.wickTop} x2={shape.center} y2={shape.wickBottom}/>
@@ -62,8 +58,8 @@ export const Candles: FC<Props> = ({trades, seed}) => {
         )}
       </svg>
     </Axes>
-    {notEmpty(candles) && <small>{captionFor(chartWindow, candles.length)}</small>}
-    {history.unavailable && chartWindow !== Period.live && <small>history unavailable</small>}
+    {notEmpty(candles) && <small>{captionFor(period, candles.length)}</small>}
+    {history.unavailable && period !== Period.live && <small>history unavailable</small>}
     <details>
       <summary>what am I looking at?</summary>
       <p>

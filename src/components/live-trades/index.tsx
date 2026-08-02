@@ -3,8 +3,7 @@ import {notEmpty} from '@ryandur/sand';
 import {Menu} from '@components/Menu';
 import {LiveTradesState} from './useLiveTrades';
 import {usePeriodCandles} from './usePeriodCandles';
-import {ChartWindow, isRange, Period, windowBucketLabel, windowPattern, windowTickEvery} from './period';
-import {RangePicker} from './RangePicker';
+import {bucketLabel, Period, tickEveryMs, timePattern} from './period';
 import {sparklinePoints, TimedPrice} from './sparkline';
 import {Axes} from './Axes';
 import {bucketTrades, Candle, mergeLive} from './Candles/shapes';
@@ -53,14 +52,14 @@ type Props = LiveTradesState & {
 };
 
 export const LiveTrades: FC<Props> = ({status, trades, seed}) => {
-  const [chartWindow, setChartWindow] = useState<ChartWindow>(Period.live);
-  const history = usePeriodCandles(chartWindow);
-  const live = chartWindow === Period.live;
+  const [period, setPeriod] = useState<Period>(Period.live);
+  const history = usePeriodCandles(period);
+  const live = period === Period.live;
   const candles = live
     ? mergeLive(seed, bucketTrades(trades, 60000))
     : history.candles;
   const showing = candles.length > 0;
-  const windowed = candlesView(candles, windowBucketLabel(chartWindow));
+  const windowed = candlesView(candles, bucketLabel[period]);
   const lastTrade = trades[trades.length - 1];
   const view = showing
     ? {...windowed, last: live && lastTrade !== undefined ? lastTrade.price : windowed.last}
@@ -71,18 +70,16 @@ export const LiveTrades: FC<Props> = ({status, trades, seed}) => {
   return <section aria-label="live trades" className="card chart live-trades" data-trend={trend}>
     <header>
       {live && <output data-status={status}>{statusCopy[status]}</output>}
-      <RangePicker idPrefix="price" value={isRange(chartWindow) ? chartWindow : null} onPick={setChartWindow}/>
-      <Menu id="price-period" label="price period"
-            toggle={isRange(chartWindow) ? 'range' : chartWindow} toggleClassName="period-toggle">
+      <Menu id="price-period" label="price period" toggle={period} toggleClassName="period-toggle">
         {Object.values(Period).map(option =>
           <button type="button" key={option} className="item"
-                  onClick={() => setChartWindow(option)}>{option}</button>
+                  onClick={() => setPeriod(option)}>{option}</button>
         )}
       </Menu>
     </header>
     <figure>
-      <Axes high={view.high} low={view.low} times={view.series.map(timed => timed.at)} pattern={windowPattern(chartWindow)}
-            tickEvery={windowTickEvery(chartWindow)}>
+      <Axes high={view.high} low={view.low} times={view.series.map(timed => timed.at)}
+            pattern={timePattern[period]} tickEvery={tickEveryMs[period]}>
         <svg aria-hidden="true"
              viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
              preserveAspectRatio="none">
