@@ -24,6 +24,9 @@ export const charted = (surface: HTMLTableElement, arranged: readonly {seat: num
     };
 };
 
+const deadZone = (struckSize: number, aloftSize: number): number =>
+    Math.max(struckSize / 4, (struckSize - aloftSize) / 2);
+
 export const columnUnder = (chart: Chart | undefined, order: readonly string[], shares: Shares) =>
     (x: number, y: number, aloft: string | undefined): string | undefined => {
         if (has(chart) && has(aloft) && y >= chart.top && y <= chart.top + chart.height) {
@@ -31,12 +34,15 @@ export const columnUnder = (chart: Chart | undefined, order: readonly string[], 
             const slots = order.map((key, at) => {
                 const width = (shares[key] ?? 0) / 100 * chart.width;
                 edge += width;
-                return {key, at, center: edge - width / 2, end: edge};
+                return {key, at, width, start: edge - width, end: edge};
             });
             const struck = slots.find(({end}) => x < end);
             if (has(struck) && struck.key !== aloft) {
-                const homeward = struck.at < order.indexOf(aloft);
-                return (homeward ? x < struck.center : x > struck.center) ? struck.key : undefined;
+                const home = order.indexOf(aloft);
+                const held = deadZone(struck.width, slots[home]?.width ?? 0);
+                return (struck.at < home ? x < struck.end - held : x > struck.start + held)
+                    ? struck.key
+                    : undefined;
             }
             return struck?.key;
         }
@@ -50,13 +56,17 @@ export const seatUnder = (chart: Chart | undefined, seats: readonly number[]) =>
             let edge = top + height -
                 seats.reduce((total, seat) => total + rowHeights[seat], 0);
             const slots = seats.map((seat, at) => {
-                edge += rowHeights[seat];
-                return {seat, at, center: edge - rowHeights[seat] / 2, end: edge};
+                const rowHeight = rowHeights[seat];
+                edge += rowHeight;
+                return {seat, at, height: rowHeight, start: edge - rowHeight, end: edge};
             });
             const struck = slots.find(({end}) => y < end);
             if (has(struck) && struck.seat !== aloft) {
-                const homeward = struck.at < seats.indexOf(aloft);
-                return (homeward ? y < struck.center : y > struck.center) ? struck.seat : undefined;
+                const home = seats.indexOf(aloft);
+                const held = deadZone(struck.height, slots[home]?.height ?? 0);
+                return (struck.at < home ? y < struck.end - held : y > struck.start + held)
+                    ? struck.seat
+                    : undefined;
             }
             return struck?.seat;
         }
