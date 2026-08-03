@@ -95,13 +95,14 @@ describe('the tables demo', () => {
 
     const header = (name: string) =>
       within(card).getByRole('columnheader', {name: new RegExp(`^${name}`)});
-    fireEvent.pointerDown(header('vwap'), {clientX: 100, clientY: 50, pointerId: 1});
-    header('window').getBoundingClientRect = () => ({
-      left: 30, right: 50, top: 40, bottom: 60, width: 20, height: 20, x: 30, y: 40, toJSON: () => ({})
+    const table = within(card).getAllByRole('table')[0];
+    table.getBoundingClientRect = () => ({
+      left: 0, right: 860, top: 0, bottom: 240, width: 860, height: 240, x: 0, y: 0, toJSON: () => ({})
     });
+    fireEvent.pointerDown(header('vwap'), {clientX: 700, clientY: 20, pointerId: 1});
     const surface = document.querySelector('.drag-surface');
     if (surface === null) throw new Error('nothing is aloft');
-    fireEvent.pointerMove(surface, {clientX: 40, clientY: 50, pointerId: 1});
+    fireEvent.pointerMove(surface, {clientX: 75, clientY: 120, pointerId: 1});
     fireEvent.pointerUp(surface, {pointerId: 1});
 
     const headerTexts = within(card).getAllByRole('columnheader').map(head => head.textContent);
@@ -120,13 +121,19 @@ describe('the tables demo', () => {
       if (row === null) throw new Error(`no row for ${label}`);
       return row;
     };
-    fireEvent.pointerDown(within(rowOf('session')).getByLabelText(/move row/), {clientX: 100, clientY: 300, pointerId: 1});
-    rowOf('this minute').getBoundingClientRect = () => ({
-      left: 90, right: 110, top: 70, bottom: 90, width: 20, height: 20, x: 90, y: 70, toJSON: () => ({})
+    const stage = within(card).getAllByRole('table')[0];
+    stage.getBoundingClientRect = () => ({
+      left: 0, right: 860, top: 0, bottom: 240, width: 860, height: 240, x: 0, y: 0, toJSON: () => ({})
     });
+    within(card).getAllByRole('row').slice(1).forEach(row => {
+      row.getBoundingClientRect = () => ({
+        left: 0, right: 860, top: 0, bottom: 40, width: 860, height: 40, x: 0, y: 0, toJSON: () => ({})
+      });
+    });
+    fireEvent.pointerDown(within(rowOf('session')).getByLabelText(/move row/), {clientX: 100, clientY: 300, pointerId: 1});
     const lifted = document.querySelector('.drag-surface');
     if (lifted === null) throw new Error('nothing is aloft');
-    fireEvent.pointerMove(lifted, {clientX: 100, clientY: 80, pointerId: 1});
+    fireEvent.pointerMove(lifted, {clientX: 100, clientY: 60, pointerId: 1});
     fireEvent.pointerUp(lifted, {pointerId: 1});
 
     const labels = within(card).getAllByRole('row').slice(1)
