@@ -1,5 +1,6 @@
 .menu {
   inset: auto;
+  list-style: none;
   position-area: block-end span-inline-start;
   position-try-fallbacks: flip-block;
   margin: 0;
@@ -30,20 +31,20 @@
     &:focus {
       border: var(--hairline-x-2) solid var(--shadow);
     }
+  }
 
-    &:not(:last-child) {
-      border-bottom: var(--hairline) solid var(--charcoal);
-    }
+  li:not(:last-child) .item {
+    border-bottom: var(--hairline) solid var(--charcoal);
+  }
 
-    &:first-child {
-      border-top-right-radius: var(--radius-card);
-      border-top-left-radius: var(--radius-card);
-    }
+  li:first-child .item {
+    border-top-right-radius: var(--radius-card);
+    border-top-left-radius: var(--radius-card);
+  }
 
-    &:last-child {
-      border-bottom-right-radius: var(--radius-card);
-      border-bottom-left-radius: var(--radius-card);
-    }
+  li:last-child .item {
+    border-bottom-right-radius: var(--radius-card);
+    border-bottom-left-radius: var(--radius-card);
   }
 }
 
