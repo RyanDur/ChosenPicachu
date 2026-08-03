@@ -104,6 +104,28 @@ describe('the tables demo', () => {
     expect(headerTexts).toEqual(['window', 'vwap', 'trades', 'buys', 'sells', 'volume', 'change']);
   });
 
+  test('the windows can trade places by hand', async () => {
+    const feed = await streamingFeed();
+
+    renderTables(urlOf(feed));
+
+    await feedIsSubscribed();
+    const card = screen.getByRole('region', {name: 'live aggregations'});
+    const rowOf = (label: string) => {
+      const row = within(card).getByText(label).closest('tr');
+      if (row === null) throw new Error(`no row for ${label}`);
+      return row;
+    };
+    fireEvent.pointerDown(rowOf('session'), {clientX: 100, clientY: 300, pointerId: 1});
+    document.elementFromPoint = () => rowOf('this minute');
+    fireEvent.pointerMove(document.body, {clientX: 100, clientY: 80, pointerId: 1});
+    fireEvent.pointerUp(document.body, {pointerId: 1});
+
+    const labels = within(card).getAllByRole('row').slice(1)
+      .map(row => within(row).getAllByRole('cell')[0].textContent);
+    expect(labels).toEqual(['session', 'this minute', 'last 5 minutes', 'last 15 minutes', 'this hour']);
+  });
+
   test('every column is resizable', async () => {
     const feed = await streamingFeed();
 

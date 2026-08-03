@@ -5,12 +5,14 @@ import {Dispatch, FC, KeyboardEvent, PointerEvent, SetStateAction, useRef, useSt
 import {join} from '@components/class-names';
 import './Table.css';
 
-export type ColumnDragStyle = 'eager-move' | 'lazy-move' | 'hide-eager-move' | 'hide-lazy-move';
+export type DragStyle = 'eager-move' | 'lazy-move' | 'hide-eager-move' | 'hide-lazy-move';
+export type ColumnDragStyle = DragStyle;
 
 export type TableProps = {
     columns: Column[];
     rows: Row[];
-    draggableColumns?: ColumnDragStyle;
+    draggableColumns?: DragStyle;
+    draggableRows?: DragStyle;
     id?: string;
     tableClassName?: string;
     theadClassName?: string;
@@ -39,6 +41,27 @@ const columnSlice = (section: HTMLTableSectionElement, position: number): HTMLTa
         }
     }
     return group;
+};
+
+const rowGhost = (source: HTMLTableElement, position: number): HTMLTableElement => {
+    const ghost = document.createElement('table');
+    ghost.className = join(source.className, 'column-ghost');
+    const line = source.tBodies[0]?.rows[position];
+    if (has(line)) {
+        const body = document.createElement('tbody');
+        body.className = source.tBodies[0].className;
+        body.appendChild(line.cloneNode(true));
+        ghost.appendChild(body);
+    }
+    ghost.style.position = 'fixed';
+    ghost.style.top = '0';
+    ghost.style.left = '0';
+    ghost.style.willChange = 'transform';
+    ghost.style.width = `${source.offsetWidth}px`;
+    ghost.style.background = 'var(--paper)';
+    ghost.style.boxShadow = 'var(--lift-box-shadow)';
+    ghost.style.pointerEvents = 'none';
+    return ghost;
 };
 
 const columnGhost = (source: HTMLTableElement, position: number): HTMLTableElement => {
@@ -131,6 +154,7 @@ export const Table: FC<TableProps> = (
         columns,
         rows,
         draggableColumns,
+        draggableRows,
         id,
         tableClassName,
         theadClassName,
@@ -147,7 +171,10 @@ export const Table: FC<TableProps> = (
     const [grip, setGrip] = useState<Grip>(null);
     const [order, setOrder] = useState<string[]>(() => columns.map(({column}) => String(column)));
     const [dragged, setDragged] = useState<string>();
+    const [draggedRow, setDraggedRow] = useState(-1);
     const landing = useRef('');
+    const rowLanding = useRef(-1);
+    const [rowOrder, setRowOrder] = useState<number[]>(() => rows.map((_, seat) => seat));
     const ghost = useRef<HTMLTableElement>(null);
     const byKey = new Map(columns.map(definition => [String(definition.column), definition]));
     const ordered = order.map(key => byKey.get(key)).filter(has);
@@ -155,6 +182,11 @@ export const Table: FC<TableProps> = (
     const clipped = notEmpty(apportioned);
     const eager = draggableColumns === 'eager-move' || draggableColumns === 'hide-eager-move';
     const hiding = draggableColumns === 'hide-eager-move' || draggableColumns === 'hide-lazy-move';
+    const rowsEager = draggableRows === 'eager-move' || draggableRows === 'hide-eager-move';
+    const rowsHiding = draggableRows === 'hide-eager-move' || draggableRows === 'hide-lazy-move';
+    const arranged = rowOrder.length === rows.length
+        ? rowOrder.map(seat => ({row: rows[seat], seat}))
+        : rows.map((row, seat) => ({row, seat}));
     const neighborOf = (key: string): string => {
         const index = apportioned.indexOf(key);
         return apportioned[index + 1] ?? apportioned[index - 1];
@@ -210,12 +242,61 @@ export const Table: FC<TableProps> = (
         document.addEventListener('pointerup', released);
         document.addEventListener('pointercancel', released);
     };
+    const rowUnder = (x: number, y: number): number => {
+        const struck = document.elementFromPoint(x, y)?.closest('tr')?.dataset.seat;
+        return has(struck) ? Number(struck) : -1;
+    };
+    const reseated = (seat: number, struck: number) => (previous: number[]): number[] =>
+        array.moveToIndex(previous.indexOf(struck), seat, previous);
+    const liftedRow = (seat: number, position: number) => (event: PointerEvent<HTMLElement>): void => {
+        event.preventDefault();
+        const surface = event.currentTarget.closest('table');
+        let grip = 0;
+        if (has(surface)) {
+            const shade = rowGhost(surface, position);
+            document.body.appendChild(shade);
+            grip = shade.offsetWidth / 2;
+            shade.style.transform = `translate(${event.clientX - grip}px, ${event.clientY - 16}px)`;
+            ghost.current = shade;
+        }
+        setDraggedRow(seat);
+        let lastStruck = -1;
+        const carried = (moving: globalThis.PointerEvent): void => {
+            ghost.current?.style.setProperty('transform',
+                `translate(${moving.clientX - grip}px, ${moving.clientY - 16}px)`);
+            const struck = rowUnder(moving.clientX, moving.clientY);
+            if (struck < 0 || struck === seat || struck === lastStruck) {
+                return;
+            }
+            lastStruck = struck;
+            if (rowsEager) {
+                setRowOrder(reseated(seat, struck));
+            } else {
+                rowLanding.current = struck;
+            }
+        };
+        const released = (): void => {
+            if (!rowsEager && rowLanding.current >= 0) {
+                setRowOrder(reseated(seat, rowLanding.current));
+            }
+            ghost.current?.remove();
+            ghost.current = null;
+            rowLanding.current = -1;
+            setDraggedRow(-1);
+            document.removeEventListener('pointermove', carried);
+            document.removeEventListener('pointerup', released);
+            document.removeEventListener('pointercancel', released);
+        };
+        document.addEventListener('pointermove', carried);
+        document.addEventListener('pointerup', released);
+        document.addEventListener('pointercancel', released);
+    };
 
     return <table id={id}
                   className={join(
                       tableClassName,
                       notEmpty(apportioned) && 'apportioned',
-                      has(draggableColumns) && 'sortable'
+                      (has(draggableColumns) || has(draggableRows)) && 'sortable'
                   )}>
         <thead className={theadClassName}>
         <tr className={join(
@@ -254,14 +335,18 @@ export const Table: FC<TableProps> = (
             </th>;
         })}</tr>
         </thead>
-        <tbody className={tbodyClassName}>{rows.map((row, rowNumber) =>
-            <tr className={join(trClassName, rowClassName)} key={rowNumber}>
+        <tbody className={tbodyClassName}>{arranged.map(({row, seat}, position) =>
+            <tr className={join(trClassName, rowClassName, has(draggableRows) && 'grabbable')}
+                key={seat}
+                data-seat={seat}
+                onPointerDown={has(draggableRows) ? liftedRow(seat, position) : undefined}>
                 {ordered.map(({column}, columnNumber) => {
                     const cell = row[column];
                     return <td className={join(
                                    tdClassName, cellClassName, cell.className,
                                    clipped && 'ellipsis',
-                                   hiding && dragged === String(column) && 'hide'
+                                   (hiding && dragged === String(column) ||
+                                       rowsHiding && draggedRow === seat) && 'hide'
                                )} key={columnNumber}>
                         {cell.display}
                     </td>;
