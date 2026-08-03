@@ -1,4 +1,5 @@
-import {ReactNode, useLayoutEffect, useRef, useState} from 'react';
+import {ReactNode, useEffect, useLayoutEffect, useRef, useState} from 'react';
+import {join} from '@components/class-names';
 import './PillGlider.css';
 
 type Option<T extends string> = {
@@ -22,6 +23,9 @@ type Geometry = {
 export const PillGlider = <T extends string>({label, name, options, chosen, onChoose}: Props<T>) => {
   const pills = useRef(new Map<T, HTMLLabelElement>());
   const [geometry, setGeometry] = useState<Geometry>({left: 0, width: 0});
+  const [gliding, setGliding] = useState(false);
+
+  useEffect(() => setGliding(true), []);
 
   useLayoutEffect(() => {
     const pill = pills.current.get(chosen);
@@ -33,7 +37,7 @@ export const PillGlider = <T extends string>({label, name, options, chosen, onCh
   return <fieldset className="pill-glider">
     <legend className="off-screen">{label}</legend>
     <article className="pills">
-      <article className="glider"
+      <article className={join('glider', gliding && 'gliding')}
                style={{width: `${geometry.width}px`, transform: `translateX(${geometry.left}px)`}}/>
       {options.map(({display, value}) =>
         <label className="pill"
