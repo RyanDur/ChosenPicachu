@@ -113,7 +113,9 @@ export const DragSortableTable: FC<DragSortableTableProps> = (
                                         travels={has(draggableColumns) && not(anchored(position, ordered.length))}
                                         hidden={columnsTravel.hiding && columnsTravel.aloft === key}
                                         sorted={rule?.column === key ? rule.direction : undefined}
-                                        named={animated ? `header-${key}` : undefined}
+                                        named={animated && columnsTravel.aloft !== key
+                                            ? `header-${key}`
+                                            : undefined}
                                         dress={dress}
                                         onLift={liftColumn(key)}
                                         onTrade={apportioned.length > 1
@@ -134,7 +136,8 @@ export const DragSortableTable: FC<DragSortableTableProps> = (
                               gripped={has(draggableRows)}
                               hidden={rowsTravel.hiding && rowsTravel.aloft === seat}
                               hiddenColumn={columnsTravel.hiding ? columnsTravel.aloft : undefined}
-                              named={animated ? `seat-${seat}` : undefined}
+                              named={animated && rowsTravel.aloft !== seat ? `seat-${seat}` : undefined}
+                              aloftColumn={columnsTravel.aloft}
                               dress={dress}
                               onLift={liftRow(seat)}
                               onNudge={nudged(seat)}/>
