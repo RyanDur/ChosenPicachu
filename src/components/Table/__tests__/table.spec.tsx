@@ -289,3 +289,91 @@ describe('drag sortable columns', () => {
     expect(headerTexts()).toEqual(['name', 'age', 'city', 'job']);
   });
 });
+
+describe('drag sortable rows', () => {
+  const sized = [
+    {display: 'name', column: 'name', width: 200},
+    {display: 'age', column: 'age', width: 120}
+  ];
+  const people = [
+    {name: {display: 'Ada'}, age: {display: '36'}},
+    {name: {display: 'Grace'}, age: {display: '45'}},
+    {name: {display: 'Alan'}, age: {display: '41'}}
+  ];
+
+  const sourceTable = () => screen.getAllByRole('table')[0];
+  const firstCells = () => within(within(sourceTable()).getAllByRole('rowgroup')[1])
+    .getAllByRole('row').map(row => within(row).getAllByRole('cell')[0].textContent);
+  const rowOf = (person: string) => {
+    const row = within(sourceTable()).getByText(person).closest('tr');
+    if (row === null) throw new Error(`no row for ${person}`);
+    return row;
+  };
+  const lift = (person: string) => fireEvent.pointerDown(rowOf(person), {clientX: 100, clientY: 50, pointerId: 1});
+  const carryOver = (target: string) => {
+    document.elementFromPoint = () => rowOf(target);
+    fireEvent.pointerMove(document.body, {clientX: 100, clientY: 200, pointerId: 1});
+  };
+  const drop = () => fireEvent.pointerUp(document.body, {pointerId: 1});
+
+  afterEach(() => document.body.querySelector(':scope > table')?.remove());
+
+  test('an eager row follows the pointer as it crosses its neighbors', () => {
+    render(<Table columns={sized} rows={people} draggableRows="eager-move"/>);
+
+    lift('Ada');
+    carryOver('Alan');
+
+    expect(firstCells()).toEqual(['Grace', 'Alan', 'Ada']);
+  });
+
+  test('a lazy row waits for the drop', () => {
+    render(<Table columns={sized} rows={people} draggableRows="lazy-move"/>);
+
+    lift('Ada');
+    carryOver('Alan');
+    expect(firstCells()).toEqual(['Ada', 'Grace', 'Alan']);
+
+    drop();
+    expect(firstCells()).toEqual(['Grace', 'Alan', 'Ada']);
+  });
+
+  test('a hiding row vanishes while it travels and returns on arrival', () => {
+    render(<Table columns={sized} rows={people} draggableRows="hide-eager-move"/>);
+
+    lift('Grace');
+    within(rowOf('Grace')).getAllByRole('cell')
+      .forEach(cell => expect(cell.classList).toContain('hide'));
+
+    carryOver('Ada');
+    drop();
+    within(rowOf('Grace')).getAllByRole('cell')
+      .forEach(cell => expect(cell.classList).not.toContain('hide'));
+    expect(firstCells()).toEqual(['Grace', 'Ada', 'Alan']);
+  });
+
+  test('the travelling ghost carries the whole row', () => {
+    render(<Table columns={sized} rows={people} draggableRows="eager-move"/>);
+
+    lift('Grace');
+
+    const ghost = document.body.querySelector(':scope > table');
+    expect(ghost).not.toBeNull();
+    expect(ghost?.querySelectorAll('tr')).toHaveLength(1);
+    expect(ghost?.textContent).toContain('Grace');
+    expect(ghost?.textContent).toContain('45');
+
+    drop();
+    expect(document.body.querySelector(':scope > table')).toBeNull();
+  });
+
+  test('rows hold still without the opt-in', () => {
+    render(<Table columns={sized} rows={people}/>);
+
+    lift('Ada');
+    carryOver('Alan');
+    drop();
+
+    expect(firstCells()).toEqual(['Ada', 'Grace', 'Alan']);
+  });
+});

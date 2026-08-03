@@ -27,6 +27,7 @@ export const Aggregations: FC<Props> = ({trades, dragStyle}) => {
   return <section aria-label="live aggregations" className="aggregations card">
     <Table tableClassName="fancy-table"
            draggableColumns={dragStyle}
+           draggableRows={dragStyle}
            theadClassName="header"
            thClassName="column-name"
            trClassName="row"
