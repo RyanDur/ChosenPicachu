@@ -2,14 +2,26 @@ import {FC, useState} from 'react';
 import {array} from '@components/arrays';
 import {flushSync} from 'react-dom';
 import {HideOnDrag} from './HideOnDrag';
+import {PillGlider} from '@components/PillGlider';
 import './styles.css';
 import './styles.layout.css';
 
-export const HideElemOnDragSortableListEagerMove: FC<{ list: Set<string>; animated?: boolean }> = ({list, animated}) => {
+export const HideElemOnDragSortableListEagerMove: FC<{ list: Set<string> }> = ({list}) => {
   const [currentList, updateList] = useState<string[]>([...list]);
+  const [motion, updateMotion] = useState<'animated' | 'static'>('static');
+  const animated = motion === 'animated';
   const [draggedItem, updateDraggedItem] = useState<string>();
 
-  return <ul
+  return <>
+    <PillGlider label="hide-eager animation style"
+                name="hide-eager-animate-or-static"
+                options={[
+                  {display: 'Animate', value: 'animated'},
+                  {display: 'Static', value: 'static'}
+                ]}
+                chosen={motion}
+                onChoose={updateMotion}/>
+    <ul
     onDragOver={event => event.preventDefault()}
     onDrop={event => event.preventDefault()}
     className='hide-elem-on-drag-sortable-list-eager-move sortable-list'>{
@@ -50,6 +62,7 @@ export const HideElemOnDragSortableListEagerMove: FC<{ list: Set<string>; animat
           label={item}
         >{item}</HideOnDrag>
       </li>
-    )}</ul>;
+    )}</ul>
+  </>;
 };
 
