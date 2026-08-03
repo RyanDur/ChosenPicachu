@@ -25,28 +25,40 @@ export const charted = (surface: HTMLTableElement, arranged: readonly {seat: num
 };
 
 export const columnUnder = (chart: Chart | undefined, order: readonly string[], shares: Shares) =>
-    (x: number, y: number): string | undefined => {
-        if (has(chart) && y >= chart.top && y <= chart.top + chart.height) {
-            const {left, width} = chart;
-            let edge = left;
-            return order.find(key => {
-                edge += (shares[key] ?? 0) / 100 * width;
-                return x < edge;
+    (x: number, y: number, aloft: string | undefined): string | undefined => {
+        if (has(chart) && has(aloft) && y >= chart.top && y <= chart.top + chart.height) {
+            let edge = chart.left;
+            const slots = order.map((key, at) => {
+                const width = (shares[key] ?? 0) / 100 * chart.width;
+                edge += width;
+                return {key, at, center: edge - width / 2, end: edge};
             });
+            const struck = slots.find(({end}) => x < end);
+            if (has(struck) && struck.key !== aloft) {
+                const homeward = struck.at < order.indexOf(aloft);
+                return (homeward ? x < struck.center : x > struck.center) ? struck.key : undefined;
+            }
+            return struck?.key;
         }
         return undefined;
     };
 
 export const seatUnder = (chart: Chart | undefined, seats: readonly number[]) =>
-    (x: number, y: number): number | undefined => {
-        if (has(chart) && x >= chart.left && x <= chart.left + chart.width) {
+    (x: number, y: number, aloft: number | undefined): number | undefined => {
+        if (has(chart) && has(aloft) && x >= chart.left && x <= chart.left + chart.width) {
             const {top, height, rowHeights} = chart;
             let edge = top + height -
                 seats.reduce((total, seat) => total + rowHeights[seat], 0);
-            return seats.find(seat => {
+            const slots = seats.map((seat, at) => {
                 edge += rowHeights[seat];
-                return y < edge;
+                return {seat, at, center: edge - rowHeights[seat] / 2, end: edge};
             });
+            const struck = slots.find(({end}) => y < end);
+            if (has(struck) && struck.seat !== aloft) {
+                const homeward = struck.at < seats.indexOf(aloft);
+                return (homeward ? y < struck.center : y > struck.center) ? struck.seat : undefined;
+            }
+            return struck?.seat;
         }
         return undefined;
     };
