@@ -14,7 +14,6 @@ import {
     row1Col2Display,
     rows
 } from './demoData';
-import {faker} from '@faker-js/faker';
 
 const cellAt = (column: number, row: number): HTMLElement => {
     const [, tbody] = screen.getAllByRole('rowgroup');
@@ -22,16 +21,16 @@ const cellAt = (column: number, row: number): HTMLElement => {
 };
 
 describe('A Table', () => {
-    const tableId = faker.lorem.word();
-    const tableClassName = faker.lorem.word();
-    const theadClassName = faker.lorem.word();
-    const trClassName = faker.lorem.word();
-    const thClassName = faker.lorem.word();
-    const headerRowClassName = faker.lorem.word();
-    const tbodyClassName = faker.lorem.word();
-    const tdClassName = faker.lorem.word();
-    const rowClassName = faker.lorem.word();
-    const cellClassName = faker.lorem.word();
+    const tableId = 'the-table';
+    const tableClassName = 'table-skin';
+    const theadClassName = 'head-skin';
+    const trClassName = 'line-skin';
+    const thClassName = 'title-skin';
+    const headerRowClassName = 'headline-skin';
+    const tbodyClassName = 'body-skin';
+    const tdClassName = 'cell-skin';
+    const rowClassName = 'row-skin';
+    const cellClassName = 'every-cell-skin';
 
     beforeEach(() => {
         render(<Table

@@ -1,15 +1,15 @@
-import {has} from '@ryandur/sand';
 import {Trade} from '../../Charts/coinbase';
-import {cents, deltaLabel} from '../../Charts/money';
 
-export type AggregateRow = {
+export type WindowAggregate = {
   window: string;
-  trades: string;
-  buys: string;
-  sells: string;
-  volume: string;
-  vwap: string;
-  change: string;
+  span: number;
+  trades: number;
+  buys: number;
+  sells: number;
+  volume: number;
+  vwap: number | undefined;
+  opened: number | undefined;
+  closed: number | undefined;
 };
 
 const MINUTE = 60000;
@@ -22,29 +22,31 @@ export const windows = [
   {label: 'session', span: Number.POSITIVE_INFINITY}
 ];
 
-const still = (label: string): AggregateRow =>
-  ({window: label, trades: '0', buys: '0', sells: '0', volume: '0.00', vwap: '—', change: '—'});
+const still = (label: string, span: number): WindowAggregate =>
+  ({window: label, span, trades: 0, buys: 0, sells: 0, volume: 0, vwap: undefined, opened: undefined, closed: undefined});
 
-const aggregate = (label: string, trades: readonly Trade[]): AggregateRow => {
+const aggregate = (label: string, span: number, trades: readonly Trade[]): WindowAggregate => {
   if (trades.length === 0) {
-    return still(label);
+    return still(label, span);
   }
   const volume = trades.reduce((total, trade) => total + trade.size, 0);
   const notional = trades.reduce((total, trade) => total + trade.size * trade.price, 0);
   const buys = trades.filter(trade => trade.side === 'buy').length;
   return {
     window: label,
-    trades: String(trades.length),
-    buys: String(buys),
-    sells: String(trades.length - buys),
-    volume: volume.toFixed(2),
-    vwap: cents.format(notional / volume),
-    change: deltaLabel(trades[0].price, trades[trades.length - 1].price)
+    span,
+    trades: trades.length,
+    buys,
+    sells: trades.length - buys,
+    volume,
+    vwap: notional / volume,
+    opened: trades[0].price,
+    closed: trades[trades.length - 1].price
   };
 };
 
-export const windowedAggregates = (trades: readonly Trade[]): readonly AggregateRow[] => {
+export const windowedAggregates = (trades: readonly Trade[]): readonly WindowAggregate[] => {
   const now = trades[trades.length - 1]?.tradedAt;
   return windows.map(({label, span}) =>
-    aggregate(label, trades.filter(trade => has(now) && now - trade.tradedAt < span)));
+    aggregate(label, span, trades.filter(trade => now !== undefined && now - trade.tradedAt < span)));
 };
