@@ -116,7 +116,7 @@ describe('the tables demo', () => {
       if (row === null) throw new Error(`no row for ${label}`);
       return row;
     };
-    fireEvent.pointerDown(rowOf('session'), {clientX: 100, clientY: 300, pointerId: 1});
+    fireEvent.pointerDown(within(rowOf('session')).getByLabelText(/move row/), {clientX: 100, clientY: 300, pointerId: 1});
     document.elementFromPoint = () => rowOf('this minute');
     fireEvent.pointerMove(document.body, {clientX: 100, clientY: 80, pointerId: 1});
     fireEvent.pointerUp(document.body, {pointerId: 1});

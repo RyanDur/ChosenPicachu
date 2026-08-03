@@ -28,6 +28,14 @@
     border-right: var(--hairline) solid var(--charcoal);
   }
 
+  &.sortable .row {
+    position: relative;
+  }
+
+  &.sortable .body .cell:first-child {
+    padding-left: var(--base-x-3);
+  }
+
   .body .row {
     position: relative;
     right: 0;
@@ -91,4 +99,15 @@
   &:active {
     cursor: grabbing;
   }
+}
+
+.sortable .grip {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  translate: 0 -50%;
+  width: var(--base-x-2);
+  height: var(--base-x-2);
+  display: inline-flex;
+  align-items: center;
 }

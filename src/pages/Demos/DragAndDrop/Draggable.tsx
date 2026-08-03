@@ -1,6 +1,6 @@
 import {DragEvent, DragEventHandler, FC, PropsWithChildren, useState} from 'react';
 import {classNames} from '@components/class-names';
-import Handle from './grip.svg';
+import Handle from '@components/grip.svg';
 import {PropsWithClassName} from '../types';
 import {is} from '@ryandur/sand';
 
