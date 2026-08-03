@@ -1,5 +1,5 @@
 import {PointerEvent, RefObject, useRef, useState} from 'react';
-import {has} from '@ryandur/sand';
+import {has, not} from '@ryandur/sand';
 
 export type DragStyle = 'eager-move' | 'lazy-move' | 'hide-eager-move' | 'hide-lazy-move';
 
@@ -51,20 +51,18 @@ export const useTravel = <SUBJECT,>(
             ghost.current?.style.setProperty('transform',
                 `translate(${event.clientX - origin.current.x}px, ${event.clientY - origin.current.y}px)`);
             const struck = strike(event.clientX, event.clientY);
-            if (!has(struck) || struck === aloft || struck === lastStruck.current) {
-                return;
-            }
-            lastStruck.current = struck;
-            if (has(aloft)) {
-                if (eager) {
+            if (has(struck) && struck !== aloft && struck !== lastStruck.current) {
+                lastStruck.current = struck;
+                if (has(aloft) && eager) {
                     settle(aloft, struck);
-                } else {
+                }
+                if (not(eager)) {
                     landing.current = struck;
                 }
             }
         },
         onPointerUp: (): void => {
-            if (!eager && has(aloft) && has(landing.current)) {
+            if (not(eager) && has(aloft) && has(landing.current)) {
                 settle(aloft, landing.current);
             }
             origin.current = null;
