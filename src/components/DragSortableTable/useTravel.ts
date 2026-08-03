@@ -19,6 +19,7 @@ type Travel<SUBJECT> = {
         onPointerMove: (event: PointerEvent<HTMLElement>) => void;
         onPointerUp: () => void;
         onPointerCancel: () => void;
+        onLostPointerCapture: () => void;
     };
 };
 
@@ -50,6 +51,7 @@ export const useTravel = <SUBJECT,>(
                 surface.onPointerUp();
                 return;
             }
+            event.currentTarget.setPointerCapture?.(event.pointerId);
             origin.current = origin.current ?? {x: event.clientX, y: event.clientY};
             ghost.current?.style.setProperty('transform',
                 `translate(${event.clientX - origin.current.x}px, ${event.clientY - origin.current.y}px)`);
@@ -73,7 +75,8 @@ export const useTravel = <SUBJECT,>(
             setAloft(undefined);
             setFlight(grounded);
         },
-        onPointerCancel: (): void => surface.onPointerUp()
+        onPointerCancel: (): void => surface.onPointerUp(),
+        onLostPointerCapture: (): void => surface.onPointerUp()
     };
 
     return {aloft, hiding, flight, ghost, lift, surface};
