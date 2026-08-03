@@ -3,6 +3,7 @@ import {has, not, notEmpty} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {join} from '@components/class-names';
 import {Shares, TableProps, neighborOf, seededShares, traded} from '@components/Table';
+import {glide} from '@components/glide';
 import {DragStyle, useTravel} from './useTravel';
 import {Chart, anchored, charted, columnUnder, seatUnder} from './chart';
 import {ColumnGhost, RowGhost} from './ghosts';
@@ -14,6 +15,7 @@ export type DragSortableTableProps = TableProps & {
     draggableColumns?: DragStyle;
     draggableRows?: DragStyle;
     sortable?: boolean;
+    animated?: boolean;
 };
 
 type Rule = {
@@ -30,7 +32,7 @@ const ranked = (rows: TableProps['rows'], dealt: readonly number[], rule: Rule) 
         });
 
 export const DragSortableTable: FC<DragSortableTableProps> = (
-    {columns, rows, draggableColumns, draggableRows, sortable, id, ...dress}
+    {columns, rows, draggableColumns, draggableRows, sortable, animated, id, ...dress}
 ) => {
     const [shares, setShares] = useState<Shares>(() => seededShares(columns));
     const [order, setOrder] = useState<string[]>(() => columns.map(({column}) => String(column)));
@@ -48,23 +50,27 @@ export const DragSortableTable: FC<DragSortableTableProps> = (
         : dealt.map(seat => ({row: rows[seat], seat}));
     const standing = arranged.map(({seat}) => seat);
 
+    const move = glide(animated ?? false);
+
     const columnsTravel = useTravel<string>(
         draggableColumns,
         columnUnder(chart, order, shares),
-        (key, struck) => setOrder(previous => {
+        (key, struck) => move(() => setOrder(previous => {
             const at = Math.min(Math.max(previous.indexOf(struck), 1), previous.length - 2);
             return array.moveToIndex(at, key, previous);
-        }));
+        })));
     const rowsTravel = useTravel<number>(
         draggableRows,
         seatUnder(chart, seats),
-        (seat, struck) => setSeats(previous =>
-            array.moveToIndex(previous.indexOf(struck), seat, previous)));
+        (seat, struck) => move(() => setSeats(previous =>
+            array.moveToIndex(previous.indexOf(struck), seat, previous))));
 
     const nudged = (seat: number) => (toward: 1 | -1): void => {
         const to = Math.min(Math.max(standing.indexOf(seat) + toward, 0), standing.length - 1);
-        setRule(undefined);
-        setSeats(array.moveToIndex(to, seat, standing));
+        move(() => {
+            setRule(undefined);
+            setSeats(array.moveToIndex(to, seat, standing));
+        });
     };
 
     const liftColumn = (key: string) => (event: PointerEvent<HTMLTableCellElement>): void => {
@@ -107,13 +113,15 @@ export const DragSortableTable: FC<DragSortableTableProps> = (
                                         travels={has(draggableColumns) && not(anchored(position, ordered.length))}
                                         hidden={columnsTravel.hiding && columnsTravel.aloft === key}
                                         sorted={rule?.column === key ? rule.direction : undefined}
+                                        named={animated ? `header-${key}` : undefined}
                                         dress={dress}
                                         onLift={liftColumn(key)}
                                         onTrade={apportioned.length > 1
                                             ? delta => setShares(traded(key, neighborOf(apportioned, key), delta))
                                             : undefined}
                                         onRule={sortable && position > 0
-                                            ? direction => setRule(has(direction) ? {column: key, direction} : undefined)
+                                            ? direction => move(() =>
+                                                setRule(has(direction) ? {column: key, direction} : undefined))
                                             : undefined}/>;
             })}</tr>
             </thead>
@@ -126,6 +134,7 @@ export const DragSortableTable: FC<DragSortableTableProps> = (
                               gripped={has(draggableRows)}
                               hidden={rowsTravel.hiding && rowsTravel.aloft === seat}
                               hiddenColumn={columnsTravel.hiding ? columnsTravel.aloft : undefined}
+                              named={animated ? `seat-${seat}` : undefined}
                               dress={dress}
                               onLift={liftRow(seat)}
                               onNudge={nudged(seat)}/>

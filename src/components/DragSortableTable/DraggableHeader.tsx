@@ -15,6 +15,7 @@ type Props = {
     travels: boolean;
     hidden: boolean;
     sorted: Direction | undefined;
+    named: string | undefined;
     dress: Dress;
     onLift: (event: PointerEvent<HTMLTableCellElement>) => void;
     onTrade: ((delta: number) => void) | undefined;
@@ -22,7 +23,7 @@ type Props = {
 };
 
 export const DraggableHeader: FC<Props> = (
-    {column, share, clipped, travels, hidden, sorted, dress, onLift, onTrade, onRule}
+    {column, share, clipped, travels, hidden, sorted, named, dress, onLift, onTrade, onRule}
 ) => {
     const key = String(column.column);
     return <th className={join(
@@ -34,7 +35,10 @@ export const DraggableHeader: FC<Props> = (
                scope="col"
                aria-sort={sorted}
                onPointerDown={travels ? onLift : undefined}
-               style={has(share) ? {width: `${share}%`} : undefined}>
+               style={{
+                   ...(has(share) ? {width: `${share}%`} : {}),
+                   ...(has(named) ? {viewTransitionName: named} : {})
+               }}>
         {column.display}
         {has(onRule) &&
             <Menu id={`sort-${key}`} label={`sort ${key}`}

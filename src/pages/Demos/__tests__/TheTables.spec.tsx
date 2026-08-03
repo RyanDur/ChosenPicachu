@@ -103,7 +103,7 @@ describe('the tables demo', () => {
     fireEvent.pointerDown(header('vwap'), {clientX: 700, clientY: 20, pointerId: 1});
     const surface = document.querySelector('.drag-surface');
     if (surface === null) throw new Error('nothing is aloft');
-    fireEvent.pointerMove(surface, {clientX: 40, clientY: 120, pointerId: 1});
+    fireEvent.pointerMove(surface, {buttons: 1, clientX: 40, clientY: 120, pointerId: 1});
     fireEvent.pointerUp(surface, {pointerId: 1});
 
     const headerTexts = within(card).getAllByRole('columnheader').map(head => head.textContent);
@@ -135,7 +135,7 @@ describe('the tables demo', () => {
     fireEvent.pointerDown(within(rowOf('session')).getByLabelText(/move row/), {clientX: 100, clientY: 300, pointerId: 1});
     const lifted = document.querySelector('.drag-surface');
     if (lifted === null) throw new Error('nothing is aloft');
-    fireEvent.pointerMove(lifted, {clientX: 100, clientY: 50, pointerId: 1});
+    fireEvent.pointerMove(lifted, {buttons: 1, clientX: 100, clientY: 50, pointerId: 1});
     fireEvent.pointerUp(lifted, {pointerId: 1});
 
     const labels = within(card).getAllByRole('row').slice(1)
@@ -173,6 +173,17 @@ describe('the tables demo', () => {
     expect(labels()).toEqual(['this hour', 'session', 'last 15 minutes', 'last 5 minutes', 'this minute']);
     expect(within(card).getByRole('columnheader', {name: /^trades/}))
       .toHaveAttribute('aria-sort', 'descending');
+  });
+
+  test('the motion of a move is a choice', async () => {
+    const feed = await streamingFeed();
+
+    renderTables(urlOf(feed));
+
+    await feedIsSubscribed();
+    expect(screen.getByRole('group', {name: 'animation style'})).toBeVisible();
+    expect(screen.getByRole('radio', {name: 'Animate'})).toBeChecked();
+    expect(screen.getByRole('radio', {name: 'Static'})).toBeVisible();
   });
 
   test('every column is resizable', async () => {

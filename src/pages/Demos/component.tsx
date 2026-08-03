@@ -36,6 +36,8 @@ export const DemosPage = () => {
   const {tab} = useSearchParamsObject({tab: demoTopicParam}, {tab: DemoTopics.accordions});
   const [accordionContents] = useState(() => Array.from({length: 5}, () => paragraphs(5)));
   const [dragStyle, setDragStyle] = useState<DragStyle>('eager-move');
+  const [tableMotion, setTableMotion] = useState<'animated' | 'static'>('animated');
+  const [listMotion, setListMotion] = useState<'animated' | 'static'>('animated');
   const {tradeFeed, tradeProduct} = useEnv();
   const liveTrades = useLiveTrades(tradeFeed, tradeProduct);
 
@@ -84,28 +86,49 @@ export const DemosPage = () => {
               <Candles trades={liveTrades.trades}/>
             </>,
             [DemoTopics.tables]: <>
-              <PillGlider label="drag style"
-                          name="column-drag-style"
-                          options={[
-                            {display: 'Eager', value: 'eager-move'},
-                            {display: 'Lazy', value: 'lazy-move'},
-                            {display: 'Hide Eager', value: 'hide-eager-move'},
-                            {display: 'Hide Lazy', value: 'hide-lazy-move'}
-                          ]}
-                          chosen={dragStyle}
-                          onChoose={setDragStyle}/>
-              <Aggregations trades={liveTrades.trades} dragStyle={dragStyle}/>
+              <header className="table-styles">
+                <PillGlider label="drag style"
+                            name="column-drag-style"
+                            options={[
+                              {display: 'Eager', value: 'eager-move'},
+                              {display: 'Lazy', value: 'lazy-move'},
+                              {display: 'Hide Eager', value: 'hide-eager-move'},
+                              {display: 'Hide Lazy', value: 'hide-lazy-move'}
+                            ]}
+                            chosen={dragStyle}
+                            onChoose={setDragStyle}/>
+                <PillGlider label="animation style"
+                            name="table-animate-or-static"
+                            options={[
+                              {display: 'Animate', value: 'animated'},
+                              {display: 'Static', value: 'static'}
+                            ]}
+                            chosen={tableMotion}
+                            onChoose={setTableMotion}/>
+              </header>
+              <Aggregations trades={liveTrades.trades} dragStyle={dragStyle}
+                            animated={tableMotion === 'animated'}/>
             </>,
             [DemoTopics.dragAndDrop]: <>
               <h2 className="heading">Sortable List</h2>
+              <PillGlider label="animation style"
+                          name="list-animate-or-static"
+                          options={[
+                            {display: 'Animate', value: 'animated'},
+                            {display: 'Static', value: 'static'}
+                          ]}
+                          chosen={listMotion}
+                          onChoose={setListMotion}/>
               <h3 className="subheading">Lazy Move</h3>
-              <SortableListLazyMove list={new Set(['A', 'B', 'C'])}/>
+              <SortableListLazyMove list={new Set(['A', 'B', 'C'])} animated={listMotion === 'animated'}/>
               <h3 className="subheading">Eager Move</h3>
-              <SortableListEagerMove list={new Set(['A', 'B', 'C'])}/>
+              <SortableListEagerMove list={new Set(['A', 'B', 'C'])} animated={listMotion === 'animated'}/>
               <h3 className="subheading">Hide and Lazy Move</h3>
-              <HideElemOnDragSortableListLazyMove list={new Set(['A', 'B', 'C'])}/>
+              <HideElemOnDragSortableListLazyMove list={new Set(['A', 'B', 'C'])}
+                                                  animated={listMotion === 'animated'}/>
               <h3 className="subheading">Hide and Eager Move</h3>
-              <HideElemOnDragSortableListEagerMove list={new Set(['A', 'B', 'C'])}/>
+              <HideElemOnDragSortableListEagerMove list={new Set(['A', 'B', 'C'])}
+                                                   animated={listMotion === 'animated'}/>
             </>
         })[tab ?? DemoTopics.accordions]}
       </section>

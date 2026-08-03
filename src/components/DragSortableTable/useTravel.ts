@@ -46,6 +46,10 @@ export const useTravel = <SUBJECT,>(
 
     const surface = {
         onPointerMove: (event: PointerEvent<HTMLElement>): void => {
+            if (event.buttons === 0) {
+                surface.onPointerUp();
+                return;
+            }
             origin.current = origin.current ?? {x: event.clientX, y: event.clientY};
             ghost.current?.style.setProperty('transform',
                 `translate(${event.clientX - origin.current.x}px, ${event.clientY - origin.current.y}px)`);
