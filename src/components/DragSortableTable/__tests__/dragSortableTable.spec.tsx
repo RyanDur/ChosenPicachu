@@ -42,7 +42,7 @@ describe('drag sortable columns', () => {
       edge += widths[key ?? ''];
     }
     const past = texts.indexOf(target) < texts.indexOf(aloft) ? 0.25 : 0.75;
-    fireEvent.pointerMove(surface(), {clientX: edge + widths[target] * past, clientY: 100, pointerId: 1});
+    fireEvent.pointerMove(surface(), {buttons: 1, clientX: edge + widths[target] * past, clientY: 100, pointerId: 1});
   };
   const drop = () => fireEvent.pointerUp(surface(), {pointerId: 1});
 
@@ -111,10 +111,10 @@ describe('drag sortable columns', () => {
     render(<DragSortableTable columns={sized} rows={people} draggableColumns="eager-move"/>);
 
     lift('age');
-    fireEvent.pointerMove(surface(), {clientX: 332, clientY: 100, pointerId: 1});
+    fireEvent.pointerMove(surface(), {buttons: 1, clientX: 332, clientY: 100, pointerId: 1});
     expect(headerTexts()).toEqual(['name', 'age', 'city', 'job']);
 
-    fireEvent.pointerMove(surface(), {clientX: 356, clientY: 100, pointerId: 1});
+    fireEvent.pointerMove(surface(), {buttons: 1, clientX: 356, clientY: 100, pointerId: 1});
     expect(headerTexts()).toEqual(['name', 'city', 'age', 'job']);
     drop();
   });
@@ -132,10 +132,10 @@ describe('drag sortable columns', () => {
     render(<DragSortableTable columns={stretched} rows={person} draggableColumns="eager-move"/>);
 
     lift('slim');
-    fireEvent.pointerMove(surface(), {clientX: 260, clientY: 100, pointerId: 1});
+    fireEvent.pointerMove(surface(), {buttons: 1, clientX: 260, clientY: 100, pointerId: 1});
     expect(headerTexts()).toEqual(['name', 'slim', 'wide', 'job']);
 
-    fireEvent.pointerMove(surface(), {clientX: 320, clientY: 100, pointerId: 1});
+    fireEvent.pointerMove(surface(), {buttons: 1, clientX: 320, clientY: 100, pointerId: 1});
     expect(headerTexts()).toEqual(['name', 'wide', 'slim', 'job']);
     drop();
   });
@@ -168,8 +168,8 @@ describe('drag sortable columns', () => {
     expect(ghost.textContent).toContain('age');
     expect(ghost.textContent).toContain('36');
 
-    fireEvent.pointerMove(surface(), {clientX: 300, clientY: 200, pointerId: 1});
-    fireEvent.pointerMove(surface(), {clientX: 320, clientY: 215, pointerId: 1});
+    fireEvent.pointerMove(surface(), {buttons: 1, clientX: 300, clientY: 200, pointerId: 1});
+    fireEvent.pointerMove(surface(), {buttons: 1, clientX: 320, clientY: 215, pointerId: 1});
     expect(ghost).toHaveStyle({transform: 'translate(20px, 15px)'});
 
     drop();
@@ -231,7 +231,7 @@ describe('drag sortable rows', () => {
     const cells = firstCells();
     const at = cells.indexOf(target);
     const past = at < cells.indexOf(aloft) ? 10 : 30;
-    fireEvent.pointerMove(surface(), {clientX: 100, clientY: 40 + at * 40 + past, pointerId: 1});
+    fireEvent.pointerMove(surface(), {buttons: 1, clientX: 100, clientY: 40 + at * 40 + past, pointerId: 1});
   };
   const drop = () => fireEvent.pointerUp(surface(), {pointerId: 1});
 
@@ -419,5 +419,58 @@ describe('sort criteria menus', () => {
     render(<DragSortableTable columns={sized} rows={people}/>);
 
     expect(screen.queryByRole('button', {name: /^sort/})).toBeNull();
+  });
+});
+
+describe('animated moves', () => {
+  const sized = [
+    {display: 'name', column: 'name', width: 200},
+    {display: 'age', column: 'age', width: 120}
+  ];
+  const people = [
+    {name: {display: 'Ada'}, age: {display: '36'}},
+    {name: {display: 'Grace'}, age: {display: '45'}}
+  ];
+  const firstCells = () => within(screen.getAllByRole('rowgroup')[1])
+    .getAllByRole('row').map(row => within(row).getAllByRole('cell')[0].textContent);
+
+  afterEach(() => {
+    delete (document as {startViewTransition?: unknown}).startViewTransition;
+  });
+
+  test('an animated move travels through a view transition', async () => {
+    const transition = vi.fn((update: () => void) => update());
+    (document as {startViewTransition?: unknown}).startViewTransition = transition;
+    render(<DragSortableTable columns={sized} rows={people} animated draggableRows="eager-move"/>);
+
+    within(screen.getByText('Ada').closest('tr') as HTMLElement)
+      .getByRole('button', {name: /move row/}).focus();
+    await userEvent.keyboard('{ArrowDown}');
+
+    expect(transition).toHaveBeenCalledTimes(1);
+    expect(firstCells()).toEqual(['Grace', 'Ada']);
+  });
+
+  test('a static move never asks for a transition', async () => {
+    const transition = vi.fn((update: () => void) => update());
+    (document as {startViewTransition?: unknown}).startViewTransition = transition;
+    render(<DragSortableTable columns={sized} rows={people} draggableRows="eager-move"/>);
+
+    within(screen.getByText('Ada').closest('tr') as HTMLElement)
+      .getByRole('button', {name: /move row/}).focus();
+    await userEvent.keyboard('{ArrowDown}');
+
+    expect(transition).not.toHaveBeenCalled();
+    expect(firstCells()).toEqual(['Grace', 'Ada']);
+  });
+
+  test('an animated move still lands where the platform cannot glide', async () => {
+    render(<DragSortableTable columns={sized} rows={people} animated draggableRows="eager-move"/>);
+
+    within(screen.getByText('Ada').closest('tr') as HTMLElement)
+      .getByRole('button', {name: /move row/}).focus();
+    await userEvent.keyboard('{ArrowDown}');
+
+    expect(firstCells()).toEqual(['Grace', 'Ada']);
   });
 });

@@ -10,6 +10,7 @@ import {hydrated, useRecentTrades} from './useRecentTrades';
 type Props = {
   trades: readonly Trade[];
   dragStyle: DragStyle;
+  animated: boolean;
 };
 
 const columns = [
@@ -37,13 +38,14 @@ const cells = (aggregate: WindowAggregate): Row => ({
   change: moved(aggregate)
 });
 
-export const Aggregations: FC<Props> = ({trades, dragStyle}) => {
+export const Aggregations: FC<Props> = ({trades, dragStyle, animated}) => {
   const recent = useRecentTrades();
   return <section aria-label="live aggregations" className="aggregations card">
     <DragSortableTable tableClassName="fancy-table"
            draggableColumns={dragStyle}
            draggableRows={dragStyle}
            sortable
+           animated={animated}
            theadClassName="header"
            thClassName="column-name"
            trClassName="row"
