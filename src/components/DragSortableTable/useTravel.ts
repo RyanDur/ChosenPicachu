@@ -26,14 +26,13 @@ const grounded: Flight = {x: 0, y: 0, width: 0};
 
 export const useTravel = <SUBJECT,>(
     style: DragStyle | undefined,
-    strike: (x: number, y: number) => SUBJECT | undefined,
+    strike: (x: number, y: number, aloft: SUBJECT | undefined) => SUBJECT | undefined,
     settle: (subject: SUBJECT, struck: SUBJECT) => void
 ): Travel<SUBJECT> => {
     const [aloft, setAloft] = useState<SUBJECT>();
     const [flight, setFlight] = useState<Flight>(grounded);
     const ghost = useRef<HTMLTableElement>(null);
     const origin = useRef<{x: number; y: number}>(null);
-    const lastStruck = useRef<SUBJECT>(null);
     const landing = useRef<SUBJECT>(null);
     const eager = style === 'eager-move' || style === 'hide-eager-move';
     const hiding = style === 'hide-eager-move' || style === 'hide-lazy-move';
@@ -50,13 +49,13 @@ export const useTravel = <SUBJECT,>(
             origin.current = origin.current ?? {x: event.clientX, y: event.clientY};
             ghost.current?.style.setProperty('transform',
                 `translate(${event.clientX - origin.current.x}px, ${event.clientY - origin.current.y}px)`);
-            const struck = strike(event.clientX, event.clientY);
-            if (has(struck) && struck !== aloft && struck !== lastStruck.current) {
-                lastStruck.current = struck;
-                if (has(aloft) && eager) {
+            const struck = strike(event.clientX, event.clientY, aloft);
+            if (has(aloft) && has(struck)) {
+                if (struck === aloft) {
+                    landing.current = null;
+                } else if (eager) {
                     settle(aloft, struck);
-                }
-                if (not(eager)) {
+                } else {
                     landing.current = struck;
                 }
             }
@@ -66,7 +65,6 @@ export const useTravel = <SUBJECT,>(
                 settle(aloft, landing.current);
             }
             origin.current = null;
-            lastStruck.current = null;
             landing.current = null;
             setAloft(undefined);
             setFlight(grounded);

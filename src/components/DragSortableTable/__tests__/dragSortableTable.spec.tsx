@@ -28,17 +28,21 @@ describe('drag sortable columns', () => {
       left: 0, right: 600, top: 0, bottom: 200, width: 600, height: 200, x: 0, y: 0, toJSON: () => ({})
     });
   };
+  let aloft = '';
   const lift = (name: string) => {
+    aloft = name;
     charted();
     fireEvent.pointerDown(header(name), {clientX: 100, clientY: 50, pointerId: 1});
   };
   const carryOver = (target: string) => {
+    const texts = headerTexts();
     let edge = 0;
-    for (const key of headerTexts()) {
+    for (const key of texts) {
       if (key === target) break;
       edge += widths[key ?? ''];
     }
-    fireEvent.pointerMove(surface(), {clientX: edge + widths[target] / 2, clientY: 100, pointerId: 1});
+    const past = texts.indexOf(target) < texts.indexOf(aloft) ? 0.25 : 0.75;
+    fireEvent.pointerMove(surface(), {clientX: edge + widths[target] * past, clientY: 100, pointerId: 1});
   };
   const drop = () => fireEvent.pointerUp(surface(), {pointerId: 1});
 
@@ -77,6 +81,30 @@ describe('drag sortable columns', () => {
     drop();
     expect(header('city').classList).not.toContain('hide');
     expect(headerTexts()).toEqual(['name', 'city', 'age', 'job']);
+  });
+
+  test('a column carried back without dropping comes home', () => {
+    render(<DragSortableTable columns={sized} rows={people} draggableColumns="eager-move"/>);
+
+    lift('age');
+    carryOver('city');
+    expect(headerTexts()).toEqual(['name', 'city', 'age', 'job']);
+
+    carryOver('city');
+    expect(headerTexts()).toEqual(['name', 'age', 'city', 'job']);
+    drop();
+    expect(headerTexts()).toEqual(['name', 'age', 'city', 'job']);
+  });
+
+  test('a lazy column carried home lands nowhere', () => {
+    render(<DragSortableTable columns={sized} rows={people} draggableColumns="lazy-move"/>);
+
+    lift('age');
+    carryOver('city');
+    carryOver('age');
+    drop();
+
+    expect(headerTexts()).toEqual(['name', 'age', 'city', 'job']);
   });
 
   test('the first and last columns hold their posts', () => {
@@ -160,13 +188,17 @@ describe('drag sortable rows', () => {
         });
       });
   };
+  let aloft = '';
   const lift = (person: string) => {
+    aloft = person;
     charted();
     fireEvent.pointerDown(grip(person), {clientX: 100, clientY: 50, pointerId: 1});
   };
   const carryOver = (target: string) => {
-    const at = firstCells().indexOf(target);
-    fireEvent.pointerMove(surface(), {clientX: 100, clientY: 40 + at * 40 + 20, pointerId: 1});
+    const cells = firstCells();
+    const at = cells.indexOf(target);
+    const past = at < cells.indexOf(aloft) ? 10 : 30;
+    fireEvent.pointerMove(surface(), {clientX: 100, clientY: 40 + at * 40 + past, pointerId: 1});
   };
   const drop = () => fireEvent.pointerUp(surface(), {pointerId: 1});
 
@@ -202,6 +234,18 @@ describe('drag sortable rows', () => {
     within(rowOf('Grace')).getAllByRole('cell')
       .forEach(cell => expect(cell.classList).not.toContain('hide-across'));
     expect(firstCells()).toEqual(['Grace', 'Ada', 'Alan']);
+  });
+
+  test('a row carried back without dropping comes home', () => {
+    render(<DragSortableTable columns={sized} rows={people} draggableRows="eager-move"/>);
+
+    lift('Ada');
+    carryOver('Grace');
+    expect(firstCells()).toEqual(['Grace', 'Ada', 'Alan']);
+
+    carryOver('Grace');
+    drop();
+    expect(firstCells()).toEqual(['Ada', 'Grace', 'Alan']);
   });
 
   test('the travelling ghost carries the whole row', () => {
