@@ -32,6 +32,7 @@
     position: relative;
   }
 
+
   &.sortable .body .cell:first-child {
     padding-left: var(--base-x-3);
   }
@@ -47,6 +48,10 @@
     &:last-child .cell {
       border-bottom: none;
     }
+  }
+
+  &.lifting .body .row:hover {
+    background: transparent;
   }
 }
 

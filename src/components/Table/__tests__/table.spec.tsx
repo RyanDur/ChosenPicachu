@@ -273,7 +273,8 @@ describe('drag sortable columns', () => {
 
     document.elementFromPoint = () => null;
     fireEvent.pointerMove(document.body, {clientX: 300, clientY: 200, pointerId: 1});
-    expect(ghost).toHaveStyle({transform: 'translate(300px, 184px)'});
+    fireEvent.pointerMove(document.body, {clientX: 320, clientY: 215, pointerId: 1});
+    expect(ghost).toHaveStyle({transform: 'translate(20px, 15px)'});
 
     drop();
     expect(document.body.querySelector(':scope > table')).toBeNull();
