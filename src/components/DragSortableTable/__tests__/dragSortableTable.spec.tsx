@@ -107,6 +107,39 @@ describe('drag sortable columns', () => {
     expect(headerTexts()).toEqual(['name', 'age', 'city', 'job']);
   });
 
+  test('the switch waits for the inner half of the neighbor', () => {
+    render(<DragSortableTable columns={sized} rows={people} draggableColumns="eager-move"/>);
+
+    lift('age');
+    fireEvent.pointerMove(surface(), {clientX: 332, clientY: 100, pointerId: 1});
+    expect(headerTexts()).toEqual(['name', 'age', 'city', 'job']);
+
+    fireEvent.pointerMove(surface(), {clientX: 356, clientY: 100, pointerId: 1});
+    expect(headerTexts()).toEqual(['name', 'city', 'age', 'job']);
+    drop();
+  });
+
+  test('a slim column reaches deeper into a wide neighbor before switching', () => {
+    const stretched = [
+      {display: 'name', column: 'name', width: 100},
+      {display: 'slim', column: 'slim', width: 40},
+      {display: 'wide', column: 'wide', width: 360},
+      {display: 'job', column: 'job', width: 100}
+    ];
+    const person = [{
+      name: {display: 'Ada'}, slim: {display: 'few'}, wide: {display: 'many'}, job: {display: 'Analyst'}
+    }];
+    render(<DragSortableTable columns={stretched} rows={person} draggableColumns="eager-move"/>);
+
+    lift('slim');
+    fireEvent.pointerMove(surface(), {clientX: 260, clientY: 100, pointerId: 1});
+    expect(headerTexts()).toEqual(['name', 'slim', 'wide', 'job']);
+
+    fireEvent.pointerMove(surface(), {clientX: 320, clientY: 100, pointerId: 1});
+    expect(headerTexts()).toEqual(['name', 'wide', 'slim', 'job']);
+    drop();
+  });
+
   test('the first and last columns hold their posts', () => {
     render(<DragSortableTable columns={sized} rows={people} draggableColumns="eager-move"/>);
 
