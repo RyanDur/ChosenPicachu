@@ -10,12 +10,15 @@ export const SortableListEagerMove: FC<{ list: Set<string>; animated?: boolean }
   const move = glide(animated ?? false);
   const [draggedItem, updateDraggedItem] = useState<string>();
 
-  return <ul className='sortable-list-eager-move sortable-list'>{
+  return <ul onDragOver={event => event.preventDefault()}
+             onDrop={event => event.preventDefault()}
+             className='sortable-list-eager-move sortable-list'>{
     currentList.map((item, index) =>
       <li className='item' key={item}
-          style={animated ? {viewTransitionName: `eager-${item}`} : undefined}>
+          style={animated && item !== draggedItem ? {viewTransitionName: `eager-${item}`} : undefined}>
         <Draggable
           onDragStart={() => updateDraggedItem(item)}
+          onDragEnd={() => updateDraggedItem(undefined)}
           onDragOver={() => {
             if (draggedItem) {
               move(() => updateList((oldList) => array
