@@ -11,6 +11,7 @@ import './Table.css';
 
 export type ColumnDragStyle = DragStyle;
 export type {DragStyle} from './useTravel';
+export type {Column, Row} from './types';
 
 export type TableProps = {
     columns: Column[];
@@ -208,5 +209,3 @@ export const Table: FC<TableProps> = (
                      {...(has(columnsTravel.aloft) ? columnsTravel.surface : rowsTravel.surface)}/>}
     </>;
 };
-
-export type {Column, Row} from './types';
