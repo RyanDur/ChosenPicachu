@@ -1,4 +1,5 @@
 import {cleanup, fireEvent, screen, waitFor, within} from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import {
   broadcast,
   interceptedNetwork,
@@ -106,7 +107,8 @@ describe('the tables demo', () => {
     fireEvent.pointerUp(surface, {pointerId: 1});
 
     const headerTexts = within(card).getAllByRole('columnheader').map(head => head.textContent);
-    expect(headerTexts).toEqual(['window', 'vwap', 'trades', 'buys', 'sells', 'volume', 'change']);
+    ['window', 'vwap', 'trades', 'buys', 'sells', 'volume', 'change'].forEach((name, at) =>
+      expect(headerTexts[at]).toMatch(new RegExp(`^${name}`)));
   });
 
   test('the windows can trade places by hand', async () => {
@@ -139,6 +141,38 @@ describe('the tables demo', () => {
     const labels = within(card).getAllByRole('row').slice(1)
       .map(row => within(row).getAllByRole('cell')[0].textContent);
     expect(labels).toEqual(['session', 'this minute', 'last 5 minutes', 'last 15 minutes', 'this hour']);
+  });
+
+  test('a criterion from a column menu rules the windows', async () => {
+    const feed = await streamingFeed();
+
+    renderTables(urlOf(feed));
+
+    await feedIsSubscribed();
+    const card = screen.getByRole('region', {name: 'live aggregations'});
+    const now = 1700000000000;
+    broadcast(feed, [
+      tradeFrame(50001, now - 30 * 60000, '0.10', 'buy'),
+      tradeFrame(50002, now - 10 * 60000, '0.25', 'sell'),
+      tradeFrame(50003, now - 3 * 60000, '0.05', 'buy'),
+      tradeFrame(50004, now, '0.01', 'buy')
+    ]);
+    const labels = () => within(card).getAllByRole('row').slice(1)
+      .map(row => within(row).getAllByRole('cell')[0].textContent);
+    const menuFor = (label: string) => {
+      const toggle = within(card).getByRole('button', {name: label});
+      const target = toggle.getAttribute('popovertarget') ?? '';
+      const menu = document.getElementById(target);
+      if (menu === null) throw new Error(`no menu for ${label}`);
+      return menu;
+    };
+    await waitFor(() => expect(within(card).getAllByText('4')).not.toHaveLength(0));
+
+    await userEvent.click(within(menuFor('sort trades')).getByText('descending'));
+
+    expect(labels()).toEqual(['this hour', 'session', 'last 15 minutes', 'last 5 minutes', 'this minute']);
+    expect(within(card).getByRole('columnheader', {name: /^trades/}))
+      .toHaveAttribute('aria-sort', 'descending');
   });
 
   test('every column is resizable', async () => {

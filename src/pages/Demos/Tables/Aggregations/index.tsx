@@ -1,7 +1,10 @@
 import {FC} from 'react';
+import {has} from '@ryandur/sand';
 import {DragSortableTable, DragStyle} from '@components/DragSortableTable';
+import {Row} from '@components/Table';
 import {Trade} from '../../Charts/coinbase';
-import {AggregateRow, windowedAggregates} from './fold';
+import {cents, deltaLabel} from '../../Charts/money';
+import {WindowAggregate, windowedAggregates} from './fold';
 import {hydrated, useRecentTrades} from './useRecentTrades';
 
 type Props = {
@@ -19,8 +22,20 @@ const columns = [
   {display: 'change', column: 'change', width: 130}
 ];
 
-const cells = (row: AggregateRow) =>
-  Object.fromEntries(Object.entries(row).map(([measure, value]) => [measure, {display: value}]));
+const moved = ({opened, closed}: WindowAggregate) =>
+  has(opened) && has(closed)
+    ? {display: deltaLabel(opened, closed), value: closed - opened}
+    : {display: '—'};
+
+const cells = (aggregate: WindowAggregate): Row => ({
+  window: {display: aggregate.window},
+  trades: {display: String(aggregate.trades), value: aggregate.trades},
+  buys: {display: String(aggregate.buys), value: aggregate.buys},
+  sells: {display: String(aggregate.sells), value: aggregate.sells},
+  volume: {display: aggregate.volume.toFixed(2), value: aggregate.volume},
+  vwap: {display: has(aggregate.vwap) ? cents.format(aggregate.vwap) : '—', value: aggregate.vwap},
+  change: moved(aggregate)
+});
 
 export const Aggregations: FC<Props> = ({trades, dragStyle}) => {
   const recent = useRecentTrades();
@@ -28,6 +43,7 @@ export const Aggregations: FC<Props> = ({trades, dragStyle}) => {
     <DragSortableTable tableClassName="fancy-table"
            draggableColumns={dragStyle}
            draggableRows={dragStyle}
+           sortable
            theadClassName="header"
            thClassName="column-name"
            trClassName="row"

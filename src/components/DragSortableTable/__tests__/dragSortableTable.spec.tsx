@@ -313,3 +313,111 @@ describe('drag sortable rows', () => {
     expect(within(sourceTable()).queryByRole('button', {name: /move row/})).toBeNull();
   });
 });
+
+describe('sort criteria menus', () => {
+  const sized = [
+    {display: 'name', column: 'name', width: 200},
+    {display: 'age', column: 'age', width: 120},
+    {display: 'city', column: 'city', width: 120}
+  ];
+  const people = [
+    {name: {display: 'Ada'}, age: {display: '36', value: 36}, city: {display: 'London'}},
+    {name: {display: 'Grace'}, age: {display: '45', value: 45}, city: {display: 'New York'}},
+    {name: {display: 'Alan'}, age: {display: '41', value: 41}, city: {display: 'Manchester'}}
+  ];
+  const aged = (ada: number) => [
+    {...people[0], age: {display: String(ada), value: ada}},
+    people[1],
+    people[2]
+  ];
+
+  const sourceTable = () => screen.getAllByRole('table')[0];
+  const firstCells = () => within(within(sourceTable()).getAllByRole('rowgroup')[1])
+    .getAllByRole('row').map(row => within(row).getAllByRole('cell')[0].textContent);
+  const ageHeader = () => screen.getByRole('columnheader', {name: /^age/});
+  const menuFor = (label: string) => {
+    const toggle = screen.getByRole('button', {name: label});
+    const target = toggle.getAttribute('popovertarget') ?? '';
+    const menu = document.getElementById(target);
+    if (menu === null) throw new Error(`no menu for ${label}`);
+    return menu;
+  };
+
+  test('a criterion chosen from the column menu rules the rows', async () => {
+    render(<DragSortableTable columns={sized} rows={people} sortable/>);
+
+    await userEvent.click(within(menuFor('sort age')).getByText('descending'));
+
+    expect(firstCells()).toEqual(['Grace', 'Alan', 'Ada']);
+    expect(ageHeader()).toHaveAttribute('aria-sort', 'descending');
+  });
+
+  test('the rule keeps sorting as the values change', async () => {
+    const {rerender} = render(<DragSortableTable columns={sized} rows={people} sortable/>);
+
+    await userEvent.click(within(menuFor('sort age')).getByText('ascending'));
+    expect(firstCells()).toEqual(['Ada', 'Alan', 'Grace']);
+
+    rerender(<DragSortableTable columns={sized} rows={aged(50)} sortable/>);
+    expect(firstCells()).toEqual(['Alan', 'Grace', 'Ada']);
+  });
+
+  test('as dealt restores the deal', async () => {
+    render(<DragSortableTable columns={sized} rows={people} sortable/>);
+
+    await userEvent.click(within(menuFor('sort age')).getByText('descending'));
+    await userEvent.click(within(menuFor('sort age')).getByText('as dealt'));
+
+    expect(firstCells()).toEqual(['Ada', 'Grace', 'Alan']);
+    expect(ageHeader()).not.toHaveAttribute('aria-sort');
+  });
+
+  test('a hand on a row ends the rule and keeps the standing order', async () => {
+    const {rerender} = render(
+      <DragSortableTable columns={sized} rows={people} sortable draggableRows="eager-move"/>);
+
+    await userEvent.click(within(menuFor('sort age')).getByText('descending'));
+    expect(firstCells()).toEqual(['Grace', 'Alan', 'Ada']);
+
+    const grip = within(within(sourceTable()).getByText('Ada').closest('tr') as HTMLElement)
+      .getByRole('button', {name: /move row/});
+    grip.focus();
+    await userEvent.keyboard('{ArrowUp}');
+
+    expect(firstCells()).toEqual(['Grace', 'Ada', 'Alan']);
+    expect(ageHeader()).not.toHaveAttribute('aria-sort');
+
+    rerender(<DragSortableTable columns={sized} rows={aged(50)} sortable draggableRows="eager-move"/>);
+    expect(firstCells()).toEqual(['Grace', 'Ada', 'Alan']);
+  });
+
+  test('the menu toggle never lifts the column', () => {
+    render(<DragSortableTable columns={sized} rows={people} sortable draggableColumns="eager-move"/>);
+
+    fireEvent.pointerDown(screen.getByRole('button', {name: 'sort age'}), {clientX: 100, clientY: 50, pointerId: 1});
+
+    expect(document.querySelector('.drag-surface')).toBeNull();
+  });
+
+  test('choosing a direction never lifts the column', async () => {
+    render(<DragSortableTable columns={sized} rows={people} sortable draggableColumns="eager-move"/>);
+
+    await userEvent.click(within(menuFor('sort age')).getByText('descending'));
+
+    expect(document.querySelector('.drag-surface')).toBeNull();
+    expect(screen.getAllByRole('table')).toHaveLength(1);
+  });
+
+  test('the first column keeps its own counsel', () => {
+    render(<DragSortableTable columns={sized} rows={people} sortable/>);
+
+    expect(screen.queryByRole('button', {name: 'sort name'})).toBeNull();
+    expect(screen.getByRole('button', {name: 'sort age'})).toBeVisible();
+  });
+
+  test('no menus without the opt-in', () => {
+    render(<DragSortableTable columns={sized} rows={people}/>);
+
+    expect(screen.queryByRole('button', {name: /^sort/})).toBeNull();
+  });
+});
