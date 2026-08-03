@@ -13,6 +13,7 @@ export const Ghost: FC<Props> = ({at, ghost, dress, children}) =>
     <table ref={ghost}
            className={join(dress.tableClassName, 'column-ghost')}
            style={{
+               viewTransitionName: 'ghost',
                position: 'fixed',
                top: at.y,
                left: at.x,
