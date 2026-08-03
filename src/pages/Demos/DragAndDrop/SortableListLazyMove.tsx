@@ -17,12 +17,12 @@ export const SortableListLazyMove: FC<{ list: Set<string>; animated?: boolean }>
              className='sortable-list-lazy-move sortable-list'>{
     currentList.map((item, index) =>
       <li className='item' key={item}
-          style={animated && item !== draggedItem ? {viewTransitionName: `lazy-${item}`} : undefined}>
+          style={animated ? {viewTransitionName: `lazy-${item}`} : undefined}>
         <Draggable
           onDragEnd={() => {
             if (draggedItem && dragOverIndex >= 0) {
-              move(() => updateList((oldList) => array
-                .moveToIndex(dragOverIndex, draggedItem, oldList)));
+              const settled = array.moveToIndex(dragOverIndex, draggedItem, currentList);
+              setTimeout(() => move(() => updateList(settled)));
             }
             updateDraggedItem(undefined);
           }}
