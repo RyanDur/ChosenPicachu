@@ -1,4 +1,3 @@
 export type {DragStyle} from './useTravel';
-export type {Column, Row} from './types';
-export type {TableProps} from './Table';
+export type {Column, Dress, Row, TableProps} from './types';
 export {Table} from './Table';

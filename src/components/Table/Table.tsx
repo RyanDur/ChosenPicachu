@@ -1,51 +1,17 @@
 import {has, not, notEmpty} from '@ryandur/sand';
 import {array} from '@components/arrays';
-import {Column, Row} from './types';
+import {TableProps} from './types';
 import {FC, useState} from 'react';
 import {join} from '@components/class-names';
-import {DragStyle, useTravel} from './useTravel';
-import {ColumnGhost, RowGhost} from './Ghosts';
+import {useTravel} from './useTravel';
+import {ColumnGhost, RowGhost} from './ghosts';
 import {ResizeHandle} from './ResizeHandle';
 import {RowGrip} from './RowGrip';
 import {Shares, neighborOf, seededShares, traded} from './shares';
 import {Chart, anchored, charted, columnUnder, seatUnder} from './chart';
 import './Table.css';
 
-export type TableProps = {
-    columns: Column[];
-    rows: Row[];
-    draggableColumns?: DragStyle;
-    draggableRows?: DragStyle;
-    id?: string;
-    tableClassName?: string;
-    theadClassName?: string;
-    tbodyClassName?: string;
-    trClassName?: string;
-    thClassName?: string;
-    tdClassName?: string;
-    headerRowClassName?: string;
-    rowClassName?: string;
-    cellClassName?: string;
-}
-
-export const Table: FC<TableProps> = (
-    {
-        columns,
-        rows,
-        draggableColumns,
-        draggableRows,
-        id,
-        tableClassName,
-        theadClassName,
-        tbodyClassName,
-        trClassName,
-        thClassName,
-        tdClassName,
-        headerRowClassName,
-        rowClassName,
-        cellClassName
-    }
-) => {
+export const Table: FC<TableProps> = ({columns, rows, draggableColumns, draggableRows, id, ...dress}) => {
     const [shares, setShares] = useState<Shares>(() => seededShares(columns));
     const [order, setOrder] = useState<string[]>(() => columns.map(({column}) => String(column)));
     const [seats, setSeats] = useState<number[]>(() => rows.map((_, seat) => seat));
@@ -58,11 +24,6 @@ export const Table: FC<TableProps> = (
     const arranged = seats.length === rows.length
         ? seats.map(seat => ({row: rows[seat], seat}))
         : rows.map((row, seat) => ({row, seat}));
-    const dress = {
-        tableClassName, theadClassName, tbodyClassName, trClassName,
-        thClassName, tdClassName, headerRowClassName, rowClassName, cellClassName
-    };
-
     const columnsTravel = useTravel<string>(
         draggableColumns,
         columnUnder(chart, order, shares),
@@ -88,20 +49,20 @@ export const Table: FC<TableProps> = (
     return <>
         <table id={id}
                className={join(
-                   tableClassName,
+                   dress.tableClassName,
                    clipped && 'apportioned',
                    (has(draggableColumns) || has(draggableRows)) && 'sortable'
                )}>
-            <thead className={theadClassName}>
+            <thead className={dress.theadClassName}>
             <tr className={join(
-                trClassName,
-                headerRowClassName
+                dress.trClassName,
+                dress.headerRowClassName
             )}>{ordered.map(({display, column, className, width}, position) => {
                 const key = String(column);
                 const share = has(width) ? shares[key] : undefined;
                 const travels = has(draggableColumns) && not(anchored(position, ordered.length));
                 return <th className={join(
-                               thClassName, cellClassName, className,
+                               dress.thClassName, dress.cellClassName, className,
                                clipped && 'clipped',
                                travels && 'grabbable',
                                columnsTravel.hiding && columnsTravel.aloft === key && 'hide'
@@ -126,13 +87,13 @@ export const Table: FC<TableProps> = (
                 </th>;
             })}</tr>
             </thead>
-            <tbody className={tbodyClassName}>{arranged.map(({row, seat}, position) =>
-                <tr className={join(trClassName, rowClassName)}
+            <tbody className={dress.tbodyClassName}>{arranged.map(({row, seat}, position) =>
+                <tr className={join(dress.trClassName, dress.rowClassName)}
                     key={seat}>
                     {ordered.map(({column}, columnNumber) => {
                         const cell = row[column];
                         return <td className={join(
-                                       tdClassName, cellClassName, cell.className,
+                                       dress.tdClassName, dress.cellClassName, cell.className,
                                        clipped && 'ellipsis',
                                        columnsTravel.hiding && columnsTravel.aloft === String(column) && 'hide',
                                        rowsTravel.hiding && rowsTravel.aloft === seat && 'hide-across'
