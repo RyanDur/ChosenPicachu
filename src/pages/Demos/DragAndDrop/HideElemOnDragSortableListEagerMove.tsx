@@ -1,5 +1,6 @@
 import {FC, useState} from 'react';
 import {array} from '@components/arrays';
+import {flushSync} from 'react-dom';
 import {HideOnDrag} from './HideOnDrag';
 import './styles.css';
 import './styles.layout.css';
@@ -18,18 +19,21 @@ export const HideElemOnDragSortableListEagerMove: FC<{ list: Set<string>; animat
           onDragStart={() => updateDraggedItem(item)}
           onDragEnd={() => updateDraggedItem(undefined)}
           onDragOver={event => {
-            if (draggedItem && draggedItem !== item) {
-              const overtaken = event.currentTarget;
-              const held = overtaken.getBoundingClientRect().top;
+            if (!draggedItem || draggedItem === item) {
+              return;
+            }
+            if (!animated) {
               updateList((oldList) => array.moveToIndex(index, draggedItem, oldList));
-              if (animated) {
-                requestAnimationFrame(() => {
-                  const landed = overtaken.getBoundingClientRect().top;
-                  overtaken.animate(
-                    [{transform: `translateY(${held - landed}px)`}, {transform: 'none'}],
-                    {duration: 150, easing: 'ease-out'});
-                });
-              }
+              return;
+            }
+            const overtaken = event.currentTarget;
+            const held = overtaken.getBoundingClientRect();
+            flushSync(() => updateList((oldList) => array.moveToIndex(index, draggedItem, oldList)));
+            const landed = overtaken.getBoundingClientRect();
+            if (held.left !== landed.left || held.top !== landed.top) {
+              overtaken.animate(
+                [{transform: `translate(${held.left - landed.left}px, ${held.top - landed.top}px)`}, {transform: 'none'}],
+                {duration: 150, easing: 'ease-out'});
             }
           }}
           label={item}
