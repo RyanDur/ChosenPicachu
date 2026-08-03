@@ -200,15 +200,23 @@ describe('drag sortable columns', () => {
   };
   const headerTexts = () => within(sourceTable()).getAllByRole('columnheader').map(header => header.textContent);
   const header = (name: string) => within(sourceTable()).getByRole('columnheader', {name: new RegExp(`^${name}`)});
-  const landable = (element: HTMLElement) => {
-    element.getBoundingClientRect = () => ({
-      left: 290, right: 310, top: 190, bottom: 210, width: 20, height: 20, x: 290, y: 190, toJSON: () => ({})
+  const widths: Record<string, number> = {name: 200, age: 120, city: 120, job: 160};
+  const charted = () => {
+    sourceTable().getBoundingClientRect = () => ({
+      left: 0, right: 600, top: 0, bottom: 200, width: 600, height: 200, x: 0, y: 0, toJSON: () => ({})
     });
   };
-  const lift = (name: string) => fireEvent.pointerDown(header(name), {clientX: 100, clientY: 50, pointerId: 1});
+  const lift = (name: string) => {
+    charted();
+    fireEvent.pointerDown(header(name), {clientX: 100, clientY: 50, pointerId: 1});
+  };
   const carryOver = (target: string) => {
-    landable(header(target));
-    fireEvent.pointerMove(surface(), {clientX: 300, clientY: 200, pointerId: 1});
+    let edge = 0;
+    for (const key of headerTexts()) {
+      if (key === target) break;
+      edge += widths[key ?? ''];
+    }
+    fireEvent.pointerMove(surface(), {clientX: edge + widths[target] / 2, clientY: 100, pointerId: 1});
   };
   const drop = () => fireEvent.pointerUp(surface(), {pointerId: 1});
 
@@ -319,16 +327,24 @@ describe('drag sortable rows', () => {
     return row;
   };
   const grip = (person: string) => within(rowOf(person)).getByRole('button', {name: /move row/});
-  const landable = (element: HTMLElement) => {
-    element.getBoundingClientRect = () => ({
-      left: 90, right: 110, top: 190, bottom: 210, width: 20, height: 20, x: 90, y: 190, toJSON: () => ({})
+  const charted = () => {
+    sourceTable().getBoundingClientRect = () => ({
+      left: 0, right: 400, top: 0, bottom: 160, width: 400, height: 160, x: 0, y: 0, toJSON: () => ({})
     });
+    within(within(sourceTable()).getAllByRole('rowgroup')[1]).getAllByRole('row')
+      .forEach(row => {
+        row.getBoundingClientRect = () => ({
+          left: 0, right: 400, top: 0, bottom: 40, width: 400, height: 40, x: 0, y: 0, toJSON: () => ({})
+        });
+      });
   };
-  const lift = (person: string) =>
+  const lift = (person: string) => {
+    charted();
     fireEvent.pointerDown(grip(person), {clientX: 100, clientY: 50, pointerId: 1});
+  };
   const carryOver = (target: string) => {
-    landable(rowOf(target));
-    fireEvent.pointerMove(surface(), {clientX: 100, clientY: 200, pointerId: 1});
+    const at = firstCells().indexOf(target);
+    fireEvent.pointerMove(surface(), {clientX: 100, clientY: 40 + at * 40 + 20, pointerId: 1});
   };
   const drop = () => fireEvent.pointerUp(surface(), {pointerId: 1});
 

@@ -1,8 +1,7 @@
 import {FC, KeyboardEvent, PointerEvent, useState} from 'react';
+import {SLIMMEST} from './shares';
 
 const STEP_SHARE = 2;
-
-export const SLIMMEST = 5;
 
 type Grip = {
     fromX: number;
