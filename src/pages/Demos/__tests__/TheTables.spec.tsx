@@ -186,6 +186,29 @@ describe('the tables demo', () => {
     expect(screen.getByRole('radio', {name: 'Animate'})).toBeVisible();
   });
 
+  test('the recipe teaches whatever the dials are set to', async () => {
+    const feed = await streamingFeed();
+
+    renderTables(urlOf(feed));
+
+    await feedIsSubscribed();
+    const recipe = screen.getByRole('region', {name: 'how to build this'});
+    expect(recipe).toBeVisible();
+    expect(recipe).toHaveTextContent(/pointer events/);
+    expect(recipe).toHaveTextContent(/commit the reorder on every crossing/);
+    expect(recipe).toHaveTextContent(/plain state update/);
+    expect(recipe).not.toHaveTextContent(/startViewTransition/);
+
+    await userEvent.click(screen.getByRole('radio', {name: 'Hide Lazy'}));
+    await userEvent.click(screen.getByRole('radio', {name: 'Animate'}));
+
+    expect(recipe).toHaveTextContent(/remember the crossing as a landing/);
+    expect(recipe).toHaveTextContent(/color: transparent/);
+    expect(recipe).toHaveTextContent(/startViewTransition/);
+    expect(recipe).not.toHaveTextContent(/commit the reorder on every crossing/);
+    expect(recipe).not.toHaveTextContent(/plain state update/);
+  });
+
   test('every column is resizable', async () => {
     const feed = await streamingFeed();
 

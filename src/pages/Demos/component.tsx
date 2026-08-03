@@ -20,7 +20,7 @@ import {
 import {DemoTopics, demoTopicParam} from './types';
 import {NaturalZIndex} from './ZIndexDemo';
 import {Candles, PriceChart} from './Charts';
-import {Aggregations} from './Tables';
+import {Aggregations, Recipe} from './Tables';
 import {PillGlider} from '@components/PillGlider';
 import {DragStyle} from '@components/DragSortableTable';
 import {statusCopy, useLiveTrades} from './Charts/useLiveTrades';
@@ -107,6 +107,7 @@ export const DemosPage = () => {
               </header>
               <Aggregations trades={liveTrades.trades} dragStyle={dragStyle}
                             animated={tableMotion === 'animated'}/>
+              <Recipe dragStyle={dragStyle} animated={tableMotion === 'animated'}/>
             </>,
             [DemoTopics.dragAndDrop]: <>
               <h2 className="heading">Sortable List</h2>

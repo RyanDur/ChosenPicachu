@@ -1,0 +1,85 @@
+.drag-recipe {
+  max-width: var(--measure);
+  display: grid;
+  gap: var(--base-x-2);
+
+  .headline {
+    font-size: var(--text-headline);
+  }
+
+  .lead {
+    font-size: var(--text-body);
+  }
+
+  .step {
+    font-size: var(--text-title);
+    margin-top: var(--base-x-2);
+  }
+
+  .explanation {
+    font-size: var(--text-body);
+    line-height: 1.6;
+  }
+
+  .code-block {
+    background: var(--void);
+    color: var(--paper);
+    padding: var(--base-x-2);
+    border-radius: var(--radius-card);
+    overflow-x: auto;
+    font-size: var(--text-caption);
+    line-height: 1.5;
+  }
+
+  .recipe-figure {
+    margin: 0;
+    display: grid;
+    gap: var(--base);
+
+    svg {
+      width: 100%;
+      height: auto;
+    }
+
+    .slot {
+      fill: var(--paper);
+      stroke: var(--charcoal);
+      stroke-width: var(--hairline);
+    }
+
+    .dead {
+      fill: var(--faded-leather);
+    }
+
+    .inner {
+      fill: var(--faded-mint);
+    }
+
+    .center {
+      stroke: var(--charcoal);
+      stroke-dasharray: 4 3;
+    }
+
+    .plane {
+      fill: var(--paper);
+      stroke: var(--charcoal);
+      stroke-width: var(--hairline);
+    }
+
+    .plane-top {
+      fill: var(--faded-mint);
+      stroke: var(--charcoal);
+      stroke-width: var(--hairline);
+    }
+
+    .label {
+      fill: var(--void);
+      font-size: var(--base-x-1_5);
+    }
+
+    .caption {
+      font-size: var(--text-caption);
+      color: var(--charcoal);
+    }
+  }
+}
