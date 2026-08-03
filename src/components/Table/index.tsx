@@ -1,4 +1,4 @@
-import {has, notEmpty} from '@ryandur/sand';
+import {has, not, notEmpty} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {Column, Row} from './types';
 import {FC, useRef, useState} from 'react';
@@ -142,7 +142,7 @@ export const Table: FC<TableProps> = (
             )}>{ordered.map(({display, column, className, width}, position) => {
                 const key = String(column);
                 const share = has(width) ? shares[key] : undefined;
-                const travels = has(draggableColumns) && !anchored(position);
+                const travels = has(draggableColumns) && not(anchored(position));
                 return <th className={join(
                                thClassName, cellClassName, className,
                                clipped && 'clipped',
