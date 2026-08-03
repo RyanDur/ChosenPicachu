@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {DragStyle, Table} from '@components/Table';
+import {DragSortableTable, DragStyle} from '@components/DragSortableTable';
 import {Trade} from '../../Charts/coinbase';
 import {AggregateRow, windowedAggregates} from './fold';
 import {hydrated, useRecentTrades} from './useRecentTrades';
@@ -25,7 +25,7 @@ const cells = (row: AggregateRow) =>
 export const Aggregations: FC<Props> = ({trades, dragStyle}) => {
   const recent = useRecentTrades();
   return <section aria-label="live aggregations" className="aggregations card">
-    <Table tableClassName="fancy-table"
+    <DragSortableTable tableClassName="fancy-table"
            draggableColumns={dragStyle}
            draggableRows={dragStyle}
            theadClassName="header"

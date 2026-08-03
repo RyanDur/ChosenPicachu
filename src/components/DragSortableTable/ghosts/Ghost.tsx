@@ -1,6 +1,6 @@
 import {FC, ReactNode, RefObject} from 'react';
 import {join} from '@components/class-names';
-import {Dress} from '../types';
+import {Dress} from '@components/Table';
 
 type Props = {
     at: {x: number; y: number; width: number};

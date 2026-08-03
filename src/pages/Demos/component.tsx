@@ -22,7 +22,7 @@ import {NaturalZIndex} from './ZIndexDemo';
 import {Candles, PriceChart} from './Charts';
 import {Aggregations} from './Tables';
 import {PillGlider} from '@components/PillGlider';
-import {DragStyle} from '@components/Table';
+import {DragStyle} from '@components/DragSortableTable';
 import {statusCopy, useLiveTrades} from './Charts/useLiveTrades';
 import {useEnv} from '@components/Env';
 

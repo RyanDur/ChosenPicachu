@@ -1,5 +1,5 @@
 import {has} from '@ryandur/sand';
-import {Shares} from './shares';
+import {Shares} from '@components/Table';
 
 export type Chart = {
     left: number;

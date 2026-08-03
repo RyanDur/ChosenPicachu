@@ -1,5 +1,5 @@
 import {has} from '@ryandur/sand';
-import {Column} from './types';
+import {Column} from './Table';
 
 export const SLIMMEST = 5;
 
