@@ -22,6 +22,9 @@ export const HideElemOnDragSortableListEagerMove: FC<{ list: Set<string>; animat
             if (!draggedItem || draggedItem === item) {
               return;
             }
+            if (event.currentTarget.getAnimations().length > 0) {
+              return;
+            }
             const space = event.currentTarget.getBoundingClientRect();
             const quarter = space.width / 4;
             const crossed = index < currentList.indexOf(draggedItem)
