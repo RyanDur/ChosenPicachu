@@ -192,16 +192,25 @@ describe('drag sortable columns', () => {
   }];
 
   const sourceTable = () => screen.getAllByRole('table')[0];
+  const ghostTable = () => screen.getAllByRole('table')[1];
+  const surface = () => {
+    const found = document.querySelector('.drag-surface');
+    if (found === null) throw new Error('nothing is aloft');
+    return found;
+  };
   const headerTexts = () => within(sourceTable()).getAllByRole('columnheader').map(header => header.textContent);
   const header = (name: string) => within(sourceTable()).getByRole('columnheader', {name: new RegExp(`^${name}`)});
+  const landable = (element: HTMLElement) => {
+    element.getBoundingClientRect = () => ({
+      left: 290, right: 310, top: 190, bottom: 210, width: 20, height: 20, x: 290, y: 190, toJSON: () => ({})
+    });
+  };
   const lift = (name: string) => fireEvent.pointerDown(header(name), {clientX: 100, clientY: 50, pointerId: 1});
   const carryOver = (target: string) => {
-    document.elementFromPoint = () => header(target);
-    fireEvent.pointerMove(document.body, {clientX: 300, clientY: 200, pointerId: 1});
+    landable(header(target));
+    fireEvent.pointerMove(surface(), {clientX: 300, clientY: 200, pointerId: 1});
   };
-  const drop = () => fireEvent.pointerUp(document.body, {pointerId: 1});
-
-  afterEach(() => document.body.querySelector(':scope > table')?.remove());
+  const drop = () => fireEvent.pointerUp(surface(), {pointerId: 1});
 
   test('an eager column follows the pointer as it crosses its neighbors', () => {
     render(<Table columns={sized} rows={people} draggableColumns="eager-move"/>);
@@ -248,9 +257,7 @@ describe('drag sortable columns', () => {
     expect(header('age').classList).toContain('grabbable');
 
     lift('name');
-    carryOver('city');
-    expect(headerTexts()).toEqual(['name', 'age', 'city', 'job']);
-    drop();
+    expect(document.querySelector('.drag-surface')).toBeNull();
 
     lift('city');
     carryOver('name');
@@ -263,30 +270,26 @@ describe('drag sortable columns', () => {
 
     lift('age');
 
-    const ghost = document.body.querySelector(':scope > table');
-    expect(ghost).not.toBeNull();
-    expect([...(ghost?.children ?? [])].map(section => section.tagName)).toEqual(['THEAD', 'TBODY']);
-    expect(ghost?.querySelectorAll('thead tr')).toHaveLength(1);
-    expect(ghost?.querySelectorAll('tbody tr')).toHaveLength(1);
-    expect(ghost?.textContent).toContain('age');
-    expect(ghost?.textContent).toContain('36');
+    const ghost = ghostTable();
+    expect([...ghost.children].map(section => section.tagName)).toEqual(['THEAD', 'TBODY']);
+    expect(ghost.querySelectorAll('thead tr')).toHaveLength(1);
+    expect(ghost.querySelectorAll('tbody tr')).toHaveLength(1);
+    expect(ghost.textContent).toContain('age');
+    expect(ghost.textContent).toContain('36');
 
-    document.elementFromPoint = () => null;
-    fireEvent.pointerMove(document.body, {clientX: 300, clientY: 200, pointerId: 1});
-    fireEvent.pointerMove(document.body, {clientX: 320, clientY: 215, pointerId: 1});
+    fireEvent.pointerMove(surface(), {clientX: 300, clientY: 200, pointerId: 1});
+    fireEvent.pointerMove(surface(), {clientX: 320, clientY: 215, pointerId: 1});
     expect(ghost).toHaveStyle({transform: 'translate(20px, 15px)'});
 
     drop();
-    expect(document.body.querySelector(':scope > table')).toBeNull();
+    expect(screen.getAllByRole('table')).toHaveLength(1);
   });
 
   test('columns hold still without the opt-in', () => {
     render(<Table columns={sized} rows={people}/>);
 
-    lift('age');
-    carryOver('city');
-    drop();
-
+    fireEvent.pointerDown(header('age'), {clientX: 100, clientY: 50, pointerId: 1});
+    expect(document.querySelector('.drag-surface')).toBeNull();
     expect(headerTexts()).toEqual(['name', 'age', 'city', 'job']);
   });
 });
@@ -303,6 +306,11 @@ describe('drag sortable rows', () => {
   ];
 
   const sourceTable = () => screen.getAllByRole('table')[0];
+  const surface = () => {
+    const found = document.querySelector('.drag-surface');
+    if (found === null) throw new Error('nothing is aloft');
+    return found;
+  };
   const firstCells = () => within(within(sourceTable()).getAllByRole('rowgroup')[1])
     .getAllByRole('row').map(row => within(row).getAllByRole('cell')[0].textContent);
   const rowOf = (person: string) => {
@@ -311,15 +319,18 @@ describe('drag sortable rows', () => {
     return row;
   };
   const grip = (person: string) => within(rowOf(person)).getByRole('button', {name: /move row/});
+  const landable = (element: HTMLElement) => {
+    element.getBoundingClientRect = () => ({
+      left: 90, right: 110, top: 190, bottom: 210, width: 20, height: 20, x: 90, y: 190, toJSON: () => ({})
+    });
+  };
   const lift = (person: string) =>
     fireEvent.pointerDown(grip(person), {clientX: 100, clientY: 50, pointerId: 1});
   const carryOver = (target: string) => {
-    document.elementFromPoint = () => rowOf(target);
-    fireEvent.pointerMove(document.body, {clientX: 100, clientY: 200, pointerId: 1});
+    landable(rowOf(target));
+    fireEvent.pointerMove(surface(), {clientX: 100, clientY: 200, pointerId: 1});
   };
-  const drop = () => fireEvent.pointerUp(document.body, {pointerId: 1});
-
-  afterEach(() => document.body.querySelector(':scope > table')?.remove());
+  const drop = () => fireEvent.pointerUp(surface(), {pointerId: 1});
 
   test('an eager row follows the pointer as it crosses its neighbors', () => {
     render(<Table columns={sized} rows={people} draggableRows="eager-move"/>);
@@ -360,14 +371,13 @@ describe('drag sortable rows', () => {
 
     lift('Grace');
 
-    const ghost = document.body.querySelector(':scope > table');
-    expect(ghost).not.toBeNull();
-    expect(ghost?.querySelectorAll('tr')).toHaveLength(1);
-    expect(ghost?.textContent).toContain('Grace');
-    expect(ghost?.textContent).toContain('45');
+    const ghost = screen.getAllByRole('table')[1];
+    expect(ghost.querySelectorAll('tr')).toHaveLength(1);
+    expect(ghost.textContent).toContain('Grace');
+    expect(ghost.textContent).toContain('45');
 
     drop();
-    expect(document.body.querySelector(':scope > table')).toBeNull();
+    expect(screen.getAllByRole('table')).toHaveLength(1);
   });
 
   test('the keyboard walks a row up and down', async () => {

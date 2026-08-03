@@ -96,9 +96,13 @@ describe('the tables demo', () => {
     const header = (name: string) =>
       within(card).getByRole('columnheader', {name: new RegExp(`^${name}`)});
     fireEvent.pointerDown(header('vwap'), {clientX: 100, clientY: 50, pointerId: 1});
-    document.elementFromPoint = () => header('window');
-    fireEvent.pointerMove(document.body, {clientX: 40, clientY: 50, pointerId: 1});
-    fireEvent.pointerUp(document.body, {pointerId: 1});
+    header('window').getBoundingClientRect = () => ({
+      left: 30, right: 50, top: 40, bottom: 60, width: 20, height: 20, x: 30, y: 40, toJSON: () => ({})
+    });
+    const surface = document.querySelector('.drag-surface');
+    if (surface === null) throw new Error('nothing is aloft');
+    fireEvent.pointerMove(surface, {clientX: 40, clientY: 50, pointerId: 1});
+    fireEvent.pointerUp(surface, {pointerId: 1});
 
     const headerTexts = within(card).getAllByRole('columnheader').map(head => head.textContent);
     expect(headerTexts).toEqual(['window', 'vwap', 'trades', 'buys', 'sells', 'volume', 'change']);
@@ -117,9 +121,13 @@ describe('the tables demo', () => {
       return row;
     };
     fireEvent.pointerDown(within(rowOf('session')).getByLabelText(/move row/), {clientX: 100, clientY: 300, pointerId: 1});
-    document.elementFromPoint = () => rowOf('this minute');
-    fireEvent.pointerMove(document.body, {clientX: 100, clientY: 80, pointerId: 1});
-    fireEvent.pointerUp(document.body, {pointerId: 1});
+    rowOf('this minute').getBoundingClientRect = () => ({
+      left: 90, right: 110, top: 70, bottom: 90, width: 20, height: 20, x: 90, y: 70, toJSON: () => ({})
+    });
+    const lifted = document.querySelector('.drag-surface');
+    if (lifted === null) throw new Error('nothing is aloft');
+    fireEvent.pointerMove(lifted, {clientX: 100, clientY: 80, pointerId: 1});
+    fireEvent.pointerUp(lifted, {pointerId: 1});
 
     const labels = within(card).getAllByRole('row').slice(1)
       .map(row => within(row).getAllByRole('cell')[0].textContent);

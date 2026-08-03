@@ -32,7 +32,6 @@
     position: relative;
   }
 
-
   &.sortable .body .cell:first-child {
     padding-left: var(--base-x-3);
   }
@@ -50,9 +49,6 @@
     }
   }
 
-  &.lifting .body .row:hover {
-    background: transparent;
-  }
 }
 
 .resize-handle {
@@ -134,3 +130,8 @@
   }
 }
 
+.drag-surface {
+  position: fixed;
+  inset: 0;
+  cursor: grabbing;
+}
