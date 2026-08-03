@@ -2,14 +2,26 @@ import {FC, useState} from 'react';
 import {array} from '@components/arrays';
 import {flushSync} from 'react-dom';
 import {Draggable} from './Draggable';
+import {PillGlider} from '@components/PillGlider';
 import './styles.css';
 import './styles.layout.css';
 
-export const SortableListEagerMove: FC<{ list: Set<string>; animated?: boolean }> = ({list, animated}) => {
+export const SortableListEagerMove: FC<{ list: Set<string> }> = ({list}) => {
   const [currentList, updateList] = useState<string[]>([...list]);
+  const [motion, updateMotion] = useState<'animated' | 'static'>('static');
+  const animated = motion === 'animated';
   const [draggedItem, updateDraggedItem] = useState<string>();
 
-  return <ul onDragOver={event => event.preventDefault()}
+  return <>
+    <PillGlider label="eager animation style"
+                name="eager-animate-or-static"
+                options={[
+                  {display: 'Animate', value: 'animated'},
+                  {display: 'Static', value: 'static'}
+                ]}
+                chosen={motion}
+                onChoose={updateMotion}/>
+    <ul onDragOver={event => event.preventDefault()}
              onDrop={event => event.preventDefault()}
              className='sortable-list-eager-move sortable-list'>{
     currentList.map((item, index) =>
@@ -48,5 +60,6 @@ export const SortableListEagerMove: FC<{ list: Set<string>; animated?: boolean }
           }}
           label={item}>{item}</Draggable>
       </li>)
-  }</ul>;
+  }</ul>
+  </>;
 };
