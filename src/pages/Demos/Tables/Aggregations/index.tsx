@@ -5,6 +5,7 @@ import {Row} from '@components/Table';
 import {Trade} from '../../Charts/coinbase';
 import {cents, deltaLabel} from '../../Charts/money';
 import {WindowAggregate, windowedAggregates} from './fold';
+import {DragMechanics} from './DragMechanics';
 import {hydrated, useRecentTrades} from './useRecentTrades';
 
 type Props = {
@@ -63,5 +64,6 @@ export const Aggregations: FC<Props> = ({trades, dragStyle, animated}) => {
         trades land — the grid never grows, it only breathes.
       </p>
     </details>
+    <DragMechanics dragStyle={dragStyle} animated={animated}/>
   </section>;
 };
