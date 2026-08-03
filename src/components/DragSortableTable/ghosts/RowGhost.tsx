@@ -1,6 +1,6 @@
 import {FC, RefObject} from 'react';
 import {join} from '@components/class-names';
-import {Column, Dress, Row} from '../types';
+import {Column, Dress, Row} from '@components/Table';
 import {Ghost} from './Ghost';
 
 type Props = {
