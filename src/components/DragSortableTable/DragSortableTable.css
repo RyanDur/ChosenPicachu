@@ -62,6 +62,10 @@
   }
 }
 
+.sortable .hide .menu-toggle {
+  visibility: hidden;
+}
+
 .sortable {
   user-select: none;
 }
