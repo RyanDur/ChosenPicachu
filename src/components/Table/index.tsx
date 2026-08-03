@@ -203,19 +203,23 @@ export const Table: FC<TableProps> = (
     const lifted = (key: string, position: number) => (event: PointerEvent<HTMLElement>): void => {
         event.preventDefault();
         const surface = event.currentTarget.closest('table');
-        let grip = 0;
+        const base = {x: 0, y: 0};
         if (has(surface)) {
             const shade = columnGhost(surface, position);
+            const anchor = event.currentTarget.getBoundingClientRect();
+            base.x = anchor.x;
+            base.y = anchor.y;
             document.body.appendChild(shade);
-            grip = shade.offsetWidth / 2;
-            shade.style.transform = `translate(${event.clientX - grip}px, ${event.clientY - 16}px)`;
+            shade.style.transform = `translate(${base.x}px, ${base.y}px)`;
             ghost.current = shade;
         }
         setDragged(key);
         let lastStruck = '';
+        let origin: {x: number; y: number} | undefined;
         const carried = (moving: globalThis.PointerEvent): void => {
+            origin = origin ?? {x: moving.clientX, y: moving.clientY};
             ghost.current?.style.setProperty('transform',
-                `translate(${moving.clientX - grip}px, ${moving.clientY - 16}px)`);
+                `translate(${base.x + moving.clientX - origin.x}px, ${base.y + moving.clientY - origin.y}px)`);
             const struck = headerUnder(moving.clientX, moving.clientY);
             if (empty(struck) || struck === key || struck === lastStruck) {
                 return;
@@ -264,19 +268,23 @@ export const Table: FC<TableProps> = (
     const liftedRow = (seat: number, position: number) => (event: PointerEvent<HTMLElement>): void => {
         event.preventDefault();
         const surface = event.currentTarget.closest('table');
-        let grip = 0;
+        const base = {x: 0, y: 0};
         if (has(surface)) {
             const shade = rowGhost(surface, position);
+            const anchor = event.currentTarget.closest('tr')?.getBoundingClientRect();
+            base.x = anchor?.x ?? 0;
+            base.y = anchor?.y ?? 0;
             document.body.appendChild(shade);
-            grip = 16;
-            shade.style.transform = `translate(${event.clientX - grip}px, ${event.clientY - 16}px)`;
+            shade.style.transform = `translate(${base.x}px, ${base.y}px)`;
             ghost.current = shade;
         }
         setDraggedRow(seat);
         let lastStruck = -1;
+        let origin: {x: number; y: number} | undefined;
         const carried = (moving: globalThis.PointerEvent): void => {
+            origin = origin ?? {x: moving.clientX, y: moving.clientY};
             ghost.current?.style.setProperty('transform',
-                `translate(${moving.clientX - grip}px, ${moving.clientY - 16}px)`);
+                `translate(${base.x + moving.clientX - origin.x}px, ${base.y + moving.clientY - origin.y}px)`);
             const struck = rowUnder(moving.clientX, moving.clientY);
             if (struck < 0 || struck === seat || struck === lastStruck) {
                 return;
@@ -309,7 +317,8 @@ export const Table: FC<TableProps> = (
                   className={join(
                       tableClassName,
                       notEmpty(apportioned) && 'apportioned',
-                      (has(draggableColumns) || has(draggableRows)) && 'sortable'
+                      (has(draggableColumns) || has(draggableRows)) && 'sortable',
+                      (has(dragged) || draggedRow >= 0) && 'lifting'
                   )}>
         <thead className={theadClassName}>
         <tr className={join(
