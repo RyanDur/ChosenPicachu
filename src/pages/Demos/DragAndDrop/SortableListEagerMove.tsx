@@ -21,6 +21,14 @@ export const SortableListEagerMove: FC<{ list: Set<string>; animated?: boolean }
             if (!draggedItem || draggedItem === item) {
               return;
             }
+            const space = event.currentTarget.getBoundingClientRect();
+            const quarter = space.width / 4;
+            const crossed = index < currentList.indexOf(draggedItem)
+              ? event.clientX < space.right - quarter
+              : event.clientX > space.left + quarter;
+            if (!crossed) {
+              return;
+            }
             if (!animated) {
               updateList((oldList) => array.moveToIndex(index, draggedItem, oldList));
               return;
