@@ -22,7 +22,7 @@ import {NaturalZIndex} from './ZIndexDemo';
 import {Candles, PriceChart} from './Charts';
 import {Aggregations} from './Tables';
 import {PillGlider} from '@components/PillGlider';
-import {ColumnDragStyle} from '@components/Table';
+import {DragStyle} from '@components/Table';
 import {statusCopy, useLiveTrades} from './Charts/useLiveTrades';
 import {useEnv} from '@components/Env';
 
@@ -35,7 +35,7 @@ const paragraphs = (count: number) =>
 export const DemosPage = () => {
   const {tab} = useSearchParamsObject({tab: demoTopicParam}, {tab: DemoTopics.accordions});
   const [accordionContents] = useState(() => Array.from({length: 5}, () => paragraphs(5)));
-  const [dragStyle, setDragStyle] = useState<ColumnDragStyle>('eager-move');
+  const [dragStyle, setDragStyle] = useState<DragStyle>('eager-move');
   const {tradeFeed, tradeProduct} = useEnv();
   const liveTrades = useLiveTrades(tradeFeed, tradeProduct);
 
