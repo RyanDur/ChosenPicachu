@@ -33,6 +33,7 @@ export const Draggable: FC<DraggableListItemProps> = ({
       event.preventDefault();
       onDragOver?.(event);
     }}
+    onDrop={event => event.preventDefault()}
     onDragEnd={(event: DragEvent<HTMLElement>) => {
       onDragEnd?.(event);
       updateDragging(undefined);
