@@ -3,6 +3,7 @@ import {array} from '@components/arrays';
 import {Column, Row} from './types';
 import {Dispatch, FC, KeyboardEvent, PointerEvent, SetStateAction, useRef, useState} from 'react';
 import {join} from '@components/class-names';
+import Handle from '@components/grip.svg';
 import './Table.css';
 
 export type DragStyle = 'eager-move' | 'lazy-move' | 'hide-eager-move' | 'hide-lazy-move';
@@ -255,7 +256,7 @@ export const Table: FC<TableProps> = (
         if (has(surface)) {
             const shade = rowGhost(surface, position);
             document.body.appendChild(shade);
-            grip = shade.offsetWidth / 2;
+            grip = 16;
             shade.style.transform = `translate(${event.clientX - grip}px, ${event.clientY - 16}px)`;
             ghost.current = shade;
         }
@@ -336,10 +337,9 @@ export const Table: FC<TableProps> = (
         })}</tr>
         </thead>
         <tbody className={tbodyClassName}>{arranged.map(({row, seat}, position) =>
-            <tr className={join(trClassName, rowClassName, has(draggableRows) && 'grabbable')}
+            <tr className={join(trClassName, rowClassName)}
                 key={seat}
-                data-seat={seat}
-                onPointerDown={has(draggableRows) ? liftedRow(seat, position) : undefined}>
+                data-seat={seat}>
                 {ordered.map(({column}, columnNumber) => {
                     const cell = row[column];
                     return <td className={join(
@@ -348,6 +348,12 @@ export const Table: FC<TableProps> = (
                                    (hiding && dragged === String(column) ||
                                        rowsHiding && draggedRow === seat) && 'hide'
                                )} key={columnNumber}>
+                        {columnNumber === 0 && has(draggableRows) &&
+                            <i className="grip grabbable"
+                               aria-label={`move row ${position + 1}`}
+                               onPointerDown={liftedRow(seat, position)}>
+                                <Handle/>
+                            </i>}
                         {cell.display}
                     </td>;
                 })}</tr>

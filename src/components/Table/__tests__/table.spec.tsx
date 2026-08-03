@@ -309,7 +309,8 @@ describe('drag sortable rows', () => {
     if (row === null) throw new Error(`no row for ${person}`);
     return row;
   };
-  const lift = (person: string) => fireEvent.pointerDown(rowOf(person), {clientX: 100, clientY: 50, pointerId: 1});
+  const lift = (person: string) =>
+    fireEvent.pointerDown(within(rowOf(person)).getByLabelText(/move row/), {clientX: 100, clientY: 50, pointerId: 1});
   const carryOver = (target: string) => {
     document.elementFromPoint = () => rowOf(target);
     fireEvent.pointerMove(document.body, {clientX: 100, clientY: 200, pointerId: 1});
@@ -370,10 +371,6 @@ describe('drag sortable rows', () => {
   test('rows hold still without the opt-in', () => {
     render(<Table columns={sized} rows={people}/>);
 
-    lift('Ada');
-    carryOver('Alan');
-    drop();
-
-    expect(firstCells()).toEqual(['Ada', 'Grace', 'Alan']);
+    expect(within(sourceTable()).queryByLabelText(/move row/)).toBeNull();
   });
 });
