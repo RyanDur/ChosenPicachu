@@ -1,12 +1,12 @@
 import {FC} from 'react';
-import {ColumnDragStyle, Table} from '@components/Table';
+import {DragStyle, Table} from '@components/Table';
 import {Trade} from '../../Charts/coinbase';
 import {AggregateRow, windowedAggregates} from './fold';
 import {hydrated, useRecentTrades} from './useRecentTrades';
 
 type Props = {
   trades: readonly Trade[];
-  dragStyle: ColumnDragStyle;
+  dragStyle: DragStyle;
 };
 
 const columns = [
