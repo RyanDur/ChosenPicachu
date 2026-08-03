@@ -36,8 +36,8 @@ export const DemosPage = () => {
   const {tab} = useSearchParamsObject({tab: demoTopicParam}, {tab: DemoTopics.accordions});
   const [accordionContents] = useState(() => Array.from({length: 5}, () => paragraphs(5)));
   const [dragStyle, setDragStyle] = useState<DragStyle>('eager-move');
-  const [tableMotion, setTableMotion] = useState<'animated' | 'static'>('animated');
-  const [listMotion, setListMotion] = useState<'animated' | 'static'>('animated');
+  const [tableMotion, setTableMotion] = useState<'animated' | 'static'>('static');
+  const [listMotion, setListMotion] = useState<'animated' | 'static'>('static');
   const {tradeFeed, tradeProduct} = useEnv();
   const liveTrades = useLiveTrades(tradeFeed, tradeProduct);
 

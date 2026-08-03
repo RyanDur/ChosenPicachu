@@ -182,8 +182,8 @@ describe('the tables demo', () => {
 
     await feedIsSubscribed();
     expect(screen.getByRole('group', {name: 'animation style'})).toBeVisible();
-    expect(screen.getByRole('radio', {name: 'Animate'})).toBeChecked();
-    expect(screen.getByRole('radio', {name: 'Static'})).toBeVisible();
+    expect(screen.getByRole('radio', {name: 'Static'})).toBeChecked();
+    expect(screen.getByRole('radio', {name: 'Animate'})).toBeVisible();
   });
 
   test('every column is resizable', async () => {
