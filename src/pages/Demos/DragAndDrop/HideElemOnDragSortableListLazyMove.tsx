@@ -11,16 +11,20 @@ export const HideElemOnDragSortableListLazyMove: FC<{ list: Set<string>; animate
   const [dragOverIndex, updateIndex] = useState<number>(-1);
   const [draggedItem, updateDraggedItem] = useState<string>();
 
-  return <ul onDragLeave={() => updateIndex(-1)} className='hide-elem-on-drag-sortable-list-lazy-move sortable-list'>{
+  return <ul onDragLeave={() => updateIndex(-1)}
+             onDragOver={event => event.preventDefault()}
+             onDrop={event => event.preventDefault()}
+             className='hide-elem-on-drag-sortable-list-lazy-move sortable-list'>{
     currentList.map((item, index) =>
       <li className='item' key={item}
-          style={animated ? {viewTransitionName: `hide-lazy-${item}`} : undefined}>
+          style={animated && item !== draggedItem ? {viewTransitionName: `hide-lazy-${item}`} : undefined}>
         <HideOnDrag
           onDragEnd={() => {
             if (draggedItem && dragOverIndex >= 0) {
               move(() => updateList((oldList) => array
                 .moveToIndex(dragOverIndex, draggedItem, oldList)));
             }
+            updateDraggedItem(undefined);
           }}
           onDragStart={() => updateDraggedItem(item)}
           onDragOver={() => updateIndex(index)}

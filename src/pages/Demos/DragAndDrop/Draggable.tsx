@@ -31,6 +31,7 @@ export const Draggable: FC<DraggableListItemProps> = ({
     }}
     onDragOver={event => {
       event.preventDefault();
+      event.dataTransfer.dropEffect = 'move';
       onDragOver?.(event);
     }}
     onDrop={event => event.preventDefault()}

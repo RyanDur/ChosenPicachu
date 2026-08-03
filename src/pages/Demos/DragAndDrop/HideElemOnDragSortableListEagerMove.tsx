@@ -11,12 +11,15 @@ export const HideElemOnDragSortableListEagerMove: FC<{ list: Set<string>; animat
   const [draggedItem, updateDraggedItem] = useState<string>();
 
   return <ul
+    onDragOver={event => event.preventDefault()}
+    onDrop={event => event.preventDefault()}
     className='hide-elem-on-drag-sortable-list-eager-move sortable-list'>{
     currentList.map((item, index) =>
       <li className='item' key={item}
-          style={animated ? {viewTransitionName: `hide-eager-${item}`} : undefined}>
+          style={animated && item !== draggedItem ? {viewTransitionName: `hide-eager-${item}`} : undefined}>
         <HideOnDrag
           onDragStart={() => updateDraggedItem(item)}
+          onDragEnd={() => updateDraggedItem(undefined)}
           onDragOver={() => {
             if (draggedItem) {
               move(() => updateList((oldList) => array
