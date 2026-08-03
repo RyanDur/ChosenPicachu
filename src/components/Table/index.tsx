@@ -243,6 +243,18 @@ export const Table: FC<TableProps> = (
         document.addEventListener('pointerup', released);
         document.addEventListener('pointercancel', released);
     };
+    const nudged = (seat: number) => (event: KeyboardEvent<HTMLElement>): void => {
+        if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') {
+            return;
+        }
+        event.preventDefault();
+        const toward = event.key === 'ArrowDown' ? 1 : -1;
+        setRowOrder(previous => {
+            const at = previous.indexOf(seat);
+            const to = Math.min(Math.max(at + toward, 0), previous.length - 1);
+            return array.moveToIndex(to, seat, previous);
+        });
+    };
     const rowUnder = (x: number, y: number): number => {
         const struck = document.elementFromPoint(x, y)?.closest('tr')?.dataset.seat;
         return has(struck) ? Number(struck) : -1;
@@ -345,15 +357,17 @@ export const Table: FC<TableProps> = (
                     return <td className={join(
                                    tdClassName, cellClassName, cell.className,
                                    clipped && 'ellipsis',
-                                   (hiding && dragged === String(column) ||
-                                       rowsHiding && draggedRow === seat) && 'hide'
+                                   hiding && dragged === String(column) && 'hide',
+                                   rowsHiding && draggedRow === seat && 'hide-across'
                                )} key={columnNumber}>
                         {columnNumber === 0 && has(draggableRows) &&
-                            <i className="grip grabbable"
-                               aria-label={`move row ${position + 1}`}
-                               onPointerDown={liftedRow(seat, position)}>
+                            <button type="button"
+                                    className="grip grabbable"
+                                    aria-label={`move row ${position + 1}`}
+                                    onKeyDown={nudged(seat)}
+                                    onPointerDown={liftedRow(seat, position)}>
                                 <Handle/>
-                            </i>}
+                            </button>}
                         {cell.display}
                     </td>;
                 })}</tr>

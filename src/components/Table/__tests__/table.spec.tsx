@@ -309,8 +309,9 @@ describe('drag sortable rows', () => {
     if (row === null) throw new Error(`no row for ${person}`);
     return row;
   };
+  const grip = (person: string) => within(rowOf(person)).getByRole('button', {name: /move row/});
   const lift = (person: string) =>
-    fireEvent.pointerDown(within(rowOf(person)).getByLabelText(/move row/), {clientX: 100, clientY: 50, pointerId: 1});
+    fireEvent.pointerDown(grip(person), {clientX: 100, clientY: 50, pointerId: 1});
   const carryOver = (target: string) => {
     document.elementFromPoint = () => rowOf(target);
     fireEvent.pointerMove(document.body, {clientX: 100, clientY: 200, pointerId: 1});
@@ -344,12 +345,12 @@ describe('drag sortable rows', () => {
 
     lift('Grace');
     within(rowOf('Grace')).getAllByRole('cell')
-      .forEach(cell => expect(cell.classList).toContain('hide'));
+      .forEach(cell => expect(cell.classList).toContain('hide-across'));
 
     carryOver('Ada');
     drop();
     within(rowOf('Grace')).getAllByRole('cell')
-      .forEach(cell => expect(cell.classList).not.toContain('hide'));
+      .forEach(cell => expect(cell.classList).not.toContain('hide-across'));
     expect(firstCells()).toEqual(['Grace', 'Ada', 'Alan']);
   });
 
@@ -368,9 +369,21 @@ describe('drag sortable rows', () => {
     expect(document.body.querySelector(':scope > table')).toBeNull();
   });
 
+  test('the keyboard walks a row up and down', async () => {
+    render(<Table columns={sized} rows={people} draggableRows="eager-move"/>);
+
+    grip('Ada').focus();
+    await userEvent.keyboard('{ArrowDown}');
+    expect(firstCells()).toEqual(['Grace', 'Ada', 'Alan']);
+    await userEvent.keyboard('{ArrowDown}');
+    expect(firstCells()).toEqual(['Grace', 'Alan', 'Ada']);
+    await userEvent.keyboard('{ArrowDown}');
+    expect(firstCells()).toEqual(['Grace', 'Alan', 'Ada']);
+  });
+
   test('rows hold still without the opt-in', () => {
     render(<Table columns={sized} rows={people}/>);
 
-    expect(within(sourceTable()).queryByLabelText(/move row/)).toBeNull();
+    expect(within(sourceTable()).queryByRole('button', {name: /move row/})).toBeNull();
   });
 });
