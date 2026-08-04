@@ -26,7 +26,6 @@
     margin: 0;
     font-size: var(--text-body);
     line-height: 1.6;
-    max-width: var(--measure);
     text-wrap: pretty;
   }
 
