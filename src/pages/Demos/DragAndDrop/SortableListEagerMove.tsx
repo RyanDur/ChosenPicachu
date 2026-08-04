@@ -1,6 +1,7 @@
 import {FC, useState} from 'react';
+import {has} from '@ryandur/sand';
 import {array} from '@components/arrays';
-import {flushSync} from 'react-dom';
+import {classNames} from '@components/class-names';
 import {Draggable} from './Draggable';
 import {PillGlider} from '@components/PillGlider';
 import './styles.css';
@@ -11,6 +12,7 @@ export const SortableListEagerMove: FC<{ list: Set<string> }> = ({list}) => {
   const [motion, updateMotion] = useState<'animated' | 'static'>('static');
   const animated = motion === 'animated';
   const [draggedItem, updateDraggedItem] = useState<string>();
+  const [pushed, setPushed] = useState<{item: string; toward: 'left' | 'right'}>();
 
   return <>
     <PillGlider label="eager animation style"
@@ -25,7 +27,9 @@ export const SortableListEagerMove: FC<{ list: Set<string> }> = ({list}) => {
              onDrop={event => event.preventDefault()}
              className='sortable-list-eager-move sortable-list'>{
     currentList.map((item, index) =>
-      <li className='item' key={item}>
+      <li className={classNames('item', has(pushed) && pushed.item === item && `pushed-${pushed.toward}`)}
+          key={item}
+          onAnimationEnd={() => setPushed(undefined)}>
         <Draggable
           onDragStart={() => updateDraggedItem(item)}
           onDragEnd={() => updateDraggedItem(undefined)}
@@ -33,30 +37,23 @@ export const SortableListEagerMove: FC<{ list: Set<string> }> = ({list}) => {
             if (!draggedItem || draggedItem === item) {
               return;
             }
-            if (event.currentTarget.getAnimations().length > 0) {
+            const lane = event.currentTarget.closest('li');
+            if (has(lane) && lane.getAnimations().length > 0) {
               return;
             }
             const space = event.currentTarget.getBoundingClientRect();
             const quarter = space.width / 4;
-            const crossed = index < currentList.indexOf(draggedItem)
+            const homeward = index < currentList.indexOf(draggedItem);
+            const crossed = homeward
               ? event.clientX < space.right - quarter
               : event.clientX > space.left + quarter;
             if (!crossed) {
               return;
             }
-            if (!animated) {
-              updateList((oldList) => array.moveToIndex(index, draggedItem, oldList));
-              return;
+            if (animated) {
+              setPushed({item, toward: homeward ? 'right' : 'left'});
             }
-            const overtaken = event.currentTarget;
-            const held = overtaken.getBoundingClientRect();
-            flushSync(() => updateList((oldList) => array.moveToIndex(index, draggedItem, oldList)));
-            const landed = overtaken.getBoundingClientRect();
-            if (held.left !== landed.left || held.top !== landed.top) {
-              overtaken.animate(
-                [{transform: `translate(${held.left - landed.left}px, ${held.top - landed.top}px)`}, {transform: 'none'}],
-                {duration: 150, easing: 'ease-out'});
-            }
+            updateList((oldList) => array.moveToIndex(index, draggedItem, oldList));
           }}
           label={item}>{item}</Draggable>
       </li>)
