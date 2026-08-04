@@ -58,13 +58,13 @@
 
   .step {
     counter-increment: recipe-step;
-    display: flex;
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: var(--base-x-4) minmax(0, var(--measure));
+    align-items: start;
     gap: var(--base-x-2);
 
     &::before {
       content: counter(recipe-step);
-      flex: none;
       display: grid;
       place-items: center;
       width: var(--base-x-4);
@@ -83,7 +83,6 @@
     display: grid;
     gap: var(--base);
     min-width: 0;
-    flex: 1;
   }
 
   .step-title {
@@ -98,7 +97,6 @@
     margin: 0;
     font-size: var(--text-body);
     line-height: 1.55;
-    max-width: var(--measure);
     text-wrap: pretty;
   }
 
