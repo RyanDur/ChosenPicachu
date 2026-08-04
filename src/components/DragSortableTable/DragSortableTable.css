@@ -75,27 +75,15 @@
 }
 
 .sortable .displaced-left {
-  transition: transform 200ms ease-out;
-
-  @starting-style {
-    transform: translateX(calc(var(--carried) * 1cqi + var(--base-x-2_5) + var(--hairline)));
-  }
+  animation: displaced-left 200ms ease-out;
 }
 
 .sortable .displaced-right {
-  transition: transform 200ms ease-out;
-
-  @starting-style {
-    transform: translateX(calc(var(--carried) * -1cqi - var(--base-x-2_5) - var(--hairline)));
-  }
+  animation: displaced-right 200ms ease-out;
 }
 
 .sortable .shifted {
-  transition: transform 200ms ease-out;
-
-  @starting-style {
-    transform: translateY(var(--drop));
-  }
+  animation: shifted 200ms ease-out;
 }
 
 .sortable {
@@ -120,4 +108,22 @@
   position: fixed;
   inset: 0;
   cursor: grabbing;
+}
+
+@keyframes displaced-left {
+  from {
+    transform: translateX(calc(var(--carried) * 1cqi + var(--base-x-2_5) + var(--hairline)));
+  }
+}
+
+@keyframes displaced-right {
+  from {
+    transform: translateX(calc(var(--carried) * -1cqi - var(--base-x-2_5) - var(--hairline)));
+  }
+}
+
+@keyframes shifted {
+  from {
+    transform: translateY(var(--drop));
+  }
 }

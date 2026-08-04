@@ -12,7 +12,7 @@ type Props = {
     gripped: boolean;
     hidden: boolean;
     hiddenColumn: string | undefined;
-    slid: {keys: readonly string[]; toward: 'left' | 'right'; wave: number} | undefined;
+    slid: {keys: readonly string[]; toward: 'left' | 'right'} | undefined;
     drop: number | undefined;
     dress: Dress;
     onLift: (event: PointerEvent<HTMLElement>) => void;
@@ -35,7 +35,7 @@ export const DraggableRow: FC<Props> = (
                            hidden && 'hide-across',
                            has(displaced) && `displaced-${displaced}`
                        )}
-                       key={has(slid) && slid.keys.includes(key) ? `${key}#${slid.wave}` : key}>
+                       key={key}>
                 {columnNumber === 0 && gripped &&
                     <RowGrip row={position + 1} onLift={onLift} onNudge={onNudge}/>}
                 {cell.display}

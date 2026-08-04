@@ -104,22 +104,25 @@ const moved = (animated: boolean): Step => animated
       'move layout, so nothing else can shift: a bounce is impossible by construction.',
       'CSS knows the distance without measuring. Make the table a size container and 1cqi is one ' +
       'percent of its width, so the slide starts at the carried column’s share — a value already ' +
-      'in state — plus its padding. @starting-style declares where the slide begins, one render ' +
-      'starts it, and transitionend hands the class back.',
+      'in state — plus its padding. The slide is a keyframe whose from is the old position: the ' +
+      'reorder moves the node, the class applies as it lands, and the animation starts fresh — ' +
+      'no remounting, no counting renders. animationend hands the class back.',
       'Rows are the same theater turned vertical. Their heights are measured once, in whatever ' +
       'event reorders them — the lift, a nudge, a sort ruling — and the difference between each ' +
       'row’s old and new position becomes a pixel offset: every displaced row starts at ' +
       'translateY(var(--drop)) and slides home. Nothing in this table rides a view transition; ' +
-      'the motion is transitions all the way down, each one started by @starting-style.'
+      'every motion is a keyframe starting from where things used to be.'
     ],
     code: [
       [
         plain('.table-stage { container-type: inline-size; }'),
         plain(''),
         plain('.sortable .displaced-left {'),
-        plain('  transition: transform 200ms ease-out;'),
+        plain('  animation: displaced-left 200ms ease-out;'),
+        plain('}'),
         plain(''),
-        plain('  @starting-style {'),
+        plain('@keyframes displaced-left {'),
+        plain('  from {'),
         plain('    transform: translateX(calc(var(--carried) * 1cqi + var(--pad)));'),
         plain('  }'),
         plain('}'),
@@ -130,17 +133,15 @@ const moved = (animated: boolean): Step => animated
         plain('  ? order.slice(from + 1, to + 1)'),
         plain('  : order.slice(to, from);'),
         plain('setSlid({keys: displaced, carried: shares[key],'),
-        plain("         toward: from < to ? 'left' : 'right', wave: wave + 1});"),
-        aside('// key={displaced ? `${key}#${wave}` : key} — a fresh node starts the slide')
+        plain("         toward: from < to ? 'left' : 'right'});"),
+        aside('// the reorder moves the node; the class rides along and starts the slide')
       ],
       [
         plain('const shifts = (heights, before, after) =>'),
         plain('  offsets(tops(before), tops(after));   // oldY - newY, per seat'),
         plain(''),
-        plain('setShifted({offsets: shifts(heights, standing, after),'),
-        plain('            wave: wave + 1});'),
-        aside("// <tr className={drop && 'shifted'} style={{'--drop': `${drop}px`}}"),
-        aside('//     key={drop ? `${seat}#${wave}` : seat}>')
+        plain('setShifted(shifts(heights, standing, after));'),
+        aside("// <tr className={drop && 'shifted'} style={{'--drop': `${drop}px`}}>")
       ]
     ]
   }

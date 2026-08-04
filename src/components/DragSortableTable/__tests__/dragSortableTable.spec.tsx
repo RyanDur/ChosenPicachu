@@ -462,7 +462,9 @@ describe('animated moves', () => {
     expect(displaced).toHaveStyle({'--drop': '40px'});
     expect(transition).not.toHaveBeenCalled();
 
-    fireEvent(displaced, Object.assign(new Event('transitionend', {bubbles: true}), {propertyName: 'transform'}));
+    for (const name of ['animationend', 'webkitAnimationEnd']) {
+      fireEvent(displaced, Object.assign(new Event(name, {bubbles: true}), {animationName: 'shifted'}));
+    }
     expect((screen.getByText('Grace').closest('tr') as HTMLElement).classList)
       .not.toContain('shifted');
   });
@@ -508,7 +510,9 @@ describe('animated moves', () => {
     expect(table).toHaveStyle({'--carried': '20'});
     expect(transition).not.toHaveBeenCalled();
 
-    fireEvent(displaced, Object.assign(new Event('transitionend', {bubbles: true}), {propertyName: 'transform'}));
+    for (const name of ['animationend', 'webkitAnimationEnd']) {
+      fireEvent(displaced, Object.assign(new Event(name, {bubbles: true}), {animationName: 'displaced-left'}));
+    }
     expect(within(table).getByRole('columnheader', {name: /^city/}).classList)
       .not.toContain('displaced-left');
   });

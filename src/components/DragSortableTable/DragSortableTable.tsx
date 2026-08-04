@@ -39,8 +39,8 @@ export const DragSortableTable: FC<DragSortableTableProps> = (
     const [seats, setSeats] = useState<number[]>(() => rows.map((_, seat) => seat));
     const [chart, setChart] = useState<Chart>();
     const [rule, setRule] = useState<Rule>();
-    const [slid, setSlid] = useState<{keys: readonly string[]; toward: 'left' | 'right'; carried: number; wave: number}>();
-    const [shifted, setShifted] = useState<{offsets: Readonly<Record<number, number>>; wave: number}>();
+    const [slid, setSlid] = useState<{keys: readonly string[]; toward: 'left' | 'right'; carried: number}>();
+    const [shifted, setShifted] = useState<Readonly<Record<number, number>>>();
 
     const byKey = new Map(columns.map(definition => [String(definition.column), definition]));
     const ordered = order.map(key => byKey.get(key)).filter(has);
@@ -59,12 +59,11 @@ export const DragSortableTable: FC<DragSortableTableProps> = (
             if (animated) {
                 const from = order.indexOf(key);
                 const to = Math.min(Math.max(order.indexOf(struck), 1), order.length - 2);
-                setSlid(previous => ({
+                setSlid({
                     keys: from < to ? order.slice(from + 1, to + 1) : order.slice(to, from),
                     toward: from < to ? 'left' : 'right',
-                    carried: shares[key] ?? 0,
-                    wave: (previous?.wave ?? 0) + 1
-                }));
+                    carried: shares[key] ?? 0
+                });
             }
             setOrder(previous => {
                 const at = Math.min(Math.max(previous.indexOf(struck), 1), previous.length - 2);
@@ -72,10 +71,7 @@ export const DragSortableTable: FC<DragSortableTableProps> = (
             });
         });
     const shifting = (heights: Readonly<Record<number, number>>, before: readonly number[], after: readonly number[]): void =>
-        setShifted(previous => ({
-            offsets: shifts(heights, before, after),
-            wave: (previous?.wave ?? 0) + 1
-        }));
+        setShifted(shifts(heights, before, after));
 
     const rowsTravel = useTravel<number>(
         draggableRows,
@@ -84,7 +80,7 @@ export const DragSortableTable: FC<DragSortableTableProps> = (
             const after = array.moveToIndex(seats.indexOf(struck), seat, seats);
             if (animated && has(chart)) {
                 const {[seat]: carried, ...displaced} = shifts(chart.rowHeights, seats, after);
-                setShifted(previous => ({offsets: displaced, wave: (previous?.wave ?? 0) + 1}));
+                setShifted(displaced);
             }
             setSeats(after);
         });
@@ -125,9 +121,11 @@ export const DragSortableTable: FC<DragSortableTableProps> = (
         <div className="table-stage">
         <table id={id}
                style={has(slid) ? {'--carried': `${slid.carried}`} : undefined}
-               onTransitionEnd={event => {
-                   if (event.propertyName === 'transform') {
+               onAnimationEnd={event => {
+                   if (event.animationName.startsWith('displaced-')) {
                        setSlid(undefined);
+                   }
+                   if (event.animationName === 'shifted') {
                        setShifted(undefined);
                    }
                }}
@@ -143,8 +141,7 @@ export const DragSortableTable: FC<DragSortableTableProps> = (
             )}>{ordered.map((column, position) => {
                 const key = String(column.column);
                 const displaced = has(slid) && slid.keys.includes(key) ? slid.toward : undefined;
-                const waved = has(slid) && slid.keys.includes(key) ? `${key}#${slid.wave}` : key;
-                return <DraggableHeader key={waved}
+                return <DraggableHeader key={key}
                                         displaced={displaced}
                                         column={column}
                                         share={has(column.width) ? shares[key] : undefined}
@@ -174,8 +171,8 @@ export const DragSortableTable: FC<DragSortableTableProps> = (
             })}</tr>
             </thead>
             <tbody className={dress.tbodyClassName}>{arranged.map(({row, seat}, position) => {
-                const drop = shifted?.offsets[seat];
-                return <DraggableRow key={has(drop) ? `${seat}#${shifted?.wave}` : seat}
+                const drop = shifted?.[seat];
+                return <DraggableRow key={seat}
                               row={row}
                               columns={ordered}
                               position={position}
