@@ -88,11 +88,14 @@ describe('the tables demo', () => {
 
     await feedIsSubscribed();
     const card = screen.getByRole('region', {name: 'live aggregations'});
-    expect(screen.getByRole('group', {name: 'drag style'})).toBeVisible();
-    for (const style of ['Eager', 'Lazy', 'Hide Eager', 'Hide Lazy']) {
-      expect(screen.getByRole('radio', {name: style})).toBeVisible();
+    for (const axis of ['pace', 'origin', 'motion']) {
+      expect(screen.getByRole('group', {name: axis})).toBeVisible();
+    }
+    for (const choice of ['Eager', 'Lazy', 'Keep', 'Hide']) {
+      expect(screen.getByRole('radio', {name: choice})).toBeVisible();
     }
     expect(screen.getByRole('radio', {name: 'Eager'})).toBeChecked();
+    expect(screen.getByRole('radio', {name: 'Keep'})).toBeChecked();
 
     const header = (name: string) =>
       within(card).getByRole('columnheader', {name: new RegExp(`^${name}`)});
@@ -175,17 +178,6 @@ describe('the tables demo', () => {
       .toHaveAttribute('aria-sort', 'descending');
   });
 
-  test('the motion of a move is a choice', async () => {
-    const feed = await streamingFeed();
-
-    renderTables(urlOf(feed));
-
-    await feedIsSubscribed();
-    expect(screen.getByRole('group', {name: 'animation style'})).toBeVisible();
-    expect(screen.getByRole('radio', {name: 'Static'})).toBeChecked();
-    expect(screen.getByRole('radio', {name: 'Animate'})).toBeVisible();
-  });
-
   test('the controls read out whatever is chosen', async () => {
     const feed = await streamingFeed();
 
@@ -193,16 +185,22 @@ describe('the tables demo', () => {
 
     await feedIsSubscribed();
     const controls = screen.getByRole('region', {name: 'table controls'});
-    expect(controls).toHaveTextContent(/settles into each slot as you carry it/);
-    expect(controls).toHaveTextContent(/nothing animates/);
+    expect(controls).toHaveTextContent(/Neighbours swap the moment you drag past them/);
+    expect(controls).toHaveTextContent(/stays where it was/);
+    expect(controls).toHaveTextContent(/single frame/);
+    expect(controls).toHaveTextContent('dragStyle="eager-move"');
+    expect(controls).toHaveTextContent('animated={false}');
 
-    await userEvent.click(screen.getByRole('radio', {name: 'Hide Lazy'}));
+    await userEvent.click(screen.getByRole('radio', {name: 'Lazy'}));
+    await userEvent.click(screen.getByRole('radio', {name: 'Hide'}));
     await userEvent.click(screen.getByRole('radio', {name: 'Animate'}));
 
-    expect(controls).toHaveTextContent(/waits for the drop/i);
-    expect(controls).toHaveTextContent(/glide out of the way/);
-    expect(controls).not.toHaveTextContent(/settles into each slot/);
-    expect(controls).not.toHaveTextContent(/nothing animates/);
+    expect(controls).toHaveTextContent(/commits the new order on drop/);
+    expect(controls).toHaveTextContent(/blanks out at its origin/);
+    expect(controls).toHaveTextContent(/view transition/);
+    expect(controls).toHaveTextContent('dragStyle="hide-lazy-move"');
+    expect(controls).toHaveTextContent('animated={true}');
+    expect(controls).not.toHaveTextContent(/Neighbours swap/);
   });
 
   test('the recipe teaches whatever the dials are set to', async () => {
@@ -222,7 +220,8 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/plain state update/);
     expect(recipe).not.toHaveTextContent(/startViewTransition/);
 
-    await userEvent.click(screen.getByRole('radio', {name: 'Hide Lazy'}));
+    await userEvent.click(screen.getByRole('radio', {name: 'Lazy'}));
+    await userEvent.click(screen.getByRole('radio', {name: 'Hide'}));
     await userEvent.click(screen.getByRole('radio', {name: 'Animate'}));
 
     expect(recipe).toHaveTextContent(/remember the crossing as a landing/);

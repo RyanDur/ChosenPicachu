@@ -1,2 +1,2 @@
-export {Controls} from './Controls';
-export type {Motion} from './Controls';
+export type {Motion, Origin, Pace} from './Controls';
+export {Controls, styled} from './Controls';

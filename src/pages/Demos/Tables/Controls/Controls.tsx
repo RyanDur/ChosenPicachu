@@ -3,45 +3,71 @@ import {DragStyle} from '@components/DragSortableTable';
 import {PillGlider} from '@components/PillGlider';
 import './Controls.css';
 
+export type Pace = 'eager' | 'lazy';
+export type Origin = 'keep' | 'hide';
 export type Motion = 'animated' | 'static';
 
-const dragReadings: Record<DragStyle, string> = {
-  'eager-move': 'The column settles into each slot as you carry it — the order updates mid-drag.',
-  'lazy-move': 'The table holds still while you drag — the order changes once, where you drop.',
-  'hide-eager-move': 'Settles mid-drag like Eager, but the carried column turns invisible while it travels.',
-  'hide-lazy-move': 'Waits for the drop like Lazy, and the carried column hides while aloft.'
+const styles: Record<Origin, Record<Pace, DragStyle>> = {
+  keep: {eager: 'eager-move', lazy: 'lazy-move'},
+  hide: {eager: 'hide-eager-move', lazy: 'hide-lazy-move'}
+};
+
+export const styled = (pace: Pace, origin: Origin): DragStyle => styles[origin][pace];
+
+const paceReadings: Record<Pace, string> = {
+  eager: 'Neighbours swap the moment you drag past them, so the order is already settled when you let go.',
+  lazy: 'The table holds its shape while you drag and commits the new order on drop.'
+};
+
+const originReadings: Record<Origin, string> = {
+  keep: 'The lifted row or column stays where it was, so you can see the gap it will leave.',
+  hide: 'The lifted row or column blanks out at its origin; only the ghost under your pointer reads as real.'
 };
 
 const motionReadings: Record<Motion, string> = {
-  static: 'Reorders land in place instantly — nothing animates.',
-  animated: 'Displaced neighbors glide out of the way as the order changes.'
+  animated: 'Reorders run through a view transition, so cells slide to their new seats.',
+  static: 'Reorders apply in a single frame; cells cut to their new seats.'
 };
 
 type Props = {
-  dragStyle: DragStyle;
+  pace: Pace;
+  origin: Origin;
   motion: Motion;
-  onDragStyle: (style: DragStyle) => void;
+  onPace: (pace: Pace) => void;
+  onOrigin: (origin: Origin) => void;
   onMotion: (motion: Motion) => void;
 };
 
-export const Controls: FC<Props> = ({dragStyle, motion, onDragStyle, onMotion}) =>
-  <section aria-label="table controls" className="table-controls card">
+export const Controls: FC<Props> = ({pace, origin, motion, onPace, onOrigin, onMotion}) =>
+  <section aria-label="table controls" className="table-controls">
     <article className="control">
-      <PillGlider label="drag style"
-                  name="column-drag-style"
+      <span className="axis">pace</span>
+      <PillGlider label="pace"
+                  name="table-pace"
                   options={[
-                    {display: 'Eager', value: 'eager-move'},
-                    {display: 'Lazy', value: 'lazy-move'},
-                    {display: 'Hide Eager', value: 'hide-eager-move'},
-                    {display: 'Hide Lazy', value: 'hide-lazy-move'}
+                    {display: 'Eager', value: 'eager'},
+                    {display: 'Lazy', value: 'lazy'}
                   ]}
-                  chosen={dragStyle}
-                  onChoose={onDragStyle}/>
-      <p className="reading">{dragReadings[dragStyle]}</p>
+                  chosen={pace}
+                  onChoose={onPace}/>
+      <p className="reading">{paceReadings[pace]}</p>
     </article>
     <article className="control">
-      <PillGlider label="animation style"
-                  name="table-animate-or-static"
+      <span className="axis">origin</span>
+      <PillGlider label="origin"
+                  name="table-origin"
+                  options={[
+                    {display: 'Keep', value: 'keep'},
+                    {display: 'Hide', value: 'hide'}
+                  ]}
+                  chosen={origin}
+                  onChoose={onOrigin}/>
+      <p className="reading">{originReadings[origin]}</p>
+    </article>
+    <article className="control">
+      <span className="axis">motion</span>
+      <PillGlider label="motion"
+                  name="table-motion"
                   options={[
                     {display: 'Animate', value: 'animated'},
                     {display: 'Static', value: 'static'}
@@ -50,4 +76,7 @@ export const Controls: FC<Props> = ({dragStyle, motion, onDragStyle, onMotion}) 
                   onChoose={onMotion}/>
       <p className="reading">{motionReadings[motion]}</p>
     </article>
+    <p className="readout">
+      <code>{`dragStyle="${styled(pace, origin)}"  animated={${String(motion === 'animated')}}`}</code>
+    </p>
   </section>;

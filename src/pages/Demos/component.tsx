@@ -20,8 +20,7 @@ import {
 import {DemoTopics, demoTopicParam} from './types';
 import {NaturalZIndex} from './ZIndexDemo';
 import {Candles, PriceChart} from './Charts';
-import {Aggregations, Controls, Motion, Recipe} from './Tables';
-import {DragStyle} from '@components/DragSortableTable';
+import {Aggregations, Controls, Motion, Origin, Pace, Recipe, styled} from './Tables';
 import {statusCopy, useLiveTrades} from './Charts/useLiveTrades';
 import {useEnv} from '@components/Env';
 
@@ -34,7 +33,8 @@ const paragraphs = (count: number) =>
 export const DemosPage = () => {
   const {tab} = useSearchParamsObject({tab: demoTopicParam}, {tab: DemoTopics.accordions});
   const [accordionContents] = useState(() => Array.from({length: 5}, () => paragraphs(5)));
-  const [dragStyle, setDragStyle] = useState<DragStyle>('eager-move');
+  const [pace, setPace] = useState<Pace>('eager');
+  const [origin, setOrigin] = useState<Origin>('keep');
   const [tableMotion, setTableMotion] = useState<Motion>('static');
   const {tradeFeed, tradeProduct} = useEnv();
   const liveTrades = useLiveTrades(tradeFeed, tradeProduct);
@@ -84,11 +84,12 @@ export const DemosPage = () => {
               <Candles trades={liveTrades.trades}/>
             </>,
             [DemoTopics.tables]: <>
-              <Controls dragStyle={dragStyle} motion={tableMotion}
-                        onDragStyle={setDragStyle} onMotion={setTableMotion}/>
-              <Aggregations trades={liveTrades.trades} dragStyle={dragStyle}
-                            animated={tableMotion === 'animated'}/>
-              <Recipe dragStyle={dragStyle} animated={tableMotion === 'animated'}/>
+              <Aggregations trades={liveTrades.trades} dragStyle={styled(pace, origin)}
+                            animated={tableMotion === 'animated'}>
+                <Controls pace={pace} origin={origin} motion={tableMotion}
+                          onPace={setPace} onOrigin={setOrigin} onMotion={setTableMotion}/>
+              </Aggregations>
+              <Recipe dragStyle={styled(pace, origin)} animated={tableMotion === 'animated'}/>
             </>,
             [DemoTopics.dragAndDrop]: <>
               <h2 className="heading">Sortable List</h2>
