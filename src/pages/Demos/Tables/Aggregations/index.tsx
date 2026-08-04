@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, PropsWithChildren} from 'react';
 import {has} from '@ryandur/sand';
 import {DragSortableTable, DragStyle} from '@components/DragSortableTable';
 import {Row} from '@components/Table';
@@ -7,11 +7,11 @@ import {cents, deltaLabel} from '../../Charts/money';
 import {WindowAggregate, windowedAggregates} from './fold';
 import {hydrated, useRecentTrades} from './useRecentTrades';
 
-type Props = {
+type Props = PropsWithChildren<{
   trades: readonly Trade[];
   dragStyle: DragStyle;
   animated: boolean;
-};
+}>;
 
 const columns = [
   {display: 'window', column: 'window', width: 150},
@@ -38,9 +38,10 @@ const cells = (aggregate: WindowAggregate): Row => ({
   change: moved(aggregate)
 });
 
-export const Aggregations: FC<Props> = ({trades, dragStyle, animated}) => {
+export const Aggregations: FC<Props> = ({trades, dragStyle, animated, children}) => {
   const recent = useRecentTrades();
   return <section aria-label="live aggregations" className="aggregations card">
+    {children}
     <DragSortableTable tableClassName="fancy-table"
            draggableColumns={dragStyle}
            draggableRows={dragStyle}

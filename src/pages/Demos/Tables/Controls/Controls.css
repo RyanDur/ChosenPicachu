@@ -1,18 +1,38 @@
 .table-controls {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(var(--base-x-40), 1fr));
-  gap: var(--base-x-3);
-  align-items: start;
+  padding-bottom: var(--base-x-2);
+  border-bottom: var(--hairline) solid var(--charcoal);
 
   .control {
-    display: grid;
-    gap: var(--base);
-    justify-items: start;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--base-x-1_5) var(--base-x-2_5);
+    padding: var(--base-x-1_5) 0;
+    border-bottom: var(--hairline) solid var(--charcoal-veil);
+  }
+
+  .axis {
+    flex: 0 0 var(--base-x-12);
+    font-size: var(--text-caption);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--charcoal);
   }
 
   .reading {
+    flex: 1 1 var(--base-x-40);
+    min-width: 0;
+    margin: 0;
+    font-size: var(--text-body);
+    line-height: 1.5;
+    text-wrap: pretty;
+  }
+
+  .readout {
+    margin: 0;
+    padding-top: var(--base-x-1_5);
     font-size: var(--text-caption);
     color: var(--charcoal);
-    max-width: var(--base-x-50);
   }
 }
