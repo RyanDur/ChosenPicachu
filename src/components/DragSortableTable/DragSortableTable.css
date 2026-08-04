@@ -10,12 +10,9 @@
   padding-left: var(--base-x-3);
 }
 
-.sortable .hide {
-  color: transparent;
-}
-
-.fancy-table.sortable .hide {
-  border-bottom-color: transparent;
+.sortable .hide,
+.sortable .hide-across {
+  visibility: hidden;
 }
 
 .sortable .grip {
@@ -34,18 +31,6 @@
   }
 }
 
-.sortable .hide-across {
-  color: transparent;
-}
-
-.fancy-table.sortable .hide-across {
-  border-right-color: transparent;
-
-  .grip {
-    visibility: hidden;
-  }
-}
-
 .sortable .menu-toggle {
   position: absolute;
   right: var(--base-x-1_5);
@@ -60,10 +45,6 @@
   &:focus-visible {
     outline: var(--hairline-x-2) solid var(--charcoal);
   }
-}
-
-.sortable .hide .menu-toggle {
-  visibility: hidden;
 }
 
 .table-stage {
