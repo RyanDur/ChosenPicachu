@@ -113,6 +113,15 @@
     font-size: var(--text-title);
   }
 
+  .step-want {
+    margin: 0;
+    font-size: var(--text-body);
+    font-style: italic;
+    line-height: 1.55;
+    color: var(--charcoal);
+    text-wrap: pretty;
+  }
+
   .step-says {
     margin: 0;
     font-size: var(--text-body);

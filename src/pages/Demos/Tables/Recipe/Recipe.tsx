@@ -14,6 +14,7 @@ type Block = {
 
 type Step = {
   title: string;
+  want: string;
   says: string[];
   tuned?: boolean;
   figure?: ReactNode;
@@ -27,6 +28,7 @@ const held = (pace: 'eager' | 'lazy'): Step => pace === 'eager'
   ? {
     title: 'Commit inside the move',
     tuned: true,
+    want: 'The problem: you want the table to answer the hand immediately — waiting for the drop hides the outcome until it is too late to change your mind.',
     says: ['With eager pace, settle as soon as a neighbour is struck — the order state updates ' +
       'mid-drag, and because the markup renders through that order, the same key finds its new ' +
       'seat and React moves the real cells. Carrying the column back is just more crossings: ' +
@@ -48,6 +50,7 @@ const held = (pace: 'eager' | 'lazy'): Step => pace === 'eager'
   : {
     title: 'Stash the landing, commit on release',
     tuned: true,
+    want: 'The problem: you want a calm table while dragging — mid-flight churn is distracting, and only the destination matters.',
     says: ['With lazy pace, remember the last neighbour struck and do nothing else — the table ' +
       'holds still, and one moveToIndex runs on pointer up. Drifting back over your own slot ' +
       'clears the landing, so a drop at home changes nothing.'],
@@ -69,6 +72,7 @@ const shown = (origin: 'keep' | 'hide'): Step => origin === 'hide'
   ? {
     title: 'Blank the origin while it is aloft',
     tuned: true,
+    want: 'The problem: with the ghost in hand, the origin column reads as a duplicate — two of the same thing, and no visible gap to say where the drop will land.',
     says: ['Three languages, one disappearance. JavaScript knows only a boolean — the origin dial ' +
       'is already the flag, derived by comparison. The markup passes it down as a class on the ' +
       'lifted key’s cells. CSS does the vanishing with a single word: visibility hidden takes ' +
@@ -94,6 +98,7 @@ const shown = (origin: 'keep' | 'hide'): Step => origin === 'hide'
   : {
     title: 'Leave the origin in place while it is aloft',
     tuned: true,
+    want: 'The problem: a vanished origin can disorient — sometimes the eye wants the column both at rest and in hand while deciding.',
     says: ['Render the lifted key normally underneath the ghost. There are two of it for the ' +
       'length of the drag, which reads as a copy being carried out of a still-intact table. ' +
       'The hidden flag simply never reaches the markup, so CSS has nothing to erase.'],
@@ -109,6 +114,7 @@ const moved = (animated: boolean): Step => animated
   ? {
     title: 'Slide the theater, not the layout',
     tuned: true,
+    want: 'The problem: a swap that teleports is honest but hard to follow — the eye loses which column went where. Yet animating the layout itself makes the whole table bounce, because layout is load-bearing.',
     says: [
       'A swap commits instantly — the carried column already sits at full width in its new slot, ' +
       'hidden or under the ghost, and the layout underneath is final. The displaced column is ' +
@@ -159,6 +165,7 @@ const moved = (animated: boolean): Step => animated
   : {
     title: 'Apply the state update directly',
     tuned: true,
+    want: 'The problem: motion is not free — it competes with the pointer, costs a frame budget, and some users ask for none at all.',
     says: ['Call the updater and let React paint — the new order is on screen in the next frame. ' +
       'No classes, no keyframes, nothing marked. There is real value in this mode beyond taste: ' +
       'no animation means nothing competes with the pointer, and no motion for ' +
@@ -174,6 +181,7 @@ const moved = (animated: boolean): Step => animated
 const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolean): Step[] => [
   {
     title: 'Let CSS carry its share',
+    want: 'The problem: a drag built in JavaScript alone reimplements what the platform already does — cursors, keyboard, focus, selection — and does each of them worse.',
     says: [
       'The markup stays honest HTML: a real table with real headers, so the semantics come free. ' +
       'The row grip is a button — arrow keys reorder rows without a line of drag code — and the ' +
@@ -203,6 +211,7 @@ const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolea
   },
   {
     title: 'Keep the order in state, not in the data',
+    want: 'The problem: the stream keeps producing rows in its own order — if reordering meant rewriting the data, every trade landing would fight every drag.',
     says: ['Rows and columns arrive in whatever order the fold produced. Hold a separate list of ' +
       'keys and seats, and render the markup through it, so a reorder never touches the data — ' +
       'the same key finds its new seat and React moves the real nodes.'],
@@ -221,6 +230,7 @@ const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolea
   },
   {
     title: 'Lift on pointer down, and measure the table once',
+    want: 'The problem: a drag needs to know where everything is, but asking the DOM on every move forces layout again and again — and mid-reorder, the DOM is the wrong authority anyway.',
     says: ['The hand is CSS before anything happens — grab on hover, grabbing on press — and ' +
       'touch-action: none is why the pointer can drag on touch at all. On pointerdown, ' +
       'JavaScript records which key is aloft and measures the table’s bounding rect a single ' +
@@ -242,6 +252,7 @@ const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolea
   },
   {
     title: 'Give the drag a surface of its own',
+    want: 'The problem: a drag outruns the element it started on — the pointer leaves the header, handlers close over stale state, and the release can happen anywhere, even outside the window.',
     says: ['While something is aloft, the markup grows a fixed, full-viewport element carrying ' +
       'the move and drop handlers. Because React re-renders it on every settle, the handlers are ' +
       'always fresh — no stale closures, no document listeners. CSS gives it the grabbing cursor ' +
@@ -268,6 +279,7 @@ const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolea
   },
   {
     title: 'Draw the ghost by hand',
+    want: 'The problem: the user needs to see what they are carrying, but cloning DOM nodes is brittle and measuring the ghost every move is what makes drags stutter.',
     says: ['The column in your hand is not a clone of DOM nodes — it is a second table rendered ' +
       'from the same data, fixed at the lift point, its transform rendered from a drift held in ' +
       'state. Each pointer move sets the drift and React paints the translation; CSS keeps the ' +
@@ -293,6 +305,7 @@ const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolea
   },
   {
     title: 'Find the neighbour under the pointer, with a dead zone',
+    want: 'The problem: naive hit-testing makes the order chatter — at a boundary, every pixel of movement flips the swap back and forth.',
     says: ['This step is JavaScript alone, on purpose: where the pointer is, in table terms, is a ' +
       'walk over cumulative column widths — arithmetic on the chart, never elementFromPoint. A ' +
       'neighbour only yields once the pointer reaches its inner half: the outer quarter is a ' +
@@ -333,6 +346,11 @@ export const Recipe: FC<Props> = ({pace, origin, animated}) =>
       </p>
     </header>
     <p className="lead">
+      The want: a live table whose columns and rows can be dragged into any order — eagerly or on
+      the drop, origin shown or hidden, sliding or cutting — while the data keeps streaming
+      underneath. The need: enough control to own every pixel of that interaction.
+    </p>
+    <p className="lead">
       There are two roads to dragging something across a page, and this site walks both. The{' '}
       <Link className="signpost" to={`${Paths.demos}?tab=${DemoTopics.dragAndDrop}`}>Drag and Drop
       demo</Link> takes the native API — draggable, dragstart, dragover, drop — where the platform
@@ -356,6 +374,7 @@ export const Recipe: FC<Props> = ({pace, origin, animated}) =>
             </h3>
             <div className="step-flow">
               <div className="step-words">
+                <p className="step-want">{step.want}</p>
                 {step.says.map(paragraph => <p className="step-says" key={paragraph}>{paragraph}</p>)}
                 {step.figure}
               </div>
