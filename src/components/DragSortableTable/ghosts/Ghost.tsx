@@ -12,7 +12,6 @@ type Props = {
 export const Ghost: FC<Props> = ({at, drift, dress, children}) =>
     <table className={join(dress.tableClassName, 'column-ghost')}
            style={{
-               viewTransitionName: 'ghost',
                position: 'fixed',
                top: at.y,
                left: at.x,

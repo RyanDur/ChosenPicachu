@@ -214,7 +214,7 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/Commit inside the move/);
     expect(recipe).toHaveTextContent(/Leave the origin in place/);
     expect(recipe).toHaveTextContent(/Apply the state update directly/);
-    expect(recipe).not.toHaveTextContent(/startViewTransition/);
+    expect(recipe).not.toHaveTextContent(/1cqi/);
 
     await userEvent.click(screen.getByRole('radio', {name: 'Lazy'}));
     await userEvent.click(screen.getByRole('radio', {name: 'Hide'}));
@@ -223,8 +223,9 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/Stash the landing, commit on release/);
     expect(recipe).toHaveTextContent(/Blank the origin while it is aloft/);
     expect(recipe).toHaveTextContent(/color: transparent/);
-    expect(recipe).toHaveTextContent(/Wrap the state update in a view transition/);
-    expect(recipe).toHaveTextContent(/startViewTransition/);
+    expect(recipe).toHaveTextContent(/Slide the theater, not the layout/);
+    expect(recipe).toHaveTextContent(/1cqi/);
+    expect(recipe).toHaveTextContent(/translateY\(var\(--drop\)\)/);
     expect(recipe).not.toHaveTextContent(/Commit inside the move/);
   });
 

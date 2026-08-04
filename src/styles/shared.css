@@ -44,15 +44,3 @@
   animation: none;
 }
 
-::view-transition-group(ghost) {
-  z-index: 1;
-  animation: none;
-}
-
-::view-transition-old(ghost) {
-  display: none;
-}
-
-::view-transition-new(ghost) {
-  animation: none;
-}

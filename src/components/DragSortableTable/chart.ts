@@ -75,3 +75,23 @@ export const seatUnder = (chart: Chart | undefined, seats: readonly number[]) =>
 
 export const anchored = (position: number, count: number): boolean =>
     position === 0 || position === count - 1;
+
+export const shifts = (
+    heights: Readonly<Record<number, number>>,
+    before: readonly number[],
+    after: readonly number[]
+): Record<number, number> => {
+    const tops = (seated: readonly number[]): Record<number, number> => {
+        let y = 0;
+        return seated.reduce<Record<number, number>>((at, seat) => {
+            at[seat] = y;
+            y += heights[seat] ?? 0;
+            return at;
+        }, {});
+    };
+    const was = tops(before);
+    const now = tops(after);
+    return Object.fromEntries(after
+        .filter(seat => (was[seat] ?? 0) !== (now[seat] ?? 0))
+        .map(seat => [seat, (was[seat] ?? 0) - (now[seat] ?? 0)]));
+};

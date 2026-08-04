@@ -6,7 +6,6 @@ import {DemoTopics} from '../../types';
 import {Origin, Pace} from '../Controls';
 import {Line, Snippet} from './Snippet';
 import {SlotsFigure} from './SlotsFigure';
-import {LayersFigure} from './LayersFigure';
 import './Recipe.css';
 
 type Step = {
@@ -96,32 +95,52 @@ const shown = (origin: Origin): Step => origin === 'hide'
 
 const moved = (animated: boolean): Step => animated
   ? {
-    title: 'Wrap the state update in a view transition',
+    title: 'Slide the theater, not the layout',
     tuned: true,
     says: [
-      'Name every cell that survives the reorder, then run the setState inside ' +
-      'startViewTransition with flushSync so the browser captures before and after in one frame. ' +
-      'The browser glides whatever geometry changed — and because the carried column sheds its ' +
-      'name while aloft, the only thing that ever moves is the neighbour whose space is being ' +
-      'overtaken. Where the platform cannot glide, the move lands static — the check is the guard.',
-      'Two traps worth knowing. Transition groups paint in the browser’s top layer, above even ' +
-      'a fixed-position ghost — so the ghost must join the overlay under its own name, unanimated ' +
-      'and z-ordered on top. And a transition’s capture phase can swallow a pointerup outright, ' +
-      'which is why the surface holds pointer capture and treats lostpointercapture as the drop.'
+      'A column swap commits instantly — the carried column already sits at full width in its ' +
+      'new slot, hidden or under the ghost, and the layout underneath is final. The displaced ' +
+      'column is merely drawn where it used to be, sliding home on a transform. Transforms cannot ' +
+      'move layout, so nothing else can shift: a bounce is impossible by construction.',
+      'CSS knows the distance without measuring. Make the table a size container and 1cqi is one ' +
+      'percent of its width, so the slide starts at the carried column’s share — a value already ' +
+      'in state — plus its padding. @starting-style declares where the slide begins, one render ' +
+      'starts it, and transitionend hands the class back.',
+      'Rows are the same theater turned vertical. Their heights are measured once, in whatever ' +
+      'event reorders them — the lift, a nudge, a sort ruling — and the difference between each ' +
+      'row’s old and new position becomes a pixel offset: every displaced row starts at ' +
+      'translateY(var(--drop)) and slides home. Nothing in this table rides a view transition; ' +
+      'the motion is transitions all the way down, each one started by @starting-style.'
     ],
-    figure: <LayersFigure/>,
     code: [
       [
-        plain('const glide = animated => update =>'),
-        plain('  animated && \'startViewTransition\' in document'),
-        plain('    ? document.startViewTransition(() => flushSync(update))'),
-        plain('    : update();'),
-        aside('// style={{viewTransitionName: aloft === key ? undefined : `header-${key}`}}')
+        plain('.table-stage { container-type: inline-size; }'),
+        plain(''),
+        plain('.sortable .displaced-left {'),
+        plain('  transition: transform 200ms ease-out;'),
+        plain(''),
+        plain('  @starting-style {'),
+        plain('    transform: translateX(calc(var(--carried) * 1cqi + var(--pad)));'),
+        plain('  }'),
+        plain('}'),
+        aside('/* .displaced-right mirrors with a negative offset */')
       ],
       [
-        plain('::view-transition-group(ghost) { z-index: 1; animation: none; }'),
-        plain('::view-transition-old(ghost) { display: none; }'),
-        aside('/* the ghost rides the overlay, above the glide */')
+        plain('const displaced = from < to'),
+        plain('  ? order.slice(from + 1, to + 1)'),
+        plain('  : order.slice(to, from);'),
+        plain('setSlid({keys: displaced, carried: shares[key],'),
+        plain("         toward: from < to ? 'left' : 'right', wave: wave + 1});"),
+        aside('// key={displaced ? `${key}#${wave}` : key} — a fresh node starts the slide')
+      ],
+      [
+        plain('const shifts = (heights, before, after) =>'),
+        plain('  offsets(tops(before), tops(after));   // oldY - newY, per seat'),
+        plain(''),
+        plain('setShifted({offsets: shifts(heights, standing, after),'),
+        plain('            wave: wave + 1});'),
+        aside("// <tr className={drop && 'shifted'} style={{'--drop': `${drop}px`}}"),
+        aside('//     key={drop ? `${seat}#${wave}` : seat}>')
       ]
     ]
   }

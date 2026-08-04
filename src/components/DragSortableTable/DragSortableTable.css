@@ -90,9 +90,18 @@
   }
 }
 
+.sortable .shifted {
+  transition: transform 200ms ease-out;
+
+  @starting-style {
+    transform: translateY(var(--drop));
+  }
+}
+
 .sortable {
   --share: auto;
   --carried: 0;
+  --drop: 0px;
 
   user-select: none;
 }

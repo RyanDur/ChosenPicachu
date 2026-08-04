@@ -438,17 +438,33 @@ describe('animated moves', () => {
     delete (document as {startViewTransition?: unknown}).startViewTransition;
   });
 
-  test('an animated move travels through a view transition', async () => {
+  test('an animated nudge slides the displaced row, not a transition', async () => {
     const transition = vi.fn((update: () => void) => update());
     (document as {startViewTransition?: unknown}).startViewTransition = transition;
     render(<DragSortableTable columns={sized} rows={people} animated draggableRows="eager-move"/>);
+    const table = screen.getAllByRole('table')[0];
+    table.getBoundingClientRect = () => ({
+      left: 0, right: 320, top: 0, bottom: 80, width: 320, height: 80, x: 0, y: 0, toJSON: () => ({})
+    });
+    within(within(table).getAllByRole('rowgroup')[1]).getAllByRole('row').forEach(row => {
+      row.getBoundingClientRect = () => ({
+        left: 0, right: 320, top: 0, bottom: 40, width: 320, height: 40, x: 0, y: 0, toJSON: () => ({})
+      });
+    });
 
     within(screen.getByText('Ada').closest('tr') as HTMLElement)
       .getByRole('button', {name: /move row/}).focus();
     await userEvent.keyboard('{ArrowDown}');
 
-    expect(transition).toHaveBeenCalledTimes(1);
     expect(firstCells()).toEqual(['Grace', 'Ada']);
+    const displaced = screen.getByText('Grace').closest('tr') as HTMLElement;
+    expect(displaced.classList).toContain('shifted');
+    expect(displaced).toHaveStyle({'--drop': '40px'});
+    expect(transition).not.toHaveBeenCalled();
+
+    fireEvent(displaced, Object.assign(new Event('transitionend', {bubbles: true}), {propertyName: 'transform'}));
+    expect((screen.getByText('Grace').closest('tr') as HTMLElement).classList)
+      .not.toContain('shifted');
   });
 
   test('a static move never asks for a transition', async () => {
@@ -497,13 +513,4 @@ describe('animated moves', () => {
       .not.toContain('displaced-left');
   });
 
-  test('an animated move still lands where the platform cannot glide', async () => {
-    render(<DragSortableTable columns={sized} rows={people} animated draggableRows="eager-move"/>);
-
-    within(screen.getByText('Ada').closest('tr') as HTMLElement)
-      .getByRole('button', {name: /move row/}).focus();
-    await userEvent.keyboard('{ArrowDown}');
-
-    expect(firstCells()).toEqual(['Grace', 'Ada']);
-  });
 });
