@@ -41,22 +41,4 @@
     background: var(--paper-veil);
   }
 
-  .explainer {
-    margin-top: var(--base-x-2);
-
-    .prompt {
-      cursor: pointer;
-      font-size: var(--text-caption);
-      color: var(--charcoal);
-      opacity: 0.7;
-    }
-
-    .explanation {
-      margin-top: var(--base-x-0_75);
-      font-size: var(--text-caption);
-      line-height: 1.5;
-      color: var(--charcoal);
-      max-width: var(--measure);
-    }
-  }
 }
