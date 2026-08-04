@@ -149,13 +149,12 @@ const moved = (animated: boolean): Step => animated
     title: 'Apply the state update directly',
     tuned: true,
     says: ['Call the updater and let React paint — the new order is on screen in the next frame. ' +
-      'There is real value in this mode beyond taste: no animation means nothing competes with ' +
-      'the pointer, no overlay to swallow events, and no motion for prefers-reduced-motion users ' +
-      'to endure.'],
+      'No classes, no keyframes, nothing marked. There is real value in this mode beyond taste: ' +
+      'no animation means nothing competes with the pointer, and no motion for ' +
+      'prefers-reduced-motion users to endure.'],
     code: [[
-      plain('const glide = animated => update => {'),
-      plain('  update();'),
-      plain('};')
+      plain('setOrder(next);   // React paints the new order in place — done'),
+      aside('// animated only decides whether anyone gets a slide class')
     ]]
   };
 
@@ -207,7 +206,9 @@ const steps = (pace: Pace, origin: Origin, animated: boolean): Step[] => [
       plain('  <article className="drag-surface"   /* position: fixed; inset: 0 */'),
       plain('           onPointerMove={travel}'),
       plain('           onPointerUp={drop}'),
-      plain('           onLostPointerCapture={drop}/>}')
+      plain('           onPointerCancel={drop}'),
+      plain('           onLostPointerCapture={drop}/>}'),
+      aside('// cancel and lost capture are not delegates — they ARE the drop')
     ]]
   },
   {
