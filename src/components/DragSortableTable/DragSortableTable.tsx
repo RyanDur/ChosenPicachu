@@ -39,7 +39,7 @@ export const DragSortableTable: FC<DragSortableTableProps> = (
     const [seats, setSeats] = useState<number[]>(() => rows.map((_, seat) => seat));
     const [chart, setChart] = useState<Chart>();
     const [rule, setRule] = useState<Rule>();
-    const [vacated, setVacated] = useState<{at: number; share: number; wave: number}>();
+    const [vacated, setVacated] = useState<{at: number; share: number; wave: number; landing: string}>();
 
     const byKey = new Map(columns.map(definition => [String(definition.column), definition]));
     const ordered = order.map(key => byKey.get(key)).filter(has);
@@ -57,13 +57,17 @@ export const DragSortableTable: FC<DragSortableTableProps> = (
         draggableColumns,
         columnUnder(chart, order, shares),
         (key, struck) => {
+            if (animated && has(vacated)) {
+                return;
+            }
             if (animated) {
                 const from = order.indexOf(key);
                 const to = Math.min(Math.max(order.indexOf(struck), 1), order.length - 2);
                 setVacated(previous => ({
                     at: from < to ? from : from + 1,
                     share: shares[key] ?? 0,
-                    wave: (previous?.wave ?? 0) + 1
+                    wave: (previous?.wave ?? 0) + 1,
+                    landing: key
                 }));
             }
             setOrder(previous => {
@@ -119,9 +123,9 @@ export const DragSortableTable: FC<DragSortableTableProps> = (
                 dress.headerRowClassName
             )}>{ordered.flatMap((column, position) => {
                 const key = String(column.column);
-                const aloft = columnsTravel.aloft === key;
-                const header = <DraggableHeader key={aloft && has(vacated) ? `${key}#${vacated.wave}` : key}
-                                        landing={aloft && has(vacated)}
+                const landing = has(vacated) && vacated.landing === key;
+                const header = <DraggableHeader key={landing && has(vacated) ? `${key}#${vacated.wave}` : key}
+                                        landing={landing}
                                         column={column}
                                         share={has(column.width) ? shares[key] : undefined}
                                         clipped={clipped}
