@@ -5,6 +5,7 @@ declare module 'csstype' {
   // oxlint-disable-next-line typescript/consistent-type-definitions
   interface Properties {
     '--carried'?: string;
+    '--drop'?: string;
     '--share'?: string;
   }
 }

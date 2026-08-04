@@ -1,4 +1,4 @@
-import {FC, PointerEvent} from 'react';
+import {FC, KeyboardEvent, PointerEvent} from 'react';
 import {has} from '@ryandur/sand';
 import {join} from '@components/class-names';
 import {Column, Dress, Row} from '@components/Table';
@@ -13,17 +13,17 @@ type Props = {
     hidden: boolean;
     hiddenColumn: string | undefined;
     slid: {keys: readonly string[]; toward: 'left' | 'right'; wave: number} | undefined;
-    named: string | undefined;
-    aloftColumn: string | undefined;
+    drop: number | undefined;
     dress: Dress;
     onLift: (event: PointerEvent<HTMLElement>) => void;
-    onNudge: (toward: 1 | -1) => void;
+    onNudge: (toward: 1 | -1, event: KeyboardEvent<HTMLElement>) => void;
 };
 
 export const DraggableRow: FC<Props> = (
-    {row, columns, position, clipped, gripped, hidden, hiddenColumn, slid, named, aloftColumn, dress, onLift, onNudge}
+    {row, columns, position, clipped, gripped, hidden, hiddenColumn, slid, drop, dress, onLift, onNudge}
 ) =>
-    <tr className={join(dress.trClassName, dress.rowClassName)}>
+    <tr className={join(dress.trClassName, dress.rowClassName, has(drop) && 'shifted')}
+        style={has(drop) ? {'--drop': `${drop}px`} : undefined}>
         {columns.map(({column}, columnNumber) => {
             const cell = row[column];
             const key = String(column);
@@ -35,10 +35,7 @@ export const DraggableRow: FC<Props> = (
                            hidden && 'hide-across',
                            has(displaced) && `displaced-${displaced}`
                        )}
-                       key={has(slid) && slid.keys.includes(key) ? `${key}#${slid.wave}` : key}
-                       style={has(named) && aloftColumn !== key
-                           ? {viewTransitionName: `${named}-${key}`}
-                           : undefined}>
+                       key={has(slid) && slid.keys.includes(key) ? `${key}#${slid.wave}` : key}>
                 {columnNumber === 0 && gripped &&
                     <RowGrip row={position + 1} onLift={onLift} onNudge={onNudge}/>}
                 {cell.display}
