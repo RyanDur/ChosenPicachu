@@ -20,8 +20,7 @@ import {
 import {DemoTopics, demoTopicParam} from './types';
 import {NaturalZIndex} from './ZIndexDemo';
 import {Candles, PriceChart} from './Charts';
-import {Aggregations, Recipe} from './Tables';
-import {PillGlider} from '@components/PillGlider';
+import {Aggregations, Controls, Motion, Recipe} from './Tables';
 import {DragStyle} from '@components/DragSortableTable';
 import {statusCopy, useLiveTrades} from './Charts/useLiveTrades';
 import {useEnv} from '@components/Env';
@@ -36,7 +35,7 @@ export const DemosPage = () => {
   const {tab} = useSearchParamsObject({tab: demoTopicParam}, {tab: DemoTopics.accordions});
   const [accordionContents] = useState(() => Array.from({length: 5}, () => paragraphs(5)));
   const [dragStyle, setDragStyle] = useState<DragStyle>('eager-move');
-  const [tableMotion, setTableMotion] = useState<'animated' | 'static'>('static');
+  const [tableMotion, setTableMotion] = useState<Motion>('static');
   const {tradeFeed, tradeProduct} = useEnv();
   const liveTrades = useLiveTrades(tradeFeed, tradeProduct);
 
@@ -85,26 +84,8 @@ export const DemosPage = () => {
               <Candles trades={liveTrades.trades}/>
             </>,
             [DemoTopics.tables]: <>
-              <header className="table-styles">
-                <PillGlider label="drag style"
-                            name="column-drag-style"
-                            options={[
-                              {display: 'Eager', value: 'eager-move'},
-                              {display: 'Lazy', value: 'lazy-move'},
-                              {display: 'Hide Eager', value: 'hide-eager-move'},
-                              {display: 'Hide Lazy', value: 'hide-lazy-move'}
-                            ]}
-                            chosen={dragStyle}
-                            onChoose={setDragStyle}/>
-                <PillGlider label="animation style"
-                            name="table-animate-or-static"
-                            options={[
-                              {display: 'Animate', value: 'animated'},
-                              {display: 'Static', value: 'static'}
-                            ]}
-                            chosen={tableMotion}
-                            onChoose={setTableMotion}/>
-              </header>
+              <Controls dragStyle={dragStyle} motion={tableMotion}
+                        onDragStyle={setDragStyle} onMotion={setTableMotion}/>
               <Aggregations trades={liveTrades.trades} dragStyle={dragStyle}
                             animated={tableMotion === 'animated'}/>
               <Recipe dragStyle={dragStyle} animated={tableMotion === 'animated'}/>
