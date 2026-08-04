@@ -23,6 +23,20 @@
     color: var(--charcoal);
   }
 
+  .lead {
+    margin: 0;
+    font-size: var(--text-body);
+    line-height: 1.6;
+    text-wrap: pretty;
+  }
+
+  .signpost {
+    display: inline;
+    width: auto;
+    height: auto;
+    text-decoration: underline;
+  }
+
   .chip {
     font-style: normal;
     font-size: var(--text-caption);
@@ -44,14 +58,13 @@
 
   .step {
     counter-increment: recipe-step;
-    display: grid;
-    grid-template-columns: var(--base-x-4) minmax(0, 1fr);
-    gap: var(--base) var(--base-x-2);
-    align-items: start;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--base-x-2);
 
     &::before {
       content: counter(recipe-step);
-      grid-row: span 3;
+      flex: none;
       display: grid;
       place-items: center;
       width: var(--base-x-4);
@@ -64,6 +77,13 @@
     &.tuned::before {
       background: var(--mint);
     }
+  }
+
+  .step-body {
+    display: grid;
+    gap: var(--base);
+    min-width: 0;
+    flex: 1;
   }
 
   .step-title {
@@ -98,6 +118,58 @@
 
     .aside {
       color: var(--disabled-gray);
+    }
+  }
+
+  .recipe-figure {
+    margin: 0;
+    display: grid;
+    gap: var(--base);
+
+    svg {
+      width: 100%;
+      height: auto;
+    }
+
+    .slot {
+      fill: var(--paper);
+      stroke: var(--charcoal);
+      stroke-width: var(--hairline);
+    }
+
+    .dead {
+      fill: var(--faded-leather);
+    }
+
+    .inner {
+      fill: var(--faded-mint);
+    }
+
+    .center {
+      stroke: var(--charcoal);
+      stroke-dasharray: 4 3;
+    }
+
+    .plane {
+      fill: var(--paper);
+      stroke: var(--charcoal);
+      stroke-width: var(--hairline);
+    }
+
+    .plane-top {
+      fill: var(--faded-mint);
+      stroke: var(--charcoal);
+      stroke-width: var(--hairline);
+    }
+
+    .label {
+      fill: var(--void);
+      font-size: var(--base-x-1_5);
+    }
+
+    .caption {
+      font-size: var(--text-caption);
+      color: var(--charcoal);
     }
   }
 }

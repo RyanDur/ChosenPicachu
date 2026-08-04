@@ -207,7 +207,10 @@ describe('the tables demo', () => {
     await feedIsSubscribed();
     const recipe = screen.getByRole('region', {name: 'build it from scratch'});
     expect(recipe).toBeVisible();
-    expect(recipe).toHaveTextContent(/Seven steps, no library/);
+    expect(recipe).toHaveTextContent(/Eight steps, no library/);
+    expect(within(recipe).getByRole('link', {name: /Drag and Drop/}))
+      .toHaveAttribute('href', expect.stringContaining('tab=dragAndDrop'));
+    expect(recipe).toHaveTextContent(/touch-action/);
     expect(recipe).toHaveTextContent(/Commit inside the move/);
     expect(recipe).toHaveTextContent(/Leave the origin in place/);
     expect(recipe).toHaveTextContent(/Apply the state update directly/);
@@ -219,6 +222,7 @@ describe('the tables demo', () => {
 
     expect(recipe).toHaveTextContent(/Stash the landing, commit on release/);
     expect(recipe).toHaveTextContent(/Blank the origin while it is aloft/);
+    expect(recipe).toHaveTextContent(/color: transparent/);
     expect(recipe).toHaveTextContent(/Wrap the state update in a view transition/);
     expect(recipe).toHaveTextContent(/startViewTransition/);
     expect(recipe).not.toHaveTextContent(/Commit inside the move/);
