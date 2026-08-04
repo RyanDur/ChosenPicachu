@@ -14,7 +14,7 @@ type Props = {
     clipped: boolean;
     travels: boolean;
     hidden: boolean;
-    landing?: boolean;
+    displaced?: 'left' | 'right';
     sorted: Direction | undefined;
     named: string | undefined;
     dress: Dress;
@@ -24,7 +24,7 @@ type Props = {
 };
 
 export const DraggableHeader: FC<Props> = (
-    {column, share, clipped, travels, hidden, landing, sorted, named, dress, onLift, onTrade, onRule}
+    {column, share, clipped, travels, hidden, displaced, sorted, named, dress, onLift, onTrade, onRule}
 ) => {
     const key = String(column.column);
     return <th className={join(
@@ -33,7 +33,7 @@ export const DraggableHeader: FC<Props> = (
                clipped && 'clipped',
                travels && 'grabbable',
                hidden && 'hide',
-               landing && 'landing'
+               has(displaced) && `displaced-${displaced}`
            )}
                scope="col"
                aria-sort={sorted}

@@ -39,7 +39,7 @@ export const DragSortableTable: FC<DragSortableTableProps> = (
     const [seats, setSeats] = useState<number[]>(() => rows.map((_, seat) => seat));
     const [chart, setChart] = useState<Chart>();
     const [rule, setRule] = useState<Rule>();
-    const [vacated, setVacated] = useState<{at: number; share: number; wave: number; landing: string}>();
+    const [slid, setSlid] = useState<{keys: readonly string[]; toward: 'left' | 'right'; carried: number; wave: number}>();
 
     const byKey = new Map(columns.map(definition => [String(definition.column), definition]));
     const ordered = order.map(key => byKey.get(key)).filter(has);
@@ -57,17 +57,14 @@ export const DragSortableTable: FC<DragSortableTableProps> = (
         draggableColumns,
         columnUnder(chart, order, shares),
         (key, struck) => {
-            if (animated && has(vacated)) {
-                return;
-            }
             if (animated) {
                 const from = order.indexOf(key);
                 const to = Math.min(Math.max(order.indexOf(struck), 1), order.length - 2);
-                setVacated(previous => ({
-                    at: from < to ? from : from + 1,
-                    share: shares[key] ?? 0,
-                    wave: (previous?.wave ?? 0) + 1,
-                    landing: key
+                setSlid(previous => ({
+                    keys: from < to ? order.slice(from + 1, to + 1) : order.slice(to, from),
+                    toward: from < to ? 'left' : 'right',
+                    carried: shares[key] ?? 0,
+                    wave: (previous?.wave ?? 0) + 1
                 }));
             }
             setOrder(previous => {
@@ -111,7 +108,14 @@ export const DragSortableTable: FC<DragSortableTableProps> = (
     const surface = has(columnsTravel.aloft) ? columnsTravel.surface : rowsTravel.surface;
 
     return <>
+        <div className="table-stage">
         <table id={id}
+               style={has(slid) ? {'--carried': `${slid.carried}`} : undefined}
+               onTransitionEnd={event => {
+                   if (event.propertyName === 'transform') {
+                       setSlid(undefined);
+                   }
+               }}
                className={join(
                    dress.tableClassName,
                    clipped && 'apportioned',
@@ -121,11 +125,12 @@ export const DragSortableTable: FC<DragSortableTableProps> = (
             <tr className={join(
                 dress.trClassName,
                 dress.headerRowClassName
-            )}>{ordered.flatMap((column, position) => {
+            )}>{ordered.map((column, position) => {
                 const key = String(column.column);
-                const landing = has(vacated) && vacated.landing === key;
-                const header = <DraggableHeader key={landing && has(vacated) ? `${key}#${vacated.wave}` : key}
-                                        landing={landing}
+                const displaced = has(slid) && slid.keys.includes(key) ? slid.toward : undefined;
+                const waved = has(slid) && slid.keys.includes(key) ? `${key}#${slid.wave}` : key;
+                return <DraggableHeader key={waved}
+                                        displaced={displaced}
                                         column={column}
                                         share={has(column.width) ? shares[key] : undefined}
                                         clipped={clipped}
@@ -144,13 +149,6 @@ export const DragSortableTable: FC<DragSortableTableProps> = (
                                             ? direction => move(() =>
                                                 setRule(has(direction) ? {column: key, direction} : undefined))
                                             : undefined}/>;
-                return has(vacated) && position === vacated.at
-                    ? [<th className="vacating"
-                           aria-hidden="true"
-                           key={`vacating#${vacated.wave}`}
-                           style={{'--lane': `${vacated.share}%`}}
-                           onTransitionEnd={() => setVacated(undefined)}/>, header]
-                    : [header];
             })}</tr>
             </thead>
             <tbody className={dress.tbodyClassName}>{arranged.map(({row, seat}, position) =>
@@ -162,7 +160,7 @@ export const DragSortableTable: FC<DragSortableTableProps> = (
                               gripped={has(draggableRows)}
                               hidden={rowsTravel.hiding && rowsTravel.aloft === seat}
                               hiddenColumn={columnsTravel.hiding ? columnsTravel.aloft : undefined}
-                              vacatedAt={vacated?.at}
+                              slid={slid}
                               named={animated && rowsTravel.aloft !== seat ? `seat-${seat}` : undefined}
                               aloftColumn={columnsTravel.aloft}
                               dress={dress}
@@ -170,6 +168,7 @@ export const DragSortableTable: FC<DragSortableTableProps> = (
                               onNudge={nudged(seat)}/>
             )}</tbody>
         </table>
+        </div>
         {has(aloftColumn) &&
             <ColumnGhost at={columnsTravel.flight} drift={columnsTravel.drift} dress={dress}
                          column={aloftColumn} rows={arranged.map(({row}) => row)}/>}

@@ -464,19 +464,22 @@ describe('animated moves', () => {
     expect(firstCells()).toEqual(['Grace', 'Ada']);
   });
 
-  test('an animated column swap opens a landing lane, not a transition', () => {
+  test('an animated swap slides the displaced column — theater, not layout', () => {
     const transition = vi.fn((update: () => void) => update());
     (document as {startViewTransition?: unknown}).startViewTransition = transition;
-    const three = [
+    const four = [
       {display: 'name', column: 'name', width: 200},
       {display: 'age', column: 'age', width: 120},
-      {display: 'city', column: 'city', width: 120}
+      {display: 'city', column: 'city', width: 120},
+      {display: 'job', column: 'job', width: 160}
     ];
-    const crew = [{name: {display: 'Ada'}, age: {display: '36'}, city: {display: 'London'}}];
-    render(<DragSortableTable columns={three} rows={crew} animated draggableColumns="eager-move"/>);
+    const crew = [{
+      name: {display: 'Ada'}, age: {display: '36'}, city: {display: 'London'}, job: {display: 'Analyst'}
+    }];
+    render(<DragSortableTable columns={four} rows={crew} animated draggableColumns="eager-move"/>);
     const table = screen.getAllByRole('table')[0];
     table.getBoundingClientRect = () => ({
-      left: 0, right: 440, top: 0, bottom: 100, width: 440, height: 100, x: 0, y: 0, toJSON: () => ({})
+      left: 0, right: 600, top: 0, bottom: 100, width: 600, height: 100, x: 0, y: 0, toJSON: () => ({})
     });
 
     fireEvent.pointerDown(within(table).getByRole('columnheader', {name: /^age/}), {clientX: 260, clientY: 20, pointerId: 1});
@@ -484,13 +487,14 @@ describe('animated moves', () => {
     if (surface === null) throw new Error('nothing is aloft');
     fireEvent.pointerMove(surface, {buttons: 1, clientX: 410, clientY: 50, pointerId: 1});
 
-    const lane = document.querySelector('th.vacating');
-    expect(lane).not.toBeNull();
-    expect(within(table).getByRole('columnheader', {name: /^age/}).classList).toContain('landing');
+    const displaced = within(table).getByRole('columnheader', {name: /^city/});
+    expect(displaced.classList).toContain('displaced-left');
+    expect(table).toHaveStyle({'--carried': '20'});
     expect(transition).not.toHaveBeenCalled();
 
-    fireEvent(lane as Element, new Event('transitionend', {bubbles: true}));
-    expect(document.querySelector('th.vacating')).toBeNull();
+    fireEvent(displaced, Object.assign(new Event('transitionend', {bubbles: true}), {propertyName: 'transform'}));
+    expect(within(table).getByRole('columnheader', {name: /^city/}).classList)
+      .not.toContain('displaced-left');
   });
 
   test('an animated move still lands where the platform cannot glide', async () => {
