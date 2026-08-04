@@ -8,6 +8,11 @@ import {SlotsFigure} from './SlotsFigure';
 import {LayersFigure} from './LayersFigure';
 import './Recipe.css';
 
+const labourCss = `.grabbable { cursor: grab; touch-action: none; }
+.grabbable:active { cursor: grabbing; }
+.sortable { user-select: none; }
+.drag-surface { position: fixed; inset: 0; cursor: grabbing; }`;
+
 const liftCode = `const liftColumn = (key: string) => (event: PointerEvent) => {
   const table = event.currentTarget.closest('table');
   setChart(charted(table));   // one getBoundingClientRect, kept in state
@@ -138,10 +143,27 @@ export const Recipe: FC<Props> = ({dragStyle, animated}) => {
     </p>
     <p className="lead">
       This table takes the other road: pointer events, where every pixel of the interaction is
-      owned — the ghost is opaque because we drew it, the cursor is ours to set, and the motion
-      never fights the drag. The dials above change how it settles and how it moves; this article
-      changes with them.
+      owned. Owned is not the same as scripted — the effect is a blend of all three languages, with
+      script carrying only what the other two cannot. The dials above change how it settles and how
+      it moves; this article changes with them.
     </p>
+
+    <h3 className="step">The division of labor</h3>
+    <p className="explanation">
+      The markup stays honest HTML: a real table with real headers, so the semantics come free. The
+      row grip is a button — arrow keys reorder rows without a line of drag code — the resize handle
+      is a separator that announces its value, and a sorted header wears aria-sort. None of that is
+      drag machinery; it is just the platform being used on purpose.
+    </p>
+    <p className="explanation">
+      CSS carries more of the effect than it appears. The open hand and the closed fist are
+      cursors. touch-action: none is the single line that lets pointer events drag on a touchscreen.
+      user-select: none keeps a fast drag from sweeping text selections across the page. The hiding
+      styles are nothing but transparent colors, and hover styling under the drag is suppressed by
+      the surface simply existing on top — no state, no class-toggling. JavaScript is left holding
+      only what it must: one measurement, some arithmetic, and the order.
+    </p>
+    <CodeBlock code={labourCss}/>
 
     <h3 className="step">Lift: measure once, then trust arithmetic</h3>
     <p className="explanation">
