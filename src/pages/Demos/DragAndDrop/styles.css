@@ -35,3 +35,30 @@
         width: var(--base-x-2_5);
     }
 }
+.sortable-list .pushed-left {
+    animation: pushed-left 150ms ease-out;
+}
+
+.sortable-list .pushed-right {
+    animation: pushed-right 150ms ease-out;
+}
+
+@keyframes pushed-left {
+    from {
+        transform: translateX(calc(100% + var(--base)));
+    }
+
+    to {
+        transform: none;
+    }
+}
+
+@keyframes pushed-right {
+    from {
+        transform: translateX(calc(-100% - var(--base)));
+    }
+
+    to {
+        transform: none;
+    }
+}
