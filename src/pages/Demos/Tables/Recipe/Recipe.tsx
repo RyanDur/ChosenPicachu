@@ -356,7 +356,8 @@ export const Recipe: FC<Props> = ({pace, origin, animated}) =>
       demo</Link> takes the native API — draggable, dragstart, dragover, drop — where the platform
       brings the drag image, the drop rules, and most of the behavior for very little code. That
       generosity has edges: the drag image cannot be made opaque on macOS, the cursor belongs to
-      the platform, and an animation cannot run while a native drag session is alive.
+      the platform, the drag image is a snapshot that cannot be animated, and on macOS even the
+      cancel is the platform’s animation to run.
     </p>
     <p className="lead">
       This table takes the other road: pointer events, where every pixel of the interaction is
