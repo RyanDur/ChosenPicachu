@@ -222,7 +222,7 @@ describe('the tables demo', () => {
 
     expect(recipe).toHaveTextContent(/Stash the landing, commit on release/);
     expect(recipe).toHaveTextContent(/Blank the origin while it is aloft/);
-    expect(recipe).toHaveTextContent(/color: transparent/);
+    expect(recipe).toHaveTextContent(/visibility: hidden/);
     expect(recipe).toHaveTextContent(/Slide the theater, not the layout/);
     expect(recipe).toHaveTextContent(/1cqi/);
     expect(recipe).toHaveTextContent(/translateY\(var\(--drop\)\)/);

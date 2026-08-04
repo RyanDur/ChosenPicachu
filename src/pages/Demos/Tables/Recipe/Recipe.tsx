@@ -71,8 +71,9 @@ const shown = (origin: 'keep' | 'hide'): Step => origin === 'hide'
     tuned: true,
     says: ['Three languages, one disappearance. JavaScript knows only a boolean — the origin dial ' +
       'is already the flag, derived by comparison. The markup passes it down as a class on the ' +
-      'lifted key’s cells. CSS does the vanishing: transparent text and rules, nothing ' +
-      'unmounted, while the lane keeps its right edge to mark the gap where the drop will land.'],
+      'lifted key’s cells. CSS does the vanishing with a single word: visibility hidden takes ' +
+      'the whole column — text, borders, grip, everything — while its layout space remains as ' +
+      'the gap where the drop will land. Nothing unmounts.'],
     code: [
       {label: 'JS', lines: [
         plain("const hiding = origin === 'hide';")
@@ -82,9 +83,11 @@ const shown = (origin: 'keep' | 'hide'): Step => origin === 'hide'
         plain('<DraggableRow hiddenColumn={hiding ? aloft : undefined} ... />')
       ]},
       {label: 'CSS', lines: [
-        plain('.sortable .hide { color: transparent; }'),
-        plain('.fancy-table.sortable .hide { border-bottom-color: transparent; }'),
-        aside('/* the hidden lane keeps only its right edge */')
+        plain('.sortable .hide,'),
+        plain('.sortable .hide-across {'),
+        plain('  visibility: hidden;'),
+        plain('}'),
+        aside('/* the box stops painting; its layout space stays */')
       ]}
     ]
   }
