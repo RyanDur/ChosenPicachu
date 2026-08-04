@@ -118,7 +118,7 @@
     }
 
     .aside {
-      color: var(--disabled-gray);
+      opacity: 0.65;
     }
   }
 
