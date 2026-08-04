@@ -1,4 +1,4 @@
-import {PointerEvent, RefObject, useRef, useState} from 'react';
+import {PointerEvent, useState} from 'react';
 import {has, not} from '@ryandur/sand';
 
 export type DragStyle = 'eager-move' | 'lazy-move' | 'hide-eager-move' | 'hide-lazy-move';
@@ -9,11 +9,16 @@ type Flight = {
     width: number;
 };
 
+type Drift = {
+    x: number;
+    y: number;
+};
+
 type Travel<SUBJECT> = {
     aloft: SUBJECT | undefined;
     hiding: boolean;
     flight: Flight;
-    ghost: RefObject<HTMLTableElement | null>;
+    drift: Drift;
     lift: (subject: SUBJECT, anchor: HTMLElement | null) => (event: PointerEvent<HTMLElement>) => void;
     surface: {
         onPointerMove: (event: PointerEvent<HTMLElement>) => void;
@@ -24,6 +29,7 @@ type Travel<SUBJECT> = {
 };
 
 const grounded: Flight = {x: 0, y: 0, width: 0};
+const still: Drift = {x: 0, y: 0};
 
 export const useTravel = <SUBJECT,>(
     style: DragStyle | undefined,
@@ -32,9 +38,9 @@ export const useTravel = <SUBJECT,>(
 ): Travel<SUBJECT> => {
     const [aloft, setAloft] = useState<SUBJECT>();
     const [flight, setFlight] = useState<Flight>(grounded);
-    const ghost = useRef<HTMLTableElement>(null);
-    const origin = useRef<{x: number; y: number}>(null);
-    const landing = useRef<SUBJECT>(null);
+    const [origin, setOrigin] = useState<Drift>();
+    const [drift, setDrift] = useState<Drift>(still);
+    const [landing, setLanding] = useState<SUBJECT>();
     const eager = style === 'eager-move' || style === 'hide-eager-move';
     const hiding = style === 'hide-eager-move' || style === 'hide-lazy-move';
 
@@ -52,32 +58,35 @@ export const useTravel = <SUBJECT,>(
                 return;
             }
             event.currentTarget.setPointerCapture?.(event.pointerId);
-            origin.current = origin.current ?? {x: event.clientX, y: event.clientY};
-            ghost.current?.style.setProperty('transform',
-                `translate(${event.clientX - origin.current.x}px, ${event.clientY - origin.current.y}px)`);
+            if (has(origin)) {
+                setDrift({x: event.clientX - origin.x, y: event.clientY - origin.y});
+            } else {
+                setOrigin({x: event.clientX, y: event.clientY});
+            }
             const struck = strike(event.clientX, event.clientY, aloft);
             if (has(aloft) && has(struck)) {
                 if (struck === aloft) {
-                    landing.current = null;
+                    setLanding(undefined);
                 } else if (eager) {
                     settle(aloft, struck);
                 } else {
-                    landing.current = struck;
+                    setLanding(struck);
                 }
             }
         },
         onPointerUp: (): void => {
-            if (not(eager) && has(aloft) && has(landing.current)) {
-                settle(aloft, landing.current);
+            if (not(eager) && has(aloft) && has(landing)) {
+                settle(aloft, landing);
             }
-            origin.current = null;
-            landing.current = null;
+            setOrigin(undefined);
+            setLanding(undefined);
             setAloft(undefined);
             setFlight(grounded);
+            setDrift(still);
         },
         onPointerCancel: (): void => surface.onPointerUp(),
         onLostPointerCapture: (): void => surface.onPointerUp()
     };
 
-    return {aloft, hiding, flight, ghost, lift, surface};
+    return {aloft, hiding, flight, drift, lift, surface};
 };

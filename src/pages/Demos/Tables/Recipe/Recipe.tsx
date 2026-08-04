@@ -51,11 +51,11 @@ const held = (pace: Pace): Step => pace === 'eager'
     code: [[
       plain('onPointerMove: event => {'),
       plain('  const struck = strike(event.clientX, event.clientY, aloft);'),
-      plain('  landing.current = struck === aloft ? null : struck;'),
+      plain('  setLanding(struck === aloft ? undefined : struck);'),
       plain('},'),
       plain('onPointerUp: () => {'),
-      plain('  if (has(aloft) && has(landing.current))'),
-      plain('    settle(aloft, landing.current);'),
+      plain('  if (has(aloft) && has(landing))'),
+      plain('    settle(aloft, landing);'),
       plain('}')
     ]]
   };
@@ -184,19 +184,19 @@ const steps = (pace: Pace, origin: Origin, animated: boolean): Step[] => [
   {
     title: 'Draw the ghost by hand',
     says: ['The column in your hand is not a clone of DOM nodes — it is a second table rendered ' +
-      'from the same data, fixed at the lift point. Each pointer move writes one transform ' +
-      'straight to the node, off the React render path; nothing is measured per move, which is ' +
-      'what keeps slower engines smooth.'],
+      'from the same data, fixed at the lift point, its transform rendered from a drift held in ' +
+      'state. No element handles, no refs: each pointer move sets the drift, and React paints ' +
+      'the translation. Nothing is measured per move, which is what keeps slower engines smooth.'],
     code: [[
       plain('<table className="column-ghost"'),
-      plain('       style={{position: \'fixed\', top: at.y, left: at.x,'),
-      plain('               width: at.width, pointerEvents: \'none\','),
-      plain('               willChange: \'transform\'}}>'),
+      plain('       style={{position: \'fixed\', top: flight.y, left: flight.x,'),
+      plain('               width: flight.width, pointerEvents: \'none\','),
+      plain('               transform: `translate(${drift.x}px, ${drift.y}px)`}}>'),
       aside('  {/* the same cells, rendered again from the data */}'),
       plain('</table>'),
       plain(''),
-      plain('ghost.current?.style.setProperty("transform",'),
-      plain('  `translate(${x - origin.x}px, ${y - origin.y}px)`);')
+      plain('onPointerMove: event =>'),
+      plain('  setDrift({x: event.clientX - origin.x, y: event.clientY - origin.y});')
     ]]
   },
   {
