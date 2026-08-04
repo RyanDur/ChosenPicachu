@@ -121,6 +121,7 @@
   }
 
   .snippet {
+    position: relative;
     margin: 0;
     padding: var(--base-x-1_5) var(--base-x-2);
     border-radius: var(--radius-card);
@@ -129,6 +130,15 @@
     font-size: var(--text-caption);
     line-height: 1.8;
     overflow-x: auto;
+
+    .lang {
+      position: absolute;
+      top: var(--base);
+      right: var(--base-x-1_5);
+      font-size: var(--text-caption);
+      letter-spacing: 0.08em;
+      color: var(--mint);
+    }
 
     .line {
       display: block;

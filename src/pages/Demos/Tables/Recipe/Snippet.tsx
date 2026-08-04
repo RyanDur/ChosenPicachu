@@ -7,9 +7,13 @@ export type Line = {
 };
 
 type Props = {
+  label: 'HTML' | 'CSS' | 'JS';
   lines: readonly Line[];
 };
 
-export const Snippet: FC<Props> = ({lines}) =>
-  <pre className="snippet"><code>{lines.map(({text, dim}, at) =>
-    <span className={join('line', dim && 'aside')} key={at}>{text}</span>)}</code></pre>;
+export const Snippet: FC<Props> = ({label, lines}) =>
+  <pre className="snippet">
+    <span className="lang" aria-hidden="true">{label}</span>
+    <code>{lines.map(({text, dim}, at) =>
+      <span className={join('line', dim && 'aside')} key={at}>{text}</span>)}</code>
+  </pre>;
