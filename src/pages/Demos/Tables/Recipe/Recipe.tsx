@@ -64,13 +64,14 @@ const shown = (origin: Origin): Step => origin === 'hide'
   ? {
     title: 'Blank the origin while it is aloft',
     tuned: true,
-    says: ['Pass a hiding flag down and drop the lifted key out of the header and every row — ' +
+    says: ['The origin dial is already the flag — derive it by comparison, never by parsing a ' +
+      'style string apart. Pass it down and drop the lifted key out of the header and every row — ' +
       'only the ghost reads as real, and the gap shows exactly where the drop will land. Nothing ' +
       'unmounts: CSS turns the text and rules transparent while the lane keeps its right edge to ' +
       'mark the gap.'],
     code: [
       [
-        plain('const hiding = style.startsWith("hide-");'),
+        plain('const hiding = origin === \'hide\';'),
         plain('<DraggableHeader hidden={hiding && aloft === key} ... />'),
         plain('<DraggableRow hiddenColumn={hiding ? aloft : undefined} ... />')
       ],
@@ -87,7 +88,7 @@ const shown = (origin: Origin): Step => origin === 'hide'
     says: ['Render the lifted key normally underneath the ghost. There are two of it for the ' +
       'length of the drag, which reads as a copy being carried out of a still-intact table.'],
     code: [[
-      plain('const hiding = style.startsWith("hide-");  // false here'),
+      plain('const hiding = origin === \'hide\';  // \'keep\' — so false'),
       plain('<DraggableHeader hidden={false} ... />'),
       aside('// the lifted cells keep rendering in their seats')
     ]]
