@@ -141,6 +141,14 @@ const moved = (animated: boolean): Step => animated
 
 const steps = (pace: Pace, origin: Origin, animated: boolean): Step[] => [
   {
+    title: 'Let CSS carry its share',
+    says: ['The open hand and the closed fist are cursors. touch-action: none is the single line ' +
+      'that lets pointer events drag on a touchscreen; user-select: none keeps a fast drag from ' +
+      'sweeping text selections across the page; and the hiding styles, later on, are nothing but ' +
+      'transparent colors. None of this is state — the stylesheet carries it.'],
+    code: [labourCss]
+  },
+  {
     title: 'Keep the order in state, not in the data',
     says: ['Rows and columns arrive in whatever order the fold produced. Hold a separate list of ' +
       'keys and seats, and render through it, so a reorder never touches the data.'],
@@ -234,7 +242,7 @@ export const Recipe: FC<Props> = ({pace, origin, animated}) =>
     <header className="brief-line">
       <h2 className="kicker">build it from scratch</h2>
       <p className="brief">
-        Eight steps, no library. Steps marked <em className="chip">set above</em> are written the
+        Nine steps, no library. Steps marked <em className="chip">set above</em> are written the
         way the controls are currently set.
       </p>
     </header>
@@ -249,13 +257,10 @@ export const Recipe: FC<Props> = ({pace, origin, animated}) =>
     <p className="lead">
       This table takes the other road: pointer events, where every pixel of the interaction is
       owned. Owned is not the same as scripted — the markup stays a real table with real headers,
-      the row grip is a button so arrow keys reorder rows without a line of drag code, and CSS
-      carries the cursors, the hiding, and the hover-taming. touch-action: none is the single line
-      that lets pointer events drag on a touchscreen; user-select: none keeps a fast drag from
-      sweeping text selections. JavaScript is left holding only what neither can: one measurement,
-      some arithmetic, and the order.
+      the row grip is a button so arrow keys reorder rows without a line of drag code, CSS carries
+      the cursors, the hiding, and the hover-taming, and JavaScript is left holding only what
+      neither can: one measurement, some arithmetic, and the order.
     </p>
-    <Snippet lines={labourCss}/>
     <ol className="steps">
       {steps(pace, origin, animated).map(step =>
         <li className={join('step', step.tuned && 'tuned')} key={step.title}>
