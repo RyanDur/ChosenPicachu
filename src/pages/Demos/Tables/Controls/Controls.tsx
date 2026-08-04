@@ -25,7 +25,7 @@ const originReadings: Record<Origin, string> = {
 };
 
 const motionReadings: Record<Motion, string> = {
-  animated: 'Reorders run through a view transition, so cells slide to their new seats.',
+  animated: 'The swap itself is instant; displaced cells slide to their new seats.',
   static: 'Reorders apply in a single frame; cells cut to their new seats.'
 };
 
