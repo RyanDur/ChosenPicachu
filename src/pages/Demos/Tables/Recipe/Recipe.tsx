@@ -3,43 +3,47 @@ import {Link} from 'react-router';
 import {join} from '@components/class-names';
 import {Paths} from '@pages/Paths';
 import {DemoTopics} from '../../types';
-import {Origin, Pace} from '../Controls';
 import {Line, Snippet} from './Snippet';
 import {SlotsFigure} from './SlotsFigure';
 import './Recipe.css';
+
+type Block = {
+  label: 'HTML' | 'CSS' | 'JS';
+  lines: Line[];
+};
 
 type Step = {
   title: string;
   says: string[];
   tuned?: boolean;
   figure?: ReactNode;
-  code: Line[][];
+  code: Block[];
 };
 
 const plain = (text: string): Line => ({text});
 const aside = (text: string): Line => ({text, dim: true});
 
-const labourCss = [
-  plain('.grabbable { cursor: grab; touch-action: none; }'),
-  plain('.grabbable:active { cursor: grabbing; }'),
-  plain('.sortable { user-select: none; }'),
-  plain('.drag-surface { position: fixed; inset: 0; cursor: grabbing; }')
-];
-
-const held = (pace: Pace): Step => pace === 'eager'
+const held = (pace: 'eager' | 'lazy'): Step => pace === 'eager'
   ? {
     title: 'Commit inside the move',
     tuned: true,
-    says: ['With eager pace, settle as soon as a neighbour is struck — the list reorders under ' +
-      'the pointer, so what you see during the drag is already the result. Keyed rendering moves ' +
-      'the real cells, and carrying the column back is just more crossings: home is always reachable.'],
-    code: [[
-      plain('onPointerMove: event => {'),
-      plain('  const struck = strike(event.clientX, event.clientY, aloft);'),
-      plain('  if (has(aloft) && has(struck) && struck !== aloft)'),
-      plain('    settle(aloft, struck);'),
-      plain('}')
-    ]]
+    says: ['With eager pace, settle as soon as a neighbour is struck — the order state updates ' +
+      'mid-drag, and because the markup renders through that order, the same key finds its new ' +
+      'seat and React moves the real cells. Carrying the column back is just more crossings: ' +
+      'home is always reachable. No style changes hands here at all.'],
+    code: [
+      {label: 'JS', lines: [
+        plain('onPointerMove: event => {'),
+        plain('  const struck = strike(event.clientX, event.clientY, aloft);'),
+        plain('  if (has(aloft) && has(struck) && struck !== aloft)'),
+        plain('    settle(aloft, struck);'),
+        plain('}')
+      ]},
+      {label: 'HTML', lines: [
+        plain('<DraggableHeader key={key} ... />'),
+        aside('{/* same key, new seat — React moves the node, not a copy */}')
+      ]}
+    ]
   }
   : {
     title: 'Stash the landing, commit on release',
@@ -47,50 +51,55 @@ const held = (pace: Pace): Step => pace === 'eager'
     says: ['With lazy pace, remember the last neighbour struck and do nothing else — the table ' +
       'holds still, and one moveToIndex runs on pointer up. Drifting back over your own slot ' +
       'clears the landing, so a drop at home changes nothing.'],
-    code: [[
-      plain('onPointerMove: event => {'),
-      plain('  const struck = strike(event.clientX, event.clientY, aloft);'),
-      plain('  setLanding(struck === aloft ? undefined : struck);'),
-      plain('},'),
-      plain('onPointerUp: () => {'),
-      plain('  if (has(aloft) && has(landing))'),
-      plain('    settle(aloft, landing);'),
-      plain('}')
-    ]]
+    code: [
+      {label: 'JS', lines: [
+        plain('onPointerMove: event => {'),
+        plain('  const struck = strike(event.clientX, event.clientY, aloft);'),
+        plain('  setLanding(struck === aloft ? undefined : struck);'),
+        plain('},'),
+        plain('onPointerUp: () => {'),
+        plain('  if (has(aloft) && has(landing))'),
+        plain('    settle(aloft, landing);'),
+        plain('}')
+      ]}
+    ]
   };
 
-const shown = (origin: Origin): Step => origin === 'hide'
+const shown = (origin: 'keep' | 'hide'): Step => origin === 'hide'
   ? {
     title: 'Blank the origin while it is aloft',
     tuned: true,
-    says: ['The origin dial is already the flag — derive it by comparison, never by parsing a ' +
-      'style string apart. Pass it down and drop the lifted key out of the header and every row — ' +
-      'only the ghost reads as real, and the gap shows exactly where the drop will land. Nothing ' +
-      'unmounts: CSS turns the text and rules transparent while the lane keeps its right edge to ' +
-      'mark the gap.'],
+    says: ['Three languages, one disappearance. JavaScript knows only a boolean — the origin dial ' +
+      'is already the flag, derived by comparison. The markup passes it down as a class on the ' +
+      'lifted key’s cells. CSS does the vanishing: transparent text and rules, nothing ' +
+      'unmounted, while the lane keeps its right edge to mark the gap where the drop will land.'],
     code: [
-      [
-        plain('const hiding = origin === \'hide\';'),
+      {label: 'JS', lines: [
+        plain("const hiding = origin === 'hide';")
+      ]},
+      {label: 'HTML', lines: [
         plain('<DraggableHeader hidden={hiding && aloft === key} ... />'),
         plain('<DraggableRow hiddenColumn={hiding ? aloft : undefined} ... />')
-      ],
-      [
+      ]},
+      {label: 'CSS', lines: [
         plain('.sortable .hide { color: transparent; }'),
         plain('.fancy-table.sortable .hide { border-bottom-color: transparent; }'),
         aside('/* the hidden lane keeps only its right edge */')
-      ]
+      ]}
     ]
   }
   : {
     title: 'Leave the origin in place while it is aloft',
     tuned: true,
     says: ['Render the lifted key normally underneath the ghost. There are two of it for the ' +
-      'length of the drag, which reads as a copy being carried out of a still-intact table.'],
-    code: [[
-      plain('const hiding = origin === \'hide\';  // \'keep\' — so false'),
-      plain('<DraggableHeader hidden={false} ... />'),
-      aside('// the lifted cells keep rendering in their seats')
-    ]]
+      'length of the drag, which reads as a copy being carried out of a still-intact table. ' +
+      'The hidden flag simply never reaches the markup, so CSS has nothing to erase.'],
+    code: [
+      {label: 'HTML', lines: [
+        plain('<DraggableHeader hidden={false} ... />'),
+        aside('{/* the lifted cells keep rendering in their seats */}')
+      ]}
+    ]
   };
 
 const moved = (animated: boolean): Step => animated
@@ -98,51 +107,50 @@ const moved = (animated: boolean): Step => animated
     title: 'Slide the theater, not the layout',
     tuned: true,
     says: [
-      'A column swap commits instantly — the carried column already sits at full width in its ' +
-      'new slot, hidden or under the ghost, and the layout underneath is final. The displaced ' +
-      'column is merely drawn where it used to be, sliding home on a transform. Transforms cannot ' +
-      'move layout, so nothing else can shift: a bounce is impossible by construction.',
-      'CSS knows the distance without measuring. Make the table a size container and 1cqi is one ' +
-      'percent of its width, so the slide starts at the carried column’s share — a value already ' +
-      'in state — plus its padding. The slide is a keyframe whose from is the old position: the ' +
-      'reorder moves the node, the class applies as it lands, and the animation starts fresh — ' +
-      'no remounting, no counting renders. animationend hands the class back.',
-      'Rows are the same theater turned vertical. Their heights are measured once, in whatever ' +
-      'event reorders them — the lift, a nudge, a sort ruling — and the difference between each ' +
-      'row’s old and new position becomes a pixel offset: every displaced row starts at ' +
+      'A swap commits instantly — the carried column already sits at full width in its new slot, ' +
+      'hidden or under the ghost, and the layout underneath is final. The displaced column is ' +
+      'merely drawn where it used to be, sliding home on a transform. Transforms cannot move ' +
+      'layout, so nothing else can shift: a bounce is impossible by construction.',
+      'The three languages split the trick cleanly. JavaScript marks who was displaced and hands ' +
+      'over two numbers it already owns — the carried share, each row’s drop. The markup ' +
+      'carries the mark as a class that arrives exactly as the reorder moves the node. CSS does ' +
+      'all the moving: the table is a size container, so 1cqi is one percent of its width, and a ' +
+      'keyframe’s from is the old position — applying the class starts the slide fresh, and ' +
+      'animationend hands the class back.',
+      'Rows are the same theater turned vertical: heights measured once, in whatever event ' +
+      'reorders them, become per-row pixel offsets, and every displaced row starts at ' +
       'translateY(var(--drop)) and slides home. Nothing in this table rides a view transition; ' +
       'every motion is a keyframe starting from where things used to be.'
     ],
     code: [
-      [
+      {label: 'JS', lines: [
+        plain('setSlid({keys: displaced, carried: shares[key],'),
+        plain("         toward: from < to ? 'left' : 'right'});"),
+        plain('setShifted(shifts(heights, standing, after));'),
+        aside('// two numbers and some names — javascript is done')
+      ]},
+      {label: 'HTML', lines: [
+        plain("<th className={displaced && `displaced-${toward}`} ... >"),
+        plain("<tr className={drop && 'shifted'} style={{'--drop': `${drop}px`}}>"),
+        aside('{/* the reorder moves the node; the class rides along */}')
+      ]},
+      {label: 'CSS', lines: [
         plain('.table-stage { container-type: inline-size; }'),
         plain(''),
-        plain('.sortable .displaced-left {'),
-        plain('  animation: displaced-left 200ms ease-out;'),
-        plain('}'),
+        plain('.sortable .displaced-left { animation: displaced-left 200ms ease-out; }'),
+        plain('.sortable .shifted { animation: shifted 200ms ease-out; }'),
         plain(''),
         plain('@keyframes displaced-left {'),
         plain('  from {'),
         plain('    transform: translateX(calc(var(--carried) * 1cqi + var(--pad)));'),
         plain('  }'),
         plain('}'),
-        aside('/* .displaced-right mirrors with a negative offset */')
-      ],
-      [
-        plain('const displaced = from < to'),
-        plain('  ? order.slice(from + 1, to + 1)'),
-        plain('  : order.slice(to, from);'),
-        plain('setSlid({keys: displaced, carried: shares[key],'),
-        plain("         toward: from < to ? 'left' : 'right'});"),
-        aside('// the reorder moves the node; the class rides along and starts the slide')
-      ],
-      [
-        plain('const shifts = (heights, before, after) =>'),
-        plain('  offsets(tops(before), tops(after));   // oldY - newY, per seat'),
         plain(''),
-        plain('setShifted(shifts(heights, standing, after));'),
-        aside("// <tr className={drop && 'shifted'} style={{'--drop': `${drop}px`}}>")
-      ]
+        plain('@keyframes shifted {'),
+        plain('  from { transform: translateY(var(--drop)); }'),
+        plain('}'),
+        aside('/* .displaced-right mirrors with a negative offset */')
+      ]}
     ]
   }
   : {
@@ -152,100 +160,154 @@ const moved = (animated: boolean): Step => animated
       'No classes, no keyframes, nothing marked. There is real value in this mode beyond taste: ' +
       'no animation means nothing competes with the pointer, and no motion for ' +
       'prefers-reduced-motion users to endure.'],
-    code: [[
-      plain('setOrder(next);   // React paints the new order in place — done'),
-      aside('// animated only decides whether anyone gets a slide class')
-    ]]
+    code: [
+      {label: 'JS', lines: [
+        plain('setOrder(next);   // React paints the new order in place — done'),
+        aside('// animated only decides whether anyone gets a slide class')
+      ]}
+    ]
   };
 
-const steps = (pace: Pace, origin: Origin, animated: boolean): Step[] => [
+const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolean): Step[] => [
   {
     title: 'Let CSS carry its share',
-    says: ['The open hand and the closed fist are cursors. touch-action: none is the single line ' +
-      'that lets pointer events drag on a touchscreen; user-select: none keeps a fast drag from ' +
-      'sweeping text selections across the page; and the hiding styles, later on, are nothing but ' +
-      'transparent colors. None of this is state — the stylesheet carries it.'],
-    code: [labourCss]
+    says: [
+      'The markup stays honest HTML: a real table with real headers, so the semantics come free. ' +
+      'The row grip is a button — arrow keys reorder rows without a line of drag code — and the ' +
+      'resize handle is a separator that announces its value.',
+      'CSS carries more of the effect than it appears: the open hand and the closed fist are ' +
+      'cursors, touch-action: none is the single line that lets pointer events drag on a ' +
+      'touchscreen, and user-select: none keeps a fast drag from sweeping text selections. ' +
+      'JavaScript is left holding only what neither can: one measurement, some arithmetic, and ' +
+      'the order.'
+    ],
+    code: [
+      {label: 'HTML', lines: [
+        plain('<table><thead><tr><th scope="col">window</th> ...'),
+        plain('<button className="grip" aria-label="move row 2"><Handle/></button>'),
+        plain('<i role="separator" aria-label="resize trades" aria-valuenow={24}/>')
+      ]},
+      {label: 'CSS', lines: [
+        plain('.grabbable { cursor: grab; touch-action: none; }'),
+        plain('.grabbable:active { cursor: grabbing; }'),
+        plain('.sortable { user-select: none; }'),
+        plain('.drag-surface { position: fixed; inset: 0; cursor: grabbing; }')
+      ]},
+      {label: 'JS', lines: [
+        aside('// one measurement, slot arithmetic, and the order — nothing else')
+      ]}
+    ]
   },
   {
     title: 'Keep the order in state, not in the data',
     says: ['Rows and columns arrive in whatever order the fold produced. Hold a separate list of ' +
-      'keys and seats, and render through it, so a reorder never touches the data.'],
-    code: [[
-      plain('const [order, setOrder] = useState(() =>'),
-      plain('  columns.map(({column}) => String(column)));'),
-      plain('const [seats, setSeats] = useState(() =>'),
-      plain('  rows.map((_, seat) => seat));'),
-      aside('// render: order.map(key => byKey.get(key))')
-    ]]
+      'keys and seats, and render the markup through it, so a reorder never touches the data — ' +
+      'the same key finds its new seat and React moves the real nodes.'],
+    code: [
+      {label: 'JS', lines: [
+        plain('const [order, setOrder] = useState(() =>'),
+        plain('  columns.map(({column}) => String(column)));'),
+        plain('const [seats, setSeats] = useState(() =>'),
+        plain('  rows.map((_, seat) => seat));')
+      ]},
+      {label: 'HTML', lines: [
+        plain('<tr>{order.map(key =>'),
+        plain('  <DraggableHeader key={key} column={byKey.get(key)} ... />)}</tr>')
+      ]}
+    ]
   },
   {
     title: 'Lift on pointer down, and measure the table once',
-    says: ['On pointerdown over a header (or a row’s grip), record which key is aloft and ' +
-      'measure the table’s bounding rect a single time — call it the chart. Everything that ' +
-      'follows is math against the chart; measuring per move would fight the reorder you are ' +
-      'about to apply, and the DOM is never asked where things are again.'],
-    code: [[
-      plain('const lift = (key, anchor) => () => {'),
-      plain('  setChart(charted(anchor.closest("table"), arranged));'),
-      plain('  setFlight(anchor.getBoundingClientRect());'),
-      plain('  setAloft(key);'),
-      plain('};')
-    ]]
+    says: ['The hand is CSS before anything happens — grab on hover, grabbing on press — and ' +
+      'touch-action: none is why the pointer can drag on touch at all. On pointerdown, ' +
+      'JavaScript records which key is aloft and measures the table’s bounding rect a single ' +
+      'time — the chart. Everything that follows is math against the chart; measuring per move ' +
+      'would fight the reorder you are about to apply.'],
+    code: [
+      {label: 'JS', lines: [
+        plain('const lift = (key, anchor) => () => {'),
+        plain('  setChart(charted(anchor.closest("table"), arranged));'),
+        plain('  setFlight(anchor.getBoundingClientRect());'),
+        plain('  setAloft(key);'),
+        plain('};')
+      ]},
+      {label: 'CSS', lines: [
+        plain('.grabbable { cursor: grab; touch-action: none; }'),
+        plain('.grabbable:active { cursor: grabbing; }')
+      ]}
+    ]
   },
   {
     title: 'Give the drag a surface of its own',
-    says: ['While something is aloft, render a fixed, full-viewport element and give it the move ' +
-      'and drop handlers. Because React re-renders it on every settle, the handlers are always ' +
-      'fresh — no stale closures, no document listeners — and it physically blocks hover styles ' +
-      'beneath it for free. Hold pointer capture on it, and treat losing the capture as the drop: ' +
-      'releases can vanish into odd corners of the platform, and the capture going away is the ' +
-      'one signal that always arrives.'],
-    code: [[
-      plain('{aloft &&'),
-      plain('  <article className="drag-surface"   /* position: fixed; inset: 0 */'),
-      plain('           onPointerMove={travel}'),
-      plain('           onPointerUp={drop}'),
-      plain('           onPointerCancel={drop}'),
-      plain('           onLostPointerCapture={drop}/>}'),
-      aside('// cancel and lost capture are not delegates — they ARE the drop')
-    ]]
+    says: ['While something is aloft, the markup grows a fixed, full-viewport element carrying ' +
+      'the move and drop handlers. Because React re-renders it on every settle, the handlers are ' +
+      'always fresh — no stale closures, no document listeners. CSS gives it the grabbing cursor ' +
+      'and, by mere existence, it blocks hover styles beneath it — no state, no class-toggling. ' +
+      'Hold pointer capture on it, and treat losing the capture as the drop: releases can vanish ' +
+      'into odd corners of the platform, and the capture going away is the one signal that ' +
+      'always arrives.'],
+    code: [
+      {label: 'HTML', lines: [
+        plain('{aloft &&'),
+        plain('  <article className="drag-surface"'),
+        plain('           onPointerMove={travel}'),
+        plain('           onPointerUp={drop}'),
+        plain('           onPointerCancel={drop}'),
+        plain('           onLostPointerCapture={drop}/>}'),
+        aside('{/* cancel and lost capture are not delegates — they ARE the drop */}')
+      ]},
+      {label: 'CSS', lines: [
+        plain('.drag-surface { position: fixed; inset: 0; cursor: grabbing; }'),
+        plain('.sortable { user-select: none; }'),
+        aside('/* hover below is blocked by existence; selection never starts */')
+      ]}
+    ]
   },
   {
     title: 'Draw the ghost by hand',
     says: ['The column in your hand is not a clone of DOM nodes — it is a second table rendered ' +
       'from the same data, fixed at the lift point, its transform rendered from a drift held in ' +
-      'state. No element handles, no refs: each pointer move sets the drift, and React paints ' +
-      'the translation. Nothing is measured per move, which is what keeps slower engines smooth.'],
-    code: [[
-      plain('<table className="column-ghost"'),
-      plain('       style={{position: \'fixed\', top: flight.y, left: flight.x,'),
-      plain('               width: flight.width, pointerEvents: \'none\','),
-      plain('               transform: `translate(${drift.x}px, ${drift.y}px)`}}>'),
-      aside('  {/* the same cells, rendered again from the data */}'),
-      plain('</table>'),
-      plain(''),
-      plain('onPointerMove: event =>'),
-      plain('  setDrift({x: event.clientX - origin.x, y: event.clientY - origin.y});')
-    ]]
+      'state. Each pointer move sets the drift and React paints the translation; CSS keeps the ' +
+      'ghost out of hit-testing with pointer-events: none and promises the browser motion with ' +
+      'will-change. Nothing is measured per move, which is what keeps slower engines smooth.'],
+    code: [
+      {label: 'HTML', lines: [
+        plain('<table className="column-ghost"'),
+        plain('       style={{position: \'fixed\', top: flight.y, left: flight.x,'),
+        plain('               width: flight.width,'),
+        plain('               transform: `translate(${drift.x}px, ${drift.y}px)`}}>'),
+        aside('  {/* the same cells, rendered again from the data */}'),
+        plain('</table>')
+      ]},
+      {label: 'JS', lines: [
+        plain('onPointerMove: event =>'),
+        plain('  setDrift({x: event.clientX - origin.x, y: event.clientY - origin.y});')
+      ]},
+      {label: 'CSS', lines: [
+        plain('.column-ghost { pointer-events: none; will-change: transform; }')
+      ]}
+    ]
   },
   {
     title: 'Find the neighbour under the pointer, with a dead zone',
-    says: ['Where the pointer is, in table terms, is a walk over cumulative column widths — ' +
-      'arithmetic on the chart, not elementFromPoint. A neighbour only yields once the pointer ' +
-      'reaches its inner half: the outer quarter is a dead zone, without which the reorder ' +
-      'oscillates when a wide column passes a narrow one. After a swap the pointer sits over the ' +
-      'carried column itself — a no-op — so reversing means deliberately reaching the ' +
-      'neighbour’s inner half again. Hysteresis, for free, from geometry.'],
+    says: ['This step is JavaScript alone, on purpose: where the pointer is, in table terms, is a ' +
+      'walk over cumulative column widths — arithmetic on the chart, never elementFromPoint. A ' +
+      'neighbour only yields once the pointer reaches its inner half: the outer quarter is a ' +
+      'dead zone, without which the reorder oscillates when a wide column passes a narrow one. ' +
+      'After a swap the pointer sits over the carried column itself — a no-op — so reversing ' +
+      'means deliberately reaching the neighbour’s inner half again. Hysteresis, for free, ' +
+      'from geometry.'],
     figure: <SlotsFigure/>,
-    code: [[
-      plain('const struck = slots.find(({end}) => x < end);'),
-      plain('const held = Math.max(struck.width / 4, (struck.width - aloftWidth) / 2);'),
-      plain('const homeward = order.indexOf(struck.key) < order.indexOf(aloft);'),
-      plain('return (homeward ? x < struck.end - held : x > struck.start + held)'),
-      plain('  ? struck.key'),
-      plain('  : undefined;')
-    ]]
+    code: [
+      {label: 'JS', lines: [
+        plain('const struck = slots.find(({end}) => x < end);'),
+        plain('const held = Math.max(struck.width / 4, (struck.width - aloftWidth) / 2);'),
+        plain('const homeward = order.indexOf(struck.key) < order.indexOf(aloft);'),
+        plain('return (homeward ? x < struck.end - held : x > struck.start + held)'),
+        plain('  ? struck.key'),
+        plain('  : undefined;')
+      ]}
+    ]
   },
   held(pace),
   shown(origin),
@@ -253,8 +315,8 @@ const steps = (pace: Pace, origin: Origin, animated: boolean): Step[] => [
 ];
 
 type Props = {
-  pace: Pace;
-  origin: Origin;
+  pace: 'eager' | 'lazy';
+  origin: 'keep' | 'hide';
   animated: boolean;
 };
 
@@ -277,10 +339,9 @@ export const Recipe: FC<Props> = ({pace, origin, animated}) =>
     </p>
     <p className="lead">
       This table takes the other road: pointer events, where every pixel of the interaction is
-      owned. Owned is not the same as scripted — the markup stays a real table with real headers,
-      the row grip is a button so arrow keys reorder rows without a line of drag code, CSS carries
-      the cursors, the hiding, and the hover-taming, and JavaScript is left holding only what
-      neither can: one measurement, some arithmetic, and the order.
+      owned. Owned is not the same as scripted — every step below is the three languages working
+      one behavior together: HTML holds the truth, CSS renders and moves it, JavaScript only
+      decides. Each code block says which language is talking.
     </p>
     <ol className="steps">
       {steps(pace, origin, animated).map(step =>
@@ -296,7 +357,7 @@ export const Recipe: FC<Props> = ({pace, origin, animated}) =>
                 {step.figure}
               </div>
               <div className="step-code">
-                {step.code.map((lines, at) => <Snippet lines={lines} key={at}/>)}
+                {step.code.map(({label, lines}, at) => <Snippet label={label} lines={lines} key={at}/>)}
               </div>
             </div>
           </article>
