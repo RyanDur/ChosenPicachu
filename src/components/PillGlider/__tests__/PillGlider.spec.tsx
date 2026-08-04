@@ -31,8 +31,8 @@ describe('the pill glider', () => {
     expect(onChoose).toHaveBeenCalledWith('hide-lazy');
   });
 
-  test('the glider stretches and slides to the chosen pill', () => {
-    const {container, rerender} = render(
+  test('the glider stretches and slides to the chosen pill', async () => {
+    const {container} = render(
       <PillGlider label="drag style" name="drag-style" options={styles}
                   chosen="eager" onChoose={vi.fn()}/>);
     const widths = [60, 50, 90, 80];
@@ -42,9 +42,9 @@ describe('the pill glider', () => {
         value: widths.slice(0, index).reduce((sum, width) => sum + width, 0)
       });
     });
+    expect(container.querySelector('.glider')).toBeNull();
 
-    rerender(<PillGlider label="drag style" name="drag-style" options={styles}
-                         chosen="hide-eager" onChoose={vi.fn()}/>);
+    await userEvent.click(screen.getByRole('radio', {name: 'Hide Eager'}));
 
     expect(container.querySelector('.glider')).toHaveStyle({
       width: '90px',

@@ -144,10 +144,10 @@ export const DragSortableTable: FC<DragSortableTableProps> = (
             )}</tbody>
         </table>
         {has(aloftColumn) &&
-            <ColumnGhost at={columnsTravel.flight} ghost={columnsTravel.ghost} dress={dress}
+            <ColumnGhost at={columnsTravel.flight} drift={columnsTravel.drift} dress={dress}
                          column={aloftColumn} rows={arranged.map(({row}) => row)}/>}
         {has(aloftRow) &&
-            <RowGhost at={rowsTravel.flight} ghost={rowsTravel.ghost} dress={dress}
+            <RowGhost at={rowsTravel.flight} drift={rowsTravel.drift} dress={dress}
                       columns={ordered} row={aloftRow}/>}
         {(has(columnsTravel.aloft) || has(rowsTravel.aloft)) &&
             <article className="drag-surface"

@@ -1,5 +1,5 @@
-import {ReactNode, useEffect, useLayoutEffect, useRef, useState} from 'react';
-import {join} from '@components/class-names';
+import {ChangeEvent, ReactNode, useState} from 'react';
+import {has} from '@ryandur/sand';
 import './PillGlider.css';
 
 type Option<T extends string> = {
@@ -21,39 +21,32 @@ type Geometry = {
 };
 
 export const PillGlider = <T extends string>({label, name, options, chosen, onChoose}: Props<T>) => {
-  const pills = useRef(new Map<T, HTMLLabelElement>());
-  const [geometry, setGeometry] = useState<Geometry>({left: 0, width: 0});
-  const [gliding, setGliding] = useState(false);
+  const [geometry, setGeometry] = useState<Geometry>();
 
-  useEffect(() => setGliding(true), []);
-
-  useLayoutEffect(() => {
-    const pill = pills.current.get(chosen);
-    if (pill) {
+  const choose = (value: T) => (event: ChangeEvent<HTMLInputElement>): void => {
+    const pill = event.currentTarget.closest('label');
+    if (has(pill)) {
       setGeometry({left: pill.offsetLeft, width: pill.offsetWidth});
     }
-  }, [chosen]);
+    onChoose(value);
+  };
 
   return <fieldset className="pill-glider">
     <legend className="off-screen">{label}</legend>
     <article className="pills">
-      <article className={join('glider', gliding && 'gliding')}
-               style={{width: `${geometry.width}px`, transform: `translateX(${geometry.left}px)`}}/>
+      {has(geometry) &&
+        <article className="glider"
+                 style={{width: `${geometry.width}px`, transform: `translateX(${geometry.left}px)`}}/>}
       {options.map(({display, value}) =>
         <label className="pill"
-               key={value}
-               ref={pill => {
-                 if (pill) {
-                   pills.current.set(value, pill);
-                 }
-               }}>
+               key={value}>
           {display}
           <input type="radio"
                  className="off-screen"
                  name={name}
                  value={value}
-                 checked={value === chosen}
-                 onChange={() => onChoose(value)}/>
+                 checked={chosen === value}
+                 onChange={choose(value)}/>
         </label>)}
     </article>
   </fieldset>;
