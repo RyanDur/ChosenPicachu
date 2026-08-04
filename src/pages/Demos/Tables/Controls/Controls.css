@@ -28,11 +28,4 @@
     line-height: 1.5;
     text-wrap: pretty;
   }
-
-  .readout {
-    margin: 0;
-    padding-top: var(--base-x-1_5);
-    font-size: var(--text-caption);
-    color: var(--charcoal);
-  }
 }

@@ -76,7 +76,4 @@ export const Controls: FC<Props> = ({pace, origin, motion, onPace, onOrigin, onM
                   onChoose={onMotion}/>
       <p className="reading">{motionReadings[motion]}</p>
     </article>
-    <p className="readout">
-      <code>{`dragStyle="${styled(pace, origin)}"  animated={${String(motion === 'animated')}}`}</code>
-    </p>
   </section>;

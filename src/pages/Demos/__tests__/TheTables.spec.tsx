@@ -188,8 +188,6 @@ describe('the tables demo', () => {
     expect(controls).toHaveTextContent(/Neighbours swap the moment you drag past them/);
     expect(controls).toHaveTextContent(/stays where it was/);
     expect(controls).toHaveTextContent(/single frame/);
-    expect(controls).toHaveTextContent('dragStyle="eager-move"');
-    expect(controls).toHaveTextContent('animated={false}');
 
     await userEvent.click(screen.getByRole('radio', {name: 'Lazy'}));
     await userEvent.click(screen.getByRole('radio', {name: 'Hide'}));
@@ -198,8 +196,6 @@ describe('the tables demo', () => {
     expect(controls).toHaveTextContent(/commits the new order on drop/);
     expect(controls).toHaveTextContent(/blanks out at its origin/);
     expect(controls).toHaveTextContent(/view transition/);
-    expect(controls).toHaveTextContent('dragStyle="hide-lazy-move"');
-    expect(controls).toHaveTextContent('animated={true}');
     expect(controls).not.toHaveTextContent(/Neighbours swap/);
   });
 
@@ -209,26 +205,23 @@ describe('the tables demo', () => {
     renderTables(urlOf(feed));
 
     await feedIsSubscribed();
-    const recipe = screen.getByRole('region', {name: 'how to build this'});
+    const recipe = screen.getByRole('region', {name: 'build it from scratch'});
     expect(recipe).toBeVisible();
-    expect(recipe).toHaveTextContent(/pointer events/);
-    expect(recipe).toHaveTextContent(/division of labor/i);
-    expect(recipe).toHaveTextContent(/touch-action/);
-    expect(within(recipe).getByRole('link', {name: 'Drag and Drop demo'}))
-      .toHaveAttribute('href', expect.stringContaining('tab=dragAndDrop'));
-    expect(recipe).toHaveTextContent(/commit the reorder on every crossing/);
-    expect(recipe).toHaveTextContent(/plain state update/);
+    expect(recipe).toHaveTextContent(/Seven steps, no library/);
+    expect(recipe).toHaveTextContent(/Commit inside the move/);
+    expect(recipe).toHaveTextContent(/Leave the origin in place/);
+    expect(recipe).toHaveTextContent(/Apply the state update directly/);
     expect(recipe).not.toHaveTextContent(/startViewTransition/);
 
     await userEvent.click(screen.getByRole('radio', {name: 'Lazy'}));
     await userEvent.click(screen.getByRole('radio', {name: 'Hide'}));
     await userEvent.click(screen.getByRole('radio', {name: 'Animate'}));
 
-    expect(recipe).toHaveTextContent(/remember the crossing as a landing/);
-    expect(recipe).toHaveTextContent(/color: transparent/);
+    expect(recipe).toHaveTextContent(/Stash the landing, commit on release/);
+    expect(recipe).toHaveTextContent(/Blank the origin while it is aloft/);
+    expect(recipe).toHaveTextContent(/Wrap the state update in a view transition/);
     expect(recipe).toHaveTextContent(/startViewTransition/);
-    expect(recipe).not.toHaveTextContent(/commit the reorder on every crossing/);
-    expect(recipe).not.toHaveTextContent(/plain state update/);
+    expect(recipe).not.toHaveTextContent(/Commit inside the move/);
   });
 
   test('every column is resizable', async () => {
