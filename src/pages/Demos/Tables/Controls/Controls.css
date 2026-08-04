@@ -8,6 +8,10 @@
     gap: var(--base-x-1_5) var(--base-x-2_5);
     padding: var(--base-x-1_5) 0;
     border-bottom: var(--hairline) solid var(--charcoal-veil);
+
+    &:last-child {
+      border-bottom: none;
+    }
   }
 
   .axis {
