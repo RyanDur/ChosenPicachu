@@ -66,33 +66,33 @@
   visibility: hidden;
 }
 
+.table-stage {
+  container-type: inline-size;
+}
+
 .sortable .slot {
   width: var(--share);
 }
 
-.sortable .landing {
-  transition: width 200ms ease-out, padding-inline 200ms ease-out;
+.sortable .displaced-left {
+  transition: transform 200ms ease-out;
 
   @starting-style {
-    width: 0;
-    padding-inline: 0;
+    transform: translateX(calc(var(--carried) * 1cqi + var(--base-x-2_5) + var(--hairline)));
   }
 }
 
-.sortable .vacating {
-  width: 0;
-  padding: 0;
-  border: none;
-  transition: width 200ms ease-out;
+.sortable .displaced-right {
+  transition: transform 200ms ease-out;
 
   @starting-style {
-    width: calc(var(--lane) + var(--base-x-2_5));
+    transform: translateX(calc(var(--carried) * -1cqi - var(--base-x-2_5) - var(--hairline)));
   }
 }
 
 .sortable {
   --share: auto;
-  --lane: 0%;
+  --carried: 0;
 
   user-select: none;
 }
