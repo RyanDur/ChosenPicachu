@@ -11,6 +11,13 @@
     font-size: var(--text-body);
   }
 
+  .signpost {
+    display: inline;
+    width: auto;
+    height: auto;
+    text-decoration: underline;
+  }
+
   .step {
     font-size: var(--text-title);
     margin-top: var(--base-x-2);
