@@ -12,6 +12,7 @@ type Props = {
     gripped: boolean;
     hidden: boolean;
     hiddenColumn: string | undefined;
+    vacatedAt: number | undefined;
     named: string | undefined;
     aloftColumn: string | undefined;
     dress: Dress;
@@ -20,12 +21,12 @@ type Props = {
 };
 
 export const DraggableRow: FC<Props> = (
-    {row, columns, position, clipped, gripped, hidden, hiddenColumn, named, aloftColumn, dress, onLift, onNudge}
+    {row, columns, position, clipped, gripped, hidden, hiddenColumn, vacatedAt, named, aloftColumn, dress, onLift, onNudge}
 ) =>
     <tr className={join(dress.trClassName, dress.rowClassName)}>
-        {columns.map(({column}, columnNumber) => {
+        {columns.flatMap(({column}, columnNumber) => {
             const cell = row[column];
-            return <td className={join(
+            const seat = <td className={join(
                            dress.tdClassName, dress.cellClassName, cell.className,
                            clipped && 'ellipsis',
                            hiddenColumn === String(column) && 'hide',
@@ -39,5 +40,8 @@ export const DraggableRow: FC<Props> = (
                     <RowGrip row={position + 1} onLift={onLift} onNudge={onNudge}/>}
                 {cell.display}
             </td>;
+            return columnNumber === vacatedAt
+                ? [<td className="vacating" aria-hidden="true" key="vacating"/>, seat]
+                : [seat];
         })}
     </tr>;
