@@ -51,42 +51,51 @@ export const useTravel = <SUBJECT,>(
             setAloft(subject);
         };
 
-    const surface = {
-        onPointerMove: (event: PointerEvent<HTMLElement>): void => {
-            if (event.buttons === 0) {
-                surface.onPointerUp();
-                return;
-            }
-            event.currentTarget.setPointerCapture?.(event.pointerId);
-            if (has(origin)) {
-                setDrift({x: event.clientX - origin.x, y: event.clientY - origin.y});
-            } else {
-                setOrigin({x: event.clientX, y: event.clientY});
-            }
-            const struck = strike(event.clientX, event.clientY, aloft);
-            if (has(aloft) && has(struck)) {
-                if (struck === aloft) {
-                    setLanding(undefined);
-                } else if (eager) {
-                    settle(aloft, struck);
-                } else {
-                    setLanding(struck);
-                }
-            }
-        },
-        onPointerUp: (): void => {
-            if (not(eager) && has(aloft) && has(landing)) {
-                settle(aloft, landing);
-            }
-            setOrigin(undefined);
-            setLanding(undefined);
-            setAloft(undefined);
-            setFlight(grounded);
-            setDrift(still);
-        },
-        onPointerCancel: (): void => surface.onPointerUp(),
-        onLostPointerCapture: (): void => surface.onPointerUp()
+    const drop = (): void => {
+        if (not(eager) && has(aloft) && has(landing)) {
+            settle(aloft, landing);
+        }
+        setOrigin(undefined);
+        setLanding(undefined);
+        setAloft(undefined);
+        setFlight(grounded);
+        setDrift(still);
     };
 
-    return {aloft, hiding, flight, drift, lift, surface};
+    const travel = (event: PointerEvent<HTMLElement>): void => {
+        if (event.buttons === 0) {
+            drop();
+            return;
+        }
+        event.currentTarget.setPointerCapture?.(event.pointerId);
+        if (has(origin)) {
+            setDrift({x: event.clientX - origin.x, y: event.clientY - origin.y});
+        } else {
+            setOrigin({x: event.clientX, y: event.clientY});
+        }
+        const struck = strike(event.clientX, event.clientY, aloft);
+        if (has(aloft) && has(struck)) {
+            if (struck === aloft) {
+                setLanding(undefined);
+            } else if (eager) {
+                settle(aloft, struck);
+            } else {
+                setLanding(struck);
+            }
+        }
+    };
+
+    return {
+        aloft,
+        hiding,
+        flight,
+        drift,
+        lift,
+        surface: {
+            onPointerMove: travel,
+            onPointerUp: drop,
+            onPointerCancel: drop,
+            onLostPointerCapture: drop
+        }
+    };
 };
