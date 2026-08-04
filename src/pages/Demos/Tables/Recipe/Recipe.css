@@ -59,7 +59,7 @@
   .step {
     counter-increment: recipe-step;
     display: grid;
-    grid-template-columns: var(--base-x-4) minmax(0, var(--measure));
+    grid-template-columns: var(--base-x-4) minmax(0, 1fr);
     align-items: start;
     gap: var(--base-x-2);
 
@@ -83,6 +83,27 @@
     display: grid;
     gap: var(--base);
     min-width: 0;
+  }
+
+  .step-flow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: start;
+    gap: var(--base-x-2) var(--base-x-3);
+  }
+
+  .step-words {
+    flex: 1 1 34ch;
+    min-width: 0;
+    display: grid;
+    gap: var(--base);
+  }
+
+  .step-code {
+    flex: 1 1 52ch;
+    min-width: 0;
+    display: grid;
+    gap: var(--base);
   }
 
   .step-title {

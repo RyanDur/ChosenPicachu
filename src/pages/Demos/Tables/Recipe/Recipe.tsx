@@ -264,9 +264,15 @@ export const Recipe: FC<Props> = ({pace, origin, animated}) =>
               {step.title}
               {step.tuned && <em className="chip">set above</em>}
             </h3>
-            {step.says.map(paragraph => <p className="step-says" key={paragraph}>{paragraph}</p>)}
-            {step.figure}
-            {step.code.map((lines, at) => <Snippet lines={lines} key={at}/>)}
+            <div className="step-flow">
+              <div className="step-words">
+                {step.says.map(paragraph => <p className="step-says" key={paragraph}>{paragraph}</p>)}
+                {step.figure}
+              </div>
+              <div className="step-code">
+                {step.code.map((lines, at) => <Snippet lines={lines} key={at}/>)}
+              </div>
+            </div>
           </article>
         </li>)}
     </ol>
