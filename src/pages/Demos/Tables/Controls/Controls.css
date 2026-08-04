@@ -1,0 +1,18 @@
+.table-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--base-x-40), 1fr));
+  gap: var(--base-x-3);
+  align-items: start;
+
+  .control {
+    display: grid;
+    gap: var(--base);
+    justify-items: start;
+  }
+
+  .reading {
+    font-size: var(--text-caption);
+    color: var(--charcoal);
+    max-width: var(--base-x-50);
+  }
+}

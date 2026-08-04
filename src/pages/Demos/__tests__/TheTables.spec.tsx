@@ -186,6 +186,25 @@ describe('the tables demo', () => {
     expect(screen.getByRole('radio', {name: 'Animate'})).toBeVisible();
   });
 
+  test('the controls read out whatever is chosen', async () => {
+    const feed = await streamingFeed();
+
+    renderTables(urlOf(feed));
+
+    await feedIsSubscribed();
+    const controls = screen.getByRole('region', {name: 'table controls'});
+    expect(controls).toHaveTextContent(/settles into each slot as you carry it/);
+    expect(controls).toHaveTextContent(/nothing animates/);
+
+    await userEvent.click(screen.getByRole('radio', {name: 'Hide Lazy'}));
+    await userEvent.click(screen.getByRole('radio', {name: 'Animate'}));
+
+    expect(controls).toHaveTextContent(/waits for the drop/i);
+    expect(controls).toHaveTextContent(/glide out of the way/);
+    expect(controls).not.toHaveTextContent(/settles into each slot/);
+    expect(controls).not.toHaveTextContent(/nothing animates/);
+  });
+
   test('the recipe teaches whatever the dials are set to', async () => {
     const feed = await streamingFeed();
 
