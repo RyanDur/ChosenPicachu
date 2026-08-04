@@ -74,24 +74,25 @@ export const DragSortableTable: FC<DragSortableTableProps> = (
     };
 
     const liftColumn = (key: string) => (event: PointerEvent<HTMLTableCellElement>): void => {
-        const surface = event.currentTarget.closest('table');
-        if (has(surface)) {
-            setChart(charted(surface, arranged));
+        const table = event.currentTarget.closest('table');
+        if (has(table)) {
+            setChart(charted(table, arranged));
         }
         columnsTravel.lift(key, event.currentTarget)(event);
     };
     const liftRow = (seat: number) => (event: PointerEvent<HTMLElement>): void => {
         setRule(undefined);
         setSeats(standing);
-        const surface = event.currentTarget.closest('table');
-        if (has(surface)) {
-            setChart(charted(surface, arranged));
+        const table = event.currentTarget.closest('table');
+        if (has(table)) {
+            setChart(charted(table, arranged));
         }
         rowsTravel.lift(seat, event.currentTarget.closest('tr'))(event);
     };
 
     const aloftColumn = has(columnsTravel.aloft) ? byKey.get(columnsTravel.aloft) : undefined;
     const aloftRow = has(rowsTravel.aloft) ? rows[rowsTravel.aloft] : undefined;
+    const surface = has(columnsTravel.aloft) ? columnsTravel.surface : rowsTravel.surface;
 
     return <>
         <table id={id}
@@ -151,6 +152,9 @@ export const DragSortableTable: FC<DragSortableTableProps> = (
                       columns={ordered} row={aloftRow}/>}
         {(has(columnsTravel.aloft) || has(rowsTravel.aloft)) &&
             <article className="drag-surface"
-                     {...(has(columnsTravel.aloft) ? columnsTravel.surface : rowsTravel.surface)}/>}
+                     onPointerMove={surface.onPointerMove}
+                     onPointerUp={surface.onPointerUp}
+                     onPointerCancel={surface.onPointerCancel}
+                     onLostPointerCapture={surface.onLostPointerCapture}/>}
     </>;
 };
