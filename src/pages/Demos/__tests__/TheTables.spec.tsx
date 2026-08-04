@@ -195,6 +195,8 @@ describe('the tables demo', () => {
     const recipe = screen.getByRole('region', {name: 'how to build this'});
     expect(recipe).toBeVisible();
     expect(recipe).toHaveTextContent(/pointer events/);
+    expect(within(recipe).getByRole('link', {name: 'Drag and Drop demo'}))
+      .toHaveAttribute('href', expect.stringContaining('tab=dragAndDrop'));
     expect(recipe).toHaveTextContent(/commit the reorder on every crossing/);
     expect(recipe).toHaveTextContent(/plain state update/);
     expect(recipe).not.toHaveTextContent(/startViewTransition/);

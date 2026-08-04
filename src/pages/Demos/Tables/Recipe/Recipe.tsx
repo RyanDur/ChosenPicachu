@@ -1,5 +1,8 @@
 import {FC} from 'react';
+import {Link} from 'react-router';
+import {Paths} from '@pages/Paths';
 import {DragStyle} from '@components/DragSortableTable';
+import {DemoTopics} from '../../types';
 import {CodeBlock} from './CodeBlock';
 import {SlotsFigure} from './SlotsFigure';
 import {LayersFigure} from './LayersFigure';
@@ -126,10 +129,18 @@ export const Recipe: FC<Props> = ({dragStyle, animated}) => {
   return <section aria-label="how to build this" className="drag-recipe card">
     <h2 className="headline">Build it yourself</h2>
     <p className="lead">
-      Skip native drag and drop — its drag image, its cursors, and its drop rules belong to the
-      platform, and half of them cannot be styled. This table is dragged with pointer events, and
-      every pixel of the interaction is owned. The dials above change how it settles and how it
-      moves; this article changes with them.
+      There are two roads to dragging something across a page, and this site walks both. The{' '}
+      <Link to={`${Paths.demos}?tab=${DemoTopics.dragAndDrop}`}>Drag and Drop demo</Link> takes the
+      native API — draggable, dragstart, dragover, drop — where the platform brings the drag image,
+      the drop rules, and most of the behavior for very little code. That generosity has edges: the
+      drag image cannot be made opaque on macOS, the cursor belongs to the platform, and an
+      animation cannot run while a native drag session is alive.
+    </p>
+    <p className="lead">
+      This table takes the other road: pointer events, where every pixel of the interaction is
+      owned — the ghost is opaque because we drew it, the cursor is ours to set, and the motion
+      never fights the drag. The dials above change how it settles and how it moves; this article
+      changes with them.
     </p>
 
     <h3 className="step">Lift: measure once, then trust arithmetic</h3>
