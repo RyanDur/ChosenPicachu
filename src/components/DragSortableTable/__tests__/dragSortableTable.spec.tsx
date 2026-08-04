@@ -464,6 +464,35 @@ describe('animated moves', () => {
     expect(firstCells()).toEqual(['Grace', 'Ada']);
   });
 
+  test('an animated column swap opens a landing lane, not a transition', () => {
+    const transition = vi.fn((update: () => void) => update());
+    (document as {startViewTransition?: unknown}).startViewTransition = transition;
+    const three = [
+      {display: 'name', column: 'name', width: 200},
+      {display: 'age', column: 'age', width: 120},
+      {display: 'city', column: 'city', width: 120}
+    ];
+    const crew = [{name: {display: 'Ada'}, age: {display: '36'}, city: {display: 'London'}}];
+    render(<DragSortableTable columns={three} rows={crew} animated draggableColumns="eager-move"/>);
+    const table = screen.getAllByRole('table')[0];
+    table.getBoundingClientRect = () => ({
+      left: 0, right: 440, top: 0, bottom: 100, width: 440, height: 100, x: 0, y: 0, toJSON: () => ({})
+    });
+
+    fireEvent.pointerDown(within(table).getByRole('columnheader', {name: /^age/}), {clientX: 260, clientY: 20, pointerId: 1});
+    const surface = document.querySelector('.drag-surface');
+    if (surface === null) throw new Error('nothing is aloft');
+    fireEvent.pointerMove(surface, {buttons: 1, clientX: 410, clientY: 50, pointerId: 1});
+
+    const lane = document.querySelector('th.vacating');
+    expect(lane).not.toBeNull();
+    expect(within(table).getByRole('columnheader', {name: /^age/}).classList).toContain('landing');
+    expect(transition).not.toHaveBeenCalled();
+
+    fireEvent(lane as Element, new Event('transitionend', {bubbles: true}));
+    expect(document.querySelector('th.vacating')).toBeNull();
+  });
+
   test('an animated move still lands where the platform cannot glide', async () => {
     render(<DragSortableTable columns={sized} rows={people} animated draggableRows="eager-move"/>);
 
