@@ -1,7 +1,6 @@
 .build-steps {
   display: grid;
   gap: var(--base-x-3);
-  max-width: var(--measure);
 
   .brief-line {
     display: flex;
@@ -27,6 +26,7 @@
     margin: 0;
     font-size: var(--text-body);
     line-height: 1.6;
+    max-width: var(--measure);
     text-wrap: pretty;
   }
 
@@ -98,6 +98,7 @@
     margin: 0;
     font-size: var(--text-body);
     line-height: 1.55;
+    max-width: var(--measure);
     text-wrap: pretty;
   }
 

@@ -1,7 +1,5 @@
 .table-controls {
   display: grid;
-  padding-bottom: var(--base-x-2);
-  border-bottom: var(--hairline) solid var(--charcoal);
 
   .control {
     display: flex;
