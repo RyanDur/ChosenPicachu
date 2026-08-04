@@ -95,7 +95,8 @@ describe('the tables demo', () => {
       expect(screen.getByRole('radio', {name: choice})).toBeVisible();
     }
     expect(screen.getByRole('radio', {name: 'Eager'})).toBeChecked();
-    expect(screen.getByRole('radio', {name: 'Keep'})).toBeChecked();
+    expect(screen.getByRole('radio', {name: 'Hide'})).toBeChecked();
+    expect(screen.getByRole('radio', {name: 'Animate'})).toBeChecked();
 
     const header = (name: string) =>
       within(card).getByRole('columnheader', {name: new RegExp(`^${name}`)});
@@ -186,16 +187,16 @@ describe('the tables demo', () => {
     await feedIsSubscribed();
     const controls = screen.getByRole('region', {name: 'table controls'});
     expect(controls).toHaveTextContent(/Neighbours swap the moment you drag past them/);
-    expect(controls).toHaveTextContent(/stays where it was/);
-    expect(controls).toHaveTextContent(/single frame/);
+    expect(controls).toHaveTextContent(/blanks out at its origin/);
+    expect(controls).toHaveTextContent(/slide to their new seats/);
 
     await userEvent.click(screen.getByRole('radio', {name: 'Lazy'}));
-    await userEvent.click(screen.getByRole('radio', {name: 'Hide'}));
-    await userEvent.click(screen.getByRole('radio', {name: 'Animate'}));
+    await userEvent.click(screen.getByRole('radio', {name: 'Keep'}));
+    await userEvent.click(screen.getByRole('radio', {name: 'Static'}));
 
     expect(controls).toHaveTextContent(/commits the new order on drop/);
-    expect(controls).toHaveTextContent(/blanks out at its origin/);
-    expect(controls).toHaveTextContent(/view transition/);
+    expect(controls).toHaveTextContent(/stays where it was/);
+    expect(controls).toHaveTextContent(/single frame/);
     expect(controls).not.toHaveTextContent(/Neighbours swap/);
   });
 
@@ -212,20 +213,20 @@ describe('the tables demo', () => {
       .toHaveAttribute('href', expect.stringContaining('tab=dragAndDrop'));
     expect(recipe).toHaveTextContent(/touch-action/);
     expect(recipe).toHaveTextContent(/Commit inside the move/);
-    expect(recipe).toHaveTextContent(/Leave the origin in place/);
-    expect(recipe).toHaveTextContent(/Apply the state update directly/);
-    expect(recipe).not.toHaveTextContent(/1cqi/);
-
-    await userEvent.click(screen.getByRole('radio', {name: 'Lazy'}));
-    await userEvent.click(screen.getByRole('radio', {name: 'Hide'}));
-    await userEvent.click(screen.getByRole('radio', {name: 'Animate'}));
-
-    expect(recipe).toHaveTextContent(/Stash the landing, commit on release/);
     expect(recipe).toHaveTextContent(/Blank the origin while it is aloft/);
     expect(recipe).toHaveTextContent(/visibility: hidden/);
     expect(recipe).toHaveTextContent(/Slide the theater, not the layout/);
     expect(recipe).toHaveTextContent(/1cqi/);
     expect(recipe).toHaveTextContent(/translateY\(var\(--drop\)\)/);
+
+    await userEvent.click(screen.getByRole('radio', {name: 'Lazy'}));
+    await userEvent.click(screen.getByRole('radio', {name: 'Keep'}));
+    await userEvent.click(screen.getByRole('radio', {name: 'Static'}));
+
+    expect(recipe).toHaveTextContent(/Stash the landing, commit on release/);
+    expect(recipe).toHaveTextContent(/Leave the origin in place/);
+    expect(recipe).toHaveTextContent(/Apply the state update directly/);
+    expect(recipe).not.toHaveTextContent(/1cqi/);
     expect(recipe).not.toHaveTextContent(/Commit inside the move/);
   });
 
