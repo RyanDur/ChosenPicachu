@@ -130,7 +130,7 @@ export const Recipe: FC<Props> = ({dragStyle, animated}) => {
     <h2 className="headline">Build it yourself</h2>
     <p className="lead">
       There are two roads to dragging something across a page, and this site walks both. The{' '}
-      <Link to={`${Paths.demos}?tab=${DemoTopics.dragAndDrop}`}>Drag and Drop demo</Link> takes the
+      <Link className="signpost" to={`${Paths.demos}?tab=${DemoTopics.dragAndDrop}`}>Drag and Drop demo</Link> takes the
       native API — draggable, dragstart, dragover, drop — where the platform brings the drag image,
       the drop rules, and most of the behavior for very little code. That generosity has edges: the
       drag image cannot be made opaque on macOS, the cursor belongs to the platform, and an
