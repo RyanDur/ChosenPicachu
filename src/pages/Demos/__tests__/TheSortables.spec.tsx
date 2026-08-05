@@ -124,6 +124,24 @@ describe('the sortable list demo', () => {
     expect(controls).toHaveTextContent('dragStyle="lazy-move" animated={false}');
   });
 
+  test('arrow keys walk an item, and both parties slide', async () => {
+    const feed = await streamingFeed();
+
+    renderSortables(urlOf(feed));
+
+    await feedIsSubscribed();
+    const grip = screen.getByRole('button', {name: 'grip for A'});
+    grip.focus();
+    fireEvent.keyDown(grip, {key: 'ArrowRight'});
+
+    expect(seats()).toEqual(['B', 'A', 'C']);
+    expect(screen.getByText('A').closest('li')).toHaveClass('pushed-right');
+    expect(screen.getByText('B').closest('li')).toHaveClass('pushed-left');
+
+    fireEvent.keyDown(screen.getByRole('button', {name: 'grip for A'}), {key: 'ArrowLeft'});
+    expect(seats()).toEqual(['A', 'B', 'C']);
+  });
+
   test('the recipe teaches the native road as the dials sit', async () => {
     const feed = await streamingFeed();
 
@@ -139,6 +157,7 @@ describe('the sortable list demo', () => {
     expect(recipe).toHaveTextContent(/Commit inside the crossing/);
     expect(recipe).toHaveTextContent(/Fade the origin to a whisper/);
     expect(recipe).toHaveTextContent(/Slide the crossed item home/);
+    expect(recipe).toHaveTextContent(/Let the keyboard skip the session/);
     expect(recipe).toHaveTextContent(/Know where the road ends/);
 
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Lazy'}));

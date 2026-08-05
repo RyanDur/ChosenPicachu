@@ -33,6 +33,14 @@
 
     .grip {
         width: var(--base-x-2_5);
+        border: none;
+        background: none;
+        padding: 0;
+        cursor: grab;
+
+        &:focus-visible {
+            outline: var(--hairline-x-2) solid var(--charcoal);
+        }
     }
 }
 .sortable-list .pushed-left {

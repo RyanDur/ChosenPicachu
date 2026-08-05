@@ -120,7 +120,7 @@ const moved = (motion: Motion, pace: Pace): Step => motion === 'static'
           aside('/* pushed-right mirrors with a negative offset */')
         ]},
         {label: 'JS', lines: [
-          plain("setPushed({item, toward: homeward ? 'right' : 'left'});")
+          plain("setPushed({[item]: homeward ? 'right' : 'left'});")
         ]}
       ]
     }
@@ -213,13 +213,38 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => [
   shown(origin),
   moved(motion, pace),
   {
+    title: 'Let the keyboard skip the session',
+    want: 'No keyboard event will ever open a drag session — the platform sells that gesture to the pointer alone — yet the reorder itself never needed a session.',
+    says: ['The grip was already the handle, so make it a real button: focus reaches it for ' +
+      'free, and the arrow keys move the item directly — the same moveToIndex the drags call, ' +
+      'with no dataTransfer and no consent protocol. When the slides are on, both parties are ' +
+      'drawn from the seats they just left, and an item still sliding keeps the keys silent ' +
+      'until it lands.'],
+    code: [
+      {label: 'HTML', lines: [
+        plain('<button type="button" className="grip"'),
+        plain('        aria-label={`grip for ${label}`} ... >')
+      ]},
+      {label: 'JS', lines: [
+        plain('onKeyDown: event => {'),
+        plain("    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight')"),
+        plain('        return;'),
+        plain('    event.preventDefault();'),
+        plain("    nudge(event.key === 'ArrowRight' ? 1 : -1);"),
+        plain('}'),
+        aside('// no session, no snapshot — just the order changing hands')
+      ]}
+    ]
+  },
+  {
     title: 'Know where the road ends',
     want: 'Some pixels on this road are never yours: the snapshot, the cursor, the cancel — and the keyboard never gets a session at all.',
     says: ['The drag image is a bitmap taken at dragstart, so it cannot be animated and cannot ' +
       'be made opaque on macOS; the cursor belongs to the platform; on macOS even the cancel is ' +
-      'the platform’s animation to run; and no keyboard event opens a drag session, so this ' +
-      'road has no keyboard track to offer. When those pixels matter, build the drag from ' +
-      'pointer events instead — the Tables demo walks that road.'],
+      'the platform’s animation to run; and no keyboard event opens a drag session — the ' +
+      'arrows work here only because the sort sidesteps the session entirely. When those ' +
+      'pixels matter, build the drag from pointer events instead — the Tables demo walks that ' +
+      'road.'],
     code: [
       {label: 'JS', lines: [
         aside('// no API exists for these pixels — when they matter,'),
@@ -260,7 +285,7 @@ export const NativeRecipe: FC<ControlsProps> = ({pace, origin, motion, onPace, o
     <header className="brief-line">
       <h2 className="kicker">build the native drag sort yourself</h2>
       <p className="brief">
-        Eight steps of consent and timing — the one demo on this site built on the API actually
+        Nine steps of consent and timing — the one demo on this site built on the API actually
         named drag-and-drop. Steps that carry a dial rewrite to match it.
       </p>
     </header>

@@ -1,4 +1,4 @@
-import {DragEvent, DragEventHandler, FC, PropsWithChildren, useState} from 'react';
+import {DragEvent, DragEventHandler, FC, KeyboardEvent, PropsWithChildren, useState} from 'react';
 import {classNames} from '@components/class-names';
 import Handle from '@components/grip.svg';
 import {PropsWithClassName} from '../types';
@@ -9,6 +9,7 @@ export type DraggableListItemProps = PropsWithChildren & PropsWithClassName & {
   onDragOver?: DragEventHandler<HTMLElement>;
   onDragStart?: DragEventHandler<HTMLElement>;
   onDragEnd?: DragEventHandler<HTMLElement>;
+  onNudge?: (toward: 1 | -1, event: KeyboardEvent<HTMLElement>) => void;
 };
 
 export const Draggable: FC<DraggableListItemProps> = ({
@@ -16,6 +17,7 @@ export const Draggable: FC<DraggableListItemProps> = ({
   onDragOver,
   onDragEnd,
   onDragStart,
+  onNudge,
   children,
   className,
   ...rest
@@ -42,22 +44,33 @@ export const Draggable: FC<DraggableListItemProps> = ({
     draggable={is(dragging)} key={label}>
     <Grip
       label={label}
-      onMouseDown={() => updateDragging('dragging')}/>
+      onMouseDown={() => updateDragging('dragging')}
+      onNudge={onNudge}/>
     <article className='value'>{children}</article>
   </article>;
 };
 
 type GripProps = {
   label: string,
-  onMouseDown: () => void
+  onMouseDown: () => void,
+  onNudge?: (toward: 1 | -1, event: KeyboardEvent<HTMLElement>) => void
 };
 const Grip: FC<GripProps> = ({
   label,
   onMouseDown,
+  onNudge,
 }) =>
-  <article
+  <button
+    type='button'
     className='grip'
     aria-label={`grip for ${label}`}
-    onMouseDown={onMouseDown}>
+    onMouseDown={onMouseDown}
+    onKeyDown={event => {
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') {
+        return;
+      }
+      event.preventDefault();
+      onNudge?.(event.key === 'ArrowRight' ? 1 : -1, event);
+    }}>
     <Handle/>
-  </article>;
+  </button>;
