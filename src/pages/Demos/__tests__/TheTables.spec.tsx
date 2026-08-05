@@ -246,7 +246,7 @@ describe('the tables demo', () => {
     expect(screen.getByRole('region', {name: 'build the drag sort yourself'})).toBeVisible();
     expect(screen.queryByRole('region', {name: 'build the drag resize yourself'})).toBeNull();
 
-    await userEvent.click(screen.getByRole('radio', {name: 'Drag resize'}));
+    await userEvent.click(screen.getByRole('button', {name: 'Drag resize'}));
 
     const resize = screen.getByRole('region', {name: 'build the drag resize yourself'});
     expect(resize).toBeVisible();
@@ -256,7 +256,7 @@ describe('the tables demo', () => {
     expect(screen.queryByRole('region', {name: 'build the drag sort yourself'})).toBeNull();
     expect(screen.queryByRole('region', {name: 'table controls'})).toBeNull();
 
-    await userEvent.click(screen.getByRole('radio', {name: 'Drag sort'}));
+    await userEvent.click(screen.getByRole('button', {name: 'Drag sort'}));
     expect(screen.getByRole('region', {name: 'build the drag sort yourself'})).toBeVisible();
   });
 
