@@ -212,7 +212,7 @@ describe('the tables demo', () => {
     const recipe = screen.getByRole('region', {name: 'build the drag sort yourself'});
     expect(recipe).toBeVisible();
     expect(recipe).toHaveTextContent(/told one hand at a time/);
-    expect(within(recipe).getByRole('link', {name: /Drag and Drop/}))
+    expect(within(recipe).getByRole('link', {name: /Drag sort list demo/}))
       .toHaveAttribute('href', expect.stringContaining('tab=dragAndDrop'));
     expect(recipe).toHaveTextContent(/touch-action/);
     expect(recipe).toHaveTextContent(/Commit inside the move/);

@@ -42,7 +42,7 @@ export const DemosPage = () => {
         values={[
           {display: 'Accordions', param: DemoTopics.accordions},
           {display: 'Z-Index', param: DemoTopics.zIndex},
-          {display: 'Drag and Drop', param: DemoTopics.dragAndDrop},
+          {display: 'Drag sort', param: DemoTopics.dragAndDrop},
           {display: 'Charts', param: DemoTopics.charts},
           {display: 'Tables', param: DemoTopics.tables}
         ]}/>
