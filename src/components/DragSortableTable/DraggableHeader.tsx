@@ -45,6 +45,9 @@ export const DraggableHeader: FC<Props> = (
                            return;
                        }
                        event.preventDefault();
+                       if ((event.currentTarget.getAnimations?.().length ?? 0) > 0) {
+                           return;
+                       }
                        onNudge(event.key === 'ArrowRight' ? 1 : -1);
                    }
                    : undefined}
