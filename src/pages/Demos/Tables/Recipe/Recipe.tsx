@@ -475,9 +475,9 @@ export const Recipe: FC<Props> = ({track, onTrack, pace, origin, motion, onPace,
     <header className="brief-line">
       <h2 className="kicker">build the drag sort yourself</h2>
       <p className="brief">
-        No drag-and-drop library, and two hands in — pointer or keyboard, one track at a time.
-        Marked steps carry their own toggle — the same dials as under the table — and are
-        written the way the toggle sits.
+        No drag-and-drop library. The sort is taught twice — by pointer and by keyboard, one
+        track at a time. Steps that carry a toggle are written the way it sits — the same dials
+        as under the table.
       </p>
     </header>
     <Picks label="input track"
