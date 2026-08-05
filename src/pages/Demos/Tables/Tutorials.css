@@ -1,0 +1,9 @@
+.tutorials {
+  display: grid;
+  gap: var(--base-x-3);
+  justify-items: start;
+
+  .build-steps {
+    justify-self: stretch;
+  }
+}

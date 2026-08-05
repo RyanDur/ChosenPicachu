@@ -237,6 +237,28 @@ describe('the tables demo', () => {
     expect(within(controls).getByRole('radio', {name: 'Static'})).toBeChecked();
   });
 
+  test('a second tutorial answers the resize', async () => {
+    const feed = await streamingFeed();
+
+    renderTables(urlOf(feed));
+
+    await feedIsSubscribed();
+    expect(screen.getByRole('region', {name: 'build the drag sort yourself'})).toBeVisible();
+    expect(screen.queryByRole('region', {name: 'build the drag resize yourself'})).toBeNull();
+
+    await userEvent.click(screen.getByRole('radio', {name: 'Drag resize'}));
+
+    const resize = screen.getByRole('region', {name: 'build the drag resize yourself'});
+    expect(resize).toBeVisible();
+    expect(resize).toHaveTextContent(/zero-sum ledger/);
+    expect(resize).toHaveTextContent(/Trade, never take/);
+    expect(resize).toHaveTextContent(/role="separator"/);
+    expect(screen.queryByRole('region', {name: 'build the drag sort yourself'})).toBeNull();
+
+    await userEvent.click(screen.getByRole('radio', {name: 'Drag sort'}));
+    expect(screen.getByRole('region', {name: 'build the drag sort yourself'})).toBeVisible();
+  });
+
   test('every column is resizable', async () => {
     const feed = await streamingFeed();
 
