@@ -105,11 +105,14 @@
     gap: var(--base);
   }
 
-  .step-title {
+  .step-heading {
     display: flex;
     flex-wrap: wrap;
-    align-items: baseline;
-    gap: var(--base);
+    align-items: center;
+    gap: var(--base) var(--base-x-2_5);
+  }
+
+  .step-title {
     font-size: var(--text-title);
   }
 

@@ -88,15 +88,16 @@ describe('the tables demo', () => {
 
     await feedIsSubscribed();
     const card = screen.getByRole('region', {name: 'live aggregations'});
+    const controls = screen.getByRole('region', {name: 'table controls'});
     for (const axis of ['pace', 'origin', 'motion']) {
-      expect(screen.getByRole('group', {name: axis})).toBeVisible();
+      expect(within(controls).getByRole('group', {name: axis})).toBeVisible();
     }
     for (const choice of ['Eager', 'Lazy', 'Keep', 'Hide']) {
-      expect(screen.getByRole('radio', {name: choice})).toBeVisible();
+      expect(within(controls).getByRole('radio', {name: choice})).toBeVisible();
     }
-    expect(screen.getByRole('radio', {name: 'Eager'})).toBeChecked();
-    expect(screen.getByRole('radio', {name: 'Hide'})).toBeChecked();
-    expect(screen.getByRole('radio', {name: 'Animate'})).toBeChecked();
+    expect(within(controls).getByRole('radio', {name: 'Eager'})).toBeChecked();
+    expect(within(controls).getByRole('radio', {name: 'Hide'})).toBeChecked();
+    expect(within(controls).getByRole('radio', {name: 'Animate'})).toBeChecked();
 
     const header = (name: string) =>
       within(card).getByRole('columnheader', {name: new RegExp(`^${name}`)});
@@ -191,9 +192,9 @@ describe('the tables demo', () => {
     expect(controls).toHaveTextContent(/slide to their new seats/);
     expect(controls).toHaveTextContent('dragStyle="hide-eager-move" animated={true}');
 
-    await userEvent.click(screen.getByRole('radio', {name: 'Lazy'}));
-    await userEvent.click(screen.getByRole('radio', {name: 'Keep'}));
-    await userEvent.click(screen.getByRole('radio', {name: 'Static'}));
+    await userEvent.click(within(controls).getByRole('radio', {name: 'Lazy'}));
+    await userEvent.click(within(controls).getByRole('radio', {name: 'Keep'}));
+    await userEvent.click(within(controls).getByRole('radio', {name: 'Static'}));
 
     expect(controls).toHaveTextContent(/commits the new order on drop/);
     expect(controls).toHaveTextContent(/stays where it was/);
@@ -221,15 +222,19 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/1cqi/);
     expect(recipe).toHaveTextContent(/translateY\(var\(--drop\)\)/);
 
-    await userEvent.click(screen.getByRole('radio', {name: 'Lazy'}));
-    await userEvent.click(screen.getByRole('radio', {name: 'Keep'}));
-    await userEvent.click(screen.getByRole('radio', {name: 'Static'}));
+    await userEvent.click(within(recipe).getByRole('radio', {name: 'Lazy'}));
+    await userEvent.click(within(recipe).getByRole('radio', {name: 'Keep'}));
+    await userEvent.click(within(recipe).getByRole('radio', {name: 'Static'}));
 
     expect(recipe).toHaveTextContent(/Stash the landing, commit on release/);
     expect(recipe).toHaveTextContent(/Leave the origin in place/);
     expect(recipe).toHaveTextContent(/Apply the state update directly/);
     expect(recipe).not.toHaveTextContent(/1cqi/);
     expect(recipe).not.toHaveTextContent(/Commit inside the move/);
+    const controls = screen.getByRole('region', {name: 'table controls'});
+    expect(within(controls).getByRole('radio', {name: 'Lazy'})).toBeChecked();
+    expect(within(controls).getByRole('radio', {name: 'Keep'})).toBeChecked();
+    expect(within(controls).getByRole('radio', {name: 'Static'})).toBeChecked();
   });
 
   test('every column is resizable', async () => {

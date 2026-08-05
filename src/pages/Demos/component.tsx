@@ -88,7 +88,8 @@ export const DemosPage = () => {
                             animated={tableMotion === 'animated'}/>
               <Controls pace={pace} origin={origin} motion={tableMotion}
                         onPace={setPace} onOrigin={setOrigin} onMotion={setTableMotion}/>
-              <Recipe pace={pace} origin={origin} animated={tableMotion === 'animated'}/>
+              <Recipe pace={pace} origin={origin} motion={tableMotion}
+                      onPace={setPace} onOrigin={setOrigin} onMotion={setTableMotion}/>
             </>,
             [DemoTopics.dragAndDrop]: <>
               <h2 className="heading">Sortable List</h2>

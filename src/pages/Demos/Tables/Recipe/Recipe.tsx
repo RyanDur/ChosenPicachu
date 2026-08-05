@@ -1,8 +1,11 @@
 import {FC, ReactNode} from 'react';
 import {Link} from 'react-router';
+import {has} from '@ryandur/sand';
 import {join} from '@components/class-names';
+import {PillGlider} from '@components/PillGlider';
 import {Paths} from '@pages/Paths';
 import {DemoTopics} from '../../types';
+import {Motion, Origin, Pace} from '../Controls';
 import {Line, Snippet} from './Snippet';
 import {SlotsFigure} from './SlotsFigure';
 import './Recipe.css';
@@ -16,7 +19,7 @@ type Step = {
   title: string;
   want: string;
   says: string[];
-  tuned?: boolean;
+  dial?: 'pace' | 'origin' | 'motion';
   figure?: ReactNode;
   code: Block[];
 };
@@ -27,7 +30,7 @@ const aside = (text: string): Line => ({text, dim: true});
 const held = (pace: 'eager' | 'lazy'): Step => pace === 'eager'
   ? {
     title: 'Commit inside the move',
-    tuned: true,
+    dial: 'pace',
     want: 'The problem: you want the table to answer the hand immediately — waiting for the drop hides the outcome until it is too late to change your mind.',
     says: ['With eager pace, settle as soon as a neighbour is struck — the order state updates ' +
       'mid-drag, and because the markup renders through that order, the same key finds its new ' +
@@ -49,7 +52,7 @@ const held = (pace: 'eager' | 'lazy'): Step => pace === 'eager'
   }
   : {
     title: 'Stash the landing, commit on release',
-    tuned: true,
+    dial: 'pace',
     want: 'The problem: you want a calm table while dragging — mid-flight churn is distracting, and only the destination matters.',
     says: ['With lazy pace, remember the last neighbour struck and do nothing else — the table ' +
       'holds still, and one moveToIndex runs on pointer up. Drifting back over your own slot ' +
@@ -71,7 +74,7 @@ const held = (pace: 'eager' | 'lazy'): Step => pace === 'eager'
 const shown = (origin: 'keep' | 'hide'): Step => origin === 'hide'
   ? {
     title: 'Blank the origin while it is aloft',
-    tuned: true,
+    dial: 'origin',
     want: 'The problem: with the ghost in hand, the origin column reads as a duplicate — two of the same thing, and no visible gap to say where the drop will land.',
     says: ['Three languages, one disappearance. JavaScript knows only a boolean — the origin dial ' +
       'is already the flag, derived by comparison. The markup passes it down as a class on the ' +
@@ -97,7 +100,7 @@ const shown = (origin: 'keep' | 'hide'): Step => origin === 'hide'
   }
   : {
     title: 'Leave the origin in place while it is aloft',
-    tuned: true,
+    dial: 'origin',
     want: 'The problem: a vanished origin can disorient — sometimes the eye wants the column both at rest and in hand while deciding.',
     says: ['Render the lifted key normally underneath the ghost. There are two of it for the ' +
       'length of the drag, which reads as a copy being carried out of a still-intact table. ' +
@@ -113,7 +116,7 @@ const shown = (origin: 'keep' | 'hide'): Step => origin === 'hide'
 const moved = (animated: boolean): Step => animated
   ? {
     title: 'Slide the theater, not the layout',
-    tuned: true,
+    dial: 'motion',
     want: 'The problem: a swap that teleports is honest but hard to follow — the eye loses which column went where. Yet animating the layout itself makes the whole table bounce, because layout is load-bearing.',
     says: [
       'A swap commits instantly — the carried column already sits at full width in its new slot, ' +
@@ -164,7 +167,7 @@ const moved = (animated: boolean): Step => animated
   }
   : {
     title: 'Apply the state update directly',
-    tuned: true,
+    dial: 'motion',
     want: 'The problem: motion is not free — it competes with the pointer, costs a frame budget, and some users ask for none at all.',
     says: ['Call the updater and let React paint — the new order is on screen in the next frame. ' +
       'No classes, no keyframes, nothing marked. There is real value in this mode beyond taste: ' +
@@ -331,18 +334,47 @@ const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolea
 ];
 
 type Props = {
-  pace: 'eager' | 'lazy';
-  origin: 'keep' | 'hide';
-  animated: boolean;
+  pace: Pace;
+  origin: Origin;
+  motion: Motion;
+  onPace: (pace: Pace) => void;
+  onOrigin: (origin: Origin) => void;
+  onMotion: (motion: Motion) => void;
 };
 
-export const Recipe: FC<Props> = ({pace, origin, animated}) =>
-  <section aria-label="build the drag sort yourself" className="build-steps">
+export const Recipe: FC<Props> = ({pace, origin, motion, onPace, onOrigin, onMotion}) => {
+  const dials = {
+    pace: <PillGlider label="pace"
+                      name="step-pace"
+                      options={[
+                        {display: 'Eager', value: 'eager'},
+                        {display: 'Lazy', value: 'lazy'}
+                      ]}
+                      chosen={pace}
+                      onChoose={onPace}/>,
+    origin: <PillGlider label="origin"
+                        name="step-origin"
+                        options={[
+                          {display: 'Keep', value: 'keep'},
+                          {display: 'Hide', value: 'hide'}
+                        ]}
+                        chosen={origin}
+                        onChoose={onOrigin}/>,
+    motion: <PillGlider label="motion"
+                        name="step-motion"
+                        options={[
+                          {display: 'Animate', value: 'animated'},
+                          {display: 'Static', value: 'static'}
+                        ]}
+                        chosen={motion}
+                        onChoose={onMotion}/>
+  };
+  return <section aria-label="build the drag sort yourself" className="build-steps">
     <header className="brief-line">
       <h2 className="kicker">build the drag sort yourself</h2>
       <p className="brief">
-        Nine steps, no drag-and-drop library. Steps marked <em className="chip">set above</em> are
-        written the way the controls are currently set.
+        Nine steps, no drag-and-drop library. Three of them carry their own toggle — the same
+        dials as under the table — and are written the way the toggle sits.
       </p>
     </header>
     <p className="lead">
@@ -377,13 +409,13 @@ export const Recipe: FC<Props> = ({pace, origin, animated}) =>
       of the marked steps you are reading now.
     </p>
     <ol className="steps">
-      {steps(pace, origin, animated).map(step =>
-        <li className={join('step', step.tuned && 'tuned')} key={step.title}>
+      {steps(pace, origin, motion === 'animated').map(step =>
+        <li className={join('step', has(step.dial) && 'tuned')} key={step.title}>
           <article className="step-body">
-            <h3 className="step-title">
-              {step.title}
-              {step.tuned && <em className="chip">set above</em>}
-            </h3>
+            <div className="step-heading">
+              <h3 className="step-title">{step.title}</h3>
+              {has(step.dial) && dials[step.dial]}
+            </div>
             <div className="step-flow">
               <div className="step-words">
                 <p className="step-want">{step.want}</p>
@@ -398,3 +430,4 @@ export const Recipe: FC<Props> = ({pace, origin, animated}) =>
         </li>)}
     </ol>
   </section>;
+};
