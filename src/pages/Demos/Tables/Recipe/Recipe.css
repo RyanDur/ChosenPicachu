@@ -157,6 +157,14 @@
     .aside {
       opacity: 0.65;
     }
+
+    .key {
+      color: var(--mint);
+    }
+
+    .lit {
+      color: var(--silk);
+    }
   }
 
   .recipe-figure {
