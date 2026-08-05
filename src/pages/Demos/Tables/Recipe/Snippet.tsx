@@ -16,7 +16,7 @@ export const Snippet: FC<Props> = ({label, lines}) =>
   <pre className="snippet">
     <span className="lang" aria-hidden="true">{label}</span>
     <code>{lines.map(({text, dim}, at) =>
-      <span className={join('line', dim && 'aside')} key={at}>
+      <span className={join('line', dim && 'comment')} key={at}>
         {dim
           ? text
           : highlight(label, text).map(({text: piece, kind}, part) =>
