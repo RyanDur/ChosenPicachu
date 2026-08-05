@@ -157,7 +157,7 @@ describe('the sortable list demo', () => {
     expect(recipe).toHaveTextContent(/Commit inside the crossing/);
     expect(recipe).toHaveTextContent(/Fade the origin to a whisper/);
     expect(recipe).toHaveTextContent(/Slide the crossed item home/);
-    expect(recipe).toHaveTextContent(/Let the keyboard skip the session/);
+    expect(recipe).toHaveTextContent(/Arrows go straight to the order/);
     expect(recipe).toHaveTextContent(/Know where the road ends/);
 
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Lazy'}));
