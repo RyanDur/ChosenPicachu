@@ -1,31 +1,16 @@
-import {FC, ReactNode} from 'react';
+import {FC} from 'react';
 import {Link} from 'react-router';
-import {has} from '@ryandur/sand';
-import {join} from '@components/class-names';
 import {PillGlider} from '@components/PillGlider';
 import {Paths} from '@pages/Paths';
 import {DemoTopics} from '../../types';
 import {Motion, Origin, Pace} from '../Controls';
-import {Line, Snippet} from './Snippet';
+import {StepEntry, StepList, aside, plain} from './StepList';
 import {SlotsFigure} from './SlotsFigure';
 import './Recipe.css';
 
-type Block = {
-  label: 'HTML' | 'CSS' | 'JS';
-  lines: Line[];
-};
-
-type Step = {
-  title: string;
-  want: string;
-  says: string[];
+type Step = Omit<StepEntry, 'dial'> & {
   dial?: 'pace' | 'origin' | 'motion';
-  figure?: ReactNode;
-  code: Block[];
 };
-
-const plain = (text: string): Line => ({text});
-const aside = (text: string): Line => ({text, dim: true});
 
 const held = (pace: 'eager' | 'lazy'): Step => pace === 'eager'
   ? {
@@ -408,26 +393,7 @@ export const Recipe: FC<Props> = ({pace, origin, motion, onPace, onOrigin, onMot
       props — the readout under them shows exactly what they build — and they pick which version
       of the marked steps you are reading now.
     </p>
-    <ol className="steps">
-      {steps(pace, origin, motion === 'animated').map(step =>
-        <li className={join('step', has(step.dial) && 'tuned')} key={step.title}>
-          <article className="step-body">
-            <div className="step-heading">
-              <h3 className="step-title">{step.title}</h3>
-              {has(step.dial) && dials[step.dial]}
-            </div>
-            <div className="step-flow">
-              <div className="step-words">
-                <p className="step-want">{step.want}</p>
-                {step.says.map(paragraph => <p className="step-says" key={paragraph}>{paragraph}</p>)}
-                {step.figure}
-              </div>
-              <div className="step-code">
-                {step.code.map(({label, lines}, at) => <Snippet label={label} lines={lines} key={at}/>)}
-              </div>
-            </div>
-          </article>
-        </li>)}
-    </ol>
+    <StepList steps={steps(pace, origin, motion === 'animated')
+      .map(({dial, ...step}) => ({...step, dial: dial && dials[dial]}))}/>
   </section>;
 };

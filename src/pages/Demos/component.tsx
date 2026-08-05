@@ -20,7 +20,7 @@ import {
 import {DemoTopics, demoTopicParam} from './types';
 import {NaturalZIndex} from './ZIndexDemo';
 import {Candles, PriceChart} from './Charts';
-import {Aggregations, Controls, Motion, Origin, Pace, Recipe, styled} from './Tables';
+import {Aggregations, Controls, Motion, Origin, Pace, Tutorials, styled} from './Tables';
 import {statusCopy, useLiveTrades} from './Charts/useLiveTrades';
 import {useEnv} from '@components/Env';
 
@@ -88,8 +88,8 @@ export const DemosPage = () => {
                             animated={tableMotion === 'animated'}/>
               <Controls pace={pace} origin={origin} motion={tableMotion}
                         onPace={setPace} onOrigin={setOrigin} onMotion={setTableMotion}/>
-              <Recipe pace={pace} origin={origin} motion={tableMotion}
-                      onPace={setPace} onOrigin={setOrigin} onMotion={setTableMotion}/>
+              <Tutorials pace={pace} origin={origin} motion={tableMotion}
+                         onPace={setPace} onOrigin={setOrigin} onMotion={setTableMotion}/>
             </>,
             [DemoTopics.dragAndDrop]: <>
               <h2 className="heading">Sortable List</h2>
