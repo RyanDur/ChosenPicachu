@@ -22,7 +22,7 @@ const held = (pace: 'eager' | 'lazy'): Step => pace === 'eager'
   ? {
     title: 'Commit inside the move',
     dial: 'pace',
-    want: 'The problem: you want the table to answer the hand immediately — waiting for the drop hides the outcome until it is too late to change your mind.',
+    want: 'You want the table to answer the hand immediately; waiting for the drop hides the outcome until it is too late to change your mind.',
     says: ['With eager pace, settle as soon as a neighbour is struck — the order state updates ' +
       'mid-drag, and because the markup renders through that order, the same key finds its new ' +
       'seat and React moves the real cells. Carrying the column back is just more crossings: ' +
@@ -44,7 +44,7 @@ const held = (pace: 'eager' | 'lazy'): Step => pace === 'eager'
   : {
     title: 'Stash the landing, commit on release',
     dial: 'pace',
-    want: 'The problem: you want a calm table while dragging — mid-flight churn is distracting, and only the destination matters.',
+    want: 'You want the table calm while you drag, because mid-flight churn distracts and only the destination matters.',
     says: ['With lazy pace, remember the last neighbour struck and do nothing else — the table ' +
       'holds still, and one moveToIndex runs on pointer up. Drifting back over your own slot ' +
       'clears the landing, so a drop at home changes nothing.'],
@@ -66,8 +66,8 @@ const shown = (origin: 'keep' | 'hide'): Step => origin === 'hide'
   ? {
     title: 'Blank the origin while it is aloft',
     dial: 'origin',
-    want: 'The problem: with the ghost in hand, the origin column reads as a duplicate — two of the same thing, and no visible gap to say where the drop will land.',
-    says: ['Three languages, one disappearance. JavaScript knows only a boolean — the origin dial ' +
+    want: 'With the ghost in hand, the origin column reads as a duplicate — two of the same thing, and no visible gap to say where the drop will land.',
+    says: ['The disappearance takes all three languages. JavaScript knows only a boolean — the origin dial ' +
       'is already the flag, derived by comparison. The markup passes it down as a class on the ' +
       'lifted key’s cells. CSS does the vanishing with a single word: visibility hidden takes ' +
       'the whole column — text, borders, grip, everything — while its layout space remains as ' +
@@ -92,7 +92,7 @@ const shown = (origin: 'keep' | 'hide'): Step => origin === 'hide'
   : {
     title: 'Leave the origin in place while it is aloft',
     dial: 'origin',
-    want: 'The problem: a vanished origin can disorient — sometimes the eye wants the column both at rest and in hand while deciding.',
+    want: 'A vanished origin can disorient; sometimes the eye wants the column both at rest and in hand while it decides.',
     says: ['Render the lifted key normally underneath the ghost. There are two of it for the ' +
       'length of the drag, which reads as a copy being carried out of a still-intact table. ' +
       'The hidden flag simply never reaches the markup, so CSS has nothing to erase.'],
@@ -108,7 +108,7 @@ const moved = (animated: boolean): Step => animated
   ? {
     title: 'Slide the theater, not the layout',
     dial: 'motion',
-    want: 'The problem: a swap that teleports is honest but hard to follow — the eye loses which column went where. Yet animating the layout itself makes the whole table bounce, because layout is load-bearing.',
+    want: 'A swap that teleports is honest but hard to follow — the eye loses which column went where — yet animating the layout itself makes the whole table bounce, because layout is load-bearing.',
     says: [
       'A swap commits instantly — the carried column already sits at full width in its new slot, ' +
       'hidden or under the ghost, and the layout underneath is final. The displaced column is ' +
@@ -159,7 +159,7 @@ const moved = (animated: boolean): Step => animated
   : {
     title: 'Apply the state update directly',
     dial: 'motion',
-    want: 'The problem: motion is not free — it competes with the pointer, costs a frame budget, and some users ask for none at all.',
+    want: 'Motion is not free: it competes with the pointer, costs a frame budget, and some users ask for none at all.',
     says: ['Call the updater and let React paint — the new order is on screen in the next frame. ' +
       'No classes, no keyframes, nothing marked. There is real value in this mode beyond taste: ' +
       'no animation means nothing competes with the pointer, and no motion for ' +
@@ -175,11 +175,11 @@ const moved = (animated: boolean): Step => animated
 const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolean): Step[] => [
   {
     title: 'Let CSS carry its share',
-    want: 'The problem: a drag built in JavaScript alone reimplements what the platform already does — cursors, keyboard, focus, selection — and does each of them worse.',
+    want: 'A drag built in JavaScript alone ends up reimplementing what the platform already does — cursors, keyboard, focus, selection — and doing each of them worse.',
     says: [
-      'The markup stays honest HTML: a real table with real headers, so the semantics come free. ' +
-      'The row grip is a button — arrow keys reorder rows without a line of drag code — and the ' +
-      'resize handle is a separator that announces its value.',
+      'The markup stays honest HTML — a real table with real headers — so the semantics come ' +
+      'free: the row grip is a button that reorders rows from the arrow keys without a line of ' +
+      'drag code, and the resize handle is a separator that announces its value.',
       'CSS carries more of the effect than it appears: the open hand and the closed fist are ' +
       'cursors, touch-action: none is the single line that lets pointer events drag on a ' +
       'touchscreen, and user-select: none keeps a fast drag from sweeping text selections. ' +
@@ -205,7 +205,7 @@ const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolea
   },
   {
     title: 'Keep the order in state, not in the data',
-    want: 'The problem: the stream keeps producing rows in its own order — if reordering meant rewriting the data, every trade landing would fight every drag.',
+    want: 'The stream keeps producing rows in its own order, and if reordering meant rewriting the data, every trade that lands would fight every drag.',
     says: ['Rows and columns arrive in whatever order the fold produced. Hold a separate list of ' +
       'keys and seats, and render the markup through it, so a reorder never touches the data — ' +
       'the same key finds its new seat and React moves the real nodes.'],
@@ -224,7 +224,7 @@ const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolea
   },
   {
     title: 'Lift on pointer down, and measure the table once',
-    want: 'The problem: a drag needs to know where everything is, but asking the DOM on every move forces layout again and again — and mid-reorder, the DOM is the wrong authority anyway.',
+    want: 'A drag needs to know where everything is, but asking the DOM on every move forces layout again and again — and mid-reorder, the DOM is the wrong authority anyway.',
     says: ['The hand is CSS before anything happens — grab on hover, grabbing on press — and ' +
       'touch-action: none is why the pointer can drag on touch at all. On pointerdown, ' +
       'JavaScript records which key is aloft and measures the table’s bounding rect a single ' +
@@ -246,7 +246,7 @@ const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolea
   },
   {
     title: 'Give the drag a surface of its own',
-    want: 'The problem: a drag outruns the element it started on — the pointer leaves the header, handlers close over stale state, and the release can happen anywhere, even outside the window.',
+    want: 'A drag outruns the element it started on: the pointer leaves the header, handlers close over stale state, and the release can happen anywhere, even outside the window.',
     says: ['While something is aloft, the markup grows a fixed, full-viewport element carrying ' +
       'the move and drop handlers. Because React re-renders it on every settle, the handlers are ' +
       'always fresh — no stale closures, no document listeners. CSS gives it the grabbing cursor ' +
@@ -273,7 +273,7 @@ const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolea
   },
   {
     title: 'Draw the ghost by hand',
-    want: 'The problem: the user needs to see what they are carrying, but cloning DOM nodes is brittle and measuring the ghost every move is what makes drags stutter.',
+    want: 'You need to see what you are carrying, but cloning DOM nodes is brittle, and measuring the ghost on every move is what makes drags stutter.',
     says: ['The column in your hand is not a clone of DOM nodes — it is a second table rendered ' +
       'from the same data, fixed at the lift point, its transform rendered from a drift held in ' +
       'state. Each pointer move sets the drift and React paints the translation; CSS keeps the ' +
@@ -299,7 +299,7 @@ const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolea
   },
   {
     title: 'Find the neighbour under the pointer, with a dead zone',
-    want: 'The problem: naive hit-testing makes the order chatter — at a boundary, every pixel of movement flips the swap back and forth.',
+    want: 'Hit-test naively and the order chatters: at a boundary, every pixel of movement flips the swap back and forth.',
     says: ['This step is JavaScript alone, on purpose: where the pointer is, in table terms, is a ' +
       'walk over cumulative column widths — arithmetic on the chart, never elementFromPoint. A ' +
       'neighbour only yields once the pointer reaches its inner half: the outer quarter is a ' +
@@ -326,13 +326,13 @@ const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolea
 
 const nudgedBoth = (animated: boolean): Step => animated
   ? {
-    title: 'Both parties slide, each by the other\u2019s share',
+    title: 'Both parties slide, each by the other’s share',
     dial: 'motion',
-    want: 'The problem: a pointer swap has a ghost in hand to explain itself \u2014 a keyboard swap has no hand, so if only the neighbour slid, the walked column would simply teleport.',
-    says: ['Mark both columns displaced. The swap still commits instantly \u2014 the same theater ' +
-      'the pointer track built \u2014 but now each party is drawn starting from the seat it just ' +
-      'left, offset by the other\u2019s share, sliding home on the same keyframes. The classes ' +
-      'arrive as the reorder moves the nodes, so both slides start fresh. No new CSS at all.'],
+    want: 'A pointer swap has a ghost in hand to explain itself; a keyboard swap has no hand, and if only the neighbour slid, the walked column would simply teleport.',
+    says: ['Mark both columns displaced. The swap still commits instantly — the same theater ' +
+      'the pointer track built — but now each party is drawn starting from the seat it just ' +
+      'left, offset by the other’s share, sliding home on the same keyframes. The classes ' +
+      'arrive as the reorder moves the nodes, so both slides start fresh without a line of new CSS.'],
     code: [
       {label: 'JS', lines: [
         plain('setSlid({'),
@@ -345,14 +345,14 @@ const nudgedBoth = (animated: boolean): Step => animated
       {label: 'CSS', lines: [
         plain('.sortable .displaced-left { animation: displaced-left 200ms ease-out; }'),
         plain('.sortable .displaced-right { animation: displaced-right 200ms ease-out; }'),
-        aside('/* the pointer track\u2019s keyframes, unchanged */')
+        aside('/* the pointer track’s keyframes, unchanged */')
       ]}
     ]
   }
   : {
     title: 'Cut on the keypress',
     dial: 'motion',
-    want: 'The problem: motion is not free \u2014 a held key multiplies it, and some users ask for none at all.',
+    want: 'Motion is not free, a held key multiplies it, and some users ask for none at all.',
     says: ['Apply the order and mark nothing; the swap paints on the next frame. With no ' +
       'animation running there is nothing to pace, so a held arrow walks the column exactly as ' +
       'fast as the key repeats.'],
@@ -367,11 +367,11 @@ const nudgedBoth = (animated: boolean): Step => animated
 const keyedSteps = (animated: boolean): Step[] => [
   {
     title: 'Give focus a place to land',
-    want: 'The problem: a drag answers only the hand \u2014 the keyboard can reach the page, but a plain header holds no focus, so there is nothing to press.',
-    says: ['HTML nearly solves this alone. The row grip is a button, focusable by birth; the ' +
-      'headers ask for focus with a tabIndex. Tab now walks every movable piece of the table in ' +
-      'order. CSS answers the arrival: a focus-visible ring draws for the keyboard only, so ' +
-      'pointer users never see it.'],
+    want: 'A drag answers only the hand, and though the keyboard can reach the page, a plain header holds no focus — there is nothing to press.',
+    says: ['HTML nearly solves this alone: the row grip is a button, focusable by birth, and ' +
+      'the headers ask for focus with a tabIndex, so Tab walks every movable piece of the table ' +
+      'in order. CSS answers the arrival with a focus-visible ring that draws for the keyboard ' +
+      'only — pointer users never see it.'],
     code: [
       {label: 'HTML', lines: [
         plain('<th tabIndex={travels ? 0 : undefined} ... >'),
@@ -388,12 +388,12 @@ const keyedSteps = (animated: boolean): Step[] => [
   },
   {
     title: 'Arrows speak direction',
-    want: 'The problem: focus can reach a column, but the platform ships no verb for \u201cswap left\u201d \u2014 the keyboard needs one.',
-    says: ['A keydown handler claims the two arrows and nothing else \u2014 every other key falls ' +
-      'through untouched, so tabbing and the sort menu keep working \u2014 and preventDefault ' +
-      'stops the page from scrolling on the keys it does claim. The walk clamps inside the ' +
-      'anchored edges: the first and last columns hold the table, so the nudge stops beside ' +
-      'them. Rows do the same dance turned vertical \u2014 the grip listens for up and down.'],
+    want: 'Focus can reach a column, but the platform ships no verb for “swap left” — the keyboard needs one.',
+    says: ['A keydown handler claims the two arrows and nothing else, so every other key falls ' +
+      'through untouched and tabbing and the sort menu keep working; preventDefault stops the ' +
+      'page from scrolling on the keys it does claim. The walk clamps inside the anchored ' +
+      'edges — the first and last columns hold the table, so the nudge stops beside them — and ' +
+      'rows do the same dance turned vertical, the grip listening for up and down.'],
     code: [
       {label: 'JS', lines: [
         plain('onKeyDown: event => {'),
@@ -413,9 +413,9 @@ const keyedSteps = (animated: boolean): Step[] => [
   ...animated
     ? [{
       title: 'Let the slide pace the key',
-      want: 'The problem: a held arrow autorepeats faster than the slide runs \u2014 nudges land mid-flight and the column outruns its own theater.',
-      says: ['No timers. Before nudging, ask the element whether an animation is still running ' +
-        '\u2014 getAnimations is the platform\u2019s own record of the slide. While one runs, ' +
+      want: 'A held arrow autorepeats faster than the slide runs — nudges land mid-flight and the column outruns its own theater.',
+      says: ['There are no timers in this step: before nudging, ask the element whether an ' +
+        'animation is still running — getAnimations is the platform’s own record of the slide. While one runs, ' +
         'the key falls silent; the moment it ends, the next repeat lands. The animation is the ' +
         'debounce clock, and CSS already set its length.'],
       code: [
@@ -490,9 +490,9 @@ export const Recipe: FC<Props> = ({track, onTrack, pace, origin, motion, onPace,
            onPick={onTrack}/>
     {track === 'pointer' ? <>
     <p className="lead">
-      The want: a live table whose columns and rows can be dragged into any order — eagerly or on
+      You want a live table whose columns and rows can be dragged into any order — eagerly or on
       the drop, origin shown or hidden, sliding or cutting — while the data keeps streaming
-      underneath. The need: enough control to own every pixel of that interaction.
+      underneath, and having that means owning every pixel of the interaction.
     </p>
     <p className="lead">
       There are two roads to dragging something across a page, and this site walks both. The{' '}
@@ -522,10 +522,10 @@ export const Recipe: FC<Props> = ({track, onTrack, pace, origin, motion, onPace,
     </p>
     </> : <>
     <p className="lead">
-      The want: every reorder the hand can make, made from the keyboard — walk a column left or
-      right, a row up or down, with the same slides explaining the same swaps. The need: almost
-      nothing new. The state, the clamps, and the theater all exist; this track is about letting
-      focus reach them and letting two keys speak.
+      You want every reorder the hand can make, made from the keyboard — a column walked left or
+      right, a row up or down, the same slides explaining the same swaps — and it turns out to
+      need almost nothing new: the state, the clamps, and the theater all exist, so this track is
+      about letting focus reach them and letting two keys speak.
     </p>
     <p className="lead">
       Two of the dials go quiet here: pace and origin describe a drag session — what happens

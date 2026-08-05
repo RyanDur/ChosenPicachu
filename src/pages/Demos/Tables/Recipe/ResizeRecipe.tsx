@@ -5,12 +5,12 @@ import './Recipe.css';
 const steps: StepEntry[] = [
   {
     title: 'Keep the widths as a zero-sum ledger',
-    want: 'The problem: absolute pixel widths break the promise that the table fills its ' +
-      'container — resize one column and the table grows, wraps, or leaves a gap behind.',
+    want: 'Absolute pixel widths break the promise that the table fills its container: resize ' +
+      'one column and the table grows, wraps, or leaves a gap behind.',
     says: ['Widths are shares of a hundred, seeded once from the declared weights. The markup ' +
       'renders each header through its share, and fixed table layout does the rest: the table is ' +
-      'always exactly its container, and every column is a fraction of it. One record, one ' +
-      'promise.'],
+      'always exactly its container, and every column is a fraction of it — one record keeping ' +
+      'one promise.'],
     code: [
       {label: 'JS', lines: [
         plain('const seededShares = (columns) => {'),
@@ -31,8 +31,8 @@ const steps: StepEntry[] = [
   },
   {
     title: 'A handle that announces itself',
-    want: 'The problem: a resize affordance is invisible to assistive tech unless it says what ' +
-      'it is, where it stands, and how far it can go.',
+    want: 'A resize affordance is invisible to assistive tech unless it says what it is, ' +
+      'where it stands, and how far it can go.',
     says: ['The handle is a real separator with a value: now, minimum, and maximum, focusable ' +
       'from the keyboard. CSS gives it its post — absolute on the column’s right edge, the ' +
       'col-resize cursor, and touch-action: none so the pointer can drag it on a touchscreen.'],
@@ -61,11 +61,11 @@ const steps: StepEntry[] = [
   },
   {
     title: 'Trade, never take',
-    want: 'The problem: dragging one boundary must not change the table’s total width or starve ' +
-      'a column down to nothing.',
-    says: ['Every resize is a trade between neighbours: whatever one column gains, the next ' +
-      'gives. The trade is clamped so neither side drops below the slimmest share — and because ' +
-      'it only ever moves value between two entries of the ledger, the sum cannot change. The ' +
+    want: 'Dragging one boundary must not change the table’s total width, and it must not ' +
+      'starve a column down to nothing.',
+    says: ['Every resize is a trade between neighbours — whatever one column gains, the next ' +
+      'gives — clamped so neither side drops below the slimmest share, and because a trade only ' +
+      'ever moves value between two entries of the ledger, the sum cannot change. The ' +
       'invariant is not checked; it is built in.'],
     code: [
       {label: 'JS', lines: [
@@ -83,8 +83,8 @@ const steps: StepEntry[] = [
   },
   {
     title: 'Capture the pointer, measure once',
-    want: 'The problem: pointer positions arrive in pixels but the ledger speaks in shares — ' +
-      'and asking the DOM for the table’s width on every move brings back layout thrash.',
+    want: 'Pointer positions arrive in pixels while the ledger speaks in shares, and asking ' +
+      'the DOM for the table’s width on every move brings back layout thrash.',
     says: ['On pointerdown the handle captures its pointer — safe here, because unlike the ' +
       'sort’s cells the handle never moves in the DOM — and measures the table once: pixels per ' +
       'share. Each move converts the drag into shares and trades only the increment since the ' +
@@ -108,9 +108,9 @@ const steps: StepEntry[] = [
   },
   {
     title: 'Two gestures, one header',
-    want: 'The problem: the handle lives inside a draggable header — pressing it would lift ' +
-      'the whole column into a drag.',
-    says: ['The handle stops pointer descent, so the sort never hears the press. And the ' +
+    want: 'The handle lives inside a draggable header, so pressing it would lift the whole ' +
+      'column into a drag.',
+    says: ['The handle stops pointer descent, so the sort never hears the press, and the ' +
       'keyboard gets its own road: focus the separator and the arrow keys trade a fixed step, ' +
       'no pointer required.'],
     code: [
@@ -133,13 +133,13 @@ export const ResizeRecipe: FC = () =>
   <section aria-label="build the drag resize yourself" className="build-steps">
     <header className="brief-line">
       <h2 className="kicker">build the drag resize yourself</h2>
-      <p className="brief">Five steps, sharing the table the drag sort already built.</p>
+      <p className="brief">Five steps that share the table the drag sort already built.</p>
     </header>
     <p className="lead">
-      The want: column boundaries you can drag, with the table always filling its container —
-      widen a column and its neighbour gives up the space, never the table’s edge. The need: a
-      record of widths that cannot sum to more or less than the whole, no matter what the hand
-      does.
+      You want column boundaries you can drag while the table always fills its container —
+      widen a column and its neighbour gives up the space, never the table’s edge — and that
+      takes a record of widths that cannot sum to more or less than the whole, no matter what
+      the hand does.
     </p>
     <StepList steps={steps}/>
   </section>;
