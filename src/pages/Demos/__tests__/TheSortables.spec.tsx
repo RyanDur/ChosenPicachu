@@ -123,4 +123,33 @@ describe('the sortable list demo', () => {
     expect(within(controls).getByRole('radio', {name: 'Static'})).toBeChecked();
     expect(controls).toHaveTextContent('dragStyle="lazy-move" animated={false}');
   });
+
+  test('the recipe teaches the native road as the dials sit', async () => {
+    const feed = await streamingFeed();
+
+    renderSortables(urlOf(feed));
+
+    await feedIsSubscribed();
+    const recipe = screen.getByRole('region', {name: 'build the native drag sort yourself'});
+    expect(recipe).toBeVisible();
+    expect(within(recipe).getByRole('link', {name: /Tables demo/}))
+      .toHaveAttribute('href', expect.stringContaining('tab=tables'));
+    expect(recipe).toHaveTextContent(/Arm the drag from its handle/);
+    expect(recipe).toHaveTextContent(/Accept the drop, or the platform takes it back/);
+    expect(recipe).toHaveTextContent(/Commit inside the crossing/);
+    expect(recipe).toHaveTextContent(/Fade the origin to a whisper/);
+    expect(recipe).toHaveTextContent(/Slide the crossed item home/);
+    expect(recipe).toHaveTextContent(/Know where the road ends/);
+
+    await userEvent.click(within(recipe).getByRole('radio', {name: 'Lazy'}));
+    await userEvent.click(within(recipe).getByRole('radio', {name: 'Keep'}));
+
+    expect(recipe).toHaveTextContent(/Stash the landing, settle after the drag/);
+    expect(recipe).toHaveTextContent(/Leave the origin standing/);
+    expect(recipe).toHaveTextContent(/Glide the settle, one tick after/);
+    expect(recipe).not.toHaveTextContent(/Commit inside the crossing/);
+    const controls = screen.getByRole('region', {name: 'list controls'});
+    expect(within(controls).getByRole('radio', {name: 'Lazy'})).toBeChecked();
+    expect(within(controls).getByRole('radio', {name: 'Keep'})).toBeChecked();
+  });
 });
