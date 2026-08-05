@@ -5,10 +5,10 @@ import {PillGlider} from '@components/PillGlider';
 import {Picks} from '../Picks';
 import {Paths} from '@pages/Paths';
 import {DemoTopics} from '../../types';
-import {Motion, Origin, Pace} from '../Controls';
-import {StepEntry, StepList, aside, plain} from './StepList';
+import {Motion, Origin, Pace} from '../../Controls';
+import {StepEntry, StepList, aside, plain} from '../../Recipe/StepList';
 import {SlotsFigure} from './SlotsFigure';
-import './Recipe.css';
+import '../../Recipe/Recipe.css';
 
 export type Track = 'pointer' | 'keyboard';
 

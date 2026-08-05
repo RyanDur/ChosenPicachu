@@ -1,6 +1,6 @@
 import {FC} from 'react';
-import {StepEntry, StepList, aside, plain} from './StepList';
-import './Recipe.css';
+import {StepEntry, StepList, aside, plain} from '../../Recipe/StepList';
+import '../../Recipe/Recipe.css';
 
 const steps: StepEntry[] = [
   {
