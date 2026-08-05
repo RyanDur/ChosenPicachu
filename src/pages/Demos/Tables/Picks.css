@@ -1,0 +1,25 @@
+.picks {
+  --pick-size: var(--text-title);
+
+  display: flex;
+  gap: var(--base-x-4);
+  border-bottom: var(--hairline) solid var(--charcoal-veil);
+
+  .pick {
+    all: unset;
+    cursor: pointer;
+    padding-block: var(--base);
+    font-size: var(--pick-size);
+    color: var(--charcoal);
+    border-bottom: var(--hairline-x-3) solid transparent;
+
+    &:focus-visible {
+      outline: var(--hairline-x-2) solid var(--charcoal);
+    }
+  }
+
+  .pick.current {
+    color: var(--void);
+    border-bottom-color: var(--charcoal);
+  }
+}

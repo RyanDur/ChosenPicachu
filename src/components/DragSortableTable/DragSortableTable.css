@@ -53,6 +53,10 @@
 
 .sortable .slot {
   width: var(--share);
+
+  &:focus-visible {
+    outline: var(--hairline-x-2) solid var(--charcoal);
+  }
 }
 
 .sortable .displaced-left {

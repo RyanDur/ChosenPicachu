@@ -8,28 +8,7 @@
   }
 
   .tutorial-picks {
-    display: flex;
-    gap: var(--base-x-4);
     justify-self: stretch;
-    border-bottom: var(--hairline) solid var(--charcoal-veil);
-  }
-
-  .pick {
-    all: unset;
-    cursor: pointer;
-    padding-block: var(--base);
-    font-size: var(--text-title);
-    color: var(--charcoal);
-    border-bottom: var(--hairline-x-3) solid transparent;
-
-    &:focus-visible {
-      outline: var(--hairline-x-2) solid var(--charcoal);
-    }
-  }
-
-  .pick.current {
-    color: var(--void);
-    border-bottom-color: var(--charcoal);
   }
 
   .build-steps,
