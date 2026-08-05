@@ -362,10 +362,13 @@ export const Recipe: FC<Props> = ({pace, origin, animated}) =>
     <p className="lead">
       This table takes the other road: pointer events. You could build the whole effect in
       JavaScript — track positions, set styles, move nodes by hand. This page deliberately does
-      not. The markup stays a normal table, rendered from state by React; the visible changes —
-      the cursors, the hiding, every slide — are CSS rules that classes switch on; and the
-      JavaScript’s only job is deciding what the state is. Each code block below is labeled with
-      which of the three is doing the work.
+      not. The markup stays a normal table; the visible changes — the cursors, the hiding, every
+      slide — are CSS rules that classes switch on; and the JavaScript’s only job is deciding
+      what the state is. React is the convenience in the middle: it renders the markup from that
+      state, and when the order changes it moves the same keyed nodes instead of rebuilding them.
+      But it affords nothing the DOM does not give you — the node moves are insertBefore, the
+      handlers are events, the state is a value. It boils down to HTML, CSS, and JavaScript, and
+      each code block below is labeled with which of the three is doing the work.
     </p>
     <p className="lead">
       One more thing before the steps: Eager, Lazy, Keep, Hide, Animate, and Static are this
