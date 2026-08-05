@@ -471,16 +471,14 @@ export const Recipe: FC<Props> = ({track, onTrack, pace, origin, motion, onPace,
                         chosen={motion}
                         onChoose={onMotion}/>
   };
-  const briefs: Record<Track, string> = {
-    pointer: 'Nine steps, no drag-and-drop library. Three of them carry their own toggle — the ' +
-      'same dials as under the table — and are written the way the toggle sits.',
-    keyboard: 'The pointer track built the theater; the keyboard borrows it. Focus, two keys, ' +
-      'and the slide itself for a clock — one step carries a toggle.'
-  };
   return <section aria-label="build the drag sort yourself" className="build-steps">
     <header className="brief-line">
       <h2 className="kicker">build the drag sort yourself</h2>
-      <p className="brief">{briefs[track]}</p>
+      <p className="brief">
+        No drag-and-drop library, and two hands in — pointer or keyboard, one track at a time.
+        Marked steps carry their own toggle — the same dials as under the table — and are
+        written the way the toggle sits.
+      </p>
     </header>
     <Picks label="input track"
            className="track-picks"
