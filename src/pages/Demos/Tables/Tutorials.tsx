@@ -1,6 +1,6 @@
 import {FC, useState} from 'react';
 import {PillGlider} from '@components/PillGlider';
-import {Motion, Origin, Pace} from './Controls';
+import {Controls, Motion, Origin, Pace} from './Controls';
 import {Recipe} from './Recipe';
 import {ResizeRecipe} from './Recipe/ResizeRecipe';
 import './Tutorials.css';
@@ -25,6 +25,7 @@ export const Tutorials: FC<Props> = props => {
                 ]}
                 chosen={shown}
                 onChoose={setShown}/>
+    {shown === 'sort' && <Controls {...props}/>}
     {shown === 'sort' ? <Recipe {...props}/> : <ResizeRecipe/>}
   </div>;
 };
