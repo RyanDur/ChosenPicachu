@@ -276,6 +276,19 @@ describe('the tables demo', () => {
     expect(controls).toHaveTextContent('dragStyle="lazy-move" animated={false}');
   });
 
+  test('the chosen tutorial travels in the url', async () => {
+    const feed = await streamingFeed();
+
+    renderWithMemoryRouter({
+      path: Paths.demos,
+      element: <EnvProvider env={{tradeFeed: urlOf(feed), tradeHistory: 'http://127.0.0.1:9'}}><DemosPage/></EnvProvider>
+    }, {path: `${Paths.demos}?tab=tables&tut=resize`});
+
+    await feedIsSubscribed();
+    expect(screen.getByRole('region', {name: 'build the drag resize yourself'})).toBeVisible();
+    expect(screen.queryByRole('region', {name: 'build the drag sort yourself'})).toBeNull();
+  });
+
   test('every column is resizable', async () => {
     const feed = await streamingFeed();
 

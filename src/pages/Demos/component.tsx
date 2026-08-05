@@ -20,7 +20,7 @@ import {
 import {DemoTopics, demoTopicParam} from './types';
 import {NaturalZIndex} from './ZIndexDemo';
 import {Candles, PriceChart} from './Charts';
-import {Aggregations, Tutorials, motionParam, originParam, paceParam, styled} from './Tables';
+import {Aggregations, Tutorials, motionParam, originParam, paceParam, styled, tutorialParam} from './Tables';
 import {statusCopy, useLiveTrades} from './Charts/useLiveTrades';
 import {useEnv} from '@components/Env';
 
@@ -31,9 +31,9 @@ const paragraphs = (count: number) =>
   }));
 
 export const DemosPage = () => {
-  const {tab, pace = 'eager', origin = 'hide', motion = 'animated', updateSearchParams} =
+  const {tab, pace = 'eager', origin = 'hide', motion = 'animated', tut = 'sort', updateSearchParams} =
     useSearchParamsObject(
-      {tab: demoTopicParam, pace: paceParam, origin: originParam, motion: motionParam},
+      {tab: demoTopicParam, pace: paceParam, origin: originParam, motion: motionParam, tut: tutorialParam},
       {tab: DemoTopics.accordions});
   const [accordionContents] = useState(() => Array.from({length: 5}, () => paragraphs(5)));
   const {tradeFeed, tradeProduct} = useEnv();
@@ -86,7 +86,8 @@ export const DemosPage = () => {
             [DemoTopics.tables]: <>
               <Aggregations trades={liveTrades.trades} dragStyle={styled(pace, origin)}
                             animated={motion === 'animated'}/>
-              <Tutorials pace={pace} origin={origin} motion={motion}
+              <Tutorials shown={tut} onShow={next => updateSearchParams({tut: next})}
+                         pace={pace} origin={origin} motion={motion}
                          onPace={next => updateSearchParams({pace: next})}
                          onOrigin={next => updateSearchParams({origin: next})}
                          onMotion={next => updateSearchParams({motion: next})}/>
