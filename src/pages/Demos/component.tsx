@@ -84,10 +84,10 @@ export const DemosPage = () => {
               <Candles trades={liveTrades.trades}/>
             </>,
             [DemoTopics.tables]: <>
-              <Controls pace={pace} origin={origin} motion={tableMotion}
-                        onPace={setPace} onOrigin={setOrigin} onMotion={setTableMotion}/>
               <Aggregations trades={liveTrades.trades} dragStyle={styled(pace, origin)}
                             animated={tableMotion === 'animated'}/>
+              <Controls pace={pace} origin={origin} motion={tableMotion}
+                        onPace={setPace} onOrigin={setOrigin} onMotion={setTableMotion}/>
               <Recipe pace={pace} origin={origin} animated={tableMotion === 'animated'}/>
             </>,
             [DemoTopics.dragAndDrop]: <>
