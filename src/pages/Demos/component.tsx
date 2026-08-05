@@ -11,12 +11,7 @@ import {
   InclusiveAccordion,
   ExclusiveRadioToggleAccordion
 } from './Accordions';
-import {
-  HideElemOnDragSortableListEagerMove,
-  HideElemOnDragSortableListLazyMove,
-  SortableListEagerMove,
-  SortableListLazyMove
-} from './DragAndDrop';
+import {DragSortList, ListControls} from './DragAndDrop';
 import {DemoTopics, demoTopicParam} from './types';
 import {NaturalZIndex} from './ZIndexDemo';
 import {Candles, PriceChart} from './Charts';
@@ -95,15 +90,16 @@ export const DemosPage = () => {
                          onMotion={next => updateSearchParams({motion: next})}/>
             </>,
             [DemoTopics.dragAndDrop]: <>
-              <h2 className="heading">Sortable List</h2>
-              <h3 className="subheading">Lazy Move</h3>
-              <SortableListLazyMove list={new Set(['A', 'B', 'C'])}/>
-              <h3 className="subheading">Eager Move</h3>
-              <SortableListEagerMove list={new Set(['A', 'B', 'C'])}/>
-              <h3 className="subheading">Hide and Lazy Move</h3>
-              <HideElemOnDragSortableListLazyMove list={new Set(['A', 'B', 'C'])}/>
-              <h3 className="subheading">Hide and Eager Move</h3>
-              <HideElemOnDragSortableListEagerMove list={new Set(['A', 'B', 'C'])}/>
+              <DragSortList list={new Set(['A', 'B', 'C'])}
+                            dragStyle={styled(pace, origin)}
+                            animated={motion === 'animated'}/>
+              <div className="tutorials">
+                <h2 className="tutorials-title">how it’s built</h2>
+                <ListControls pace={pace} origin={origin} motion={motion}
+                              onPace={next => updateSearchParams({pace: next})}
+                              onOrigin={next => updateSearchParams({origin: next})}
+                              onMotion={next => updateSearchParams({motion: next})}/>
+              </div>
             </>
         })[tab ?? DemoTopics.accordions]}
       </section>
