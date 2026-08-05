@@ -39,9 +39,9 @@ const held = (pace: 'eager' | 'lazy'): Step => pace === 'eager'
     code: [
       {label: 'JS', lines: [
         plain('onPointerMove: event => {'),
-        plain('  const struck = strike(event.clientX, event.clientY, aloft);'),
-        plain('  if (has(aloft) && has(struck) && struck !== aloft)'),
-        plain('    settle(aloft, struck);'),
+        plain('    const struck = strike(event.clientX, event.clientY, aloft);'),
+        plain('    if (has(aloft) && has(struck) && struck !== aloft)'),
+        plain('        settle(aloft, struck);'),
         plain('}')
       ]},
       {label: 'HTML', lines: [
@@ -60,12 +60,12 @@ const held = (pace: 'eager' | 'lazy'): Step => pace === 'eager'
     code: [
       {label: 'JS', lines: [
         plain('onPointerMove: event => {'),
-        plain('  const struck = strike(event.clientX, event.clientY, aloft);'),
-        plain('  setLanding(struck === aloft ? undefined : struck);'),
+        plain('    const struck = strike(event.clientX, event.clientY, aloft);'),
+        plain('    setLanding(struck === aloft ? undefined : struck);'),
         plain('},'),
         plain('onPointerUp: () => {'),
-        plain('  if (has(aloft) && has(landing))'),
-        plain('    settle(aloft, landing);'),
+        plain('    if (has(aloft) && has(landing))'),
+        plain('        settle(aloft, landing);'),
         plain('}')
       ]}
     ]
@@ -92,7 +92,7 @@ const shown = (origin: 'keep' | 'hide'): Step => origin === 'hide'
       {label: 'CSS', lines: [
         plain('.sortable .hide,'),
         plain('.sortable .hide-across {'),
-        plain('  visibility: hidden;'),
+        plain('    visibility: hidden;'),
         plain('}'),
         aside('/* the box stops painting; its layout space stays */')
       ]}
@@ -137,7 +137,7 @@ const moved = (animated: boolean): Step => animated
     code: [
       {label: 'JS', lines: [
         plain('setSlid({keys: displaced, carried: shares[key],'),
-        plain("         toward: from < to ? 'left' : 'right'});"),
+        plain("                  toward: from < to ? 'left' : 'right'});"),
         plain('setShifted(shifts(heights, standing, after));'),
         aside('// two numbers and some names — javascript is done')
       ]},
@@ -153,13 +153,13 @@ const moved = (animated: boolean): Step => animated
         plain('.sortable .shifted { animation: shifted 200ms ease-out; }'),
         plain(''),
         plain('@keyframes displaced-left {'),
-        plain('  from {'),
-        plain('    transform: translateX(calc(var(--carried) * 1cqi + var(--pad)));'),
-        plain('  }'),
+        plain('    from {'),
+        plain('        transform: translateX(calc(var(--carried) * 1cqi + var(--pad)));'),
+        plain('    }'),
         plain('}'),
         plain(''),
         plain('@keyframes shifted {'),
-        plain('  from { transform: translateY(var(--drop)); }'),
+        plain('    from { transform: translateY(var(--drop)); }'),
         plain('}'),
         aside('/* .displaced-right mirrors with a negative offset */')
       ]}
@@ -221,13 +221,13 @@ const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolea
     code: [
       {label: 'JS', lines: [
         plain('const [order, setOrder] = useState(() =>'),
-        plain('  columns.map(({column}) => String(column)));'),
+        plain('    columns.map(({column}) => String(column)));'),
         plain('const [seats, setSeats] = useState(() =>'),
-        plain('  rows.map((_, seat) => seat));')
+        plain('    rows.map((_, seat) => seat));')
       ]},
       {label: 'HTML', lines: [
         plain('<tr>{order.map(key =>'),
-        plain('  <DraggableHeader key={key} column={byKey.get(key)} ... />)}</tr>')
+        plain('    <DraggableHeader key={key} column={byKey.get(key)} ... />)}</tr>')
       ]}
     ]
   },
@@ -242,9 +242,9 @@ const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolea
     code: [
       {label: 'JS', lines: [
         plain('const lift = (key, anchor) => () => {'),
-        plain('  setChart(charted(anchor.closest("table"), arranged));'),
-        plain('  setFlight(anchor.getBoundingClientRect());'),
-        plain('  setAloft(key);'),
+        plain('    setChart(charted(anchor.closest("table"), arranged));'),
+        plain('    setFlight(anchor.getBoundingClientRect());'),
+        plain('    setAloft(key);'),
         plain('};')
       ]},
       {label: 'CSS', lines: [
@@ -266,11 +266,11 @@ const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolea
     code: [
       {label: 'HTML', lines: [
         plain('{aloft &&'),
-        plain('  <article className="drag-surface"'),
-        plain('           onPointerMove={travel}'),
-        plain('           onPointerUp={drop}'),
-        plain('           onPointerCancel={drop}'),
-        plain('           onLostPointerCapture={drop}/>}'),
+        plain('    <article className="drag-surface"'),
+        plain('                      onPointerMove={travel}'),
+        plain('                      onPointerUp={drop}'),
+        plain('                      onPointerCancel={drop}'),
+        plain('                      onLostPointerCapture={drop}/>}'),
         aside('{/* cancel and lost capture are not delegates — they ARE the drop */}')
       ]},
       {label: 'CSS', lines: [
@@ -291,15 +291,15 @@ const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolea
     code: [
       {label: 'HTML', lines: [
         plain('<table className="column-ghost"'),
-        plain('       style={{position: \'fixed\', top: flight.y, left: flight.x,'),
-        plain('               width: flight.width,'),
-        plain('               transform: `translate(${drift.x}px, ${drift.y}px)`}}>'),
-        aside('  {/* the same cells, rendered again from the data */}'),
+        plain('              style={{position: \'fixed\', top: flight.y, left: flight.x,'),
+        plain('                              width: flight.width,'),
+        plain('                              transform: `translate(${drift.x}px, ${drift.y}px)`}}>'),
+        aside('    {/* the same cells, rendered again from the data */}'),
         plain('</table>')
       ]},
       {label: 'JS', lines: [
         plain('onPointerMove: event =>'),
-        plain('  setDrift({x: event.clientX - origin.x, y: event.clientY - origin.y});')
+        plain('    setDrift({x: event.clientX - origin.x, y: event.clientY - origin.y});')
       ]},
       {label: 'CSS', lines: [
         plain('.column-ghost { pointer-events: none; will-change: transform; }')
@@ -323,8 +323,8 @@ const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolea
         plain('const held = Math.max(struck.width / 4, (struck.width - aloftWidth) / 2);'),
         plain('const homeward = order.indexOf(struck.key) < order.indexOf(aloft);'),
         plain('return (homeward ? x < struck.end - held : x > struck.start + held)'),
-        plain('  ? struck.key'),
-        plain('  : undefined;')
+        plain('    ? struck.key'),
+        plain('    : undefined;')
       ]}
     ]
   },
