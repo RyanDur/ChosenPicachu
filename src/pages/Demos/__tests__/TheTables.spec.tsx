@@ -189,6 +189,7 @@ describe('the tables demo', () => {
     expect(controls).toHaveTextContent(/Neighbours swap the moment you drag past them/);
     expect(controls).toHaveTextContent(/blanks out at its origin/);
     expect(controls).toHaveTextContent(/slide to their new seats/);
+    expect(controls).toHaveTextContent('dragStyle="hide-eager-move" animated={true}');
 
     await userEvent.click(screen.getByRole('radio', {name: 'Lazy'}));
     await userEvent.click(screen.getByRole('radio', {name: 'Keep'}));
@@ -197,6 +198,7 @@ describe('the tables demo', () => {
     expect(controls).toHaveTextContent(/commits the new order on drop/);
     expect(controls).toHaveTextContent(/stays where it was/);
     expect(controls).toHaveTextContent(/single frame/);
+    expect(controls).toHaveTextContent('dragStyle="lazy-move" animated={false}');
     expect(controls).not.toHaveTextContent(/Neighbours swap/);
   });
 
@@ -208,7 +210,7 @@ describe('the tables demo', () => {
     await feedIsSubscribed();
     const recipe = screen.getByRole('region', {name: 'build it from scratch'});
     expect(recipe).toBeVisible();
-    expect(recipe).toHaveTextContent(/Nine steps, no library/);
+    expect(recipe).toHaveTextContent(/Nine steps, no drag-and-drop library/);
     expect(within(recipe).getByRole('link', {name: /Drag and Drop/}))
       .toHaveAttribute('href', expect.stringContaining('tab=dragAndDrop'));
     expect(recipe).toHaveTextContent(/touch-action/);

@@ -341,8 +341,8 @@ export const Recipe: FC<Props> = ({pace, origin, animated}) =>
     <header className="brief-line">
       <h2 className="kicker">build it from scratch</h2>
       <p className="brief">
-        Nine steps, no library. Steps marked <em className="chip">set above</em> are written the
-        way the controls are currently set.
+        Nine steps, no drag-and-drop library. Steps marked <em className="chip">set above</em> are
+        written the way the controls are currently set.
       </p>
     </header>
     <p className="lead">
@@ -360,10 +360,18 @@ export const Recipe: FC<Props> = ({pace, origin, animated}) =>
       cancel is the platform’s animation to run.
     </p>
     <p className="lead">
-      This table takes the other road: pointer events, where every pixel of the interaction is
-      owned. Owned is not the same as scripted — every step below is the three languages working
-      one behavior together: HTML holds the truth, CSS renders and moves it, JavaScript only
-      decides. Each code block says which language is talking.
+      This table takes the other road: pointer events. You could build the whole effect in
+      JavaScript — track positions, set styles, move nodes by hand. This page deliberately does
+      not. The markup stays a normal table, rendered from state by React; the visible changes —
+      the cursors, the hiding, every slide — are CSS rules that classes switch on; and the
+      JavaScript’s only job is deciding what the state is. Each code block below is labeled with
+      which of the three is doing the work.
+    </p>
+    <p className="lead">
+      One more thing before the steps: Eager, Lazy, Keep, Hide, Animate, and Static are this
+      page’s names for the choices, not platform keywords. The dials above compose two component
+      props — the readout under them shows exactly what they build — and they pick which version
+      of the marked steps you are reading now.
     </p>
     <ol className="steps">
       {steps(pace, origin, animated).map(step =>
