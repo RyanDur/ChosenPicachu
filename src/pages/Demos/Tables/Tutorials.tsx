@@ -1,5 +1,5 @@
 import {FC, useState} from 'react';
-import {PillGlider} from '@components/PillGlider';
+import {join} from '@components/class-names';
 import {Controls, Motion, Origin, Pace} from './Controls';
 import {Recipe} from './Recipe';
 import {ResizeRecipe} from './Recipe/ResizeRecipe';
@@ -16,15 +16,17 @@ type Props = {
 
 export const Tutorials: FC<Props> = props => {
   const [shown, setShown] = useState<'sort' | 'resize'>('sort');
+  const pick = (tutorial: 'sort' | 'resize', display: string) =>
+    <button type="button"
+            className={join('pick', shown === tutorial && 'current')}
+            aria-pressed={shown === tutorial}
+            onClick={() => setShown(tutorial)}>{display}</button>;
   return <div className="tutorials">
-    <PillGlider label="tutorial"
-                name="tutorial"
-                options={[
-                  {display: 'Drag sort', value: 'sort'},
-                  {display: 'Drag resize', value: 'resize'}
-                ]}
-                chosen={shown}
-                onChoose={setShown}/>
+    <h2 className="tutorials-title">how it’s built</h2>
+    <nav className="tutorial-picks" aria-label="tutorials">
+      {pick('sort', 'Drag sort')}
+      {pick('resize', 'Drag resize')}
+    </nav>
     {shown === 'sort' && <Controls {...props}/>}
     {shown === 'sort' ? <Recipe {...props}/> : <ResizeRecipe/>}
   </div>;
