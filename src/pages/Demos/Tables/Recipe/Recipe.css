@@ -22,6 +22,10 @@
     color: var(--charcoal);
   }
 
+  .track-picks {
+    --pick-size: var(--text-body);
+  }
+
   .lead {
     margin: 0;
     font-size: var(--text-body);

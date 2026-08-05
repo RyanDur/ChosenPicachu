@@ -237,6 +237,46 @@ describe('the tables demo', () => {
     expect(within(controls).getByRole('radio', {name: 'Static'})).toBeChecked();
   });
 
+  test('the keyboard track teaches the same sort by other hands', async () => {
+    const feed = await streamingFeed();
+
+    renderTables(urlOf(feed));
+
+    await feedIsSubscribed();
+    const recipe = screen.getByRole('region', {name: 'build the drag sort yourself'});
+    await userEvent.click(within(recipe).getByRole('button', {name: 'By keyboard'}));
+
+    expect(recipe).toHaveTextContent(/Give focus a place to land/);
+    expect(recipe).toHaveTextContent(/Arrows speak direction/);
+    expect(recipe).toHaveTextContent(/Both parties slide, each by the other\u2019s share/);
+    expect(recipe).toHaveTextContent(/Let the slide pace the key/);
+    expect(recipe).toHaveTextContent(/getAnimations/);
+    expect(recipe).not.toHaveTextContent(/Draw the ghost by hand/);
+    expect(within(recipe).queryByRole('radio', {name: 'Lazy'})).toBeNull();
+
+    await userEvent.click(within(recipe).getByRole('radio', {name: 'Static'}));
+
+    expect(recipe).toHaveTextContent(/Cut on the keypress/);
+    expect(recipe).not.toHaveTextContent(/Let the slide pace the key/);
+
+    await userEvent.click(within(recipe).getByRole('button', {name: 'By pointer'}));
+    expect(recipe).toHaveTextContent(/Draw the ghost by hand/);
+  });
+
+  test('the chosen track travels in the url', async () => {
+    const feed = await streamingFeed();
+
+    renderWithMemoryRouter({
+      path: Paths.demos,
+      element: <EnvProvider env={{tradeFeed: urlOf(feed), tradeHistory: 'http://127.0.0.1:9'}}><DemosPage/></EnvProvider>
+    }, {path: `${Paths.demos}?tab=tables&track=keyboard`});
+
+    await feedIsSubscribed();
+    const recipe = screen.getByRole('region', {name: 'build the drag sort yourself'});
+    expect(recipe).toHaveTextContent(/Arrows speak direction/);
+    expect(recipe).not.toHaveTextContent(/Draw the ghost by hand/);
+  });
+
   test('a second tutorial answers the resize', async () => {
     const feed = await streamingFeed();
 

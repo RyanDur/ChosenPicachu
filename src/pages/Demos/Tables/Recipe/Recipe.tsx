@@ -1,12 +1,18 @@
 import {FC} from 'react';
+import * as D from 'schemawax';
 import {Link} from 'react-router';
 import {PillGlider} from '@components/PillGlider';
+import {Picks} from '../Picks';
 import {Paths} from '@pages/Paths';
 import {DemoTopics} from '../../types';
 import {Motion, Origin, Pace} from '../Controls';
 import {StepEntry, StepList, aside, plain} from './StepList';
 import {SlotsFigure} from './SlotsFigure';
 import './Recipe.css';
+
+export type Track = 'pointer' | 'keyboard';
+
+export const trackParam: D.Decoder<Track> = D.literalUnion('pointer', 'keyboard');
 
 type Step = Omit<StepEntry, 'dial'> & {
   dial?: 'pace' | 'origin' | 'motion';
@@ -318,7 +324,118 @@ const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolea
   moved(animated)
 ];
 
+const nudgedBoth = (animated: boolean): Step => animated
+  ? {
+    title: 'Both parties slide, each by the other\u2019s share',
+    dial: 'motion',
+    want: 'The problem: a pointer swap has a ghost in hand to explain itself \u2014 a keyboard swap has no hand, so if only the neighbour slid, the walked column would simply teleport.',
+    says: ['Mark both columns displaced. The swap still commits instantly \u2014 the same theater ' +
+      'the pointer track built \u2014 but now each party is drawn starting from the seat it just ' +
+      'left, offset by the other\u2019s share, sliding home on the same keyframes. The classes ' +
+      'arrive as the reorder moves the nodes, so both slides start fresh. No new CSS at all.'],
+    code: [
+      {label: 'JS', lines: [
+        plain('setSlid({'),
+        plain("    [key]:      {toward: 'right', by: shares[neighbour]},"),
+        plain("    [neighbour]: {toward: 'left', by: shares[key]}"),
+        plain('});'),
+        plain('setOrder(array.moveToIndex(to, key, order));'),
+        aside('// each starts where the other now sits')
+      ]},
+      {label: 'CSS', lines: [
+        plain('.sortable .displaced-left { animation: displaced-left 200ms ease-out; }'),
+        plain('.sortable .displaced-right { animation: displaced-right 200ms ease-out; }'),
+        aside('/* the pointer track\u2019s keyframes, unchanged */')
+      ]}
+    ]
+  }
+  : {
+    title: 'Cut on the keypress',
+    dial: 'motion',
+    want: 'The problem: motion is not free \u2014 a held key multiplies it, and some users ask for none at all.',
+    says: ['Apply the order and mark nothing; the swap paints on the next frame. With no ' +
+      'animation running there is nothing to pace, so a held arrow walks the column exactly as ' +
+      'fast as the key repeats.'],
+    code: [
+      {label: 'JS', lines: [
+        plain('setOrder(array.moveToIndex(to, key, order));'),
+        aside('// nothing marked, nothing to wait for')
+      ]}
+    ]
+  };
+
+const keyedSteps = (animated: boolean): Step[] => [
+  {
+    title: 'Give focus a place to land',
+    want: 'The problem: a drag answers only the hand \u2014 the keyboard can reach the page, but a plain header holds no focus, so there is nothing to press.',
+    says: ['HTML nearly solves this alone. The row grip is a button, focusable by birth; the ' +
+      'headers ask for focus with a tabIndex. Tab now walks every movable piece of the table in ' +
+      'order. CSS answers the arrival: a focus-visible ring draws for the keyboard only, so ' +
+      'pointer users never see it.'],
+    code: [
+      {label: 'HTML', lines: [
+        plain('<th tabIndex={travels ? 0 : undefined} ... >'),
+        plain('<button className="grip" aria-label="move row 2"><Handle/></button>'),
+        aside('{/* the button was focusable all along; the header asks */}')
+      ]},
+      {label: 'CSS', lines: [
+        plain('.sortable .slot:focus-visible,'),
+        plain('.sortable .grip:focus-visible {'),
+        plain('    outline: var(--hairline-x-2) solid var(--charcoal);'),
+        plain('}')
+      ]}
+    ]
+  },
+  {
+    title: 'Arrows speak direction',
+    want: 'The problem: focus can reach a column, but the platform ships no verb for \u201cswap left\u201d \u2014 the keyboard needs one.',
+    says: ['A keydown handler claims the two arrows and nothing else \u2014 every other key falls ' +
+      'through untouched, so tabbing and the sort menu keep working \u2014 and preventDefault ' +
+      'stops the page from scrolling on the keys it does claim. The walk clamps inside the ' +
+      'anchored edges: the first and last columns hold the table, so the nudge stops beside ' +
+      'them. Rows do the same dance turned vertical \u2014 the grip listens for up and down.'],
+    code: [
+      {label: 'JS', lines: [
+        plain('onKeyDown: event => {'),
+        plain("    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight')"),
+        plain('        return;'),
+        plain('    event.preventDefault();'),
+        plain("    nudge(event.key === 'ArrowRight' ? 1 : -1);"),
+        plain('}'),
+        plain(''),
+        plain('const to = Math.min(Math.max(from + toward, 1), order.length - 2);'),
+        plain('if (to === from) return;'),
+        aside('// the anchors hold; the walk stops beside them')
+      ]}
+    ]
+  },
+  nudgedBoth(animated),
+  ...animated
+    ? [{
+      title: 'Let the slide pace the key',
+      want: 'The problem: a held arrow autorepeats faster than the slide runs \u2014 nudges land mid-flight and the column outruns its own theater.',
+      says: ['No timers. Before nudging, ask the element whether an animation is still running ' +
+        '\u2014 getAnimations is the platform\u2019s own record of the slide. While one runs, ' +
+        'the key falls silent; the moment it ends, the next repeat lands. The animation is the ' +
+        'debounce clock, and CSS already set its length.'],
+      code: [
+        {label: 'JS', lines: [
+          plain('if ((event.currentTarget.getAnimations?.().length ?? 0) > 0)'),
+          plain('    return;'),
+          aside('// while the slide runs, the key falls silent')
+        ]},
+        {label: 'CSS', lines: [
+          plain('.sortable .displaced-left { animation: displaced-left 200ms ease-out; }'),
+          aside('/* the 200ms IS the debounce interval */')
+        ]}
+      ]
+    } satisfies Step]
+    : []
+];
+
 type Props = {
+  track: Track;
+  onTrack: (track: Track) => void;
   pace: Pace;
   origin: Origin;
   motion: Motion;
@@ -327,7 +444,7 @@ type Props = {
   onMotion: (motion: Motion) => void;
 };
 
-export const Recipe: FC<Props> = ({pace, origin, motion, onPace, onOrigin, onMotion}) => {
+export const Recipe: FC<Props> = ({track, onTrack, pace, origin, motion, onPace, onOrigin, onMotion}) => {
   const dials = {
     pace: <PillGlider label="pace"
                       name="step-pace"
@@ -354,14 +471,26 @@ export const Recipe: FC<Props> = ({pace, origin, motion, onPace, onOrigin, onMot
                         chosen={motion}
                         onChoose={onMotion}/>
   };
+  const briefs: Record<Track, string> = {
+    pointer: 'Nine steps, no drag-and-drop library. Three of them carry their own toggle — the ' +
+      'same dials as under the table — and are written the way the toggle sits.',
+    keyboard: 'The pointer track built the theater; the keyboard borrows it. Focus, two keys, ' +
+      'and the slide itself for a clock — one step carries a toggle.'
+  };
   return <section aria-label="build the drag sort yourself" className="build-steps">
     <header className="brief-line">
       <h2 className="kicker">build the drag sort yourself</h2>
-      <p className="brief">
-        Nine steps, no drag-and-drop library. Three of them carry their own toggle — the same
-        dials as under the table — and are written the way the toggle sits.
-      </p>
+      <p className="brief">{briefs[track]}</p>
     </header>
+    <Picks label="input track"
+           className="track-picks"
+           options={[
+             {display: 'By pointer', value: 'pointer'},
+             {display: 'By keyboard', value: 'keyboard'}
+           ]}
+           chosen={track}
+           onPick={onTrack}/>
+    {track === 'pointer' ? <>
     <p className="lead">
       The want: a live table whose columns and rows can be dragged into any order — eagerly or on
       the drop, origin shown or hidden, sliding or cutting — while the data keeps streaming
@@ -393,7 +522,22 @@ export const Recipe: FC<Props> = ({pace, origin, motion, onPace, onOrigin, onMot
       props — the readout under them shows exactly what they build — and they pick which version
       of the marked steps you are reading now.
     </p>
-    <StepList steps={steps(pace, origin, motion === 'animated')
+    </> : <>
+    <p className="lead">
+      The want: every reorder the hand can make, made from the keyboard — walk a column left or
+      right, a row up or down, with the same slides explaining the same swaps. The need: almost
+      nothing new. The state, the clamps, and the theater all exist; this track is about letting
+      focus reach them and letting two keys speak.
+    </p>
+    <p className="lead">
+      Two of the dials go quiet here: pace and origin describe a drag session — what happens
+      while something is held aloft — and a keyboard nudge holds nothing aloft. Only motion
+      still chooses, and the marked step below is written the way that dial sits.
+    </p>
+    </>}
+    <StepList steps={(track === 'pointer'
+      ? steps(pace, origin, motion === 'animated')
+      : keyedSteps(motion === 'animated'))
       .map(({dial, ...step}) => ({...step, dial: dial && dials[dial]}))}/>
   </section>;
 };
