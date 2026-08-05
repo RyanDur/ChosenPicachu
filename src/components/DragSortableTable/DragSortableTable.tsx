@@ -100,6 +100,10 @@ export const DragSortableTable: FC<DragSortableTableProps> = (
     };
 
     const nudged = (seat: number) => (toward: 1 | -1, event: KeyboardEvent<HTMLElement>): void => {
+        const lane = event.currentTarget.closest('tr');
+        if (has(lane) && (lane.getAnimations?.().length ?? 0) > 0) {
+            return;
+        }
         const to = Math.min(Math.max(standing.indexOf(seat) + toward, 0), standing.length - 1);
         const after = array.moveToIndex(to, seat, standing);
         const table = event.currentTarget.closest('table');
