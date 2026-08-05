@@ -337,9 +337,9 @@ type Props = {
 };
 
 export const Recipe: FC<Props> = ({pace, origin, animated}) =>
-  <section aria-label="build it from scratch" className="build-steps">
+  <section aria-label="build the drag yourself" className="build-steps">
     <header className="brief-line">
-      <h2 className="kicker">build it from scratch</h2>
+      <h2 className="kicker">build the drag yourself</h2>
       <p className="brief">
         Nine steps, no drag-and-drop library. Steps marked <em className="chip">set above</em> are
         written the way the controls are currently set.
