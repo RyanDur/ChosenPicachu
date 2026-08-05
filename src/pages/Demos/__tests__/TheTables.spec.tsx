@@ -211,7 +211,7 @@ describe('the tables demo', () => {
     await feedIsSubscribed();
     const recipe = screen.getByRole('region', {name: 'build the drag sort yourself'});
     expect(recipe).toBeVisible();
-    expect(recipe).toHaveTextContent(/Pick a track — pointer or keyboard/);
+    expect(recipe).toHaveTextContent(/told one hand at a time/);
     expect(within(recipe).getByRole('link', {name: /Drag and Drop/}))
       .toHaveAttribute('href', expect.stringContaining('tab=dragAndDrop'));
     expect(recipe).toHaveTextContent(/touch-action/);
