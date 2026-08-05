@@ -1,4 +1,4 @@
-export type Kind = 'plain' | 'key' | 'lit';
+export type Kind = 'plain' | 'keyword' | 'string' | 'number' | 'comment' | 'tag';
 
 export type Token = {
   text: string;
@@ -18,7 +18,7 @@ const scan = (line: string, patterns: ReadonlyArray<{match: RegExp; kind: Kind}>
       const start = hit.index;
       const overlaps = found.some(taken =>
         start < taken.start + taken.length && taken.start < start + hit[0].length);
-      if (!overlaps) {
+      if (!overlaps && hit[0].length > 0) {
         found.push({start, length: hit[0].length, kind});
       }
     }
@@ -40,22 +40,26 @@ const scan = (line: string, patterns: ReadonlyArray<{match: RegExp; kind: Kind}>
 };
 
 const js: ReadonlyArray<{match: RegExp; kind: Kind}> = [
-  {match: /'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|"(?:[^"\\]|\\.)*"/g, kind: 'lit'},
-  {match: /\b(?:const|let|return|if|else|new|function|undefined|true|false)\b/g, kind: 'key'},
-  {match: /\b\d+(?:\.\d+)?\b/g, kind: 'lit'}
+  {match: /\/\/.*$/g, kind: 'comment'},
+  {match: /'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|"(?:[^"\\]|\\.)*"/g, kind: 'string'},
+  {match: /\b(?:const|let|return|if|else|new|function|undefined|true|false)\b/g, kind: 'keyword'},
+  {match: /\b\d+(?:\.\d+)?\b/g, kind: 'number'}
 ];
 
 const css: ReadonlyArray<{match: RegExp; kind: Kind}> = [
-  {match: /@[\w-]+/g, kind: 'key'},
-  {match: /^\s*[a-z-]+(?=\s*:)/g, kind: 'key'},
-  {match: /(?<=:\s*)[^;{}]+/g, kind: 'lit'},
-  {match: /^[.&@:\w][^:{]*(?=,?\s*\{?$)/g, kind: 'key'}
+  {match: /\/\*.*?\*\//g, kind: 'comment'},
+  {match: /'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"/g, kind: 'string'},
+  {match: /@[\w-]+/g, kind: 'keyword'},
+  {match: /^[ \t]*[^:;{}@][^:;{}]*(?=\s*\{)/g, kind: 'tag'},
+  {match: /^[ \t]*[.&][^:;{}]*,$/g, kind: 'tag'},
+  {match: /(?<![\w-])-?\d+(?:\.\d+)?[a-z%]*/g, kind: 'number'}
 ];
 
 const html: ReadonlyArray<{match: RegExp; kind: Kind}> = [
-  {match: /'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|"(?:[^"\\]|\\.)*"/g, kind: 'lit'},
-  {match: /(?<=<\/?)[\w.-]+/g, kind: 'key'},
-  {match: /[\w-]+(?==)/g, kind: 'key'}
+  {match: /\{\/\*.*?\*\/\}/g, kind: 'comment'},
+  {match: /'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|"(?:[^"\\]|\\.)*"/g, kind: 'string'},
+  {match: /(?<=<\/?)[\w.-]+/g, kind: 'tag'},
+  {match: /\b\d+(?:\.\d+)?\b/g, kind: 'number'}
 ];
 
 const grammars = {JS: js, CSS: css, HTML: html};

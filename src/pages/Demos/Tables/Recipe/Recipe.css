@@ -137,8 +137,8 @@
     margin: 0;
     padding: var(--base-x-1_5) var(--base-x-2);
     border-radius: var(--radius-card);
-    background: var(--void);
-    color: var(--paper);
+    background: var(--code-paper);
+    color: var(--code-ink);
     font-size: var(--text-caption);
     line-height: 1.8;
     overflow-x: auto;
@@ -149,7 +149,7 @@
       right: var(--base-x-1_5);
       font-size: var(--text-caption);
       letter-spacing: 0.08em;
-      color: var(--mint);
+      color: var(--code-comment);
     }
 
     .line {
@@ -157,16 +157,26 @@
       white-space: pre;
     }
 
-    .aside {
-      opacity: 0.65;
+    .keyword {
+      color: var(--code-keyword);
+      font-weight: bold;
     }
 
-    .key {
-      color: var(--mint);
+    .string {
+      color: var(--code-string);
     }
 
-    .lit {
-      color: var(--silk);
+    .number {
+      color: var(--code-number);
+    }
+
+    .comment {
+      color: var(--code-comment);
+      font-style: italic;
+    }
+
+    .tag {
+      color: var(--code-tag);
     }
   }
 
