@@ -438,6 +438,35 @@ describe('animated moves', () => {
     delete (document as {startViewTransition?: unknown}).startViewTransition;
   });
 
+  test('arrow keys walk a column, and both parties slide', async () => {
+    const four = [
+      {display: 'name', column: 'name', width: 200},
+      {display: 'age', column: 'age', width: 120},
+      {display: 'city', column: 'city', width: 120},
+      {display: 'job', column: 'job', width: 160}
+    ];
+    const crew = [{
+      name: {display: 'Ada'}, age: {display: '36'}, city: {display: 'London'}, job: {display: 'Analyst'}
+    }];
+    render(<DragSortableTable columns={four} rows={crew} animated draggableColumns="eager-move"/>);
+    const table = screen.getAllByRole('table')[0];
+    const headerTexts = () => within(table).getAllByRole('columnheader')
+      .map(head => head.textContent?.trim().split('⇅')[0].trim());
+
+    const age = within(table).getByRole('columnheader', {name: /^age/});
+    age.focus();
+    await userEvent.keyboard('{ArrowRight}');
+
+    expect(headerTexts()).toEqual(['name', 'city', 'age', 'job']);
+    expect(within(table).getByRole('columnheader', {name: /^age/}).classList).toContain('displaced-right');
+    expect(within(table).getByRole('columnheader', {name: /^age/})).toHaveStyle({'--carried': '20'});
+    expect(within(table).getByRole('columnheader', {name: /^city/}).classList).toContain('displaced-left');
+    expect(within(table).getByRole('columnheader', {name: /^city/})).toHaveStyle({'--carried': '20'});
+
+    await userEvent.keyboard('{ArrowLeft}');
+    expect(headerTexts()).toEqual(['name', 'age', 'city', 'job']);
+  });
+
   test('an animated nudge slides the displaced row, not a transition', async () => {
     const transition = vi.fn((update: () => void) => update());
     (document as {startViewTransition?: unknown}).startViewTransition = transition;
@@ -507,7 +536,7 @@ describe('animated moves', () => {
 
     const displaced = within(table).getByRole('columnheader', {name: /^city/});
     expect(displaced.classList).toContain('displaced-left');
-    expect(table).toHaveStyle({'--carried': '20'});
+    expect(displaced).toHaveStyle({'--carried': '20'});
     expect(transition).not.toHaveBeenCalled();
 
     for (const name of ['animationend', 'webkitAnimationEnd']) {

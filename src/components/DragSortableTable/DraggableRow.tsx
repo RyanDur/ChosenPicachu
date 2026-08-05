@@ -12,7 +12,7 @@ type Props = {
     gripped: boolean;
     hidden: boolean;
     hiddenColumn: string | undefined;
-    slid: {keys: readonly string[]; toward: 'left' | 'right'} | undefined;
+    slid: Readonly<Record<string, {toward: 'left' | 'right'; by: number}>> | undefined;
     drop: number | undefined;
     dress: Dress;
     onLift: (event: PointerEvent<HTMLElement>) => void;
@@ -27,15 +27,16 @@ export const DraggableRow: FC<Props> = (
         {columns.map(({column}, columnNumber) => {
             const cell = row[column];
             const key = String(column);
-            const displaced = has(slid) && slid.keys.includes(key) ? slid.toward : undefined;
+            const displaced = slid?.[key];
             return <td className={join(
                            dress.tdClassName, dress.cellClassName, cell.className,
                            clipped && 'ellipsis',
                            hiddenColumn === key && 'hide',
                            hidden && 'hide-across',
-                           has(displaced) && `displaced-${displaced}`
+                           has(displaced) && `displaced-${displaced.toward}`
                        )}
-                       key={key}>
+                       key={key}
+                       style={has(displaced) ? {'--carried': `${displaced.by}`} : undefined}>
                 {columnNumber === 0 && gripped &&
                     <RowGrip row={position + 1} onLift={onLift} onNudge={onNudge}/>}
                 {cell.display}

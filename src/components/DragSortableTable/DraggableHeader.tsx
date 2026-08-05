@@ -1,4 +1,4 @@
-import {FC, MouseEvent, PointerEvent} from 'react';
+import {FC, KeyboardEvent, MouseEvent, PointerEvent} from 'react';
 import {has} from '@ryandur/sand';
 import {join} from '@components/class-names';
 import {Column, Dress, ResizeHandle} from '@components/Table';
@@ -14,16 +14,17 @@ type Props = {
     clipped: boolean;
     travels: boolean;
     hidden: boolean;
-    displaced?: 'left' | 'right';
+    displaced?: {toward: 'left' | 'right'; by: number};
     sorted: Direction | undefined;
     dress: Dress;
     onLift: (event: PointerEvent<HTMLTableCellElement>) => void;
+    onNudge: (toward: 1 | -1) => void;
     onTrade: ((delta: number) => void) | undefined;
     onRule: ((direction: Direction | undefined, event: MouseEvent<HTMLButtonElement>) => void) | undefined;
 };
 
 export const DraggableHeader: FC<Props> = (
-    {column, share, clipped, travels, hidden, displaced, sorted, dress, onLift, onTrade, onRule}
+    {column, share, clipped, travels, hidden, displaced, sorted, dress, onLift, onNudge, onTrade, onRule}
 ) => {
     const key = String(column.column);
     return <th className={join(
@@ -32,12 +33,25 @@ export const DraggableHeader: FC<Props> = (
                clipped && 'clipped',
                travels && 'grabbable',
                hidden && 'hide',
-               has(displaced) && `displaced-${displaced}`
+               has(displaced) && `displaced-${displaced.toward}`
            )}
                scope="col"
                aria-sort={sorted}
+               tabIndex={travels ? 0 : undefined}
                onPointerDown={travels ? onLift : undefined}
-               style={has(share) ? {'--share': `${share}%`} : undefined}>
+               onKeyDown={travels
+                   ? (event: KeyboardEvent<HTMLTableCellElement>) => {
+                       if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') {
+                           return;
+                       }
+                       event.preventDefault();
+                       onNudge(event.key === 'ArrowRight' ? 1 : -1);
+                   }
+                   : undefined}
+               style={{
+                   ...(has(share) ? {'--share': `${share}%`} : {}),
+                   ...(has(displaced) ? {'--carried': `${displaced.by}`} : {})
+               }}>
         {column.display}
         {has(onRule) &&
             <Menu id={`sort-${key}`} label={`sort ${key}`}

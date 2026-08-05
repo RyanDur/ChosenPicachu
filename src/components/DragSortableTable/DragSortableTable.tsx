@@ -39,7 +39,7 @@ export const DragSortableTable: FC<DragSortableTableProps> = (
     const [seats, setSeats] = useState<number[]>(() => rows.map((_, seat) => seat));
     const [chart, setChart] = useState<Chart>();
     const [rule, setRule] = useState<Rule>();
-    const [slid, setSlid] = useState<{keys: readonly string[]; toward: 'left' | 'right'; carried: number}>();
+    const [slid, setSlid] = useState<Readonly<Record<string, {toward: 'left' | 'right'; by: number}>>>();
     const [shifted, setShifted] = useState<Readonly<Record<number, number>>>();
 
     const byKey = new Map(columns.map(definition => [String(definition.column), definition]));
@@ -59,11 +59,9 @@ export const DragSortableTable: FC<DragSortableTableProps> = (
             if (animated) {
                 const from = order.indexOf(key);
                 const to = Math.min(Math.max(order.indexOf(struck), 1), order.length - 2);
-                setSlid({
-                    keys: from < to ? order.slice(from + 1, to + 1) : order.slice(to, from),
-                    toward: from < to ? 'left' : 'right',
-                    carried: shares[key] ?? 0
-                });
+                const displaced = from < to ? order.slice(from + 1, to + 1) : order.slice(to, from);
+                setSlid(Object.fromEntries(displaced.map(seat =>
+                    [seat, {toward: from < to ? 'left' : 'right', by: shares[key] ?? 0}])));
             }
             setOrder(previous => {
                 const at = Math.min(Math.max(previous.indexOf(struck), 1), previous.length - 2);
@@ -84,6 +82,22 @@ export const DragSortableTable: FC<DragSortableTableProps> = (
             }
             setSeats(after);
         });
+
+    const nudgedColumn = (key: string) => (toward: 1 | -1): void => {
+        const from = order.indexOf(key);
+        const to = Math.min(Math.max(from + toward, 1), order.length - 2);
+        if (to === from) {
+            return;
+        }
+        const neighbor = order[to];
+        if (animated) {
+            setSlid({
+                [key]: {toward: toward > 0 ? 'right' : 'left', by: shares[neighbor] ?? 0},
+                [neighbor]: {toward: toward > 0 ? 'left' : 'right', by: shares[key] ?? 0}
+            });
+        }
+        setOrder(array.moveToIndex(to, key, order));
+    };
 
     const nudged = (seat: number) => (toward: 1 | -1, event: KeyboardEvent<HTMLElement>): void => {
         const to = Math.min(Math.max(standing.indexOf(seat) + toward, 0), standing.length - 1);
@@ -120,7 +134,6 @@ export const DragSortableTable: FC<DragSortableTableProps> = (
     return <>
         <div className="table-stage">
         <table id={id}
-               style={has(slid) ? {'--carried': `${slid.carried}`} : undefined}
                onAnimationEnd={event => {
                    if (event.animationName.startsWith('displaced-')) {
                        setSlid(undefined);
@@ -140,9 +153,8 @@ export const DragSortableTable: FC<DragSortableTableProps> = (
                 dress.headerRowClassName
             )}>{ordered.map((column, position) => {
                 const key = String(column.column);
-                const displaced = has(slid) && slid.keys.includes(key) ? slid.toward : undefined;
                 return <DraggableHeader key={key}
-                                        displaced={displaced}
+                                        displaced={slid?.[key]}
                                         column={column}
                                         share={has(column.width) ? shares[key] : undefined}
                                         clipped={clipped}
@@ -151,6 +163,7 @@ export const DragSortableTable: FC<DragSortableTableProps> = (
                                         sorted={rule?.column === key ? rule.direction : undefined}
                                         dress={dress}
                                         onLift={liftColumn(key)}
+                                        onNudge={nudgedColumn(key)}
                                         onTrade={apportioned.length > 1
                                             ? delta => setShares(traded(key, neighborOf(apportioned, key), delta))
                                             : undefined}
