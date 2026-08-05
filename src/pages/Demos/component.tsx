@@ -20,7 +20,8 @@ import {
 import {DemoTopics, demoTopicParam} from './types';
 import {NaturalZIndex} from './ZIndexDemo';
 import {Candles, PriceChart} from './Charts';
-import {Aggregations, Tutorials, motionParam, originParam, paceParam, styled, trackParam, tutorialParam} from './Tables';
+import {motionParam, originParam, paceParam, styled} from './Controls';
+import {Aggregations, Tutorials, trackParam, tutorialParam} from './Tables';
 import {statusCopy, useLiveTrades} from './Charts/useLiveTrades';
 import {useEnv} from '@components/Env';
 

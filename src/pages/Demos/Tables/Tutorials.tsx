@@ -1,6 +1,7 @@
 import {FC} from 'react';
 import * as D from 'schemawax';
-import {Controls, Motion, Origin, Pace} from './Controls';
+import {Motion, Origin, Pace} from '../Controls';
+import {TableControls} from './TableControls';
 import {Picks} from './Picks';
 import {Recipe, Track} from './Recipe';
 import {ResizeRecipe} from './Recipe/ResizeRecipe';
@@ -34,6 +35,6 @@ export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack, ...props}) 
            ]}
            chosen={shown}
            onPick={onShow}/>
-    {shown === 'sort' && <Controls {...props}/>}
+    {shown === 'sort' && <TableControls {...props}/>}
     {shown === 'sort' ? <Recipe track={track} onTrack={onTrack} {...props}/> : <ResizeRecipe/>}
   </div>;
