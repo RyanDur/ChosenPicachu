@@ -254,9 +254,26 @@ describe('the tables demo', () => {
     expect(resize).toHaveTextContent(/Trade, never take/);
     expect(resize).toHaveTextContent(/role="separator"/);
     expect(screen.queryByRole('region', {name: 'build the drag sort yourself'})).toBeNull();
+    expect(screen.queryByRole('region', {name: 'table controls'})).toBeNull();
 
     await userEvent.click(screen.getByRole('radio', {name: 'Drag sort'}));
     expect(screen.getByRole('region', {name: 'build the drag sort yourself'})).toBeVisible();
+  });
+
+  test('the dials travel in the url', async () => {
+    const feed = await streamingFeed();
+
+    renderWithMemoryRouter({
+      path: Paths.demos,
+      element: <EnvProvider env={{tradeFeed: urlOf(feed), tradeHistory: 'http://127.0.0.1:9'}}><DemosPage/></EnvProvider>
+    }, {path: `${Paths.demos}?tab=tables&pace=lazy&origin=keep&motion=static`});
+
+    await feedIsSubscribed();
+    const controls = screen.getByRole('region', {name: 'table controls'});
+    expect(within(controls).getByRole('radio', {name: 'Lazy'})).toBeChecked();
+    expect(within(controls).getByRole('radio', {name: 'Keep'})).toBeChecked();
+    expect(within(controls).getByRole('radio', {name: 'Static'})).toBeChecked();
+    expect(controls).toHaveTextContent('dragStyle="lazy-move" animated={false}');
   });
 
   test('every column is resizable', async () => {

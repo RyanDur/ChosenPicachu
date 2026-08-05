@@ -20,7 +20,7 @@ import {
 import {DemoTopics, demoTopicParam} from './types';
 import {NaturalZIndex} from './ZIndexDemo';
 import {Candles, PriceChart} from './Charts';
-import {Aggregations, Controls, Motion, Origin, Pace, Tutorials, styled} from './Tables';
+import {Aggregations, Tutorials, motionParam, originParam, paceParam, styled} from './Tables';
 import {statusCopy, useLiveTrades} from './Charts/useLiveTrades';
 import {useEnv} from '@components/Env';
 
@@ -31,11 +31,11 @@ const paragraphs = (count: number) =>
   }));
 
 export const DemosPage = () => {
-  const {tab} = useSearchParamsObject({tab: demoTopicParam}, {tab: DemoTopics.accordions});
+  const {tab, pace = 'eager', origin = 'hide', motion = 'animated', updateSearchParams} =
+    useSearchParamsObject(
+      {tab: demoTopicParam, pace: paceParam, origin: originParam, motion: motionParam},
+      {tab: DemoTopics.accordions});
   const [accordionContents] = useState(() => Array.from({length: 5}, () => paragraphs(5)));
-  const [pace, setPace] = useState<Pace>('eager');
-  const [origin, setOrigin] = useState<Origin>('hide');
-  const [tableMotion, setTableMotion] = useState<Motion>('animated');
   const {tradeFeed, tradeProduct} = useEnv();
   const liveTrades = useLiveTrades(tradeFeed, tradeProduct);
 
@@ -85,11 +85,11 @@ export const DemosPage = () => {
             </>,
             [DemoTopics.tables]: <>
               <Aggregations trades={liveTrades.trades} dragStyle={styled(pace, origin)}
-                            animated={tableMotion === 'animated'}/>
-              <Controls pace={pace} origin={origin} motion={tableMotion}
-                        onPace={setPace} onOrigin={setOrigin} onMotion={setTableMotion}/>
-              <Tutorials pace={pace} origin={origin} motion={tableMotion}
-                         onPace={setPace} onOrigin={setOrigin} onMotion={setTableMotion}/>
+                            animated={motion === 'animated'}/>
+              <Tutorials pace={pace} origin={origin} motion={motion}
+                         onPace={next => updateSearchParams({pace: next})}
+                         onOrigin={next => updateSearchParams({origin: next})}
+                         onMotion={next => updateSearchParams({motion: next})}/>
             </>,
             [DemoTopics.dragAndDrop]: <>
               <h2 className="heading">Sortable List</h2>

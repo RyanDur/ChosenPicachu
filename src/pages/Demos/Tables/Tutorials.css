@@ -3,7 +3,8 @@
   gap: var(--base-x-3);
   justify-items: start;
 
-  .build-steps {
+  .build-steps,
+  .table-controls {
     justify-self: stretch;
   }
 }
