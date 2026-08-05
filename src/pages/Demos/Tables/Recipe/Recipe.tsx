@@ -475,9 +475,9 @@ export const Recipe: FC<Props> = ({track, onTrack, pace, origin, motion, onPace,
     <header className="brief-line">
       <h2 className="kicker">build the drag sort yourself</h2>
       <p className="brief">
-        No drag-and-drop library. Pick a track — pointer or keyboard — and read the sort the way
-        that hand builds it. When a step depends on a dial, the dial sits on the step itself —
-        the same dials as under the table — and the step rewrites to match.
+        Everything below is built without a drag-and-drop library and told one hand at a time —
+        take the pointer’s track or the keyboard’s. Wherever a step depends on a dial under the
+        table, that dial sits on the step, and the writing follows it.
       </p>
     </header>
     <Picks label="input track"
