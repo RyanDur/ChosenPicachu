@@ -6,6 +6,8 @@ import {Column, Dress, ResizeHandle, Shares} from '@components/Table';
 import {Slid} from './chart';
 import {Menu} from '@components/Menu';
 import {Direction} from './DraggableHeader';
+import './DraggableHeader.css';
+import './displaced.css';
 
 const glyphs: Record<Direction, string> = {ascending: '▲', descending: '▼'};
 

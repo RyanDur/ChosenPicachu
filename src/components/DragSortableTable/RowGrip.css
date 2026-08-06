@@ -1,0 +1,18 @@
+.sortable .grip,
+.column-ghost .grip {
+  all: unset;
+  cursor: grab;
+  touch-action: none;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  translate: 0 -50%;
+  width: var(--base-x-2);
+  height: var(--base-x-2);
+  display: inline-flex;
+  align-items: center;
+
+  &:focus-visible {
+    outline: var(--hairline-x-2) solid var(--charcoal);
+  }
+}

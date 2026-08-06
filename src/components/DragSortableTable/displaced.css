@@ -1,0 +1,24 @@
+.sortable .displaced-left,
+.sortable .displaced-right {
+  --carried: 0;
+}
+
+.sortable .displaced-left {
+  animation: displaced-left 200ms ease-out;
+}
+
+.sortable .displaced-right {
+  animation: displaced-right 200ms ease-out;
+}
+
+@keyframes displaced-left {
+  from {
+    transform: translateX(calc(var(--carried) * 1cqi + var(--base-x-2_5) + var(--hairline)));
+  }
+}
+
+@keyframes displaced-right {
+  from {
+    transform: translateX(calc(var(--carried) * -1cqi - var(--base-x-2_5) - var(--hairline)));
+  }
+}

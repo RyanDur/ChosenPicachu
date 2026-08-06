@@ -10,7 +10,9 @@ import {ColumnGhost, RowGhost} from './ghosts';
 import {Direction} from './DraggableHeader';
 import {AnimatedDraggableHeader} from './AnimatedDraggableHeader';
 import {AnimatedDraggableRow} from './AnimatedDraggableRow';
-import './DragSortableTable.css';
+import './sortable.css';
+import './hide.css';
+import './staged.css';
 
 export type LazyHideAnimatedTableProps = TableProps & {
     draggableColumns?: boolean;

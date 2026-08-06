@@ -1,0 +1,11 @@
+.sortable .shifted {
+  --drop: 0px;
+
+  animation: shifted 200ms ease-out;
+}
+
+@keyframes shifted {
+  from {
+    transform: translateY(var(--drop));
+  }
+}

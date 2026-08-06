@@ -4,6 +4,7 @@ import {join} from '@components/class-names';
 import {array} from '@components/arrays';
 import {Column, Dress, ResizeHandle} from '@components/Table';
 import {Menu} from '@components/Menu';
+import './DraggableHeader.css';
 
 export type Direction = 'ascending' | 'descending';
 

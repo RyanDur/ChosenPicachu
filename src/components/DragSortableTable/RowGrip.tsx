@@ -1,5 +1,6 @@
 import {FC, KeyboardEvent, PointerEvent} from 'react';
 import Handle from '@components/grip.svg';
+import './RowGrip.css';
 
 type Props = {
     row: number;

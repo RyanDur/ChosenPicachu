@@ -24,7 +24,13 @@ import headerSource from '@components/DragSortableTable/DraggableHeader.tsx?raw'
 import animatedHeaderSource from '@components/DragSortableTable/AnimatedDraggableHeader.tsx?raw';
 import gripSource from '@components/DragSortableTable/RowGrip.tsx?raw';
 import ghostSource from '@components/DragSortableTable/ghosts/Ghost.tsx?raw';
-import tableCss from '@components/DragSortableTable/DragSortableTable.css?raw';
+import sortableCss from '@components/DragSortableTable/sortable.css?raw';
+import headerCss from '@components/DragSortableTable/DraggableHeader.css?raw';
+import ghostCss from '@components/DragSortableTable/ghosts/Ghost.css?raw';
+import hideCss from '@components/DragSortableTable/hide.css?raw';
+import displacedCss from '@components/DragSortableTable/displaced.css?raw';
+import animatedRowCss from '@components/DragSortableTable/AnimatedDraggableRow.css?raw';
+import stagedCss from '@components/DragSortableTable/staged.css?raw';
 import '../../Recipe/Recipe.css';
 
 const gap = plain('');
@@ -104,7 +110,7 @@ const shown = (origin: 'keep' | 'hide', source: string): Step => origin === 'hid
         ...span(source, 'hidden={rowsTravel.aloft === seat}', 'hiddenColumn={columnsTravel.aloft}')
       ]},
       {label: 'CSS', lines: [
-        ...unit(tableCss, '.sortable .hide,'),
+        ...unit(hideCss, '.sortable .hide,'),
         aside('/* the box stops painting; its layout space stays */')
       ]}
     ]
@@ -158,12 +164,12 @@ const moved = (animated: boolean, source: string): Step => animated
         aside('{/* the reorder moves the node; the class rides along */}')
       ]},
       {label: 'CSS', lines: [
-        ...unit(tableCss, '.staged {'), gap,
-        ...unit(tableCss, '.sortable .displaced-left {'), gap,
-        ...unit(tableCss, '.sortable .shifted {'), gap,
-        ...unit(tableCss, '@keyframes displaced-left'),
+        ...unit(stagedCss, '.staged {'), gap,
+        ...unit(displacedCss, '.sortable .displaced-left {'), gap,
+        ...unit(animatedRowCss, '.sortable .shifted {'), gap,
+        ...unit(displacedCss, '@keyframes displaced-left'),
         aside('/* the share, plus the padding and border it carried */'), gap,
-        ...unit(tableCss, '@keyframes shifted'),
+        ...unit(animatedRowCss, '@keyframes shifted'),
         aside('/* .displaced-right mirrors with a negative offset */')
       ]}
     ]
@@ -208,8 +214,8 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
         plain('<i role="separator" aria-label="resize trades" aria-valuenow={24}/>')
       ]},
       {label: 'CSS', lines: [
-        ...unit(tableCss, '.grabbable {'), gap,
-        ...unit(tableCss, '.sortable {')
+        ...unit(sortableCss, '.grabbable {'), gap,
+        ...unit(sortableCss, '.sortable {')
       ]},
       {label: 'JS', lines: [
         aside('// one measurement, slot arithmetic, and the order — nothing else')
@@ -247,7 +253,7 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
         ...span(source, 'onLift={columnsTravel.lift(key)}', 'onLift={columnsTravel.lift(key)}')
       ]},
       {label: 'CSS', lines: [
-        ...unit(tableCss, '.grabbable {')
+        ...unit(sortableCss, '.grabbable {')
       ]}
     ]
   },
@@ -271,7 +277,7 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
         aside('// cancel and lost capture are not delegates — they ARE the drop')
       ]},
       {label: 'CSS', lines: [
-        ...unit(tableCss, '.drag-surface {'),
+        ...unit(sortableCss, '.drag-surface {'),
         aside('/* hover below is blocked by existence */')
       ]}
     ]
@@ -294,7 +300,7 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
           'setDrift({x: event.clientX - origin.x')
       ]},
       {label: 'CSS', lines: [
-        ...unit(tableCss, '.column-ghost {')
+        ...unit(ghostCss, '.column-ghost {')
       ]}
     ]
   },
@@ -337,8 +343,8 @@ const nudgedBoth = (animated: boolean): Step => animated
         aside('// each starts where the other now sits')
       ]},
       {label: 'CSS', lines: [
-        ...unit(tableCss, '.sortable .displaced-left {'), gap,
-        ...unit(tableCss, '.sortable .displaced-right {'),
+        ...unit(displacedCss, '.sortable .displaced-left {'), gap,
+        ...unit(displacedCss, '.sortable .displaced-right {'),
         aside('/* the pointer track’s keyframes, unchanged */')
       ]}
     ]
@@ -376,7 +382,7 @@ const keyedSteps = (motion: Motion): Step[] => {
         aside('{/* the button was focusable all along; the header asks */}')
       ]},
       {label: 'CSS', lines: [
-        ...unit(tableCss, '.sortable .slot {')
+        ...unit(headerCss, '.sortable .slot {')
       ]}
     ]
   },
@@ -410,7 +416,7 @@ const keyedSteps = (motion: Motion): Step[] => {
           aside('// while the slide runs, the key falls silent')
         ]},
         {label: 'CSS', lines: [
-          ...unit(tableCss, '.sortable .displaced-left {'),
+          ...unit(displacedCss, '.sortable .displaced-left {'),
           aside('/* the 200ms IS the debounce interval */')
         ]}
       ]

@@ -9,7 +9,8 @@ import {anchored} from './chart';
 import {ColumnGhost, RowGhost} from './ghosts';
 import {DraggableHeader, Direction} from './DraggableHeader';
 import {DraggableRow} from './DraggableRow';
-import './DragSortableTable.css';
+import './sortable.css';
+import './hide.css';
 
 export type LazyHideStaticTableProps = TableProps & {
     draggableColumns?: boolean;

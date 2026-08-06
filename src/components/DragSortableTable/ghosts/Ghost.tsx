@@ -1,6 +1,7 @@
 import {FC, ReactNode} from 'react';
 import {join} from '@components/class-names';
 import {Dress} from '@components/Table';
+import './Ghost.css';
 
 type Props = {
     at: {x: number; y: number; width: number};
