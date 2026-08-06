@@ -1,6 +1,13 @@
 import {FC} from 'react';
 import {StepEntry, StepList, aside, plain} from '../../Recipe/StepList';
+import {span, unit} from '../../Recipe/carve';
+import sharesSource from '@components/Table/shares.ts?raw';
+import resizeSource from '@components/Table/ResizeHandle.tsx?raw';
+import baseCss from '@components/Table/Table.css?raw';
+import tableCss from '@components/DragSortableTable/DragSortableTable.css?raw';
 import '../../Recipe/Recipe.css';
+
+const gap = plain('');
 
 const steps: StepEntry[] = [
   {
@@ -13,19 +20,14 @@ const steps: StepEntry[] = [
       'one promise.'],
     code: [
       {label: 'JS', lines: [
-        plain('const seededShares = (columns) => {'),
-        plain('    const sized = columns.filter(({width}) => has(width));'),
-        plain('    const total = sized.reduce((sum, {width}) => sum + width, 0);'),
-        plain('    return sized.reduce((shares, {column, width}) =>'),
-        plain('        ({...shares, [column]: width / total * 100}), {});'),
-        plain('};')
+        ...unit(sharesSource, 'export const seededShares')
       ]},
       {label: 'HTML', lines: [
         plain("<th className=\"slot\" style={{'--share': `${share}%`}}>")
       ]},
       {label: 'CSS', lines: [
-        plain('.apportioned { table-layout: fixed; width: 100%; }'),
-        plain('.sortable .slot { width: var(--share); }')
+        ...unit(baseCss, '.apportioned {'), gap,
+        ...unit(tableCss, '.sortable .slot {')
       ]}
     ]
   },
@@ -38,24 +40,10 @@ const steps: StepEntry[] = [
       'col-resize cursor, and touch-action: none so the pointer can drag it on a touchscreen.'],
     code: [
       {label: 'HTML', lines: [
-        plain('<i role="separator"'),
-        plain('   tabIndex={0}'),
-        plain('   aria-orientation="vertical"'),
-        plain('   aria-label={`resize ${column}`}'),
-        plain('   aria-valuenow={Math.round(share)}'),
-        plain('   aria-valuemin={SLIMMEST}'),
-        plain('   aria-valuemax={100 - SLIMMEST}/>')
+        ...span(resizeSource, '<i role="separator"', 'aria-valuemax')
       ]},
       {label: 'CSS', lines: [
-        plain('.resize-handle {'),
-        plain('    position: absolute;'),
-        plain('    top: 0;'),
-        plain('    right: 0;'),
-        plain('    width: var(--base);'),
-        plain('    height: 100%;'),
-        plain('    cursor: col-resize;'),
-        plain('    touch-action: none;'),
-        plain('}')
+        ...unit(baseCss, '.resize-handle {')
       ]}
     ]
   },
@@ -69,15 +57,7 @@ const steps: StepEntry[] = [
       'invariant is not checked; it is built in.'],
     code: [
       {label: 'JS', lines: [
-        plain('const traded = (column, neighbor, delta) => (previous) => {'),
-        plain('    const given = Math.min('),
-        plain('        Math.max(delta, SLIMMEST - previous[column]),'),
-        plain('        previous[neighbor] - SLIMMEST'),
-        plain('    );'),
-        plain('    return {...previous,'),
-        plain('        [column]: previous[column] + given,'),
-        plain('        [neighbor]: previous[neighbor] - given};'),
-        plain('};')
+        ...unit(sharesSource, 'export const traded')
       ]}
     ]
   },
@@ -91,18 +71,8 @@ const steps: StepEntry[] = [
       'last one, so a clamped trade never accumulates error.'],
     code: [
       {label: 'JS', lines: [
-        plain('onPointerDown: event => {'),
-        plain('    event.currentTarget.setPointerCapture?.(event.pointerId);'),
-        plain('    const width = event.currentTarget.closest("table")'),
-        plain('        .getBoundingClientRect().width;'),
-        plain('    setGrip({fromX: event.clientX, pxPerShare: width / 100});'),
-        plain('    setTraded(0);'),
-        plain('},'),
-        plain('onPointerMove: event => {'),
-        plain('    const sought = (event.clientX - grip.fromX) / grip.pxPerShare;'),
-        plain('    onTrade(sought - traded);'),
-        plain('    setTraded(sought);'),
-        plain('}')
+        ...unit(resizeSource, 'onPointerDown={(event'), gap,
+        ...unit(resizeSource, 'onPointerMove={(event')
       ]}
     ]
   },
@@ -115,14 +85,9 @@ const steps: StepEntry[] = [
       'no pointer required.'],
     code: [
       {label: 'JS', lines: [
-        plain('onPointerDown: event => event.stopPropagation(),'),
-        plain('onKeyDown: event => {'),
-        plain("    if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') {"),
-        plain('        return;'),
-        plain('    }'),
-        plain('    event.preventDefault();'),
-        plain("    onTrade(event.key === 'ArrowRight' ? STEP_SHARE : -STEP_SHARE);"),
-        plain('}'),
+        ...span(resizeSource, 'onMouseDown={event => event.stopPropagation()}',
+          'onMouseDown={event => event.stopPropagation()}'), gap,
+        ...unit(resizeSource, 'onKeyDown={(event'),
         aside('// the column dial above never hears a thing')
       ]}
     ]

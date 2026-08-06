@@ -7,8 +7,18 @@ import {Paths} from '@pages/Paths';
 import {DemoTopics} from '../../types';
 import {Motion, Origin, Pace} from '../../Controls';
 import {StepEntry, StepList, aside, plain} from '../../Recipe/StepList';
+import {span, unit} from '../../Recipe/carve';
 import {SlotsFigure} from './SlotsFigure';
+import tableSource from '@components/DragSortableTable/DragSortableTable.tsx?raw';
+import travelSource from '@components/DragSortableTable/useTravel.ts?raw';
+import chartSource from '@components/DragSortableTable/chart.ts?raw';
+import headerSource from '@components/DragSortableTable/DraggableHeader.tsx?raw';
+import gripSource from '@components/DragSortableTable/RowGrip.tsx?raw';
+import ghostSource from '@components/DragSortableTable/ghosts/Ghost.tsx?raw';
+import tableCss from '@components/DragSortableTable/DragSortableTable.css?raw';
 import '../../Recipe/Recipe.css';
+
+const gap = plain('');
 
 export type Track = 'pointer' | 'keyboard';
 
@@ -26,14 +36,13 @@ const held = (pace: 'eager' | 'lazy'): Step => pace === 'eager'
     says: ['With eager pace, settle as soon as a neighbour is struck — the order state updates ' +
       'mid-drag, and because the markup renders through that order, the same key finds its new ' +
       'seat and React moves the real cells. Carrying the column back is just more crossings: ' +
-      'home is always reachable. No style changes hands here at all.'],
+      'home is always reachable. No style changes hands here at all.',
+      'This is the real handler, not a sketch — buttons at zero heals a drag whose release was ' +
+      'swallowed, the surface claims the pointer capture, the drift feeds the ghost — and the ' +
+      'eager fork settles the strike the moment it lands.'],
     code: [
       {label: 'JS', lines: [
-        plain('onPointerMove: event => {'),
-        plain('    const struck = strike(event.clientX, event.clientY, aloft);'),
-        plain('    if (has(aloft) && has(struck) && struck !== aloft)'),
-        plain('        settle(aloft, struck);'),
-        plain('}')
+        ...unit(travelSource, 'const travel = ')
       ]},
       {label: 'HTML', lines: [
         plain('<DraggableHeader key={key} ... />'),
@@ -47,17 +56,13 @@ const held = (pace: 'eager' | 'lazy'): Step => pace === 'eager'
     want: 'You want the table calm while you drag, because mid-flight churn distracts and only the destination matters.',
     says: ['With lazy pace, remember the last neighbour struck and do nothing else — the table ' +
       'holds still, and one moveToIndex runs on pointer up. Drifting back over your own slot ' +
-      'clears the landing, so a drop at home changes nothing.'],
+      'clears the landing, so a drop at home changes nothing.',
+      'Same handler, other fork: the strike is only remembered as the landing, and drop — ' +
+      'which also answers cancel and a lost capture — commits it.'],
     code: [
       {label: 'JS', lines: [
-        plain('onPointerMove: event => {'),
-        plain('    const struck = strike(event.clientX, event.clientY, aloft);'),
-        plain('    setLanding(struck === aloft ? undefined : struck);'),
-        plain('},'),
-        plain('onPointerUp: () => {'),
-        plain('    if (has(aloft) && has(landing))'),
-        plain('        settle(aloft, landing);'),
-        plain('}')
+        ...unit(travelSource, 'const travel = '), gap,
+        ...unit(travelSource, 'const drop = ')
       ]}
     ]
   };
@@ -74,17 +79,14 @@ const shown = (origin: 'keep' | 'hide'): Step => origin === 'hide'
       'the gap where the drop will land. Nothing unmounts.'],
     code: [
       {label: 'JS', lines: [
-        plain("const hiding = origin === 'hide';")
+        ...span(travelSource, 'const hiding = ', 'const hiding = ')
       ]},
       {label: 'HTML', lines: [
         plain('<DraggableHeader hidden={hiding && aloft === key} ... />'),
         plain('<DraggableRow hiddenColumn={hiding ? aloft : undefined} ... />')
       ]},
       {label: 'CSS', lines: [
-        plain('.sortable .hide,'),
-        plain('.sortable .hide-across {'),
-        plain('    visibility: hidden;'),
-        plain('}'),
+        ...unit(tableCss, '.sortable .hide,'),
         aside('/* the box stops painting; its layout space stays */')
       ]}
     ]
@@ -127,9 +129,7 @@ const moved = (animated: boolean): Step => animated
     ],
     code: [
       {label: 'JS', lines: [
-        plain('setSlid(Object.fromEntries(displaced.map(seat =>'),
-        plain("    [seat, {toward: from < to ? 'left' : 'right', by: shares[key] ?? 0}])));"),
-        plain('setShifted(shifts(heights, standing, after));'),
+        ...unit(tableSource, 'const settleColumn = '),
         aside('// a direction and a share per displaced key — javascript is done')
       ]},
       {label: 'HTML', lines: [
@@ -138,22 +138,12 @@ const moved = (animated: boolean): Step => animated
         aside('{/* the reorder moves the node; the class rides along */}')
       ]},
       {label: 'CSS', lines: [
-        plain('.table-stage { container-type: inline-size; }'),
-        plain(''),
-        plain('.sortable .displaced-left { animation: displaced-left 200ms ease-out; }'),
-        plain('.sortable .shifted { animation: shifted 200ms ease-out; }'),
-        plain(''),
-        plain('@keyframes displaced-left {'),
-        plain('    from {'),
-        plain('        transform: translateX(calc('),
-        plain('            var(--carried) * 1cqi + var(--base-x-2_5) + var(--hairline)));'),
-        aside('        /* the share, plus the padding and border it carried */'),
-        plain('    }'),
-        plain('}'),
-        plain(''),
-        plain('@keyframes shifted {'),
-        plain('    from { transform: translateY(var(--drop)); }'),
-        plain('}'),
+        ...unit(tableCss, '.table-stage {'), gap,
+        ...unit(tableCss, '.sortable .displaced-left {'), gap,
+        ...unit(tableCss, '.sortable .shifted {'), gap,
+        ...unit(tableCss, '@keyframes displaced-left'),
+        aside('/* the share, plus the padding and border it carried */'), gap,
+        ...unit(tableCss, '@keyframes shifted'),
         aside('/* .displaced-right mirrors with a negative offset */')
       ]}
     ]
@@ -195,10 +185,8 @@ const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolea
         plain('<i role="separator" aria-label="resize trades" aria-valuenow={24}/>')
       ]},
       {label: 'CSS', lines: [
-        plain('.grabbable { cursor: grab; touch-action: none; }'),
-        plain('.grabbable:active { cursor: grabbing; }'),
-        plain('.sortable { user-select: none; }'),
-        plain('.drag-surface { position: fixed; inset: 0; cursor: grabbing; }')
+        ...unit(tableCss, '.grabbable {'), gap,
+        ...unit(tableCss, '.sortable {')
       ]},
       {label: 'JS', lines: [
         aside('// one measurement, slot arithmetic, and the order — nothing else')
@@ -213,10 +201,8 @@ const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolea
       'the same key finds its new seat and React moves the real nodes.'],
     code: [
       {label: 'JS', lines: [
-        plain('const [order, setOrder] = useState(() =>'),
-        plain('    columns.map(({column}) => String(column)));'),
-        plain('const [seats, setSeats] = useState(() =>'),
-        plain('    rows.map((_, seat) => seat));')
+        ...unit(tableSource, 'const [order, setOrder]'), gap,
+        ...unit(tableSource, 'const [seats, setSeats]')
       ]},
       {label: 'HTML', lines: [
         plain('<tr>{order.map(key =>'),
@@ -234,15 +220,11 @@ const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolea
       'would fight the reorder you are about to apply.'],
     code: [
       {label: 'JS', lines: [
-        plain('const lift = (key, anchor) => () => {'),
-        plain('    setChart(charted(anchor.closest("table"), arranged));'),
-        plain('    setFlight(anchor.getBoundingClientRect());'),
-        plain('    setAloft(key);'),
-        plain('};')
+        ...unit(tableSource, 'const liftColumn = '), gap,
+        ...unit(travelSource, 'const lift = ')
       ]},
       {label: 'CSS', lines: [
-        plain('.grabbable { cursor: grab; touch-action: none; }'),
-        plain('.grabbable:active { cursor: grabbing; }')
+        ...unit(tableCss, '.grabbable {')
       ]}
     ]
   },
@@ -258,18 +240,16 @@ const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolea
       'always arrives.'],
     code: [
       {label: 'HTML', lines: [
-        plain('{aloft &&'),
-        plain('    <article className="drag-surface"'),
-        plain('                      onPointerMove={travel}'),
-        plain('                      onPointerUp={drop}'),
-        plain('                      onPointerCancel={drop}'),
-        plain('                      onLostPointerCapture={drop}/>}'),
-        aside('{/* cancel and lost capture are not delegates — they ARE the drop */}')
+        ...span(tableSource, '(has(columnsTravel.aloft) || has(rowsTravel.aloft))', '{...surface}')
+      ]},
+      {label: 'JS', lines: [
+        ...span(travelSource, 'onPointerMove: travel', 'onLostPointerCapture: drop'), gap,
+        ...unit(travelSource, 'const drop = '),
+        aside('// cancel and lost capture are not delegates — they ARE the drop')
       ]},
       {label: 'CSS', lines: [
-        plain('.drag-surface { position: fixed; inset: 0; cursor: grabbing; }'),
-        plain('.sortable { user-select: none; }'),
-        aside('/* hover below is blocked by existence; selection never starts */')
+        ...unit(tableCss, '.drag-surface {'),
+        aside('/* hover below is blocked by existence */')
       ]}
     ]
   },
@@ -283,22 +263,15 @@ const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolea
       'will-change. Nothing is measured per move, which is what keeps slower engines smooth.'],
     code: [
       {label: 'HTML', lines: [
-        plain('<table className="column-ghost"'),
-        plain('              style={{top: flight.y, left: flight.x, width: flight.width,'),
-        plain('                              transform: `translate(${drift.x}px, ${drift.y}px)`}}>'),
-        aside('    {/* the same cells, rendered again from the data */}'),
-        plain('</table>')
+        ...span(ghostSource, 'export const Ghost', '</table>;'),
+        aside('{/* the same cells, rendered again from the data */}')
       ]},
       {label: 'JS', lines: [
-        plain('onPointerMove: event =>'),
-        plain('    setDrift({x: event.clientX - origin.x, y: event.clientY - origin.y});')
+        ...span(travelSource, 'setDrift({x: event.clientX - origin.x',
+          'setDrift({x: event.clientX - origin.x')
       ]},
       {label: 'CSS', lines: [
-        plain('.column-ghost {'),
-        plain('    position: fixed;'),
-        plain('    pointer-events: none;'),
-        plain('    will-change: transform;'),
-        plain('}')
+        ...unit(tableCss, '.column-ghost {')
       ]}
     ]
   },
@@ -315,12 +288,8 @@ const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolea
     figure: <SlotsFigure/>,
     code: [
       {label: 'JS', lines: [
-        plain('const struck = slots.find(({end}) => x < end);'),
-        plain('const held = Math.max(struck.width / 4, (struck.width - aloftWidth) / 2);'),
-        plain('const homeward = order.indexOf(struck.key) < order.indexOf(aloft);'),
-        plain('return (homeward ? x < struck.end - held : x > struck.start + held)'),
-        plain('    ? struck.key'),
-        plain('    : undefined;')
+        ...unit(chartSource, 'const deadZone = '), gap,
+        ...unit(chartSource, 'export const columnUnder')
       ]}
     ]
   },
@@ -340,16 +309,12 @@ const nudgedBoth = (animated: boolean): Step => animated
       'arrive as the reorder moves the nodes, so both slides start fresh without a line of new CSS.'],
     code: [
       {label: 'JS', lines: [
-        plain('setSlid({'),
-        plain("    [key]:      {toward: 'right', by: shares[neighbour]},"),
-        plain("    [neighbour]: {toward: 'left', by: shares[key]}"),
-        plain('});'),
-        plain('setOrder(array.moveToIndex(to, key, order));'),
+        ...unit(tableSource, 'const nudgedColumn = '),
         aside('// each starts where the other now sits')
       ]},
       {label: 'CSS', lines: [
-        plain('.sortable .displaced-left { animation: displaced-left 200ms ease-out; }'),
-        plain('.sortable .displaced-right { animation: displaced-right 200ms ease-out; }'),
+        ...unit(tableCss, '.sortable .displaced-left {'), gap,
+        ...unit(tableCss, '.sortable .displaced-right {'),
         aside('/* the pointer track’s keyframes, unchanged */')
       ]}
     ]
@@ -379,15 +344,12 @@ const keyedSteps = (animated: boolean): Step[] => [
       'only — pointer users never see it.'],
     code: [
       {label: 'HTML', lines: [
-        plain('<th tabIndex={travels ? 0 : undefined} ... >'),
-        plain('<button className="grip" aria-label="move row 2"><Handle/></button>'),
+        ...span(headerSource, 'tabIndex={travels', 'tabIndex={travels'), gap,
+        ...span(gripSource, '<button', '</button>'),
         aside('{/* the button was focusable all along; the header asks */}')
       ]},
       {label: 'CSS', lines: [
-        plain('.sortable .slot:focus-visible,'),
-        plain('.sortable .grip:focus-visible {'),
-        plain('    outline: var(--hairline-x-2) solid var(--charcoal);'),
-        plain('}')
+        ...unit(tableCss, '.sortable .slot {')
       ]}
     ]
   },
@@ -401,15 +363,8 @@ const keyedSteps = (animated: boolean): Step[] => [
       'rows do the same dance turned vertical, the grip listening for up and down.'],
     code: [
       {label: 'JS', lines: [
-        plain('onKeyDown: event => {'),
-        plain("    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight')"),
-        plain('        return;'),
-        plain('    event.preventDefault();'),
-        plain("    nudge(event.key === 'ArrowRight' ? 1 : -1);"),
-        plain('}'),
-        plain(''),
-        plain('const to = Math.min(Math.max(from + toward, 1), order.length - 2);'),
-        plain('if (to === from) return;'),
+        ...unit(headerSource, 'onKeyDown={travels'), gap,
+        ...span(tableSource, 'const to = Math.min(Math.max(from + toward', '}'),
         aside('// the anchors hold; the walk stops beside them')
       ]}
     ]
@@ -425,12 +380,11 @@ const keyedSteps = (animated: boolean): Step[] => [
         'debounce clock, and CSS already set its length.'],
       code: [
         {label: 'JS', lines: [
-          plain('if ((event.currentTarget.getAnimations?.().length ?? 0) > 0)'),
-          plain('    return;'),
+          ...span(headerSource, 'if ((event.currentTarget.getAnimations', '}'),
           aside('// while the slide runs, the key falls silent')
         ]},
         {label: 'CSS', lines: [
-          plain('.sortable .displaced-left { animation: displaced-left 200ms ease-out; }'),
+          ...unit(tableCss, '.sortable .displaced-left {'),
           aside('/* the 200ms IS the debounce interval */')
         ]}
       ]

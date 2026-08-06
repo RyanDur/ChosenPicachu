@@ -52,36 +52,33 @@ export const DragSortableTable: FC<DragSortableTableProps> = (
         : dealt.map(seat => ({row: rows[seat], seat}));
     const standing = arranged.map(({seat}) => seat);
 
-    const columnsTravel = useTravel<string>(
-        draggableColumns,
-        columnUnder(chart, order, shares),
-        (key, struck) => {
-            if (animated) {
-                const from = order.indexOf(key);
-                const to = Math.min(Math.max(order.indexOf(struck), 1), order.length - 2);
-                const displaced = from < to ? order.slice(from + 1, to + 1) : order.slice(to, from);
-                setSlid(Object.fromEntries(displaced.map(seat =>
-                    [seat, {toward: from < to ? 'left' : 'right', by: shares[key] ?? 0}])));
-            }
-            setOrder(previous => {
-                const at = Math.min(Math.max(previous.indexOf(struck), 1), previous.length - 2);
-                return array.moveToIndex(at, key, previous);
-            });
+    const settleColumn = (key: string, struck: string): void => {
+        if (animated) {
+            const from = order.indexOf(key);
+            const to = Math.min(Math.max(order.indexOf(struck), 1), order.length - 2);
+            const displaced = from < to ? order.slice(from + 1, to + 1) : order.slice(to, from);
+            setSlid(Object.fromEntries(displaced.map(seat =>
+                [seat, {toward: from < to ? 'left' : 'right', by: shares[key] ?? 0}])));
+        }
+        setOrder(previous => {
+            const at = Math.min(Math.max(previous.indexOf(struck), 1), previous.length - 2);
+            return array.moveToIndex(at, key, previous);
         });
+    };
+    const columnsTravel = useTravel<string>(
+        draggableColumns, columnUnder(chart, order, shares), settleColumn);
     const shifting = (heights: Readonly<Record<number, number>>, before: readonly number[], after: readonly number[]): void =>
         setShifted(shifts(heights, before, after));
 
-    const rowsTravel = useTravel<number>(
-        draggableRows,
-        seatUnder(chart, seats),
-        (seat, struck) => {
-            const after = array.moveToIndex(seats.indexOf(struck), seat, seats);
-            if (animated && has(chart)) {
-                const {[seat]: carried, ...displaced} = shifts(chart.rowHeights, seats, after);
-                setShifted(displaced);
-            }
-            setSeats(after);
-        });
+    const settleRow = (seat: number, struck: number): void => {
+        const after = array.moveToIndex(seats.indexOf(struck), seat, seats);
+        if (animated && has(chart)) {
+            const {[seat]: carried, ...displaced} = shifts(chart.rowHeights, seats, after);
+            setShifted(displaced);
+        }
+        setSeats(after);
+    };
+    const rowsTravel = useTravel<number>(draggableRows, seatUnder(chart, seats), settleRow);
 
     const nudgedColumn = (key: string) => (toward: 1 | -1): void => {
         const from = order.indexOf(key);
@@ -212,10 +209,6 @@ export const DragSortableTable: FC<DragSortableTableProps> = (
             <RowGhost at={rowsTravel.flight} drift={rowsTravel.drift} dress={dress}
                       columns={ordered} row={aloftRow}/>}
         {(has(columnsTravel.aloft) || has(rowsTravel.aloft)) &&
-            <article className="drag-surface"
-                     onPointerMove={surface.onPointerMove}
-                     onPointerUp={surface.onPointerUp}
-                     onPointerCancel={surface.onPointerCancel}
-                     onLostPointerCapture={surface.onLostPointerCapture}/>}
+            <article className="drag-surface" {...surface}/>}
     </>;
 };
