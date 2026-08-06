@@ -5,19 +5,16 @@ import {join} from '@components/class-names';
 import {Shares, TableProps, neighborOf, seededShares, traded} from '@components/Table';
 import {useLazyColumnTravel} from './useLazyColumnTravel';
 import {useLazyRowTravel} from './useLazyRowTravel';
-import {Shifted, Slid, Theater} from './theater';
-import {anchored, charted} from './chart';
+import {Shifted, Slid, anchored, charted, shifts} from './chart';
 import {ColumnGhost, RowGhost} from './ghosts';
 import {DraggableHeader, Direction} from './DraggableHeader';
 import {DraggableRow} from './DraggableRow';
 import './DragSortableTable.css';
 
-export type LazySortingTableProps = TableProps & {
-    hiding: boolean;
-    draggableColumns: boolean;
-    draggableRows: boolean;
+export type LazyHideAnimatedTableProps = TableProps & {
+    draggableColumns?: boolean;
+    draggableRows?: boolean;
     sortable?: boolean;
-    theater: Theater;
 };
 
 type Rule = {
@@ -33,8 +30,8 @@ const ranked = (rows: TableProps['rows'], dealt: readonly number[], rule: Rule) 
             return rule.direction === 'ascending' ? gap : -gap;
         });
 
-export const LazySortingTable: FC<LazySortingTableProps> = (
-    {columns, rows, hiding, draggableColumns, draggableRows, sortable, theater: casting, id, ...dress}
+export const LazyHideAnimatedTable: FC<LazyHideAnimatedTableProps> = (
+    {columns, rows, draggableColumns = false, draggableRows = false, sortable, id, ...dress}
 ) => {
     const [shares, setShares] = useState<Shares>(() => seededShares(columns));
     const [order, setOrder] = useState<string[]>(() => columns.map(({column}) => String(column)));
@@ -42,7 +39,6 @@ export const LazySortingTable: FC<LazySortingTableProps> = (
     const [rule, setRule] = useState<Rule>();
     const [slid, setSlid] = useState<Slid>();
     const [shifted, setShifted] = useState<Shifted>();
-    const theater = casting({slid: setSlid, shifted: setShifted});
 
     const byKey = new Map(columns.map(definition => [String(definition.column), definition]));
     const ordered = order.map(key => byKey.get(key)).filter(has);
@@ -57,7 +53,9 @@ export const LazySortingTable: FC<LazySortingTableProps> = (
     const settleColumn = (key: string, struck: string): void => {
         const from = order.indexOf(key);
         const to = Math.min(Math.max(order.indexOf(struck), 1), order.length - 2);
-        theater.columnsDisplaced(from, to, order, shares);
+        const displaced = from < to ? order.slice(from + 1, to + 1) : order.slice(to, from);
+        setSlid(Object.fromEntries(displaced.map(neighbour =>
+            [neighbour, {toward: from < to ? 'left' : 'right', by: shares[key] ?? 0}])));
         setOrder(previous => {
             const at = Math.min(Math.max(previous.indexOf(struck), 1), previous.length - 2);
             return array.moveToIndex(at, key, previous);
@@ -67,7 +65,8 @@ export const LazySortingTable: FC<LazySortingTableProps> = (
 
     const settleRow = (seat: number, struck: number, heights: Shifted): void => {
         const after = array.moveToIndex(seats.indexOf(struck), seat, seats);
-        theater.rowsShifted(() => heights, seats, after, seat);
+        const {[seat]: ridden, ...drops} = shifts(heights, seats, after);
+        setShifted(drops);
         setSeats(after);
     };
     const rowsTravel = useLazyRowTravel(seats, settleRow);
@@ -78,7 +77,11 @@ export const LazySortingTable: FC<LazySortingTableProps> = (
         if (to === from) {
             return;
         }
-        theater.partiesSwapped(key, order[to], toward, shares);
+        const neighbour = order[to];
+        setSlid({
+            [key]: {toward: toward > 0 ? 'right' : 'left', by: shares[neighbour] ?? 0},
+            [neighbour]: {toward: toward > 0 ? 'left' : 'right', by: shares[key] ?? 0}
+        });
         setOrder(array.moveToIndex(to, key, order));
     };
 
@@ -91,7 +94,7 @@ export const LazySortingTable: FC<LazySortingTableProps> = (
         const after = array.moveToIndex(to, seat, standing);
         const table = event.currentTarget.closest('table');
         if (has(table)) {
-            theater.rowsShifted(() => charted(table, standing).rowHeights, standing, after);
+            setShifted(shifts(charted(table, standing).rowHeights, standing, after));
         }
         setRule(undefined);
         setSeats(after);
@@ -135,7 +138,7 @@ export const LazySortingTable: FC<LazySortingTableProps> = (
                                         share={has(column.width) ? shares[key] : undefined}
                                         clipped={clipped}
                                         travels={draggableColumns && not(anchored(position, ordered.length))}
-                                        hidden={hiding && columnsTravel.aloft === key}
+                                        hidden={columnsTravel.aloft === key}
                                         sorted={rule?.column === key ? rule.direction : undefined}
                                         dress={dress}
                                         onLift={columnsTravel.lift(key)}
@@ -151,30 +154,29 @@ export const LazySortingTable: FC<LazySortingTableProps> = (
                                                     const after = has(next)
                                                         ? ranked(rows, dealt, next)
                                                         : dealt.map(seat => ({row: rows[seat], seat}));
-                                                    theater.rowsShifted(() => charted(table, standing).rowHeights,
-                                                        standing, after.map(({seat}) => seat));
+                                                    setShifted(shifts(charted(table, standing).rowHeights,
+                                                        standing, after.map(({seat}) => seat)));
                                                 }
                                                 setRule(next);
                                             }
                                             : undefined}/>;
             })}</tr>
             </thead>
-            <tbody className={dress.tbodyClassName}>{arranged.map(({row, seat}, position) => {
-                const drop = shifted?.[seat];
-                return <DraggableRow key={seat}
+            <tbody className={dress.tbodyClassName}>{arranged.map(({row, seat}, position) =>
+                <DraggableRow key={seat}
                               row={row}
                               columns={ordered}
                               position={position}
                               clipped={clipped}
                               gripped={draggableRows}
-                              hidden={hiding && rowsTravel.aloft === seat}
-                              hiddenColumn={hiding ? columnsTravel.aloft : undefined}
+                              hidden={rowsTravel.aloft === seat}
+                              hiddenColumn={columnsTravel.aloft}
                               slid={slid}
-                              drop={drop}
+                              drop={shifted?.[seat]}
                               dress={dress}
                               onLift={liftRow(seat)}
-                              onNudge={nudged(seat)}/>;
-            })}</tbody>
+                              onNudge={nudged(seat)}/>
+            )}</tbody>
         </table>
         </div>
         {has(aloftColumn) &&

@@ -1,9 +1,10 @@
 import {FC} from 'react';
-import {Controls, ControlsProps, Copy} from '../Controls';
+import {Controls, ControlsProps, Copy, styled} from '../Controls';
 
 const copy: Copy = {
   kind: 'list',
-  component: {animated: 'AnimatedDragSortList', static: 'DragSortList'},
+  readout: (pace, origin, motion) =>
+    `<${motion === 'animated' ? 'AnimatedDragSortList' : 'DragSortList'} dragStyle="${styled(pace, origin)}"/>`,
   pace: {
     eager: 'Items swap the moment the drag crosses them, so the order is already settled when you let go.',
     lazy: 'The list holds its shape while you drag and commits the new order when the drag ends.'

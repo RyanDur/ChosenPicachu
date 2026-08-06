@@ -11,11 +11,5 @@ export type Drift = {
     y: number;
 };
 
-export const eagerly = (style?: DragStyle): boolean =>
-    style === 'eager-move' || style === 'hide-eager-move';
-
-export const hides = (style?: DragStyle): boolean =>
-    style === 'hide-eager-move' || style === 'hide-lazy-move';
-
 export const grounded: Flight = {x: 0, y: 0, width: 0};
 export const still: Drift = {x: 0, y: 0};

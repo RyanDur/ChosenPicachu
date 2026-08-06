@@ -13,7 +13,7 @@ type Props = {
     share: number | undefined;
     clipped: boolean;
     travels: boolean;
-    hidden: boolean;
+    hidden?: boolean;
     displaced?: {toward: 'left' | 'right'; by: number};
     sorted: Direction | undefined;
     dress: Dress;
