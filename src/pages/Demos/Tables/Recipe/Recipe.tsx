@@ -21,6 +21,7 @@ import eagerSource from '@components/DragSortableTable/useEagerColumnTravel.ts?r
 import lazySource from '@components/DragSortableTable/useLazyColumnTravel.ts?raw';
 import chartSource from '@components/DragSortableTable/chart.ts?raw';
 import headerSource from '@components/DragSortableTable/DraggableHeader.tsx?raw';
+import animatedHeaderSource from '@components/DragSortableTable/AnimatedDraggableHeader.tsx?raw';
 import gripSource from '@components/DragSortableTable/RowGrip.tsx?raw';
 import ghostSource from '@components/DragSortableTable/ghosts/Ghost.tsx?raw';
 import tableCss from '@components/DragSortableTable/DragSortableTable.css?raw';
@@ -321,7 +322,7 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
 ];
 };
 
-const nudgedBoth = (animated: boolean, source: string): Step => animated
+const nudgedBoth = (animated: boolean): Step => animated
   ? {
     title: 'Both parties slide, each by the other’s share',
     dial: 'motion',
@@ -332,7 +333,7 @@ const nudgedBoth = (animated: boolean, source: string): Step => animated
       'arrive as the reorder moves the nodes, so both slides start fresh without a line of new CSS.'],
     code: [
       {label: 'JS', lines: [
-        ...unit(source, 'const nudgedColumn = '),
+        ...span(animatedHeaderSource, 'const neighbour = order[to];', '});'),
         aside('// each starts where the other now sits')
       ]},
       {label: 'CSS', lines: [
@@ -351,14 +352,15 @@ const nudgedBoth = (animated: boolean, source: string): Step => animated
       'fast as the key repeats.'],
     code: [
       {label: 'JS', lines: [
-        ...unit(source, 'const nudgedColumn = '),
+        ...span(headerSource, 'const from = order.indexOf(key);',
+          'onOrdered(array.moveToIndex(to, key, order));'),
         aside('// the whole walk — nothing marked, nothing to wait for')
       ]}
     ]
   };
 
-const keyedSteps = (origin: Origin, motion: Motion): Step[] => {
-  const source = tableSources.eager[origin][motion];
+const keyedSteps = (motion: Motion): Step[] => {
+  const headerSrc = motion === 'animated' ? animatedHeaderSource : headerSource;
   return [
   {
     title: 'Give focus a place to land',
@@ -388,13 +390,12 @@ const keyedSteps = (origin: Origin, motion: Motion): Step[] => {
       'rows do the same dance turned vertical, the grip listening for up and down.'],
     code: [
       {label: 'JS', lines: [
-        ...unit(headerSource, 'onKeyDown={travels'), gap,
-        ...span(source, 'const to = Math.min(Math.max(from + toward', '}'),
+        ...unit(headerSrc, 'onKeyDown={travels'),
         aside('// the anchors hold; the walk stops beside them')
       ]}
     ]
   },
-  nudgedBoth(motion === 'animated', source),
+  nudgedBoth(motion === 'animated'),
   ...motion === 'animated'
     ? [{
       title: 'Let the slide pace the key',
@@ -405,7 +406,7 @@ const keyedSteps = (origin: Origin, motion: Motion): Step[] => {
         'debounce clock, and CSS already set its length.'],
       code: [
         {label: 'JS', lines: [
-          ...span(headerSource, 'if ((event.currentTarget.getAnimations', '}'),
+          ...span(animatedHeaderSource, 'if ((event.currentTarget.getAnimations', '}'),
           aside('// while the slide runs, the key falls silent')
         ]},
         {label: 'CSS', lines: [
@@ -520,7 +521,7 @@ export const Recipe: FC<Props> = ({track, onTrack, pace, origin, motion, onPace,
     </>}
     <StepList steps={(track === 'pointer'
       ? steps(pace, origin, motion)
-      : keyedSteps(origin, motion))
+      : keyedSteps(motion))
       .map(({dial, ...step}) => ({...step, dial: dial && dials[dial]}))}/>
   </section>;
 };
