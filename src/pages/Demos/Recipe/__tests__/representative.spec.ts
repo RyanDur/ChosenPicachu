@@ -1,7 +1,7 @@
-import tableSource from '@components/DragSortableTable/DragSortableTable.tsx?raw';
+import tableSource from '@components/DragSortableTable/SortingTable.tsx?raw';
 import headerSource from '@components/DragSortableTable/DraggableHeader.tsx?raw';
 import rowSource from '@components/DragSortableTable/DraggableRow.tsx?raw';
-import listSource from '@pages/Demos/DragAndDrop/DragSortList.tsx?raw';
+import listSource from '@pages/Demos/DragAndDrop/SortingList.tsx?raw';
 import draggableSource from '@pages/Demos/DragAndDrop/Draggable.tsx?raw';
 import listCss from '@pages/Demos/DragAndDrop/styles.css?raw';
 
@@ -18,7 +18,7 @@ describe('the hand-written tutorial fragments still tell the truth', () => {
     ['a shifted row carries its drop', rowSource, "'--drop': `${drop}px`"],
     ['the grip arms the native drag', draggableSource, 'draggable={is(dragging)}'],
     ['a lazy list stashes the landing', listSource, 'setLanding(index)'],
-    ['a lazy settle waits one tick', listSource, 'setTimeout(() => settle(() => setOrder(settled)))'],
+    ['a lazy settle waits one tick', listSource, 'setTimeout(() => theater.glided(() => setOrder(settled)))'],
     ['the native origin fades, never vanishes', listCss, 'opacity: 0.1%'],
     ['eager list slides span a seat and a gap', listCss, 'translateX(calc(100% + var(--base)))']
   ])('%s', (_claim, source, fragment) => {

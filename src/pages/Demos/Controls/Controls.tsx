@@ -21,7 +21,7 @@ export const styled = (pace: Pace, origin: Origin): DragStyle => styles[origin][
 
 export type Copy = {
   kind: string;
-  component: string;
+  component: Record<Motion, string>;
   pace: Record<Pace, string>;
   origin: Record<Origin, string>;
   motion: Record<Motion, string>;
@@ -75,6 +75,6 @@ export const Controls: FC<ControlsProps & {copy: Copy}> = ({copy, pace, origin, 
       <p className="reading">{copy.motion[motion]}</p>
     </article>
     <p className="readout">
-      <code>{`<${copy.component} dragStyle="${styled(pace, origin)}" animated={${String(motion === 'animated')}}/>`}</code>
+      <code>{`<${copy.component[motion]} dragStyle="${styled(pace, origin)}"/>`}</code>
     </p>
   </section>;

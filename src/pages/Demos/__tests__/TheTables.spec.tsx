@@ -190,7 +190,7 @@ describe('the tables demo', () => {
     expect(controls).toHaveTextContent(/Neighbours swap the moment you drag past them/);
     expect(controls).toHaveTextContent(/blanks out at its origin/);
     expect(controls).toHaveTextContent(/slide to their new seats/);
-    expect(controls).toHaveTextContent('dragStyle="hide-eager-move" animated={true}');
+    expect(controls).toHaveTextContent('<AnimatedDragSortableTable dragStyle="hide-eager-move"/>');
 
     await userEvent.click(within(controls).getByRole('radio', {name: 'Lazy'}));
     await userEvent.click(within(controls).getByRole('radio', {name: 'Keep'}));
@@ -199,7 +199,7 @@ describe('the tables demo', () => {
     expect(controls).toHaveTextContent(/commits the new order on drop/);
     expect(controls).toHaveTextContent(/stays where it was/);
     expect(controls).toHaveTextContent(/single frame/);
-    expect(controls).toHaveTextContent('dragStyle="lazy-move" animated={false}');
+    expect(controls).toHaveTextContent('<DragSortableTable dragStyle="lazy-move"/>');
     expect(controls).not.toHaveTextContent(/Neighbours swap/);
   });
 
@@ -313,7 +313,7 @@ describe('the tables demo', () => {
     expect(within(controls).getByRole('radio', {name: 'Lazy'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Keep'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Static'})).toBeChecked();
-    expect(controls).toHaveTextContent('dragStyle="lazy-move" animated={false}');
+    expect(controls).toHaveTextContent('<DragSortableTable dragStyle="lazy-move"/>');
   });
 
   test('the chosen tutorial travels in the url', async () => {

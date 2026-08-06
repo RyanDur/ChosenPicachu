@@ -11,7 +11,7 @@ import {
   InclusiveAccordion,
   ExclusiveRadioToggleAccordion
 } from './Accordions';
-import {DragSortList, ListControls, NativeRecipe} from './DragAndDrop';
+import {AnimatedDragSortList, DragSortList, ListControls, NativeRecipe} from './DragAndDrop';
 import {DemoTopics, demoTopicParam} from './types';
 import {NaturalZIndex} from './ZIndexDemo';
 import {Candles, PriceChart} from './Charts';
@@ -90,9 +90,9 @@ export const DemosPage = () => {
                          onMotion={next => updateSearchParams({motion: next})}/>
             </>,
             [DemoTopics.dragAndDrop]: <>
-              <DragSortList list={new Set(['A', 'B', 'C'])}
-                            dragStyle={styled(pace, origin)}
-                            animated={motion === 'animated'}/>
+              {motion === 'animated'
+                ? <AnimatedDragSortList list={new Set(['A', 'B', 'C'])} dragStyle={styled(pace, origin)}/>
+                : <DragSortList list={new Set(['A', 'B', 'C'])} dragStyle={styled(pace, origin)}/>}
               <div className="tutorials">
                 <h2 className="tutorials-title">how it’s built</h2>
                 <ListControls pace={pace} origin={origin} motion={motion}

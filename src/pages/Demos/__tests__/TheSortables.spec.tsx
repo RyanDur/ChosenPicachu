@@ -63,7 +63,7 @@ describe('the sortable list demo', () => {
     expect(within(controls).getByRole('radio', {name: 'Eager'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Hide'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Animate'})).toBeChecked();
-    expect(controls).toHaveTextContent('dragStyle="hide-eager-move" animated={true}');
+    expect(controls).toHaveTextContent('<AnimatedDragSortList dragStyle="hide-eager-move"/>');
   });
 
   test('an eager drag commits on the crossing', async () => {
@@ -121,7 +121,7 @@ describe('the sortable list demo', () => {
     expect(within(controls).getByRole('radio', {name: 'Lazy'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Keep'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Static'})).toBeChecked();
-    expect(controls).toHaveTextContent('dragStyle="lazy-move" animated={false}');
+    expect(controls).toHaveTextContent('<DragSortList dragStyle="lazy-move"/>');
   });
 
   test('arrow keys walk an item, and both parties slide', async () => {

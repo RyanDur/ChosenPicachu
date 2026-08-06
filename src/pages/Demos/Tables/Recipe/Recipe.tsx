@@ -9,7 +9,10 @@ import {Motion, Origin, Pace} from '../../Controls';
 import {StepEntry, StepList, aside, plain} from '../../Recipe/StepList';
 import {span, unit} from '../../Recipe/carve';
 import {SlotsFigure} from './SlotsFigure';
-import tableSource from '@components/DragSortableTable/DragSortableTable.tsx?raw';
+import tableSource from '@components/DragSortableTable/SortingTable.tsx?raw';
+import theaterSource from '@components/DragSortableTable/theater.ts?raw';
+import stillShell from '@components/DragSortableTable/DragSortableTable.tsx?raw';
+import stagedShell from '@components/DragSortableTable/AnimatedDragSortableTable.tsx?raw';
 import travelSource from '@components/DragSortableTable/useTravel.ts?raw';
 import chartSource from '@components/DragSortableTable/chart.ts?raw';
 import headerSource from '@components/DragSortableTable/DraggableHeader.tsx?raw';
@@ -125,11 +128,16 @@ const moved = (animated: boolean): Step => animated
       'Rows are the same theater turned vertical: heights measured once, in whatever event ' +
       'reorders them, become per-row pixel offsets, and every displaced row starts at ' +
       'translateY(var(--drop)) and slides home. Nothing in this table rides a view transition; ' +
-      'every motion is a keyframe starting from where things used to be.'
+      'every motion is a keyframe starting from where things used to be.',
+      'Motion is a hiring decision, not a flag: the animated component casts the staged ' +
+      'theater, and the core simply announces every reorder to whoever was cast. The verbs ' +
+      'below are the whole cast list.'
     ],
     code: [
       {label: 'JS', lines: [
-        ...unit(tableSource, 'const settleColumn = '),
+        ...unit(stagedShell, 'export const AnimatedDragSortableTable'), gap,
+        ...unit(tableSource, 'const settleColumn = '), gap,
+        ...unit(theaterSource, 'export const staged'),
         aside('// a direction and a share per displaced key — javascript is done')
       ]},
       {label: 'HTML', lines: [
@@ -152,14 +160,17 @@ const moved = (animated: boolean): Step => animated
     title: 'Apply the state update directly',
     dial: 'motion',
     want: 'Motion is not free: it competes with the pointer, costs a frame budget, and some users ask for none at all.',
-    says: ['Call the updater and let React paint — the new order is on screen in the next frame. ' +
-      'No classes, no keyframes, nothing marked. There is real value in this mode beyond taste: ' +
-      'no animation means nothing competes with the pointer, and no motion for ' +
+    says: ['The static table is the null theater. The same announcements land — ' +
+      'columnsDisplaced, partiesSwapped, rowsShifted — and every verb has an empty body, so ' +
+      'React paints the new order in the next frame and nothing is ever marked. No branches ' +
+      'anywhere: choosing the component was the whole decision. There is real value in this ' +
+      'mode beyond taste — nothing competes with the pointer, and no motion for ' +
       'prefers-reduced-motion users to endure.'],
     code: [
       {label: 'JS', lines: [
-        plain('setOrder(next);   // React paints the new order in place — done'),
-        aside('// animated only decides whether anyone gets a slide class')
+        ...unit(stillShell, 'export const DragSortableTable'), gap,
+        ...unit(theaterSource, 'export const still'),
+        aside('// the same calls land; nothing marks')
       ]}
     ]
   };
@@ -309,7 +320,8 @@ const nudgedBoth = (animated: boolean): Step => animated
       'arrive as the reorder moves the nodes, so both slides start fresh without a line of new CSS.'],
     code: [
       {label: 'JS', lines: [
-        ...unit(tableSource, 'const nudgedColumn = '),
+        ...unit(tableSource, 'const nudgedColumn = '), gap,
+        ...unit(theaterSource, 'partiesSwapped:'),
         aside('// each starts where the other now sits')
       ]},
       {label: 'CSS', lines: [
@@ -328,8 +340,8 @@ const nudgedBoth = (animated: boolean): Step => animated
       'fast as the key repeats.'],
     code: [
       {label: 'JS', lines: [
-        plain('setOrder(array.moveToIndex(to, key, order));'),
-        aside('// nothing marked, nothing to wait for')
+        ...unit(theaterSource, 'export const still'),
+        aside('// the walk still commits; the null theater swallows the mark')
       ]}
     ]
   };
@@ -475,9 +487,9 @@ export const Recipe: FC<Props> = ({track, onTrack, pace, origin, motion, onPace,
     </p>
     <p className="lead">
       One more thing before the steps: Eager, Lazy, Keep, Hide, Animate, and Static are this
-      page’s names for the choices, not platform keywords. The dials above compose two component
-      props — the readout under them shows exactly what they build — and they pick which version
-      of the marked steps you are reading now.
+      page’s names for the choices, not platform keywords. The dials above choose a component
+      and compose its dragStyle prop — the readout under them shows exactly what they build —
+      and they pick which version of the marked steps you are reading now.
     </p>
     </> : <>
     <p className="lead">

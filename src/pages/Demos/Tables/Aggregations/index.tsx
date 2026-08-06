@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {has} from '@ryandur/sand';
-import {DragSortableTable, DragStyle} from '@components/DragSortableTable';
+import {AnimatedDragSortableTable, DragSortableTable, DragStyle} from '@components/DragSortableTable';
 import {Row} from '@components/Table';
 import {Trade} from '../../Charts/coinbase';
 import {cents, deltaLabel} from '../../Charts/money';
@@ -40,12 +40,12 @@ const cells = (aggregate: WindowAggregate): Row => ({
 
 export const Aggregations: FC<Props> = ({trades, dragStyle, animated}) => {
   const recent = useRecentTrades();
+  const Sortable = animated ? AnimatedDragSortableTable : DragSortableTable;
   return <section aria-label="live aggregations" className="aggregations card">
-    <DragSortableTable tableClassName="fancy-table"
+    <Sortable tableClassName="fancy-table"
            draggableColumns={dragStyle}
            draggableRows={dragStyle}
            sortable
-           animated={animated}
            theadClassName="header"
            thClassName="column-name"
            trClassName="row"
