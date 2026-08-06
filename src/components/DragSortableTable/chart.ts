@@ -1,23 +1,27 @@
 import {has} from '@ryandur/sand';
 import {Shares} from '@components/Table';
 
-export type Chart = {
+export type Bounds = {
     left: number;
     top: number;
     width: number;
     height: number;
+};
+
+export type Chart = Bounds & {
     rowHeights: Readonly<Record<number, number>>;
 };
 
-export const charted = (surface: HTMLTableElement, arranged: readonly {seat: number}[]): Chart => {
+export const bounded = (surface: HTMLTableElement): Bounds => {
     const bounds = surface.getBoundingClientRect();
+    return {left: bounds.left, top: bounds.top, width: bounds.width, height: bounds.height};
+};
+
+export const charted = (surface: HTMLTableElement, seats: readonly number[]): Chart => {
     const body = surface.tBodies[0];
     return {
-        left: bounds.left,
-        top: bounds.top,
-        width: bounds.width,
-        height: bounds.height,
-        rowHeights: arranged.reduce((heights, {seat}, position) => ({
+        ...bounded(surface),
+        rowHeights: seats.reduce((heights, seat, position) => ({
             ...heights,
             [seat]: body?.rows[position]?.getBoundingClientRect().height ?? 0
         }), {})
@@ -27,7 +31,7 @@ export const charted = (surface: HTMLTableElement, arranged: readonly {seat: num
 const deadZone = (struckSize: number, aloftSize: number): number =>
     Math.max(struckSize / 4, (struckSize - aloftSize) / 2);
 
-export const columnUnder = (order: readonly string[], shares: Shares, chart?: Chart) =>
+export const columnUnder = (order: readonly string[], shares: Shares, chart?: Bounds) =>
     (x: number, y: number, aloft?: string): string | undefined => {
         if (has(chart) && has(aloft) && y >= chart.top && y <= chart.top + chart.height) {
             let edge = chart.left;

@@ -43,8 +43,9 @@ export const Aggregations: FC<Props> = ({trades, dragStyle, animated}) => {
   const Sortable = animated ? AnimatedDragSortableTable : DragSortableTable;
   return <section aria-label="live aggregations" className="aggregations card">
     <Sortable tableClassName="fancy-table"
-           draggableColumns={dragStyle}
-           draggableRows={dragStyle}
+           dragStyle={dragStyle}
+           draggableColumns
+           draggableRows
            sortable
            theadClassName="header"
            thClassName="column-name"

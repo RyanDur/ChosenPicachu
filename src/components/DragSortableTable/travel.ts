@@ -1,5 +1,3 @@
-import {PointerEvent} from 'react';
-
 export type DragStyle = 'eager-move' | 'lazy-move' | 'hide-eager-move' | 'hide-lazy-move';
 
 export type Flight = {
@@ -11,19 +9,6 @@ export type Flight = {
 export type Drift = {
     x: number;
     y: number;
-};
-
-export type Travel<SUBJECT> = {
-    aloft?: SUBJECT;
-    flight: Flight;
-    drift: Drift;
-    lift: (subject: SUBJECT, anchor: HTMLElement | null) => (event: PointerEvent<HTMLElement>) => void;
-    surface: {
-        onPointerMove: (event: PointerEvent<HTMLElement>) => void;
-        onPointerUp: () => void;
-        onPointerCancel: () => void;
-        onLostPointerCapture: () => void;
-    };
 };
 
 export const eagerly = (style?: DragStyle): boolean =>

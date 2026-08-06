@@ -1,23 +1,23 @@
-import {FC, PointerEvent, useState} from 'react';
+import {FC, KeyboardEvent, PointerEvent, useState} from 'react';
 import {has, not, notEmpty} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {join} from '@components/class-names';
-import {KeyboardEvent} from 'react';
 import {Shares, TableProps, neighborOf, seededShares, traded} from '@components/Table';
-import {DragStyle, Travel, eagerly, hides} from './travel';
-import {useEagerTravel} from './useEagerTravel';
-import {useLazyTravel} from './useLazyTravel';
+import {useLazyColumnTravel} from './useLazyColumnTravel';
+import {useLazyRowTravel} from './useLazyRowTravel';
 import {Shifted, Slid, Theater} from './theater';
-import {Chart, anchored, charted, columnUnder, seatUnder} from './chart';
+import {anchored, charted} from './chart';
 import {ColumnGhost, RowGhost} from './ghosts';
 import {DraggableHeader, Direction} from './DraggableHeader';
 import {DraggableRow} from './DraggableRow';
 import './DragSortableTable.css';
 
-export type SortingTableProps = TableProps & {
-    draggableColumns?: DragStyle;
-    draggableRows?: DragStyle;
+export type LazySortingTableProps = TableProps & {
+    hiding: boolean;
+    draggableColumns: boolean;
+    draggableRows: boolean;
     sortable?: boolean;
+    theater: Theater;
 };
 
 type Rule = {
@@ -33,13 +33,12 @@ const ranked = (rows: TableProps['rows'], dealt: readonly number[], rule: Rule) 
             return rule.direction === 'ascending' ? gap : -gap;
         });
 
-export const SortingTable: FC<SortingTableProps & {theater: Theater}> = (
-    {columns, rows, draggableColumns, draggableRows, sortable, theater: casting, id, ...dress}
+export const LazySortingTable: FC<LazySortingTableProps> = (
+    {columns, rows, hiding, draggableColumns, draggableRows, sortable, theater: casting, id, ...dress}
 ) => {
     const [shares, setShares] = useState<Shares>(() => seededShares(columns));
     const [order, setOrder] = useState<string[]>(() => columns.map(({column}) => String(column)));
     const [seats, setSeats] = useState<number[]>(() => rows.map((_, seat) => seat));
-    const [chart, setChart] = useState<Chart>();
     const [rule, setRule] = useState<Rule>();
     const [slid, setSlid] = useState<Slid>();
     const [shifted, setShifted] = useState<Shifted>();
@@ -64,21 +63,14 @@ export const SortingTable: FC<SortingTableProps & {theater: Theater}> = (
             return array.moveToIndex(at, key, previous);
         });
     };
-    const columnStrike = columnUnder(order, shares, chart);
-    const eagerColumns = useEagerTravel(columnStrike, settleColumn);
-    const lazyColumns = useLazyTravel(columnStrike, settleColumn);
-    const columnsTravel: Travel<string> = eagerly(draggableColumns) ? eagerColumns : lazyColumns;
-    const settleRow = (seat: number, struck: number): void => {
+    const columnsTravel = useLazyColumnTravel(order, shares, settleColumn);
+
+    const settleRow = (seat: number, struck: number, heights: Shifted): void => {
         const after = array.moveToIndex(seats.indexOf(struck), seat, seats);
-        if (has(chart)) {
-            theater.rowsShifted(() => chart.rowHeights, seats, after, seat);
-        }
+        theater.rowsShifted(() => heights, seats, after, seat);
         setSeats(after);
     };
-    const rowStrike = seatUnder(seats, chart);
-    const eagerRows = useEagerTravel(rowStrike, settleRow);
-    const lazyRows = useLazyTravel(rowStrike, settleRow);
-    const rowsTravel: Travel<number> = eagerly(draggableRows) ? eagerRows : lazyRows;
+    const rowsTravel = useLazyRowTravel(seats, settleRow);
 
     const nudgedColumn = (key: string) => (toward: 1 | -1): void => {
         const from = order.indexOf(key);
@@ -99,27 +91,16 @@ export const SortingTable: FC<SortingTableProps & {theater: Theater}> = (
         const after = array.moveToIndex(to, seat, standing);
         const table = event.currentTarget.closest('table');
         if (has(table)) {
-            theater.rowsShifted(() => charted(table, arranged).rowHeights, standing, after);
+            theater.rowsShifted(() => charted(table, standing).rowHeights, standing, after);
         }
         setRule(undefined);
         setSeats(after);
     };
 
-    const liftColumn = (key: string) => (event: PointerEvent<HTMLTableCellElement>): void => {
-        const table = event.currentTarget.closest('table');
-        if (has(table)) {
-            setChart(charted(table, arranged));
-        }
-        columnsTravel.lift(key, event.currentTarget)(event);
-    };
     const liftRow = (seat: number) => (event: PointerEvent<HTMLElement>): void => {
         setRule(undefined);
         setSeats(standing);
-        const table = event.currentTarget.closest('table');
-        if (has(table)) {
-            setChart(charted(table, arranged));
-        }
-        rowsTravel.lift(seat, event.currentTarget.closest('tr'))(event);
+        rowsTravel.lift(seat)(event);
     };
 
     const aloftColumn = has(columnsTravel.aloft) ? byKey.get(columnsTravel.aloft) : undefined;
@@ -140,7 +121,7 @@ export const SortingTable: FC<SortingTableProps & {theater: Theater}> = (
                className={join(
                    dress.tableClassName,
                    clipped && 'apportioned',
-                   (has(draggableColumns) || has(draggableRows)) && 'sortable'
+                   (draggableColumns || draggableRows) && 'sortable'
                )}>
             <thead className={dress.theadClassName}>
             <tr className={join(
@@ -153,11 +134,11 @@ export const SortingTable: FC<SortingTableProps & {theater: Theater}> = (
                                         column={column}
                                         share={has(column.width) ? shares[key] : undefined}
                                         clipped={clipped}
-                                        travels={has(draggableColumns) && not(anchored(position, ordered.length))}
-                                        hidden={hides(draggableColumns) && columnsTravel.aloft === key}
+                                        travels={draggableColumns && not(anchored(position, ordered.length))}
+                                        hidden={hiding && columnsTravel.aloft === key}
                                         sorted={rule?.column === key ? rule.direction : undefined}
                                         dress={dress}
-                                        onLift={liftColumn(key)}
+                                        onLift={columnsTravel.lift(key)}
                                         onNudge={nudgedColumn(key)}
                                         onTrade={apportioned.length > 1
                                             ? delta => setShares(traded(key, neighborOf(apportioned, key), delta))
@@ -170,7 +151,7 @@ export const SortingTable: FC<SortingTableProps & {theater: Theater}> = (
                                                     const after = has(next)
                                                         ? ranked(rows, dealt, next)
                                                         : dealt.map(seat => ({row: rows[seat], seat}));
-                                                    theater.rowsShifted(() => charted(table, arranged).rowHeights,
+                                                    theater.rowsShifted(() => charted(table, standing).rowHeights,
                                                         standing, after.map(({seat}) => seat));
                                                 }
                                                 setRule(next);
@@ -185,9 +166,9 @@ export const SortingTable: FC<SortingTableProps & {theater: Theater}> = (
                               columns={ordered}
                               position={position}
                               clipped={clipped}
-                              gripped={has(draggableRows)}
-                              hidden={hides(draggableRows) && rowsTravel.aloft === seat}
-                              hiddenColumn={hides(draggableColumns) ? columnsTravel.aloft : undefined}
+                              gripped={draggableRows}
+                              hidden={hiding && rowsTravel.aloft === seat}
+                              hiddenColumn={hiding ? columnsTravel.aloft : undefined}
                               slid={slid}
                               drop={drop}
                               dress={dress}

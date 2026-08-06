@@ -1,4 +1,4 @@
-import tableSource from '@components/DragSortableTable/SortingTable.tsx?raw';
+import tableSource from '@components/DragSortableTable/EagerSortingTable.tsx?raw';
 import headerSource from '@components/DragSortableTable/DraggableHeader.tsx?raw';
 import rowSource from '@components/DragSortableTable/DraggableRow.tsx?raw';
 import listSource from '@pages/Demos/DragAndDrop/SortingList.tsx?raw';
@@ -9,9 +9,9 @@ describe('the hand-written tutorial fragments still tell the truth', () => {
   test.each([
     ['headers render through the order', tableSource, 'ordered.map((column'],
     ['the lifted header blanks by comparison', tableSource,
-      'hidden={hides(draggableColumns) && columnsTravel.aloft === key}'],
+      'hidden={hiding && columnsTravel.aloft === key}'],
     ['the lifted column blanks across rows', tableSource,
-      'hiddenColumn={hides(draggableColumns) ? columnsTravel.aloft : undefined}'],
+      'hiddenColumn={hiding ? columnsTravel.aloft : undefined}'],
     ['headers are real column headers', headerSource, 'scope="col"'],
     ['a displaced header wears its direction', headerSource, 'displaced-${displaced.toward}'],
     ['a shifted row wears the class', rowSource, "has(drop) && 'shifted'"],
