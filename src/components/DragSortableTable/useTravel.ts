@@ -33,7 +33,7 @@ const still: Drift = {x: 0, y: 0};
 
 export const useTravel = <SUBJECT,>(
     style: DragStyle | undefined,
-    strike: (x: number, y: number, aloft: SUBJECT | undefined) => SUBJECT | undefined,
+    strike: (x: number, y: number, aloft?: SUBJECT) => SUBJECT | undefined,
     settle: (subject: SUBJECT, struck: SUBJECT) => void
 ): Travel<SUBJECT> => {
     const [aloft, setAloft] = useState<SUBJECT>();

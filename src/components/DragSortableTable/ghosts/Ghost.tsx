@@ -11,6 +11,7 @@ type Props = {
 
 export const Ghost: FC<Props> = ({at, drift, dress, children}) =>
     <table className={join(dress.tableClassName, 'column-ghost')}
+           aria-hidden="true"
            style={{
                top: at.y,
                left: at.x,

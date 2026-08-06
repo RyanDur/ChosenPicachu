@@ -63,7 +63,7 @@ export const SortingTable: FC<SortingTableProps & {theater: Theater}> = (
         });
     };
     const columnsTravel = useTravel<string>(
-        draggableColumns, columnUnder(chart, order, shares), settleColumn);
+        draggableColumns, columnUnder(order, shares, chart), settleColumn);
     const settleRow = (seat: number, struck: number): void => {
         const after = array.moveToIndex(seats.indexOf(struck), seat, seats);
         if (has(chart)) {
@@ -71,7 +71,7 @@ export const SortingTable: FC<SortingTableProps & {theater: Theater}> = (
         }
         setSeats(after);
     };
-    const rowsTravel = useTravel<number>(draggableRows, seatUnder(chart, seats), settleRow);
+    const rowsTravel = useTravel<number>(draggableRows, seatUnder(seats, chart), settleRow);
 
     const nudgedColumn = (key: string) => (toward: 1 | -1): void => {
         const from = order.indexOf(key);
@@ -194,7 +194,7 @@ export const SortingTable: FC<SortingTableProps & {theater: Theater}> = (
                          column={aloftColumn} rows={arranged.map(({row}) => row)}/>}
         {has(aloftRow) &&
             <RowGhost at={rowsTravel.flight} drift={rowsTravel.drift} dress={dress}
-                      columns={ordered} row={aloftRow}/>}
+                      columns={ordered} shares={shares} row={aloftRow}/>}
         {(has(columnsTravel.aloft) || has(rowsTravel.aloft)) &&
             <article className="drag-surface" {...surface}/>}
     </>;
