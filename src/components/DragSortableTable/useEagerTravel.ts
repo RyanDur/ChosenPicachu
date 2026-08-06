@@ -1,38 +1,8 @@
 import {PointerEvent, useState} from 'react';
-import {has, not} from '@ryandur/sand';
+import {has} from '@ryandur/sand';
+import {Drift, Flight, Travel, grounded, still} from './travel';
 
-export type DragStyle = 'eager-move' | 'lazy-move' | 'hide-eager-move' | 'hide-lazy-move';
-
-type Flight = {
-    x: number;
-    y: number;
-    width: number;
-};
-
-type Drift = {
-    x: number;
-    y: number;
-};
-
-type Travel<SUBJECT> = {
-    aloft: SUBJECT | undefined;
-    hiding: boolean;
-    flight: Flight;
-    drift: Drift;
-    lift: (subject: SUBJECT, anchor: HTMLElement | null) => (event: PointerEvent<HTMLElement>) => void;
-    surface: {
-        onPointerMove: (event: PointerEvent<HTMLElement>) => void;
-        onPointerUp: () => void;
-        onPointerCancel: () => void;
-        onLostPointerCapture: () => void;
-    };
-};
-
-const grounded: Flight = {x: 0, y: 0, width: 0};
-const still: Drift = {x: 0, y: 0};
-
-export const useTravel = <SUBJECT,>(
-    style: DragStyle | undefined,
+export const useEagerTravel = <SUBJECT,>(
     strike: (x: number, y: number, aloft?: SUBJECT) => SUBJECT | undefined,
     settle: (subject: SUBJECT, struck: SUBJECT) => void
 ): Travel<SUBJECT> => {
@@ -40,9 +10,6 @@ export const useTravel = <SUBJECT,>(
     const [flight, setFlight] = useState<Flight>(grounded);
     const [origin, setOrigin] = useState<Drift>();
     const [drift, setDrift] = useState<Drift>(still);
-    const [landing, setLanding] = useState<SUBJECT>();
-    const eager = style === 'eager-move' || style === 'hide-eager-move';
-    const hiding = style === 'hide-eager-move' || style === 'hide-lazy-move';
 
     const lift = (subject: SUBJECT, anchor: HTMLElement | null) =>
         (): void => {
@@ -52,11 +19,7 @@ export const useTravel = <SUBJECT,>(
         };
 
     const drop = (): void => {
-        if (not(eager) && has(aloft) && has(landing)) {
-            settle(aloft, landing);
-        }
         setOrigin(undefined);
-        setLanding(undefined);
         setAloft(undefined);
         setFlight(grounded);
         setDrift(still);
@@ -74,20 +37,13 @@ export const useTravel = <SUBJECT,>(
             setOrigin({x: event.clientX, y: event.clientY});
         }
         const struck = strike(event.clientX, event.clientY, aloft);
-        if (has(aloft) && has(struck)) {
-            if (struck === aloft) {
-                setLanding(undefined);
-            } else if (eager) {
-                settle(aloft, struck);
-            } else {
-                setLanding(struck);
-            }
+        if (has(aloft) && has(struck) && struck !== aloft) {
+            settle(aloft, struck);
         }
     };
 
     return {
         aloft,
-        hiding,
         flight,
         drift,
         lift,
