@@ -1,6 +1,10 @@
 import {FC} from 'react';
 import {has} from '@ryandur/sand';
-import {AnimatedDragSortableTable, DragSortableTable, DragStyle} from '@components/DragSortableTable';
+import {
+  EagerHideAnimatedTable, EagerHideStaticTable, EagerKeepAnimatedTable, EagerKeepStaticTable,
+  LazyHideAnimatedTable, LazyHideStaticTable, LazyKeepAnimatedTable, LazyKeepStaticTable
+} from '@components/DragSortableTable';
+import {Motion, Origin, Pace} from '../../Controls';
 import {Row} from '@components/Table';
 import {Trade} from '../../Charts/coinbase';
 import {cents, deltaLabel} from '../../Charts/money';
@@ -9,8 +13,20 @@ import {hydrated, useRecentTrades} from './useRecentTrades';
 
 type Props = {
   trades: readonly Trade[];
-  dragStyle: DragStyle;
-  animated: boolean;
+  pace: Pace;
+  origin: Origin;
+  motion: Motion;
+};
+
+const tables = {
+  eager: {
+    keep: {animated: EagerKeepAnimatedTable, static: EagerKeepStaticTable},
+    hide: {animated: EagerHideAnimatedTable, static: EagerHideStaticTable}
+  },
+  lazy: {
+    keep: {animated: LazyKeepAnimatedTable, static: LazyKeepStaticTable},
+    hide: {animated: LazyHideAnimatedTable, static: LazyHideStaticTable}
+  }
 };
 
 const columns = [
@@ -38,12 +54,11 @@ const cells = (aggregate: WindowAggregate): Row => ({
   change: moved(aggregate)
 });
 
-export const Aggregations: FC<Props> = ({trades, dragStyle, animated}) => {
+export const Aggregations: FC<Props> = ({trades, pace, origin, motion}) => {
   const recent = useRecentTrades();
-  const Sortable = animated ? AnimatedDragSortableTable : DragSortableTable;
+  const Sortable = tables[pace][origin][motion];
   return <section aria-label="live aggregations" className="aggregations card">
     <Sortable tableClassName="fancy-table"
-           dragStyle={dragStyle}
            draggableColumns
            draggableRows
            sortable

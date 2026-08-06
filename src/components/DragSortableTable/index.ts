@@ -1,4 +1,9 @@
 export type {DragStyle} from './travel';
-export type {DragSortableTableProps} from './DragSortableTable';
-export {DragSortableTable} from './DragSortableTable';
-export {AnimatedDragSortableTable} from './AnimatedDragSortableTable';
+export {EagerKeepStaticTable} from './EagerKeepStaticTable';
+export {EagerKeepAnimatedTable} from './EagerKeepAnimatedTable';
+export {EagerHideStaticTable} from './EagerHideStaticTable';
+export {EagerHideAnimatedTable} from './EagerHideAnimatedTable';
+export {LazyKeepStaticTable} from './LazyKeepStaticTable';
+export {LazyKeepAnimatedTable} from './LazyKeepAnimatedTable';
+export {LazyHideStaticTable} from './LazyHideStaticTable';
+export {LazyHideAnimatedTable} from './LazyHideAnimatedTable';

@@ -9,13 +9,16 @@ import {Motion, Origin, Pace} from '../../Controls';
 import {StepEntry, StepList, aside, plain} from '../../Recipe/StepList';
 import {span, unit} from '../../Recipe/carve';
 import {SlotsFigure} from './SlotsFigure';
-import tableSource from '@components/DragSortableTable/EagerSortingTable.tsx?raw';
-import theaterSource from '@components/DragSortableTable/theater.ts?raw';
-import stillShell from '@components/DragSortableTable/DragSortableTable.tsx?raw';
-import stagedShell from '@components/DragSortableTable/AnimatedDragSortableTable.tsx?raw';
+import eagerKeepStatic from '@components/DragSortableTable/EagerKeepStaticTable.tsx?raw';
+import eagerKeepAnimated from '@components/DragSortableTable/EagerKeepAnimatedTable.tsx?raw';
+import eagerHideStatic from '@components/DragSortableTable/EagerHideStaticTable.tsx?raw';
+import eagerHideAnimated from '@components/DragSortableTable/EagerHideAnimatedTable.tsx?raw';
+import lazyKeepStatic from '@components/DragSortableTable/LazyKeepStaticTable.tsx?raw';
+import lazyKeepAnimated from '@components/DragSortableTable/LazyKeepAnimatedTable.tsx?raw';
+import lazyHideStatic from '@components/DragSortableTable/LazyHideStaticTable.tsx?raw';
+import lazyHideAnimated from '@components/DragSortableTable/LazyHideAnimatedTable.tsx?raw';
 import eagerSource from '@components/DragSortableTable/useEagerColumnTravel.ts?raw';
 import lazySource from '@components/DragSortableTable/useLazyColumnTravel.ts?raw';
-import travelShared from '@components/DragSortableTable/travel.ts?raw';
 import chartSource from '@components/DragSortableTable/chart.ts?raw';
 import headerSource from '@components/DragSortableTable/DraggableHeader.tsx?raw';
 import gripSource from '@components/DragSortableTable/RowGrip.tsx?raw';
@@ -24,6 +27,17 @@ import tableCss from '@components/DragSortableTable/DragSortableTable.css?raw';
 import '../../Recipe/Recipe.css';
 
 const gap = plain('');
+
+const tableSources: Record<Pace, Record<Origin, Record<Motion, string>>> = {
+  eager: {
+    keep: {animated: eagerKeepAnimated, static: eagerKeepStatic},
+    hide: {animated: eagerHideAnimated, static: eagerHideStatic}
+  },
+  lazy: {
+    keep: {animated: lazyKeepAnimated, static: lazyKeepStatic},
+    hide: {animated: lazyHideAnimated, static: lazyHideStatic}
+  }
+};
 
 export type Track = 'pointer' | 'keyboard';
 
@@ -73,23 +87,20 @@ const held = (pace: 'eager' | 'lazy'): Step => pace === 'eager'
     ]
   };
 
-const shown = (origin: 'keep' | 'hide'): Step => origin === 'hide'
+const shown = (origin: 'keep' | 'hide', source: string): Step => origin === 'hide'
   ? {
     title: 'Blank the origin while it is aloft',
     dial: 'origin',
     want: 'With the ghost in hand, the origin column reads as a duplicate — two of the same thing, and no visible gap to say where the drop will land.',
-    says: ['The disappearance takes all three languages. JavaScript knows only a boolean — the origin dial ' +
-      'is already the flag, derived by comparison. The markup passes it down as a class on the ' +
-      'lifted key’s cells. CSS does the vanishing with a single word: visibility hidden takes ' +
-      'the whole column — text, borders, grip, everything — while its layout space remains as ' +
-      'the gap where the drop will land. Nothing unmounts.'],
+    says: ['The disappearance takes a component choice and one word of CSS. This is the hide ' +
+      'table, so there is no flag anywhere — the markup compares the aloft key against each ' +
+      'cell, and CSS does the vanishing: visibility hidden takes the whole column — text, ' +
+      'borders, grip, everything — while its layout space remains as the gap where the drop ' +
+      'will land. Nothing unmounts.'],
     code: [
-      {label: 'JS', lines: [
-        ...unit(travelShared, 'export const hides')
-      ]},
       {label: 'HTML', lines: [
-        plain('<DraggableHeader hidden={hiding && aloft === key} ... />'),
-        plain('<DraggableRow hiddenColumn={hiding ? aloft : undefined} ... />')
+        ...span(source, 'hidden={columnsTravel.aloft === key}', 'hidden={columnsTravel.aloft === key}'),
+        ...span(source, 'hidden={rowsTravel.aloft === seat}', 'hiddenColumn={columnsTravel.aloft}')
       ]},
       {label: 'CSS', lines: [
         ...unit(tableCss, '.sortable .hide,'),
@@ -103,16 +114,15 @@ const shown = (origin: 'keep' | 'hide'): Step => origin === 'hide'
     want: 'A vanished origin can disorient; sometimes the eye wants the column both at rest and in hand while it decides.',
     says: ['Render the lifted key normally underneath the ghost. There are two of it for the ' +
       'length of the drag, which reads as a copy being carried out of a still-intact table. ' +
-      'The hidden flag simply never reaches the markup, so CSS has nothing to erase.'],
+      'This is the keep table: no hiding code exists in it, so there is nothing to erase.'],
     code: [
       {label: 'HTML', lines: [
-        plain('<DraggableHeader hidden={false} ... />'),
-        aside('{/* the lifted cells keep rendering in their seats */}')
+        aside('{/* no hidden wiring exists in this table — nothing to erase */}')
       ]}
     ]
   };
 
-const moved = (animated: boolean): Step => animated
+const moved = (animated: boolean, source: string): Step => animated
   ? {
     title: 'Slide the theater, not the layout',
     dial: 'motion',
@@ -132,15 +142,13 @@ const moved = (animated: boolean): Step => animated
       'reorders them, become per-row pixel offsets, and every displaced row starts at ' +
       'translateY(var(--drop)) and slides home. Nothing in this table rides a view transition; ' +
       'every motion is a keyframe starting from where things used to be.',
-      'Motion is a hiring decision, not a flag: the animated component casts the staged ' +
-      'theater, and the core simply announces every reorder to whoever was cast. The verbs ' +
-      'below are the whole cast list.'
+      'Motion is not a flag on this table — it is this table. The animated variant marks its ' +
+      'own theater inline in its settles, the dial above chooses which of eight tables you are ' +
+      'reading, and the readout under the dials names it.'
     ],
     code: [
       {label: 'JS', lines: [
-        ...unit(stagedShell, 'export const AnimatedDragSortableTable'), gap,
-        ...unit(tableSource, 'const settleColumn = '), gap,
-        ...unit(theaterSource, 'export const staged'),
+        ...unit(source, 'const settleColumn = '),
         aside('// a direction and a share per displaced key — javascript is done')
       ]},
       {label: 'HTML', lines: [
@@ -163,22 +171,22 @@ const moved = (animated: boolean): Step => animated
     title: 'Apply the state update directly',
     dial: 'motion',
     want: 'Motion is not free: it competes with the pointer, costs a frame budget, and some users ask for none at all.',
-    says: ['The static table is the null theater. The same announcements land — ' +
-      'columnsDisplaced, partiesSwapped, rowsShifted — and every verb has an empty body, so ' +
-      'React paints the new order in the next frame and nothing is ever marked. No branches ' +
-      'anywhere: choosing the component was the whole decision. There is real value in this ' +
-      'mode beyond taste — nothing competes with the pointer, and no motion for ' +
-      'prefers-reduced-motion users to endure.'],
+    says: ['The static table is not the animated one with a switch off — it is a different ' +
+      'table with no marking code in it. Its settle is the whole story: move the key, let ' +
+      'React paint, and there is nothing else, because nothing else exists in this file. ' +
+      'There is real value in this mode beyond taste — nothing competes with the pointer, and ' +
+      'no motion for prefers-reduced-motion users to endure.'],
     code: [
       {label: 'JS', lines: [
-        ...unit(stillShell, 'export const DragSortableTable'), gap,
-        ...unit(theaterSource, 'export const still'),
-        aside('// the same calls land; nothing marks')
+        ...unit(source, 'const settleColumn = '),
+        aside('// the whole settle — no marking code exists in this table')
       ]}
     ]
   };
 
-const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolean): Step[] => [
+const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
+  const source = tableSources[pace][origin][motion];
+  return [
   {
     title: 'Let CSS carry its share',
     want: 'A drag built in JavaScript alone ends up reimplementing what the platform already does — cursors, keyboard, focus, selection — and doing each of them worse.',
@@ -215,8 +223,8 @@ const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolea
       'the same key finds its new seat and React moves the real nodes.'],
     code: [
       {label: 'JS', lines: [
-        ...unit(tableSource, 'const [order, setOrder]'), gap,
-        ...unit(tableSource, 'const [seats, setSeats]')
+        ...unit(source, 'const [order, setOrder]'), gap,
+        ...unit(source, 'const [seats, setSeats]')
       ]},
       {label: 'HTML', lines: [
         plain('<tr>{order.map(key =>'),
@@ -235,7 +243,7 @@ const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolea
     code: [
       {label: 'JS', lines: [
         ...unit(eagerSource, 'const lift = '), gap,
-        ...span(tableSource, 'onLift={columnsTravel.lift(key)}', 'onLift={columnsTravel.lift(key)}')
+        ...span(source, 'onLift={columnsTravel.lift(key)}', 'onLift={columnsTravel.lift(key)}')
       ]},
       {label: 'CSS', lines: [
         ...unit(tableCss, '.grabbable {')
@@ -254,7 +262,7 @@ const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolea
       'always arrives.'],
     code: [
       {label: 'HTML', lines: [
-        ...span(tableSource, '(has(columnsTravel.aloft) || has(rowsTravel.aloft))', '{...surface}')
+        ...span(source, '(has(columnsTravel.aloft) || has(rowsTravel.aloft))', '{...surface}')
       ]},
       {label: 'JS', lines: [
         ...span(eagerSource, 'onPointerMove: travel', 'onLostPointerCapture: drop'), gap,
@@ -308,11 +316,12 @@ const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolea
     ]
   },
   held(pace),
-  shown(origin),
-  moved(animated)
+  shown(origin, source),
+  moved(motion === 'animated', source)
 ];
+};
 
-const nudgedBoth = (animated: boolean): Step => animated
+const nudgedBoth = (animated: boolean, source: string): Step => animated
   ? {
     title: 'Both parties slide, each by the other’s share',
     dial: 'motion',
@@ -323,8 +332,7 @@ const nudgedBoth = (animated: boolean): Step => animated
       'arrive as the reorder moves the nodes, so both slides start fresh without a line of new CSS.'],
     code: [
       {label: 'JS', lines: [
-        ...unit(tableSource, 'const nudgedColumn = '), gap,
-        ...unit(theaterSource, 'partiesSwapped:'),
+        ...unit(source, 'const nudgedColumn = '),
         aside('// each starts where the other now sits')
       ]},
       {label: 'CSS', lines: [
@@ -343,13 +351,15 @@ const nudgedBoth = (animated: boolean): Step => animated
       'fast as the key repeats.'],
     code: [
       {label: 'JS', lines: [
-        ...unit(theaterSource, 'export const still'),
-        aside('// the walk still commits; the null theater swallows the mark')
+        ...unit(source, 'const nudgedColumn = '),
+        aside('// the whole walk — nothing marked, nothing to wait for')
       ]}
     ]
   };
 
-const keyedSteps = (animated: boolean): Step[] => [
+const keyedSteps = (origin: Origin, motion: Motion): Step[] => {
+  const source = tableSources.eager[origin][motion];
+  return [
   {
     title: 'Give focus a place to land',
     want: 'A drag answers only the hand, and though the keyboard can reach the page, a plain header holds no focus — there is nothing to press.',
@@ -379,13 +389,13 @@ const keyedSteps = (animated: boolean): Step[] => [
     code: [
       {label: 'JS', lines: [
         ...unit(headerSource, 'onKeyDown={travels'), gap,
-        ...span(tableSource, 'const to = Math.min(Math.max(from + toward', '}'),
+        ...span(source, 'const to = Math.min(Math.max(from + toward', '}'),
         aside('// the anchors hold; the walk stops beside them')
       ]}
     ]
   },
-  nudgedBoth(animated),
-  ...animated
+  nudgedBoth(motion === 'animated', source),
+  ...motion === 'animated'
     ? [{
       title: 'Let the slide pace the key',
       want: 'A held arrow autorepeats faster than the slide runs — nudges land mid-flight and the column outruns its own theater.',
@@ -406,6 +416,7 @@ const keyedSteps = (animated: boolean): Step[] => [
     } satisfies Step]
     : []
 ];
+};
 
 type Props = {
   track: Track;
@@ -490,9 +501,9 @@ export const Recipe: FC<Props> = ({track, onTrack, pace, origin, motion, onPace,
     </p>
     <p className="lead">
       One more thing before the steps: Eager, Lazy, Keep, Hide, Animate, and Static are this
-      page’s names for the choices, not platform keywords. The dials above choose a component
-      and compose its dragStyle prop — the readout under them shows exactly what they build —
-      and they pick which version of the marked steps you are reading now.
+      page’s names for the choices, not platform keywords. The dials above choose one of eight
+      tables — the readout under them names the one on screen — and they pick which version of
+      the marked steps you are reading now.
     </p>
     </> : <>
     <p className="lead">
@@ -508,8 +519,8 @@ export const Recipe: FC<Props> = ({track, onTrack, pace, origin, motion, onPace,
     </p>
     </>}
     <StepList steps={(track === 'pointer'
-      ? steps(pace, origin, motion === 'animated')
-      : keyedSteps(motion === 'animated'))
+      ? steps(pace, origin, motion)
+      : keyedSteps(origin, motion))
       .map(({dial, ...step}) => ({...step, dial: dial && dials[dial]}))}/>
   </section>;
 };

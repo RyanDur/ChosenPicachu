@@ -1,4 +1,7 @@
 import {has} from '@ryandur/sand';
+
+export type Slid = Readonly<Record<string, {toward: 'left' | 'right'; by: number}>>;
+export type Shifted = Readonly<Record<number, number>>;
 import {Shares} from '@components/Table';
 
 export type Bounds = {

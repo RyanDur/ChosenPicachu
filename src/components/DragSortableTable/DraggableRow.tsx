@@ -10,10 +10,10 @@ type Props = {
     position: number;
     clipped: boolean;
     gripped: boolean;
-    hidden: boolean;
-    hiddenColumn: string | undefined;
-    slid: Readonly<Record<string, {toward: 'left' | 'right'; by: number}>> | undefined;
-    drop: number | undefined;
+    hidden?: boolean;
+    hiddenColumn?: string;
+    slid?: Readonly<Record<string, {toward: 'left' | 'right'; by: number}>>;
+    drop?: number;
     dress: Dress;
     onLift: (event: PointerEvent<HTMLElement>) => void;
     onNudge: (toward: 1 | -1, event: KeyboardEvent<HTMLElement>) => void;

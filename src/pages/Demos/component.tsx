@@ -80,8 +80,7 @@ export const DemosPage = () => {
               <Candles trades={liveTrades.trades}/>
             </>,
             [DemoTopics.tables]: <>
-              <Aggregations trades={liveTrades.trades} dragStyle={styled(pace, origin)}
-                            animated={motion === 'animated'}/>
+              <Aggregations trades={liveTrades.trades} pace={pace} origin={origin} motion={motion}/>
               <Tutorials shown={tut} onShow={next => updateSearchParams({tut: next})}
                          track={track} onTrack={next => updateSearchParams({track: next})}
                          pace={pace} origin={origin} motion={motion}
