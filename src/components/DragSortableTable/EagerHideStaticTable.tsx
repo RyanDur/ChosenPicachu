@@ -1,4 +1,4 @@
-import {FC, PointerEvent, useState} from 'react';
+import {FC, useState} from 'react';
 import {has, not, notEmpty} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {join} from '@components/class-names';
@@ -61,26 +61,6 @@ export const EagerHideStaticTable: FC<EagerHideStaticTableProps> = (
     };
     const rowsTravel = useEagerRowTravel(seats, settleRow);
 
-    const nudgedColumn = (key: string) => (toward: 1 | -1): void => {
-        const from = order.indexOf(key);
-        const to = Math.min(Math.max(from + toward, 1), order.length - 2);
-        if (to === from) {
-            return;
-        }
-        setOrder(array.moveToIndex(to, key, order));
-    };
-
-    const nudged = (seat: number) => (toward: 1 | -1): void => {
-        const to = Math.min(Math.max(standing.indexOf(seat) + toward, 0), standing.length - 1);
-        setRule(undefined);
-        setSeats(array.moveToIndex(to, seat, standing));
-    };
-
-    const liftRow = (seat: number) => (event: PointerEvent<HTMLElement>): void => {
-        setRule(undefined);
-        setSeats(standing);
-        rowsTravel.lift(seat)(event);
-    };
 
     const aloftColumn = has(columnsTravel.aloft) ? byKey.get(columnsTravel.aloft) : undefined;
     const aloftRow = has(rowsTravel.aloft) ? rows[rowsTravel.aloft] : undefined;
@@ -101,6 +81,7 @@ export const EagerHideStaticTable: FC<EagerHideStaticTableProps> = (
                 const key = String(column.column);
                 return <DraggableHeader key={key}
                                         column={column}
+                                        order={order}
                                         share={has(column.width) ? shares[key] : undefined}
                                         clipped={clipped}
                                         travels={draggableColumns && not(anchored(position, ordered.length))}
@@ -108,7 +89,7 @@ export const EagerHideStaticTable: FC<EagerHideStaticTableProps> = (
                                         sorted={rule?.column === key ? rule.direction : undefined}
                                         dress={dress}
                                         onLift={columnsTravel.lift(key)}
-                                        onNudge={nudgedColumn(key)}
+                                        onOrdered={setOrder}
                                         onTrade={apportioned.length > 1
                                             ? delta => setShares(traded(key, neighborOf(apportioned, key), delta))
                                             : undefined}
@@ -122,13 +103,22 @@ export const EagerHideStaticTable: FC<EagerHideStaticTableProps> = (
                               row={row}
                               columns={ordered}
                               position={position}
+                              seat={seat}
+                              standing={standing}
                               clipped={clipped}
                               gripped={draggableRows}
                               hidden={rowsTravel.aloft === seat}
                               hiddenColumn={columnsTravel.aloft}
                               dress={dress}
-                              onLift={liftRow(seat)}
-                              onNudge={nudged(seat)}/>
+                              onLift={event => {
+                          setRule(undefined);
+                          setSeats(standing);
+                          rowsTravel.lift(seat)(event);
+                      }}
+                              onArranged={after => {
+                                  setRule(undefined);
+                                  setSeats(after);
+                              }}/>
             )}</tbody>
         </table>
         {has(aloftColumn) &&

@@ -1,6 +1,7 @@
 import tableSource from '@components/DragSortableTable/EagerHideAnimatedTable.tsx?raw';
 import headerSource from '@components/DragSortableTable/DraggableHeader.tsx?raw';
-import rowSource from '@components/DragSortableTable/DraggableRow.tsx?raw';
+import animatedHeaderSource from '@components/DragSortableTable/AnimatedDraggableHeader.tsx?raw';
+import rowSource from '@components/DragSortableTable/AnimatedDraggableRow.tsx?raw';
 import listSource from '@pages/Demos/DragAndDrop/SortingList.tsx?raw';
 import draggableSource from '@pages/Demos/DragAndDrop/Draggable.tsx?raw';
 import listCss from '@pages/Demos/DragAndDrop/styles.css?raw';
@@ -13,7 +14,7 @@ describe('the hand-written tutorial fragments still tell the truth', () => {
     ['the lifted column blanks across rows', tableSource,
       'hiddenColumn={columnsTravel.aloft}'],
     ['headers are real column headers', headerSource, 'scope="col"'],
-    ['a displaced header wears its direction', headerSource, 'displaced-${displaced.toward}'],
+    ['a displaced header wears its direction', animatedHeaderSource, 'displaced-${displaced.toward}'],
     ['a shifted row wears the class', rowSource, "has(drop) && 'shifted'"],
     ['a shifted row carries its drop', rowSource, "'--drop': `${drop}px`"],
     ['the grip arms the native drag', draggableSource, 'draggable={is(dragging)}'],

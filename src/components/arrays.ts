@@ -5,7 +5,7 @@ const empty = <T>(list: T[] = []): boolean =>
 const has = <T>(list: T[] = []) =>
   not(empty(list));
 
-const removeFrom = <T>(list: T[], itemToRemove: T) => {
+const removeFrom = <T>(list: readonly T[], itemToRemove: T) => {
   const index = list.indexOf(itemToRemove);
   return [...list.slice(0, index), ...list.slice(index + 1)];
 };
@@ -13,15 +13,15 @@ const removeFrom = <T>(list: T[], itemToRemove: T) => {
 const insertAt = <T>(
   index: number,
   item: T,
-  list: T[]
+  list: readonly T[]
 ): T[] => [...list.slice(0, index), item, ...list.slice(index)];
 
 const moveToIndex = <T>(
   index: number,
   item: T,
-  list: T[]
+  list: readonly T[]
 ): T[] =>
-  !list.includes(item) ? list : insertAt(index, item, removeFrom(list, item));
+  list.includes(item) ? insertAt(index, item, removeFrom(list, item)) : [...list];
 
 const removeFromGrid = <T>(
   item: T,
