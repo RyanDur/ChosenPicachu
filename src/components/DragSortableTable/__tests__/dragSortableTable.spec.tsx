@@ -14,7 +14,7 @@ describe('drag sortable columns', () => {
   }];
 
   const sourceTable = () => screen.getAllByRole('table')[0];
-  const ghostTable = () => screen.getAllByRole('table')[1];
+  const ghostTable = () => screen.getAllByRole('table', {hidden: true})[1];
   const surface = () => {
     const found = document.querySelector('.drag-surface');
     if (found === null) throw new Error('nothing is aloft');
@@ -235,6 +235,21 @@ describe('drag sortable rows', () => {
   };
   const drop = () => fireEvent.pointerUp(surface(), {pointerId: 1});
 
+  test('the row in hand keeps its grip and the table’s proportions', () => {
+    render(<DragSortableTable columns={sized} rows={people} draggableRows="eager-move"/>);
+
+    lift('Grace');
+
+    const ghost = document.querySelector('.column-ghost');
+    if (ghost === null) throw new Error('no ghost is aloft');
+    expect(ghost).toHaveAttribute('aria-hidden', 'true');
+    expect(ghost.querySelector('.grip')).not.toBeNull();
+    const [name, age] = [...ghost.querySelectorAll('td')];
+    expect(name).toHaveStyle({width: '62.5%'});
+    expect(age).toHaveStyle({width: '37.5%'});
+    drop();
+  });
+
   test('an eager row follows the pointer as it crosses its neighbors', () => {
     render(<DragSortableTable columns={sized} rows={people} draggableRows="eager-move"/>);
 
@@ -286,7 +301,7 @@ describe('drag sortable rows', () => {
 
     lift('Grace');
 
-    const ghost = screen.getAllByRole('table')[1];
+    const ghost = screen.getAllByRole('table', {hidden: true})[1];
     expect(ghost.querySelectorAll('tr')).toHaveLength(1);
     expect(ghost.textContent).toContain('Grace');
     expect(ghost.textContent).toContain('45');

@@ -1,5 +1,6 @@
 .column-ghost {
   position: fixed;
+  table-layout: fixed;
   background: var(--paper);
   box-shadow: var(--lift-box-shadow);
   pointer-events: none;
@@ -23,8 +24,11 @@
   visibility: hidden;
 }
 
-.sortable .grip {
+.sortable .grip,
+.column-ghost .grip {
   all: unset;
+  cursor: grab;
+  touch-action: none;
   position: absolute;
   left: 0;
   top: 50%;

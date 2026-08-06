@@ -27,8 +27,8 @@ export const charted = (surface: HTMLTableElement, arranged: readonly {seat: num
 const deadZone = (struckSize: number, aloftSize: number): number =>
     Math.max(struckSize / 4, (struckSize - aloftSize) / 2);
 
-export const columnUnder = (chart: Chart | undefined, order: readonly string[], shares: Shares) =>
-    (x: number, y: number, aloft: string | undefined): string | undefined => {
+export const columnUnder = (order: readonly string[], shares: Shares, chart?: Chart) =>
+    (x: number, y: number, aloft?: string): string | undefined => {
         if (has(chart) && has(aloft) && y >= chart.top && y <= chart.top + chart.height) {
             let edge = chart.left;
             const slots = order.map((key, at) => {
@@ -49,8 +49,8 @@ export const columnUnder = (chart: Chart | undefined, order: readonly string[], 
         return undefined;
     };
 
-export const seatUnder = (chart: Chart | undefined, seats: readonly number[]) =>
-    (x: number, y: number, aloft: number | undefined): number | undefined => {
+export const seatUnder = (seats: readonly number[], chart?: Chart) =>
+    (x: number, y: number, aloft?: number): number | undefined => {
         if (has(chart) && has(aloft) && x >= chart.left && x <= chart.left + chart.width) {
             const {top, height, rowHeights} = chart;
             let edge = top + height -
