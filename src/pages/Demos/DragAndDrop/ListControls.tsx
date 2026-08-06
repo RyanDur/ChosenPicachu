@@ -3,7 +3,7 @@ import {Controls, ControlsProps, Copy} from '../Controls';
 
 const copy: Copy = {
   kind: 'list',
-  component: 'DragSortList',
+  component: {animated: 'AnimatedDragSortList', static: 'DragSortList'},
   pace: {
     eager: 'Items swap the moment the drag crosses them, so the order is already settled when you let go.',
     lazy: 'The list holds its shape while you drag and commits the new order when the drag ends.'

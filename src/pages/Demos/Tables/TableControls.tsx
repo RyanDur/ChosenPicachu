@@ -3,7 +3,7 @@ import {Controls, ControlsProps, Copy} from '../Controls';
 
 const copy: Copy = {
   kind: 'table',
-  component: 'DragSortableTable',
+  component: {animated: 'AnimatedDragSortableTable', static: 'DragSortableTable'},
   pace: {
     eager: 'Neighbours swap the moment you drag past them, so the order is already settled when you let go.',
     lazy: 'The table holds its shape while you drag and commits the new order on drop.'

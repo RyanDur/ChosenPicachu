@@ -1,6 +1,6 @@
 import {fireEvent, render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {DragSortableTable} from '../index';
+import {AnimatedDragSortableTable, DragSortableTable} from '../index';
 
 describe('drag sortable columns', () => {
   const sized = [
@@ -448,7 +448,7 @@ describe('animated moves', () => {
     const crew = [{
       name: {display: 'Ada'}, age: {display: '36'}, city: {display: 'London'}, job: {display: 'Analyst'}
     }];
-    render(<DragSortableTable columns={four} rows={crew} animated draggableColumns="eager-move"/>);
+    render(<AnimatedDragSortableTable columns={four} rows={crew} draggableColumns="eager-move"/>);
     const table = screen.getAllByRole('table')[0];
     const headerTexts = () => within(table).getAllByRole('columnheader')
       .map(head => head.textContent?.trim().split('⇅')[0].trim());
@@ -470,7 +470,7 @@ describe('animated moves', () => {
   test('an animated nudge slides the displaced row, not a transition', async () => {
     const transition = vi.fn((update: () => void) => update());
     (document as {startViewTransition?: unknown}).startViewTransition = transition;
-    render(<DragSortableTable columns={sized} rows={people} animated draggableRows="eager-move"/>);
+    render(<AnimatedDragSortableTable columns={sized} rows={people} draggableRows="eager-move"/>);
     const table = screen.getAllByRole('table')[0];
     table.getBoundingClientRect = () => ({
       left: 0, right: 320, top: 0, bottom: 80, width: 320, height: 80, x: 0, y: 0, toJSON: () => ({})
@@ -523,7 +523,7 @@ describe('animated moves', () => {
     const crew = [{
       name: {display: 'Ada'}, age: {display: '36'}, city: {display: 'London'}, job: {display: 'Analyst'}
     }];
-    render(<DragSortableTable columns={four} rows={crew} animated draggableColumns="eager-move"/>);
+    render(<AnimatedDragSortableTable columns={four} rows={crew} draggableColumns="eager-move"/>);
     const table = screen.getAllByRole('table')[0];
     table.getBoundingClientRect = () => ({
       left: 0, right: 600, top: 0, bottom: 100, width: 600, height: 100, x: 0, y: 0, toJSON: () => ({})

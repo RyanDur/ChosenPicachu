@@ -5,6 +5,11 @@ import {Paths} from '@pages/Paths';
 import {DemoTopics} from '../types';
 import {ControlsProps, Motion, Origin, Pace} from '../Controls';
 import {StepEntry, StepList, aside, plain} from '../Recipe';
+import {span, unit} from '../Recipe/carve';
+import listTheaterSource from './theater.ts?raw';
+import glideSource from '@components/glide.ts?raw';
+
+const gap = plain('');
 import '../Recipe/Recipe.css';
 
 type Step = Omit<StepEntry, 'dial'> & {
@@ -41,7 +46,7 @@ const paced = (pace: Pace): Step => pace === 'eager'
         plain('onDragOver: () => setLanding(index),'),
         plain('onDragEnd: () => {'),
         plain('    const settled = array.moveToIndex(landing, aloft, order);'),
-        plain('    setTimeout(() => settle(() => setOrder(settled)));'),
+        plain('    setTimeout(() => theater.glided(() => setOrder(settled)));'),
         plain('}'),
         aside('// one tick past the session — never inside it')
       ]}
@@ -88,11 +93,12 @@ const moved = (motion: Motion, pace: Pace): Step => motion === 'static'
     title: 'Apply the state update directly',
     dial: 'motion',
     want: 'Motion is not free: it competes with the drag session, costs a frame budget, and some users ask for none at all.',
-    says: ['Apply the order and let React paint — the new arrangement is on screen next frame, ' +
-      'and nothing races the session the platform is running.'],
+    says: ['The static list is the null theater: the same announcements land, every verb has ' +
+      'an empty body, and React paints the new arrangement next frame — nothing races the ' +
+      'session the platform is running.'],
     code: [
       {label: 'JS', lines: [
-        plain('setOrder(next);'),
+        ...unit(listTheaterSource, 'export const still'),
         aside('// nothing marked, nothing competing with the session')
       ]}
     ]
@@ -120,7 +126,7 @@ const moved = (motion: Motion, pace: Pace): Step => motion === 'static'
           aside('/* pushed-right mirrors with a negative offset */')
         ]},
         {label: 'JS', lines: [
-          plain("setPushed({[item]: homeward ? 'right' : 'left'});")
+          ...span(listTheaterSource, 'crossed: (item, toward)', 'crossed: (item, toward)')
         ]}
       ]
     }
@@ -137,10 +143,9 @@ const moved = (motion: Motion, pace: Pace): Step => motion === 'static'
           plain("<li style={{viewTransitionName: `sort-${item}`}}>")
         ]},
         {label: 'JS', lines: [
-          plain('setTimeout(() => settle(() => setOrder(settled)));'),
-          plain(''),
-          plain('const settle = (update) =>'),
-          plain('    document.startViewTransition(() => flushSync(update));')
+          plain('setTimeout(() => theater.glided(() => setOrder(settled)));'), gap,
+          ...span(listTheaterSource, 'named: item =>', 'glided: glide(true)'), gap,
+          ...unit(glideSource, 'export const glide')
         ]}
       ]
     };
