@@ -87,7 +87,6 @@ export const EagerHideStaticTable: FC<EagerHideStaticTableProps> = (
     const surface = has(columnsTravel.aloft) ? columnsTravel.surface : rowsTravel.surface;
 
     return <>
-        <div className="table-stage">
         <table id={id}
                className={join(
                    dress.tableClassName,
@@ -132,7 +131,6 @@ export const EagerHideStaticTable: FC<EagerHideStaticTableProps> = (
                               onNudge={nudged(seat)}/>
             )}</tbody>
         </table>
-        </div>
         {has(aloftColumn) &&
             <ColumnGhost at={columnsTravel.flight} drift={columnsTravel.drift} dress={dress}
                          column={aloftColumn} rows={arranged.map(({row}) => row)}/>}
