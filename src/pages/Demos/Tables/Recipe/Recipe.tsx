@@ -9,12 +9,12 @@ import {Motion, Origin, Pace} from '../../Controls';
 import {StepEntry, StepList, aside, plain} from '../../Recipe/StepList';
 import {span, unit} from '../../Recipe/carve';
 import {SlotsFigure} from './SlotsFigure';
-import tableSource from '@components/DragSortableTable/SortingTable.tsx?raw';
+import tableSource from '@components/DragSortableTable/EagerSortingTable.tsx?raw';
 import theaterSource from '@components/DragSortableTable/theater.ts?raw';
 import stillShell from '@components/DragSortableTable/DragSortableTable.tsx?raw';
 import stagedShell from '@components/DragSortableTable/AnimatedDragSortableTable.tsx?raw';
-import eagerSource from '@components/DragSortableTable/useEagerTravel.ts?raw';
-import lazySource from '@components/DragSortableTable/useLazyTravel.ts?raw';
+import eagerSource from '@components/DragSortableTable/useEagerColumnTravel.ts?raw';
+import lazySource from '@components/DragSortableTable/useLazyColumnTravel.ts?raw';
 import travelShared from '@components/DragSortableTable/travel.ts?raw';
 import chartSource from '@components/DragSortableTable/chart.ts?raw';
 import headerSource from '@components/DragSortableTable/DraggableHeader.tsx?raw';
@@ -234,8 +234,8 @@ const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolea
       'would fight the reorder you are about to apply.'],
     code: [
       {label: 'JS', lines: [
-        ...unit(tableSource, 'const liftColumn = '), gap,
-        ...unit(eagerSource, 'const lift = ')
+        ...unit(eagerSource, 'const lift = '), gap,
+        ...span(tableSource, 'onLift={columnsTravel.lift(key)}', 'onLift={columnsTravel.lift(key)}')
       ]},
       {label: 'CSS', lines: [
         ...unit(tableCss, '.grabbable {')

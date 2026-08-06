@@ -1,26 +1,40 @@
 import {PointerEvent, useState} from 'react';
 import {has} from '@ryandur/sand';
-import {Drift, Flight, Travel, grounded, still} from './travel';
+import {Drift, Flight, grounded, still} from './travel';
+import {Chart, charted, seatUnder} from './chart';
 
-export const useEagerTravel = <SUBJECT,>(
-    strike: (x: number, y: number, aloft?: SUBJECT) => SUBJECT | undefined,
-    settle: (subject: SUBJECT, struck: SUBJECT) => void
-): Travel<SUBJECT> => {
-    const [aloft, setAloft] = useState<SUBJECT>();
+export const useLazyRowTravel = (
+    standing: readonly number[],
+    settle: (seat: number, struck: number, heights: Readonly<Record<number, number>>) => void
+) => {
+    const [aloft, setAloft] = useState<number>();
+    const [chart, setChart] = useState<Chart>();
     const [flight, setFlight] = useState<Flight>(grounded);
     const [origin, setOrigin] = useState<Drift>();
     const [drift, setDrift] = useState<Drift>(still);
+    const [landing, setLanding] = useState<number>();
+    const strike = seatUnder(standing, chart);
 
-    const lift = (subject: SUBJECT, anchor: HTMLElement | null) =>
-        (): void => {
-            const anchored = anchor?.getBoundingClientRect();
+    const lift = (seat: number) =>
+        (event: PointerEvent<HTMLElement>): void => {
+            const lane = event.currentTarget.closest('tr');
+            const table = event.currentTarget.closest('table');
+            if (has(table)) {
+                setChart(charted(table, standing));
+            }
+            const anchored = lane?.getBoundingClientRect();
             setFlight({x: anchored?.x ?? 0, y: anchored?.y ?? 0, width: anchored?.width ?? 0});
-            setAloft(subject);
+            setAloft(seat);
         };
 
     const drop = (): void => {
+        if (has(chart) && has(aloft) && has(landing)) {
+            settle(aloft, landing, chart.rowHeights);
+        }
         setOrigin(undefined);
+        setLanding(undefined);
         setAloft(undefined);
+        setChart(undefined);
         setFlight(grounded);
         setDrift(still);
     };
@@ -37,8 +51,8 @@ export const useEagerTravel = <SUBJECT,>(
             setOrigin({x: event.clientX, y: event.clientY});
         }
         const struck = strike(event.clientX, event.clientY, aloft);
-        if (has(aloft) && has(struck) && struck !== aloft) {
-            settle(aloft, struck);
+        if (has(aloft) && has(struck)) {
+            setLanding(struck === aloft ? undefined : struck);
         }
     };
 
