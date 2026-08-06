@@ -111,7 +111,6 @@ export const LazyHideAnimatedTable: FC<LazyHideAnimatedTableProps> = (
     const surface = has(columnsTravel.aloft) ? columnsTravel.surface : rowsTravel.surface;
 
     return <>
-        <div className="table-stage">
         <table id={id}
                onAnimationEnd={event => {
                    if (event.animationName.startsWith('displaced-')) {
@@ -123,6 +122,7 @@ export const LazyHideAnimatedTable: FC<LazyHideAnimatedTableProps> = (
                }}
                className={join(
                    dress.tableClassName,
+                   'staged',
                    clipped && 'apportioned',
                    (draggableColumns || draggableRows) && 'sortable'
                )}>
@@ -178,7 +178,6 @@ export const LazyHideAnimatedTable: FC<LazyHideAnimatedTableProps> = (
                               onNudge={nudged(seat)}/>
             )}</tbody>
         </table>
-        </div>
         {has(aloftColumn) &&
             <ColumnGhost at={columnsTravel.flight} drift={columnsTravel.drift} dress={dress}
                          column={aloftColumn} rows={arranged.map(({row}) => row)}/>}

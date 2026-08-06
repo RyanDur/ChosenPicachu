@@ -157,7 +157,7 @@ const moved = (animated: boolean, source: string): Step => animated
         aside('{/* the reorder moves the node; the class rides along */}')
       ]},
       {label: 'CSS', lines: [
-        ...unit(tableCss, '.table-stage {'), gap,
+        ...unit(tableCss, '.staged {'), gap,
         ...unit(tableCss, '.sortable .displaced-left {'), gap,
         ...unit(tableCss, '.sortable .shifted {'), gap,
         ...unit(tableCss, '@keyframes displaced-left'),
