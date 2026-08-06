@@ -4,7 +4,9 @@ import {array} from '@components/arrays';
 import {join} from '@components/class-names';
 import {KeyboardEvent} from 'react';
 import {Shares, TableProps, neighborOf, seededShares, traded} from '@components/Table';
-import {DragStyle, useTravel} from './useTravel';
+import {DragStyle, Travel, eagerly, hides} from './travel';
+import {useEagerTravel} from './useEagerTravel';
+import {useLazyTravel} from './useLazyTravel';
 import {Shifted, Slid, Theater} from './theater';
 import {Chart, anchored, charted, columnUnder, seatUnder} from './chart';
 import {ColumnGhost, RowGhost} from './ghosts';
@@ -62,8 +64,10 @@ export const SortingTable: FC<SortingTableProps & {theater: Theater}> = (
             return array.moveToIndex(at, key, previous);
         });
     };
-    const columnsTravel = useTravel<string>(
-        draggableColumns, columnUnder(order, shares, chart), settleColumn);
+    const columnStrike = columnUnder(order, shares, chart);
+    const eagerColumns = useEagerTravel(columnStrike, settleColumn);
+    const lazyColumns = useLazyTravel(columnStrike, settleColumn);
+    const columnsTravel: Travel<string> = eagerly(draggableColumns) ? eagerColumns : lazyColumns;
     const settleRow = (seat: number, struck: number): void => {
         const after = array.moveToIndex(seats.indexOf(struck), seat, seats);
         if (has(chart)) {
@@ -71,7 +75,10 @@ export const SortingTable: FC<SortingTableProps & {theater: Theater}> = (
         }
         setSeats(after);
     };
-    const rowsTravel = useTravel<number>(draggableRows, seatUnder(seats, chart), settleRow);
+    const rowStrike = seatUnder(seats, chart);
+    const eagerRows = useEagerTravel(rowStrike, settleRow);
+    const lazyRows = useLazyTravel(rowStrike, settleRow);
+    const rowsTravel: Travel<number> = eagerly(draggableRows) ? eagerRows : lazyRows;
 
     const nudgedColumn = (key: string) => (toward: 1 | -1): void => {
         const from = order.indexOf(key);
@@ -147,7 +154,7 @@ export const SortingTable: FC<SortingTableProps & {theater: Theater}> = (
                                         share={has(column.width) ? shares[key] : undefined}
                                         clipped={clipped}
                                         travels={has(draggableColumns) && not(anchored(position, ordered.length))}
-                                        hidden={columnsTravel.hiding && columnsTravel.aloft === key}
+                                        hidden={hides(draggableColumns) && columnsTravel.aloft === key}
                                         sorted={rule?.column === key ? rule.direction : undefined}
                                         dress={dress}
                                         onLift={liftColumn(key)}
@@ -179,8 +186,8 @@ export const SortingTable: FC<SortingTableProps & {theater: Theater}> = (
                               position={position}
                               clipped={clipped}
                               gripped={has(draggableRows)}
-                              hidden={rowsTravel.hiding && rowsTravel.aloft === seat}
-                              hiddenColumn={columnsTravel.hiding ? columnsTravel.aloft : undefined}
+                              hidden={hides(draggableRows) && rowsTravel.aloft === seat}
+                              hiddenColumn={hides(draggableColumns) ? columnsTravel.aloft : undefined}
                               slid={slid}
                               drop={drop}
                               dress={dress}

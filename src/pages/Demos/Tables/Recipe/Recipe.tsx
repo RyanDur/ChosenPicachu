@@ -13,7 +13,9 @@ import tableSource from '@components/DragSortableTable/SortingTable.tsx?raw';
 import theaterSource from '@components/DragSortableTable/theater.ts?raw';
 import stillShell from '@components/DragSortableTable/DragSortableTable.tsx?raw';
 import stagedShell from '@components/DragSortableTable/AnimatedDragSortableTable.tsx?raw';
-import travelSource from '@components/DragSortableTable/useTravel.ts?raw';
+import eagerSource from '@components/DragSortableTable/useEagerTravel.ts?raw';
+import lazySource from '@components/DragSortableTable/useLazyTravel.ts?raw';
+import travelShared from '@components/DragSortableTable/travel.ts?raw';
 import chartSource from '@components/DragSortableTable/chart.ts?raw';
 import headerSource from '@components/DragSortableTable/DraggableHeader.tsx?raw';
 import gripSource from '@components/DragSortableTable/RowGrip.tsx?raw';
@@ -40,12 +42,12 @@ const held = (pace: 'eager' | 'lazy'): Step => pace === 'eager'
       'mid-drag, and because the markup renders through that order, the same key finds its new ' +
       'seat and React moves the real cells. Carrying the column back is just more crossings: ' +
       'home is always reachable. No style changes hands here at all.',
-      'This is the real handler, not a sketch — buttons at zero heals a drag whose release was ' +
-      'swallowed, the surface claims the pointer capture, the drift feeds the ghost — and the ' +
-      'eager fork settles the strike the moment it lands.'],
+      'This is the whole eager hook’s handler, and there is no landing state to keep anywhere ' +
+      'in it: buttons at zero heals a drag whose release was swallowed, the surface claims the ' +
+      'pointer capture, the drift feeds the ghost, and a strike settles on the spot.'],
     code: [
       {label: 'JS', lines: [
-        ...unit(travelSource, 'const travel = ')
+        ...unit(eagerSource, 'const travel = ')
       ]},
       {label: 'HTML', lines: [
         plain('<DraggableHeader key={key} ... />'),
@@ -60,12 +62,13 @@ const held = (pace: 'eager' | 'lazy'): Step => pace === 'eager'
     says: ['With lazy pace, remember the last neighbour struck and do nothing else — the table ' +
       'holds still, and one moveToIndex runs on pointer up. Drifting back over your own slot ' +
       'clears the landing, so a drop at home changes nothing.',
-      'Same handler, other fork: the strike is only remembered as the landing, and drop — ' +
-      'which also answers cancel and a lost capture — commits it.'],
+      'The lazy hook is its own handler, not a flag on the eager one: a strike is only ever ' +
+      'remembered as the landing, and drop — which also answers cancel and a lost capture — ' +
+      'commits it.'],
     code: [
       {label: 'JS', lines: [
-        ...unit(travelSource, 'const travel = '), gap,
-        ...unit(travelSource, 'const drop = ')
+        ...unit(lazySource, 'const travel = '), gap,
+        ...unit(lazySource, 'const drop = ')
       ]}
     ]
   };
@@ -82,7 +85,7 @@ const shown = (origin: 'keep' | 'hide'): Step => origin === 'hide'
       'the gap where the drop will land. Nothing unmounts.'],
     code: [
       {label: 'JS', lines: [
-        ...span(travelSource, 'const hiding = ', 'const hiding = ')
+        ...unit(travelShared, 'export const hides')
       ]},
       {label: 'HTML', lines: [
         plain('<DraggableHeader hidden={hiding && aloft === key} ... />'),
@@ -232,7 +235,7 @@ const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolea
     code: [
       {label: 'JS', lines: [
         ...unit(tableSource, 'const liftColumn = '), gap,
-        ...unit(travelSource, 'const lift = ')
+        ...unit(eagerSource, 'const lift = ')
       ]},
       {label: 'CSS', lines: [
         ...unit(tableCss, '.grabbable {')
@@ -254,8 +257,8 @@ const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolea
         ...span(tableSource, '(has(columnsTravel.aloft) || has(rowsTravel.aloft))', '{...surface}')
       ]},
       {label: 'JS', lines: [
-        ...span(travelSource, 'onPointerMove: travel', 'onLostPointerCapture: drop'), gap,
-        ...unit(travelSource, 'const drop = '),
+        ...span(eagerSource, 'onPointerMove: travel', 'onLostPointerCapture: drop'), gap,
+        ...unit(eagerSource, 'const drop = '),
         aside('// cancel and lost capture are not delegates — they ARE the drop')
       ]},
       {label: 'CSS', lines: [
@@ -278,7 +281,7 @@ const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolea
         aside('{/* the same cells, rendered again from the data */}')
       ]},
       {label: 'JS', lines: [
-        ...span(travelSource, 'setDrift({x: event.clientX - origin.x',
+        ...span(eagerSource, 'setDrift({x: event.clientX - origin.x',
           'setDrift({x: event.clientX - origin.x')
       ]},
       {label: 'CSS', lines: [
