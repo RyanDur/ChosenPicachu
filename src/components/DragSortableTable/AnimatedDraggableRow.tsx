@@ -5,6 +5,8 @@ import {array} from '@components/arrays';
 import {Column, Dress, Row} from '@components/Table';
 import {Shifted, Slid, charted, shifts} from './chart';
 import {RowGrip} from './RowGrip';
+import './displaced.css';
+import './AnimatedDraggableRow.css';
 
 type Props = {
     row: Row;

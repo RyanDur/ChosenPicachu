@@ -1,0 +1,27 @@
+.sortable {
+  user-select: none;
+}
+
+.fancy-table.sortable .row {
+  position: relative;
+}
+
+.fancy-table.sortable .body .cell:first-child {
+  padding-left: var(--base-x-3);
+}
+
+.grabbable {
+  cursor: grab;
+  touch-action: none;
+  transition: opacity 50ms;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.drag-surface {
+  position: fixed;
+  inset: 0;
+  cursor: grabbing;
+}

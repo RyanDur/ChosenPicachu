@@ -1,0 +1,25 @@
+.sortable .slot {
+  --share: auto;
+
+  width: var(--share);
+
+  &:focus-visible {
+    outline: var(--hairline-x-2) solid var(--charcoal);
+  }
+}
+
+.sortable .menu-toggle {
+  position: absolute;
+  right: var(--base-x-1_5);
+  top: 50%;
+  translate: 0 -50%;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--charcoal);
+
+  &:focus-visible {
+    outline: var(--hairline-x-2) solid var(--charcoal);
+  }
+}

@@ -9,7 +9,7 @@ import {anchored} from './chart';
 import {ColumnGhost, RowGhost} from './ghosts';
 import {DraggableHeader, Direction} from './DraggableHeader';
 import {DraggableRow} from './DraggableRow';
-import './DragSortableTable.css';
+import './sortable.css';
 
 export type LazyKeepStaticTableProps = TableProps & {
   draggableColumns?: boolean;

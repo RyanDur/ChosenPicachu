@@ -10,7 +10,8 @@ import {ColumnGhost, RowGhost} from './ghosts';
 import {Direction} from './DraggableHeader';
 import {AnimatedDraggableHeader} from './AnimatedDraggableHeader';
 import {AnimatedDraggableRow} from './AnimatedDraggableRow';
-import './DragSortableTable.css';
+import './sortable.css';
+import './staged.css';
 
 export type EagerKeepAnimatedTableProps = TableProps & {
   draggableColumns?: boolean;
