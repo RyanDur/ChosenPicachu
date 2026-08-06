@@ -1,3 +1,11 @@
+.column-ghost {
+  position: fixed;
+  background: var(--paper);
+  box-shadow: var(--lift-box-shadow);
+  pointer-events: none;
+  will-change: transform;
+}
+
 .fancy-table.column-ghost .cell:last-child {
   border-right: var(--hairline) solid var(--charcoal);
 }

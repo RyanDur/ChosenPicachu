@@ -127,10 +127,10 @@ const moved = (animated: boolean): Step => animated
     ],
     code: [
       {label: 'JS', lines: [
-        plain('setSlid({keys: displaced, carried: shares[key],'),
-        plain("                  toward: from < to ? 'left' : 'right'});"),
+        plain('setSlid(Object.fromEntries(displaced.map(seat =>'),
+        plain("    [seat, {toward: from < to ? 'left' : 'right', by: shares[key] ?? 0}])));"),
         plain('setShifted(shifts(heights, standing, after));'),
-        aside('// two numbers and some names — javascript is done')
+        aside('// a direction and a share per displaced key — javascript is done')
       ]},
       {label: 'HTML', lines: [
         plain("<th className={displaced && `displaced-${toward}`} ... >"),
@@ -145,7 +145,9 @@ const moved = (animated: boolean): Step => animated
         plain(''),
         plain('@keyframes displaced-left {'),
         plain('    from {'),
-        plain('        transform: translateX(calc(var(--carried) * 1cqi + var(--pad)));'),
+        plain('        transform: translateX(calc('),
+        plain('            var(--carried) * 1cqi + var(--base-x-2_5) + var(--hairline)));'),
+        aside('        /* the share, plus the padding and border it carried */'),
         plain('    }'),
         plain('}'),
         plain(''),
@@ -282,8 +284,7 @@ const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolea
     code: [
       {label: 'HTML', lines: [
         plain('<table className="column-ghost"'),
-        plain('              style={{position: \'fixed\', top: flight.y, left: flight.x,'),
-        plain('                              width: flight.width,'),
+        plain('              style={{top: flight.y, left: flight.x, width: flight.width,'),
         plain('                              transform: `translate(${drift.x}px, ${drift.y}px)`}}>'),
         aside('    {/* the same cells, rendered again from the data */}'),
         plain('</table>')
@@ -293,7 +294,11 @@ const steps = (pace: 'eager' | 'lazy', origin: 'keep' | 'hide', animated: boolea
         plain('    setDrift({x: event.clientX - origin.x, y: event.clientY - origin.y});')
       ]},
       {label: 'CSS', lines: [
-        plain('.column-ghost { pointer-events: none; will-change: transform; }')
+        plain('.column-ghost {'),
+        plain('    position: fixed;'),
+        plain('    pointer-events: none;'),
+        plain('    will-change: transform;'),
+        plain('}')
       ]}
     ]
   },
