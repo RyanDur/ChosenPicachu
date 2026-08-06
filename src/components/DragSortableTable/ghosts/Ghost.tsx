@@ -12,15 +12,10 @@ type Props = {
 export const Ghost: FC<Props> = ({at, drift, dress, children}) =>
     <table className={join(dress.tableClassName, 'column-ghost')}
            style={{
-               position: 'fixed',
                top: at.y,
                left: at.x,
                width: at.width,
-               transform: `translate(${drift.x}px, ${drift.y}px)`,
-               willChange: 'transform',
-               background: 'var(--paper)',
-               boxShadow: 'var(--lift-box-shadow)',
-               pointerEvents: 'none'
+               transform: `translate(${drift.x}px, ${drift.y}px)`
            }}>
         {children}
     </table>;
