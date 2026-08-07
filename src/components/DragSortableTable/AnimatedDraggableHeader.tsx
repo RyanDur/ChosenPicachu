@@ -39,7 +39,7 @@ export const AnimatedDraggableHeader: FC<Props> = (
     const displaced = slid?.[key];
     const sorted = rule?.column === key ? rule.direction : undefined;
     return <th className={classNames(
-               className, column.className,
+               className,
                'slot',
                clipped && 'clipped',
                travels && 'grabbable',

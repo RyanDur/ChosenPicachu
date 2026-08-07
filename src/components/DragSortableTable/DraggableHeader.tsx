@@ -37,7 +37,7 @@ export const DraggableHeader: FC<Props> = (
     const hidden = aloft === key;
     const sorted = rule?.column === key ? rule.direction : undefined;
     return <th className={classNames(
-               className, column.className,
+               className,
                'slot',
                clipped && 'clipped',
                travels && 'grabbable',

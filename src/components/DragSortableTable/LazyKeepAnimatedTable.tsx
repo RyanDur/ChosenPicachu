@@ -117,7 +117,7 @@ export const LazyKeepAnimatedTable: FC<LazyKeepAnimatedTableProps> = (
                     draggable={draggableColumns}
                     slid={slid}
                     rule={rule}
-                    className={headerClassName}
+                    className={classNames(headerClassName, column.className)}
                     onLift={columnsTravel.lift}
                     onOrdered={(column, to, marks) => {
                         setSlid(marks);
