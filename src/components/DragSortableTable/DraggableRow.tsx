@@ -15,7 +15,7 @@ type Props = {
     aloft?: number;
     aloftColumn?: string;
     dress: Dress;
-    onLift: (seat: number, event: PointerEvent<HTMLElement>) => void;
+    onLift: (seat: number) => (event: PointerEvent<HTMLElement>) => void;
     onArranged: (after: number[]) => void;
 };
 
@@ -35,7 +35,7 @@ export const DraggableRow: FC<Props> = (
                        )}
                        key={key}>
                 {columnNumber === 0 && gripped &&
-                    <RowGrip row={position + 1} onLift={event => onLift(seat, event)}
+                    <RowGrip row={position + 1} onLift={onLift(seat)}
                              onNudge={toward => {
                                  const to = Math.min(Math.max(standing.indexOf(seat) + toward, 0), standing.length - 1);
                                  onArranged(array.moveToIndex(to, seat, standing));

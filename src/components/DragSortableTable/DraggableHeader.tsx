@@ -1,7 +1,6 @@
 import {FC, KeyboardEvent, MouseEvent, PointerEvent} from 'react';
 import {has, not} from '@ryandur/sand';
 import {join} from '@components/class-names';
-import {array} from '@components/arrays';
 import {Column, Dress, ResizeHandle, Shares, neighborOf, traded} from '@components/Table';
 import {Menu} from '@components/Menu';
 import {anchored} from './chart';
@@ -24,7 +23,7 @@ type Props = {
     rule?: {column: string; direction: Direction};
     dress: Dress;
     onLift: (column: string) => (event: PointerEvent<HTMLTableCellElement>) => void;
-    onOrdered: (after: string[]) => void;
+    onOrdered: (column: string, to: number) => void;
     onShared: (update: (previous: Shares) => Shares) => void;
     onRule?: (column: string, direction: Direction | undefined, event: MouseEvent<HTMLButtonElement>) => void;
 };
@@ -59,7 +58,7 @@ export const DraggableHeader: FC<Props> = (
                        if (to === from) {
                            return;
                        }
-                       onOrdered(array.moveToIndex(to, key, order));
+                       onOrdered(key, to);
                    }
                    : undefined}
                style={has(share) ? {'--share': `${share}%`} : undefined}>
