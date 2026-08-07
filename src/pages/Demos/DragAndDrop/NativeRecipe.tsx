@@ -6,17 +6,40 @@ import {DemoTopics} from '../types';
 import {ControlsProps, Motion, Origin, Pace} from '../Controls';
 import {StepEntry, StepList, aside, plain} from '../Recipe';
 import {span, unit} from '../Recipe/carve';
-import listTheaterSource from './theater.ts?raw';
+import draggableSource from './Draggable.tsx?raw';
+import hideSource from './HideOnDrag.tsx?raw';
+import crossingSource from './crossing.ts?raw';
 import glideSource from '@components/glide.ts?raw';
+import hideCss from './HideOnDrag.css?raw';
+import pushedCss from './pushed.css?raw';
+import eagerKeepStatic from './lists/EagerKeepStaticList.tsx?raw';
+import eagerKeepAnimated from './lists/EagerKeepAnimatedList.tsx?raw';
+import eagerHideStatic from './lists/EagerHideStaticList.tsx?raw';
+import eagerHideAnimated from './lists/EagerHideAnimatedList.tsx?raw';
+import lazyKeepStatic from './lists/LazyKeepStaticList.tsx?raw';
+import lazyKeepAnimated from './lists/LazyKeepAnimatedList.tsx?raw';
+import lazyHideStatic from './lists/LazyHideStaticList.tsx?raw';
+import lazyHideAnimated from './lists/LazyHideAnimatedList.tsx?raw';
+import '../Recipe/Recipe.css';
 
 const gap = plain('');
-import '../Recipe/Recipe.css';
+
+const listSources: Record<Pace, Record<Origin, Record<Motion, string>>> = {
+  eager: {
+    keep: {animated: eagerKeepAnimated, static: eagerKeepStatic},
+    hide: {animated: eagerHideAnimated, static: eagerHideStatic}
+  },
+  lazy: {
+    keep: {animated: lazyKeepAnimated, static: lazyKeepStatic},
+    hide: {animated: lazyHideAnimated, static: lazyHideStatic}
+  }
+};
 
 type Step = Omit<StepEntry, 'dial'> & {
   dial?: 'pace' | 'origin' | 'motion';
 };
 
-const paced = (pace: Pace): Step => pace === 'eager'
+const paced = (pace: Pace, source: string): Step => pace === 'eager'
   ? {
     title: 'Commit inside the crossing',
     dial: 'pace',
@@ -27,10 +50,7 @@ const paced = (pace: Pace): Step => pace === 'eager'
       'crossings, so home stays reachable.'],
     code: [
       {label: 'JS', lines: [
-        plain('onDragOver: event => {'),
-        plain('    if (crossed(event, item))'),
-        plain('        setOrder(previous => array.moveToIndex(index, aloft, previous));'),
-        plain('}')
+        ...unit(source, 'onDragOver={event => {')
       ]}
     ]
   }
@@ -39,37 +59,32 @@ const paced = (pace: Pace): Step => pace === 'eager'
     dial: 'pace',
     want: 'You want the list calm while the platform drags, which means the reorder must wait for a session that is still alive when the drop lands.',
     says: ['Each dragover only remembers where the pointer last hovered, and a dragleave forgets ' +
-      'it. The commit runs from dragend, one tick later — the session has to finish before the ' +
-      'list moves, because the platform is still animating its own end of the bargain.'],
+      'it. The commit runs from the release — the session has to finish before the list moves, ' +
+      'because the platform is still animating its own end of the bargain.'],
     code: [
       {label: 'JS', lines: [
-        plain('onDragOver: () => setLanding(index),'),
-        plain('onDragEnd: () => {'),
-        plain('    const settled = array.moveToIndex(landing, aloft, order);'),
-        plain('    setTimeout(() => theater.glided(() => setOrder(settled)));'),
-        plain('}'),
-        aside('// one tick past the session — never inside it')
+        ...span(source, 'onDragOver={() => setLanding(index)}', 'onDragOver={() => setLanding(index)}'), gap,
+        ...unit(source, 'onReleased={() => {')
       ]}
     ]
   };
 
-const shown = (origin: Origin): Step => origin === 'hide'
+const shown = (origin: Origin, source: string): Step => origin === 'hide'
   ? {
     title: 'Fade the origin to a whisper',
     dial: 'origin',
     want: 'With the snapshot in hand, the origin card reads as a duplicate — but truly vanishing it can kill the drag, because some engines end the session when its source disappears.',
-    says: ['So the origin does not vanish; it fades to a whisper. A class lands on dragstart and ' +
-      'leaves on dragend, and the CSS behind it is an opacity of nearly nothing — the node stays ' +
-      'alive, the session keeps its source, and the eye reads a single card riding the pointer.'],
+    says: ['So the origin does not vanish; it fades to a whisper. This is the hide list, so its ' +
+      'item is HideOnDrag — the element that dresses itself on its own lift and undresses on ' +
+      'its own release. The CSS behind the class is an opacity of nearly nothing: the node ' +
+      'stays alive, the session keeps its source, and the eye reads a single card riding the ' +
+      'pointer.'],
     code: [
       {label: 'JS', lines: [
-        plain("onDragStart: () => updateHide('hide'),"),
-        plain('onDragEnd: () => updateHide(undefined)')
+        ...unit(hideSource, 'export const HideOnDrag')
       ]},
       {label: 'CSS', lines: [
-        plain('.draggable.hide {'),
-        plain('    opacity: 0.1%;'),
-        plain('}'),
+        ...unit(hideCss, '.sortable-list .hide {'),
         aside('/* not visibility — the session dies with its source */')
       ]}
     ]
@@ -78,27 +93,27 @@ const shown = (origin: Origin): Step => origin === 'hide'
     title: 'Leave the origin standing',
     dial: 'origin',
     want: 'A vanished origin can disorient; sometimes the eye wants the card both at rest and in hand while it decides.',
-    says: ['Do nothing. The platform already drew the snapshot, so there are two of the card for ' +
-      'the length of the drag — one at rest in the list, one dimmed under the pointer — and no ' +
-      'style needs to change hands at all.'],
+    says: ['Do nothing. This is the keep list, so its item is the plain Draggable: the platform ' +
+      'already drew the snapshot, there are two of the card for the length of the drag — one ' +
+      'at rest, one dimmed under the pointer — and no hiding code exists in this file at all.'],
     code: [
-      {label: 'CSS', lines: [
-        aside('/* no rule exists for this variant — the platform paints both */')
+      {label: 'HTML', lines: [
+        ...span(source, '<Draggable item={item}', '<Draggable item={item}'),
+        aside('{/* no hiding wiring exists in this list — nothing to erase */}')
       ]}
     ]
   };
 
-const moved = (motion: Motion, pace: Pace): Step => motion === 'static'
+const moved = (motion: Motion, pace: Pace, source: string): Step => motion === 'static'
   ? {
     title: 'Apply the state update directly',
     dial: 'motion',
     want: 'Motion is not free: it competes with the drag session, costs a frame budget, and some users ask for none at all.',
-    says: ['The static list is the null theater: the same announcements land, every verb has ' +
-      'an empty body, and React paints the new arrangement next frame — nothing races the ' +
-      'session the platform is running.'],
+    says: ['This is the static list — no marking code exists in it. The order applies and React ' +
+      'paints next frame; a keyboard walk is applied as plainly as everything else.'],
     code: [
       {label: 'JS', lines: [
-        ...unit(listTheaterSource, 'export const still'),
+        ...span(source, 'onArranged={setOrder}', 'onArranged={setOrder}'),
         aside('// nothing marked, nothing competing with the session')
       ]}
     ]
@@ -110,23 +125,16 @@ const moved = (motion: Motion, pace: Pace): Step => motion === 'static'
       want: 'An eager swap that teleports is hard to follow, yet nothing can be animated mid-session by view transitions — the capture would swallow the drag’s own events.',
       says: ['The swap commits instantly and the crossed item is merely drawn where it used to ' +
         'be, sliding home on a keyframe whose from is one seat over — the same theater the ' +
-        'table plays, turned horizontal. The class arrives with the commit and animationend ' +
-        'hands it back, and an item still sliding cannot be crossed again.'],
+        'table plays, turned horizontal, with the direction as data: --toward flips the sign ' +
+        'of one keyframe instead of naming two.'],
       code: [
-        {label: 'CSS', lines: [
-          plain('.sortable-list .pushed-left {'),
-          plain('    animation: pushed-left 150ms ease-out;'),
-          plain('}'),
-          plain(''),
-          plain('@keyframes pushed-left {'),
-          plain('    from {'),
-          plain('        transform: translateX(calc(100% + var(--base)));'),
-          plain('    }'),
-          plain('}'),
-          aside('/* pushed-right mirrors with a negative offset */')
-        ]},
         {label: 'JS', lines: [
-          ...span(listTheaterSource, 'crossed: (item, toward)', 'crossed: (item, toward)')
+          ...span(source, "setPushed({[item]: homeward ? 'right' : 'left'});",
+            "setPushed({[item]: homeward ? 'right' : 'left'});")
+        ]},
+        {label: 'CSS', lines: [
+          ...unit(pushedCss, '.sortable-list .pushed {'), gap,
+          ...unit(pushedCss, '@keyframes pushed')
         ]}
       ]
     }
@@ -134,131 +142,112 @@ const moved = (motion: Motion, pace: Pace): Step => motion === 'static'
       title: 'Glide the settle, one tick after',
       dial: 'motion',
       want: 'A lazy settle happens all at once on release — the perfect moment for a view transition, except the drag session is still alive when the drop fires, and a capture mid-session swallows its events.',
-      says: ['Name each item for the transition and defer the settle one tick past dragend. By ' +
-        'the time startViewTransition captures the page, the platform has finished its ' +
+      says: ['Name each item for the transition and defer the settle one tick past the release. ' +
+        'By the time startViewTransition captures the page, the platform has finished its ' +
         'ceremony, and every item glides from where the drag left it to where the order says ' +
         'it belongs.'],
       code: [
         {label: 'HTML', lines: [
-          plain("<li style={{viewTransitionName: `sort-${item}`}}>")
+          ...span(source, 'viewTransitionName: `sort-${item}`', 'viewTransitionName: `sort-${item}`')
         ]},
         {label: 'JS', lines: [
-          plain('setTimeout(() => theater.glided(() => setOrder(settled)));'), gap,
-          ...span(listTheaterSource, 'named: item =>', 'glided: glide(true)'), gap,
+          ...span(source, 'setTimeout(() => glide(true)(() => setOrder(settled)));',
+            'setTimeout(() => glide(true)(() => setOrder(settled)));'), gap,
           ...unit(glideSource, 'export const glide')
         ]}
       ]
     };
 
-const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => [
-  {
-    title: 'Arm the drag from its handle',
-    want: 'The platform will drag anything marked draggable, but marking the whole card turns every press into a lift and kills text selection inside it.',
-    says: ['draggable is only an attribute, so let the grip arm it: a mousedown on the handle ' +
-      'sets a flag, the card renders draggable just for that gesture, and dragstart declares ' +
-      'the move the platform is about to make. The browser answers with the whole ceremony — ' +
-      'the snapshot under your pointer, the cursor, the cancel — without another line.'],
-    code: [
-      {label: 'HTML', lines: [
-        plain('<article draggable={is(dragging)}'),
-        plain("         onDragStart={event => { event.dataTransfer.effectAllowed = 'move'; }}>"),
-        plain('    <Grip onMouseDown={() => updateDragging(\'dragging\')}/>')
-      ]}
-    ]
-  },
-  {
-    title: 'Hold the aloft in state, not in the payload',
-    want: 'dataTransfer exists to carry data between windows, and mid-drag it is locked — a dragover may not read what dragstart wrote, so the payload cannot steer the sort.',
-    says: ['Steer with state instead. dragstart records which item is aloft, dragend clears it, ' +
-      'and every handler in between reads the same value the render does. The payload API is ' +
-      'still there when another window genuinely needs the data.'],
-    code: [
-      {label: 'JS', lines: [
-        plain('onDragStart: () => setAloft(item),'),
-        plain('onDragEnd: () => setAloft(undefined)')
-      ]}
-    ]
-  },
-  {
-    title: 'Accept the drop, or the platform takes it back',
-    want: 'By default nothing is a drop target — release over the list and the platform animates the card flying home, a snapback you cannot cancel.',
-    says: ['Acceptance is a protocol. dragover calls preventDefault to say the drag may land ' +
-      'here, dropEffect names the verb so the cursor matches, and drop calls preventDefault so ' +
-      'the browser does not treat the payload as a navigation. Miss any of the three and the ' +
-      'drag ends in the platform’s apology animation.'],
-    code: [
-      {label: 'HTML', lines: [
-        plain('<ul onDragOver={event => event.preventDefault()}'),
-        plain('    onDrop={event => event.preventDefault()}>')
-      ]},
-      {label: 'JS', lines: [
-        plain("event.dataTransfer.dropEffect = 'move';")
-      ]}
-    ]
-  },
-  {
-    title: 'Find the crossing with the inner half',
-    want: 'Swap at the first touch of a neighbour and the order chatters: at a boundary, every pixel of movement flips it back and forth.',
-    says: ['There is no chart on this road — the platform fires dragover on whatever the pointer ' +
-      'is really over, so the event’s own target is the neighbour and its bounding box is the ' +
-      'slot. A crossing only counts once the pointer reaches the inner half; the outer quarter ' +
-      'holds still, and an item already sliding cannot be overtaken.'],
-    code: [
-      {label: 'JS', lines: [
-        plain('const space = event.currentTarget.getBoundingClientRect();'),
-        plain('const quarter = space.width / 4;'),
-        plain('const homeward = index < order.indexOf(aloft);'),
-        plain('const crossed = homeward'),
-        plain('    ? event.clientX < space.right - quarter'),
-        plain('    : event.clientX > space.left + quarter;')
-      ]}
-    ]
-  },
-  paced(pace),
-  shown(origin),
-  moved(motion, pace),
-  {
-    title: 'Arrows go straight to the order',
-    want: 'A keyboard user needs the same reorders, and this is the one thing the API cannot sell you — drag-and-drop only ever answers the pointer.',
-    says: ['It does not matter, because dragging was never the goal — the order changing is. ' +
-      'The grip is a real button, so focus reaches it for free, and the arrow keys change the ' +
-      'order directly: the same moveToIndex the drags call, none of the ceremony. The slides ' +
-      'still play — both parties drawn from the seats they just left, an item mid-slide ' +
-      'keeping the keys silent until it lands. Nothing in this step touches drag-and-drop, ' +
-      'which is exactly why it works.'],
-    code: [
-      {label: 'HTML', lines: [
-        plain('<button type="button" className="grip"'),
-        plain('        aria-label={`grip for ${label}`} ... >')
-      ]},
-      {label: 'JS', lines: [
-        plain('onKeyDown: event => {'),
-        plain("    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight')"),
-        plain('        return;'),
-        plain('    event.preventDefault();'),
-        plain("    nudge(event.key === 'ArrowRight' ? 1 : -1);"),
-        plain('}'),
-        aside('// no session, no snapshot — just the order changing hands')
-      ]}
-    ]
-  },
-  {
-    title: 'Know where the road ends',
-    want: 'Some pixels on this road are never yours: the snapshot, the cursor, the cancel — and the keyboard never gets a session at all.',
-    says: ['The drag image is a bitmap taken at dragstart, so it cannot be animated and cannot ' +
-      'be made opaque on macOS; the cursor belongs to the platform; on macOS even the cancel is ' +
-      'the platform’s animation to run; and drag-and-drop itself never answers the keyboard ' +
-      '— the arrows on the grips work because they change the order directly, without the ' +
-      'API. When those pixels matter, build the drag from pointer events instead — the Tables ' +
-      'demo walks that road.'],
-    code: [
-      {label: 'JS', lines: [
-        aside('// no API exists for these pixels — when they matter,'),
-        aside('// take the pointer road')
-      ]}
-    ]
-  }
-];
+const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
+  const source = listSources[pace][origin][motion];
+  return [
+    {
+      title: 'Arm the drag from its handle',
+      want: 'The platform will drag anything marked draggable, but marking the whole card turns every press into a lift and kills text selection inside it.',
+      says: ['draggable is only an attribute, so let the grip arm it: a mousedown on the handle ' +
+        'sets a flag, the card renders draggable just for that gesture, and dragstart declares ' +
+        'the move the platform is about to make. The browser answers with the whole ceremony — ' +
+        'the snapshot under your pointer, the cursor, the cancel — without another line.'],
+      code: [
+        {label: 'HTML', lines: [
+          ...span(draggableSource, '<article', 'draggable={is(dragging)}>')
+        ]}
+      ]
+    },
+    {
+      title: 'Hold the aloft in state, not in the payload',
+      want: 'dataTransfer exists to carry data between windows, and mid-drag it is locked — a dragover may not read what dragstart wrote, so the payload cannot steer the sort.',
+      says: ['Steer with state instead. The lift reports which item is aloft, the release clears ' +
+        'it, and every handler in between reads the same value the render does. The payload API ' +
+        'is still there when another window genuinely needs the data.'],
+      code: [
+        {label: 'JS', lines: [
+          ...span(source, 'onLifted={setAloft}', 'onLifted={setAloft}'),
+          aside('// the item names itself; the list holds the answer')
+        ]}
+      ]
+    },
+    {
+      title: 'Accept the drop, or the platform takes it back',
+      want: 'By default nothing is a drop target — release over the list and the platform animates the card flying home, a snapback you cannot cancel.',
+      says: ['Acceptance is a protocol. dragover calls preventDefault to say the drag may land ' +
+        'here, dropEffect names the verb so the cursor matches, and drop calls preventDefault so ' +
+        'the browser does not treat the payload as a navigation. Miss any of the three and the ' +
+        'drag ends in the platform’s apology animation.'],
+      code: [
+        {label: 'HTML', lines: [
+          ...span(source, '<ul aria-label="sortable list"', 'onDrop={event => event.preventDefault()}')
+        ]}
+      ]
+    },
+    {
+      title: 'Find the crossing with the inner half',
+      want: 'Swap at the first touch of a neighbour and the order chatters: at a boundary, every pixel of movement flips it back and forth.',
+      says: ['There is no chart on this road — the platform fires dragover on whatever the ' +
+        'pointer is really over, so the event’s own target is the neighbour and its bounding ' +
+        'box is the slot. A crossing only counts once the pointer reaches the inner half; the ' +
+        'outer quarter holds still, and an item already sliding cannot be overtaken.'],
+      code: [
+        {label: 'JS', lines: [
+          ...unit(crossingSource, 'export const crossed')
+        ]}
+      ]
+    },
+    paced(pace, source),
+    shown(origin, source),
+    moved(motion, pace, source),
+    {
+      title: 'Arrows go straight to the order',
+      want: 'A keyboard user needs the same reorders, and this is the one thing the API cannot sell you — drag-and-drop only ever answers the pointer.',
+      says: ['It does not matter, because dragging was never the goal — the order changing is. ' +
+        'The grip is a real button, so focus reaches it for free, and the item owns its walk: ' +
+        'arrow keys compute the move and report the outcome up, none of the ceremony. An item ' +
+        'mid-slide keeps the keys silent until it lands. Nothing in this step touches ' +
+        'drag-and-drop, which is exactly why it works.'],
+      code: [
+        {label: 'JS', lines: [
+          ...unit(draggableSource, 'onKeyDown={event => {')
+        ]}
+      ]
+    },
+    {
+      title: 'Know where the road ends',
+      want: 'Some pixels on this road are never yours: the snapshot, the cursor, the cancel — and the keyboard never gets a session at all.',
+      says: ['The drag image is a bitmap taken at dragstart, so it cannot be animated and cannot ' +
+        'be made opaque on macOS; the cursor belongs to the platform; on macOS even the cancel is ' +
+        'the platform’s animation to run; and drag-and-drop itself never answers the keyboard ' +
+        '— the arrows on the grips work because they change the order directly, without the ' +
+        'API. When those pixels matter, build the drag from pointer events instead — the Tables ' +
+        'demo walks that road.'],
+      code: [
+        {label: 'JS', lines: [
+          aside('// no API exists for these pixels — when they matter,'),
+          aside('// take the pointer road')
+        ]}
+      ]
+    }
+  ];
+};
 
 export const NativeRecipe: FC<ControlsProps> = ({pace, origin, motion, onPace, onOrigin, onMotion}) => {
   const dials = {
@@ -292,7 +281,8 @@ export const NativeRecipe: FC<ControlsProps> = ({pace, origin, motion, onPace, o
       <h2 className="kicker">build the native drag sort yourself</h2>
       <p className="brief">
         Nine steps of consent and timing — the one demo on this site built on the API actually
-        named drag-and-drop. Steps that carry a dial rewrite to match it.
+        named drag-and-drop. The dials choose one of eight lists, the readout names the one on
+        screen, and every code block below is carved from that list’s own source.
       </p>
     </header>
     <p className="lead">

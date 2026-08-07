@@ -1,0 +1,42 @@
+import {FC, useState} from 'react';
+import {has} from '@ryandur/sand';
+import {array} from '@components/arrays';
+import {crossed} from '../crossing';
+import {HideOnDrag} from '../HideOnDrag';
+import '../sortable-list.css';
+
+type Props = {
+    list: Set<string>;
+};
+
+export const EagerHideStaticList: FC<Props> = ({list}) => {
+    const [order, setOrder] = useState<string[]>(() => [...list]);
+    const [aloft, setAloft] = useState<string>();
+
+    return <ul aria-label="sortable list"
+               onDragOver={event => event.preventDefault()}
+               onDrop={event => event.preventDefault()}
+               className="sortable-list">{
+        order.map((item, index) =>
+            <li key={item}
+                className={'item'}>
+                <HideOnDrag item={item}
+                    order={order}
+                    onLifted={setAloft}
+                    onReleased={() => setAloft(undefined)}
+                    onDragOver={event => {
+                        const lane = event.currentTarget.closest('li');
+                        if (has(lane) && (lane.getAnimations?.().length ?? 0) > 0) {
+                            return;
+                        }
+                        if (has(aloft) && aloft !== item) {
+                            const homeward = index < order.indexOf(aloft);
+                            if (crossed(event, homeward)) {
+                                setOrder(previous => array.moveToIndex(index, aloft, previous));
+                            }
+                        }
+                    }}
+                    onArranged={setOrder}/>
+            </li>)
+    }</ul>;
+};

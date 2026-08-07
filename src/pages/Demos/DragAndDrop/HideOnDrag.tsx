@@ -1,28 +1,20 @@
 import {FC, useState} from 'react';
-import {Draggable, DraggableListItemProps} from './Draggable';
 import {classNames} from '@components/class-names';
+import {Draggable, DraggableProps} from './Draggable';
+import './HideOnDrag.css';
 
-export const HideOnDrag: FC<DraggableListItemProps> = ({
-  children,
-  className,
-  label,
-  onDragStart,
-  onDragEnd,
-  ...rest
-}) => {
+export const HideOnDrag: FC<DraggableProps> = ({className, onLifted, onReleased, ...rest}) => {
   const [hide, updateHide] = useState<'hide'>();
 
   return <Draggable
     {...rest}
-    className={classNames('hide-on-drag', hide, className)}
-    onDragEnd={(event) => {
-      onDragEnd?.(event);
-      updateHide(undefined);
-    }}
-    onDragStart={(event) => {
-      onDragStart?.(event);
+    className={classNames(hide, className)}
+    onLifted={item => {
       updateHide('hide');
+      onLifted(item);
     }}
-    label={label}
-  >{children}</Draggable>;
+    onReleased={() => {
+      updateHide(undefined);
+      onReleased();
+    }}/>;
 };

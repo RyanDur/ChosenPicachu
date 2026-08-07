@@ -3,15 +3,15 @@ import {has} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {classNames} from '@components/class-names';
 import {Column, Shares, TableProps, seededShares} from '@components/Table';
-import {useEagerColumnTravel} from './useEagerColumnTravel';
-import {useEagerRowTravel} from './useEagerRowTravel';
-import {Aloft} from './Aloft';
-import {interior, placed} from './chart';
-import {Direction, Rule, ranked} from './sorting';
-import {DraggableHeader} from './DraggableHeader';
-import {DraggableRow} from './DraggableRow';
-import './sortable.css';
-import './hide.css';
+import {useEagerColumnTravel} from '../useEagerColumnTravel';
+import {useEagerRowTravel} from '../useEagerRowTravel';
+import {Aloft} from '../Aloft';
+import {interior, placed} from '../chart';
+import {Direction, Rule, ranked} from '../sorting';
+import {DraggableHeader} from '../DraggableHeader';
+import {DraggableRow} from '../DraggableRow';
+import '../sortable.css';
+import '../hide.css';
 
 export type EagerHideStaticTableProps = TableProps & {
     draggableColumns?: boolean;
