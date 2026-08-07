@@ -35,12 +35,12 @@ export const LazyHideStaticTable: FC<LazyHideStaticTableProps> = (
 ) => {
     const [shares, setShares] = useState<Shares>(() => seededShares(columns));
     const [ordered, setOrdered] = useState<Column[]>(() => [...columns]);
-    const [seats, setSeats] = useState<number[]>(() => rows.map((_, seat) => seat));
+    const [seats, setSeats] = useState<number[]>(() => rows.map((_, card) => card));
     const [rule, setRule] = useState<Rule>();
 
     const order = ordered.map(({column}) => column);
     const clipped = ordered.some(({width}) => has(width));
-    const dealt = seats.length === rows.length ? seats : rows.map((_, seat) => seat);
+    const dealt = seats.length === rows.length ? seats : rows.map((_, card) => card);
     const standing = has(rule) ? ranked(rows, dealt, rule) : dealt;
 
     const placedColumn = (column: string, to: number): void =>
@@ -52,8 +52,8 @@ export const LazyHideStaticTable: FC<LazyHideStaticTableProps> = (
         placedColumn(column, Math.min(Math.max(order.indexOf(struck), 1), order.length - 2));
     const columnsTravel = useLazyColumnTravel(order, shares, settleColumn);
 
-    const settleRow = (seat: number, struck: number): void =>
-        setSeats(array.moveToIndex(seats.indexOf(struck), seat, seats));
+    const settleRow = (card: number, struck: number): void =>
+        setSeats(array.moveToIndex(seats.indexOf(struck), card, seats));
     const rowsTravel = useLazyRowTravel(standing, settleRow);
 
     const ruled = (column: string, direction: Direction | undefined): void =>
@@ -120,13 +120,13 @@ export const LazyHideStaticTable: FC<LazyHideStaticTableProps> = (
                 <DraggableHeader key={column.column} column={column} table={columnState}/>
             )}</tr>
             </thead>
-            <tbody className={dress.tbodyClassName}>{standing.map(seat =>
-                <DraggableRow key={seat} seat={seat} table={rowState}/>
+            <tbody className={dress.tbodyClassName}>{standing.map(card =>
+                <DraggableRow key={card} card={card} table={rowState}/>
             )}</tbody>
         </table>
         {has(aloftColumn) &&
             <ColumnGhost at={columnsTravel.flight} drift={columnsTravel.drift} dress={ghostDress}
-                         column={aloftColumn} rows={standing.map(seat => rows[seat])}/>}
+                         column={aloftColumn} rows={standing.map(card => rows[card])}/>}
         {has(aloftRow) &&
             <RowGhost at={rowsTravel.flight} drift={rowsTravel.drift} dress={ghostDress}
                       columns={ordered} shares={shares} row={aloftRow}/>}

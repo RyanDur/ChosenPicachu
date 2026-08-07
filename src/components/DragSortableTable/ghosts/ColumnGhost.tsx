@@ -20,8 +20,8 @@ export const ColumnGhost: FC<Props> = ({at, drift, dress, column, rows}) =>
             </th>
         </tr>
         </thead>
-        <tbody className={dress.tbody}>{rows.map((row, seat) =>
-            <tr className={dress.row} key={seat}>
+        <tbody className={dress.tbody}>{rows.map((row, place) =>
+            <tr className={dress.row} key={place}>
                 <td className={classNames(dress.cell, row[column.column].className, 'ellipsis')}>
                     {row[column.column].display}
                 </td>

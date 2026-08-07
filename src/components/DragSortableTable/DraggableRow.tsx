@@ -14,21 +14,21 @@ type Table = {
   aloftColumn?: string;
   className: string;
   cellClassName: string;
-  onLift: (seat: number) => (event: PointerEvent<HTMLElement>) => void;
+  onLift: (card: number) => (event: PointerEvent<HTMLElement>) => void;
   onArranged: (after: number[]) => void;
 };
 
 type Props = {
-  seat: number;
+  card: number;
   table: Table;
 };
 
-export const DraggableRow: FC<Props> = ({seat, table}) => {
+export const DraggableRow: FC<Props> = ({card, table}) => {
   const {rows, ordered, standing, gripped, aloft, aloftColumn, className, cellClassName, onLift, onArranged} = table;
-  const row: Row = rows[seat];
-  const position = standing.indexOf(seat);
+  const row: Row = rows[card];
+  const position = standing.indexOf(card);
   const clipped = notEmpty(ordered.filter(({width}) => has(width)));
-  const hidden = aloft === seat;
+  const hidden = aloft === card;
 
   return <tr className={className}>
     {ordered.map(({column}, columnNumber) => {
@@ -42,10 +42,10 @@ export const DraggableRow: FC<Props> = ({seat, table}) => {
       )}
                  key={key}>
         {columnNumber === 0 && gripped &&
-            <RowGrip row={position + 1} onLift={onLift(seat)}
+            <RowGrip row={position + 1} onLift={onLift(card)}
                      onNudge={toward => {
                        const to = Math.min(Math.max(position + toward, 0), standing.length - 1);
-                       onArranged(array.moveToIndex(to, seat, standing));
+                       onArranged(array.moveToIndex(to, card, standing));
                      }}/>}
         {cell.display}
       </td>;

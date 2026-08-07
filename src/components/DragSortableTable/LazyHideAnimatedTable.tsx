@@ -37,14 +37,14 @@ export const LazyHideAnimatedTable: FC<LazyHideAnimatedTableProps> = (
 ) => {
     const [shares, setShares] = useState<Shares>(() => seededShares(columns));
     const [ordered, setOrdered] = useState<Column[]>(() => [...columns]);
-    const [seats, setSeats] = useState<number[]>(() => rows.map((_, seat) => seat));
+    const [seats, setSeats] = useState<number[]>(() => rows.map((_, card) => card));
     const [rule, setRule] = useState<Rule>();
     const [slid, setSlid] = useState<Slid>();
     const [shifted, setShifted] = useState<Shifted>();
 
     const order = ordered.map(({column}) => column);
     const clipped = ordered.some(({width}) => has(width));
-    const dealt = seats.length === rows.length ? seats : rows.map((_, seat) => seat);
+    const dealt = seats.length === rows.length ? seats : rows.map((_, card) => card);
     const standing = has(rule) ? ranked(rows, dealt, rule) : dealt;
 
     const placedColumn = (column: string, to: number): void =>
@@ -58,9 +58,9 @@ export const LazyHideAnimatedTable: FC<LazyHideAnimatedTableProps> = (
     };
     const columnsTravel = useLazyColumnTravel(order, shares, settleColumn);
 
-    const settleRow = (seat: number, struck: number, heights: Shifted): void => {
-        const after = array.moveToIndex(seats.indexOf(struck), seat, seats);
-        const {[seat]: ridden, ...drops} = shifts(heights, seats, after);
+    const settleRow = (card: number, struck: number, heights: Shifted): void => {
+        const after = array.moveToIndex(seats.indexOf(struck), card, seats);
+        const {[card]: ridden, ...drops} = shifts(heights, seats, after);
         setShifted(drops);
         setSeats(after);
     };
@@ -155,13 +155,13 @@ export const LazyHideAnimatedTable: FC<LazyHideAnimatedTableProps> = (
                 <AnimatedDraggableHeader key={column.column} column={column} table={columnState}/>
             )}</tr>
             </thead>
-            <tbody className={dress.tbodyClassName}>{standing.map(seat =>
-                <AnimatedDraggableRow key={seat} seat={seat} table={rowState}/>
+            <tbody className={dress.tbodyClassName}>{standing.map(card =>
+                <AnimatedDraggableRow key={card} card={card} table={rowState}/>
             )}</tbody>
         </table>
         {has(aloftColumn) &&
             <ColumnGhost at={columnsTravel.flight} drift={columnsTravel.drift} dress={ghostDress}
-                         column={aloftColumn} rows={standing.map(seat => rows[seat])}/>}
+                         column={aloftColumn} rows={standing.map(card => rows[card])}/>}
         {has(aloftRow) &&
             <RowGhost at={rowsTravel.flight} drift={rowsTravel.drift} dress={ghostDress}
                       columns={ordered} shares={shares} row={aloftRow}/>}

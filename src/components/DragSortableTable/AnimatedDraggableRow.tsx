@@ -19,22 +19,22 @@ type Table = {
   shifted?: Shifted;
   className: string;
   cellClassName: string;
-  onLift: (seat: number) => (event: PointerEvent<HTMLElement>) => void;
+  onLift: (card: number) => (event: PointerEvent<HTMLElement>) => void;
   onArranged: (after: number[], drops: Shifted) => void;
 };
 
 type Props = {
-  seat: number;
+  card: number;
   table: Table;
 };
 
-export const AnimatedDraggableRow: FC<Props> = ({seat, table}) => {
+export const AnimatedDraggableRow: FC<Props> = ({card, table}) => {
   const {rows, ordered, standing, gripped, aloft, aloftColumn, slid, shifted, className, cellClassName, onLift, onArranged} = table;
-  const row: Row = rows[seat];
-  const position = standing.indexOf(seat);
+  const row: Row = rows[card];
+  const position = standing.indexOf(card);
   const clipped = notEmpty(ordered.filter(({width}) => has(width)));
-  const hidden = aloft === seat;
-  const drop = shifted?.[seat];
+  const hidden = aloft === card;
+  const drop = shifted?.[card];
 
   return <tr className={classNames(className, has(drop) && 'shifted')}
              style={has(drop) ? {'--drop': `${drop}px`} : undefined}>
@@ -54,14 +54,14 @@ export const AnimatedDraggableRow: FC<Props> = ({seat, table}) => {
                    ? {'--carried': `${displaced.by}`, '--toward': displaced.toward === 'left' ? '1' : '-1'}
                    : undefined}>
         {columnNumber === 0 && gripped &&
-            <RowGrip row={position + 1} onLift={onLift(seat)}
+            <RowGrip row={position + 1} onLift={onLift(card)}
                      onNudge={(toward, event) => {
                        const lane = event.currentTarget.closest('tr');
                        if (has(lane) && (lane.getAnimations?.().length ?? 0) > 0) {
                          return;
                        }
                        const to = Math.min(Math.max(position + toward, 0), standing.length - 1);
-                       const after = array.moveToIndex(to, seat, standing);
+                       const after = array.moveToIndex(to, card, standing);
                        const table = event.currentTarget.closest('table');
                        onArranged(after, has(table)
                          ? shifts(charted(table, standing).rowHeights, standing, after)
