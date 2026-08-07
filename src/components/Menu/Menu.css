@@ -3,10 +3,7 @@
   list-style: none;
   position-area: block-end span-inline-start;
   position-try-fallbacks: flip-block;
-  margin: 0;
   width: var(--base-x-25);
-  border: none;
-  padding: 0;
   background: var(--paper);
   box-shadow: var(--base-box-shadow);
 

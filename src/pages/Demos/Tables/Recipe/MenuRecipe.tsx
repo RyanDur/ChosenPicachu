@@ -69,11 +69,12 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
         'own column and spreads toward the line’s start — under the toggle, hanging left, in ' +
         'this writing mode. position-try-fallbacks: flip-block is the escape hatch: when the ' +
         'row below has no room, the whole area flips above. No measuring, no JavaScript.',
-        'Everything else in the rule cancels a browser opinion. A popover ships centered — ' +
-        'inset: 0 with auto margins — so inset: auto and margin: 0 take placement back for ' +
-        'the anchor to decide. It ships with a border and padding — border: none because the ' +
-        'card’s shadow will draw the edge, padding: 0 because the items own their hit areas. ' +
-        'And list-style: none because this is a real list, and lists come with markers.',
+        'A popover also ships dressed — auto margins, a border, padding — but none of that ' +
+        'is this rule’s business: the site reset already zeroes menu, and author styles beat ' +
+        'user-agent styles no matter the specificity. Two cancellations remain that the reset ' +
+        'cannot make. inset: auto, because the reset never speaks inset and the UA centers ' +
+        'every popover with inset: 0. And list-style: none, because the reset drops markers ' +
+        'for ol and ul — and menu is not in that rule.',
         'Engines that have popovers but not anchor positioning get the @supports fallback: a ' +
         'centered popover. Worse placement, same menu — the feature degrades, the function ' +
         'does not.'],
@@ -84,13 +85,11 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
         ]},
         {label: 'CSS', lines: [
           ...span(menuCss, 'inset: auto;', 'list-style: none;'),
-          aside('/* take back the centered default; a real list drops its markers */'), gap,
+          aside('/* the two cancellations the reset cannot make */'), gap,
           ...span(menuCss, 'position-area: block-end span-inline-start;', 'position-try-fallbacks: flip-block;'),
           aside('/* the invoker is the implicit anchor: below it, hanging leading; flips when cramped */'), gap,
-          ...span(menuCss, 'margin: 0;', 'padding: 0;'),
-          aside('/* undress the UA popover: its margins, border, and padding all go */'), gap,
-          ...span(menuCss, 'background: var(--paper);', 'box-shadow: var(--base-box-shadow);'),
-          aside('/* the card language: paper, floating shadow — the shadow is the edge */'), gap,
+          ...span(menuCss, 'width: var(--base-x-25);', 'box-shadow: var(--base-box-shadow);'),
+          aside('/* the card language: fixed width, paper, floating shadow as the edge */'), gap,
           ...unit(menuCss, '@supports not (position-area: block-end)'),
           aside('/* no anchor positioning? centered — worse placement, same menu */')
         ]}
