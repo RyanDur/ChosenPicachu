@@ -48,7 +48,7 @@ import lhsCss from '@components/DragSortableTable/LazyHideStaticTable/LazyHideSt
 import lhaCss from '@components/DragSortableTable/LazyHideAnimatedTable/LazyHideAnimatedTable.css?raw';
 import '../../Recipe/Recipe.css';
 
-const gap = plain('');
+const gap = plain(' ');
 
 type Sources = Record<Pace, Record<Origin, Record<Motion, string>>>;
 

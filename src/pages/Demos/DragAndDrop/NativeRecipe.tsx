@@ -32,7 +32,7 @@ import lhsListCss from './LazyHideStaticList/LazyHideStaticList.css?raw';
 import lhaListCss from './LazyHideAnimatedList/LazyHideAnimatedList.css?raw';
 import '../Recipe/Recipe.css';
 
-const gap = plain('');
+const gap = plain(' ');
 
 type Sources = Record<Pace, Record<Origin, Record<Motion, string>>>;
 
