@@ -18,6 +18,7 @@ import lazyKeepAnimated from '@components/DragSortableTable/LazyKeepAnimatedTabl
 import lazyHideStatic from '@components/DragSortableTable/LazyHideStaticTable.tsx?raw';
 import lazyHideAnimated from '@components/DragSortableTable/LazyHideAnimatedTable.tsx?raw';
 import eagerSource from '@components/DragSortableTable/useEagerColumnTravel.ts?raw';
+import aloftSource from '@components/DragSortableTable/Aloft.tsx?raw';
 import lazySource from '@components/DragSortableTable/useLazyColumnTravel.ts?raw';
 import chartSource from '@components/DragSortableTable/chart.ts?raw';
 import headerSource from '@components/DragSortableTable/DraggableHeader.tsx?raw';
@@ -273,7 +274,7 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
       'always arrives.'],
     code: [
       {label: 'HTML', lines: [
-        ...span(source, '(has(columnsTravel.aloft) || has(rowsTravel.aloft))', '{...surface}')
+        ...span(aloftSource, '(has(columnsTravel.aloft) || has(rowsTravel.aloft))', '{...surface}')
       ]},
       {label: 'JS', lines: [
         ...span(eagerSource, 'onPointerMove: travel', 'onLostPointerCapture: drop'), gap,

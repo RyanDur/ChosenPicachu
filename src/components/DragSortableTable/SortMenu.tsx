@@ -1,8 +1,9 @@
 import {FC, MouseEvent} from 'react';
 import {has} from '@ryandur/sand';
 import {Menu} from '@components/Menu';
+import {Direction} from './sorting';
 
-export type Direction = 'ascending' | 'descending';
+export type {Direction};
 
 const glyphs: Record<Direction, string> = {ascending: '▲', descending: '▼'};
 
