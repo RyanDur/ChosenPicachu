@@ -59,7 +59,7 @@ export const LazyKeepStaticTable: FC<LazyKeepStaticTableProps> = (
         setRule(has(direction) ? {column, direction} : undefined);
 
     const columnState = {
-        ordered,
+        order,
         shares,
         rule,
         draggable: draggableColumns,
@@ -71,8 +71,8 @@ export const LazyKeepStaticTable: FC<LazyKeepStaticTableProps> = (
     };
 
     const rowState = {
-        rows,
-        ordered,
+        columns: order,
+        clipped,
         standing,
         gripped: draggableRows,
         className: classNames(dress.trClassName, dress.rowClassName),
@@ -117,7 +117,7 @@ export const LazyKeepStaticTable: FC<LazyKeepStaticTableProps> = (
             )}</tr>
             </thead>
             <tbody className={dress.tbodyClassName}>{standing.map(card =>
-                <DraggableRow key={card} card={card} table={rowState}/>
+                <DraggableRow key={card} card={card} row={rows[card]} table={rowState}/>
             )}</tbody>
         </table>
         {has(aloftColumn) &&

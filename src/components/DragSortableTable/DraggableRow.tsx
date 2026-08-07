@@ -1,13 +1,12 @@
 import {FC, PointerEvent} from 'react';
-import {has, notEmpty} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {array} from '@components/arrays';
-import {Column, Row, TableProps} from '@components/Table';
+import {Row} from '@components/Table';
 import {RowGrip} from './RowGrip';
 
 type Table = {
-  rows: TableProps['rows'];
-  ordered: readonly Column[];
+  columns: readonly string[];
+  clipped: boolean;
   standing: readonly number[];
   gripped: boolean;
   aloft?: number;
@@ -20,18 +19,17 @@ type Table = {
 
 type Props = {
   card: number;
+  row: Row;
   table: Table;
 };
 
-export const DraggableRow: FC<Props> = ({card, table}) => {
-  const {rows, ordered, standing, gripped, aloft, aloftColumn, className, cellClassName, onLift, onArranged} = table;
-  const row: Row = rows[card];
+export const DraggableRow: FC<Props> = ({card, row, table}) => {
+  const {columns, clipped, standing, gripped, aloft, aloftColumn, className, cellClassName, onLift, onArranged} = table;
   const position = standing.indexOf(card);
-  const clipped = notEmpty(ordered.filter(({width}) => has(width)));
   const hidden = aloft === card;
 
   return <tr className={className}>
-    {ordered.map(({column}, columnNumber) => {
+    {columns.map((column, columnNumber) => {
       const cell = row[column];
       return <td className={classNames(
         cellClassName, cell.className,

@@ -78,7 +78,7 @@ export const LazyKeepAnimatedTable: FC<LazyKeepAnimatedTableProps> = (
     };
 
     const columnState = {
-        ordered,
+        order,
         shares,
         rule,
         slid,
@@ -94,8 +94,8 @@ export const LazyKeepAnimatedTable: FC<LazyKeepAnimatedTableProps> = (
     };
 
     const rowState = {
-        rows,
-        ordered,
+        columns: order,
+        clipped,
         standing,
         gripped: draggableRows,
         slid,
@@ -152,7 +152,7 @@ export const LazyKeepAnimatedTable: FC<LazyKeepAnimatedTableProps> = (
             )}</tr>
             </thead>
             <tbody className={dress.tbodyClassName}>{standing.map(card =>
-                <AnimatedDraggableRow key={card} card={card} table={rowState}/>
+                <AnimatedDraggableRow key={card} card={card} row={rows[card]} table={rowState}/>
             )}</tbody>
         </table>
         {has(aloftColumn) &&

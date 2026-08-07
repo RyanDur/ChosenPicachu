@@ -1,16 +1,16 @@
 import {FC, PointerEvent} from 'react';
-import {has, notEmpty} from '@ryandur/sand';
+import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {array} from '@components/arrays';
-import {Column, Row, TableProps} from '@components/Table';
+import {Row} from '@components/Table';
 import {Shifted, Slid, charted, shifts} from './chart';
 import {RowGrip} from './RowGrip';
 import './displaced.css';
 import './AnimatedDraggableRow.css';
 
 type Table = {
-  rows: TableProps['rows'];
-  ordered: readonly Column[];
+  columns: readonly string[];
+  clipped: boolean;
   standing: readonly number[];
   gripped: boolean;
   aloft?: number;
@@ -25,20 +25,19 @@ type Table = {
 
 type Props = {
   card: number;
+  row: Row;
   table: Table;
 };
 
-export const AnimatedDraggableRow: FC<Props> = ({card, table}) => {
-  const {rows, ordered, standing, gripped, aloft, aloftColumn, slid, shifted, className, cellClassName, onLift, onArranged} = table;
-  const row: Row = rows[card];
+export const AnimatedDraggableRow: FC<Props> = ({card, row, table}) => {
+  const {columns, clipped, standing, gripped, aloft, aloftColumn, slid, shifted, className, cellClassName, onLift, onArranged} = table;
   const position = standing.indexOf(card);
-  const clipped = notEmpty(ordered.filter(({width}) => has(width)));
   const hidden = aloft === card;
   const drop = shifted?.[card];
 
   return <tr className={classNames(className, has(drop) && 'shifted')}
              style={has(drop) ? {'--drop': `${drop}px`} : undefined}>
-    {ordered.map(({column}, columnNumber) => {
+    {columns.map((column, columnNumber) => {
       const cell = row[column];
       const displaced = slid?.[column];
       return <td className={classNames(
