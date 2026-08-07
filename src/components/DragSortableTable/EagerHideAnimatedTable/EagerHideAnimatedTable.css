@@ -1,0 +1,33 @@
+.sortable .hide,
+.sortable .hide-across {
+  visibility: hidden;
+}
+
+.staged {
+  container-type: inline-size;
+}
+
+.sortable .displaced {
+  --carried: 0;
+  --toward: 1;
+
+  animation: displaced 200ms ease-out;
+}
+
+@keyframes displaced {
+  from {
+    transform: translateX(calc(var(--toward) * (var(--carried) * 1cqi + var(--base-x-2_5) + var(--hairline))));
+  }
+}
+
+.sortable .shifted {
+  --drop: 0px;
+
+  animation: shifted 200ms ease-out;
+}
+
+@keyframes shifted {
+  from {
+    transform: translateY(var(--drop));
+  }
+}

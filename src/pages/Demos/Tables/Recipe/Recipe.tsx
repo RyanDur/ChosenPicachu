@@ -9,53 +9,82 @@ import {Motion, Origin, Pace} from '../../Controls';
 import {StepEntry, StepList, aside, plain} from '../../Recipe/StepList';
 import {span, unit} from '../../Recipe/carve';
 import {SlotsFigure} from './SlotsFigure';
-import eagerKeepStatic from '@components/DragSortableTable/tables/EagerKeepStaticTable.tsx?raw';
-import eagerKeepAnimated from '@components/DragSortableTable/tables/EagerKeepAnimatedTable.tsx?raw';
-import eagerHideStatic from '@components/DragSortableTable/tables/EagerHideStaticTable.tsx?raw';
-import eagerHideAnimated from '@components/DragSortableTable/tables/EagerHideAnimatedTable.tsx?raw';
-import lazyKeepStatic from '@components/DragSortableTable/tables/LazyKeepStaticTable.tsx?raw';
-import lazyKeepAnimated from '@components/DragSortableTable/tables/LazyKeepAnimatedTable.tsx?raw';
-import lazyHideStatic from '@components/DragSortableTable/tables/LazyHideStaticTable.tsx?raw';
-import lazyHideAnimated from '@components/DragSortableTable/tables/LazyHideAnimatedTable.tsx?raw';
-import eagerSource from '@components/DragSortableTable/useEagerColumnTravel.ts?raw';
 import aloftSource from '@components/DragSortableTable/Aloft.tsx?raw';
-import lazySource from '@components/DragSortableTable/useLazyColumnTravel.ts?raw';
 import chartSource from '@components/DragSortableTable/chart.ts?raw';
-import headerSource from '@components/DragSortableTable/DraggableHeader.tsx?raw';
-import animatedHeaderSource from '@components/DragSortableTable/AnimatedDraggableHeader.tsx?raw';
 import gripSource from '@components/DragSortableTable/RowGrip.tsx?raw';
 import ghostSource from '@components/DragSortableTable/ghosts/Ghost.tsx?raw';
 import sortableCss from '@components/DragSortableTable/sortable.css?raw';
-import headerCss from '@components/DragSortableTable/DraggableHeader.css?raw';
+import headerCss from '@components/DragSortableTable/Header.css?raw';
 import ghostCss from '@components/DragSortableTable/ghosts/Ghost.css?raw';
-import hideCss from '@components/DragSortableTable/hide.css?raw';
-import displacedCss from '@components/DragSortableTable/displaced.css?raw';
-import animatedRowCss from '@components/DragSortableTable/AnimatedDraggableRow.css?raw';
-import stagedCss from '@components/DragSortableTable/staged.css?raw';
+import eksTable from '@components/DragSortableTable/EagerKeepStaticTable/EagerKeepStaticTable.tsx?raw';
+import eksHeader from '@components/DragSortableTable/EagerKeepStaticTable/Header.tsx?raw';
+import eksHook from '@components/DragSortableTable/EagerKeepStaticTable/useColumnTravel.ts?raw';
+import ekaTable from '@components/DragSortableTable/EagerKeepAnimatedTable/EagerKeepAnimatedTable.tsx?raw';
+import ekaHeader from '@components/DragSortableTable/EagerKeepAnimatedTable/Header.tsx?raw';
+import ekaHook from '@components/DragSortableTable/EagerKeepAnimatedTable/useColumnTravel.ts?raw';
+import ehsTable from '@components/DragSortableTable/EagerHideStaticTable/EagerHideStaticTable.tsx?raw';
+import ehsHeader from '@components/DragSortableTable/EagerHideStaticTable/Header.tsx?raw';
+import ehsHook from '@components/DragSortableTable/EagerHideStaticTable/useColumnTravel.ts?raw';
+import ehaTable from '@components/DragSortableTable/EagerHideAnimatedTable/EagerHideAnimatedTable.tsx?raw';
+import ehaHeader from '@components/DragSortableTable/EagerHideAnimatedTable/Header.tsx?raw';
+import ehaHook from '@components/DragSortableTable/EagerHideAnimatedTable/useColumnTravel.ts?raw';
+import lksTable from '@components/DragSortableTable/LazyKeepStaticTable/LazyKeepStaticTable.tsx?raw';
+import lksHeader from '@components/DragSortableTable/LazyKeepStaticTable/Header.tsx?raw';
+import lksHook from '@components/DragSortableTable/LazyKeepStaticTable/useColumnTravel.ts?raw';
+import lkaTable from '@components/DragSortableTable/LazyKeepAnimatedTable/LazyKeepAnimatedTable.tsx?raw';
+import lkaHeader from '@components/DragSortableTable/LazyKeepAnimatedTable/Header.tsx?raw';
+import lkaHook from '@components/DragSortableTable/LazyKeepAnimatedTable/useColumnTravel.ts?raw';
+import lhsTable from '@components/DragSortableTable/LazyHideStaticTable/LazyHideStaticTable.tsx?raw';
+import lhsHeader from '@components/DragSortableTable/LazyHideStaticTable/Header.tsx?raw';
+import lhsHook from '@components/DragSortableTable/LazyHideStaticTable/useColumnTravel.ts?raw';
+import lhaTable from '@components/DragSortableTable/LazyHideAnimatedTable/LazyHideAnimatedTable.tsx?raw';
+import lhaHeader from '@components/DragSortableTable/LazyHideAnimatedTable/Header.tsx?raw';
+import lhaHook from '@components/DragSortableTable/LazyHideAnimatedTable/useColumnTravel.ts?raw';
+import ekaCss from '@components/DragSortableTable/EagerKeepAnimatedTable/EagerKeepAnimatedTable.css?raw';
+import ehsCss from '@components/DragSortableTable/EagerHideStaticTable/EagerHideStaticTable.css?raw';
+import ehaCss from '@components/DragSortableTable/EagerHideAnimatedTable/EagerHideAnimatedTable.css?raw';
+import lkaCss from '@components/DragSortableTable/LazyKeepAnimatedTable/LazyKeepAnimatedTable.css?raw';
+import lhsCss from '@components/DragSortableTable/LazyHideStaticTable/LazyHideStaticTable.css?raw';
+import lhaCss from '@components/DragSortableTable/LazyHideAnimatedTable/LazyHideAnimatedTable.css?raw';
 import '../../Recipe/Recipe.css';
 
 const gap = plain('');
 
-const tableSources: Record<Pace, Record<Origin, Record<Motion, string>>> = {
-  eager: {
-    keep: {animated: eagerKeepAnimated, static: eagerKeepStatic},
-    hide: {animated: eagerHideAnimated, static: eagerHideStatic}
-  },
-  lazy: {
-    keep: {animated: lazyKeepAnimated, static: lazyKeepStatic},
-    hide: {animated: lazyHideAnimated, static: lazyHideStatic}
-  }
+type Sources = Record<Pace, Record<Origin, Record<Motion, string>>>;
+
+const tableSources: Sources = {
+  eager: {keep: {animated: ekaTable, static: eksTable}, hide: {animated: ehaTable, static: ehsTable}},
+  lazy: {keep: {animated: lkaTable, static: lksTable}, hide: {animated: lhaTable, static: lhsTable}}
+};
+
+const headerSources: Sources = {
+  eager: {keep: {animated: ekaHeader, static: eksHeader}, hide: {animated: ehaHeader, static: ehsHeader}},
+  lazy: {keep: {animated: lkaHeader, static: lksHeader}, hide: {animated: lhaHeader, static: lhsHeader}}
+};
+
+const hookSources: Sources = {
+  eager: {keep: {animated: ekaHook, static: eksHook}, hide: {animated: ehaHook, static: ehsHook}},
+  lazy: {keep: {animated: lkaHook, static: lksHook}, hide: {animated: lhaHook, static: lhsHook}}
+};
+
+const cssSources: Record<Pace, Record<Origin, Partial<Record<Motion, string>>>> = {
+  eager: {keep: {animated: ekaCss}, hide: {animated: ehaCss, static: ehsCss}},
+  lazy: {keep: {animated: lkaCss}, hide: {animated: lhaCss, static: lhsCss}}
 };
 
 export type Track = 'pointer' | 'keyboard';
 
 export const trackParam: D.Decoder<Track> = D.literalUnion('pointer', 'keyboard');
 
+const animatedHeader = headerSources.eager.keep.animated;
+const staticHeader = headerSources.eager.keep.static;
+const animatedCss = cssSources.eager.keep.animated ?? '';
+
 type Step = Omit<StepEntry, 'dial'> & {
   dial?: 'pace' | 'origin' | 'motion';
 };
 
-const held = (pace: 'eager' | 'lazy'): Step => pace === 'eager'
+const held = (pace: 'eager' | 'lazy', hookSrc: string): Step => pace === 'eager'
   ? {
     title: 'Commit inside the move',
     dial: 'pace',
@@ -69,7 +98,7 @@ const held = (pace: 'eager' | 'lazy'): Step => pace === 'eager'
       'pointer capture, the drift feeds the ghost, and a strike settles on the spot.'],
     code: [
       {label: 'JS', lines: [
-        ...unit(eagerSource, 'const travel = ')
+        ...unit(hookSrc, 'const travel = ')
       ]},
       {label: 'HTML', lines: [
         plain('<DraggableHeader key={key} ... />'),
@@ -89,13 +118,13 @@ const held = (pace: 'eager' | 'lazy'): Step => pace === 'eager'
       'commits it.'],
     code: [
       {label: 'JS', lines: [
-        ...unit(lazySource, 'const travel = '), gap,
-        ...unit(lazySource, 'const drop = ')
+        ...unit(hookSrc, 'const travel = '), gap,
+        ...unit(hookSrc, 'const drop = ')
       ]}
     ]
   };
 
-const shown = (origin: 'keep' | 'hide', source: string, headerSrc: string): Step => origin === 'hide'
+const shown = (origin: 'keep' | 'hide', source: string, headerSrc: string, cssSrc: string): Step => origin === 'hide'
   ? {
     title: 'Blank the origin while it is aloft',
     dial: 'origin',
@@ -115,7 +144,7 @@ const shown = (origin: 'keep' | 'hide', source: string, headerSrc: string): Step
         aside('// being the hide table is the flag; the element serves itself')
       ]},
       {label: 'CSS', lines: [
-        ...unit(hideCss, '.sortable .hide,'),
+        ...unit(cssSrc, '.sortable .hide,'),
         aside('/* the box stops painting; its layout space stays */')
       ]}
     ]
@@ -134,7 +163,7 @@ const shown = (origin: 'keep' | 'hide', source: string, headerSrc: string): Step
     ]
   };
 
-const moved = (animated: boolean, source: string): Step => animated
+const moved = (animated: boolean, source: string, cssSrc: string): Step => animated
   ? {
     title: 'Slide the theater, not the layout',
     dial: 'motion',
@@ -169,12 +198,12 @@ const moved = (animated: boolean, source: string): Step => animated
         aside('{/* the reorder moves the node; the class rides along */}')
       ]},
       {label: 'CSS', lines: [
-        ...unit(stagedCss, '.staged {'), gap,
-        ...unit(displacedCss, '.sortable .displaced {'), gap,
-        ...unit(animatedRowCss, '.sortable .shifted {'), gap,
-        ...unit(displacedCss, '@keyframes displaced'),
+        ...unit(cssSrc, '.staged {'), gap,
+        ...unit(cssSrc, '.sortable .displaced {'), gap,
+        ...unit(cssSrc, '.sortable .shifted {'), gap,
+        ...unit(cssSrc, '@keyframes displaced'),
         aside('/* --toward flips the sign; direction is data, not a name */'), gap,
-        ...unit(animatedRowCss, '@keyframes shifted')
+        ...unit(cssSrc, '@keyframes shifted')
       ]}
     ]
   }
@@ -197,7 +226,9 @@ const moved = (animated: boolean, source: string): Step => animated
 
 const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
   const source = tableSources[pace][origin][motion];
-  const headerSrc = motion === 'animated' ? animatedHeaderSource : headerSource;
+  const headerSrc = headerSources[pace][origin][motion];
+  const hookSrc = hookSources[pace][origin][motion];
+  const cssSrc = cssSources[pace][origin][motion] ?? '';
   return [
   {
     title: 'Let CSS carry its share',
@@ -254,7 +285,7 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
       'would fight the reorder you are about to apply.'],
     code: [
       {label: 'JS', lines: [
-        ...unit(eagerSource, 'const lift = '), gap,
+        ...unit(hookSrc, 'const lift = '), gap,
         ...span(source, 'onLift={columnsTravel.lift}', 'onLift={columnsTravel.lift}')
       ]},
       {label: 'CSS', lines: [
@@ -277,8 +308,8 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
         ...span(aloftSource, '(has(columnsTravel.aloft) || has(rowsTravel.aloft))', '{...surface}')
       ]},
       {label: 'JS', lines: [
-        ...span(eagerSource, 'onPointerMove: travel', 'onLostPointerCapture: drop'), gap,
-        ...unit(eagerSource, 'const drop = '),
+        ...span(hookSrc, 'onPointerMove: travel', 'onLostPointerCapture: drop'), gap,
+        ...unit(hookSrc, 'const drop = '),
         aside('// cancel and lost capture are not delegates — they ARE the drop')
       ]},
       {label: 'CSS', lines: [
@@ -301,7 +332,7 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
         aside('{/* the same cells, rendered again from the data */}')
       ]},
       {label: 'JS', lines: [
-        ...span(eagerSource, 'setDrift({x: event.clientX - origin.x',
+        ...span(hookSrc, 'setDrift({x: event.clientX - origin.x',
           'setDrift({x: event.clientX - origin.x')
       ]},
       {label: 'CSS', lines: [
@@ -327,9 +358,9 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
       ]}
     ]
   },
-  held(pace),
-  shown(origin, source, headerSrc),
-  moved(motion === 'animated', source)
+  held(pace, hookSrc),
+  shown(origin, source, headerSrc, cssSrc),
+  moved(motion === 'animated', source, cssSrc)
 ];
 };
 
@@ -344,11 +375,11 @@ const nudgedBoth = (animated: boolean): Step => animated
       'arrive as the reorder moves the nodes, so both slides start fresh without a line of new CSS.'],
     code: [
       {label: 'JS', lines: [
-        ...span(animatedHeaderSource, 'const neighbour = order[to];', '});'),
+        ...span(animatedHeader, 'const neighbour = order[to];', '});'),
         aside('// each starts where the other now sits')
       ]},
       {label: 'CSS', lines: [
-        ...unit(displacedCss, '.sortable .displaced {'),
+        ...unit(animatedCss, '.sortable .displaced {'),
         aside('/* the pointer track’s keyframe, unchanged — --toward flips the sign */')
       ]}
     ]
@@ -362,14 +393,14 @@ const nudgedBoth = (animated: boolean): Step => animated
       'fast as the key repeats.'],
     code: [
       {label: 'JS', lines: [
-        ...span(headerSource, 'const from = order.indexOf(columnName);', 'onOrdered(columnName, to);'),
+        ...span(staticHeader, 'const from = order.indexOf(columnName);', 'onOrdered(columnName, to);'),
         aside('// the whole walk — nothing marked, nothing to wait for')
       ]}
     ]
   };
 
 const keyedSteps = (motion: Motion): Step[] => {
-  const headerSrc = motion === 'animated' ? animatedHeaderSource : headerSource;
+  const headerSrc = headerSources.eager.keep[motion];
   return [
   {
     title: 'Give focus a place to land',
@@ -380,7 +411,7 @@ const keyedSteps = (motion: Motion): Step[] => {
       'only — pointer users never see it.'],
     code: [
       {label: 'HTML', lines: [
-        ...span(headerSource, 'tabIndex={travels', 'tabIndex={travels'), gap,
+        ...span(staticHeader, 'tabIndex={travels', 'tabIndex={travels'), gap,
         ...span(gripSource, '<button', '</button>'),
         aside('{/* the button was focusable all along; the header asks */}')
       ]},
@@ -415,11 +446,11 @@ const keyedSteps = (motion: Motion): Step[] => {
         'debounce clock, and CSS already set its length.'],
       code: [
         {label: 'JS', lines: [
-          ...span(animatedHeaderSource, 'if ((event.currentTarget.getAnimations', '}'),
+          ...span(animatedHeader, 'if ((event.currentTarget.getAnimations', '}'),
           aside('// while the slide runs, the key falls silent')
         ]},
         {label: 'CSS', lines: [
-          ...unit(displacedCss, '.sortable .displaced {'),
+          ...unit(animatedCss, '.sortable .displaced {'),
           aside('/* the 200ms IS the debounce interval */')
         ]}
       ]

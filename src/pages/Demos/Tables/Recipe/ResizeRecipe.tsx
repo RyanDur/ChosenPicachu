@@ -4,7 +4,7 @@ import {span, unit} from '../../Recipe/carve';
 import sharesSource from '@components/Table/shares.ts?raw';
 import resizeSource from '@components/Table/ResizeHandle.tsx?raw';
 import baseCss from '@components/Table/Table.css?raw';
-import headerCss from '@components/DragSortableTable/DraggableHeader.css?raw';
+import headerCss from '@components/DragSortableTable/Header.css?raw';
 import '../../Recipe/Recipe.css';
 
 const gap = plain('');
