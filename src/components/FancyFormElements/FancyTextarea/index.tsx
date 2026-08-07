@@ -1,4 +1,4 @@
-import {join} from '@components/class-names';
+import {classNames} from '@components/class-names';
 import {FC, FormEvent, useState} from 'react';
 import {Consumer} from '@ryandur/sand';
 
@@ -16,7 +16,7 @@ export const FancyTextarea: FC<FancyTextareaProps> = (
     }) => {
     const [focused, updateDetailsFocus] = useState(false);
 
-    return <article id="details-cell" className={join(
+    return <article id="details-cell" className={classNames(
         'fancy-textarea',
         'fancy',
         focused && 'focus',

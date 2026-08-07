@@ -1,6 +1,6 @@
 import {FC, PropsWithChildren, useContext, useState} from 'react';
 import {Link} from 'react-router';
-import {join} from '@components/class-names';
+import {classNames} from '@components/class-names';
 import {Loading} from '@components/Loading';
 import {useSearchParamsObject} from '@components/search-params';
 import * as D from 'schemawax';
@@ -40,7 +40,7 @@ export const Image: FC<ImageProps> = (
              src={noImage}/> :
         (<>
             <ConditionalLink enabled={linkEnabled} area={tab ?? ''}>
-                <img className={join('image', 'off-screen', className)}
+                <img className={classNames('image', 'off-screen', className)}
                      referrerPolicy="no-referrer"
                      onError={() => {
                          isComplete(true);

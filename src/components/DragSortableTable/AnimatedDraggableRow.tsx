@@ -1,6 +1,6 @@
 import {FC, PointerEvent} from 'react';
 import {has} from '@ryandur/sand';
-import {join} from '@components/class-names';
+import {classNames} from '@components/class-names';
 import {array} from '@components/arrays';
 import {Column, Row} from '@components/Table';
 import {Shifted, Slid, charted, shifts} from './chart';
@@ -31,13 +31,13 @@ export const AnimatedDraggableRow: FC<Props> = (
 ) => {
     const hidden = aloft === seat;
     const drop = shifted?.[seat];
-    return <tr className={join(className, has(drop) && 'shifted')}
+    return <tr className={classNames(className, has(drop) && 'shifted')}
         style={has(drop) ? {'--drop': `${drop}px`} : undefined}>
         {columns.map(({column}, columnNumber) => {
             const cell = row[column];
             const key = String(column);
             const displaced = slid?.[key];
-            return <td className={join(
+            return <td className={classNames(
                            cellClassName, cell.className,
                            clipped && 'ellipsis',
                            aloftColumn === key && 'hide',

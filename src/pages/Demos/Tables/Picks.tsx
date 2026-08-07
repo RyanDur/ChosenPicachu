@@ -1,4 +1,4 @@
-import {join} from '@components/class-names';
+import {classNames} from '@components/class-names';
 import './Picks.css';
 
 type Option<T extends string> = {
@@ -15,11 +15,11 @@ type Props<T extends string> = {
 };
 
 export const Picks = <T extends string>({label, className, options, chosen, onPick}: Props<T>) =>
-  <nav className={join('picks', className)} aria-label={label}>
+  <nav className={classNames('picks', className)} aria-label={label}>
     {options.map(({display, value}) =>
       <button type="button"
               key={value}
-              className={join('pick', chosen === value && 'current')}
+              className={classNames('pick', chosen === value && 'current')}
               aria-pressed={chosen === value}
               onClick={() => onPick(value)}>{display}</button>)}
   </nav>;

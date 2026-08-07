@@ -1,7 +1,7 @@
 import {FC, useState} from 'react';
 import {has, notEmpty} from '@ryandur/sand';
 import {array} from '@components/arrays';
-import {join} from '@components/class-names';
+import {classNames} from '@components/class-names';
 import {Column, Shares, TableProps, seededShares} from '@components/Table';
 import {useLazyColumnTravel} from './useLazyColumnTravel';
 import {useLazyRowTravel} from './useLazyRowTravel';
@@ -60,22 +60,22 @@ export const LazyHideStaticTable: FC<LazyHideStaticTableProps> = (
     const ruled = (column: string, direction: Direction | undefined): void =>
         setRule(has(direction) ? {column, direction} : undefined);
 
-    const headerClassName = join(dress.thClassName, dress.cellClassName);
-    const rowClassName = join(dress.trClassName, dress.rowClassName);
-    const cellClassName = join(dress.tdClassName, dress.cellClassName);
+    const headerClassName = classNames(dress.thClassName, dress.cellClassName);
+    const rowClassName = classNames(dress.trClassName, dress.rowClassName);
+    const cellClassName = classNames(dress.tdClassName, dress.cellClassName);
     const aloftColumn = ordered.find(definition => String(definition.column) === columnsTravel.aloft);
     const aloftRow = has(rowsTravel.aloft) ? rows[rowsTravel.aloft] : undefined;
     const surface = has(columnsTravel.aloft) ? columnsTravel.surface : rowsTravel.surface;
 
     return <>
         <table id={id}
-               className={join(
+               className={classNames(
                    dress.tableClassName,
                    clipped && 'apportioned',
                    (draggableColumns || draggableRows) && 'sortable'
                )}>
             <thead className={dress.theadClassName}>
-            <tr className={join(
+            <tr className={classNames(
                 dress.trClassName,
                 dress.headerRowClassName
             )}>{ordered.map((column, position) =>

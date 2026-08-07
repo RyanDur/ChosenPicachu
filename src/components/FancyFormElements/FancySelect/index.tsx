@@ -1,5 +1,5 @@
 import {FC, FormEvent, PropsWithChildren} from 'react';
-import {join} from '@components/class-names';
+import {classNames} from '@components/class-names';
 import {FancyInput} from '../FancyInput';
 import {Consumer} from '@ryandur/sand';
 import './FancySelect.css';
@@ -32,9 +32,9 @@ export const FancySelect: FC<PropsWithChildren<FancySelectProps>> = (
         readOnly
     }
 ) => (readOnly || disabled) ? <FancyInput className={className} id={id} value={value} readOnly={readOnly} disabled={disabled} inputId={selectId}>{children}</FancyInput> :
-    <article id={id} className={join('fancy-select', 'fancy', value && 'not-empty', className)}>
+    <article id={id} className={classNames('fancy-select', 'fancy', value && 'not-empty', className)}>
         <select id={selectId}
-                className={join('fancy-select-box fancy-text', selectClassName)}
+                className={classNames('fancy-select-box fancy-text', selectClassName)}
                 {...(value ? {value} : {defaultValue: ''})}
                 required={required}
                 disabled={disabled || readOnly}
@@ -43,5 +43,5 @@ export const FancySelect: FC<PropsWithChildren<FancySelectProps>> = (
                 ...Array.from(optionValues).map(state => <option key={state}>{state}</option>)
             ]}
         </select>
-        <label className={join('fancy-title', selectClassName)} htmlFor={selectId}>{children}</label>
+        <label className={classNames('fancy-title', selectClassName)} htmlFor={selectId}>{children}</label>
     </article>;

@@ -1,6 +1,6 @@
 import {FC, ReactNode} from 'react';
 import {has} from '@ryandur/sand';
-import {join} from '@components/class-names';
+import {classNames} from '@components/class-names';
 import {Line, Snippet} from './Snippet';
 
 export type Block = {
@@ -23,7 +23,7 @@ export const aside = (text: string): Line => ({text, dim: true});
 export const StepList: FC<{steps: StepEntry[]}> = ({steps}) =>
   <ol className="steps">
     {steps.map(step =>
-      <li className={join('step', has(step.dial) && 'tuned')} key={step.title}>
+      <li className={classNames('step', has(step.dial) && 'tuned')} key={step.title}>
         <article className="step-body">
           <div className="step-heading">
             <h3 className="step-title">{step.title}</h3>

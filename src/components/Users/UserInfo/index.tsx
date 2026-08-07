@@ -1,7 +1,7 @@
 import {FC, useEffect, useReducer, useState, useContext} from 'react';
 import {isPersisted, NewUser, User} from './types';
 import {FancyInput} from '@components/FancyFormElements/FancyInput';
-import {join} from '@components/class-names';
+import {classNames} from '@components/class-names';
 import {FancyTextarea} from '@components/FancyFormElements/FancyTextarea';
 import {
   resetForm,
@@ -57,7 +57,7 @@ export const UserInformation: FC<FormProps> = (
 
     return <form id="user-info-form"
                  aria-label="user info"
-                 className={join('user-information', readOnly && 'read-only')}
+                 className={classNames('user-information', readOnly && 'read-only')}
                  onSubmit={event => {
                      event.preventDefault();
 
@@ -98,7 +98,7 @@ export const UserInformation: FC<FormProps> = (
 
         <button type="button" id="avatar-cell"
                 aria-label="Generate a new avatar"
-                className={join('card', readOnly && 'read-only')}
+                className={classNames('card', readOnly && 'read-only')}
                 disabled={readOnly}
                 onClick={() => dispatch(updateAvatar(generateAvatar()))}>
             <img id="avatar" src={user.avatar} width="244" height="244" fetchPriority="high" alt="avatar"/>
@@ -109,7 +109,7 @@ export const UserInformation: FC<FormProps> = (
                  onChange={address => dispatch(updateHomeAddress(address))}/>
 
         <h3 id="work-address-title" className="subheading">Work Address</h3>
-        <article id="same-as-home-cell" className={join(readOnly && 'read-only')}>
+        <article id="same-as-home-cell" className={classNames(readOnly && 'read-only')}>
             <input id="same-as-home" type="checkbox" checked={sameAsHome} disabled={readOnly}
                    onChange={event => updateSameAsHome(event.currentTarget.checked)}/>
             <label id="same-as-home-title" htmlFor="same-as-home">Same as Home</label>

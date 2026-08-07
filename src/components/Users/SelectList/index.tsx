@@ -1,6 +1,6 @@
 import {ChangeEvent, FC} from 'react';
 import {User} from '@components/Users/UserInfo/types';
-import {join} from '@components/class-names';
+import {classNames} from '@components/class-names';
 import {Consumer, has} from '@ryandur/sand';
 import cancelIcon from '../../../assets/icons/cancel.png';
 import './fiends-list.css';
@@ -27,7 +27,7 @@ export const FriendsList: FC<Props> = ({users, user, onChange}) => {
 
   const remove = (friend: User) => onChange(user.friends.filter(id => id !== friend.id));
 
-  return <article className={join('friends-list', has(friends) && 'not-empty')}>
+  return <article className={classNames('friends-list', has(friends) && 'not-empty')}>
     <ul className="friends" aria-label="friends">{friends.map(friend =>
       <li className="friend" key={friend.id}>
         <label className="friend-title ellipsis"

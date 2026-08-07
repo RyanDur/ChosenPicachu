@@ -1,6 +1,6 @@
 import {FC, KeyboardEvent, MouseEvent, PointerEvent} from 'react';
 import {has, not} from '@ryandur/sand';
-import {join} from '@components/class-names';
+import {classNames} from '@components/class-names';
 import {Column, ResizeHandle, Shares, neighborOf, traded} from '@components/Table';
 import {Menu} from '@components/Menu';
 import {anchored} from './chart';
@@ -36,7 +36,7 @@ export const DraggableHeader: FC<Props> = (
     const travels = draggable && not(anchored(position, count));
     const hidden = aloft === key;
     const sorted = rule?.column === key ? rule.direction : undefined;
-    return <th className={join(
+    return <th className={classNames(
                className, column.className,
                'slot',
                clipped && 'clipped',

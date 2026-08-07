@@ -1,6 +1,6 @@
 import {FC, useEffect} from 'react';
 import {Link, useLocation} from 'react-router';
-import {join} from '@components/class-names';
+import {classNames} from '@components/class-names';
 import {useSearchParamsObject} from '@components/search-params';
 import * as D from 'schemawax';
 import {not} from '@ryandur/sand';
@@ -27,7 +27,7 @@ export const Tabs: FC<Props> = ({values, id, label, defaultTab}) => {
   }, [tab, updateSearchParams, values, defaultTab]);
 
   return <nav aria-label={label} id={id} className="tabs">{values.map(({param, display}) =>
-    <span className={join('tab', tab === param && 'current')} key={param}>
+    <span className={classNames('tab', tab === param && 'current')} key={param}>
       <Link to={`${pathname}${createSearchParams({tab: param})}`}
             className="path">{display}</Link>
     </span>

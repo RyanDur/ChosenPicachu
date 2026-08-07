@@ -1,7 +1,7 @@
 import {FC, MouseEvent, useState} from 'react';
 import {has, notEmpty} from '@ryandur/sand';
 import {array} from '@components/arrays';
-import {join} from '@components/class-names';
+import {classNames} from '@components/class-names';
 import {Column, Shares, TableProps, seededShares} from '@components/Table';
 import {useEagerColumnTravel} from './useEagerColumnTravel';
 import {useEagerRowTravel} from './useEagerRowTravel';
@@ -79,9 +79,9 @@ export const EagerHideAnimatedTable: FC<EagerHideAnimatedTableProps> = (
         setRule(next);
     };
 
-    const headerClassName = join(dress.thClassName, dress.cellClassName);
-    const rowClassName = join(dress.trClassName, dress.rowClassName);
-    const cellClassName = join(dress.tdClassName, dress.cellClassName);
+    const headerClassName = classNames(dress.thClassName, dress.cellClassName);
+    const rowClassName = classNames(dress.trClassName, dress.rowClassName);
+    const cellClassName = classNames(dress.tdClassName, dress.cellClassName);
     const aloftColumn = ordered.find(definition => String(definition.column) === columnsTravel.aloft);
     const aloftRow = has(rowsTravel.aloft) ? rows[rowsTravel.aloft] : undefined;
     const surface = has(columnsTravel.aloft) ? columnsTravel.surface : rowsTravel.surface;
@@ -96,14 +96,14 @@ export const EagerHideAnimatedTable: FC<EagerHideAnimatedTableProps> = (
                        setShifted(undefined);
                    }
                }}
-               className={join(
+               className={classNames(
                    dress.tableClassName,
                    'staged',
                    clipped && 'apportioned',
                    (draggableColumns || draggableRows) && 'sortable'
                )}>
             <thead className={dress.theadClassName}>
-            <tr className={join(
+            <tr className={classNames(
                 dress.trClassName,
                 dress.headerRowClassName
             )}>{ordered.map((column, position) =>
