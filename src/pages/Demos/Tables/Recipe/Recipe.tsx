@@ -94,7 +94,7 @@ const held = (pace: 'eager' | 'lazy'): Step => pace === 'eager'
     ]
   };
 
-const shown = (origin: 'keep' | 'hide', source: string): Step => origin === 'hide'
+const shown = (origin: 'keep' | 'hide', source: string, headerSrc: string): Step => origin === 'hide'
   ? {
     title: 'Blank the origin while it is aloft',
     dial: 'origin',
@@ -106,8 +106,12 @@ const shown = (origin: 'keep' | 'hide', source: string): Step => origin === 'hid
       'will land. Nothing unmounts.'],
     code: [
       {label: 'HTML', lines: [
-        ...span(source, 'hidden={columnsTravel.aloft === key}', 'hidden={columnsTravel.aloft === key}'),
-        ...span(source, 'hidden={rowsTravel.aloft === seat}', 'hiddenColumn={columnsTravel.aloft}')
+        ...span(source, 'aloft={columnsTravel.aloft}', 'aloft={columnsTravel.aloft}'), gap,
+        ...span(source, 'aloft={rowsTravel.aloft}', 'aloftColumn={columnsTravel.aloft}')
+      ]},
+      {label: 'JS', lines: [
+        ...span(headerSrc, 'const hidden = aloft === key;', 'const hidden = aloft === key;'),
+        aside('// being the hide table is the flag; the element serves itself')
       ]},
       {label: 'CSS', lines: [
         ...unit(hideCss, '.sortable .hide,'),
@@ -193,6 +197,7 @@ const moved = (animated: boolean, source: string): Step => animated
 
 const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
   const source = tableSources[pace][origin][motion];
+  const headerSrc = motion === 'animated' ? animatedHeaderSource : headerSource;
   return [
   {
     title: 'Let CSS carry its share',
@@ -250,7 +255,7 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
     code: [
       {label: 'JS', lines: [
         ...unit(eagerSource, 'const lift = '), gap,
-        ...span(source, 'onLift={columnsTravel.lift(key)}', 'onLift={columnsTravel.lift(key)}')
+        ...span(source, 'onLift={columnsTravel.lift}', 'onLift={columnsTravel.lift}')
       ]},
       {label: 'CSS', lines: [
         ...unit(sortableCss, '.grabbable {')
@@ -323,7 +328,7 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
     ]
   },
   held(pace),
-  shown(origin, source),
+  shown(origin, source, headerSrc),
   moved(motion === 'animated', source)
 ];
 };

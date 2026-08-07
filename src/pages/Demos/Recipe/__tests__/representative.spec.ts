@@ -10,9 +10,9 @@ describe('the hand-written tutorial fragments still tell the truth', () => {
   test.each([
     ['headers render through the order', tableSource, 'ordered.map((column'],
     ['the lifted header blanks by comparison', tableSource,
-      'hidden={columnsTravel.aloft === key}'],
+      'aloft={columnsTravel.aloft}'],
     ['the lifted column blanks across rows', tableSource,
-      'hiddenColumn={columnsTravel.aloft}'],
+      'aloftColumn={columnsTravel.aloft}'],
     ['headers are real column headers', headerSource, 'scope="col"'],
     ['a displaced header wears its direction', animatedHeaderSource, 'displaced-${displaced.toward}'],
     ['a shifted row wears the class', rowSource, "has(drop) && 'shifted'"],

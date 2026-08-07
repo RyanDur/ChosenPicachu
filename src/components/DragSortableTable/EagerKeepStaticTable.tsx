@@ -1,13 +1,13 @@
 import {FC, useState} from 'react';
-import {has, not, notEmpty} from '@ryandur/sand';
+import {has, notEmpty} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {join} from '@components/class-names';
-import {Shares, TableProps, neighborOf, seededShares, traded} from '@components/Table';
+import {Shares, TableProps, seededShares} from '@components/Table';
 import {useEagerColumnTravel} from './useEagerColumnTravel';
 import {useEagerRowTravel} from './useEagerRowTravel';
-import {anchored} from './chart';
 import {ColumnGhost, RowGhost} from './ghosts';
-import {DraggableHeader, Direction} from './DraggableHeader';
+import {Direction} from './DraggableHeader';
+import {DraggableHeader} from './DraggableHeader';
 import {DraggableRow} from './DraggableRow';
 import './sortable.css';
 
@@ -61,6 +61,8 @@ export const EagerKeepStaticTable: FC<EagerKeepStaticTableProps> = (
     };
     const rowsTravel = useEagerRowTravel(seats, settleRow);
 
+    const ruled = (column: string, direction: Direction | undefined): void =>
+        setRule(has(direction) ? {column, direction} : undefined);
 
     const aloftColumn = has(columnsTravel.aloft) ? byKey.get(columnsTravel.aloft) : undefined;
     const aloftRow = has(rowsTravel.aloft) ? rows[rowsTravel.aloft] : undefined;
@@ -77,45 +79,43 @@ export const EagerKeepStaticTable: FC<EagerKeepStaticTableProps> = (
             <tr className={join(
                 dress.trClassName,
                 dress.headerRowClassName
-            )}>{ordered.map((column, position) => {
-                const key = String(column.column);
-                return <DraggableHeader key={key}
-                                        column={column}
-                                        order={order}
-                                        share={has(column.width) ? shares[key] : undefined}
-                                        clipped={clipped}
-                                        travels={draggableColumns && not(anchored(position, ordered.length))}
-                                        sorted={rule?.column === key ? rule.direction : undefined}
-                                        dress={dress}
-                                        onLift={columnsTravel.lift(key)}
-                                        onOrdered={setOrder}
-                                        onTrade={apportioned.length > 1
-                                            ? delta => setShares(traded(key, neighborOf(apportioned, key), delta))
-                                            : undefined}
-                                        onRule={sortable && position > 0
-                                            ? direction => setRule(has(direction) ? {column: key, direction} : undefined)
-                                            : undefined}/>;
-            })}</tr>
+            )}>{ordered.map((column, position) =>
+                <DraggableHeader key={String(column.column)}
+                    column={column}
+                    order={order}
+                    shares={shares}
+                    apportioned={apportioned}
+                    clipped={clipped}
+                    position={position}
+                    count={ordered.length}
+                    draggable={draggableColumns}
+                    rule={rule}
+                    dress={dress}
+                    onLift={columnsTravel.lift}
+                    onOrdered={setOrder}
+                    onShared={setShares}
+                    onRule={sortable ? ruled : undefined}/>
+            )}</tr>
             </thead>
             <tbody className={dress.tbodyClassName}>{arranged.map(({row, seat}, position) =>
                 <DraggableRow key={seat}
-                              row={row}
-                              columns={ordered}
-                              position={position}
-                              seat={seat}
-                              standing={standing}
-                              clipped={clipped}
-                              gripped={draggableRows}
-                              dress={dress}
-                              onLift={event => {
-                          setRule(undefined);
-                          setSeats(standing);
-                          rowsTravel.lift(seat)(event);
-                      }}
-                              onArranged={after => {
-                                  setRule(undefined);
-                                  setSeats(after);
-                              }}/>
+                    row={row}
+                    columns={ordered}
+                    position={position}
+                    seat={seat}
+                    standing={standing}
+                    clipped={clipped}
+                    gripped={draggableRows}
+                    dress={dress}
+                    onLift={(lifted, event) => {
+                        setRule(undefined);
+                        setSeats(standing);
+                        rowsTravel.lift(lifted)(event);
+                    }}
+                    onArranged={after => {
+                        setRule(undefined);
+                        setSeats(after);
+                    }}/>
             )}</tbody>
         </table>
         {has(aloftColumn) &&
