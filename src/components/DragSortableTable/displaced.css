@@ -1,24 +1,12 @@
-.sortable .displaced-left,
-.sortable .displaced-right {
+.sortable .displaced {
   --carried: 0;
+  --toward: 1;
+
+  animation: displaced 200ms ease-out;
 }
 
-.sortable .displaced-left {
-  animation: displaced-left 200ms ease-out;
-}
-
-.sortable .displaced-right {
-  animation: displaced-right 200ms ease-out;
-}
-
-@keyframes displaced-left {
+@keyframes displaced {
   from {
-    transform: translateX(calc(var(--carried) * 1cqi + var(--base-x-2_5) + var(--hairline)));
-  }
-}
-
-@keyframes displaced-right {
-  from {
-    transform: translateX(calc(var(--carried) * -1cqi - var(--base-x-2_5) - var(--hairline)));
+    transform: translateX(calc(var(--toward) * (var(--carried) * 1cqi + var(--base-x-2_5) + var(--hairline))));
   }
 }

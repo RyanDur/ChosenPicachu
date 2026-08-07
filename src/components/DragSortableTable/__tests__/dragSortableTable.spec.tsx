@@ -475,9 +475,11 @@ describe('animated moves', () => {
     await userEvent.keyboard('{ArrowRight}');
 
     expect(headerTexts()).toEqual(['name', 'city', 'age', 'job']);
-    expect(within(table).getByRole('columnheader', {name: /^age/}).classList).toContain('displaced-right');
+    expect(within(table).getByRole('columnheader', {name: /^age/}).classList).toContain('displaced');
+    expect(within(table).getByRole('columnheader', {name: /^age/})).toHaveStyle({'--toward': '-1'});
     expect(within(table).getByRole('columnheader', {name: /^age/})).toHaveStyle({'--carried': '20'});
-    expect(within(table).getByRole('columnheader', {name: /^city/}).classList).toContain('displaced-left');
+    expect(within(table).getByRole('columnheader', {name: /^city/}).classList).toContain('displaced');
+    expect(within(table).getByRole('columnheader', {name: /^city/})).toHaveStyle({'--toward': '1'});
     expect(within(table).getByRole('columnheader', {name: /^city/})).toHaveStyle({'--carried': '20'});
 
     await userEvent.keyboard('{ArrowLeft}');
@@ -552,15 +554,15 @@ describe('animated moves', () => {
     fireEvent.pointerMove(surface, {buttons: 1, clientX: 410, clientY: 50, pointerId: 1});
 
     const displaced = within(table).getByRole('columnheader', {name: /^city/});
-    expect(displaced.classList).toContain('displaced-left');
+    expect(displaced.classList).toContain('displaced');
     expect(displaced).toHaveStyle({'--carried': '20'});
     expect(transition).not.toHaveBeenCalled();
 
     for (const name of ['animationend', 'webkitAnimationEnd']) {
-      fireEvent(displaced, Object.assign(new Event(name, {bubbles: true}), {animationName: 'displaced-left'}));
+      fireEvent(displaced, Object.assign(new Event(name, {bubbles: true}), {animationName: 'displaced'}));
     }
     expect(within(table).getByRole('columnheader', {name: /^city/}).classList)
-      .not.toContain('displaced-left');
+      .not.toContain('displaced');
   });
 
 });

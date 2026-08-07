@@ -14,7 +14,7 @@ describe('the hand-written tutorial fragments still tell the truth', () => {
     ['the lifted column blanks across rows', tableSource,
       'aloftColumn: columnsTravel.aloft,'],
     ['headers are real column headers', headerSource, 'scope="col"'],
-    ['a displaced header wears its direction', animatedHeaderSource, 'displaced-${displaced.toward}'],
+    ["a displaced header carries its direction as data", animatedHeaderSource, "'--toward': displaced.toward === 'left' ? '1' : '-1'"],
     ['a shifted row wears the class', rowSource, "has(drop) && 'shifted'"],
     ['a shifted row carries its drop', rowSource, "'--drop': `${drop}px`"],
     ['the grip arms the native drag', draggableSource, 'draggable={is(dragging)}'],

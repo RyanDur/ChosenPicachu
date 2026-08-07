@@ -121,7 +121,7 @@ export const LazyKeepAnimatedTable: FC<LazyKeepAnimatedTableProps> = (
     return <>
         <table id={id}
                onAnimationEnd={event => {
-                   if (event.animationName.startsWith('displaced-')) {
+                   if (event.animationName === 'displaced') {
                        setSlid(undefined);
                    }
                    if (event.animationName === 'shifted') {

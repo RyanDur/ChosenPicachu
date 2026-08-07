@@ -46,10 +46,12 @@ export const AnimatedDraggableRow: FC<Props> = ({seat, table}) => {
         clipped && 'ellipsis',
         aloftColumn === key && 'hide',
         hidden && 'hide-across',
-        has(displaced) && `displaced-${displaced.toward}`
+        has(displaced) && 'displaced'
       )}
                  key={key}
-                 style={has(displaced) ? {'--carried': `${displaced.by}`} : undefined}>
+                 style={has(displaced)
+                   ? {'--carried': `${displaced.by}`, '--toward': displaced.toward === 'left' ? '1' : '-1'}
+                   : undefined}>
         {columnNumber === 0 && gripped &&
             <RowGrip row={position + 1} onLift={onLift(seat)}
                      onNudge={(toward, event) => {
