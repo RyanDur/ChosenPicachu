@@ -1,11 +1,11 @@
 import {PointerEvent, useState} from 'react';
 import {has} from '@ryandur/sand';
 import {Drift, Flight, grounded, still} from './travel';
-import {Chart, charted, seatUnder} from './chart';
+import {Chart, charted, cardUnder} from './chart';
 
 export const useLazyRowTravel = (
     standing: readonly number[],
-    settle: (seat: number, struck: number, heights: Readonly<Record<number, number>>) => void
+    settle: (card: number, struck: number, heights: Readonly<Record<number, number>>) => void
 ) => {
     const [aloft, setAloft] = useState<number>();
     const [chart, setChart] = useState<Chart>();
@@ -13,9 +13,9 @@ export const useLazyRowTravel = (
     const [origin, setOrigin] = useState<Drift>();
     const [drift, setDrift] = useState<Drift>(still);
     const [landing, setLanding] = useState<number>();
-    const strike = seatUnder(standing, chart);
+    const strike = cardUnder(standing, chart);
 
-    const lift = (seat: number) =>
+    const lift = (card: number) =>
         (event: PointerEvent<HTMLElement>): void => {
             const lane = event.currentTarget.closest('tr');
             const table = event.currentTarget.closest('table');
@@ -24,7 +24,7 @@ export const useLazyRowTravel = (
             }
             const anchored = lane?.getBoundingClientRect();
             setFlight({x: anchored?.x ?? 0, y: anchored?.y ?? 0, width: anchored?.width ?? 0});
-            setAloft(seat);
+            setAloft(card);
         };
 
     const drop = (): void => {

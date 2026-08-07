@@ -24,9 +24,9 @@ export const charted = (surface: HTMLTableElement, seats: readonly number[]): Ch
     const body = surface.tBodies[0];
     return {
         ...bounded(surface),
-        rowHeights: seats.reduce((heights, seat, position) => ({
+        rowHeights: seats.reduce((heights, card, position) => ({
             ...heights,
-            [seat]: body?.rows[position]?.getBoundingClientRect().height ?? 0
+            [card]: body?.rows[position]?.getBoundingClientRect().height ?? 0
         }), {})
     };
 };
@@ -56,26 +56,26 @@ export const columnUnder = (order: readonly string[], shares: Shares, chart?: Bo
         return undefined;
     };
 
-export const seatUnder = (seats: readonly number[], chart?: Chart) =>
+export const cardUnder = (seats: readonly number[], chart?: Chart) =>
     (x: number, y: number, aloft?: number): number | undefined => {
         if (has(chart) && has(aloft) && x >= chart.left && x <= chart.left + chart.width) {
             const {top, height, rowHeights} = chart;
             let edge = top + height -
-                seats.reduce((total, seat) => total + rowHeights[seat], 0);
-            const slots = seats.map((seat, at) => {
-                const rowHeight = rowHeights[seat];
+                seats.reduce((total, card) => total + rowHeights[card], 0);
+            const slots = seats.map((card, at) => {
+                const rowHeight = rowHeights[card];
                 edge += rowHeight;
-                return {seat, at, height: rowHeight, start: edge - rowHeight, end: edge};
+                return {card, at, height: rowHeight, start: edge - rowHeight, end: edge};
             });
             const struck = slots.find(({end}) => y < end);
-            if (has(struck) && struck.seat !== aloft) {
+            if (has(struck) && struck.card !== aloft) {
                 const home = seats.indexOf(aloft);
                 const held = deadZone(struck.height, slots[home]?.height ?? 0);
                 return (struck.at < home ? y < struck.end - held : y > struck.start + held)
-                    ? struck.seat
+                    ? struck.card
                     : undefined;
             }
-            return struck?.seat;
+            return struck?.card;
         }
         return undefined;
     };
@@ -103,15 +103,15 @@ export const shifts = (
 ): Record<number, number> => {
     const tops = (seated: readonly number[]): Record<number, number> => {
         let y = 0;
-        return seated.reduce<Record<number, number>>((at, seat) => {
-            at[seat] = y;
-            y += heights[seat] ?? 0;
+        return seated.reduce<Record<number, number>>((at, card) => {
+            at[card] = y;
+            y += heights[card] ?? 0;
             return at;
         }, {});
     };
     const was = tops(before);
     const now = tops(after);
     return Object.fromEntries(after
-        .filter(seat => (was[seat] ?? 0) !== (now[seat] ?? 0))
-        .map(seat => [seat, (was[seat] ?? 0) - (now[seat] ?? 0)]));
+        .filter(card => (was[card] ?? 0) !== (now[card] ?? 0))
+        .map(card => [card, (was[card] ?? 0) - (now[card] ?? 0)]));
 };
