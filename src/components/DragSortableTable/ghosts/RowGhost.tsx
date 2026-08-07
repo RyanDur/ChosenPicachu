@@ -9,7 +9,7 @@ type Props = {
     at: {x: number; y: number; width: number};
     drift: {x: number; y: number};
     dress: GhostDress;
-    columns: Column[];
+    columns: readonly Column[];
     shares: Shares;
     row: Row;
 };

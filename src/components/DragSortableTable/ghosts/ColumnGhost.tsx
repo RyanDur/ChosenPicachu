@@ -8,7 +8,7 @@ type Props = {
     drift: {x: number; y: number};
     dress: GhostDress;
     column: Column;
-    rows: Row[];
+    rows: readonly Row[];
 };
 
 export const ColumnGhost: FC<Props> = ({at, drift, dress, column, rows}) =>

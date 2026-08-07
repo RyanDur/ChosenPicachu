@@ -99,7 +99,8 @@ export const displaced = (
 export const shifts = (
     heights: Readonly<Record<number, number>>,
     before: readonly number[],
-    after: readonly number[]
+    after: readonly number[],
+    riding?: number
 ): Record<number, number> => {
     const tops = (seated: readonly number[]): Record<number, number> => {
         let y = 0;
@@ -112,6 +113,6 @@ export const shifts = (
     const was = tops(before);
     const now = tops(after);
     return Object.fromEntries(after
-        .filter(card => (was[card] ?? 0) !== (now[card] ?? 0))
+        .filter(card => card !== riding && (was[card] ?? 0) !== (now[card] ?? 0))
         .map(card => [card, (was[card] ?? 0) - (now[card] ?? 0)]));
 };

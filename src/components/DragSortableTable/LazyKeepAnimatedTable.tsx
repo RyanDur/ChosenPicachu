@@ -6,8 +6,8 @@ import {Column, Shares, TableProps, seededShares} from '@components/Table';
 import {useLazyColumnTravel} from './useLazyColumnTravel';
 import {useLazyRowTravel} from './useLazyRowTravel';
 import {Shifted, Slid, charted, displaced, shifts} from './chart';
-import {ColumnGhost, RowGhost} from './ghosts';
-import {Direction} from './SortMenu';
+import {Aloft} from './Aloft';
+import {Direction, Rule, ranked} from './sorting';
 import {AnimatedDraggableHeader} from './AnimatedDraggableHeader';
 import {AnimatedDraggableRow} from './AnimatedDraggableRow';
 import './sortable.css';
@@ -18,18 +18,6 @@ export type LazyKeepAnimatedTableProps = TableProps & {
     draggableRows?: boolean;
     sortable?: boolean;
 };
-
-type Rule = {
-    column: string;
-    direction: Direction;
-};
-
-const ranked = (rows: TableProps['rows'], dealt: readonly number[], rule: Rule): number[] =>
-    [...dealt].sort((left, right) => {
-        const gap = (rows[left][rule.column]?.value ?? Number.NEGATIVE_INFINITY) -
-            (rows[right][rule.column]?.value ?? Number.NEGATIVE_INFINITY);
-        return rule.direction === 'ascending' ? gap : -gap;
-    });
 
 export const LazyKeepAnimatedTable: FC<LazyKeepAnimatedTableProps> = (
     {columns, rows, draggableColumns = false, draggableRows = false, sortable, id, ...dress}
@@ -59,8 +47,7 @@ export const LazyKeepAnimatedTable: FC<LazyKeepAnimatedTableProps> = (
 
     const settleRow = (card: number, struck: number, heights: Shifted): void => {
         const after = array.moveToIndex(seats.indexOf(struck), card, seats);
-        const {[card]: ridden, ...drops} = shifts(heights, seats, after);
-        setShifted(drops);
+        setShifted(shifts(heights, seats, after, card));
         setSeats(after);
     };
     const rowsTravel = useLazyRowTravel(standing, settleRow);
@@ -114,18 +101,6 @@ export const LazyKeepAnimatedTable: FC<LazyKeepAnimatedTableProps> = (
         }
     };
 
-    const ghostDress = {
-        table: classNames(dress.tableClassName),
-        thead: classNames(dress.theadClassName),
-        headerRow: classNames(dress.trClassName, dress.headerRowClassName),
-        header: classNames(dress.thClassName, dress.cellClassName),
-        tbody: classNames(dress.tbodyClassName),
-        row: classNames(dress.trClassName, dress.rowClassName),
-        cell: classNames(dress.tdClassName, dress.cellClassName)
-    };
-    const aloftColumn = ordered.find(definition => definition.column === columnsTravel.aloft);
-    const aloftRow = has(rowsTravel.aloft) ? rows[rowsTravel.aloft] : undefined;
-    const surface = has(columnsTravel.aloft) ? columnsTravel.surface : rowsTravel.surface;
 
     return <>
         <table id={id}
@@ -155,13 +130,7 @@ export const LazyKeepAnimatedTable: FC<LazyKeepAnimatedTableProps> = (
                 <AnimatedDraggableRow key={card} card={card} row={rows[card]} table={rowState}/>
             )}</tbody>
         </table>
-        {has(aloftColumn) &&
-            <ColumnGhost at={columnsTravel.flight} drift={columnsTravel.drift} dress={ghostDress}
-                         column={aloftColumn} rows={standing.map(card => rows[card])}/>}
-        {has(aloftRow) &&
-            <RowGhost at={rowsTravel.flight} drift={rowsTravel.drift} dress={ghostDress}
-                      columns={ordered} shares={shares} row={aloftRow}/>}
-        {(has(columnsTravel.aloft) || has(rowsTravel.aloft)) &&
-            <article className="drag-surface" {...surface}/>}
+        <Aloft columnsTravel={columnsTravel} rowsTravel={rowsTravel}
+               ordered={ordered} shares={shares} rows={rows} standing={standing} dress={dress}/>
     </>;
 };
