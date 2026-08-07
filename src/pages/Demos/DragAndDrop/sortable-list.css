@@ -4,6 +4,7 @@
     height: fit-content;
 
     .item {
+        width: 100%;
         position: relative;
     }
 }
