@@ -1,5 +1,5 @@
-import {FC, MouseEvent, useState} from 'react';
-import {has, notEmpty} from '@ryandur/sand';
+import {FC, MouseEvent, PointerEvent, useState} from 'react';
+import {has} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {classNames} from '@components/class-names';
 import {Column, Shares, TableProps, seededShares} from '@components/Table';
@@ -42,8 +42,7 @@ export const EagerKeepAnimatedTable: FC<EagerKeepAnimatedTableProps> = (
     const [shifted, setShifted] = useState<Shifted>();
 
     const order = ordered.map(({column}) => String(column));
-    const apportioned = ordered.filter(({width}) => has(width)).map(({column}) => String(column));
-    const clipped = notEmpty(apportioned);
+    const clipped = ordered.some(({width}) => has(width));
     const dealt = seats.length === rows.length ? seats : rows.map((_, seat) => seat);
     const standing = has(rule) ? ranked(rows, dealt, rule) : dealt;
 
@@ -78,9 +77,43 @@ export const EagerKeepAnimatedTable: FC<EagerKeepAnimatedTableProps> = (
         setRule(next);
     };
 
-    const headerClassName = classNames(dress.thClassName, dress.cellClassName);
-    const rowClassName = classNames(dress.trClassName, dress.rowClassName);
-    const cellClassName = classNames(dress.tdClassName, dress.cellClassName);
+    const columnState = {
+        ordered,
+        shares,
+        rule,
+        slid,
+        draggable: draggableColumns,
+        className: classNames(dress.thClassName, dress.cellClassName),
+        onLift: columnsTravel.lift,
+        onOrdered: (column: string, to: number, marks: Slid) => {
+            setSlid(marks);
+            placedColumn(column, to);
+        },
+        onShared: setShares,
+        onRule: sortable ? ruled : undefined
+    };
+
+    const rowState = {
+        rows,
+        ordered,
+        standing,
+        gripped: draggableRows,
+        slid,
+        shifted,
+        className: classNames(dress.trClassName, dress.rowClassName),
+        cellClassName: classNames(dress.tdClassName, dress.cellClassName),
+        onLift: (lifted: number) => (event: PointerEvent<HTMLElement>) => {
+            setRule(undefined);
+            setSeats(standing);
+            rowsTravel.lift(lifted)(event);
+        },
+        onArranged: (after: number[], drops: Shifted) => {
+            setShifted(drops);
+            setRule(undefined);
+            setSeats(after);
+        }
+    };
+
     const aloftColumn = ordered.find(definition => String(definition.column) === columnsTravel.aloft);
     const aloftRow = has(rowsTravel.aloft) ? rows[rowsTravel.aloft] : undefined;
     const surface = has(columnsTravel.aloft) ? columnsTravel.surface : rowsTravel.surface;
@@ -105,51 +138,12 @@ export const EagerKeepAnimatedTable: FC<EagerKeepAnimatedTableProps> = (
             <tr className={classNames(
                 dress.trClassName,
                 dress.headerRowClassName
-            )}>{ordered.map((column, position) =>
-                <AnimatedDraggableHeader key={String(column.column)}
-                    column={column}
-                    order={order}
-                    shares={shares}
-                    apportioned={apportioned}
-                    clipped={clipped}
-                    position={position}
-                    count={ordered.length}
-                    draggable={draggableColumns}
-                    slid={slid}
-                    rule={rule}
-                    className={classNames(headerClassName, column.className)}
-                    onLift={columnsTravel.lift}
-                    onOrdered={(column, to, marks) => {
-                        setSlid(marks);
-                        placedColumn(column, to);
-                    }}
-                    onShared={setShares}
-                    onRule={sortable ? ruled : undefined}/>
+            )}>{ordered.map(column =>
+                <AnimatedDraggableHeader key={String(column.column)} column={column} table={columnState}/>
             )}</tr>
             </thead>
-            <tbody className={dress.tbodyClassName}>{standing.map((seat, position) =>
-                <AnimatedDraggableRow key={seat}
-                    row={rows[seat]}
-                    columns={ordered}
-                    position={position}
-                    seat={seat}
-                    standing={standing}
-                    clipped={clipped}
-                    gripped={draggableRows}
-                    slid={slid}
-                    shifted={shifted}
-                    className={rowClassName}
-                    cellClassName={cellClassName}
-                    onLift={lifted => event => {
-                        setRule(undefined);
-                        setSeats(standing);
-                        rowsTravel.lift(lifted)(event);
-                    }}
-                    onArranged={(after, drops) => {
-                        setShifted(drops);
-                        setRule(undefined);
-                        setSeats(after);
-                    }}/>
+            <tbody className={dress.tbodyClassName}>{standing.map(seat =>
+                <AnimatedDraggableRow key={seat} seat={seat} table={rowState}/>
             )}</tbody>
         </table>
         {has(aloftColumn) &&

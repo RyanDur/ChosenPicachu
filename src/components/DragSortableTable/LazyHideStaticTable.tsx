@@ -1,5 +1,5 @@
-import {FC, useState} from 'react';
-import {has, notEmpty} from '@ryandur/sand';
+import {FC, PointerEvent, useState} from 'react';
+import {has} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {classNames} from '@components/class-names';
 import {Column, Shares, TableProps, seededShares} from '@components/Table';
@@ -39,8 +39,7 @@ export const LazyHideStaticTable: FC<LazyHideStaticTableProps> = (
     const [rule, setRule] = useState<Rule>();
 
     const order = ordered.map(({column}) => String(column));
-    const apportioned = ordered.filter(({width}) => has(width)).map(({column}) => String(column));
-    const clipped = notEmpty(apportioned);
+    const clipped = ordered.some(({width}) => has(width));
     const dealt = seats.length === rows.length ? seats : rows.map((_, seat) => seat);
     const standing = has(rule) ? ranked(rows, dealt, rule) : dealt;
 
@@ -60,9 +59,39 @@ export const LazyHideStaticTable: FC<LazyHideStaticTableProps> = (
     const ruled = (column: string, direction: Direction | undefined): void =>
         setRule(has(direction) ? {column, direction} : undefined);
 
-    const headerClassName = classNames(dress.thClassName, dress.cellClassName);
-    const rowClassName = classNames(dress.trClassName, dress.rowClassName);
-    const cellClassName = classNames(dress.tdClassName, dress.cellClassName);
+    const columnState = {
+        ordered,
+        shares,
+        rule,
+        aloft: columnsTravel.aloft,
+        draggable: draggableColumns,
+        className: classNames(dress.thClassName, dress.cellClassName),
+        onLift: columnsTravel.lift,
+        onOrdered: placedColumn,
+        onShared: setShares,
+        onRule: sortable ? ruled : undefined
+    };
+
+    const rowState = {
+        rows,
+        ordered,
+        standing,
+        gripped: draggableRows,
+        aloft: rowsTravel.aloft,
+        aloftColumn: columnsTravel.aloft,
+        className: classNames(dress.trClassName, dress.rowClassName),
+        cellClassName: classNames(dress.tdClassName, dress.cellClassName),
+        onLift: (lifted: number) => (event: PointerEvent<HTMLElement>) => {
+            setRule(undefined);
+            setSeats(standing);
+            rowsTravel.lift(lifted)(event);
+        },
+        onArranged: (after: number[]) => {
+            setRule(undefined);
+            setSeats(after);
+        }
+    };
+
     const aloftColumn = ordered.find(definition => String(definition.column) === columnsTravel.aloft);
     const aloftRow = has(rowsTravel.aloft) ? rows[rowsTravel.aloft] : undefined;
     const surface = has(columnsTravel.aloft) ? columnsTravel.surface : rowsTravel.surface;
@@ -78,47 +107,12 @@ export const LazyHideStaticTable: FC<LazyHideStaticTableProps> = (
             <tr className={classNames(
                 dress.trClassName,
                 dress.headerRowClassName
-            )}>{ordered.map((column, position) =>
-                <DraggableHeader key={String(column.column)}
-                    column={column}
-                    order={order}
-                    shares={shares}
-                    apportioned={apportioned}
-                    clipped={clipped}
-                    position={position}
-                    count={ordered.length}
-                    draggable={draggableColumns}
-                    aloft={columnsTravel.aloft}
-                    rule={rule}
-                    className={classNames(headerClassName, column.className)}
-                    onLift={columnsTravel.lift}
-                    onOrdered={placedColumn}
-                    onShared={setShares}
-                    onRule={sortable ? ruled : undefined}/>
+            )}>{ordered.map(column =>
+                <DraggableHeader key={String(column.column)} column={column} table={columnState}/>
             )}</tr>
             </thead>
-            <tbody className={dress.tbodyClassName}>{standing.map((seat, position) =>
-                <DraggableRow key={seat}
-                    row={rows[seat]}
-                    columns={ordered}
-                    position={position}
-                    seat={seat}
-                    standing={standing}
-                    clipped={clipped}
-                    gripped={draggableRows}
-                    aloft={rowsTravel.aloft}
-                    aloftColumn={columnsTravel.aloft}
-                    className={rowClassName}
-                    cellClassName={cellClassName}
-                    onLift={lifted => event => {
-                        setRule(undefined);
-                        setSeats(standing);
-                        rowsTravel.lift(lifted)(event);
-                    }}
-                    onArranged={after => {
-                        setRule(undefined);
-                        setSeats(after);
-                    }}/>
+            <tbody className={dress.tbodyClassName}>{standing.map(seat =>
+                <DraggableRow key={seat} seat={seat} table={rowState}/>
             )}</tbody>
         </table>
         {has(aloftColumn) &&
