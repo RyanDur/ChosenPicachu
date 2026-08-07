@@ -2,14 +2,15 @@ import {FC, useState} from 'react';
 import {has} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {crossed} from '../crossing';
-import {Draggable} from '../Draggable';
+import {Item} from './Item';
 import '../sortable-list.css';
+import './EagerHideStaticList.css';
 
 type Props = {
     list: Set<string>;
 };
 
-export const EagerKeepStaticList: FC<Props> = ({list}) => {
+export const EagerHideStaticList: FC<Props> = ({list}) => {
     const [order, setOrder] = useState<string[]>(() => [...list]);
     const [aloft, setAloft] = useState<string>();
 
@@ -20,7 +21,7 @@ export const EagerKeepStaticList: FC<Props> = ({list}) => {
         order.map((item, index) =>
             <li key={item}
                 className={'item'}>
-                <Draggable item={item}
+                <Item item={item}
                     order={order}
                     onLifted={setAloft}
                     onReleased={() => setAloft(undefined)}

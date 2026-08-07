@@ -6,33 +6,49 @@ import {DemoTopics} from '../types';
 import {ControlsProps, Motion, Origin, Pace} from '../Controls';
 import {StepEntry, StepList, aside, plain} from '../Recipe';
 import {span, unit} from '../Recipe/carve';
-import draggableSource from './Draggable.tsx?raw';
-import hideSource from './HideOnDrag.tsx?raw';
 import crossingSource from './crossing.ts?raw';
 import glideSource from '@components/glide.ts?raw';
-import hideCss from './HideOnDrag.css?raw';
-import pushedCss from './pushed.css?raw';
-import eagerKeepStatic from './lists/EagerKeepStaticList.tsx?raw';
-import eagerKeepAnimated from './lists/EagerKeepAnimatedList.tsx?raw';
-import eagerHideStatic from './lists/EagerHideStaticList.tsx?raw';
-import eagerHideAnimated from './lists/EagerHideAnimatedList.tsx?raw';
-import lazyKeepStatic from './lists/LazyKeepStaticList.tsx?raw';
-import lazyKeepAnimated from './lists/LazyKeepAnimatedList.tsx?raw';
-import lazyHideStatic from './lists/LazyHideStaticList.tsx?raw';
-import lazyHideAnimated from './lists/LazyHideAnimatedList.tsx?raw';
+import eksList from './EagerKeepStaticList/EagerKeepStaticList.tsx?raw';
+import eksItem from './EagerKeepStaticList/Item.tsx?raw';
+import ekaList from './EagerKeepAnimatedList/EagerKeepAnimatedList.tsx?raw';
+import ekaItem from './EagerKeepAnimatedList/Item.tsx?raw';
+import ehsList from './EagerHideStaticList/EagerHideStaticList.tsx?raw';
+import ehsItem from './EagerHideStaticList/Item.tsx?raw';
+import ehaList from './EagerHideAnimatedList/EagerHideAnimatedList.tsx?raw';
+import ehaItem from './EagerHideAnimatedList/Item.tsx?raw';
+import lksList from './LazyKeepStaticList/LazyKeepStaticList.tsx?raw';
+import lksItem from './LazyKeepStaticList/Item.tsx?raw';
+import lkaList from './LazyKeepAnimatedList/LazyKeepAnimatedList.tsx?raw';
+import lkaItem from './LazyKeepAnimatedList/Item.tsx?raw';
+import lhsList from './LazyHideStaticList/LazyHideStaticList.tsx?raw';
+import lhsItem from './LazyHideStaticList/Item.tsx?raw';
+import lhaList from './LazyHideAnimatedList/LazyHideAnimatedList.tsx?raw';
+import lhaItem from './LazyHideAnimatedList/Item.tsx?raw';
+import ekaListCss from './EagerKeepAnimatedList/EagerKeepAnimatedList.css?raw';
+import ehsListCss from './EagerHideStaticList/EagerHideStaticList.css?raw';
+import ehaListCss from './EagerHideAnimatedList/EagerHideAnimatedList.css?raw';
+import lkaListCss from './LazyKeepAnimatedList/LazyKeepAnimatedList.css?raw';
+import lhsListCss from './LazyHideStaticList/LazyHideStaticList.css?raw';
+import lhaListCss from './LazyHideAnimatedList/LazyHideAnimatedList.css?raw';
 import '../Recipe/Recipe.css';
 
 const gap = plain('');
 
-const listSources: Record<Pace, Record<Origin, Record<Motion, string>>> = {
-  eager: {
-    keep: {animated: eagerKeepAnimated, static: eagerKeepStatic},
-    hide: {animated: eagerHideAnimated, static: eagerHideStatic}
-  },
-  lazy: {
-    keep: {animated: lazyKeepAnimated, static: lazyKeepStatic},
-    hide: {animated: lazyHideAnimated, static: lazyHideStatic}
-  }
+type Sources = Record<Pace, Record<Origin, Record<Motion, string>>>;
+
+const listSources: Sources = {
+  eager: {keep: {animated: ekaList, static: eksList}, hide: {animated: ehaList, static: ehsList}},
+  lazy: {keep: {animated: lkaList, static: lksList}, hide: {animated: lhaList, static: lhsList}}
+};
+
+const itemSources: Sources = {
+  eager: {keep: {animated: ekaItem, static: eksItem}, hide: {animated: ehaItem, static: ehsItem}},
+  lazy: {keep: {animated: lkaItem, static: lksItem}, hide: {animated: lhaItem, static: lhsItem}}
+};
+
+const cssSources: Record<Pace, Record<Origin, Partial<Record<Motion, string>>>> = {
+  eager: {keep: {animated: ekaListCss}, hide: {animated: ehaListCss, static: ehsListCss}},
+  lazy: {keep: {animated: lkaListCss}, hide: {animated: lhaListCss, static: lhsListCss}}
 };
 
 type Step = Omit<StepEntry, 'dial'> & {
@@ -69,22 +85,23 @@ const paced = (pace: Pace, source: string): Step => pace === 'eager'
     ]
   };
 
-const shown = (origin: Origin, source: string): Step => origin === 'hide'
+const shown = (origin: Origin, source: string, itemSrc: string, cssSrc: string): Step => origin === 'hide'
   ? {
     title: 'Fade the origin to a whisper',
     dial: 'origin',
     want: 'With the snapshot in hand, the origin card reads as a duplicate — but truly vanishing it can kill the drag, because some engines end the session when its source disappears.',
     says: ['So the origin does not vanish; it fades to a whisper. This is the hide list, so its ' +
-      'item is HideOnDrag — the element that dresses itself on its own lift and undresses on ' +
+      'own Item dresses itself on its own lift and undresses on ' +
       'its own release. The CSS behind the class is an opacity of nearly nothing: the node ' +
       'stays alive, the session keeps its source, and the eye reads a single card riding the ' +
       'pointer.'],
     code: [
       {label: 'JS', lines: [
-        ...unit(hideSource, 'export const HideOnDrag')
+        ...span(itemSrc, "updateHide('hide');", "updateHide('hide');"), gap,
+        ...span(itemSrc, 'updateHide(undefined);', 'updateHide(undefined);')
       ]},
       {label: 'CSS', lines: [
-        ...unit(hideCss, '.sortable-list .hide {'),
+        ...unit(cssSrc, '.sortable-list .hide {'),
         aside('/* not visibility — the session dies with its source */')
       ]}
     ]
@@ -93,18 +110,18 @@ const shown = (origin: Origin, source: string): Step => origin === 'hide'
     title: 'Leave the origin standing',
     dial: 'origin',
     want: 'A vanished origin can disorient; sometimes the eye wants the card both at rest and in hand while it decides.',
-    says: ['Do nothing. This is the keep list, so its item is the plain Draggable: the platform ' +
+    says: ['Do nothing. This is the keep list, so its Item is the plain card: the platform ' +
       'already drew the snapshot, there are two of the card for the length of the drag — one ' +
-      'at rest, one dimmed under the pointer — and no hiding code exists in this file at all.'],
+      'at rest, one dimmed under the pointer — and no hiding code exists in its directory at all.'],
     code: [
       {label: 'HTML', lines: [
-        ...span(source, '<Draggable item={item}', '<Draggable item={item}'),
+        ...span(source, '<Item item={item}', '<Item item={item}'),
         aside('{/* no hiding wiring exists in this list — nothing to erase */}')
       ]}
     ]
   };
 
-const moved = (motion: Motion, pace: Pace, source: string): Step => motion === 'static'
+const moved = (motion: Motion, pace: Pace, source: string, cssSrc: string): Step => motion === 'static'
   ? {
     title: 'Apply the state update directly',
     dial: 'motion',
@@ -133,8 +150,8 @@ const moved = (motion: Motion, pace: Pace, source: string): Step => motion === '
             "setPushed({[item]: homeward ? 'right' : 'left'});")
         ]},
         {label: 'CSS', lines: [
-          ...unit(pushedCss, '.sortable-list .pushed {'), gap,
-          ...unit(pushedCss, '@keyframes pushed')
+          ...unit(cssSrc, '.sortable-list .pushed {'), gap,
+          ...unit(cssSrc, '@keyframes pushed')
         ]}
       ]
     }
@@ -160,6 +177,8 @@ const moved = (motion: Motion, pace: Pace, source: string): Step => motion === '
 
 const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
   const source = listSources[pace][origin][motion];
+  const itemSrc = itemSources[pace][origin][motion];
+  const cssSrc = cssSources[pace][origin][motion] ?? '';
   return [
     {
       title: 'Arm the drag from its handle',
@@ -170,7 +189,7 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
         'the snapshot under your pointer, the cursor, the cancel — without another line.'],
       code: [
         {label: 'HTML', lines: [
-          ...span(draggableSource, '<article', 'draggable={is(dragging)}>')
+          ...span(itemSrc, '<article', 'draggable={is(dragging)}>')
         ]}
       ]
     },
@@ -214,8 +233,8 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
       ]
     },
     paced(pace, source),
-    shown(origin, source),
-    moved(motion, pace, source),
+    shown(origin, source, itemSrc, cssSrc),
+    moved(motion, pace, source, cssSrc),
     {
       title: 'Arrows go straight to the order',
       want: 'A keyboard user needs the same reorders, and this is the one thing the API cannot sell you — drag-and-drop only ever answers the pointer.',
@@ -226,7 +245,7 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
         'drag-and-drop, which is exactly why it works.'],
       code: [
         {label: 'JS', lines: [
-          ...unit(draggableSource, 'onKeyDown={event => {')
+          ...unit(itemSrc, 'onKeyDown={event => {')
         ]}
       ]
     },

@@ -3,9 +3,9 @@ import {has} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {classNames} from '@components/class-names';
 import {glide} from '@components/glide';
-import {HideOnDrag} from '../HideOnDrag';
+import {Item} from './Item';
 import '../sortable-list.css';
-import '../pushed.css';
+import './LazyHideAnimatedList.css';
 
 type Pushed = Readonly<Record<string, 'left' | 'right'>>;
 
@@ -29,7 +29,7 @@ export const LazyHideAnimatedList: FC<Props> = ({list}) => {
                 className={classNames('item', has(pushed?.[item]) && 'pushed')}
                     style={{...(has(pushed?.[item]) ? {'--toward': pushed?.[item] === 'left' ? '1' : '-1'} : {}), viewTransitionName: `sort-${item}`}}
                     onAnimationEnd={() => setPushed(undefined)}>
-                <HideOnDrag item={item}
+                <Item item={item}
                     order={order}
                     onLifted={setAloft}
                     onReleased={() => {

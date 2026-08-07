@@ -2,11 +2,11 @@ import tableSource from '@components/DragSortableTable/EagerHideAnimatedTable/Ea
 import headerSource from '@components/DragSortableTable/EagerKeepStaticTable/Header.tsx?raw';
 import animatedHeaderSource from '@components/DragSortableTable/EagerKeepAnimatedTable/Header.tsx?raw';
 import rowSource from '@components/DragSortableTable/EagerKeepAnimatedTable/Row.tsx?raw';
-import lazyStaticList from '@pages/Demos/DragAndDrop/lists/LazyKeepStaticList.tsx?raw';
-import lazyAnimatedList from '@pages/Demos/DragAndDrop/lists/LazyKeepAnimatedList.tsx?raw';
-import draggableSource from '@pages/Demos/DragAndDrop/Draggable.tsx?raw';
-import whisperCss from '@pages/Demos/DragAndDrop/HideOnDrag.css?raw';
-import pushedCss from '@pages/Demos/DragAndDrop/pushed.css?raw';
+import lazyStaticList from '@pages/Demos/DragAndDrop/LazyKeepStaticList/LazyKeepStaticList.tsx?raw';
+import lazyAnimatedList from '@pages/Demos/DragAndDrop/LazyKeepAnimatedList/LazyKeepAnimatedList.tsx?raw';
+import draggableSource from '@pages/Demos/DragAndDrop/EagerKeepStaticList/Item.tsx?raw';
+import whisperCss from '@pages/Demos/DragAndDrop/EagerHideStaticList/EagerHideStaticList.css?raw';
+import pushedCss from '@pages/Demos/DragAndDrop/EagerKeepAnimatedList/EagerKeepAnimatedList.css?raw';
 
 describe('the hand-written tutorial fragments still tell the truth', () => {
   test.each([

@@ -3,9 +3,9 @@ import {has, is} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {array} from '@components/arrays';
 import Handle from '@components/grip.svg';
-import './Draggable.css';
+import '../Item.css';
 
-export type DraggableProps = {
+export type ItemProps = {
   item: string;
   order: readonly string[];
   className?: string;
@@ -15,15 +15,17 @@ export type DraggableProps = {
   onArranged: (after: string[], walker: string, toward: 1 | -1) => void;
 };
 
-export const Draggable: FC<DraggableProps> = (
+export const Item: FC<ItemProps> = (
   {item, order, className, onLifted, onReleased, onDragOver, onArranged}
 ) => {
   const [dragging, updateDragging] = useState<'dragging'>();
+  const [hide, updateHide] = useState<'hide'>();
 
   return <article
-    className={classNames('draggable', className)}
+    className={classNames('draggable', hide, className)}
     onDragStart={event => {
       event.dataTransfer.effectAllowed = 'move';
+      updateHide('hide');
       onLifted(item);
     }}
     onDragOver={event => {
@@ -33,6 +35,7 @@ export const Draggable: FC<DraggableProps> = (
     }}
     onDrop={event => event.preventDefault()}
     onDragEnd={() => {
+      updateHide(undefined);
       onReleased();
       updateDragging(undefined);
     }}
