@@ -49,10 +49,10 @@ export const LazyHideStaticTable: FC<LazyHideStaticTableProps> = (
         : dealt.map(seat => ({row: rows[seat], seat}));
     const standing = arranged.map(({seat}) => seat);
 
-    const settleColumn = (key: string, struck: string): void => {
+    const settleColumn = (column: string, struck: string): void => {
         setOrder(previous => {
             const at = Math.min(Math.max(previous.indexOf(struck), 1), previous.length - 2);
-            return array.moveToIndex(at, key, previous);
+            return array.moveToIndex(at, column, previous);
         });
     };
     const columnsTravel = useLazyColumnTravel(order, shares, settleColumn);
