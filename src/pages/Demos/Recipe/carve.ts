@@ -12,7 +12,7 @@ const dedented = (lines: string[]): Line[] => {
 
 const closesTheUnit = (source: string, at: number): boolean => {
   const ahead = source.slice(at + 1).match(/\S/);
-  return ahead === null || !'=:'.includes(ahead[0]);
+  return ahead === null || !'=:{'.includes(ahead[0]);
 };
 
 export const unit = (source: string, anchor: string): Line[] => {
