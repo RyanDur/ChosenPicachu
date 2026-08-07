@@ -1,8 +1,9 @@
 import {FC, useState} from 'react';
 import {has} from '@ryandur/sand';
 import {array} from '@components/arrays';
-import {HideOnDrag} from '../HideOnDrag';
+import {Item} from './Item';
 import '../sortable-list.css';
+import './LazyHideStaticList.css';
 
 type Props = {
     list: Set<string>;
@@ -21,7 +22,7 @@ export const LazyHideStaticList: FC<Props> = ({list}) => {
         order.map((item, index) =>
             <li key={item}
                 className={'item'}>
-                <HideOnDrag item={item}
+                <Item item={item}
                     order={order}
                     onLifted={setAloft}
                     onReleased={() => {

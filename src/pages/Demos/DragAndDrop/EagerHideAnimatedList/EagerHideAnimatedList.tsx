@@ -3,9 +3,9 @@ import {has} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {classNames} from '@components/class-names';
 import {crossed} from '../crossing';
-import {Draggable} from '../Draggable';
+import {Item} from './Item';
 import '../sortable-list.css';
-import '../pushed.css';
+import './EagerHideAnimatedList.css';
 
 type Pushed = Readonly<Record<string, 'left' | 'right'>>;
 
@@ -13,7 +13,7 @@ type Props = {
     list: Set<string>;
 };
 
-export const EagerKeepAnimatedList: FC<Props> = ({list}) => {
+export const EagerHideAnimatedList: FC<Props> = ({list}) => {
     const [order, setOrder] = useState<string[]>(() => [...list]);
     const [aloft, setAloft] = useState<string>();
     const [pushed, setPushed] = useState<Pushed>();
@@ -27,7 +27,7 @@ export const EagerKeepAnimatedList: FC<Props> = ({list}) => {
                 className={classNames('item', has(pushed?.[item]) && 'pushed')}
                     style={has(pushed?.[item]) ? {'--toward': pushed?.[item] === 'left' ? '1' : '-1'} : undefined}
                     onAnimationEnd={() => setPushed(undefined)}>
-                <Draggable item={item}
+                <Item item={item}
                     order={order}
                     onLifted={setAloft}
                     onReleased={() => setAloft(undefined)}

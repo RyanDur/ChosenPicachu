@@ -1,7 +1,7 @@
 import {FC, useState} from 'react';
 import {has} from '@ryandur/sand';
 import {array} from '@components/arrays';
-import {Draggable} from '../Draggable';
+import {Item} from './Item';
 import '../sortable-list.css';
 
 type Props = {
@@ -21,7 +21,7 @@ export const LazyKeepStaticList: FC<Props> = ({list}) => {
         order.map((item, index) =>
             <li key={item}
                 className={'item'}>
-                <Draggable item={item}
+                <Item item={item}
                     order={order}
                     onLifted={setAloft}
                     onReleased={() => {

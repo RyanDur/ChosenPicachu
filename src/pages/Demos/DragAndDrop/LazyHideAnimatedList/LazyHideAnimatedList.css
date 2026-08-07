@@ -1,0 +1,15 @@
+.sortable-list .hide {
+    opacity: 0.1%;
+}
+
+.sortable-list .pushed {
+    --toward: 1;
+
+    animation: pushed 150ms ease-out;
+}
+
+@keyframes pushed {
+    from {
+        transform: translateX(calc(var(--toward) * (100% + var(--base))));
+    }
+}
