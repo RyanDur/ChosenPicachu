@@ -4,7 +4,9 @@ import {array} from '@components/arrays';
 import {Row} from '@components/Table';
 import {RowGrip} from './RowGrip';
 
-type Table = {
+type Props = {
+  card: number;
+  row: Row;
   columns: readonly string[];
   clipped: boolean;
   standing: readonly number[];
@@ -17,14 +19,9 @@ type Table = {
   onArranged: (after: number[]) => void;
 };
 
-type Props = {
-  card: number;
-  row: Row;
-  table: Table;
-};
-
-export const DraggableRow: FC<Props> = ({card, row, table}) => {
-  const {columns, clipped, standing, gripped, aloft, aloftColumn, className, cellClassName, onLift, onArranged} = table;
+export const DraggableRow: FC<Props> = (
+  {card, row, columns, clipped, standing, gripped, aloft, aloftColumn, className, cellClassName, onLift, onArranged}
+) => {
   const position = standing.indexOf(card);
   const hidden = aloft === card;
 

@@ -6,7 +6,8 @@ import {anchored, interior} from './chart';
 import {Direction, SortMenu} from './SortMenu';
 import './DraggableHeader.css';
 
-type Table = {
+type Props = {
+  column: Column;
   order: readonly string[];
   shares: Shares;
   rule?: { column: string; direction: Direction };
@@ -19,13 +20,9 @@ type Table = {
   onRule?: (column: string, direction: Direction | undefined, event: MouseEvent<HTMLButtonElement>) => void;
 };
 
-type Props = {
-  column: Column;
-  table: Table;
-};
-
-export const DraggableHeader: FC<Props> = ({column, table}) => {
-  const {order, shares, rule, aloft, draggable, className, onLift, onOrdered, onShared, onRule} = table;
+export const DraggableHeader: FC<Props> = (
+  {column, order, shares, rule, aloft, draggable, className, onLift, onOrdered, onShared, onRule}
+) => {
   const columnName = column.column;
   const apportioned = order.filter(name => name in shares);
   const position = order.indexOf(columnName);

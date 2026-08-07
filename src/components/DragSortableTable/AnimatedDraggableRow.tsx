@@ -8,7 +8,9 @@ import {RowGrip} from './RowGrip';
 import './displaced.css';
 import './AnimatedDraggableRow.css';
 
-type Table = {
+type Props = {
+  card: number;
+  row: Row;
   columns: readonly string[];
   clipped: boolean;
   standing: readonly number[];
@@ -23,14 +25,9 @@ type Table = {
   onArranged: (after: number[], drops: Shifted) => void;
 };
 
-type Props = {
-  card: number;
-  row: Row;
-  table: Table;
-};
-
-export const AnimatedDraggableRow: FC<Props> = ({card, row, table}) => {
-  const {columns, clipped, standing, gripped, aloft, aloftColumn, slid, shifted, className, cellClassName, onLift, onArranged} = table;
+export const AnimatedDraggableRow: FC<Props> = (
+  {card, row, columns, clipped, standing, gripped, aloft, aloftColumn, slid, shifted, className, cellClassName, onLift, onArranged}
+) => {
   const position = standing.indexOf(card);
   const hidden = aloft === card;
   const drop = shifted?.[card];
