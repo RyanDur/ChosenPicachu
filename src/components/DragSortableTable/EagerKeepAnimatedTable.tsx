@@ -114,6 +114,15 @@ export const EagerKeepAnimatedTable: FC<EagerKeepAnimatedTableProps> = (
     }
   };
 
+  const ghostDress = {
+      table: classNames(dress.tableClassName),
+      thead: classNames(dress.theadClassName),
+      headerRow: classNames(dress.trClassName, dress.headerRowClassName),
+      header: classNames(dress.thClassName, dress.cellClassName),
+      tbody: classNames(dress.tbodyClassName),
+      row: classNames(dress.trClassName, dress.rowClassName),
+      cell: classNames(dress.tdClassName, dress.cellClassName)
+  };
   const aloftColumn = ordered.find(definition => definition.column === columnsTravel.aloft);
   const aloftRow = has(rowsTravel.aloft) ? rows[rowsTravel.aloft] : undefined;
   const surface = has(columnsTravel.aloft) ? columnsTravel.surface : rowsTravel.surface;
@@ -147,10 +156,10 @@ export const EagerKeepAnimatedTable: FC<EagerKeepAnimatedTableProps> = (
       )}</tbody>
     </table>
     {has(aloftColumn) &&
-        <ColumnGhost at={columnsTravel.flight} drift={columnsTravel.drift} dress={dress}
+        <ColumnGhost at={columnsTravel.flight} drift={columnsTravel.drift} dress={ghostDress}
                      column={aloftColumn} rows={standing.map(seat => rows[seat])}/>}
     {has(aloftRow) &&
-        <RowGhost at={rowsTravel.flight} drift={rowsTravel.drift} dress={dress}
+        <RowGhost at={rowsTravel.flight} drift={rowsTravel.drift} dress={ghostDress}
                   columns={ordered} shares={shares} row={aloftRow}/>}
     {(has(columnsTravel.aloft) || has(rowsTravel.aloft)) &&
         <article className="drag-surface" {...surface}/>}

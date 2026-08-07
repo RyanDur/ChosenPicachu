@@ -1,17 +1,16 @@
 import {FC, ReactNode} from 'react';
 import {classNames} from '@components/class-names';
-import {Dress} from '@components/Table';
 import './Ghost.css';
 
 type Props = {
     at: {x: number; y: number; width: number};
     drift: {x: number; y: number};
-    dress: Dress;
+    className: string;
     children: ReactNode;
 };
 
-export const Ghost: FC<Props> = ({at, drift, dress, children}) =>
-    <table className={classNames(dress.tableClassName, 'column-ghost')}
+export const Ghost: FC<Props> = ({at, drift, className, children}) =>
+    <table className={classNames(className, 'column-ghost')}
            aria-hidden="true"
            style={{
                top: at.y,
