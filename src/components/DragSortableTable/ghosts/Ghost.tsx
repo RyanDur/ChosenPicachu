@@ -1,5 +1,5 @@
 import {FC, ReactNode} from 'react';
-import {join} from '@components/class-names';
+import {classNames} from '@components/class-names';
 import {Dress} from '@components/Table';
 import './Ghost.css';
 
@@ -11,7 +11,7 @@ type Props = {
 };
 
 export const Ghost: FC<Props> = ({at, drift, dress, children}) =>
-    <table className={join(dress.tableClassName, 'column-ghost')}
+    <table className={classNames(dress.tableClassName, 'column-ghost')}
            aria-hidden="true"
            style={{
                top: at.y,

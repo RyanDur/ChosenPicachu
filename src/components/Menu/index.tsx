@@ -1,5 +1,5 @@
 import {Children, FC, PropsWithChildren, ReactNode} from 'react';
-import {join} from '@components/class-names';
+import {classNames} from '@components/class-names';
 import './Menu.css';
 
 type Props = PropsWithChildren<{
@@ -12,7 +12,7 @@ type Props = PropsWithChildren<{
 export const Menu: FC<Props> = ({id, label, toggle, toggleClassName, children}) =>
   <>
     <button type="button"
-            className={join('menu-toggle', 'rounded-corners', toggleClassName)}
+            className={classNames('menu-toggle', 'rounded-corners', toggleClassName)}
             popoverTarget={id}
             onPointerDown={event => event.stopPropagation()}
             onMouseDown={event => event.stopPropagation()}

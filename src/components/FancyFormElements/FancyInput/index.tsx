@@ -1,5 +1,5 @@
 import {FC, FormEvent, PropsWithChildren} from 'react';
-import {join} from '@components/class-names';
+import {classNames} from '@components/class-names';
 import {format} from 'date-fns';
 
 type FancyTextInputProps = {
@@ -35,14 +35,14 @@ export const FancyInput: FC<PropsWithChildren<FancyTextInputProps>> = (
         pattern,
     value = ''
   }
-) => <article id={id} className={join(
+) => <article id={id} className={classNames(
   'fancy-input',
   'fancy',
   value && 'not-empty',
   className
 )}>
     <input id={inputId}
-           className={join('fancy-text', inputClass)}
+           className={classNames('fancy-text', inputClass)}
            pattern={pattern}
            readOnly={readOnly}
            disabled={disabled}
@@ -50,5 +50,5 @@ export const FancyInput: FC<PropsWithChildren<FancyTextInputProps>> = (
            value={value instanceof Date ? format(value, 'yyyy-MM-dd') : value}
            type={type}
            onChange={onChange}/>
-    <label id={labelId} className={join('fancy-title', 'ellipsis', labelClass)} htmlFor={inputId}>{children}</label>
+    <label id={labelId} className={classNames('fancy-title', 'ellipsis', labelClass)} htmlFor={inputId}>{children}</label>
 </article>;
