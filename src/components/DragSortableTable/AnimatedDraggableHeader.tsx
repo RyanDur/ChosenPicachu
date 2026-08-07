@@ -2,7 +2,7 @@ import {FC, KeyboardEvent, MouseEvent, PointerEvent} from 'react';
 import {has, not} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {Column, ResizeHandle, Shares, neighborOf, traded} from '@components/Table';
-import {Slid, anchored} from './chart';
+import {Slid, anchored, interior} from './chart';
 import {Direction, SortMenu} from './SortMenu';
 import './DraggableHeader.css';
 import './displaced.css';
@@ -59,7 +59,7 @@ export const AnimatedDraggableHeader: FC<Props> = ({column, table}) => {
                  }
                  const toward = event.key === 'ArrowRight' ? 1 : -1;
                  const from = order.indexOf(columnName);
-                 const to = Math.min(Math.max(from + toward, 1), order.length - 2);
+                 const to = interior(from + toward, order.length);
                  if (to === from) {
                    return;
                  }
