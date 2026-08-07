@@ -1,0 +1,9 @@
+.sortable-list {
+    display: flex;
+    gap: var(--base);
+    height: fit-content;
+
+    .item {
+        position: relative;
+    }
+}

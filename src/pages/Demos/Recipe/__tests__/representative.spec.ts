@@ -1,10 +1,12 @@
-import tableSource from '@components/DragSortableTable/EagerHideAnimatedTable.tsx?raw';
+import tableSource from '@components/DragSortableTable/tables/EagerHideAnimatedTable.tsx?raw';
 import headerSource from '@components/DragSortableTable/DraggableHeader.tsx?raw';
 import animatedHeaderSource from '@components/DragSortableTable/AnimatedDraggableHeader.tsx?raw';
 import rowSource from '@components/DragSortableTable/AnimatedDraggableRow.tsx?raw';
-import listSource from '@pages/Demos/DragAndDrop/SortingList.tsx?raw';
+import lazyStaticList from '@pages/Demos/DragAndDrop/lists/LazyKeepStaticList.tsx?raw';
+import lazyAnimatedList from '@pages/Demos/DragAndDrop/lists/LazyKeepAnimatedList.tsx?raw';
 import draggableSource from '@pages/Demos/DragAndDrop/Draggable.tsx?raw';
-import listCss from '@pages/Demos/DragAndDrop/styles.css?raw';
+import whisperCss from '@pages/Demos/DragAndDrop/HideOnDrag.css?raw';
+import pushedCss from '@pages/Demos/DragAndDrop/pushed.css?raw';
 
 describe('the hand-written tutorial fragments still tell the truth', () => {
   test.each([
@@ -18,10 +20,10 @@ describe('the hand-written tutorial fragments still tell the truth', () => {
     ['a shifted row wears the class', rowSource, "has(drop) && 'shifted'"],
     ['a shifted row carries its drop', rowSource, "'--drop': `${drop}px`"],
     ['the grip arms the native drag', draggableSource, 'draggable={is(dragging)}'],
-    ['a lazy list stashes the landing', listSource, 'setLanding(index)'],
-    ['a lazy settle waits one tick', listSource, 'setTimeout(() => theater.glided(() => setOrder(settled)))'],
-    ['the native origin fades, never vanishes', listCss, 'opacity: 0.1%'],
-    ['eager list slides span a seat and a gap', listCss, 'translateX(calc(100% + var(--base)))']
+    ['a lazy list stashes the landing', lazyStaticList, 'setLanding(index)'],
+    ['a lazy settle waits one tick', lazyAnimatedList, 'setTimeout(() => glide(true)(() => setOrder(settled)))'],
+    ['the native origin fades, never vanishes', whisperCss, 'opacity: 0.1%'],
+    ['eager list slides carry a signed seat and gap', pushedCss, 'translateX(calc(var(--toward) * (100% + var(--base))))']
   ])('%s', (_claim, source, fragment) => {
     expect(source).toContain(fragment);
   });

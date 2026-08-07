@@ -63,7 +63,7 @@ describe('the sortable list demo', () => {
     expect(within(controls).getByRole('radio', {name: 'Eager'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Hide'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Animate'})).toBeChecked();
-    expect(controls).toHaveTextContent('<AnimatedDragSortList dragStyle="hide-eager-move"/>');
+    expect(controls).toHaveTextContent('<EagerHideAnimatedList/>');
   });
 
   test('an eager drag commits on the crossing', async () => {
@@ -121,7 +121,7 @@ describe('the sortable list demo', () => {
     expect(within(controls).getByRole('radio', {name: 'Lazy'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Keep'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Static'})).toBeChecked();
-    expect(controls).toHaveTextContent('<DragSortList dragStyle="lazy-move"/>');
+    expect(controls).toHaveTextContent('<LazyKeepStaticList/>');
   });
 
   test('arrow keys walk an item, and both parties slide', async () => {
@@ -135,8 +135,10 @@ describe('the sortable list demo', () => {
     fireEvent.keyDown(grip, {key: 'ArrowRight'});
 
     expect(seats()).toEqual(['B', 'A', 'C']);
-    expect(screen.getByText('A').closest('li')).toHaveClass('pushed-right');
-    expect(screen.getByText('B').closest('li')).toHaveClass('pushed-left');
+    expect(screen.getByText('A').closest('li')).toHaveClass('pushed');
+    expect(screen.getByText('A').closest('li')).toHaveStyle({'--toward': '-1'});
+    expect(screen.getByText('B').closest('li')).toHaveClass('pushed');
+    expect(screen.getByText('B').closest('li')).toHaveStyle({'--toward': '1'});
 
     fireEvent.keyDown(screen.getByRole('button', {name: 'grip for A'}), {key: 'ArrowLeft'});
     expect(seats()).toEqual(['A', 'B', 'C']);

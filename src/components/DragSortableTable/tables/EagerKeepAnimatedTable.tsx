@@ -3,24 +3,23 @@ import {has} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {classNames} from '@components/class-names';
 import {Column, Shares, TableProps, seededShares} from '@components/Table';
-import {useEagerColumnTravel} from './useEagerColumnTravel';
-import {useEagerRowTravel} from './useEagerRowTravel';
-import {Shifted, Slid, charted, displaced, interior, placed, shifts} from './chart';
-import {Aloft} from './Aloft';
-import {Direction, Rule, ranked} from './sorting';
-import {AnimatedDraggableHeader} from './AnimatedDraggableHeader';
-import {AnimatedDraggableRow} from './AnimatedDraggableRow';
-import './sortable.css';
-import './hide.css';
-import './staged.css';
+import {useEagerColumnTravel} from '../useEagerColumnTravel';
+import {useEagerRowTravel} from '../useEagerRowTravel';
+import {Shifted, Slid, charted, displaced, interior, placed, shifts} from '../chart';
+import {Aloft} from '../Aloft';
+import {Direction, Rule, ranked} from '../sorting';
+import {AnimatedDraggableHeader} from '../AnimatedDraggableHeader';
+import {AnimatedDraggableRow} from '../AnimatedDraggableRow';
+import '../sortable.css';
+import '../staged.css';
 
-export type EagerHideAnimatedTableProps = TableProps & {
+export type EagerKeepAnimatedTableProps = TableProps & {
     draggableColumns?: boolean;
     draggableRows?: boolean;
     sortable?: boolean;
 };
 
-export const EagerHideAnimatedTable: FC<EagerHideAnimatedTableProps> = (
+export const EagerKeepAnimatedTable: FC<EagerKeepAnimatedTableProps> = (
     {columns, rows, draggableColumns = false, draggableRows = false, sortable, id, ...dress}
 ) => {
     const [shares, setShares] = useState<Shares>(() => seededShares(columns));
@@ -93,7 +92,6 @@ export const EagerHideAnimatedTable: FC<EagerHideAnimatedTableProps> = (
                     order={order}
                     shares={shares}
                     rule={rule}
-                    aloft={columnsTravel.aloft}
                     slid={slid}
                     draggable={draggableColumns}
                     className={headerClassName}
@@ -114,8 +112,6 @@ export const EagerHideAnimatedTable: FC<EagerHideAnimatedTableProps> = (
                     clipped={clipped}
                     standing={standing}
                     gripped={draggableRows}
-                    aloft={rowsTravel.aloft}
-                    aloftColumn={columnsTravel.aloft}
                     slid={slid}
                     shifted={shifted}
                     className={rowClassName}

@@ -1,31 +1,34 @@
-import {FC, useState} from 'react';
+import {FC, MouseEvent, useState} from 'react';
 import {has} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {classNames} from '@components/class-names';
 import {Column, Shares, TableProps, seededShares} from '@components/Table';
-import {useLazyColumnTravel} from './useLazyColumnTravel';
-import {useLazyRowTravel} from './useLazyRowTravel';
-import {Aloft} from './Aloft';
-import {interior, placed} from './chart';
-import {Direction, Rule, ranked} from './sorting';
-import {DraggableHeader} from './DraggableHeader';
-import {DraggableRow} from './DraggableRow';
-import './sortable.css';
-import './hide.css';
+import {useEagerColumnTravel} from '../useEagerColumnTravel';
+import {useEagerRowTravel} from '../useEagerRowTravel';
+import {Shifted, Slid, charted, displaced, interior, placed, shifts} from '../chart';
+import {Aloft} from '../Aloft';
+import {Direction, Rule, ranked} from '../sorting';
+import {AnimatedDraggableHeader} from '../AnimatedDraggableHeader';
+import {AnimatedDraggableRow} from '../AnimatedDraggableRow';
+import '../sortable.css';
+import '../hide.css';
+import '../staged.css';
 
-export type LazyHideStaticTableProps = TableProps & {
+export type EagerHideAnimatedTableProps = TableProps & {
     draggableColumns?: boolean;
     draggableRows?: boolean;
     sortable?: boolean;
 };
 
-export const LazyHideStaticTable: FC<LazyHideStaticTableProps> = (
+export const EagerHideAnimatedTable: FC<EagerHideAnimatedTableProps> = (
     {columns, rows, draggableColumns = false, draggableRows = false, sortable, id, ...dress}
 ) => {
     const [shares, setShares] = useState<Shares>(() => seededShares(columns));
     const [ordered, setOrdered] = useState<Column[]>(() => [...columns]);
     const [seats, setSeats] = useState<number[]>(() => rows.map((_, card) => card));
     const [rule, setRule] = useState<Rule>();
+    const [slid, setSlid] = useState<Slid>();
+    const [shifted, setShifted] = useState<Shifted>();
 
     const order = ordered.map(({column}) => column);
     const clipped = ordered.some(({width}) => has(width));
@@ -34,16 +37,30 @@ export const LazyHideStaticTable: FC<LazyHideStaticTableProps> = (
 
     const placedColumn = (column: string, to: number): void =>
         setOrdered(previous => placed(previous, column, to));
-    const settleColumn = (column: string, struck: string): void =>
+    const settleColumn = (column: string, struck: string): void => {
+        setSlid(displaced(order, column, struck, shares));
         placedColumn(column, interior(order.indexOf(struck), order.length));
-    const columnsTravel = useLazyColumnTravel(order, shares, settleColumn);
+    };
+    const columnsTravel = useEagerColumnTravel(order, shares, settleColumn);
 
-    const settleRow = (card: number, struck: number): void =>
-        setSeats(array.moveToIndex(seats.indexOf(struck), card, seats));
-    const rowsTravel = useLazyRowTravel(standing, settleRow);
+    const settleRow = (card: number, struck: number, heights: Shifted): void => {
+        const after = array.moveToIndex(seats.indexOf(struck), card, seats);
+        setShifted(shifts(heights, seats, after, card));
+        setSeats(after);
+    };
+    const rowsTravel = useEagerRowTravel(standing, settleRow);
 
-    const ruled = (column: string, direction: Direction | undefined): void =>
-        setRule(has(direction) ? {column, direction} : undefined);
+    const ruled = (column: string, direction: Direction | undefined, event: MouseEvent<HTMLButtonElement>): void => {
+        const next = has(direction) ? {column, direction} : undefined;
+        const table = event.currentTarget.closest('table');
+        if (has(table)) {
+            const after = has(next)
+                ? ranked(rows, dealt, next)
+                : dealt;
+            setShifted(shifts(charted(table, standing).rowHeights, standing, after));
+        }
+        setRule(next);
+    };
 
     const headerClassName = classNames(dress.thClassName, dress.cellClassName);
     const rowClassName = classNames(dress.trClassName, dress.rowClassName);
@@ -52,8 +69,17 @@ export const LazyHideStaticTable: FC<LazyHideStaticTableProps> = (
 
     return <>
         <table id={id}
+               onAnimationEnd={event => {
+                   if (event.animationName === 'displaced') {
+                       setSlid(undefined);
+                   }
+                   if (event.animationName === 'shifted') {
+                       setShifted(undefined);
+                   }
+               }}
                className={classNames(
                    dress.tableClassName,
+                   'staged',
                    clipped && 'apportioned',
                    (draggableColumns || draggableRows) && 'sortable'
                )}>
@@ -62,22 +88,26 @@ export const LazyHideStaticTable: FC<LazyHideStaticTableProps> = (
                 dress.trClassName,
                 dress.headerRowClassName
             )}>{ordered.map(column =>
-                <DraggableHeader key={column.column}
+                <AnimatedDraggableHeader key={column.column}
                     column={column}
                     order={order}
                     shares={shares}
                     rule={rule}
                     aloft={columnsTravel.aloft}
+                    slid={slid}
                     draggable={draggableColumns}
                     className={headerClassName}
                     onLift={columnsTravel.lift}
-                    onOrdered={placedColumn}
+                    onOrdered={(column, to, marks) => {
+                        setSlid(marks);
+                        placedColumn(column, to);
+                    }}
                     onShared={setShares}
                     onRule={sortable ? ruled : undefined}/>
             )}</tr>
             </thead>
             <tbody className={dress.tbodyClassName}>{standing.map(card =>
-                <DraggableRow key={card}
+                <AnimatedDraggableRow key={card}
                     card={card}
                     row={rows[card]}
                     columns={order}
@@ -86,6 +116,8 @@ export const LazyHideStaticTable: FC<LazyHideStaticTableProps> = (
                     gripped={draggableRows}
                     aloft={rowsTravel.aloft}
                     aloftColumn={columnsTravel.aloft}
+                    slid={slid}
+                    shifted={shifted}
                     className={rowClassName}
                     cellClassName={cellClassName}
                     onLift={lifted => event => {
@@ -93,7 +125,8 @@ export const LazyHideStaticTable: FC<LazyHideStaticTableProps> = (
                         setSeats(standing);
                         rowsTravel.lift(lifted)(event);
                     }}
-                    onArranged={after => {
+                    onArranged={(after, drops) => {
+                        setShifted(drops);
                         setRule(undefined);
                         setSeats(after);
                     }}/>

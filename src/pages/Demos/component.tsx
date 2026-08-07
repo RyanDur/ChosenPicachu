@@ -11,11 +11,15 @@ import {
   InclusiveAccordion,
   ExclusiveRadioToggleAccordion
 } from './Accordions';
-import {AnimatedDragSortList, DragSortList, ListControls, NativeRecipe} from './DragAndDrop';
+import {
+  EagerHideAnimatedList, EagerHideStaticList, EagerKeepAnimatedList, EagerKeepStaticList,
+  LazyHideAnimatedList, LazyHideStaticList, LazyKeepAnimatedList, LazyKeepStaticList,
+  ListControls, NativeRecipe
+} from './DragAndDrop';
 import {DemoTopics, demoTopicParam} from './types';
 import {NaturalZIndex} from './ZIndexDemo';
 import {Candles, PriceChart} from './Charts';
-import {motionParam, originParam, paceParam, styled} from './Controls';
+import {motionParam, originParam, paceParam} from './Controls';
 import {Aggregations, Tutorials, trackParam, tutorialParam} from './Tables';
 import {statusCopy, useLiveTrades} from './Charts/useLiveTrades';
 import {useEnv} from '@components/Env';
@@ -89,9 +93,20 @@ export const DemosPage = () => {
                          onMotion={next => updateSearchParams({motion: next})}/>
             </>,
             [DemoTopics.dragAndDrop]: <>
-              {motion === 'animated'
-                ? <AnimatedDragSortList list={new Set(['A', 'B', 'C'])} dragStyle={styled(pace, origin)}/>
-                : <DragSortList list={new Set(['A', 'B', 'C'])} dragStyle={styled(pace, origin)}/>}
+              {(() => {
+                const lists = {
+                  eager: {
+                    keep: {animated: EagerKeepAnimatedList, static: EagerKeepStaticList},
+                    hide: {animated: EagerHideAnimatedList, static: EagerHideStaticList}
+                  },
+                  lazy: {
+                    keep: {animated: LazyKeepAnimatedList, static: LazyKeepStaticList},
+                    hide: {animated: LazyHideAnimatedList, static: LazyHideStaticList}
+                  }
+                };
+                const List = lists[pace][origin][motion];
+                return <List list={new Set(['A', 'B', 'C'])}/>;
+              })()}
               <div className="tutorials">
                 <h2 className="tutorials-title">how it’s built</h2>
                 <ListControls pace={pace} origin={origin} motion={motion}
