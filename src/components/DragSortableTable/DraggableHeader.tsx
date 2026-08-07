@@ -2,7 +2,7 @@ import {FC, KeyboardEvent, MouseEvent, PointerEvent} from 'react';
 import {has, not} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {Column, ResizeHandle, Shares, neighborOf, traded} from '@components/Table';
-import {anchored} from './chart';
+import {anchored, interior} from './chart';
 import {Direction, SortMenu} from './SortMenu';
 import './DraggableHeader.css';
 
@@ -52,7 +52,7 @@ export const DraggableHeader: FC<Props> = ({column, table}) => {
                  }
                  event.preventDefault();
                  const from = order.indexOf(columnName);
-                 const to = Math.min(Math.max(from + (event.key === 'ArrowRight' ? 1 : -1), 1), order.length - 2);
+                 const to = interior(from + (event.key === 'ArrowRight' ? 1 : -1), order.length);
                  if (to === from) {
                    return;
                  }

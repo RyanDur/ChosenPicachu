@@ -5,7 +5,7 @@ import {classNames} from '@components/class-names';
 import {Column, Shares, TableProps, seededShares} from '@components/Table';
 import {useEagerColumnTravel} from './useEagerColumnTravel';
 import {useEagerRowTravel} from './useEagerRowTravel';
-import {Shifted, Slid, charted, displaced, shifts} from './chart';
+import {Shifted, Slid, charted, displaced, interior, placed, shifts} from './chart';
 import {Aloft} from './Aloft';
 import {Direction, Rule, ranked} from './sorting';
 import {AnimatedDraggableHeader} from './AnimatedDraggableHeader';
@@ -36,13 +36,10 @@ export const EagerHideAnimatedTable: FC<EagerHideAnimatedTableProps> = (
     const standing = has(rule) ? ranked(rows, dealt, rule) : dealt;
 
     const placedColumn = (column: string, to: number): void =>
-        setOrdered(previous => {
-            const lifted = previous.find(definition => definition.column === column);
-            return has(lifted) ? array.moveToIndex(to, lifted, previous) : previous;
-        });
+        setOrdered(previous => placed(previous, column, to));
     const settleColumn = (column: string, struck: string): void => {
         setSlid(displaced(order, column, struck, shares));
-        placedColumn(column, Math.min(Math.max(order.indexOf(struck), 1), order.length - 2));
+        placedColumn(column, interior(order.indexOf(struck), order.length));
     };
     const columnsTravel = useEagerColumnTravel(order, shares, settleColumn);
 

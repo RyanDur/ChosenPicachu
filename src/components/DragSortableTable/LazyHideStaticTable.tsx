@@ -6,6 +6,7 @@ import {Column, Shares, TableProps, seededShares} from '@components/Table';
 import {useLazyColumnTravel} from './useLazyColumnTravel';
 import {useLazyRowTravel} from './useLazyRowTravel';
 import {Aloft} from './Aloft';
+import {interior, placed} from './chart';
 import {Direction, Rule, ranked} from './sorting';
 import {DraggableHeader} from './DraggableHeader';
 import {DraggableRow} from './DraggableRow';
@@ -32,12 +33,9 @@ export const LazyHideStaticTable: FC<LazyHideStaticTableProps> = (
     const standing = has(rule) ? ranked(rows, dealt, rule) : dealt;
 
     const placedColumn = (column: string, to: number): void =>
-        setOrdered(previous => {
-            const lifted = previous.find(definition => definition.column === column);
-            return has(lifted) ? array.moveToIndex(to, lifted, previous) : previous;
-        });
+        setOrdered(previous => placed(previous, column, to));
     const settleColumn = (column: string, struck: string): void =>
-        placedColumn(column, Math.min(Math.max(order.indexOf(struck), 1), order.length - 2));
+        placedColumn(column, interior(order.indexOf(struck), order.length));
     const columnsTravel = useLazyColumnTravel(order, shares, settleColumn);
 
     const settleRow = (card: number, struck: number): void =>
