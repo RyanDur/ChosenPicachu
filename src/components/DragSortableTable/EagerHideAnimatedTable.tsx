@@ -1,11 +1,11 @@
-import {FC, useState} from 'react';
-import {has, not, notEmpty} from '@ryandur/sand';
+import {FC, MouseEvent, useState} from 'react';
+import {has, notEmpty} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {join} from '@components/class-names';
-import {Shares, TableProps, neighborOf, seededShares, traded} from '@components/Table';
+import {Shares, TableProps, seededShares} from '@components/Table';
 import {useEagerColumnTravel} from './useEagerColumnTravel';
 import {useEagerRowTravel} from './useEagerRowTravel';
-import {Shifted, Slid, anchored, charted, shifts} from './chart';
+import {Shifted, Slid, charted, shifts} from './chart';
 import {ColumnGhost, RowGhost} from './ghosts';
 import {Direction} from './DraggableHeader';
 import {AnimatedDraggableHeader} from './AnimatedDraggableHeader';
@@ -74,6 +74,18 @@ export const EagerHideAnimatedTable: FC<EagerHideAnimatedTableProps> = (
     };
     const rowsTravel = useEagerRowTravel(seats, settleRow);
 
+    const ruled = (column: string, direction: Direction | undefined, event: MouseEvent<HTMLButtonElement>): void => {
+        const table = event.currentTarget.closest('table');
+        const next = has(direction) ? {column, direction} : undefined;
+        if (has(table)) {
+            const after = has(next)
+                ? ranked(rows, dealt, next)
+                : dealt.map(seat => ({row: rows[seat], seat}));
+            setShifted(shifts(charted(table, standing).rowHeights,
+                standing, after.map(({seat}) => seat)));
+        }
+        setRule(next);
+    };
 
     const aloftColumn = has(columnsTravel.aloft) ? byKey.get(columnsTravel.aloft) : undefined;
     const aloftRow = has(rowsTravel.aloft) ? rows[rowsTravel.aloft] : undefined;
@@ -99,67 +111,53 @@ export const EagerHideAnimatedTable: FC<EagerHideAnimatedTableProps> = (
             <tr className={join(
                 dress.trClassName,
                 dress.headerRowClassName
-            )}>{ordered.map((column, position) => {
-                const key = String(column.column);
-                return <AnimatedDraggableHeader key={key}
-                                        displaced={slid?.[key]}
-                                        column={column}
-                                        order={order}
-                                        shares={shares}
-                                        share={has(column.width) ? shares[key] : undefined}
-                                        clipped={clipped}
-                                        travels={draggableColumns && not(anchored(position, ordered.length))}
-                                        hidden={columnsTravel.aloft === key}
-                                        sorted={rule?.column === key ? rule.direction : undefined}
-                                        dress={dress}
-                                        onLift={columnsTravel.lift(key)}
-                                        onOrdered={(after, marks) => {
-                                            setSlid(marks);
-                                            setOrder(after);
-                                        }}
-                                        onTrade={apportioned.length > 1
-                                            ? delta => setShares(traded(key, neighborOf(apportioned, key), delta))
-                                            : undefined}
-                                        onRule={sortable && position > 0
-                                            ? (direction, event) => {
-                                                const table = event.currentTarget.closest('table');
-                                                const next = has(direction) ? {column: key, direction} : undefined;
-                                                if (has(table)) {
-                                                    const after = has(next)
-                                                        ? ranked(rows, dealt, next)
-                                                        : dealt.map(seat => ({row: rows[seat], seat}));
-                                                    setShifted(shifts(charted(table, standing).rowHeights,
-                                                        standing, after.map(({seat}) => seat)));
-                                                }
-                                                setRule(next);
-                                            }
-                                            : undefined}/>;
-            })}</tr>
+            )}>{ordered.map((column, position) =>
+                <AnimatedDraggableHeader key={String(column.column)}
+                    column={column}
+                    order={order}
+                    shares={shares}
+                    apportioned={apportioned}
+                    clipped={clipped}
+                    position={position}
+                    count={ordered.length}
+                    draggable={draggableColumns}
+                    aloft={columnsTravel.aloft}
+                    slid={slid}
+                    rule={rule}
+                    dress={dress}
+                    onLift={columnsTravel.lift}
+                    onOrdered={(after, marks) => {
+                        setSlid(marks);
+                        setOrder(after);
+                    }}
+                    onShared={setShares}
+                    onRule={sortable ? ruled : undefined}/>
+            )}</tr>
             </thead>
             <tbody className={dress.tbodyClassName}>{arranged.map(({row, seat}, position) =>
                 <AnimatedDraggableRow key={seat}
-                              row={row}
-                              columns={ordered}
-                              position={position}
-                              seat={seat}
-                              standing={standing}
-                              clipped={clipped}
-                              gripped={draggableRows}
-                              hidden={rowsTravel.aloft === seat}
-                              hiddenColumn={columnsTravel.aloft}
-                              slid={slid}
-                              drop={shifted?.[seat]}
-                              dress={dress}
-                              onLift={event => {
-                          setRule(undefined);
-                          setSeats(standing);
-                          rowsTravel.lift(seat)(event);
-                      }}
-                              onArranged={(after, drops) => {
-                                  setShifted(drops);
-                                  setRule(undefined);
-                                  setSeats(after);
-                              }}/>
+                    row={row}
+                    columns={ordered}
+                    position={position}
+                    seat={seat}
+                    standing={standing}
+                    clipped={clipped}
+                    gripped={draggableRows}
+                    aloft={rowsTravel.aloft}
+                    aloftColumn={columnsTravel.aloft}
+                    slid={slid}
+                    shifted={shifted}
+                    dress={dress}
+                    onLift={(lifted, event) => {
+                        setRule(undefined);
+                        setSeats(standing);
+                        rowsTravel.lift(lifted)(event);
+                    }}
+                    onArranged={(after, drops) => {
+                        setShifted(drops);
+                        setRule(undefined);
+                        setSeats(after);
+                    }}/>
             )}</tbody>
         </table>
         {has(aloftColumn) &&

@@ -16,19 +16,21 @@ type Props = {
     standing: readonly number[];
     clipped: boolean;
     gripped: boolean;
-    hidden?: boolean;
-    hiddenColumn?: string;
+    aloft?: number;
+    aloftColumn?: string;
     slid?: Slid;
-    drop?: number;
+    shifted?: Shifted;
     dress: Dress;
-    onLift: (event: PointerEvent<HTMLElement>) => void;
+    onLift: (seat: number, event: PointerEvent<HTMLElement>) => void;
     onArranged: (after: number[], drops: Shifted) => void;
 };
 
 export const AnimatedDraggableRow: FC<Props> = (
-    {row, columns, position, seat, standing, clipped, gripped, hidden, hiddenColumn, slid, drop, dress, onLift, onArranged}
-) =>
-    <tr className={join(dress.trClassName, dress.rowClassName, has(drop) && 'shifted')}
+    {row, columns, position, seat, standing, clipped, gripped, aloft, aloftColumn, slid, shifted, dress, onLift, onArranged}
+) => {
+    const hidden = aloft === seat;
+    const drop = shifted?.[seat];
+    return <tr className={join(dress.trClassName, dress.rowClassName, has(drop) && 'shifted')}
         style={has(drop) ? {'--drop': `${drop}px`} : undefined}>
         {columns.map(({column}, columnNumber) => {
             const cell = row[column];
@@ -37,14 +39,14 @@ export const AnimatedDraggableRow: FC<Props> = (
             return <td className={join(
                            dress.tdClassName, dress.cellClassName, cell.className,
                            clipped && 'ellipsis',
-                           hiddenColumn === key && 'hide',
+                           aloftColumn === key && 'hide',
                            hidden && 'hide-across',
                            has(displaced) && `displaced-${displaced.toward}`
                        )}
                        key={key}
                        style={has(displaced) ? {'--carried': `${displaced.by}`} : undefined}>
                 {columnNumber === 0 && gripped &&
-                    <RowGrip row={position + 1} onLift={onLift}
+                    <RowGrip row={position + 1} onLift={event => onLift(seat, event)}
                              onNudge={(toward, event) => {
                                  const lane = event.currentTarget.closest('tr');
                                  if (has(lane) && (lane.getAnimations?.().length ?? 0) > 0) {
@@ -61,3 +63,4 @@ export const AnimatedDraggableRow: FC<Props> = (
             </td>;
         })}
     </tr>;
+};
