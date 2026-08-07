@@ -316,6 +316,29 @@ describe('the tables demo', () => {
     expect(controls).toHaveTextContent('<LazyKeepStaticTable/>');
   });
 
+  test('a third tutorial answers the menu', async () => {
+    const feed = await streamingFeed();
+
+    renderTables(urlOf(feed));
+
+    await feedIsSubscribed();
+    await userEvent.click(screen.getByRole('button', {name: 'Sort menu'}));
+
+    const recipe = screen.getByRole('region', {name: 'build the sort menu yourself'});
+    expect(recipe).toBeVisible();
+    expect(recipe).toHaveTextContent(/popover/);
+    expect(recipe).toHaveTextContent(/position-area/);
+    expect(recipe).toHaveTextContent(/The rule is a drape, not a bake/);
+    expect(recipe).toHaveTextContent(/A hand ends the rule/);
+    expect(recipe).toHaveTextContent(/setShifted\(shifts\(charted/);
+    expect(screen.queryByRole('region', {name: 'build the drag sort yourself'})).toBeNull();
+    expect(screen.queryByRole('region', {name: 'table controls'})).toBeNull();
+
+    await userEvent.click(within(recipe).getByRole('radio', {name: 'Static'}));
+    expect(recipe).toHaveTextContent(/Rule directly/);
+    expect(recipe).not.toHaveTextContent(/setShifted\(shifts\(charted/);
+  });
+
   test('the chosen tutorial travels in the url', async () => {
     const feed = await streamingFeed();
 
