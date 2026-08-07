@@ -35,11 +35,12 @@ export const AnimatedDraggableRow: FC<Props> = ({seat, table}) => {
   const clipped = notEmpty(ordered.filter(({width}) => has(width)));
   const hidden = aloft === seat;
   const drop = shifted?.[seat];
+
   return <tr className={classNames(className, has(drop) && 'shifted')}
              style={has(drop) ? {'--drop': `${drop}px`} : undefined}>
     {ordered.map(({column}, columnNumber) => {
       const cell = row[column];
-      const key = String(column);
+      const key = column;
       const displaced = slid?.[key];
       return <td className={classNames(
         cellClassName, cell.className,

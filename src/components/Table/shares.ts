@@ -9,7 +9,7 @@ export const seededShares = (columns: Column[]): Shares => {
     const sized = columns.filter(({width}) => has(width));
     const total = sized.reduce((sum, {width}) => sum + (width ?? 0), 0);
     return sized.reduce<Shares>((shares, {column, width}) =>
-        ({...shares, [String(column)]: (width ?? 0) / total * 100}), {});
+        ({...shares, [column]: (width ?? 0) / total * 100}), {});
 };
 
 export const traded = (column: string, neighbor: string, delta: number) => (previous: Shares): Shares => {

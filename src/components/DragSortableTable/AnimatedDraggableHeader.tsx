@@ -31,8 +31,8 @@ type Props = {
 
 export const AnimatedDraggableHeader: FC<Props> = ({column, table}) => {
   const {ordered, shares, rule, aloft, slid, draggable, className, onLift, onOrdered, onShared, onRule} = table;
-  const key = String(column.column);
-  const order = ordered.map(definition => String(definition.column));
+  const key = column.column;
+  const order = ordered.map(definition => definition.column);
   const apportioned = order.filter(name => name in shares);
   const position = ordered.indexOf(column);
   const share = has(column.width) ? shares[key] : undefined;

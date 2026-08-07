@@ -19,7 +19,7 @@ export const RowGhost: FC<Props> = ({at, drift, dress, columns, shares, row}) =>
         <tbody className={dress.tbodyClassName}>
         <tr className={classNames(dress.trClassName, dress.rowClassName)}>
             {columns.map(({column}, place) => {
-                const share = shares[String(column)];
+                const share = shares[column];
                 return <td className={classNames(dress.tdClassName, dress.cellClassName, row[column].className, 'ellipsis')}
                     key={place}
                     style={has(share) ? {width: `${share}%`} : undefined}>
