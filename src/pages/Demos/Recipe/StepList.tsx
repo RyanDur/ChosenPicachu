@@ -6,6 +6,7 @@ import {Line, Snippet} from './Snippet';
 export type Block = {
   label: 'HTML' | 'CSS' | 'JS';
   lines: Line[];
+  foil?: boolean;
 };
 
 export type StepEntry = {
@@ -36,7 +37,7 @@ export const StepList: FC<{steps: StepEntry[]}> = ({steps}) =>
               {step.figure}
             </div>
             <div className="step-code">
-              {step.code.map(({label, lines}, at) => <Snippet label={label} lines={lines} key={at}/>)}
+              {step.code.map(({label, lines, foil}, at) => <Snippet label={label} lines={lines} foil={foil} key={at}/>)}
             </div>
           </div>
         </article>

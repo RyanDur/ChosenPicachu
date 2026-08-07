@@ -331,6 +331,9 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/The rule is a drape, not a bake/);
     expect(recipe).toHaveTextContent(/A hand ends the rule/);
     expect(recipe).toHaveTextContent(/setShifted\(shifts\(charted/);
+    expect(recipe).toHaveTextContent(/setOpen\(!open\)/);
+    expect(recipe).toHaveTextContent(/unsorted by the next trade/);
+    expect(recipe.querySelectorAll('.snippet.foil')).toHaveLength(2);
     expect(screen.queryByRole('region', {name: 'build the drag sort yourself'})).toBeNull();
     expect(screen.queryByRole('region', {name: 'table controls'})).toBeNull();
 

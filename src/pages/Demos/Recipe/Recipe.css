@@ -152,6 +152,10 @@
       outline: var(--hairline-x-2) solid var(--code-ink);
     }
 
+    &.foil {
+      border: var(--hairline-x-2) dashed var(--code-comment);
+    }
+
     .lang {
       position: absolute;
       top: var(--base);
