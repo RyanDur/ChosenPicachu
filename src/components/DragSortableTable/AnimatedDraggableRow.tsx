@@ -21,7 +21,7 @@ type Props = {
     slid?: Slid;
     shifted?: Shifted;
     dress: Dress;
-    onLift: (seat: number, event: PointerEvent<HTMLElement>) => void;
+    onLift: (seat: number) => (event: PointerEvent<HTMLElement>) => void;
     onArranged: (after: number[], drops: Shifted) => void;
 };
 
@@ -46,7 +46,7 @@ export const AnimatedDraggableRow: FC<Props> = (
                        key={key}
                        style={has(displaced) ? {'--carried': `${displaced.by}`} : undefined}>
                 {columnNumber === 0 && gripped &&
-                    <RowGrip row={position + 1} onLift={event => onLift(seat, event)}
+                    <RowGrip row={position + 1} onLift={onLift(seat)}
                              onNudge={(toward, event) => {
                                  const lane = event.currentTarget.closest('tr');
                                  if (has(lane) && (lane.getAnimations?.().length ?? 0) > 0) {

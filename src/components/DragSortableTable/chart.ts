@@ -83,6 +83,19 @@ export const seatUnder = (seats: readonly number[], chart?: Chart) =>
 export const anchored = (position: number, count: number): boolean =>
     position === 0 || position === count - 1;
 
+export const displaced = (
+    order: readonly string[],
+    column: string,
+    struck: string,
+    shares: Shares
+): Slid => {
+    const from = order.indexOf(column);
+    const to = Math.min(Math.max(order.indexOf(struck), 1), order.length - 2);
+    const between = from < to ? order.slice(from + 1, to + 1) : order.slice(to, from);
+    return Object.fromEntries(between.map(neighbour =>
+        [neighbour, {toward: from < to ? 'left' : 'right', by: shares[column] ?? 0}]));
+};
+
 export const shifts = (
     heights: Readonly<Record<number, number>>,
     before: readonly number[],

@@ -230,12 +230,12 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
   {
     title: 'Keep the order in state, not in the data',
     want: 'The stream keeps producing rows in its own order, and if reordering meant rewriting the data, every trade that lands would fight every drag.',
-    says: ['Rows and columns arrive in whatever order the fold produced. Hold a separate list of ' +
-      'keys and seats, and render the markup through it, so a reorder never touches the data — ' +
-      'the same key finds its new seat and React moves the real nodes.'],
+    says: ['Rows and columns arrive in whatever order the fold produced. Hold the ordered ' +
+      'columns and the seats as state, and render the markup through them, so a reorder never ' +
+      'touches the data — the same key finds its new seat and React moves the real nodes.'],
     code: [
       {label: 'JS', lines: [
-        ...unit(source, 'const [order, setOrder]'), gap,
+        ...unit(source, 'const [ordered, setOrdered]'), gap,
         ...unit(source, 'const [seats, setSeats]')
       ]},
       {label: 'HTML', lines: [
@@ -363,8 +363,7 @@ const nudgedBoth = (animated: boolean): Step => animated
       'fast as the key repeats.'],
     code: [
       {label: 'JS', lines: [
-        ...span(headerSource, 'const from = order.indexOf(key);',
-          'onOrdered(array.moveToIndex(to, key, order));'),
+        ...span(headerSource, 'const from = order.indexOf(key);', 'onOrdered(key, to);'),
         aside('// the whole walk — nothing marked, nothing to wait for')
       ]}
     ]
