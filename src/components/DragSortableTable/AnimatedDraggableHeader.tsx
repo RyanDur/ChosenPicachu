@@ -46,7 +46,7 @@ export const AnimatedDraggableHeader: FC<Props> = ({column, table}) => {
     apportioned.length > 0 && 'clipped',
     travels && 'grabbable',
     hidden && 'hide',
-    has(displaced) && `displaced-${displaced.toward}`
+    has(displaced) && 'displaced'
   )}
              scope="col"
              aria-sort={sorted}
@@ -76,7 +76,9 @@ export const AnimatedDraggableHeader: FC<Props> = ({column, table}) => {
                : undefined}
              style={{
                ...(has(share) ? {'--share': `${share}%`} : {}),
-               ...(has(displaced) ? {'--carried': `${displaced.by}`} : {})
+               ...(has(displaced)
+                 ? {'--carried': `${displaced.by}`, '--toward': displaced.toward === 'left' ? '1' : '-1'}
+                 : {})
              }}>
     {column.display}
     {has(onRule) && position > 0 &&

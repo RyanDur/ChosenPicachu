@@ -169,12 +169,11 @@ const moved = (animated: boolean, source: string): Step => animated
       ]},
       {label: 'CSS', lines: [
         ...unit(stagedCss, '.staged {'), gap,
-        ...unit(displacedCss, '.sortable .displaced-left {'), gap,
+        ...unit(displacedCss, '.sortable .displaced {'), gap,
         ...unit(animatedRowCss, '.sortable .shifted {'), gap,
-        ...unit(displacedCss, '@keyframes displaced-left'),
-        aside('/* the share, plus the padding and border it carried */'), gap,
-        ...unit(animatedRowCss, '@keyframes shifted'),
-        aside('/* .displaced-right mirrors with a negative offset */')
+        ...unit(displacedCss, '@keyframes displaced'),
+        aside('/* --toward flips the sign; direction is data, not a name */'), gap,
+        ...unit(animatedRowCss, '@keyframes shifted')
       ]}
     ]
   }
@@ -348,9 +347,8 @@ const nudgedBoth = (animated: boolean): Step => animated
         aside('// each starts where the other now sits')
       ]},
       {label: 'CSS', lines: [
-        ...unit(displacedCss, '.sortable .displaced-left {'), gap,
-        ...unit(displacedCss, '.sortable .displaced-right {'),
-        aside('/* the pointer track’s keyframes, unchanged */')
+        ...unit(displacedCss, '.sortable .displaced {'),
+        aside('/* the pointer track’s keyframe, unchanged — --toward flips the sign */')
       ]}
     ]
   }
@@ -420,7 +418,7 @@ const keyedSteps = (motion: Motion): Step[] => {
           aside('// while the slide runs, the key falls silent')
         ]},
         {label: 'CSS', lines: [
-          ...unit(displacedCss, '.sortable .displaced-left {'),
+          ...unit(displacedCss, '.sortable .displaced {'),
           aside('/* the 200ms IS the debounce interval */')
         ]}
       ]
