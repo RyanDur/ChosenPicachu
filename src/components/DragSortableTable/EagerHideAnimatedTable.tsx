@@ -79,7 +79,7 @@ export const EagerHideAnimatedTable: FC<EagerHideAnimatedTableProps> = (
     };
 
     const columnState = {
-        ordered,
+        order,
         shares,
         rule,
         aloft: columnsTravel.aloft,
@@ -96,8 +96,8 @@ export const EagerHideAnimatedTable: FC<EagerHideAnimatedTableProps> = (
     };
 
     const rowState = {
-        rows,
-        ordered,
+        columns: order,
+        clipped,
         standing,
         gripped: draggableRows,
         aloft: rowsTravel.aloft,
@@ -156,7 +156,7 @@ export const EagerHideAnimatedTable: FC<EagerHideAnimatedTableProps> = (
             )}</tr>
             </thead>
             <tbody className={dress.tbodyClassName}>{standing.map(card =>
-                <AnimatedDraggableRow key={card} card={card} table={rowState}/>
+                <AnimatedDraggableRow key={card} card={card} row={rows[card]} table={rowState}/>
             )}</tbody>
         </table>
         {has(aloftColumn) &&

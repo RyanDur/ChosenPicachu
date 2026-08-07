@@ -7,7 +7,7 @@ import {Direction, SortMenu} from './SortMenu';
 import './DraggableHeader.css';
 
 type Table = {
-  ordered: readonly Column[];
+  order: readonly string[];
   shares: Shares;
   rule?: { column: string; direction: Direction };
   aloft?: string;
@@ -25,13 +25,12 @@ type Props = {
 };
 
 export const DraggableHeader: FC<Props> = ({column, table}) => {
-  const {ordered, shares, rule, aloft, draggable, className, onLift, onOrdered, onShared, onRule} = table;
+  const {order, shares, rule, aloft, draggable, className, onLift, onOrdered, onShared, onRule} = table;
   const columnName = column.column;
-  const order = ordered.map(definition => definition.column);
   const apportioned = order.filter(name => name in shares);
-  const position = ordered.indexOf(column);
+  const position = order.indexOf(columnName);
   const share = has(column.width) ? shares[columnName] : undefined;
-  const travels = draggable && not(anchored(position, ordered.length));
+  const travels = draggable && not(anchored(position, order.length));
   const hidden = aloft === columnName;
   const sorted = rule?.column === columnName ? rule.direction : undefined;
 
