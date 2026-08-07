@@ -33,14 +33,13 @@ export const DraggableRow: FC<Props> = ({card, table}) => {
   return <tr className={className}>
     {ordered.map(({column}, columnNumber) => {
       const cell = row[column];
-      const key = column;
       return <td className={classNames(
         cellClassName, cell.className,
         clipped && 'ellipsis',
-        aloftColumn === key && 'hide',
+        aloftColumn === column && 'hide',
         hidden && 'hide-across'
       )}
-                 key={key}>
+                 key={column}>
         {columnNumber === 0 && gripped &&
             <RowGrip row={position + 1} onLift={onLift(card)}
                      onNudge={toward => {
