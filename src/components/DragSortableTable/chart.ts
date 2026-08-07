@@ -38,20 +38,20 @@ export const columnUnder = (order: readonly string[], shares: Shares, chart?: Bo
     (x: number, y: number, aloft?: string): string | undefined => {
         if (has(chart) && has(aloft) && y >= chart.top && y <= chart.top + chart.height) {
             let edge = chart.left;
-            const slots = order.map((key, at) => {
-                const width = (shares[key] ?? 0) / 100 * chart.width;
+            const slots = order.map((column, at) => {
+                const width = (shares[column] ?? 0) / 100 * chart.width;
                 edge += width;
-                return {key, at, width, start: edge - width, end: edge};
+                return {column, at, width, start: edge - width, end: edge};
             });
             const struck = slots.find(({end}) => x < end);
-            if (has(struck) && struck.key !== aloft) {
+            if (has(struck) && struck.column !== aloft) {
                 const home = order.indexOf(aloft);
                 const held = deadZone(struck.width, slots[home]?.width ?? 0);
                 return (struck.at < home ? x < struck.end - held : x > struck.start + held)
-                    ? struck.key
+                    ? struck.column
                     : undefined;
             }
-            return struck?.key;
+            return struck?.column;
         }
         return undefined;
     };

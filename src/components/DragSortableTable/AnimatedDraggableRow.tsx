@@ -40,16 +40,15 @@ export const AnimatedDraggableRow: FC<Props> = ({card, table}) => {
              style={has(drop) ? {'--drop': `${drop}px`} : undefined}>
     {ordered.map(({column}, columnNumber) => {
       const cell = row[column];
-      const key = column;
-      const displaced = slid?.[key];
+      const displaced = slid?.[column];
       return <td className={classNames(
         cellClassName, cell.className,
         clipped && 'ellipsis',
-        aloftColumn === key && 'hide',
+        aloftColumn === column && 'hide',
         hidden && 'hide-across',
         has(displaced) && 'displaced'
       )}
-                 key={key}
+                 key={column}
                  style={has(displaced)
                    ? {'--carried': `${displaced.by}`, '--toward': displaced.toward === 'left' ? '1' : '-1'}
                    : undefined}>

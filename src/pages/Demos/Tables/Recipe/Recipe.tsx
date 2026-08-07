@@ -110,7 +110,7 @@ const shown = (origin: 'keep' | 'hide', source: string, headerSrc: string): Step
         ...span(source, 'aloft: rowsTravel.aloft,', 'aloftColumn: columnsTravel.aloft,')
       ]},
       {label: 'JS', lines: [
-        ...span(headerSrc, 'const hidden = aloft === key;', 'const hidden = aloft === key;'),
+        ...span(headerSrc, 'const hidden = aloft === columnName;', 'const hidden = aloft === columnName;'),
         aside('// being the hide table is the flag; the element serves itself')
       ]},
       {label: 'CSS', lines: [
@@ -361,7 +361,7 @@ const nudgedBoth = (animated: boolean): Step => animated
       'fast as the key repeats.'],
     code: [
       {label: 'JS', lines: [
-        ...span(headerSource, 'const from = order.indexOf(key);', 'onOrdered(key, to);'),
+        ...span(headerSource, 'const from = order.indexOf(columnName);', 'onOrdered(columnName, to);'),
         aside('// the whole walk — nothing marked, nothing to wait for')
       ]}
     ]
