@@ -29,10 +29,11 @@ export const DraggableRow: FC<Props> = ({seat, table}) => {
   const position = standing.indexOf(seat);
   const clipped = notEmpty(ordered.filter(({width}) => has(width)));
   const hidden = aloft === seat;
+
   return <tr className={className}>
     {ordered.map(({column}, columnNumber) => {
       const cell = row[column];
-      const key = String(column);
+      const key = column;
       return <td className={classNames(
         cellClassName, cell.className,
         clipped && 'ellipsis',

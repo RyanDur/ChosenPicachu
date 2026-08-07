@@ -30,14 +30,15 @@ type Props = {
 
 export const DraggableHeader: FC<Props> = ({column, table}) => {
   const {ordered, shares, rule, aloft, draggable, className, onLift, onOrdered, onShared, onRule} = table;
-  const key = String(column.column);
-  const order = ordered.map(definition => String(definition.column));
+  const key = column.column;
+  const order = ordered.map(definition => definition.column);
   const apportioned = order.filter(name => name in shares);
   const position = ordered.indexOf(column);
   const share = has(column.width) ? shares[key] : undefined;
   const travels = draggable && not(anchored(position, ordered.length));
   const hidden = aloft === key;
   const sorted = rule?.column === key ? rule.direction : undefined;
+
   return <th className={classNames(
     className, column.className,
     'slot',

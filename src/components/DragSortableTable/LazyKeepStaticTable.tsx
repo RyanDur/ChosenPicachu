@@ -37,14 +37,14 @@ export const LazyKeepStaticTable: FC<LazyKeepStaticTableProps> = (
     const [seats, setSeats] = useState<number[]>(() => rows.map((_, seat) => seat));
     const [rule, setRule] = useState<Rule>();
 
-    const order = ordered.map(({column}) => String(column));
+    const order = ordered.map(({column}) => column);
     const clipped = ordered.some(({width}) => has(width));
     const dealt = seats.length === rows.length ? seats : rows.map((_, seat) => seat);
     const standing = has(rule) ? ranked(rows, dealt, rule) : dealt;
 
     const placedColumn = (column: string, to: number): void =>
         setOrdered(previous => {
-            const lifted = previous.find(definition => String(definition.column) === column);
+            const lifted = previous.find(definition => definition.column === column);
             return has(lifted) ? array.moveToIndex(to, lifted, previous) : previous;
         });
     const settleColumn = (column: string, struck: string): void =>
@@ -88,7 +88,7 @@ export const LazyKeepStaticTable: FC<LazyKeepStaticTableProps> = (
         }
     };
 
-    const aloftColumn = ordered.find(definition => String(definition.column) === columnsTravel.aloft);
+    const aloftColumn = ordered.find(definition => definition.column === columnsTravel.aloft);
     const aloftRow = has(rowsTravel.aloft) ? rows[rowsTravel.aloft] : undefined;
     const surface = has(columnsTravel.aloft) ? columnsTravel.surface : rowsTravel.surface;
 
@@ -104,7 +104,7 @@ export const LazyKeepStaticTable: FC<LazyKeepStaticTableProps> = (
                 dress.trClassName,
                 dress.headerRowClassName
             )}>{ordered.map(column =>
-                <DraggableHeader key={String(column.column)} column={column} table={columnState}/>
+                <DraggableHeader key={column.column} column={column} table={columnState}/>
             )}</tr>
             </thead>
             <tbody className={dress.tbodyClassName}>{standing.map(seat =>

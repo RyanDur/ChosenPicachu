@@ -16,7 +16,7 @@ export type Row = {
 };
 
 export type Column = Cell & {
-    column: keyof Row;
+    column: string;
     width?: number;
 }
 
@@ -40,7 +40,7 @@ export type TableProps = Dress & {
 
 export const Table: FC<TableProps> = ({columns, rows, id, ...dress}) => {
     const [shares, setShares] = useState<Shares>(() => seededShares(columns));
-    const apportioned = columns.filter(({width}) => has(width)).map(({column}) => String(column));
+    const apportioned = columns.filter(({width}) => has(width)).map(({column}) => column);
     const clipped = notEmpty(apportioned);
 
     return <table id={id} className={classNames(dress.tableClassName, clipped && 'apportioned')}>
@@ -49,7 +49,7 @@ export const Table: FC<TableProps> = ({columns, rows, id, ...dress}) => {
             dress.trClassName,
             dress.headerRowClassName
         )}>{columns.map(({display, column, className, width}) => {
-            const key = String(column);
+            const key = column;
             const share = has(width) ? shares[key] : undefined;
             return <th className={classNames(dress.thClassName, dress.cellClassName, className, clipped && 'clipped')}
                        key={key}
