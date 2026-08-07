@@ -7,7 +7,7 @@ import {useEagerColumnTravel} from './useEagerColumnTravel';
 import {useEagerRowTravel} from './useEagerRowTravel';
 import {Shifted, Slid, charted, displaced, shifts} from './chart';
 import {ColumnGhost, RowGhost} from './ghosts';
-import {Direction} from './DraggableHeader';
+import {Direction} from './SortMenu';
 import {AnimatedDraggableHeader} from './AnimatedDraggableHeader';
 import {AnimatedDraggableRow} from './AnimatedDraggableRow';
 import './sortable.css';

@@ -6,7 +6,7 @@ import {Column, Shares, TableProps, seededShares} from '@components/Table';
 import {useEagerColumnTravel} from './useEagerColumnTravel';
 import {useEagerRowTravel} from './useEagerRowTravel';
 import {ColumnGhost, RowGhost} from './ghosts';
-import {Direction} from './DraggableHeader';
+import {Direction} from './SortMenu';
 import {DraggableHeader} from './DraggableHeader';
 import {DraggableRow} from './DraggableRow';
 import './sortable.css';

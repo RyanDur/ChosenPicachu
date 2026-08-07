@@ -3,12 +3,9 @@ import {has, not} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {Column, ResizeHandle, Shares, neighborOf, traded} from '@components/Table';
 import {Slid, anchored} from './chart';
-import {Menu} from '@components/Menu';
-import {Direction} from './DraggableHeader';
+import {Direction, SortMenu} from './SortMenu';
 import './DraggableHeader.css';
 import './displaced.css';
-
-const glyphs: Record<Direction, string> = {ascending: '▲', descending: '▼'};
 
 type Table = {
   ordered: readonly Column[];
@@ -82,13 +79,7 @@ export const AnimatedDraggableHeader: FC<Props> = ({column, table}) => {
              }}>
     {column.display}
     {has(onRule) && position > 0 &&
-        <Menu id={`sort-${columnName}`} label={`sort ${columnName}`}
-              toggle={has(sorted) ? glyphs[sorted] : '⇅'}>
-            <button type="button" className="item" onClick={event => onRule(columnName, 'ascending', event)}>ascending</button>
-            <button type="button" className="item" onClick={event => onRule(columnName, 'descending', event)}>descending
-            </button>
-            <button type="button" className="item" onClick={event => onRule(columnName, undefined, event)}>as dealt</button>
-        </Menu>}
+        <SortMenu column={columnName} sorted={sorted} onRule={onRule}/>}
     {has(share) && apportioned.length > 1 &&
         <ResizeHandle column={columnName} share={share}
                       onTrade={delta => onShared(traded(columnName, neighborOf(apportioned, columnName), delta))}/>}
