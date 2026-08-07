@@ -7,7 +7,7 @@ import {Bounds, bounded, columnUnder} from './chart';
 export const useLazyColumnTravel = (
     order: readonly string[],
     shares: Shares,
-    settle: (key: string, struck: string) => void
+    settle: (column: string, struck: string) => void
 ) => {
     const [aloft, setAloft] = useState<string>();
     const [bounds, setBounds] = useState<Bounds>();
@@ -17,7 +17,7 @@ export const useLazyColumnTravel = (
     const [landing, setLanding] = useState<string>();
     const strike = columnUnder(order, shares, bounds);
 
-    const lift = (key: string) =>
+    const lift = (column: string) =>
         (event: PointerEvent<HTMLElement>): void => {
             const anchored = event.currentTarget.getBoundingClientRect();
             const table = event.currentTarget.closest('table');
@@ -25,7 +25,7 @@ export const useLazyColumnTravel = (
                 setBounds(bounded(table));
             }
             setFlight({x: anchored.x, y: anchored.y, width: anchored.width});
-            setAloft(key);
+            setAloft(column);
         };
 
     const drop = (): void => {

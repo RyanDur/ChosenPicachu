@@ -52,15 +52,15 @@ export const LazyKeepAnimatedTable: FC<LazyKeepAnimatedTableProps> = (
         : dealt.map(seat => ({row: rows[seat], seat}));
     const standing = arranged.map(({seat}) => seat);
 
-    const settleColumn = (key: string, struck: string): void => {
-        const from = order.indexOf(key);
+    const settleColumn = (column: string, struck: string): void => {
+        const from = order.indexOf(column);
         const to = Math.min(Math.max(order.indexOf(struck), 1), order.length - 2);
         const displaced = from < to ? order.slice(from + 1, to + 1) : order.slice(to, from);
         setSlid(Object.fromEntries(displaced.map(neighbour =>
-            [neighbour, {toward: from < to ? 'left' : 'right', by: shares[key] ?? 0}])));
+            [neighbour, {toward: from < to ? 'left' : 'right', by: shares[column] ?? 0}])));
         setOrder(previous => {
             const at = Math.min(Math.max(previous.indexOf(struck), 1), previous.length - 2);
-            return array.moveToIndex(at, key, previous);
+            return array.moveToIndex(at, column, previous);
         });
     };
     const columnsTravel = useLazyColumnTravel(order, shares, settleColumn);
