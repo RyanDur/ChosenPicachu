@@ -5,6 +5,7 @@ import {StepEntry, StepList, aside, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
 import menuSource from '@components/Menu/index.tsx?raw';
 import menuCss from '@components/Menu/Menu.css?raw';
+import headerCss from '@components/DragSortableTable/Header.css?raw';
 import sortMenuSource from '@components/DragSortableTable/SortMenu.tsx?raw';
 import sortingSource from '@components/DragSortableTable/sorting.ts?raw';
 import {headerSources, tableSources} from './sources';
@@ -53,16 +54,21 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
       want: 'A sort chooser needs a popup, and popups built from divs re-invent focus, dismissal, and stacking — badly.',
       says: ['The platform ships the whole apparatus. The toggle is a button whose popoverTarget ' +
         'names a real menu element; popover="auto" gives open, close, light-dismiss, and the ' +
-        'top layer for free. CSS anchors the menu to its own invoker with position-area and ' +
-        'flips it when there is no room below — no measuring, no JavaScript positioning.'],
+        'top layer for free. CSS carries the rest of the character: position-area anchors the ' +
+        'menu to its own invoker and flips it when there is no room below — no measuring, no ' +
+        'JavaScript positioning — while the items get their hairlines between neighbours and ' +
+        'their corner radii only where the card’s corners are. Engines without anchor ' +
+        'positioning fall back to a centered popover: worse placement, same menu.'],
       code: [
         {label: 'HTML', lines: [
           ...span(menuSource, '<button type="button"', 'aria-label={label}>{toggle}</button>'), gap,
           ...span(menuSource, '<menu id={id}', '</menu>')
         ]},
         {label: 'CSS', lines: [
-          ...span(menuCss, '.menu {', 'position-try-fallbacks: flip-block;'),
-          aside('/* anchored to its invoker; flips when there is no room */')
+          ...unit(menuCss, '.menu {'),
+          aside('/* anchored to its invoker; flips when there is no room */'), gap,
+          ...unit(menuCss, '@supports not (position-area: block-end)'),
+          aside('/* no anchor positioning? centered popover — worse placement, same menu */')
         ]}
       ]
     },
@@ -117,8 +123,9 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
       title: 'The press never becomes a drag',
       want: 'The menu lives inside a draggable header — an unguarded press on the toggle would lift the whole column.',
       says: ['Both the toggle and the menu stop pointer descent, so the header never hears the ' +
-        'press. And the first column has no menu at all — it anchors the table, and the header ' +
-        'only offers sorting from the second seat on.'],
+        'press. The toggle itself rides the header’s right edge — absolutely placed inside the ' +
+        'cell, undressed of its button chrome. And the first column has no menu at all — it ' +
+        'anchors the table, and the header only offers sorting from the second seat on.'],
       code: [
         {label: 'JS', lines: [
           ...span(menuSource, 'onPointerDown={event => event.stopPropagation()}',
@@ -127,6 +134,9 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
         ]},
         {label: 'HTML', lines: [
           ...span(headerSrc, '{has(onRule) && position > 0 &&', '{has(onRule) && position > 0 &&')
+        ]},
+        {label: 'CSS', lines: [
+          ...unit(headerCss, '.sortable .menu-toggle {')
         ]}
       ]
     }
