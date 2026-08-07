@@ -23,6 +23,12 @@ const css = `.sortable .slot {
     width: var(--share);
 }
 
+@supports not (position-area: block-end) {
+    .menu:popover-open {
+        inset: 0;
+    }
+}
+
 @keyframes displaced-left {
     from {
         transform: translateX(1cqi);
@@ -54,6 +60,16 @@ describe('carving examples out of the source they teach', () => {
     expect(unit(source, 'const seeded = ').map(({text}) => text)).toEqual([
       'const seeded = (columns) => columns.reduce((shares, {column, width}) =>',
       '    ({...shares, [column]: width}), {});'
+    ]);
+  });
+
+  test('an at-rule with a parenthesised prelude carves whole', () => {
+    expect(unit(css, '@supports not (position-area').map(({text}) => text)).toEqual([
+      '@supports not (position-area: block-end) {',
+      '    .menu:popover-open {',
+      '        inset: 0;',
+      '    }',
+      '}'
     ]);
   });
 

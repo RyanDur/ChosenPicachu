@@ -52,14 +52,28 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
     {
       title: 'A menu that is a menu',
       want: 'A sort chooser needs a popup, and popups built from divs re-invent focus, dismissal, and stacking — badly.',
-      says: ['The platform ships the whole apparatus. The toggle is a button whose popoverTarget ' +
-        'names a real menu element; popover="auto" gives open, close, light-dismiss, and the ' +
-        'top layer for free — no portal, no z-index war, no click-outside listener.',
-        'Placement is CSS speaking its newest dialect. A popover defaults to inset: 0 and ' +
-        'centers itself, so the first move is inset: auto — hand placement back. Then ' +
-        'position-area reads like a compass bearing: block-end (below the invoker), ' +
-        'span-inline-start (spreading toward the leading edge). When there is no room below, ' +
-        'position-try-fallbacks flips the whole thing above. No measuring, no JavaScript.',
+      says: ['The targeting is two attributes and an id. The button’s popoverTarget names the ' +
+        'menu; pressing the button toggles that popover — the default popovertargetaction — ' +
+        'with no onClick anywhere, and the platform wires the invoker-to-popup accessibility ' +
+        'relationship itself. popover="auto" chooses the managed mode: the top layer, above ' +
+        'every z-index; light-dismiss on outside click or Escape; and only one auto popover ' +
+        'open at a time.',
+        'The invoker relationship carries one more gift: it makes the button the popover’s ' +
+        'implicit anchor. Anchor positioning is new CSS that normally asks you to declare an ' +
+        'anchor-name on one element and point another at it — but a popover opened by an ' +
+        'invoker is anchored to that invoker automatically, which is why this menu speaks ' +
+        'position-area without an anchor-name in sight.',
+        'The new syntax reads as a compass around the anchor. Picture the toggle as the ' +
+        'middle cell of a three-by-three grid drawn over the page: position-area picks cells. ' +
+        'block-end takes the row below the toggle; span-inline-start starts from the toggle’s ' +
+        'own column and spreads toward the line’s start — under the toggle, hanging left, in ' +
+        'this writing mode. position-try-fallbacks: flip-block is the escape hatch: when the ' +
+        'row below has no room, the whole area flips above. No measuring, no JavaScript.',
+        'Everything else in the rule cancels a browser opinion. A popover ships centered — ' +
+        'inset: 0 with auto margins — so inset: auto and margin: 0 take placement back for ' +
+        'the anchor to decide. It ships with a border and padding — border: none because the ' +
+        'card’s shadow will draw the edge, padding: 0 because the items own their hit areas. ' +
+        'And list-style: none because this is a real list, and lists come with markers.',
         'Engines that have popovers but not anchor positioning get the @supports fallback: a ' +
         'centered popover. Worse placement, same menu — the feature degrades, the function ' +
         'does not.'],
@@ -69,10 +83,14 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
           ...span(menuSource, '<menu id={id}', '</menu>')
         ]},
         {label: 'CSS', lines: [
-          ...span(menuCss, 'inset: auto;', 'inset: auto;'),
-          aside('/* a popover defaults to inset: 0, centered — take placement back */'), gap,
+          ...span(menuCss, 'inset: auto;', 'list-style: none;'),
+          aside('/* take back the centered default; a real list drops its markers */'), gap,
           ...span(menuCss, 'position-area: block-end span-inline-start;', 'position-try-fallbacks: flip-block;'),
-          aside('/* below the invoker, spreading leading; flips above when cramped */'), gap,
+          aside('/* the invoker is the implicit anchor: below it, hanging leading; flips when cramped */'), gap,
+          ...span(menuCss, 'margin: 0;', 'padding: 0;'),
+          aside('/* undress the UA popover: its margins, border, and padding all go */'), gap,
+          ...span(menuCss, 'background: var(--paper);', 'box-shadow: var(--base-box-shadow);'),
+          aside('/* the card language: paper, floating shadow — the shadow is the edge */'), gap,
           ...unit(menuCss, '@supports not (position-area: block-end)'),
           aside('/* no anchor positioning? centered — worse placement, same menu */')
         ]}
@@ -81,8 +99,12 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
     {
       title: 'Dress the menu as a card',
       want: 'A list of buttons reads as chrome until it wears the site’s card language — and rounded corners are unforgiving about what happens inside them.',
-      says: ['The body is a card: fixed width, paper, the floating shadow. Each item is a button ' +
-        'stripped to a full-width row — press glows, hover and focus draw the ring.',
+      says: ['The body is a card at a fixed width, so the items have something to measure ' +
+        'against. Each item is a button undressed to a full-width row: background, border, and ' +
+        'outline stripped, flex centering the label, width 100% so the whole row is the hit ' +
+        'area, height and type from the scale. Focus deliberately loses the UA outline and ' +
+        'gains the same ring hover draws — keyboard and pointer speak one language — and the ' +
+        'press answers with the glow.',
         'The geometry is where the care shows. Hairlines go between neighbours, so ' +
         'li:not(:last-child) — a line after the last item would double the card’s own edge. ' +
         'And only the first and last items get corner radii, top and bottom pairs ' +
@@ -90,8 +112,6 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
         'poking square through them.'],
       code: [
         {label: 'CSS', lines: [
-          ...span(menuCss, 'margin: 0;', 'box-shadow: var(--base-box-shadow);'),
-          aside('/* the card body */'), gap,
           ...unit(menuCss, '.item {'),
           aside('/* a button stripped to a row; press glows, hover rings */'), gap,
           ...span(menuCss, 'li:not(:last-child) .item {', '}'),
