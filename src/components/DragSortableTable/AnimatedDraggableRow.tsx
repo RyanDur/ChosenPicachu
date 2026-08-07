@@ -2,7 +2,7 @@ import {FC, PointerEvent} from 'react';
 import {has} from '@ryandur/sand';
 import {join} from '@components/class-names';
 import {array} from '@components/arrays';
-import {Column, Dress, Row} from '@components/Table';
+import {Column, Row} from '@components/Table';
 import {Shifted, Slid, charted, shifts} from './chart';
 import {RowGrip} from './RowGrip';
 import './displaced.css';
@@ -20,24 +20,25 @@ type Props = {
     aloftColumn?: string;
     slid?: Slid;
     shifted?: Shifted;
-    dress: Dress;
+    className: string;
+    cellClassName: string;
     onLift: (seat: number) => (event: PointerEvent<HTMLElement>) => void;
     onArranged: (after: number[], drops: Shifted) => void;
 };
 
 export const AnimatedDraggableRow: FC<Props> = (
-    {row, columns, position, seat, standing, clipped, gripped, aloft, aloftColumn, slid, shifted, dress, onLift, onArranged}
+    {row, columns, position, seat, standing, clipped, gripped, aloft, aloftColumn, slid, shifted, className, cellClassName, onLift, onArranged}
 ) => {
     const hidden = aloft === seat;
     const drop = shifted?.[seat];
-    return <tr className={join(dress.trClassName, dress.rowClassName, has(drop) && 'shifted')}
+    return <tr className={join(className, has(drop) && 'shifted')}
         style={has(drop) ? {'--drop': `${drop}px`} : undefined}>
         {columns.map(({column}, columnNumber) => {
             const cell = row[column];
             const key = String(column);
             const displaced = slid?.[key];
             return <td className={join(
-                           dress.tdClassName, dress.cellClassName, cell.className,
+                           cellClassName, cell.className,
                            clipped && 'ellipsis',
                            aloftColumn === key && 'hide',
                            hidden && 'hide-across',
