@@ -11,7 +11,7 @@ import sortingSource from '@components/DragSortableTable/sorting.ts?raw';
 import {headerSources, tableSources} from './sources';
 import '../../Recipe/Recipe.css';
 
-const gap = plain('');
+const gap = plain(' ');
 
 type Step = Omit<StepEntry, 'dial'> & {
   dial?: 'motion';
@@ -54,21 +54,51 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
       want: 'A sort chooser needs a popup, and popups built from divs re-invent focus, dismissal, and stacking — badly.',
       says: ['The platform ships the whole apparatus. The toggle is a button whose popoverTarget ' +
         'names a real menu element; popover="auto" gives open, close, light-dismiss, and the ' +
-        'top layer for free. CSS carries the rest of the character: position-area anchors the ' +
-        'menu to its own invoker and flips it when there is no room below — no measuring, no ' +
-        'JavaScript positioning — while the items get their hairlines between neighbours and ' +
-        'their corner radii only where the card’s corners are. Engines without anchor ' +
-        'positioning fall back to a centered popover: worse placement, same menu.'],
+        'top layer for free — no portal, no z-index war, no click-outside listener.',
+        'Placement is CSS speaking its newest dialect. A popover defaults to inset: 0 and ' +
+        'centers itself, so the first move is inset: auto — hand placement back. Then ' +
+        'position-area reads like a compass bearing: block-end (below the invoker), ' +
+        'span-inline-start (spreading toward the leading edge). When there is no room below, ' +
+        'position-try-fallbacks flips the whole thing above. No measuring, no JavaScript.',
+        'Engines that have popovers but not anchor positioning get the @supports fallback: a ' +
+        'centered popover. Worse placement, same menu — the feature degrades, the function ' +
+        'does not.'],
       code: [
         {label: 'HTML', lines: [
           ...span(menuSource, '<button type="button"', 'aria-label={label}>{toggle}</button>'), gap,
           ...span(menuSource, '<menu id={id}', '</menu>')
         ]},
         {label: 'CSS', lines: [
-          ...unit(menuCss, '.menu {'),
-          aside('/* anchored to its invoker; flips when there is no room */'), gap,
+          ...span(menuCss, 'inset: auto;', 'inset: auto;'),
+          aside('/* a popover defaults to inset: 0, centered — take placement back */'), gap,
+          ...span(menuCss, 'position-area: block-end span-inline-start;', 'position-try-fallbacks: flip-block;'),
+          aside('/* below the invoker, spreading leading; flips above when cramped */'), gap,
           ...unit(menuCss, '@supports not (position-area: block-end)'),
-          aside('/* no anchor positioning? centered popover — worse placement, same menu */')
+          aside('/* no anchor positioning? centered — worse placement, same menu */')
+        ]}
+      ]
+    },
+    {
+      title: 'Dress the menu as a card',
+      want: 'A list of buttons reads as chrome until it wears the site’s card language — and rounded corners are unforgiving about what happens inside them.',
+      says: ['The body is a card: fixed width, paper, the floating shadow. Each item is a button ' +
+        'stripped to a full-width row — press glows, hover and focus draw the ring.',
+        'The geometry is where the care shows. Hairlines go between neighbours, so ' +
+        'li:not(:last-child) — a line after the last item would double the card’s own edge. ' +
+        'And only the first and last items get corner radii, top and bottom pairs ' +
+        'respectively, so a hovered item’s ring follows the card’s rounded corners instead of ' +
+        'poking square through them.'],
+      code: [
+        {label: 'CSS', lines: [
+          ...span(menuCss, 'margin: 0;', 'box-shadow: var(--base-box-shadow);'),
+          aside('/* the card body */'), gap,
+          ...unit(menuCss, '.item {'),
+          aside('/* a button stripped to a row; press glows, hover rings */'), gap,
+          ...span(menuCss, 'li:not(:last-child) .item {', '}'),
+          aside('/* hairlines between neighbours — never after the last */'), gap,
+          ...span(menuCss, 'li:first-child .item {', '}'), gap,
+          ...span(menuCss, 'li:last-child .item {', '}'),
+          aside('/* radii only where the card’s corners are */')
         ]}
       ]
     },
@@ -165,9 +195,10 @@ export const MenuRecipe: FC<Props> = ({pace, origin, motion, onMotion}) => {
     <header className="brief-line">
       <h2 className="kicker">build the sort menu yourself</h2>
       <p className="brief">
-        Six steps on the chooser that rides every header: a native menu on the popover API, one
-        rule draped over live data, and the armistice that keeps a press from becoming a drag.
-        The marked step is carved from whichever of the eight tables the dials hold.
+        Seven steps on the chooser that rides every header: a native menu on the popover API,
+        dressed as a card, one rule draped over live data, and the armistice that keeps a press
+        from becoming a drag. The marked step is carved from whichever of the eight tables the
+        dials hold.
       </p>
     </header>
     <p className="lead">

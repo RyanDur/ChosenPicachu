@@ -7,7 +7,7 @@ import baseCss from '@components/Table/Table.css?raw';
 import headerCss from '@components/DragSortableTable/Header.css?raw';
 import '../../Recipe/Recipe.css';
 
-const gap = plain('');
+const gap = plain(' ');
 
 const steps: StepEntry[] = [
   {
