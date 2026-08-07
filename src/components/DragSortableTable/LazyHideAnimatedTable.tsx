@@ -119,7 +119,7 @@ export const LazyHideAnimatedTable: FC<LazyHideAnimatedTableProps> = (
                     aloft={columnsTravel.aloft}
                     slid={slid}
                     rule={rule}
-                    className={headerClassName}
+                    className={classNames(headerClassName, column.className)}
                     onLift={columnsTravel.lift}
                     onOrdered={(column, to, marks) => {
                         setSlid(marks);
