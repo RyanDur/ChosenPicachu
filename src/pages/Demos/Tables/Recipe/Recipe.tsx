@@ -107,8 +107,8 @@ const shown = (origin: 'keep' | 'hide', source: string, headerSrc: string): Step
       'will land. Nothing unmounts.'],
     code: [
       {label: 'HTML', lines: [
-        ...span(source, 'aloft: columnsTravel.aloft,', 'aloft: columnsTravel.aloft,'), gap,
-        ...span(source, 'aloft: rowsTravel.aloft,', 'aloftColumn: columnsTravel.aloft,')
+        ...span(source, 'aloft={columnsTravel.aloft}', 'aloft={columnsTravel.aloft}'), gap,
+        ...span(source, 'aloft={rowsTravel.aloft}', 'aloftColumn={columnsTravel.aloft}')
       ]},
       {label: 'JS', lines: [
         ...span(headerSrc, 'const hidden = aloft === columnName;', 'const hidden = aloft === columnName;'),
@@ -255,7 +255,7 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
     code: [
       {label: 'JS', lines: [
         ...unit(eagerSource, 'const lift = '), gap,
-        ...span(source, 'onLift: columnsTravel.lift,', 'onLift: columnsTravel.lift,')
+        ...span(source, 'onLift={columnsTravel.lift}', 'onLift={columnsTravel.lift}')
       ]},
       {label: 'CSS', lines: [
         ...unit(sortableCss, '.grabbable {')

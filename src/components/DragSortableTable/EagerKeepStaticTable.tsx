@@ -1,4 +1,4 @@
-import {FC, PointerEvent, useState} from 'react';
+import {FC, useState} from 'react';
 import {has} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {classNames} from '@components/class-names';
@@ -44,35 +44,9 @@ export const EagerKeepStaticTable: FC<EagerKeepStaticTableProps> = (
     const ruled = (column: string, direction: Direction | undefined): void =>
         setRule(has(direction) ? {column, direction} : undefined);
 
-    const columnState = {
-        order,
-        shares,
-        rule,
-        draggable: draggableColumns,
-        className: classNames(dress.thClassName, dress.cellClassName),
-        onLift: columnsTravel.lift,
-        onOrdered: placedColumn,
-        onShared: setShares,
-        onRule: sortable ? ruled : undefined
-    };
-
-    const rowState = {
-        columns: order,
-        clipped,
-        standing,
-        gripped: draggableRows,
-        className: classNames(dress.trClassName, dress.rowClassName),
-        cellClassName: classNames(dress.tdClassName, dress.cellClassName),
-        onLift: (lifted: number) => (event: PointerEvent<HTMLElement>) => {
-            setRule(undefined);
-            setSeats(standing);
-            rowsTravel.lift(lifted)(event);
-        },
-        onArranged: (after: number[]) => {
-            setRule(undefined);
-            setSeats(after);
-        }
-    };
+    const headerClassName = classNames(dress.thClassName, dress.cellClassName);
+    const rowClassName = classNames(dress.trClassName, dress.rowClassName);
+    const cellClassName = classNames(dress.tdClassName, dress.cellClassName);
 
 
     return <>
@@ -87,11 +61,38 @@ export const EagerKeepStaticTable: FC<EagerKeepStaticTableProps> = (
                 dress.trClassName,
                 dress.headerRowClassName
             )}>{ordered.map(column =>
-                <DraggableHeader key={column.column} column={column} table={columnState}/>
+                <DraggableHeader key={column.column}
+                    column={column}
+                    order={order}
+                    shares={shares}
+                    rule={rule}
+                    draggable={draggableColumns}
+                    className={headerClassName}
+                    onLift={columnsTravel.lift}
+                    onOrdered={placedColumn}
+                    onShared={setShares}
+                    onRule={sortable ? ruled : undefined}/>
             )}</tr>
             </thead>
             <tbody className={dress.tbodyClassName}>{standing.map(card =>
-                <DraggableRow key={card} card={card} row={rows[card]} table={rowState}/>
+                <DraggableRow key={card}
+                    card={card}
+                    row={rows[card]}
+                    columns={order}
+                    clipped={clipped}
+                    standing={standing}
+                    gripped={draggableRows}
+                    className={rowClassName}
+                    cellClassName={cellClassName}
+                    onLift={lifted => event => {
+                        setRule(undefined);
+                        setSeats(standing);
+                        rowsTravel.lift(lifted)(event);
+                    }}
+                    onArranged={after => {
+                        setRule(undefined);
+                        setSeats(after);
+                    }}/>
             )}</tbody>
         </table>
         <Aloft columnsTravel={columnsTravel} rowsTravel={rowsTravel}
