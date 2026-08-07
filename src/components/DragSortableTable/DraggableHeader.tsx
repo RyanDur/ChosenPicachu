@@ -2,13 +2,9 @@ import {FC, KeyboardEvent, MouseEvent, PointerEvent} from 'react';
 import {has, not} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {Column, ResizeHandle, Shares, neighborOf, traded} from '@components/Table';
-import {Menu} from '@components/Menu';
 import {anchored} from './chart';
+import {Direction, SortMenu} from './SortMenu';
 import './DraggableHeader.css';
-
-export type Direction = 'ascending' | 'descending';
-
-const glyphs: Record<Direction, string> = {ascending: '▲', descending: '▼'};
 
 type Table = {
   ordered: readonly Column[];
@@ -67,13 +63,7 @@ export const DraggableHeader: FC<Props> = ({column, table}) => {
              style={has(share) ? {'--share': `${share}%`} : undefined}>
     {column.display}
     {has(onRule) && position > 0 &&
-        <Menu id={`sort-${columnName}`} label={`sort ${columnName}`}
-              toggle={has(sorted) ? glyphs[sorted] : '⇅'}>
-            <button type="button" className="item" onClick={event => onRule(columnName, 'ascending', event)}>ascending</button>
-            <button type="button" className="item" onClick={event => onRule(columnName, 'descending', event)}>descending
-            </button>
-            <button type="button" className="item" onClick={event => onRule(columnName, undefined, event)}>as dealt</button>
-        </Menu>}
+        <SortMenu column={columnName} sorted={sorted} onRule={onRule}/>}
     {has(share) && apportioned.length > 1 &&
         <ResizeHandle column={columnName} share={share}
                       onTrade={delta => onShared(traded(columnName, neighborOf(apportioned, columnName), delta))}/>}
