@@ -1,7 +1,7 @@
 import {FC, PointerEvent} from 'react';
 import {join} from '@components/class-names';
 import {array} from '@components/arrays';
-import {Column, Dress, Row} from '@components/Table';
+import {Column, Row} from '@components/Table';
 import {RowGrip} from './RowGrip';
 
 type Props = {
@@ -14,21 +14,22 @@ type Props = {
     gripped: boolean;
     aloft?: number;
     aloftColumn?: string;
-    dress: Dress;
+    className: string;
+    cellClassName: string;
     onLift: (seat: number) => (event: PointerEvent<HTMLElement>) => void;
     onArranged: (after: number[]) => void;
 };
 
 export const DraggableRow: FC<Props> = (
-    {row, columns, position, seat, standing, clipped, gripped, aloft, aloftColumn, dress, onLift, onArranged}
+    {row, columns, position, seat, standing, clipped, gripped, aloft, aloftColumn, className, cellClassName, onLift, onArranged}
 ) => {
     const hidden = aloft === seat;
-    return <tr className={join(dress.trClassName, dress.rowClassName)}>
+    return <tr className={className}>
         {columns.map(({column}, columnNumber) => {
             const cell = row[column];
             const key = String(column);
             return <td className={join(
-                           dress.tdClassName, dress.cellClassName, cell.className,
+                           cellClassName, cell.className,
                            clipped && 'ellipsis',
                            aloftColumn === key && 'hide',
                            hidden && 'hide-across'

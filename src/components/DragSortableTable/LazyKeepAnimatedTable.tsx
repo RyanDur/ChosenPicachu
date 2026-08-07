@@ -78,6 +78,9 @@ export const LazyKeepAnimatedTable: FC<LazyKeepAnimatedTableProps> = (
         setRule(next);
     };
 
+    const headerClassName = join(dress.thClassName, dress.cellClassName);
+    const rowClassName = join(dress.trClassName, dress.rowClassName);
+    const cellClassName = join(dress.tdClassName, dress.cellClassName);
     const aloftColumn = ordered.find(definition => String(definition.column) === columnsTravel.aloft);
     const aloftRow = has(rowsTravel.aloft) ? rows[rowsTravel.aloft] : undefined;
     const surface = has(columnsTravel.aloft) ? columnsTravel.surface : rowsTravel.surface;
@@ -114,7 +117,7 @@ export const LazyKeepAnimatedTable: FC<LazyKeepAnimatedTableProps> = (
                     draggable={draggableColumns}
                     slid={slid}
                     rule={rule}
-                    dress={dress}
+                    className={headerClassName}
                     onLift={columnsTravel.lift}
                     onOrdered={(column, to, marks) => {
                         setSlid(marks);
@@ -135,7 +138,8 @@ export const LazyKeepAnimatedTable: FC<LazyKeepAnimatedTableProps> = (
                     gripped={draggableRows}
                     slid={slid}
                     shifted={shifted}
-                    dress={dress}
+                    className={rowClassName}
+                    cellClassName={cellClassName}
                     onLift={lifted => event => {
                         setRule(undefined);
                         setSeats(standing);

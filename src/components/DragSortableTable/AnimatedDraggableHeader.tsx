@@ -1,7 +1,7 @@
 import {FC, KeyboardEvent, MouseEvent, PointerEvent} from 'react';
 import {has, not} from '@ryandur/sand';
 import {join} from '@components/class-names';
-import {Column, Dress, ResizeHandle, Shares, neighborOf, traded} from '@components/Table';
+import {Column, ResizeHandle, Shares, neighborOf, traded} from '@components/Table';
 import {Slid, anchored} from './chart';
 import {Menu} from '@components/Menu';
 import {Direction} from './DraggableHeader';
@@ -22,7 +22,7 @@ type Props = {
     aloft?: string;
     slid?: Slid;
     rule?: {column: string; direction: Direction};
-    dress: Dress;
+    className: string;
     onLift: (column: string) => (event: PointerEvent<HTMLTableCellElement>) => void;
     onOrdered: (column: string, to: number, marks: Slid) => void;
     onShared: (update: (previous: Shares) => Shares) => void;
@@ -30,7 +30,7 @@ type Props = {
 };
 
 export const AnimatedDraggableHeader: FC<Props> = (
-    {column, order, shares, apportioned, clipped, position, count, draggable, aloft, slid, rule, dress, onLift, onOrdered, onShared, onRule}
+    {column, order, shares, apportioned, clipped, position, count, draggable, aloft, slid, rule, className, onLift, onOrdered, onShared, onRule}
 ) => {
     const key = String(column.column);
     const share = has(column.width) ? shares[key] : undefined;
@@ -39,7 +39,7 @@ export const AnimatedDraggableHeader: FC<Props> = (
     const displaced = slid?.[key];
     const sorted = rule?.column === key ? rule.direction : undefined;
     return <th className={join(
-               dress.thClassName, dress.cellClassName, column.className,
+               className, column.className,
                'slot',
                clipped && 'clipped',
                travels && 'grabbable',

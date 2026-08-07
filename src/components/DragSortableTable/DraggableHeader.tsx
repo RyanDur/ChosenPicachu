@@ -1,7 +1,7 @@
 import {FC, KeyboardEvent, MouseEvent, PointerEvent} from 'react';
 import {has, not} from '@ryandur/sand';
 import {join} from '@components/class-names';
-import {Column, Dress, ResizeHandle, Shares, neighborOf, traded} from '@components/Table';
+import {Column, ResizeHandle, Shares, neighborOf, traded} from '@components/Table';
 import {Menu} from '@components/Menu';
 import {anchored} from './chart';
 import './DraggableHeader.css';
@@ -21,7 +21,7 @@ type Props = {
     draggable: boolean;
     aloft?: string;
     rule?: {column: string; direction: Direction};
-    dress: Dress;
+    className: string;
     onLift: (column: string) => (event: PointerEvent<HTMLTableCellElement>) => void;
     onOrdered: (column: string, to: number) => void;
     onShared: (update: (previous: Shares) => Shares) => void;
@@ -29,7 +29,7 @@ type Props = {
 };
 
 export const DraggableHeader: FC<Props> = (
-    {column, order, shares, apportioned, clipped, position, count, draggable, aloft, rule, dress, onLift, onOrdered, onShared, onRule}
+    {column, order, shares, apportioned, clipped, position, count, draggable, aloft, rule, className, onLift, onOrdered, onShared, onRule}
 ) => {
     const key = String(column.column);
     const share = has(column.width) ? shares[key] : undefined;
@@ -37,7 +37,7 @@ export const DraggableHeader: FC<Props> = (
     const hidden = aloft === key;
     const sorted = rule?.column === key ? rule.direction : undefined;
     return <th className={join(
-               dress.thClassName, dress.cellClassName, column.className,
+               className, column.className,
                'slot',
                clipped && 'clipped',
                travels && 'grabbable',

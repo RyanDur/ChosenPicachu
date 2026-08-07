@@ -60,6 +60,9 @@ export const EagerHideStaticTable: FC<EagerHideStaticTableProps> = (
     const ruled = (column: string, direction: Direction | undefined): void =>
         setRule(has(direction) ? {column, direction} : undefined);
 
+    const headerClassName = join(dress.thClassName, dress.cellClassName);
+    const rowClassName = join(dress.trClassName, dress.rowClassName);
+    const cellClassName = join(dress.tdClassName, dress.cellClassName);
     const aloftColumn = ordered.find(definition => String(definition.column) === columnsTravel.aloft);
     const aloftRow = has(rowsTravel.aloft) ? rows[rowsTravel.aloft] : undefined;
     const surface = has(columnsTravel.aloft) ? columnsTravel.surface : rowsTravel.surface;
@@ -87,7 +90,7 @@ export const EagerHideStaticTable: FC<EagerHideStaticTableProps> = (
                     draggable={draggableColumns}
                     aloft={columnsTravel.aloft}
                     rule={rule}
-                    dress={dress}
+                    className={headerClassName}
                     onLift={columnsTravel.lift}
                     onOrdered={placedColumn}
                     onShared={setShares}
@@ -105,7 +108,8 @@ export const EagerHideStaticTable: FC<EagerHideStaticTableProps> = (
                     gripped={draggableRows}
                     aloft={rowsTravel.aloft}
                     aloftColumn={columnsTravel.aloft}
-                    dress={dress}
+                    className={rowClassName}
+                    cellClassName={cellClassName}
                     onLift={lifted => event => {
                         setRule(undefined);
                         setSeats(standing);
