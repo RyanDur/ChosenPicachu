@@ -1,7 +1,20 @@
 {
   "ci": {
     "collect": {
-      "numberOfRuns": 3
+      "numberOfRuns": 3,
+      "startServerCommand": "node scripts/lighthouse/server.mjs",
+      "startServerReadyPattern": "stub ready",
+      "url": [
+        "http://localhost:4517/ChosenPicachu/",
+        "http://localhost:4517/ChosenPicachu/gallery/?tab=vam",
+        "http://localhost:4517/ChosenPicachu/users/",
+        "http://localhost:4517/ChosenPicachu/demos/",
+        "http://localhost:4517/ChosenPicachu/games/",
+        "http://localhost:4517/ChosenPicachu/demos/?tab=tables",
+        "http://localhost:4517/ChosenPicachu/demos/?tab=tables&tut=menu",
+        "http://localhost:4517/ChosenPicachu/demos/?tab=tables&tut=resize",
+        "http://localhost:4517/ChosenPicachu/demos/?tab=dragAndDrop"
+      ]
     },
     "assert": {
       "assertMatrix": [

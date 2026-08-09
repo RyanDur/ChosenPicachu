@@ -92,19 +92,24 @@ jobs:
         run: npx playwright test
 
   lighthouse:
-    needs: pages
+    needs: build_test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Lighthouse audit of the deployed site
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+          registry-url: 'https://npm.pkg.github.com'
+      - name: Build against the stubs
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npm ci
+          npm run build:lighthouse
+      - name: Lighthouse audit of the stubbed site
         uses: treosh/lighthouse-ci-action@v12
         with:
-          urls: |
-            https://ryandur.github.io/ChosenPicachu/
-            https://ryandur.github.io/ChosenPicachu/gallery/?tab=vam
-            https://ryandur.github.io/ChosenPicachu/users/
-            https://ryandur.github.io/ChosenPicachu/demos/
-            https://ryandur.github.io/ChosenPicachu/games/
           configPath: ./lighthouserc.json
-          runs: 3
           uploadArtifacts: true

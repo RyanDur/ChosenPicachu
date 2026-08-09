@@ -13,7 +13,9 @@
     "lint": "oxlint --type-aware --deny-warnings",
     "preview": "vite preview",
     "tsc": "tsc -b",
-    "lint:css": "stylelint --max-warnings 0 'src/**/*.css'"
+    "lint:css": "stylelint --max-warnings 0 'src/**/*.css'",
+    "build:lighthouse": "vite build --mode lighthouse && node scripts/spa-fallback.mjs",
+    "lighthouse:record": "node scripts/lighthouse/record.mjs"
   },
   "dependencies": {
     "@ngneat/falso": "^8.0.2",
