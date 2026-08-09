@@ -92,7 +92,7 @@ export const DemosPage = () => {
               {chartKinds.map((kind, at) => kind === 'price'
                 ? <PriceChart key={at} trades={liveTrades.trades}/>
                 : <Candles key={at} trades={liveTrades.trades}/>)}
-              <Menu id="add-chart" label="Add a chart" toggle="Add a chart"
+              <Menu id="add-chart" label="Add a chart" toggle="+"
                     toggleClassName="add-chart button secondary">
                 <button type="button" className="item" onClick={addChart('price')}>Price line</button>
                 <button type="button" className="item" onClick={addChart('candles')}>Candles</button>
