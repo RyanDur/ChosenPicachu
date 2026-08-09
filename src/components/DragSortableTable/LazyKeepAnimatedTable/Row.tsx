@@ -37,6 +37,7 @@ export const Row: FC<Props> = (
       const displaced = slid?.[column];
       return <td className={classNames(
         cellClassName, cell.className,
+        columnNumber === 0 && gripped && 'row-header',
         clipped && 'ellipsis',
         aloftColumn === column && 'hide',
         hidden && 'hide-across',
@@ -47,7 +48,7 @@ export const Row: FC<Props> = (
                    ? {'--carried': `${displaced.by}px`, '--toward': displaced.toward === 'left' ? '1' : '-1'}
                    : undefined}>
         {columnNumber === 0 && gripped
-          ? <div className="cell-content">
+          ? <div className="row-header-content">
             <RowGrip position={position} onLift={onLift(row)}
                      onNudge={(toward, event) => {
                        const lane = event.currentTarget.closest('tr');

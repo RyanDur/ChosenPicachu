@@ -2,11 +2,16 @@
   user-select: none;
 }
 
-.cell-content {
+.fancy-table .cell.row-header {
+  padding: 0;
+}
+
+.row-header-content {
   display: grid;
   grid-template-columns: auto 1fr;
   align-items: center;
   column-gap: var(--base);
+  padding: var(--base-x-1_25);
 }
 
 .grabbable {

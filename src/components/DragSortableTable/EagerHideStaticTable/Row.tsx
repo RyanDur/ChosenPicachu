@@ -30,13 +30,14 @@ export const Row: FC<Props> = (
       const cell = cells[column];
       return <td className={classNames(
         cellClassName, cell.className,
+        columnNumber === 0 && gripped && 'row-header',
         clipped && 'ellipsis',
         aloftColumn === column && 'hide',
         hidden && 'hide-across'
       )}
                  key={column}>
         {columnNumber === 0 && gripped
-          ? <div className="cell-content">
+          ? <div className="row-header-content">
             <RowGrip position={position} onLift={onLift(row)}
                      onNudge={toward => {
                        const to = Math.min(Math.max(position + toward, 0), standing.length - 1);
