@@ -43,25 +43,30 @@ export const surveyed = (surface: HTMLTableElement, order: readonly string[], se
 const deadZone = (struckSize: number, aloftSize: number): number =>
     Math.max(struckSize / 4, (struckSize - aloftSize) / 2);
 
+type Slot<Identity> = {holds: Identity; at: number; size: number; start: number; end: number};
+
+const struckPast = <Identity>(slots: readonly Slot<Identity>[], home: number, coord: number): Identity | undefined => {
+    const struck = slots.find(({end}) => coord < end);
+    if (has(struck) && struck.at !== home) {
+        const held = deadZone(struck.size, slots[home]?.size ?? 0);
+        return (struck.at < home ? coord < struck.end - held : coord > struck.start + held)
+            ? struck.holds
+            : undefined;
+    }
+    return struck?.holds;
+};
+
 export const columnUnder = (order: readonly string[], survey?: Bounds) =>
     (x: number, y: number, aloft?: string): string | undefined => {
         if (has(survey) && has(aloft) && y >= survey.top && y <= survey.top + survey.height) {
             let edge = survey.left;
             const total = order.reduce((sum, name) => sum + (survey.columnWidths[name] ?? 0), 0) || 1;
             const slots = order.map((column, at) => {
-                const width = (survey.columnWidths[column] ?? 0) / total * survey.width;
-                edge += width;
-                return {column, at, width, start: edge - width, end: edge};
+                const size = (survey.columnWidths[column] ?? 0) / total * survey.width;
+                edge += size;
+                return {holds: column, at, size, start: edge - size, end: edge};
             });
-            const struck = slots.find(({end}) => x < end);
-            if (has(struck) && struck.column !== aloft) {
-                const home = order.indexOf(aloft);
-                const held = deadZone(struck.width, slots[home]?.width ?? 0);
-                return (struck.at < home ? x < struck.end - held : x > struck.start + held)
-                    ? struck.column
-                    : undefined;
-            }
-            return struck?.column;
+            return struckPast(slots, order.indexOf(aloft), x);
         }
         return undefined;
     };
@@ -73,19 +78,11 @@ export const cardUnder = (seats: readonly number[], survey?: Survey) =>
             let edge = top + height -
                 seats.reduce((total, card) => total + rowHeights[card], 0);
             const slots = seats.map((card, at) => {
-                const rowHeight = rowHeights[card];
-                edge += rowHeight;
-                return {card, at, height: rowHeight, start: edge - rowHeight, end: edge};
+                const size = rowHeights[card];
+                edge += size;
+                return {holds: card, at, size, start: edge - size, end: edge};
             });
-            const struck = slots.find(({end}) => y < end);
-            if (has(struck) && struck.card !== aloft) {
-                const home = seats.indexOf(aloft);
-                const held = deadZone(struck.height, slots[home]?.height ?? 0);
-                return (struck.at < home ? y < struck.end - held : y > struck.start + held)
-                    ? struck.card
-                    : undefined;
-            }
-            return struck?.card;
+            return struckPast(slots, seats.indexOf(aloft), y);
         }
         return undefined;
     };
