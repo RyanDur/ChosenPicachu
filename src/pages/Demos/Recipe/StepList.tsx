@@ -1,4 +1,5 @@
-import {FC, MouseEvent, ReactNode, useState} from 'react';
+import {FC, MouseEvent, ReactNode} from 'react';
+import {useSearchParams} from 'react-router';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {Line, Snippet} from './Snippet';
@@ -28,19 +29,29 @@ export type StoryEntry = {
   steps: StepEntry[];
 };
 
-export const StoryList: FC<{stories: StoryEntry[]}> = ({stories}) => {
-  const [opened, setOpened] = useState<ReadonlySet<number>>(() => new Set());
+const openedIn = (params: URLSearchParams, param: string): Set<number> =>
+  new Set((params.get(param) ?? '').split(',').filter(part => part !== '').map(Number));
+
+export const StoryList: FC<{stories: StoryEntry[]; param: string}> = ({stories, param}) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const opened = openedIn(searchParams, param);
   const toggled = (at: number) => (event: MouseEvent<HTMLElement>) => {
     event.preventDefault();
-    setOpened(previous => {
-      const next = new Set(previous);
+    setSearchParams(previous => {
+      const next = openedIn(previous, param);
       if (next.has(at)) {
         next.delete(at);
       } else {
         next.add(at);
       }
-      return next;
-    });
+      const params = new URLSearchParams(previous);
+      if (next.size > 0) {
+        params.set(param, [...next].join(','));
+      } else {
+        params.delete(param);
+      }
+      return params;
+    }, {replace: true});
   };
   return <ol className="arcs">
     {stories.map((story, at) =>

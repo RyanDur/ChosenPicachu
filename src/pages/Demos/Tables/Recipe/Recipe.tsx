@@ -622,7 +622,7 @@ export const Recipe: FC<Props> = ({track, onTrack, pace, origin, motion, onPace,
            ]}
            chosen={track}
            onPick={onTrack}/>
-    <StoryList stories={(track === 'pointer'
+    <StoryList param="sort" stories={(track === 'pointer'
       ? pointerStories(pace, origin, motion)
       : keyedStories(motion))
       .map(story => ({...story,

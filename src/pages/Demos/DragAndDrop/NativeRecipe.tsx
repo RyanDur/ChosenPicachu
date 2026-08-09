@@ -367,7 +367,7 @@ export const NativeRecipe: FC<ControlsProps> = ({pace, origin, motion, onPace, o
         the real one.
       </p>
     </header>
-    <StoryList stories={stories(pace, origin, motion)
+    <StoryList param="native" stories={stories(pace, origin, motion)
       .map(story => ({...story,
         steps: story.steps.map(({dial, ...step}) => ({...step, dial: dial && dials[dial]}))}))}/>
   </section>;
