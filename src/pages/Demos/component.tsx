@@ -20,6 +20,7 @@ import {DemoTopics, demoTopicParam} from './types';
 import {NaturalZIndex} from './ZIndexDemo';
 import {Candles, PriceChart} from './Charts';
 import {Menu} from '@components/Menu';
+import {ChartsTutorial} from './Charts/Tutorial';
 import {classNames} from '@components/class-names';
 import Handle from '@components/grip.svg';
 import {strayed} from './DragAndDrop/crossing';
@@ -204,6 +205,7 @@ export const DemosPage = () => {
                     : <Candles id={`chart-${at}`} trades={liveTrades.trades}
                                actions={dismissal(at)}/>}
                 </article>)}
+              <ChartsTutorial/>
             </>,
             [DemoTopics.tables]: <>
               <Aggregations trades={liveTrades.trades} pace={pace} origin={origin} motion={motion}/>
