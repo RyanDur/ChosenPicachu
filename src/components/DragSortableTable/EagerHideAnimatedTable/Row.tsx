@@ -62,7 +62,7 @@ export const Row: FC<Props> = (
                    ? {'--carried': `${displaced.by}px`, '--toward': displaced.toward === 'left' ? '1' : '-1'}
                    : undefined}>
         {columnNumber === 0 && gripped &&
-            <RowGrip row={position + 1} onLift={onLift(row)}
+            <RowGrip position={position} onLift={onLift(row)}
                      onNudge={(toward, event) => {
                        const lane = event.currentTarget.closest('tr');
                        if (has(lane) && (lane.getAnimations?.().length ?? 0) > 0) {

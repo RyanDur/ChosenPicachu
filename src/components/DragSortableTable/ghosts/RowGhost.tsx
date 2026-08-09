@@ -20,7 +20,7 @@ export const RowGhost: FC<Props> = ({at, drift, dress, columns, widths, row}) =>
         <tr className={dress.row}>
             {columns.map(({column}, place) => {
                 const share = widths[column];
-                return <td className={classNames(dress.cell, has(share) && 'shared', row[column].className, 'ellipsis')}
+                return <td className={classNames(dress.cell, place === 0 && 'gripped', has(share) && 'shared', row[column].className, 'ellipsis')}
                     key={place}
                     style={has(share) ? {'--share': `${share}%`} : undefined}>
                     {place === 0 && <i className="grip"><Handle/></i>}

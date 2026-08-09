@@ -6,8 +6,13 @@
   position: relative;
 }
 
-.fancy-table.sortable .body .cell:first-child {
+.fancy-table.sortable .body .cell:first-child,
+.column-ghost .cell.gripped {
   padding-left: var(--base-x-3);
+}
+
+.column-ghost .cell.gripped {
+  position: relative;
 }
 
 .grabbable {

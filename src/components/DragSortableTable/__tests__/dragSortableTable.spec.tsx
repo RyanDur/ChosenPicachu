@@ -266,6 +266,8 @@ describe('drag sortable rows', () => {
     expect(ghost).toHaveAttribute('aria-hidden', 'true');
     expect(ghost.querySelector('.grip')).not.toBeNull();
     const [name, age] = [...ghost.querySelectorAll('td')];
+    expect(name.classList).toContain('gripped');
+    expect(age.classList).not.toContain('gripped');
     expect(name.style.getPropertyValue('--share')).toBe('62.5%');
     expect(age.style.getPropertyValue('--share')).toBe('37.5%');
     drop();

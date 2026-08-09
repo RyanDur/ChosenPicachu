@@ -36,7 +36,7 @@ export const Row: FC<Props> = (
       )}
                  key={column}>
         {columnNumber === 0 && gripped &&
-            <RowGrip row={position + 1} onLift={onLift(row)}
+            <RowGrip position={position} onLift={onLift(row)}
                      onNudge={toward => {
                        const to = Math.min(Math.max(position + toward, 0), standing.length - 1);
                        onArranged(array.moveToIndex(to, row, standing));
