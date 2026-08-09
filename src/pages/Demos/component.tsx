@@ -132,8 +132,10 @@ export const DemosPage = () => {
                   <figcaption className="attribution">a user</figcaption>
                 </figure>
                 <p className="overview">
-                  The list is our interpretation of that. The cards below break the
-                  interpretation into features; open one to see how we built it.
+                  If you want the exercise, stop here and build the story yourself first. The
+                  list is our interpretation of that; the cards below break the
+                  interpretation into features. Open one to see how we built it, or to
+                  compare it with yours.
                 </p>
                 <ListControls pace={pace} origin={origin} motion={motion}
                               onPace={next => updateSearchParams({pace: next})}
