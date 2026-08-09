@@ -82,7 +82,7 @@ export const Header: FC<Props> = (
                  ? {'--carried': `${displaced.by}px`, '--toward': displaced.toward === 'left' ? '1' : '-1'}
                  : {})
              }}>
-    <article className="slot-grid">
+    <div className="slot-grid">
       {column.display}
       {has(onRule) && position > 0 &&
           <SortMenu column={columnName} sorted={sorted} onRule={onRule}/>}
@@ -91,6 +91,6 @@ export const Header: FC<Props> = (
                         onAwaken={onAwaken}
                         onTrade={delta => onShared(previous =>
                           previous && traded(columnName, neighborOf(order, columnName), delta)(previous))}/>}
-    </article>
+    </div>
   </th>;
 };

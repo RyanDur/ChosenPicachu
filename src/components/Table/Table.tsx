@@ -55,7 +55,7 @@ export const Table: FC<TableProps> = ({columns, rows, id, resizableColumns, ...d
                    className={classNames(dress.thClassName, dress.cellClassName, className, 'slot',
                      clipped && 'clipped', has(share) && 'shared')}
                    style={has(share) ? {'--share': `${share}%`} : undefined}>
-          <article className="slot-grid">
+          <div className="slot-grid">
             {display}
             {clipped && apportioned.length > 1 &&
               <ResizeHandle column={column}
@@ -63,7 +63,7 @@ export const Table: FC<TableProps> = ({columns, rows, id, resizableColumns, ...d
                             onAwaken={awaken}
                             onTrade={delta => setShares(previous =>
                               previous && traded(column, neighborOf(apportioned, column), delta)(previous))}/>}
-          </article>
+          </div>
         </th>;
       })}
     </tr>
