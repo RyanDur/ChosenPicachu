@@ -45,8 +45,56 @@ const chartsRoute = (feedUrl: string) => ({
   element: <EnvProvider env={{tradeFeed: feedUrl, tradeHistory: 'http://127.0.0.1:9'}}><DemosPage/></EnvProvider>
 });
 
-const renderCharts = (feedUrl: string) =>
-  renderWithMemoryRouter(chartsRoute(feedUrl), {path: `${Paths.demos}?tab=charts`});
+const renderCharts = (feedUrl: string, search = '?tab=charts') =>
+  renderWithMemoryRouter(chartsRoute(feedUrl), {path: `${Paths.demos}${search}`});
+
+describe('a list of charts', () => {
+  const feeds: WebSocketServer[] = [];
+  const streamingFeed = async (): Promise<WebSocketServer> => {
+    const feed = await listeningFeed();
+    feeds.push(feed);
+    return feed;
+  };
+  afterEach(async () => {
+    cleanup();
+    subscribed.clear();
+    await Promise.all(feeds.map(feed => new Promise(resolve => feed.close(resolve))));
+    feeds.length = 0;
+  });
+
+  test('the trader starts with one chart', async () => {
+    const feed = await streamingFeed();
+
+    renderCharts(urlOf(feed));
+
+    expect(await screen.findByRole('region', {name: 'live trades'})).toBeVisible();
+    expect(screen.queryByRole('region', {name: 'candles'})).toBeNull();
+  });
+
+  test('the trader can add a chart', async () => {
+    const feed = await streamingFeed();
+
+    renderCharts(urlOf(feed));
+    await screen.findByRole('region', {name: 'live trades'});
+
+    const toggle = screen.getByRole('button', {name: 'Add a chart'});
+    const menu = document.getElementById(toggle.getAttribute('popovertarget') ?? '');
+    if (menu === null) throw new Error('no add-a-chart menu');
+    await userEvent.click(within(menu).getByText('Candles'));
+
+    expect(await screen.findByRole('region', {name: 'candles'})).toBeVisible();
+    expect(screen.getByRole('region', {name: 'live trades'})).toBeVisible();
+  });
+
+  test('the charts travel in the url', async () => {
+    const feed = await streamingFeed();
+
+    renderCharts(urlOf(feed), '?tab=charts&charts=candles,price,price');
+
+    expect(await screen.findByRole('region', {name: 'candles'})).toBeVisible();
+    expect(screen.getAllByRole('region', {name: 'live trades'})).toHaveLength(2);
+  });
+});
 
 describe('the demos page', () => {
   describe('live trades', () => {
@@ -187,7 +235,7 @@ describe('the demos page', () => {
     test('the charts explain what they show', async () => {
       const feed = await streamingFeed();
 
-      renderCharts(urlOf(feed));
+      renderCharts(urlOf(feed), '?tab=charts&charts=price,candles');
 
       const explainers = await screen.findAllByText('what am I looking at?');
       expect(explainers).toHaveLength(2);
@@ -201,7 +249,7 @@ describe('the demos page', () => {
       const feed = await streamingFeed();
       const bucketStart = 1700000000000;
 
-      renderCharts(urlOf(feed));
+      renderCharts(urlOf(feed), '?tab=charts&charts=candles');
 
       await feedIsLive();
       broadcast(feed, [

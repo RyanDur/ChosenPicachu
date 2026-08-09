@@ -19,6 +19,8 @@ import {
 import {DemoTopics, demoTopicParam} from './types';
 import {NaturalZIndex} from './ZIndexDemo';
 import {Candles, PriceChart} from './Charts';
+import {Menu} from '@components/Menu';
+import * as D from 'schemawax';
 import {motionParam, originParam, paceParam} from './Controls';
 import {Aggregations, Tutorials, trackParam, tutorialParam} from './Tables';
 import {statusCopy, useLiveTrades} from './Charts/useLiveTrades';
@@ -30,11 +32,18 @@ const paragraphs = (count: number) =>
     value: Array.from({length: Math.floor(Math.random() * 6) + 1}, () => randParagraph()).join('\n\n')
   }));
 
+type ChartKind = 'price' | 'candles';
+
 export const DemosPage = () => {
-  const {tab, pace = 'eager', origin = 'hide', motion = 'animated', tut = 'sort', track = 'pointer', updateSearchParams} =
+  const {tab, pace = 'eager', origin = 'hide', motion = 'animated', tut = 'sort', track = 'pointer', charts = 'price', updateSearchParams} =
     useSearchParamsObject(
-      {tab: demoTopicParam, pace: paceParam, origin: originParam, motion: motionParam, tut: tutorialParam, track: trackParam},
+      {tab: demoTopicParam, pace: paceParam, origin: originParam, motion: motionParam, tut: tutorialParam, track: trackParam, charts: D.string},
       {tab: DemoTopics.accordions});
+  const isChartKind = (kind: string): kind is ChartKind => kind === 'price' || kind === 'candles';
+  const dealtCharts = charts.split(',').filter(isChartKind);
+  const chartKinds: readonly ChartKind[] = dealtCharts.length > 0 ? dealtCharts : ['price'];
+  const addChart = (kind: ChartKind) => () =>
+    updateSearchParams({charts: [...chartKinds, kind].join(',')});
   const [accordionContents] = useState(() => Array.from({length: 5}, () => paragraphs(5)));
   const {tradeFeed, tradeProduct} = useEnv();
   const liveTrades = useLiveTrades(tradeFeed, tradeProduct);
@@ -80,8 +89,14 @@ export const DemosPage = () => {
                 <h2 className="headline">{`Bitcoin, live — every ${tradeProduct} trade on Coinbase`}</h2>
                 <output className="status" data-status={liveTrades.status}>{statusCopy[liveTrades.status]}</output>
               </header>
-              <PriceChart trades={liveTrades.trades}/>
-              <Candles trades={liveTrades.trades}/>
+              {chartKinds.map((kind, at) => kind === 'price'
+                ? <PriceChart key={at} trades={liveTrades.trades}/>
+                : <Candles key={at} trades={liveTrades.trades}/>)}
+              <Menu id="add-chart" label="Add a chart" toggle="Add a chart"
+                    toggleClassName="add-chart button secondary">
+                <button type="button" className="item" onClick={addChart('price')}>Price line</button>
+                <button type="button" className="item" onClick={addChart('candles')}>Candles</button>
+              </Menu>
             </>,
             [DemoTopics.tables]: <>
               <Aggregations trades={liveTrades.trades} pace={pace} origin={origin} motion={motion}/>
