@@ -82,7 +82,7 @@ export const Header: FC<Props> = (
                  ? {'--carried': `${displaced.by}px`, '--toward': displaced.toward === 'left' ? '1' : '-1'}
                  : {})
              }}>
-    <div className="header-cell-grid">
+    <div className="header-cell-content">
       {column.display}
       {has(onRule) && position > 0 &&
           <SortMenu column={columnName} sorted={sorted} onRule={onRule}/>}

@@ -16,7 +16,7 @@ export const ColumnGhost: FC<Props> = ({at, drift, dress, column, rows}) =>
         <thead className={dress.thead}>
         <tr className={dress.headerRow}>
             <th className={classNames(dress.header, column.className, 'header-cell', 'clipped')} scope="col">
-                <div className="header-cell-grid">
+                <div className="header-cell-content">
                     {column.display}
                 </div>
             </th>

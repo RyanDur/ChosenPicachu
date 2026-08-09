@@ -58,7 +58,7 @@ export const Header: FC<Props> = (
                }
                : undefined}
              style={has(share) ? {'--share': `${share}%`} : undefined}>
-    <div className="header-cell-grid">
+    <div className="header-cell-content">
       {column.display}
       {has(onRule) && position > 0 &&
           <SortMenu column={columnName} sorted={sorted} onRule={onRule}/>}
