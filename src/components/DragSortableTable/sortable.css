@@ -5,6 +5,7 @@
 .fancy-table .cell.row-header {
   padding: 0;
   vertical-align: middle;
+  text-align: left;
 }
 
 .row-header-content {

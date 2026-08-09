@@ -227,7 +227,7 @@ describe('drag sortable rows', () => {
     return found;
   };
   const firstCells = () => within(within(sourceTable()).getAllByRole('rowgroup')[1])
-    .getAllByRole('row').map(row => within(row).getAllByRole('cell')[0].textContent);
+    .getAllByRole('row').map(row => row.querySelector('th, td')?.textContent);
   const rowOf = (person: string) => {
     const row = within(sourceTable()).getByText(person).closest('tr');
     if (row === null) throw new Error(`no row for ${person}`);
@@ -275,7 +275,9 @@ describe('drag sortable rows', () => {
     if (ghost === null) throw new Error('no ghost is aloft');
     expect(ghost).toHaveAttribute('aria-hidden', 'true');
     expect(ghost.querySelector('.grip')).not.toBeNull();
-    const [name, age] = [...ghost.querySelectorAll('td')];
+    const name = ghost.querySelector('th');
+    const age = ghost.querySelector('td');
+    if (name === null || age === null) throw new Error('the ghost row lost a seat');
     expect(name.classList).toContain('row-header');
     expect(name.querySelector('.row-header-content .grip')).not.toBeNull();
     expect(age.querySelector('.grip')).toBeNull();
@@ -308,12 +310,12 @@ describe('drag sortable rows', () => {
     render(<EagerHideStaticTable columns={sized} rows={people} draggableRows/>);
 
     lift('Grace');
-    within(rowOf('Grace')).getAllByRole('cell')
+    [...rowOf('Grace').querySelectorAll('th, td')]
       .forEach(cell => expect(cell.classList).toContain('hide-across'));
 
     carryOver('Ada');
     drop();
-    within(rowOf('Grace')).getAllByRole('cell')
+    [...rowOf('Grace').querySelectorAll('th, td')]
       .forEach(cell => expect(cell.classList).not.toContain('hide-across'));
     expect(firstCells()).toEqual(['Grace', 'Ada', 'Alan']);
   });
@@ -382,7 +384,7 @@ describe('sort criteria menus', () => {
 
   const sourceTable = () => screen.getAllByRole('table')[0];
   const firstCells = () => within(within(sourceTable()).getAllByRole('rowgroup')[1])
-    .getAllByRole('row').map(row => within(row).getAllByRole('cell')[0].textContent);
+    .getAllByRole('row').map(row => row.querySelector('th, td')?.textContent);
   const ageHeader = () => screen.getByRole('columnheader', {name: /^age/});
   const menuFor = (label: string) => {
     const toggle = screen.getByRole('button', {name: label});
@@ -489,7 +491,7 @@ describe('animated moves', () => {
     });
   };
   const firstCells = () => within(screen.getAllByRole('rowgroup')[1])
-    .getAllByRole('row').map(row => within(row).getAllByRole('cell')[0].textContent);
+    .getAllByRole('row').map(row => row.querySelector('th, td')?.textContent);
 
   afterEach(() => {
     delete (document as {startViewTransition?: unknown}).startViewTransition;

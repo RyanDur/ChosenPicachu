@@ -31,7 +31,7 @@ describe('the windows hydrate from history', () => {
     renderTables();
 
     const card = screen.getByRole('region', {name: 'live aggregations'});
-    const texts = (row: HTMLElement) => within(row).getAllByRole('cell').map(cell => cell.textContent);
+    const texts = (row: HTMLElement) => [...row.querySelectorAll('th, td')].map(cell => cell.textContent);
     const rowFor = (label: string) => {
       const cell = within(card).getByText(label);
       const row = cell.closest('tr');

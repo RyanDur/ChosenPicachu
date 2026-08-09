@@ -50,20 +50,21 @@ export const Row: FC<Props> = (
     {columns.map((column, columnNumber) => {
       const cell = cells[column];
       const displaced = slid?.[column];
-      return <td className={classNames(
+      const rowHeader = columnNumber === 0 && gripped;
+      const dress = classNames(
         cellClassName, cell.className,
-        columnNumber === 0 && gripped && 'row-header',
+        rowHeader && 'row-header',
         clipped && 'ellipsis',
         aloftColumn === column && 'hide',
         hidden && 'hide-across',
         has(displaced) && 'displaced'
-      )}
-                 key={column}
-                 style={has(displaced)
-                   ? {'--carried': `${displaced.by}px`, '--toward': displaced.toward === 'left' ? '1' : '-1'}
-                   : undefined}>
-        {columnNumber === 0 && gripped
-          ? <div className="row-header-content">
+      );
+      const theater = has(displaced)
+        ? {'--carried': `${displaced.by}px`, '--toward': displaced.toward === 'left' ? '1' : '-1'}
+        : undefined;
+      return rowHeader
+        ? <th scope="row" className={dress} key={column} style={theater}>
+          <div className="row-header-content">
             <RowGrip position={position} onLift={onLift(row)}
                      onNudge={(toward, event) => {
                        const lane = event.currentTarget.closest('tr');
@@ -79,8 +80,8 @@ export const Row: FC<Props> = (
                      }}/>
             {cell.display}
           </div>
-          : cell.display}
-      </td>;
+        </th>
+        : <td className={dress} key={column} style={theater}>{cell.display}</td>;
     })}
   </tr>;
 };
