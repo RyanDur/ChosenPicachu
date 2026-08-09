@@ -35,13 +35,16 @@ export const Row: FC<Props> = (
         hidden && 'hide-across'
       )}
                  key={column}>
-        {columnNumber === 0 && gripped &&
+        {columnNumber === 0 && gripped
+          ? <div className="cell-content">
             <RowGrip position={position} onLift={onLift(row)}
                      onNudge={toward => {
                        const to = Math.min(Math.max(position + toward, 0), standing.length - 1);
                        onArranged(array.moveToIndex(to, row, standing));
-                     }}/>}
-        {cell.display}
+                     }}/>
+            {cell.display}
+          </div>
+          : cell.display}
       </td>;
     })}
   </tr>;

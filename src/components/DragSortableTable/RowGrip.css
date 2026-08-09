@@ -1,13 +1,8 @@
 .sortable .grip,
 .column-ghost .grip {
-  appearance: none;
   border: none;
   padding: 0;
   background: none;
-  position: absolute;
-  left: 0;
-  top: 50%;
-  translate: 0 -50%;
   width: var(--base-x-2);
   height: var(--base-x-2);
   display: inline-flex;

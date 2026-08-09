@@ -61,7 +61,8 @@ export const Row: FC<Props> = (
                  style={has(displaced)
                    ? {'--carried': `${displaced.by}px`, '--toward': displaced.toward === 'left' ? '1' : '-1'}
                    : undefined}>
-        {columnNumber === 0 && gripped &&
+        {columnNumber === 0 && gripped
+          ? <div className="cell-content">
             <RowGrip position={position} onLift={onLift(row)}
                      onNudge={(toward, event) => {
                        const lane = event.currentTarget.closest('tr');
@@ -74,8 +75,10 @@ export const Row: FC<Props> = (
                        onArranged(after, has(table)
                          ? shifts(surveyed(table, columns, standing).rowHeights, standing, after)
                          : {});
-                     }}/>}
-        {cell.display}
+                     }}/>
+            {cell.display}
+          </div>
+          : cell.display}
       </td>;
     })}
   </tr>;

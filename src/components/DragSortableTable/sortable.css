@@ -2,17 +2,11 @@
   user-select: none;
 }
 
-.fancy-table.sortable .row {
-  position: relative;
-}
-
-.fancy-table.sortable .body .cell:first-child,
-.column-ghost .cell.gripped {
-  padding-left: var(--base-x-3);
-}
-
-.column-ghost .cell.gripped {
-  position: relative;
+.cell-content {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  column-gap: var(--base);
 }
 
 .grabbable {
