@@ -10,8 +10,8 @@ export const crossed = (event: DragEvent<HTMLElement>, homeward: boolean): boole
 
 export const crossedVertical = (event: DragEvent<HTMLElement>, homeward: boolean): boolean => {
   const space = event.currentTarget.getBoundingClientRect();
-  const quarter = space.height / 4;
+  const toehold = Math.min(space.height / 4, 48);
   return homeward
-    ? event.clientY < space.bottom - quarter
-    : event.clientY > space.top + quarter;
+    ? event.clientY < space.bottom - toehold
+    : event.clientY > space.top + toehold;
 };
