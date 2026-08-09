@@ -247,12 +247,10 @@ export const MenuRecipe: FC<Props> = ({pace, origin, motion, onMotion}) => {
     <header className="brief-line">
       <h2 className="kicker">build the sort menu yourself</h2>
       <p className="brief">
-        The chooser that rides every header, told as one story: a
-        native <Mdn path="Web/HTML/Element/menu">menu</Mdn> on
-        the <Mdn path="Web/API/Popover_API">popover API</Mdn>, one rule draped over live data,
-        and the hand that outranks it. Open a card and the steps inside build it. Where there
-        is a wrong way you would reach for first, it appears in a dashed frame before the real
-        one, and the code is carved from whichever of the eight tables the dials hold.
+        The chooser that rides every header, told as one story; open the card and the steps
+        inside build it. Where there is a wrong way you would reach for first, it appears in
+        a dashed frame before the real one, and where a step depends on the motion dial, that
+        dial sits on the step.
       </p>
     </header>
     <p className="lead">
