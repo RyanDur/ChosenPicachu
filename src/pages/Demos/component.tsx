@@ -158,16 +158,30 @@ export const DemosPage = () => {
                          onDragOver={event => {
                            event.preventDefault();
                            event.dataTransfer.dropEffect = 'move';
-                           if ((event.currentTarget.getAnimations?.().length ?? 0) > 0 || aloftChart === undefined) {
+                           if (aloftChart === undefined) {
                              return;
                            }
-                           const seat = event.currentTarget.getBoundingClientRect();
-                           const to = at === aloftChart
-                             ? passedThird(event, seat, false) ? at + 1
-                               : passedThird(event, seat, true) ? at - 1
-                                 : undefined
-                             : at;
-                           if (to !== undefined && to !== aloftChart && to >= 0 && to < chartKinds.length) {
+                           const slots = event.currentTarget.parentElement?.querySelectorAll(':scope > .chart-slot');
+                           const held = slots?.item(aloftChart);
+                           if (!(held instanceof HTMLElement)) {
+                             return;
+                           }
+                           const seat = held.getBoundingClientRect();
+                           const to = passedThird(event, seat, false) ? aloftChart + 1
+                             : passedThird(event, seat, true) ? aloftChart - 1
+                               : undefined;
+                           if (to === undefined || to < 0 || to >= chartKinds.length) {
+                             return;
+                           }
+                           const next = slots?.item(to);
+                           if (!(next instanceof HTMLElement) || (next.getAnimations?.().length ?? 0) > 0) {
+                             return;
+                           }
+                           const displaced = next.getBoundingClientRect();
+                           const settled = to > aloftChart
+                             ? event.clientY > seat.top + displaced.height
+                             : event.clientY < seat.bottom - displaced.height;
+                           if (settled) {
                              setChartPushed({[aloftChart]: to > aloftChart ? 'up' : 'down'});
                              updateSearchParams({charts: seated(aloftChart, to).join(',')}, {replace: true});
                              setAloftChart(to);
