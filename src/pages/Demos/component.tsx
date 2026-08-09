@@ -182,18 +182,13 @@ export const DemosPage = () => {
                              return;
                            }
                            const displaced = next.getBoundingClientRect();
-                           const settled = to > aloftChart
-                             ? event.clientY > seat.top + displaced.height
-                             : event.clientY < seat.bottom - displaced.height;
-                           if (settled) {
-                             const landingTop = to > aloftChart
-                               ? seat.top + displaced.height
-                               : seat.top - displaced.height;
-                             setAloftLead(event.clientY - landingTop);
-                             setChartPushed({[aloftChart]: to > aloftChart ? 'up' : 'down'});
-                             updateSearchParams({charts: seated(aloftChart, to).join(',')}, {replace: true});
-                             setAloftChart(to);
-                           }
+                           const landingTop = to > aloftChart
+                             ? seat.top + displaced.height
+                             : seat.top - displaced.height;
+                           setAloftLead(event.clientY - landingTop);
+                           setChartPushed({[aloftChart]: to > aloftChart ? 'up' : 'down'});
+                           updateSearchParams({charts: seated(aloftChart, to).join(',')}, {replace: true});
+                           setAloftChart(to);
                          }}
                          onDrop={event => event.preventDefault()}
                          onDragEnd={() => {
