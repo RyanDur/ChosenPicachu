@@ -1,5 +1,5 @@
 import userEvent from '@testing-library/user-event';
-import {screen} from '@testing-library/react';
+import {screen, waitFor} from '@testing-library/react';
 import {fromAICArt} from '@test-support/fixtures';
 import {renderWithGalleryContext} from '@test-support';
 import {PageControl} from '@components/art-gallery/PageControl/index';
@@ -22,7 +22,8 @@ describe('The page controls', () => {
       await userEvent.type(screen.getByLabelText(/Page #/), pageNumber);
       await userEvent.click(screen.getByText('Go'));
 
-      expect(screen.getByLabelText('url search')).toHaveTextContent(`?page=${pageNumber}`);
+      await waitFor(() =>
+        expect(screen.getByLabelText('url search')).toHaveTextContent(`?page=${pageNumber}`));
       expect(screen.getByLabelText(/Page #/)).not.toHaveValue(+pageNumber);
     });
 
