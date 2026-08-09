@@ -110,3 +110,20 @@
   position-area: block-start;
   position-try-fallbacks: flip-block;
 }
+
+.remove-chart {
+  border: none;
+  background: none;
+  padding: 0;
+  min-width: var(--base-x-3);
+  min-height: var(--base-x-3);
+  display: inline-grid;
+  place-items: center;
+  cursor: pointer;
+  font-size: var(--base-x-2_5);
+  color: var(--charcoal);
+
+  &:focus-visible {
+    outline: var(--hairline-x-2) solid var(--charcoal);
+  }
+}

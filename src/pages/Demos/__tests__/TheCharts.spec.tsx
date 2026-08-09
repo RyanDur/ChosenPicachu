@@ -87,34 +87,25 @@ describe('a list of charts', () => {
     expect(candles.compareDocumentPosition(price)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
   });
 
-  test('the trader can switch what a chart is', async () => {
-    const feed = await streamingFeed();
-
-    renderCharts(urlOf(feed));
-    await screen.findByRole('region', {name: 'live trades'});
-
-    const toggle = screen.getByRole('button', {name: 'chart kind'});
-    const menu = document.getElementById(toggle.getAttribute('popovertarget') ?? '');
-    if (menu === null) throw new Error('no chart-kind menu');
-    await userEvent.click(within(menu).getByText('Candles'));
-
-    expect(await screen.findByRole('region', {name: 'candles'})).toBeVisible();
-    expect(screen.queryByRole('region', {name: 'live trades'})).toBeNull();
-  });
-
-  test('switching one chart leaves the others alone', async () => {
+  test('the trader can remove a chart', async () => {
     const feed = await streamingFeed();
 
     renderCharts(urlOf(feed), '?tab=charts&charts=price,candles');
     await screen.findByRole('region', {name: 'live trades'});
 
-    const toggle = screen.getAllByRole('button', {name: 'chart kind'})[0];
-    const menu = document.getElementById(toggle.getAttribute('popovertarget') ?? '');
-    if (menu === null) throw new Error('no chart-kind menu');
-    await userEvent.click(within(menu).getByText('Candles'));
+    await userEvent.click(screen.getAllByRole('button', {name: 'remove chart'})[0]);
 
-    expect(await screen.findAllByRole('region', {name: 'candles'})).toHaveLength(2);
     expect(screen.queryByRole('region', {name: 'live trades'})).toBeNull();
+    expect(await screen.findByRole('region', {name: 'candles'})).toBeVisible();
+  });
+
+  test('the last chart cannot be removed', async () => {
+    const feed = await streamingFeed();
+
+    renderCharts(urlOf(feed));
+    await screen.findByRole('region', {name: 'live trades'});
+
+    expect(screen.queryByRole('button', {name: 'remove chart'})).toBeNull();
   });
 
   test('the charts travel in the url', async () => {

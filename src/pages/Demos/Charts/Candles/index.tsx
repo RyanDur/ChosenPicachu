@@ -17,13 +17,13 @@ const VOLUME_HEIGHT = 24;
 type Props = {
   trades: readonly Trade[];
   id?: string;
-  switcher?: ReactNode;
+  actions?: ReactNode;
 };
 
 const captionFor = (period: Period, count: number): string =>
   `${count} candles · ${bucketLabel[period]}`;
 
-export const Candles: FC<Props> = ({trades, id = 'candle', switcher}) => {
+export const Candles: FC<Props> = ({trades, id = 'candle', actions}) => {
   const [period, setPeriod] = useState<Period>(Period.hour);
   const history = usePeriodCandles(period);
   const candles = mergeLive(history.candles, bucketTrades(trades, bucketMs[period]), periodCap[period]);
@@ -31,7 +31,7 @@ export const Candles: FC<Props> = ({trades, id = 'candle', switcher}) => {
   const bars = volumeShapes(candles, CHART_WIDTH, VOLUME_HEIGHT, bucketMs[period]);
   return <section aria-label="candles" className="candles card chart">
     <header className="chart-header">
-      {switcher}
+      {actions}
       <Menu id={`${id}-period`} label="candle period" toggle={period} toggleClassName="period-toggle">
         {Object.values(Period).map(option =>
           <button type="button" key={option} className="item"
