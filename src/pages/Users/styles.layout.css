@@ -1,10 +1,6 @@
 #user-info {
   display: flex;
   flex-direction: column;
-
-  .title {
-    align-self: flex-end;
-  }
 }
 
 #user-candidates {

@@ -112,17 +112,6 @@
   }
 }
 
-@media (max-width: 1547px) {
-  #user-info-form {
-    #avatar-cell {
-      width: 100%;
-      #avatar {
-        width: 80%;
-      }
-    }
-  }
-}
-
 @media (max-width: 1000px) {
   #user-info-form {
     #dob {
