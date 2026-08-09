@@ -44,14 +44,13 @@ export const DemosPage = () => {
   const chartKinds: readonly ChartKind[] = dealtCharts.length > 0 ? dealtCharts : ['price'];
   const addChart = (kind: ChartKind) => () =>
     updateSearchParams({charts: [kind, ...chartKinds].join(',')});
-  const switchChart = (at: number) => (kind: ChartKind) => () =>
-    updateSearchParams({charts: chartKinds.map((held, seat) => seat === at ? kind : held).join(',')});
-  const kindMenu = (at: number, kind: ChartKind) =>
-    <Menu id={`chart-kind-${at}`} label="chart kind"
-          toggle={kind === 'price' ? 'price line' : 'candles'} toggleClassName="period-toggle">
-      <button type="button" className="item" onClick={switchChart(at)('price')}>Price line</button>
-      <button type="button" className="item" onClick={switchChart(at)('candles')}>Candles</button>
-    </Menu>;
+  const removeChart = (at: number) => () =>
+    updateSearchParams({charts: chartKinds.filter((_, seat) => seat !== at).join(',')});
+  const dismissal = (at: number) =>
+    chartKinds.length > 1
+      ? <button type="button" className="remove-chart" aria-label="remove chart"
+                onClick={removeChart(at)}>×</button>
+      : undefined;
   const [accordionContents] = useState(() => Array.from({length: 5}, () => paragraphs(5)));
   const {tradeFeed, tradeProduct} = useEnv();
   const liveTrades = useLiveTrades(tradeFeed, tradeProduct);
@@ -104,9 +103,9 @@ export const DemosPage = () => {
               </header>
               {chartKinds.map((kind, at) => kind === 'price'
                 ? <PriceChart key={at} id={`chart-${at}`} trades={liveTrades.trades}
-                              switcher={kindMenu(at, kind)}/>
+                              actions={dismissal(at)}/>
                 : <Candles key={at} id={`chart-${at}`} trades={liveTrades.trades}
-                           switcher={kindMenu(at, kind)}/>)}
+                           actions={dismissal(at)}/>)}
             </>,
             [DemoTopics.tables]: <>
               <Aggregations trades={liveTrades.trades} pace={pace} origin={origin} motion={motion}/>
