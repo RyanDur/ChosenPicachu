@@ -1,9 +1,4 @@
-import {FC, ReactNode, useState} from 'react';
-import {has, notEmpty} from '@ryandur/sand';
-import {classNames} from '@components/class-names';
-import {Shares, measuredShares, neighborOf, traded} from './shares';
-import {ResizeHandle} from './ResizeHandle';
-import './Table.css';
+import {ReactNode} from 'react';
 
 export type Cell = {
   display: ReactNode;
@@ -37,51 +32,4 @@ export type TableProps = Dress & {
   rows: Row[];
   id?: string;
   resizableColumns?: boolean;
-};
-
-export const Table: FC<TableProps> = ({columns, rows, id, resizableColumns, ...dress}) => {
-  const [shares, setShares] = useState<Shares>();
-  const apportioned = resizableColumns ? columns.map(({column}) => column) : [];
-  const clipped = notEmpty(apportioned);
-  const awaken = (table: HTMLTableElement): void =>
-    setShares(previous => previous ?? measuredShares(apportioned, table));
-
-  return <table id={id} className={classNames(dress.tableClassName, clipped && 'apportioned')}>
-    <thead className={dress.theadClassName}>
-    <tr className={classNames(dress.trClassName, dress.headerRowClassName)}>
-      {columns.map(({display, column, className}) => {
-        const share = clipped ? shares?.[column] : undefined;
-        return <th key={column}
-                   scope="col"
-                   className={classNames(dress.thClassName, dress.cellClassName, className, 'header-cell',
-                     clipped && 'clipped', has(share) && 'shared')}
-                   style={has(share) ? {'--share': `${share}%`} : undefined}>
-          <div className={classNames('header-cell-content',
-            clipped && apportioned.length > 1 && 'resizable')}>
-            {display}
-            {clipped && apportioned.length > 1 &&
-              <ResizeHandle column={column}
-                            share={share}
-                            onAwaken={awaken}
-                            onTrade={delta => setShares(previous =>
-                              previous && traded(column, neighborOf(apportioned, column), delta)(previous))}/>}
-          </div>
-        </th>;
-      })}
-    </tr>
-    </thead>
-    <tbody className={dress.tbodyClassName}>
-      {rows.map((row, rowNumber) =>
-        <tr className={classNames(dress.trClassName, dress.rowClassName)} key={rowNumber}>
-          {columns.map(({column}, columnNumber) => {
-            const cell = row[column];
-            return <td key={columnNumber}
-                       className={classNames(dress.tdClassName, dress.cellClassName, cell.className,
-                         clipped && 'ellipsis')}>
-              {cell.display}
-            </td>;
-          })}
-        </tr>)}
-    </tbody>
-  </table>;
 };
