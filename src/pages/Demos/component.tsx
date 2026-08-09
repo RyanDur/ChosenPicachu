@@ -158,18 +158,19 @@ export const DemosPage = () => {
                          onDragOver={event => {
                            event.preventDefault();
                            event.dataTransfer.dropEffect = 'move';
-                           if ((event.currentTarget.getAnimations?.().length ?? 0) > 0) {
+                           if ((event.currentTarget.getAnimations?.().length ?? 0) > 0 || aloftChart === undefined) {
                              return;
                            }
-                           const hidden = aloftChart === undefined
-                             ? null
-                             : event.currentTarget.parentElement
-                               ?.querySelectorAll(':scope > .chart-slot').item(aloftChart);
-                           if (aloftChart !== undefined && aloftChart !== at && hidden instanceof HTMLElement
-                             && passedThird(event, hidden.getBoundingClientRect(), at < aloftChart)) {
-                             setChartPushed({[aloftChart]: at > aloftChart ? 'up' : 'down'});
-                             updateSearchParams({charts: seated(aloftChart, at).join(',')}, {replace: true});
-                             setAloftChart(at);
+                           const seat = event.currentTarget.getBoundingClientRect();
+                           const to = at === aloftChart
+                             ? passedThird(event, seat, false) ? at + 1
+                               : passedThird(event, seat, true) ? at - 1
+                                 : undefined
+                             : at;
+                           if (to !== undefined && to !== aloftChart && to >= 0 && to < chartKinds.length) {
+                             setChartPushed({[aloftChart]: to > aloftChart ? 'up' : 'down'});
+                             updateSearchParams({charts: seated(aloftChart, to).join(',')}, {replace: true});
+                             setAloftChart(to);
                            }
                          }}
                          onDrop={event => event.preventDefault()}
