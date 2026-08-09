@@ -104,7 +104,7 @@ const living: StepEntry[] = [
 
 export const LivingTable: FC = () =>
   <section aria-label="the living table" className="build-steps">
-    <StoryList stories={[{
+    <StoryList param="living" stories={[{
       can: 'The trader can watch the market live, in windows',
       soThat: 'the numbers stay current without a single refresh',
       tells: ['What the trader reads is a few measures across a few time windows: numbers ' +

@@ -245,7 +245,7 @@ export const MenuRecipe: FC<Props> = ({pace, origin, motion, onMotion}) => {
                         onChoose={onMotion}/>
   };
   return <section aria-label="build the sort menu yourself" className="build-steps">
-    <StoryList stories={stories(pace, origin, motion)
+    <StoryList param="menu" stories={stories(pace, origin, motion)
       .map(story => ({...story,
         steps: story.steps.map(({dial, ...step}) => ({...step, dial: dial && dials[dial]}))}))}/>
   </section>;

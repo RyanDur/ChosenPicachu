@@ -18,11 +18,11 @@ import {Paths} from '@pages/Paths';
 beforeAll(realSockets);
 afterAll(interceptedNetwork);
 
-const renderTables = (feedUrl: string) =>
+const renderTables = (feedUrl: string, search = '?tab=tables') =>
   renderWithMemoryRouter({
     path: Paths.demos,
     element: <EnvProvider env={{tradeFeed: feedUrl, tradeHistory: 'http://127.0.0.1:9'}}><DemosPage/></EnvProvider>
-  }, {path: `${Paths.demos}?tab=tables`});
+  }, {path: `${Paths.demos}${search}`});
 
 const feedIsSubscribed = async (): Promise<void> => {
   await waitFor(() => expect(subscribed.size).toBeGreaterThan(0));
@@ -345,6 +345,19 @@ describe('the tables demo', () => {
 
     await userEvent.click(screen.getByRole('button', {name: 'Drag sort'}));
     expect(screen.getByRole('region', {name: 'build the drag sort yourself'})).toBeVisible();
+  });
+
+  test('the open cards travel in the url', async () => {
+    const feed = await streamingFeed();
+
+    renderTables(urlOf(feed), '?tab=tables&sort=0');
+
+    await feedIsSubscribed();
+    const recipe = screen.getByRole('region', {name: 'build the drag sort yourself'});
+    expect(recipe.querySelectorAll('details.arc[open]')).toHaveLength(1);
+    expect(recipe.querySelectorAll('details.arc')[0]).toHaveAttribute('open');
+    const living = screen.getByRole('region', {name: 'the living table'});
+    expect(living.querySelector('details.arc[open]')).toBeNull();
   });
 
   test('the dials travel in the url', async () => {
