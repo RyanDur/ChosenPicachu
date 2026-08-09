@@ -55,13 +55,15 @@ export const Table: FC<TableProps> = ({columns, rows, id, resizableColumns, ...d
                    className={classNames(dress.thClassName, dress.cellClassName, className, 'slot',
                      clipped && 'clipped', has(share) && 'shared')}
                    style={has(share) ? {'--share': `${share}%`} : undefined}>
-          {display}
-          {clipped && apportioned.length > 1 &&
-            <ResizeHandle column={column}
-                          share={share}
-                          onAwaken={awaken}
-                          onTrade={delta => setShares(previous =>
-                            previous && traded(column, neighborOf(apportioned, column), delta)(previous))}/>}
+          <article className="slot-grid">
+            {display}
+            {clipped && apportioned.length > 1 &&
+              <ResizeHandle column={column}
+                            share={share}
+                            onAwaken={awaken}
+                            onTrade={delta => setShares(previous =>
+                              previous && traded(column, neighborOf(apportioned, column), delta)(previous))}/>}
+          </article>
         </th>;
       })}
     </tr>

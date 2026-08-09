@@ -1,19 +1,17 @@
 .sortable .slot {
   text-align: left;
-  padding-inline: var(--base-x-1_5) var(--base-x-6);
   --share: auto;
-
 
   &:focus-visible {
     outline: var(--hairline-x-2) solid var(--charcoal);
   }
 }
 
+.sortable .slot-grid {
+  padding-inline-start: var(--base-x-1_5);
+}
+
 .sortable .menu-toggle {
-  position: absolute;
-  right: var(--base-x-3);
-  top: 50%;
-  translate: 0 -50%;
   min-width: var(--base-x-3);
   min-height: var(--base-x-3);
   display: inline-grid;
