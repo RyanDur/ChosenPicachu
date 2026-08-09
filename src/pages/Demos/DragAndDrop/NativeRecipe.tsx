@@ -178,40 +178,40 @@ const moved = (motion: Motion, pace: Pace, source: string, cssSrc: string): Step
 type Tale = {can: string; soThat: string; tells?: string[]; steps: Step[]};
 
 const pacedStory = (pace: Pace): Omit<Tale, 'steps'> => pace === 'eager'
-  ? {can: 'The trader sees the list answer as they drag',
+  ? {can: 'The user sees the list answer as they drag',
     soThat: 'home stays reachable until they let go',
     tells: ['We could wait for the drop, but then you cannot change your mind until it is ' +
       'too late; so the reorder commits inside the dragover that found the crossing, while ' +
       'the platform still holds the snapshot in your hand.']}
-  : {can: 'The trader drags in calm, and the list settles on the drop',
+  : {can: 'The user drags in calm, and the list settles on the drop',
     soThat: 'only the destination matters',
     tells: ['We could commit on every crossing, but the platform is still animating its own ' +
       'end of the bargain; so each dragover only remembers where you hover, and the release ' +
       'commits once.']};
 
 const shownStory = (origin: Origin): Omit<Tale, 'steps'> => origin === 'hide'
-  ? {can: 'The trader sees one card riding the pointer',
+  ? {can: 'The user sees one card riding the pointer',
     soThat: 'no duplicate muddies the carry',
     tells: ['We could vanish the origin outright, but some engines end the drag session when ' +
       'its source disappears; so the origin fades to a whisper: alive for the platform, ' +
       'invisible to the eye.']}
-  : {can: 'The trader keeps the card at rest in sight',
+  : {can: 'The user keeps the card at rest in sight',
     soThat: 'nothing vanishes while they decide',
     tells: ['We do nothing. The platform already drew the snapshot, so two of the card read ' +
       'as a copy being carried, and there is no hiding code to get wrong.']};
 
 const movedStory = (motion: Motion, pace: Pace): Omit<Tale, 'steps'> => motion === 'static'
-  ? {can: 'The trader gets the settle instantly',
+  ? {can: 'The user gets the settle instantly',
     soThat: 'nothing competes with the drag session',
-    tells: ['We could animate every move, but motion costs and some traders ask for none; so ' +
+    tells: ['We could animate every move, but motion costs and some users ask for none; so ' +
       'the order applies and React paints the next frame.']}
   : pace === 'eager'
-    ? {can: 'The trader watches the crossed card slide home',
+    ? {can: 'The user watches the crossed card slide home',
       soThat: 'the eye keeps the story of the swap',
       tells: ['A view transition would swallow the session’s own events mid-drag; so the ' +
         'crossed item is drawn where it used to be and slides home on a keyframe, the ' +
         'table’s theater turned horizontal.']}
-    : {can: 'The trader watches the whole settle glide, once',
+    : {can: 'The user watches the whole settle glide, once',
       soThat: 'the landing explains itself',
       tells: ['The drop is the perfect moment for a view transition, except the session is ' +
         'still alive when it fires; so the settle defers one tick past the release, and then ' +
@@ -337,7 +337,7 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
 const stories = (pace: Pace, origin: Origin, motion: Motion): Tale[] => {
   const built = steps(pace, origin, motion);
   return [
-    {can: 'The trader can sort the list the platform’s way',
+    {can: 'The user can sort the list the platform’s way',
       soThat: 'the browser carries the drag for them',
       tells: ['The tables build their drag from pointer events and own every pixel; this ' +
         'list pays platform currency instead. Mark a card draggable and the ceremony ' +
@@ -348,13 +348,13 @@ const stories = (pace: Pace, origin: Origin, motion: Motion): Tale[] => {
     {...pacedStory(pace), steps: [built[4]]},
     {...shownStory(origin), steps: [built[5]]},
     {...movedStory(motion, pace), steps: [built[6]]},
-    {can: 'The trader can sort without a mouse',
+    {can: 'The user can sort without a mouse',
       soThat: 'the keys go straight to the order',
       tells: ['Drag-and-drop never answers the keyboard, and it does not matter: dragging ' +
         'was never the goal, the order changing is. The grip is a real button, and the ' +
         'arrows compute the move directly.'],
       steps: [built[7]]},
-    {can: 'The trader can see where this road ends',
+    {can: 'The user can see where this road ends',
       soThat: 'the pointer road is there when those pixels matter',
       tells: ['Some pixels are never ours on this road: the snapshot, the cursor, the macOS ' +
         'cancel. We name them instead of faking them, and the Tables demo walks the road ' +
