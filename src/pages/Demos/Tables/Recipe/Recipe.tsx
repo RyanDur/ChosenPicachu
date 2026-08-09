@@ -402,11 +402,13 @@ const pointerStories = (pace: Pace, origin: Origin, motion: Motion): Tale[] => {
       dead zone, without which the reorder oscillates when a wide column passes a narrow one.
       After a swap the pointer sits over the carried column itself, a no-op, so reversing
       means deliberately reaching the neighbour’s inner half again. Hysteresis, for free,
-      from geometry.</>],
+      from geometry. The ruling itself is struckPast, one function with no axis in it; the
+      vertical turn will reuse it unchanged.</>],
     figure: <SlotsFigure/>,
     code: [
       {label: 'JS', lines: [
         ...unit(surveySource, 'const deadZone = '), gap,
+        ...unit(surveySource, 'const struckPast = '), gap,
         ...unit(surveySource, 'export const columnUnder')
       ]}
     ]
