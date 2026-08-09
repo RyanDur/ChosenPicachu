@@ -47,7 +47,7 @@
   position: absolute;
   top: 0;
   right: 0;
-  width: var(--base);
+  width: var(--base-x-3);
   height: 100%;
   cursor: col-resize;
   touch-action: none;
