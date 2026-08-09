@@ -27,3 +27,4 @@ dist-ssr
 .netlify
 test-results/
 playwright-report/
+.lighthouseci/
