@@ -35,6 +35,7 @@ export const ResizeHandle: FC<Props> = ({column, share, onAwaken, onTrade}) => {
                       return;
                   }
                   event.preventDefault();
+                  event.stopPropagation();
                   onTrade(event.key === 'ArrowRight' ? STEP_SHARE : -STEP_SHARE);
               }}
               onMouseDown={event => event.stopPropagation()}
