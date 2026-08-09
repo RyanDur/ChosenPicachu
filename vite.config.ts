@@ -1,5 +1,6 @@
 import {readFileSync} from 'node:fs';
 import { defineConfig } from 'vitest/config';
+import { loadEnv } from 'vite';
 import type { Plugin } from 'vite';
 
 const rawCss = (): Plugin => ({
@@ -23,8 +24,43 @@ import { fileURLToPath } from 'node:url';
 import react from '@vitejs/plugin-react';
 import svgr from 'vite-plugin-svgr';
 
+const runtimeEnv = (env: Record<string, string>): Plugin => {
+  const body = `window.__env = ${JSON.stringify({
+    tradeFeed: env.VITE_APP_TRADE_FEED ?? '',
+    tradeProduct: env.VITE_APP_TRADE_PRODUCT ?? '',
+    tradeHistory: env.VITE_APP_TRADE_HISTORY ?? '',
+    aicDomain: env.VITE_APP_API_AIC ?? '',
+    harvardDomain: env.VITE_APP_HARVARD_API ?? '',
+    harvardAPIKey: env.VITE_APP_HARVARD_API_KEY ?? '',
+    vamDomain: env.VITE_APP_VAM_API ?? ''
+  }, null, 2)};\n`;
+  let base = '/';
+  return {
+    name: 'runtime-env',
+    configResolved(config) {
+      base = config.base;
+    },
+    transformIndexHtml() {
+      return [{tag: 'script', attrs: {src: `${base}env.js`}, injectTo: 'head'}];
+    },
+    configureServer(server) {
+      server.middlewares.use((request, response, next) => {
+        if (request.url?.split('?')[0].endsWith('/env.js')) {
+          response.setHeader('content-type', 'text/javascript');
+          response.end(body);
+          return;
+        }
+        next();
+      });
+    },
+    generateBundle() {
+      this.emitFile({type: 'asset', fileName: 'env.js', source: body});
+    }
+  };
+};
+
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig(({mode}) => ({
   base: '/ChosenPicachu/',
   resolve: {
     alias: {
@@ -34,7 +70,7 @@ export default defineConfig({
       '@test-support': fileURLToPath(new URL('./src/test-support', import.meta.url))
     }
   },
-  plugins: [rawCss(), react(), svgr({
+  plugins: [rawCss(), runtimeEnv(loadEnv(mode, process.cwd())), react(), svgr({
     // svgr options: https://react-svgr.com/docs/options/
     svgrOptions: { exportType: 'default', ref: true, svgo: false, titleProp: true },
     include: '**/*.svg',
@@ -44,4 +80,4 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./test-setup.ts'],
   }
-});
+}));
