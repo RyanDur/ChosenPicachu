@@ -217,7 +217,7 @@ describe('the tables demo', () => {
     await feedIsSubscribed();
     const recipe = screen.getByRole('region', {name: 'build the drag sort yourself'});
     expect(recipe).toBeVisible();
-    expect(recipe).toHaveTextContent(/told as its stories/);
+    expect(recipe).toHaveTextContent(/no drag-and-drop library/);
     expect(recipe).toHaveTextContent(/The trader can sort by column/);
     expect(recipe.querySelectorAll('.story')).toHaveLength(2);
     expect(recipe.querySelectorAll('details.arc')).toHaveLength(2);

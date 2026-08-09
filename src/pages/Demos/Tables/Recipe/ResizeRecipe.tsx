@@ -167,10 +167,6 @@ export const ResizeRecipe: FC = () =>
   <section aria-label="build the drag resize yourself" className="build-steps">
     <header className="brief-line">
       <h2 className="kicker">build the drag resize yourself</h2>
-      <p className="brief">
-        One story on the boundaries of the table the drag sort already built; open the card
-        and the steps inside build it.
-      </p>
     </header>
     <StoryList stories={stories}/>
   </section>;

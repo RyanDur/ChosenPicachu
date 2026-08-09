@@ -425,7 +425,7 @@ const pointerStories = (pace: Pace, origin: Origin, motion: Motion): Tale[] => {
         its edges (the snapshot that cannot be animated, the cursor that belongs to the
         platform, the macOS cancel) are that road’s own story. This table takes the other
         road: <Mdn path="Web/API/Pointer_events">pointer events</Mdn>, where every pixel is
-        ours to own.</>,
+        ours to own and no drag-and-drop library is anywhere in the build.</>,
         'The trader needs to move a column while the stream writes. We could reorder ' +
         'the data itself, but every trade that lands would fight every drag; so the order is ' +
         'its own piece of state, and the markup renders through it. Moving a column is just ' +
@@ -616,14 +616,6 @@ export const Recipe: FC<Props> = ({track, onTrack, pace, origin, motion, onPace,
   return <section aria-label="build the drag sort yourself" className="build-steps">
     <header className="brief-line">
       <h2 className="kicker">build the drag sort yourself</h2>
-      <p className="brief">
-        Everything below is built without a drag-and-drop library and told as its stories:
-        what the trader can do, and why, then the features each story demands. Take the
-        pointer’s track or the keyboard’s.
-        Wherever a step depends on a dial under the table, that dial sits on the step. Where
-        there is a wrong way you would reach for first, it appears in a dashed frame before
-        the real one.
-      </p>
     </header>
     <Picks label="input track"
            className="track-picks"
