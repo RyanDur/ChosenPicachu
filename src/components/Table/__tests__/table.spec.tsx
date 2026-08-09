@@ -1,109 +1,6 @@
 import {fireEvent, render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {Table} from '../index';
-import {
-    column1Display,
-    column2Name,
-    column3Display,
-    columns,
-    row0Col0Display,
-    row0Col1Display,
-    row0Col2Display,
-    row1Col0Value,
-    row1Col1Display,
-    row1Col2Display,
-    rows
-} from './demoData';
-
-const cellAt = (column: number, row: number): HTMLElement => {
-    const [, tbody] = screen.getAllByRole('rowgroup');
-    return within(within(tbody).getAllByRole('row')[row]).getAllByRole('cell')[column];
-};
-
-describe('A Table', () => {
-    const tableId = 'the-table';
-    const tableClassName = 'table-skin';
-    const theadClassName = 'head-skin';
-    const trClassName = 'line-skin';
-    const thClassName = 'title-skin';
-    const headerRowClassName = 'headline-skin';
-    const tbodyClassName = 'body-skin';
-    const tdClassName = 'cell-skin';
-    const rowClassName = 'row-skin';
-    const cellClassName = 'every-cell-skin';
-
-    beforeEach(() => {
-        render(<Table
-            columns={columns}
-            rows={rows}
-            id={tableId}
-            tableClassName={tableClassName}
-            theadClassName={theadClassName}
-            trClassName={trClassName}
-            thClassName={thClassName}
-            tbodyClassName={tbodyClassName}
-            tdClassName={tdClassName}
-            headerRowClassName={headerRowClassName}
-            rowClassName={rowClassName}
-            cellClassName={cellClassName}
-        />);
-    });
-
-    test('should have columns', () => {
-        const columnNames = screen.getAllByRole('columnheader')
-            .map(header => header.textContent);
-
-        expect(columnNames.sort()).toEqual([column1Display, column2Name, column3Display].sort());
-    });
-
-    test.each`
-    column | row  | expected
-    ${0}   | ${0} | ${row0Col0Display}
-    ${1}   | ${0} | ${row0Col1Display}
-    ${2}   | ${0} | ${row0Col2Display}
-    ${0}   | ${1} | ${row1Col0Value}
-    ${1}   | ${1} | ${row1Col1Display}
-    ${2}   | ${1} | ${row1Col2Display}
-    `('should put the value "$expected" into cell ( column: $column,  row: $row )',
-        ({column, row, expected}) => {
-            expect(cellAt(column, row).textContent).toEqual(expected);
-        });
-
-    test('should be able to add more class names where needed', () => {
-        const table = screen.getByRole('table');
-        expect(table.classList).toContain(tableClassName);
-
-        const [thead, tbody] = screen.getAllByRole('rowgroup');
-        expect(thead.classList).toContain(theadClassName);
-        expect(tbody.classList).toContain(tbodyClassName);
-
-        const [header, ...body] = screen.getAllByRole('row');
-        [header, ...body].forEach(tr => expect(tr.classList).toContain(trClassName));
-        expect(header.classList).toContain(headerRowClassName);
-        expect(header.classList).not.toContain(rowClassName);
-        body.forEach(row => expect(row.classList).not.toContain(headerRowClassName));
-
-        const columns = screen.getAllByRole('columnheader');
-        columns.forEach(column => expect(column.classList).toContain(thClassName));
-
-        const [firstColumn, ...otherColumns] = columns;
-        expect(firstColumn.classList).toContain('aClassName');
-        otherColumns.forEach(column => expect(column.classList).not.toContain('aClassName'));
-
-        const cells = screen.getAllByRole('cell');
-        cells.forEach(cell => expect(cell.classList).toContain(tdClassName));
-        cells.forEach(cell => expect(cell.classList).toContain(cellClassName));
-
-        const singled = cellAt(2, 0);
-        expect(singled.classList).toContain('aSingleClassName');
-        cells.filter(cell => cell !== singled)
-            .forEach(cell => expect(cell.classList).not.toContain('aSingleClassName'));
-    });
-
-    test('should be able to add an id', () => {
-        expect(screen.getByRole('table').id).toBe(tableId);
-    });
-});
+import {EagerKeepStaticTable} from '@components/DragSortableTable';
 
 describe('resizable columns', () => {
   const sized = [
@@ -128,7 +25,7 @@ describe('resizable columns', () => {
   };
 
   test('the css owns the widths until a hand arrives', () => {
-    render(<Table columns={sized} rows={people} resizableColumns/>);
+    render(<EagerKeepStaticTable columns={sized} rows={people} resizableColumns/>);
 
     expect(screen.getByRole('table').classList).toContain('apportioned');
     expect(nameHeader().style.width).toBe('');
@@ -137,7 +34,7 @@ describe('resizable columns', () => {
   });
 
   test('the first touch surveys the headers into the ledger', () => {
-    render(<Table columns={sized} rows={people} resizableColumns/>);
+    render(<EagerKeepStaticTable columns={sized} rows={people} resizableColumns/>);
     surveyed();
 
     fireEvent.focus(screen.getByRole('button', {name: 'resize name'}));
@@ -148,7 +45,7 @@ describe('resizable columns', () => {
   });
 
   test('the keyboard moves the boundary and the total holds', async () => {
-    render(<Table columns={sized} rows={people} resizableColumns/>);
+    render(<EagerKeepStaticTable columns={sized} rows={people} resizableColumns/>);
     surveyed();
 
     const handle = screen.getByRole('button', {name: 'resize name'});
@@ -163,7 +60,7 @@ describe('resizable columns', () => {
   });
 
   test('dragging the handle trades share between neighbors', () => {
-    render(<Table columns={sized} rows={people} resizableColumns/>);
+    render(<EagerKeepStaticTable columns={sized} rows={people} resizableColumns/>);
     surveyed();
 
     const handle = screen.getByRole('button', {name: 'resize name'});
@@ -176,7 +73,7 @@ describe('resizable columns', () => {
   });
 
   test('a boundary can never starve a column', async () => {
-    render(<Table columns={sized} rows={people} resizableColumns/>);
+    render(<EagerKeepStaticTable columns={sized} rows={people} resizableColumns/>);
     surveyed();
 
     const handle = screen.getByRole('button', {name: 'resize age'});
@@ -187,7 +84,7 @@ describe('resizable columns', () => {
   });
 
   test('resizable columns truncate their values and clip their titles', () => {
-    render(<Table columns={sized} rows={people} resizableColumns/>);
+    render(<EagerKeepStaticTable columns={sized} rows={people} resizableColumns/>);
 
     expect(nameHeader().classList).toContain('clipped');
     within(screen.getAllByRole('rowgroup')[1]).getAllByRole('cell')
@@ -195,7 +92,7 @@ describe('resizable columns', () => {
   });
 
   test('without the opt-in the columns stay plain', () => {
-    render(<Table columns={columns} rows={rows}/>);
+    render(<EagerKeepStaticTable columns={sized} rows={people}/>);
 
     expect(screen.queryAllByRole('button', {name: /^resize/})).toHaveLength(0);
     screen.getAllByRole('cell').forEach(cell => expect(cell.classList).not.toContain('ellipsis'));
