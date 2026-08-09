@@ -4,7 +4,8 @@ import {span, unit} from '../../Recipe/carve';
 import feedSource from '@pages/Demos/Charts/useLiveTrades.ts?raw';
 import foldSource from '@pages/Demos/Tables/Aggregations/fold.ts?raw';
 import dealSource from '@pages/Demos/Tables/Aggregations/index.tsx?raw';
-import tableSource from '@components/Table/Table.tsx?raw';
+import headerSource from '@components/DragSortableTable/EagerHideAnimatedTable/Header.tsx?raw';
+import rowSource from '@components/DragSortableTable/EagerHideAnimatedTable/Row.tsx?raw';
 import hydrateSource from '@pages/Demos/Tables/Aggregations/useRecentTrades.ts?raw';
 import widthsSource from '@pages/Demos/Tables/Aggregations/Aggregations.css?raw';
 import '../../Recipe/Recipe.css';
@@ -32,8 +33,10 @@ const living: StepEntry[] = [
       A <Mdn path="Web/HTML/Element/thead">thead</Mdn> of th headers, one per column, each
       announcing <Mdn path="Web/HTML/Element/th#scope">scope="col"</Mdn>: that one attribute
       is how a screen reader knows to say the column’s name with every cell below it.
-      A <Mdn path="Web/HTML/Element/tbody">tbody</Mdn> of rows dealt from the trades we hold,
-      one td per column.</>,
+      A <Mdn path="Web/HTML/Element/tbody">tbody</Mdn> of rows dealt from the trades we hold;
+      each row leads with a th of its own,
+      announcing <Mdn path="Web/HTML/Element/th#scope">scope="row"</Mdn> so the window’s name
+      travels with every cell beside it, then a td per measure.</>,
       <>We could build this out of divs and grid, and it would look identical. But the table
       element carries behavior we would otherwise owe: readers walk it row by row and cell by
       cell, headers belong to their columns, and everything later, the sorting announcements,
@@ -48,7 +51,8 @@ const living: StepEntry[] = [
         ...unit(widthsSource, '.aggregations {')
       ]},
       {label: 'HTML', lines: [
-        ...span(tableSource, 'return <table', '</table>;')
+        ...span(headerSource, 'return <th', 'scope="col"'), gap,
+        ...span(rowSource, 'return rowHeader', '<td className={dress} key={column} style={theater}>{cell.display}</td>;')
       ]}
     ]
   },
