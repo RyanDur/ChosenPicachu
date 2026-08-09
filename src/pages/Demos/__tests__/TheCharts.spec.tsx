@@ -163,6 +163,24 @@ describe('a list of charts', () => {
     expect(within(slot('chart 2')).getByRole('region', {name: 'live trades'})).toBeVisible();
   });
 
+  test('a tutorial builds the charts', async () => {
+    const feed = await streamingFeed();
+
+    renderCharts(urlOf(feed), '?tab=charts&graph=workspace');
+    await screen.findByRole('region', {name: 'live trades'});
+
+    expect(screen.getByRole('heading', {name: 'let’s build this feature'})).toBeVisible();
+    expect(screen.getByText(/the shape of the session/)).toBeVisible();
+    const recipe = screen.getByRole('region', {name: 'build the charts yourself'});
+    expect(recipe.querySelectorAll('.story')).toHaveLength(3);
+    expect(recipe.querySelectorAll('details.arc[open]')).toHaveLength(1);
+    expect(recipe).toHaveTextContent(/The trader can watch the price move, live/);
+    expect(recipe).toHaveTextContent(/strays a third of the seat’s height/);
+    expect(recipe).toHaveTextContent(/export const strayed/);
+    expect(recipe).toHaveTextContent(/Bucket the stream into candles/);
+    expect(recipe.querySelectorAll('.snippet.foil')).toHaveLength(2);
+  });
+
   test('the charts travel in the url', async () => {
     const feed = await streamingFeed();
 

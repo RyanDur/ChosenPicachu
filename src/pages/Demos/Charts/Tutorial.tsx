@@ -1,0 +1,217 @@
+import {FC} from 'react';
+import {Mdn, StoryList, aside, plain} from '../Recipe';
+import {span, unit} from '../Recipe/carve';
+import shapesSource from './Candles/shapes.ts?raw';
+import sparklineSource from './sparkline.ts?raw';
+import periodSource from './period.ts?raw';
+import candlesHook from './usePeriodCandles.ts?raw';
+import priceSource from './PriceChart/index.tsx?raw';
+import axesSource from './Axes/index.tsx?raw';
+import pageSource from '../component.tsx?raw';
+import crossingSource from '../DragAndDrop/crossing.ts?raw';
+import pageCss from '../DemosPage.css?raw';
+import '../Recipe/Recipe.css';
+
+const gap = plain(' ');
+
+export const ChartsTutorial: FC = () =>
+  <div className="tutorials">
+    <h2 className="tutorials-title">let’s build this feature</h2>
+    <p className="overview">
+      We are going to build this site’s live charts, feature by feature. Here is how to use
+      this page: every card below is a feature, told as a <a className="signpost"
+        href="https://initialcapacity.io/insights/user-story"
+        target="_blank"
+        rel="noreferrer">user story</a>. Open a card and you get the plan for that feature and
+      the steps that build it, with the real code from this site, so what you read is what
+      runs. The dashed code is the wrong way you would probably try first, and the links go
+      to MDN if you want more.
+    </p>
+    <figure className="feedback">
+      <blockquote className="quote">
+        Numbers tell me where the price is; I need to see where it has been to feel where it
+        is going. One glance, the shape of the session. And I arrange my own desk: the charts
+        I watch, in the order I watch them.
+      </blockquote>
+      <figcaption className="attribution">a trader</figcaption>
+    </figure>
+    <p className="overview">
+      If you want the exercise, stop here and build the story yourself first. The charts are
+      our interpretation of that; the cards below break the interpretation into features.
+      Open one to see how we built it, or to compare it with yours.
+    </p>
+    <section aria-label="build the charts yourself" className="build-steps">
+      <StoryList param="graph" stories={[
+        {id: 'price',
+          can: 'The trader can watch the price move, live',
+          soThat: 'the session reads at a glance',
+          tells: ['We could reach for a chart library, but the promise is one line and two ' +
+            'axes; so the line is an SVG polyline whose points are arithmetic over the ' +
+            'trades we already hold, and everything the card shows derives fresh on every ' +
+            'render.',
+            'The stream writes faster than an eye reads; so the trades bucket into windows, ' +
+            'one candle per window. History hydrates the left of the line, the live feed ' +
+            'writes the right, and the merge keeps a single truth in time order.'],
+          steps: [
+            {title: 'Bucket the stream into candles',
+              want: 'Raw trades tick too fast to draw; the line needs one point per window, and the left of the line existed before the trader arrived.',
+              says: ['bucketTrades folds the live trades into one candle per window. ' +
+                'usePeriodCandles fetches the recent past at the same granularity, and ' +
+                'mergeLive stitches them: history where the stream has not spoken, the ' +
+                'stream everywhere it has.'],
+              code: [
+                {label: 'JS', lines: [
+                  ...unit(shapesSource, 'export const bucketTrades'), gap,
+                  ...unit(shapesSource, 'export const mergeLive')
+                ]}
+              ]},
+            {title: 'Choose the window',
+              want: 'A minute of scalping and a session of context are different questions; the trader picks the window, and every measure follows it.',
+              says: [<>The period menu rides the card, the same
+                native <Mdn path="Web/API/Popover_API">popover</Mdn> chooser the tables
+                taught. Each period carries its own bucket size, its cap on how many candles
+                a card holds, and how often the time axis speaks; choosing one refetches
+                history at that granularity.</>],
+              code: [
+                {label: 'JS', lines: [
+                  ...unit(periodSource, 'export const bucketMs'), gap,
+                  ...unit(periodSource, 'export const periodCap'), gap,
+                  ...unit(candlesHook, 'export const usePeriodCandles')
+                ]},
+                {label: 'HTML', lines: [
+                  ...span(priceSource, '{actions}', '</Menu>')
+                ]}
+              ]},
+            {title: 'Draw the line from arithmetic',
+              want: 'The price line must stay smooth while the stream writes, on slow machines too.',
+              code: [
+                {label: 'JS', foil: true, lines: [
+                  plain("import {LineChart} from 'a-chart-library';"),
+                  plain('<LineChart data={trades} live smooth/>'),
+                  aside('// one line and two axes do not need a dependency')
+                ]},
+                {label: 'JS', lines: [
+                  ...unit(sparklineSource, 'export const sparklinePoints')
+                ]},
+                {label: 'HTML', lines: [
+                  ...span(priceSource, '<svg className="sparkline"', '</svg>')
+                ]}
+              ],
+              says: [<>Every candle becomes a point by proportion: time across the width,
+                price down the height. The result feeds one
+                SVG <Mdn path="Web/SVG/Element/polyline">polyline</Mdn>; a new trade means new
+                points and React paints the new line, nothing is measured and nothing
+                animates, which is what keeps a busy stream smooth.</>]},
+            {title: 'Let the axes speak',
+              want: 'A naked line is a shape, not a chart; the trader needs the high, the low, and the hour under it.',
+              says: ['Axes wraps any chart body: the high and low label the vertical reach, ' +
+                'and time ticks land every tickEveryMs, patterned per period, so an hour ' +
+                'chart speaks minutes and a session chart speaks hours.'],
+              code: [
+                {label: 'JS', lines: [
+                  ...unit(axesSource, 'export const Axes')
+                ]}
+              ]}
+          ]},
+        {id: 'candles',
+          can: 'The trader can read the same trades as candles',
+          soThat: 'each window answers open, close, reach, and volume',
+          tells: ['A line answers where the price went; a candle answers what each window ' +
+            'did: where it opened and closed, how far it reached, and how much traded. The ' +
+            'same buckets feed both cards; no new state exists, only new shapes.'],
+          steps: [
+            {title: 'Shape each window’s candle',
+              want: 'Open, high, low, close: four numbers per window, one honest glyph.',
+              says: ['candleShapes turns each candle into a body and a wick by the same ' +
+                'proportions the sparkline used; rising and falling wear their own class, ' +
+                'and CSS owns the colors.'],
+              code: [
+                {label: 'JS', lines: [
+                  ...unit(shapesSource, 'export const candleShapes')
+                ]}
+              ]},
+            {title: 'Bar the traded volume beneath',
+              want: 'A price move on no volume and one on heavy volume are different stories; the trader reads both at once.',
+              says: ['volumeShapes bars each window’s traded size under the candles, scaled ' +
+                'to the busiest window on screen, drawn in the same SVG pass.'],
+              code: [
+                {label: 'JS', lines: [
+                  ...unit(shapesSource, 'export const volumeShapes')
+                ]}
+              ]}
+          ]},
+        {id: 'workspace',
+          can: 'The trader can lay out the workspace',
+          soThat: 'the charts they watch sit where they put them',
+          tells: ['One chart is dealt on arrival, and the workspace is the URL: add, sort, ' +
+            'remove, refresh, share, and the layout survives all of it, because the address ' +
+            'is the state.',
+            'Sorting rides a native drag from a grip that only shows itself to a hover. The ' +
+            'origin whispers in its seat, the displaced chart slides home on a keyframe, ' +
+            'and the swap fires when the hand strays a third of the seat’s height from ' +
+            'where it settled, the same distance up as down; every swap re-anchors to the ' +
+            'hand, so reversing always costs a fresh third.',
+            'The keyboard needs no grip: the card itself is the widget. Arrows walk it and ' +
+            'focus rides along, delete removes it, and a lone chart offers neither grip nor ' +
+            'remove, because a workspace cannot lose its last window.'],
+          steps: [
+            {title: 'Deal the workspace from the address',
+              want: 'The layout is the trader’s, so it must survive a refresh and travel in a link.',
+              says: ['The charts param is a comma list of kinds; absent, the trader starts ' +
+                'with one price chart. Adding prepends, so the newest chart lands under the ' +
+                'hand, and the plus rides the heading with its menu anchored above it.'],
+              code: [
+                {label: 'JS', lines: [
+                  ...unit(pageSource, 'const isChartKind'), gap,
+                  ...unit(pageSource, 'const dealtCharts'), gap,
+                  ...unit(pageSource, 'const addChart')
+                ]},
+                {label: 'HTML', lines: [
+                  ...span(pageSource, '<Menu id="add-chart"', '</Menu>')
+                ]}
+              ]},
+            {title: 'Sort by a third’s stray',
+              want: 'The card is huge and the hand holds only its grip; the swap has to key on the hand, not the card’s far edge.',
+              says: ['The drag anchors where the hand grabbed the seat. A swap fires when ' +
+                'the hand strays a third of the seat’s height from that anchor, either ' +
+                'direction, and the anchor re-derives at each swap from where the seat ' +
+                'lands under the hand: hysteresis by bookkeeping, so mixed chart heights ' +
+                'cannot jitter.'],
+              code: [
+                {label: 'JS', foil: true, lines: [
+                  plain('if (event.clientY > neighbour.top) swap();'),
+                  aside('// the hand holds the grip; the card is long past it')
+                ]},
+                {label: 'JS', lines: [
+                  ...unit(crossingSource, 'export const strayed'), gap,
+                  ...span(pageSource, 'const anchor = seat.top + aloftLead;', 'setAloftChart(to);')
+                ]},
+                {label: 'CSS', lines: [
+                  ...unit(pageCss, '@keyframes chart-pushed')
+                ]}
+              ]},
+            {title: 'The card answers keys',
+              want: 'The grip and the remove only show to a hover; the keyboard speaks to the card itself.',
+              says: ['Focus the card: arrows walk it seat by seat and focus rides along, so ' +
+                'a held arrow keeps moving the same chart. Delete removes it, guarded like ' +
+                'everything else by the last-chart rule.'],
+              code: [
+                {label: 'JS', lines: [
+                  ...unit(pageSource, 'const chartKeys')
+                ]}
+              ]},
+            {title: 'Never the last',
+              want: 'An empty workspace shows nothing and teaches nothing; the last chart holds its post.',
+              says: ['The grip and the remove are dealt only while more than one chart ' +
+                'stands. With one left, hover finds nothing, delete falls silent, and only ' +
+                'the plus remains.'],
+              code: [
+                {label: 'JS', lines: [
+                  ...unit(pageSource, 'const dismissal'), gap,
+                  ...unit(pageSource, 'const grip')
+                ]}
+              ]}
+          ]}
+      ]}/>
+    </section>
+  </div>;
