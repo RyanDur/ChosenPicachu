@@ -152,8 +152,6 @@ describe('the sortable list demo', () => {
     await feedIsSubscribed();
     const recipe = screen.getByRole('region', {name: 'build the native drag sort yourself'});
     expect(recipe).toBeVisible();
-    expect(within(recipe).getByRole('link', {name: /Tables demo/}))
-      .toHaveAttribute('href', expect.stringContaining('tab=tables'));
     expect(recipe).toHaveTextContent(/Arm the drag from its handle/);
     expect(recipe).toHaveTextContent(/Accept the drop, or the platform takes it back/);
     expect(recipe).toHaveTextContent(/Commit inside the crossing/);
@@ -171,6 +169,8 @@ describe('the sortable list demo', () => {
     expect(recipe).toHaveTextContent(/The list answers as they drag/);
 
     await userEvent.click(within(recipe).getByText(/The user can sort the list/));
+    expect(within(recipe).getByRole('link', {name: /Tables demo/}))
+      .toHaveAttribute('href', expect.stringContaining('tab=tables'));
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Lazy'}));
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Keep'}));
 

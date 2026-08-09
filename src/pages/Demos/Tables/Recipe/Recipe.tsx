@@ -614,9 +614,6 @@ export const Recipe: FC<Props> = ({track, onTrack, pace, origin, motion, onPace,
                         onChoose={onMotion}/>
   };
   return <section aria-label="build the drag sort yourself" className="build-steps">
-    <header className="brief-line">
-      <h2 className="kicker">build the drag sort yourself</h2>
-    </header>
     <Picks label="input track"
            className="track-picks"
            options={[
