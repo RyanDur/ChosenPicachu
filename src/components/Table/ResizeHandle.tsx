@@ -1,4 +1,5 @@
-import {FC, KeyboardEvent, PointerEvent, useState} from 'react';
+import {FC, FocusEvent, KeyboardEvent, PointerEvent, useState} from 'react';
+import {has} from '@ryandur/sand';
 import {SLIMMEST} from './shares';
 
 const STEP_SHARE = 2;
@@ -10,11 +11,12 @@ type Grip = {
 
 type Props = {
     column: string;
-    share: number;
+    share?: number;
+    onAwaken: (table: HTMLTableElement) => void;
     onTrade: (delta: number) => void;
 };
 
-export const ResizeHandle: FC<Props> = ({column, share, onTrade}) => {
+export const ResizeHandle: FC<Props> = ({column, share, onAwaken, onTrade}) => {
     const [grip, setGrip] = useState<Grip>(null);
     const [traded, setTraded] = useState(0);
 
@@ -23,9 +25,15 @@ export const ResizeHandle: FC<Props> = ({column, share, onTrade}) => {
               className="resize-handle"
               aria-orientation="vertical"
               aria-label={`resize ${column}`}
-              aria-valuenow={Math.round(share)}
+              aria-valuenow={has(share) ? Math.round(share) : undefined}
               aria-valuemin={SLIMMEST}
               aria-valuemax={100 - SLIMMEST}
+              onFocus={(event: FocusEvent<HTMLElement>) => {
+                  const table = event.currentTarget.closest('table');
+                  if (table !== null) {
+                      onAwaken(table);
+                  }
+              }}
               onKeyDown={(event: KeyboardEvent<HTMLElement>) => {
                   if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') {
                       return;
@@ -37,7 +45,11 @@ export const ResizeHandle: FC<Props> = ({column, share, onTrade}) => {
               onPointerDown={(event: PointerEvent<HTMLElement>) => {
                   event.stopPropagation();
                   event.currentTarget.setPointerCapture?.(event.pointerId);
-                  const surface = event.currentTarget.closest('table')?.getBoundingClientRect().width ?? 0;
+                  const table = event.currentTarget.closest('table');
+                  if (table !== null) {
+                      onAwaken(table);
+                  }
+                  const surface = table?.getBoundingClientRect().width ?? 0;
                   setGrip({fromX: event.clientX, pxPerShare: surface / 100});
                   setTraded(0);
               }}

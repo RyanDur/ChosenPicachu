@@ -2,10 +2,10 @@ import {FC, MouseEvent, useState} from 'react';
 import {has} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {classNames} from '@components/class-names';
-import {Column, Shares, TableProps, seededShares} from '@components/Table';
+import {Column, Shares, TableProps, measuredShares} from '@components/Table';
 import {useColumnTravel} from './useColumnTravel';
 import {useRowTravel} from './useRowTravel';
-import {Shifted, Slid, surveyed, displaced, interior, placed, shifts} from '../survey';
+import {Bounds, Shifted, Slid, surveyed, displaced, interior, placed, shifts} from '../survey';
 import {Aloft} from '../Aloft';
 import {Direction, Rule, ranked} from '../sorting';
 import {Header} from './Header';
@@ -20,9 +20,9 @@ export type LazyKeepAnimatedTableProps = TableProps & {
 };
 
 export const LazyKeepAnimatedTable: FC<LazyKeepAnimatedTableProps> = (
-    {columns, rows, draggableColumns = false, draggableRows = false, sortable, id, ...dress}
+    {columns, rows, draggableColumns = false, draggableRows = false, resizableColumns = false, sortable, id, ...dress}
 ) => {
-    const [shares, setShares] = useState<Shares>(() => seededShares(columns));
+    const [shares, setShares] = useState<Shares>();
     const [ordered, setOrdered] = useState<Column[]>(() => [...columns]);
     const [seats, setSeats] = useState<number[]>(() => rows.map((_, card) => card));
     const [rule, setRule] = useState<Rule>();
@@ -30,24 +30,26 @@ export const LazyKeepAnimatedTable: FC<LazyKeepAnimatedTableProps> = (
     const [shifted, setShifted] = useState<Shifted>();
 
     const order = ordered.map(({column}) => column);
-    const clipped = ordered.some(({width}) => has(width));
+    const awaken = (table: HTMLTableElement): void =>
+        setShares(previous => previous ?? measuredShares(order, table));
+    const clipped = resizableColumns;
     const dealt = seats.length === rows.length ? seats : rows.map((_, card) => card);
     const standing = has(rule) ? ranked(rows, dealt, rule) : dealt;
 
     const placedColumn = (column: string, to: number): void =>
         setOrdered(previous => placed(previous, column, to));
-    const settleColumn = (column: string, struck: string): void => {
-        setSlid(displaced(order, column, struck, shares));
+    const settleColumn = (column: string, struck: string, survey: Bounds): void => {
+        setSlid(displaced(order, column, struck, survey));
         placedColumn(column, interior(order.indexOf(struck), order.length));
     };
-    const columnsTravel = useColumnTravel(order, shares, settleColumn);
+    const columnsTravel = useColumnTravel(order, settleColumn);
 
     const settleRow = (card: number, struck: number, heights: Shifted): void => {
         const after = array.moveToIndex(seats.indexOf(struck), card, seats);
         setShifted(shifts(heights, seats, after, card));
         setSeats(after);
     };
-    const rowsTravel = useRowTravel(standing, settleRow);
+    const rowsTravel = useRowTravel(order, standing, settleRow);
 
     const ruled = (column: string, direction: Direction | undefined, event: MouseEvent<HTMLButtonElement>): void => {
         const next = has(direction) ? {column, direction} : undefined;
@@ -56,7 +58,7 @@ export const LazyKeepAnimatedTable: FC<LazyKeepAnimatedTableProps> = (
             const after = has(next)
                 ? ranked(rows, dealt, next)
                 : dealt;
-            setShifted(shifts(surveyed(table, standing).rowHeights, standing, after));
+            setShifted(shifts(surveyed(table, order, standing).rowHeights, standing, after));
         }
         setRule(next);
     };
@@ -78,7 +80,6 @@ export const LazyKeepAnimatedTable: FC<LazyKeepAnimatedTableProps> = (
                }}
                className={classNames(
                    dress.tableClassName,
-                   'staged',
                    clipped && 'apportioned',
                    (draggableColumns || draggableRows) && 'sortable'
                )}>
@@ -90,7 +91,9 @@ export const LazyKeepAnimatedTable: FC<LazyKeepAnimatedTableProps> = (
                 <Header key={column.column}
                     column={column}
                     order={order}
-                    shares={shares}
+                    share={shares?.[column.column]}
+                    resizable={resizableColumns}
+                    onAwaken={awaken}
                     rule={rule}
                     slid={slid}
                     draggable={draggableColumns}
@@ -129,6 +132,6 @@ export const LazyKeepAnimatedTable: FC<LazyKeepAnimatedTableProps> = (
             )}</tbody>
         </table>
         <Aloft columnsTravel={columnsTravel} rowsTravel={rowsTravel}
-               ordered={ordered} shares={shares} rows={rows} standing={standing} dress={dress}/>
+               ordered={ordered} rows={rows} standing={standing} dress={dress}/>
     </>;
 };

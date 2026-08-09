@@ -13,10 +13,11 @@ export const Ghost: FC<Props> = ({at, drift, className, children}) =>
     <table className={classNames(className, 'column-ghost')}
            aria-hidden="true"
            style={{
-               top: at.y,
-               left: at.x,
-               width: at.width,
-               transform: `translate(${drift.x}px, ${drift.y}px)`
+               '--flight-x': `${at.x}px`,
+               '--flight-y': `${at.y}px`,
+               '--flight-width': `${at.width}px`,
+               '--drift-x': `${drift.x}px`,
+               '--drift-y': `${drift.y}px`
            }}>
         {children}
     </table>;

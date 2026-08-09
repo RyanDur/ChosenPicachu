@@ -1,0 +1,14 @@
+.aggregations {
+  .fancy-table:not(.column-ghost) {
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  .window { width: 17.5%; }
+  .trades { width: 13%; }
+  .buys { width: 11.5%; }
+  .sells { width: 11.5%; }
+  .volume { width: 14%; }
+  .vwap { width: 17.5%; }
+  .change { width: 15%; }
+}

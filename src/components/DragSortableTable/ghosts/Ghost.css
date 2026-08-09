@@ -1,5 +1,15 @@
 .column-ghost {
+  --flight-x: 0;
+  --flight-y: 0;
+  --flight-width: 0;
+  --drift-x: 0;
+  --drift-y: 0;
+
   position: fixed;
+  top: var(--flight-y);
+  left: var(--flight-x);
+  width: var(--flight-width);
+  transform: translate(var(--drift-x), var(--drift-y));
   table-layout: fixed;
   background: var(--paper);
   box-shadow: var(--lift-box-shadow);
@@ -9,4 +19,10 @@
 
 .fancy-table.column-ghost .cell:last-child {
   border-right: var(--hairline) solid var(--charcoal);
+}
+
+.column-ghost .shared {
+  --share: 0;
+
+  width: var(--share);
 }

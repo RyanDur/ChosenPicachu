@@ -105,6 +105,12 @@ describe('the tables demo', () => {
     table.getBoundingClientRect = () => ({
       left: 0, right: 860, top: 0, bottom: 240, width: 860, height: 240, x: 0, y: 0, toJSON: () => ({})
     });
+    const spans = [150, 110, 100, 100, 120, 150, 130];
+    within(table).getAllByRole('columnheader').forEach((head, at) => {
+      head.getBoundingClientRect = () => ({
+        left: 0, right: 0, top: 0, bottom: 0, width: spans[at], height: 0, x: 0, y: 0, toJSON: () => ({})
+      });
+    });
     fireEvent.pointerDown(header('vwap'), {clientX: 700, clientY: 20, pointerId: 1});
     const surface = document.querySelector('.drag-surface');
     if (surface === null) throw new Error('nothing is aloft');
@@ -211,7 +217,24 @@ describe('the tables demo', () => {
     await feedIsSubscribed();
     const recipe = screen.getByRole('region', {name: 'build the drag sort yourself'});
     expect(recipe).toBeVisible();
-    expect(recipe).toHaveTextContent(/told one hand at a time/);
+    expect(recipe).toHaveTextContent(/told as its stories/);
+    expect(recipe).toHaveTextContent(/The trader can sort by column/);
+    expect(recipe.querySelectorAll('.story')).toHaveLength(5);
+    expect(recipe.querySelectorAll('details.arc')).toHaveLength(5);
+    expect(recipe.querySelectorAll('details.arc[open]')).toHaveLength(0);
+    expect(screen.getByRole('heading', {name: 'let’s build this feature'})).toBeVisible();
+    expect(screen.getByText(/I watch the market all day/)).toBeVisible();
+    expect(screen.getByText(/The table is our interpretation of that/)).toBeVisible();
+    expect(recipe).toHaveTextContent(/sees the sort happen while they drag/);
+    const living = screen.getByRole('region', {name: 'the living table'});
+    expect(living).toBeVisible();
+    expect(living).toHaveTextContent(/The trader can watch the market live/);
+    expect(living).toHaveTextContent(/Deal a real HTML table/);
+    expect(living).toHaveTextContent(/scope="col"/);
+    expect(living.querySelectorAll('.story')).toHaveLength(1);
+    expect(living).toHaveTextContent(/a socket comes next/);
+    expect(living).toHaveTextContent(/Hydrate with one fetch/);
+    expect(living).toHaveTextContent(/that is what a table is for/);
     expect(within(recipe).getByRole('link', {name: /Drag sort list demo/}))
       .toHaveAttribute('href', expect.stringContaining('tab=dragAndDrop'));
     expect(recipe).toHaveTextContent(/touch-action/);
@@ -219,18 +242,26 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/Blank the origin while it is aloft/);
     expect(recipe).toHaveTextContent(/visibility: hidden/);
     expect(recipe).toHaveTextContent(/Slide the theater, not the layout/);
-    expect(recipe).toHaveTextContent(/1cqi/);
+    expect(recipe).toHaveTextContent(/measured by the survey/);
     expect(recipe).toHaveTextContent(/translateY\(var\(--drop\)\)/);
     expect(recipe).toHaveTextContent(/owes a removeEventListener/);
+    expect(recipe).toHaveTextContent(/Turn the theater vertical/);
     expect(within(recipe).getByRole('link', {name: 'insertBefore'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/Node/insertBefore'));
     expect(recipe.querySelectorAll('.snippet.foil')).toHaveLength(1);
 
+    await userEvent.click(within(recipe).getByText(/sees the sort happen while they drag/));
+    await userEvent.click(within(recipe).getByText(/sees a gap where the column left/));
+    await userEvent.click(within(recipe).getByText(/watches the swap slide into place/));
+    expect(recipe.querySelectorAll('details.arc[open]')).toHaveLength(3);
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Lazy'}));
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Keep'}));
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Static'}));
 
     expect(recipe).toHaveTextContent(/Stash the landing, commit on release/);
+    expect(recipe).toHaveTextContent(/the sort lands on the drop/);
+    expect(recipe).toHaveTextContent(/keeps the column in sight/);
+    expect(recipe).toHaveTextContent(/instantly, with no motion/);
     expect(recipe).toHaveTextContent(/Leave the origin in place/);
     expect(recipe).toHaveTextContent(/Apply the state update directly/);
     expect(recipe).not.toHaveTextContent(/1cqi/);
@@ -255,7 +286,9 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/Both parties slide, each by the other\u2019s share/);
     expect(recipe).toHaveTextContent(/Let the slide pace the key/);
     expect(recipe).toHaveTextContent(/getAnimations/);
+    await userEvent.click(within(recipe).getByText(/sort without a mouse/));
     expect(recipe).toHaveTextContent(/The reflex is a timer/);
+    expect(recipe.querySelectorAll('.story')).toHaveLength(1);
     expect(within(recipe).getByRole('link', {name: 'getAnimations'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/Element/getAnimations'));
     expect(recipe.querySelectorAll('.snippet.foil')).toHaveLength(0);
@@ -307,6 +340,7 @@ describe('the tables demo', () => {
     expect(resize.querySelectorAll('.snippet.foil')).toHaveLength(1);
     expect(screen.queryByRole('region', {name: 'build the drag sort yourself'})).toBeNull();
     expect(screen.queryByRole('region', {name: 'table controls'})).toBeNull();
+    expect(screen.getByRole('region', {name: 'the living table'})).toBeVisible();
 
     await userEvent.click(screen.getByRole('button', {name: 'Drag sort'}));
     expect(screen.getByRole('region', {name: 'build the drag sort yourself'})).toBeVisible();
@@ -351,6 +385,7 @@ describe('the tables demo', () => {
     expect(recipe.querySelectorAll('.snippet.foil')).toHaveLength(2);
     expect(screen.queryByRole('region', {name: 'build the drag sort yourself'})).toBeNull();
     expect(screen.queryByRole('region', {name: 'table controls'})).toBeNull();
+    expect(screen.getByRole('region', {name: 'the living table'})).toBeVisible();
 
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Static'}));
     expect(recipe).toHaveTextContent(/Rule directly/);

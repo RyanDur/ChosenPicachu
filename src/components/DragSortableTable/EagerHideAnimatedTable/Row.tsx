@@ -24,7 +24,22 @@ type Props = {
 };
 
 export const Row: FC<Props> = (
-  {card, row, columns, clipped, standing, gripped, aloft, aloftColumn, slid, shifted, className, cellClassName, onLift, onArranged}
+  {
+    card,
+    row,
+    columns,
+    clipped,
+    standing,
+    gripped,
+    aloft,
+    aloftColumn,
+    slid,
+    shifted,
+    className,
+    cellClassName,
+    onLift,
+    onArranged
+  }
 ) => {
   const position = standing.indexOf(card);
   const hidden = aloft === card;
@@ -44,7 +59,7 @@ export const Row: FC<Props> = (
       )}
                  key={column}
                  style={has(displaced)
-                   ? {'--carried': `${displaced.by}`, '--toward': displaced.toward === 'left' ? '1' : '-1'}
+                   ? {'--carried': `${displaced.by}px`, '--toward': displaced.toward === 'left' ? '1' : '-1'}
                    : undefined}>
         {columnNumber === 0 && gripped &&
             <RowGrip row={position + 1} onLift={onLift(card)}
@@ -57,7 +72,7 @@ export const Row: FC<Props> = (
                        const after = array.moveToIndex(to, card, standing);
                        const table = event.currentTarget.closest('table');
                        onArranged(after, has(table)
-                         ? shifts(surveyed(table, standing).rowHeights, standing, after)
+                         ? shifts(surveyed(table, columns, standing).rowHeights, standing, after)
                          : {});
                      }}/>}
         {cell.display}

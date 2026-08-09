@@ -2,7 +2,7 @@ import {FC, useState} from 'react';
 import {has} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {classNames} from '@components/class-names';
-import {Column, Shares, TableProps, seededShares} from '@components/Table';
+import {Column, Shares, TableProps, measuredShares} from '@components/Table';
 import {useColumnTravel} from './useColumnTravel';
 import {useRowTravel} from './useRowTravel';
 import {Aloft} from '../Aloft';
@@ -20,15 +20,17 @@ export type LazyHideStaticTableProps = TableProps & {
 };
 
 export const LazyHideStaticTable: FC<LazyHideStaticTableProps> = (
-    {columns, rows, draggableColumns = false, draggableRows = false, sortable, id, ...dress}
+    {columns, rows, draggableColumns = false, draggableRows = false, resizableColumns = false, sortable, id, ...dress}
 ) => {
-    const [shares, setShares] = useState<Shares>(() => seededShares(columns));
+    const [shares, setShares] = useState<Shares>();
     const [ordered, setOrdered] = useState<Column[]>(() => [...columns]);
     const [seats, setSeats] = useState<number[]>(() => rows.map((_, card) => card));
     const [rule, setRule] = useState<Rule>();
 
     const order = ordered.map(({column}) => column);
-    const clipped = ordered.some(({width}) => has(width));
+    const awaken = (table: HTMLTableElement): void =>
+        setShares(previous => previous ?? measuredShares(order, table));
+    const clipped = resizableColumns;
     const dealt = seats.length === rows.length ? seats : rows.map((_, card) => card);
     const standing = has(rule) ? ranked(rows, dealt, rule) : dealt;
 
@@ -36,11 +38,11 @@ export const LazyHideStaticTable: FC<LazyHideStaticTableProps> = (
         setOrdered(previous => placed(previous, column, to));
     const settleColumn = (column: string, struck: string): void =>
         placedColumn(column, interior(order.indexOf(struck), order.length));
-    const columnsTravel = useColumnTravel(order, shares, settleColumn);
+    const columnsTravel = useColumnTravel(order, settleColumn);
 
     const settleRow = (card: number, struck: number): void =>
         setSeats(array.moveToIndex(seats.indexOf(struck), card, seats));
-    const rowsTravel = useRowTravel(standing, settleRow);
+    const rowsTravel = useRowTravel(order, standing, settleRow);
 
     const ruled = (column: string, direction: Direction | undefined): void =>
         setRule(has(direction) ? {column, direction} : undefined);
@@ -65,7 +67,9 @@ export const LazyHideStaticTable: FC<LazyHideStaticTableProps> = (
                 <Header key={column.column}
                     column={column}
                     order={order}
-                    shares={shares}
+                    share={shares?.[column.column]}
+                    resizable={resizableColumns}
+                    onAwaken={awaken}
                     rule={rule}
                     aloft={columnsTravel.aloft}
                     draggable={draggableColumns}
@@ -100,6 +104,6 @@ export const LazyHideStaticTable: FC<LazyHideStaticTableProps> = (
             )}</tbody>
         </table>
         <Aloft columnsTravel={columnsTravel} rowsTravel={rowsTravel}
-               ordered={ordered} shares={shares} rows={rows} standing={standing} dress={dress}/>
+               ordered={ordered} rows={rows} standing={standing} dress={dress}/>
     </>;
 };

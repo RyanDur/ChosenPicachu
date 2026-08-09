@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import Handle from '@components/grip.svg';
-import {Column, Row, Shares} from '@components/Table';
+import {Column, Row} from '@components/Table';
 import {Ghost, GhostDress} from './dress';
 
 type Props = {
@@ -10,19 +10,19 @@ type Props = {
     drift: {x: number; y: number};
     dress: GhostDress;
     columns: readonly Column[];
-    shares: Shares;
+    widths: Readonly<Record<string, number | undefined>>;
     row: Row;
 };
 
-export const RowGhost: FC<Props> = ({at, drift, dress, columns, shares, row}) =>
+export const RowGhost: FC<Props> = ({at, drift, dress, columns, widths, row}) =>
     <Ghost at={at} drift={drift} className={dress.table}>
         <tbody className={dress.tbody}>
         <tr className={dress.row}>
             {columns.map(({column}, place) => {
-                const share = shares[column];
-                return <td className={classNames(dress.cell, row[column].className, 'ellipsis')}
+                const share = widths[column];
+                return <td className={classNames(dress.cell, has(share) && 'shared', row[column].className, 'ellipsis')}
                     key={place}
-                    style={has(share) ? {width: `${share}%`} : undefined}>
+                    style={has(share) ? {'--share': `${share}%`} : undefined}>
                     {place === 0 && <i className="grip"><Handle/></i>}
                     {row[column].display}
                 </td>;
