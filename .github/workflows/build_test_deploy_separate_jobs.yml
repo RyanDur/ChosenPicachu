@@ -32,11 +32,6 @@ jobs:
           npm run lint
           npm run lint:css
           npm run build
-      - name: Export env for test
-        uses: cardinalby/export-env-action@v2
-        with:
-          mask: true
-          envFile: '.env.test'
       - name: Test
         run: npm test
       - name: Upload
@@ -91,31 +86,8 @@ jobs:
       - name: Smoke the deployed site
         run: npx playwright test
 
-  lighthouse_build:
-    needs: build_test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-          cache: 'npm'
-          registry-url: 'https://npm.pkg.github.com'
-      - name: Build against the stubs
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          npm ci
-          npm run build:lighthouse
-      - name: Share the stubbed bundle
-        uses: actions/upload-artifact@v4
-        with:
-          name: lighthouse-dist
-          path: ./dist
-
   lighthouse:
-    needs: lighthouse_build
+    needs: build_test
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -152,10 +124,10 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm ci
-      - name: Take the stubbed bundle
+      - name: Take the shipped bundle
         uses: actions/download-artifact@v4
         with:
-          name: lighthouse-dist
+          name: dist
           path: ./dist
       - name: Lighthouse audit of ${{ matrix.page }}
         uses: treosh/lighthouse-ci-action@v12

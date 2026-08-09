@@ -35,6 +35,18 @@ const server = createServer((request, response) => {
 
   const url = request.url ?? '/';
 
+  if (url.split('?')[0].endsWith('/env.js')) {
+    return send(200, `window.__env = ${JSON.stringify({
+      tradeFeed: `ws://localhost:${port}/ws-feed`,
+      tradeProduct: 'BTC-USD',
+      tradeHistory: '/trade-history',
+      aicDomain: '/aic',
+      harvardDomain: '/harvard',
+      harvardAPIKey: 'recorded',
+      vamDomain: '/vam'
+    })};`, 'text/javascript', true);
+  }
+
   const image = url.match(/^\/vam-image\/(\d+)\/full\/!(\d+),/);
   if (image) {
     const sized = join(fixtures, 'assets', `vam-${image[1]}-${image[2]}.jpg`);

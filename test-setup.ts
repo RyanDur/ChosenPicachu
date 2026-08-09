@@ -1,3 +1,4 @@
+import './src/test-support/env';
 import * as matchers from '@testing-library/jest-dom/matchers';
 import '@testing-library/jest-dom/vitest';
 import {afterAll, afterEach, beforeAll, expect} from 'vitest';
