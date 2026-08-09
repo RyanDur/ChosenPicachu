@@ -172,11 +172,5 @@ export const ResizeRecipe: FC = () =>
         and the steps inside build it.
       </p>
     </header>
-    <p className="lead">
-      You want column boundaries you can drag while the table always fills its container:
-      widen a column and its neighbour gives up the space, never the table’s edge. That
-      takes a record of widths that cannot sum to more or less than the whole, no matter what
-      the hand does.
-    </p>
     <StoryList stories={stories}/>
   </section>;

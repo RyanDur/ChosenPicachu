@@ -207,7 +207,8 @@ const stories = (pace: Pace, origin: Origin, motion: Motion): Tale[] => {
     {can: 'The trader can sort the windows by any measure, or take the order back',
       soThat: 'the table ranks itself, and the hand still outranks it',
       tells: ['We could build the popup from divs, but then we owe focus, dismissal, and ' +
-        'stacking; so the chooser is a native menu on the popover API, and the platform ' +
+        'stacking, and choosing starts to feel like fighting the menu instead of using it; ' +
+        'so the chooser is a native menu on the popover API, and the platform ' +
         'carries all three. Nothing stores which column is sorted: the glyph and aria-sort ' +
         'both derive from the one rule, because a second source of truth only learns to ' +
         'drift.',
@@ -253,12 +254,6 @@ export const MenuRecipe: FC<Props> = ({pace, origin, motion, onMotion}) => {
         dial sits on the step.
       </p>
     </header>
-    <p className="lead">
-      You want each column to offer its own sort: ascending, descending, or back to the deal.
-      The stream keeps writing new values underneath, and you want choosing to feel like
-      using a menu, not fighting one. The platform carries more of this than you might expect;
-      the interesting parts are what the rule is, and when a hand outranks it.
-    </p>
     <StoryList stories={stories(pace, origin, motion)
       .map(story => ({...story,
         steps: story.steps.map(({dial, ...step}) => ({...step, dial: dial && dials[dial]}))}))}/>

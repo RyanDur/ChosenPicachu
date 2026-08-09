@@ -568,7 +568,10 @@ const keyedStories = (motion: Motion): Tale[] => {
     soThat: 'the table answers whoever arrives at it',
     tells: ['We could build the keyboard its own sorting system, but the state, the clamps, ' +
       'and the slides already exist; so this track is about access. Focus reaches every grip ' +
-      'and every header, and two arrow keys get everything the hand has.'],
+      'and every header, and two arrow keys get everything the hand has.',
+      'Two of the dials go quiet here: pace and origin describe a drag session, what happens ' +
+      'while something is held aloft, and a keyboard nudge holds nothing aloft. Only motion ' +
+      'still chooses, and the marked step below is written the way that dial sits.'],
     steps}];
 };
 
@@ -630,18 +633,6 @@ export const Recipe: FC<Props> = ({track, onTrack, pace, origin, motion, onPace,
            ]}
            chosen={track}
            onPick={onTrack}/>
-    {track === 'pointer' ? <>
-    </> : <>
-    <p className="lead">
-      It turns out to need almost nothing new: the state, the clamps, and the theater all
-      exist, so this track is about letting focus reach them and letting two keys speak.
-    </p>
-    <p className="lead">
-      Two of the dials go quiet here: pace and origin describe a drag session, what happens
-      while something is held aloft, and a keyboard nudge holds nothing aloft. Only motion
-      still chooses, and the marked step below is written the way that dial sits.
-    </p>
-    </>}
     <StoryList stories={(track === 'pointer'
       ? pointerStories(pace, origin, motion)
       : keyedStories(motion))
