@@ -73,7 +73,6 @@ export const UserInformation: FC<FormProps> = (
                  }}
                  onInvalid={event => event.currentTarget.classList.add('invalid')}>
         <h2 id="form-title" className="title heading">User Information</h2>
-        <h3 id="name-title" className="subheading">User</h3>
         <FancyInput id="first-name-cell" inputId="first-name" required
                     value={user.info.firstName} readOnly={readOnly}
                     onChange={event => dispatch(updateFirstName(event.currentTarget.value))}>
