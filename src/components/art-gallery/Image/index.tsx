@@ -32,6 +32,7 @@ export const Image: FC<ImageProps> = (
   const ConditionalLink: FC<PropsWithChildren & { enabled: boolean, area: string }> =
     ({children, enabled, area}) => enabled ?
       <Link onClick={gotoTopOfPage} to={`${gallery}${piece.id}${toQueryString({tab: area})}`}
+            aria-label={piece.title}
             className="scrim">{children}</Link> : <>{children}</>;
 
     return (errored || !piece.image) ?
