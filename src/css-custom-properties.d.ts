@@ -7,6 +7,7 @@ declare module 'csstype' {
     '--carried'?: string;
     '--toward'?: string;
     '--drop'?: string;
+    '--seat-height'?: string;
     '--share'?: string;
     '--flight-x'?: string;
     '--flight-y'?: string;

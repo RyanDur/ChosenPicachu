@@ -65,9 +65,9 @@ export const UsersPage: FC = () => {
           columns={[
             {display: 'Full Name', column: 'fullName', className: 'full-name'},
             {display: 'Home City', column: 'homeCity', className: 'home-city'},
-            {display: 'Age', column: 'age', className: 'age'},
+            {display: 'Age', column: 'age', className: 'age', sortable: true},
             {display: 'Friends', column: 'friends', className: 'friends'},
-            {display: 'Works from Home', column: 'worksFromHome', className: 'works-from-home'}
+            {display: 'Works from Home', column: 'worksFromHome', className: 'works-from-home', sortable: true}
           ]}
           resizableColumns
           rows={users.map(user => {
@@ -76,12 +76,11 @@ export const UsersPage: FC = () => {
               lastName: string
             }) => `${user.firstName} ${user.lastName}`;
             return ({
-              fullName: {display: displayFullName(user.info), value: displayFullName(user.info)},
-              homeCity: {display: user.homeAddress.city, value: user.homeAddress.city},
+              fullName: {display: displayFullName(user.info)},
+              homeCity: {display: user.homeAddress.city},
               age: {display: formatAge(age(user.info.dob)), value: has(user.info.dob) ? -user.info.dob.getTime() : undefined},
               friends: {
-                display: <FriendsList user={user} users={users} onChange={update(user)}/>,
-                value: user.friends.length
+                display: <FriendsList user={user} users={users} onChange={update(user)}/>
               },
               worksFromHome: {
                 value: equalAddresses(user.homeAddress, user.workAddress) ? 'Yes' : 'No',

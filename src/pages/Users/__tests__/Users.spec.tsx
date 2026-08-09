@@ -30,21 +30,24 @@ describe('the users page', () => {
   });
 
   describe('ranking the users', () => {
-    it('ranks by a column menu criterion', async () => {
+    it('groups by a column menu criterion', async () => {
       renderWithRouter(<UsersPage/>, {});
-      const cities = () => within(screen.getAllByRole('rowgroup')[1]).getAllByRole('row')
-        .map(row => row.querySelectorAll('th, td')[1]?.textContent ?? '');
-      await waitFor(() => expect(cities().length).toBeGreaterThan(1));
-      const dealt = cities();
+      const homes = () => within(screen.getAllByRole('rowgroup')[1]).getAllByRole('row')
+        .map(row => row.querySelectorAll('th, td')[4]?.textContent ?? '');
+      await waitFor(() => expect(homes().length).toBeGreaterThan(1));
 
-      const toggle = screen.getByRole('button', {name: 'sort homeCity'});
+      const toggle = screen.getByRole('button', {name: 'sort worksFromHome'});
       const menu = document.getElementById(toggle.getAttribute('popovertarget') ?? '');
-      if (menu === null) throw new Error('no menu for homeCity');
+      if (menu === null) throw new Error('no menu for worksFromHome');
       await userEvent.click(within(menu).getByText('ascending'));
 
-      expect(cities()).toEqual([...dealt].sort((left, right) => left.localeCompare(right)));
+      expect(homes()).toEqual([...homes()].sort((left, right) => left.localeCompare(right)));
       expect(screen.getAllByRole('button', {name: /move row/}).length).toBeGreaterThan(0);
       expect(screen.getAllByRole('button', {name: /resize homeCity/}).length).toBe(1);
+      expect(screen.getByRole('button', {name: 'sort age'})).toBeVisible();
+      expect(screen.queryByRole('button', {name: 'sort fullName'})).toBeNull();
+      expect(screen.queryByRole('button', {name: 'sort homeCity'})).toBeNull();
+      expect(screen.queryByRole('button', {name: 'sort friends'})).toBeNull();
     });
   });
 

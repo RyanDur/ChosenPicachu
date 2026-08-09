@@ -3,7 +3,7 @@ import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {Column, Dress, TableProps} from '@components/Table';
 import {Drift, Flight} from './travel';
-import {Bounds} from './survey';
+import {Survey} from './survey';
 import {ColumnGhost, RowGhost} from './ghosts';
 
 type Surface = {
@@ -15,7 +15,7 @@ type Surface = {
 
 type Travel<SUBJECT> = {
     aloft?: SUBJECT;
-    survey?: Bounds;
+    survey?: Survey;
     flight: Flight;
     drift: Drift;
     surface: Surface;
@@ -50,7 +50,8 @@ export const Aloft: FC<Props> = ({columnsTravel, rowsTravel, ordered, rows, stan
     return <>
         {has(aloftColumn) &&
             <ColumnGhost at={columnsTravel.flight} drift={columnsTravel.drift} dress={ghostDress}
-                         column={aloftColumn} rows={standing.map(row => rows[row])}/>}
+                         column={aloftColumn} rows={standing.map(row => rows[row])}
+                         heights={standing.map(row => columnsTravel.survey?.rowHeights[row])}/>}
         {has(aloftRow) &&
             <RowGhost at={rowsTravel.flight} drift={rowsTravel.drift} dress={ghostDress}
                       columns={ordered} widths={widths} row={aloftRow}/>}

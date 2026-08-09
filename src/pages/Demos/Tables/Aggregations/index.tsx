@@ -32,12 +32,12 @@ const tables = {
 
 const columns = [
   {display: 'window', column: 'window', className: 'window'},
-  {display: 'trades', column: 'trades', className: 'trades'},
-  {display: 'buys', column: 'buys', className: 'buys'},
-  {display: 'sells', column: 'sells', className: 'sells'},
-  {display: 'volume', column: 'volume', className: 'volume'},
-  {display: 'vwap', column: 'vwap', className: 'vwap'},
-  {display: 'change', column: 'change', className: 'change'}
+  {display: 'trades', column: 'trades', className: 'trades', sortable: true},
+  {display: 'buys', column: 'buys', className: 'buys', sortable: true},
+  {display: 'sells', column: 'sells', className: 'sells', sortable: true},
+  {display: 'volume', column: 'volume', className: 'volume', sortable: true},
+  {display: 'vwap', column: 'vwap', className: 'vwap', sortable: true},
+  {display: 'change', column: 'change', className: 'change', sortable: true}
 ];
 
 const moved = ({opened, closed}: WindowAggregate) =>

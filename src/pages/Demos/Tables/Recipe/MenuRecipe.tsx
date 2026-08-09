@@ -180,10 +180,10 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
       want: 'The menu lives inside a draggable header, where an unguarded press on the toggle would lift the whole column.',
       says: [<>Both the toggle and the
         menu <Mdn path="Web/API/Event/stopPropagation">stop pointer descent</Mdn>, so the header
-        never hears your press. The toggle itself rides the header’s right edge, absolutely placed
-        inside the cell, undressed of its button chrome. And the first column offers you no
-        menu at all: it anchors the table, and the header only offers sorting from the
-        second seat on.</>],
+        never hears your press. The toggle itself rides the header’s right edge, a track in the
+        cell’s own grid, undressed of its button chrome. And not every column offers a menu:
+        each column declares whether ranking it means anything, and the header only deals a
+        menu where it does.</>],
       code: [
         {label: 'JS', lines: [
           ...span(menuSource, 'onPointerDown={event => event.stopPropagation()}',
@@ -191,7 +191,7 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
           aside('// on the toggle and on the menu both')
         ]},
         {label: 'HTML', lines: [
-          ...span(headerSrc, '{has(onRule) && position > 0 &&', '{has(onRule) && position > 0 &&')
+          ...span(headerSrc, '{has(onRule) && column.sortable &&', '{has(onRule) && column.sortable &&')
         ]},
         {label: 'CSS', lines: [
           ...unit(headerCss, '.sortable .menu-toggle {')
