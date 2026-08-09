@@ -50,8 +50,9 @@ export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack, ...props}) 
       <figcaption className="attribution">a trader</figcaption>
     </figure>
     <p className="overview">
-      The table is our interpretation of that. The cards below break the interpretation into
-      features; open one to see how we built it.
+      If you want the exercise, stop here and build the story yourself first. The table is
+      our interpretation of that; the cards below break the interpretation into features.
+      Open one to see how we built it, or to compare it with yours.
     </p>
     <LivingTable/>
     <Picks label="tutorials"
