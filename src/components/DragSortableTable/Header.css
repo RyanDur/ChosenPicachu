@@ -1,14 +1,9 @@
 .sortable .header-cell {
   text-align: left;
-  --share: auto;
 
   &:focus-visible {
     outline: var(--hairline-x-2) solid var(--charcoal);
   }
-}
-
-.sortable .header-cell-content {
-  padding-inline-start: var(--base-x-1_5);
 }
 
 .sortable .menu-toggle {

@@ -21,6 +21,6 @@ export const Menu: FC<Props> = ({id, label, toggle, toggleClassName, children}) 
           onPointerDown={event => event.stopPropagation()}
           onMouseDown={event => event.stopPropagation()}
           onClick={event => event.currentTarget.hidePopover?.()}>
-      {Children.map(children, child => <li>{child}</li>)}
+      {Children.map(children, child => <li className="entry">{child}</li>)}
     </menu>
   </>;

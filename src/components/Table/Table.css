@@ -12,10 +12,6 @@
     }
   }
 
-  .column-name {
-    position: relative;
-  }
-
   .header .column-name {
     border-bottom: var(--hairline-x-3) solid var(--charcoal);
   }
@@ -25,9 +21,6 @@
   }
 
   .body .row {
-    position: relative;
-    right: 0;
-
     &:hover {
       background: var(--mint);
     }
@@ -47,7 +40,7 @@
   grid-template-columns: 1fr auto auto;
   align-items: center;
   column-gap: var(--base);
-  height: var(--base-x-5);
+  min-height: var(--base-x-5);
   padding-inline-start: var(--base-x-1_25);
 }
 
