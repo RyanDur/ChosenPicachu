@@ -297,8 +297,8 @@ const pointerStories = (pace: Pace, origin: Origin, motion: Motion): Tale[] => {
       <>The markup stays honest HTML, a real table with real headers, so the semantics come
       free: the row grip is a button that reorders rows from the arrow keys without a line of
       drag code, and the resize handle is
-      a <Mdn path="Web/Accessibility/ARIA/Roles/separator_role">separator</Mdn> that announces
-      its value.</>,
+      a real <Mdn path="Web/HTML/Element/button">button</Mdn> that announces itself by
+      name, and its share once the ledger exists.</>,
       <>CSS carries more of the effect than it appears: the open hand and the closed fist
       are <Mdn path="Web/CSS/cursor">cursors</Mdn>, <Mdn path="Web/CSS/touch-action">touch-action</Mdn>:
       none is the single line that lets pointer events drag on a touchscreen,
@@ -310,7 +310,7 @@ const pointerStories = (pace: Pace, origin: Origin, motion: Motion): Tale[] => {
       {label: 'HTML', lines: [
         plain('<table><thead><tr><th scope="col">window</th> ...'),
         plain('<button className="grip" aria-label="move row 2"><Handle/></button>'),
-        plain('<i role="separator" aria-label="resize trades" aria-valuenow={24}/>')
+        plain('<button className="resize-handle" aria-label="resize trades, 24%"/>')
       ]},
       {label: 'CSS', lines: [
         ...unit(sortableCss, '.grabbable {'), gap,

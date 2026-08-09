@@ -133,17 +133,16 @@ describe('resizable columns', () => {
     expect(screen.getByRole('table').classList).toContain('apportioned');
     expect(nameHeader().style.width).toBe('');
     expect(ageHeader().style.width).toBe('');
-    expect(screen.getByRole('separator', {name: 'resize name'}))
-      .not.toHaveAttribute('aria-valuenow');
+    expect(screen.getByRole('button', {name: 'resize name'})).toBeVisible();
   });
 
   test('the first touch surveys the headers into the ledger', () => {
     render(<Table columns={sized} rows={people} resizableColumns/>);
     surveyed();
 
-    fireEvent.focus(screen.getByRole('separator', {name: 'resize name'}));
+    fireEvent.focus(screen.getByRole('button', {name: 'resize name'}));
 
-    expect(screen.getByRole('separator', {name: 'resize name'})).toHaveAttribute('aria-valuenow', '63');
+    expect(screen.getByRole('button', {name: 'resize name, 63%'})).toBeVisible();
     expect(nameHeader().style.getPropertyValue('--share')).toBe('62.5%');
     expect(ageHeader().style.getPropertyValue('--share')).toBe('37.5%');
   });
@@ -152,12 +151,12 @@ describe('resizable columns', () => {
     render(<Table columns={sized} rows={people} resizableColumns/>);
     surveyed();
 
-    const handle = screen.getByRole('separator', {name: 'resize name'});
+    const handle = screen.getByRole('button', {name: 'resize name'});
     handle.focus();
     await userEvent.keyboard('{ArrowRight}');
     expect(nameHeader().style.getPropertyValue('--share')).toBe('64.5%');
     expect(ageHeader().style.getPropertyValue('--share')).toBe('35.5%');
-    expect(screen.getByRole('separator', {name: 'resize name'})).toHaveAttribute('aria-valuenow', '65');
+    expect(screen.getByRole('button', {name: 'resize name, 65%'})).toBeVisible();
     await userEvent.keyboard('{ArrowLeft}{ArrowLeft}');
     expect(nameHeader().style.getPropertyValue('--share')).toBe('60.5%');
     expect(ageHeader().style.getPropertyValue('--share')).toBe('39.5%');
@@ -167,7 +166,7 @@ describe('resizable columns', () => {
     render(<Table columns={sized} rows={people} resizableColumns/>);
     surveyed();
 
-    const handle = screen.getByRole('separator', {name: 'resize name'});
+    const handle = screen.getByRole('button', {name: 'resize name'});
     fireEvent.pointerDown(handle, {clientX: 300, pointerId: 1});
     fireEvent.pointerMove(handle, {clientX: 340, pointerId: 1});
     fireEvent.pointerUp(handle, {pointerId: 1});
@@ -180,7 +179,7 @@ describe('resizable columns', () => {
     render(<Table columns={sized} rows={people} resizableColumns/>);
     surveyed();
 
-    const handle = screen.getByRole('separator', {name: 'resize age'});
+    const handle = screen.getByRole('button', {name: 'resize age'});
     handle.focus();
     await userEvent.keyboard('{ArrowRight}'.repeat(30));
     expect(ageHeader().style.getPropertyValue('--share')).toBe('95%');
@@ -198,7 +197,7 @@ describe('resizable columns', () => {
   test('without the opt-in the columns stay plain', () => {
     render(<Table columns={columns} rows={rows}/>);
 
-    expect(screen.queryAllByRole('separator')).toHaveLength(0);
+    expect(screen.queryAllByRole('button', {name: /^resize/})).toHaveLength(0);
     screen.getAllByRole('cell').forEach(cell => expect(cell.classList).not.toContain('ellipsis'));
   });
 });

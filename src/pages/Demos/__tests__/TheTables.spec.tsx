@@ -333,7 +333,7 @@ describe('the tables demo', () => {
     expect(resize).toBeVisible();
     expect(resize).toHaveTextContent(/zero-sum ledger/);
     expect(resize).toHaveTextContent(/Trade, never take/);
-    expect(resize).toHaveTextContent(/role="separator"/);
+    expect(resize).toHaveTextContent(/A handle that is a button/);
     expect(resize).toHaveTextContent(/the table grows with it/);
     expect(within(resize).getByRole('link', {name: 'captures its pointer'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/Element/setPointerCapture'));
@@ -411,6 +411,6 @@ describe('the tables demo', () => {
     renderTables(urlOf(feed));
 
     const card = screen.getByRole('region', {name: 'live aggregations'});
-    expect(within(card).getAllByRole('separator')).toHaveLength(7);
+    expect(within(card).getAllByRole('button', {name: /^resize/})).toHaveLength(7);
   });
 });

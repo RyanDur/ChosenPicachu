@@ -1,6 +1,5 @@
 import {FC, FocusEvent, KeyboardEvent, PointerEvent, useState} from 'react';
 import {has} from '@ryandur/sand';
-import {SLIMMEST} from './shares';
 
 const STEP_SHARE = 2;
 
@@ -20,14 +19,11 @@ export const ResizeHandle: FC<Props> = ({column, share, onAwaken, onTrade}) => {
     const [grip, setGrip] = useState<Grip>(null);
     const [traded, setTraded] = useState(0);
 
-    return <i role="separator"
-              tabIndex={0}
+    return <button type="button"
               className="resize-handle"
-              aria-orientation="vertical"
-              aria-label={`resize ${column}`}
-              aria-valuenow={has(share) ? Math.round(share) : undefined}
-              aria-valuemin={SLIMMEST}
-              aria-valuemax={100 - SLIMMEST}
+              aria-label={has(share)
+                  ? `resize ${column}, ${Math.round(share)}%`
+                  : `resize ${column}`}
               onFocus={(event: FocusEvent<HTMLElement>) => {
                   const table = event.currentTarget.closest('table');
                   if (table !== null) {
