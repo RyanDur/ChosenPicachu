@@ -48,18 +48,15 @@
   border: none;
   padding: 0;
   background: none;
-  position: relative;
   align-self: stretch;
   cursor: col-resize;
   touch-action: none;
+  display: grid;
+  justify-items: end;
 
   &::after {
     content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
     width: var(--base);
-    height: 100%;
   }
 
   &:focus {
