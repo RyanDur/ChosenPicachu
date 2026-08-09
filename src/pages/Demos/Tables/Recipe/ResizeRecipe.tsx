@@ -37,7 +37,7 @@ const steps: StepEntry[] = [
         plain("<th className=\"header-cell\" style={{'--share': `${share}%`}}>")
       ]},
       {label: 'CSS', lines: [
-        ...unit(baseCss, '.apportioned {'), gap,
+        ...unit(baseCss, '.fancy-table.apportioned .header-cell.shared {'), gap,
         ...unit(headerCss, '.sortable .header-cell {')
       ]}
     ]

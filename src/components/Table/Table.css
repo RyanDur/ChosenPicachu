@@ -85,12 +85,10 @@
   }
 }
 
-.apportioned {
-  .header-cell.shared {
-    --share: 0;
+.fancy-table.apportioned .header-cell.shared {
+  --share: 0;
 
-    width: var(--share);
-  }
+  width: var(--share);
 }
 
 .clipped {
