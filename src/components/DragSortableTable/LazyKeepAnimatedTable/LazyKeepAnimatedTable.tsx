@@ -5,7 +5,7 @@ import {classNames} from '@components/class-names';
 import {Column, Shares, TableProps, seededShares} from '@components/Table';
 import {useColumnTravel} from './useColumnTravel';
 import {useRowTravel} from './useRowTravel';
-import {Shifted, Slid, charted, displaced, interior, placed, shifts} from '../chart';
+import {Shifted, Slid, surveyed, displaced, interior, placed, shifts} from '../survey';
 import {Aloft} from '../Aloft';
 import {Direction, Rule, ranked} from '../sorting';
 import {Header} from './Header';
@@ -56,7 +56,7 @@ export const LazyKeepAnimatedTable: FC<LazyKeepAnimatedTableProps> = (
             const after = has(next)
                 ? ranked(rows, dealt, next)
                 : dealt;
-            setShifted(shifts(charted(table, standing).rowHeights, standing, after));
+            setShifted(shifts(surveyed(table, standing).rowHeights, standing, after));
         }
         setRule(next);
     };

@@ -13,7 +13,7 @@ export type Bounds = {
     height: number;
 };
 
-export type Chart = Bounds & {
+export type Survey = Bounds & {
     rowHeights: Readonly<Record<number, number>>;
 };
 
@@ -22,7 +22,7 @@ export const bounded = (surface: HTMLTableElement): Bounds => {
     return {left: bounds.left, top: bounds.top, width: bounds.width, height: bounds.height};
 };
 
-export const charted = (surface: HTMLTableElement, seats: readonly number[]): Chart => {
+export const surveyed = (surface: HTMLTableElement, seats: readonly number[]): Survey => {
     const body = surface.tBodies[0];
     return {
         ...bounded(surface),
@@ -36,12 +36,12 @@ export const charted = (surface: HTMLTableElement, seats: readonly number[]): Ch
 const deadZone = (struckSize: number, aloftSize: number): number =>
     Math.max(struckSize / 4, (struckSize - aloftSize) / 2);
 
-export const columnUnder = (order: readonly string[], shares: Shares, chart?: Bounds) =>
+export const columnUnder = (order: readonly string[], shares: Shares, survey?: Bounds) =>
     (x: number, y: number, aloft?: string): string | undefined => {
-        if (has(chart) && has(aloft) && y >= chart.top && y <= chart.top + chart.height) {
-            let edge = chart.left;
+        if (has(survey) && has(aloft) && y >= survey.top && y <= survey.top + survey.height) {
+            let edge = survey.left;
             const slots = order.map((column, at) => {
-                const width = (shares[column] ?? 0) / 100 * chart.width;
+                const width = (shares[column] ?? 0) / 100 * survey.width;
                 edge += width;
                 return {column, at, width, start: edge - width, end: edge};
             });
@@ -58,10 +58,10 @@ export const columnUnder = (order: readonly string[], shares: Shares, chart?: Bo
         return undefined;
     };
 
-export const cardUnder = (seats: readonly number[], chart?: Chart) =>
+export const cardUnder = (seats: readonly number[], survey?: Survey) =>
     (x: number, y: number, aloft?: number): number | undefined => {
-        if (has(chart) && has(aloft) && x >= chart.left && x <= chart.left + chart.width) {
-            const {top, height, rowHeights} = chart;
+        if (has(survey) && has(aloft) && x >= survey.left && x <= survey.left + survey.width) {
+            const {top, height, rowHeights} = survey;
             let edge = top + height -
                 seats.reduce((total, card) => total + rowHeights[card], 0);
             const slots = seats.map((card, at) => {

@@ -25,7 +25,7 @@ describe('drag sortable columns', () => {
   const headerTexts = () => within(sourceTable()).getAllByRole('columnheader').map(header => header.textContent);
   const header = (name: string) => within(sourceTable()).getByRole('columnheader', {name: new RegExp(`^${name}`)});
   const widths: Record<string, number> = {name: 200, age: 120, city: 120, job: 160};
-  const charted = () => {
+  const surveyed = () => {
     sourceTable().getBoundingClientRect = () => ({
       left: 0, right: 600, top: 0, bottom: 200, width: 600, height: 200, x: 0, y: 0, toJSON: () => ({})
     });
@@ -33,7 +33,7 @@ describe('drag sortable columns', () => {
   let aloft = '';
   const lift = (name: string) => {
     aloft = name;
-    charted();
+    surveyed();
     fireEvent.pointerDown(header(name), {clientX: 100, clientY: 50, pointerId: 1});
   };
   const carryOver = (target: string) => {
@@ -212,7 +212,7 @@ describe('drag sortable rows', () => {
     return row;
   };
   const grip = (person: string) => within(rowOf(person)).getByRole('button', {name: /move row/});
-  const charted = () => {
+  const surveyed = () => {
     sourceTable().getBoundingClientRect = () => ({
       left: 0, right: 400, top: 0, bottom: 160, width: 400, height: 160, x: 0, y: 0, toJSON: () => ({})
     });
@@ -226,7 +226,7 @@ describe('drag sortable rows', () => {
   let aloft = '';
   const lift = (person: string) => {
     aloft = person;
-    charted();
+    surveyed();
     fireEvent.pointerDown(grip(person), {clientX: 100, clientY: 50, pointerId: 1});
   };
   const carryOver = (target: string) => {

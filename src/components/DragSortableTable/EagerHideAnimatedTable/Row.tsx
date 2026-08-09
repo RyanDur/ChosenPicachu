@@ -3,7 +3,7 @@ import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {array} from '@components/arrays';
 import {Row as RowData} from '@components/Table';
-import {Shifted, Slid, charted, shifts} from '../chart';
+import {Shifted, Slid, surveyed, shifts} from '../survey';
 import {RowGrip} from '../RowGrip';
 
 type Props = {
@@ -57,7 +57,7 @@ export const Row: FC<Props> = (
                        const after = array.moveToIndex(to, card, standing);
                        const table = event.currentTarget.closest('table');
                        onArranged(after, has(table)
-                         ? shifts(charted(table, standing).rowHeights, standing, after)
+                         ? shifts(surveyed(table, standing).rowHeights, standing, after)
                          : {});
                      }}/>}
         {cell.display}

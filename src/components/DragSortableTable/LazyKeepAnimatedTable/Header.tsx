@@ -2,7 +2,7 @@ import {FC, KeyboardEvent, MouseEvent, PointerEvent} from 'react';
 import {has, not} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {Column, ResizeHandle, Shares, neighborOf, traded} from '@components/Table';
-import {Slid, anchored, interior} from '../chart';
+import {Slid, anchored, interior} from '../survey';
 import {Direction, SortMenu} from '../SortMenu';
 import '../Header.css';
 

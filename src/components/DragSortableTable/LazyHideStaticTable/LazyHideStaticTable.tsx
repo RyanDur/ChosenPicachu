@@ -6,7 +6,7 @@ import {Column, Shares, TableProps, seededShares} from '@components/Table';
 import {useColumnTravel} from './useColumnTravel';
 import {useRowTravel} from './useRowTravel';
 import {Aloft} from '../Aloft';
-import {interior, placed} from '../chart';
+import {interior, placed} from '../survey';
 import {Direction, Rule, ranked} from '../sorting';
 import {Header} from './Header';
 import {Row} from './Row';

@@ -1,26 +1,26 @@
 import {PointerEvent, useState} from 'react';
 import {has} from '@ryandur/sand';
 import {Drift, Flight, grounded, still} from '../travel';
-import {Chart, charted, cardUnder} from '../chart';
+import {Survey, surveyed, cardUnder} from '../survey';
 
 export const useRowTravel = (
     standing: readonly number[],
     settle: (card: number, struck: number, heights: Readonly<Record<number, number>>) => void
 ) => {
     const [aloft, setAloft] = useState<number>();
-    const [chart, setChart] = useState<Chart>();
+    const [survey, setChart] = useState<Survey>();
     const [flight, setFlight] = useState<Flight>(grounded);
     const [origin, setOrigin] = useState<Drift>();
     const [drift, setDrift] = useState<Drift>(still);
     const [landing, setLanding] = useState<number>();
-    const strike = cardUnder(standing, chart);
+    const strike = cardUnder(standing, survey);
 
     const lift = (card: number) =>
         (event: PointerEvent<HTMLElement>): void => {
             const lane = event.currentTarget.closest('tr');
             const table = event.currentTarget.closest('table');
             if (has(table)) {
-                setChart(charted(table, standing));
+                setChart(surveyed(table, standing));
             }
             const anchored = lane?.getBoundingClientRect();
             setFlight({x: anchored?.x ?? 0, y: anchored?.y ?? 0, width: anchored?.width ?? 0});
@@ -28,8 +28,8 @@ export const useRowTravel = (
         };
 
     const drop = (): void => {
-        if (has(chart) && has(aloft) && has(landing)) {
-            settle(aloft, landing, chart.rowHeights);
+        if (has(survey) && has(aloft) && has(landing)) {
+            settle(aloft, landing, survey.rowHeights);
         }
         setOrigin(undefined);
         setLanding(undefined);

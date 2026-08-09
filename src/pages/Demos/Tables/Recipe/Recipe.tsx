@@ -11,7 +11,7 @@ import {Mdn} from '../../Recipe/Mdn';
 import {span, unit} from '../../Recipe/carve';
 import {SlotsFigure} from './SlotsFigure';
 import aloftSource from '@components/DragSortableTable/Aloft.tsx?raw';
-import chartSource from '@components/DragSortableTable/chart.ts?raw';
+import surveySource from '@components/DragSortableTable/survey.ts?raw';
 import gripSource from '@components/DragSortableTable/RowGrip.tsx?raw';
 import ghostSource from '@components/DragSortableTable/ghosts/Ghost.tsx?raw';
 import sortableCss from '@components/DragSortableTable/sortable.css?raw';
@@ -291,7 +291,7 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
       touch-action: none is why the pointer can drag on touch at all. On pointerdown,
       JavaScript records which key is aloft and measures the
       table’s <Mdn path="Web/API/Element/getBoundingClientRect">bounding rect</Mdn> a single
-      time: the chart. Everything that follows is math against the chart; measuring per move
+      time: the survey. Everything that follows is math against the survey; measuring per move
       would fight the reorder you are about to apply.</>],
     code: [
       {label: 'JS', lines: [
@@ -365,7 +365,7 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
     title: 'Find the neighbour under the pointer, with a dead zone',
     want: 'Hit-test naively and the order chatters: at a boundary, every pixel of movement flips the swap back and forth.',
     says: [<>This step is JavaScript alone, on purpose: where the pointer is, in table terms,
-      is a walk over cumulative column widths: arithmetic on the chart,
+      is a walk over cumulative column widths: arithmetic on the survey,
       never <Mdn path="Web/API/Document/elementFromPoint">elementFromPoint</Mdn>. A{' '}
       neighbour only yields once the pointer reaches its inner half: the outer quarter is a
       dead zone, without which the reorder oscillates when a wide column passes a narrow one.
@@ -375,8 +375,8 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
     figure: <SlotsFigure/>,
     code: [
       {label: 'JS', lines: [
-        ...unit(chartSource, 'const deadZone = '), gap,
-        ...unit(chartSource, 'export const columnUnder')
+        ...unit(surveySource, 'const deadZone = '), gap,
+        ...unit(surveySource, 'export const columnUnder')
       ]}
     ]
   },
