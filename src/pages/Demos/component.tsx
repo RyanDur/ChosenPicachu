@@ -60,10 +60,12 @@ export const DemosPage = () => {
   const [aloftLead, setAloftLead] = useState(0);
   const [chartPushed, setChartPushed] = useState<Readonly<Record<number, 'up' | 'down'>>>();
   const grip = (at: number) =>
-    <button type="button" className="chart-grip" aria-label="move chart" tabIndex={-1}
-            onMouseDown={() => setArmedChart(at)}>
-      <Handle/>
-    </button>;
+    chartKinds.length > 1
+      ? <button type="button" className="chart-grip" aria-label="move chart" tabIndex={-1}
+                onMouseDown={() => setArmedChart(at)}>
+        <Handle/>
+      </button>
+      : undefined;
   const chartKeys = (at: number) => (event: KeyboardEvent<HTMLElement>) => {
     if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
       event.preventDefault();
