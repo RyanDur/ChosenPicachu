@@ -69,5 +69,9 @@ a {
   &:focus {
     outline: none;
   }
+
+  &:focus-visible {
+    outline: var(--hairline-x-2) solid var(--charcoal);
+  }
 }
 
