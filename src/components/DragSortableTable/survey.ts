@@ -29,7 +29,11 @@ export const bounded = (surface: HTMLTableElement, order: readonly string[]): Bo
     };
 };
 
-export const surveyed = (surface: HTMLTableElement, order: readonly string[], seats: readonly number[]): Survey => {
+export const surveyed = (
+    surface: HTMLTableElement,
+    order: readonly string[],
+    seats: readonly number[]
+): Survey => {
     const body = surface.tBodies[0];
     return {
         ...bounded(surface, order),
@@ -97,7 +101,11 @@ export const anchored = (position: number, count: number): boolean =>
 export const interior = (at: number, count: number): number =>
     Math.min(Math.max(at, 1), count - 2);
 
-export const placed = (ordered: readonly Column[], column: string, to: number): Column[] => {
+export const placed = (
+    ordered: readonly Column[],
+    column: string,
+    to: number
+): Column[] => {
     const lifted = ordered.find(definition => definition.column === column);
     return has(lifted) ? array.moveToIndex(to, lifted, ordered) : [...ordered];
 };
