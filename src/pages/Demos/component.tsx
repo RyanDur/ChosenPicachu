@@ -22,7 +22,7 @@ import {Candles, PriceChart} from './Charts';
 import {Menu} from '@components/Menu';
 import {classNames} from '@components/class-names';
 import Handle from '@components/grip.svg';
-import {passedThird} from './DragAndDrop/crossing';
+import {strayed} from './DragAndDrop/crossing';
 import * as D from 'schemawax';
 import {motionParam, originParam, paceParam} from './Controls';
 import {Aggregations, Tutorials, trackParam, tutorialParam} from './Tables';
@@ -57,6 +57,7 @@ export const DemosPage = () => {
   };
   const [armedChart, setArmedChart] = useState<number>();
   const [aloftChart, setAloftChart] = useState<number>();
+  const [aloftLead, setAloftLead] = useState(0);
   const [chartPushed, setChartPushed] = useState<Readonly<Record<number, 'up' | 'down'>>>();
   const grip = (at: number) =>
     <button type="button" className="chart-grip" aria-label="move chart" tabIndex={-1}
@@ -153,6 +154,7 @@ export const DemosPage = () => {
                          draggable={armedChart === at}
                          onDragStart={event => {
                            event.dataTransfer.effectAllowed = 'move';
+                           setAloftLead(event.clientY - event.currentTarget.getBoundingClientRect().top);
                            setAloftChart(at);
                          }}
                          onDragOver={event => {
@@ -167,8 +169,10 @@ export const DemosPage = () => {
                              return;
                            }
                            const seat = held.getBoundingClientRect();
-                           const to = passedThird(event, seat, false) ? aloftChart + 1
-                             : passedThird(event, seat, true) ? aloftChart - 1
+                           const anchor = seat.top + aloftLead;
+                           const third = seat.height / 3;
+                           const to = strayed(event.clientY, anchor, third, false) ? aloftChart + 1
+                             : strayed(event.clientY, anchor, third, true) ? aloftChart - 1
                                : undefined;
                            if (to === undefined || to < 0 || to >= chartKinds.length) {
                              return;
@@ -182,6 +186,10 @@ export const DemosPage = () => {
                              ? event.clientY > seat.top + displaced.height
                              : event.clientY < seat.bottom - displaced.height;
                            if (settled) {
+                             const landingTop = to > aloftChart
+                               ? seat.top + displaced.height
+                               : seat.top - displaced.height;
+                             setAloftLead(event.clientY - landingTop);
                              setChartPushed({[aloftChart]: to > aloftChart ? 'up' : 'down'});
                              updateSearchParams({charts: seated(aloftChart, to).join(',')}, {replace: true});
                              setAloftChart(to);
