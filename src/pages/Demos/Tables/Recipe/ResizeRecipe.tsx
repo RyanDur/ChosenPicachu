@@ -47,7 +47,10 @@ const steps: StepEntry[] = [
     want: 'The affordance must be reachable and honest for everyone: a real control at the column’s edge, not a styled sliver of nothing.',
     says: [<>The handle is a
       native <Mdn path="Web/HTML/Element/button">button</Mdn>: focusable by birth, announcing
-      itself by name, and once the ledger exists its label speaks the share too. CSS gives it
+      itself by name, and once the ledger exists its label speaks the share too. This
+      is <Mdn path="Web/Accessibility/ARIA">ARIA</Mdn>’s own first rule: prefer the native
+      element, because it carries focus, announcement, and activation for free, and the
+      user’s need is met by the platform instead of imitated. CSS gives it
       its post: absolute on the column’s right edge, the
       col-resize <Mdn path="Web/CSS/cursor">cursor</Mdn>,
       and <Mdn path="Web/CSS/touch-action">touch-action</Mdn>: none so the pointer can drag it

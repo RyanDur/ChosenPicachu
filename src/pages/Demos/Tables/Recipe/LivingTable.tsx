@@ -37,7 +37,9 @@ const living: StepEntry[] = [
       <>We could build this out of divs and grid, and it would look identical. But the table
       element carries behavior we would otherwise owe: readers walk it row by row and cell by
       cell, headers belong to their columns, and everything later, the sorting announcements,
-      the drags, the keyboard, hangs off these roles instead of reinventing them.</>],
+      the drags, the keyboard, hangs off these roles instead of reinventing them. This is the
+      first rule of <Mdn path="Web/Accessibility/ARIA">ARIA</Mdn>: prefer the native element,
+      and accessibility stops being work you add and becomes behavior you inherit.</>],
     code: [
       {label: 'JS', lines: [
         ...unit(dealSource, 'const columns = ')
