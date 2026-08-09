@@ -37,12 +37,12 @@
     }
   }
 
-  .slot {
+  .header-cell {
     padding: 0;
   }
 }
 
-.slot-grid {
+.header-cell-grid {
   display: grid;
   grid-template-columns: 1fr auto auto;
   align-items: center;
@@ -84,7 +84,7 @@
 }
 
 .apportioned {
-  .slot.shared {
+  .header-cell.shared {
     --share: 0;
 
     width: var(--share);

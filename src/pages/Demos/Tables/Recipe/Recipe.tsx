@@ -517,7 +517,7 @@ const keyedStories = (motion: Motion): Tale[] => {
         aside('{/* the button was focusable all along; the header asks */}')
       ]},
       {label: 'CSS', lines: [
-        ...unit(headerCss, '.sortable .slot {')
+        ...unit(headerCss, '.sortable .header-cell {')
       ]}
     ]
   },

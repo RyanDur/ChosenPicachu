@@ -34,11 +34,11 @@ const steps: StepEntry[] = [
         ...unit(sharesSource, 'export const measuredShares')
       ]},
       {label: 'HTML', lines: [
-        plain("<th className=\"slot\" style={{'--share': `${share}%`}}>")
+        plain("<th className=\"header-cell\" style={{'--share': `${share}%`}}>")
       ]},
       {label: 'CSS', lines: [
         ...unit(baseCss, '.apportioned {'), gap,
-        ...unit(headerCss, '.sortable .slot {')
+        ...unit(headerCss, '.sortable .header-cell {')
       ]}
     ]
   },
