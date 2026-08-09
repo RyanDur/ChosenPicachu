@@ -15,7 +15,7 @@ export type Carried = {
 
 export const covering = (event: DragEvent<HTMLElement>, carried: Carried, above: boolean): boolean => {
   const space = event.currentTarget.getBoundingClientRect();
-  const third = space.height / 3;
+  const third = (carried.lead + carried.trail) / 3;
   return above
     ? space.bottom - (event.clientY - carried.lead) >= third
     : (event.clientY + carried.trail) - space.top >= third;
