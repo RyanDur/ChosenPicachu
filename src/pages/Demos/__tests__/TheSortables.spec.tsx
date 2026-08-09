@@ -167,7 +167,7 @@ describe('the sortable list demo', () => {
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/DataTransfer'));
     expect(recipe.querySelectorAll('.snippet.foil')).toHaveLength(2);
     expect(recipe.querySelectorAll('.story')).toHaveLength(6);
-    expect(recipe).toHaveTextContent(/The trader can sort the list the platform’s way/);
+    expect(recipe).toHaveTextContent(/The user can sort the list the platform’s way/);
 
     await userEvent.click(within(recipe).getByText(/sees the list answer as they drag/));
     await userEvent.click(within(recipe).getByText(/one card riding the pointer/));
