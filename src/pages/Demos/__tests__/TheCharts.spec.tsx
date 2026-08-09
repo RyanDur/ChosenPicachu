@@ -143,7 +143,10 @@ describe('a list of charts', () => {
     const slot = (name: string) => screen.getByRole('article', {name});
 
     fireEvent.mouseDown(within(slot('chart 1')).getByRole('button', {name: 'move chart', hidden: true}));
-    fireEvent.dragStart(slot('chart 1'), {dataTransfer: {effectAllowed: 'move', dropEffect: 'move'}});
+    const start = createEvent.dragStart(slot('chart 1'));
+    Object.defineProperty(start, 'clientY', {value: 0});
+    Object.defineProperty(start, 'dataTransfer', {value: {effectAllowed: '', dropEffect: ''}});
+    fireEvent(slot('chart 1'), start);
     const over = createEvent.dragOver(slot('chart 2'));
     Object.defineProperty(over, 'clientY', {value: 100});
     Object.defineProperty(over, 'dataTransfer', {value: {dropEffect: ''}});

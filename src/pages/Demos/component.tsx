@@ -22,7 +22,7 @@ import {Candles, PriceChart} from './Charts';
 import {Menu} from '@components/Menu';
 import {classNames} from '@components/class-names';
 import Handle from '@components/grip.svg';
-import {crossedVertical} from './DragAndDrop/crossing';
+import {Carried, covering} from './DragAndDrop/crossing';
 import * as D from 'schemawax';
 import {motionParam, originParam, paceParam} from './Controls';
 import {Aggregations, Tutorials, trackParam, tutorialParam} from './Tables';
@@ -57,6 +57,7 @@ export const DemosPage = () => {
   };
   const [armedChart, setArmedChart] = useState<number>();
   const [aloftChart, setAloftChart] = useState<number>();
+  const [carried, setCarried] = useState<Carried>();
   const [chartPushed, setChartPushed] = useState<Readonly<Record<number, 'up' | 'down'>>>();
   const grip = (at: number) =>
     <button type="button" className="chart-grip" aria-label="move chart" tabIndex={-1}
@@ -153,6 +154,8 @@ export const DemosPage = () => {
                          draggable={armedChart === at}
                          onDragStart={event => {
                            event.dataTransfer.effectAllowed = 'move';
+                           const held = event.currentTarget.getBoundingClientRect();
+                           setCarried({lead: event.clientY - held.top, trail: held.bottom - event.clientY});
                            setAloftChart(at);
                          }}
                          onDragOver={event => {
@@ -161,8 +164,8 @@ export const DemosPage = () => {
                            if ((event.currentTarget.getAnimations?.().length ?? 0) > 0) {
                              return;
                            }
-                           if (aloftChart !== undefined && aloftChart !== at
-                             && crossedVertical(event, at < aloftChart)) {
+                           if (aloftChart !== undefined && carried !== undefined && aloftChart !== at
+                             && covering(event, carried, at < aloftChart)) {
                              setChartPushed({[aloftChart]: at > aloftChart ? 'up' : 'down'});
                              updateSearchParams({charts: seated(aloftChart, at).join(',')}, {replace: true});
                              setAloftChart(at);
@@ -171,6 +174,7 @@ export const DemosPage = () => {
                          onDrop={event => event.preventDefault()}
                          onDragEnd={() => {
                            setAloftChart(undefined);
+                           setCarried(undefined);
                            setArmedChart(undefined);
                          }}>
                   {grip(at)}
