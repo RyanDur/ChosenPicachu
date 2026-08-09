@@ -52,10 +52,10 @@ export const Table: FC<TableProps> = ({columns, rows, id, resizableColumns, ...d
         const share = clipped ? shares?.[column] : undefined;
         return <th key={column}
                    scope="col"
-                   className={classNames(dress.thClassName, dress.cellClassName, className, 'slot',
+                   className={classNames(dress.thClassName, dress.cellClassName, className, 'header-cell',
                      clipped && 'clipped', has(share) && 'shared')}
                    style={has(share) ? {'--share': `${share}%`} : undefined}>
-          <div className="slot-grid">
+          <div className="header-cell-grid">
             {display}
             {clipped && apportioned.length > 1 &&
               <ResizeHandle column={column}

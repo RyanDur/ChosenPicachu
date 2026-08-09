@@ -33,7 +33,7 @@ export const Header: FC<Props> = (
 
   return <th className={classNames(
     className, column.className,
-    'slot',
+    'header-cell',
     resizable && 'clipped',
     travels && 'grabbable',
     hidden && 'hide',
@@ -58,7 +58,7 @@ export const Header: FC<Props> = (
                }
                : undefined}
              style={has(share) ? {'--share': `${share}%`} : undefined}>
-    <div className="slot-grid">
+    <div className="header-cell-grid">
       {column.display}
       {has(onRule) && position > 0 &&
           <SortMenu column={columnName} sorted={sorted} onRule={onRule}/>}

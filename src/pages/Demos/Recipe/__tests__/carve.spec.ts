@@ -19,7 +19,7 @@ const seeded = (columns) => columns.reduce((shares, {column, width}) =>
     ({...shares, [column]: width}), {});
 `;
 
-const css = `.sortable .slot {
+const css = `.sortable .header-cell {
     width: var(--share);
 }
 

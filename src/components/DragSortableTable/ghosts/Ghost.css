@@ -22,7 +22,7 @@
   border-right: var(--hairline) solid var(--charcoal);
 }
 
-.column-ghost .slot-grid {
+.column-ghost .header-cell-grid {
   padding-inline-start: var(--base-x-1_5);
 }
 

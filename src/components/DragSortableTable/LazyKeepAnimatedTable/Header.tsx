@@ -34,7 +34,7 @@ export const Header: FC<Props> = (
   const sorted = rule?.column === columnName ? rule.direction : undefined;
   return <th className={classNames(
     className, column.className,
-    'slot',
+    'header-cell',
     resizable && 'clipped',
     travels && 'grabbable',
     hidden && 'hide',
@@ -82,7 +82,7 @@ export const Header: FC<Props> = (
                  ? {'--carried': `${displaced.by}px`, '--toward': displaced.toward === 'left' ? '1' : '-1'}
                  : {})
              }}>
-    <div className="slot-grid">
+    <div className="header-cell-grid">
       {column.display}
       {has(onRule) && position > 0 &&
           <SortMenu column={columnName} sorted={sorted} onRule={onRule}/>}
