@@ -15,7 +15,7 @@ type Props = {
 
 export const Snippet: FC<Props> = ({label, lines, foil}) =>
   // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- overflowing code scrolls; axe scrollable-region-focusable requires keyboard reach
-  <pre className={classNames('snippet', foil && 'foil')} tabIndex={0}>
+  <pre className={classNames('snippet', foil && 'foil')}>
     <span className="lang" aria-hidden="true">{label}</span>
     <code>{lines.map(({text, dim}, at) =>
       <span className={classNames('line', dim && 'comment')} key={at}>

@@ -205,11 +205,8 @@
     color: var(--code-ink);
     font-size: var(--text-caption);
     line-height: 1.8;
-    overflow-x: auto;
-
-    &:focus-visible {
-      outline: var(--hairline-x-2) solid var(--code-ink);
-    }
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
 
     &.foil {
       border: var(--hairline-x-2) dashed var(--code-comment);

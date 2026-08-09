@@ -23,7 +23,11 @@ export const useRowTravel = (
                 setChart(surveyed(table, order, standing));
             }
             const anchored = lane?.getBoundingClientRect();
-            setFlight({x: anchored?.x ?? 0, y: anchored?.y ?? 0, width: anchored?.width ?? 0});
+            setFlight({
+                x: anchored?.x ?? 0,
+                y: anchored?.y ?? 0,
+                width: anchored?.width ?? 0
+            });
             setAloft(row);
         };
 
