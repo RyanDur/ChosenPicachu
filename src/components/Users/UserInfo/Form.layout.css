@@ -4,13 +4,19 @@
   row-gap: var(--base-x-2);
   grid-template-columns: repeat(12, 1fr);
   grid-template-areas:
-    "name_title . . . . . . . . . avatar avatar"
+    "title title title title title title title title title title avatar avatar"
+    "name_title name_title name_title . . . . . . . avatar avatar"
     "first_name first_name first_name first_name first_name last_name last_name last_name last_name last_name avatar avatar"
-    "email email email email email email email dob dob dob avatar avatar"
-    "home_address_title home_address_title home_address_title . . . work_address_title work_address_title same_as_home same_as_home avatar avatar"
+    "dob dob dob . . . . . . . avatar avatar"
+    "email email email email email email email email email email email email"
+    "home_address_title home_address_title home_address_title . . . work_address_title work_address_title same_as_home same_as_home . ."
     "home_address home_address home_address home_address home_address home_address work_address work_address work_address work_address work_address work_address"
     "details details details details details details details details details details details details"
     "reset reset reset cancel cancel cancel submit submit submit submit submit submit";
+
+  #form-title {
+    grid-area: title;
+  }
 
   #name-title {
     grid-area: name_title;
@@ -47,7 +53,8 @@
 
   #same-as-home-cell {
     grid-area: same_as_home;
-    justify-self: flex-end;
+    justify-self: flex-start;
+    align-self: center;
   }
 
   #home-address {
@@ -79,20 +86,21 @@
   #user-info-form {
     grid-template-columns: repeat(3, 1fr);
     grid-template-areas:
-      "name_title . ."
-      "first_name first_name first_name"
-      "last_name last_name last_name"
-      "email email avatar"
-      "dob dob avatar"
+      "title title title"
+      "name_title name_title avatar"
+      "first_name first_name avatar"
+      "last_name last_name avatar"
+      "email email email"
+      "dob . ."
       "home_address_title . . "
       "home_address home_address home_address"
-      "work_address_title . same_as_home"
+      "work_address_title same_as_home ."
       "work_address work_address work_address"
       "details details details"
       "reset cancel submit";
 
-    #email-cell,
-    #dob-cell {
+    #first-name-cell,
+    #last-name-cell {
       align-self: center;
     }
   }

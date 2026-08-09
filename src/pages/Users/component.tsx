@@ -37,7 +37,6 @@ export const UsersPage: FC = () => {
 
   return <>
     <section id="user-info" className="user-info users card" key={currentUser?.id}>
-        <h2 className="title heading">User Information</h2>
         <UsersLinks.Provider value={{users: Paths.users}}><UserInformation currentUser={currentUser}
                          readOnly={mode === 'view'}
                          editing={mode === 'edit'}
