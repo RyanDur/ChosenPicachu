@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, ReactNode} from 'react';
 import * as D from 'schemawax';
 import {Link} from 'react-router';
 import {PillGlider} from '@components/PillGlider';
@@ -250,7 +250,7 @@ const vertical = (source: string): Step => ({
 });
 
 
-type Tale = {can: string; soThat: string; tells?: string[]; steps: Step[]};
+type Tale = {can: string; soThat: string; tells?: ReactNode[]; steps: Step[]};
 
 const pacedStory = (pace: Pace): Omit<Tale, 'steps'> => pace === 'eager'
   ? {can: 'The trader sees the sort happen while they drag', soThat: 'a wrong grab costs nothing',
@@ -446,12 +446,27 @@ const pointerStories = (pace: Pace, origin: Origin, motion: Motion): Tale[] => {
   return [
     {can: 'The trader can sort by column',
       soThat: 'the measures they compare sit beside each other',
-      tells: ['The trader needs to move a column while the stream writes. We could reorder ' +
+      tells: [<>There are two roads to dragging something across a page, and this site walks
+        both. The <Link className="signpost"
+        to={`${Paths.demos}?tab=${DemoTopics.dragAndDrop}`}>Drag sort list demo</Link> takes
+        the native API, where the platform brings most of the behavior for very little code;
+        its edges (the snapshot that cannot be animated, the cursor that belongs to the
+        platform, the macOS cancel) are that road’s own story. This table takes the other
+        road: <Mdn path="Web/API/Pointer_events">pointer events</Mdn>, where every pixel is
+        ours to own.</>,
+        'The trader needs to move a column while the stream writes. We could reorder ' +
         'the data itself, but every trade that lands would fight every drag; so the order is ' +
         'its own piece of state, and the markup renders through it. Moving a column is just ' +
         'changing the order. We could ask the DOM where everything is as the pointer moves, ' +
         'but layout queries during a drag cause the jank we are trying to avoid; so ' +
-        'everything the drag needs gets measured once, when you grab.'],
+        'everything the drag needs gets measured once, when you grab.',
+        <>And owning the pixels does not mean building in JavaScript. The markup stays a
+        normal table; every visible change (the cursors, the hiding, every slide) is a CSS
+        rule a class switches on; JavaScript only decides what the state is, and React
+        affords nothing the DOM does not give you: the node moves
+        are <Mdn path="Web/API/Node/insertBefore">insertBefore</Mdn>, the handlers are
+        events, the state is a value. Each code block below is labeled with which of the
+        three languages is doing the work.</>],
       steps: mechanics},
     {can: 'The trader can sort by row',
       soThat: 'the windows they watch closest sit on top',
@@ -634,35 +649,6 @@ export const Recipe: FC<Props> = ({track, onTrack, pace, origin, motion, onPace,
            chosen={track}
            onPick={onTrack}/>
     {track === 'pointer' ? <>
-    <p className="lead">
-      There are two roads to dragging something across a page, and this site walks both. The{' '}
-      <Link className="signpost" to={`${Paths.demos}?tab=${DemoTopics.dragAndDrop}`}>Drag sort
-      list demo</Link> takes the native API (<Mdn path="Web/HTML/Global_attributes/draggable">draggable</Mdn>,{' '}
-      <Mdn path="Web/API/HTMLElement/dragstart_event">dragstart</Mdn>,{' '}
-      <Mdn path="Web/API/HTMLElement/dragover_event">dragover</Mdn>,{' '}
-      <Mdn path="Web/API/HTMLElement/drop_event">drop</Mdn>), where the platform
-      brings the drag image, the drop rules, and most of the behavior for very little code. That
-      generosity has edges: the drag image cannot be made opaque on macOS, the cursor belongs to
-      the platform, the drag image is a snapshot that cannot be animated, and on macOS even the
-      cancel is the platform’s animation to run.
-    </p>
-    <p className="lead">
-      This table takes the other road: <Mdn path="Web/API/Pointer_events">pointer events</Mdn>. You could build the whole effect in
-      JavaScript: track positions, set styles, move nodes by hand. This page deliberately does
-      not. The markup stays a normal table; the visible changes (the cursors, the hiding, every
-      slide) are CSS rules that classes switch on; and the JavaScript’s only job is deciding
-      what the state is. React is the convenience in the middle: it renders the markup from that
-      state, and when the order changes it moves the same keyed nodes instead of rebuilding them.
-      But it affords nothing the DOM does not give you: the node moves are <Mdn path="Web/API/Node/insertBefore">insertBefore</Mdn>, the
-      handlers are events, the state is a value. It boils down to HTML, CSS, and JavaScript, and
-      each code block below is labeled with which of the three is doing the work.
-    </p>
-    <p className="lead">
-      One more thing before the steps: Eager, Lazy, Keep, Hide, Animate, and Static are this
-      page’s names for the choices, not platform keywords. The dials above choose one of eight
-      tables (the readout under them names the one on screen) and they pick which version of
-      the marked steps you are reading now.
-    </p>
     </> : <>
     <p className="lead">
       It turns out to need almost nothing new: the state, the clamps, and the theater all

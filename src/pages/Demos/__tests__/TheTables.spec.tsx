@@ -235,6 +235,7 @@ describe('the tables demo', () => {
     expect(living).toHaveTextContent(/a socket comes next/);
     expect(living).toHaveTextContent(/Hydrate with one fetch/);
     expect(living).toHaveTextContent(/that is what a table is for/);
+    await userEvent.click(within(recipe).getByText(/The trader can sort by column/));
     expect(within(recipe).getByRole('link', {name: /Drag sort list demo/}))
       .toHaveAttribute('href', expect.stringContaining('tab=dragAndDrop'));
     expect(recipe).toHaveTextContent(/touch-action/);
@@ -253,7 +254,7 @@ describe('the tables demo', () => {
     await userEvent.click(within(recipe).getByText(/sees the sort happen while they drag/));
     await userEvent.click(within(recipe).getByText(/sees a gap where the column left/));
     await userEvent.click(within(recipe).getByText(/watches the swap slide into place/));
-    expect(recipe.querySelectorAll('details.arc[open]')).toHaveLength(3);
+    expect(recipe.querySelectorAll('details.arc[open]')).toHaveLength(4);
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Lazy'}));
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Keep'}));
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Static'}));
