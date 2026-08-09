@@ -2,7 +2,7 @@ import {PointerEvent, useState} from 'react';
 import {has} from '@ryandur/sand';
 import {Shares} from '@components/Table';
 import {Drift, Flight, grounded, still} from '../travel';
-import {Bounds, bounded, columnUnder} from '../chart';
+import {Bounds, bounded, columnUnder} from '../survey';
 
 export const useColumnTravel = (
     order: readonly string[],

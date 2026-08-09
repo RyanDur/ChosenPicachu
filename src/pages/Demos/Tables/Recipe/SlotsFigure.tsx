@@ -16,7 +16,7 @@ export const SlotsFigure: FC = () =>
       <text className="label" x="335" y="12" textAnchor="middle">dead</text>
     </svg>
     <figcaption className="caption">
-      Pointer x walks cumulative slot widths across the chart. The outer quarter of a
+      Pointer x walks cumulative slot widths across the survey. The outer quarter of a
       neighbor is a dead zone; only its inner half accepts the switch.
     </figcaption>
   </figure>;
