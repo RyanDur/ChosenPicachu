@@ -1,5 +1,5 @@
 import {Link, useLocation} from 'react-router';
-import {FC, useEffect, useRef} from 'react';
+import {FC, useState} from 'react';
 import {numberParam, useSearchParamsObject} from '@components/search-params';
 import {useGallery} from '@components/art-gallery/Art/Context';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
@@ -10,14 +10,6 @@ type Props = {
   id?: string;
 }
 
-const usePrevious = <T,>(value: T) => {
-  const ref = useRef<T | undefined>(undefined);
-  useEffect(() => {
-    ref.current = value;
-  }, [value]);
-  return ref.current;
-};
-
 export const GalleryNav: FC<Props> = ({id}) => {
   const {art} = useGallery();
   const {
@@ -26,7 +18,11 @@ export const GalleryNav: FC<Props> = ({id}) => {
   } = useSearchParamsObject({page: numberParam, size: numberParam}, {page: 1});
   const location = useLocation();
   const path = location.pathname;
-  const previous = usePrevious(art?.pagination.total);
+  const [remembered, setRemembered] = useState<number>();
+  const total = art?.pagination.total;
+  if (total !== undefined && total !== remembered) {
+    setRemembered(total);
+  }
   const firstPage = 1;
   const lastPage = art?.pagination?.totalPages ?? Number.MAX_VALUE;
   const currentPage = page ?? firstPage;
@@ -36,7 +32,7 @@ export const GalleryNav: FC<Props> = ({id}) => {
   const hasPrevPage = currentPage > firstPage;
   const prevPage = hasPrevPage ? currentPage - 1 : currentPage;
 
-  const totalRecords = art?.pagination.total ?? previous;
+  const totalRecords = total ?? remembered;
   const pageSize = art?.pagination.limit ?? size ?? defaultRecordLimit;
   const firstRecord = 1 + pageSize * ((art?.pagination.currentPage ?? currentPage) - 1);
   const lastRecord = art?.pagination.totalPages === currentPage ? totalRecords : pageSize * currentPage;
