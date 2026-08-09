@@ -108,7 +108,33 @@ export const DemosPage = () => {
                 return <List list={new Set(['A', 'B', 'C'])}/>;
               })()}
               <div className="tutorials">
-                <h2 className="tutorials-title">how it’s built</h2>
+                <h2 className="tutorials-title">let’s build this feature</h2>
+                <p className="overview">
+                  We are going to build this site’s drag-and-drop list, feature by feature.
+                  Here is how to use this page: every card below is a feature, told as
+                  a <a className="signpost"
+                    href="https://initialcapacity.io/insights/user-story"
+                    target="_blank"
+                    rel="noreferrer">user story</a>. Open a card and you get the plan for that
+                  feature and the steps that build it, with the real code from this site, so
+                  what you read is what runs. The dials change which list you are reading
+                  about, and Eager, Lazy, Keep, Hide, Animate, and Static are this page’s
+                  names for the choices, not platform keywords. Where a step depends on a
+                  dial, that dial sits on the step. The dashed code is the wrong way you would
+                  probably try first, and the links go to MDN if you want more.
+                </p>
+                <figure className="feedback">
+                  <blockquote className="quote">
+                    I have a list, and the order is mine. When something belongs above
+                    something else, I want to pick it up and put it there, and see it land
+                    where I dropped it.
+                  </blockquote>
+                  <figcaption className="attribution">a user</figcaption>
+                </figure>
+                <p className="overview">
+                  The list is our interpretation of that. The cards below break the
+                  interpretation into features; open one to see how we built it.
+                </p>
                 <ListControls pace={pace} origin={origin} motion={motion}
                               onPace={next => updateSearchParams({pace: next})}
                               onOrigin={next => updateSearchParams({origin: next})}

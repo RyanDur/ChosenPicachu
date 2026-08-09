@@ -2,26 +2,6 @@
   display: grid;
   gap: var(--base-x-3);
 
-  .brief-line {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: var(--base) var(--base-x-2);
-  }
-
-  .kicker {
-    font-size: var(--text-caption);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--charcoal);
-  }
-
-  .brief {
-    margin: 0;
-    font-size: var(--text-body);
-    color: var(--charcoal);
-  }
-
   .track-picks {
     --pick-size: var(--text-body);
   }
