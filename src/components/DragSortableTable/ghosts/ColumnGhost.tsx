@@ -15,8 +15,10 @@ export const ColumnGhost: FC<Props> = ({at, drift, dress, column, rows}) =>
     <Ghost at={at} drift={drift} className={dress.table}>
         <thead className={dress.thead}>
         <tr className={dress.headerRow}>
-            <th className={classNames(dress.header, column.className, 'clipped')} scope="col">
-                {column.display}
+            <th className={classNames(dress.header, column.className, 'slot', 'clipped')} scope="col">
+                <div className="slot-grid">
+                    {column.display}
+                </div>
             </th>
         </tr>
         </thead>

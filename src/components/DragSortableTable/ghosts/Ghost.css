@@ -6,6 +6,7 @@
   --drift-y: 0;
 
   position: fixed;
+  text-align: left;
   top: var(--flight-y);
   left: var(--flight-x);
   width: var(--flight-width);
@@ -19,6 +20,10 @@
 
 .fancy-table.column-ghost .cell:last-child {
   border-right: var(--hairline) solid var(--charcoal);
+}
+
+.column-ghost .slot-grid {
+  padding-inline-start: var(--base-x-1_5);
 }
 
 .column-ghost .shared {

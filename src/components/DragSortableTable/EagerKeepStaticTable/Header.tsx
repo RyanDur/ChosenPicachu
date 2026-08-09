@@ -58,7 +58,7 @@ export const Header: FC<Props> = (
                }
                : undefined}
              style={has(share) ? {'--share': `${share}%`} : undefined}>
-    <article className="slot-grid">
+    <div className="slot-grid">
       {column.display}
       {has(onRule) && position > 0 &&
           <SortMenu column={columnName} sorted={sorted} onRule={onRule}/>}
@@ -67,6 +67,6 @@ export const Header: FC<Props> = (
                         onAwaken={onAwaken}
                         onTrade={delta => onShared(previous =>
                           previous && traded(columnName, neighborOf(order, columnName), delta)(previous))}/>}
-    </article>
+    </div>
   </th>;
 };

@@ -48,8 +48,7 @@
   align-items: center;
   column-gap: var(--base);
   height: 100%;
-  padding: var(--base-x-1_25);
-  padding-inline-end: 0;
+  padding-inline-start: var(--base-x-1_25);
 }
 
 .resize-handle {
