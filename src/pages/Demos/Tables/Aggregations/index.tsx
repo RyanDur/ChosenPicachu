@@ -65,7 +65,6 @@ export const Aggregations: FC<Props> = ({trades, pace, origin, motion}) => {
            resizableColumns
            sortable
            theadClassName="header"
-           thClassName="column-name"
            trClassName="row"
            tbodyClassName="body"
            cellClassName="cell"
