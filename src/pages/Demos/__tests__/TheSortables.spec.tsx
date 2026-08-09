@@ -166,11 +166,11 @@ describe('the sortable list demo', () => {
     expect(within(recipe).getByRole('link', {name: 'dataTransfer'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/DataTransfer'));
     expect(recipe.querySelectorAll('.snippet.foil')).toHaveLength(2);
-    expect(recipe.querySelectorAll('.story')).toHaveLength(6);
-    expect(recipe).toHaveTextContent(/The user can sort the list the platform’s way/);
+    expect(recipe.querySelectorAll('.story')).toHaveLength(2);
+    expect(recipe).toHaveTextContent(/The user can sort the list/);
+    expect(recipe).toHaveTextContent(/The list answers as they drag/);
 
-    await userEvent.click(within(recipe).getByText(/sees the list answer as they drag/));
-    await userEvent.click(within(recipe).getByText(/one card riding the pointer/));
+    await userEvent.click(within(recipe).getByText(/The user can sort the list/));
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Lazy'}));
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Keep'}));
 
