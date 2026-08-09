@@ -5,7 +5,8 @@ import * as D from 'schemawax';
 import {User, UserInformation, users as usersApi, UsersLinks} from '@components/Users';
 import {equalAddresses} from './addresses';
 import {Paths} from '@pages/Paths';
-import {Table} from '@components/Table';
+import {has} from '@ryandur/sand';
+import {EagerHideAnimatedTable} from '@components/DragSortableTable';
 import {Menu} from '@components/Menu';
 import {age, formatAge, FriendsList} from '@components/Users';
 import './styles.css';
@@ -51,9 +52,12 @@ export const UsersPage: FC = () => {
         <h2 className="title heading">User Candidates</h2>
         {mode === 'view' &&
             <Link to={Paths.users} id="add-new-user" className="button primary">Add New User</Link>}
-        <Table
+        <EagerHideAnimatedTable
           id="users-table"
           tableClassName="fancy-table"
+          draggableColumns
+          draggableRows
+          sortable
           theadClassName="header"
           trClassName="row"
           tbodyClassName="body"
@@ -72,13 +76,15 @@ export const UsersPage: FC = () => {
               lastName: string
             }) => `${user.firstName} ${user.lastName}`;
             return ({
-              fullName: {display: displayFullName(user.info)},
-              homeCity: {display: user.homeAddress.city},
-              age: {display: formatAge(age(user.info.dob))},
+              fullName: {display: displayFullName(user.info), value: displayFullName(user.info)},
+              homeCity: {display: user.homeAddress.city, value: user.homeAddress.city},
+              age: {display: formatAge(age(user.info.dob)), value: has(user.info.dob) ? -user.info.dob.getTime() : undefined},
               friends: {
-                display: <FriendsList user={user} users={users} onChange={update(user)}/>
+                display: <FriendsList user={user} users={users} onChange={update(user)}/>,
+                value: user.friends.length
               },
               worksFromHome: {
+                value: equalAddresses(user.homeAddress, user.workAddress) ? 'Yes' : 'No',
                 display: <section className="last-column">
                   {equalAddresses(user.homeAddress, user.workAddress) ? 'Yes' : 'No'}
                   <Menu id={`menu-${user.id}`}
