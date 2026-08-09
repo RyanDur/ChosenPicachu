@@ -8,7 +8,7 @@ export const crossed = (event: DragEvent<HTMLElement>, homeward: boolean): boole
     : event.clientX > space.left + quarter;
 };
 
-export const passedThird = (event: DragEvent<HTMLElement>, hidden: DOMRect, above: boolean): boolean =>
-  above
-    ? event.clientY < hidden.top + hidden.height / 3
-    : event.clientY > hidden.bottom - hidden.height / 3;
+export const strayed = (clientY: number, anchor: number, third: number, upward: boolean): boolean =>
+  upward
+    ? clientY < anchor - third
+    : clientY > anchor + third;
