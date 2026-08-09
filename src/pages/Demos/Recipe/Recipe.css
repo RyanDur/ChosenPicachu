@@ -37,7 +37,17 @@
     display: inline;
     width: auto;
     height: auto;
+    color: var(--primary-blue);
     text-decoration: underline;
+
+    &:visited {
+      color: var(--plum);
+    }
+
+    &:hover,
+    &:focus-visible {
+      color: var(--primary-dark-blue);
+    }
   }
 
   .chip {

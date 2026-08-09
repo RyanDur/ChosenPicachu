@@ -1,6 +1,5 @@
 .menu {
   inset: auto;
-  list-style: none;
   position-area: block-end span-inline-start;
   position-try-fallbacks: flip-block;
   width: var(--base-x-25);

@@ -11,8 +11,8 @@ export type Block = {
 
 export type StepEntry = {
   title: string;
-  want: string;
-  says: string[];
+  want: ReactNode;
+  says: ReactNode[];
   dial?: ReactNode;
   figure?: ReactNode;
   code: Block[];
@@ -33,7 +33,7 @@ export const StepList: FC<{steps: StepEntry[]}> = ({steps}) =>
           <div className="step-flow">
             <div className="step-words">
               <p className="step-want">{step.want}</p>
-              {step.says.map(paragraph => <p className="step-says" key={paragraph}>{paragraph}</p>)}
+              {step.says.map((paragraph, at) => <p className="step-says" key={at}>{paragraph}</p>)}
               {step.figure}
             </div>
             <div className="step-code">

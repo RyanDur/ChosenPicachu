@@ -221,6 +221,10 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/Slide the theater, not the layout/);
     expect(recipe).toHaveTextContent(/1cqi/);
     expect(recipe).toHaveTextContent(/translateY\(var\(--drop\)\)/);
+    expect(recipe).toHaveTextContent(/owes a removeEventListener/);
+    expect(within(recipe).getByRole('link', {name: 'insertBefore'}))
+      .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/Node/insertBefore'));
+    expect(recipe.querySelectorAll('.snippet.foil')).toHaveLength(1);
 
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Lazy'}));
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Keep'}));
@@ -251,6 +255,10 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/Both parties slide, each by the other\u2019s share/);
     expect(recipe).toHaveTextContent(/Let the slide pace the key/);
     expect(recipe).toHaveTextContent(/getAnimations/);
+    expect(recipe).toHaveTextContent(/The reflex is a timer/);
+    expect(within(recipe).getByRole('link', {name: 'getAnimations'}))
+      .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/Element/getAnimations'));
+    expect(recipe.querySelectorAll('.snippet.foil')).toHaveLength(0);
     expect(recipe).not.toHaveTextContent(/Draw the ghost by hand/);
     expect(within(recipe).queryByRole('radio', {name: 'Lazy'})).toBeNull();
 
@@ -293,6 +301,10 @@ describe('the tables demo', () => {
     expect(resize).toHaveTextContent(/zero-sum ledger/);
     expect(resize).toHaveTextContent(/Trade, never take/);
     expect(resize).toHaveTextContent(/role="separator"/);
+    expect(resize).toHaveTextContent(/the table grows with it/);
+    expect(within(resize).getByRole('link', {name: 'captures its pointer'}))
+      .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/Element/setPointerCapture'));
+    expect(resize.querySelectorAll('.snippet.foil')).toHaveLength(1);
     expect(screen.queryByRole('region', {name: 'build the drag sort yourself'})).toBeNull();
     expect(screen.queryByRole('region', {name: 'table controls'})).toBeNull();
 
@@ -332,7 +344,10 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/A hand ends the rule/);
     expect(recipe).toHaveTextContent(/setShifted\(shifts\(charted/);
     expect(recipe).toHaveTextContent(/setOpen\(!open\)/);
+    expect(recipe).not.toHaveTextContent(/Dress the menu as a card/);
     expect(recipe).toHaveTextContent(/unsorted by the next trade/);
+    expect(within(recipe).getByRole('link', {name: 'position-area'}))
+      .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/CSS/position-area'));
     expect(recipe.querySelectorAll('.snippet.foil')).toHaveLength(2);
     expect(screen.queryByRole('region', {name: 'build the drag sort yourself'})).toBeNull();
     expect(screen.queryByRole('region', {name: 'table controls'})).toBeNull();
