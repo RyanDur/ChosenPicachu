@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {KeyboardEvent, useState} from 'react';
 import {randParagraph, randWord} from '@ngneat/falso';
 import {useSearchParamsObject} from '@components/search-params';
 import './style.css';
@@ -20,6 +20,9 @@ import {DemoTopics, demoTopicParam} from './types';
 import {NaturalZIndex} from './ZIndexDemo';
 import {Candles, PriceChart} from './Charts';
 import {Menu} from '@components/Menu';
+import {classNames} from '@components/class-names';
+import Handle from '@components/grip.svg';
+import {crossedVertical} from './DragAndDrop/crossing';
 import * as D from 'schemawax';
 import {motionParam, originParam, paceParam} from './Controls';
 import {Aggregations, Tutorials, trackParam, tutorialParam} from './Tables';
@@ -46,9 +49,40 @@ export const DemosPage = () => {
     updateSearchParams({charts: [kind, ...chartKinds].join(',')});
   const removeChart = (at: number) => () =>
     updateSearchParams({charts: chartKinds.filter((_, seat) => seat !== at).join(',')});
+  const seated = (from: number, to: number): ChartKind[] => {
+    const next = [...chartKinds];
+    const [lifted] = next.splice(from, 1);
+    next.splice(to, 0, lifted);
+    return next;
+  };
+  const [armedChart, setArmedChart] = useState<number>();
+  const [aloftChart, setAloftChart] = useState<number>();
+  const [chartPushed, setChartPushed] = useState<Readonly<Record<number, 'up' | 'down'>>>();
+  const grip = (at: number) =>
+    <button type="button" className="chart-grip" aria-label="move chart" tabIndex={-1}
+            onMouseDown={() => setArmedChart(at)}>
+      <Handle/>
+    </button>;
+  const chartKeys = (at: number) => (event: KeyboardEvent<HTMLElement>) => {
+    if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+      event.preventDefault();
+      const to = Math.min(Math.max(at + (event.key === 'ArrowDown' ? 1 : -1), 0), chartKinds.length - 1);
+      if (to !== at) {
+        updateSearchParams({charts: seated(at, to).join(',')});
+        const next = event.currentTarget.parentElement?.querySelectorAll(':scope > .chart-slot').item(to);
+        if (next instanceof HTMLElement) {
+          next.focus();
+        }
+      }
+    }
+    if ((event.key === 'Delete' || event.key === 'Backspace') && chartKinds.length > 1) {
+      event.preventDefault();
+      removeChart(at)();
+    }
+  };
   const dismissal = (at: number) =>
     chartKinds.length > 1
-      ? <button type="button" className="remove-chart" aria-label="remove chart"
+      ? <button type="button" className="remove-chart" aria-label="remove chart" tabIndex={-1}
                 onClick={removeChart(at)}>×</button>
       : undefined;
   const [accordionContents] = useState(() => Array.from({length: 5}, () => paragraphs(5)));
@@ -101,11 +135,51 @@ export const DemosPage = () => {
                   <button type="button" className="item" onClick={addChart('candles')}>Candles</button>
                 </Menu>
               </header>
-              {chartKinds.map((kind, at) => kind === 'price'
-                ? <PriceChart key={at} id={`chart-${at}`} trades={liveTrades.trades}
-                              actions={dismissal(at)}/>
-                : <Candles key={at} id={`chart-${at}`} trades={liveTrades.trades}
-                           actions={dismissal(at)}/>)}
+              {chartKinds.map((kind, at) =>
+                <article key={at}
+                         className={classNames('chart-slot',
+                           aloftChart === at && 'hide',
+                           chartPushed?.[at] !== undefined && 'chart-pushed')}
+                         style={chartPushed?.[at] !== undefined
+                           ? {'--toward': chartPushed[at] === 'up' ? '1' : '-1'}
+                           : undefined}
+                         onAnimationEnd={() => setChartPushed(undefined)}
+                         aria-label={`chart ${at + 1}`}
+                         /* the card is the keyboard widget by design: arrows sort it, delete removes it,
+                             and the pointer controls are hover-only; no native element models this */
+                         // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+                         tabIndex={0}
+                         onKeyDown={chartKeys(at)}
+                         draggable={armedChart === at}
+                         onDragStart={event => {
+                           event.dataTransfer.effectAllowed = 'move';
+                           setAloftChart(at);
+                         }}
+                         onDragOver={event => {
+                           event.preventDefault();
+                           event.dataTransfer.dropEffect = 'move';
+                           if ((event.currentTarget.getAnimations?.().length ?? 0) > 0) {
+                             return;
+                           }
+                           if (aloftChart !== undefined && aloftChart !== at
+                             && crossedVertical(event, at < aloftChart)) {
+                             setChartPushed({[aloftChart]: at > aloftChart ? 'up' : 'down'});
+                             updateSearchParams({charts: seated(aloftChart, at).join(',')}, {replace: true});
+                             setAloftChart(at);
+                           }
+                         }}
+                         onDrop={event => event.preventDefault()}
+                         onDragEnd={() => {
+                           setAloftChart(undefined);
+                           setArmedChart(undefined);
+                         }}>
+                  {grip(at)}
+                  {kind === 'price'
+                    ? <PriceChart id={`chart-${at}`} trades={liveTrades.trades}
+                                  actions={dismissal(at)}/>
+                    : <Candles id={`chart-${at}`} trades={liveTrades.trades}
+                               actions={dismissal(at)}/>}
+                </article>)}
             </>,
             [DemoTopics.tables]: <>
               <Aggregations trades={liveTrades.trades} pace={pace} origin={origin} motion={motion}/>

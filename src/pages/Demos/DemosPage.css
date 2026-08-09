@@ -122,8 +122,59 @@
   cursor: pointer;
   font-size: var(--base-x-2_5);
   color: var(--charcoal);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.chart-slot {
+  position: relative;
 
   &:focus-visible {
     outline: var(--hairline-x-2) solid var(--charcoal);
   }
+
+  &.hide {
+    opacity: 0.1%;
+  }
+
+  &.chart-pushed {
+    --toward: 1;
+
+    animation: chart-pushed 150ms ease-out;
+  }
+}
+
+@keyframes chart-pushed {
+  from {
+    transform: translateY(calc(var(--toward) * 100%));
+  }
+}
+
+.chart-grip {
+  border: none;
+  background: none;
+  padding: 0;
+  min-width: var(--base-x-3);
+  min-height: var(--base-x-3);
+  display: inline-grid;
+  place-items: center;
+  cursor: grab;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  translate: -50% 0;
+  opacity: 0;
+  transition: opacity 0.2s;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.chart-slot:hover .chart-grip {
+  opacity: 1;
+}
+
+.chart-slot:hover .remove-chart {
+  opacity: 1;
 }

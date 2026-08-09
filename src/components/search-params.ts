@@ -20,7 +20,7 @@ const decodeParams = <T>(decoders: ParamDecoders<T>, raw: Record<string, unknown
 };
 
 type SearchParamsObject<T extends { [key: string]: unknown }> = Partial<T> & {
-  updateSearchParams: (params: Partial<T>) => void,
+  updateSearchParams: (params: Partial<T>, options?: {replace?: boolean}) => void,
   removeSearchParams: (...params: string[]) => void,
   createSearchParams: (params: Partial<T>) => string,
 };
@@ -37,8 +37,8 @@ export const useSearchParamsObject = <T extends { [p: string]: string | number }
     setSearchParams(Array.from(searchParams.entries())
       .filter(([key]) => !params.includes(key)));
 
-  const updateSearchParams = (params = {}) =>
-    setSearchParams({...Object.fromEntries(searchParams.entries()), ...filterEmpty(params)});
+  const updateSearchParams = (params = {}, options?: {replace?: boolean}) =>
+    setSearchParams({...Object.fromEntries(searchParams.entries()), ...filterEmpty(params)}, options);
 
   return {
     ...defaults,
