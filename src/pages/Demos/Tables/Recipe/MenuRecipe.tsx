@@ -47,18 +47,6 @@ const ruled = (motion: Motion, source: string): Step => motion === 'animated'
 
 type Tale = {can: string; soThat: string; tells?: string[]; steps: Step[]};
 
-const motioned = (motion: Motion): Omit<Tale, 'steps'> => motion === 'animated'
-  ? {can: 'The trader watches the re-rank slide into place',
-    soThat: 'the eye follows every row to its new seat',
-    tells: ['We could let the rows teleport to their ranked seats, but a sort moves ' +
-      'everything at once and the eye loses the story; so the menu click measures the seats ' +
-      'before the rule lands, and the same shifted theater the drags play runs for the sort.']}
-  : {can: 'The trader gets the re-rank instantly',
-    soThat: 'nothing competes with reading the numbers',
-    tells: ['We could animate every re-rank, but motion is not free and a sort moves ' +
-      'everything at once; so this table applies the rule and lets the rows cut to their ' +
-      'ranked seats on the next frame.']};
-
 const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
   const source = tableSources[pace][origin][motion];
   const headerSrc = headerSources[pace][origin][motion];
@@ -216,30 +204,26 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
 const stories = (pace: Pace, origin: Origin, motion: Motion): Tale[] => {
   const built = steps(pace, origin, motion);
   return [
-    {can: 'The trader can sort by any column’s numbers',
-      soThat: 'what matters most rises to the top',
+    {can: 'The trader can sort the windows by any measure, or take the order back',
+      soThat: 'the table ranks itself, and the hand still outranks it',
       tells: ['We could build the popup from divs, but then we owe focus, dismissal, and ' +
         'stacking; so the chooser is a native menu on the popover API, and the platform ' +
-        'carries all three. And nothing stores which column is sorted: the glyph and ' +
-        'aria-sort both derive from the one rule, because a second source of truth only ' +
-        'learns to drift.'],
-      steps: [built[0], built[1]]},
-    {can: 'The trader can trust the order while the numbers keep moving',
-      soThat: 'the sort stays true to the live market',
-      tells: ['We could bake the sort into the seats when the menu closes, and it even looks ' +
-        'right until the next trade lands unsorted; so the rule never rewrites the seats: ' +
-        'standing re-ranks on every render, and the drape keeps ruling.'],
-      steps: [built[2]]},
-    {...motioned(motion), steps: [built[3]]},
-    {can: 'The trader can take the order back by hand',
-      soThat: 'their drag outranks any rule',
-      tells: ['Rule and hand cannot both own the table; so a touch bakes the current ' +
-        'standing into the seats and clears the rule, and the drape becomes the fabric. And ' +
-        'a press on the chooser must never lift the column: both the toggle and the menu ' +
-        'stop pointer descent.'],
-      steps: [built[4], built[5]]}
+        'carries all three. Nothing stores which column is sorted: the glyph and aria-sort ' +
+        'both derive from the one rule, because a second source of truth only learns to ' +
+        'drift.',
+        'We could bake the sort into the seats when the menu closes, and it even looks right ' +
+        'until the next trade lands unsorted; so the rule never rewrites the seats: standing ' +
+        're-ranks on every render, and the drape keeps ruling.' + (motion === 'animated'
+          ? ' The re-rank plays the same shifted theater the drags use, so the eye follows ' +
+            'every row to its new seat.'
+          : ' The re-rank lands instantly; nothing competes with reading the numbers.'),
+        'And rule and hand cannot both own the table: a touch bakes the current standing ' +
+        'into the seats and clears the rule, and choosing as dealt clears it the other way. ' +
+        'A press on the chooser never lifts the column; both the toggle and the menu stop ' +
+        'pointer descent.'],
+      steps: built}
   ];
-};
+}
 
 type Props = {
   pace: Pace;
@@ -263,7 +247,7 @@ export const MenuRecipe: FC<Props> = ({pace, origin, motion, onMotion}) => {
     <header className="brief-line">
       <h2 className="kicker">build the sort menu yourself</h2>
       <p className="brief">
-        The chooser that rides every header, told as its stories: a
+        The chooser that rides every header, told as one story: a
         native <Mdn path="Web/HTML/Element/menu">menu</Mdn> on
         the <Mdn path="Web/API/Popover_API">popover API</Mdn>, one rule draped over live data,
         and the hand that outranks it. Open a card and the steps inside build it. Where there
