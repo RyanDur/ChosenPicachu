@@ -91,7 +91,7 @@ jobs:
       - name: Smoke the deployed site
         run: npx playwright test
 
-  lighthouse:
+  lighthouse_build:
     needs: build_test
     runs-on: ubuntu-latest
     steps:
@@ -108,8 +108,65 @@ jobs:
         run: |
           npm ci
           npm run build:lighthouse
-      - name: Lighthouse audit of the stubbed site
+      - name: Share the stubbed bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-dist
+          path: ./dist
+
+  lighthouse:
+    needs: lighthouse_build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - page: home
+            url: http://localhost:4517/ChosenPicachu/
+          - page: gallery
+            url: http://localhost:4517/ChosenPicachu/gallery/?tab=vam
+          - page: users
+            url: http://localhost:4517/ChosenPicachu/users/
+          - page: demos
+            url: http://localhost:4517/ChosenPicachu/demos/
+          - page: games
+            url: http://localhost:4517/ChosenPicachu/games/
+          - page: tables
+            url: http://localhost:4517/ChosenPicachu/demos/?tab=tables
+          - page: menu-tutorial
+            url: http://localhost:4517/ChosenPicachu/demos/?tab=tables&tut=menu
+          - page: resize-tutorial
+            url: http://localhost:4517/ChosenPicachu/demos/?tab=tables&tut=resize
+          - page: drag-sort
+            url: http://localhost:4517/ChosenPicachu/demos/?tab=dragAndDrop
+    name: lighthouse (${{ matrix.page }})
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+          registry-url: 'https://npm.pkg.github.com'
+      - name: Install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm ci
+      - name: Take the stubbed bundle
+        uses: actions/download-artifact@v4
+        with:
+          name: lighthouse-dist
+          path: ./dist
+      - name: Lighthouse audit of ${{ matrix.page }}
         uses: treosh/lighthouse-ci-action@v12
         with:
+          urls: ${{ matrix.url }}
           configPath: ./lighthouserc.json
-          uploadArtifacts: true
+          uploadArtifacts: false
+      - name: Keep the reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-${{ matrix.page }}
+          path: .lighthouseci
+          if-no-files-found: ignore
