@@ -30,7 +30,7 @@ const renderCharts = () =>
   renderWithMemoryRouter({
     path: Paths.demos,
     element: <EnvProvider env={{tradeFeed: 'ws://127.0.0.1:9', tradeHistory: HISTORY}}><DemosPage/></EnvProvider>
-  }, {path: `${Paths.demos}?tab=charts`});
+  }, {path: `${Paths.demos}?tab=charts&charts=price,candles`});
 
 const menuFor = (label: string): HTMLElement => {
   const toggle = screen.getByRole('button', {name: label});
