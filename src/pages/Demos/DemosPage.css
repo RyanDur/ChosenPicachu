@@ -29,18 +29,27 @@
 }
 
 .charts-heading {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas: "headline status plus";
   align-items: center;
   gap: var(--base-x-3);
   margin: 0 0 var(--base-x-2);
 
+  .add-chart {
+    grid-area: plus;
+  }
+
   .headline {
+    grid-area: headline;
     font-size: var(--text-headline);
     font-weight: bold;
     color: var(--void);
   }
 
   .status {
+    grid-area: status;
+    justify-self: start;
     display: inline-flex;
     align-items: center;
     gap: var(--base-x-0_75);
@@ -87,7 +96,6 @@
 }
 
 .add-chart.button.secondary {
-  align-self: flex-end;
   display: grid;
   place-items: center;
   width: var(--base-x-6);

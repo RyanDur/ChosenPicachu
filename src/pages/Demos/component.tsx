@@ -88,12 +88,12 @@ export const DemosPage = () => {
               <header className="charts-heading">
                 <h2 className="headline">{`Bitcoin, live — every ${tradeProduct} trade on Coinbase`}</h2>
                 <output className="status" data-status={liveTrades.status}>{statusCopy[liveTrades.status]}</output>
+                <Menu id="add-chart" label="Add a chart" toggle="+"
+                      toggleClassName="add-chart button secondary">
+                  <button type="button" className="item" onClick={addChart('price')}>Price line</button>
+                  <button type="button" className="item" onClick={addChart('candles')}>Candles</button>
+                </Menu>
               </header>
-              <Menu id="add-chart" label="Add a chart" toggle="+"
-                    toggleClassName="add-chart button secondary">
-                <button type="button" className="item" onClick={addChart('price')}>Price line</button>
-                <button type="button" className="item" onClick={addChart('candles')}>Candles</button>
-              </Menu>
               {chartKinds.map((kind, at) => kind === 'price'
                 ? <PriceChart key={at} trades={liveTrades.trades}/>
                 : <Candles key={at} trades={liveTrades.trades}/>)}
