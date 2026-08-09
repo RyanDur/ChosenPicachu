@@ -469,10 +469,16 @@ describe('sort criteria menus', () => {
   });
 
   test('a menu appears only where the column asks for one', () => {
-    render(<EagerKeepStaticTable columns={sized} rows={people} sortable/>);
+    render(<EagerKeepStaticTable columns={sized} rows={people} sortable resizableColumns/>);
 
     expect(screen.queryByRole('button', {name: 'sort name'})).toBeNull();
     expect(screen.getByRole('button', {name: 'sort age'})).toBeVisible();
+    const contentOf = (name: string) => screen.getByRole('columnheader', {name: new RegExp(`^${name}`)})
+      .querySelector('.header-cell-content');
+    expect(contentOf('age')?.classList.contains('rankable')).toBe(true);
+    expect(contentOf('age')?.classList.contains('resizable')).toBe(true);
+    expect(contentOf('name')?.classList.contains('rankable')).toBe(false);
+    expect(contentOf('name')?.classList.contains('resizable')).toBe(true);
   });
 
   test('no menus without the opt-in', () => {

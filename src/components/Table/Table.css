@@ -38,11 +38,23 @@
 
 .header-cell-content {
   display: grid;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: 1fr;
   align-items: center;
   column-gap: var(--base);
   min-height: var(--base-x-5);
   padding-inline-start: var(--base-x-1_25);
+}
+
+.header-cell-content.rankable {
+  grid-template-columns: 1fr auto;
+}
+
+.header-cell-content.resizable {
+  grid-template-columns: 1fr auto;
+}
+
+.header-cell-content.rankable.resizable {
+  grid-template-columns: 1fr auto auto;
 }
 
 .resize-handle {
