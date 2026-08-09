@@ -1,7 +1,10 @@
 .aggregations {
+  overflow-x: auto;
+
   .fancy-table:not(.column-ghost) {
     table-layout: fixed;
     width: 100%;
+    min-width: 86rem;
   }
 
   .window { width: 17.5%; }
