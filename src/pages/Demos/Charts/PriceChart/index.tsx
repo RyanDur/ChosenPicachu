@@ -1,4 +1,4 @@
-import {FC, useState} from 'react';
+import {FC, useState, ReactNode} from 'react';
 import {has, notEmpty} from '@ryandur/sand';
 import {Menu} from '@components/Menu';
 import {Loading} from '@components/Loading';
@@ -35,9 +35,12 @@ const candlesView = (candles: readonly Candle[], bucket: string): PriceView => (
   caption: `${candles.length} candles · ${bucket}`
 });
 
-type Props = Pick<LiveTradesState, 'trades'>;
+type Props = Pick<LiveTradesState, 'trades'> & {
+  id?: string;
+  switcher?: ReactNode;
+};
 
-export const PriceChart: FC<Props> = ({trades}) => {
+export const PriceChart: FC<Props> = ({trades, id = 'price', switcher}) => {
   const [period, setPeriod] = useState<Period>(Period.hour);
   const history = usePeriodCandles(period);
   const candles = mergeLive(history.candles, bucketTrades(trades, bucketMs[period]), periodCap[period]);
@@ -52,7 +55,8 @@ export const PriceChart: FC<Props> = ({trades}) => {
   const trend = showing && view.last >= view.first ? 'rising' : 'falling';
   return <section aria-label="live trades" className="price-chart card chart" data-trend={trend}>
     <header className="chart-header">
-      <Menu id="price-period" label="price period" toggle={period} toggleClassName="period-toggle">
+      {switcher}
+      <Menu id={`${id}-period`} label="price period" toggle={period} toggleClassName="period-toggle">
         {Object.values(Period).map(option =>
           <button type="button" key={option} className="item"
                   onClick={() => setPeriod(option)}>{option}</button>

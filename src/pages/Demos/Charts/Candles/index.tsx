@@ -1,4 +1,4 @@
-import {FC, useState} from 'react';
+import {FC, useState, ReactNode} from 'react';
 import {notEmpty} from '@ryandur/sand';
 import {Menu} from '@components/Menu';
 import {Trade} from '../coinbase';
@@ -16,12 +16,14 @@ const VOLUME_HEIGHT = 24;
 
 type Props = {
   trades: readonly Trade[];
+  id?: string;
+  switcher?: ReactNode;
 };
 
 const captionFor = (period: Period, count: number): string =>
   `${count} candles · ${bucketLabel[period]}`;
 
-export const Candles: FC<Props> = ({trades}) => {
+export const Candles: FC<Props> = ({trades, id = 'candle', switcher}) => {
   const [period, setPeriod] = useState<Period>(Period.hour);
   const history = usePeriodCandles(period);
   const candles = mergeLive(history.candles, bucketTrades(trades, bucketMs[period]), periodCap[period]);
@@ -29,7 +31,8 @@ export const Candles: FC<Props> = ({trades}) => {
   const bars = volumeShapes(candles, CHART_WIDTH, VOLUME_HEIGHT, bucketMs[period]);
   return <section aria-label="candles" className="candles card chart">
     <header className="chart-header">
-      <Menu id="candle-period" label="candle period" toggle={period} toggleClassName="period-toggle">
+      {switcher}
+      <Menu id={`${id}-period`} label="candle period" toggle={period} toggleClassName="period-toggle">
         {Object.values(Period).map(option =>
           <button type="button" key={option} className="item"
                   onClick={() => setPeriod(option)}>{option}</button>
