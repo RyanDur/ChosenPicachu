@@ -9,6 +9,7 @@ import {Row} from '@components/Table';
 import {Trade} from '../../Charts/coinbase';
 import {cents, deltaLabel} from '../../Charts/money';
 import {WindowAggregate, windowedAggregates} from './fold';
+import './Aggregations.css';
 import {hydrated, useRecentTrades} from './useRecentTrades';
 
 type Props = {
@@ -30,13 +31,13 @@ const tables = {
 };
 
 const columns = [
-  {display: 'window', column: 'window', width: 150},
-  {display: 'trades', column: 'trades', width: 110},
-  {display: 'buys', column: 'buys', width: 100},
-  {display: 'sells', column: 'sells', width: 100},
-  {display: 'volume', column: 'volume', width: 120},
-  {display: 'vwap', column: 'vwap', width: 150},
-  {display: 'change', column: 'change', width: 130}
+  {display: 'window', column: 'window', className: 'window'},
+  {display: 'trades', column: 'trades', className: 'trades'},
+  {display: 'buys', column: 'buys', className: 'buys'},
+  {display: 'sells', column: 'sells', className: 'sells'},
+  {display: 'volume', column: 'volume', className: 'volume'},
+  {display: 'vwap', column: 'vwap', className: 'vwap'},
+  {display: 'change', column: 'change', className: 'change'}
 ];
 
 const moved = ({opened, closed}: WindowAggregate) =>
@@ -61,6 +62,7 @@ export const Aggregations: FC<Props> = ({trades, pace, origin, motion}) => {
     <Sortable tableClassName="fancy-table"
            draggableColumns
            draggableRows
+           resizableColumns
            sortable
            theadClassName="header"
            thClassName="column-name"

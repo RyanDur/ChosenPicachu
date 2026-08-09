@@ -47,3 +47,14 @@
     }
   }
 }
+
+#users-table {
+  table-layout: fixed;
+  width: 100%;
+
+  .full-name { width: 22%; }
+  .home-city { width: 18%; }
+  .age { width: 9%; }
+  .friends { width: 26%; }
+  .works-from-home { width: 25%; }
+}

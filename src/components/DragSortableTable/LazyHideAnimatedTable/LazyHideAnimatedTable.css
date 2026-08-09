@@ -3,10 +3,6 @@
   visibility: hidden;
 }
 
-.staged {
-  container-type: inline-size;
-}
-
 .sortable .displaced {
   --carried: 0;
   --toward: 1;
@@ -16,7 +12,7 @@
 
 @keyframes displaced {
   from {
-    transform: translateX(calc(var(--toward) * (var(--carried) * 1cqi + var(--base-x-2_5) + var(--hairline))));
+    transform: translateX(calc(var(--toward) * var(--carried)));
   }
 }
 

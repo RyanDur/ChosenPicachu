@@ -59,12 +59,13 @@ export const UsersPage: FC = () => {
           tbodyClassName="body"
           cellClassName="cell"
           columns={[
-            {display: 'Full Name', column: 'fullName', width: 220},
-            {display: 'Home City', column: 'homeCity', width: 180},
-            {display: 'Age', column: 'age', width: 90},
-            {display: 'Friends', column: 'friends', width: 260},
-            {display: 'Works from Home', column: 'worksFromHome', width: 250}
+            {display: 'Full Name', column: 'fullName', className: 'full-name'},
+            {display: 'Home City', column: 'homeCity', className: 'home-city'},
+            {display: 'Age', column: 'age', className: 'age'},
+            {display: 'Friends', column: 'friends', className: 'friends'},
+            {display: 'Works from Home', column: 'worksFromHome', className: 'works-from-home'}
           ]}
+          resizableColumns
           rows={users.map(user => {
             const displayFullName = (user: {
               firstName: string,

@@ -4,28 +4,35 @@ import {Column} from '@components/Table';
 
 export type Slid = Readonly<Record<string, {toward: 'left' | 'right'; by: number}>>;
 export type Shifted = Readonly<Record<number, number>>;
-import {Shares} from '@components/Table';
 
 export type Bounds = {
     left: number;
     top: number;
     width: number;
     height: number;
+    columnWidths: Readonly<Record<string, number>>;
 };
 
 export type Survey = Bounds & {
     rowHeights: Readonly<Record<number, number>>;
 };
 
-export const bounded = (surface: HTMLTableElement): Bounds => {
+export const bounded = (surface: HTMLTableElement, order: readonly string[]): Bounds => {
     const bounds = surface.getBoundingClientRect();
-    return {left: bounds.left, top: bounds.top, width: bounds.width, height: bounds.height};
+    const headers = [...surface.querySelectorAll('thead th')];
+    return {
+        left: bounds.left, top: bounds.top, width: bounds.width, height: bounds.height,
+        columnWidths: order.reduce((widths, column, at) => ({
+            ...widths,
+            [column]: headers[at]?.getBoundingClientRect().width ?? 0
+        }), {})
+    };
 };
 
-export const surveyed = (surface: HTMLTableElement, seats: readonly number[]): Survey => {
+export const surveyed = (surface: HTMLTableElement, order: readonly string[], seats: readonly number[]): Survey => {
     const body = surface.tBodies[0];
     return {
-        ...bounded(surface),
+        ...bounded(surface, order),
         rowHeights: seats.reduce((heights, card, position) => ({
             ...heights,
             [card]: body?.rows[position]?.getBoundingClientRect().height ?? 0
@@ -36,12 +43,13 @@ export const surveyed = (surface: HTMLTableElement, seats: readonly number[]): S
 const deadZone = (struckSize: number, aloftSize: number): number =>
     Math.max(struckSize / 4, (struckSize - aloftSize) / 2);
 
-export const columnUnder = (order: readonly string[], shares: Shares, survey?: Bounds) =>
+export const columnUnder = (order: readonly string[], survey?: Bounds) =>
     (x: number, y: number, aloft?: string): string | undefined => {
         if (has(survey) && has(aloft) && y >= survey.top && y <= survey.top + survey.height) {
             let edge = survey.left;
+            const total = order.reduce((sum, name) => sum + (survey.columnWidths[name] ?? 0), 0) || 1;
             const slots = order.map((column, at) => {
-                const width = (shares[column] ?? 0) / 100 * survey.width;
+                const width = (survey.columnWidths[column] ?? 0) / total * survey.width;
                 edge += width;
                 return {column, at, width, start: edge - width, end: edge};
             });
@@ -97,13 +105,16 @@ export const displaced = (
     order: readonly string[],
     column: string,
     struck: string,
-    shares: Shares
+    survey: Bounds
 ): Slid => {
     const from = order.indexOf(column);
     const to = Math.min(Math.max(order.indexOf(struck), 1), order.length - 2);
     const between = from < to ? order.slice(from + 1, to + 1) : order.slice(to, from);
+    const spanned = order.reduce((sum, name) => sum + (survey.columnWidths[name] ?? 0), 0);
+    const gap = order.length > 1 ? Math.max(survey.width - spanned, 0) / (order.length - 1) : 0;
     return Object.fromEntries(between.map(neighbour =>
-        [neighbour, {toward: from < to ? 'left' : 'right', by: shares[column] ?? 0}]));
+        [neighbour, {toward: from < to ? 'left' : 'right',
+            by: (survey.columnWidths[column] ?? 0) + gap}]));
 };
 
 export const shifts = (

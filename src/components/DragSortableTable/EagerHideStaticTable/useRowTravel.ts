@@ -4,6 +4,7 @@ import {Drift, Flight, grounded, still} from '../travel';
 import {Survey, surveyed, cardUnder} from '../survey';
 
 export const useRowTravel = (
+    order: readonly string[],
     standing: readonly number[],
     settle: (card: number, struck: number, heights: Readonly<Record<number, number>>) => void
 ) => {
@@ -19,7 +20,7 @@ export const useRowTravel = (
             const lane = event.currentTarget.closest('tr');
             const table = event.currentTarget.closest('table');
             if (has(table)) {
-                setChart(surveyed(table, standing));
+                setChart(surveyed(table, order, standing));
             }
             const anchored = lane?.getBoundingClientRect();
             setFlight({x: anchored?.x ?? 0, y: anchored?.y ?? 0, width: anchored?.width ?? 0});
@@ -53,6 +54,7 @@ export const useRowTravel = (
 
     return {
         aloft,
+        survey,
         flight,
         drift,
         lift,

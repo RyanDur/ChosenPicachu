@@ -9,24 +9,24 @@ import '../Header.css';
 type Props = {
   column: Column;
   order: readonly string[];
-  shares: Shares;
+  share?: number;
+  resizable: boolean;
   rule?: { column: string; direction: Direction };
   aloft?: string;
   draggable: boolean;
   className: string;
   onLift: (column: string) => (event: PointerEvent<HTMLTableCellElement>) => void;
   onOrdered: (column: string, to: number) => void;
-  onShared: (update: (previous: Shares) => Shares) => void;
+  onAwaken: (table: HTMLTableElement) => void;
+  onShared: (update: (previous: Shares | undefined) => Shares | undefined) => void;
   onRule?: (column: string, direction: Direction | undefined, event: MouseEvent<HTMLButtonElement>) => void;
 };
 
 export const Header: FC<Props> = (
-  {column, order, shares, rule, aloft, draggable, className, onLift, onOrdered, onShared, onRule}
+  {column, order, share, resizable, rule, aloft, draggable, className, onLift, onOrdered, onAwaken, onShared, onRule}
 ) => {
   const columnName = column.column;
-  const apportioned = order.filter(name => name in shares);
   const position = order.indexOf(columnName);
-  const share = has(column.width) ? shares[columnName] : undefined;
   const travels = draggable && not(anchored(position, order.length));
   const hidden = aloft === columnName;
   const sorted = rule?.column === columnName ? rule.direction : undefined;
@@ -34,9 +34,10 @@ export const Header: FC<Props> = (
   return <th className={classNames(
     className, column.className,
     'slot',
-    apportioned.length > 0 && 'clipped',
+    resizable && 'clipped',
     travels && 'grabbable',
-    hidden && 'hide'
+    hidden && 'hide',
+    has(share) && 'shared'
   )}
              scope="col"
              aria-sort={sorted}
@@ -60,8 +61,10 @@ export const Header: FC<Props> = (
     {column.display}
     {has(onRule) && position > 0 &&
         <SortMenu column={columnName} sorted={sorted} onRule={onRule}/>}
-    {has(share) && apportioned.length > 1 &&
+    {resizable && order.length > 1 &&
         <ResizeHandle column={columnName} share={share}
-                      onTrade={delta => onShared(traded(columnName, neighborOf(apportioned, columnName), delta))}/>}
+                      onAwaken={onAwaken}
+                      onTrade={delta => onShared(previous =>
+                        previous && traded(columnName, neighborOf(order, columnName), delta)(previous))}/>}
   </th>;
 };

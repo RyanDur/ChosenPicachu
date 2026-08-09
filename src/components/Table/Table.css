@@ -59,8 +59,11 @@
 }
 
 .apportioned {
-  table-layout: fixed;
-  width: 100%;
+  .slot.shared {
+    --share: 0;
+
+    width: var(--share);
+  }
 }
 
 .clipped {

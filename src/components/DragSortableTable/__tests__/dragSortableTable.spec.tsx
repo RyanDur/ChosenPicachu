@@ -6,10 +6,10 @@ import {
 
 describe('drag sortable columns', () => {
   const sized = [
-    {display: 'name', column: 'name', width: 200},
-    {display: 'age', column: 'age', width: 120},
-    {display: 'city', column: 'city', width: 120},
-    {display: 'job', column: 'job', width: 160}
+    {display: 'name', column: 'name'},
+    {display: 'age', column: 'age'},
+    {display: 'city', column: 'city'},
+    {display: 'job', column: 'job'}
   ];
   const people = [{
     name: {display: 'Ada'}, age: {display: '36'}, city: {display: 'London'}, job: {display: 'Analyst'}
@@ -24,10 +24,20 @@ describe('drag sortable columns', () => {
   };
   const headerTexts = () => within(sourceTable()).getAllByRole('columnheader').map(header => header.textContent);
   const header = (name: string) => within(sourceTable()).getByRole('columnheader', {name: new RegExp(`^${name}`)});
-  const widths: Record<string, number> = {name: 200, age: 120, city: 120, job: 160};
+  let widths: Record<string, number> = {name: 200, age: 120, city: 120, job: 160};
+
+  beforeEach(() => {
+    widths = {name: 200, age: 120, city: 120, job: 160};
+  });
   const surveyed = () => {
     sourceTable().getBoundingClientRect = () => ({
       left: 0, right: 600, top: 0, bottom: 200, width: 600, height: 200, x: 0, y: 0, toJSON: () => ({})
+    });
+    within(sourceTable()).getAllByRole('columnheader').forEach(header => {
+      const key = header.textContent ?? '';
+      header.getBoundingClientRect = () => ({
+        left: 0, right: 0, top: 0, bottom: 0, width: widths[key] ?? 0, height: 0, x: 0, y: 0, toJSON: () => ({})
+      });
     });
   };
   let aloft = '';
@@ -122,11 +132,12 @@ describe('drag sortable columns', () => {
   });
 
   test('a slim column reaches deeper into a wide neighbor before switching', () => {
+    widths = {name: 100, slim: 40, wide: 360, job: 100};
     const stretched = [
-      {display: 'name', column: 'name', width: 100},
-      {display: 'slim', column: 'slim', width: 40},
-      {display: 'wide', column: 'wide', width: 360},
-      {display: 'job', column: 'job', width: 100}
+      {display: 'name', column: 'name'},
+      {display: 'slim', column: 'slim'},
+      {display: 'wide', column: 'wide'},
+      {display: 'job', column: 'job'}
     ];
     const person = [{
       name: {display: 'Ada'}, slim: {display: 'few'}, wide: {display: 'many'}, job: {display: 'Analyst'}
@@ -172,7 +183,8 @@ describe('drag sortable columns', () => {
 
     fireEvent.pointerMove(surface(), {buttons: 1, clientX: 300, clientY: 200, pointerId: 1});
     fireEvent.pointerMove(surface(), {buttons: 1, clientX: 320, clientY: 215, pointerId: 1});
-    expect(ghost).toHaveStyle({transform: 'translate(20px, 15px)'});
+    expect(ghost.style.getPropertyValue('--drift-x')).toBe('20px');
+    expect(ghost.style.getPropertyValue('--drift-y')).toBe('15px');
 
     drop();
     expect(screen.getAllByRole('table')).toHaveLength(1);
@@ -189,8 +201,8 @@ describe('drag sortable columns', () => {
 
 describe('drag sortable rows', () => {
   const sized = [
-    {display: 'name', column: 'name', width: 200},
-    {display: 'age', column: 'age', width: 120}
+    {display: 'name', column: 'name'},
+    {display: 'age', column: 'age'}
   ];
   const people = [
     {name: {display: 'Ada'}, age: {display: '36'}},
@@ -215,6 +227,13 @@ describe('drag sortable rows', () => {
   const surveyed = () => {
     sourceTable().getBoundingClientRect = () => ({
       left: 0, right: 400, top: 0, bottom: 160, width: 400, height: 160, x: 0, y: 0, toJSON: () => ({})
+    });
+    const spans: Record<string, number> = {name: 250, age: 150};
+    within(sourceTable()).getAllByRole('columnheader').forEach(header => {
+      const key = header.textContent ?? '';
+      header.getBoundingClientRect = () => ({
+        left: 0, right: 0, top: 0, bottom: 0, width: spans[key] ?? 0, height: 0, x: 0, y: 0, toJSON: () => ({})
+      });
     });
     within(within(sourceTable()).getAllByRole('rowgroup')[1]).getAllByRole('row')
       .forEach(row => {
@@ -247,8 +266,8 @@ describe('drag sortable rows', () => {
     expect(ghost).toHaveAttribute('aria-hidden', 'true');
     expect(ghost.querySelector('.grip')).not.toBeNull();
     const [name, age] = [...ghost.querySelectorAll('td')];
-    expect(name).toHaveStyle({width: '62.5%'});
-    expect(age).toHaveStyle({width: '37.5%'});
+    expect(name.style.getPropertyValue('--share')).toBe('62.5%');
+    expect(age.style.getPropertyValue('--share')).toBe('37.5%');
     drop();
   });
 
@@ -333,9 +352,9 @@ describe('drag sortable rows', () => {
 
 describe('sort criteria menus', () => {
   const sized = [
-    {display: 'name', column: 'name', width: 200},
-    {display: 'age', column: 'age', width: 120},
-    {display: 'city', column: 'city', width: 120}
+    {display: 'name', column: 'name'},
+    {display: 'age', column: 'age'},
+    {display: 'city', column: 'city'}
   ];
   const people = [
     {name: {display: 'Ada'}, age: {display: '36', value: 36}, city: {display: 'London'}},
@@ -441,13 +460,21 @@ describe('sort criteria menus', () => {
 
 describe('animated moves', () => {
   const sized = [
-    {display: 'name', column: 'name', width: 200},
-    {display: 'age', column: 'age', width: 120}
+    {display: 'name', column: 'name'},
+    {display: 'age', column: 'age'}
   ];
   const people = [
     {name: {display: 'Ada'}, age: {display: '36'}},
     {name: {display: 'Grace'}, age: {display: '45'}}
   ];
+  const spanned = (table: HTMLElement, spans: Record<string, number>) => {
+    within(table).getAllByRole('columnheader').forEach(header => {
+      const key = header.textContent?.trim().split('⇅')[0].trim() ?? '';
+      header.getBoundingClientRect = () => ({
+        left: 0, right: 0, top: 0, bottom: 0, width: spans[key] ?? 0, height: 0, x: 0, y: 0, toJSON: () => ({})
+      });
+    });
+  };
   const firstCells = () => within(screen.getAllByRole('rowgroup')[1])
     .getAllByRole('row').map(row => within(row).getAllByRole('cell')[0].textContent);
 
@@ -457,16 +484,20 @@ describe('animated moves', () => {
 
   test('arrow keys walk a column, and both parties slide', async () => {
     const four = [
-      {display: 'name', column: 'name', width: 200},
-      {display: 'age', column: 'age', width: 120},
-      {display: 'city', column: 'city', width: 120},
-      {display: 'job', column: 'job', width: 160}
+      {display: 'name', column: 'name'},
+      {display: 'age', column: 'age'},
+      {display: 'city', column: 'city'},
+      {display: 'job', column: 'job'}
     ];
     const crew = [{
       name: {display: 'Ada'}, age: {display: '36'}, city: {display: 'London'}, job: {display: 'Analyst'}
     }];
     render(<EagerKeepAnimatedTable columns={four} rows={crew} draggableColumns/>);
     const table = screen.getAllByRole('table')[0];
+    table.getBoundingClientRect = () => ({
+      left: 0, right: 600, top: 0, bottom: 100, width: 600, height: 100, x: 0, y: 0, toJSON: () => ({})
+    });
+    spanned(table, {name: 200, age: 120, city: 120, job: 160});
     const headerTexts = () => within(table).getAllByRole('columnheader')
       .map(head => head.textContent?.trim().split('⇅')[0].trim());
 
@@ -477,10 +508,10 @@ describe('animated moves', () => {
     expect(headerTexts()).toEqual(['name', 'city', 'age', 'job']);
     expect(within(table).getByRole('columnheader', {name: /^age/}).classList).toContain('displaced');
     expect(within(table).getByRole('columnheader', {name: /^age/})).toHaveStyle({'--toward': '-1'});
-    expect(within(table).getByRole('columnheader', {name: /^age/})).toHaveStyle({'--carried': '20'});
+    expect(within(table).getByRole('columnheader', {name: /^age/})).toHaveStyle({'--carried': '120px'});
     expect(within(table).getByRole('columnheader', {name: /^city/}).classList).toContain('displaced');
     expect(within(table).getByRole('columnheader', {name: /^city/})).toHaveStyle({'--toward': '1'});
-    expect(within(table).getByRole('columnheader', {name: /^city/})).toHaveStyle({'--carried': '20'});
+    expect(within(table).getByRole('columnheader', {name: /^city/})).toHaveStyle({'--carried': '120px'});
 
     await userEvent.keyboard('{ArrowLeft}');
     expect(headerTexts()).toEqual(['name', 'age', 'city', 'job']);
@@ -534,10 +565,10 @@ describe('animated moves', () => {
     const transition = vi.fn((update: () => void) => update());
     (document as {startViewTransition?: unknown}).startViewTransition = transition;
     const four = [
-      {display: 'name', column: 'name', width: 200},
-      {display: 'age', column: 'age', width: 120},
-      {display: 'city', column: 'city', width: 120},
-      {display: 'job', column: 'job', width: 160}
+      {display: 'name', column: 'name'},
+      {display: 'age', column: 'age'},
+      {display: 'city', column: 'city'},
+      {display: 'job', column: 'job'}
     ];
     const crew = [{
       name: {display: 'Ada'}, age: {display: '36'}, city: {display: 'London'}, job: {display: 'Analyst'}
@@ -547,6 +578,7 @@ describe('animated moves', () => {
     table.getBoundingClientRect = () => ({
       left: 0, right: 600, top: 0, bottom: 100, width: 600, height: 100, x: 0, y: 0, toJSON: () => ({})
     });
+    spanned(table, {name: 200, age: 120, city: 120, job: 160});
 
     fireEvent.pointerDown(within(table).getByRole('columnheader', {name: /^age/}), {clientX: 260, clientY: 20, pointerId: 1});
     const surface = document.querySelector('.drag-surface');
@@ -555,7 +587,7 @@ describe('animated moves', () => {
 
     const displaced = within(table).getByRole('columnheader', {name: /^city/});
     expect(displaced.classList).toContain('displaced');
-    expect(displaced).toHaveStyle({'--carried': '20'});
+    expect(displaced).toHaveStyle({'--carried': '120px'});
     expect(transition).not.toHaveBeenCalled();
 
     for (const name of ['animationend', 'webkitAnimationEnd']) {

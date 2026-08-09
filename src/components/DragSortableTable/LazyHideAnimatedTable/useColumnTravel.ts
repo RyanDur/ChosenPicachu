@@ -1,13 +1,11 @@
 import {PointerEvent, useState} from 'react';
 import {has} from '@ryandur/sand';
-import {Shares} from '@components/Table';
 import {Drift, Flight, grounded, still} from '../travel';
 import {Bounds, bounded, columnUnder} from '../survey';
 
 export const useColumnTravel = (
     order: readonly string[],
-    shares: Shares,
-    settle: (column: string, struck: string) => void
+    settle: (column: string, struck: string, survey: Bounds) => void
 ) => {
     const [aloft, setAloft] = useState<string>();
     const [bounds, setBounds] = useState<Bounds>();
@@ -15,22 +13,22 @@ export const useColumnTravel = (
     const [origin, setOrigin] = useState<Drift>();
     const [drift, setDrift] = useState<Drift>(still);
     const [landing, setLanding] = useState<string>();
-    const strike = columnUnder(order, shares, bounds);
+    const strike = columnUnder(order, bounds);
 
     const lift = (column: string) =>
         (event: PointerEvent<HTMLElement>): void => {
             const anchored = event.currentTarget.getBoundingClientRect();
             const table = event.currentTarget.closest('table');
             if (has(table)) {
-                setBounds(bounded(table));
+                setBounds(bounded(table, order));
             }
             setFlight({x: anchored.x, y: anchored.y, width: anchored.width});
             setAloft(column);
         };
 
     const drop = (): void => {
-        if (has(aloft) && has(landing)) {
-            settle(aloft, landing);
+        if (has(bounds) && has(aloft) && has(landing)) {
+            settle(aloft, landing, bounds);
         }
         setOrigin(undefined);
         setLanding(undefined);
@@ -59,6 +57,7 @@ export const useColumnTravel = (
 
     return {
         aloft,
+        survey: bounds,
         flight,
         drift,
         lift,

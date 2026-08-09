@@ -1,15 +1,12 @@
-import {has} from '@ryandur/sand';
-import {Column} from './Table';
-
 export const SLIMMEST = 5;
 
 export type Shares = Readonly<Record<string, number>>;
 
-export const seededShares = (columns: Column[]): Shares => {
-    const sized = columns.filter(({width}) => has(width));
-    const total = sized.reduce((sum, {width}) => sum + (width ?? 0), 0);
-    return sized.reduce<Shares>((shares, {column, width}) =>
-        ({...shares, [column]: (width ?? 0) / total * 100}), {});
+export const measuredShares = (keys: readonly string[], table: HTMLTableElement): Shares => {
+    const widths = [...table.querySelectorAll('thead th')].map(header => header.getBoundingClientRect().width);
+    const total = widths.reduce((sum, width) => sum + width, 0);
+    return keys.reduce<Shares>((shares, key, at) =>
+        ({...shares, [key]: (widths[at] ?? 0) / (total || 1) * 100}), {});
 };
 
 export const traded = (column: string, neighbor: string, delta: number) => (previous: Shares): Shares => {
