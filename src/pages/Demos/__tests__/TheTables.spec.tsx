@@ -62,7 +62,7 @@ describe('the tables demo', () => {
       tradeFrame(50003, now - 3 * 60000, '0.05', 'buy'),
       tradeFrame(50004, now, '0.01', 'buy')
     ]);
-    const texts = (row: HTMLElement) => within(row).getAllByRole('cell').map(cell => cell.textContent);
+    const texts = (row: HTMLElement) => [...row.querySelectorAll('th, td')].map(cell => cell.textContent);
     const rowFor = (label: string) => {
       const cell = within(card).getByText(label);
       const row = cell.closest('tr');
@@ -150,7 +150,7 @@ describe('the tables demo', () => {
     fireEvent.pointerUp(lifted, {pointerId: 1});
 
     const labels = within(card).getAllByRole('row').slice(1)
-      .map(row => within(row).getAllByRole('cell')[0].textContent);
+      .map(row => row.querySelector('th, td')?.textContent);
     expect(labels).toEqual(['session', 'this minute', 'last 5 minutes', 'last 15 minutes', 'this hour']);
   });
 
@@ -169,7 +169,7 @@ describe('the tables demo', () => {
       tradeFrame(50004, now, '0.01', 'buy')
     ]);
     const labels = () => within(card).getAllByRole('row').slice(1)
-      .map(row => within(row).getAllByRole('cell')[0].textContent);
+      .map(row => row.querySelector('th, td')?.textContent);
     const menuFor = (label: string) => {
       const toggle = within(card).getByRole('button', {name: label});
       const target = toggle.getAttribute('popovertarget') ?? '';

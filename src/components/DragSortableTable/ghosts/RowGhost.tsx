@@ -20,13 +20,13 @@ export const RowGhost: FC<Props> = ({at, drift, dress, columns, widths, row}) =>
         <tr className={dress.row}>
             {columns.map(({column}, place) => {
                 const share = widths[column];
-                return <td className={classNames(dress.cell, place === 0 && 'row-header', has(share) && 'shared', row[column].className, 'ellipsis')}
-                    key={place}
-                    style={has(share) ? {'--share': `${share}%`} : undefined}>
-                    {place === 0
-                        ? <div className="row-header-content"><i className="grip"><Handle/></i>{row[column].display}</div>
-                        : row[column].display}
-                </td>;
+                const seat = classNames(dress.cell, place === 0 && 'row-header', has(share) && 'shared', row[column].className, 'ellipsis');
+                const width = has(share) ? {'--share': `${share}%`} : undefined;
+                return place === 0
+                    ? <th scope="row" className={seat} key={place} style={width}>
+                        <div className="row-header-content"><i className="grip"><Handle/></i>{row[column].display}</div>
+                    </th>
+                    : <td className={seat} key={place} style={width}>{row[column].display}</td>;
             })}
         </tr>
         </tbody>

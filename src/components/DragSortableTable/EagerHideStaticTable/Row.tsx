@@ -28,16 +28,17 @@ export const Row: FC<Props> = (
   return <tr className={className}>
     {columns.map((column, columnNumber) => {
       const cell = cells[column];
-      return <td className={classNames(
+      const rowHeader = columnNumber === 0 && gripped;
+      const dress = classNames(
         cellClassName, cell.className,
-        columnNumber === 0 && gripped && 'row-header',
+        rowHeader && 'row-header',
         clipped && 'ellipsis',
         aloftColumn === column && 'hide',
         hidden && 'hide-across'
-      )}
-                 key={column}>
-        {columnNumber === 0 && gripped
-          ? <div className="row-header-content">
+      );
+      return rowHeader
+        ? <th scope="row" className={dress} key={column}>
+          <div className="row-header-content">
             <RowGrip position={position} onLift={onLift(row)}
                      onNudge={toward => {
                        const to = Math.min(Math.max(position + toward, 0), standing.length - 1);
@@ -45,8 +46,8 @@ export const Row: FC<Props> = (
                      }}/>
             {cell.display}
           </div>
-          : cell.display}
-      </td>;
+        </th>
+        : <td className={dress} key={column}>{cell.display}</td>;
     })}
   </tr>;
 };
