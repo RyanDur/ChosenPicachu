@@ -58,13 +58,15 @@ export const Header: FC<Props> = (
                }
                : undefined}
              style={has(share) ? {'--share': `${share}%`} : undefined}>
-    {column.display}
-    {has(onRule) && position > 0 &&
-        <SortMenu column={columnName} sorted={sorted} onRule={onRule}/>}
-    {resizable && order.length > 1 &&
-        <ResizeHandle column={columnName} share={share}
-                      onAwaken={onAwaken}
-                      onTrade={delta => onShared(previous =>
-                        previous && traded(columnName, neighborOf(order, columnName), delta)(previous))}/>}
+    <article className="slot-grid">
+      {column.display}
+      {has(onRule) && position > 0 &&
+          <SortMenu column={columnName} sorted={sorted} onRule={onRule}/>}
+      {resizable && order.length > 1 &&
+          <ResizeHandle column={columnName} share={share}
+                        onAwaken={onAwaken}
+                        onTrade={delta => onShared(previous =>
+                          previous && traded(columnName, neighborOf(order, columnName), delta)(previous))}/>}
+    </article>
   </th>;
 };

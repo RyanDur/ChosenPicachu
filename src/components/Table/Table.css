@@ -37,6 +37,19 @@
     }
   }
 
+  .slot {
+    padding: 0;
+  }
+}
+
+.slot-grid {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  column-gap: var(--base);
+  height: 100%;
+  padding: var(--base-x-1_25);
+  padding-inline-end: 0;
 }
 
 .resize-handle {
@@ -44,11 +57,8 @@
   border: none;
   padding: 0;
   background: none;
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: var(--base-x-3);
-  height: 100%;
+  position: relative;
+  align-self: stretch;
   cursor: col-resize;
   touch-action: none;
 
