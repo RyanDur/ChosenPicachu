@@ -234,17 +234,18 @@ const vertical = (source: string): Step => ({
   want: 'A window is a row: the same carry on a second axis, and the hand needs something honest to hold.',
   says: ['Rows ride the machinery the columns built, with three substitutions. The grip is a ' +
     'real button, so the hand has a target and the keyboard will later get one free. The ' +
-    'survey learns row heights at lift, measured once like everything else. And cardUnder ' +
-    'answers which seat sits under the pointer, columnUnder turned vertical. Two more words: ' +
-    'the seats are the seating chart, the rows’ order, and a card is one row’s identity. The ' +
-    'settle is the same story: the moved card takes its new seat, and the rest ride along.'],
+    'survey learns row heights at lift, measured once like everything else. And rowUnder ' +
+    'answers which seat sits under the pointer, columnUnder turned vertical. One more word: ' +
+    'the seats are the seating chart, the rows’ order; a row keeps its number as the seats ' +
+    'shuffle. The settle is the same story: the moved row takes its new seat, and the rest ' +
+    'ride along.'],
   code: [
     {label: 'HTML', lines: [
       ...span(gripSource, '<button', '</button>'),
       aside('{/* focusable by birth; the keyboard track will thank us */}')
     ]},
     {label: 'JS', lines: [
-      ...unit(surveySource, 'export const cardUnder'), gap,
+      ...unit(surveySource, 'export const rowUnder'), gap,
       ...unit(source, 'const settleRow = ')
     ]}
   ]

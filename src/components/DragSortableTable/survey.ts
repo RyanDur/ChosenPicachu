@@ -33,9 +33,9 @@ export const surveyed = (surface: HTMLTableElement, order: readonly string[], se
     const body = surface.tBodies[0];
     return {
         ...bounded(surface, order),
-        rowHeights: seats.reduce((heights, card, position) => ({
+        rowHeights: seats.reduce((heights, row, position) => ({
             ...heights,
-            [card]: body?.rows[position]?.getBoundingClientRect().height ?? 0
+            [row]: body?.rows[position]?.getBoundingClientRect().height ?? 0
         }), {})
     };
 };
@@ -71,16 +71,16 @@ export const columnUnder = (order: readonly string[], survey?: Bounds) =>
         return undefined;
     };
 
-export const cardUnder = (seats: readonly number[], survey?: Survey) =>
+export const rowUnder = (seats: readonly number[], survey?: Survey) =>
     (x: number, y: number, aloft?: number): number | undefined => {
         if (has(survey) && has(aloft) && x >= survey.left && x <= survey.left + survey.width) {
             const {top, height, rowHeights} = survey;
             let edge = top + height -
-                seats.reduce((total, card) => total + rowHeights[card], 0);
-            const slots = seats.map((card, at) => {
-                const size = rowHeights[card];
+                seats.reduce((total, row) => total + rowHeights[row], 0);
+            const slots = seats.map((row, at) => {
+                const size = rowHeights[row];
                 edge += size;
-                return {holds: card, at, size, start: edge - size, end: edge};
+                return {holds: row, at, size, start: edge - size, end: edge};
             });
             return struckPast(slots, seats.indexOf(aloft), y);
         }
@@ -122,15 +122,15 @@ export const shifts = (
 ): Record<number, number> => {
     const tops = (seated: readonly number[]): Record<number, number> => {
         let y = 0;
-        return seated.reduce<Record<number, number>>((at, card) => {
-            at[card] = y;
-            y += heights[card] ?? 0;
+        return seated.reduce<Record<number, number>>((at, row) => {
+            at[row] = y;
+            y += heights[row] ?? 0;
             return at;
         }, {});
     };
     const was = tops(before);
     const now = tops(after);
     return Object.fromEntries(after
-        .filter(card => card !== riding && (was[card] ?? 0) !== (now[card] ?? 0))
-        .map(card => [card, (was[card] ?? 0) - (now[card] ?? 0)]));
+        .filter(row => row !== riding && (was[row] ?? 0) !== (now[row] ?? 0))
+        .map(row => [row, (was[row] ?? 0) - (now[row] ?? 0)]));
 };

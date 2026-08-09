@@ -50,7 +50,7 @@ export const Aloft: FC<Props> = ({columnsTravel, rowsTravel, ordered, rows, stan
     return <>
         {has(aloftColumn) &&
             <ColumnGhost at={columnsTravel.flight} drift={columnsTravel.drift} dress={ghostDress}
-                         column={aloftColumn} rows={standing.map(card => rows[card])}/>}
+                         column={aloftColumn} rows={standing.map(row => rows[row])}/>}
         {has(aloftRow) &&
             <RowGhost at={rowsTravel.flight} drift={rowsTravel.drift} dress={ghostDress}
                       columns={ordered} widths={widths} row={aloftRow}/>}
