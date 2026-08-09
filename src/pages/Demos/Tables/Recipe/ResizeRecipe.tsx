@@ -5,6 +5,7 @@ import {span, unit} from '../../Recipe/carve';
 import sharesSource from '@components/Table/shares.ts?raw';
 import resizeSource from '@components/Table/ResizeHandle.tsx?raw';
 import baseCss from '@components/Table/Table.css?raw';
+import headerSource from '@components/DragSortableTable/EagerHideAnimatedTable/Header.tsx?raw';
 import headerCss from '@components/DragSortableTable/Header.css?raw';
 import '../../Recipe/Recipe.css';
 
@@ -43,6 +44,38 @@ const steps: StepEntry[] = [
     ]
   },
   {
+    title: 'Lay the header out on a grid',
+    want: 'A header cell seats a title, sometimes a menu, sometimes a handle; the cell must tell that furniture where to live, and a table cell cannot become a grid without ceasing to be a table cell.',
+    says: ['You reach for absolute positioning: pin the furniture to the cell’s edge and ' +
+      'reserve room for it with padding. It works until it does not: the pinned widths, the ' +
+      'reserved padding, and the layout are three numbers agreeing by luck, and nothing ' +
+      'breaks loudly when one drifts.',
+      <>So the cell surrenders its padding and a plain div takes the whole cell (an explicit
+      height keeps the header’s stature, since block padding would inset the furniture). The
+      div is the <Mdn path="Web/CSS/CSS_grid_layout">grid</Mdn>; its columns compose from what
+      the header actually carries: a class per piece of furniture, and each combination
+      declares its own tracks. The parent tells the children where they live, and the classes
+      say why.</>],
+    code: [
+      {label: 'CSS', foil: true, lines: [
+        plain('.menu-toggle { position: absolute; right: 24px; }'),
+        plain('.resize-handle { position: absolute; right: 0; width: 24px; }'),
+        plain('.header-cell { padding-right: 48px; }'),
+        aside('/* three numbers agreeing by luck */')
+      ]},
+      {label: 'HTML', lines: [
+        ...span(headerSource, "<div className={classNames('header-cell-content'", '</div>')
+      ]},
+      {label: 'CSS', lines: [
+        ...unit(baseCss, '.header-cell {'), gap,
+        ...unit(baseCss, '.header-cell-content {'), gap,
+        ...unit(baseCss, '.header-cell-content.rankable {'), gap,
+        ...unit(baseCss, '.header-cell-content.resizable {'), gap,
+        ...unit(baseCss, '.header-cell-content.rankable.resizable {')
+      ]}
+    ]
+  },
+  {
     title: 'A handle that is a button',
     want: 'The affordance must be reachable and honest for everyone: a real control at the column’s edge, not a styled sliver of nothing.',
     says: [<>The handle is a
@@ -50,10 +83,12 @@ const steps: StepEntry[] = [
       itself by name, and once the ledger exists its label speaks the share too. This
       is <Mdn path="Web/Accessibility/ARIA">ARIA</Mdn>’s own first rule: prefer the native
       element, because it carries focus, announcement, and activation for free, and the
-      user’s need is met by the platform instead of imitated. CSS gives it
-      its post: absolute on the column’s right edge, the
-      col-resize <Mdn path="Web/CSS/cursor">cursor</Mdn>,
-      and <Mdn path="Web/CSS/touch-action">touch-action</Mdn>: none so the pointer can drag it
+      user’s need is met by the platform instead of imitated. The grid from the
+      last step deals it the header’s end track, and the button carries no width of its own:
+      it is a grid container whose only item is the 8px line its ::after paints, so the
+      painted line is the hit area. The
+      col-resize <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
+      and <Mdn path="Web/CSS/touch-action">touch-action</Mdn>: none lets the pointer drag it
       on a touchscreen.</>],
     code: [
       {label: 'HTML', lines: [
@@ -121,7 +156,8 @@ const stories: StoryEntry[] = [
       'measuring the rendered headers at the first touch, and every resize is a trade ' +
       'between neighbours: whatever one column gains, the next gives, and the sum cannot ' +
       'change.',
-      'The handle captures its pointer and measures the table once, pixels per share; it ' +
+      'The header cell lays its furniture on a grid, so the handle has a track instead of a ' +
+      'post. It captures its pointer and measures the table once, pixels per share; it ' +
       'stops pointer descent, so a boundary drag never becomes a column drag; and the ' +
       'keyboard gets the same road, one fixed step per arrow.'],
     steps}
