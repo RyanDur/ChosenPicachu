@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, ReactNode} from 'react';
 import {Link} from 'react-router';
 import {PillGlider} from '@components/PillGlider';
 import {Paths} from '@pages/Paths';
@@ -175,7 +175,7 @@ const moved = (motion: Motion, pace: Pace, source: string, cssSrc: string): Step
       ]
     };
 
-type Tale = {can: string; soThat: string; tells?: string[]; steps: Step[]};
+type Tale = {can: string; soThat: string; tells?: ReactNode[]; steps: Step[]};
 
 const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
   const source = listSources[pace][origin][motion];
@@ -315,9 +315,10 @@ const stories = (pace: Pace, origin: Origin, motion: Motion): Tale[] => {
           : pace === 'eager'
             ? 'And the crossed card slides home, so the eye keeps the story of the swap.'
             : 'And the whole settle glides once, so the landing explains itself.'),
-        'Some pixels are never ours on this road: the snapshot, the cursor, the macOS ' +
-        'cancel. We name them instead of faking them, and the Tables demo walks the road ' +
-        'that owns them.'],
+        <>Some pixels are never ours on this road: the snapshot, the cursor, the macOS
+        cancel. We name them instead of faking them, and the <Link className="signpost"
+        to={`${Paths.demos}?tab=${DemoTopics.tables}`}>Tables demo</Link> walks the road that
+        owns them.</>],
       steps: [built[0], built[1], built[2], built[3], built[4], built[5], built[6], built[8]]},
     {can: 'The user can sort without a mouse',
       soThat: 'the keys go straight to the order',
@@ -366,14 +367,6 @@ export const NativeRecipe: FC<ControlsProps> = ({pace, origin, motion, onPace, o
         the real one.
       </p>
     </header>
-    <p className="lead">
-      You want the same sortable list the <Link className="signpost"
-      to={`${Paths.demos}?tab=${DemoTopics.tables}`}>Tables demo</Link> builds from pointer
-      events, paid for in platform currency instead: mark a card <Mdn path="Web/HTML/Global_attributes/draggable">draggable</Mdn> and the browser brings
-      the ghost, the cursor, and the drop rules for very little code. What it asks in return is
-      protocol: the native road is a series of consents and timings, and each step below is one
-      of them.
-    </p>
     <StoryList stories={stories(pace, origin, motion)
       .map(story => ({...story,
         steps: story.steps.map(({dial, ...step}) => ({...step, dial: dial && dials[dial]}))}))}/>

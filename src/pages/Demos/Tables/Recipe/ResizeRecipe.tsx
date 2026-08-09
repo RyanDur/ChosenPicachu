@@ -165,8 +165,5 @@ const stories: StoryEntry[] = [
 
 export const ResizeRecipe: FC = () =>
   <section aria-label="build the drag resize yourself" className="build-steps">
-    <header className="brief-line">
-      <h2 className="kicker">build the drag resize yourself</h2>
-    </header>
     <StoryList stories={stories}/>
   </section>;
