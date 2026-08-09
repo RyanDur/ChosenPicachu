@@ -8,10 +8,15 @@ export const crossed = (event: DragEvent<HTMLElement>, homeward: boolean): boole
     : event.clientX > space.left + quarter;
 };
 
-export const crossedVertical = (event: DragEvent<HTMLElement>, homeward: boolean): boolean => {
+export type Carried = {
+  lead: number;
+  trail: number;
+};
+
+export const covering = (event: DragEvent<HTMLElement>, carried: Carried, above: boolean): boolean => {
   const space = event.currentTarget.getBoundingClientRect();
-  const toehold = Math.min(space.height / 4, 48);
-  return homeward
-    ? event.clientY < space.bottom - toehold
-    : event.clientY > space.top + toehold;
+  const third = space.height / 3;
+  return above
+    ? space.bottom - (event.clientY - carried.lead) >= third
+    : (event.clientY + carried.trail) - space.top >= third;
 };
