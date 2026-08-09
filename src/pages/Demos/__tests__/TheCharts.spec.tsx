@@ -82,8 +82,9 @@ describe('a list of charts', () => {
     if (menu === null) throw new Error('no add-a-chart menu');
     await userEvent.click(within(menu).getByText('Candles'));
 
-    expect(await screen.findByRole('region', {name: 'candles'})).toBeVisible();
-    expect(screen.getByRole('region', {name: 'live trades'})).toBeVisible();
+    const candles = await screen.findByRole('region', {name: 'candles'});
+    const price = screen.getByRole('region', {name: 'live trades'});
+    expect(candles.compareDocumentPosition(price)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
   });
 
   test('the charts travel in the url', async () => {

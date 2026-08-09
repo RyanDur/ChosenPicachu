@@ -43,7 +43,7 @@ export const DemosPage = () => {
   const dealtCharts = charts.split(',').filter(isChartKind);
   const chartKinds: readonly ChartKind[] = dealtCharts.length > 0 ? dealtCharts : ['price'];
   const addChart = (kind: ChartKind) => () =>
-    updateSearchParams({charts: [...chartKinds, kind].join(',')});
+    updateSearchParams({charts: [kind, ...chartKinds].join(',')});
   const [accordionContents] = useState(() => Array.from({length: 5}, () => paragraphs(5)));
   const {tradeFeed, tradeProduct} = useEnv();
   const liveTrades = useLiveTrades(tradeFeed, tradeProduct);
@@ -89,14 +89,14 @@ export const DemosPage = () => {
                 <h2 className="headline">{`Bitcoin, live — every ${tradeProduct} trade on Coinbase`}</h2>
                 <output className="status" data-status={liveTrades.status}>{statusCopy[liveTrades.status]}</output>
               </header>
-              {chartKinds.map((kind, at) => kind === 'price'
-                ? <PriceChart key={at} trades={liveTrades.trades}/>
-                : <Candles key={at} trades={liveTrades.trades}/>)}
               <Menu id="add-chart" label="Add a chart" toggle="+"
                     toggleClassName="add-chart button secondary">
                 <button type="button" className="item" onClick={addChart('price')}>Price line</button>
                 <button type="button" className="item" onClick={addChart('candles')}>Candles</button>
               </Menu>
+              {chartKinds.map((kind, at) => kind === 'price'
+                ? <PriceChart key={at} trades={liveTrades.trades}/>
+                : <Candles key={at} trades={liveTrades.trades}/>)}
             </>,
             [DemoTopics.tables]: <>
               <Aggregations trades={liveTrades.trades} pace={pace} origin={origin} motion={motion}/>
