@@ -10,7 +10,10 @@ import {UsersPage} from '@pages/Users/component';
 
 const cellAt = (column: number, row: number): HTMLElement => {
   const [, tbody] = screen.getAllByRole('rowgroup');
-  return within(within(tbody).getAllByRole('row')[row]).getAllByRole('cell')[column];
+  const lane = within(tbody).getAllByRole('row')[row];
+  const seat = [lane.querySelector('th'), ...lane.querySelectorAll('td')][column];
+  if (seat === null || seat === undefined) throw new Error(`no cell ${column} in row ${row}`);
+  return seat;
 };
 
 describe('the users page', () => {
@@ -24,6 +27,25 @@ describe('the users page', () => {
     users.add = testResource.add;
     users.update = testResource.update;
     users.delete = testResource.delete;
+  });
+
+  describe('ranking the users', () => {
+    it('ranks by a column menu criterion', async () => {
+      renderWithRouter(<UsersPage/>, {});
+      const cities = () => within(screen.getAllByRole('rowgroup')[1]).getAllByRole('row')
+        .map(row => row.querySelectorAll('th, td')[1]?.textContent ?? '');
+      await waitFor(() => expect(cities().length).toBeGreaterThan(1));
+      const dealt = cities();
+
+      const toggle = screen.getByRole('button', {name: 'sort homeCity'});
+      const menu = document.getElementById(toggle.getAttribute('popovertarget') ?? '');
+      if (menu === null) throw new Error('no menu for homeCity');
+      await userEvent.click(within(menu).getByText('ascending'));
+
+      expect(cities()).toEqual([...dealt].sort((left, right) => left.localeCompare(right)));
+      expect(screen.getAllByRole('button', {name: /move row/}).length).toBeGreaterThan(0);
+      expect(screen.getAllByRole('button', {name: /resize homeCity/}).length).toBe(1);
+    });
   });
 
   describe('adding a user', () => {

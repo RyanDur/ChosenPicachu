@@ -8,7 +8,7 @@ import './Table.css';
 export type Cell = {
   display: ReactNode;
   className?: string;
-  value?: number;
+  value?: number | string;
 }
 
 export type Row = {
