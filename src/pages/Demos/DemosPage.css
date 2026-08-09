@@ -85,3 +85,18 @@
     max-width: var(--measure);
   }
 }
+
+.add-chart {
+  align-self: center;
+  width: var(--base-x-6);
+  height: var(--base-x-6);
+  border-radius: 50%;
+  font-size: var(--base-x-4);
+  line-height: 1;
+  padding: 0;
+}
+
+#add-chart {
+  position-area: block-start;
+  position-try-fallbacks: flip-block;
+}
