@@ -1,11 +1,11 @@
 window.__env = {
-  tradeFeed: 'wss://feed.test',
-  tradeProduct: 'BTC-USD',
-  tradeHistory: 'https://history.test',
-  aicDomain: 'https://aic.com',
-  harvardDomain: 'https://harvard.com',
-  harvardAPIKey: 'YOUR_API_KEY',
-  vamDomain: 'https://vam.com'
+  tradeFeed: import.meta.env.VITE_APP_TRADE_FEED,
+  tradeProduct: import.meta.env.VITE_APP_TRADE_PRODUCT,
+  tradeHistory: import.meta.env.VITE_APP_TRADE_HISTORY,
+  aicDomain: import.meta.env.VITE_APP_API_AIC,
+  harvardDomain: import.meta.env.VITE_APP_HARVARD_API,
+  harvardAPIKey: import.meta.env.VITE_APP_HARVARD_API_KEY,
+  vamDomain: import.meta.env.VITE_APP_VAM_API
 };
 
 export {};

@@ -14,9 +14,7 @@
     "preview": "vite preview",
     "tsc": "tsc -b",
     "lint:css": "stylelint --max-warnings 0 'src/**/*.css'",
-    "lighthouse:record": "node scripts/lighthouse/record.mjs",
-    "predev": "node scripts/write-env.mjs",
-    "prebuild": "node scripts/write-env.mjs"
+    "lighthouse:record": "node scripts/lighthouse/record.mjs"
   },
   "dependencies": {
     "@ngneat/falso": "^8.0.2",

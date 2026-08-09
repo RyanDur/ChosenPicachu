@@ -28,4 +28,3 @@ dist-ssr
 test-results/
 playwright-report/
 .lighthouseci/
-public/env.js
