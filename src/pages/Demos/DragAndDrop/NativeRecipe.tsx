@@ -359,16 +359,6 @@ export const NativeRecipe: FC<ControlsProps> = ({pace, origin, motion, onPace, o
                         onChoose={onMotion}/>
   };
   return <section aria-label="build the native drag sort yourself" className="build-steps">
-    <header className="brief-line">
-      <h2 className="kicker">build the native drag sort yourself</h2>
-      <p className="brief">
-        The one demo on this site built on the API actually named drag-and-drop, told as its
-        stories of consent and timing. The dials choose one of eight lists, the readout names
-        the one on screen, and the real code is carved from that list’s own source. Where
-        there is a wrong way you would reach for first, it appears in a dashed frame before
-        the real one.
-      </p>
-    </header>
     <StoryList param="native" stories={stories(pace, origin, motion)
       .map(story => ({...story,
         steps: story.steps.map(({dial, ...step}) => ({...step, dial: dial && dials[dial]}))}))}/>

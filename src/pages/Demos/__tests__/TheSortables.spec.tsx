@@ -163,6 +163,9 @@ describe('the sortable list demo', () => {
     await feedIsSubscribed();
     const recipe = screen.getByRole('region', {name: 'build the native drag sort yourself'});
     expect(recipe).toBeVisible();
+    expect(screen.getByRole('heading', {name: 'let’s build this feature'})).toBeVisible();
+    expect(screen.getByText(/the order is mine/)).toBeVisible();
+    expect(screen.getByText(/The list is our interpretation of that/)).toBeVisible();
     expect(recipe).toHaveTextContent(/Arm the drag from its handle/);
     expect(recipe).toHaveTextContent(/Accept the drop, or the platform takes it back/);
     expect(recipe).toHaveTextContent(/Commit inside the crossing/);
