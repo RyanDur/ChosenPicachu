@@ -28,7 +28,7 @@
   border-right: var(--hairline) solid var(--charcoal);
 }
 
-.column-ghost .shared {
+.fancy-table.column-ghost .cell.shared {
   --share: 0;
 
   width: var(--share);
