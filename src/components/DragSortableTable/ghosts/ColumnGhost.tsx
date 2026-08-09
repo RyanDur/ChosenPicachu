@@ -1,4 +1,5 @@
 import {FC} from 'react';
+import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {Column, Row} from '@components/Table';
 import {Ghost, GhostDress} from './dress';
@@ -9,9 +10,10 @@ type Props = {
     dress: GhostDress;
     column: Column;
     rows: readonly Row[];
+    heights: readonly (number | undefined)[];
 };
 
-export const ColumnGhost: FC<Props> = ({at, drift, dress, column, rows}) =>
+export const ColumnGhost: FC<Props> = ({at, drift, dress, column, rows, heights}) =>
     <Ghost at={at} drift={drift} className={dress.table}>
         <thead className={dress.thead}>
         <tr className={dress.headerRow}>
@@ -23,7 +25,8 @@ export const ColumnGhost: FC<Props> = ({at, drift, dress, column, rows}) =>
         </tr>
         </thead>
         <tbody className={dress.tbody}>{rows.map((row, place) =>
-            <tr className={dress.row} key={place}>
+            <tr className={dress.row} key={place}
+                style={has(heights[place]) ? {'--seat-height': `${heights[place]}px`} : undefined}>
                 <td className={classNames(dress.cell, row[column.column].className, 'ellipsis')}>
                     {row[column.column].display}
                 </td>

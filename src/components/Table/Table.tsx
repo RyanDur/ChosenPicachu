@@ -17,6 +17,7 @@ export type Row = {
 
 export type Column = Cell & {
   column: string;
+  sortable?: boolean;
 }
 
 export type Dress = {

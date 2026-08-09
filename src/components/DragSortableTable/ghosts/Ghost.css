@@ -18,6 +18,12 @@
   will-change: transform;
 }
 
+.column-ghost .row {
+  --seat-height: auto;
+
+  height: var(--seat-height);
+}
+
 .fancy-table.column-ghost .cell:last-child {
   border-right: var(--hairline) solid var(--charcoal);
 }

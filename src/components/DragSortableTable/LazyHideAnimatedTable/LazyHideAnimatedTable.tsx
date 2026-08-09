@@ -42,7 +42,7 @@ export const LazyHideAnimatedTable: FC<LazyHideAnimatedTableProps> = (
         setSlid(displaced(order, column, struck, survey));
         placedColumn(column, interior(order.indexOf(struck), order.length));
     };
-    const columnsTravel = useColumnTravel(order, settleColumn);
+    const columnsTravel = useColumnTravel(order, standing, settleColumn);
 
     const settleRow = (row: number, struck: number, heights: Shifted): void => {
         const after = array.moveToIndex(seats.indexOf(struck), row, seats);

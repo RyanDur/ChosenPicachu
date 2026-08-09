@@ -37,7 +37,7 @@ export const EagerKeepStaticTable: FC<EagerKeepStaticTableProps> = (
         setOrdered(previous => placed(previous, column, to));
     const settleColumn = (column: string, struck: string): void =>
         placedColumn(column, interior(order.indexOf(struck), order.length));
-    const columnsTravel = useColumnTravel(order, settleColumn);
+    const columnsTravel = useColumnTravel(order, standing, settleColumn);
 
     const settleRow = (row: number, struck: number): void =>
         setSeats(array.moveToIndex(seats.indexOf(struck), row, seats));

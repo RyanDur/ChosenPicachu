@@ -1,14 +1,15 @@
 import {PointerEvent, useState} from 'react';
 import {has} from '@ryandur/sand';
 import {Drift, Flight, grounded, still} from '../travel';
-import {Bounds, bounded, columnUnder} from '../survey';
+import {Bounds, Survey, surveyed, columnUnder} from '../survey';
 
 export const useColumnTravel = (
     order: readonly string[],
+    standing: readonly number[],
     settle: (column: string, struck: string, survey: Bounds) => void
 ) => {
     const [aloft, setAloft] = useState<string>();
-    const [bounds, setBounds] = useState<Bounds>();
+    const [bounds, setBounds] = useState<Survey>();
     const [flight, setFlight] = useState<Flight>(grounded);
     const [origin, setOrigin] = useState<Drift>();
     const [drift, setDrift] = useState<Drift>(still);
@@ -20,7 +21,7 @@ export const useColumnTravel = (
             const anchored = event.currentTarget.getBoundingClientRect();
             const table = event.currentTarget.closest('table');
             if (has(table)) {
-                setBounds(bounded(table, order));
+                setBounds(surveyed(table, order, standing));
             }
             setFlight({x: anchored.x, y: anchored.y, width: anchored.width});
             setAloft(column);

@@ -100,7 +100,7 @@ export const Header: FC<Props> = (
              }}>
     <div className="header-cell-content">
       {column.display}
-      {has(onRule) && position > 0 &&
+      {has(onRule) && column.sortable &&
           <SortMenu column={columnName} sorted={sorted} onRule={onRule}/>}
       {resizable && order.length > 1 &&
           <ResizeHandle column={columnName} share={share}

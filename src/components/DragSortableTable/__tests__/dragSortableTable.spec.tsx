@@ -181,6 +181,11 @@ describe('drag sortable columns', () => {
 
   test('the travelling ghost carries the whole column', () => {
     render(<EagerKeepStaticTable columns={sized} rows={people} draggableColumns/>);
+    [...sourceTable().querySelectorAll('tr')].slice(1).forEach((lane, at) => {
+      lane.getBoundingClientRect = () => ({
+        left: 0, right: 0, top: 0, bottom: 0, width: 0, height: 40 + at * 10, x: 0, y: 0, toJSON: () => ({})
+      });
+    });
 
     lift('age');
 
@@ -190,6 +195,10 @@ describe('drag sortable columns', () => {
     expect(ghost.querySelectorAll('tbody tr')).toHaveLength(1);
     expect(ghost.textContent).toContain('age');
     expect(ghost.textContent).toContain('36');
+    const carriedRows = ghost.querySelector('tbody');
+    if (carriedRows === null) throw new Error('the ghost has no body');
+    expect([...carriedRows.rows].map(lane => lane.style.getPropertyValue('--seat-height')))
+      .toEqual(['40px']);
 
     fireEvent.pointerMove(surface(), {buttons: 1, clientX: 300, clientY: 200, pointerId: 1});
     fireEvent.pointerMove(surface(), {buttons: 1, clientX: 320, clientY: 215, pointerId: 1});
@@ -368,8 +377,8 @@ describe('drag sortable rows', () => {
 describe('sort criteria menus', () => {
   const sized = [
     {display: 'name', column: 'name'},
-    {display: 'age', column: 'age'},
-    {display: 'city', column: 'city'}
+    {display: 'age', column: 'age', sortable: true},
+    {display: 'city', column: 'city', sortable: true}
   ];
   const people = [
     {name: {display: 'Ada'}, age: {display: '36', value: 36}, city: {display: 'London'}},
@@ -459,7 +468,7 @@ describe('sort criteria menus', () => {
     expect(screen.getAllByRole('table')).toHaveLength(1);
   });
 
-  test('the first column keeps its own counsel', () => {
+  test('a menu appears only where the column asks for one', () => {
     render(<EagerKeepStaticTable columns={sized} rows={people} sortable/>);
 
     expect(screen.queryByRole('button', {name: 'sort name'})).toBeNull();
