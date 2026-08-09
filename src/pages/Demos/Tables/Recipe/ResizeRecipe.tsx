@@ -43,18 +43,18 @@ const steps: StepEntry[] = [
     ]
   },
   {
-    title: 'A handle that announces itself',
-    want: 'A resize affordance is invisible to assistive tech unless it says what it is, ' +
-      'where it stands, and how far it can go.',
+    title: 'A handle that is a button',
+    want: 'The affordance must be reachable and honest for everyone: a real control at the column’s edge, not a styled sliver of nothing.',
     says: [<>The handle is a
-      real <Mdn path="Web/Accessibility/ARIA/Roles/separator_role">separator</Mdn> with a value:
-      now, minimum, and maximum, focusable from the keyboard. CSS gives it its post: absolute on
-      the column’s right edge, the col-resize <Mdn path="Web/CSS/cursor">cursor</Mdn>,
+      native <Mdn path="Web/HTML/Element/button">button</Mdn>: focusable by birth, announcing
+      itself by name, and once the ledger exists its label speaks the share too. CSS gives it
+      its post: absolute on the column’s right edge, the
+      col-resize <Mdn path="Web/CSS/cursor">cursor</Mdn>,
       and <Mdn path="Web/CSS/touch-action">touch-action</Mdn>: none so the pointer can drag it
       on a touchscreen.</>],
     code: [
       {label: 'HTML', lines: [
-        ...span(resizeSource, '<i role="separator"', 'aria-valuemax')
+        ...span(resizeSource, '<button type="button"', ': `resize ${column}`}')
       ]},
       {label: 'CSS', lines: [
         ...unit(baseCss, '.resize-handle {')
@@ -97,7 +97,7 @@ const steps: StepEntry[] = [
       'column into a drag.',
     says: [<>The
       handle <Mdn path="Web/API/Event/stopPropagation">stops pointer descent</Mdn>, so the sort
-      never hears the press, and the keyboard gets its own road: focus the separator and the
+      never hears the press, and the keyboard gets its own road: focus the handle and the
       arrow keys trade a fixed step, no pointer required.</>],
     code: [
       {label: 'JS', lines: [
