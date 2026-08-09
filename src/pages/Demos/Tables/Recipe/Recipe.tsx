@@ -6,7 +6,7 @@ import {Picks} from '../Picks';
 import {Paths} from '@pages/Paths';
 import {DemoTopics} from '../../types';
 import {Motion, Origin, Pace} from '../../Controls';
-import {StepEntry, StepList, aside, plain} from '../../Recipe/StepList';
+import {StepEntry, StoryList, aside, plain} from '../../Recipe/StepList';
 import {Mdn} from '../../Recipe/Mdn';
 import {span, unit} from '../../Recipe/carve';
 import {SlotsFigure} from './SlotsFigure';
@@ -89,7 +89,7 @@ const held = (pace: 'eager' | 'lazy', hookSrc: string): Step => pace === 'eager'
   ? {
     title: 'Commit inside the move',
     dial: 'pace',
-    want: 'You want the table to answer the hand immediately; waiting for the drop hides the outcome until it is too late to change your mind.',
+    want: 'The trader wants the table to answer inside the move, so that they can change their mind before the drop.',
     says: ['With eager pace, settle as soon as a neighbour is struck: the order state updates ' +
       'mid-drag, and because the markup renders through that order, the same key finds its new ' +
       'seat and React moves the real cells. Carrying the column back is just more crossings: ' +
@@ -110,7 +110,7 @@ const held = (pace: 'eager' | 'lazy', hookSrc: string): Step => pace === 'eager'
   : {
     title: 'Stash the landing, commit on release',
     dial: 'pace',
-    want: 'You want the table calm while you drag, because mid-flight churn distracts and only the destination matters.',
+    want: 'The trader wants the table calm while they drag, because mid-flight churn distracts and only the destination matters.',
     says: ['With lazy pace, remember the last neighbour struck and do nothing else. The table ' +
       'holds still, and one moveToIndex runs on pointer up. Drifting back over your own slot ' +
       'clears the landing, so a drop at home changes nothing.',
@@ -129,7 +129,7 @@ const shown = (origin: 'keep' | 'hide', source: string, headerSrc: string, cssSr
   ? {
     title: 'Blank the origin while it is aloft',
     dial: 'origin',
-    want: 'With the ghost in hand, the origin column reads as a duplicate: two of the same thing, and no visible gap to say where the drop will land.',
+    want: 'With the ghost in hand, the trader reads the origin column as a duplicate, and nothing says where the drop will land.',
     says: [<>The disappearance takes a component choice and one word of CSS. This is the hide
       table, so there is no flag anywhere: the markup compares the aloft key against each
       cell, and CSS does the
@@ -154,7 +154,7 @@ const shown = (origin: 'keep' | 'hide', source: string, headerSrc: string, cssSr
   : {
     title: 'Leave the origin in place while it is aloft',
     dial: 'origin',
-    want: 'A vanished origin can disorient; sometimes the eye wants the column both at rest and in hand while it decides.',
+    want: 'A vanished origin can disorient; some traders want the column both at rest and in hand while they decide.',
     says: ['Render the lifted key normally underneath the ghost. There are two of it for the ' +
       'length of the drag, which reads as a copy being carried out of a still-intact table. ' +
       'This is the keep table: no hiding code exists in it, so there is nothing to erase.'],
@@ -169,7 +169,7 @@ const moved = (animated: boolean, source: string, cssSrc: string): Step => anima
   ? {
     title: 'Slide the theater, not the layout',
     dial: 'motion',
-    want: 'A swap that teleports is honest but hard to follow; the eye loses which column went where. Yet animating the layout itself makes the whole table bounce, because layout is load-bearing.',
+    want: 'The trader must be able to follow which column went where; a teleport is honest but unreadable, and animating the layout itself would bounce the whole table, because layout is load-bearing.',
     says: [
       <>A swap commits instantly: the carried column already sits at full width in its new
       slot, hidden or under the ghost, and the layout underneath is final. The displaced column
@@ -177,12 +177,11 @@ const moved = (animated: boolean, source: string, cssSrc: string): Step => anima
       a <Mdn path="Web/CSS/transform">transform</Mdn>. Transforms cannot move layout, so nothing
       else can shift: a bounce is impossible by construction.</>,
       <>The three languages split the trick cleanly. JavaScript marks who was displaced and
-      hands over two numbers it already owns: the carried share and each row’s drop. The markup
-      carries the mark as a class that arrives exactly as the reorder moves the node. CSS does
-      all the moving: the table is a size container,
-      so <Mdn path="Web/CSS/length#container_query_length_units">1cqi</Mdn> is one percent of
-      its width, and a <Mdn path="Web/CSS/@keyframes">keyframe</Mdn>’s from is the old position;
-      applying the class starts the slide fresh,
+      hands over two lengths it already owns, both measured by the survey: the carried
+      column’s width and each row’s drop. The markup carries the mark as a class that arrives
+      exactly as the reorder moves the node. CSS does all the moving:
+      a <Mdn path="Web/CSS/@keyframes">keyframe</Mdn>’s from is the old position, a pixel
+      length the survey measured at the lift; applying the class starts the slide fresh,
       and <Mdn path="Web/API/Element/animationend_event">animationend</Mdn> hands the class
       back.</>,
       'Rows are the same theater turned vertical: heights measured once, in whatever event ' +
@@ -204,7 +203,6 @@ const moved = (animated: boolean, source: string, cssSrc: string): Step => anima
         aside('{/* the reorder moves the node; the class rides along */}')
       ]},
       {label: 'CSS', lines: [
-        ...unit(cssSrc, '.staged {'), gap,
         ...unit(cssSrc, '.sortable .displaced {'), gap,
         ...unit(cssSrc, '.sortable .shifted {'), gap,
         ...unit(cssSrc, '@keyframes displaced'),
@@ -216,7 +214,7 @@ const moved = (animated: boolean, source: string, cssSrc: string): Step => anima
   : {
     title: 'Apply the state update directly',
     dial: 'motion',
-    want: 'Motion is not free: it competes with the pointer, costs a frame budget, and some users ask for none at all.',
+    want: 'Motion is not free: it competes with the pointer, costs a frame budget, and some traders ask for none at all.',
     says: ['The static table is not the animated one with a switch off; it is a different ' +
       'table with no marking code in it. Its settle is the whole story: move the key, let ' +
       'React paint, and there is nothing else, because nothing else exists in this file. ' +
@@ -230,15 +228,71 @@ const moved = (animated: boolean, source: string, cssSrc: string): Step => anima
     ]
   };
 
-const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
+const vertical = (source: string): Step => ({
+  title: 'Turn the theater vertical',
+  want: 'A window is a row: the same carry on a second axis, and the hand needs something honest to hold.',
+  says: ['Rows ride the machinery the columns built, with three substitutions. The grip is a ' +
+    'real button, so the hand has a target and the keyboard will later get one free. The ' +
+    'survey learns row heights at lift, measured once like everything else. And cardUnder ' +
+    'answers which seat sits under the pointer, columnUnder turned vertical. Two more words: ' +
+    'the seats are the seating chart, the rows’ order, and a card is one row’s identity. The ' +
+    'settle is the same story: the moved card takes its new seat, and the rest ride along.'],
+  code: [
+    {label: 'HTML', lines: [
+      ...span(gripSource, '<button', '</button>'),
+      aside('{/* focusable by birth; the keyboard track will thank us */}')
+    ]},
+    {label: 'JS', lines: [
+      ...unit(surveySource, 'export const cardUnder'), gap,
+      ...unit(source, 'const settleRow = ')
+    ]}
+  ]
+});
+
+
+type Tale = {can: string; soThat: string; tells?: string[]; steps: Step[]};
+
+const pacedStory = (pace: Pace): Omit<Tale, 'steps'> => pace === 'eager'
+  ? {can: 'The trader sees the sort happen while they drag', soThat: 'a wrong grab costs nothing',
+    tells: ['We could wait for the drop, but then you cannot change your mind until it is ' +
+      'too late; so we commit while you drag. The state updates mid-drag and React moves the ' +
+      'real cells, and carrying a column back is just more crossings; home is always ' +
+      'reachable before you let go.']}
+  : {can: 'The trader drags in calm, and the sort lands on the drop', soThat: 'only the destination matters',
+    tells: ['We could commit on every crossing, but a long drag would churn the table under ' +
+      'your hand; so we remember where you are hovering and commit once, on the drop. ' +
+      'Nothing moves until you let go.']};
+
+const shownStory = (origin: Origin): Omit<Tale, 'steps'> => origin === 'hide'
+  ? {can: 'The trader sees a gap where the column left', soThat: 'the landing is never a guess',
+    tells: ['We could unmount the origin while it travels, but its space would collapse and ' +
+      'the whole table would shift; so we hide it with CSS. It never unmounts, its layout ' +
+      'space stays, and the gap you see is exactly where the drop will land.']}
+  : {can: 'The trader keeps the column in sight while its copy travels', soThat: 'nothing vanishes while they decide',
+    tells: ['We could hide the origin, but some traders want it in sight while they decide; ' +
+      'so we do nothing. The column stays seated, the ghost in your hand is a second copy, ' +
+      'and there is no hiding code to write or to get wrong.']};
+
+const movedStory = (motion: Motion): Omit<Tale, 'steps'> => motion === 'animated'
+  ? {can: 'The trader watches the swap slide into place', soThat: 'the eye never loses a column',
+    tells: ['We could animate the layout itself, but the whole table would bounce, because ' +
+      'layout is load-bearing; so the swap commits instantly, and the displaced column is ' +
+      'only drawn where it used to be, sliding home on a transform. Transforms cannot move ' +
+      'layout, so nothing else can shift while it slides.']}
+  : {can: 'The trader gets the swap instantly, with no motion', soThat: 'nothing competes with the pointer',
+    tells: ['We could run the animation for everyone, but motion is not free and some ' +
+      'traders ask for none; so this variant applies the state and lets React paint. No ' +
+      'animation code exists in it, so there is nothing to pace and nothing to interrupt.']};
+
+const pointerStories = (pace: Pace, origin: Origin, motion: Motion): Tale[] => {
   const source = tableSources[pace][origin][motion];
   const headerSrc = headerSources[pace][origin][motion];
   const hookSrc = hookSources[pace][origin][motion];
   const cssSrc = cssSources[pace][origin][motion] ?? '';
-  return [
+  const mechanics: Step[] = [
   {
     title: 'Let CSS carry its share',
-    want: 'A drag built in JavaScript alone ends up reimplementing what the platform already does (cursors, keyboard, focus, selection) and doing each of them worse.',
+    want: 'Whatever the trader arrives with (mouse, touchscreen, keyboard), the platform’s manners come first: cursors that offer the hand, touch that drags, selections that never smear mid-drag.',
     says: [
       <>The markup stays honest HTML, a real table with real headers, so the semantics come
       free: the row grip is a button that reorders rows from the arrow keys without a line of
@@ -269,7 +323,7 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
   },
   {
     title: 'Keep the order in state, not in the data',
-    want: 'The stream keeps producing rows in its own order, and if reordering meant rewriting the data, every trade that lands would fight every drag.',
+    want: 'Every story runs against the stream: a reorder that rewrote the data would lose to the next trade, so order and data must never fight.',
     says: ['Rows and columns arrive in whatever order the fold produced. Hold the ordered ' +
       'columns and the seats as state, and render the markup through them, so a reorder never ' +
       'touches the data: the same key finds its new seat and React moves the real nodes.'],
@@ -286,13 +340,20 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
   },
   {
     title: 'Lift on pointer down, and measure the table once',
-    want: 'A drag needs to know where everything is, but asking the DOM on every move forces layout again and again. And mid-reorder, the DOM is the wrong authority anyway.',
+    want: 'A carry must know the ground it stands on without asking the DOM again on every twitch of the hand.',
     says: [<>The hand is CSS before anything happens, grab on hover, grabbing on press, and
       touch-action: none is why the pointer can drag on touch at all. On pointerdown,
       JavaScript records which key is aloft and measures the
-      table’s <Mdn path="Web/API/Element/getBoundingClientRect">bounding rect</Mdn> a single
-      time: the survey. Everything that follows is math against the survey; measuring per move
-      would fight the reorder you are about to apply.</>],
+      table’s <Mdn path="Web/API/Element/getBoundingClientRect">bounding rect</Mdn>, and every
+      header in it, a single time: the survey. Everything that follows is math against the survey; measuring per move
+      would fight the reorder you are about to apply.</>,
+      <>Three words you will see in every block from here. Aloft is whatever you are
+      carrying, named by its key. The survey is a plain record of that one measurement: the
+      table’s box, each column’s width, and later the row heights. And has is this site’s null check, from a small
+      library called <a className="signpost"
+        href="https://ryandur.github.io/sand/"
+        target="_blank"
+        rel="noreferrer">sand</a>; it answers false for nothing and for empty.</>],
     code: [
       {label: 'JS', lines: [
         ...unit(hookSrc, 'const lift = '), gap,
@@ -305,7 +366,7 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
   },
   {
     title: 'Give the drag a surface of its own',
-    want: 'A drag outruns the element it started on: the pointer leaves the header, handlers close over stale state, and the release can happen anywhere, even outside the window.',
+    want: 'The carry outruns the header it grabbed: the pointer leaves the element mid-drag, and the release can land anywhere, even outside the window.',
     says: ['Your first surface is the document: add two listeners at lift, remove them at drop. ' +
       'Now travel is running against the order as it stood when the drag began, and every path ' +
       'out of the drag owes you a cleanup.',
@@ -340,10 +401,11 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
   },
   {
     title: 'Draw the ghost by hand',
-    want: 'You need to see what you are carrying, but cloning DOM nodes is brittle, and measuring the ghost on every move is what makes drags stutter.',
+    want: 'The carried column has to be visible in the hand, smoothly, on slow machines too.',
     says: [<>The column in your hand is not a clone of DOM nodes. It is a second table rendered
-      from the same data, fixed at the lift point, its transform rendered from a drift held in
-      state. Each pointer move sets the drift and React paints the translation; CSS keeps the
+      from the same data. The flight is where you grabbed it; the drift is how far you have
+      moved since; both are state, and the ghost renders at the flight, translated by the
+      drift. Each pointer move sets the drift and React paints the translation; CSS keeps the
       ghost out of hit-testing with <Mdn path="Web/CSS/pointer-events">pointer-events</Mdn>: none
       and promises the browser motion with <Mdn path="Web/CSS/will-change">will-change</Mdn>.
       Nothing is measured per move, which is what keeps slower engines smooth.</>],
@@ -363,7 +425,7 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
   },
   {
     title: 'Find the neighbour under the pointer, with a dead zone',
-    want: 'Hit-test naively and the order chatters: at a boundary, every pixel of movement flips the swap back and forth.',
+    want: 'A drift along a boundary must not chatter the order under the hand.',
     says: [<>This step is JavaScript alone, on purpose: where the pointer is, in table terms,
       is a walk over cumulative column widths: arithmetic on the survey,
       never <Mdn path="Web/API/Document/elementFromPoint">elementFromPoint</Mdn>. A{' '}
@@ -379,18 +441,36 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
         ...unit(surveySource, 'export const columnUnder')
       ]}
     ]
-  },
-  held(pace, hookSrc),
-  shown(origin, source, headerSrc, cssSrc),
-  moved(motion === 'animated', source, cssSrc)
-];
+  }
+  ];
+  return [
+    {can: 'The trader can sort by column',
+      soThat: 'the measures they compare sit beside each other',
+      tells: ['The trader needs to move a column while the stream writes. We could reorder ' +
+        'the data itself, but every trade that lands would fight every drag; so the order is ' +
+        'its own piece of state, and the markup renders through it. Moving a column is just ' +
+        'changing the order. We could ask the DOM where everything is as the pointer moves, ' +
+        'but layout queries during a drag cause the jank we are trying to avoid; so ' +
+        'everything the drag needs gets measured once, when you grab.'],
+      steps: mechanics},
+    {can: 'The trader can sort by row',
+      soThat: 'the windows they watch closest sit on top',
+      tells: ['We could build rows their own machinery, but the need is the same motion ' +
+        'turned vertical; so rows ride what the columns built. The differences that remain ' +
+        'are honest ones: a grip button to grab, row heights in the survey, and a vertical ' +
+        'hit test.'],
+      steps: [vertical(source)]},
+    {...pacedStory(pace), steps: [held(pace, hookSrc)]},
+    {...shownStory(origin), steps: [shown(origin, source, headerSrc, cssSrc)]},
+    {...movedStory(motion), steps: [moved(motion === 'animated', source, cssSrc)]}
+  ];
 };
 
 const nudgedBoth = (animated: boolean): Step => animated
   ? {
     title: 'Both parties slide, each by the other’s share',
     dial: 'motion',
-    want: 'A pointer swap has a ghost in hand to explain itself; a keyboard swap has no hand, and if only the neighbour slid, the walked column would simply teleport.',
+    want: 'A pointer swap explains itself with a ghost in hand; the trader’s keyboard swap has no hand, and if only the neighbour slid, the walked column would simply teleport.',
     says: ['Mark both columns displaced. The swap still commits instantly, the same theater ' +
       'the pointer track built, but now each party is drawn starting from the seat it just ' +
       'left, offset by the other’s share, sliding home on the same keyframes. The classes ' +
@@ -409,7 +489,7 @@ const nudgedBoth = (animated: boolean): Step => animated
   : {
     title: 'Cut on the keypress',
     dial: 'motion',
-    want: 'Motion is not free, a held key multiplies it, and some users ask for none at all.',
+    want: 'Motion is not free, a held key multiplies it, and some traders ask for none at all.',
     says: ['Apply the order and mark nothing; the swap paints on the next frame. With no ' +
       'animation running there is nothing to pace, so a held arrow walks the column exactly as ' +
       'fast as the key repeats.'],
@@ -421,12 +501,12 @@ const nudgedBoth = (animated: boolean): Step => animated
     ]
   };
 
-const keyedSteps = (motion: Motion): Step[] => {
+const keyedStories = (motion: Motion): Tale[] => {
   const headerSrc = headerSources.eager.keep[motion];
-  return [
+  const steps: Step[] = [
   {
     title: 'Give focus a place to land',
-    want: 'A drag answers only the hand, and though the keyboard can reach the page, a plain header holds no focus; there is nothing to press.',
+    want: 'The trader without a pointer expects the same reorders, and first, focus needs a place to land; a plain header holds none.',
     says: [<>HTML nearly solves this alone: the row grip is a button, focusable by birth, and
       the headers ask for focus with
       a <Mdn path="Web/HTML/Global_attributes/tabindex">tabIndex</Mdn>, so Tab walks every
@@ -446,7 +526,7 @@ const keyedSteps = (motion: Motion): Step[] => {
   },
   {
     title: 'Arrows speak direction',
-    want: 'Focus can reach a column, but the platform ships no verb for “swap left”; the keyboard needs one.',
+    want: 'The trader’s focus can reach a column, but the platform ships no verb for “swap left”; they need one.',
     says: [<>A <Mdn path="Web/API/Element/keydown_event">keydown</Mdn> handler claims the two
       arrows and nothing else, so every other key falls through untouched and tabbing and the
       sort menu keep
@@ -465,7 +545,7 @@ const keyedSteps = (motion: Motion): Step[] => {
   ...motion === 'animated'
     ? [{
       title: 'Let the slide pace the key',
-      want: 'A held arrow autorepeats faster than the slide runs: nudges land mid-flight and the column outruns its own theater.',
+      want: 'The trader holds the arrow, and autorepeat must not outrun the slide: nudges landing mid-flight would outrun the theater.',
       says: ['The reflex is a timer: block the keys for however long the slide takes, and hope ' +
         'the number matches the CSS.',
         <>There are no timers in this step: before nudging, ask the element whether an
@@ -486,7 +566,13 @@ const keyedSteps = (motion: Motion): Step[] => {
       ]
     } satisfies Step]
     : []
-];
+  ];
+  return [{can: 'The trader can sort without a mouse',
+    soThat: 'the table answers whoever arrives at it',
+    tells: ['We could build the keyboard its own sorting system, but the state, the clamps, ' +
+      'and the slides already exist; so this track is about access. Focus reaches every grip ' +
+      'and every header, and two arrow keys get everything the hand has.'],
+    steps}];
 };
 
 type Props = {
@@ -531,10 +617,12 @@ export const Recipe: FC<Props> = ({track, onTrack, pace, origin, motion, onPace,
     <header className="brief-line">
       <h2 className="kicker">build the drag sort yourself</h2>
       <p className="brief">
-        Everything below is built without a drag-and-drop library and told one hand at a time:
-        take the pointer’s track or the keyboard’s. Wherever a step depends on a dial under the
-        table, that dial sits on the step, and the writing follows it. Where there is
-        a wrong way you would reach for first, it appears in a dashed frame before the real one.
+        Everything below is built without a drag-and-drop library and told as its stories:
+        what the trader can do, and why, then the features each story demands. Take the
+        pointer’s track or the keyboard’s.
+        Wherever a step depends on a dial under the table, that dial sits on the step. Where
+        there is a wrong way you would reach for first, it appears in a dashed frame before
+        the real one.
       </p>
     </header>
     <Picks label="input track"
@@ -546,11 +634,6 @@ export const Recipe: FC<Props> = ({track, onTrack, pace, origin, motion, onPace,
            chosen={track}
            onPick={onTrack}/>
     {track === 'pointer' ? <>
-    <p className="lead">
-      You want a live table whose columns and rows can be dragged into any order, eagerly or on
-      the drop, origin shown or hidden, sliding or cutting, while the data keeps streaming
-      underneath, and having that means owning every pixel of the interaction.
-    </p>
     <p className="lead">
       There are two roads to dragging something across a page, and this site walks both. The{' '}
       <Link className="signpost" to={`${Paths.demos}?tab=${DemoTopics.dragAndDrop}`}>Drag sort
@@ -582,10 +665,8 @@ export const Recipe: FC<Props> = ({track, onTrack, pace, origin, motion, onPace,
     </p>
     </> : <>
     <p className="lead">
-      You want every reorder the hand can make, made from the keyboard: a column walked left or
-      right, a row up or down, the same slides explaining the same swaps. It turns out to
-      need almost nothing new: the state, the clamps, and the theater all exist, so this track is
-      about letting focus reach them and letting two keys speak.
+      It turns out to need almost nothing new: the state, the clamps, and the theater all
+      exist, so this track is about letting focus reach them and letting two keys speak.
     </p>
     <p className="lead">
       Two of the dials go quiet here: pace and origin describe a drag session, what happens
@@ -593,9 +674,10 @@ export const Recipe: FC<Props> = ({track, onTrack, pace, origin, motion, onPace,
       still chooses, and the marked step below is written the way that dial sits.
     </p>
     </>}
-    <StepList steps={(track === 'pointer'
-      ? steps(pace, origin, motion)
-      : keyedSteps(motion))
-      .map(({dial, ...step}) => ({...step, dial: dial && dials[dial]}))}/>
+    <StoryList stories={(track === 'pointer'
+      ? pointerStories(pace, origin, motion)
+      : keyedStories(motion))
+      .map(story => ({...story,
+        steps: story.steps.map(({dial, ...step}) => ({...step, dial: dial && dials[dial]}))}))}/>
   </section>;
 };

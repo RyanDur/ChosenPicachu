@@ -4,6 +4,7 @@ import {Motion, Origin, Pace} from '../Controls';
 import {TableControls} from './TableControls';
 import {Picks} from './Picks';
 import {Recipe, Track} from './Recipe';
+import {LivingTable} from './Recipe/LivingTable';
 import {MenuRecipe} from './Recipe/MenuRecipe';
 import {ResizeRecipe} from './Recipe/ResizeRecipe';
 import './Tutorials.css';
@@ -27,7 +28,31 @@ type Props = {
 
 export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack, ...props}) =>
   <div className="tutorials">
-    <h2 className="tutorials-title">how it’s built</h2>
+    <h2 className="tutorials-title">let’s build this feature</h2>
+    <p className="overview">
+      We are going to build this site’s live trading table, feature by feature. Here is how to
+      use this page: every card below is a feature, told as a <a className="signpost"
+        href="https://initialcapacity.io/insights/user-story"
+        target="_blank"
+        rel="noreferrer">user story</a>. Open a card and you
+      get the plan for that feature and the steps that build it, with the real code from this
+      site, so what you read is what runs. The dials change which table you are reading
+      about; each combination is its own small table, not one table full of switches. The dashed code is the wrong way you would probably try first, and the
+      links go to MDN if you want more.
+    </p>
+    <figure className="feedback">
+      <blockquote className="quote">
+        I watch the market all day. I need the numbers to keep themselves current, and I need
+        them arranged the way I think: what I am comparing side by side, what matters most on
+        top. When I sort something, it should just happen.
+      </blockquote>
+      <figcaption className="attribution">a trader</figcaption>
+    </figure>
+    <p className="overview">
+      The table is our interpretation of that. The cards below break the interpretation into
+      features; open one to see how we built it.
+    </p>
+    <LivingTable/>
     <Picks label="tutorials"
            className="tutorial-picks"
            options={[

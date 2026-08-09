@@ -1,4 +1,4 @@
-import {FC, ReactNode} from 'react';
+import {FC, MouseEvent, ReactNode, useState} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {Line, Snippet} from './Snippet';
@@ -20,6 +20,45 @@ export type StepEntry = {
 
 export const plain = (text: string): Line => ({text});
 export const aside = (text: string): Line => ({text, dim: true});
+
+export type StoryEntry = {
+  can: string;
+  soThat: string;
+  tells?: ReactNode[];
+  steps: StepEntry[];
+};
+
+export const StoryList: FC<{stories: StoryEntry[]}> = ({stories}) => {
+  const [opened, setOpened] = useState<ReadonlySet<number>>(() => new Set());
+  const toggled = (at: number) => (event: MouseEvent<HTMLElement>) => {
+    event.preventDefault();
+    setOpened(previous => {
+      const next = new Set(previous);
+      if (next.has(at)) {
+        next.delete(at);
+      } else {
+        next.add(at);
+      }
+      return next;
+    });
+  };
+  return <ol className="arcs">
+    {stories.map((story, at) =>
+      <li key={at}>
+        <details className="arc" open={opened.has(at)}>
+          <summary className="opener" onClick={toggled(at)}>
+            <article className="story">
+              <p className="can">{story.can}</p>
+              <p className="so-that">so that {story.soThat}</p>
+            </article>
+          </summary>
+          {story.tells?.map((paragraph, tale) =>
+            <p className="approach" key={tale}>{paragraph}</p>)}
+          <StepList steps={story.steps}/>
+        </details>
+      </li>)}
+  </ol>;
+};
 
 export const StepList: FC<{steps: StepEntry[]}> = ({steps}) =>
   <ol className="steps">

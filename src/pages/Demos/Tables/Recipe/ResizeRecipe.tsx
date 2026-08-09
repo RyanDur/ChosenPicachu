@@ -17,11 +17,12 @@ const steps: StepEntry[] = [
       'one column and the table grows, wraps, or leaves a gap behind.',
     says: ['Pixel widths are the first ledger you reach for, and every entry in it is a lie ' +
       'waiting for a resize: the sum answers to nobody.',
-      <>Widths are shares of a hundred, seeded once from the declared weights. The markup
-      renders each header through its share, and
-      fixed <Mdn path="Web/CSS/table-layout">table layout</Mdn> does the rest: the table is
-      always exactly its container, and every column is a fraction of it: one record keeping
-      one promise.</>],
+      <>Widths are shares of a hundred, born by measuring the rendered headers the first
+      time a hand arrives; until then the page’s stylesheet owns the widths and no ledger
+      exists. After a trade the header wears the shared class and its share rides a custom
+      property, and fixed <Mdn path="Web/CSS/table-layout">table layout</Mdn>, set beside the
+      opening widths in that same stylesheet, keeps the table exactly its container: every
+      column a fraction of it, one record keeping one promise.</>],
     code: [
       {label: 'JS', foil: true, lines: [
         plain('const [widths, setWidths] = useState({window: 240, trades: 96});'), gap,
@@ -30,7 +31,7 @@ const steps: StepEntry[] = [
         aside('// the column grows, and the table grows with it')
       ]},
       {label: 'JS', lines: [
-        ...unit(sharesSource, 'export const seededShares')
+        ...unit(sharesSource, 'export const measuredShares')
       ]},
       {label: 'HTML', lines: [
         plain("<th className=\"slot\" style={{'--share': `${share}%`}}>")
