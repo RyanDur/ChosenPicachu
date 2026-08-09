@@ -82,17 +82,19 @@
       "name_title . ."
       "first_name first_name first_name"
       "last_name last_name last_name"
-      "email email email"
-      "dob . ."
-      "avatar avatar avatar"
-      "avatar avatar avatar"
-      "avatar avatar avatar"
+      "email email avatar"
+      "dob dob avatar"
       "home_address_title . . "
       "home_address home_address home_address"
       "work_address_title . same_as_home"
       "work_address work_address work_address"
       "details details details"
       "reset cancel submit";
+
+    #email-cell,
+    #dob-cell {
+      align-self: center;
+    }
   }
 }
 
