@@ -106,6 +106,7 @@ describe('a list of charts', () => {
     await screen.findByRole('region', {name: 'live trades'});
 
     expect(screen.queryByRole('button', {name: 'remove chart'})).toBeNull();
+    expect(screen.queryByRole('button', {name: 'move chart', hidden: true})).toBeNull();
   });
 
   test('the trader can sort the charts by keyboard', async () => {
