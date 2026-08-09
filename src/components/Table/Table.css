@@ -12,10 +12,6 @@
     }
   }
 
-  .header .column-name {
-    border-bottom: var(--hairline-x-3) solid var(--charcoal);
-  }
-
   .body .cell {
     border-bottom: var(--hairline) solid var(--charcoal);
   }
@@ -32,6 +28,10 @@
 
   .header-cell {
     padding: 0;
+  }
+
+  .header .header-cell {
+    border-bottom: var(--hairline-x-3) solid var(--charcoal);
   }
 }
 

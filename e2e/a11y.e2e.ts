@@ -19,7 +19,7 @@ const pages: A11yPage[] = [
   {name: 'root', path: '', ready: 'navigation'},
   {name: 'demos', path: 'demos?tab=accordions', ready: 'navigation'},
   {name: 'charts', path: 'demos?tab=charts', ready: 'navigation', loaded: '.price-chart .delta'},
-  {name: 'tables', path: 'demos?tab=tables', ready: 'navigation', loaded: '.aggregations .column-name'},
+  {name: 'tables', path: 'demos?tab=tables', ready: 'navigation', loaded: '.aggregations .header-cell'},
   {name: 'menu tutorial', path: 'demos?tab=tables&tut=menu', ready: 'navigation', loaded: '.build-steps .story'},
   {name: 'resize tutorial', path: 'demos?tab=tables&tut=resize', ready: 'navigation', loaded: '.build-steps .story'},
   {name: 'drag sort', path: 'demos?tab=dragAndDrop', ready: 'navigation', loaded: '.sortable-list .draggable'},
