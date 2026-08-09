@@ -24,7 +24,22 @@ type Props = {
 };
 
 export const Header: FC<Props> = (
-  {column, order, share, resizable, rule, aloft, slid, draggable, className, onLift, onOrdered, onAwaken, onShared, onRule}
+  {
+    column,
+    order,
+    share,
+    resizable,
+    rule,
+    aloft,
+    slid,
+    draggable,
+    className,
+    onLift,
+    onOrdered,
+    onAwaken,
+    onShared,
+    onRule
+  }
 ) => {
   const columnName = column.column;
   const position = order.indexOf(columnName);
@@ -32,6 +47,7 @@ export const Header: FC<Props> = (
   const hidden = aloft === columnName;
   const displaced = slid?.[columnName];
   const sorted = rule?.column === columnName ? rule.direction : undefined;
+
   return <th className={classNames(
     className, column.className,
     'header-cell',

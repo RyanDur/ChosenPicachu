@@ -22,10 +22,6 @@
   border-right: var(--hairline) solid var(--charcoal);
 }
 
-.column-ghost .header-cell-content {
-  padding-inline-start: var(--base-x-1_5);
-}
-
 .column-ghost .shared {
   --share: 0;
 

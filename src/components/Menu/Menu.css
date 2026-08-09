@@ -13,7 +13,6 @@
     width: 100%;
     background: none;
     cursor: pointer;
-    outline: none;
     border: none;
     height: var(--base-x-5);
     font-size: var(--base-x-2_5);
@@ -25,20 +24,21 @@
 
     &:hover,
     &:focus {
-      border: var(--hairline-x-2) solid var(--shadow);
+      outline: var(--hairline-x-2) solid var(--shadow);
+      outline-offset: calc(var(--hairline-x-2) * -1);
     }
   }
 
-  li:not(:last-child) .item {
+  .entry:not(:last-child) .item {
     border-bottom: var(--hairline) solid var(--charcoal);
   }
 
-  li:first-child .item {
+  .entry:first-child .item {
     border-top-right-radius: var(--radius-card);
     border-top-left-radius: var(--radius-card);
   }
 
-  li:last-child .item {
+  .entry:last-child .item {
     border-bottom-right-radius: var(--radius-card);
     border-bottom-left-radius: var(--radius-card);
   }
