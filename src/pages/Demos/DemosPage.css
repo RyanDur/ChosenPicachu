@@ -86,14 +86,16 @@
   }
 }
 
-.add-chart {
-  align-self: center;
+.add-chart.button.secondary {
+  align-self: flex-end;
+  display: grid;
+  place-items: center;
   width: var(--base-x-6);
   height: var(--base-x-6);
+  padding: 0;
   border-radius: 50%;
   font-size: var(--base-x-4);
   line-height: 1;
-  padding: 0;
 }
 
 #add-chart {
