@@ -47,10 +47,10 @@ export const StoryList: FC<{stories: StoryEntry[]}> = ({stories}) => {
       <li key={at}>
         <details className="arc" open={opened.has(at)}>
           <summary className="opener" onClick={toggled(at)}>
-            <article className="story">
-              <p className="can">{story.can}</p>
-              <p className="so-that">so that {story.soThat}</p>
-            </article>
+            <span className="story">
+              <span className="can">{story.can}</span>
+              <span className="so-that">so that {story.soThat}</span>
+            </span>
           </summary>
           {story.tells?.map((paragraph, tale) =>
             <p className="approach" key={tale}>{paragraph}</p>)}
