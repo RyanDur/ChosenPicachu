@@ -1,4 +1,4 @@
-import {cleanup, screen, waitFor, within} from '@testing-library/react';
+import {cleanup, createEvent, fireEvent, screen, waitFor, within} from '@testing-library/react';
 import {
   broadcast,
   interceptedNetwork,
@@ -106,6 +106,57 @@ describe('a list of charts', () => {
     await screen.findByRole('region', {name: 'live trades'});
 
     expect(screen.queryByRole('button', {name: 'remove chart'})).toBeNull();
+  });
+
+  test('the trader can sort the charts by keyboard', async () => {
+    const feed = await streamingFeed();
+
+    renderCharts(urlOf(feed), '?tab=charts&charts=price,candles');
+    await screen.findByRole('region', {name: 'live trades'});
+
+    fireEvent.keyDown(screen.getByRole('article', {name: 'chart 1'}), {key: 'ArrowDown'});
+
+    const candles = screen.getByRole('region', {name: 'candles'});
+    expect(candles.compareDocumentPosition(screen.getByRole('region', {name: 'live trades'})))
+      .toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    expect(screen.getByRole('article', {name: 'chart 2'})).toHaveFocus();
+  });
+
+  test('the delete key removes a chart, never the last', async () => {
+    const feed = await streamingFeed();
+
+    renderCharts(urlOf(feed), '?tab=charts&charts=price,candles');
+    await screen.findByRole('region', {name: 'live trades'});
+
+    fireEvent.keyDown(screen.getByRole('article', {name: 'chart 1'}), {key: 'Delete'});
+    expect(screen.queryByRole('region', {name: 'live trades'})).toBeNull();
+
+    fireEvent.keyDown(screen.getByRole('article', {name: 'chart 1'}), {key: 'Delete'});
+    expect(screen.getByRole('region', {name: 'candles'})).toBeVisible();
+  });
+
+  test('the trader can drag a chart to a new seat', async () => {
+    const feed = await streamingFeed();
+
+    renderCharts(urlOf(feed), '?tab=charts&charts=price,candles');
+    await screen.findByRole('region', {name: 'live trades'});
+    const slot = (name: string) => screen.getByRole('article', {name});
+
+    fireEvent.mouseDown(within(slot('chart 1')).getByRole('button', {name: 'move chart', hidden: true}));
+    fireEvent.dragStart(slot('chart 1'), {dataTransfer: {effectAllowed: 'move', dropEffect: 'move'}});
+    const over = createEvent.dragOver(slot('chart 2'));
+    Object.defineProperty(over, 'clientY', {value: 100});
+    Object.defineProperty(over, 'dataTransfer', {value: {dropEffect: ''}});
+    fireEvent(slot('chart 2'), over);
+
+    expect(within(slot('chart 1')).getByRole('region', {name: 'candles'})).toBeVisible();
+    expect(slot('chart 1').classList).toContain('chart-pushed');
+
+    fireEvent.drop(slot('chart 2'));
+    fireEvent.dragEnd(slot('chart 2'));
+
+    expect(within(slot('chart 1')).getByRole('region', {name: 'candles'})).toBeVisible();
+    expect(within(slot('chart 2')).getByRole('region', {name: 'live trades'})).toBeVisible();
   });
 
   test('the charts travel in the url', async () => {

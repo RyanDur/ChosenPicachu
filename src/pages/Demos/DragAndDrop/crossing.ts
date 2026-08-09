@@ -7,3 +7,11 @@ export const crossed = (event: DragEvent<HTMLElement>, homeward: boolean): boole
     ? event.clientX < space.right - quarter
     : event.clientX > space.left + quarter;
 };
+
+export const crossedVertical = (event: DragEvent<HTMLElement>, homeward: boolean): boolean => {
+  const space = event.currentTarget.getBoundingClientRect();
+  const quarter = space.height / 4;
+  return homeward
+    ? event.clientY < space.bottom - quarter
+    : event.clientY > space.top + quarter;
+};
