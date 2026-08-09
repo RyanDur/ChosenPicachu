@@ -6,7 +6,7 @@
   grid-template-areas:
     "title title title title title title title title title title avatar avatar"
     "name_title name_title name_title . . . . . . . avatar avatar"
-    "first_name first_name first_name first_name last_name last_name last_name dob dob dob avatar avatar"
+    "first_name first_name first_name first_name first_name last_name last_name last_name last_name last_name dob dob"
     "email email email email email email email email email email email email"
     "home_address_title home_address_title home_address_title . . . work_address_title work_address_title same_as_home same_as_home . ."
     "home_address home_address home_address home_address home_address home_address work_address work_address work_address work_address work_address work_address"
@@ -25,6 +25,7 @@
 
   #name-title {
     grid-area: name_title;
+    align-self: end;
   }
 
   #first-name-cell {
@@ -91,10 +92,10 @@
   #user-info-form {
     grid-template-columns: repeat(3, 1fr);
     grid-template-areas:
-      "title title avatar"
+      "title title title"
       "name_title name_title avatar"
-      "first_name first_name avatar"
-      "last_name last_name avatar"
+      "first_name first_name first_name"
+      "last_name last_name last_name"
       "email email email"
       "dob . ."
       "home_address_title . . "
