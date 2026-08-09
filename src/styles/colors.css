@@ -40,7 +40,6 @@
   --gray: rgb(128, 128, 128);
   --focus-blue: rgba(30, 118, 224, 0.68);
   --charcoal-veil: rgba(55, 55, 55, 0.5);
-  --scrim: rgba(0, 0, 0, 0.4);
   --faint-shadow: rgba(0, 0, 0, 0.12);
   --paper-veil: rgba(244, 244, 244, 0.7);
   --mint-ink: color-mix(in srgb, var(--mint) 45%, black);

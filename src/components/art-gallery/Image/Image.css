@@ -1,3 +1,7 @@
+.image.veiled {
+  visibility: hidden;
+}
+
 .scrim {
   position: relative;
   display: flex;
@@ -6,22 +10,15 @@
 
   &:focus,
   &:hover {
-    &::before,
     &::after {
       content: "";
-      height: inherit;
-      width: inherit;
       position: absolute;
-    }
-
-    &::before {
-      background: var(--scrim);
-    }
-
-    &::after {
-      margin: 0 auto;
+      inset: 0;
       background: url("../../../assets/icons/detective.png")
         no-repeat center;
+      filter: invert(1)
+        drop-shadow(0 0 var(--hairline-x-3) var(--white))
+        drop-shadow(0 0 var(--hairline-x-3) var(--white));
     }
   }
 }
