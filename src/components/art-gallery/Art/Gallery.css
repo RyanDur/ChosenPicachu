@@ -2,16 +2,52 @@
   height: 100%;
   width: 100%;
   padding: var(--base-x-5);
+  background: var(--faded-leather);
 
   .frame {
+    position: relative;
     outline: none;
 
+    .loading-screen {
+      position: absolute;
+      inset: 0;
+    }
+
+    .wall-slot {
+      aspect-ratio: 1;
+      container-type: size;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .scrim {
+      width: auto;
+      height: auto;
+    }
+
     .piece {
-      width: 100%;
+      display: block;
+      max-width: 100cqw;
+      max-height: 100cqh;
+      filter: drop-shadow(0 14px 28px var(--shadow)) drop-shadow(0 10px 10px var(--dark-shadow));
+      transition: filter 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .scrim:focus .piece,
+    .scrim:hover .piece {
+      filter: drop-shadow(0 24px 48px var(--shadow)) drop-shadow(0 18px 20px var(--dark-shadow));
     }
 
     .title {
+      width: fit-content;
+      margin: var(--base-x-2) auto 0;
+      padding: 0 var(--base-x-2);
       text-align: center;
+      font-size: var(--text-caption);
+      font-style: italic;
+      background: var(--silk);
+      border: var(--hairline) solid var(--void);
     }
   }
 }

@@ -40,7 +40,7 @@ export const Image: FC<ImageProps> = (
              src={noImage}/> :
         (<>
             <ConditionalLink enabled={linkEnabled} area={tab ?? ''}>
-                <img className={classNames('image', 'off-screen', className)}
+                <img className={classNames('image', 'veiled', className)}
                      referrerPolicy="no-referrer"
                      onError={() => {
                          isComplete(true);
@@ -49,7 +49,7 @@ export const Image: FC<ImageProps> = (
                      onLoad={event => {
                          isComplete(true);
                          isError(false);
-                         event.currentTarget.classList.remove('off-screen');
+                         event.currentTarget.classList.remove('veiled');
                      }}
                      fetchPriority={priority ? 'high' : 'auto'}
                      srcSet={piece.srcSet ?? undefined}
