@@ -40,6 +40,10 @@
 }
 
 .resize-handle {
+  appearance: none;
+  border: none;
+  padding: 0;
+  background: none;
   position: absolute;
   top: 0;
   right: 0;
