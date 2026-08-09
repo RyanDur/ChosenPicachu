@@ -14,8 +14,9 @@
     "preview": "vite preview",
     "tsc": "tsc -b",
     "lint:css": "stylelint --max-warnings 0 'src/**/*.css'",
-    "build:lighthouse": "vite build --mode lighthouse && node scripts/spa-fallback.mjs",
-    "lighthouse:record": "node scripts/lighthouse/record.mjs"
+    "lighthouse:record": "node scripts/lighthouse/record.mjs",
+    "predev": "node scripts/write-env.mjs",
+    "prebuild": "node scripts/write-env.mjs"
   },
   "dependencies": {
     "@ngneat/falso": "^8.0.2",

@@ -10,15 +10,25 @@ export type Env = {
   vamDomain: string;
 };
 
-export const env: Env = {
-  tradeFeed: import.meta.env.VITE_APP_TRADE_FEED,
-  tradeProduct: import.meta.env.VITE_APP_TRADE_PRODUCT,
-  tradeHistory: import.meta.env.VITE_APP_TRADE_HISTORY,
-  aicDomain: import.meta.env.VITE_APP_API_AIC,
-  harvardDomain: import.meta.env.VITE_APP_HARVARD_API,
-  harvardAPIKey: import.meta.env.VITE_APP_HARVARD_API_KEY,
-  vamDomain: import.meta.env.VITE_APP_VAM_API
+declare global {
+  // augmenting Window only works through interface merging — a type alias cannot merge
+  // oxlint-disable-next-line typescript/consistent-type-definitions
+  interface Window {
+    __env?: Env;
+  }
+}
+
+const unconfigured: Env = {
+  tradeFeed: '',
+  tradeProduct: '',
+  tradeHistory: '',
+  aicDomain: '',
+  harvardDomain: '',
+  harvardAPIKey: '',
+  vamDomain: ''
 };
+
+export const env: Env = window.__env ?? unconfigured;
 
 const EnvContext = createContext<Env>(env);
 
