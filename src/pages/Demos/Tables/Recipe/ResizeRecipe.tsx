@@ -149,7 +149,8 @@ const steps: StepEntry[] = [
 ];
 
 const stories: StoryEntry[] = [
-  {can: 'The trader can widen a column',
+  {id: 'widen',
+    can: 'The trader can widen a column',
     soThat: 'what they read most gets the room, and the table keeps its shape',
     tells: ['We could resize with absolute pixel widths, but one drag would break the ' +
       'table’s promise to fill its container; so widths are shares of a hundred, born by ' +

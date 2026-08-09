@@ -175,7 +175,7 @@ const moved = (motion: Motion, pace: Pace, source: string, cssSrc: string): Step
       ]
     };
 
-type Tale = {can: string; soThat: string; tells?: ReactNode[]; steps: Step[]};
+type Tale = {id: string; can: string; soThat: string; tells?: ReactNode[]; steps: Step[]};
 
 const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
   const source = listSources[pace][origin][motion];
@@ -297,7 +297,8 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
 const stories = (pace: Pace, origin: Origin, motion: Motion): Tale[] => {
   const built = steps(pace, origin, motion);
   return [
-    {can: 'The user can sort the list',
+    {id: 'sort',
+      can: 'The user can sort the list',
       soThat: 'it reads in the order they mean',
       tells: ['The tables build their drag from pointer events and own every pixel; this ' +
         'list pays platform currency instead. Mark a card draggable and the ceremony ' +
@@ -320,7 +321,8 @@ const stories = (pace: Pace, origin: Origin, motion: Motion): Tale[] => {
         to={`${Paths.demos}?tab=${DemoTopics.tables}`}>Tables demo</Link> walks the road that
         owns them.</>],
       steps: [built[0], built[1], built[2], built[3], built[4], built[5], built[6], built[8]]},
-    {can: 'The user can sort without a mouse',
+    {id: 'keyboard',
+      can: 'The user can sort without a mouse',
       soThat: 'the keys go straight to the order',
       tells: ['Drag-and-drop never answers the keyboard, and it does not matter: dragging ' +
         'was never the goal, the order changing is. The grip is a real button, and the ' +

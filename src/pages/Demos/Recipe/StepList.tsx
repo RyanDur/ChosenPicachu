@@ -23,26 +23,27 @@ export const plain = (text: string): Line => ({text});
 export const aside = (text: string): Line => ({text, dim: true});
 
 export type StoryEntry = {
+  id: string;
   can: string;
   soThat: string;
   tells?: ReactNode[];
   steps: StepEntry[];
 };
 
-const openedIn = (params: URLSearchParams, param: string): Set<number> =>
-  new Set((params.get(param) ?? '').split(',').filter(part => part !== '').map(Number));
+const openedIn = (params: URLSearchParams, param: string): Set<string> =>
+  new Set((params.get(param) ?? '').split(',').filter(part => part !== ''));
 
 export const StoryList: FC<{stories: StoryEntry[]; param: string}> = ({stories, param}) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const opened = openedIn(searchParams, param);
-  const toggled = (at: number) => (event: MouseEvent<HTMLElement>) => {
+  const toggled = (story: string) => (event: MouseEvent<HTMLElement>) => {
     event.preventDefault();
     setSearchParams(previous => {
       const next = openedIn(previous, param);
-      if (next.has(at)) {
-        next.delete(at);
+      if (next.has(story)) {
+        next.delete(story);
       } else {
-        next.add(at);
+        next.add(story);
       }
       const params = new URLSearchParams(previous);
       if (next.size > 0) {
@@ -54,10 +55,10 @@ export const StoryList: FC<{stories: StoryEntry[]; param: string}> = ({stories, 
     }, {replace: true});
   };
   return <ol className="arcs">
-    {stories.map((story, at) =>
-      <li key={at}>
-        <details className="arc" open={opened.has(at)}>
-          <summary className="opener" onClick={toggled(at)}>
+    {stories.map(story =>
+      <li key={story.id}>
+        <details className="arc" open={opened.has(story.id)}>
+          <summary className="opener" onClick={toggled(story.id)}>
             <hgroup className="story">
               <h3 className="can">{story.can}</h3>
               <p className="so-that">so that {story.soThat}</p>

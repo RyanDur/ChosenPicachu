@@ -252,7 +252,7 @@ const vertical = (source: string): Step => ({
 });
 
 
-type Tale = {can: string; soThat: string; tells?: ReactNode[]; steps: Step[]};
+type Tale = {id: string; can: string; soThat: string; tells?: ReactNode[]; steps: Step[]};
 
 const pointerStories = (pace: Pace, origin: Origin, motion: Motion): Tale[] => {
   const source = tableSources[pace][origin][motion];
@@ -416,7 +416,8 @@ const pointerStories = (pace: Pace, origin: Origin, motion: Motion): Tale[] => {
   }
   ];
   return [
-    {can: 'The trader can sort by column',
+    {id: 'column',
+      can: 'The trader can sort by column',
       soThat: 'the measures they compare sit beside each other',
       tells: [<>There are two roads to dragging something across a page, and this site walks
         both. The <Link className="signpost"
@@ -452,7 +453,8 @@ const pointerStories = (pace: Pace, origin: Origin, motion: Motion): Tale[] => {
         held(pace, hookSrc),
         shown(origin, source, headerSrc, cssSrc),
         moved(motion === 'animated', source, cssSrc)]},
-    {can: 'The trader can sort by row',
+    {id: 'row',
+      can: 'The trader can sort by row',
       soThat: 'the windows they watch closest sit on top',
       tells: ['We could build rows their own machinery, but the need is the same motion ' +
         'turned vertical; so rows ride what the columns built. The differences that remain ' +
@@ -564,7 +566,8 @@ const keyedStories = (motion: Motion): Tale[] => {
     } satisfies Step]
     : []
   ];
-  return [{can: 'The trader can sort without a mouse',
+  return [{id: 'keyboard',
+    can: 'The trader can sort without a mouse',
     soThat: 'the table answers whoever arrives at it',
     tells: ['We could build the keyboard its own sorting system, but the state, the clamps, ' +
       'and the slides already exist; so this track is about access. Focus reaches every grip ' +
