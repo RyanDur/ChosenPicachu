@@ -56,7 +56,8 @@ export const Table: FC<TableProps> = ({columns, rows, id, resizableColumns, ...d
                    className={classNames(dress.thClassName, dress.cellClassName, className, 'header-cell',
                      clipped && 'clipped', has(share) && 'shared')}
                    style={has(share) ? {'--share': `${share}%`} : undefined}>
-          <div className="header-cell-content">
+          <div className={classNames('header-cell-content',
+            clipped && apportioned.length > 1 && 'resizable')}>
             {display}
             {clipped && apportioned.length > 1 &&
               <ResizeHandle column={column}

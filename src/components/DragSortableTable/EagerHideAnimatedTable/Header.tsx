@@ -98,7 +98,9 @@ export const Header: FC<Props> = (
                  ? {'--carried': `${displaced.by}px`, '--toward': displaced.toward === 'left' ? '1' : '-1'}
                  : {})
              }}>
-    <div className="header-cell-content">
+    <div className={classNames('header-cell-content',
+      has(onRule) && column.sortable && 'rankable',
+      resizable && order.length > 1 && 'resizable')}>
       {column.display}
       {has(onRule) && column.sortable &&
           <SortMenu column={columnName} sorted={sorted} onRule={onRule}/>}
