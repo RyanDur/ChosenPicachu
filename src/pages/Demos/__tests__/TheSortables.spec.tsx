@@ -52,6 +52,17 @@ describe('the sortable list demo', () => {
     feeds.length = 0;
   });
 
+  test('the open cards travel in the url', async () => {
+    const feed = await streamingFeed();
+
+    renderSortables(urlOf(feed), '?tab=dragAndDrop&native=0');
+
+    await feedIsSubscribed();
+    const recipe = screen.getByRole('region', {name: 'build the native drag sort yourself'});
+    expect(recipe.querySelectorAll('details.arc[open]')).toHaveLength(1);
+    expect(recipe.querySelectorAll('details.arc')[0]).toHaveAttribute('open');
+  });
+
   test('one list answers the dials', async () => {
     const feed = await streamingFeed();
 
