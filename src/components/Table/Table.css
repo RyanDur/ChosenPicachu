@@ -80,6 +80,11 @@
     }
   }
 
+  &:focus-visible {
+    outline: var(--hairline-x-2) solid var(--charcoal);
+    outline-offset: var(--base-x-0_25);
+  }
+
   &:hover::after {
     background: var(--faded-leather);
   }
