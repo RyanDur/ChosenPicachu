@@ -247,12 +247,6 @@ export const MenuRecipe: FC<Props> = ({pace, origin, motion, onMotion}) => {
   return <section aria-label="build the sort menu yourself" className="build-steps">
     <header className="brief-line">
       <h2 className="kicker">build the sort menu yourself</h2>
-      <p className="brief">
-        The chooser that rides every header, told as one story; open the card and the steps
-        inside build it. Where there is a wrong way you would reach for first, it appears in
-        a dashed frame before the real one, and where a step depends on the motion dial, that
-        dial sits on the step.
-      </p>
     </header>
     <StoryList stories={stories(pace, origin, motion)
       .map(story => ({...story,
