@@ -47,7 +47,7 @@
   grid-template-columns: 1fr auto auto;
   align-items: center;
   column-gap: var(--base);
-  height: 100%;
+  height: var(--base-x-5);
   padding-inline-start: var(--base-x-1_25);
 }
 
