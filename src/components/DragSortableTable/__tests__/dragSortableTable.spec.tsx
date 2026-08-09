@@ -153,6 +153,16 @@ describe('drag sortable columns', () => {
     drop();
   });
 
+  test('arrow keys on the resize handle trade shares, never seats', () => {
+    render(<EagerKeepStaticTable columns={sized} rows={people} draggableColumns resizableColumns/>);
+
+    const handle = screen.getByRole('button', {name: /resize age/});
+    fireEvent.focus(handle);
+    fireEvent.keyDown(handle, {key: 'ArrowRight'});
+
+    expect(headerTexts()).toEqual(['name', 'age', 'city', 'job']);
+  });
+
   test('the first and last columns hold their posts', () => {
     render(<EagerKeepStaticTable columns={sized} rows={people} draggableColumns/>);
 
