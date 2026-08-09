@@ -52,12 +52,24 @@
   cursor: col-resize;
   touch-action: none;
 
-  &:focus {
-    background: var(--faded-mint);
-    outline: none;
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: var(--base);
+    height: 100%;
   }
 
-  &:hover {
+  &:focus {
+    outline: none;
+
+    &::after {
+      background: var(--faded-mint);
+    }
+  }
+
+  &:hover::after {
     background: var(--faded-leather);
   }
 }
