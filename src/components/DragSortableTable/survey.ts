@@ -45,7 +45,11 @@ const deadZone = (struckSize: number, aloftSize: number): number =>
 
 type Slot<Identity> = {holds: Identity; at: number; size: number; start: number; end: number};
 
-const struckPast = <Identity>(slots: readonly Slot<Identity>[], home: number, coord: number): Identity | undefined => {
+const struckPast = <Identity>(
+    slots: readonly Slot<Identity>[],
+    home: number,
+    coord: number
+): Identity | undefined => {
     const struck = slots.find(({end}) => coord < end);
     if (has(struck) && struck.at !== home) {
         const held = deadZone(struck.size, slots[home]?.size ?? 0);
