@@ -377,7 +377,7 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/position-area/);
     expect(recipe).toHaveTextContent(/The rule is a drape, not a bake/);
     expect(recipe).toHaveTextContent(/A hand ends the rule/);
-    expect(recipe).toHaveTextContent(/setShifted\(shifts\(surveyed/);
+    expect(recipe).toHaveTextContent(/setShifted\(shifts\(/);
     expect(recipe).toHaveTextContent(/setOpen\(!open\)/);
     expect(recipe).not.toHaveTextContent(/Dress the menu as a card/);
     expect(recipe).toHaveTextContent(/unsorted by the next trade/);

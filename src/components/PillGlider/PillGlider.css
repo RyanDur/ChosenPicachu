@@ -33,7 +33,7 @@
 
     &:has(:focus-visible) {
       outline: var(--hairline-x-2) solid var(--chosen-color);
-      outline-offset: -2px;
+      outline-offset: var(--base-x-0_25);
     }
 
     &:hover {

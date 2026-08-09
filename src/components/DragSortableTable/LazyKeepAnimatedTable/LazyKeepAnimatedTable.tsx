@@ -51,14 +51,19 @@ export const LazyKeepAnimatedTable: FC<LazyKeepAnimatedTableProps> = (
     };
     const rowsTravel = useRowTravel(order, standing, settleRow);
 
-    const ruled = (column: string, direction: Direction | undefined, event: MouseEvent<HTMLButtonElement>): void => {
+    const ruled = (
+        column: string,
+        direction: Direction | undefined,
+        event: MouseEvent<HTMLButtonElement>
+    ): void => {
         const next = has(direction) ? {column, direction} : undefined;
         const table = event.currentTarget.closest('table');
         if (has(table)) {
             const after = has(next)
                 ? ranked(rows, dealt, next)
                 : dealt;
-            setShifted(shifts(surveyed(table, order, standing).rowHeights, standing, after));
+            setShifted(shifts(
+                surveyed(table, order, standing).rowHeights, standing, after));
         }
         setRule(next);
     };
