@@ -37,9 +37,8 @@ export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack, ...props}) 
         rel="noreferrer">user story</a>. Open a card and you
       get the plan for that feature and the steps that build it, with the real code from this
       site, so what you read is what runs. The dials change which table you are reading
-      about; each combination is its own small table, not one table full of switches, and
-      Eager, Lazy, Keep, Hide, Animate, and Static are this page’s names for the choices,
-      not platform keywords. Where a step depends on a dial, that dial sits on the step. The dashed code is the wrong way you would probably try first, and the
+      about, and Eager, Lazy, Keep, Hide, Animate, and Static are this page’s names for the
+      choices, not platform keywords. Where a step depends on a dial, that dial sits on the step. The dashed code is the wrong way you would probably try first, and the
       links go to MDN if you want more.
     </p>
     <figure className="feedback">
