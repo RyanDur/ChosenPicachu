@@ -24,7 +24,7 @@ export const LazyKeepAnimatedTable: FC<LazyKeepAnimatedTableProps> = (
 ) => {
     const [shares, setShares] = useState<Shares>();
     const [ordered, setOrdered] = useState<Column[]>(() => [...columns]);
-    const [seats, setSeats] = useState<number[]>(() => rows.map((_, card) => card));
+    const [seats, setSeats] = useState<number[]>(() => rows.map((_, row) => row));
     const [rule, setRule] = useState<Rule>();
     const [slid, setSlid] = useState<Slid>();
     const [shifted, setShifted] = useState<Shifted>();
@@ -33,7 +33,7 @@ export const LazyKeepAnimatedTable: FC<LazyKeepAnimatedTableProps> = (
     const awaken = (table: HTMLTableElement): void =>
         setShares(previous => previous ?? measuredShares(order, table));
     const clipped = resizableColumns;
-    const dealt = seats.length === rows.length ? seats : rows.map((_, card) => card);
+    const dealt = seats.length === rows.length ? seats : rows.map((_, row) => row);
     const standing = has(rule) ? ranked(rows, dealt, rule) : dealt;
 
     const placedColumn = (column: string, to: number): void =>
@@ -44,9 +44,9 @@ export const LazyKeepAnimatedTable: FC<LazyKeepAnimatedTableProps> = (
     };
     const columnsTravel = useColumnTravel(order, settleColumn);
 
-    const settleRow = (card: number, struck: number, heights: Shifted): void => {
-        const after = array.moveToIndex(seats.indexOf(struck), card, seats);
-        setShifted(shifts(heights, seats, after, card));
+    const settleRow = (row: number, struck: number, heights: Shifted): void => {
+        const after = array.moveToIndex(seats.indexOf(struck), row, seats);
+        setShifted(shifts(heights, seats, after, row));
         setSeats(after);
     };
     const rowsTravel = useRowTravel(order, standing, settleRow);
@@ -107,10 +107,10 @@ export const LazyKeepAnimatedTable: FC<LazyKeepAnimatedTableProps> = (
                     onRule={sortable ? ruled : undefined}/>
             )}</tr>
             </thead>
-            <tbody className={dress.tbodyClassName}>{standing.map(card =>
-                <Row key={card}
-                    card={card}
-                    row={rows[card]}
+            <tbody className={dress.tbodyClassName}>{standing.map(row =>
+                <Row key={row}
+                    row={row}
+                    cells={rows[row]}
                     columns={order}
                     clipped={clipped}
                     standing={standing}

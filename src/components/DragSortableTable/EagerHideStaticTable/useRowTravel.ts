@@ -1,21 +1,21 @@
 import {PointerEvent, useState} from 'react';
 import {has} from '@ryandur/sand';
 import {Drift, Flight, grounded, still} from '../travel';
-import {Survey, surveyed, cardUnder} from '../survey';
+import {Survey, surveyed, rowUnder} from '../survey';
 
 export const useRowTravel = (
     order: readonly string[],
     standing: readonly number[],
-    settle: (card: number, struck: number, heights: Readonly<Record<number, number>>) => void
+    settle: (row: number, struck: number, heights: Readonly<Record<number, number>>) => void
 ) => {
     const [aloft, setAloft] = useState<number>();
     const [survey, setChart] = useState<Survey>();
     const [flight, setFlight] = useState<Flight>(grounded);
     const [origin, setOrigin] = useState<Drift>();
     const [drift, setDrift] = useState<Drift>(still);
-    const strike = cardUnder(standing, survey);
+    const strike = rowUnder(standing, survey);
 
-    const lift = (card: number) =>
+    const lift = (row: number) =>
         (event: PointerEvent<HTMLElement>): void => {
             const lane = event.currentTarget.closest('tr');
             const table = event.currentTarget.closest('table');
@@ -24,7 +24,7 @@ export const useRowTravel = (
             }
             const anchored = lane?.getBoundingClientRect();
             setFlight({x: anchored?.x ?? 0, y: anchored?.y ?? 0, width: anchored?.width ?? 0});
-            setAloft(card);
+            setAloft(row);
         };
 
     const drop = (): void => {

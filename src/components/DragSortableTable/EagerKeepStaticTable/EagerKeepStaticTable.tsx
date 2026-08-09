@@ -23,14 +23,14 @@ export const EagerKeepStaticTable: FC<EagerKeepStaticTableProps> = (
 ) => {
     const [shares, setShares] = useState<Shares>();
     const [ordered, setOrdered] = useState<Column[]>(() => [...columns]);
-    const [seats, setSeats] = useState<number[]>(() => rows.map((_, card) => card));
+    const [seats, setSeats] = useState<number[]>(() => rows.map((_, row) => row));
     const [rule, setRule] = useState<Rule>();
 
     const order = ordered.map(({column}) => column);
     const awaken = (table: HTMLTableElement): void =>
         setShares(previous => previous ?? measuredShares(order, table));
     const clipped = resizableColumns;
-    const dealt = seats.length === rows.length ? seats : rows.map((_, card) => card);
+    const dealt = seats.length === rows.length ? seats : rows.map((_, row) => row);
     const standing = has(rule) ? ranked(rows, dealt, rule) : dealt;
 
     const placedColumn = (column: string, to: number): void =>
@@ -39,8 +39,8 @@ export const EagerKeepStaticTable: FC<EagerKeepStaticTableProps> = (
         placedColumn(column, interior(order.indexOf(struck), order.length));
     const columnsTravel = useColumnTravel(order, settleColumn);
 
-    const settleRow = (card: number, struck: number): void =>
-        setSeats(array.moveToIndex(seats.indexOf(struck), card, seats));
+    const settleRow = (row: number, struck: number): void =>
+        setSeats(array.moveToIndex(seats.indexOf(struck), row, seats));
     const rowsTravel = useRowTravel(order, standing, settleRow);
 
     const ruled = (column: string, direction: Direction | undefined): void =>
@@ -78,10 +78,10 @@ export const EagerKeepStaticTable: FC<EagerKeepStaticTableProps> = (
                     onRule={sortable ? ruled : undefined}/>
             )}</tr>
             </thead>
-            <tbody className={dress.tbodyClassName}>{standing.map(card =>
-                <Row key={card}
-                    card={card}
-                    row={rows[card]}
+            <tbody className={dress.tbodyClassName}>{standing.map(row =>
+                <Row key={row}
+                    row={row}
+                    cells={rows[row]}
                     columns={order}
                     clipped={clipped}
                     standing={standing}

@@ -5,8 +5,8 @@ import {Row as RowData} from '@components/Table';
 import {RowGrip} from '../RowGrip';
 
 type Props = {
-  card: number;
-  row: RowData;
+  row: number;
+  cells: RowData;
   columns: readonly string[];
   clipped: boolean;
   standing: readonly number[];
@@ -15,19 +15,19 @@ type Props = {
   aloftColumn?: string;
   className: string;
   cellClassName: string;
-  onLift: (card: number) => (event: PointerEvent<HTMLElement>) => void;
+  onLift: (row: number) => (event: PointerEvent<HTMLElement>) => void;
   onArranged: (after: number[]) => void;
 };
 
 export const Row: FC<Props> = (
-  {card, row, columns, clipped, standing, gripped, aloft, aloftColumn, className, cellClassName, onLift, onArranged}
+  {row, cells, columns, clipped, standing, gripped, aloft, aloftColumn, className, cellClassName, onLift, onArranged}
 ) => {
-  const position = standing.indexOf(card);
-  const hidden = aloft === card;
+  const position = standing.indexOf(row);
+  const hidden = aloft === row;
 
   return <tr className={className}>
     {columns.map((column, columnNumber) => {
-      const cell = row[column];
+      const cell = cells[column];
       return <td className={classNames(
         cellClassName, cell.className,
         clipped && 'ellipsis',
@@ -36,10 +36,10 @@ export const Row: FC<Props> = (
       )}
                  key={column}>
         {columnNumber === 0 && gripped &&
-            <RowGrip row={position + 1} onLift={onLift(card)}
+            <RowGrip row={position + 1} onLift={onLift(row)}
                      onNudge={toward => {
                        const to = Math.min(Math.max(position + toward, 0), standing.length - 1);
-                       onArranged(array.moveToIndex(to, card, standing));
+                       onArranged(array.moveToIndex(to, row, standing));
                      }}/>}
         {cell.display}
       </td>;
