@@ -1,3 +1,3 @@
-export type {Block, StepEntry} from './StepList';
-export {StepList, aside, plain} from './StepList';
+export type {Block, StepEntry, StoryEntry} from './StepList';
+export {StepList, StoryList, aside, plain} from './StepList';
 export {Mdn} from './Mdn';

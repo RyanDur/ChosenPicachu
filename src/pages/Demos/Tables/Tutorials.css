@@ -3,6 +3,37 @@
   gap: var(--base-x-3);
   justify-items: start;
 
+  .feedback {
+    margin: 0;
+    margin-inline: auto;
+    max-width: var(--measure);
+    width: 100%;
+    display: grid;
+    gap: var(--base);
+
+    .quote {
+      margin: 0;
+      padding-left: var(--base-x-2);
+      border-left: var(--hairline-x-3) solid var(--silk);
+      font-style: italic;
+      font-size: var(--text-body);
+      line-height: 1.6;
+      text-wrap: pretty;
+    }
+
+    .attribution {
+      color: var(--charcoal);
+      font-size: var(--text-caption);
+    }
+  }
+
+  .overview {
+    margin: 0;
+    font-size: var(--text-body);
+    line-height: 1.6;
+    text-wrap: pretty;
+  }
+
   .tutorials-title {
     font-size: var(--text-headline);
   }
