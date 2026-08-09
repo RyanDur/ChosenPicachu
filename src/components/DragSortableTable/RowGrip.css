@@ -1,8 +1,9 @@
 .sortable .grip,
 .column-ghost .grip {
-  all: unset;
-  cursor: grab;
-  touch-action: none;
+  appearance: none;
+  border: none;
+  padding: 0;
+  background: none;
   position: absolute;
   left: 0;
   top: 50%;
