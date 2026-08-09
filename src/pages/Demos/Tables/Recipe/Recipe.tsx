@@ -130,8 +130,9 @@ const shown = (origin: 'keep' | 'hide', source: string, headerSrc: string, cssSr
     title: 'Blank the origin while it is aloft',
     dial: 'origin',
     want: 'With the ghost in hand, the trader reads the origin column as a duplicate, and nothing says where the drop will land.',
-    says: [<>The disappearance takes a component choice and one word of CSS. This is the hide
-      table, so there is no flag anywhere: the markup compares the aloft key against each
+    says: [<>We could unmount the origin while it travels, but its space would collapse and
+      the whole table would shift; so the disappearance takes a component choice and one word
+      of CSS instead. This is the hide table, so there is no flag anywhere: the markup compares the aloft key against each
       cell, and CSS does the
       vanishing: <Mdn path="Web/CSS/visibility">visibility</Mdn> hidden takes the whole column
       (text, borders, grip, everything) while its layout space remains as the gap where the
@@ -251,38 +252,6 @@ const vertical = (source: string): Step => ({
 
 
 type Tale = {can: string; soThat: string; tells?: ReactNode[]; steps: Step[]};
-
-const pacedStory = (pace: Pace): Omit<Tale, 'steps'> => pace === 'eager'
-  ? {can: 'The trader sees the sort happen while they drag', soThat: 'a wrong grab costs nothing',
-    tells: ['We could wait for the drop, but then you cannot change your mind until it is ' +
-      'too late; so we commit while you drag. The state updates mid-drag and React moves the ' +
-      'real cells, and carrying a column back is just more crossings; home is always ' +
-      'reachable before you let go.']}
-  : {can: 'The trader drags in calm, and the sort lands on the drop', soThat: 'only the destination matters',
-    tells: ['We could commit on every crossing, but a long drag would churn the table under ' +
-      'your hand; so we remember where you are hovering and commit once, on the drop. ' +
-      'Nothing moves until you let go.']};
-
-const shownStory = (origin: Origin): Omit<Tale, 'steps'> => origin === 'hide'
-  ? {can: 'The trader sees a gap where the column left', soThat: 'the landing is never a guess',
-    tells: ['We could unmount the origin while it travels, but its space would collapse and ' +
-      'the whole table would shift; so we hide it with CSS. It never unmounts, its layout ' +
-      'space stays, and the gap you see is exactly where the drop will land.']}
-  : {can: 'The trader keeps the column in sight while its copy travels', soThat: 'nothing vanishes while they decide',
-    tells: ['We could hide the origin, but some traders want it in sight while they decide; ' +
-      'so we do nothing. The column stays seated, the ghost in your hand is a second copy, ' +
-      'and there is no hiding code to write or to get wrong.']};
-
-const movedStory = (motion: Motion): Omit<Tale, 'steps'> => motion === 'animated'
-  ? {can: 'The trader watches the swap slide into place', soThat: 'the eye never loses a column',
-    tells: ['We could animate the layout itself, but the whole table would bounce, because ' +
-      'layout is load-bearing; so the swap commits instantly, and the displaced column is ' +
-      'only drawn where it used to be, sliding home on a transform. Transforms cannot move ' +
-      'layout, so nothing else can shift while it slides.']}
-  : {can: 'The trader gets the swap instantly, with no motion', soThat: 'nothing competes with the pointer',
-    tells: ['We could run the animation for everyone, but motion is not free and some ' +
-      'traders ask for none; so this variant applies the state and lets React paint. No ' +
-      'animation code exists in it, so there is nothing to pace and nothing to interrupt.']};
 
 const pointerStories = (pace: Pace, origin: Origin, motion: Motion): Tale[] => {
   const source = tableSources[pace][origin][motion];
@@ -466,18 +435,28 @@ const pointerStories = (pace: Pace, origin: Origin, motion: Motion): Tale[] => {
         affords nothing the DOM does not give you: the node moves
         are <Mdn path="Web/API/Node/insertBefore">insertBefore</Mdn>, the handlers are
         events, the state is a value. Each code block below is labeled with which of the
-        three languages is doing the work.</>],
-      steps: mechanics},
+        three languages is doing the work.</>,
+        'This particular table keeps three more promises. ' + (pace === 'eager'
+          ? 'The sort happens while you drag, so a wrong grab costs nothing. '
+          : 'The table holds calm and the sort lands on the drop, so only the destination matters. ') +
+        (origin === 'hide'
+          ? 'A gap opens where the column left, so the landing is never a guess. '
+          : 'The column stays in sight while its copy travels, so nothing vanishes while you decide. ') +
+        (motion === 'animated'
+          ? 'And the swap slides into place, so the eye never loses a column.'
+          : 'And the swap lands instantly, with no motion, so nothing competes with the pointer.')],
+      steps: [...mechanics,
+        held(pace, hookSrc),
+        shown(origin, source, headerSrc, cssSrc),
+        moved(motion === 'animated', source, cssSrc)]},
     {can: 'The trader can sort by row',
       soThat: 'the windows they watch closest sit on top',
       tells: ['We could build rows their own machinery, but the need is the same motion ' +
         'turned vertical; so rows ride what the columns built. The differences that remain ' +
         'are honest ones: a grip button to grab, row heights in the survey, and a vertical ' +
-        'hit test.'],
-      steps: [vertical(source)]},
-    {...pacedStory(pace), steps: [held(pace, hookSrc)]},
-    {...shownStory(origin), steps: [shown(origin, source, headerSrc, cssSrc)]},
-    {...movedStory(motion), steps: [moved(motion === 'animated', source, cssSrc)]}
+        'hit test. The promises the dials set ride along unchanged; the turn changes the ' +
+        'axis, nothing else.'],
+      steps: [vertical(source)]}
   ];
 };
 

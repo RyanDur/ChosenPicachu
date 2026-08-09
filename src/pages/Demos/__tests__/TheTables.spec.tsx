@@ -219,13 +219,13 @@ describe('the tables demo', () => {
     expect(recipe).toBeVisible();
     expect(recipe).toHaveTextContent(/told as its stories/);
     expect(recipe).toHaveTextContent(/The trader can sort by column/);
-    expect(recipe.querySelectorAll('.story')).toHaveLength(5);
-    expect(recipe.querySelectorAll('details.arc')).toHaveLength(5);
+    expect(recipe.querySelectorAll('.story')).toHaveLength(2);
+    expect(recipe.querySelectorAll('details.arc')).toHaveLength(2);
     expect(recipe.querySelectorAll('details.arc[open]')).toHaveLength(0);
     expect(screen.getByRole('heading', {name: 'let’s build this feature'})).toBeVisible();
     expect(screen.getByText(/I watch the market all day/)).toBeVisible();
     expect(screen.getByText(/The table is our interpretation of that/)).toBeVisible();
-    expect(recipe).toHaveTextContent(/sees the sort happen while they drag/);
+    expect(recipe).toHaveTextContent(/The sort happens while you drag/);
     const living = screen.getByRole('region', {name: 'the living table'});
     expect(living).toBeVisible();
     expect(living).toHaveTextContent(/The trader can watch the market live/);
@@ -251,17 +251,15 @@ describe('the tables demo', () => {
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/Node/insertBefore'));
     expect(recipe.querySelectorAll('.snippet.foil')).toHaveLength(1);
 
-    await userEvent.click(within(recipe).getByText(/sees the sort happen while they drag/));
-    await userEvent.click(within(recipe).getByText(/sees a gap where the column left/));
-    await userEvent.click(within(recipe).getByText(/watches the swap slide into place/));
-    expect(recipe.querySelectorAll('details.arc[open]')).toHaveLength(4);
+    await userEvent.click(within(recipe).getByText(/The trader can sort by row/));
+    expect(recipe.querySelectorAll('details.arc[open]')).toHaveLength(2);
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Lazy'}));
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Keep'}));
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Static'}));
 
     expect(recipe).toHaveTextContent(/Stash the landing, commit on release/);
     expect(recipe).toHaveTextContent(/the sort lands on the drop/);
-    expect(recipe).toHaveTextContent(/keeps the column in sight/);
+    expect(recipe).toHaveTextContent(/stays in sight while its copy travels/);
     expect(recipe).toHaveTextContent(/instantly, with no motion/);
     expect(recipe).toHaveTextContent(/Leave the origin in place/);
     expect(recipe).toHaveTextContent(/Apply the state update directly/);
