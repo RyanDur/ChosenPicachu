@@ -45,7 +45,7 @@ const ruled = (motion: Motion, source: string): Step => motion === 'animated'
     ]
   };
 
-type Tale = {can: string; soThat: string; tells?: string[]; steps: Step[]};
+type Tale = {id: string; can: string; soThat: string; tells?: string[]; steps: Step[]};
 
 const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
   const source = tableSources[pace][origin][motion];
@@ -204,7 +204,8 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
 const stories = (pace: Pace, origin: Origin, motion: Motion): Tale[] => {
   const built = steps(pace, origin, motion);
   return [
-    {can: 'The trader can sort the windows by any measure, or take the order back',
+    {id: 'rank',
+      can: 'The trader can sort the windows by any measure, or take the order back',
       soThat: 'the table ranks itself, and the hand still outranks it',
       tells: ['We could build the popup from divs, but then we owe focus, dismissal, and ' +
         'stacking, and choosing starts to feel like fighting the menu instead of using it; ' +

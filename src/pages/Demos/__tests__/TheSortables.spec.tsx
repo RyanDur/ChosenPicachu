@@ -55,7 +55,7 @@ describe('the sortable list demo', () => {
   test('the open cards travel in the url', async () => {
     const feed = await streamingFeed();
 
-    renderSortables(urlOf(feed), '?tab=dragAndDrop&native=0');
+    renderSortables(urlOf(feed), '?tab=dragAndDrop&native=sort');
 
     await feedIsSubscribed();
     const recipe = screen.getByRole('region', {name: 'build the native drag sort yourself'});

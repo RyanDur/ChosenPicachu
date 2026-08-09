@@ -350,7 +350,7 @@ describe('the tables demo', () => {
   test('the open cards travel in the url', async () => {
     const feed = await streamingFeed();
 
-    renderTables(urlOf(feed), '?tab=tables&sort=0');
+    renderTables(urlOf(feed), '?tab=tables&sort=column');
 
     await feedIsSubscribed();
     const recipe = screen.getByRole('region', {name: 'build the drag sort yourself'});
