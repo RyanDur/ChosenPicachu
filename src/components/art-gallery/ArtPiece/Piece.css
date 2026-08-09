@@ -4,12 +4,20 @@
   width: 100%;
 
   .piece {
-    margin-bottom: var(--base-x-5);
+    margin-bottom: var(--base-x-2);
     width: 100%;
+    filter: drop-shadow(0 14px 28px var(--shadow)) drop-shadow(0 10px 10px var(--dark-shadow));
   }
 
   .artist-display {
+    width: fit-content;
+    margin: 0 auto;
+    padding: 0 var(--base-x-2);
     text-align: center;
+    font-size: var(--text-caption);
+    font-style: italic;
+    background: var(--silk);
+    border: var(--hairline) solid var(--void);
   }
 }
 
