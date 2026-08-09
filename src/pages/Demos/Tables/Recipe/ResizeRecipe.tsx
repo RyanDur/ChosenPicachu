@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {StepEntry, StepList, aside, plain} from '../../Recipe/StepList';
+import {StepEntry, StoryEntry, StoryList, aside, plain} from '../../Recipe/StepList';
 import {Mdn} from '../../Recipe/Mdn';
 import {span, unit} from '../../Recipe/carve';
 import sharesSource from '@components/Table/shares.ts?raw';
@@ -113,11 +113,31 @@ const steps: StepEntry[] = [
   }
 ];
 
+const stories: StoryEntry[] = [
+  {can: 'The trader can widen a column',
+    soThat: 'what they read most gets the room',
+    tells: ['We could resize with absolute pixel widths, but one drag would break the ' +
+      'table’s promise to fill its container; so widths are shares of a hundred, born by ' +
+      'measuring the rendered headers at the first touch, and every resize is a trade ' +
+      'between neighbours: whatever one column gains, the next gives, and the sum cannot ' +
+      'change.'],
+    steps: [steps[0], steps[1], steps[2]]},
+  {can: 'The trader can drag a boundary without disturbing the sort',
+    soThat: 'a resize never becomes a column drag',
+    tells: ['The handle captures its pointer and measures the table once, pixels per share; ' +
+      'it stops pointer descent, so the header never hears the press; and the keyboard gets ' +
+      'the same road, one fixed step per arrow.'],
+    steps: [steps[3], steps[4]]}
+];
+
 export const ResizeRecipe: FC = () =>
   <section aria-label="build the drag resize yourself" className="build-steps">
     <header className="brief-line">
       <h2 className="kicker">build the drag resize yourself</h2>
-      <p className="brief">Five steps that share the table the drag sort already built.</p>
+      <p className="brief">
+        Two stories on the boundaries of the table the drag sort already built; open a card
+        and the steps inside build it.
+      </p>
     </header>
     <p className="lead">
       You want column boundaries you can drag while the table always fills its container:
@@ -125,5 +145,5 @@ export const ResizeRecipe: FC = () =>
       takes a record of widths that cannot sum to more or less than the whole, no matter what
       the hand does.
     </p>
-    <StepList steps={steps}/>
+    <StoryList stories={stories}/>
   </section>;

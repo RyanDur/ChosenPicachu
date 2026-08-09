@@ -334,6 +334,8 @@ describe('the tables demo', () => {
     expect(resize).toHaveTextContent(/zero-sum ledger/);
     expect(resize).toHaveTextContent(/Trade, never take/);
     expect(resize).toHaveTextContent(/A handle that is a button/);
+    expect(resize.querySelectorAll('.story')).toHaveLength(2);
+    expect(resize).toHaveTextContent(/The trader can widen a column/);
     expect(resize).toHaveTextContent(/the table grows with it/);
     expect(within(resize).getByRole('link', {name: 'captures its pointer'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/Element/setPointerCapture'));
@@ -383,12 +385,16 @@ describe('the tables demo', () => {
     expect(within(recipe).getByRole('link', {name: 'position-area'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/CSS/position-area'));
     expect(recipe.querySelectorAll('.snippet.foil')).toHaveLength(2);
+    expect(recipe.querySelectorAll('.story')).toHaveLength(4);
+    expect(recipe).toHaveTextContent(/The trader can sort by any column’s numbers/);
     expect(screen.queryByRole('region', {name: 'build the drag sort yourself'})).toBeNull();
     expect(screen.queryByRole('region', {name: 'table controls'})).toBeNull();
     expect(screen.getByRole('region', {name: 'the living table'})).toBeVisible();
 
+    await userEvent.click(within(recipe).getByText(/watches the re-rank slide/));
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Static'}));
     expect(recipe).toHaveTextContent(/Rule directly/);
+    expect(recipe).toHaveTextContent(/gets the re-rank instantly/);
     expect(recipe).not.toHaveTextContent(/setShifted\(shifts\(surveyed/);
   });
 
