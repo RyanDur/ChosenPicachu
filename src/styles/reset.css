@@ -32,7 +32,7 @@ time, mark, audio, video {
   vertical-align: baseline;
 }
 
-ol, ul {
+ol, ul, menu {
   list-style: none;
 }
 

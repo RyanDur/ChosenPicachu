@@ -4,7 +4,7 @@ import {PillGlider} from '@components/PillGlider';
 import {Paths} from '@pages/Paths';
 import {DemoTopics} from '../types';
 import {ControlsProps, Motion, Origin, Pace} from '../Controls';
-import {StepEntry, StepList, aside, plain} from '../Recipe';
+import {Mdn, StepEntry, StepList, aside, plain} from '../Recipe';
 import {span, unit} from '../Recipe/carve';
 import crossingSource from './crossing.ts?raw';
 import glideSource from '@components/glide.ts?raw';
@@ -60,7 +60,7 @@ const paced = (pace: Pace, source: string): Step => pace === 'eager'
     title: 'Commit inside the crossing',
     dial: 'pace',
     want: 'You want the list to answer the drag as it happens; waiting for the drop hides the outcome until it is too late to change your mind.',
-    says: ['Commit the reorder inside the dragover that detected the crossing — the state updates ' +
+    says: ['Commit the reorder inside the dragover that detected the crossing: the state updates ' +
       'mid-drag, the markup renders through it, and the same key finds its new seat while the ' +
       'platform still holds the snapshot in your hand. Carrying the item back is just more ' +
       'crossings, so home stays reachable.'],
@@ -74,9 +74,9 @@ const paced = (pace: Pace, source: string): Step => pace === 'eager'
     title: 'Stash the landing, settle after the drag',
     dial: 'pace',
     want: 'You want the list calm while the platform drags, which means the reorder must wait for a session that is still alive when the drop lands.',
-    says: ['Each dragover only remembers where the pointer last hovered, and a dragleave forgets ' +
-      'it. The commit runs from the release — the session has to finish before the list moves, ' +
-      'because the platform is still animating its own end of the bargain.'],
+    says: [<>Each dragover only remembers where the pointer last hovered, and
+      a <Mdn path="Web/API/HTMLElement/dragleave_event">dragleave</Mdn> forgets it. The commit runs from the release: the session has to finish before the list moves,
+      because the platform is still animating its own end of the bargain.</>],
     code: [
       {label: 'JS', lines: [
         ...span(source, 'onDragOver={() => setLanding(index)}', 'onDragOver={() => setLanding(index)}'), gap,
@@ -89,12 +89,11 @@ const shown = (origin: Origin, source: string, itemSrc: string, cssSrc: string):
   ? {
     title: 'Fade the origin to a whisper',
     dial: 'origin',
-    want: 'With the snapshot in hand, the origin card reads as a duplicate — but truly vanishing it can kill the drag, because some engines end the session when its source disappears.',
-    says: ['So the origin does not vanish; it fades to a whisper. This is the hide list, so its ' +
-      'own Item dresses itself on its own lift and undresses on ' +
-      'its own release. The CSS behind the class is an opacity of nearly nothing: the node ' +
-      'stays alive, the session keeps its source, and the eye reads a single card riding the ' +
-      'pointer.'],
+    want: 'With the snapshot in hand, the origin card reads as a duplicate, but truly vanishing it can kill the drag: some engines end the session when its source disappears.',
+    says: [<>So the origin does not vanish; it fades to a whisper. This is the hide list, so
+      its own Item dresses itself on its own lift and undresses on its own release. The CSS behind the class is
+      an <Mdn path="Web/CSS/opacity">opacity</Mdn> of nearly nothing: the node stays alive, the
+      session keeps its source, and the eye reads a single card riding the pointer.</>],
     code: [
       {label: 'JS', lines: [
         ...span(itemSrc, "updateHide('hide');", "updateHide('hide');"), gap,
@@ -102,7 +101,7 @@ const shown = (origin: Origin, source: string, itemSrc: string, cssSrc: string):
       ]},
       {label: 'CSS', lines: [
         ...unit(cssSrc, '.sortable-list .hide {'),
-        aside('/* not visibility — the session dies with its source */')
+        aside('/* not visibility; the session dies with its source */')
       ]}
     ]
   }
@@ -111,12 +110,12 @@ const shown = (origin: Origin, source: string, itemSrc: string, cssSrc: string):
     dial: 'origin',
     want: 'A vanished origin can disorient; sometimes the eye wants the card both at rest and in hand while it decides.',
     says: ['Do nothing. This is the keep list, so its Item is the plain card: the platform ' +
-      'already drew the snapshot, there are two of the card for the length of the drag — one ' +
-      'at rest, one dimmed under the pointer — and no hiding code exists in its directory at all.'],
+      'already drew the snapshot, there are two of the card for the length of the drag, one ' +
+      'at rest, one dimmed under the pointer, and no hiding code exists in its directory at all.'],
     code: [
       {label: 'HTML', lines: [
         ...span(source, '<Item item={item}', '<Item item={item}'),
-        aside('{/* no hiding wiring exists in this list — nothing to erase */}')
+        aside('{/* no hiding wiring exists in this list; nothing to erase */}')
       ]}
     ]
   };
@@ -126,7 +125,7 @@ const moved = (motion: Motion, pace: Pace, source: string, cssSrc: string): Step
     title: 'Apply the state update directly',
     dial: 'motion',
     want: 'Motion is not free: it competes with the drag session, costs a frame budget, and some users ask for none at all.',
-    says: ['This is the static list — no marking code exists in it. The order applies and React ' +
+    says: ['This is the static list; no marking code exists in it. The order applies and React ' +
       'paints next frame; a keyboard walk is applied as plainly as everything else.'],
     code: [
       {label: 'JS', lines: [
@@ -139,11 +138,11 @@ const moved = (motion: Motion, pace: Pace, source: string, cssSrc: string): Step
     ? {
       title: 'Slide the crossed item home',
       dial: 'motion',
-      want: 'An eager swap that teleports is hard to follow, yet nothing can be animated mid-session by view transitions — the capture would swallow the drag’s own events.',
-      says: ['The swap commits instantly and the crossed item is merely drawn where it used to ' +
-        'be, sliding home on a keyframe whose from is one seat over — the same theater the ' +
-        'table plays, turned horizontal, with the direction as data: --toward flips the sign ' +
-        'of one keyframe instead of naming two.'],
+      want: 'An eager swap that teleports is hard to follow, yet nothing can be animated mid-session by view transitions; the capture would swallow the drag’s own events.',
+      says: [<>The swap commits instantly and the crossed item is merely drawn where it used
+        to be, sliding home on a <Mdn path="Web/CSS/@keyframes">keyframe</Mdn> whose from is one
+        seat over, the same theater the table plays, turned horizontal, with the direction as
+        data: --toward flips the sign of one keyframe instead of naming two.</>],
       code: [
         {label: 'JS', lines: [
           ...span(source, "setPushed({[item]: homeward ? 'right' : 'left'});",
@@ -158,11 +157,12 @@ const moved = (motion: Motion, pace: Pace, source: string, cssSrc: string): Step
     : {
       title: 'Glide the settle, one tick after',
       dial: 'motion',
-      want: 'A lazy settle happens all at once on release — the perfect moment for a view transition, except the drag session is still alive when the drop fires, and a capture mid-session swallows its events.',
-      says: ['Name each item for the transition and defer the settle one tick past the release. ' +
-        'By the time startViewTransition captures the page, the platform has finished its ' +
-        'ceremony, and every item glides from where the drag left it to where the order says ' +
-        'it belongs.'],
+      want: 'A lazy settle happens all at once on release, the perfect moment for a view transition, except the drag session is still alive when the drop fires, and a capture mid-session swallows its events.',
+      says: [<><Mdn path="Web/CSS/view-transition-name">Name each item for the transition</Mdn> and
+        defer the settle one tick past the release. By the
+        time <Mdn path="Web/API/Document/startViewTransition">startViewTransition</Mdn> captures
+        the page, the platform has finished its ceremony, and every item glides from where the
+        drag left it to where the order says it belongs.</>],
       code: [
         {label: 'HTML', lines: [
           ...span(source, 'viewTransitionName: `sort-${item}`', 'viewTransitionName: `sort-${item}`')
@@ -183,10 +183,11 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
     {
       title: 'Arm the drag from its handle',
       want: 'The platform will drag anything marked draggable, but marking the whole card turns every press into a lift and kills text selection inside it.',
-      says: ['draggable is only an attribute, so let the grip arm it: a mousedown on the handle ' +
-        'sets a flag, the card renders draggable just for that gesture, and dragstart declares ' +
-        'the move the platform is about to make. The browser answers with the whole ceremony — ' +
-        'the snapshot under your pointer, the cursor, the cancel — without another line.'],
+      says: [<>draggable is only an attribute, so let the grip arm it: a mousedown on the
+        handle sets a flag, the card renders draggable just for that gesture,
+        and <Mdn path="Web/API/HTMLElement/dragstart_event">dragstart</Mdn> declares the move
+        the platform is about to make. The browser answers with the whole ceremony (the
+        snapshot under your pointer, the cursor, the cancel) without another line.</>],
       code: [
         {label: 'HTML', lines: [
           ...span(itemSrc, '<article', 'draggable={is(dragging)}>')
@@ -195,11 +196,23 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
     },
     {
       title: 'Hold the aloft in state, not in the payload',
-      want: 'dataTransfer exists to carry data between windows, and mid-drag it is locked — a dragover may not read what dragstart wrote, so the payload cannot steer the sort.',
-      says: ['Steer with state instead. The lift reports which item is aloft, the release clears ' +
+      want: <><Mdn path="Web/API/DataTransfer">dataTransfer</Mdn> exists to carry data between
+        windows, and mid-drag it is locked:
+        a <Mdn path="Web/API/HTMLElement/dragover_event">dragover</Mdn> may not read what
+        dragstart wrote, so the payload cannot steer the sort.</>,
+      says: ['Your first try writes the item into the payload at dragstart and reads it back in ' +
+        'dragover, and the read comes back empty. That is not a bug: the store is sealed ' +
+        'mid-drag so a hovered window cannot sniff data that was never dropped on it.',
+        'Steer with state instead. The lift reports which item is aloft, the release clears ' +
         'it, and every handler in between reads the same value the render does. The payload API ' +
         'is still there when another window genuinely needs the data.'],
       code: [
+        {label: 'JS', foil: true, lines: [
+          plain("event.dataTransfer.setData('text/plain', item);"),
+          aside('// written at dragstart'), gap,
+          plain("event.dataTransfer.getData('text/plain');"),
+          aside('// read in dragover: always "", the store is sealed')
+        ]},
         {label: 'JS', lines: [
           ...span(source, 'onLifted={setAloft}', 'onLifted={setAloft}'),
           aside('// the item names itself; the list holds the answer')
@@ -208,12 +221,23 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
     },
     {
       title: 'Accept the drop, or the platform takes it back',
-      want: 'By default nothing is a drop target — release over the list and the platform animates the card flying home, a snapback you cannot cancel.',
-      says: ['Acceptance is a protocol. dragover calls preventDefault to say the drag may land ' +
-        'here, dropEffect names the verb so the cursor matches, and drop calls preventDefault so ' +
-        'the browser does not treat the payload as a navigation. Miss any of the three and the ' +
-        'drag ends in the platform’s apology animation.'],
+      want: 'By default nothing is a drop target: release over the list and the platform animates the card flying home, a snapback you cannot cancel.',
+      says: ['A bare list looks finished. Then you release over it, the card flies home, and your ' +
+        'drop handler never ran.',
+        <>Acceptance is a protocol. dragover
+        calls <Mdn path="Web/API/Event/preventDefault">preventDefault</Mdn> to say the drag may
+        land here, <Mdn path="Web/API/DataTransfer/dropEffect">dropEffect</Mdn> names the verb
+        so the cursor matches, and <Mdn path="Web/API/HTMLElement/drop_event">drop</Mdn> calls
+        preventDefault so the browser does not treat the payload as a navigation. Miss any of
+        the three and the drag ends in the platform’s apology animation.</>],
       code: [
+        {label: 'HTML', foil: true, lines: [
+          plain('<ul aria-label="sortable list">'),
+          plain('    {order.map(item => <Item key={item} item={item}/>)}'),
+          plain('</ul>'), gap,
+          aside("{/* release here: the card flies home in the platform's */}"),
+          aside('{/* apology animation, and your onDrop never fired */}')
+        ]},
         {label: 'HTML', lines: [
           ...span(source, '<ul aria-label="sortable list"', 'onDrop={event => event.preventDefault()}')
         ]}
@@ -222,7 +246,7 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
     {
       title: 'Find the crossing with the inner half',
       want: 'Swap at the first touch of a neighbour and the order chatters: at a boundary, every pixel of movement flips it back and forth.',
-      says: ['There is no chart on this road — the platform fires dragover on whatever the ' +
+      says: ['There is no chart on this road: the platform fires dragover on whatever the ' +
         'pointer is really over, so the event’s own target is the neighbour and its bounding ' +
         'box is the slot. A crossing only counts once the pointer reaches the inner half; the ' +
         'outer quarter holds still, and an item already sliding cannot be overtaken.'],
@@ -237,8 +261,8 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
     moved(motion, pace, source, cssSrc),
     {
       title: 'Arrows go straight to the order',
-      want: 'A keyboard user needs the same reorders, and this is the one thing the API cannot sell you — drag-and-drop only ever answers the pointer.',
-      says: ['It does not matter, because dragging was never the goal — the order changing is. ' +
+      want: 'A keyboard user needs the same reorders, and this is the one thing the API cannot sell you: drag-and-drop only ever answers the pointer.',
+      says: ['It does not matter, because dragging was never the goal; the order changing is. ' +
         'The grip is a real button, so focus reaches it for free, and the item owns its walk: ' +
         'arrow keys compute the move and report the outcome up, none of the ceremony. An item ' +
         'mid-slide keeps the keys silent until it lands. Nothing in this step touches ' +
@@ -251,16 +275,16 @@ const steps = (pace: Pace, origin: Origin, motion: Motion): Step[] => {
     },
     {
       title: 'Know where the road ends',
-      want: 'Some pixels on this road are never yours: the snapshot, the cursor, the cancel — and the keyboard never gets a session at all.',
+      want: 'Some pixels on this road are never yours: the snapshot, the cursor, the cancel. And the keyboard never gets a session at all.',
       says: ['The drag image is a bitmap taken at dragstart, so it cannot be animated and cannot ' +
         'be made opaque on macOS; the cursor belongs to the platform; on macOS even the cancel is ' +
-        'the platform’s animation to run; and drag-and-drop itself never answers the keyboard ' +
-        '— the arrows on the grips work because they change the order directly, without the ' +
-        'API. When those pixels matter, build the drag from pointer events instead — the Tables ' +
+        'the platform’s animation to run; and drag-and-drop itself never answers the keyboard: ' +
+        'the arrows on the grips work because they change the order directly, without the ' +
+        'API. When those pixels matter, build the drag from pointer events instead; the Tables ' +
         'demo walks that road.'],
       code: [
         {label: 'JS', lines: [
-          aside('// no API exists for these pixels — when they matter,'),
+          aside('// no API exists for these pixels; when they matter,'),
           aside('// take the pointer road')
         ]}
       ]
@@ -299,17 +323,18 @@ export const NativeRecipe: FC<ControlsProps> = ({pace, origin, motion, onPace, o
     <header className="brief-line">
       <h2 className="kicker">build the native drag sort yourself</h2>
       <p className="brief">
-        Nine steps of consent and timing — the one demo on this site built on the API actually
+        Nine steps of consent and timing: the one demo on this site built on the API actually
         named drag-and-drop. The dials choose one of eight lists, the readout names the one on
-        screen, and every code block below is carved from that list’s own source.
+        screen, and the real code is carved from that list’s own source. Where there is a wrong
+        way you would reach for first, it appears in a dashed frame before the real one.
       </p>
     </header>
     <p className="lead">
       You want the same sortable list the <Link className="signpost"
       to={`${Paths.demos}?tab=${DemoTopics.tables}`}>Tables demo</Link> builds from pointer
-      events, paid for in platform currency instead: mark a card draggable and the browser brings
+      events, paid for in platform currency instead: mark a card <Mdn path="Web/HTML/Global_attributes/draggable">draggable</Mdn> and the browser brings
       the ghost, the cursor, and the drop rules for very little code. What it asks in return is
-      protocol — the native road is a series of consents and timings, and each step below is one
+      protocol: the native road is a series of consents and timings, and each step below is one
       of them.
     </p>
     <StepList steps={steps(pace, origin, motion)

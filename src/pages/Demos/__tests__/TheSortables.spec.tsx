@@ -161,6 +161,11 @@ describe('the sortable list demo', () => {
     expect(recipe).toHaveTextContent(/Slide the crossed item home/);
     expect(recipe).toHaveTextContent(/Arrows go straight to the order/);
     expect(recipe).toHaveTextContent(/Know where the road ends/);
+    expect(recipe).toHaveTextContent(/read in dragover: always ""/);
+    expect(recipe).toHaveTextContent(/onDrop never fired/);
+    expect(within(recipe).getByRole('link', {name: 'dataTransfer'}))
+      .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/DataTransfer'));
+    expect(recipe.querySelectorAll('.snippet.foil')).toHaveLength(2);
 
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Lazy'}));
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Keep'}));
