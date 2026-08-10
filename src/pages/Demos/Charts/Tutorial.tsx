@@ -26,7 +26,7 @@ import '../Recipe/Recipe.css';
 const gap = plain(' ');
 
 export const ChartsTutorial: FC = () =>
-  <div className="tutorials">
+  <section className="tutorials">
     <h2 className="tutorials-title">let’s build this feature</h2>
     <p className="overview">
       We are going to build this site’s live charts, feature by feature. Here is how to use
@@ -55,7 +55,7 @@ export const ChartsTutorial: FC = () =>
     <section aria-label="build the charts yourself" className="build-steps">
       <StoryList param="graph" stories={[workspaceStory]}/>
     </section>
-  </div>;
+  </section>;
 
 export const priceStory: StoryEntry = {id: 'price',
           can: 'The trader can watch the price move, live',

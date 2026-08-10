@@ -255,7 +255,7 @@ export const DemosPage = () => {
                 const List = lists[pace][origin][motion];
                 return <List list={new Set(['A', 'B', 'C'])}/>;
               })()}
-              <div className="tutorials">
+              <section className="tutorials">
                 <h2 className="tutorials-title">let’s build this feature</h2>
                 <p className="overview">
                   We are going to build this site’s drag-and-drop list, feature by feature.
@@ -293,7 +293,7 @@ export const DemosPage = () => {
                               onPace={next => updateSearchParams({pace: next})}
                               onOrigin={next => updateSearchParams({origin: next})}
                               onMotion={next => updateSearchParams({motion: next})}/>
-              </div>
+              </section>
             </>
         })[tab ?? DemoTopics.accordions]}
       </section>
