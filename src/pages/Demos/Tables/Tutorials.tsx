@@ -7,7 +7,7 @@ import {Recipe, Track} from './Recipe';
 import {LivingTable} from './Recipe/LivingTable';
 import {MenuRecipe} from './Recipe/MenuRecipe';
 import {ResizeRecipe} from './Recipe/ResizeRecipe';
-import './Tutorials.css';
+import '../Tutorials.css';
 
 export type Tutorial = 'sort' | 'menu' | 'resize';
 

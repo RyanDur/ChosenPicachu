@@ -9,6 +9,7 @@ import {PriceChart} from './PriceChart';
 import {Candles} from './Candles';
 import {candlesStory, priceStory} from './Tutorial';
 import '../Recipe/Recipe.css';
+import '../Tutorials.css';
 
 export const ChartPage: FC = () => {
   const {kind} = useParams();
