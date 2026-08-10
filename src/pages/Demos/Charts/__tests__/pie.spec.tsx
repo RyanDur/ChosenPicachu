@@ -1,5 +1,5 @@
 import {render, screen} from '@testing-library/react';
-import {arcPath, sideTotals, slices} from '@pages/Demos/Charts/Pie/shapes';
+import {arcPath, explodedBy, sideTotals, slices} from '@pages/Demos/Charts/Pie/shapes';
 import {Pie} from '@pages/Demos/Charts/Pie';
 import {Trade} from '@pages/Demos/Charts/coinbase';
 
@@ -37,15 +37,26 @@ describe('the pie', () => {
     expect(arcPath(60, 60, 50, short)).toContain('A 50 50 0 0 1');
   });
 
-  test('the card cuts the session into a bought and a sold slice', () => {
+  test('a slice explodes along its own middle', () => {
+    const [rightHalf] = slices([1, 1]);
+
+    const {dx, dy} = explodedBy(rightHalf, 4);
+
+    expect(dx).toBeCloseTo(4);
+    expect(dy).toBeCloseTo(0);
+  });
+
+  test('the card cuts the session into a bought and a sold slice, each with a face and a wall', () => {
     render(<Pie trades={[
       trade({size: 3, side: 'buy'}),
       trade({id: 2, size: 1, side: 'sell'})
     ]}/>);
 
     const card = screen.getByRole('region', {name: 'pie'});
-    expect(card.querySelectorAll('path.bought')).toHaveLength(1);
-    expect(card.querySelectorAll('path.sold')).toHaveLength(1);
+    expect(card.querySelectorAll('.slice.bought path.face')).toHaveLength(1);
+    expect(card.querySelectorAll('.slice.bought path.wall')).toHaveLength(1);
+    expect(card.querySelectorAll('.slice.sold path.face')).toHaveLength(1);
+    expect(card.querySelectorAll('.slice.sold path.wall')).toHaveLength(1);
     expect(card).toHaveTextContent('75% bought');
     expect(card).toHaveTextContent('25% sold');
     expect(card).toHaveTextContent('since you arrived');
@@ -55,7 +66,8 @@ describe('the pie', () => {
     render(<Pie trades={[trade({size: 2, side: 'buy'})]}/>);
 
     const card = screen.getByRole('region', {name: 'pie'});
-    expect(card.querySelectorAll('circle.bought')).toHaveLength(1);
+    expect(card.querySelectorAll('.slice.bought circle.face')).toHaveLength(1);
+    expect(card.querySelectorAll('.slice.bought circle.wall')).toHaveLength(1);
     expect(card.querySelectorAll('path')).toHaveLength(0);
     expect(card).toHaveTextContent('100% bought');
   });

@@ -14,5 +14,7 @@ declare module 'csstype' {
     '--flight-width'?: string;
     '--drift-x'?: string;
     '--drift-y'?: string;
+    '--explode-x'?: string;
+    '--explode-y'?: string;
   }
 }
