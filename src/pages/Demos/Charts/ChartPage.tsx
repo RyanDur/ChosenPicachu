@@ -47,7 +47,7 @@ export const ChartPage: FC = () => {
     return <Navigate to={`${Paths.demos}?tab=${DemoTopics.charts}`} replace/>;
   }
   const {name, reference, story, quote} = features[kind];
-  return <div className="chart-page tutorials">
+  return <article aria-label={`${name} tutorial`} className="chart-page tutorials">
     {kind === 'price'
       ? <PriceChart trades={liveTrades.trades}/>
       : kind === 'candles'
@@ -80,5 +80,5 @@ export const ChartPage: FC = () => {
     <section aria-label={`build the ${name} yourself`} className="build-steps">
       <StoryList param="graph" stories={[story]}/>
     </section>
-  </div>;
+  </article>;
 };

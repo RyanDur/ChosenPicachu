@@ -242,7 +242,8 @@ describe('a list of charts', () => {
     ]}, {path: `${Paths.demos}charts/price/`});
     await screen.findByRole('region', {name: 'live trades'});
 
-    expect(screen.getByRole('heading', {name: 'let’s build this feature'})).toBeVisible();
+    const page = screen.getByRole('article', {name: 'price line tutorial'});
+    expect(within(page).getByRole('heading', {name: 'let’s build this feature'})).toBeVisible();
     expect(screen.getByText(/without reading a single digit/)).toBeVisible();
     expect(screen.getByText('a trader')).toBeVisible();
     expect(screen.getByText(/build the story yourself first/)).toBeVisible();
