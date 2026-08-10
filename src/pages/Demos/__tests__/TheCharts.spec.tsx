@@ -250,6 +250,50 @@ describe('a list of charts', () => {
     expect(recipe.querySelectorAll('.story')).toHaveLength(1);
   });
 
+  test('the price story teaches the whole journey, data to drawn chart', async () => {
+    const feed = await streamingFeed();
+
+    renderWithMemoryRouter({children: [
+      chartsRoute(urlOf(feed)),
+      {path: `${Paths.demos}charts/:kind/`,
+        element: <EnvProvider env={{tradeFeed: urlOf(feed), tradeHistory: 'http://127.0.0.1:9'}}><ChartPage/></EnvProvider>}
+    ]}, {path: `${Paths.demos}charts/price/`});
+    await screen.findByRole('region', {name: 'live trades'});
+
+    const recipe = screen.getByRole('region', {name: 'build the price line yourself'});
+    expect(recipe).toHaveTextContent('export const subscribeTo');
+    expect(recipe).toHaveTextContent('export const decodeTrade');
+    expect(recipe).toHaveTextContent('export const periodCandles');
+    expect(recipe).toHaveTextContent('export const mergeLive');
+    expect(recipe).toHaveTextContent('export const sparklinePoints');
+    expect(recipe).toHaveTextContent('export const Axes');
+  });
+
+  test('the candles story stands on its own feet', async () => {
+    const feed = await streamingFeed();
+
+    renderCharts(urlOf(feed), '?tab=charts&charts=candles');
+    await screen.findByRole('region', {name: 'candles'});
+    fireEvent.keyDown(screen.getByRole('article', {name: 'chart 1'}), {key: 'Enter'});
+
+    const recipe = await screen.findByRole('region', {name: 'build the candles yourself'});
+    expect(recipe).toHaveTextContent('export const bucketTrades');
+    expect(recipe).toHaveTextContent('export const mergeLive');
+    expect(recipe).toHaveTextContent('<Axes');
+    expect(recipe.querySelectorAll('.snippet.foil').length).toBeGreaterThan(0);
+  });
+
+  test('the pressure story proves the side is a fact, not a guess', async () => {
+    const feed = await streamingFeed();
+
+    renderCharts(urlOf(feed), '?tab=charts&charts=pressure');
+    await screen.findByRole('region', {name: 'pressure'});
+    fireEvent.keyDown(screen.getByRole('article', {name: 'chart 1'}), {key: 'Enter'});
+
+    const recipe = await screen.findByRole('region', {name: 'build the pressure yourself'});
+    expect(recipe).toHaveTextContent("side: D.literalUnion('buy', 'sell')");
+  });
+
   test('the charts travel in the url', async () => {
     const feed = await streamingFeed();
 

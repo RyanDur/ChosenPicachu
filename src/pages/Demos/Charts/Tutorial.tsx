@@ -14,6 +14,9 @@ import pressureComponent from './Pressure/index.tsx?raw';
 import pressureCss from './Pressure/Pressure.css?raw';
 import moneySource from './money.ts?raw';
 import slotsSource from './slots.ts?raw';
+import coinbaseSource from './coinbase/index.ts?raw';
+import historySource from './coinbase/history.ts?raw';
+import liveTradesSource from './useLiveTrades.ts?raw';
 import axesSource from './Axes/index.tsx?raw';
 import pageSource from '../component.tsx?raw';
 import crossingSource from '../DragAndDrop/crossing.ts?raw';
@@ -65,16 +68,52 @@ export const priceStory: StoryEntry = {id: 'price',
             'one candle per window. History hydrates the left of the line, the live feed ' +
             'writes the right, and the merge keeps a single truth in time order.'],
           steps: [
-            {title: 'Bucket the stream into candles',
-              want: 'Raw trades tick too fast to draw; the line needs one point per window, and the left of the line existed before the trader arrived.',
-              says: ['bucketTrades folds the live trades into one candle per window. ' +
-                'usePeriodCandles fetches the recent past at the same granularity, and ' +
-                'mergeLive stitches them: history where the stream has not spoken, the ' +
-                'stream everywhere it has.'],
+            {title: 'Open the stream',
+              want: 'A live chart starts with a conversation: the exchange speaks in frames, and every frame is a stranger until it proves otherwise.',
+              says: [<>The browser opens
+                a <Mdn path="Web/API/WebSocket">WebSocket</Mdn> and asks for one product’s
+                matches. Every frame then runs a gauntlet: parse, a strict decoder that
+                names exactly the shape a match may take, and number conversions that
+                refuse NaN. What survives is a Trade; what does not never reaches state.
+                And the page keeps only the newest 1500, because the stream never ends and
+                the page must not grow with it.</>],
+              code: [
+                {label: 'JS', foil: true, lines: [
+                  plain("socket.addEventListener('message', event =>"),
+                  plain('    setTrades([...trades, JSON.parse(event.data)]));'),
+                  aside('// every malformed frame is now state, forever')
+                ]},
+                {label: 'JS', lines: [
+                  ...unit(coinbaseSource, 'export const subscribeTo'), gap,
+                  ...unit(coinbaseSource, 'export const decodeTrade'), gap,
+                  ...unit(liveTradesSource, 'const LATEST_TRADES_CAP'), gap,
+                  ...unit(liveTradesSource, 'const appendTrade')
+                ]}
+              ]},
+            {title: 'Hydrate the past',
+              want: 'The trader arrives mid-session; the left of the chart existed before they did.',
+              says: [<>The exchange also answers
+                over <Mdn path="Web/API/Fetch_API">HTTP</Mdn>: recent candles at the
+                period’s granularity, decoded with the same suspicion. mergeLive stitches
+                the two truths into one: history where the stream has not spoken, the
+                stream everywhere it has, capped to what the card can hold.</>],
               code: [
                 {label: 'JS', lines: [
-                  ...unit(shapesSource, 'export const bucketTrades'), gap,
+                  ...unit(historySource, 'export const periodCandles'), gap,
+                  ...unit(candlesHook, 'export const usePeriodCandles'), gap,
                   ...unit(shapesSource, 'export const mergeLive')
+                ]}
+              ]},
+            {title: 'Bucket the stream into candles',
+              want: 'Raw trades tick too fast to draw; the line needs one point per window.',
+              says: ['bucketTrades folds the live trades into one candle per window: the ' +
+                'first price opens it, every trade stretches its reach, and the last one ' +
+                'closes it. One candle per window is one point per window, which is all a ' +
+                'line needs.'],
+              code: [
+                {label: 'JS', lines: [
+                  ...unit(shapesSource, 'const fold'), gap,
+                  ...unit(shapesSource, 'export const bucketTrades')
                 ]}
               ]},
             {title: 'Choose the window',
@@ -87,8 +126,7 @@ export const priceStory: StoryEntry = {id: 'price',
               code: [
                 {label: 'JS', lines: [
                   ...unit(periodSource, 'export const bucketMs'), gap,
-                  ...unit(periodSource, 'export const periodCap'), gap,
-                  ...unit(candlesHook, 'export const usePeriodCandles')
+                  ...unit(periodSource, 'export const periodCap')
                 ]},
                 {label: 'HTML', lines: [
                   ...span(priceSource, '{actions}', '</Menu>')
@@ -131,8 +169,29 @@ export const candlesStory: StoryEntry = {id: 'candles',
           soThat: 'each window answers open, close, reach, and volume',
           tells: ['A line answers where the price went; a candle answers what each window ' +
             'did: where it opened and closed, how far it reached, and how much traded. The ' +
-            'same buckets feed both cards; no new state exists, only new shapes.'],
+            'same buckets feed both cards; no new state exists, only new shapes.',
+            'No new data exists for it either: the page owns one stream and one history, ' +
+            'and every card reads them, so two charts can never tell two stories.'],
           steps: [
+            {title: 'Born from the same buckets',
+              want: 'A second chart must not mean a second truth; two cards reading the same market have to agree, frame for frame.',
+              says: [<>The page owns one stream and hands every card the same trades; this
+                card buckets them with the very fold the price line used,
+                and mergeLive stitches the same history underneath. The line only ever read
+                a corner of each candle; this card finally reads all of it. The period menu
+                rides this card too, the
+                same <Mdn path="Web/API/Popover_API">popover</Mdn> chooser.</>],
+              code: [
+                {label: 'JS', foil: true, lines: [
+                  plain("const candles = await fetch('/candles?for=the-new-card');"),
+                  aside('// two fetches, two clocks, one screen disagreeing with itself')
+                ]},
+                {label: 'JS', lines: [
+                  ...unit(shapesSource, 'const fold'), gap,
+                  ...unit(shapesSource, 'export const bucketTrades'), gap,
+                  ...unit(shapesSource, 'export const mergeLive')
+                ]}
+              ]},
             {title: 'Shape each window’s candle',
               want: 'Open, high, low, close: four numbers per window, one honest glyph.',
               says: ['candleShapes turns each candle into a body and a wick by the same ' +
@@ -166,6 +225,16 @@ export const candlesStory: StoryEntry = {id: 'candles',
                 {label: 'CSS', lines: [
                   ...unit(candlesCss, '.volume {')
                 ]}
+              ]},
+            {title: 'The axes come free',
+              want: 'A cluster of candles is a shape, not a chart; it needs its reach labelled and its hours ticked.',
+              says: ['The same Axes wraps this card: the high and the low come from the ' +
+                'candles’ own reach, and the time ticks pattern themselves per period. A ' +
+                'component that owns one job serves every chart that has that job.'],
+              code: [
+                {label: 'HTML', lines: [
+                  ...span(candlesSource, '<Axes high', 'headroomMs={2 * bucketMs[period]}>')
+                ]}
               ]}
           ]};
 
@@ -182,14 +251,17 @@ export const pressureStory: StoryEntry = {id: 'pressure',
           steps: [
             {title: 'Split each window by side',
               want: 'Volume alone says how much traded, never who pushed; the split has to survive the bucketing.',
-              says: ['Every match names its taker’s side. The fold mirrors the candles’ ' +
-                'bucketing, but keeps two sums per window: bought size and sold size.'],
+              says: ['Every match names its taker’s side, and the decoder makes that a ' +
+                'fact: a frame whose side is not buy or sell never becomes a Trade. The ' +
+                'fold mirrors the candles’ bucketing, but keeps two sums per window: ' +
+                'bought size and sold size.'],
               code: [
                 {label: 'JS', foil: true, lines: [
                   plain("const driver = candle.close > candle.open ? 'buying' : 'selling';"),
                   aside('// sellers stepping away wears the same badge as a stampede')
                 ]},
                 {label: 'JS', lines: [
+                  ...unit(coinbaseSource, 'const MatchDecoder'), gap,
                   ...unit(pressureSource, 'const fold'), gap,
                   ...unit(pressureSource, 'export const bucketPressure')
                 ]}
