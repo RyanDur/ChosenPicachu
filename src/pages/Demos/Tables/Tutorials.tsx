@@ -27,7 +27,7 @@ type Props = {
 };
 
 export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack, ...props}) =>
-  <div className="tutorials">
+  <section className="tutorials">
     <h2 className="tutorials-title">let’s build this feature</h2>
     <p className="overview">
       We are going to build this site’s live trading table, feature by feature. Here is how to
@@ -69,4 +69,4 @@ export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack, ...props}) 
     {shown === 'menu' && <MenuRecipe pace={props.pace} origin={props.origin}
                                      motion={props.motion} onMotion={props.onMotion}/>}
     {shown === 'resize' && <ResizeRecipe/>}
-  </div>;
+  </section>;

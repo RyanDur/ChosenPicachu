@@ -77,10 +77,10 @@ export const StepList: FC<{steps: StepEntry[]}> = ({steps}) =>
     {steps.map(step =>
       <li className={classNames('step', has(step.dial) && 'tuned')} key={step.title}>
         <article className="step-body">
-          <div className="step-heading">
+          <header className="step-heading">
             <h3 className="step-title">{step.title}</h3>
             {step.dial}
-          </div>
+          </header>
           <div className="step-flow">
             <div className="step-words">
               <p className="step-want">{step.want}</p>
