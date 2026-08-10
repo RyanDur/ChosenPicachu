@@ -1,5 +1,6 @@
 import {has} from '@ryandur/sand';
 import {Trade} from '../coinbase';
+import {windowSlots} from '../slots';
 
 export type Candle = {
   openedAt: number;
@@ -69,22 +70,18 @@ export const candleShapes = (
   const lowest = Math.min(...candles.map(candle => candle.low));
   const scaleY = (price: number): number =>
     highest === lowest ? height / 2 : height - ((price - lowest) / (highest - lowest)) * height;
-  const from = candles[0].openedAt;
-  const span = candles[candles.length - 1].openedAt + 2 * bucketMs - from;
-  const slot = (bucketMs / span) * width;
-  const bodyWidth = slot * 0.6;
-  return candles.map(candle => {
-    const x = ((candle.openedAt - from) / span) * width;
+  const slots = windowSlots(candles.map(candle => candle.openedAt), width, bucketMs);
+  return candles.map((candle, at) => {
     const bodyTop = scaleY(Math.max(candle.open, candle.close));
     const bodyBottom = scaleY(Math.min(candle.open, candle.close));
     return {
-      x: x + (slot - bodyWidth) / 2,
-      width: bodyWidth,
+      x: slots[at].x,
+      width: slots[at].width,
       bodyTop,
       bodyHeight: Math.max(bodyBottom - bodyTop, 1),
       wickTop: scaleY(candle.high),
       wickBottom: scaleY(candle.low),
-      center: x + slot / 2,
+      center: slots[at].center,
       direction: candle.close >= candle.open ? 'up' : 'down'
     };
   });
@@ -107,15 +104,12 @@ export const volumeShapes = (
     return [];
   }
   const heaviest = Math.max(...candles.map(candle => candle.volume));
-  const from = candles[0].openedAt;
-  const span = candles[candles.length - 1].openedAt + 2 * bucketMs - from;
-  const slot = (bucketMs / span) * width;
-  const barWidth = slot * 0.6;
-  return candles.map(candle => {
+  const slots = windowSlots(candles.map(candle => candle.openedAt), width, bucketMs);
+  return candles.map((candle, at) => {
     const barHeight = heaviest === 0 ? 0 : (candle.volume / heaviest) * height;
     return {
-      x: ((candle.openedAt - from) / span) * width + (slot - barWidth) / 2,
-      width: barWidth,
+      x: slots[at].x,
+      width: slots[at].width,
       top: height - barHeight,
       height: barHeight
     };

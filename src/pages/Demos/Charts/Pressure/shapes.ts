@@ -1,5 +1,6 @@
 import {has} from '@ryandur/sand';
 import {Trade} from '../coinbase';
+import {windowSlots} from '../slots';
 
 export type Pressure = {
   openedAt: number;
@@ -49,15 +50,12 @@ export const pressureShapes = (
   const peak = heaviestSide(pressures);
   const middle = height / 2;
   const scale = (size: number): number => peak === 0 ? 0 : (size / peak) * middle;
-  const from = pressures[0].openedAt;
-  const span = pressures[pressures.length - 1].openedAt + 2 * bucketMs - from;
-  const slot = (bucketMs / span) * width;
-  const barWidth = slot * 0.6;
-  return pressures.map(pressure => {
+  const slots = windowSlots(pressures.map(pressure => pressure.openedAt), width, bucketMs);
+  return pressures.map((pressure, at) => {
     const boughtHeight = scale(pressure.bought);
     return {
-      x: ((pressure.openedAt - from) / span) * width + (slot - barWidth) / 2,
-      width: barWidth,
+      x: slots[at].x,
+      width: slots[at].width,
       boughtTop: middle - boughtHeight,
       boughtHeight,
       soldTop: middle,
