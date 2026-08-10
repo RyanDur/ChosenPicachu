@@ -56,16 +56,11 @@
   }
 
   .step-body {
-    display: grid;
-    gap: var(--base);
-    min-width: 0;
-  }
-
-  .step-flow {
     display: flex;
     flex-wrap: wrap;
     align-items: start;
     gap: var(--base-x-2) var(--base-x-3);
+    min-width: 0;
   }
 
   .step-words {
@@ -83,6 +78,7 @@
   }
 
   .step-heading {
+    flex-basis: 100%;
     display: flex;
     flex-wrap: wrap;
     align-items: center;

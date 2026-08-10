@@ -81,15 +81,13 @@ export const StepList: FC<{steps: StepEntry[]}> = ({steps}) =>
             <h3 className="step-title">{step.title}</h3>
             {step.dial}
           </header>
-          <div className="step-flow">
-            <div className="step-words">
-              <p className="step-want">{step.want}</p>
-              {step.says.map((paragraph, at) => <p className="step-says" key={at}>{paragraph}</p>)}
-              {step.figure}
-            </div>
-            <div className="step-code">
-              {step.code.map(({label, lines, foil}, at) => <Snippet label={label} lines={lines} foil={foil} key={at}/>)}
-            </div>
+          <div className="step-words">
+            <p className="step-want">{step.want}</p>
+            {step.says.map((paragraph, at) => <p className="step-says" key={at}>{paragraph}</p>)}
+            {step.figure}
+          </div>
+          <div className="step-code">
+            {step.code.map(({label, lines, foil}, at) => <Snippet label={label} lines={lines} foil={foil} key={at}/>)}
           </div>
         </article>
       </li>)}
