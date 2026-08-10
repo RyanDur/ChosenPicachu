@@ -19,8 +19,7 @@ export type StepEntry = {
   code: Block[];
 };
 
-export const plain = (text: string): Line => ({text});
-export const aside = (text: string): Line => ({text, dim: true});
+export {aside, plain} from './lines';
 
 export type StoryEntry = {
   id: string;

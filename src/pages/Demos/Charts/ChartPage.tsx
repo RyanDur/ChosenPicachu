@@ -1,8 +1,8 @@
-import {FC} from 'react';
+import {FC, ReactNode} from 'react';
 import {Navigate, useParams} from 'react-router';
 import {useEnv} from '@components/Env';
 import {Paths} from '@pages/Paths';
-import {StoryList} from '../Recipe';
+import {Stories} from '../Recipe';
 import {DemoTopics} from '../types';
 import {useLiveTrades} from './useLiveTrades';
 import {PriceChart} from './PriceChart';
@@ -11,7 +11,6 @@ import {Pressure} from './Pressure';
 import {Pie} from './Pie';
 import {candlesStory, pieStory, pressureStory, priceStory} from './Tutorial';
 import {ChartKind, isChartKind, matchChartKind} from './kinds';
-import {StoryEntry} from '../Recipe/StepList';
 import {Trade} from './coinbase';
 import '../Recipe/Recipe.css';
 import '../Tutorials.css';
@@ -21,7 +20,7 @@ type Feature = {
   name: string;
   chart: FC<{trades: readonly Trade[]}>;
   reference: string;
-  story: StoryEntry;
+  story: ReactNode;
   quote: string;
 };
 
@@ -94,7 +93,7 @@ export const ChartPage: FC = () => {
       to see the steps, or to compare them with yours.
     </p>
     <section aria-label={`build the ${name} yourself`} className="build-steps">
-      <StoryList param="graph" stories={[story]}/>
+      <Stories>{story}</Stories>
     </section>
     </article>;
   return matchChartKind(isChartKind(kind) ? kind : undefined, {

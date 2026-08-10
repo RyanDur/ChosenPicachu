@@ -1,3 +1,13 @@
 export type {Block, StepEntry, StoryEntry} from './StepList';
-export {StepList, StoryList, aside, plain} from './StepList';
+export {StepList, StoryList} from './StepList';
+export {Stories} from './Stories';
+export {Story} from './Story';
+export {Tell} from './Tell';
+export {Steps} from './Steps';
+export {Step} from './Step';
+export {Words} from './Words';
+export {Says} from './Says';
+export {Codes} from './Codes';
+export {Snippet} from './Snippet';
+export {aside, plain} from './lines';
 export {Mdn} from './Mdn';
