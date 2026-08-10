@@ -41,6 +41,14 @@ const paragraphs = (count: number) =>
 
 type ChartKind = 'price' | 'candles' | 'pressure';
 
+const allChartKinds: readonly ChartKind[] = ['price', 'candles', 'pressure'];
+
+const chartNames: Record<ChartKind, string> = {
+  price: 'Price line',
+  candles: 'Candles',
+  pressure: 'Pressure'
+};
+
 export const DemosPage = () => {
   const {tab, pace = 'eager', origin = 'hide', motion = 'animated', tut = 'sort', track = 'pointer', charts = 'price', updateSearchParams} =
     useSearchParamsObject(
@@ -48,10 +56,12 @@ export const DemosPage = () => {
       {tab: DemoTopics.accordions});
   const isChartKind = (kind: string): kind is ChartKind =>
     kind === 'price' || kind === 'candles' || kind === 'pressure';
-  const dealtCharts = charts.split(',').filter(isChartKind);
+  const dealtCharts = charts.split(',').filter(isChartKind)
+    .filter((kind, at, all) => all.indexOf(kind) === at);
   const chartKinds: readonly ChartKind[] = dealtCharts.length > 0 ? dealtCharts : ['price'];
   const addChart = (kind: ChartKind) => () =>
     updateSearchParams({charts: [kind, ...chartKinds].join(',')});
+  const absentKinds = allChartKinds.filter(kind => !chartKinds.includes(kind));
   const removeChart = (at: number) => () =>
     updateSearchParams({charts: chartKinds.filter((_, seat) => seat !== at).join(',')});
   const seated = (from: number, to: number): ChartKind[] => {
@@ -152,12 +162,13 @@ export const DemosPage = () => {
               <header className="charts-heading">
                 <h2 className="headline">{`Bitcoin, live — every ${tradeProduct} trade on Coinbase`}</h2>
                 <output className="status" data-status={liveTrades.status}>{statusCopy[liveTrades.status]}</output>
-                <Menu id="add-chart" label="Add a chart" toggle="+"
-                      toggleClassName="add-chart button secondary">
-                  <button type="button" className="item" onClick={addChart('price')}>Price line</button>
-                  <button type="button" className="item" onClick={addChart('candles')}>Candles</button>
-                  <button type="button" className="item" onClick={addChart('pressure')}>Pressure</button>
-                </Menu>
+                {absentKinds.length > 0 &&
+                  <Menu id="add-chart" label="Add a chart" toggle="+"
+                        toggleClassName="add-chart button secondary">
+                    {absentKinds.map(kind =>
+                      <button type="button" key={kind} className="item"
+                              onClick={addChart(kind)}>{chartNames[kind]}</button>)}
+                  </Menu>}
               </header>
               <ul className="chart-list">{chartKinds.map((kind, at) =>
                 <li key={at}
