@@ -301,7 +301,7 @@ describe('a list of charts', () => {
     const recipe = await screen.findByRole('region', {name: 'build the pie yourself'});
     expect(recipe).toHaveTextContent('export const sideTotals');
     expect(recipe).toHaveTextContent('export const slices');
-    expect(recipe).toHaveTextContent('export const arcPath');
+    expect(recipe).toHaveTextContent('export const sweepGates');
     expect(screen.getByText(/who owns the session/)).toBeVisible();
   });
 });

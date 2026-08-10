@@ -1,7 +1,7 @@
 import {FC, ReactNode} from 'react';
 import {classNames} from '@components/class-names';
 import {Trade} from '../coinbase';
-import {arcPath, explodedBy, sideTotals, slices, Slice} from './shapes';
+import {degrees, explodedBy, sideTotals, slices, sweepGates} from './shapes';
 import '../chart-card.css';
 import './Pie.css';
 
@@ -10,17 +10,14 @@ const RADIUS = 56;
 const DEPTH = 9;
 const EXPLODE = 4;
 
+const HALF = `M 0 0 L 0 ${-RADIUS} A ${RADIUS} ${RADIUS} 0 0 1 0 ${RADIUS} Z`;
+
 const sides = ['bought', 'sold'];
 
 type Props = {
   trades: readonly Trade[];
   actions?: ReactNode;
 };
-
-const disc = (slice: Slice, cy: number, dressed: string) =>
-  slice.share === 1
-    ? <circle className={dressed} cx={SIZE / 2} cy={cy} r={RADIUS}/>
-    : <path className={dressed} d={arcPath(SIZE / 2, cy, RADIUS, slice)}/>;
 
 export const Pie: FC<Props> = ({trades, actions}) => {
   const totals = sideTotals(trades);
@@ -31,14 +28,33 @@ export const Pie: FC<Props> = ({trades, actions}) => {
     </header>
     <section className="chart-stage">
       <svg className="split" aria-hidden="true" viewBox={`0 0 ${SIZE} ${SIZE + DEPTH}`}>
+        <defs>
+          <clipPath id="pie-first-gate">
+            <rect x={0} y={-SIZE} width={SIZE} height={2 * SIZE}/>
+          </clipPath>
+          <clipPath id="pie-second-gate">
+            <rect x={-SIZE} y={-SIZE} width={SIZE} height={2 * SIZE}/>
+          </clipPath>
+        </defs>
         {cut.map((slice, at) => {
           const {dx, dy} = slice.share === 1 ? {dx: 0, dy: 0} : explodedBy(slice, EXPLODE);
-          return slice.share > 0 &&
-            <g key={sides[at]} className={classNames('slice', sides[at])}
-               style={{'--explode-x': `${dx}px`, '--explode-y': `${dy}px`}}>
-              {disc(slice, SIZE / 2 + DEPTH, 'wall')}
-              {disc(slice, SIZE / 2, 'face')}
+          const {opening, closing} = sweepGates(slice);
+          const layer = (drop: number, dressed: string) =>
+            <g className={dressed}
+               style={{'--seat-x': `${SIZE / 2}px`, '--seat-y': `${SIZE / 2 + drop}px`,
+                 '--turn': `${degrees(slice.from)}deg`}}>
+              <g clipPath="url(#pie-first-gate)">
+                <path className="half" d={HALF} style={{'--swing': `${opening}deg`}}/>
+              </g>
+              <g clipPath="url(#pie-second-gate)">
+                <path className="half" d={HALF} style={{'--swing': `${closing}deg`}}/>
+              </g>
             </g>;
+          return <g key={sides[at]} className={classNames('slice', sides[at])}
+                    style={{'--explode-x': `${dx}px`, '--explode-y': `${dy}px`}}>
+            {layer(DEPTH, 'wall')}
+            {layer(0, 'face')}
+          </g>;
         })}
       </svg>
       <p className="legend">

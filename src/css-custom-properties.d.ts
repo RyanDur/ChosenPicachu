@@ -16,5 +16,9 @@ declare module 'csstype' {
     '--drift-y'?: string;
     '--explode-x'?: string;
     '--explode-y'?: string;
+    '--turn'?: string;
+    '--swing'?: string;
+    '--seat-x'?: string;
+    '--seat-y'?: string;
   }
 }
