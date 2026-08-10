@@ -264,6 +264,8 @@ describe('a list of charts', () => {
     const recipe = screen.getByRole('region', {name: 'build the price line yourself'});
     expect(recipe).toHaveTextContent('export const subscribeTo');
     expect(recipe).toHaveTextContent('export const decodeTrade');
+    expect(recipe).toHaveTextContent('.mBind(toTrade);');
+    expect(recipe).toHaveTextContent('.map(toCandles);');
     expect(recipe).toHaveTextContent('export const periodCandles');
     expect(recipe).toHaveTextContent('export const mergeLive');
     expect(recipe).toHaveTextContent('export const sparklinePoints');

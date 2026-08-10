@@ -17,6 +17,18 @@ const rule = {
 
 const seeded = (columns) => columns.reduce((shares, {column, width}) =>
     ({...shares, [column]: width}), {});
+
+const decoded = (raw) =>
+    attempt(() => parse(raw))
+        .mBind(check)
+        .mBind(shape);
+
+const bucketish = (trades: readonly Trade[]): readonly Candle[] =>
+    trades.reduce<readonly Candle[]>((candles, trade) => {
+        return candles;
+    }, []);
+
+const trailing = 'never carved';
 `;
 
 const css = `.sortable .header-cell {
@@ -60,6 +72,30 @@ describe('carving examples out of the source they teach', () => {
     expect(unit(source, 'const seeded = ').map(({text}) => text)).toEqual([
       'const seeded = (columns) => columns.reduce((shares, {column, width}) =>',
       '    ({...shares, [column]: width}), {});'
+    ]);
+  });
+
+  test('a chained expression continues through its dots', () => {
+    expect(unit(source, 'const decoded').map(({text}) => text)).toEqual([
+      'const decoded = (raw) =>',
+      '    attempt(() => parse(raw))',
+      '        .mBind(check)',
+      '        .mBind(shape);'
+    ]);
+  });
+
+  test('array types and generics never end a unit early', () => {
+    expect(unit(source, 'const bucketish').map(({text}) => text)).toEqual([
+      'const bucketish = (trades: readonly Trade[]): readonly Candle[] =>',
+      '    trades.reduce<readonly Candle[]>((candles, trade) => {',
+      '        return candles;',
+      '    }, []);'
+    ]);
+  });
+
+  test('a bracketless unit ends at its own semicolon', () => {
+    expect(unit(source, 'const still').map(({text}) => text)).toEqual([
+      'const still = 0;'
     ]);
   });
 
