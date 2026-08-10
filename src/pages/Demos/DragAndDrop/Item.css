@@ -1,5 +1,4 @@
 .sortable-list .draggable {
-    max-width: var(--base-x-40);
     padding: var(--base-x-4);
     padding-top: var(--base);
     border-radius: var(--radius-card);
