@@ -10,14 +10,28 @@
       stroke: var(--charcoal);
       stroke-width: var(--hairline);
       vector-effect: non-scaling-stroke;
+      transition: x1 300ms ease-out, y1 300ms ease-out, x2 300ms ease-out, y2 300ms ease-out;
+    }
+
+    .body,
+    .wall {
+      transition: x 300ms ease-out, y 300ms ease-out, width 300ms ease-out, height 300ms ease-out;
     }
 
     .up .body {
       fill: var(--mint-shade);
     }
 
+    .up .wall {
+      fill: var(--mint-ink);
+    }
+
     .down .body {
       fill: var(--internationl-orange-engineering);
+    }
+
+    .down .wall {
+      fill: var(--internationl-orange-engineering-shade);
     }
   }
 
@@ -28,8 +42,17 @@
     margin-top: var(--base-x-0_5);
     padding: var(--base) 0 var(--base-x-0_5);
 
+    .volume,
+    .volume-wall {
+      transition: x 300ms ease-out, y 300ms ease-out, width 300ms ease-out, height 300ms ease-out;
+    }
+
     .volume {
       fill: var(--faded-leather);
+    }
+
+    .volume-wall {
+      fill: var(--field-drab);
     }
   }
 

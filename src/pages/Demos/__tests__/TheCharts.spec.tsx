@@ -471,6 +471,8 @@ describe('the demos page', () => {
       ]);
       await waitFor(() => expect(drawnCandleParts('rect.body')).toBe(2));
       expect(drawnCandleParts('rect.volume')).toBe(2);
+      expect(drawnCandleParts('rect.wall')).toBe(2);
+      expect(drawnCandleParts('rect.volume-wall')).toBe(2);
     });
 
     test('the chart tells the user its price and time range', async () => {
