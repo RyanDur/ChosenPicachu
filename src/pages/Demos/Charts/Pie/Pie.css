@@ -1,0 +1,28 @@
+.pie {
+  margin-bottom: var(--base-x-4);
+
+  .split {
+    display: block;
+    height: var(--base-x-32_5);
+    margin-inline: auto;
+    padding: var(--base) 0 var(--base-x-0_5);
+    box-sizing: border-box;
+  }
+
+  .bought {
+    fill: var(--mint-shade);
+  }
+
+  .sold {
+    fill: var(--internationl-orange-engineering);
+  }
+
+  .legend {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    gap: var(--base-x-3);
+    font-size: var(--text-caption);
+    color: var(--charcoal);
+  }
+}

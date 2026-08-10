@@ -12,6 +12,8 @@ import candlesCss from './Candles/Candles.css?raw';
 import pressureSource from './Pressure/shapes.ts?raw';
 import pressureComponent from './Pressure/index.tsx?raw';
 import pressureCss from './Pressure/Pressure.css?raw';
+import pieSource from './Pie/shapes.ts?raw';
+import pieComponent from './Pie/index.tsx?raw';
 import moneySource from './money.ts?raw';
 import slotsSource from './slots.ts?raw';
 import coinbaseSource from './coinbase/index.ts?raw';
@@ -19,6 +21,7 @@ import historySource from './coinbase/history.ts?raw';
 import liveTradesSource from './useLiveTrades.ts?raw';
 import axesSource from './Axes/index.tsx?raw';
 import pageSource from '../component.tsx?raw';
+import kindsSource from './kinds.ts?raw';
 import crossingSource from '../DragAndDrop/crossing.ts?raw';
 import pageCss from '../DemosPage.css?raw';
 import '../Recipe/Recipe.css';
@@ -300,6 +303,62 @@ export const pressureStory: StoryEntry = {id: 'pressure',
               ]}
           ]};
 
+export const pieStory: StoryEntry = {id: 'pie',
+          can: 'The trader can see who owns the session',
+          soThat: 'the whole pot reads in one circle',
+          tells: ['Pressure answers minute by minute; the pie answers the whole pot: ' +
+            'everything traded since arrival, one slice per side. The same decoded ' +
+            'stream feeds it, and like pressure it counts only the session it watched, ' +
+            'because history never says who started a trade.',
+            'The circle is cut by arithmetic: each side’s share of the total becomes an ' +
+            'angle, and each angle becomes one SVG path. A side that took everything ' +
+            'gets a circle instead, because an arc from a point back to itself draws ' +
+            'nothing.'],
+          steps: [
+            {title: 'Total the sides',
+              want: 'One number per side for the whole session; the pie asks nothing about time.',
+              says: ['sideTotals folds every trade into two sums, bought size and sold ' +
+                'size, the same side the decoder proved. No buckets, no windows: the pie ' +
+                'is the session’s aggregate, which is exactly why it stays honest as a ' +
+                'pair of totals.'],
+              code: [
+                {label: 'JS', lines: [
+                  ...unit(pieSource, 'export const sideTotals')
+                ]}
+              ]},
+            {title: 'Cut the circle',
+              want: 'Shares must become drawable shapes, and a share must read as its angle, nothing else.',
+              says: [<>You could paint the split with a conic gradient, but a painted
+                background has no parts: nothing to class, nothing to label, nothing for a
+                test to find. So each share becomes a slice of the full turn, and each
+                slice becomes one
+                SVG <Mdn path="Web/SVG/Attribute/d">path</Mdn>: move to the center, line
+                to where the slice starts, arc to where it ends, close. An arc past half
+                the circle sets the large-arc flag, and a slice that is the whole circle
+                is drawn as a circle, because an arc from a point back to itself draws
+                nothing.</>],
+              code: [
+                {label: 'JS', foil: true, lines: [
+                  plain("background: conic-gradient(green 0 75%, orange 75%);"),
+                  aside('/* one painted background, zero parts to name or announce */')
+                ]},
+                {label: 'JS', lines: [
+                  ...unit(pieSource, 'export const slices'), gap,
+                  ...unit(pieSource, 'export const arcPath')
+                ]}
+              ]},
+            {title: 'Name the shares',
+              want: 'A circle without numbers is an impression; the trader wants the split spoken.',
+              says: ['The legend prints each share as a percentage in the slice’s own ' +
+                'color class, and the caption claims only what the card can honestly ' +
+                'claim: the session’s volume by side, since you arrived.'],
+              code: [
+                {label: 'HTML', lines: [
+                  ...span(pieComponent, '<p className="legend">', '</p>')
+                ]}
+              ]}
+          ]};
+
 const workspaceStory: StoryEntry = {id: 'workspace',
           can: 'The trader can lay out the workspace',
           soThat: 'the charts they watch sit where they put them',
@@ -322,7 +381,7 @@ const workspaceStory: StoryEntry = {id: 'workspace',
                 'hand, and the plus rides the heading with its menu anchored above it.'],
               code: [
                 {label: 'JS', lines: [
-                  ...unit(pageSource, 'const isChartKind'), gap,
+                  ...unit(kindsSource, 'export const isChartKind'), gap,
                   ...unit(pageSource, 'const dealtCharts'), gap,
                   ...unit(pageSource, 'const addChart')
                 ]},
