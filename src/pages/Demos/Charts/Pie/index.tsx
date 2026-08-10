@@ -1,11 +1,14 @@
 import {FC, ReactNode} from 'react';
+import {classNames} from '@components/class-names';
 import {Trade} from '../coinbase';
-import {arcPath, sideTotals, slices} from './shapes';
+import {arcPath, explodedBy, sideTotals, slices, Slice} from './shapes';
 import '../chart-card.css';
 import './Pie.css';
 
 const SIZE = 120;
 const RADIUS = 56;
+const DEPTH = 9;
+const EXPLODE = 4;
 
 const sides = ['bought', 'sold'];
 
@@ -13,6 +16,11 @@ type Props = {
   trades: readonly Trade[];
   actions?: ReactNode;
 };
+
+const disc = (slice: Slice, cy: number, dressed: string) =>
+  slice.share === 1
+    ? <circle className={dressed} cx={SIZE / 2} cy={cy} r={RADIUS}/>
+    : <path className={dressed} d={arcPath(SIZE / 2, cy, RADIUS, slice)}/>;
 
 export const Pie: FC<Props> = ({trades, actions}) => {
   const totals = sideTotals(trades);
@@ -22,11 +30,16 @@ export const Pie: FC<Props> = ({trades, actions}) => {
       {actions}
     </header>
     <section className="chart-stage">
-      <svg className="split" aria-hidden="true" viewBox={`0 0 ${SIZE} ${SIZE}`}>
-        {cut.map((slice, at) => slice.share === 1
-          ? <circle key={sides[at]} className={sides[at]} cx={SIZE / 2} cy={SIZE / 2} r={RADIUS}/>
-          : slice.share > 0 &&
-            <path key={sides[at]} className={sides[at]} d={arcPath(SIZE / 2, SIZE / 2, RADIUS, slice)}/>)}
+      <svg className="split" aria-hidden="true" viewBox={`0 0 ${SIZE} ${SIZE + DEPTH}`}>
+        {cut.map((slice, at) => {
+          const {dx, dy} = slice.share === 1 ? {dx: 0, dy: 0} : explodedBy(slice, EXPLODE);
+          return slice.share > 0 &&
+            <g key={sides[at]} className={classNames('slice', sides[at])}
+               style={{'--explode-x': `${dx}px`, '--explode-y': `${dy}px`}}>
+              {disc(slice, SIZE / 2 + DEPTH, 'wall')}
+              {disc(slice, SIZE / 2, 'face')}
+            </g>;
+        })}
       </svg>
       <p className="legend">
         {cut.map((slice, at) =>

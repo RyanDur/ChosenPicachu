@@ -43,6 +43,7 @@
   --faint-shadow: rgba(0, 0, 0, 0.12);
   --paper-veil: rgba(244, 244, 244, 0.7);
   --mint-ink: color-mix(in srgb, var(--mint) 45%, black);
+  --internationl-orange-engineering-shade: color-mix(in srgb, var(--internationl-orange-engineering) 70%, black);
   --mint-shade: color-mix(in srgb, var(--mint) 85%, black);
   --mint-dim: color-mix(in srgb, var(--mint) 75%, black);
   --press-glow: inset 0 0 5px var(--void);

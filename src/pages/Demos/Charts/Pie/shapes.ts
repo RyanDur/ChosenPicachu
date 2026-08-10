@@ -30,6 +30,16 @@ export const slices = (weights: readonly number[]): readonly Slice[] => {
     }, []);
 };
 
+export type Explosion = {
+  dx: number;
+  dy: number;
+};
+
+export const explodedBy = (slice: Slice, by: number): Explosion => {
+  const middle = (slice.from + slice.to) / 2;
+  return {dx: by * Math.sin(middle), dy: -by * Math.cos(middle)};
+};
+
 export const arcPath = (cx: number, cy: number, r: number, slice: Slice): string => {
   const at = (angle: number): string =>
     `${cx + r * Math.sin(angle)} ${cy - r * Math.cos(angle)}`;

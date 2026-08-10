@@ -5,14 +5,34 @@
     height: var(--base-x-32_5);
     margin-inline: auto;
     padding: var(--base) 0 var(--base-x-0_5);
-  }
+    overflow: visible;
+    transform: scaleY(0.82);
 
-  .bought {
-    fill: var(--mint-shade);
-  }
+    .slice {
+      transform: translate(var(--explode-x, 0), var(--explode-y, 0));
+      transition: transform 300ms ease-out;
 
-  .sold {
-    fill: var(--internationl-orange-engineering);
+      .face,
+      .wall {
+        transition: d 300ms ease-out;
+      }
+    }
+
+    .bought .face {
+      fill: var(--mint-shade);
+    }
+
+    .bought .wall {
+      fill: var(--mint-ink);
+    }
+
+    .sold .face {
+      fill: var(--internationl-orange-engineering);
+    }
+
+    .sold .wall {
+      fill: var(--internationl-orange-engineering-shade);
+    }
   }
 
   .legend {
