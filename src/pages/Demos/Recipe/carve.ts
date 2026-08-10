@@ -12,7 +12,7 @@ const dedented = (lines: string[]): Line[] => {
 
 const closesTheUnit = (source: string, at: number): boolean => {
   const ahead = source.slice(at + 1).match(/\S/);
-  return ahead === null || !'=:{'.includes(ahead[0]);
+  return ahead === null || !'=:{.'.includes(ahead[0]);
 };
 
 export const unit = (source: string, anchor: string): Line[] => {
@@ -25,11 +25,14 @@ export const unit = (source: string, anchor: string): Line[] => {
   let at = found;
   while (at < source.length) {
     const glyph = source[at];
+    if (glyph === ';' && pending.length === 0) {
+      break;
+    }
     if (glyph in openers) {
       pending.push(openers[glyph]);
     } else if (closers.has(glyph) && glyph === pending[pending.length - 1]) {
       pending.pop();
-      if (pending.length === 0 && closesTheUnit(source, at)) {
+      if (pending.length === 0 && glyph !== ']' && closesTheUnit(source, at)) {
         break;
       }
     }
