@@ -200,6 +200,38 @@ describe('a list of charts', () => {
     expect(screen.getByText(/read the same trades as candles/)).toBeVisible();
   });
 
+  test('the candles story shows the markup and the dress, not just the arithmetic', async () => {
+    const feed = await streamingFeed();
+
+    renderCharts(urlOf(feed), '?tab=charts&charts=candles');
+    await screen.findByRole('region', {name: 'candles'});
+    fireEvent.keyDown(screen.getByRole('article', {name: 'chart 1'}), {key: 'Enter'});
+
+    const recipe = await screen.findByRole('region', {name: 'build the candles yourself'});
+    expect(recipe).toHaveTextContent('className="candlesticks"');
+    expect(recipe).toHaveTextContent('.up .body');
+    expect(recipe).toHaveTextContent('className="volumes"');
+    expect(recipe).toHaveTextContent('.volume');
+  });
+
+  test('the trader can add the pressure chart and walk through its doorway', async () => {
+    const feed = await streamingFeed();
+
+    renderCharts(urlOf(feed));
+    await screen.findByRole('region', {name: 'live trades'});
+
+    const toggle = screen.getByRole('button', {name: 'Add a chart'});
+    const menu = document.getElementById(toggle.getAttribute('popovertarget') ?? '');
+    if (menu === null) throw new Error('no add-a-chart menu');
+    await userEvent.click(within(menu).getByText('Pressure'));
+    const pressure = await screen.findByRole('region', {name: 'pressure'});
+    expect(pressure).toBeVisible();
+
+    fireEvent.keyDown(screen.getByRole('article', {name: 'chart 1'}), {key: 'Enter'});
+    expect(await screen.findByRole('region', {name: 'build the pressure yourself'})).toBeVisible();
+    expect(screen.getByText(/who is driving/)).toBeVisible();
+  });
+
   test('a chart’s tutorial opens like a feature', async () => {
     const feed = await streamingFeed();
 

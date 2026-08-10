@@ -11,6 +11,7 @@ type Props = PropsWithChildren<{
   pattern: string;
   tickEvery?: number;
   headroomMs?: number;
+  label?: (value: number) => string;
 }>;
 
 const firstMidLast = (times: readonly number[]): readonly number[] =>
@@ -32,13 +33,16 @@ const placed = (
   return ticks.map(at => ({at, along: span === 0 ? 50 : ((at - from) / span) * 100}));
 };
 
-export const Axes: FC<Props> = ({high, low, times, pattern, tickEvery, headroomMs = 0, children}) => {
+export const Axes: FC<Props> = ({
+  high, low, times, pattern, tickEvery, headroomMs = 0,
+  label = value => dollars.format(value), children
+}) => {
   const populated = times.length > 0;
   return <section className="axes">
     {populated && <p className="y-labels">
-      <data value={high}>{dollars.format(high)}</data>
-      <data value={(high + low) / 2}>{dollars.format((high + low) / 2)}</data>
-      <data value={low}>{dollars.format(low)}</data>
+      <data value={high}>{label(high)}</data>
+      <data value={(high + low) / 2}>{label((high + low) / 2)}</data>
+      <data value={low}>{label(low)}</data>
     </p>}
     <section className="chart-area">{children}</section>
     {populated && <p className="x-labels">{placed(times, chosenTicks(times, tickEvery), headroomMs).map(tick =>

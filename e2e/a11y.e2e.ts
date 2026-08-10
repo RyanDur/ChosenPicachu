@@ -22,6 +22,7 @@ const pages: A11yPage[] = [
   {name: 'tables', path: 'demos?tab=tables', ready: 'navigation', loaded: '.aggregations .header-cell'},
   {name: 'price chart tutorial', path: 'demos/charts/price/', ready: 'navigation', loaded: '.build-steps .story'},
   {name: 'candles chart tutorial', path: 'demos/charts/candles/', ready: 'navigation', loaded: '.build-steps .story'},
+  {name: 'pressure chart tutorial', path: 'demos/charts/pressure/', ready: 'navigation', loaded: '.build-steps .story'},
   {name: 'menu tutorial', path: 'demos?tab=tables&tut=menu', ready: 'navigation', loaded: '.build-steps .story'},
   {name: 'resize tutorial', path: 'demos?tab=tables&tut=resize', ready: 'navigation', loaded: '.build-steps .story'},
   {name: 'drag sort', path: 'demos?tab=dragAndDrop', ready: 'navigation', loaded: '.sortable-list .draggable'},

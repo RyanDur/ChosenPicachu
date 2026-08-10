@@ -7,6 +7,12 @@ import sparklineSource from './sparkline.ts?raw';
 import periodSource from './period.ts?raw';
 import candlesHook from './usePeriodCandles.ts?raw';
 import priceSource from './PriceChart/index.tsx?raw';
+import candlesSource from './Candles/index.tsx?raw';
+import candlesCss from './Candles/Candles.css?raw';
+import pressureSource from './Pressure/shapes.ts?raw';
+import pressureComponent from './Pressure/index.tsx?raw';
+import pressureCss from './Pressure/Pressure.css?raw';
+import moneySource from './money.ts?raw';
 import axesSource from './Axes/index.tsx?raw';
 import pageSource from '../component.tsx?raw';
 import crossingSource from '../DragAndDrop/crossing.ts?raw';
@@ -134,6 +140,14 @@ export const candlesStory: StoryEntry = {id: 'candles',
               code: [
                 {label: 'JS', lines: [
                   ...unit(shapesSource, 'export const candleShapes')
+                ]},
+                {label: 'HTML', lines: [
+                  ...span(candlesSource, '<svg className="candlesticks"', '</svg>')
+                ]},
+                {label: 'CSS', lines: [
+                  ...unit(candlesCss, '.wick {'), gap,
+                  ...unit(candlesCss, '.up .body {'), gap,
+                  ...unit(candlesCss, '.down .body {')
                 ]}
               ]},
             {title: 'Bar the traded volume beneath',
@@ -143,6 +157,70 @@ export const candlesStory: StoryEntry = {id: 'candles',
               code: [
                 {label: 'JS', lines: [
                   ...unit(shapesSource, 'export const volumeShapes')
+                ]},
+                {label: 'HTML', lines: [
+                  ...span(candlesSource, '<svg className="volumes"', '</svg>')
+                ]},
+                {label: 'CSS', lines: [
+                  ...unit(candlesCss, '.volume {')
+                ]}
+              ]}
+          ]};
+
+export const pressureStory: StoryEntry = {id: 'pressure',
+          can: 'The trader can see who is driving the move',
+          soThat: 'a push and a retreat stop looking alike',
+          tells: ['We could infer the driver from the direction of the price, but a rise on ' +
+            'heavy buying and a rise on sellers stepping away draw the same line; so the ' +
+            'card reads each match’s side, a fact the stream already carries, and folds ' +
+            'every minute into bought size and sold size.',
+            'History’s candles never say who started a trade; so the card counts only the ' +
+            'session it watches, and says so. The heaviest side sets one scale for both ' +
+            'directions, which keeps the taller side an honest answer.'],
+          steps: [
+            {title: 'Split each window by side',
+              want: 'Volume alone says how much traded, never who pushed; the split has to survive the bucketing.',
+              says: ['Every match names its taker’s side. The fold mirrors the candles’ ' +
+                'bucketing, but keeps two sums per window: bought size and sold size.'],
+              code: [
+                {label: 'JS', foil: true, lines: [
+                  plain("const driver = candle.close > candle.open ? 'buying' : 'selling';"),
+                  aside('// sellers stepping away wears the same badge as a stampede')
+                ]},
+                {label: 'JS', lines: [
+                  ...unit(pressureSource, 'const fold'), gap,
+                  ...unit(pressureSource, 'export const bucketPressure')
+                ]}
+              ]},
+            {title: 'One scale, both directions',
+              want: 'Comparing the sides only works if both wear the same ruler; a taller bar must mean more size, nothing else.',
+              says: ['The heaviest single side sets the scale. Bought rises from the ' +
+                'midline, sold falls from it, and a window that bought four and sold two ' +
+                'shows bars in exactly that proportion.'],
+              code: [
+                {label: 'JS', lines: [
+                  ...unit(pressureSource, 'export const heaviestSide'), gap,
+                  ...unit(pressureSource, 'export const pressureShapes')
+                ]}
+              ]},
+            {title: 'Bars around a midline',
+              want: 'The eye should read dominance at a glance, and the axes must speak size, not dollars.',
+              says: ['Two rects per window around a hairline midline, wearing the colors ' +
+                'the candles taught: mint above, orange below. Axes learned a second ' +
+                'tongue for it: a label prop formats the reach in bitcoin instead of ' +
+                'dollars, and the caption claims only what the card can honestly claim: ' +
+                'the session it watched.'],
+              code: [
+                {label: 'HTML', lines: [
+                  ...span(pressureComponent, '<svg className="pressures"', '</svg>')
+                ]},
+                {label: 'CSS', lines: [
+                  ...unit(pressureCss, '.midline {'), gap,
+                  ...unit(pressureCss, '.bought {'), gap,
+                  ...unit(pressureCss, '.sold {')
+                ]},
+                {label: 'JS', lines: [
+                  ...unit(moneySource, 'export const bitcoin')
                 ]}
               ]}
           ]};
