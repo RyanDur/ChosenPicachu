@@ -10,6 +10,7 @@ import {Candles} from './Candles';
 import {candlesStory, priceStory} from './Tutorial';
 import '../Recipe/Recipe.css';
 import '../Tutorials.css';
+import './ChartPage.css';
 
 export const ChartPage: FC = () => {
   const {kind} = useParams();
@@ -19,7 +20,7 @@ export const ChartPage: FC = () => {
     return <Navigate to={`${Paths.demos}?tab=${DemoTopics.charts}`} replace/>;
   }
   const name = kind === 'price' ? 'price line' : 'candles';
-  return <div className="tutorials">
+  return <div className="chart-page tutorials">
     <Link className="signpost" to={`${Paths.demos}?tab=${DemoTopics.charts}`}>
       back to the workspace
     </Link>
