@@ -3,6 +3,7 @@ import {randParagraph, randWord} from '@ngneat/falso';
 import {useSearchParamsObject} from '@components/search-params';
 import './style.css';
 import './DemosPage.css';
+import './Tutorials.css';
 import {Tabs} from '@components/Tabs';
 import {
   ExclusiveAccordion,
