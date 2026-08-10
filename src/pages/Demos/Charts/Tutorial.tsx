@@ -14,6 +14,7 @@ import pressureComponent from './Pressure/index.tsx?raw';
 import pressureCss from './Pressure/Pressure.css?raw';
 import pieSource from './Pie/shapes.ts?raw';
 import pieComponent from './Pie/index.tsx?raw';
+import pieCss from './Pie/Pie.css?raw';
 import moneySource from './money.ts?raw';
 import slotsSource from './slots.ts?raw';
 import coinbaseSource from './coinbase/index.ts?raw';
@@ -310,10 +311,10 @@ export const pieStory: StoryEntry = {id: 'pie',
             'everything traded since arrival, one slice per side. The same decoded ' +
             'stream feeds it, and like pressure it counts only the session it watched, ' +
             'because history never says who started a trade.',
-            'The circle is cut by arithmetic: each side’s share of the total becomes an ' +
-            'angle, and each angle becomes one SVG path. A side that took everything ' +
-            'gets a circle instead, because an arc from a point back to itself draws ' +
-            'nothing.'],
+            'The circle is cut by arithmetic that can move: each slice is two half-discs ' +
+            'behind two fixed gates, and a share is how far its halves swing open. Swings, ' +
+            'turns, and the explode are all transforms, one of the few properties the ' +
+            'compositor animates without repainting, so a shifting split glides for free.'],
           steps: [
             {title: 'Total the sides',
               want: 'One number per side for the whole session; the pie asks nothing about time.',
@@ -327,24 +328,43 @@ export const pieStory: StoryEntry = {id: 'pie',
                 ]}
               ]},
             {title: 'Cut the circle',
-              want: 'Shares must become drawable shapes, and a share must read as its angle, nothing else.',
+              want: 'Shares must become drawable shapes that can move; a split that shifts with every trade must glide, not jump, and glide cheaply.',
               says: [<>You could paint the split with a conic gradient, but a painted
                 background has no parts: nothing to class, nothing to label, nothing for a
-                test to find. So each share becomes a slice of the full turn, and each
-                slice becomes one
-                SVG <Mdn path="Web/SVG/Attribute/d">path</Mdn>: move to the center, line
-                to where the slice starts, arc to where it ends, close. An arc past half
-                the circle sets the large-arc flag, and a slice that is the whole circle
-                is drawn as a circle, because an arc from a point back to itself draws
-                nothing.</>],
+                test to find. Honest arc paths came next, and the stream taught us better:
+                an arc’s large-arc flag flips at half and cannot tween, so a moving split
+                jumps. A dashed circle stroke tweens, but stroke geometry repaints every
+                frame on the main thread. The compositor animates only a few properties
+                without repainting — translate, rotate, scale,
+                and <Mdn path="Web/CSS/opacity">opacity</Mdn> — so the cut is built from
+                rotation alone: each slice is two half-discs behind two
+                fixed <Mdn path="Web/SVG/Element/clipPath">gates</Mdn>, the first gate
+                owns the first half-turn, the second owns the rest, and a share is how
+                far its halves swing open, in plain degrees. Nothing changes shape;
+                everything that moves is a transform. A side that took everything is
+                both gates fully open: no special case survives.</>],
               code: [
                 {label: 'JS', foil: true, lines: [
                   plain("background: conic-gradient(green 0 75%, orange 75%);"),
                   aside('/* one painted background, zero parts to name or announce */')
                 ]},
+                {label: 'JS', foil: true, lines: [
+                  plain('const d = `M ${cx} ${cy} L ${ax} ${ay} A ${r} ${r} 0 ${large} 1 ${bx} ${by} Z`;'),
+                  aside('// honest arcs, but the large-arc flag cannot tween: every trade lands as a jump')
+                ]},
+                {label: 'JS', foil: true, lines: [
+                  plain('<circle strokeDasharray={`${share * circumference} ${circumference}`}/>'),
+                  aside('// tweens, but stroke geometry repaints every frame; the compositor never helps')
+                ]},
                 {label: 'JS', lines: [
                   ...unit(pieSource, 'export const slices'), gap,
-                  ...unit(pieSource, 'export const arcPath')
+                  ...unit(pieSource, 'export const sweepGates')
+                ]},
+                {label: 'HTML', lines: [
+                  ...span(pieComponent, 'const layer = (drop', '</g>;')
+                ]},
+                {label: 'CSS', lines: [
+                  ...unit(pieCss, '.slice {')
                 ]}
               ]},
             {title: 'Name the shares',

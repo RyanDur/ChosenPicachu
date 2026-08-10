@@ -11,21 +11,34 @@
     .slice {
       transform: translate(var(--explode-x, 0), var(--explode-y, 0));
       transition: transform 300ms ease-out;
+
+      .face,
+      .wall {
+        transform: translate(var(--seat-x, 0), var(--seat-y, 0)) rotate(var(--turn, 0deg));
+        transition: transform 300ms ease-out;
+      }
+
+      .half {
+        transform-box: fill-box;
+        transform-origin: left center;
+        transform: rotate(var(--swing, -180deg));
+        transition: transform 300ms ease-out;
+      }
     }
 
-    .bought .face {
+    .bought .face .half {
       fill: var(--mint-shade);
     }
 
-    .bought .wall {
+    .bought .wall .half {
       fill: var(--mint-ink);
     }
 
-    .sold .face {
+    .sold .face .half {
       fill: var(--internationl-orange-engineering);
     }
 
-    .sold .wall {
+    .sold .wall .half {
       fill: var(--internationl-orange-engineering-shade);
     }
   }

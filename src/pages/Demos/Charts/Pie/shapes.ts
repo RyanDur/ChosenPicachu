@@ -40,9 +40,14 @@ export const explodedBy = (slice: Slice, by: number): Explosion => {
   return {dx: by * Math.sin(middle), dy: -by * Math.cos(middle)};
 };
 
-export const arcPath = (cx: number, cy: number, r: number, slice: Slice): string => {
-  const at = (angle: number): string =>
-    `${cx + r * Math.sin(angle)} ${cy - r * Math.cos(angle)}`;
-  const longWay = slice.to - slice.from > Math.PI ? 1 : 0;
-  return `M ${cx} ${cy} L ${at(slice.from)} A ${r} ${r} 0 ${longWay} 1 ${at(slice.to)} Z`;
+export const degrees = (radians: number): number => (radians * 180) / Math.PI;
+
+export type Gates = {
+  opening: number;
+  closing: number;
+};
+
+export const sweepGates = (slice: Slice): Gates => {
+  const sweep = degrees(slice.to - slice.from);
+  return {opening: Math.min(sweep, 180) - 180, closing: sweep - 180};
 };

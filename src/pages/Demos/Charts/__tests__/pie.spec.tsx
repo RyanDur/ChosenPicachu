@@ -1,5 +1,5 @@
 import {render, screen} from '@testing-library/react';
-import {arcPath, explodedBy, sideTotals, slices} from '@pages/Demos/Charts/Pie/shapes';
+import {explodedBy, sideTotals, slices, sweepGates} from '@pages/Demos/Charts/Pie/shapes';
 import {Pie} from '@pages/Demos/Charts/Pie';
 import {Trade} from '@pages/Demos/Charts/coinbase';
 
@@ -30,11 +30,11 @@ describe('the pie', () => {
     expect(slices([0, 0])).toEqual([]);
   });
 
-  test('a slice past half the circle takes the long way round', () => {
-    const [long, short] = slices([3, 1]);
+  test('a share opens its gates in degrees, which the compositor can tween', () => {
+    const [threeQuarters, quarter] = slices([3, 1]);
 
-    expect(arcPath(60, 60, 50, long)).toContain('A 50 50 0 1 1');
-    expect(arcPath(60, 60, 50, short)).toContain('A 50 50 0 0 1');
+    expect(sweepGates(threeQuarters)).toEqual({opening: 0, closing: 90});
+    expect(sweepGates(quarter)).toEqual({opening: -90, closing: -90});
   });
 
   test('a slice explodes along its own middle', () => {
@@ -53,22 +53,21 @@ describe('the pie', () => {
     ]}/>);
 
     const card = screen.getByRole('region', {name: 'pie'});
-    expect(card.querySelectorAll('.slice.bought path.face')).toHaveLength(1);
-    expect(card.querySelectorAll('.slice.bought path.wall')).toHaveLength(1);
-    expect(card.querySelectorAll('.slice.sold path.face')).toHaveLength(1);
-    expect(card.querySelectorAll('.slice.sold path.wall')).toHaveLength(1);
+    expect(card.querySelectorAll('.slice.bought .face path.half')).toHaveLength(2);
+    expect(card.querySelectorAll('.slice.bought .wall path.half')).toHaveLength(2);
+    expect(card.querySelectorAll('.slice.sold .face path.half')).toHaveLength(2);
+    expect(card.querySelectorAll('.slice.sold .wall path.half')).toHaveLength(2);
     expect(card).toHaveTextContent('75% bought');
     expect(card).toHaveTextContent('25% sold');
     expect(card).toHaveTextContent('since you arrived');
   });
 
-  test('a one-sided session draws a whole circle, not a broken arc', () => {
+  test('a one-sided session opens both gates fully, no special case', () => {
     render(<Pie trades={[trade({size: 2, side: 'buy'})]}/>);
 
     const card = screen.getByRole('region', {name: 'pie'});
-    expect(card.querySelectorAll('.slice.bought circle.face')).toHaveLength(1);
-    expect(card.querySelectorAll('.slice.bought circle.wall')).toHaveLength(1);
-    expect(card.querySelectorAll('path')).toHaveLength(0);
+    expect(sweepGates(slices([2, 0])[0])).toEqual({opening: 0, closing: 180});
+    expect(card.querySelectorAll('.slice.bought .face path.half')).toHaveLength(2);
     expect(card).toHaveTextContent('100% bought');
   });
 
@@ -76,7 +75,7 @@ describe('the pie', () => {
     render(<Pie trades={[]}/>);
 
     const card = screen.getByRole('region', {name: 'pie'});
-    expect(card.querySelectorAll('path, circle')).toHaveLength(0);
+    expect(card.querySelectorAll('.slice')).toHaveLength(0);
     expect(card).toHaveTextContent('waiting for the first trade');
   });
 });
