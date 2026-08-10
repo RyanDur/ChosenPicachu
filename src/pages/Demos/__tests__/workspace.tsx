@@ -13,7 +13,7 @@ const routes = (feedUrl: string) => ({children: [
     element: <EnvProvider env={{tradeFeed: feedUrl, tradeHistory: 'http://127.0.0.1:9'}}><ChartPage/></EnvProvider>}
 ]});
 
-export const renderWorkspace = (feedUrl: string, search = '?tab=charts') =>
+export const renderDemos = (feedUrl: string, search = '?tab=charts') =>
   renderWithMemoryRouter(routes(feedUrl), {path: `${Paths.demos}${search}`});
 
 export const renderChartPage = (feedUrl: string, kind: string) =>

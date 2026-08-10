@@ -1,4 +1,4 @@
-import {KeyboardEvent, MouseEvent, useState} from 'react';
+import {FC, KeyboardEvent, MouseEvent, ReactNode, useState} from 'react';
 import {randParagraph, randWord} from '@ngneat/falso';
 import {useSearchParamsObject} from '@components/search-params';
 import './style.css';
@@ -19,7 +19,7 @@ import {
 } from './DragAndDrop';
 import {DemoTopics, demoTopicParam} from './types';
 import {NaturalZIndex} from './ZIndexDemo';
-import {Candles, Pressure, PriceChart} from './Charts';
+import {Candles, Pie, Pressure, PriceChart} from './Charts';
 import {Menu} from '@components/Menu';
 import {useNavigate} from 'react-router';
 import {Paths} from '@pages/Paths';
@@ -31,6 +31,8 @@ import * as D from 'schemawax';
 import {motionParam, originParam, paceParam} from './Controls';
 import {Aggregations, Tutorials, trackParam, tutorialParam} from './Tables';
 import {statusCopy, useLiveTrades} from './Charts/useLiveTrades';
+import {Trade} from './Charts/coinbase';
+import {allChartKinds, ChartKind, isChartKind} from './Charts/kinds';
 import {useEnv} from '@components/Env';
 
 const paragraphs = (count: number) =>
@@ -39,14 +41,20 @@ const paragraphs = (count: number) =>
     value: Array.from({length: Math.floor(Math.random() * 6) + 1}, () => randParagraph()).join('\n\n')
   }));
 
-type ChartKind = 'price' | 'candles' | 'pressure';
-
-const allChartKinds: readonly ChartKind[] = ['price', 'candles', 'pressure'];
-
 const chartNames: Record<ChartKind, string> = {
   price: 'Price line',
   candles: 'Candles',
-  pressure: 'Pressure'
+  pressure: 'Pressure',
+  pie: 'Pie'
+};
+
+type ChartCard = FC<{trades: readonly Trade[]; id?: string; actions?: ReactNode}>;
+
+const chartCards: Record<ChartKind, ChartCard> = {
+  price: PriceChart,
+  candles: Candles,
+  pressure: Pressure,
+  pie: Pie
 };
 
 export const DemosPage = () => {
@@ -54,8 +62,6 @@ export const DemosPage = () => {
     useSearchParamsObject(
       {tab: demoTopicParam, pace: paceParam, origin: originParam, motion: motionParam, tut: tutorialParam, track: trackParam, charts: D.string},
       {tab: DemoTopics.accordions});
-  const isChartKind = (kind: string): kind is ChartKind =>
-    kind === 'price' || kind === 'candles' || kind === 'pressure';
   const dealtCharts = charts.split(',').filter(isChartKind)
     .filter((kind, at, all) => all.indexOf(kind) === at);
   const chartKinds: readonly ChartKind[] = dealtCharts.length > 0 ? dealtCharts : ['price'];
@@ -104,7 +110,8 @@ export const DemosPage = () => {
   const doorways: Record<ChartKind, Paths> = {
     price: Paths.priceChartTutorial,
     candles: Paths.candlesChartTutorial,
-    pressure: Paths.pressureChartTutorial
+    pressure: Paths.pressureChartTutorial,
+    pie: Paths.pieChartTutorial
   };
   const doorway = (kind: ChartKind): string => doorways[kind];
   const throughTheDoor = (kind: ChartKind) => (event: MouseEvent<HTMLElement>) => {
@@ -231,13 +238,11 @@ export const DemosPage = () => {
                            setArmedChart(undefined);
                          }}>
                   {grip(at)}
-                  {kind === 'price'
-                    ? <PriceChart id={`chart-${at}`} trades={liveTrades.trades}
-                                  actions={dismissal(at)}/>
-                    : kind === 'candles'
-                      ? <Candles id={`chart-${at}`} trades={liveTrades.trades}
-                                 actions={dismissal(at)}/>
-                      : <Pressure trades={liveTrades.trades} actions={dismissal(at)}/>}
+                  {(() => {
+                    const Chart = chartCards[kind];
+                    return <Chart id={`chart-${at}`} trades={liveTrades.trades}
+                                  actions={dismissal(at)}/>;
+                  })()}
                 </li>)}
               </ul>
               <ChartsTutorial/>

@@ -8,14 +8,27 @@ import {useLiveTrades} from './useLiveTrades';
 import {PriceChart} from './PriceChart';
 import {Candles} from './Candles';
 import {Pressure} from './Pressure';
-import {candlesStory, pressureStory, priceStory} from './Tutorial';
+import {Pie} from './Pie';
+import {candlesStory, pieStory, pressureStory, priceStory} from './Tutorial';
+import {ChartKind, isChartKind, matchChartKind} from './kinds';
+import {StoryEntry} from '../Recipe/StepList';
+import {Trade} from './coinbase';
 import '../Recipe/Recipe.css';
 import '../Tutorials.css';
 import './ChartPage.css';
 
-const features = {
+type Feature = {
+  name: string;
+  chart: FC<{trades: readonly Trade[]}>;
+  reference: string;
+  story: StoryEntry;
+  quote: string;
+};
+
+const features: Record<ChartKind, Feature> = {
   price: {
     name: 'price line',
+    chart: PriceChart,
     reference: 'https://en.wikipedia.org/wiki/Line_chart',
     story: priceStory,
     quote: 'The ticker tells me now; it doesn’t tell me the way here. I want to glance up ' +
@@ -24,6 +37,7 @@ const features = {
   },
   candles: {
     name: 'candles',
+    chart: Candles,
     reference: 'https://en.wikipedia.org/wiki/Candlestick_chart',
     story: candlesStory,
     quote: 'The line smooths over the fight. A drift and a battle can draw the same shape, ' +
@@ -32,10 +46,19 @@ const features = {
   },
   pressure: {
     name: 'pressure',
+    chart: Pressure,
     reference: 'https://en.wikipedia.org/wiki/Order_flow_trading',
     story: pressureStory,
     quote: 'I can see the price move; I can’t see who is pushing it. When it breaks out, I ' +
       'want to know whether buyers drove it there or the sellers just stepped away.'
+  },
+  pie: {
+    name: 'pie',
+    chart: Pie,
+    reference: 'https://en.wikipedia.org/wiki/Pie_chart',
+    story: pieStory,
+    quote: 'The bars tell me the battle, minute by minute. At the end I want the war: one ' +
+      'circle, who owned the session.'
   }
 };
 
@@ -43,16 +66,9 @@ export const ChartPage: FC = () => {
   const {kind} = useParams();
   const {tradeFeed, tradeProduct} = useEnv();
   const liveTrades = useLiveTrades(tradeFeed, tradeProduct);
-  if (kind !== 'price' && kind !== 'candles' && kind !== 'pressure') {
-    return <Navigate to={`${Paths.demos}?tab=${DemoTopics.charts}`} replace/>;
-  }
-  const {name, reference, story, quote} = features[kind];
-  return <article aria-label={`${name} tutorial`} className="chart-page tutorials">
-    {kind === 'price'
-      ? <PriceChart trades={liveTrades.trades}/>
-      : kind === 'candles'
-        ? <Candles trades={liveTrades.trades}/>
-        : <Pressure trades={liveTrades.trades}/>}
+  const page = ({name, reference, story, quote, chart: Chart}: Feature) => () =>
+    <article aria-label={`${name} tutorial`} className="chart-page tutorials">
+    <Chart trades={liveTrades.trades}/>
     <h2 className="tutorials-title">let’s build this feature</h2>
     <p className="overview">
       We are going to build the <a
@@ -80,5 +96,11 @@ export const ChartPage: FC = () => {
     <section aria-label={`build the ${name} yourself`} className="build-steps">
       <StoryList param="graph" stories={[story]}/>
     </section>
-  </article>;
+    </article>;
+  return matchChartKind(isChartKind(kind) ? kind : undefined, {
+    price: page(features.price),
+    candles: page(features.candles),
+    pressure: page(features.pressure),
+    pie: page(features.pie)
+  }).orElse(<Navigate to={`${Paths.demos}?tab=${DemoTopics.charts}`} replace/>);
 };
