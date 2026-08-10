@@ -16,6 +16,7 @@ import {renderWithMemoryRouter} from '@test-support';
 import {EnvProvider} from '@components/Env';
 import {DemosPage} from '@pages/Demos/component';
 import {Paths} from '@pages/Paths';
+import {ChartPage} from '@pages/Demos/Charts/ChartPage';
 import {format} from 'date-fns';
 
 beforeAll(realSockets);
@@ -46,7 +47,11 @@ const chartsRoute = (feedUrl: string) => ({
 });
 
 const renderCharts = (feedUrl: string, search = '?tab=charts') =>
-  renderWithMemoryRouter(chartsRoute(feedUrl), {path: `${Paths.demos}${search}`});
+  renderWithMemoryRouter({children: [
+    chartsRoute(feedUrl),
+    {path: `${Paths.demos}charts/:kind/`,
+      element: <EnvProvider env={{tradeFeed: feedUrl, tradeHistory: 'http://127.0.0.1:9'}}><ChartPage/></EnvProvider>}
+  ]}, {path: `${Paths.demos}${search}`});
 
 describe('a list of charts', () => {
   const feeds: WebSocketServer[] = [];
@@ -163,7 +168,7 @@ describe('a list of charts', () => {
     expect(within(slot('chart 2')).getByRole('region', {name: 'live trades'})).toBeVisible();
   });
 
-  test('a tutorial builds the charts', async () => {
+  test('the workspace tells its story and each chart is a doorway', async () => {
     const feed = await streamingFeed();
 
     renderCharts(urlOf(feed), '?tab=charts&graph=workspace');
@@ -172,13 +177,27 @@ describe('a list of charts', () => {
     expect(screen.getByRole('heading', {name: 'let’s build this feature'})).toBeVisible();
     expect(screen.getByText(/the shape of the session/)).toBeVisible();
     const recipe = screen.getByRole('region', {name: 'build the charts yourself'});
-    expect(recipe.querySelectorAll('.story')).toHaveLength(3);
+    expect(recipe.querySelectorAll('.story')).toHaveLength(1);
     expect(recipe.querySelectorAll('details.arc[open]')).toHaveLength(1);
-    expect(recipe).toHaveTextContent(/The trader can watch the price move, live/);
     expect(recipe).toHaveTextContent(/strays a third of the seat’s height/);
     expect(recipe).toHaveTextContent(/export const strayed/);
-    expect(recipe).toHaveTextContent(/Bucket the stream into candles/);
-    expect(recipe.querySelectorAll('.snippet.foil')).toHaveLength(2);
+    expect(recipe.querySelectorAll('.snippet.foil')).toHaveLength(1);
+
+    await userEvent.click(screen.getByRole('region', {name: 'live trades'}));
+    expect(await screen.findByRole('region', {name: 'build the price line yourself'})).toBeVisible();
+  });
+
+  test('enter on a chart opens its tutorial', async () => {
+    const feed = await streamingFeed();
+
+    renderCharts(urlOf(feed), '?tab=charts&charts=candles');
+    await screen.findByRole('region', {name: 'candles'});
+
+    fireEvent.keyDown(screen.getByRole('article', {name: 'chart 1'}), {key: 'Enter'});
+
+    expect(await screen.findByRole('region', {name: 'build the candles yourself'})).toBeVisible();
+    expect(screen.getByRole('region', {name: 'candles'})).toBeVisible();
+    expect(screen.getByText(/read the same trades as candles/)).toBeVisible();
   });
 
   test('the charts travel in the url', async () => {
