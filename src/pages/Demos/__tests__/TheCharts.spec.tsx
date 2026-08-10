@@ -120,12 +120,12 @@ describe('a list of charts', () => {
     renderCharts(urlOf(feed), '?tab=charts&charts=price,candles');
     await screen.findByRole('region', {name: 'live trades'});
 
-    fireEvent.keyDown(screen.getByRole('article', {name: 'chart 1'}), {key: 'ArrowDown'});
+    fireEvent.keyDown(screen.getByRole('listitem', {name: 'chart 1'}), {key: 'ArrowDown'});
 
     const candles = screen.getByRole('region', {name: 'candles'});
     expect(candles.compareDocumentPosition(screen.getByRole('region', {name: 'live trades'})))
       .toBe(Node.DOCUMENT_POSITION_FOLLOWING);
-    expect(screen.getByRole('article', {name: 'chart 2'})).toHaveFocus();
+    expect(screen.getByRole('listitem', {name: 'chart 2'})).toHaveFocus();
   });
 
   test('the delete key removes a chart, never the last', async () => {
@@ -134,10 +134,10 @@ describe('a list of charts', () => {
     renderCharts(urlOf(feed), '?tab=charts&charts=price,candles');
     await screen.findByRole('region', {name: 'live trades'});
 
-    fireEvent.keyDown(screen.getByRole('article', {name: 'chart 1'}), {key: 'Delete'});
+    fireEvent.keyDown(screen.getByRole('listitem', {name: 'chart 1'}), {key: 'Delete'});
     expect(screen.queryByRole('region', {name: 'live trades'})).toBeNull();
 
-    fireEvent.keyDown(screen.getByRole('article', {name: 'chart 1'}), {key: 'Delete'});
+    fireEvent.keyDown(screen.getByRole('listitem', {name: 'chart 1'}), {key: 'Delete'});
     expect(screen.getByRole('region', {name: 'candles'})).toBeVisible();
   });
 
@@ -146,7 +146,7 @@ describe('a list of charts', () => {
 
     renderCharts(urlOf(feed), '?tab=charts&charts=price,candles');
     await screen.findByRole('region', {name: 'live trades'});
-    const slot = (name: string) => screen.getByRole('article', {name});
+    const slot = (name: string) => screen.getByRole('listitem', {name});
 
     fireEvent.mouseDown(within(slot('chart 1')).getByRole('button', {name: 'move chart', hidden: true}));
     const start = createEvent.dragStart(slot('chart 1'));
@@ -193,7 +193,7 @@ describe('a list of charts', () => {
     renderCharts(urlOf(feed), '?tab=charts&charts=candles');
     await screen.findByRole('region', {name: 'candles'});
 
-    fireEvent.keyDown(screen.getByRole('article', {name: 'chart 1'}), {key: 'Enter'});
+    fireEvent.keyDown(screen.getByRole('listitem', {name: 'chart 1'}), {key: 'Enter'});
 
     expect(await screen.findByRole('region', {name: 'build the candles yourself'})).toBeVisible();
     expect(screen.getByRole('region', {name: 'candles'})).toBeVisible();
@@ -205,7 +205,7 @@ describe('a list of charts', () => {
 
     renderCharts(urlOf(feed), '?tab=charts&charts=candles');
     await screen.findByRole('region', {name: 'candles'});
-    fireEvent.keyDown(screen.getByRole('article', {name: 'chart 1'}), {key: 'Enter'});
+    fireEvent.keyDown(screen.getByRole('listitem', {name: 'chart 1'}), {key: 'Enter'});
 
     const recipe = await screen.findByRole('region', {name: 'build the candles yourself'});
     expect(recipe).toHaveTextContent('className="candlesticks"');
@@ -227,7 +227,7 @@ describe('a list of charts', () => {
     const pressure = await screen.findByRole('region', {name: 'pressure'});
     expect(pressure).toBeVisible();
 
-    fireEvent.keyDown(screen.getByRole('article', {name: 'chart 1'}), {key: 'Enter'});
+    fireEvent.keyDown(screen.getByRole('listitem', {name: 'chart 1'}), {key: 'Enter'});
     expect(await screen.findByRole('region', {name: 'build the pressure yourself'})).toBeVisible();
     expect(screen.getByText(/who is driving/)).toBeVisible();
   });
@@ -274,7 +274,7 @@ describe('a list of charts', () => {
 
     renderCharts(urlOf(feed), '?tab=charts&charts=candles');
     await screen.findByRole('region', {name: 'candles'});
-    fireEvent.keyDown(screen.getByRole('article', {name: 'chart 1'}), {key: 'Enter'});
+    fireEvent.keyDown(screen.getByRole('listitem', {name: 'chart 1'}), {key: 'Enter'});
 
     const recipe = await screen.findByRole('region', {name: 'build the candles yourself'});
     expect(recipe).toHaveTextContent('export const bucketTrades');
@@ -288,7 +288,7 @@ describe('a list of charts', () => {
 
     renderCharts(urlOf(feed), '?tab=charts&charts=pressure');
     await screen.findByRole('region', {name: 'pressure'});
-    fireEvent.keyDown(screen.getByRole('article', {name: 'chart 1'}), {key: 'Enter'});
+    fireEvent.keyDown(screen.getByRole('listitem', {name: 'chart 1'}), {key: 'Enter'});
 
     const recipe = await screen.findByRole('region', {name: 'build the pressure yourself'});
     expect(recipe).toHaveTextContent("side: D.literalUnion('buy', 'sell')");
