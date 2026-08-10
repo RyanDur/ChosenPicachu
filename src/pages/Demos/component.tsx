@@ -1,4 +1,4 @@
-import {KeyboardEvent, useState} from 'react';
+import {KeyboardEvent, MouseEvent, useState} from 'react';
 import {randParagraph, randWord} from '@ngneat/falso';
 import {useSearchParamsObject} from '@components/search-params';
 import './style.css';
@@ -20,6 +20,8 @@ import {DemoTopics, demoTopicParam} from './types';
 import {NaturalZIndex} from './ZIndexDemo';
 import {Candles, PriceChart} from './Charts';
 import {Menu} from '@components/Menu';
+import {useNavigate} from 'react-router';
+import {Paths} from '@pages/Paths';
 import {ChartsTutorial} from './Charts/Tutorial';
 import {classNames} from '@components/class-names';
 import Handle from '@components/grip.svg';
@@ -83,12 +85,23 @@ export const DemosPage = () => {
       event.preventDefault();
       removeChart(at)();
     }
+    if (event.key === 'Enter') {
+      void navigate(doorway(chartKinds[at]));
+    }
+  };
+  const doorway = (kind: ChartKind): string =>
+    kind === 'price' ? Paths.priceChartTutorial : Paths.candlesChartTutorial;
+  const throughTheDoor = (kind: ChartKind) => (event: MouseEvent<HTMLElement>) => {
+    if (event.target instanceof Element && event.target.closest('button, a, details, .menu') === null) {
+      void navigate(doorway(kind));
+    }
   };
   const dismissal = (at: number) =>
     chartKinds.length > 1
       ? <button type="button" className="remove-chart" aria-label="remove chart" tabIndex={-1}
                 onClick={removeChart(at)}>×</button>
       : undefined;
+  const navigate = useNavigate();
   const [accordionContents] = useState(() => Array.from({length: 5}, () => paragraphs(5)));
   const {tradeFeed, tradeProduct} = useEnv();
   const liveTrades = useLiveTrades(tradeFeed, tradeProduct);
@@ -154,6 +167,7 @@ export const DemosPage = () => {
                          // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex
                          tabIndex={0}
                          onKeyDown={chartKeys(at)}
+                         onClick={throughTheDoor(kind)}
                          draggable={armedChart === at}
                          onDragStart={event => {
                            event.dataTransfer.effectAllowed = 'move';

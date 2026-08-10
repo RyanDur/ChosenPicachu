@@ -128,6 +128,7 @@
 
 .chart-slot {
   position: relative;
+  cursor: pointer;
 
   &:focus-visible {
     outline: var(--hairline-x-2) solid var(--charcoal);

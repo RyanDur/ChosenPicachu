@@ -1,4 +1,5 @@
 import {FC} from 'react';
+import {StoryEntry} from '../Recipe/StepList';
 import {Mdn, StoryList, aside, plain} from '../Recipe';
 import {span, unit} from '../Recipe/carve';
 import shapesSource from './Candles/shapes.ts?raw';
@@ -24,8 +25,9 @@ export const ChartsTutorial: FC = () =>
         target="_blank"
         rel="noreferrer">user story</a>. Open a card and you get the plan for that feature and
       the steps that build it, with the real code from this site, so what you read is what
-      runs. The dashed code is the wrong way you would probably try first, and the links go
-      to MDN if you want more.
+      runs. Each chart above is a doorway too: click it, or press enter on it, and that
+      chart’s own tutorial opens. The dashed code is the wrong way you would probably try
+      first, and the links go to MDN if you want more.
     </p>
     <figure className="feedback">
       <blockquote className="quote">
@@ -41,8 +43,11 @@ export const ChartsTutorial: FC = () =>
       Open one to see how we built it, or to compare it with yours.
     </p>
     <section aria-label="build the charts yourself" className="build-steps">
-      <StoryList param="graph" stories={[
-        {id: 'price',
+      <StoryList param="graph" stories={[workspaceStory]}/>
+    </section>
+  </div>;
+
+export const priceStory: StoryEntry = {id: 'price',
           can: 'The trader can watch the price move, live',
           soThat: 'the session reads at a glance',
           tells: ['We could reach for a chart library, but the promise is one line and two ' +
@@ -112,8 +117,9 @@ export const ChartsTutorial: FC = () =>
                   ...unit(axesSource, 'export const Axes')
                 ]}
               ]}
-          ]},
-        {id: 'candles',
+          ]};
+
+export const candlesStory: StoryEntry = {id: 'candles',
           can: 'The trader can read the same trades as candles',
           soThat: 'each window answers open, close, reach, and volume',
           tells: ['A line answers where the price went; a candle answers what each window ' +
@@ -139,8 +145,9 @@ export const ChartsTutorial: FC = () =>
                   ...unit(shapesSource, 'export const volumeShapes')
                 ]}
               ]}
-          ]},
-        {id: 'workspace',
+          ]};
+
+const workspaceStory: StoryEntry = {id: 'workspace',
           can: 'The trader can lay out the workspace',
           soThat: 'the charts they watch sit where they put them',
           tells: ['One chart is dealt on arrival, and the workspace is the URL: add, sort, ' +
@@ -211,7 +218,4 @@ export const ChartsTutorial: FC = () =>
                   ...unit(pageSource, 'const grip')
                 ]}
               ]}
-          ]}
-      ]}/>
-    </section>
-  </div>;
+          ]};
