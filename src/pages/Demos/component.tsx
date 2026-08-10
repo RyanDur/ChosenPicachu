@@ -19,7 +19,7 @@ import {
 } from './DragAndDrop';
 import {DemoTopics, demoTopicParam} from './types';
 import {NaturalZIndex} from './ZIndexDemo';
-import {Candles, PriceChart} from './Charts';
+import {Candles, Pressure, PriceChart} from './Charts';
 import {Menu} from '@components/Menu';
 import {useNavigate} from 'react-router';
 import {Paths} from '@pages/Paths';
@@ -39,14 +39,15 @@ const paragraphs = (count: number) =>
     value: Array.from({length: Math.floor(Math.random() * 6) + 1}, () => randParagraph()).join('\n\n')
   }));
 
-type ChartKind = 'price' | 'candles';
+type ChartKind = 'price' | 'candles' | 'pressure';
 
 export const DemosPage = () => {
   const {tab, pace = 'eager', origin = 'hide', motion = 'animated', tut = 'sort', track = 'pointer', charts = 'price', updateSearchParams} =
     useSearchParamsObject(
       {tab: demoTopicParam, pace: paceParam, origin: originParam, motion: motionParam, tut: tutorialParam, track: trackParam, charts: D.string},
       {tab: DemoTopics.accordions});
-  const isChartKind = (kind: string): kind is ChartKind => kind === 'price' || kind === 'candles';
+  const isChartKind = (kind: string): kind is ChartKind =>
+    kind === 'price' || kind === 'candles' || kind === 'pressure';
   const dealtCharts = charts.split(',').filter(isChartKind);
   const chartKinds: readonly ChartKind[] = dealtCharts.length > 0 ? dealtCharts : ['price'];
   const addChart = (kind: ChartKind) => () =>
@@ -90,8 +91,12 @@ export const DemosPage = () => {
       void navigate(doorway(chartKinds[at]));
     }
   };
-  const doorway = (kind: ChartKind): string =>
-    kind === 'price' ? Paths.priceChartTutorial : Paths.candlesChartTutorial;
+  const doorways: Record<ChartKind, Paths> = {
+    price: Paths.priceChartTutorial,
+    candles: Paths.candlesChartTutorial,
+    pressure: Paths.pressureChartTutorial
+  };
+  const doorway = (kind: ChartKind): string => doorways[kind];
   const throughTheDoor = (kind: ChartKind) => (event: MouseEvent<HTMLElement>) => {
     if (event.target instanceof Element && event.target.closest('button, a, details, .menu') === null) {
       void navigate(doorway(kind));
@@ -151,6 +156,7 @@ export const DemosPage = () => {
                       toggleClassName="add-chart button secondary">
                   <button type="button" className="item" onClick={addChart('price')}>Price line</button>
                   <button type="button" className="item" onClick={addChart('candles')}>Candles</button>
+                  <button type="button" className="item" onClick={addChart('pressure')}>Pressure</button>
                 </Menu>
               </header>
               {chartKinds.map((kind, at) =>
@@ -217,8 +223,10 @@ export const DemosPage = () => {
                   {kind === 'price'
                     ? <PriceChart id={`chart-${at}`} trades={liveTrades.trades}
                                   actions={dismissal(at)}/>
-                    : <Candles id={`chart-${at}`} trades={liveTrades.trades}
-                               actions={dismissal(at)}/>}
+                    : kind === 'candles'
+                      ? <Candles id={`chart-${at}`} trades={liveTrades.trades}
+                                 actions={dismissal(at)}/>
+                      : <Pressure trades={liveTrades.trades} actions={dismissal(at)}/>}
                 </article>)}
               <ChartsTutorial/>
             </>,

@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Link, Navigate, useParams} from 'react-router';
+import {Navigate, useParams} from 'react-router';
 import {useEnv} from '@components/Env';
 import {Paths} from '@pages/Paths';
 import {StoryList} from '../Recipe';
@@ -7,7 +7,8 @@ import {DemoTopics} from '../types';
 import {useLiveTrades} from './useLiveTrades';
 import {PriceChart} from './PriceChart';
 import {Candles} from './Candles';
-import {candlesStory, priceStory} from './Tutorial';
+import {Pressure} from './Pressure';
+import {candlesStory, pressureStory, priceStory} from './Tutorial';
 import '../Recipe/Recipe.css';
 import '../Tutorials.css';
 import './ChartPage.css';
@@ -28,6 +29,13 @@ const features = {
     quote: 'The line smooths over the fight. A drift and a battle can draw the same shape, ' +
       'so I want each window to answer for itself: where it opened and closed, how far it ' +
       'reached, and how much conviction was underneath.'
+  },
+  pressure: {
+    name: 'pressure',
+    reference: 'https://en.wikipedia.org/wiki/Order_flow_trading',
+    story: pressureStory,
+    quote: 'I can see the price move; I can’t see who is pushing it. When it breaks out, I ' +
+      'want to know whether buyers drove it there or the sellers just stepped away.'
   }
 };
 
@@ -35,17 +43,16 @@ export const ChartPage: FC = () => {
   const {kind} = useParams();
   const {tradeFeed, tradeProduct} = useEnv();
   const liveTrades = useLiveTrades(tradeFeed, tradeProduct);
-  if (kind !== 'price' && kind !== 'candles') {
+  if (kind !== 'price' && kind !== 'candles' && kind !== 'pressure') {
     return <Navigate to={`${Paths.demos}?tab=${DemoTopics.charts}`} replace/>;
   }
   const {name, reference, story, quote} = features[kind];
   return <div className="chart-page tutorials">
-    <Link className="signpost" to={`${Paths.demos}?tab=${DemoTopics.charts}`}>
-      back to the workspace
-    </Link>
     {kind === 'price'
       ? <PriceChart trades={liveTrades.trades}/>
-      : <Candles trades={liveTrades.trades}/>}
+      : kind === 'candles'
+        ? <Candles trades={liveTrades.trades}/>
+        : <Pressure trades={liveTrades.trades}/>}
     <h2 className="tutorials-title">let’s build this feature</h2>
     <p className="overview">
       We are going to build the <a
