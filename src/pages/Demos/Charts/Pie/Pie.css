@@ -1,12 +1,10 @@
 .pie {
-  margin-bottom: var(--base-x-4);
 
   .split {
     display: block;
     height: var(--base-x-32_5);
     margin-inline: auto;
     padding: var(--base) 0 var(--base-x-0_5);
-    box-sizing: border-box;
   }
 
   .bought {
@@ -23,6 +21,13 @@
     justify-content: center;
     gap: var(--base-x-3);
     font-size: var(--text-caption);
-    color: var(--charcoal);
+
+    .bought {
+      color: var(--mint-ink);
+    }
+
+    .sold {
+      color: var(--internationl-orange-engineering);
+    }
   }
 }

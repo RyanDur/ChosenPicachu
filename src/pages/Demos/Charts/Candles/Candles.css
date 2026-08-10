@@ -1,12 +1,10 @@
 .candles {
-  margin-bottom: var(--base-x-4);
 
   .candlesticks {
     display: block;
     width: 100%;
     height: var(--base-x-32_5);
     padding: var(--base) 0 var(--base-x-0_5);
-    box-sizing: border-box;
 
     .wick {
       stroke: var(--charcoal);
@@ -29,7 +27,6 @@
     height: var(--base-x-7_5);
     margin-top: var(--base-x-0_5);
     padding: var(--base) 0 var(--base-x-0_5);
-    box-sizing: border-box;
 
     .volume {
       fill: var(--faded-leather);

@@ -28,6 +28,11 @@
     }
 }
 
+.chart-list {
+  display: grid;
+  gap: var(--base-x-4);
+}
+
 .charts-heading {
   display: grid;
   grid-template-columns: auto 1fr auto;
