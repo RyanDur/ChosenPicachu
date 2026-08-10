@@ -159,8 +159,8 @@ export const DemosPage = () => {
                   <button type="button" className="item" onClick={addChart('pressure')}>Pressure</button>
                 </Menu>
               </header>
-              {chartKinds.map((kind, at) =>
-                <article key={at}
+              <ul className="chart-list">{chartKinds.map((kind, at) =>
+                <li key={at}
                          className={classNames('chart-slot',
                            aloftChart === at && 'hide',
                            chartPushed?.[at] !== undefined && 'chart-pushed')}
@@ -227,7 +227,8 @@ export const DemosPage = () => {
                       ? <Candles id={`chart-${at}`} trades={liveTrades.trades}
                                  actions={dismissal(at)}/>
                       : <Pressure trades={liveTrades.trades} actions={dismissal(at)}/>}
-                </article>)}
+                </li>)}
+              </ul>
               <ChartsTutorial/>
             </>,
             [DemoTopics.tables]: <>
