@@ -1,5 +1,4 @@
 .price-chart {
-  margin-bottom: var(--base-x-4);
 
   .graph {
     position: relative;
@@ -10,7 +9,6 @@
       width: 100%;
       height: var(--base-x-30);
       padding: var(--base) 0 var(--base-x-0_5);
-      box-sizing: border-box;
 
       .baseline {
         stroke: var(--charcoal);

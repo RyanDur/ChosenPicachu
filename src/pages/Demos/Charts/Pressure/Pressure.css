@@ -1,12 +1,10 @@
 .pressure {
-  margin-bottom: var(--base-x-4);
 
   .pressures {
     display: block;
     width: 100%;
     height: var(--base-x-32_5);
     padding: var(--base) 0 var(--base-x-0_5);
-    box-sizing: border-box;
 
     .midline {
       stroke: var(--charcoal);
