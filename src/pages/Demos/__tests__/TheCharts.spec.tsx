@@ -297,13 +297,31 @@ describe('a list of charts', () => {
     expect(recipe).toHaveTextContent("side: D.literalUnion('buy', 'sell')");
   });
 
-  test('the charts travel in the url', async () => {
+  test('the charts travel in the url, one of each kind', async () => {
     const feed = await streamingFeed();
 
     renderCharts(urlOf(feed), '?tab=charts&charts=candles,price,price');
 
     expect(await screen.findByRole('region', {name: 'candles'})).toBeVisible();
-    expect(screen.getAllByRole('region', {name: 'live trades'})).toHaveLength(2);
+    expect(screen.getAllByRole('region', {name: 'live trades'})).toHaveLength(1);
+  });
+
+  test('the add menu offers only what the desk lacks, and a full desk offers nothing', async () => {
+    const feed = await streamingFeed();
+
+    renderCharts(urlOf(feed), '?tab=charts&charts=price,candles');
+    await screen.findByRole('region', {name: 'live trades'});
+
+    const toggle = screen.getByRole('button', {name: 'Add a chart'});
+    const menu = document.getElementById(toggle.getAttribute('popovertarget') ?? '');
+    if (menu === null) throw new Error('no add-a-chart menu');
+    expect(within(menu).queryByRole('button', {name: 'Price line', hidden: true})).toBeNull();
+    expect(within(menu).queryByRole('button', {name: 'Candles', hidden: true})).toBeNull();
+    expect(within(menu).getByRole('button', {name: 'Pressure', hidden: true})).toBeInTheDocument();
+
+    await userEvent.click(within(menu).getByRole('button', {name: 'Pressure', hidden: true}));
+    await screen.findByRole('region', {name: 'pressure'});
+    expect(screen.queryByRole('button', {name: 'Add a chart'})).toBeNull();
   });
 });
 
