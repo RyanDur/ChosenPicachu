@@ -13,6 +13,7 @@ import pressureSource from './Pressure/shapes.ts?raw';
 import pressureComponent from './Pressure/index.tsx?raw';
 import pressureCss from './Pressure/Pressure.css?raw';
 import moneySource from './money.ts?raw';
+import slotsSource from './slots.ts?raw';
 import axesSource from './Axes/index.tsx?raw';
 import pageSource from '../component.tsx?raw';
 import crossingSource from '../DragAndDrop/crossing.ts?raw';
@@ -139,6 +140,7 @@ export const candlesStory: StoryEntry = {id: 'candles',
                 'and CSS owns the colors.'],
               code: [
                 {label: 'JS', lines: [
+                  ...unit(slotsSource, 'export const windowSlots'), gap,
                   ...unit(shapesSource, 'export const candleShapes')
                 ]},
                 {label: 'HTML', lines: [
@@ -199,6 +201,7 @@ export const pressureStory: StoryEntry = {id: 'pressure',
                 'shows bars in exactly that proportion.'],
               code: [
                 {label: 'JS', lines: [
+                  ...unit(slotsSource, 'export const windowSlots'), gap,
                   ...unit(pressureSource, 'export const heaviestSide'), gap,
                   ...unit(pressureSource, 'export const pressureShapes')
                 ]}
