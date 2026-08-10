@@ -11,11 +11,6 @@
     .slice {
       transform: translate(var(--explode-x, 0), var(--explode-y, 0));
       transition: transform 300ms ease-out;
-
-      .face,
-      .wall {
-        transition: d 300ms ease-out;
-      }
     }
 
     .bought .face {

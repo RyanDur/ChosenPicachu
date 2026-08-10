@@ -12,6 +12,8 @@ const CHART_HEIGHT = 104;
 const BUCKET_MS = 60000;
 const WINDOW_CAP = 60;
 const TICK_EVERY_MS = 600000;
+const DEPTH_X = 1;
+const DEPTH_Y = 1.5;
 
 type Props = {
   trades: readonly Trade[];
@@ -34,11 +36,15 @@ export const Pressure: FC<Props> = ({trades, actions}) => {
             headroomMs={2 * BUCKET_MS}>
         <svg className="pressures" aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}>
           <line className="midline" x1={0} y1={CHART_HEIGHT / 2} x2={CHART_WIDTH} y2={CHART_HEIGHT / 2}/>
-          {bars.map(shape => <g key={shape.x}>
-            <rect className="bought" x={shape.x} y={shape.boughtTop}
-                  width={shape.width} height={shape.boughtHeight}/>
-            <rect className="sold" x={shape.x} y={shape.soldTop}
-                  width={shape.width} height={shape.soldHeight}/>
+          {pressures.map((pressure, at) => <g key={pressure.openedAt}>
+            <rect className="bought-wall" x={bars[at].x + DEPTH_X} y={bars[at].boughtTop + DEPTH_Y}
+                  width={bars[at].width} height={bars[at].boughtHeight}/>
+            <rect className="sold-wall" x={bars[at].x + DEPTH_X} y={bars[at].soldTop + DEPTH_Y}
+                  width={bars[at].width} height={bars[at].soldHeight}/>
+            <rect className="bought" x={bars[at].x} y={bars[at].boughtTop}
+                  width={bars[at].width} height={bars[at].boughtHeight}/>
+            <rect className="sold" x={bars[at].x} y={bars[at].soldTop}
+                  width={bars[at].width} height={bars[at].soldHeight}/>
           </g>)}
         </svg>
       </Axes>

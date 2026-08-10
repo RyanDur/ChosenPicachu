@@ -13,6 +13,8 @@ import './Candles.css';
 const CHART_WIDTH = 240;
 const CANDLE_HEIGHT = 80;
 const VOLUME_HEIGHT = 24;
+const DEPTH_X = 1;
+const DEPTH_Y = 1.5;
 
 type Props = {
   trades: readonly Trade[];
@@ -47,17 +49,22 @@ export const Candles: FC<Props> = ({trades, id = 'candle', actions}) => {
             tickEvery={tickEveryMs[period]}
             headroomMs={2 * bucketMs[period]}>
         <svg className="candlesticks" aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${CANDLE_HEIGHT}`}>
-          {bodies.map(shape => <g key={shape.x} className={shape.direction}>
-            <line className="wick" x1={shape.center} y1={shape.wickTop} x2={shape.center} y2={shape.wickBottom}/>
-            <rect className="body" x={shape.x} y={shape.bodyTop}
-                  width={shape.width} height={shape.bodyHeight}/>
+          {candles.map((candle, at) => <g key={candle.openedAt} className={bodies[at].direction}>
+            <rect className="wall" x={bodies[at].x + DEPTH_X} y={bodies[at].bodyTop + DEPTH_Y}
+                  width={bodies[at].width} height={bodies[at].bodyHeight}/>
+            <line className="wick" x1={bodies[at].center} y1={bodies[at].wickTop}
+                  x2={bodies[at].center} y2={bodies[at].wickBottom}/>
+            <rect className="body" x={bodies[at].x} y={bodies[at].bodyTop}
+                  width={bodies[at].width} height={bodies[at].bodyHeight}/>
           </g>)}
         </svg>
         <svg className="volumes" aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${VOLUME_HEIGHT}`}>
-          {bars.map(shape =>
-            <rect className="volume" key={shape.x} x={shape.x} y={shape.top}
-                  width={shape.width} height={shape.height}/>
-          )}
+          {candles.map((candle, at) => <g key={candle.openedAt}>
+            <rect className="volume-wall" x={bars[at].x + DEPTH_X} y={bars[at].top + DEPTH_Y}
+                  width={bars[at].width} height={bars[at].height}/>
+            <rect className="volume" x={bars[at].x} y={bars[at].top}
+                  width={bars[at].width} height={bars[at].height}/>
+          </g>)}
         </svg>
       </Axes>
       <small className="caption">

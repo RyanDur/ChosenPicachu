@@ -12,12 +12,27 @@
       vector-effect: non-scaling-stroke;
     }
 
+    .bought,
+    .sold,
+    .bought-wall,
+    .sold-wall {
+      transition: x 300ms ease-out, y 300ms ease-out, width 300ms ease-out, height 300ms ease-out;
+    }
+
     .bought {
       fill: var(--mint-shade);
     }
 
+    .bought-wall {
+      fill: var(--mint-ink);
+    }
+
     .sold {
       fill: var(--internationl-orange-engineering);
+    }
+
+    .sold-wall {
+      fill: var(--internationl-orange-engineering-shade);
     }
   }
 }

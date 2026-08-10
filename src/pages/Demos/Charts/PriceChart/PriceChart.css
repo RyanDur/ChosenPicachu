@@ -23,10 +23,12 @@
         stroke-width: var(--hairline-x-2);
         stroke-linejoin: round;
         stroke-linecap: round;
+        filter: drop-shadow(0 var(--hairline-x-2) var(--hairline) var(--shadow));
       }
 
       .marker {
         fill: var(--primary-blue);
+        transition: cx 300ms ease-out, cy 300ms ease-out;
       }
     }
 
