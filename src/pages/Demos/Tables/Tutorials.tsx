@@ -1,5 +1,4 @@
 import {FC} from 'react';
-import * as D from 'schemawax';
 import {useSearchParamsObject} from '@components/search-params';
 import {motionParam, originParam, paceParam} from '../Controls';
 import {TableControls} from './TableControls';
@@ -10,9 +9,11 @@ import {MenuRecipe} from './Recipe/MenuRecipe';
 import {ResizeRecipe} from './Recipe/ResizeRecipe';
 import '../Tutorials.css';
 
-export type Tutorial = 'sort' | 'menu' | 'resize';
+import {Tutorial} from './params';
 
-export const tutorialParam: D.Decoder<Tutorial> = D.literalUnion('sort', 'menu', 'resize');
+export type {Tutorial} from './params';
+
+export {tutorialParam} from './params';
 
 type Props = {
   shown: Tutorial;
@@ -29,13 +30,14 @@ export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack}) => {
     <p className="overview">
       We are going to build this site’s live trading table, feature by feature. Here is how to
       use this page: every card below is a feature, told as a <a className="signpost"
-        href="https://initialcapacity.io/insights/user-story"
-        target="_blank"
-        rel="noreferrer">user story</a>. Open a card and you
+                                                                 href="https://initialcapacity.io/insights/user-story"
+                                                                 target="_blank"
+                                                                 rel="noreferrer">user story</a>. Open a card and you
       get the plan for that feature and the steps that build it, with the real code from this
       site, so what you read is what runs. The dials change which table you are reading
       about, and Eager, Lazy, Keep, Hide, Animate, and Static are this page’s names for the
-      choices, not platform keywords. Where a step depends on a dial, that dial sits on the step. The dashed code is the wrong way you would probably try first, and the
+      choices, not platform keywords. Where a step depends on a dial, that dial sits on the step. The dashed code is the
+      wrong way you would probably try first, and the
       links go to MDN if you want more.
     </p>
     <figure className="feedback">

@@ -40,7 +40,7 @@ export const ArtGallery: FC = () => {
     {art?.pieces.map((piece, index) => <figure
       className="frame" key={piece.id}>
       <div className="wall-slot">
-        <Image className="piece" piece={piece} priority={index < 4}/>
+        <Image className="piece" piece={piece} priority={index < 4} lazy={index >= 6}/>
       </div>
       <figcaption className="title">{piece.title}</figcaption>
     </figure>)}

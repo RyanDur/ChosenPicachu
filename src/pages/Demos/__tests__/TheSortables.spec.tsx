@@ -58,7 +58,7 @@ describe('the sortable list demo', () => {
     renderSortables(urlOf(feed), '?tab=dragAndDrop&native=sort');
 
     await feedIsSubscribed();
-    const recipe = screen.getByRole('region', {name: 'build the native drag sort yourself'});
+    const recipe = await screen.findByRole('region', {name: 'build the native drag sort yourself'});
     expect(recipe.querySelectorAll('details.arc[open]')).toHaveLength(1);
     expect(recipe.querySelectorAll('details.arc')[0]).toHaveAttribute('open');
   });
@@ -161,7 +161,7 @@ describe('the sortable list demo', () => {
     renderSortables(urlOf(feed));
 
     await feedIsSubscribed();
-    const recipe = screen.getByRole('region', {name: 'build the native drag sort yourself'});
+    const recipe = await screen.findByRole('region', {name: 'build the native drag sort yourself'});
     expect(recipe).toBeVisible();
     expect(screen.getByRole('heading', {name: 'let’s build this feature'})).toBeVisible();
     expect(screen.getByText(/the order is mine/)).toBeVisible();

@@ -12,7 +12,7 @@ import {
 } from '@test-support/feed';
 import {WebSocketServer} from 'ws';
 import userEvent from '@testing-library/user-event';
-import {addChart, addMenu, dragChart, keys, releaseDrag, renderChartPage, renderDemos, slot} from './workspace';
+import {addChart, addMenu, doorway, dragChart, keys, releaseDrag, renderChartPage, renderDemos, slot} from './workspace';
 import {format} from 'date-fns';
 
 beforeAll(realSockets);
@@ -106,7 +106,7 @@ describe('a list of charts', () => {
     const candles = screen.getByRole('region', {name: 'candles'});
     expect(candles.compareDocumentPosition(screen.getByRole('region', {name: 'live trades'})))
       .toBe(Node.DOCUMENT_POSITION_FOLLOWING);
-    expect(screen.getByRole('listitem', {name: 'chart 2'})).toHaveFocus();
+    expect(doorway('chart 2')).toHaveFocus();
   });
 
   test('the delete key removes a chart, never the last', async () => {
@@ -144,7 +144,7 @@ describe('a list of charts', () => {
     renderDemos(urlOf(feed), '?tab=charts&graph=workspace');
     await screen.findByRole('region', {name: 'live trades'});
 
-    expect(screen.getByRole('heading', {name: 'let’s build this feature'})).toBeVisible();
+    expect(await screen.findByRole('heading', {name: 'let’s build this feature'})).toBeVisible();
     expect(screen.getByText(/the shape of the session/)).toBeVisible();
     const recipe = screen.getByRole('region', {name: 'build the charts yourself'});
     expect(recipe.querySelectorAll('.story')).toHaveLength(1);
@@ -153,7 +153,7 @@ describe('a list of charts', () => {
     expect(recipe).toHaveTextContent(/export const strayed/);
     expect(recipe.querySelectorAll('.snippet.foil')).toHaveLength(1);
 
-    await userEvent.click(screen.getByRole('region', {name: 'live trades'}));
+    await userEvent.click(doorway('chart 1'));
     expect(await screen.findByRole('region', {name: 'build the price line yourself'})).toBeVisible();
   });
 
@@ -163,11 +163,11 @@ describe('a list of charts', () => {
     renderDemos(urlOf(feed), '?tab=charts&charts=candles');
     await screen.findByRole('region', {name: 'candles'});
 
-    keys('chart 1', 'Enter');
+    await userEvent.click(doorway('chart 1'));
 
     expect(await screen.findByRole('region', {name: 'build the candles yourself'})).toBeVisible();
     expect(screen.getByRole('region', {name: 'candles'})).toBeVisible();
-    expect(screen.getByText(/read the same trades as candles/)).toBeVisible();
+    expect(await screen.findByText(/read the same trades as candles/)).toBeVisible();
   });
 
   test('the candles story shows the markup and the dress, not just the arithmetic', async () => {
@@ -175,9 +175,10 @@ describe('a list of charts', () => {
 
     renderDemos(urlOf(feed), '?tab=charts&charts=candles');
     await screen.findByRole('region', {name: 'candles'});
-    keys('chart 1', 'Enter');
+    await userEvent.click(doorway('chart 1'));
 
     const recipe = await screen.findByRole('region', {name: 'build the candles yourself'});
+    await within(recipe).findByText(/read the same trades as candles/);
     expect(recipe).toHaveTextContent('className="candlesticks"');
     expect(recipe).toHaveTextContent('.up .body');
     expect(recipe).toHaveTextContent('className="volumes"');
@@ -194,9 +195,9 @@ describe('a list of charts', () => {
     const pressure = await screen.findByRole('region', {name: 'pressure'});
     expect(pressure).toBeVisible();
 
-    keys('chart 1', 'Enter');
+    await userEvent.click(doorway('chart 1'));
     expect(await screen.findByRole('region', {name: 'build the pressure yourself'})).toBeVisible();
-    expect(screen.getByText(/who is driving/)).toBeVisible();
+    expect(await screen.findByText(/who is driving/)).toBeVisible();
   });
 
   test('a chart’s tutorial opens like a feature', async () => {
@@ -211,6 +212,7 @@ describe('a list of charts', () => {
     expect(screen.getByText('a trader')).toBeVisible();
     expect(screen.getByText(/build the story yourself first/)).toBeVisible();
     const recipe = screen.getByRole('region', {name: 'build the price line yourself'});
+    await within(recipe).findByText(/watch the price move, live/);
     expect(recipe.querySelectorAll('.story')).toHaveLength(1);
   });
 
@@ -221,6 +223,7 @@ describe('a list of charts', () => {
     await screen.findByRole('region', {name: 'live trades'});
 
     const recipe = screen.getByRole('region', {name: 'build the price line yourself'});
+    await within(recipe).findByText(/watch the price move, live/);
     expect(recipe).toHaveTextContent('export const subscribeTo');
     expect(recipe).toHaveTextContent('export const decodeTrade');
     expect(recipe).toHaveTextContent('.mBind(toTrade);');
@@ -236,9 +239,10 @@ describe('a list of charts', () => {
 
     renderDemos(urlOf(feed), '?tab=charts&charts=candles');
     await screen.findByRole('region', {name: 'candles'});
-    keys('chart 1', 'Enter');
+    await userEvent.click(doorway('chart 1'));
 
     const recipe = await screen.findByRole('region', {name: 'build the candles yourself'});
+    await within(recipe).findByText(/read the same trades as candles/);
     expect(recipe).toHaveTextContent('export const bucketTrades');
     expect(recipe).toHaveTextContent('export const mergeLive');
     expect(recipe).toHaveTextContent('<Axes');
@@ -250,7 +254,7 @@ describe('a list of charts', () => {
 
     renderDemos(urlOf(feed), '?tab=charts&charts=pressure');
     await screen.findByRole('region', {name: 'pressure'});
-    keys('chart 1', 'Enter');
+    await userEvent.click(doorway('chart 1'));
 
     const recipe = await screen.findByRole('region', {name: 'build the pressure yourself'});
     expect(recipe).toHaveTextContent("side: D.literalUnion('buy', 'sell')");
@@ -296,7 +300,7 @@ describe('a list of charts', () => {
 
     renderDemos(urlOf(feed), '?tab=charts&charts=pie,price');
     await screen.findByRole('region', {name: 'pie'});
-    keys('chart 1', 'Enter');
+    await userEvent.click(doorway('chart 1'));
 
     const recipe = await screen.findByRole('region', {name: 'build the pie yourself'});
     expect(recipe).toHaveTextContent('export const sideTotals');
