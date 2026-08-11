@@ -3,7 +3,7 @@ import {useSearchParamsObject} from '@components/search-params';
 import {useNavigate} from 'react-router';
 import {SearchOptions} from '@components/art-gallery/museums/types/response';
 import {sourceParam} from '@components/art-gallery/museums/types/resource';
-import * as D from 'schemawax';
+import * as schema from 'schemawax';
 import {GalleryLinks} from '@components/art-gallery/Links';
 import {debounce} from 'throttle-debounce';
 import {has} from '@ryandur/sand';
@@ -20,7 +20,7 @@ export const Search: FC<Props> = ({id}) => {
   const [searchString, updateQuery] = useState<string>('');
   const navigate = useNavigate();
   const {gallery} = useContext(GalleryLinks);
-  const {tab, search, removeSearchParams, createSearchParams} = useSearchParamsObject({tab: sourceParam, search: D.string});
+  const {tab, search, removeSearchParams, createSearchParams} = useSearchParamsObject({tab: sourceParam, search: schema.string});
   const debounceSearch = debounce(300, (search: string) => {
     if (has(tab)) art.search({search, source: tab})
       .onSuccess(updateSearchOptions);

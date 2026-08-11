@@ -1,30 +1,30 @@
-import * as D from 'schemawax';
+import * as schema from 'schemawax';
 
-const VAMInfoDecoder = D.object({
+const VAMInfoDecoder = schema.object({
     required: {
-        record_count: D.number,
-        pages: D.number,
-        page: D.number,
-        page_size: D.number
+        record_count: schema.number,
+        pages: schema.number,
+        page: schema.number,
+        page_size: schema.number
     }
 });
 
-const VAMImagesDecoder = D.object({
+const VAMImagesDecoder = schema.object({
     required: {
-        _iiif_image_base_url: D.string
+        _iiif_image_base_url: schema.string
     }
 });
 
-const VAMMakerDecoder = D.object({
+const VAMMakerDecoder = schema.object({
     required: {
-        name: D.string
+        name: schema.string
     }
 });
 
-const VAMSearchRecordDecoder = D.object({
+const VAMSearchRecordDecoder = schema.object({
     required: {
-        systemNumber: D.string,
-        _primaryTitle: D.string
+        systemNumber: schema.string,
+        _primaryTitle: schema.string
     },
     optional: {
         _primaryMaker: VAMMakerDecoder,
@@ -32,50 +32,50 @@ const VAMSearchRecordDecoder = D.object({
     }
 });
 
-export const VAMAllArtSchema = D.object({
+export const VAMAllArtSchema = schema.object({
     required: {
         info: VAMInfoDecoder,
-        records: D.array(VAMSearchRecordDecoder)
+        records: schema.array(VAMSearchRecordDecoder)
     }
 });
 
-const VAMNameDecoder = D.object({
+const VAMNameDecoder = schema.object({
     required: {
-        text: D.string
+        text: schema.string
     }
 });
 
-const VAMPersonDecoder = D.object({
+const VAMPersonDecoder = schema.object({
     required: {
         name: VAMNameDecoder
     }
 });
 
-const VAMTitleDecoder = D.object({
+const VAMTitleDecoder = schema.object({
     required: {
-        title: D.string
+        title: schema.string
     }
 });
 
-const VAMDetailRecordDecoder = D.object({
+const VAMDetailRecordDecoder = schema.object({
     required: {
-        systemNumber: D.string,
-        objectType: D.string
+        systemNumber: schema.string,
+        objectType: schema.string
     },
     optional: {
-        titles: D.array(VAMTitleDecoder),
-        artistMakerPerson: D.array(VAMPersonDecoder),
-        images: D.array(D.string)
+        titles: schema.array(VAMTitleDecoder),
+        artistMakerPerson: schema.array(VAMPersonDecoder),
+        images: schema.array(schema.string)
     }
 });
 
-export const VAMArtSchema = D.object({
+export const VAMArtSchema = schema.object({
     required: {
         record: VAMDetailRecordDecoder
     }
 });
 
-export type VAMInfo = D.Output<typeof VAMInfoDecoder>;
-export type VAMSearchRecord = D.Output<typeof VAMSearchRecordDecoder>;
-export type VAMAllArtResponse = D.Output<typeof VAMAllArtSchema>;
-export type VAMArtResponse = D.Output<typeof VAMArtSchema>;
+export type VAMInfo = schema.Output<typeof VAMInfoDecoder>;
+export type VAMSearchRecord = schema.Output<typeof VAMSearchRecordDecoder>;
+export type VAMAllArtResponse = schema.Output<typeof VAMAllArtSchema>;
+export type VAMArtResponse = schema.Output<typeof VAMArtSchema>;

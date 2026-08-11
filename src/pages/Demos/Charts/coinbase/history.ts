@@ -1,11 +1,11 @@
-import * as D from 'schemawax';
+import * as schema from 'schemawax';
 import {Result} from '@ryandur/sand';
 import {http} from '@transport/http';
 import {validate} from '@transport/validate';
 import {HTTPError} from '@transport/types';
 import {Candle} from '../Candles/shapes';
 
-const HistoryRowsDecoder = D.array(D.array(D.number));
+const HistoryRowsDecoder = schema.array(schema.array(schema.number));
 
 const toCandle = (row: readonly number[]): Candle => ({
   openedAt: row[0] * 1000,

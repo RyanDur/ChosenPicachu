@@ -1,10 +1,16 @@
-import {DragEvent, useState} from 'react';
+import {DragEvent, KeyboardEvent, useState} from 'react';
 import {classNames} from '@components/class-names';
 import {strayed} from '../DragAndDrop/crossing';
 
 type Pushed = Readonly<Record<number, 'up' | 'down'>>;
 
-export const useChartTravel = (seats: number, onSeated: (from: number, to: number) => void) => {
+type Travel = {
+  seats: number;
+  onSeated: (from: number, to: number, options?: {replace?: boolean}) => void;
+  onRemoved: (at: number) => void;
+};
+
+export const useChartTravel = ({seats, onSeated, onRemoved}: Travel) => {
   const [armed, setArmed] = useState<number>();
   const [aloft, setAloft] = useState<number>();
   const [aloftLead, setAloftLead] = useState(0);
@@ -12,9 +18,9 @@ export const useChartTravel = (seats: number, onSeated: (from: number, to: numbe
 
   const dress = (at: number) => classNames('chart-slot',
     aloft === at && 'hide',
-    pushed?.[at] !== undefined && 'chart-pushed');
+    pushed?.[at] && 'chart-pushed');
 
-  const theater = (at: number) => pushed?.[at] !== undefined
+  const theater = (at: number) => pushed?.[at]
     ? {'--toward': pushed[at] === 'up' ? '1' : '-1'}
     : undefined;
 
@@ -54,7 +60,7 @@ export const useChartTravel = (seats: number, onSeated: (from: number, to: numbe
       : seat.top - displaced.height;
     setAloftLead(event.clientY - landingTop);
     setPushed({[aloft]: to > aloft ? 'up' : 'down'});
-    onSeated(aloft, to);
+    onSeated(aloft, to, {replace: true});
     setAloft(to);
   };
 
@@ -63,5 +69,24 @@ export const useChartTravel = (seats: number, onSeated: (from: number, to: numbe
     setArmed(undefined);
   };
 
-  return {armed, setArmed, dress, theater, lift, travel, release, settled: () => setPushed(undefined)};
+  const keys = (at: number) => (event: KeyboardEvent<HTMLElement>) => {
+    if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+      event.preventDefault();
+      const to = Math.min(Math.max(at + (event.key === 'ArrowDown' ? 1 : -1), 0), seats - 1);
+      if (to !== at) {
+        onSeated(at, to);
+        const slot = event.currentTarget.closest('.chart-list')?.querySelectorAll(':scope > .chart-slot').item(to);
+        const next = slot?.querySelector('.doorway');
+        if (next instanceof HTMLElement) {
+          next.focus();
+        }
+      }
+    }
+    if ((event.key === 'Delete' || event.key === 'Backspace') && seats > 1) {
+      event.preventDefault();
+      onRemoved(at);
+    }
+  };
+
+  return {armed, setArmed, dress, theater, lift, travel, release, keys, settled: () => setPushed(undefined)};
 };

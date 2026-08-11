@@ -1,4 +1,4 @@
-import {FC, lazy, Suspense} from 'react';
+import {FC, lazy, ReactNode, Suspense} from 'react';
 import {Navigate, useParams} from 'react-router';
 import {useEnv} from '@components/Env';
 import {Paths} from '@pages/Paths';
@@ -10,7 +10,6 @@ import {Candles} from './Candles';
 import {Pressure} from './Pressure';
 import {Pie} from './Pie';
 import {ChartKind, isChartKind, matchChartKind} from './kinds';
-import {Trade} from './coinbase';
 import '../Recipe/Recipe.css';
 import '../Tutorials.css';
 import './ChartPage.css';
@@ -18,7 +17,6 @@ import './ChartPage.css';
 type Feature = {
   kind: ChartKind;
   name: string;
-  chart: FC<{trades: readonly Trade[]}>;
   reference: string;
   quote: string;
 };
@@ -29,7 +27,6 @@ const features: Record<ChartKind, Feature> = {
   price: {
     kind: 'price',
     name: 'price line',
-    chart: PriceChart,
     reference: 'https://en.wikipedia.org/wiki/Line_chart',
     quote: 'The ticker tells me now; it doesn’t tell me the way here. I want to glance up ' +
       'and know whether the market is climbing, stalling, or rolling over, without reading ' +
@@ -38,7 +35,6 @@ const features: Record<ChartKind, Feature> = {
   candles: {
     kind: 'candles',
     name: 'candles',
-    chart: Candles,
     reference: 'https://en.wikipedia.org/wiki/Candlestick_chart',
     quote: 'The line smooths over the fight. A drift and a battle can draw the same shape, ' +
       'so I want each window to answer for itself: where it opened and closed, how far it ' +
@@ -47,7 +43,6 @@ const features: Record<ChartKind, Feature> = {
   pressure: {
     kind: 'pressure',
     name: 'pressure',
-    chart: Pressure,
     reference: 'https://en.wikipedia.org/wiki/Order_flow_trading',
     quote: 'I can see the price move; I can’t see who is pushing it. When it breaks out, I ' +
       'want to know whether buyers drove it there or the sellers just stepped away.'
@@ -55,7 +50,6 @@ const features: Record<ChartKind, Feature> = {
   pie: {
     kind: 'pie',
     name: 'pie',
-    chart: Pie,
     reference: 'https://en.wikipedia.org/wiki/Pie_chart',
     quote: 'The bars tell me the battle, minute by minute. At the end I want the war: one ' +
       'circle, who owned the session.'
@@ -66,9 +60,9 @@ export const ChartPage: FC = () => {
   const {kind} = useParams();
   const {tradeFeed, tradeProduct} = useEnv();
   const liveTrades = useLiveTrades(tradeFeed, tradeProduct);
-  const page = ({kind: dealt, name, reference, quote, chart: Chart}: Feature) => () =>
+  const page = ({kind: dealt, name, reference, quote}: Feature, chart: ReactNode) => () =>
     <article aria-label={`${name} tutorial`} className="chart-page tutorials">
-    <Chart trades={liveTrades.trades}/>
+    {chart}
     <h2 className="tutorials-title">let’s build this feature</h2>
     <p className="overview">
       We are going to build the <a
@@ -100,9 +94,9 @@ export const ChartPage: FC = () => {
     </section>
     </article>;
   return matchChartKind(isChartKind(kind) ? kind : undefined, {
-    price: page(features.price),
-    candles: page(features.candles),
-    pressure: page(features.pressure),
-    pie: page(features.pie)
+    price: page(features.price, <PriceChart trades={liveTrades.trades}/>),
+    candles: page(features.candles, <Candles trades={liveTrades.trades}/>),
+    pressure: page(features.pressure, <Pressure trades={liveTrades.trades}/>),
+    pie: page(features.pie, <Pie trades={liveTrades.trades}/>)
   }).orElse(<Navigate to={`${Paths.demos}?tab=${DemoTopics.charts}`} replace/>);
 };

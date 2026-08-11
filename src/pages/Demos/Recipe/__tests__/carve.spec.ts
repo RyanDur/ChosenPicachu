@@ -46,6 +46,14 @@ const css = `.sortable .header-cell {
         transform: translateX(1cqi);
     }
 }
+
+.bought {
+    fill: green;
+}
+
+.bought-wall {
+    fill: darkgreen;
+}
 `;
 
 describe('carving examples out of the source they teach', () => {
@@ -115,6 +123,14 @@ describe('carving examples out of the source they teach', () => {
       '    from {',
       '        transform: translateX(1cqi);',
       '    }',
+      '}'
+    ]);
+  });
+
+  test('a css rule ends at its brace, even when the next selector starts with a dot', () => {
+    expect(unit(css, '.bought {').map(({text}) => text)).toEqual([
+      '.bought {',
+      '    fill: green;',
       '}'
     ]);
   });

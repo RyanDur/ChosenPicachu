@@ -1,6 +1,6 @@
 import {FC, useEffect, useState} from 'react';
 import {numberParam, useSearchParamsObject} from '@components/search-params';
-import * as D from 'schemawax';
+import * as schema from 'schemawax';
 import {Loading} from '@components/Loading';
 import {Image} from '@components/art-gallery/Image';
 import {useGallery} from '@components/art-gallery/Art/Context';
@@ -17,7 +17,7 @@ export const ArtGallery: FC = () => {
   const [loading, isLoading] = useState(false);
   const [errored, hasErrored] = useState(false);
   const {page, size, search, tab} =
-    useSearchParamsObject({page: numberParam, size: numberParam, tab: sourceParam, search: D.string}, {
+    useSearchParamsObject({page: numberParam, size: numberParam, tab: sourceParam, search: schema.string}, {
       size: defaultRecordLimit,
       page: 1,
       tab: Source.AIC

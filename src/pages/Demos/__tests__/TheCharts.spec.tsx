@@ -257,7 +257,7 @@ describe('a list of charts', () => {
     await userEvent.click(doorway('chart 1'));
 
     const recipe = await screen.findByRole('region', {name: 'build the pressure yourself'});
-    expect(recipe).toHaveTextContent("side: D.literalUnion('buy', 'sell')");
+    expect(recipe).toHaveTextContent("side: schema.literalUnion('buy', 'sell')");
   });
 
   test('the charts travel in the url, one of each kind', async () => {

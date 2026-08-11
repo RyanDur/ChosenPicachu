@@ -1,21 +1,21 @@
 import {useEffect, useState} from 'react';
-import * as D from 'schemawax';
+import * as schema from 'schemawax';
 import {useEnv} from '@components/Env';
 import {http} from '@transport/http';
 import {validate} from '@transport/validate';
 import {Trade} from '../../Charts/coinbase';
 
-const RecentTradesDecoder = D.array(D.object({
+const RecentTradesDecoder = schema.array(schema.object({
   required: {
-    trade_id: D.number,
-    price: D.string,
-    size: D.string,
-    side: D.literalUnion('buy', 'sell'),
-    time: D.string
+    trade_id: schema.number,
+    price: schema.string,
+    size: schema.string,
+    side: schema.literalUnion('buy', 'sell'),
+    time: schema.string
   }
 }));
 
-const toTrades = (rows: D.Output<typeof RecentTradesDecoder>): readonly Trade[] =>
+const toTrades = (rows: schema.Output<typeof RecentTradesDecoder>): readonly Trade[] =>
   rows.map(row => ({
     id: row.trade_id,
     price: Number(row.price),
