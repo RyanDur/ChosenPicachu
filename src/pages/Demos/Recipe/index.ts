@@ -1,5 +1,3 @@
-export type {Block, StepEntry, StoryEntry} from './StepList';
-export {StepList, StoryList} from './StepList';
 export {Stories} from './Stories';
 export {Story} from './Story';
 export {Tell} from './Tell';
