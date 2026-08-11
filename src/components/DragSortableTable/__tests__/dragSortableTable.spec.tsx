@@ -19,7 +19,7 @@ describe('drag sortable columns', () => {
   const ghostTable = () => screen.getAllByRole('table', {hidden: true})[1];
   const surface = () => {
     const found = document.querySelector('.drag-surface');
-    if (found === null) throw new Error('nothing is aloft');
+    if (!found) throw new Error('nothing is aloft');
     return found;
   };
   const headerTexts = () => within(sourceTable()).getAllByRole('columnheader').map(header => header.textContent);
@@ -196,7 +196,7 @@ describe('drag sortable columns', () => {
     expect(ghost.textContent).toContain('age');
     expect(ghost.textContent).toContain('36');
     const carriedRows = ghost.querySelector('tbody');
-    if (carriedRows === null) throw new Error('the ghost has no body');
+    if (!carriedRows) throw new Error('the ghost has no body');
     expect([...carriedRows.rows].map(lane => lane.style.getPropertyValue('--seat-height')))
       .toEqual(['40px']);
 
@@ -232,14 +232,14 @@ describe('drag sortable rows', () => {
   const sourceTable = () => screen.getAllByRole('table')[0];
   const surface = () => {
     const found = document.querySelector('.drag-surface');
-    if (found === null) throw new Error('nothing is aloft');
+    if (!found) throw new Error('nothing is aloft');
     return found;
   };
   const firstCells = () => within(within(sourceTable()).getAllByRole('rowgroup')[1])
     .getAllByRole('row').map(row => row.querySelector('th, td')?.textContent);
   const rowOf = (person: string) => {
     const row = within(sourceTable()).getByText(person).closest('tr');
-    if (row === null) throw new Error(`no row for ${person}`);
+    if (!row) throw new Error(`no row for ${person}`);
     return row;
   };
   const grip = (person: string) => within(rowOf(person)).getByRole('button', {name: /move row/});
@@ -281,7 +281,7 @@ describe('drag sortable rows', () => {
     lift('Grace');
 
     const ghost = document.querySelector('.column-ghost');
-    if (ghost === null) throw new Error('no ghost is aloft');
+    if (!ghost) throw new Error('no ghost is aloft');
     expect(ghost).toHaveAttribute('aria-hidden', 'true');
     expect(ghost.querySelector('.grip')).not.toBeNull();
     const name = ghost.querySelector('th');
@@ -399,7 +399,7 @@ describe('sort criteria menus', () => {
     const toggle = screen.getByRole('button', {name: label});
     const target = toggle.getAttribute('popovertarget') ?? '';
     const menu = document.getElementById(target);
-    if (menu === null) throw new Error(`no menu for ${label}`);
+    if (!menu) throw new Error(`no menu for ${label}`);
     return menu;
   };
 
@@ -612,7 +612,7 @@ describe('animated moves', () => {
 
     fireEvent.pointerDown(within(table).getByRole('columnheader', {name: /^age/}), {clientX: 260, clientY: 20, pointerId: 1});
     const surface = document.querySelector('.drag-surface');
-    if (surface === null) throw new Error('nothing is aloft');
+    if (!surface) throw new Error('nothing is aloft');
     fireEvent.pointerMove(surface, {buttons: 1, clientX: 410, clientY: 50, pointerId: 1});
 
     const displaced = within(table).getByRole('columnheader', {name: /^city/});

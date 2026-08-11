@@ -1,6 +1,6 @@
 import {useSearchParams} from 'react-router';
 import {toQueryString} from '@transport/url';
-import {has} from '@ryandur/sand';
+import {has, maybe} from '@ryandur/sand';
 import * as schema from 'schemawax';
 
 const filterEmpty = (obj: { [p: string]: string | number }) =>
@@ -13,8 +13,9 @@ type ParamDecoders<T> = { [K in keyof T]: schema.Decoder<T[K]> };
 const decodeParams = <T>(decoders: ParamDecoders<T>, raw: Record<string, unknown>): Partial<T> => {
   const decoded: Partial<T> = {};
   for (const key in decoders) {
-    const value = decoders[key].decode(raw[key]);
-    if (value !== null) decoded[key] = value;
+    maybe(decoders[key].decode(raw[key])).map(value => {
+      decoded[key] = value;
+    });
   }
   return decoded;
 };

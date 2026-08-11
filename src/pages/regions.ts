@@ -9,4 +9,4 @@ export type Regions = {
 };
 
 export const isRegions = (handle: unknown): handle is Regions =>
-  typeof handle === 'object' && handle !== null && 'header' in handle;
+  typeof handle === 'object' && !!handle && 'header' in handle;

@@ -36,7 +36,7 @@ const menuFor = (label: string): HTMLElement => {
   const toggle = screen.getByRole('button', {name: label});
   const target = toggle.getAttribute('popovertarget') ?? '';
   const menu = document.getElementById(target);
-  if (menu === null) {
+  if (!menu) {
     throw new Error(`no menu for ${label}`);
   }
   return menu;

@@ -192,7 +192,7 @@ describe('the keyboard walks the whole form', () => {
 
     const visited: Element[] = [];
     let guard = 0;
-    while (document.activeElement !== null && form.contains(document.activeElement) && guard < 50) {
+    while (document.activeElement && form.contains(document.activeElement) && guard < 50) {
       expect(visited, 'tab revisited a control — a trap').not.toContain(document.activeElement);
       visited.push(document.activeElement);
       await userEvent.tab();
