@@ -1,5 +1,5 @@
 import {anyRequestRespondsWith} from '@test-support/server';
-import {screen, waitFor} from '@testing-library/react';
+import {screen, waitFor, within} from '@testing-library/react';
 import {ArtPiece} from '@components/art-gallery/ArtPiece/index';
 import {renderWithArtPieceContext} from '@test-support';
 import {HTTPError} from '@transport/types';
@@ -54,5 +54,7 @@ describe('viewing a piece', () => {
     await waitFor(() => expect(screen.queryByAltText('Load Error')).toBeInTheDocument());
     expect(screen.queryByRole('figure')).not.toBeInTheDocument();
     expect(screen.queryByRole('progressbar', {name: 'loading piece'})).not.toBeInTheDocument();
+    expect(within(screen.getByRole('alert', {hidden: true}))
+      .getByText('the museum is having trouble')).toBeInTheDocument();
   });
 });

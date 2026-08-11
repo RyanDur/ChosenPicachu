@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import {streaming} from '@ryandur/sand';
+import {useBanners} from '@components/Banners';
 import {decodeTrade, subscribeTo, Trade} from './coinbase';
 
 export type LiveTradesState = {
@@ -28,10 +29,11 @@ const appendTrade = (trade: Trade) => (previous: LiveTradesState): LiveTradesSta
 
 export const useLiveTrades = (url: string, product: string): LiveTradesState => {
   const [liveTrades, setLiveTrades] = useState<LiveTradesState>(opening);
+  const {raise} = useBanners();
 
   useEffect(() => {
     setLiveTrades(opening);
-    const stream = streaming(url, () => undefined)
+    const stream = streaming(url, () => 'the live feed refused the handshake')
       .onOpen(socket => {
         socket.send(subscribeTo(product));
         setLiveTrades(live);
@@ -40,10 +42,16 @@ export const useLiveTrades = (url: string, product: string): LiveTradesState => 
         trade => setLiveTrades(appendTrade(trade)),
         () => undefined
       ))
-      .onClose(() => setLiveTrades(failed))
-      .onFailure(() => setLiveTrades(failed));
+      .onClose(() => {
+        setLiveTrades(failed);
+        raise('the live feed hung up mid-stream');
+      })
+      .onFailure(trouble => {
+        setLiveTrades(failed);
+        raise(trouble);
+      });
     return () => stream.close();
-  }, [url, product]);
+  }, [url, product, raise]);
 
   return liveTrades;
 };

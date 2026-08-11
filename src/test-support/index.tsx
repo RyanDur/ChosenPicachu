@@ -21,6 +21,7 @@ import {AddressInfo, NewUser} from '@components/Users/UserInfo/types';
 import {AllArt, Art} from '@components/art-gallery/museums/types/response';
 import {toDate} from 'date-fns';
 import {GalleryContext} from '@components/art-gallery/Art/Context';
+import {BannerProvider, Banners} from '@components/Banners';
 import {ArtPieceContext} from '@components/art-gallery/ArtPiece/Context';
 
 export type Rendered = {
@@ -48,12 +49,15 @@ const TestRouter: FC<PropsWithChildren & {
   context: URLContext,
 }> = ({children, context}) => 
   <MemoryRouter initialEntries={[`${(context.initialRoute)}${toQueryString(context.params)}`]}>
-    <Routes>
-      <Route path={context.path}
-             element={<LocationHelper><GalleryLinks.Provider value={{gallery: Paths.artGallery}}>{children}</GalleryLinks.Provider></LocationHelper>}>
-      </Route>
-      <Route path="*" element={<LocationHelper/>}/>
-    </Routes>
+    <BannerProvider>
+      <Routes>
+        <Route path={context.path}
+               element={<LocationHelper><GalleryLinks.Provider value={{gallery: Paths.artGallery}}>{children}</GalleryLinks.Provider></LocationHelper>}>
+        </Route>
+        <Route path="*" element={<LocationHelper/>}/>
+      </Routes>
+      <Banners/>
+    </BannerProvider>
   </MemoryRouter>
 ;
 type Defaults = Partial<URLContext & { pieceState: Partial<Art>, galleryState: AllArt }>;

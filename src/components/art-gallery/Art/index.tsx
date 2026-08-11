@@ -5,6 +5,8 @@ import {Loading} from '@components/Loading';
 import {Image} from '@components/art-gallery/Image';
 import {useGallery} from '@components/art-gallery/Art/Context';
 import {empty, has} from '@ryandur/sand';
+import {useBanners} from '@components/Banners';
+import {troubleWith} from '@transport/trouble';
 import {Source, sourceParam} from '@components/art-gallery/museums/types/resource';
 import {art as artResource} from '@components/art-gallery/museums';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
@@ -14,6 +16,7 @@ import './Gallery.layout.css';
 
 export const ArtGallery: FC = () => {
   const {art, updateArt, reset} = useGallery();
+  const {raise} = useBanners();
   const [loading, isLoading] = useState(false);
   const [errored, hasErrored] = useState(false);
   const {page, size, search, tab} =
@@ -29,12 +32,15 @@ export const ArtGallery: FC = () => {
       .onPending(isLoading)
       .onSuccess(updateArt)
       .onSuccess(data => hasErrored(empty(data.pieces)))
-      .onFailure(() => hasErrored(true));
+      .onFailure(error => {
+        hasErrored(true);
+        raise(troubleWith('the museum')(error));
+      });
     return () => {
       cancel();
       reset();
     };
-  }, [page, search, tab, size, reset, updateArt]);
+  }, [page, search, tab, size, reset, updateArt, raise]);
 
   return <section id="art-gallery">
     {art?.pieces.map((piece, index) => <figure

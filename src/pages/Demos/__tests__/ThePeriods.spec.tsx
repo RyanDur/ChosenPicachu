@@ -101,6 +101,8 @@ describe('the chart periods', () => {
     await userEvent.click(within(menuFor('candle period')).getByText('week'));
     const candleCard = screen.getByRole('region', {name: 'candles'});
     expect(await within(candleCard).findByText('history unavailable')).toBeVisible();
+    expect(within(screen.getByRole('alert', {hidden: true}))
+      .getByText('the candle history could not be reached')).toBeInTheDocument();
   });
 
   test('switching the window shows the loading view until history arrives', async () => {

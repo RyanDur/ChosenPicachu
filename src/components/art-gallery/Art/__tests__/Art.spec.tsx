@@ -2,7 +2,7 @@ import {anyRequestFailsToConnect} from '@test-support/server';
 import {delay, http as handle, HttpResponse} from 'msw';
 import {server} from '@test-support/server';
 import {env} from '@components/Env';
-import {screen, waitFor} from '@testing-library/react';
+import {screen, waitFor, within} from '@testing-library/react';
 import {renderWithGalleryContext, renderWithMemoryRouter} from '@test-support';
 import {ArtGallery} from '@components/art-gallery/Art/index';
 import {Source} from '@components/art-gallery/museums/types/resource';
@@ -70,5 +70,7 @@ describe('The gallery.', () => {
     expect(await screen.findByAltText('empty gallery')).toBeInTheDocument();
     expect(screen.queryByRole('figure')).not.toBeInTheDocument();
     expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument();
+    expect(within(screen.getByRole('alert', {hidden: true}))
+      .getByText('the museum could not be reached')).toBeInTheDocument();
   });
 });
