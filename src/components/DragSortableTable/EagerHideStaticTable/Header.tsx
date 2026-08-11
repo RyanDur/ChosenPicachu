@@ -1,10 +1,12 @@
 import {FC, KeyboardEvent, MouseEvent, PointerEvent} from 'react';
-import {has, not} from '@ryandur/sand';
+import {Maybe, has, maybe, not, nothing} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {Column, ResizeHandle, Shares, neighborOf, traded} from '@components/Table';
 import {anchored, interior} from '../survey';
 import {Direction, SortMenu} from '../SortMenu';
 import '../Header.css';
+
+const steps: Record<string, number> = {ArrowRight: 1, ArrowLeft: -1};
 
 type Props = {
   column: Column;
@@ -12,7 +14,7 @@ type Props = {
   share?: number;
   resizable: boolean;
   rule?: { column: string; direction: Direction };
-  aloft?: string;
+  aloft?: Maybe<string>;
   draggable: boolean;
   className: string;
   onLift: (column: string) => (event: PointerEvent<HTMLTableCellElement>) => void;
@@ -23,12 +25,12 @@ type Props = {
 };
 
 export const Header: FC<Props> = (
-  {column, order, share, resizable, rule, aloft, draggable, className, onLift, onOrdered, onAwaken, onShared, onRule}
+  {column, order, share, resizable, rule, aloft = nothing(), draggable, className, onLift, onOrdered, onAwaken, onShared, onRule}
 ) => {
   const columnName = column.column;
   const position = order.indexOf(columnName);
   const travels = draggable && not(anchored(position, order.length));
-  const hidden = aloft === columnName;
+  const hidden = aloft.map(held => held === columnName).orElse(false);
   const sorted = rule?.column === columnName ? rule.direction : undefined;
 
   return <th className={classNames(
@@ -44,18 +46,16 @@ export const Header: FC<Props> = (
              tabIndex={travels ? 0 : undefined}
              onPointerDown={travels ? onLift(columnName) : undefined}
              onKeyDown={travels
-               ? (event: KeyboardEvent<HTMLTableCellElement>) => {
-                 if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') {
-                   return;
-                 }
-                 event.preventDefault();
-                 const from = order.indexOf(columnName);
-                 const to = interior(from + (event.key === 'ArrowRight' ? 1 : -1), order.length);
-                 if (to === from) {
-                   return;
-                 }
-                 onOrdered(columnName, to);
-               }
+               ? (event: KeyboardEvent<HTMLTableCellElement>) =>
+                 maybe(steps[event.key]).map(toward => {
+                   event.preventDefault();
+                   const from = order.indexOf(columnName);
+                   const to = interior(from + toward, order.length);
+                   if (to === from) {
+                     return;
+                   }
+                   onOrdered(columnName, to);
+                 })
                : undefined}
              style={has(share) ? {'--share': `${share}%`} : undefined}>
     <div className={classNames('header-cell-content',

@@ -145,13 +145,15 @@ export const liftOnce = (hookSource: string, tableSource: string) =>
         table’s <Mdn path="Web/API/Element/getBoundingClientRect">bounding rect</Mdn>, and every
         header in it, a single time: the survey. Everything that follows is math against the survey; measuring per move
         would fight the reorder you are about to apply.</Says>
-      <Says>Three words you will see in every block from here. Aloft is whatever you are
-        carrying, named by its key. The survey is a plain record of that one measurement: the
-        table’s box, each column’s width, and later the row heights. And has is this site’s null check, from a small
-        library called <a className="signpost"
+      <Says>Four words you will see in every block from here. Aloft is whatever you are
+        carrying, named by its key; it is a Maybe from a small library
+        called <a className="signpost"
           href="https://ryandur.github.io/sand/"
           target="_blank"
-          rel="noreferrer">sand</a>; it answers false for nothing and for empty.</Says>
+          rel="noreferrer">sand</a>, nothing until a lift, and map runs only while something is
+        held. The survey is a plain record of that one measurement: the table’s box, each
+        column’s width, and later the row heights. And has is the same library’s null check;
+        it answers false for nothing and for empty.</Says>
     </Words>
     <Codes>
       <Snippet label="JS" lines={[
@@ -187,7 +189,7 @@ export const dragSurface = (hookSource: string) =>
         aside('// path out of the drag owes a removeEventListener')
       ]}/>
       <Snippet label="HTML" lines={[
-        ...span(aloftSource, '(has(columnsTravel.aloft) || has(rowsTravel.aloft))', '{...surface}')
+        ...span(aloftSource, '(!columnsTravel.aloft.isNothing || !rowsTravel.aloft.isNothing)', '{...surface}')
       ]}/>
       <Snippet label="JS" lines={[
         ...span(hookSource, 'onPointerMove: travel', 'onLostPointerCapture: drop'), gap,
@@ -207,7 +209,8 @@ export const ghostByHand = (hookSource: string) =>
       <Says>The column in your hand is not a clone of DOM nodes. It is a second table rendered
         from the same data. The flight is where you grabbed it; the drift is how far you have
         moved since; both are state, and the ghost renders at the flight, translated by the
-        drift. Each pointer move sets the drift and React paints the translation; CSS keeps the
+        drift. The first move seeds the origin; every move after sets the drift against it
+        and React paints the translation; CSS keeps the
         ghost out of hit-testing with <Mdn path="Web/CSS/pointer-events">pointer-events</Mdn>: none
         and promises the browser motion with <Mdn path="Web/CSS/will-change">will-change</Mdn>.
         Nothing is measured per move, which is what keeps slower engines smooth.</Says>
@@ -218,8 +221,8 @@ export const ghostByHand = (hookSource: string) =>
         aside('{/* the same cells, rendered again from the data */}')
       ]}/>
       <Snippet label="JS" lines={[
-        ...span(hookSource, 'setDrift({x: event.clientX - origin.x',
-          'setDrift({x: event.clientX - origin.x')
+        ...span(hookSource, 'origin.either(',
+          'setOrigin(maybe({x: event.clientX')
       ]}/>
       <Snippet label="CSS" lines={[
         ...unit(ghostCss, '.column-ghost {')

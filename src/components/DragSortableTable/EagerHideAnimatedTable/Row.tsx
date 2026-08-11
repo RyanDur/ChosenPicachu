@@ -1,5 +1,5 @@
 import {FC, PointerEvent} from 'react';
-import {has} from '@ryandur/sand';
+import {Maybe, has, maybe, nothing} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {array} from '@components/arrays';
 import {Row as RowData} from '@components/Table';
@@ -13,8 +13,8 @@ type Props = {
   clipped: boolean;
   standing: readonly number[];
   gripped: boolean;
-  aloft?: number;
-  aloftColumn?: string;
+  aloft?: Maybe<number>;
+  aloftColumn?: Maybe<string>;
   slid?: Slid;
   shifted?: Shifted;
   className: string;
@@ -31,8 +31,8 @@ export const Row: FC<Props> = (
     clipped,
     standing,
     gripped,
-    aloft,
-    aloftColumn,
+    aloft = nothing(),
+    aloftColumn = nothing(),
     slid,
     shifted,
     className,
@@ -42,7 +42,7 @@ export const Row: FC<Props> = (
   }
 ) => {
   const position = standing.indexOf(row);
-  const hidden = aloft === row;
+  const hidden = aloft.map(held => held === row).orElse(false);
   const drop = shifted?.[row];
 
   return <tr className={classNames(className, has(drop) && 'shifted')}
@@ -55,7 +55,7 @@ export const Row: FC<Props> = (
         cellClassName, cell.className,
         rowHeader && 'row-header',
         clipped && 'ellipsis',
-        aloftColumn === column && 'hide',
+        aloftColumn.map(held => held === column).orElse(false) && 'hide',
         hidden && 'hide-across',
         has(displaced) && 'displaced'
       );
@@ -67,16 +67,17 @@ export const Row: FC<Props> = (
           <div className="row-header-content">
             <RowGrip position={position} onLift={onLift(row)}
                      onNudge={(toward, event) => {
-                       const lane = event.currentTarget.closest('tr');
-                       if (has(lane) && lane.getAnimations().length > 0) {
+                       const sliding = maybe(event.currentTarget.closest('tr'))
+                         .map(lane => lane.getAnimations().length > 0)
+                         .orElse(false);
+                       if (sliding) {
                          return;
                        }
                        const to = Math.min(Math.max(position + toward, 0), standing.length - 1);
                        const after = array.moveToIndex(to, row, standing);
-                       const table = event.currentTarget.closest('table');
-                       onArranged(after, has(table)
-                         ? shifts(surveyed(table, columns, standing).rowHeights, standing, after)
-                         : {});
+                       onArranged(after, maybe(event.currentTarget.closest('table'))
+                         .map(table => shifts(surveyed(table, columns, standing).rowHeights, standing, after))
+                         .orElse({}));
                      }}/>
             {cell.display}
           </div>

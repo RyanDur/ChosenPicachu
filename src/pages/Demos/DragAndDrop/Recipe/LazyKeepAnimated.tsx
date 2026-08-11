@@ -30,8 +30,8 @@ export const LazyKeepAnimatedRecipe: FC = () => <>
         </Words>
         <Codes>
           <Snippet label="JS" lines={[
-            ...span(listSource, 'onDragOver={() => setLanding(index)}', 'onDragOver={() => setLanding(index)}'), gap,
-            ...unit(listSource, 'onReleased={() => {')
+            ...span(listSource, 'onDragOver={() => setLanding(maybe(index))}', 'onDragOver={() => setLanding(maybe(index))}'), gap,
+            ...unit(listSource, 'const release')
           ]}/>
         </Codes>
       </Step>

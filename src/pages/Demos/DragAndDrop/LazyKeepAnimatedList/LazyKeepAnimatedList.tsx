@@ -1,5 +1,5 @@
 import {FC, useState} from 'react';
-import {has} from '@ryandur/sand';
+import {Maybe, maybe, nothing} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {classNames} from '@components/class-names';
 import {glide} from '@components/glide';
@@ -15,32 +15,34 @@ type Props = {
 
 export const LazyKeepAnimatedList: FC<Props> = ({list}) => {
     const [order, setOrder] = useState<string[]>(() => [...list]);
-    const [aloft, setAloft] = useState<string>();
-    const [landing, setLanding] = useState(-1);
-    const [pushed, setPushed] = useState<Pushed>();
+    const [aloft, setAloft] = useState<Maybe<string>>(nothing());
+    const [landing, setLanding] = useState<Maybe<number>>(nothing());
+    const [pushed, setPushed] = useState<Pushed>({});
+
+    const release = () => {
+        aloft.and(landing).map(([held, at]) => {
+            const settled = array.moveToIndex(at, held, order);
+            setTimeout(() => glide(true)(() => setOrder(settled)));
+        });
+        setAloft(nothing());
+        setLanding(nothing());
+    };
 
     return <ul aria-label="sortable list"
                onDragOver={event => event.preventDefault()}
                onDrop={event => event.preventDefault()}
-               onDragLeave={() => setLanding(-1)}
+               onDragLeave={() => setLanding(nothing())}
                className="sortable-list">{
         order.map((item, index) =>
             <li key={item}
-                className={classNames('item', has(pushed?.[item]) && 'pushed')}
-                    style={{...(has(pushed?.[item]) ? {'--toward': pushed?.[item] === 'left' ? '1' : '-1'} : {}), viewTransitionName: `sort-${item}`}}
-                    onAnimationEnd={() => setPushed(undefined)}>
+                className={classNames('item', pushed[item] && 'pushed')}
+                    style={{...(pushed[item] ? {'--toward': pushed[item] === 'left' ? '1' : '-1'} : {}), viewTransitionName: `sort-${item}`}}
+                    onAnimationEnd={() => setPushed({})}>
                 <Item item={item}
                     order={order}
-                    onLifted={setAloft}
-                    onReleased={() => {
-                        if (has(aloft) && landing >= 0) {
-                            const settled = array.moveToIndex(landing, aloft, order);
-                            setTimeout(() => glide(true)(() => setOrder(settled)));
-                        }
-                        setAloft(undefined);
-                        setLanding(-1);
-                    }}
-                    onDragOver={() => setLanding(index)}
+                    onLifted={lifted => setAloft(maybe(lifted))}
+                    onReleased={release}
+                    onDragOver={() => setLanding(maybe(index))}
                     onArranged={(after, walker, toward) => {
                         const neighbour = order[order.indexOf(walker) + toward];
                         setPushed({

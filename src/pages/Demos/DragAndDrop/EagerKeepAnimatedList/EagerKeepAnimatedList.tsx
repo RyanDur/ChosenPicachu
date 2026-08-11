@@ -1,5 +1,5 @@
 import {FC, useState} from 'react';
-import {has} from '@ryandur/sand';
+import {has, Maybe, maybe, nothing} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {classNames} from '@components/class-names';
 import {crossed} from '../crossing';
@@ -15,8 +15,8 @@ type Props = {
 
 export const EagerKeepAnimatedList: FC<Props> = ({list}) => {
     const [order, setOrder] = useState<string[]>(() => [...list]);
-    const [aloft, setAloft] = useState<string>();
-    const [pushed, setPushed] = useState<Pushed>();
+    const [aloft, setAloft] = useState<Maybe<string>>(nothing());
+    const [pushed, setPushed] = useState<Pushed>({});
 
     return <ul aria-label="sortable list"
                onDragOver={event => event.preventDefault()}
@@ -24,25 +24,28 @@ export const EagerKeepAnimatedList: FC<Props> = ({list}) => {
                className="sortable-list">{
         order.map((item, index) =>
             <li key={item}
-                className={classNames('item', has(pushed?.[item]) && 'pushed')}
-                    style={has(pushed?.[item]) ? {'--toward': pushed?.[item] === 'left' ? '1' : '-1'} : undefined}
-                    onAnimationEnd={() => setPushed(undefined)}>
+                className={classNames('item', pushed[item] && 'pushed')}
+                    style={pushed[item] ? {'--toward': pushed[item] === 'left' ? '1' : '-1'} : undefined}
+                    onAnimationEnd={() => setPushed({})}>
                 <Item item={item}
                     order={order}
-                    onLifted={setAloft}
-                    onReleased={() => setAloft(undefined)}
+                    onLifted={lifted => setAloft(maybe(lifted))}
+                    onReleased={() => setAloft(nothing())}
                     onDragOver={event => {
                         const lane = event.currentTarget.closest('li');
                         if (has(lane) && lane.getAnimations().length > 0) {
                             return;
                         }
-                        if (has(aloft) && aloft !== item) {
-                            const homeward = index < order.indexOf(aloft);
+                        aloft.map(held => {
+                            if (held === item) {
+                                return;
+                            }
+                            const homeward = index < order.indexOf(held);
                             if (crossed(event, homeward)) {
                                 setPushed({[item]: homeward ? 'right' : 'left'});
-                                setOrder(previous => array.moveToIndex(index, aloft, previous));
+                                setOrder(previous => array.moveToIndex(index, held, previous));
                             }
-                        }
+                        });
                     }}
                     onArranged={(after, walker, toward) => {
                         const neighbour = order[order.indexOf(walker) + toward];

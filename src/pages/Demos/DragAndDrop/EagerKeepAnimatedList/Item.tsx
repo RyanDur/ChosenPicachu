@@ -1,9 +1,11 @@
 import {DragEventHandler, FC, useState} from 'react';
-import {has, is} from '@ryandur/sand';
+import {has, maybe} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {array} from '@components/arrays';
 import Handle from '@components/grip.svg';
 import '../Item.css';
+
+const steps: Record<string, 1 | -1> = {ArrowRight: 1, ArrowLeft: -1};
 
 export type ItemProps = {
   item: string;
@@ -18,7 +20,7 @@ export type ItemProps = {
 export const Item: FC<ItemProps> = (
   {item, order, className, onLifted, onReleased, onDragOver, onArranged}
 ) => {
-  const [dragging, updateDragging] = useState<'dragging'>();
+  const [dragging, updateDragging] = useState(false);
 
   return <article
     className={classNames('draggable', className)}
@@ -34,30 +36,25 @@ export const Item: FC<ItemProps> = (
     onDrop={event => event.preventDefault()}
     onDragEnd={() => {
       onReleased();
-      updateDragging(undefined);
+      updateDragging(false);
     }}
-    draggable={is(dragging)}>
+    draggable={dragging}>
     <button type="button"
             className="grip"
             aria-label={`grip for ${item}`}
-            onMouseDown={() => updateDragging('dragging')}
-            onKeyDown={event => {
-              if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') {
-                return;
-              }
+            onMouseDown={() => updateDragging(true)}
+            onKeyDown={event => maybe(steps[event.key]).map(toward => {
               event.preventDefault();
               const lane = event.currentTarget.closest('li');
               if (has(lane) && lane.getAnimations().length > 0) {
                 return;
               }
-              const toward = event.key === 'ArrowRight' ? 1 : -1;
               const from = order.indexOf(item);
               const to = Math.min(Math.max(from + toward, 0), order.length - 1);
-              if (to === from) {
-                return;
+              if (to !== from) {
+                onArranged(array.moveToIndex(to, item, order), item, toward);
               }
-              onArranged(array.moveToIndex(to, item, order), item, toward);
-            }}>
+            })}>
       <Handle/>
     </button>
     <article className="value">{item}</article>

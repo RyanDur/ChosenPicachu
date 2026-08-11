@@ -1,5 +1,5 @@
 import {FC, PointerEvent} from 'react';
-import {has} from '@ryandur/sand';
+import {Maybe, maybe} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {Column, Dress, TableProps} from '@components/Table';
 import {Drift, Flight} from './travel';
@@ -14,8 +14,8 @@ type Surface = {
 };
 
 type Travel<SUBJECT> = {
-    aloft?: SUBJECT;
-    survey?: Survey;
+    aloft: Maybe<SUBJECT>;
+    survey: Maybe<Survey>;
     flight: Flight;
     drift: Drift;
     surface: Surface;
@@ -31,10 +31,11 @@ type Props = {
 };
 
 export const Aloft: FC<Props> = ({columnsTravel, rowsTravel, ordered, rows, standing, dress}) => {
-    const rowSurvey = rowsTravel.survey;
-    const spanned = ordered.reduce((sum, {column}) => sum + (rowSurvey?.columnWidths[column] ?? 0), 0) || 1;
-    const widths = Object.fromEntries(ordered.map(({column}) => [column,
-        has(rowSurvey) ? (rowSurvey.columnWidths[column] ?? 0) / spanned * 100 : undefined]));
+    const widths: Readonly<Record<string, number | undefined>> = rowsTravel.survey.map(survey => {
+        const spanned = ordered.reduce((sum, {column}) => sum + (survey.columnWidths[column] ?? 0), 0) || 1;
+        return Object.fromEntries(ordered.map(({column}) =>
+            [column, (survey.columnWidths[column] ?? 0) / spanned * 100]));
+    }).orElse({});
     const ghostDress = {
         table: classNames(dress.tableClassName),
         thead: classNames(dress.theadClassName),
@@ -44,18 +45,21 @@ export const Aloft: FC<Props> = ({columnsTravel, rowsTravel, ordered, rows, stan
         row: classNames(dress.trClassName, dress.rowClassName),
         cell: classNames(dress.tdClassName, dress.cellClassName)
     };
-    const aloftColumn = ordered.find(definition => definition.column === columnsTravel.aloft);
-    const aloftRow = has(rowsTravel.aloft) ? rows[rowsTravel.aloft] : undefined;
-    const surface = has(columnsTravel.aloft) ? columnsTravel.surface : rowsTravel.surface;
+    const aloftColumn = columnsTravel.aloft.mBind(held =>
+        maybe(ordered.find(definition => definition.column === held)));
+    const aloftRow = rowsTravel.aloft.map(held => rows[held]);
+    const surface = columnsTravel.aloft.either(() => columnsTravel.surface, () => rowsTravel.surface);
     return <>
-        {has(aloftColumn) &&
+        {aloftColumn.either(column =>
             <ColumnGhost at={columnsTravel.flight} drift={columnsTravel.drift} dress={ghostDress}
-                         column={aloftColumn} rows={standing.map(row => rows[row])}
-                         heights={standing.map(row => columnsTravel.survey?.rowHeights[row])}/>}
-        {has(aloftRow) &&
+                         column={column} rows={standing.map(row => rows[row])}
+                         heights={columnsTravel.survey
+                             .map(survey => standing.map(row => survey.rowHeights[row]))
+                             .orElse([])}/>, () => null)}
+        {aloftRow.either(row =>
             <RowGhost at={rowsTravel.flight} drift={rowsTravel.drift} dress={ghostDress}
-                      columns={ordered} widths={widths} row={aloftRow}/>}
-        {(has(columnsTravel.aloft) || has(rowsTravel.aloft)) &&
+                      columns={ordered} widths={widths} row={row}/>, () => null)}
+        {(!columnsTravel.aloft.isNothing || !rowsTravel.aloft.isNothing) &&
             <article className="drag-surface" {...surface}/>}
     </>;
 };

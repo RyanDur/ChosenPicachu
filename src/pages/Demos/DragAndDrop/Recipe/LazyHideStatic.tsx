@@ -30,8 +30,8 @@ export const LazyHideStaticRecipe: FC = () => <>
         </Words>
         <Codes>
           <Snippet label="JS" lines={[
-            ...span(listSource, 'onDragOver={() => setLanding(index)}', 'onDragOver={() => setLanding(index)}'), gap,
-            ...unit(listSource, 'onReleased={() => {')
+            ...span(listSource, 'onDragOver={() => setLanding(maybe(index))}', 'onDragOver={() => setLanding(maybe(index))}'), gap,
+            ...unit(listSource, 'const release')
           ]}/>
         </Codes>
       </Step>
@@ -44,8 +44,8 @@ export const LazyHideStaticRecipe: FC = () => <>
         </Words>
         <Codes>
           <Snippet label="JS" lines={[
-            ...span(itemSource, "updateHide('hide');", "updateHide('hide');"), gap,
-            ...span(itemSource, 'updateHide(undefined);', 'updateHide(undefined);')
+            ...span(itemSource, 'updateHide(true);', 'updateHide(true);'), gap,
+            ...span(itemSource, 'updateHide(false);', 'updateHide(false);')
           ]}/>
           <Snippet label="CSS" lines={[
             ...unit(cssSource, '.sortable-list .hide {'),

@@ -1,5 +1,5 @@
 import {PointerEvent, useState} from 'react';
-import {has} from '@ryandur/sand';
+import {Maybe, has, maybe, nothing} from '@ryandur/sand';
 import {Drift, Flight, grounded, still} from '../travel';
 import {Survey, surveyed, rowUnder} from '../survey';
 
@@ -8,38 +8,31 @@ export const useRowTravel = (
     standing: readonly number[],
     settle: (row: number, struck: number, heights: Readonly<Record<number, number>>) => void
 ) => {
-    const [aloft, setAloft] = useState<number>();
-    const [survey, setChart] = useState<Survey>();
+    const [aloft, setAloft] = useState<Maybe<number>>(nothing());
+    const [survey, setChart] = useState<Maybe<Survey>>(nothing());
+    const [landing, setLanding] = useState<Maybe<number>>(nothing());
     const [flight, setFlight] = useState<Flight>(grounded);
-    const [origin, setOrigin] = useState<Drift>();
+    const [origin, setOrigin] = useState<Maybe<Drift>>(nothing());
     const [drift, setDrift] = useState<Drift>(still);
-    const [landing, setLanding] = useState<number>();
-    const strike = rowUnder(standing, survey);
 
     const lift = (row: number) =>
         (event: PointerEvent<HTMLElement>): void => {
-            const lane = event.currentTarget.closest('tr');
-            const table = event.currentTarget.closest('table');
-            if (has(table)) {
-                setChart(surveyed(table, order, standing));
-            }
-            const anchored = lane?.getBoundingClientRect();
-            setFlight({
-                x: anchored?.x ?? 0,
-                y: anchored?.y ?? 0,
-                width: anchored?.width ?? 0
-            });
-            setAloft(row);
+            maybe(event.currentTarget.closest('table'))
+                .map(table => setChart(maybe(surveyed(table, order, standing))));
+            setFlight(maybe(event.currentTarget.closest('tr'))
+                .map(lane => lane.getBoundingClientRect())
+                .map(({x, y, width}) => ({x, y, width}))
+                .orElse(grounded));
+            setAloft(maybe(row));
         };
 
     const drop = (): void => {
-        if (has(survey) && has(aloft) && has(landing)) {
-            settle(aloft, landing, survey.rowHeights);
-        }
-        setOrigin(undefined);
-        setLanding(undefined);
-        setAloft(undefined);
-        setChart(undefined);
+        aloft.and(survey).and(landing).map(([[held, chart], struck]) =>
+            settle(held, struck, chart.rowHeights));
+        setLanding(nothing());
+        setOrigin(nothing());
+        setAloft(nothing());
+        setChart(nothing());
         setFlight(grounded);
         setDrift(still);
     };
@@ -50,15 +43,15 @@ export const useRowTravel = (
             return;
         }
         event.currentTarget.setPointerCapture(event.pointerId);
-        if (has(origin)) {
-            setDrift({x: event.clientX - origin.x, y: event.clientY - origin.y});
-        } else {
-            setOrigin({x: event.clientX, y: event.clientY});
-        }
-        const struck = strike(event.clientX, event.clientY, aloft);
-        if (has(aloft) && has(struck)) {
-            setLanding(struck === aloft ? undefined : struck);
-        }
+        origin.either(
+            from => setDrift({x: event.clientX - from.x, y: event.clientY - from.y}),
+            () => setOrigin(maybe({x: event.clientX, y: event.clientY})));
+        aloft.and(survey).map(([held, chart]) => {
+            const struck = rowUnder(standing, chart)(event.clientX, event.clientY, held);
+            if (has(struck)) {
+                setLanding(struck === held ? nothing() : maybe(struck));
+            }
+        });
     };
 
     return {

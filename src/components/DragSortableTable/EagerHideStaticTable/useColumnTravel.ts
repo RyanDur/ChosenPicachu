@@ -1,5 +1,5 @@
 import {PointerEvent, useState} from 'react';
-import {has} from '@ryandur/sand';
+import {Maybe, has, maybe, nothing} from '@ryandur/sand';
 import {Drift, Flight, grounded, still} from '../travel';
 import {Bounds, Survey, surveyed, columnUnder} from '../survey';
 
@@ -8,28 +8,25 @@ export const useColumnTravel = (
     standing: readonly number[],
     settle: (column: string, struck: string, survey: Bounds) => void
 ) => {
-    const [aloft, setAloft] = useState<string>();
-    const [bounds, setBounds] = useState<Survey>();
+    const [aloft, setAloft] = useState<Maybe<string>>(nothing());
+    const [bounds, setBounds] = useState<Maybe<Survey>>(nothing());
     const [flight, setFlight] = useState<Flight>(grounded);
-    const [origin, setOrigin] = useState<Drift>();
+    const [origin, setOrigin] = useState<Maybe<Drift>>(nothing());
     const [drift, setDrift] = useState<Drift>(still);
-    const strike = columnUnder(order, bounds);
 
     const lift = (column: string) =>
         (event: PointerEvent<HTMLElement>): void => {
             const anchored = event.currentTarget.getBoundingClientRect();
-            const table = event.currentTarget.closest('table');
-            if (has(table)) {
-                setBounds(surveyed(table, order, standing));
-            }
+            maybe(event.currentTarget.closest('table'))
+                .map(table => setBounds(maybe(surveyed(table, order, standing))));
             setFlight({x: anchored.x, y: anchored.y, width: anchored.width});
-            setAloft(column);
+            setAloft(maybe(column));
         };
 
     const drop = (): void => {
-        setOrigin(undefined);
-        setAloft(undefined);
-        setBounds(undefined);
+        setOrigin(nothing());
+        setAloft(nothing());
+        setBounds(nothing());
         setFlight(grounded);
         setDrift(still);
     };
@@ -40,15 +37,15 @@ export const useColumnTravel = (
             return;
         }
         event.currentTarget.setPointerCapture(event.pointerId);
-        if (has(origin)) {
-            setDrift({x: event.clientX - origin.x, y: event.clientY - origin.y});
-        } else {
-            setOrigin({x: event.clientX, y: event.clientY});
-        }
-        const struck = strike(event.clientX, event.clientY, aloft);
-        if (has(bounds) && has(aloft) && has(struck) && struck !== aloft) {
-            settle(aloft, struck, bounds);
-        }
+        origin.either(
+            from => setDrift({x: event.clientX - from.x, y: event.clientY - from.y}),
+            () => setOrigin(maybe({x: event.clientX, y: event.clientY})));
+        aloft.and(bounds).map(([held, survey]) => {
+            const struck = columnUnder(order, survey)(event.clientX, event.clientY, held);
+            if (has(struck) && struck !== held) {
+                settle(held, struck, survey);
+            }
+        });
     };
 
     return {
