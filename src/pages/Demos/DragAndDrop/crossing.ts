@@ -12,3 +12,8 @@ export const strayed = (clientY: number, anchor: number, third: number, upward: 
   upward
     ? clientY < anchor - third
     : clientY > anchor + third;
+
+export const strayedTo = (clientY: number, anchor: number, third: number, at: number): number =>
+  strayed(clientY, anchor, third, false) ? at + 1
+    : strayed(clientY, anchor, third, true) ? at - 1
+      : at;

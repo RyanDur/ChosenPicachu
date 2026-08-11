@@ -435,8 +435,9 @@ const workspaceStory =
             aside('// the hand holds the grip; the card is long past it')
           ]}/>
           <Snippet label="JS" lines={[
-            ...unit(crossingSource, 'export const strayed'), gap,
-            ...span(travelSource, 'const anchor = bounds.top + aloftLead;', 'setAloft(maybe(to));')
+            ...unit(crossingSource, 'export const strayedTo'), gap,
+            ...unit(travelSource, 'const travel = (event'), gap,
+            ...unit(travelSource, 'const swap = (held')
           ]}/>
           <Snippet label="CSS" lines={[
             ...unit(workspaceCss, '@keyframes chart-pushed')
