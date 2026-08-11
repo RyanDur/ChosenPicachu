@@ -1,4 +1,5 @@
 import {FC, PointerEvent} from 'react';
+import {Maybe, nothing} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {array} from '@components/arrays';
 import {Row as RowData} from '@components/Table';
@@ -11,8 +12,8 @@ type Props = {
   clipped: boolean;
   standing: readonly number[];
   gripped: boolean;
-  aloft?: number;
-  aloftColumn?: string;
+  aloft?: Maybe<number>;
+  aloftColumn?: Maybe<string>;
   className: string;
   cellClassName: string;
   onLift: (row: number) => (event: PointerEvent<HTMLElement>) => void;
@@ -20,10 +21,10 @@ type Props = {
 };
 
 export const Row: FC<Props> = (
-  {row, cells, columns, clipped, standing, gripped, aloft, aloftColumn, className, cellClassName, onLift, onArranged}
+  {row, cells, columns, clipped, standing, gripped, aloft = nothing(), aloftColumn = nothing(), className, cellClassName, onLift, onArranged}
 ) => {
   const position = standing.indexOf(row);
-  const hidden = aloft === row;
+  const hidden = aloft.map(held => held === row).orElse(false);
 
   return <tr className={className}>
     {columns.map((column, columnNumber) => {
@@ -33,7 +34,7 @@ export const Row: FC<Props> = (
         cellClassName, cell.className,
         rowHeader && 'row-header',
         clipped && 'ellipsis',
-        aloftColumn === column && 'hide',
+        aloftColumn.map(held => held === column).orElse(false) && 'hide',
         hidden && 'hide-across'
       );
       return rowHeader

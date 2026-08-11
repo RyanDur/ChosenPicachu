@@ -43,8 +43,8 @@ export const EagerHideStaticRecipe: FC = () => <>
         </Words>
         <Codes>
           <Snippet label="JS" lines={[
-            ...span(itemSource, "updateHide('hide');", "updateHide('hide');"), gap,
-            ...span(itemSource, 'updateHide(undefined);', 'updateHide(undefined);')
+            ...span(itemSource, 'updateHide(true);', 'updateHide(true);'), gap,
+            ...span(itemSource, 'updateHide(false);', 'updateHide(false);')
           ]}/>
           <Snippet label="CSS" lines={[
             ...unit(cssSource, '.sortable-list .hide {'),

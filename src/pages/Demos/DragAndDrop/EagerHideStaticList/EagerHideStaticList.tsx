@@ -1,5 +1,5 @@
 import {FC, useState} from 'react';
-import {has} from '@ryandur/sand';
+import {has, Maybe, maybe, nothing} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {crossed} from '../crossing';
 import {Item} from './Item';
@@ -12,7 +12,7 @@ type Props = {
 
 export const EagerHideStaticList: FC<Props> = ({list}) => {
     const [order, setOrder] = useState<string[]>(() => [...list]);
-    const [aloft, setAloft] = useState<string>();
+    const [aloft, setAloft] = useState<Maybe<string>>(nothing());
 
     return <ul aria-label="sortable list"
                onDragOver={event => event.preventDefault()}
@@ -23,19 +23,22 @@ export const EagerHideStaticList: FC<Props> = ({list}) => {
                 className={'item'}>
                 <Item item={item}
                     order={order}
-                    onLifted={setAloft}
-                    onReleased={() => setAloft(undefined)}
+                    onLifted={lifted => setAloft(maybe(lifted))}
+                    onReleased={() => setAloft(nothing())}
                     onDragOver={event => {
                         const lane = event.currentTarget.closest('li');
                         if (has(lane) && lane.getAnimations().length > 0) {
                             return;
                         }
-                        if (has(aloft) && aloft !== item) {
-                            const homeward = index < order.indexOf(aloft);
-                            if (crossed(event, homeward)) {
-                                setOrder(previous => array.moveToIndex(index, aloft, previous));
+                        aloft.map(held => {
+                            if (held === item) {
+                                return;
                             }
-                        }
+                            const homeward = index < order.indexOf(held);
+                            if (crossed(event, homeward)) {
+                                setOrder(previous => array.moveToIndex(index, held, previous));
+                            }
+                        });
                     }}
                     onArranged={setOrder}/>
             </li>)

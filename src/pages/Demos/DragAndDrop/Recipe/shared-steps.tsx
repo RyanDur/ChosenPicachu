@@ -31,7 +31,7 @@ export const armTheDrag = (itemSource: string) =>
     </Words>
     <Codes>
       <Snippet label="HTML" lines={[
-        ...span(itemSource, '<article', 'draggable={is(dragging)}>')
+        ...span(itemSource, '<article', 'draggable={dragging}>')
       ]}/>
     </Codes>
   </Step>;
@@ -57,7 +57,7 @@ export const holdTheAloft = (listSource: string) =>
         aside('// read in dragover: always "", the store is sealed')
       ]}/>
       <Snippet label="JS" lines={[
-        ...span(listSource, 'onLifted={setAloft}', 'onLifted={setAloft}'),
+        ...span(listSource, 'onLifted={lifted => setAloft(maybe(lifted))}', 'onLifted={lifted => setAloft(maybe(lifted))}'),
         aside('// the item names itself; the list holds the answer')
       ]}/>
     </Codes>
@@ -140,7 +140,8 @@ export const straightToOrder = (itemSource: string) =>
         </Words>
         <Codes>
           <Snippet label="JS" lines={[
-            ...unit(itemSource, 'onKeyDown={event => {')
+            ...unit(itemSource, 'const steps'), gap,
+            ...unit(itemSource, 'onKeyDown={event =>')
           ]}/>
         </Codes>
       </Step>

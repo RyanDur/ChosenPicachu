@@ -97,7 +97,7 @@ const liveStory =
         </Words>
         <Codes>
           <Snippet label="JS" lines={[
-            ...unit(feedSource, 'const beginStreaming = '), gap,
+            ...unit(feedSource, 'const streamFrom = '), gap,
             ...unit(feedSource, 'const appendTrade = ')
           ]}/>
         </Codes>

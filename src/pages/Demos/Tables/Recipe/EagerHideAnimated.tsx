@@ -81,7 +81,7 @@ export const EagerHideAnimatedRecipe: FC<{track: Track}> = ({track}) => track ==
               ...span(tableSource, 'aloft={rowsTravel.aloft}', 'aloftColumn={columnsTravel.aloft}')
             ]}/>
             <Snippet label="JS" lines={[
-              ...span(headerSource, 'const hidden = aloft === columnName;', 'const hidden = aloft === columnName;'),
+              ...span(headerSource, 'const hidden = aloft.map(held => held === columnName).orElse(false);', 'const hidden = aloft.map(held => held === columnName).orElse(false);'),
               aside('// being the hide table is the flag; the element serves itself')
             ]}/>
             <Snippet label="CSS" lines={[

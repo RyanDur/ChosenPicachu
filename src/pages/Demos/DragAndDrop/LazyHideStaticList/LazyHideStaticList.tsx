@@ -1,5 +1,5 @@
 import {FC, useState} from 'react';
-import {has} from '@ryandur/sand';
+import {Maybe, maybe, nothing} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {Item} from './Item';
 import '../sortable-list.css';
@@ -11,29 +11,28 @@ type Props = {
 
 export const LazyHideStaticList: FC<Props> = ({list}) => {
     const [order, setOrder] = useState<string[]>(() => [...list]);
-    const [aloft, setAloft] = useState<string>();
-    const [landing, setLanding] = useState(-1);
+    const [aloft, setAloft] = useState<Maybe<string>>(nothing());
+    const [landing, setLanding] = useState<Maybe<number>>(nothing());
+
+    const release = () => {
+        aloft.and(landing).map(([held, at]) => setOrder(array.moveToIndex(at, held, order)));
+        setAloft(nothing());
+        setLanding(nothing());
+    };
 
     return <ul aria-label="sortable list"
                onDragOver={event => event.preventDefault()}
                onDrop={event => event.preventDefault()}
-               onDragLeave={() => setLanding(-1)}
+               onDragLeave={() => setLanding(nothing())}
                className="sortable-list">{
         order.map((item, index) =>
             <li key={item}
                 className={'item'}>
                 <Item item={item}
                     order={order}
-                    onLifted={setAloft}
-                    onReleased={() => {
-                        if (has(aloft) && landing >= 0) {
-                            const settled = array.moveToIndex(landing, aloft, order);
-                            setOrder(settled);
-                        }
-                        setAloft(undefined);
-                        setLanding(-1);
-                    }}
-                    onDragOver={() => setLanding(index)}
+                    onLifted={lifted => setAloft(maybe(lifted))}
+                    onReleased={release}
+                    onDragOver={() => setLanding(maybe(index))}
                     onArranged={setOrder}/>
             </li>)
     }</ul>;

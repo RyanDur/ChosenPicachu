@@ -64,9 +64,9 @@ const struckPast = <Identity>(
     return struck?.holds;
 };
 
-export const columnUnder = (order: readonly string[], survey?: Bounds) =>
-    (x: number, y: number, aloft?: string): string | undefined => {
-        if (has(survey) && has(aloft) && y >= survey.top && y <= survey.top + survey.height) {
+export const columnUnder = (order: readonly string[], survey: Bounds) =>
+    (x: number, y: number, aloft: string): string | undefined => {
+        if (y >= survey.top && y <= survey.top + survey.height) {
             let edge = survey.left;
             const total = order.reduce((sum, name) => sum + (survey.columnWidths[name] ?? 0), 0) || 1;
             const slots = order.map((column, at) => {
@@ -79,9 +79,9 @@ export const columnUnder = (order: readonly string[], survey?: Bounds) =>
         return undefined;
     };
 
-export const rowUnder = (seats: readonly number[], survey?: Survey) =>
-    (x: number, y: number, aloft?: number): number | undefined => {
-        if (has(survey) && has(aloft) && x >= survey.left && x <= survey.left + survey.width) {
+export const rowUnder = (seats: readonly number[], survey: Survey) =>
+    (x: number, y: number, aloft: number): number | undefined => {
+        if (x >= survey.left && x <= survey.left + survey.width) {
             const {top, height, rowHeights} = survey;
             let edge = top + height -
                 seats.reduce((total, row) => total + rowHeights[row], 0);

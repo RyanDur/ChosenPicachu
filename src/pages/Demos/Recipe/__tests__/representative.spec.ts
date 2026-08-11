@@ -19,8 +19,8 @@ describe('the hand-written tutorial fragments still tell the truth', () => {
     ["a displaced header carries its direction as data", animatedHeaderSource, "'--toward': displaced.toward === 'left' ? '1' : '-1'"],
     ['a shifted row wears the class', rowSource, "has(drop) && 'shifted'"],
     ['a shifted row carries its drop', rowSource, "'--drop': `${drop}px`"],
-    ['the grip arms the native drag', draggableSource, 'draggable={is(dragging)}'],
-    ['a lazy list stashes the landing', lazyStaticList, 'setLanding(index)'],
+    ['the grip arms the native drag', draggableSource, 'draggable={dragging}'],
+    ['a lazy list stashes the landing', lazyStaticList, 'setLanding(maybe(index))'],
     ['a lazy settle waits one tick', lazyAnimatedList, 'setTimeout(() => glide(true)(() => setOrder(settled)))'],
     ['the native origin fades, never vanishes', whisperCss, 'opacity: 0.1%'],
     ['eager list slides carry a signed seat and gap', pushedCss, 'translateX(calc(var(--toward) * (100% + var(--base))))']
