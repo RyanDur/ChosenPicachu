@@ -118,7 +118,7 @@ const liveStory =
     </Steps>
   </Story>;
 
-export const LivingTable: FC = () =>
+export const LivingTableRecipe: FC = () =>
   <section aria-label="the living table" className="build-steps">
     <Stories>{liveStory}</Stories>
   </section>;
