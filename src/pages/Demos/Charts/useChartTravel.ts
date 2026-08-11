@@ -1,4 +1,5 @@
 import {DragEvent, KeyboardEvent, useState} from 'react';
+import {Maybe, maybe, nothing} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {strayed} from '../DragAndDrop/crossing';
 
@@ -11,62 +12,63 @@ type Travel = {
 };
 
 export const useChartTravel = ({seats, onSeated, onRemoved}: Travel) => {
-  const [armed, setArmed] = useState<number>();
-  const [aloft, setAloft] = useState<number>();
+  const [armed, setArmed] = useState<Maybe<number>>(nothing());
+  const [aloft, setAloft] = useState<Maybe<number>>(nothing());
   const [aloftLead, setAloftLead] = useState(0);
-  const [pushed, setPushed] = useState<Pushed>();
+  const [pushed, setPushed] = useState<Pushed>({});
+
+  const isArmed = (at: number) => armed.map(seat => seat === at).orElse(false);
+
+  const arm = (at: number) => setArmed(maybe(at));
 
   const dress = (at: number) => classNames('chart-slot',
-    aloft === at && 'hide',
-    pushed?.[at] && 'chart-pushed');
-
-  const theater = (at: number) => pushed?.[at]
-    ? {'--toward': pushed[at] === 'up' ? '1' : '-1'}
-    : undefined;
+    aloft.map(seat => seat === at).orElse(false) && 'hide',
+    pushed[at] && 'chart-pushed',
+    pushed[at] === 'up' && 'upward',
+    pushed[at] === 'down' && 'downward');
 
   const lift = (at: number) => (event: DragEvent<HTMLElement>) => {
     event.dataTransfer.effectAllowed = 'move';
     setAloftLead(event.clientY - event.currentTarget.getBoundingClientRect().top);
-    setAloft(at);
+    setAloft(maybe(at));
   };
 
   const travel = (event: DragEvent<HTMLElement>) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
-    if (aloft === undefined) {
-      return;
-    }
-    const slots = event.currentTarget.parentElement?.querySelectorAll(':scope > .chart-slot');
-    const held = slots?.item(aloft);
-    if (!(held instanceof HTMLElement)) {
-      return;
-    }
-    const seat = held.getBoundingClientRect();
-    const anchor = seat.top + aloftLead;
-    const third = seat.height / 3;
-    const to = strayed(event.clientY, anchor, third, false) ? aloft + 1
-      : strayed(event.clientY, anchor, third, true) ? aloft - 1
-        : undefined;
-    if (to === undefined || to < 0 || to >= seats) {
-      return;
-    }
-    const next = slots?.item(to);
-    if (!(next instanceof HTMLElement) || (next.getAnimations?.().length ?? 0) > 0) {
-      return;
-    }
-    const displaced = next.getBoundingClientRect();
-    const landingTop = to > aloft
-      ? seat.top + displaced.height
-      : seat.top - displaced.height;
-    setAloftLead(event.clientY - landingTop);
-    setPushed({[aloft]: to > aloft ? 'up' : 'down'});
-    onSeated(aloft, to, {replace: true});
-    setAloft(to);
+    aloft.map(held => {
+      const slots = event.currentTarget.parentElement?.querySelectorAll(':scope > .chart-slot');
+      const seat = slots?.item(held);
+      if (!(seat instanceof HTMLElement)) {
+        return;
+      }
+      const bounds = seat.getBoundingClientRect();
+      const anchor = bounds.top + aloftLead;
+      const third = bounds.height / 3;
+      const to = strayed(event.clientY, anchor, third, false) ? held + 1
+        : strayed(event.clientY, anchor, third, true) ? held - 1
+          : held;
+      if (to === held || to < 0 || to >= seats) {
+        return;
+      }
+      const next = slots?.item(to);
+      if (!(next instanceof HTMLElement) || (next.getAnimations?.().length ?? 0) > 0) {
+        return;
+      }
+      const displaced = next.getBoundingClientRect();
+      const landingTop = to > held
+        ? bounds.top + displaced.height
+        : bounds.top - displaced.height;
+      setAloftLead(event.clientY - landingTop);
+      setPushed({[held]: to > held ? 'up' : 'down'});
+      onSeated(held, to, {replace: true});
+      setAloft(maybe(to));
+    });
   };
 
   const release = () => {
-    setAloft(undefined);
-    setArmed(undefined);
+    setAloft(nothing());
+    setArmed(nothing());
   };
 
   const keys = (at: number) => (event: KeyboardEvent<HTMLElement>) => {
@@ -88,5 +90,7 @@ export const useChartTravel = ({seats, onSeated, onRemoved}: Travel) => {
     }
   };
 
-  return {armed, setArmed, dress, theater, lift, travel, release, keys, settled: () => setPushed(undefined)};
+  const settled = () => setPushed({});
+
+  return {isArmed, arm, dress, lift, travel, release, keys, settled};
 };

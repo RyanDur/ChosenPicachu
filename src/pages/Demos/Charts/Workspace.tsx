@@ -37,7 +37,7 @@ type Props = {
 
 export const Workspace: FC<Props> = ({trades, status, product}) => {
   const {chartKinds, absentKinds, add, remove, reorder} = useDesk();
-  const {armed, setArmed, dress, theater, lift, travel, release, keys, settled} =
+  const {isArmed, arm, dress, lift, travel, release, keys, settled} =
     useChartTravel({seats: chartKinds.length, onSeated: reorder, onRemoved: remove});
   const plural = chartKinds.length > 1;
 
@@ -56,16 +56,16 @@ export const Workspace: FC<Props> = ({trades, status, product}) => {
     <ul className="chart-list">{chartKinds.map((kind, at) => {
       const actions = plural ? <Dismissal onRemove={() => remove(at)}/> : undefined;
       return <li key={at}
-                 className={dress(at)} style={theater(at)}
+                 className={dress(at)}
                  onAnimationEnd={settled}
-                 draggable={armed === at}
+                 draggable={isArmed(at)}
                  onDragStart={lift(at)}
                  onDragOver={travel}
                  onDrop={event => event.preventDefault()}
                  onDragEnd={release}>
         <Link className="doorway" to={doorways[kind]}
               aria-label={`chart ${at + 1}`} onKeyDown={keys(at)}/>
-        {plural && <Grip onArm={() => setArmed(at)}/>}
+        {plural && <Grip onArm={() => arm(at)}/>}
         {matchChartKind(kind, {
           price: () => <PriceChart id={`chart-${at}`} trades={trades} actions={actions}/>,
           candles: () => <Candles id={`chart-${at}`} trades={trades} actions={actions}/>,
