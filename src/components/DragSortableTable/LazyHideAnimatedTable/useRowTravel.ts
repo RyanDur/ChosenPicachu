@@ -49,7 +49,7 @@ export const useRowTravel = (
             drop();
             return;
         }
-        event.currentTarget.setPointerCapture?.(event.pointerId);
+        event.currentTarget.setPointerCapture(event.pointerId);
         if (has(origin)) {
             setDrift({x: event.clientX - origin.x, y: event.clientY - origin.y});
         } else {

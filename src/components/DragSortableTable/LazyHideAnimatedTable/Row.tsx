@@ -53,7 +53,7 @@ export const Row: FC<Props> = (
             <RowGrip position={position} onLift={onLift(row)}
                      onNudge={(toward, event) => {
                        const lane = event.currentTarget.closest('tr');
-                       if (has(lane) && (lane.getAnimations?.().length ?? 0) > 0) {
+                       if (has(lane) && lane.getAnimations().length > 0) {
                          return;
                        }
                        const to = Math.min(Math.max(position + toward, 0), standing.length - 1);
