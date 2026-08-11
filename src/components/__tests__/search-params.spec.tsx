@@ -1,11 +1,11 @@
 import {FC} from 'react';
 import {screen} from '@testing-library/react';
-import * as D from 'schemawax';
+import * as schema from 'schemawax';
 import {numberParam, useSearchParamsObject} from '@components/search-params';
 import {renderWithMemoryRouter} from '@test-support';
 
 const Probe: FC = () => {
-  const {page, tab} = useSearchParamsObject({page: numberParam, tab: D.string}, {page: 1, tab: 'aic'});
+  const {page, tab} = useSearchParamsObject({page: numberParam, tab: schema.string}, {page: 1, tab: 'aic'});
   return <output>{JSON.stringify({page, tab})}</output>;
 };
 

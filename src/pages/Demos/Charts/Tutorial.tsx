@@ -23,6 +23,7 @@ import liveTradesSource from './useLiveTrades.ts?raw';
 import axesSource from './Axes/index.tsx?raw';
 import workspaceSource from './Workspace.tsx?raw';
 import travelSource from './useChartTravel.ts?raw';
+import deskSource from './desk.ts?raw';
 import kindsSource from './kinds.ts?raw';
 import crossingSource from '../DragAndDrop/crossing.ts?raw';
 import workspaceCss from './Workspace.css?raw';
@@ -412,8 +413,8 @@ const workspaceStory =
         <Codes>
           <Snippet label="JS" lines={[
             ...unit(kindsSource, 'export const isChartKind'), gap,
-            ...unit(workspaceSource, 'const dealtCharts'), gap,
-            ...unit(workspaceSource, 'const addChart')
+            ...unit(deskSource, 'export const dealt'), gap,
+            ...unit(deskSource, 'export const added')
           ]}/>
           <Snippet label="HTML" lines={[
             ...span(workspaceSource, '<Menu id="add-chart"', '</Menu>')
@@ -450,7 +451,7 @@ const workspaceStory =
         </Words>
         <Codes>
           <Snippet label="JS" lines={[
-            ...unit(workspaceSource, 'const keys')
+            ...unit(travelSource, 'const keys')
           ]}/>
         </Codes>
       </Step>
@@ -462,8 +463,8 @@ const workspaceStory =
         </Words>
         <Codes>
           <Snippet label="JS" lines={[
-            ...unit(workspaceSource, 'const dismissal'), gap,
-            ...unit(workspaceSource, 'const grip')
+            ...unit(workspaceSource, 'const plural'), gap,
+            ...unit(workspaceSource, 'const actions')
           ]}/>
         </Codes>
       </Step>

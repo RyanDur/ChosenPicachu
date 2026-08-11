@@ -1,14 +1,14 @@
 import {useSearchParams} from 'react-router';
 import {toQueryString} from '@transport/url';
 import {has} from '@ryandur/sand';
-import * as D from 'schemawax';
+import * as schema from 'schemawax';
 
 const filterEmpty = (obj: { [p: string]: string | number }) =>
   Object.entries(obj).reduce((acc, [key, value]) => has(value) ? {...acc, [key]: value} : acc, {});
 
-export const numberParam: D.Decoder<number> = D.regex(/^-?\d+$/).andThen(Number);
+export const numberParam: schema.Decoder<number> = schema.regex(/^-?\d+$/).andThen(Number);
 
-type ParamDecoders<T> = { [K in keyof T]: D.Decoder<T[K]> };
+type ParamDecoders<T> = { [K in keyof T]: schema.Decoder<T[K]> };
 
 const decodeParams = <T>(decoders: ParamDecoders<T>, raw: Record<string, unknown>): Partial<T> => {
   const decoded: Partial<T> = {};

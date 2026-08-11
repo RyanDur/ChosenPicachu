@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import * as D from 'schemawax';
+import * as schema from 'schemawax';
 import {DragStyle} from '@components/DragSortableTable';
 import {PillGlider} from '@components/PillGlider';
 import './Controls.css';
@@ -8,9 +8,9 @@ export type Pace = 'eager' | 'lazy';
 export type Origin = 'keep' | 'hide';
 export type Motion = 'animated' | 'static';
 
-export const paceParam: D.Decoder<Pace> = D.literalUnion('eager', 'lazy');
-export const originParam: D.Decoder<Origin> = D.literalUnion('keep', 'hide');
-export const motionParam: D.Decoder<Motion> = D.literalUnion('animated', 'static');
+export const paceParam: schema.Decoder<Pace> = schema.literalUnion('eager', 'lazy');
+export const originParam: schema.Decoder<Origin> = schema.literalUnion('keep', 'hide');
+export const motionParam: schema.Decoder<Motion> = schema.literalUnion('animated', 'static');
 
 const styles: Record<Origin, Record<Pace, DragStyle>> = {
   keep: {eager: 'eager-move', lazy: 'lazy-move'},

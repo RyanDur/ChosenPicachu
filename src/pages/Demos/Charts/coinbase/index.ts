@@ -1,14 +1,14 @@
-import * as D from 'schemawax';
+import * as schema from 'schemawax';
 import {attempt, Maybe, maybe, nothing} from '@ryandur/sand';
 
-const MatchDecoder = D.object({
+const MatchDecoder = schema.object({
   required: {
-    type: D.literal('match'),
-    trade_id: D.number,
-    price: D.string,
-    size: D.string,
-    side: D.literalUnion('buy', 'sell'),
-    time: D.string
+    type: schema.literal('match'),
+    trade_id: schema.number,
+    price: schema.string,
+    size: schema.string,
+    side: schema.literalUnion('buy', 'sell'),
+    time: schema.string
   }
 });
 
@@ -25,7 +25,7 @@ export const subscribeTo = (product: string): string => JSON.stringify({
   channels: [{name: 'matches', product_ids: [product]}]
 });
 
-const toTrade = (frame: D.Output<typeof MatchDecoder>): Maybe<Trade> => {
+const toTrade = (frame: schema.Output<typeof MatchDecoder>): Maybe<Trade> => {
   const price = Number(frame.price);
   const tradedAt = Date.parse(frame.time);
   const size = Number(frame.size);

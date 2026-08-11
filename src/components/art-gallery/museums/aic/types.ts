@@ -1,56 +1,56 @@
-import * as D from 'schemawax';
+import * as schema from 'schemawax';
 
-const AICThumbnailDecoder = D.object({
+const AICThumbnailDecoder = schema.object({
   optional: {
-    alt_text: D.string
+    alt_text: schema.string
   }
 });
-const AICPaginationResponseDecoder = D.object({
+const AICPaginationResponseDecoder = schema.object({
   required: {
-    total: D.number,
-    limit: D.number,
-    total_pages: D.number,
-    current_page: D.number
+    total: schema.number,
+    limit: schema.number,
+    total_pages: schema.number,
+    current_page: schema.number
   }
 });
-export const AICPieceResponseDecoder = D.object({
+export const AICPieceResponseDecoder = schema.object({
   required: {
-    id: D.number,
-    title: D.string,
-    term_titles: D.array(D.string),
-    artist_display: D.string
+    id: schema.number,
+    title: schema.string,
+    term_titles: schema.array(schema.string),
+    artist_display: schema.string
   },
   optional: {
-    image_id: D.nullable(D.string),
-    thumbnail: D.nullable(AICThumbnailDecoder)
+    image_id: schema.nullable(schema.string),
+    thumbnail: schema.nullable(AICThumbnailDecoder)
   }
 });
-export const AICAllArtSchema = D.object({
+export const AICAllArtSchema = schema.object({
   required: {
     pagination: AICPaginationResponseDecoder,
-    data: D.array(AICPieceResponseDecoder)
+    data: schema.array(AICPieceResponseDecoder)
   }
 });
-export const AICArtSchema = D.object({
+export const AICArtSchema = schema.object({
   required: {
     data: AICPieceResponseDecoder
   }
 });
-const AICArtOptionDecoder = D.object({
+const AICArtOptionDecoder = schema.object({
   required: {
-    input: D.array(D.string)
+    input: schema.array(schema.string)
   }
 });
-const AICAutocompleteDecoder = D.object({
+const AICAutocompleteDecoder = schema.object({
   required: {
-    suggest_autocomplete_all: D.tuple(D.object({}), AICArtOptionDecoder)
+    suggest_autocomplete_all: schema.tuple(schema.object({}), AICArtOptionDecoder)
   }
 });
 
-export const AICSearchSchema = D.object({
+export const AICSearchSchema = schema.object({
   required: {
     pagination: AICPaginationResponseDecoder,
-    data: D.array(AICAutocompleteDecoder)
+    data: schema.array(AICAutocompleteDecoder)
   }
 });
 
@@ -58,7 +58,7 @@ export type AICPieceData = {
   data: AICArt;
 }
 
-export type AICArtResponse = D.Output<typeof AICArtSchema>;
-export type AICAllArtResponse = D.Output<typeof AICAllArtSchema>;
-export type AICSearchResponse = D.Output<typeof AICSearchSchema>;
-export type AICArt = D.Output<typeof AICPieceResponseDecoder>;
+export type AICArtResponse = schema.Output<typeof AICArtSchema>;
+export type AICAllArtResponse = schema.Output<typeof AICAllArtSchema>;
+export type AICSearchResponse = schema.Output<typeof AICSearchSchema>;
+export type AICArt = schema.Output<typeof AICPieceResponseDecoder>;

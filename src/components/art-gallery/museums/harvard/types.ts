@@ -1,54 +1,54 @@
-import * as D from 'schemawax';
+import * as schema from 'schemawax';
 
-const HarvardPeopleDecoder = D.object({
+const HarvardPeopleDecoder = schema.object({
     required: {
-        role: D.string,
-        displayname: D.string
+        role: schema.string,
+        displayname: schema.string
     }
 });
 
-const HarvardInfoDecoder = D.object({
+const HarvardInfoDecoder = schema.object({
     required: {
-        totalrecordsperquery: D.number,
-        totalrecords: D.number,
-        pages: D.number,
-        page: D.number
+        totalrecordsperquery: schema.number,
+        totalrecords: schema.number,
+        pages: schema.number,
+        page: schema.number
     }
 });
 
-const HarvardArtOptionDecoder = D.object({
+const HarvardArtOptionDecoder = schema.object({
     required: {
-        title: D.string
+        title: schema.string
     }
 });
 
-export const HarvardArtSchema = D.object({
+export const HarvardArtSchema = schema.object({
     required: {
-        id: D.number,
+        id: schema.number,
     },
     optional: {
-        title: D.nullable(D.string),
-        people: D.array(HarvardPeopleDecoder),
-        primaryimageurl: D.nullable(D.string)
+        title: schema.nullable(schema.string),
+        people: schema.array(HarvardPeopleDecoder),
+        primaryimageurl: schema.nullable(schema.string)
     }
 });
 
-export const HarvardAllArtSchema = D.object({
+export const HarvardAllArtSchema = schema.object({
     required: {
         info: HarvardInfoDecoder,
-        records: D.array(HarvardArtSchema)
+        records: schema.array(HarvardArtSchema)
     }
 });
 
-export const HarvardSearchSchema = D.object({
+export const HarvardSearchSchema = schema.object({
     required: {
         info: HarvardInfoDecoder,
-        records: D.array(HarvardArtOptionDecoder)
+        records: schema.array(HarvardArtOptionDecoder)
     }
 });
 
-export type HarvardPeople = D.Output<typeof HarvardPeopleDecoder>;
-export type HarvardInfo = D.Output<typeof HarvardInfoDecoder>;
-export type HarvardAllArtResponse = D.Output<typeof HarvardAllArtSchema>
-export type HarvardArtResponse = D.Output<typeof HarvardArtSchema>
-export type HarvardSearchResponse = D.Output<typeof HarvardSearchSchema>;
+export type HarvardPeople = schema.Output<typeof HarvardPeopleDecoder>;
+export type HarvardInfo = schema.Output<typeof HarvardInfoDecoder>;
+export type HarvardAllArtResponse = schema.Output<typeof HarvardAllArtSchema>
+export type HarvardArtResponse = schema.Output<typeof HarvardArtSchema>
+export type HarvardSearchResponse = schema.Output<typeof HarvardSearchSchema>;

@@ -10,9 +10,15 @@ const dedented = (lines: string[]): Line[] => {
   return lines.map(line => ({text: line.slice(margin)}));
 };
 
-const closesTheUnit = (source: string, at: number): boolean => {
+const closesTheUnit = (source: string, at: number, closer: string): boolean => {
   const ahead = source.slice(at + 1).match(/\S/);
-  return ahead === null || !'=:{.'.includes(ahead[0]);
+  if (ahead === null) {
+    return true;
+  }
+  if (ahead[0] === '.') {
+    return closer !== ')';
+  }
+  return !'=:{'.includes(ahead[0]);
 };
 
 export const unit = (source: string, anchor: string): Line[] => {
@@ -32,7 +38,7 @@ export const unit = (source: string, anchor: string): Line[] => {
       pending.push(openers[glyph]);
     } else if (closers.has(glyph) && glyph === pending[pending.length - 1]) {
       pending.pop();
-      if (pending.length === 0 && glyph !== ']' && closesTheUnit(source, at)) {
+      if (pending.length === 0 && glyph !== ']' && closesTheUnit(source, at, glyph)) {
         break;
       }
     }
