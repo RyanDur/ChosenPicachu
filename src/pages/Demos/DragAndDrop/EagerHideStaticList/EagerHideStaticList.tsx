@@ -27,7 +27,7 @@ export const EagerHideStaticList: FC<Props> = ({list}) => {
                     onReleased={() => setAloft(undefined)}
                     onDragOver={event => {
                         const lane = event.currentTarget.closest('li');
-                        if (has(lane) && (lane.getAnimations?.().length ?? 0) > 0) {
+                        if (has(lane) && lane.getAnimations().length > 0) {
                             return;
                         }
                         if (has(aloft) && aloft !== item) {

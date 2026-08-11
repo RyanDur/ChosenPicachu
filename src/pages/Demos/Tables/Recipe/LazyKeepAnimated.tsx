@@ -165,7 +165,7 @@ export const LazyKeepAnimatedRecipe: FC<{track: Track}> = ({track}) => track ===
         </Words>
         <Codes>
           <Snippet label="JS" lines={[
-            ...span(headerSource, 'if ((event.currentTarget.getAnimations', '}'),
+            ...span(headerSource, 'if (event.currentTarget.getAnimations', '}'),
             aside('// while the slide runs, the key falls silent')
           ]}/>
           <Snippet label="CSS" lines={[

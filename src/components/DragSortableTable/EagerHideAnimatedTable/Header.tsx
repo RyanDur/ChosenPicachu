@@ -67,7 +67,7 @@ export const Header: FC<Props> = (
                    return;
                  }
                  event.preventDefault();
-                 if ((event.currentTarget.getAnimations?.().length ?? 0) > 0) {
+                 if (event.currentTarget.getAnimations().length > 0) {
                    return;
                  }
                  const toward = event.key === 'ArrowRight' ? 1 : -1;

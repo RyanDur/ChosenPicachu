@@ -10,3 +10,7 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 expect.extend(matchers);
+
+// jsdom lacks these platform pieces; the suite supplies inert ones
+HTMLElement.prototype.setPointerCapture = () => undefined;
+Element.prototype.getAnimations = () => [];

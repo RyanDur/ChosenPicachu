@@ -47,7 +47,7 @@ export const Item: FC<ItemProps> = (
               }
               event.preventDefault();
               const lane = event.currentTarget.closest('li');
-              if (has(lane) && (lane.getAnimations?.().length ?? 0) > 0) {
+              if (has(lane) && lane.getAnimations().length > 0) {
                 return;
               }
               const toward = event.key === 'ArrowRight' ? 1 : -1;

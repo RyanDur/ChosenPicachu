@@ -37,7 +37,7 @@ export const useChartTravel = ({seats, onSeated, onRemoved}: Travel) => {
     node instanceof HTMLElement ? node.getBoundingClientRect() : undefined;
 
   const resting = (node: Element | null | undefined) =>
-    node instanceof HTMLElement && (node.getAnimations?.().length ?? 0) === 0
+    node instanceof HTMLElement && node.getAnimations().length === 0
       ? node.getBoundingClientRect()
       : undefined;
 
