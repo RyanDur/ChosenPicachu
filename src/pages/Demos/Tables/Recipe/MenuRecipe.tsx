@@ -1,6 +1,6 @@
 import {FC, ReactNode} from 'react';
-import {PillGlider} from '@components/PillGlider';
-import {Motion, Origin, Pace} from '../../Controls';
+import {useSearchParamsObject} from '@components/search-params';
+import {Motion, MotionDial, Origin, Pace, motionParam, originParam, paceParam} from '../../Controls';
 import {Codes, Mdn, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, aside, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
 import menuSource from '@components/Menu/index.tsx?raw';
@@ -213,23 +213,10 @@ const rankStory = (pace: Pace, origin: Origin, motion: Motion, dial: ReactNode) 
   </Story>;
 };
 
-type Props = {
-  pace: Pace;
-  origin: Origin;
-  motion: Motion;
-  onMotion: (motion: Motion) => void;
-};
-
-export const MenuRecipe: FC<Props> = ({pace, origin, motion, onMotion}) => {
-  const dial = <PillGlider label="motion"
-                           name="menu-motion"
-                           options={[
-                             {display: 'Animate', value: 'animated'},
-                             {display: 'Static', value: 'static'}
-                           ]}
-                           chosen={motion}
-                           onChoose={onMotion}/>;
+export const MenuRecipe: FC = () => {
+  const {pace = 'eager', origin = 'hide', motion = 'animated'} =
+    useSearchParamsObject({pace: paceParam, origin: originParam, motion: motionParam});
   return <section aria-label="build the sort menu yourself" className="build-steps">
-    <Stories>{rankStory(pace, origin, motion, dial)}</Stories>
+    <Stories>{rankStory(pace, origin, motion, <MotionDial name="menu-motion"/>)}</Stories>
   </section>;
 };

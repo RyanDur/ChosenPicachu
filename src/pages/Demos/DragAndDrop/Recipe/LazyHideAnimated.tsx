@@ -1,13 +1,14 @@
 import {FC} from 'react';
+import {MotionDial, OriginDial, PaceDial} from '../../Controls';
 import {Codes, Mdn, Says, Snippet, Step, Steps, Story, Tell, Words, aside, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
-import {Dials, crossingStep, currencyTell, gap, neverOursTell, roadEndStep} from './shared-steps';
+import {crossingStep, currencyTell, gap, neverOursTell, roadEndStep} from './shared-steps';
 import listSource from '../LazyHideAnimatedList/LazyHideAnimatedList.tsx?raw';
 import itemSource from '../LazyHideAnimatedList/Item.tsx?raw';
 import cssSource from '../LazyHideAnimatedList/LazyHideAnimatedList.css?raw';
 import glideSource from '@components/glide.ts?raw';
 
-export const LazyHideAnimatedRecipe: FC<Dials> = ({pace, origin, motion}) => <>
+export const LazyHideAnimatedRecipe: FC = () => <>
   <Story param="native" id="sort"
          can="The user can sort the list"
          soThat="it reads in the order they mean">
@@ -81,7 +82,7 @@ export const LazyHideAnimatedRecipe: FC<Dials> = ({pace, origin, motion}) => <>
         </Codes>
       </Step>
       {crossingStep}
-      <Step title="Stash the landing, settle after the drag" dial={pace}>
+      <Step title="Stash the landing, settle after the drag" dial={<PaceDial name="native-pace"/>}>
         <Words want="You want the list calm while the platform drags, which means the reorder must wait for a session that is still alive when the drop lands.">
           <Says>Each dragover only remembers where the pointer last hovered, and
             a <Mdn path="Web/API/HTMLElement/dragleave_event">dragleave</Mdn> forgets it. The commit runs from the release: the session has to finish before the list moves,
@@ -94,7 +95,7 @@ export const LazyHideAnimatedRecipe: FC<Dials> = ({pace, origin, motion}) => <>
           ]}/>
         </Codes>
       </Step>
-      <Step title="Fade the origin to a whisper" dial={origin}>
+      <Step title="Fade the origin to a whisper" dial={<OriginDial name="native-origin"/>}>
         <Words want="With the snapshot in hand, the origin card reads as a duplicate, but truly vanishing it can kill the drag: some engines end the session when its source disappears.">
           <Says>So the origin does not vanish; it fades to a whisper. This is the hide list, so
             its own Item dresses itself on its own lift and undresses on its own release. The CSS behind the class is
@@ -112,7 +113,7 @@ export const LazyHideAnimatedRecipe: FC<Dials> = ({pace, origin, motion}) => <>
           ]}/>
         </Codes>
       </Step>
-      <Step title="Glide the settle, one tick after" dial={motion}>
+      <Step title="Glide the settle, one tick after" dial={<MotionDial name="native-motion"/>}>
         <Words want="A lazy settle happens all at once on release, the perfect moment for a view transition, except the drag session is still alive when the drop fires, and a capture mid-session swallows its events.">
           <Says><Mdn path="Web/CSS/view-transition-name">Name each item for the transition</Mdn> and
             defer the settle one tick past the release. By the

@@ -1,12 +1,13 @@
 import {FC} from 'react';
+import {MotionDial, OriginDial, PaceDial} from '../../Controls';
 import {Codes, Mdn, Says, Snippet, Step, Steps, Story, Tell, Words, aside, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
-import {Dials, crossingStep, currencyTell, gap, neverOursTell, roadEndStep} from './shared-steps';
+import {crossingStep, currencyTell, gap, neverOursTell, roadEndStep} from './shared-steps';
 import listSource from '../LazyHideStaticList/LazyHideStaticList.tsx?raw';
 import itemSource from '../LazyHideStaticList/Item.tsx?raw';
 import cssSource from '../LazyHideStaticList/LazyHideStaticList.css?raw';
 
-export const LazyHideStaticRecipe: FC<Dials> = ({pace, origin, motion}) => <>
+export const LazyHideStaticRecipe: FC = () => <>
   <Story param="native" id="sort"
          can="The user can sort the list"
          soThat="it reads in the order they mean">
@@ -81,7 +82,7 @@ export const LazyHideStaticRecipe: FC<Dials> = ({pace, origin, motion}) => <>
         </Codes>
       </Step>
       {crossingStep}
-      <Step title="Stash the landing, settle after the drag" dial={pace}>
+      <Step title="Stash the landing, settle after the drag" dial={<PaceDial name="native-pace"/>}>
         <Words want="You want the list calm while the platform drags, which means the reorder must wait for a session that is still alive when the drop lands.">
           <Says>Each dragover only remembers where the pointer last hovered, and
             a <Mdn path="Web/API/HTMLElement/dragleave_event">dragleave</Mdn> forgets it. The commit runs from the release: the session has to finish before the list moves,
@@ -94,7 +95,7 @@ export const LazyHideStaticRecipe: FC<Dials> = ({pace, origin, motion}) => <>
           ]}/>
         </Codes>
       </Step>
-      <Step title="Fade the origin to a whisper" dial={origin}>
+      <Step title="Fade the origin to a whisper" dial={<OriginDial name="native-origin"/>}>
         <Words want="With the snapshot in hand, the origin card reads as a duplicate, but truly vanishing it can kill the drag: some engines end the session when its source disappears.">
           <Says>So the origin does not vanish; it fades to a whisper. This is the hide list, so
             its own Item dresses itself on its own lift and undresses on its own release. The CSS behind the class is
@@ -112,7 +113,7 @@ export const LazyHideStaticRecipe: FC<Dials> = ({pace, origin, motion}) => <>
           ]}/>
         </Codes>
       </Step>
-      <Step title="Apply the state update directly" dial={motion}>
+      <Step title="Apply the state update directly" dial={<MotionDial name="native-motion"/>}>
         <Words want="Motion is not free: it competes with the drag session, costs a frame budget, and some users ask for none at all.">
           <Says>This is the static list; no marking code exists in it. The order applies and React
             paints next frame; a keyboard walk is applied as plainly as everything else.</Says>

@@ -1,12 +1,13 @@
 import {FC} from 'react';
+import {MotionDial, OriginDial, PaceDial} from '../../Controls';
 import {Codes, Mdn, Says, Snippet, Step, Steps, Story, Tell, Words, aside, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
-import {Dials, crossingStep, currencyTell, gap, neverOursTell, roadEndStep} from './shared-steps';
+import {crossingStep, currencyTell, gap, neverOursTell, roadEndStep} from './shared-steps';
 import listSource from '../EagerKeepAnimatedList/EagerKeepAnimatedList.tsx?raw';
 import itemSource from '../EagerKeepAnimatedList/Item.tsx?raw';
 import cssSource from '../EagerKeepAnimatedList/EagerKeepAnimatedList.css?raw';
 
-export const EagerKeepAnimatedRecipe: FC<Dials> = ({pace, origin, motion}) => <>
+export const EagerKeepAnimatedRecipe: FC = () => <>
   <Story param="native" id="sort"
          can="The user can sort the list"
          soThat="it reads in the order they mean">
@@ -81,7 +82,7 @@ export const EagerKeepAnimatedRecipe: FC<Dials> = ({pace, origin, motion}) => <>
         </Codes>
       </Step>
       {crossingStep}
-      <Step title="Commit inside the crossing" dial={pace}>
+      <Step title="Commit inside the crossing" dial={<PaceDial name="native-pace"/>}>
         <Words want="You want the list to answer the drag as it happens; waiting for the drop hides the outcome until it is too late to change your mind.">
           <Says>Commit the reorder inside the dragover that detected the crossing: the state updates
             mid-drag, the markup renders through it, and the same key finds its new seat while the
@@ -94,7 +95,7 @@ export const EagerKeepAnimatedRecipe: FC<Dials> = ({pace, origin, motion}) => <>
           ]}/>
         </Codes>
       </Step>
-      <Step title="Leave the origin standing" dial={origin}>
+      <Step title="Leave the origin standing" dial={<OriginDial name="native-origin"/>}>
         <Words want="A vanished origin can disorient; sometimes the eye wants the card both at rest and in hand while it decides.">
           <Says>Do nothing. This is the keep list, so its Item is the plain card: the platform
             already drew the snapshot, there are two of the card for the length of the drag, one
@@ -107,7 +108,7 @@ export const EagerKeepAnimatedRecipe: FC<Dials> = ({pace, origin, motion}) => <>
           ]}/>
         </Codes>
       </Step>
-      <Step title="Slide the crossed item home" dial={motion}>
+      <Step title="Slide the crossed item home" dial={<MotionDial name="native-motion"/>}>
         <Words want="An eager swap that teleports is hard to follow, yet nothing can be animated mid-session by view transitions; the capture would swallow the drag’s own events.">
           <Says>The swap commits instantly and the crossed item is merely drawn where it used
             to be, sliding home on a <Mdn path="Web/CSS/@keyframes">keyframe</Mdn> whose from is one

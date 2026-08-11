@@ -1,11 +1,12 @@
 import {FC} from 'react';
+import {MotionDial, OriginDial, PaceDial} from '../../Controls';
 import {Codes, Mdn, Says, Snippet, Step, Steps, Story, Tell, Words, aside, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
-import {Dials, crossingStep, currencyTell, gap, neverOursTell, roadEndStep} from './shared-steps';
+import {crossingStep, currencyTell, gap, neverOursTell, roadEndStep} from './shared-steps';
 import listSource from '../LazyKeepStaticList/LazyKeepStaticList.tsx?raw';
 import itemSource from '../LazyKeepStaticList/Item.tsx?raw';
 
-export const LazyKeepStaticRecipe: FC<Dials> = ({pace, origin, motion}) => <>
+export const LazyKeepStaticRecipe: FC = () => <>
   <Story param="native" id="sort"
          can="The user can sort the list"
          soThat="it reads in the order they mean">
@@ -80,7 +81,7 @@ export const LazyKeepStaticRecipe: FC<Dials> = ({pace, origin, motion}) => <>
         </Codes>
       </Step>
       {crossingStep}
-      <Step title="Stash the landing, settle after the drag" dial={pace}>
+      <Step title="Stash the landing, settle after the drag" dial={<PaceDial name="native-pace"/>}>
         <Words want="You want the list calm while the platform drags, which means the reorder must wait for a session that is still alive when the drop lands.">
           <Says>Each dragover only remembers where the pointer last hovered, and
             a <Mdn path="Web/API/HTMLElement/dragleave_event">dragleave</Mdn> forgets it. The commit runs from the release: the session has to finish before the list moves,
@@ -93,7 +94,7 @@ export const LazyKeepStaticRecipe: FC<Dials> = ({pace, origin, motion}) => <>
           ]}/>
         </Codes>
       </Step>
-      <Step title="Leave the origin standing" dial={origin}>
+      <Step title="Leave the origin standing" dial={<OriginDial name="native-origin"/>}>
         <Words want="A vanished origin can disorient; sometimes the eye wants the card both at rest and in hand while it decides.">
           <Says>Do nothing. This is the keep list, so its Item is the plain card: the platform
             already drew the snapshot, there are two of the card for the length of the drag, one
@@ -106,7 +107,7 @@ export const LazyKeepStaticRecipe: FC<Dials> = ({pace, origin, motion}) => <>
           ]}/>
         </Codes>
       </Step>
-      <Step title="Apply the state update directly" dial={motion}>
+      <Step title="Apply the state update directly" dial={<MotionDial name="native-motion"/>}>
         <Words want="Motion is not free: it competes with the drag session, costs a frame budget, and some users ask for none at all.">
           <Says>This is the static list; no marking code exists in it. The order applies and React
             paints next frame; a keyboard walk is applied as plainly as everything else.</Says>

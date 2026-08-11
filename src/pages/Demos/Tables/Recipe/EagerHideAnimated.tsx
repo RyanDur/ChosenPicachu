@@ -1,8 +1,8 @@
 import {FC} from 'react';
+import {MotionDial, OriginDial, PaceDial} from '../../Controls';
 import {Codes, Mdn, Says, Snippet, Step, Steps, Story, Tell, Words, aside, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
 import {
-  Dials,
   Track,
   accessTrack,
   againstTheStream,
@@ -26,7 +26,7 @@ import headerSource from '@components/DragSortableTable/EagerHideAnimatedTable/H
 import hookSource from '@components/DragSortableTable/EagerHideAnimatedTable/useColumnTravel.ts?raw';
 import cssSource from '@components/DragSortableTable/EagerHideAnimatedTable/EagerHideAnimatedTable.css?raw';
 
-export const EagerHideAnimatedRecipe: FC<{dials: Dials; track: Track}> = ({dials, track}) => track === 'pointer'
+export const EagerHideAnimatedRecipe: FC<{track: Track}> = ({track}) => track === 'pointer'
   ? <>
     <Story param="sort" id="column"
            can="The trader can sort by column"
@@ -143,7 +143,7 @@ export const EagerHideAnimatedRecipe: FC<{dials: Dials; track: Track}> = ({dials
           </Codes>
         </Step>
         {deadZone}
-        <Step title="Commit inside the move" dial={dials.pace}>
+        <Step title="Commit inside the move" dial={<PaceDial name="step-pace"/>}>
           <Words want="The trader wants the table to answer inside the move, so that they can change their mind before the drop.">
             <Says>With eager pace, settle as soon as a neighbour is struck: the order state updates
               mid-drag, and because the markup renders through that order, the same key finds its new
@@ -163,7 +163,7 @@ export const EagerHideAnimatedRecipe: FC<{dials: Dials; track: Track}> = ({dials
             ]}/>
           </Codes>
         </Step>
-        <Step title="Blank the origin while it is aloft" dial={dials.origin}>
+        <Step title="Blank the origin while it is aloft" dial={<OriginDial name="step-origin"/>}>
           <Words want="With the ghost in hand, the trader reads the origin column as a duplicate, and nothing says where the drop will land.">
             <Says>We could unmount the origin while it travels, but its space would collapse and
               the whole table would shift; so the disappearance takes a component choice and one word
@@ -188,7 +188,7 @@ export const EagerHideAnimatedRecipe: FC<{dials: Dials; track: Track}> = ({dials
             ]}/>
           </Codes>
         </Step>
-        <Step title="Slide the theater, not the layout" dial={dials.motion}>
+        <Step title="Slide the theater, not the layout" dial={<MotionDial name="step-motion"/>}>
           <Words want="The trader must be able to follow which column went where; a teleport is honest but unreadable, and animating the layout itself would bounce the whole table, because layout is load-bearing.">
             <Says>A swap commits instantly: the carried column already sits at full width in its new
               slot, hidden or under the ghost, and the layout underneath is final. The displaced column
@@ -304,7 +304,7 @@ export const EagerHideAnimatedRecipe: FC<{dials: Dials; track: Track}> = ({dials
           ]}/>
         </Codes>
       </Step>
-      <Step title="Both parties slide, each by the other’s share" dial={dials.motion}>
+      <Step title="Both parties slide, each by the other’s share" dial={<MotionDial name="step-motion"/>}>
         <Words want="A pointer swap explains itself with a ghost in hand; the trader’s keyboard swap has no hand, and if only the neighbour slid, the walked column would simply teleport.">
           <Says>Mark both columns displaced. The swap still commits instantly, the same theater
             the pointer track built, but now each party is drawn starting from the seat it just

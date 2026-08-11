@@ -1,12 +1,13 @@
 import {FC} from 'react';
+import {MotionDial, OriginDial, PaceDial} from '../../Controls';
 import {Codes, Mdn, Says, Snippet, Step, Steps, Story, Tell, Words, aside, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
-import {Dials, crossingStep, currencyTell, gap, neverOursTell, roadEndStep} from './shared-steps';
+import {crossingStep, currencyTell, gap, neverOursTell, roadEndStep} from './shared-steps';
 import listSource from '../EagerHideAnimatedList/EagerHideAnimatedList.tsx?raw';
 import itemSource from '../EagerHideAnimatedList/Item.tsx?raw';
 import cssSource from '../EagerHideAnimatedList/EagerHideAnimatedList.css?raw';
 
-export const EagerHideAnimatedRecipe: FC<Dials> = ({pace, origin, motion}) => <>
+export const EagerHideAnimatedRecipe: FC = () => <>
   <Story param="native" id="sort"
          can="The user can sort the list"
          soThat="it reads in the order they mean">
@@ -80,7 +81,7 @@ export const EagerHideAnimatedRecipe: FC<Dials> = ({pace, origin, motion}) => <>
         </Codes>
       </Step>
       {crossingStep}
-      <Step title="Commit inside the crossing" dial={pace}>
+      <Step title="Commit inside the crossing" dial={<PaceDial name="native-pace"/>}>
         <Words want="You want the list to answer the drag as it happens; waiting for the drop hides the outcome until it is too late to change your mind.">
           <Says>Commit the reorder inside the dragover that detected the crossing: the state updates
             mid-drag, the markup renders through it, and the same key finds its new seat while the
@@ -93,7 +94,7 @@ export const EagerHideAnimatedRecipe: FC<Dials> = ({pace, origin, motion}) => <>
           ]}/>
         </Codes>
       </Step>
-      <Step title="Fade the origin to a whisper" dial={origin}>
+      <Step title="Fade the origin to a whisper" dial={<OriginDial name="native-origin"/>}>
         <Words want="With the snapshot in hand, the origin card reads as a duplicate, but truly vanishing it can kill the drag: some engines end the session when its source disappears.">
           <Says>So the origin does not vanish; it fades to a whisper. This is the hide list, so
             its own Item dresses itself on its own lift and undresses on its own release. The CSS behind the class is
@@ -111,7 +112,7 @@ export const EagerHideAnimatedRecipe: FC<Dials> = ({pace, origin, motion}) => <>
           ]}/>
         </Codes>
       </Step>
-      <Step title="Slide the crossed item home" dial={motion}>
+      <Step title="Slide the crossed item home" dial={<MotionDial name="native-motion"/>}>
         <Words want="An eager swap that teleports is hard to follow, yet nothing can be animated mid-session by view transitions; the capture would swallow the drag’s own events.">
           <Says>The swap commits instantly and the crossed item is merely drawn where it used
             to be, sliding home on a <Mdn path="Web/CSS/@keyframes">keyframe</Mdn> whose from is one

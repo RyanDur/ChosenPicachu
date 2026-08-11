@@ -1,12 +1,13 @@
 import {FC} from 'react';
+import {MotionDial, OriginDial, PaceDial} from '../../Controls';
 import {Codes, Mdn, Says, Snippet, Step, Steps, Story, Tell, Words, aside, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
-import {Dials, crossingStep, currencyTell, gap, neverOursTell, roadEndStep} from './shared-steps';
+import {crossingStep, currencyTell, gap, neverOursTell, roadEndStep} from './shared-steps';
 import listSource from '../LazyKeepAnimatedList/LazyKeepAnimatedList.tsx?raw';
 import itemSource from '../LazyKeepAnimatedList/Item.tsx?raw';
 import glideSource from '@components/glide.ts?raw';
 
-export const LazyKeepAnimatedRecipe: FC<Dials> = ({pace, origin, motion}) => <>
+export const LazyKeepAnimatedRecipe: FC = () => <>
   <Story param="native" id="sort"
          can="The user can sort the list"
          soThat="it reads in the order they mean">
@@ -81,7 +82,7 @@ export const LazyKeepAnimatedRecipe: FC<Dials> = ({pace, origin, motion}) => <>
         </Codes>
       </Step>
       {crossingStep}
-      <Step title="Stash the landing, settle after the drag" dial={pace}>
+      <Step title="Stash the landing, settle after the drag" dial={<PaceDial name="native-pace"/>}>
         <Words want="You want the list calm while the platform drags, which means the reorder must wait for a session that is still alive when the drop lands.">
           <Says>Each dragover only remembers where the pointer last hovered, and
             a <Mdn path="Web/API/HTMLElement/dragleave_event">dragleave</Mdn> forgets it. The commit runs from the release: the session has to finish before the list moves,
@@ -94,7 +95,7 @@ export const LazyKeepAnimatedRecipe: FC<Dials> = ({pace, origin, motion}) => <>
           ]}/>
         </Codes>
       </Step>
-      <Step title="Leave the origin standing" dial={origin}>
+      <Step title="Leave the origin standing" dial={<OriginDial name="native-origin"/>}>
         <Words want="A vanished origin can disorient; sometimes the eye wants the card both at rest and in hand while it decides.">
           <Says>Do nothing. This is the keep list, so its Item is the plain card: the platform
             already drew the snapshot, there are two of the card for the length of the drag, one
@@ -107,7 +108,7 @@ export const LazyKeepAnimatedRecipe: FC<Dials> = ({pace, origin, motion}) => <>
           ]}/>
         </Codes>
       </Step>
-      <Step title="Glide the settle, one tick after" dial={motion}>
+      <Step title="Glide the settle, one tick after" dial={<MotionDial name="native-motion"/>}>
         <Words want="A lazy settle happens all at once on release, the perfect moment for a view transition, except the drag session is still alive when the drop fires, and a capture mid-session swallows its events.">
           <Says><Mdn path="Web/CSS/view-transition-name">Name each item for the transition</Mdn> and
             defer the settle one tick past the release. By the

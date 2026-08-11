@@ -1,9 +1,9 @@
 import {FC} from 'react';
-import {PillGlider} from '@components/PillGlider';
+import {useSearchParamsObject} from '@components/search-params';
 import {Picks} from '../Picks';
-import {Motion, Origin, Pace} from '../../Controls';
+import {Motion, Origin, Pace, motionParam, originParam, paceParam} from '../../Controls';
 import {Stories} from '../../Recipe';
-import {Dials, Track} from './shared-steps';
+import {Track} from './shared-steps';
 import {EagerKeepAnimatedRecipe} from './EagerKeepAnimated';
 import {EagerKeepStaticRecipe} from './EagerKeepStatic';
 import {EagerHideAnimatedRecipe} from './EagerHideAnimated';
@@ -17,7 +17,7 @@ import '../../Recipe/Recipe.css';
 export type {Track} from './shared-steps';
 export {trackParam} from './shared-steps';
 
-const recipes: Record<Pace, Record<Origin, Record<Motion, FC<{dials: Dials; track: Track}>>>> = {
+const recipes: Record<Pace, Record<Origin, Record<Motion, FC<{track: Track}>>>> = {
   eager: {
     keep: {animated: EagerKeepAnimatedRecipe, static: EagerKeepStaticRecipe},
     hide: {animated: EagerHideAnimatedRecipe, static: EagerHideStaticRecipe}
@@ -31,41 +31,11 @@ const recipes: Record<Pace, Record<Origin, Record<Motion, FC<{dials: Dials; trac
 type Props = {
   track: Track;
   onTrack: (track: Track) => void;
-  pace: Pace;
-  origin: Origin;
-  motion: Motion;
-  onPace: (pace: Pace) => void;
-  onOrigin: (origin: Origin) => void;
-  onMotion: (motion: Motion) => void;
 };
 
-export const Recipe: FC<Props> = ({track, onTrack, pace, origin, motion, onPace, onOrigin, onMotion}) => {
-  const dials: Dials = {
-    pace: <PillGlider label="pace"
-                      name="step-pace"
-                      options={[
-                        {display: 'Eager', value: 'eager'},
-                        {display: 'Lazy', value: 'lazy'}
-                      ]}
-                      chosen={pace}
-                      onChoose={onPace}/>,
-    origin: <PillGlider label="origin"
-                        name="step-origin"
-                        options={[
-                          {display: 'Keep', value: 'keep'},
-                          {display: 'Hide', value: 'hide'}
-                        ]}
-                        chosen={origin}
-                        onChoose={onOrigin}/>,
-    motion: <PillGlider label="motion"
-                        name="step-motion"
-                        options={[
-                          {display: 'Animate', value: 'animated'},
-                          {display: 'Static', value: 'static'}
-                        ]}
-                        chosen={motion}
-                        onChoose={onMotion}/>
-  };
+export const Recipe: FC<Props> = ({track, onTrack}) => {
+  const {pace = 'eager', origin = 'hide', motion = 'animated'} =
+    useSearchParamsObject({pace: paceParam, origin: originParam, motion: motionParam});
   const Chosen = recipes[pace][origin][motion];
   return <section aria-label="build the drag sort yourself" className="build-steps">
     <Picks label="input track"
@@ -76,6 +46,6 @@ export const Recipe: FC<Props> = ({track, onTrack, pace, origin, motion, onPace,
            ]}
            chosen={track}
            onPick={onTrack}/>
-    <Stories><Chosen dials={dials} track={track}/></Stories>
+    <Stories><Chosen track={track}/></Stories>
   </section>;
 };

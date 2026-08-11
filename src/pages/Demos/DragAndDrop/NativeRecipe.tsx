@@ -1,8 +1,7 @@
 import {FC} from 'react';
-import {PillGlider} from '@components/PillGlider';
-import {ControlsProps, Motion, Origin, Pace} from '../Controls';
+import {useSearchParamsObject} from '@components/search-params';
+import {Motion, Origin, Pace, motionParam, originParam, paceParam} from '../Controls';
 import {Stories} from '../Recipe';
-import {Dials} from './Recipe/shared-steps';
 import {EagerKeepAnimatedRecipe} from './Recipe/EagerKeepAnimated';
 import {EagerKeepStaticRecipe} from './Recipe/EagerKeepStatic';
 import {EagerHideAnimatedRecipe} from './Recipe/EagerHideAnimated';
@@ -13,7 +12,7 @@ import {LazyHideAnimatedRecipe} from './Recipe/LazyHideAnimated';
 import {LazyHideStaticRecipe} from './Recipe/LazyHideStatic';
 import '../Recipe/Recipe.css';
 
-const recipes: Record<Pace, Record<Origin, Record<Motion, FC<Dials>>>> = {
+const recipes: Record<Pace, Record<Origin, Record<Motion, FC>>> = {
   eager: {
     keep: {animated: EagerKeepAnimatedRecipe, static: EagerKeepStaticRecipe},
     hide: {animated: EagerHideAnimatedRecipe, static: EagerHideStaticRecipe}
@@ -24,37 +23,13 @@ const recipes: Record<Pace, Record<Origin, Record<Motion, FC<Dials>>>> = {
   }
 };
 
-export const NativeRecipe: FC<ControlsProps> = ({pace, origin, motion, onPace, onOrigin, onMotion}) => {
+export const NativeRecipe: FC = () => {
+  const {pace = 'eager', origin = 'hide', motion = 'animated'} =
+    useSearchParamsObject({pace: paceParam, origin: originParam, motion: motionParam});
   const Recipe = recipes[pace][origin][motion];
-  const dials: Dials = {
-    pace: <PillGlider label="pace"
-                      name="native-pace"
-                      options={[
-                        {display: 'Eager', value: 'eager'},
-                        {display: 'Lazy', value: 'lazy'}
-                      ]}
-                      chosen={pace}
-                      onChoose={onPace}/>,
-    origin: <PillGlider label="origin"
-                        name="native-origin"
-                        options={[
-                          {display: 'Keep', value: 'keep'},
-                          {display: 'Hide', value: 'hide'}
-                        ]}
-                        chosen={origin}
-                        onChoose={onOrigin}/>,
-    motion: <PillGlider label="motion"
-                        name="native-motion"
-                        options={[
-                          {display: 'Animate', value: 'animated'},
-                          {display: 'Static', value: 'static'}
-                        ]}
-                        chosen={motion}
-                        onChoose={onMotion}/>
-  };
   return <section aria-label="build the native drag sort yourself" className="build-steps">
     <Stories>
-      <Recipe {...dials}/>
+      <Recipe/>
     </Stories>
   </section>;
 };

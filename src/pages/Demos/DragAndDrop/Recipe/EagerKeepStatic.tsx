@@ -1,11 +1,12 @@
 import {FC} from 'react';
+import {MotionDial, OriginDial, PaceDial} from '../../Controls';
 import {Codes, Mdn, Says, Snippet, Step, Steps, Story, Tell, Words, aside, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
-import {Dials, crossingStep, currencyTell, gap, neverOursTell, roadEndStep} from './shared-steps';
+import {crossingStep, currencyTell, gap, neverOursTell, roadEndStep} from './shared-steps';
 import listSource from '../EagerKeepStaticList/EagerKeepStaticList.tsx?raw';
 import itemSource from '../EagerKeepStaticList/Item.tsx?raw';
 
-export const EagerKeepStaticRecipe: FC<Dials> = ({pace, origin, motion}) => <>
+export const EagerKeepStaticRecipe: FC = () => <>
   <Story param="native" id="sort"
          can="The user can sort the list"
          soThat="it reads in the order they mean">
@@ -80,7 +81,7 @@ export const EagerKeepStaticRecipe: FC<Dials> = ({pace, origin, motion}) => <>
         </Codes>
       </Step>
       {crossingStep}
-      <Step title="Commit inside the crossing" dial={pace}>
+      <Step title="Commit inside the crossing" dial={<PaceDial name="native-pace"/>}>
         <Words want="You want the list to answer the drag as it happens; waiting for the drop hides the outcome until it is too late to change your mind.">
           <Says>Commit the reorder inside the dragover that detected the crossing: the state updates
             mid-drag, the markup renders through it, and the same key finds its new seat while the
@@ -93,7 +94,7 @@ export const EagerKeepStaticRecipe: FC<Dials> = ({pace, origin, motion}) => <>
           ]}/>
         </Codes>
       </Step>
-      <Step title="Leave the origin standing" dial={origin}>
+      <Step title="Leave the origin standing" dial={<OriginDial name="native-origin"/>}>
         <Words want="A vanished origin can disorient; sometimes the eye wants the card both at rest and in hand while it decides.">
           <Says>Do nothing. This is the keep list, so its Item is the plain card: the platform
             already drew the snapshot, there are two of the card for the length of the drag, one
@@ -106,7 +107,7 @@ export const EagerKeepStaticRecipe: FC<Dials> = ({pace, origin, motion}) => <>
           ]}/>
         </Codes>
       </Step>
-      <Step title="Apply the state update directly" dial={motion}>
+      <Step title="Apply the state update directly" dial={<MotionDial name="native-motion"/>}>
         <Words want="Motion is not free: it competes with the drag session, costs a frame budget, and some users ask for none at all.">
           <Says>This is the static list; no marking code exists in it. The order applies and React
             paints next frame; a keyboard walk is applied as plainly as everything else.</Says>
