@@ -368,7 +368,7 @@ const pieStory =
             ...unit(pieSource, 'export const sweepGates')
           ]}/>
           <Snippet label="HTML" lines={[
-            ...span(pieComponent, 'const layer = (drop', '</g>;')
+            ...span(pieComponent, "{['wall', 'face'].map(dressed", "}))}")
           ]}/>
           <Snippet label="CSS" lines={[
             ...unit(pieCss, '.slice {')
