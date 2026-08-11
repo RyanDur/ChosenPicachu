@@ -12,9 +12,8 @@
       transform: translate(var(--explode-x, 0), var(--explode-y, 0));
       transition: transform 300ms ease-out;
 
-      .face,
-      .wall {
-        transform: translate(var(--seat-x, 0), var(--seat-y, 0)) rotate(var(--turn, 0deg));
+      .spin {
+        transform: rotate(var(--turn, 0deg));
         transition: transform 300ms ease-out;
       }
 

@@ -40,14 +40,14 @@ export const Pie: FC<Props> = ({trades, actions}) => {
           const {dx, dy} = slice.share === 1 ? {dx: 0, dy: 0} : explodedBy(slice, EXPLODE);
           const {opening, closing} = sweepGates(slice);
           const layer = (drop: number, dressed: string) =>
-            <g className={dressed}
-               style={{'--seat-x': `${SIZE / 2}px`, '--seat-y': `${SIZE / 2 + drop}px`,
-                 '--turn': `${degrees(slice.from)}deg`}}>
-              <g clipPath="url(#pie-first-gate)">
-                <path className="half" d={HALF} style={{'--swing': `${opening}deg`}}/>
-              </g>
-              <g clipPath="url(#pie-second-gate)">
-                <path className="half" d={HALF} style={{'--swing': `${closing}deg`}}/>
+            <g className={dressed} transform={`translate(${SIZE / 2} ${SIZE / 2 + drop})`}>
+              <g className="spin" style={{'--turn': `${degrees(slice.from)}deg`}}>
+                <g clipPath="url(#pie-first-gate)">
+                  <path className="half" d={HALF} style={{'--swing': `${opening}deg`}}/>
+                </g>
+                <g clipPath="url(#pie-second-gate)">
+                  <path className="half" d={HALF} style={{'--swing': `${closing}deg`}}/>
+                </g>
               </g>
             </g>;
           return <g key={sides[at]} className={classNames('slice', sides[at])}
