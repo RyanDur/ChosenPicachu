@@ -250,11 +250,7 @@ export const DemosPage = () => {
             [DemoTopics.tables]: <>
               <Aggregations trades={liveTrades.trades} pace={pace} origin={origin} motion={motion}/>
               <Tutorials shown={tut} onShow={next => updateSearchParams({tut: next})}
-                         track={track} onTrack={next => updateSearchParams({track: next})}
-                         pace={pace} origin={origin} motion={motion}
-                         onPace={next => updateSearchParams({pace: next})}
-                         onOrigin={next => updateSearchParams({origin: next})}
-                         onMotion={next => updateSearchParams({motion: next})}/>
+                         track={track} onTrack={next => updateSearchParams({track: next})}/>
             </>,
             [DemoTopics.dragAndDrop]: <>
               {(() => {
@@ -305,10 +301,7 @@ export const DemosPage = () => {
                               onPace={next => updateSearchParams({pace: next})}
                               onOrigin={next => updateSearchParams({origin: next})}
                               onMotion={next => updateSearchParams({motion: next})}/>
-                <NativeRecipe pace={pace} origin={origin} motion={motion}
-                              onPace={next => updateSearchParams({pace: next})}
-                              onOrigin={next => updateSearchParams({origin: next})}
-                              onMotion={next => updateSearchParams({motion: next})}/>
+                <NativeRecipe/>
               </section>
             </>
         })[tab ?? DemoTopics.accordions]}

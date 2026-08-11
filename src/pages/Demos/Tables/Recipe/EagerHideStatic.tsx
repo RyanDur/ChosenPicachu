@@ -1,8 +1,8 @@
 import {FC} from 'react';
+import {MotionDial, OriginDial, PaceDial} from '../../Controls';
 import {Codes, Mdn, Says, Snippet, Step, Steps, Story, Tell, Words, aside, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
 import {
-  Dials,
   Track,
   accessTrack,
   againstTheStream,
@@ -26,7 +26,7 @@ import headerSource from '@components/DragSortableTable/EagerHideStaticTable/Hea
 import hookSource from '@components/DragSortableTable/EagerHideStaticTable/useColumnTravel.ts?raw';
 import cssSource from '@components/DragSortableTable/EagerHideStaticTable/EagerHideStaticTable.css?raw';
 
-export const EagerHideStaticRecipe: FC<{dials: Dials; track: Track}> = ({dials, track}) => track === 'pointer'
+export const EagerHideStaticRecipe: FC<{track: Track}> = ({track}) => track === 'pointer'
   ? <>
     <Story param="sort" id="column"
            can="The trader can sort by column"
@@ -143,7 +143,7 @@ export const EagerHideStaticRecipe: FC<{dials: Dials; track: Track}> = ({dials, 
           </Codes>
         </Step>
         {deadZone}
-        <Step title="Commit inside the move" dial={dials.pace}>
+        <Step title="Commit inside the move" dial={<PaceDial name="step-pace"/>}>
           <Words want="The trader wants the table to answer inside the move, so that they can change their mind before the drop.">
             <Says>With eager pace, settle as soon as a neighbour is struck: the order state updates
               mid-drag, and because the markup renders through that order, the same key finds its new
@@ -163,7 +163,7 @@ export const EagerHideStaticRecipe: FC<{dials: Dials; track: Track}> = ({dials, 
             ]}/>
           </Codes>
         </Step>
-        <Step title="Blank the origin while it is aloft" dial={dials.origin}>
+        <Step title="Blank the origin while it is aloft" dial={<OriginDial name="step-origin"/>}>
           <Words want="With the ghost in hand, the trader reads the origin column as a duplicate, and nothing says where the drop will land.">
             <Says>We could unmount the origin while it travels, but its space would collapse and
               the whole table would shift; so the disappearance takes a component choice and one word
@@ -188,7 +188,7 @@ export const EagerHideStaticRecipe: FC<{dials: Dials; track: Track}> = ({dials, 
             ]}/>
           </Codes>
         </Step>
-        <Step title="Apply the state update directly" dial={dials.motion}>
+        <Step title="Apply the state update directly" dial={<MotionDial name="step-motion"/>}>
           <Words want="Motion is not free: it competes with the pointer, costs a frame budget, and some traders ask for none at all.">
             <Says>The static table is not the animated one with a switch off; it is a different
               table with no marking code in it. Its settle is the whole story: move the key, let
@@ -277,7 +277,7 @@ export const EagerHideStaticRecipe: FC<{dials: Dials; track: Track}> = ({dials, 
           ]}/>
         </Codes>
       </Step>
-      <Step title="Cut on the keypress" dial={dials.motion}>
+      <Step title="Cut on the keypress" dial={<MotionDial name="step-motion"/>}>
         <Words want="Motion is not free, a held key multiplies it, and some traders ask for none at all.">
           <Says>Apply the order and mark nothing; the swap paints on the next frame. With no
             animation running there is nothing to pace, so a held arrow walks the column exactly as

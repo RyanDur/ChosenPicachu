@@ -1,12 +1,9 @@
-import {ReactNode} from 'react';
 import {Link} from 'react-router';
 import {Paths} from '@pages/Paths';
 import {DemoTopics} from '../../types';
 import {Codes, Says, Snippet, Step, Tell, Words, aside, plain} from '../../Recipe';
 import {unit} from '../../Recipe/carve';
 import crossingSource from '../crossing.ts?raw';
-
-export type Dials = Record<'pace' | 'origin' | 'motion', ReactNode>;
 
 export const gap = plain(' ');
 

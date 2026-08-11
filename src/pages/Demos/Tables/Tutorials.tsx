@@ -1,6 +1,7 @@
 import {FC} from 'react';
 import * as D from 'schemawax';
-import {Motion, Origin, Pace} from '../Controls';
+import {useSearchParamsObject} from '@components/search-params';
+import {motionParam, originParam, paceParam} from '../Controls';
 import {TableControls} from './TableControls';
 import {Picks} from './Picks';
 import {Recipe, Track} from './Recipe';
@@ -18,16 +19,12 @@ type Props = {
   onShow: (tutorial: Tutorial) => void;
   track: Track;
   onTrack: (track: Track) => void;
-  pace: Pace;
-  origin: Origin;
-  motion: Motion;
-  onPace: (pace: Pace) => void;
-  onOrigin: (origin: Origin) => void;
-  onMotion: (motion: Motion) => void;
 };
 
-export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack, ...props}) =>
-  <section className="tutorials">
+export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack}) => {
+  const {pace = 'eager', origin = 'hide', motion = 'animated', updateSearchParams} =
+    useSearchParamsObject({pace: paceParam, origin: originParam, motion: motionParam});
+  return <section className="tutorials">
     <h2 className="tutorials-title">let’s build this feature</h2>
     <p className="overview">
       We are going to build this site’s live trading table, feature by feature. Here is how to
@@ -64,9 +61,12 @@ export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack, ...props}) 
            ]}
            chosen={shown}
            onPick={onShow}/>
-    {shown === 'sort' && <TableControls {...props}/>}
-    {shown === 'sort' && <Recipe track={track} onTrack={onTrack} {...props}/>}
-    {shown === 'menu' && <MenuRecipe pace={props.pace} origin={props.origin}
-                                     motion={props.motion} onMotion={props.onMotion}/>}
+    {shown === 'sort' && <TableControls pace={pace} origin={origin} motion={motion}
+                                        onPace={next => updateSearchParams({pace: next})}
+                                        onOrigin={next => updateSearchParams({origin: next})}
+                                        onMotion={next => updateSearchParams({motion: next})}/>}
+    {shown === 'sort' && <Recipe track={track} onTrack={onTrack}/>}
+    {shown === 'menu' && <MenuRecipe/>}
     {shown === 'resize' && <ResizeRecipe/>}
   </section>;
+};

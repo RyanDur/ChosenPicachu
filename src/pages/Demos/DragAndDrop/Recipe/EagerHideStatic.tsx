@@ -1,12 +1,13 @@
 import {FC} from 'react';
+import {MotionDial, OriginDial, PaceDial} from '../../Controls';
 import {Codes, Mdn, Says, Snippet, Step, Steps, Story, Tell, Words, aside, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
-import {Dials, crossingStep, currencyTell, gap, neverOursTell, roadEndStep} from './shared-steps';
+import {crossingStep, currencyTell, gap, neverOursTell, roadEndStep} from './shared-steps';
 import listSource from '../EagerHideStaticList/EagerHideStaticList.tsx?raw';
 import itemSource from '../EagerHideStaticList/Item.tsx?raw';
 import cssSource from '../EagerHideStaticList/EagerHideStaticList.css?raw';
 
-export const EagerHideStaticRecipe: FC<Dials> = ({pace, origin, motion}) => <>
+export const EagerHideStaticRecipe: FC = () => <>
   <Story param="native" id="sort"
          can="The user can sort the list"
          soThat="it reads in the order they mean">
@@ -80,7 +81,7 @@ export const EagerHideStaticRecipe: FC<Dials> = ({pace, origin, motion}) => <>
         </Codes>
       </Step>
       {crossingStep}
-      <Step title="Commit inside the crossing" dial={pace}>
+      <Step title="Commit inside the crossing" dial={<PaceDial name="native-pace"/>}>
         <Words want="You want the list to answer the drag as it happens; waiting for the drop hides the outcome until it is too late to change your mind.">
           <Says>Commit the reorder inside the dragover that detected the crossing: the state updates
             mid-drag, the markup renders through it, and the same key finds its new seat while the
@@ -93,7 +94,7 @@ export const EagerHideStaticRecipe: FC<Dials> = ({pace, origin, motion}) => <>
           ]}/>
         </Codes>
       </Step>
-      <Step title="Fade the origin to a whisper" dial={origin}>
+      <Step title="Fade the origin to a whisper" dial={<OriginDial name="native-origin"/>}>
         <Words want="With the snapshot in hand, the origin card reads as a duplicate, but truly vanishing it can kill the drag: some engines end the session when its source disappears.">
           <Says>So the origin does not vanish; it fades to a whisper. This is the hide list, so
             its own Item dresses itself on its own lift and undresses on its own release. The CSS behind the class is
@@ -111,7 +112,7 @@ export const EagerHideStaticRecipe: FC<Dials> = ({pace, origin, motion}) => <>
           ]}/>
         </Codes>
       </Step>
-      <Step title="Apply the state update directly" dial={motion}>
+      <Step title="Apply the state update directly" dial={<MotionDial name="native-motion"/>}>
         <Words want="Motion is not free: it competes with the drag session, costs a frame budget, and some users ask for none at all.">
           <Says>This is the static list; no marking code exists in it. The order applies and React
             paints next frame; a keyboard walk is applied as plainly as everything else.</Says>

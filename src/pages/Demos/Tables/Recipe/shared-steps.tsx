@@ -1,4 +1,3 @@
-import {ReactNode} from 'react';
 import * as D from 'schemawax';
 import {Link} from 'react-router';
 import {Paths} from '@pages/Paths';
@@ -19,8 +18,6 @@ export {aloftSource, surveySource, gripSource, ghostSource, sortableCss, headerC
 export type Track = 'pointer' | 'keyboard';
 
 export const trackParam: D.Decoder<Track> = D.literalUnion('pointer', 'keyboard');
-
-export type Dials = Record<'pace' | 'origin' | 'motion', ReactNode>;
 
 export const gap = plain(' ');
 
