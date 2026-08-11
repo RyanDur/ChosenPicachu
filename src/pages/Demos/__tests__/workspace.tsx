@@ -21,11 +21,11 @@ export const renderChartPage = (feedUrl: string, kind: string) =>
 
 export const addMenu = (): HTMLElement | null => {
   const toggle = screen.queryByRole('button', {name: 'Add a chart'});
-  if (toggle === null) {
+  if (!toggle) {
     return null;
   }
   const menu = document.getElementById(toggle.getAttribute('popovertarget') ?? '');
-  if (menu === null) {
+  if (!menu) {
     throw new Error('the add-chart toggle points at no menu');
   }
   return menu;
@@ -33,7 +33,7 @@ export const addMenu = (): HTMLElement | null => {
 
 export const addChart = async (name: string): Promise<void> => {
   const menu = addMenu();
-  if (menu === null) {
+  if (!menu) {
     throw new Error('no add-a-chart menu on the desk');
   }
   await userEvent.click(within(menu).getByRole('button', {name, hidden: true}));
@@ -43,7 +43,7 @@ export const doorway = (name: string): HTMLElement => screen.getByRole('link', {
 
 export const slot = (name: string): HTMLElement => {
   const seat = doorway(name).closest('li');
-  if (seat === null) {
+  if (!seat) {
     throw new Error(`the ${name} doorway sits in no seat`);
   }
   return seat;

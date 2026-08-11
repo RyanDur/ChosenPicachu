@@ -276,7 +276,7 @@ describe('a list of charts', () => {
     await screen.findByRole('region', {name: 'live trades'});
 
     const menu = addMenu();
-    if (menu === null) throw new Error('no add-a-chart menu on the desk');
+    if (!menu) throw new Error('no add-a-chart menu on the desk');
     expect(within(menu).queryByRole('button', {name: 'Price line', hidden: true})).not.toBeInTheDocument();
     expect(within(menu).queryByRole('button', {name: 'Candles', hidden: true})).not.toBeInTheDocument();
     expect(within(menu).queryByRole('button', {name: 'Pressure', hidden: true})).not.toBeInTheDocument();

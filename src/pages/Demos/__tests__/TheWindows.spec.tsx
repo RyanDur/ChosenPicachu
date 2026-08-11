@@ -35,7 +35,7 @@ describe('the windows hydrate from history', () => {
     const rowFor = (label: string) => {
       const cell = within(card).getByText(label);
       const row = cell.closest('tr');
-      if (row === null) throw new Error(`no row for ${label}`);
+      if (!row) throw new Error(`no row for ${label}`);
       return row;
     };
     await waitFor(() => expect(texts(rowFor('this minute'))).toEqual(

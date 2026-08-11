@@ -12,7 +12,7 @@ const cellAt = (column: number, row: number): HTMLElement => {
   const [, tbody] = screen.getAllByRole('rowgroup');
   const lane = within(tbody).getAllByRole('row')[row];
   const seat = [lane.querySelector('th'), ...lane.querySelectorAll('td')][column];
-  if (seat === null || seat === undefined) throw new Error(`no cell ${column} in row ${row}`);
+  if (!seat) throw new Error(`no cell ${column} in row ${row}`);
   return seat;
 };
 
@@ -38,7 +38,7 @@ describe('the users page', () => {
 
       const toggle = screen.getByRole('button', {name: 'sort worksFromHome'});
       const menu = document.getElementById(toggle.getAttribute('popovertarget') ?? '');
-      if (menu === null) throw new Error('no menu for worksFromHome');
+      if (!menu) throw new Error('no menu for worksFromHome');
       await userEvent.click(within(menu).getByText('ascending'));
 
       expect(homes()).toEqual([...homes()].sort((left, right) => left.localeCompare(right)));

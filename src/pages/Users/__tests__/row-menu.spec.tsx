@@ -14,7 +14,7 @@ describe('the row menu is a popover anchored to its toggle', () => {
     const target = toggle.getAttribute('popovertarget') ?? '';
     expect(target).toMatch(/^menu-/);
     const menu = document.getElementById(target);
-    if (menu === null) throw new Error(`no menu with id ${target}`);
+    if (!menu) throw new Error(`no menu with id ${target}`);
     return menu;
   };
 

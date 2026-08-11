@@ -1,5 +1,5 @@
 import {FC, FocusEvent, KeyboardEvent, PointerEvent, useState} from 'react';
-import {has} from '@ryandur/sand';
+import {has, maybe} from '@ryandur/sand';
 
 const STEP_SHARE = 2;
 
@@ -26,12 +26,8 @@ export const ResizeHandle: FC<Props> = ({column, share, onAwaken, onTrade}) => {
               aria-label={has(share)
                   ? `resize ${column}, ${Math.round(share)}%`
                   : `resize ${column}`}
-              onFocus={(event: FocusEvent<HTMLElement>) => {
-                  const table = event.currentTarget.closest('table');
-                  if (table !== null) {
-                      onAwaken(table);
-                  }
-              }}
+              onFocus={(event: FocusEvent<HTMLElement>) =>
+                  maybe(event.currentTarget.closest('table')).map(onAwaken)}
               onKeyDown={(event: KeyboardEvent<HTMLElement>) => {
                   if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') {
                       return;
@@ -44,13 +40,11 @@ export const ResizeHandle: FC<Props> = ({column, share, onAwaken, onTrade}) => {
               onPointerDown={(event: PointerEvent<HTMLElement>) => {
                   event.stopPropagation();
                   event.currentTarget.setPointerCapture?.(event.pointerId);
-                  const table = event.currentTarget.closest('table');
-                  if (table !== null) {
+                  maybe(event.currentTarget.closest('table')).map(table => {
                       onAwaken(table);
-                  }
-                  const surface = table?.getBoundingClientRect().width ?? 0;
-                  setGrip({fromX: event.clientX, pxPerShare: surface / 100});
-                  setTraded(0);
+                      setGrip({fromX: event.clientX, pxPerShare: table.getBoundingClientRect().width / 100});
+                      setTraded(0);
+                  });
               }}
               onPointerMove={(event: PointerEvent<HTMLElement>) => {
                   if (!grip.pxPerShare) {

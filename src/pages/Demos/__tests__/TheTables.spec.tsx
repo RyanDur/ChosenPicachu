@@ -66,7 +66,7 @@ describe('the tables demo', () => {
     const rowFor = (label: string) => {
       const cell = within(card).getByText(label);
       const row = cell.closest('tr');
-      if (row === null) throw new Error(`no row for ${label}`);
+      if (!row) throw new Error(`no row for ${label}`);
       return row;
     };
     await waitFor(() => expect(texts(rowFor('this minute'))).toEqual(
@@ -113,7 +113,7 @@ describe('the tables demo', () => {
     });
     fireEvent.pointerDown(header('vwap'), {clientX: 700, clientY: 20, pointerId: 1});
     const surface = document.querySelector('.drag-surface');
-    if (surface === null) throw new Error('nothing is aloft');
+    if (!surface) throw new Error('nothing is aloft');
     fireEvent.pointerMove(surface, {buttons: 1, clientX: 40, clientY: 120, pointerId: 1});
     fireEvent.pointerUp(surface, {pointerId: 1});
 
@@ -131,7 +131,7 @@ describe('the tables demo', () => {
     const card = screen.getByRole('region', {name: 'live aggregations'});
     const rowOf = (label: string) => {
       const row = within(card).getByText(label).closest('tr');
-      if (row === null) throw new Error(`no row for ${label}`);
+      if (!row) throw new Error(`no row for ${label}`);
       return row;
     };
     const stage = within(card).getAllByRole('table')[0];
@@ -145,7 +145,7 @@ describe('the tables demo', () => {
     });
     fireEvent.pointerDown(within(rowOf('session')).getByLabelText(/move row/), {clientX: 100, clientY: 300, pointerId: 1});
     const lifted = document.querySelector('.drag-surface');
-    if (lifted === null) throw new Error('nothing is aloft');
+    if (!lifted) throw new Error('nothing is aloft');
     fireEvent.pointerMove(lifted, {buttons: 1, clientX: 100, clientY: 50, pointerId: 1});
     fireEvent.pointerUp(lifted, {pointerId: 1});
 
@@ -174,7 +174,7 @@ describe('the tables demo', () => {
       const toggle = within(card).getByRole('button', {name: label});
       const target = toggle.getAttribute('popovertarget') ?? '';
       const menu = document.getElementById(target);
-      if (menu === null) throw new Error(`no menu for ${label}`);
+      if (!menu) throw new Error(`no menu for ${label}`);
       return menu;
     };
     await waitFor(() => expect(within(card).getAllByText('4')).not.toHaveLength(0));
