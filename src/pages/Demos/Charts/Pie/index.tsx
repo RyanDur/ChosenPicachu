@@ -28,10 +28,12 @@ export const Pie: FC<Props> = ({trades, actions}) => {
     </header>
     <section className="chart-stage">
       <svg className="split" aria-hidden="true" viewBox={`0 0 ${SIZE} ${SIZE + DEPTH}`}>
-        {cut.map((slice, at) => {
+        {['wall', 'face'].map(dressed => cut.map((slice, at) => {
           const {dx, dy} = slice.share === 1 ? {dx: 0, dy: 0} : explodedBy(slice, EXPLODE);
           const {opening, closing} = sweepGates(slice);
-          const layer = (drop: number, dressed: string) =>
+          const drop = dressed === 'wall' ? DEPTH : 0;
+          return <g key={`${sides[at]}-${dressed}`} className={classNames('slice', sides[at])}
+                    style={{'--explode-x': `${dx}px`, '--explode-y': `${dy}px`}}>
             <g className={dressed} transform={`translate(${SIZE / 2} ${SIZE / 2 + drop})`}>
               <g className="spin" style={{'--turn': `${degrees(slice.from)}deg`}}>
                 <svg x={0} y={-RADIUS} width={RADIUS} height={2 * RADIUS}
@@ -43,13 +45,9 @@ export const Pie: FC<Props> = ({trades, actions}) => {
                   <path className="half" d={HALF} style={{'--swing': `${closing}deg`}}/>
                 </svg>
               </g>
-            </g>;
-          return <g key={sides[at]} className={classNames('slice', sides[at])}
-                    style={{'--explode-x': `${dx}px`, '--explode-y': `${dy}px`}}>
-            {layer(DEPTH, 'wall')}
-            {layer(0, 'face')}
+            </g>
           </g>;
-        })}
+        }))}
       </svg>
       <p className="legend">
         {cut.map((slice, at) =>
