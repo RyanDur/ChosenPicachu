@@ -145,12 +145,12 @@ export const liftOnce = (hookSource: string, tableSource: string) =>
         table’s <Mdn path="Web/API/Element/getBoundingClientRect">bounding rect</Mdn>, and every
         header in it, a single time: the survey. Everything that follows is math against the survey; measuring per move
         would fight the reorder you are about to apply.</Says>
-      <Says>Four words you will see in every block from here. Aloft is whatever you are
-        carrying, named by its key; it is a Maybe from a small library
+      <Says>A few words you will see in every block from here. Aloft is whatever you are
+        carrying, named by its key. It rides in a Maybe from a small library
         called <a className="signpost"
           href="https://ryandur.github.io/sand/"
           target="_blank"
-          rel="noreferrer">sand</a>, nothing until a lift, and map runs only while something is
+          rel="noreferrer">sand</a>: nothing until a lift, and map runs only while something is
         held. The survey is a plain record of that one measurement: the table’s box, each
         column’s width, and later the row heights. And has is the same library’s null check;
         it answers false for nothing and for empty.</Says>
