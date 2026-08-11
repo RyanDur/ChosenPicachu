@@ -341,10 +341,12 @@ const pieStory =
             frame on the main thread. The compositor animates only a few properties
             without repainting — translate, rotate, scale,
             and <Mdn path="Web/CSS/opacity">opacity</Mdn> — so the cut is built from
-            rotation alone: each slice is two half-discs behind two
-            fixed <Mdn path="Web/SVG/Element/clipPath">gates</Mdn>, the first gate
-            owns the first half-turn, the second owns the rest, and a share is how
-            far its halves swing open, in plain degrees. Nothing changes shape;
+            rotation alone: each slice is two half-discs behind two fixed gates, each a
+            nested <Mdn path="Web/SVG/Element/svg">SVG viewport</Mdn> that shows only
+            its own half-plane. The first gate owns the first half-turn, the second
+            owns the rest, and a share is how far its halves swing open, in plain
+            degrees; a slice under half a turn parks its closing half where its gate
+            cannot see it, because a half-disc's span wraps. Nothing changes shape;
             everything that moves is a transform. A side that took everything is
             both gates fully open: no special case survives.</Says>
         </Words>
