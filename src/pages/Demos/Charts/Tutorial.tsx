@@ -436,7 +436,7 @@ const workspaceStory =
           ]}/>
           <Snippet label="JS" lines={[
             ...unit(crossingSource, 'export const strayed'), gap,
-            ...span(travelSource, 'const anchor = seat.top + aloftLead;', 'setAloft(to);')
+            ...span(travelSource, 'const anchor = bounds.top + aloftLead;', 'setAloft(maybe(to));')
           ]}/>
           <Snippet label="CSS" lines={[
             ...unit(workspaceCss, '@keyframes chart-pushed')

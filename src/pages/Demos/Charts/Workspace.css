@@ -104,9 +104,15 @@
   }
 
   &.chart-pushed {
-    --toward: 1;
-
     animation: chart-pushed 150ms ease-out;
+  }
+
+  &.chart-pushed.upward {
+    --toward: 1;
+  }
+
+  &.chart-pushed.downward {
+    --toward: -1;
   }
 }
 
