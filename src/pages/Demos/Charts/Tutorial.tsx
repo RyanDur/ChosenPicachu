@@ -1,4 +1,5 @@
-import {FC} from 'react';
+import {FC, ReactNode} from 'react';
+import {ChartKind} from './kinds';
 import {Codes, Mdn, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, aside, plain} from '../Recipe';
 import {span, unit} from '../Recipe/carve';
 import shapesSource from './Candles/shapes.ts?raw';
@@ -20,15 +21,16 @@ import coinbaseSource from './coinbase/index.ts?raw';
 import historySource from './coinbase/history.ts?raw';
 import liveTradesSource from './useLiveTrades.ts?raw';
 import axesSource from './Axes/index.tsx?raw';
-import pageSource from '../component.tsx?raw';
+import workspaceSource from './Workspace.tsx?raw';
+import travelSource from './useChartTravel.ts?raw';
 import kindsSource from './kinds.ts?raw';
 import crossingSource from '../DragAndDrop/crossing.ts?raw';
-import pageCss from '../DemosPage.css?raw';
+import workspaceCss from './Workspace.css?raw';
 import '../Recipe/Recipe.css';
 
 const gap = plain(' ');
 
-export const priceStory =
+const priceStory =
   <Story param="graph" id="price"
          can="The trader can watch the price move, live"
          soThat="the session reads at a glance">
@@ -148,7 +150,7 @@ export const priceStory =
     </Steps>
   </Story>;
 
-export const candlesStory =
+const candlesStory =
   <Story param="graph" id="candles"
          can="The trader can read the same trades as candles"
          soThat="each window answers open, close, reach, and volume">
@@ -232,7 +234,7 @@ export const candlesStory =
     </Steps>
   </Story>;
 
-export const pressureStory =
+const pressureStory =
   <Story param="graph" id="pressure"
          can="The trader can see who is driving the move"
          soThat="a push and a retreat stop looking alike">
@@ -302,7 +304,7 @@ export const pressureStory =
     </Steps>
   </Story>;
 
-export const pieStory =
+const pieStory =
   <Story param="graph" id="pie"
          can="The trader can see who owns the session"
          soThat="the whole pot reads in one circle">
@@ -410,11 +412,11 @@ const workspaceStory =
         <Codes>
           <Snippet label="JS" lines={[
             ...unit(kindsSource, 'export const isChartKind'), gap,
-            ...unit(pageSource, 'const dealtCharts'), gap,
-            ...unit(pageSource, 'const addChart')
+            ...unit(workspaceSource, 'const dealtCharts'), gap,
+            ...unit(workspaceSource, 'const addChart')
           ]}/>
           <Snippet label="HTML" lines={[
-            ...span(pageSource, '<Menu id="add-chart"', '</Menu>')
+            ...span(workspaceSource, '<Menu id="add-chart"', '</Menu>')
           ]}/>
         </Codes>
       </Step>
@@ -433,10 +435,10 @@ const workspaceStory =
           ]}/>
           <Snippet label="JS" lines={[
             ...unit(crossingSource, 'export const strayed'), gap,
-            ...span(pageSource, 'const anchor = seat.top + aloftLead;', 'setAloftChart(to);')
+            ...span(travelSource, 'const anchor = seat.top + aloftLead;', 'setAloft(to);')
           ]}/>
           <Snippet label="CSS" lines={[
-            ...unit(pageCss, '@keyframes chart-pushed')
+            ...unit(workspaceCss, '@keyframes chart-pushed')
           ]}/>
         </Codes>
       </Step>
@@ -448,7 +450,7 @@ const workspaceStory =
         </Words>
         <Codes>
           <Snippet label="JS" lines={[
-            ...unit(pageSource, 'const chartKeys')
+            ...unit(workspaceSource, 'const keys')
           ]}/>
         </Codes>
       </Step>
@@ -460,13 +462,23 @@ const workspaceStory =
         </Words>
         <Codes>
           <Snippet label="JS" lines={[
-            ...unit(pageSource, 'const dismissal'), gap,
-            ...unit(pageSource, 'const grip')
+            ...unit(workspaceSource, 'const dismissal'), gap,
+            ...unit(workspaceSource, 'const grip')
           ]}/>
         </Codes>
       </Step>
     </Steps>
   </Story>;
+
+const chartStories: Record<ChartKind, ReactNode> = {
+  price: priceStory,
+  candles: candlesStory,
+  pressure: pressureStory,
+  pie: pieStory
+};
+
+export const ChartStories: FC<{kind: ChartKind}> = ({kind}) =>
+  <Stories>{chartStories[kind]}</Stories>;
 
 export const ChartsTutorial: FC = () =>
   <section className="tutorials">

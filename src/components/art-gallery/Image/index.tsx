@@ -15,6 +15,7 @@ type ImageProps = {
   className?: string;
   linkEnabled?: boolean;
   priority?: boolean;
+  lazy?: boolean;
 }
 
 export const Image: FC<ImageProps> = (
@@ -22,7 +23,8 @@ export const Image: FC<ImageProps> = (
     piece,
     className,
     linkEnabled = true,
-    priority = false
+    priority = false,
+    lazy = false
   }) => {
   const [completed, isComplete] = useState(false);
   const [errored, isError] = useState(false);
@@ -53,6 +55,7 @@ export const Image: FC<ImageProps> = (
                          event.currentTarget.classList.remove('veiled');
                      }}
                      fetchPriority={priority ? 'high' : 'auto'}
+                     loading={lazy ? 'lazy' : undefined}
                      srcSet={piece.srcSet ?? undefined}
                      sizes="(max-width: 600px) 85vw, (max-width: 1100px) 45vw, 33vw"
                      alt={piece.altText} title={piece.title}

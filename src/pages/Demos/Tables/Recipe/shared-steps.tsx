@@ -1,4 +1,3 @@
-import * as D from 'schemawax';
 import {Link} from 'react-router';
 import {Paths} from '@pages/Paths';
 import {DemoTopics} from '../../types';
@@ -15,9 +14,8 @@ import ghostCss from '@components/DragSortableTable/ghosts/Ghost.css?raw';
 
 export {aloftSource, surveySource, gripSource, ghostSource, sortableCss, headerCss, ghostCss};
 
-export type Track = 'pointer' | 'keyboard';
-
-export const trackParam: D.Decoder<Track> = D.literalUnion('pointer', 'keyboard');
+export type {Track} from '../params';
+export {trackParam} from '../params';
 
 export const gap = plain(' ');
 

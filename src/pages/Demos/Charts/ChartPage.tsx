@@ -1,15 +1,14 @@
-import {FC, ReactNode} from 'react';
+import {FC, lazy, Suspense} from 'react';
 import {Navigate, useParams} from 'react-router';
 import {useEnv} from '@components/Env';
 import {Paths} from '@pages/Paths';
-import {Stories} from '../Recipe';
+import {Loading} from '@components/Loading';
 import {DemoTopics} from '../types';
 import {useLiveTrades} from './useLiveTrades';
 import {PriceChart} from './PriceChart';
 import {Candles} from './Candles';
 import {Pressure} from './Pressure';
 import {Pie} from './Pie';
-import {candlesStory, pieStory, pressureStory, priceStory} from './Tutorial';
 import {ChartKind, isChartKind, matchChartKind} from './kinds';
 import {Trade} from './coinbase';
 import '../Recipe/Recipe.css';
@@ -17,45 +16,47 @@ import '../Tutorials.css';
 import './ChartPage.css';
 
 type Feature = {
+  kind: ChartKind;
   name: string;
   chart: FC<{trades: readonly Trade[]}>;
   reference: string;
-  story: ReactNode;
   quote: string;
 };
 
+const ChartStories = lazy(() => import('./Tutorial').then(module => ({default: module.ChartStories})));
+
 const features: Record<ChartKind, Feature> = {
   price: {
+    kind: 'price',
     name: 'price line',
     chart: PriceChart,
     reference: 'https://en.wikipedia.org/wiki/Line_chart',
-    story: priceStory,
     quote: 'The ticker tells me now; it doesn’t tell me the way here. I want to glance up ' +
       'and know whether the market is climbing, stalling, or rolling over, without reading ' +
       'a single digit.'
   },
   candles: {
+    kind: 'candles',
     name: 'candles',
     chart: Candles,
     reference: 'https://en.wikipedia.org/wiki/Candlestick_chart',
-    story: candlesStory,
     quote: 'The line smooths over the fight. A drift and a battle can draw the same shape, ' +
       'so I want each window to answer for itself: where it opened and closed, how far it ' +
       'reached, and how much conviction was underneath.'
   },
   pressure: {
+    kind: 'pressure',
     name: 'pressure',
     chart: Pressure,
     reference: 'https://en.wikipedia.org/wiki/Order_flow_trading',
-    story: pressureStory,
     quote: 'I can see the price move; I can’t see who is pushing it. When it breaks out, I ' +
       'want to know whether buyers drove it there or the sellers just stepped away.'
   },
   pie: {
+    kind: 'pie',
     name: 'pie',
     chart: Pie,
     reference: 'https://en.wikipedia.org/wiki/Pie_chart',
-    story: pieStory,
     quote: 'The bars tell me the battle, minute by minute. At the end I want the war: one ' +
       'circle, who owned the session.'
   }
@@ -65,7 +66,7 @@ export const ChartPage: FC = () => {
   const {kind} = useParams();
   const {tradeFeed, tradeProduct} = useEnv();
   const liveTrades = useLiveTrades(tradeFeed, tradeProduct);
-  const page = ({name, reference, story, quote, chart: Chart}: Feature) => () =>
+  const page = ({kind: dealt, name, reference, quote, chart: Chart}: Feature) => () =>
     <article aria-label={`${name} tutorial`} className="chart-page tutorials">
     <Chart trades={liveTrades.trades}/>
     <h2 className="tutorials-title">let’s build this feature</h2>
@@ -93,7 +94,9 @@ export const ChartPage: FC = () => {
       to see the steps, or to compare them with yours.
     </p>
     <section aria-label={`build the ${name} yourself`} className="build-steps">
-      <Stories>{story}</Stories>
+      <Suspense fallback={<Loading label="loading the tutorial"/>}>
+        <ChartStories kind={dealt}/>
+      </Suspense>
     </section>
     </article>;
   return matchChartKind(isChartKind(kind) ? kind : undefined, {

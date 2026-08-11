@@ -39,10 +39,18 @@ export const addChart = async (name: string): Promise<void> => {
   await userEvent.click(within(menu).getByRole('button', {name, hidden: true}));
 };
 
-export const slot = (name: string): HTMLElement => screen.getByRole('listitem', {name});
+export const doorway = (name: string): HTMLElement => screen.getByRole('link', {name});
+
+export const slot = (name: string): HTMLElement => {
+  const seat = doorway(name).closest('li');
+  if (seat === null) {
+    throw new Error(`the ${name} doorway sits in no seat`);
+  }
+  return seat;
+};
 
 export const keys = (slotName: string, key: string): void => {
-  fireEvent.keyDown(slot(slotName), {key});
+  fireEvent.keyDown(doorway(slotName), {key});
 };
 
 export const dragChart = (from: string, to: string, handAt: number): void => {

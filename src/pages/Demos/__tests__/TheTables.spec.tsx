@@ -88,7 +88,7 @@ describe('the tables demo', () => {
 
     await feedIsSubscribed();
     const card = screen.getByRole('region', {name: 'live aggregations'});
-    const controls = screen.getByRole('region', {name: 'table controls'});
+    const controls = await screen.findByRole('region', {name: 'table controls'});
     for (const axis of ['pace', 'origin', 'motion']) {
       expect(within(controls).getByRole('group', {name: axis})).toBeVisible();
     }
@@ -192,7 +192,7 @@ describe('the tables demo', () => {
     renderTables(urlOf(feed));
 
     await feedIsSubscribed();
-    const controls = screen.getByRole('region', {name: 'table controls'});
+    const controls = await screen.findByRole('region', {name: 'table controls'});
     expect(controls).toHaveTextContent(/Neighbours swap the moment you drag past them/);
     expect(controls).toHaveTextContent(/blanks out at its origin/);
     expect(controls).toHaveTextContent(/slide to their new seats/);
@@ -215,7 +215,7 @@ describe('the tables demo', () => {
     renderTables(urlOf(feed));
 
     await feedIsSubscribed();
-    const recipe = screen.getByRole('region', {name: 'build the drag sort yourself'});
+    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
     expect(recipe).toBeVisible();
     expect(recipe).toHaveTextContent(/no drag-and-drop library/);
     expect(recipe).toHaveTextContent(/The trader can sort by column/);
@@ -265,7 +265,7 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/Apply the state update directly/);
     expect(recipe).not.toHaveTextContent(/1cqi/);
     expect(recipe).not.toHaveTextContent(/Commit inside the move/);
-    const controls = screen.getByRole('region', {name: 'table controls'});
+    const controls = await screen.findByRole('region', {name: 'table controls'});
     expect(within(controls).getByRole('radio', {name: 'Lazy'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Keep'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Static'})).toBeChecked();
@@ -277,7 +277,7 @@ describe('the tables demo', () => {
     renderTables(urlOf(feed));
 
     await feedIsSubscribed();
-    const recipe = screen.getByRole('region', {name: 'build the drag sort yourself'});
+    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
     await userEvent.click(within(recipe).getByRole('button', {name: 'By keyboard'}));
 
     expect(recipe).toHaveTextContent(/Give focus a place to land/);
@@ -312,7 +312,7 @@ describe('the tables demo', () => {
     }, {path: `${Paths.demos}?tab=tables&track=keyboard`});
 
     await feedIsSubscribed();
-    const recipe = screen.getByRole('region', {name: 'build the drag sort yourself'});
+    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
     expect(recipe).toHaveTextContent(/Arrows speak direction/);
     expect(recipe).not.toHaveTextContent(/Draw the ghost by hand/);
   });
@@ -323,12 +323,12 @@ describe('the tables demo', () => {
     renderTables(urlOf(feed));
 
     await feedIsSubscribed();
-    expect(screen.getByRole('region', {name: 'build the drag sort yourself'})).toBeVisible();
+    expect(await screen.findByRole('region', {name: 'build the drag sort yourself'})).toBeVisible();
     expect(screen.queryByRole('region', {name: 'build the drag resize yourself'})).toBeNull();
 
     await userEvent.click(screen.getByRole('button', {name: 'Drag resize'}));
 
-    const resize = screen.getByRole('region', {name: 'build the drag resize yourself'});
+    const resize = await screen.findByRole('region', {name: 'build the drag resize yourself'});
     expect(resize).toBeVisible();
     expect(resize).toHaveTextContent(/zero-sum ledger/);
     expect(resize).toHaveTextContent(/Trade, never take/);
@@ -344,7 +344,7 @@ describe('the tables demo', () => {
     expect(screen.getByRole('region', {name: 'the living table'})).toBeVisible();
 
     await userEvent.click(screen.getByRole('button', {name: 'Drag sort'}));
-    expect(screen.getByRole('region', {name: 'build the drag sort yourself'})).toBeVisible();
+    expect(await screen.findByRole('region', {name: 'build the drag sort yourself'})).toBeVisible();
   });
 
   test('the open cards travel in the url', async () => {
@@ -353,7 +353,7 @@ describe('the tables demo', () => {
     renderTables(urlOf(feed), '?tab=tables&sort=column');
 
     await feedIsSubscribed();
-    const recipe = screen.getByRole('region', {name: 'build the drag sort yourself'});
+    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
     expect(recipe.querySelectorAll('details.arc[open]')).toHaveLength(1);
     expect(recipe.querySelectorAll('details.arc')[0]).toHaveAttribute('open');
     const living = screen.getByRole('region', {name: 'the living table'});
@@ -369,7 +369,7 @@ describe('the tables demo', () => {
     }, {path: `${Paths.demos}?tab=tables&pace=lazy&origin=keep&motion=static`});
 
     await feedIsSubscribed();
-    const controls = screen.getByRole('region', {name: 'table controls'});
+    const controls = await screen.findByRole('region', {name: 'table controls'});
     expect(within(controls).getByRole('radio', {name: 'Lazy'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Keep'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Static'})).toBeChecked();
@@ -384,7 +384,7 @@ describe('the tables demo', () => {
     await feedIsSubscribed();
     await userEvent.click(screen.getByRole('button', {name: 'Sort menu'}));
 
-    const recipe = screen.getByRole('region', {name: 'build the sort menu yourself'});
+    const recipe = await screen.findByRole('region', {name: 'build the sort menu yourself'});
     expect(recipe).toBeVisible();
     expect(recipe).toHaveTextContent(/popover/);
     expect(recipe).toHaveTextContent(/position-area/);
@@ -419,7 +419,7 @@ describe('the tables demo', () => {
     }, {path: `${Paths.demos}?tab=tables&tut=resize`});
 
     await feedIsSubscribed();
-    expect(screen.getByRole('region', {name: 'build the drag resize yourself'})).toBeVisible();
+    expect(await screen.findByRole('region', {name: 'build the drag resize yourself'})).toBeVisible();
     expect(screen.queryByRole('region', {name: 'build the drag sort yourself'})).toBeNull();
   });
 

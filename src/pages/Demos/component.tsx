@@ -1,4 +1,4 @@
-import {FC, KeyboardEvent, MouseEvent, ReactNode, useState} from 'react';
+import {lazy, Suspense, useState} from 'react';
 import {randParagraph, randWord} from '@ngneat/falso';
 import {useSearchParamsObject} from '@components/search-params';
 import './style.css';
@@ -15,24 +15,15 @@ import {
 import {
   EagerHideAnimatedList, EagerHideStaticList, EagerKeepAnimatedList, EagerKeepStaticList,
   LazyHideAnimatedList, LazyHideStaticList, LazyKeepAnimatedList, LazyKeepStaticList,
-  ListControls, NativeRecipe
+  ListControls
 } from './DragAndDrop';
 import {DemoTopics, demoTopicParam} from './types';
 import {NaturalZIndex} from './ZIndexDemo';
-import {Candles, Pie, Pressure, PriceChart} from './Charts';
-import {Menu} from '@components/Menu';
-import {useNavigate} from 'react-router';
-import {Paths} from '@pages/Paths';
-import {ChartsTutorial} from './Charts/Tutorial';
-import {classNames} from '@components/class-names';
-import Handle from '@components/grip.svg';
-import {strayed} from './DragAndDrop/crossing';
-import * as D from 'schemawax';
 import {motionParam, originParam, paceParam} from './Controls';
-import {Aggregations, Tutorials, trackParam, tutorialParam} from './Tables';
-import {statusCopy, useLiveTrades} from './Charts/useLiveTrades';
-import {Trade} from './Charts/coinbase';
-import {allChartKinds, ChartKind, isChartKind} from './Charts/kinds';
+import {Aggregations, trackParam, tutorialParam} from './Tables';
+import {Loading} from '@components/Loading';
+import {useLiveTrades} from './Charts/useLiveTrades';
+import {Workspace} from './Charts/Workspace';
 import {useEnv} from '@components/Env';
 
 const paragraphs = (count: number) =>
@@ -41,90 +32,15 @@ const paragraphs = (count: number) =>
     value: Array.from({length: Math.floor(Math.random() * 6) + 1}, () => randParagraph()).join('\n\n')
   }));
 
-const chartNames: Record<ChartKind, string> = {
-  price: 'Price line',
-  candles: 'Candles',
-  pressure: 'Pressure',
-  pie: 'Pie'
-};
-
-type ChartCard = FC<{trades: readonly Trade[]; id?: string; actions?: ReactNode}>;
-
-const chartCards: Record<ChartKind, ChartCard> = {
-  price: PriceChart,
-  candles: Candles,
-  pressure: Pressure,
-  pie: Pie
-};
+const Tutorials = lazy(() => import('./Tables/Tutorials').then(module => ({default: module.Tutorials})));
+const NativeRecipe = lazy(() => import('./DragAndDrop/NativeRecipe').then(module => ({default: module.NativeRecipe})));
+const ChartsTutorial = lazy(() => import('./Charts/Tutorial').then(module => ({default: module.ChartsTutorial})));
 
 export const DemosPage = () => {
-  const {tab, pace = 'eager', origin = 'hide', motion = 'animated', tut = 'sort', track = 'pointer', charts = 'price', updateSearchParams} =
+  const {tab, pace = 'eager', origin = 'hide', motion = 'animated', tut = 'sort', track = 'pointer', updateSearchParams} =
     useSearchParamsObject(
-      {tab: demoTopicParam, pace: paceParam, origin: originParam, motion: motionParam, tut: tutorialParam, track: trackParam, charts: D.string},
+      {tab: demoTopicParam, pace: paceParam, origin: originParam, motion: motionParam, tut: tutorialParam, track: trackParam},
       {tab: DemoTopics.accordions});
-  const dealtCharts = charts.split(',').filter(isChartKind)
-    .filter((kind, at, all) => all.indexOf(kind) === at);
-  const chartKinds: readonly ChartKind[] = dealtCharts.length > 0 ? dealtCharts : ['price'];
-  const addChart = (kind: ChartKind) => () =>
-    updateSearchParams({charts: [kind, ...chartKinds].join(',')});
-  const absentKinds = allChartKinds.filter(kind => !chartKinds.includes(kind));
-  const removeChart = (at: number) => () =>
-    updateSearchParams({charts: chartKinds.filter((_, seat) => seat !== at).join(',')});
-  const seated = (from: number, to: number): ChartKind[] => {
-    const next = [...chartKinds];
-    const [lifted] = next.splice(from, 1);
-    next.splice(to, 0, lifted);
-    return next;
-  };
-  const [armedChart, setArmedChart] = useState<number>();
-  const [aloftChart, setAloftChart] = useState<number>();
-  const [aloftLead, setAloftLead] = useState(0);
-  const [chartPushed, setChartPushed] = useState<Readonly<Record<number, 'up' | 'down'>>>();
-  const grip = (at: number) =>
-    chartKinds.length > 1
-      ? <button type="button" className="chart-grip" aria-label="move chart" tabIndex={-1}
-                onMouseDown={() => setArmedChart(at)}>
-        <Handle/>
-      </button>
-      : undefined;
-  const chartKeys = (at: number) => (event: KeyboardEvent<HTMLElement>) => {
-    if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
-      event.preventDefault();
-      const to = Math.min(Math.max(at + (event.key === 'ArrowDown' ? 1 : -1), 0), chartKinds.length - 1);
-      if (to !== at) {
-        updateSearchParams({charts: seated(at, to).join(',')});
-        const next = event.currentTarget.parentElement?.querySelectorAll(':scope > .chart-slot').item(to);
-        if (next instanceof HTMLElement) {
-          next.focus();
-        }
-      }
-    }
-    if ((event.key === 'Delete' || event.key === 'Backspace') && chartKinds.length > 1) {
-      event.preventDefault();
-      removeChart(at)();
-    }
-    if (event.key === 'Enter') {
-      void navigate(doorway(chartKinds[at]));
-    }
-  };
-  const doorways: Record<ChartKind, Paths> = {
-    price: Paths.priceChartTutorial,
-    candles: Paths.candlesChartTutorial,
-    pressure: Paths.pressureChartTutorial,
-    pie: Paths.pieChartTutorial
-  };
-  const doorway = (kind: ChartKind): string => doorways[kind];
-  const throughTheDoor = (kind: ChartKind) => (event: MouseEvent<HTMLElement>) => {
-    if (event.target instanceof Element && event.target.closest('button, a, details, .menu') === null) {
-      void navigate(doorway(kind));
-    }
-  };
-  const dismissal = (at: number) =>
-    chartKinds.length > 1
-      ? <button type="button" className="remove-chart" aria-label="remove chart" tabIndex={-1}
-                onClick={removeChart(at)}>×</button>
-      : undefined;
-  const navigate = useNavigate();
   const [accordionContents] = useState(() => Array.from({length: 5}, () => paragraphs(5)));
   const {tradeFeed, tradeProduct} = useEnv();
   const liveTrades = useLiveTrades(tradeFeed, tradeProduct);
@@ -166,91 +82,17 @@ export const DemosPage = () => {
               <NaturalZIndex className='card'/>
             </>,
             [DemoTopics.charts]: <>
-              <header className="charts-heading">
-                <h2 className="headline">{`Bitcoin, live — every ${tradeProduct} trade on Coinbase`}</h2>
-                <output className="status" data-status={liveTrades.status}>{statusCopy[liveTrades.status]}</output>
-                {absentKinds.length > 0 &&
-                  <Menu id="add-chart" label="Add a chart" toggle="+"
-                        toggleClassName="add-chart button secondary">
-                    {absentKinds.map(kind =>
-                      <button type="button" key={kind} className="item"
-                              onClick={addChart(kind)}>{chartNames[kind]}</button>)}
-                  </Menu>}
-              </header>
-              <ul className="chart-list">{chartKinds.map((kind, at) =>
-                <li key={at}
-                         className={classNames('chart-slot',
-                           aloftChart === at && 'hide',
-                           chartPushed?.[at] !== undefined && 'chart-pushed')}
-                         style={chartPushed?.[at] !== undefined
-                           ? {'--toward': chartPushed[at] === 'up' ? '1' : '-1'}
-                           : undefined}
-                         onAnimationEnd={() => setChartPushed(undefined)}
-                         aria-label={`chart ${at + 1}`}
-                         /* the card is the keyboard widget by design: arrows sort it, delete removes it,
-                             and the pointer controls are hover-only; no native element models this */
-                         // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-                         tabIndex={0}
-                         onKeyDown={chartKeys(at)}
-                         onClick={throughTheDoor(kind)}
-                         draggable={armedChart === at}
-                         onDragStart={event => {
-                           event.dataTransfer.effectAllowed = 'move';
-                           setAloftLead(event.clientY - event.currentTarget.getBoundingClientRect().top);
-                           setAloftChart(at);
-                         }}
-                         onDragOver={event => {
-                           event.preventDefault();
-                           event.dataTransfer.dropEffect = 'move';
-                           if (aloftChart === undefined) {
-                             return;
-                           }
-                           const slots = event.currentTarget.parentElement?.querySelectorAll(':scope > .chart-slot');
-                           const held = slots?.item(aloftChart);
-                           if (!(held instanceof HTMLElement)) {
-                             return;
-                           }
-                           const seat = held.getBoundingClientRect();
-                           const anchor = seat.top + aloftLead;
-                           const third = seat.height / 3;
-                           const to = strayed(event.clientY, anchor, third, false) ? aloftChart + 1
-                             : strayed(event.clientY, anchor, third, true) ? aloftChart - 1
-                               : undefined;
-                           if (to === undefined || to < 0 || to >= chartKinds.length) {
-                             return;
-                           }
-                           const next = slots?.item(to);
-                           if (!(next instanceof HTMLElement) || (next.getAnimations?.().length ?? 0) > 0) {
-                             return;
-                           }
-                           const displaced = next.getBoundingClientRect();
-                           const landingTop = to > aloftChart
-                             ? seat.top + displaced.height
-                             : seat.top - displaced.height;
-                           setAloftLead(event.clientY - landingTop);
-                           setChartPushed({[aloftChart]: to > aloftChart ? 'up' : 'down'});
-                           updateSearchParams({charts: seated(aloftChart, to).join(',')}, {replace: true});
-                           setAloftChart(to);
-                         }}
-                         onDrop={event => event.preventDefault()}
-                         onDragEnd={() => {
-                           setAloftChart(undefined);
-                           setArmedChart(undefined);
-                         }}>
-                  {grip(at)}
-                  {(() => {
-                    const Chart = chartCards[kind];
-                    return <Chart id={`chart-${at}`} trades={liveTrades.trades}
-                                  actions={dismissal(at)}/>;
-                  })()}
-                </li>)}
-              </ul>
-              <ChartsTutorial/>
+              <Workspace trades={liveTrades.trades} status={liveTrades.status} product={tradeProduct}/>
+              <Suspense fallback={<Loading label="loading the tutorial"/>}>
+                <ChartsTutorial/>
+              </Suspense>
             </>,
             [DemoTopics.tables]: <>
               <Aggregations trades={liveTrades.trades} pace={pace} origin={origin} motion={motion}/>
-              <Tutorials shown={tut} onShow={next => updateSearchParams({tut: next})}
-                         track={track} onTrack={next => updateSearchParams({track: next})}/>
+              <Suspense fallback={<Loading label="loading the tutorial"/>}>
+                <Tutorials shown={tut} onShow={next => updateSearchParams({tut: next})}
+                           track={track} onTrack={next => updateSearchParams({track: next})}/>
+              </Suspense>
             </>,
             [DemoTopics.dragAndDrop]: <>
               {(() => {
@@ -301,7 +143,9 @@ export const DemosPage = () => {
                               onPace={next => updateSearchParams({pace: next})}
                               onOrigin={next => updateSearchParams({origin: next})}
                               onMotion={next => updateSearchParams({motion: next})}/>
-                <NativeRecipe/>
+                <Suspense fallback={<Loading label="loading the tutorial"/>}>
+                  <NativeRecipe/>
+                </Suspense>
               </section>
             </>
         })[tab ?? DemoTopics.accordions]}
