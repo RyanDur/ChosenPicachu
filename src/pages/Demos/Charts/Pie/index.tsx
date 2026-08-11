@@ -28,26 +28,20 @@ export const Pie: FC<Props> = ({trades, actions}) => {
     </header>
     <section className="chart-stage">
       <svg className="split" aria-hidden="true" viewBox={`0 0 ${SIZE} ${SIZE + DEPTH}`}>
-        <defs>
-          <clipPath id="pie-first-gate">
-            <rect x={0} y={-SIZE} width={SIZE} height={2 * SIZE}/>
-          </clipPath>
-          <clipPath id="pie-second-gate">
-            <rect x={-SIZE} y={-SIZE} width={SIZE} height={2 * SIZE}/>
-          </clipPath>
-        </defs>
         {cut.map((slice, at) => {
           const {dx, dy} = slice.share === 1 ? {dx: 0, dy: 0} : explodedBy(slice, EXPLODE);
           const {opening, closing} = sweepGates(slice);
           const layer = (drop: number, dressed: string) =>
             <g className={dressed} transform={`translate(${SIZE / 2} ${SIZE / 2 + drop})`}>
               <g className="spin" style={{'--turn': `${degrees(slice.from)}deg`}}>
-                <g clipPath="url(#pie-first-gate)">
+                <svg x={0} y={-RADIUS} width={RADIUS} height={2 * RADIUS}
+                     viewBox={`0 ${-RADIUS} ${RADIUS} ${2 * RADIUS}`}>
                   <path className="half" d={HALF} style={{'--swing': `${opening}deg`}}/>
-                </g>
-                <g clipPath="url(#pie-second-gate)">
+                </svg>
+                <svg x={-RADIUS} y={-RADIUS} width={RADIUS} height={2 * RADIUS}
+                     viewBox={`${-RADIUS} ${-RADIUS} ${RADIUS} ${2 * RADIUS}`}>
                   <path className="half" d={HALF} style={{'--swing': `${closing}deg`}}/>
-                </g>
+                </svg>
               </g>
             </g>;
           return <g key={sides[at]} className={classNames('slice', sides[at])}

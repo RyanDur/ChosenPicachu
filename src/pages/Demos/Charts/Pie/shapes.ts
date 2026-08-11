@@ -49,5 +49,5 @@ export type Gates = {
 
 export const sweepGates = (slice: Slice): Gates => {
   const sweep = degrees(slice.to - slice.from);
-  return {opening: Math.min(sweep, 180) - 180, closing: sweep - 180};
+  return {opening: Math.min(sweep, 180) - 180, closing: Math.max(sweep - 180, 0)};
 };

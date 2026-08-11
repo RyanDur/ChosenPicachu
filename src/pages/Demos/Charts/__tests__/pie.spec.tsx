@@ -34,7 +34,7 @@ describe('the pie', () => {
     const [threeQuarters, quarter] = slices([3, 1]);
 
     expect(sweepGates(threeQuarters)).toEqual({opening: 0, closing: 90});
-    expect(sweepGates(quarter)).toEqual({opening: -90, closing: -90});
+    expect(sweepGates(quarter)).toEqual({opening: -90, closing: 0});
   });
 
   test('a slice explodes along its own middle', () => {
