@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {connecting} from '@ryandur/sand';
+import {streaming} from '@ryandur/sand';
 import {decodeTrade, subscribeTo, Trade} from './coinbase';
 
 export type LiveTradesState = {
@@ -17,7 +17,8 @@ const LATEST_TRADES_CAP = 1500;
 
 const opening: LiveTradesState = {status: 'connecting', trades: []};
 
-const streaming = (previous: LiveTradesState): LiveTradesState => ({...previous, status: 'streaming'});
+const live = (previous: LiveTradesState): LiveTradesState => ({...previous, status: 'streaming'});
+
 const failed = (previous: LiveTradesState): LiveTradesState => ({...previous, status: 'failed'});
 
 const appendTrade = (trade: Trade) => (previous: LiveTradesState): LiveTradesState => ({
@@ -30,21 +31,18 @@ export const useLiveTrades = (url: string, product: string): LiveTradesState => 
 
   useEffect(() => {
     setLiveTrades(opening);
-    const frame = (event: MessageEvent): void =>
-      decodeTrade(event.data).either(
+    const stream = streaming(url, () => undefined)
+      .onOpen(socket => {
+        socket.send(subscribeTo(product));
+        setLiveTrades(live);
+      })
+      .onMessage(event => decodeTrade(event.data).either(
         trade => setLiveTrades(appendTrade(trade)),
         () => undefined
-      );
-    const streamFrom = (socket: WebSocket): void => {
-      socket.addEventListener('message', frame);
-      socket.addEventListener('close', () => setLiveTrades(failed));
-      socket.send(subscribeTo(product));
-      setLiveTrades(streaming);
-    };
-    const handshake = connecting(url, () => undefined)
-      .onSuccess(streamFrom)
+      ))
+      .onClose(() => setLiveTrades(failed))
       .onFailure(() => setLiveTrades(failed));
-    return () => handshake.cancel();
+    return () => stream.close();
   }, [url, product]);
 
   return liveTrades;
