@@ -5,7 +5,7 @@ import {motionParam, originParam, paceParam} from '../Controls';
 import {TableControls} from './TableControls';
 import {Picks} from './Picks';
 import {Recipe, Track} from './Recipe';
-import {LivingTable} from './Recipe/LivingTable';
+import {LivingTableRecipe} from './Recipe/LivingTableRecipe';
 import {MenuRecipe} from './Recipe/MenuRecipe';
 import {ResizeRecipe} from './Recipe/ResizeRecipe';
 import '../Tutorials.css';
@@ -51,7 +51,7 @@ export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack}) => {
       our interpretation of that; the cards below break the interpretation into features.
       Open one to see how we built it, or to compare it with yours.
     </p>
-    <LivingTable/>
+    <LivingTableRecipe/>
     <Picks label="tutorials"
            className="tutorial-picks"
            options={[
