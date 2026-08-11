@@ -6,7 +6,9 @@ const STEP_SHARE = 2;
 type Grip = {
     fromX: number;
     pxPerShare: number;
-} | null;
+};
+
+const resting: Grip = {fromX: 0, pxPerShare: 0};
 
 type Props = {
     column: string;
@@ -16,7 +18,7 @@ type Props = {
 };
 
 export const ResizeHandle: FC<Props> = ({column, share, onAwaken, onTrade}) => {
-    const [grip, setGrip] = useState<Grip>(null);
+    const [grip, setGrip] = useState(resting);
     const [traded, setTraded] = useState(0);
 
     return <button type="button"
@@ -51,12 +53,12 @@ export const ResizeHandle: FC<Props> = ({column, share, onAwaken, onTrade}) => {
                   setTraded(0);
               }}
               onPointerMove={(event: PointerEvent<HTMLElement>) => {
-                  if (grip === null || grip.pxPerShare === 0) {
+                  if (!grip.pxPerShare) {
                       return;
                   }
                   const sought = (event.clientX - grip.fromX) / grip.pxPerShare;
                   onTrade(sought - traded);
                   setTraded(sought);
               }}
-              onPointerUp={() => setGrip(null)}/>;
+              onPointerUp={() => setGrip(resting)}/>;
 };
