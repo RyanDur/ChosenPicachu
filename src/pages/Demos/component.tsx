@@ -18,7 +18,7 @@ import {
   ListControls
 } from './DragAndDrop';
 import {DemoTopics, demoTopicParam} from './types';
-import {NaturalZIndex} from './ZIndexDemo';
+import {NaturalZIndex, TopLayer} from './ZIndexDemo';
 import {motionParam, originParam, paceParam} from './Controls';
 import {Aggregations, trackParam, tutorialParam} from './Tables';
 import {Loading} from '@components/Loading';
@@ -35,6 +35,7 @@ const paragraphs = (count: number) =>
 const Tutorials = lazy(() => import('./Tables/Tutorials').then(module => ({default: module.Tutorials})));
 const NativeRecipe = lazy(() => import('./DragAndDrop/NativeRecipe').then(module => ({default: module.NativeRecipe})));
 const ChartsTutorial = lazy(() => import('./Charts/Tutorial').then(module => ({default: module.ChartsTutorial})));
+const TopLayerTutorial = lazy(() => import('./ZIndexDemo/Tutorial').then(module => ({default: module.TopLayerTutorial})));
 
 export const DemosPage = () => {
   const {tab, pace = 'eager', origin = 'hide', motion = 'animated', tut = 'sort', track = 'pointer', updateSearchParams} =
@@ -80,6 +81,10 @@ export const DemosPage = () => {
             [DemoTopics.zIndex]: <>
               <article>Z-Index Demo.</article>
               <NaturalZIndex className='card'/>
+              <TopLayer className='card'/>
+              <Suspense fallback={<Loading label="loading the tutorial"/>}>
+                <TopLayerTutorial/>
+              </Suspense>
             </>,
             [DemoTopics.charts]: <>
               <Workspace trades={liveTrades.trades} status={liveTrades.status} product={tradeProduct}/>

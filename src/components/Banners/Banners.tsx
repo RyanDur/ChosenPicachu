@@ -23,7 +23,7 @@ export const Banners: FC = () => {
       {banners.map(banner =>
         <li key={banner.id} className="trouble">
           {banner.message}
-          <button type="button" className="dismiss" aria-label="dismiss"
+          <button type="button" className="dismiss" aria-label={`dismiss ${banner.message}`}
                   onClick={() => lower(banner.id)}>×</button>
         </li>)}
     </ul>

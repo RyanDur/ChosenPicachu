@@ -42,7 +42,7 @@ describe('the banners', () => {
     expect(within(alert).getByText('first trouble')).toBeInTheDocument();
     expect(within(alert).getByText('second trouble')).toBeInTheDocument();
 
-    await userEvent.click(within(alert).getAllByRole('button', {name: 'dismiss', hidden: true})[0]);
+    await userEvent.click(within(alert).getByRole('button', {name: 'dismiss first trouble', hidden: true}));
     expect(within(alert).queryByText('first trouble')).not.toBeInTheDocument();
     expect(within(alert).getByText('second trouble')).toBeInTheDocument();
   });
@@ -56,7 +56,7 @@ describe('the banners', () => {
     const alert = screen.getByRole('alert', {hidden: true});
     expect(within(alert).getAllByText('the feed is down')).toHaveLength(1);
 
-    await userEvent.click(within(alert).getByRole('button', {name: 'dismiss', hidden: true}));
+    await userEvent.click(within(alert).getByRole('button', {name: 'dismiss the feed is down', hidden: true}));
     await userEvent.click(trouble);
     expect(within(alert).getAllByText('the feed is down')).toHaveLength(1);
   });
