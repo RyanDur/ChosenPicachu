@@ -1,0 +1,36 @@
+.banners {
+  margin: var(--base-x-2) auto 0;
+  padding: 0;
+  border: none;
+  background: none;
+
+  .troubles {
+    display: grid;
+    gap: var(--base);
+  }
+
+  .trouble {
+    display: flex;
+    align-items: center;
+    gap: var(--base-x-2);
+    padding: var(--base) var(--base-x-2);
+    background: var(--paper);
+    color: var(--internationl-orange-engineering);
+    border: var(--hairline) solid var(--internationl-orange-engineering);
+    border-radius: var(--radius-card);
+    box-shadow: var(--lift-box-shadow);
+  }
+
+  .dismiss {
+    border: none;
+    background: none;
+    padding: 0;
+    min-width: var(--base-x-3);
+    min-height: var(--base-x-3);
+    display: inline-grid;
+    place-items: center;
+    cursor: pointer;
+    font-size: var(--base-x-2_5);
+    color: var(--charcoal);
+  }
+}

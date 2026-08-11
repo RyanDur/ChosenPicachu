@@ -1,16 +1,20 @@
 import {createEvent, fireEvent, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {renderWithMemoryRouter} from '@test-support';
+import {ReactElement} from 'react';
 import {EnvProvider} from '@components/Env';
 import {DemosPage} from '@pages/Demos/component';
 import {ChartPage} from '@pages/Demos/Charts/ChartPage';
 import {Paths} from '@pages/Paths';
 
+const dressed = (feedUrl: string, page: ReactElement) =>
+  <EnvProvider env={{tradeFeed: feedUrl, tradeHistory: 'http://127.0.0.1:9'}}>
+    {page}
+  </EnvProvider>;
+
 const routes = (feedUrl: string) => ({children: [
-  {path: Paths.demos,
-    element: <EnvProvider env={{tradeFeed: feedUrl, tradeHistory: 'http://127.0.0.1:9'}}><DemosPage/></EnvProvider>},
-  {path: `${Paths.demos}charts/:kind/`,
-    element: <EnvProvider env={{tradeFeed: feedUrl, tradeHistory: 'http://127.0.0.1:9'}}><ChartPage/></EnvProvider>}
+  {path: Paths.demos, element: dressed(feedUrl, <DemosPage/>)},
+  {path: `${Paths.demos}charts/:kind/`, element: dressed(feedUrl, <ChartPage/>)}
 ]});
 
 export const renderDemos = (feedUrl: string, search = '?tab=charts') =>

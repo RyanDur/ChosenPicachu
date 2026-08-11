@@ -1,4 +1,5 @@
 import {classNames} from '@components/class-names';
+import {BannerProvider, Banners} from '@components/Banners';
 import {Navigate, Outlet, useMatches} from 'react-router';
 import {Fragment} from 'react';
 import {SideNav} from '@pages/BasePage/SideNav';
@@ -15,19 +16,22 @@ export const Shell = () => {
     .reduce<Regions>((parent, child) => ({...parent, ...child}), {header: NoHeader});
   const {header: HeaderRegion, aside: AsideRegion, footer: FooterRegion, provider: Provider = Fragment, mainClassName} = regions;
 
-  return <Provider>
-    <HeaderRegion/>
-    <main className={classNames('app-main', mainClassName)}>
-      <Outlet/>
-    </main>
-    {AsideRegion !== undefined && <article id="filter">
-      <AsideRegion/>
-    </article>}
-    {FooterRegion !== undefined && <footer id="app-footer" className="stick-to-bottom">
-      <FooterRegion/>
-    </footer>}
-    <SideNav/>
-  </Provider>;
+  return <BannerProvider>
+    <Provider>
+      <HeaderRegion/>
+      <main className={classNames('app-main', mainClassName)}>
+        <Outlet/>
+      </main>
+      {AsideRegion !== undefined && <article id="filter">
+        <AsideRegion/>
+      </article>}
+      {FooterRegion !== undefined && <footer id="app-footer" className="stick-to-bottom">
+        <FooterRegion/>
+      </footer>}
+      <SideNav/>
+    </Provider>
+    <Banners/>
+  </BannerProvider>;
 };
 
 export const router = {

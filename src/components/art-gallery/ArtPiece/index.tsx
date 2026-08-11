@@ -6,12 +6,15 @@ import {Image} from '@components/art-gallery/Image';
 import {useSearchParamsObject} from '@components/search-params';
 import {Source, sourceParam} from '@components/art-gallery/museums/types/resource';
 import {has, not} from '@ryandur/sand';
+import {useBanners} from '@components/Banners';
+import {troubleWith} from '@transport/trouble';
 import {art} from '@components/art-gallery/museums';
 import noImage from '../../../assets/icons/no-image.png';
 import './Piece.css';
 
 export const ArtPiece = () => {
     const {piece, updatePiece, reset} = useArtPiece();
+    const {raise} = useBanners();
     const {tab} = useSearchParamsObject({tab: sourceParam});
     const {id} = useParams<{ id: string }>();
     const [errored, hasErrored] = useState(false);
@@ -22,12 +25,15 @@ export const ArtPiece = () => {
         const {cancel} = art.get({id, source: tab ?? Source.AIC})
             .onPending(isLoading)
             .onSuccess(updatePiece)
-            .onFailure(() => hasErrored(true));
+            .onFailure(error => {
+                hasErrored(true);
+                raise(troubleWith('the museum')(error));
+            });
         return () => {
             cancel();
             reset();
         };
-    }, [id, updatePiece, tab, reset]);
+    }, [id, updatePiece, tab, reset, raise]);
 
     return <>
         {loading && <Loading label="loading piece"/>}

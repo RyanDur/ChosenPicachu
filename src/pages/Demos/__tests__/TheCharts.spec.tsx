@@ -425,6 +425,8 @@ describe('the demos page', () => {
 
       await waitFor(() =>
         expect(screen.getByRole('status')).toHaveTextContent('live feed unavailable'));
+      expect(within(screen.getByRole('alert', {hidden: true}))
+        .getByText('the live feed refused the handshake')).toBeInTheDocument();
     });
 
     test('the user sees the price trend drawn from every recent minute', async () => {
@@ -511,6 +513,8 @@ describe('the demos page', () => {
       await waitFor(() =>
         expect(screen.getByRole('status')).toHaveTextContent('live feed unavailable'));
       expect(within(priceCard()).getByText('$50,001.00')).toBeVisible();
+      expect(within(screen.getByRole('alert', {hidden: true}))
+        .getByText('the live feed hung up mid-stream')).toBeInTheDocument();
     });
 
     test('a trade whose price is not a number never reaches the user', async () => {
