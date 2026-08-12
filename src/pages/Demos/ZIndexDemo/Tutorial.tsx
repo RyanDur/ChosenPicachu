@@ -221,10 +221,12 @@ export const TopLayerTutorial: FC = () =>
       </blockquote>
       <figcaption className="attribution">a user</figcaption>
     </figure>
-    <Stories>
-      {topStory}
-      {raiseStory}
-      {onceStory}
-      {wiredStory}
-    </Stories>
+    <section aria-label="build the banners yourself" className="build-steps">
+      <Stories>
+        {topStory}
+        {raiseStory}
+        {onceStory}
+        {wiredStory}
+      </Stories>
+    </section>
   </section>;

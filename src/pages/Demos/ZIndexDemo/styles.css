@@ -36,3 +36,23 @@
         }
     }
 }
+
+.top-layer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--base-x-1_25);
+    padding-block: var(--base-x-2_5);
+
+    .pitch {
+        max-inline-size: 60ch;
+        text-align: center;
+    }
+
+    .dials {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: var(--base-x-2);
+    }
+}
