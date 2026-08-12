@@ -49,10 +49,4 @@
         text-align: center;
     }
 
-    .dials {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: var(--base-x-2);
-    }
 }
