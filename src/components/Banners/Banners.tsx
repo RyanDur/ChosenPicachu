@@ -27,6 +27,7 @@ export const Banners: FC = () => {
     const sideways = stack === 'left' || stack === 'right';
     const settler = new ResizeObserver(entries => entries.forEach(entry => {
       if (entry.target instanceof HTMLElement) {
+        entry.target.style.blockSize = '';
         const borders = entry.target.offsetHeight - entry.target.clientHeight;
         entry.target.style.blockSize = `${entry.target.scrollHeight + borders}px`;
       }
