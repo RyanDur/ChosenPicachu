@@ -38,10 +38,8 @@ export const useLiveTrades = (url: string, product: string): LiveTradesState => 
         socket.send(subscribeTo(product));
         setLiveTrades(live);
       })
-      .onMessage(event => decodeTrade(event.data).either(
-        trade => setLiveTrades(appendTrade(trade)),
-        () => undefined
-      ))
+      .onMessage(event => decodeTrade(event.data)
+        .map(trade => setLiveTrades(appendTrade(trade))))
       .onClose(() => {
         setLiveTrades(failed);
         raise('the live feed hung up mid-stream');
