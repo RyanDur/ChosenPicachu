@@ -1,16 +1,14 @@
 import {fireEvent, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import {seed} from '@ngneat/falso';
 import {renderWithMemoryRouter} from '@test-support';
 import {Paths} from '@pages/Paths';
 import {Demos} from '@pages/Demos';
 
-const standingIn = (alert: HTMLElement, message: string): HTMLElement => {
-  const item = within(alert).getByText(message).closest('li');
-  if (!item) {
-    throw new Error(`no standing trouble says "${message}"`);
-  }
-  return item;
-};
+beforeEach(() => seed('top-layer'));
+
+const troublesIn = (alert: HTMLElement): HTMLElement[] =>
+  within(alert).queryAllByRole('button', {name: /^dismiss /, hidden: true});
 
 const openZIndexTab = async () => {
   renderWithMemoryRouter(Demos, {path: Paths.demos});
@@ -21,30 +19,34 @@ const openZIndexTab = async () => {
 describe('the top layer', () => {
   test('the user raises a banner from the demo, and dismisses it', async () => {
     await openZIndexTab();
+    const alert = screen.getByRole('alert', {hidden: true});
+    const alreadyStanding = troublesIn(alert).length;
 
     await userEvent.click(await screen.findByRole('button', {name: 'raise a banner'}));
 
-    const alert = screen.getByRole('alert', {hidden: true});
-    expect(within(alert).getByText('banner 1 rides the top layer, above every z-index on the page'))
-      .toBeInTheDocument();
-    await userEvent.click(within(alert).getByRole('button',
-      {name: 'dismiss banner 1 rides the top layer, above every z-index on the page', hidden: true}));
-    fireEvent.transitionEnd(standingIn(alert, 'banner 1 rides the top layer, above every z-index on the page'),
-      {propertyName: 'grid-template-rows'});
-    expect(within(alert).queryByText('banner 1 rides the top layer, above every z-index on the page'))
-      .not.toBeInTheDocument();
+    const raised = troublesIn(alert);
+    expect(raised).toHaveLength(alreadyStanding + 1);
+    const newest = raised[raised.length - 1];
+    const item = newest.closest('li');
+    if (!item) {
+      throw new Error('the raised trouble stands in no list item');
+    }
+    await userEvent.click(newest);
+    fireEvent.transitionEnd(item, {propertyName: 'grid-template-rows'});
+    expect(troublesIn(alert)).toHaveLength(alreadyStanding);
   });
 
   test('every press stacks another banner', async () => {
     await openZIndexTab();
+    const alert = screen.getByRole('alert', {hidden: true});
+    const alreadyStanding = troublesIn(alert).length;
     const raise = await screen.findByRole('button', {name: 'raise a banner'});
 
     await userEvent.click(raise);
     await userEvent.click(raise);
     await userEvent.click(raise);
 
-    const alert = screen.getByRole('alert', {hidden: true});
-    expect(within(alert).getAllByText(/rides the top layer/)).toHaveLength(3);
+    expect(troublesIn(alert)).toHaveLength(alreadyStanding + 3);
   });
 
   test('the tutorial tells the story of the news', async () => {
