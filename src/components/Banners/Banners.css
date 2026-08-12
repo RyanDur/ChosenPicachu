@@ -26,6 +26,10 @@
   &:where(.stack-left, .stack-right):where(.middle) .troubles { align-items: center; }
   &:where(.stack-left, .stack-right):where(.bottom) .troubles { align-items: flex-end; }
 
+  &:where(.stack-down, .stack-up):where(.left) .troubles { align-items: flex-start; }
+  &:where(.stack-down, .stack-up):where(.center) .troubles { align-items: center; }
+  &:where(.stack-down, .stack-up):where(.right) .troubles { align-items: flex-end; }
+
   &.stack-up .troubles { flex-direction: column-reverse; }
   &.stack-right .troubles { flex-direction: row; }
   &.stack-left .troubles { flex-direction: row-reverse; }
