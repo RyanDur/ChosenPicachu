@@ -57,25 +57,28 @@ describe('the top layer', () => {
     expect(screen.getByText('Any component can raise its trouble')).toBeVisible();
     expect(screen.getByText('The same trouble stands only once')).toBeVisible();
     expect(screen.getByText('The feeds raise their own news')).toBeVisible();
+    expect(screen.getByText('The news travels, and the pile makes room')).toBeVisible();
   });
 
-  test('the dials move the panel and turn its entrance', async () => {
+  test('the dials move the panel, turn its entrance, and explain themselves', async () => {
     await openZIndexTab();
-    await screen.findByRole('button', {name: 'raise a banner'});
+    const controls = await screen.findByRole('region', {name: 'banner controls'});
 
-    await userEvent.click(within(screen.getByRole('group', {name: 'side'})).getByRole('radio', {name: 'Bottom'}));
-    await userEvent.click(within(screen.getByRole('group', {name: 'align'})).getByRole('radio', {name: 'Right'}));
-    await userEvent.click(within(screen.getByRole('group', {name: 'entrance'})).getByRole('radio', {name: 'Below'}));
-    await userEvent.click(within(screen.getByRole('group', {name: 'stack'})).getByRole('radio', {name: 'Left'}));
+    await userEvent.click(within(within(controls).getByRole('group', {name: 'side'})).getByRole('radio', {name: 'Bottom'}));
+    await userEvent.click(within(within(controls).getByRole('group', {name: 'align'})).getByRole('radio', {name: 'Right'}));
+    await userEvent.click(within(within(controls).getByRole('group', {name: 'entrance'})).getByRole('radio', {name: 'Below'}));
+    await userEvent.click(within(within(controls).getByRole('group', {name: 'stack'})).getByRole('radio', {name: 'Left'}));
 
     const alert = screen.getByRole('alert', {hidden: true});
     expect(alert).toHaveClass('bottom', 'right', 'from-below', 'stack-left');
+    expect(within(controls).getByText('The news rests along the bottom edge and waits to be noticed.')).toBeVisible();
+    expect(within(controls).getByText('?side=bottom&align=right&enter=below&stack=left')).toBeVisible();
   });
 
   test('every wrong-way snippet names itself', async () => {
     await openZIndexTab();
 
     await screen.findByText('let’s build this feature');
-    expect(screen.getAllByText('the wrong way')).toHaveLength(4);
+    expect(screen.getAllByText('the wrong way')).toHaveLength(7);
   });
 });
