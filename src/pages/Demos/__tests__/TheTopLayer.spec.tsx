@@ -74,10 +74,23 @@ describe('the top layer', () => {
     expect(within(controls).getByText('?side=bottom&align=right&enter=below&stack=left')).toBeVisible();
   });
 
+  test('the tutorial follows the dials', async () => {
+    await openZIndexTab();
+    const controls = await screen.findByRole('region', {name: 'banner controls'});
+
+    expect(screen.getAllByText('the wrong way')).toHaveLength(4);
+    expect(screen.getByText(/the slot is a row/)).toBeInTheDocument();
+
+    await userEvent.click(within(within(controls).getByRole('group', {name: 'stack'})).getByRole('radio', {name: 'Left'}));
+
+    expect(screen.getByText(/the slot is a column/)).toBeInTheDocument();
+    expect(screen.getAllByText('the wrong way')).toHaveLength(5);
+  });
+
   test('every wrong-way snippet names itself', async () => {
     await openZIndexTab();
 
     await screen.findByText('let’s build this feature');
-    expect(screen.getAllByText('the wrong way')).toHaveLength(5);
+    expect(screen.getAllByText('the wrong way')).toHaveLength(4);
   });
 });

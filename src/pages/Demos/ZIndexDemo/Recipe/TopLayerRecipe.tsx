@@ -1,4 +1,6 @@
 import {FC} from 'react';
+import {useSearchParamsObject} from '@components/search-params';
+import {Align, Side, alignParam, sideParam} from '@components/Banners/params';
 import {Codes, Mdn, Says, Snippet, Step, Steps, Story, Words, Tell, aside, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
 import {AlignDial, SideDial} from '../../Controls';
@@ -8,8 +10,22 @@ import '../../Recipe/Recipe.css';
 
 const gap = plain(' ');
 
-export const TopLayerRecipe: FC = () =>
-  <Story param="news" id="top"
+const sideFact: Record<Side, string> = {
+  top: 'margin-block turns its first auto into a gap, and the top edge is pinned.',
+  middle: 'margin-block stays auto both ways, and the platform centers it.',
+  bottom: 'margin-block turns its second auto into a gap, and the bottom edge is pinned.'
+};
+
+const alignFact: Record<Align, string> = {
+  left: 'margin-inline turns its first auto into a gap, and the panel holds left.',
+  center: 'margin-inline stays auto both ways, and the panel centers.',
+  right: 'margin-inline turns its second auto into a gap, and the panel holds right.'
+};
+
+export const TopLayerRecipe: FC = () => {
+  const {side = 'top', align = 'center'} = useSearchParamsObject({side: sideParam, align: alignParam});
+
+  return <Story param="news" id="top"
          can="The user sees the news above everything"
          soThat="no stacking context can bury the news">
     <Tell>We could give the banner a huge z-index, but z-index only ranks siblings inside
@@ -55,18 +71,19 @@ export const TopLayerRecipe: FC = () =>
             dial={<><SideDial name="station-side"/><AlignDial name="station-align"/></>}>
         <Words want="Nine stations, and no arithmetic: the platform already centers a popover.">
           <Says>The UA stylesheet gives every popover inset 0 and margin auto, which is
-            centering. Each station just turns one auto margin into a gap, so top
-            center costs one line and so does every other station.</Says>
+            centering; a station just turns auto margins into gaps. At this
+            one, {sideFact[side]} And {alignFact[align]}</Says>
         </Words>
         <Codes>
           <Snippet label="CSS" lines={[
-            ...span(bannersCss, '&.top {', '&.right { margin-inline: auto var(--base-x-2); }')
+            ...unit(bannersCss, `&.${side} {`), gap,
+            ...unit(bannersCss, `&.${align} {`)
           ]}/>
         </Codes>
       </Step>
       <Step title="Dress the news">
         <Words want="A banner is read at a glance, in the corner of an eye already busy with something else.">
-          <Says>The card is the news element inside each trouble, dressed in the house
+          <Says>The card is the news element inside each banner, dressed in the house
             style, and the dismiss button gives the whole target height so a hurried
             pointer still lands.</Says>
         </Words>
@@ -79,3 +96,4 @@ export const TopLayerRecipe: FC = () =>
       </Step>
     </Steps>
   </Story>;
+};
