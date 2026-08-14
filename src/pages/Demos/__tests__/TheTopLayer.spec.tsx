@@ -54,10 +54,9 @@ describe('the top layer', () => {
 
     expect(await screen.findByText('let’s build this feature')).toBeVisible();
     expect(screen.getByText('The user sees the news above everything')).toBeVisible();
-    expect(screen.getByText('Any component can raise a banner')).toBeVisible();
-    expect(screen.getByText('The same message stands only once')).toBeVisible();
-    expect(screen.getByText('The news travels, and the pile makes room')).toBeVisible();
-    expect(screen.queryByText('The feeds raise their own news')).not.toBeInTheDocument();
+    expect(screen.getByText('The user can have multiple banners')).toBeVisible();
+    expect(screen.queryByText('Any component can raise a banner')).not.toBeInTheDocument();
+    expect(screen.queryByText('The news travels, and the pile makes room')).not.toBeInTheDocument();
   });
 
   test('the dials move the panel, turn its entrance, and explain themselves', async () => {
@@ -79,6 +78,6 @@ describe('the top layer', () => {
     await openZIndexTab();
 
     await screen.findByText('let’s build this feature');
-    expect(screen.getAllByText('the wrong way')).toHaveLength(6);
+    expect(screen.getAllByText('the wrong way')).toHaveLength(5);
   });
 });
