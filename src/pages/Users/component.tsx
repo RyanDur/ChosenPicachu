@@ -48,7 +48,7 @@ export const UsersPage: FC = () => {
       </section>
 
       <section id="user-candidates" className="user-candidates users card">
-        <h2 className="title heading">User Candidates</h2>
+        <h2 className="roster-title title bold">User Candidates</h2>
         {mode === 'view' &&
             <Link to={Paths.users} id="add-new-user" className="button primary">Add New User</Link>}
         <EagerHideAnimatedTable

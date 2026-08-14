@@ -21,7 +21,7 @@
       1fr;
         grid-template-areas: ". title   search";
 
-        .title {
+        .app-title {
             grid-area: title;
             align-self: center;
         }
@@ -88,7 +88,7 @@
             grid-template-columns: var(--base-x-16_5) 1fr 1fr;
             grid-template-areas: ". title search";
 
-            .title {
+            .app-title {
                 grid-area: title;
                 align-self: center;
             }

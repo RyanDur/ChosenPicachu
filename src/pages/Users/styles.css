@@ -14,7 +14,7 @@
   &#user-candidates {
     overflow: auto;
 
-    .title {
+    .roster-title {
       position: sticky;
       left: 0;
       right: 0;

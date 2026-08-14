@@ -7,7 +7,7 @@
     border: 0;
     border-radius: 0;
 
-    & + .title {
+    & + .control-label {
       width: 100%;
       background-color: var(--paper);
       display: block;
@@ -17,8 +17,8 @@
       padding-left: var(--base-x-2);
     }
 
-    &:hover + .title,
-    &:focus + .title {
+    &:hover + .control-label,
+    &:focus + .control-label {
       background-color: var(--mint);
     }
   }

@@ -16,8 +16,8 @@
     grid-area: title;
   }
 
-  .heading,
-  .subheading {
+  .title,
+  .sub-title {
     margin-block: 0;
   }
 

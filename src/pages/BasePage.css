@@ -7,7 +7,7 @@
   #app-header {
     background-color: var(--paper);
 
-    .title {
+    .app-title {
       width: 100%;
       font-size: var(--base-x-4);
       font-weight: bold;
@@ -50,7 +50,7 @@
         padding: 0;
       }
 
-      .heading {
+      .title {
         cursor: pointer;
       }
 
