@@ -34,7 +34,7 @@ export const ExclusiveAccordion: FC<PropsWithClassName & ContentProps> = ({
   <ul className="accordion">
     <li className="fold close">
       <input id="close-radio" defaultChecked={true} className="info-toggle off-screen" type="radio" name="group"/>
-      <label className="info-label center" htmlFor="close-radio">Close</label>
+      <label className="info-label" htmlFor="close-radio">Close</label>
     </li>
     {content.map(({value, key}, id) =>
       <li className="fold" key={key}>

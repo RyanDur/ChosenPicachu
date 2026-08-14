@@ -103,11 +103,15 @@ describe('the banners', () => {
     expect(screen.getByRole('alert', {hidden: true}).querySelectorAll('li')).toHaveLength(0);
   });
 
-  test('the panel stands where the dials say, facing its entrance', () => {
+  test('the panel stands where the dials say, facing its entrance', async () => {
     renderWithTrouble('placed');
+
+    await userEvent.click(screen.getByRole('button', {name: 'trouble'}));
 
     const alert = screen.getByRole('alert', {hidden: true});
     expect(alert).toHaveClass('top', 'center', 'from-above', 'stack-down');
+    expect(within(alert).getByText('placed'))
+      .toHaveClass('news', 'paper', 'rounded-corners', 'drop-shadow', 'hairline-outline');
   });
 
   test('without a provider, raising degrades quietly', async () => {
