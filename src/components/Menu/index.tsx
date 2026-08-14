@@ -17,7 +17,7 @@ export const Menu: FC<Props> = ({id, label, toggle, toggleClassName, children}) 
             onPointerDown={event => event.stopPropagation()}
             onMouseDown={event => event.stopPropagation()}
             aria-label={label}>{toggle}</button>
-    <menu id={id} popover="auto" className="menu rounded-corners"
+    <menu id={id} popover="auto" className="menu paper rounded-corners drop-shadow"
           onPointerDown={event => event.stopPropagation()}
           onMouseDown={event => event.stopPropagation()}
           onClick={event => event.currentTarget.hidePopover?.()}>
