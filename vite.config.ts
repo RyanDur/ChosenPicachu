@@ -16,7 +16,9 @@ const rawCss = (): Plugin => ({
   },
   load(id) {
     if (id.startsWith('\0rawcss')) {
-      return `export default ${JSON.stringify(readFileSync(id.slice('\0rawcss'.length, -'.js'.length), 'utf8'))};`;
+      const path = id.slice('\0rawcss'.length, -'.js'.length);
+      this.addWatchFile(path);
+      return `export default ${JSON.stringify(readFileSync(path, 'utf8'))};`;
     }
   }
 });
