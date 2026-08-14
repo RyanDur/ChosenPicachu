@@ -1,5 +1,5 @@
 #app-header {
-    .title {
+    .app-title {
         text-transform: capitalize;
     }
 }
@@ -18,7 +18,7 @@
         grid-template-areas:
           "title title";
 
-        .title {
+        .list-title {
             grid-area: title;
         }
 

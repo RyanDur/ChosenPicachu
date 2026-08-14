@@ -6,26 +6,32 @@
   --text-headline: var(--base-x-3);
 }
 
-/* text styles — what a run of text is */
-.heading {
+/* voices — what a run of text is; size and leading travel together */
+.title {
   font-size: var(--text-headline);
-  font-weight: bold;
+  line-height: 1.2;
   margin: var(--base-x-2_5) 0;
 }
 
-.subheading {
+.sub-title {
   font-size: var(--text-title);
-  font-weight: bold;
+  line-height: 1.25;
   margin: var(--base-x-2_25) 0;
+}
+
+.paragraph {
+  font-size: var(--text-body);
+  line-height: 1.55;
 }
 
 .caption {
   font-size: var(--text-caption);
+  line-height: 1.4;
   color: var(--charcoal);
   opacity: 0.7;
 }
 
-/* modifiers — compose on the same element or on nested runs */
+/* modifiers — compose on the voice */
 .bold {
   font-weight: 600;
 }

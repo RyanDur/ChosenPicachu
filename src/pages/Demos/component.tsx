@@ -61,7 +61,7 @@ export const DemosPage = () => {
         {({
             [DemoTopics.accordions]:
               <ul className='accordions'>
-                <li className='title'>Different styles of Accordions.</li>
+                <li className='list-title'>Different styles of Accordions.</li>
                 <li>
                   <InclusiveAccordion className='card' content={accordionContents[0]}/>
                 </li>

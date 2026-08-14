@@ -39,7 +39,7 @@
       filter: drop-shadow(0 24px 48px var(--shadow)) drop-shadow(0 18px 20px var(--dark-shadow));
     }
 
-    .title {
+    .placard {
       width: fit-content;
       margin: var(--base-x-2) auto 0;
       padding: 0 var(--base-x-2);
