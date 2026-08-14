@@ -3,6 +3,7 @@ import {classNames} from '@components/class-names';
 import {FancyInput} from '../FancyInput';
 import {Consumer} from '@ryandur/sand';
 import './FancySelect.css';
+import '../fancy.css';
 
 type FancySelectProps = {
     selectId: string;
@@ -43,5 +44,5 @@ export const FancySelect: FC<PropsWithChildren<FancySelectProps>> = (
                 ...Array.from(optionValues).map(state => <option key={state}>{state}</option>)
             ]}
         </select>
-        <label className={classNames('fancy-title', selectClassName)} htmlFor={selectId}>{children}</label>
+        <label className={classNames('fancy-title', 'bold', selectClassName)} htmlFor={selectId}>{children}</label>
     </article>;

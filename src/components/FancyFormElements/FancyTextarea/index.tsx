@@ -1,6 +1,7 @@
 import {classNames} from '@components/class-names';
 import {FC, FormEvent, useState} from 'react';
 import {Consumer} from '@ryandur/sand';
+import '../fancy.css';
 
 type FancyTextareaProps = {
     onChange: Consumer<FormEvent<HTMLTextAreaElement>>;
@@ -23,7 +24,7 @@ export const FancyTextarea: FC<FancyTextareaProps> = (
         value && 'not-empty',
         readOnly && 'read-only'
     )}>
-        <label id="details-label" className="fancy-title" htmlFor="details">Details</label>
+        <label id="details-label" className="fancy-title bold" htmlFor="details">Details</label>
         <textarea name="details" className="fancy-text" id="details"
                   onFocus={() => updateDetailsFocus(true)}
                   onBlur={() => updateDetailsFocus(false)}

@@ -1,0 +1,23 @@
+/* the field dress — how a form field presents, wherever a form appears */
+.fancy {
+  border-radius: var(--radius-soft);
+}
+
+.fancy-text {
+  border: var(--hairline) solid var(--focus-blue);
+  box-shadow: var(--light-box-shadow);
+  border-radius: var(--radius-soft);
+
+  &:focus,
+  &:hover {
+    box-shadow: var(--drop-shadow);
+  }
+
+  &:disabled,
+  &:read-only:not(.fancy-select-box) {
+    border: none;
+    border-bottom: var(--hairline) solid var(--focus-blue);
+    box-shadow: none;
+    border-radius: 0;
+  }
+}
