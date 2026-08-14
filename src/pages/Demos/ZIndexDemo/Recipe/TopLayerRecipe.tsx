@@ -76,8 +76,7 @@ export const TopLayerRecipe: FC = () => {
         </Words>
         <Codes>
           <Snippet label="CSS" lines={[
-            ...unit(bannersCss, `&.${side} {`), gap,
-            ...unit(bannersCss, `&.${align} {`)
+            ...span(bannersCss, '&.top {', '&.right { margin-inline: auto var(--base-x-2); }')
           ]}/>
         </Codes>
       </Step>
