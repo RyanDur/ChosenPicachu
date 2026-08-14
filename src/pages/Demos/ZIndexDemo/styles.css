@@ -45,7 +45,6 @@
     padding-block: var(--base-x-2_5);
 
     .pitch {
-        max-inline-size: 60ch;
         text-align: center;
     }
 
