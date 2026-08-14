@@ -15,9 +15,6 @@
       margin: 0;
       padding-left: var(--base-x-2);
       border-left: var(--hairline-x-3) solid var(--silk);
-      font-style: italic;
-      font-size: var(--text-body);
-      line-height: 1.6;
       text-wrap: pretty;
     }
 
@@ -29,8 +26,6 @@
 
   .overview {
     margin: 0;
-    font-size: var(--text-body);
-    line-height: 1.6;
     text-wrap: pretty;
   }
 
