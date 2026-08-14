@@ -115,11 +115,12 @@ export const MultipleRecipe: FC = () => {
       </Step>
       <Step title="Arrive from beyond the edge" dial={<EntranceDial name="journey-entrance"/>}>
         <Words want="Seen from the middle of the screen, a slide from beside yourself reads as a pop. The flight has to start where the screen ends.">
-          <Says>{enterFact[enter]} written as a literal because Chrome resolves
-            no var() inside a starting style; hand it a variable and the start computes
-            to nothing, so the banner materializes in place. The flight is only visible
-            at all because the panel overrides the UA popover stylesheet, whose overflow
-            would clip the whole journey to the panel’s own box.</Says>
+          <Says>{enterFact[enter]} and the four edges are written out as four literal
+            rules because Chrome resolves no var() inside a starting style; hand it a
+            variable and the start computes to nothing, so the banner materializes in
+            place. The flight is only visible at all because the panel overrides the UA
+            popover stylesheet, whose overflow would clip the whole journey to the
+            panel’s own box.</Says>
         </Words>
         <Codes>
           <Snippet label="CSS" foil lines={[
@@ -131,7 +132,10 @@ export const MultipleRecipe: FC = () => {
             aside('/* the var never resolves inside a starting style; nothing moves */')
           ]}/>
           <Snippet label="CSS" lines={[
-            ...unit(bannersCss, `&.from-${enter} .trouble {`), gap,
+            ...unit(bannersCss, '&.from-above .trouble {'), gap,
+            ...unit(bannersCss, '&.from-below .trouble {'), gap,
+            ...unit(bannersCss, '&.from-left .trouble {'), gap,
+            ...unit(bannersCss, '&.from-right .trouble {'), gap,
             ...span(bannersCss, '/* the UA popover stylesheet', 'overflow: visible;')
           ]}/>
         </Codes>
