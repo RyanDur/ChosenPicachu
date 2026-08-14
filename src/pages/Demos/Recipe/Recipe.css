@@ -8,8 +8,7 @@
 
   .lead {
     margin: 0;
-    font-size: var(--text-body);
-    line-height: 1.6;
+
     text-wrap: pretty;
   }
 
@@ -92,17 +91,13 @@
 
   .step-want {
     margin: 0;
-    font-size: var(--text-body);
-    font-style: italic;
-    line-height: 1.55;
+
     color: var(--charcoal);
     text-wrap: pretty;
   }
 
   .step-says {
     margin: 0;
-    font-size: var(--text-body);
-    line-height: 1.55;
     text-wrap: pretty;
   }
 
@@ -137,8 +132,6 @@
 
   .arc > .approach {
     margin: var(--base-x-2) 0 0;
-    font-size: var(--text-body);
-    line-height: 1.55;
     text-wrap: pretty;
   }
 

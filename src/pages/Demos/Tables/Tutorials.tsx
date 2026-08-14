@@ -27,7 +27,7 @@ export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack}) => {
     useSearchParamsObject({pace: paceParam, origin: originParam, motion: motionParam});
   return <section className="tutorials">
     <h2 className="tutorials-title">let’s build this feature</h2>
-    <p className="overview">
+    <p className="overview paragraph">
       We are going to build this site’s live trading table, feature by feature. Here is how to
       use this page: every card below is a feature, told as a <a className="signpost"
                                                                  href="https://initialcapacity.io/insights/user-story"
@@ -41,14 +41,14 @@ export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack}) => {
       links go to MDN if you want more.
     </p>
     <figure className="feedback">
-      <blockquote className="quote">
+      <blockquote className="quote paragraph italic">
         I watch the market all day. I need the numbers to keep themselves current, and I need
         them arranged the way I think: what I am comparing side by side, what matters most on
         top. When I sort something, it should just happen.
       </blockquote>
       <figcaption className="attribution">a trader</figcaption>
     </figure>
-    <p className="overview">
+    <p className="overview paragraph">
       If you want the exercise, stop here and build the story yourself first. The table is
       our interpretation of that; the cards below break the interpretation into features.
       Open one to see how we built it, or to compare it with yours.

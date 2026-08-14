@@ -13,7 +13,7 @@ export const TopLayerTutorial: FC = () => {
 
   return <section className="tutorials">
     <h2 className="tutorials-title">let’s build this feature</h2>
-    <p className="overview">
+    <p className="overview paragraph">
       We are going to build this site’s banner: the panel that carries the news, whatever
       the news is. Elsewhere on this site it reports real trouble; on this page the button
       raises random nonsense so you can watch the mechanics. Here is how to use this page:
@@ -30,7 +30,7 @@ export const TopLayerTutorial: FC = () => {
       go to MDN if you want more.
     </p>
     <figure className="feedback">
-      <blockquote className="quote">
+      <blockquote className="quote paragraph italic">
         When something breaks, tell me. Do not make me guess why the chart went quiet,
         and do not hide the note under the thing that broke.
       </blockquote>
