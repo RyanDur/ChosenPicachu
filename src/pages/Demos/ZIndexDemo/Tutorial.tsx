@@ -4,9 +4,7 @@ import {alignParam, enterParam, sideParam, stackParam} from '@components/Banners
 import {Stories} from '../Recipe';
 import {BannerControls} from './BannerControls';
 import {TopLayerRecipe} from './Recipe/TopLayerRecipe';
-import {RaisingRecipe} from './Recipe/RaisingRecipe';
-import {OnceRecipe} from './Recipe/OnceRecipe';
-import {JourneyRecipe} from './Recipe/JourneyRecipe';
+import {MultipleRecipe} from './Recipe/MultipleRecipe';
 import '../Recipe/Recipe.css';
 
 export const TopLayerTutorial: FC = () => {
@@ -46,9 +44,7 @@ export const TopLayerTutorial: FC = () => {
     <section aria-label="build the banners yourself" className="build-steps">
       <Stories>
         <TopLayerRecipe/>
-        <RaisingRecipe/>
-        <OnceRecipe/>
-        <JourneyRecipe/>
+        <MultipleRecipe/>
       </Stories>
     </section>
   </section>;

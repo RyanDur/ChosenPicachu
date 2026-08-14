@@ -1,25 +1,43 @@
 import {FC} from 'react';
 import {Codes, Says, Snippet, Step, Steps, Story, Words, Tell, aside, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
-import {AlignDial, EntranceDial, SideDial, StackDial} from '../../Controls';
+import {EntranceDial, StackDial} from '../../Controls';
 import bannersSource from '@components/Banners/Banners.tsx?raw';
+import providerSource from '@components/Banners/BannerProvider.tsx?raw';
 import bannersCss from '@components/Banners/Banners.css?raw';
 import '../../Recipe/Recipe.css';
 
 const gap = plain(' ');
 
-export const JourneyRecipe: FC = () =>
-  <Story param="news" id="journey"
-         can="The news travels, and the pile makes room"
-         soThat="arrival and leaving read as motion, not surprise">
-    <Tell>A banner that pops into place startles; one that arrives reads as news. So
-      every arrival is a small play in two acts: the pile opens a slot while the
-      newcomer is still off screen, and only then does the newcomer fly in. Leaving
-      runs the play backwards.</Tell>
+export const MultipleRecipe: FC = () =>
+  <Story param="news" id="many"
+         can="The user can have multiple banners"
+         soThat="no message waits for another to leave">
+    <Tell>News rarely arrives alone, so the banners stand in a pile. Every arrival is a
+      small play in two acts: the pile opens a slot while the newcomer is still off
+      screen, and only then does the newcomer fly in. Leaving runs the play
+      backwards.</Tell>
     <Tell>Three platform traps live here, each marked below as the wrong way: a starting
       style that silently cannot start, a variable that silently does not resolve, and
       a measurement that can only grow.</Tell>
     <Steps>
+      <Step title="Refuse the duplicate">
+        <Words want="Multiple means different. The second copy of the same sentence adds noise, not information.">
+          <Says>raise looks for its message among the standing banners and appends only
+            when it is new. Dismiss a banner and the same message may stand again; the
+            pile remembers what stands, not what stood.</Says>
+        </Words>
+        <Codes>
+          <Snippet label="JS" foil lines={[
+            plain('const raise = (message) =>'),
+            plain('  setBanners(standing => [...standing, {message}]);'),
+            aside('// raised three times, standing three times')
+          ]}/>
+          <Snippet label="JS" lines={[
+            ...unit(providerSource, 'const raise = useCallback(')
+          ]}/>
+        </Codes>
+      </Step>
       <Step title="Open the slot before the flight" dial={<StackDial name="journey-stack"/>}>
         <Words want="The standing banners should glide apart while nobody is watching. The newcomer is still a full screen away.">
           <Says>Each banner is a one-track grid, and the track is the slot: a keyframe
@@ -88,21 +106,8 @@ export const JourneyRecipe: FC = () =>
           ]}/>
         </Codes>
       </Step>
-      <Step title="Stand at your station"
-            dial={<><SideDial name="journey-side"/><AlignDial name="journey-align"/></>}>
-        <Words want="Nine stations, and no arithmetic: the platform already centers a popover.">
-          <Says>The UA stylesheet gives every popover inset 0 and margin auto, which is
-            centering. Each station just turns one auto margin into a gap, so top
-            center costs one line and so does every other station.</Says>
-        </Words>
-        <Codes>
-          <Snippet label="CSS" lines={[
-            ...span(bannersCss, '&.top {', '&.right { margin-inline: auto var(--base-x-2); }')
-          ]}/>
-        </Codes>
-      </Step>
       <Step title="Let the heights settle">
-        <Words want="Sideways stacks squeeze their cards, and text that rewraps changes height in a snap.">
+        <Words want="Sideways piles squeeze their cards, and text that rewraps changes height in a snap.">
           <Says>A ResizeObserver pins each card’s height to a measured value, so a wrap
             becomes a property change and the transition can carry it. The pin releases
             before it measures, because scrollHeight never reads below the box it is

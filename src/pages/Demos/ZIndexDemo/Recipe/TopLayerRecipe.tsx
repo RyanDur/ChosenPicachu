@@ -1,6 +1,7 @@
 import {FC} from 'react';
 import {Codes, Mdn, Says, Snippet, Step, Steps, Story, Words, Tell, aside, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
+import {AlignDial, SideDial} from '../../Controls';
 import bannersSource from '@components/Banners/Banners.tsx?raw';
 import bannersCss from '@components/Banners/Banners.css?raw';
 import '../../Recipe/Recipe.css';
@@ -47,6 +48,19 @@ export const TopLayerRecipe: FC = () =>
         <Codes>
           <Snippet label="JS" lines={[
             ...unit(bannersSource, 'useEffect(() => {')
+          ]}/>
+        </Codes>
+      </Step>
+      <Step title="Stand at your station"
+            dial={<><SideDial name="station-side"/><AlignDial name="station-align"/></>}>
+        <Words want="Nine stations, and no arithmetic: the platform already centers a popover.">
+          <Says>The UA stylesheet gives every popover inset 0 and margin auto, which is
+            centering. Each station just turns one auto margin into a gap, so top
+            center costs one line and so does every other station.</Says>
+        </Words>
+        <Codes>
+          <Snippet label="CSS" lines={[
+            ...span(bannersCss, '&.top {', '&.right { margin-inline: auto var(--base-x-2); }')
           ]}/>
         </Codes>
       </Step>
