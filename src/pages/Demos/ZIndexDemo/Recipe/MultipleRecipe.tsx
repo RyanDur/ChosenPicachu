@@ -107,10 +107,11 @@ export const MultipleRecipe: FC = () => {
         </Codes>
       </Step>
       <Step title="Arrive from beyond the edge" dial={<EntranceDial name="journey-entrance"/>}>
-        <Words want="Seen from the middle of the screen, a slide from beside yourself reads as a pop. The flight has to start where the screen ends.">
-          <Says>{enterFact[enter]} and the start is a literal because Chrome resolves
-            no var() inside a starting style; hand it a variable and the start computes
-            to nothing, so the banner materializes in place. The flight is only visible
+        <Words want="A slide from beside yourself reads as a pop. The flight has to start where the screen ends.">
+          <Says>{enterFact[enter]} and the leaving rule will reuse the same value, so
+            you will be tempted to name it once as a custom property. Resist it in the
+            starting style: Chrome resolves no var() there, the start computes to
+            nothing, and the banner materializes in place. The flight is only visible
             at all because the panel overrides the UA popover stylesheet, whose overflow
             would clip the whole journey to the panel’s own box.</Says>
         </Words>

@@ -13,13 +13,13 @@ const gap = plain(' ');
 
 const sideFact: Record<Side, string> = {
   top: 'margin-block turns its first auto into a gap, and the top edge is pinned.',
-  middle: 'margin-block stays auto both ways, and the platform centers it.',
+  middle: 'the block axis needs no rule; the platform is already centering it.',
   bottom: 'margin-block turns its second auto into a gap, and the bottom edge is pinned.'
 };
 
 const alignFact: Record<Align, string> = {
   left: 'margin-inline turns its first auto into a gap, and the panel holds left.',
-  center: 'margin-inline stays auto both ways, and the panel centers.',
+  center: 'the inline axis needs no rule; the platform is already centering it.',
   right: 'margin-inline turns its second auto into a gap, and the panel holds right.'
 };
 
