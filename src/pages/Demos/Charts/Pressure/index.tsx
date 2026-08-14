@@ -48,7 +48,7 @@ export const Pressure: FC<Props> = ({trades, actions}) => {
           </g>)}
         </svg>
       </Axes>
-      <small className="caption">
+      <small className="chart-caption caption">
         {notEmpty(pressures)
           ? `${pressures.length} ${pressures.length === 1 ? 'window' : 'windows'} · 1m each · since you arrived`
           : 'waiting for the first trade'}

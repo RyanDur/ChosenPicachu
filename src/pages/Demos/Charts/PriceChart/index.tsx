@@ -56,7 +56,7 @@ export const PriceChart: FC<Props> = ({trades, id = 'price', actions}) => {
   return <section aria-label="live trades" className="price-chart chart paper rounded-corners drop-shadow padded" data-trend={trend}>
     <header className="chart-header">
       {actions}
-      <Menu id={`${id}-period`} label="price period" toggle={period} toggleClassName="period-toggle">
+      <Menu id={`${id}-period`} label="price period" toggle={period} toggleClassName="period-toggle paper caption">
         {Object.values(Period).map(option =>
           <button type="button" key={option} className="item"
                   onClick={() => setPeriod(option)}>{option}</button>
@@ -82,7 +82,7 @@ export const PriceChart: FC<Props> = ({trades, id = 'price', actions}) => {
           </svg>
         </Axes>
         <figcaption>
-          <small className="caption">
+          <small className="chart-caption caption">
             {showing ? view.caption : history.unavailable && 'history unavailable'}
           </small>
         </figcaption>
