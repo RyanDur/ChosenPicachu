@@ -34,7 +34,7 @@ export const Candles: FC<Props> = ({trades, id = 'candle', actions}) => {
   return <section aria-label="candles" className="candles chart paper rounded-corners drop-shadow padded">
     <header className="chart-header">
       {actions}
-      <Menu id={`${id}-period`} label="candle period" toggle={period} toggleClassName="period-toggle">
+      <Menu id={`${id}-period`} label="candle period" toggle={period} toggleClassName="period-toggle paper caption">
         {Object.values(Period).map(option =>
           <button type="button" key={option} className="item"
                   onClick={() => setPeriod(option)}>{option}</button>
@@ -67,7 +67,7 @@ export const Candles: FC<Props> = ({trades, id = 'candle', actions}) => {
           </g>)}
         </svg>
       </Axes>
-      <small className="caption">
+      <small className="chart-caption caption">
         {notEmpty(candles) ? captionFor(period, candles.length) : history.unavailable && 'history unavailable'}
       </small>
       {history.pending && <Loading className="chart-loading"/>}

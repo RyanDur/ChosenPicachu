@@ -55,7 +55,7 @@ export const Pie: FC<Props> = ({trades, actions}) => {
             {`${Math.round(slice.share * 100)}% ${sides[at]}`}
           </data>)}
       </p>
-      <small className="caption">
+      <small className="chart-caption caption">
         {cut.length > 0
           ? 'the session’s volume by side · since you arrived'
           : 'waiting for the first trade'}
