@@ -1,6 +1,6 @@
 import {Align, Entrance, Side, Stack} from '@components/Banners/params';
 import {Line} from '../../Recipe/Snippet';
-import {plain} from '../../Recipe';
+import {aside, plain} from '../../Recipe';
 
 export const sideMargin: Record<Side, string> = {
   top: 'margin-block: var(--base-x-2) auto;',
@@ -56,12 +56,15 @@ export const closingTransition: Record<Stack, string> = {
   right: 'grid-template-columns 0.3s 0.6s,'
 };
 
-export const stationLines = (side: Side, align: Align): Line[] => [
-  plain('.banners {'),
-  plain(`  ${sideMargin[side]}`),
-  plain(`  ${alignMargin[align]}`),
-  plain('}')
-];
+export const stationLines = (side: Side, align: Align): Line[] => {
+  const gaps = [
+    ...(side === 'middle' ? [] : [plain(`  ${sideMargin[side]}`)]),
+    ...(align === 'center' ? [] : [plain(`  ${alignMargin[align]}`)])
+  ];
+  return gaps.length > 0
+    ? [plain('.banners {'), ...gaps, plain('}')]
+    : [aside('/* the popover default is already middle center; there is nothing to write */')];
+};
 
 export const slotLines = (stack: Stack): Line[] => [
   plain('.trouble {'),
