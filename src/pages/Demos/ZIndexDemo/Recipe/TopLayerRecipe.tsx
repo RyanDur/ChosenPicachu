@@ -90,7 +90,7 @@ export const TopLayerRecipe: FC = () => {
       <Step title="Dress the news">
         <Words want="A banner is read at a glance, in the corner of an eye already busy with something else.">
           <Says>The card is the news element inside each banner, wearing the house
-            vocabulary: paper, rounded corners, a drop shadow, and a hairline outline
+            vocabulary: paper, rounded corners, raised off the page, and a hairline outline
             that borrows the ink it stands beside. The dismiss button gives the whole
             target height so a hurried pointer still lands.</Says>
         </Words>
@@ -99,7 +99,7 @@ export const TopLayerRecipe: FC = () => {
             ...unit(bannersCss, '.news {'), gap,
             ...unit(surfaceCss, '.paper {'), gap,
             ...unit(surfaceCss, '.rounded-corners {'), gap,
-            ...unit(surfaceCss, '.drop-shadow {'), gap,
+            ...unit(surfaceCss, '.raised {'), gap,
             ...unit(surfaceCss, '.hairline-outline {'), gap,
             ...unit(bannersCss, '.dismiss {')
           ]}/>

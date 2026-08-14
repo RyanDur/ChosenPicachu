@@ -61,7 +61,7 @@ export const Banners: FC = () => {
       {banners.map(banner =>
         <li key={banner.id} onTransitionEnd={left(banner.id)}
             className={classNames('trouble', leaving.includes(banner.id) && 'leaving')}>
-          <p className="news paper rounded-corners drop-shadow hairline-outline">
+          <p className="news paper rounded-corners raised hairline-outline">
             {banner.message}
             <button type="button" className="dismiss" aria-label={`dismiss ${banner.message}`}
                     onClick={() => dismissed(banner.id)}>×</button>

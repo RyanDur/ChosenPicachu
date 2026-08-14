@@ -14,7 +14,7 @@
         justify-content: end;
         flex-direction: column;
 
-        .card {
+        .layer {
             padding: var(--base-x-2_5);
             position: relative;
             transition: bottom 0.3s;

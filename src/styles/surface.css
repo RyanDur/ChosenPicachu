@@ -1,4 +1,17 @@
 .paper { background: var(--paper); }
+
 .rounded-corners { border-radius: var(--radius-card); }
-.drop-shadow { box-shadow: var(--lift-box-shadow); }
+
+.drop-shadow { box-shadow: var(--base-box-shadow); }
+
+.raised { box-shadow: var(--lift-box-shadow); }
+
 .hairline-outline { border: var(--hairline) solid currentcolor; }
+
+.padded {
+  padding: var(--base-x-4);
+
+  @media (max-width: 1000px) {
+    padding: var(--base-x-2) var(--base-x-0_5);
+  }
+}
