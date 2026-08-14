@@ -1,6 +1,7 @@
 import {FC, FormEvent, PropsWithChildren} from 'react';
 import {classNames} from '@components/class-names';
 import {format} from 'date-fns';
+import '../fancy.css';
 
 type FancyTextInputProps = {
   inputId: string;
@@ -50,5 +51,5 @@ export const FancyInput: FC<PropsWithChildren<FancyTextInputProps>> = (
            value={value instanceof Date ? format(value, 'yyyy-MM-dd') : value}
            type={type}
            onChange={onChange}/>
-    <label id={labelId} className={classNames('fancy-title', 'ellipsis', labelClass)} htmlFor={inputId}>{children}</label>
+    <label id={labelId} className={classNames('fancy-title', 'ellipsis', 'bold', labelClass)} htmlFor={inputId}>{children}</label>
 </article>;
