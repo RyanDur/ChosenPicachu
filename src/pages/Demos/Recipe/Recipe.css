@@ -176,7 +176,7 @@
     position: relative;
     margin: 0;
     padding: var(--base-x-1_5) var(--base-x-2);
-    border-radius: var(--radius-card);
+    border-radius: var(--radius-soft);
     background: var(--code-paper);
     color: var(--code-ink);
     font-size: var(--text-caption);

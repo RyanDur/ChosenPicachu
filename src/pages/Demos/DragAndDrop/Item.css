@@ -1,7 +1,7 @@
 .sortable-list .draggable {
     padding: var(--base-x-4);
     padding-top: var(--base);
-    border-radius: var(--radius-card);
+    border-radius: var(--radius-soft);
     background: var(--paper);
     border: var(--hairline) solid var(--black);
     opacity: 1;
@@ -12,7 +12,7 @@
     gap: var(--base);
 
     &:has(.grip:hover) {
-        box-shadow: var(--lift-box-shadow);
+        box-shadow: var(--raised);
     }
 }
 

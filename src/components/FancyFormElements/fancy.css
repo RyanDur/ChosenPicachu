@@ -1,5 +1,5 @@
 .fancy {
-  border-radius: var(--radius-card);
+  border-radius: var(--radius-soft);
   min-height: var(--base-x-5);
   position: relative;
   transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -43,12 +43,12 @@
     padding: var(--base-x-1_25) var(--base-x-2_5);
     width: 100%;
     height: 100%;
-    border-radius: var(--radius-card);
+    border-radius: var(--radius-soft);
     position: absolute;
 
     &:focus,
     &:hover {
-      box-shadow: var(--base-box-shadow);
+      box-shadow: var(--drop-shadow);
     }
 
     &:focus ~ .fancy-title,

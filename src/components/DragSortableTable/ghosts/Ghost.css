@@ -13,7 +13,7 @@
   transform: translate(var(--drift-x), var(--drift-y));
   table-layout: fixed;
   background: var(--paper);
-  box-shadow: var(--lift-box-shadow);
+  box-shadow: var(--raised);
   pointer-events: none;
   will-change: transform;
 }

@@ -37,7 +37,7 @@
 
         &:hover,
         &:focus {
-          box-shadow: var(--base-box-shadow);
+          box-shadow: var(--drop-shadow);
         }
       }
     }

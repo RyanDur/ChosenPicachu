@@ -16,7 +16,7 @@
 
     &:focus,
     &:hover {
-      box-shadow: var(--base-box-shadow);
+      box-shadow: var(--drop-shadow);
     }
 
     &:active {
@@ -37,7 +37,7 @@
 
   &.invalid *:invalid {
     border: var(--hairline) solid var(--internationl-orange-engineering);
-    box-shadow: var(--base-box-shadow);
+    box-shadow: var(--drop-shadow);
   }
 
   #details-cell {
@@ -91,13 +91,13 @@
 
       &:hover,
       &:focus {
-        box-shadow: var(--base-box-shadow);
+        box-shadow: var(--drop-shadow);
       }
 
       &:hover ~ #same-as-home-title,
       &:focus ~ #same-as-home-title {
         font-weight: bold;
-        box-shadow: var(--base-box-shadow);
+        box-shadow: var(--drop-shadow);
       }
     }
 
