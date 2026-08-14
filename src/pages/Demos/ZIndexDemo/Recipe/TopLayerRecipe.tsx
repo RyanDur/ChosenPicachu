@@ -9,7 +9,7 @@ const gap = plain(' ');
 
 export const TopLayerRecipe: FC = () =>
   <Story param="news" id="top"
-         can="The user sees trouble above everything"
+         can="The user sees the news above everything"
          soThat="no stacking context can bury the news">
     <Tell>We could give the banner a huge z-index, but z-index only ranks siblings inside
       one stacking context, and any ancestor with a transform, a filter, or a z-index of
@@ -39,9 +39,9 @@ export const TopLayerRecipe: FC = () =>
         </Codes>
       </Step>
       <Step title="Show it when there is news">
-        <Words want="The top layer is not a place you sit; it is a place you enter. The panel should rise when trouble arrives and leave when the last of it is dismissed.">
+        <Words want="The top layer is not a place you sit; it is a place you enter. The panel should rise when news arrives and leave when the last of it is dismissed.">
           <Says>An effect watches the count. showPopover lifts the panel when the first
-            trouble arrives, hidePopover returns it when the wall is clear, and
+            banner arrives, hidePopover returns it when the wall is clear, and
             matches(':popover-open') keeps both calls honest so neither runs twice.</Says>
         </Words>
         <Codes>
@@ -50,7 +50,7 @@ export const TopLayerRecipe: FC = () =>
           ]}/>
         </Codes>
       </Step>
-      <Step title="Dress the trouble">
+      <Step title="Dress the news">
         <Words want="A banner is read at a glance, in the corner of an eye already busy with something else.">
           <Says>The card is the news element inside each trouble, dressed in the house
             style, and the dismiss button gives the whole target height so a hurried
