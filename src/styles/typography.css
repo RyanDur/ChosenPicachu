@@ -45,6 +45,24 @@
   letter-spacing: 0.08em;
 }
 
+/* signpost — the link a run of prose points with */
+.signpost {
+  display: inline;
+  width: auto;
+  height: auto;
+  color: var(--primary-blue);
+  text-decoration: underline;
+
+  &:visited {
+    color: var(--plum);
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: var(--primary-dark-blue);
+  }
+}
+
 .ellipsis {
   min-width: 0;
   text-overflow: ellipsis;
