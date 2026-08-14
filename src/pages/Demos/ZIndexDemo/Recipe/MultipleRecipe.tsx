@@ -4,6 +4,7 @@ import {Entrance, Stack, enterParam, stackParam} from '@components/Banners/param
 import {Codes, Says, Snippet, Step, Steps, Story, Words, Tell, aside, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
 import {EntranceDial, StackDial} from '../../Controls';
+import {arrivalLines, leavingLines, slotLines} from './decided';
 import bannersSource from '@components/Banners/Banners.tsx?raw';
 import providerSource from '@components/Banners/BannerProvider.tsx?raw';
 import bannersCss from '@components/Banners/Banners.css?raw';
@@ -12,10 +13,10 @@ import '../../Recipe/Recipe.css';
 const gap = plain(' ');
 
 const stackFact: Record<Stack, string> = {
-  down: 'the pile grows downward and the slot is a row: a keyframe animation opens grid-template-rows from 0fr on arrival, and the gap below rides along as a margin the banner owns itself.',
-  up: 'the pile grows upward and the slot is a row: a keyframe animation opens grid-template-rows from 0fr on arrival, and the gap the banner owns rides along as a margin.',
-  left: 'the pile grows leftward and the slot is a column: a keyframe animation opens grid-template-columns from 0fr on arrival, and the gap beside the banner rides along as a margin.',
-  right: 'the pile grows rightward and the slot is a column: a keyframe animation opens grid-template-columns from 0fr on arrival, and the gap beside the banner rides along as a margin.'
+  down: 'the pile grows downward and the slot is a row: a keyframe animation opens it from 0fr on arrival, and the gap below rides along as a margin the banner owns itself.',
+  up: 'the pile grows upward and the slot is a row: a keyframe animation opens it from 0fr on arrival, and the gap the banner owns rides along as a margin.',
+  left: 'the pile grows leftward and the slot is a column: a keyframe animation opens it from 0fr on arrival, and the gap beside the banner rides along as a margin.',
+  right: 'the pile grows rightward and the slot is a column: a keyframe animation opens it from 0fr on arrival, and the gap beside the banner rides along as a margin.'
 };
 
 const enterFact: Record<Entrance, string> = {
@@ -28,14 +29,6 @@ const enterFact: Record<Entrance, string> = {
 const sideways = (stack: Stack): boolean => stack === 'left' || stack === 'right';
 
 const slotKeyframes = (stack: Stack): string => sideways(stack) ? '@keyframes open-column' : '@keyframes open-slot';
-
-const slotRule = (stack: Stack): string => sideways(stack)
-  ? '&:where(.stack-left, .stack-right) .trouble {'
-  : '&:where(.stack-down, .stack-up) .trouble {';
-
-const leavingRule = (stack: Stack): string => sideways(stack)
-  ? '&:where(.stack-left, .stack-right) .trouble.leaving'
-  : '&:where(.stack-down, .stack-up) .trouble.leaving';
 
 const settleStep = (
   <Step title="Let the heights settle">
@@ -108,19 +101,18 @@ export const MultipleRecipe: FC = () => {
             aside('/* parses fine, matches fine, and the transition never starts */')
           ]}/>
           <Snippet label="CSS" lines={[
-            ...unit(bannersCss, slotKeyframes(stack)), gap,
-            ...unit(bannersCss, slotRule(stack))
+            ...slotLines(stack), gap,
+            ...unit(bannersCss, slotKeyframes(stack))
           ]}/>
         </Codes>
       </Step>
       <Step title="Arrive from beyond the edge" dial={<EntranceDial name="journey-entrance"/>}>
         <Words want="Seen from the middle of the screen, a slide from beside yourself reads as a pop. The flight has to start where the screen ends.">
-          <Says>{enterFact[enter]} and the four edges are written out as four literal
-            rules because Chrome resolves no var() inside a starting style; hand it a
-            variable and the start computes to nothing, so the banner materializes in
-            place. The flight is only visible at all because the panel overrides the UA
-            popover stylesheet, whose overflow would clip the whole journey to the
-            panel’s own box.</Says>
+          <Says>{enterFact[enter]} and the start is a literal because Chrome resolves
+            no var() inside a starting style; hand it a variable and the start computes
+            to nothing, so the banner materializes in place. The flight is only visible
+            at all because the panel overrides the UA popover stylesheet, whose overflow
+            would clip the whole journey to the panel’s own box.</Says>
         </Words>
         <Codes>
           <Snippet label="CSS" foil lines={[
@@ -132,10 +124,7 @@ export const MultipleRecipe: FC = () => {
             aside('/* the var never resolves inside a starting style; nothing moves */')
           ]}/>
           <Snippet label="CSS" lines={[
-            ...unit(bannersCss, '&.from-above .trouble {'), gap,
-            ...unit(bannersCss, '&.from-below .trouble {'), gap,
-            ...unit(bannersCss, '&.from-left .trouble {'), gap,
-            ...unit(bannersCss, '&.from-right .trouble {'), gap,
+            ...arrivalLines(enter), gap,
             ...span(bannersCss, '/* the UA popover stylesheet', 'overflow: visible;')
           ]}/>
         </Codes>
@@ -148,9 +137,7 @@ export const MultipleRecipe: FC = () => {
             snap.</Says>
         </Words>
         <Codes>
-          <Snippet label="CSS" lines={[
-            ...unit(bannersCss, leavingRule(stack))
-          ]}/>
+          <Snippet label="CSS" lines={leavingLines(stack, enter)}/>
           <Snippet label="JS" lines={[
             ...unit(bannersSource, 'const left = ')
           ]}/>

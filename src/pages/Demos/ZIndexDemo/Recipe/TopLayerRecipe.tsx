@@ -4,6 +4,7 @@ import {Align, Side, alignParam, sideParam} from '@components/Banners/params';
 import {Codes, Mdn, Says, Snippet, Step, Steps, Story, Words, Tell, aside, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
 import {AlignDial, SideDial} from '../../Controls';
+import {stationLines} from './decided';
 import bannersSource from '@components/Banners/Banners.tsx?raw';
 import bannersCss from '@components/Banners/Banners.css?raw';
 import '../../Recipe/Recipe.css';
@@ -71,13 +72,11 @@ export const TopLayerRecipe: FC = () => {
             dial={<><SideDial name="station-side"/><AlignDial name="station-align"/></>}>
         <Words want="Nine stations, and no arithmetic: the platform already centers a popover.">
           <Says>The UA stylesheet gives every popover inset 0 and margin auto, which is
-            centering; a station just turns auto margins into gaps. At this
-            one, {sideFact[side]} And {alignFact[align]}</Says>
+            centering; a station just turns auto margins into gaps.
+            Here, {sideFact[side]} And {alignFact[align]}</Says>
         </Words>
         <Codes>
-          <Snippet label="CSS" lines={[
-            ...span(bannersCss, '&.top {', '&.right { margin-inline: auto var(--base-x-2); }')
-          ]}/>
+          <Snippet label="CSS" lines={stationLines(side, align)}/>
         </Codes>
       </Step>
       <Step title="Dress the news">
