@@ -1,10 +1,10 @@
 .paper { background: var(--paper); }
 
-.rounded-corners { border-radius: var(--radius-card); }
+.rounded-corners { border-radius: var(--radius-soft); }
 
-.drop-shadow { box-shadow: var(--base-box-shadow); }
+.drop-shadow { box-shadow: var(--drop-shadow); }
 
-.raised { box-shadow: var(--lift-box-shadow); }
+.raised { box-shadow: var(--raised); }
 
 .hairline-outline { border: var(--hairline) solid currentcolor; }
 

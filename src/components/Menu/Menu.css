@@ -4,7 +4,7 @@
   position-try-fallbacks: flip-block;
   width: var(--base-x-25);
   background: var(--paper);
-  box-shadow: var(--base-box-shadow);
+  box-shadow: var(--drop-shadow);
 
   .item {
     display: flex;
@@ -34,13 +34,13 @@
   }
 
   .entry:first-child .item {
-    border-top-right-radius: var(--radius-card);
-    border-top-left-radius: var(--radius-card);
+    border-top-right-radius: var(--radius-soft);
+    border-top-left-radius: var(--radius-soft);
   }
 
   .entry:last-child .item {
-    border-bottom-right-radius: var(--radius-card);
-    border-bottom-left-radius: var(--radius-card);
+    border-bottom-right-radius: var(--radius-soft);
+    border-bottom-left-radius: var(--radius-soft);
   }
 }
 

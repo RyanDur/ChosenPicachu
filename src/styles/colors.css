@@ -17,11 +17,11 @@
   --shadow: rgba(0, 0, 0, 0.19);
   --dark-shadow: rgba(0, 0, 0, 0.23);
   --disabled-gray: rgba(239, 239, 239, 0.3);
-  --base-box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25),
+  --drop-shadow: 0 14px 28px rgba(0, 0, 0, 0.25),
   0 10px 10px rgba(0, 0, 0, 0.22);
   --light-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12),
   0 1px 2px rgba(0, 0, 0, 0.24);
-  --base-box-shadow-red: 0 2px 15px 15px rgb(186, 45, 11),
+  --alarm-glow: 0 2px 15px 15px rgb(186, 45, 11),
   0 1px 2px rgba(255, 255, 255, 1);
   --white: rgb(255, 255, 255);
 
@@ -48,5 +48,5 @@
   --mint-dim: color-mix(in srgb, var(--mint) 75%, black);
   --press-glow: inset 0 0 5px var(--void);
   --press-glow-soft: inset 0 0 5px var(--charcoal);
-  --lift-box-shadow: 0 10px 14px var(--faint-shadow);
+  --raised: 0 10px 14px var(--faint-shadow);
 }
