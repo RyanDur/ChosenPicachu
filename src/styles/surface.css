@@ -1,5 +1,7 @@
 .paper { background: var(--paper); }
 
+.silk { background: var(--silk); }
+
 .rounded-corners { border-radius: var(--radius-soft); }
 
 .drop-shadow { box-shadow: var(--drop-shadow); }

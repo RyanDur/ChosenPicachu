@@ -15,9 +15,6 @@
     padding: 0 var(--base-x-2);
     text-align: center;
     font-size: var(--text-caption);
-    font-style: italic;
-    background: var(--silk);
-    border: var(--hairline) solid var(--void);
   }
 }
 
