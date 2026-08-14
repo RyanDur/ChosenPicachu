@@ -7,11 +7,6 @@
   overflow: auto;
 }
 
-.center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
 .off-screen {
   position: absolute;
@@ -24,9 +19,6 @@
   white-space: nowrap;
 }
 
-.rounded-corners {
-  border-radius: var(--radius-card);
-}
 
 @media (max-width: 1000px) {
   .card {

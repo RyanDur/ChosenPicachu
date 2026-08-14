@@ -1,0 +1,4 @@
+.paper { background: var(--paper); }
+.rounded-corners { border-radius: var(--radius-card); }
+.drop-shadow { box-shadow: var(--lift-box-shadow); }
+.hairline-outline { border: var(--hairline) solid currentcolor; }

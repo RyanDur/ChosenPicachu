@@ -10,13 +10,6 @@
     max-inline-size: calc(100vw - var(--base-x-4));
   }
 
-  &.top { margin-block: var(--base-x-2) auto; }
-  &.middle { margin-block: auto; }
-  &.bottom { margin-block: auto var(--base-x-2); }
-  &.left { margin-inline: var(--base-x-2) auto; }
-  &.center { margin-inline: auto; }
-  &.right { margin-inline: auto var(--base-x-2); }
-
   .troubles {
     display: flex;
     flex-direction: column;
@@ -102,11 +95,7 @@
     align-items: center;
     gap: var(--base-x-2);
     padding: var(--base) var(--base-x-2);
-    background: var(--paper);
     color: var(--internationl-orange-engineering);
-    border: var(--hairline) solid var(--internationl-orange-engineering);
-    border-radius: var(--radius-card);
-    box-shadow: var(--lift-box-shadow);
     transition: block-size 0.3s;
   }
 

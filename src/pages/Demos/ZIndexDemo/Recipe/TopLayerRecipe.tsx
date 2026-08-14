@@ -4,23 +4,24 @@ import {Align, Side, alignParam, sideParam} from '@components/Banners/params';
 import {Codes, Mdn, Says, Snippet, Step, Steps, Story, Words, Tell, aside, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
 import {AlignDial, SideDial} from '../../Controls';
-import {stationLines} from './decided';
 import bannersSource from '@components/Banners/Banners.tsx?raw';
 import bannersCss from '@components/Banners/Banners.css?raw';
+import placementCss from '../../../../styles/placement.css?raw';
+import surfaceCss from '../../../../styles/surface.css?raw';
 import '../../Recipe/Recipe.css';
 
 const gap = plain(' ');
 
 const sideFact: Record<Side, string> = {
-  top: 'margin-block turns its first auto into a gap, and the top edge is pinned.',
-  middle: 'the block axis needs no rule; the platform is already centering it.',
-  bottom: 'margin-block turns its second auto into a gap, and the bottom edge is pinned.'
+  top: 'top turns the first block auto into a gap, and the top edge is pinned.',
+  middle: 'middle restates the platform’s own centering, so the choice still reads in the markup.',
+  bottom: 'bottom turns the second block auto into a gap, and the bottom edge is pinned.'
 };
 
 const alignFact: Record<Align, string> = {
-  left: 'margin-inline turns its first auto into a gap, and the panel holds left.',
-  center: 'the inline axis needs no rule; the platform is already centering it.',
-  right: 'margin-inline turns its second auto into a gap, and the panel holds right.'
+  left: 'left turns the first inline auto into a gap, and the panel holds left.',
+  center: 'center restates the platform’s own centering, so the choice still reads in the markup.',
+  right: 'right turns the second inline auto into a gap, and the panel holds right.'
 };
 
 export const TopLayerRecipe: FC = () => {
@@ -72,22 +73,34 @@ export const TopLayerRecipe: FC = () => {
             dial={<><SideDial name="station-side"/><AlignDial name="station-align"/></>}>
         <Words want="Nine stations, and no arithmetic: the platform already centers a popover.">
           <Says>The UA stylesheet gives every popover inset 0 and margin auto, which is
-            centering; a station just turns auto margins into gaps.
+            centering; the placement vocabulary turns auto margins into gaps, and the
+            panel wears its station as two words.
             Here, {sideFact[side]} And {alignFact[align]}</Says>
         </Words>
         <Codes>
-          <Snippet label="CSS" lines={stationLines(side, align)}/>
+          <Snippet label="HTML" lines={[
+            plain(`<section class="banners ${side} ${align}">`)
+          ]}/>
+          <Snippet label="CSS" lines={[
+            ...unit(placementCss, `.${side} {`), gap,
+            ...unit(placementCss, `.${align} {`)
+          ]}/>
         </Codes>
       </Step>
       <Step title="Dress the news">
         <Words want="A banner is read at a glance, in the corner of an eye already busy with something else.">
-          <Says>The card is the news element inside each banner, dressed in the house
-            style, and the dismiss button gives the whole target height so a hurried
-            pointer still lands.</Says>
+          <Says>The card is the news element inside each banner, wearing the house
+            vocabulary: paper, rounded corners, a drop shadow, and a hairline outline
+            that borrows the ink it stands beside. The dismiss button gives the whole
+            target height so a hurried pointer still lands.</Says>
         </Words>
         <Codes>
           <Snippet label="CSS" lines={[
             ...unit(bannersCss, '.news {'), gap,
+            ...unit(surfaceCss, '.paper {'), gap,
+            ...unit(surfaceCss, '.rounded-corners {'), gap,
+            ...unit(surfaceCss, '.drop-shadow {'), gap,
+            ...unit(surfaceCss, '.hairline-outline {'), gap,
             ...unit(bannersCss, '.dismiss {')
           ]}/>
         </Codes>
