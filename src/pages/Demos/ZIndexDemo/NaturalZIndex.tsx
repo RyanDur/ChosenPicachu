@@ -11,9 +11,9 @@ export const NaturalZIndex: FC<PropsWithClassName> = ({className}) => {
   return <article id="z-index-demo" className={className}>
     <button className='primary' onClick={onClick}>{isCollapsed ? 'Collapse' : 'Expand'}</button>
     <section className='demo-container'>
-      <p className={classNames('card', isCollapsed && 'closed')}>First</p>
-      <p className={classNames('card', isCollapsed && 'closed')}>Second</p>
-      <p className={classNames('card', isCollapsed && 'closed')}>Third</p>
+      <p className={classNames('layer paper rounded-corners drop-shadow', isCollapsed && 'closed')}>First</p>
+      <p className={classNames('layer paper rounded-corners drop-shadow', isCollapsed && 'closed')}>Second</p>
+      <p className={classNames('layer paper rounded-corners drop-shadow', isCollapsed && 'closed')}>Third</p>
     </section>
   </article>;
 };

@@ -1,4 +1,6 @@
-.card.chart {
+.chart {
+  overflow: auto;
+
   .chart-header {
     display: flex;
     align-items: center;

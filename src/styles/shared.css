@@ -1,11 +1,3 @@
-.card {
-  width: 100%;
-  background: var(--paper);
-  border-radius: var(--radius-card);
-  box-shadow: var(--base-box-shadow);
-  padding: var(--base-x-4);
-  overflow: auto;
-}
 
 
 .off-screen {
@@ -14,12 +6,6 @@
 }
 
 
-
-@media (max-width: 1000px) {
-  .card {
-    padding: var(--base-x-2) var(--base-x-0_5);
-  }
-}
 
 
 ::view-transition {

@@ -111,7 +111,7 @@ describe('the banners', () => {
     const alert = screen.getByRole('alert', {hidden: true});
     expect(alert).toHaveClass('top', 'center', 'from-above', 'stack-down');
     expect(within(alert).getByText('placed'))
-      .toHaveClass('news', 'paper', 'rounded-corners', 'drop-shadow', 'hairline-outline');
+      .toHaveClass('news', 'paper', 'rounded-corners', 'raised', 'hairline-outline');
   });
 
   test('without a provider, raising degrades quietly', async () => {

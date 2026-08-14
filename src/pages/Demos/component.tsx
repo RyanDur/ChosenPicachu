@@ -63,25 +63,25 @@ export const DemosPage = () => {
               <ul className='accordions'>
                 <li className='list-title'>Different styles of Accordions.</li>
                 <li>
-                  <InclusiveAccordion className='card' content={accordionContents[0]}/>
+                  <InclusiveAccordion className='paper rounded-corners drop-shadow padded' content={accordionContents[0]}/>
                 </li>
                 <li>
-                  <ExclusiveAccordion className='card' content={accordionContents[1]}/>
+                  <ExclusiveAccordion className='paper rounded-corners drop-shadow padded' content={accordionContents[1]}/>
                 </li>
                 <li className="exclusive">
-                  <ExclusiveToggleAccordion className='card' content={accordionContents[2]}/>
+                  <ExclusiveToggleAccordion className='paper rounded-corners drop-shadow padded' content={accordionContents[2]}/>
                 </li>
                 <li>
-                  <ExclusiveCheckboxToggleAccordion className='card' content={accordionContents[3]}/>
+                  <ExclusiveCheckboxToggleAccordion className='paper rounded-corners drop-shadow padded' content={accordionContents[3]}/>
                 </li>
                 <li>
-                  <ExclusiveRadioToggleAccordion className='card' content={accordionContents[4]}/>
+                  <ExclusiveRadioToggleAccordion className='paper rounded-corners drop-shadow padded' content={accordionContents[4]}/>
                 </li>
               </ul>,
             [DemoTopics.zIndex]: <>
               <article>Z-Index Demo.</article>
-              <NaturalZIndex className='card'/>
-              <TopLayer className='card'/>
+              <NaturalZIndex className='paper rounded-corners drop-shadow padded'/>
+              <TopLayer className='paper rounded-corners drop-shadow padded'/>
               <Suspense fallback={<Loading label="loading the tutorial"/>}>
                 <TopLayerTutorial/>
               </Suspense>

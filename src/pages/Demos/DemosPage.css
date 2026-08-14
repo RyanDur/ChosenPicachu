@@ -28,7 +28,7 @@
     }
 }
 
-.card .explainer {
+.chart .explainer {
   margin-top: var(--base-x-2);
 
   .prompt {

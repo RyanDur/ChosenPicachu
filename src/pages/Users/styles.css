@@ -3,12 +3,8 @@
 }
 
 .users {
-  &.card {
-    background: var(--paper);
-
-    &:not(:last-child) {
-      margin-bottom: var(--base-x-4);
-    }
+  &:not(:last-child) {
+    margin-bottom: var(--base-x-4);
   }
 
   &#user-candidates {
