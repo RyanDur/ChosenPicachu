@@ -12,17 +12,17 @@ export const JourneyRecipe: FC = () =>
   <Story param="news" id="journey"
          can="The news travels, and the pile makes room"
          soThat="arrival and leaving read as motion, not surprise">
-    <Tell>A banner that pops into place startles; one that arrives reads as news. So every
-      arrival is a small play in two acts: the pile opens a slot while the newcomer is
-      still off screen, and only then does the newcomer fly in. Leaving runs the same
-      play backwards.</Tell>
-    <Tell>Three platform traps live in this feature, and each is marked below as the
-      wrong way: a starting style that silently cannot start, a variable that silently
-      does not resolve, and a measurement that can only grow.</Tell>
+    <Tell>A banner that pops into place startles; one that arrives reads as news. So
+      every arrival is a small play in two acts: the pile opens a slot while the
+      newcomer is still off screen, and only then does the newcomer fly in. Leaving
+      runs the play backwards.</Tell>
+    <Tell>Three platform traps live here, each marked below as the wrong way: a starting
+      style that silently cannot start, a variable that silently does not resolve, and
+      a measurement that can only grow.</Tell>
     <Steps>
       <Step title="Open the slot before the flight" dial={<StackDial name="journey-stack"/>}>
         <Words want="The standing banners should glide apart while nobody is watching. The newcomer is still a full screen away.">
-          <Says>Each trouble is a one-track grid, and the track is the slot: a keyframe
+          <Says>Each banner is a one-track grid, and the track is the slot: a keyframe
             animation opens it from 0fr on arrival, and the gap below rides along as a
             margin the banner owns itself. It is an animation rather than a transition
             because Chrome never starts a grid-track transition from a starting style;

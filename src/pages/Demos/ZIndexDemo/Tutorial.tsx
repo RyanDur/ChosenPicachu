@@ -6,7 +6,6 @@ import {BannerControls} from './BannerControls';
 import {TopLayerRecipe} from './Recipe/TopLayerRecipe';
 import {RaisingRecipe} from './Recipe/RaisingRecipe';
 import {OnceRecipe} from './Recipe/OnceRecipe';
-import {WiredRecipe} from './Recipe/WiredRecipe';
 import {JourneyRecipe} from './Recipe/JourneyRecipe';
 import '../Recipe/Recipe.css';
 
@@ -17,18 +16,20 @@ export const TopLayerTutorial: FC = () => {
   return <section className="tutorials">
     <h2 className="tutorials-title">let’s build this feature</h2>
     <p className="overview">
-      We are going to build this site’s banner system, the place trouble goes to be seen.
-      Here is how to use this page: every card below is a feature, told as a <a
+      We are going to build this site’s banner: the panel that carries the news, whatever
+      the news is. Elsewhere on this site it reports real trouble; on this page the button
+      raises random nonsense so you can watch the mechanics. Here is how to use this page:
+      every card below is a feature, told as a <a
         className="signpost"
         href="https://initialcapacity.io/insights/user-story"
         target="_blank"
         rel="noreferrer">user story</a>. Open a card and you get the plan for that feature
       and the steps that build it, with the real code from this site, so what you read is
       what runs. The cards at the top of this page fight for the front with z-index; the
-      button under them raises a banner that does not fight at all. The dials below place
-      the stack, choose its entrance, and pick how it grows, and where a step depends on
-      a dial, that dial sits on the step. The dashed code is the wrong way you would
-      probably try first, and the links go to MDN if you want more.
+      banner does not fight at all. The dials below place the stack, choose its entrance,
+      and pick how it grows, and where a step depends on a dial, that dial sits on the
+      step. The dashed code is the wrong way you would probably try first, and the links
+      go to MDN if you want more.
     </p>
     <figure className="feedback">
       <blockquote className="quote">
@@ -47,7 +48,6 @@ export const TopLayerTutorial: FC = () => {
         <TopLayerRecipe/>
         <RaisingRecipe/>
         <OnceRecipe/>
-        <WiredRecipe/>
         <JourneyRecipe/>
       </Stories>
     </section>
