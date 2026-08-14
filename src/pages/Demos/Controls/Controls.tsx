@@ -39,7 +39,7 @@ export type ControlsProps = {
 export const Controls: FC<ControlsProps & {copy: Copy}> = ({copy, pace, origin, motion, onPace, onOrigin, onMotion}) =>
   <section aria-label={`${copy.kind} controls`} className="controls">
     <article className="control">
-      <span className="axis">pace</span>
+      <span className="axis caption uppercase">pace</span>
       <PillGlider label="pace"
                   name={`${copy.kind}-pace`}
                   options={[
@@ -48,10 +48,10 @@ export const Controls: FC<ControlsProps & {copy: Copy}> = ({copy, pace, origin, 
                   ]}
                   chosen={pace}
                   onChoose={onPace}/>
-      <p className="reading">{copy.pace[pace]}</p>
+      <p className="reading paragraph">{copy.pace[pace]}</p>
     </article>
     <article className="control">
-      <span className="axis">origin</span>
+      <span className="axis caption uppercase">origin</span>
       <PillGlider label="origin"
                   name={`${copy.kind}-origin`}
                   options={[
@@ -60,10 +60,10 @@ export const Controls: FC<ControlsProps & {copy: Copy}> = ({copy, pace, origin, 
                   ]}
                   chosen={origin}
                   onChoose={onOrigin}/>
-      <p className="reading">{copy.origin[origin]}</p>
+      <p className="reading paragraph">{copy.origin[origin]}</p>
     </article>
     <article className="control">
-      <span className="axis">motion</span>
+      <span className="axis caption uppercase">motion</span>
       <PillGlider label="motion"
                   name={`${copy.kind}-motion`}
                   options={[
@@ -72,9 +72,9 @@ export const Controls: FC<ControlsProps & {copy: Copy}> = ({copy, pace, origin, 
                   ]}
                   chosen={motion}
                   onChoose={onMotion}/>
-      <p className="reading">{copy.motion[motion]}</p>
+      <p className="reading paragraph">{copy.motion[motion]}</p>
     </article>
-    <p className="readout">
+    <p className="readout caption">
       <code>{copy.readout(pace, origin, motion)}</code>
     </p>
   </section>;

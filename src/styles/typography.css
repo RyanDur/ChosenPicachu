@@ -40,6 +40,11 @@
   font-style: italic;
 }
 
+.uppercase {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
 .ellipsis {
   min-width: 0;
   text-overflow: ellipsis;
