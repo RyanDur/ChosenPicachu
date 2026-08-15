@@ -1,4 +1,4 @@
-import {has, maybe} from '@ryandur/sand';
+import {has, is, maybe} from '@ryandur/sand';
 import {Row} from '@components/Table';
 import {Grip, STEP_SHARE, Shares, measuredShares, neighborOf, sought, traded} from '@components/Table/shares';
 import {Direction, Rule, glyphs, ranked, unsorted} from '@components/DragSortableTable/sorting';
@@ -9,10 +9,6 @@ import {cells} from '@pages/Demos/Tables/Aggregations/cells';
 import {hydrated, recentTrades} from '@pages/Demos/Tables/Aggregations/recent-trades';
 import {LiveTradesState, liveTrades, opening} from '@pages/Demos/Charts/live-trades';
 import {Trade} from '@pages/Demos/Charts/coinbase';
-
-export const measures = ['trades', 'buys', 'sells', 'volume', 'vwap', 'change'];
-
-export const columns = ['window', ...measures];
 
 const directions: Record<string, Direction> = {ascending: 'ascending', descending: 'descending'};
 
@@ -205,15 +201,6 @@ const summonedTable = (document: Document, id: string): HTMLTableElement => {
   return element;
 };
 
-const summonedLane = (document: Document): HTMLTableRowElement => {
-  const clone = summoned(document, 'ghost-lane').content.cloneNode(true);
-  const element = clone instanceof DocumentFragment ? clone.firstElementChild : clone;
-  if (!(element instanceof HTMLTableRowElement)) {
-    throw new Error('template "ghost-lane" holds no row');
-  }
-  return element;
-};
-
 const flown = (document: Document, element: HTMLTableElement, at: {x: number; y: number; width: number}): GhostFlight => {
   element.style.setProperty('--flight-x', `${at.x}px`);
   element.style.setProperty('--flight-y', `${at.y}px`);
@@ -239,15 +226,13 @@ export const columnGhost = ({document, table, desk, lanes}: Shell, column: strin
   maybe(ghost.querySelector('.header-cell-content')).map(content => {
     content.textContent = column;
   });
-  maybe(ghost.querySelector('tbody')).map(hold =>
-    lanes.forEach(lane => {
-      const seat = summonedLane(document);
+  [...ghost.querySelectorAll('tbody td')].forEach((td, seat) =>
+    maybe(lanes[seat]).map(lane => {
       const cell = lane.cells[at];
-      maybe(seat.querySelector('td')).map(td => {
-        td.textContent = (cell.textContent ?? '').trim();
+      td.textContent = (cell.textContent ?? '').trim();
+      if (td instanceof HTMLElement) {
         td.style.height = `${cell.getBoundingClientRect().height}px`;
-      });
-      hold.append(seat);
+      }
     }));
   const box = th.getBoundingClientRect();
   return flown(document, ghost, {x: box.x, y: box.y, width: box.width});
@@ -366,7 +351,9 @@ const standTable = (
 ): void => {
   const lanes = [...body.querySelectorAll('tr')];
   const dealt = lanes.map((_, at) => at);
-  const desk: Desk = {order: columns, seats: dealt, seated: dealt, shares: undefined};
+  const order = [...table.querySelectorAll('thead th')].map(th => th.classList.item(1) ?? '');
+  const measures = order.filter(column => is(document.getElementById(`sort-${column}`)));
+  const desk: Desk = {order, seats: dealt, seated: dealt, shares: undefined};
   const env = {...quiet, ...window.__env};
 
   let history: readonly Trade[] = [];
