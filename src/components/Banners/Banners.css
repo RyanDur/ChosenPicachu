@@ -95,7 +95,6 @@
     align-items: center;
     gap: var(--base-x-2);
     padding: var(--base) var(--base-x-2);
-    color: var(--internationl-orange-engineering);
     transition: block-size 0.3s;
   }
 
