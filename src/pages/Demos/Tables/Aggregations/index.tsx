@@ -1,14 +1,12 @@
 import {FC} from 'react';
-import {has} from '@ryandur/sand';
 import {
   EagerHideAnimatedTable, EagerHideStaticTable, EagerKeepAnimatedTable, EagerKeepStaticTable,
   LazyHideAnimatedTable, LazyHideStaticTable, LazyKeepAnimatedTable, LazyKeepStaticTable
 } from '@components/DragSortableTable';
 import {Motion, Origin, Pace} from '../../Controls';
-import {Row} from '@components/Table';
 import {Trade} from '../../Charts/coinbase';
-import {cents, deltaLabel} from '../../Charts/money';
-import {WindowAggregate, windowedAggregates} from './fold';
+import {windowedAggregates} from './fold';
+import {cells} from './cells';
 import './Aggregations.css';
 import {hydrated, useRecentTrades} from './useRecentTrades';
 
@@ -39,21 +37,6 @@ const columns = [
   {display: 'vwap', column: 'vwap', className: 'vwap', sortable: true},
   {display: 'change', column: 'change', className: 'change', sortable: true}
 ];
-
-const moved = ({opened, closed}: WindowAggregate) =>
-  has(opened) && has(closed)
-    ? {display: deltaLabel(opened, closed), value: closed - opened}
-    : {display: '—'};
-
-const cells = (aggregate: WindowAggregate): Row => ({
-  window: {display: aggregate.window},
-  trades: {display: String(aggregate.trades), value: aggregate.trades},
-  buys: {display: String(aggregate.buys), value: aggregate.buys},
-  sells: {display: String(aggregate.sells), value: aggregate.sells},
-  volume: {display: aggregate.volume.toFixed(2), value: aggregate.volume},
-  vwap: {display: has(aggregate.vwap) ? cents.format(aggregate.vwap) : '—', value: aggregate.vwap},
-  change: moved(aggregate)
-});
 
 export const Aggregations: FC<Props> = ({trades, pace, origin, motion}) => {
   const recent = useRecentTrades();

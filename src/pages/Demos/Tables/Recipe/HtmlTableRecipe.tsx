@@ -45,7 +45,7 @@ const dealtStory =
         </Words>
         <Codes>
           <Snippet label="HTML" lines={[
-            ...span(tableSource, '<thead class="header">', '</thead>'), gap,
+            ...span(tableSource, '<thead class="header">', '</th>'), gap,
             ...span(tableSource, '<tbody class="body">', '</tr>')
           ]}/>
           <Snippet label="CSS" lines={[
