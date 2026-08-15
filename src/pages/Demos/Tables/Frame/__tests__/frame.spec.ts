@@ -5,7 +5,7 @@ import tableHtml from '../table.html?raw';
 
 describe('the frame table sorts', () => {
   const windowNames = (): string[] =>
-    screen.getAllByRole('rowheader').map(header => header.textContent ?? '');
+    screen.getAllByRole('rowheader').map(header => (header.textContent ?? '').trim());
 
   const sortMenu = (column: string) =>
     within(screen.getByRole('columnheader', {name: new RegExp(column)}));
