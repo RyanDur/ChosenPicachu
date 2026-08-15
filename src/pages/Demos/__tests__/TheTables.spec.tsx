@@ -481,6 +481,24 @@ describe('the tables demo', () => {
       expect(await screen.findByText('The trader can widen a column')).toBeInTheDocument();
     });
 
+
+    test('the sort tutorial stands in every html build, on both tracks', async () => {
+      const feed = await streamingFeed();
+      const builds = ['eager', 'lazy'].flatMap(pace =>
+        ['keep', 'hide'].flatMap(origin =>
+          ['animated', 'static'].map(motion => `pace=${pace}&origin=${origin}&motion=${motion}`)));
+      const stood = [];
+      for (const build of builds) {
+        const {unmount} = renderTables(urlOf(feed), `?tab=tables&world=html&tut=sort&${build}`);
+        expect(await screen.findByText('The trader can sort by column')).toBeInTheDocument();
+        await userEvent.click(screen.getByRole('button', {name: 'By keyboard'}));
+        expect(await screen.findByText('The trader can sort without a mouse')).toBeInTheDocument();
+        stood.push(build);
+        unmount();
+      }
+      expect(stood).toHaveLength(8);
+    });
+
     test('the world dial swaps the stage', async () => {
       const feed = await streamingFeed();
 

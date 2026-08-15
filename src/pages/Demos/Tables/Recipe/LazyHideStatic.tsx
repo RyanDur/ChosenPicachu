@@ -4,6 +4,7 @@ import {Codes, Mdn, Says, Snippet, Step, Steps, Story, Tell, Words, aside} from 
 import {span, unit} from '../../Recipe/carve';
 import {
   Track,
+  World,
   accessTrack,
   againstTheStream,
   arrowsSpeak,
@@ -19,67 +20,96 @@ import {
   quietDials,
   theaterVertical,
   turnedVertical,
-  twoRoads
+  twoRoads,
+  frameShell
 } from './shared-steps';
+import shellSrc from '../Frame/shells/LazyHideStatic.ts?raw';
 import tableSource from '@components/DragSortableTable/LazyHideStaticTable/LazyHideStaticTable.tsx?raw';
 import headerSource from '@components/DragSortableTable/LazyHideStaticTable/Header.tsx?raw';
 import hookSource from '@components/DragSortableTable/LazyHideStaticTable/useColumnTravel.ts?raw';
 import cssSource from '@components/DragSortableTable/LazyHideStaticTable/LazyHideStaticTable.css?raw';
 
-export const LazyHideStaticRecipe: FC<{track: Track}> = ({track}) => track === 'pointer'
+export const LazyHideStaticRecipe: FC<{track: Track; world: World}> = ({track, world}) => track === 'pointer'
   ? <>
     <Story param="sort" id="column"
            can="The trader can sort by column"
            soThat="the measures they compare sit beside each other">
       {twoRoads}
       {againstTheStream}
-      {ownedPixels}
+      {ownedPixels(world)}
       <Tell>This particular table keeps three more promises.
         The table holds calm and the sort lands on the drop, so only the destination matters.
         A gap opens where the column left, so the landing is never a guess.
         And the swap lands instantly, with no motion, so nothing competes with the pointer.</Tell>
       <Steps>
-        {cssShare}
-        {orderInState(tableSource)}
-        {liftOnce(hookSource, tableSource)}
-        {dragSurface(hookSource)}
-        {ghostByHand(hookSource)}
+        {cssShare(world)}
+        {orderInState(world, tableSource)}
+        {liftOnce(world, hookSource, tableSource, shellSrc)}
+        {dragSurface(world, hookSource)}
+        {ghostByHand(world, hookSource)}
         {deadZone}
         <Step title="Stash the landing, commit on release" dial={<PaceDial name="step-pace"/>}>
           <Words want="The trader wants the table calm while they drag, because mid-flight churn distracts and only the destination matters.">
-            <Says>With lazy pace, remember the last neighbour struck and do nothing else. The table
-              holds still, and one moveToIndex runs on pointer up. Drifting back over your own slot
-              clears the landing, so a drop at home changes nothing.</Says>
-            <Says>The lazy hook is its own handler, not a flag on the eager one: a strike is only ever
-              remembered as the landing, and drop, which also answers cancel and a lost capture,
-              commits it.</Says>
+            {world === 'react'
+              ? <Says>With lazy pace, remember the last neighbour struck and do nothing else. The table
+                holds still, and one moveToIndex runs on pointer up. Drifting back over your own slot
+                clears the landing, so a drop at home changes nothing.</Says>
+              : <Says>With lazy pace, remember the last neighbour struck and do nothing else. The table
+                holds still, and one commit runs at the landing. Drifting back over your own slot
+                clears the landing, so a drop at home changes nothing.</Says>}
+            {world === 'react'
+              ? <Says>The lazy hook is its own handler, not a flag on the eager one: a strike is only ever
+                remembered as the landing, and drop, which also answers cancel and a lost capture,
+                commits it.</Says>
+              : <Says>The lazy shell is its own file, not a flag on the eager one: a strike is only ever
+                remembered as the landing, and the land of the flight, which also answers cancel and a
+                lost capture, commits it.</Says>}
           </Words>
           <Codes>
-            <Snippet label="JS" lines={[
-              ...unit(hookSource, 'const travel = '), gap,
-              ...unit(hookSource, 'const drop = ')
-            ]}/>
+            {world === 'react'
+              ? <Snippet label="JS" lines={[
+                ...unit(hookSource, 'const travel = '), gap,
+                ...unit(hookSource, 'const drop = ')
+              ]}/>
+              : <Snippet label="JS" lines={[
+                ...span(shellSrc, 'let landing: string | undefined;', 'commit(columnOf(desk, th), landing')
+              ]}/>}
           </Codes>
         </Step>
         <Step title="Blank the origin while it is aloft" dial={<OriginDial name="step-origin"/>}>
           <Words want="With the ghost in hand, the trader reads the origin column as a duplicate, and nothing says where the drop will land.">
-            <Says>We could unmount the origin while it travels, but its space would collapse and
-              the whole table would shift; so the disappearance takes a component choice and one word
-              of CSS instead. This is the hide table, so there is no flag anywhere: the markup compares the aloft key against each
-              cell, and CSS does the
-              vanishing: <Mdn path="Web/CSS/visibility">visibility</Mdn> hidden takes the whole column
-              (text, borders, grip, everything) while its layout space remains as the gap where the
-              drop will land. Nothing unmounts.</Says>
+            {world === 'react'
+              ? <Says>We could unmount the origin while it travels, but its space would collapse and
+                the whole table would shift; so the disappearance takes a component choice and one word
+                of CSS instead. This is the hide table, so there is no flag anywhere: the markup compares the aloft key against each
+                cell, and CSS does the
+                vanishing: <Mdn path="Web/CSS/visibility">visibility</Mdn> hidden takes the whole column
+                (text, borders, grip, everything) while its layout space remains as the gap where the
+                drop will land. Nothing unmounts.</Says>
+              : <Says>We could pull the origin out of the DOM while it travels, but its space would
+                collapse and the whole table would shift; so the disappearance takes one class and one
+                word of CSS instead. This is the hide shell, so there is no flag anywhere: the grab
+                blanks the column it lifted and the landing unblanks it, and CSS does the
+                vanishing: <Mdn path="Web/CSS/visibility">visibility</Mdn> hidden takes the whole column
+                (text, borders, grip, everything) while its layout space remains as the gap where the
+                drop will land. Nothing leaves the DOM.</Says>}
           </Words>
           <Codes>
-            <Snippet label="HTML" lines={[
-              ...span(tableSource, 'aloft={columnsTravel.aloft}', 'aloft={columnsTravel.aloft}'), gap,
-              ...span(tableSource, 'aloft={rowsTravel.aloft}', 'aloftColumn={columnsTravel.aloft}')
-            ]}/>
-            <Snippet label="JS" lines={[
-              ...span(headerSource, 'const hidden = aloft.map(held => held === columnName).orElse(false);', 'const hidden = aloft.map(held => held === columnName).orElse(false);'),
-              aside('// being the hide table is the flag; the element serves itself')
-            ]}/>
+            {world === 'react'
+              ? <Snippet label="HTML" lines={[
+                ...span(tableSource, 'aloft={columnsTravel.aloft}', 'aloft={columnsTravel.aloft}'), gap,
+                ...span(tableSource, 'aloft={rowsTravel.aloft}', 'aloftColumn={columnsTravel.aloft}')
+              ]}/>
+              : <Snippet label="JS" lines={[
+                ...unit(frameShell, 'export const hideColumn'),
+                aside('// the grab calls it at the lift; the landing calls unhideColumn')
+              ]}/>}
+            {world === 'react'
+              ? <Snippet label="JS" lines={[
+                ...span(headerSource, 'const hidden = aloft.map(held => held === columnName).orElse(false);', 'const hidden = aloft.map(held => held === columnName).orElse(false);'),
+                aside('// being the hide table is the flag; the element serves itself')
+              ]}/>
+              : undefined}
             <Snippet label="CSS" lines={[
               ...unit(cssSource, '.sortable .hide,'),
               aside('/* the box stops painting; its layout space stays */')
@@ -88,17 +118,28 @@ export const LazyHideStaticRecipe: FC<{track: Track}> = ({track}) => track === '
         </Step>
         <Step title="Apply the state update directly" dial={<MotionDial name="step-motion"/>}>
           <Words want="Motion is not free: it competes with the pointer, costs a frame budget, and some traders ask for none at all.">
-            <Says>The static table is not the animated one with a switch off; it is a different
-              table with no marking code in it. Its settle is the whole story: move the key, let
-              React paint, and there is nothing else, because nothing else exists in this file.
-              There is real value in this mode beyond taste: nothing competes with the pointer, and
-              no motion for prefers-reduced-motion users to endure.</Says>
+            {world === 'react'
+              ? <Says>The static table is not the animated one with a switch off; it is a different
+                table with no marking code in it. Its settle is the whole story: move the key, let
+                React paint, and there is nothing else, because nothing else exists in this file.
+                There is real value in this mode beyond taste: nothing competes with the pointer, and
+                no motion for prefers-reduced-motion users to endure.</Says>
+              : <Says>The static shell is not the animated one with a switch off; it is a different
+                file with no marking code in it. Its commit is the whole story: move the cells, let
+                paint reseat, and there is nothing else, because nothing else exists in this file.
+                There is real value in this mode beyond taste: nothing competes with the pointer, and
+                no motion for prefers-reduced-motion users to endure.</Says>}
           </Words>
           <Codes>
-            <Snippet label="JS" lines={[
-              ...unit(tableSource, 'const settleColumn = '),
-              aside('// the whole settle; no marking code exists in this table')
-            ]}/>
+            {world === 'react'
+              ? <Snippet label="JS" lines={[
+                ...unit(tableSource, 'const settleColumn = '),
+                aside('// the whole settle; no marking code exists in this table')
+              ]}/>
+              : <Snippet label="JS" lines={[
+                ...unit(shellSrc, 'const commit = (held: string'),
+                aside('// the whole settle; no marking code exists in this shell')
+              ]}/>}
           </Codes>
         </Step>
       </Steps>
@@ -108,7 +149,7 @@ export const LazyHideStaticRecipe: FC<{track: Track}> = ({track}) => track === '
            soThat="the windows they watch closest sit on top">
       {turnedVertical}
       <Steps>
-        {theaterVertical(tableSource)}
+        {theaterVertical(world, tableSource, shellSrc)}
       </Steps>
     </Story>
   </>
@@ -118,8 +159,8 @@ export const LazyHideStaticRecipe: FC<{track: Track}> = ({track}) => track === '
     {accessTrack}
     {quietDials}
     <Steps>
-      {focusLands(headerSource)}
-      {arrowsSpeak(headerSource)}
+      {focusLands(world, headerSource)}
+      {arrowsSpeak(world, headerSource, shellSrc)}
       <Step title="Cut on the keypress" dial={<MotionDial name="step-motion"/>}>
         <Words want="Motion is not free, a held key multiplies it, and some traders ask for none at all.">
           <Says>Apply the order and mark nothing; the swap paints on the next frame. With no
@@ -127,10 +168,15 @@ export const LazyHideStaticRecipe: FC<{track: Track}> = ({track}) => track === '
             fast as the key repeats.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" lines={[
-            ...span(headerSource, 'const from = order.indexOf(columnName);', 'onOrdered(columnName, to);'),
-            aside('// the whole walk; nothing marked, nothing to wait for')
-          ]}/>
+          {world === 'react'
+            ? <Snippet label="JS" lines={[
+              ...span(headerSource, 'const from = order.indexOf(columnName);', 'onOrdered(columnName, to);'),
+              aside('// the whole walk; nothing marked, nothing to wait for')
+            ]}/>
+            : <Snippet label="JS" lines={[
+              ...span(shellSrc, 'const from = desk.order.indexOf(held);', 'moveColumn(shell, from, to);'),
+              aside('// the whole walk; nothing marked, nothing to wait for')
+            ]}/>}
         </Codes>
       </Step>
     </Steps>
