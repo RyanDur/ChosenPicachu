@@ -28,3 +28,18 @@ test('a real drag reorders the frame columns in the default world', async ({page
 
   expect(await order()).toEqual(['window', 'buys', 'sells', 'trades', 'volume', 'vwap', 'change']);
 });
+
+test('a menu choice sorts, and never lifts the column', async ({page}) => {
+  await page.goto('/ChosenPicachu/demos/?tab=tables&world=html');
+  const frame = page.frameLocator('iframe.table-frame');
+  await frame.locator('th.trades').waitFor();
+
+  await frame.locator('th.trades .menu-toggle').click();
+  await frame.locator('#sort-trades button.item', {hasText: 'descending'}).click();
+
+  await expect(frame.locator('th.trades')).toHaveAttribute('aria-sort', 'descending');
+  await expect(frame.locator('th.trades .menu-toggle')).toHaveText('▼');
+  await expect(frame.locator('table.column-ghost')).toHaveCount(0);
+  await expect(frame.locator('article.drag-surface')).toHaveCount(0);
+  await expect(frame.locator('th.trades')).not.toHaveClass(/hide/);
+});
