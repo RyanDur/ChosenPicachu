@@ -239,3 +239,50 @@
     </tbody>
   </table>
 </section>
+
+<template id="column-ghost">
+  <table class="fancy-table column-ghost" aria-hidden="true">
+    <thead class="header">
+    <tr class="row">
+      <th scope="col" class="cell header-cell clipped">
+        <div class="header-cell-content"></div>
+      </th>
+    </tr>
+    </thead>
+    <tbody class="body"></tbody>
+  </table>
+</template>
+
+<template id="ghost-lane">
+  <tr class="row">
+    <td class="cell"></td>
+  </tr>
+</template>
+
+<template id="row-ghost">
+  <table class="fancy-table column-ghost" aria-hidden="true">
+    <tbody class="body">
+    <tr class="row">
+      <th scope="row" class="cell ellipsis row-header">
+        <div class="row-header-content">
+          <i class="grip">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+                       width="16" height="16" aria-hidden="true">
+                    <path d="M32 288c-17.7 0-32 14.3-32 32s14.3 32 32 32l384 0c17.7
+                             0 32-14.3 32-32s-14.3-32-32-32L32 288zm0-128c-17.7
+                             0-32 14.3-32 32s14.3 32 32 32l384 0c17.7 0 32-14.3
+                             32-32s-14.3-32-32-32L32 160z"/>
+          </svg>
+          </i>
+        </div>
+      </th>
+        <td class="cell ellipsis"></td>
+        <td class="cell ellipsis"></td>
+        <td class="cell ellipsis"></td>
+        <td class="cell ellipsis"></td>
+        <td class="cell ellipsis"></td>
+        <td class="cell ellipsis"></td>
+    </tr>
+    </tbody>
+  </table>
+</template>

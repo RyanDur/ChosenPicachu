@@ -15,6 +15,7 @@ import type {Motion, Origin, Pace} from '../../Controls';
 import menuCss from '@components/Menu/Menu.css?raw';
 import aggregationsCss from '../Aggregations/Aggregations.css?raw';
 import tableHtml from './table.html?raw';
+import scaffold from './frame.html?raw';
 import frameJs from './frame.main.ts?frame';
 
 const styleSheets = import.meta.glob<string>('../../../../styles/*.css', {query: '?raw', import: 'default', eager: true});
@@ -60,20 +61,12 @@ export type FrameEnv = {
   tradeProduct: string;
 };
 
-export const frameDocument = (env: FrameEnv, frame: FrameConfig): string => `<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<title>the living table</title>
-<style>
-${[...sheets, ...maybe(variantSheets[frame.pace][frame.origin][frame.motion]).map(sheet => [sheet]).orElse([])].map(({css}) => css).join('\n')}
-</style>
-</head>
-<body>
-${tableHtml}
-<script>window.__env = ${JSON.stringify(env)}; window.__frame = ${JSON.stringify(frame)};</script>
-<script type="module">
-${frameJs}
-</script>
-</body>
-</html>`;
+export const frameDocument = (env: FrameEnv, frame: FrameConfig): string => {
+  const cascade = [...sheets, ...maybe(variantSheets[frame.pace][frame.origin][frame.motion]).map(sheet => [sheet]).orElse([])]
+    .map(({css}) => css).join('\n');
+  return scaffold
+    .replace('/* the cascade */', () => cascade)
+    .replace('<!-- the dealt table -->', () => tableHtml)
+    .replace('/* the environment */', () => `window.__env = ${JSON.stringify(env)}; window.__frame = ${JSON.stringify(frame)};`)
+    .replace('/* the shell */', () => frameJs);
+};
