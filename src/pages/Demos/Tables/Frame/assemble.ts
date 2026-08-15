@@ -29,7 +29,13 @@ export const sheets = [
   {name: 'Aggregations.css', css: aggregationsCss}
 ];
 
-export const frameDocument = `<!doctype html>
+export type FrameEnv = {
+  tradeFeed: string;
+  tradeHistory: string;
+  tradeProduct: string;
+};
+
+export const frameDocument = (env: FrameEnv): string => `<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -40,6 +46,7 @@ ${sheets.map(({css}) => css).join('\n')}
 </head>
 <body>
 ${tableHtml}
+<script>window.__env = ${JSON.stringify(env)};</script>
 <script type="module">
 ${frameJs}
 </script>
