@@ -1,7 +1,13 @@
 import {FC} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
 import {motionParam, originParam, paceParam} from '../Controls';
-import {worldParam} from './params';
+import {World, worldParam} from './params';
+import {PillGlider} from '@components/PillGlider';
+
+const worldCopy: Record<World, string> = {
+  react: 'React builds and rebuilds this table; the page you read is its render.',
+  html: 'The table stands in its own document: markup, stylesheet, and script, no framework.'
+};
 import {TableControls} from './TableControls';
 import {Picks} from './Picks';
 import {Recipe, Track} from './Recipe';
@@ -27,7 +33,18 @@ export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack}) => {
   const {pace = 'eager', origin = 'hide', motion = 'animated', world = 'react', updateSearchParams} =
     useSearchParamsObject({pace: paceParam, origin: originParam, motion: motionParam, world: worldParam});
   return <section className="tutorials">
-    <h2 className="tutorials-title">let’s build this feature</h2>
+    <header className="tutorials-header">
+      <h2 className="tutorials-title">let’s build this feature</h2>
+      <PillGlider label="world"
+                  name="table-world"
+                  options={[
+                    {display: 'React', value: 'react'},
+                    {display: 'HTML', value: 'html'}
+                  ]}
+                  chosen={world}
+                  onChoose={next => updateSearchParams({world: next})}/>
+    </header>
+    <p className="paragraph">{worldCopy[world]}</p>
     <p className="overview paragraph">
       We are going to build this site’s live trading table, feature by feature. Here is how to
       use this page: every card below is a feature, told as a <a className="signpost"
@@ -67,8 +84,7 @@ export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack}) => {
     {shown === 'sort' && <TableControls pace={pace} origin={origin} motion={motion} world={world}
                                         onPace={next => updateSearchParams({pace: next})}
                                         onOrigin={next => updateSearchParams({origin: next})}
-                                        onMotion={next => updateSearchParams({motion: next})}
-                                        onWorld={next => updateSearchParams({world: next})}/>}
+                                        onMotion={next => updateSearchParams({motion: next})}/>}
     {shown === 'sort' && <Recipe track={track} onTrack={onTrack}/>}
     {shown === 'menu' && <MenuRecipe/>}
     {shown === 'resize' && <ResizeRecipe/>}

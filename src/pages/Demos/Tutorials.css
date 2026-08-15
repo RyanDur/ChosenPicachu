@@ -29,6 +29,12 @@
     text-wrap: pretty;
   }
 
+  .tutorials-header {
+    display: flex;
+    align-items: center;
+    gap: var(--base-x-2_5);
+  }
+
   .tutorials-title {
     font-size: var(--text-headline);
   }
