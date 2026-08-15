@@ -75,6 +75,7 @@ const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void 
   };
 
   grip.addEventListener('pointerdown', event => {
+    shell.bake();
     const survey = surveyed(table, desk.order, desk.seated);
     const ghost = rowGhost(shell, held);
     const from = {x: event.clientX, y: event.clientY};

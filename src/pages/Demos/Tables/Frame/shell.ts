@@ -32,6 +32,7 @@ export type Shell = {
   lanes: readonly HTMLTableRowElement[];
   desk: Desk;
   paint: () => void;
+  bake: () => void;
 };
 
 export const columnOf = (desk: Desk, cell: Element): string =>
@@ -392,7 +393,15 @@ const standTable = (
     }
   };
 
-  const shell: Shell = {document, table, body, lanes, desk, paint};
+  const bake = (): void => {
+    desk.seats = desk.seated;
+    if (has(rule)) {
+      rule = undefined;
+      measures.forEach(column => announce(document, column, rule));
+    }
+  };
+
+  const shell: Shell = {document, table, body, lanes, desk, paint, bake};
 
   const choose = (next?: Rule): void => {
     rule = next;

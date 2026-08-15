@@ -231,15 +231,18 @@ describe('the frame table', () => {
     fireEvent.pointerUp(surface(), {pointerId: 1});
   });
 
-  it('a standing rule outranks the dragged seats, and as dealt returns to them', async () => {
+  it('a hand on a row bakes the standing and ends the rule', async () => {
     deal();
 
-    await userEvent.click(screen.getByRole('button', {name: 'move row 1'}));
-    await userEvent.keyboard('{ArrowDown}');
     await userEvent.click(sortMenu('trades').getByRole('button', {name: 'ascending', hidden: true}));
-    await userEvent.click(sortMenu('trades').getByRole('button', {name: 'as dealt', hidden: true}));
+    expect(screen.getByRole('columnheader', {name: /trades/})).toHaveAttribute('aria-sort', 'ascending');
 
-    expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
+    fireEvent.pointerDown(screen.getByRole('button', {name: 'move row 1'}), {clientX: 20, clientY: 20, pointerId: 1});
+    fireEvent.pointerUp(surface(), {pointerId: 1});
+
+    expect(screen.getByRole('columnheader', {name: /trades/})).not.toHaveAttribute('aria-sort');
+    expect(sortMenu('trades').getByRole('button', {name: 'sort trades'})).toHaveTextContent('⇅');
+    expect(windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
   });
 
   it('the keyboard trades shares between neighbours', async () => {
