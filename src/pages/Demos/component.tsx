@@ -95,7 +95,7 @@ export const DemosPage = () => {
             [DemoTopics.tables]: <>
               {world === 'react'
                 ? <Aggregations trades={liveTrades.trades} pace={pace} origin={origin} motion={motion}/>
-                : <TableFrame/>}
+                : <TableFrame pace={pace} origin={origin} motion={motion}/>}
               <Suspense fallback={<Loading label="loading the tutorial"/>}>
                 <Tutorials shown={tut} onShow={next => updateSearchParams({tut: next})}
                            track={track} onTrack={next => updateSearchParams({track: next})}/>
