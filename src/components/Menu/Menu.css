@@ -10,11 +10,9 @@
     justify-content: center;
     width: 100%;
     background: none;
-    cursor: pointer;
     border: none;
     height: var(--base-x-5);
-    font-size: var(--base-x-2_5);
-    color: var(--void);
+    font-size: var(--text-title);
 
     &:active {
       box-shadow: var(--press-glow-soft);
