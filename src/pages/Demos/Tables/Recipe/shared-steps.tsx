@@ -19,7 +19,7 @@ import frameShell from '../Frame/shell.ts?raw';
 export {aloftSource, surveySource, gripSource, ghostSource, sortableCss, headerCss, ghostCss, frameShell};
 
 export type {Track, World} from '../params';
-export {trackParam, worldParam} from '../params';
+export {trackParam} from '../params';
 
 export const gap = plain(' ');
 

@@ -12,6 +12,7 @@ import {
   deadZone,
   dragSurface,
   focusLands,
+  frameShell,
   ghostByHand,
   liftOnce,
   orderInState,
@@ -19,8 +20,7 @@ import {
   quietDials,
   theaterVertical,
   turnedVertical,
-  twoRoads,
-  frameShell
+  twoRoads
 } from './shared-steps';
 import shellSrc from '../Frame/shells/EagerKeepStatic.ts?raw';
 import tableSource from '@components/DragSortableTable/EagerKeepStaticTable/EagerKeepStaticTable.tsx?raw';

@@ -245,6 +245,19 @@ describe('the frame table', () => {
     expect(windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
   });
 
+  it('a keyboard nudge bakes the standing and ends the rule', async () => {
+    deal();
+
+    await userEvent.click(sortMenu('trades').getByRole('button', {name: 'ascending', hidden: true}));
+    expect(screen.getByRole('columnheader', {name: /trades/})).toHaveAttribute('aria-sort', 'ascending');
+
+    screen.getByRole('button', {name: 'move row 1'}).focus();
+    await userEvent.keyboard('{ArrowDown}');
+
+    expect(screen.getByRole('columnheader', {name: /trades/})).not.toHaveAttribute('aria-sort');
+    expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
+  });
+
   it('the keyboard trades shares between neighbours', async () => {
     deal();
     stubbedRects();
@@ -297,6 +310,33 @@ describe('the frame table', () => {
       fireEvent.pointerUp(surface(), {pointerId: 1});
 
       expect(columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
+    });
+
+    it('a lazy row dropped at home changes nothing', () => {
+      deal(undefined, lazyKeepStatic);
+      rowRects();
+
+      const grip = within(screen.getByRole('row', {name: /this minute/})).getByRole('button', {name: 'move row 1'});
+      fireEvent.pointerDown(grip, {clientX: 20, clientY: 20, pointerId: 1});
+      fireEvent.pointerMove(surface(), {buttons: 1, clientX: 20, clientY: 75, pointerId: 1});
+      fireEvent.pointerMove(surface(), {buttons: 1, clientX: 20, clientY: 20, pointerId: 1});
+      fireEvent.pointerUp(surface(), {pointerId: 1});
+
+      expect(windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
+    });
+
+    it('keep flies a row ghost and never blanks the lane', () => {
+      deal(undefined, lazyKeepStatic);
+      rowRects();
+
+      const grip = within(screen.getByRole('row', {name: /this minute/})).getByRole('button', {name: 'move row 1'});
+      fireEvent.pointerDown(grip, {clientX: 20, clientY: 20, pointerId: 1});
+
+      expect(document.querySelector('table.column-ghost .grip')).toBeInTheDocument();
+      expect(document.querySelector('.hide-across')).not.toBeInTheDocument();
+
+      fireEvent.pointerUp(surface(), {pointerId: 1});
+      expect(document.querySelector('table.column-ghost')).not.toBeInTheDocument();
     });
 
     it('keep flies a ghost and never blanks the origin', () => {

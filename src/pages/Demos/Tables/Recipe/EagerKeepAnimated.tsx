@@ -12,6 +12,7 @@ import {
   deadZone,
   dragSurface,
   focusLands,
+  frameShell,
   gap,
   ghostByHand,
   liftOnce,
@@ -20,8 +21,7 @@ import {
   quietDials,
   theaterVertical,
   turnedVertical,
-  twoRoads,
-  frameShell
+  twoRoads
 } from './shared-steps';
 import shellSrc from '../Frame/shells/EagerKeepAnimated.ts?raw';
 import tableSource from '@components/DragSortableTable/EagerKeepAnimatedTable/EagerKeepAnimatedTable.tsx?raw';

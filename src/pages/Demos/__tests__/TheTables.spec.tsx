@@ -28,6 +28,11 @@ const feedIsSubscribed = async (): Promise<void> => {
   await waitFor(() => expect(subscribed.size).toBeGreaterThan(0));
 };
 
+const dialCombos = ['eager', 'lazy'].flatMap(pace =>
+  ['keep', 'hide'].flatMap(origin =>
+    ['animated', 'static'].map(motion => `pace=${pace}&origin=${origin}&motion=${motion}`)));
+const builds = ['react', 'html'].flatMap(world => dialCombos.map(dials => `world=${world}&${dials}`));
+
 describe('the tables demo', () => {
   const feeds: WebSocketServer[] = [];
 
@@ -463,7 +468,6 @@ describe('the tables demo', () => {
       expect(screen.queryByText('The trader can read the market in windows')).not.toBeInTheDocument();
     });
 
-
     test('the menu story stands in the html world', async () => {
       const feed = await streamingFeed();
 
@@ -471,7 +475,6 @@ describe('the tables demo', () => {
 
       expect(await screen.findByText('The trader can sort the windows by any measure, or take the order back')).toBeInTheDocument();
     });
-
 
     test('the resize story stands in the html world', async () => {
       const feed = await streamingFeed();
@@ -481,22 +484,15 @@ describe('the tables demo', () => {
       expect(await screen.findByText('The trader can widen a column')).toBeInTheDocument();
     });
 
-
-    test('the sort tutorial stands in every html build, on both tracks', async () => {
+    test('the sort tutorial stands in every build, in both worlds, on both tracks', async () => {
       const feed = await streamingFeed();
-      const builds = ['eager', 'lazy'].flatMap(pace =>
-        ['keep', 'hide'].flatMap(origin =>
-          ['animated', 'static'].map(motion => `pace=${pace}&origin=${origin}&motion=${motion}`)));
-      const stood = [];
       for (const build of builds) {
-        const {unmount} = renderTables(urlOf(feed), `?tab=tables&world=html&tut=sort&${build}`);
+        const {unmount} = renderTables(urlOf(feed), `?tab=tables&tut=sort&${build}`);
         expect(await screen.findByText('The trader can sort by column')).toBeInTheDocument();
         await userEvent.click(screen.getByRole('button', {name: 'By keyboard'}));
         expect(await screen.findByText('The trader can sort without a mouse')).toBeInTheDocument();
-        stood.push(build);
         unmount();
       }
-      expect(stood).toHaveLength(8);
     });
 
     test('the world dial swaps the stage', async () => {
