@@ -232,10 +232,12 @@ export const rowGhost = ({document, desk, lanes}: Shell, row: number): GhostFlig
   const at = lane.getBoundingClientRect();
   const ghost = flown(document, {x: at.x, y: at.y, width: at.width});
   const dressed = desk.order.map((column, at) => {
-    const text = (lane.cells[at].textContent ?? '').trim();
+    const cell = lane.cells[at];
+    const text = (cell.textContent ?? '').trim();
+    const width = `style="width: ${cell.getBoundingClientRect().width}px"`;
     return column === 'window'
-      ? `<th scope="row" class="cell row-header"><div class="row-header-content">${text}</div></th>`
-      : `<td class="cell">${text}</td>`;
+      ? `<th scope="row" class="cell row-header" ${width}><div class="row-header-content">${text}</div></th>`
+      : `<td class="cell" ${width}>${text}</td>`;
   });
   ghost.element.innerHTML = `<tbody class="body"><tr class="row">${dressed.join('')}</tr></tbody>`;
   return ghost;
@@ -341,13 +343,22 @@ const standTable = (
     lanes.forEach((lane, at) =>
       measures.forEach(measure => {
         const {display} = rows[at][measure];
-        lane.cells[desk.order.indexOf(measure)].textContent = typeof display === 'string' ? display : '';
+        const cell = lane.cells[desk.order.indexOf(measure)];
+        const next = typeof display === 'string' ? display : '';
+        if (cell.textContent !== next) {
+          cell.textContent = next;
+        }
       }));
-    desk.seated = has(rule) ? ranked(rows, desk.seats, rule) : desk.seats;
-    desk.seated.forEach(at => body.append(lanes[at]));
-    desk.seated.forEach((at, position) =>
-      maybe(lanes[at].querySelector('button.grip')).map(grip =>
-        grip.setAttribute('aria-label', `move row ${position + 1}`)));
+    const standing = has(rule) ? ranked(rows, desk.seats, rule) : desk.seats;
+    if (standing.some((at, position) => desk.seated[position] !== at)) {
+      desk.seated = standing;
+      desk.seated.forEach(at => body.append(lanes[at]));
+      desk.seated.forEach((at, position) =>
+        maybe(lanes[at].querySelector('button.grip')).map(grip =>
+          grip.setAttribute('aria-label', `move row ${position + 1}`)));
+    } else {
+      desk.seated = standing;
+    }
   };
 
   const choose = (next?: Rule): void => {
@@ -358,8 +369,8 @@ const standTable = (
 
   measures.forEach(column => wireMenu(document, column, choose));
   wireResize(table, desk);
-  [...table.querySelectorAll('.menu-toggle')].forEach(toggle =>
-    toggle.addEventListener('pointerdown', event => event.stopPropagation()));
+  [...table.querySelectorAll('.menu-toggle, .menu')].forEach(chrome =>
+    chrome.addEventListener('pointerdown', event => event.stopPropagation()));
 
   const shell: Shell = {document, table, body, lanes, desk, paint};
   dressGrips(shell);
