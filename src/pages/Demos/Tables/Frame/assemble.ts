@@ -2,8 +2,10 @@ import indexCss from '../../../../index.css?raw';
 import tableCss from '@components/Table/Table.css?raw';
 import headerCss from '@components/DragSortableTable/Header.css?raw';
 import sortableCss from '@components/DragSortableTable/sortable.css?raw';
+import menuCss from '@components/Menu/Menu.css?raw';
 import aggregationsCss from '../Aggregations/Aggregations.css?raw';
 import tableHtml from './table.html?raw';
+import frameJs from './frame.main.ts?frame';
 
 const styleSheets = import.meta.glob<string>('../../../../styles/*.css', {query: '?raw', import: 'default', eager: true});
 
@@ -23,6 +25,7 @@ export const sheets = [
   {name: 'Table.css', css: tableCss},
   {name: 'Header.css', css: headerCss},
   {name: 'sortable.css', css: sortableCss},
+  {name: 'Menu.css', css: menuCss},
   {name: 'Aggregations.css', css: aggregationsCss}
 ];
 
@@ -37,5 +40,8 @@ ${sheets.map(({css}) => css).join('\n')}
 </head>
 <body>
 ${tableHtml}
+<script type="module">
+${frameJs}
+</script>
 </body>
 </html>`;

@@ -2,6 +2,38 @@ import {readFileSync} from 'node:fs';
 import { defineConfig } from 'vitest/config';
 import { loadEnv } from 'vite';
 import type { Plugin } from 'vite';
+import { rolldown } from 'rolldown';
+import { fileURLToPath } from 'node:url';
+
+const aliases = {
+  '@pages': fileURLToPath(new URL('./src/pages', import.meta.url)),
+  '@components': fileURLToPath(new URL('./src/components', import.meta.url)),
+  '@transport': fileURLToPath(new URL('./src/transport', import.meta.url)),
+  '@test-support': fileURLToPath(new URL('./src/test-support', import.meta.url)),
+  crypto: fileURLToPath(new URL('./src/shims/empty.ts', import.meta.url))
+};
+
+const frameScript = (): Plugin => ({
+  name: 'frame-script',
+  enforce: 'pre',
+  async resolveId(source, importer) {
+    if (source.endsWith('.ts?frame')) {
+      const resolved = await this.resolve(source.slice(0, -'?frame'.length), importer, {skipSelf: true});
+      if (resolved !== null) {
+        return '\0framejs' + resolved.id + '.js';
+      }
+    }
+  },
+  async load(id) {
+    if (id.startsWith('\0framejs')) {
+      const path = id.slice('\0framejs'.length, -'.js'.length);
+      this.addWatchFile(path);
+      const bundle = await rolldown({input: path, resolve: {alias: aliases}, logLevel: 'silent'});
+      const {output} = await bundle.generate({format: 'esm'});
+      return `export default ${JSON.stringify(output[0].code)};`;
+    }
+  }
+});
 
 const rawCss = (): Plugin => ({
   name: 'raw-css',
@@ -22,7 +54,6 @@ const rawCss = (): Plugin => ({
     }
   }
 });
-import { fileURLToPath } from 'node:url';
 import react from '@vitejs/plugin-react';
 import svgr from 'vite-plugin-svgr';
 
@@ -65,15 +96,9 @@ const runtimeEnv = (env: Record<string, string>): Plugin => {
 export default defineConfig(({mode}) => ({
   base: '/ChosenPicachu/',
   resolve: {
-    alias: {
-      '@pages': fileURLToPath(new URL('./src/pages', import.meta.url)),
-      '@components': fileURLToPath(new URL('./src/components', import.meta.url)),
-      '@transport': fileURLToPath(new URL('./src/transport', import.meta.url)),
-      '@test-support': fileURLToPath(new URL('./src/test-support', import.meta.url)),
-      crypto: fileURLToPath(new URL('./src/shims/empty.ts', import.meta.url))
-    }
+    alias: aliases
   },
-  plugins: [rawCss(), runtimeEnv(loadEnv(mode, process.cwd())), react(), svgr({
+  plugins: [rawCss(), frameScript(), runtimeEnv(loadEnv(mode, process.cwd())), react(), svgr({
     // svgr options: https://react-svgr.com/docs/options/
     svgrOptions: { exportType: 'default', ref: true, svgo: false, titleProp: true },
     include: '**/*.svg',
