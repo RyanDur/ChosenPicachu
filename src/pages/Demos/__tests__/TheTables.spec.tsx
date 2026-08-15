@@ -452,16 +452,15 @@ describe('the tables demo', () => {
       expect(screen.queryByRole('region', {name: 'live aggregations'})).not.toBeInTheDocument();
     });
 
-    test('the tutorial follows the world', async () => {
+    test('one tutorial stands in both worlds; only the build swaps', async () => {
       const feed = await streamingFeed();
 
       renderTables(urlOf(feed), '?tab=tables&world=html');
 
-      expect(await screen.findByText('The trader can read the market in windows')).toBeInTheDocument();
-      expect(screen.getByText('The trader can watch the market live, in windows')).toBeInTheDocument();
-      expect(screen.getByText('The trader can sort by any measure')).toBeInTheDocument();
-      expect(screen.queryByText('Drag resize')).not.toBeInTheDocument();
-      expect(await screen.findByRole('radio', {name: 'Eager', hidden: true})).toBeInTheDocument();
+      expect(await screen.findByText('The trader can watch the market live, in windows')).toBeInTheDocument();
+      expect(screen.getByText('Drag resize')).toBeInTheDocument();
+      expect((await screen.findAllByRole('radio', {name: 'Eager', hidden: true})).length).toBeGreaterThan(0);
+      expect(screen.queryByText('The trader can read the market in windows')).not.toBeInTheDocument();
     });
 
     test('the world dial swaps the stage', async () => {
