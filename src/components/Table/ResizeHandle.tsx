@@ -1,12 +1,6 @@
 import {FC, FocusEvent, KeyboardEvent, PointerEvent, useState} from 'react';
 import {has, Maybe, maybe, nothing} from '@ryandur/sand';
-
-const STEP_SHARE = 2;
-
-type Grip = {
-    fromX: number;
-    pxPerShare: number;
-};
+import {Grip, STEP_SHARE, sought} from './shares';
 
 const steps: Record<string, number> = {ArrowRight: STEP_SHARE, ArrowLeft: -STEP_SHARE};
 
@@ -48,10 +42,10 @@ export const ResizeHandle: FC<Props> = ({column, share, onAwaken, onTrade}) => {
                   });
               }}
               onPointerMove={(event: PointerEvent<HTMLElement>) =>
-                  grip.map(({fromX, pxPerShare}) => {
-                      const sought = (event.clientX - fromX) / pxPerShare;
-                      onTrade(sought - traded);
-                      setTraded(sought);
+                  grip.map(held => {
+                      const share = sought(held, event.clientX);
+                      onTrade(share - traded);
+                      setTraded(share);
                   })}
               onPointerUp={() => setGrip(nothing())}/>;
 };
