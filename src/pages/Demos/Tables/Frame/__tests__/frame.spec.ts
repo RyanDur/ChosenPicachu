@@ -286,6 +286,19 @@ describe('the frame table', () => {
       expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
     });
 
+    it('a lazy drop at home changes nothing', () => {
+      deal(undefined, lazyKeepStatic);
+      stubbedRects();
+
+      const trades = screen.getByRole('columnheader', {name: /trades/});
+      fireEvent.pointerDown(trades, {clientX: 200, clientY: 50, pointerId: 1});
+      fireEvent.pointerMove(surface(), {buttons: 1, clientX: 335, clientY: 100, pointerId: 1});
+      fireEvent.pointerMove(surface(), {buttons: 1, clientX: 200, clientY: 50, pointerId: 1});
+      fireEvent.pointerUp(surface(), {pointerId: 1});
+
+      expect(columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
+    });
+
     it('keep flies a ghost and never blanks the origin', () => {
       deal(undefined, lazyKeepStatic);
       stubbedRects();
