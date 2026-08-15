@@ -58,7 +58,7 @@ export const PriceChart: FC<Props> = ({trades, id = 'price', actions}) => {
       {actions}
       <Menu id={`${id}-period`} label="price period" toggle={period} toggleClassName="period-toggle paper caption">
         {Object.values(Period).map(option =>
-          <button type="button" key={option} className="item"
+          <button type="button" key={option} className="item sub-title"
                   onClick={() => setPeriod(option)}>{option}</button>
         )}
       </Menu>

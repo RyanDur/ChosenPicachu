@@ -12,7 +12,6 @@
     background: none;
     border: none;
     height: var(--base-x-5);
-    font-size: var(--text-title);
 
     &:active {
       box-shadow: var(--press-glow-soft);

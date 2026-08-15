@@ -10,13 +10,11 @@
 .title {
   font-size: var(--text-headline);
   line-height: 1.2;
-  margin: var(--base-x-2_5) 0;
 }
 
 .sub-title {
   font-size: var(--text-title);
   line-height: 1.25;
-  margin: var(--base-x-2_25) 0;
 }
 
 .paragraph {

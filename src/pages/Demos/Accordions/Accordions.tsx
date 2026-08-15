@@ -8,7 +8,7 @@ type ContentProps = { content: { value: ReactNode, key: string }[] };
 export const InclusiveAccordion: FC<PropsWithClassName & ContentProps> = ({
   className,
   content
-}) => <article className={className}>
+}) => <article className={classNames('inclusive-accordion', className)}>
   <header>
     <h2 className="title bold">Accordion using checkboxes</h2>
     <p>no Javascript needed to pull this off.</p>
@@ -26,7 +26,7 @@ export const InclusiveAccordion: FC<PropsWithClassName & ContentProps> = ({
 export const ExclusiveAccordion: FC<PropsWithClassName & ContentProps> = ({
   className,
   content
-}) => <article className={className}>
+}) => <article className={classNames('exclusive-accordion', className)}>
   <header>
     <h2 className="title bold">Accordion using a radio group</h2>
     <p>no Javascript needed to pull this off.</p>
@@ -48,7 +48,7 @@ export const ExclusiveAccordion: FC<PropsWithClassName & ContentProps> = ({
 export const ExclusiveToggleAccordion: FC<PropsWithClassName & ContentProps> = ({
   className,
   content
-}) => <article className={className}>
+}) => <article className={classNames('exclusive-toggle-accordion', className)}>
   <header className="exclusive-checkbox-header">
     <h2 className="title bold">Exclusive accordion using details elements</h2>
   </header>
