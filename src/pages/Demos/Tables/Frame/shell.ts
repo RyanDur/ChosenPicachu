@@ -2,7 +2,7 @@ import {has, maybe} from '@ryandur/sand';
 import {Row} from '@components/Table';
 import {Grip, STEP_SHARE, Shares, measuredShares, neighborOf, sought, traded} from '@components/Table/shares';
 import {Direction, Rule, glyphs, ranked, unsorted} from '@components/DragSortableTable/sorting';
-import {Shifted, Slid} from '@components/DragSortableTable/survey';
+import {Shifted, Slid, anchored} from '@components/DragSortableTable/survey';
 import {array} from '@components/arrays';
 import {windowedAggregates} from '@pages/Demos/Tables/Aggregations/fold';
 import {cells} from '@pages/Demos/Tables/Aggregations/cells';
@@ -65,7 +65,23 @@ const wireMenu = (document: Document, column: string, choose: (rule?: Rule) => v
       })));
 };
 
-export const moveColumn = ({table, desk}: Shell, from: number, to: number): void => {
+export const dressGrips = ({table, desk}: Shell): void => {
+  [...table.querySelectorAll('thead th')].forEach((th, at) => {
+    if (!(th instanceof HTMLTableCellElement)) {
+      return;
+    }
+    if (anchored(at, desk.order.length)) {
+      th.classList.remove('grabbable');
+      th.removeAttribute('tabindex');
+    } else {
+      th.classList.add('grabbable');
+      th.tabIndex = 0;
+    }
+  });
+};
+
+export const moveColumn = (shell: Shell, from: number, to: number): void => {
+  const {table, desk} = shell;
   [...table.rows].forEach(lane => {
     const cell = lane.cells[from];
     const target = lane.cells[to];
@@ -76,6 +92,7 @@ export const moveColumn = ({table, desk}: Shell, from: number, to: number): void
     }
   });
   desk.order = array.moveToIndex(to, desk.order[from], desk.order);
+  dressGrips(shell);
 };
 
 export const moveRow = ({desk}: Shell, held: number, struck: number): void => {
@@ -102,9 +119,12 @@ const markCell = (cell: Element, mark: {toward: 'left' | 'right'; by: number}): 
   }
 };
 
-export const markColumns = ({table}: Shell, marks: Slid): void => {
-  Object.entries(marks).forEach(([column, mark]) =>
-    [...table.querySelectorAll(`.${column}`)].forEach(cell => markCell(cell, mark)));
+export const markColumns = ({table, desk, lanes}: Shell, marks: Slid): void => {
+  Object.entries(marks).forEach(([column, mark]) => {
+    const at = desk.order.indexOf(column);
+    maybe(table.querySelector(`th.${column}`)).map(header => markCell(header, mark));
+    lanes.forEach(lane => markCell(lane.cells[at], mark));
+  });
 };
 
 export const markRows = ({lanes}: Shell, drops: Shifted): void => {
@@ -116,14 +136,14 @@ export const markRows = ({lanes}: Shell, drops: Shifted): void => {
     }));
 };
 
-export const hideColumn = ({table}: Shell, column: string): void => {
+export const hideColumn = ({table, desk, lanes}: Shell, column: string): void => {
   maybe(table.querySelector(`th.${column}`)).map(th => th.classList.add('hide'));
-  [...table.querySelectorAll(`td.${column}`)].forEach(cell => cell.classList.add('hide-across'));
+  lanes.forEach(lane => lane.cells[desk.order.indexOf(column)].classList.add('hide-across'));
 };
 
-export const unhideColumn = ({table}: Shell, column: string): void => {
+export const unhideColumn = ({table, desk, lanes}: Shell, column: string): void => {
   maybe(table.querySelector(`th.${column}`)).map(th => th.classList.remove('hide'));
-  [...table.querySelectorAll(`td.${column}`)].forEach(cell => cell.classList.remove('hide-across'));
+  lanes.forEach(lane => lane.cells[desk.order.indexOf(column)].classList.remove('hide-across'));
 };
 
 export const hideRow = ({lanes}: Shell, row: number): void =>
@@ -188,18 +208,18 @@ const flown = (document: Document, at: {x: number; y: number; width: number}): G
   };
 };
 
-export const columnGhost = ({document, table, lanes}: Shell, column: string): GhostFlight => {
+export const columnGhost = ({document, table, desk, lanes}: Shell, column: string): GhostFlight => {
+  const at = desk.order.indexOf(column);
   const th = maybe(table.querySelector(`th.${column}`)).orElse(table);
-  const at = th.getBoundingClientRect();
-  const ghost = flown(document, {x: at.x, y: at.y, width: at.width});
+  const flownAt = th.getBoundingClientRect();
+  const ghost = flown(document, {x: flownAt.x, y: flownAt.y, width: flownAt.width});
   const texts = [
     `<thead class="header"><tr class="row"><th scope="col" class="cell ${column} header-cell clipped">` +
     `<div class="header-cell-content">${column}</div></th></tr></thead>`,
     '<tbody class="body">',
     ...lanes.map(lane => {
-      const text = maybe(lane.querySelector(`.${column}`)).map(cell => cell.textContent ?? '').orElse('');
-      const height = maybe(lane.querySelector(`.${column}`)).map(cell => cell.getBoundingClientRect().height).orElse(0);
-      return `<tr class="row"><td class="cell ${column}" style="height: ${height}px">${text.trim()}</td></tr>`;
+      const cell = lane.cells[at];
+      return `<tr class="row"><td class="cell" style="height: ${cell.getBoundingClientRect().height}px">${(cell.textContent ?? '').trim()}</td></tr>`;
     }),
     '</tbody>'
   ];
@@ -211,11 +231,11 @@ export const rowGhost = ({document, desk, lanes}: Shell, row: number): GhostFlig
   const lane = lanes[row];
   const at = lane.getBoundingClientRect();
   const ghost = flown(document, {x: at.x, y: at.y, width: at.width});
-  const dressed = desk.order.map(column => {
-    const text = maybe(lane.querySelector(`.${column}`)).map(cell => (cell.textContent ?? '').trim()).orElse('');
+  const dressed = desk.order.map((column, at) => {
+    const text = (lane.cells[at].textContent ?? '').trim();
     return column === 'window'
-      ? `<th scope="row" class="cell ${column} row-header"><div class="row-header-content">${text}</div></th>`
-      : `<td class="cell ${column}">${text}</td>`;
+      ? `<th scope="row" class="cell row-header"><div class="row-header-content">${text}</div></th>`
+      : `<td class="cell">${text}</td>`;
   });
   ghost.element.innerHTML = `<tbody class="body"><tr class="row">${dressed.join('')}</tr></tbody>`;
   return ghost;
@@ -319,11 +339,10 @@ const standTable = (
   const paint = (): void => {
     const rows: Row[] = windowedAggregates(hydrated(history, live.trades)).map(cells);
     lanes.forEach((lane, at) =>
-      measures.forEach(measure =>
-        maybe(lane.querySelector(`.${measure}`)).map(cell => {
-          const {display} = rows[at][measure];
-          cell.textContent = typeof display === 'string' ? display : '';
-        })));
+      measures.forEach(measure => {
+        const {display} = rows[at][measure];
+        lane.cells[desk.order.indexOf(measure)].textContent = typeof display === 'string' ? display : '';
+      }));
     desk.seated = has(rule) ? ranked(rows, desk.seats, rule) : desk.seats;
     desk.seated.forEach(at => body.append(lanes[at]));
     desk.seated.forEach((at, position) =>
@@ -342,7 +361,9 @@ const standTable = (
   [...table.querySelectorAll('.menu-toggle')].forEach(toggle =>
     toggle.addEventListener('pointerdown', event => event.stopPropagation()));
 
-  travels({document, table, body, lanes, desk, paint});
+  const shell: Shell = {document, table, body, lanes, desk, paint};
+  dressGrips(shell);
+  travels(shell);
 
   if (env.tradeHistory) {
     recentTrades(env.tradeHistory, env.tradeProduct, trades => {
