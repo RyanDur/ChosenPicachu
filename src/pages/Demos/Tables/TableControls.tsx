@@ -1,5 +1,7 @@
 import {FC} from 'react';
+import {PillGlider} from '@components/PillGlider';
 import {Controls, ControlsProps, Copy} from '../Controls';
+import {World} from './params';
 
 const cap = (word: string): string => word.charAt(0).toUpperCase() + word.slice(1);
 
@@ -20,4 +22,29 @@ const copy: Copy = {
   }
 };
 
-export const TableControls: FC<ControlsProps> = props => <Controls copy={copy} {...props}/>;
+const worldCopy: Record<World, string> = {
+  react: 'React builds and rebuilds this table; the page you read is its render.',
+  html: 'The table stands in its own document: markup, stylesheet, and script, no framework.'
+};
+
+type TableControlsProps = ControlsProps & {
+  world: World;
+  onWorld: (world: World) => void;
+};
+
+export const TableControls: FC<TableControlsProps> = ({world, onWorld, ...props}) =>
+  <Controls copy={{...copy, readout: (pace, origin, motion) => world === 'html' ? '<TableFrame/>' : copy.readout(pace, origin, motion)}}
+            {...props}>
+    <article className="control">
+      <span className="axis caption uppercase">world</span>
+      <PillGlider label="world"
+                  name="table-world"
+                  options={[
+                    {display: 'React', value: 'react'},
+                    {display: 'HTML', value: 'html'}
+                  ]}
+                  chosen={world}
+                  onChoose={onWorld}/>
+      <p className="reading paragraph">{worldCopy[world]}</p>
+    </article>
+  </Controls>;

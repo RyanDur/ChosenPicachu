@@ -431,4 +431,37 @@ describe('the tables demo', () => {
     const card = screen.getByRole('region', {name: 'live aggregations'});
     expect(within(card).getAllByRole('button', {name: /^resize/})).toHaveLength(7);
   });
+
+  describe('the table worlds', () => {
+    test('react holds the stage by default, and no frame stands', async () => {
+      const feed = await streamingFeed();
+
+      renderTables(urlOf(feed));
+
+      expect(await screen.findByRole('region', {name: 'live aggregations'})).toBeInTheDocument();
+      expect(screen.queryByTitle('the living table, in html')).not.toBeInTheDocument();
+    });
+
+    test('the html world deals the table in its own document', async () => {
+      const feed = await streamingFeed();
+
+      renderTables(urlOf(feed), '?tab=tables&world=html');
+
+      const frame = await screen.findByTitle('the living table, in html');
+      expect(frame).toHaveAttribute('srcdoc', expect.stringContaining('<table'));
+      expect(screen.queryByRole('region', {name: 'live aggregations'})).not.toBeInTheDocument();
+    });
+
+    test('the world dial swaps the stage', async () => {
+      const feed = await streamingFeed();
+
+      renderTables(urlOf(feed));
+
+      const controls = await screen.findByRole('region', {name: 'table controls'});
+      await userEvent.click(within(controls).getByRole('radio', {name: 'HTML'}));
+
+      expect(await screen.findByTitle('the living table, in html')).toBeInTheDocument();
+      expect(screen.queryByRole('region', {name: 'live aggregations'})).not.toBeInTheDocument();
+    });
+  });
 });

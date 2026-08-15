@@ -20,6 +20,7 @@ const pages: A11yPage[] = [
   {name: 'demos', path: 'demos?tab=accordions', ready: 'navigation'},
   {name: 'charts', path: 'demos?tab=charts', ready: 'navigation', loaded: '.price-chart .delta'},
   {name: 'tables', path: 'demos?tab=tables', ready: 'navigation', loaded: '.aggregations .header-cell'},
+  {name: 'tables in html', path: 'demos?tab=tables&world=html', ready: 'navigation', loaded: '.table-frame'},
   {name: 'price chart tutorial', path: 'demos/charts/price/', ready: 'navigation', loaded: '.build-steps .story'},
   {name: 'candles chart tutorial', path: 'demos/charts/candles/', ready: 'navigation', loaded: '.build-steps .story'},
   {name: 'pressure chart tutorial', path: 'demos/charts/pressure/', ready: 'navigation', loaded: '.build-steps .story'},

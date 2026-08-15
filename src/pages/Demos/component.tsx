@@ -20,7 +20,7 @@ import {
 import {DemoTopics, demoTopicParam} from './types';
 import {NaturalZIndex, TopLayer} from './ZIndexDemo';
 import {motionParam, originParam, paceParam} from './Controls';
-import {Aggregations, trackParam, tutorialParam} from './Tables';
+import {Aggregations, TableFrame, trackParam, tutorialParam, worldParam} from './Tables';
 import {Loading} from '@components/Loading';
 import {useLiveTrades} from './Charts/useLiveTrades';
 import {Workspace} from './Charts/Workspace';
@@ -38,9 +38,9 @@ const ChartsTutorial = lazy(() => import('./Charts/Tutorial').then(module => ({d
 const TopLayerTutorial = lazy(() => import('./ZIndexDemo/Tutorial').then(module => ({default: module.TopLayerTutorial})));
 
 export const DemosPage = () => {
-  const {tab, pace = 'eager', origin = 'hide', motion = 'animated', tut = 'sort', track = 'pointer', updateSearchParams} =
+  const {tab, pace = 'eager', origin = 'hide', motion = 'animated', tut = 'sort', track = 'pointer', world = 'react', updateSearchParams} =
     useSearchParamsObject(
-      {tab: demoTopicParam, pace: paceParam, origin: originParam, motion: motionParam, tut: tutorialParam, track: trackParam},
+      {tab: demoTopicParam, pace: paceParam, origin: originParam, motion: motionParam, tut: tutorialParam, track: trackParam, world: worldParam},
       {tab: DemoTopics.accordions});
   const [accordionContents] = useState(() => Array.from({length: 5}, () => paragraphs(5)));
   const {tradeFeed, tradeProduct} = useEnv();
@@ -93,7 +93,9 @@ export const DemosPage = () => {
               </Suspense>
             </>,
             [DemoTopics.tables]: <>
-              <Aggregations trades={liveTrades.trades} pace={pace} origin={origin} motion={motion}/>
+              {world === 'react'
+                ? <Aggregations trades={liveTrades.trades} pace={pace} origin={origin} motion={motion}/>
+                : <TableFrame/>}
               <Suspense fallback={<Loading label="loading the tutorial"/>}>
                 <Tutorials shown={tut} onShow={next => updateSearchParams({tut: next})}
                            track={track} onTrack={next => updateSearchParams({track: next})}/>
