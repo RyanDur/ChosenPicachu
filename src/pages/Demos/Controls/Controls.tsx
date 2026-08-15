@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, PropsWithChildren} from 'react';
 import * as schema from 'schemawax';
 import {DragStyle} from '@components/DragSortableTable';
 import {PillGlider} from '@components/PillGlider';
@@ -36,7 +36,7 @@ export type ControlsProps = {
   onMotion: (motion: Motion) => void;
 };
 
-export const Controls: FC<ControlsProps & {copy: Copy}> = ({copy, pace, origin, motion, onPace, onOrigin, onMotion}) =>
+export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({copy, pace, origin, motion, onPace, onOrigin, onMotion, children}) =>
   <section aria-label={`${copy.kind} controls`} className="controls">
     <article className="control">
       <span className="axis caption uppercase">pace</span>
@@ -74,6 +74,7 @@ export const Controls: FC<ControlsProps & {copy: Copy}> = ({copy, pace, origin, 
                   onChoose={onMotion}/>
       <p className="reading paragraph">{copy.motion[motion]}</p>
     </article>
+    {children}
     <p className="readout caption">
       <code>{copy.readout(pace, origin, motion)}</code>
     </p>

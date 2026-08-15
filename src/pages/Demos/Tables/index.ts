@@ -1,4 +1,5 @@
 export {Aggregations} from './Aggregations';
 export {TableControls} from './TableControls';
-export type {Track, Tutorial} from './params';
-export {trackParam, tutorialParam} from './params';
+export {TableFrame} from './Frame/TableFrame';
+export type {Track, Tutorial, World} from './params';
+export {trackParam, tutorialParam, worldParam} from './params';

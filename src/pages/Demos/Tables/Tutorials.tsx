@@ -1,6 +1,7 @@
 import {FC} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
 import {motionParam, originParam, paceParam} from '../Controls';
+import {worldParam} from './params';
 import {TableControls} from './TableControls';
 import {Picks} from './Picks';
 import {Recipe, Track} from './Recipe';
@@ -23,8 +24,8 @@ type Props = {
 };
 
 export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack}) => {
-  const {pace = 'eager', origin = 'hide', motion = 'animated', updateSearchParams} =
-    useSearchParamsObject({pace: paceParam, origin: originParam, motion: motionParam});
+  const {pace = 'eager', origin = 'hide', motion = 'animated', world = 'react', updateSearchParams} =
+    useSearchParamsObject({pace: paceParam, origin: originParam, motion: motionParam, world: worldParam});
   return <section className="tutorials">
     <h2 className="tutorials-title">let’s build this feature</h2>
     <p className="overview paragraph">
@@ -63,10 +64,11 @@ export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack}) => {
            ]}
            chosen={shown}
            onPick={onShow}/>
-    {shown === 'sort' && <TableControls pace={pace} origin={origin} motion={motion}
+    {shown === 'sort' && <TableControls pace={pace} origin={origin} motion={motion} world={world}
                                         onPace={next => updateSearchParams({pace: next})}
                                         onOrigin={next => updateSearchParams({origin: next})}
-                                        onMotion={next => updateSearchParams({motion: next})}/>}
+                                        onMotion={next => updateSearchParams({motion: next})}
+                                        onWorld={next => updateSearchParams({world: next})}/>}
     {shown === 'sort' && <Recipe track={track} onTrack={onTrack}/>}
     {shown === 'menu' && <MenuRecipe/>}
     {shown === 'resize' && <ResizeRecipe/>}
