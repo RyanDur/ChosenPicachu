@@ -285,6 +285,22 @@ describe('the frame table', () => {
       expect(document.querySelector('table.column-ghost')).not.toBeInTheDocument();
     });
 
+
+    it('a menu sort slides the rows in an animated world', async () => {
+      const feed = await streamingFeed();
+      deal(urlOf(feed), eagerKeepAnimated);
+      rowRects();
+      await waitFor(() => expect(subscribed.size).toBeGreaterThan(0));
+      broadcast(feed, [tradeFrame(100), tradeFrame(101, 1700000000000 - 120000)]);
+      await waitFor(() => expect(measure('session', 0)).toHaveTextContent('2'));
+
+      await userEvent.click(sortMenu('trades').getByRole('button', {name: 'descending', hidden: true}));
+
+      const slid = screen.getByRole('row', {name: /this minute/});
+      expect(slid.classList).toContain('shifted');
+      expect(slid.style.getPropertyValue('--drop')).not.toBe('');
+    });
+
     it('animated commits wear their marks and shed them when the slide ends', async () => {
       deal(undefined, eagerKeepAnimated);
       stubbedRects();
