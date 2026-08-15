@@ -153,6 +153,71 @@ describe('the frame table', () => {
     });
   });
 
+  const rowRects = (): void => {
+    stubbedRects();
+    screen.getAllByRole('row').slice(1).forEach((lane, at) => {
+      lane.getBoundingClientRect = () => ({
+        left: 0, right: 800, top: at * 40, bottom: at * 40 + 40, width: 800, height: 40, x: 0, y: at * 40, toJSON: () => ({})
+      });
+    });
+  };
+
+  it('the keyboard walks a row, and its label follows', async () => {
+    deal();
+
+    await userEvent.click(screen.getByRole('button', {name: 'move row 1'}));
+    await userEvent.keyboard('{ArrowDown}');
+
+    expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
+    const row = screen.getByRole('row', {name: /this minute/});
+    expect(within(row).getByRole('button', {name: 'move row 2'})).toBeInTheDocument();
+  });
+
+  it('the last seat clamps the walk', async () => {
+    deal();
+
+    await userEvent.click(screen.getByRole('button', {name: 'move row 5'}));
+    await userEvent.keyboard('{ArrowDown}');
+
+    expect(windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
+  });
+
+  it('a row drags past its neighbour and the swap is eager', () => {
+    deal();
+    rowRects();
+
+    const grip = within(screen.getByRole('row', {name: /this minute/})).getByRole('button', {name: 'move row 1'});
+    fireEvent.pointerDown(grip, {clientX: 20, clientY: 20, pointerId: 1});
+    fireEvent.pointerMove(grip, {buttons: 1, clientX: 20, clientY: 75, pointerId: 1});
+
+    expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
+    fireEvent.pointerUp(grip, {pointerId: 1});
+  });
+
+  it('a standing rule outranks the dragged seats, and as dealt returns to them', async () => {
+    deal();
+
+    await userEvent.click(screen.getByRole('button', {name: 'move row 1'}));
+    await userEvent.keyboard('{ArrowDown}');
+    await userEvent.click(sortMenu('trades').getByRole('button', {name: 'ascending', hidden: true}));
+    await userEvent.click(sortMenu('trades').getByRole('button', {name: 'as dealt', hidden: true}));
+
+    expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
+  });
+
+  it('the keyboard trades shares between neighbours', async () => {
+    deal();
+    stubbedRects();
+
+    const handle = screen.getByRole('button', {name: 'resize trades'});
+    handle.focus();
+    await userEvent.keyboard('{ArrowRight}');
+
+    expect(screen.getByRole('columnheader', {name: /trades/}).style.getPropertyValue('--share')).toBe('14.5%');
+    expect(screen.getByRole('columnheader', {name: /buys/}).style.getPropertyValue('--share')).toBe('10.5%');
+    expect(screen.getByRole('button', {name: /resize trades, 15%/})).toBeInTheDocument();
+  });
+
   it('the rule stands while trades land', async () => {
     const feed = await streamingFeed();
     deal(urlOf(feed));
