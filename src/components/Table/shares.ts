@@ -21,3 +21,9 @@ export const neighborOf = (apportioned: readonly string[], key: string): string 
     const index = apportioned.indexOf(key);
     return apportioned[index + 1] ?? apportioned[index - 1];
 };
+
+export const STEP_SHARE = 2;
+
+export type Grip = Readonly<{fromX: number; pxPerShare: number}>;
+
+export const sought = ({fromX, pxPerShare}: Grip, clientX: number): number => (clientX - fromX) / pxPerShare;

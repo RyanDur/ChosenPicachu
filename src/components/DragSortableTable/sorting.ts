@@ -7,6 +7,10 @@ export type Rule = {
     direction: Direction;
 };
 
+export const glyphs: Record<Direction, string> = {ascending: '▲', descending: '▼'};
+
+export const unsorted = '⇅';
+
 export const ranked = (rows: TableProps['rows'], dealt: readonly number[], rule: Rule): number[] =>
     [...dealt].sort((left, right) => {
         const first = rows[left][rule.column]?.value;
