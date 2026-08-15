@@ -188,10 +188,33 @@ export type GhostFlight = {
   land: () => void;
 };
 
-const flown = (document: Document, at: {x: number; y: number; width: number}): GhostFlight => {
-  const element = document.createElement('table');
-  element.className = 'fancy-table column-ghost';
-  element.setAttribute('aria-hidden', 'true');
+const summoned = (document: Document, id: string): HTMLTemplateElement => {
+  const template = document.getElementById(id);
+  if (!(template instanceof HTMLTemplateElement)) {
+    throw new Error(`no template "${id}" in the page`);
+  }
+  return template;
+};
+
+const summonedTable = (document: Document, id: string): HTMLTableElement => {
+  const clone = summoned(document, id).content.cloneNode(true);
+  const element = clone instanceof DocumentFragment ? clone.firstElementChild : clone;
+  if (!(element instanceof HTMLTableElement)) {
+    throw new Error(`template "${id}" holds no table`);
+  }
+  return element;
+};
+
+const summonedLane = (document: Document): HTMLTableRowElement => {
+  const clone = summoned(document, 'ghost-lane').content.cloneNode(true);
+  const element = clone instanceof DocumentFragment ? clone.firstElementChild : clone;
+  if (!(element instanceof HTMLTableRowElement)) {
+    throw new Error('template "ghost-lane" holds no row');
+  }
+  return element;
+};
+
+const flown = (document: Document, element: HTMLTableElement, at: {x: number; y: number; width: number}): GhostFlight => {
   element.style.setProperty('--flight-x', `${at.x}px`);
   element.style.setProperty('--flight-y', `${at.y}px`);
   element.style.setProperty('--flight-width', `${at.width}px`);
@@ -211,41 +234,43 @@ const flown = (document: Document, at: {x: number; y: number; width: number}): G
 export const columnGhost = ({document, table, desk, lanes}: Shell, column: string): GhostFlight => {
   const at = desk.order.indexOf(column);
   const th = maybe(table.querySelector(`th.${column}`)).orElse(table);
-  const flownAt = th.getBoundingClientRect();
-  const ghost = flown(document, {x: flownAt.x, y: flownAt.y, width: flownAt.width});
-  const texts = [
-    `<thead class="header"><tr class="row"><th scope="col" class="cell ${column} header-cell clipped">` +
-    `<div class="header-cell-content">${column}</div></th></tr></thead>`,
-    '<tbody class="body">',
-    ...lanes.map(lane => {
+  const ghost = summonedTable(document, 'column-ghost');
+  maybe(ghost.querySelector('th')).map(header => header.classList.add(column));
+  maybe(ghost.querySelector('.header-cell-content')).map(content => {
+    content.textContent = column;
+  });
+  maybe(ghost.querySelector('tbody')).map(hold =>
+    lanes.forEach(lane => {
+      const seat = summonedLane(document);
       const cell = lane.cells[at];
-      return `<tr class="row"><td class="cell" style="height: ${cell.getBoundingClientRect().height}px">${(cell.textContent ?? '').trim()}</td></tr>`;
-    }),
-    '</tbody>'
-  ];
-  ghost.element.innerHTML = texts.join('');
-  return ghost;
+      maybe(seat.querySelector('td')).map(td => {
+        td.textContent = (cell.textContent ?? '').trim();
+        td.style.height = `${cell.getBoundingClientRect().height}px`;
+      });
+      hold.append(seat);
+    }));
+  const box = th.getBoundingClientRect();
+  return flown(document, ghost, {x: box.x, y: box.y, width: box.width});
 };
 
-const gripGlyph = '<i class="grip">' +
-  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="16" height="16" aria-hidden="true">' +
-  '<path d="M32 288c-17.7 0-32 14.3-32 32s14.3 32 32 32l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 288zm0-128' +
-  'c-17.7 0-32 14.3-32 32s14.3 32 32 32l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 160z"/></svg></i>';
-
-export const rowGhost = ({document, desk, lanes}: Shell, row: number): GhostFlight => {
+export const rowGhost = ({document, lanes}: Shell, row: number): GhostFlight => {
   const lane = lanes[row];
-  const at = lane.getBoundingClientRect();
-  const ghost = flown(document, {x: at.x, y: at.y, width: at.width});
-  const dressed = desk.order.map((column, at) => {
-    const cell = lane.cells[at];
-    const text = (cell.textContent ?? '').trim();
-    const width = `style="width: ${cell.getBoundingClientRect().width}px"`;
-    return column === 'window'
-      ? `<th scope="row" class="cell row-header" ${width}><div class="row-header-content">${gripGlyph}${text}</div></th>`
-      : `<td class="cell" ${width}>${text}</td>`;
-  });
-  ghost.element.innerHTML = `<tbody class="body"><tr class="row">${dressed.join('')}</tr></tbody>`;
-  return ghost;
+  const ghost = summonedTable(document, 'row-ghost');
+  maybe(ghost.querySelector('tr')).map(seat =>
+    [...seat.children].forEach((cell, at) => {
+      if (!(cell instanceof HTMLTableCellElement)) {
+        return;
+      }
+      cell.style.width = `${lane.cells[at].getBoundingClientRect().width}px`;
+      const text = (lane.cells[at].textContent ?? '').trim();
+      if (at === 0) {
+        maybe(cell.querySelector('.row-header-content')).map(content => content.append(text));
+      } else {
+        cell.textContent = text;
+      }
+    }));
+  const box = lane.getBoundingClientRect();
+  return flown(document, ghost, {x: box.x, y: box.y, width: box.width});
 };
 
 const dressColumn = (table: HTMLTableElement, column: string, share: number): void => {
