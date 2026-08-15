@@ -457,8 +457,7 @@ describe('the tables demo', () => {
 
       renderTables(urlOf(feed));
 
-      const controls = await screen.findByRole('region', {name: 'table controls'});
-      await userEvent.click(within(controls).getByRole('radio', {name: 'HTML'}));
+      await userEvent.click(await screen.findByRole('radio', {name: 'HTML'}));
 
       expect(await screen.findByTitle('the living table, in html')).toBeInTheDocument();
       expect(screen.queryByRole('region', {name: 'live aggregations'})).not.toBeInTheDocument();
