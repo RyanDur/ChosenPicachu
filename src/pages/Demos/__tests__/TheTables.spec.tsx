@@ -472,6 +472,15 @@ describe('the tables demo', () => {
       expect(await screen.findByText('The trader can sort the windows by any measure, or take the order back')).toBeInTheDocument();
     });
 
+
+    test('the resize story stands in the html world', async () => {
+      const feed = await streamingFeed();
+
+      renderTables(urlOf(feed), '?tab=tables&world=html&tut=resize');
+
+      expect(await screen.findByText('The trader can widen a column')).toBeInTheDocument();
+    });
+
     test('the world dial swaps the stage', async () => {
       const feed = await streamingFeed();
 
