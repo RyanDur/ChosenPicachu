@@ -113,12 +113,15 @@ const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void 
 };
 
 export const wire = (document: Document): void =>
-  stand(document, shell => {
-    [...shell.table.querySelectorAll('thead th')]
-      .filter(th => th instanceof HTMLTableCellElement)
-      .forEach(th => wireColumnGrip(shell, th));
-    shell.lanes.forEach((lane, held) =>
-      [...lane.querySelectorAll('button.grip')]
-        .filter(grip => grip instanceof HTMLButtonElement)
-        .forEach(grip => wireRowGrip(shell, held, grip)));
+  stand(document, {
+    travels: shell => {
+      [...shell.table.querySelectorAll('thead th')]
+        .filter(th => th instanceof HTMLTableCellElement)
+        .forEach(th => wireColumnGrip(shell, th));
+      shell.lanes.forEach((lane, held) =>
+        [...lane.querySelectorAll('button.grip')]
+          .filter(grip => grip instanceof HTMLButtonElement)
+          .forEach(grip => wireRowGrip(shell, held, grip)));
+    },
+    ruled: (shell, heights, before, after) => markRows(shell, shifts(heights, before, after))
   });

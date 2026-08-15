@@ -2,7 +2,7 @@ import {has, maybe} from '@ryandur/sand';
 import {Row} from '@components/Table';
 import {Grip, STEP_SHARE, Shares, measuredShares, neighborOf, sought, traded} from '@components/Table/shares';
 import {Direction, Rule, glyphs, ranked, unsorted} from '@components/DragSortableTable/sorting';
-import {Shifted, Slid, anchored} from '@components/DragSortableTable/survey';
+import {Shifted, Slid, anchored, surveyed} from '@components/DragSortableTable/survey';
 import {array} from '@components/arrays';
 import {windowedAggregates} from '@pages/Demos/Tables/Aggregations/fold';
 import {cells} from '@pages/Demos/Tables/Aggregations/cells';
@@ -348,16 +348,21 @@ const wireResize = (table: HTMLTableElement, desk: Desk): void => {
       wireHandle(table, desk, columnOf(desk, th), handle)));
 };
 
-export const stand = (document: Document, travels: (shell: Shell) => void): void => {
+export type Dressage = {
+  travels: (shell: Shell) => void;
+  ruled?: (shell: Shell, heights: Readonly<Record<number, number>>, before: readonly number[], after: readonly number[]) => void;
+};
+
+export const stand = (document: Document, dressage: Dressage): void => {
   maybe(document.querySelector('table')).map(table =>
-    maybe(table.querySelector('tbody')).map(body => standTable(document, table, body, travels)));
+    maybe(table.querySelector('tbody')).map(body => standTable(document, table, body, dressage)));
 };
 
 const standTable = (
   document: Document,
   table: HTMLTableElement,
   body: HTMLTableSectionElement,
-  travels: (shell: Shell) => void
+  {travels, ruled}: Dressage
 ): void => {
   const lanes = [...body.querySelectorAll('tr')];
   const dealt = lanes.map((_, at) => at);
@@ -391,9 +396,16 @@ const standTable = (
     }
   };
 
+  const shell: Shell = {document, table, body, lanes, desk, paint};
+
   const choose = (next?: Rule): void => {
     rule = next;
+    const before = desk.seated;
+    const heights = surveyed(table, desk.order, desk.seated).rowHeights;
     paint();
+    if (has(ruled) && desk.seated.some((at, position) => before[position] !== at)) {
+      ruled(shell, heights, before, desk.seated);
+    }
     measures.forEach(column => announce(document, column, rule));
   };
 
@@ -402,7 +414,6 @@ const standTable = (
   [...table.querySelectorAll('.menu-toggle, .menu')].forEach(chrome =>
     chrome.addEventListener('pointerdown', event => event.stopPropagation()));
 
-  const shell: Shell = {document, table, body, lanes, desk, paint};
   dressGrips(shell);
   travels(shell);
 
