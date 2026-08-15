@@ -1,58 +1,38 @@
 import {has, maybe} from '@ryandur/sand';
 import {array} from '@components/arrays';
-import {Bounds, Survey, columnUnder, interior, rowUnder, surveyed} from '@components/DragSortableTable/survey';
-import {GhostFlight, Shell, columnGhost, columnOf, columnSteps, hideColumn, hideRow, moveColumn, moveRow, rowGhost, rowSteps, stand, unhideColumn, unhideRow} from '../shell';
+import {columnUnder, interior, rowUnder, surveyed} from '@components/DragSortableTable/survey';
+import {Shell, columnGhost, columnOf, columnSteps, hideColumn, hideRow, moveColumn, moveRow, rowGhost, rowSteps, stand, takeFlight, unhideColumn, unhideRow} from '../shell';
 
 const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
   const {table, desk} = shell;
-  let survey: Bounds | undefined;
-  let ghost: GhostFlight | undefined;
-  let origin: {x: number; y: number} | undefined;
 
   const commit = (held: string, struck: string): void => {
     moveColumn(shell, desk.order.indexOf(held), interior(desk.order.indexOf(struck), desk.order.length));
-  };
-
-  const land = (): void => {
-    survey = undefined;
-    unhideColumn(shell, columnOf(desk, th));
-    if (has(ghost)) {
-      ghost.land();
-      ghost = undefined;
-    }
-    origin = undefined;
   };
 
   th.classList.add('grabbable');
   th.tabIndex = 0;
 
   th.addEventListener('pointerdown', event => {
-    th.setPointerCapture(event.pointerId);
-    survey = surveyed(table, desk.order, desk.seated);
-    ghost = columnGhost(shell, columnOf(desk, th));
-    origin = {x: event.clientX, y: event.clientY};
+    const survey = surveyed(table, desk.order, desk.seated);
+    const ghost = columnGhost(shell, columnOf(desk, th));
+    const from = {x: event.clientX, y: event.clientY};
     hideColumn(shell, columnOf(desk, th));
+    takeFlight(shell, event, {
+      travel: moving => {
+        ghost.drift(moving.clientX - from.x, moving.clientY - from.y);
+        const held = columnOf(desk, th);
+        const struck = columnUnder(desk.order, survey)(moving.clientX, moving.clientY, held);
+        if (has(struck) && struck !== held) {
+          commit(held, struck);
+        }
+      },
+      land: () => {
+        unhideColumn(shell, columnOf(desk, th));
+        ghost.land();
+      }
+    });
   });
-  th.addEventListener('pointermove', event => {
-    if (!has(survey)) {
-      return;
-    }
-    if (event.buttons === 0) {
-      land();
-      return;
-    }
-    th.setPointerCapture(event.pointerId);
-    if (has(ghost) && has(origin)) {
-      ghost.drift(event.clientX - origin.x, event.clientY - origin.y);
-    }
-    const held = columnOf(desk, th);
-    const struck = columnUnder(desk.order, survey)(event.clientX, event.clientY, held);
-    if (has(struck) && struck !== held) {
-      commit(held, struck);
-    }
-  });
-  ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(ending =>
-    th.addEventListener(ending, land));
   th.addEventListener('keydown', event => {
     maybe(columnSteps[event.key]).map(toward => {
       event.preventDefault();
@@ -69,51 +49,31 @@ const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
 
 const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void => {
   const {table, desk} = shell;
-  let survey: Survey | undefined;
-  let ghost: GhostFlight | undefined;
-  let origin: {x: number; y: number} | undefined;
 
   const commit = (struck: number): void => {
     moveRow(shell, held, struck);
     shell.paint();
   };
 
-  const land = (): void => {
-    survey = undefined;
-    unhideRow(shell, held);
-    if (has(ghost)) {
-      ghost.land();
-      ghost = undefined;
-    }
-    origin = undefined;
-  };
-
   grip.addEventListener('pointerdown', event => {
-    grip.setPointerCapture(event.pointerId);
-    survey = surveyed(table, desk.order, desk.seated);
-    ghost = rowGhost(shell, held);
-    origin = {x: event.clientX, y: event.clientY};
+    const survey = surveyed(table, desk.order, desk.seated);
+    const ghost = rowGhost(shell, held);
+    const from = {x: event.clientX, y: event.clientY};
     hideRow(shell, held);
+    takeFlight(shell, event, {
+      travel: moving => {
+        ghost.drift(moving.clientX - from.x, moving.clientY - from.y);
+        const struck = rowUnder(desk.seated, survey)(moving.clientX, moving.clientY, held);
+        if (has(struck) && struck !== held) {
+          commit(struck);
+        }
+      },
+      land: () => {
+        unhideRow(shell, held);
+        ghost.land();
+      }
+    });
   });
-  grip.addEventListener('pointermove', event => {
-    if (!has(survey)) {
-      return;
-    }
-    if (event.buttons === 0) {
-      land();
-      return;
-    }
-    grip.setPointerCapture(event.pointerId);
-    if (has(ghost) && has(origin)) {
-      ghost.drift(event.clientX - origin.x, event.clientY - origin.y);
-    }
-    const struck = rowUnder(desk.seated, survey)(event.clientX, event.clientY, held);
-    if (has(struck) && struck !== held) {
-      commit(struck);
-    }
-  });
-  ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(ending =>
-    grip.addEventListener(ending, land));
   grip.addEventListener('keydown', event => {
     maybe(rowSteps[event.key]).map(toward => {
       event.preventDefault();

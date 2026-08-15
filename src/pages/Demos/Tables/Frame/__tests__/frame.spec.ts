@@ -134,10 +134,10 @@ describe('the frame table', () => {
 
     const trades = screen.getByRole('columnheader', {name: /trades/});
     fireEvent.pointerDown(trades, {clientX: 200, clientY: 50, pointerId: 1});
-    fireEvent.pointerMove(trades, {buttons: 1, clientX: 335, clientY: 100, pointerId: 1});
+    fireEvent.pointerMove(surface(), {buttons: 1, clientX: 335, clientY: 100, pointerId: 1});
 
     expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
-    fireEvent.pointerUp(trades, {pointerId: 1});
+    fireEvent.pointerUp(surface(), {pointerId: 1});
   });
 
   it('the fold finds its columns after they move', async () => {
@@ -155,6 +155,14 @@ describe('the frame table', () => {
       expect(row[1]).toHaveTextContent('1');
     });
   });
+
+  const surface = (): HTMLElement => {
+    const flying = document.querySelector('article.drag-surface');
+    if (!(flying instanceof HTMLElement)) {
+      throw new Error('no drag surface aloft');
+    }
+    return flying;
+  };
 
   const rowRects = (): void => {
     stubbedRects();
@@ -191,10 +199,10 @@ describe('the frame table', () => {
 
     const grip = within(screen.getByRole('row', {name: /this minute/})).getByRole('button', {name: 'move row 1'});
     fireEvent.pointerDown(grip, {clientX: 20, clientY: 20, pointerId: 1});
-    fireEvent.pointerMove(grip, {buttons: 1, clientX: 20, clientY: 75, pointerId: 1});
+    fireEvent.pointerMove(surface(), {buttons: 1, clientX: 20, clientY: 75, pointerId: 1});
 
     expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
-    fireEvent.pointerUp(grip, {pointerId: 1});
+    fireEvent.pointerUp(surface(), {pointerId: 1});
   });
 
   it('a standing rule outranks the dragged seats, and as dealt returns to them', async () => {
@@ -241,11 +249,11 @@ describe('the frame table', () => {
 
       const trades = screen.getByRole('columnheader', {name: /trades/});
       fireEvent.pointerDown(trades, {clientX: 200, clientY: 50, pointerId: 1});
-      fireEvent.pointerMove(trades, {buttons: 1, clientX: 335, clientY: 100, pointerId: 1});
+      fireEvent.pointerMove(surface(), {buttons: 1, clientX: 335, clientY: 100, pointerId: 1});
 
       expect(columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
 
-      fireEvent.pointerUp(trades, {pointerId: 1});
+      fireEvent.pointerUp(surface(), {pointerId: 1});
       expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
     });
 
@@ -259,7 +267,7 @@ describe('the frame table', () => {
       expect(trades.classList).toContain('hide');
       expect(document.querySelector('table.column-ghost')).toBeInTheDocument();
 
-      fireEvent.pointerUp(trades, {pointerId: 1});
+      fireEvent.pointerUp(surface(), {pointerId: 1});
       expect(trades.classList).not.toContain('hide');
       expect(document.querySelector('table.column-ghost')).not.toBeInTheDocument();
     });

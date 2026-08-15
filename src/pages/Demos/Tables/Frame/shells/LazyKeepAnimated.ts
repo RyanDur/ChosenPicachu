@@ -1,12 +1,10 @@
 import {has, maybe} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {Bounds, Survey, bounded, columnUnder, displaced, interior, rowUnder, shifts, surveyed} from '@components/DragSortableTable/survey';
-import {Shell, columnOf, columnSteps, markColumns, markRows, moveColumn, moveRow, rowSteps, stand} from '../shell';
+import {Shell, columnOf, columnSteps, markColumns, markRows, moveColumn, moveRow, rowSteps, stand, takeFlight} from '../shell';
 
 const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
   const {table, desk} = shell;
-  let survey: Bounds | undefined;
-  let landing: string | undefined;
 
   const commit = (held: string, struck: string, measured: Bounds): void => {
     const marks = displaced(desk.order, held, struck, measured);
@@ -14,38 +12,27 @@ const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
     markColumns(shell, marks);
   };
 
-  const land = (): void => {
-    if (has(survey) && has(landing)) {
-      commit(columnOf(desk, th), landing, survey);
-    }
-    landing = undefined;
-    survey = undefined;
-  };
-
   th.classList.add('grabbable');
   th.tabIndex = 0;
 
   th.addEventListener('pointerdown', event => {
-    th.setPointerCapture(event.pointerId);
-    survey = surveyed(table, desk.order, desk.seated);
+    const survey = surveyed(table, desk.order, desk.seated);
+    let landing: string | undefined;
+    takeFlight(shell, event, {
+      travel: moving => {
+        const held = columnOf(desk, th);
+        const struck = columnUnder(desk.order, survey)(moving.clientX, moving.clientY, held);
+        if (has(struck) && struck !== held) {
+          landing = struck;
+        }
+      },
+      land: () => {
+        if (has(landing)) {
+          commit(columnOf(desk, th), landing, survey);
+        }
+      }
+    });
   });
-  th.addEventListener('pointermove', event => {
-    if (!has(survey)) {
-      return;
-    }
-    if (event.buttons === 0) {
-      land();
-      return;
-    }
-    th.setPointerCapture(event.pointerId);
-    const held = columnOf(desk, th);
-    const struck = columnUnder(desk.order, survey)(event.clientX, event.clientY, held);
-    if (has(struck) && struck !== held) {
-      landing = struck;
-    }
-  });
-  ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(ending =>
-    th.addEventListener(ending, land));
   th.addEventListener('keydown', event => {
     maybe(columnSteps[event.key]).map(toward => {
       event.preventDefault();
@@ -74,8 +61,6 @@ const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
 
 const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void => {
   const {table, desk} = shell;
-  let survey: Survey | undefined;
-  let landing: number | undefined;
 
   const commit = (struck: number, measured: Survey): void => {
     const before = desk.seated;
@@ -84,34 +69,23 @@ const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void 
     markRows(shell, shifts(measured.rowHeights, before, desk.seated, held));
   };
 
-  const land = (): void => {
-    if (has(survey) && has(landing)) {
-      commit(landing, survey);
-    }
-    landing = undefined;
-    survey = undefined;
-  };
-
   grip.addEventListener('pointerdown', event => {
-    grip.setPointerCapture(event.pointerId);
-    survey = surveyed(table, desk.order, desk.seated);
+    const survey = surveyed(table, desk.order, desk.seated);
+    let landing: number | undefined;
+    takeFlight(shell, event, {
+      travel: moving => {
+        const struck = rowUnder(desk.seated, survey)(moving.clientX, moving.clientY, held);
+        if (has(struck) && struck !== held) {
+          landing = struck;
+        }
+      },
+      land: () => {
+        if (has(landing)) {
+          commit(landing, survey);
+        }
+      }
+    });
   });
-  grip.addEventListener('pointermove', event => {
-    if (!has(survey)) {
-      return;
-    }
-    if (event.buttons === 0) {
-      land();
-      return;
-    }
-    grip.setPointerCapture(event.pointerId);
-    const struck = rowUnder(desk.seated, survey)(event.clientX, event.clientY, held);
-    if (has(struck) && struck !== held) {
-      landing = struck;
-    }
-  });
-  ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(ending =>
-    grip.addEventListener(ending, land));
   grip.addEventListener('keydown', event => {
     maybe(rowSteps[event.key]).map(toward => {
       event.preventDefault();
