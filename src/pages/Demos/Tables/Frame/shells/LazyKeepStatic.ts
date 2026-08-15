@@ -23,7 +23,8 @@ const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
   th.classList.add('grabbable');
   th.tabIndex = 0;
 
-  th.addEventListener('pointerdown', () => {
+  th.addEventListener('pointerdown', event => {
+    th.setPointerCapture(event.pointerId);
     survey = surveyed(table, desk.order, desk.seated);
   });
   th.addEventListener('pointermove', event => {
@@ -75,7 +76,8 @@ const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void 
     survey = undefined;
   };
 
-  grip.addEventListener('pointerdown', () => {
+  grip.addEventListener('pointerdown', event => {
+    grip.setPointerCapture(event.pointerId);
     survey = surveyed(table, desk.order, desk.seated);
   });
   grip.addEventListener('pointermove', event => {
