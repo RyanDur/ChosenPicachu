@@ -1,6 +1,6 @@
 import {has, maybe} from '@ryandur/sand';
 import {array} from '@components/arrays';
-import {Bounds, Survey, bounded, columnUnder, displaced, interior, rowUnder, shifts, surveyed} from '@components/DragSortableTable/survey';
+import {Bounds, Survey, anchored, bounded, columnUnder, displaced, interior, rowUnder, shifts, surveyed} from '@components/DragSortableTable/survey';
 import {Shell, columnGhost, columnOf, columnSteps, hideColumn, hideRow, markColumns, markRows, moveColumn, moveRow, rowGhost, rowSteps, stand, takeFlight, unhideColumn, unhideRow} from '../shell';
 
 const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
@@ -12,10 +12,10 @@ const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
     markColumns(shell, marks);
   };
 
-  th.classList.add('grabbable');
-  th.tabIndex = 0;
-
   th.addEventListener('pointerdown', event => {
+    if (anchored(desk.order.indexOf(columnOf(desk, th)), desk.order.length)) {
+      return;
+    }
     const survey = surveyed(table, desk.order, desk.seated);
     const ghost = columnGhost(shell, columnOf(desk, th));
     const from = {x: event.clientX, y: event.clientY};
@@ -42,6 +42,9 @@ const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
   th.addEventListener('keydown', event => {
     maybe(columnSteps[event.key]).map(toward => {
       event.preventDefault();
+      if (anchored(desk.order.indexOf(columnOf(desk, th)), desk.order.length)) {
+        return;
+      }
       if (th.getAnimations().length > 0) {
         return;
       }
