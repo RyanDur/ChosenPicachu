@@ -6,7 +6,7 @@ import foldSource from '@pages/Demos/Tables/Aggregations/fold.ts?raw';
 import dealSource from '@pages/Demos/Tables/Aggregations/index.tsx?raw';
 import headerSource from '@components/DragSortableTable/EagerHideAnimatedTable/Header.tsx?raw';
 import rowSource from '@components/DragSortableTable/EagerHideAnimatedTable/Row.tsx?raw';
-import hydrateSource from '@pages/Demos/Tables/Aggregations/useRecentTrades.ts?raw';
+import hydrateSource from '@pages/Demos/Tables/Aggregations/recent-trades.ts?raw';
 import widthsSource from '@pages/Demos/Tables/Aggregations/Aggregations.css?raw';
 import '../../Recipe/Recipe.css';
 
@@ -79,7 +79,7 @@ const liveStory =
         </Words>
         <Codes>
           <Snippet label="JS" lines={[
-            ...unit(hydrateSource, 'export const useRecentTrades'), gap,
+            ...unit(hydrateSource, 'export const recentTrades'), gap,
             ...unit(hydrateSource, 'export const hydrated')
           ]}/>
         </Codes>
