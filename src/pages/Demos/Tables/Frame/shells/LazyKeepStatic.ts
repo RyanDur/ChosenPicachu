@@ -57,6 +57,7 @@ const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void 
   };
 
   grip.addEventListener('pointerdown', event => {
+    shell.bake();
     const survey = surveyed(table, desk.order, desk.seated);
     let landing: number | undefined;
     takeFlight(shell, event, {
