@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {Codes, Mdn, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
-import feedSource from '@pages/Demos/Charts/useLiveTrades.ts?raw';
+import feedSource from '@pages/Demos/Charts/live-trades.ts?raw';
 import foldSource from '@pages/Demos/Tables/Aggregations/fold.ts?raw';
 import dealSource from '@pages/Demos/Tables/Aggregations/index.tsx?raw';
 import headerSource from '@components/DragSortableTable/EagerHideAnimatedTable/Header.tsx?raw';
