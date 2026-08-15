@@ -14,7 +14,7 @@ const numeric = (text: string): number | undefined => {
 const dealtRows = (lanes: readonly HTMLTableRowElement[]): Row[] =>
   lanes.map(lane =>
     columns.reduce<Row>((row, column, at) => {
-      const display = lane.cells[at].textContent ?? '';
+      const display = (lane.cells[at].textContent ?? '').trim();
       return {...row, [column]: {display, value: at === 0 ? display : numeric(display)}};
     }, {}));
 

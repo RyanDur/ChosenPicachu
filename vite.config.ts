@@ -27,9 +27,11 @@ const frameScript = (): Plugin => ({
   async load(id) {
     if (id.startsWith('\0framejs')) {
       const path = id.slice('\0framejs'.length, -'.js'.length);
-      this.addWatchFile(path);
       const bundle = await rolldown({input: path, resolve: {alias: aliases}, logLevel: 'silent'});
       const {output} = await bundle.generate({format: 'esm'});
+      output[0].moduleIds
+        .filter(module => !module.startsWith('\0'))
+        .forEach(module => this.addWatchFile(module));
       return `export default ${JSON.stringify(output[0].code)};`;
     }
   }
