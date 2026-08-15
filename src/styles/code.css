@@ -1,0 +1,29 @@
+/* the code voice — how source reads on the page; darcula brightened to clear contrast on its own paper */
+.code {
+  background: var(--code-paper);
+  color: var(--code-ink);
+  font-size: var(--text-caption);
+  line-height: 1.8;
+
+  .keyword {
+    color: var(--code-keyword);
+    font-weight: bold;
+  }
+
+  .string {
+    color: var(--code-string);
+  }
+
+  .number {
+    color: var(--code-number);
+  }
+
+  .comment {
+    color: var(--code-comment);
+    font-style: italic;
+  }
+
+  .tag {
+    color: var(--code-tag);
+  }
+}
