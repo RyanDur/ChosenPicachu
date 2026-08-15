@@ -458,9 +458,10 @@ describe('the tables demo', () => {
       renderTables(urlOf(feed), '?tab=tables&world=html');
 
       expect(await screen.findByText('The trader can read the market in windows')).toBeInTheDocument();
+      expect(screen.getByText('The trader can watch the market live, in windows')).toBeInTheDocument();
+      expect(screen.getByText('The trader can sort by any measure')).toBeInTheDocument();
       expect(screen.queryByText('Drag resize')).not.toBeInTheDocument();
       expect(screen.queryByRole('radio', {name: 'Eager', hidden: true})).not.toBeInTheDocument();
-      expect(screen.queryByText('The trader can watch the market live, in windows')).not.toBeInTheDocument();
     });
 
     test('the world dial swaps the stage', async () => {
