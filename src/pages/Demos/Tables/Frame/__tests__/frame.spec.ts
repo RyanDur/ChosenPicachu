@@ -1,4 +1,4 @@
-import {screen, waitFor, within} from '@testing-library/react';
+import {fireEvent, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {WebSocketServer} from 'ws';
 import {broadcast, interceptedNetwork, listeningFeed, realSockets, subscribed, tradeFrame, urlOf} from '@test-support/feed';
@@ -87,6 +87,70 @@ describe('the frame table', () => {
 
     await waitFor(() => expect(measure('session', 0)).toHaveTextContent('2'));
     expect(measure('this minute', 0)).toHaveTextContent('1');
+  });
+
+  const columnOrder = (): string[] =>
+    screen.getAllByRole('columnheader').map(header => header.className.split(' ')[1]);
+
+  const stubbedRects = (): void => {
+    const widths: Record<string, number> = {window: 160, trades: 100, buys: 100, sells: 100, volume: 100, vwap: 120, change: 120};
+    screen.getByRole('table').getBoundingClientRect = () => ({
+      left: 0, right: 800, top: 0, bottom: 200, width: 800, height: 200, x: 0, y: 0, toJSON: () => ({})
+    });
+    screen.getAllByRole('columnheader').forEach(header => {
+      const name = header.className.split(' ')[1];
+      header.getBoundingClientRect = () => ({
+        left: 0, right: 0, top: 0, bottom: 0, width: widths[name] ?? 0, height: 0, x: 0, y: 0, toJSON: () => ({})
+      });
+    });
+  };
+
+  it('the keyboard walks a column, and the rows follow', async () => {
+    deal();
+
+    screen.getByRole('columnheader', {name: /trades/}).focus();
+    await userEvent.keyboard('{ArrowRight}');
+
+    expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
+    const row = within(screen.getByRole('row', {name: /this minute/})).getAllByRole('cell');
+    expect(row[0].className).toContain('buys');
+  });
+
+  it('the first seat is anchored', async () => {
+    deal();
+
+    screen.getByRole('columnheader', {name: /trades/}).focus();
+    await userEvent.keyboard('{ArrowLeft}');
+
+    expect(columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
+  });
+
+  it('a column drags past its neighbour and the swap is eager', () => {
+    deal();
+    stubbedRects();
+
+    const trades = screen.getByRole('columnheader', {name: /trades/});
+    fireEvent.pointerDown(trades, {clientX: 200, clientY: 50, pointerId: 1});
+    fireEvent.pointerMove(trades, {buttons: 1, clientX: 335, clientY: 100, pointerId: 1});
+
+    expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
+    fireEvent.pointerUp(trades, {pointerId: 1});
+  });
+
+  it('the fold finds its columns after they move', async () => {
+    const feed = await streamingFeed();
+    deal(urlOf(feed));
+    await waitFor(() => expect(subscribed.size).toBeGreaterThan(0));
+    screen.getByRole('columnheader', {name: /trades/}).focus();
+    await userEvent.keyboard('{ArrowRight}');
+
+    broadcast(feed, [tradeFrame(100)]);
+
+    await waitFor(() => {
+      const row = within(screen.getByRole('row', {name: /session/})).getAllByRole('cell');
+      expect(row[1].className).toContain('trades');
+      expect(row[1]).toHaveTextContent('1');
+    });
   });
 
   it('the rule stands while trades land', async () => {
