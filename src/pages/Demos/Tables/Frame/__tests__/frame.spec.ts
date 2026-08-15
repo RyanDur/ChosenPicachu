@@ -2,7 +2,10 @@ import {fireEvent, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {WebSocketServer} from 'ws';
 import {broadcast, interceptedNetwork, listeningFeed, realSockets, subscribed, tradeFrame, urlOf} from '@test-support/feed';
-import {wire} from '../frame';
+import {wire as eagerKeepStatic} from '../shells/EagerKeepStatic';
+import {wire as eagerKeepAnimated} from '../shells/EagerKeepAnimated';
+import {wire as eagerHideStatic} from '../shells/EagerHideStatic';
+import {wire as lazyKeepStatic} from '../shells/LazyKeepStatic';
 import tableHtml from '../table.html?raw';
 
 beforeAll(realSockets);
@@ -17,7 +20,7 @@ describe('the frame table', () => {
     return feed;
   };
 
-  const deal = (feedUrl?: string): void => {
+  const deal = (feedUrl?: string, wire: (document: Document) => void = eagerKeepStatic): void => {
     window.__env = feedUrl
       ? {tradeFeed: feedUrl, tradeHistory: 'http://127.0.0.1:9', tradeProduct: 'BTC-USD',
          aicDomain: '', harvardDomain: '', harvardAPIKey: '', vamDomain: ''}
@@ -229,5 +232,52 @@ describe('the frame table', () => {
     await waitFor(() =>
       expect(windowNames()).toEqual(['last 5 minutes', 'last 15 minutes', 'this hour', 'session', 'this minute']));
     expect(screen.getByRole('columnheader', {name: /trades/})).toHaveAttribute('aria-sort', 'descending');
+  });
+
+  describe('the worlds of pace, origin, and motion', () => {
+    it('lazy holds its shape and commits on drop', () => {
+      deal(undefined, lazyKeepStatic);
+      stubbedRects();
+
+      const trades = screen.getByRole('columnheader', {name: /trades/});
+      fireEvent.pointerDown(trades, {clientX: 200, clientY: 50, pointerId: 1});
+      fireEvent.pointerMove(trades, {buttons: 1, clientX: 335, clientY: 100, pointerId: 1});
+
+      expect(columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
+
+      fireEvent.pointerUp(trades, {pointerId: 1});
+      expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
+    });
+
+    it('hide blanks the lifted column and flies a ghost', () => {
+      deal(undefined, eagerHideStatic);
+      stubbedRects();
+
+      const trades = screen.getByRole('columnheader', {name: /trades/});
+      fireEvent.pointerDown(trades, {clientX: 200, clientY: 50, pointerId: 1});
+
+      expect(trades.classList).toContain('hide');
+      expect(document.querySelector('table.column-ghost')).toBeInTheDocument();
+
+      fireEvent.pointerUp(trades, {pointerId: 1});
+      expect(trades.classList).not.toContain('hide');
+      expect(document.querySelector('table.column-ghost')).not.toBeInTheDocument();
+    });
+
+    it('animated commits wear their marks and shed them when the slide ends', async () => {
+      deal(undefined, eagerKeepAnimated);
+      stubbedRects();
+
+      const trades = screen.getByRole('columnheader', {name: /trades/});
+      trades.focus();
+      await userEvent.keyboard('{ArrowRight}');
+
+      expect(trades.classList).toContain('displaced');
+      expect(trades.style.getPropertyValue('--carried')).not.toBe('');
+
+      fireEvent(trades, Object.assign(new Event('animationend', {bubbles: true}), {animationName: 'displaced'}));
+      expect(trades.classList).not.toContain('displaced');
+      expect(trades.style.getPropertyValue('--carried')).toBe('');
+    });
   });
 });

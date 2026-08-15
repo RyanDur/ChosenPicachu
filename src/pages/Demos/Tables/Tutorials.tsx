@@ -94,10 +94,10 @@ export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack}) => {
            ]}
            chosen={shown}
            onPick={onShow}/>}
-    {world === 'react' && shown === 'sort' && <TableControls pace={pace} origin={origin} motion={motion} world={world}
-                                                             onPace={next => updateSearchParams({pace: next})}
-                                                             onOrigin={next => updateSearchParams({origin: next})}
-                                                             onMotion={next => updateSearchParams({motion: next})}/>}
+    {shown === 'sort' && <TableControls pace={pace} origin={origin} motion={motion} world={world}
+                                        onPace={next => updateSearchParams({pace: next})}
+                                        onOrigin={next => updateSearchParams({origin: next})}
+                                        onMotion={next => updateSearchParams({motion: next})}/>}
     {world === 'react' && shown === 'sort' && <Recipe track={track} onTrack={onTrack}/>}
     {world === 'react' && shown === 'menu' && <MenuRecipe/>}
     {world === 'react' && shown === 'resize' && <ResizeRecipe/>}

@@ -19,11 +19,15 @@ describe('the frame assembly', () => {
   });
 
   it('the document carries the cascade, the dealt table, and its environment, with no unresolvable imports', () => {
-    const document = frameDocument({tradeFeed: 'wss://feed.test/', tradeHistory: 'http://history.test', tradeProduct: 'BTC-USD'});
+    const document = frameDocument(
+      {tradeFeed: 'wss://feed.test/', tradeHistory: 'http://history.test', tradeProduct: 'BTC-USD'},
+      {pace: 'eager', origin: 'hide', motion: 'animated'});
 
     sheets.forEach(({css}) => expect(document).toContain(css));
     expect(document).toContain(tableHtml);
     expect(document).toContain('"tradeFeed":"wss://feed.test/"');
+    expect(document).toContain('"pace":"eager"');
+    expect(document).toContain('@keyframes displaced');
     expect(document).not.toContain('@import');
   });
 });

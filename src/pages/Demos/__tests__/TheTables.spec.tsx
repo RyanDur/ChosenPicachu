@@ -461,7 +461,7 @@ describe('the tables demo', () => {
       expect(screen.getByText('The trader can watch the market live, in windows')).toBeInTheDocument();
       expect(screen.getByText('The trader can sort by any measure')).toBeInTheDocument();
       expect(screen.queryByText('Drag resize')).not.toBeInTheDocument();
-      expect(screen.queryByRole('radio', {name: 'Eager', hidden: true})).not.toBeInTheDocument();
+      expect(await screen.findByRole('radio', {name: 'Eager', hidden: true})).toBeInTheDocument();
     });
 
     test('the world dial swaps the stage', async () => {

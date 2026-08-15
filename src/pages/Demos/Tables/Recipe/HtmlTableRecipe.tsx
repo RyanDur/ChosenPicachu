@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {Codes, Mdn, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
 import tableSource from '../Frame/table.html?raw';
-import frameSource from '../Frame/frame.ts?raw';
+import frameSource from '../Frame/shell.ts?raw';
 import widthsSource from '@pages/Demos/Tables/Aggregations/Aggregations.css?raw';
 import hydrateSource from '@pages/Demos/Tables/Aggregations/recent-trades.ts?raw';
 import feedSource from '@pages/Demos/Charts/live-trades.ts?raw';
