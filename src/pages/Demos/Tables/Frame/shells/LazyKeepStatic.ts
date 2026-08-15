@@ -23,8 +23,8 @@ const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
         ghost.drift(moving.clientX - from.x, moving.clientY - from.y);
         const held = columnOf(desk, th);
         const struck = columnUnder(desk.order, survey)(moving.clientX, moving.clientY, held);
-        if (has(struck) && struck !== held) {
-          landing = struck;
+        if (has(struck)) {
+          landing = struck === held ? undefined : struck;
         }
       },
       land: () => {
@@ -70,8 +70,8 @@ const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void 
       travel: moving => {
         ghost.drift(moving.clientX - from.x, moving.clientY - from.y);
         const struck = rowUnder(desk.seated, survey)(moving.clientX, moving.clientY, held);
-        if (has(struck) && struck !== held) {
-          landing = struck;
+        if (has(struck)) {
+          landing = struck === held ? undefined : struck;
         }
       },
       land: () => {
