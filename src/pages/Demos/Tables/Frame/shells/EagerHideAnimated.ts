@@ -103,6 +103,7 @@ const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void 
       if (sliding) {
         return;
       }
+      shell.bake();
       const from = desk.seats.indexOf(held);
       const to = Math.min(Math.max(from + toward, 0), desk.seats.length - 1);
       if (to === from) {

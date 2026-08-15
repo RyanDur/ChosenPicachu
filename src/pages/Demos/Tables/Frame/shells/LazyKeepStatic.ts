@@ -28,10 +28,10 @@ const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
         }
       },
       land: () => {
-        ghost.land();
         if (has(landing)) {
           commit(columnOf(desk, th), landing);
         }
+        ghost.land();
       }
     });
   });
@@ -75,16 +75,17 @@ const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void 
         }
       },
       land: () => {
-        ghost.land();
         if (has(landing)) {
           commit(landing);
         }
+        ghost.land();
       }
     });
   });
   grip.addEventListener('keydown', event => {
     maybe(rowSteps[event.key]).map(toward => {
       event.preventDefault();
+      shell.bake();
       const from = desk.seats.indexOf(held);
       const to = Math.min(Math.max(from + toward, 0), desk.seats.length - 1);
       if (to === from) {
