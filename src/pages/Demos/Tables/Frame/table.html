@@ -2,13 +2,62 @@
   <table class="fancy-table sortable">
     <thead class="header">
     <tr class="row">
-      <th scope="col" class="cell window header-cell"><div class="header-cell-content">window</div></th>
-      <th scope="col" class="cell trades header-cell"><div class="header-cell-content">trades</div></th>
-      <th scope="col" class="cell buys header-cell"><div class="header-cell-content">buys</div></th>
-      <th scope="col" class="cell sells header-cell"><div class="header-cell-content">sells</div></th>
-      <th scope="col" class="cell volume header-cell"><div class="header-cell-content">volume</div></th>
-      <th scope="col" class="cell vwap header-cell"><div class="header-cell-content">vwap</div></th>
-      <th scope="col" class="cell change header-cell"><div class="header-cell-content">change</div></th>
+      <th scope="col" class="cell window header-cell"><div class="header-cell-content rankable">window
+        <button type="button" class="menu-toggle rounded-corners" popovertarget="sort-window" aria-label="sort window">⇅</button>
+        <menu id="sort-window" popover="auto" class="menu paper rounded-corners drop-shadow">
+          <li class="entry"><button type="button" class="item sub-title">ascending</button></li>
+          <li class="entry"><button type="button" class="item sub-title">descending</button></li>
+          <li class="entry"><button type="button" class="item sub-title">as dealt</button></li>
+        </menu>
+      </div></th>
+      <th scope="col" class="cell trades header-cell"><div class="header-cell-content rankable">trades
+        <button type="button" class="menu-toggle rounded-corners" popovertarget="sort-trades" aria-label="sort trades">⇅</button>
+        <menu id="sort-trades" popover="auto" class="menu paper rounded-corners drop-shadow">
+          <li class="entry"><button type="button" class="item sub-title">ascending</button></li>
+          <li class="entry"><button type="button" class="item sub-title">descending</button></li>
+          <li class="entry"><button type="button" class="item sub-title">as dealt</button></li>
+        </menu>
+      </div></th>
+      <th scope="col" class="cell buys header-cell"><div class="header-cell-content rankable">buys
+        <button type="button" class="menu-toggle rounded-corners" popovertarget="sort-buys" aria-label="sort buys">⇅</button>
+        <menu id="sort-buys" popover="auto" class="menu paper rounded-corners drop-shadow">
+          <li class="entry"><button type="button" class="item sub-title">ascending</button></li>
+          <li class="entry"><button type="button" class="item sub-title">descending</button></li>
+          <li class="entry"><button type="button" class="item sub-title">as dealt</button></li>
+        </menu>
+      </div></th>
+      <th scope="col" class="cell sells header-cell"><div class="header-cell-content rankable">sells
+        <button type="button" class="menu-toggle rounded-corners" popovertarget="sort-sells" aria-label="sort sells">⇅</button>
+        <menu id="sort-sells" popover="auto" class="menu paper rounded-corners drop-shadow">
+          <li class="entry"><button type="button" class="item sub-title">ascending</button></li>
+          <li class="entry"><button type="button" class="item sub-title">descending</button></li>
+          <li class="entry"><button type="button" class="item sub-title">as dealt</button></li>
+        </menu>
+      </div></th>
+      <th scope="col" class="cell volume header-cell"><div class="header-cell-content rankable">volume
+        <button type="button" class="menu-toggle rounded-corners" popovertarget="sort-volume" aria-label="sort volume">⇅</button>
+        <menu id="sort-volume" popover="auto" class="menu paper rounded-corners drop-shadow">
+          <li class="entry"><button type="button" class="item sub-title">ascending</button></li>
+          <li class="entry"><button type="button" class="item sub-title">descending</button></li>
+          <li class="entry"><button type="button" class="item sub-title">as dealt</button></li>
+        </menu>
+      </div></th>
+      <th scope="col" class="cell vwap header-cell"><div class="header-cell-content rankable">vwap
+        <button type="button" class="menu-toggle rounded-corners" popovertarget="sort-vwap" aria-label="sort vwap">⇅</button>
+        <menu id="sort-vwap" popover="auto" class="menu paper rounded-corners drop-shadow">
+          <li class="entry"><button type="button" class="item sub-title">ascending</button></li>
+          <li class="entry"><button type="button" class="item sub-title">descending</button></li>
+          <li class="entry"><button type="button" class="item sub-title">as dealt</button></li>
+        </menu>
+      </div></th>
+      <th scope="col" class="cell change header-cell"><div class="header-cell-content rankable">change
+        <button type="button" class="menu-toggle rounded-corners" popovertarget="sort-change" aria-label="sort change">⇅</button>
+        <menu id="sort-change" popover="auto" class="menu paper rounded-corners drop-shadow">
+          <li class="entry"><button type="button" class="item sub-title">ascending</button></li>
+          <li class="entry"><button type="button" class="item sub-title">descending</button></li>
+          <li class="entry"><button type="button" class="item sub-title">as dealt</button></li>
+        </menu>
+      </div></th>
     </tr>
     </thead>
     <tbody class="body">
