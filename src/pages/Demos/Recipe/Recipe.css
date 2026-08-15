@@ -6,22 +6,6 @@
     --pick-size: var(--text-body);
   }
 
-  .lead {
-    margin: 0;
-
-    text-wrap: pretty;
-  }
-
-  .chip {
-    font-style: normal;
-    font-size: var(--text-caption);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    padding: 0 var(--base);
-    border-radius: var(--radius);
-    background: var(--mint);
-  }
-
   .steps {
     list-style: none;
     counter-reset: recipe-step;
@@ -169,11 +153,6 @@
     position: relative;
     margin: 0;
     padding: var(--base-x-1_5) var(--base-x-2);
-    border-radius: var(--radius-soft);
-    background: var(--code-paper);
-    color: var(--code-ink);
-    font-size: var(--text-caption);
-    line-height: 1.8;
     white-space: pre-wrap;
     overflow-wrap: break-word;
 
@@ -184,8 +163,6 @@
         display: block;
         margin-block-end: var(--base);
         font-size: var(--text-caption);
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
         color: var(--internationl-orange-engineering);
       }
     }
@@ -202,28 +179,6 @@
     .line {
       display: block;
       white-space: pre;
-    }
-
-    .keyword {
-      color: var(--code-keyword);
-      font-weight: bold;
-    }
-
-    .string {
-      color: var(--code-string);
-    }
-
-    .number {
-      color: var(--code-number);
-    }
-
-    .comment {
-      color: var(--code-comment);
-      font-style: italic;
-    }
-
-    .tag {
-      color: var(--code-tag);
     }
   }
 
