@@ -463,6 +463,15 @@ describe('the tables demo', () => {
       expect(screen.queryByText('The trader can read the market in windows')).not.toBeInTheDocument();
     });
 
+
+    test('the menu story stands in the html world', async () => {
+      const feed = await streamingFeed();
+
+      renderTables(urlOf(feed), '?tab=tables&world=html&tut=menu');
+
+      expect(await screen.findByText('The trader can sort the windows by any measure, or take the order back')).toBeInTheDocument();
+    });
+
     test('the world dial swaps the stage', async () => {
       const feed = await streamingFeed();
 
