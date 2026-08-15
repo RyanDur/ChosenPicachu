@@ -3,10 +3,13 @@
     <thead class="header">
     <tr class="row">
       <th scope="col" class="cell window header-cell">
-        <div class="header-cell-content">window</div>
+        <div class="header-cell-content resizable">window
+          <button type="button" class="resize-handle"
+                  aria-label="resize window"></button>
+        </div>
       </th>
       <th scope="col" class="cell trades header-cell">
-        <div class="header-cell-content rankable">trades
+        <div class="header-cell-content rankable resizable">trades
           <button type="button" class="menu-toggle rounded-corners"
                   popovertarget="sort-trades" aria-label="sort trades">⇅</button>
           <menu id="sort-trades" popover="auto"
@@ -21,10 +24,12 @@
               <button type="button" class="item sub-title">as dealt</button>
             </li>
           </menu>
+          <button type="button" class="resize-handle"
+                  aria-label="resize trades"></button>
         </div>
       </th>
       <th scope="col" class="cell buys header-cell">
-        <div class="header-cell-content rankable">buys
+        <div class="header-cell-content rankable resizable">buys
           <button type="button" class="menu-toggle rounded-corners"
                   popovertarget="sort-buys" aria-label="sort buys">⇅</button>
           <menu id="sort-buys" popover="auto"
@@ -39,10 +44,12 @@
               <button type="button" class="item sub-title">as dealt</button>
             </li>
           </menu>
+          <button type="button" class="resize-handle"
+                  aria-label="resize buys"></button>
         </div>
       </th>
       <th scope="col" class="cell sells header-cell">
-        <div class="header-cell-content rankable">sells
+        <div class="header-cell-content rankable resizable">sells
           <button type="button" class="menu-toggle rounded-corners"
                   popovertarget="sort-sells" aria-label="sort sells">⇅</button>
           <menu id="sort-sells" popover="auto"
@@ -57,10 +64,12 @@
               <button type="button" class="item sub-title">as dealt</button>
             </li>
           </menu>
+          <button type="button" class="resize-handle"
+                  aria-label="resize sells"></button>
         </div>
       </th>
       <th scope="col" class="cell volume header-cell">
-        <div class="header-cell-content rankable">volume
+        <div class="header-cell-content rankable resizable">volume
           <button type="button" class="menu-toggle rounded-corners"
                   popovertarget="sort-volume" aria-label="sort volume">⇅</button>
           <menu id="sort-volume" popover="auto"
@@ -75,10 +84,12 @@
               <button type="button" class="item sub-title">as dealt</button>
             </li>
           </menu>
+          <button type="button" class="resize-handle"
+                  aria-label="resize volume"></button>
         </div>
       </th>
       <th scope="col" class="cell vwap header-cell">
-        <div class="header-cell-content rankable">vwap
+        <div class="header-cell-content rankable resizable">vwap
           <button type="button" class="menu-toggle rounded-corners"
                   popovertarget="sort-vwap" aria-label="sort vwap">⇅</button>
           <menu id="sort-vwap" popover="auto"
@@ -93,10 +104,12 @@
               <button type="button" class="item sub-title">as dealt</button>
             </li>
           </menu>
+          <button type="button" class="resize-handle"
+                  aria-label="resize vwap"></button>
         </div>
       </th>
       <th scope="col" class="cell change header-cell">
-        <div class="header-cell-content rankable">change
+        <div class="header-cell-content rankable resizable">change
           <button type="button" class="menu-toggle rounded-corners"
                   popovertarget="sort-change" aria-label="sort change">⇅</button>
           <menu id="sort-change" popover="auto"
@@ -111,6 +124,8 @@
               <button type="button" class="item sub-title">as dealt</button>
             </li>
           </menu>
+          <button type="button" class="resize-handle"
+                  aria-label="resize change"></button>
         </div>
       </th>
     </tr>
@@ -118,7 +133,17 @@
     <tbody class="body">
     <tr class="row">
       <th scope="row" class="cell window row-header">
-        <div class="row-header-content">this minute</div>
+        <div class="row-header-content">
+          <button type="button" class="grip grabbable" aria-label="move row 1">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+               width="16" height="16" aria-hidden="true">
+            <path d="M32 288c-17.7 0-32 14.3-32 32s14.3 32 32 32l384 0c17.7
+                     0 32-14.3 32-32s-14.3-32-32-32L32 288zm0-128c-17.7
+                     0-32 14.3-32 32s14.3 32 32 32l384 0c17.7 0 32-14.3
+                     32-32s-14.3-32-32-32L32 160z"/>
+          </svg>
+          </button>this minute
+        </div>
       </th>
       <td class="cell trades">0</td>
       <td class="cell buys">0</td>
@@ -129,7 +154,17 @@
     </tr>
     <tr class="row">
       <th scope="row" class="cell window row-header">
-        <div class="row-header-content">last 5 minutes</div>
+        <div class="row-header-content">
+          <button type="button" class="grip grabbable" aria-label="move row 2">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+               width="16" height="16" aria-hidden="true">
+            <path d="M32 288c-17.7 0-32 14.3-32 32s14.3 32 32 32l384 0c17.7
+                     0 32-14.3 32-32s-14.3-32-32-32L32 288zm0-128c-17.7
+                     0-32 14.3-32 32s14.3 32 32 32l384 0c17.7 0 32-14.3
+                     32-32s-14.3-32-32-32L32 160z"/>
+          </svg>
+          </button>last 5 minutes
+        </div>
       </th>
       <td class="cell trades">0</td>
       <td class="cell buys">0</td>
@@ -140,7 +175,17 @@
     </tr>
     <tr class="row">
       <th scope="row" class="cell window row-header">
-        <div class="row-header-content">last 15 minutes</div>
+        <div class="row-header-content">
+          <button type="button" class="grip grabbable" aria-label="move row 3">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+               width="16" height="16" aria-hidden="true">
+            <path d="M32 288c-17.7 0-32 14.3-32 32s14.3 32 32 32l384 0c17.7
+                     0 32-14.3 32-32s-14.3-32-32-32L32 288zm0-128c-17.7
+                     0-32 14.3-32 32s14.3 32 32 32l384 0c17.7 0 32-14.3
+                     32-32s-14.3-32-32-32L32 160z"/>
+          </svg>
+          </button>last 15 minutes
+        </div>
       </th>
       <td class="cell trades">0</td>
       <td class="cell buys">0</td>
@@ -151,7 +196,17 @@
     </tr>
     <tr class="row">
       <th scope="row" class="cell window row-header">
-        <div class="row-header-content">this hour</div>
+        <div class="row-header-content">
+          <button type="button" class="grip grabbable" aria-label="move row 4">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+               width="16" height="16" aria-hidden="true">
+            <path d="M32 288c-17.7 0-32 14.3-32 32s14.3 32 32 32l384 0c17.7
+                     0 32-14.3 32-32s-14.3-32-32-32L32 288zm0-128c-17.7
+                     0-32 14.3-32 32s14.3 32 32 32l384 0c17.7 0 32-14.3
+                     32-32s-14.3-32-32-32L32 160z"/>
+          </svg>
+          </button>this hour
+        </div>
       </th>
       <td class="cell trades">0</td>
       <td class="cell buys">0</td>
@@ -162,7 +217,17 @@
     </tr>
     <tr class="row">
       <th scope="row" class="cell window row-header">
-        <div class="row-header-content">session</div>
+        <div class="row-header-content">
+          <button type="button" class="grip grabbable" aria-label="move row 5">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+               width="16" height="16" aria-hidden="true">
+            <path d="M32 288c-17.7 0-32 14.3-32 32s14.3 32 32 32l384 0c17.7
+                     0 32-14.3 32-32s-14.3-32-32-32L32 288zm0-128c-17.7
+                     0-32 14.3-32 32s14.3 32 32 32l384 0c17.7 0 32-14.3
+                     32-32s-14.3-32-32-32L32 160z"/>
+          </svg>
+          </button>session
+        </div>
       </th>
       <td class="cell trades">0</td>
       <td class="cell buys">0</td>
