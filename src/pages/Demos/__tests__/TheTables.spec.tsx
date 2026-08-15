@@ -452,6 +452,17 @@ describe('the tables demo', () => {
       expect(screen.queryByRole('region', {name: 'live aggregations'})).not.toBeInTheDocument();
     });
 
+    test('the tutorial follows the world', async () => {
+      const feed = await streamingFeed();
+
+      renderTables(urlOf(feed), '?tab=tables&world=html');
+
+      expect(await screen.findByText('The trader can read the market in windows')).toBeInTheDocument();
+      expect(screen.queryByText('Drag resize')).not.toBeInTheDocument();
+      expect(screen.queryByRole('radio', {name: 'Eager', hidden: true})).not.toBeInTheDocument();
+      expect(screen.queryByText('The trader can watch the market live, in windows')).not.toBeInTheDocument();
+    });
+
     test('the world dial swaps the stage', async () => {
       const feed = await streamingFeed();
 

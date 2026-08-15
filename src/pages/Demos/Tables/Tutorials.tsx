@@ -12,6 +12,7 @@ import {TableControls} from './TableControls';
 import {Picks} from './Picks';
 import {Recipe, Track} from './Recipe';
 import {LivingTableRecipe} from './Recipe/LivingTableRecipe';
+import {HtmlTableRecipe} from './Recipe/HtmlTableRecipe';
 import {MenuRecipe} from './Recipe/MenuRecipe';
 import {ResizeRecipe} from './Recipe/ResizeRecipe';
 import '../Tutorials.css';
@@ -45,19 +46,30 @@ export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack}) => {
                   onChoose={next => updateSearchParams({world: next})}/>
     </header>
     <p className="paragraph">{worldCopy[world]}</p>
-    <p className="overview paragraph">
-      We are going to build this site’s live trading table, feature by feature. Here is how to
-      use this page: every card below is a feature, told as a <a className="signpost"
-                                                                 href="https://initialcapacity.io/insights/user-story"
-                                                                 target="_blank"
-                                                                 rel="noreferrer">user story</a>. Open a card and you
-      get the plan for that feature and the steps that build it, with the real code from this
-      site, so what you read is what runs. The dials change which table you are reading
-      about, and Eager, Lazy, Keep, Hide, Animate, and Static are this page’s names for the
-      choices, not platform keywords. Where a step depends on a dial, that dial sits on the step. The dashed code is the
-      wrong way you would probably try first, and the
-      links go to MDN if you want more.
-    </p>
+    {world === 'react'
+      ? <p className="overview paragraph">
+        We are going to build this site’s live trading table, feature by feature. Here is how to
+        use this page: every card below is a feature, told as a <a className="signpost"
+                                                                   href="https://initialcapacity.io/insights/user-story"
+                                                                   target="_blank"
+                                                                   rel="noreferrer">user story</a>. Open a card and you
+        get the plan for that feature and the steps that build it, with the real code from this
+        site, so what you read is what runs. The dials change which table you are reading
+        about, and Eager, Lazy, Keep, Hide, Animate, and Static are this page’s names for the
+        choices, not platform keywords. Where a step depends on a dial, that dial sits on the step. The dashed code is the
+        wrong way you would probably try first, and the
+        links go to MDN if you want more.
+      </p>
+      : <p className="overview paragraph">
+        We are going to build this site’s live trading table in plain HTML, CSS, and JavaScript,
+        feature by feature. Here is how to use this page: every card below is a feature, told as
+        a <a className="signpost"
+             href="https://initialcapacity.io/insights/user-story"
+             target="_blank"
+             rel="noreferrer">user story</a>. Open a card and you get the plan for that feature
+        and the steps that build it, with the real files this page serves, so what you read is
+        what runs. The links go to MDN if you want more.
+      </p>}
     <figure className="feedback">
       <blockquote className="quote paragraph italic">
         I watch the market all day. I need the numbers to keep themselves current, and I need
@@ -71,8 +83,9 @@ export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack}) => {
       our interpretation of that; the cards below break the interpretation into features.
       Open one to see how we built it, or to compare it with yours.
     </p>
-    <LivingTableRecipe/>
-    <Picks label="tutorials"
+    {world === 'html' && <HtmlTableRecipe/>}
+    {world === 'react' && <LivingTableRecipe/>}
+    {world === 'react' && <Picks label="tutorials"
            className="tutorial-picks"
            options={[
              {display: 'Drag sort', value: 'sort'},
@@ -80,13 +93,13 @@ export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack}) => {
              {display: 'Drag resize', value: 'resize'}
            ]}
            chosen={shown}
-           onPick={onShow}/>
-    {shown === 'sort' && <TableControls pace={pace} origin={origin} motion={motion} world={world}
-                                        onPace={next => updateSearchParams({pace: next})}
-                                        onOrigin={next => updateSearchParams({origin: next})}
-                                        onMotion={next => updateSearchParams({motion: next})}/>}
-    {shown === 'sort' && <Recipe track={track} onTrack={onTrack}/>}
-    {shown === 'menu' && <MenuRecipe/>}
-    {shown === 'resize' && <ResizeRecipe/>}
+           onPick={onShow}/>}
+    {world === 'react' && shown === 'sort' && <TableControls pace={pace} origin={origin} motion={motion} world={world}
+                                                             onPace={next => updateSearchParams({pace: next})}
+                                                             onOrigin={next => updateSearchParams({origin: next})}
+                                                             onMotion={next => updateSearchParams({motion: next})}/>}
+    {world === 'react' && shown === 'sort' && <Recipe track={track} onTrack={onTrack}/>}
+    {world === 'react' && shown === 'menu' && <MenuRecipe/>}
+    {world === 'react' && shown === 'resize' && <ResizeRecipe/>}
   </section>;
 };
