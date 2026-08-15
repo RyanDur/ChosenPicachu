@@ -1,7 +1,7 @@
 import {has, maybe} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {anchored, columnUnder, interior, rowUnder, surveyed} from '@components/DragSortableTable/survey';
-import {Shell, columnOf, columnSteps, moveColumn, moveRow, rowSteps, stand, takeFlight} from '../shell';
+import {Shell, columnGhost, columnOf, columnSteps, moveColumn, moveRow, rowGhost, rowSteps, stand, takeFlight} from '../shell';
 
 const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
   const {table, desk} = shell;
@@ -15,15 +15,18 @@ const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
       return;
     }
     const survey = surveyed(table, desk.order, desk.seated);
+    const ghost = columnGhost(shell, columnOf(desk, th));
+    const from = {x: event.clientX, y: event.clientY};
     takeFlight(shell, event, {
       travel: moving => {
+        ghost.drift(moving.clientX - from.x, moving.clientY - from.y);
         const held = columnOf(desk, th);
         const struck = columnUnder(desk.order, survey)(moving.clientX, moving.clientY, held);
         if (has(struck) && struck !== held) {
           commit(held, struck);
         }
       },
-      land: () => undefined
+      land: () => ghost.land()
     });
   });
   th.addEventListener('keydown', event => {
@@ -54,14 +57,17 @@ const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void 
   grip.addEventListener('pointerdown', event => {
     shell.bake();
     const survey = surveyed(table, desk.order, desk.seated);
+    const ghost = rowGhost(shell, held);
+    const from = {x: event.clientX, y: event.clientY};
     takeFlight(shell, event, {
       travel: moving => {
+        ghost.drift(moving.clientX - from.x, moving.clientY - from.y);
         const struck = rowUnder(desk.seated, survey)(moving.clientX, moving.clientY, held);
         if (has(struck) && struck !== held) {
           commit(struck);
         }
       },
-      land: () => undefined
+      land: () => ghost.land()
     });
   });
   grip.addEventListener('keydown', event => {

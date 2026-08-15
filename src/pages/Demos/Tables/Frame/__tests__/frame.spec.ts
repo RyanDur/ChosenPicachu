@@ -286,6 +286,20 @@ describe('the frame table', () => {
       expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
     });
 
+    it('keep flies a ghost and never blanks the origin', () => {
+      deal(undefined, lazyKeepStatic);
+      stubbedRects();
+
+      const trades = screen.getByRole('columnheader', {name: /trades/});
+      fireEvent.pointerDown(trades, {clientX: 200, clientY: 50, pointerId: 1});
+
+      expect(trades.classList).not.toContain('hide');
+      expect(document.querySelector('table.column-ghost')).toBeInTheDocument();
+
+      fireEvent.pointerUp(surface(), {pointerId: 1});
+      expect(document.querySelector('table.column-ghost')).not.toBeInTheDocument();
+    });
+
     it('hide blanks the lifted column and flies a ghost', () => {
       deal(undefined, eagerHideStatic);
       stubbedRects();
