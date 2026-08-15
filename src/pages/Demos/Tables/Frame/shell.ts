@@ -132,6 +132,36 @@ export const hideRow = ({lanes}: Shell, row: number): void =>
 export const unhideRow = ({lanes}: Shell, row: number): void =>
   [...lanes[row].cells].forEach(cell => cell.classList.remove('hide-across'));
 
+export type Flight = {
+  travel: (event: PointerEvent) => void;
+  land: () => void;
+};
+
+export const takeFlight = ({document}: Shell, event: PointerEvent, flight: Flight): void => {
+  const surface = document.createElement('article');
+  surface.className = 'drag-surface';
+  document.body.append(surface);
+  let flown = false;
+  const done = (): void => {
+    if (flown) {
+      return;
+    }
+    flown = true;
+    flight.land();
+    surface.remove();
+  };
+  surface.addEventListener('pointermove', moving => {
+    if (moving.buttons === 0) {
+      done();
+      return;
+    }
+    flight.travel(moving);
+  });
+  ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(ending =>
+    surface.addEventListener(ending, done));
+  surface.setPointerCapture(event.pointerId);
+};
+
 export type GhostFlight = {
   element: HTMLTableElement;
   drift: (x: number, y: number) => void;
