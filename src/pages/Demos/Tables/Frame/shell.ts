@@ -387,10 +387,19 @@ const standTable = (
     const standing = has(rule) ? ranked(rows, desk.seats, rule) : desk.seats;
     if (standing.some((at, position) => desk.seated[position] !== at)) {
       desk.seated = standing;
-      desk.seated.forEach(at => body.append(lanes[at]));
+      desk.seated.forEach((at, position) => {
+        const desired = lanes[at];
+        if (body.children[position] !== desired) {
+          body.insertBefore(desired, body.children[position] ?? null);
+        }
+      });
       desk.seated.forEach((at, position) =>
-        maybe(lanes[at].querySelector('button.grip')).map(grip =>
-          grip.setAttribute('aria-label', `move row ${position + 1}`)));
+        maybe(lanes[at].querySelector('button.grip')).map(grip => {
+          const label = `move row ${position + 1}`;
+          if (grip.getAttribute('aria-label') !== label) {
+            grip.setAttribute('aria-label', label);
+          }
+        }));
     } else {
       desk.seated = standing;
     }

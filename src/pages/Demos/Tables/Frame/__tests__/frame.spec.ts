@@ -172,6 +172,33 @@ describe('the frame table', () => {
     });
   };
 
+
+  it('a reseat leaves settled rows untouched', async () => {
+    deal();
+
+    const still = screen.getByRole('row', {name: /this hour/});
+    const hold = still.closest('tbody');
+    if (!(hold instanceof HTMLElement)) {
+      throw new Error('no tbody');
+    }
+    let touched = false;
+    const observer = new MutationObserver(records =>
+      records.forEach(record => {
+        if ([...record.addedNodes].includes(still)) {
+          touched = true;
+        }
+      }));
+    observer.observe(hold, {childList: true});
+
+    await userEvent.click(screen.getByRole('button', {name: 'move row 1'}));
+    await userEvent.keyboard('{ArrowDown}');
+
+    observer.takeRecords();
+    observer.disconnect();
+    expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
+    expect(touched).toBe(false);
+  });
+
   it('the keyboard walks a row, and its label follows', async () => {
     deal();
 
