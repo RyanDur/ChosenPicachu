@@ -19,7 +19,7 @@ import moneySource from './money.ts?raw';
 import slotsSource from './slots.ts?raw';
 import coinbaseSource from './coinbase/index.ts?raw';
 import historySource from './coinbase/history.ts?raw';
-import liveTradesSource from './useLiveTrades.ts?raw';
+import liveTradesSource from './live-trades.ts?raw';
 import axesSource from './Axes/index.tsx?raw';
 import workspaceSource from './Workspace.tsx?raw';
 import travelSource from './useChartTravel.ts?raw';
