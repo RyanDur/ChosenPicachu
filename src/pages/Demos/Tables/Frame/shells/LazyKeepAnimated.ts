@@ -1,7 +1,7 @@
 import {has, maybe} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {Bounds, Survey, anchored, bounded, columnUnder, displaced, interior, rowUnder, shifts, surveyed} from '@components/DragSortableTable/survey';
-import {Shell, columnOf, columnSteps, markColumns, markRows, moveColumn, moveRow, rowSteps, stand, takeFlight} from '../shell';
+import {Shell, columnGhost, columnOf, columnSteps, markColumns, markRows, moveColumn, moveRow, rowGhost, rowSteps, stand, takeFlight} from '../shell';
 
 const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
   const {table, desk} = shell;
@@ -17,9 +17,12 @@ const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
       return;
     }
     const survey = surveyed(table, desk.order, desk.seated);
+    const ghost = columnGhost(shell, columnOf(desk, th));
+    const from = {x: event.clientX, y: event.clientY};
     let landing: string | undefined;
     takeFlight(shell, event, {
       travel: moving => {
+        ghost.drift(moving.clientX - from.x, moving.clientY - from.y);
         const held = columnOf(desk, th);
         const struck = columnUnder(desk.order, survey)(moving.clientX, moving.clientY, held);
         if (has(struck) && struck !== held) {
@@ -27,6 +30,7 @@ const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
         }
       },
       land: () => {
+        ghost.land();
         if (has(landing)) {
           commit(columnOf(desk, th), landing, survey);
         }
@@ -75,15 +79,19 @@ const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void 
   grip.addEventListener('pointerdown', event => {
     shell.bake();
     const survey = surveyed(table, desk.order, desk.seated);
+    const ghost = rowGhost(shell, held);
+    const from = {x: event.clientX, y: event.clientY};
     let landing: number | undefined;
     takeFlight(shell, event, {
       travel: moving => {
+        ghost.drift(moving.clientX - from.x, moving.clientY - from.y);
         const struck = rowUnder(desk.seated, survey)(moving.clientX, moving.clientY, held);
         if (has(struck) && struck !== held) {
           landing = struck;
         }
       },
       land: () => {
+        ghost.land();
         if (has(landing)) {
           commit(landing, survey);
         }
