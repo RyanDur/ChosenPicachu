@@ -1,16 +1,152 @@
-import {FC} from 'react';
+import {FC, ReactNode} from 'react';
+import {useSearchParamsObject} from '@components/search-params';
 import {Codes, Mdn, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, aside, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
+import {World, worldParam} from '../params';
 import sharesSource from '@components/Table/shares.ts?raw';
 import resizeSource from '@components/Table/ResizeHandle.tsx?raw';
 import baseCss from '@components/Table/Table.css?raw';
 import headerSource from '@components/DragSortableTable/EagerHideAnimatedTable/Header.tsx?raw';
 import headerCss from '@components/DragSortableTable/Header.css?raw';
+import tableSource from '../Frame/table.html?raw';
+import shellSource from '../Frame/shell.ts?raw';
 import '../../Recipe/Recipe.css';
 
 const gap = plain(' ');
 
-const widenStory =
+const ledgerCodes: Record<World, ReactNode> = {
+  react: <Codes>
+    <Snippet label="JS" foil lines={[
+      plain('const [widths, setWidths] = useState({window: 240, trades: 96});'), gap,
+      plain('const resized = (column, dx) =>'),
+      plain('    setWidths({...widths, [column]: widths[column] + dx});'),
+      aside('// the column grows, and the table grows with it')
+    ]}/>
+    <Snippet label="JS" lines={[
+      ...unit(sharesSource, 'export const measuredShares')
+    ]}/>
+    <Snippet label="HTML" lines={[
+      plain("<th className=\"header-cell\" style={{'--share': `${share}%`}}>")
+    ]}/>
+    <Snippet label="CSS" lines={[
+      ...unit(baseCss, '.fancy-table.apportioned .header-cell.shared {'), gap,
+      ...unit(headerCss, '.sortable .header-cell {')
+    ]}/>
+  </Codes>,
+  html: <Codes>
+    <Snippet label="JS" foil lines={[
+      plain("header.style.width = `${header.offsetWidth + dx}px`;"),
+      aside('// the column grows, and the table grows with it')
+    ]}/>
+    <Snippet label="JS" lines={[
+      ...unit(sharesSource, 'export const measuredShares'), gap,
+      ...unit(shellSource, '  const awaken = ')
+    ]}/>
+    <Snippet label="JS" lines={[
+      ...unit(shellSource, 'const dressColumn = ')
+    ]}/>
+    <Snippet label="CSS" lines={[
+      ...unit(baseCss, '.fancy-table.apportioned .header-cell.shared {'), gap,
+      ...unit(headerCss, '.sortable .header-cell {')
+    ]}/>
+  </Codes>
+};
+
+const gridMarkup: Record<World, ReactNode> = {
+  react: <Snippet label="HTML" lines={[
+    ...span(headerSource, "<div className={classNames('header-cell-content'", '</div>')
+  ]}/>,
+  html: <Snippet label="HTML" lines={[
+    ...span(tableSource, '<div class="header-cell-content rankable resizable">trades', '⇅</button>'), gap,
+    ...span(tableSource, 'aria-label="resize trades"></button>', '</div>')
+  ]}/>
+};
+
+const handleMarkup: Record<World, ReactNode> = {
+  react: <Snippet label="HTML" lines={[
+    ...span(resizeSource, '<button type="button"', ': `resize ${column}`}')
+  ]}/>,
+  html: <Snippet label="HTML" lines={[
+    ...span(tableSource, '<button type="button" class="resize-handle"', 'aria-label="resize window"></button>')
+  ]}/>
+};
+
+const handleSays: Record<World, ReactNode> = {
+  react: <Says>The handle is a
+    native <Mdn path="Web/HTML/Element/button">button</Mdn>: focusable by birth, announcing
+    itself by name, and once the ledger exists its label speaks the share too. This
+    is <Mdn path="Web/Accessibility/ARIA">ARIA</Mdn>’s own first rule: prefer the native
+    element, because it carries focus, announcement, and activation for free, and the
+    user’s need is met by the platform instead of imitated. The grid from the
+    last step deals it the header’s end track, and the button carries no width of its own:
+    it is a grid container whose only item is the 8px line its ::after paints, so the
+    painted line is the hit area. The
+    col-resize <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
+    and <Mdn path="Web/CSS/touch-action">touch-action</Mdn>: none lets the pointer drag it
+    on a touchscreen.</Says>,
+  html: <Says>The handle is a
+    native <Mdn path="Web/HTML/Element/button">button</Mdn>: focusable by birth, announcing
+    the name the markup gives it, and once the ledger exists dressColumn rewrites that label
+    to speak the share too. This
+    is <Mdn path="Web/Accessibility/ARIA">ARIA</Mdn>’s own first rule: prefer the native
+    element, because it carries focus, announcement, and activation for free, and the
+    user’s need is met by the platform instead of imitated. The grid from the
+    last step deals it the header’s end track, and the button carries no width of its own:
+    it is a grid container whose only item is the 8px line its ::after paints, so the
+    painted line is the hit area. The
+    col-resize <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
+    and <Mdn path="Web/CSS/touch-action">touch-action</Mdn>: none lets the pointer drag it
+    on a touchscreen.</Says>
+};
+
+const captureSays: Record<World, ReactNode> = {
+  react: <Says>On pointerdown the
+    handle <Mdn path="Web/API/Element/setPointerCapture">captures its pointer</Mdn> (safe
+    here, because unlike the sort’s cells the handle never moves in the DOM) and measures the
+    table once: pixels per share. Each move converts the drag into shares and trades only the
+    increment since the last one, so a clamped trade never accumulates error.</Says>,
+  html: <Says>A press wakes the ledger and measures the table once: pixels per share. The
+    first move <Mdn path="Web/API/Element/setPointerCapture">captures the pointer</Mdn> (safe
+    here, because unlike the sort’s cells the handle never moves in the DOM), and each move
+    converts the drag into shares and trades only the increment since the last one, so a
+    clamped trade never accumulates error.</Says>
+};
+
+const captureCodes: Record<World, ReactNode> = {
+  react: <Codes>
+    <Snippet label="JS" lines={[
+      ...unit(resizeSource, 'onPointerDown={(event'), gap,
+      ...unit(resizeSource, 'onPointerMove={(event')
+    ]}/>
+  </Codes>,
+  html: <Codes>
+    <Snippet label="JS" lines={[
+      ...unit(shellSource, "handle.addEventListener('pointerdown'"), gap,
+      ...unit(shellSource, "handle.addEventListener('pointermove'")
+    ]}/>
+  </Codes>
+};
+
+const gestureCodes: Record<World, ReactNode> = {
+  react: <Codes>
+    <Snippet label="JS" lines={[
+      ...span(resizeSource, 'onMouseDown={event => event.stopPropagation()}',
+        'onMouseDown={event => event.stopPropagation()}'), gap,
+      ...unit(resizeSource, 'onKeyDown={(event'),
+      aside('// the column dial above never hears a thing')
+    ]}/>
+  </Codes>,
+  html: <Codes>
+    <Snippet label="JS" lines={[
+      ...span(shellSource, "handle.addEventListener('pointerdown', event => {", 'event.stopPropagation();'),
+      plain('    // …the press measures; the descent stops here'), gap,
+      ...unit(shellSource, "handle.addEventListener('keydown'"),
+      aside('// the column drag above never hears a thing')
+    ]}/>
+  </Codes>
+};
+
+const widenStory = (world: World) =>
   <Story param="resize" id="widen"
          can="The trader can widen a column"
          soThat="what they read most gets the room, and the table keeps its shape">
@@ -35,24 +171,7 @@ const widenStory =
             opening widths in that same stylesheet, keeps the table exactly its container: every
             column a fraction of it, one record keeping one promise.</Says>
         </Words>
-        <Codes>
-          <Snippet label="JS" foil lines={[
-            plain('const [widths, setWidths] = useState({window: 240, trades: 96});'), gap,
-            plain('const resized = (column, dx) =>'),
-            plain('    setWidths({...widths, [column]: widths[column] + dx});'),
-            aside('// the column grows, and the table grows with it')
-          ]}/>
-          <Snippet label="JS" lines={[
-            ...unit(sharesSource, 'export const measuredShares')
-          ]}/>
-          <Snippet label="HTML" lines={[
-            plain("<th className=\"header-cell\" style={{'--share': `${share}%`}}>")
-          ]}/>
-          <Snippet label="CSS" lines={[
-            ...unit(baseCss, '.fancy-table.apportioned .header-cell.shared {'), gap,
-            ...unit(headerCss, '.sortable .header-cell {')
-          ]}/>
-        </Codes>
+        {ledgerCodes[world]}
       </Step>
       <Step title="Lay the header out on a grid">
         <Words want="A header cell seats a title, sometimes a menu, sometimes a handle; the cell must tell that furniture where to live, and a table cell cannot become a grid without ceasing to be a table cell.">
@@ -74,9 +193,7 @@ const widenStory =
             plain('.header-cell { padding-right: 48px; }'),
             aside('/* three numbers agreeing by luck */')
           ]}/>
-          <Snippet label="HTML" lines={[
-            ...span(headerSource, "<div className={classNames('header-cell-content'", '</div>')
-          ]}/>
+          {gridMarkup[world]}
           <Snippet label="CSS" lines={[
             ...unit(baseCss, '.header-cell {'), gap,
             ...unit(baseCss, '.header-cell-content {'), gap,
@@ -88,23 +205,10 @@ const widenStory =
       </Step>
       <Step title="A handle that is a button">
         <Words want="The affordance must be reachable and honest for everyone: a real control at the column’s edge, not a styled sliver of nothing.">
-          <Says>The handle is a
-            native <Mdn path="Web/HTML/Element/button">button</Mdn>: focusable by birth, announcing
-            itself by name, and once the ledger exists its label speaks the share too. This
-            is <Mdn path="Web/Accessibility/ARIA">ARIA</Mdn>’s own first rule: prefer the native
-            element, because it carries focus, announcement, and activation for free, and the
-            user’s need is met by the platform instead of imitated. The grid from the
-            last step deals it the header’s end track, and the button carries no width of its own:
-            it is a grid container whose only item is the 8px line its ::after paints, so the
-            painted line is the hit area. The
-            col-resize <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
-            and <Mdn path="Web/CSS/touch-action">touch-action</Mdn>: none lets the pointer drag it
-            on a touchscreen.</Says>
+          {handleSays[world]}
         </Words>
         <Codes>
-          <Snippet label="HTML" lines={[
-            ...span(resizeSource, '<button type="button"', ': `resize ${column}`}')
-          ]}/>
+          {handleMarkup[world]}
           <Snippet label="CSS" lines={[
             ...unit(baseCss, '.resize-handle {')
           ]}/>
@@ -125,18 +229,9 @@ const widenStory =
       </Step>
       <Step title="Capture the pointer, measure once">
         <Words want="Pointer positions arrive in pixels while the ledger speaks in shares, and asking the DOM for the table’s width on every move brings back layout thrash.">
-          <Says>On pointerdown the
-            handle <Mdn path="Web/API/Element/setPointerCapture">captures its pointer</Mdn> (safe
-            here, because unlike the sort’s cells the handle never moves in the DOM) and measures the
-            table once: pixels per share. Each move converts the drag into shares and trades only the
-            increment since the last one, so a clamped trade never accumulates error.</Says>
+          {captureSays[world]}
         </Words>
-        <Codes>
-          <Snippet label="JS" lines={[
-            ...unit(resizeSource, 'onPointerDown={(event'), gap,
-            ...unit(resizeSource, 'onPointerMove={(event')
-          ]}/>
-        </Codes>
+        {captureCodes[world]}
       </Step>
       <Step title="Two gestures, one header">
         <Words want="The handle lives inside a draggable header, so pressing it would lift the whole column into a drag.">
@@ -145,19 +240,14 @@ const widenStory =
             never hears the press, and the keyboard gets its own road: focus the handle and the
             arrow keys trade a fixed step, no pointer required.</Says>
         </Words>
-        <Codes>
-          <Snippet label="JS" lines={[
-            ...span(resizeSource, 'onMouseDown={event => event.stopPropagation()}',
-              'onMouseDown={event => event.stopPropagation()}'), gap,
-            ...unit(resizeSource, 'onKeyDown={(event'),
-            aside('// the column dial above never hears a thing')
-          ]}/>
-        </Codes>
+        {gestureCodes[world]}
       </Step>
     </Steps>
   </Story>;
 
-export const ResizeRecipe: FC = () =>
-  <section aria-label="build the drag resize yourself" className="build-steps">
-    <Stories>{widenStory}</Stories>
+export const ResizeRecipe: FC = () => {
+  const {world = 'react'} = useSearchParamsObject({world: worldParam});
+  return <section aria-label="build the drag resize yourself" className="build-steps">
+    <Stories>{widenStory(world)}</Stories>
   </section>;
+};
