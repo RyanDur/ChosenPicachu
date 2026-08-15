@@ -271,6 +271,20 @@ describe('the frame table', () => {
       expect(document.querySelector('table.column-ghost')).not.toBeInTheDocument();
     });
 
+
+    it('the row ghost carries its grip', () => {
+      deal(undefined, eagerHideStatic);
+      rowRects();
+
+      const grip = within(screen.getByRole('row', {name: /this minute/})).getByRole('button', {name: 'move row 1'});
+      fireEvent.pointerDown(grip, {clientX: 20, clientY: 20, pointerId: 1});
+
+      expect(document.querySelector('table.column-ghost .grip')).toBeInTheDocument();
+
+      fireEvent.pointerUp(surface(), {pointerId: 1});
+      expect(document.querySelector('table.column-ghost')).not.toBeInTheDocument();
+    });
+
     it('animated commits wear their marks and shed them when the slide ends', async () => {
       deal(undefined, eagerKeepAnimated);
       stubbedRects();

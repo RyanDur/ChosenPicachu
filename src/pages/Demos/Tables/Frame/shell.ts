@@ -227,6 +227,11 @@ export const columnGhost = ({document, table, desk, lanes}: Shell, column: strin
   return ghost;
 };
 
+const gripGlyph = '<i class="grip">' +
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="16" height="16" aria-hidden="true">' +
+  '<path d="M32 288c-17.7 0-32 14.3-32 32s14.3 32 32 32l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 288zm0-128' +
+  'c-17.7 0-32 14.3-32 32s14.3 32 32 32l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 160z"/></svg></i>';
+
 export const rowGhost = ({document, desk, lanes}: Shell, row: number): GhostFlight => {
   const lane = lanes[row];
   const at = lane.getBoundingClientRect();
@@ -236,7 +241,7 @@ export const rowGhost = ({document, desk, lanes}: Shell, row: number): GhostFlig
     const text = (cell.textContent ?? '').trim();
     const width = `style="width: ${cell.getBoundingClientRect().width}px"`;
     return column === 'window'
-      ? `<th scope="row" class="cell row-header" ${width}><div class="row-header-content">${text}</div></th>`
+      ? `<th scope="row" class="cell row-header" ${width}><div class="row-header-content">${gripGlyph}${text}</div></th>`
       : `<td class="cell" ${width}>${text}</td>`;
   });
   ghost.element.innerHTML = `<tbody class="body"><tr class="row">${dressed.join('')}</tr></tbody>`;
