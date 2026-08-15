@@ -29,6 +29,7 @@ const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
   th.tabIndex = 0;
 
   th.addEventListener('pointerdown', event => {
+    th.setPointerCapture(event.pointerId);
     survey = surveyed(table, desk.order, desk.seated);
     ghost = columnGhost(shell, columnOf(desk, th));
     origin = {x: event.clientX, y: event.clientY};
@@ -104,6 +105,7 @@ const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void 
   };
 
   grip.addEventListener('pointerdown', event => {
+    grip.setPointerCapture(event.pointerId);
     survey = surveyed(table, desk.order, desk.seated);
     ghost = rowGhost(shell, held);
     origin = {x: event.clientX, y: event.clientY};
