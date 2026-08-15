@@ -6,6 +6,7 @@
   --faded-mint: rgba(180, 219, 192, 0.5);
   --internationl-orange-engineering: rgb(186, 45, 11);
   --faded-internationl-orange-engineering: rgba(186, 45, 11, 0.4);
+  --alarm-ink: var(--internationl-orange-engineering);
   --primary-blue: rgb(21, 101, 192);
   --plum: rgb(85, 26, 139);
   --primary-dark-blue: rgb(13, 71, 161);

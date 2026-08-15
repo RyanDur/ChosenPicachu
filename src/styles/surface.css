@@ -10,6 +10,8 @@
 
 .hairline-outline { border: var(--hairline) solid currentcolor; }
 
+.alarm-ink { color: var(--alarm-ink); }
+
 .padded {
   padding: var(--base-x-4);
 
