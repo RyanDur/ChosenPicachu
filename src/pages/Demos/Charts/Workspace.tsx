@@ -49,7 +49,7 @@ export const Workspace: FC<Props> = ({trades, status, product}) => {
         <Menu id="add-chart" label="Add a chart" toggle="+"
               toggleClassName="add-chart button secondary">
           {absentKinds.map(kind =>
-            <button type="button" key={kind} className="item"
+            <button type="button" key={kind} className="item sub-title"
                     onClick={() => add(kind)}>{chartNames[kind]}</button>)}
         </Menu>}
     </header>

@@ -202,6 +202,14 @@
   }
 }
 
+.inclusive-accordion,
+.exclusive-accordion,
+.exclusive-toggle-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--base-x-1_25);
+}
+
 .toggle-accordion {
   display: flex;
   flex-direction: column;

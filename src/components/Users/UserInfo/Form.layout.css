@@ -16,11 +16,6 @@
     grid-area: title;
   }
 
-  .title,
-  .sub-title {
-    margin-block: 0;
-  }
-
   #first-name-cell,
   #last-name-cell,
   #email-cell,

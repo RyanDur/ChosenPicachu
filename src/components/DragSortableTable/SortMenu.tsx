@@ -16,7 +16,7 @@ type Props = {
 export const SortMenu: FC<Props> = ({column, sorted, onRule}) =>
   <Menu id={`sort-${column}`} label={`sort ${column}`}
         toggle={has(sorted) ? glyphs[sorted] : '⇅'}>
-    <button type="button" className="item" onClick={event => onRule(column, 'ascending', event)}>ascending</button>
-    <button type="button" className="item" onClick={event => onRule(column, 'descending', event)}>descending</button>
-    <button type="button" className="item" onClick={event => onRule(column, undefined, event)}>as dealt</button>
+    <button type="button" className="item sub-title" onClick={event => onRule(column, 'ascending', event)}>ascending</button>
+    <button type="button" className="item sub-title" onClick={event => onRule(column, 'descending', event)}>descending</button>
+    <button type="button" className="item sub-title" onClick={event => onRule(column, undefined, event)}>as dealt</button>
   </Menu>;

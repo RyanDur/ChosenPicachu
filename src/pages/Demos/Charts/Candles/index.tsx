@@ -36,7 +36,7 @@ export const Candles: FC<Props> = ({trades, id = 'candle', actions}) => {
       {actions}
       <Menu id={`${id}-period`} label="candle period" toggle={period} toggleClassName="period-toggle paper caption">
         {Object.values(Period).map(option =>
-          <button type="button" key={option} className="item"
+          <button type="button" key={option} className="item sub-title"
                   onClick={() => setPeriod(option)}>{option}</button>
         )}
       </Menu>
