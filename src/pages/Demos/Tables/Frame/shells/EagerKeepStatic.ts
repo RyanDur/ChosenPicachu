@@ -72,13 +72,9 @@ const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void 
   grip.addEventListener('keydown', event => {
     maybe(rowSteps[event.key]).map(toward => {
       event.preventDefault();
-      shell.commit(baked);
-      const {seats} = shell.desk();
-      const {from, to} = nudgedRow(seats, held, toward);
-      if (to === from) {
-        return;
-      }
-      shell.commit(nudgedTo(held, to));
+      const standing = shell.desk().seated;
+      const {to} = nudgedRow(standing, held, toward);
+      shell.commit(desk => nudgedTo(held, to)(baked(desk)));
     });
   });
 };

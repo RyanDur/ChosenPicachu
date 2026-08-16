@@ -258,7 +258,7 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
             ]}/>
             : <Snippet label="TS" lines={[
               ...unit(frameDesk, 'export const baked = '),
-              aside('// every grip commits it first thing on the way up')
+              aside('// the grab commits it outright; a nudge folds it into its own move')
             ]}/>}
         </Codes>
       </Step>
