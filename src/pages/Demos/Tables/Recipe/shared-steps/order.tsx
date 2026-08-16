@@ -2,15 +2,16 @@ import {ReactNode} from 'react';
 import {Codes, Says, Snippet, Step, Words, aside, plain} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
-import {deskSource, frameStand, gap} from './sources';
+import {deskSource, frameStand, gap, useDeskSource} from './sources';
 
-export const orderInState = (world: World, tableSource: string): ReactNode =>
+export const orderInState = (world: World): ReactNode =>
   <Step title="Keep the order in state, not in the data">
     <Words want="Every story runs against the stream: a reorder that rewrote the data would lose to the next trade, so order and data must never fight.">
       {world === 'react'
-        ? <Says>Rows and columns arrive in whatever order the fold produced. Hold the ordered
-          columns and the seats as state, and render the markup through them, so a reorder never
-          touches the data: the same key finds its new seat and React moves the real nodes.</Says>
+        ? <Says>Rows and columns arrive in whatever order the fold produced. The table holds the
+          ordered columns and the seats on the desk, one value behind one commit, and renders the
+          markup through it, so a reorder never touches the data: the same key finds its new seat
+          and React moves the real nodes.</Says>
         : <Says>Rows and columns arrive dealt by the markup, and the markup is the source of the
           structural knowledge: the shell reads the order off the header classes and seats every
           lane by its birth index. Both live on the desk, one immutable value behind one commit,
@@ -21,8 +22,8 @@ export const orderInState = (world: World, tableSource: string): ReactNode =>
     {world === 'react'
       ? <Codes>
         <Snippet label="TS" lines={[
-          ...unit(tableSource, 'const [ordered, setOrdered]'), gap,
-          ...unit(tableSource, 'const [seats, setSeats]')
+          ...unit(deskSource, 'export type Desk'), gap,
+          ...unit(useDeskSource, 'export const useDesk')
         ]}/>
         <Snippet label="HTML" lines={[
           plain('<tr>{order.map(key =>'),

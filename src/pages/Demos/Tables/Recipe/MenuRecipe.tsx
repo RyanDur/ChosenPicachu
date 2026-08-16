@@ -230,17 +230,11 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
               : plain('    seats = ranked(rows, seats, {column, direction});'),
             aside('// ranked once, unsorted by the next trade')
           ]}/>
-          {world === 'react'
-            ? <Snippet label="TS" lines={[
-              ...unit(sortingSource, 'export const ranked'), gap,
-              ...span(source, 'const standing = has(rule) ? ranked(rows, dealt, rule) : dealt;',
-                'const standing = has(rule) ? ranked(rows, dealt, rule) : dealt;')
-            ]}/>
-            : <Snippet label="TS" lines={[
-              ...unit(sortingSource, 'export const ranked'), gap,
-              ...span(frameStand, 'const standing = has(next.rule) ? ranked(rows, next.seats, next.rule) : next.seats;',
-                'const standing = has(next.rule) ? ranked(rows, next.seats, next.rule) : next.seats;')
-            ]}/>}
+          <Snippet label="TS" lines={[
+            ...unit(sortingSource, 'export const ranked'), gap,
+            ...unit(deskSource, 'export const standingOf'),
+            aside('// both worlds drape through the same standing')
+          ]}/>
         </Codes>
       </Step>
       {ruled(build, motion, dial)}
@@ -254,7 +248,8 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
         <Codes>
           {world === 'react'
             ? <Snippet label="TS" lines={[
-              ...unit(source, 'onLift={lifted => event => {')
+              ...unit(deskSource, 'export const baked'), gap,
+              ...span(source, 'const grabbedRow = ', 'baked(current)));')
             ]}/>
             : <Snippet label="TS" lines={[
               ...unit(deskSource, 'export const baked = '),

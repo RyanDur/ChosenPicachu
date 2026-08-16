@@ -4,7 +4,7 @@ import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {frameGhosts, frameHtml, gap, ghostCss, ghostSource, travelSource} from './sources';
 
-export const ghostByHand = (world: World, hookSource: string): ReactNode =>
+export const ghostByHand = (world: World, tableSource: string): ReactNode =>
   <Step title="Draw the ghost by hand">
     <Words want="The carried column has to be visible in the hand, smoothly, on slow machines too.">
       {world === 'react'
@@ -37,8 +37,7 @@ export const ghostByHand = (world: World, hookSource: string): ReactNode =>
         ]}/>}
       {world === 'react'
         ? <Snippet label="TS" lines={[
-          ...span(hookSource, 'origin.either(',
-            'setOrigin(maybe({x: moving.clientX')
+          ...unit(tableSource, 'const drifting = ')
         ]}/>
         : <Snippet label="TS" lines={[
           ...unit(frameGhosts, 'export const columnGhost'), gap,

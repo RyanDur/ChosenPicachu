@@ -4,7 +4,7 @@ import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {gap, sortableCss, travelSource} from './sources';
 
-export const liftOnce = (world: World, hookSource: string, tableSource: string, shellSrc: string): ReactNode =>
+export const liftOnce = (world: World, tableSource: string, shellSrc: string): ReactNode =>
   <Step title="Lift on pointer down, and measure the table once">
     <Words want="A carry must know the ground it stands on without asking the DOM again on every twitch of the hand.">
       {world === 'react'
@@ -44,9 +44,8 @@ export const liftOnce = (world: World, hookSource: string, tableSource: string, 
     <Codes>
       {world === 'react'
         ? <Snippet label="TS" lines={[
-          ...unit(hookSource, 'const grabbed = '), gap,
-          ...unit(hookSource, 'const lift = '), gap,
-          ...span(tableSource, 'onLift={columnsTravel.lift}', 'onLift={columnsTravel.lift}')
+          ...unit(tableSource, 'const grabbedColumn = '), gap,
+          ...span(tableSource, 'onLift={column => columnLift(column', 'onLift={column => columnLift(column')
         ]}/>
         : <Snippet label="TS" lines={[
           ...unit(shellSrc, '  const grabbed = '), gap,

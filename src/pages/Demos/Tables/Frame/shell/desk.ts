@@ -3,7 +3,7 @@ import {Desk} from '@components/DragSortableTable/desk';
 export type {Aloft, Desk} from '@components/DragSortableTable/desk';
 export {
   baked, columnAloft, columnLanding, columnOf, drifting, dropped, landedColumn, landedRow,
-  lifted, nudgedTo, orderedTo, rowAloft, rowLanding, ruledBy, seatedTo, sharedAs, tradedBy
+  lifted, nudgedTo, orderedTo, rowAloft, rowLanding, ruledBy, seatedTo, sharedAs, standingOf, tradedBy
 } from '@components/DragSortableTable/desk';
 
 export type Shell = {

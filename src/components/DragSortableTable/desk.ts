@@ -2,7 +2,8 @@ import {Maybe, has, maybe, nothing} from '@ryandur/sand';
 import {Drift, Flight as FlightBox, Grab, carried, still} from './travel';
 import {Survey} from './survey';
 import {Shares, neighborOf, traded} from '@components/Table/shares';
-import {Rule} from './sorting';
+import {TableProps} from '@components/Table';
+import {Rule, ranked} from './sorting';
 import {array} from '@components/arrays';
 
 export type Aloft =
@@ -74,3 +75,14 @@ export const tradedBy = (column: string, delta: number) => (desk: Desk): Desk =>
 
 export const columnOf = (desk: Desk, cell: Element): string =>
   desk.order.find(name => cell.classList.contains(name)) ?? '';
+
+export const dealtDesk = (order: readonly string[], lanes: number): Desk => {
+  const dealt = Array.from({length: lanes}, (_, at) => at);
+  return {
+    order, seats: dealt, seated: dealt, shares: undefined, rule: undefined,
+    aloft: undefined, bounds: undefined, flight: undefined, origin: undefined, drift: still
+  };
+};
+
+export const standingOf = (rows: TableProps['rows'], desk: Desk): readonly number[] =>
+  has(desk.rule) ? ranked(rows, desk.seats, desk.rule) : desk.seats;

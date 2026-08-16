@@ -27,7 +27,6 @@ import {
 import shellSrc from '../Frame/shells/LazyKeepAnimated.ts?raw';
 import tableSource from '@components/DragSortableTable/LazyKeepAnimatedTable/LazyKeepAnimatedTable.tsx?raw';
 import headerSource from '@components/DragSortableTable/LazyKeepAnimatedTable/Header.tsx?raw';
-import hookSource from '@components/DragSortableTable/LazyKeepAnimatedTable/useColumnTravel.ts?raw';
 import cssSource from '@components/DragSortableTable/LazyKeepAnimatedTable/LazyKeepAnimatedTable.css?raw';
 
 export const LazyKeepAnimatedRecipe: FC<{track: Track; world: World}> = ({track, world}) => track === 'pointer'
@@ -44,10 +43,10 @@ export const LazyKeepAnimatedRecipe: FC<{track: Track; world: World}> = ({track,
         And the swap slides into place, so the eye never loses a column.</Tell>
       <Steps>
         {cssShare(world)}
-        {orderInState(world, tableSource)}
-        {liftOnce(world, hookSource, tableSource, shellSrc)}
-        {dragSurface(world, hookSource)}
-        {ghostByHand(world, hookSource)}
+        {orderInState(world)}
+        {liftOnce(world, tableSource, shellSrc)}
+        {dragSurface(world, tableSource)}
+        {ghostByHand(world, tableSource)}
         {deadZone}
         <Step title="Stash the landing, commit on release" dial={<PaceDial name="step-pace"/>}>
           <Words want="The trader wants the table calm while they drag, because mid-flight churn distracts and only the destination matters.">
@@ -69,8 +68,9 @@ export const LazyKeepAnimatedRecipe: FC<{track: Track; world: World}> = ({track,
           <Codes>
             {world === 'react'
               ? <Snippet label="TS" lines={[
-                ...unit(hookSource, 'const travel = '), gap,
-                ...unit(hookSource, 'const drop = ')
+                ...unit(tableSource, 'const settleColumn = '), gap,
+                ...unit(tableSource, 'const columnTravel = '), gap,
+                ...unit(tableSource, 'const columnLand = ')
               ]}/>
               : <Snippet label="TS" lines={[
                 ...unit(shellSrc, 'const columnTravel = '), gap,
