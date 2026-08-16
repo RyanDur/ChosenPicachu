@@ -2,7 +2,7 @@ import {AddressInfo, NewUser, User, UserInfo} from '@components/Users/UserInfo/t
 import {asyncFailure, asyncSuccess, maybe, Result} from '@ryandur/sand';
 import {HTTPError} from '@transport/types';
 import {nanoid} from 'nanoid';
-import {randBetweenDate, randCity, randEmail, randFirstName, randLastName, randNumber, randSentence, randStateAbbr, randStreetName, randZipCode} from '@ngneat/falso';
+import {randBetweenDate, randCity, randEmail, randFirstName, randLastName, randNumber, randSentence, randStateAbbr, randStreetName, randZipCode} from '@components/fibs';
 import {AvatarGenerator} from 'random-avatar-generator';
 import {toDate} from 'date-fns';
 

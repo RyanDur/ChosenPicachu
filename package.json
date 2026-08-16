@@ -17,7 +17,6 @@
     "lighthouse:record": "node scripts/lighthouse/record.mjs"
   },
   "dependencies": {
-    "@ngneat/falso": "^8.0.2",
     "@ryandur/sand": "^10.0.0",
     "date-fns": "4.1.0",
     "random-avatar-generator": "^2.0.0",

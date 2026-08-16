@@ -1,5 +1,5 @@
 import {lazy, Suspense, useState} from 'react';
-import {randParagraph, randWord} from '@ngneat/falso';
+import {randParagraph, randWord} from '@components/fibs';
 import {useSearchParamsObject} from '@components/search-params';
 import './style.css';
 import './DemosPage.css';
