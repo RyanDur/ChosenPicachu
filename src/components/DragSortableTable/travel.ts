@@ -1,6 +1,6 @@
 import {has, maybe} from '@ryandur/sand';
 import {array} from '@components/arrays';
-import {Shifted, Slid, bounded, columnNudge, nudgedColumn, nudgedRow, rowNudge, struckAway, surveyed} from './survey';
+import {ColumnNudge, RowNudge, bounded, columnNudge, nudgedColumn, nudgedRow, rowNudge, struckAway, surveyed} from './survey';
 export type DragStyle = 'eager-move' | 'lazy-move' | 'hide-eager-move' | 'hide-lazy-move';
 
 export type Flight = {
@@ -42,7 +42,7 @@ export const lazyTravel = <Seat,>(under: (x: number, y: number, held: Seat) => S
 export const animatedColumnArrows = (
     th: HTMLTableCellElement,
     order: readonly string[],
-    arrange: (nudge: {from: number; to: number; marks: Slid}) => void
+    arrange: (nudge: ColumnNudge) => void
 ) => (held: string, toward: number): void => {
     if (th.getAnimations().length > 0) {
         return;
@@ -69,7 +69,7 @@ export const animatedRowArrows = (
     grip: Element,
     order: readonly string[],
     standing: readonly number[],
-    arrange: (nudge: {to: number; after: number[]; drops: Shifted}) => void
+    arrange: (nudge: RowNudge) => void
 ) => (held: number, toward: number): void => {
     const sliding = maybe(grip.closest('tr'))
         .map(lane => lane.getAnimations().length > 0)

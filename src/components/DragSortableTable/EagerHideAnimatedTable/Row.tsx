@@ -3,7 +3,7 @@ import {Maybe, has, nothing} from '@ryandur/sand';
 import {animatedRowArrows} from '../travel';
 import {classNames} from '@components/class-names';
 import {Row as RowData} from '@components/Table';
-import {Shifted, Slid} from '../survey';
+import {RowNudge, Shifted, Slid} from '../survey';
 import {RowGrip} from '../RowGrip';
 
 type Props = {
@@ -42,6 +42,7 @@ export const Row: FC<Props> = (
   }
 ) => {
   const position = standing.indexOf(row);
+  const arranged = (nudge: RowNudge): void => onArranged(nudge.after, nudge.drops);
   const hidden = aloft.map(held => held === row).orElse(false);
   const drop = shifted?.[row];
 
@@ -67,8 +68,7 @@ export const Row: FC<Props> = (
           <div className="row-header-content">
             <RowGrip position={position} onLift={onLift(row)}
                      onNudge={(toward, event) =>
-                       animatedRowArrows(event.currentTarget, columns, standing, nudge =>
-                         onArranged(nudge.after, nudge.drops))(row, toward)}/>
+                       animatedRowArrows(event.currentTarget, columns, standing, arranged)(row, toward)}/>
             {cell.display}
           </div>
         </th>

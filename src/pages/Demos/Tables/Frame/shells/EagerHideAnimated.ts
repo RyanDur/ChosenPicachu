@@ -1,10 +1,15 @@
 import {maybe} from '@ryandur/sand';
 import {animatedColumnArrows, animatedRowArrows, drifted, eagerTravel} from '@components/DragSortableTable/travel';
-import {anchored, Bounds, columnSteps, columnUnder, displaced, interior, rowSteps, rowUnder, shifts, Survey, surveyed} from '@components/DragSortableTable/survey';
+import {anchored, Bounds, ColumnNudge, columnSteps, columnUnder, displaced, interior, RowNudge, rowSteps, rowUnder, shifts, Survey, surveyed} from '@components/DragSortableTable/survey';
 import {baked, columnGhost, columnOf, hideColumn, hideRow, markColumns, markRows, nudgedTo, orderedTo, rowGhost, seatedTo, Shell, stand, takeFlight, unhideColumn, unhideRow} from '../shell';
 
 const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
   const {table} = shell;
+
+  const ordered = (nudge: ColumnNudge): void => {
+    shell.commit(orderedTo(nudge.from, nudge.to));
+    markColumns(shell, nudge.marks);
+  };
 
   const commit = (held: string, struck: string, measured: Bounds): void => {
     const {order} = shell.desk();
@@ -42,10 +47,7 @@ const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
         return;
       }
       const held = columnOf(shell.desk(), th);
-      animatedColumnArrows(th, order, nudge => {
-        shell.commit(orderedTo(nudge.from, nudge.to));
-        markColumns(shell, nudge.marks);
-      })(held, toward);
+      animatedColumnArrows(th, order, ordered)(held, toward);
     });
   });
 };
@@ -53,8 +55,10 @@ const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
 const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void => {
   const {table} = shell;
 
-  const arranged = (to: number): void =>
-    shell.commit(desk => nudgedTo(held, to)(baked(desk)));
+  const arranged = (nudge: RowNudge): void => {
+    shell.commit(desk => nudgedTo(held, nudge.to)(baked(desk)));
+    markRows(shell, nudge.drops);
+  };
 
   const commit = (struck: number, measured: Survey): void => {
     const before = shell.desk().seated;
@@ -82,10 +86,7 @@ const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void 
   grip.addEventListener('keydown', event => {
     maybe(rowSteps[event.key]).map(toward => {
       event.preventDefault();
-      animatedRowArrows(grip, shell.desk().order, shell.desk().seated, nudge => {
-        arranged(nudge.to);
-        markRows(shell, nudge.drops);
-      })(held, toward);
+      animatedRowArrows(grip, shell.desk().order, shell.desk().seated, arranged)(held, toward);
     });
   });
 };

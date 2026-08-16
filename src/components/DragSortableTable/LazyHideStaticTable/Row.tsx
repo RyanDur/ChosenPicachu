@@ -24,6 +24,7 @@ export const Row: FC<Props> = (
   {row, cells, columns, clipped, standing, gripped, aloft = nothing(), aloftColumn = nothing(), className, cellClassName, onLift, onArranged}
 ) => {
   const position = standing.indexOf(row);
+  const arranged = ({after}: {to: number; after: number[]}): void => onArranged(after);
   const hidden = aloft.map(held => held === row).orElse(false);
 
   return <tr className={className}>
@@ -42,7 +43,7 @@ export const Row: FC<Props> = (
           <div className="row-header-content">
             <RowGrip position={position} onLift={onLift(row)}
                      onNudge={toward =>
-                       staticRowArrows(standing, ({after}) => onArranged(after))(row, toward)}/>
+                       staticRowArrows(standing, arranged)(row, toward)}/>
             {cell.display}
           </div>
         </th>
