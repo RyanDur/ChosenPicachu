@@ -2,9 +2,9 @@ import {ReactNode} from 'react';
 import {Codes, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
-import {frameHtml, gap, gripSource, surveySource} from './sources';
+import {frameHtml, gap, gripSource, settlesSource, surveySource} from './sources';
 
-export const theaterVertical = (world: World, tableSource: string, shellSrc: string): ReactNode =>
+export const theaterVertical = (world: World, tableSource: string): ReactNode =>
   <Step title="Turn the theater vertical">
     <Words want="A window is a row: the same carry on a second axis, and the hand needs something honest to hold.">
       <Says>Rows ride the machinery the columns built, with three substitutions. The grip is a
@@ -32,7 +32,8 @@ export const theaterVertical = (world: World, tableSource: string, shellSrc: str
         ]}/>
         : <Snippet label="TS" lines={[
           ...unit(surveySource, 'export const rowUnder'), gap,
-          ...unit(shellSrc, 'const settleRow = ')
+          ...unit(settlesSource, 'export const animatedSettleRow'), gap,
+          ...unit(settlesSource, 'export const staticSettleRow')
         ]}/>}
     </Codes>
   </Step>;

@@ -46,7 +46,7 @@ export const EagerKeepStaticRecipe: FC<{track: Track; world: World}> = ({track, 
         {deadZone}
         {eagerPace(world, tableSource, shellSrc)}
         {keepOrigin(world)}
-        {staticMotion(world, tableSource, shellSrc)}
+        {staticMotion(world, tableSource)}
       </Steps>
     </Story>
     <Story param="sort" id="row"
@@ -54,7 +54,7 @@ export const EagerKeepStaticRecipe: FC<{track: Track; world: World}> = ({track, 
            soThat="the windows they watch closest sit on top">
       {turnedVertical}
       <Steps>
-        {theaterVertical(world, tableSource, shellSrc)}
+        {theaterVertical(world, tableSource)}
       </Steps>
     </Story>
   </>

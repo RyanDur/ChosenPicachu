@@ -16,3 +16,8 @@ export const hideRow = ({lanes}: Shell, row: number): void =>
 
 export const unhideRow = ({lanes}: Shell, row: number): void =>
   [...lanes[row].cells].forEach(cell => cell.classList.remove('hide-across'));
+
+export const veiled = {
+  column: {veil: hideColumn, unveil: unhideColumn},
+  row: {veil: hideRow, unveil: unhideRow}
+};

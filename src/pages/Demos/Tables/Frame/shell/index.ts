@@ -4,7 +4,7 @@ export {baked, columnAloft, columnLanding, columnOf, drifting, dropped, landedCo
 export type {GhostFlight} from './ghosts';
 export {columnGhost, rowGhost} from './ghosts';
 export {markColumns, markRows} from './marks';
-export {hideColumn, hideRow, unhideColumn, unhideRow} from './hide';
+export {hideColumn, hideRow, unhideColumn, unhideRow, veiled} from './hide';
 export {announce, wireMenu} from './menus';
 export {dressShares, wireResize} from './resize';
 export type {Dressage, FlightAnswers} from './stand';

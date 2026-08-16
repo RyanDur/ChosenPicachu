@@ -3,9 +3,9 @@ import {MotionDial} from '../../../Controls';
 import {Codes, Mdn, Says, Snippet, Step, Words, aside, plain} from '../../../Recipe';
 import {unit} from '../../../Recipe/carve';
 import {World} from '../../params';
-import {frameMarks, gap} from './sources';
+import {frameMarks, gap, settlesSource} from './sources';
 
-export const animatedMotion = (world: World, tableSource: string, shellSrc: string, cssSource: string): ReactNode =>
+export const animatedMotion = (world: World, tableSource: string, cssSource: string): ReactNode =>
   <Step title="Slide the theater, not the layout" dial={<MotionDial name="step-motion"/>}>
     <Words want="The trader must be able to follow which column went where; a teleport is honest but unreadable, and animating the layout itself would bounce the whole table, because layout is load-bearing.">
       <Says>A swap commits instantly: the carried column already sits at full width in its new
@@ -49,7 +49,7 @@ export const animatedMotion = (world: World, tableSource: string, shellSrc: stri
           aside('// a direction and a share per displaced key; javascript is done')
         ]}/>
         : <Snippet label="TS" lines={[
-          ...unit(shellSrc, 'const settleColumn = '), gap,
+          ...unit(settlesSource, 'export const animatedSettleColumn'), gap,
           ...unit(frameMarks, 'const markCell = '),
           aside('// a direction and a share per displaced key; javascript is done')
         ]}/>}
@@ -70,7 +70,7 @@ export const animatedMotion = (world: World, tableSource: string, shellSrc: stri
     </Codes>
   </Step>;
 
-export const staticMotion = (world: World, tableSource: string, shellSrc: string): ReactNode =>
+export const staticMotion = (world: World, tableSource: string): ReactNode =>
   <Step title="Apply the state update directly" dial={<MotionDial name="step-motion"/>}>
     <Words want="Motion is not free: it competes with the pointer, costs a frame budget, and some traders ask for none at all.">
       {world === 'react'
@@ -92,7 +92,7 @@ export const staticMotion = (world: World, tableSource: string, shellSrc: string
           aside('// the whole settle; no marking code exists in this table')
         ]}/>
         : <Snippet label="TS" lines={[
-          ...unit(shellSrc, 'const settleColumn = '),
+          ...unit(settlesSource, 'export const staticSettleColumn'),
           aside('// the whole settle; no marking code exists in this shell')
         ]}/>}
     </Codes>
