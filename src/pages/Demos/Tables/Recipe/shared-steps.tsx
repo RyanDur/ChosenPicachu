@@ -141,9 +141,10 @@ export const orderInState = (world: World, tableSource: string): ReactNode =>
           touches the data: the same key finds its new seat and React moves the real nodes.</Says>
         : <Says>Rows and columns arrive dealt by the markup, and the markup is the source of the
           structural knowledge: the shell reads the order off the header classes and seats every
-          lane by its birth index. Both live on the desk, and paint renders through them, so a
-          reorder never touches the data: the same lane finds its new seat, and insertBefore moves
-          the real node only when its seat actually changed.</Says>}
+          lane by its birth index. Both live on the desk, one immutable value behind one commit,
+          and every commit reconciles the page against the new desk, so a reorder never touches
+          the data: the same lane finds its new seat, and insertBefore moves the real node only
+          when its seat actually changed.</Says>}
     </Words>
     {world === 'react'
       ? <Codes>
@@ -160,10 +161,10 @@ export const orderInState = (world: World, tableSource: string): ReactNode =>
         <Snippet label="TS" lines={[
           ...unit(frameShell, 'export type Desk'), gap,
           ...span(frameShell, "const order = [...table.querySelectorAll('thead th')]",
-            'const desk: Desk = {order, seats: dealt, seated: dealt, shares: undefined};')
+            'let desk: Desk = {order, seats: dealt, seated: dealt, shares: undefined, rule: undefined};')
         ]}/>
         <Snippet label="TS" lines={[
-          ...span(frameShell, 'desk.seated.forEach((at, position) => {',
+          ...span(frameShell, 'seated.forEach((at, position) => {',
             'body.insertBefore(desired, body.children[position] ?? null);'),
           aside('// the same lane, its new seat: the shell moves the node, not a copy')
         ]}/>
@@ -381,7 +382,7 @@ export const focusLands = (world: World, headerSource: string): ReactNode =>
           aside('{/* the button was focusable all along; the header asks */}')
         ]}/>
         : <Snippet label="TS" lines={[
-          ...unit(frameShell, 'export const dressGrips'),
+          ...unit(frameShell, 'const dressGrips = '),
           aside('// the button was focusable all along; the shell asks for the headers')
         ]}/>}
       <Snippet label="CSS" lines={[
