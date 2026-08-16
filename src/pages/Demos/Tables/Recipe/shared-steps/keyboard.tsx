@@ -39,7 +39,7 @@ export const focusLands = (world: World, headerSource: string): ReactNode =>
     </Codes>
   </Step>;
 
-export const arrowsSpeak = (world: World, headerSource: string, shellSrc: string): ReactNode =>
+export const arrowsSpeak = (world: World, headerSource: string): ReactNode =>
   <Step title="Arrows speak direction">
     <Words want="The trader’s focus can reach a column, but the platform ships no verb for “swap left”; they need one.">
       <Says>A <Mdn path="Web/API/Element/keydown_event">keydown</Mdn> handler claims the two
@@ -57,7 +57,7 @@ export const arrowsSpeak = (world: World, headerSource: string, shellSrc: string
           aside('// the anchors hold; the walk stops beside them')
         ]}/>
         : <Snippet label="TS" lines={[
-          ...unit(shellSrc, "th.addEventListener('keydown'"),
+          ...unit(frameStand, "th.addEventListener('keydown'"),
           aside('// the anchors hold; the walk stops beside them')
         ]}/>}
       <Snippet label="TS" lines={[

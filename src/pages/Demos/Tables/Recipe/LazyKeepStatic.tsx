@@ -42,7 +42,7 @@ export const LazyKeepStaticRecipe: FC<{track: Track; world: World}> = ({track, w
       <Steps>
         {cssShare(world)}
         {orderInState(world)}
-        {liftOnce(world, tableSource, shellSrc)}
+        {liftOnce(world, tableSource)}
         {dragSurface(world, tableSource)}
         {ghostByHand(world, tableSource)}
         {deadZone}
@@ -143,7 +143,7 @@ export const LazyKeepStaticRecipe: FC<{track: Track; world: World}> = ({track, w
     {quietDials}
     <Steps>
       {focusLands(world, headerSource)}
-      {arrowsSpeak(world, headerSource, shellSrc)}
+      {arrowsSpeak(world, headerSource)}
       <Step title="Cut on the keypress" dial={<MotionDial name="step-motion"/>}>
         <Words want="Motion is not free, a held key multiplies it, and some traders ask for none at all.">
           <Says>Apply the order and mark nothing; the swap paints on the next frame. With no
@@ -160,8 +160,8 @@ export const LazyKeepStaticRecipe: FC<{track: Track; world: World}> = ({track, w
             ]}/>
             : <Snippet label="TS" lines={[
               ...unit(travelSource, 'export const staticColumnArrows'), gap,
-              ...unit(shellSrc, '  const ordered = '), gap,
-              ...span(shellSrc, "th.addEventListener('keydown', staticColumnArrows", "th.addEventListener('keydown', staticColumnArrows"),
+              ...unit(shellSrc, 'const ordered = '), gap,
+              ...span(shellSrc, 'column: (shell, held) => staticColumnArrows', 'column: (shell, held) => staticColumnArrows'),
               aside('// the whole walk; nothing marked, nothing to wait for')
             ]}/>}
         </Codes>

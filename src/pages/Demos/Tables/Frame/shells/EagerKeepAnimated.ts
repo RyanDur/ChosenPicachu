@@ -1,7 +1,7 @@
 import {has, maybe} from '@ryandur/sand';
 import {ColumnNudge, columnUnder, displaced, interior, RowNudge, rowUnder, shifts} from '@components/DragSortableTable/survey';
-import {Grab, animatedColumnArrows, animatedRowArrows, columnLift, rowLift, eagerTravel} from '@components/DragSortableTable/travel';
-import {baked, columnAloft, columnOf, lifted, markColumns, markRows, nudgedTo, orderedTo, rowAloft, seatedTo, Shell, stand} from '../shell';
+import {animatedColumnArrows, animatedRowArrows, eagerTravel} from '@components/DragSortableTable/travel';
+import {baked, columnAloft, markColumns, markRows, nudgedTo, orderedTo, rowAloft, seatedTo, Shell, stand} from '../shell';
 
 const settleColumn = (shell: Shell, held: string, struck: string): void => {
   const {order, bounds} = shell.desk();
@@ -14,12 +14,12 @@ const settleColumn = (shell: Shell, held: string, struck: string): void => {
 };
 
 const settleRow = (shell: Shell, held: number, struck: number): void => {
-  const {bounds, seated: standing} = shell.desk();
+  const {bounds, seated} = shell.desk();
   if (!has(bounds)) {
     return;
   }
   shell.commit(seatedTo(held, struck));
-  markRows(shell, shifts(bounds.rowHeights, standing, shell.desk().seated, held));
+  markRows(shell, shifts(bounds.rowHeights, seated, shell.desk().seated, held));
 };
 
 const columnTravel = (shell: Shell, moving: {clientX: number; clientY: number}): void => {
@@ -44,50 +44,25 @@ const rowTravel = (shell: Shell, moving: {clientX: number; clientY: number}): vo
 
 const rowLand = (): void => undefined;
 
-const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
-  const held = columnOf(shell.desk(), th);
-
-  const ordered = (nudge: ColumnNudge): void => {
-    shell.commit(orderedTo(nudge.from, nudge.to));
-    markColumns(shell, nudge.marks);
-  };
-
-  const grabbed = (grab: Grab): void => {
-    shell.commit(lifted({axis: 'column', held}, grab));
-  };
-
-  th.addEventListener('pointerdown', columnLift(held, () => shell.desk().order, () => shell.desk().seated, grabbed));
-  th.addEventListener('keydown', animatedColumnArrows(held, () => shell.desk().order, ordered));
+const ordered = (shell: Shell) => (nudge: ColumnNudge): void => {
+  shell.commit(orderedTo(nudge.from, nudge.to));
+  markColumns(shell, nudge.marks);
 };
 
-const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void => {
-  const arranged = (nudge: RowNudge): void => {
-    shell.commit(desk => nudgedTo(held, nudge.to)(baked(desk)));
-    markRows(shell, nudge.drops);
-  };
-
-  const grabbed = (grab: Grab): void => {
-    shell.commit(desk => lifted({axis: 'row', held}, grab)(baked(desk)));
-  };
-
-  grip.addEventListener('pointerdown', rowLift(() => shell.desk().order, () => shell.desk().seated, grabbed));
-  grip.addEventListener('keydown', animatedRowArrows(held, () => shell.desk().order, () => shell.desk().seated, arranged));
+const arranged = (shell: Shell, held: number) => (nudge: RowNudge): void => {
+  shell.commit(desk => nudgedTo(held, nudge.to)(baked(desk)));
+  markRows(shell, nudge.drops);
 };
 
 export const wire = (document: Document): void =>
   stand(document, {
-    travels: shell => {
-      [...shell.table.querySelectorAll('thead th')]
-        .filter(th => th instanceof HTMLTableCellElement)
-        .forEach(th => wireColumnGrip(shell, th));
-      shell.lanes.forEach((lane, held) =>
-        [...lane.querySelectorAll('button.grip')]
-          .filter(grip => grip instanceof HTMLButtonElement)
-          .forEach(grip => wireRowGrip(shell, held, grip)));
-    },
     flights: {
       column: {travel: columnTravel, land: columnLand},
       row: {travel: rowTravel, land: rowLand}
+    },
+    arrows: {
+      column: (shell, held) => animatedColumnArrows(held, () => shell.desk().order, ordered(shell)),
+      row: (shell, held) => animatedRowArrows(held, () => shell.desk().order, () => shell.desk().seated, arranged(shell, held))
     },
     ruled: (shell, heights, before, after) => markRows(shell, shifts(heights, before, after))
   });

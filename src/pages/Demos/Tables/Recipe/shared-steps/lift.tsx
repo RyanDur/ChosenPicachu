@@ -2,9 +2,9 @@ import {ReactNode} from 'react';
 import {Codes, Mdn, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
-import {gap, sortableCss, travelSource} from './sources';
+import {frameStand, gap, sortableCss, travelSource} from './sources';
 
-export const liftOnce = (world: World, tableSource: string, shellSrc: string): ReactNode =>
+export const liftOnce = (world: World, tableSource: string): ReactNode =>
   <Step title="Lift on pointer down, and measure the table once">
     <Words want="A carry must know the ground it stands on without asking the DOM again on every twitch of the hand.">
       {world === 'react'
@@ -48,8 +48,8 @@ export const liftOnce = (world: World, tableSource: string, shellSrc: string): R
           ...span(tableSource, 'onLift={column => columnLift(column', 'onLift={column => columnLift(column')
         ]}/>
         : <Snippet label="TS" lines={[
-          ...unit(shellSrc, '  const grabbed = '), gap,
-          ...span(shellSrc, "th.addEventListener('pointerdown', columnLift",
+          ...unit(frameStand, '    const grabbed = '), gap,
+          ...span(frameStand, "th.addEventListener('pointerdown', columnLift",
             "th.addEventListener('pointerdown', columnLift")
         ]}/>}
       <Snippet label="TS" lines={[

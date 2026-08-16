@@ -44,7 +44,7 @@ export const LazyKeepAnimatedRecipe: FC<{track: Track; world: World}> = ({track,
       <Steps>
         {cssShare(world)}
         {orderInState(world)}
-        {liftOnce(world, tableSource, shellSrc)}
+        {liftOnce(world, tableSource)}
         {dragSurface(world, tableSource)}
         {ghostByHand(world, tableSource)}
         {deadZone}
@@ -182,7 +182,7 @@ export const LazyKeepAnimatedRecipe: FC<{track: Track; world: World}> = ({track,
     {quietDials}
     <Steps>
       {focusLands(world, headerSource)}
-      {arrowsSpeak(world, headerSource, shellSrc)}
+      {arrowsSpeak(world, headerSource)}
       <Step title="Both parties slide, each by the other’s share" dial={<MotionDial name="step-motion"/>}>
         <Words want="A pointer swap explains itself with a ghost in hand; the trader’s keyboard swap has no hand, and if only the neighbour slid, the walked column would simply teleport.">
           <Says>Mark both columns displaced. The swap still commits instantly, the same theater
@@ -200,8 +200,8 @@ export const LazyKeepAnimatedRecipe: FC<{track: Track; world: World}> = ({track,
             ]}/>
             : <Snippet label="TS" lines={[
               ...unit(travelSource, 'export const animatedColumnArrows'), gap,
-              ...unit(shellSrc, '  const ordered = '), gap,
-              ...span(shellSrc, "th.addEventListener('keydown', animatedColumnArrows", "th.addEventListener('keydown', animatedColumnArrows"),
+              ...unit(shellSrc, 'const ordered = '), gap,
+              ...span(shellSrc, 'column: (shell, held) => animatedColumnArrows', 'column: (shell, held) => animatedColumnArrows'),
               aside('// each starts where the other now sits')
             ]}/>}
           <Snippet label="CSS" lines={[
