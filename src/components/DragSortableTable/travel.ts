@@ -1,5 +1,6 @@
-import {has} from '@ryandur/sand';
-import {struckAway} from './survey';
+import {has, maybe} from '@ryandur/sand';
+import {array} from '@components/arrays';
+import {Shifted, Slid, bounded, columnNudge, nudgedColumn, nudgedRow, rowNudge, struckAway, surveyed} from './survey';
 export type DragStyle = 'eager-move' | 'lazy-move' | 'hide-eager-move' | 'hide-lazy-move';
 
 export type Flight = {
@@ -37,3 +38,53 @@ export const lazyTravel = <Seat,>(under: (x: number, y: number, held: Seat) => S
         }
         return struckAway(held, struck) ? struck : undefined;
     };
+
+export const animatedColumnArrows = (
+    th: HTMLTableCellElement,
+    order: readonly string[],
+    arrange: (nudge: {from: number; to: number; marks: Slid}) => void
+) => (held: string, toward: number): void => {
+    if (th.getAnimations().length > 0) {
+        return;
+    }
+    maybe(th.closest('table')).map(table => {
+        const nudge = columnNudge(order, bounded(table, order))(held, toward);
+        if (has(nudge)) {
+            arrange(nudge);
+        }
+    });
+};
+
+export const staticColumnArrows = (
+    order: readonly string[],
+    arrange: (nudge: {from: number; to: number}) => void
+) => (held: string, toward: number): void => {
+    const {from, to} = nudgedColumn(order, held, toward);
+    if (to !== from) {
+        arrange({from, to});
+    }
+};
+
+export const animatedRowArrows = (
+    grip: Element,
+    order: readonly string[],
+    standing: readonly number[],
+    arrange: (nudge: {to: number; after: number[]; drops: Shifted}) => void
+) => (held: number, toward: number): void => {
+    const sliding = maybe(grip.closest('tr'))
+        .map(lane => lane.getAnimations().length > 0)
+        .orElse(false);
+    if (sliding) {
+        return;
+    }
+    maybe(grip.closest('table')).map(table =>
+        arrange(rowNudge(standing, surveyed(table, order, standing).rowHeights)(held, toward)));
+};
+
+export const staticRowArrows = (
+    standing: readonly number[],
+    arrange: (nudge: {to: number; after: number[]}) => void
+) => (held: number, toward: number): void => {
+    const {to} = nudgedRow(standing, held, toward);
+    arrange({to, after: array.moveToIndex(to, held, standing)});
+};

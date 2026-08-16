@@ -20,7 +20,6 @@ import {
   orderInState,
   ownedPixels,
   quietDials,
-  surveySource,
   theaterVertical,
   travelSource,
   turnedVertical,
@@ -188,13 +187,13 @@ export const EagerHideStaticRecipe: FC<{track: Track; world: World}> = ({track, 
         <Codes>
           {world === 'react'
             ? <Snippet label="TS" lines={[
-              ...unit(surveySource, 'export const nudgedColumn'), gap,
-              ...span(headerSource, 'const {from, to} = nudgedColumn(order, columnName, toward);', 'onOrdered(columnName, to);'),
+              ...unit(travelSource, 'export const staticColumnArrows'), gap,
+              ...span(headerSource, 'staticColumnArrows(order,', 'onOrdered(columnName, to))'),
               aside('// the whole walk; nothing marked, nothing to wait for')
             ]}/>
             : <Snippet label="TS" lines={[
-              ...unit(surveySource, 'export const nudgedColumn'), gap,
-              ...span(shellSrc, 'const {from, to} = nudgedColumn(order, held, toward);', 'shell.commit(orderedTo(from, to));'),
+              ...unit(travelSource, 'export const staticColumnArrows'), gap,
+              ...span(shellSrc, 'staticColumnArrows(order,', 'shell.commit(orderedTo(from, to)))'),
               aside('// the whole walk; nothing marked, nothing to wait for')
             ]}/>}
         </Codes>

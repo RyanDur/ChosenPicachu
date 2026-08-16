@@ -1,8 +1,9 @@
 import {FC, PointerEvent} from 'react';
-import {Maybe, has, maybe, nothing} from '@ryandur/sand';
+import {Maybe, has, nothing} from '@ryandur/sand';
+import {animatedRowArrows} from '../travel';
 import {classNames} from '@components/class-names';
 import {Row as RowData} from '@components/Table';
-import {Shifted, Slid, rowNudge, surveyed} from '../survey';
+import {Shifted, Slid} from '../survey';
 import {RowGrip} from '../RowGrip';
 
 type Props = {
@@ -50,18 +51,9 @@ export const Row: FC<Props> = (
         ? <th scope="row" className={dress} key={column} style={theater}>
           <div className="row-header-content">
             <RowGrip position={position} onLift={onLift(row)}
-                     onNudge={(toward, event) => {
-                       const sliding = maybe(event.currentTarget.closest('tr'))
-                         .map(lane => lane.getAnimations().length > 0)
-                         .orElse(false);
-                       if (sliding) {
-                         return;
-                       }
-                       maybe(event.currentTarget.closest('table')).map(table => {
-                         const nudge = rowNudge(standing, surveyed(table, columns, standing).rowHeights)(row, toward);
-                         onArranged(nudge.after, nudge.drops);
-                       });
-                     }}/>
+                     onNudge={(toward, event) =>
+                       animatedRowArrows(event.currentTarget, columns, standing, nudge =>
+                         onArranged(nudge.after, nudge.drops))(row, toward)}/>
             {cell.display}
           </div>
         </th>

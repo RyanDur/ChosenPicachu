@@ -1,10 +1,9 @@
 import {FC, PointerEvent} from 'react';
 import {Maybe, nothing} from '@ryandur/sand';
+import {staticRowArrows} from '../travel';
 import {classNames} from '@components/class-names';
-import {array} from '@components/arrays';
 import {Row as RowData} from '@components/Table';
 import {RowGrip} from '../RowGrip';
-import {nudgedRow} from '../survey';
 
 type Props = {
   row: number;
@@ -42,10 +41,8 @@ export const Row: FC<Props> = (
         ? <th scope="row" className={dress} key={column}>
           <div className="row-header-content">
             <RowGrip position={position} onLift={onLift(row)}
-                     onNudge={toward => {
-                       const {to} = nudgedRow(standing, row, toward);
-                       onArranged(array.moveToIndex(to, row, standing));
-                     }}/>
+                     onNudge={toward =>
+                       staticRowArrows(standing, ({after}) => onArranged(after))(row, toward)}/>
             {cell.display}
           </div>
         </th>
