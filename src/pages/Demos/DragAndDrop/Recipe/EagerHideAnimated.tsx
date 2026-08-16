@@ -29,7 +29,7 @@ export const EagerHideAnimatedRecipe: FC = () => <>
             crossings, so home stays reachable.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...unit(listSource, 'onDragOver={event => {')
           ]}/>
         </Codes>
@@ -42,7 +42,7 @@ export const EagerHideAnimatedRecipe: FC = () => <>
             session keeps its source, and the eye reads a single card riding the pointer.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...span(itemSource, 'updateHide(true);', 'updateHide(true);'), gap,
             ...span(itemSource, 'updateHide(false);', 'updateHide(false);')
           ]}/>
@@ -60,7 +60,7 @@ export const EagerHideAnimatedRecipe: FC = () => <>
             data: --toward flips the sign of one keyframe instead of naming two.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...span(listSource, "setPushed({[item]: homeward ? 'right' : 'left'});",
               "setPushed({[item]: homeward ? 'right' : 'left'});")
           ]}/>

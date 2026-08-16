@@ -39,11 +39,11 @@ const settleStep = (
         measuring; a pin that measures through itself can only ratchet taller.</Says>
     </Words>
     <Codes>
-      <Snippet label="JS" foil lines={[
+      <Snippet label="TS" foil lines={[
         plain('card.style.blockSize = `${card.scrollHeight}px`;'),
         aside('/* the box is the floor of its own measurement; this pin grows and never shrinks */')
       ]}/>
-      <Snippet label="JS" lines={[
+      <Snippet label="TS" lines={[
         ...unit(bannersSource, 'const settler = new ResizeObserver(')
       ]}/>
       <Snippet label="CSS" lines={[
@@ -73,12 +73,12 @@ export const MultipleRecipe: FC = () => {
             pile remembers what stands, not what stood.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" foil lines={[
+          <Snippet label="TS" foil lines={[
             plain('const raise = (message) =>'),
             plain('  setBanners(standing => [...standing, {message}]);'),
             aside('// raised three times, standing three times')
           ]}/>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...unit(providerSource, 'const raise = useCallback(')
           ]}/>
         </Codes>
@@ -139,7 +139,7 @@ export const MultipleRecipe: FC = () => {
         </Words>
         <Codes>
           <Snippet label="CSS" lines={leavingLines(stack, enter)}/>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...unit(bannersSource, 'const left = ')
           ]}/>
         </Codes>

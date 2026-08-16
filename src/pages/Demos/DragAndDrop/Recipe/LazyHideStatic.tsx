@@ -29,7 +29,7 @@ export const LazyHideStaticRecipe: FC = () => <>
             because the platform is still animating its own end of the bargain.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...span(listSource, 'onDragOver={() => setLanding(maybe(index))}', 'onDragOver={() => setLanding(maybe(index))}'), gap,
             ...unit(listSource, 'const release')
           ]}/>
@@ -43,7 +43,7 @@ export const LazyHideStaticRecipe: FC = () => <>
             session keeps its source, and the eye reads a single card riding the pointer.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...span(itemSource, 'updateHide(true);', 'updateHide(true);'), gap,
             ...span(itemSource, 'updateHide(false);', 'updateHide(false);')
           ]}/>
@@ -59,7 +59,7 @@ export const LazyHideStaticRecipe: FC = () => <>
             paints next frame; a keyboard walk is applied as plainly as everything else.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...span(listSource, 'onArranged={setOrder}', 'onArranged={setOrder}'),
             aside('// nothing marked, nothing competing with the session')
           ]}/>

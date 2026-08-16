@@ -52,7 +52,7 @@ export const TopLayerRecipe: FC = () => {
             plain('}'),
             aside('/* an ancestor with a transform starts a new stacking context; 9999 is now local */')
           ]}/>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...span(bannersSource, 'return <section', '</section>;')
           ]}/>
         </Codes>
@@ -64,7 +64,7 @@ export const TopLayerRecipe: FC = () => {
             matches(':popover-open') keeps both calls honest so neither runs twice.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...unit(bannersSource, 'useEffect(() => {')
           ]}/>
         </Codes>

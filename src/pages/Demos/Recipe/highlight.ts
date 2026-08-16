@@ -39,7 +39,7 @@ const scan = (line: string, patterns: ReadonlyArray<{match: RegExp; kind: Kind}>
   return tokens;
 };
 
-const js: ReadonlyArray<{match: RegExp; kind: Kind}> = [
+const ts: ReadonlyArray<{match: RegExp; kind: Kind}> = [
   {match: /\/\/.*$/g, kind: 'comment'},
   {match: /'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|"(?:[^"\\]|\\.)*"/g, kind: 'string'},
   {match: /\b(?:const|let|return|if|else|new|function|undefined|true|false)\b/g, kind: 'keyword'},
@@ -62,7 +62,7 @@ const html: ReadonlyArray<{match: RegExp; kind: Kind}> = [
   {match: /\b\d+(?:\.\d+)?\b/g, kind: 'number'}
 ];
 
-const grammars = {JS: js, CSS: css, HTML: html};
+const grammars = {TS: ts, CSS: css, HTML: html};
 
-export const highlight = (label: 'HTML' | 'CSS' | 'JS', line: string): Token[] =>
+export const highlight = (label: 'HTML' | 'CSS' | 'TS', line: string): Token[] =>
   scan(line, grammars[label]);

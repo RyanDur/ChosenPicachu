@@ -29,7 +29,7 @@ export const EagerKeepStaticRecipe: FC = () => <>
             crossings, so home stays reachable.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...unit(listSource, 'onDragOver={event => {')
           ]}/>
         </Codes>
@@ -53,7 +53,7 @@ export const EagerKeepStaticRecipe: FC = () => <>
             paints next frame; a keyboard walk is applied as plainly as everything else.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...span(listSource, 'onArranged={setOrder}', 'onArranged={setOrder}'),
             aside('// nothing marked, nothing competing with the session')
           ]}/>
