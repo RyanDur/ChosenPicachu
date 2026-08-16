@@ -19,7 +19,7 @@ export const dragSurface = (world: World, tableSource: string): ReactNode =>
           it, and treat <Mdn path="Web/API/Element/lostpointercapture_event">losing the capture</Mdn> as
           the drop: releases can vanish into odd corners of the platform, and the capture going
           away is the one signal that always arrives.</Says>
-        : <Says>While something is aloft, the shell appends a fixed, full-viewport element carrying
+        : <Says>While something is aloft, JavaScript appends a fixed, full-viewport surface carrying
           the move and drop handlers, and removes it at the landing: the surface exists exactly as
           long as the drag does, so nothing can go stale. CSS gives it the grabbing cursor
           and, by mere existence, it blocks hover styles beneath it, with no state and no

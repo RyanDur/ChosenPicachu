@@ -24,7 +24,7 @@ export const animatedMotion = (world: World, tableSource: string, cssSource: str
           back.</Says>
         : <Says>The three languages split the trick cleanly. JavaScript marks who was displaced and
           hands over two lengths it already owns, both measured by the survey: the carried
-          column’s width and each row’s drop. The shell writes the mark as a class the moment it
+          column’s width and each row’s drop. The settle writes the mark as a class the moment it
           moves the node. CSS does all the moving:
           a <Mdn path="Web/CSS/@keyframes">keyframe</Mdn>’s from is the old position, a pixel
           length the survey measured at the lift; applying the class starts the slide fresh,
@@ -38,8 +38,8 @@ export const animatedMotion = (world: World, tableSource: string, cssSource: str
         ? <Says>Motion is not a flag on this table; it is this table. The animated variant marks its
           own theater inline in its settles, the dial above chooses which of eight tables you are
           reading, and the readout under the dials names it.</Says>
-        : <Says>Motion is not a flag on this shell; it is this shell. The animated variant marks its
-          own theater inline in its commits, the dial above chooses which of eight shells you are
+        : <Says>Motion is not a flag on this build; it is this build. The animated variant marks its
+          own theater inline in its commits, the dial above chooses which of eight builds you are
           reading, and the readout under the dials names it.</Says>}
     </Words>
     <Codes>
@@ -79,7 +79,7 @@ export const staticMotion = (world: World, tableSource: string): ReactNode =>
           React paint, and there is nothing else, because nothing else exists in this file.
           There is real value in this mode beyond taste: nothing competes with the pointer, and
           no motion for prefers-reduced-motion users to endure.</Says>
-        : <Says>The static shell is not the animated one with a switch off; it is a different
+        : <Says>The static build is not the animated one with a switch off; it is a different
           file with no marking code in it. Its commit is the whole story: a new order on the
           desk, the reconcile moves the cells, and there is nothing else, because nothing else
           exists in this file. There is real value in this mode beyond taste: nothing competes
@@ -93,7 +93,7 @@ export const staticMotion = (world: World, tableSource: string): ReactNode =>
         ]}/>
         : <Snippet label="TS" lines={[
           ...unit(settlesSource, 'export const staticSettleColumn'),
-          aside('// the whole settle; no marking code exists in this shell')
+          aside('// the whole settle; no marking code exists in this build')
         ]}/>}
     </Codes>
   </Step>;

@@ -13,18 +13,18 @@ export const eagerPace = (world: World, tableSource: string, buildSrc: string): 
           mid-drag, and because the markup renders through that order, the same key finds its new
           seat and React moves the real cells. Carrying the column back is just more crossings:
           home is always reachable. No style changes hands here at all.</Says>
-        : <Says>With eager pace, commit as soon as a neighbour is struck: the commit deals a new
-          order onto the desk, and the reconcile moves the real cells to match it. Carrying the
+        : <Says>With eager pace, commit as soon as a neighbour is struck: the commit writes a new
+          column order into the state, and the reconcile moves the real cells to match it. Carrying the
           column back is just more crossings: home is always reachable. No style changes hands
           here at all.</Says>}
       {world === 'react'
         ? <Says>This is the whole eager hook’s handler, and there is no landing state to keep anywhere
           in it: buttons at zero heals a drag whose release was swallowed, the surface claims the
           pointer capture, the drift feeds the ghost, and a strike settles on the spot.</Says>
-        : <Says>This is the whole travel of the eager shell, and there is no landing state to keep
+        : <Says>This is the whole travel of the eager build, and there is no landing state to keep
           anywhere in it: the drift feeds the ghost, columnUnder answers from the survey, and a
-          strike commits on the spot; the buttons-at-zero healing lives back in takeFlight, once,
-          for every shell.</Says>}
+          strike commits on the spot; the buttons-at-zero healing lives in the shared surface
+          listener, once, for every build.</Says>}
     </Words>
     <Codes>
       {world === 'react'
@@ -43,7 +43,7 @@ export const eagerPace = (world: World, tableSource: string, buildSrc: string): 
         ]}/>
         : <Snippet label="TS" lines={[
           ...unit(frameStand, 'const reconcileColumns = '),
-          aside('// the same cells, new seats: the shell moves the node, not a copy')
+          aside('// the same cells, new seats: the reconcile moves the node, not a copy')
         ]}/>}
       <Snippet label="TS" lines={[
         ...unit(travelSource, 'export const eagerTravel'),
@@ -66,9 +66,9 @@ export const lazyPace = (world: World, tableSource: string, buildSrc: string): R
         ? <Says>The lazy hook is its own handler, not a flag on the eager one: a strike is only ever
           remembered as the landing, and drop, which also answers cancel and a lost capture,
           commits it.</Says>
-        : <Says>The lazy shell is its own file, not a flag on the eager one: the flight folds every
-          move into a carried landing, and the land of the flight, which also answers cancel and
-          a lost capture, commits whatever the fold is holding.</Says>}
+        : <Says>The lazy build is its own file, not a flag on the eager one: the travel records the
+          landing in the state, and the land, which also answers cancel and a lost capture,
+          commits whatever the state is holding.</Says>}
     </Words>
     <Codes>
       {world === 'react'

@@ -17,7 +17,7 @@ export const ghostByHand = (world: World, tableSource: string): ReactNode =>
           and promises the browser motion with <Mdn path="Web/CSS/will-change">will-change</Mdn>.
           Nothing is measured per move, which is what keeps slower engines smooth.</Says>
         : <Says>The column in your hand is not a clone of live nodes. It is a second table stamped
-          from a template the page already carries: the shell fills its header and its cells once,
+          from a template the page already carries: the lift fills its header and its cells once,
           at the lift, from the lanes as they stand. The flight is where you grabbed it; the drift
           is how far you have moved since; both ride custom properties a transform composes, so
           every move writes two numbers and nothing is measured per move, which is what keeps
@@ -33,7 +33,7 @@ export const ghostByHand = (world: World, tableSource: string): ReactNode =>
         ]}/>
         : <Snippet label="HTML" lines={[
           ...span(frameHtml, '<template id="column-ghost">', '</template>'),
-          aside('<!-- the shape is the page’s own; the shell only fills it -->')
+          aside('<!-- the shape is the page’s own; the lift only fills it -->')
         ]}/>}
       {world === 'react'
         ? <Snippet label="TS" lines={[

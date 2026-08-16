@@ -16,9 +16,9 @@ export const liftOnce = (world: World, tableSource: string): ReactNode =>
           would fight the reorder you are about to apply.</Says>
         : <Says>The hand is CSS before anything happens, grab on hover, grabbing on press, and
           touch-action: none is why the pointer can drag on touch at all. On pointerdown,
-          the shell measures the
+          JavaScript measures the
           table’s <Mdn path="Web/API/Element/getBoundingClientRect">bounding rect</Mdn>, and every
-          header in it, a single time: the survey. Then it summons the ghost and takes flight.
+          header in it, a single time: the survey. Then the grab summons the ghost and takes flight.
           Everything that follows is math against the survey; measuring per move
           would fight the reorder you are about to apply.</Says>}
       {world === 'react'
@@ -32,7 +32,7 @@ export const liftOnce = (world: World, tableSource: string): ReactNode =>
           column’s width, and later the row heights. And has is the same library’s null check;
           it answers false for nothing and for empty.</Says>
         : <Says>A few words you will see in every block from here. Aloft is whatever you are
-          carrying, named by its column or its seat, and it lives on the desk like everything
+          carrying, named by its column or its seat, and it lives in the table state like everything
           else: the grab is just another commit. The survey is a plain record of that one
           measurement: the table’s box, each column’s width, and later the row heights. And has
           is the null check from a small library
