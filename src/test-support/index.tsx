@@ -1,4 +1,4 @@
-import {Shell} from '../router';
+import {MountedTable} from '../router';
 import {FC, PropsWithChildren, ReactElement} from 'react';
 import {render, RenderResult, screen, within} from '@testing-library/react';
 import {
@@ -89,7 +89,7 @@ export const renderWithGalleryContext: RenderWithRouter<'pieceState'> = (
 export const renderWithMemoryRouter = (routes: RouteObject, {
   path = defaultUrlContext.path
 }: { path?: string }) => {
-  const router = createMemoryRouter([{path: '/', element: <Shell/>, children: [routes]}], {
+  const router = createMemoryRouter([{path: '/', element: <MountedTable/>, children: [routes]}], {
     initialEntries: [path],
   });
 

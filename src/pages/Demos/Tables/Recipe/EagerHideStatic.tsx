@@ -24,7 +24,7 @@ import {
   turnedVertical,
   twoRoads
 } from './shared-steps';
-import shellSrc from '../Frame/shells/EagerHideStatic.ts?raw';
+import buildSrc from '../Frame/builds/EagerHideStatic.ts?raw';
 import tableSource from '@components/DragSortableTable/EagerHideStaticTable/EagerHideStaticTable.tsx?raw';
 import headerSource from '@components/DragSortableTable/EagerHideStaticTable/Header.tsx?raw';
 import cssSource from '@components/DragSortableTable/EagerHideStaticTable/EagerHideStaticTable.css?raw';
@@ -45,7 +45,7 @@ export const EagerHideStaticRecipe: FC<{track: Track; world: World}> = ({track, 
         {dragSurface(world, tableSource)}
         {ghostByHand(world, tableSource)}
         {deadZone}
-        {eagerPace(world, tableSource, shellSrc)}
+        {eagerPace(world, tableSource, buildSrc)}
         {hideOrigin(world, tableSource, headerSource, cssSource)}
         {staticMotion(world, tableSource)}
       </Steps>
@@ -67,6 +67,6 @@ export const EagerHideStaticRecipe: FC<{track: Track; world: World}> = ({track, 
     <Steps>
       {focusLands(world, headerSource)}
       {arrowsSpeak(world, headerSource)}
-      {cutKey(world, headerSource, shellSrc)}
+      {cutKey(world, headerSource, buildSrc)}
     </Steps>
   </Story>;

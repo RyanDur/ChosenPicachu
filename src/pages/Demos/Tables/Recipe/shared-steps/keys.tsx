@@ -5,7 +5,7 @@ import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {gap, settlesSource, travelSource} from './sources';
 
-export const bothSlide = (world: World, headerSource: string, shellSrc: string, cssSource: string): ReactNode =>
+export const bothSlide = (world: World, headerSource: string, buildSrc: string, cssSource: string): ReactNode =>
   <Step title="Both parties slide, each by the other’s share" dial={<MotionDial name="step-motion"/>}>
     <Words want="A pointer swap explains itself with a ghost in hand; the trader’s keyboard swap has no hand, and if only the neighbour slid, the walked column would simply teleport.">
       <Says>Mark both columns displaced. The swap still commits instantly, the same theater
@@ -24,7 +24,7 @@ export const bothSlide = (world: World, headerSource: string, shellSrc: string, 
         : <Snippet label="TS" lines={[
           ...unit(travelSource, 'export const animatedColumnArrows'), gap,
           ...unit(settlesSource, 'export const animatedOrdered'), gap,
-          ...span(shellSrc, 'column: (shell, held) => animatedColumnArrows', 'column: (shell, held) => animatedColumnArrows'),
+          ...span(buildSrc, 'column: (mounted, held) => animatedColumnArrows', 'column: (mounted, held) => animatedColumnArrows'),
           aside('// each starts where the other now sits')
         ]}/>}
       <Snippet label="CSS" lines={[
@@ -58,7 +58,7 @@ export const paceKey = (cssSource: string): ReactNode =>
     </Codes>
   </Step>;
 
-export const cutKey = (world: World, headerSource: string, shellSrc: string): ReactNode =>
+export const cutKey = (world: World, headerSource: string, buildSrc: string): ReactNode =>
   <Step title="Cut on the keypress" dial={<MotionDial name="step-motion"/>}>
     <Words want="Motion is not free, a held key multiplies it, and some traders ask for none at all.">
       <Says>Apply the order and mark nothing; the swap paints on the next frame. With no
@@ -76,7 +76,7 @@ export const cutKey = (world: World, headerSource: string, shellSrc: string): Re
         : <Snippet label="TS" lines={[
           ...unit(travelSource, 'export const staticColumnArrows'), gap,
           ...unit(settlesSource, 'export const staticOrdered'), gap,
-          ...span(shellSrc, 'column: (shell, held) => staticColumnArrows', 'column: (shell, held) => staticColumnArrows'),
+          ...span(buildSrc, 'column: (mounted, held) => staticColumnArrows', 'column: (mounted, held) => staticColumnArrows'),
           aside('// the whole walk; nothing marked, nothing to wait for')
         ]}/>}
     </Codes>

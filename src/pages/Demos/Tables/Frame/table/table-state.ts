@@ -1,16 +1,16 @@
-import {Desk} from '@components/DragSortableTable/desk';
+import {TableState} from '@components/DragSortableTable/table-state';
 
-export type {Aloft, Desk} from '@components/DragSortableTable/desk';
+export type {Aloft, TableState} from '@components/DragSortableTable/table-state';
 export {
   baked, columnAloft, columnLanding, columnOf, drifting, dropped, landedColumn, landedRow,
   lifted, nudgedTo, orderedTo, rowAloft, rowLanding, ruledBy, seatedTo, sharedAs, standingOf, tradedBy
-} from '@components/DragSortableTable/desk';
+} from '@components/DragSortableTable/table-state';
 
-export type Shell = {
+export type MountedTable = {
   document: Document;
   table: HTMLTableElement;
   body: HTMLTableSectionElement;
   lanes: readonly HTMLTableRowElement[];
-  desk: () => Desk;
-  commit: (transition: (desk: Desk) => Desk) => void;
+  state: () => TableState;
+  commit: (transition: (state: TableState) => TableState) => void;
 };

@@ -9,27 +9,27 @@ import {hydrated, recentTrades} from '@pages/Demos/Tables/Aggregations/recent-tr
 import {LiveTradesState, liveTrades, opening} from '@pages/Demos/Charts/live-trades';
 import {Trade} from '@pages/Demos/Charts/coinbase';
 import {ArrowKey, Grab, columnLift, rowLift, still, surfaceTravel} from '@components/DragSortableTable/travel';
-import {Aloft, Desk, Shell, baked, columnOf, drifting, dropped, lifted, ruledBy, standingOf} from './desk';
+import {Aloft, TableState, MountedTable, baked, columnOf, drifting, dropped, lifted, ruledBy, standingOf} from './table-state';
 import {GhostFlight, columnGhost, rowGhost} from './ghosts';
 import {announce, wireMenu} from './menus';
 import {dressShares, wireResize} from './resize';
 
 export type FlightAnswers = {
-  travel: (shell: Shell, moving: {clientX: number; clientY: number}) => void;
-  land?: (shell: Shell) => void;
+  travel: (mounted: MountedTable, moving: {clientX: number; clientY: number}) => void;
+  land?: (mounted: MountedTable) => void;
 };
 
 export type Dressage = {
   flights: {column: FlightAnswers; row: FlightAnswers};
   arrows: {
-    column: (shell: Shell, held: string) => (event: ArrowKey) => void;
-    row: (shell: Shell, held: number) => (event: ArrowKey) => void;
+    column: (mounted: MountedTable, held: string) => (event: ArrowKey) => void;
+    row: (mounted: MountedTable, held: number) => (event: ArrowKey) => void;
   };
   veils?: {
-    column: {veil: (shell: Shell, held: string) => void; unveil: (shell: Shell, held: string) => void};
-    row: {veil: (shell: Shell, held: number) => void; unveil: (shell: Shell, held: number) => void};
+    column: {veil: (mounted: MountedTable, held: string) => void; unveil: (mounted: MountedTable, held: string) => void};
+    row: {veil: (mounted: MountedTable, held: number) => void; unveil: (mounted: MountedTable, held: number) => void};
   };
-  ruled?: (shell: Shell, heights: Readonly<Record<number, number>>, before: readonly number[], after: readonly number[]) => void;
+  ruled?: (mounted: MountedTable, heights: Readonly<Record<number, number>>, before: readonly number[], after: readonly number[]) => void;
 };
 
 export const stand = (document: Document, dressage: Dressage): void => {
@@ -40,12 +40,12 @@ export const stand = (document: Document, dressage: Dressage): void => {
 const changed = (before: readonly number[], after: readonly number[]): boolean =>
   after.some((at, position) => before[position] !== at);
 
-const dressGrips = (table: HTMLTableElement, desk: Desk): void => {
+const dressGrips = (table: HTMLTableElement, state: TableState): void => {
   [...table.querySelectorAll('thead th')].forEach((th, at) => {
     if (!(th instanceof HTMLTableCellElement)) {
       return;
     }
-    if (anchored(at, desk.order.length)) {
+    if (anchored(at, state.order.length)) {
       th.classList.remove('grabbable');
       th.removeAttribute('tabindex');
     } else {
@@ -69,7 +69,7 @@ const standTable = (
 
   let history: readonly Trade[] = [];
   let live: LiveTradesState = opening;
-  let desk: Desk = {
+  let state: TableState = {
     order, seats: dealt, seated: dealt, shares: undefined, rule: undefined,
     aloft: undefined, bounds: undefined, flight: undefined, origin: undefined, drift: still
   };
@@ -79,7 +79,7 @@ const standTable = (
   const folded = (): Row[] =>
     windowedAggregates(hydrated(history, live.trades)).map(cells);
 
-  const writeCells = (rows: Row[], next: Desk): void => {
+  const writeCells = (rows: Row[], next: TableState): void => {
     lanes.forEach((lane, at) =>
       measures.forEach(measure => {
         const {display} = rows[at][measure];
@@ -120,25 +120,25 @@ const standTable = (
   };
 
   const summoned = (aloft: Aloft): GhostFlight =>
-    aloft.axis === 'column' ? columnGhost(shell, aloft.held) : rowGhost(shell, aloft.held);
+    aloft.axis === 'column' ? columnGhost(mounted, aloft.held) : rowGhost(mounted, aloft.held);
 
-  const mounted = (aloft: Aloft): HTMLElement => {
+  const mountSurface = (aloft: Aloft): HTMLElement => {
     const drop = (): void => {
-      const standing = shell.desk().aloft;
+      const standing = mounted.state().aloft;
       if (!has(standing)) {
         return;
       }
       maybe(veils).map(veil => standing.axis === 'column'
-        ? veil.column.unveil(shell, standing.held)
-        : veil.row.unveil(shell, standing.held));
-      maybe(flights[aloft.axis].land).map(land => land(shell));
+        ? veil.column.unveil(mounted, standing.held)
+        : veil.row.unveil(mounted, standing.held));
+      maybe(flights[aloft.axis].land).map(land => land(mounted));
       commit(dropped);
     };
     const element = document.createElement('article');
     element.className = 'drag-surface';
     element.addEventListener('pointermove', surfaceTravel(
       moving => commit(drifting(moving)),
-      moving => flights[aloft.axis].travel(shell, moving),
+      moving => flights[aloft.axis].travel(mounted, moving),
       drop));
     ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(ending =>
       element.addEventListener(ending, drop));
@@ -146,20 +146,20 @@ const standTable = (
     return element;
   };
 
-  const reconcileFlight = (previous: Desk, next: Desk): void => {
+  const reconcileFlight = (previous: TableState, next: TableState): void => {
     if (next.aloft !== previous.aloft && (previous.aloft === undefined || next.aloft === undefined
         || next.aloft.held !== previous.aloft.held || next.aloft.axis !== previous.aloft.axis)) {
       maybe(ghost).map(flown => flown.land());
       maybe(surface).map(standing => standing.remove());
       ghost = has(next.aloft) ? summoned(next.aloft) : undefined;
-      surface = has(next.aloft) ? mounted(next.aloft) : undefined;
+      surface = has(next.aloft) ? mountSurface(next.aloft) : undefined;
     }
     if (next.drift !== previous.drift) {
       maybe(ghost).map(flown => flown.drift(next.drift));
     }
   };
 
-  const reconciled = (previous: Desk, next: Desk): Desk => {
+  const reconciled = (previous: TableState, next: TableState): TableState => {
     reconcileFlight(previous, next);
     if (next.order !== previous.order) {
       reconcileColumns(previous.order, next.order);
@@ -180,49 +180,49 @@ const standTable = (
     return {...next, seated: standing};
   };
 
-  const commit = (transition: (current: Desk) => Desk): void => {
-    desk = reconciled(desk, transition(desk));
+  const commit = (transition: (current: TableState) => TableState): void => {
+    state = reconciled(state, transition(state));
   };
 
-  const shell: Shell = {document, table, body, lanes, desk: () => desk, commit};
+  const mounted: MountedTable = {document, table, body, lanes, state: () => state, commit};
 
   const choose = (next?: Rule): void => {
-    const before = desk.seated;
-    const heights = surveyed(table, desk.order, before).rowHeights;
+    const before = state.seated;
+    const heights = surveyed(table, state.order, before).rowHeights;
     commit(ruledBy(next));
-    if (has(ruled) && changed(before, desk.seated)) {
-      ruled(shell, heights, before, desk.seated);
+    if (has(ruled) && changed(before, state.seated)) {
+      ruled(mounted, heights, before, state.seated);
     }
   };
 
   measures.forEach(column => wireMenu(document, column, choose));
-  wireResize(shell);
+  wireResize(mounted);
   [...table.querySelectorAll('.menu-toggle, .menu')].forEach(chrome =>
     chrome.addEventListener('pointerdown', event => event.stopPropagation()));
 
   const wireColumnGrip = (th: HTMLTableCellElement): void => {
-    const held = columnOf(desk, th);
+    const held = columnOf(state, th);
 
     const grabbed = (grab: Grab): void => {
-      maybe(veils).map(veil => veil.column.veil(shell, held));
-      shell.commit(lifted({axis: 'column', held}, grab));
+      maybe(veils).map(veil => veil.column.veil(mounted, held));
+      mounted.commit(lifted({axis: 'column', held}, grab));
     };
 
-    th.addEventListener('pointerdown', columnLift(held, () => shell.desk().order, () => shell.desk().seated, grabbed));
-    th.addEventListener('keydown', arrows.column(shell, held));
+    th.addEventListener('pointerdown', columnLift(held, () => mounted.state().order, () => mounted.state().seated, grabbed));
+    th.addEventListener('keydown', arrows.column(mounted, held));
   };
 
   const wireRowGrip = (held: number, grip: HTMLButtonElement): void => {
     const grabbed = (grab: Grab): void => {
-      maybe(veils).map(veil => veil.row.veil(shell, held));
-      shell.commit(current => lifted({axis: 'row', held}, grab)(baked(current)));
+      maybe(veils).map(veil => veil.row.veil(mounted, held));
+      mounted.commit(current => lifted({axis: 'row', held}, grab)(baked(current)));
     };
 
-    grip.addEventListener('pointerdown', rowLift(() => shell.desk().order, () => shell.desk().seated, grabbed));
-    grip.addEventListener('keydown', arrows.row(shell, held));
+    grip.addEventListener('pointerdown', rowLift(() => mounted.state().order, () => mounted.state().seated, grabbed));
+    grip.addEventListener('keydown', arrows.row(mounted, held));
   };
 
-  dressGrips(table, desk);
+  dressGrips(table, state);
   [...table.querySelectorAll('thead th')]
     .filter(th => th instanceof HTMLTableCellElement)
     .forEach(wireColumnGrip);

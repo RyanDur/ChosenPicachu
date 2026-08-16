@@ -6,14 +6,14 @@ import {World, worldParam} from '../params';
 import feedSource from '@pages/Demos/Charts/live-trades.ts?raw';
 import foldSource from '@pages/Demos/Tables/Aggregations/fold.ts?raw';
 import dealSource from '@pages/Demos/Tables/Aggregations/index.tsx?raw';
-import useDeskSource from '@components/DragSortableTable/useDesk.ts?raw';
+import useTableStateSource from '@components/DragSortableTable/useTableState.ts?raw';
 import headerSource from '@components/DragSortableTable/EagerHideAnimatedTable/Header.tsx?raw';
 import rowSource from '@components/DragSortableTable/EagerHideAnimatedTable/Row.tsx?raw';
 import hydrateSource from '@pages/Demos/Tables/Aggregations/recent-trades.ts?raw';
 import widthsSource from '@pages/Demos/Tables/Aggregations/Aggregations.css?raw';
 import tableSource from '../Frame/table.html?raw';
-import deskSource from '@components/DragSortableTable/desk.ts?raw';
-import frameStand from '../Frame/shell/stand.ts?raw';
+import stateSource from '@components/DragSortableTable/table-state.ts?raw';
+import frameStand from '../Frame/table/stand.ts?raw';
 import '../../Recipe/Recipe.css';
 
 const gap = plain(' ');
@@ -104,7 +104,7 @@ const refolds: Record<World, string> = {
 
 const stateSays: Record<World, ReactNode> = {
   react: <>
-    <Says>The table’s state is one value: the desk, held in a single cell, and setDesk is the
+    <Says>The table’s state is one value: the desk, held in a single cell, and setTableState is the
       commit. Nothing ever edits the desk in place: a change is a pure transition, a function
       from the old desk to a new one, and the old value simply stops being rendered.</Says>
     <Says>What follows the commit is React’s half of the deal: the component re-renders, the
@@ -127,15 +127,15 @@ const stateSays: Record<World, ReactNode> = {
 const stateCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="TS" lines={[
-      ...unit(deskSource, 'export type Desk'), gap,
-      ...unit(useDeskSource, 'export const useDesk')
+      ...unit(stateSource, 'export type TableState'), gap,
+      ...unit(useTableStateSource, 'export const useTableState')
     ]}/>
   </Codes>,
   vanilla: <Codes>
     <Snippet label="TS" lines={[
-      ...unit(deskSource, 'export type Desk'), gap,
-      ...unit(deskSource, 'export const orderedTo'), gap,
-      ...unit(deskSource, 'export const baked')
+      ...unit(stateSource, 'export type TableState'), gap,
+      ...unit(stateSource, 'export const orderedTo'), gap,
+      ...unit(stateSource, 'export const baked')
     ]}/>
     <Snippet label="TS" lines={[
       ...unit(frameStand, 'const commit = ')

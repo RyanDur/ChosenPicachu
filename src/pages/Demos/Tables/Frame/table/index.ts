@@ -1,6 +1,6 @@
-export type {Desk, Shell} from './desk';
-export type {Aloft} from './desk';
-export {baked, columnAloft, columnLanding, columnOf, drifting, dropped, landedColumn, landedRow, lifted, nudgedTo, orderedTo, rowAloft, rowLanding, ruledBy, seatedTo, sharedAs, tradedBy} from './desk';
+export type {TableState, MountedTable} from './table-state';
+export type {Aloft} from './table-state';
+export {baked, columnAloft, columnLanding, columnOf, drifting, dropped, landedColumn, landedRow, lifted, nudgedTo, orderedTo, rowAloft, rowLanding, ruledBy, seatedTo, sharedAs, tradedBy} from './table-state';
 export type {GhostFlight} from './ghosts';
 export {columnGhost, rowGhost} from './ghosts';
 export {markColumns, markRows} from './marks';

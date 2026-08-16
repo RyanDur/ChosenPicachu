@@ -25,7 +25,7 @@ import {
   turnedVertical,
   twoRoads
 } from './shared-steps';
-import shellSrc from '../Frame/shells/LazyKeepAnimated.ts?raw';
+import buildSrc from '../Frame/builds/LazyKeepAnimated.ts?raw';
 import tableSource from '@components/DragSortableTable/LazyKeepAnimatedTable/LazyKeepAnimatedTable.tsx?raw';
 import headerSource from '@components/DragSortableTable/LazyKeepAnimatedTable/Header.tsx?raw';
 import cssSource from '@components/DragSortableTable/LazyKeepAnimatedTable/LazyKeepAnimatedTable.css?raw';
@@ -46,7 +46,7 @@ export const LazyKeepAnimatedRecipe: FC<{track: Track; world: World}> = ({track,
         {dragSurface(world, tableSource)}
         {ghostByHand(world, tableSource)}
         {deadZone}
-        {lazyPace(world, tableSource, shellSrc)}
+        {lazyPace(world, tableSource, buildSrc)}
         {keepOrigin(world)}
         {animatedMotion(world, tableSource, cssSource)}
       </Steps>
@@ -68,7 +68,7 @@ export const LazyKeepAnimatedRecipe: FC<{track: Track; world: World}> = ({track,
     <Steps>
       {focusLands(world, headerSource)}
       {arrowsSpeak(world, headerSource)}
-      {bothSlide(world, headerSource, shellSrc, cssSource)}
+      {bothSlide(world, headerSource, buildSrc, cssSource)}
       {paceKey(cssSource)}
     </Steps>
   </Story>;

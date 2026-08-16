@@ -24,7 +24,7 @@ import {
   turnedVertical,
   twoRoads
 } from './shared-steps';
-import shellSrc from '../Frame/shells/LazyKeepStatic.ts?raw';
+import buildSrc from '../Frame/builds/LazyKeepStatic.ts?raw';
 import tableSource from '@components/DragSortableTable/LazyKeepStaticTable/LazyKeepStaticTable.tsx?raw';
 import headerSource from '@components/DragSortableTable/LazyKeepStaticTable/Header.tsx?raw';
 
@@ -44,7 +44,7 @@ export const LazyKeepStaticRecipe: FC<{track: Track; world: World}> = ({track, w
         {dragSurface(world, tableSource)}
         {ghostByHand(world, tableSource)}
         {deadZone}
-        {lazyPace(world, tableSource, shellSrc)}
+        {lazyPace(world, tableSource, buildSrc)}
         {keepOrigin(world)}
         {staticMotion(world, tableSource)}
       </Steps>
@@ -66,6 +66,6 @@ export const LazyKeepStaticRecipe: FC<{track: Track; world: World}> = ({track, w
     <Steps>
       {focusLands(world, headerSource)}
       {arrowsSpeak(world, headerSource)}
-      {cutKey(world, headerSource, shellSrc)}
+      {cutKey(world, headerSource, buildSrc)}
     </Steps>
   </Story>;

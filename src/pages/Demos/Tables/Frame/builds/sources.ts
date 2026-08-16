@@ -8,7 +8,7 @@ import lazyKeepStatic from './LazyKeepStatic.ts?raw';
 import lazyHideAnimated from './LazyHideAnimated.ts?raw';
 import lazyHideStatic from './LazyHideStatic.ts?raw';
 
-export const shellSources: Record<Pace, Record<Origin, Record<Motion, string>>> = {
+export const buildSources: Record<Pace, Record<Origin, Record<Motion, string>>> = {
   eager: {
     keep: {animated: eagerKeepAnimated, static: eagerKeepStatic},
     hide: {animated: eagerHideAnimated, static: eagerHideStatic}

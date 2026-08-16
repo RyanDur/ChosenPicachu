@@ -25,7 +25,7 @@ import {
   turnedVertical,
   twoRoads
 } from './shared-steps';
-import shellSrc from '../Frame/shells/LazyHideAnimated.ts?raw';
+import buildSrc from '../Frame/builds/LazyHideAnimated.ts?raw';
 import tableSource from '@components/DragSortableTable/LazyHideAnimatedTable/LazyHideAnimatedTable.tsx?raw';
 import headerSource from '@components/DragSortableTable/LazyHideAnimatedTable/Header.tsx?raw';
 import cssSource from '@components/DragSortableTable/LazyHideAnimatedTable/LazyHideAnimatedTable.css?raw';
@@ -46,7 +46,7 @@ export const LazyHideAnimatedRecipe: FC<{track: Track; world: World}> = ({track,
         {dragSurface(world, tableSource)}
         {ghostByHand(world, tableSource)}
         {deadZone}
-        {lazyPace(world, tableSource, shellSrc)}
+        {lazyPace(world, tableSource, buildSrc)}
         {hideOrigin(world, tableSource, headerSource, cssSource)}
         {animatedMotion(world, tableSource, cssSource)}
       </Steps>
@@ -68,7 +68,7 @@ export const LazyHideAnimatedRecipe: FC<{track: Track; world: World}> = ({track,
     <Steps>
       {focusLands(world, headerSource)}
       {arrowsSpeak(world, headerSource)}
-      {bothSlide(world, headerSource, shellSrc, cssSource)}
+      {bothSlide(world, headerSource, buildSrc, cssSource)}
       {paceKey(cssSource)}
     </Steps>
   </Story>;

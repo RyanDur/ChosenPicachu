@@ -2,7 +2,7 @@ import {render} from '@testing-library/react';
 import {EagerHideAnimatedTable} from '@components/DragSortableTable';
 import {windowedAggregates} from '@pages/Demos/Tables/Aggregations/fold';
 import {cells} from '@pages/Demos/Tables/Aggregations/cells';
-import {wire} from '../shells/EagerHideAnimated';
+import {wire} from '../builds/EagerHideAnimated';
 import tableHtml from '../table.html?raw';
 
 const columns = [

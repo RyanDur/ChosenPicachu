@@ -25,7 +25,7 @@ import {
   turnedVertical,
   twoRoads
 } from './shared-steps';
-import shellSrc from '../Frame/shells/EagerKeepAnimated.ts?raw';
+import buildSrc from '../Frame/builds/EagerKeepAnimated.ts?raw';
 import tableSource from '@components/DragSortableTable/EagerKeepAnimatedTable/EagerKeepAnimatedTable.tsx?raw';
 import headerSource from '@components/DragSortableTable/EagerKeepAnimatedTable/Header.tsx?raw';
 import cssSource from '@components/DragSortableTable/EagerKeepAnimatedTable/EagerKeepAnimatedTable.css?raw';
@@ -46,7 +46,7 @@ export const EagerKeepAnimatedRecipe: FC<{track: Track; world: World}> = ({track
         {dragSurface(world, tableSource)}
         {ghostByHand(world, tableSource)}
         {deadZone}
-        {eagerPace(world, tableSource, shellSrc)}
+        {eagerPace(world, tableSource, buildSrc)}
         {keepOrigin(world)}
         {animatedMotion(world, tableSource, cssSource)}
       </Steps>
@@ -68,7 +68,7 @@ export const EagerKeepAnimatedRecipe: FC<{track: Track; world: World}> = ({track
     <Steps>
       {focusLands(world, headerSource)}
       {arrowsSpeak(world, headerSource)}
-      {bothSlide(world, headerSource, shellSrc, cssSource)}
+      {bothSlide(world, headerSource, buildSrc, cssSource)}
       {paceKey(cssSource)}
     </Steps>
   </Story>;

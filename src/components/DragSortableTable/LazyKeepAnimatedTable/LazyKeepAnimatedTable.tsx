@@ -5,8 +5,8 @@ import {classNames} from '@components/class-names';
 import {TableProps, measuredShares} from '@components/Table';
 import {Bounds, columnUnder, displaced, interior, rowUnder, Shifted, shifts, Slid, Survey, surveyed} from '../survey';
 import {columnLift, Grab, grounded, lazyTravel, rowLift, surfaceTravel} from '../travel';
-import {baked, columnAloft, columnLanding, drifting as drifts, dropped, landedColumn, landedRow, lifted, orderedTo, rowAloft, rowLanding, seatedTo, sharedAs, standingOf} from '../desk';
-import {useDesk} from '../useDesk';
+import {baked, columnAloft, columnLanding, drifting as drifts, dropped, landedColumn, landedRow, lifted, orderedTo, rowAloft, rowLanding, seatedTo, sharedAs, standingOf} from '../table-state';
+import {useTableState} from '../useTableState';
 import {Aloft} from '../Aloft';
 import {Direction, ranked} from '../sorting';
 import {Header} from './Header';
@@ -23,14 +23,14 @@ export type LazyKeepAnimatedTableProps = TableProps & {
 export const LazyKeepAnimatedTable: FC<LazyKeepAnimatedTableProps> = (
     {columns, rows, draggableColumns = false, draggableRows = false, resizableColumns = false, sortable, id, ...dress}
 ) => {
-    const [desk, commit] = useDesk(columns.map(({column}) => column), rows);
+    const [state, commit] = useTableState(columns.map(({column}) => column), rows);
     const [slid, setSlid] = useState<Slid>();
     const [shifted, setShifted] = useState<Shifted>();
 
-    const {order, shares, rule} = desk;
-    const grown = desk.seats.length === rows.length
-        ? desk
-        : {...desk, seats: rows.map((_, row) => row)};
+    const {order, shares, rule} = state;
+    const grown = state.seats.length === rows.length
+        ? state
+        : {...state, seats: rows.map((_, row) => row)};
     const standing = standingOf(rows, grown);
     const ordered = order.flatMap(name => {
         const definition = columns.find(({column}) => column === name);
@@ -47,8 +47,8 @@ export const LazyKeepAnimatedTable: FC<LazyKeepAnimatedTableProps> = (
     };
 
     const settleRow = (held: number, struck: number, measured: Survey): void => {
-        const after = array.moveToIndex(desk.seats.indexOf(struck), held, desk.seats);
-        setShifted(shifts(measured.rowHeights, desk.seats, after, held));
+        const after = array.moveToIndex(state.seats.indexOf(struck), held, state.seats);
+        setShifted(shifts(measured.rowHeights, state.seats, after, held));
         commit(seatedTo(held, struck));
     };
 
@@ -64,24 +64,24 @@ export const LazyKeepAnimatedTable: FC<LazyKeepAnimatedTableProps> = (
         commit(drifts(moving));
 
     const columnTravel = (moving: {clientX: number; clientY: number}): void => {
-        columnAloft(desk).and(maybe(desk.bounds)).map(([held, measured]) =>
+        columnAloft(state).and(maybe(state.bounds)).map(([held, measured]) =>
             commit(columnLanding(
-                lazyTravel(columnUnder(order, measured))(held, moving, landedColumn(desk).orElse(undefined)))));
+                lazyTravel(columnUnder(order, measured))(held, moving, landedColumn(state).orElse(undefined)))));
     };
 
     const rowTravel = (moving: {clientX: number; clientY: number}): void => {
-        rowAloft(desk).and(maybe(desk.bounds)).map(([held, measured]) =>
+        rowAloft(state).and(maybe(state.bounds)).map(([held, measured]) =>
             commit(rowLanding(
-                lazyTravel(rowUnder(standing, measured))(held, moving, landedRow(desk).orElse(undefined)))));
+                lazyTravel(rowUnder(standing, measured))(held, moving, landedRow(state).orElse(undefined)))));
     };
 
     const columnLand = (): void => {
-        columnAloft(desk).and(landedColumn(desk)).and(maybe(desk.bounds)).map(([[held, struck], measured]) =>
+        columnAloft(state).and(landedColumn(state)).and(maybe(state.bounds)).map(([[held, struck], measured]) =>
             settleColumn(held, struck, measured));
     };
 
     const rowLand = (): void => {
-        rowAloft(desk).and(landedRow(desk)).and(maybe(desk.bounds)).map(([[held, struck], measured]) =>
+        rowAloft(state).and(landedRow(state)).and(maybe(state.bounds)).map(([[held, struck], measured]) =>
             settleRow(held, struck, measured));
     };
 
@@ -99,17 +99,17 @@ export const LazyKeepAnimatedTable: FC<LazyKeepAnimatedTableProps> = (
     };
 
     const columnsTravel = {
-        aloft: columnAloft(desk),
-        survey: maybe(desk.bounds),
-        flight: desk.flight ?? grounded,
-        drift: desk.drift,
+        aloft: columnAloft(state),
+        survey: maybe(state.bounds),
+        flight: state.flight ?? grounded,
+        drift: state.drift,
         surface: surface(columnTravel, columnLand)
     };
     const rowsTravel = {
-        aloft: rowAloft(desk),
-        survey: maybe(desk.bounds),
-        flight: desk.flight ?? grounded,
-        drift: desk.drift,
+        aloft: rowAloft(state),
+        survey: maybe(state.bounds),
+        flight: state.flight ?? grounded,
+        drift: state.drift,
         surface: surface(rowTravel, rowLand)
     };
 
@@ -121,7 +121,7 @@ export const LazyKeepAnimatedTable: FC<LazyKeepAnimatedTableProps> = (
         const next = has(direction) ? {column, direction} : undefined;
         const table = event.currentTarget.closest('table');
         if (has(table)) {
-            const after = has(next) ? ranked(rows, desk.seats, next) : desk.seats;
+            const after = has(next) ? ranked(rows, state.seats, next) : state.seats;
             setShifted(shifts(surveyed(table, order, standing).rowHeights, standing, after));
         }
         commit(current => ({...current, rule: next}));

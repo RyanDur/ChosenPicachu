@@ -4,8 +4,8 @@ import {classNames} from '@components/class-names';
 import {TableProps, measuredShares} from '@components/Table';
 import {columnUnder, interior, rowUnder} from '../survey';
 import {columnLift, Grab, grounded, lazyTravel, rowLift, surfaceTravel} from '../travel';
-import {baked, columnAloft, columnLanding, drifting as drifts, dropped, landedColumn, landedRow, lifted, orderedTo, rowAloft, rowLanding, seatedTo, sharedAs, standingOf} from '../desk';
-import {useDesk} from '../useDesk';
+import {baked, columnAloft, columnLanding, drifting as drifts, dropped, landedColumn, landedRow, lifted, orderedTo, rowAloft, rowLanding, seatedTo, sharedAs, standingOf} from '../table-state';
+import {useTableState} from '../useTableState';
 import {Aloft} from '../Aloft';
 import {Direction} from '../sorting';
 import {Header} from './Header';
@@ -22,11 +22,11 @@ export type LazyHideStaticTableProps = TableProps & {
 export const LazyHideStaticTable: FC<LazyHideStaticTableProps> = (
     {columns, rows, draggableColumns = false, draggableRows = false, resizableColumns = false, sortable, id, ...dress}
 ) => {
-    const [desk, commit] = useDesk(columns.map(({column}) => column), rows);
-    const {order, shares, rule} = desk;
-    const grown = desk.seats.length === rows.length
-        ? desk
-        : {...desk, seats: rows.map((_, row) => row)};
+    const [state, commit] = useTableState(columns.map(({column}) => column), rows);
+    const {order, shares, rule} = state;
+    const grown = state.seats.length === rows.length
+        ? state
+        : {...state, seats: rows.map((_, row) => row)};
     const standing = standingOf(rows, grown);
     const ordered = order.flatMap(name => {
         const definition = columns.find(({column}) => column === name);
@@ -55,24 +55,24 @@ export const LazyHideStaticTable: FC<LazyHideStaticTableProps> = (
         commit(drifts(moving));
 
     const columnTravel = (moving: {clientX: number; clientY: number}): void => {
-        columnAloft(desk).and(maybe(desk.bounds)).map(([held, measured]) =>
+        columnAloft(state).and(maybe(state.bounds)).map(([held, measured]) =>
             commit(columnLanding(
-                lazyTravel(columnUnder(order, measured))(held, moving, landedColumn(desk).orElse(undefined)))));
+                lazyTravel(columnUnder(order, measured))(held, moving, landedColumn(state).orElse(undefined)))));
     };
 
     const rowTravel = (moving: {clientX: number; clientY: number}): void => {
-        rowAloft(desk).and(maybe(desk.bounds)).map(([held, measured]) =>
+        rowAloft(state).and(maybe(state.bounds)).map(([held, measured]) =>
             commit(rowLanding(
-                lazyTravel(rowUnder(standing, measured))(held, moving, landedRow(desk).orElse(undefined)))));
+                lazyTravel(rowUnder(standing, measured))(held, moving, landedRow(state).orElse(undefined)))));
     };
 
     const columnLand = (): void => {
-        columnAloft(desk).and(landedColumn(desk)).map(([held, struck]) =>
+        columnAloft(state).and(landedColumn(state)).map(([held, struck]) =>
             settleColumn(held, struck));
     };
 
     const rowLand = (): void => {
-        rowAloft(desk).and(landedRow(desk)).map(([held, struck]) =>
+        rowAloft(state).and(landedRow(state)).map(([held, struck]) =>
             settleRow(held, struck));
     };
 
@@ -90,17 +90,17 @@ export const LazyHideStaticTable: FC<LazyHideStaticTableProps> = (
     };
 
     const columnsTravel = {
-        aloft: columnAloft(desk),
-        survey: maybe(desk.bounds),
-        flight: desk.flight ?? grounded,
-        drift: desk.drift,
+        aloft: columnAloft(state),
+        survey: maybe(state.bounds),
+        flight: state.flight ?? grounded,
+        drift: state.drift,
         surface: surface(columnTravel, columnLand)
     };
     const rowsTravel = {
-        aloft: rowAloft(desk),
-        survey: maybe(desk.bounds),
-        flight: desk.flight ?? grounded,
-        drift: desk.drift,
+        aloft: rowAloft(state),
+        survey: maybe(state.bounds),
+        flight: state.flight ?? grounded,
+        drift: state.drift,
         surface: surface(rowTravel, rowLand)
     };
 
