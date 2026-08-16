@@ -7,7 +7,7 @@ import {
   HarvardSearchSchema
 } from '@components/art-gallery/museums/harvard/types';
 import {defaultRecordLimit, defaultSearchLimit} from '@components/art-gallery/limits';
-import {env} from '@components/Env';
+import {env} from '@env';
 import {toQueryString} from '@transport/url';
 import {AllArt, Art, SearchOptions} from '@components/art-gallery/museums/types/response';
 import {validate} from '@transport/validate';

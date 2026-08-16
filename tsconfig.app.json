@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "paths": {
+      "@env": ["./src/env.ts"],
       "@pages/*": ["./src/pages/*"],
       "@components/*": ["./src/components/*"],
       "@transport/*": ["./src/transport/*"],

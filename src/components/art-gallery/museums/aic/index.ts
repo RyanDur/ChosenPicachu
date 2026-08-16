@@ -9,7 +9,7 @@ import {
 } from '@components/art-gallery/museums/aic/types';
 import {toQueryString} from '@transport/url';
 import {defaultRecordLimit, defaultSearchLimit} from '@components/art-gallery/limits';
-import {env} from '@components/Env';
+import {env} from '@env';
 import {AllArt, Art, SearchOptions} from '@components/art-gallery/museums/types/response';
 import {validate} from '@transport/validate';
 import {http} from '@transport/http';
