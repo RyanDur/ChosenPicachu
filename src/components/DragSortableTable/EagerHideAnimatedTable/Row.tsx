@@ -67,8 +67,7 @@ export const Row: FC<Props> = (
         ? <th scope="row" className={dress} key={column} style={theater}>
           <div className="row-header-content">
             <RowGrip position={position} onLift={onLift(row)}
-                     onNudge={(toward, event) =>
-                       animatedRowArrows(event.currentTarget, columns, standing, arranged)(row, toward)}/>
+                     onArrows={animatedRowArrows(row, () => columns, () => standing, arranged)}/>
             {cell.display}
           </div>
         </th>

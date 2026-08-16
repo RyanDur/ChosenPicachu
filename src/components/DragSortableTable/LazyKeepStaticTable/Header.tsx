@@ -1,8 +1,8 @@
-import {FC, KeyboardEvent, MouseEvent, PointerEvent} from 'react';
-import {Maybe, has, maybe, not, nothing} from '@ryandur/sand';
+import {FC, MouseEvent, PointerEvent} from 'react';
+import {Maybe, has, not, nothing} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {Column, ResizeHandle, Shares, neighborOf, traded} from '@components/Table';
-import {anchored, columnSteps} from '../survey';
+import {anchored} from '../survey';
 import {staticColumnArrows} from '../travel';
 import {Direction, SortMenu} from '../SortMenu';
 import {sortedBy} from '../sorting';
@@ -46,13 +46,7 @@ export const Header: FC<Props> = (
              aria-sort={sorted}
              tabIndex={travels ? 0 : undefined}
              onPointerDown={travels ? onLift(columnName) : undefined}
-             onKeyDown={travels
-               ? (event: KeyboardEvent<HTMLTableCellElement>) =>
-                 maybe(columnSteps[event.key]).map(toward => {
-                   event.preventDefault();
-                   staticColumnArrows(order, ordered)(columnName, toward);
-                 })
-               : undefined}
+             onKeyDown={travels ? staticColumnArrows(columnName, () => order, ordered) : undefined}
              style={has(share) ? {'--share': `${share}%`} : undefined}>
     <div className={classNames('header-cell-content',
       has(onRule) && column.sortable && 'rankable',

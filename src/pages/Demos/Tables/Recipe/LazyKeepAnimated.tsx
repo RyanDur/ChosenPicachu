@@ -194,13 +194,13 @@ export const LazyKeepAnimatedRecipe: FC<{track: Track; world: World}> = ({track,
             ? <Snippet label="TS" lines={[
               ...unit(travelSource, 'export const animatedColumnArrows'), gap,
               ...unit(headerSource, 'const ordered = '), gap,
-              ...span(headerSource, 'animatedColumnArrows(event.currentTarget', 'animatedColumnArrows(event.currentTarget'),
+              ...span(headerSource, 'onKeyDown={travels ? animatedColumnArrows', 'onKeyDown={travels ? animatedColumnArrows'),
               aside('// each starts where the other now sits')
             ]}/>
             : <Snippet label="TS" lines={[
               ...unit(travelSource, 'export const animatedColumnArrows'), gap,
               ...unit(shellSrc, '  const ordered = '), gap,
-              ...span(shellSrc, 'animatedColumnArrows(th, order,', 'animatedColumnArrows(th, order,'),
+              ...span(shellSrc, "th.addEventListener('keydown', animatedColumnArrows", "th.addEventListener('keydown', animatedColumnArrows"),
               aside('// each starts where the other now sits')
             ]}/>}
           <Snippet label="CSS" lines={[

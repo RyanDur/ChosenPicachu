@@ -1,6 +1,6 @@
 import {has, maybe} from '@ryandur/sand';
 import {array} from '@components/arrays';
-import {ColumnNudge, RowNudge, bounded, columnNudge, nudgedColumn, nudgedRow, rowNudge, struckAway, surveyed} from './survey';
+import {ColumnNudge, RowNudge, anchored, bounded, columnNudge, columnSteps, nudgedColumn, nudgedRow, rowNudge, rowSteps, struckAway, surveyed} from './survey';
 export type DragStyle = 'eager-move' | 'lazy-move' | 'hide-eager-move' | 'hide-lazy-move';
 
 export type Flight = {
@@ -39,52 +39,89 @@ export const lazyTravel = <Seat,>(under: (x: number, y: number, held: Seat) => S
         return struckAway(held, struck) ? struck : undefined;
     };
 
+export type ArrowKey = {
+    key: string;
+    preventDefault: () => void;
+    currentTarget: EventTarget | null;
+};
+
 export const animatedColumnArrows = (
-    th: HTMLTableCellElement,
-    order: readonly string[],
+    held: string,
+    order: () => readonly string[],
     arrange: (nudge: ColumnNudge) => void
-) => (held: string, toward: number): void => {
-    if (th.getAnimations().length > 0) {
-        return;
-    }
-    maybe(th.closest('table')).map(table => {
-        const nudge = columnNudge(order, bounded(table, order))(held, toward);
-        if (has(nudge)) {
-            arrange(nudge);
+) => (event: ArrowKey): void => {
+    maybe(columnSteps[event.key]).map(toward => {
+        event.preventDefault();
+        const columns = order();
+        if (anchored(columns.indexOf(held), columns.length)) {
+            return;
         }
+        const th = event.currentTarget;
+        if (!(th instanceof Element)) {
+            return;
+        }
+        if (th.getAnimations().length > 0) {
+            return;
+        }
+        maybe(th.closest('table')).map(table => {
+            const nudge = columnNudge(columns, bounded(table, columns))(held, toward);
+            if (has(nudge)) {
+                arrange(nudge);
+            }
+        });
     });
 };
 
 export const staticColumnArrows = (
-    order: readonly string[],
+    held: string,
+    order: () => readonly string[],
     arrange: (nudge: {from: number; to: number}) => void
-) => (held: string, toward: number): void => {
-    const {from, to} = nudgedColumn(order, held, toward);
-    if (to !== from) {
-        arrange({from, to});
-    }
+) => (event: ArrowKey): void => {
+    maybe(columnSteps[event.key]).map(toward => {
+        event.preventDefault();
+        const columns = order();
+        if (anchored(columns.indexOf(held), columns.length)) {
+            return;
+        }
+        const {from, to} = nudgedColumn(columns, held, toward);
+        if (to !== from) {
+            arrange({from, to});
+        }
+    });
 };
 
 export const animatedRowArrows = (
-    grip: Element,
-    order: readonly string[],
-    standing: readonly number[],
+    held: number,
+    order: () => readonly string[],
+    standing: () => readonly number[],
     arrange: (nudge: RowNudge) => void
-) => (held: number, toward: number): void => {
-    const sliding = maybe(grip.closest('tr'))
-        .map(lane => lane.getAnimations().length > 0)
-        .orElse(false);
-    if (sliding) {
-        return;
-    }
-    maybe(grip.closest('table')).map(table =>
-        arrange(rowNudge(standing, surveyed(table, order, standing).rowHeights)(held, toward)));
+) => (event: ArrowKey): void => {
+    maybe(rowSteps[event.key]).map(toward => {
+        event.preventDefault();
+        const grip = event.currentTarget;
+        if (!(grip instanceof Element)) {
+            return;
+        }
+        const sliding = maybe(grip.closest('tr'))
+            .map(lane => lane.getAnimations().length > 0)
+            .orElse(false);
+        if (sliding) {
+            return;
+        }
+        maybe(grip.closest('table')).map(table =>
+            arrange(rowNudge(standing(), surveyed(table, order(), standing()).rowHeights)(held, toward)));
+    });
 };
 
 export const staticRowArrows = (
-    standing: readonly number[],
+    held: number,
+    standing: () => readonly number[],
     arrange: (nudge: {to: number; after: number[]}) => void
-) => (held: number, toward: number): void => {
-    const {to} = nudgedRow(standing, held, toward);
-    arrange({to, after: array.moveToIndex(to, held, standing)});
+) => (event: ArrowKey): void => {
+    maybe(rowSteps[event.key]).map(toward => {
+        event.preventDefault();
+        const seats = standing();
+        const {to} = nudgedRow(seats, held, toward);
+        arrange({to, after: array.moveToIndex(to, held, seats)});
+    });
 };

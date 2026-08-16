@@ -1,8 +1,6 @@
-import {FC, FocusEvent, KeyboardEvent, PointerEvent, useState} from 'react';
+import {FC, FocusEvent, PointerEvent, useState} from 'react';
 import {Maybe, maybe, nothing} from '@ryandur/sand';
-import {Grip, STEP_SHARE, grippedAt, resizeLabel, soughtTrade} from './shares';
-
-const steps: Record<string, number> = {ArrowRight: STEP_SHARE, ArrowLeft: -STEP_SHARE};
+import {Grip, grippedAt, resizeArrows, resizeLabel, soughtTrade} from './shares';
 
 type Props = {
     column: string;
@@ -20,12 +18,7 @@ export const ResizeHandle: FC<Props> = ({column, share, onAwaken, onTrade}) => {
               aria-label={resizeLabel(column, share)}
               onFocus={(event: FocusEvent<HTMLElement>) =>
                   maybe(event.currentTarget.closest('table')).map(onAwaken)}
-              onKeyDown={(event: KeyboardEvent<HTMLElement>) =>
-                  maybe(steps[event.key]).map(step => {
-                      event.preventDefault();
-                      event.stopPropagation();
-                      onTrade(step);
-                  })}
+              onKeyDown={resizeArrows(onTrade)}
               onMouseDown={event => event.stopPropagation()}
               onPointerDown={(event: PointerEvent<HTMLElement>) => {
                   event.stopPropagation();

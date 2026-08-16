@@ -1,9 +1,9 @@
-import {FC, KeyboardEvent, MouseEvent, PointerEvent} from 'react';
-import {Maybe, has, maybe, not, nothing} from '@ryandur/sand';
+import {FC, MouseEvent, PointerEvent} from 'react';
+import {Maybe, has, not, nothing} from '@ryandur/sand';
 import {animatedColumnArrows} from '../travel';
 import {classNames} from '@components/class-names';
 import {Column, ResizeHandle, Shares, neighborOf, traded} from '@components/Table';
-import {anchored, ColumnNudge, columnSteps, Slid} from '../survey';
+import {anchored, ColumnNudge, Slid} from '../survey';
 import {Direction, SortMenu} from '../SortMenu';
 import {sortedBy} from '../sorting';
 import '../Header.css';
@@ -64,13 +64,7 @@ export const Header: FC<Props> = (
              aria-sort={sorted}
              tabIndex={travels ? 0 : undefined}
              onPointerDown={travels ? onLift(columnName) : undefined}
-             onKeyDown={travels
-               ? (event: KeyboardEvent<HTMLTableCellElement>) =>
-                 maybe(columnSteps[event.key]).map(toward => {
-                   event.preventDefault();
-                   animatedColumnArrows(event.currentTarget, order, ordered)(columnName, toward);
-                 })
-               : undefined}
+             onKeyDown={travels ? animatedColumnArrows(columnName, () => order, ordered) : undefined}
              style={{
                ...(has(share) ? {'--share': `${share}%`} : {}),
                ...(has(displaced)

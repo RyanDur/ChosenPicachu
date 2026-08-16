@@ -41,3 +41,15 @@ export const soughtTrade = (grip: Grip, clientX: number, carried: number): {delt
     const share = sought(grip, clientX);
     return {delta: share - carried, carried: share};
 };
+
+const arrowTrades: Record<string, number> = {ArrowRight: STEP_SHARE, ArrowLeft: -STEP_SHARE};
+
+export const resizeArrows = (trade: (delta: number) => void) =>
+    (event: {key: string; preventDefault: () => void; stopPropagation: () => void}): void => {
+        const delta = arrowTrades[event.key];
+        if (has(delta)) {
+            event.preventDefault();
+            event.stopPropagation();
+            trade(delta);
+        }
+    };

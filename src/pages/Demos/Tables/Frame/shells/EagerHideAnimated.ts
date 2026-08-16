@@ -1,10 +1,10 @@
-import {maybe} from '@ryandur/sand';
 import {animatedColumnArrows, animatedRowArrows, drifted, eagerTravel} from '@components/DragSortableTable/travel';
-import {anchored, Bounds, ColumnNudge, columnSteps, columnUnder, displaced, interior, RowNudge, rowSteps, rowUnder, shifts, Survey, surveyed} from '@components/DragSortableTable/survey';
+import {anchored, Bounds, ColumnNudge, columnUnder, displaced, interior, RowNudge, rowUnder, shifts, Survey, surveyed} from '@components/DragSortableTable/survey';
 import {baked, columnGhost, columnOf, hideColumn, hideRow, markColumns, markRows, nudgedTo, orderedTo, rowGhost, seatedTo, Shell, stand, takeFlight, unhideColumn, unhideRow} from '../shell';
 
 const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
   const {table} = shell;
+  const held = columnOf(shell.desk(), th);
 
   const ordered = (nudge: ColumnNudge): void => {
     shell.commit(orderedTo(nudge.from, nudge.to));
@@ -39,17 +39,7 @@ const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
       }
     });
   });
-  th.addEventListener('keydown', event => {
-    maybe(columnSteps[event.key]).map(toward => {
-      event.preventDefault();
-      const {order} = shell.desk();
-      if (anchored(order.indexOf(columnOf(shell.desk(), th)), order.length)) {
-        return;
-      }
-      const held = columnOf(shell.desk(), th);
-      animatedColumnArrows(th, order, ordered)(held, toward);
-    });
-  });
+  th.addEventListener('keydown', animatedColumnArrows(held, () => shell.desk().order, ordered));
 };
 
 const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void => {
@@ -83,12 +73,7 @@ const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void 
       }
     });
   });
-  grip.addEventListener('keydown', event => {
-    maybe(rowSteps[event.key]).map(toward => {
-      event.preventDefault();
-      animatedRowArrows(grip, shell.desk().order, shell.desk().seated, arranged)(held, toward);
-    });
-  });
+  grip.addEventListener('keydown', animatedRowArrows(held, () => shell.desk().order, () => shell.desk().seated, arranged));
 };
 
 export const wire = (document: Document): void =>
