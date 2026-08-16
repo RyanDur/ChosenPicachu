@@ -8,8 +8,8 @@ import {cells} from '@pages/Demos/Tables/Aggregations/cells';
 import {hydrated, recentTrades} from '@pages/Demos/Tables/Aggregations/recent-trades';
 import {LiveTradesState, liveTrades, opening} from '@pages/Demos/Charts/live-trades';
 import {Trade} from '@pages/Demos/Charts/coinbase';
-import {still, surfaceTravel} from '@components/DragSortableTable/travel';
-import {Aloft, Desk, Shell, drifting, dropped, ruledBy, standingOf} from './desk';
+import {ArrowKey, Grab, columnLift, rowLift, still, surfaceTravel} from '@components/DragSortableTable/travel';
+import {Aloft, Desk, Shell, baked, columnOf, drifting, dropped, lifted, ruledBy, standingOf} from './desk';
 import {GhostFlight, columnGhost, rowGhost} from './ghosts';
 import {announce, wireMenu} from './menus';
 import {dressShares, wireResize} from './resize';
@@ -20,9 +20,16 @@ export type FlightAnswers = {
 };
 
 export type Dressage = {
-  travels: (shell: Shell) => void;
-  ruled?: (shell: Shell, heights: Readonly<Record<number, number>>, before: readonly number[], after: readonly number[]) => void;
   flights: {column: FlightAnswers; row: FlightAnswers};
+  arrows: {
+    column: (shell: Shell, held: string) => (event: ArrowKey) => void;
+    row: (shell: Shell, held: number) => (event: ArrowKey) => void;
+  };
+  veils?: {
+    column: (shell: Shell, held: string) => void;
+    row: (shell: Shell, held: number) => void;
+  };
+  ruled?: (shell: Shell, heights: Readonly<Record<number, number>>, before: readonly number[], after: readonly number[]) => void;
 };
 
 export const stand = (document: Document, dressage: Dressage): void => {
@@ -52,7 +59,7 @@ const standTable = (
   document: Document,
   table: HTMLTableElement,
   body: HTMLTableSectionElement,
-  {travels, ruled, flights}: Dressage
+  {flights, arrows, veils, ruled}: Dressage
 ): void => {
   const lanes = [...body.querySelectorAll('tr')];
   const dealt = lanes.map((_, at) => at);
@@ -189,8 +196,36 @@ const standTable = (
   [...table.querySelectorAll('.menu-toggle, .menu')].forEach(chrome =>
     chrome.addEventListener('pointerdown', event => event.stopPropagation()));
 
+  const wireColumnGrip = (th: HTMLTableCellElement): void => {
+    const held = columnOf(desk, th);
+
+    const grabbed = (grab: Grab): void => {
+      maybe(veils).map(veil => veil.column(shell, held));
+      shell.commit(lifted({axis: 'column', held}, grab));
+    };
+
+    th.addEventListener('pointerdown', columnLift(held, () => shell.desk().order, () => shell.desk().seated, grabbed));
+    th.addEventListener('keydown', arrows.column(shell, held));
+  };
+
+  const wireRowGrip = (held: number, grip: HTMLButtonElement): void => {
+    const grabbed = (grab: Grab): void => {
+      maybe(veils).map(veil => veil.row(shell, held));
+      shell.commit(current => lifted({axis: 'row', held}, grab)(baked(current)));
+    };
+
+    grip.addEventListener('pointerdown', rowLift(() => shell.desk().order, () => shell.desk().seated, grabbed));
+    grip.addEventListener('keydown', arrows.row(shell, held));
+  };
+
   dressGrips(table, desk);
-  travels(shell);
+  [...table.querySelectorAll('thead th')]
+    .filter(th => th instanceof HTMLTableCellElement)
+    .forEach(wireColumnGrip);
+  lanes.forEach((lane, held) =>
+    [...lane.querySelectorAll('button.grip')]
+      .filter(grip => grip instanceof HTMLButtonElement)
+      .forEach(grip => wireRowGrip(held, grip)));
 
   if (env.tradeHistory) {
     recentTrades(env.tradeHistory, env.tradeProduct, trades => {
