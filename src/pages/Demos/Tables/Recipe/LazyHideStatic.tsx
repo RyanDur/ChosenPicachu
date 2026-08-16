@@ -73,7 +73,7 @@ export const LazyHideStaticRecipe: FC<{track: Track; world: World}> = ({track, w
                 ...unit(hookSource, 'const drop = ')
               ]}/>
               : <Snippet label="TS" lines={[
-                ...span(shellSrc, 'travel: (moving, landing) => {', 'commit(columnOf(shell.desk(), th), struck')
+                ...span(shellSrc, 'travel: (moving, landing) => {', 'maybe(landing).map(struck => commit(held, struck')
               ]}/>}
             <Snippet label="TS" lines={[
               ...unit(travelSource, 'export const lazyTravel'),

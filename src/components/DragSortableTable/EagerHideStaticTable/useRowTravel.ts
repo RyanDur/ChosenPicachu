@@ -1,7 +1,7 @@
 import {PointerEvent, useState} from 'react';
 import {Maybe, maybe, nothing} from '@ryandur/sand';
-import {Drift, drifted, eagerTravel, Flight, grounded, still} from '../travel';
-import {rowUnder, Survey, surveyed} from '../survey';
+import {Drift, drifted, eagerTravel, Flight, Grab, grounded, rowLift, still} from '../travel';
+import {rowUnder, Survey} from '../survey';
 
 export const useRowTravel = (
     order: readonly string[],
@@ -14,16 +14,14 @@ export const useRowTravel = (
     const [origin, setOrigin] = useState<Maybe<Drift>>(nothing());
     const [drift, setDrift] = useState<Drift>(still);
 
+    const grabbed = (row: number) => ({survey, box}: Grab): void => {
+        setChart(maybe(survey));
+        setFlight(box);
+        setAloft(maybe(row));
+    };
+
     const lift = (row: number) =>
-        (event: PointerEvent<HTMLElement>): void => {
-            maybe(event.currentTarget.closest('table'))
-                .map(table => setChart(maybe(surveyed(table, order, standing))));
-            setFlight(maybe(event.currentTarget.closest('tr'))
-                .map(lane => lane.getBoundingClientRect())
-                .map(({x, y, width}) => ({x, y, width}))
-                .orElse(grounded));
-            setAloft(maybe(row));
-        };
+        rowLift(() => order, () => standing, grabbed(row));
 
     const drop = (): void => {
         setOrigin(nothing());

@@ -1,10 +1,9 @@
 import {maybe} from '@ryandur/sand';
-import {staticColumnArrows, staticRowArrows, drifted, lazyTravel} from '@components/DragSortableTable/travel';
-import {anchored, columnUnder, interior, rowUnder, surveyed} from '@components/DragSortableTable/survey';
+import {staticColumnArrows, staticRowArrows, Grab, columnLift, drifted, rowLift, lazyTravel} from '@components/DragSortableTable/travel';
+import {columnUnder, interior, rowUnder} from '@components/DragSortableTable/survey';
 import {baked, columnGhost, columnOf, hideColumn, hideRow, nudgedTo, orderedTo, rowGhost, seatedTo, Shell, stand, takeFlight, unhideColumn, unhideRow} from '../shell';
 
 const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
-  const {table} = shell;
   const held = columnOf(shell.desk(), th);
 
   const ordered = ({from, to}: {from: number; to: number}): void =>
@@ -15,34 +14,27 @@ const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
     shell.commit(orderedTo(order.indexOf(held), interior(order.indexOf(struck), order.length)));
   };
 
-  th.addEventListener('pointerdown', event => {
-    const {order, seated} = shell.desk();
-    if (anchored(order.indexOf(columnOf(shell.desk(), th)), order.length)) {
-      return;
-    }
-    const survey = surveyed(table, order, seated);
-    const ghost = columnGhost(shell, columnOf(shell.desk(), th));
-    const from = {x: event.clientX, y: event.clientY};
-    hideColumn(shell, columnOf(shell.desk(), th));
-    takeFlight<string | undefined>(shell, event, undefined, {
+  const grabbed = ({survey, at, pointerId}: Grab): void => {
+    const ghost = columnGhost(shell, held);
+    hideColumn(shell, held);
+    takeFlight<string | undefined>(shell, pointerId, undefined, {
       travel: (moving, landing) => {
-        ghost.drift(drifted(moving, from));
-        const held = columnOf(shell.desk(), th);
+        ghost.drift(drifted(moving, at));
         return lazyTravel(columnUnder(shell.desk().order, survey))(held, moving, landing);
       },
       land: landing => {
-        unhideColumn(shell, columnOf(shell.desk(), th));
+        unhideColumn(shell, held);
         ghost.land();
-        maybe(landing).map(struck => commit(columnOf(shell.desk(), th), struck));
+        maybe(landing).map(struck => commit(held, struck));
       }
     });
-  });
+  };
+
+  th.addEventListener('pointerdown', columnLift(held, () => shell.desk().order, () => shell.desk().seated, grabbed));
   th.addEventListener('keydown', staticColumnArrows(held, () => shell.desk().order, ordered));
 };
 
 const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void => {
-  const {table} = shell;
-
   const arranged = ({to}: {to: number; after: number[]}): void =>
     shell.commit(desk => nudgedTo(held, to)(baked(desk)));
 
@@ -50,15 +42,13 @@ const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void 
     shell.commit(seatedTo(held, struck));
   };
 
-  grip.addEventListener('pointerdown', event => {
+  const grabbed = ({survey, at, pointerId}: Grab): void => {
     shell.commit(baked);
-    const survey = surveyed(table, shell.desk().order, shell.desk().seated);
     const ghost = rowGhost(shell, held);
-    const from = {x: event.clientX, y: event.clientY};
     hideRow(shell, held);
-    takeFlight<number | undefined>(shell, event, undefined, {
+    takeFlight<number | undefined>(shell, pointerId, undefined, {
       travel: (moving, landing) => {
-        ghost.drift(drifted(moving, from));
+        ghost.drift(drifted(moving, at));
         return lazyTravel(rowUnder(shell.desk().seated, survey))(held, moving, landing);
       },
       land: landing => {
@@ -67,7 +57,9 @@ const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void 
         maybe(landing).map(struck => commit(struck));
       }
     });
-  });
+  };
+
+  grip.addEventListener('pointerdown', rowLift(() => shell.desk().order, () => shell.desk().seated, grabbed));
   grip.addEventListener('keydown', staticRowArrows(held, () => shell.desk().seated, arranged));
 };
 
