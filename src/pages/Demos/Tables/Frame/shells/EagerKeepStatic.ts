@@ -1,5 +1,6 @@
-import {has, maybe} from '@ryandur/sand';
-import {anchored, columnSteps, columnUnder, interior, nudgedColumn, nudgedRow, rowSteps, rowUnder, surveyed} from '@components/DragSortableTable/survey';
+import {maybe} from '@ryandur/sand';
+import {drifted} from '@components/DragSortableTable/travel';
+import {anchored, columnSteps, columnUnder, interior, nudgedColumn, nudgedRow, rowSteps, rowUnder, struckAway, surveyed} from '@components/DragSortableTable/survey';
 import {baked, columnGhost, columnOf, nudgedTo, orderedTo, rowGhost, seatedTo, Shell, stand, takeFlight} from '../shell';
 
 const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
@@ -20,10 +21,10 @@ const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
     const from = {x: event.clientX, y: event.clientY};
     takeFlight<void>(shell, event, undefined, {
       travel: moving => {
-        ghost.drift(moving.clientX - from.x, moving.clientY - from.y);
+        ghost.drift(drifted(moving, from));
         const held = columnOf(shell.desk(), th);
         const struck = columnUnder(shell.desk().order, survey)(moving.clientX, moving.clientY, held);
-        if (has(struck) && struck !== held) {
+        if (struckAway(held, struck)) {
           commit(held, struck);
         }
       },
@@ -63,9 +64,9 @@ const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void 
     const from = {x: event.clientX, y: event.clientY};
     takeFlight<void>(shell, event, undefined, {
       travel: moving => {
-        ghost.drift(moving.clientX - from.x, moving.clientY - from.y);
+        ghost.drift(drifted(moving, from));
         const struck = rowUnder(shell.desk().seated, survey)(moving.clientX, moving.clientY, held);
-        if (has(struck) && struck !== held) {
+        if (struckAway(held, struck)) {
           commit(struck);
         }
       },
