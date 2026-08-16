@@ -1,6 +1,6 @@
-import {maybe} from '@ryandur/sand';
+import {has, maybe} from '@ryandur/sand';
 import {drifted, eagerTravel} from '@components/DragSortableTable/travel';
-import {anchored, bounded, Bounds, columnSteps, columnUnder, displaced, interior, nudgedColumn, nudgedRow, rowSteps, rowUnder, shifts, Survey, surveyed, swapped} from '@components/DragSortableTable/survey';
+import {anchored, bounded, Bounds, columnNudge, columnSteps, columnUnder, displaced, interior, rowNudge, rowSteps, rowUnder, shifts, Survey, surveyed} from '@components/DragSortableTable/survey';
 import {baked, columnGhost, columnOf, hideColumn, hideRow, markColumns, markRows, nudgedTo, orderedTo, rowGhost, seatedTo, Shell, stand, takeFlight, unhideColumn, unhideRow} from '../shell';
 
 const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
@@ -45,14 +45,11 @@ const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
         return;
       }
       const held = columnOf(shell.desk(), th);
-      const {from, to} = nudgedColumn(order, held, toward);
-      if (to === from) {
-        return;
+      const nudge = columnNudge(order, bounded(table, order))(held, toward);
+      if (has(nudge)) {
+        shell.commit(orderedTo(nudge.from, nudge.to));
+        markColumns(shell, nudge.marks);
       }
-      const neighbour = order[to];
-      const marks = swapped(bounded(table, order), order)(held, neighbour, toward);
-      shell.commit(orderedTo(from, to));
-      markColumns(shell, marks);
     });
   });
 };
@@ -94,14 +91,9 @@ const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void 
       }
       shell.commit(baked);
       const {seats} = shell.desk();
-      const {from, to} = nudgedRow(seats, held, toward);
-      if (to === from) {
-        return;
-      }
-      const measured = surveyed(table, shell.desk().order, shell.desk().seated);
-      const before = shell.desk().seated;
-      shell.commit(nudgedTo(held, to));
-      markRows(shell, shifts(measured.rowHeights, before, shell.desk().seated));
+      const nudge = rowNudge(seats, surveyed(table, shell.desk().order, seats).rowHeights)(held, toward);
+      shell.commit(nudgedTo(held, nudge.to));
+      markRows(shell, nudge.drops);
     });
   });
 };

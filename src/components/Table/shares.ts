@@ -31,3 +31,13 @@ export const sought = ({fromX, pxPerShare}: Grip, clientX: number): number => (c
 
 export const resizeLabel = (column: string, share?: number): string =>
     has(share) ? `resize ${column}, ${Math.round(share)}%` : `resize ${column}`;
+
+export const grippedAt = (width: number, clientX: number): Grip | undefined => {
+    const pxPerShare = width / 100;
+    return pxPerShare ? {fromX: clientX, pxPerShare} : undefined;
+};
+
+export const soughtTrade = (grip: Grip, clientX: number, carried: number): {delta: number; carried: number} => {
+    const share = sought(grip, clientX);
+    return {delta: share - carried, carried: share};
+};

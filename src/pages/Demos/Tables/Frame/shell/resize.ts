@@ -1,5 +1,5 @@
 import {has, maybe} from '@ryandur/sand';
-import {Grip, STEP_SHARE, measuredShares, resizeLabel, sought} from '@components/Table/shares';
+import {Grip, STEP_SHARE, grippedAt, measuredShares, resizeLabel, soughtTrade} from '@components/Table/shares';
 import {columnSteps} from '@components/DragSortableTable/survey';
 import {Desk, Shell, columnOf, sharedAs, tradedBy} from './desk';
 
@@ -36,20 +36,17 @@ const wireHandle = (shell: Shell, column: string, handle: HTMLButtonElement): vo
   handle.addEventListener('pointerdown', event => {
     event.stopPropagation();
     awaken();
-    const pxPerShare = table.getBoundingClientRect().width / 100;
-    if (pxPerShare) {
-      grip = {fromX: event.clientX, pxPerShare};
-      carried = 0;
-    }
+    grip = grippedAt(table.getBoundingClientRect().width, event.clientX);
+    carried = 0;
   });
   handle.addEventListener('pointermove', event => {
     if (!has(grip)) {
       return;
     }
     handle.setPointerCapture(event.pointerId);
-    const share = sought(grip, event.clientX);
-    shell.commit(tradedBy(column, share - carried));
-    carried = share;
+    const trade = soughtTrade(grip, event.clientX, carried);
+    shell.commit(tradedBy(column, trade.delta));
+    carried = trade.carried;
   });
   ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(landing =>
     handle.addEventListener(landing, () => {

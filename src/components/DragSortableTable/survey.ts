@@ -126,6 +126,23 @@ export const swapped = (measured: Bounds, order: readonly string[]) =>
 export const struckAway = <Seat,>(held: Seat, struck: Seat | undefined): struck is Seat =>
     has(struck) && struck !== held;
 
+export const columnNudge = (order: readonly string[], measured: Bounds) =>
+    (held: string, toward: number): {from: number; to: number; marks: Slid} | undefined => {
+        const {from, to} = nudgedColumn(order, held, toward);
+        if (to === from) {
+            return undefined;
+        }
+        const neighbour = order[to];
+        return {from, to, marks: swapped(measured, order)(held, neighbour, toward)};
+    };
+
+export const rowNudge = (seats: readonly number[], heights: Readonly<Record<number, number>>) =>
+    (held: number, toward: number): {to: number; after: number[]; drops: Shifted} => {
+        const {to} = nudgedRow(seats, held, toward);
+        const after = array.moveToIndex(to, held, seats);
+        return {to, after, drops: shifts(heights, seats, after)};
+    };
+
 export const gripLabel = (position: number): string => `move row ${position + 1}`;
 
 export const interior = (at: number, count: number): number =>

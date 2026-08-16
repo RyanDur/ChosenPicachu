@@ -1,6 +1,6 @@
 import {FC, FocusEvent, KeyboardEvent, PointerEvent, useState} from 'react';
 import {Maybe, maybe, nothing} from '@ryandur/sand';
-import {Grip, STEP_SHARE, resizeLabel, sought} from './shares';
+import {Grip, STEP_SHARE, grippedAt, resizeLabel, soughtTrade} from './shares';
 
 const steps: Record<string, number> = {ArrowRight: STEP_SHARE, ArrowLeft: -STEP_SHARE};
 
@@ -32,18 +32,15 @@ export const ResizeHandle: FC<Props> = ({column, share, onAwaken, onTrade}) => {
                   event.currentTarget.setPointerCapture(event.pointerId);
                   maybe(event.currentTarget.closest('table')).map(table => {
                       onAwaken(table);
-                      const pxPerShare = table.getBoundingClientRect().width / 100;
-                      if (pxPerShare) {
-                          setGrip(maybe({fromX: event.clientX, pxPerShare}));
-                          setTraded(0);
-                      }
+                      setGrip(maybe(grippedAt(table.getBoundingClientRect().width, event.clientX)));
+                      setTraded(0);
                   });
               }}
               onPointerMove={(event: PointerEvent<HTMLElement>) =>
                   grip.map(held => {
-                      const share = sought(held, event.clientX);
-                      onTrade(share - traded);
-                      setTraded(share);
+                      const trade = soughtTrade(held, event.clientX, traded);
+                      onTrade(trade.delta);
+                      setTraded(trade.carried);
                   })}
               onPointerUp={() => setGrip(nothing())}/>;
 };
