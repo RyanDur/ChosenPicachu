@@ -1,7 +1,7 @@
 import {has, is, maybe} from '@ryandur/sand';
 import {unconfigured} from '@env';
 import {Row} from '@components/Table';
-import {Rule, ranked} from '@components/DragSortableTable/sorting';
+import {Rule} from '@components/DragSortableTable/sorting';
 import {anchored, gripLabel, surveyed} from '@components/DragSortableTable/survey';
 import {windowedAggregates} from '@pages/Demos/Tables/Aggregations/fold';
 import {cells} from '@pages/Demos/Tables/Aggregations/cells';
@@ -9,7 +9,7 @@ import {hydrated, recentTrades} from '@pages/Demos/Tables/Aggregations/recent-tr
 import {LiveTradesState, liveTrades, opening} from '@pages/Demos/Charts/live-trades';
 import {Trade} from '@pages/Demos/Charts/coinbase';
 import {still, surfaceTravel} from '@components/DragSortableTable/travel';
-import {Aloft, Desk, Shell, drifting, dropped, ruledBy} from './desk';
+import {Aloft, Desk, Shell, drifting, dropped, ruledBy, standingOf} from './desk';
 import {GhostFlight, columnGhost, rowGhost} from './ghosts';
 import {announce, wireMenu} from './menus';
 import {dressShares, wireResize} from './resize';
@@ -156,7 +156,7 @@ const standTable = (
     }
     const rows = folded();
     writeCells(rows, next);
-    const standing = has(next.rule) ? ranked(rows, next.seats, next.rule) : next.seats;
+    const standing = standingOf(rows, next);
     if (changed(previous.seated, standing)) {
       reseatRows(standing);
     }

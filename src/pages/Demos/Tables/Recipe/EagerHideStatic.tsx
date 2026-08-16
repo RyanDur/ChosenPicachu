@@ -28,7 +28,6 @@ import {
 import shellSrc from '../Frame/shells/EagerHideStatic.ts?raw';
 import tableSource from '@components/DragSortableTable/EagerHideStaticTable/EagerHideStaticTable.tsx?raw';
 import headerSource from '@components/DragSortableTable/EagerHideStaticTable/Header.tsx?raw';
-import hookSource from '@components/DragSortableTable/EagerHideStaticTable/useColumnTravel.ts?raw';
 import cssSource from '@components/DragSortableTable/EagerHideStaticTable/EagerHideStaticTable.css?raw';
 
 export const EagerHideStaticRecipe: FC<{track: Track; world: World}> = ({track, world}) => track === 'pointer'
@@ -45,10 +44,10 @@ export const EagerHideStaticRecipe: FC<{track: Track; world: World}> = ({track, 
         And the swap lands instantly, with no motion, so nothing competes with the pointer.</Tell>
       <Steps>
         {cssShare(world)}
-        {orderInState(world, tableSource)}
-        {liftOnce(world, hookSource, tableSource, shellSrc)}
-        {dragSurface(world, hookSource)}
-        {ghostByHand(world, hookSource)}
+        {orderInState(world)}
+        {liftOnce(world, tableSource, shellSrc)}
+        {dragSurface(world, tableSource)}
+        {ghostByHand(world, tableSource)}
         {deadZone}
         <Step title="Commit inside the move" dial={<PaceDial name="step-pace"/>}>
           <Words want="The trader wants the table to answer inside the move, so that they can change their mind before the drop.">
@@ -73,7 +72,8 @@ export const EagerHideStaticRecipe: FC<{track: Track; world: World}> = ({track, 
           <Codes>
             {world === 'react'
               ? <Snippet label="TS" lines={[
-                ...unit(hookSource, 'const travel = ')
+                ...unit(tableSource, 'const settleColumn = '), gap,
+                ...unit(tableSource, 'const columnTravel = ')
               ]}/>
               : <Snippet label="TS" lines={[
                 ...unit(shellSrc, 'const settleColumn = '), gap,

@@ -29,7 +29,6 @@ import {
 import shellSrc from '../Frame/shells/EagerHideAnimated.ts?raw';
 import tableSource from '@components/DragSortableTable/EagerHideAnimatedTable/EagerHideAnimatedTable.tsx?raw';
 import headerSource from '@components/DragSortableTable/EagerHideAnimatedTable/Header.tsx?raw';
-import hookSource from '@components/DragSortableTable/EagerHideAnimatedTable/useColumnTravel.ts?raw';
 import cssSource from '@components/DragSortableTable/EagerHideAnimatedTable/EagerHideAnimatedTable.css?raw';
 
 export const EagerHideAnimatedRecipe: FC<{track: Track; world: World}> = ({track, world}) => track === 'pointer'
@@ -46,10 +45,10 @@ export const EagerHideAnimatedRecipe: FC<{track: Track; world: World}> = ({track
         And the swap slides into place, so the eye never loses a column.</Tell>
       <Steps>
         {cssShare(world)}
-        {orderInState(world, tableSource)}
-        {liftOnce(world, hookSource, tableSource, shellSrc)}
-        {dragSurface(world, hookSource)}
-        {ghostByHand(world, hookSource)}
+        {orderInState(world)}
+        {liftOnce(world, tableSource, shellSrc)}
+        {dragSurface(world, tableSource)}
+        {ghostByHand(world, tableSource)}
         {deadZone}
         <Step title="Commit inside the move" dial={<PaceDial name="step-pace"/>}>
           <Words want="The trader wants the table to answer inside the move, so that they can change their mind before the drop.">
@@ -74,7 +73,8 @@ export const EagerHideAnimatedRecipe: FC<{track: Track; world: World}> = ({track
           <Codes>
             {world === 'react'
               ? <Snippet label="TS" lines={[
-                ...unit(hookSource, 'const travel = ')
+                ...unit(tableSource, 'const settleColumn = '), gap,
+                ...unit(tableSource, 'const columnTravel = ')
               ]}/>
               : <Snippet label="TS" lines={[
                 ...unit(shellSrc, 'const settleColumn = '), gap,

@@ -4,7 +4,7 @@ import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {aloftSource, frameStand, gap, sortableCss, travelSource} from './sources';
 
-export const dragSurface = (world: World, hookSource: string): ReactNode =>
+export const dragSurface = (world: World, tableSource: string): ReactNode =>
   <Step title="Give the drag a surface of its own">
     <Words want="The carry outruns the header it grabbed: the pointer leaves the element mid-drag, and the release can land anywhere, even outside the window.">
       <Says>Your first surface is the document: add two listeners at lift, remove them at drop.
@@ -42,8 +42,8 @@ export const dragSurface = (world: World, hookSource: string): ReactNode =>
         : undefined}
       {world === 'react'
         ? <Snippet label="TS" lines={[
-          ...span(hookSource, 'onPointerMove: surfaceTravel(drifting, travel, drop)', 'onLostPointerCapture: drop'), gap,
-          ...unit(hookSource, 'const drop = '),
+          ...span(tableSource, 'onPointerMove: surfaceTravel(drifting, travel,', 'onLostPointerCapture:'), gap,
+          ...unit(tableSource, 'const drop = '),
           aside('// cancel and lost capture are not delegates; they ARE the drop')
         ]}/>
         : <Snippet label="TS" lines={[

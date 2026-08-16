@@ -6,7 +6,7 @@ import {World, worldParam} from '../params';
 import feedSource from '@pages/Demos/Charts/live-trades.ts?raw';
 import foldSource from '@pages/Demos/Tables/Aggregations/fold.ts?raw';
 import dealSource from '@pages/Demos/Tables/Aggregations/index.tsx?raw';
-import stateSource from '@components/DragSortableTable/EagerHideAnimatedTable/EagerHideAnimatedTable.tsx?raw';
+import useDeskSource from '@components/DragSortableTable/useDesk.ts?raw';
 import headerSource from '@components/DragSortableTable/EagerHideAnimatedTable/Header.tsx?raw';
 import rowSource from '@components/DragSortableTable/EagerHideAnimatedTable/Row.tsx?raw';
 import hydrateSource from '@pages/Demos/Tables/Aggregations/recent-trades.ts?raw';
@@ -104,34 +104,31 @@ const refolds: Record<World, string> = {
 
 const stateSays: Record<World, ReactNode> = {
   react: <>
-    <Says>The table’s state is a few cells beside the markup: the ordered columns, the seats,
-      and the rule, each born with useState. Nothing ever edits a value in place: a change
-      hands a new array or a new rule to the setter, and the old value simply stops being
-      rendered.</Says>
-    <Says>What follows the state is React’s half of the deal: set a cell and the component
-      re-renders, the markup renders through the new value, and React reconciles the real DOM
-      to match, moving only the nodes whose place changed. You never touch the DOM; you only
-      decide the state.</Says>
+    <Says>The table’s state is one value: the desk, held in a single cell, and setDesk is the
+      commit. Nothing ever edits the desk in place: a change is a pure transition, a function
+      from the old desk to a new one, and the old value simply stops being rendered.</Says>
+    <Says>What follows the commit is React’s half of the deal: the component re-renders, the
+      markup renders through the new desk, and React reconciles the real DOM to match, moving
+      only the nodes whose place changed. You never touch the DOM; you only deal the desk.</Says>
   </>,
   html: <>
     <Says>The shell keeps the same state as one value: the desk, which holds order, seats,
       seated, shares, and the rule together, every field readonly. Nothing ever edits the desk in place: a
       change is a pure transition, a function from the old desk to a new one, and the old
       value simply stops being current.</Says>
-    <Says>What React did for you is the other half: the shell holds one cell with one write
-      path. commit runs your transition and reconciles the page against the new desk, moving
-      only the cells whose place changed and writing only the text that differs. The seam
-      between the worlds is exactly here: the state model is identical; who owns the cell and
-      the reconciliation is the difference.</Says>
+    <Says>What React did for you is the other half: the shell holds the same cell with the same
+      write path, and its commit reconciles the page against the new desk by hand, moving only
+      the cells whose place changed and writing only the text that differs. The seam between
+      the worlds is exactly here: the state machine is identical; the projection is the
+      difference.</Says>
   </>
 };
 
 const stateCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="TS" lines={[
-      ...unit(stateSource, 'const [ordered, setOrdered]'), gap,
-      ...unit(stateSource, 'const [seats, setSeats]'), gap,
-      ...unit(stateSource, 'const [rule, setRule]')
+      ...unit(deskSource, 'export type Desk'), gap,
+      ...unit(useDeskSource, 'export const useDesk')
     ]}/>
   </Codes>,
   html: <Codes>
