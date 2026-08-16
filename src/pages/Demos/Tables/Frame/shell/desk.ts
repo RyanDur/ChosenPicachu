@@ -1,4 +1,4 @@
-import {has} from '@ryandur/sand';
+import {Maybe, has, maybe, nothing} from '@ryandur/sand';
 import {Drift, Flight as FlightBox, Grab, carried, still} from '@components/DragSortableTable/travel';
 import {Survey} from '@components/DragSortableTable/survey';
 import {Shares, neighborOf, traded} from '@components/Table/shares';
@@ -45,6 +45,18 @@ export const rowLanding = (landing: number | undefined) => (desk: Desk): Desk =>
 
 export const dropped = (desk: Desk): Desk =>
   ({...desk, aloft: undefined, bounds: undefined, flight: undefined, origin: undefined, drift: still});
+
+export const columnAloft = ({aloft}: Desk): Maybe<string> =>
+  has(aloft) && aloft.axis === 'column' ? maybe(aloft.held) : nothing();
+
+export const rowAloft = ({aloft}: Desk): Maybe<number> =>
+  has(aloft) && aloft.axis === 'row' ? maybe(aloft.held) : nothing();
+
+export const landedColumn = ({aloft}: Desk): Maybe<string> =>
+  has(aloft) && aloft.axis === 'column' ? maybe(aloft.landing) : nothing();
+
+export const landedRow = ({aloft}: Desk): Maybe<number> =>
+  has(aloft) && aloft.axis === 'row' ? maybe(aloft.landing) : nothing();
 
 export const baked = (desk: Desk): Desk =>
   ({...desk, seats: desk.seated, rule: undefined});
