@@ -33,11 +33,11 @@ const columnLand = (shell: Shell): void => {
 
 const rowTravel = (shell: Shell, moving: {clientX: number; clientY: number}): void => {
   maybe(shell.desk().aloft).map(aloft => {
-    const {bounds, seated} = shell.desk();
+    const {bounds, seated: standing} = shell.desk();
     if (aloft.axis !== 'row' || !has(bounds)) {
       return;
     }
-    eagerTravel(rowUnder(seated, bounds), struck =>
+    eagerTravel(rowUnder(standing, bounds), struck =>
       settleRow(shell, aloft.held, struck))(aloft.held, moving);
   });
 };

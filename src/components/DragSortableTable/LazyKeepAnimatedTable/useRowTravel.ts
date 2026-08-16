@@ -9,14 +9,14 @@ export const useRowTravel = (
     settle: (row: number, struck: number, heights: Readonly<Record<number, number>>) => void
 ) => {
     const [aloft, setAloft] = useState<Maybe<number>>(nothing());
-    const [survey, setChart] = useState<Maybe<Survey>>(nothing());
+    const [bounds, setBounds] = useState<Maybe<Survey>>(nothing());
     const [landing, setLanding] = useState<Maybe<number>>(nothing());
     const [flight, setFlight] = useState<Flight>(grounded);
     const [origin, setOrigin] = useState<Maybe<Drift>>(nothing());
     const [drift, setDrift] = useState<Drift>(still);
 
     const grabbed = (row: number) => ({survey, box}: Grab): void => {
-        setChart(maybe(survey));
+        setBounds(maybe(survey));
         setFlight(box);
         setAloft(maybe(row));
     };
@@ -25,32 +25,35 @@ export const useRowTravel = (
         rowLift(() => order, () => standing, grabbed(row));
 
     const drop = (): void => {
-        aloft.and(survey).and(landing).map(([[held, chart], struck]) =>
-            settle(held, struck, chart.rowHeights));
+        aloft.and(bounds).and(landing).map(([[held, measured], struck]) =>
+            settle(held, struck, measured.rowHeights));
         setLanding(nothing());
         setOrigin(nothing());
         setAloft(nothing());
-        setChart(nothing());
+        setBounds(nothing());
         setFlight(grounded);
         setDrift(still);
     };
 
-    const travel = surfaceTravel(
-        moving => origin.either(
+    const drifting = (moving: {clientX: number; clientY: number}): void => {
+        origin.either(
             from => setDrift(drifted(moving, from)),
-            () => setOrigin(maybe({x: moving.clientX, y: moving.clientY}))),
-        moving => aloft.and(survey).map(([held, chart]) =>
-                setLanding(maybe(lazyTravel(rowUnder(standing, chart))(held, moving, landing.orElse(undefined))))),
-        drop);
+            () => setOrigin(maybe({x: moving.clientX, y: moving.clientY})));
+    };
+
+    const travel = (moving: {clientX: number; clientY: number}): void => {
+        aloft.and(bounds).map(([held, measured]) =>
+                setLanding(maybe(lazyTravel(rowUnder(standing, measured))(held, moving, landing.orElse(undefined)))));
+    };
 
     return {
         aloft,
-        survey,
+        survey: bounds,
         flight,
         drift,
         lift,
         surface: {
-            onPointerMove: travel,
+            onPointerMove: surfaceTravel(drifting, travel, drop),
             onPointerUp: drop,
             onPointerCancel: drop,
             onLostPointerCapture: drop

@@ -31,13 +31,16 @@ export const useColumnTravel = (
         setDrift(still);
     };
 
-    const travel = surfaceTravel(
-        moving => origin.either(
+    const drifting = (moving: {clientX: number; clientY: number}): void => {
+        origin.either(
             from => setDrift(drifted(moving, from)),
-            () => setOrigin(maybe({x: moving.clientX, y: moving.clientY}))),
-        moving => aloft.and(bounds).map(([held, survey]) =>
-                eagerTravel(columnUnder(order, survey), struck => settle(held, struck, survey))(held, moving)),
-        drop);
+            () => setOrigin(maybe({x: moving.clientX, y: moving.clientY})));
+    };
+
+    const travel = (moving: {clientX: number; clientY: number}): void => {
+        aloft.and(bounds).map(([held, measured]) =>
+                eagerTravel(columnUnder(order, measured), struck => settle(held, struck, measured))(held, moving));
+    };
 
     return {
         aloft,
@@ -46,7 +49,7 @@ export const useColumnTravel = (
         drift,
         lift,
         surface: {
-            onPointerMove: travel,
+            onPointerMove: surfaceTravel(drifting, travel, drop),
             onPointerUp: drop,
             onPointerCancel: drop,
             onLostPointerCapture: drop
