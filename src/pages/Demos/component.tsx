@@ -20,7 +20,7 @@ import {
 import {DemoTopics, demoTopicParam} from './types';
 import {NaturalZIndex, TopLayer} from './ZIndexDemo';
 import {motionParam, originParam, paceParam} from './Controls';
-import {Aggregations, TableFrame, trackParam, tutorialParam, worldParam} from './Tables';
+import {Aggregations, trackParam, tutorialParam, worldParam} from './Tables';
 import {Loading} from '@components/Loading';
 import {useLiveTrades} from './Charts/useLiveTrades';
 import {Workspace} from './Charts/Workspace';
@@ -93,9 +93,7 @@ export const DemosPage = () => {
               </Suspense>
             </>,
             [DemoTopics.tables]: <>
-              {world === 'react'
-                ? <Aggregations trades={liveTrades.trades} pace={pace} origin={origin} motion={motion}/>
-                : <TableFrame pace={pace} origin={origin} motion={motion}/>}
+              <Aggregations trades={liveTrades.trades} pace={pace} origin={origin} motion={motion} world={world}/>
               <Suspense fallback={<Loading label="loading the tutorial"/>}>
                 <Tutorials shown={tut} onShow={next => updateSearchParams({tut: next})}
                            track={track} onTrack={next => updateSearchParams({track: next})}/>
