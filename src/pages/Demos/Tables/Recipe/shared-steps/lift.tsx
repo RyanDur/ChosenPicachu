@@ -31,11 +31,11 @@ export const liftOnce = (world: World, tableSource: string): ReactNode =>
           held. The survey is a plain record of that one measurement: the table’s box, each
           column’s width, and later the row heights. And has is the same library’s null check;
           it answers false for nothing and for empty.</Says>
-        : <Says>A few words you will see in every block from here. Held is whatever you are
-          carrying, named by its column or its seat, and it lives in the listener’s own closure:
-          no state store anywhere. The survey is a plain record of that one measurement: the
-          table’s box, each column’s width, and later the row heights. And has is the null check
-          from a small library
+        : <Says>A few words you will see in every block from here. Aloft is whatever you are
+          carrying, named by its column or its seat, and it lives on the desk like everything
+          else: the grab is just another commit. The survey is a plain record of that one
+          measurement: the table’s box, each column’s width, and later the row heights. And has
+          is the null check from a small library
           called <a className="signpost"
             href="https://ryandur.github.io/sand/"
             target="_blank"
