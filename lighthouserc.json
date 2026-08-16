@@ -11,6 +11,7 @@
         "http://localhost:4517/ChosenPicachu/demos/",
         "http://localhost:4517/ChosenPicachu/games/",
         "http://localhost:4517/ChosenPicachu/demos/?tab=tables",
+        "http://localhost:4517/ChosenPicachu/demos/?tab=tables&world=vanilla",
         "http://localhost:4517/ChosenPicachu/demos/?tab=tables&tut=menu",
         "http://localhost:4517/ChosenPicachu/demos/?tab=tables&tut=resize",
         "http://localhost:4517/ChosenPicachu/demos/?tab=dragAndDrop"
