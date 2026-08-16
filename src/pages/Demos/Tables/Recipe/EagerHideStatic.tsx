@@ -12,7 +12,8 @@ import {
   deadZone,
   dragSurface,
   focusLands,
-  frameShell,
+  frameHide,
+  frameStand,
   gap,
   ghostByHand,
   liftOnce,
@@ -82,7 +83,7 @@ export const EagerHideStaticRecipe: FC<{track: Track; world: World}> = ({track, 
                 aside('{/* same key, new seat: React moves the node, not a copy */}')
               ]}/>
               : <Snippet label="TS" lines={[
-                ...unit(frameShell, 'const reconcileColumns = '),
+                ...unit(frameStand, 'const reconcileColumns = '),
                 aside('// the same cells, new seats: the shell moves the node, not a copy')
               ]}/>}
           </Codes>
@@ -112,7 +113,7 @@ export const EagerHideStaticRecipe: FC<{track: Track; world: World}> = ({track, 
                 ...span(tableSource, 'aloft={rowsTravel.aloft}', 'aloftColumn={columnsTravel.aloft}')
               ]}/>
               : <Snippet label="TS" lines={[
-                ...unit(frameShell, 'export const hideColumn'),
+                ...unit(frameHide, 'export const hideColumn'),
                 aside('// the grab calls it at the lift; the landing calls unhideColumn')
               ]}/>}
             {world === 'react'

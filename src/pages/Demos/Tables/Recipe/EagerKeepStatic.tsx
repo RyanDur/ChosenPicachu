@@ -12,7 +12,7 @@ import {
   deadZone,
   dragSurface,
   focusLands,
-  frameShell,
+  frameStand,
   ghostByHand,
   liftOnce,
   orderInState,
@@ -80,7 +80,7 @@ export const EagerKeepStaticRecipe: FC<{track: Track; world: World}> = ({track, 
                 aside('{/* same key, new seat: React moves the node, not a copy */}')
               ]}/>
               : <Snippet label="TS" lines={[
-                ...unit(frameShell, 'const reconcileColumns = '),
+                ...unit(frameStand, 'const reconcileColumns = '),
                 aside('// the same cells, new seats: the shell moves the node, not a copy')
               ]}/>}
           </Codes>

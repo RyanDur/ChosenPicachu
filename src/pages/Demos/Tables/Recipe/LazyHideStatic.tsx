@@ -12,7 +12,7 @@ import {
   deadZone,
   dragSurface,
   focusLands,
-  frameShell,
+  frameHide,
   gap,
   ghostByHand,
   liftOnce,
@@ -101,7 +101,7 @@ export const LazyHideStaticRecipe: FC<{track: Track; world: World}> = ({track, w
                 ...span(tableSource, 'aloft={rowsTravel.aloft}', 'aloftColumn={columnsTravel.aloft}')
               ]}/>
               : <Snippet label="TS" lines={[
-                ...unit(frameShell, 'export const hideColumn'),
+                ...unit(frameHide, 'export const hideColumn'),
                 aside('// the grab calls it at the lift; the landing calls unhideColumn')
               ]}/>}
             {world === 'react'

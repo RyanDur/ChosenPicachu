@@ -12,7 +12,7 @@ import {
   deadZone,
   dragSurface,
   focusLands,
-  frameShell,
+  frameMarks,
   gap,
   ghostByHand,
   liftOnce,
@@ -139,7 +139,7 @@ export const LazyKeepAnimatedRecipe: FC<{track: Track; world: World}> = ({track,
               ]}/>
               : <Snippet label="TS" lines={[
                 ...unit(shellSrc, 'const commit = (held: string'), gap,
-                ...unit(frameShell, 'const markCell = '),
+                ...unit(frameMarks, 'const markCell = '),
                 aside('// a direction and a share per displaced key; javascript is done')
               ]}/>}
             {world === 'react'

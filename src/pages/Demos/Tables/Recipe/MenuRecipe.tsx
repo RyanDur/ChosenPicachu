@@ -10,7 +10,9 @@ import headerCss from '@components/DragSortableTable/Header.css?raw';
 import sortMenuSource from '@components/DragSortableTable/SortMenu.tsx?raw';
 import sortingSource from '@components/DragSortableTable/sorting.ts?raw';
 import tableSource from '../Frame/table.html?raw';
-import shellSource from '../Frame/shell.ts?raw';
+import frameDesk from '../Frame/shell/desk.ts?raw';
+import frameMenus from '../Frame/shell/menus.ts?raw';
+import frameStand from '../Frame/shell/stand.ts?raw';
 import {shellSources} from '../Frame/shells/sources';
 import {headerSources, tableSources} from './sources';
 import '../../Recipe/Recipe.css';
@@ -43,7 +45,7 @@ const ruled = ({world, source, shellSrc}: Build, motion: Motion, dial: ReactNode
             ...unit(source, 'const ruled = ')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...unit(shellSource, '  const choose = '), gap,
+            ...unit(frameStand, '  const choose = '), gap,
             ...span(shellSrc, 'ruled: (shell, heights, before, after)', 'shifts(heights, before, after))')
           ]}/>}
       </Codes>
@@ -62,7 +64,7 @@ const ruled = ({world, source, shellSrc}: Build, motion: Motion, dial: ReactNode
             ...unit(source, 'const ruled = ')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...unit(shellSource, '  const choose = ')
+            ...unit(frameStand, '  const choose = ')
           ]}/>}
       </Codes>
     </Step>;
@@ -193,7 +195,7 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
             : <Snippet label="TS" lines={[
               ...unit(sortingSource, 'export const glyphs'), gap,
               ...unit(sortingSource, 'export const unsorted'), gap,
-              ...unit(shellSource, 'const announce = ')
+              ...unit(frameMenus, 'const announce = ')
             ]}/>}
           {world === 'react'
             ? <Snippet label="HTML" lines={[
@@ -235,7 +237,7 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
             ]}/>
             : <Snippet label="TS" lines={[
               ...unit(sortingSource, 'export const ranked'), gap,
-              ...span(shellSource, 'const standing = has(next.rule) ? ranked(rows, next.seats, next.rule) : next.seats;',
+              ...span(frameStand, 'const standing = has(next.rule) ? ranked(rows, next.seats, next.rule) : next.seats;',
                 'const standing = has(next.rule) ? ranked(rows, next.seats, next.rule) : next.seats;')
             ]}/>}
         </Codes>
@@ -254,7 +256,7 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
               ...unit(source, 'onLift={lifted => event => {')
             ]}/>
             : <Snippet label="TS" lines={[
-              ...unit(shellSource, 'export const baked = '),
+              ...unit(frameDesk, 'export const baked = '),
               aside('// every grip commits it first thing on the way up')
             ]}/>}
         </Codes>
@@ -283,7 +285,7 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
               aside('// on the toggle and on the menu both')
             ]}/>
             : <Snippet label="TS" lines={[
-              ...span(shellSource, "  [...table.querySelectorAll('.menu-toggle, .menu')]", 'event.stopPropagation()));'),
+              ...span(frameStand, "  [...table.querySelectorAll('.menu-toggle, .menu')]", 'event.stopPropagation()));'),
               aside('// on the toggle and on the menu both')
             ]}/>}
           {world === 'react'
@@ -291,7 +293,7 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
               ...span(headerSrc, '{has(onRule) && column.sortable &&', '{has(onRule) && column.sortable &&')
             ]}/>
             : <Snippet label="HTML" lines={[
-              ...span(shellSource, 'const measures = order.filter', 'sort-${column}`)));')
+              ...span(frameStand, 'const measures = order.filter', 'sort-${column}`)));')
             ]}/>}
           <Snippet label="CSS" lines={[
             ...unit(headerCss, '.sortable .menu-toggle {')
