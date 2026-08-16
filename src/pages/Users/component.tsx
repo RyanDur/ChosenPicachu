@@ -5,7 +5,7 @@ import * as schema from 'schemawax';
 import {User, UserInformation, users as usersApi, UsersLinks} from '@components/Users';
 import {equalAddresses} from './addresses';
 import {Paths} from '@pages/Paths';
-import {has} from '@ryandur/sand';
+import {has, maybe} from '@ryandur/sand';
 import {EagerHideAnimatedTable} from '@components/DragSortableTable';
 import {Menu} from '@components/Menu';
 import {age, formatAge, FriendsList} from '@components/Users';
@@ -34,6 +34,14 @@ export const UsersPage: FC = () => {
 
   const currentFriendsOf = (user: User): string[] =>
     users.find(({id: userId}) => userId === user.id)?.friends ?? user.friends;
+
+  const dismissed = (id: string) => (): void => {
+    maybe(document.getElementById(id)).map(menu => {
+      if (menu.matches(':popover-open')) {
+        menu.hidePopover();
+      }
+    });
+  };
 
   return <>
     <section id="user-info" className="user-info users paper rounded-corners drop-shadow padded" key={currentUser?.id}>
@@ -91,18 +99,24 @@ export const UsersPage: FC = () => {
                         id: user.id,
                         mode: 'view'
                       })}`}
+                            onClick={dismissed(`menu-${user.id}`)}
                             className="item sub-title">View</Link>
                       <Link to={`${path}${createSearchParams({
                         id: user.id,
                         mode: 'edit'
                       })}`}
+                            onClick={dismissed(`menu-${user.id}`)}
                             className="item sub-title">Edit</Link>
                       <Link to={path}
                             className="item sub-title"
-                            onClick={() => usersApi.delete(user)
-                              .onSuccess(updateUsers)
-                              .onSuccess(() => navigate(Paths.users))}>Remove</Link>
+                            onClick={() => {
+                              dismissed(`menu-${user.id}`)();
+                              usersApi.delete(user)
+                                .onSuccess(updateUsers)
+                                .onSuccess(() => navigate(Paths.users));
+                            }}>Remove</Link>
                       <Link to={`${path}${createSearchParams({id: user.id})}`}
+                            onClick={dismissed(`menu-${user.id}`)}
                             className="item sub-title">Clone</Link>
                   </Menu>
                 </section>

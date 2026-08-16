@@ -19,8 +19,7 @@ export const Menu: FC<Props> = ({id, label, toggle, toggleClassName, children}) 
             aria-label={label}>{toggle}</button>
     <menu id={id} popover="auto" className="menu paper rounded-corners drop-shadow"
           onPointerDown={event => event.stopPropagation()}
-          onMouseDown={event => event.stopPropagation()}
-          onClick={event => event.currentTarget.hidePopover?.()}>
+          onMouseDown={event => event.stopPropagation()}>
       {Children.map(children, child => <li className="entry">{child}</li>)}
     </menu>
   </>;

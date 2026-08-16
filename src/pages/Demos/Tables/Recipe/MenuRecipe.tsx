@@ -180,13 +180,13 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
               anywhere else. The header compares itself against the rule: the toggle wears the
               direction’s glyph, and the th
               announces <Mdn path="Web/Accessibility/ARIA/Attributes/aria-sort">aria-sort</Mdn> from
-              the same comparison. SortMenu is the whole chooser: three buttons naming the three
+              the same comparison, and the toggle’s glyph is CSS reading that attribute. SortMenu is the whole chooser: three buttons naming the three
               choices, reporting which column asked for what.</Says>
             : <Says>Everything derives from the one rule; you never store which column is sorted
               anywhere else. When the rule changes, announce walks the headers and compares each
               against it: the sorted th
-              gains <Mdn path="Web/Accessibility/ARIA/Attributes/aria-sort">aria-sort</Mdn> and its
-              toggle wears the direction’s glyph; every other column returns to rest. Derive,
+              gains <Mdn path="Web/Accessibility/ARIA/Attributes/aria-sort">aria-sort</Mdn>, and the
+              toggle’s glyph is CSS reading that attribute; every other column returns to rest. Derive,
               never store, and the header cannot lie.</Says>}
         </Words>
         <Codes>
@@ -197,9 +197,14 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
             ]}/>
             : <Snippet label="TS" lines={[
               ...unit(sortingSource, 'export const sortedBy'), gap,
-              ...unit(sortingSource, 'export const glyphOf'), gap,
               ...unit(frameMenus, 'const announce = ')
             ]}/>}
+          <Snippet label="CSS" lines={[
+            ...unit(headerCss, ".sortable .menu-toggle::before {"), gap,
+            ...unit(headerCss, ".sortable th[aria-sort='ascending'] .menu-toggle::before {"), gap,
+            ...unit(headerCss, ".sortable th[aria-sort='descending'] .menu-toggle::before {"),
+            aside('/* the glyph is CSS reading the one attribute; no world writes it */')
+          ]}/>
           {world === 'react'
             ? <Snippet label="HTML" lines={[
               ...span(headerSrc, 'const sorted = sortedBy(columnName, rule);',
@@ -207,7 +212,7 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
               ...span(headerSrc, 'aria-sort={sorted}', 'aria-sort={sorted}')
             ]}/>
             : <Snippet label="HTML" lines={[
-              ...span(tableSource, '<th scope="col" class="cell trades header-cell clipped">', '⇅</button>')
+              ...span(tableSource, '<th scope="col" class="cell trades header-cell clipped">', 'aria-label="sort trades"></button>')
             ]}/>}
         </Codes>
       </Step>
