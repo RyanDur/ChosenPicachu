@@ -105,6 +105,8 @@ jobs:
             url: http://localhost:4517/ChosenPicachu/games/
           - page: tables
             url: http://localhost:4517/ChosenPicachu/demos/?tab=tables
+          - page: tables-vanilla
+            url: http://localhost:4517/ChosenPicachu/demos/?tab=tables&world=vanilla
           - page: menu-tutorial
             url: http://localhost:4517/ChosenPicachu/demos/?tab=tables&tut=menu
           - page: resize-tutorial
