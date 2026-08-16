@@ -1,10 +1,10 @@
 import {animatedColumnArrows, animatedRowArrows} from '@components/DragSortableTable/travel';
-import {stand, veiled} from '../table';
+import {mount, veiled} from '../table';
 import {animatedArranged, animatedOrdered, animatedSettleColumn, animatedSettleRow, shiftsRuled} from './settles';
 import {eagerColumnFlight, eagerRowFlight} from './flights';
 
 export const wire = (document: Document): void =>
-  stand(document, {
+  mount(document, {
     flights: {
       column: eagerColumnFlight(animatedSettleColumn),
       row: eagerRowFlight(animatedSettleRow)

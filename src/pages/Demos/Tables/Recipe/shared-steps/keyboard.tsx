@@ -2,7 +2,7 @@ import {ReactNode} from 'react';
 import {Codes, Mdn, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
-import {frameStand, gap, gripSource, headerCss, surveySource} from './sources';
+import {frameMount, gap, gripSource, headerCss, surveySource} from './sources';
 
 export const focusLands = (world: World, headerSource: string): ReactNode =>
   <Step title="Give focus a place to land">
@@ -30,7 +30,7 @@ export const focusLands = (world: World, headerSource: string): ReactNode =>
           aside('{/* the button was focusable all along; the header asks */}')
         ]}/>
         : <Snippet label="TS" lines={[
-          ...unit(frameStand, 'const dressGrips = '),
+          ...unit(frameMount, 'const dressGrips = '),
           aside('// the button was focusable all along; JavaScript asks for the headers')
         ]}/>}
       <Snippet label="CSS" lines={[
@@ -57,7 +57,7 @@ export const arrowsSpeak = (world: World, headerSource: string): ReactNode =>
           aside('// the anchors hold; the walk stops beside them')
         ]}/>
         : <Snippet label="TS" lines={[
-          ...unit(frameStand, "th.addEventListener('keydown'"),
+          ...unit(frameMount, "th.addEventListener('keydown'"),
           aside('// the anchors hold; the walk stops beside them')
         ]}/>}
       <Snippet label="TS" lines={[

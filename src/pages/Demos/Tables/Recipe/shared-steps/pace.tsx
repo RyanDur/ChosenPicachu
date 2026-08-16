@@ -3,7 +3,7 @@ import {PaceDial} from '../../../Controls';
 import {Codes, Says, Snippet, Step, Words, aside, plain} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
-import {flightsSource, frameStand, gap, travelSource} from './sources';
+import {flightsSource, frameMount, gap, travelSource} from './sources';
 
 export const eagerPace = (world: World, tableSource: string, buildSrc: string): ReactNode =>
   <Step title="Commit inside the move" dial={<PaceDial name="step-pace"/>}>
@@ -42,7 +42,7 @@ export const eagerPace = (world: World, tableSource: string, buildSrc: string): 
           aside('{/* same key, new seat: React moves the node, not a copy */}')
         ]}/>
         : <Snippet label="TS" lines={[
-          ...unit(frameStand, 'const reconcileColumns = '),
+          ...unit(frameMount, 'const reconcileColumns = '),
           aside('// the same cells, new seats: the reconcile moves the node, not a copy')
         ]}/>}
       <Snippet label="TS" lines={[

@@ -12,7 +12,7 @@ import sortingSource from '@components/DragSortableTable/sorting.ts?raw';
 import tableSource from '../Frame/table.html?raw';
 import stateSource from '@components/DragSortableTable/table-state.ts?raw';
 import frameMenus from '../Frame/table/menus.ts?raw';
-import frameStand from '../Frame/table/stand.ts?raw';
+import frameMount from '../Frame/table/mount.ts?raw';
 import {buildSources} from '../Frame/builds/sources';
 import settlesSource from '../Frame/builds/settles.ts?raw';
 import {headerSources, tableSources} from './sources';
@@ -46,7 +46,7 @@ const ruled = ({world, source, buildSrc}: Build, motion: Motion, dial: ReactNode
             ...unit(source, 'const ruled = ')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...unit(frameStand, '  const choose = '), gap,
+            ...unit(frameMount, '  const choose = '), gap,
             ...unit(settlesSource, 'export const shiftsRuled'), gap,
             ...span(buildSrc, 'ruled: shiftsRuled', 'ruled: shiftsRuled')
           ]}/>}
@@ -66,7 +66,7 @@ const ruled = ({world, source, buildSrc}: Build, motion: Motion, dial: ReactNode
             ...unit(source, 'const ruled = ')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...unit(frameStand, '  const choose = ')
+            ...unit(frameMount, '  const choose = ')
           ]}/>}
       </Codes>
     </Step>;
@@ -288,7 +288,7 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
               aside('// on the toggle and on the menu both')
             ]}/>
             : <Snippet label="TS" lines={[
-              ...span(frameStand, "  [...table.querySelectorAll('.menu-toggle, .menu')]", 'event.stopPropagation()));'),
+              ...span(frameMount, "  [...table.querySelectorAll('.menu-toggle, .menu')]", 'event.stopPropagation()));'),
               aside('// on the toggle and on the menu both')
             ]}/>}
           {world === 'react'
@@ -296,7 +296,7 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
               ...span(headerSrc, '{has(onRule) && column.sortable &&', '{has(onRule) && column.sortable &&')
             ]}/>
             : <Snippet label="HTML" lines={[
-              ...span(frameStand, 'const measures = order.filter', 'sort-${column}`)));')
+              ...span(frameMount, 'const measures = order.filter', 'sort-${column}`)));')
             ]}/>}
           <Snippet label="CSS" lines={[
             ...unit(headerCss, '.sortable .menu-toggle {')

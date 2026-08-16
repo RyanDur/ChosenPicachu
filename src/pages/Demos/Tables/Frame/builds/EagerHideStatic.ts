@@ -1,10 +1,10 @@
 import {staticColumnArrows, staticRowArrows} from '@components/DragSortableTable/travel';
-import {stand, veiled} from '../table';
+import {mount, veiled} from '../table';
 import {staticArranged, staticOrdered, staticSettleColumn, staticSettleRow} from './settles';
 import {eagerColumnFlight, eagerRowFlight} from './flights';
 
 export const wire = (document: Document): void =>
-  stand(document, {
+  mount(document, {
     flights: {
       column: eagerColumnFlight(staticSettleColumn),
       row: eagerRowFlight(staticSettleRow)

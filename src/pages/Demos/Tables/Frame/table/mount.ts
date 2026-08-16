@@ -19,7 +19,7 @@ export type FlightAnswers = {
   land?: (mounted: MountedTable) => void;
 };
 
-export type Dressage = {
+export type Build = {
   flights: {column: FlightAnswers; row: FlightAnswers};
   arrows: {
     column: (mounted: MountedTable, held: string) => (event: ArrowKey) => void;
@@ -32,9 +32,9 @@ export type Dressage = {
   ruled?: (mounted: MountedTable, heights: Readonly<Record<number, number>>, before: readonly number[], after: readonly number[]) => void;
 };
 
-export const stand = (document: Document, dressage: Dressage): void => {
+export const mount = (document: Document, build: Build): void => {
   maybe(document.querySelector('table')).map(table =>
-    maybe(table.querySelector('tbody')).map(body => standTable(document, table, body, dressage)));
+    maybe(table.querySelector('tbody')).map(body => mountTable(document, table, body, build)));
 };
 
 const changed = (before: readonly number[], after: readonly number[]): boolean =>
@@ -55,11 +55,11 @@ const dressGrips = (table: HTMLTableElement, state: TableState): void => {
   });
 };
 
-const standTable = (
+const mountTable = (
   document: Document,
   table: HTMLTableElement,
   body: HTMLTableSectionElement,
-  {flights, arrows, veils, ruled}: Dressage
+  {flights, arrows, veils, ruled}: Build
 ): void => {
   const lanes = [...body.querySelectorAll('tr')];
   const dealt = lanes.map((_, at) => at);
