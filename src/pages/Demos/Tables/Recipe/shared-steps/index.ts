@@ -10,3 +10,8 @@ export {dragSurface} from './surface';
 export {ghostByHand} from './ghost';
 export {theaterVertical} from './vertical';
 export {focusLands, arrowsSpeak} from './keyboard';
+export {eagerPace, lazyPace} from './pace';
+export {hideOrigin, keepOrigin} from './shroud';
+export {animatedMotion, staticMotion} from './motion';
+export {bothSlide, cutKey, paceKey} from './keys';
+export {promises} from './promises';
