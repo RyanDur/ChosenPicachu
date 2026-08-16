@@ -1,4 +1,5 @@
 .aggregations {
+  position: relative;
   overflow-x: auto;
 
   .fancy-table:not(.column-ghost) {

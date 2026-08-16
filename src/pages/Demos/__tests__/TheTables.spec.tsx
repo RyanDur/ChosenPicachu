@@ -438,6 +438,15 @@ describe('the tables demo', () => {
   });
 
   describe('the table worlds', () => {
+    const standFrame = async () => {
+      const frame = await screen.findByTitle('the living table, in vanilla');
+      Object.defineProperty(frame, 'contentDocument', {
+        value: {body: {getBoundingClientRect: () => ({height: 487})}}
+      });
+      fireEvent.load(frame);
+      return frame;
+    };
+
     test('react holds the stage by default, and no frame stands', async () => {
       const feed = await streamingFeed();
 
@@ -452,11 +461,11 @@ describe('the tables demo', () => {
 
       renderTables(urlOf(feed), '?tab=tables&world=vanilla');
 
-      const frame = await screen.findByTitle('the living table, in vanilla');
+      const frame = await standFrame();
       expect(frame).toHaveAttribute('srcdoc', expect.stringContaining('<table'));
       const card = screen.getByRole('region', {name: 'live aggregations'});
       expect(card).toContainElement(frame);
-      expect(within(card).queryByRole('table')).not.toBeInTheDocument();
+      await waitFor(() => expect(within(card).queryByRole('table')).not.toBeInTheDocument());
     });
 
     test('one tutorial stands in both worlds; only the build swaps', async () => {
@@ -513,11 +522,7 @@ describe('the tables demo', () => {
 
       renderTables(urlOf(feed), '?tab=tables&world=vanilla');
 
-      const frame = await screen.findByTitle('the living table, in vanilla');
-      Object.defineProperty(frame, 'contentDocument', {
-        value: {body: {getBoundingClientRect: () => ({height: 486.4})}}
-      });
-      fireEvent.load(frame);
+      const frame = await standFrame();
 
       expect(frame).toHaveStyle({blockSize: '487px'});
     });
@@ -529,10 +534,10 @@ describe('the tables demo', () => {
 
       await userEvent.click(await screen.findByRole('radio', {name: 'Vanilla'}));
 
-      const frame = await screen.findByTitle('the living table, in vanilla');
+      const frame = await standFrame();
       const card = screen.getByRole('region', {name: 'live aggregations'});
       expect(card).toContainElement(frame);
-      expect(within(card).queryByRole('table')).not.toBeInTheDocument();
+      await waitFor(() => expect(within(card).queryByRole('table')).not.toBeInTheDocument());
     });
   });
 });
