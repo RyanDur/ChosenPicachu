@@ -1,7 +1,7 @@
 import {anyRequestFailsToConnect} from '@test-support/server';
 import {delay, http as handle, HttpResponse} from 'msw';
 import {server} from '@test-support/server';
-import {env} from '@components/Env';
+import {env} from '@env';
 import {screen, waitFor, within} from '@testing-library/react';
 import {renderWithGalleryContext, renderWithMemoryRouter} from '@test-support';
 import {ArtGallery} from '@components/art-gallery/Art/index';

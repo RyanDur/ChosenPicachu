@@ -1,4 +1,5 @@
 import {has, is, maybe} from '@ryandur/sand';
+import {unconfigured} from '@env';
 import {Row} from '@components/Table';
 import {Rule, ranked} from '@components/DragSortableTable/sorting';
 import {anchored, surveyed} from '@components/DragSortableTable/survey';
@@ -10,8 +11,6 @@ import {Trade} from '@pages/Demos/Charts/coinbase';
 import {Desk, Shell, ruledBy} from './desk';
 import {announce, wireMenu} from './menus';
 import {dressShares, wireResize} from './resize';
-
-const quiet = {tradeFeed: '', tradeHistory: '', tradeProduct: ''};
 
 export type Dressage = {
   travels: (shell: Shell) => void;
@@ -51,7 +50,7 @@ const standTable = (
   const dealt = lanes.map((_, at) => at);
   const order = [...table.querySelectorAll('thead th')].map(th => th.classList.item(1) ?? '');
   const measures = order.filter(column => is(document.getElementById(`sort-${column}`)));
-  const env = {...quiet, ...window.__env};
+  const env = {...unconfigured, ...window.__env};
 
   let history: readonly Trade[] = [];
   let live: LiveTradesState = opening;

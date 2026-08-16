@@ -2,7 +2,7 @@ import {http, HttpResponse} from 'msw';
 import {server} from '@test-support/server';
 import {AICAllArtResponse, AICArtResponse} from '@components/art-gallery/museums/aic/types';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
-import {env} from '@components/Env';
+import {env} from '@env';
 import {fields} from '@components/art-gallery/museums/aic';
 import {HarvardAllArtResponse} from '@components/art-gallery/museums/harvard/types';
 import {harvardFields} from '@components/art-gallery/museums/harvard';
