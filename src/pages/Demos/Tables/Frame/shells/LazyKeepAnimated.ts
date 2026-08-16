@@ -14,12 +14,12 @@ const settleColumn = (shell: Shell, held: string, struck: string): void => {
 };
 
 const settleRow = (shell: Shell, held: number, struck: number): void => {
-  const {bounds, seated} = shell.desk();
+  const {bounds, seated: standing} = shell.desk();
   if (!has(bounds)) {
     return;
   }
   shell.commit(seatedTo(held, struck));
-  markRows(shell, shifts(bounds.rowHeights, seated, shell.desk().seated, held));
+  markRows(shell, shifts(bounds.rowHeights, standing, shell.desk().seated, held));
 };
 
 const columnTravel = (shell: Shell, moving: {clientX: number; clientY: number}): void => {
@@ -44,12 +44,12 @@ const columnLand = (shell: Shell): void => {
 
 const rowTravel = (shell: Shell, moving: {clientX: number; clientY: number}): void => {
   maybe(shell.desk().aloft).map(aloft => {
-    const {bounds, seated} = shell.desk();
+    const {bounds, seated: standing} = shell.desk();
     if (aloft.axis !== 'row' || !has(bounds)) {
       return;
     }
     shell.commit(rowLanding(
-      lazyTravel(rowUnder(seated, bounds))(aloft.held, moving, aloft.landing)));
+      lazyTravel(rowUnder(standing, bounds))(aloft.held, moving, aloft.landing)));
   });
 };
 

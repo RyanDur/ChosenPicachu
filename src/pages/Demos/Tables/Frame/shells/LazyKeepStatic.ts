@@ -34,12 +34,12 @@ const columnLand = (shell: Shell): void => {
 
 const rowTravel = (shell: Shell, moving: {clientX: number; clientY: number}): void => {
   maybe(shell.desk().aloft).map(aloft => {
-    const {bounds, seated} = shell.desk();
+    const {bounds, seated: standing} = shell.desk();
     if (aloft.axis !== 'row' || !has(bounds)) {
       return;
     }
     shell.commit(rowLanding(
-      lazyTravel(rowUnder(seated, bounds))(aloft.held, moving, aloft.landing)));
+      lazyTravel(rowUnder(standing, bounds))(aloft.held, moving, aloft.landing)));
   });
 };
 

@@ -42,7 +42,7 @@ export const dragSurface = (world: World, hookSource: string): ReactNode =>
         : undefined}
       {world === 'react'
         ? <Snippet label="TS" lines={[
-          ...span(hookSource, 'onPointerMove: travel', 'onLostPointerCapture: drop'), gap,
+          ...span(hookSource, 'onPointerMove: surfaceTravel(drifting, travel, drop)', 'onLostPointerCapture: drop'), gap,
           ...unit(hookSource, 'const drop = '),
           aside('// cancel and lost capture are not delegates; they ARE the drop')
         ]}/>

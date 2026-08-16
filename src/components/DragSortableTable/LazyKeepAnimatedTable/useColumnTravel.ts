@@ -25,8 +25,8 @@ export const useColumnTravel = (
         columnLift(column, () => order, () => standing, grabbed(column));
 
     const drop = (): void => {
-        aloft.and(bounds).and(landing).map(([[held, survey], struck]) =>
-            settle(held, struck, survey));
+        aloft.and(bounds).and(landing).map(([[held, measured], struck]) =>
+            settle(held, struck, measured));
         setLanding(nothing());
         setOrigin(nothing());
         setAloft(nothing());
@@ -35,13 +35,16 @@ export const useColumnTravel = (
         setDrift(still);
     };
 
-    const travel = surfaceTravel(
-        moving => origin.either(
+    const drifting = (moving: {clientX: number; clientY: number}): void => {
+        origin.either(
             from => setDrift(drifted(moving, from)),
-            () => setOrigin(maybe({x: moving.clientX, y: moving.clientY}))),
-        moving => aloft.and(bounds).map(([held, survey]) =>
-                setLanding(maybe(lazyTravel(columnUnder(order, survey))(held, moving, landing.orElse(undefined))))),
-        drop);
+            () => setOrigin(maybe({x: moving.clientX, y: moving.clientY})));
+    };
+
+    const travel = (moving: {clientX: number; clientY: number}): void => {
+        aloft.and(bounds).map(([held, measured]) =>
+                setLanding(maybe(lazyTravel(columnUnder(order, measured))(held, moving, landing.orElse(undefined)))));
+    };
 
     return {
         aloft,
@@ -50,7 +53,7 @@ export const useColumnTravel = (
         drift,
         lift,
         surface: {
-            onPointerMove: travel,
+            onPointerMove: surfaceTravel(drifting, travel, drop),
             onPointerUp: drop,
             onPointerCancel: drop,
             onLostPointerCapture: drop
