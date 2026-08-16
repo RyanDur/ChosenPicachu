@@ -123,6 +123,9 @@ export const swapped = (measured: Bounds, order: readonly string[]) =>
         };
     };
 
+export const struckAway = <Seat,>(held: Seat, struck: Seat | undefined): struck is Seat =>
+    has(struck) && struck !== held;
+
 export const gripLabel = (position: number): string => `move row ${position + 1}`;
 
 export const interior = (at: number, count: number): number =>

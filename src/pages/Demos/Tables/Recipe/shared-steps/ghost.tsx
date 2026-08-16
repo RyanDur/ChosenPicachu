@@ -2,7 +2,7 @@ import {ReactNode} from 'react';
 import {Codes, Mdn, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
-import {frameGhosts, frameHtml, gap, ghostCss, ghostSource} from './sources';
+import {frameGhosts, frameHtml, gap, ghostCss, ghostSource, travelSource} from './sources';
 
 export const ghostByHand = (world: World, hookSource: string): ReactNode =>
   <Step title="Draw the ghost by hand">
@@ -44,6 +44,10 @@ export const ghostByHand = (world: World, hookSource: string): ReactNode =>
           ...unit(frameGhosts, 'export const columnGhost'), gap,
           ...unit(frameGhosts, 'const flown = ')
         ]}/>}
+      <Snippet label="TS" lines={[
+        ...unit(travelSource, 'export const drifted'),
+        aside('// both worlds measure the drift with the same word')
+      ]}/>
       <Snippet label="CSS" lines={[
         ...unit(ghostCss, '.column-ghost {')
       ]}/>

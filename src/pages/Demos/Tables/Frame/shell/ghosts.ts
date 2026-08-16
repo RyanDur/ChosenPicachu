@@ -1,9 +1,10 @@
 import {maybe} from '@ryandur/sand';
+import {Drift} from '@components/DragSortableTable/travel';
 import {Shell} from './desk';
 
 export type GhostFlight = {
   element: HTMLTableElement;
-  drift: (x: number, y: number) => void;
+  drift: (drift: Drift) => void;
   land: () => void;
 };
 
@@ -33,7 +34,7 @@ const flown = (document: Document, element: HTMLTableElement, at: {x: number; y:
   document.body.append(element);
   return {
     element,
-    drift: (x, y) => {
+    drift: ({x, y}) => {
       element.style.setProperty('--drift-x', `${x}px`);
       element.style.setProperty('--drift-y', `${y}px`);
     },

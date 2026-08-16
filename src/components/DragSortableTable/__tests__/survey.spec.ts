@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest';
-import {columnSteps, gripLabel, nudgedColumn, nudgedRow, rowSteps, swapped} from '../survey';
+import {columnSteps, gripLabel, nudgedColumn, nudgedRow, rowSteps, struckAway, swapped} from '../survey';
 
 describe('the keyboard vocabulary', () => {
   it('claims exactly the two arrows per axis', () => {
@@ -28,6 +28,14 @@ describe('the keyboard vocabulary', () => {
       trades: {toward: 'right', by: 70},
       buys: {toward: 'left', by: 50}
     });
+  });
+
+  it('rules a strike: another seat strikes, home and nothing never do', () => {
+    expect(struckAway('trades', 'buys')).toBe(true);
+    expect(struckAway('trades', 'trades')).toBe(false);
+    expect(struckAway('trades', undefined)).toBe(false);
+    expect(struckAway(2, 0)).toBe(true);
+    expect(struckAway(2, 2)).toBe(false);
   });
 
   it('speaks the grip label from the displayed position', () => {

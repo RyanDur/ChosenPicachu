@@ -1,5 +1,6 @@
 import {has, maybe} from '@ryandur/sand';
-import {anchored, columnSteps, columnUnder, interior, nudgedColumn, nudgedRow, rowSteps, rowUnder, surveyed} from '@components/DragSortableTable/survey';
+import {drifted} from '@components/DragSortableTable/travel';
+import {anchored, columnSteps, columnUnder, interior, nudgedColumn, nudgedRow, rowSteps, rowUnder, struckAway, surveyed} from '@components/DragSortableTable/survey';
 import {baked, columnGhost, columnOf, hideColumn, hideRow, nudgedTo, orderedTo, rowGhost, seatedTo, Shell, stand, takeFlight, unhideColumn, unhideRow} from '../shell';
 
 const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
@@ -21,13 +22,13 @@ const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
     hideColumn(shell, columnOf(shell.desk(), th));
     takeFlight<string | undefined>(shell, event, undefined, {
       travel: (moving, landing) => {
-        ghost.drift(moving.clientX - from.x, moving.clientY - from.y);
+        ghost.drift(drifted(moving, from));
         const held = columnOf(shell.desk(), th);
         const struck = columnUnder(shell.desk().order, survey)(moving.clientX, moving.clientY, held);
         if (!has(struck)) {
           return landing;
         }
-        return struck === held ? undefined : struck;
+        return struckAway(held, struck) ? struck : undefined;
       },
       land: landing => {
         unhideColumn(shell, columnOf(shell.desk(), th));
@@ -68,12 +69,12 @@ const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void 
     hideRow(shell, held);
     takeFlight<number | undefined>(shell, event, undefined, {
       travel: (moving, landing) => {
-        ghost.drift(moving.clientX - from.x, moving.clientY - from.y);
+        ghost.drift(drifted(moving, from));
         const struck = rowUnder(shell.desk().seated, survey)(moving.clientX, moving.clientY, held);
         if (!has(struck)) {
           return landing;
         }
-        return struck === held ? undefined : struck;
+        return struckAway(held, struck) ? struck : undefined;
       },
       land: landing => {
         unhideRow(shell, held);

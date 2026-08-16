@@ -75,6 +75,10 @@ export const LazyKeepAnimatedRecipe: FC<{track: Track; world: World}> = ({track,
               : <Snippet label="TS" lines={[
                 ...span(shellSrc, 'travel: (moving, landing) => {', 'commit(columnOf(shell.desk(), th), struck')
               ]}/>}
+            <Snippet label="TS" lines={[
+              ...unit(surveySource, 'export const struckAway'),
+              aside('// both worlds rule the strike with the same word')
+            ]}/>
           </Codes>
         </Step>
         <Step title="Leave the origin in place while it is aloft" dial={<OriginDial name="step-origin"/>}>
