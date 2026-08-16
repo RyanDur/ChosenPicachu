@@ -6,11 +6,13 @@ import {World, worldParam} from '../params';
 import feedSource from '@pages/Demos/Charts/live-trades.ts?raw';
 import foldSource from '@pages/Demos/Tables/Aggregations/fold.ts?raw';
 import dealSource from '@pages/Demos/Tables/Aggregations/index.tsx?raw';
+import stateSource from '@components/DragSortableTable/EagerHideAnimatedTable/EagerHideAnimatedTable.tsx?raw';
 import headerSource from '@components/DragSortableTable/EagerHideAnimatedTable/Header.tsx?raw';
 import rowSource from '@components/DragSortableTable/EagerHideAnimatedTable/Row.tsx?raw';
 import hydrateSource from '@pages/Demos/Tables/Aggregations/recent-trades.ts?raw';
 import widthsSource from '@pages/Demos/Tables/Aggregations/Aggregations.css?raw';
 import tableSource from '../Frame/table.html?raw';
+import frameDesk from '../Frame/shell/desk.ts?raw';
 import frameStand from '../Frame/shell/stand.ts?raw';
 import '../../Recipe/Recipe.css';
 
@@ -100,6 +102,50 @@ const refolds: Record<World, string> = {
   html: 'Then every arrival refolds everything we hold into the windows, and the page writes what changed.'
 };
 
+const stateSays: Record<World, ReactNode> = {
+  react: <>
+    <Says>The table’s state is a few cells beside the markup: the ordered columns, the seats,
+      and the rule, each born with useState. Nothing ever edits a value in place: a change
+      hands a new array or a new rule to the setter, and the old value simply stops being
+      rendered.</Says>
+    <Says>What follows the state is React’s half of the deal: set a cell and the component
+      re-renders, the markup renders through the new value, and React reconciles the real DOM
+      to match, moving only the nodes whose place changed. You never touch the DOM; you only
+      decide the state.</Says>
+  </>,
+  html: <>
+    <Says>The shell keeps the same state as one value: the desk, which holds order, seats,
+      seated, shares, and the rule together, every field readonly. Nothing ever edits the desk in place: a
+      change is a pure transition, a function from the old desk to a new one, and the old
+      value simply stops being current.</Says>
+    <Says>What React did for you is the other half: the shell holds one cell with one write
+      path. commit runs your transition and reconciles the page against the new desk, moving
+      only the cells whose place changed and writing only the text that differs. The seam
+      between the worlds is exactly here: the state model is identical; who owns the cell and
+      the reconciliation is the difference.</Says>
+  </>
+};
+
+const stateCodes: Record<World, ReactNode> = {
+  react: <Codes>
+    <Snippet label="TS" lines={[
+      ...unit(stateSource, 'const [ordered, setOrdered]'), gap,
+      ...unit(stateSource, 'const [seats, setSeats]'), gap,
+      ...unit(stateSource, 'const [rule, setRule]')
+    ]}/>
+  </Codes>,
+  html: <Codes>
+    <Snippet label="TS" lines={[
+      ...unit(frameDesk, 'export type Desk'), gap,
+      ...unit(frameDesk, 'export const orderedTo'), gap,
+      ...unit(frameDesk, 'export const baked')
+    ]}/>
+    <Snippet label="TS" lines={[
+      ...unit(frameStand, 'const commit = ')
+    ]}/>
+  </Codes>
+};
+
 const liveStory = (world: World) =>
   <Story param="living" id="live"
          can="The trader can watch the market live, in windows"
@@ -135,6 +181,12 @@ const liveStory = (world: World) =>
             and accessibility stops being work you add and becomes behavior you inherit.</Says>
         </Words>
         {dealCodes[world]}
+      </Step>
+      <Step title="Hold the state in one place">
+        <Words want="A live table is state before it is pixels: something must own the order, the seats, and the rule, and the page must follow it.">
+          {stateSays[world]}
+        </Words>
+        {stateCodes[world]}
       </Step>
       <Step title="Hydrate with one fetch">
         <Words want="An empty table at open is a lie about the market; the trader arrives mid-session, so the recent past comes first, and it is just a fetch.">
