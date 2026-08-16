@@ -3,7 +3,7 @@ import {MotionDial} from '../../../Controls';
 import {Codes, Mdn, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
-import {gap, travelSource} from './sources';
+import {gap, settlesSource, travelSource} from './sources';
 
 export const bothSlide = (world: World, headerSource: string, shellSrc: string, cssSource: string): ReactNode =>
   <Step title="Both parties slide, each by the other’s share" dial={<MotionDial name="step-motion"/>}>
@@ -23,7 +23,7 @@ export const bothSlide = (world: World, headerSource: string, shellSrc: string, 
         ]}/>
         : <Snippet label="TS" lines={[
           ...unit(travelSource, 'export const animatedColumnArrows'), gap,
-          ...unit(shellSrc, 'const ordered = '), gap,
+          ...unit(settlesSource, 'export const animatedOrdered'), gap,
           ...span(shellSrc, 'column: (shell, held) => animatedColumnArrows', 'column: (shell, held) => animatedColumnArrows'),
           aside('// each starts where the other now sits')
         ]}/>}
@@ -75,7 +75,7 @@ export const cutKey = (world: World, headerSource: string, shellSrc: string): Re
         ]}/>
         : <Snippet label="TS" lines={[
           ...unit(travelSource, 'export const staticColumnArrows'), gap,
-          ...unit(shellSrc, 'const ordered = '), gap,
+          ...unit(settlesSource, 'export const staticOrdered'), gap,
           ...span(shellSrc, 'column: (shell, held) => staticColumnArrows', 'column: (shell, held) => staticColumnArrows'),
           aside('// the whole walk; nothing marked, nothing to wait for')
         ]}/>}

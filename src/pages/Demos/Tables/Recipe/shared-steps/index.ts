@@ -1,6 +1,6 @@
 export type {Track, World} from '../../params';
 export {trackParam} from '../../params';
-export {aloftSource, frameHide, frameMarks, frameStand, gap, ghostCss, ghostSource, gripSource, headerCss, sortableCss, surveySource, travelSource} from './sources';
+export {aloftSource, flightsSource, frameHide, frameMarks, frameStand, gap, ghostCss, ghostSource, gripSource, headerCss, settlesSource, sortableCss, surveySource, travelSource} from './sources';
 export {accessTrack, againstTheStream, ownedPixels, quietDials, turnedVertical, twoRoads} from './tells';
 export {cssShare} from './share';
 export {deadZone} from './zone';

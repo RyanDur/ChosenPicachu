@@ -47,7 +47,7 @@ export const LazyHideStaticRecipe: FC<{track: Track; world: World}> = ({track, w
         {deadZone}
         {lazyPace(world, tableSource, shellSrc)}
         {hideOrigin(world, tableSource, headerSource, cssSource)}
-        {staticMotion(world, tableSource, shellSrc)}
+        {staticMotion(world, tableSource)}
       </Steps>
     </Story>
     <Story param="sort" id="row"
@@ -55,7 +55,7 @@ export const LazyHideStaticRecipe: FC<{track: Track; world: World}> = ({track, w
            soThat="the windows they watch closest sit on top">
       {turnedVertical}
       <Steps>
-        {theaterVertical(world, tableSource, shellSrc)}
+        {theaterVertical(world, tableSource)}
       </Steps>
     </Story>
   </>

@@ -14,6 +14,7 @@ import deskSource from '@components/DragSortableTable/desk.ts?raw';
 import frameMenus from '../Frame/shell/menus.ts?raw';
 import frameStand from '../Frame/shell/stand.ts?raw';
 import {shellSources} from '../Frame/shells/sources';
+import settlesSource from '../Frame/shells/settles.ts?raw';
 import {headerSources, tableSources} from './sources';
 import '../../Recipe/Recipe.css';
 
@@ -46,7 +47,8 @@ const ruled = ({world, source, shellSrc}: Build, motion: Motion, dial: ReactNode
           ]}/>
           : <Snippet label="TS" lines={[
             ...unit(frameStand, '  const choose = '), gap,
-            ...span(shellSrc, 'ruled: (shell, heights, before, after)', 'shifts(heights, before, after))')
+            ...unit(settlesSource, 'export const shiftsRuled'), gap,
+            ...span(shellSrc, 'ruled: shiftsRuled', 'ruled: shiftsRuled')
           ]}/>}
       </Codes>
     </Step>

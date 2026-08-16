@@ -1,9 +1,9 @@
 import {ReactNode} from 'react';
 import {PaceDial} from '../../../Controls';
 import {Codes, Says, Snippet, Step, Words, aside, plain} from '../../../Recipe';
-import {unit} from '../../../Recipe/carve';
+import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
-import {frameStand, gap, travelSource} from './sources';
+import {flightsSource, frameStand, gap, travelSource} from './sources';
 
 export const eagerPace = (world: World, tableSource: string, shellSrc: string): ReactNode =>
   <Step title="Commit inside the move" dial={<PaceDial name="step-pace"/>}>
@@ -33,8 +33,8 @@ export const eagerPace = (world: World, tableSource: string, shellSrc: string): 
           ...unit(tableSource, 'const columnTravel = ')
         ]}/>
         : <Snippet label="TS" lines={[
-          ...unit(shellSrc, 'const settleColumn = '), gap,
-          ...unit(shellSrc, 'const columnTravel = ')
+          ...unit(flightsSource, 'export const eagerColumnFlight'), gap,
+          ...span(shellSrc, 'column: eagerColumnFlight', 'column: eagerColumnFlight')
         ]}/>}
       {world === 'react'
         ? <Snippet label="HTML" lines={[
@@ -78,8 +78,8 @@ export const lazyPace = (world: World, tableSource: string, shellSrc: string): R
           ...unit(tableSource, 'const columnLand = ')
         ]}/>
         : <Snippet label="TS" lines={[
-          ...unit(shellSrc, 'const columnTravel = '), gap,
-          ...unit(shellSrc, 'const columnLand = ')
+          ...unit(flightsSource, 'export const lazyColumnFlight'), gap,
+          ...span(shellSrc, 'column: lazyColumnFlight', 'column: lazyColumnFlight')
         ]}/>}
       <Snippet label="TS" lines={[
         ...unit(travelSource, 'export const lazyTravel'),

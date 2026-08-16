@@ -16,7 +16,7 @@ import {dressShares, wireResize} from './resize';
 
 export type FlightAnswers = {
   travel: (shell: Shell, moving: {clientX: number; clientY: number}) => void;
-  land: (shell: Shell) => void;
+  land?: (shell: Shell) => void;
 };
 
 export type Dressage = {
@@ -26,8 +26,8 @@ export type Dressage = {
     row: (shell: Shell, held: number) => (event: ArrowKey) => void;
   };
   veils?: {
-    column: (shell: Shell, held: string) => void;
-    row: (shell: Shell, held: number) => void;
+    column: {veil: (shell: Shell, held: string) => void; unveil: (shell: Shell, held: string) => void};
+    row: {veil: (shell: Shell, held: number) => void; unveil: (shell: Shell, held: number) => void};
   };
   ruled?: (shell: Shell, heights: Readonly<Record<number, number>>, before: readonly number[], after: readonly number[]) => void;
 };
@@ -124,10 +124,14 @@ const standTable = (
 
   const mounted = (aloft: Aloft): HTMLElement => {
     const drop = (): void => {
-      if (!has(shell.desk().aloft)) {
+      const standing = shell.desk().aloft;
+      if (!has(standing)) {
         return;
       }
-      flights[aloft.axis].land(shell);
+      maybe(veils).map(veil => standing.axis === 'column'
+        ? veil.column.unveil(shell, standing.held)
+        : veil.row.unveil(shell, standing.held));
+      maybe(flights[aloft.axis].land).map(land => land(shell));
       commit(dropped);
     };
     const element = document.createElement('article');
@@ -200,7 +204,7 @@ const standTable = (
     const held = columnOf(desk, th);
 
     const grabbed = (grab: Grab): void => {
-      maybe(veils).map(veil => veil.column(shell, held));
+      maybe(veils).map(veil => veil.column.veil(shell, held));
       shell.commit(lifted({axis: 'column', held}, grab));
     };
 
@@ -210,7 +214,7 @@ const standTable = (
 
   const wireRowGrip = (held: number, grip: HTMLButtonElement): void => {
     const grabbed = (grab: Grab): void => {
-      maybe(veils).map(veil => veil.row(shell, held));
+      maybe(veils).map(veil => veil.row.veil(shell, held));
       shell.commit(current => lifted({axis: 'row', held}, grab)(baked(current)));
     };
 

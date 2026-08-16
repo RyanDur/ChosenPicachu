@@ -13,8 +13,10 @@ import frameGhosts from '../../Frame/shell/ghosts.ts?raw';
 import frameHide from '../../Frame/shell/hide.ts?raw';
 import frameMarks from '../../Frame/shell/marks.ts?raw';
 import frameStand from '../../Frame/shell/stand.ts?raw';
+import settlesSource from '../../Frame/shells/settles.ts?raw';
+import flightsSource from '../../Frame/shells/flights.ts?raw';
 import {plain} from '../../../Recipe';
 
-export {aloftSource, surveySource, gripSource, ghostSource, sortableCss, headerCss, ghostCss, frameHtml, deskSource, frameGhosts, frameHide, frameMarks, frameStand, travelSource, useDeskSource};
+export {aloftSource, surveySource, gripSource, ghostSource, sortableCss, headerCss, ghostCss, frameHtml, deskSource, frameGhosts, frameHide, frameMarks, frameStand, travelSource, useDeskSource, flightsSource, settlesSource};
 
 export const gap = plain(' ');
