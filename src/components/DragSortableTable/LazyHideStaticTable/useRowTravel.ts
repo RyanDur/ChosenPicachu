@@ -1,7 +1,7 @@
 import {PointerEvent, useState} from 'react';
-import {Maybe, has, maybe, nothing} from '@ryandur/sand';
-import {Drift, drifted, Flight, grounded, still} from '../travel';
-import {rowUnder, struckAway, Survey, surveyed} from '../survey';
+import {Maybe, maybe, nothing} from '@ryandur/sand';
+import {Drift, drifted, Flight, grounded, lazyTravel, still} from '../travel';
+import {rowUnder, Survey, surveyed} from '../survey';
 
 export const useRowTravel = (
     order: readonly string[],
@@ -46,12 +46,8 @@ export const useRowTravel = (
         origin.either(
             from => setDrift(drifted(event, from)),
             () => setOrigin(maybe({x: event.clientX, y: event.clientY})));
-        aloft.and(survey).map(([held, chart]) => {
-            const struck = rowUnder(standing, chart)(event.clientX, event.clientY, held);
-            if (has(struck)) {
-                setLanding(struckAway(held, struck) ? maybe(struck) : nothing());
-            }
-        });
+        aloft.and(survey).map(([held, chart]) =>
+            setLanding(maybe(lazyTravel(rowUnder(standing, chart))(held, event, landing.orElse(undefined)))));
     };
 
     return {

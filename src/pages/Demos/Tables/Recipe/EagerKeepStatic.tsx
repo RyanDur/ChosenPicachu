@@ -21,6 +21,7 @@ import {
   quietDials,
   surveySource,
   theaterVertical,
+  travelSource,
   turnedVertical,
   twoRoads
 } from './shared-steps';
@@ -86,8 +87,8 @@ export const EagerKeepStaticRecipe: FC<{track: Track; world: World}> = ({track, 
                 aside('// the same cells, new seats: the shell moves the node, not a copy')
               ]}/>}
             <Snippet label="TS" lines={[
-              ...unit(surveySource, 'export const struckAway'),
-              aside('// both worlds rule the strike with the same word')
+              ...unit(travelSource, 'export const eagerTravel'),
+              aside('// one travel ruling; each world answers with its own settle')
             ]}/>
           </Codes>
         </Step>

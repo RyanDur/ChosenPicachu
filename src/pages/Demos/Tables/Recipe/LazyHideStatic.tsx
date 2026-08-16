@@ -21,6 +21,7 @@ import {
   quietDials,
   surveySource,
   theaterVertical,
+  travelSource,
   turnedVertical,
   twoRoads
 } from './shared-steps';
@@ -76,8 +77,8 @@ export const LazyHideStaticRecipe: FC<{track: Track; world: World}> = ({track, w
                 ...span(shellSrc, 'travel: (moving, landing) => {', 'commit(columnOf(shell.desk(), th), struck')
               ]}/>}
             <Snippet label="TS" lines={[
-              ...unit(surveySource, 'export const struckAway'),
-              aside('// both worlds rule the strike with the same word')
+              ...unit(travelSource, 'export const lazyTravel'),
+              aside('// one travel ruling; the fold is its value, each world keeps it its own way')
             ]}/>
           </Codes>
         </Step>
