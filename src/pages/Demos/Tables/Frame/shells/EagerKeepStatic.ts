@@ -1,10 +1,10 @@
-import {maybe} from '@ryandur/sand';
 import {staticColumnArrows, staticRowArrows, drifted, eagerTravel} from '@components/DragSortableTable/travel';
-import {anchored, columnSteps, columnUnder, interior, rowSteps, rowUnder, surveyed} from '@components/DragSortableTable/survey';
+import {anchored, columnUnder, interior, rowUnder, surveyed} from '@components/DragSortableTable/survey';
 import {baked, columnGhost, columnOf, nudgedTo, orderedTo, rowGhost, seatedTo, Shell, stand, takeFlight} from '../shell';
 
 const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
   const {table} = shell;
+  const held = columnOf(shell.desk(), th);
 
   const ordered = ({from, to}: {from: number; to: number}): void =>
     shell.commit(orderedTo(from, to));
@@ -33,17 +33,7 @@ const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
       }
     });
   });
-  th.addEventListener('keydown', event => {
-    maybe(columnSteps[event.key]).map(toward => {
-      event.preventDefault();
-      const {order} = shell.desk();
-      if (anchored(order.indexOf(columnOf(shell.desk(), th)), order.length)) {
-        return;
-      }
-      const held = columnOf(shell.desk(), th);
-      staticColumnArrows(order, ordered)(held, toward);
-    });
-  });
+  th.addEventListener('keydown', staticColumnArrows(held, () => shell.desk().order, ordered));
 };
 
 const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void => {
@@ -71,12 +61,7 @@ const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void 
       }
     });
   });
-  grip.addEventListener('keydown', event => {
-    maybe(rowSteps[event.key]).map(toward => {
-      event.preventDefault();
-      staticRowArrows(shell.desk().seated, arranged)(held, toward);
-    });
-  });
+  grip.addEventListener('keydown', staticRowArrows(held, () => shell.desk().seated, arranged));
 };
 
 export const wire = (document: Document): void =>

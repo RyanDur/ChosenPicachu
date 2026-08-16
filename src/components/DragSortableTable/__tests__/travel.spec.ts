@@ -1,6 +1,8 @@
 import {describe, expect, it} from 'vitest';
 import {drifted, eagerTravel, staticColumnArrows, staticRowArrows} from '../travel';
 
+const pressed = (key: string) => ({key, preventDefault: (): void => undefined, currentTarget: null});
+
 describe('the travel vocabulary', () => {
   it('measures the drift from the grab to the pointer', () => {
     expect(drifted({clientX: 130, clientY: 45}, {x: 100, y: 50})).toEqual({x: 30, y: -5});
@@ -17,11 +19,14 @@ describe('the travel vocabulary', () => {
     expect(settled).toEqual(['buys']);
   });
 
-  it('static column arrows arrange inside the anchors, and never at the rail', () => {
+  it('static column arrows claim the keys, arrange inside the anchors, and never at the rail', () => {
     const arranged: {from: number; to: number}[] = [];
+    const listener = staticColumnArrows('trades', () => ['window', 'trades', 'buys', 'change'],
+      nudge => arranged.push(nudge));
 
-    staticColumnArrows(['window', 'trades', 'buys', 'change'], nudge => arranged.push(nudge))('trades', 1);
-    staticColumnArrows(['window', 'trades', 'buys', 'change'], nudge => arranged.push(nudge))('trades', -1);
+    listener(pressed('ArrowRight'));
+    listener(pressed('ArrowLeft'));
+    listener(pressed('Enter'));
 
     expect(arranged).toEqual([{from: 1, to: 2}]);
   });
@@ -29,8 +34,8 @@ describe('the travel vocabulary', () => {
   it('static row arrows always arrange, so the rail nudge still bakes', () => {
     const arranged: {to: number; after: number[]}[] = [];
 
-    staticRowArrows([0, 1, 2], nudge => arranged.push(nudge))(0, 1);
-    staticRowArrows([0, 1, 2], nudge => arranged.push(nudge))(2, 1);
+    staticRowArrows(0, () => [0, 1, 2], nudge => arranged.push(nudge))(pressed('ArrowDown'));
+    staticRowArrows(2, () => [0, 1, 2], nudge => arranged.push(nudge))(pressed('ArrowDown'));
 
     expect(arranged).toEqual([
       {to: 1, after: [1, 0, 2]},

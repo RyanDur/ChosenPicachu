@@ -146,7 +146,8 @@ const gestureCodes: Record<World, ReactNode> = {
     <Snippet label="TS" lines={[
       ...span(resizeSource, 'onMouseDown={event => event.stopPropagation()}',
         'onMouseDown={event => event.stopPropagation()}'), gap,
-      ...unit(resizeSource, 'onKeyDown={(event'),
+      ...unit(sharesSource, 'export const resizeArrows'), gap,
+      ...span(resizeSource, 'onKeyDown={resizeArrows(onTrade)}', 'onKeyDown={resizeArrows(onTrade)}'),
       aside('// the column dial above never hears a thing')
     ]}/>
   </Codes>,

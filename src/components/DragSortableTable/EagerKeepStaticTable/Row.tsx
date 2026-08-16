@@ -42,8 +42,7 @@ export const Row: FC<Props> = (
         ? <th scope="row" className={dress} key={column}>
           <div className="row-header-content">
             <RowGrip position={position} onLift={onLift(row)}
-                     onNudge={toward =>
-                       staticRowArrows(standing, arranged)(row, toward)}/>
+                     onArrows={staticRowArrows(row, () => standing, arranged)}/>
             {cell.display}
           </div>
         </th>

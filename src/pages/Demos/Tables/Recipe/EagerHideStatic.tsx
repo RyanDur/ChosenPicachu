@@ -189,13 +189,13 @@ export const EagerHideStaticRecipe: FC<{track: Track; world: World}> = ({track, 
             ? <Snippet label="TS" lines={[
               ...unit(travelSource, 'export const staticColumnArrows'), gap,
               ...unit(headerSource, 'const ordered = '), gap,
-              ...span(headerSource, 'staticColumnArrows(order, ordered)', 'staticColumnArrows(order, ordered)'),
+              ...span(headerSource, 'onKeyDown={travels ? staticColumnArrows', 'onKeyDown={travels ? staticColumnArrows'),
               aside('// the whole walk; nothing marked, nothing to wait for')
             ]}/>
             : <Snippet label="TS" lines={[
               ...unit(travelSource, 'export const staticColumnArrows'), gap,
               ...unit(shellSrc, '  const ordered = '), gap,
-              ...span(shellSrc, 'staticColumnArrows(order, ordered)', 'staticColumnArrows(order, ordered)'),
+              ...span(shellSrc, "th.addEventListener('keydown', staticColumnArrows", "th.addEventListener('keydown', staticColumnArrows"),
               aside('// the whole walk; nothing marked, nothing to wait for')
             ]}/>}
         </Codes>
