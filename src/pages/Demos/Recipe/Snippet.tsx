@@ -10,13 +10,11 @@ export type Line = {
 type Props = {
   label: 'HTML' | 'CSS' | 'TS';
   lines: readonly Line[];
-  foil?: boolean;
 };
 
-export const Snippet: FC<Props> = ({label, lines, foil}) =>
-  <pre className={classNames('snippet', foil && 'foil', 'code', 'rounded-corners')}>
+export const Snippet: FC<Props> = ({label, lines}) =>
+  <pre className={classNames('snippet', 'code', 'rounded-corners')}>
     <span className="lang" aria-hidden="true">{label}</span>
-    {foil && <strong className="wrong-way uppercase">the wrong way</strong>}
     <code>{lines.map(({text, dim}, at) =>
       <span className={classNames('line', dim && 'comment')} key={at}>
         {dim

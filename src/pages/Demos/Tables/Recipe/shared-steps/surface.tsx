@@ -1,5 +1,5 @@
 import {ReactNode} from 'react';
-import {Codes, Mdn, Says, Snippet, Step, Words, aside, plain} from '../../../Recipe';
+import {Codes, Mdn, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {aloftSource, frameMount, gap, sortableCss, travelSource} from './sources';
@@ -29,12 +29,6 @@ export const dragSurface = (world: World, tableSource: string): ReactNode =>
           the platform, and the capture going away is the one signal that always arrives.</Says>}
     </Words>
     <Codes>
-      <Snippet label="TS" foil lines={[
-        plain("document.addEventListener('pointermove', travel);"),
-        plain("document.addEventListener('pointerup', drop);"), gap,
-        aside('// travel closed over the order at lift time, and every'),
-        aside('// path out of the drag owes a removeEventListener')
-      ]}/>
       {world === 'react'
         ? <Snippet label="HTML" lines={[
           ...span(aloftSource, '(!columnsTravel.aloft.isNothing || !rowsTravel.aloft.isNothing)', '{...surface}')

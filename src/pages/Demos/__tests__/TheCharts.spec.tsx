@@ -151,7 +151,6 @@ describe('a list of charts', () => {
     expect(recipe.querySelectorAll('details.arc[open]')).toHaveLength(1);
     expect(recipe).toHaveTextContent(/strays a third of the seat’s height/);
     expect(recipe).toHaveTextContent(/export const strayed/);
-    expect(recipe.querySelectorAll('.snippet.foil')).toHaveLength(1);
 
     await userEvent.click(doorway('chart 1'));
     expect(await screen.findByRole('region', {name: 'build the price line yourself'})).toBeVisible();
@@ -246,7 +245,6 @@ describe('a list of charts', () => {
     expect(recipe).toHaveTextContent('export const bucketTrades');
     expect(recipe).toHaveTextContent('export const mergeLive');
     expect(recipe).toHaveTextContent('<Axes');
-    expect(recipe.querySelectorAll('.snippet.foil').length).toBeGreaterThan(0);
   });
 
   test('the pressure story proves the side is a fact, not a guess', async () => {

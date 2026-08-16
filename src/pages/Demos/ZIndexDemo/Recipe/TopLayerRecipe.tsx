@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
 import {Align, Side, alignParam, sideParam} from '@components/Banners/params';
-import {Codes, Mdn, Says, Snippet, Step, Steps, Story, Words, Tell, aside, plain} from '../../Recipe';
+import {Codes, Mdn, Says, Snippet, Step, Steps, Story, Words, Tell, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
 import {AlignDial, SideDial} from '../../Controls';
 import bannersSource from '@components/Banners/Banners.tsx?raw';
@@ -45,13 +45,6 @@ export const TopLayerRecipe: FC = () => {
             so a screen reader announces what arrives without being asked to look.</Says>
         </Words>
         <Codes>
-          <Snippet label="CSS" foil lines={[
-            plain('.banners {'),
-            plain('  position: fixed;'),
-            plain('  z-index: 9999;'),
-            plain('}'),
-            aside('/* an ancestor with a transform starts a new stacking context; 9999 is now local */')
-          ]}/>
           <Snippet label="TS" lines={[
             ...span(bannersSource, 'return <section', '</section>;')
           ]}/>

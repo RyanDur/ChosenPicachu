@@ -1,6 +1,5 @@
-import {Codes, Mdn, Says, Snippet, Step, Words, aside, plain} from '../../../Recipe';
+import {Codes, Mdn, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span} from '../../../Recipe/carve';
-import {gap} from './sources';
 
 export const holdTheAloft = (listSource: string) =>
   <Step title="Hold the aloft in state, not in the payload">
@@ -16,12 +15,6 @@ export const holdTheAloft = (listSource: string) =>
         is still there when another window genuinely needs the data.</Says>
     </Words>
     <Codes>
-      <Snippet label="TS" foil lines={[
-        plain("event.dataTransfer.setData('text/plain', item);"),
-        aside('// written at dragstart'), gap,
-        plain("event.dataTransfer.getData('text/plain');"),
-        aside('// read in dragover: always "", the store is sealed')
-      ]}/>
       <Snippet label="TS" lines={[
         ...span(listSource, 'onLifted={lifted => setAloft(maybe(lifted))}', 'onLifted={lifted => setAloft(maybe(lifted))}'),
         aside('// the item names itself; the list holds the answer')

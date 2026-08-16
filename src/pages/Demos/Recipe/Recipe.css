@@ -156,17 +156,6 @@
     white-space: pre-wrap;
     overflow-wrap: break-word;
 
-    &.foil {
-      border: var(--hairline-x-2) dashed var(--internationl-orange-engineering);
-
-      .wrong-way {
-        display: block;
-        margin-block-end: var(--base);
-        font-size: var(--text-caption);
-        color: var(--internationl-orange-engineering);
-      }
-    }
-
     .lang {
       position: absolute;
       top: var(--base);

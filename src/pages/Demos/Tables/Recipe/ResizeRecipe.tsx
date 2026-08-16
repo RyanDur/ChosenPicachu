@@ -16,12 +16,6 @@ const gap = plain(' ');
 
 const ledgerCodes: Record<World, ReactNode> = {
   react: <Codes>
-    <Snippet label="TS" foil lines={[
-      plain('const [widths, setWidths] = useState({window: 240, trades: 96});'), gap,
-      plain('const resized = (column, dx) =>'),
-      plain('    setWidths({...widths, [column]: widths[column] + dx});'),
-      aside('// the column grows, and the table grows with it')
-    ]}/>
     <Snippet label="TS" lines={[
       ...unit(sharesSource, 'export const measuredShares')
     ]}/>
@@ -34,10 +28,6 @@ const ledgerCodes: Record<World, ReactNode> = {
     ]}/>
   </Codes>,
   vanilla: <Codes>
-    <Snippet label="TS" foil lines={[
-      plain("header.style.width = `${header.offsetWidth + dx}px`;"),
-      aside('// the column grows, and the table grows with it')
-    ]}/>
     <Snippet label="TS" lines={[
       ...unit(sharesSource, 'export const measuredShares'), gap,
       ...unit(frameResize, '  const awaken = ')
@@ -202,12 +192,6 @@ const widenStory = (world: World) =>
             say why.</Says>
         </Words>
         <Codes>
-          <Snippet label="CSS" foil lines={[
-            plain('.menu-toggle { position: absolute; right: 24px; }'),
-            plain('.resize-handle { position: absolute; right: 0; width: 24px; }'),
-            plain('.header-cell { padding-right: 48px; }'),
-            aside('/* three numbers agreeing by luck */')
-          ]}/>
           {gridMarkup[world]}
           <Snippet label="CSS" lines={[
             ...unit(baseCss, '.header-cell {'), gap,

@@ -1,6 +1,6 @@
 import {FC, ReactNode} from 'react';
 import {ChartKind} from './kinds';
-import {Codes, Mdn, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, aside, plain} from '../Recipe';
+import {Codes, Mdn, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, plain} from '../Recipe';
 import {span, unit} from '../Recipe/carve';
 import shapesSource from './Candles/shapes.ts?raw';
 import sparklineSource from './sparkline.ts?raw';
@@ -53,11 +53,6 @@ const priceStory =
             the page must not grow with it.</Says>
         </Words>
         <Codes>
-          <Snippet label="TS" foil lines={[
-            plain("socket.addEventListener('message', event =>"),
-            plain('    setTrades([...trades, JSON.parse(event.data)]));'),
-            aside('// every malformed frame is now state, forever')
-          ]}/>
           <Snippet label="TS" lines={[
             ...unit(coinbaseSource, 'export const subscribeTo'), gap,
             ...unit(coinbaseSource, 'export const decodeTrade'), gap,
@@ -123,11 +118,6 @@ const priceStory =
             animates, which is what keeps a busy stream smooth.</Says>
         </Words>
         <Codes>
-          <Snippet label="TS" foil lines={[
-            plain("import {LineChart} from 'a-chart-library';"),
-            plain('<LineChart data={trades} live smooth/>'),
-            aside('// one line and two axes do not need a dependency')
-          ]}/>
           <Snippet label="TS" lines={[
             ...unit(sparklineSource, 'export const sparklinePoints')
           ]}/>
@@ -171,10 +161,6 @@ const candlesStory =
             same <Mdn path="Web/API/Popover_API">popover</Mdn> chooser.</Says>
         </Words>
         <Codes>
-          <Snippet label="TS" foil lines={[
-            plain("const candles = await fetch('/candles?for=the-new-card');"),
-            aside('// two fetches, two clocks, one screen disagreeing with itself')
-          ]}/>
           <Snippet label="TS" lines={[
             ...unit(shapesSource, 'const fold'), gap,
             ...unit(shapesSource, 'export const bucketTrades'), gap,
@@ -255,10 +241,6 @@ const pressureStory =
             bought size and sold size.</Says>
         </Words>
         <Codes>
-          <Snippet label="TS" foil lines={[
-            plain("const driver = candle.close > candle.open ? 'buying' : 'selling';"),
-            aside('// sellers stepping away wears the same badge as a stampede')
-          ]}/>
           <Snippet label="TS" lines={[
             ...unit(coinbaseSource, 'const MatchDecoder'), gap,
             ...unit(pressureSource, 'const fold'), gap,
@@ -351,18 +333,6 @@ const pieStory =
             both gates fully open: no special case survives.</Says>
         </Words>
         <Codes>
-          <Snippet label="TS" foil lines={[
-            plain("background: conic-gradient(green 0 75%, orange 75%);"),
-            aside('/* one painted background, zero parts to name or announce */')
-          ]}/>
-          <Snippet label="TS" foil lines={[
-            plain('const d = `M ${cx} ${cy} L ${ax} ${ay} A ${r} ${r} 0 ${large} 1 ${bx} ${by} Z`;'),
-            aside('// honest arcs, but the large-arc flag cannot tween: every trade lands as a jump')
-          ]}/>
-          <Snippet label="TS" foil lines={[
-            plain('<circle strokeDasharray={`${share * circumference} ${circumference}`}/>'),
-            aside('// tweens, but stroke geometry repaints every frame; the compositor never helps')
-          ]}/>
           <Snippet label="TS" lines={[
             ...unit(pieSource, 'export const slices'), gap,
             ...unit(pieSource, 'export const sweepGates')
@@ -432,10 +402,6 @@ const workspaceStory =
             cannot jitter.</Says>
         </Words>
         <Codes>
-          <Snippet label="TS" foil lines={[
-            plain('if (event.clientY > neighbour.top) swap();'),
-            aside('// the hand holds the grip; the card is long past it')
-          ]}/>
           <Snippet label="TS" lines={[
             ...unit(crossingSource, 'export const strayedTo'), gap,
             ...unit(travelSource, 'const travel = (event'), gap,
@@ -495,8 +461,7 @@ export const ChartsTutorial: FC = () =>
         rel="noreferrer">user story</a>. Open a card and you get the plan for that feature and
       the steps that build it, with the real code from this site, so what you read is what
       runs. Each chart above is a doorway too: click it, or press enter on it, and that
-      chart’s own tutorial opens. The dashed code is the wrong way you would probably try
-      first, and the links go to MDN if you want more.
+      chart’s own tutorial opens. The links go to MDN if you want more.
     </p>
     <figure className="feedback">
       <blockquote className="quote paragraph italic">

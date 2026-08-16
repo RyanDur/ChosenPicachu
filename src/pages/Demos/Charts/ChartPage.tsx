@@ -75,7 +75,7 @@ export const ChartPage: FC = () => {
         target="_blank"
         rel="noreferrer">user story</a>: open it and you get the plan and the steps that
       build it, with the real code from this site, so what you read is what runs. The
-      dashed code is the wrong way you would probably try first, and the links go to MDN
+      links go to MDN
       if you want more.
     </p>
     <figure className="feedback">
