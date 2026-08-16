@@ -29,7 +29,7 @@ export const LazyKeepAnimatedRecipe: FC = () => <>
             because the platform is still animating its own end of the bargain.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...span(listSource, 'onDragOver={() => setLanding(maybe(index))}', 'onDragOver={() => setLanding(maybe(index))}'), gap,
             ...unit(listSource, 'const release')
           ]}/>
@@ -60,7 +60,7 @@ export const LazyKeepAnimatedRecipe: FC = () => <>
           <Snippet label="HTML" lines={[
             ...span(listSource, 'viewTransitionName: `sort-${item}`', 'viewTransitionName: `sort-${item}`')
           ]}/>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...span(listSource, 'setTimeout(() => glide(true)(() => setOrder(settled)));',
               'setTimeout(() => glide(true)(() => setOrder(settled)));'), gap,
             ...unit(glideSource, 'export const glide')

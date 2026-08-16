@@ -42,7 +42,7 @@ const dealOpeners: Record<World, ReactNode> = {
 
 const dealCodes: Record<World, ReactNode> = {
   react: <Codes>
-    <Snippet label="JS" lines={[
+    <Snippet label="TS" lines={[
       ...unit(dealSource, 'const columns = ')
     ]}/>
     <Snippet label="CSS" lines={[
@@ -82,13 +82,13 @@ const foldSays: Record<World, ReactNode> = {
 
 const foldCodes: Record<World, ReactNode> = {
   react: <Codes>
-    <Snippet label="JS" lines={[
+    <Snippet label="TS" lines={[
       ...unit(foldSource, 'export const windows'), gap,
       ...unit(foldSource, 'const aggregate = ')
     ]}/>
   </Codes>,
   html: <Codes>
-    <Snippet label="JS" lines={[
+    <Snippet label="TS" lines={[
       ...unit(foldSource, 'export const windows'), gap,
       ...unit(shellSource, 'const paint = ')
     ]}/>
@@ -143,7 +143,7 @@ const liveStory = (world: World) =>
             and keeps everything in time order.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...unit(hydrateSource, 'export const recentTrades'), gap,
             ...unit(hydrateSource, 'export const hydrated')
           ]}/>
@@ -161,7 +161,7 @@ const liveStory = (world: World) =>
             pretending.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...unit(feedSource, 'const stream = streaming('), gap,
             ...unit(feedSource, 'const appendTrade = ')
           ]}/>

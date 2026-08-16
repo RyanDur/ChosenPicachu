@@ -68,10 +68,10 @@ export const EagerKeepStaticRecipe: FC<{track: Track; world: World}> = ({track, 
           </Words>
           <Codes>
             {world === 'react'
-              ? <Snippet label="JS" lines={[
+              ? <Snippet label="TS" lines={[
                 ...unit(hookSource, 'const travel = ')
               ]}/>
-              : <Snippet label="JS" lines={[
+              : <Snippet label="TS" lines={[
                 ...span(shellSrc, 'travel: moving => {', 'commit(held, struck')
               ]}/>}
             {world === 'react'
@@ -79,7 +79,7 @@ export const EagerKeepStaticRecipe: FC<{track: Track; world: World}> = ({track, 
                 plain('<DraggableHeader key={key} ... />'),
                 aside('{/* same key, new seat: React moves the node, not a copy */}')
               ]}/>
-              : <Snippet label="JS" lines={[
+              : <Snippet label="TS" lines={[
                 ...unit(frameShell, 'export const moveColumn'),
                 aside('// the same cells, new seats: the shell moves the node, not a copy')
               ]}/>}
@@ -120,11 +120,11 @@ export const EagerKeepStaticRecipe: FC<{track: Track; world: World}> = ({track, 
           </Words>
           <Codes>
             {world === 'react'
-              ? <Snippet label="JS" lines={[
+              ? <Snippet label="TS" lines={[
                 ...unit(tableSource, 'const settleColumn = '),
                 aside('// the whole settle; no marking code exists in this table')
               ]}/>
-              : <Snippet label="JS" lines={[
+              : <Snippet label="TS" lines={[
                 ...unit(shellSrc, 'const commit = (held: string'),
                 aside('// the whole settle; no marking code exists in this shell')
               ]}/>}
@@ -157,11 +157,11 @@ export const EagerKeepStaticRecipe: FC<{track: Track; world: World}> = ({track, 
         </Words>
         <Codes>
           {world === 'react'
-            ? <Snippet label="JS" lines={[
+            ? <Snippet label="TS" lines={[
               ...span(headerSource, 'const from = order.indexOf(columnName);', 'onOrdered(columnName, to);'),
               aside('// the whole walk; nothing marked, nothing to wait for')
             ]}/>
-            : <Snippet label="JS" lines={[
+            : <Snippet label="TS" lines={[
               ...span(shellSrc, 'const from = desk.order.indexOf(held);', 'moveColumn(shell, from, to);'),
               aside('// the whole walk; nothing marked, nothing to wait for')
             ]}/>}

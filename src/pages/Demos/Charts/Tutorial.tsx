@@ -53,12 +53,12 @@ const priceStory =
             the page must not grow with it.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" foil lines={[
+          <Snippet label="TS" foil lines={[
             plain("socket.addEventListener('message', event =>"),
             plain('    setTrades([...trades, JSON.parse(event.data)]));'),
             aside('// every malformed frame is now state, forever')
           ]}/>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...unit(coinbaseSource, 'export const subscribeTo'), gap,
             ...unit(coinbaseSource, 'export const decodeTrade'), gap,
             ...unit(liveTradesSource, 'const LATEST_TRADES_CAP'), gap,
@@ -75,7 +75,7 @@ const priceStory =
             stream everywhere it has, capped to what the card can hold.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...unit(historySource, 'export const periodCandles'), gap,
             ...unit(candlesHook, 'export const usePeriodCandles'), gap,
             ...unit(shapesSource, 'export const mergeLive')
@@ -90,7 +90,7 @@ const priceStory =
             needs.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...unit(shapesSource, 'const fold'), gap,
             ...unit(shapesSource, 'export const bucketTrades')
           ]}/>
@@ -105,7 +105,7 @@ const priceStory =
             history at that granularity.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...unit(periodSource, 'export const bucketMs'), gap,
             ...unit(periodSource, 'export const periodCap')
           ]}/>
@@ -123,12 +123,12 @@ const priceStory =
             animates, which is what keeps a busy stream smooth.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" foil lines={[
+          <Snippet label="TS" foil lines={[
             plain("import {LineChart} from 'a-chart-library';"),
             plain('<LineChart data={trades} live smooth/>'),
             aside('// one line and two axes do not need a dependency')
           ]}/>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...unit(sparklineSource, 'export const sparklinePoints')
           ]}/>
           <Snippet label="HTML" lines={[
@@ -143,7 +143,7 @@ const priceStory =
             chart speaks minutes and a session chart speaks hours.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...unit(axesSource, 'export const Axes')
           ]}/>
         </Codes>
@@ -171,11 +171,11 @@ const candlesStory =
             same <Mdn path="Web/API/Popover_API">popover</Mdn> chooser.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" foil lines={[
+          <Snippet label="TS" foil lines={[
             plain("const candles = await fetch('/candles?for=the-new-card');"),
             aside('// two fetches, two clocks, one screen disagreeing with itself')
           ]}/>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...unit(shapesSource, 'const fold'), gap,
             ...unit(shapesSource, 'export const bucketTrades'), gap,
             ...unit(shapesSource, 'export const mergeLive')
@@ -189,7 +189,7 @@ const candlesStory =
             and CSS owns the colors.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...unit(slotsSource, 'export const windowSlots'), gap,
             ...unit(shapesSource, 'export const candleShapes')
           ]}/>
@@ -209,7 +209,7 @@ const candlesStory =
             to the busiest window on screen, drawn in the same SVG pass.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...unit(shapesSource, 'export const volumeShapes')
           ]}/>
           <Snippet label="HTML" lines={[
@@ -255,11 +255,11 @@ const pressureStory =
             bought size and sold size.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" foil lines={[
+          <Snippet label="TS" foil lines={[
             plain("const driver = candle.close > candle.open ? 'buying' : 'selling';"),
             aside('// sellers stepping away wears the same badge as a stampede')
           ]}/>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...unit(coinbaseSource, 'const MatchDecoder'), gap,
             ...unit(pressureSource, 'const fold'), gap,
             ...unit(pressureSource, 'export const bucketPressure')
@@ -273,7 +273,7 @@ const pressureStory =
             shows bars in exactly that proportion.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...unit(slotsSource, 'export const windowSlots'), gap,
             ...unit(pressureSource, 'export const heaviestSide'), gap,
             ...unit(pressureSource, 'export const pressureShapes')
@@ -297,7 +297,7 @@ const pressureStory =
             ...unit(pressureCss, '.bought {'), gap,
             ...unit(pressureCss, '.sold {')
           ]}/>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...unit(moneySource, 'export const bitcoin')
           ]}/>
         </Codes>
@@ -326,7 +326,7 @@ const pieStory =
             pair of totals.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...unit(pieSource, 'export const sideTotals')
           ]}/>
         </Codes>
@@ -351,19 +351,19 @@ const pieStory =
             both gates fully open: no special case survives.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" foil lines={[
+          <Snippet label="TS" foil lines={[
             plain("background: conic-gradient(green 0 75%, orange 75%);"),
             aside('/* one painted background, zero parts to name or announce */')
           ]}/>
-          <Snippet label="JS" foil lines={[
+          <Snippet label="TS" foil lines={[
             plain('const d = `M ${cx} ${cy} L ${ax} ${ay} A ${r} ${r} 0 ${large} 1 ${bx} ${by} Z`;'),
             aside('// honest arcs, but the large-arc flag cannot tween: every trade lands as a jump')
           ]}/>
-          <Snippet label="JS" foil lines={[
+          <Snippet label="TS" foil lines={[
             plain('<circle strokeDasharray={`${share * circumference} ${circumference}`}/>'),
             aside('// tweens, but stroke geometry repaints every frame; the compositor never helps')
           ]}/>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...unit(pieSource, 'export const slices'), gap,
             ...unit(pieSource, 'export const sweepGates')
           ]}/>
@@ -413,7 +413,7 @@ const workspaceStory =
             hand, and the plus rides the heading with its menu anchored above it.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...unit(kindsSource, 'export const isChartKind'), gap,
             ...unit(deskSource, 'export const dealt'), gap,
             ...unit(deskSource, 'export const added')
@@ -432,11 +432,11 @@ const workspaceStory =
             cannot jitter.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" foil lines={[
+          <Snippet label="TS" foil lines={[
             plain('if (event.clientY > neighbour.top) swap();'),
             aside('// the hand holds the grip; the card is long past it')
           ]}/>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...unit(crossingSource, 'export const strayedTo'), gap,
             ...unit(travelSource, 'const travel = (event'), gap,
             ...unit(travelSource, 'const swap = (held')
@@ -453,7 +453,7 @@ const workspaceStory =
             everything else by the last-chart rule.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...unit(travelSource, 'const keys')
           ]}/>
         </Codes>
@@ -465,7 +465,7 @@ const workspaceStory =
             the plus remains.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...unit(workspaceSource, 'const plural'), gap,
             ...unit(workspaceSource, 'const actions')
           ]}/>

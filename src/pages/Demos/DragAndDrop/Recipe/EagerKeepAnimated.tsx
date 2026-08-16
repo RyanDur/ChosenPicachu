@@ -30,7 +30,7 @@ export const EagerKeepAnimatedRecipe: FC = () => <>
             crossings, so home stays reachable.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...unit(listSource, 'onDragOver={event => {')
           ]}/>
         </Codes>
@@ -56,7 +56,7 @@ export const EagerKeepAnimatedRecipe: FC = () => <>
             data: --toward flips the sign of one keyframe instead of naming two.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...span(listSource, "setPushed({[item]: homeward ? 'right' : 'left'});",
               "setPushed({[item]: homeward ? 'right' : 'left'});")
           ]}/>

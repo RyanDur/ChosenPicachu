@@ -39,10 +39,10 @@ const ruled = ({world, source, shellSrc}: Build, motion: Motion, dial: ReactNode
       </Words>
       <Codes>
         {world === 'react'
-          ? <Snippet label="JS" lines={[
+          ? <Snippet label="TS" lines={[
             ...unit(source, 'const ruled = ')
           ]}/>
-          : <Snippet label="JS" lines={[
+          : <Snippet label="TS" lines={[
             ...unit(shellSource, '  const choose = '), gap,
             ...span(shellSrc, 'ruled: (shell, heights, before, after)', 'shifts(heights, before, after))')
           ]}/>}
@@ -58,24 +58,24 @@ const ruled = ({world, source, shellSrc}: Build, motion: Motion, dial: ReactNode
       </Words>
       <Codes>
         {world === 'react'
-          ? <Snippet label="JS" lines={[
+          ? <Snippet label="TS" lines={[
             ...unit(source, 'const ruled = ')
           ]}/>
-          : <Snippet label="JS" lines={[
+          : <Snippet label="TS" lines={[
             ...unit(shellSource, '  const choose = ')
           ]}/>}
       </Codes>
     </Step>;
 
 const menuFoils: Record<World, ReactNode> = {
-  react: <Snippet label="JS" foil lines={[
+  react: <Snippet label="TS" foil lines={[
     plain('const [open, setOpen] = useState(false);'), gap,
     plain('<button onClick={() => setOpen(!open)}>⇅</button>'),
     plain('{open && <menu className="popup">…</menu>}'), gap,
     aside('// now you owe: outside clicks, Escape, focus return,'),
     aside('// aria wiring, and a z-index war you cannot win')
   ]}/>,
-  html: <Snippet label="JS" foil lines={[
+  html: <Snippet label="TS" foil lines={[
     plain("toggle.addEventListener('click', () =>"),
     plain("    menu.classList.toggle('open'));"), gap,
     aside('// now you owe: outside clicks, Escape, focus return,'),
@@ -187,10 +187,10 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
         </Words>
         <Codes>
           {world === 'react'
-            ? <Snippet label="JS" lines={[
+            ? <Snippet label="TS" lines={[
               ...span(sortMenuSource, 'export const SortMenu', '</Menu>;')
             ]}/>
-            : <Snippet label="JS" lines={[
+            : <Snippet label="TS" lines={[
               ...unit(sortingSource, 'export const glyphs'), gap,
               ...unit(sortingSource, 'export const unsorted'), gap,
               ...unit(shellSource, 'const announce = ')
@@ -218,7 +218,7 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
             is the engine, not ceremony.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" foil lines={[
+          <Snippet label="TS" foil lines={[
             world === 'react'
               ? plain('const ruled = (column, direction) =>')
               : plain('const choose = (column, direction) =>'),
@@ -228,12 +228,12 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
             aside('// ranked once, unsorted by the next trade')
           ]}/>
           {world === 'react'
-            ? <Snippet label="JS" lines={[
+            ? <Snippet label="TS" lines={[
               ...unit(sortingSource, 'export const ranked'), gap,
               ...span(source, 'const standing = has(rule) ? ranked(rows, dealt, rule) : dealt;',
                 'const standing = has(rule) ? ranked(rows, dealt, rule) : dealt;')
             ]}/>
-            : <Snippet label="JS" lines={[
+            : <Snippet label="TS" lines={[
               ...unit(sortingSource, 'export const ranked'), gap,
               ...span(shellSource, 'const standing = has(rule) ? ranked(rows, desk.seats, rule) : desk.seats;',
                 'const standing = has(rule) ? ranked(rows, desk.seats, rule) : desk.seats;')
@@ -250,10 +250,10 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
         </Words>
         <Codes>
           {world === 'react'
-            ? <Snippet label="JS" lines={[
+            ? <Snippet label="TS" lines={[
               ...unit(source, 'onLift={lifted => event => {')
             ]}/>
-            : <Snippet label="JS" lines={[
+            : <Snippet label="TS" lines={[
               ...unit(shellSource, '  const bake = '),
               aside('// every row grip calls it first thing on the way up')
             ]}/>}
@@ -277,12 +277,12 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
         </Words>
         <Codes>
           {world === 'react'
-            ? <Snippet label="JS" lines={[
+            ? <Snippet label="TS" lines={[
               ...span(menuSource, 'onPointerDown={event => event.stopPropagation()}',
                 'onPointerDown={event => event.stopPropagation()}'),
               aside('// on the toggle and on the menu both')
             ]}/>
-            : <Snippet label="JS" lines={[
+            : <Snippet label="TS" lines={[
               ...span(shellSource, "  [...table.querySelectorAll('.menu-toggle, .menu')]", 'event.stopPropagation()));'),
               aside('// on the toggle and on the menu both')
             ]}/>}

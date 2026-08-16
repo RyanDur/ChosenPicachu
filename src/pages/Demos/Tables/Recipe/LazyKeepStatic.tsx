@@ -65,11 +65,11 @@ export const LazyKeepStaticRecipe: FC<{track: Track; world: World}> = ({track, w
           </Words>
           <Codes>
             {world === 'react'
-              ? <Snippet label="JS" lines={[
+              ? <Snippet label="TS" lines={[
                 ...unit(hookSource, 'const travel = '), gap,
                 ...unit(hookSource, 'const drop = ')
               ]}/>
-              : <Snippet label="JS" lines={[
+              : <Snippet label="TS" lines={[
                 ...span(shellSrc, 'let landing: string | undefined;', 'commit(columnOf(desk, th), landing')
               ]}/>}
           </Codes>
@@ -109,11 +109,11 @@ export const LazyKeepStaticRecipe: FC<{track: Track; world: World}> = ({track, w
           </Words>
           <Codes>
             {world === 'react'
-              ? <Snippet label="JS" lines={[
+              ? <Snippet label="TS" lines={[
                 ...unit(tableSource, 'const settleColumn = '),
                 aside('// the whole settle; no marking code exists in this table')
               ]}/>
-              : <Snippet label="JS" lines={[
+              : <Snippet label="TS" lines={[
                 ...unit(shellSrc, 'const commit = (held: string'),
                 aside('// the whole settle; no marking code exists in this shell')
               ]}/>}
@@ -146,11 +146,11 @@ export const LazyKeepStaticRecipe: FC<{track: Track; world: World}> = ({track, w
         </Words>
         <Codes>
           {world === 'react'
-            ? <Snippet label="JS" lines={[
+            ? <Snippet label="TS" lines={[
               ...span(headerSource, 'const from = order.indexOf(columnName);', 'onOrdered(columnName, to);'),
               aside('// the whole walk; nothing marked, nothing to wait for')
             ]}/>
-            : <Snippet label="JS" lines={[
+            : <Snippet label="TS" lines={[
               ...span(shellSrc, 'const from = desk.order.indexOf(held);', 'moveColumn(shell, from, to);'),
               aside('// the whole walk; nothing marked, nothing to wait for')
             ]}/>}

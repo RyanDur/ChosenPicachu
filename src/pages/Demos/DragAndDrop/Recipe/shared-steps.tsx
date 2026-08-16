@@ -50,13 +50,13 @@ export const holdTheAloft = (listSource: string) =>
         is still there when another window genuinely needs the data.</Says>
     </Words>
     <Codes>
-      <Snippet label="JS" foil lines={[
+      <Snippet label="TS" foil lines={[
         plain("event.dataTransfer.setData('text/plain', item);"),
         aside('// written at dragstart'), gap,
         plain("event.dataTransfer.getData('text/plain');"),
         aside('// read in dragover: always "", the store is sealed')
       ]}/>
-      <Snippet label="JS" lines={[
+      <Snippet label="TS" lines={[
         ...span(listSource, 'onLifted={lifted => setAloft(maybe(lifted))}', 'onLifted={lifted => setAloft(maybe(lifted))}'),
         aside('// the item names itself; the list holds the answer')
       ]}/>
@@ -98,7 +98,7 @@ export const innerHalf =
         outer quarter holds still, and an item already sliding cannot be overtaken.</Says>
     </Words>
     <Codes>
-      <Snippet label="JS" lines={[
+      <Snippet label="TS" lines={[
         ...unit(crossingSource, 'export const crossed')
       ]}/>
     </Codes>
@@ -115,7 +115,7 @@ export const roadEnd =
         demo walks that road.</Says>
     </Words>
     <Codes>
-      <Snippet label="JS" lines={[
+      <Snippet label="TS" lines={[
         aside('// no API exists for these pixels; when they matter,'),
         aside('// take the pointer road')
       ]}/>
@@ -139,7 +139,7 @@ export const straightToOrder = (itemSource: string) =>
             drag-and-drop, which is exactly why it works.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...unit(itemSource, 'const steps'), gap,
             ...unit(itemSource, 'onKeyDown={event =>')
           ]}/>

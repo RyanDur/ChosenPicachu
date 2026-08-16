@@ -16,13 +16,13 @@ const gap = plain(' ');
 
 const ledgerCodes: Record<World, ReactNode> = {
   react: <Codes>
-    <Snippet label="JS" foil lines={[
+    <Snippet label="TS" foil lines={[
       plain('const [widths, setWidths] = useState({window: 240, trades: 96});'), gap,
       plain('const resized = (column, dx) =>'),
       plain('    setWidths({...widths, [column]: widths[column] + dx});'),
       aside('// the column grows, and the table grows with it')
     ]}/>
-    <Snippet label="JS" lines={[
+    <Snippet label="TS" lines={[
       ...unit(sharesSource, 'export const measuredShares')
     ]}/>
     <Snippet label="HTML" lines={[
@@ -34,15 +34,15 @@ const ledgerCodes: Record<World, ReactNode> = {
     ]}/>
   </Codes>,
   html: <Codes>
-    <Snippet label="JS" foil lines={[
+    <Snippet label="TS" foil lines={[
       plain("header.style.width = `${header.offsetWidth + dx}px`;"),
       aside('// the column grows, and the table grows with it')
     ]}/>
-    <Snippet label="JS" lines={[
+    <Snippet label="TS" lines={[
       ...unit(sharesSource, 'export const measuredShares'), gap,
       ...unit(shellSource, '  const awaken = ')
     ]}/>
-    <Snippet label="JS" lines={[
+    <Snippet label="TS" lines={[
       ...unit(shellSource, 'const dressColumn = ')
     ]}/>
     <Snippet label="CSS" lines={[
@@ -114,13 +114,13 @@ const captureSays: Record<World, ReactNode> = {
 
 const captureCodes: Record<World, ReactNode> = {
   react: <Codes>
-    <Snippet label="JS" lines={[
+    <Snippet label="TS" lines={[
       ...unit(resizeSource, 'onPointerDown={(event'), gap,
       ...unit(resizeSource, 'onPointerMove={(event')
     ]}/>
   </Codes>,
   html: <Codes>
-    <Snippet label="JS" lines={[
+    <Snippet label="TS" lines={[
       ...unit(shellSource, "handle.addEventListener('pointerdown'"), gap,
       ...unit(shellSource, "handle.addEventListener('pointermove'")
     ]}/>
@@ -129,7 +129,7 @@ const captureCodes: Record<World, ReactNode> = {
 
 const gestureCodes: Record<World, ReactNode> = {
   react: <Codes>
-    <Snippet label="JS" lines={[
+    <Snippet label="TS" lines={[
       ...span(resizeSource, 'onMouseDown={event => event.stopPropagation()}',
         'onMouseDown={event => event.stopPropagation()}'), gap,
       ...unit(resizeSource, 'onKeyDown={(event'),
@@ -137,7 +137,7 @@ const gestureCodes: Record<World, ReactNode> = {
     ]}/>
   </Codes>,
   html: <Codes>
-    <Snippet label="JS" lines={[
+    <Snippet label="TS" lines={[
       ...span(shellSource, "handle.addEventListener('pointerdown', event => {", 'event.stopPropagation();'),
       plain('    // …the press measures; the descent stops here'), gap,
       ...unit(shellSource, "handle.addEventListener('keydown'"),
@@ -222,7 +222,7 @@ const widenStory = (world: World) =>
             invariant is not checked; it is built in.</Says>
         </Words>
         <Codes>
-          <Snippet label="JS" lines={[
+          <Snippet label="TS" lines={[
             ...unit(sharesSource, 'export const traded')
           ]}/>
         </Codes>

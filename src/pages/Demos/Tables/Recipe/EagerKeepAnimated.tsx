@@ -70,10 +70,10 @@ export const EagerKeepAnimatedRecipe: FC<{track: Track; world: World}> = ({track
           </Words>
           <Codes>
             {world === 'react'
-              ? <Snippet label="JS" lines={[
+              ? <Snippet label="TS" lines={[
                 ...unit(hookSource, 'const travel = ')
               ]}/>
-              : <Snippet label="JS" lines={[
+              : <Snippet label="TS" lines={[
                 ...span(shellSrc, 'travel: moving => {', 'commit(held, struck')
               ]}/>}
             {world === 'react'
@@ -81,7 +81,7 @@ export const EagerKeepAnimatedRecipe: FC<{track: Track; world: World}> = ({track
                 plain('<DraggableHeader key={key} ... />'),
                 aside('{/* same key, new seat: React moves the node, not a copy */}')
               ]}/>
-              : <Snippet label="JS" lines={[
+              : <Snippet label="TS" lines={[
                 ...unit(frameShell, 'export const moveColumn'),
                 aside('// the same cells, new seats: the shell moves the node, not a copy')
               ]}/>}
@@ -144,11 +144,11 @@ export const EagerKeepAnimatedRecipe: FC<{track: Track; world: World}> = ({track
           </Words>
           <Codes>
             {world === 'react'
-              ? <Snippet label="JS" lines={[
+              ? <Snippet label="TS" lines={[
                 ...unit(tableSource, 'const settleColumn = '),
                 aside('// a direction and a share per displaced key; javascript is done')
               ]}/>
-              : <Snippet label="JS" lines={[
+              : <Snippet label="TS" lines={[
                 ...unit(shellSrc, 'const commit = (held: string'), gap,
                 ...unit(frameShell, 'const markCell = '),
                 aside('// a direction and a share per displaced key; javascript is done')
@@ -197,11 +197,11 @@ export const EagerKeepAnimatedRecipe: FC<{track: Track; world: World}> = ({track
         </Words>
         <Codes>
           {world === 'react'
-            ? <Snippet label="JS" lines={[
+            ? <Snippet label="TS" lines={[
               ...span(headerSource, 'const neighbour = order[to];', '});'),
               aside('// each starts where the other now sits')
             ]}/>
-            : <Snippet label="JS" lines={[
+            : <Snippet label="TS" lines={[
               ...span(shellSrc, 'const neighbour = desk.order[to];', '});'),
               aside('// each starts where the other now sits')
             ]}/>}
@@ -224,11 +224,11 @@ export const EagerKeepAnimatedRecipe: FC<{track: Track; world: World}> = ({track
         </Words>
         <Codes>
           {world === 'react'
-            ? <Snippet label="JS" lines={[
+            ? <Snippet label="TS" lines={[
               ...span(headerSource, 'if (event.currentTarget.getAnimations', '}'),
               aside('// while the slide runs, the key falls silent')
             ]}/>
-            : <Snippet label="JS" lines={[
+            : <Snippet label="TS" lines={[
               ...span(shellSrc, 'if (th.getAnimations().length > 0) {', '}'),
               aside('// while the slide runs, the key falls silent')
             ]}/>}

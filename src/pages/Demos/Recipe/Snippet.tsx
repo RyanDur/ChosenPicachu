@@ -8,7 +8,7 @@ export type Line = {
 };
 
 type Props = {
-  label: 'HTML' | 'CSS' | 'JS';
+  label: 'HTML' | 'CSS' | 'TS';
   lines: readonly Line[];
   foil?: boolean;
 };

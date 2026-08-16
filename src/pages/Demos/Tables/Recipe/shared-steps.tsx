@@ -103,7 +103,7 @@ export const cssShare = (world: World): ReactNode =>
         ...unit(sortableCss, '.grabbable {'), gap,
         ...unit(sortableCss, '.sortable {')
       ]}/>
-      <Snippet label="JS" lines={[
+      <Snippet label="TS" lines={[
         aside('// one measurement, slot arithmetic, and the order; nothing else')
       ]}/>
     </Codes>
@@ -124,7 +124,7 @@ export const deadZone =
       <SlotsFigure/>
     </Words>
     <Codes>
-      <Snippet label="JS" lines={[
+      <Snippet label="TS" lines={[
         ...unit(surveySource, 'const deadZone = '), gap,
         ...unit(surveySource, 'const struckPast = '), gap,
         ...unit(surveySource, 'export const columnUnder')
@@ -147,7 +147,7 @@ export const orderInState = (world: World, tableSource: string): ReactNode =>
     </Words>
     {world === 'react'
       ? <Codes>
-        <Snippet label="JS" lines={[
+        <Snippet label="TS" lines={[
           ...unit(tableSource, 'const [ordered, setOrdered]'), gap,
           ...unit(tableSource, 'const [seats, setSeats]')
         ]}/>
@@ -157,12 +157,12 @@ export const orderInState = (world: World, tableSource: string): ReactNode =>
         ]}/>
       </Codes>
       : <Codes>
-        <Snippet label="JS" lines={[
+        <Snippet label="TS" lines={[
           ...unit(frameShell, 'export type Desk'), gap,
           ...span(frameShell, "const order = [...table.querySelectorAll('thead th')]",
             'const desk: Desk = {order, seats: dealt, seated: dealt, shares: undefined};')
         ]}/>
-        <Snippet label="JS" lines={[
+        <Snippet label="TS" lines={[
           ...span(frameShell, 'desk.seated.forEach((at, position) => {',
             'body.insertBefore(desired, body.children[position] ?? null);'),
           aside('// the same lane, its new seat: the shell moves the node, not a copy')
@@ -209,11 +209,11 @@ export const liftOnce = (world: World, hookSource: string, tableSource: string, 
     </Words>
     <Codes>
       {world === 'react'
-        ? <Snippet label="JS" lines={[
+        ? <Snippet label="TS" lines={[
           ...unit(hookSource, 'const lift = '), gap,
           ...span(tableSource, 'onLift={columnsTravel.lift}', 'onLift={columnsTravel.lift}')
         ]}/>
-        : <Snippet label="JS" lines={[
+        : <Snippet label="TS" lines={[
           ...span(shellSrc, "th.addEventListener('pointerdown'",
             'const from = {x: event.clientX, y: event.clientY};')
         ]}/>}
@@ -248,7 +248,7 @@ export const dragSurface = (world: World, hookSource: string): ReactNode =>
           the platform, and the capture going away is the one signal that always arrives.</Says>}
     </Words>
     <Codes>
-      <Snippet label="JS" foil lines={[
+      <Snippet label="TS" foil lines={[
         plain("document.addEventListener('pointermove', travel);"),
         plain("document.addEventListener('pointerup', drop);"), gap,
         aside('// travel closed over the order at lift time, and every'),
@@ -260,12 +260,12 @@ export const dragSurface = (world: World, hookSource: string): ReactNode =>
         ]}/>
         : undefined}
       {world === 'react'
-        ? <Snippet label="JS" lines={[
+        ? <Snippet label="TS" lines={[
           ...span(hookSource, 'onPointerMove: travel', 'onLostPointerCapture: drop'), gap,
           ...unit(hookSource, 'const drop = '),
           aside('// cancel and lost capture are not delegates; they ARE the drop')
         ]}/>
-        : <Snippet label="JS" lines={[
+        : <Snippet label="TS" lines={[
           ...unit(frameShell, 'export const takeFlight'),
           aside('// cancel, lost capture, and buttons at zero are not delegates; they ARE the drop')
         ]}/>}
@@ -308,11 +308,11 @@ export const ghostByHand = (world: World, hookSource: string): ReactNode =>
           aside('<!-- the shape is the page’s own; the shell only fills it -->')
         ]}/>}
       {world === 'react'
-        ? <Snippet label="JS" lines={[
+        ? <Snippet label="TS" lines={[
           ...span(hookSource, 'origin.either(',
             'setOrigin(maybe({x: event.clientX')
         ]}/>
-        : <Snippet label="JS" lines={[
+        : <Snippet label="TS" lines={[
           ...unit(frameShell, 'export const columnGhost'), gap,
           ...unit(frameShell, 'const flown = ')
         ]}/>}
@@ -344,11 +344,11 @@ export const theaterVertical = (world: World, tableSource: string, shellSrc: str
           aside('<!-- focusable by birth; the keyboard track will thank us -->')
         ]}/>}
       {world === 'react'
-        ? <Snippet label="JS" lines={[
+        ? <Snippet label="TS" lines={[
           ...unit(surveySource, 'export const rowUnder'), gap,
           ...unit(tableSource, 'const settleRow = ')
         ]}/>
-        : <Snippet label="JS" lines={[
+        : <Snippet label="TS" lines={[
           ...unit(surveySource, 'export const rowUnder'), gap,
           ...unit(shellSrc, 'const commit = (struck')
         ]}/>}
@@ -380,7 +380,7 @@ export const focusLands = (world: World, headerSource: string): ReactNode =>
           ...span(gripSource, '<button', '</button>'),
           aside('{/* the button was focusable all along; the header asks */}')
         ]}/>
-        : <Snippet label="JS" lines={[
+        : <Snippet label="TS" lines={[
           ...unit(frameShell, 'export const dressGrips'),
           aside('// the button was focusable all along; the shell asks for the headers')
         ]}/>}
@@ -403,11 +403,11 @@ export const arrowsSpeak = (world: World, headerSource: string, shellSrc: string
     </Words>
     <Codes>
       {world === 'react'
-        ? <Snippet label="JS" lines={[
+        ? <Snippet label="TS" lines={[
           ...unit(headerSource, 'onKeyDown={travels'),
           aside('// the anchors hold; the walk stops beside them')
         ]}/>
-        : <Snippet label="JS" lines={[
+        : <Snippet label="TS" lines={[
           ...unit(shellSrc, "th.addEventListener('keydown'"),
           aside('// the anchors hold; the walk stops beside them')
         ]}/>}
