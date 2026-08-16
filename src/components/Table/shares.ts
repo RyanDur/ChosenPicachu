@@ -1,3 +1,4 @@
+import {has} from '@ryandur/sand';
 export const SLIMMEST = 5;
 
 export type Shares = Readonly<Record<string, number>>;
@@ -27,3 +28,6 @@ export const STEP_SHARE = 2;
 export type Grip = Readonly<{fromX: number; pxPerShare: number}>;
 
 export const sought = ({fromX, pxPerShare}: Grip, clientX: number): number => (clientX - fromX) / pxPerShare;
+
+export const resizeLabel = (column: string, share?: number): string =>
+    has(share) ? `resize ${column}, ${Math.round(share)}%` : `resize ${column}`;

@@ -1,5 +1,5 @@
 import {has, maybe} from '@ryandur/sand';
-import {Grip, STEP_SHARE, measuredShares, sought} from '@components/Table/shares';
+import {Grip, STEP_SHARE, measuredShares, resizeLabel, sought} from '@components/Table/shares';
 import {Desk, Shell, columnOf, columnSteps, sharedAs, tradedBy} from './desk';
 
 const dressColumn = (table: HTMLTableElement, column: string, share: number): void => {
@@ -10,7 +10,7 @@ const dressColumn = (table: HTMLTableElement, column: string, share: number): vo
     header.classList.add('shared');
     header.style.setProperty('--share', `${share}%`);
     maybe(header.querySelector('.resize-handle')).map(handle =>
-      handle.setAttribute('aria-label', `resize ${column}, ${Math.round(share)}%`));
+      handle.setAttribute('aria-label', resizeLabel(column, share)));
   });
 };
 

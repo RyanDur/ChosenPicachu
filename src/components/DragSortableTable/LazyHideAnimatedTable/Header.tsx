@@ -4,6 +4,7 @@ import {classNames} from '@components/class-names';
 import {Column, ResizeHandle, Shares, neighborOf, traded} from '@components/Table';
 import {Slid, anchored, bounded, interior} from '../survey';
 import {Direction, SortMenu} from '../SortMenu';
+import {sortedBy} from '../sorting';
 import '../Header.css';
 
 const steps: Record<string, number> = {ArrowRight: 1, ArrowLeft: -1};
@@ -33,7 +34,7 @@ export const Header: FC<Props> = (
   const travels = draggable && not(anchored(position, order.length));
   const hidden = aloft.map(held => held === columnName).orElse(false);
   const displaced = slid?.[columnName];
-  const sorted = rule?.column === columnName ? rule.direction : undefined;
+  const sorted = sortedBy(columnName, rule);
   return <th className={classNames(
     className, column.className,
     'header-cell',

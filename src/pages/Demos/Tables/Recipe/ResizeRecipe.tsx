@@ -62,9 +62,14 @@ const gridMarkup: Record<World, ReactNode> = {
   ]}/>
 };
 
+const spokenLabel =
+  <Snippet label="TS" lines={[
+    ...unit(sharesSource, 'export const resizeLabel')
+  ]}/>;
+
 const handleMarkup: Record<World, ReactNode> = {
   react: <Snippet label="HTML" lines={[
-    ...span(resizeSource, '<button type="button"', ': `resize ${column}`}')
+    ...span(resizeSource, '<button type="button"', 'aria-label={resizeLabel(column, share)}')
   ]}/>,
   html: <Snippet label="HTML" lines={[
     ...span(tableSource, '<button type="button" class="resize-handle"', 'aria-label="resize window"></button>')
@@ -209,6 +214,7 @@ const widenStory = (world: World) =>
         </Words>
         <Codes>
           {handleMarkup[world]}
+          {spokenLabel}
           <Snippet label="CSS" lines={[
             ...unit(baseCss, '.resize-handle {')
           ]}/>
