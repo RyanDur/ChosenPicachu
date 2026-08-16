@@ -77,7 +77,8 @@ export const EagerHideAnimatedRecipe: FC<{track: Track; world: World}> = ({track
                 ...unit(hookSource, 'const travel = ')
               ]}/>
               : <Snippet label="TS" lines={[
-                ...span(shellSrc, 'travel: moving => {', 'commit(held, struck')
+                ...unit(shellSrc, 'const settleColumn = '), gap,
+                ...unit(shellSrc, 'const columnTravel = ')
               ]}/>}
             {world === 'react'
               ? <Snippet label="HTML" lines={[
@@ -177,7 +178,7 @@ export const EagerHideAnimatedRecipe: FC<{track: Track; world: World}> = ({track
                 aside('// a direction and a share per displaced key; javascript is done')
               ]}/>
               : <Snippet label="TS" lines={[
-                ...unit(shellSrc, 'const commit = (held: string'), gap,
+                ...unit(shellSrc, 'const settleColumn = '), gap,
                 ...unit(frameMarks, 'const markCell = '),
                 aside('// a direction and a share per displaced key; javascript is done')
               ]}/>}

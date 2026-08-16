@@ -33,7 +33,8 @@ export const orderInState = (world: World, tableSource: string): ReactNode =>
         <Snippet label="TS" lines={[
           ...unit(frameDesk, 'export type Desk'), gap,
           ...span(frameStand, "const order = [...table.querySelectorAll('thead th')]",
-            'let desk: Desk = {order, seats: dealt, seated: dealt, shares: undefined, rule: undefined};')
+            'aloft: undefined, bounds: undefined, flight: undefined, origin: undefined, drift: still'),
+          plain('  };')
         ]}/>
         <Snippet label="TS" lines={[
           ...span(frameStand, 'seated.forEach((at, position) => {',

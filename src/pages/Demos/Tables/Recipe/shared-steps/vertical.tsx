@@ -32,7 +32,7 @@ export const theaterVertical = (world: World, tableSource: string, shellSrc: str
         ]}/>
         : <Snippet label="TS" lines={[
           ...unit(surveySource, 'export const rowUnder'), gap,
-          ...unit(shellSrc, 'const commit = (struck')
+          ...unit(shellSrc, 'const settleRow = ')
         ]}/>}
     </Codes>
   </Step>;
