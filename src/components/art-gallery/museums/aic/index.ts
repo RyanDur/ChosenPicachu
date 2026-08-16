@@ -21,7 +21,7 @@ export const fields = ['id', 'title', 'image_id', 'artist_display', 'term_titles
 
 export const aic = {
   allArt: ({page, search, size = defaultRecordLimit}: GetAllArtRequest) => http
-    .get(`${aicDomain}/search${toQueryString({q: search, 'query[exists][field]': 'image_id', fields, page, limit: size})}`)
+    .get(`${aicDomain}/search${toQueryString({q: search, 'query[exists][field]': 'image_id', fields, page, limit: size})}`, {cache: 'force-cache'})
     .mBind(validate(AICAllArtSchema))
     .map(({pagination, data}: AICAllArtResponse): AllArt => ({
       pagination: {
@@ -34,7 +34,7 @@ export const aic = {
     })),
 
   art: (id: string) => http
-    .get(`${aicDomain}/${id}${toQueryString({fields})}`)
+    .get(`${aicDomain}/${id}${toQueryString({fields})}`, {cache: 'force-cache'})
     .mBind(validate(AICArtSchema))
     .map(({data}: AICPieceData): Art => aicToPiece(843)(data)),
 
@@ -43,7 +43,7 @@ export const aic = {
       'query[term][title]': search,
       fields: 'suggest_autocomplete_all',
       limit: defaultSearchLimit
-    })}`)
+    })}`, {cache: 'force-cache'})
     .mBind(validate(AICSearchSchema))
     .map(({data}: AICSearchResponse): SearchOptions => data
       .map(({suggest_autocomplete_all}) => suggest_autocomplete_all[1])

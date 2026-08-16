@@ -25,7 +25,7 @@ const vamRecordToArt = (record: VAMSearchRecord): Art => ({
 
 export const vam = {
   allArt: ({page, search, size = defaultRecordLimit}: GetAllArtRequest) => http
-    .get(`${vamDomain}/objects/search${toQueryString({q: search, page, page_size: size, images_exist: true})}`)
+    .get(`${vamDomain}/objects/search${toQueryString({q: search, page, page_size: size, images_exist: true})}`, {cache: 'force-cache'})
     .mBind(validate(VAMAllArtSchema))
     .map(({info, records}: VAMAllArtResponse): AllArt => ({
       pagination: {
@@ -38,7 +38,7 @@ export const vam = {
     })),
 
   art: (id: string) => http
-    .get(`${vamDomain}/museumobject/${id}`)
+    .get(`${vamDomain}/museumobject/${id}`, {cache: 'force-cache'})
     .mBind(validate(VAMArtSchema))
     .map(({record}: VAMArtResponse): Art => ({
       id: record.systemNumber,
@@ -49,7 +49,7 @@ export const vam = {
     })),
 
   searchOptions: (search: string) => http
-    .get(`${vamDomain}/objects/search${toQueryString({q: search, page_size: defaultSearchLimit})}`)
+    .get(`${vamDomain}/objects/search${toQueryString({q: search, page_size: defaultSearchLimit})}`, {cache: 'force-cache'})
     .mBind(validate(VAMAllArtSchema))
     .map(({records}: VAMAllArtResponse): SearchOptions => records.map(({_primaryTitle}) => _primaryTitle))
 };
