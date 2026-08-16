@@ -43,16 +43,15 @@ export const Image: FC<ImageProps> = (
              src={noImage}/> :
         (<>
             <ConditionalLink enabled={linkEnabled} area={tab ?? ''}>
-                <img className={classNames('image', 'veiled', className)}
+                <img className={classNames('image', className)}
                      referrerPolicy="no-referrer"
                      onError={() => {
                          isComplete(true);
                          isError(true);
                      }}
-                     onLoad={event => {
+                     onLoad={() => {
                          isComplete(true);
                          isError(false);
-                         event.currentTarget.classList.remove('veiled');
                      }}
                      fetchPriority={priority ? 'high' : 'auto'}
                      loading={lazy ? 'lazy' : undefined}
