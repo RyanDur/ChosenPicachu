@@ -512,7 +512,7 @@ describe('the tables demo', () => {
 
       renderTables(urlOf(feed));
 
-      await userEvent.click(await screen.findByRole('radio', {name: 'HTML'}));
+      await userEvent.click(await screen.findByRole('radio', {name: 'Vanilla'}));
 
       const frame = await screen.findByTitle('the living table, in html');
       const card = screen.getByRole('region', {name: 'live aggregations'});
