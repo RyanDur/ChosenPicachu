@@ -1,6 +1,6 @@
 import {fireEvent, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {seed} from '@ngneat/falso';
+import {seed} from '@components/fibs';
 import {renderWithMemoryRouter} from '@test-support';
 import {Paths} from '@pages/Paths';
 import {Demos} from '@pages/Demos';
