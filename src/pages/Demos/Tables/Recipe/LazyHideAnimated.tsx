@@ -61,9 +61,9 @@ export const LazyHideAnimatedRecipe: FC<{track: Track; world: World}> = ({track,
               ? <Says>The lazy hook is its own handler, not a flag on the eager one: a strike is only ever
                 remembered as the landing, and drop, which also answers cancel and a lost capture,
                 commits it.</Says>
-              : <Says>The lazy shell is its own file, not a flag on the eager one: a strike is only ever
-                remembered as the landing, and the land of the flight, which also answers cancel and a
-                lost capture, commits it.</Says>}
+              : <Says>The lazy shell is its own file, not a flag on the eager one: the flight folds every
+                move into a carried landing, and the land of the flight, which also answers cancel and
+                a lost capture, commits whatever the fold is holding.</Says>}
           </Words>
           <Codes>
             {world === 'react'
@@ -72,7 +72,7 @@ export const LazyHideAnimatedRecipe: FC<{track: Track; world: World}> = ({track,
                 ...unit(hookSource, 'const drop = ')
               ]}/>
               : <Snippet label="TS" lines={[
-                ...span(shellSrc, 'let landing: string | undefined;', 'commit(columnOf(desk, th), landing')
+                ...span(shellSrc, 'travel: (moving, landing) => {', 'commit(columnOf(shell.desk(), th), struck')
               ]}/>}
           </Codes>
         </Step>
@@ -212,7 +212,7 @@ export const LazyHideAnimatedRecipe: FC<{track: Track; world: World}> = ({track,
               aside('// each starts where the other now sits')
             ]}/>
             : <Snippet label="TS" lines={[
-              ...span(shellSrc, 'const neighbour = desk.order[to];', '});'),
+              ...span(shellSrc, 'const neighbour = order[to];', '});'),
               aside('// each starts where the other now sits')
             ]}/>}
           <Snippet label="CSS" lines={[

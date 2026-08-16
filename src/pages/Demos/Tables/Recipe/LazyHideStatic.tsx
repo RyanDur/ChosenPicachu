@@ -61,9 +61,9 @@ export const LazyHideStaticRecipe: FC<{track: Track; world: World}> = ({track, w
               ? <Says>The lazy hook is its own handler, not a flag on the eager one: a strike is only ever
                 remembered as the landing, and drop, which also answers cancel and a lost capture,
                 commits it.</Says>
-              : <Says>The lazy shell is its own file, not a flag on the eager one: a strike is only ever
-                remembered as the landing, and the land of the flight, which also answers cancel and a
-                lost capture, commits it.</Says>}
+              : <Says>The lazy shell is its own file, not a flag on the eager one: the flight folds every
+                move into a carried landing, and the land of the flight, which also answers cancel and
+                a lost capture, commits whatever the fold is holding.</Says>}
           </Words>
           <Codes>
             {world === 'react'
@@ -72,7 +72,7 @@ export const LazyHideStaticRecipe: FC<{track: Track; world: World}> = ({track, w
                 ...unit(hookSource, 'const drop = ')
               ]}/>
               : <Snippet label="TS" lines={[
-                ...span(shellSrc, 'let landing: string | undefined;', 'commit(columnOf(desk, th), landing')
+                ...span(shellSrc, 'travel: (moving, landing) => {', 'commit(columnOf(shell.desk(), th), struck')
               ]}/>}
           </Codes>
         </Step>
@@ -125,10 +125,10 @@ export const LazyHideStaticRecipe: FC<{track: Track; world: World}> = ({track, w
                 There is real value in this mode beyond taste: nothing competes with the pointer, and
                 no motion for prefers-reduced-motion users to endure.</Says>
               : <Says>The static shell is not the animated one with a switch off; it is a different
-                file with no marking code in it. Its commit is the whole story: move the cells, let
-                paint reseat, and there is nothing else, because nothing else exists in this file.
-                There is real value in this mode beyond taste: nothing competes with the pointer, and
-                no motion for prefers-reduced-motion users to endure.</Says>}
+                file with no marking code in it. Its commit is the whole story: a new order on the
+                desk, the reconcile moves the cells, and there is nothing else, because nothing else
+                exists in this file. There is real value in this mode beyond taste: nothing competes
+                with the pointer, and no motion for prefers-reduced-motion users to endure.</Says>}
           </Words>
           <Codes>
             {world === 'react'
@@ -174,7 +174,7 @@ export const LazyHideStaticRecipe: FC<{track: Track; world: World}> = ({track, w
               aside('// the whole walk; nothing marked, nothing to wait for')
             ]}/>
             : <Snippet label="TS" lines={[
-              ...span(shellSrc, 'const from = desk.order.indexOf(held);', 'moveColumn(shell, from, to);'),
+              ...span(shellSrc, 'const from = order.indexOf(held);', 'shell.commit(orderedTo(from, to));'),
               aside('// the whole walk; nothing marked, nothing to wait for')
             ]}/>}
         </Codes>

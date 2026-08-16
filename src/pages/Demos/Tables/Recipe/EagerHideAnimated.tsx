@@ -55,10 +55,10 @@ export const EagerHideAnimatedRecipe: FC<{track: Track; world: World}> = ({track
                 mid-drag, and because the markup renders through that order, the same key finds its new
                 seat and React moves the real cells. Carrying the column back is just more crossings:
                 home is always reachable. No style changes hands here at all.</Says>
-              : <Says>With eager pace, commit as soon as a neighbour is struck: moveColumn walks every
-                lane and moves the real cells, and the order updates on the desk. Carrying the column
-                back is just more crossings: home is always reachable. No style changes hands here at
-                all.</Says>}
+              : <Says>With eager pace, commit as soon as a neighbour is struck: the commit deals a new
+                order onto the desk, and the reconcile moves the real cells to match it. Carrying the
+                column back is just more crossings: home is always reachable. No style changes hands
+                here at all.</Says>}
             {world === 'react'
               ? <Says>This is the whole eager hook’s handler, and there is no landing state to keep anywhere
                 in it: buttons at zero heals a drag whose release was swallowed, the surface claims the
@@ -82,7 +82,7 @@ export const EagerHideAnimatedRecipe: FC<{track: Track; world: World}> = ({track
                 aside('{/* same key, new seat: React moves the node, not a copy */}')
               ]}/>
               : <Snippet label="TS" lines={[
-                ...unit(frameShell, 'export const moveColumn'),
+                ...unit(frameShell, 'const reconcileColumns = '),
                 aside('// the same cells, new seats: the shell moves the node, not a copy')
               ]}/>}
           </Codes>
@@ -223,7 +223,7 @@ export const EagerHideAnimatedRecipe: FC<{track: Track; world: World}> = ({track
               aside('// each starts where the other now sits')
             ]}/>
             : <Snippet label="TS" lines={[
-              ...span(shellSrc, 'const neighbour = desk.order[to];', '});'),
+              ...span(shellSrc, 'const neighbour = order[to];', '});'),
               aside('// each starts where the other now sits')
             ]}/>}
           <Snippet label="CSS" lines={[

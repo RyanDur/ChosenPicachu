@@ -235,8 +235,8 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
             ]}/>
             : <Snippet label="TS" lines={[
               ...unit(sortingSource, 'export const ranked'), gap,
-              ...span(shellSource, 'const standing = has(rule) ? ranked(rows, desk.seats, rule) : desk.seats;',
-                'const standing = has(rule) ? ranked(rows, desk.seats, rule) : desk.seats;')
+              ...span(shellSource, 'const standing = has(next.rule) ? ranked(rows, next.seats, next.rule) : next.seats;',
+                'const standing = has(next.rule) ? ranked(rows, next.seats, next.rule) : next.seats;')
             ]}/>}
         </Codes>
       </Step>
@@ -254,8 +254,8 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
               ...unit(source, 'onLift={lifted => event => {')
             ]}/>
             : <Snippet label="TS" lines={[
-              ...unit(shellSource, '  const bake = '),
-              aside('// every row grip calls it first thing on the way up')
+              ...unit(shellSource, 'export const baked = '),
+              aside('// every grip commits it first thing on the way up')
             ]}/>}
         </Codes>
       </Step>

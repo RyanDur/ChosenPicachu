@@ -55,10 +55,10 @@ export const EagerHideStaticRecipe: FC<{track: Track; world: World}> = ({track, 
                 mid-drag, and because the markup renders through that order, the same key finds its new
                 seat and React moves the real cells. Carrying the column back is just more crossings:
                 home is always reachable. No style changes hands here at all.</Says>
-              : <Says>With eager pace, commit as soon as a neighbour is struck: moveColumn walks every
-                lane and moves the real cells, and the order updates on the desk. Carrying the column
-                back is just more crossings: home is always reachable. No style changes hands here at
-                all.</Says>}
+              : <Says>With eager pace, commit as soon as a neighbour is struck: the commit deals a new
+                order onto the desk, and the reconcile moves the real cells to match it. Carrying the
+                column back is just more crossings: home is always reachable. No style changes hands
+                here at all.</Says>}
             {world === 'react'
               ? <Says>This is the whole eager hook’s handler, and there is no landing state to keep anywhere
                 in it: buttons at zero heals a drag whose release was swallowed, the surface claims the
@@ -82,7 +82,7 @@ export const EagerHideStaticRecipe: FC<{track: Track; world: World}> = ({track, 
                 aside('{/* same key, new seat: React moves the node, not a copy */}')
               ]}/>
               : <Snippet label="TS" lines={[
-                ...unit(frameShell, 'export const moveColumn'),
+                ...unit(frameShell, 'const reconcileColumns = '),
                 aside('// the same cells, new seats: the shell moves the node, not a copy')
               ]}/>}
           </Codes>
@@ -136,10 +136,10 @@ export const EagerHideStaticRecipe: FC<{track: Track; world: World}> = ({track, 
                 There is real value in this mode beyond taste: nothing competes with the pointer, and
                 no motion for prefers-reduced-motion users to endure.</Says>
               : <Says>The static shell is not the animated one with a switch off; it is a different
-                file with no marking code in it. Its commit is the whole story: move the cells, let
-                paint reseat, and there is nothing else, because nothing else exists in this file.
-                There is real value in this mode beyond taste: nothing competes with the pointer, and
-                no motion for prefers-reduced-motion users to endure.</Says>}
+                file with no marking code in it. Its commit is the whole story: a new order on the
+                desk, the reconcile moves the cells, and there is nothing else, because nothing else
+                exists in this file. There is real value in this mode beyond taste: nothing competes
+                with the pointer, and no motion for prefers-reduced-motion users to endure.</Says>}
           </Words>
           <Codes>
             {world === 'react'
@@ -185,7 +185,7 @@ export const EagerHideStaticRecipe: FC<{track: Track; world: World}> = ({track, 
               aside('// the whole walk; nothing marked, nothing to wait for')
             ]}/>
             : <Snippet label="TS" lines={[
-              ...span(shellSrc, 'const from = desk.order.indexOf(held);', 'moveColumn(shell, from, to);'),
+              ...span(shellSrc, 'const from = order.indexOf(held);', 'shell.commit(orderedTo(from, to));'),
               aside('// the whole walk; nothing marked, nothing to wait for')
             ]}/>}
         </Codes>

@@ -76,8 +76,8 @@ const foldSays: Record<World, ReactNode> = {
   html: <Says>Every arrival refolds the same trades into per-window aggregates, because
     refolding is simple math and cannot drift out of sync. The fold is the same module the
     React world runs. What React did for you ends here: there is no render to catch the
-    change, so paint walks the rows, writes only the cells whose text changed, and reseats
-    only the rows whose seat changed.</Says>
+    change, so every commit reconciles the page against the desk, writing only the cells
+    whose text changed and reseating only the rows whose seat changed.</Says>
 };
 
 const foldCodes: Record<World, ReactNode> = {
@@ -90,7 +90,7 @@ const foldCodes: Record<World, ReactNode> = {
   html: <Codes>
     <Snippet label="TS" lines={[
       ...unit(foldSource, 'export const windows'), gap,
-      ...unit(shellSource, 'const paint = ')
+      ...unit(shellSource, 'const reconciled = ')
     ]}/>
   </Codes>
 };
