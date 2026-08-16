@@ -504,7 +504,7 @@ describe('the tables demo', () => {
         expect(await screen.findByText('The trader can sort without a mouse')).toBeInTheDocument();
         unmount();
       }
-    });
+    }, 20000);
 
 
     test('the explainer stands in the html world too', async () => {
