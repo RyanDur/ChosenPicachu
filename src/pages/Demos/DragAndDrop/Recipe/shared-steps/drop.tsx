@@ -1,6 +1,5 @@
-import {Codes, Mdn, Says, Snippet, Step, Words, aside, plain} from '../../../Recipe';
+import {Codes, Mdn, Says, Snippet, Step, Words} from '../../../Recipe';
 import {span} from '../../../Recipe/carve';
-import {gap} from './sources';
 
 export const acceptTheDrop = (listSource: string) =>
   <Step title="Accept the drop, or the platform takes it back">
@@ -15,13 +14,6 @@ export const acceptTheDrop = (listSource: string) =>
         the three and the drag ends in the platform’s apology animation.</Says>
     </Words>
     <Codes>
-      <Snippet label="HTML" foil lines={[
-        plain('<ul aria-label="sortable list">'),
-        plain('    {order.map(item => <Item key={item} item={item}/>)}'),
-        plain('</ul>'), gap,
-        aside("{/* release here: the card flies home in the platform's */}"),
-        aside('{/* apology animation, and your onDrop never fired */}')
-      ]}/>
       <Snippet label="HTML" lines={[
         ...span(listSource, '<ul aria-label="sortable list"', 'onDrop={event => event.preventDefault()}')
       ]}/>

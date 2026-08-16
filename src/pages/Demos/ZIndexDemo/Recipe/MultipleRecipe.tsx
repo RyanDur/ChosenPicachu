@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
 import {Entrance, Stack, enterParam, stackParam} from '@components/Banners/params';
-import {Codes, Says, Snippet, Step, Steps, Story, Words, Tell, aside, plain} from '../../Recipe';
+import {Codes, Says, Snippet, Step, Steps, Story, Words, Tell, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
 import {EntranceDial, StackDial} from '../../Controls';
 import {arrivalLines, leavingLines, slotLines} from './decided';
@@ -39,10 +39,6 @@ const settleStep = (
         measuring; a pin that measures through itself can only ratchet taller.</Says>
     </Words>
     <Codes>
-      <Snippet label="TS" foil lines={[
-        plain('card.style.blockSize = `${card.scrollHeight}px`;'),
-        aside('/* the box is the floor of its own measurement; this pin grows and never shrinks */')
-      ]}/>
       <Snippet label="TS" lines={[
         ...unit(bannersSource, 'const settler = new ResizeObserver(')
       ]}/>
@@ -63,7 +59,7 @@ export const MultipleRecipe: FC = () => {
       small play in two acts: the pile opens a slot while the newcomer is still off
       screen, and only then does the newcomer fly in. Leaving runs the play
       backwards.</Tell>
-    <Tell>Platform traps live here, each marked below as the wrong way: a starting style
+    <Tell>Platform traps live here: a starting style
       that silently cannot start, and a variable that silently does not resolve.</Tell>
     <Steps>
       <Step title="Refuse the duplicate">
@@ -73,11 +69,6 @@ export const MultipleRecipe: FC = () => {
             pile remembers what stands, not what stood.</Says>
         </Words>
         <Codes>
-          <Snippet label="TS" foil lines={[
-            plain('const raise = (message) =>'),
-            plain('  setBanners(standing => [...standing, {message}]);'),
-            aside('// raised three times, standing three times')
-          ]}/>
           <Snippet label="TS" lines={[
             ...unit(providerSource, 'const raise = useCallback(')
           ]}/>
@@ -91,15 +82,6 @@ export const MultipleRecipe: FC = () => {
             render.</Says>
         </Words>
         <Codes>
-          <Snippet label="CSS" foil lines={[
-            plain('.trouble {'),
-            plain('  transition: grid-template-rows 0.3s;'),
-            plain('  @starting-style {'),
-            plain('    grid-template-rows: 0fr;'),
-            plain('  }'),
-            plain('}'),
-            aside('/* parses fine, matches fine, and the transition never starts */')
-          ]}/>
           <Snippet label="CSS" lines={[
             ...slotLines(stack), gap,
             ...unit(bannersCss, slotKeyframes(stack))
@@ -116,14 +98,6 @@ export const MultipleRecipe: FC = () => {
             would clip the whole journey to the panel’s own box.</Says>
         </Words>
         <Codes>
-          <Snippet label="CSS" foil lines={[
-            plain('.trouble {'),
-            plain('  @starting-style {'),
-            plain('    translate: var(--arrive);'),
-            plain('  }'),
-            plain('}'),
-            aside('/* the var never resolves inside a starting style; nothing moves */')
-          ]}/>
           <Snippet label="CSS" lines={[
             ...arrivalLines(enter), gap,
             ...span(bannersCss, '/* the UA popover stylesheet', 'overflow: visible;')

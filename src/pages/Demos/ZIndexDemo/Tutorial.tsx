@@ -26,7 +26,7 @@ export const TopLayerTutorial: FC = () => {
       what runs. The cards at the top of this page fight for the front with z-index; the
       banner does not fight at all. The dials below place the stack, choose its entrance,
       and pick how it grows, and where a step depends on a dial, that dial sits on the
-      step. The dashed code is the wrong way you would probably try first, and the links
+      step. The links
       go to MDN if you want more.
     </p>
     <figure className="feedback">

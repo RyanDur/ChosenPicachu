@@ -71,22 +71,6 @@ const ruled = ({world, source, buildSrc}: Build, motion: Motion, dial: ReactNode
       </Codes>
     </Step>;
 
-const menuFoils: Record<World, ReactNode> = {
-  react: <Snippet label="TS" foil lines={[
-    plain('const [open, setOpen] = useState(false);'), gap,
-    plain('<button onClick={() => setOpen(!open)}>⇅</button>'),
-    plain('{open && <menu className="popup">…</menu>}'), gap,
-    aside('// now you owe: outside clicks, Escape, focus return,'),
-    aside('// aria wiring, and a z-index war you cannot win')
-  ]}/>,
-  vanilla: <Snippet label="TS" foil lines={[
-    plain("toggle.addEventListener('click', () =>"),
-    plain("    menu.classList.toggle('open'));"), gap,
-    aside('// now you owe: outside clicks, Escape, focus return,'),
-    aside('// aria wiring, and a z-index war you cannot win')
-  ]}/>
-};
-
 const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
   const {world, source, headerSrc} = build;
   return <Story param="menu" id="rank"
@@ -154,7 +138,6 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
             placement, same menu: the feature degrades, the function does not.</Says>
         </Words>
         <Codes>
-          {menuFoils[world]}
           {world === 'react'
             ? <Snippet label="HTML" lines={[
               ...span(menuSource, '<button type="button"', 'aria-label={label}>{toggle}</button>'), gap,
@@ -228,15 +211,6 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
             is the engine, not ceremony.</Says>
         </Words>
         <Codes>
-          <Snippet label="TS" foil lines={[
-            world === 'react'
-              ? plain('const ruled = (column, direction) =>')
-              : plain('const choose = (column, direction) =>'),
-            world === 'react'
-              ? plain('    setSeats(ranked(rows, seats, {column, direction}));')
-              : plain('    seats = ranked(rows, seats, {column, direction});'),
-            aside('// ranked once, unsorted by the next trade')
-          ]}/>
           <Snippet label="TS" lines={[
             ...unit(sortingSource, 'export const ranked'), gap,
             ...unit(stateSource, 'export const standingOf'),
