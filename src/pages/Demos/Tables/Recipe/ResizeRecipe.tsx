@@ -117,18 +117,27 @@ const captureSays: Record<World, ReactNode> = {
     clamped trade never accumulates error.</Says>
 };
 
+const gripWords =
+  <Snippet label="TS" lines={[
+    ...unit(sharesSource, 'export const grippedAt'), gap,
+    ...unit(sharesSource, 'export const soughtTrade'),
+    aside('// both worlds seed the grip and fold the moves with the same words')
+  ]}/>;
+
 const captureCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="TS" lines={[
       ...unit(resizeSource, 'onPointerDown={(event'), gap,
       ...unit(resizeSource, 'onPointerMove={(event')
     ]}/>
+    {gripWords}
   </Codes>,
   html: <Codes>
     <Snippet label="TS" lines={[
       ...unit(frameResize, "handle.addEventListener('pointerdown'"), gap,
       ...unit(frameResize, "handle.addEventListener('pointermove'")
     ]}/>
+    {gripWords}
   </Codes>
 };
 

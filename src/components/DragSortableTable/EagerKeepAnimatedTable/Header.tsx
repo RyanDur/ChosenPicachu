@@ -2,7 +2,7 @@ import {FC, KeyboardEvent, MouseEvent, PointerEvent} from 'react';
 import {Maybe, has, maybe, not, nothing} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {Column, ResizeHandle, Shares, neighborOf, traded} from '@components/Table';
-import {Slid, anchored, bounded, columnSteps, nudgedColumn, swapped} from '../survey';
+import {Slid, anchored, bounded, columnNudge, columnSteps} from '../survey';
 import {Direction, SortMenu} from '../SortMenu';
 import {sortedBy} from '../sorting';
 import '../Header.css';
@@ -53,13 +53,11 @@ export const Header: FC<Props> = (
                    if (event.currentTarget.getAnimations().length > 0) {
                      return;
                    }
-                   const {from, to} = nudgedColumn(order, columnName, toward);
-                   if (to === from) {
-                     return;
-                   }
                    maybe(event.currentTarget.closest('table')).map(table => {
-                     const neighbour = order[to];
-                     onOrdered(columnName, to, swapped(bounded(table, order), order)(columnName, neighbour, toward));
+                     const nudge = columnNudge(order, bounded(table, order))(columnName, toward);
+                     if (has(nudge)) {
+                       onOrdered(columnName, nudge.to, nudge.marks);
+                     }
                    });
                  })
                : undefined}
