@@ -14,7 +14,7 @@ import frameHide from '../../Frame/table/hide.ts?raw';
 import frameMarks from '../../Frame/table/marks.ts?raw';
 import frameMount from '../../Frame/table/mount.ts?raw';
 import settlesSource from '../../Frame/builds/settles.ts?raw';
-import flightsSource from '../../Frame/builds/flights.ts?raw';
+import flightsSource from '@components/DragSortableTable/flights.ts?raw';
 import {plain} from '../../../Recipe';
 
 export {aloftSource, surveySource, gripSource, ghostSource, sortableCss, headerCss, ghostCss, frameHtml, stateSource, frameGhosts, frameHide, frameMarks, frameMount, travelSource, useTableStateSource, flightsSource, settlesSource};

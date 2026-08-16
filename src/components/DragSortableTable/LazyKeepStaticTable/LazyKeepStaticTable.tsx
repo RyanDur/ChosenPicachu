@@ -2,9 +2,10 @@ import {FC} from 'react';
 import {has, maybe} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {TableProps, measuredShares} from '@components/Table';
-import {columnUnder, interior, rowUnder} from '../survey';
-import {columnLift, Grab, grounded, lazyTravel, rowLift, surfaceTravel} from '../travel';
-import {baked, columnAloft, columnLanding, drifting as drifts, dropped, landedColumn, landedRow, lifted, orderedTo, rowAloft, rowLanding, seatedTo, sharedAs, standingOf} from '../table-state';
+import {interior} from '../survey';
+import {columnLift, Grab, grounded, rowLift, surfaceTravel} from '../travel';
+import {lazyColumnFlight, lazyRowFlight} from '../flights';
+import {baked, Cell, columnAloft, drifting as drifts, dropped, lifted, orderedTo, rowAloft, seatedTo, sharedAs, standingOf} from '../table-state';
 import {useTableState} from '../useTableState';
 import {Aloft} from '../Aloft';
 import {Direction} from '../sorting';
@@ -22,6 +23,7 @@ export const LazyKeepStaticTable: FC<LazyKeepStaticTableProps> = (
     {columns, rows, draggableColumns = false, draggableRows = false, resizableColumns = false, sortable, id, ...dress}
 ) => {
     const [state, commit] = useTableState(columns.map(({column}) => column), rows);
+    const cell: Cell = {state: () => state, commit};
     const {order, shares, rule} = state;
     const grown = state.seats.length === rows.length
         ? state
@@ -53,28 +55,8 @@ export const LazyKeepStaticTable: FC<LazyKeepStaticTableProps> = (
     const drifting = (moving: {clientX: number; clientY: number}): void =>
         commit(drifts(moving));
 
-    const columnTravel = (moving: {clientX: number; clientY: number}): void => {
-        columnAloft(state).and(maybe(state.bounds)).map(([held, measured]) =>
-            commit(columnLanding(
-                lazyTravel(columnUnder(order, measured))(held, moving, landedColumn(state).orElse(undefined)))));
-    };
-
-    const rowTravel = (moving: {clientX: number; clientY: number}): void => {
-        rowAloft(state).and(maybe(state.bounds)).map(([held, measured]) =>
-            commit(rowLanding(
-                lazyTravel(rowUnder(standing, measured))(held, moving, landedRow(state).orElse(undefined)))));
-    };
-
-    const columnLand = (): void => {
-        columnAloft(state).and(landedColumn(state)).map(([held, struck]) =>
-            settleColumn(held, struck));
-    };
-
-    const rowLand = (): void => {
-        rowAloft(state).and(landedRow(state)).map(([held, struck]) =>
-            settleRow(held, struck));
-    };
-
+    const columnFlight = lazyColumnFlight<Cell>((_cell, held, struck) => settleColumn(held, struck));
+    const rowFlight = lazyRowFlight<Cell>((_cell, held, struck) => settleRow(held, struck));
     const surface = (travel: (moving: {clientX: number; clientY: number}) => void, land: () => void) => {
         const landed = (): void => {
             land();
@@ -93,14 +75,14 @@ export const LazyKeepStaticTable: FC<LazyKeepStaticTableProps> = (
         survey: maybe(state.bounds),
         flight: state.flight ?? grounded,
         drift: state.drift,
-        surface: surface(columnTravel, columnLand)
+        surface: surface(moving => columnFlight.travel(cell, moving), () => maybe(columnFlight.land).map(land => land(cell)))
     };
     const rowsTravel = {
         aloft: rowAloft(state),
         survey: maybe(state.bounds),
         flight: state.flight ?? grounded,
         drift: state.drift,
-        surface: surface(rowTravel, rowLand)
+        surface: surface(moving => rowFlight.travel(cell, moving), () => maybe(rowFlight.land).map(land => land(cell)))
     };
 
     const ruled = (

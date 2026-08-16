@@ -10,6 +10,11 @@ export type Aloft =
   | {readonly axis: 'column'; readonly held: string; readonly landing?: string}
   | {readonly axis: 'row'; readonly held: number; readonly landing?: number};
 
+export type Cell = {
+  state: () => TableState;
+  commit: (transition: (state: TableState) => TableState) => void;
+};
+
 export type TableState = {
   readonly order: readonly string[];
   readonly seats: readonly number[];

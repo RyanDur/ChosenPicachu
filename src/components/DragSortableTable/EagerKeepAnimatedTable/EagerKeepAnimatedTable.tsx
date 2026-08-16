@@ -3,9 +3,10 @@ import {has, maybe} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {classNames} from '@components/class-names';
 import {TableProps, measuredShares} from '@components/Table';
-import {Bounds, columnUnder, displaced, interior, rowUnder, Shifted, shifts, Slid, Survey, surveyed} from '../survey';
-import {columnLift, eagerTravel, Grab, grounded, rowLift, surfaceTravel} from '../travel';
-import {baked, columnAloft, drifting as drifts, dropped, lifted, orderedTo, rowAloft, seatedTo, sharedAs, standingOf} from '../table-state';
+import {displaced, interior, Shifted, shifts, Slid, surveyed} from '../survey';
+import {columnLift, Grab, grounded, rowLift, surfaceTravel} from '../travel';
+import {eagerColumnFlight, eagerRowFlight} from '../flights';
+import {baked, Cell, columnAloft, drifting as drifts, dropped, lifted, orderedTo, rowAloft, seatedTo, sharedAs, standingOf} from '../table-state';
 import {useTableState} from '../useTableState';
 import {Aloft} from '../Aloft';
 import {Direction, ranked} from '../sorting';
@@ -24,6 +25,7 @@ export const EagerKeepAnimatedTable: FC<EagerKeepAnimatedTableProps> = (
     {columns, rows, draggableColumns = false, draggableRows = false, resizableColumns = false, sortable, id, ...dress}
 ) => {
     const [state, commit] = useTableState(columns.map(({column}) => column), rows);
+    const cell: Cell = {state: () => state, commit};
     const [slid, setSlid] = useState<Slid>();
     const [shifted, setShifted] = useState<Shifted>();
 
@@ -41,14 +43,16 @@ export const EagerKeepAnimatedTable: FC<EagerKeepAnimatedTableProps> = (
     const awaken = (table: HTMLTableElement): void =>
         commit(current => has(current.shares) ? current : sharedAs(measuredShares(current.order, table))(current));
 
-    const settleColumn = (held: string, struck: string, measured: Bounds): void => {
-        setSlid(displaced(order, held, struck, measured));
+    const settleColumn = (held: string, struck: string): void => {
+        maybe(state.bounds).map(measured => setSlid(displaced(order, held, struck, measured)));
         commit(orderedTo(order.indexOf(held), interior(order.indexOf(struck), order.length)));
     };
 
-    const settleRow = (held: number, struck: number, measured: Survey): void => {
-        const after = array.moveToIndex(state.seats.indexOf(struck), held, state.seats);
-        setShifted(shifts(measured.rowHeights, state.seats, after, held));
+    const settleRow = (held: number, struck: number): void => {
+        maybe(state.bounds).map(measured => {
+            const after = array.moveToIndex(state.seats.indexOf(struck), held, state.seats);
+            setShifted(shifts(measured.rowHeights, state.seats, after, held));
+        });
         commit(seatedTo(held, struck));
     };
 
@@ -63,18 +67,8 @@ export const EagerKeepAnimatedTable: FC<EagerKeepAnimatedTableProps> = (
     const drifting = (moving: {clientX: number; clientY: number}): void =>
         commit(drifts(moving));
 
-    const columnTravel = (moving: {clientX: number; clientY: number}): void => {
-        columnAloft(state).and(maybe(state.bounds)).map(([held, measured]) =>
-            eagerTravel(columnUnder(order, measured), struck =>
-                settleColumn(held, struck, measured))(held, moving));
-    };
-
-    const rowTravel = (moving: {clientX: number; clientY: number}): void => {
-        rowAloft(state).and(maybe(state.bounds)).map(([held, measured]) =>
-            eagerTravel(rowUnder(standing, measured), struck =>
-                settleRow(held, struck, measured))(held, moving));
-    };
-
+    const columnFlight = eagerColumnFlight<Cell>((_cell, held, struck) => settleColumn(held, struck));
+    const rowFlight = eagerRowFlight<Cell>((_cell, held, struck) => settleRow(held, struck));
     const surface = (travel: (moving: {clientX: number; clientY: number}) => void) => ({
         onPointerMove: surfaceTravel(drifting, travel, drop),
         onPointerUp: drop,
@@ -87,14 +81,14 @@ export const EagerKeepAnimatedTable: FC<EagerKeepAnimatedTableProps> = (
         survey: maybe(state.bounds),
         flight: state.flight ?? grounded,
         drift: state.drift,
-        surface: surface(columnTravel)
+        surface: surface(moving => columnFlight.travel(cell, moving))
     };
     const rowsTravel = {
         aloft: rowAloft(state),
         survey: maybe(state.bounds),
         flight: state.flight ?? grounded,
         drift: state.drift,
-        surface: surface(rowTravel)
+        surface: surface(moving => rowFlight.travel(cell, moving))
     };
 
     const ruled = (

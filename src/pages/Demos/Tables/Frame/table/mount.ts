@@ -9,18 +9,14 @@ import {hydrated, recentTrades} from '@pages/Demos/Tables/Aggregations/recent-tr
 import {LiveTradesState, liveTrades, opening} from '@pages/Demos/Charts/live-trades';
 import {Trade} from '@pages/Demos/Charts/coinbase';
 import {ArrowKey, Grab, columnLift, rowLift, still, surfaceTravel} from '@components/DragSortableTable/travel';
+import {FlightAnswers} from '@components/DragSortableTable/flights';
 import {Aloft, TableState, MountedTable, baked, columnOf, drifting, dropped, lifted, ruledBy, standingOf} from './table-state';
 import {GhostFlight, columnGhost, rowGhost} from './ghosts';
 import {announce, wireMenu} from './menus';
 import {dressShares, wireResize} from './resize';
 
-export type FlightAnswers = {
-  travel: (mounted: MountedTable, moving: {clientX: number; clientY: number}) => void;
-  land?: (mounted: MountedTable) => void;
-};
-
 export type Build = {
-  flights: {column: FlightAnswers; row: FlightAnswers};
+  flights: {column: FlightAnswers<MountedTable>; row: FlightAnswers<MountedTable>};
   arrows: {
     column: (mounted: MountedTable, held: string) => (event: ArrowKey) => void;
     row: (mounted: MountedTable, held: number) => (event: ArrowKey) => void;

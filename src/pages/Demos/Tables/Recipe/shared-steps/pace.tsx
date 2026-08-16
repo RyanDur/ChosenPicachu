@@ -30,7 +30,7 @@ export const eagerPace = (world: World, tableSource: string, buildSrc: string): 
       {world === 'react'
         ? <Snippet label="TS" lines={[
           ...unit(tableSource, 'const settleColumn = '), gap,
-          ...unit(tableSource, 'const columnTravel = ')
+          ...span(tableSource, 'const columnFlight = eagerColumnFlight', 'const columnFlight = eagerColumnFlight')
         ]}/>
         : <Snippet label="TS" lines={[
           ...unit(flightsSource, 'export const eagerColumnFlight'), gap,
@@ -74,8 +74,7 @@ export const lazyPace = (world: World, tableSource: string, buildSrc: string): R
       {world === 'react'
         ? <Snippet label="TS" lines={[
           ...unit(tableSource, 'const settleColumn = '), gap,
-          ...unit(tableSource, 'const columnTravel = '), gap,
-          ...unit(tableSource, 'const columnLand = ')
+          ...span(tableSource, 'const columnFlight = lazyColumnFlight', 'const columnFlight = lazyColumnFlight')
         ]}/>
         : <Snippet label="TS" lines={[
           ...unit(flightsSource, 'export const lazyColumnFlight'), gap,
