@@ -1,7 +1,7 @@
 import {has, maybe} from '@ryandur/sand';
 import {ColumnNudge, columnUnder, displaced, interior, RowNudge, rowUnder, shifts} from '@components/DragSortableTable/survey';
 import {Grab, animatedColumnArrows, animatedRowArrows, columnLift, rowLift, lazyTravel} from '@components/DragSortableTable/travel';
-import {baked, columnLanding, columnOf, lifted, markColumns, markRows, nudgedTo, orderedTo, rowLanding, seatedTo, Shell, stand} from '../shell';
+import {baked, columnAloft, columnLanding, columnOf, landedColumn, landedRow, lifted, markColumns, markRows, nudgedTo, orderedTo, rowAloft, rowLanding, seatedTo, Shell, stand} from '../shell';
 
 const settleColumn = (shell: Shell, held: string, struck: string): void => {
   const {order, bounds} = shell.desk();
@@ -23,42 +23,34 @@ const settleRow = (shell: Shell, held: number, struck: number): void => {
 };
 
 const columnTravel = (shell: Shell, moving: {clientX: number; clientY: number}): void => {
-  maybe(shell.desk().aloft).map(aloft => {
-    const {bounds, order} = shell.desk();
-    if (aloft.axis !== 'column' || !has(bounds)) {
-      return;
-    }
+  const {order} = shell.desk();
+  const aloft = columnAloft(shell.desk());
+  const bounds = maybe(shell.desk().bounds);
+  const landing = landedColumn(shell.desk());
+  aloft.and(bounds).map(([held, measured]) =>
     shell.commit(columnLanding(
-      lazyTravel(columnUnder(order, bounds))(aloft.held, moving, aloft.landing)));
-  });
+      lazyTravel(columnUnder(order, measured))(held, moving, landing.orElse(undefined)))));
 };
 
 const columnLand = (shell: Shell): void => {
-  maybe(shell.desk().aloft).map(aloft => {
-    if (aloft.axis !== 'column') {
-      return;
-    }
-    maybe(aloft.landing).map(struck => settleColumn(shell, aloft.held, struck));
+  columnAloft(shell.desk()).map(held => {
+    landedColumn(shell.desk()).map(struck => settleColumn(shell, held, struck));
   });
 };
 
 const rowTravel = (shell: Shell, moving: {clientX: number; clientY: number}): void => {
-  maybe(shell.desk().aloft).map(aloft => {
-    const {bounds, seated: standing} = shell.desk();
-    if (aloft.axis !== 'row' || !has(bounds)) {
-      return;
-    }
+  const {seated: standing} = shell.desk();
+  const aloft = rowAloft(shell.desk());
+  const bounds = maybe(shell.desk().bounds);
+  const landing = landedRow(shell.desk());
+  aloft.and(bounds).map(([held, measured]) =>
     shell.commit(rowLanding(
-      lazyTravel(rowUnder(standing, bounds))(aloft.held, moving, aloft.landing)));
-  });
+      lazyTravel(rowUnder(standing, measured))(held, moving, landing.orElse(undefined)))));
 };
 
 const rowLand = (shell: Shell): void => {
-  maybe(shell.desk().aloft).map(aloft => {
-    if (aloft.axis !== 'row') {
-      return;
-    }
-    maybe(aloft.landing).map(struck => settleRow(shell, aloft.held, struck));
+  rowAloft(shell.desk()).map(held => {
+    landedRow(shell.desk()).map(struck => settleRow(shell, held, struck));
   });
 };
 

@@ -1,7 +1,7 @@
-import {has, maybe} from '@ryandur/sand';
+import {maybe} from '@ryandur/sand';
 import {columnUnder, interior, rowUnder} from '@components/DragSortableTable/survey';
 import {Grab, staticColumnArrows, staticRowArrows, columnLift, rowLift, eagerTravel} from '@components/DragSortableTable/travel';
-import {baked, columnOf, lifted, nudgedTo, orderedTo, seatedTo, Shell, stand} from '../shell';
+import {baked, columnAloft, columnOf, lifted, nudgedTo, orderedTo, rowAloft, seatedTo, Shell, stand} from '../shell';
 
 const settleColumn = (shell: Shell, held: string, struck: string): void => {
   const {order} = shell.desk();
@@ -13,42 +13,26 @@ const settleRow = (shell: Shell, held: number, struck: number): void => {
 };
 
 const columnTravel = (shell: Shell, moving: {clientX: number; clientY: number}): void => {
-  maybe(shell.desk().aloft).map(aloft => {
-    const {bounds, order} = shell.desk();
-    if (aloft.axis !== 'column' || !has(bounds)) {
-      return;
-    }
-    eagerTravel(columnUnder(order, bounds), struck =>
-      settleColumn(shell, aloft.held, struck))(aloft.held, moving);
-  });
+  const {order} = shell.desk();
+  const aloft = columnAloft(shell.desk());
+  const bounds = maybe(shell.desk().bounds);
+  aloft.and(bounds).map(([held, measured]) =>
+    eagerTravel(columnUnder(order, measured), struck =>
+      settleColumn(shell, held, struck))(held, moving));
 };
 
-const columnLand = (shell: Shell): void => {
-  maybe(shell.desk().aloft).map(aloft => {
-    if (aloft.axis !== 'column') {
-      return;
-    }
-  });
-};
+const columnLand = (): void => undefined;
 
 const rowTravel = (shell: Shell, moving: {clientX: number; clientY: number}): void => {
-  maybe(shell.desk().aloft).map(aloft => {
-    const {bounds, seated: standing} = shell.desk();
-    if (aloft.axis !== 'row' || !has(bounds)) {
-      return;
-    }
-    eagerTravel(rowUnder(standing, bounds), struck =>
-      settleRow(shell, aloft.held, struck))(aloft.held, moving);
-  });
+  const {seated: standing} = shell.desk();
+  const aloft = rowAloft(shell.desk());
+  const bounds = maybe(shell.desk().bounds);
+  aloft.and(bounds).map(([held, measured]) =>
+    eagerTravel(rowUnder(standing, measured), struck =>
+      settleRow(shell, held, struck))(held, moving));
 };
 
-const rowLand = (shell: Shell): void => {
-  maybe(shell.desk().aloft).map(aloft => {
-    if (aloft.axis !== 'row') {
-      return;
-    }
-  });
-};
+const rowLand = (): void => undefined;
 
 const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
   const held = columnOf(shell.desk(), th);
