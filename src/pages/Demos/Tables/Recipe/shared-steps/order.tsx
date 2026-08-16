@@ -2,7 +2,7 @@ import {ReactNode} from 'react';
 import {Codes, Says, Snippet, Step, Words, aside, plain} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
-import {frameDesk, frameStand, gap} from './sources';
+import {deskSource, frameStand, gap} from './sources';
 
 export const orderInState = (world: World, tableSource: string): ReactNode =>
   <Step title="Keep the order in state, not in the data">
@@ -31,7 +31,7 @@ export const orderInState = (world: World, tableSource: string): ReactNode =>
       </Codes>
       : <Codes>
         <Snippet label="TS" lines={[
-          ...unit(frameDesk, 'export type Desk'), gap,
+          ...unit(deskSource, 'export type Desk'), gap,
           ...span(frameStand, "const order = [...table.querySelectorAll('thead th')]",
             'aloft: undefined, bounds: undefined, flight: undefined, origin: undefined, drift: still'),
           plain('  };')
