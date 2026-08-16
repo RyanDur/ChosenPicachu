@@ -1,7 +1,6 @@
 import {FC, MouseEvent} from 'react';
-import {has} from '@ryandur/sand';
 import {Menu} from '@components/Menu';
-import {Direction, glyphs, unsorted} from './sorting';
+import {Direction, choices, glyphOf} from './sorting';
 
 export type {Direction};
 
@@ -13,8 +12,8 @@ type Props = {
 
 export const SortMenu: FC<Props> = ({column, sorted, onRule}) =>
   <Menu id={`sort-${column}`} label={`sort ${column}`}
-        toggle={has(sorted) ? glyphs[sorted] : unsorted}>
-    <button type="button" className="item sub-title" onClick={event => onRule(column, 'ascending', event)}>ascending</button>
-    <button type="button" className="item sub-title" onClick={event => onRule(column, 'descending', event)}>descending</button>
-    <button type="button" className="item sub-title" onClick={event => onRule(column, undefined, event)}>as dealt</button>
+        toggle={glyphOf(sorted)}>
+    {choices.map(({display, direction}) =>
+      <button type="button" className="item sub-title" key={display}
+              onClick={event => onRule(column, direction, event)}>{display}</button>)}
   </Menu>;

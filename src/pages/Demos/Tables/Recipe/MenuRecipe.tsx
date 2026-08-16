@@ -190,17 +190,18 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
         <Codes>
           {world === 'react'
             ? <Snippet label="TS" lines={[
+              ...unit(sortingSource, 'export const sortedBy'), gap,
               ...span(sortMenuSource, 'export const SortMenu', '</Menu>;')
             ]}/>
             : <Snippet label="TS" lines={[
-              ...unit(sortingSource, 'export const glyphs'), gap,
-              ...unit(sortingSource, 'export const unsorted'), gap,
+              ...unit(sortingSource, 'export const sortedBy'), gap,
+              ...unit(sortingSource, 'export const glyphOf'), gap,
               ...unit(frameMenus, 'const announce = ')
             ]}/>}
           {world === 'react'
             ? <Snippet label="HTML" lines={[
-              ...span(headerSrc, 'const sorted = rule?.column === columnName ? rule.direction : undefined;',
-                'const sorted = rule?.column === columnName ? rule.direction : undefined;'), gap,
+              ...span(headerSrc, 'const sorted = sortedBy(columnName, rule);',
+                'const sorted = sortedBy(columnName, rule);'), gap,
               ...span(headerSrc, 'aria-sort={sorted}', 'aria-sort={sorted}')
             ]}/>
             : <Snippet label="HTML" lines={[

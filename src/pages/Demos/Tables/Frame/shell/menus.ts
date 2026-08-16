@@ -1,18 +1,16 @@
 import {has, maybe} from '@ryandur/sand';
-import {Direction, Rule, glyphs, unsorted} from '@components/DragSortableTable/sorting';
-
-const directions: Record<string, Direction> = {ascending: 'ascending', descending: 'descending'};
+import {Rule, directionOf, glyphOf, sortedBy} from '@components/DragSortableTable/sorting';
 
 export const announce = (document: Document, column: string, rule?: Rule): void => {
   maybe(document.querySelector(`th.${column}`)).map(header => {
-    const sorted = rule?.column === column ? rule.direction : undefined;
+    const sorted = sortedBy(column, rule);
     if (has(sorted)) {
       header.setAttribute('aria-sort', sorted);
     } else {
       header.removeAttribute('aria-sort');
     }
     maybe(header.querySelector('.menu-toggle')).map(toggle => {
-      toggle.textContent = has(sorted) ? glyphs[sorted] : unsorted;
+      toggle.textContent = glyphOf(sorted);
     });
   });
 };
@@ -21,7 +19,7 @@ export const wireMenu = (document: Document, column: string, choose: (rule?: Rul
   maybe(document.getElementById(`sort-${column}`)).map(menu =>
     [...menu.querySelectorAll('button.item')].forEach(item =>
       item.addEventListener('click', () => {
-        const direction = directions[(item.textContent ?? '').trim()];
+        const direction = directionOf((item.textContent ?? '').trim());
         choose(has(direction) ? {column, direction} : undefined);
         menu.hidePopover();
       })));

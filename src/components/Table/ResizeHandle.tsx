@@ -1,6 +1,6 @@
 import {FC, FocusEvent, KeyboardEvent, PointerEvent, useState} from 'react';
-import {has, Maybe, maybe, nothing} from '@ryandur/sand';
-import {Grip, STEP_SHARE, sought} from './shares';
+import {Maybe, maybe, nothing} from '@ryandur/sand';
+import {Grip, STEP_SHARE, resizeLabel, sought} from './shares';
 
 const steps: Record<string, number> = {ArrowRight: STEP_SHARE, ArrowLeft: -STEP_SHARE};
 
@@ -17,9 +17,7 @@ export const ResizeHandle: FC<Props> = ({column, share, onAwaken, onTrade}) => {
 
     return <button type="button"
               className="resize-handle"
-              aria-label={has(share)
-                  ? `resize ${column}, ${Math.round(share)}%`
-                  : `resize ${column}`}
+              aria-label={resizeLabel(column, share)}
               onFocus={(event: FocusEvent<HTMLElement>) =>
                   maybe(event.currentTarget.closest('table')).map(onAwaken)}
               onKeyDown={(event: KeyboardEvent<HTMLElement>) =>
