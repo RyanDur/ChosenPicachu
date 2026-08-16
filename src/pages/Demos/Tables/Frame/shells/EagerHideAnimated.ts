@@ -1,9 +1,8 @@
-import {animatedColumnArrows, animatedRowArrows, drifted, eagerTravel} from '@components/DragSortableTable/travel';
-import {anchored, Bounds, ColumnNudge, columnUnder, displaced, interior, RowNudge, rowUnder, shifts, Survey, surveyed} from '@components/DragSortableTable/survey';
+import {animatedColumnArrows, animatedRowArrows, Grab, columnLift, drifted, rowLift, eagerTravel} from '@components/DragSortableTable/travel';
+import {Bounds, ColumnNudge, columnUnder, displaced, interior, RowNudge, rowUnder, shifts, Survey} from '@components/DragSortableTable/survey';
 import {baked, columnGhost, columnOf, hideColumn, hideRow, markColumns, markRows, nudgedTo, orderedTo, rowGhost, seatedTo, Shell, stand, takeFlight, unhideColumn, unhideRow} from '../shell';
 
 const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
-  const {table} = shell;
   const held = columnOf(shell.desk(), th);
 
   const ordered = (nudge: ColumnNudge): void => {
@@ -18,33 +17,26 @@ const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
     markColumns(shell, marks);
   };
 
-  th.addEventListener('pointerdown', event => {
-    const {order, seated} = shell.desk();
-    if (anchored(order.indexOf(columnOf(shell.desk(), th)), order.length)) {
-      return;
-    }
-    const survey = surveyed(table, order, seated);
-    const ghost = columnGhost(shell, columnOf(shell.desk(), th));
-    const from = {x: event.clientX, y: event.clientY};
-    hideColumn(shell, columnOf(shell.desk(), th));
-    takeFlight<void>(shell, event, undefined, {
+  const grabbed = ({survey, at, pointerId}: Grab): void => {
+    const ghost = columnGhost(shell, held);
+    hideColumn(shell, held);
+    takeFlight<void>(shell, pointerId, undefined, {
       travel: moving => {
-        ghost.drift(drifted(moving, from));
-        const held = columnOf(shell.desk(), th);
+        ghost.drift(drifted(moving, at));
         eagerTravel(columnUnder(shell.desk().order, survey), struck => commit(held, struck, survey))(held, moving);
       },
       land: () => {
-        unhideColumn(shell, columnOf(shell.desk(), th));
+        unhideColumn(shell, held);
         ghost.land();
       }
     });
-  });
+  };
+
+  th.addEventListener('pointerdown', columnLift(held, () => shell.desk().order, () => shell.desk().seated, grabbed));
   th.addEventListener('keydown', animatedColumnArrows(held, () => shell.desk().order, ordered));
 };
 
 const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void => {
-  const {table} = shell;
-
   const arranged = (nudge: RowNudge): void => {
     shell.commit(desk => nudgedTo(held, nudge.to)(baked(desk)));
     markRows(shell, nudge.drops);
@@ -56,15 +48,13 @@ const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void 
     markRows(shell, shifts(measured.rowHeights, before, shell.desk().seated, held));
   };
 
-  grip.addEventListener('pointerdown', event => {
+  const grabbed = ({survey, at, pointerId}: Grab): void => {
     shell.commit(baked);
-    const survey = surveyed(table, shell.desk().order, shell.desk().seated);
     const ghost = rowGhost(shell, held);
-    const from = {x: event.clientX, y: event.clientY};
     hideRow(shell, held);
-    takeFlight<void>(shell, event, undefined, {
+    takeFlight<void>(shell, pointerId, undefined, {
       travel: moving => {
-        ghost.drift(drifted(moving, from));
+        ghost.drift(drifted(moving, at));
         eagerTravel(rowUnder(shell.desk().seated, survey), struck => commit(struck, survey))(held, moving);
       },
       land: () => {
@@ -72,7 +62,9 @@ const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void 
         ghost.land();
       }
     });
-  });
+  };
+
+  grip.addEventListener('pointerdown', rowLift(() => shell.desk().order, () => shell.desk().seated, grabbed));
   grip.addEventListener('keydown', animatedRowArrows(held, () => shell.desk().order, () => shell.desk().seated, arranged));
 };
 

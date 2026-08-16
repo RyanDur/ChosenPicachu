@@ -7,7 +7,7 @@ export type Flight<Carried> = {
 
 export const takeFlight = <Carried>(
   {document}: Shell,
-  event: PointerEvent,
+  pointerId: number,
   opening: Carried,
   flight: Flight<Carried>
 ): void => {
@@ -33,5 +33,5 @@ export const takeFlight = <Carried>(
   });
   ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(ending =>
     surface.addEventListener(ending, done));
-  surface.setPointerCapture(event.pointerId);
+  surface.setPointerCapture(pointerId);
 };

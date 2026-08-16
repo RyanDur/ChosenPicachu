@@ -1,6 +1,6 @@
 import {has, maybe} from '@ryandur/sand';
 import {array} from '@components/arrays';
-import {ColumnNudge, RowNudge, anchored, bounded, columnNudge, columnSteps, nudgedColumn, nudgedRow, rowNudge, rowSteps, struckAway, surveyed} from './survey';
+import {ColumnNudge, RowNudge, Survey, anchored, bounded, columnNudge, columnSteps, nudgedColumn, nudgedRow, rowNudge, rowSteps, struckAway, surveyed} from './survey';
 export type DragStyle = 'eager-move' | 'lazy-move' | 'hide-eager-move' | 'hide-lazy-move';
 
 export type Flight = {
@@ -124,4 +124,64 @@ export const staticRowArrows = (
         const {to} = nudgedRow(seats, held, toward);
         arrange({to, after: array.moveToIndex(to, held, seats)});
     });
+};
+
+export type Grab = {
+    survey: Survey;
+    box: Flight;
+    at: Drift;
+    pointerId: number;
+};
+
+type GrabEvent = {
+    clientX: number;
+    clientY: number;
+    pointerId: number;
+    currentTarget: EventTarget | null;
+};
+
+export const columnLift = (
+    held: string,
+    order: () => readonly string[],
+    standing: () => readonly number[],
+    grabbed: (grab: Grab) => void
+) => (event: GrabEvent): void => {
+    const columns = order();
+    if (anchored(columns.indexOf(held), columns.length)) {
+        return;
+    }
+    const th = event.currentTarget;
+    if (!(th instanceof Element)) {
+        return;
+    }
+    const box = th.getBoundingClientRect();
+    maybe(th.closest('table')).map(table =>
+        grabbed({
+            survey: surveyed(table, columns, standing()),
+            box: {x: box.x, y: box.y, width: box.width},
+            at: {x: event.clientX, y: event.clientY},
+            pointerId: event.pointerId
+        }));
+};
+
+export const rowLift = (
+    order: () => readonly string[],
+    standing: () => readonly number[],
+    grabbed: (grab: Grab) => void
+) => (event: GrabEvent): void => {
+    const grip = event.currentTarget;
+    if (!(grip instanceof Element)) {
+        return;
+    }
+    const lane = maybe(grip.closest('tr'))
+        .map(row => row.getBoundingClientRect())
+        .map(({x, y, width}) => ({x, y, width}))
+        .orElse(grounded);
+    maybe(grip.closest('table')).map(table =>
+        grabbed({
+            survey: surveyed(table, order(), standing()),
+            box: lane,
+            at: {x: event.clientX, y: event.clientY},
+            pointerId: event.pointerId
+        }));
 };

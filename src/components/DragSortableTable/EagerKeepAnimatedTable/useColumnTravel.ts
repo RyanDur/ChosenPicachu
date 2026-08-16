@@ -1,7 +1,7 @@
 import {PointerEvent, useState} from 'react';
 import {Maybe, maybe, nothing} from '@ryandur/sand';
-import {Drift, drifted, eagerTravel, Flight, grounded, still} from '../travel';
-import {Bounds, columnUnder, Survey, surveyed} from '../survey';
+import {columnLift, Drift, drifted, eagerTravel, Flight, Grab, grounded, still} from '../travel';
+import {Bounds, columnUnder, Survey} from '../survey';
 
 export const useColumnTravel = (
     order: readonly string[],
@@ -14,14 +14,14 @@ export const useColumnTravel = (
     const [origin, setOrigin] = useState<Maybe<Drift>>(nothing());
     const [drift, setDrift] = useState<Drift>(still);
 
+    const grabbed = (column: string) => ({survey, box}: Grab): void => {
+        setBounds(maybe(survey));
+        setFlight(box);
+        setAloft(maybe(column));
+    };
+
     const lift = (column: string) =>
-        (event: PointerEvent<HTMLElement>): void => {
-            const anchored = event.currentTarget.getBoundingClientRect();
-            maybe(event.currentTarget.closest('table'))
-                .map(table => setBounds(maybe(surveyed(table, order, standing))));
-            setFlight({x: anchored.x, y: anchored.y, width: anchored.width});
-            setAloft(maybe(column));
-        };
+        columnLift(column, () => order, () => standing, grabbed(column));
 
     const drop = (): void => {
         setOrigin(nothing());

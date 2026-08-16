@@ -1,8 +1,8 @@
 import {ReactNode} from 'react';
-import {Codes, Mdn, Says, Snippet, Step, Words} from '../../../Recipe';
+import {Codes, Mdn, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
-import {gap, sortableCss} from './sources';
+import {gap, sortableCss, travelSource} from './sources';
 
 export const liftOnce = (world: World, hookSource: string, tableSource: string, shellSrc: string): ReactNode =>
   <Step title="Lift on pointer down, and measure the table once">
@@ -44,13 +44,19 @@ export const liftOnce = (world: World, hookSource: string, tableSource: string, 
     <Codes>
       {world === 'react'
         ? <Snippet label="TS" lines={[
+          ...unit(hookSource, 'const grabbed = '), gap,
           ...unit(hookSource, 'const lift = '), gap,
           ...span(tableSource, 'onLift={columnsTravel.lift}', 'onLift={columnsTravel.lift}')
         ]}/>
         : <Snippet label="TS" lines={[
-          ...span(shellSrc, "th.addEventListener('pointerdown'",
-            'const from = {x: event.clientX, y: event.clientY};')
+          ...unit(shellSrc, '  const grabbed = '), gap,
+          ...span(shellSrc, "th.addEventListener('pointerdown', columnLift",
+            "th.addEventListener('pointerdown', columnLift")
         ]}/>}
+      <Snippet label="TS" lines={[
+        ...unit(travelSource, 'export const columnLift'),
+        aside('// one lift; each world grabs with its own hands')
+      ]}/>
       <Snippet label="CSS" lines={[
         ...unit(sortableCss, '.grabbable {')
       ]}/>
