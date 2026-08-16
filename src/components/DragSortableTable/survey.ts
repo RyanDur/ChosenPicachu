@@ -98,6 +98,33 @@ export const rowUnder = (seats: readonly number[], survey: Survey) =>
 export const anchored = (position: number, count: number): boolean =>
     position === 0 || position === count - 1;
 
+export const columnSteps: Record<string, 1 | -1> = {ArrowRight: 1, ArrowLeft: -1};
+
+export const rowSteps: Record<string, 1 | -1> = {ArrowDown: 1, ArrowUp: -1};
+
+export const nudgedColumn = (order: readonly string[], held: string, toward: number): {from: number; to: number} => {
+    const from = order.indexOf(held);
+    return {from, to: interior(from + toward, order.length)};
+};
+
+export const nudgedRow = (seats: readonly number[], held: number, toward: number): {from: number; to: number} => {
+    const from = seats.indexOf(held);
+    return {from, to: Math.min(Math.max(from + toward, 0), seats.length - 1)};
+};
+
+export const swapped = (measured: Bounds, order: readonly string[]) =>
+    (held: string, neighbour: string, toward: number): Slid => {
+        const spanned = order.reduce((sum, name) => sum + (measured.columnWidths[name] ?? 0), 0);
+        const gap = order.length > 1 ? Math.max(measured.width - spanned, 0) / (order.length - 1) : 0;
+        const carried = (name: string): number => (measured.columnWidths[name] ?? 0) + gap;
+        return {
+            [held]: {toward: toward > 0 ? 'right' : 'left', by: carried(neighbour)},
+            [neighbour]: {toward: toward > 0 ? 'left' : 'right', by: carried(held)}
+        };
+    };
+
+export const gripLabel = (position: number): string => `move row ${position + 1}`;
+
 export const interior = (at: number, count: number): number =>
     Math.min(Math.max(at, 1), count - 2);
 

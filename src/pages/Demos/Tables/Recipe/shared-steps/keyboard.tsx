@@ -2,7 +2,7 @@ import {ReactNode} from 'react';
 import {Codes, Mdn, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
-import {frameStand, gap, gripSource, headerCss} from './sources';
+import {frameStand, gap, gripSource, headerCss, surveySource} from './sources';
 
 export const focusLands = (world: World, headerSource: string): ReactNode =>
   <Step title="Give focus a place to land">
@@ -60,5 +60,10 @@ export const arrowsSpeak = (world: World, headerSource: string, shellSrc: string
           ...unit(shellSrc, "th.addEventListener('keydown'"),
           aside('// the anchors hold; the walk stops beside them')
         ]}/>}
+      <Snippet label="TS" lines={[
+        ...unit(surveySource, 'export const nudgedColumn'), gap,
+        ...unit(surveySource, 'export const nudgedRow'),
+        aside('// both worlds walk with the same feet')
+      ]}/>
     </Codes>
   </Step>;

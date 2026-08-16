@@ -13,11 +13,13 @@ import {
   dragSurface,
   focusLands,
   frameStand,
+  gap,
   ghostByHand,
   liftOnce,
   orderInState,
   ownedPixels,
   quietDials,
+  surveySource,
   theaterVertical,
   turnedVertical,
   twoRoads
@@ -158,11 +160,13 @@ export const EagerKeepStaticRecipe: FC<{track: Track; world: World}> = ({track, 
         <Codes>
           {world === 'react'
             ? <Snippet label="TS" lines={[
-              ...span(headerSource, 'const from = order.indexOf(columnName);', 'onOrdered(columnName, to);'),
+              ...unit(surveySource, 'export const nudgedColumn'), gap,
+              ...span(headerSource, 'const {from, to} = nudgedColumn(order, columnName, toward);', 'onOrdered(columnName, to);'),
               aside('// the whole walk; nothing marked, nothing to wait for')
             ]}/>
             : <Snippet label="TS" lines={[
-              ...span(shellSrc, 'const from = order.indexOf(held);', 'shell.commit(orderedTo(from, to));'),
+              ...unit(surveySource, 'export const nudgedColumn'), gap,
+              ...span(shellSrc, 'const {from, to} = nudgedColumn(order, held, toward);', 'shell.commit(orderedTo(from, to));'),
               aside('// the whole walk; nothing marked, nothing to wait for')
             ]}/>}
         </Codes>

@@ -1,9 +1,8 @@
 import {FC, KeyboardEvent, PointerEvent} from 'react';
 import {maybe} from '@ryandur/sand';
 import Handle from '@components/grip.svg';
+import {gripLabel, rowSteps} from './survey';
 import './RowGrip.css';
-
-const steps: Record<string, 1 | -1> = {ArrowDown: 1, ArrowUp: -1};
 
 type Props = {
     position: number;
@@ -14,9 +13,9 @@ type Props = {
 export const RowGrip: FC<Props> = ({position, onLift, onNudge}) =>
     <button type="button"
             className="grip grabbable"
-            aria-label={`move row ${position + 1}`}
+            aria-label={gripLabel(position)}
             onKeyDown={(event: KeyboardEvent<HTMLElement>) =>
-                maybe(steps[event.key]).map(toward => {
+                maybe(rowSteps[event.key]).map(toward => {
                     event.preventDefault();
                     onNudge(toward, event);
                 })}
