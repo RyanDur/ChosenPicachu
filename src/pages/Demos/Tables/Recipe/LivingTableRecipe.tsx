@@ -78,7 +78,7 @@ const foldSays: Record<World, ReactNode> = {
   vanilla: <Says>Every arrival refolds the same trades into per-window aggregates, because
     refolding is simple math and cannot drift out of sync. The fold is the same module the
     React world runs. What React did for you ends here: there is no render to catch the
-    change, so every commit reconciles the page against the desk, writing only the cells
+    change, so every commit reconciles the page against the state, writing only the cells
     whose text changed and reseating only the rows whose seat changed.</Says>
 };
 
@@ -104,20 +104,20 @@ const refolds: Record<World, string> = {
 
 const stateSays: Record<World, ReactNode> = {
   react: <>
-    <Says>The table’s state is one value: the desk, held in a single cell, and setTableState is the
-      commit. Nothing ever edits the desk in place: a change is a pure transition, a function
+    <Says>The table’s state is one value held in a single cell, and the setter is the
+      commit. Nothing ever edits the state in place: a change is a pure transition, a function
       from the old desk to a new one, and the old value simply stops being rendered.</Says>
     <Says>What follows the commit is React’s half of the deal: the component re-renders, the
       markup renders through the new desk, and React reconciles the real DOM to match, moving
-      only the nodes whose place changed. You never touch the DOM; you only deal the desk.</Says>
+      only the nodes whose place changed. You never touch the DOM; you only commit the next state.</Says>
   </>,
   vanilla: <>
-    <Says>The shell keeps the same state as one value: the desk, which holds order, seats,
-      seated, shares, and the rule together, every field readonly. Nothing ever edits the desk in place: a
+    <Says>The vanilla build keeps the same single value: the table state, which holds order, seats,
+      seated, shares, and the rule together, every field readonly. Nothing ever edits the state in place: a
       change is a pure transition, a function from the old desk to a new one, and the old
       value simply stops being current.</Says>
-    <Says>What React did for you is the other half: the shell holds the same cell with the same
-      write path, and its commit reconciles the page against the new desk by hand, moving only
+    <Says>What React did for you is the other half: the build holds the same cell with the same
+      write path, and its commit reconciles the page against the new state by hand, moving only
       the cells whose place changed and writing only the text that differs. The seam between
       the worlds is exactly here: the state machine is identical; the projection is the
       difference.</Says>

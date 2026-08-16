@@ -35,10 +35,10 @@ const ruled = ({world, source, buildSrc}: Build, motion: Motion, dial: ReactNode
             ruled handler measures the seats before the rule lands and marks every moved row with
             its old offset. The same shifted theater your drags play runs for the sort; the rule
             itself is one state update at the end.</Says>
-          : <Says>Choosing measures the seats before the rule lands: the shell’s choose reads the
+          : <Says>Choosing measures the seats before the rule lands: choose reads the
             row heights first, reseats, and then the variant’s ruled hook marks every moved row
             with its old offset. The same shifted theater the drags play runs for the sort; the
-            animated shell declares the hook, and the static shells simply do not.</Says>}
+            animated build declares the hook, and the static builds simply do not.</Says>}
       </Words>
       <Codes>
         {world === 'react'
@@ -57,7 +57,7 @@ const ruled = ({world, source, buildSrc}: Build, motion: Motion, dial: ReactNode
         {world === 'react'
           ? <Says>This is the static table: ruled sets the rule, and nothing else exists in the
             file. Your rows cut to their ranked seats on the next frame.</Says>
-          : <Says>This is the static shell: choose sets the rule and paints, and no ruled hook
+          : <Says>This is the static build: choose sets the rule and paints, and no ruled hook
             exists in the file. Your rows cut to their ranked seats in the same breath.</Says>}
       </Words>
       <Codes>
@@ -277,8 +277,8 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
               menu <Mdn path="Web/API/Event/stopPropagation">stop pointer descent</Mdn>, so the header
               never hears your press. The toggle itself rides the header’s right edge, a track in the
               cell’s own grid, undressed of its button chrome. And not every column offers a menu:
-              menus exist only where the markup writes them, and the shell discovers the sortable
-              set from the page itself.</Says>}
+              menus exist only where the markup writes them, and the page itself declares the sortable
+              set.</Says>}
         </Words>
         <Codes>
           {world === 'react'

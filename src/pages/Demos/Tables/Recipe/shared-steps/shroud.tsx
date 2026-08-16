@@ -18,7 +18,7 @@ export const hideOrigin = (world: World, tableSource: string, headerSource: stri
           drop will land. Nothing unmounts.</Says>
         : <Says>We could pull the origin out of the DOM while it travels, but its space would
           collapse and the whole table would shift; so the disappearance takes one class and one
-          word of CSS instead. This is the hide shell, so there is no flag anywhere: the grab
+          word of CSS instead. This is the hide build, so there is no flag anywhere: the grab
           blanks the column it lifted and the landing unblanks it, and CSS does the
           vanishing: <Mdn path="Web/CSS/visibility">visibility</Mdn> hidden takes the whole column
           (text, borders, grip, everything) while its layout space remains as the gap where the
@@ -56,14 +56,14 @@ export const keepOrigin = (world: World): ReactNode =>
           This is the keep table: no hiding code exists in it, so there is nothing to erase.</Says>
         : <Says>The lifted column simply stays painted underneath the ghost. There are two of it
           for the length of the drag, which reads as a copy being carried out of a still-intact
-          table. This is the keep shell: no hiding code exists in it, so there is nothing to
+          table. This is the keep build: no hiding code exists in it, so there is nothing to
           erase.</Says>}
     </Words>
     <Codes>
       <Snippet label="HTML" lines={[
         aside(world === 'react'
           ? '{/* no hidden wiring exists in this table; nothing to erase */}'
-          : '<!-- no hiding code exists in this shell; nothing to erase -->')
+          : '<!-- no hiding code exists in this build; nothing to erase -->')
       ]}/>
     </Codes>
   </Step>;

@@ -15,7 +15,7 @@ export const focusLands = (world: World, headerSource: string): ReactNode =>
           a <Mdn path="Web/CSS/:focus-visible">focus-visible</Mdn> ring that draws for the keyboard
           only; pointer users never see it.</Says>
         : <Says>HTML nearly solves this alone: the row grip is a button in the markup, focusable by
-          birth, and the shell asks each movable header for focus with
+          birth, and JavaScript asks each movable header for focus with
           a <Mdn path="Web/HTML/Global_attributes/tabindex">tabindex</Mdn> as it dresses the grips
           (the anchored edges hold the table, so their headers ask for nothing), so Tab walks every
           movable piece of the table in order. CSS answers the arrival with
@@ -31,7 +31,7 @@ export const focusLands = (world: World, headerSource: string): ReactNode =>
         ]}/>
         : <Snippet label="TS" lines={[
           ...unit(frameStand, 'const dressGrips = '),
-          aside('// the button was focusable all along; the shell asks for the headers')
+          aside('// the button was focusable all along; JavaScript asks for the headers')
         ]}/>}
       <Snippet label="CSS" lines={[
         ...unit(headerCss, '.sortable .header-cell {')
