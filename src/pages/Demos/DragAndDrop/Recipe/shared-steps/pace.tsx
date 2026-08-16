@@ -2,7 +2,7 @@ import {ReactNode} from 'react';
 import {PaceDial} from '../../../Controls';
 import {Codes, Mdn, Says, Snippet, Step, Words} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
-import {gap} from './sources';
+import {gap, sessionSource} from './sources';
 
 export const commitCrossing = (listSource: string): ReactNode =>
   <Step title="Commit inside the crossing" dial={<PaceDial name="native-pace"/>}>
@@ -14,7 +14,8 @@ export const commitCrossing = (listSource: string): ReactNode =>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
-        ...unit(listSource, 'onDragOver={event => {')
+        ...unit(sessionSource, 'export const crossingOver'), gap,
+        ...span(listSource, 'onDragOver={crossingOver(aloft, order)(item, index,', 'setOrder(previous => array.moveToIndex(index, held, previous));')
       ]}/>
     </Codes>
   </Step>;

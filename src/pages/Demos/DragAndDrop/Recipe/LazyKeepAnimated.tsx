@@ -14,8 +14,9 @@ import {
   stashLanding,
   straightToOrder
 } from './shared-steps';
+import gripSource from '../items/Grip.tsx?raw';
 import listSource from '../LazyKeepAnimatedList/LazyKeepAnimatedList.tsx?raw';
-import itemSource from '../LazyKeepAnimatedList/Item.tsx?raw';
+import itemSource from '../items/KeepItem.tsx?raw';
 
 export const LazyKeepAnimatedRecipe: FC = () => <>
   <Story param="native" id="sort"
@@ -35,5 +36,5 @@ export const LazyKeepAnimatedRecipe: FC = () => <>
       {roadEnd}
     </Steps>
   </Story>
-  {straightToOrder(itemSource)}
+  {straightToOrder(gripSource)}
 </>;

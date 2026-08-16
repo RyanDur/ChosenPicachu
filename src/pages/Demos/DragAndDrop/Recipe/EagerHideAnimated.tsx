@@ -14,8 +14,9 @@ import {
   slideCrossed,
   straightToOrder
 } from './shared-steps';
+import gripSource from '../items/Grip.tsx?raw';
 import listSource from '../EagerHideAnimatedList/EagerHideAnimatedList.tsx?raw';
-import itemSource from '../EagerHideAnimatedList/Item.tsx?raw';
+import itemSource from '../items/HideItem.tsx?raw';
 import cssSource from '../EagerHideAnimatedList/EagerHideAnimatedList.css?raw';
 
 export const EagerHideAnimatedRecipe: FC = () => <>
@@ -36,5 +37,5 @@ export const EagerHideAnimatedRecipe: FC = () => <>
       {roadEnd}
     </Steps>
   </Story>
-  {straightToOrder(itemSource)}
+  {straightToOrder(gripSource)}
 </>;

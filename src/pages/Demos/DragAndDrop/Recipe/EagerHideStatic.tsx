@@ -14,8 +14,9 @@ import {
   roadEnd,
   straightToOrder
 } from './shared-steps';
+import gripSource from '../items/Grip.tsx?raw';
 import listSource from '../EagerHideStaticList/EagerHideStaticList.tsx?raw';
-import itemSource from '../EagerHideStaticList/Item.tsx?raw';
+import itemSource from '../items/HideItem.tsx?raw';
 import cssSource from '../EagerHideStaticList/EagerHideStaticList.css?raw';
 
 export const EagerHideStaticRecipe: FC = () => <>
@@ -36,5 +37,5 @@ export const EagerHideStaticRecipe: FC = () => <>
       {roadEnd}
     </Steps>
   </Story>
-  {straightToOrder(itemSource)}
+  {straightToOrder(gripSource)}
 </>;
