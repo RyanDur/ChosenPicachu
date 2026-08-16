@@ -1,7 +1,7 @@
 import {FC, useState} from 'react';
 import {Maybe, maybe, nothing} from '@ryandur/sand';
-import {array} from '@components/arrays';
-import {Item} from './Item';
+import {landedOrder} from '../session';
+import {HideItem} from '../items/HideItem';
 import '../sortable-list.css';
 import './LazyHideStaticList.css';
 
@@ -15,7 +15,7 @@ export const LazyHideStaticList: FC<Props> = ({list}) => {
     const [landing, setLanding] = useState<Maybe<number>>(nothing());
 
     const release = () => {
-        aloft.and(landing).map(([held, at]) => setOrder(array.moveToIndex(at, held, order)));
+        landedOrder(aloft, landing, order).map(setOrder);
         setAloft(nothing());
         setLanding(nothing());
     };
@@ -28,7 +28,7 @@ export const LazyHideStaticList: FC<Props> = ({list}) => {
         order.map((item, index) =>
             <li key={item}
                 className={'item'}>
-                <Item item={item}
+                <HideItem item={item}
                     order={order}
                     onLifted={lifted => setAloft(maybe(lifted))}
                     onReleased={release}

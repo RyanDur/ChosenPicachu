@@ -2,7 +2,7 @@ import {Codes, Says, Snippet, Step, Steps, Story, Tell, Words} from '../../../Re
 import {unit} from '../../../Recipe/carve';
 import {gap} from './sources';
 
-export const straightToOrder = (itemSource: string) =>
+export const straightToOrder = (gripSource: string) =>
   <Story param="native" id="keyboard"
          can="The user can sort without a mouse"
          soThat="the keys go straight to the order">
@@ -20,8 +20,8 @@ export const straightToOrder = (itemSource: string) =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...unit(itemSource, 'const steps'), gap,
-            ...unit(itemSource, 'onKeyDown={event =>')
+            ...unit(gripSource, 'const steps'), gap,
+            ...unit(gripSource, 'onKeyDown={event =>')
           ]}/>
         </Codes>
       </Step>

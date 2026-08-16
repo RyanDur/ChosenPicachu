@@ -14,8 +14,9 @@ import {
   stashLanding,
   straightToOrder
 } from './shared-steps';
+import gripSource from '../items/Grip.tsx?raw';
 import listSource from '../LazyHideAnimatedList/LazyHideAnimatedList.tsx?raw';
-import itemSource from '../LazyHideAnimatedList/Item.tsx?raw';
+import itemSource from '../items/HideItem.tsx?raw';
 import cssSource from '../LazyHideAnimatedList/LazyHideAnimatedList.css?raw';
 
 export const LazyHideAnimatedRecipe: FC = () => <>
@@ -36,5 +37,5 @@ export const LazyHideAnimatedRecipe: FC = () => <>
       {roadEnd}
     </Steps>
   </Story>
-  {straightToOrder(itemSource)}
+  {straightToOrder(gripSource)}
 </>;

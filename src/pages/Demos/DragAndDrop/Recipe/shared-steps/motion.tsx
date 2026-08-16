@@ -2,7 +2,7 @@ import {ReactNode} from 'react';
 import {MotionDial} from '../../../Controls';
 import {Codes, Mdn, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
-import {gap, glideSource} from './sources';
+import {gap, glideSource, marksSource, sessionSource} from './sources';
 
 export const slideCrossed = (listSource: string, cssSource: string): ReactNode =>
   <Step title="Slide the crossed item home" dial={<MotionDial name="native-motion"/>}>
@@ -14,8 +14,8 @@ export const slideCrossed = (listSource: string, cssSource: string): ReactNode =
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
-        ...span(listSource, "setPushed({[item]: homeward ? 'right' : 'left'});",
-          "setPushed({[item]: homeward ? 'right' : 'left'});")
+        ...unit(marksSource, 'export const crossedMark'), gap,
+        ...span(listSource, 'setPushed(crossedMark(item, homeward));', 'setPushed(crossedMark(item, homeward));')
       ]}/>
       <Snippet label="CSS" lines={[
         ...unit(cssSource, '.sortable-list .pushed {'), gap,
@@ -38,8 +38,8 @@ export const glideSettle = (listSource: string): ReactNode =>
         ...span(listSource, 'viewTransitionName: `sort-${item}`', 'viewTransitionName: `sort-${item}`')
       ]}/>
       <Snippet label="TS" lines={[
-        ...span(listSource, 'setTimeout(() => glide(true)(() => setOrder(settled)));',
-          'setTimeout(() => glide(true)(() => setOrder(settled)));'), gap,
+        ...unit(sessionSource, 'export const glided'), gap,
+        ...span(listSource, 'landedOrder(aloft, landing, order).map(glided(setOrder));', 'landedOrder(aloft, landing, order).map(glided(setOrder));'), gap,
         ...unit(glideSource, 'export const glide')
       ]}/>
     </Codes>

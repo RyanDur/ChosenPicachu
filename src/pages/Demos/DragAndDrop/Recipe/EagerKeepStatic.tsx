@@ -14,8 +14,9 @@ import {
   roadEnd,
   straightToOrder
 } from './shared-steps';
+import gripSource from '../items/Grip.tsx?raw';
 import listSource from '../EagerKeepStaticList/EagerKeepStaticList.tsx?raw';
-import itemSource from '../EagerKeepStaticList/Item.tsx?raw';
+import itemSource from '../items/KeepItem.tsx?raw';
 
 export const EagerKeepStaticRecipe: FC = () => <>
   <Story param="native" id="sort"
@@ -35,5 +36,5 @@ export const EagerKeepStaticRecipe: FC = () => <>
       {roadEnd}
     </Steps>
   </Story>
-  {straightToOrder(itemSource)}
+  {straightToOrder(gripSource)}
 </>;

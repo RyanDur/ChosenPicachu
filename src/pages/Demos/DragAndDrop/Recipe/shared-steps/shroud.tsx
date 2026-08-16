@@ -33,7 +33,7 @@ export const keepStanding = (listSource: string): ReactNode =>
     </Words>
     <Codes>
       <Snippet label="HTML" lines={[
-        ...span(listSource, '<Item item={item}', '<Item item={item}'),
+        ...span(listSource, '<KeepItem item={item}', '<KeepItem item={item}'),
         aside('{/* no hiding wiring exists in this list; nothing to erase */}')
       ]}/>
     </Codes>
