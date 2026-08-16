@@ -1,7 +1,7 @@
 import {has, maybe} from '@ryandur/sand';
 import {Grip, STEP_SHARE, grippedAt, measuredShares, resizeLabel, soughtTrade} from '@components/Table/shares';
 import {columnSteps} from '@components/DragSortableTable/survey';
-import {Desk, Shell, columnOf, sharedAs, tradedBy} from './desk';
+import {TableState, MountedTable, columnOf, sharedAs, tradedBy} from './table-state';
 
 const dressColumn = (table: HTMLTableElement, column: string, share: number): void => {
   maybe(table.querySelector(`th.${column}`)).map(header => {
@@ -15,21 +15,21 @@ const dressColumn = (table: HTMLTableElement, column: string, share: number): vo
   });
 };
 
-export const dressShares = (table: HTMLTableElement, desk: Desk): void => {
-  maybe(desk.shares).map(shares => {
+export const dressShares = (table: HTMLTableElement, state: TableState): void => {
+  maybe(state.shares).map(shares => {
     table.classList.add('apportioned');
-    desk.order.forEach(column => dressColumn(table, column, shares[column]));
+    state.order.forEach(column => dressColumn(table, column, shares[column]));
   });
 };
 
-const wireHandle = (shell: Shell, column: string, handle: HTMLButtonElement): void => {
-  const {table} = shell;
+const wireHandle = (mounted: MountedTable, column: string, handle: HTMLButtonElement): void => {
+  const {table} = mounted;
   let grip: Grip | undefined;
   let carried = 0;
 
   const awaken = (): void => {
-    const shares = shell.desk().shares ?? measuredShares(shell.desk().order, table);
-    shell.commit(sharedAs(shares));
+    const shares = mounted.state().shares ?? measuredShares(mounted.state().order, table);
+    mounted.commit(sharedAs(shares));
   };
 
   handle.addEventListener('focus', awaken);
@@ -45,7 +45,7 @@ const wireHandle = (shell: Shell, column: string, handle: HTMLButtonElement): vo
     }
     handle.setPointerCapture(event.pointerId);
     const trade = soughtTrade(grip, event.clientX, carried);
-    shell.commit(tradedBy(column, trade.delta));
+    mounted.commit(tradedBy(column, trade.delta));
     carried = trade.carried;
   });
   ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(landing =>
@@ -57,14 +57,14 @@ const wireHandle = (shell: Shell, column: string, handle: HTMLButtonElement): vo
       event.preventDefault();
       event.stopPropagation();
       awaken();
-      shell.commit(tradedBy(column, toward * STEP_SHARE));
+      mounted.commit(tradedBy(column, toward * STEP_SHARE));
     });
   });
 };
 
-export const wireResize = (shell: Shell): void => {
-  [...shell.table.querySelectorAll('.resize-handle')]
+export const wireResize = (mounted: MountedTable): void => {
+  [...mounted.table.querySelectorAll('.resize-handle')]
     .filter(handle => handle instanceof HTMLButtonElement)
     .forEach(handle => maybe(handle.closest('th')).map(th =>
-      wireHandle(shell, columnOf(shell.desk(), th), handle)));
+      wireHandle(mounted, columnOf(mounted.state(), th), handle)));
 };

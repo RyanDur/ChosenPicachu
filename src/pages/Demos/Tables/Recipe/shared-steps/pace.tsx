@@ -5,7 +5,7 @@ import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {flightsSource, frameStand, gap, travelSource} from './sources';
 
-export const eagerPace = (world: World, tableSource: string, shellSrc: string): ReactNode =>
+export const eagerPace = (world: World, tableSource: string, buildSrc: string): ReactNode =>
   <Step title="Commit inside the move" dial={<PaceDial name="step-pace"/>}>
     <Words want="The trader wants the table to answer inside the move, so that they can change their mind before the drop.">
       {world === 'react'
@@ -34,7 +34,7 @@ export const eagerPace = (world: World, tableSource: string, shellSrc: string): 
         ]}/>
         : <Snippet label="TS" lines={[
           ...unit(flightsSource, 'export const eagerColumnFlight'), gap,
-          ...span(shellSrc, 'column: eagerColumnFlight', 'column: eagerColumnFlight')
+          ...span(buildSrc, 'column: eagerColumnFlight', 'column: eagerColumnFlight')
         ]}/>}
       {world === 'react'
         ? <Snippet label="HTML" lines={[
@@ -52,7 +52,7 @@ export const eagerPace = (world: World, tableSource: string, shellSrc: string): 
     </Codes>
   </Step>;
 
-export const lazyPace = (world: World, tableSource: string, shellSrc: string): ReactNode =>
+export const lazyPace = (world: World, tableSource: string, buildSrc: string): ReactNode =>
   <Step title="Stash the landing, commit on release" dial={<PaceDial name="step-pace"/>}>
     <Words want="The trader wants the table calm while they drag, because mid-flight churn distracts and only the destination matters.">
       {world === 'react'
@@ -79,7 +79,7 @@ export const lazyPace = (world: World, tableSource: string, shellSrc: string): R
         ]}/>
         : <Snippet label="TS" lines={[
           ...unit(flightsSource, 'export const lazyColumnFlight'), gap,
-          ...span(shellSrc, 'column: lazyColumnFlight', 'column: lazyColumnFlight')
+          ...span(buildSrc, 'column: lazyColumnFlight', 'column: lazyColumnFlight')
         ]}/>}
       <Snippet label="TS" lines={[
         ...unit(travelSource, 'export const lazyTravel'),

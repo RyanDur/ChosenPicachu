@@ -1,6 +1,6 @@
 import {maybe} from '@ryandur/sand';
 import {Drift} from '@components/DragSortableTable/travel';
-import {Shell} from './desk';
+import {MountedTable} from './table-state';
 
 export type GhostFlight = {
   element: HTMLTableElement;
@@ -42,9 +42,9 @@ const flown = (document: Document, element: HTMLTableElement, at: {x: number; y:
   };
 };
 
-export const columnGhost = (shell: Shell, column: string): GhostFlight => {
-  const {document, table, lanes} = shell;
-  const at = shell.desk().order.indexOf(column);
+export const columnGhost = (mounted: MountedTable, column: string): GhostFlight => {
+  const {document, table, lanes} = mounted;
+  const at = mounted.state().order.indexOf(column);
   const th = maybe(table.querySelector(`th.${column}`)).orElse(table);
   const ghost = summonedTable(document, 'column-ghost');
   maybe(ghost.querySelector('th')).map(header => header.classList.add(column));
@@ -63,7 +63,7 @@ export const columnGhost = (shell: Shell, column: string): GhostFlight => {
   return flown(document, ghost, {x: box.x, y: box.y, width: box.width});
 };
 
-export const rowGhost = ({document, lanes}: Shell, row: number): GhostFlight => {
+export const rowGhost = ({document, lanes}: MountedTable, row: number): GhostFlight => {
   const lane = lanes[row];
   const ghost = summonedTable(document, 'row-ghost');
   maybe(ghost.querySelector('tr')).map(seat =>

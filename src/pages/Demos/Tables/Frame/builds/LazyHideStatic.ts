@@ -1,5 +1,5 @@
 import {staticColumnArrows, staticRowArrows} from '@components/DragSortableTable/travel';
-import {stand} from '../shell';
+import {stand, veiled} from '../table';
 import {staticArranged, staticOrdered, staticSettleColumn, staticSettleRow} from './settles';
 import {lazyColumnFlight, lazyRowFlight} from './flights';
 
@@ -10,7 +10,8 @@ export const wire = (document: Document): void =>
       row: lazyRowFlight(staticSettleRow)
     },
     arrows: {
-      column: (shell, held) => staticColumnArrows(held, () => shell.desk().order, staticOrdered(shell)),
-      row: (shell, held) => staticRowArrows(held, () => shell.desk().seated, staticArranged(shell, held))
+      column: (mounted, held) => staticColumnArrows(held, () => mounted.state().order, staticOrdered(mounted)),
+      row: (mounted, held) => staticRowArrows(held, () => mounted.state().seated, staticArranged(mounted, held))
     },
+    veils: veiled,
   });

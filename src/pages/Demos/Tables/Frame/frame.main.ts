@@ -1,5 +1,5 @@
 import type {Motion, Origin, Pace} from '../../Controls';
-import {wires} from './shells';
+import {wires} from './builds';
 
 declare global {
   // augmenting Window only works through interface merging — a type alias cannot merge

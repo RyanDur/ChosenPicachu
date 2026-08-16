@@ -24,7 +24,7 @@ import {
   turnedVertical,
   twoRoads
 } from './shared-steps';
-import shellSrc from '../Frame/shells/EagerKeepStatic.ts?raw';
+import buildSrc from '../Frame/builds/EagerKeepStatic.ts?raw';
 import tableSource from '@components/DragSortableTable/EagerKeepStaticTable/EagerKeepStaticTable.tsx?raw';
 import headerSource from '@components/DragSortableTable/EagerKeepStaticTable/Header.tsx?raw';
 
@@ -44,7 +44,7 @@ export const EagerKeepStaticRecipe: FC<{track: Track; world: World}> = ({track, 
         {dragSurface(world, tableSource)}
         {ghostByHand(world, tableSource)}
         {deadZone}
-        {eagerPace(world, tableSource, shellSrc)}
+        {eagerPace(world, tableSource, buildSrc)}
         {keepOrigin(world)}
         {staticMotion(world, tableSource)}
       </Steps>
@@ -66,6 +66,6 @@ export const EagerKeepStaticRecipe: FC<{track: Track; world: World}> = ({track, 
     <Steps>
       {focusLands(world, headerSource)}
       {arrowsSpeak(world, headerSource)}
-      {cutKey(world, headerSource, shellSrc)}
+      {cutKey(world, headerSource, buildSrc)}
     </Steps>
   </Story>;

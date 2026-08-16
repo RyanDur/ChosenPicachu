@@ -10,11 +10,11 @@ import headerCss from '@components/DragSortableTable/Header.css?raw';
 import sortMenuSource from '@components/DragSortableTable/SortMenu.tsx?raw';
 import sortingSource from '@components/DragSortableTable/sorting.ts?raw';
 import tableSource from '../Frame/table.html?raw';
-import deskSource from '@components/DragSortableTable/desk.ts?raw';
-import frameMenus from '../Frame/shell/menus.ts?raw';
-import frameStand from '../Frame/shell/stand.ts?raw';
-import {shellSources} from '../Frame/shells/sources';
-import settlesSource from '../Frame/shells/settles.ts?raw';
+import stateSource from '@components/DragSortableTable/table-state.ts?raw';
+import frameMenus from '../Frame/table/menus.ts?raw';
+import frameStand from '../Frame/table/stand.ts?raw';
+import {buildSources} from '../Frame/builds/sources';
+import settlesSource from '../Frame/builds/settles.ts?raw';
 import {headerSources, tableSources} from './sources';
 import '../../Recipe/Recipe.css';
 
@@ -24,10 +24,10 @@ type Build = {
   world: World;
   source: string;
   headerSrc: string;
-  shellSrc: string;
+  buildSrc: string;
 };
 
-const ruled = ({world, source, shellSrc}: Build, motion: Motion, dial: ReactNode) => motion === 'animated'
+const ruled = ({world, source, buildSrc}: Build, motion: Motion, dial: ReactNode) => motion === 'animated'
   ? <Step title="Rule, measure, and mark" dial={dial}>
       <Words want="Choosing a direction reorders every row at once. On the animated table, each row deserves to be drawn sliding from where it was.">
         {world === 'react'
@@ -48,7 +48,7 @@ const ruled = ({world, source, shellSrc}: Build, motion: Motion, dial: ReactNode
           : <Snippet label="TS" lines={[
             ...unit(frameStand, '  const choose = '), gap,
             ...unit(settlesSource, 'export const shiftsRuled'), gap,
-            ...span(shellSrc, 'ruled: shiftsRuled', 'ruled: shiftsRuled')
+            ...span(buildSrc, 'ruled: shiftsRuled', 'ruled: shiftsRuled')
           ]}/>}
       </Codes>
     </Step>
@@ -239,7 +239,7 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
           ]}/>
           <Snippet label="TS" lines={[
             ...unit(sortingSource, 'export const ranked'), gap,
-            ...unit(deskSource, 'export const standingOf'),
+            ...unit(stateSource, 'export const standingOf'),
             aside('// both worlds drape through the same standing')
           ]}/>
         </Codes>
@@ -255,11 +255,11 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
         <Codes>
           {world === 'react'
             ? <Snippet label="TS" lines={[
-              ...unit(deskSource, 'export const baked'), gap,
+              ...unit(stateSource, 'export const baked'), gap,
               ...span(source, 'const grabbedRow = ', 'baked(current)));')
             ]}/>
             : <Snippet label="TS" lines={[
-              ...unit(deskSource, 'export const baked = '),
+              ...unit(stateSource, 'export const baked = '),
               aside('// the grab commits it outright; a nudge folds it into its own move')
             ]}/>}
         </Codes>
@@ -314,7 +314,7 @@ export const MenuRecipe: FC = () => {
     world,
     source: tableSources[pace][origin][motion],
     headerSrc: headerSources[pace][origin][motion],
-    shellSrc: shellSources[pace][origin][motion]
+    buildSrc: buildSources[pace][origin][motion]
   };
   return <section aria-label="build the sort menu yourself" className="build-steps">
     <Stories>{rankStory(build, motion, <MotionDial name="menu-motion"/>)}</Stories>

@@ -47,7 +47,7 @@ export const dragSurface = (world: World, tableSource: string): ReactNode =>
           aside('// cancel and lost capture are not delegates; they ARE the drop')
         ]}/>
         : <Snippet label="TS" lines={[
-          ...unit(frameStand, '  const mounted = '),
+          ...unit(frameStand, '  const mountSurface = '),
           aside('// cancel, lost capture, and buttons at zero are not delegates; they ARE the drop')
         ]}/>}
       <Snippet label="TS" lines={[

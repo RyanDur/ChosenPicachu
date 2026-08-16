@@ -2,10 +2,10 @@ import {fireEvent, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {WebSocketServer} from 'ws';
 import {broadcast, interceptedNetwork, listeningFeed, realSockets, subscribed, tradeFrame, urlOf} from '@test-support/feed';
-import {wire as eagerKeepStatic} from '../shells/EagerKeepStatic';
-import {wire as eagerKeepAnimated} from '../shells/EagerKeepAnimated';
-import {wire as eagerHideStatic} from '../shells/EagerHideStatic';
-import {wire as lazyKeepStatic} from '../shells/LazyKeepStatic';
+import {wire as eagerKeepStatic} from '../builds/EagerKeepStatic';
+import {wire as eagerKeepAnimated} from '../builds/EagerKeepAnimated';
+import {wire as eagerHideStatic} from '../builds/EagerHideStatic';
+import {wire as lazyKeepStatic} from '../builds/LazyKeepStatic';
 import tableHtml from '../table.html?raw';
 
 beforeAll(realSockets);

@@ -4,8 +4,8 @@ import {classNames} from '@components/class-names';
 import {TableProps, measuredShares} from '@components/Table';
 import {columnUnder, interior, rowUnder} from '../survey';
 import {columnLift, eagerTravel, Grab, grounded, rowLift, surfaceTravel} from '../travel';
-import {baked, columnAloft, drifting as drifts, dropped, lifted, orderedTo, rowAloft, seatedTo, sharedAs, standingOf} from '../desk';
-import {useDesk} from '../useDesk';
+import {baked, columnAloft, drifting as drifts, dropped, lifted, orderedTo, rowAloft, seatedTo, sharedAs, standingOf} from '../table-state';
+import {useTableState} from '../useTableState';
 import {Aloft} from '../Aloft';
 import {Direction} from '../sorting';
 import {Header} from './Header';
@@ -21,11 +21,11 @@ export type EagerKeepStaticTableProps = TableProps & {
 export const EagerKeepStaticTable: FC<EagerKeepStaticTableProps> = (
     {columns, rows, draggableColumns = false, draggableRows = false, resizableColumns = false, sortable, id, ...dress}
 ) => {
-    const [desk, commit] = useDesk(columns.map(({column}) => column), rows);
-    const {order, shares, rule} = desk;
-    const grown = desk.seats.length === rows.length
-        ? desk
-        : {...desk, seats: rows.map((_, row) => row)};
+    const [state, commit] = useTableState(columns.map(({column}) => column), rows);
+    const {order, shares, rule} = state;
+    const grown = state.seats.length === rows.length
+        ? state
+        : {...state, seats: rows.map((_, row) => row)};
     const standing = standingOf(rows, grown);
     const ordered = order.flatMap(name => {
         const definition = columns.find(({column}) => column === name);
@@ -54,13 +54,13 @@ export const EagerKeepStaticTable: FC<EagerKeepStaticTableProps> = (
         commit(drifts(moving));
 
     const columnTravel = (moving: {clientX: number; clientY: number}): void => {
-        columnAloft(desk).and(maybe(desk.bounds)).map(([held, measured]) =>
+        columnAloft(state).and(maybe(state.bounds)).map(([held, measured]) =>
             eagerTravel(columnUnder(order, measured), struck =>
                 settleColumn(held, struck))(held, moving));
     };
 
     const rowTravel = (moving: {clientX: number; clientY: number}): void => {
-        rowAloft(desk).and(maybe(desk.bounds)).map(([held, measured]) =>
+        rowAloft(state).and(maybe(state.bounds)).map(([held, measured]) =>
             eagerTravel(rowUnder(standing, measured), struck =>
                 settleRow(held, struck))(held, moving));
     };
@@ -73,17 +73,17 @@ export const EagerKeepStaticTable: FC<EagerKeepStaticTableProps> = (
     });
 
     const columnsTravel = {
-        aloft: columnAloft(desk),
-        survey: maybe(desk.bounds),
-        flight: desk.flight ?? grounded,
-        drift: desk.drift,
+        aloft: columnAloft(state),
+        survey: maybe(state.bounds),
+        flight: state.flight ?? grounded,
+        drift: state.drift,
         surface: surface(columnTravel)
     };
     const rowsTravel = {
-        aloft: rowAloft(desk),
-        survey: maybe(desk.bounds),
-        flight: desk.flight ?? grounded,
-        drift: desk.drift,
+        aloft: rowAloft(state),
+        survey: maybe(state.bounds),
+        flight: state.flight ?? grounded,
+        drift: state.drift,
         surface: surface(rowTravel)
     };
 

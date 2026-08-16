@@ -9,7 +9,7 @@ import {Paths} from '@pages/Paths';
 
 const NoHeader = () => null;
 
-export const Shell = () => {
+export const MountedTable = () => {
   const regions = useMatches()
     .map(match => match.handle)
     .filter(isRegions)
@@ -36,7 +36,7 @@ export const Shell = () => {
 
 export const router = {
   path: '/',
-  element: <Shell/>,
+  element: <MountedTable/>,
   children: [
     {path: Paths.home, element: <Navigate to={Paths.demos} replace/>},
     Demos,

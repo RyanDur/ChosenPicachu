@@ -7,16 +7,16 @@ import sortableCss from '@components/DragSortableTable/sortable.css?raw';
 import headerCss from '@components/DragSortableTable/Header.css?raw';
 import ghostCss from '@components/DragSortableTable/ghosts/Ghost.css?raw';
 import frameHtml from '../../Frame/table.html?raw';
-import deskSource from '@components/DragSortableTable/desk.ts?raw';
-import useDeskSource from '@components/DragSortableTable/useDesk.ts?raw';
-import frameGhosts from '../../Frame/shell/ghosts.ts?raw';
-import frameHide from '../../Frame/shell/hide.ts?raw';
-import frameMarks from '../../Frame/shell/marks.ts?raw';
-import frameStand from '../../Frame/shell/stand.ts?raw';
-import settlesSource from '../../Frame/shells/settles.ts?raw';
-import flightsSource from '../../Frame/shells/flights.ts?raw';
+import stateSource from '@components/DragSortableTable/table-state.ts?raw';
+import useTableStateSource from '@components/DragSortableTable/useTableState.ts?raw';
+import frameGhosts from '../../Frame/table/ghosts.ts?raw';
+import frameHide from '../../Frame/table/hide.ts?raw';
+import frameMarks from '../../Frame/table/marks.ts?raw';
+import frameStand from '../../Frame/table/stand.ts?raw';
+import settlesSource from '../../Frame/builds/settles.ts?raw';
+import flightsSource from '../../Frame/builds/flights.ts?raw';
 import {plain} from '../../../Recipe';
 
-export {aloftSource, surveySource, gripSource, ghostSource, sortableCss, headerCss, ghostCss, frameHtml, deskSource, frameGhosts, frameHide, frameMarks, frameStand, travelSource, useDeskSource, flightsSource, settlesSource};
+export {aloftSource, surveySource, gripSource, ghostSource, sortableCss, headerCss, ghostCss, frameHtml, stateSource, frameGhosts, frameHide, frameMarks, frameStand, travelSource, useTableStateSource, flightsSource, settlesSource};
 
 export const gap = plain(' ');

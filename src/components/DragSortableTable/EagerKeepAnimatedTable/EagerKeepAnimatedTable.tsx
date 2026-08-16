@@ -5,8 +5,8 @@ import {classNames} from '@components/class-names';
 import {TableProps, measuredShares} from '@components/Table';
 import {Bounds, columnUnder, displaced, interior, rowUnder, Shifted, shifts, Slid, Survey, surveyed} from '../survey';
 import {columnLift, eagerTravel, Grab, grounded, rowLift, surfaceTravel} from '../travel';
-import {baked, columnAloft, drifting as drifts, dropped, lifted, orderedTo, rowAloft, seatedTo, sharedAs, standingOf} from '../desk';
-import {useDesk} from '../useDesk';
+import {baked, columnAloft, drifting as drifts, dropped, lifted, orderedTo, rowAloft, seatedTo, sharedAs, standingOf} from '../table-state';
+import {useTableState} from '../useTableState';
 import {Aloft} from '../Aloft';
 import {Direction, ranked} from '../sorting';
 import {Header} from './Header';
@@ -23,14 +23,14 @@ export type EagerKeepAnimatedTableProps = TableProps & {
 export const EagerKeepAnimatedTable: FC<EagerKeepAnimatedTableProps> = (
     {columns, rows, draggableColumns = false, draggableRows = false, resizableColumns = false, sortable, id, ...dress}
 ) => {
-    const [desk, commit] = useDesk(columns.map(({column}) => column), rows);
+    const [state, commit] = useTableState(columns.map(({column}) => column), rows);
     const [slid, setSlid] = useState<Slid>();
     const [shifted, setShifted] = useState<Shifted>();
 
-    const {order, shares, rule} = desk;
-    const grown = desk.seats.length === rows.length
-        ? desk
-        : {...desk, seats: rows.map((_, row) => row)};
+    const {order, shares, rule} = state;
+    const grown = state.seats.length === rows.length
+        ? state
+        : {...state, seats: rows.map((_, row) => row)};
     const standing = standingOf(rows, grown);
     const ordered = order.flatMap(name => {
         const definition = columns.find(({column}) => column === name);
@@ -47,8 +47,8 @@ export const EagerKeepAnimatedTable: FC<EagerKeepAnimatedTableProps> = (
     };
 
     const settleRow = (held: number, struck: number, measured: Survey): void => {
-        const after = array.moveToIndex(desk.seats.indexOf(struck), held, desk.seats);
-        setShifted(shifts(measured.rowHeights, desk.seats, after, held));
+        const after = array.moveToIndex(state.seats.indexOf(struck), held, state.seats);
+        setShifted(shifts(measured.rowHeights, state.seats, after, held));
         commit(seatedTo(held, struck));
     };
 
@@ -64,13 +64,13 @@ export const EagerKeepAnimatedTable: FC<EagerKeepAnimatedTableProps> = (
         commit(drifts(moving));
 
     const columnTravel = (moving: {clientX: number; clientY: number}): void => {
-        columnAloft(desk).and(maybe(desk.bounds)).map(([held, measured]) =>
+        columnAloft(state).and(maybe(state.bounds)).map(([held, measured]) =>
             eagerTravel(columnUnder(order, measured), struck =>
                 settleColumn(held, struck, measured))(held, moving));
     };
 
     const rowTravel = (moving: {clientX: number; clientY: number}): void => {
-        rowAloft(desk).and(maybe(desk.bounds)).map(([held, measured]) =>
+        rowAloft(state).and(maybe(state.bounds)).map(([held, measured]) =>
             eagerTravel(rowUnder(standing, measured), struck =>
                 settleRow(held, struck, measured))(held, moving));
     };
@@ -83,17 +83,17 @@ export const EagerKeepAnimatedTable: FC<EagerKeepAnimatedTableProps> = (
     });
 
     const columnsTravel = {
-        aloft: columnAloft(desk),
-        survey: maybe(desk.bounds),
-        flight: desk.flight ?? grounded,
-        drift: desk.drift,
+        aloft: columnAloft(state),
+        survey: maybe(state.bounds),
+        flight: state.flight ?? grounded,
+        drift: state.drift,
         surface: surface(columnTravel)
     };
     const rowsTravel = {
-        aloft: rowAloft(desk),
-        survey: maybe(desk.bounds),
-        flight: desk.flight ?? grounded,
-        drift: desk.drift,
+        aloft: rowAloft(state),
+        survey: maybe(state.bounds),
+        flight: state.flight ?? grounded,
+        drift: state.drift,
         surface: surface(rowTravel)
     };
 
@@ -105,7 +105,7 @@ export const EagerKeepAnimatedTable: FC<EagerKeepAnimatedTableProps> = (
         const next = has(direction) ? {column, direction} : undefined;
         const table = event.currentTarget.closest('table');
         if (has(table)) {
-            const after = has(next) ? ranked(rows, desk.seats, next) : desk.seats;
+            const after = has(next) ? ranked(rows, state.seats, next) : state.seats;
             setShifted(shifts(surveyed(table, order, standing).rowHeights, standing, after));
         }
         commit(current => ({...current, rule: next}));
