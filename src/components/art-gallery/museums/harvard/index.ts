@@ -25,7 +25,7 @@ const withImages = (search?: string) =>
 
 export const harvard = {
   allArt: ({page, search, size = defaultRecordLimit}: GetAllArtRequest) => http
-    .get(`${harvardDomain}${toQueryString({q: withImages(search), page, size, ...baseQueryString})}`)
+    .get(`${harvardDomain}${toQueryString({q: withImages(search), page, size, ...baseQueryString})}`, {cache: 'force-cache'})
     .mBind(validate(HarvardAllArtSchema))
     .map(({info, records}: HarvardAllArtResponse): AllArt => ({
       pagination: {
@@ -38,7 +38,7 @@ export const harvard = {
     })),
 
   art: (id: string) => http
-    .get(`${harvardDomain}/${id}${toQueryString(baseQueryString)}`)
+    .get(`${harvardDomain}/${id}${toQueryString(baseQueryString)}`, {cache: 'force-cache'})
     .mBind(validate(HarvardArtSchema))
     .map(harvardArtToArt),
 
@@ -48,7 +48,7 @@ export const harvard = {
       fields: 'title',
       apikey: harvardAPIKey,
       size: defaultSearchLimit
-    })}`)
+    })}`, {cache: 'force-cache'})
     .mBind(validate(HarvardSearchSchema))
     .map(({records}: HarvardSearchResponse): SearchOptions =>
       records.map(({title}) => title))

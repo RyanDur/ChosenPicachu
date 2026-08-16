@@ -2,8 +2,8 @@ import {FailStatusCode, HTTPError, HTTPMethod, isCreated, isNoContent, isOk, mat
 import {asyncFailure, asyncResult, asyncSuccess, maybe, requesting, Result} from '@ryandur/sand';
 
 export const http = {
-  get: <T>(endpoint: string): Result.Async<T, HTTPError> =>
-    request(endpoint).mBind(response =>
+  get: <T>(endpoint: string, {cache}: {cache?: RequestCache} = {}): Result.Async<T, HTTPError> =>
+    request(endpoint, HTTPMethod.GET, undefined, cache).mBind(response =>
       maybe(response, isOk).map(bodyResult)
         .orElse(fail(response))),
 
@@ -28,8 +28,8 @@ export const http = {
 const bodyResult = (resp: Response) => asyncResult(resp.json()).or(() => asyncFailure(HTTPError.JSON_BODY_ERROR));
 const emptySuccess = () => asyncSuccess<undefined, HTTPError>(undefined);
 
-const request = (uri: PATH, method?: HTTPMethod, body?: unknown) =>
-  requesting(uri, {method, mode: 'cors', body}, () => HTTPError.NETWORK_ERROR);
+const request = (uri: PATH, method?: HTTPMethod, body?: unknown, cache?: RequestCache) =>
+  requesting(uri, {method, mode: 'cors', body, cache}, () => HTTPError.NETWORK_ERROR);
 
 const fail = (response: Response) => matchFailStatusCode(response.status, {
   [FailStatusCode.FORBIDDEN]: () => asyncFailure(HTTPError.FORBIDDEN),

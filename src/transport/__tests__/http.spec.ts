@@ -10,6 +10,30 @@ const testObject = {foo: faker.lorem.words()};
 describe('http', () => {
   const endpoint = `/${faker.lorem.word()}/${faker.lorem.word()}`;
 
+  test('a get can ask the cache to stand in for the network', async () => {
+    let asked: string | undefined;
+    server.use(handle.get(endpoint, ({request}) => {
+      asked = request.cache;
+      return HttpResponse.json(testObject);
+    }));
+
+    await http.get(endpoint, {cache: 'force-cache'}).value;
+
+    expect(asked).toBe('force-cache');
+  });
+
+  test('a plain get leaves caching to the response headers', async () => {
+    let asked: string | undefined;
+    server.use(handle.get(endpoint, ({request}) => {
+      asked = request.cache;
+      return HttpResponse.json(testObject);
+    }));
+
+    await http.get(endpoint).value;
+
+    expect(asked).toBe('default');
+  });
+
   const handlers = {
     [HTTPMethod.GET]: handle.get,
     [HTTPMethod.POST]: handle.post,
