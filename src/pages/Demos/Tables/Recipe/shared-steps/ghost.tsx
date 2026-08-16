@@ -38,7 +38,7 @@ export const ghostByHand = (world: World, hookSource: string): ReactNode =>
       {world === 'react'
         ? <Snippet label="TS" lines={[
           ...span(hookSource, 'origin.either(',
-            'setOrigin(maybe({x: event.clientX')
+            'setOrigin(maybe({x: moving.clientX')
         ]}/>
         : <Snippet label="TS" lines={[
           ...unit(frameGhosts, 'export const columnGhost'), gap,

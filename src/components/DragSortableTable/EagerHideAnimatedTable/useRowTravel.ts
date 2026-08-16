@@ -1,6 +1,6 @@
-import {PointerEvent, useState} from 'react';
+import {useState} from 'react';
 import {Maybe, maybe, nothing} from '@ryandur/sand';
-import {Drift, drifted, eagerTravel, Flight, Grab, grounded, rowLift, still} from '../travel';
+import {Drift, drifted, eagerTravel, Flight, Grab, grounded, rowLift, still, surfaceTravel} from '../travel';
 import {rowUnder, Survey} from '../survey';
 
 export const useRowTravel = (
@@ -31,18 +31,13 @@ export const useRowTravel = (
         setDrift(still);
     };
 
-    const travel = (event: PointerEvent<HTMLElement>): void => {
-        if (event.buttons === 0) {
-            drop();
-            return;
-        }
-        event.currentTarget.setPointerCapture(event.pointerId);
-        origin.either(
-            from => setDrift(drifted(event, from)),
-            () => setOrigin(maybe({x: event.clientX, y: event.clientY})));
-        aloft.and(survey).map(([held, chart]) =>
-            eagerTravel(rowUnder(standing, chart), struck => settle(held, struck, chart.rowHeights))(held, event));
-    };
+    const travel = surfaceTravel(
+        moving => origin.either(
+            from => setDrift(drifted(moving, from)),
+            () => setOrigin(maybe({x: moving.clientX, y: moving.clientY}))),
+        moving => aloft.and(survey).map(([held, chart]) =>
+                eagerTravel(rowUnder(standing, chart), struck => settle(held, struck, chart.rowHeights))(held, moving)),
+        drop);
 
     return {
         aloft,

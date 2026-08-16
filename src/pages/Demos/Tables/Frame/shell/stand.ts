@@ -8,13 +8,21 @@ import {cells} from '@pages/Demos/Tables/Aggregations/cells';
 import {hydrated, recentTrades} from '@pages/Demos/Tables/Aggregations/recent-trades';
 import {LiveTradesState, liveTrades, opening} from '@pages/Demos/Charts/live-trades';
 import {Trade} from '@pages/Demos/Charts/coinbase';
-import {Desk, Shell, ruledBy} from './desk';
+import {still, surfaceTravel} from '@components/DragSortableTable/travel';
+import {Aloft, Desk, Shell, drifting, dropped, ruledBy} from './desk';
+import {GhostFlight, columnGhost, rowGhost} from './ghosts';
 import {announce, wireMenu} from './menus';
 import {dressShares, wireResize} from './resize';
+
+export type FlightAnswers = {
+  travel: (shell: Shell, moving: {clientX: number; clientY: number}) => void;
+  land: (shell: Shell) => void;
+};
 
 export type Dressage = {
   travels: (shell: Shell) => void;
   ruled?: (shell: Shell, heights: Readonly<Record<number, number>>, before: readonly number[], after: readonly number[]) => void;
+  flights: {column: FlightAnswers; row: FlightAnswers};
 };
 
 export const stand = (document: Document, dressage: Dressage): void => {
@@ -44,7 +52,7 @@ const standTable = (
   document: Document,
   table: HTMLTableElement,
   body: HTMLTableSectionElement,
-  {travels, ruled}: Dressage
+  {travels, ruled, flights}: Dressage
 ): void => {
   const lanes = [...body.querySelectorAll('tr')];
   const dealt = lanes.map((_, at) => at);
@@ -54,7 +62,12 @@ const standTable = (
 
   let history: readonly Trade[] = [];
   let live: LiveTradesState = opening;
-  let desk: Desk = {order, seats: dealt, seated: dealt, shares: undefined, rule: undefined};
+  let desk: Desk = {
+    order, seats: dealt, seated: dealt, shares: undefined, rule: undefined,
+    aloft: undefined, bounds: undefined, flight: undefined, origin: undefined, drift: still
+  };
+  let ghost: GhostFlight | undefined;
+  let surface: HTMLElement | undefined;
 
   const folded = (): Row[] =>
     windowedAggregates(hydrated(history, live.trades)).map(cells);
@@ -99,7 +112,44 @@ const standTable = (
       }));
   };
 
+  const summoned = (aloft: Aloft): GhostFlight =>
+    aloft.axis === 'column' ? columnGhost(shell, aloft.held) : rowGhost(shell, aloft.held);
+
+  const mounted = (aloft: Aloft): HTMLElement => {
+    const drop = (): void => {
+      if (!has(shell.desk().aloft)) {
+        return;
+      }
+      flights[aloft.axis].land(shell);
+      commit(dropped);
+    };
+    const element = document.createElement('article');
+    element.className = 'drag-surface';
+    element.addEventListener('pointermove', surfaceTravel(
+      moving => commit(drifting(moving)),
+      moving => flights[aloft.axis].travel(shell, moving),
+      drop));
+    ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(ending =>
+      element.addEventListener(ending, drop));
+    document.body.append(element);
+    return element;
+  };
+
+  const reconcileFlight = (previous: Desk, next: Desk): void => {
+    if (next.aloft !== previous.aloft && (previous.aloft === undefined || next.aloft === undefined
+        || next.aloft.held !== previous.aloft.held || next.aloft.axis !== previous.aloft.axis)) {
+      maybe(ghost).map(flown => flown.land());
+      maybe(surface).map(standing => standing.remove());
+      ghost = has(next.aloft) ? summoned(next.aloft) : undefined;
+      surface = has(next.aloft) ? mounted(next.aloft) : undefined;
+    }
+    if (next.drift !== previous.drift) {
+      maybe(ghost).map(flown => flown.drift(next.drift));
+    }
+  };
+
   const reconciled = (previous: Desk, next: Desk): Desk => {
+    reconcileFlight(previous, next);
     if (next.order !== previous.order) {
       reconcileColumns(previous.order, next.order);
       dressGrips(table, next);

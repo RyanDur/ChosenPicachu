@@ -1,7 +1,56 @@
-import {maybe} from '@ryandur/sand';
-import {staticColumnArrows, staticRowArrows, Grab, columnLift, drifted, rowLift, lazyTravel} from '@components/DragSortableTable/travel';
+import {has, maybe} from '@ryandur/sand';
 import {columnUnder, interior, rowUnder} from '@components/DragSortableTable/survey';
-import {baked, columnGhost, columnOf, nudgedTo, orderedTo, rowGhost, seatedTo, Shell, stand, takeFlight} from '../shell';
+import {Grab, staticColumnArrows, staticRowArrows, columnLift, rowLift, lazyTravel} from '@components/DragSortableTable/travel';
+import {baked, columnLanding, columnOf, lifted, nudgedTo, orderedTo, rowLanding, seatedTo, Shell, stand} from '../shell';
+
+const settleColumn = (shell: Shell, held: string, struck: string): void => {
+  const {order} = shell.desk();
+  shell.commit(orderedTo(order.indexOf(held), interior(order.indexOf(struck), order.length)));
+};
+
+const settleRow = (shell: Shell, held: number, struck: number): void => {
+  shell.commit(seatedTo(held, struck));
+};
+
+const columnTravel = (shell: Shell, moving: {clientX: number; clientY: number}): void => {
+  maybe(shell.desk().aloft).map(aloft => {
+    const {bounds, order} = shell.desk();
+    if (aloft.axis !== 'column' || !has(bounds)) {
+      return;
+    }
+    shell.commit(columnLanding(
+      lazyTravel(columnUnder(order, bounds))(aloft.held, moving, aloft.landing)));
+  });
+};
+
+const columnLand = (shell: Shell): void => {
+  maybe(shell.desk().aloft).map(aloft => {
+    if (aloft.axis !== 'column') {
+      return;
+    }
+    maybe(aloft.landing).map(struck => settleColumn(shell, aloft.held, struck));
+  });
+};
+
+const rowTravel = (shell: Shell, moving: {clientX: number; clientY: number}): void => {
+  maybe(shell.desk().aloft).map(aloft => {
+    const {bounds, seated} = shell.desk();
+    if (aloft.axis !== 'row' || !has(bounds)) {
+      return;
+    }
+    shell.commit(rowLanding(
+      lazyTravel(rowUnder(seated, bounds))(aloft.held, moving, aloft.landing)));
+  });
+};
+
+const rowLand = (shell: Shell): void => {
+  maybe(shell.desk().aloft).map(aloft => {
+    if (aloft.axis !== 'row') {
+      return;
+    }
+    maybe(aloft.landing).map(struck => settleRow(shell, aloft.held, struck));
+  });
+};
 
 const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
   const held = columnOf(shell.desk(), th);
@@ -9,23 +58,8 @@ const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
   const ordered = ({from, to}: {from: number; to: number}): void =>
     shell.commit(orderedTo(from, to));
 
-  const commit = (held: string, struck: string): void => {
-    const {order} = shell.desk();
-    shell.commit(orderedTo(order.indexOf(held), interior(order.indexOf(struck), order.length)));
-  };
-
-  const grabbed = ({survey, at, pointerId}: Grab): void => {
-    const ghost = columnGhost(shell, held);
-    takeFlight<string | undefined>(shell, pointerId, undefined, {
-      travel: (moving, landing) => {
-        ghost.drift(drifted(moving, at));
-        return lazyTravel(columnUnder(shell.desk().order, survey))(held, moving, landing);
-      },
-      land: landing => {
-        ghost.land();
-        maybe(landing).map(struck => commit(held, struck));
-      }
-    });
+  const grabbed = (grab: Grab): void => {
+    shell.commit(lifted({axis: 'column', held}, grab));
   };
 
   th.addEventListener('pointerdown', columnLift(held, () => shell.desk().order, () => shell.desk().seated, grabbed));
@@ -36,23 +70,8 @@ const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void 
   const arranged = ({to}: {to: number; after: number[]}): void =>
     shell.commit(desk => nudgedTo(held, to)(baked(desk)));
 
-  const commit = (struck: number): void => {
-    shell.commit(seatedTo(held, struck));
-  };
-
-  const grabbed = ({survey, at, pointerId}: Grab): void => {
-    shell.commit(baked);
-    const ghost = rowGhost(shell, held);
-    takeFlight<number | undefined>(shell, pointerId, undefined, {
-      travel: (moving, landing) => {
-        ghost.drift(drifted(moving, at));
-        return lazyTravel(rowUnder(shell.desk().seated, survey))(held, moving, landing);
-      },
-      land: landing => {
-        ghost.land();
-        maybe(landing).map(struck => commit(struck));
-      }
-    });
+  const grabbed = (grab: Grab): void => {
+    shell.commit(desk => lifted({axis: 'row', held}, grab)(baked(desk)));
   };
 
   grip.addEventListener('pointerdown', rowLift(() => shell.desk().order, () => shell.desk().seated, grabbed));
@@ -69,5 +88,9 @@ export const wire = (document: Document): void =>
         [...lane.querySelectorAll('button.grip')]
           .filter(grip => grip instanceof HTMLButtonElement)
           .forEach(grip => wireRowGrip(shell, held, grip)));
+    },
+    flights: {
+      column: {travel: columnTravel, land: columnLand},
+      row: {travel: rowTravel, land: rowLand}
     }
   });

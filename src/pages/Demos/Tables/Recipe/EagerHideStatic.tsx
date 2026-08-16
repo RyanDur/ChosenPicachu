@@ -76,7 +76,8 @@ export const EagerHideStaticRecipe: FC<{track: Track; world: World}> = ({track, 
                 ...unit(hookSource, 'const travel = ')
               ]}/>
               : <Snippet label="TS" lines={[
-                ...span(shellSrc, 'travel: moving => {', 'commit(held, struck')
+                ...unit(shellSrc, 'const settleColumn = '), gap,
+                ...unit(shellSrc, 'const columnTravel = ')
               ]}/>}
             {world === 'react'
               ? <Snippet label="HTML" lines={[
@@ -154,7 +155,7 @@ export const EagerHideStaticRecipe: FC<{track: Track; world: World}> = ({track, 
                 aside('// the whole settle; no marking code exists in this table')
               ]}/>
               : <Snippet label="TS" lines={[
-                ...unit(shellSrc, 'const commit = (held: string'),
+                ...unit(shellSrc, 'const settleColumn = '),
                 aside('// the whole settle; no marking code exists in this shell')
               ]}/>}
           </Codes>

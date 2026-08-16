@@ -185,3 +185,33 @@ export const rowLift = (
             pointerId: event.pointerId
         }));
 };
+
+export const carried = (origin: Drift | undefined, moving: {clientX: number; clientY: number}): {origin: Drift; drift: Drift} =>
+    has(origin)
+        ? {origin, drift: drifted(moving, origin)}
+        : {origin: {x: moving.clientX, y: moving.clientY}, drift: still};
+
+type MoveEvent = {
+    buttons: number;
+    pointerId: number;
+    clientX: number;
+    clientY: number;
+    currentTarget: EventTarget | null;
+};
+
+export const surfaceTravel = (
+    drift: (moving: {clientX: number; clientY: number}) => void,
+    strike: (moving: {clientX: number; clientY: number}) => void,
+    drop: () => void
+) => (event: MoveEvent): void => {
+    if (event.buttons === 0) {
+        drop();
+        return;
+    }
+    const surface = event.currentTarget;
+    if (surface instanceof Element) {
+        surface.setPointerCapture(event.pointerId);
+    }
+    drift(event);
+    strike(event);
+};

@@ -8,13 +8,12 @@ import headerCss from '@components/DragSortableTable/Header.css?raw';
 import ghostCss from '@components/DragSortableTable/ghosts/Ghost.css?raw';
 import frameHtml from '../../Frame/table.html?raw';
 import frameDesk from '../../Frame/shell/desk.ts?raw';
-import frameFlight from '../../Frame/shell/flight.ts?raw';
 import frameGhosts from '../../Frame/shell/ghosts.ts?raw';
 import frameHide from '../../Frame/shell/hide.ts?raw';
 import frameMarks from '../../Frame/shell/marks.ts?raw';
 import frameStand from '../../Frame/shell/stand.ts?raw';
 import {plain} from '../../../Recipe';
 
-export {aloftSource, surveySource, gripSource, ghostSource, sortableCss, headerCss, ghostCss, frameHtml, frameDesk, frameFlight, frameGhosts, frameHide, frameMarks, frameStand, travelSource};
+export {aloftSource, surveySource, gripSource, ghostSource, sortableCss, headerCss, ghostCss, frameHtml, frameDesk, frameGhosts, frameHide, frameMarks, frameStand, travelSource};
 
 export const gap = plain(' ');

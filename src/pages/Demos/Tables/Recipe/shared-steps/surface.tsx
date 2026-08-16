@@ -2,7 +2,7 @@ import {ReactNode} from 'react';
 import {Codes, Mdn, Says, Snippet, Step, Words, aside, plain} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
-import {aloftSource, frameFlight, gap, sortableCss} from './sources';
+import {aloftSource, frameStand, gap, sortableCss, travelSource} from './sources';
 
 export const dragSurface = (world: World, hookSource: string): ReactNode =>
   <Step title="Give the drag a surface of its own">
@@ -47,9 +47,13 @@ export const dragSurface = (world: World, hookSource: string): ReactNode =>
           aside('// cancel and lost capture are not delegates; they ARE the drop')
         ]}/>
         : <Snippet label="TS" lines={[
-          ...unit(frameFlight, 'export const takeFlight'),
+          ...unit(frameStand, '  const mounted = '),
           aside('// cancel, lost capture, and buttons at zero are not delegates; they ARE the drop')
         ]}/>}
+      <Snippet label="TS" lines={[
+        ...unit(travelSource, 'export const surfaceTravel'),
+        aside('// one surface move; each world drifts, strikes, and drops its own way')
+      ]}/>
       <Snippet label="CSS" lines={[
         ...unit(sortableCss, '.drag-surface {'),
         aside('/* hover below is blocked by existence */')
