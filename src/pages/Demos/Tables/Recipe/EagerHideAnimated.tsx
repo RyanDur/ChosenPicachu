@@ -21,7 +21,6 @@ import {
   orderInState,
   ownedPixels,
   quietDials,
-  surveySource,
   theaterVertical,
   travelSource,
   turnedVertical,
@@ -227,13 +226,13 @@ export const EagerHideAnimatedRecipe: FC<{track: Track; world: World}> = ({track
         <Codes>
           {world === 'react'
             ? <Snippet label="TS" lines={[
-              ...unit(surveySource, 'export const columnNudge'), gap,
-              ...span(headerSource, 'const nudge = columnNudge', 'onOrdered(columnName, nudge.to, nudge.marks);'),
+              ...unit(travelSource, 'export const animatedColumnArrows'), gap,
+              ...span(headerSource, 'animatedColumnArrows(event.currentTarget', 'onOrdered(columnName, nudge.to, nudge.marks))'),
               aside('// each starts where the other now sits')
             ]}/>
             : <Snippet label="TS" lines={[
-              ...unit(surveySource, 'export const columnNudge'), gap,
-              ...span(shellSrc, 'const nudge = columnNudge', 'markColumns(shell, nudge.marks);'),
+              ...unit(travelSource, 'export const animatedColumnArrows'), gap,
+              ...span(shellSrc, 'animatedColumnArrows(th, order,', 'markColumns(shell, nudge.marks);'),
               aside('// each starts where the other now sits')
             ]}/>}
           <Snippet label="CSS" lines={[
@@ -254,15 +253,10 @@ export const EagerHideAnimatedRecipe: FC<{track: Track; world: World}> = ({track
             length.</Says>
         </Words>
         <Codes>
-          {world === 'react'
-            ? <Snippet label="TS" lines={[
-              ...span(headerSource, 'if (event.currentTarget.getAnimations', '}'),
-              aside('// while the slide runs, the key falls silent')
-            ]}/>
-            : <Snippet label="TS" lines={[
-              ...span(shellSrc, 'if (th.getAnimations().length > 0) {', '}'),
-              aside('// while the slide runs, the key falls silent')
-            ]}/>}
+          <Snippet label="TS" lines={[
+            ...span(travelSource, 'if (th.getAnimations().length > 0) {', '}'),
+            aside('// while the slide runs, the key falls silent')
+          ]}/>
           <Snippet label="CSS" lines={[
             ...unit(cssSource, '.sortable .displaced {'),
             aside('/* the 200ms IS the debounce interval */')

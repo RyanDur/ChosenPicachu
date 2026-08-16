@@ -2,7 +2,8 @@ import {FC, KeyboardEvent, MouseEvent, PointerEvent} from 'react';
 import {Maybe, has, maybe, not, nothing} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {Column, ResizeHandle, Shares, neighborOf, traded} from '@components/Table';
-import {anchored, columnSteps, nudgedColumn} from '../survey';
+import {anchored, columnSteps} from '../survey';
+import {staticColumnArrows} from '../travel';
 import {Direction, SortMenu} from '../SortMenu';
 import {sortedBy} from '../sorting';
 import '../Header.css';
@@ -48,11 +49,7 @@ export const Header: FC<Props> = (
                ? (event: KeyboardEvent<HTMLTableCellElement>) =>
                  maybe(columnSteps[event.key]).map(toward => {
                    event.preventDefault();
-                   const {from, to} = nudgedColumn(order, columnName, toward);
-                   if (to === from) {
-                     return;
-                   }
-                   onOrdered(columnName, to);
+                   staticColumnArrows(order, ({to}) => onOrdered(columnName, to))(columnName, toward);
                  })
                : undefined}
              style={has(share) ? {'--share': `${share}%`} : undefined}>

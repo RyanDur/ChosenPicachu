@@ -1,6 +1,6 @@
-import {has, maybe} from '@ryandur/sand';
-import {drifted, eagerTravel} from '@components/DragSortableTable/travel';
-import {anchored, bounded, Bounds, columnNudge, columnSteps, columnUnder, displaced, interior, rowNudge, rowSteps, rowUnder, shifts, Survey, surveyed} from '@components/DragSortableTable/survey';
+import {maybe} from '@ryandur/sand';
+import {animatedColumnArrows, animatedRowArrows, drifted, eagerTravel} from '@components/DragSortableTable/travel';
+import {anchored, Bounds, columnSteps, columnUnder, displaced, interior, rowSteps, rowUnder, shifts, Survey, surveyed} from '@components/DragSortableTable/survey';
 import {baked, columnGhost, columnOf, markColumns, markRows, nudgedTo, orderedTo, rowGhost, seatedTo, Shell, stand, takeFlight} from '../shell';
 
 const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
@@ -39,21 +39,20 @@ const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
       if (anchored(order.indexOf(columnOf(shell.desk(), th)), order.length)) {
         return;
       }
-      if (th.getAnimations().length > 0) {
-        return;
-      }
       const held = columnOf(shell.desk(), th);
-      const nudge = columnNudge(order, bounded(table, order))(held, toward);
-      if (has(nudge)) {
+      animatedColumnArrows(th, order, nudge => {
         shell.commit(orderedTo(nudge.from, nudge.to));
         markColumns(shell, nudge.marks);
-      }
+      })(held, toward);
     });
   });
 };
 
 const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void => {
   const {table} = shell;
+
+  const arranged = (to: number): void =>
+    shell.commit(desk => nudgedTo(held, to)(baked(desk)));
 
   const commit = (struck: number, measured: Survey): void => {
     const before = shell.desk().seated;
@@ -79,16 +78,10 @@ const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void 
   grip.addEventListener('keydown', event => {
     maybe(rowSteps[event.key]).map(toward => {
       event.preventDefault();
-      const sliding = maybe(grip.closest('tr'))
-        .map(lane => lane.getAnimations().length > 0)
-        .orElse(false);
-      if (sliding) {
-        return;
-      }
-      const standing = shell.desk().seated;
-      const nudge = rowNudge(standing, surveyed(table, shell.desk().order, standing).rowHeights)(held, toward);
-      shell.commit(desk => nudgedTo(held, nudge.to)(baked(desk)));
-      markRows(shell, nudge.drops);
+      animatedRowArrows(grip, shell.desk().order, shell.desk().seated, nudge => {
+        arranged(nudge.to);
+        markRows(shell, nudge.drops);
+      })(held, toward);
     });
   });
 };

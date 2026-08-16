@@ -1,6 +1,6 @@
 import {maybe} from '@ryandur/sand';
-import {drifted, lazyTravel} from '@components/DragSortableTable/travel';
-import {anchored, columnSteps, columnUnder, interior, nudgedColumn, nudgedRow, rowSteps, rowUnder, surveyed} from '@components/DragSortableTable/survey';
+import {staticColumnArrows, staticRowArrows, drifted, lazyTravel} from '@components/DragSortableTable/travel';
+import {anchored, columnSteps, columnUnder, interior, rowSteps, rowUnder, surveyed} from '@components/DragSortableTable/survey';
 import {baked, columnGhost, columnOf, hideColumn, hideRow, nudgedTo, orderedTo, rowGhost, seatedTo, Shell, stand, takeFlight, unhideColumn, unhideRow} from '../shell';
 
 const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
@@ -41,17 +41,16 @@ const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
         return;
       }
       const held = columnOf(shell.desk(), th);
-      const {from, to} = nudgedColumn(order, held, toward);
-      if (to === from) {
-        return;
-      }
-      shell.commit(orderedTo(from, to));
+      staticColumnArrows(order, ({from, to}) => shell.commit(orderedTo(from, to)))(held, toward);
     });
   });
 };
 
 const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void => {
   const {table} = shell;
+
+  const arranged = (to: number): void =>
+    shell.commit(desk => nudgedTo(held, to)(baked(desk)));
 
   const commit = (struck: number): void => {
     shell.commit(seatedTo(held, struck));
@@ -78,9 +77,7 @@ const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void 
   grip.addEventListener('keydown', event => {
     maybe(rowSteps[event.key]).map(toward => {
       event.preventDefault();
-      const standing = shell.desk().seated;
-      const {to} = nudgedRow(standing, held, toward);
-      shell.commit(desk => nudgedTo(held, to)(baked(desk)));
+      staticRowArrows(shell.desk().seated, ({to}) => arranged(to))(held, toward);
     });
   });
 };

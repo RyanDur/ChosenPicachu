@@ -1,8 +1,9 @@
 import {FC, KeyboardEvent, MouseEvent, PointerEvent} from 'react';
 import {Maybe, has, maybe, not, nothing} from '@ryandur/sand';
+import {animatedColumnArrows} from '../travel';
 import {classNames} from '@components/class-names';
 import {Column, ResizeHandle, Shares, neighborOf, traded} from '@components/Table';
-import {Slid, anchored, bounded, columnNudge, columnSteps} from '../survey';
+import {Slid, anchored, columnSteps} from '../survey';
 import {Direction, SortMenu} from '../SortMenu';
 import {sortedBy} from '../sorting';
 import '../Header.css';
@@ -66,15 +67,8 @@ export const Header: FC<Props> = (
                ? (event: KeyboardEvent<HTMLTableCellElement>) =>
                  maybe(columnSteps[event.key]).map(toward => {
                    event.preventDefault();
-                   if (event.currentTarget.getAnimations().length > 0) {
-                     return;
-                   }
-                   maybe(event.currentTarget.closest('table')).map(table => {
-                     const nudge = columnNudge(order, bounded(table, order))(columnName, toward);
-                     if (has(nudge)) {
-                       onOrdered(columnName, nudge.to, nudge.marks);
-                     }
-                   });
+                   animatedColumnArrows(event.currentTarget, order, nudge =>
+                     onOrdered(columnName, nudge.to, nudge.marks))(columnName, toward);
                  })
                : undefined}
              style={{

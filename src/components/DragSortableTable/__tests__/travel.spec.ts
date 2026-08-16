@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest';
-import {drifted, eagerTravel} from '../travel';
+import {drifted, eagerTravel, staticColumnArrows, staticRowArrows} from '../travel';
 
 describe('the travel vocabulary', () => {
   it('measures the drift from the grab to the pointer', () => {
@@ -15,5 +15,26 @@ describe('the travel vocabulary', () => {
     eagerTravel(under, struck => settled.push(struck))('trades', {clientX: 10, clientY: 10});
 
     expect(settled).toEqual(['buys']);
+  });
+
+  it('static column arrows arrange inside the anchors, and never at the rail', () => {
+    const arranged: {from: number; to: number}[] = [];
+
+    staticColumnArrows(['window', 'trades', 'buys', 'change'], nudge => arranged.push(nudge))('trades', 1);
+    staticColumnArrows(['window', 'trades', 'buys', 'change'], nudge => arranged.push(nudge))('trades', -1);
+
+    expect(arranged).toEqual([{from: 1, to: 2}]);
+  });
+
+  it('static row arrows always arrange, so the rail nudge still bakes', () => {
+    const arranged: {to: number; after: number[]}[] = [];
+
+    staticRowArrows([0, 1, 2], nudge => arranged.push(nudge))(0, 1);
+    staticRowArrows([0, 1, 2], nudge => arranged.push(nudge))(2, 1);
+
+    expect(arranged).toEqual([
+      {to: 1, after: [1, 0, 2]},
+      {to: 2, after: [0, 1, 2]}
+    ]);
   });
 });
