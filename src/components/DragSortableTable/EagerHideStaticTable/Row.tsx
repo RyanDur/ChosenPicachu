@@ -4,6 +4,7 @@ import {classNames} from '@components/class-names';
 import {array} from '@components/arrays';
 import {Row as RowData} from '@components/Table';
 import {RowGrip} from '../RowGrip';
+import {nudgedRow} from '../survey';
 
 type Props = {
   row: number;
@@ -42,7 +43,7 @@ export const Row: FC<Props> = (
           <div className="row-header-content">
             <RowGrip position={position} onLift={onLift(row)}
                      onNudge={toward => {
-                       const to = Math.min(Math.max(position + toward, 0), standing.length - 1);
+                       const {to} = nudgedRow(standing, row, toward);
                        onArranged(array.moveToIndex(to, row, standing));
                      }}/>
             {cell.display}

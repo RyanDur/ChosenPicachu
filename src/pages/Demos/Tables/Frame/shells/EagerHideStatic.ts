@@ -1,6 +1,6 @@
 import {has, maybe} from '@ryandur/sand';
-import {anchored, columnUnder, interior, rowUnder, surveyed} from '@components/DragSortableTable/survey';
-import {baked, columnGhost, columnOf, columnSteps, hideColumn, hideRow, nudgedTo, orderedTo, rowGhost, rowSteps, seatedTo, Shell, stand, takeFlight, unhideColumn, unhideRow} from '../shell';
+import {anchored, columnSteps, columnUnder, interior, nudgedColumn, nudgedRow, rowSteps, rowUnder, surveyed} from '@components/DragSortableTable/survey';
+import {baked, columnGhost, columnOf, hideColumn, hideRow, nudgedTo, orderedTo, rowGhost, seatedTo, Shell, stand, takeFlight, unhideColumn, unhideRow} from '../shell';
 
 const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
   const {table} = shell;
@@ -42,8 +42,7 @@ const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
         return;
       }
       const held = columnOf(shell.desk(), th);
-      const from = order.indexOf(held);
-      const to = interior(from + toward, order.length);
+      const {from, to} = nudgedColumn(order, held, toward);
       if (to === from) {
         return;
       }
@@ -84,8 +83,7 @@ const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void 
       event.preventDefault();
       shell.commit(baked);
       const {seats} = shell.desk();
-      const from = seats.indexOf(held);
-      const to = Math.min(Math.max(from + toward, 0), seats.length - 1);
+      const {from, to} = nudgedRow(seats, held, toward);
       if (to === from) {
         return;
       }

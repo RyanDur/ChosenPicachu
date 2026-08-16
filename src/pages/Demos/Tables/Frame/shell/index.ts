@@ -1,5 +1,5 @@
 export type {Desk, Shell} from './desk';
-export {baked, columnOf, columnSteps, nudgedTo, orderedTo, rowSteps, ruledBy, seatedTo, sharedAs, tradedBy} from './desk';
+export {baked, columnOf, nudgedTo, orderedTo, ruledBy, seatedTo, sharedAs, tradedBy} from './desk';
 export type {Flight} from './flight';
 export {takeFlight} from './flight';
 export type {GhostFlight} from './ghosts';

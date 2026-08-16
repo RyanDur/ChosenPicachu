@@ -2,12 +2,10 @@ import {FC, KeyboardEvent, MouseEvent, PointerEvent} from 'react';
 import {Maybe, has, maybe, not, nothing} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {Column, ResizeHandle, Shares, neighborOf, traded} from '@components/Table';
-import {Slid, anchored, bounded, interior} from '../survey';
+import {Slid, anchored, bounded, columnSteps, nudgedColumn, swapped} from '../survey';
 import {Direction, SortMenu} from '../SortMenu';
 import {sortedBy} from '../sorting';
 import '../Header.css';
-
-const steps: Record<string, number> = {ArrowRight: 1, ArrowLeft: -1};
 
 type Props = {
   column: Column;
@@ -50,30 +48,18 @@ export const Header: FC<Props> = (
              onPointerDown={travels ? onLift(columnName) : undefined}
              onKeyDown={travels
                ? (event: KeyboardEvent<HTMLTableCellElement>) =>
-                 maybe(steps[event.key]).map(toward => {
+                 maybe(columnSteps[event.key]).map(toward => {
                    event.preventDefault();
                    if (event.currentTarget.getAnimations().length > 0) {
                      return;
                    }
-                   const from = order.indexOf(columnName);
-                   const to = interior(from + toward, order.length);
+                   const {from, to} = nudgedColumn(order, columnName, toward);
                    if (to === from) {
                      return;
                    }
                    maybe(event.currentTarget.closest('table')).map(table => {
-                     const survey = bounded(table, order);
-                     const spanned = order.reduce((sum, name) =>
-                       sum + (survey.columnWidths[name] ?? 0), 0);
-                     const gap = order.length > 1
-                       ? Math.max(survey.width - spanned, 0) / (order.length - 1)
-                       : 0;
-                     const pct = (name: string): number =>
-                       (survey.columnWidths[name] ?? 0) + gap;
                      const neighbour = order[to];
-                     onOrdered(columnName, to, {
-                       [columnName]: {toward: toward > 0 ? 'right' : 'left', by: pct(neighbour)},
-                       [neighbour]: {toward: toward > 0 ? 'left' : 'right', by: pct(columnName)}
-                     });
+                     onOrdered(columnName, to, swapped(bounded(table, order), order)(columnName, neighbour, toward));
                    });
                  })
                : undefined}

@@ -3,10 +3,6 @@ import {Shares, neighborOf, traded} from '@components/Table/shares';
 import {Rule} from '@components/DragSortableTable/sorting';
 import {array} from '@components/arrays';
 
-export const columnSteps: Record<string, number> = {ArrowRight: 1, ArrowLeft: -1};
-
-export const rowSteps: Record<string, number> = {ArrowDown: 1, ArrowUp: -1};
-
 export type Desk = {
   readonly order: readonly string[];
   readonly seats: readonly number[];

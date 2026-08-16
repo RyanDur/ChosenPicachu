@@ -19,6 +19,7 @@ import {
   orderInState,
   ownedPixels,
   quietDials,
+  surveySource,
   theaterVertical,
   turnedVertical,
   twoRoads
@@ -187,10 +188,12 @@ export const LazyKeepAnimatedRecipe: FC<{track: Track; world: World}> = ({track,
         <Codes>
           {world === 'react'
             ? <Snippet label="TS" lines={[
+              ...unit(surveySource, 'export const swapped'), gap,
               ...span(headerSource, 'const neighbour = order[to];', '});'),
               aside('// each starts where the other now sits')
             ]}/>
             : <Snippet label="TS" lines={[
+              ...unit(surveySource, 'export const swapped'), gap,
               ...span(shellSrc, 'const neighbour = order[to];', '});'),
               aside('// each starts where the other now sits')
             ]}/>}

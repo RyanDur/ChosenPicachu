@@ -1,6 +1,7 @@
 import {has, maybe} from '@ryandur/sand';
 import {Grip, STEP_SHARE, measuredShares, resizeLabel, sought} from '@components/Table/shares';
-import {Desk, Shell, columnOf, columnSteps, sharedAs, tradedBy} from './desk';
+import {columnSteps} from '@components/DragSortableTable/survey';
+import {Desk, Shell, columnOf, sharedAs, tradedBy} from './desk';
 
 const dressColumn = (table: HTMLTableElement, column: string, share: number): void => {
   maybe(table.querySelector(`th.${column}`)).map(header => {

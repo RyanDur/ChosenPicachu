@@ -1,6 +1,6 @@
 import {has, maybe} from '@ryandur/sand';
-import {anchored, bounded, Bounds, columnUnder, displaced, interior, rowUnder, shifts, Survey, surveyed} from '@components/DragSortableTable/survey';
-import {baked, columnGhost, columnOf, columnSteps, hideColumn, hideRow, markColumns, markRows, nudgedTo, orderedTo, rowGhost, rowSteps, seatedTo, Shell, stand, takeFlight, unhideColumn, unhideRow} from '../shell';
+import {anchored, bounded, Bounds, columnSteps, columnUnder, displaced, interior, nudgedColumn, nudgedRow, rowSteps, rowUnder, shifts, Survey, surveyed, swapped} from '@components/DragSortableTable/survey';
+import {baked, columnGhost, columnOf, hideColumn, hideRow, markColumns, markRows, nudgedTo, orderedTo, rowGhost, seatedTo, Shell, stand, takeFlight, unhideColumn, unhideRow} from '../shell';
 
 const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
   const {table} = shell;
@@ -47,21 +47,14 @@ const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
         return;
       }
       const held = columnOf(shell.desk(), th);
-      const from = order.indexOf(held);
-      const to = interior(from + toward, order.length);
+      const {from, to} = nudgedColumn(order, held, toward);
       if (to === from) {
         return;
       }
-      const measured = bounded(table, order);
-      const spanned = order.reduce((sum, name) => sum + (measured.columnWidths[name] ?? 0), 0);
-      const gap = order.length > 1 ? Math.max(measured.width - spanned, 0) / (order.length - 1) : 0;
-      const carried = (name: string): number => (measured.columnWidths[name] ?? 0) + gap;
       const neighbour = order[to];
+      const marks = swapped(bounded(table, order), order)(held, neighbour, toward);
       shell.commit(orderedTo(from, to));
-      markColumns(shell, {
-        [held]: {toward: toward > 0 ? 'right' : 'left', by: carried(neighbour)},
-        [neighbour]: {toward: toward > 0 ? 'left' : 'right', by: carried(held)}
-      });
+      markColumns(shell, marks);
     });
   });
 };
@@ -106,8 +99,7 @@ const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void 
       }
       shell.commit(baked);
       const {seats} = shell.desk();
-      const from = seats.indexOf(held);
-      const to = Math.min(Math.max(from + toward, 0), seats.length - 1);
+      const {from, to} = nudgedRow(seats, held, toward);
       if (to === from) {
         return;
       }

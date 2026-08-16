@@ -2,7 +2,7 @@ import {has, is, maybe} from '@ryandur/sand';
 import {unconfigured} from '@env';
 import {Row} from '@components/Table';
 import {Rule, ranked} from '@components/DragSortableTable/sorting';
-import {anchored, surveyed} from '@components/DragSortableTable/survey';
+import {anchored, gripLabel, surveyed} from '@components/DragSortableTable/survey';
 import {windowedAggregates} from '@pages/Demos/Tables/Aggregations/fold';
 import {cells} from '@pages/Demos/Tables/Aggregations/cells';
 import {hydrated, recentTrades} from '@pages/Demos/Tables/Aggregations/recent-trades';
@@ -92,7 +92,7 @@ const standTable = (
     });
     seated.forEach((at, position) =>
       maybe(lanes[at].querySelector('button.grip')).map(grip => {
-        const label = `move row ${position + 1}`;
+        const label = gripLabel(position);
         if (grip.getAttribute('aria-label') !== label) {
           grip.setAttribute('aria-label', label);
         }

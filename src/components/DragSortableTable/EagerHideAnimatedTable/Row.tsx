@@ -3,7 +3,7 @@ import {Maybe, has, maybe, nothing} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {array} from '@components/arrays';
 import {Row as RowData} from '@components/Table';
-import {Shifted, Slid, surveyed, shifts} from '../survey';
+import {Shifted, Slid, nudgedRow, shifts, surveyed} from '../survey';
 import {RowGrip} from '../RowGrip';
 
 type Props = {
@@ -73,7 +73,7 @@ export const Row: FC<Props> = (
                        if (sliding) {
                          return;
                        }
-                       const to = Math.min(Math.max(position + toward, 0), standing.length - 1);
+                       const {to} = nudgedRow(standing, row, toward);
                        const after = array.moveToIndex(to, row, standing);
                        onArranged(after, maybe(event.currentTarget.closest('table'))
                          .map(table => shifts(surveyed(table, columns, standing).rowHeights, standing, after))

@@ -2,12 +2,10 @@ import {FC, KeyboardEvent, MouseEvent, PointerEvent} from 'react';
 import {Maybe, has, maybe, not, nothing} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {Column, ResizeHandle, Shares, neighborOf, traded} from '@components/Table';
-import {anchored, interior} from '../survey';
+import {anchored, columnSteps, nudgedColumn} from '../survey';
 import {Direction, SortMenu} from '../SortMenu';
 import {sortedBy} from '../sorting';
 import '../Header.css';
-
-const steps: Record<string, number> = {ArrowRight: 1, ArrowLeft: -1};
 
 type Props = {
   column: Column;
@@ -48,10 +46,9 @@ export const Header: FC<Props> = (
              onPointerDown={travels ? onLift(columnName) : undefined}
              onKeyDown={travels
                ? (event: KeyboardEvent<HTMLTableCellElement>) =>
-                 maybe(steps[event.key]).map(toward => {
+                 maybe(columnSteps[event.key]).map(toward => {
                    event.preventDefault();
-                   const from = order.indexOf(columnName);
-                   const to = interior(from + toward, order.length);
+                   const {from, to} = nudgedColumn(order, columnName, toward);
                    if (to === from) {
                      return;
                    }
