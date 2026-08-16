@@ -126,8 +126,10 @@ export const swapped = (measured: Bounds, order: readonly string[]) =>
 export const struckAway = <Seat,>(held: Seat, struck: Seat | undefined): struck is Seat =>
     has(struck) && struck !== held;
 
+export type ColumnNudge = {from: number; to: number; marks: Slid};
+
 export const columnNudge = (order: readonly string[], measured: Bounds) =>
-    (held: string, toward: number): {from: number; to: number; marks: Slid} | undefined => {
+    (held: string, toward: number): ColumnNudge | undefined => {
         const {from, to} = nudgedColumn(order, held, toward);
         if (to === from) {
             return undefined;
@@ -136,8 +138,10 @@ export const columnNudge = (order: readonly string[], measured: Bounds) =>
         return {from, to, marks: swapped(measured, order)(held, neighbour, toward)};
     };
 
+export type RowNudge = {to: number; after: number[]; drops: Shifted};
+
 export const rowNudge = (seats: readonly number[], heights: Readonly<Record<number, number>>) =>
-    (held: number, toward: number): {to: number; after: number[]; drops: Shifted} => {
+    (held: number, toward: number): RowNudge => {
         const {to} = nudgedRow(seats, held, toward);
         const after = array.moveToIndex(to, held, seats);
         return {to, after, drops: shifts(heights, seats, after)};

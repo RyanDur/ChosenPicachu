@@ -32,6 +32,7 @@ export const Header: FC<Props> = (
   const travels = draggable && not(anchored(position, order.length));
   const hidden = aloft.map(held => held === columnName).orElse(false);
   const sorted = sortedBy(columnName, rule);
+  const ordered = ({to}: {from: number; to: number}): void => onOrdered(columnName, to);
 
   return <th className={classNames(
     className, column.className,
@@ -49,7 +50,7 @@ export const Header: FC<Props> = (
                ? (event: KeyboardEvent<HTMLTableCellElement>) =>
                  maybe(columnSteps[event.key]).map(toward => {
                    event.preventDefault();
-                   staticColumnArrows(order, ({to}) => onOrdered(columnName, to))(columnName, toward);
+                   staticColumnArrows(order, ordered)(columnName, toward);
                  })
                : undefined}
              style={has(share) ? {'--share': `${share}%`} : undefined}>

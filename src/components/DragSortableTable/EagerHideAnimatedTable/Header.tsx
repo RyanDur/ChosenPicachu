@@ -3,7 +3,7 @@ import {Maybe, has, maybe, not, nothing} from '@ryandur/sand';
 import {animatedColumnArrows} from '../travel';
 import {classNames} from '@components/class-names';
 import {Column, ResizeHandle, Shares, neighborOf, traded} from '@components/Table';
-import {Slid, anchored, columnSteps} from '../survey';
+import {anchored, ColumnNudge, columnSteps, Slid} from '../survey';
 import {Direction, SortMenu} from '../SortMenu';
 import {sortedBy} from '../sorting';
 import '../Header.css';
@@ -49,6 +49,7 @@ export const Header: FC<Props> = (
   const hidden = aloft.map(held => held === columnName).orElse(false);
   const displaced = slid?.[columnName];
   const sorted = sortedBy(columnName, rule);
+  const ordered = (nudge: ColumnNudge): void => onOrdered(columnName, nudge.to, nudge.marks);
 
   return <th className={classNames(
     className, column.className,
@@ -67,8 +68,7 @@ export const Header: FC<Props> = (
                ? (event: KeyboardEvent<HTMLTableCellElement>) =>
                  maybe(columnSteps[event.key]).map(toward => {
                    event.preventDefault();
-                   animatedColumnArrows(event.currentTarget, order, nudge =>
-                     onOrdered(columnName, nudge.to, nudge.marks))(columnName, toward);
+                   animatedColumnArrows(event.currentTarget, order, ordered)(columnName, toward);
                  })
                : undefined}
              style={{

@@ -6,6 +6,9 @@ import {baked, columnGhost, columnOf, nudgedTo, orderedTo, rowGhost, seatedTo, S
 const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
   const {table} = shell;
 
+  const ordered = ({from, to}: {from: number; to: number}): void =>
+    shell.commit(orderedTo(from, to));
+
   const commit = (held: string, struck: string): void => {
     const {order} = shell.desk();
     shell.commit(orderedTo(order.indexOf(held), interior(order.indexOf(struck), order.length)));
@@ -38,7 +41,7 @@ const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
         return;
       }
       const held = columnOf(shell.desk(), th);
-      staticColumnArrows(order, ({from, to}) => shell.commit(orderedTo(from, to)))(held, toward);
+      staticColumnArrows(order, ordered)(held, toward);
     });
   });
 };
@@ -46,7 +49,7 @@ const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
 const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void => {
   const {table} = shell;
 
-  const arranged = (to: number): void =>
+  const arranged = ({to}: {to: number; after: number[]}): void =>
     shell.commit(desk => nudgedTo(held, to)(baked(desk)));
 
   const commit = (struck: number): void => {
@@ -71,7 +74,7 @@ const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void 
   grip.addEventListener('keydown', event => {
     maybe(rowSteps[event.key]).map(toward => {
       event.preventDefault();
-      staticRowArrows(shell.desk().seated, ({to}) => arranged(to))(held, toward);
+      staticRowArrows(shell.desk().seated, arranged)(held, toward);
     });
   });
 };

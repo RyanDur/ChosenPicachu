@@ -205,12 +205,14 @@ export const EagerKeepAnimatedRecipe: FC<{track: Track; world: World}> = ({track
           {world === 'react'
             ? <Snippet label="TS" lines={[
               ...unit(travelSource, 'export const animatedColumnArrows'), gap,
-              ...span(headerSource, 'animatedColumnArrows(event.currentTarget', 'onOrdered(columnName, nudge.to, nudge.marks))'),
+              ...unit(headerSource, 'const ordered = '), gap,
+              ...span(headerSource, 'animatedColumnArrows(event.currentTarget', 'animatedColumnArrows(event.currentTarget'),
               aside('// each starts where the other now sits')
             ]}/>
             : <Snippet label="TS" lines={[
               ...unit(travelSource, 'export const animatedColumnArrows'), gap,
-              ...span(shellSrc, 'animatedColumnArrows(th, order,', 'markColumns(shell, nudge.marks);'),
+              ...unit(shellSrc, '  const ordered = '), gap,
+              ...span(shellSrc, 'animatedColumnArrows(th, order,', 'animatedColumnArrows(th, order,'),
               aside('// each starts where the other now sits')
             ]}/>}
           <Snippet label="CSS" lines={[

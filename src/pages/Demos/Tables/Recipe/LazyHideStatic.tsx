@@ -176,12 +176,14 @@ export const LazyHideStaticRecipe: FC<{track: Track; world: World}> = ({track, w
           {world === 'react'
             ? <Snippet label="TS" lines={[
               ...unit(travelSource, 'export const staticColumnArrows'), gap,
-              ...span(headerSource, 'staticColumnArrows(order,', 'onOrdered(columnName, to))'),
+              ...unit(headerSource, 'const ordered = '), gap,
+              ...span(headerSource, 'staticColumnArrows(order, ordered)', 'staticColumnArrows(order, ordered)'),
               aside('// the whole walk; nothing marked, nothing to wait for')
             ]}/>
             : <Snippet label="TS" lines={[
               ...unit(travelSource, 'export const staticColumnArrows'), gap,
-              ...span(shellSrc, 'staticColumnArrows(order,', 'shell.commit(orderedTo(from, to)))'),
+              ...unit(shellSrc, '  const ordered = '), gap,
+              ...span(shellSrc, 'staticColumnArrows(order, ordered)', 'staticColumnArrows(order, ordered)'),
               aside('// the whole walk; nothing marked, nothing to wait for')
             ]}/>}
         </Codes>
