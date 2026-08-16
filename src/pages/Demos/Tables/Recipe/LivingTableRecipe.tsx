@@ -13,7 +13,7 @@ import hydrateSource from '@pages/Demos/Tables/Aggregations/recent-trades.ts?raw
 import widthsSource from '@pages/Demos/Tables/Aggregations/Aggregations.css?raw';
 import tableSource from '../Frame/table.html?raw';
 import stateSource from '@components/DragSortableTable/table-state.ts?raw';
-import frameStand from '../Frame/table/stand.ts?raw';
+import frameMount from '../Frame/table/mount.ts?raw';
 import '../../Recipe/Recipe.css';
 
 const gap = plain(' ');
@@ -92,7 +92,7 @@ const foldCodes: Record<World, ReactNode> = {
   vanilla: <Codes>
     <Snippet label="TS" lines={[
       ...unit(foldSource, 'export const windows'), gap,
-      ...unit(frameStand, 'const reconciled = ')
+      ...unit(frameMount, 'const reconciled = ')
     ]}/>
   </Codes>
 };
@@ -138,7 +138,7 @@ const stateCodes: Record<World, ReactNode> = {
       ...unit(stateSource, 'export const baked')
     ]}/>
     <Snippet label="TS" lines={[
-      ...unit(frameStand, 'const commit = ')
+      ...unit(frameMount, 'const commit = ')
     ]}/>
   </Codes>
 };

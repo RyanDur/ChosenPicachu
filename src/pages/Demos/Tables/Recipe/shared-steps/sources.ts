@@ -12,11 +12,11 @@ import useTableStateSource from '@components/DragSortableTable/useTableState.ts?
 import frameGhosts from '../../Frame/table/ghosts.ts?raw';
 import frameHide from '../../Frame/table/hide.ts?raw';
 import frameMarks from '../../Frame/table/marks.ts?raw';
-import frameStand from '../../Frame/table/stand.ts?raw';
+import frameMount from '../../Frame/table/mount.ts?raw';
 import settlesSource from '../../Frame/builds/settles.ts?raw';
 import flightsSource from '../../Frame/builds/flights.ts?raw';
 import {plain} from '../../../Recipe';
 
-export {aloftSource, surveySource, gripSource, ghostSource, sortableCss, headerCss, ghostCss, frameHtml, stateSource, frameGhosts, frameHide, frameMarks, frameStand, travelSource, useTableStateSource, flightsSource, settlesSource};
+export {aloftSource, surveySource, gripSource, ghostSource, sortableCss, headerCss, ghostCss, frameHtml, stateSource, frameGhosts, frameHide, frameMarks, frameMount, travelSource, useTableStateSource, flightsSource, settlesSource};
 
 export const gap = plain(' ');

@@ -2,7 +2,7 @@ import {ReactNode} from 'react';
 import {Codes, Mdn, Says, Snippet, Step, Words, aside, plain} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
-import {aloftSource, frameStand, gap, sortableCss, travelSource} from './sources';
+import {aloftSource, frameMount, gap, sortableCss, travelSource} from './sources';
 
 export const dragSurface = (world: World, tableSource: string): ReactNode =>
   <Step title="Give the drag a surface of its own">
@@ -47,7 +47,7 @@ export const dragSurface = (world: World, tableSource: string): ReactNode =>
           aside('// cancel and lost capture are not delegates; they ARE the drop')
         ]}/>
         : <Snippet label="TS" lines={[
-          ...unit(frameStand, '  const mountSurface = '),
+          ...unit(frameMount, '  const mountSurface = '),
           aside('// cancel, lost capture, and buttons at zero are not delegates; they ARE the drop')
         ]}/>}
       <Snippet label="TS" lines={[

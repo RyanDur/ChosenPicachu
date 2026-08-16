@@ -7,5 +7,5 @@ export {markColumns, markRows} from './marks';
 export {hideColumn, hideRow, unhideColumn, unhideRow, veiled} from './hide';
 export {announce, wireMenu} from './menus';
 export {dressShares, wireResize} from './resize';
-export type {Dressage, FlightAnswers} from './stand';
-export {stand} from './stand';
+export type {Build, FlightAnswers} from './mount';
+export {mount} from './mount';

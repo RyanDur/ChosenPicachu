@@ -2,7 +2,7 @@ import {ReactNode} from 'react';
 import {Codes, Says, Snippet, Step, Words, aside, plain} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
-import {stateSource, frameStand, gap, useTableStateSource} from './sources';
+import {stateSource, frameMount, gap, useTableStateSource} from './sources';
 
 export const orderInState = (world: World): ReactNode =>
   <Step title="Keep the order in state, not in the data">
@@ -33,12 +33,12 @@ export const orderInState = (world: World): ReactNode =>
       : <Codes>
         <Snippet label="TS" lines={[
           ...unit(stateSource, 'export type TableState'), gap,
-          ...span(frameStand, "const order = [...table.querySelectorAll('thead th')]",
+          ...span(frameMount, "const order = [...table.querySelectorAll('thead th')]",
             'aloft: undefined, bounds: undefined, flight: undefined, origin: undefined, drift: still'),
           plain('  };')
         ]}/>
         <Snippet label="TS" lines={[
-          ...span(frameStand, 'seated.forEach((at, position) => {',
+          ...span(frameMount, 'seated.forEach((at, position) => {',
             'body.insertBefore(desired, body.children[position] ?? null);'),
           aside('// the same lane, its new seat: the reconcile moves the node, not a copy')
         ]}/>
