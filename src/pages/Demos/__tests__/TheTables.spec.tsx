@@ -515,7 +515,7 @@ describe('the tables demo', () => {
 
       const frame = await screen.findByTitle('the living table, in vanilla');
       Object.defineProperty(frame, 'contentDocument', {
-        value: {documentElement: {scrollHeight: 487}}
+        value: {body: {getBoundingClientRect: () => ({height: 486.4})}}
       });
       fireEvent.load(frame);
 

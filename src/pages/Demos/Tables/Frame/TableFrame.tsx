@@ -1,4 +1,4 @@
-import {FC, SyntheticEvent, useEffect, useState} from 'react';
+import {FC, useEffect, useState} from 'react';
 import {has, maybe} from '@ryandur/sand';
 import {useEnv} from '@components/Env';
 import {Motion, Origin, Pace} from '../../Controls';
@@ -10,9 +10,19 @@ type Props = {
   motion: Motion;
 };
 
+const measured = (frame: HTMLIFrameElement, grown: (height: number) => void): void => {
+  maybe(frame.contentDocument).map(inner => {
+    const height = Math.ceil(inner.body.getBoundingClientRect().height);
+    if (height > 0) {
+      grown(height);
+    }
+  });
+};
+
 export const TableFrame: FC<Props> = ({pace, origin, motion}) => {
   const {tradeFeed, tradeHistory, tradeProduct} = useEnv();
   const [document, setDocument] = useState<string>();
+  const [frame, setFrame] = useState<HTMLIFrameElement>();
   const [height, setHeight] = useState<number>();
   useEffect(() => {
     let standing = true;
@@ -25,19 +35,22 @@ export const TableFrame: FC<Props> = ({pace, origin, motion}) => {
       standing = false;
     };
   }, [pace, origin, motion, tradeFeed, tradeHistory, tradeProduct]);
-  const measured = (event: SyntheticEvent<HTMLIFrameElement>): void => {
-    maybe(event.currentTarget.contentDocument).map(inner => {
-      const grown = inner.documentElement.scrollHeight;
-      if (grown > 0) {
-        setHeight(grown);
-      }
-    });
-  };
+  useEffect(() => {
+    if (!has(frame)) {
+      return;
+    }
+    const watcher = new ResizeObserver(() => measured(frame, setHeight));
+    watcher.observe(frame);
+    return () => watcher.disconnect();
+  }, [frame]);
   return has(document)
     ? <iframe className="table-frame"
               title="the living table, in vanilla"
               style={has(height) ? {blockSize: `${height}px`} : undefined}
-              onLoad={measured}
+              onLoad={event => {
+                setFrame(event.currentTarget);
+                measured(event.currentTarget, setHeight);
+              }}
               srcDoc={document}/>
     : null;
 };
