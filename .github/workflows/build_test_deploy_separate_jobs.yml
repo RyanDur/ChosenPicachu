@@ -132,6 +132,7 @@ jobs:
           name: dist
           path: ./dist
       - name: Lighthouse audit of ${{ matrix.page }}
+        id: audit
         uses: treosh/lighthouse-ci-action@v12
         with:
           urls: ${{ matrix.url }}
@@ -142,5 +143,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: lighthouse-${{ matrix.page }}
-          path: .lighthouseci
-          if-no-files-found: ignore
+          path: ${{ steps.audit.outputs.resultsPath }}
+          if-no-files-found: error
