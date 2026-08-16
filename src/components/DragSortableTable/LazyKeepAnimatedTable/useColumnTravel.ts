@@ -1,7 +1,7 @@
 import {PointerEvent, useState} from 'react';
-import {Maybe, has, maybe, nothing} from '@ryandur/sand';
-import {Drift, drifted, Flight, grounded, still} from '../travel';
-import {Bounds, columnUnder, struckAway, Survey, surveyed} from '../survey';
+import {Maybe, maybe, nothing} from '@ryandur/sand';
+import {Drift, drifted, Flight, grounded, lazyTravel, still} from '../travel';
+import {Bounds, columnUnder, Survey, surveyed} from '../survey';
 
 export const useColumnTravel = (
     order: readonly string[],
@@ -44,12 +44,8 @@ export const useColumnTravel = (
         origin.either(
             from => setDrift(drifted(event, from)),
             () => setOrigin(maybe({x: event.clientX, y: event.clientY})));
-        aloft.and(bounds).map(([held, survey]) => {
-            const struck = columnUnder(order, survey)(event.clientX, event.clientY, held);
-            if (has(struck)) {
-                setLanding(struckAway(held, struck) ? maybe(struck) : nothing());
-            }
-        });
+        aloft.and(bounds).map(([held, survey]) =>
+            setLanding(maybe(lazyTravel(columnUnder(order, survey))(held, event, landing.orElse(undefined)))));
     };
 
     return {

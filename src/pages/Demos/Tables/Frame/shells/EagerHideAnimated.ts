@@ -1,6 +1,6 @@
 import {maybe} from '@ryandur/sand';
-import {drifted} from '@components/DragSortableTable/travel';
-import {anchored, bounded, Bounds, columnSteps, columnUnder, displaced, interior, nudgedColumn, nudgedRow, rowSteps, rowUnder, shifts, struckAway, Survey, surveyed, swapped} from '@components/DragSortableTable/survey';
+import {drifted, eagerTravel} from '@components/DragSortableTable/travel';
+import {anchored, bounded, Bounds, columnSteps, columnUnder, displaced, interior, nudgedColumn, nudgedRow, rowSteps, rowUnder, shifts, Survey, surveyed, swapped} from '@components/DragSortableTable/survey';
 import {baked, columnGhost, columnOf, hideColumn, hideRow, markColumns, markRows, nudgedTo, orderedTo, rowGhost, seatedTo, Shell, stand, takeFlight, unhideColumn, unhideRow} from '../shell';
 
 const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
@@ -26,10 +26,7 @@ const wireColumnGrip = (shell: Shell, th: HTMLTableCellElement): void => {
       travel: moving => {
         ghost.drift(drifted(moving, from));
         const held = columnOf(shell.desk(), th);
-        const struck = columnUnder(shell.desk().order, survey)(moving.clientX, moving.clientY, held);
-        if (struckAway(held, struck)) {
-          commit(held, struck, survey);
-        }
+        eagerTravel(columnUnder(shell.desk().order, survey), struck => commit(held, struck, survey))(held, moving);
       },
       land: () => {
         unhideColumn(shell, columnOf(shell.desk(), th));
@@ -78,10 +75,7 @@ const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void 
     takeFlight<void>(shell, event, undefined, {
       travel: moving => {
         ghost.drift(drifted(moving, from));
-        const struck = rowUnder(shell.desk().seated, survey)(moving.clientX, moving.clientY, held);
-        if (struckAway(held, struck)) {
-          commit(struck, survey);
-        }
+        eagerTravel(rowUnder(shell.desk().seated, survey), struck => commit(struck, survey))(held, moving);
       },
       land: () => {
         unhideRow(shell, held);
