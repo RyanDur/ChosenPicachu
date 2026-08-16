@@ -9,6 +9,14 @@ const named = (path: string): string => path.slice(path.lastIndexOf('/') + 1);
 describe('the frame assembly', () => {
   const manifest = [...indexCss.matchAll(/@import "styles\/(.+?)";/g)].map(([, name]) => name);
 
+  it('no sheet rides the cascade twice', () => {
+    const names = sheets.map(({name}) => name);
+    expect(new Set(names).size).toBe(names.length);
+    const everything = sheets.map(({css}) => css).join('\n');
+    expect(everything.match(/\.off-screen\s*\{/g)).toHaveLength(1);
+    expect(everything.match(/@import/g)).toBeNull();
+  });
+
   it('the cascade follows index.css into the frame', () => {
     expect(manifest.length).toBeGreaterThan(0);
     manifest.forEach(name => expect(sheets.map(({name: sheetName}) => sheetName)).toContain(name));

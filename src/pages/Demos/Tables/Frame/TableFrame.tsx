@@ -35,6 +35,7 @@ export const TableFrame: FC<Props> = ({pace, origin, motion, veiled = false, onS
     setHeight(grown);
     onStand();
   };
+
   useEffect(() => {
     let standing = true;
     void import('./assemble').then(({frameDocument}) => {
@@ -46,6 +47,7 @@ export const TableFrame: FC<Props> = ({pace, origin, motion, veiled = false, onS
       standing = false;
     };
   }, [pace, origin, motion, tradeFeed, tradeHistory, tradeProduct]);
+
   useEffect(() => {
     if (!has(frame)) {
       return;
@@ -54,6 +56,7 @@ export const TableFrame: FC<Props> = ({pace, origin, motion, veiled = false, onS
     watcher.observe(frame);
     return () => watcher.disconnect();
   }, [frame]);
+
   return has(document)
     ? <iframe className={classNames('table-frame', veiled && 'veiled')}
               title="the living table, in vanilla"
