@@ -12,7 +12,8 @@ import {
   deadZone,
   dragSurface,
   focusLands,
-  frameShell,
+  frameHide,
+  frameMarks,
   gap,
   ghostByHand,
   liftOnce,
@@ -101,7 +102,7 @@ export const LazyHideAnimatedRecipe: FC<{track: Track; world: World}> = ({track,
                 ...span(tableSource, 'aloft={rowsTravel.aloft}', 'aloftColumn={columnsTravel.aloft}')
               ]}/>
               : <Snippet label="TS" lines={[
-                ...unit(frameShell, 'export const hideColumn'),
+                ...unit(frameHide, 'export const hideColumn'),
                 aside('// the grab calls it at the lift; the landing calls unhideColumn')
               ]}/>}
             {world === 'react'
@@ -160,7 +161,7 @@ export const LazyHideAnimatedRecipe: FC<{track: Track; world: World}> = ({track,
               ]}/>
               : <Snippet label="TS" lines={[
                 ...unit(shellSrc, 'const commit = (held: string'), gap,
-                ...unit(frameShell, 'const markCell = '),
+                ...unit(frameMarks, 'const markCell = '),
                 aside('// a direction and a share per displaced key; javascript is done')
               ]}/>}
             {world === 'react'

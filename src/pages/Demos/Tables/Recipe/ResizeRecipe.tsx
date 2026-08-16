@@ -9,7 +9,7 @@ import baseCss from '@components/Table/Table.css?raw';
 import headerSource from '@components/DragSortableTable/EagerHideAnimatedTable/Header.tsx?raw';
 import headerCss from '@components/DragSortableTable/Header.css?raw';
 import tableSource from '../Frame/table.html?raw';
-import shellSource from '../Frame/shell.ts?raw';
+import frameResize from '../Frame/shell/resize.ts?raw';
 import '../../Recipe/Recipe.css';
 
 const gap = plain(' ');
@@ -40,10 +40,10 @@ const ledgerCodes: Record<World, ReactNode> = {
     ]}/>
     <Snippet label="TS" lines={[
       ...unit(sharesSource, 'export const measuredShares'), gap,
-      ...unit(shellSource, '  const awaken = ')
+      ...unit(frameResize, '  const awaken = ')
     ]}/>
     <Snippet label="TS" lines={[
-      ...unit(shellSource, 'const dressColumn = ')
+      ...unit(frameResize, 'const dressColumn = ')
     ]}/>
     <Snippet label="CSS" lines={[
       ...unit(baseCss, '.fancy-table.apportioned .header-cell.shared {'), gap,
@@ -121,8 +121,8 @@ const captureCodes: Record<World, ReactNode> = {
   </Codes>,
   html: <Codes>
     <Snippet label="TS" lines={[
-      ...unit(shellSource, "handle.addEventListener('pointerdown'"), gap,
-      ...unit(shellSource, "handle.addEventListener('pointermove'")
+      ...unit(frameResize, "handle.addEventListener('pointerdown'"), gap,
+      ...unit(frameResize, "handle.addEventListener('pointermove'")
     ]}/>
   </Codes>
 };
@@ -138,9 +138,9 @@ const gestureCodes: Record<World, ReactNode> = {
   </Codes>,
   html: <Codes>
     <Snippet label="TS" lines={[
-      ...span(shellSource, "handle.addEventListener('pointerdown', event => {", 'event.stopPropagation();'),
+      ...span(frameResize, "handle.addEventListener('pointerdown', event => {", 'event.stopPropagation();'),
       plain('    // …the press measures; the descent stops here'), gap,
-      ...unit(shellSource, "handle.addEventListener('keydown'"),
+      ...unit(frameResize, "handle.addEventListener('keydown'"),
       aside('// the column drag above never hears a thing')
     ]}/>
   </Codes>

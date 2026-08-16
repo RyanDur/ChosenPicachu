@@ -11,7 +11,7 @@ import rowSource from '@components/DragSortableTable/EagerHideAnimatedTable/Row.
 import hydrateSource from '@pages/Demos/Tables/Aggregations/recent-trades.ts?raw';
 import widthsSource from '@pages/Demos/Tables/Aggregations/Aggregations.css?raw';
 import tableSource from '../Frame/table.html?raw';
-import shellSource from '../Frame/shell.ts?raw';
+import frameStand from '../Frame/shell/stand.ts?raw';
 import '../../Recipe/Recipe.css';
 
 const gap = plain(' ');
@@ -90,7 +90,7 @@ const foldCodes: Record<World, ReactNode> = {
   html: <Codes>
     <Snippet label="TS" lines={[
       ...unit(foldSource, 'export const windows'), gap,
-      ...unit(shellSource, 'const reconciled = ')
+      ...unit(frameStand, 'const reconciled = ')
     ]}/>
   </Codes>
 };

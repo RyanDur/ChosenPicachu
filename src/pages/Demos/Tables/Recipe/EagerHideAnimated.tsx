@@ -12,7 +12,9 @@ import {
   deadZone,
   dragSurface,
   focusLands,
-  frameShell,
+  frameHide,
+  frameMarks,
+  frameStand,
   gap,
   ghostByHand,
   liftOnce,
@@ -82,7 +84,7 @@ export const EagerHideAnimatedRecipe: FC<{track: Track; world: World}> = ({track
                 aside('{/* same key, new seat: React moves the node, not a copy */}')
               ]}/>
               : <Snippet label="TS" lines={[
-                ...unit(frameShell, 'const reconcileColumns = '),
+                ...unit(frameStand, 'const reconcileColumns = '),
                 aside('// the same cells, new seats: the shell moves the node, not a copy')
               ]}/>}
           </Codes>
@@ -112,7 +114,7 @@ export const EagerHideAnimatedRecipe: FC<{track: Track; world: World}> = ({track
                 ...span(tableSource, 'aloft={rowsTravel.aloft}', 'aloftColumn={columnsTravel.aloft}')
               ]}/>
               : <Snippet label="TS" lines={[
-                ...unit(frameShell, 'export const hideColumn'),
+                ...unit(frameHide, 'export const hideColumn'),
                 aside('// the grab calls it at the lift; the landing calls unhideColumn')
               ]}/>}
             {world === 'react'
@@ -171,7 +173,7 @@ export const EagerHideAnimatedRecipe: FC<{track: Track; world: World}> = ({track
               ]}/>
               : <Snippet label="TS" lines={[
                 ...unit(shellSrc, 'const commit = (held: string'), gap,
-                ...unit(frameShell, 'const markCell = '),
+                ...unit(frameMarks, 'const markCell = '),
                 aside('// a direction and a share per displaced key; javascript is done')
               ]}/>}
             {world === 'react'

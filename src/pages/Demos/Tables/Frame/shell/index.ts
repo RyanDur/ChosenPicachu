@@ -1,0 +1,12 @@
+export type {Desk, Shell} from './desk';
+export {baked, columnOf, columnSteps, nudgedTo, orderedTo, rowSteps, ruledBy, seatedTo, sharedAs, tradedBy} from './desk';
+export type {Flight} from './flight';
+export {takeFlight} from './flight';
+export type {GhostFlight} from './ghosts';
+export {columnGhost, rowGhost} from './ghosts';
+export {markColumns, markRows} from './marks';
+export {hideColumn, hideRow, unhideColumn, unhideRow} from './hide';
+export {announce, wireMenu} from './menus';
+export {dressShares, wireResize} from './resize';
+export type {Dressage} from './stand';
+export {stand} from './stand';
