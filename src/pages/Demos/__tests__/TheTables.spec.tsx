@@ -454,7 +454,9 @@ describe('the tables demo', () => {
 
       const frame = await screen.findByTitle('the living table, in html');
       expect(frame).toHaveAttribute('srcdoc', expect.stringContaining('<table'));
-      expect(screen.queryByRole('region', {name: 'live aggregations'})).not.toBeInTheDocument();
+      const card = screen.getByRole('region', {name: 'live aggregations'});
+      expect(card).toContainElement(frame);
+      expect(within(card).queryByRole('table')).not.toBeInTheDocument();
     });
 
     test('one tutorial stands in both worlds; only the build swaps', async () => {
@@ -495,6 +497,16 @@ describe('the tables demo', () => {
       }
     });
 
+
+    test('the explainer stands in the html world too', async () => {
+      const feed = await streamingFeed();
+
+      renderTables(urlOf(feed), '?tab=tables&world=html');
+
+      expect(await screen.findByText('what am I looking at?')).toBeInTheDocument();
+      expect(screen.getByTitle('the living table, in html')).toBeInTheDocument();
+    });
+
     test('the world dial swaps the stage', async () => {
       const feed = await streamingFeed();
 
@@ -502,8 +514,10 @@ describe('the tables demo', () => {
 
       await userEvent.click(await screen.findByRole('radio', {name: 'HTML'}));
 
-      expect(await screen.findByTitle('the living table, in html')).toBeInTheDocument();
-      expect(screen.queryByRole('region', {name: 'live aggregations'})).not.toBeInTheDocument();
+      const frame = await screen.findByTitle('the living table, in html');
+      const card = screen.getByRole('region', {name: 'live aggregations'});
+      expect(card).toContainElement(frame);
+      expect(within(card).queryByRole('table')).not.toBeInTheDocument();
     });
   });
 });

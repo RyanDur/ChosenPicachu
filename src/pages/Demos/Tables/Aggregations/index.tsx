@@ -4,6 +4,8 @@ import {
   LazyHideAnimatedTable, LazyHideStaticTable, LazyKeepAnimatedTable, LazyKeepStaticTable
 } from '@components/DragSortableTable';
 import {Motion, Origin, Pace} from '../../Controls';
+import {World} from '../params';
+import {TableFrame} from '../Frame/TableFrame';
 import {Trade} from '../../Charts/coinbase';
 import {windowedAggregates} from './fold';
 import {cells} from './cells';
@@ -15,6 +17,7 @@ type Props = {
   pace: Pace;
   origin: Origin;
   motion: Motion;
+  world: World;
 };
 
 const tables = {
@@ -38,11 +41,13 @@ const columns = [
   {display: 'change', column: 'change', className: 'change', sortable: true}
 ];
 
-export const Aggregations: FC<Props> = ({trades, pace, origin, motion}) => {
+export const Aggregations: FC<Props> = ({trades, pace, origin, motion, world}) => {
   const recent = useRecentTrades();
   const Sortable = tables[pace][origin][motion];
   return <section aria-label="live aggregations" className="aggregations">
-    <Sortable tableClassName="fancy-table"
+    {world === 'html'
+      ? <TableFrame pace={pace} origin={origin} motion={motion}/>
+      : <Sortable tableClassName="fancy-table"
            draggableColumns
            draggableRows
            resizableColumns
@@ -52,7 +57,7 @@ export const Aggregations: FC<Props> = ({trades, pace, origin, motion}) => {
            tbodyClassName="body"
            cellClassName="cell"
            columns={columns}
-           rows={windowedAggregates(hydrated(recent, trades)).map(cells)}/>
+           rows={windowedAggregates(hydrated(recent, trades)).map(cells)}/>}
     <details className="explainer">
       <summary className="prompt">what am I looking at?</summary>
       <p className="explanation">
