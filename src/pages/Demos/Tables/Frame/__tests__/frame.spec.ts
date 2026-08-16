@@ -57,7 +57,7 @@ describe('the frame table', () => {
 
     expect(windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
     expect(screen.getByRole('columnheader', {name: /trades/})).toHaveAttribute('aria-sort', 'descending');
-    expect(sortMenu('trades').getByRole('button', {name: 'sort trades'})).toHaveTextContent('▼');
+    expect(screen.getByRole('columnheader', {name: /trades/})).toHaveAttribute('aria-sort', 'descending');
   });
 
   it('as dealt restores the birth order and withdraws the announcement', async () => {
@@ -68,7 +68,7 @@ describe('the frame table', () => {
 
     expect(windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
     expect(screen.getByRole('columnheader', {name: /buys/})).not.toHaveAttribute('aria-sort');
-    expect(sortMenu('buys').getByRole('button', {name: 'sort buys'})).toHaveTextContent('⇅');
+    expect(screen.getByRole('columnheader', {name: /buys/})).not.toHaveAttribute('aria-sort');
   });
 
   it('a new rule releases the old column', async () => {
@@ -241,7 +241,6 @@ describe('the frame table', () => {
     fireEvent.pointerUp(surface(), {pointerId: 1});
 
     expect(screen.getByRole('columnheader', {name: /trades/})).not.toHaveAttribute('aria-sort');
-    expect(sortMenu('trades').getByRole('button', {name: 'sort trades'})).toHaveTextContent('⇅');
     expect(windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
   });
 

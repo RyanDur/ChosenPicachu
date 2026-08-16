@@ -38,7 +38,7 @@ test('a menu choice sorts, and never lifts the column', async ({page}) => {
   await frame.locator('#sort-trades button.item', {hasText: 'descending'}).click();
 
   await expect(frame.locator('th.trades')).toHaveAttribute('aria-sort', 'descending');
-  await expect(frame.locator('th.trades .menu-toggle')).toHaveText('▼');
+  await expect(frame.locator('th.trades')).toHaveAttribute('aria-sort', 'descending');
   await expect(frame.locator('table.column-ghost')).toHaveCount(0);
   await expect(frame.locator('article.drag-surface')).toHaveCount(0);
   await expect(frame.locator('th.trades')).not.toHaveClass(/hide/);

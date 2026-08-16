@@ -50,6 +50,7 @@ export const Workspace: FC<Props> = ({trades, status, product}) => {
               toggleClassName="add-chart button secondary">
           {absentKinds.map(kind =>
             <button type="button" key={kind} className="item sub-title"
+                    popoverTarget="add-chart" popoverTargetAction="hide"
                     onClick={() => add(kind)}>{chartNames[kind]}</button>)}
         </Menu>}
     </header>

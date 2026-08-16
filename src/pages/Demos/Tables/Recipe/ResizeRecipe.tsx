@@ -57,7 +57,7 @@ const gridMarkup: Record<World, ReactNode> = {
     ...span(headerSource, "<div className={classNames('header-cell-content'", '</div>')
   ]}/>,
   vanilla: <Snippet label="HTML" lines={[
-    ...span(tableSource, '<div class="header-cell-content rankable resizable">trades', '⇅</button>'), gap,
+    ...span(tableSource, '<div class="header-cell-content rankable resizable">trades', 'aria-label="sort trades"></button>'), gap,
     ...span(tableSource, 'aria-label="resize trades"></button>', '</div>')
   ]}/>
 };

@@ -8,15 +8,8 @@ export type Rule = {
     direction: Direction;
 };
 
-export const glyphs: Record<Direction, string> = {ascending: '▲', descending: '▼'};
-
-export const unsorted = '⇅';
-
 export const sortedBy = (column: string, rule?: Rule): Direction | undefined =>
     has(rule) && rule.column === column ? rule.direction : undefined;
-
-export const glyphOf = (sorted?: Direction): string =>
-    has(sorted) ? glyphs[sorted] : unsorted;
 
 export type Choice = {
     display: string;

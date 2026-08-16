@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest';
-import {choices, directionOf, glyphOf, sortedBy} from '../sorting';
+import {choices, directionOf, sortedBy} from '../sorting';
 
 describe('the sorting vocabulary', () => {
   it('derives the sorted direction only for the ruled column', () => {
@@ -8,12 +8,6 @@ describe('the sorting vocabulary', () => {
     expect(sortedBy('trades', rule)).toBe('descending');
     expect(sortedBy('buys', rule)).toBeUndefined();
     expect(sortedBy('trades', undefined)).toBeUndefined();
-  });
-
-  it('dresses the toggle with the direction glyph, or the unsorted glyph', () => {
-    expect(glyphOf('ascending')).toBe('▲');
-    expect(glyphOf('descending')).toBe('▼');
-    expect(glyphOf(undefined)).toBe('⇅');
   });
 
   it('speaks the three choices both worlds offer', () => {
