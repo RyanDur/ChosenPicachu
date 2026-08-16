@@ -26,5 +26,5 @@ type TableControlsProps = ControlsProps & {
 };
 
 export const TableControls: FC<TableControlsProps> = ({world, ...props}) =>
-  <Controls copy={{...copy, readout: (pace, origin, motion) => world === 'html' ? '<TableFrame/>' : copy.readout(pace, origin, motion)}}
+  <Controls copy={{...copy, readout: (pace, origin, motion) => world === 'vanilla' ? '<TableFrame/>' : copy.readout(pace, origin, motion)}}
             {...props}/>;

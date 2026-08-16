@@ -45,7 +45,7 @@ export const Aggregations: FC<Props> = ({trades, pace, origin, motion, world}) =
   const recent = useRecentTrades();
   const Sortable = tables[pace][origin][motion];
   return <section aria-label="live aggregations" className="aggregations">
-    {world === 'html'
+    {world === 'vanilla'
       ? <TableFrame pace={pace} origin={origin} motion={motion}/>
       : <Sortable tableClassName="fancy-table"
            draggableColumns

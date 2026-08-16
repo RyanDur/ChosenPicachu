@@ -16,7 +16,7 @@ for (const world of worlds) {
     const troubles: string[] = [];
     page.on('pageerror', error => troubles.push(String(error)));
 
-    await page.goto(`/ChosenPicachu/demos/?tab=tables&world=html&${world}`);
+    await page.goto(`/ChosenPicachu/demos/?tab=tables&world=vanilla&${world}`);
     const frame = page.frameLocator('iframe.table-frame');
     await frame.locator('th.trades').waitFor();
 

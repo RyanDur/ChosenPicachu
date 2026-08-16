@@ -77,7 +77,7 @@ const menuFoils: Record<World, ReactNode> = {
     aside('// now you owe: outside clicks, Escape, focus return,'),
     aside('// aria wiring, and a z-index war you cannot win')
   ]}/>,
-  html: <Snippet label="TS" foil lines={[
+  vanilla: <Snippet label="TS" foil lines={[
     plain("toggle.addEventListener('click', () =>"),
     plain("    menu.classList.toggle('open'));"), gap,
     aside('// now you owe: outside clicks, Escape, focus return,'),

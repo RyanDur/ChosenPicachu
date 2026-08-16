@@ -33,7 +33,7 @@ const ledgerCodes: Record<World, ReactNode> = {
       ...unit(headerCss, '.sortable .header-cell {')
     ]}/>
   </Codes>,
-  html: <Codes>
+  vanilla: <Codes>
     <Snippet label="TS" foil lines={[
       plain("header.style.width = `${header.offsetWidth + dx}px`;"),
       aside('// the column grows, and the table grows with it')
@@ -56,7 +56,7 @@ const gridMarkup: Record<World, ReactNode> = {
   react: <Snippet label="HTML" lines={[
     ...span(headerSource, "<div className={classNames('header-cell-content'", '</div>')
   ]}/>,
-  html: <Snippet label="HTML" lines={[
+  vanilla: <Snippet label="HTML" lines={[
     ...span(tableSource, '<div class="header-cell-content rankable resizable">trades', '⇅</button>'), gap,
     ...span(tableSource, 'aria-label="resize trades"></button>', '</div>')
   ]}/>
@@ -71,7 +71,7 @@ const handleMarkup: Record<World, ReactNode> = {
   react: <Snippet label="HTML" lines={[
     ...span(resizeSource, '<button type="button"', 'aria-label={resizeLabel(column, share)}')
   ]}/>,
-  html: <Snippet label="HTML" lines={[
+  vanilla: <Snippet label="HTML" lines={[
     ...span(tableSource, '<button type="button" class="resize-handle"', 'aria-label="resize window"></button>')
   ]}/>
 };
@@ -89,7 +89,7 @@ const handleSays: Record<World, ReactNode> = {
     col-resize <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
     and <Mdn path="Web/CSS/touch-action">touch-action</Mdn>: none lets the pointer drag it
     on a touchscreen.</Says>,
-  html: <Says>The handle is a
+  vanilla: <Says>The handle is a
     native <Mdn path="Web/HTML/Element/button">button</Mdn>: focusable by birth, announcing
     the name the markup gives it, and once the ledger exists dressColumn rewrites that label
     to speak the share too. This
@@ -110,7 +110,7 @@ const captureSays: Record<World, ReactNode> = {
     here, because unlike the sort’s cells the handle never moves in the DOM) and measures the
     table once: pixels per share. Each move converts the drag into shares and trades only the
     increment since the last one, so a clamped trade never accumulates error.</Says>,
-  html: <Says>A press wakes the ledger and measures the table once: pixels per share. The
+  vanilla: <Says>A press wakes the ledger and measures the table once: pixels per share. The
     first move <Mdn path="Web/API/Element/setPointerCapture">captures the pointer</Mdn> (safe
     here, because unlike the sort’s cells the handle never moves in the DOM), and each move
     converts the drag into shares and trades only the increment since the last one, so a
@@ -132,7 +132,7 @@ const captureCodes: Record<World, ReactNode> = {
     ]}/>
     {gripWords}
   </Codes>,
-  html: <Codes>
+  vanilla: <Codes>
     <Snippet label="TS" lines={[
       ...unit(frameResize, "handle.addEventListener('pointerdown'"), gap,
       ...unit(frameResize, "handle.addEventListener('pointermove'")
@@ -151,7 +151,7 @@ const gestureCodes: Record<World, ReactNode> = {
       aside('// the column dial above never hears a thing')
     ]}/>
   </Codes>,
-  html: <Codes>
+  vanilla: <Codes>
     <Snippet label="TS" lines={[
       ...span(frameResize, "handle.addEventListener('pointerdown', event => {", 'event.stopPropagation();'),
       plain('    // …the press measures; the descent stops here'), gap,

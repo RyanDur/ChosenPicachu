@@ -1,5 +1,5 @@
 .table-frame {
   display: block;
   width: 100%;
-  height: var(--base-x-32_5);
+  border: none;
 }
