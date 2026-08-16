@@ -14,7 +14,7 @@ type Props = {
 };
 
 export const warmed = (): void => {
-  void import('./assemble');
+  void import('./assemble').catch(() => undefined);
 };
 
 const measured = (frame: HTMLIFrameElement, grown: (height: number) => void): void => {
@@ -41,7 +41,7 @@ export const TableFrame: FC<Props> = ({pace, origin, motion, veiled = false, onS
       if (standing) {
         setDocument(frameDocument({tradeFeed, tradeHistory, tradeProduct}, {pace, origin, motion}));
       }
-    });
+    }).catch(() => undefined);
     return () => {
       standing = false;
     };
