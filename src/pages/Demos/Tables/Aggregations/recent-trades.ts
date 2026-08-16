@@ -25,7 +25,7 @@ const toTrades = (rows: schema.Output<typeof RecentTradesDecoder>): readonly Tra
   ).reverse();
 
 export const recentTrades = (base: string, product: string, onHistory: (trades: readonly Trade[]) => void): {cancel: () => void} => {
-  const fetching = http.get<unknown>(`${base}/products/${product}/trades?limit=1000`)
+  const fetching = http.get(`${base}/products/${product}/trades?limit=1000`)
     .mBind(validate(RecentTradesDecoder))
     .map(toTrades)
     .onSuccess(onHistory);
