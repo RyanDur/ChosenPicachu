@@ -106,15 +106,15 @@ const stateSays: Record<World, ReactNode> = {
   react: <>
     <Says>The table’s state is one value held in a single cell, and the setter is the
       commit. Nothing ever edits the state in place: a change is a pure transition, a function
-      from the old desk to a new one, and the old value simply stops being rendered.</Says>
+      from the old state to the new, and the old value simply stops being rendered.</Says>
     <Says>What follows the commit is React’s half of the deal: the component re-renders, the
-      markup renders through the new desk, and React reconciles the real DOM to match, moving
+      markup renders through the new state, and React reconciles the real DOM to match, moving
       only the nodes whose place changed. You never touch the DOM; you only commit the next state.</Says>
   </>,
   vanilla: <>
     <Says>The vanilla build keeps the same single value: the table state, which holds order, seats,
       seated, shares, and the rule together, every field readonly. Nothing ever edits the state in place: a
-      change is a pure transition, a function from the old desk to a new one, and the old
+      change is a pure transition, a function from the old state to the new, and the old
       value simply stops being current.</Says>
     <Says>What React did for you is the other half: the build holds the same cell with the same
       write path, and its commit reconciles the page against the new state by hand, moving only

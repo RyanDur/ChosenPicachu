@@ -80,8 +80,8 @@ export const staticMotion = (world: World, tableSource: string): ReactNode =>
           There is real value in this mode beyond taste: nothing competes with the pointer, and
           no motion for prefers-reduced-motion users to endure.</Says>
         : <Says>The static build is not the animated one with a switch off; it is a different
-          file with no marking code in it. Its commit is the whole story: a new order on the
-          desk, the reconcile moves the cells, and there is nothing else, because nothing else
+          file with no marking code in it. Its commit is the whole story: a new order in the
+          state, the reconcile moves the cells, and there is nothing else, because nothing else
           exists in this file. There is real value in this mode beyond taste: nothing competes
           with the pointer, and no motion for prefers-reduced-motion users to endure.</Says>}
     </Words>
