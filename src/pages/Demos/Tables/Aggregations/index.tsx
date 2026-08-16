@@ -1,11 +1,11 @@
-import {FC} from 'react';
+import {FC, useEffect, useState} from 'react';
 import {
   EagerHideAnimatedTable, EagerHideStaticTable, EagerKeepAnimatedTable, EagerKeepStaticTable,
   LazyHideAnimatedTable, LazyHideStaticTable, LazyKeepAnimatedTable, LazyKeepStaticTable
 } from '@components/DragSortableTable';
 import {Motion, Origin, Pace} from '../../Controls';
 import {World} from '../params';
-import {TableFrame} from '../Frame/TableFrame';
+import {TableFrame, warmed} from '../Frame/TableFrame';
 import {Trade} from '../../Charts/coinbase';
 import {windowedAggregates} from './fold';
 import {cells} from './cells';
@@ -44,10 +44,20 @@ const columns = [
 export const Aggregations: FC<Props> = ({trades, pace, origin, motion, world}) => {
   const recent = useRecentTrades();
   const Sortable = tables[pace][origin][motion];
+  const vanilla = world === 'vanilla';
+  const [stood, setStood] = useState(false);
+  useEffect(warmed, []);
+  useEffect(() => {
+    if (!vanilla) {
+      setStood(false);
+    }
+  }, [vanilla]);
   return <section aria-label="live aggregations" className="aggregations">
-    {world === 'vanilla'
-      ? <TableFrame pace={pace} origin={origin} motion={motion}/>
-      : <Sortable tableClassName="fancy-table"
+    {vanilla &&
+      <TableFrame pace={pace} origin={origin} motion={motion}
+                  veiled={!stood} onStand={() => setStood(true)}/>}
+    {(!vanilla || !stood) &&
+      <Sortable tableClassName="fancy-table"
            draggableColumns
            draggableRows
            resizableColumns

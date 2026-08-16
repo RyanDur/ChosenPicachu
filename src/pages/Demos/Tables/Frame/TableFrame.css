@@ -3,3 +3,9 @@
   width: 100%;
   border: none;
 }
+
+.table-frame.veiled {
+  position: absolute;
+  inset-inline: 0;
+  visibility: hidden;
+}

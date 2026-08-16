@@ -1,5 +1,6 @@
 import {FC, useEffect, useState} from 'react';
 import {has, maybe} from '@ryandur/sand';
+import {classNames} from '@components/class-names';
 import {useEnv} from '@components/Env';
 import {Motion, Origin, Pace} from '../../Controls';
 import './TableFrame.css';
@@ -8,6 +9,12 @@ type Props = {
   pace: Pace;
   origin: Origin;
   motion: Motion;
+  veiled?: boolean;
+  onStand?: () => void;
+};
+
+export const warmed = (): void => {
+  void import('./assemble');
 };
 
 const measured = (frame: HTMLIFrameElement, grown: (height: number) => void): void => {
@@ -19,11 +26,15 @@ const measured = (frame: HTMLIFrameElement, grown: (height: number) => void): vo
   });
 };
 
-export const TableFrame: FC<Props> = ({pace, origin, motion}) => {
+export const TableFrame: FC<Props> = ({pace, origin, motion, veiled = false, onStand = () => undefined}) => {
   const {tradeFeed, tradeHistory, tradeProduct} = useEnv();
   const [document, setDocument] = useState<string>();
   const [frame, setFrame] = useState<HTMLIFrameElement>();
   const [height, setHeight] = useState<number>();
+  const stood = (grown: number): void => {
+    setHeight(grown);
+    onStand();
+  };
   useEffect(() => {
     let standing = true;
     void import('./assemble').then(({frameDocument}) => {
@@ -44,12 +55,12 @@ export const TableFrame: FC<Props> = ({pace, origin, motion}) => {
     return () => watcher.disconnect();
   }, [frame]);
   return has(document)
-    ? <iframe className="table-frame"
+    ? <iframe className={classNames('table-frame', veiled && 'veiled')}
               title="the living table, in vanilla"
               style={has(height) ? {blockSize: `${height}px`} : undefined}
               onLoad={event => {
                 setFrame(event.currentTarget);
-                measured(event.currentTarget, setHeight);
+                measured(event.currentTarget, stood);
               }}
               srcDoc={document}/>
     : null;
