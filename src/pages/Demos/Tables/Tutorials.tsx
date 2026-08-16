@@ -39,7 +39,7 @@ export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack}) => {
                   name="table-world"
                   options={[
                     {display: 'React', value: 'react'},
-                    {display: 'HTML', value: 'html'}
+                    {display: 'Vanilla', value: 'html'}
                   ]}
                   chosen={world}
                   onChoose={next => updateSearchParams({world: next})}/>
