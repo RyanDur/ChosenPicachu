@@ -32,7 +32,7 @@ const dealOpeners: Record<World, ReactNode> = {
       measuring the headers as they stand, and the drag surveys them at the lift; a value
       that changes at runtime is state, and until then nothing has changed.</Says>
   </>,
-  html: <Says>The columns are declared once, each a header cell with a name and a class; how
+  vanilla: <Says>The columns are declared once, each a header cell with a name and a class; how
     wide they open is CSS. We could let the browser size the columns by their content,
     but a live table would breathe: every new number re-negotiates the layout. And we
     could carry widths in the markup, but they are layout, not content. So the page’s
@@ -55,7 +55,7 @@ const dealCodes: Record<World, ReactNode> = {
       ...span(rowSource, 'return rowHeader', '<td className={dress} key={column} style={theater}>{cell.display}</td>;')
     ]}/>
   </Codes>,
-  html: <Codes>
+  vanilla: <Codes>
     <Snippet label="HTML" lines={[
       ...span(tableSource, '<thead class="header">', '</th>'), gap,
       ...span(tableSource, '<tbody class="body">', '</tr>')
@@ -68,14 +68,14 @@ const dealCodes: Record<World, ReactNode> = {
 
 const socketOpeners: Record<World, string> = {
   react: 'One connection at page scope, so the stream survives every tab and dial below it.',
-  html: 'One connection for the document’s whole life.'
+  vanilla: 'One connection for the document’s whole life.'
 };
 
 const foldSays: Record<World, ReactNode> = {
   react: <Says>Every render folds the same trades into per-window aggregates: counts, volume,
     vwap, the change since the window opened. The fold runs over the same capped trades
     each time, so the windows are always exactly the stream’s current truth.</Says>,
-  html: <Says>Every arrival refolds the same trades into per-window aggregates, because
+  vanilla: <Says>Every arrival refolds the same trades into per-window aggregates, because
     refolding is simple math and cannot drift out of sync. The fold is the same module the
     React world runs. What React did for you ends here: there is no render to catch the
     change, so every commit reconciles the page against the desk, writing only the cells
@@ -89,7 +89,7 @@ const foldCodes: Record<World, ReactNode> = {
       ...unit(foldSource, 'const aggregate = ')
     ]}/>
   </Codes>,
-  html: <Codes>
+  vanilla: <Codes>
     <Snippet label="TS" lines={[
       ...unit(foldSource, 'export const windows'), gap,
       ...unit(frameStand, 'const reconciled = ')
@@ -99,7 +99,7 @@ const foldCodes: Record<World, ReactNode> = {
 
 const refolds: Record<World, string> = {
   react: 'Then every render refolds everything we hold into the windows, because refolding is simple math and cannot drift out of sync.',
-  html: 'Then every arrival refolds everything we hold into the windows, and the page writes what changed.'
+  vanilla: 'Then every arrival refolds everything we hold into the windows, and the page writes what changed.'
 };
 
 const stateSays: Record<World, ReactNode> = {
@@ -111,7 +111,7 @@ const stateSays: Record<World, ReactNode> = {
       markup renders through the new desk, and React reconciles the real DOM to match, moving
       only the nodes whose place changed. You never touch the DOM; you only deal the desk.</Says>
   </>,
-  html: <>
+  vanilla: <>
     <Says>The shell keeps the same state as one value: the desk, which holds order, seats,
       seated, shares, and the rule together, every field readonly. Nothing ever edits the desk in place: a
       change is a pure transition, a function from the old desk to a new one, and the old
@@ -131,7 +131,7 @@ const stateCodes: Record<World, ReactNode> = {
       ...unit(useDeskSource, 'export const useDesk')
     ]}/>
   </Codes>,
-  html: <Codes>
+  vanilla: <Codes>
     <Snippet label="TS" lines={[
       ...unit(deskSource, 'export type Desk'), gap,
       ...unit(deskSource, 'export const orderedTo'), gap,

@@ -8,6 +8,6 @@ export type Tutorial = 'sort' | 'menu' | 'resize';
 
 export const tutorialParam: schema.Decoder<Tutorial> = schema.literalUnion('sort', 'menu', 'resize');
 
-export type World = 'react' | 'html';
+export type World = 'react' | 'vanilla';
 
-export const worldParam: schema.Decoder<World> = schema.literalUnion('react', 'html');
+export const worldParam: schema.Decoder<World> = schema.literalUnion('react', 'vanilla');

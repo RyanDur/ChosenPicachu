@@ -31,7 +31,7 @@ const feedIsSubscribed = async (): Promise<void> => {
 const dialCombos = ['eager', 'lazy'].flatMap(pace =>
   ['keep', 'hide'].flatMap(origin =>
     ['animated', 'static'].map(motion => `pace=${pace}&origin=${origin}&motion=${motion}`)));
-const builds = ['react', 'html'].flatMap(world => dialCombos.map(dials => `world=${world}&${dials}`));
+const builds = ['react', 'vanilla'].flatMap(world => dialCombos.map(dials => `world=${world}&${dials}`));
 
 describe('the tables demo', () => {
   const feeds: WebSocketServer[] = [];
@@ -444,15 +444,15 @@ describe('the tables demo', () => {
       renderTables(urlOf(feed));
 
       expect(await screen.findByRole('region', {name: 'live aggregations'})).toBeInTheDocument();
-      expect(screen.queryByTitle('the living table, in html')).not.toBeInTheDocument();
+      expect(screen.queryByTitle('the living table, in vanilla')).not.toBeInTheDocument();
     });
 
     test('the html world deals the table in its own document', async () => {
       const feed = await streamingFeed();
 
-      renderTables(urlOf(feed), '?tab=tables&world=html');
+      renderTables(urlOf(feed), '?tab=tables&world=vanilla');
 
-      const frame = await screen.findByTitle('the living table, in html');
+      const frame = await screen.findByTitle('the living table, in vanilla');
       expect(frame).toHaveAttribute('srcdoc', expect.stringContaining('<table'));
       const card = screen.getByRole('region', {name: 'live aggregations'});
       expect(card).toContainElement(frame);
@@ -462,7 +462,7 @@ describe('the tables demo', () => {
     test('one tutorial stands in both worlds; only the build swaps', async () => {
       const feed = await streamingFeed();
 
-      renderTables(urlOf(feed), '?tab=tables&world=html');
+      renderTables(urlOf(feed), '?tab=tables&world=vanilla');
 
       expect(await screen.findByText('The trader can watch the market live, in windows')).toBeInTheDocument();
       expect(screen.getByText('Drag resize')).toBeInTheDocument();
@@ -473,7 +473,7 @@ describe('the tables demo', () => {
     test('the menu story stands in the html world', async () => {
       const feed = await streamingFeed();
 
-      renderTables(urlOf(feed), '?tab=tables&world=html&tut=menu');
+      renderTables(urlOf(feed), '?tab=tables&world=vanilla&tut=menu');
 
       expect(await screen.findByText('The trader can sort the windows by any measure, or take the order back')).toBeInTheDocument();
     });
@@ -481,7 +481,7 @@ describe('the tables demo', () => {
     test('the resize story stands in the html world', async () => {
       const feed = await streamingFeed();
 
-      renderTables(urlOf(feed), '?tab=tables&world=html&tut=resize');
+      renderTables(urlOf(feed), '?tab=tables&world=vanilla&tut=resize');
 
       expect(await screen.findByText('The trader can widen a column')).toBeInTheDocument();
     });
@@ -501,10 +501,25 @@ describe('the tables demo', () => {
     test('the explainer stands in the html world too', async () => {
       const feed = await streamingFeed();
 
-      renderTables(urlOf(feed), '?tab=tables&world=html');
+      renderTables(urlOf(feed), '?tab=tables&world=vanilla');
 
       expect(await screen.findByText('what am I looking at?')).toBeInTheDocument();
-      expect(screen.getByTitle('the living table, in html')).toBeInTheDocument();
+      expect(screen.getByTitle('the living table, in vanilla')).toBeInTheDocument();
+    });
+
+
+    test('the frame wears its own document\u2019s height', async () => {
+      const feed = await streamingFeed();
+
+      renderTables(urlOf(feed), '?tab=tables&world=vanilla');
+
+      const frame = await screen.findByTitle('the living table, in vanilla');
+      Object.defineProperty(frame, 'contentDocument', {
+        value: {documentElement: {scrollHeight: 487}}
+      });
+      fireEvent.load(frame);
+
+      expect(frame).toHaveStyle({blockSize: '487px'});
     });
 
     test('the world dial swaps the stage', async () => {
@@ -514,7 +529,7 @@ describe('the tables demo', () => {
 
       await userEvent.click(await screen.findByRole('radio', {name: 'Vanilla'}));
 
-      const frame = await screen.findByTitle('the living table, in html');
+      const frame = await screen.findByTitle('the living table, in vanilla');
       const card = screen.getByRole('region', {name: 'live aggregations'});
       expect(card).toContainElement(frame);
       expect(within(card).queryByRole('table')).not.toBeInTheDocument();

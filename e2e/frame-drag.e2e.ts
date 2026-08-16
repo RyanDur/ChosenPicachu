@@ -3,7 +3,7 @@ import {expect, test} from '@playwright/test';
 // the jsdom laws dispatch events by target; only a real input pipeline exercises
 // hit-testing and pointer capture, which is where the frame's drags have broken before
 test('a real drag reorders the frame columns in the default world', async ({page}) => {
-  await page.goto('/ChosenPicachu/demos/?tab=tables&world=html');
+  await page.goto('/ChosenPicachu/demos/?tab=tables&world=vanilla');
   const frame = page.frameLocator('iframe.table-frame');
   const trades = frame.locator('th.trades');
   await expect(trades).toBeVisible();
@@ -30,7 +30,7 @@ test('a real drag reorders the frame columns in the default world', async ({page
 });
 
 test('a menu choice sorts, and never lifts the column', async ({page}) => {
-  await page.goto('/ChosenPicachu/demos/?tab=tables&world=html');
+  await page.goto('/ChosenPicachu/demos/?tab=tables&world=vanilla');
   const frame = page.frameLocator('iframe.table-frame');
   await frame.locator('th.trades').waitFor();
 
