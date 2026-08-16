@@ -144,4 +144,5 @@ jobs:
         with:
           name: lighthouse-${{ matrix.page }}
           path: ${{ steps.audit.outputs.resultsPath }}
+          include-hidden-files: true
           if-no-files-found: error
