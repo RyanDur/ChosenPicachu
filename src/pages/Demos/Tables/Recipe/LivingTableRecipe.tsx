@@ -12,7 +12,7 @@ import rowSource from '@components/DragSortableTable/EagerHideAnimatedTable/Row.
 import hydrateSource from '@pages/Demos/Tables/Aggregations/recent-trades.ts?raw';
 import widthsSource from '@pages/Demos/Tables/Aggregations/Aggregations.css?raw';
 import tableSource from '../Frame/table.html?raw';
-import frameDesk from '../Frame/shell/desk.ts?raw';
+import deskSource from '@components/DragSortableTable/desk.ts?raw';
 import frameStand from '../Frame/shell/stand.ts?raw';
 import '../../Recipe/Recipe.css';
 
@@ -136,9 +136,9 @@ const stateCodes: Record<World, ReactNode> = {
   </Codes>,
   html: <Codes>
     <Snippet label="TS" lines={[
-      ...unit(frameDesk, 'export type Desk'), gap,
-      ...unit(frameDesk, 'export const orderedTo'), gap,
-      ...unit(frameDesk, 'export const baked')
+      ...unit(deskSource, 'export type Desk'), gap,
+      ...unit(deskSource, 'export const orderedTo'), gap,
+      ...unit(deskSource, 'export const baked')
     ]}/>
     <Snippet label="TS" lines={[
       ...unit(frameStand, 'const commit = ')

@@ -10,7 +10,7 @@ import headerCss from '@components/DragSortableTable/Header.css?raw';
 import sortMenuSource from '@components/DragSortableTable/SortMenu.tsx?raw';
 import sortingSource from '@components/DragSortableTable/sorting.ts?raw';
 import tableSource from '../Frame/table.html?raw';
-import frameDesk from '../Frame/shell/desk.ts?raw';
+import deskSource from '@components/DragSortableTable/desk.ts?raw';
 import frameMenus from '../Frame/shell/menus.ts?raw';
 import frameStand from '../Frame/shell/stand.ts?raw';
 import {shellSources} from '../Frame/shells/sources';
@@ -257,7 +257,7 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
               ...unit(source, 'onLift={lifted => event => {')
             ]}/>
             : <Snippet label="TS" lines={[
-              ...unit(frameDesk, 'export const baked = '),
+              ...unit(deskSource, 'export const baked = '),
               aside('// the grab commits it outright; a nudge folds it into its own move')
             ]}/>}
         </Codes>
