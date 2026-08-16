@@ -24,6 +24,6 @@ export const periodCandles = (
   product: string,
   query: string
 ): Result.Async<readonly Candle[], HTTPError> =>
-  http.get<unknown>(`${base}/products/${product}/candles?${query}`)
+  http.get(`${base}/products/${product}/candles?${query}`)
     .mBind(validate(HistoryRowsDecoder))
     .map(toCandles);
