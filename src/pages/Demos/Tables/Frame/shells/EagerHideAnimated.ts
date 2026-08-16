@@ -89,10 +89,9 @@ const wireRowGrip = (shell: Shell, held: number, grip: HTMLButtonElement): void 
       if (sliding) {
         return;
       }
-      shell.commit(baked);
-      const {seats} = shell.desk();
-      const nudge = rowNudge(seats, surveyed(table, shell.desk().order, seats).rowHeights)(held, toward);
-      shell.commit(nudgedTo(held, nudge.to));
+      const standing = shell.desk().seated;
+      const nudge = rowNudge(standing, surveyed(table, shell.desk().order, standing).rowHeights)(held, toward);
+      shell.commit(desk => nudgedTo(held, nudge.to)(baked(desk)));
       markRows(shell, nudge.drops);
     });
   });
