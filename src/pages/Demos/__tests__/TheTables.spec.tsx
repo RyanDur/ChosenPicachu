@@ -271,7 +271,7 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/stays in sight while its copy travels/);
     expect(recipe).toHaveTextContent(/instantly, with no motion/);
     expect(recipe).toHaveTextContent(/Leave the origin in place/);
-    expect(recipe).toHaveTextContent(/Apply the state update directly/);
+    expect(recipe).toHaveTextContent(/Leave the motion out/);
     expect(recipe).not.toHaveTextContent(/1cqi/);
     expect(recipe).not.toHaveTextContent(/Commit inside the move/);
     const controls = await screen.findByRole('region', {name: 'table controls'});

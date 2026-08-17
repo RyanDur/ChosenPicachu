@@ -85,11 +85,6 @@
     text-wrap: pretty;
   }
 
-  .step-words .step-want,
-  .step-words .step-says {
-    max-width: 70ch;
-  }
-
   .step-reveal {
     flex-basis: 100%;
   }
@@ -138,10 +133,6 @@
     margin-top: var(--base-x-2);
     display: grid;
     gap: var(--base-x-2);
-
-    .step-says {
-      max-width: 70ch;
-    }
   }
 
   .arcs {
@@ -173,6 +164,15 @@
     rotate: 90deg;
   }
 
+  .step-reveal > .opener {
+    gap: var(--base);
+    color: var(--charcoal);
+
+    &::before {
+      font-size: var(--text-body);
+    }
+  }
+
   .arc > .approach {
     margin: var(--base-x-2) 0 0;
     text-wrap: pretty;
@@ -200,6 +200,12 @@
     text-wrap: pretty;
   }
 
+  .story .step-tally {
+    margin: 0;
+    font-size: var(--text-caption);
+    color: var(--charcoal);
+  }
+
   .story .so-that {
     margin: 0;
     font-size: var(--text-body);
@@ -214,6 +220,7 @@
     padding: var(--base-x-1_5) var(--base-x-2);
     white-space: pre-wrap;
     overflow-wrap: break-word;
+    overflow-x: auto;
 
     .lang {
       position: absolute;
