@@ -1,12 +1,19 @@
-import {FC, PropsWithChildren, useId, useState} from 'react';
+import {FC, PropsWithChildren, ReactNode, useId, useState} from 'react';
 import {has} from '@ryandur/sand';
 
 export type Word =
   | 'aloft' | 'survey' | 'drift' | 'flight' | 'ghost'
   | 'strike' | 'settle' | 'landing' | 'seats' | 'share' | 'travel' | 'reconcile';
 
-const definitions: Record<Word, string> = {
-  aloft: 'whatever the hand is carrying, named by its key or its seat',
+const sand =
+  <a className="signpost"
+     href="https://ryandur.github.io/sand/"
+     target="_blank"
+     rel="noreferrer">sand</a>;
+
+const definitions: Record<Word, ReactNode> = {
+  aloft: <>whatever the hand is carrying, named by its key or its seat; in React it rides
+    a Maybe from {sand}: nothing until a lift</>,
   survey: 'the one measurement taken at the grab: the table’s box, every column’s width, later the row heights',
   drift: 'how far the pointer has moved since the grab',
   flight: 'the box the carried thing was grabbed in: where the ghost starts',

@@ -17,14 +17,20 @@ export const liftOnce = (world: World, tableSource: string): ReactNode =>
       {world === 'react'
         ? <Says>The hand is CSS before anything happens, grab on hover, grabbing on press, and
           touch-action: none is why the pointer can drag on touch at all. On pointerdown,
-          JavaScript records which key is <Term word="aloft">aloft</Term> and takes the survey. Aloft rides
-          a Maybe from a small library called <a className="signpost"
+          JavaScript records which key is <Term word="aloft">aloft</Term> and takes the survey. Two words in
+          the code come from a small library called <a className="signpost"
             href="https://ryandur.github.io/sand/"
             target="_blank"
-            rel="noreferrer">sand</a>: nothing until a lift.</Says>
+            rel="noreferrer">sand</a>: aloft rides its Maybe, nothing until a lift, and has is
+          its null check, false for nothing and for empty.</Says>
         : <Says>The hand is CSS before anything happens, grab on hover, grabbing on press, and
           touch-action: none is why the pointer can drag on touch at all. On pointerdown,
-          JavaScript takes the survey; then the grab fills the <Term word="ghost">ghost</Term> and the carry begins.</Says>}
+          JavaScript takes the survey; then the grab fills the <Term word="ghost">ghost</Term> and the carry
+          begins. One word in the code comes from a small library called <a className="signpost"
+            href="https://ryandur.github.io/sand/"
+            target="_blank"
+            rel="noreferrer">sand</a>: has, its null check, false for nothing and for
+          empty.</Says>}
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
