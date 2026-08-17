@@ -5,6 +5,7 @@ import './style.css';
 import './DemosPage.css';
 import './Tutorials.css';
 import {Tabs} from '@components/Tabs';
+import {Overview} from './Recipe';
 import {
   ExclusiveAccordion,
   ExclusiveToggleAccordion,
@@ -116,33 +117,10 @@ export const DemosPage = () => {
               })()}
               <section className="tutorials">
                 <h2 className="tutorials-title">let’s build this feature</h2>
-                <p className="overview paragraph">
-                  We are going to build this site’s drag-and-drop list, feature by feature.
-                  Here is how to use this page: every card below is a feature, told as
-                  a <a className="signpost"
-                    href="https://initialcapacity.io/insights/user-story"
-                    target="_blank"
-                    rel="noreferrer">user story</a>. Open a card and you get the plan for that
-                  feature and the steps that build it, with the real code from this site, so
-                  what you read is what runs. The dials change which list you are reading
-                  about, and Eager, Lazy, Keep, Hide, Animate, and Static are this page’s
-                  names for the choices, not platform keywords. Where a step depends on a
-                  dial, that dial sits on the step. The links go to MDN if you want more.
-                </p>
-                <figure className="feedback">
-                  <blockquote className="quote paragraph italic">
-                    I have a list, and the order is mine. When something belongs above
-                    something else, I want to pick it up and put it there, and see it land
-                    where I dropped it.
-                  </blockquote>
-                  <figcaption className="attribution">a user</figcaption>
-                </figure>
-                <p className="overview paragraph">
-                  If you want the exercise, stop here and build the story yourself first. The
-                  list is our interpretation of that; the cards below break the
-                  interpretation into features. Open one to see how we built it, or to
-                  compare it with yours.
-                </p>
+                <Overview builds="this site’s drag-and-drop list"
+                          reads="list"
+                          quote="I have a list, and the order is mine. When something belongs above something else, I want to pick it up and put it there, and see it land where I dropped it."
+                          by="a user"/>
                 <ListControls pace={pace} origin={origin} motion={motion}
                               onPace={next => updateSearchParams({pace: next})}
                               onOrigin={next => updateSearchParams({origin: next})}

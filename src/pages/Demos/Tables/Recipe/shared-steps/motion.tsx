@@ -76,7 +76,7 @@ export const animatedMotion = (world: World, tableSource: string, cssSource: str
   </Step>;
 
 export const staticMotion = (world: World, tableSource: string): ReactNode =>
-  <Step title="Apply the state update directly" dial={<MotionDial name="step-motion"/>}>
+  <Step title="Leave the motion out" dial={<MotionDial name="step-motion"/>}>
     <Words want="Motion is not free: it competes with the pointer, costs a frame budget, and some traders ask for none at all.">
       <Says>No motion should mean no motion code: not the animated table with its slides
         switched off, but a file with nothing to switch. Its settle should read as the whole

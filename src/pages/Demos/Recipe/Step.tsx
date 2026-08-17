@@ -11,7 +11,7 @@ export const Step: FC<Props> = ({title, dial, children}) =>
   <li className={classNames('step', has(dial) && 'tuned')}>
     <article className="step-body">
       <header className="step-heading">
-        <h3 className="step-title">{title}</h3>
+        <h4 className="step-title">{title}</h4>
         {dial}
       </header>
       {children}
