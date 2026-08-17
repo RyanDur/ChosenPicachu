@@ -245,9 +245,9 @@ describe('the tables demo', () => {
       .toHaveAttribute('href', expect.stringContaining('tab=dragAndDrop'));
     expect(recipe).toHaveTextContent(/touch-action/);
     expect(recipe).toHaveTextContent(/Write each listener once, for both worlds/);
-    expect(recipe).toHaveTextContent(/before you read on:/);
-    expect(recipe).toHaveTextContent(/what does a vanilla listener, attached once at mount, remember/);
     expect(recipe).toHaveTextContent(/export type Cell/);
+    expect(within(recipe).getAllByText('how we built it').length).toBeGreaterThan(0);
+    expect(recipe.querySelectorAll('details.step-reveal[open]')).toHaveLength(0);
     expect(recipe).toHaveTextContent(/Commit inside the move/);
     expect(recipe).toHaveTextContent(/Blank the origin while it is aloft/);
     expect(recipe).toHaveTextContent(/visibility: hidden/);
@@ -293,7 +293,7 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/Let the slide pace the key/);
     expect(recipe).toHaveTextContent(/getAnimations/);
     await userEvent.click(within(recipe).getByText(/sort without a mouse/));
-    expect(recipe).toHaveTextContent(/The reflex is a timer/);
+    expect(recipe).toHaveTextContent(/a timer matched to the CSS by hand/);
     expect(recipe.querySelectorAll('.story')).toHaveLength(1);
     expect(within(recipe).getByRole('link', {name: 'getAnimations'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/Element/getAnimations'));
@@ -337,7 +337,6 @@ describe('the tables demo', () => {
     const resize = await screen.findByRole('region', {name: 'build the drag resize yourself'});
     expect(resize).toBeVisible();
     expect(resize).toHaveTextContent(/zero-sum ledger/);
-    expect(resize).toHaveTextContent(/Where do the pixels come from\?/);
     expect(resize).toHaveTextContent(/Trade, never take/);
     expect(resize).toHaveTextContent(/A handle that is a button/);
     expect(resize.querySelectorAll('.story')).toHaveLength(1);
@@ -394,8 +393,6 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/popover/);
     expect(recipe).toHaveTextContent(/position-area/);
     expect(recipe).toHaveTextContent(/The rule is a drape, not a bake/);
-    expect(recipe).toHaveTextContent(/Decide before the next trade lands\./);
-    expect(recipe).toHaveTextContent(/How many of those will you write yourself\?/);
     expect(recipe).toHaveTextContent(/A hand ends the rule/);
     expect(recipe).toHaveTextContent(/setShifted\(shifts\(/);
     expect(recipe).not.toHaveTextContent(/Dress the menu as a card/);

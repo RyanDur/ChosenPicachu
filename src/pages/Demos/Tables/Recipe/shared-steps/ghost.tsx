@@ -1,5 +1,5 @@
 import {ReactNode} from 'react';
-import {Codes, Mdn, Predict, Says, Snippet, Step, Words, aside} from '../../../Recipe';
+import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {frameGhosts, frameHtml, gap, ghostCss, ghostSource, travelSource} from './sources';
@@ -7,8 +7,13 @@ import {frameGhosts, frameHtml, gap, ghostCss, ghostSource, travelSource} from '
 export const ghostByHand = (world: World, tableSource: string): ReactNode =>
   <Step title="Draw the ghost by hand">
     <Words want="The carried column has to be visible in the hand, smoothly, on slow machines too.">
-      <Predict>Something must ride the hand. Do you clone the node you grabbed, or draw the
-        column again from what you already know? Pick one and name its cost.</Predict>
+      <Says>Something must ride the hand. Cloning the node we grabbed feels cheapest, but a
+        clone of live cells goes stale the moment the stream writes, and measuring it invites
+        more layout work mid-drag. So we would draw the ghost from what we already hold, the
+        data and the survey, and let CSS keep it honest: pointer-events to keep it out of the
+        drag’s own hit-testing, will-change to promise the browser motion.</Says>
+    </Words>
+    <Reveal>
       {world === 'react'
         ? <Says>The column in your hand is not a clone of DOM nodes. It is a second table rendered
           from the same data. The flight is where you grabbed it; the drift is how far you have
@@ -26,31 +31,31 @@ export const ghostByHand = (world: World, tableSource: string): ReactNode =>
           slower engines smooth. CSS keeps the
           ghost out of hit-testing with <Mdn path="Web/CSS/pointer-events">pointer-events</Mdn>: none
           and promises the browser motion with <Mdn path="Web/CSS/will-change">will-change</Mdn>.</Says>}
-    </Words>
-    <Codes>
-      {world === 'react'
-        ? <Snippet label="HTML" lines={[
-          ...span(ghostSource, 'export const Ghost', '</table>;'),
-          aside('{/* the same cells, rendered again from the data */}')
+      <Codes>
+        {world === 'react'
+          ? <Snippet label="HTML" lines={[
+            ...span(ghostSource, 'export const Ghost', '</table>;'),
+            aside('{/* the same cells, rendered again from the data */}')
+          ]}/>
+          : <Snippet label="HTML" lines={[
+            ...span(frameHtml, '<template id="column-ghost">', '</template>'),
+            aside('<!-- the shape is the page’s own; the lift only fills it -->')
+          ]}/>}
+        {world === 'react'
+          ? <Snippet label="TS" lines={[
+            ...unit(tableSource, 'const drifting = ')
+          ]}/>
+          : <Snippet label="TS" lines={[
+            ...unit(frameGhosts, 'export const columnGhost'), gap,
+            ...unit(frameGhosts, 'const flown = ')
+          ]}/>}
+        <Snippet label="TS" lines={[
+          ...unit(travelSource, 'export const drifted'),
+          aside('// both worlds measure the drift with the same word')
         ]}/>
-        : <Snippet label="HTML" lines={[
-          ...span(frameHtml, '<template id="column-ghost">', '</template>'),
-          aside('<!-- the shape is the page’s own; the lift only fills it -->')
-        ]}/>}
-      {world === 'react'
-        ? <Snippet label="TS" lines={[
-          ...unit(tableSource, 'const drifting = ')
+        <Snippet label="CSS" lines={[
+          ...unit(ghostCss, '.column-ghost {')
         ]}/>
-        : <Snippet label="TS" lines={[
-          ...unit(frameGhosts, 'export const columnGhost'), gap,
-          ...unit(frameGhosts, 'const flown = ')
-        ]}/>}
-      <Snippet label="TS" lines={[
-        ...unit(travelSource, 'export const drifted'),
-        aside('// both worlds measure the drift with the same word')
-      ]}/>
-      <Snippet label="CSS" lines={[
-        ...unit(ghostCss, '.column-ghost {')
-      ]}/>
-    </Codes>
+      </Codes>
+    </Reveal>
   </Step>;

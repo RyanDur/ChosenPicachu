@@ -1,6 +1,6 @@
 import {ReactNode} from 'react';
 import {MotionDial} from '../../../Controls';
-import {Codes, Mdn, Says, Snippet, Step, Words, aside, plain} from '../../../Recipe';
+import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, aside, plain} from '../../../Recipe';
 import {unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {frameMarks, gap, settlesSource} from './sources';
@@ -8,6 +8,13 @@ import {frameMarks, gap, settlesSource} from './sources';
 export const animatedMotion = (world: World, tableSource: string, cssSource: string): ReactNode =>
   <Step title="Slide the theater, not the layout" dial={<MotionDial name="step-motion"/>}>
     <Words want="The trader must be able to follow which column went where; a teleport is honest but unreadable, and animating the layout itself would bounce the whole table, because layout is load-bearing.">
+      <Says>The slide must never touch layout: animating widths would bounce the table, and the
+        reorder must land instantly for the drag math to stay true. So we would commit the swap
+        at once and only draw the displaced column where it used to be, sliding home on a
+        transform, with the survey supplying the one number CSS cannot know: how far home
+        is.</Says>
+    </Words>
+    <Reveal>
       <Says>A swap commits instantly: the carried column already sits at full width in its new
         slot, hidden or under the ghost, and the layout underneath is final. The displaced column
         is merely drawn where it used to be, sliding home on
@@ -41,38 +48,43 @@ export const animatedMotion = (world: World, tableSource: string, cssSource: str
         : <Says>Motion is not a flag on this build; it is this build. The animated variant marks its
           own theater inline in its commits, the dial above chooses which of eight builds you are
           reading, and the readout under the dials names it.</Says>}
-    </Words>
-    <Codes>
-      {world === 'react'
-        ? <Snippet label="TS" lines={[
-          ...unit(tableSource, 'const settleColumn = '),
-          aside('// a direction and a share per displaced key; javascript is done')
+      <Codes>
+        {world === 'react'
+          ? <Snippet label="TS" lines={[
+            ...unit(tableSource, 'const settleColumn = '),
+            aside('// a direction and a share per displaced key; javascript is done')
+          ]}/>
+          : <Snippet label="TS" lines={[
+            ...unit(settlesSource, 'export const animatedSettleColumn'), gap,
+            ...unit(frameMarks, 'const markCell = '),
+            aside('// a direction and a share per displaced key; javascript is done')
+          ]}/>}
+        {world === 'react'
+          ? <Snippet label="HTML" lines={[
+            plain("<th className={displaced && `displaced-${toward}`} ... >"),
+            plain("<tr className={drop && 'shifted'} style={{'--drop': `${drop}px`}}>"),
+            aside('{/* the reorder moves the node; the class rides along */}')
+          ]}/>
+          : undefined}
+        <Snippet label="CSS" lines={[
+          ...unit(cssSource, '.sortable .displaced {'), gap,
+          ...unit(cssSource, '.sortable .shifted {'), gap,
+          ...unit(cssSource, '@keyframes displaced'),
+          aside('/* --toward flips the sign; direction is data, not a name */'), gap,
+          ...unit(cssSource, '@keyframes shifted')
         ]}/>
-        : <Snippet label="TS" lines={[
-          ...unit(settlesSource, 'export const animatedSettleColumn'), gap,
-          ...unit(frameMarks, 'const markCell = '),
-          aside('// a direction and a share per displaced key; javascript is done')
-        ]}/>}
-      {world === 'react'
-        ? <Snippet label="HTML" lines={[
-          plain("<th className={displaced && `displaced-${toward}`} ... >"),
-          plain("<tr className={drop && 'shifted'} style={{'--drop': `${drop}px`}}>"),
-          aside('{/* the reorder moves the node; the class rides along */}')
-        ]}/>
-        : undefined}
-      <Snippet label="CSS" lines={[
-        ...unit(cssSource, '.sortable .displaced {'), gap,
-        ...unit(cssSource, '.sortable .shifted {'), gap,
-        ...unit(cssSource, '@keyframes displaced'),
-        aside('/* --toward flips the sign; direction is data, not a name */'), gap,
-        ...unit(cssSource, '@keyframes shifted')
-      ]}/>
-    </Codes>
+      </Codes>
+    </Reveal>
   </Step>;
 
 export const staticMotion = (world: World, tableSource: string): ReactNode =>
   <Step title="Apply the state update directly" dial={<MotionDial name="step-motion"/>}>
     <Words want="Motion is not free: it competes with the pointer, costs a frame budget, and some traders ask for none at all.">
+      <Says>No motion should mean no motion code: not the animated table with the theater
+        switched off, but a build with nothing to switch. We would expect its settle to read as
+        the whole story.</Says>
+    </Words>
+    <Reveal>
       {world === 'react'
         ? <Says>The static table is not the animated one with a switch off; it is a different
           table with no marking code in it. Its settle is the whole story: move the key, let
@@ -84,16 +96,16 @@ export const staticMotion = (world: World, tableSource: string): ReactNode =>
           state, the reconcile moves the cells, and there is nothing else, because nothing else
           exists in this file. There is real value in this mode beyond taste: nothing competes
           with the pointer, and no motion for prefers-reduced-motion users to endure.</Says>}
-    </Words>
-    <Codes>
-      {world === 'react'
-        ? <Snippet label="TS" lines={[
-          ...unit(tableSource, 'const settleColumn = '),
-          aside('// the whole settle; no marking code exists in this table')
-        ]}/>
-        : <Snippet label="TS" lines={[
-          ...unit(settlesSource, 'export const staticSettleColumn'),
-          aside('// the whole settle; no marking code exists in this build')
-        ]}/>}
-    </Codes>
+      <Codes>
+        {world === 'react'
+          ? <Snippet label="TS" lines={[
+            ...unit(tableSource, 'const settleColumn = '),
+            aside('// the whole settle; no marking code exists in this table')
+          ]}/>
+          : <Snippet label="TS" lines={[
+            ...unit(settlesSource, 'export const staticSettleColumn'),
+            aside('// the whole settle; no marking code exists in this build')
+          ]}/>}
+      </Codes>
+    </Reveal>
   </Step>;

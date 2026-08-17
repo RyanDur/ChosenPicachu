@@ -85,11 +85,23 @@
     text-wrap: pretty;
   }
 
-  .step-predict {
-    margin: 0;
-    padding-inline-start: var(--base-x-2);
-    border-inline-start: var(--hairline-x-2) solid var(--mint);
-    text-wrap: pretty;
+  .step-words .step-want,
+  .step-words .step-says {
+    max-width: 70ch;
+  }
+
+  .step-reveal {
+    flex-basis: 100%;
+  }
+
+  .step-built {
+    margin-top: var(--base-x-2);
+    display: grid;
+    gap: var(--base-x-2);
+
+    .step-says {
+      max-width: 70ch;
+    }
   }
 
   .arcs {
@@ -100,7 +112,7 @@
     gap: var(--base-x-5);
   }
 
-  .arc > .opener {
+  :is(.arc, .step-reveal) > .opener {
     display: flex;
     align-items: center;
     gap: var(--base-x-2);
@@ -117,7 +129,7 @@
     }
   }
 
-  .arc[open] > .opener::before {
+  :is(.arc, .step-reveal)[open] > .opener::before {
     rotate: 90deg;
   }
 
