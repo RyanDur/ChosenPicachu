@@ -7,6 +7,13 @@ type Props = {
   by: string;
 };
 
+export const DialNote: FC<{reads: string}> = ({reads}) =>
+  <p className="overview paragraph">
+    The dials change which {reads} you are reading about. Eager, Lazy, Keep, Hide, Animate,
+    and Static are this page’s names for the choices, not platform keywords, and where a step
+    depends on a dial, that dial sits on the step.
+  </p>;
+
 export const Overview: FC<Props> = ({builds, reads, quote, by}) =>
   <>
     <p className="overview paragraph">
@@ -16,11 +23,7 @@ export const Overview: FC<Props> = ({builds, reads, quote, by}) =>
         target="_blank"
         rel="noreferrer">user story</a>: open one and you get the plan for that feature and the
       steps that build it, with the real code from this site, so what you read is what runs.
-    </p>
-    <p className="overview paragraph">
-      The dials change which {reads} you are reading about. Eager, Lazy, Keep, Hide, Animate,
-      and Static are this page’s names for the choices, not platform keywords, and where a step
-      depends on a dial, that dial sits on the step. The links go to MDN if you want more.
+      The links go to MDN if you want more.
     </p>
     <figure className="feedback">
       <blockquote className="quote paragraph italic">{quote}</blockquote>

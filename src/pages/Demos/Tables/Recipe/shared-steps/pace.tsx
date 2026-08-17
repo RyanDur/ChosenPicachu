@@ -20,7 +20,7 @@ export const eagerPace = (world: World, tableSource: string, buildSrc: string): 
           just more crossings: home is always reachable. No style changes hands here at
           all.</Says>
         : <Says>Commit as soon as a neighbour is struck: the commit writes a new column order
-          into the state, and the reconcile moves the real cells to match it. Carrying the
+          into the state, and the <Term word="reconcile">reconcile</Term> moves the real cells to match it. Carrying the
           column back is just more crossings: home is always reachable. No style changes hands
           here at all.</Says>}
       {world === 'react'
@@ -52,14 +52,14 @@ export const eagerPace = (world: World, tableSource: string, buildSrc: string): 
           ]}/>}
         <Snippet label="TS" lines={[
           ...unit(travelSource, 'export const eagerTravel'),
-          aside('// one travel ruling; each world answers with its own settle')
+          aside('// one shared travel; each world answers with its own settle')
         ]}/>
       </Codes>
     </Reveal>
   </Step>;
 
 export const lazyPace = (world: World, tableSource: string, buildSrc: string): ReactNode =>
-  <Step title="Stash the landing, commit on release" dial={<PaceDial name="step-pace"/>}>
+  <Step title="Hold still, commit on release" dial={<PaceDial name="step-pace"/>}>
     <Words want="The trader wants the table calm while they drag, because motion during the drag distracts, and only the destination matters.">
       <Says>Instead of committing, a <Term word="strike">strike</Term> only remembers a <Term word="landing">landing</Term>, and the release commits
         it. The landing is state like everything else: drifting back over home must clear it,
@@ -90,7 +90,7 @@ export const lazyPace = (world: World, tableSource: string, buildSrc: string): R
           ]}/>}
         <Snippet label="TS" lines={[
           ...unit(travelSource, 'export const lazyTravel'),
-          aside('// one travel ruling; the fold is its value, each world keeps it its own way')
+          aside('// one shared travel; the fold is its value, each world keeps it its own way')
         ]}/>
       </Codes>
     </Reveal>

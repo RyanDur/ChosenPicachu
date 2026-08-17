@@ -268,7 +268,7 @@ describe('the tables demo', () => {
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Keep'}));
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Static'}));
 
-    expect(recipe).toHaveTextContent(/Stash the landing, commit on release/);
+    expect(recipe).toHaveTextContent(/Hold still, commit on release/);
     expect(recipe).toHaveTextContent(/the sort lands on the drop/);
     expect(recipe).toHaveTextContent(/stays in sight while its copy travels/);
     expect(recipe).toHaveTextContent(/instantly, with no motion/);
