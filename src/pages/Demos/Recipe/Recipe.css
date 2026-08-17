@@ -94,6 +94,46 @@
     flex-basis: 100%;
   }
 
+  .vocabulary {
+    padding: var(--base-x-2);
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--light-box-shadow);
+    display: grid;
+    gap: var(--base);
+  }
+
+  .vocabulary-title {
+    margin: 0;
+    font-size: var(--text-body);
+  }
+
+  .vocabulary-words {
+    margin: 0;
+    display: grid;
+    gap: var(--base);
+  }
+
+  .vocabulary-entry {
+    display: grid;
+    grid-template-columns: 8ch minmax(0, 1fr);
+    gap: var(--base);
+  }
+
+  .vocabulary-word {
+    font-weight: bold;
+  }
+
+  .vocabulary-meaning {
+    margin: 0;
+    text-wrap: pretty;
+  }
+
+  .vocabulary-note {
+    margin: 0;
+    text-wrap: pretty;
+  }
+
   .step-built {
     margin-top: var(--base-x-2);
     display: grid;

@@ -6,7 +6,7 @@ import {World} from '../../params';
 import {frameMarks, gap, settlesSource} from './sources';
 
 export const animatedMotion = (world: World, tableSource: string, cssSource: string): ReactNode =>
-  <Step title="Slide the theater, not the layout" dial={<MotionDial name="step-motion"/>}>
+  <Step title="Slide the drawing, not the layout" dial={<MotionDial name="step-motion"/>}>
     <Words want="The trader must be able to follow which column went where. A teleport is honest but unreadable, and animating the layout itself would bounce the whole table, because layout is load-bearing.">
       <Says>The reorder has to land instantly for the drag math to stay true, so only the
         drawing can move: commit the swap at once, then draw the displaced column where it used
@@ -35,15 +35,15 @@ export const animatedMotion = (world: World, tableSource: string, cssSource: str
           length the survey measured at the lift; applying the class starts the slide fresh,
           and <Mdn path="Web/API/Element/animationend_event">animationend</Mdn> hands the class
           back.</Says>}
-      <Says>Rows are the same theater turned vertical: heights measured once, in whatever event
+      <Says>Rows are the same trick turned vertical: heights measured once, in whatever event
         reorders them, become per-row pixel offsets, and every displaced row starts at
         translateY(var(--drop)) and slides home. Nothing here rides a view transition; every
         motion is a keyframe starting from where things used to be.</Says>
       {world === 'react'
-        ? <Says>Motion is not a flag; the animated variant is its own file, marking its theater
+        ? <Says>Motion is not a flag; the animated variant is its own file, marking its slides
           inline in its settles. The dial above chooses which of eight tables you are reading,
           and the readout under the dials names it.</Says>
-        : <Says>Motion is not a flag; the animated variant is its own file, marking its theater
+        : <Says>Motion is not a flag; the animated variant is its own file, marking its slides
           inline in its commits. The dial above chooses which of eight builds you are reading,
           and the readout under the dials names it.</Says>}
       <Codes>

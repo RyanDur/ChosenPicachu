@@ -33,11 +33,11 @@ const ruled = ({world, source, buildSrc}: Build, motion: Motion, dial: ReactNode
         {world === 'react'
           ? <Says>Your menu click’s own event reaches the table element, so the animated table’s
             ruled handler measures the seats before the rule lands and marks every moved row with
-            its old offset. The same shifted theater your drags play runs for the sort; the rule
+            its old offset. The same slide your drags play runs for the sort; the rule
             itself is one state update at the end.</Says>
           : <Says>Choosing measures the seats before the rule lands: choose reads the
             row heights first, reseats, and then the variant’s ruled hook marks every moved row
-            with its old offset. The same shifted theater the drags play runs for the sort; the
+            with its old offset. The same slide the drags play runs for the sort; the
             animated build declares the hook, and the static builds simply do not.</Says>}
       </Words>
       <Codes>
@@ -85,7 +85,7 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
     <Tell>We could bake the sort into the seats when the menu closes, and it even looks right
       until the next trade lands unsorted; so the rule never rewrites the seats: standing
       re-ranks on every {world === 'react' ? 'render' : 'paint'}, and the drape keeps ruling.{motion === 'animated'
-        ? ' The re-rank plays the same shifted theater the drags use, so the eye follows ' +
+        ? ' The re-rank slides rows exactly as the drags do, so the eye follows ' +
           'every row to its new seat.'
         : ' The re-rank lands instantly; nothing competes with reading the numbers.'}</Tell>
     <Tell>And rule and hand cannot both own the table: a touch bakes the current standing
