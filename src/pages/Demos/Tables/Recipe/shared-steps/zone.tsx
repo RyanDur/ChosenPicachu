@@ -19,7 +19,7 @@ export const deadZone =
         ground, without which the reorder oscillates when a wide column passes a narrow one.
         After a swap the pointer sits over the carried column itself, a no-op, so reversing
         means deliberately reaching the neighbour’s inner half again. Hysteresis, for free,
-        from geometry. The ruling is struckPast, one function with no axis in it; the vertical
+        from geometry. The decision lives in struckPast, one function with no axis in it; the vertical
         turn will reuse it unchanged.</Says>
       <SlotsFigure/>
       <Codes>

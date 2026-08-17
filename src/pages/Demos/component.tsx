@@ -5,7 +5,7 @@ import './style.css';
 import './DemosPage.css';
 import './Tutorials.css';
 import {Tabs} from '@components/Tabs';
-import {Overview} from './Recipe';
+import {DialNote, Overview} from './Recipe';
 import {
   ExclusiveAccordion,
   ExclusiveToggleAccordion,
@@ -121,6 +121,7 @@ export const DemosPage = () => {
                           reads="list"
                           quote="I have a list, and the order is mine. When something belongs above something else, I want to pick it up and put it there, and see it land where I dropped it."
                           by="a user"/>
+                <DialNote reads="list"/>
                 <ListControls pace={pace} origin={origin} motion={motion}
                               onPace={next => updateSearchParams({pace: next})}
                               onOrigin={next => updateSearchParams({origin: next})}

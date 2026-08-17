@@ -14,7 +14,7 @@ export const dragSurface = (world: World, tableSource: string): ReactNode =>
     </Words>
     <Reveal>
       <Says>Your first surface is the document: add two listeners at lift, remove them at drop.
-        Now travel is running against the order as it stood when the drag began, and every path
+        Now <Term word="travel">travel</Term> is running against the order as it stood when the drag began, and every path
         out of the drag owes you a cleanup.</Says>
       {world === 'react'
         ? <Says>While something is <Term word="aloft">aloft</Term>, the markup grows a fixed, full-viewport element carrying

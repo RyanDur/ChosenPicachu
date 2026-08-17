@@ -3,15 +3,10 @@ import {useSearchParamsObject} from '@components/search-params';
 import {motionParam, originParam, paceParam} from '../Controls';
 import {World, worldParam} from './params';
 import {PillGlider} from '@components/PillGlider';
-
-const worldCopy: Record<World, string> = {
-  react: 'React builds and rebuilds this table; the page you read is its render.',
-  vanilla: 'The table stands in its own document: markup, stylesheet, and script, no framework.'
-};
 import {TableControls} from './TableControls';
 import {Picks} from './Picks';
 import {Recipe, Track} from './Recipe';
-import {Overview} from '../Recipe';
+import {DialNote, Overview} from '../Recipe';
 import {LivingTableRecipe} from './Recipe/LivingTableRecipe';
 import {MenuRecipe} from './Recipe/MenuRecipe';
 import {ResizeRecipe} from './Recipe/ResizeRecipe';
@@ -22,6 +17,11 @@ import {Tutorial} from './params';
 export type {Tutorial} from './params';
 
 export {tutorialParam} from './params';
+
+const worldCopy: Record<World, string> = {
+  react: 'React builds and rebuilds this table; the page you read is its render.',
+  vanilla: 'The table stands in its own document: markup, stylesheet, and script, no framework.'
+};
 
 type Props = {
   shown: Tutorial;
@@ -60,6 +60,7 @@ export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack}) => {
            ]}
            chosen={shown}
            onPick={onShow}/>
+    {shown === 'sort' && <DialNote reads="table"/>}
     {shown === 'sort' && <TableControls pace={pace} origin={origin} motion={motion} world={world}
                                         onPace={next => updateSearchParams({pace: next})}
                                         onOrigin={next => updateSearchParams({origin: next})}

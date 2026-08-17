@@ -1,5 +1,5 @@
 export {Stories} from './Stories';
-export {Overview} from './Overview';
+export {DialNote, Overview} from './Overview';
 export {Story} from './Story';
 export {Tell} from './Tell';
 export {Steps} from './Steps';

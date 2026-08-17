@@ -1,12 +1,13 @@
 import {ReactNode} from 'react';
 import {Codes, Reveal, Says, Snippet, Step, Words, aside} from '../../../Recipe';
+import {Term} from '../Term';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {frameMount, gap, stateSource, travelSource} from './sources';
 
 export const listenersOnce = (world: World, tableSource: string): ReactNode =>
   <Step title="Write each listener once, for both worlds">
-    <Words want="A pointer does not know which world it landed in: the lift, the travel, and the arrows should each be one function, written once and attached twice.">
+    <Words want={<>A pointer does not know which world it landed in: the lift, the <Term word="travel">travel</Term>, and the arrows should each be one function, written once and attached twice.</>}>
       <Says>The trap to check before sharing anything: a listener that closes over state
         remembers the world as it stood when the listener was made, and a vanilla listener
         attaches once, at mount. Sharing only works if a handler holds no state at all: it asks

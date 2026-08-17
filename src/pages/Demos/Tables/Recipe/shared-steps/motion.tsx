@@ -38,14 +38,12 @@ export const animatedMotion = (world: World, tableSource: string, cssSource: str
           back.</Says>}
       <Says>Rows are the same trick turned vertical: heights measured once, in whatever event
         reorders them, become per-row pixel offsets, and every displaced row starts at
-        translateY(var(--drop)) and slides home. Nothing here rides a view transition; every
+        translateY(var(--drop)) and slides home. None of this uses a view transition; every
         motion is a keyframe starting from where things used to be.</Says>
       {world === 'react'
-        ? <Says>Motion is not a flag; the animated variant is its own file, marking its slides
-          inline in its settles. The dial above chooses which of eight tables you are reading,
+        ? <Says>The animated variant is its own file, marking its slides inline in its settles. The dial above chooses which of eight tables you are reading,
           and the readout under the dials names it.</Says>
-        : <Says>Motion is not a flag; the animated variant is its own file, marking its slides
-          inline in its commits. The dial above chooses which of eight builds you are reading,
+        : <Says>The animated variant is its own file, marking its slides inline in its commits. The dial above chooses which of eight builds you are reading,
           and the readout under the dials names it.</Says>}
       <Codes>
         {world === 'react'

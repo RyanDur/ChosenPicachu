@@ -1,9 +1,9 @@
-import {FC, PropsWithChildren, useId} from 'react';
+import {FC, PropsWithChildren, useId, useState} from 'react';
 import {has} from '@ryandur/sand';
 
 export type Word =
   | 'aloft' | 'survey' | 'drift' | 'flight' | 'ghost'
-  | 'strike' | 'settle' | 'landing' | 'seats' | 'share';
+  | 'strike' | 'settle' | 'landing' | 'seats' | 'share' | 'travel' | 'reconcile';
 
 const definitions: Record<Word, string> = {
   aloft: 'whatever the hand is carrying, named by its key or its seat',
@@ -15,7 +15,9 @@ const definitions: Record<Word, string> = {
   settle: 'the reorder a strike causes',
   landing: 'the destination a lazy drag remembers instead of settling',
   seats: 'the rows’ order: a row keeps its number while its seat changes',
-  share: 'a column’s slice of the table’s width: a fraction, not a pixel'
+  share: 'a column’s slice of the table’s width: a fraction, not a pixel',
+  travel: 'everything between the lift and the drop: the shared move handling',
+  reconcile: 'walking the DOM to match the state, moving only what changed'
 };
 
 const definitionOf = (id: string): HTMLElement | undefined => {
@@ -40,13 +42,17 @@ const concealed = (id: string): void => {
 export const Term: FC<PropsWithChildren<{word: Word}>> = ({word, children}) => {
   const anchor = `--term-${useId().replace(/[^a-zA-Z0-9-]/g, '')}`;
   const id = `definition${anchor}`;
+  const [intent, setIntent] = useState<number>();
   return <>
     <button type="button"
             className="term"
             popoverTarget={id}
             style={{'--term-anchor': anchor}}
-            onMouseEnter={() => revealed(id)}
-            onMouseLeave={() => concealed(id)}
+            onMouseEnter={() => setIntent(window.setTimeout(() => revealed(id), 120))}
+            onMouseLeave={() => {
+              window.clearTimeout(intent);
+              concealed(id);
+            }}
             onFocus={() => revealed(id)}
             onBlur={() => concealed(id)}>{children ?? word}</button>
     <span id={id}
