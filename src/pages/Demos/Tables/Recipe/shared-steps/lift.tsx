@@ -6,24 +6,20 @@ import {frameMount, gap, sortableCss, travelSource} from './sources';
 
 export const liftOnce = (world: World, tableSource: string): ReactNode =>
   <Step title="Lift on pointer down, and measure the table once">
-    <Words want="A carry must know the ground it stands on without asking the DOM again on every twitch of the hand.">
-      <Says>A drag is arithmetic against geometry we should own before the first move: asking
-        the DOM where things are on every twitch invites layout thrash in the middle of the
-        reorder we are about to apply. So we would measure everything once, at the grab: the
+    <Words want="A carry must know the ground it stands on without asking the DOM again on every move.">
+      <Says>Asking the DOM where things are mid-drag causes the layout thrash we came here to
+        avoid, so everything gets measured once, at the grab: the
         table’s <Mdn path="Web/API/Element/getBoundingClientRect">bounding rect</Mdn> and every
-        header in it, one survey that every later answer is math against.</Says>
+        header in it. Every later answer is arithmetic against that one survey.</Says>
     </Words>
     <Reveal>
       {world === 'react'
         ? <Says>The hand is CSS before anything happens, grab on hover, grabbing on press, and
           touch-action: none is why the pointer can drag on touch at all. On pointerdown,
-          JavaScript records which key is aloft and measures the table’s bounding rect, and every
-          header in it, a single time: the survey. Everything that follows is math against the
-          survey.</Says>
+          JavaScript records which key is aloft and takes the survey.</Says>
         : <Says>The hand is CSS before anything happens, grab on hover, grabbing on press, and
           touch-action: none is why the pointer can drag on touch at all. On pointerdown,
-          JavaScript measures the table’s bounding rect, and every header in it, a single time:
-          the survey. Then the grab summons the ghost and takes flight.</Says>}
+          JavaScript takes the survey; then the grab fills the ghost and the carry begins.</Says>}
       {world === 'react'
         ? <Says>A few words you will see in every block from here. Aloft is whatever you are
           carrying, named by its key. It rides in a Maybe from a small library

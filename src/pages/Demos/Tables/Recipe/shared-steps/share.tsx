@@ -19,27 +19,23 @@ const shareMarkup: Record<World, ReactNode> = {
 
 export const cssShare = (world: World): ReactNode =>
   <Step title="Let CSS carry its share">
-    <Words want="Whatever the trader arrives with (mouse, touchscreen, keyboard), the platform’s manners come first: cursors that offer the hand, touch that drags, selections that never smear mid-drag.">
-      <Says>Our first pass writes no behavior at all: we would shop the
-        stylesheet. <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the open hand and the closed
-        fist, <Mdn path="Web/CSS/touch-action">touch-action</Mdn>: none is the single line that
-        lets pointer events drag on a touchscreen instead of scrolling it,
+    <Words want="Whatever the trader arrives with (mouse, touchscreen, keyboard), the platform’s manners come first, and most of them are declarations, not code.">
+      <Says>Our first pass writes no behavior: the stylesheet already covers most of
+        this. <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the open hand and the closed
+        fist, <Mdn path="Web/CSS/touch-action">touch-action</Mdn>: none lets pointer events drag
+        on a touchscreen instead of scrolling it,
         and <Mdn path="Web/CSS/user-select">user-select</Mdn>: none keeps a fast drag from
-        sweeping selections. And anything the hand or the keyboard must find should be a
-        real <Mdn path="Web/HTML/Element/button">button</Mdn>, because a button arrives named and
-        focusable. The bet: JavaScript ends this story holding one measurement, some arithmetic,
-        and the order.</Says>
+        sweeping selections. Anything the hand or the keyboard must find should be a
+        real <Mdn path="Web/HTML/Element/button">button</Mdn>, which arrives named and
+        focusable.</Says>
     </Words>
     <Reveal>
-      <Says>The markup stays honest HTML, a real table with real headers, so the semantics come
-        free: the row grip is a button that reorders rows from the arrow keys without a line of
-        drag code, and the resize handle is a real button that announces itself by
-        name, and its share once the ledger exists.</Says>
-      <Says>CSS carries more of the effect than it appears: the open hand and the closed fist
-        are cursors, touch-action: none is the single line that lets pointer events drag on a
-        touchscreen, and user-select: none keeps a fast drag from sweeping text selections.
-        JavaScript is left holding only what neither can: one measurement, some arithmetic, and
-        the order.</Says>
+      <Says>The markup stays honest HTML, a real table with real headers. The row grip is a
+        button that will reorder rows from the arrow keys without a line of drag code, and the
+        resize handle is a button that announces itself by name, and its share once the ledger
+        exists.</Says>
+      <Says>JavaScript is left holding only what CSS cannot: one measurement, some arithmetic,
+        and the order.</Says>
       <Codes>
         {shareMarkup[world]}
         <Snippet label="CSS" lines={[

@@ -22,7 +22,7 @@ const dealOpeners: Record<World, ReactNode> = {
   react: <>
     <Says>The columns are declared once, each with a name and a class; how wide they open is CSS.
       We could let the browser size the columns by their content, but a live table
-      would breathe: every new number re-negotiates the layout. And we could carry widths in
+      would never hold still: every new number re-negotiates the layout. And we could carry widths in
       the data, but they are layout, not data. So the page’s stylesheet deals the opening
       widths, and with <Mdn path="Web/CSS/table-layout">table-layout</Mdn>: fixed, the header
       widths govern their whole columns: the table always fills its container, and the
@@ -34,7 +34,7 @@ const dealOpeners: Record<World, ReactNode> = {
   </>,
   vanilla: <Says>The columns are declared once, each a header cell with a name and a class; how
     wide they open is CSS. We could let the browser size the columns by their content,
-    but a live table would breathe: every new number re-negotiates the layout. And we
+    but a live table would never hold still: every new number re-negotiates the layout. And we
     could carry widths in the markup, but they are layout, not content. So the page’s
     stylesheet deals the opening widths, and
     with <Mdn path="Web/CSS/table-layout">table-layout</Mdn>: fixed, the header widths
@@ -106,7 +106,7 @@ const stateSays: Record<World, ReactNode> = {
   react: <>
     <Says>The table’s state is one value held in a single cell, and the setter is the
       commit. Nothing ever edits the state in place: a change is a pure transition, a function
-      from the old state to the new, and the old value simply stops being rendered.</Says>
+      from the old state to the new; the previous value is never mutated, only replaced.</Says>
     <Says>What follows the commit is React’s half of the deal: the component re-renders, the
       markup renders through the new state, and React reconciles the real DOM to match, moving
       only the nodes whose place changed. You never touch the DOM; you only commit the next state.</Says>
@@ -114,8 +114,8 @@ const stateSays: Record<World, ReactNode> = {
   vanilla: <>
     <Says>The vanilla build keeps the same single value: the table state, which holds order, seats,
       seated, shares, and the rule together, every field readonly. Nothing ever edits the state in place: a
-      change is a pure transition, a function from the old state to the new, and the old
-      value simply stops being current.</Says>
+      change is a pure transition, a function from the old state to the new; the previous
+      value is never mutated, only replaced.</Says>
     <Says>What React did for you is the other half: the build holds the same cell with the same
       write path, and its commit reconciles the page against the new state by hand, moving only
       the cells whose place changed and writing only the text that differs. The seam between

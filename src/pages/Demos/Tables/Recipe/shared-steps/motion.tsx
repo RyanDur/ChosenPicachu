@@ -7,47 +7,45 @@ import {frameMarks, gap, settlesSource} from './sources';
 
 export const animatedMotion = (world: World, tableSource: string, cssSource: string): ReactNode =>
   <Step title="Slide the theater, not the layout" dial={<MotionDial name="step-motion"/>}>
-    <Words want="The trader must be able to follow which column went where; a teleport is honest but unreadable, and animating the layout itself would bounce the whole table, because layout is load-bearing.">
-      <Says>The slide must never touch layout: animating widths would bounce the table, and the
-        reorder must land instantly for the drag math to stay true. So we would commit the swap
-        at once and only draw the displaced column where it used to be, sliding home on a
-        transform, with the survey supplying the one number CSS cannot know: how far home
-        is.</Says>
+    <Words want="The trader must be able to follow which column went where. A teleport is honest but unreadable, and animating the layout itself would bounce the whole table, because layout is load-bearing.">
+      <Says>The reorder has to land instantly for the drag math to stay true, so only the
+        drawing can move: commit the swap at once, then draw the displaced column where it used
+        to be, sliding home on a <Mdn path="Web/CSS/transform">transform</Mdn>. The survey
+        supplies the one number CSS cannot know: the distance home.</Says>
     </Words>
     <Reveal>
       <Says>A swap commits instantly: the carried column already sits at full width in its new
-        slot, hidden or under the ghost, and the layout underneath is final. The displaced column
-        is merely drawn where it used to be, sliding home on
-        a <Mdn path="Web/CSS/transform">transform</Mdn>. Transforms cannot move layout, so nothing
-        else can shift: a bounce is impossible by construction.</Says>
+        slot, hidden or under the ghost, and the layout underneath is final. The displaced
+        column is drawn where it used to be and slides home. Transforms cannot move layout, so
+        nothing else can shift: a bounce is impossible by construction.</Says>
       {world === 'react'
-        ? <Says>The three languages split the trick cleanly. JavaScript marks who was displaced and
+        ? <Says>The three languages split the work. JavaScript marks who was displaced and
           hands over two lengths it already owns, both measured by the survey: the carried
           column’s width and each row’s drop. The markup carries the mark as a class that arrives
-          exactly as the reorder moves the node. CSS does all the moving:
+          exactly as the reorder moves the node. CSS does the moving:
           a <Mdn path="Web/CSS/@keyframes">keyframe</Mdn>’s from is the old position, a pixel
           length the survey measured at the lift; applying the class starts the slide fresh,
           and <Mdn path="Web/API/Element/animationend_event">animationend</Mdn> hands the class
           back.</Says>
-        : <Says>The three languages split the trick cleanly. JavaScript marks who was displaced and
+        : <Says>The three languages split the work. JavaScript marks who was displaced and
           hands over two lengths it already owns, both measured by the survey: the carried
           column’s width and each row’s drop. The settle writes the mark as a class the moment it
-          moves the node. CSS does all the moving:
+          moves the node. CSS does the moving:
           a <Mdn path="Web/CSS/@keyframes">keyframe</Mdn>’s from is the old position, a pixel
           length the survey measured at the lift; applying the class starts the slide fresh,
           and <Mdn path="Web/API/Element/animationend_event">animationend</Mdn> hands the class
           back.</Says>}
       <Says>Rows are the same theater turned vertical: heights measured once, in whatever event
         reorders them, become per-row pixel offsets, and every displaced row starts at
-        translateY(var(--drop)) and slides home. Nothing in this table rides a view transition;
-        every motion is a keyframe starting from where things used to be.</Says>
+        translateY(var(--drop)) and slides home. Nothing here rides a view transition; every
+        motion is a keyframe starting from where things used to be.</Says>
       {world === 'react'
-        ? <Says>Motion is not a flag on this table; it is this table. The animated variant marks its
-          own theater inline in its settles, the dial above chooses which of eight tables you are
-          reading, and the readout under the dials names it.</Says>
-        : <Says>Motion is not a flag on this build; it is this build. The animated variant marks its
-          own theater inline in its commits, the dial above chooses which of eight builds you are
-          reading, and the readout under the dials names it.</Says>}
+        ? <Says>Motion is not a flag; the animated variant is its own file, marking its theater
+          inline in its settles. The dial above chooses which of eight tables you are reading,
+          and the readout under the dials names it.</Says>
+        : <Says>Motion is not a flag; the animated variant is its own file, marking its theater
+          inline in its commits. The dial above chooses which of eight builds you are reading,
+          and the readout under the dials names it.</Says>}
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
@@ -80,22 +78,20 @@ export const animatedMotion = (world: World, tableSource: string, cssSource: str
 export const staticMotion = (world: World, tableSource: string): ReactNode =>
   <Step title="Apply the state update directly" dial={<MotionDial name="step-motion"/>}>
     <Words want="Motion is not free: it competes with the pointer, costs a frame budget, and some traders ask for none at all.">
-      <Says>No motion should mean no motion code: not the animated table with the theater
-        switched off, but a build with nothing to switch. We would expect its settle to read as
-        the whole story.</Says>
+      <Says>No motion should mean no motion code: not the animated table with its slides
+        switched off, but a file with nothing to switch. Its settle should read as the whole
+        story.</Says>
     </Words>
     <Reveal>
       {world === 'react'
-        ? <Says>The static table is not the animated one with a switch off; it is a different
-          table with no marking code in it. Its settle is the whole story: move the key, let
-          React paint, and there is nothing else, because nothing else exists in this file.
-          There is real value in this mode beyond taste: nothing competes with the pointer, and
-          no motion for prefers-reduced-motion users to endure.</Says>
-        : <Says>The static build is not the animated one with a switch off; it is a different
-          file with no marking code in it. Its commit is the whole story: a new order in the
-          state, the reconcile moves the cells, and there is nothing else, because nothing else
-          exists in this file. There is real value in this mode beyond taste: nothing competes
-          with the pointer, and no motion for prefers-reduced-motion users to endure.</Says>}
+        ? <Says>The static table is a different file with no marking code in it. Its settle
+          moves the key and lets React paint; nothing else exists in the file. There is real
+          value beyond taste: nothing competes with the pointer, and no motion for
+          prefers-reduced-motion users to endure.</Says>
+        : <Says>The static build is a different file with no marking code in it. Its commit
+          writes a new order, the reconcile moves the cells; nothing else exists in the file.
+          There is real value beyond taste: nothing competes with the pointer, and no motion
+          for prefers-reduced-motion users to endure.</Says>}
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[

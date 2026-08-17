@@ -8,25 +8,20 @@ import {frameHide, gap} from './sources';
 export const hideOrigin = (world: World, tableSource: string, headerSource: string, cssSource: string): ReactNode =>
   <Step title="Blank the origin while it is aloft" dial={<OriginDial name="step-origin"/>}>
     <Words want="With the ghost in hand, the trader reads the origin column as a duplicate, and nothing says where the drop will land.">
-      <Says>The origin should vanish without anything moving: unmounting it would collapse its
-        space and shift the whole table. So we would reach for CSS that stops the painting and
-        keeps the box, visibility rather than display, and then ask which world writes the
-        signal: a comparison the markup makes, or a class the grab applies.</Says>
+      <Says>Unmounting the origin would collapse its space and shift the whole table, so the
+        vanishing should be CSS that stops the painting and keeps the
+        box: <Mdn path="Web/CSS/visibility">visibility</Mdn>, not display. What differs by world
+        is who writes the signal: a comparison the markup makes, or a class the grab
+        applies.</Says>
     </Words>
     <Reveal>
       {world === 'react'
-        ? <Says>We could unmount the origin while it travels, but its space would collapse and
-          the whole table would shift; so the disappearance takes a component choice and one word
-          of CSS instead. This is the hide table, so there is no flag anywhere: the markup compares the aloft key against each
-          cell, and CSS does the
-          vanishing: <Mdn path="Web/CSS/visibility">visibility</Mdn> hidden takes the whole column
-          (text, borders, grip, everything) while its layout space remains as the gap where the
-          drop will land. Nothing unmounts.</Says>
-        : <Says>We could pull the origin out of the DOM while it travels, but its space would
-          collapse and the whole table would shift; so the disappearance takes one class and one
-          word of CSS instead. This is the hide build, so there is no flag anywhere: the grab
-          blanks the column it lifted and the landing unblanks it, and CSS does the
-          vanishing: <Mdn path="Web/CSS/visibility">visibility</Mdn> hidden takes the whole column
+        ? <Says>This is the hide table, so there is no flag anywhere: the markup compares the
+          aloft key against each cell, and visibility: hidden takes the whole column (text,
+          borders, grip, everything) while its layout space remains as the gap where the drop
+          will land. Nothing unmounts.</Says>
+        : <Says>This is the hide build, so there is no flag anywhere: the grab blanks the column
+          it lifted and the landing unblanks it, and visibility: hidden takes the whole column
           (text, borders, grip, everything) while its layout space remains as the gap where the
           drop will land. Nothing leaves the DOM.</Says>}
       <Codes>
@@ -42,7 +37,7 @@ export const hideOrigin = (world: World, tableSource: string, headerSource: stri
         {world === 'react'
           ? <Snippet label="TS" lines={[
             ...span(headerSource, 'const hidden = aloft.map(held => held === columnName).orElse(false);', 'const hidden = aloft.map(held => held === columnName).orElse(false);'),
-            aside('// being the hide table is the flag; the element serves itself')
+            aside('// the hide table needs no flag; each header compares itself to the aloft key')
           ]}/>
           : undefined}
         <Snippet label="CSS" lines={[
@@ -56,9 +51,8 @@ export const hideOrigin = (world: World, tableSource: string, headerSource: stri
 export const keepOrigin = (world: World): ReactNode =>
   <Step title="Leave the origin in place while it is aloft" dial={<OriginDial name="step-origin"/>}>
     <Words want="A vanished origin can disorient; some traders want the column both at rest and in hand while they decide.">
-      <Says>Keeping the origin is the absence of work, and we would treat it that way: no flag
-        to leave off, no hiding code to skip. The variant that keeps should simply contain
-        nothing that hides.</Says>
+      <Says>Keeping the origin is the absence of work: no flag to leave off, no hiding code to
+        skip. The keep variant should simply contain nothing that hides.</Says>
     </Words>
     <Reveal>
       {world === 'react'
