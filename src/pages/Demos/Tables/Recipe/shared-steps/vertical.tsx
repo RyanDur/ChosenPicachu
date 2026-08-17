@@ -7,9 +7,9 @@ import {frameHtml, gap, gripSource, settlesSource, surveySource} from './sources
 export const theaterVertical = (world: World, tableSource: string): ReactNode =>
   <Step title="Turn the theater vertical">
     <Words want="A window is a row: the same carry on a second axis, and the hand needs something honest to hold.">
-      <Says>A row is the column story turned vertical, so we would try to buy the second axis
-        with substitutions, not new machinery: a real button for the hand to hold, row heights
-        joining the survey, and the under-the-pointer question re-asked downward.</Says>
+      <Says>The second axis should be bought with substitutions, not new machinery: a real
+        button for the hand, row heights joining the survey, and the under-the-pointer question
+        asked downward.</Says>
     </Words>
     <Reveal>
       <Says>Rows ride the machinery the columns built, with three substitutions. The grip is a

@@ -6,26 +6,22 @@ import {frameMount, gap, gripSource, headerCss, surveySource} from './sources';
 
 export const focusLands = (world: World, headerSource: string): ReactNode =>
   <Step title="Give focus a place to land">
-    <Words want="The trader without a pointer expects the same reorders, and first, focus needs a place to land; a plain header holds none.">
-      <Says>Before inventing anything we would count what HTML already focuses: a button is
-        focusable by birth, a header is not but tabindex asks, and CSS can greet the keyboard
-        alone, a focus ring pointer users never see.</Says>
+    <Words want="The trader without a pointer expects the same reorders. First, focus needs a place to land; a plain header holds none.">
+      <Says>HTML already focuses more than it gets credit for: a button is focusable by birth,
+        and a header can ask with
+        a <Mdn path="Web/HTML/Global_attributes/tabindex">tabindex</Mdn>. CSS handles the
+        arrival: a <Mdn path="Web/CSS/:focus-visible">focus-visible</Mdn> ring for the keyboard
+        that pointer users never see.</Says>
     </Words>
     <Reveal>
       {world === 'react'
-        ? <Says>HTML nearly solves this alone: the row grip is a button, focusable by birth, and
-          the headers ask for focus with
-          a <Mdn path="Web/HTML/Global_attributes/tabindex">tabIndex</Mdn>, so Tab walks every
-          movable piece of the table in order. CSS answers the arrival with
-          a <Mdn path="Web/CSS/:focus-visible">focus-visible</Mdn> ring that draws for the keyboard
-          only; pointer users never see it.</Says>
-        : <Says>HTML nearly solves this alone: the row grip is a button in the markup, focusable by
-          birth, and JavaScript asks each movable header for focus with
-          a <Mdn path="Web/HTML/Global_attributes/tabindex">tabindex</Mdn> as it dresses the grips
-          (the anchored edges hold the table, so their headers ask for nothing), so Tab walks every
-          movable piece of the table in order. CSS answers the arrival with
-          a <Mdn path="Web/CSS/:focus-visible">focus-visible</Mdn> ring that draws for the keyboard
-          only; pointer users never see it.</Says>}
+        ? <Says>The row grip is already a button, and the headers ask with a tabIndex, so Tab
+          walks every movable piece of the table in order. The focus-visible ring draws for the
+          keyboard only.</Says>
+        : <Says>The row grip is already a button in the markup, and JavaScript asks each movable
+          header for focus with a tabindex as it dresses the grips (the anchored edges hold the
+          table, so their headers ask for nothing), so Tab walks every movable piece of the
+          table in order. The focus-visible ring draws for the keyboard only.</Says>}
       <Codes>
         {world === 'react'
           ? <Snippet label="HTML" lines={[
@@ -47,19 +43,18 @@ export const focusLands = (world: World, headerSource: string): ReactNode =>
 export const arrowsSpeak = (world: World, headerSource: string): ReactNode =>
   <Step title="Arrows speak direction">
     <Words want="The trader’s focus can reach a column, but the platform ships no verb for “swap left”; they need one.">
-      <Says>The platform ships no verb for swap left, so we would claim one: a keydown listener
-        that takes the two arrows and nothing else, letting every other key fall through, and
-        preventDefault only on what it claims so the page does not scroll. The walk itself
-        should be the same seat arithmetic the pointer track built.</Says>
+      <Says>The verb gets claimed with
+        a <Mdn path="Web/API/Element/keydown_event">keydown</Mdn> listener that takes the two
+        arrows and nothing else: every other key falls through,
+        and <Mdn path="Web/API/Event/preventDefault">preventDefault</Mdn> fires only on what it
+        claims, so the page does not scroll. The walk itself is the same seat arithmetic the
+        pointer track built.</Says>
     </Words>
     <Reveal>
-      <Says>A <Mdn path="Web/API/Element/keydown_event">keydown</Mdn> handler claims the two
-        arrows and nothing else, so every other key falls through untouched and tabbing and the
-        sort menu keep
-        working; <Mdn path="Web/API/Event/preventDefault">preventDefault</Mdn> stops the page
-        from scrolling on the keys it does claim. The walk clamps inside the anchored
-        edges: the first and last columns hold the table, so the nudge stops beside them, and
-        rows do the same dance turned vertical, the grip listening for up and down.</Says>
+      <Says>The handler claims the left and right arrows; tabbing and the sort menu keep working
+        because nothing else is touched. The walk clamps inside the anchored edges: the first
+        and last columns hold the table, so the nudge stops beside them. Rows do the same turned
+        vertical, the grip listening for up and down.</Says>
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
