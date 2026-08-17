@@ -9,7 +9,7 @@ export const slideCrossed = (listSource: string, cssSource: string): ReactNode =
     <Words want="An eager swap that teleports is hard to follow, yet nothing can be animated mid-session by view transitions; the capture would swallow the drag’s own events.">
       <Says>The swap commits instantly and the crossed item is merely drawn where it used
         to be, sliding home on a <Mdn path="Web/CSS/@keyframes">keyframe</Mdn> whose from is one
-        seat over, the same theater the table plays, turned horizontal, with the direction as
+        seat over, the same slide the tables demo plays, turned horizontal, with the direction as
         data: --toward flips the sign of one keyframe instead of naming two.</Says>
     </Words>
     <Codes>
