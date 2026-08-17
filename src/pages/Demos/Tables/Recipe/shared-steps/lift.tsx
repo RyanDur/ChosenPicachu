@@ -1,5 +1,5 @@
 import {ReactNode} from 'react';
-import {Codes, Mdn, Predict, Says, Snippet, Step, Words, aside} from '../../../Recipe';
+import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {frameMount, gap, sortableCss, travelSource} from './sources';
@@ -7,22 +7,23 @@ import {frameMount, gap, sortableCss, travelSource} from './sources';
 export const liftOnce = (world: World, tableSource: string): ReactNode =>
   <Step title="Lift on pointer down, and measure the table once">
     <Words want="A carry must know the ground it stands on without asking the DOM again on every twitch of the hand.">
-      <Predict>The travel must know where every column sits. When do you ask the DOM, and how
-        many times per drag?</Predict>
+      <Says>A drag is arithmetic against geometry we should own before the first move: asking
+        the DOM where things are on every twitch invites layout thrash in the middle of the
+        reorder we are about to apply. So we would measure everything once, at the grab: the
+        table’s <Mdn path="Web/API/Element/getBoundingClientRect">bounding rect</Mdn> and every
+        header in it, one survey that every later answer is math against.</Says>
+    </Words>
+    <Reveal>
       {world === 'react'
         ? <Says>The hand is CSS before anything happens, grab on hover, grabbing on press, and
           touch-action: none is why the pointer can drag on touch at all. On pointerdown,
-          JavaScript records which key is aloft and measures the
-          table’s <Mdn path="Web/API/Element/getBoundingClientRect">bounding rect</Mdn>, and every
-          header in it, a single time: the survey. Everything that follows is math against the survey; measuring per move
-          would fight the reorder you are about to apply.</Says>
+          JavaScript records which key is aloft and measures the table’s bounding rect, and every
+          header in it, a single time: the survey. Everything that follows is math against the
+          survey.</Says>
         : <Says>The hand is CSS before anything happens, grab on hover, grabbing on press, and
           touch-action: none is why the pointer can drag on touch at all. On pointerdown,
-          JavaScript measures the
-          table’s <Mdn path="Web/API/Element/getBoundingClientRect">bounding rect</Mdn>, and every
-          header in it, a single time: the survey. Then the grab summons the ghost and takes flight.
-          Everything that follows is math against the survey; measuring per move
-          would fight the reorder you are about to apply.</Says>}
+          JavaScript measures the table’s bounding rect, and every header in it, a single time:
+          the survey. Then the grab summons the ghost and takes flight.</Says>}
       {world === 'react'
         ? <Says>A few words you will see in every block from here. Aloft is whatever you are
           carrying, named by its key. It rides in a Maybe from a small library
@@ -42,24 +43,24 @@ export const liftOnce = (world: World, tableSource: string): ReactNode =>
             href="https://ryandur.github.io/sand/"
             target="_blank"
             rel="noreferrer">sand</a>; it answers false for nothing and for empty.</Says>}
-    </Words>
-    <Codes>
-      {world === 'react'
-        ? <Snippet label="TS" lines={[
-          ...unit(tableSource, 'const grabbedColumn = '), gap,
-          ...span(tableSource, 'onLift={column => columnLift(column', 'onLift={column => columnLift(column')
+      <Codes>
+        {world === 'react'
+          ? <Snippet label="TS" lines={[
+            ...unit(tableSource, 'const grabbedColumn = '), gap,
+            ...span(tableSource, 'onLift={column => columnLift(column', 'onLift={column => columnLift(column')
+          ]}/>
+          : <Snippet label="TS" lines={[
+            ...unit(frameMount, '    const grabbed = '), gap,
+            ...span(frameMount, "th.addEventListener('pointerdown', columnLift",
+              "th.addEventListener('pointerdown', columnLift")
+          ]}/>}
+        <Snippet label="TS" lines={[
+          ...unit(travelSource, 'export const columnLift'),
+          aside('// one lift; each world grabs with its own hands')
         ]}/>
-        : <Snippet label="TS" lines={[
-          ...unit(frameMount, '    const grabbed = '), gap,
-          ...span(frameMount, "th.addEventListener('pointerdown', columnLift",
-            "th.addEventListener('pointerdown', columnLift")
-        ]}/>}
-      <Snippet label="TS" lines={[
-        ...unit(travelSource, 'export const columnLift'),
-        aside('// one lift; each world grabs with its own hands')
-      ]}/>
-      <Snippet label="CSS" lines={[
-        ...unit(sortableCss, '.grabbable {')
-      ]}/>
-    </Codes>
+        <Snippet label="CSS" lines={[
+          ...unit(sortableCss, '.grabbable {')
+        ]}/>
+      </Codes>
+    </Reveal>
   </Step>;
