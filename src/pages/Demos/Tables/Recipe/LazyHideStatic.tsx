@@ -15,6 +15,7 @@ import {
   hideOrigin,
   lazyPace,
   liftOnce,
+  listenersOnce,
   orderInState,
   ownedPixels,
   promises,
@@ -41,6 +42,7 @@ export const LazyHideStaticRecipe: FC<{track: Track; world: World}> = ({track, w
       <Steps>
         {cssShare(world)}
         {orderInState(world)}
+        {listenersOnce(world, tableSource)}
         {liftOnce(world, tableSource)}
         {dragSurface(world, tableSource)}
         {ghostByHand(world, tableSource)}

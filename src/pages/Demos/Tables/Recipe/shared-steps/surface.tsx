@@ -1,5 +1,5 @@
 import {ReactNode} from 'react';
-import {Codes, Mdn, Says, Snippet, Step, Words, aside} from '../../../Recipe';
+import {Codes, Mdn, Predict, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {aloftSource, frameMount, gap, sortableCss, travelSource} from './sources';
@@ -7,6 +7,8 @@ import {aloftSource, frameMount, gap, sortableCss, travelSource} from './sources
 export const dragSurface = (world: World, tableSource: string): ReactNode =>
   <Step title="Give the drag a surface of its own">
     <Words want="The carry outruns the header it grabbed: the pointer leaves the element mid-drag, and the release can land anywhere, even outside the window.">
+      <Predict>Halfway through the carry the pointer slides off the header it grabbed, and the
+        release can land outside the window. Which element hears the rest of the drag?</Predict>
       <Says>Your first surface is the document: add two listeners at lift, remove them at drop.
         Now travel is running against the order as it stood when the drag began, and every path
         out of the drag owes you a cleanup.</Says>

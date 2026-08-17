@@ -1,5 +1,5 @@
 import {ReactNode} from 'react';
-import {Codes, Says, Snippet, Step, Words, aside, plain} from '../../../Recipe';
+import {Codes, Predict, Says, Snippet, Step, Words, aside, plain} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {stateSource, frameMount, gap, useTableStateSource} from './sources';
@@ -7,6 +7,8 @@ import {stateSource, frameMount, gap, useTableStateSource} from './sources';
 export const orderInState = (world: World): ReactNode =>
   <Step title="Keep the order in state, not in the data">
     <Words want="Every story runs against the stream: a reorder that rewrote the data would lose to the next trade, so order and data must never fight.">
+      <Predict>Suppose the reorder rewrites the data itself. The next trade arrives from the
+        stream: what order does the table show now?</Predict>
       {world === 'react'
         ? <Says>Rows and columns arrive in whatever order the fold produced. The table holds the
           ordered columns and the seats as one state value behind one commit, and renders the

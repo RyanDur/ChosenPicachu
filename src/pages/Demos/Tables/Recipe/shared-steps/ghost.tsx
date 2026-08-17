@@ -1,5 +1,5 @@
 import {ReactNode} from 'react';
-import {Codes, Mdn, Says, Snippet, Step, Words, aside} from '../../../Recipe';
+import {Codes, Mdn, Predict, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {frameGhosts, frameHtml, gap, ghostCss, ghostSource, travelSource} from './sources';
@@ -7,6 +7,8 @@ import {frameGhosts, frameHtml, gap, ghostCss, ghostSource, travelSource} from '
 export const ghostByHand = (world: World, tableSource: string): ReactNode =>
   <Step title="Draw the ghost by hand">
     <Words want="The carried column has to be visible in the hand, smoothly, on slow machines too.">
+      <Predict>Something must ride the hand. Do you clone the node you grabbed, or draw the
+        column again from what you already know? Pick one and name its cost.</Predict>
       {world === 'react'
         ? <Says>The column in your hand is not a clone of DOM nodes. It is a second table rendered
           from the same data. The flight is where you grabbed it; the drift is how far you have

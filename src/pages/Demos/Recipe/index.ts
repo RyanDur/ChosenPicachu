@@ -5,6 +5,7 @@ export {Steps} from './Steps';
 export {Step} from './Step';
 export {Words} from './Words';
 export {Says} from './Says';
+export {Predict} from './Predict';
 export {Codes} from './Codes';
 export {Snippet} from './Snippet';
 export {aside, plain} from './lines';

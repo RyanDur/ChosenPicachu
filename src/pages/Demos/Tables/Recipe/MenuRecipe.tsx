@@ -1,7 +1,7 @@
 import {FC, ReactNode} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
 import {Motion, MotionDial, motionParam, originParam, paceParam} from '../../Controls';
-import {Codes, Mdn, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, aside, plain} from '../../Recipe';
+import {Codes, Mdn, Predict, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, aside, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
 import {World, worldParam} from '../params';
 import menuSource from '@components/Menu/index.tsx?raw';
@@ -95,6 +95,9 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
     <Steps>
       <Step title="A menu that is a menu">
         <Words want="A sort chooser needs a popup, and popups built from divs re-invent focus, dismissal, and stacking. Badly.">
+          <Predict>Count what a popup owes before it is polite: outside click, Escape, focus
+            return, stacking, one open at a time. How many of those will you write
+            yourself?</Predict>
           <Says>You reach for the state you always reach for: a boolean, a class to toggle,
             a <Mdn path="Web/CSS/z-index">z-index</Mdn>. It works on the first click, and then the
             bill arrives. Outside clicks need a document listener you must remember to remove.
@@ -201,6 +204,8 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
       </Step>
       <Step title="The rule is a drape, not a bake">
         <Words want="The data keeps streaming under the sort, so the rule has to keep ruling.">
+          <Predict>The trader picks descending. Do you rank the rows once and store the result?
+            Decide before the next trade lands.</Predict>
           <Says>Your first instinct is to bake: rank the seats once when the direction is
             chosen, store the result, move on. It even looks right, until the feed writes the
             next value and the table quietly stops being sorted. A sort applied once is stale by

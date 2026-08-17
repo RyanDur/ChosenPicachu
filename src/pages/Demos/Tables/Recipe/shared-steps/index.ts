@@ -5,6 +5,7 @@ export {accessTrack, againstTheStream, ownedPixels, quietDials, turnedVertical, 
 export {cssShare} from './share';
 export {deadZone} from './zone';
 export {orderInState} from './order';
+export {listenersOnce} from './listeners';
 export {liftOnce} from './lift';
 export {dragSurface} from './surface';
 export {ghostByHand} from './ghost';
