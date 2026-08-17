@@ -18,5 +18,6 @@ declare module 'csstype' {
     '--explode-y'?: string;
     '--turn'?: string;
     '--swing'?: string;
+    '--term-anchor'?: string;
   }
 }

@@ -245,8 +245,10 @@ describe('the tables demo', () => {
       .toHaveAttribute('href', expect.stringContaining('tab=dragAndDrop'));
     expect(recipe).toHaveTextContent(/touch-action/);
     expect(recipe).toHaveTextContent(/Write each listener once, for both worlds/);
-    expect(within(recipe).getByRole('complementary', {name: 'the words this page coins'})).toBeVisible();
-    expect(recipe).toHaveTextContent(/the reorder a strike causes/);
+    const [term] = within(recipe).getAllByRole('button', {name: 'survey'});
+    expect(term).toHaveClass('term');
+    const definition = document.getElementById(term.getAttribute('popovertarget') ?? '');
+    expect(definition).toHaveTextContent(/the one measurement taken at the grab/);
     expect(recipe).toHaveTextContent(/export type Cell/);
     expect(within(recipe).getAllByText('how we built it').length).toBeGreaterThan(0);
     expect(recipe.querySelectorAll('details.step-reveal[open]')).toHaveLength(0);

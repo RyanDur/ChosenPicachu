@@ -144,7 +144,7 @@ const stateCodes: Record<World, ReactNode> = {
 };
 
 const liveStory = (world: World) =>
-  <Story param="living" id="live"
+  <Story param="living" id="live" steps={5}
          can="The trader can watch the market live, in windows"
          soThat="the numbers stay current without a single refresh">
     <Tell>What the trader reads is a few measures across a few time windows: numbers

@@ -1,12 +1,13 @@
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Words} from '../../../Recipe';
 import {unit} from '../../../Recipe/carve';
 import {SlotsFigure} from '../SlotsFigure';
+import {Term} from '../Term';
 import {gap, surveySource} from './sources';
 
 export const deadZone =
   <Step title="Find the neighbour under the pointer, with a dead zone">
     <Words want="A drift along a boundary must not chatter the order under the hand.">
-      <Says>Where the pointer is, in table terms, should be arithmetic on the survey,
+      <Says>Where the pointer is, in table terms, should be arithmetic on the <Term word="survey">survey</Term>,
         not <Mdn path="Web/API/Document/elementFromPoint">elementFromPoint</Mdn> under a moving
         hand. And a plain boundary fails: swap a wide column past a narrow one at first touch,
         and the new boundary lands under the resting pointer, ready to swap straight back. The

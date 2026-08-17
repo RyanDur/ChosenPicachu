@@ -3,6 +3,7 @@ import {MotionDial} from '../../../Controls';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
+import {Term} from '../Term';
 import {gap, settlesSource, travelSource} from './sources';
 
 export const bothSlide = (world: World, headerSource: string, buildSrc: string, cssSource: string): ReactNode =>
@@ -10,7 +11,7 @@ export const bothSlide = (world: World, headerSource: string, buildSrc: string, 
     <Words want="A pointer swap explains itself with a ghost in hand; the trader’s keyboard swap has no hand, and if only the neighbour slid, the walked column would simply teleport.">
       <Says>Both parties should explain themselves: each starts drawn where the other now sits
         and slides home. The pointer track’s slide machinery should work unchanged, handed each
-        column the other’s share.</Says>
+        column the other’s <Term word="share">share</Term>.</Says>
     </Words>
     <Reveal>
       <Says>Mark both columns displaced. The swap still commits instantly, but each party starts

@@ -1,7 +1,6 @@
 import {FC} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
 import {Picks} from '../Picks';
-import {Vocabulary} from './Vocabulary';
 import {Motion, Origin, Pace, motionParam, originParam, paceParam} from '../../Controls';
 import {World, worldParam} from '../params';
 import {Stories} from '../../Recipe';
@@ -48,7 +47,6 @@ export const Recipe: FC<Props> = ({track, onTrack}) => {
            ]}
            chosen={track}
            onPick={onTrack}/>
-    <Vocabulary/>
     <Stories><Chosen track={track} world={world}/></Stories>
   </section>;
 };

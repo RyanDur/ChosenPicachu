@@ -32,7 +32,7 @@ import cssSource from '@components/DragSortableTable/LazyHideStaticTable/LazyHid
 
 export const LazyHideStaticRecipe: FC<{track: Track; world: World}> = ({track, world}) => track === 'pointer'
   ? <>
-    <Story param="sort" id="column"
+    <Story param="sort" id="column" steps={10}
            can="The trader can sort by column"
            soThat="the measures they compare sit beside each other">
       {twoRoads}
@@ -52,7 +52,7 @@ export const LazyHideStaticRecipe: FC<{track: Track; world: World}> = ({track, w
         {staticMotion(world, tableSource)}
       </Steps>
     </Story>
-    <Story param="sort" id="row"
+    <Story param="sort" id="row" steps={1}
            can="The trader can sort by row"
            soThat="the windows they watch closest sit on top">
       {turnedVertical}
@@ -61,7 +61,7 @@ export const LazyHideStaticRecipe: FC<{track: Track; world: World}> = ({track, w
       </Steps>
     </Story>
   </>
-  : <Story param="sort" id="keyboard"
+  : <Story param="sort" id="keyboard" steps={3}
            can="The trader can sort without a mouse"
            soThat="the table answers whoever arrives at it">
     {accessTrack}

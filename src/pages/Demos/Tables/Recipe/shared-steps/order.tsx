@@ -2,6 +2,7 @@ import {ReactNode} from 'react';
 import {Codes, Reveal, Says, Snippet, Step, Words, aside, plain} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
+import {Term} from '../Term';
 import {stateSource, frameMount, gap, useTableStateSource} from './sources';
 
 export const orderInState = (world: World): ReactNode =>
@@ -14,7 +15,7 @@ export const orderInState = (world: World): ReactNode =>
     <Reveal>
       {world === 'react'
         ? <Says>Rows and columns arrive in whatever order the fold produced. The table holds the
-          ordered columns and the seats as one state value, and renders the markup through it,
+          ordered columns and the <Term word="seats">seats</Term> as one state value, and renders the markup through it,
           so a reorder never touches the data: the same key finds its new seat and React moves
           the real nodes.</Says>
         : <Says>Rows and columns arrive dealt by the markup, and the markup is the source of the

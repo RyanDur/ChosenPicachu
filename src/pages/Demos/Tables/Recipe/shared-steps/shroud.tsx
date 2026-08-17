@@ -3,11 +3,12 @@ import {OriginDial} from '../../../Controls';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
+import {Term} from '../Term';
 import {frameHide, gap} from './sources';
 
 export const hideOrigin = (world: World, tableSource: string, headerSource: string, cssSource: string): ReactNode =>
   <Step title="Blank the origin while it is aloft" dial={<OriginDial name="step-origin"/>}>
-    <Words want="With the ghost in hand, the trader reads the origin column as a duplicate, and nothing says where the drop will land.">
+    <Words want={<>With the <Term word="ghost">ghost</Term> in hand, the trader reads the origin column as a duplicate, and nothing says where the drop will land.</>}>
       <Says>Unmounting the origin would collapse its space and shift the whole table, so the
         vanishing should be CSS that stops the painting and keeps the
         box: <Mdn path="Web/CSS/visibility">visibility</Mdn>, not display. What differs by world
@@ -17,7 +18,7 @@ export const hideOrigin = (world: World, tableSource: string, headerSource: stri
     <Reveal>
       {world === 'react'
         ? <Says>This is the hide table, so there is no flag anywhere: the markup compares the
-          aloft key against each cell, and visibility: hidden takes the whole column (text,
+          <Term word="aloft">aloft</Term> key against each cell, and visibility: hidden takes the whole column (text,
           borders, grip, everything) while its layout space remains as the gap where the drop
           will land. Nothing unmounts.</Says>
         : <Says>This is the hide build, so there is no flag anywhere: the grab blanks the column

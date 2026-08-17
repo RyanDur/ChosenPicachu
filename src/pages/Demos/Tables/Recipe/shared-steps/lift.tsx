@@ -2,6 +2,7 @@ import {ReactNode} from 'react';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
+import {Term} from '../Term';
 import {frameMount, gap, sortableCss, travelSource} from './sources';
 
 export const liftOnce = (world: World, tableSource: string): ReactNode =>
@@ -10,16 +11,20 @@ export const liftOnce = (world: World, tableSource: string): ReactNode =>
       <Says>Asking the DOM where things are mid-drag causes the layout thrash we came here to
         avoid, so everything gets measured once, at the grab: the
         table’s <Mdn path="Web/API/Element/getBoundingClientRect">bounding rect</Mdn> and every
-        header in it. Every later answer is arithmetic against that one survey.</Says>
+        header in it. Every later answer is arithmetic against that one <Term word="survey">survey</Term>.</Says>
     </Words>
     <Reveal>
       {world === 'react'
         ? <Says>The hand is CSS before anything happens, grab on hover, grabbing on press, and
           touch-action: none is why the pointer can drag on touch at all. On pointerdown,
-          JavaScript records which key is aloft and takes the survey.</Says>
+          JavaScript records which key is <Term word="aloft">aloft</Term> and takes the survey. Aloft rides
+          a Maybe from a small library called <a className="signpost"
+            href="https://ryandur.github.io/sand/"
+            target="_blank"
+            rel="noreferrer">sand</a>: nothing until a lift.</Says>
         : <Says>The hand is CSS before anything happens, grab on hover, grabbing on press, and
           touch-action: none is why the pointer can drag on touch at all. On pointerdown,
-          JavaScript takes the survey; then the grab fills the ghost and the carry begins.</Says>}
+          JavaScript takes the survey; then the grab fills the <Term word="ghost">ghost</Term> and the carry begins.</Says>}
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[

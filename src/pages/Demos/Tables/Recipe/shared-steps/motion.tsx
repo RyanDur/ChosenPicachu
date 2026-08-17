@@ -3,6 +3,7 @@ import {MotionDial} from '../../../Controls';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, aside, plain} from '../../../Recipe';
 import {unit} from '../../../Recipe/carve';
 import {World} from '../../params';
+import {Term} from '../Term';
 import {frameMarks, gap, settlesSource} from './sources';
 
 export const animatedMotion = (world: World, tableSource: string, cssSource: string): ReactNode =>
@@ -10,7 +11,7 @@ export const animatedMotion = (world: World, tableSource: string, cssSource: str
     <Words want="The trader must be able to follow which column went where. A teleport is honest but unreadable, and animating the layout itself would bounce the whole table, because layout is load-bearing.">
       <Says>The reorder has to land instantly for the drag math to stay true, so only the
         drawing can move: commit the swap at once, then draw the displaced column where it used
-        to be, sliding home on a <Mdn path="Web/CSS/transform">transform</Mdn>. The survey
+        to be, sliding home on a <Mdn path="Web/CSS/transform">transform</Mdn>. The <Term word="survey">survey</Term>
         supplies the one number CSS cannot know: the distance home.</Says>
     </Words>
     <Reveal>

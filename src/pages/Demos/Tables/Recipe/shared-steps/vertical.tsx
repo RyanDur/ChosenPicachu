@@ -2,13 +2,14 @@ import {ReactNode} from 'react';
 import {Codes, Reveal, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
+import {Term} from '../Term';
 import {frameHtml, gap, gripSource, settlesSource, surveySource} from './sources';
 
 export const theaterVertical = (world: World, tableSource: string): ReactNode =>
   <Step title="Turn the carry vertical">
     <Words want="A window is a row: the same carry on a second axis, and the hand needs something honest to hold.">
       <Says>The second axis should be bought with substitutions, not new machinery: a real
-        button for the hand, row heights joining the survey, and the under-the-pointer question
+        button for the hand, row heights joining the <Term word="survey">survey</Term>, and the under-the-pointer question
         asked downward.</Says>
     </Words>
     <Reveal>
@@ -16,7 +17,7 @@ export const theaterVertical = (world: World, tableSource: string): ReactNode =>
         real button, so the hand has a target and the keyboard will later get one free. The
         survey learns row heights at lift, measured once like everything else. And rowUnder
         answers which seat sits under the pointer, columnUnder turned vertical. One more word:
-        the seats are the seating chart, the rows’ order; a row keeps its number as the seats
+        the <Term word="seats">seats</Term> are the seating chart, the rows’ order; a row keeps its number as the seats
         shuffle. The settle is the same story: the moved row takes its new seat, and the rest
         ride along.</Says>
       <Codes>
