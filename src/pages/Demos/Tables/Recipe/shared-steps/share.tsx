@@ -2,6 +2,7 @@ import {ReactNode} from 'react';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, aside, plain} from '../../../Recipe';
 import {unit} from '../../../Recipe/carve';
 import {World} from '../../params';
+import {Term} from '../Term';
 import {gap, sortableCss} from './sources';
 
 const shareMarkup: Record<World, ReactNode> = {
@@ -32,7 +33,7 @@ export const cssShare = (world: World): ReactNode =>
     <Reveal>
       <Says>The markup stays honest HTML, a real table with real headers. The row grip is a
         button that will reorder rows from the arrow keys without a line of drag code, and the
-        resize handle is a button that announces itself by name, and its share once the ledger
+        resize handle is a button that announces itself by name, and its <Term word="share">share</Term> once the ledger
         exists.</Says>
       <Says>JavaScript is left holding only what CSS cannot: one measurement, some arithmetic,
         and the order.</Says>

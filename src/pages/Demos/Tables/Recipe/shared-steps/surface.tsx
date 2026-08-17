@@ -2,6 +2,7 @@ import {ReactNode} from 'react';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
+import {Term} from '../Term';
 import {aloftSource, frameMount, gap, sortableCss, travelSource} from './sources';
 
 export const dragSurface = (world: World, tableSource: string): ReactNode =>
@@ -16,14 +17,14 @@ export const dragSurface = (world: World, tableSource: string): ReactNode =>
         Now travel is running against the order as it stood when the drag began, and every path
         out of the drag owes you a cleanup.</Says>
       {world === 'react'
-        ? <Says>While something is aloft, the markup grows a fixed, full-viewport element carrying
+        ? <Says>While something is <Term word="aloft">aloft</Term>, the markup grows a fixed, full-viewport element carrying
           the move and drop handlers. Because React re-renders it on every settle, the handlers
           are always fresh: no stale closures, no document listeners. CSS gives it the grabbing
           cursor, and by existing it blocks hover styles beneath it, with no state and no
           class-toggling. Hold <Mdn path="Web/API/Element/setPointerCapture">pointer capture</Mdn> on
           it, and treat <Mdn path="Web/API/Element/lostpointercapture_event">losing the capture</Mdn> as
           the drop: releases can vanish into odd corners of the platform.</Says>
-        : <Says>While something is aloft, JavaScript appends a fixed, full-viewport surface carrying
+        : <Says>While something is <Term word="aloft">aloft</Term>, JavaScript appends a fixed, full-viewport surface carrying
           the move and drop handlers, and removes it at the landing: the surface exists exactly as
           long as the drag does, so nothing can go stale. CSS gives it the grabbing cursor, and by
           existing it blocks hover styles beneath it, with no state and no class-toggling.

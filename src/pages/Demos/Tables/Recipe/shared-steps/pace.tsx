@@ -3,18 +3,19 @@ import {PaceDial} from '../../../Controls';
 import {Codes, Reveal, Says, Snippet, Step, Words, aside, plain} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
+import {Term} from '../Term';
 import {flightsSource, frameMount, gap, travelSource} from './sources';
 
 export const eagerPace = (world: World, tableSource: string, buildSrc: string): ReactNode =>
   <Step title="Commit inside the move" dial={<PaceDial name="step-pace"/>}>
     <Words want="The trader wants the table to answer inside the move, so they can change their mind before the drop.">
-      <Says>Answering mid-drag means a strike is simply a commit: the same state change a drop
+      <Says>Answering mid-drag means a <Term word="strike">strike</Term> is simply a commit: the same state change a drop
         would make, made early. One thing has to hold: the reorder moves real nodes, not copies,
         so the drag keeps flying over a table that has already reordered.</Says>
     </Words>
     <Reveal>
       {world === 'react'
-        ? <Says>Settle as soon as a neighbour is struck: the order updates mid-drag, the markup
+        ? <Says><Term word="settle">Settle</Term> as soon as a neighbour is struck: the order updates mid-drag, the markup
           renders through it, and the same key finds its new seat. Carrying the column back is
           just more crossings: home is always reachable. No style changes hands here at
           all.</Says>
@@ -60,7 +61,7 @@ export const eagerPace = (world: World, tableSource: string, buildSrc: string): 
 export const lazyPace = (world: World, tableSource: string, buildSrc: string): ReactNode =>
   <Step title="Stash the landing, commit on release" dial={<PaceDial name="step-pace"/>}>
     <Words want="The trader wants the table calm while they drag, because motion during the drag distracts, and only the destination matters.">
-      <Says>Instead of committing, a strike only remembers a landing, and the release commits
+      <Says>Instead of committing, a <Term word="strike">strike</Term> only remembers a <Term word="landing">landing</Term>, and the release commits
         it. The landing is state like everything else: drifting back over home must clear it,
         and release, cancel, and lost capture must all resolve it the same way.</Says>
     </Words>

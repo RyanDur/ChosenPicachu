@@ -152,7 +152,7 @@ const gestureCodes: Record<World, ReactNode> = {
 };
 
 const widenStory = (world: World) =>
-  <Story param="resize" id="widen"
+  <Story param="resize" id="widen" steps={6}
          can="The trader can widen a column"
          soThat="what they read most gets the room, and the table keeps its shape">
     <Tell>We could resize with absolute pixel widths, but one drag would break the

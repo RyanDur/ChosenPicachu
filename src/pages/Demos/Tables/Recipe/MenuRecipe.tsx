@@ -73,7 +73,7 @@ const ruled = ({world, source, buildSrc}: Build, motion: Motion, dial: ReactNode
 
 const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
   const {world, source, headerSrc} = build;
-  return <Story param="menu" id="rank"
+  return <Story param="menu" id="rank" steps={6}
                 can="The trader can sort the windows by any measure, or take the order back"
                 soThat="the table ranks itself, and the hand still outranks it">
     <Tell>We could build the popup from divs, but then we owe focus, dismissal, and

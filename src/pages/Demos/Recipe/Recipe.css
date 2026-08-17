@@ -89,44 +89,43 @@
     flex-basis: 100%;
   }
 
-  .vocabulary {
-    padding: var(--base-x-2);
-    background: var(--white);
-    border-radius: var(--radius);
-    box-shadow: var(--light-box-shadow);
-    display: grid;
-    gap: var(--base);
+  .term {
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    font-style: inherit;
+    text-decoration: underline dotted;
+    text-underline-offset: 0.2em;
+    cursor: help;
+    --term-anchor: --term-unset;
+    anchor-name: var(--term-anchor);
+
+    &:focus-visible {
+      outline: var(--hairline-x-2) solid var(--charcoal);
+    }
   }
 
-  .vocabulary-title {
-    margin: 0;
+  .term-definition {
+    --term-anchor: --term-unset;
+    inset: auto;
+    position-anchor: var(--term-anchor);
+    position-area: block-end span-inline-end;
+    position-try-fallbacks: flip-block, flip-inline;
+    padding: var(--base) var(--base-x-1_5);
+    max-width: 44ch;
     font-size: var(--text-body);
-  }
-
-  .vocabulary-words {
-    margin: 0;
-    display: grid;
-    gap: var(--base);
-  }
-
-  .vocabulary-entry {
-    display: grid;
-    grid-template-columns: 8ch minmax(0, 1fr);
-    gap: var(--base);
-  }
-
-  .vocabulary-word {
-    font-weight: bold;
-  }
-
-  .vocabulary-meaning {
-    margin: 0;
     text-wrap: pretty;
   }
 
-  .vocabulary-note {
-    margin: 0;
-    text-wrap: pretty;
+  @supports not (position-area: block-end) {
+    .term-definition:popover-open {
+      inset: 0;
+      margin: auto;
+      height: fit-content;
+    }
   }
 
   .step-built {
