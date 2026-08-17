@@ -32,14 +32,14 @@ const ruled = ({world, source, buildSrc}: Build, motion: Motion, dial: ReactNode
   ? <Step title="Rule, measure, and mark" dial={dial}>
       <Words want="Choosing a direction reorders every row at once. On the animated table, each row deserves to be drawn sliding from where it was.">
         <Says>A sort is a reorder like any drag, so the slide machinery should serve it:
-          measure the seats before the rule lands, mark every moved row with its old offset,
-          and commit the rule last.</Says>
+          measure the <Term word="seats">seats</Term> before the rule lands, mark every moved
+          row with its old offset, and commit the rule last.</Says>
       </Words>
       <Reveal>
         {world === 'react'
-          ? <Says>Your menu click’s own event reaches the table element, so the animated table’s
+          ? <Says>The menu click’s own event reaches the table element, so the animated table’s
             ruled handler measures the seats before the rule lands and marks every moved row with
-            its old offset. The same slide your drags play runs for the sort; the rule
+            its old offset. The same slide the drags play runs for the sort; the rule
             itself is one state update at the end.</Says>
           : <Says>Choosing measures the seats before the rule lands: choose reads the
             row heights first, reseats, and then the variant’s ruled hook marks every moved row
@@ -66,9 +66,9 @@ const ruled = ({world, source, buildSrc}: Build, motion: Motion, dial: ReactNode
       <Reveal>
         {world === 'react'
           ? <Says>This is the static table: ruled sets the rule, and nothing else exists in the
-            file. Your rows cut to their ranked seats on the next frame.</Says>
+            file. The rows cut to their ranked seats on the next frame.</Says>
           : <Says>This is the static build: choose sets the rule and paints, and no ruled hook
-            exists in the file. Your rows cut to their ranked seats in the same breath.</Says>}
+            exists in the file. The rows cut to their ranked seats in the same breath.</Says>}
         <Codes>
           {world === 'react'
             ? <Snippet label="TS" lines={[
@@ -83,35 +83,27 @@ const ruled = ({world, source, buildSrc}: Build, motion: Motion, dial: ReactNode
 
 const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
   const {world, source, headerSrc} = build;
-  return <Story param="menu" id="rank" steps={6}
+  return <Story param="menu" id="rank" steps={7}
                 can="The trader can sort the windows by any measure, or take the order back"
                 soThat="the table ranks itself, and the hand still outranks it">
     <Tell>We could build the popup from divs, but then we owe focus, dismissal, and
       stacking, and choosing starts to feel like fighting the menu instead of using it;
-      so the chooser is a native menu on the popover API, and the platform
-      carries all three. Nothing stores which column is sorted: the glyph and aria-sort
-      both derive from the one rule, because a second source of truth only learns to
+      so the chooser leans on the platform, and the first steps below collect what that
+      decision buys. Sorting state has its own trap: the glyph, the attribute, and the
+      ranked rows all want their own copy of which column is chosen, and copies
       drift.</Tell>
-    <Tell>We could bake the sort into the seats when the menu closes, and it even looks right
-      until the next trade lands unsorted; so the rule never rewrites the seats: standing
-      re-ranks on every {world === 'react' ? 'render' : 'paint'}, and the drape keeps ruling.{motion === 'animated'
-        ? ' The re-rank slides rows exactly as the drags do, so the eye follows ' +
-          'every row to its new seat.'
-        : ' The re-rank lands instantly; nothing competes with reading the numbers.'}</Tell>
-    <Tell>And rule and hand cannot both own the table: a touch bakes the current standing
-      into the seats and clears the rule, and choosing as dealt clears it the other way.
-      A press on the chooser never lifts the column; both the toggle and the menu stop
-      pointer descent.</Tell>
+    <Tell>And two forces pull at whatever the trader chooses. The data keeps streaming under
+      the sort, so a sort that happens once is stale by the next trade. And the hand wants
+      the order too: the trader who drags a row mid-sort is not wrong, and the table must
+      decide whose order wins.</Tell>
     <Steps>
       <Step title="A menu that is a menu">
         <Words want="A sort chooser needs a popup, and popups built from divs re-invent focus, dismissal, and stacking.">
           <Says>The platform sells the whole popup: point the
             button’s <Mdn path="Web/HTML/Element/button#popovertarget">popoverTarget</Mdn> at the
             menu, and <Mdn path="Web/HTML/Global_attributes/popover">popover="auto"</Mdn> brings
-            the top layer, light-dismiss, and the accessibility relationship,
-            while <Mdn path="Web/CSS/CSS_anchor_positioning">anchor positioning</Mdn> places it
-            against the invoker with no measuring. The plan is to write no popup JavaScript at
-            all.</Says>
+            the top layer, light-dismiss, and the accessibility relationship. The plan is to
+            write no popup JavaScript at all.</Says>
         </Words>
         <Reveal>
           <Says>You reach for the state you always reach for: a boolean, a class to toggle,
@@ -130,15 +122,30 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
             the managed mode: the <Mdn path="Web/Glossary/Top_layer">top layer</Mdn>, above every
             z-index you have ever lost to; light-dismiss on outside click or Escape; one auto
             popover open at a time.</Says>
-          <Says>The invoker relationship carries one more gift: it makes your button the popover’s
-            implicit anchor. Anchor positioning normally
-            asks you to declare an <Mdn path="Web/CSS/anchor-name">anchor-name</Mdn> on one element
-            and point another at it. But a popover opened by an invoker is anchored to that invoker
-            automatically, which is why you get to
-            write <Mdn path="Web/CSS/position-area">position-area</Mdn> with no anchor-name in
-            sight.</Says>
+          <Codes>
+            {world === 'react'
+              ? <Snippet label="HTML" lines={[
+                ...span(menuSource, '<button type="button"', 'aria-label={label}>{toggle}</button>'), gap,
+                ...span(menuSource, '<menu id={id}', '</menu>')
+              ]}/>
+              : <Snippet label="HTML" lines={[
+                ...span(tableSource, '<button type="button" class="menu-toggle rounded-corners"', '</menu>')
+              ]}/>}
+          </Codes>
+        </Reveal>
+      </Step>
+      <Step title="Anchored, not measured">
+        <Words want="The menu must land by its own button, not centered in the page, and nothing should measure to put it there.">
+          <Says>A popover opened by its invoker is anchored to that invoker
+            automatically, so <Mdn path="Web/CSS/CSS_anchor_positioning">anchor
+            positioning</Mdn> can place it:
+            no <Mdn path="Web/CSS/anchor-name">anchor-name</Mdn>, no measurement, no
+            JavaScript.</Says>
+        </Words>
+        <Reveal>
           <Says>Read the new syntax as a compass around the anchor. Picture your toggle as the
-            middle cell of a three-by-three grid drawn over the page: position-area picks cells.
+            middle cell of a three-by-three grid drawn over the page:
+            <Mdn path="Web/CSS/position-area"> position-area</Mdn> picks cells.
             block-end takes the row below the toggle; span-inline-start starts from the toggle’s
             own column and spreads toward the line’s start: under the toggle, hanging left, in
             this writing mode. <Mdn path="Web/CSS/position-try-fallbacks">position-try-fallbacks</Mdn>:
@@ -155,14 +162,6 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
             your <Mdn path="Web/CSS/@supports">@supports</Mdn> fallback: a centered popover. Worse
             placement, same menu: the feature degrades, the function does not.</Says>
           <Codes>
-            {world === 'react'
-              ? <Snippet label="HTML" lines={[
-                ...span(menuSource, '<button type="button"', 'aria-label={label}>{toggle}</button>'), gap,
-                ...span(menuSource, '<menu id={id}', '</menu>')
-              ]}/>
-              : <Snippet label="HTML" lines={[
-                ...span(tableSource, '<button type="button" class="menu-toggle rounded-corners"', '</menu>')
-              ]}/>}
             <Snippet label="CSS" lines={[
               ...span(menuCss, 'inset: auto;', 'inset: auto;'),
               aside('/* centered is the UA’s placement; this menu chooses the anchor */'), gap,
@@ -174,10 +173,11 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
           </Codes>
         </Reveal>
       </Step>
-      <Step title="The glyph is the state">
+      <Step title="The glyph derives from the rule">
         <Words want="A sorted column must say so, to the eye and to assistive tech, without a second source of truth appearing anywhere.">
-          <Says>Nothing should store which column is sorted: derive everything from the one
-            rule, let <Mdn path="Web/Accessibility/ARIA/Attributes/aria-sort">aria-sort</Mdn> be
+          <Says>Nothing should store which column is sorted: derive everything from the
+            one <Term word="rule">rule</Term>,
+            let <Mdn path="Web/Accessibility/ARIA/Attributes/aria-sort">aria-sort</Mdn> be
             the single written signal, and let the glyph be CSS reading that attribute.</Says>
         </Words>
         <Reveal>
@@ -219,17 +219,18 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
       </Step>
       <Step title="The rule is a drape, not a bake">
         <Words want="The data keeps streaming under the sort, so the rule has to keep ruling.">
-          <Says>The rule should never rewrite the <Term word="seats">seats</Term>: it drapes over
-            them, and the display re-ranks through it on
-            every {world === 'react' ? 'render' : 'paint'}. What to verify: the ranking lives in
-            one function both worlds call.</Says>
+          <Says>The <Term word="rule">rule</Term> should never rewrite
+            the <Term word="seats">seats</Term>:
+            it <Term word="drape">drapes</Term> over them, the display re-ranking through it on
+            every {world === 'react' ? 'render' : 'paint'}, with the ranking living in one
+            function both worlds call.</Says>
         </Words>
         <Reveal>
-          <Says>Your first instinct is to bake: rank the seats once when the direction is
-            chosen, store the result, move on. It even looks right, until the feed writes the
-            next value and the table quietly stops being sorted. A sort applied once is stale by
-            the next trade, and this data never stops trading.</Says>
-          <Says>So the rule drapes: standing re-ranks on
+          <Says>Your first instinct is to <Term word="bake">bake</Term>: rank the seats once
+            when the direction is chosen, store the result, move on. It even looks right, until
+            the feed writes the next value and the table quietly stops being sorted. A sort
+            applied once is stale by the next trade, and this data never stops trading.</Says>
+          <Says>So the rule drapes: <Term word="standing">standing</Term> re-ranks on
             every {world === 'react' ? 'render' : 'paint'}, and as values change underneath, your rows keep trading places to
             stay sorted. Bake and the sort is a moment; drape and it is a property.</Says>
           <Codes>
@@ -248,10 +249,10 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
             real order, and the rule must end.</Says>
         </Words>
         <Reveal>
-          <Says>Touch a row and the current standing bakes into the seats as the rule
-            clears: the drape becomes the fabric, and your drag proceeds from exactly what you
-            saw. Choosing "as dealt" clears the rule the other way: back to the seats as they
-            stand, no drape at all.</Says>
+          <Says>Touch a row and the current <Term word="standing">standing</Term> bakes into
+            the seats as the rule clears: the drape becomes the fabric, and your drag proceeds
+            from exactly what you saw. Choosing "as dealt" clears the rule the other way: back
+            to the seats as they stand, no drape at all.</Says>
           <Codes>
             {world === 'react'
               ? <Snippet label="TS" lines={[

@@ -411,7 +411,6 @@ describe('the tables demo', () => {
     await userEvent.click(within(recipe).getByText(/The trader can sort the windows/));
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Static'}));
     expect(recipe).toHaveTextContent(/Rule directly/);
-    expect(recipe).toHaveTextContent(/The re-rank lands instantly/);
     expect(recipe).not.toHaveTextContent(/setShifted\(shifts\(surveyed/);
   });
 
