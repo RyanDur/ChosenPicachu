@@ -5,7 +5,7 @@ import {World} from '../../params';
 import {frameHtml, gap, gripSource, settlesSource, surveySource} from './sources';
 
 export const theaterVertical = (world: World, tableSource: string): ReactNode =>
-  <Step title="Turn the theater vertical">
+  <Step title="Turn the carry vertical">
     <Words want="A window is a row: the same carry on a second axis, and the hand needs something honest to hold.">
       <Says>The second axis should be bought with substitutions, not new machinery: a real
         button for the hand, row heights joining the survey, and the under-the-pointer question

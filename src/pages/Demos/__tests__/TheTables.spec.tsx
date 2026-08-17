@@ -245,16 +245,18 @@ describe('the tables demo', () => {
       .toHaveAttribute('href', expect.stringContaining('tab=dragAndDrop'));
     expect(recipe).toHaveTextContent(/touch-action/);
     expect(recipe).toHaveTextContent(/Write each listener once, for both worlds/);
+    expect(within(recipe).getByRole('complementary', {name: 'the words this page coins'})).toBeVisible();
+    expect(recipe).toHaveTextContent(/the reorder a strike causes/);
     expect(recipe).toHaveTextContent(/export type Cell/);
     expect(within(recipe).getAllByText('how we built it').length).toBeGreaterThan(0);
     expect(recipe.querySelectorAll('details.step-reveal[open]')).toHaveLength(0);
     expect(recipe).toHaveTextContent(/Commit inside the move/);
     expect(recipe).toHaveTextContent(/Blank the origin while it is aloft/);
     expect(recipe).toHaveTextContent(/visibility: hidden/);
-    expect(recipe).toHaveTextContent(/Slide the theater, not the layout/);
+    expect(recipe).toHaveTextContent(/Slide the drawing, not the layout/);
     expect(recipe).toHaveTextContent(/measured by the survey/);
     expect(recipe).toHaveTextContent(/translateY\(var\(--drop\)\)/);
-    expect(recipe).toHaveTextContent(/Turn the theater vertical/);
+    expect(recipe).toHaveTextContent(/Turn the carry vertical/);
     expect(within(recipe).getByRole('link', {name: 'insertBefore'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/Node/insertBefore'));
 
