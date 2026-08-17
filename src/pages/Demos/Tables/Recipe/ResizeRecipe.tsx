@@ -1,8 +1,9 @@
 import {FC, ReactNode} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
-import {Codes, Mdn, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, aside, plain} from '../../Recipe';
+import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, aside, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
 import {World, worldParam} from '../params';
+import {Term} from './Term';
 import sharesSource from '@components/Table/shares.ts?raw';
 import resizeSource from '@components/Table/ResizeHandle.tsx?raw';
 import baseCss from '@components/Table/Table.css?raw';
@@ -67,28 +68,18 @@ const handleMarkup: Record<World, ReactNode> = {
 };
 
 const handleSays: Record<World, ReactNode> = {
-  react: <Says>The handle is a
-    native <Mdn path="Web/HTML/Element/button">button</Mdn>: focusable by birth, announcing
-    itself by name, and once the ledger exists its label speaks the share too. This
-    is <Mdn path="Web/Accessibility/ARIA">ARIA</Mdn>’s own first rule: prefer the native
-    element, because it carries focus, announcement, and activation for free, and the
-    user’s need is met by the platform instead of imitated. The grid from the
-    last step deals it the header’s end track, and the button carries no width of its own:
-    it is a grid container whose only item is the 8px line its ::after paints, so the
-    painted line is the hit area. The
-    col-resize <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
+  react: <Says>The handle is focusable by birth, announcing itself by name, and once the ledger
+    exists its label speaks the <Term word="share">share</Term> too. The grid from the last step
+    deals it the header’s end track, and the button carries no width of its own: it is a grid
+    container whose only item is the 8px line its ::after paints, so the painted line is the
+    hit area. The col-resize <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
     and <Mdn path="Web/CSS/touch-action">touch-action</Mdn>: none lets the pointer drag it
     on a touchscreen.</Says>,
-  vanilla: <Says>The handle is a
-    native <Mdn path="Web/HTML/Element/button">button</Mdn>: focusable by birth, announcing
-    the name the markup gives it, and once the ledger exists dressColumn rewrites that label
-    to speak the share too. This
-    is <Mdn path="Web/Accessibility/ARIA">ARIA</Mdn>’s own first rule: prefer the native
-    element, because it carries focus, announcement, and activation for free, and the
-    user’s need is met by the platform instead of imitated. The grid from the
-    last step deals it the header’s end track, and the button carries no width of its own:
-    it is a grid container whose only item is the 8px line its ::after paints, so the
-    painted line is the hit area. The
+  vanilla: <Says>The handle is focusable by birth, announcing the name the markup gives it, and
+    once the ledger exists dressColumn rewrites that label to speak
+    the <Term word="share">share</Term> too. The grid from the last step deals it the header’s
+    end track, and the button carries no width of its own: it is a grid container whose only
+    item is the 8px line its ::after paints, so the painted line is the hit area. The
     col-resize <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
     and <Mdn path="Web/CSS/touch-action">touch-action</Mdn>: none lets the pointer drag it
     on a touchscreen.</Says>
@@ -96,15 +87,13 @@ const handleSays: Record<World, ReactNode> = {
 
 const captureSays: Record<World, ReactNode> = {
   react: <Says>On pointerdown the
-    handle <Mdn path="Web/API/Element/setPointerCapture">captures its pointer</Mdn> (safe
-    here, because unlike the sort’s cells the handle never moves in the DOM) and measures the
-    table once: pixels per share. Each move converts the drag into shares and trades only the
-    increment since the last one, so a clamped trade never accumulates error.</Says>,
+    handle <Mdn path="Web/API/Element/setPointerCapture">captures its pointer</Mdn> and measures
+    the table once: pixels per share. Each move converts the drag into shares and trades only
+    the increment since the last one, so a clamped trade never accumulates error.</Says>,
   vanilla: <Says>A press wakes the ledger and measures the table once: pixels per share. The
-    first move <Mdn path="Web/API/Element/setPointerCapture">captures the pointer</Mdn> (safe
-    here, because unlike the sort’s cells the handle never moves in the DOM), and each move
-    converts the drag into shares and trades only the increment since the last one, so a
-    clamped trade never accumulates error.</Says>
+    first move <Mdn path="Web/API/Element/setPointerCapture">captures the pointer</Mdn>, and
+    each move converts the drag into shares and trades only the increment since the last one,
+    so a clamped trade never accumulates error.</Says>
 };
 
 const gripWords =
@@ -167,80 +156,103 @@ const widenStory = (world: World) =>
     <Steps>
       <Step title="Keep the widths as a zero-sum ledger">
         <Words want="Absolute pixel widths break the promise that the table fills its container: resize one column and the table grows, wraps, or leaves a gap behind.">
+          <Says>Widths should be <Term word="share">shares</Term> of a hundred, born by
+            measuring the rendered headers at the first touch; until a hand arrives, the
+            stylesheet owns the widths and no ledger exists.</Says>
+        </Words>
+        <Reveal>
           <Says>Pixel widths are the first ledger you reach for, and every entry in it is a lie
             waiting for a resize: the sum answers to nobody.</Says>
-          <Says>Widths are shares of a hundred, born by measuring the rendered headers the first
-            time a hand arrives; until then the page’s stylesheet owns the widths and no ledger
-            exists. After a trade the header wears the shared class and its share rides a custom
+          <Says>After a trade the header wears the shared class and its share rides a custom
             property, and fixed <Mdn path="Web/CSS/table-layout">table layout</Mdn>, set beside the
             opening widths in that same stylesheet, keeps the table exactly its container: every
             column a fraction of it, one record keeping one promise.</Says>
-        </Words>
-        {ledgerCodes[world]}
+          {ledgerCodes[world]}
+        </Reveal>
       </Step>
       <Step title="Lay the header out on a grid">
         <Words want="A header cell seats a title, sometimes a menu, sometimes a handle; the cell must tell that furniture where to live, and a table cell cannot become a grid without ceasing to be a table cell.">
+          <Says>A <Mdn path="Web/CSS/CSS_grid_layout">grid</Mdn> inside the cell: a full-size div
+            whose columns compose from the furniture classes the header actually carries.</Says>
+        </Words>
+        <Reveal>
           <Says>You reach for absolute positioning: pin the furniture to the cell’s edge and
             reserve room for it with padding. It works until it does not: the pinned widths, the
             reserved padding, and the layout are three numbers agreeing by luck, and nothing
             breaks loudly when one drifts.</Says>
           <Says>So the cell surrenders its padding and a plain div takes the whole cell (an explicit
             height keeps the header’s stature, since block padding would inset the furniture). The
-            div is the <Mdn path="Web/CSS/CSS_grid_layout">grid</Mdn>; its columns compose from what
+            div is the grid; its columns compose from what
             the header actually carries: a class per piece of furniture, and each combination
             declares its own tracks. The parent tells the children where they live, and the classes
             say why.</Says>
-        </Words>
-        <Codes>
-          {gridMarkup[world]}
-          <Snippet label="CSS" lines={[
-            ...unit(baseCss, '.header-cell {'), gap,
-            ...unit(baseCss, '.header-cell-content {'), gap,
-            ...unit(baseCss, '.header-cell-content.rankable {'), gap,
-            ...unit(baseCss, '.header-cell-content.resizable {'), gap,
-            ...unit(baseCss, '.header-cell-content.rankable.resizable {')
-          ]}/>
-        </Codes>
+          <Codes>
+            {gridMarkup[world]}
+            <Snippet label="CSS" lines={[
+              ...unit(baseCss, '.header-cell {'), gap,
+              ...unit(baseCss, '.header-cell-content {'), gap,
+              ...unit(baseCss, '.header-cell-content.rankable {'), gap,
+              ...unit(baseCss, '.header-cell-content.resizable {'), gap,
+              ...unit(baseCss, '.header-cell-content.rankable.resizable {')
+            ]}/>
+          </Codes>
+        </Reveal>
       </Step>
       <Step title="A handle that is a button">
         <Words want="The affordance must be reachable and honest for everyone: a real control at the column’s edge, not a styled sliver of nothing.">
-          {handleSays[world]}
+          <Says>The handle should be a
+            native <Mdn path="Web/HTML/Element/button">button</Mdn>: focus, announcement, and
+            activation for free, <Mdn path="Web/Accessibility/ARIA">ARIA</Mdn>’s own first rule.
+            What remains to decide is where it lives and what it paints as its hit area.</Says>
         </Words>
-        <Codes>
-          {handleMarkup[world]}
-          {spokenLabel}
-          <Snippet label="CSS" lines={[
-            ...unit(baseCss, '.resize-handle {')
-          ]}/>
-        </Codes>
+        <Reveal>
+          {handleSays[world]}
+          <Codes>
+            {handleMarkup[world]}
+            {spokenLabel}
+            <Snippet label="CSS" lines={[
+              ...unit(baseCss, '.resize-handle {')
+            ]}/>
+          </Codes>
+        </Reveal>
       </Step>
       <Step title="Trade, never take">
         <Words want="Dragging one boundary must not change the table’s total width, and it must not starve a column down to nothing.">
-          <Says>Every resize is a trade between neighbours: whatever one column gains, the next
-            gives, clamped so neither side drops below the slimmest share, and because a trade only
-            ever moves value between two entries of the ledger, the sum cannot change. The
-            invariant is not checked; it is built in.</Says>
+          <Says>Every resize should be a trade between neighbours. If a trade is the only move
+            that exists, the total is safe by construction.</Says>
         </Words>
-        <Codes>
-          <Snippet label="TS" lines={[
-            ...unit(sharesSource, 'export const traded')
-          ]}/>
-        </Codes>
+        <Reveal>
+          <Says>Whatever one column gains, the next gives, clamped so neither side drops below
+            the slimmest share. The invariant is not checked; it is built in.</Says>
+          <Codes>
+            <Snippet label="TS" lines={[
+              ...unit(sharesSource, 'export const traded')
+            ]}/>
+          </Codes>
+        </Reveal>
       </Step>
       <Step title="Capture the pointer, measure once">
         <Words want="Pointer positions arrive in pixels while the ledger speaks in shares, and asking the DOM for the table’s width on every move brings back layout thrash.">
-          {captureSays[world]}
+          <Says>Capture on the handle, which is safe here because unlike the sort’s cells the
+            handle never moves in the DOM, and measure the table once: pixels per share, the
+            resize’s own <Term word="survey">survey</Term>.</Says>
         </Words>
-        {captureCodes[world]}
+        <Reveal>
+          {captureSays[world]}
+          {captureCodes[world]}
+        </Reveal>
       </Step>
       <Step title="Two gestures, one header">
         <Words want="The handle lives inside a draggable header, so pressing it would lift the whole column into a drag.">
-          <Says>The
-            handle <Mdn path="Web/API/Event/stopPropagation">stops pointer descent</Mdn>, so the sort
-            never hears the press, and the keyboard gets its own road: focus the handle and the
-            arrow keys trade a fixed step, no pointer required.</Says>
+          <Says>The handle should <Mdn path="Web/API/Event/stopPropagation">stop pointer
+            descent</Mdn>, and the keyboard should get its own road: a fixed step per
+            arrow.</Says>
         </Words>
-        {gestureCodes[world]}
+        <Reveal>
+          <Says>The sort never hears the press, and the arrow keys trade a fixed step with no
+            pointer required: focus the handle and tap.</Says>
+          {gestureCodes[world]}
+        </Reveal>
       </Step>
     </Steps>
   </Story>;
