@@ -1,5 +1,5 @@
 import {ReactNode} from 'react';
-import {Codes, Mdn, Says, Snippet, Step, Words, aside} from '../../../Recipe';
+import {Codes, Mdn, Predict, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {frameMount, gap, sortableCss, travelSource} from './sources';
@@ -7,6 +7,8 @@ import {frameMount, gap, sortableCss, travelSource} from './sources';
 export const liftOnce = (world: World, tableSource: string): ReactNode =>
   <Step title="Lift on pointer down, and measure the table once">
     <Words want="A carry must know the ground it stands on without asking the DOM again on every twitch of the hand.">
+      <Predict>The travel must know where every column sits. When do you ask the DOM, and how
+        many times per drag?</Predict>
       {world === 'react'
         ? <Says>The hand is CSS before anything happens, grab on hover, grabbing on press, and
           touch-action: none is why the pointer can drag on touch at all. On pointerdown,

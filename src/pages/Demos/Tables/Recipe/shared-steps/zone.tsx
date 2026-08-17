@@ -1,4 +1,4 @@
-import {Codes, Mdn, Says, Snippet, Step, Words} from '../../../Recipe';
+import {Codes, Mdn, Predict, Says, Snippet, Step, Words} from '../../../Recipe';
 import {unit} from '../../../Recipe/carve';
 import {SlotsFigure} from '../SlotsFigure';
 import {gap, surveySource} from './sources';
@@ -6,6 +6,8 @@ import {gap, surveySource} from './sources';
 export const deadZone =
   <Step title="Find the neighbour under the pointer, with a dead zone">
     <Words want="A drift along a boundary must not chatter the order under the hand.">
+      <Predict>Drag a wide column across a narrow one and swap at first touch. The swap moves
+        the boundary while your pointer holds still. What happens on the next frame?</Predict>
       <Says>This step is JavaScript alone, on purpose: where the pointer is, in table terms,
         is a walk over cumulative column widths: arithmetic on the survey,
         never <Mdn path="Web/API/Document/elementFromPoint">elementFromPoint</Mdn>. A{' '}

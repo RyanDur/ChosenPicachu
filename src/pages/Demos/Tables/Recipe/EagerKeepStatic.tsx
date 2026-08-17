@@ -15,6 +15,7 @@ import {
   ghostByHand,
   keepOrigin,
   liftOnce,
+  listenersOnce,
   orderInState,
   ownedPixels,
   promises,
@@ -40,6 +41,7 @@ export const EagerKeepStaticRecipe: FC<{track: Track; world: World}> = ({track, 
       <Steps>
         {cssShare(world)}
         {orderInState(world)}
+        {listenersOnce(world, tableSource)}
         {liftOnce(world, tableSource)}
         {dragSurface(world, tableSource)}
         {ghostByHand(world, tableSource)}

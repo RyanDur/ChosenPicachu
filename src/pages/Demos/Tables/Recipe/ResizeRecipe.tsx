@@ -1,6 +1,6 @@
 import {FC, ReactNode} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
-import {Codes, Mdn, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, aside, plain} from '../../Recipe';
+import {Codes, Mdn, Predict, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, aside, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
 import {World, worldParam} from '../params';
 import sharesSource from '@components/Table/shares.ts?raw';
@@ -167,6 +167,8 @@ const widenStory = (world: World) =>
     <Steps>
       <Step title="Keep the widths as a zero-sum ledger">
         <Words want="Absolute pixel widths break the promise that the table fills its container: resize one column and the table grows, wraps, or leaves a gap behind.">
+          <Predict>Drag one column forty pixels wider. The table must not grow. Where do the
+            pixels come from?</Predict>
           <Says>Pixel widths are the first ledger you reach for, and every entry in it is a lie
             waiting for a resize: the sum answers to nobody.</Says>
           <Says>Widths are shares of a hundred, born by measuring the rendered headers the first
