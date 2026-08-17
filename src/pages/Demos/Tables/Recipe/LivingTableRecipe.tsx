@@ -1,6 +1,6 @@
 import {FC, ReactNode} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
-import {Codes, Mdn, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, plain} from '../../Recipe';
+import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
 import {World, worldParam} from '../params';
 import feedSource from '@pages/Demos/Charts/live-trades.ts?raw';
@@ -18,7 +18,7 @@ import '../../Recipe/Recipe.css';
 
 const gap = plain(' ');
 
-const dealOpeners: Record<World, ReactNode> = {
+const dealPlans: Record<World, ReactNode> = {
   react: <>
     <Says>The columns are declared once, each with a name and a class; how wide they open is CSS.
       We could let the browser size the columns by their content, but a live table
@@ -66,7 +66,7 @@ const dealCodes: Record<World, ReactNode> = {
   </Codes>
 };
 
-const socketOpeners: Record<World, string> = {
+const socketPlans: Record<World, string> = {
   react: 'One connection at page scope, so the stream survives every tab and dial below it.',
   vanilla: 'One connection for the document’s whole life.'
 };
@@ -102,26 +102,25 @@ const refolds: Record<World, string> = {
   vanilla: 'Then every arrival refolds everything we hold into the windows, and the page writes what changed.'
 };
 
-const stateSays: Record<World, ReactNode> = {
-  react: <>
-    <Says>The table’s state is one value held in a single cell, and the setter is the
-      commit. Nothing ever edits the state in place: a change is a pure transition, a function
-      from the old state to the new; the previous value is never mutated, only replaced.</Says>
-    <Says>What follows the commit is React’s half of the deal: the component re-renders, the
-      markup renders through the new state, and React reconciles the real DOM to match, moving
-      only the nodes whose place changed. You never touch the DOM; you only commit the next state.</Says>
-  </>,
-  vanilla: <>
-    <Says>The vanilla build keeps the same single value: the table state, which holds order, seats,
-      seated, shares, and the rule together, every field readonly. Nothing ever edits the state in place: a
-      change is a pure transition, a function from the old state to the new; the previous
-      value is never mutated, only replaced.</Says>
-    <Says>What React did for you is the other half: the build holds the same cell with the same
-      write path, and its commit reconciles the page against the new state by hand, moving only
-      the cells whose place changed and writing only the text that differs. The seam between
-      the worlds is exactly here: the state machine is identical; the projection is the
-      difference.</Says>
-  </>
+const statePlans: Record<World, ReactNode> = {
+  react: <Says>The table’s state is one value held in a single cell, and the setter is the
+    commit. Nothing ever edits the state in place: a change is a pure transition, a function
+    from the old state to the new; the previous value is never mutated, only replaced.</Says>,
+  vanilla: <Says>The vanilla build keeps the same single value: the table state, which holds order, seats,
+    seated, shares, and the rule together, every field readonly. Nothing ever edits the state in place: a
+    change is a pure transition, a function from the old state to the new; the previous
+    value is never mutated, only replaced.</Says>
+};
+
+const stateFollows: Record<World, ReactNode> = {
+  react: <Says>What follows the commit is React’s half of the deal: the component re-renders, the
+    markup renders through the new state, and React reconciles the real DOM to match, moving
+    only the nodes whose place changed. You never touch the DOM; you only commit the next state.</Says>,
+  vanilla: <Says>What React did for you is the other half: the build holds the same cell with the same
+    write path, and its commit reconciles the page against the new state by hand, moving only
+    the cells whose place changed and writing only the text that differs. The seam between
+    the worlds is exactly here: the state machine is identical; the projection is the
+    difference.</Says>
 };
 
 const stateCodes: Record<World, ReactNode> = {
@@ -161,7 +160,9 @@ const liveStory = (world: World) =>
         <Words want={<>The table is more than JavaScript holding numbers; it is an
           HTML <Mdn path="Web/HTML/Element/table">table</Mdn>: header cells that declare their
           scope, rows a reader and a screen reader both walk.</>}>
-          {dealOpeners[world]}
+          {dealPlans[world]}
+        </Words>
+        <Reveal>
           <Says>The markup is the platform’s own.
             A <Mdn path="Web/HTML/Element/thead">thead</Mdn> of th headers, one per column, each
             announcing <Mdn path="Web/HTML/Element/th#scope">scope="col"</Mdn>: that one attribute
@@ -176,51 +177,65 @@ const liveStory = (world: World) =>
             the drags, the keyboard, hangs off these roles instead of reinventing them. This is the
             first rule of <Mdn path="Web/Accessibility/ARIA">ARIA</Mdn>: prefer the native element,
             and accessibility stops being work you add and becomes behavior you inherit.</Says>
-        </Words>
-        {dealCodes[world]}
+          {dealCodes[world]}
+        </Reveal>
       </Step>
       <Step title="Hold the state in one place">
         <Words want="A live table is state before it is pixels: something must own the order, the seats, and the rule, and the page must follow it.">
-          {stateSays[world]}
+          {statePlans[world]}
         </Words>
-        {stateCodes[world]}
+        <Reveal>
+          {stateFollows[world]}
+          {stateCodes[world]}
+        </Reveal>
       </Step>
       <Step title="Hydrate with one fetch">
         <Words want="An empty table at open is a lie about the market; the trader arrives mid-session, so the recent past comes first, and it is just a fetch.">
+          <Says>The recent past is not a stream problem: it is one request, and the only care is
+            the seam where the fetch and the socket overlap.</Says>
+        </Words>
+        <Reveal>
           <Says>One GET for the last thousand trades, decoded and cleaned. When the stream is
             also running, hydrated merges the two, drops whatever the stream already delivered,
             and keeps everything in time order.</Says>
-        </Words>
-        <Codes>
-          <Snippet label="TS" lines={[
-            ...unit(hydrateSource, 'export const recentTrades'), gap,
-            ...unit(hydrateSource, 'export const hydrated')
-          ]}/>
-        </Codes>
+          <Codes>
+            <Snippet label="TS" lines={[
+              ...unit(hydrateSource, 'export const recentTrades'), gap,
+              ...unit(hydrateSource, 'export const hydrated')
+            ]}/>
+          </Codes>
+        </Reveal>
       </Step>
       <Step title="Open a socket to the exchange">
         <Words want={<>The table is only worth sorting if its numbers are the market’s, now:
           a <Mdn path="Web/API/WebSocket">socket</Mdn> to the exchange, subscribed to the product,
           every trade arriving as it happens.</>}>
-          <Says>{socketOpeners[world]} The
-            handshake subscribes to the product,
+          <Says>{socketPlans[world]} The open questions are the cap that keeps a long session
+            from growing forever, and what to do when the socket closes.</Says>
+        </Words>
+        <Reveal>
+          <Says>The handshake subscribes to the product,
             every <Mdn path="Web/API/WebSocket/message_event">message</Mdn> decodes into a trade
             appended under a cap so a long session never grows without bound, and
             a <Mdn path="Web/API/WebSocket/close_event">close</Mdn> marks the feed failed instead of
             pretending.</Says>
-        </Words>
-        <Codes>
-          <Snippet label="TS" lines={[
-            ...unit(feedSource, 'const stream = streaming('), gap,
-            ...unit(feedSource, 'const appendTrade = ')
-          ]}/>
-        </Codes>
+          <Codes>
+            <Snippet label="TS" lines={[
+              ...unit(feedSource, 'const stream = streaming('), gap,
+              ...unit(feedSource, 'const appendTrade = ')
+            ]}/>
+          </Codes>
+        </Reveal>
       </Step>
       <Step title="Fold the stream into windows">
         <Words want="Raw trades tick too fast to read; the trader reads windows: this minute, the last five, the hour, the whole session.">
-          {foldSays[world]}
+          <Says>The windows should be derived, never accumulated: refold every trade we hold
+            each time, so the aggregates cannot drift from the trades that made them.</Says>
         </Words>
-        {foldCodes[world]}
+        <Reveal>
+          {foldSays[world]}
+          {foldCodes[world]}
+        </Reveal>
       </Step>
     </Steps>
   </Story>;
