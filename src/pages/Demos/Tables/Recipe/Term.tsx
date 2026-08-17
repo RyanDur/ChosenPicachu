@@ -3,7 +3,8 @@ import {has} from '@ryandur/sand';
 
 export type Word =
   | 'aloft' | 'survey' | 'drift' | 'flight' | 'ghost'
-  | 'strike' | 'settle' | 'landing' | 'seats' | 'share' | 'travel' | 'reconcile';
+  | 'strike' | 'settle' | 'landing' | 'seats' | 'share' | 'travel' | 'reconcile'
+  | 'rule' | 'standing' | 'drape' | 'bake';
 
 const sand =
   <a className="signpost"
@@ -24,7 +25,11 @@ const definitions: Record<Word, ReactNode> = {
   seats: 'the rows’ order: a row keeps its number while its seat changes',
   share: 'a column’s slice of the table’s width: a fraction, not a pixel',
   travel: 'everything between the lift and the drop: the shared move handling',
-  reconcile: 'walking the DOM to match the state, moving only what changed'
+  reconcile: 'walking the DOM to match the state, moving only what changed',
+  rule: 'the chosen column and direction: what the table ranks by',
+  standing: 'the seats with the rule draped over them: the order actually on screen',
+  drape: 'ranking through the rule at render time, leaving the seats unwritten',
+  bake: 'writing the current standing into the seats and clearing the rule'
 };
 
 const definitionOf = (id: string): HTMLElement | undefined => {
