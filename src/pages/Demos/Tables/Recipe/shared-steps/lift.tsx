@@ -6,7 +6,7 @@ import {Term} from '../Term';
 import {frameMount, gap, sortableCss, travelSource} from './sources';
 
 export const liftOnce = (world: World, tableSource: string): ReactNode =>
-  <Step title="Lift on pointer down, and measure the table once">
+  <Step title="Lift on pointer down, and measure the table once" id="step-lift">
     <Words want="A carry must know the ground it stands on without asking the DOM again on every move.">
       <Says>Asking the DOM where things are mid-drag causes the layout thrash we came here to
         avoid, so everything gets measured once, at the grab: the

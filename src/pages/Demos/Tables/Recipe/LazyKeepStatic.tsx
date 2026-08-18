@@ -11,6 +11,7 @@ import {
   deadZone,
   dragSurface,
   focusLands,
+  gripArrows,
   ghostByHand,
   keepOrigin,
   lazyPace,
@@ -26,6 +27,7 @@ import {
   twoRoads
 } from './shared-steps';
 import buildSrc from '../Frame/builds/LazyKeepStatic.ts?raw';
+import rowSource from '@components/DragSortableTable/LazyKeepStaticTable/Row.tsx?raw';
 import tableSource from '@components/DragSortableTable/LazyKeepStaticTable/LazyKeepStaticTable.tsx?raw';
 import headerSource from '@components/DragSortableTable/LazyKeepStaticTable/Header.tsx?raw';
 
@@ -60,14 +62,23 @@ export const LazyKeepStaticRecipe: FC<{track: Track; world: World}> = ({track, w
       </Steps>
     </Story>
   </>
-  : <Story param="sort" id="keyboard" steps={3}
-           can="The trader can sort without a mouse"
-           soThat="the table answers whoever arrives at it">
-    {accessTrack}
-    {quietDials}
-    <Steps>
+  : <>
+    <Story param="sort" id="column" steps={3}
+           can="The trader can sort by column"
+           soThat="the measures they compare sit beside each other">
+      {accessTrack}
+      {quietDials}
+      <Steps>
       {focusLands(world, headerSource)}
       {arrowsSpeak(world, headerSource)}
       {cutKey(world, headerSource, buildSrc)}
-    </Steps>
-  </Story>;
+      </Steps>
+    </Story>
+    <Story param="sort" id="row" steps={1}
+           can="The trader can sort by row"
+           soThat="the windows they watch closest sit on top">
+      <Steps>
+        {gripArrows(world, rowSource, buildSrc, 'staticRowArrows')}
+      </Steps>
+    </Story>
+  </>;

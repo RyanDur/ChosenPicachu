@@ -36,7 +36,7 @@ export const Story: FC<Props> = ({param, id, can, soThat, steps, children}) => {
   return <li>
     <details className="arc" open={openedIn(searchParams, param).has(id)}>
       <summary className="opener" onClick={toggled}>
-        <hgroup className="story">
+        <hgroup className="story white rounded-corners drop-shadow">
           <h3 className="can">{can}</h3>
           <p className="so-that">so that {soThat}</p>
           {has(steps) && <p className="step-tally">{steps === 1 ? '1 step' : `${steps} steps`}</p>}

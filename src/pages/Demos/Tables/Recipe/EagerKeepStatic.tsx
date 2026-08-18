@@ -12,6 +12,7 @@ import {
   dragSurface,
   eagerPace,
   focusLands,
+  gripArrows,
   ghostByHand,
   keepOrigin,
   liftOnce,
@@ -26,6 +27,7 @@ import {
   twoRoads
 } from './shared-steps';
 import buildSrc from '../Frame/builds/EagerKeepStatic.ts?raw';
+import rowSource from '@components/DragSortableTable/EagerKeepStaticTable/Row.tsx?raw';
 import tableSource from '@components/DragSortableTable/EagerKeepStaticTable/EagerKeepStaticTable.tsx?raw';
 import headerSource from '@components/DragSortableTable/EagerKeepStaticTable/Header.tsx?raw';
 
@@ -60,14 +62,23 @@ export const EagerKeepStaticRecipe: FC<{track: Track; world: World}> = ({track, 
       </Steps>
     </Story>
   </>
-  : <Story param="sort" id="keyboard" steps={3}
-           can="The trader can sort without a mouse"
-           soThat="the table answers whoever arrives at it">
-    {accessTrack}
-    {quietDials}
-    <Steps>
+  : <>
+    <Story param="sort" id="column" steps={3}
+           can="The trader can sort by column"
+           soThat="the measures they compare sit beside each other">
+      {accessTrack}
+      {quietDials}
+      <Steps>
       {focusLands(world, headerSource)}
       {arrowsSpeak(world, headerSource)}
       {cutKey(world, headerSource, buildSrc)}
-    </Steps>
-  </Story>;
+      </Steps>
+    </Story>
+    <Story param="sort" id="row" steps={1}
+           can="The trader can sort by row"
+           soThat="the windows they watch closest sit on top">
+      <Steps>
+        {gripArrows(world, rowSource, buildSrc, 'staticRowArrows')}
+      </Steps>
+    </Story>
+  </>;

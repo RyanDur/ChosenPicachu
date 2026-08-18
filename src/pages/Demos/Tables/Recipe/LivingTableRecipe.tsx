@@ -14,6 +14,7 @@ import widthsSource from '@pages/Demos/Tables/Aggregations/Aggregations.css?raw'
 import tableSource from '../Frame/table.html?raw';
 import stateSource from '@components/DragSortableTable/table-state.ts?raw';
 import frameMount from '../Frame/table/mount.ts?raw';
+import {DataPath} from './DataPath';
 import '../../Recipe/Recipe.css';
 
 const gap = plain(' ');
@@ -142,19 +143,14 @@ const stateCodes: Record<World, ReactNode> = {
   </Codes>
 };
 
-const liveStory = (world: World) =>
-  <Story param="living" id="live" steps={5}
-         can="The trader can watch the market live, in windows"
-         soThat="the numbers stay current without a single refresh">
-    <Tell>What the trader reads is a few measures across a few time windows: numbers
-      on two axes. That is not a chart and not a feed; that is what a table is for. So
-      the table comes first: a real HTML one, semantics for free, dealt from whatever
-      trades we hold.</Tell>
-    <Tell>Then the trades. The trader arrives mid-session, so we start with one plain fetch
-      of the recent history. And the numbers have to keep themselves current: we could
-      poll, but polling is always a little late and mostly wasted requests. The exchange
-      offers a stream, so a socket comes next, and from then on the trades come to us,
-      kept under a cap so a long session cannot grow forever. {refolds[world]}</Tell>
+const stillStory = (world: World) =>
+  <Story param="living" id="still" steps={2}
+         can="The trader can read the market in a table"
+         soThat="the shape is right before anything moves">
+    <Tell>The shape comes from the design, in the element the story chose: a few measures
+      across a few time windows, numbers on two axes; that is what a table is for. It stands
+      first as a still, dealt from whatever trades we hold: headers on both axes, and the
+      reading order correct before a single interaction exists.</Tell>
     <Steps>
       <Step title="Deal a real HTML table">
         <Words want={<>The table is more than JavaScript holding numbers; it is an
@@ -189,6 +185,20 @@ const liveStory = (world: World) =>
           {stateCodes[world]}
         </Reveal>
       </Step>
+    </Steps>
+  </Story>;
+
+const flowStory = (world: World) =>
+  <Story param="living" id="flow" steps={3}
+         can="The trader can watch the market live, in windows"
+         soThat="the numbers stay current without a single refresh">
+    <Tell>The still becomes a stream. The trader arrives mid-session, so we start with one
+      plain fetch of the recent history. And the numbers have to keep themselves current: we
+      could poll, but polling is always a little late and mostly wasted requests. The exchange
+      offers a stream, so a socket comes next, and from then on the trades come to us,
+      kept under a cap so a long session cannot grow forever. {refolds[world]}</Tell>
+    <DataPath/>
+    <Steps>
       <Step title="Hydrate with one fetch">
         <Words want="An empty table at open is a lie about the market; the trader arrives mid-session, so the recent past comes first, and it is just a fetch.">
           <Says>The recent past is not a stream problem: it is one request, and the only care is
@@ -240,9 +250,16 @@ const liveStory = (world: World) =>
     </Steps>
   </Story>;
 
-export const LivingTableRecipe: FC = () => {
+export const StillTableRecipe: FC = () => {
+  const {world = 'react'} = useSearchParamsObject({world: worldParam});
+  return <section aria-label="the still table" className="build-steps">
+    <Stories>{stillStory(world)}</Stories>
+  </section>;
+};
+
+export const FlowTableRecipe: FC = () => {
   const {world = 'react'} = useSearchParamsObject({world: worldParam});
   return <section aria-label="the living table" className="build-steps">
-    <Stories>{liveStory(world)}</Stories>
+    <Stories>{flowStory(world)}</Stories>
   </section>;
 };

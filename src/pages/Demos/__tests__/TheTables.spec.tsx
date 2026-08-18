@@ -229,17 +229,39 @@ describe('the tables demo', () => {
     expect(recipe.querySelectorAll('details.arc[open]')).toHaveLength(0);
     expect(screen.getByRole('heading', {name: 'let’s build this feature'})).toBeVisible();
     expect(screen.getByText(/I watch the market all day/)).toBeVisible();
+    expect(screen.getByRole('heading', {name: 'Start with the need, and let it inform the implementation'})).toBeVisible();
+    expect(screen.getByRole('heading', {name: 'The trader can watch the live market in windows they arrange'})).toBeVisible();
+    expect(screen.getByText(/so that what they compare sits side by side/)).toBeVisible();
+    expect(screen.getByRole('columnheader', {name: 'what it tells you'})).toBeVisible();
+    expect(screen.getByRole('rowheader', {name: /keep themselves current/})).toBeVisible();
+    expect(screen.getByRole('heading', {name: 'Cultivate a design from the need'})).toBeVisible();
+    expect(screen.getByRole('heading', {name: 'Generate the stories from the design'})).toBeVisible();
+    expect(screen.getByRole('link', {name: 'user story'}))
+      .toHaveAttribute('href', expect.stringContaining('initialcapacity.io/insights/user-story'));
+    expect(screen.getByRole('complementary', {name: 'what a design cannot tell you'})).toBeVisible();
+    expect(screen.getByText(/keep building on your best interpretation/)).toBeVisible();
     expect(screen.getByText(/The table is our interpretation of that/)).toBeVisible();
     expect(recipe).toHaveTextContent(/The sort happens while you drag/);
+    const still = screen.getByRole('region', {name: 'the still table'});
+    expect(still).toBeVisible();
+    expect(still).toHaveTextContent(/The trader can read the market in a table/);
+    expect(still).toHaveTextContent(/Deal a real HTML table/);
+    expect(still).toHaveTextContent(/scope="col"/);
+    expect(still.querySelectorAll('.story')).toHaveLength(1);
+    expect(still).toHaveTextContent(/that is what a table is for/);
     const living = screen.getByRole('region', {name: 'the living table'});
     expect(living).toBeVisible();
     expect(living).toHaveTextContent(/The trader can watch the market live/);
-    expect(living).toHaveTextContent(/Deal a real HTML table/);
-    expect(living).toHaveTextContent(/scope="col"/);
     expect(living.querySelectorAll('.story')).toHaveLength(1);
     expect(living).toHaveTextContent(/a socket comes next/);
     expect(living).toHaveTextContent(/Hydrate with one fetch/);
-    expect(living).toHaveTextContent(/that is what a table is for/);
+    expect(living).toHaveTextContent(/where a number comes from/);
+    expect(living).toHaveTextContent(/Drawn, not recorded/);
+    expect(living.querySelector('video')).toBeNull();
+    expect(screen.getByRole('heading', {name: 'Layer on functionality, in the order it was asked for'})).toBeVisible();
+    expect(screen.getByText(/Both axes, every layer, or the layer is not done/)).toBeVisible();
+    expect(screen.getByRole('columnheader', {name: 'by keyboard'})).toBeVisible();
+    expect(screen.getByRole('rowheader', {name: 'Widen a column'})).toBeVisible();
     await userEvent.click(within(recipe).getByText(/The trader can sort by column/));
     expect(within(recipe).getByRole('link', {name: /Drag sort list demo/}))
       .toHaveAttribute('href', expect.stringContaining('tab=dragAndDrop'));
@@ -296,9 +318,11 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/Both parties slide, each by the other\u2019s share/);
     expect(recipe).toHaveTextContent(/Let the slide pace the key/);
     expect(recipe).toHaveTextContent(/getAnimations/);
-    await userEvent.click(within(recipe).getByText(/sort without a mouse/));
+    await userEvent.click(within(recipe).getByText(/The trader can sort by column/));
     expect(recipe).toHaveTextContent(/a timer matched to the CSS by hand/);
-    expect(recipe.querySelectorAll('.story')).toHaveLength(1);
+    expect(recipe).toHaveTextContent(/The trader can sort by row/);
+    expect(recipe).toHaveTextContent(/Turn the arrows vertical/);
+    expect(recipe.querySelectorAll('.story')).toHaveLength(2);
     expect(within(recipe).getByRole('link', {name: 'getAnimations'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/Element/getAnimations'));
     expect(recipe).not.toHaveTextContent(/Draw the ghost by hand/);
@@ -500,7 +524,7 @@ describe('the tables demo', () => {
         const {unmount} = renderTables(urlOf(feed), `?tab=tables&tut=sort&${build}`);
         expect(await screen.findByText('The trader can sort by column')).toBeInTheDocument();
         await userEvent.click(screen.getByRole('button', {name: 'By keyboard'}));
-        expect(await screen.findByText('The trader can sort without a mouse')).toBeInTheDocument();
+        expect(await screen.findByText('Give focus a place to land')).toBeInTheDocument();
         unmount();
       }
     }, 20000);

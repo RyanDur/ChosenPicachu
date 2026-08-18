@@ -7,7 +7,7 @@ import {Term} from '../Term';
 import {frameMarks, gap, settlesSource} from './sources';
 
 export const animatedMotion = (world: World, tableSource: string, cssSource: string): ReactNode =>
-  <Step title="Slide the drawing, not the layout" dial={<MotionDial name="step-motion"/>}>
+  <Step title="Slide the drawing, not the layout" dial={<MotionDial name="step-motion"/>} id="step-motion">
     <Words want="The trader must be able to follow which column went where. A teleport is honest but unreadable, and animating the layout itself would bounce the whole table, because layout is load-bearing.">
       <Says>The reorder has to land instantly for the drag math to stay true, so only the
         drawing can move: commit the swap at once, then draw the displaced column where it used
@@ -75,7 +75,7 @@ export const animatedMotion = (world: World, tableSource: string, cssSource: str
   </Step>;
 
 export const staticMotion = (world: World, tableSource: string): ReactNode =>
-  <Step title="Leave the motion out" dial={<MotionDial name="step-motion"/>}>
+  <Step title="Leave the motion out" dial={<MotionDial name="step-motion"/>} id="step-motion">
     <Words want="Motion is not free: it competes with the pointer, costs a frame budget, and some traders ask for none at all.">
       <Says>No motion should mean no motion code: not the animated table with its slides
         switched off, but a file with nothing to switch. Its settle should read as the whole

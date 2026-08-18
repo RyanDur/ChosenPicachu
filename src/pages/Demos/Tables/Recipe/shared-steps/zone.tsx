@@ -5,7 +5,7 @@ import {Term} from '../Term';
 import {gap, surveySource} from './sources';
 
 export const deadZone =
-  <Step title="Find the neighbour under the pointer, with a dead zone">
+  <Step title="Find the neighbour under the pointer, with a dead zone" id="step-dead-zone">
     <Words want="A drift along a boundary must not chatter the order under the hand.">
       <Says>Where the pointer is, in table terms, should be arithmetic on the <Term word="survey">survey</Term>,
         not <Mdn path="Web/API/Document/elementFromPoint">elementFromPoint</Mdn> under a moving

@@ -231,7 +231,7 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
             the feed writes the next value and the table quietly stops being sorted. A sort
             applied once is stale by the next trade, and this data never stops trading.</Says>
           <Says>So the rule drapes: <Term word="standing">standing</Term> re-ranks on
-            every {world === 'react' ? 'render' : 'paint'}, and as values change underneath, your rows keep trading places to
+            every {world === 'react' ? 'render' : 'paint'}, and as values change underneath, the rows keep trading places to
             stay sorted. Bake and the sort is a moment; drape and it is a property.</Says>
           <Codes>
             <Snippet label="TS" lines={[

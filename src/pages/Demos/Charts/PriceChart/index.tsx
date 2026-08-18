@@ -53,7 +53,7 @@ export const PriceChart: FC<Props> = ({trades, id = 'price', actions}) => {
   const points = sparklinePoints(view.series, CHART_WIDTH, CHART_HEIGHT, 2 * bucketMs[period]);
   const line = points.map(point => `${point.x},${point.y}`).join(' ');
   const trend = showing && view.last >= view.first ? 'rising' : 'falling';
-  return <section aria-label="live trades" className="price-chart chart paper rounded-corners drop-shadow padded" data-trend={trend}>
+  return <section aria-label="live trades" className="price-chart chart white rounded-corners drop-shadow padded" data-trend={trend}>
     <header className="chart-header">
       {actions}
       <Menu id={`${id}-period`} label="price period" toggle={period} toggleClassName="period-toggle paper caption">
