@@ -14,7 +14,8 @@
     "preview": "vite preview",
     "tsc": "tsc -b",
     "lint:css": "stylelint --max-warnings 0 'src/**/*.css'",
-    "lighthouse:record": "node scripts/lighthouse/record.mjs"
+    "lighthouse:record": "node scripts/lighthouse/record.mjs",
+    "media": "playwright test --config=playwright.media.config.ts"
   },
   "dependencies": {
     "@ryandur/sand": "^10.0.0",
