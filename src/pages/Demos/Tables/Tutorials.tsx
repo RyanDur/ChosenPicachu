@@ -60,7 +60,7 @@ export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack}) => {
       </li>
       <li className="station">
         <StorySlices/>
-        <p className="overview paragraph">
+        <p className="verdict paragraph">
           If you want the exercise, stop here and build the story yourself first. The table is
           our interpretation of that; the cards below break the interpretation into features.
           Open one to see how we built it, or to compare it with yours. The links go to MDN if
