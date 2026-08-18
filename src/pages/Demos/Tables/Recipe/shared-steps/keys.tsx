@@ -4,7 +4,7 @@ import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, aside} from '../../../Re
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {Term} from '../Term';
-import {gap, settlesSource, travelSource} from './sources';
+import {frameMount, gap, settlesSource, travelSource} from './sources';
 
 export const bothSlide = (world: World, headerSource: string, buildSrc: string, cssSource: string): ReactNode =>
   <Step title="Both parties slide, each by the other’s share" dial={<MotionDial name="step-motion"/>}>
@@ -90,6 +90,36 @@ export const cutKey = (world: World, headerSource: string, buildSrc: string): Re
             ...span(buildSrc, 'column: (mounted, held) => staticColumnArrows', 'column: (mounted, held) => staticColumnArrows'),
             aside('// the whole walk; nothing marked, nothing to wait for')
           ]}/>}
+      </Codes>
+    </Reveal>
+  </Step>;
+
+export const gripArrows = (world: World, rowSrc: string, buildSrc: string, arrows: string): ReactNode =>
+  <Step title="Turn the arrows vertical">
+    <Words want="A row is the same walk turned vertical, and the grip is already a button under the fingers.">
+      <Says>Nothing new should be needed: the grip was focusable from its first appearance, so
+        up and down claim the vertical walk the way left and right claimed the horizontal one,
+        with the same anchors holding and the same pacing riding whatever motion the build
+        declares.</Says>
+    </Words>
+    <Reveal>
+      <Says>The grip listens for the arrows itself, and the walk is the column walk with the
+        axis turned: the seats shuffle instead of the order, the dealt edges hold, and the
+        marks and pacing ride the build unchanged.</Says>
+      <Codes>
+        {world === 'react'
+          ? <Snippet label="TS" lines={[
+            ...span(rowSrc, 'onArrows={', 'onArrows={'),
+            aside('// the grip hears its own arrows; the walk is shared')
+          ]}/>
+          : <Snippet label="TS" lines={[
+            ...span(frameMount, "grip.addEventListener('keydown'", "grip.addEventListener('keydown'"), gap,
+            ...span(buildSrc, arrows, arrows),
+            aside('// the grip hears its own arrows; the walk is shared')
+          ]}/>}
+        <Snippet label="TS" lines={[
+          ...unit(travelSource, `export const ${arrows}`)
+        ]}/>
       </Codes>
     </Reveal>
   </Step>;

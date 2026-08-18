@@ -69,7 +69,7 @@ export const Term: FC<PropsWithChildren<{word: Word}>> = ({word, children}) => {
             onBlur={() => concealed(id)}>{children ?? word}</button>
     <span id={id}
           popover="auto"
-          className="term-definition paper rounded-corners drop-shadow"
+          className="term-definition white rounded-corners drop-shadow"
           style={{'--term-anchor': anchor}}>{definitions[word]}</span>
   </>;
 };

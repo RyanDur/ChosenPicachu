@@ -1,0 +1,212 @@
+.tutorials {
+  .spine {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    justify-self: stretch;
+    display: grid;
+    counter-reset: station;
+  }
+
+  .station {
+    counter-increment: station;
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--base-x-5) minmax(0, 1fr);
+    column-gap: var(--base-x-2);
+    row-gap: var(--base-x-2_5);
+    padding-block: var(--base-x-2_5);
+  }
+
+  .station::before {
+    content: counter(station);
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: center;
+    display: grid;
+    place-items: center;
+    width: var(--base-x-4);
+    height: var(--base-x-4);
+    border-radius: 50%;
+    background: var(--void);
+    color: var(--white);
+    font-weight: bold;
+    z-index: 1;
+  }
+
+  .station::after {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: calc((var(--base-x-5) - var(--hairline-x-2)) / 2);
+    width: var(--hairline-x-2);
+    background: var(--shadow);
+  }
+
+  .station:first-child::after {
+    inset-block-start: var(--base-x-2_5);
+  }
+
+  .station:last-child::after {
+    inset-block-end: auto;
+    height: calc(var(--base-x-2_5) + var(--base-x-4));
+  }
+
+  .station > * {
+    grid-column: 2;
+  }
+
+  .verdict {
+    margin: 0;
+    font-size: var(--text-title);
+  }
+
+  .phase {
+    justify-self: stretch;
+    padding: var(--base-x-3);
+    display: grid;
+    gap: var(--base-x-2_5);
+    justify-items: start;
+  }
+
+  .phase-title {
+    margin: 0;
+    font-size: var(--text-headline);
+    text-wrap: balance;
+  }
+
+  .phase .overview {
+    color: var(--charcoal);
+  }
+
+  .phase .story.arriving {
+    justify-self: stretch;
+    padding: var(--base-x-2);
+    display: grid;
+    gap: var(--base);
+
+    .can {
+      margin: 0;
+      font-size: var(--text-body);
+      font-weight: bold;
+      text-wrap: pretty;
+    }
+
+    .so-that {
+      margin: 0;
+      font-size: var(--text-body);
+      font-style: italic;
+      color: var(--charcoal);
+      text-wrap: pretty;
+    }
+  }
+
+  .phase .feedback {
+    padding: var(--base-x-2);
+    background: var(--faded-leather);
+
+    .attribution {
+      padding-inline-start: calc(var(--base-x-2) + var(--hairline-x-3));
+    }
+  }
+
+  .tutorial-table {
+    justify-self: stretch;
+    border-collapse: collapse;
+
+    th,
+    td {
+      padding: var(--base-x-1_5) var(--base-x-2);
+      border-block-end: var(--hairline) solid var(--shadow);
+      text-align: start;
+      vertical-align: top;
+    }
+
+    thead th {
+      font-size: var(--text-caption);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      border-block-end: var(--hairline-x-2) solid var(--void);
+    }
+
+    th:first-child,
+    td:first-child {
+      padding-inline-start: 0;
+    }
+
+    tbody tr:last-child th,
+    tbody tr:last-child td {
+      border-block-end: none;
+    }
+
+    .clue {
+      font-style: italic;
+      font-weight: normal;
+      min-width: 18ch;
+    }
+
+    .tells {
+      color: var(--charcoal);
+    }
+  }
+
+  .design-still {
+    margin: 0;
+    justify-self: stretch;
+    padding: var(--base-x-2_5);
+    border: var(--hairline-x-2) dashed var(--charcoal);
+    display: grid;
+    gap: var(--base-x-2);
+  }
+
+  .design-sketch {
+    display: grid;
+    gap: var(--base);
+  }
+
+  .design-header,
+  .design-row {
+    display: grid;
+    grid-template-columns: 14ch repeat(6, minmax(0, 1fr));
+    gap: var(--base);
+    align-items: center;
+  }
+
+  .design-measure {
+    font-size: var(--text-caption);
+    font-weight: bold;
+  }
+
+  .design-window {
+    font-size: var(--text-caption);
+    color: var(--charcoal);
+  }
+
+  .design-cell {
+    height: var(--base-x-2_5);
+    border: var(--hairline) solid var(--shadow);
+  }
+
+  .unanswered {
+    justify-self: stretch;
+    padding: var(--base-x-2_5);
+    display: grid;
+    gap: var(--base-x-1_5);
+  }
+
+  .unanswered-title {
+    margin: 0;
+    font-size: var(--text-caption);
+    letter-spacing: 0.08em;
+    color: var(--charcoal);
+  }
+
+  .unanswered-list {
+    margin: 0;
+    padding-inline-start: var(--base-x-2_5);
+    display: grid;
+    gap: var(--base);
+  }
+
+}

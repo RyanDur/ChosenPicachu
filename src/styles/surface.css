@@ -1,10 +1,12 @@
 .paper { background: var(--paper); }
 
+.white { background: var(--white); }
+
 .silk { background: var(--silk); }
 
-.rounded-corners { border-radius: var(--radius-soft); }
+.rounded-corners { border-radius: var(--radius); }
 
-.drop-shadow { box-shadow: var(--drop-shadow); }
+.drop-shadow { box-shadow: var(--light-box-shadow); }
 
 .raised { box-shadow: var(--raised); }
 

@@ -22,7 +22,7 @@ type Props = {
 export const Pie: FC<Props> = ({trades, actions}) => {
   const totals = sideTotals(trades);
   const cut = slices([totals.bought, totals.sold]);
-  return <section aria-label="pie" className="pie chart paper rounded-corners drop-shadow padded">
+  return <section aria-label="pie" className="pie chart white rounded-corners drop-shadow padded">
     <header className="chart-header">
       {actions}
     </header>

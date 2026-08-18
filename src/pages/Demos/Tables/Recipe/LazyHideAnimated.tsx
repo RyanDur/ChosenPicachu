@@ -12,6 +12,7 @@ import {
   deadZone,
   dragSurface,
   focusLands,
+  gripArrows,
   ghostByHand,
   hideOrigin,
   lazyPace,
@@ -27,6 +28,7 @@ import {
   twoRoads
 } from './shared-steps';
 import buildSrc from '../Frame/builds/LazyHideAnimated.ts?raw';
+import rowSource from '@components/DragSortableTable/LazyHideAnimatedTable/Row.tsx?raw';
 import tableSource from '@components/DragSortableTable/LazyHideAnimatedTable/LazyHideAnimatedTable.tsx?raw';
 import headerSource from '@components/DragSortableTable/LazyHideAnimatedTable/Header.tsx?raw';
 import cssSource from '@components/DragSortableTable/LazyHideAnimatedTable/LazyHideAnimatedTable.css?raw';
@@ -62,15 +64,24 @@ export const LazyHideAnimatedRecipe: FC<{track: Track; world: World}> = ({track,
       </Steps>
     </Story>
   </>
-  : <Story param="sort" id="keyboard" steps={4}
-           can="The trader can sort without a mouse"
-           soThat="the table answers whoever arrives at it">
-    {accessTrack}
-    {quietDials}
-    <Steps>
+  : <>
+    <Story param="sort" id="column" steps={4}
+           can="The trader can sort by column"
+           soThat="the measures they compare sit beside each other">
+      {accessTrack}
+      {quietDials}
+      <Steps>
       {focusLands(world, headerSource)}
       {arrowsSpeak(world, headerSource)}
       {bothSlide(world, headerSource, buildSrc, cssSource)}
       {paceKey(cssSource)}
-    </Steps>
-  </Story>;
+      </Steps>
+    </Story>
+    <Story param="sort" id="row" steps={1}
+           can="The trader can sort by row"
+           soThat="the windows they watch closest sit on top">
+      <Steps>
+        {gripArrows(world, rowSource, buildSrc, 'animatedRowArrows')}
+      </Steps>
+    </Story>
+  </>;

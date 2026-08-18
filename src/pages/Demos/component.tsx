@@ -64,25 +64,25 @@ export const DemosPage = () => {
               <ul className='accordions'>
                 <li className='list-title'>Different styles of Accordions.</li>
                 <li>
-                  <InclusiveAccordion className='paper rounded-corners drop-shadow padded' content={accordionContents[0]}/>
+                  <InclusiveAccordion className='white rounded-corners drop-shadow padded' content={accordionContents[0]}/>
                 </li>
                 <li>
-                  <ExclusiveAccordion className='paper rounded-corners drop-shadow padded' content={accordionContents[1]}/>
+                  <ExclusiveAccordion className='white rounded-corners drop-shadow padded' content={accordionContents[1]}/>
                 </li>
                 <li className="exclusive">
-                  <ExclusiveToggleAccordion className='paper rounded-corners drop-shadow padded' content={accordionContents[2]}/>
+                  <ExclusiveToggleAccordion className='white rounded-corners drop-shadow padded' content={accordionContents[2]}/>
                 </li>
                 <li>
-                  <ExclusiveCheckboxToggleAccordion className='paper rounded-corners drop-shadow padded' content={accordionContents[3]}/>
+                  <ExclusiveCheckboxToggleAccordion className='white rounded-corners drop-shadow padded' content={accordionContents[3]}/>
                 </li>
                 <li>
-                  <ExclusiveRadioToggleAccordion className='paper rounded-corners drop-shadow padded' content={accordionContents[4]}/>
+                  <ExclusiveRadioToggleAccordion className='white rounded-corners drop-shadow padded' content={accordionContents[4]}/>
                 </li>
               </ul>,
             [DemoTopics.zIndex]: <>
               <article>Z-Index Demo.</article>
-              <NaturalZIndex className='paper rounded-corners drop-shadow padded'/>
-              <TopLayer className='paper rounded-corners drop-shadow padded'/>
+              <NaturalZIndex className='white rounded-corners drop-shadow padded'/>
+              <TopLayer className='white rounded-corners drop-shadow padded'/>
               <Suspense fallback={<Loading label="loading the tutorial"/>}>
                 <TopLayerTutorial/>
               </Suspense>

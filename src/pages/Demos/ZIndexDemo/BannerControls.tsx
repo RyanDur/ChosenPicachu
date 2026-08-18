@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {PillGlider} from '@components/PillGlider';
 import {Align, Entrance, Side, Stack} from '@components/Banners/params';
-import './BannerControls.css';
+import '../Controls/Controls.css';
 
 type Copy = {
   side: Record<Side, string>;

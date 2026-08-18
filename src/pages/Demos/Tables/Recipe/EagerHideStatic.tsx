@@ -12,6 +12,7 @@ import {
   dragSurface,
   eagerPace,
   focusLands,
+  gripArrows,
   ghostByHand,
   hideOrigin,
   liftOnce,
@@ -26,6 +27,7 @@ import {
   twoRoads
 } from './shared-steps';
 import buildSrc from '../Frame/builds/EagerHideStatic.ts?raw';
+import rowSource from '@components/DragSortableTable/EagerHideStaticTable/Row.tsx?raw';
 import tableSource from '@components/DragSortableTable/EagerHideStaticTable/EagerHideStaticTable.tsx?raw';
 import headerSource from '@components/DragSortableTable/EagerHideStaticTable/Header.tsx?raw';
 import cssSource from '@components/DragSortableTable/EagerHideStaticTable/EagerHideStaticTable.css?raw';
@@ -61,14 +63,23 @@ export const EagerHideStaticRecipe: FC<{track: Track; world: World}> = ({track, 
       </Steps>
     </Story>
   </>
-  : <Story param="sort" id="keyboard" steps={3}
-           can="The trader can sort without a mouse"
-           soThat="the table answers whoever arrives at it">
-    {accessTrack}
-    {quietDials}
-    <Steps>
+  : <>
+    <Story param="sort" id="column" steps={3}
+           can="The trader can sort by column"
+           soThat="the measures they compare sit beside each other">
+      {accessTrack}
+      {quietDials}
+      <Steps>
       {focusLands(world, headerSource)}
       {arrowsSpeak(world, headerSource)}
       {cutKey(world, headerSource, buildSrc)}
-    </Steps>
-  </Story>;
+      </Steps>
+    </Story>
+    <Story param="sort" id="row" steps={1}
+           can="The trader can sort by row"
+           soThat="the windows they watch closest sit on top">
+      <Steps>
+        {gripArrows(world, rowSource, buildSrc, 'staticRowArrows')}
+      </Steps>
+    </Story>
+  </>;
