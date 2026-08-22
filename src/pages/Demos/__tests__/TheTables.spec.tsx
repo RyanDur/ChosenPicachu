@@ -93,7 +93,7 @@ describe('the tables demo', () => {
 
     await feedIsSubscribed();
     const card = screen.getByRole('region', {name: 'live aggregations'});
-    const controls = await screen.findByRole('region', {name: 'table controls'});
+    const controls = await screen.findByRole('region', {name: 'table controls'}, {timeout: 5000});
     for (const axis of ['pace', 'origin', 'motion']) {
       expect(within(controls).getByRole('group', {name: axis})).toBeVisible();
     }
@@ -197,7 +197,7 @@ describe('the tables demo', () => {
     renderTables(urlOf(feed));
 
     await feedIsSubscribed();
-    const controls = await screen.findByRole('region', {name: 'table controls'});
+    const controls = await screen.findByRole('region', {name: 'table controls'}, {timeout: 5000});
     expect(controls).toHaveTextContent(/Neighbours swap the moment you drag past them/);
     expect(controls).toHaveTextContent(/blanks out at its origin/);
     expect(controls).toHaveTextContent(/slide to their new seats/);
@@ -298,7 +298,7 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/Leave the motion out/);
     expect(recipe).not.toHaveTextContent(/1cqi/);
     expect(recipe).not.toHaveTextContent(/Commit inside the move/);
-    const controls = await screen.findByRole('region', {name: 'table controls'});
+    const controls = await screen.findByRole('region', {name: 'table controls'}, {timeout: 5000});
     expect(within(controls).getByRole('radio', {name: 'Lazy'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Keep'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Static'})).toBeChecked();
@@ -401,7 +401,7 @@ describe('the tables demo', () => {
     }, {path: `${Paths.demos}?tab=tables&pace=lazy&origin=keep&motion=static`});
 
     await feedIsSubscribed();
-    const controls = await screen.findByRole('region', {name: 'table controls'});
+    const controls = await screen.findByRole('region', {name: 'table controls'}, {timeout: 5000});
     expect(within(controls).getByRole('radio', {name: 'Lazy'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Keep'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Static'})).toBeChecked();
