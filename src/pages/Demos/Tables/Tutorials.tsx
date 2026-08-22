@@ -7,7 +7,7 @@ import {TableControls} from './TableControls';
 import {Picks} from './Picks';
 import {Recipe, Track} from './Recipe';
 import {LayerMap} from './Recipe/LayerMap';
-import {DialNote} from '../Recipe';
+import {DialNote, Exercise} from '../Recipe';
 import {StoryClues} from './Recipe/StoryClues';
 import {DesignAsk} from './Recipe/DesignAsk';
 import {StorySlices} from './Recipe/StorySlices';
@@ -59,12 +59,7 @@ export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack}) => {
       </li>
       <li className="station">
         <StorySlices/>
-        <p className="verdict paragraph">
-          If you want the exercise, stop here and build the story yourself first. The table is
-          our interpretation of that; the cards below break the interpretation into features.
-          Open one to see how we built it, or to compare it with yours. The links go to MDN if
-          you want more.
-        </p>
+        <Exercise interprets="table"/>
       </li>
       <li className="station">
         <StillTableRecipe/>
