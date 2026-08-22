@@ -1,6 +1,9 @@
 import {render, screen} from '@testing-library/react';
 import {renderWithMemoryRouter} from '@test-support';
-import {Demos, Gallery, Games, Users} from '@pages/index';
+import {Demos} from '@pages/Demos';
+import {Gallery} from '@pages/Gallery';
+import {Games} from '@pages/Games';
+import {Users} from '@pages/Users';
 import {PageError} from '@pages/PageError';
 import {createMemoryRouter, RouterProvider} from 'react-router';
 import {router} from '../../router';

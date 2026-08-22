@@ -35,27 +35,28 @@ const PieceHeader = () => {
 
 const GalleryFooter = () => <GalleryNav id="gallery-nav"/>;
 
+export const GalleryHome = {
+  path: GalleryPaths.home,
+  handle: {
+    header: GalleryHeader,
+    provider: GalleryProviders,
+    aside: PageControl,
+    footer: GalleryFooter,
+    mainClassName: 'in-view'
+  },
+  element: <ArtGalleryPage/>
+};
+
+export const GalleryPiece = {
+  path: GalleryPaths.piece,
+  handle: {header: PieceHeader, provider: GalleryProviders, mainClassName: 'in-view'},
+  element: <ArtGalleryPiecePage/>
+};
+
 export const Gallery = {
   path: Paths.artGallery,
   errorElement: <PageError/>,
   handle: {header: GalleryHeader, provider: GalleryProviders, mainClassName: 'in-view'},
   element: <Outlet/>,
-  children: [
-    {
-      path: GalleryPaths.home,
-      handle: {
-        header: GalleryHeader,
-        provider: GalleryProviders,
-        aside: PageControl,
-        footer: GalleryFooter,
-        mainClassName: 'in-view'
-      },
-      element: <ArtGalleryPage/>
-    },
-    {
-      path: GalleryPaths.piece,
-      handle: {header: PieceHeader, provider: GalleryProviders, mainClassName: 'in-view'},
-      element: <ArtGalleryPiecePage/>
-    }
-  ]
+  children: [GalleryHome, GalleryPiece]
 };

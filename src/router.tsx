@@ -4,8 +4,9 @@ import {Navigate, Outlet, useMatches} from 'react-router';
 import {Fragment} from 'react';
 import {SideNav} from '@pages/BasePage/SideNav';
 import {isRegions, Regions} from '@pages/regions';
-import {ChartTutorial, Demos, Gallery, Games, Users} from './pages';
 import {Paths} from '@pages/Paths';
+import {GalleryPaths} from '@pages/Gallery/GalleryRouter/GalleryPaths';
+import {GamePaths} from '@pages/Games/GamePaths';
 
 const NoHeader = () => null;
 
@@ -34,15 +35,36 @@ export const MountedTable = () => {
   </BannerProvider>;
 };
 
+/* Each page joins the bundle it navigates to: this skeleton carries only the
+   matchable paths, and every other route property arrives with the page's own
+   chunk, so no page downloads another page's code. */
+const without = <T extends {path?: string, children?: unknown}>({path, children, ...route}: T) => route;
+
 export const router = {
   path: '/',
   element: <MountedTable/>,
   children: [
     {path: Paths.home, element: <Navigate to={Paths.demos} replace/>},
-    Demos,
-    ChartTutorial,
-    Users,
-    Gallery,
-    Games
+    {path: Paths.demos, lazy: () => import('@pages/Demos').then(({Demos}) => without(Demos))},
+    {
+      path: `${Paths.demos}charts/:kind/`,
+      lazy: () => import('@pages/Demos').then(({ChartTutorial}) => without(ChartTutorial))
+    },
+    {path: Paths.users, lazy: () => import('@pages/Users').then(({Users}) => without(Users))},
+    {
+      path: Paths.artGallery,
+      lazy: () => import('@pages/Gallery').then(({Gallery}) => without(Gallery)),
+      children: [
+        {path: GalleryPaths.home, lazy: () => import('@pages/Gallery').then(({GalleryHome}) => without(GalleryHome))},
+        {path: GalleryPaths.piece, lazy: () => import('@pages/Gallery').then(({GalleryPiece}) => without(GalleryPiece))}
+      ]
+    },
+    {
+      path: `${Paths.games}*`,
+      lazy: () => import('@pages/Games').then(({Games}) => without(Games)),
+      children: [
+        {path: GamePaths.colorGame, lazy: () => import('@pages/Games').then(({ColorGame}) => without(ColorGame))}
+      ]
+    }
   ]
 };
