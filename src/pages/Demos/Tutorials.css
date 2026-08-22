@@ -1,7 +1,3 @@
-/* The glide belongs to the interaction, not the document: while a station
-   link is under the pointer or holds keyboard focus, the fragment scroll it
-   triggers runs smooth; every other scroll on the page keeps the platform
-   default. Clicks leave focus on the body, so hover carries the mouse case. */
 html:has(.slice-station:hover, .slice-station:focus) {
   scroll-behavior: smooth;
 }
