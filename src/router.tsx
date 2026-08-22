@@ -1,10 +1,11 @@
 import {classNames} from '@components/class-names';
 import {BannerProvider, Banners} from '@components/Banners';
-import {Navigate, Outlet, useMatches} from 'react-router';
+import {Outlet, useMatches} from 'react-router';
 import {Fragment} from 'react';
 import {SideNav} from '@pages/BasePage/SideNav';
 import {isRegions, Regions} from '@pages/regions';
 import {Paths} from '@pages/Paths';
+import {Home} from '@pages/Home';
 import {Users} from '@pages/Users';
 import {Gallery} from '@pages/Gallery';
 import {Games} from '@pages/Games';
@@ -40,7 +41,7 @@ export const router = {
   path: '/',
   element: <MountedTable/>,
   children: [
-    {path: Paths.home, element: <Navigate to={Paths.demos} replace/>},
+    Home,
     {path: Paths.demos, lazy: () => import('@pages/Demos').then(({Demos}) => Demos)},
     {path: Paths.chartTutorial, lazy: () => import('@pages/Demos').then(({ChartTutorial}) => ChartTutorial)},
     Users,

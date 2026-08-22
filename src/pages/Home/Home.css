@@ -1,0 +1,120 @@
+.home {
+  display: grid;
+  gap: var(--base-x-3);
+  padding: var(--base-x-3);
+
+  .feedback {
+    margin: 0;
+    max-width: var(--measure);
+    display: grid;
+    gap: var(--base);
+  }
+
+  .quote {
+    margin: 0;
+    padding-left: var(--base-x-2);
+    border-left: var(--hairline-x-3) solid var(--silk);
+    font-style: italic;
+    text-wrap: pretty;
+  }
+
+  .attribution {
+    padding-inline-start: calc(var(--base-x-2) + var(--hairline-x-3));
+    color: var(--charcoal);
+  }
+
+  .thesis {
+    margin: 0;
+    max-width: var(--measure);
+    text-wrap: pretty;
+  }
+
+  .record {
+    display: grid;
+    gap: var(--base-x-2_5);
+  }
+
+  .record-title,
+  .door-title {
+    margin: 0;
+    font-size: var(--text-headline);
+    text-wrap: balance;
+  }
+
+  .timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+  }
+
+  .moment {
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--base-x-8) minmax(0, 1fr);
+    column-gap: var(--base-x-2);
+    padding-block: var(--base-x-2);
+  }
+
+  .moment::after {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: calc(var(--base-x-8) + var(--base-x-2) / 2 - var(--hairline));
+    width: var(--hairline-x-2);
+    background: var(--shadow);
+  }
+
+  .moment:first-child::after {
+    inset-block-start: var(--base-x-2);
+  }
+
+  .moment:last-child::after {
+    inset-block-end: auto;
+    height: var(--base-x-2);
+  }
+
+  .year {
+    justify-self: end;
+    align-self: start;
+    font-weight: bold;
+    color: var(--charcoal);
+  }
+
+  .beat {
+    display: grid;
+    gap: var(--base);
+    padding-inline-start: var(--base-x-2);
+  }
+
+  .beat-title {
+    margin: 0;
+    font-size: var(--text-title);
+    text-wrap: balance;
+  }
+
+  .beat-tells {
+    margin: 0;
+    max-width: var(--measure);
+    color: var(--charcoal);
+    text-wrap: pretty;
+  }
+
+  .door {
+    display: grid;
+    gap: var(--base-x-2);
+    max-width: var(--measure);
+
+    .paragraph {
+      margin: 0;
+      text-wrap: pretty;
+    }
+  }
+
+  .tee-up {
+    margin: 0;
+    max-width: var(--measure);
+    font-size: var(--text-title);
+    text-wrap: pretty;
+  }
+}
