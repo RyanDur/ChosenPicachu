@@ -77,10 +77,10 @@ type SlicesProps = {
 };
 
 /* A clicked station anchor glides natively on the html scroll-behavior, but
-   a hash arriving in the url finds nothing: the stations mount from a lazy
-   chunk after the browser has stopped honoring the fragment. This lands the
-   late arrival in one frame; anything smooth here would read as a lurch from
-   the top of the page. */
+   a hash arriving in the url finds nothing: the browser looks for the
+   fragment while parsing the html, before React has rendered any station,
+   and never looks again. This lands the late arrival in one frame; anything
+   smooth here would read as a lurch from the top of the page. */
 export const Slices: FC<SlicesProps> = ({who, can, soThat, slices, sliced}) => {
   useEffect(() => {
     document.getElementById(location.hash.slice(1))?.scrollIntoView({behavior: 'instant'});
