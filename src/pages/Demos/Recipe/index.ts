@@ -1,5 +1,5 @@
 export {Stories} from './Stories';
-export {DialNote, Overview} from './Overview';
+export {DialNote} from './DialNote';
 export {Story} from './Story';
 export {Tell} from './Tell';
 export {Steps} from './Steps';
@@ -7,6 +7,8 @@ export {Step} from './Step';
 export {Words} from './Words';
 export {Says} from './Says';
 export {Reveal} from './Reveal';
+export {Defined} from './Defined';
+export {Clues, Design, Slices} from './Arc';
 export {Codes} from './Codes';
 export {Snippet} from './Snippet';
 export {aside, plain} from './lines';

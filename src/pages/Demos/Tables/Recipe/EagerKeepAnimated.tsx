@@ -23,7 +23,7 @@ import {
   paceKey,
   promises,
   quietDials,
-  theaterVertical,
+  carryVertical,
   turnedVertical,
   twoRoads
 } from './shared-steps';
@@ -60,7 +60,7 @@ export const EagerKeepAnimatedRecipe: FC<{track: Track; world: World}> = ({track
            soThat="the windows they watch closest sit on top">
       {turnedVertical}
       <Steps>
-        {theaterVertical(world, tableSource)}
+        {carryVertical(world, tableSource)}
       </Steps>
     </Story>
   </>

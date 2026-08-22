@@ -20,7 +20,7 @@ import itemSource from '../items/HideItem.tsx?raw';
 import cssSource from '../LazyHideAnimatedList/LazyHideAnimatedList.css?raw';
 
 export const LazyHideAnimatedRecipe: FC = () => <>
-  <Story param="native" id="sort"
+  <Story param="native" id="sort" steps={8}
          can="The user can sort the list"
          soThat="it reads in the order they mean">
     {platformCurrency}

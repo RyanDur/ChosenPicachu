@@ -22,7 +22,7 @@ import {
   promises,
   quietDials,
   staticMotion,
-  theaterVertical,
+  carryVertical,
   turnedVertical,
   twoRoads
 } from './shared-steps';
@@ -58,7 +58,7 @@ export const EagerKeepStaticRecipe: FC<{track: Track; world: World}> = ({track, 
            soThat="the windows they watch closest sit on top">
       {turnedVertical}
       <Steps>
-        {theaterVertical(world, tableSource)}
+        {carryVertical(world, tableSource)}
       </Steps>
     </Story>
   </>

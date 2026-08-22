@@ -3,7 +3,7 @@ import {unit} from '../../../Recipe/carve';
 import {gap} from './sources';
 
 export const straightToOrder = (gripSource: string) =>
-  <Story param="native" id="keyboard"
+  <Story param="native" id="keyboard" steps={1}
          can="The user can sort without a mouse"
          soThat="the keys go straight to the order">
     <Tell>Drag-and-drop never answers the keyboard, and it does not matter: dragging
