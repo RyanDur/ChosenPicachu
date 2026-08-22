@@ -1,4 +1,4 @@
-import {FC, ReactNode} from 'react';
+import {FC, ReactNode, useEffect} from 'react';
 
 type CluesProps = {
   quote: string;
@@ -76,8 +76,16 @@ type SlicesProps = {
   sliced: [string, string][];
 };
 
-export const Slices: FC<SlicesProps> = ({who, can, soThat, slices, sliced}) =>
-  <section className="phase white rounded-corners drop-shadow" aria-label="the stories">
+/* A clicked station anchor glides natively on the html scroll-behavior, but
+   a hash arriving in the url finds nothing: the stations mount from a lazy
+   chunk after the browser has stopped honoring the fragment. This lands the
+   late arrival in one frame; anything smooth here would read as a lurch from
+   the top of the page. */
+export const Slices: FC<SlicesProps> = ({who, can, soThat, slices, sliced}) => {
+  useEffect(() => {
+    document.getElementById(location.hash.slice(1))?.scrollIntoView({behavior: 'instant'});
+  }, []);
+  return <section className="phase white rounded-corners drop-shadow" aria-label="the stories">
     <h3 className="phase-title">Generate the stories from the design</h3>
     <p className="overview paragraph">
       With the need heard and the design answering shape, the work splits into stories: each
@@ -101,3 +109,4 @@ export const Slices: FC<SlicesProps> = ({who, can, soThat, slices, sliced}) =>
         </li>)}
     </ul>
   </section>;
+};
