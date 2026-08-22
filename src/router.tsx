@@ -36,18 +36,13 @@ export const MountedTable = () => {
   </BannerProvider>;
 };
 
-const without = <T extends {path?: string, children?: unknown}>({path, children, ...route}: T) => route;
-
 export const router = {
   path: '/',
   element: <MountedTable/>,
   children: [
     {path: Paths.home, element: <Navigate to={Paths.demos} replace/>},
-    {path: Paths.demos, lazy: () => import('@pages/Demos').then(({Demos}) => without(Demos))},
-    {
-      path: `${Paths.demos}charts/:kind/`,
-      lazy: () => import('@pages/Demos').then(({ChartTutorial}) => without(ChartTutorial))
-    },
+    {path: Paths.demos, lazy: () => import('@pages/Demos').then(({Demos}) => Demos)},
+    {path: Paths.chartTutorial, lazy: () => import('@pages/Demos').then(({ChartTutorial}) => ChartTutorial)},
     Users,
     Gallery,
     Games

@@ -12,6 +12,10 @@ html {
   font-size: 62.5%;
 }
 
+html:has(.slice-station:hover, .slice-station:focus) {
+  scroll-behavior: smooth;
+}
+
 body {
   font-size: var(--base-x-2);
   font-family: Arial, sans-serif;

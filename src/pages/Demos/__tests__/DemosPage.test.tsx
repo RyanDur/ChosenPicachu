@@ -7,7 +7,7 @@ import {Demos} from '@pages/Demos';
 
 describe('The Demos page', () => {
   test('on initial render', async () => {
-    renderWithMemoryRouter(Demos, {path: Paths.demos});
+    renderWithMemoryRouter({path: Paths.demos, ...Demos}, {path: Paths.demos});
 
     await waitFor(() => {
       const main = screen.getByRole('main');
@@ -16,7 +16,7 @@ describe('The Demos page', () => {
   });
 
   test('when going to the z-index demo', async () => {
-    renderWithMemoryRouter(Demos, {path: Paths.demos});
+    renderWithMemoryRouter({path: Paths.demos, ...Demos}, {path: Paths.demos});
 
     const demoTabs = await screen.findByRole('navigation', {name: 'demos'});
     await userEvent.click(within(demoTabs).getByText('Z-Index'));

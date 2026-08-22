@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
 import {motionParam, originParam, paceParam} from '../Controls';
 import {Clues, Design, Slices} from '../Recipe/Arc';
-import {DialNote, Exercise} from '../Recipe';
+import {DialNote, Exercise, useArrival} from '../Recipe';
 import {ListControls} from './ListControls';
 import {NativeRecipe} from './NativeRecipe';
 import '../Tutorials.css';
@@ -32,6 +32,7 @@ const unanswered = [
 export const ListTutorials: FC = () => {
   const {pace = 'eager', origin = 'hide', motion = 'animated', updateSearchParams} =
     useSearchParamsObject({pace: paceParam, origin: originParam, motion: motionParam});
+  useArrival();
   return <section className="tutorials">
     <h2 className="tutorials-title">let’s build this feature</h2>
     <ol className="spine">

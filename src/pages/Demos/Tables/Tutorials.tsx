@@ -7,7 +7,7 @@ import {TableControls} from './TableControls';
 import {Picks} from './Picks';
 import {Recipe, Track} from './Recipe';
 import {LayerMap} from './Recipe/LayerMap';
-import {DialNote, Exercise} from '../Recipe';
+import {DialNote, Exercise, useArrival} from '../Recipe';
 import {StoryClues} from './Recipe/StoryClues';
 import {DesignAsk} from './Recipe/DesignAsk';
 import {StorySlices} from './Recipe/StorySlices';
@@ -37,6 +37,7 @@ type Props = {
 export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack}) => {
   const {pace = 'eager', origin = 'hide', motion = 'animated', world = 'react', updateSearchParams} =
     useSearchParamsObject({pace: paceParam, origin: originParam, motion: motionParam, world: worldParam});
+  useArrival();
   return <section className="tutorials">
     <header className="tutorials-header">
       <h2 className="tutorials-title">let’s build this feature</h2>

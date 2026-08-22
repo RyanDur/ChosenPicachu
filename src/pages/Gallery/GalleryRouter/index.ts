@@ -1,1 +1,0 @@
-export {GalleryPaths} from './GalleryPaths';

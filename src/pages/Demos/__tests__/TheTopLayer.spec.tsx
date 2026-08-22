@@ -11,7 +11,7 @@ const troublesIn = (alert: HTMLElement): HTMLElement[] =>
   within(alert).queryAllByRole('button', {name: /^dismiss /, hidden: true});
 
 const openZIndexTab = async () => {
-  renderWithMemoryRouter(Demos, {path: Paths.demos});
+  renderWithMemoryRouter({path: Paths.demos, ...Demos}, {path: Paths.demos});
   const demoTabs = await screen.findByRole('navigation', {name: 'demos'});
   await userEvent.click(within(demoTabs).getByText('Z-Index'));
 };
