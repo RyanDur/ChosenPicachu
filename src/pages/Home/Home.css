@@ -19,6 +19,7 @@
 
   .attribution {
     padding-inline-start: calc(var(--base-x-2) + var(--hairline-x-3));
+    font-size: var(--text-caption);
     color: var(--charcoal);
   }
 
