@@ -150,13 +150,8 @@
     }
   }
 
-  .phase .feedback {
-    padding: var(--base-x-2);
-    background: var(--faded-leather);
-
-    .attribution {
-      padding-inline-start: calc(var(--base-x-2) + var(--hairline-x-3));
-    }
+  .phase .feedback .attribution {
+    padding-inline-start: calc(var(--base-x-2) + var(--hairline-x-3));
   }
 
   .tutorial-table {
