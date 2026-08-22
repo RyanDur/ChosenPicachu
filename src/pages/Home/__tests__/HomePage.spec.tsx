@@ -31,6 +31,23 @@ describe('the home page', () => {
     expect(screen.getByText(/a much livelier Web/)).toBeVisible();
   });
 
+  test('the history cites its sources', () => {
+    expect(screen.getByRole('link', {name: /proposing the WorldWideWeb/}))
+      .toHaveAttribute('href', expect.stringContaining('w3.org/History'));
+    expect(screen.getByRole('link', {name: /drafted Cascading HTML Style Sheets/}))
+      .toHaveAttribute('href', expect.stringContaining('w3.org/People/howcome'));
+    expect(screen.getByRole('link', {name: /never become a page-description language/}))
+      .toHaveAttribute('href', expect.stringContaining('w3.org/Style/LieBos2e'));
+    expect(screen.getByRole('link', {name: /the Acid Test/}))
+      .toHaveAttribute('href', expect.stringContaining('w3.org/Style/CSS/Test'));
+    expect(screen.getByRole('link', {name: /one HTML document/}))
+      .toHaveAttribute('href', expect.stringContaining('csszengarden.com'));
+    expect(screen.getByRole('link', {name: /built JavaScript in ten days/}))
+      .toHaveAttribute('href', expect.stringContaining('auth0.com'));
+    expect(screen.getByRole('link', {name: /reducing the overlap/}))
+      .toHaveAttribute('href', expect.stringContaining('html.com/html5'));
+  });
+
   test('each door and the closing walk into the demos', () => {
     expect(screen.getByRole('link', {name: /carry the still table/}))
       .toHaveAttribute('href', expect.stringContaining('tab=tables#station-4'));
