@@ -57,6 +57,7 @@
   }
 
   .station {
+    scroll-margin-block-start: var(--base-x-2);
     counter-increment: station;
     position: relative;
     display: grid;

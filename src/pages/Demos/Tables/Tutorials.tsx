@@ -51,23 +51,23 @@ export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack}) => {
     </header>
     <p className="paragraph">{worldCopy[world]}</p>
     <ol className="spine">
-      <li className="station">
+      <li className="station" id="station-1">
         <StoryClues/>
       </li>
-      <li className="station">
+      <li className="station" id="station-2">
         <DesignAsk/>
       </li>
-      <li className="station">
+      <li className="station" id="station-3">
         <StorySlices/>
         <Exercise interprets="table"/>
       </li>
-      <li className="station">
+      <li className="station" id="station-4">
         <StillTableRecipe/>
       </li>
-      <li className="station">
+      <li className="station" id="station-5">
         <FlowTableRecipe/>
       </li>
-      <li className="station">
+      <li className="station" id="station-6">
         <h3 className="phase-title">Layer on functionality, in the order it was asked for</h3>
         <LayerMap/>
         <Picks label="tutorials"

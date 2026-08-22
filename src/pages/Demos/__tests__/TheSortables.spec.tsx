@@ -173,6 +173,9 @@ describe('the sortable list demo', () => {
     const sliced = within(screen.getByRole('list', {name: 'the slices'}));
     ['The user can sort the list', 'The user can sort without a mouse']
       .forEach(slice => expect(sliced.getByText(slice).closest('li')).toHaveTextContent('station 4'));
+    expect(sliced.getAllByRole('link').map(link => link.getAttribute('href')))
+      .toEqual(['#station-4', '#station-4']);
+    expect(document.getElementById('station-4')).toHaveClass('station');
     expect(screen.getByRole('heading', {name: 'The user can keep the list in the order they mean'})).toBeVisible();
     expect(screen.getByRole('link', {name: 'user story'}))
       .toHaveAttribute('href', expect.stringContaining('initialcapacity.io/insights/user-story'));
