@@ -1,8 +1,4 @@
 import {useState} from 'react';
-import {Tutorials} from './Tables/Tutorials';
-import {ListTutorials} from './DragAndDrop/Tutorials';
-import {ChartsTutorial} from './Charts/Tutorial';
-import {TopLayerTutorial} from './ZIndexDemo/Tutorial';
 import {randParagraph, randWord} from '@components/fibs';
 import {useSearchParamsObject} from '@components/search-params';
 import './style.css';
@@ -22,6 +18,10 @@ import {
 } from './DragAndDrop';
 import {DemoTopics, demoTopicParam} from './types';
 import {NaturalZIndex, TopLayer} from './ZIndexDemo';
+import {Tutorials} from './Tables/Tutorials';
+import {ListTutorials} from './DragAndDrop/Tutorials';
+import {ChartsTutorial} from './Charts/Tutorial';
+import {TopLayerTutorial} from './ZIndexDemo/Tutorial';
 import {motionParam, originParam, paceParam} from './Controls';
 import {Aggregations, trackParam, tutorialParam, worldParam} from './Tables';
 import {useLiveTrades} from './Charts/useLiveTrades';
@@ -33,7 +33,6 @@ const paragraphs = (count: number) =>
     key,
     value: Array.from({length: Math.floor(Math.random() * 6) + 1}, () => randParagraph()).join('\n\n')
   }));
-
 
 export const DemosPage = () => {
   const {tab, pace = 'eager', origin = 'hide', motion = 'animated', tut = 'sort', track = 'pointer', world = 'react', updateSearchParams} =

@@ -1,4 +1,3 @@
-import {Paths} from '@pages/Paths';
 import {PageError} from '@pages/PageError';
 import {Header} from '@pages/BasePage/Header';
 import {useSearchParamsObject} from '@components/search-params';
@@ -12,14 +11,12 @@ const DemosHeader = () => {
 };
 
 export const Demos = {
-  path: Paths.demos,
   errorElement: <PageError/>,
   handle: {header: DemosHeader, mainClassName: 'in-view'},
   element: <DemosPage/>
 };
 
 export const ChartTutorial = {
-  path: `${Paths.demos}charts/:kind/`,
   errorElement: <PageError/>,
   handle: {header: () => <Header title="Demos charts"/>, mainClassName: 'in-view'},
   element: <ChartPage/>

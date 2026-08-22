@@ -1,7 +1,3 @@
-html:has(.slice-station:hover, .slice-station:focus) {
-  scroll-behavior: smooth;
-}
-
 .tutorials {
   display: grid;
   gap: var(--base-x-3);

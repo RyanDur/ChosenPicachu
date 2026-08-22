@@ -1,6 +1,5 @@
 import {render, screen} from '@testing-library/react';
 import {renderWithMemoryRouter} from '@test-support';
-import {Demos} from '@pages/Demos';
 import {Gallery} from '@pages/Gallery';
 import {Games} from '@pages/Games';
 import {Users} from '@pages/Users';
@@ -9,9 +8,14 @@ import {createMemoryRouter, RouterProvider} from 'react-router';
 import {router} from '../../router';
 
 describe('page error boundaries', () => {
-  test('every page route declares one', () => {
-    [Demos, Users, Gallery, Games].forEach(route =>
-      expect(route.errorElement).toBeDefined());
+  test('every page route declares one, split or not', async () => {
+    const split = await Promise.all(router.children.flatMap(child => 'lazy' in child && child.lazy !== undefined ? [child.lazy()] : []));
+
+    expect(split).toHaveLength(2);
+    [...split, Users, Gallery, Games].forEach(route => {
+      expect(route.errorElement).toBeDefined();
+      expect(route.element).toBeDefined();
+    });
   });
 
   test('a crashing page shows the closed-room message instead of dying', async () => {

@@ -1,8 +1,7 @@
-import {FC, lazy, ReactNode, Suspense} from 'react';
+import {FC, ReactNode} from 'react';
 import {Navigate, useParams} from 'react-router';
 import {useEnv} from '@components/Env';
 import {Paths} from '@pages/Paths';
-import {Loading} from '@components/Loading';
 import {DemoTopics} from '../types';
 import {useLiveTrades} from './useLiveTrades';
 import {PriceChart} from './PriceChart';
@@ -10,6 +9,7 @@ import {Candles} from './Candles';
 import {Pressure} from './Pressure';
 import {Pie} from './Pie';
 import {ChartKind, isChartKind, matchChartKind} from './kinds';
+import {ChartStories} from './Tutorial';
 import '../Recipe/Recipe.css';
 import '../Tutorials.css';
 import './ChartPage.css';
@@ -20,8 +20,6 @@ type Feature = {
   reference: string;
   quote: string;
 };
-
-const ChartStories = lazy(() => import('./Tutorial').then(module => ({default: module.ChartStories})));
 
 const features: Record<ChartKind, Feature> = {
   price: {
@@ -88,9 +86,7 @@ export const ChartPage: FC = () => {
       to see the steps, or to compare them with yours.
     </p>
     <section aria-label={`build the ${name} yourself`} className="build-steps">
-      <Suspense fallback={<Loading label="loading the tutorial"/>}>
-        <ChartStories kind={dealt}/>
-      </Suspense>
+      <ChartStories kind={dealt}/>
     </section>
     </article>;
   return matchChartKind(isChartKind(kind) ? kind : undefined, {

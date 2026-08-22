@@ -35,7 +35,7 @@ const PieceHeader = () => {
 
 const GalleryFooter = () => <GalleryNav id="gallery-nav"/>;
 
-export const GalleryHome = {
+const GalleryHome = {
   path: GalleryPaths.home,
   handle: {
     header: GalleryHeader,
@@ -47,7 +47,7 @@ export const GalleryHome = {
   element: <ArtGalleryPage/>
 };
 
-export const GalleryPiece = {
+const GalleryPiece = {
   path: GalleryPaths.piece,
   handle: {header: PieceHeader, provider: GalleryProviders, mainClassName: 'in-view'},
   element: <ArtGalleryPiecePage/>

@@ -1,4 +1,4 @@
-import {FC, ReactNode, useEffect} from 'react';
+import {FC, ReactNode} from 'react';
 
 type CluesProps = {
   quote: string;
@@ -76,11 +76,8 @@ type SlicesProps = {
   sliced: [string, string][];
 };
 
-export const Slices: FC<SlicesProps> = ({who, can, soThat, slices, sliced}) => {
-  useEffect(() => {
-    document.getElementById(location.hash.slice(1))?.scrollIntoView({behavior: 'instant'});
-  }, []);
-  return <section className="phase white rounded-corners drop-shadow" aria-label="the stories">
+export const Slices: FC<SlicesProps> = ({who, can, soThat, slices, sliced}) =>
+  <section className="phase white rounded-corners drop-shadow" aria-label="the stories">
     <h3 className="phase-title">Generate the stories from the design</h3>
     <p className="overview paragraph">
       With the need heard and the design answering shape, the work splits into stories: each
@@ -104,4 +101,3 @@ export const Slices: FC<SlicesProps> = ({who, can, soThat, slices, sliced}) => {
         </li>)}
     </ul>
   </section>;
-};

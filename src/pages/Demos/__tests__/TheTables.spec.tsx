@@ -246,8 +246,10 @@ describe('the tables demo', () => {
       expect(sliced.getByText(slice).closest('li')).toHaveTextContent(station));
     expect(sliced.getAllByRole('link').map(link => link.getAttribute('href')))
       .toEqual(['#station-4', '#station-5', '#station-6', '#station-6', '#station-6']);
-    ['station-4', 'station-5', 'station-6'].forEach(id =>
-      expect(document.getElementById(id)).toHaveClass('station'));
+    [['station-4', 'The trader can read the market in a table'],
+      ['station-5', 'The trader can watch the market live, in windows'],
+      ['station-6', 'Layer on functionality, in the order it was asked for']
+    ].forEach(([id, holds]) => expect(document.getElementById(id)).toHaveTextContent(holds));
     expect(screen.getByRole('link', {name: 'user story'}))
       .toHaveAttribute('href', expect.stringContaining('initialcapacity.io/insights/user-story'));
     expect(screen.getByRole('complementary', {name: 'what a design cannot tell you'})).toBeVisible();
@@ -314,6 +316,22 @@ describe('the tables demo', () => {
     expect(within(controls).getByRole('radio', {name: 'Lazy'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Keep'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Static'})).toBeChecked();
+  });
+
+  test('a hash arriving in the url is brought to its station', async () => {
+    const brought: string[] = [];
+    Element.prototype.scrollIntoView = function (this: Element) {
+      brought.push(this.id);
+    };
+    location.hash = '#station-5';
+    const feed = await streamingFeed();
+
+    renderTables(urlOf(feed));
+
+    await screen.findByRole('heading', {name: 'Generate the stories from the design'});
+    expect(brought).toContain('station-5');
+    Element.prototype.scrollIntoView = () => undefined;
+    location.hash = '';
   });
 
   test('the keyboard track teaches the same sort by other hands', async () => {
