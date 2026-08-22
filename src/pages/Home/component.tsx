@@ -106,7 +106,7 @@ export const HomePage: FC = () =>
         HyperText is a way to link and access information of various kinds as a web of nodes
         in which the user can browse at will.
       </p>
-      <footer className="attribution caption">Tim Berners-Lee and Robert Cailliau,{' '}
+      <footer className="attribution">Tim Berners-Lee and Robert Cailliau,{' '}
         <a {...source('https://www.w3.org/History/19921103-hypertext/hypertext/WWW/Proposal.html')}>proposing
         the WorldWideWeb, 1990</a></footer>
     </blockquote>
@@ -140,7 +140,7 @@ export const HomePage: FC = () =>
           It is not a programming language, but rather a language that identifies the meaning,
           purpose, and structure of text within a document.
         </p>
-        <footer className="attribution caption"><a {...source('https://html.com/html5/')}>html.com, on HTML</a></footer>
+        <footer className="attribution"><a {...source('https://html.com/html5/')}>html.com, on HTML</a></footer>
       </blockquote>
       <p className="paragraph">
         What things are: content, meaning, and the order a reader and a screen reader both
@@ -155,7 +155,7 @@ export const HomePage: FC = () =>
           The separation of HTML from CSS makes it easier to maintain sites, share style
           sheets across pages, and tailor pages to different environments.
         </p>
-        <footer className="attribution caption"><a {...source('https://www.w3.org/standards/webdesign/htmlcss.html')}>the W3C, on HTML and CSS</a></footer>
+        <footer className="attribution"><a {...source('https://www.w3.org/standards/webdesign/htmlcss.html')}>the W3C, on HTML and CSS</a></footer>
       </blockquote>
       <p className="paragraph">
         How things show: shared words for shared needs, structure beside the component that
@@ -171,7 +171,7 @@ export const HomePage: FC = () =>
           their properties, and respond to events, we envisioned a much livelier Web
           consisting of pages that acted more like applications.
         </p>
-        <footer className="attribution caption"><a {...source('https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html')}>Brendan
+        <footer className="attribution"><a {...source('https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html')}>Brendan
         Eich, in Computerworld’s A-Z of Programming Languages</a></footer>
       </blockquote>
       <p className="paragraph">
