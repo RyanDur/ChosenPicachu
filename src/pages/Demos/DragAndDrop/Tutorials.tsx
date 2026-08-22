@@ -56,7 +56,7 @@ export const ListTutorials: FC = () => {
                   ['The user can arrange the list by hand', 4],
                   ['The user can arrange the list from the keyboard', 4]
                 ]}/>
-        <Exercise interprets="list"/>
+        <Exercise/>
       </li>
       <li className="station" id={stationId(4)}>
         <h3 className="phase-title">Layer on functionality, in the order it was asked for</h3>

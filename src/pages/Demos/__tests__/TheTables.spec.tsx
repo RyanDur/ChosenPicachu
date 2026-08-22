@@ -229,13 +229,13 @@ describe('the tables demo', () => {
     expect(recipe.querySelectorAll('details.arc[open]')).toHaveLength(0);
     expect(screen.getByRole('heading', {name: 'let’s build this feature'})).toBeVisible();
     expect(screen.getByText(/I watch the market all day/)).toBeVisible();
-    expect(screen.getByRole('heading', {name: 'Start with the need, and let it inform the implementation'})).toBeVisible();
+    expect(screen.getByRole('heading', {name: 'Start with the need, and let it pick the element'})).toBeVisible();
     expect(screen.getByRole('heading', {name: 'The trader can watch the live market in windows they arrange'})).toBeVisible();
     expect(screen.getByText(/so that what they compare sits side by side/)).toBeVisible();
     expect(screen.getByRole('columnheader', {name: 'what it tells you'})).toBeVisible();
     expect(screen.getByRole('rowheader', {name: /keep themselves current/})).toBeVisible();
-    expect(screen.getByRole('heading', {name: 'Cultivate a design from the need'})).toBeVisible();
-    expect(screen.getByRole('heading', {name: 'Generate the stories from the design'})).toBeVisible();
+    expect(screen.getByRole('heading', {name: 'Sketch a design from the need'})).toBeVisible();
+    expect(screen.getByRole('heading', {name: 'Slice the design into stories'})).toBeVisible();
     const sliced = within(screen.getByRole('list', {name: 'the slices'}));
     [['The trader can read the market in a table', 'station 4'],
       ['The trader can watch the market live, in windows', 'station 5'],
@@ -254,7 +254,7 @@ describe('the tables demo', () => {
       .toHaveAttribute('href', expect.stringContaining('initialcapacity.io/insights/user-story'));
     expect(screen.getByRole('complementary', {name: 'what a design cannot tell you'})).toBeVisible();
     expect(screen.getByText(/keep building on your best interpretation/)).toBeVisible();
-    expect(screen.getByText(/The table is our interpretation of that/)).toBeVisible();
+    expect(screen.getByText(/What you see above is our interpretation of that/)).toBeVisible();
     expect(recipe).toHaveTextContent(/The sort happens while you drag/);
     const still = screen.getByRole('region', {name: 'the still table'});
     expect(still).toBeVisible();
@@ -328,7 +328,7 @@ describe('the tables demo', () => {
 
     renderTables(urlOf(feed));
 
-    await screen.findByRole('heading', {name: 'Generate the stories from the design'});
+    await screen.findByRole('heading', {name: 'Slice the design into stories'});
     expect(brought).toContain('station-5');
     Element.prototype.scrollIntoView = () => undefined;
     location.hash = '';

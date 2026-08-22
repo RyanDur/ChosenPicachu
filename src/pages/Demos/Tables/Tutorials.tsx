@@ -60,7 +60,7 @@ export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack}) => {
       </li>
       <li className="station" id={stationId(3)}>
         <StorySlices/>
-        <Exercise interprets="table"/>
+        <Exercise/>
       </li>
       <li className="station" id={stationId(4)}>
         <StillTableRecipe/>
