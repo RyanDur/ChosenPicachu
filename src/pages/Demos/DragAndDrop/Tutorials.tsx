@@ -2,7 +2,7 @@ import {FC, Suspense, lazy} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
 import {motionParam, originParam, paceParam} from '../Controls';
 import {Clues, Design, Slices} from '../Recipe/Arc';
-import {DialNote} from '../Recipe';
+import {DialNote, Exercise} from '../Recipe';
 import {Loading} from '@components/Loading';
 import {ListControls} from './ListControls';
 import '../Tutorials.css';
@@ -57,12 +57,7 @@ export const ListTutorials: FC = () => {
                   ['The user can sort the list', 'station 4'],
                   ['The user can sort without a mouse', 'station 4']
                 ]}/>
-        <p className="verdict paragraph">
-          If you want the exercise, stop here and build the story yourself first. The list is
-          our interpretation of that; the cards below break the interpretation into features.
-          Open one to see how we built it, or to compare it with yours. The links go to MDN if
-          you want more.
-        </p>
+        <Exercise interprets="list"/>
       </li>
       <li className="station">
         <h3 className="phase-title">Layer on functionality, in the order it was asked for</h3>
