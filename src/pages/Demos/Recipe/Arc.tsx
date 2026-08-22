@@ -1,13 +1,4 @@
-import {FC, MouseEvent, ReactNode, useEffect} from 'react';
-
-/* The router redraws on fragment navigation, and the redraw cancels the
-   browser's own scroll to the target; pushState stays under its radar, so
-   the glide (and the arrival after a lazy mount) is carried by hand. */
-const glide = (event: MouseEvent<HTMLAnchorElement>) => {
-  event.preventDefault();
-  history.pushState(null, '', event.currentTarget.hash);
-  document.getElementById(event.currentTarget.hash.slice(1))?.scrollIntoView();
-};
+import {FC, ReactNode} from 'react';
 
 type CluesProps = {
   quote: string;
@@ -85,11 +76,8 @@ type SlicesProps = {
   sliced: [string, string][];
 };
 
-export const Slices: FC<SlicesProps> = ({who, can, soThat, slices, sliced}) => {
-  useEffect(() => {
-    document.getElementById(location.hash.slice(1))?.scrollIntoView();
-  }, []);
-  return <section className="phase white rounded-corners drop-shadow" aria-label="the stories">
+export const Slices: FC<SlicesProps> = ({who, can, soThat, slices, sliced}) =>
+  <section className="phase white rounded-corners drop-shadow" aria-label="the stories">
     <h3 className="phase-title">Generate the stories from the design</h3>
     <p className="overview paragraph">
       With the need heard and the design answering shape, the work splits into stories: each
@@ -109,9 +97,7 @@ export const Slices: FC<SlicesProps> = ({who, can, soThat, slices, sliced}) => {
       {sliced.map(([slice, station]) =>
         <li className="slice" key={slice}>
           <span className="slice-name">{slice}</span>
-          <a className="slice-station signpost caption" href={`#${station.replace(' ', '-')}`}
-             onClick={glide}>{station}</a>
+          <a className="slice-station signpost caption" href={`#${station.replace(' ', '-')}`}>{station}</a>
         </li>)}
     </ul>
   </section>;
-};
