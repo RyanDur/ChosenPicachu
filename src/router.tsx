@@ -5,8 +5,9 @@ import {Fragment} from 'react';
 import {SideNav} from '@pages/BasePage/SideNav';
 import {isRegions, Regions} from '@pages/regions';
 import {Paths} from '@pages/Paths';
-import {GalleryPaths} from '@pages/Gallery/GalleryRouter/GalleryPaths';
-import {GamePaths} from '@pages/Games/GamePaths';
+import {Users} from '@pages/Users';
+import {Gallery} from '@pages/Gallery';
+import {Games} from '@pages/Games';
 
 const NoHeader = () => null;
 
@@ -47,21 +48,8 @@ export const router = {
       path: `${Paths.demos}charts/:kind/`,
       lazy: () => import('@pages/Demos').then(({ChartTutorial}) => without(ChartTutorial))
     },
-    {path: Paths.users, lazy: () => import('@pages/Users').then(({Users}) => without(Users))},
-    {
-      path: Paths.artGallery,
-      lazy: () => import('@pages/Gallery').then(({Gallery}) => without(Gallery)),
-      children: [
-        {path: GalleryPaths.home, lazy: () => import('@pages/Gallery').then(({GalleryHome}) => without(GalleryHome))},
-        {path: GalleryPaths.piece, lazy: () => import('@pages/Gallery').then(({GalleryPiece}) => without(GalleryPiece))}
-      ]
-    },
-    {
-      path: `${Paths.games}*`,
-      lazy: () => import('@pages/Games').then(({Games}) => without(Games)),
-      children: [
-        {path: GamePaths.colorGame, lazy: () => import('@pages/Games').then(({ColorGame}) => without(ColorGame))}
-      ]
-    }
+    Users,
+    Gallery,
+    Games
   ]
 };
