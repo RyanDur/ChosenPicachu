@@ -10,7 +10,8 @@ export const slideCrossed = (listSource: string, cssSource: string): ReactNode =
       <Says>The swap commits instantly and the crossed item is merely drawn where it used
         to be, sliding home on a <Mdn path="Web/CSS/@keyframes">keyframe</Mdn> whose from is one
         seat over, the same slide the tables demo plays, turned horizontal, with the direction as
-        data: --toward flips the sign of one keyframe instead of naming two.</Says>
+        data: --toward flips the sign of one keyframe instead of naming two. The animation
+        is theater: the swap has already happened, and the slide only tells you what did.</Says>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
@@ -31,7 +32,8 @@ export const glideSettle = (listSource: string): ReactNode =>
         defer the settle one tick past the release. By the
         time <Mdn path="Web/API/Document/startViewTransition">startViewTransition</Mdn> captures
         the page, the platform has finished its ceremony, and every item glides from where the
-        drag left it to where the order says it belongs.</Says>
+        drag left it to where the order says it belongs. The animation is theater: the order
+        has already settled, and the glide only tells you what did.</Says>
     </Words>
     <Codes>
       <Snippet label="HTML" lines={[
