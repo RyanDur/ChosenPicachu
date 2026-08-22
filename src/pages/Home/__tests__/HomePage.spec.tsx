@@ -31,6 +31,17 @@ describe('the home page', () => {
     expect(screen.getByText(/a much livelier Web/)).toBeVisible();
   });
 
+  test('every beat opens into its fuller story, closed until asked', () => {
+    const timeline = within(screen.getByRole('list', {name: 'the timeline'}));
+
+    expect(timeline.getAllByText('the fuller story')).toHaveLength(10);
+    expect(document.querySelectorAll('.timeline details[open]')).toHaveLength(0);
+    [/Viola/, /Mocha/, /ham is to hamster/, /MULTICOL/, /Wired/, /React in 2013/]
+      .forEach(depth => expect(timeline.getByText(depth)).toBeInTheDocument());
+    expect(timeline.getByText('Ajax').closest('a'))
+      .toHaveAttribute('href', expect.stringContaining('immagic'));
+  });
+
   test('the history cites its sources', () => {
     expect(screen.getByRole('link', {name: /proposing the WorldWideWeb/}))
       .toHaveAttribute('href', expect.stringContaining('w3.org/History'));
