@@ -237,12 +237,13 @@ describe('the tables demo', () => {
     expect(screen.getByRole('heading', {name: 'Cultivate a design from the need'})).toBeVisible();
     expect(screen.getByRole('heading', {name: 'Generate the stories from the design'})).toBeVisible();
     const sliced = within(screen.getByRole('list', {name: 'the slices'}));
-    ['The trader can read the market in a table',
-      'The trader can watch the market live, in windows',
-      'The trader can sort by column, and by row',
-      'The trader can sort the windows by any measure, or take the order back',
-      'The trader can widen a column'
-    ].forEach(slice => expect(sliced.getByText(slice)).toBeVisible());
+    [['The trader can read the market in a table', 'station 4'],
+      ['The trader can watch the market live, in windows', 'station 5'],
+      ['The trader can sort by column, and by row', 'station 6'],
+      ['The trader can sort the windows by any measure, or take the order back', 'station 6'],
+      ['The trader can widen a column', 'station 6']
+    ].forEach(([slice, station]) =>
+      expect(sliced.getByText(slice).closest('li')).toHaveTextContent(station));
     expect(screen.getByRole('link', {name: 'user story'}))
       .toHaveAttribute('href', expect.stringContaining('initialcapacity.io/insights/user-story'));
     expect(screen.getByRole('complementary', {name: 'what a design cannot tell you'})).toBeVisible();
