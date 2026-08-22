@@ -45,18 +45,18 @@ export const Row: FC<Props> = (
         hidden && 'hide-across',
         has(displaced) && 'displaced'
       );
-      const theater = has(displaced)
+      const drawn = has(displaced)
         ? {'--carried': `${displaced.by}px`, '--toward': displaced.toward === 'left' ? '1' : '-1'}
         : undefined;
       return rowHeader
-        ? <th scope="row" className={dress} key={column} style={theater}>
+        ? <th scope="row" className={dress} key={column} style={drawn}>
           <div className="row-header-content">
             <RowGrip position={position} onLift={onLift(row)}
                      onArrows={animatedRowArrows(row, () => columns, () => standing, arranged)}/>
             {cell.display}
           </div>
         </th>
-        : <td className={dress} key={column} style={theater}>{cell.display}</td>;
+        : <td className={dress} key={column} style={drawn}>{cell.display}</td>;
     })}
   </tr>;
 };

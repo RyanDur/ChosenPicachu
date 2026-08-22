@@ -53,7 +53,7 @@ const dealCodes: Record<World, ReactNode> = {
     ]}/>
     <Snippet label="HTML" lines={[
       ...span(headerSource, 'return <th', 'scope="col"'), gap,
-      ...span(rowSource, 'return rowHeader', '<td className={dress} key={column} style={theater}>{cell.display}</td>;')
+      ...span(rowSource, 'return rowHeader', '<td className={dress} key={column} style={drawn}>{cell.display}</td>;')
     ]}/>
   </Codes>,
   vanilla: <Codes>
