@@ -21,7 +21,7 @@ import cssSource from '../EagerHideAnimatedList/EagerHideAnimatedList.css?raw';
 
 export const EagerHideAnimatedRecipe: FC = () => <>
   <Story param="native" id="sort" steps={8}
-         can="The user can sort the list"
+         can="The user can arrange the list by hand"
          soThat="it reads in the order they mean">
     {platformCurrency}
     {promises('eager', 'hide', 'animated')}
