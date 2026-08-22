@@ -1,1 +1,1 @@
-export {Games} from './routes';
+export {ColorGame, Games} from './routes';

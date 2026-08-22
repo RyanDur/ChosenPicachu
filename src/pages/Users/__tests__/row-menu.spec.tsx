@@ -1,6 +1,6 @@
 import {screen, waitFor, within} from '@testing-library/react';
 import {renderWithMemoryRouter} from '@test-support';
-import {Users} from '@pages/index';
+import {Users} from '@pages/Users';
 import {Paths} from '@pages/Paths';
 
 describe('the row menu is a popover anchored to its toggle', () => {
