@@ -5,7 +5,6 @@
 
   .feedback {
     margin: 0;
-    max-width: var(--measure);
     display: grid;
     gap: var(--base);
   }
@@ -25,7 +24,6 @@
 
   .thesis {
     margin: 0;
-    max-width: var(--measure);
     text-wrap: pretty;
   }
 
@@ -95,7 +93,6 @@
 
   .beat-tells {
     margin: 0;
-    max-width: var(--measure);
     color: var(--charcoal);
     text-wrap: pretty;
   }
@@ -103,7 +100,6 @@
   .door {
     display: grid;
     gap: var(--base-x-2);
-    max-width: var(--measure);
 
     .paragraph {
       margin: 0;
@@ -113,7 +109,6 @@
 
   .tee-up {
     margin: 0;
-    max-width: var(--measure);
     font-size: var(--text-title);
     text-wrap: pretty;
   }
