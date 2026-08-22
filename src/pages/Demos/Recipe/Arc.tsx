@@ -73,7 +73,7 @@ type SlicesProps = {
   can: string;
   soThat: string;
   slices: ReactNode;
-  sliced: string[];
+  sliced: [string, string][];
 };
 
 export const Slices: FC<SlicesProps> = ({who, can, soThat, slices, sliced}) =>
@@ -94,6 +94,10 @@ export const Slices: FC<SlicesProps> = ({who, can, soThat, slices, sliced}) =>
     </hgroup>
     <p className="overview paragraph">{slices}</p>
     <ul className="sliced" aria-label="the slices">
-      {sliced.map(slice => <li className="slice" key={slice}>{slice}</li>)}
+      {sliced.map(([slice, station]) =>
+        <li className="slice" key={slice}>
+          <span className="slice-name">{slice}</span>
+          <span className="slice-station caption">{station}</span>
+        </li>)}
     </ul>
   </section>;

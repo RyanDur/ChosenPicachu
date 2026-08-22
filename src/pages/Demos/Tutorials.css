@@ -244,6 +244,11 @@
     color: var(--charcoal);
   }
 
+  .slice-station {
+    margin-inline-start: var(--base);
+    font-style: normal;
+  }
+
   .design-item {
     display: flex;
     align-items: center;
