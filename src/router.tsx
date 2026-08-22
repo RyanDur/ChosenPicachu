@@ -35,9 +35,6 @@ export const MountedTable = () => {
   </BannerProvider>;
 };
 
-/* Each page joins the bundle it navigates to: this skeleton carries only the
-   matchable paths, and every other route property arrives with the page's own
-   chunk, so no page downloads another page's code. */
 const without = <T extends {path?: string, children?: unknown}>({path, children, ...route}: T) => route;
 
 export const router = {
