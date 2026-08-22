@@ -171,7 +171,7 @@ describe('the sortable list demo', () => {
     expect(screen.getByRole('complementary', {name: 'what a design cannot tell you'})).toBeVisible();
     expect(screen.getByRole('heading', {name: 'Generate the stories from the design'})).toBeVisible();
     const sliced = within(screen.getByRole('list', {name: 'the slices'}));
-    ['The user can sort the list', 'The user can sort without a mouse']
+    ['The user can arrange the list by hand', 'The user can arrange the list from the keyboard']
       .forEach(slice => expect(sliced.getByText(slice).closest('li')).toHaveTextContent('station 4'));
     expect(sliced.getAllByRole('link').map(link => link.getAttribute('href')))
       .toEqual(['#station-4', '#station-4']);
@@ -191,10 +191,10 @@ describe('the sortable list demo', () => {
     expect(within(recipe).getByRole('link', {name: 'dataTransfer'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/DataTransfer'));
     expect(recipe.querySelectorAll('.story')).toHaveLength(2);
-    expect(recipe).toHaveTextContent(/The user can sort the list/);
+    expect(recipe).toHaveTextContent(/The user can arrange the list by hand/);
     expect(recipe).toHaveTextContent(/The list answers as they drag/);
 
-    await userEvent.click(within(recipe).getByText(/The user can sort the list/));
+    await userEvent.click(within(recipe).getByText(/The user can arrange the list by hand/));
     expect(within(recipe).getByRole('link', {name: /Tables demo/}))
       .toHaveAttribute('href', expect.stringContaining('tab=tables'));
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Lazy'}));
