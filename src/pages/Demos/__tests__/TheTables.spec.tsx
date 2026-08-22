@@ -244,6 +244,10 @@ describe('the tables demo', () => {
       ['The trader can widen a column', 'station 6']
     ].forEach(([slice, station]) =>
       expect(sliced.getByText(slice).closest('li')).toHaveTextContent(station));
+    expect(sliced.getAllByRole('link').map(link => link.getAttribute('href')))
+      .toEqual(['#station-4', '#station-5', '#station-6', '#station-6', '#station-6']);
+    ['station-4', 'station-5', 'station-6'].forEach(id =>
+      expect(document.getElementById(id)).toHaveClass('station'));
     expect(screen.getByRole('link', {name: 'user story'}))
       .toHaveAttribute('href', expect.stringContaining('initialcapacity.io/insights/user-story'));
     expect(screen.getByRole('complementary', {name: 'what a design cannot tell you'})).toBeVisible();
