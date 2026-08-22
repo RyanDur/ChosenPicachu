@@ -1,13 +1,11 @@
-import {FC, Suspense, lazy} from 'react';
+import {FC} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
 import {motionParam, originParam, paceParam} from '../Controls';
 import {Clues, Design, Slices} from '../Recipe/Arc';
 import {DialNote, Exercise} from '../Recipe';
-import {Loading} from '@components/Loading';
 import {ListControls} from './ListControls';
+import {NativeRecipe} from './NativeRecipe';
 import '../Tutorials.css';
-
-const NativeRecipe = lazy(() => import('./NativeRecipe').then(module => ({default: module.NativeRecipe})));
 
 const clues: [string, string][] = [
   ['the order is mine', 'The order is the user’s state; the app only renders it. Nothing reorders on its own.'],
@@ -66,9 +64,7 @@ export const ListTutorials: FC = () => {
                       onPace={next => updateSearchParams({pace: next})}
                       onOrigin={next => updateSearchParams({origin: next})}
                       onMotion={next => updateSearchParams({motion: next})}/>
-        <Suspense fallback={<Loading label="loading the tutorial"/>}>
-          <NativeRecipe/>
-        </Suspense>
+        <NativeRecipe/>
       </li>
     </ol>
   </section>;

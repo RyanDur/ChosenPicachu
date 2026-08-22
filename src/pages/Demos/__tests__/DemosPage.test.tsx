@@ -26,6 +26,6 @@ describe('The Demos page', () => {
       expect(within(main).getByText('Z-Index Demo.')).toBeInTheDocument();
     });
 
-    expect(screen.getByRole('banner')).toHaveTextContent('Demos z-index');
+    expect(screen.getByRole('heading', {level: 1})).toHaveTextContent('Demos z-index');
   });
 });

@@ -1,4 +1,8 @@
-import {lazy, Suspense, useState} from 'react';
+import {useState} from 'react';
+import {Tutorials} from './Tables/Tutorials';
+import {ListTutorials} from './DragAndDrop/Tutorials';
+import {ChartsTutorial} from './Charts/Tutorial';
+import {TopLayerTutorial} from './ZIndexDemo/Tutorial';
 import {randParagraph, randWord} from '@components/fibs';
 import {useSearchParamsObject} from '@components/search-params';
 import './style.css';
@@ -20,7 +24,6 @@ import {DemoTopics, demoTopicParam} from './types';
 import {NaturalZIndex, TopLayer} from './ZIndexDemo';
 import {motionParam, originParam, paceParam} from './Controls';
 import {Aggregations, trackParam, tutorialParam, worldParam} from './Tables';
-import {Loading} from '@components/Loading';
 import {useLiveTrades} from './Charts/useLiveTrades';
 import {Workspace} from './Charts/Workspace';
 import {useEnv} from '@components/Env';
@@ -31,10 +34,6 @@ const paragraphs = (count: number) =>
     value: Array.from({length: Math.floor(Math.random() * 6) + 1}, () => randParagraph()).join('\n\n')
   }));
 
-const Tutorials = lazy(() => import('./Tables/Tutorials').then(module => ({default: module.Tutorials})));
-const ListTutorials = lazy(() => import('./DragAndDrop/Tutorials').then(module => ({default: module.ListTutorials})));
-const ChartsTutorial = lazy(() => import('./Charts/Tutorial').then(module => ({default: module.ChartsTutorial})));
-const TopLayerTutorial = lazy(() => import('./ZIndexDemo/Tutorial').then(module => ({default: module.TopLayerTutorial})));
 
 export const DemosPage = () => {
   const {tab, pace = 'eager', origin = 'hide', motion = 'animated', tut = 'sort', track = 'pointer', world = 'react', updateSearchParams} =
@@ -81,22 +80,16 @@ export const DemosPage = () => {
               <article>Z-Index Demo.</article>
               <NaturalZIndex className='white rounded-corners drop-shadow padded'/>
               <TopLayer className='white rounded-corners drop-shadow padded'/>
-              <Suspense fallback={<Loading label="loading the tutorial"/>}>
-                <TopLayerTutorial/>
-              </Suspense>
+              <TopLayerTutorial/>
             </>,
             [DemoTopics.charts]: <>
               <Workspace trades={liveTrades.trades} status={liveTrades.status} product={tradeProduct}/>
-              <Suspense fallback={<Loading label="loading the tutorial"/>}>
-                <ChartsTutorial/>
-              </Suspense>
+              <ChartsTutorial/>
             </>,
             [DemoTopics.tables]: <>
               <Aggregations trades={liveTrades.trades} pace={pace} origin={origin} motion={motion} world={world}/>
-              <Suspense fallback={<Loading label="loading the tutorial"/>}>
-                <Tutorials shown={tut} onShow={next => updateSearchParams({tut: next})}
-                           track={track} onTrack={next => updateSearchParams({track: next})}/>
-              </Suspense>
+              <Tutorials shown={tut} onShow={next => updateSearchParams({tut: next})}
+                         track={track} onTrack={next => updateSearchParams({track: next})}/>
             </>,
             [DemoTopics.dragAndDrop]: <>
               {(() => {
