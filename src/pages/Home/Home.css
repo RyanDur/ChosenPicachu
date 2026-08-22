@@ -98,6 +98,34 @@
     text-wrap: pretty;
   }
 
+  .fuller-story {
+    display: grid;
+    gap: var(--base);
+
+    .prompt {
+      cursor: pointer;
+      width: fit-content;
+      font-size: var(--text-caption);
+      color: var(--charcoal);
+    }
+
+    .paragraph {
+      margin: 0;
+      color: var(--charcoal);
+      text-wrap: pretty;
+    }
+  }
+
+  .period-markup {
+    margin: 0;
+    padding: var(--base-x-1_5);
+    overflow-x: auto;
+    background: var(--white);
+    border: var(--hairline) solid var(--shadow);
+    border-radius: var(--radius);
+    font-size: var(--text-caption);
+  }
+
   .door {
     display: grid;
     gap: var(--base-x-2);
