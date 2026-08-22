@@ -1,4 +1,5 @@
 import {FC, ReactNode} from 'react';
+import {stationId} from './station';
 
 type CluesProps = {
   quote: string;
@@ -73,7 +74,7 @@ type SlicesProps = {
   can: string;
   soThat: string;
   slices: ReactNode;
-  sliced: [string, string][];
+  sliced: [string, number][];
 };
 
 export const Slices: FC<SlicesProps> = ({who, can, soThat, slices, sliced}) =>
@@ -97,7 +98,7 @@ export const Slices: FC<SlicesProps> = ({who, can, soThat, slices, sliced}) =>
       {sliced.map(([slice, station]) =>
         <li className="slice" key={slice}>
           <span className="slice-name">{slice}</span>
-          <a className="slice-station signpost caption" href={`#${station.replace(' ', '-')}`}>{station}</a>
+          <a className="slice-station signpost caption" href={`#${stationId(station)}`}>station {station}</a>
         </li>)}
     </ul>
   </section>;

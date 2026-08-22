@@ -7,7 +7,7 @@ import {TableControls} from './TableControls';
 import {Picks} from './Picks';
 import {Recipe, Track} from './Recipe';
 import {LayerMap} from './Recipe/LayerMap';
-import {DialNote, Exercise, useArrival} from '../Recipe';
+import {DialNote, Exercise, stationId, useArrival} from '../Recipe';
 import {StoryClues} from './Recipe/StoryClues';
 import {DesignAsk} from './Recipe/DesignAsk';
 import {StorySlices} from './Recipe/StorySlices';
@@ -52,23 +52,23 @@ export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack}) => {
     </header>
     <p className="paragraph">{worldCopy[world]}</p>
     <ol className="spine">
-      <li className="station" id="station-1">
+      <li className="station" id={stationId(1)}>
         <StoryClues/>
       </li>
-      <li className="station" id="station-2">
+      <li className="station" id={stationId(2)}>
         <DesignAsk/>
       </li>
-      <li className="station" id="station-3">
+      <li className="station" id={stationId(3)}>
         <StorySlices/>
         <Exercise interprets="table"/>
       </li>
-      <li className="station" id="station-4">
+      <li className="station" id={stationId(4)}>
         <StillTableRecipe/>
       </li>
-      <li className="station" id="station-5">
+      <li className="station" id={stationId(5)}>
         <FlowTableRecipe/>
       </li>
-      <li className="station" id="station-6">
+      <li className="station" id={stationId(6)}>
         <h3 className="phase-title">Layer on functionality, in the order it was asked for</h3>
         <LayerMap/>
         <Picks label="tutorials"
