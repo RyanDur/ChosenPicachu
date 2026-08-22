@@ -12,7 +12,8 @@ export const animatedMotion = (world: World, tableSource: string, cssSource: str
       <Says>The reorder has to land instantly for the drag math to stay true, so only the
         drawing can move: commit the swap at once, then draw the displaced column where it used
         to be, sliding home on a <Mdn path="Web/CSS/transform">transform</Mdn>. The <Term word="survey">survey</Term>
-        supplies the one number CSS cannot know: the distance home.</Says>
+        supplies the one number CSS cannot know: the distance home. The animation is
+        theater: the swap has already happened, and the slide only tells you what did.</Says>
     </Words>
     <Reveal>
       <Says>A swap commits instantly: the carried column already sits at full width in its new
