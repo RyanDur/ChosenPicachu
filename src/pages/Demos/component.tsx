@@ -5,7 +5,6 @@ import './style.css';
 import './DemosPage.css';
 import './Tutorials.css';
 import {Tabs} from '@components/Tabs';
-import {DialNote, Overview} from './Recipe';
 import {
   ExclusiveAccordion,
   ExclusiveToggleAccordion,
@@ -15,8 +14,7 @@ import {
 } from './Accordions';
 import {
   EagerHideAnimatedList, EagerHideStaticList, EagerKeepAnimatedList, EagerKeepStaticList,
-  LazyHideAnimatedList, LazyHideStaticList, LazyKeepAnimatedList, LazyKeepStaticList,
-  ListControls
+  LazyHideAnimatedList, LazyHideStaticList, LazyKeepAnimatedList, LazyKeepStaticList
 } from './DragAndDrop';
 import {DemoTopics, demoTopicParam} from './types';
 import {NaturalZIndex, TopLayer} from './ZIndexDemo';
@@ -34,7 +32,7 @@ const paragraphs = (count: number) =>
   }));
 
 const Tutorials = lazy(() => import('./Tables/Tutorials').then(module => ({default: module.Tutorials})));
-const NativeRecipe = lazy(() => import('./DragAndDrop/NativeRecipe').then(module => ({default: module.NativeRecipe})));
+const ListTutorials = lazy(() => import('./DragAndDrop/Tutorials').then(module => ({default: module.ListTutorials})));
 const ChartsTutorial = lazy(() => import('./Charts/Tutorial').then(module => ({default: module.ChartsTutorial})));
 const TopLayerTutorial = lazy(() => import('./ZIndexDemo/Tutorial').then(module => ({default: module.TopLayerTutorial})));
 
@@ -115,21 +113,7 @@ export const DemosPage = () => {
                 const List = lists[pace][origin][motion];
                 return <List list={new Set(['A', 'B', 'C'])}/>;
               })()}
-              <section className="tutorials">
-                <h2 className="tutorials-title">let’s build this feature</h2>
-                <Overview builds="this site’s drag-and-drop list"
-                          reads="list"
-                          quote="I have a list, and the order is mine. When something belongs above something else, I want to pick it up and put it there, and see it land where I dropped it."
-                          by="a user"/>
-                <DialNote reads="list"/>
-                <ListControls pace={pace} origin={origin} motion={motion}
-                              onPace={next => updateSearchParams({pace: next})}
-                              onOrigin={next => updateSearchParams({origin: next})}
-                              onMotion={next => updateSearchParams({motion: next})}/>
-                <Suspense fallback={<Loading label="loading the tutorial"/>}>
-                  <NativeRecipe/>
-                </Suspense>
-              </section>
+              <ListTutorials/>
             </>
         })[tab ?? DemoTopics.accordions]}
       </section>

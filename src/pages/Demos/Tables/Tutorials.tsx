@@ -15,7 +15,6 @@ import {FlowTableRecipe, StillTableRecipe} from './Recipe/LivingTableRecipe';
 import {MenuRecipe} from './Recipe/MenuRecipe';
 import {ResizeRecipe} from './Recipe/ResizeRecipe';
 import '../Tutorials.css';
-import './Arc.css';
 
 import {Tutorial} from './params';
 

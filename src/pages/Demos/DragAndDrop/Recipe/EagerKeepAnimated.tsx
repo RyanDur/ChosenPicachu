@@ -20,7 +20,7 @@ import itemSource from '../items/KeepItem.tsx?raw';
 import cssSource from '../EagerKeepAnimatedList/EagerKeepAnimatedList.css?raw';
 
 export const EagerKeepAnimatedRecipe: FC = () => <>
-  <Story param="native" id="sort"
+  <Story param="native" id="sort" steps={8}
          can="The user can sort the list"
          soThat="it reads in the order they mean">
     {platformCurrency}
