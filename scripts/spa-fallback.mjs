@@ -16,8 +16,7 @@ const closure = (key, seen = new Set()) => {
 
 const alreadyInShell = closure('index.html');
 const moduleOf = page => Object.keys(manifest).find(key => new RegExp(`pages/${page}/(index|routes)\\.tsx?$`).test(key));
-const pageOf = route => route.startsWith('/demos/') ? 'Demos'
-  : {'/users/': 'Users', '/gallery/': 'Gallery', '/games/': 'Games'}[route];
+const pageOf = route => route.startsWith('/demos/') ? 'Demos' : undefined;
 
 const preloaded = route => {
   const page = pageOf(route);
