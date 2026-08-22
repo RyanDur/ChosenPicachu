@@ -165,11 +165,11 @@ describe('the sortable list demo', () => {
     expect(recipe).toBeVisible();
     expect(screen.getByRole('heading', {name: 'let’s build this feature'})).toBeVisible();
     expect(screen.getAllByText(/the order is mine/).length).toBeGreaterThan(0);
-    expect(screen.getByRole('heading', {name: 'Start with the need, and let it inform the implementation'})).toBeVisible();
+    expect(screen.getByRole('heading', {name: 'Start with the need, and let it pick the element'})).toBeVisible();
     expect(screen.getByRole('rowheader', {name: /pick it up and put it there/})).toBeVisible();
-    expect(screen.getByRole('heading', {name: 'Cultivate a design from the need'})).toBeVisible();
+    expect(screen.getByRole('heading', {name: 'Sketch a design from the need'})).toBeVisible();
     expect(screen.getByRole('complementary', {name: 'what a design cannot tell you'})).toBeVisible();
-    expect(screen.getByRole('heading', {name: 'Generate the stories from the design'})).toBeVisible();
+    expect(screen.getByRole('heading', {name: 'Slice the design into stories'})).toBeVisible();
     const sliced = within(screen.getByRole('list', {name: 'the slices'}));
     ['The user can arrange the list by hand', 'The user can arrange the list from the keyboard']
       .forEach(slice => expect(sliced.getByText(slice).closest('li')).toHaveTextContent('station 4'));
@@ -180,7 +180,7 @@ describe('the sortable list demo', () => {
     expect(screen.getByRole('link', {name: 'user story'}))
       .toHaveAttribute('href', expect.stringContaining('initialcapacity.io/insights/user-story'));
     expect(screen.getByRole('heading', {name: 'Layer on functionality, in the order it was asked for'})).toBeVisible();
-    expect(screen.getByText(/The list is our interpretation of that/)).toBeVisible();
+    expect(screen.getByText(/What you see above is our interpretation of that/)).toBeVisible();
     expect(recipe).toHaveTextContent(/Arm the drag from its handle/);
     expect(recipe).toHaveTextContent(/Accept the drop, or the platform takes it back/);
     expect(recipe).toHaveTextContent(/Commit inside the crossing/);
