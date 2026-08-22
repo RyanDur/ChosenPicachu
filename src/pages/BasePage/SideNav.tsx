@@ -25,6 +25,7 @@ const AboutNav: FC = () => {
 export const SideNav: FC = () =>
   <aside id="side-nav" aria-label="sidebar">
     <nav id="app-navigation" aria-label="site">
+      <Link id="navigate-home" className="path" to={Paths.home}>Home</Link>
       <AboutNav/>
       <Link id="navigate-users" className="path" to={Paths.users}>Users</Link>
       <Link id="navigate-form" className="path"

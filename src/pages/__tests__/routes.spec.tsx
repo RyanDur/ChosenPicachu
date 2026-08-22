@@ -29,10 +29,11 @@ describe('page error boundaries', () => {
 });
 
 describe('the root path', () => {
-  test('lands the user on the demos', async () => {
+  test('opens the front door, which tees up the demos', async () => {
     const memory = createMemoryRouter([router], {initialEntries: ['/']});
     render(<RouterProvider router={memory}/>);
 
-    expect(await screen.findByRole('navigation', {name: 'demos'})).toBeVisible();
+    expect(await screen.findByRole('heading', {level: 1})).toHaveTextContent('The three languages');
+    expect(screen.getByRole('link', {name: /Start with the tables/})).toBeVisible();
   });
 });
