@@ -591,7 +591,7 @@ describe('animated moves', () => {
     expect(firstCells()).toEqual(['Grace', 'Ada']);
   });
 
-  test('an animated swap slides the displaced column — theater, not layout', () => {
+  test('an animated swap slides the displaced column — drawn, not layout', () => {
     const transition = vi.fn((update: () => void) => update());
     (document as {startViewTransition?: unknown}).startViewTransition = transition;
     const four = [
