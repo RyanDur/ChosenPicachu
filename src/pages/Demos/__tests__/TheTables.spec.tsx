@@ -236,6 +236,13 @@ describe('the tables demo', () => {
     expect(screen.getByRole('rowheader', {name: /keep themselves current/})).toBeVisible();
     expect(screen.getByRole('heading', {name: 'Cultivate a design from the need'})).toBeVisible();
     expect(screen.getByRole('heading', {name: 'Generate the stories from the design'})).toBeVisible();
+    const sliced = within(screen.getByRole('list', {name: 'the slices'}));
+    ['The trader can read the market in a table',
+      'The trader can watch the market live, in windows',
+      'The trader can sort by column, and by row',
+      'The trader can sort the windows by any measure, or take the order back',
+      'The trader can widen a column'
+    ].forEach(slice => expect(sliced.getByText(slice)).toBeVisible());
     expect(screen.getByRole('link', {name: 'user story'}))
       .toHaveAttribute('href', expect.stringContaining('initialcapacity.io/insights/user-story'));
     expect(screen.getByRole('complementary', {name: 'what a design cannot tell you'})).toBeVisible();
@@ -496,7 +503,7 @@ describe('the tables demo', () => {
 
       renderTables(urlOf(feed), '?tab=tables&world=vanilla');
 
-      expect(await screen.findByText('The trader can watch the market live, in windows')).toBeInTheDocument();
+      expect(await screen.findByRole('heading', {name: 'The trader can watch the market live, in windows'})).toBeInTheDocument();
       expect(screen.getByText('Drag resize')).toBeInTheDocument();
       expect((await screen.findAllByRole('radio', {name: 'Eager', hidden: true})).length).toBeGreaterThan(0);
       expect(screen.queryByText('The trader can read the market in windows')).not.toBeInTheDocument();
@@ -507,7 +514,7 @@ describe('the tables demo', () => {
 
       renderTables(urlOf(feed), '?tab=tables&world=vanilla&tut=menu');
 
-      expect(await screen.findByText('The trader can sort the windows by any measure, or take the order back')).toBeInTheDocument();
+      expect(await screen.findByRole('heading', {name: 'The trader can sort the windows by any measure, or take the order back'})).toBeInTheDocument();
     });
 
     test('the resize story stands in the html world', async () => {
@@ -515,7 +522,7 @@ describe('the tables demo', () => {
 
       renderTables(urlOf(feed), '?tab=tables&world=vanilla&tut=resize');
 
-      expect(await screen.findByText('The trader can widen a column')).toBeInTheDocument();
+      expect(await screen.findByRole('heading', {name: 'The trader can widen a column'})).toBeInTheDocument();
     });
 
     test('the sort tutorial stands in every build, in both worlds, on both tracks', async () => {

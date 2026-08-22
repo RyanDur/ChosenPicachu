@@ -52,7 +52,11 @@ export const ListTutorials: FC = () => {
         <Slices who="user"
                 can="The user can keep the list in the order they mean"
                 soThat="so that what belongs above sits above"
-                slices="It slices thin: the same sort told twice, once by pointer on the platform’s own drag-and-drop road, and once by keyboard going straight to the order. Every card below is one of the slices, and each opens into its build."/>
+                slices="It slices thin: the same sort told twice, once by pointer on the platform’s own drag-and-drop road, and once by keyboard going straight to the order. Every card below is one of the slices, and each opens into its build."
+                sliced={[
+                  'The user can sort the list',
+                  'The user can sort without a mouse'
+                ]}/>
         <p className="verdict paragraph">
           If you want the exercise, stop here and build the story yourself first. The list is
           our interpretation of that; the cards below break the interpretation into features.

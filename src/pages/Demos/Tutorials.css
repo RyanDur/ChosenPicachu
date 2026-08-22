@@ -232,6 +232,18 @@
     color: var(--charcoal);
   }
 
+  .sliced {
+    margin: 0;
+    padding-inline-start: var(--base-x-2_5);
+    display: grid;
+    gap: var(--base-x-0_5);
+  }
+
+  .slice {
+    font-style: italic;
+    color: var(--charcoal);
+  }
+
   .design-item {
     display: flex;
     align-items: center;
