@@ -18,12 +18,17 @@ const alreadyInShell = closure('index.html');
 const moduleOf = page => Object.keys(manifest).find(key => new RegExp(`pages/${page}/(index|routes)\\.tsx?$`).test(key));
 const pageOf = route => route.startsWith('/demos/') ? 'Demos' : undefined;
 
-const preloaded = route => {
+const chunkLinks = route => {
   const page = pageOf(route);
-  if (page === undefined) return shell;
-  const links = [...closure(moduleOf(page))]
+  if (page === undefined) return [];
+  return [...closure(moduleOf(page))]
     .filter(key => !alreadyInShell.has(key))
     .map(key => `    <link rel="modulepreload" crossorigin href="${base}${manifest[key].file}">`);
+};
+
+const preloaded = route => {
+  const links = chunkLinks(route);
+  if (links.length === 0) return shell;
   return shell.replace('</head>', `${links.join('\n')}\n  </head>`);
 };
 
@@ -32,6 +37,5 @@ for (const route of staticRoutes) {
   mkdirSync(`dist${route}`, {recursive: true});
   writeFileSync(`dist${route}/index.html`, preloaded(route));
 }
-writeFileSync('dist/index.html', preloaded('/demos/'));
 rmSync('dist/.vite', {recursive: true});
 console.log(`SPA entry points: 404.html, ${staticRoutes.join(', ')}`);
