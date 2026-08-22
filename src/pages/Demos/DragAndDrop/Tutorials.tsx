@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
 import {motionParam, originParam, paceParam} from '../Controls';
 import {Clues, Design, Slices} from '../Recipe/Arc';
-import {DialNote, Exercise, useArrival} from '../Recipe';
+import {DialNote, Exercise, stationId, useArrival} from '../Recipe';
 import {ListControls} from './ListControls';
 import {NativeRecipe} from './NativeRecipe';
 import '../Tutorials.css';
@@ -36,29 +36,29 @@ export const ListTutorials: FC = () => {
   return <section className="tutorials">
     <h2 className="tutorials-title">let’s build this feature</h2>
     <ol className="spine">
-      <li className="station" id="station-1">
+      <li className="station" id={stationId(1)}>
         <Clues quote="I have a list, and the order is mine. When something belongs above something else, I want to pick it up and put it there, and see it land where I dropped it."
                by="a user"
                clues={clues}
                verdict="Items whose positions carry the meaning are a list, and the platform’s list element carries it: entries a reader and a screen reader both walk, in exactly the order the markup says. Everything after this point is layered onto that one choice."/>
       </li>
-      <li className="station" id="station-2">
+      <li className="station" id={stationId(2)}>
         <Design sketch={sketch}
                 answers="The design answers shape: how a card reads, where the hand grabs, how dense the stack."
                 unanswered={unanswered}/>
       </li>
-      <li className="station" id="station-3">
+      <li className="station" id={stationId(3)}>
         <Slices who="user"
                 can="The user can keep the list in the order they mean"
                 soThat="so that what belongs above sits above"
                 slices="It slices thin: the same sort told twice, once by pointer on the platform’s own drag-and-drop road, and once by keyboard going straight to the order. Every card below is one of the slices, and each opens into its build."
                 sliced={[
-                  ['The user can sort the list', 'station 4'],
-                  ['The user can sort without a mouse', 'station 4']
+                  ['The user can sort the list', 4],
+                  ['The user can sort without a mouse', 4]
                 ]}/>
         <Exercise interprets="list"/>
       </li>
-      <li className="station" id="station-4">
+      <li className="station" id={stationId(4)}>
         <h3 className="phase-title">Layer on functionality, in the order it was asked for</h3>
         <DialNote reads="list"/>
         <ListControls pace={pace} origin={origin} motion={motion}

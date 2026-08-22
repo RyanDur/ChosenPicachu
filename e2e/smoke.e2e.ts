@@ -62,3 +62,15 @@ for (const entry of ['users', 'demos', 'games', 'gallery']) {
     await expect(page.getByRole('navigation').first()).toBeVisible({timeout: 30_000});
   });
 }
+
+test('the demos entry preloads its page chunk', async ({page}) => {
+  await page.goto('demos');
+
+  await expect(page.locator('link[rel=modulepreload]')).not.toHaveCount(0);
+});
+
+test('the gallery entry stays pristine', async ({page}) => {
+  await page.goto('gallery');
+
+  await expect(page.locator('link[rel=modulepreload]')).toHaveCount(0);
+});
