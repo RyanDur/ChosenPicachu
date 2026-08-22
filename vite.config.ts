@@ -101,6 +101,9 @@ export default defineConfig(({mode}) => ({
   resolve: {
     alias: aliases
   },
+  build: {
+    manifest: true
+  },
   plugins: [rawCss(), frameScript(), runtimeEnv(loadEnv(mode, process.cwd())), react(), svgr({
     // svgr options: https://react-svgr.com/docs/options/
     svgrOptions: { exportType: 'default', ref: true, svgo: false, titleProp: true },
