@@ -170,6 +170,9 @@ describe('the sortable list demo', () => {
     expect(screen.getByRole('heading', {name: 'Cultivate a design from the need'})).toBeVisible();
     expect(screen.getByRole('complementary', {name: 'what a design cannot tell you'})).toBeVisible();
     expect(screen.getByRole('heading', {name: 'Generate the stories from the design'})).toBeVisible();
+    const sliced = within(screen.getByRole('list', {name: 'the slices'}));
+    ['The user can sort the list', 'The user can sort without a mouse']
+      .forEach(slice => expect(sliced.getByText(slice)).toBeVisible());
     expect(screen.getByRole('heading', {name: 'The user can keep the list in the order they mean'})).toBeVisible();
     expect(screen.getByRole('link', {name: 'user story'}))
       .toHaveAttribute('href', expect.stringContaining('initialcapacity.io/insights/user-story'));
