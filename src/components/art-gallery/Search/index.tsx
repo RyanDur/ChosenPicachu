@@ -46,10 +46,10 @@ export const Search: FC<Props> = ({id}) => {
     <input type="search" autoComplete="off" list="search-options" id="query"
            className="bare white"
            onInput={event => updateQuery(event.currentTarget.value)}/>
-    <button className="submit-query paper pressable" disabled={!searchString.length} type="submit"
+    <button className="submit-query paper" disabled={!searchString.length} type="submit"
             aria-label="submit search"><img src={searchIcon} alt=""/></button>
-    <button className="reset-query paper pressable" type="reset" aria-label="reset search"><img src={resetIcon} alt=""/></button>
-    <datalist id="search-options">
+    <button className="reset-query paper" type="reset" aria-label="reset search"><img src={resetIcon} alt=""/></button>
+    <datalist id="search-options" className="search-options">
       {searchOptions.map((searchOption, index) =>
         <option value={searchOption} key={index}>{searchOption}</option>)}
     </datalist>

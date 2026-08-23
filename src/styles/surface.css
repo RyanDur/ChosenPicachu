@@ -9,10 +9,7 @@
 .drop-shadow { box-shadow: var(--light-box-shadow); }
 
 .raised { box-shadow: var(--raised); }
-.bare {
-  appearance: none;
-  border: none;
-}
+.bare { appearance: none; }
 .void { background: var(--void); }
 
 .pressable {
@@ -20,10 +17,6 @@
   &:focus {
     color: var(--white);
     background-color: var(--primary-dark-blue);
-  }
-
-  &:active {
-    box-shadow: var(--press-glow);
   }
 }
 

@@ -3,34 +3,61 @@
   inline-size: 100%;
   block-size: 100%;
   column-gap: var(--base);
-  grid-template-columns: auto var(--base-x-8) var(--base-x-8);
+  grid-template-columns: var(--base-x-8) auto var(--base-x-8);
   grid-template-rows: 40% 1fr;
   grid-template-areas:
-    'query-label query-label query-label'
-    'query submit reset';
+    'reset query-label submit'
+    'reset query submit';
 
   #query-label {
     grid-area: query-label;
     line-height: var(--base-x-4);
-    padding-inline: var(--base-x-2);
+    padding: 0 var(--base-x-2);
+    border: none;
   }
 
   #query {
     grid-area: query;
-    padding-inline: var(--base-x-2);
-  }
-
-  .submit-query {
-    grid-area: submit;
+    padding: 0 var(--base-x-2);
+    border: none;
   }
 
   .reset-query {
     grid-area: reset;
   }
 
-  .submit-query img,
-  .reset-query img {
-    block-size: var(--base-x-2_5);
+  .submit-query {
+    grid-area: submit;
+  }
+
+  /* dress parked here until its needs are named; the refactor changes no looks */
+  &:has(#query:hover) #query-label,
+  &:has(#query:focus) #query-label {
+    background-color: var(--mint);
+  }
+
+  .search-options {
+    background: var(--paper);
+  }
+
+  .submit-query,
+  .reset-query {
+    display: grid;
+    place-items: center;
+    border: none;
+
+    img {
+      block-size: var(--base-x-2_5);
+    }
+
+    &:hover,
+    &:focus {
+      background-color: var(--mint);
+    }
+
+    &:active {
+      box-shadow: var(--press-glow);
+    }
   }
 }
 
@@ -46,6 +73,10 @@
     grid-template-areas:
       'query-label query-label'
       'query query'
-      'submit reset';
+      'reset submit';
+
+    .submit-query {
+      margin-left: var(--base);
+    }
   }
 }
