@@ -39,7 +39,7 @@ export const ArtPiece = () => {
         {loading && <Loading label="loading piece"/>}
         {has(piece) && not(errored) && <figure className="art-piece art-work">
           <Image piece={piece} linkEnabled={false} className="piece hung"/>
-          <figcaption className="artist-display trim hairline-outline italic">{piece.artistInfo}</figcaption>
+          <figcaption className="trim artist-display hairline-outline italic">{piece.artistInfo}</figcaption>
         </figure>}
         {errored && <article className="art-piece err">
           <img src={noImage}
