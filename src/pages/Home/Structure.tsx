@@ -31,12 +31,12 @@ export const Structure: FC = () =>
         collide. Sections name themselves through their headings, and if a section has nothing
         to be named by, that is the page telling me it is not a section.</p>
       <p className="paragraph">The elements mean something, and not just visually: a nav
-        announces wayfinding and a button promises a press to readers whose affordances
-        differ from mine. The right tag hands most of that over for free,{' '}
+        announces wayfinding and a button promises a press to readers whose way in
+        differs from mine. The right tag hands most of that over for free,{' '}
         <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA">“built-in keyboard accessibility, roles and states”</a> in
         MDN’s words; repurpose a meaningless tag instead, and I become responsible for
         rebuilding all of it in script. The field even has a saying,{' '}
-        <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA">“No ARIA is better than bad ARIA”</a>: WebAIM
+        <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA">“No ARIA is better than bad ARIA”</a>; WebAIM
         found pages using ARIA averaged{' '}
         <a className="signpost" href="https://webaim.org/projects/million/">41 percent more detected errors</a> than
         pages without.</p>
@@ -49,7 +49,7 @@ export const Structure: FC = () =>
         divs gives them nothing to navigate by. Everywhere else the name holds: figures
         carry their captions, lists admit they are lists, buttons are buttons even when
         they look like links.</p>
-      <p className="paragraph">The test of a structure is reading it with the styles off.
+      <p className="paragraph">The test of the organization is reading the markup with the styles off.
         Naked, the page should still say everything it means, in order: that reading is what
         search engines, reader modes, and assistive tech consume. If the meaning only appears
         when the CSS arrives, the meaning is living in the wrong language.</p>

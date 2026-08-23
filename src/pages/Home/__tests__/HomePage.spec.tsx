@@ -61,7 +61,7 @@ describe('the home page', () => {
     expect(door.getByText(/nothing to navigate by/)).toBeInTheDocument();
     expect(door.getByRole('link', {name: /No ARIA is better than bad ARIA/, hidden: true}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
-    expect(door.getByText(/reading it with the styles off/)).toBeInTheDocument();
+    expect(door.getByText(/reading the markup with the styles off/)).toBeInTheDocument();
   });
 
   test('the presentation door folds open how I organize it, ungrouped', () => {
