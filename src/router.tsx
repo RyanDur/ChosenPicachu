@@ -29,13 +29,13 @@ export const MountedTable = () => {
   return <BannerProvider>
     <Provider>
       <HeaderRegion/>
-      <main className={classNames('app-main', mainClassName)}>
+      <main className={classNames('app-main', 'paper', mainClassName)}>
         <Outlet/>
       </main>
-      {AsideRegion !== undefined && <aside id="filter" aria-label="filters">
+      {AsideRegion !== undefined && <aside id="filter" className="filter paper" aria-label="filters">
         <AsideRegion/>
       </aside>}
-      {FooterRegion !== undefined && <footer id="app-footer" className="stick-to-bottom">
+      {FooterRegion !== undefined && <footer id="app-footer" className="app-footer stick-to-bottom paper">
         <FooterRegion/>
       </footer>}
       <SideNav/>

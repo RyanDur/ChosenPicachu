@@ -23,13 +23,13 @@ const GalleryProviders = ({children}: PropsWithChildren) =>
 
 const GalleryHeader = () =>
   <Header title="Gallery">
-    <Search id="gallery-search"/>
+    <Search id="gallery-search" className="gallery-search"/>
   </Header>;
 
 const PieceHeader = () => {
   const {piece} = useArtPiece();
   return <Header title={piece.title ?? ''}>
-    <Search id="gallery-search"/>
+    <Search id="gallery-search" className="gallery-search"/>
   </Header>;
 };
 

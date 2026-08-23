@@ -6,6 +6,7 @@ import {sourceParam} from '@components/art-gallery/museums/types/resource';
 import * as schema from 'schemawax';
 import {GalleryLinks} from '@components/art-gallery/Links';
 import {debounce} from 'throttle-debounce';
+import {classNames} from '@components/class-names';
 import {has} from '@ryandur/sand';
 import {art} from '@components/art-gallery/museums';
 import './Search.css';
@@ -14,9 +15,10 @@ import resetIcon from '../../../assets/icons/reset.png';
 
 type Props = {
   id?: string;
+  className?: string;
 }
 
-export const Search: FC<Props> = ({id}) => {
+export const Search: FC<Props> = ({id, className}) => {
   const [searchOptions, updateSearchOptions] = useState<SearchOptions>([]);
   const [searchString, updateQuery] = useState<string>('');
   const navigate = useNavigate();
@@ -41,7 +43,7 @@ export const Search: FC<Props> = ({id}) => {
 
   const handleReset = () => removeSearchParams('search');
 
-  return <search id={id} className="search void"><form className="search-form" onSubmit={handleSubmit} onReset={handleReset}>
+  return <search id={id} className={classNames('search', 'void', className)}><form className="search-form" onSubmit={handleSubmit} onReset={handleReset}>
     <label id="query-label" className='query-label paper ellipsis' htmlFor="query"><span className='bold'>Search For:</span> {decodeURI(search || '')}</label>
     <input type="search" autoComplete="off" list="search-options" id="query"
            className="query bare white"

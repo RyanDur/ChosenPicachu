@@ -9,3 +9,7 @@
   position: absolute;
   right: 1000vw;
 }
+.stick-to-bottom {
+  position: sticky;
+  bottom: 0;
+}
