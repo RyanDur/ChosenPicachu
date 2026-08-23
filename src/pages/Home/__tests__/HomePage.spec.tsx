@@ -16,10 +16,10 @@ describe('the home page', () => {
   test('the timeline walks the drift and the correction', () => {
     const timeline = within(screen.getByRole('list', {name: 'the timeline'}));
 
-    expect(timeline.getAllByRole('listitem')).toHaveLength(14);
-    ['1989', '1990', '1995', '1996', '2003', '2004', '2005', '2013', '2014', '2016', 'Today'].forEach(year =>
+    expect(timeline.getAllByRole('listitem')).toHaveLength(13);
+    ['1989', '1990', '1995', '1996', '2003', '2004', '2005', '2013', '2014', '2016'].forEach(year =>
       expect(timeline.getAllByText(year).length).toBeGreaterThan(0));
-    [/Someone needs something/, /Presentation leaves home/, /The cascade settles it/, /The languages blur/, /The garden proves it/, /says it out loud/, /becomes an application/, /The blur returns/, /The document comes back/, /take the pen/, /carries it on/]
+    [/Someone needs something/, /Presentation leaves home/, /The cascade settles it/, /The languages blur/, /The garden proves it/, /says it out loud/, /becomes an application/, /The blur returns/, /The document comes back/, /take the pen/]
       .forEach(beat => expect(timeline.getByRole('heading', {name: beat})).toBeVisible());
   });
 
@@ -34,9 +34,9 @@ describe('the home page', () => {
   test('every beat opens into its fuller story, closed until asked', () => {
     const timeline = within(screen.getByRole('list', {name: 'the timeline'}));
 
-    expect(timeline.getAllByText('the fuller story')).toHaveLength(14);
+    expect(timeline.getAllByText('the fuller story')).toHaveLength(13);
     expect(document.querySelectorAll('.timeline details[open]')).toHaveLength(0);
-    [/Viola/, /Mocha/, /ham is to hamster/, /MULTICOL/, /Wired News/, /React in 2013/, /CSS-in-JS/, /Next\.js/, /island of behavior/, /the projection is the difference/, /WorldWideWeb/, /Self-ish/, /eczema/, /aural/, /namespaces/, /ill-fated ES4/, /Chedeau/, /Sylor-Miller/, /you’re screwed/, /40% helvetica/, /Fahrner/, /Enquire/, /dictatorship/, /WHATWG/, /Living Standard/, /real-world web developers/]
+    [/Viola/, /Mocha/, /ham is to hamster/, /MULTICOL/, /Wired News/, /React in 2013/, /CSS-in-JS/, /Next\.js/, /island of behavior/, /WorldWideWeb/, /Self-ish/, /eczema/, /aural/, /namespaces/, /ill-fated ES4/, /Chedeau/, /Sylor-Miller/, /you’re screwed/, /40% helvetica/, /Fahrner/, /Enquire/, /dictatorship/, /WHATWG/, /Living Standard/, /real-world web developers/]
       .forEach(depth => expect(timeline.getAllByText(depth).length).toBeGreaterThan(0));
     expect(timeline.getByRole('link', {name: 'the essay', hidden: true}))
       .toHaveAttribute('href', expect.stringContaining('adaptivepath'));
@@ -62,7 +62,7 @@ describe('the home page', () => {
   });
 
   test('the research stands collected, closed until asked', () => {
-    const bibliography = screen.getByRole('region', {name: 'bibliography'});
+    const bibliography = screen.getByRole('region', {name: 'The research'});
 
     expect(within(bibliography).getByRole('heading', {name: 'The research'})).toBeVisible();
     expect(bibliography.querySelector('details[open]')).toBeNull();
@@ -74,11 +74,11 @@ describe('the home page', () => {
     expect(bibliography.querySelector('a[href*="w3.org/History/1989"]')).not.toBeNull();
   });
 
-  test('each door and the closing walk into the demos', () => {
-    const doorways = screen.getAllByRole('link', {name: 'the demos'});
-    expect(doorways).toHaveLength(3);
-    doorways.forEach(doorway =>
-      expect(doorway).toHaveAttribute('href', expect.stringContaining(Paths.demos)));
+  test('the doors define before the history argues, and the closing walks in', () => {
+    const doors = screen.getByRole('heading', {name: 'Structure', level: 2});
+    const record = screen.getByRole('heading', {name: 'How the web got its languages'});
+    expect(doors.compareDocumentPosition(record) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(screen.getByText(/The projection is the difference/)).toBeVisible();
     expect(screen.getByRole('link', {name: /Start where the demos start/}))
       .toHaveAttribute('href', expect.stringContaining(Paths.demos));
   });

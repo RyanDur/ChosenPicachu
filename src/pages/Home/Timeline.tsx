@@ -12,11 +12,10 @@ import {PageBecomesApplication} from './record/PageBecomesApplication';
 import {BlurReturns} from './record/BlurReturns';
 import {Html5SaysIt} from './record/Html5SaysIt';
 import {DocumentComesBack} from './record/DocumentComesBack';
-import {ThisSite} from './record/ThisSite';
 
 export const Timeline: FC = () =>
-  <section className="record" aria-label="the history">
-    <h2 className="record-title">How the web got its languages</h2>
+  <section className="record" aria-labelledby="the-record">
+    <h2 className="record-title" id="the-record">How the web got its languages</h2>
     <ol className="timeline" aria-label="the timeline">
       <Need/>
       <StructureArrives/>
@@ -31,6 +30,5 @@ export const Timeline: FC = () =>
       <BlurReturns/>
       <Html5SaysIt/>
       <DocumentComesBack/>
-      <ThisSite/>
     </ol>
   </section>;

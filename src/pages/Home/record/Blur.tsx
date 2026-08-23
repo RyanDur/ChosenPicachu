@@ -4,7 +4,7 @@ import {Moment} from './Moment';
 export const Blur: FC = () =>
   <Moment year="1996"
           title="The languages blur"
-          tells={<>Presentation had been leaking into markup since before the war, columns and fonts
+          tells={<>Presentation had been leaking into markup since before the browser wars, columns and fonts
             written as tags, and{' '}
             <a className="signpost" href="https://thehistoryoftheweb.com/the-rise-of-css/">the war made it
             worse</a>: vendor tags on every side, and CSS itself{' '}

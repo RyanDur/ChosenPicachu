@@ -11,10 +11,10 @@ import './Home.css';
 export const HomePage: FC = () =>
   <article className="home">
     <Opener/>
-    <Timeline/>
     <Structure/>
     <Presentation/>
     <DynamicInteraction/>
+    <Timeline/>
     <Bibliography/>
     <TeeUp/>
   </article>;

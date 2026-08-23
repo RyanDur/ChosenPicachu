@@ -1,15 +1,17 @@
 import {FC} from 'react';
 
 export const Opener: FC = () => <>
-  <blockquote className="feedback">
-    <p className="quote">
-      HyperText is a way to link and access information of various kinds as a web of nodes
-      in which the user can browse at will.
-    </p>
-    <footer className="attribution">Tim Berners-Lee and Robert Cailliau,{' '}
+  <figure className="feedback">
+    <blockquote>
+      <p className="quote">
+        HyperText is a way to link and access information of various kinds as a web of nodes
+        in which the user can browse at will.
+      </p>
+    </blockquote>
+    <figcaption className="attribution">Tim Berners-Lee and Robert Cailliau,{' '}
       <a className="signpost" href="https://www.w3.org/History/19921103-hypertext/hypertext/WWW/Proposal.html">proposing
-      the WorldWideWeb, 1990</a></footer>
-  </blockquote>
+      the WorldWideWeb, 1990</a></figcaption>
+  </figure>
   <p className="thesis paragraph">
     Someone needed something: researchers, scattered across institutes, losing each other’s
     documents. Everything on the web is layered onto that one need.

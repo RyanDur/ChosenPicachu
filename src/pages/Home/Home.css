@@ -7,6 +7,10 @@
     margin: 0;
     display: grid;
     gap: var(--base);
+
+    blockquote {
+      margin: 0;
+    }
   }
 
   .quote {
@@ -34,6 +38,7 @@
   }
 
   .record-title,
+  .research-title,
   .door-title {
     margin: 0;
     font-size: var(--text-headline);
@@ -53,6 +58,18 @@
     grid-template-columns: var(--base-x-8) minmax(0, 1fr);
     column-gap: var(--base-x-2);
     padding-block: var(--base-x-2);
+  }
+
+  .moment::before {
+    content: '';
+    position: absolute;
+    inset-block-start: calc(var(--base-x-2) + var(--base-x-0_5));
+    inset-inline-start: calc(var(--base-x-8) + var(--base-x-2) / 2 - var(--base-x-0_5));
+    width: var(--base);
+    height: var(--base);
+    border-radius: 50%;
+    background: var(--void);
+    z-index: 1;
   }
 
   .moment::after {
@@ -144,7 +161,7 @@
       width: fit-content;
     }
 
-    .record-title {
+    .research-title {
       display: inline;
     }
   }
