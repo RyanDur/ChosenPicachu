@@ -186,7 +186,8 @@
     text-wrap: pretty;
   }
 
-  .fuller-story {
+  .fuller-story,
+  .door-fold {
     .prompt {
       cursor: pointer;
       width: fit-content;
