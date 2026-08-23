@@ -1,14 +1,59 @@
+/* dress not yet named as needs is marked "parked dress"; the refactor changes no looks */
 #user-info-form {
   width: 100%;
+  display: grid;
+  column-gap: var(--base-x-2);
+  row-gap: var(--base-x-2);
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-areas:
+    'title title title title title title title title title title avatar avatar'
+    'first_name first_name first_name first_name first_name last_name last_name last_name last_name last_name avatar avatar'
+    'email email email email email email email dob dob dob avatar avatar'
+    'home_address_title home_address_title home_address_title . . . work_address_title same_as_home same_as_home . avatar avatar'
+    'home_address home_address home_address home_address home_address home_address work_address work_address work_address work_address work_address work_address'
+    'details details details details details details details details details details details details'
+    'reset reset reset cancel cancel cancel submit submit submit submit submit submit';
+
+  #form-title {
+    grid-area: title;
+  }
+
+  #first-name-cell,
+  #last-name-cell,
+  #email-cell {
+    align-self: center;
+  }
+
+  #first-name-cell {
+    grid-area: first_name;
+  }
+
+  #last-name-cell {
+    grid-area: last_name;
+  }
+
+  #email-cell {
+    grid-area: email;
+  }
+
+  #dob-cell {
+    grid-area: dob;
+    align-self: center;
+    display: flex;
+  }
 
   #avatar-cell {
-    border: none;
-    outline: none;
+    grid-area: avatar;
+    justify-self: flex-end;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: var(--base-x-1_25);
     width: var(--base-x-25);
+
+    /* parked dress */
+    border: none;
+    outline: none;
     background: var(--faded-leather);
 
     &:focus,
@@ -26,61 +71,34 @@
     }
   }
 
-  &.read-only *,
-  &.read-only #avatar-cell {
-    box-shadow: none;
-    cursor: initial;
+  #home-address-title {
+    grid-area: home_address_title;
   }
 
-  *:user-invalid {
-    border: var(--hairline) solid var(--internationl-orange-engineering);
-    box-shadow: var(--drop-shadow);
-  }
-
-  #details-cell {
-    #details {
-      resize: vertical;
-      border-radius: var(--radius);
-      min-height: var(--base-x-0_5);
-      position: relative;
-
-      &:read-only {
-        resize: none;
-        border-radius: 0;
-      }
-    }
-  }
-
-  #dob-cell {
-    display: flex;
-  }
-
-  #dob {
-    min-width: 50%;
-    background-color: var(--white);
-
-    &:invalid {
-      color: transparent;
-    }
-
-    &:focus {
-      color: var(--void);
-    }
+  #work-address-title {
+    grid-area: work_address_title;
+    white-space: nowrap;
   }
 
   #same-as-home-cell {
+    grid-area: same_as_home;
+    justify-self: flex-start;
+    align-self: center;
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
-    border-radius: var(--radius-pill);
     height: var(--base-x-2_5);
     text-align: center;
     width: 100%;
+
+    /* parked dress */
+    border-radius: var(--radius-pill);
     font-size: var(--text-body);
 
     #same-as-home {
       margin-left: var(--base-x-1_25);
 
+      /* parked dress */
       &:focus {
         outline: none;
         font-size: var(--base-x-2);
@@ -103,14 +121,99 @@
     }
   }
 
+  #home-address {
+    grid-area: home_address;
+  }
+
+  #work-address {
+    grid-area: work_address;
+  }
+
+  #details-cell {
+    grid-area: details;
+
+    #details {
+      resize: vertical;
+      min-height: var(--base-x-0_5);
+      position: relative;
+
+      /* parked dress */
+      border-radius: var(--radius);
+
+      &:read-only {
+        resize: none;
+        border-radius: 0;
+      }
+    }
+  }
+
+  #reset-form {
+    grid-area: reset;
+  }
+
+  #cancel {
+    grid-area: cancel;
+  }
+
+  #submit {
+    grid-area: submit;
+  }
+
+  &.read-only *,
+  &.read-only #avatar-cell {
+    box-shadow: none;
+    cursor: initial;
+  }
+
+  /* parked dress: the invalid answer */
+  *:user-invalid {
+    border: var(--hairline) solid var(--internationl-orange-engineering);
+    box-shadow: var(--drop-shadow);
+  }
+
+  #dob {
+    min-width: 50%;
+
+    /* parked dress */
+    background-color: var(--white);
+
+    &:invalid {
+      color: transparent;
+    }
+
+    &:focus {
+      color: var(--void);
+    }
+  }
+
   &:not(.read-only) *:required + .fancy-title::after {
-    content: "*";
+    content: '*';
     color: var(--internationl-orange-engineering);
+  }
+}
+
+@media (max-width: 1547px) {
+  #user-info-form {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-areas:
+      'title title avatar'
+      'first_name first_name first_name'
+      'last_name last_name last_name'
+      'email email dob'
+      'home_address_title . . '
+      'home_address home_address home_address'
+      'work_address_title same_as_home .'
+      'work_address work_address work_address'
+      'details details details'
+      'reset cancel submit';
   }
 }
 
 @media (max-width: 1000px) {
   #user-info-form {
+    display: flex;
+    flex-direction: column;
+
     #dob {
       width: 50%;
     }

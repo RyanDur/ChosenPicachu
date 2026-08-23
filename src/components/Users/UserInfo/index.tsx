@@ -22,7 +22,6 @@ import {FancyDateInput} from '@components/FancyFormElements/FancyDateInput';
 import {toDate} from 'date-fns';
 import {Consumer} from '@ryandur/sand';
 import {UsersLinks} from './Links';
-import './Form.layout.css';
 import './Form.css';
 
 type FormProps = {

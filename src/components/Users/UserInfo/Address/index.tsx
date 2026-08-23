@@ -3,7 +3,7 @@ import {FancyInput} from '@components/FancyFormElements/FancyInput';
 import {FancySelect} from '@components/FancyFormElements/FancySelect';
 import {stateAbbreviations} from './states';
 import {AddressInfo} from '../types';
-import './Address.layout.css';
+import './Address.css';
 
 type AddressProps = {
     onChange: (address: AddressInfo) => void;
