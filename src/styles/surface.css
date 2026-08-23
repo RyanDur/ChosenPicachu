@@ -11,6 +11,14 @@
 .raised { box-shadow: var(--raised); }
 .bare { appearance: none; }
 .borderless { border: none; }
+
+.lit {
+  &:hover,
+  &:focus,
+  &:focus-within {
+    background-color: var(--mint);
+  }
+}
 .faded-leather { background: var(--faded-leather); }
 
 .raisable {

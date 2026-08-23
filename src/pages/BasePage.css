@@ -32,11 +32,6 @@
         background-color: var(--paper);
         height: var(--base-x-8);
         width: 100%;
-
-        &:focus,
-        &:hover {
-          background-color: var(--mint);
-        }
       }
     }
 

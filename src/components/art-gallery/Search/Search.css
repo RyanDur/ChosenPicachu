@@ -28,18 +28,10 @@
     grid-area: submit;
   }
 
-  /* parked dress awaiting the mint ruling: the gallery's hover answer */
+  /* choreography: the query lights its own label */
   &:has(.query:hover) .query-label,
   &:has(.query:focus) .query-label {
     background-color: var(--mint);
-  }
-
-  .submit-query,
-  .reset-query {
-    &:hover,
-    &:focus {
-      background-color: var(--mint);
-    }
   }
 }
 

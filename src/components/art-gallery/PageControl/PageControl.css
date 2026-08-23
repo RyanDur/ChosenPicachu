@@ -38,7 +38,7 @@
   .control {
     width: 100%;
 
-    /* parked dress awaiting the mint ruling and the focus story */
+    /* parked dress awaiting the focus story */
     border-radius: 0;
 
     & + .control-label {
@@ -46,6 +46,7 @@
       display: block;
     }
 
+    /* choreography: the control lights its own label */
     &:hover + .control-label,
     &:focus + .control-label {
       background-color: var(--mint);
@@ -70,13 +71,8 @@
   }
 
   .submit-page-button {
-    /* parked dress awaiting the mint ruling; the font size sits off the type scale */
+    /* parked dress: the font size sits off the type scale */
     font-size: var(--base-x-2);
-
-    &:focus,
-    &:hover {
-      background: var(--mint);
-    }
   }
 }
 
