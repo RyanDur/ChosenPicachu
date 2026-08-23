@@ -45,6 +45,20 @@ describe('the home page', () => {
       expect(story.querySelectorAll('.paragraph').length).toBeGreaterThanOrEqual(3));
   });
 
+  test('the structure door folds open how I organize it, closed until asked', () => {
+    const door = within(screen.getByRole('region', {name: 'Structure'}));
+
+    const fold = door.getByRole('group', {hidden: true});
+    expect(fold).toHaveAttribute('name', 'doors');
+    expect(door.getByText('how I organize it')).toBeVisible();
+    expect(door.getByRole('link', {name: 'search', hidden: true}))
+      .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
+    expect(door.getByRole('link', {name: 'output', hidden: true}))
+      .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
+    expect(door.getByText(/The div is a last resort, not a default/)).toBeInTheDocument();
+    expect(door.getByText(/reading it with the styles off/)).toBeInTheDocument();
+  });
+
   test('the history cites its sources', () => {
     expect(screen.getByRole('link', {name: /proposing the WorldWideWeb/}))
       .toHaveAttribute('href', expect.stringContaining('w3.org/History'));
