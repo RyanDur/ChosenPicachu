@@ -12,12 +12,4 @@ export const Opener: FC = () =>
       <a className="signpost" href="https://www.w3.org/TR/html-design-principles/">“consider adopting
       it rather than forbidding it or inventing something new”</a>.
     </p>
-    <p className="thesis paragraph">
-      Even the standards changed how they arrive: the CSS working group chose independent
-      modules over{' '}
-      <a className="signpost" href="https://www.w3.org/TR/css-2023/">“a single monolithic
-      specification”</a>, and TC39 ratifies a new ECMAScript{' '}
-      <a className="signpost" href="https://tc39.es/process-document/">“in July of each year”</a>.
-      The history below is the iteration. The rest of the site is my practice of it.
-    </p>
   </header>;
