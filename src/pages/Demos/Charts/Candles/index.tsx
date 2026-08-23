@@ -34,7 +34,7 @@ export const Candles: FC<Props> = ({trades, id = 'candle', actions}) => {
   return <section aria-label="candles" className="candles chart card rounded-corners lifted padded">
     <header className="chart-header">
       {actions}
-      <Menu id={`${id}-period`} label="candle period" toggle={period} toggleClassName="period-toggle paper caption">
+      <Menu id={`${id}-period`} label="candle period" toggle={period} toggleClassName="period-toggle field caption">
         {Object.values(Period).map(option =>
           <button type="button" key={option} className="item sub-title"
                   popoverTarget={`${id}-period`} popoverTargetAction="hide"

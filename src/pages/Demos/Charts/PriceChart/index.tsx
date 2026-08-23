@@ -56,7 +56,7 @@ export const PriceChart: FC<Props> = ({trades, id = 'price', actions}) => {
   return <section aria-label="live trades" className="price-chart chart card rounded-corners lifted padded" data-trend={trend}>
     <header className="chart-header">
       {actions}
-      <Menu id={`${id}-period`} label="price period" toggle={period} toggleClassName="period-toggle paper caption">
+      <Menu id={`${id}-period`} label="price period" toggle={period} toggleClassName="period-toggle field caption">
         {Object.values(Period).map(option =>
           <button type="button" key={option} className="item sub-title"
                   popoverTarget={`${id}-period`} popoverTargetAction="hide"
