@@ -57,7 +57,10 @@ describe('the home page', () => {
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
     expect(door.getByRole('link', {name: 'output', hidden: true}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
-    expect(door.getByText(/The div is a last resort, not a default/)).toBeInTheDocument();
+    expect(door.getByText(/invisible to a screen reader/)).toBeInTheDocument();
+    expect(door.getByText(/nothing to navigate by/)).toBeInTheDocument();
+    expect(door.getByRole('link', {name: /No ARIA is better than bad ARIA/, hidden: true}))
+      .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
     expect(door.getByText(/reading it with the styles off/)).toBeInTheDocument();
   });
 

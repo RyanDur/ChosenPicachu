@@ -69,6 +69,22 @@ export const Bibliography: FC = () =>
             <span className="provenance caption">Anne van Kesteren and Maciej Stachowiak, W3C, 2007</span>
           </li>
           <li className="work">
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA">ARIA</a>
+            <span className="provenance caption">MDN</span>
+          </li>
+          <li className="work">
+            <a className="signpost" href="https://html.spec.whatwg.org/multipage/grouping-content.html#the-div-element">The div element</a>
+            <span className="provenance caption">the HTML Standard, WHATWG</span>
+          </li>
+          <li className="work">
+            <a className="signpost" href="https://webaim.org/projects/screenreadersurvey10/">Screen Reader User Survey #10</a>
+            <span className="provenance caption">WebAIM, 2024</span>
+          </li>
+          <li className="work">
+            <a className="signpost" href="https://webaim.org/projects/million/">The WebAIM Million</a>
+            <span className="provenance caption">WebAIM</span>
+          </li>
+          <li className="work">
             <a className="signpost" href="https://web.archive.org/web/20141221170539/https://www.w3.org/standards/webdesign/htmlcss.html">HTML and CSS</a>
             <span className="provenance caption">the W3C; the definitions survive only in the archive</span>
           </li>

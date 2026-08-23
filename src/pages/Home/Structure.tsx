@@ -30,11 +30,25 @@ export const Structure: FC = () =>
         walks them the way eyes scan headings, so every landmark gets a name and no two names
         collide. Sections name themselves through their headings, and if a section has nothing
         to be named by, that is the page telling me it is not a section.</p>
-      <p className="paragraph">The div is a last resort, not a default. It says nothing, which
-        is occasionally the point: when the content model forbids anything better, a div
-        carries the class and stays silent. Everything else has a name: figures carry their
-        captions, lists admit they are lists, buttons are buttons even when they look like
-        links.</p>
+      <p className="paragraph">The elements mean something, and not just visually: a nav
+        announces wayfinding and a button promises a press to readers whose affordances
+        differ from mine. The right tag hands most of that over for free,{' '}
+        <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA">“built-in keyboard accessibility, roles and states”</a> in
+        MDN’s words; repurpose a meaningless tag instead, and I become responsible for
+        rebuilding all of it in script. The field even has a saying,{' '}
+        <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA">“No ARIA is better than bad ARIA”</a>: WebAIM
+        found pages using ARIA averaged{' '}
+        <a className="signpost" href="https://webaim.org/projects/million/">41 percent more detected errors</a> than
+        pages without.</p>
+      <p className="paragraph">The div is for when I want an element to say nothing: it is
+        invisible to a screen reader, and sometimes silence is the right answer. Still an
+        element <a className="signpost" href="https://html.spec.whatwg.org/multipage/grouping-content.html#the-div-element">“of last resort, for when no other element is suitable”</a>,
+        the standard’s own words, because the silence cuts both ways:{' '}
+        <a className="signpost" href="https://webaim.org/projects/screenreadersurvey10/">WebAIM’s screen reader survey</a> finds
+        71.6 percent of users navigate a long page by its headings, and a page built of
+        divs gives them nothing to navigate by. Everywhere else the name holds: figures
+        carry their captions, lists admit they are lists, buttons are buttons even when
+        they look like links.</p>
       <p className="paragraph">The test of a structure is reading it with the styles off.
         Naked, the page should still say everything it means, in order: that reading is what
         search engines, reader modes, and assistive tech consume. If the meaning only appears
