@@ -28,13 +28,14 @@ export const DynamicInteraction: FC = () =>
         one place, and committing the next one is the only way anything moves. Everything
         on screen follows from it: events in, state change, projection out.</p>
       <p className="paragraph">Not every event starts at the pointer. The page talks with
-        servers and feeds, and what comes back, a reply, a price arriving on a socket, is
-        an event like any other: it says what happened somewhere else, and the state still
-        decides what is true when it arrives. Requests go out the same door commits come
-        through, so the outside world never writes to the screen directly.</p>
+        servers and feeds, and what comes back is an event like any other: a reply, a price
+        arriving on a socket. It says what happened somewhere else, and the state still
+        decides what is true when it arrives.</p>
       <p className="paragraph">The core is functional and the shell is imperative. Transitions
         are pure functions from state to state, tested alone with no page in sight; the
-        shell holds the state, listens, commits, and reconciles what stands on screen. The
+        shell holds the state, listens, commits, and reconciles what stands on screen.
+        Requests go out the same path commits come through, so the outside world never
+        writes to the screen directly. The
         same core can wear any shell: swap the framework, or drop it entirely, and only
         the shell changes.</p>
       <p className="paragraph">The platform answers first here, too. The folds on this page
