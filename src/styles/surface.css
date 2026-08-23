@@ -9,13 +9,21 @@
 .drop-shadow { box-shadow: var(--light-box-shadow); }
 
 .raised { box-shadow: var(--raised); }
-.bare { appearance: none; }
+.bare {
+  appearance: none;
+  border: none;
+}
+.void { background: var(--void); }
 
 .pressable {
   &:hover,
   &:focus {
     color: var(--white);
     background-color: var(--primary-dark-blue);
+  }
+
+  &:active {
+    box-shadow: var(--press-glow);
   }
 }
 

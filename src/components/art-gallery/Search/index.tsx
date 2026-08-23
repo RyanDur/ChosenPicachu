@@ -9,7 +9,8 @@ import {debounce} from 'throttle-debounce';
 import {has} from '@ryandur/sand';
 import {art} from '@components/art-gallery/museums';
 import './Search.css';
-import './Search.layout.css';
+import searchIcon from '../../../assets/icons/search.png';
+import resetIcon from '../../../assets/icons/reset.png';
 
 type Props = {
   id?: string;
@@ -40,14 +41,15 @@ export const Search: FC<Props> = ({id}) => {
 
   const handleReset = () => removeSearchParams('search');
 
-  return <search className="search"><form id={id} className="search-form" onSubmit={handleSubmit} onReset={handleReset}>
+  return <search className="search void"><form id={id} className="search-form" onSubmit={handleSubmit} onReset={handleReset}>
+    <label id="query-label" className='paper ellipsis' htmlFor="query"><span className='bold'>Search For:</span> {decodeURI(search || '')}</label>
     <input type="search" autoComplete="off" list="search-options" id="query"
+           className="bare white"
            onInput={event => updateQuery(event.currentTarget.value)}/>
-    <label id="query-label" className='ellipsis' htmlFor="query"><span className='bold'>Search For:</span> {decodeURI(search || '')}</label>
-    <button className="reset-query" type="reset" aria-label="reset search"/>
-    <button className="submit-query" disabled={!searchString.length} type="submit"
-            aria-label="submit search"/>
-    <datalist id="search-options" className="search-options">
+    <button className="submit-query paper pressable" disabled={!searchString.length} type="submit"
+            aria-label="submit search"><img src={searchIcon} alt=""/></button>
+    <button className="reset-query paper pressable" type="reset" aria-label="reset search"><img src={resetIcon} alt=""/></button>
+    <datalist id="search-options">
       {searchOptions.map((searchOption, index) =>
         <option value={searchOption} key={index}>{searchOption}</option>)}
     </datalist>
