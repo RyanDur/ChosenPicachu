@@ -1,6 +1,6 @@
 .pill-glider {
   --chosen-color: var(--charcoal);
-  --not-chosen-color: var(--paper);
+  --not-chosen-color: var(--field);
 
   width: fit-content;
 

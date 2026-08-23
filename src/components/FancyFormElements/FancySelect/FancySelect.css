@@ -1,3 +1,5 @@
+/* the select's covering: a hand-drawn arrow while options could not be styled;
+   appearance: base-select is the platform's arriving answer — this retires with it */
 .fancy-select .fancy-select-box {
   all: unset;
   height: 100%;
@@ -5,7 +7,7 @@
   display: flex;
   align-items: center;
   box-sizing: border-box;
-  background-color: var(--white);
+  background-color: var(--card);
   background-image: linear-gradient(45deg, transparent 50%, var(--gray) 50%),
     linear-gradient(135deg, var(--gray) 50%, transparent 50%),
     linear-gradient(to right, var(--silver), var(--silver));
