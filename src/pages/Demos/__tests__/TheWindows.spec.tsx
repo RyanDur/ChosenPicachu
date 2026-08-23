@@ -3,7 +3,7 @@ import {http, HttpResponse} from 'msw';
 import {server} from '@test-support/server';
 import {renderWithMemoryRouter} from '@test-support';
 import {EnvProvider} from '@components/Env';
-import {DemosPage} from '@pages/Demos/component';
+import {DemosPage} from '@pages/Demos/DemosPage';
 import {Paths} from '@pages/Paths';
 
 const HISTORY = 'https://api.exchange.coinbase.com';

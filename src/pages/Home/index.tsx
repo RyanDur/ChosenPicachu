@@ -1,7 +1,7 @@
 import {Paths} from '@pages/Paths';
 import {PageError} from '@pages/PageError';
 import {Header} from '@pages/BasePage/Header';
-import {HomePage} from './component';
+import {HomePage} from './HomePage';
 
 const HomeHeader = () => <Header title="The three languages"/>;
 

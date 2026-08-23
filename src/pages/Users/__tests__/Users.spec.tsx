@@ -6,7 +6,7 @@ import userEvent from '@testing-library/user-event';
 import {AddressInfo, User} from '@components/Users/UserInfo/types';
 import {createUser, usersApi} from '@components/Users/resource/usersApi';
 import {users} from '@components/Users/resource/users';
-import {UsersPage} from '@pages/Users/component';
+import {UsersPage} from '@pages/Users/UsersPage';
 
 const cellAt = (column: number, row: number): HTMLElement => {
   const [, tbody] = screen.getAllByRole('rowgroup');

@@ -12,7 +12,7 @@ import {
 import {WebSocketServer} from 'ws';
 import {renderWithMemoryRouter} from '@test-support';
 import {EnvProvider} from '@components/Env';
-import {DemosPage} from '@pages/Demos/component';
+import {DemosPage} from '@pages/Demos/DemosPage';
 import {Paths} from '@pages/Paths';
 
 beforeAll(realSockets);

@@ -1,1 +1,1 @@
-export {ThreeInARow} from './component';
+export {ThreeInARow} from './ThreeInARow';

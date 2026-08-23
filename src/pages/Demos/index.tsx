@@ -2,7 +2,7 @@ import {PageError} from '@pages/PageError';
 import {Header} from '@pages/BasePage/Header';
 import {useSearchParamsObject} from '@components/search-params';
 import {DemoTopics, demoTopicParam} from './types';
-import {DemosPage} from './component';
+import {DemosPage} from './DemosPage';
 import {ChartPage} from './Charts/ChartPage';
 
 const DemosHeader = () => {

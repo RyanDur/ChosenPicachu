@@ -5,7 +5,7 @@ import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Wo
 import {span, unit} from '../../Recipe/carve';
 import {World, worldParam} from '../params';
 import {Term} from './Term';
-import menuSource from '@components/Menu/index.tsx?raw';
+import menuSource from '@components/Menu/Menu.tsx?raw';
 import menuCss from '@components/Menu/Menu.css?raw';
 import headerCss from '@components/DragSortableTable/Header.css?raw';
 import sortMenuSource from '@components/DragSortableTable/SortMenu.tsx?raw';

@@ -5,7 +5,7 @@ import {span, unit} from '../../Recipe/carve';
 import {World, worldParam} from '../params';
 import feedSource from '@pages/Demos/Charts/live-trades.ts?raw';
 import foldSource from '@pages/Demos/Tables/Aggregations/fold.ts?raw';
-import dealSource from '@pages/Demos/Tables/Aggregations/index.tsx?raw';
+import dealSource from '@pages/Demos/Tables/Aggregations/Aggregations.tsx?raw';
 import useTableStateSource from '@components/DragSortableTable/useTableState.ts?raw';
 import headerSource from '@components/DragSortableTable/EagerHideAnimatedTable/Header.tsx?raw';
 import rowSource from '@components/DragSortableTable/EagerHideAnimatedTable/Row.tsx?raw';

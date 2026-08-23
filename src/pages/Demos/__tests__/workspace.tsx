@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import {renderWithMemoryRouter} from '@test-support';
 import {ReactElement} from 'react';
 import {EnvProvider} from '@components/Env';
-import {DemosPage} from '@pages/Demos/component';
+import {DemosPage} from '@pages/Demos/DemosPage';
 import {ChartPage} from '@pages/Demos/Charts/ChartPage';
 import {Paths} from '@pages/Paths';
 

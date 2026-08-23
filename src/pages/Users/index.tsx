@@ -1,7 +1,7 @@
 import {Paths} from '@pages/Paths';
 import {PageError} from '@pages/PageError';
 import {Header} from '@pages/BasePage/Header';
-import {UsersPage} from '@pages/Users/component';
+import {UsersPage} from '@pages/Users/UsersPage';
 
 const UsersHeader = () => <Header title="Users"/>;
 
