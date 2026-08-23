@@ -2,21 +2,6 @@ import {FC} from 'react';
 
 export const Opener: FC = () =>
   <header className="opening">
-  <figure className="feedback">
-    <blockquote>
-      <p className="quote">
-        HyperText is a way to link and access information of various kinds as a web of nodes
-        in which the user can browse at will.
-      </p>
-    </blockquote>
-    <figcaption className="attribution">Tim Berners-Lee and Robert Cailliau,{' '}
-      <a className="signpost" href="https://www.w3.org/History/19921103-hypertext/hypertext/WWW/Proposal.html">proposing
-      the WorldWideWeb, 1990</a></figcaption>
-  </figure>
-    <p className="lede paragraph">
-      Someone needed something: researchers, scattered across institutes, losing each other’s
-      documents. Everything on the web is layered onto that one need.
-    </p>
     <p className="thesis paragraph">
       A webpage is three languages working in concert. HTML says what things are. CSS says how
       they show. JavaScript says how they respond. They were designed apart, on purpose, by

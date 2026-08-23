@@ -6,14 +6,16 @@ import {Paths} from '@pages/Paths';
 describe('the home page', () => {
   beforeEach(() => renderWithMemoryRouter(Home, {path: Paths.home}));
 
-  test('the web opens on its founding need', () => {
-    expect(screen.getAllByText(/a web of nodes in which the user can browse at will/)[0]).toBeVisible();
-    expect(screen.getAllByText(/Tim Berners-Lee and Robert Cailliau/)[0]).toBeVisible();
+  test('the page opens on the thesis', () => {
     expect(screen.getByText(/three languages working in concert/)).toBeVisible();
     expect(screen.getByText(/The history below is the iteration/)).toBeVisible();
   });
 
   test('the timeline walks the iteration', () => {
+    const record = within(screen.getByRole('region', {name: 'How the web got its languages'}));
+    expect(record.getByText(/a web of nodes in which the user can browse at will/)).toBeVisible();
+    expect(record.getByText(/Tim Berners-Lee and Robert Cailliau/)).toBeVisible();
+    expect(record.getByText(/Someone needed something/)).toBeVisible();
     const timeline = within(screen.getByRole('list', {name: 'the timeline'}));
 
     expect(timeline.getAllByRole('listitem')).toHaveLength(13);
