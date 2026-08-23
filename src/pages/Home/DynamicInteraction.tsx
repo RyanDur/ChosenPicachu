@@ -38,7 +38,7 @@ export const DynamicInteraction: FC = () =>
         re-implements them buys their bugs back. I write behavior only for what the
         platform does not yet do.</p>
       <p className="paragraph">Every gesture gets its keyboard twin: what a pointer can drag,
-        arrows can move, or the feature is not done. WCAG states it as a floor, all
+        arrows can move, or the feature is not done. WCAG states it as a floor: all
         functionality{' '}
         <a className="signpost" href="https://www.w3.org/WAI/WCAG21/Understanding/keyboard.html">“operable through a keyboard interface”</a>. Changes
         announce themselves, too. A sighted reader watches the order change; a listening

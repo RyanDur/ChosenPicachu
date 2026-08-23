@@ -54,9 +54,9 @@ export const Presentation: FC = () =>
         <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties">custom property</a> the
         sheet is already listening for: a measured height, a dealt position, a number the
         page computed. If a value is known before the page runs, it belongs in a class. If it
-        is born at runtime, it earns the channel.</p>
-      <p className="paragraph">Everything sits on one scale: every size a multiple of a single
-        base, every color a named token on the root. The test of the organization is reading
+        is born at runtime, it earns the channel. Everything sits on one scale: every size
+        a multiple of a single base, every color a named token on the root.</p>
+      <p className="paragraph">The test of the organization is reading
         the class list cold: if it does not say what the element is and what it needs, in words
         the design speaks, the sheet has stopped being a stylesheet and become a bag of
         overrides.</p>
