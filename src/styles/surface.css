@@ -12,7 +12,7 @@
 .bare { appearance: none; }
 .borderless { border: none; }
 
-.lit {
+.attentive {
   &:hover,
   &:focus,
   &:focus-within {

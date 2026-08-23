@@ -27,7 +27,7 @@ export const Tabs: FC<Props> = ({values, id, label, defaultTab}) => {
   }, [tab, updateSearchParams, values, defaultTab]);
 
   return <nav aria-label={label} id={id} className="tabs">{values.map(({param, display}) =>
-    <span className={classNames('tab', 'lit', tab === param && 'current')} key={param}>
+    <span className={classNames('tab', 'attentive', tab === param && 'current')} key={param}>
       <Link to={`${pathname}${createSearchParams({tab: param})}`}
             className="path">{display}</Link>
     </span>

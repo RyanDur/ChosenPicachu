@@ -8,22 +8,22 @@ import {Source} from '@components/art-gallery/museums/types/resource';
 import {Paths} from '@pages/Paths';
 
 const AboutNav: FC = () =>
-  <Link id="navigate-demos" className="path lit" to={Paths.demos}>Demos</Link>;
+  <Link id="navigate-demos" className="path attentive" to={Paths.demos}>Demos</Link>;
 
 export const SideNav: FC = () =>
   <aside id="side-nav" aria-label="site rail">
     <nav id="app-navigation" aria-label="site">
-      <Link id="navigate-home" className="path lit" to={Paths.home}>Home</Link>
+      <Link id="navigate-home" className="path attentive" to={Paths.home}>Home</Link>
       <AboutNav/>
-      <Link id="navigate-users" className="path lit" to={Paths.users}>Users</Link>
-      <Link id="navigate-form" className="path lit"
+      <Link id="navigate-users" className="path attentive" to={Paths.users}>Users</Link>
+      <Link id="navigate-form" className="path attentive"
             to={`${Paths.artGallery}${toQueryString({
               page: 1,
               size: defaultRecordLimit,
               tab: Source.AIC
             })}`}>Gallery</Link>
-      <Link id="navigate-games" className="path lit" to={Paths.games}>Games</Link>
-      <a id="navigate-repo" className="path lit" href={Paths.repo}
+      <Link id="navigate-games" className="path attentive" to={Paths.games}>Games</Link>
+      <a id="navigate-repo" className="path attentive" href={Paths.repo}
          rel="noopener noreferrer" target="_blank">Repo</a>
     </nav>
 

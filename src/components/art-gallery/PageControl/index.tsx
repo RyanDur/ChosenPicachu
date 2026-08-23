@@ -36,6 +36,6 @@ export const PageControl = () => {
            id="per-page"
            onChange={event => updatePageSize(+event.currentTarget.value)}/>
     <label id="per-page-label" className="per-page-label control-label paper" htmlFor="per-page">{size} Per Page</label>
-    <button type="submit" id="submit-page-number" className="submit-page submit-page-button control borderless paper bold lit">Go</button>
+    <button type="submit" id="submit-page-number" className="submit-page submit-page-button control borderless paper bold attentive">Go</button>
   </form>;
 };
