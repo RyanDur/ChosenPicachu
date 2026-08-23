@@ -16,7 +16,7 @@ export const Presentation: FC = () =>
       How things show: shared words for shared needs, structure beside the component that
       wears it, and nothing owned that the content already says.
     </p>
-    <details className="door-fold" name="doors">
+    <details className="door-fold">
       <summary className="prompt">how I organize it</summary>
       <p className="paragraph">I write CSS in two vocabularies. Component sheets own structure:
         the grid, the placement, the bones of one component, named for it and kept beside it.

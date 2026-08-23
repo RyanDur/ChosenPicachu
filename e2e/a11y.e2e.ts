@@ -95,17 +95,16 @@ test('the period menu stays hidden until asked', async ({page}) => {
   await expect(page.getByText('week').first()).toBeVisible();
 });
 
-test('only one door stands open at a time', async ({page}) => {
+test('only one fuller story stands open at a time', async ({page}) => {
   await page.goto('');
-  const structure = page.getByRole('region', {name: 'Structure'});
-  const presentation = page.getByRole('region', {name: 'Presentation'});
+  const stories = page.locator('.timeline .fuller-story');
 
-  await structure.getByText('how I organize it').click();
-  await expect(structure.getByText(/The div is a last resort/)).toBeVisible();
+  await stories.nth(0).locator('summary').click();
+  await expect(page.locator('.timeline .fuller-story[open]')).toHaveCount(1);
 
-  await presentation.getByText('how I organize it').click();
-  await expect(presentation.getByText(/A class list reads like a sentence/)).toBeVisible();
-  await expect(structure.getByText(/The div is a last resort/)).toBeHidden();
+  await stories.nth(1).locator('summary').click();
+  await expect(page.locator('.timeline .fuller-story[open]')).toHaveCount(1);
+  await expect(stories.nth(1)).toHaveAttribute('open', '');
 });
 
 const markets = [

@@ -16,7 +16,7 @@ export const Structure: FC = () =>
       What things are: content, meaning, and the order a reader and a screen reader both
       walk. The element chooses itself, and everything else layers on.
     </p>
-    <details className="door-fold" name="doors">
+    <details className="door-fold">
       <summary className="prompt">how I organize it</summary>
       <p className="paragraph">I start with the need and let it pick the element. That is the
         whole method. The platform ships more vocabulary than most pages ever use: a{' '}

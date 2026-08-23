@@ -41,15 +41,17 @@ describe('the home page', () => {
       .forEach(depth => expect(timeline.getAllByText(depth).length).toBeGreaterThan(0));
     expect(timeline.getByRole('link', {name: 'the essay', hidden: true}))
       .toHaveAttribute('href', expect.stringContaining('adaptivepath'));
-    document.querySelectorAll('.timeline .fuller-story').forEach(story =>
-      expect(story.querySelectorAll('.paragraph').length).toBeGreaterThanOrEqual(3));
+    document.querySelectorAll('.timeline .fuller-story').forEach(story => {
+      expect(story).toHaveAttribute('name', 'record');
+      expect(story.querySelectorAll('.paragraph').length).toBeGreaterThanOrEqual(3);
+    });
   });
 
-  test('the structure door folds open how I organize it, closed until asked', () => {
+  test('the structure door folds open how I organize it, ungrouped', () => {
     const door = within(screen.getByRole('region', {name: 'Structure'}));
 
     const fold = door.getByRole('group', {hidden: true});
-    expect(fold).toHaveAttribute('name', 'doors');
+    expect(fold).not.toHaveAttribute('name');
     expect(door.getByText('how I organize it')).toBeVisible();
     expect(door.getByRole('link', {name: 'search', hidden: true}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
@@ -59,11 +61,11 @@ describe('the home page', () => {
     expect(door.getByText(/reading it with the styles off/)).toBeInTheDocument();
   });
 
-  test('the presentation door folds open how I organize it, in the same exclusive group', () => {
+  test('the presentation door folds open how I organize it, ungrouped', () => {
     const door = within(screen.getByRole('region', {name: 'Presentation'}));
 
     const fold = door.getByRole('group', {hidden: true});
-    expect(fold).toHaveAttribute('name', 'doors');
+    expect(fold).not.toHaveAttribute('name');
     expect(door.getByText('how I organize it')).toBeVisible();
     expect(door.getByRole('link', {name: 'custom property', hidden: true}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
