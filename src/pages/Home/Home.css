@@ -21,7 +21,7 @@
   .quote {
     margin: 0;
     padding-inline-start: var(--base-x-2);
-    border-inline-start: var(--hairline-x-3) solid var(--silk);
+    border-inline-start: var(--hairline-x-3) solid var(--trim);
     font-size: var(--text-title);
     line-height: 1.25;
     font-style: italic;
@@ -60,11 +60,11 @@
     display: grid;
     gap: var(--base-x-1_5);
     padding-block-start: var(--base-x-2);
-    border-block-start: var(--hairline-x-3) solid var(--silk);
+    border-block-start: var(--hairline-x-3) solid var(--trim);
 
     .quote {
       padding-inline-start: var(--base-x-2);
-      border-inline-start: var(--hairline-x-3) solid var(--silk);
+      border-inline-start: var(--hairline-x-3) solid var(--trim);
       font-size: var(--text-body);
       line-height: 1.55;
     }
@@ -86,7 +86,7 @@
     display: grid;
     gap: var(--base-x-2_5);
     padding-block-start: var(--base-x-3);
-    border-block-start: var(--hairline-x-3) solid var(--silk);
+    border-block-start: var(--hairline-x-3) solid var(--trim);
   }
 
   .coda {
@@ -147,7 +147,7 @@
     inset-block: 0;
     inset-inline-start: calc(var(--base-x-8) + var(--base-x-2) / 2 - var(--hairline));
     width: var(--hairline-x-2);
-    background: var(--silk);
+    background: var(--trim);
   }
 
   .moment:first-child::after {
@@ -204,7 +204,7 @@
     margin-block-start: var(--base-x-1_5);
     padding: var(--base-x-1_5);
     overflow-x: auto;
-    background: var(--white);
+    background: var(--card);
     border: var(--hairline) solid var(--shadow);
     border-radius: var(--radius);
     font-size: var(--text-caption);
