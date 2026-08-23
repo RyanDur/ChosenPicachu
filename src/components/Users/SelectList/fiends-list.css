@@ -40,13 +40,5 @@
     height: var(--base-x-4);
     padding: 0;
     text-align: center;
-    border-radius: var(--base);
-    box-shadow: var(--light-box-shadow);
-
-    &:focus,
-    &:hover {
-      color: var(--white);
-      background-color: var(--primary-dark-blue);
-    }
   }
 }

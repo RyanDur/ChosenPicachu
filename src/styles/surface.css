@@ -11,6 +11,14 @@
 .raised { box-shadow: var(--raised); }
 .bare { appearance: none; }
 
+.pressable {
+  &:hover,
+  &:focus {
+    color: var(--white);
+    background-color: var(--primary-dark-blue);
+  }
+}
+
 .hairline-outline { border: var(--hairline) solid currentcolor; }
 
 .alarm-ink { color: var(--alarm-ink); }
