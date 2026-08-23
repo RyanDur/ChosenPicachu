@@ -22,7 +22,8 @@ export const Presentation: FC = () =>
         the grid, the placement, the bones of one component, named for it and kept beside it.
         Needs live at the top scope as plain words: rounded-corners, drop-shadow, silk: what
         an element needs, not what it is. Tag selectors are for resets only, and there is no
-        atomic scale: needs repeat, looks do not.</p>
+        atomic scale: a need says why a style is there, a utility only says what it does,
+        and a markup full of utilities is the look written back into the structure.</p>
       <p className="paragraph">A class list reads like a sentence: the noun first, then what it
         needs, then what is true right now. The platform already names most states, invalid,
         checked, hover, and the sheet listens for those{' '}
