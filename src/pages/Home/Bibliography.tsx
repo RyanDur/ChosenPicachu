@@ -8,27 +8,27 @@ export const Bibliography: FC = () =>
         <h3 className="shelf-title">The web</h3>
         <ul className="works">
           <li className="work">
-            <a className="signpost" href="https://www.w3.org/History/1989/proposal.html">Information Management: A Proposal</a>
+            <a className="signpost" href="https://www.w3.org/History/1989/proposal.html"><cite>Information Management: A Proposal</cite></a>
             <span className="provenance caption">Tim Berners-Lee, CERN, 1989</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://www.w3.org/History/19921103-hypertext/hypertext/WWW/Proposal.html">WorldWideWeb: Proposal for a HyperText Project</a>
+            <a className="signpost" href="https://www.w3.org/History/19921103-hypertext/hypertext/WWW/Proposal.html"><cite>WorldWideWeb: Proposal for a HyperText Project</cite></a>
             <span className="provenance caption">Tim Berners-Lee and Robert Cailliau, 1990</span>
           </li>
           <li className="work">
-            <a className="signpost" href="http://info.cern.ch/hypertext/WWW/MarkUp/Tags.html">The original HTML tags</a>
+            <a className="signpost" href="http://info.cern.ch/hypertext/WWW/MarkUp/Tags.html"><cite>The original HTML tags</cite></a>
             <span className="provenance caption">info.cern.ch, as preserved in 1992</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://www.w3.org/Protocols/HTTP/AsImplemented.html">The Original HTTP as defined in 1991</a>
+            <a className="signpost" href="https://www.w3.org/Protocols/HTTP/AsImplemented.html"><cite>The Original HTTP as defined in 1991</cite></a>
             <span className="provenance caption">w3.org</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://worldwideweb.cern.ch/browser/">The WorldWideWeb browser, rebuilt</a>
+            <a className="signpost" href="https://worldwideweb.cern.ch/browser/"><cite>The WorldWideWeb browser, rebuilt</cite></a>
             <span className="provenance caption">CERN, 2019</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://worldwideweb.cern.ch/history/">A short history of the browser</a>
+            <a className="signpost" href="https://worldwideweb.cern.ch/history/"><cite>A short history of the browser</cite></a>
             <span className="provenance caption">CERN, 2019</span>
           </li>
         </ul>
@@ -37,59 +37,59 @@ export const Bibliography: FC = () =>
         <h3 className="shelf-title">Structure</h3>
         <ul className="works">
           <li className="work">
-            <a className="signpost" href="https://html.com/html5/">HTML5 Basics</a>
+            <a className="signpost" href="https://html.com/html5/"><cite>HTML5 Basics</cite></a>
             <span className="provenance caption">html.com</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://html.com/deprecated/">Deprecated HTML features</a>
+            <a className="signpost" href="https://html.com/deprecated/"><cite>Deprecated HTML features</cite></a>
             <span className="provenance caption">html.com</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://www.infoq.com/news/2011/05/html5-design/">Jeremy Keith on the Design Principles of HTML5</a>
+            <a className="signpost" href="https://www.infoq.com/news/2011/05/html5-design/"><cite>Jeremy Keith on the Design Principles of HTML5</cite></a>
             <span className="provenance caption">InfoQ, 2011</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://www.smashingmagazine.com/2020/01/html5-article-section/">Why You Should Choose HTML5 article Over section</a>
+            <a className="signpost" href="https://www.smashingmagazine.com/2020/01/html5-article-section/"><cite>Why You Should Choose HTML5 article Over section</cite></a>
             <span className="provenance caption">Bruce Lawson, Smashing Magazine, 2020</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://whatwg.org/position-paper">Position Paper for the W3C Workshop on Web Applications and Compound Documents</a>
+            <a className="signpost" href="https://whatwg.org/position-paper"><cite>Position Paper for the W3C Workshop on Web Applications and Compound Documents</cite></a>
             <span className="provenance caption">Mozilla and Opera, June 2004; the rejected proposal, preserved by the WHATWG</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://html.spec.whatwg.org/multipage/introduction.html">The HTML Standard’s own history</a>
+            <a className="signpost" href="https://html.spec.whatwg.org/multipage/introduction.html"><cite>The HTML Standard’s own history</cite></a>
             <span className="provenance caption">the WHATWG, in the specification’s introduction</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://whatwg.org/faq">The WHATWG FAQ</a>
+            <a className="signpost" href="https://whatwg.org/faq"><cite>The WHATWG FAQ</cite></a>
             <span className="provenance caption">the WHATWG</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://www.w3.org/TR/html-design-principles/">HTML Design Principles</a>
+            <a className="signpost" href="https://www.w3.org/TR/html-design-principles/"><cite>HTML Design Principles</cite></a>
             <span className="provenance caption">Anne van Kesteren and Maciej Stachowiak, W3C, 2007</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA">ARIA</a>
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA"><cite>ARIA</cite></a>
             <span className="provenance caption">MDN</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://html.spec.whatwg.org/multipage/grouping-content.html#the-div-element">The div element</a>
+            <a className="signpost" href="https://html.spec.whatwg.org/multipage/grouping-content.html#the-div-element"><cite>The div element</cite></a>
             <span className="provenance caption">the HTML Standard, WHATWG</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://webaim.org/projects/screenreadersurvey10/">Screen Reader User Survey #10</a>
+            <a className="signpost" href="https://webaim.org/projects/screenreadersurvey10/"><cite>Screen Reader User Survey #10</cite></a>
             <span className="provenance caption">WebAIM, 2024</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://webaim.org/projects/million/">The WebAIM Million</a>
+            <a className="signpost" href="https://webaim.org/projects/million/"><cite>The WebAIM Million</cite></a>
             <span className="provenance caption">WebAIM</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://web.archive.org/web/20141221170539/https://www.w3.org/standards/webdesign/htmlcss.html">HTML and CSS</a>
+            <a className="signpost" href="https://web.archive.org/web/20141221170539/https://www.w3.org/standards/webdesign/htmlcss.html"><cite>HTML and CSS</cite></a>
             <span className="provenance caption">the W3C; the definitions survive only in the archive</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Learn/Server-side/First_steps/Website_security">Website security</a>
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Learn/Server-side/First_steps/Website_security"><cite>Website security</cite></a>
             <span className="provenance caption">MDN</span>
           </li>
         </ul>
@@ -98,75 +98,75 @@ export const Bibliography: FC = () =>
         <h3 className="shelf-title">Presentation</h3>
         <ul className="works">
           <li className="work">
-            <a className="signpost" href="https://www.w3.org/People/howcome/p/cascade.html">Cascading HTML style sheets: a proposal</a>
+            <a className="signpost" href="https://www.w3.org/People/howcome/p/cascade.html"><cite>Cascading HTML style sheets: a proposal</cite></a>
             <span className="provenance caption">Håkon Wium Lie, 10 October 1994</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://www.w3.org/Style/LieBos2e/history/Overview.html">The CSS Saga</a>
+            <a className="signpost" href="https://www.w3.org/Style/LieBos2e/history/Overview.html"><cite>The CSS Saga</cite></a>
             <span className="provenance caption">Håkon Wium Lie and Bert Bos, from Cascading Style Sheets: Designing for the Web, 1999</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://www.w3.org/Style/CSS/Test/CSS1/current/test5526c.htm">The Box Acid Test</a>
+            <a className="signpost" href="https://www.w3.org/Style/CSS/Test/CSS1/current/test5526c.htm"><cite>The Box Acid Test</cite></a>
             <span className="provenance caption">Todd Fahrner, in the W3C CSS1 Test Suite</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://www.w3.org/Style/CSS/Test/CSS1/current/tsack.html">CSS1 Test Suite Acknowledgments</a>
+            <a className="signpost" href="https://www.w3.org/Style/CSS/Test/CSS1/current/tsack.html"><cite>CSS1 Test Suite Acknowledgments</cite></a>
             <span className="provenance caption">the W3C; the credits name the testers</span>
           </li>
           <li className="work">
-            <a className="signpost" href="http://1997.webhistory.org/www.lists/www-talk.1994q1/0648.html">Sorry, you’re screwed</a>
+            <a className="signpost" href="http://1997.webhistory.org/www.lists/www-talk.1994q1/0648.html"><cite>Sorry, you’re screwed</cite></a>
             <span className="provenance caption">Marc Andreessen on www-talk, February 1994</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://thehistoryoftheweb.com/the-rise-of-css/">The Rise of CSS</a>
+            <a className="signpost" href="https://thehistoryoftheweb.com/the-rise-of-css/"><cite>The Rise of CSS</cite></a>
             <span className="provenance caption">Jay Hoffmann, The History of the Web, 2017</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://thehistoryoftheweb.com/look-back-history-css/">A Look Back at the History of CSS</a>
+            <a className="signpost" href="https://thehistoryoftheweb.com/look-back-history-css/"><cite>A Look Back at the History of CSS</cite></a>
             <span className="provenance caption">Jay Hoffmann, The History of the Web, 2017</span>
           </li>
           <li className="work">
-            <a className="signpost" href="http://csszengarden.com/">CSS Zen Garden</a>
+            <a className="signpost" href="http://csszengarden.com/"><cite>CSS Zen Garden</cite></a>
             <span className="provenance caption">Dave Shea, 2003</span>
           </li>
           <li className="work">
-            <a className="signpost" href="http://www.css-class.com/a-brief-history-of-css/">A Brief History of CSS</a>
+            <a className="signpost" href="http://www.css-class.com/a-brief-history-of-css/"><cite>A Brief History of CSS</cite></a>
             <span className="provenance caption">css-class.com</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://simplecss.eu/css-history-brief-overview.html">CSS History, A Brief Overview</a>
+            <a className="signpost" href="https://simplecss.eu/css-history-brief-overview.html"><cite>CSS History, A Brief Overview</cite></a>
             <span className="provenance caption">simplecss.eu</span>
           </li>
           <li className="work">
-            <a className="signpost" href="http://www.zerobugsandprogramfaster.net/essays/2.html">A tinge of guilt</a>
+            <a className="signpost" href="http://www.zerobugsandprogramfaster.net/essays/2.html"><cite>A tinge of guilt</cite></a>
             <span className="provenance caption">zerobugsandprogramfaster.net</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://www.webdesignmuseum.org/">The Web Design Museum</a>
+            <a className="signpost" href="https://www.webdesignmuseum.org/"><cite>The Web Design Museum</cite></a>
             <span className="provenance caption">webdesignmuseum.org</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://www.w3.org/Style/CSS/Overview.en.html">Cascading Style Sheets home page</a>
+            <a className="signpost" href="https://www.w3.org/Style/CSS/Overview.en.html"><cite>Cascading Style Sheets home page</cite></a>
             <span className="provenance caption">the W3C</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://www.w3.org/TR/css-2023/">CSS Snapshot 2023</a>
+            <a className="signpost" href="https://www.w3.org/TR/css-2023/"><cite>CSS Snapshot 2023</cite></a>
             <span className="provenance caption">the CSS working group, W3C, 2023</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes">Pseudo-classes</a>
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes"><cite>Pseudo-classes</cite></a>
             <span className="provenance caption">MDN</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion">prefers-reduced-motion</a>
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion"><cite>prefers-reduced-motion</cite></a>
             <span className="provenance caption">MDN</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://www.w3.org/WAI/WCAG21/Understanding/meaningful-sequence.html">Understanding Meaningful Sequence</a>
+            <a className="signpost" href="https://www.w3.org/WAI/WCAG21/Understanding/meaningful-sequence.html"><cite>Understanding Meaningful Sequence</cite></a>
             <span className="provenance caption">W3C WAI</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select">Customizable select elements</a>
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select"><cite>Customizable select elements</cite></a>
             <span className="provenance caption">MDN</span>
           </li>
         </ul>
@@ -175,51 +175,51 @@ export const Bibliography: FC = () =>
         <h3 className="shelf-title">Dynamic Interaction</h3>
         <ul className="works">
           <li className="work">
-            <a className="signpost" href="https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html">The A-Z of Programming Languages: JavaScript</a>
+            <a className="signpost" href="https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html"><cite>The A-Z of Programming Languages: JavaScript</cite></a>
             <span className="provenance caption">Brendan Eich, interviewed by Naomi Hamilton, Computerworld, 2008</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://www.infoworld.com/article/2653798/javascript-creator-ponders-past--future.html">JavaScript creator ponders past, future</a>
+            <a className="signpost" href="https://www.infoworld.com/article/2653798/javascript-creator-ponders-past--future.html"><cite>JavaScript creator ponders past, future</cite></a>
             <span className="provenance caption">Brendan Eich, interviewed by Paul Krill, InfoWorld, 2008</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://brendaneich.com/2008/04/popularity/">Popularity</a>
+            <a className="signpost" href="https://brendaneich.com/2008/04/popularity/"><cite>Popularity</cite></a>
             <span className="provenance caption">Brendan Eich, 2008</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://auth0.com/blog/a-brief-history-of-javascript/">A Brief History of JavaScript</a>
+            <a className="signpost" href="https://auth0.com/blog/a-brief-history-of-javascript/"><cite>A Brief History of JavaScript</cite></a>
             <span className="provenance caption">Sebastian Peyrott, Auth0, 2017</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://medium.com/@benastontweet/lesson-1a-the-history-of-javascript-8c1ce3bffb17">A brief history of JavaScript</a>
+            <a className="signpost" href="https://medium.com/@benastontweet/lesson-1a-the-history-of-javascript-8c1ce3bffb17"><cite>A brief history of JavaScript</cite></a>
             <span className="provenance caption">Ben Aston, 2015</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://www.coursereport.com/blog/history-of-javascript">JavaScript: A History for Beginners</a>
+            <a className="signpost" href="https://www.coursereport.com/blog/history-of-javascript"><cite>JavaScript: A History for Beginners</cite></a>
             <span className="provenance caption">Course Report</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://en.wikibooks.org/wiki/JavaScript/History_of_JavaScript">History of JavaScript</a>
+            <a className="signpost" href="https://en.wikibooks.org/wiki/JavaScript/History_of_JavaScript"><cite>History of JavaScript</cite></a>
             <span className="provenance caption">Wikibooks</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://web.archive.org/web/20071002213206/http://www.adaptivepath.com/ideas/essays/archives/000385.php">Ajax: A New Approach to Web Applications</a>
+            <a className="signpost" href="https://web.archive.org/web/20071002213206/http://www.adaptivepath.com/ideas/essays/archives/000385.php"><cite>Ajax: A New Approach to Web Applications</cite></a>
             <span className="provenance caption">Jesse James Garrett, Adaptive Path, 18 February 2005; archived</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://en.wikipedia.org/wiki/Brendan_Eich">Brendan Eich</a>
+            <a className="signpost" href="https://en.wikipedia.org/wiki/Brendan_Eich"><cite>Brendan Eich</cite></a>
             <span className="provenance caption">Wikipedia</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://en.wikipedia.org/wiki/Prototype-based_programming">Prototype-based programming</a>
+            <a className="signpost" href="https://en.wikipedia.org/wiki/Prototype-based_programming"><cite>Prototype-based programming</cite></a>
             <span className="provenance caption">Wikipedia</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://tc39.es/process-document/">The TC39 Process</a>
+            <a className="signpost" href="https://tc39.es/process-document/"><cite>The TC39 Process</cite></a>
             <span className="provenance caption">TC39, Ecma International</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://www.w3.org/WAI/WCAG21/Understanding/keyboard.html">Understanding Success Criterion 2.1.1: Keyboard</a>
+            <a className="signpost" href="https://www.w3.org/WAI/WCAG21/Understanding/keyboard.html"><cite>Understanding Success Criterion 2.1.1: Keyboard</cite></a>
             <span className="provenance caption">W3C WAI</span>
           </li>
         </ul>
@@ -228,23 +228,23 @@ export const Bibliography: FC = () =>
         <h3 className="shelf-title">The concert</h3>
         <ul className="works">
           <li className="work">
-            <a className="signpost" href="https://blog.vjeux.com/2014/javascript/react-css-in-js-nationjs.html">React: CSS in JS</a>
+            <a className="signpost" href="https://blog.vjeux.com/2014/javascript/react-css-in-js-nationjs.html"><cite>React: CSS in JS</cite></a>
             <span className="provenance caption">Christopher Chedeau, NationJS, 2014</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_shadow_DOM">Using shadow DOM</a>
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_shadow_DOM"><cite>Using shadow DOM</cite></a>
             <span className="provenance caption">MDN</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://html.spec.whatwg.org/multipage/custom-elements.html">Custom elements</a>
+            <a className="signpost" href="https://html.spec.whatwg.org/multipage/custom-elements.html"><cite>Custom elements</cite></a>
             <span className="provenance caption">the HTML Standard, WHATWG</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://jasonformat.com/islands-architecture/">Islands Architecture</a>
+            <a className="signpost" href="https://jasonformat.com/islands-architecture/"><cite>Islands Architecture</cite></a>
             <span className="provenance caption">Jason Miller, 2020</span>
           </li>
           <li className="work">
-            <a className="signpost" href="https://web.dev/rendering-on-the-web/">Rendering on the Web</a>
+            <a className="signpost" href="https://web.dev/rendering-on-the-web/"><cite>Rendering on the Web</cite></a>
             <span className="provenance caption">Jason Miller and Addy Osmani, web.dev, 2019</span>
           </li>
         </ul>

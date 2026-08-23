@@ -26,10 +26,10 @@
   content: '\21C5';
 }
 
-.sortable th[aria-sort='ascending'] .menu-toggle::before {
+.sortable [aria-sort='ascending'] .menu-toggle::before {
   content: '\25B2';
 }
 
-.sortable th[aria-sort='descending'] .menu-toggle::before {
+.sortable [aria-sort='descending'] .menu-toggle::before {
   content: '\25BC';
 }

@@ -40,7 +40,7 @@ export const Search: FC<Props> = ({id}) => {
 
   const handleReset = () => removeSearchParams('search');
 
-  return <form id={id} className="search" onSubmit={handleSubmit} onReset={handleReset}>
+  return <search className="search"><form id={id} className="search-form" onSubmit={handleSubmit} onReset={handleReset}>
     <input type="search" autoComplete="off" list="search-options" id="query"
            onInput={event => updateQuery(event.currentTarget.value)}/>
     <label id="query-label" className='ellipsis' htmlFor="query"><span className='bold'>Search For:</span> {decodeURI(search || '')}</label>
@@ -51,5 +51,5 @@ export const Search: FC<Props> = ({id}) => {
       {searchOptions.map((searchOption, index) =>
         <option value={searchOption} key={index}>{searchOption}</option>)}
     </datalist>
-  </form>;
+  </form></search>;
 };

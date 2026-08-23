@@ -9,8 +9,8 @@ type CluesProps = {
 };
 
 export const Clues: FC<CluesProps> = ({quote, by, clues, verdict}) => <>
-  <section className="phase white rounded-corners drop-shadow" aria-label="the need">
-    <h3 className="phase-title">Start with the need, and let it pick the element</h3>
+  <section className="phase white rounded-corners drop-shadow" aria-labelledby="phase-need">
+    <h3 id="phase-need" className="phase-title">Start with the need, and let it pick the element</h3>
     <p className="overview paragraph">
       Before any code, and before any story, someone needs something. Listen for clues, name
       each one, and the element chooses itself.
@@ -45,8 +45,8 @@ type DesignProps = {
 };
 
 export const Design: FC<DesignProps> = ({sketch, answers, unanswered}) =>
-  <section className="phase white rounded-corners drop-shadow" aria-label="the design">
-    <h3 className="phase-title">Sketch a design from the need</h3>
+  <section className="phase white rounded-corners drop-shadow" aria-labelledby="phase-design">
+    <h3 id="phase-design" className="phase-title">Sketch a design from the need</h3>
     <p className="overview paragraph">
       The need has a visual answer, so the next artifact is a design: enough shape to argue
       with, before any code. What the sketch cannot answer goes back to the people asking, as
@@ -78,8 +78,8 @@ type SlicesProps = {
 };
 
 export const Slices: FC<SlicesProps> = ({who, can, soThat, slices, sliced}) =>
-  <section className="phase white rounded-corners drop-shadow" aria-label="the stories">
-    <h3 className="phase-title">Slice the design into stories</h3>
+  <section className="phase white rounded-corners drop-shadow" aria-labelledby="phase-stories">
+    <h3 id="phase-stories" className="phase-title">Slice the design into stories</h3>
     <p className="overview paragraph">
       With the need heard and the design answering shape, the work splits into stories: each
       one told as a <a className="signpost"

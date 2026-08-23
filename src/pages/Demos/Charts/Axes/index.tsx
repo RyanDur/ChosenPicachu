@@ -49,7 +49,7 @@ export const Axes: FC<Props> = ({
       <time key={tick.at}
             className="tick"
             dateTime={new Date(tick.at).toISOString()}
-            style={{left: `${tick.along}%`}}>{format(tick.at, pattern)}</time>
+            style={{'--along': `${tick.along}%`}}>{format(tick.at, pattern)}</time>
     )}</p>}
   </section>;
 };

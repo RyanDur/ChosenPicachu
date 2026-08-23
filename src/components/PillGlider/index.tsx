@@ -36,7 +36,7 @@ export const PillGlider = <T extends string>({label, name, options, chosen, onCh
     <article className="pills">
       {has(geometry) &&
         <article className="glider"
-                 style={{width: `${geometry.width}px`, transform: `translateX(${geometry.left}px)`}}/>}
+                 style={{'--glider-width': `${geometry.width}px`, '--glider-x': `${geometry.left}px`}}/>}
       {options.map(({display, value}) =>
         <label className="pill"
                key={value}>

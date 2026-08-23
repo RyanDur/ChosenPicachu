@@ -33,6 +33,9 @@
     margin-top: var(--base-x-0_25);
 
     .tick {
+      --along: 0;
+
+      left: var(--along);
       position: absolute;
       transform: translateX(-50%);
       white-space: nowrap;

@@ -1,4 +1,7 @@
 .table-frame {
+  --stage-block-size: auto;
+
+  block-size: var(--stage-block-size);
   display: block;
   width: 100%;
   border: none;

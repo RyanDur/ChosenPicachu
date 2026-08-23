@@ -201,8 +201,8 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
               ]}/>}
             <Snippet label="CSS" lines={[
               ...unit(headerCss, ".sortable .menu-toggle::before {"), gap,
-              ...unit(headerCss, ".sortable th[aria-sort='ascending'] .menu-toggle::before {"), gap,
-              ...unit(headerCss, ".sortable th[aria-sort='descending'] .menu-toggle::before {"),
+              ...unit(headerCss, ".sortable [aria-sort='ascending'] .menu-toggle::before {"), gap,
+              ...unit(headerCss, ".sortable [aria-sort='descending'] .menu-toggle::before {"),
               aside('/* the glyph is CSS reading the one attribute; no world writes it */')
             ]}/>
             {world === 'react'

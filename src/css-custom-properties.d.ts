@@ -5,6 +5,10 @@ declare module 'csstype' {
   // oxlint-disable-next-line typescript/consistent-type-definitions
   interface Properties {
     '--carried'?: string;
+    '--along'?: string;
+    '--glider-x'?: string;
+    '--glider-width'?: string;
+    '--stage-block-size'?: string;
     '--toward'?: string;
     '--drop'?: string;
     '--seat-height'?: string;

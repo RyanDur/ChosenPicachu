@@ -35,7 +35,7 @@
   }
 }
 
-select.button {
+.select-friend {
   appearance: none;
   text-align: center;
   height: var(--base-x-4);

@@ -577,7 +577,7 @@ describe('the tables demo', () => {
 
       const frame = await standFrame();
 
-      expect(frame).toHaveStyle({blockSize: '487px'});
+      expect(frame).toHaveStyle({'--stage-block-size': '487px'});
     });
 
     test('the world dial swaps the stage', async () => {

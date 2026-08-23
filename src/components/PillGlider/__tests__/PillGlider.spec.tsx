@@ -47,8 +47,8 @@ describe('the pill glider', () => {
     await userEvent.click(screen.getByRole('radio', {name: 'Hide Eager'}));
 
     expect(container.querySelector('.glider')).toHaveStyle({
-      width: '90px',
-      transform: 'translateX(110px)'
+      '--glider-width': '90px',
+      '--glider-x': '110px'
     });
   });
 });

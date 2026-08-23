@@ -47,6 +47,11 @@
   }
 
   .glider {
+    --glider-width: 0;
+    --glider-x: 0;
+
+    width: var(--glider-width);
+    transform: translateX(var(--glider-x));
     border-radius: var(--radius);
     background: var(--black);
     pointer-events: none;
