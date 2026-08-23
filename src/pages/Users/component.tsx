@@ -44,7 +44,7 @@ export const UsersPage: FC = () => {
   };
 
   return <>
-    <section id="user-info" className="user-info users white rounded-corners drop-shadow padded" key={currentUser?.id}>
+    <section id="user-info" className="user-info users white rounded-corners lifted padded" key={currentUser?.id}>
         <UsersLinks.Provider value={{users: Paths.users}}><UserInformation currentUser={currentUser}
                          readOnly={mode === 'view'}
                          editing={mode === 'edit'}
@@ -55,7 +55,7 @@ export const UsersPage: FC = () => {
                            .onSuccess(() => navigate(Paths.users))}/></UsersLinks.Provider>
       </section>
 
-      <section id="user-candidates" className="user-candidates users white rounded-corners drop-shadow padded">
+      <section id="user-candidates" className="user-candidates users white rounded-corners lifted padded">
         <h2 className="roster-title title bold">User Candidates</h2>
         {mode === 'view' &&
             <Link to={Paths.users} id="add-new-user" className="button primary">Add New User</Link>}

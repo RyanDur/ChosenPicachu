@@ -8,7 +8,7 @@ const stations: [string, string][] = [
 ];
 
 export const DataPath: FC = () =>
-  <figure className="data-path white rounded-corners drop-shadow">
+  <figure className="data-path white rounded-corners lifted">
     <figcaption className="reel-heading">
       <span className="reel-title uppercase">where a number comes from</span>
     </figcaption>

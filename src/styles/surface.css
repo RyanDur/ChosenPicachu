@@ -6,9 +6,9 @@
 
 .rounded-corners { border-radius: var(--radius); }
 
-.drop-shadow { box-shadow: var(--light-box-shadow); }
+.lifted { box-shadow: var(--light-box-shadow); }
 
-.raised { box-shadow: var(--raised); }
+.floating { box-shadow: var(--raised); }
 .bare { appearance: none; }
 .borderless { border: none; }
 
@@ -32,7 +32,7 @@
     box-shadow: initial;
   }
 }
-.canvas-shadow { filter: drop-shadow(0 14px 28px var(--shadow)) drop-shadow(0 10px 10px var(--dark-shadow)); }
+.hung { filter: drop-shadow(0 14px 28px var(--shadow)) drop-shadow(0 10px 10px var(--dark-shadow)); }
 .void { background: var(--void); }
 
 .pressable {

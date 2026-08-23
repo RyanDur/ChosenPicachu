@@ -38,7 +38,7 @@ export const Defined: FC<PropsWithChildren<{definition: ReactNode}>> = ({definit
             onBlur={() => concealed(id)}>{children}</button>
     <span id={id}
           popover="auto"
-          className="term-definition white rounded-corners drop-shadow"
+          className="term-definition white rounded-corners lifted"
           style={{'--term-anchor': anchor}}>{definition}</span>
   </>;
 };
