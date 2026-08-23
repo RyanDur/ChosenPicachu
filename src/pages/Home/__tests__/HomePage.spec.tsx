@@ -8,6 +8,7 @@ describe('the home page', () => {
 
   test('the page opens on the thesis', () => {
     expect(screen.getByText(/three languages working in concert/)).toBeVisible();
+    expect(screen.getByText(/That argument is this whole site/)).toBeVisible();
   });
 
   test('the timeline walks the iteration', () => {

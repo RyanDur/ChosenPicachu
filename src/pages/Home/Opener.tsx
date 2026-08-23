@@ -12,4 +12,11 @@ export const Opener: FC = () =>
       <a className="signpost" href="https://www.w3.org/TR/html-design-principles/">“consider adopting
       it rather than forbidding it or inventing something new”</a>.
     </p>
+    <p className="thesis paragraph">
+      That argument is this whole site. Three doors below define the languages, one each,
+      and fold open how I organize them. Under the doors, the record: how the web got its
+      languages, told as thirteen needs and what answered them. Past the record, the demos,
+      where the practice is worked feature by feature; and at the end of the page, the
+      research everything above leans on.
+    </p>
   </header>;
