@@ -59,6 +59,19 @@ describe('the home page', () => {
     expect(door.getByText(/reading it with the styles off/)).toBeInTheDocument();
   });
 
+  test('the presentation door folds open how I organize it, in the same exclusive group', () => {
+    const door = within(screen.getByRole('region', {name: 'Presentation'}));
+
+    const fold = door.getByRole('group', {hidden: true});
+    expect(fold).toHaveAttribute('name', 'doors');
+    expect(door.getByText('how I organize it')).toBeVisible();
+    expect(door.getByRole('link', {name: 'custom property', hidden: true}))
+      .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
+    expect(door.getByText(/Tag selectors are for resets only/)).toBeInTheDocument();
+    expect(door.getByText(/reads like a sentence/)).toBeInTheDocument();
+    expect(door.getByText(/a bag of overrides/)).toBeInTheDocument();
+  });
+
   test('the history cites its sources', () => {
     expect(screen.getByRole('link', {name: /proposing the WorldWideWeb/}))
       .toHaveAttribute('href', expect.stringContaining('w3.org/History'));
