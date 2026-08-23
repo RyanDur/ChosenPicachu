@@ -25,7 +25,7 @@
 .caption {
   font-size: var(--text-caption);
   line-height: 1.4;
-  color: var(--charcoal);
+  color: var(--ink-muted);
   opacity: 0.8;
 }
 

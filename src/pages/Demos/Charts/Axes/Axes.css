@@ -14,7 +14,7 @@
     justify-content: space-between;
     align-items: flex-end;
     font-size: var(--text-caption);
-    color: var(--charcoal);
+    color: var(--ink-muted);
     opacity: 0.8;
   }
 
@@ -28,7 +28,7 @@
     position: relative;
     height: var(--base-x-2);
     font-size: var(--text-caption);
-    color: var(--charcoal);
+    color: var(--ink-muted);
     opacity: 0.8;
     margin-top: var(--base-x-0_25);
 

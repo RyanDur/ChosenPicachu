@@ -38,16 +38,14 @@
   .control {
     width: 100%;
 
-    /* parked dress awaiting the focus story */
-    border-radius: 0;
+      border-radius: 0;
 
     & + .control-label {
       width: 100%;
       display: block;
     }
 
-    /* choreography: the control lights its own label */
-    &:hover + .control-label,
+      &:hover + .control-label,
     &:focus + .control-label {
       background-color: var(--mint);
     }
@@ -66,13 +64,11 @@
     height: 60%;
     padding: 0 0 0 var(--base);
 
-    /* parked dress awaiting the focus story */
-    outline: none;
+      outline: none;
   }
 
   .submit-page-button {
-    /* parked dress: the font size sits off the type scale */
-    font-size: var(--base-x-2);
+      font-size: var(--base-x-2);
   }
 }
 

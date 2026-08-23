@@ -28,7 +28,6 @@
     grid-area: submit;
   }
 
-  /* choreography: the query lights its own label */
   &:has(.query:hover) .query-label,
   &:has(.query:focus) .query-label {
     background-color: var(--mint);

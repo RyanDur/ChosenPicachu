@@ -13,12 +13,12 @@
     .quote {
       margin: 0;
       padding-left: var(--base-x-2);
-      border-left: var(--hairline-x-3) solid var(--silk);
+      border-left: var(--hairline-x-3) solid var(--trim);
       text-wrap: pretty;
     }
 
     .attribution {
-      color: var(--charcoal);
+      color: var(--ink-muted);
       font-size: var(--text-caption);
     }
   }
@@ -77,8 +77,8 @@
     width: var(--base-x-4);
     height: var(--base-x-4);
     border-radius: 50%;
-    background: var(--void);
-    color: var(--white);
+    background: var(--backdrop);
+    color: var(--ink-inverse);
     font-weight: bold;
     z-index: 1;
   }
@@ -125,7 +125,7 @@
   }
 
   .phase .overview {
-    color: var(--charcoal);
+    color: var(--ink-muted);
   }
 
   .phase .story.arriving {
@@ -145,7 +145,7 @@
       margin: 0;
       font-size: var(--text-body);
       font-style: italic;
-      color: var(--charcoal);
+      color: var(--ink-muted);
       text-wrap: pretty;
     }
   }
@@ -170,8 +170,8 @@
       font-size: var(--text-caption);
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--charcoal);
-      border-block-end: var(--hairline-x-2) solid var(--void);
+      color: var(--ink-muted);
+      border-block-end: var(--hairline-x-2) solid var(--ink);
     }
 
     th:first-child,
@@ -191,7 +191,7 @@
     }
 
     .tells {
-      color: var(--charcoal);
+      color: var(--ink-muted);
     }
   }
 
@@ -224,7 +224,7 @@
 
   .design-window {
     font-size: var(--text-caption);
-    color: var(--charcoal);
+    color: var(--ink-muted);
   }
 
   .sliced {
@@ -236,7 +236,7 @@
 
   .slice {
     font-style: italic;
-    color: var(--charcoal);
+    color: var(--ink-muted);
   }
 
   .slice-station {
@@ -255,7 +255,7 @@
   }
 
   .design-grip {
-    color: var(--charcoal);
+    color: var(--ink-muted);
   }
 
   .design-line {
@@ -281,7 +281,7 @@
     margin: 0;
     font-size: var(--text-caption);
     letter-spacing: 0.08em;
-    color: var(--charcoal);
+    color: var(--ink-muted);
   }
 
   .unanswered-list {

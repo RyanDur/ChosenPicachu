@@ -85,8 +85,7 @@
         height: unset;
       }
 
-      /* parked dress awaiting the focus story */
-      .attribution:focus {
+          .attribution:focus {
         color: var(--internationl-orange-engineering);
       }
     }
@@ -246,8 +245,7 @@
         align-content: center;
         padding: 0;
 
-        /* parked dress: the mobile ground swap — a role for the theming station */
-        background-color: var(--paper);
+              background-color: var(--field);
 
         .path {
           font-size: var(--text-title);

@@ -19,7 +19,7 @@
     grid-area: headline;
     font-size: var(--text-headline);
     font-weight: bold;
-    color: var(--void);
+    color: var(--ink);
   }
 
   .status {
@@ -96,7 +96,7 @@
   }
 
   &:has(.doorway:focus-visible) {
-    outline: var(--hairline-x-2) solid var(--charcoal);
+    outline: var(--hairline-x-2) solid var(--ring);
   }
 
   &.hide {

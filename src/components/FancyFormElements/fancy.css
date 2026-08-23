@@ -67,7 +67,7 @@
       }
 
       &:focus {
-        color: var(--void);
+        color: var(--ink);
       }
     }
 

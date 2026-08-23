@@ -85,7 +85,6 @@
         color: var(--charcoal);
       }
 
-
       &:active {
         background: var(--charcoal);
         color: var(--paper);
@@ -115,7 +114,6 @@
   &:last-child {
     margin-bottom: 0;
   }
-
 
   .fold {
     overflow: hidden;

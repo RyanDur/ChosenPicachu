@@ -2,7 +2,7 @@
   text-align: left;
 
   &:focus-visible {
-    outline: var(--hairline-x-2) solid var(--charcoal);
+    outline: var(--hairline-x-2) solid var(--ring);
   }
 }
 
@@ -15,10 +15,10 @@
   background: none;
   padding: 0;
   cursor: pointer;
-  color: var(--charcoal);
+  color: var(--ink-muted);
 
   &:focus-visible {
-    outline: var(--hairline-x-2) solid var(--charcoal);
+    outline: var(--hairline-x-2) solid var(--ring);
   }
 }
 

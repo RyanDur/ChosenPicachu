@@ -10,7 +10,7 @@
     cursor: pointer;
     padding-block: var(--base);
     font-size: var(--pick-size);
-    color: var(--charcoal);
+    color: var(--ink-muted);
     border-bottom: var(--hairline-x-3) solid transparent;
 
     &:focus-visible {
@@ -19,7 +19,7 @@
   }
 
   .pick.current {
-    color: var(--void);
-    border-bottom-color: var(--charcoal);
+    color: var(--ink);
+    border-bottom-color: var(--ink-muted);
   }
 }

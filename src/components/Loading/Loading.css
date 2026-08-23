@@ -18,7 +18,7 @@
       background: none;
     }
 
-    color: var(--void);
+    color: var(--ink);
     font-size: var(--base-x-11);
     text-indent: -9999em;
     overflow: hidden;

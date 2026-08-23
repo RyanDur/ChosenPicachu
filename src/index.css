@@ -19,7 +19,7 @@ main.app-main:has(.slice-station:hover, .slice-station:focus) {
 body {
   font-size: var(--base-x-2);
   font-family: Arial, sans-serif;
-  color: var(--void);
+  color: var(--ink);
 }
 datalist {
   display: revert;
@@ -65,7 +65,7 @@ a {
 
   &,
   &:visited {
-    color: var(--void);
+    color: var(--ink);
   }
 
   &:hover,
@@ -74,7 +74,7 @@ a {
   }
 
   &:focus-visible {
-    outline: var(--hairline-x-2) solid var(--charcoal);
+    outline: var(--hairline-x-2) solid var(--ring);
   }
 }
 

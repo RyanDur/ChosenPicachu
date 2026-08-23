@@ -17,8 +17,7 @@
   .frame {
     position: relative;
 
-    /* parked dress */
-    outline: none;
+      outline: none;
 
     .loading-screen {
       position: absolute;
@@ -43,12 +42,10 @@
       max-width: 100cqw;
       max-height: 100cqh;
 
-      /* parked dress */
-      transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+          transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
 
-    /* parked dress */
-    .scrim:focus .piece,
+      .scrim:focus .piece,
     .scrim:hover .piece {
       transform: translateY(calc(var(--base) * -1));
       filter: drop-shadow(0 24px 48px var(--shadow)) drop-shadow(0 18px 20px var(--dark-shadow));

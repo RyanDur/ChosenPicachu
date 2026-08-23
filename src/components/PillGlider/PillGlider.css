@@ -37,11 +37,11 @@
     }
 
     &:hover {
-      color: var(--white);
+      color: var(--ink-inverse);
     }
 
     &:has(:checked) {
-      color: var(--white);
+      color: var(--ink-inverse);
       background: var(--chosen-color);
     }
   }

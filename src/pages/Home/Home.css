@@ -31,7 +31,7 @@
   .attribution {
     padding-inline-start: calc(var(--base-x-2) + var(--hairline-x-3));
     font-size: var(--text-caption);
-    color: var(--charcoal);
+    color: var(--ink-muted);
   }
 
   .opening {
@@ -52,7 +52,6 @@
     line-height: 1.55;
     text-wrap: pretty;
   }
-
 
 
   .door {
@@ -80,7 +79,6 @@
       text-wrap: pretty;
     }
   }
-
 
   .record {
     display: grid;
@@ -167,7 +165,7 @@
     padding-inline-start: 0;
     font-size: var(--text-caption);
     font-weight: bold;
-    color: var(--charcoal);
+    color: var(--ink-muted);
   }
 
   .beat-title {
@@ -178,7 +176,7 @@
 
   .beat-tells {
     margin: 0;
-    color: var(--charcoal);
+    color: var(--ink-muted);
     text-wrap: pretty;
   }
 
@@ -188,13 +186,13 @@
       cursor: pointer;
       width: fit-content;
       font-size: var(--text-caption);
-      color: var(--charcoal);
+      color: var(--ink-muted);
     }
 
     .paragraph {
       margin: 0;
       margin-block-start: var(--base-x-1_5);
-      color: var(--charcoal);
+      color: var(--ink-muted);
       text-wrap: pretty;
     }
   }
@@ -239,9 +237,8 @@
 
   .provenance {
     margin-inline-start: var(--base);
-    color: var(--charcoal);
+    color: var(--ink-muted);
   }
-
 
   .tee-up {
     display: grid;

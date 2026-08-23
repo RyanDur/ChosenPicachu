@@ -81,7 +81,7 @@
   }
 
   &:focus-visible {
-    outline: var(--hairline-x-2) solid var(--charcoal);
+    outline: var(--hairline-x-2) solid var(--ring);
     outline-offset: var(--base-x-0_25);
   }
 

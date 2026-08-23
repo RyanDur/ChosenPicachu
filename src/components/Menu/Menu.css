@@ -13,8 +13,7 @@
     border: none;
     height: var(--base-x-5);
 
-    /* parked dress: the menu's press and approach answers await their words */
-    &:active {
+      &:active {
       box-shadow: var(--press-glow-soft);
     }
 

@@ -1,4 +1,3 @@
-/* shared form needs — true of any form, whatever its fields */
 .read-only * {
   box-shadow: none;
   cursor: initial;

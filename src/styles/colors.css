@@ -51,11 +51,14 @@
   --press-glow-soft: inset 0 0 5px var(--charcoal);
   --raised: 0 10px 14px var(--faint-shadow);
 
-  /* roles — what an element needs; themes re-answer these */
   --backdrop: var(--void);
   --field: var(--paper);
   --card: var(--white);
   --trim: var(--silk);
   --accent: var(--faded-leather);
   --approach: var(--mint);
+  --ink: var(--void);
+  --ink-muted: var(--charcoal);
+  --ink-inverse: var(--white);
+  --ring: var(--charcoal);
 }

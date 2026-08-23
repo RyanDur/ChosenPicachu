@@ -76,7 +76,7 @@
   .step-want {
     margin: 0;
 
-    color: var(--charcoal);
+    color: var(--ink-muted);
     text-wrap: pretty;
   }
 
@@ -152,7 +152,7 @@
   .reel-title {
     font-size: var(--text-caption);
     letter-spacing: 0.08em;
-    color: var(--charcoal);
+    color: var(--ink-muted);
   }
 
   .reel-readout {
@@ -166,13 +166,10 @@
 
 
 
-
-
-
   .reel-note {
     margin: 0;
     font-size: var(--text-caption);
-    color: var(--charcoal);
+    color: var(--ink-muted);
     text-wrap: pretty;
   }
 
@@ -209,7 +206,7 @@
   .data-path-does {
     margin: 0;
     font-size: var(--text-caption);
-    color: var(--charcoal);
+    color: var(--ink-muted);
     text-wrap: pretty;
   }
 
@@ -244,7 +241,7 @@
 
   .step-reveal > .opener {
     gap: var(--base);
-    color: var(--charcoal);
+    color: var(--ink-muted);
 
     &::before {
       font-size: var(--text-body);
@@ -278,14 +275,14 @@
   .story .step-tally {
     margin: 0;
     font-size: var(--text-caption);
-    color: var(--charcoal);
+    color: var(--ink-muted);
   }
 
   .story .so-that {
     margin: 0;
     font-size: var(--text-body);
     font-style: italic;
-    color: var(--charcoal);
+    color: var(--ink-muted);
     text-wrap: pretty;
   }
 
@@ -360,7 +357,7 @@
 
     .caption {
       font-size: var(--text-caption);
-      color: var(--charcoal);
+      color: var(--ink-muted);
     }
   }
 }

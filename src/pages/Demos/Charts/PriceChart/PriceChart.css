@@ -66,7 +66,7 @@
     .price {
       font-size: var(--text-headline);
       font-weight: bold;
-      color: var(--void);
+      color: var(--ink);
     }
 
     .delta {
