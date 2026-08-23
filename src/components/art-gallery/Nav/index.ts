@@ -1,1 +1,1 @@
-export * from './GalleryNav';
+export {GalleryNav} from './GalleryNav';

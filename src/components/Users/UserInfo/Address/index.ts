@@ -1,1 +1,1 @@
-export * from './Address';
+export {Address} from './Address';

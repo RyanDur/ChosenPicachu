@@ -1,1 +1,1 @@
-export * from './FancyDateInput';
+export {FancyDateInput} from './FancyDateInput';

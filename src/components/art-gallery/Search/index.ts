@@ -1,1 +1,1 @@
-export * from './Search';
+export {Search} from './Search';

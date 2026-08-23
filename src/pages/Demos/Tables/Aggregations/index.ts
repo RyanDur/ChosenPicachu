@@ -1,1 +1,1 @@
-export * from './Aggregations';
+export {Aggregations} from './Aggregations';

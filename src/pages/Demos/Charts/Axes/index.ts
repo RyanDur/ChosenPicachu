@@ -1,1 +1,1 @@
-export * from './Axes';
+export {Axes} from './Axes';

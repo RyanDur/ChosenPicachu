@@ -1,1 +1,1 @@
-export * from './Pie';
+export {Pie} from './Pie';

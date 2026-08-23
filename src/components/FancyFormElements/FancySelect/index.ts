@@ -1,1 +1,1 @@
-export * from './FancySelect';
+export {FancySelect} from './FancySelect';

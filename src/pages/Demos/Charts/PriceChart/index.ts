@@ -1,1 +1,1 @@
-export * from './PriceChart';
+export {PriceChart} from './PriceChart';

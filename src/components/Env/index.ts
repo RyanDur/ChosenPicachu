@@ -1,1 +1,1 @@
-export * from './EnvProvider';
+export {EnvProvider, useEnv} from './EnvProvider';

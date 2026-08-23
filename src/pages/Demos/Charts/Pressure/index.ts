@@ -1,1 +1,1 @@
-export * from './Pressure';
+export {Pressure} from './Pressure';

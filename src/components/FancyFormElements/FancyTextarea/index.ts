@@ -1,1 +1,1 @@
-export * from './FancyTextarea';
+export {FancyTextarea} from './FancyTextarea';

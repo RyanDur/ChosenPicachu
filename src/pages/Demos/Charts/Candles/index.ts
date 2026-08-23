@@ -1,1 +1,1 @@
-export * from './Candles';
+export {Candles} from './Candles';

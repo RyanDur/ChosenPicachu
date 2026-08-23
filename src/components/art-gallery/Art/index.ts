@@ -1,1 +1,1 @@
-export * from './ArtGallery';
+export {ArtGallery} from './ArtGallery';

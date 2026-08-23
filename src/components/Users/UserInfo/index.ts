@@ -1,1 +1,1 @@
-export * from './UserInformation';
+export {UserInformation} from './UserInformation';

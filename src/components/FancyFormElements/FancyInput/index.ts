@@ -1,1 +1,1 @@
-export * from './FancyInput';
+export {FancyInput} from './FancyInput';

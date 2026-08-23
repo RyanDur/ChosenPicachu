@@ -1,1 +1,1 @@
-export * from './PillGlider';
+export {PillGlider} from './PillGlider';
