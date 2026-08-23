@@ -82,6 +82,19 @@ describe('the home page', () => {
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
   });
 
+  test('the dynamic interaction door folds open how I organize it, ungrouped', () => {
+    const door = within(screen.getByRole('region', {name: 'Dynamic Interaction'}));
+
+    const fold = door.getByRole('group', {hidden: true});
+    expect(fold).not.toHaveAttribute('name');
+    expect(door.getByText('how I organize it')).toBeVisible();
+    expect(door.getByRole('link', {name: /operable through a keyboard interface/, hidden: true}))
+      .toHaveAttribute('href', expect.stringContaining('w3.org'));
+    expect(door.getByText(/events in, state change, projection out/)).toBeInTheDocument();
+    expect(door.getByText(/no framework standing anywhere/)).toBeInTheDocument();
+    expect(door.getByText(/reading the state cold/)).toBeInTheDocument();
+  });
+
   test('the history cites its sources', () => {
     expect(screen.getByRole('link', {name: /proposing the WorldWideWeb/}))
       .toHaveAttribute('href', expect.stringContaining('w3.org/History'));

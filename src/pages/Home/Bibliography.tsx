@@ -218,6 +218,10 @@ export const Bibliography: FC = () =>
             <a className="signpost" href="https://tc39.es/process-document/">The TC39 Process</a>
             <span className="provenance caption">TC39, Ecma International</span>
           </li>
+          <li className="work">
+            <a className="signpost" href="https://www.w3.org/WAI/WCAG21/Understanding/keyboard.html">Understanding Success Criterion 2.1.1: Keyboard</a>
+            <span className="provenance caption">W3C WAI</span>
+          </li>
         </ul>
       </section>
       <section className="shelf" aria-label="the concert research">
