@@ -35,17 +35,3 @@
   }
 }
 
-.select-friend {
-  appearance: none;
-  text-align: center;
-  height: var(--base-x-4);
-  box-shadow: var(--light-box-shadow);
-  padding: 0;
-  border-radius: var(--base);
-
-  &:focus,
-  &:hover {
-    color: var(--white);
-    background-color: var(--primary-dark-blue);
-  }
-}

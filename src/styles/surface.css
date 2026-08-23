@@ -9,6 +9,7 @@
 .drop-shadow { box-shadow: var(--light-box-shadow); }
 
 .raised { box-shadow: var(--raised); }
+.bare { appearance: none; }
 
 .hairline-outline { border: var(--hairline) solid currentcolor; }
 
