@@ -19,7 +19,7 @@ describe('the home page', () => {
     expect(timeline.getAllByRole('listitem')).toHaveLength(13);
     ['1989', '1990', '1995', '1996', '2003', '2004', '2005', '2013', '2014', '2016'].forEach(year =>
       expect(timeline.getAllByText(year).length).toBeGreaterThan(0));
-    [/Someone needs something/, /Presentation leaves home/, /The cascade settles it/, /The languages cover for each other/, /The garden proves it/, /says it out loud/, /becomes an application/, /JavaScript covers for the platform/, /The document comes back/, /take the pen/]
+    [/Someone needs something/, /Researchers need to collaborate/, /Authors need control of the look/, /Author and reader both need a say/, /Pages need to respond/, /The need outruns the standards/, /The browsers need to agree/, /The separation needs proof/, /The standard needs the real world/, /The page needs to update in place/, /Someone needs components/, /The philosophy needs writing down/, /The document needs to come first/]
       .forEach(beat => expect(timeline.getByRole('heading', {name: beat})).toBeVisible());
   });
 

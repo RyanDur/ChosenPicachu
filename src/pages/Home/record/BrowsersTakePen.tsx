@@ -3,7 +3,7 @@ import {Moment} from './Moment';
 
 export const BrowsersTakePen: FC = () =>
   <Moment year="2004"
-          title="The browsers take the pen"
+          title="The standard needs the real world"
           tells={<>Mozilla and Opera{' '}
             <a className="signpost" href="https://whatwg.org/position-paper">put a counter-proposal in writing</a>:
             evolve HTML, backwards compatible. The W3C voted it down and held course for XML

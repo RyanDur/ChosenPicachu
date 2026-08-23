@@ -3,7 +3,7 @@ import {Moment} from './Moment';
 
 export const PresentationLeavesHome: FC = () =>
   <Moment year="1994"
-          title="Presentation leaves home"
+          title="Authors need control of the look"
           tells={<>Håkon Wium Lie{' '}
             <a className="signpost" href="https://www.w3.org/People/howcome/p/cascade.html">drafted Cascading HTML
             Style Sheets</a>, encouraged by Dave Raggett, who had realized HTML should{' '}

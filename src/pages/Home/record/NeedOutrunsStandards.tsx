@@ -1,9 +1,9 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
 
-export const Blur: FC = () =>
+export const NeedOutrunsStandards: FC = () =>
   <Moment year="1996"
-          title="The languages cover for each other"
+          title="The need outruns the standards"
           tells={<>Markup carried presentation for years because nothing else could, columns and fonts
             written as tags, and{' '}
             <a className="signpost" href="https://thehistoryoftheweb.com/the-rise-of-css/">the war multiplied

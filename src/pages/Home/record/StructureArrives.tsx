@@ -3,8 +3,8 @@ import {Moment} from './Moment';
 
 export const StructureArrives: FC = () =>
   <Moment year="1990"
-          title="Structure arrives"
-          tells={<>He wrote all three of specification, server, and browser, and based HTML on
+          title="Researchers need to collaborate"
+          tells={<>Berners-Lee wrote all three of specification, server, and browser, and based HTML on
             SGML so the documents world would recognize it. The one tag of his own was{' '}
             <a className="signpost" href="http://info.cern.ch/hypertext/WWW/MarkUp/Tags.html">the anchor</a>,
             an idea hypertext already had; the new thing was what his could carry: the address

@@ -3,7 +3,7 @@ import {Moment} from './Moment';
 
 export const BehaviorBorn: FC = () =>
   <Moment year="1995"
-          title="Behavior is born to serve"
+          title="Pages need to respond"
           tells={<>Brendan Eich{' '}
             <a className="signpost" href="https://auth0.com/blog/a-brief-history-of-javascript/">wrote the
             interpreter in about ten days</a>, for{' '}

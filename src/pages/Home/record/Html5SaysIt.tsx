@@ -3,7 +3,7 @@ import {Moment} from './Moment';
 
 export const Html5SaysIt: FC = () =>
   <Moment year="2014"
-          title="HTML5 says it out loud"
+          title="The philosophy needs writing down"
           tells={<>The specification era restated the philosophy:{' '}
             <a className="signpost" href="https://www.infoq.com/news/2011/05/html5-design/">design principles</a>{' '}
             for how a standard should behave, and stated objectives for the language: semantic

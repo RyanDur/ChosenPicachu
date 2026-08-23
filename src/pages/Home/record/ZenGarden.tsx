@@ -3,7 +3,7 @@ import {Moment} from './Moment';
 
 export const ZenGarden: FC = () =>
   <Moment year="2003"
-          title="The garden proves it"
+          title="The separation needs proof"
           tells={<>Dave Shea published{' '}
             <a className="signpost" href="http://csszengarden.com/">one HTML document</a> and invited the world to
             restyle it. Hundreds of designs, not one change to the markup: the same structure, any

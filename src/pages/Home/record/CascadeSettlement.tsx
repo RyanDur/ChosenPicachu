@@ -3,7 +3,7 @@ import {Moment} from './Moment';
 
 export const CascadeSettlement: FC = () =>
   <Moment year="1994"
-          title="The cascade settles it"
+          title="Author and reader both need a say"
           tells={<>The proposal{' '}
             <a className="signpost" href="https://www.w3.org/Style/LieBos2e/history/Overview.html">balanced two
             voices</a>: the author, who must be able to decide how a document presents, and the user,

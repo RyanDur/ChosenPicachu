@@ -4,12 +4,12 @@ import {StructureArrives} from './record/StructureArrives';
 import {PresentationLeavesHome} from './record/PresentationLeavesHome';
 import {CascadeSettlement} from './record/CascadeSettlement';
 import {BehaviorBorn} from './record/BehaviorBorn';
-import {Blur} from './record/Blur';
-import {CorrectionGrinds} from './record/CorrectionGrinds';
+import {NeedOutrunsStandards} from './record/NeedOutrunsStandards';
+import {BrowsersAgree} from './record/BrowsersAgree';
 import {ZenGarden} from './record/ZenGarden';
 import {BrowsersTakePen} from './record/BrowsersTakePen';
 import {PageBecomesApplication} from './record/PageBecomesApplication';
-import {BlurReturns} from './record/BlurReturns';
+import {SomeoneNeedsComponents} from './record/SomeoneNeedsComponents';
 import {Html5SaysIt} from './record/Html5SaysIt';
 import {DocumentComesBack} from './record/DocumentComesBack';
 
@@ -22,12 +22,12 @@ export const Timeline: FC = () =>
       <PresentationLeavesHome/>
       <CascadeSettlement/>
       <BehaviorBorn/>
-      <Blur/>
-      <CorrectionGrinds/>
+      <NeedOutrunsStandards/>
+      <BrowsersAgree/>
       <ZenGarden/>
       <BrowsersTakePen/>
       <PageBecomesApplication/>
-      <BlurReturns/>
+      <SomeoneNeedsComponents/>
       <Html5SaysIt/>
       <DocumentComesBack/>
     </ol>

@@ -196,6 +196,14 @@ export const Bibliography: FC = () =>
             <span className="provenance caption">Christopher Chedeau, NationJS, 2014</span>
           </li>
           <li className="work">
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_shadow_DOM">Using shadow DOM</a>
+            <span className="provenance caption">MDN</span>
+          </li>
+          <li className="work">
+            <a className="signpost" href="https://html.spec.whatwg.org/multipage/custom-elements.html">Custom elements</a>
+            <span className="provenance caption">the HTML Standard, WHATWG</span>
+          </li>
+          <li className="work">
             <a className="signpost" href="https://jasonformat.com/islands-architecture/">Islands Architecture</a>
             <span className="provenance caption">Jason Miller, 2020</span>
           </li>
