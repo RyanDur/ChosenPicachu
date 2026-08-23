@@ -1,8 +1,8 @@
-import {FC} from 'react';
+import {FC, PropsWithChildren} from 'react';
 import {Link} from 'react-router';
 import {Paths} from '@pages/Paths';
 
-export const TeeUp: FC = () =>
+export const TeeUp: FC<PropsWithChildren> = ({children}) =>
   <footer className="tee-up">
     <p className="paragraph">
       Someone needs something; the element chooses itself; a design takes shape; the stories
@@ -18,4 +18,5 @@ export const TeeUp: FC = () =>
       accordions, the tricks we used to do beside what the platform gives us now, and how
       much power there is in knowing what was built for what.
     </p>
+    {children}
   </footer>;

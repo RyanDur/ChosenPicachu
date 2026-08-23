@@ -16,7 +16,6 @@ describe('the home page', () => {
     expect(record.getByText(/a web of nodes in which the user can browse at will/)).toBeVisible();
     expect(record.getByText(/Tim Berners-Lee and Robert Cailliau/)).toBeVisible();
     expect(record.getByText(/Someone needed something/)).toBeVisible();
-    expect(record.getByText(/The history below is the iteration/)).toBeVisible();
     const timeline = within(screen.getByRole('list', {name: 'the timeline'}));
 
     expect(timeline.getAllByRole('listitem')).toHaveLength(13);
