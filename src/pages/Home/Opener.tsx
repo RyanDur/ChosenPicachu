@@ -25,8 +25,11 @@ export const Opener: FC = () =>
       covered for it, and through need, feedback, and user ingenuity, what communities built
       became parts of the standard; HTML’s own design principles say to{' '}
       <a className="signpost" href="https://www.w3.org/TR/html-design-principles/">“consider adopting
-      it rather than forbidding it or inventing something new”</a>. Even the standards changed
-      how they arrive: the CSS working group chose independent modules over{' '}
+      it rather than forbidding it or inventing something new”</a>.
+    </p>
+    <p className="thesis paragraph">
+      Even the standards changed how they arrive: the CSS working group chose independent
+      modules over{' '}
       <a className="signpost" href="https://www.w3.org/TR/css-2023/">“a single monolithic
       specification”</a>, and TC39 ratifies a new ECMAScript{' '}
       <a className="signpost" href="https://tc39.es/process-document/">“in July of each year”</a>.

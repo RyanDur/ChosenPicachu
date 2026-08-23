@@ -8,9 +8,6 @@ export const SomeoneNeedsComponents: FC = () =>
             self-contained pieces that carry structure, style, and behavior together, and styles
             that stay where they are put. The platform did not have them yet, so JavaScript built
             them first.</>}>
-    <p className="paragraph">Interfaces had grown too big to build as one document. Teams wanted
-    self-contained pieces, structure, style, and behavior traveling together, that could
-    be composed, reused, and reasoned about alone. The platform had no element for that.</p>
     <p className="paragraph">JavaScript answered. Components arrived in script, and the single-page
     application moved the whole document there with them: the server sent an empty body
     and a bundle, and until the script ran there was no page. The livelier web had quietly
