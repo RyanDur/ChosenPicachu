@@ -27,6 +27,11 @@ export const DynamicInteraction: FC = () =>
         transition that takes the current truth and returns the next. The truth lives in
         one place, and committing the next one is the only way anything moves. Everything
         on screen follows from it: events in, state change, projection out.</p>
+      <p className="paragraph">Not every event starts at the pointer. The page talks with
+        servers and feeds, and what comes back, a reply, a price arriving on a socket, is
+        an event like any other: it says what happened somewhere else, and the state still
+        decides what is true when it arrives. Requests go out the same door commits come
+        through, so the outside world never writes to the screen directly.</p>
       <p className="paragraph">The core is functional and the shell is imperative. Transitions
         are pure functions from state to state, tested alone with no page in sight; the
         shell holds the state, listens, commits, and reconciles what stands on screen. The

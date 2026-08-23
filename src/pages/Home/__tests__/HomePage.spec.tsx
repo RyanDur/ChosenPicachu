@@ -93,6 +93,7 @@ describe('the home page', () => {
     expect(door.getByRole('link', {name: /operable through a keyboard interface/, hidden: true}))
       .toHaveAttribute('href', expect.stringContaining('w3.org'));
     expect(door.getByText(/events in, state change, projection out/)).toBeInTheDocument();
+    expect(door.getByText(/Not every event starts at the pointer/)).toBeInTheDocument();
     expect(door.getByText(/swap the framework, or drop it entirely/)).toBeInTheDocument();
     expect(door.getByText(/reading the state cold/)).toBeInTheDocument();
   });
