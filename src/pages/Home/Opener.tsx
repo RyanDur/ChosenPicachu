@@ -18,7 +18,7 @@ export const Opener: FC = () =>
     </p>
     <p className="thesis paragraph">
       That argument is this whole site. Three doors below, one per language: each defines
-      its language and opens onto how I organize it. Under the doors, the record: how the
+      its own and opens onto how I organize it. Under the doors, the record: how the
       web got its languages, told as thirteen needs and what answered them. Past the
       record, the way into the demos, where I work the practice feature by feature; and at
       the end of the page, the research everything above leans on.
