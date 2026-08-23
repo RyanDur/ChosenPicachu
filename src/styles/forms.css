@@ -1,23 +1,27 @@
-/* the field dress — how a form field presents, wherever a form appears */
-.fancy {
-  border-radius: var(--radius-soft);
+/* shared form needs — true of any form, whatever its fields */
+.read-only * {
+  box-shadow: none;
+  cursor: initial;
 }
 
-.fancy-text {
-  border: var(--hairline) solid var(--focus-blue);
-  box-shadow: var(--light-box-shadow);
-  border-radius: var(--radius-soft);
+form [type='checkbox'] {
+  &:focus {
+    outline: none;
+    font-size: var(--base-x-2);
+  }
 
-  &:focus,
-  &:hover {
+  &:hover,
+  &:focus {
     box-shadow: var(--drop-shadow);
   }
 
-  &:disabled,
-  &:read-only:not(.fancy-select-box) {
-    border: none;
-    border-bottom: var(--hairline) solid var(--focus-blue);
-    box-shadow: none;
-    border-radius: 0;
+  &:hover ~ label,
+  &:focus ~ label {
+    font-weight: bold;
+    box-shadow: var(--drop-shadow);
   }
+}
+
+form button:has(img) {
+  border: none;
 }

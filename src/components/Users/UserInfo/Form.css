@@ -1,5 +1,4 @@
-/* dress not yet named as needs is marked "parked dress"; the refactor changes no looks */
-#user-info-form {
+.user-information {
   width: 100%;
   display: grid;
   column-gap: var(--base-x-2);
@@ -14,35 +13,39 @@
     'details details details details details details details details details details details details'
     'reset reset reset cancel cancel cancel submit submit submit submit submit submit';
 
-  #form-title {
+  .form-title {
     grid-area: title;
   }
 
-  #first-name-cell,
-  #last-name-cell,
-  #email-cell {
+  .first-name,
+  .last-name,
+  .email {
     align-self: center;
   }
 
-  #first-name-cell {
+  .first-name {
     grid-area: first_name;
   }
 
-  #last-name-cell {
+  .last-name {
     grid-area: last_name;
   }
 
-  #email-cell {
+  .email {
     grid-area: email;
   }
 
-  #dob-cell {
+  .dob {
     grid-area: dob;
     align-self: center;
     display: flex;
+
+    .fancy-text {
+      min-width: 50%;
+    }
   }
 
-  #avatar-cell {
+  .avatar {
     grid-area: avatar;
     justify-self: flex-end;
     display: flex;
@@ -51,36 +54,22 @@
     padding: var(--base-x-1_25);
     width: var(--base-x-25);
 
-    /* parked dress */
-    border: none;
-    outline: none;
-    background: var(--faded-leather);
-
-    &:focus,
-    &:hover {
-      box-shadow: var(--drop-shadow);
-    }
-
-    &:active {
-      box-shadow: initial;
-    }
-
-    #avatar {
+    img {
       height: auto;
       width: var(--base-x-19);
     }
   }
 
-  #home-address-title {
+  .home-address-title {
     grid-area: home_address_title;
   }
 
-  #work-address-title {
+  .work-address-title {
     grid-area: work_address_title;
     white-space: nowrap;
   }
 
-  #same-as-home-cell {
+  .same-as-home {
     grid-area: same_as_home;
     justify-self: flex-start;
     align-self: center;
@@ -90,30 +79,11 @@
     height: var(--base-x-2_5);
     text-align: center;
     width: 100%;
-
-    /* parked dress */
     border-radius: var(--radius-pill);
     font-size: var(--text-body);
 
-    #same-as-home {
+    [type='checkbox'] {
       margin-left: var(--base-x-1_25);
-
-      /* parked dress */
-      &:focus {
-        outline: none;
-        font-size: var(--base-x-2);
-      }
-
-      &:hover,
-      &:focus {
-        box-shadow: var(--drop-shadow);
-      }
-
-      &:hover ~ #same-as-home-title,
-      &:focus ~ #same-as-home-title {
-        font-weight: bold;
-        box-shadow: var(--drop-shadow);
-      }
     }
 
     &.read-only {
@@ -121,23 +91,21 @@
     }
   }
 
-  #home-address {
+  .home-address {
     grid-area: home_address;
   }
 
-  #work-address {
+  .work-address {
     grid-area: work_address;
   }
 
-  #details-cell {
+  .details-cell {
     grid-area: details;
 
-    #details {
+    .fancy-text {
       resize: vertical;
       min-height: var(--base-x-0_5);
       position: relative;
-
-      /* parked dress */
       border-radius: var(--radius);
 
       &:read-only {
@@ -147,53 +115,21 @@
     }
   }
 
-  #reset-form {
+  .reset {
     grid-area: reset;
   }
 
-  #cancel {
+  .cancel {
     grid-area: cancel;
   }
 
-  #submit {
+  .submit {
     grid-area: submit;
-  }
-
-  &.read-only *,
-  &.read-only #avatar-cell {
-    box-shadow: none;
-    cursor: initial;
-  }
-
-  /* parked dress: the invalid answer */
-  *:user-invalid {
-    border: var(--hairline) solid var(--internationl-orange-engineering);
-    box-shadow: var(--drop-shadow);
-  }
-
-  #dob {
-    min-width: 50%;
-
-    /* parked dress */
-    background-color: var(--white);
-
-    &:invalid {
-      color: transparent;
-    }
-
-    &:focus {
-      color: var(--void);
-    }
-  }
-
-  &:not(.read-only) *:required + .fancy-title::after {
-    content: '*';
-    color: var(--internationl-orange-engineering);
   }
 }
 
 @media (max-width: 1547px) {
-  #user-info-form {
+  .user-information {
     grid-template-columns: repeat(3, 1fr);
     grid-template-areas:
       'title title avatar'
@@ -210,11 +146,11 @@
 }
 
 @media (max-width: 1000px) {
-  #user-info-form {
+  .user-information {
     display: flex;
     flex-direction: column;
 
-    #dob {
+    .dob .fancy-text {
       width: 50%;
     }
   }

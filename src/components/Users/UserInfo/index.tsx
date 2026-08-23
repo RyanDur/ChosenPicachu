@@ -67,23 +67,23 @@ export const UserInformation: FC<FormProps> = (
                      dispatch(resetForm());
                  }}
                  onReset={() => reset()}>
-        <h2 id="form-title" className="title bold">User Information</h2>
-        <FancyInput id="first-name-cell" inputId="first-name" required
+        <h2 id="form-title" className="form-title title bold">User Information</h2>
+        <FancyInput id="first-name-cell" className="first-name" inputId="first-name" required
                     value={user.info.firstName} readOnly={readOnly}
                     onChange={event => dispatch(updateFirstName(event.currentTarget.value))}>
             First Name
         </FancyInput>
-        <FancyInput id="last-name-cell" inputId="last-name" required
+        <FancyInput id="last-name-cell" className="last-name" inputId="last-name" required
                     value={user.info.lastName} readOnly={readOnly}
                     onChange={event => dispatch(updateLastName(event.currentTarget.value))}>
             Last Name
         </FancyInput>
-        <FancyInput id="email-cell" inputId="email" value={user.info.email}
+        <FancyInput id="email-cell" className="email" inputId="email" value={user.info.email}
                     type="email" readOnly={readOnly}
                     onChange={event => dispatch(updateEmail(event.currentTarget.value))}>
             Email
         </FancyInput>
-        <FancyDateInput id="dob-cell" inputId="dob" value={user.info.dob}
+        <FancyDateInput id="dob-cell" className="dob" inputId="dob" value={user.info.dob}
                         readOnly={readOnly} required
                         onChange={event => {
                             dispatch(updateDOB(toDate(event.currentTarget.value)));
@@ -93,36 +93,36 @@ export const UserInformation: FC<FormProps> = (
 
         <button type="button" id="avatar-cell"
                 aria-label="Generate a new avatar"
-                className={classNames('rounded-corners', readOnly && 'read-only')}
+                className={classNames('avatar', 'rounded-corners', 'faded-leather', 'raisable', readOnly && 'read-only')}
                 disabled={readOnly}
                 onClick={() => dispatch(updateAvatar(generateAvatar()))}>
             <img id="avatar" src={user.avatar} width="244" height="244" fetchPriority="high" alt="avatar"/>
         </button>
 
-        <h3 id="home-address-title" className="sub-title bold">Home Address</h3>
-        <Address id="home-address" value={user.homeAddress} readOnly={readOnly} required
+        <h3 id="home-address-title" className="home-address-title sub-title bold">Home Address</h3>
+        <Address id="home-address" className="home-address" value={user.homeAddress} readOnly={readOnly} required
                  onChange={address => dispatch(updateHomeAddress(address))}/>
 
-        <h3 id="work-address-title" className="sub-title bold">Work Address</h3>
-        <article id="same-as-home-cell" className={classNames(readOnly && 'read-only')}>
+        <h3 id="work-address-title" className="work-address-title sub-title bold">Work Address</h3>
+        <article id="same-as-home-cell" className={classNames('same-as-home', readOnly && 'read-only')}>
             <input id="same-as-home" type="checkbox" checked={sameAsHome} disabled={readOnly}
                    onChange={event => updateSameAsHome(event.currentTarget.checked)}/>
             <label id="same-as-home-title" htmlFor="same-as-home">Same as Home</label>
         </article>
-        <Address id="work-address" value={user.workAddress} readOnly={readOnly} disabled={sameAsHome}
+        <Address id="work-address" className="work-address" value={user.workAddress} readOnly={readOnly} disabled={sameAsHome}
                  onChange={address => dispatch(updateWorkAddress(address))}/>
 
         <FancyTextarea value={user.details} readOnly={readOnly}
                        onChange={event => dispatch(updateDetails(event.currentTarget.value))}/>
 
-        {!readOnly && <button id="reset-form" type="reset" disabled={readOnly} className="secondary">Reset</button>}
+        {!readOnly && <button id="reset-form" type="reset" disabled={readOnly} className="reset secondary">Reset</button>}
         {readOnly && isPersisted(user) && <Link id="reset-form" to={`${users}?id=${user.id}&mode=edit`}
-                           className="button secondary">Edit</Link>}
+                           className="reset button secondary">Edit</Link>}
         {!editing && !readOnly &&
-        <button id="submit" type="submit" disabled={readOnly} className="primary">Add</button>}
+        <button id="submit" type="submit" disabled={readOnly} className="submit primary">Add</button>}
         {editing && isPersisted(user) && <Link id="cancel" to={`${users}?id=${user.id}&mode=view`}
-                          className="button secondary" onClick={reset}>Cancel</Link>}
-        {editing && <button id="submit" type="submit" className="primary">Update</button>}
+                          className="cancel button secondary" onClick={reset}>Cancel</Link>}
+        {editing && <button id="submit" type="submit" className="submit primary">Update</button>}
 
     </form>;
 };

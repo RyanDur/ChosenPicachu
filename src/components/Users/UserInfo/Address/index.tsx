@@ -1,4 +1,5 @@
 import {FC} from 'react';
+import {classNames} from '@components/class-names';
 import {FancyInput} from '@components/FancyFormElements/FancyInput';
 import {FancySelect} from '@components/FancyFormElements/FancySelect';
 import {stateAbbreviations} from './states';
@@ -6,6 +7,7 @@ import {AddressInfo} from '../types';
 import './Address.css';
 
 type AddressProps = {
+    className?: string;
     onChange: (address: AddressInfo) => void;
     id: string;
     value?: AddressInfo;
@@ -16,13 +18,14 @@ type AddressProps = {
 
 export const Address: FC<AddressProps> = (
     {
+        className,
         onChange,
         id,
         required,
         disabled,
         readOnly,
         value = {streetAddress: '', city: '', state: '', zip: ''}
-    }) => <article id={id} className="address" aria-labelledby={`${id}-title`}>
+    }) => <article id={id} className={classNames('address', className)} aria-labelledby={`${id}-title`}>
     <FancyInput inputId={`${id}-street`} className="street"
                 required={required} disabled={disabled} value={value.streetAddress} readOnly={readOnly}
                 onChange={event => onChange({...value, streetAddress: event.currentTarget.value})}>

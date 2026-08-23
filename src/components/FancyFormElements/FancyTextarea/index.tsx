@@ -17,6 +17,7 @@ export const FancyTextarea: FC<FancyTextareaProps> = (
     }) =>
     <article id="details-cell" className={classNames(
         'fancy-textarea',
+        'details-cell',
         'fancy',
         value && 'not-empty'
     )}>

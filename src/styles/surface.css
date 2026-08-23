@@ -10,6 +10,19 @@
 
 .raised { box-shadow: var(--raised); }
 .bare { appearance: none; }
+.faded-leather { background: var(--faded-leather); }
+
+.raisable {
+  &:hover,
+  &:focus {
+    box-shadow: var(--drop-shadow);
+    outline: none;
+  }
+
+  &:active {
+    box-shadow: initial;
+  }
+}
 .canvas-shadow { filter: drop-shadow(0 14px 28px var(--shadow)) drop-shadow(0 10px 10px var(--dark-shadow)); }
 .void { background: var(--void); }
 
