@@ -67,11 +67,9 @@
   .app-main {
     padding: var(--base-x-5);
     background-color: var(--paper);
-    height: fit-content;
 
     &.in-view {
       padding: 0;
-      height: 100%;
     }
   }
 
