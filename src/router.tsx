@@ -31,9 +31,9 @@ export const MountedTable = () => {
       <main className={classNames('app-main', mainClassName)}>
         <Outlet/>
       </main>
-      {AsideRegion !== undefined && <article id="filter">
+      {AsideRegion !== undefined && <aside id="filter" aria-label="filters">
         <AsideRegion/>
-      </article>}
+      </aside>}
       {FooterRegion !== undefined && <footer id="app-footer" className="stick-to-bottom">
         <FooterRegion/>
       </footer>}

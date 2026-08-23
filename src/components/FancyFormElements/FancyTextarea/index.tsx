@@ -1,5 +1,5 @@
 import {classNames} from '@components/class-names';
-import {FC, FormEvent, useState} from 'react';
+import {FC, FormEvent} from 'react';
 import {Consumer} from '@ryandur/sand';
 import '../fancy.css';
 
@@ -14,22 +14,16 @@ export const FancyTextarea: FC<FancyTextareaProps> = (
         onChange,
         value = '',
         readOnly
-    }) => {
-    const [focused, updateDetailsFocus] = useState(false);
-
-    return <article id="details-cell" className={classNames(
+    }) =>
+    <article id="details-cell" className={classNames(
         'fancy-textarea',
         'fancy',
-        focused && 'focus',
-        value && 'not-empty',
-        readOnly && 'read-only'
+        value && 'not-empty'
     )}>
         <label id="details-label" className="fancy-title bold" htmlFor="details">Details</label>
         <textarea name="details" className="fancy-text" id="details"
-                  onFocus={() => updateDetailsFocus(true)}
-                  onBlur={() => updateDetailsFocus(false)}
                   value={value}
                   readOnly={readOnly}
                   onChange={onChange}/>
     </article>;
-};
+

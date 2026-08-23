@@ -16,10 +16,6 @@
     margin: 0;
     display: grid;
     gap: var(--base);
-
-    blockquote {
-      margin: 0;
-    }
   }
 
   .quote {

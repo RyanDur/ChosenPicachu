@@ -4,8 +4,8 @@ export const PageError = () => {
   const error = useRouteError();
   console.error(error);
 
-  return <main className="page-error in-view">
-    <h2 className="title bold">This room is closed.</h2>
+  return <section className="page-error in-view" aria-labelledby="closed-room">
+    <h2 id="closed-room" className="title bold">This room is closed.</h2>
     <p>Something broke on this page — the rest of the gallery still works.</p>
-  </main>;
+  </section>;
 };

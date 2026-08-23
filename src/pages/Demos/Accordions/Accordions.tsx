@@ -130,8 +130,7 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
                  name="radio-animate-or-static-tab"
                  checked={tab === 'animated'}
                  value='animated'
-                 onChange={(event) => updateChecked(event.currentTarget.value)}
-                 onClick={() => updateTab('animated')}/>
+                 onChange={() => updateTab('animated')}/>
         </label>
 
         <label className='pill-tab'>
@@ -141,8 +140,7 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
                  name="radio-animate-or-static-tab"
                  checked={tab === 'static'}
                  value='static'
-                 onChange={(event) => updateChecked(event.currentTarget.value)}
-                 onClick={() => updateTab('static')}/>
+                 onChange={() => updateTab('static')}/>
         </label>
       </article>
     </header>

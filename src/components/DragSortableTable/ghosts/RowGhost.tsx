@@ -24,7 +24,7 @@ export const RowGhost: FC<Props> = ({at, drift, dress, columns, widths, row}) =>
                 const width = has(share) ? {'--share': `${share}%`} : undefined;
                 return place === 0
                     ? <th scope="row" className={seat} key={place} style={width}>
-                        <div className="row-header-content"><i className="grip"><Handle/></i>{row[column].display}</div>
+                        <div className="row-header-content"><span className="grip"><Handle/></span>{row[column].display}</div>
                     </th>
                     : <td className={seat} key={place} style={width}>{row[column].display}</td>;
             })}

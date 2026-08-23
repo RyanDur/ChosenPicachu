@@ -20,10 +20,8 @@ export const FriendsList: FC<Props> = ({users, user, onChange}) => {
 
   const displayFullName = ({info}: User) => `${info.firstName} ${info.lastName}`;
 
-  const add = (event: ChangeEvent<HTMLSelectElement>) => {
+  const add = (event: ChangeEvent<HTMLSelectElement>) =>
     onChange([...user.friends, event.currentTarget.value]);
-    event.currentTarget.selectedIndex = 0;
-  };
 
   const remove = (friend: User) => onChange(user.friends.filter(id => id !== friend.id));
 
@@ -40,7 +38,7 @@ export const FriendsList: FC<Props> = ({users, user, onChange}) => {
       </li>
     )}</ul>
     {has(potentialFriends) &&
-      <select className="select-friend button" defaultValue="" aria-label="Add a friend"
+      <select className="select-friend button" value="" aria-label="Add a friend"
               onChange={add}>{[
         <option key="placeholder" value="" disabled hidden>Add a Friend</option>,
         ...potentialFriends.map(potentialFriend =>

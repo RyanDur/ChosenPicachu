@@ -67,11 +67,7 @@ export const UserInformation: FC<FormProps> = (
                      updateSameAsHome(false);
                      dispatch(resetForm());
                  }}
-                 onReset={event => {
-                     reset();
-                     event.currentTarget.classList.remove('invalid');
-                 }}
-                 onInvalid={event => event.currentTarget.classList.add('invalid')}>
+                 onReset={() => reset()}>
         <h2 id="form-title" className="title bold">User Information</h2>
         <FancyInput id="first-name-cell" inputId="first-name" required
                     value={user.info.firstName} readOnly={readOnly}

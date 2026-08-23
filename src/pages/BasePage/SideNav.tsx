@@ -1,29 +1,17 @@
-import {FC, useEffect, useState} from 'react';
+import {FC} from 'react';
 import '../BasePage.css';
 import '../BasePage.layout.css';
-import {Link, useSearchParams} from 'react-router';
+import {Link} from 'react-router';
 import {toQueryString} from '@transport/url';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
 import {Source} from '@components/art-gallery/museums/types/resource';
 import {Paths} from '@pages/Paths';
-import {DemoTopics} from '@pages/Demos/types';
 
-const AboutNav: FC = () => {
-  const [searchParams] = useSearchParams();
-  const tab = searchParams.get('tab');
-  const [aboutTab, updateTab] = useState('');
-
-  useEffect(() => {
-    if (tab && Object.values<string>(DemoTopics).includes(tab)) {
-      updateTab(tab);
-    }
-  }, [tab]);
-
-  return <Link id="navigate-demos" className="path" to={`${Paths.demos}?tab=${aboutTab}`}>Demos</Link>;
-};
+const AboutNav: FC = () =>
+  <Link id="navigate-demos" className="path" to={Paths.demos}>Demos</Link>;
 
 export const SideNav: FC = () =>
-  <aside id="side-nav" aria-label="sidebar">
+  <aside id="side-nav" aria-label="site rail">
     <nav id="app-navigation" aria-label="site">
       <Link id="navigate-home" className="path" to={Paths.home}>Home</Link>
       <AboutNav/>

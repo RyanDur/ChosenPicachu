@@ -32,7 +32,7 @@
     cursor: initial;
   }
 
-  &.invalid *:invalid {
+  *:user-invalid {
     border: var(--hairline) solid var(--internationl-orange-engineering);
     box-shadow: var(--drop-shadow);
   }

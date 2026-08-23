@@ -27,9 +27,8 @@
     top: -1rem;
   }
 
-  &.read-only .fancy-title,
-  &.disabled .fancy-title,
-  &.focus .fancy-title {
+  &:focus-within .fancy-title,
+  &:has(.fancy-text:read-only) .fancy-title {
     opacity: 1;
     top: -1rem;
   }
