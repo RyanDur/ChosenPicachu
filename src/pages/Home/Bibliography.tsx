@@ -153,6 +153,22 @@ export const Bibliography: FC = () =>
             <a className="signpost" href="https://www.w3.org/TR/css-2023/">CSS Snapshot 2023</a>
             <span className="provenance caption">the CSS working group, W3C, 2023</span>
           </li>
+          <li className="work">
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes">Pseudo-classes</a>
+            <span className="provenance caption">MDN</span>
+          </li>
+          <li className="work">
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion">prefers-reduced-motion</a>
+            <span className="provenance caption">MDN</span>
+          </li>
+          <li className="work">
+            <a className="signpost" href="https://www.w3.org/WAI/WCAG21/Understanding/meaningful-sequence.html">Understanding Meaningful Sequence</a>
+            <span className="provenance caption">W3C WAI</span>
+          </li>
+          <li className="work">
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select">Customizable select elements</a>
+            <span className="provenance caption">MDN</span>
+          </li>
         </ul>
       </section>
       <section className="shelf" aria-label="dynamic interaction research">

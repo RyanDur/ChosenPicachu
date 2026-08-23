@@ -25,11 +25,26 @@ export const Presentation: FC = () =>
         atomic scale: needs repeat, looks do not.</p>
       <p className="paragraph">A class list reads like a sentence: the noun first, then what it
         needs, then what is true right now. The platform already names most states, invalid,
-        checked, hover, and the sheet listens for those pseudo-classes first. I add a state
+        checked, hover, and the sheet listens for those{' '}
+        <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes">pseudo-classes</a> first. I add a state
         word only where no native one exists, aloft, anchored, and a state can bring its
         effect along, landed arriving with its slide home. The words get reused, too: each
         component’s sheet decides what a word means for its own elements, so a column and a
         row can both be aloft and wear it differently.</p>
+      <p className="paragraph">Presentation carries affordances of its own. Motion is a
+        preference the reader can state, and the sheet listens for{' '}
+        <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion">prefers-reduced-motion</a> before
+        it animates. Grid and flex can reorder what the eye sees without changing what a
+        keyboard walks, so the source keeps{' '}
+        <a className="signpost" href="https://www.w3.org/WAI/WCAG21/Understanding/meaningful-sequence.html">the meaningful sequence</a> and
+        the sheet only decorates it. And my off-screen word exists only because some
+        elements cannot be styled yet: the native control stays, spoken but unseen, under a
+        styled stand-in, and the covering retires as the platform catches up. Select options
+        are stylable now,{' '}
+        <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select">appearance: base-select</a> in
+        Chromium, and a non-supporting browser will{' '}
+        <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select">“fall back to a classic select experience”</a>,
+        the new styles failing gracefully until the rest arrive.</p>
       <p className="paragraph">Constants live in the stylesheet; only runtime values ride
         inline, crossing on a{' '}
         <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties">custom property</a> the

@@ -75,6 +75,11 @@ describe('the home page', () => {
     expect(door.getByText(/Tag selectors are for resets only/)).toBeInTheDocument();
     expect(door.getByText(/reads like a sentence/)).toBeInTheDocument();
     expect(door.getByText(/a bag of overrides/)).toBeInTheDocument();
+    expect(door.getByText(/spoken but unseen/)).toBeInTheDocument();
+    expect(door.getByRole('link', {name: 'prefers-reduced-motion', hidden: true}))
+      .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
+    expect(door.getByRole('link', {name: 'appearance: base-select', hidden: true}))
+      .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
   });
 
   test('the history cites its sources', () => {
