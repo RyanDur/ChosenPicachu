@@ -3,25 +3,3 @@
   box-shadow: none;
   cursor: initial;
 }
-
-form [type='checkbox'] {
-  &:focus {
-    outline: none;
-    font-size: var(--base-x-2);
-  }
-
-  &:hover,
-  &:focus {
-    box-shadow: var(--drop-shadow);
-  }
-
-  &:hover ~ label,
-  &:focus ~ label {
-    font-weight: bold;
-    box-shadow: var(--drop-shadow);
-  }
-}
-
-form button:has(img) {
-  border: none;
-}

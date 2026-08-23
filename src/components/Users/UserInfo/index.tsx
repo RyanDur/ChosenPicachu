@@ -93,7 +93,7 @@ export const UserInformation: FC<FormProps> = (
 
         <button type="button" id="avatar-cell"
                 aria-label="Generate a new avatar"
-                className={classNames('avatar', 'rounded-corners', 'faded-leather', 'raisable', readOnly && 'read-only')}
+                className={classNames('avatar', 'borderless', 'rounded-corners', 'faded-leather', 'raisable', readOnly && 'read-only')}
                 disabled={readOnly}
                 onClick={() => dispatch(updateAvatar(generateAvatar()))}>
             <img id="avatar" src={user.avatar} width="244" height="244" fetchPriority="high" alt="avatar"/>
@@ -105,7 +105,7 @@ export const UserInformation: FC<FormProps> = (
 
         <h3 id="work-address-title" className="work-address-title sub-title bold">Work Address</h3>
         <article id="same-as-home-cell" className={classNames('same-as-home', readOnly && 'read-only')}>
-            <input id="same-as-home" type="checkbox" checked={sameAsHome} disabled={readOnly}
+            <input id="same-as-home" className="fancy-check" type="checkbox" checked={sameAsHome} disabled={readOnly}
                    onChange={event => updateSameAsHome(event.currentTarget.checked)}/>
             <label id="same-as-home-title" htmlFor="same-as-home">Same as Home</label>
         </article>

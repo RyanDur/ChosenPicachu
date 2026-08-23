@@ -10,6 +10,7 @@
 
 .raised { box-shadow: var(--raised); }
 .bare { appearance: none; }
+.borderless { border: none; }
 .faded-leather { background: var(--faded-leather); }
 
 .raisable {
