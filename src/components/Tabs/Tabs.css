@@ -5,7 +5,7 @@
   width: 100%;
   display: flex;
   justify-content: flex-start;
-  min-height: var(--base-x-12);
+  min-height: var(--base-x-10);
   background-color: var(--void);
 
   .tab {
