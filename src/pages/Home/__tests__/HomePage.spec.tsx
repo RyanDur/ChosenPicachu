@@ -7,8 +7,8 @@ describe('the home page', () => {
   beforeEach(() => renderWithMemoryRouter(Home, {path: Paths.home}));
 
   test('the web opens on its founding need', () => {
-    expect(screen.getByText(/a web of nodes in which the user can browse at will/)).toBeVisible();
-    expect(screen.getByText(/Tim Berners-Lee and Robert Cailliau/)).toBeVisible();
+    expect(screen.getAllByText(/a web of nodes in which the user can browse at will/)[0]).toBeVisible();
+    expect(screen.getAllByText(/Tim Berners-Lee and Robert Cailliau/)[0]).toBeVisible();
     expect(screen.getByText(/three languages working in concert/)).toBeVisible();
     expect(screen.getByText(/The history below is the evidence/)).toBeVisible();
   });
@@ -16,16 +16,16 @@ describe('the home page', () => {
   test('the timeline walks the drift and the correction', () => {
     const timeline = within(screen.getByRole('list', {name: 'the timeline'}));
 
-    expect(timeline.getAllByRole('listitem')).toHaveLength(10);
-    ['1989', '1990', '1995', '1996', '2003', '2014', 'Today'].forEach(year =>
+    expect(timeline.getAllByRole('listitem')).toHaveLength(14);
+    ['1989', '1990', '1995', '1996', '2003', '2004', '2005', '2013', '2014', '2016', 'Today'].forEach(year =>
       expect(timeline.getAllByText(year).length).toBeGreaterThan(0));
-    [/Someone needed something/, /on purpose/, /The blur/, /Zen Garden/, /says it out loud/]
+    [/Someone needs something/, /Presentation leaves home/, /The cascade settles it/, /The languages blur/, /The garden proves it/, /says it out loud/, /becomes an application/, /The blur returns/, /The document comes back/, /take the pen/, /carries it on/]
       .forEach(beat => expect(timeline.getByRole('heading', {name: beat})).toBeVisible());
   });
 
   test('three doors, each named by its responsibility', () => {
     ['Structure', 'Presentation', 'Dynamic Interaction'].forEach(door =>
-      expect(screen.getByRole('heading', {name: door})).toBeVisible());
+      expect(screen.getByRole('heading', {name: door, level: 2})).toBeVisible());
     expect(screen.getByText(/identifies the meaning, purpose, and structure/)).toBeVisible();
     expect(screen.getByText(/separation of HTML from CSS/)).toBeVisible();
     expect(screen.getByText(/a much livelier Web/)).toBeVisible();
@@ -34,12 +34,14 @@ describe('the home page', () => {
   test('every beat opens into its fuller story, closed until asked', () => {
     const timeline = within(screen.getByRole('list', {name: 'the timeline'}));
 
-    expect(timeline.getAllByText('the fuller story')).toHaveLength(10);
+    expect(timeline.getAllByText('the fuller story')).toHaveLength(14);
     expect(document.querySelectorAll('.timeline details[open]')).toHaveLength(0);
-    [/Viola/, /Mocha/, /ham is to hamster/, /MULTICOL/, /Wired/, /React in 2013/]
-      .forEach(depth => expect(timeline.getByText(depth)).toBeInTheDocument());
-    expect(timeline.getByText('Ajax').closest('a'))
-      .toHaveAttribute('href', expect.stringContaining('immagic'));
+    [/Viola/, /Mocha/, /ham is to hamster/, /MULTICOL/, /Wired News/, /React in 2013/, /CSS-in-JS/, /Next\.js/, /island of behavior/, /the projection is the difference/, /WorldWideWeb/, /Self-ish/, /eczema/, /aural/, /namespaces/, /ill-fated ES4/, /Chedeau/, /Sylor-Miller/, /you’re screwed/, /40% helvetica/, /Fahrner/, /Enquire/, /dictatorship/, /WHATWG/, /Living Standard/, /real-world web developers/]
+      .forEach(depth => expect(timeline.getAllByText(depth).length).toBeGreaterThan(0));
+    expect(timeline.getByRole('link', {name: 'the essay', hidden: true}))
+      .toHaveAttribute('href', expect.stringContaining('adaptivepath'));
+    document.querySelectorAll('.timeline .fuller-story').forEach(story =>
+      expect(story.querySelectorAll('.paragraph').length).toBeGreaterThanOrEqual(3));
   });
 
   test('the history cites its sources', () => {
@@ -53,20 +55,31 @@ describe('the home page', () => {
       .toHaveAttribute('href', expect.stringContaining('w3.org/Style/CSS/Test'));
     expect(screen.getByRole('link', {name: /one HTML document/}))
       .toHaveAttribute('href', expect.stringContaining('csszengarden.com'));
-    expect(screen.getByRole('link', {name: /built JavaScript in ten days/}))
+    expect(screen.getByRole('link', {name: /wrote the interpreter in about ten days/}))
       .toHaveAttribute('href', expect.stringContaining('auth0.com'));
     expect(screen.getByRole('link', {name: /reducing the overlap/}))
       .toHaveAttribute('href', expect.stringContaining('html.com/html5'));
   });
 
+  test('the research stands collected, closed until asked', () => {
+    const bibliography = screen.getByRole('region', {name: 'bibliography'});
+
+    expect(within(bibliography).getByRole('heading', {name: 'The research'})).toBeVisible();
+    expect(bibliography.querySelector('details[open]')).toBeNull();
+    const works = bibliography.querySelectorAll('.work');
+    expect(works.length).toBeGreaterThanOrEqual(25);
+    works.forEach(work => expect(work.querySelector('a.signpost')).not.toBeNull());
+    expect(bibliography.querySelector('a[href*="w3.org/Style/LieBos2e"]')).not.toBeNull();
+    expect(bibliography.querySelector('a[href*="web.archive.org"]')).not.toBeNull();
+    expect(bibliography.querySelector('a[href*="w3.org/History/1989"]')).not.toBeNull();
+  });
+
   test('each door and the closing walk into the demos', () => {
-    expect(screen.getByRole('link', {name: /carry the still table/}))
-      .toHaveAttribute('href', expect.stringContaining('tab=tables#station-4'));
-    expect(screen.getByRole('link', {name: /play the theater/}))
-      .toHaveAttribute('href', expect.stringContaining('tab=tables#station-6'));
-    expect(screen.getByRole('link', {name: /carry the drag/}))
-      .toHaveAttribute('href', expect.stringContaining('tab=dragAndDrop'));
-    expect(screen.getByRole('link', {name: /Start with the tables/}))
+    const doorways = screen.getAllByRole('link', {name: 'the demos'});
+    expect(doorways).toHaveLength(3);
+    doorways.forEach(doorway =>
+      expect(doorway).toHaveAttribute('href', expect.stringContaining(Paths.demos)));
+    expect(screen.getByRole('link', {name: /Start where the demos start/}))
       .toHaveAttribute('href', expect.stringContaining(Paths.demos));
   });
 });

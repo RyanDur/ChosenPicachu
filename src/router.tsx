@@ -1,7 +1,7 @@
 import {classNames} from '@components/class-names';
 import {BannerProvider, Banners} from '@components/Banners';
-import {Outlet, useMatches} from 'react-router';
-import {Fragment} from 'react';
+import {Outlet, useLocation, useMatches} from 'react-router';
+import {Fragment, useEffect} from 'react';
 import {SideNav} from '@pages/BasePage/SideNav';
 import {isRegions, Regions} from '@pages/regions';
 import {Paths} from '@pages/Paths';
@@ -13,6 +13,12 @@ import {Games} from '@pages/Games';
 const NoHeader = () => null;
 
 export const MountedTable = () => {
+  const {pathname, hash} = useLocation();
+  useEffect(() => {
+    if (hash === '') {
+      window.scrollTo(0, 0);
+    }
+  }, [pathname, hash]);
   const regions = useMatches()
     .map(match => match.handle)
     .filter(isRegions)

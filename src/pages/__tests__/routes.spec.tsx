@@ -1,4 +1,5 @@
 import {render, screen} from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import {renderWithMemoryRouter} from '@test-support';
 import {Gallery} from '@pages/Gallery';
 import {Games} from '@pages/Games';
@@ -28,12 +29,32 @@ describe('page error boundaries', () => {
   });
 });
 
+describe('leaving a page', () => {
+  test('a new page starts at the top', async () => {
+    const landings: [number, number][] = [];
+    window.scrollTo = (...args: unknown[]) => {
+      const [x, y] = args;
+      if (typeof x === 'number' && typeof y === 'number') {
+        landings.push([x, y]);
+      }
+    };
+    const memory = createMemoryRouter([router], {initialEntries: ['/']});
+    render(<RouterProvider router={memory}/>);
+    await screen.findByRole('heading', {level: 1});
+
+    await userEvent.click(screen.getByRole('link', {name: /Start where the demos start/}));
+
+    await screen.findByRole('navigation', {name: 'demos'});
+    expect(landings).toContainEqual([0, 0]);
+  });
+});
+
 describe('the root path', () => {
   test('opens the front door, which tees up the demos', async () => {
     const memory = createMemoryRouter([router], {initialEntries: ['/']});
     render(<RouterProvider router={memory}/>);
 
     expect(await screen.findByRole('heading', {level: 1})).toHaveTextContent('The three languages');
-    expect(screen.getByRole('link', {name: /Start with the tables/})).toBeVisible();
+    expect(screen.getByRole('link', {name: /Start where the demos start/})).toBeVisible();
   });
 });

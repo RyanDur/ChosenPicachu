@@ -16,6 +16,7 @@ HTMLElement.prototype.setPointerCapture = () => undefined;
 Element.prototype.getAnimations = () => [];
 HTMLElement.prototype.showPopover = () => undefined;
 Element.prototype.scrollIntoView = () => undefined;
+window.scrollTo = () => undefined;
 HTMLElement.prototype.hidePopover = () => undefined;
 globalThis.ResizeObserver = class {
   observe(): void {}

@@ -99,9 +99,6 @@
   }
 
   .fuller-story {
-    display: grid;
-    gap: var(--base);
-
     .prompt {
       cursor: pointer;
       width: fit-content;
@@ -111,6 +108,7 @@
 
     .paragraph {
       margin: 0;
+      margin-block-start: var(--base-x-1_5);
       color: var(--charcoal);
       text-wrap: pretty;
     }
@@ -118,6 +116,7 @@
 
   .period-markup {
     margin: 0;
+    margin-block-start: var(--base-x-1_5);
     padding: var(--base-x-1_5);
     overflow-x: auto;
     background: var(--white);
@@ -135,6 +134,43 @@
       text-wrap: pretty;
     }
   }
+
+  .bibliography .shelves {
+    display: grid;
+    gap: var(--base-x-2_5);
+
+    .prompt {
+      cursor: pointer;
+      width: fit-content;
+    }
+
+    .record-title {
+      display: inline;
+    }
+  }
+
+  .shelf {
+    display: grid;
+    gap: var(--base-x-1_5);
+  }
+
+  .shelf-title {
+    margin: 0;
+    font-size: var(--text-title);
+  }
+
+  .works {
+    margin: 0;
+    padding-inline-start: var(--base-x-2_5);
+    display: grid;
+    gap: var(--base);
+  }
+
+  .provenance {
+    margin-inline-start: var(--base);
+    color: var(--charcoal);
+  }
+
 
   .tee-up {
     margin: 0;
