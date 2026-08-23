@@ -6,7 +6,6 @@
   .piece {
     margin-bottom: var(--base-x-2);
     width: 100%;
-    filter: drop-shadow(0 14px 28px var(--shadow)) drop-shadow(0 10px 10px var(--dark-shadow));
   }
 
   .artist-display {

@@ -10,6 +10,7 @@
 
 .raised { box-shadow: var(--raised); }
 .bare { appearance: none; }
+.canvas-shadow { filter: drop-shadow(0 14px 28px var(--shadow)) drop-shadow(0 10px 10px var(--dark-shadow)); }
 .void { background: var(--void); }
 
 .pressable {
