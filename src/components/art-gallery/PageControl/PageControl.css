@@ -1,24 +1,51 @@
+/* dress not yet named as needs is marked "parked dress"; the refactor changes no looks */
 #page-control {
-  width: 100%;
-  background-color: var(--void);
+  position: sticky;
+  bottom: 0;
+  display: grid;
+  gap: var(--base);
+  inline-size: 100%;
+  grid-template-rows: repeat(3, var(--base-x-8));
+  grid-template-areas:
+    'go-to'
+    'per-page'
+    'submit';
+
+  #go-to-label {
+    grid-area: go-to;
+    align-self: flex-start;
+  }
+
+  #go-to {
+    grid-area: go-to;
+    align-self: flex-end;
+  }
+
+  #per-page-label {
+    grid-area: per-page;
+    align-self: flex-start;
+  }
+
+  #per-page {
+    grid-area: per-page;
+    align-self: flex-end;
+  }
 
   .control {
     width: 100%;
+
+    /* parked dress */
     border: 0;
     border-radius: 0;
 
     & + .control-label {
       width: 100%;
-      background-color: var(--paper);
       display: block;
-    }
-
-    &.input {
-      padding-left: var(--base-x-2);
     }
 
     &:hover + .control-label,
     &:focus + .control-label {
+      /* parked dress */
       background-color: var(--mint);
     }
   }
@@ -34,17 +61,20 @@
   #per-page,
   #go-to {
     height: 60%;
+    padding: 0 0 0 var(--base);
+
+    /* parked dress */
     outline: none;
     border: none;
-    padding: 0 0 0 var(--base);
   }
 
   #submit-page-number {
+    grid-area: submit;
+    height: 100%;
+
+    /* parked dress */
     border: none;
     font-size: var(--base-x-2);
-    font-weight: bold;
-    background-color: var(--paper);
-    height: 100%;
 
     &:focus,
     &:hover {
@@ -55,7 +85,12 @@
 
 @media (max-width: 1000px) {
   #page-control {
-    display: flex;
+    grid-template-rows: repeat(2, var(--base-x-8));
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      'go-to per-page'
+      'submit submit';
+
     .control {
       height: var(--base-x-4);
       margin: 0 var(--base) 0 0;
