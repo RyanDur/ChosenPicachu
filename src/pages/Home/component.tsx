@@ -15,6 +15,6 @@ export const HomePage: FC = () =>
     <Presentation/>
     <DynamicInteraction/>
     <Timeline/>
-    <Bibliography/>
     <TeeUp/>
+    <Bibliography/>
   </article>;
