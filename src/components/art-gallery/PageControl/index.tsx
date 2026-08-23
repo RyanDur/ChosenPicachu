@@ -1,4 +1,5 @@
 import {FormEvent, useState} from 'react';
+import {gotoTopOfPage} from '@pages/scroll';
 import {useGallery} from '@components/art-gallery/Art/Context';
 import {numberParam, useSearchParamsObject} from '@components/search-params';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
@@ -13,7 +14,6 @@ export const PageControl = () => {
   const firstPage = 1;
   const lastPage = art?.pagination?.totalPages ?? Number.MAX_VALUE;
 
-  const gotoTopOfPage = () => window.scrollTo(0, 0);
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     gotoTopOfPage();

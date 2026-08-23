@@ -1,4 +1,5 @@
 import {Link, useLocation} from 'react-router';
+import {gotoTopOfPage} from '@pages/scroll';
 import {FC, useState} from 'react';
 import {numberParam, useSearchParamsObject} from '@components/search-params';
 import {useGallery} from '@components/art-gallery/Art/Context';
@@ -37,7 +38,6 @@ export const GalleryNav: FC<Props> = ({id}) => {
   const firstRecord = 1 + pageSize * ((art?.pagination.currentPage ?? currentPage) - 1);
   const lastRecord = art?.pagination.totalPages === currentPage ? totalRecords : pageSize * currentPage;
 
-  const gotoTopOfPage = () => window.scrollTo(0, 0);
 
   return <nav className="gallery-nav pagination" aria-label="pagination" id={id}>
     {!hasPrevPage && <article className="fill-left"/>}

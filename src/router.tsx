@@ -4,6 +4,7 @@ import {Outlet, useLocation, useMatches} from 'react-router';
 import {Fragment, useEffect} from 'react';
 import {SideNav} from '@pages/BasePage/SideNav';
 import {isRegions, Regions} from '@pages/regions';
+import {gotoTopOfPage} from '@pages/scroll';
 import {Paths} from '@pages/Paths';
 import {Home} from '@pages/Home';
 import {Users} from '@pages/Users';
@@ -16,7 +17,7 @@ export const MountedTable = () => {
   const {pathname, hash} = useLocation();
   useEffect(() => {
     if (hash === '') {
-      window.scrollTo(0, 0);
+      gotoTopOfPage();
     }
   }, [pathname, hash]);
   const regions = useMatches()

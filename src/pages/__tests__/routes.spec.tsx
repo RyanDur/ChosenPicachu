@@ -32,7 +32,7 @@ describe('page error boundaries', () => {
 describe('leaving a page', () => {
   test('a new page starts at the top', async () => {
     const landings: [number, number][] = [];
-    window.scrollTo = (...args: unknown[]) => {
+    Element.prototype.scrollTo = (...args: unknown[]) => {
       const [x, y] = args;
       if (typeof x === 'number' && typeof y === 'number') {
         landings.push([x, y]);
