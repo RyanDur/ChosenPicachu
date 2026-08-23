@@ -10,16 +10,16 @@ describe('the home page', () => {
     expect(screen.getAllByText(/a web of nodes in which the user can browse at will/)[0]).toBeVisible();
     expect(screen.getAllByText(/Tim Berners-Lee and Robert Cailliau/)[0]).toBeVisible();
     expect(screen.getByText(/three languages working in concert/)).toBeVisible();
-    expect(screen.getByText(/The history below is the evidence/)).toBeVisible();
+    expect(screen.getByText(/The history below is the iteration/)).toBeVisible();
   });
 
-  test('the timeline walks the drift and the correction', () => {
+  test('the timeline walks the iteration', () => {
     const timeline = within(screen.getByRole('list', {name: 'the timeline'}));
 
     expect(timeline.getAllByRole('listitem')).toHaveLength(13);
     ['1989', '1990', '1995', '1996', '2003', '2004', '2005', '2013', '2014', '2016'].forEach(year =>
       expect(timeline.getAllByText(year).length).toBeGreaterThan(0));
-    [/Someone needs something/, /Presentation leaves home/, /The cascade settles it/, /The languages blur/, /The garden proves it/, /says it out loud/, /becomes an application/, /The blur returns/, /The document comes back/, /take the pen/]
+    [/Someone needs something/, /Presentation leaves home/, /The cascade settles it/, /The languages cover for each other/, /The garden proves it/, /says it out loud/, /becomes an application/, /JavaScript covers for the platform/, /The document comes back/, /take the pen/]
       .forEach(beat => expect(timeline.getByRole('heading', {name: beat})).toBeVisible());
   });
 

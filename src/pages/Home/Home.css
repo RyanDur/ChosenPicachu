@@ -1,7 +1,16 @@
 .home {
   display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--base-x-3);
   padding: var(--base-x-3);
+
+  > * {
+    grid-column: 1 / -1;
+  }
+
+  > .door {
+    grid-column: auto;
+  }
 
   .feedback {
     margin: 0;
@@ -15,8 +24,10 @@
 
   .quote {
     margin: 0;
-    padding-left: var(--base-x-2);
-    border-left: var(--hairline-x-3) solid var(--silk);
+    padding-inline-start: var(--base-x-2);
+    border-inline-start: var(--hairline-x-3) solid var(--silk);
+    font-size: var(--text-title);
+    line-height: 1.25;
     font-style: italic;
     text-wrap: pretty;
   }
@@ -27,14 +38,59 @@
     color: var(--charcoal);
   }
 
-  .thesis {
+  .opening {
+    display: grid;
+    gap: var(--base-x-2);
+  }
+
+  .lede {
     margin: 0;
+    font-size: var(--text-title);
+    line-height: 1.25;
     text-wrap: pretty;
   }
+
+  .thesis {
+    margin: 0;
+    font-size: var(--text-body);
+    line-height: 1.55;
+    text-wrap: pretty;
+  }
+
+
+
+  .door {
+    align-content: start;
+    display: grid;
+    gap: var(--base-x-1_5);
+    padding-block-start: var(--base-x-2);
+    border-block-start: var(--hairline-x-3) solid var(--silk);
+
+    .quote {
+      padding-inline-start: var(--base-x-2);
+      border-inline-start: var(--hairline-x-3) solid var(--silk);
+      font-size: var(--text-body);
+      line-height: 1.55;
+    }
+
+    .attribution {
+      padding-inline-start: calc(var(--base-x-2) + var(--hairline-x-3));
+    }
+
+    .paragraph {
+      margin: 0;
+      font-size: var(--text-body);
+      line-height: 1.55;
+      text-wrap: pretty;
+    }
+  }
+
 
   .record {
     display: grid;
     gap: var(--base-x-2_5);
+    padding-block-start: var(--base-x-3);
+    border-block-start: var(--hairline-x-3) solid var(--silk);
   }
 
   .research-title {
@@ -62,7 +118,14 @@
     display: grid;
     grid-template-columns: var(--base-x-8) minmax(0, 1fr);
     column-gap: var(--base-x-2);
-    padding-block: var(--base-x-2);
+    row-gap: var(--base-x-1_5);
+    padding-block: var(--base-x-3);
+  }
+
+  .moment > * {
+    grid-column: 2;
+    padding-inline-start: var(--base-x-2);
+    line-height: 1.55;
   }
 
   .moment::before {
@@ -83,7 +146,7 @@
     inset-block: 0;
     inset-inline-start: calc(var(--base-x-8) + var(--base-x-2) / 2 - var(--hairline));
     width: var(--hairline-x-2);
-    background: var(--shadow);
+    background: var(--silk);
   }
 
   .moment:first-child::after {
@@ -96,16 +159,14 @@
   }
 
   .year {
+    grid-column: 1;
+    grid-row: 1;
     justify-self: end;
     align-self: start;
+    padding-inline-start: 0;
+    font-size: var(--text-caption);
     font-weight: bold;
     color: var(--charcoal);
-  }
-
-  .beat {
-    display: grid;
-    gap: var(--base);
-    padding-inline-start: var(--base-x-2);
   }
 
   .beat-title {
@@ -145,16 +206,6 @@
     border: var(--hairline) solid var(--shadow);
     border-radius: var(--radius);
     font-size: var(--text-caption);
-  }
-
-  .door {
-    display: grid;
-    gap: var(--base-x-2);
-
-    .paragraph {
-      margin: 0;
-      text-wrap: pretty;
-    }
   }
 
   .bibliography .shelves {
@@ -197,6 +248,7 @@
     .paragraph {
       margin: 0;
       font-size: var(--text-title);
+      line-height: 1.25;
       text-wrap: pretty;
     }
   }

@@ -4,7 +4,7 @@ import {Moment} from './Moment';
 export const DocumentComesBack: FC = () =>
   <Moment year="2016"
           title="The document comes back"
-          tells={<>The correction this time was about where. Server-side rendering returned,
+          tells={<>The question this time was where. Server-side rendering returned,
             sending real HTML first and attaching behavior after; static generation, islands, and
             server components are the same instinct refined: the document first, the program only
             where the page needs one.</>}>

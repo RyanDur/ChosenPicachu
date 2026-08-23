@@ -3,11 +3,11 @@ import {Moment} from './Moment';
 
 export const Blur: FC = () =>
   <Moment year="1996"
-          title="The languages blur"
-          tells={<>Presentation had been leaking into markup since before the browser wars, columns and fonts
+          title="The languages cover for each other"
+          tells={<>Markup carried presentation for years because nothing else could, columns and fonts
             written as tags, and{' '}
-            <a className="signpost" href="https://thehistoryoftheweb.com/the-rise-of-css/">the war made it
-            worse</a>: vendor tags on every side, and CSS itself{' '}
+            <a className="signpost" href="https://thehistoryoftheweb.com/the-rise-of-css/">the war multiplied
+            the dialects</a>: vendor tags on every side, and CSS itself{' '}
             <a className="signpost" href="https://www.w3.org/Style/LieBos2e/history/Overview.html">run as
             JavaScript</a>. The same page looked broken in the other browser.</>}>
             <p className="paragraph">Mosaic-era markup said it plainly:</p>
@@ -18,17 +18,17 @@ export const Blur: FC = () =>
     <a className="signpost" href="https://thehistoryoftheweb.com/look-back-history-css/">“lost all semantic value”</a>. The font tag made it into HTML 3.2
     itself; center shipped in the very first Mozilla beta, three days after Lie’s
     draft.</p>
-    <p className="paragraph">Netscape’s own CSS support was the era’s clearest confession. The company had
-    been sceptical of style sheets, and Lie and Bos read its first implementation as{' '}
+    <p className="paragraph">Netscape had been sceptical of style sheets, and Lie and Bos read its first
+    implementation as{' '}
     <a className="signpost" href="https://www.w3.org/Style/LieBos2e/history/Overview.html">“a half-hearted attempt to stop Microsoft from claiming to be more standards-compliant than themselves”</a>.
     Navigator 4 ran CSS by{' '}
     <a className="signpost" href="https://www.w3.org/Style/LieBos2e/history/Overview.html">“translating CSS rules into snippets of Javascript”</a>, and offered
     JSSS so developers could bypass CSS entirely: style as script, shipped broad but
     untested, and had it succeeded the web would have carried{' '}
     <a className="signpost" href="https://www.w3.org/Style/LieBos2e/history/Overview.html">“one more style sheet language than necessary”</a>.</p>
-    <p className="paragraph">The war’s deepest damage was quieter than the tags: it made CSS untrustworthy.
-    The same page looked one way in IE and another in Navigator, so designers retreated to
-    table layouts, spacer GIFs, and Flash. Hoffmann’s verdict on the era:{' '}
+    <p className="paragraph">The war’s quieter effect was on trust: the same page looked one way in IE and
+    another in Navigator, so designers covered with what was reliable: table layouts,
+    spacer GIFs, and Flash. Hoffmann’s verdict on the era:{' '}
     <a className="signpost" href="https://thehistoryoftheweb.com/the-rise-of-css/">“at one time, not using CSS was actually a best practice.”</a></p>
     <p className="paragraph">JavaScript fought the same war under a different flag. It took off so fast its
     tools outpaced the Java applets it was meant to accompany, and Microsoft’s

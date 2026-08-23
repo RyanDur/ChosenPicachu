@@ -3,11 +3,11 @@ import {Moment} from './Moment';
 
 export const CorrectionGrinds: FC = () =>
   <Moment year="1998"
-          title="The correction grinds"
+          title="The tests teach the browsers"
           tells={<>The specifications ran ahead of the browsers, and{' '}
             <a className="signpost" href="https://www.w3.org/Style/CSS/Test/CSS1/current/test5526c.htm">the Acid
             Test</a> drew the line pixel by pixel; in the beginning, most browsers failed it. The
-            correction was not a release. It was a decade of tests, hacks, and public
+            catching-up was not a release. It was a decade of feedback: tests, hacks, and public
             scoreboards.</>}>
             <p className="paragraph">The specifications were ahead of everyone. CSS1 had shipped into a market where
     Internet Explorer 3, the first commercial browser to try CSS at all, had implemented
@@ -15,7 +15,7 @@ export const CorrectionGrinds: FC = () =>
     <a className="signpost" href="https://www.w3.org/Style/LieBos2e/history/Overview.html">“reliably”</a> and the box model barely at all. CSS2 followed in May
     1998 with z-index, media types, positioning, bidirectional text, and aural style
     sheets: presentation for ears as well as eyes.</p>
-    <p className="paragraph">The correction’s real weapon was testing. Eric Meyer’s private compatibility
+    <p className="paragraph">The feedback ran through tests. Eric Meyer’s private compatibility
     suite became the official CSS1 Test Suite; Tim Boland of NIST mined the specification
     for <a className="signpost" href="https://www.w3.org/Style/CSS/Test/CSS1/current/tsack.html">more than five hundred testable statements</a>; the credits
     list a young L. David Baron and a young Ian Hickson, and one line lands with special

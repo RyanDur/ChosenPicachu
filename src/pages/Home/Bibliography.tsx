@@ -65,6 +65,10 @@ export const Bibliography: FC = () =>
             <span className="provenance caption">the WHATWG</span>
           </li>
           <li className="work">
+            <a className="signpost" href="https://www.w3.org/TR/html-design-principles/">HTML Design Principles</a>
+            <span className="provenance caption">Anne van Kesteren and Maciej Stachowiak, W3C, 2007</span>
+          </li>
+          <li className="work">
             <a className="signpost" href="https://web.archive.org/web/20141221170539/https://www.w3.org/standards/webdesign/htmlcss.html">HTML and CSS</a>
             <span className="provenance caption">the W3C; the definitions survive only in the archive</span>
           </li>
@@ -129,6 +133,10 @@ export const Bibliography: FC = () =>
             <a className="signpost" href="https://www.w3.org/Style/CSS/Overview.en.html">Cascading Style Sheets home page</a>
             <span className="provenance caption">the W3C</span>
           </li>
+          <li className="work">
+            <a className="signpost" href="https://www.w3.org/TR/css-2023/">CSS Snapshot 2023</a>
+            <span className="provenance caption">the CSS working group, W3C, 2023</span>
+          </li>
         </ul>
       </section>
       <section className="shelf" aria-label="dynamic interaction research">
@@ -173,6 +181,10 @@ export const Bibliography: FC = () =>
           <li className="work">
             <a className="signpost" href="https://en.wikipedia.org/wiki/Prototype-based_programming">Prototype-based programming</a>
             <span className="provenance caption">Wikipedia</span>
+          </li>
+          <li className="work">
+            <a className="signpost" href="https://tc39.es/process-document/">The TC39 Process</a>
+            <span className="provenance caption">TC39, Ecma International</span>
           </li>
         </ul>
       </section>

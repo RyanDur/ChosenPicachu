@@ -5,9 +5,10 @@ export const StructureArrives: FC = () =>
   <Moment year="1990"
           title="Structure arrives"
           tells={<>He wrote all three of specification, server, and browser, and based HTML on
-            SGML so the documents world would recognize it. The invention was not{' '}
-            <a className="signpost" href="http://info.cern.ch/hypertext/WWW/MarkUp/Tags.html">the anchor</a>{' '}
-            itself but the address inside it: a link that crosses machine boundaries.</>}>
+            SGML so the documents world would recognize it. The one tag of his own was{' '}
+            <a className="signpost" href="http://info.cern.ch/hypertext/WWW/MarkUp/Tags.html">the anchor</a>,
+            an idea hypertext already had; the new thing was what his could carry: the address
+            of a document on another machine.</>}>
             <p className="paragraph">The November 1990 proposal, written with Robert Cailliau, names the project{' '}
     <a className="signpost" href="https://www.w3.org/History/19921103-hypertext/hypertext/WWW/Proposal.html">“WorldWideWeb (or W3)”</a> and opens on the sentence this page opens
     with. It plans three months of building, a second phase in which{' '}
