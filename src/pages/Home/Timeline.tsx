@@ -31,4 +31,12 @@ export const Timeline: FC = () =>
       <Html5SaysIt/>
       <DocumentComesBack/>
     </ol>
+    <p className="coda paragraph">
+      Read the titles again, top to bottom: it is one sentence said thirteen ways. Someone
+      needs something, the community answers, and the platform learns the answer. That
+      feedback loop built an ecosystem where elegant solutions keep arriving from places no
+      specification thought to look. The research below holds every source the record leans
+      on. And the needs have not stopped arriving; what follows is what answering them looks
+      like now.
+    </p>
   </section>;

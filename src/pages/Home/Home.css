@@ -93,6 +93,11 @@
     border-block-start: var(--hairline-x-3) solid var(--silk);
   }
 
+  .coda {
+    font-size: var(--text-title);
+    line-height: 1.25;
+  }
+
   .research-title {
     margin: 0;
     font-size: var(--text-headline);

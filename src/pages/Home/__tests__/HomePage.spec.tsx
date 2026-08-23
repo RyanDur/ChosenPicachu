@@ -21,6 +21,7 @@ describe('the home page', () => {
       expect(timeline.getAllByText(year).length).toBeGreaterThan(0));
     [/Someone needs something/, /Researchers need to collaborate/, /Authors need control of the look/, /Author and reader need a referee/, /Pages need to respond/, /The need outruns the standards/, /The browsers need to agree/, /The separation needs proof/, /The standard needs the real world/, /The page needs to update in place/, /Someone needs components/, /The philosophy needs writing down/, /The document needs to come first/]
       .forEach(beat => expect(timeline.getByRole('heading', {name: beat})).toBeVisible());
+    expect(screen.getByText(/one sentence said thirteen ways/)).toBeVisible();
   });
 
   test('three doors, each named by its responsibility', () => {
