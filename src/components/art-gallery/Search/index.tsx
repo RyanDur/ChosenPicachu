@@ -41,7 +41,7 @@ export const Search: FC<Props> = ({id}) => {
 
   const handleReset = () => removeSearchParams('search');
 
-  return <search className="search void"><form id={id} className="search-form" onSubmit={handleSubmit} onReset={handleReset}>
+  return <search id={id} className="search void"><form className="search-form" onSubmit={handleSubmit} onReset={handleReset}>
     <label id="query-label" className='paper ellipsis' htmlFor="query"><span className='bold'>Search For:</span> {decodeURI(search || '')}</label>
     <input type="search" autoComplete="off" list="search-options" id="query"
            className="bare white"
