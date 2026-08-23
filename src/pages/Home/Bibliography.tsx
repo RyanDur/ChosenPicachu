@@ -4,7 +4,7 @@ export const Bibliography: FC = () =>
   <section className="bibliography" aria-label="bibliography">
     <details className="shelves">
       <summary className="prompt"><h2 className="record-title">The research</h2></summary>
-      <section className="shelf" aria-label="the web">
+      <section className="shelf" aria-label="the web research">
         <h3 className="shelf-title">The web</h3>
         <ul className="works">
           <li className="work">
@@ -33,7 +33,7 @@ export const Bibliography: FC = () =>
           </li>
         </ul>
       </section>
-      <section className="shelf" aria-label="structure">
+      <section className="shelf" aria-label="structure research">
         <h3 className="shelf-title">Structure</h3>
         <ul className="works">
           <li className="work">
@@ -74,7 +74,7 @@ export const Bibliography: FC = () =>
           </li>
         </ul>
       </section>
-      <section className="shelf" aria-label="presentation">
+      <section className="shelf" aria-label="presentation research">
         <h3 className="shelf-title">Presentation</h3>
         <ul className="works">
           <li className="work">
@@ -131,7 +131,7 @@ export const Bibliography: FC = () =>
           </li>
         </ul>
       </section>
-      <section className="shelf" aria-label="dynamic interaction">
+      <section className="shelf" aria-label="dynamic interaction research">
         <h3 className="shelf-title">Dynamic Interaction</h3>
         <ul className="works">
           <li className="work">
@@ -176,7 +176,7 @@ export const Bibliography: FC = () =>
           </li>
         </ul>
       </section>
-      <section className="shelf" aria-label="the concert">
+      <section className="shelf" aria-label="the concert research">
         <h3 className="shelf-title">The concert</h3>
         <ul className="works">
           <li className="work">
