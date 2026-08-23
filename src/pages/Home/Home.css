@@ -37,8 +37,13 @@
     gap: var(--base-x-2_5);
   }
 
+  .research-title {
+    margin: 0;
+    font-size: var(--text-headline);
+    display: inline;
+  }
+
   .record-title,
-  .research-title,
   .door-title {
     margin: 0;
     font-size: var(--text-headline);
@@ -160,10 +165,6 @@
       cursor: pointer;
       width: fit-content;
     }
-
-    .research-title {
-      display: inline;
-    }
   }
 
   .shelf {
@@ -190,8 +191,13 @@
 
 
   .tee-up {
-    margin: 0;
-    font-size: var(--text-title);
-    text-wrap: pretty;
+    display: grid;
+    gap: var(--base-x-1_5);
+
+    .paragraph {
+      margin: 0;
+      font-size: var(--text-title);
+      text-wrap: pretty;
+    }
   }
 }
