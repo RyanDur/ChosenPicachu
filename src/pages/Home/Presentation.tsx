@@ -37,12 +37,13 @@ export const Presentation: FC = () =>
         it animates. Grid and flex can reorder what the eye sees without changing what a
         keyboard walks, so the source keeps{' '}
         <a className="signpost" href="https://www.w3.org/WAI/WCAG21/Understanding/meaningful-sequence.html">the meaningful sequence</a> and
-        the sheet only decorates it. And my off-screen word exists only because some
-        elements cannot be styled yet: the native control stays, spoken but unseen, under a
-        styled stand-in, and the covering retires as the platform catches up. Select options
-        are stylable now,{' '}
+        the sheet only decorates it. And when an element cannot be styled yet,
+        sometimes there is an easy way around: a checkbox can slip off screen, spoken but
+        unseen, while its label wears the design and the checked state re-dresses it on
+        every change. Coverings like that retire as the platform catches up. Select options
+        had no easy way around, and now they need none: stylable via{' '}
         <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select">appearance: base-select</a> in
-        Chromium, and a non-supporting browser will{' '}
+        Chromium, with a non-supporting browser promised to{' '}
         <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select">“fall back to a classic select experience”</a>,
         the new styles failing gracefully until the rest arrive.</p>
       <p className="paragraph">Constants live in the stylesheet; only runtime values ride
