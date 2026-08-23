@@ -2,7 +2,7 @@ import {FC, useState} from 'react';
 import {not as toggle} from '@ryandur/sand';
 import {PropsWithClassName} from '../types';
 import {classNames} from '@components/class-names';
-import './styles.css';
+import './ZIndexDemo.css';
 
 export const NaturalZIndex: FC<PropsWithClassName> = ({className}) => {
   const [isCollapsed, updateCollapsed] = useState(true);

@@ -9,8 +9,7 @@ import {has, maybe} from '@ryandur/sand';
 import {EagerHideAnimatedTable} from '@components/DragSortableTable';
 import {Menu} from '@components/Menu';
 import {age, formatAge, FriendsList} from '@components/Users';
-import './styles.css';
-import './styles.layout.css';
+import './UsersPage.css';
 
 export const UsersPage: FC = () => {
   const navigate = useNavigate();
@@ -58,7 +57,7 @@ export const UsersPage: FC = () => {
       <section id="user-candidates" className="user-candidates users card rounded-corners lifted padded">
         <h2 className="roster-title title bold">User Candidates</h2>
         {mode === 'view' &&
-            <Link to={Paths.users} id="add-new-user" className="button primary">Add New User</Link>}
+            <Link to={Paths.users} id="add-new-user" className="add-new-user button primary">Add New User</Link>}
         <EagerHideAnimatedTable
           id="users-table"
           tableClassName="fancy-table"
@@ -93,7 +92,7 @@ export const UsersPage: FC = () => {
                 value: equalAddresses(user.homeAddress, user.workAddress) ? 'Yes' : 'No',
                 display: <section className="last-column">
                   {equalAddresses(user.homeAddress, user.workAddress) ? 'Yes' : 'No'}
-                  <Menu id={`menu-${user.id}`}
+                  <Menu id={`menu-${user.id}`} toggleClassName="raisable"
                         label={`Actions for ${displayFullName(user.info)}`}>
                       <Link to={`${path}${createSearchParams({
                         id: user.id,

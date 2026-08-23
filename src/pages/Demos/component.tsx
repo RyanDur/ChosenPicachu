@@ -1,7 +1,6 @@
 import {useState} from 'react';
 import {randParagraph, randWord} from '@components/fibs';
 import {useSearchParamsObject} from '@components/search-params';
-import './style.css';
 import './DemosPage.css';
 import './Tutorials.css';
 import {Tabs} from '@components/Tabs';
@@ -54,7 +53,7 @@ export const DemosPage = () => {
           {display: 'Charts', param: DemoTopics.charts},
           {display: 'Tables', param: DemoTopics.tables}
         ]}/>
-      <section id='about'>
+      <section id='about' className='about'>
         {({
             [DemoTopics.accordions]:
               <ul className='accordions'>

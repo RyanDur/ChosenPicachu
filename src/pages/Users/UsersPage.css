@@ -1,0 +1,67 @@
+.user-info {
+  max-width: var(--base-x-172_5);
+  display: flex;
+  flex-direction: column;
+}
+
+.users {
+  &:not(:last-child) {
+    margin-bottom: var(--base-x-4);
+  }
+}
+
+.user-candidates {
+  width: 100%;
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: var(--base-x-2);
+  row-gap: var(--base-x-5);
+  grid-auto-rows: var(--base-x-5) 1fr;
+  grid-template-areas:
+    'title button'
+    'table table';
+  overflow: auto;
+
+  .roster-title {
+    position: sticky;
+    left: 0;
+    right: 0;
+  }
+
+  .add-new-user {
+    grid-area: button;
+    justify-self: flex-end;
+  }
+
+  .fancy-table {
+    grid-area: table;
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  .last-column {
+    display: flex;
+    justify-content: space-between;
+
+    .menu-toggle {
+      width: var(--base-x-2_5);
+      height: var(--base-x-2_5);
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      background: var(--field);
+      background-image: radial-gradient(
+        circle,
+        var(--black) 0.2rem,
+        transparent 0.1rem
+      );
+      background-size: 100% 33.33%;
+    }
+  }
+
+  .cell.full-name { width: 22%; }
+  .cell.home-city { width: 18%; }
+  .cell.age { width: 9%; }
+  .cell.friends { width: 26%; }
+  .cell.works-from-home { width: 25%; }
+}

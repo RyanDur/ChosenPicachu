@@ -2,7 +2,7 @@ import {FC, ReactNode, useState} from 'react';
 import {classNames} from '@components/class-names';
 import {PillGlider} from '@components/PillGlider';
 import {PropsWithClassName} from '../types';
-import './styles.css';
+import './Accordions.css';
 
 type ContentProps = { content: { value: ReactNode, key: string }[] };
 export const InclusiveAccordion: FC<PropsWithClassName & ContentProps> = ({

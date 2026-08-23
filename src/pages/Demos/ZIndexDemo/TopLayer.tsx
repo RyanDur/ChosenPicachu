@@ -3,7 +3,7 @@ import {decked, news} from '@components/fibs';
 import {useBanners} from '@components/Banners';
 import {classNames} from '@components/class-names';
 import {PropsWithClassName} from '../types';
-import './styles.css';
+import './ZIndexDemo.css';
 
 const nextNews = decked(news);
 
