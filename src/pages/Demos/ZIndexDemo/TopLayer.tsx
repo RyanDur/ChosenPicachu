@@ -12,7 +12,7 @@ export const TopLayer: FC<PropsWithClassName> = ({className}) => {
 
   return <article className={classNames('top-layer', className)}>
     <p className="pitch">The cards above fight for the front with z-index. The news does not fight at all.</p>
-    <button className="primary" onClick={() => raise(nextNews())}>
+    <button className="button primary" onClick={() => raise(nextNews())}>
       raise a banner
     </button>
   </article>;

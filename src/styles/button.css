@@ -1,50 +1,56 @@
-.primary {
-  color: var(--white);
-  background: var(--primary-blue);
-}
+/* button — the scope a control wears to stand as a button box; elements share it */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-.secondary {
-  background: var(--faded-leather);
-}
-
-.primary,
-.secondary {
-  font-size: var(--text-title);
-  font-weight: bold;
-  white-space: nowrap;
-  text-transform: uppercase;
-  height: var(--base-x-5);
-  padding: 0 var(--base-x-4);
-  border-radius: var(--base-x-5);
-  box-shadow: 0 0 var(--base-x-0_5) var(--smoke);
-  border: var(--hairline) solid var(--primary-blue);
-
-  &:hover,
-  &:focus {
-    box-shadow: var(--drop-shadow);
+  &.primary {
+    color: var(--card);
+    background: var(--primary-blue);
   }
 
-  &:hover,
-  &:active {
-    color: var(--white);
-    background-color: var(--primary-dark-blue);
+  &.secondary {
+    background: var(--accent);
   }
 
-  &:active {
-    box-shadow: initial;
+  &.primary,
+  &.secondary {
+    font-size: var(--text-title);
+    font-weight: bold;
+    white-space: nowrap;
+    text-transform: uppercase;
+    height: var(--base-x-5);
+    padding: 0 var(--base-x-4);
+    border-radius: var(--base-x-5);
+    box-shadow: 0 0 var(--base-x-0_5) var(--smoke);
+    border: var(--hairline) solid var(--primary-blue);
+
+    &:hover,
+    &:focus {
+      box-shadow: var(--drop-shadow);
+    }
+
+    &:hover,
+    &:active {
+      color: var(--card);
+      background-color: var(--primary-dark-blue);
+    }
+
+    &:active {
+      box-shadow: initial;
+    }
   }
-}
 
+  &.icon-button {
+    display: grid;
+    place-items: center;
 
-.icon-button {
-  display: grid;
-  place-items: center;
+    img {
+      block-size: var(--base-x-2_5);
+    }
 
-  img {
-    block-size: var(--base-x-2_5);
-  }
-
-  &:active {
-    box-shadow: var(--press-glow);
+    &:active {
+      box-shadow: var(--press-glow);
+    }
   }
 }

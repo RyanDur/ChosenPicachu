@@ -45,9 +45,6 @@
 
 /* signpost — the link a run of prose points with */
 .signpost {
-  display: inline;
-  width: auto;
-  height: auto;
   color: var(--primary-blue);
   text-decoration: underline;
 
