@@ -1,5 +1,4 @@
-/* dress not yet named as needs is marked "parked dress"; the refactor changes no looks */
-#page-control {
+.page-control {
   position: sticky;
   bottom: 0;
   display: grid;
@@ -11,31 +10,35 @@
     'per-page'
     'submit';
 
-  #go-to-label {
+  .go-to-label {
     grid-area: go-to;
     align-self: flex-start;
   }
 
-  #go-to {
+  .go-to {
     grid-area: go-to;
     align-self: flex-end;
   }
 
-  #per-page-label {
+  .per-page-label {
     grid-area: per-page;
     align-self: flex-start;
   }
 
-  #per-page {
+  .per-page {
     grid-area: per-page;
     align-self: flex-end;
+  }
+
+  .submit-page {
+    grid-area: submit;
+    height: 100%;
   }
 
   .control {
     width: 100%;
 
-    /* parked dress */
-    border: 0;
+    /* parked dress awaiting the mint ruling and the focus story */
     border-radius: 0;
 
     & + .control-label {
@@ -45,35 +48,29 @@
 
     &:hover + .control-label,
     &:focus + .control-label {
-      /* parked dress */
       background-color: var(--mint);
     }
   }
 
-  #per-page-label,
-  #go-to-label {
+  .go-to-label,
+  .per-page-label {
     padding: 0 0 0 var(--base);
     height: 40%;
     display: flex;
     align-items: center;
   }
 
-  #per-page,
-  #go-to {
+  .go-to,
+  .per-page {
     height: 60%;
     padding: 0 0 0 var(--base);
 
-    /* parked dress */
+    /* parked dress awaiting the focus story */
     outline: none;
-    border: none;
   }
 
-  #submit-page-number {
-    grid-area: submit;
-    height: 100%;
-
-    /* parked dress */
-    border: none;
+  .submit-page-button {
+    /* parked dress awaiting the mint ruling; the font size sits off the type scale */
     font-size: var(--base-x-2);
 
     &:focus,
@@ -84,7 +81,7 @@
 }
 
 @media (max-width: 1000px) {
-  #page-control {
+  .page-control {
     grid-template-rows: repeat(2, var(--base-x-8));
     grid-template-columns: 1fr 1fr;
     grid-template-areas:

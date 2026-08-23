@@ -35,3 +35,16 @@
   }
 }
 
+
+.icon-button {
+  display: grid;
+  place-items: center;
+
+  img {
+    block-size: var(--base-x-2_5);
+  }
+
+  &:active {
+    box-shadow: var(--press-glow);
+  }
+}
