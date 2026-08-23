@@ -14,7 +14,7 @@ export const DynamicInteraction: FC = () =>
       <figcaption className="attribution"><a className="signpost" href="https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html">Brendan Eich, in Computerworld’s A-Z of Programming Languages</a></figcaption>
     </figure>
     <p className="paragraph">
-      How things respond: state decides, the languages split the work, and the same
-      listeners answer in any world.
+      How things respond: state decides what is true, events say what happened, and the
+      page follows from both.
     </p>
   </section>;
