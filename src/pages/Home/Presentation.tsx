@@ -21,7 +21,7 @@ export const Presentation: FC = () =>
       <p className="paragraph">I write CSS in two vocabularies. Component sheets own structure:
         the grid, the placement, the bones of one component, named for it and kept beside it.
         Needs live at the top scope as plain words like rounded-corners, lifted, and
-        silk: what an element needs, not what it is. Tag selectors are for resets only, and there is no
+        trim: what an element needs, not what it is. Tag selectors are for resets only, and there is no
         atomic scale: a need says why a style is there, a utility only says what it does,
         and a markup full of utilities is the look written back into the structure.</p>
       <p className="paragraph">A class list reads like a sentence: the noun first, then what it

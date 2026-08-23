@@ -21,21 +21,21 @@ export const PageControl = () => {
     updateSearchParams({page: pageNumber, size: pageSize});
   };
 
-  return <form onSubmit={onSubmit} id="page-control" className="page-control void">
+  return <form onSubmit={onSubmit} id="page-control" className="page-control backdrop">
     <input type="number"
            id="go-to"
            min={firstPage}
            max={lastPage}
            className="go-to control borderless"
            onChange={event => updatePageNumber(+event.currentTarget.value)}/>
-    <label id="go-to-label" className="go-to-label control-label paper" htmlFor="go-to">Page #{page}</label>
+    <label id="go-to-label" className="go-to-label control-label field" htmlFor="go-to">Page #{page}</label>
     <input type="number"
            className="per-page control borderless"
            min={1}
            max={100}
            id="per-page"
            onChange={event => updatePageSize(+event.currentTarget.value)}/>
-    <label id="per-page-label" className="per-page-label control-label paper" htmlFor="per-page">{size} Per Page</label>
-    <button type="submit" id="submit-page-number" className="submit-page submit-page-button control borderless paper bold attentive">Go</button>
+    <label id="per-page-label" className="per-page-label control-label field" htmlFor="per-page">{size} Per Page</label>
+    <button type="submit" id="submit-page-number" className="submit-page submit-page-button control borderless field bold attentive">Go</button>
   </form>;
 };

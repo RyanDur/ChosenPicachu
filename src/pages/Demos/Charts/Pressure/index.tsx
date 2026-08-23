@@ -24,7 +24,7 @@ export const Pressure: FC<Props> = ({trades, actions}) => {
   const pressures = bucketPressure(trades, BUCKET_MS).slice(-WINDOW_CAP);
   const bars = pressureShapes(pressures, CHART_WIDTH, CHART_HEIGHT, BUCKET_MS);
   const peak = heaviestSide(pressures);
-  return <section aria-label="pressure" className="pressure chart white rounded-corners lifted padded">
+  return <section aria-label="pressure" className="pressure chart card rounded-corners lifted padded">
     <header className="chart-header">
       {actions}
     </header>

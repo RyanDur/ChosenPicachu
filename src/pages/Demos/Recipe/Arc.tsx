@@ -9,7 +9,7 @@ type CluesProps = {
 };
 
 export const Clues: FC<CluesProps> = ({quote, by, clues, verdict}) => <>
-  <section className="phase white rounded-corners lifted" aria-labelledby="phase-need">
+  <section className="phase card rounded-corners lifted" aria-labelledby="phase-need">
     <h3 id="phase-need" className="phase-title">Start with the need, and let it pick the element</h3>
     <p className="overview paragraph">
       Before any code, and before any story, someone needs something. Listen for clues, name
@@ -45,18 +45,18 @@ type DesignProps = {
 };
 
 export const Design: FC<DesignProps> = ({sketch, answers, unanswered}) =>
-  <section className="phase white rounded-corners lifted" aria-labelledby="phase-design">
+  <section className="phase card rounded-corners lifted" aria-labelledby="phase-design">
     <h3 id="phase-design" className="phase-title">Sketch a design from the need</h3>
     <p className="overview paragraph">
       The need has a visual answer, so the next artifact is a design: enough shape to argue
       with, before any code. What the sketch cannot answer goes back to the people asking, as
       questions, not guesses.
     </p>
-    <figure className="design-still paper rounded-corners">
+    <figure className="design-still field rounded-corners">
       <div className="design-sketch" aria-hidden="true">{sketch}</div>
       <figcaption className="reel-note paragraph">{answers}</figcaption>
     </figure>
-    <aside className="unanswered paper rounded-corners" aria-label="what a design cannot tell you">
+    <aside className="unanswered field rounded-corners" aria-label="what a design cannot tell you">
       <h4 className="unanswered-title uppercase">what a design cannot tell you</h4>
       <ul className="unanswered-list">
         {unanswered.map(question => <li className="unanswered-question" key={question}>{question}</li>)}
@@ -78,7 +78,7 @@ type SlicesProps = {
 };
 
 export const Slices: FC<SlicesProps> = ({who, can, soThat, slices, sliced}) =>
-  <section className="phase white rounded-corners lifted" aria-labelledby="phase-stories">
+  <section className="phase card rounded-corners lifted" aria-labelledby="phase-stories">
     <h3 id="phase-stories" className="phase-title">Slice the design into stories</h3>
     <p className="overview paragraph">
       With the need heard and the design answering shape, the work splits into stories: each
@@ -89,7 +89,7 @@ export const Slices: FC<SlicesProps> = ({who, can, soThat, slices, sliced}) =>
       the screen, and a promise of a conversation rather than a specification. The whole of it
       reads as one:
     </p>
-    <hgroup className="story arriving white rounded-corners lifted">
+    <hgroup className="story arriving card rounded-corners lifted">
       <h4 className="can">{can}</h4>
       <p className="so-that">{soThat}</p>
     </hgroup>

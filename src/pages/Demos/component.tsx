@@ -60,25 +60,25 @@ export const DemosPage = () => {
               <ul className='accordions'>
                 <li className='list-title'>Different styles of Accordions.</li>
                 <li>
-                  <InclusiveAccordion className='white rounded-corners lifted padded' content={accordionContents[0]}/>
+                  <InclusiveAccordion className='card rounded-corners lifted padded' content={accordionContents[0]}/>
                 </li>
                 <li>
-                  <ExclusiveAccordion className='white rounded-corners lifted padded' content={accordionContents[1]}/>
+                  <ExclusiveAccordion className='card rounded-corners lifted padded' content={accordionContents[1]}/>
                 </li>
                 <li className="exclusive">
-                  <ExclusiveToggleAccordion className='white rounded-corners lifted padded' content={accordionContents[2]}/>
+                  <ExclusiveToggleAccordion className='card rounded-corners lifted padded' content={accordionContents[2]}/>
                 </li>
                 <li>
-                  <ExclusiveCheckboxToggleAccordion className='white rounded-corners lifted padded' content={accordionContents[3]}/>
+                  <ExclusiveCheckboxToggleAccordion className='card rounded-corners lifted padded' content={accordionContents[3]}/>
                 </li>
                 <li>
-                  <ExclusiveRadioToggleAccordion className='white rounded-corners lifted padded' content={accordionContents[4]}/>
+                  <ExclusiveRadioToggleAccordion className='card rounded-corners lifted padded' content={accordionContents[4]}/>
                 </li>
               </ul>,
             [DemoTopics.zIndex]: <>
               <article>Z-Index Demo.</article>
-              <NaturalZIndex className='white rounded-corners lifted padded'/>
-              <TopLayer className='white rounded-corners lifted padded'/>
+              <NaturalZIndex className='card rounded-corners lifted padded'/>
+              <TopLayer className='card rounded-corners lifted padded'/>
               <TopLayerTutorial/>
             </>,
             [DemoTopics.charts]: <>

@@ -1,8 +1,8 @@
-.paper { background: var(--paper); }
+.field { background: var(--field); }
 
-.white { background: var(--white); }
+.card { background: var(--card); }
 
-.silk { background: var(--silk); }
+.trim { background: var(--trim); }
 
 .rounded-corners { border-radius: var(--radius); }
 
@@ -16,10 +16,10 @@
   &:hover,
   &:focus,
   &:focus-within {
-    background-color: var(--mint);
+    background-color: var(--approach);
   }
 }
-.faded-leather { background: var(--faded-leather); }
+.accent { background: var(--accent); }
 
 .raisable {
   &:hover,
@@ -33,7 +33,7 @@
   }
 }
 .hung { filter: drop-shadow(0 14px 28px var(--shadow)) drop-shadow(0 10px 10px var(--dark-shadow)); }
-.void { background: var(--void); }
+.backdrop { background: var(--backdrop); }
 
 .pressable {
   &:hover,

@@ -43,15 +43,15 @@ export const Search: FC<Props> = ({id, className}) => {
 
   const handleReset = () => removeSearchParams('search');
 
-  return <search id={id} className={classNames('search', 'void', className)}><form className="search-form" onSubmit={handleSubmit} onReset={handleReset}>
-    <label id="query-label" className='query-label paper ellipsis' htmlFor="query"><span className='bold'>Search For:</span> {decodeURI(search || '')}</label>
+  return <search id={id} className={classNames('search', 'backdrop', className)}><form className="search-form" onSubmit={handleSubmit} onReset={handleReset}>
+    <label id="query-label" className='query-label field ellipsis' htmlFor="query"><span className='bold'>Search For:</span> {decodeURI(search || '')}</label>
     <input type="search" autoComplete="off" list="search-options" id="query"
-           className="query bare white"
+           className="query bare card"
            onInput={event => updateQuery(event.currentTarget.value)}/>
-    <button className="submit-query icon-button borderless paper attentive" disabled={!searchString.length} type="submit"
+    <button className="submit-query icon-button borderless field attentive" disabled={!searchString.length} type="submit"
             aria-label="submit search"><img src={searchIcon} alt=""/></button>
-    <button className="reset-query icon-button borderless paper attentive" type="reset" aria-label="reset search"><img src={resetIcon} alt=""/></button>
-    <datalist id="search-options" className="search-options paper">
+    <button className="reset-query icon-button borderless field attentive" type="reset" aria-label="reset search"><img src={resetIcon} alt=""/></button>
+    <datalist id="search-options" className="search-options field">
       {searchOptions.map((searchOption, index) =>
         <option value={searchOption} key={index}>{searchOption}</option>)}
     </datalist>

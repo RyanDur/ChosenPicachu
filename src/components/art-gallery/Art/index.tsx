@@ -47,7 +47,7 @@ export const ArtGallery: FC = () => {
       <div className="wall-slot">
         <Image className="piece hung" piece={piece} priority={index < 4} lazy={index >= 6}/>
       </div>
-      <figcaption className="placard silk hairline-outline italic">{piece.title}</figcaption>
+      <figcaption className="placard trim hairline-outline italic">{piece.title}</figcaption>
     </figure>)}
     {loading && <Loading className="loader" label="loading gallery"/>}
     {!loading && errored && <img src={noImageGallery}

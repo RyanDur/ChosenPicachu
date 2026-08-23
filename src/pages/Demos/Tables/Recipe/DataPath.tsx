@@ -8,13 +8,13 @@ const stations: [string, string][] = [
 ];
 
 export const DataPath: FC = () =>
-  <figure className="data-path white rounded-corners lifted">
+  <figure className="data-path card rounded-corners lifted">
     <figcaption className="reel-heading">
       <span className="reel-title uppercase">where a number comes from</span>
     </figcaption>
     <ol className="data-path-stations">
       {stations.map(([name, does]) =>
-        <li className="data-path-station paper rounded-corners" key={name}>
+        <li className="data-path-station field rounded-corners" key={name}>
           <strong className="data-path-name">{name}</strong>
           <p className="data-path-does">{does}</p>
         </li>)}
