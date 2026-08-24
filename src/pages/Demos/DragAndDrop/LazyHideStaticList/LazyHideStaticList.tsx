@@ -1,7 +1,8 @@
 import {FC, useState} from 'react';
 import {Maybe, maybe, nothing} from '@ryandur/sand';
-import {landedOrder} from '../session';
+import {Moved, landedMove, landedOrder} from '../session';
 import {HideItem} from '../items/HideItem';
+import {MoveReport} from '../items/MoveReport';
 import '../sortable-list.css';
 import './LazyHideStaticList.css';
 
@@ -12,15 +13,18 @@ type Props = {
 export const LazyHideStaticList: FC<Props> = ({list}) => {
     const [order, setOrder] = useState<string[]>(() => [...list]);
     const [aloft, setAloft] = useState<Maybe<string>>(nothing());
+    const [moved, setMoved] = useState<Maybe<Moved>>(nothing());
     const [landing, setLanding] = useState<Maybe<number>>(nothing());
 
     const release = () => {
         landedOrder(aloft, landing, order).map(setOrder);
+        landedMove(aloft, landing, order).map(landed => setMoved(maybe(landed)));
         setAloft(nothing());
         setLanding(nothing());
     };
 
-    return <ul aria-label="sortable list"
+    return <>
+    <ul aria-label="sortable list"
                onDragOver={event => event.preventDefault()}
                onDrop={event => event.preventDefault()}
                onDragLeave={() => setLanding(nothing())}
@@ -33,7 +37,12 @@ export const LazyHideStaticList: FC<Props> = ({list}) => {
                     onLifted={lifted => setAloft(maybe(lifted))}
                     onReleased={release}
                     onDragOver={() => setLanding(maybe(index))}
-                    onArranged={setOrder}/>
+                    onArranged={(after, walker) => {
+                        setOrder(after);
+                        setMoved(maybe({item: walker, position: after.indexOf(walker), of: after.length}));
+                    }}/>
             </li>)
-    }</ul>;
+    }</ul>
+    <MoveReport moved={moved}/>
+    </>;
 };

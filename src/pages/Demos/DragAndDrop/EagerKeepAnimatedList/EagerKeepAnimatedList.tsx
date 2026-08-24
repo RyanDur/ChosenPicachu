@@ -2,9 +2,10 @@ import {FC, useState} from 'react';
 import {Maybe, maybe, nothing} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {classNames} from '@components/class-names';
-import {crossingOver} from '../session';
+import {Moved, crossingOver} from '../session';
 import {Pushed, crossedMark, pushedStyle, walkedMarks} from '../marks';
 import {KeepItem} from '../items/KeepItem';
+import {MoveReport} from '../items/MoveReport';
 import '../sortable-list.css';
 import './EagerKeepAnimatedList.css';
 
@@ -15,9 +16,11 @@ type Props = {
 export const EagerKeepAnimatedList: FC<Props> = ({list}) => {
     const [order, setOrder] = useState<string[]>(() => [...list]);
     const [aloft, setAloft] = useState<Maybe<string>>(nothing());
+    const [moved, setMoved] = useState<Maybe<Moved>>(nothing());
     const [pushed, setPushed] = useState<Pushed>({});
 
-    return <ul aria-label="sortable list"
+    return <>
+    <ul aria-label="sortable list"
                onDragOver={event => event.preventDefault()}
                onDrop={event => event.preventDefault()}
                className="sortable-list">{
@@ -33,11 +36,15 @@ export const EagerKeepAnimatedList: FC<Props> = ({list}) => {
                     onDragOver={crossingOver(aloft, order)(item, index, (held, homeward) => {
                         setPushed(crossedMark(item, homeward));
                         setOrder(previous => array.moveToIndex(index, held, previous));
+                        setMoved(maybe({item: held, position: index, of: order.length}));
                     })}
                     onArranged={(after, walker, toward) => {
                         setPushed(walkedMarks(order, walker, toward));
                         setOrder(after);
+                        setMoved(maybe({item: walker, position: after.indexOf(walker), of: after.length}));
                     }}/>
             </li>)
-    }</ul>;
+    }</ul>
+    <MoveReport moved={moved}/>
+    </>;
 };

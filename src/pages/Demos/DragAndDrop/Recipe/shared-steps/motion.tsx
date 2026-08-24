@@ -55,7 +55,7 @@ export const directState = (listSource: string): ReactNode =>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
-        ...span(listSource, 'onArranged={setOrder}', 'onArranged={setOrder}'),
+        ...span(listSource, 'onArranged={(after, walker) => {', '}}/>'),
         aside('// nothing marked, nothing competing with the session')
       ]}/>
     </Codes>

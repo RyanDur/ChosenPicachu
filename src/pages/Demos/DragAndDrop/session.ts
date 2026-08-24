@@ -25,6 +25,14 @@ export const crossingOver = (aloft: Maybe<string>, order: readonly string[]) =>
 export const landedOrder = (aloft: Maybe<string>, landing: Maybe<number>, order: readonly string[]): Maybe<string[]> =>
     aloft.and(landing).map(([held, at]) => array.moveToIndex(at, held, order));
 
+export type Moved = {readonly item: string; readonly position: number; readonly of: number};
+
+export const moveReport = ({item, position, of}: Moved): string =>
+    `${item} moved to ${position + 1} of ${of}`;
+
+export const landedMove = (aloft: Maybe<string>, landing: Maybe<number>, order: readonly string[]): Maybe<Moved> =>
+    aloft.and(landing).map(([item, position]) => ({item, position, of: order.length}));
+
 export const glided = (apply: (settled: string[]) => void) => (settled: string[]): void => {
     setTimeout(() => glide(true)(() => apply(settled)));
 };

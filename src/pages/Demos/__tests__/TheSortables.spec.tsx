@@ -155,6 +155,47 @@ describe('the sortable list demo', () => {
     expect(seats()).toEqual(['A', 'B', 'C']);
   });
 
+  test('an arrow walk says the move', async () => {
+    const feed = await streamingFeed();
+
+    renderSortables(urlOf(feed));
+
+    await feedIsSubscribed();
+    const grip = screen.getByRole('button', {name: 'grip for A'});
+    grip.focus();
+    fireEvent.keyDown(grip, {key: 'ArrowRight'});
+
+    expect(screen.getByRole('status')).toHaveTextContent('A moved to 2 of 3');
+  });
+
+  test('an eager crossing says the move', async () => {
+    const feed = await streamingFeed();
+
+    renderSortables(urlOf(feed));
+
+    await feedIsSubscribed();
+    lifted('A');
+    draggedOver('C', 10);
+
+    expect(screen.getByRole('status')).toHaveTextContent('A moved to 3 of 3');
+  });
+
+  test('a lazy release says the move', async () => {
+    const feed = await streamingFeed();
+
+    renderSortables(urlOf(feed));
+
+    await feedIsSubscribed();
+    const controls = screen.getByRole('region', {name: 'list controls'});
+    await userEvent.click(within(controls).getByRole('radio', {name: 'Lazy'}));
+
+    lifted('A');
+    draggedOver('C', 10);
+    fireEvent.dragEnd(screen.getByText('A'), {dataTransfer: {dropEffect: 'move'}});
+
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent('A moved to 3 of 3'));
+  });
+
   test('the recipe teaches the native road as the dials sit', async () => {
     const feed = await streamingFeed();
 
