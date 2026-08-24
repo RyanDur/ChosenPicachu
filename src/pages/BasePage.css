@@ -276,6 +276,10 @@
       'filter'
       'main';
   }
+
+  #root:has(.app-footer) .app-main {
+    padding-block-end: var(--base-x-10);
+  }
 }
 
 @media (max-width: 600px) {
