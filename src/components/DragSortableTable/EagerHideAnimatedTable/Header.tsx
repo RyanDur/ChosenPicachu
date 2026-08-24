@@ -2,7 +2,7 @@ import {FC, MouseEvent, PointerEvent} from 'react';
 import {Maybe, has, not, nothing} from '@ryandur/sand';
 import {animatedColumnArrows} from '../travel';
 import {classNames} from '@components/class-names';
-import {Column, ResizeHandle, Shares, neighborOf, traded} from '@components/Table';
+import {Column, ResizeHandle} from '@components/Table';
 import {anchored, ColumnNudge, Slid} from '../survey';
 import {Direction, SortMenu} from '../SortMenu';
 import {sortedBy} from '../sorting';
@@ -21,7 +21,7 @@ type Props = {
   onLift: (column: string) => (event: PointerEvent<HTMLTableCellElement>) => void;
   onOrdered: (column: string, to: number, marks: Slid) => void;
   onAwaken: (table: HTMLTableElement) => void;
-  onShared: (update: (previous: Shares | undefined) => Shares | undefined) => void;
+  onTraded: (column: string, delta: number) => void;
   onRule?: (column: string, direction: Direction | undefined, event: MouseEvent<HTMLButtonElement>) => void;
 };
 
@@ -39,7 +39,7 @@ export const Header: FC<Props> = (
     onLift,
     onOrdered,
     onAwaken,
-    onShared,
+    onTraded,
     onRule
   }
 ) => {
@@ -80,8 +80,7 @@ export const Header: FC<Props> = (
       {resizable && order.length > 1 &&
           <ResizeHandle column={columnName} share={share}
                         onAwaken={onAwaken}
-                        onTrade={delta => onShared(previous =>
-                          previous && traded(columnName, neighborOf(order, columnName), delta)(previous))}/>}
+                        onTrade={delta => onTraded(columnName, delta)}/>}
     </div>
   </th>;
 };

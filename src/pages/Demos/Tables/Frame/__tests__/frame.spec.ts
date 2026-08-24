@@ -288,6 +288,17 @@ describe('the frame table', () => {
     expect(screen.getByRole('button', {name: /resize trades, 15%/})).toBeInTheDocument();
   });
 
+  it('a share trade says the new share', async () => {
+    deal();
+    stubbedRects();
+
+    const handle = screen.getByRole('button', {name: 'resize trades'});
+    handle.focus();
+    await userEvent.keyboard('{ArrowRight}');
+
+    expect(screen.getByRole('status')).toHaveTextContent('trades resized to 15%');
+  });
+
   it('the rule stands while trades land', async () => {
     const feed = await streamingFeed();
     deal(urlOf(feed));

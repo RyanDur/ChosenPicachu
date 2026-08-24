@@ -72,6 +72,17 @@ describe('resizable columns', () => {
     expect(ageHeader().style.getPropertyValue('--share')).toBe('33.5%');
   });
 
+  test('a resize says the new share', async () => {
+    render(<EagerKeepStaticTable columns={sized} rows={people} resizableColumns/>);
+    surveyed();
+
+    const handle = screen.getByRole('button', {name: 'resize name'});
+    handle.focus();
+    await userEvent.keyboard('{ArrowRight}');
+
+    expect(screen.getByRole('status')).toHaveTextContent('name resized to 65%');
+  });
+
   test('a boundary can never starve a column', async () => {
     render(<EagerKeepStaticTable columns={sized} rows={people} resizableColumns/>);
     surveyed();

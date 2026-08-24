@@ -12,12 +12,19 @@ export type Aloft =
 
 export type Landed =
   | {readonly axis: 'column'; readonly name: string; readonly position: number; readonly of: number}
-  | {readonly axis: 'row'; readonly position: number; readonly of: number};
+  | {readonly axis: 'row'; readonly position: number; readonly of: number}
+  | {readonly axis: 'share'; readonly name: string; readonly share: number};
 
-export const moveReport = (landed: Landed): string =>
-  landed.axis === 'column'
-    ? `${landed.name} moved to column ${landed.position + 1} of ${landed.of}`
-    : `row moved to ${landed.position + 1} of ${landed.of}`;
+export const moveReport = (landed: Landed): string => {
+  switch (landed.axis) {
+    case 'column':
+      return `${landed.name} moved to column ${landed.position + 1} of ${landed.of}`;
+    case 'row':
+      return `row moved to ${landed.position + 1} of ${landed.of}`;
+    case 'share':
+      return `${landed.name} resized to ${Math.round(landed.share)}%`;
+  }
+};
 
 export type Cell = {
   state: () => TableState;
@@ -96,9 +103,10 @@ export const sharedAs = (shares: Shares) => (state: TableState): TableState =>
   ({...state, shares});
 
 export const tradedBy = (column: string, delta: number) => (state: TableState): TableState =>
-  has(state.shares)
-    ? {...state, shares: traded(column, neighborOf(state.order, column), delta)(state.shares)}
-    : state;
+  maybe(state.shares).map<TableState>(previous => {
+    const shares = traded(column, neighborOf(state.order, column), delta)(previous);
+    return {...state, shares, landed: {axis: 'share', name: column, share: shares[column]}};
+  }).orElse(state);
 
 export const columnOf = (state: TableState, cell: Element): string =>
   state.order.find(name => cell.classList.contains(name)) ?? '';

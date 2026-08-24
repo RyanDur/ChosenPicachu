@@ -1,7 +1,7 @@
 import {FC, MouseEvent, PointerEvent} from 'react';
 import {Maybe, has, not, nothing} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
-import {Column, ResizeHandle, Shares, neighborOf, traded} from '@components/Table';
+import {Column, ResizeHandle} from '@components/Table';
 import {anchored} from '../survey';
 import {staticColumnArrows} from '../travel';
 import {Direction, SortMenu} from '../SortMenu';
@@ -20,12 +20,12 @@ type Props = {
   onLift: (column: string) => (event: PointerEvent<HTMLTableCellElement>) => void;
   onOrdered: (column: string, to: number) => void;
   onAwaken: (table: HTMLTableElement) => void;
-  onShared: (update: (previous: Shares | undefined) => Shares | undefined) => void;
+  onTraded: (column: string, delta: number) => void;
   onRule?: (column: string, direction: Direction | undefined, event: MouseEvent<HTMLButtonElement>) => void;
 };
 
 export const Header: FC<Props> = (
-  {column, order, share, resizable, rule, aloft = nothing(), draggable, className, onLift, onOrdered, onAwaken, onShared, onRule}
+  {column, order, share, resizable, rule, aloft = nothing(), draggable, className, onLift, onOrdered, onAwaken, onTraded, onRule}
 ) => {
   const columnName = column.column;
   const position = order.indexOf(columnName);
@@ -57,8 +57,7 @@ export const Header: FC<Props> = (
       {resizable && order.length > 1 &&
           <ResizeHandle column={columnName} share={share}
                         onAwaken={onAwaken}
-                        onTrade={delta => onShared(previous =>
-                          previous && traded(columnName, neighborOf(order, columnName), delta)(previous))}/>}
+                        onTrade={delta => onTraded(columnName, delta)}/>}
     </div>
   </th>;
 };

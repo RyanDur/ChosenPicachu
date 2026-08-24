@@ -6,7 +6,7 @@ import {TableProps, measuredShares} from '@components/Table';
 import {displaced, interior, Shifted, shifts, Slid, surveyed} from '../survey';
 import {columnLift, Grab, grounded, rowLift, surfaceTravel} from '../travel';
 import {eagerColumnFlight, eagerRowFlight} from '../flights';
-import {baked, Cell, columnAloft, drifting as drifts, dropped, lifted, nudgedTo, orderedTo, rowAloft, seatedTo, sharedAs, standingOf} from '../table-state';
+import {baked, Cell, columnAloft, drifting as drifts, dropped, lifted, nudgedTo, orderedTo, rowAloft, seatedTo, sharedAs, standingOf, tradedBy} from '../table-state';
 import {useTableState} from '../useTableState';
 import {Aloft} from '../Aloft';
 import {MoveReport} from '../MoveReport';
@@ -146,10 +146,7 @@ export const EagerHideAnimatedTable: FC<EagerHideAnimatedTableProps> = (
                         setSlid(marks);
                         commit(orderedTo(order.indexOf(column), to));
                     }}
-                    onShared={update => commit(current => {
-                        const next = update(current.shares);
-                        return has(next) ? sharedAs(next)(current) : current;
-                    })}
+                    onTraded={(column, delta) => commit(tradedBy(column, delta))}
                     onRule={sortable ? ruled : undefined}/>
             )}</tr>
             </thead>
