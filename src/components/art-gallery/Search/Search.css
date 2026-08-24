@@ -53,3 +53,9 @@
     }
   }
 }
+
+@media (max-width: 600px) {
+  .search {
+    grid-template-rows: auto var(--base-x-5) var(--base-x-5);
+  }
+}
