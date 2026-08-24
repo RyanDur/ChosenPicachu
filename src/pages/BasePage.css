@@ -103,6 +103,7 @@
 
     > * {
       flex-shrink: 0;
+      max-width: 100%;
     }
 
     &.in-view {
@@ -281,7 +282,7 @@
   #root {
     height: auto;
     min-height: 100dvh;
-    grid-template-rows: auto auto auto 1fr auto;
+    grid-template-rows: auto auto auto auto auto;
 
     .app-header {
       grid-template-columns: 1fr;

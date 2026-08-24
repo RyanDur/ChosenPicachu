@@ -37,6 +37,10 @@
     grid-area: table;
     table-layout: fixed;
     width: 100%;
+
+    @media (width <= 1000px) {
+      min-width: 64rem;
+    }
   }
 
   .last-column {

@@ -6,6 +6,8 @@
   display: flex;
   justify-content: flex-start;
   min-height: var(--base-x-10);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
 
   .tab {
     font-size: var(--text-title);
@@ -102,9 +104,3 @@
   }
 }
 
-@media (width <= 600px) {
-  .tabs {
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-  }
-}
