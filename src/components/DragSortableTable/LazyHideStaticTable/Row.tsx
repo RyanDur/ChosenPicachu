@@ -17,14 +17,14 @@ type Props = {
   className: string;
   cellClassName: string;
   onLift: (row: number) => (event: PointerEvent<HTMLElement>) => void;
-  onArranged: (after: number[]) => void;
+  onArranged: (to: number) => void;
 };
 
 export const Row: FC<Props> = (
   {row, cells, columns, clipped, standing, gripped, aloft = nothing(), aloftColumn = nothing(), className, cellClassName, onLift, onArranged}
 ) => {
   const position = standing.indexOf(row);
-  const arranged = ({after}: {to: number; after: number[]}): void => onArranged(after);
+  const arranged = ({to}: {to: number; after: number[]}): void => onArranged(to);
   const hidden = aloft.map(held => held === row).orElse(false);
 
   return <tr className={className}>

@@ -10,6 +10,15 @@ export type Aloft =
   | {readonly axis: 'column'; readonly held: string; readonly landing?: string}
   | {readonly axis: 'row'; readonly held: number; readonly landing?: number};
 
+export type Landed =
+  | {readonly axis: 'column'; readonly name: string; readonly position: number; readonly of: number}
+  | {readonly axis: 'row'; readonly position: number; readonly of: number};
+
+export const moveReport = (landed: Landed): string =>
+  landed.axis === 'column'
+    ? `${landed.name} moved to column ${landed.position + 1} of ${landed.of}`
+    : `row moved to ${landed.position + 1} of ${landed.of}`;
+
 export type Cell = {
   state: () => TableState;
   commit: (transition: (state: TableState) => TableState) => void;
@@ -26,6 +35,7 @@ export type TableState = {
   readonly flight: FlightBox | undefined;
   readonly origin: Drift | undefined;
   readonly drift: Drift;
+  readonly landed: Landed | undefined;
 };
 
 export const lifted = (aloft: Aloft, grab: Grab) => (state: TableState): TableState =>
@@ -62,13 +72,25 @@ export const ruledBy = (rule?: Rule) => (state: TableState): TableState =>
   ({...state, rule});
 
 export const orderedTo = (from: number, to: number) => (state: TableState): TableState =>
-  ({...state, order: array.moveToIndex(to, state.order[from], state.order)});
+  ({
+    ...state,
+    order: array.moveToIndex(to, state.order[from], state.order),
+    landed: {axis: 'column', name: state.order[from], position: to, of: state.order.length}
+  });
 
 export const seatedTo = (held: number, struck: number) => (state: TableState): TableState =>
-  ({...state, seats: array.moveToIndex(state.seats.indexOf(struck), held, state.seats)});
+  ({
+    ...state,
+    seats: array.moveToIndex(state.seats.indexOf(struck), held, state.seats),
+    landed: {axis: 'row', position: state.seats.indexOf(struck), of: state.seats.length}
+  });
 
 export const nudgedTo = (held: number, to: number) => (state: TableState): TableState =>
-  ({...state, seats: array.moveToIndex(to, held, state.seats)});
+  ({
+    ...state,
+    seats: array.moveToIndex(to, held, state.seats),
+    landed: {axis: 'row', position: to, of: state.seats.length}
+  });
 
 export const sharedAs = (shares: Shares) => (state: TableState): TableState =>
   ({...state, shares});
@@ -85,7 +107,8 @@ export const dealtTableState = (order: readonly string[], lanes: number): TableS
   const dealt = Array.from({length: lanes}, (_, at) => at);
   return {
     order, seats: dealt, seated: dealt, shares: undefined, rule: undefined,
-    aloft: undefined, bounds: undefined, flight: undefined, origin: undefined, drift: still
+    aloft: undefined, bounds: undefined, flight: undefined, origin: undefined, drift: still,
+    landed: undefined
   };
 };
 

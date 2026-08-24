@@ -20,14 +20,14 @@ type Props = {
   className: string;
   cellClassName: string;
   onLift: (row: number) => (event: PointerEvent<HTMLElement>) => void;
-  onArranged: (after: number[], drops: Shifted) => void;
+  onArranged: (to: number, drops: Shifted) => void;
 };
 
 export const Row: FC<Props> = (
   {row, cells, columns, clipped, standing, gripped, aloft = nothing(), aloftColumn = nothing(), slid, shifted, className, cellClassName, onLift, onArranged}
 ) => {
   const position = standing.indexOf(row);
-  const arranged = (nudge: RowNudge): void => onArranged(nudge.after, nudge.drops);
+  const arranged = (nudge: RowNudge): void => onArranged(nudge.to, nudge.drops);
   const hidden = aloft.map(held => held === row).orElse(false);
   const drop = shifted?.[row];
 

@@ -216,6 +216,26 @@ describe('drag sortable columns', () => {
     expect(document.querySelector('.drag-surface')).toBeNull();
     expect(headerTexts()).toEqual(['name', 'age', 'city', 'job']);
   });
+
+  test('a keyboard walk says the move', async () => {
+    render(<EagerKeepStaticTable columns={sized} rows={people} draggableColumns/>);
+
+    header('age').focus();
+    await userEvent.keyboard('{ArrowRight}');
+
+    expect(headerTexts()).toEqual(['name', 'city', 'age', 'job']);
+    expect(screen.getByRole('status')).toHaveTextContent('age moved to column 3 of 4');
+  });
+
+  test('a dropped column says where it landed', () => {
+    render(<EagerKeepStaticTable columns={sized} rows={people} draggableColumns/>);
+
+    lift('age');
+    carryOver('city');
+    drop();
+
+    expect(screen.getByRole('status')).toHaveTextContent('age moved to column 3 of 4');
+  });
 });
 
 describe('drag sortable rows', () => {
@@ -371,6 +391,26 @@ describe('drag sortable rows', () => {
     render(<EagerKeepStaticTable columns={sized} rows={people}/>);
 
     expect(within(sourceTable()).queryByRole('button', {name: /move row/})).toBeNull();
+  });
+
+  test('a keyboard nudge says the move', async () => {
+    render(<EagerKeepStaticTable columns={sized} rows={people} draggableRows/>);
+
+    grip('Ada').focus();
+    await userEvent.keyboard('{ArrowDown}');
+
+    expect(firstCells()).toEqual(['Grace', 'Ada', 'Alan']);
+    expect(screen.getByRole('status')).toHaveTextContent('row moved to 2 of 3');
+  });
+
+  test('a dropped row says where it landed', () => {
+    render(<EagerKeepStaticTable columns={sized} rows={people} draggableRows/>);
+
+    lift('Ada');
+    carryOver('Alan');
+    drop();
+
+    expect(screen.getByRole('status')).toHaveTextContent('row moved to 3 of 3');
   });
 });
 

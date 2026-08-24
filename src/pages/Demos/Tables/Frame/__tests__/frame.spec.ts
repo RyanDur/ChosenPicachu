@@ -210,6 +210,24 @@ describe('the frame table', () => {
     expect(within(row).getByRole('button', {name: 'move row 2'})).toBeInTheDocument();
   });
 
+  it('a row nudge says the move', async () => {
+    deal();
+
+    await userEvent.click(screen.getByRole('button', {name: 'move row 1'}));
+    await userEvent.keyboard('{ArrowDown}');
+
+    expect(screen.getByRole('status')).toHaveTextContent('row moved to 2 of 5');
+  });
+
+  it('a column walk says the move', async () => {
+    deal();
+
+    screen.getByRole('columnheader', {name: /trades/}).focus();
+    await userEvent.keyboard('{ArrowRight}');
+
+    expect(screen.getByRole('status')).toHaveTextContent('trades moved to column 3 of 7');
+  });
+
   it('the last seat clamps the walk', async () => {
     deal();
 

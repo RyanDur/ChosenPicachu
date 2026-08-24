@@ -10,7 +10,7 @@ import {LiveTradesState, liveTrades, opening} from '@pages/Demos/Charts/live-tra
 import {Trade} from '@pages/Demos/Charts/coinbase';
 import {ArrowKey, Grab, columnLift, rowLift, still, surfaceTravel} from '@components/DragSortableTable/travel';
 import {FlightAnswers} from '@components/DragSortableTable/flights';
-import {Aloft, TableState, MountedTable, baked, columnOf, drifting, dropped, lifted, ruledBy, standingOf} from './table-state';
+import {Aloft, TableState, MountedTable, baked, columnOf, drifting, dropped, lifted, moveReport, ruledBy, standingOf} from './table-state';
 import {GhostFlight, columnGhost, rowGhost} from './ghosts';
 import {announce, wireMenu} from './menus';
 import {dressShares, wireResize} from './resize';
@@ -67,7 +67,8 @@ const mountTable = (
   let live: LiveTradesState = opening;
   let state: TableState = {
     order, seats: dealt, seated: dealt, shares: undefined, rule: undefined,
-    aloft: undefined, bounds: undefined, flight: undefined, origin: undefined, drift: still
+    aloft: undefined, bounds: undefined, flight: undefined, origin: undefined, drift: still,
+    landed: undefined
   };
   let ghost: GhostFlight | undefined;
   let surface: HTMLElement | undefined;
@@ -169,6 +170,15 @@ const mountTable = (
     }
     if (next.rule !== previous.rule) {
       measures.forEach(column => announce(document, column, next.rule));
+    }
+    if (next.landed !== previous.landed) {
+      maybe(next.landed).map(landed =>
+        maybe(document.querySelector('output.move-report')).map(report => {
+          const text = moveReport(landed);
+          if (report.textContent !== text) {
+            report.textContent = text;
+          }
+        }));
     }
     if (next.shares !== previous.shares || next.order !== previous.order) {
       dressShares(table, next);

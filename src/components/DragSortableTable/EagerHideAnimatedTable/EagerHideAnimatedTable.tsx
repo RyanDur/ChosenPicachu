@@ -6,9 +6,10 @@ import {TableProps, measuredShares} from '@components/Table';
 import {displaced, interior, Shifted, shifts, Slid, surveyed} from '../survey';
 import {columnLift, Grab, grounded, rowLift, surfaceTravel} from '../travel';
 import {eagerColumnFlight, eagerRowFlight} from '../flights';
-import {baked, Cell, columnAloft, drifting as drifts, dropped, lifted, orderedTo, rowAloft, seatedTo, sharedAs, standingOf} from '../table-state';
+import {baked, Cell, columnAloft, drifting as drifts, dropped, lifted, nudgedTo, orderedTo, rowAloft, seatedTo, sharedAs, standingOf} from '../table-state';
 import {useTableState} from '../useTableState';
 import {Aloft} from '../Aloft';
+import {MoveReport} from '../MoveReport';
 import {Direction, ranked} from '../sorting';
 import {Header} from './Header';
 import {Row} from './Row';
@@ -167,12 +168,13 @@ export const EagerHideAnimatedTable: FC<EagerHideAnimatedTableProps> = (
                     className={rowClassName}
                     cellClassName={cellClassName}
                     onLift={row => rowLift(() => order, () => standing, grabbedRow(row))}
-                    onArranged={(after, drops) => {
+                    onArranged={(to, drops) => {
                         setShifted(drops);
-                        commit(current => ({...baked(current), seats: after}));
+                        commit(current => nudgedTo(row, to)(baked(current)));
                     }}/>
             )}</tbody>
         </table>
+        <MoveReport landed={state.landed}/>
         <Aloft columnsTravel={columnsTravel} rowsTravel={rowsTravel}
                ordered={ordered} rows={rows} standing={standing} dress={dress}/>
     </>;
