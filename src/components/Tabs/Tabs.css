@@ -38,6 +38,10 @@
   }
 }
 
+.tabs ~ * {
+  isolation: isolate;
+}
+
 .pill-tabs {
   --chosen-color: var(--charcoal);
   --not-chosen-color: var(--field);
