@@ -8,7 +8,7 @@ import * as schema from 'schemawax';
 import {toQueryString} from '@transport/url';
 import {Art} from '@components/art-gallery/museums/types/response';
 import {GalleryLinks} from '@components/art-gallery/Links';
-import noImage from '../../../assets/icons/no-image.png';
+import noImage from '../../../assets/icons/missing-art.svg?url';
 import './Image.css';
 
 type ImageProps = {

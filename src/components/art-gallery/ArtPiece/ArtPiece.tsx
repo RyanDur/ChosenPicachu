@@ -9,7 +9,7 @@ import {has, not} from '@ryandur/sand';
 import {useBanners} from '@components/Banners';
 import {troubleWith} from '@transport/trouble';
 import {art} from '@components/art-gallery/museums';
-import noImage from '../../../assets/icons/no-image.png';
+import noImage from '../../../assets/icons/missing-art.svg?url';
 import './Piece.css';
 
 export const ArtPiece = () => {

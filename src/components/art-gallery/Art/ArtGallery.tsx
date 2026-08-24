@@ -10,7 +10,7 @@ import {troubleWith} from '@transport/trouble';
 import {Source, sourceParam} from '@components/art-gallery/museums/types/resource';
 import {art as artResource} from '@components/art-gallery/museums';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
-import noImageGallery from '../../../assets/icons/no-image-gallery.png';
+import noImageGallery from '../../../assets/icons/missing-wall.svg?url';
 import './Gallery.css';
 
 export const ArtGallery: FC = () => {

@@ -63,32 +63,6 @@
         justify-content: center;
       }
     }
-
-    .icons {
-      position: sticky;
-      bottom: 0;
-      padding: var(--base);
-      font-size: var(--text-caption);
-      display: flex;
-      align-items: center;
-      flex-direction: column;
-
-      .icons-content {
-        padding: 0;
-      }
-
-      .title {
-        cursor: pointer;
-      }
-
-      .attribution {
-        height: unset;
-      }
-
-          .attribution:focus {
-        color: var(--internationl-orange-engineering);
-      }
-    }
   }
 
   .app-main {
@@ -255,11 +229,6 @@
           height: unset;
           width: fit-content;
         }
-      }
-
-      .borrowed-assets {
-        flex-direction: row;
-        justify-content: space-around;
       }
     }
   }

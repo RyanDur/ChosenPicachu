@@ -25,23 +25,4 @@ export const SideNav: FC = () =>
       <a id="navigate-repo" className="path attentive field" href={Paths.repo}
          rel="noopener noreferrer" target="_blank">Repo</a>
     </nav>
-
-    <details className="borrowed-assets icons">
-      <summary className="title bold">ICONS</summary>
-      <nav className="icons-content" aria-label="icon credits">
-        <a href="https://icons8.com/icon/622/detective" rel="noopener noreferrer" target="_blank"
-           className="attribution">Detective icon by Icons8</a>
-        <a href="https://icons8.com/icon/j1UxMbqzPi7n/no-image" rel="noopener noreferrer" target="_blank"
-           className="attribution">No Image icon by
-          Icons8</a>
-        <a href="https://icons8.com/icon/EJK2FdL08858/no-image-gallery" rel="noopener noreferrer"
-           target="_blank" className="attribution">No Image
-          Gallery icon by Icons8</a>
-        <a href="https://icons8.com/icon/86209/reset" rel="noopener noreferrer" target="_blank"
-           className="attribution">Reset icon by Icons8</a>
-        <a href="https://icons8.com/icon/59878/search" rel="noopener noreferrer" target="_blank"
-           className="attribution">Search icon by Icons8</a>
-        <a href="https://icons8.com/icon/82764/cancel" className="attribution">Cancel icon by Icons8</a>
-      </nav>
-    </details>
   </aside>;

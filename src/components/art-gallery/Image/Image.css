@@ -10,10 +10,9 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: url("../../../assets/icons/detective.png")
+      background: url("../../../assets/icons/looking.svg")
         no-repeat center;
-      filter: invert(1)
-        drop-shadow(0 0 var(--hairline-x-3) var(--white))
+      filter: drop-shadow(0 0 var(--hairline-x-3) var(--white))
         drop-shadow(0 0 var(--hairline-x-3) var(--white));
     }
   }

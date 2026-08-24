@@ -10,8 +10,8 @@ import {classNames} from '@components/class-names';
 import {has} from '@ryandur/sand';
 import {art} from '@components/art-gallery/museums';
 import './Search.css';
-import searchIcon from '../../../assets/icons/search.png';
-import resetIcon from '../../../assets/icons/reset.png';
+import searchIcon from '../../../assets/icons/search.svg?url';
+import resetIcon from '../../../assets/icons/reset.svg?url';
 
 type Props = {
   id?: string;

@@ -2,7 +2,7 @@ import {ChangeEvent, FC} from 'react';
 import {User} from '@components/Users/UserInfo/types';
 import {classNames} from '@components/class-names';
 import {Consumer, has} from '@ryandur/sand';
-import cancelIcon from '../../../assets/icons/cancel.png';
+import cancelIcon from '../../../assets/icons/cancel.svg?url';
 import './fiends-list.css';
 
 type Props = {
