@@ -69,3 +69,9 @@
   .cell.friends { width: 26%; }
   .cell.works-from-home { width: 25%; }
 }
+
+@media (width <= 600px) {
+  .user-info {
+    width: 100%;
+  }
+}

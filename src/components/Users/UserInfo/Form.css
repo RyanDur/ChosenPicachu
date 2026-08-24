@@ -147,11 +147,30 @@
 
 @media (max-width: 1000px) {
   .user-information {
-    display: flex;
-    flex-direction: column;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'title'
+      'avatar'
+      'first_name'
+      'last_name'
+      'email'
+      'dob'
+      'home_address_title'
+      'home_address'
+      'work_address_title'
+      'same_as_home'
+      'work_address'
+      'details'
+      'reset'
+      'cancel'
+      'submit';
 
-    .dob .fancy-text {
-      width: 50%;
+    .avatar {
+      justify-self: center;
+    }
+
+    .dob {
+      align-self: stretch;
     }
   }
 }
