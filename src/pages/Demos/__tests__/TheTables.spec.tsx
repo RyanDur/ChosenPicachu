@@ -191,6 +191,41 @@ describe('the tables demo', () => {
       .toHaveAttribute('aria-sort', 'descending');
   });
 
+  test('the controls fold behind their readout', async () => {
+    const feed = await streamingFeed();
+
+    renderTables(urlOf(feed));
+
+    await feedIsSubscribed();
+    const opener = await screen.findByText('settings', {}, {timeout: 5000});
+    const fold = opener.closest('details');
+    expect(fold).toHaveAttribute('open');
+    expect(screen.getByText('<EagerHideAnimatedTable/>')).toBeVisible();
+
+    await userEvent.click(opener);
+    expect(screen.getByRole('region', {name: 'table controls'})).not.toBeVisible();
+    expect(screen.getByText('<EagerHideAnimatedTable/>')).toBeVisible();
+  });
+
+  test('a phone viewport starts the controls closed', async () => {
+    const feed = await streamingFeed();
+    document.documentElement.style.setProperty('--phone', '600px');
+    const wideMedia = window.matchMedia;
+    window.matchMedia = (query: string) =>
+      ({matches: query.includes('600px'), media: query} as MediaQueryList);
+    try {
+      renderTables(urlOf(feed));
+
+      await feedIsSubscribed();
+      const opener = await screen.findByText('settings', {}, {timeout: 5000});
+      expect(opener.closest('details')).not.toHaveAttribute('open');
+      expect(screen.getByRole('region', {name: 'table controls'})).not.toBeVisible();
+    } finally {
+      window.matchMedia = wideMedia;
+      document.documentElement.style.removeProperty('--phone');
+    }
+  });
+
   test('the controls read out whatever is chosen', async () => {
     const feed = await streamingFeed();
 
@@ -201,7 +236,7 @@ describe('the tables demo', () => {
     expect(controls).toHaveTextContent(/Neighbours swap the moment you drag past them/);
     expect(controls).toHaveTextContent(/blanks out at its origin/);
     expect(controls).toHaveTextContent(/slide to their new seats/);
-    expect(controls).toHaveTextContent('<EagerHideAnimatedTable/>');
+    expect(screen.getByText('<EagerHideAnimatedTable/>')).toBeVisible();
 
     await userEvent.click(within(controls).getByRole('radio', {name: 'Lazy'}));
     await userEvent.click(within(controls).getByRole('radio', {name: 'Keep'}));
@@ -210,7 +245,7 @@ describe('the tables demo', () => {
     expect(controls).toHaveTextContent(/commits the new order on drop/);
     expect(controls).toHaveTextContent(/stays where it was/);
     expect(controls).toHaveTextContent(/single frame/);
-    expect(controls).toHaveTextContent('<LazyKeepStaticTable/>');
+    expect(screen.getByText('<LazyKeepStaticTable/>')).toBeVisible();
     expect(controls).not.toHaveTextContent(/Neighbours swap/);
   });
 
@@ -435,7 +470,7 @@ describe('the tables demo', () => {
     expect(within(controls).getByRole('radio', {name: 'Lazy'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Keep'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Static'})).toBeChecked();
-    expect(controls).toHaveTextContent('<LazyKeepStaticTable/>');
+    expect(screen.getByText('<LazyKeepStaticTable/>')).toBeVisible();
   });
 
   test('a third tutorial answers the menu', async () => {

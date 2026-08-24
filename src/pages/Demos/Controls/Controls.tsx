@@ -1,8 +1,13 @@
-import {FC, PropsWithChildren} from 'react';
+import {FC, PropsWithChildren, useState} from 'react';
 import * as schema from 'schemawax';
 import {DragStyle} from '@components/DragSortableTable';
 import {PillGlider} from '@components/PillGlider';
 import './Controls.css';
+
+const roomy = (): boolean => {
+  const phone = getComputedStyle(document.documentElement).getPropertyValue('--phone').trim();
+  return phone === '' || !window.matchMedia(`(max-width: ${phone}), (max-height: ${phone})`).matches;
+};
 
 export type Pace = 'eager' | 'lazy';
 export type Origin = 'keep' | 'hide';
@@ -36,7 +41,13 @@ export type ControlsProps = {
   onMotion: (motion: Motion) => void;
 };
 
-export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({copy, pace, origin, motion, onPace, onOrigin, onMotion, children}) =>
+export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({copy, pace, origin, motion, onPace, onOrigin, onMotion, children}) => {
+  const [startsOpen] = useState(roomy);
+  return <details className="controls-fold" open={startsOpen}>
+  <summary className="prompt">
+    settings
+    <code className="readout caption">{copy.readout(pace, origin, motion)}</code>
+  </summary>
   <section aria-label={`${copy.kind} controls`} className="controls">
     <article className="control">
       <span className="axis caption uppercase">pace</span>
@@ -75,7 +86,6 @@ export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({c
       <p className="reading paragraph">{copy.motion[motion]}</p>
     </article>
     {children}
-    <p className="readout caption">
-      <code>{copy.readout(pace, origin, motion)}</code>
-    </p>
-  </section>;
+  </section>
+  </details>;
+};
