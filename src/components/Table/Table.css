@@ -100,3 +100,9 @@
   overflow: hidden;
   overflow-wrap: break-word;
 }
+
+@media (pointer: coarse) {
+  .resize-handle {
+    padding-inline: var(--base-x-2);
+  }
+}

@@ -184,7 +184,7 @@
     grid-template-rows:
       var(--base-x-10)
       var(--base-x-6)
-      var(--base-x-14)
+      auto
       1fr
       var(--base);
     grid-template-areas:
@@ -220,6 +220,7 @@
       width: 100%;
       margin: 0;
       height: fit-content;
+      min-height: var(--base-x-14);
     }
 
     .app-footer {
@@ -266,12 +267,54 @@
     grid-template-rows:
       var(--base-x-10)
       var(--base-x-6)
-      var(--base-x-14)
+      auto
       1fr;
     grid-template-areas:
       'header'
       'nav'
       'filter'
       'main';
+  }
+}
+
+@media (max-width: 600px) {
+  #root {
+    height: auto;
+    min-height: 100dvh;
+    grid-template-rows: auto auto auto 1fr auto;
+
+    .app-header {
+      grid-template-columns: 1fr;
+      grid-auto-rows: auto;
+      grid-template-areas:
+        'title'
+        'search';
+
+      .app-title {
+        font-size: var(--base-x-2_5);
+      }
+    }
+
+    .app-main {
+      overflow: visible;
+      height: auto;
+      min-width: 0;
+
+      > * {
+        max-width: 100%;
+      }
+    }
+
+    .side-nav {
+      overflow: visible;
+
+      .app-navigation {
+        flex-wrap: wrap;
+      }
+    }
+  }
+
+  #root:not(:has(.app-footer)) {
+    grid-template-rows: auto auto auto 1fr;
   }
 }

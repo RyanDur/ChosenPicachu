@@ -56,7 +56,8 @@
   /* prose — a line length stated in characters */
   --measure: 75ch;
 
-  /* media */
+  /* media — documentation only: var() cannot appear inside @media */
   --tablet: 1547px;
   --mobile: 1000px;
+  --phone: 600px;
 }

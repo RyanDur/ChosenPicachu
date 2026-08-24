@@ -12,3 +12,10 @@
     outline: var(--hairline-x-2) solid var(--ring);
   }
 }
+
+@media (pointer: coarse) {
+  .sortable .grip {
+    min-width: var(--base-x-5_5);
+    min-height: var(--base-x-5_5);
+  }
+}

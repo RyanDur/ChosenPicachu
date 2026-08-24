@@ -33,3 +33,10 @@
 .sortable [aria-sort='descending'] .menu-toggle::before {
   content: '\25BC';
 }
+
+@media (pointer: coarse) {
+  .sortable .menu-toggle {
+    min-width: var(--base-x-5_5);
+    min-height: var(--base-x-5_5);
+  }
+}

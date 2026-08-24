@@ -7,4 +7,9 @@
         width: 100%;
         position: relative;
     }
+
+    @media (width <= 600px) {
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+    }
 }

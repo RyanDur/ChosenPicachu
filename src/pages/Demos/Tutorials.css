@@ -158,6 +158,12 @@
     justify-self: stretch;
     border-collapse: collapse;
 
+    @media (width <= 600px) {
+      display: block;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+    }
+
     th,
     td {
       padding: var(--base-x-1_5) var(--base-x-2);

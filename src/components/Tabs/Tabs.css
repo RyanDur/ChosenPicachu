@@ -101,3 +101,10 @@
     }
   }
 }
+
+@media (width <= 600px) {
+  .tabs {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+  }
+}

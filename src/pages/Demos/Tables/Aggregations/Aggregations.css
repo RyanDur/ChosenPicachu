@@ -1,6 +1,7 @@
 .aggregations {
   position: relative;
   overflow-x: auto;
+  overscroll-behavior-x: contain;
 
   .fancy-table:not(.column-ghost) {
     table-layout: fixed;
@@ -15,4 +16,16 @@
   .volume { width: 14%; }
   .vwap { width: 17.5%; }
   .change { width: 15%; }
+}
+
+@media (max-width: 600px) {
+  .aggregations {
+    .fancy-table:not(.column-ghost) {
+      min-width: 64rem;
+    }
+
+    .cell {
+      padding: var(--base-x-0_75);
+    }
+  }
 }
