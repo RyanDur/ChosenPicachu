@@ -27,10 +27,7 @@ export const EagerKeepStaticTable: FC<EagerKeepStaticTableProps> = (
     const [state, commit] = useTableState(columns.map(({column}) => column), rows);
     const cell: Cell = {state: () => state, commit};
     const {order, shares, rule} = state;
-    const grown = state.seats.length === rows.length
-        ? state
-        : {...state, seats: rows.map((_, row) => row)};
-    const standing = standingOf(rows, grown);
+    const standing = standingOf(rows, state);
     const ordered = order.flatMap(name => {
         const definition = columns.find(({column}) => column === name);
         return has(definition) ? [definition] : [];

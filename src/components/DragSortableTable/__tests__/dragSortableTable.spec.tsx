@@ -388,6 +388,28 @@ describe('drag sortable rows', () => {
     expect(firstCells()).toEqual(['Grace', 'Alan', 'Ada']);
   });
 
+  test('rows that arrive after the deal still walk and speak', async () => {
+    const {rerender} = render(<EagerKeepStaticTable draggableRows>{deal(sized, [])}</EagerKeepStaticTable>);
+    rerender(<EagerKeepStaticTable draggableRows>{deal(sized, people)}</EagerKeepStaticTable>);
+
+    grip('Ada').focus();
+    await userEvent.keyboard('{ArrowDown}');
+
+    expect(firstCells()).toEqual(['Grace', 'Ada', 'Alan']);
+    expect(screen.getByRole('status')).toHaveTextContent('row moved to 2 of 3');
+  });
+
+  test('rows that arrive after the deal still drag', () => {
+    const {rerender} = render(<EagerKeepStaticTable draggableRows>{deal(sized, [])}</EagerKeepStaticTable>);
+    rerender(<EagerKeepStaticTable draggableRows>{deal(sized, people)}</EagerKeepStaticTable>);
+
+    lift('Ada');
+    carryOver('Alan');
+    drop();
+
+    expect(firstCells()).toEqual(['Grace', 'Alan', 'Ada']);
+  });
+
   test('rows hold still without the opt-in', () => {
     render(<EagerKeepStaticTable>{deal(sized, people)}</EagerKeepStaticTable>);
 
