@@ -22,7 +22,7 @@
   }
 }
 
-.sortable .menu-toggle::before {
+.sortable .rankable .menu-toggle::before {
   content: '\21C5';
 }
 
