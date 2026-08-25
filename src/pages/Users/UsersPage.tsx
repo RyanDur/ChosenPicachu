@@ -87,8 +87,12 @@ export const UsersPage: FC = () => {
                 value: equalAddresses(user.homeAddress, user.workAddress) ? 'Yes' : 'No',
                 display: <section className="last-column">
                   {equalAddresses(user.homeAddress, user.workAddress) ? 'Yes' : 'No'}
-                  <Menu id={`menu-${user.id}`} toggleClassName="raisable"
-                        label={`Actions for ${displayFullName(user.info)}`}>
+                  <button type="button" className="menu-toggle rounded-corners raisable"
+                          popoverTarget={`menu-${user.id}`}
+                          onPointerDown={event => event.stopPropagation()}
+                          onMouseDown={event => event.stopPropagation()}
+                          aria-label={`Actions for ${displayFullName(user.info)}`}/>
+                  <Menu id={`menu-${user.id}`}>
                       <Link to={`${path}${createSearchParams({
                         id: user.id,
                         mode: 'view'

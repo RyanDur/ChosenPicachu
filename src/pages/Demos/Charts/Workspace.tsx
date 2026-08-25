@@ -46,13 +46,19 @@ export const Workspace: FC<Props> = ({trades, status, product}) => {
       <h2 className="headline">{`Bitcoin, live — every ${product} trade on Coinbase`}</h2>
       <output className="status" data-status={status}>{statusCopy[status]}</output>
       {absentKinds.length > 0 &&
-        <Menu id="add-chart" label="Add a chart" toggle="+"
-              toggleClassName="add-chart button secondary">
+        <>
+        <button type="button" className="menu-toggle rounded-corners add-chart button secondary"
+                popoverTarget="add-chart"
+                onPointerDown={event => event.stopPropagation()}
+                onMouseDown={event => event.stopPropagation()}
+                aria-label="Add a chart">+</button>
+        <Menu id="add-chart">
           {absentKinds.map(kind =>
             <button type="button" key={kind} className="item sub-title"
                     popoverTarget="add-chart" popoverTargetAction="hide"
                     onClick={() => add(kind)}>{chartNames[kind]}</button>)}
-        </Menu>}
+        </Menu>
+        </>}
     </header>
     <ul className="chart-list">{chartKinds.map((kind, at) => {
       const actions = plural ? <Dismissal onRemove={() => remove(at)}/> : undefined;

@@ -125,7 +125,7 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
           <Codes>
             {world === 'react'
               ? <Snippet label="HTML" lines={[
-                ...span(menuSource, '<button type="button"', 'aria-label={label}>{toggle}</button>'), gap,
+                ...span(sortMenuSource, '<button type="button" className="menu-toggle rounded-corners"', 'aria-label={`sort ${column}`}/>'), gap,
                 ...span(menuSource, '<menu id={id}', '</menu>')
               ]}/>
               : <Snippet label="HTML" lines={[
@@ -193,7 +193,7 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
             {world === 'react'
               ? <Snippet label="TS" lines={[
                 ...unit(sortingSource, 'export const sortedBy'), gap,
-                ...span(sortMenuSource, 'export const SortMenu', '</Menu>;')
+                ...span(sortMenuSource, 'export const SortMenu', '</>;')
               ]}/>
               : <Snippet label="TS" lines={[
                 ...unit(sortingSource, 'export const sortedBy'), gap,
