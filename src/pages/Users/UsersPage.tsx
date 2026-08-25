@@ -1,22 +1,20 @@
 import {FC, useEffect, useState} from 'react';
-import {Link, useLocation, useNavigate} from 'react-router';
+import {Link, useNavigate} from 'react-router';
 import {useSearchParamsObject} from '@components/search-params';
 import * as schema from 'schemawax';
 import {User, UserInformation, users as usersApi, UsersLinks} from '@components/Users';
 import {equalAddresses} from './addresses';
 import {Paths} from '@pages/Paths';
-import {has, maybe} from '@ryandur/sand';
+import {has} from '@ryandur/sand';
 import {EagerHideAnimatedTable} from '@components/DragSortableTable';
-import {age, formatAge, FriendsList} from '@components/Users';
+import {age, formatAge, FriendsList, UserMenu} from '@components/Users';
 import './UsersPage.css';
 
 export const UsersPage: FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const {id, mode, createSearchParams} = useSearchParamsObject({id: schema.string, mode: schema.string});
+  const {id, mode} = useSearchParamsObject({id: schema.string, mode: schema.string});
   const [users, updateUsers] = useState<User[]>([]);
   const [currentUser, updateCurrentUser] = useState<User>();
-  const path = location.pathname;
 
   useEffect(() => {
     usersApi.getAll().onSuccess(updateUsers);
@@ -32,14 +30,6 @@ export const UsersPage: FC = () => {
 
   const currentFriendsOf = (user: User): string[] =>
     users.find(({id: userId}) => userId === user.id)?.friends ?? user.friends;
-
-  const dismissed = (id: string) => (): void => {
-    maybe(document.getElementById(id)).map(menu => {
-      if (menu.matches(':popover-open')) {
-        menu.hidePopover();
-      }
-    });
-  };
 
   return <>
     <section id="user-info" className="user-info users card rounded-corners lifted padded" key={currentUser?.id}>
@@ -86,34 +76,10 @@ export const UsersPage: FC = () => {
                 value: equalAddresses(user.homeAddress, user.workAddress) ? 'Yes' : 'No',
                 display: <section className="last-column">
                   {equalAddresses(user.homeAddress, user.workAddress) ? 'Yes' : 'No'}
-                  <button type="button" className="menu-toggle rounded-corners raisable"
-                          popoverTarget={`menu-${user.id}`}
-                          aria-label={`Actions for ${displayFullName(user.info)}`}/>
-                  <menu id={`menu-${user.id}`} popover="auto" className="menu card rounded-corners lifted">
-                      <li className="entry"><Link to={`${path}${createSearchParams({
-                        id: user.id,
-                        mode: 'view'
-                      })}`}
-                            onClick={dismissed(`menu-${user.id}`)}
-                            className="item sub-title">View</Link></li>
-                      <li className="entry"><Link to={`${path}${createSearchParams({
-                        id: user.id,
-                        mode: 'edit'
-                      })}`}
-                            onClick={dismissed(`menu-${user.id}`)}
-                            className="item sub-title">Edit</Link></li>
-                      <li className="entry"><Link to={path}
-                            className="item sub-title"
-                            onClick={() => {
-                              dismissed(`menu-${user.id}`)();
-                              usersApi.delete(user)
-                                .onSuccess(updateUsers)
-                                .onSuccess(() => navigate(Paths.users));
-                            }}>Remove</Link></li>
-                      <li className="entry"><Link to={`${path}${createSearchParams({id: user.id})}`}
-                            onClick={dismissed(`menu-${user.id}`)}
-                            className="item sub-title">Clone</Link></li>
-                  </menu>
+                  <UserMenu user={user} name={displayFullName(user.info)}
+                            onRemove={() => usersApi.delete(user)
+                              .onSuccess(updateUsers)
+                              .onSuccess(() => navigate(Paths.users))}/>
                 </section>
               }
             });
