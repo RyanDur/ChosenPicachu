@@ -1,6 +1,7 @@
 import {render} from '@testing-library/react';
-import {EagerHideAnimatedTable} from '@components/DragSortableTable';
-import {Cell, Column, DraggableColumn, DraggableRow, ResizeHandle, SortMenu} from '@components/Table';
+import {
+  Cell, Column, DraggableColumn, DraggableRow, EagerHideAnimatedTable, ResizeHandle, SortMenu
+} from '@components/DragSortableTable/EagerHideAnimatedTable';
 import {windowedAggregates} from '@pages/Demos/Tables/Aggregations/fold';
 import {cells} from '@pages/Demos/Tables/Aggregations/cells';
 import {wire} from '../builds/EagerHideAnimated';

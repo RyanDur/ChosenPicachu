@@ -2,8 +2,8 @@ import {has} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {ColumnData} from '@components/Table';
 
-export type Slid = Readonly<Record<string, {toward: 'left' | 'right'; by: number}>>;
-export type Shifted = Readonly<Record<number, number>>;
+export type ColumnsMoved = Readonly<Record<string, {toward: 'left' | 'right'; by: number}>>;
+export type RowsMoved = Readonly<Record<number, number>>;
 
 export type Bounds = {
     left: number;
@@ -113,7 +113,7 @@ export const nudgedRow = (seats: readonly number[], held: number, toward: number
 };
 
 export const swapped = (measured: Bounds, order: readonly string[]) =>
-    (held: string, neighbour: string, toward: number): Slid => {
+    (held: string, neighbour: string, toward: number): ColumnsMoved => {
         const spanned = order.reduce((sum, name) => sum + (measured.columnWidths[name] ?? 0), 0);
         const gap = order.length > 1 ? Math.max(measured.width - spanned, 0) / (order.length - 1) : 0;
         const carried = (name: string): number => (measured.columnWidths[name] ?? 0) + gap;
@@ -126,7 +126,7 @@ export const swapped = (measured: Bounds, order: readonly string[]) =>
 export const struckAway = <Seat,>(held: Seat, struck: Seat | undefined): struck is Seat =>
     has(struck) && struck !== held;
 
-export type ColumnNudge = {from: number; to: number; marks: Slid};
+export type ColumnNudge = {from: number; to: number; moved: ColumnsMoved};
 
 export const columnNudge = (order: readonly string[], measured: Bounds) =>
     (held: string, toward: number): ColumnNudge | undefined => {
@@ -135,16 +135,16 @@ export const columnNudge = (order: readonly string[], measured: Bounds) =>
             return undefined;
         }
         const neighbour = order[to];
-        return {from, to, marks: swapped(measured, order)(held, neighbour, toward)};
+        return {from, to, moved: swapped(measured, order)(held, neighbour, toward)};
     };
 
-export type RowNudge = {to: number; after: number[]; drops: Shifted};
+export type RowNudge = {to: number; after: number[]; moved: RowsMoved};
 
 export const rowNudge = (seats: readonly number[], heights: Readonly<Record<number, number>>) =>
     (held: number, toward: number): RowNudge => {
         const {to} = nudgedRow(seats, held, toward);
         const after = array.moveToIndex(to, held, seats);
-        return {to, after, drops: shifts(heights, seats, after)};
+        return {to, after, moved: shifts(heights, seats, after)};
     };
 
 export const gripLabel = (position: number): string => `move row ${position + 1}`;
@@ -166,7 +166,7 @@ export const displaced = (
     column: string,
     struck: string,
     survey: Bounds
-): Slid => {
+): ColumnsMoved => {
     const from = order.indexOf(column);
     const to = Math.min(Math.max(order.indexOf(struck), 1), order.length - 2);
     const between = from < to ? order.slice(from + 1, to + 1) : order.slice(to, from);

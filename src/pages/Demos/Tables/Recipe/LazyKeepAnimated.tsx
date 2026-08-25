@@ -28,9 +28,9 @@ import {
   twoRoads
 } from './shared-steps';
 import buildSrc from '../Frame/builds/LazyKeepAnimated.ts?raw';
-import rowSource from '@components/DragSortableTable/LazyKeepAnimatedTable/Row.tsx?raw';
+import rowSource from '@components/DragSortableTable/LazyKeepAnimatedTable/Cell.tsx?raw';
 import tableSource from '@components/DragSortableTable/LazyKeepAnimatedTable/LazyKeepAnimatedTable.tsx?raw';
-import headerSource from '@components/DragSortableTable/LazyKeepAnimatedTable/Header.tsx?raw';
+import headerSource from '@components/DragSortableTable/LazyKeepAnimatedTable/DraggableColumn.tsx?raw';
 import cssSource from '@components/DragSortableTable/LazyKeepAnimatedTable/LazyKeepAnimatedTable.css?raw';
 
 export const LazyKeepAnimatedRecipe: FC<{track: Track; world: World}> = ({track, world}) => track === 'pointer'
@@ -46,7 +46,7 @@ export const LazyKeepAnimatedRecipe: FC<{track: Track; world: World}> = ({track,
         {cssShare(world)}
         {orderInState(world)}
         {listenersOnce(world, tableSource)}
-        {liftOnce(world, tableSource)}
+        {liftOnce(world, headerSource)}
         {dragSurface(world, tableSource)}
         {ghostByHand(world, tableSource)}
         {deadZone}

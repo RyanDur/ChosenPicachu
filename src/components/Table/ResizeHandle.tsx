@@ -1,21 +1,16 @@
 import {FC, FocusEvent, PointerEvent, useState} from 'react';
 import {Maybe, maybe, nothing} from '@ryandur/sand';
+import {useColumn} from './column-context';
 import {Grip, grippedAt, resizeArrows, resizeLabel, soughtTrade} from './shares';
 
-type Props = {
-    column: string;
-    share?: number;
-    onAwaken: (table: HTMLTableElement) => void;
-    onTrade: (delta: number) => void;
-};
-
-export const ResizeHandle: FC<Props> = ({column, share, onAwaken, onTrade}) => {
+export const ResizeHandle: FC = () => {
+    const {name, share, onAwaken, onTrade} = useColumn();
     const [grip, setGrip] = useState<Maybe<Grip>>(nothing());
     const [traded, setTraded] = useState(0);
 
     return <button type="button"
               className="resize-handle"
-              aria-label={resizeLabel(column, share)}
+              aria-label={resizeLabel(name, share)}
               onFocus={(event: FocusEvent<HTMLElement>) =>
                   maybe(event.currentTarget.closest('table')).map(onAwaken)}
               onKeyDown={resizeArrows(onTrade)}

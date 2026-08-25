@@ -1,5 +1,5 @@
 import {maybe} from '@ryandur/sand';
-import {Shifted, Slid} from '@components/DragSortableTable/survey';
+import {ColumnsMoved, RowsMoved} from '@components/DragSortableTable/survey';
 import {MountedTable} from './table-state';
 
 const shedMarks = (element: HTMLElement, name: string): void => {
@@ -22,17 +22,17 @@ const markCell = (cell: Element, mark: {toward: 'left' | 'right'; by: number}): 
   }
 };
 
-export const markColumns = (mounted: MountedTable, marks: Slid): void => {
+export const drawColumnsMoved = (mounted: MountedTable, moved: ColumnsMoved): void => {
   const {order} = mounted.state();
-  Object.entries(marks).forEach(([column, mark]) => {
+  Object.entries(moved).forEach(([column, mark]) => {
     const at = order.indexOf(column);
     maybe(mounted.table.querySelector(`th.${column}`)).map(header => markCell(header, mark));
     mounted.lanes.forEach(lane => markCell(lane.cells[at], mark));
   });
 };
 
-export const markRows = ({lanes}: MountedTable, drops: Shifted): void => {
-  Object.entries(drops).forEach(([row, drop]) =>
+export const drawRowsMoved = ({lanes}: MountedTable, moved: RowsMoved): void => {
+  Object.entries(moved).forEach(([row, drop]) =>
     maybe(lanes[Number(row)]).map(lane => {
       lane.style.setProperty('--drop', `${drop}px`);
       lane.classList.add('shifted');

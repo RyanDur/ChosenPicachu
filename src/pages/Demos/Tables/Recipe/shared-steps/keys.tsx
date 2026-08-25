@@ -22,7 +22,7 @@ export const bothSlide = (world: World, headerSource: string, buildSrc: string, 
         {world === 'react'
           ? <Snippet label="TS" lines={[
             ...unit(travelSource, 'export const animatedColumnArrows'), gap,
-            ...unit(headerSource, 'const ordered = '), gap,
+            ...unit(headerSource, 'const walked = '), gap,
             ...span(headerSource, 'onKeyDown={travels ? animatedColumnArrows', 'onKeyDown={travels ? animatedColumnArrows'),
             aside('// each starts where the other now sits')
           ]}/>
@@ -80,7 +80,7 @@ export const cutKey = (world: World, headerSource: string, buildSrc: string): Re
         {world === 'react'
           ? <Snippet label="TS" lines={[
             ...unit(travelSource, 'export const staticColumnArrows'), gap,
-            ...unit(headerSource, 'const ordered = '), gap,
+            ...unit(headerSource, 'const walked = '), gap,
             ...span(headerSource, 'onKeyDown={travels ? staticColumnArrows', 'onKeyDown={travels ? staticColumnArrows'),
             aside('// the whole walk; nothing marked, nothing to wait for')
           ]}/>

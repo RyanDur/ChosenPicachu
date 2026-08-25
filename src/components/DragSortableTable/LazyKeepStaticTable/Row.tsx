@@ -1,50 +1,22 @@
-import {FC, PointerEvent} from 'react';
-import {Maybe, nothing} from '@ryandur/sand';
-import {staticRowArrows} from '../travel';
-import {classNames} from '@components/class-names';
-import {RowData} from '@components/Table';
-import {RowGrip} from '../RowGrip';
+import {Children, FC, Fragment, ReactElement, isValidElement} from 'react';
+import {CellProps, RowProps} from '@components/Table';
+import {RowSetting, useSeat, useTable} from '../context';
+import {Cell} from './Cell';
 
-type Props = {
-  row: number;
-  cells: RowData;
-  columns: readonly string[];
-  clipped: boolean;
-  standing: readonly number[];
-  gripped: boolean;
-  aloft?: Maybe<number>;
-  aloftColumn?: Maybe<string>;
-  onLift: (row: number) => (event: PointerEvent<HTMLElement>) => void;
-  onArranged: (to: number) => void;
-};
-
-export const Row: FC<Props> = (
-  {row, cells, columns, clipped, standing, gripped, aloft = nothing(), aloftColumn = nothing(), onLift, onArranged}
-) => {
+export const Row: FC<RowProps> = ({children}) => {
+  const {state, standing} = useTable();
+  const row = useSeat();
   const position = standing.indexOf(row);
-  const arranged = ({to}: {to: number; after: number[]}): void => onArranged(to);
-  const hidden = aloft.map(held => held === row).orElse(false);
+  const cells: Record<string, ReactElement> = {};
+  Children.forEach(children, child => {
+    if (isValidElement<CellProps>(child) && child.type === Cell) {
+      cells[child.props.column] = child;
+    }
+  });
 
-  return <tr className="row">
-    {columns.map((column, columnNumber) => {
-      const cell = cells[column];
-      const rowHeader = columnNumber === 0 && gripped;
-      const dress = classNames(
-        'cell', cell.className,
-        rowHeader && 'row-header',
-        clipped && 'ellipsis',
-        aloftColumn.map(held => held === column).orElse(false) && 'hide',
-        hidden && 'hide-across'
-      );
-      return rowHeader
-        ? <th scope="row" className={dress} key={column}>
-          <div className="row-header-content">
-            <RowGrip position={position} onLift={onLift(row)}
-                     onArrows={staticRowArrows(row, () => standing, arranged)}/>
-            {cell.display}
-          </div>
-        </th>
-        : <td className={dress} key={column}>{cell.display}</td>;
-    })}
-  </tr>;
+  return <RowSetting.Provider value={{row, position, gripped: false}}>
+    <tr className="row">
+      {state.order.map(name => <Fragment key={name}>{cells[name]}</Fragment>)}
+    </tr>
+  </RowSetting.Provider>;
 };

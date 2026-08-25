@@ -1,15 +1,18 @@
 import {FC, useEffect, useState} from 'react';
-import {
-  EagerHideAnimatedTable, EagerHideStaticTable, EagerKeepAnimatedTable, EagerKeepStaticTable,
-  LazyHideAnimatedTable, LazyHideStaticTable, LazyKeepAnimatedTable, LazyKeepStaticTable
-} from '@components/DragSortableTable';
+import * as EagerKeepAnimated from '@components/DragSortableTable/EagerKeepAnimatedTable';
+import * as EagerKeepStatic from '@components/DragSortableTable/EagerKeepStaticTable';
+import * as EagerHideAnimated from '@components/DragSortableTable/EagerHideAnimatedTable';
+import * as EagerHideStatic from '@components/DragSortableTable/EagerHideStaticTable';
+import * as LazyKeepAnimated from '@components/DragSortableTable/LazyKeepAnimatedTable';
+import * as LazyKeepStatic from '@components/DragSortableTable/LazyKeepStaticTable';
+import * as LazyHideAnimated from '@components/DragSortableTable/LazyHideAnimatedTable';
+import * as LazyHideStatic from '@components/DragSortableTable/LazyHideStaticTable';
 import {Motion, Origin, Pace} from '../../Controls';
 import {World} from '../params';
 import {TableFrame, warmed} from '../Frame/TableFrame';
 import {Trade} from '../../Charts/coinbase';
 import {windowedAggregates} from './fold';
 import {cells} from './cells';
-import {Cell, Column, DraggableColumn, DraggableRow, ResizeHandle, SortMenu} from '@components/Table';
 import './Aggregations.css';
 import {hydrated, useRecentTrades} from './useRecentTrades';
 
@@ -23,18 +26,18 @@ type Props = {
 
 const tables = {
   eager: {
-    keep: {animated: EagerKeepAnimatedTable, static: EagerKeepStaticTable},
-    hide: {animated: EagerHideAnimatedTable, static: EagerHideStaticTable}
+    keep: {animated: EagerKeepAnimated, static: EagerKeepStatic},
+    hide: {animated: EagerHideAnimated, static: EagerHideStatic}
   },
   lazy: {
-    keep: {animated: LazyKeepAnimatedTable, static: LazyKeepStaticTable},
-    hide: {animated: LazyHideAnimatedTable, static: LazyHideStaticTable}
+    keep: {animated: LazyKeepAnimated, static: LazyKeepStatic},
+    hide: {animated: LazyHideAnimated, static: LazyHideStatic}
   }
 };
 
 export const Aggregations: FC<Props> = ({trades, pace, origin, motion, world}) => {
   const recent = useRecentTrades();
-  const Sortable = tables[pace][origin][motion];
+  const {Table: Sortable, Column, DraggableColumn, DraggableRow, Cell, SortMenu, ResizeHandle} = tables[pace][origin][motion];
   const vanilla = world === 'vanilla';
   const [stood, setStood] = useState(false);
   useEffect(warmed, []);

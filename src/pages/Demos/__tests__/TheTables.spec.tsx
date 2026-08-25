@@ -487,7 +487,7 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/position-area/);
     expect(recipe).toHaveTextContent(/The rule is a drape, not a bake/);
     expect(recipe).toHaveTextContent(/A hand ends the rule/);
-    expect(recipe).toHaveTextContent(/setShifted\(shifts\(/);
+    expect(recipe).toHaveTextContent(/rowsMove\(shifts\(/);
     expect(recipe).not.toHaveTextContent(/Dress the menu as a card/);
     expect(within(recipe).getByRole('link', {name: 'position-area'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/CSS/position-area'));
@@ -500,7 +500,7 @@ describe('the tables demo', () => {
     await userEvent.click(within(recipe).getByText(/The trader can sort the windows/));
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Static'}));
     expect(recipe).toHaveTextContent(/Rule directly/);
-    expect(recipe).not.toHaveTextContent(/setShifted\(shifts\(surveyed/);
+    expect(recipe).not.toHaveTextContent(/setRowsMoved\(shifts\(surveyed/);
   });
 
   test('the chosen tutorial travels in the url', async () => {

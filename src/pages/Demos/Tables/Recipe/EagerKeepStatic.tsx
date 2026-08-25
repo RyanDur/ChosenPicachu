@@ -27,9 +27,9 @@ import {
   twoRoads
 } from './shared-steps';
 import buildSrc from '../Frame/builds/EagerKeepStatic.ts?raw';
-import rowSource from '@components/DragSortableTable/EagerKeepStaticTable/Row.tsx?raw';
+import rowSource from '@components/DragSortableTable/EagerKeepStaticTable/Cell.tsx?raw';
 import tableSource from '@components/DragSortableTable/EagerKeepStaticTable/EagerKeepStaticTable.tsx?raw';
-import headerSource from '@components/DragSortableTable/EagerKeepStaticTable/Header.tsx?raw';
+import headerSource from '@components/DragSortableTable/EagerKeepStaticTable/DraggableColumn.tsx?raw';
 
 export const EagerKeepStaticRecipe: FC<{track: Track; world: World}> = ({track, world}) => track === 'pointer'
   ? <>
@@ -44,7 +44,7 @@ export const EagerKeepStaticRecipe: FC<{track: Track; world: World}> = ({track, 
         {cssShare(world)}
         {orderInState(world)}
         {listenersOnce(world, tableSource)}
-        {liftOnce(world, tableSource)}
+        {liftOnce(world, headerSource)}
         {dragSurface(world, tableSource)}
         {ghostByHand(world, tableSource)}
         {deadZone}

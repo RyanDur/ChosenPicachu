@@ -28,9 +28,9 @@ import {
   twoRoads
 } from './shared-steps';
 import buildSrc from '../Frame/builds/EagerHideAnimated.ts?raw';
-import rowSource from '@components/DragSortableTable/EagerHideAnimatedTable/Row.tsx?raw';
+import rowSource from '@components/DragSortableTable/EagerHideAnimatedTable/Cell.tsx?raw';
 import tableSource from '@components/DragSortableTable/EagerHideAnimatedTable/EagerHideAnimatedTable.tsx?raw';
-import headerSource from '@components/DragSortableTable/EagerHideAnimatedTable/Header.tsx?raw';
+import headerSource from '@components/DragSortableTable/EagerHideAnimatedTable/DraggableColumn.tsx?raw';
 import cssSource from '@components/DragSortableTable/EagerHideAnimatedTable/EagerHideAnimatedTable.css?raw';
 
 export const EagerHideAnimatedRecipe: FC<{track: Track; world: World}> = ({track, world}) => track === 'pointer'
@@ -46,12 +46,12 @@ export const EagerHideAnimatedRecipe: FC<{track: Track; world: World}> = ({track
         {cssShare(world)}
         {orderInState(world)}
         {listenersOnce(world, tableSource)}
-        {liftOnce(world, tableSource)}
+        {liftOnce(world, headerSource)}
         {dragSurface(world, tableSource)}
         {ghostByHand(world, tableSource)}
         {deadZone}
         {eagerPace(world, tableSource, buildSrc)}
-        {hideOrigin(world, tableSource, headerSource, cssSource)}
+        {hideOrigin(world, headerSource, cssSource)}
         {animatedMotion(world, tableSource, cssSource)}
       </Steps>
     </Story>

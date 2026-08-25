@@ -15,7 +15,7 @@ import frameMenus from '../Frame/table/menus.ts?raw';
 import frameMount from '../Frame/table/mount.ts?raw';
 import {buildSources} from '../Frame/builds/sources';
 import settlesSource from '../Frame/builds/settles.ts?raw';
-import {headerSources, tableSources} from './sources';
+import {cellSources, headerSources, tableSources} from './sources';
 import '../../Recipe/Recipe.css';
 
 const gap = plain(' ');
@@ -24,10 +24,11 @@ type Build = {
   world: World;
   source: string;
   headerSrc: string;
+  cellSrc: string;
   buildSrc: string;
 };
 
-const ruled = ({world, source, buildSrc}: Build, motion: Motion, dial: ReactNode) => motion === 'animated'
+const ruled = ({world, headerSrc, buildSrc}: Build, motion: Motion, dial: ReactNode) => motion === 'animated'
   ? <Step title="Rule, measure, and mark" dial={dial}>
       <Words want="Choosing a direction reorders every row at once. On the animated table, each row deserves to be drawn sliding from where it was.">
         <Says>A sort is a reorder like any drag, so the slide machinery should serve it:
@@ -47,7 +48,7 @@ const ruled = ({world, source, buildSrc}: Build, motion: Motion, dial: ReactNode
         <Codes>
           {world === 'react'
             ? <Snippet label="TS" lines={[
-              ...unit(source, 'const ruled = ')
+              ...unit(headerSrc, 'const ruled')
             ]}/>
             : <Snippet label="TS" lines={[
               ...unit(frameMount, '  const choose = '), gap,
@@ -71,7 +72,7 @@ const ruled = ({world, source, buildSrc}: Build, motion: Motion, dial: ReactNode
         <Codes>
           {world === 'react'
             ? <Snippet label="TS" lines={[
-              ...unit(source, 'const ruled = ')
+              ...unit(headerSrc, 'const ruled')
             ]}/>
             : <Snippet label="TS" lines={[
               ...unit(frameMount, '  const choose = ')
@@ -81,7 +82,7 @@ const ruled = ({world, source, buildSrc}: Build, motion: Motion, dial: ReactNode
     </Step>;
 
 const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
-  const {world, source, headerSrc} = build;
+  const {world, headerSrc, cellSrc} = build;
   return <Story param="menu" id="rank" steps={7}
                 can="The trader can sort the windows by any measure, or take the order back"
                 soThat="the table ranks itself, and the hand still outranks it">
@@ -124,8 +125,8 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
           <Codes>
             {world === 'react'
               ? <Snippet label="HTML" lines={[
-                ...span(sortMenuSource, '<button type="button" className="menu-toggle rounded-corners"', 'aria-label={`sort ${column}`}/>'), gap,
-                ...span(sortMenuSource, '<menu id={`sort-${column}`}', '</menu>')
+                ...span(sortMenuSource, '<button type="button" className="menu-toggle rounded-corners"', 'aria-label={`sort ${name}`}/>'), gap,
+                ...span(sortMenuSource, '<menu id={`sort-${name}`}', '</menu>')
               ]}/>
               : <Snippet label="HTML" lines={[
                 ...span(tableSource, '<button type="button" class="menu-toggle rounded-corners"', '</menu>')
@@ -206,9 +207,7 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
             ]}/>
             {world === 'react'
               ? <Snippet label="HTML" lines={[
-                ...span(headerSrc, 'const sorted = sortedBy(columnName, rule);',
-                  'const sorted = sortedBy(columnName, rule);'), gap,
-                ...span(headerSrc, 'aria-sort={sorted}', 'aria-sort={sorted}')
+                ...span(headerSrc, 'aria-sort={sortedBy(name, state.rule)}', 'aria-sort={sortedBy(name, state.rule)}')
               ]}/>
               : <Snippet label="HTML" lines={[
                 ...span(tableSource, '<th scope="col" class="cell trades header-cell clipped">', 'aria-label="sort trades"></button>')
@@ -256,7 +255,7 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
             {world === 'react'
               ? <Snippet label="TS" lines={[
                 ...unit(stateSource, 'export const baked'), gap,
-                ...span(source, 'const grabbedRow = ', 'baked(current)));')
+                ...span(cellSrc, 'const grabbed = ', 'baked(current)));')
               ]}/>
               : <Snippet label="TS" lines={[
                 ...unit(stateSource, 'export const baked = '),
@@ -295,7 +294,7 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
               ]}/>}
             {world === 'react'
               ? <Snippet label="HTML" lines={[
-                ...span(headerSrc, '{has(onRule) && column.sortable &&', '{has(onRule) && column.sortable &&')
+                ...span(headerSrc, 'const rankable = carries(children, SortMenu);', 'const rankable = carries(children, SortMenu);')
               ]}/>
               : <Snippet label="HTML" lines={[
                 ...span(frameMount, 'const measures = order.filter', 'sort-${column}`)));')
@@ -317,6 +316,7 @@ export const MenuRecipe: FC = () => {
     world,
     source: tableSources[pace][origin][motion],
     headerSrc: headerSources[pace][origin][motion],
+    cellSrc: cellSources[pace][origin][motion],
     buildSrc: buildSources[pace][origin][motion]
   };
   return <section aria-label="build the sort menu yourself" className="build-steps">

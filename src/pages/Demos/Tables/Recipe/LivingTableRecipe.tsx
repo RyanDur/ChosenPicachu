@@ -7,8 +7,8 @@ import feedSource from '@pages/Demos/Charts/live-trades.ts?raw';
 import foldSource from '@pages/Demos/Tables/Aggregations/fold.ts?raw';
 import dealSource from '@pages/Demos/Tables/Aggregations/Aggregations.tsx?raw';
 import useTableStateSource from '@components/DragSortableTable/useTableState.ts?raw';
-import headerSource from '@components/DragSortableTable/EagerHideAnimatedTable/Header.tsx?raw';
-import rowSource from '@components/DragSortableTable/EagerHideAnimatedTable/Row.tsx?raw';
+import headerSource from '@components/DragSortableTable/EagerHideAnimatedTable/DraggableColumn.tsx?raw';
+import rowSource from '@components/DragSortableTable/EagerHideAnimatedTable/Cell.tsx?raw';
 import hydrateSource from '@pages/Demos/Tables/Aggregations/recent-trades.ts?raw';
 import widthsSource from '@pages/Demos/Tables/Aggregations/Aggregations.css?raw';
 import tableSource from '../Frame/table.html?raw';
@@ -52,8 +52,8 @@ const dealCodes: Record<World, ReactNode> = {
       ...unit(widthsSource, '.aggregations {')
     ]}/>
     <Snippet label="HTML" lines={[
-      ...span(headerSource, 'return <th', 'scope="col"'), gap,
-      ...span(rowSource, 'return rowHeader', '<td className={dress} key={column} style={drawn}>{cell.display}</td>;')
+      ...span(headerSource, '<th className={classNames(', 'scope="col"'), gap,
+      ...span(rowSource, 'return rowHeader', '<td className={dress} style={drawn}>{children}</td>;')
     ]}/>
   </Codes>,
   vanilla: <Codes>

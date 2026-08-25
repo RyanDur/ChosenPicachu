@@ -6,10 +6,10 @@ import {World} from '../../params';
 import {Term} from '../Term';
 import {frameHide, gap} from './sources';
 
-export const hideOrigin = (world: World, tableSource: string, headerSource: string, cssSource: string): ReactNode =>
+export const hideOrigin = (world: World, headerSource: string, cssSource: string): ReactNode =>
   <Step title="Blank the origin while it is aloft" dial={<OriginDial name="step-origin"/>}>
     <Words want={<>With the <Term word="ghost">ghost</Term> in hand, the trader reads the origin column as a duplicate, and nothing says where the drop will land.</>}>
-      <Says>Unmounting the origin would collapse its space and shift the whole table, so the
+      <Says>Unmounting the origin would collapse its space and rowsMove the whole table, so the
         vanishing should be CSS that stops the painting and keeps the
         box: <Mdn path="Web/CSS/visibility">visibility</Mdn>, not display. What differs by world
         is who writes the signal: a comparison the markup makes, or a class the grab
@@ -28,8 +28,8 @@ export const hideOrigin = (world: World, tableSource: string, headerSource: stri
       <Codes>
         {world === 'react'
           ? <Snippet label="HTML" lines={[
-            ...span(tableSource, 'aloft={columnsTravel.aloft}', 'aloft={columnsTravel.aloft}'), gap,
-            ...span(tableSource, 'aloft={rowsTravel.aloft}', 'aloftColumn={columnsTravel.aloft}')
+            ...span(headerSource, 'const hidden = columnAloft(state)', 'const hidden = columnAloft(state)'), gap,
+            ...span(headerSource, "hidden && 'hide',", "hidden && 'hide',")
           ]}/>
           : <Snippet label="TS" lines={[
             ...unit(frameHide, 'export const hideColumn'),
@@ -37,7 +37,7 @@ export const hideOrigin = (world: World, tableSource: string, headerSource: stri
           ]}/>}
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...span(headerSource, 'const hidden = aloft.map(held => held === columnName).orElse(false);', 'const hidden = aloft.map(held => held === columnName).orElse(false);'),
+            ...span(headerSource, 'const hidden = columnAloft(state).map(held => held === name).orElse(false);', 'const hidden = columnAloft(state).map(held => held === name).orElse(false);'),
             aside('// the hide table needs no flag; each header compares itself to the aloft key')
           ]}/>
           : undefined}

@@ -6,8 +6,9 @@ import {User, UserInformation, users as usersApi, UsersLinks} from '@components/
 import {equalAddresses} from './addresses';
 import {Paths} from '@pages/Paths';
 import {has} from '@ryandur/sand';
-import {EagerHideAnimatedTable} from '@components/DragSortableTable';
-import {Cell, Column, DraggableColumn, DraggableRow, ResizeHandle, SortMenu} from '@components/Table';
+import {
+  Cell, Column, DraggableColumn, DraggableRow, EagerHideAnimatedTable, ResizeHandle, SortMenu
+} from '@components/DragSortableTable/EagerHideAnimatedTable';
 import {age, formatAge, FriendsList, UserMenu} from '@components/Users';
 import './UsersPage.css';
 

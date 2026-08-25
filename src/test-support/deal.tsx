@@ -1,5 +1,5 @@
 import {ReactNode} from 'react';
-import {Cell, Column, DraggableColumn, DraggableRow, ResizeHandle, Row, RowData, SortMenu} from '@components/Table';
+import {Kit, RowData} from '@components/Table';
 
 type Fixture = {
   column: string;
@@ -15,20 +15,20 @@ type Kinds = {
   resizable?: boolean;
 };
 
-export const deal = (columns: Fixture[], rows: RowData[], kinds: Kinds = {}): ReactNode[] => [
+export const deal = (kit: Kit, columns: Fixture[], rows: RowData[], kinds: Kinds = {}): ReactNode[] => [
   ...columns.map(({column, display, className, sortable}, at) => {
-    const Heading = kinds.draggable && at > 0 && at < columns.length - 1 ? DraggableColumn : Column;
+    const Heading = kinds.draggable && at > 0 && at < columns.length - 1 ? kit.DraggableColumn : kit.Column;
     return <Heading key={column} name={column} className={className}>
       {display}
-      {kinds.sortable && sortable && <SortMenu/>}
-      {kinds.resizable && <ResizeHandle/>}
+      {kinds.sortable && sortable && <kit.SortMenu/>}
+      {kinds.resizable && <kit.ResizeHandle/>}
     </Heading>;
   }),
   ...rows.map((row, at) => {
-    const Lane = kinds.gripped ? DraggableRow : Row;
+    const Lane = kinds.gripped ? kit.DraggableRow : kit.Row;
     return <Lane key={at}>
       {Object.entries(row).map(([column, {display, className, value}]) =>
-        <Cell key={column} column={column} className={className} value={value}>{display}</Cell>)}
+        <kit.Cell key={column} column={column} className={className} value={value}>{display}</kit.Cell>)}
     </Lane>;
   })
 ];

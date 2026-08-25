@@ -27,9 +27,9 @@ import {
   twoRoads
 } from './shared-steps';
 import buildSrc from '../Frame/builds/LazyHideStatic.ts?raw';
-import rowSource from '@components/DragSortableTable/LazyHideStaticTable/Row.tsx?raw';
+import rowSource from '@components/DragSortableTable/LazyHideStaticTable/Cell.tsx?raw';
 import tableSource from '@components/DragSortableTable/LazyHideStaticTable/LazyHideStaticTable.tsx?raw';
-import headerSource from '@components/DragSortableTable/LazyHideStaticTable/Header.tsx?raw';
+import headerSource from '@components/DragSortableTable/LazyHideStaticTable/DraggableColumn.tsx?raw';
 import cssSource from '@components/DragSortableTable/LazyHideStaticTable/LazyHideStaticTable.css?raw';
 
 export const LazyHideStaticRecipe: FC<{track: Track; world: World}> = ({track, world}) => track === 'pointer'
@@ -45,12 +45,12 @@ export const LazyHideStaticRecipe: FC<{track: Track; world: World}> = ({track, w
         {cssShare(world)}
         {orderInState(world)}
         {listenersOnce(world, tableSource)}
-        {liftOnce(world, tableSource)}
+        {liftOnce(world, headerSource)}
         {dragSurface(world, tableSource)}
         {ghostByHand(world, tableSource)}
         {deadZone}
         {lazyPace(world, tableSource, buildSrc)}
-        {hideOrigin(world, tableSource, headerSource, cssSource)}
+        {hideOrigin(world, headerSource, cssSource)}
         {staticMotion(world, tableSource)}
       </Steps>
     </Story>

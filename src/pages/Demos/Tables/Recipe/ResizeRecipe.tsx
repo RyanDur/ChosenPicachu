@@ -7,7 +7,7 @@ import {Term} from './Term';
 import sharesSource from '@components/Table/shares.ts?raw';
 import resizeSource from '@components/Table/ResizeHandle.tsx?raw';
 import baseCss from '@components/Table/Table.css?raw';
-import headerSource from '@components/DragSortableTable/EagerHideAnimatedTable/Header.tsx?raw';
+import headerSource from '@components/DragSortableTable/EagerHideAnimatedTable/DraggableColumn.tsx?raw';
 import headerCss from '@components/DragSortableTable/Header.css?raw';
 import tableSource from '../Frame/table.html?raw';
 import frameResize from '../Frame/table/resize.ts?raw';
@@ -60,7 +60,7 @@ const spokenLabel =
 
 const handleMarkup: Record<World, ReactNode> = {
   react: <Snippet label="HTML" lines={[
-    ...span(resizeSource, '<button type="button"', 'aria-label={resizeLabel(column, share)}')
+    ...span(resizeSource, '<button type="button"', 'aria-label={resizeLabel(name, share)}')
   ]}/>,
   vanilla: <Snippet label="HTML" lines={[
     ...span(tableSource, '<button type="button" class="resize-handle"', 'aria-label="resize window"></button>')

@@ -28,9 +28,9 @@ import {
   twoRoads
 } from './shared-steps';
 import buildSrc from '../Frame/builds/LazyHideAnimated.ts?raw';
-import rowSource from '@components/DragSortableTable/LazyHideAnimatedTable/Row.tsx?raw';
+import rowSource from '@components/DragSortableTable/LazyHideAnimatedTable/Cell.tsx?raw';
 import tableSource from '@components/DragSortableTable/LazyHideAnimatedTable/LazyHideAnimatedTable.tsx?raw';
-import headerSource from '@components/DragSortableTable/LazyHideAnimatedTable/Header.tsx?raw';
+import headerSource from '@components/DragSortableTable/LazyHideAnimatedTable/DraggableColumn.tsx?raw';
 import cssSource from '@components/DragSortableTable/LazyHideAnimatedTable/LazyHideAnimatedTable.css?raw';
 
 export const LazyHideAnimatedRecipe: FC<{track: Track; world: World}> = ({track, world}) => track === 'pointer'
@@ -46,12 +46,12 @@ export const LazyHideAnimatedRecipe: FC<{track: Track; world: World}> = ({track,
         {cssShare(world)}
         {orderInState(world)}
         {listenersOnce(world, tableSource)}
-        {liftOnce(world, tableSource)}
+        {liftOnce(world, headerSource)}
         {dragSurface(world, tableSource)}
         {ghostByHand(world, tableSource)}
         {deadZone}
         {lazyPace(world, tableSource, buildSrc)}
-        {hideOrigin(world, tableSource, headerSource, cssSource)}
+        {hideOrigin(world, headerSource, cssSource)}
         {animatedMotion(world, tableSource, cssSource)}
       </Steps>
     </Story>

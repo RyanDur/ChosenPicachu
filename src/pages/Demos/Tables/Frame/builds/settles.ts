@@ -1,6 +1,6 @@
 import {has} from '@ryandur/sand';
 import {ColumnNudge, RowNudge, displaced, interior, shifts} from '@components/DragSortableTable/survey';
-import {MountedTable, baked, markColumns, markRows, nudgedTo, orderedTo, seatedTo} from '../table';
+import {MountedTable, baked, drawColumnsMoved, drawRowsMoved, nudgedTo, orderedTo, seatedTo} from '../table';
 
 export const animatedSettleColumn = (mounted: MountedTable, held: string, struck: string): void => {
   const {order, bounds} = mounted.state();
@@ -9,7 +9,7 @@ export const animatedSettleColumn = (mounted: MountedTable, held: string, struck
   }
   const marks = displaced(order, held, struck, bounds);
   mounted.commit(orderedTo(order.indexOf(held), interior(order.indexOf(struck), order.length)));
-  markColumns(mounted, marks);
+  drawColumnsMoved(mounted, marks);
 };
 
 export const staticSettleColumn = (mounted: MountedTable, held: string, struck: string): void => {
@@ -23,7 +23,7 @@ export const animatedSettleRow = (mounted: MountedTable, held: number, struck: n
     return;
   }
   mounted.commit(seatedTo(held, struck));
-  markRows(mounted, shifts(bounds.rowHeights, seated, mounted.state().seated, held));
+  drawRowsMoved(mounted, shifts(bounds.rowHeights, seated, mounted.state().seated, held));
 };
 
 export const staticSettleRow = (mounted: MountedTable, held: number, struck: number): void => {
@@ -32,7 +32,7 @@ export const staticSettleRow = (mounted: MountedTable, held: number, struck: num
 
 export const animatedOrdered = (mounted: MountedTable) => (nudge: ColumnNudge): void => {
   mounted.commit(orderedTo(nudge.from, nudge.to));
-  markColumns(mounted, nudge.marks);
+  drawColumnsMoved(mounted, nudge.moved);
 };
 
 export const staticOrdered = (mounted: MountedTable) => ({from, to}: {from: number; to: number}): void =>
@@ -40,7 +40,7 @@ export const staticOrdered = (mounted: MountedTable) => ({from, to}: {from: numb
 
 export const animatedArranged = (mounted: MountedTable, held: number) => (nudge: RowNudge): void => {
   mounted.commit(state => nudgedTo(held, nudge.to)(baked(state)));
-  markRows(mounted, nudge.drops);
+  drawRowsMoved(mounted, nudge.moved);
 };
 
 export const staticArranged = (mounted: MountedTable, held: number) => ({to}: {to: number; after: number[]}): void =>
@@ -51,4 +51,4 @@ export const shiftsRuled = (
   heights: Readonly<Record<number, number>>,
   before: readonly number[],
   after: readonly number[]
-): void => markRows(mounted, shifts(heights, before, after));
+): void => drawRowsMoved(mounted, shifts(heights, before, after));

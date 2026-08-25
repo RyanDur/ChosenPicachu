@@ -1,6 +1,8 @@
 import './Table.css';
 
-export type {CellData, ColumnData, Dealt, RowData, TableProps} from './Table';
-export {Cell, Column, DraggableColumn, DraggableRow, ResizeHandle, Row, SortMenu, dealt} from './Table';
+export type {CellData, CellProps, ColumnData, ColumnProps, Dealt, Kit, RowData, RowProps, TableProps} from './Table';
+export {carries, dealt} from './Table';
+export type {ColumnContext} from './column-context';
+export {ColumnSetting, useColumn} from './column-context';
 export type {Shares} from './shares';
 export {measuredShares, neighborOf, traded} from './shares';

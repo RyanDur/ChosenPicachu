@@ -37,7 +37,7 @@ describe('the keyboard vocabulary', () => {
     expect(columnNudge(order, measured)('trades', 1)).toEqual({
       from: 1,
       to: 2,
-      marks: {
+      moved: {
         trades: {toward: 'right', by: 60},
         buys: {toward: 'left', by: 40}
       }
@@ -50,8 +50,8 @@ describe('the keyboard vocabulary', () => {
 
     expect(nudge.to).toBe(1);
     expect(nudge.after).toEqual([1, 0, 2]);
-    expect(nudge.drops).toEqual({0: -40, 1: 40});
-    expect(rowNudge([0, 1, 2], {0: 40, 1: 40, 2: 40})(0, -1).drops).toEqual({});
+    expect(nudge.moved).toEqual({0: -40, 1: 40});
+    expect(rowNudge([0, 1, 2], {0: 40, 1: 40, 2: 40})(0, -1).moved).toEqual({});
   });
 
   it('rules a strike: another seat strikes, home and nothing never do', () => {
