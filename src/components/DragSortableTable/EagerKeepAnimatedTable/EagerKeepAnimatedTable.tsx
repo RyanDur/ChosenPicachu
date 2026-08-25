@@ -16,10 +16,7 @@ import {Row} from './Row';
 import '../sortable.css';
 import './EagerKeepAnimatedTable.css';
 
-export type EagerKeepAnimatedTableProps = TableProps & {
-};
-
-export const EagerKeepAnimatedTable: FC<EagerKeepAnimatedTableProps> = (
+export const EagerKeepAnimatedTable: FC<TableProps> = (
     {children, id}
 ) => {
     const {columns, rows, gripped} = dealt(children);

@@ -14,10 +14,7 @@ import {Header} from './Header';
 import {Row} from './Row';
 import '../sortable.css';
 
-export type EagerKeepStaticTableProps = TableProps & {
-};
-
-export const EagerKeepStaticTable: FC<EagerKeepStaticTableProps> = (
+export const EagerKeepStaticTable: FC<TableProps> = (
     {children, id}
 ) => {
     const {columns, rows, gripped} = dealt(children);

@@ -594,7 +594,6 @@ describe('the tables demo', () => {
       }
     }, 20000);
 
-
     test('the explainer stands in the html world too', async () => {
       const feed = await streamingFeed();
 
@@ -603,7 +602,6 @@ describe('the tables demo', () => {
       expect(await screen.findByText('what am I looking at?')).toBeInTheDocument();
       expect(screen.getByTitle('the living table, in vanilla')).toBeInTheDocument();
     });
-
 
     test('the frame wears its own document\u2019s height', async () => {
       const feed = await streamingFeed();

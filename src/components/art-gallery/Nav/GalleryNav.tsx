@@ -38,7 +38,6 @@ export const GalleryNav: FC<Props> = ({id}) => {
   const firstRecord = 1 + pageSize * ((art?.pagination.currentPage ?? currentPage) - 1);
   const lastRecord = art?.pagination.totalPages === currentPage ? totalRecords : pageSize * currentPage;
 
-
   return <nav className="gallery-nav pagination" aria-label="pagination" id={id}>
     {!hasPrevPage && <article className="fill-left"/>}
     {hasPrevPage && <Link to={`${path}${createSearchParams({page: firstPage})}`}

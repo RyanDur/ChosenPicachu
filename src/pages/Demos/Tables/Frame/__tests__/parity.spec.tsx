@@ -6,7 +6,6 @@ import {cells} from '@pages/Demos/Tables/Aggregations/cells';
 import {wire} from '../builds/EagerHideAnimated';
 import tableHtml from '../table.html?raw';
 
-
 type CellShape = {
   tag: string;
   classes: string[];

@@ -101,7 +101,6 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
               </label>
             </header>
 
-
             <article className="info-animated">
               <article className="info-animated-wrapper">
                 <article className="info">{value}</article>

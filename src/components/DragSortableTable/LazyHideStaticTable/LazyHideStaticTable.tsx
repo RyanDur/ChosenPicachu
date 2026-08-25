@@ -15,10 +15,7 @@ import {Row} from './Row';
 import '../sortable.css';
 import './LazyHideStaticTable.css';
 
-export type LazyHideStaticTableProps = TableProps & {
-};
-
-export const LazyHideStaticTable: FC<LazyHideStaticTableProps> = (
+export const LazyHideStaticTable: FC<TableProps> = (
     {children, id}
 ) => {
     const {columns, rows, gripped} = dealt(children);

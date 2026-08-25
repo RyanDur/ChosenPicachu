@@ -23,8 +23,6 @@ const feedIsLive = async (): Promise<void> => {
   await waitFor(() => expect(subscribed.size).toBeGreaterThan(0));
 };
 
-
-
 const priceCard = (): HTMLElement => screen.getByRole('region', {name: 'live trades'});
 
 const drawnCandleParts = (selector: string): number => {

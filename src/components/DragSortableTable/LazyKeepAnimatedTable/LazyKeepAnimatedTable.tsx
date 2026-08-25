@@ -16,10 +16,7 @@ import {Row} from './Row';
 import '../sortable.css';
 import './LazyKeepAnimatedTable.css';
 
-export type LazyKeepAnimatedTableProps = TableProps & {
-};
-
-export const LazyKeepAnimatedTable: FC<LazyKeepAnimatedTableProps> = (
+export const LazyKeepAnimatedTable: FC<TableProps> = (
     {children, id}
 ) => {
     const {columns, rows, gripped} = dealt(children);

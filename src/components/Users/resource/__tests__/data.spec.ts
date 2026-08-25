@@ -34,7 +34,6 @@ describe('users data', () => {
     expect(usersSuccess.orNull().length).toEqual(allUsers.length + 1);
     expect(usersSuccess.orNull()[0].id).not.toBeUndefined();
 
-
     const anotherUser = createUser();
     const moreUsers = await api.add(anotherUser).value as Success<User[], never>;
     expect(moreUsers.orNull().length).toEqual(allUsers.length + 2);

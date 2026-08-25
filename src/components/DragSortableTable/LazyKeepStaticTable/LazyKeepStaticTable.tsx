@@ -14,10 +14,7 @@ import {Header} from './Header';
 import {Row} from './Row';
 import '../sortable.css';
 
-export type LazyKeepStaticTableProps = TableProps & {
-};
-
-export const LazyKeepStaticTable: FC<LazyKeepStaticTableProps> = (
+export const LazyKeepStaticTable: FC<TableProps> = (
     {children, id}
 ) => {
     const {columns, rows, gripped} = dealt(children);

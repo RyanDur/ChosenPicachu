@@ -204,7 +204,6 @@ describe('data', () => {
             });
         });
 
-
         test.each`
         source
         ${Source.AIC}
@@ -246,7 +245,6 @@ describe('data', () => {
         total_pages: fromAICArt.pagination.totalPages,
         current_page: fromAICArt.pagination.currentPage
     };
-
 
     const aicArtOptions: AICSearchResponse = {
         pagination,

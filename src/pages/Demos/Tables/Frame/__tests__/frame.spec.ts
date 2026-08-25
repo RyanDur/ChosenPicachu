@@ -172,7 +172,6 @@ describe('the frame table', () => {
     });
   };
 
-
   it('a reseat leaves settled rows untouched', async () => {
     deal();
 
@@ -396,7 +395,6 @@ describe('the frame table', () => {
       expect(document.querySelector('table.column-ghost')).not.toBeInTheDocument();
     });
 
-
     it('the row ghost carries its grip', () => {
       deal(undefined, eagerHideStatic);
       rowRects();
@@ -409,7 +407,6 @@ describe('the frame table', () => {
       fireEvent.pointerUp(surface(), {pointerId: 1});
       expect(document.querySelector('table.column-ghost')).not.toBeInTheDocument();
     });
-
 
     it('a menu sort slides the rows in an animated world', async () => {
       const feed = await streamingFeed();

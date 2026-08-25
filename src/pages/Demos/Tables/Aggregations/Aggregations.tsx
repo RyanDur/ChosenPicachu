@@ -32,7 +32,6 @@ const tables = {
   }
 };
 
-
 export const Aggregations: FC<Props> = ({trades, pace, origin, motion, world}) => {
   const recent = useRecentTrades();
   const Sortable = tables[pace][origin][motion];

@@ -15,10 +15,7 @@ import {Row} from './Row';
 import '../sortable.css';
 import './EagerHideStaticTable.css';
 
-export type EagerHideStaticTableProps = TableProps & {
-};
-
-export const EagerHideStaticTable: FC<EagerHideStaticTableProps> = (
+export const EagerHideStaticTable: FC<TableProps> = (
     {children, id}
 ) => {
     const {columns, rows, gripped} = dealt(children);

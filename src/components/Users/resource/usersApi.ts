@@ -73,7 +73,6 @@ export const createUser = (
   });
 };
 
-
 export const createUserInfo = (): UserInfo => ({
   firstName: randFirstName(),
   lastName: randLastName(),

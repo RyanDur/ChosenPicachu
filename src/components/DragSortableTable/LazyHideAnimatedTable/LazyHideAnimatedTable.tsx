@@ -16,10 +16,7 @@ import {Row} from './Row';
 import '../sortable.css';
 import './LazyHideAnimatedTable.css';
 
-export type LazyHideAnimatedTableProps = TableProps & {
-};
-
-export const LazyHideAnimatedTable: FC<LazyHideAnimatedTableProps> = (
+export const LazyHideAnimatedTable: FC<TableProps> = (
     {children, id}
 ) => {
     const {columns, rows, gripped} = dealt(children);

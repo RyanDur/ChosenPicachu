@@ -16,7 +16,6 @@ import {defaultRecordLimit} from '@components/art-gallery/limits';
 const randomNumberFromRange = (min: number, max = 6) => Math.floor(Math.random() * max) + min;
 export const words = (num = 6) => faker.lorem.words(randomNumberFromRange(1, num));
 
-
 export const users = [
   createUser(),
   createUser(true),
