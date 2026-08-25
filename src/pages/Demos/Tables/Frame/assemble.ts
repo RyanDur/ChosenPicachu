@@ -12,7 +12,6 @@ import lazyKeepAnimatedCss from '@components/DragSortableTable/LazyKeepAnimatedT
 import lazyHideAnimatedCss from '@components/DragSortableTable/LazyHideAnimatedTable/LazyHideAnimatedTable.css?raw';
 import lazyHideStaticCss from '@components/DragSortableTable/LazyHideStaticTable/LazyHideStaticTable.css?raw';
 import type {Motion, Origin, Pace} from '../../Controls';
-import menuCss from '@components/Menu/Menu.css?raw';
 import aggregationsCss from '../Aggregations/Aggregations.css?raw';
 import tableHtml from './table.html?raw';
 import scaffold from './frame.html?raw';
@@ -38,7 +37,6 @@ export const sheets = [
   {name: 'sortable.css', css: sortableCss},
   {name: 'RowGrip.css', css: rowGripCss},
   {name: 'Ghost.css', css: ghostCss},
-  {name: 'Menu.css', css: menuCss},
   {name: 'Aggregations.css', css: aggregationsCss}
 ];
 

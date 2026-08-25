@@ -1,6 +1,5 @@
 import {FC, useState, ReactNode} from 'react';
 import {notEmpty} from '@ryandur/sand';
-import {Menu} from '@components/Menu';
 import {Trade} from '../coinbase';
 import {bucketTrades, candleShapes, mergeLive, volumeShapes} from './shapes';
 import {usePeriodCandles} from '../usePeriodCandles';
@@ -36,16 +35,16 @@ export const Candles: FC<Props> = ({trades, id = 'candle', actions}) => {
       {actions}
       <button type="button" className="menu-toggle rounded-corners period-toggle field caption"
               popoverTarget={`${id}-period`}
-              onPointerDown={event => event.stopPropagation()}
-              onMouseDown={event => event.stopPropagation()}
               aria-label="candle period">{period}</button>
-      <Menu id={`${id}-period`}>
+      <menu id={`${id}-period`} popover="auto" className="menu card rounded-corners lifted">
         {Object.values(Period).map(option =>
-          <button type="button" key={option} className="item sub-title"
-                  popoverTarget={`${id}-period`} popoverTargetAction="hide"
-                  onClick={() => setPeriod(option)}>{option}</button>
+          <li className="entry" key={option}>
+            <button type="button" className="item sub-title"
+                    popoverTarget={`${id}-period`} popoverTargetAction="hide"
+                    onClick={() => setPeriod(option)}>{option}</button>
+          </li>
         )}
-      </Menu>
+      </menu>
     </header>
     <section className="chart-stage">
       <Axes high={notEmpty(candles) ? Math.max(...candles.map(candle => candle.high)) : 0}

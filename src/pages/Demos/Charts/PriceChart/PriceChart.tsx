@@ -1,6 +1,5 @@
 import {FC, useState, ReactNode} from 'react';
 import {has, notEmpty} from '@ryandur/sand';
-import {Menu} from '@components/Menu';
 import {Loading} from '@components/Loading';
 import {LiveTradesState} from '../useLiveTrades';
 import {cents, deltaLabel} from '../money';
@@ -58,16 +57,16 @@ export const PriceChart: FC<Props> = ({trades, id = 'price', actions}) => {
       {actions}
       <button type="button" className="menu-toggle rounded-corners period-toggle field caption"
               popoverTarget={`${id}-period`}
-              onPointerDown={event => event.stopPropagation()}
-              onMouseDown={event => event.stopPropagation()}
               aria-label="price period">{period}</button>
-      <Menu id={`${id}-period`}>
+      <menu id={`${id}-period`} popover="auto" className="menu card rounded-corners lifted">
         {Object.values(Period).map(option =>
-          <button type="button" key={option} className="item sub-title"
-                  popoverTarget={`${id}-period`} popoverTargetAction="hide"
-                  onClick={() => setPeriod(option)}>{option}</button>
+          <li className="entry" key={option}>
+            <button type="button" className="item sub-title"
+                    popoverTarget={`${id}-period`} popoverTargetAction="hide"
+                    onClick={() => setPeriod(option)}>{option}</button>
+          </li>
         )}
-      </Menu>
+      </menu>
     </header>
     <section className="chart-stage">
       <figure className="graph">

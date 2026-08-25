@@ -5,8 +5,7 @@ import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Wo
 import {span, unit} from '../../Recipe/carve';
 import {World, worldParam} from '../params';
 import {Term} from './Term';
-import menuSource from '@components/Menu/Menu.tsx?raw';
-import menuCss from '@components/Menu/Menu.css?raw';
+import menuCss from '../../../../styles/menu.css?raw';
 import headerCss from '@components/DragSortableTable/Header.css?raw';
 import sortMenuSource from '@components/DragSortableTable/SortMenu.tsx?raw';
 import sortingSource from '@components/DragSortableTable/sorting.ts?raw';
@@ -126,7 +125,7 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
             {world === 'react'
               ? <Snippet label="HTML" lines={[
                 ...span(sortMenuSource, '<button type="button" className="menu-toggle rounded-corners"', 'aria-label={`sort ${column}`}/>'), gap,
-                ...span(menuSource, '<menu id={id}', '</menu>')
+                ...span(sortMenuSource, '<menu id={`sort-${column}`}', '</menu>')
               ]}/>
               : <Snippet label="HTML" lines={[
                 ...span(tableSource, '<button type="button" class="menu-toggle rounded-corners"', '</menu>')
@@ -286,7 +285,7 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
           <Codes>
             {world === 'react'
               ? <Snippet label="TS" lines={[
-                ...span(menuSource, 'onPointerDown={event => event.stopPropagation()}',
+                ...span(sortMenuSource, 'onPointerDown={event => event.stopPropagation()}',
                   'onPointerDown={event => event.stopPropagation()}'),
                 aside('// on the toggle and on the menu both')
               ]}/>

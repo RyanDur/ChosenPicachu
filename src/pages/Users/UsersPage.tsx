@@ -7,7 +7,6 @@ import {equalAddresses} from './addresses';
 import {Paths} from '@pages/Paths';
 import {has, maybe} from '@ryandur/sand';
 import {EagerHideAnimatedTable} from '@components/DragSortableTable';
-import {Menu} from '@components/Menu';
 import {age, formatAge, FriendsList} from '@components/Users';
 import './UsersPage.css';
 
@@ -89,34 +88,32 @@ export const UsersPage: FC = () => {
                   {equalAddresses(user.homeAddress, user.workAddress) ? 'Yes' : 'No'}
                   <button type="button" className="menu-toggle rounded-corners raisable"
                           popoverTarget={`menu-${user.id}`}
-                          onPointerDown={event => event.stopPropagation()}
-                          onMouseDown={event => event.stopPropagation()}
                           aria-label={`Actions for ${displayFullName(user.info)}`}/>
-                  <Menu id={`menu-${user.id}`}>
-                      <Link to={`${path}${createSearchParams({
+                  <menu id={`menu-${user.id}`} popover="auto" className="menu card rounded-corners lifted">
+                      <li className="entry"><Link to={`${path}${createSearchParams({
                         id: user.id,
                         mode: 'view'
                       })}`}
                             onClick={dismissed(`menu-${user.id}`)}
-                            className="item sub-title">View</Link>
-                      <Link to={`${path}${createSearchParams({
+                            className="item sub-title">View</Link></li>
+                      <li className="entry"><Link to={`${path}${createSearchParams({
                         id: user.id,
                         mode: 'edit'
                       })}`}
                             onClick={dismissed(`menu-${user.id}`)}
-                            className="item sub-title">Edit</Link>
-                      <Link to={path}
+                            className="item sub-title">Edit</Link></li>
+                      <li className="entry"><Link to={path}
                             className="item sub-title"
                             onClick={() => {
                               dismissed(`menu-${user.id}`)();
                               usersApi.delete(user)
                                 .onSuccess(updateUsers)
                                 .onSuccess(() => navigate(Paths.users));
-                            }}>Remove</Link>
-                      <Link to={`${path}${createSearchParams({id: user.id})}`}
+                            }}>Remove</Link></li>
+                      <li className="entry"><Link to={`${path}${createSearchParams({id: user.id})}`}
                             onClick={dismissed(`menu-${user.id}`)}
-                            className="item sub-title">Clone</Link>
-                  </Menu>
+                            className="item sub-title">Clone</Link></li>
+                  </menu>
                 </section>
               }
             });

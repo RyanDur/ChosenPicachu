@@ -98,10 +98,10 @@
     display: grid;
     justify-items: center;
     grid-template-columns: 1fr;
-    grid-template-areas: 'center';
+    grid-template-areas: 'pager';
 
     .gallery-nav {
-      grid-area: center;
+      grid-area: pager;
     }
   }
 }
@@ -137,10 +137,10 @@
       display: grid;
       justify-items: center;
       grid-template-columns: 1fr var(--base-x-16_5);
-      grid-template-areas: 'center .';
+      grid-template-areas: 'pager .';
 
       .gallery-nav {
-        grid-area: center;
+        grid-area: pager;
       }
     }
   }
@@ -201,10 +201,10 @@
     .app-footer {
       height: var(--base-x-10);
       grid-template-columns: 1fr;
-      grid-template-areas: 'center';
+      grid-template-areas: 'pager';
 
       .gallery-nav {
-        grid-area: center;
+        grid-area: pager;
       }
     }
 

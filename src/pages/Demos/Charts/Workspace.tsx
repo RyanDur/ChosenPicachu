@@ -1,6 +1,5 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
-import {Menu} from '@components/Menu';
 import {Paths} from '@pages/Paths';
 import {Trade} from './coinbase';
 import {ChartKind, matchChartKind} from './kinds';
@@ -49,15 +48,15 @@ export const Workspace: FC<Props> = ({trades, status, product}) => {
         <>
         <button type="button" className="menu-toggle rounded-corners add-chart button secondary"
                 popoverTarget="add-chart"
-                onPointerDown={event => event.stopPropagation()}
-                onMouseDown={event => event.stopPropagation()}
                 aria-label="Add a chart">+</button>
-        <Menu id="add-chart">
+        <menu id="add-chart" popover="auto" className="menu card rounded-corners lifted">
           {absentKinds.map(kind =>
-            <button type="button" key={kind} className="item sub-title"
-                    popoverTarget="add-chart" popoverTargetAction="hide"
-                    onClick={() => add(kind)}>{chartNames[kind]}</button>)}
-        </Menu>
+            <li className="entry" key={kind}>
+              <button type="button" className="item sub-title"
+                      popoverTarget="add-chart" popoverTargetAction="hide"
+                      onClick={() => add(kind)}>{chartNames[kind]}</button>
+            </li>)}
+        </menu>
         </>}
     </header>
     <ul className="chart-list">{chartKinds.map((kind, at) => {
