@@ -22,7 +22,7 @@ export type EagerHideStaticTableProps = TableProps & {
 };
 
 export const EagerHideStaticTable: FC<EagerHideStaticTableProps> = (
-    {columns, rows, draggableColumns = false, draggableRows = false, resizableColumns = false, sortable, id, ...dress}
+    {columns, rows, draggableColumns = false, draggableRows = false, resizableColumns = false, sortable, id}
 ) => {
     const [state, commit] = useTableState(columns.map(({column}) => column), rows);
     const cell: Cell = {state: () => state, commit};
@@ -87,22 +87,15 @@ export const EagerHideStaticTable: FC<EagerHideStaticTableProps> = (
     ): void =>
         commit(current => ({...current, rule: has(direction) ? {column, direction} : undefined}));
 
-    const headerClassName = classNames(dress.thClassName, dress.cellClassName);
-    const rowClassName = classNames(dress.trClassName, dress.rowClassName);
-    const cellClassName = classNames(dress.tdClassName, dress.cellClassName);
-
     return <>
         <table id={id}
                className={classNames(
-                   dress.tableClassName,
+                   'fancy-table',
                    clipped && 'apportioned',
                    (draggableColumns || draggableRows) && 'sortable'
                )}>
-            <thead className={dress.theadClassName}>
-            <tr className={classNames(
-                dress.trClassName,
-                dress.headerRowClassName
-            )}>{ordered.map(column =>
+            <thead className="header">
+            <tr className="row">{ordered.map(column =>
                 <Header key={column.column}
                     column={column}
                     order={order}
@@ -112,7 +105,6 @@ export const EagerHideStaticTable: FC<EagerHideStaticTableProps> = (
                     rule={rule}
                     aloft={columnsTravel.aloft}
                     draggable={draggableColumns}
-                    className={headerClassName}
                     onLift={column => columnLift(column, () => order, () => standing, grabbedColumn(column))}
                     onOrdered={(column, to) =>
                         commit(orderedTo(order.indexOf(column), to))}
@@ -120,7 +112,7 @@ export const EagerHideStaticTable: FC<EagerHideStaticTableProps> = (
                     onRule={sortable ? ruled : undefined}/>
             )}</tr>
             </thead>
-            <tbody className={dress.tbodyClassName}>{standing.map(row =>
+            <tbody className="body">{standing.map(row =>
                 <Row key={row}
                     row={row}
                     cells={rows[row]}
@@ -130,8 +122,6 @@ export const EagerHideStaticTable: FC<EagerHideStaticTableProps> = (
                     gripped={draggableRows}
                     aloft={rowsTravel.aloft}
                     aloftColumn={columnsTravel.aloft}
-                    className={rowClassName}
-                    cellClassName={cellClassName}
                     onLift={row => rowLift(() => order, () => standing, grabbedRow(row))}
                     onArranged={to =>
                         commit(current => nudgedTo(row, to)(baked(current)))}/>
@@ -139,6 +129,6 @@ export const EagerHideStaticTable: FC<EagerHideStaticTableProps> = (
         </table>
         <MoveReport landed={state.landed}/>
         <Aloft columnsTravel={columnsTravel} rowsTravel={rowsTravel}
-               ordered={ordered} rows={rows} standing={standing} dress={dress}/>
+               ordered={ordered} rows={rows} standing={standing}/>
     </>;
 };

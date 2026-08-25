@@ -23,7 +23,7 @@ export type EagerHideAnimatedTableProps = TableProps & {
 };
 
 export const EagerHideAnimatedTable: FC<EagerHideAnimatedTableProps> = (
-    {columns, rows, draggableColumns = false, draggableRows = false, resizableColumns = false, sortable, id, ...dress}
+    {columns, rows, draggableColumns = false, draggableRows = false, resizableColumns = false, sortable, id}
 ) => {
     const [state, commit] = useTableState(columns.map(({column}) => column), rows);
     const cell: Cell = {state: () => state, commit};
@@ -106,10 +106,6 @@ export const EagerHideAnimatedTable: FC<EagerHideAnimatedTableProps> = (
         commit(current => ({...current, rule: next}));
     };
 
-    const headerClassName = classNames(dress.thClassName, dress.cellClassName);
-    const rowClassName = classNames(dress.trClassName, dress.rowClassName);
-    const cellClassName = classNames(dress.tdClassName, dress.cellClassName);
-
     return <>
         <table id={id}
                onAnimationEnd={event => {
@@ -121,15 +117,12 @@ export const EagerHideAnimatedTable: FC<EagerHideAnimatedTableProps> = (
                    }
                }}
                className={classNames(
-                   dress.tableClassName,
+                   'fancy-table',
                    clipped && 'apportioned',
                    (draggableColumns || draggableRows) && 'sortable'
                )}>
-            <thead className={dress.theadClassName}>
-            <tr className={classNames(
-                dress.trClassName,
-                dress.headerRowClassName
-            )}>{ordered.map(column =>
+            <thead className="header">
+            <tr className="row">{ordered.map(column =>
                 <Header key={column.column}
                     column={column}
                     order={order}
@@ -140,7 +133,6 @@ export const EagerHideAnimatedTable: FC<EagerHideAnimatedTableProps> = (
                     aloft={columnsTravel.aloft}
                     slid={slid}
                     draggable={draggableColumns}
-                    className={headerClassName}
                     onLift={column => columnLift(column, () => order, () => standing, grabbedColumn(column))}
                     onOrdered={(column, to, marks) => {
                         setSlid(marks);
@@ -150,7 +142,7 @@ export const EagerHideAnimatedTable: FC<EagerHideAnimatedTableProps> = (
                     onRule={sortable ? ruled : undefined}/>
             )}</tr>
             </thead>
-            <tbody className={dress.tbodyClassName}>{standing.map(row =>
+            <tbody className="body">{standing.map(row =>
                 <Row key={row}
                     row={row}
                     cells={rows[row]}
@@ -162,8 +154,6 @@ export const EagerHideAnimatedTable: FC<EagerHideAnimatedTableProps> = (
                     aloftColumn={columnsTravel.aloft}
                     slid={slid}
                     shifted={shifted}
-                    className={rowClassName}
-                    cellClassName={cellClassName}
                     onLift={row => rowLift(() => order, () => standing, grabbedRow(row))}
                     onArranged={(to, drops) => {
                         setShifted(drops);
@@ -173,6 +163,6 @@ export const EagerHideAnimatedTable: FC<EagerHideAnimatedTableProps> = (
         </table>
         <MoveReport landed={state.landed}/>
         <Aloft columnsTravel={columnsTravel} rowsTravel={rowsTravel}
-               ordered={ordered} rows={rows} standing={standing} dress={dress}/>
+               ordered={ordered} rows={rows} standing={standing}/>
     </>;
 };

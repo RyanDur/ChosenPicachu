@@ -3,24 +3,23 @@ import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import Handle from '@components/grip.svg';
 import {Column, Row} from '@components/Table';
-import {Ghost, GhostDress} from './dress';
+import {Ghost} from './dress';
 
 type Props = {
     at: {x: number; y: number; width: number};
     drift: {x: number; y: number};
-    dress: GhostDress;
     columns: readonly Column[];
     widths: Readonly<Record<string, number | undefined>>;
     row: Row;
 };
 
-export const RowGhost: FC<Props> = ({at, drift, dress, columns, widths, row}) =>
-    <Ghost at={at} drift={drift} className={dress.table}>
-        <tbody className={dress.tbody}>
-        <tr className={dress.row}>
+export const RowGhost: FC<Props> = ({at, drift, columns, widths, row}) =>
+    <Ghost at={at} drift={drift} className="fancy-table">
+        <tbody className="body">
+        <tr className="row">
             {columns.map(({column}, place) => {
                 const share = widths[column];
-                const seat = classNames(dress.cell, place === 0 && 'row-header', has(share) && 'shared', row[column].className, 'ellipsis');
+                const seat = classNames('cell', place === 0 && 'row-header', has(share) && 'shared', row[column].className, 'ellipsis');
                 const width = has(share) ? {'--share': `${share}%`} : undefined;
                 return place === 0
                     ? <th scope="row" className={seat} key={place} style={width}>

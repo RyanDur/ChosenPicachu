@@ -16,7 +16,6 @@ type Props = {
   rule?: { column: string; direction: Direction };
   aloft?: Maybe<string>;
   draggable: boolean;
-  className: string;
   onLift: (column: string) => (event: PointerEvent<HTMLTableCellElement>) => void;
   onOrdered: (column: string, to: number) => void;
   onAwaken: (table: HTMLTableElement) => void;
@@ -25,7 +24,7 @@ type Props = {
 };
 
 export const Header: FC<Props> = (
-  {column, order, share, resizable, rule, aloft = nothing(), draggable, className, onLift, onOrdered, onAwaken, onTraded, onRule}
+  {column, order, share, resizable, rule, aloft = nothing(), draggable, onLift, onOrdered, onAwaken, onTraded, onRule}
 ) => {
   const columnName = column.column;
   const position = order.indexOf(columnName);
@@ -35,7 +34,7 @@ export const Header: FC<Props> = (
   const ordered = ({to}: {from: number; to: number}): void => onOrdered(columnName, to);
 
   return <th className={classNames(
-    className, column.className,
+    'cell', column.className,
     'header-cell',
     resizable && 'clipped',
     travels && 'grabbable',

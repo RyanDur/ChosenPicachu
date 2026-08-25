@@ -39,15 +39,11 @@ describe('the two worlds deal the same table', () => {
   it('the frame markup stands exactly as the react table renders', () => {
     const dealt = windowedAggregates([]).map(cells);
     const {container, unmount} = render(
-      <EagerHideAnimatedTable tableClassName="fancy-table"
+      <EagerHideAnimatedTable
                               draggableColumns
                               draggableRows
                               resizableColumns
                               sortable
-                              theadClassName="header"
-                              trClassName="row"
-                              tbodyClassName="body"
-                              cellClassName="cell"
                               columns={columns}
                               rows={dealt}/>);
     const react = shapeOf(container);

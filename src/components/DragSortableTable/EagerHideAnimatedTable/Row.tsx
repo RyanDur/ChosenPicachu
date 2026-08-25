@@ -17,8 +17,6 @@ type Props = {
   aloftColumn?: Maybe<string>;
   slid?: Slid;
   shifted?: Shifted;
-  className: string;
-  cellClassName: string;
   onLift: (row: number) => (event: PointerEvent<HTMLElement>) => void;
   onArranged: (to: number, drops: Shifted) => void;
 };
@@ -35,8 +33,6 @@ export const Row: FC<Props> = (
     aloftColumn = nothing(),
     slid,
     shifted,
-    className,
-    cellClassName,
     onLift,
     onArranged
   }
@@ -46,14 +42,14 @@ export const Row: FC<Props> = (
   const hidden = aloft.map(held => held === row).orElse(false);
   const drop = shifted?.[row];
 
-  return <tr className={classNames(className, has(drop) && 'shifted')}
+  return <tr className={classNames('row', has(drop) && 'shifted')}
              style={has(drop) ? {'--drop': `${drop}px`} : undefined}>
     {columns.map((column, columnNumber) => {
       const cell = cells[column];
       const displaced = slid?.[column];
       const rowHeader = columnNumber === 0 && gripped;
       const dress = classNames(
-        cellClassName, cell.className,
+        'cell', cell.className,
         rowHeader && 'row-header',
         clipped && 'ellipsis',
         aloftColumn.map(held => held === column).orElse(false) && 'hide',

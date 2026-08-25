@@ -57,15 +57,11 @@ export const Aggregations: FC<Props> = ({trades, pace, origin, motion, world}) =
       <TableFrame pace={pace} origin={origin} motion={motion}
                   veiled={!stood} onStand={() => setStood(true)}/>}
     {(!vanilla || !stood) &&
-      <Sortable tableClassName="fancy-table"
+      <Sortable
            draggableColumns
            draggableRows
            resizableColumns
            sortable
-           theadClassName="header"
-           trClassName="row"
-           tbodyClassName="body"
-           cellClassName="cell"
            columns={columns}
            rows={windowedAggregates(hydrated(recent, trades)).map(cells)}/>}
     <details className="explainer">

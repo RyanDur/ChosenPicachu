@@ -15,19 +15,7 @@ export type Column = Cell & {
   sortable?: boolean;
 }
 
-export type Dress = {
-  tableClassName?: string;
-  theadClassName?: string;
-  tbodyClassName?: string;
-  trClassName?: string;
-  thClassName?: string;
-  tdClassName?: string;
-  headerRowClassName?: string;
-  rowClassName?: string;
-  cellClassName?: string;
-};
-
-export type TableProps = Dress & {
+export type TableProps = {
   columns: Column[];
   rows: Row[];
   id?: string;

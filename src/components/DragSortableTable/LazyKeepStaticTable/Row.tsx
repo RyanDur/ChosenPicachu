@@ -14,25 +14,23 @@ type Props = {
   gripped: boolean;
   aloft?: Maybe<number>;
   aloftColumn?: Maybe<string>;
-  className: string;
-  cellClassName: string;
   onLift: (row: number) => (event: PointerEvent<HTMLElement>) => void;
   onArranged: (to: number) => void;
 };
 
 export const Row: FC<Props> = (
-  {row, cells, columns, clipped, standing, gripped, aloft = nothing(), aloftColumn = nothing(), className, cellClassName, onLift, onArranged}
+  {row, cells, columns, clipped, standing, gripped, aloft = nothing(), aloftColumn = nothing(), onLift, onArranged}
 ) => {
   const position = standing.indexOf(row);
   const arranged = ({to}: {to: number; after: number[]}): void => onArranged(to);
   const hidden = aloft.map(held => held === row).orElse(false);
 
-  return <tr className={className}>
+  return <tr className="row">
     {columns.map((column, columnNumber) => {
       const cell = cells[column];
       const rowHeader = columnNumber === 0 && gripped;
       const dress = classNames(
-        cellClassName, cell.className,
+        'cell', cell.className,
         rowHeader && 'row-header',
         clipped && 'ellipsis',
         aloftColumn.map(held => held === column).orElse(false) && 'hide',

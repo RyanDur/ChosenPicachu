@@ -60,14 +60,9 @@ export const UsersPage: FC = () => {
             <Link to={Paths.users} id="add-new-user" className="add-new-user button primary">Add New User</Link>}
         <EagerHideAnimatedTable
           id="users-table"
-          tableClassName="fancy-table"
           draggableColumns
           draggableRows
           sortable
-          theadClassName="header"
-          trClassName="row"
-          tbodyClassName="body"
-          cellClassName="cell"
           columns={[
             {display: 'Full Name', column: 'fullName', className: 'full-name'},
             {display: 'Home City', column: 'homeCity', className: 'home-city'},

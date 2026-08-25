@@ -17,7 +17,6 @@ type Props = {
   aloft?: Maybe<string>;
   slid?: Slid;
   draggable: boolean;
-  className: string;
   onLift: (column: string) => (event: PointerEvent<HTMLTableCellElement>) => void;
   onOrdered: (column: string, to: number, marks: Slid) => void;
   onAwaken: (table: HTMLTableElement) => void;
@@ -35,7 +34,6 @@ export const Header: FC<Props> = (
     aloft = nothing(),
     slid,
     draggable,
-    className,
     onLift,
     onOrdered,
     onAwaken,
@@ -52,7 +50,7 @@ export const Header: FC<Props> = (
   const ordered = (nudge: ColumnNudge): void => onOrdered(columnName, nudge.to, nudge.marks);
 
   return <th className={classNames(
-    className, column.className,
+    'cell', column.className,
     'header-cell',
     resizable && 'clipped',
     travels && 'grabbable',
