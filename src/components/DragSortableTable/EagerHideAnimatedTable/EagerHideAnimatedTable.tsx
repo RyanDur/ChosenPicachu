@@ -2,7 +2,7 @@ import {FC, MouseEvent, useState} from 'react';
 import {has, maybe} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {classNames} from '@components/class-names';
-import {TableProps, measuredShares} from '@components/Table';
+import {TableProps, dealt, measuredShares} from '@components/Table';
 import {displaced, interior, Shifted, shifts, Slid, surveyed} from '../survey';
 import {columnLift, Grab, grounded, rowLift, surfaceTravel} from '../travel';
 import {eagerColumnFlight, eagerRowFlight} from '../flights';
@@ -23,8 +23,9 @@ export type EagerHideAnimatedTableProps = TableProps & {
 };
 
 export const EagerHideAnimatedTable: FC<EagerHideAnimatedTableProps> = (
-    {columns, rows, draggableColumns = false, draggableRows = false, resizableColumns = false, sortable, id}
+    {children, draggableColumns = false, draggableRows = false, resizableColumns = false, sortable, id}
 ) => {
+    const {columns, rows} = dealt(children);
     const [state, commit] = useTableState(columns.map(({column}) => column), rows);
     const cell: Cell = {state: () => state, commit};
     const [slid, setSlid] = useState<Slid>();

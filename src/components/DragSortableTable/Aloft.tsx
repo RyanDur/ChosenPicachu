@@ -1,6 +1,6 @@
 import {FC, PointerEvent} from 'react';
 import {Maybe, maybe} from '@ryandur/sand';
-import {Column, TableProps} from '@components/Table';
+import {ColumnData, RowData} from '@components/Table';
 import {Drift, Flight} from './travel';
 import {Survey} from './survey';
 import {ColumnGhost, RowGhost} from './ghosts';
@@ -23,8 +23,8 @@ type Travel<SUBJECT> = {
 type Props = {
     columnsTravel: Travel<string>;
     rowsTravel: Travel<number>;
-    ordered: readonly Column[];
-    rows: TableProps['rows'];
+    ordered: readonly ColumnData[];
+    rows: RowData[];
     standing: readonly number[];
 };
 

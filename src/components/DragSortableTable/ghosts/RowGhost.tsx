@@ -2,15 +2,15 @@ import {FC} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import Handle from '@components/grip.svg';
-import {Column, Row} from '@components/Table';
+import {ColumnData, RowData} from '@components/Table';
 import {Ghost} from './dress';
 
 type Props = {
     at: {x: number; y: number; width: number};
     drift: {x: number; y: number};
-    columns: readonly Column[];
+    columns: readonly ColumnData[];
     widths: Readonly<Record<string, number | undefined>>;
-    row: Row;
+    row: RowData;
 };
 
 export const RowGhost: FC<Props> = ({at, drift, columns, widths, row}) =>

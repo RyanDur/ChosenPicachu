@@ -1,10 +1,10 @@
 import {useState} from 'react';
-import {TableProps} from '@components/Table';
+import {RowData} from '@components/Table';
 import {TableState, dealtTableState, standingOf} from './table-state';
 
 export const useTableState = (
     order: readonly string[],
-    rows: TableProps['rows']
+    rows: RowData[]
 ): [TableState, (transition: (state: TableState) => TableState) => void] => {
     const [state, setTableState] = useState<TableState>(() => dealtTableState(order, rows.length));
     const commit = (transition: (state: TableState) => TableState): void =>

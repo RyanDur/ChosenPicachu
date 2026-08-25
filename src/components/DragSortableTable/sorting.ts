@@ -1,5 +1,5 @@
 import {has} from '@ryandur/sand';
-import {TableProps} from '@components/Table';
+import {RowData} from '@components/Table';
 
 export type Direction = 'ascending' | 'descending';
 
@@ -27,7 +27,7 @@ export const directionOf = (label: string): Direction | undefined => {
     return has(choice) ? choice.direction : undefined;
 };
 
-export const ranked = (rows: TableProps['rows'], dealt: readonly number[], rule: Rule): number[] =>
+export const ranked = (rows: RowData[], dealt: readonly number[], rule: Rule): number[] =>
     [...dealt].sort((left, right) => {
         const first = rows[left][rule.column]?.value;
         const second = rows[right][rule.column]?.value;

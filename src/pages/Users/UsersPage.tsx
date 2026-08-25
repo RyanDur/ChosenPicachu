@@ -7,6 +7,7 @@ import {equalAddresses} from './addresses';
 import {Paths} from '@pages/Paths';
 import {has} from '@ryandur/sand';
 import {EagerHideAnimatedTable} from '@components/DragSortableTable';
+import {Cell, Column, Row} from '@components/Table';
 import {age, formatAge, FriendsList, UserMenu} from '@components/Users';
 import './UsersPage.css';
 
@@ -47,44 +48,38 @@ export const UsersPage: FC = () => {
         <h2 className="roster-title title bold">User Candidates</h2>
         {mode === 'view' &&
             <Link to={Paths.users} id="add-new-user" className="add-new-user button primary">Add New User</Link>}
-        <EagerHideAnimatedTable
-          id="users-table"
-          draggableColumns
-          draggableRows
-          sortable
-          columns={[
-            {display: 'Full Name', column: 'fullName', className: 'full-name'},
-            {display: 'Home City', column: 'homeCity', className: 'home-city'},
-            {display: 'Age', column: 'age', className: 'age', sortable: true},
-            {display: 'Friends', column: 'friends', className: 'friends'},
-            {display: 'Works from Home', column: 'worksFromHome', className: 'works-from-home', sortable: true}
-          ]}
-          resizableColumns
-          rows={users.map(user => {
-            const displayFullName = (user: {
-              firstName: string,
-              lastName: string
-            }) => `${user.firstName} ${user.lastName}`;
-            return ({
-              fullName: {display: displayFullName(user.info)},
-              homeCity: {display: user.homeAddress.city},
-              age: {display: formatAge(age(user.info.dob)), value: has(user.info.dob) ? -user.info.dob.getTime() : undefined},
-              friends: {
-                display: <FriendsList user={user} users={users} onChange={update(user)}/>
-              },
-              worksFromHome: {
-                value: equalAddresses(user.homeAddress, user.workAddress) ? 'Yes' : 'No',
-                display: <section className="last-column">
-                  {equalAddresses(user.homeAddress, user.workAddress) ? 'Yes' : 'No'}
-                  <UserMenu user={user} name={displayFullName(user.info)}
+        <EagerHideAnimatedTable id="users-table" draggableColumns draggableRows sortable resizableColumns>
+          <Column name="fullName" className="full-name">Full Name</Column>
+          <Column name="homeCity" className="home-city">Home City</Column>
+          <Column name="age" className="age" sortable>Age</Column>
+          <Column name="friends" className="friends">Friends</Column>
+          <Column name="worksFromHome" className="works-from-home" sortable>Works from Home</Column>
+
+          {users.map(user => {
+            const name = `${user.info.firstName} ${user.info.lastName}`;
+            const worksFromHome = equalAddresses(user.homeAddress, user.workAddress) ? 'Yes' : 'No';
+
+            return <Row key={user.id}>
+              <Cell column="fullName">{name}</Cell>
+              <Cell column="homeCity">{user.homeAddress.city}</Cell>
+              <Cell column="age" value={has(user.info.dob) ? -user.info.dob.getTime() : undefined}>
+                {formatAge(age(user.info.dob))}
+              </Cell>
+              <Cell column="friends">
+                <FriendsList user={user} users={users} onChange={update(user)}/>
+              </Cell>
+              <Cell column="worksFromHome" value={worksFromHome}>
+                <section className="last-column">
+                  {worksFromHome}
+                  <UserMenu user={user} name={name}
                             onRemove={() => usersApi.delete(user)
                               .onSuccess(updateUsers)
                               .onSuccess(() => navigate(Paths.users))}/>
                 </section>
-              }
-            });
+              </Cell>
+            </Row>;
           })}
-        />
+        </EagerHideAnimatedTable>
       </section>
   </>;
 };

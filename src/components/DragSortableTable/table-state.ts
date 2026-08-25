@@ -2,7 +2,7 @@ import {Maybe, has, maybe, nothing} from '@ryandur/sand';
 import {Drift, Flight as FlightBox, Grab, carried, still} from './travel';
 import {Survey} from './survey';
 import {Shares, neighborOf, traded} from '@components/Table/shares';
-import {TableProps} from '@components/Table';
+import {RowData} from '@components/Table';
 import {Rule, ranked} from './sorting';
 import {array} from '@components/arrays';
 
@@ -120,5 +120,5 @@ export const dealtTableState = (order: readonly string[], lanes: number): TableS
   };
 };
 
-export const standingOf = (rows: TableProps['rows'], state: TableState): readonly number[] =>
+export const standingOf = (rows: RowData[], state: TableState): readonly number[] =>
   has(state.rule) ? ranked(rows, state.seats, state.rule) : state.seats;

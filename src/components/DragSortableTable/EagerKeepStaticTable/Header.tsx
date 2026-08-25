@@ -1,7 +1,7 @@
 import {FC, MouseEvent, PointerEvent} from 'react';
 import {Maybe, has, not, nothing} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
-import {Column, ResizeHandle} from '@components/Table';
+import {ColumnData, ResizeHandle} from '@components/Table';
 import {anchored} from '../survey';
 import {staticColumnArrows} from '../travel';
 import {Direction, SortMenu} from '../SortMenu';
@@ -9,7 +9,7 @@ import {sortedBy} from '../sorting';
 import '../Header.css';
 
 type Props = {
-  column: Column;
+  column: ColumnData;
   order: readonly string[];
   share?: number;
   resizable: boolean;

@@ -1,5 +1,5 @@
 import {has} from '@ryandur/sand';
-import {Row} from '@components/Table';
+import {RowData} from '@components/Table';
 import {cents, deltaLabel} from '../../Charts/money';
 import {WindowAggregate} from './fold';
 
@@ -8,7 +8,7 @@ const moved = ({opened, closed}: WindowAggregate) =>
     ? {display: deltaLabel(opened, closed), value: closed - opened}
     : {display: '—'};
 
-export const cells = (aggregate: WindowAggregate): Row => ({
+export const cells = (aggregate: WindowAggregate): RowData => ({
   window: {display: aggregate.window},
   trades: {display: String(aggregate.trades), value: aggregate.trades},
   buys: {display: String(aggregate.buys), value: aggregate.buys},

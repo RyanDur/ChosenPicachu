@@ -2,7 +2,7 @@ import {FC, PointerEvent} from 'react';
 import {Maybe, nothing} from '@ryandur/sand';
 import {staticRowArrows} from '../travel';
 import {classNames} from '@components/class-names';
-import {Row as RowData} from '@components/Table';
+import {RowData} from '@components/Table';
 import {RowGrip} from '../RowGrip';
 
 type Props = {

@@ -1,5 +1,6 @@
 import {fireEvent, render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import {deal} from '@test-support/deal';
 import {
   EagerHideStaticTable, EagerKeepAnimatedTable, EagerKeepStaticTable, LazyKeepStaticTable
 } from '../index';
@@ -59,7 +60,7 @@ describe('drag sortable columns', () => {
   const drop = () => fireEvent.pointerUp(surface(), {pointerId: 1});
 
   test('an eager column follows the pointer as it crosses its neighbors', () => {
-    render(<EagerKeepStaticTable columns={sized} rows={people} draggableColumns/>);
+    render(<EagerKeepStaticTable draggableColumns>{deal(sized, people)}</EagerKeepStaticTable>);
 
     lift('age');
     carryOver('city');
@@ -70,7 +71,7 @@ describe('drag sortable columns', () => {
   });
 
   test('a lazy column waits for the drop', () => {
-    render(<LazyKeepStaticTable columns={sized} rows={people} draggableColumns/>);
+    render(<LazyKeepStaticTable draggableColumns>{deal(sized, people)}</LazyKeepStaticTable>);
 
     lift('age');
     carryOver('city');
@@ -81,7 +82,7 @@ describe('drag sortable columns', () => {
   });
 
   test('a hiding column vanishes while it travels and returns on arrival', () => {
-    render(<EagerHideStaticTable columns={sized} rows={people} draggableColumns/>);
+    render(<EagerHideStaticTable draggableColumns>{deal(sized, people)}</EagerHideStaticTable>);
 
     lift('city');
     expect(header('city').classList).toContain('hide');
@@ -96,7 +97,7 @@ describe('drag sortable columns', () => {
   });
 
   test('a column carried back without dropping comes home', () => {
-    render(<EagerKeepStaticTable columns={sized} rows={people} draggableColumns/>);
+    render(<EagerKeepStaticTable draggableColumns>{deal(sized, people)}</EagerKeepStaticTable>);
 
     lift('age');
     carryOver('city');
@@ -109,7 +110,7 @@ describe('drag sortable columns', () => {
   });
 
   test('a lazy column carried home lands nowhere', () => {
-    render(<LazyKeepStaticTable columns={sized} rows={people} draggableColumns/>);
+    render(<LazyKeepStaticTable draggableColumns>{deal(sized, people)}</LazyKeepStaticTable>);
 
     lift('age');
     carryOver('city');
@@ -120,7 +121,7 @@ describe('drag sortable columns', () => {
   });
 
   test('the switch waits for the inner half of the neighbor', () => {
-    render(<EagerKeepStaticTable columns={sized} rows={people} draggableColumns/>);
+    render(<EagerKeepStaticTable draggableColumns>{deal(sized, people)}</EagerKeepStaticTable>);
 
     lift('age');
     fireEvent.pointerMove(surface(), {buttons: 1, clientX: 332, clientY: 100, pointerId: 1});
@@ -142,7 +143,7 @@ describe('drag sortable columns', () => {
     const person = [{
       name: {display: 'Ada'}, slim: {display: 'few'}, wide: {display: 'many'}, job: {display: 'Analyst'}
     }];
-    render(<EagerKeepStaticTable columns={stretched} rows={person} draggableColumns/>);
+    render(<EagerKeepStaticTable draggableColumns>{deal(stretched, person)}</EagerKeepStaticTable>);
 
     lift('slim');
     fireEvent.pointerMove(surface(), {buttons: 1, clientX: 260, clientY: 100, pointerId: 1});
@@ -154,7 +155,7 @@ describe('drag sortable columns', () => {
   });
 
   test('arrow keys on the resize handle trade shares, never seats', () => {
-    render(<EagerKeepStaticTable columns={sized} rows={people} draggableColumns resizableColumns/>);
+    render(<EagerKeepStaticTable draggableColumns resizableColumns>{deal(sized, people)}</EagerKeepStaticTable>);
 
     const handle = screen.getByRole('button', {name: /resize age/});
     fireEvent.focus(handle);
@@ -164,7 +165,7 @@ describe('drag sortable columns', () => {
   });
 
   test('the first and last columns hold their posts', () => {
-    render(<EagerKeepStaticTable columns={sized} rows={people} draggableColumns/>);
+    render(<EagerKeepStaticTable draggableColumns>{deal(sized, people)}</EagerKeepStaticTable>);
 
     expect(header('name').classList).not.toContain('grabbable');
     expect(header('job').classList).not.toContain('grabbable');
@@ -180,7 +181,7 @@ describe('drag sortable columns', () => {
   });
 
   test('the travelling ghost carries the whole column', () => {
-    render(<EagerKeepStaticTable columns={sized} rows={people} draggableColumns/>);
+    render(<EagerKeepStaticTable draggableColumns>{deal(sized, people)}</EagerKeepStaticTable>);
     [...sourceTable().querySelectorAll('tr')].slice(1).forEach((lane, at) => {
       lane.getBoundingClientRect = () => ({
         left: 0, right: 0, top: 0, bottom: 0, width: 0, height: 40 + at * 10, x: 0, y: 0, toJSON: () => ({})
@@ -210,7 +211,7 @@ describe('drag sortable columns', () => {
   });
 
   test('columns hold still without the opt-in', () => {
-    render(<EagerKeepStaticTable columns={sized} rows={people}/>);
+    render(<EagerKeepStaticTable>{deal(sized, people)}</EagerKeepStaticTable>);
 
     fireEvent.pointerDown(header('age'), {clientX: 100, clientY: 50, pointerId: 1});
     expect(document.querySelector('.drag-surface')).toBeNull();
@@ -218,7 +219,7 @@ describe('drag sortable columns', () => {
   });
 
   test('a keyboard walk says the move', async () => {
-    render(<EagerKeepStaticTable columns={sized} rows={people} draggableColumns/>);
+    render(<EagerKeepStaticTable draggableColumns>{deal(sized, people)}</EagerKeepStaticTable>);
 
     header('age').focus();
     await userEvent.keyboard('{ArrowRight}');
@@ -228,7 +229,7 @@ describe('drag sortable columns', () => {
   });
 
   test('a dropped column says where it landed', () => {
-    render(<EagerKeepStaticTable columns={sized} rows={people} draggableColumns/>);
+    render(<EagerKeepStaticTable draggableColumns>{deal(sized, people)}</EagerKeepStaticTable>);
 
     lift('age');
     carryOver('city');
@@ -296,7 +297,7 @@ describe('drag sortable rows', () => {
   const drop = () => fireEvent.pointerUp(surface(), {pointerId: 1});
 
   test('the row in hand keeps its grip and the table’s proportions', () => {
-    render(<EagerKeepStaticTable columns={sized} rows={people} draggableRows/>);
+    render(<EagerKeepStaticTable draggableRows>{deal(sized, people)}</EagerKeepStaticTable>);
 
     lift('Grace');
 
@@ -316,7 +317,7 @@ describe('drag sortable rows', () => {
   });
 
   test('an eager row follows the pointer as it crosses its neighbors', () => {
-    render(<EagerKeepStaticTable columns={sized} rows={people} draggableRows/>);
+    render(<EagerKeepStaticTable draggableRows>{deal(sized, people)}</EagerKeepStaticTable>);
 
     lift('Ada');
     carryOver('Alan');
@@ -325,7 +326,7 @@ describe('drag sortable rows', () => {
   });
 
   test('a lazy row waits for the drop', () => {
-    render(<LazyKeepStaticTable columns={sized} rows={people} draggableRows/>);
+    render(<LazyKeepStaticTable draggableRows>{deal(sized, people)}</LazyKeepStaticTable>);
 
     lift('Ada');
     carryOver('Alan');
@@ -336,7 +337,7 @@ describe('drag sortable rows', () => {
   });
 
   test('a hiding row vanishes while it travels and returns on arrival', () => {
-    render(<EagerHideStaticTable columns={sized} rows={people} draggableRows/>);
+    render(<EagerHideStaticTable draggableRows>{deal(sized, people)}</EagerHideStaticTable>);
 
     lift('Grace');
     [...rowOf('Grace').querySelectorAll('th, td')]
@@ -350,7 +351,7 @@ describe('drag sortable rows', () => {
   });
 
   test('a row carried back without dropping comes home', () => {
-    render(<EagerKeepStaticTable columns={sized} rows={people} draggableRows/>);
+    render(<EagerKeepStaticTable draggableRows>{deal(sized, people)}</EagerKeepStaticTable>);
 
     lift('Ada');
     carryOver('Grace');
@@ -362,7 +363,7 @@ describe('drag sortable rows', () => {
   });
 
   test('the travelling ghost carries the whole row', () => {
-    render(<EagerKeepStaticTable columns={sized} rows={people} draggableRows/>);
+    render(<EagerKeepStaticTable draggableRows>{deal(sized, people)}</EagerKeepStaticTable>);
 
     lift('Grace');
 
@@ -376,7 +377,7 @@ describe('drag sortable rows', () => {
   });
 
   test('the keyboard walks a row up and down', async () => {
-    render(<EagerKeepStaticTable columns={sized} rows={people} draggableRows/>);
+    render(<EagerKeepStaticTable draggableRows>{deal(sized, people)}</EagerKeepStaticTable>);
 
     grip('Ada').focus();
     await userEvent.keyboard('{ArrowDown}');
@@ -388,13 +389,13 @@ describe('drag sortable rows', () => {
   });
 
   test('rows hold still without the opt-in', () => {
-    render(<EagerKeepStaticTable columns={sized} rows={people}/>);
+    render(<EagerKeepStaticTable>{deal(sized, people)}</EagerKeepStaticTable>);
 
     expect(within(sourceTable()).queryByRole('button', {name: /move row/})).toBeNull();
   });
 
   test('a keyboard nudge says the move', async () => {
-    render(<EagerKeepStaticTable columns={sized} rows={people} draggableRows/>);
+    render(<EagerKeepStaticTable draggableRows>{deal(sized, people)}</EagerKeepStaticTable>);
 
     grip('Ada').focus();
     await userEvent.keyboard('{ArrowDown}');
@@ -404,7 +405,7 @@ describe('drag sortable rows', () => {
   });
 
   test('a dropped row says where it landed', () => {
-    render(<EagerKeepStaticTable columns={sized} rows={people} draggableRows/>);
+    render(<EagerKeepStaticTable draggableRows>{deal(sized, people)}</EagerKeepStaticTable>);
 
     lift('Ada');
     carryOver('Alan');
@@ -444,7 +445,7 @@ describe('sort criteria menus', () => {
   };
 
   test('a criterion chosen from the column menu rules the rows', async () => {
-    render(<EagerKeepStaticTable columns={sized} rows={people} sortable/>);
+    render(<EagerKeepStaticTable sortable>{deal(sized, people)}</EagerKeepStaticTable>);
 
     await userEvent.click(within(menuFor('sort age')).getByText('descending'));
 
@@ -453,17 +454,17 @@ describe('sort criteria menus', () => {
   });
 
   test('the rule keeps sorting as the values change', async () => {
-    const {rerender} = render(<EagerKeepStaticTable columns={sized} rows={people} sortable/>);
+    const {rerender} = render(<EagerKeepStaticTable sortable>{deal(sized, people)}</EagerKeepStaticTable>);
 
     await userEvent.click(within(menuFor('sort age')).getByText('ascending'));
     expect(firstCells()).toEqual(['Ada', 'Alan', 'Grace']);
 
-    rerender(<EagerKeepStaticTable columns={sized} rows={aged(50)} sortable/>);
+    rerender(<EagerKeepStaticTable sortable>{deal(sized, aged(50))}</EagerKeepStaticTable>);
     expect(firstCells()).toEqual(['Alan', 'Grace', 'Ada']);
   });
 
   test('as dealt restores the deal', async () => {
-    render(<EagerKeepStaticTable columns={sized} rows={people} sortable/>);
+    render(<EagerKeepStaticTable sortable>{deal(sized, people)}</EagerKeepStaticTable>);
 
     await userEvent.click(within(menuFor('sort age')).getByText('descending'));
     await userEvent.click(within(menuFor('sort age')).getByText('as dealt'));
@@ -474,7 +475,7 @@ describe('sort criteria menus', () => {
 
   test('a hand on a row ends the rule and keeps the standing order', async () => {
     const {rerender} = render(
-      <EagerKeepStaticTable columns={sized} rows={people} sortable draggableRows/>);
+      <EagerKeepStaticTable sortable draggableRows>{deal(sized, people)}</EagerKeepStaticTable>);
 
     await userEvent.click(within(menuFor('sort age')).getByText('descending'));
     expect(firstCells()).toEqual(['Grace', 'Alan', 'Ada']);
@@ -487,12 +488,12 @@ describe('sort criteria menus', () => {
     expect(firstCells()).toEqual(['Grace', 'Ada', 'Alan']);
     expect(ageHeader()).not.toHaveAttribute('aria-sort');
 
-    rerender(<EagerKeepStaticTable columns={sized} rows={aged(50)} sortable draggableRows/>);
+    rerender(<EagerKeepStaticTable sortable draggableRows>{deal(sized, aged(50))}</EagerKeepStaticTable>);
     expect(firstCells()).toEqual(['Grace', 'Ada', 'Alan']);
   });
 
   test('the menu toggle never lifts the column', () => {
-    render(<EagerKeepStaticTable columns={sized} rows={people} sortable draggableColumns/>);
+    render(<EagerKeepStaticTable sortable draggableColumns>{deal(sized, people)}</EagerKeepStaticTable>);
 
     fireEvent.pointerDown(screen.getByRole('button', {name: 'sort age'}), {clientX: 100, clientY: 50, pointerId: 1});
 
@@ -500,7 +501,7 @@ describe('sort criteria menus', () => {
   });
 
   test('choosing a direction never lifts the column', async () => {
-    render(<EagerKeepStaticTable columns={sized} rows={people} sortable draggableColumns/>);
+    render(<EagerKeepStaticTable sortable draggableColumns>{deal(sized, people)}</EagerKeepStaticTable>);
 
     await userEvent.click(within(menuFor('sort age')).getByText('descending'));
 
@@ -509,7 +510,7 @@ describe('sort criteria menus', () => {
   });
 
   test('a menu appears only where the column asks for one', () => {
-    render(<EagerKeepStaticTable columns={sized} rows={people} sortable resizableColumns/>);
+    render(<EagerKeepStaticTable sortable resizableColumns>{deal(sized, people)}</EagerKeepStaticTable>);
 
     expect(screen.queryByRole('button', {name: 'sort name'})).toBeNull();
     expect(screen.getByRole('button', {name: 'sort age'})).toBeVisible();
@@ -522,7 +523,7 @@ describe('sort criteria menus', () => {
   });
 
   test('no menus without the opt-in', () => {
-    render(<EagerKeepStaticTable columns={sized} rows={people}/>);
+    render(<EagerKeepStaticTable>{deal(sized, people)}</EagerKeepStaticTable>);
 
     expect(screen.queryByRole('button', {name: /^sort/})).toBeNull();
   });
@@ -562,7 +563,7 @@ describe('animated moves', () => {
     const crew = [{
       name: {display: 'Ada'}, age: {display: '36'}, city: {display: 'London'}, job: {display: 'Analyst'}
     }];
-    render(<EagerKeepAnimatedTable columns={four} rows={crew} draggableColumns/>);
+    render(<EagerKeepAnimatedTable draggableColumns>{deal(four, crew)}</EagerKeepAnimatedTable>);
     const table = screen.getAllByRole('table')[0];
     table.getBoundingClientRect = () => ({
       left: 0, right: 600, top: 0, bottom: 100, width: 600, height: 100, x: 0, y: 0, toJSON: () => ({})
@@ -590,7 +591,7 @@ describe('animated moves', () => {
   test('an animated nudge slides the displaced row, not a transition', async () => {
     const transition = vi.fn((update: () => void) => update());
     (document as {startViewTransition?: unknown}).startViewTransition = transition;
-    render(<EagerKeepAnimatedTable columns={sized} rows={people} draggableRows/>);
+    render(<EagerKeepAnimatedTable draggableRows>{deal(sized, people)}</EagerKeepAnimatedTable>);
     const table = screen.getAllByRole('table')[0];
     table.getBoundingClientRect = () => ({
       left: 0, right: 320, top: 0, bottom: 80, width: 320, height: 80, x: 0, y: 0, toJSON: () => ({})
@@ -621,7 +622,7 @@ describe('animated moves', () => {
   test('a static move never asks for a transition', async () => {
     const transition = vi.fn((update: () => void) => update());
     (document as {startViewTransition?: unknown}).startViewTransition = transition;
-    render(<EagerKeepStaticTable columns={sized} rows={people} draggableRows/>);
+    render(<EagerKeepStaticTable draggableRows>{deal(sized, people)}</EagerKeepStaticTable>);
 
     within(screen.getByText('Ada').closest('tr') as HTMLElement)
       .getByRole('button', {name: /move row/}).focus();
@@ -643,7 +644,7 @@ describe('animated moves', () => {
     const crew = [{
       name: {display: 'Ada'}, age: {display: '36'}, city: {display: 'London'}, job: {display: 'Analyst'}
     }];
-    render(<EagerKeepAnimatedTable columns={four} rows={crew} draggableColumns/>);
+    render(<EagerKeepAnimatedTable draggableColumns>{deal(four, crew)}</EagerKeepAnimatedTable>);
     const table = screen.getAllByRole('table')[0];
     table.getBoundingClientRect = () => ({
       left: 0, right: 600, top: 0, bottom: 100, width: 600, height: 100, x: 0, y: 0, toJSON: () => ({})

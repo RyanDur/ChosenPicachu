@@ -1,19 +1,11 @@
 import {render} from '@testing-library/react';
 import {EagerHideAnimatedTable} from '@components/DragSortableTable';
+import {Cell, Column, Row} from '@components/Table';
 import {windowedAggregates} from '@pages/Demos/Tables/Aggregations/fold';
 import {cells} from '@pages/Demos/Tables/Aggregations/cells';
 import {wire} from '../builds/EagerHideAnimated';
 import tableHtml from '../table.html?raw';
 
-const columns = [
-  {display: 'window', column: 'window', className: 'window'},
-  {display: 'trades', column: 'trades', className: 'trades', sortable: true},
-  {display: 'buys', column: 'buys', className: 'buys', sortable: true},
-  {display: 'sells', column: 'sells', className: 'sells', sortable: true},
-  {display: 'volume', column: 'volume', className: 'volume', sortable: true},
-  {display: 'vwap', column: 'vwap', className: 'vwap', sortable: true},
-  {display: 'change', column: 'change', className: 'change', sortable: true}
-];
 
 type CellShape = {
   tag: string;
@@ -37,15 +29,30 @@ const shapeOf = (root: ParentNode): {headers: CellShape[]; rows: CellShape[][]} 
 
 describe('the two worlds deal the same table', () => {
   it('the frame markup stands exactly as the react table renders', () => {
-    const dealt = windowedAggregates([]).map(cells);
     const {container, unmount} = render(
-      <EagerHideAnimatedTable
-                              draggableColumns
-                              draggableRows
-                              resizableColumns
-                              sortable
-                              columns={columns}
-                              rows={dealt}/>);
+      <EagerHideAnimatedTable draggableColumns draggableRows resizableColumns sortable>
+        <Column name="window" className="window">window</Column>
+        <Column name="trades" className="trades" sortable>trades</Column>
+        <Column name="buys" className="buys" sortable>buys</Column>
+        <Column name="sells" className="sells" sortable>sells</Column>
+        <Column name="volume" className="volume" sortable>volume</Column>
+        <Column name="vwap" className="vwap" sortable>vwap</Column>
+        <Column name="change" className="change" sortable>change</Column>
+
+        {windowedAggregates([]).map(aggregate => {
+          const row = cells(aggregate);
+
+          return <Row key={aggregate.window}>
+            <Cell column="window">{row.window.display}</Cell>
+            <Cell column="trades" value={row.trades.value}>{row.trades.display}</Cell>
+            <Cell column="buys" value={row.buys.value}>{row.buys.display}</Cell>
+            <Cell column="sells" value={row.sells.value}>{row.sells.display}</Cell>
+            <Cell column="volume" value={row.volume.value}>{row.volume.display}</Cell>
+            <Cell column="vwap" value={row.vwap.value}>{row.vwap.display}</Cell>
+            <Cell column="change" value={row.change.value}>{row.change.display}</Cell>
+          </Row>;
+        })}
+      </EagerHideAnimatedTable>);
     const react = shapeOf(container);
     unmount();
 

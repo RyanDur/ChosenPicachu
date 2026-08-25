@@ -1,14 +1,14 @@
 import {FC} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
-import {Column, Row} from '@components/Table';
+import {ColumnData, RowData} from '@components/Table';
 import {Ghost} from './dress';
 
 type Props = {
     at: {x: number; y: number; width: number};
     drift: {x: number; y: number};
-    column: Column;
-    rows: readonly Row[];
+    column: ColumnData;
+    rows: readonly RowData[];
     heights: readonly (number | undefined)[];
 };
 

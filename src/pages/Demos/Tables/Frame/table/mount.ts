@@ -1,6 +1,6 @@
 import {has, is, maybe} from '@ryandur/sand';
 import {unconfigured} from '@env';
-import {Row} from '@components/Table';
+import {RowData} from '@components/Table';
 import {Rule} from '@components/DragSortableTable/sorting';
 import {anchored, gripLabel, surveyed} from '@components/DragSortableTable/survey';
 import {windowedAggregates} from '@pages/Demos/Tables/Aggregations/fold';
@@ -73,10 +73,10 @@ const mountTable = (
   let ghost: GhostFlight | undefined;
   let surface: HTMLElement | undefined;
 
-  const folded = (): Row[] =>
+  const folded = (): RowData[] =>
     windowedAggregates(hydrated(history, live.trades)).map(cells);
 
-  const writeCells = (rows: Row[], next: TableState): void => {
+  const writeCells = (rows: RowData[], next: TableState): void => {
     lanes.forEach((lane, at) =>
       measures.forEach(measure => {
         const {display} = rows[at][measure];

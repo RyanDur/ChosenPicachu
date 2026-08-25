@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {has, maybe} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
-import {TableProps, measuredShares} from '@components/Table';
+import {TableProps, dealt, measuredShares} from '@components/Table';
 import {interior} from '../survey';
 import {columnLift, Grab, grounded, rowLift, surfaceTravel} from '../travel';
 import {eagerColumnFlight, eagerRowFlight} from '../flights';
@@ -22,8 +22,9 @@ export type EagerHideStaticTableProps = TableProps & {
 };
 
 export const EagerHideStaticTable: FC<EagerHideStaticTableProps> = (
-    {columns, rows, draggableColumns = false, draggableRows = false, resizableColumns = false, sortable, id}
+    {children, draggableColumns = false, draggableRows = false, resizableColumns = false, sortable, id}
 ) => {
+    const {columns, rows} = dealt(children);
     const [state, commit] = useTableState(columns.map(({column}) => column), rows);
     const cell: Cell = {state: () => state, commit};
     const {order, shares, rule} = state;

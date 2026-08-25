@@ -2,7 +2,7 @@ import {FC, PointerEvent} from 'react';
 import {Maybe, has, nothing} from '@ryandur/sand';
 import {animatedRowArrows} from '../travel';
 import {classNames} from '@components/class-names';
-import {Row as RowData} from '@components/Table';
+import {RowData} from '@components/Table';
 import {RowNudge, Shifted, Slid} from '../survey';
 import {RowGrip} from '../RowGrip';
 

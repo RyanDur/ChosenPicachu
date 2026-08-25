@@ -1,6 +1,6 @@
 import {has} from '@ryandur/sand';
 import {array} from '@components/arrays';
-import {Column} from '@components/Table';
+import {ColumnData} from '@components/Table';
 
 export type Slid = Readonly<Record<string, {toward: 'left' | 'right'; by: number}>>;
 export type Shifted = Readonly<Record<number, number>>;
@@ -153,10 +153,10 @@ export const interior = (at: number, count: number): number =>
     Math.min(Math.max(at, 1), count - 2);
 
 export const placed = (
-    ordered: readonly Column[],
+    ordered: readonly ColumnData[],
     column: string,
     to: number
-): Column[] => {
+): ColumnData[] => {
     const lifted = ordered.find(definition => definition.column === column);
     return has(lifted) ? array.moveToIndex(to, lifted, ordered) : [...ordered];
 };

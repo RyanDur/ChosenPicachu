@@ -2,14 +2,14 @@ import {FC, MouseEvent, PointerEvent} from 'react';
 import {Maybe, has, not, nothing} from '@ryandur/sand';
 import {animatedColumnArrows} from '../travel';
 import {classNames} from '@components/class-names';
-import {Column, ResizeHandle} from '@components/Table';
+import {ColumnData, ResizeHandle} from '@components/Table';
 import {anchored, ColumnNudge, Slid} from '../survey';
 import {Direction, SortMenu} from '../SortMenu';
 import {sortedBy} from '../sorting';
 import '../Header.css';
 
 type Props = {
-  column: Column;
+  column: ColumnData;
   order: readonly string[];
   share?: number;
   resizable: boolean;
