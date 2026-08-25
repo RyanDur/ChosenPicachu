@@ -46,7 +46,7 @@ const dealPlans: Record<World, ReactNode> = {
 const dealCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="HTML" lines={[
-      ...span(dealSource, '<Column name="window"', '<Column name="change" className="change" sortable>change</Column>')
+      ...span(dealSource, '<Column name="window"', '<Column name="change" className="change">change<SortMenu/><ResizeHandle/></Column>')
     ]}/>
     <Snippet label="CSS" lines={[
       ...unit(widthsSource, '.aggregations {')

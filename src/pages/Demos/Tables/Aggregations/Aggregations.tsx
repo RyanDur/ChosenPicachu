@@ -9,7 +9,7 @@ import {TableFrame, warmed} from '../Frame/TableFrame';
 import {Trade} from '../../Charts/coinbase';
 import {windowedAggregates} from './fold';
 import {cells} from './cells';
-import {Cell, Column, Row} from '@components/Table';
+import {Cell, Column, DraggableColumn, DraggableRow, ResizeHandle, SortMenu} from '@components/Table';
 import './Aggregations.css';
 import {hydrated, useRecentTrades} from './useRecentTrades';
 
@@ -49,19 +49,19 @@ export const Aggregations: FC<Props> = ({trades, pace, origin, motion, world}) =
       <TableFrame pace={pace} origin={origin} motion={motion}
                   veiled={!stood} onStand={() => setStood(true)}/>}
     {(!vanilla || !stood) &&
-      <Sortable draggableColumns draggableRows resizableColumns sortable>
-        <Column name="window" className="window">window</Column>
-        <Column name="trades" className="trades" sortable>trades</Column>
-        <Column name="buys" className="buys" sortable>buys</Column>
-        <Column name="sells" className="sells" sortable>sells</Column>
-        <Column name="volume" className="volume" sortable>volume</Column>
-        <Column name="vwap" className="vwap" sortable>vwap</Column>
-        <Column name="change" className="change" sortable>change</Column>
+      <Sortable>
+        <Column name="window" className="window">window<ResizeHandle/></Column>
+        <DraggableColumn name="trades" className="trades">trades<SortMenu/><ResizeHandle/></DraggableColumn>
+        <DraggableColumn name="buys" className="buys">buys<SortMenu/><ResizeHandle/></DraggableColumn>
+        <DraggableColumn name="sells" className="sells">sells<SortMenu/><ResizeHandle/></DraggableColumn>
+        <DraggableColumn name="volume" className="volume">volume<SortMenu/><ResizeHandle/></DraggableColumn>
+        <DraggableColumn name="vwap" className="vwap">vwap<SortMenu/><ResizeHandle/></DraggableColumn>
+        <Column name="change" className="change">change<SortMenu/><ResizeHandle/></Column>
 
         {windowedAggregates(hydrated(recent, trades)).map(aggregate => {
           const row = cells(aggregate);
 
-          return <Row key={aggregate.window}>
+          return <DraggableRow key={aggregate.window}>
             <Cell column="window">{row.window.display}</Cell>
             <Cell column="trades" value={row.trades.value}>{row.trades.display}</Cell>
             <Cell column="buys" value={row.buys.value}>{row.buys.display}</Cell>
@@ -69,7 +69,7 @@ export const Aggregations: FC<Props> = ({trades, pace, origin, motion, world}) =
             <Cell column="volume" value={row.volume.value}>{row.volume.display}</Cell>
             <Cell column="vwap" value={row.vwap.value}>{row.vwap.display}</Cell>
             <Cell column="change" value={row.change.value}>{row.change.display}</Cell>
-          </Row>;
+          </DraggableRow>;
         })}
       </Sortable>}
     <details className="explainer">

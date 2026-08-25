@@ -17,15 +17,12 @@ import '../sortable.css';
 import './EagerKeepAnimatedTable.css';
 
 export type EagerKeepAnimatedTableProps = TableProps & {
-    draggableColumns?: boolean;
-    draggableRows?: boolean;
-    sortable?: boolean;
 };
 
 export const EagerKeepAnimatedTable: FC<EagerKeepAnimatedTableProps> = (
-    {children, draggableColumns = false, draggableRows = false, resizableColumns = false, sortable, id}
+    {children, id}
 ) => {
-    const {columns, rows} = dealt(children);
+    const {columns, rows, gripped} = dealt(children);
     const [state, commit] = useTableState(columns.map(({column}) => column), rows);
     const cell: Cell = {state: () => state, commit};
     const [slid, setSlid] = useState<Slid>();
@@ -37,7 +34,7 @@ export const EagerKeepAnimatedTable: FC<EagerKeepAnimatedTableProps> = (
         const definition = columns.find(({column}) => column === name);
         return has(definition) ? [definition] : [];
     });
-    const clipped = resizableColumns;
+    const clipped = columns.some(({resizable}) => resizable);
 
     const awaken = (table: HTMLTableElement): void =>
         commit(current => has(current.shares) ? current : sharedAs(measuredShares(current.order, table))(current));
@@ -117,7 +114,7 @@ export const EagerKeepAnimatedTable: FC<EagerKeepAnimatedTableProps> = (
                className={classNames(
                    'fancy-table',
                    clipped && 'apportioned',
-                   (draggableColumns || draggableRows) && 'sortable'
+                   (columns.some(({draggable}) => draggable) || gripped.some(Boolean)) && 'sortable'
                )}>
             <thead className="header">
             <tr className="row">{ordered.map(column =>
@@ -125,18 +122,18 @@ export const EagerKeepAnimatedTable: FC<EagerKeepAnimatedTableProps> = (
                     column={column}
                     order={order}
                     share={shares?.[column.column]}
-                    resizable={resizableColumns}
+                    resizable={column.resizable}
                     onAwaken={awaken}
                     rule={rule}
                     slid={slid}
-                    draggable={draggableColumns}
+                    draggable={column.draggable}
                     onLift={column => columnLift(column, () => order, () => standing, grabbedColumn(column))}
                     onOrdered={(column, to, marks) => {
                         setSlid(marks);
                         commit(orderedTo(order.indexOf(column), to));
                     }}
                     onTraded={(column, delta) => commit(tradedBy(column, delta))}
-                    onRule={sortable ? ruled : undefined}/>
+                    onRule={ruled}/>
             )}</tr>
             </thead>
             <tbody className="body">{standing.map(row =>
@@ -146,7 +143,7 @@ export const EagerKeepAnimatedTable: FC<EagerKeepAnimatedTableProps> = (
                     columns={order}
                     clipped={clipped}
                     standing={standing}
-                    gripped={draggableRows}
+                    gripped={gripped[row]}
                     slid={slid}
                     shifted={shifted}
                     onLift={row => rowLift(() => order, () => standing, grabbedRow(row))}

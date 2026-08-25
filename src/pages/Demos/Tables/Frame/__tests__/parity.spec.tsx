@@ -1,6 +1,6 @@
 import {render} from '@testing-library/react';
 import {EagerHideAnimatedTable} from '@components/DragSortableTable';
-import {Cell, Column, Row} from '@components/Table';
+import {Cell, Column, DraggableColumn, DraggableRow, ResizeHandle, SortMenu} from '@components/Table';
 import {windowedAggregates} from '@pages/Demos/Tables/Aggregations/fold';
 import {cells} from '@pages/Demos/Tables/Aggregations/cells';
 import {wire} from '../builds/EagerHideAnimated';
@@ -30,19 +30,19 @@ const shapeOf = (root: ParentNode): {headers: CellShape[]; rows: CellShape[][]} 
 describe('the two worlds deal the same table', () => {
   it('the frame markup stands exactly as the react table renders', () => {
     const {container, unmount} = render(
-      <EagerHideAnimatedTable draggableColumns draggableRows resizableColumns sortable>
-        <Column name="window" className="window">window</Column>
-        <Column name="trades" className="trades" sortable>trades</Column>
-        <Column name="buys" className="buys" sortable>buys</Column>
-        <Column name="sells" className="sells" sortable>sells</Column>
-        <Column name="volume" className="volume" sortable>volume</Column>
-        <Column name="vwap" className="vwap" sortable>vwap</Column>
-        <Column name="change" className="change" sortable>change</Column>
+      <EagerHideAnimatedTable>
+        <Column name="window" className="window">window<ResizeHandle/></Column>
+        <DraggableColumn name="trades" className="trades">trades<SortMenu/><ResizeHandle/></DraggableColumn>
+        <DraggableColumn name="buys" className="buys">buys<SortMenu/><ResizeHandle/></DraggableColumn>
+        <DraggableColumn name="sells" className="sells">sells<SortMenu/><ResizeHandle/></DraggableColumn>
+        <DraggableColumn name="volume" className="volume">volume<SortMenu/><ResizeHandle/></DraggableColumn>
+        <DraggableColumn name="vwap" className="vwap">vwap<SortMenu/><ResizeHandle/></DraggableColumn>
+        <Column name="change" className="change">change<SortMenu/><ResizeHandle/></Column>
 
         {windowedAggregates([]).map(aggregate => {
           const row = cells(aggregate);
 
-          return <Row key={aggregate.window}>
+          return <DraggableRow key={aggregate.window}>
             <Cell column="window">{row.window.display}</Cell>
             <Cell column="trades" value={row.trades.value}>{row.trades.display}</Cell>
             <Cell column="buys" value={row.buys.value}>{row.buys.display}</Cell>
@@ -50,7 +50,7 @@ describe('the two worlds deal the same table', () => {
             <Cell column="volume" value={row.volume.value}>{row.volume.display}</Cell>
             <Cell column="vwap" value={row.vwap.value}>{row.vwap.display}</Cell>
             <Cell column="change" value={row.change.value}>{row.change.display}</Cell>
-          </Row>;
+          </DraggableRow>;
         })}
       </EagerHideAnimatedTable>);
     const react = shapeOf(container);

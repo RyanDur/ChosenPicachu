@@ -26,7 +26,7 @@ describe('resizable columns', () => {
   };
 
   test('the css owns the widths until a hand arrives', () => {
-    render(<EagerKeepStaticTable resizableColumns>{deal(sized, people)}</EagerKeepStaticTable>);
+    render(<EagerKeepStaticTable>{deal(sized, people, {resizable: true})}</EagerKeepStaticTable>);
 
     expect(screen.getByRole('table').classList).toContain('apportioned');
     expect(nameHeader().style.width).toBe('');
@@ -35,7 +35,7 @@ describe('resizable columns', () => {
   });
 
   test('the first touch surveys the headers into the ledger', () => {
-    render(<EagerKeepStaticTable resizableColumns>{deal(sized, people)}</EagerKeepStaticTable>);
+    render(<EagerKeepStaticTable>{deal(sized, people, {resizable: true})}</EagerKeepStaticTable>);
     surveyed();
 
     fireEvent.focus(screen.getByRole('button', {name: 'resize name'}));
@@ -46,7 +46,7 @@ describe('resizable columns', () => {
   });
 
   test('the keyboard moves the boundary and the total holds', async () => {
-    render(<EagerKeepStaticTable resizableColumns>{deal(sized, people)}</EagerKeepStaticTable>);
+    render(<EagerKeepStaticTable>{deal(sized, people, {resizable: true})}</EagerKeepStaticTable>);
     surveyed();
 
     const handle = screen.getByRole('button', {name: 'resize name'});
@@ -61,7 +61,7 @@ describe('resizable columns', () => {
   });
 
   test('dragging the handle trades share between neighbors', () => {
-    render(<EagerKeepStaticTable resizableColumns>{deal(sized, people)}</EagerKeepStaticTable>);
+    render(<EagerKeepStaticTable>{deal(sized, people, {resizable: true})}</EagerKeepStaticTable>);
     surveyed();
 
     const handle = screen.getByRole('button', {name: 'resize name'});
@@ -74,7 +74,7 @@ describe('resizable columns', () => {
   });
 
   test('a resize says the new share', async () => {
-    render(<EagerKeepStaticTable resizableColumns>{deal(sized, people)}</EagerKeepStaticTable>);
+    render(<EagerKeepStaticTable>{deal(sized, people, {resizable: true})}</EagerKeepStaticTable>);
     surveyed();
 
     const handle = screen.getByRole('button', {name: 'resize name'});
@@ -85,7 +85,7 @@ describe('resizable columns', () => {
   });
 
   test('a boundary can never starve a column', async () => {
-    render(<EagerKeepStaticTable resizableColumns>{deal(sized, people)}</EagerKeepStaticTable>);
+    render(<EagerKeepStaticTable>{deal(sized, people, {resizable: true})}</EagerKeepStaticTable>);
     surveyed();
 
     const handle = screen.getByRole('button', {name: 'resize age'});
@@ -96,7 +96,7 @@ describe('resizable columns', () => {
   });
 
   test('resizable columns truncate their values and clip their titles', () => {
-    render(<EagerKeepStaticTable resizableColumns>{deal(sized, people)}</EagerKeepStaticTable>);
+    render(<EagerKeepStaticTable>{deal(sized, people, {resizable: true})}</EagerKeepStaticTable>);
 
     expect(nameHeader().classList).toContain('clipped');
     within(screen.getAllByRole('rowgroup')[1]).getAllByRole('cell')

@@ -16,15 +16,12 @@ import '../sortable.css';
 import './EagerHideStaticTable.css';
 
 export type EagerHideStaticTableProps = TableProps & {
-    draggableColumns?: boolean;
-    draggableRows?: boolean;
-    sortable?: boolean;
 };
 
 export const EagerHideStaticTable: FC<EagerHideStaticTableProps> = (
-    {children, draggableColumns = false, draggableRows = false, resizableColumns = false, sortable, id}
+    {children, id}
 ) => {
-    const {columns, rows} = dealt(children);
+    const {columns, rows, gripped} = dealt(children);
     const [state, commit] = useTableState(columns.map(({column}) => column), rows);
     const cell: Cell = {state: () => state, commit};
     const {order, shares, rule} = state;
@@ -33,7 +30,7 @@ export const EagerHideStaticTable: FC<EagerHideStaticTableProps> = (
         const definition = columns.find(({column}) => column === name);
         return has(definition) ? [definition] : [];
     });
-    const clipped = resizableColumns;
+    const clipped = columns.some(({resizable}) => resizable);
 
     const awaken = (table: HTMLTableElement): void =>
         commit(current => has(current.shares) ? current : sharedAs(measuredShares(current.order, table))(current));
@@ -90,7 +87,7 @@ export const EagerHideStaticTable: FC<EagerHideStaticTableProps> = (
                className={classNames(
                    'fancy-table',
                    clipped && 'apportioned',
-                   (draggableColumns || draggableRows) && 'sortable'
+                   (columns.some(({draggable}) => draggable) || gripped.some(Boolean)) && 'sortable'
                )}>
             <thead className="header">
             <tr className="row">{ordered.map(column =>
@@ -98,16 +95,16 @@ export const EagerHideStaticTable: FC<EagerHideStaticTableProps> = (
                     column={column}
                     order={order}
                     share={shares?.[column.column]}
-                    resizable={resizableColumns}
+                    resizable={column.resizable}
                     onAwaken={awaken}
                     rule={rule}
                     aloft={columnsTravel.aloft}
-                    draggable={draggableColumns}
+                    draggable={column.draggable}
                     onLift={column => columnLift(column, () => order, () => standing, grabbedColumn(column))}
                     onOrdered={(column, to) =>
                         commit(orderedTo(order.indexOf(column), to))}
                     onTraded={(column, delta) => commit(tradedBy(column, delta))}
-                    onRule={sortable ? ruled : undefined}/>
+                    onRule={ruled}/>
             )}</tr>
             </thead>
             <tbody className="body">{standing.map(row =>
@@ -117,7 +114,7 @@ export const EagerHideStaticTable: FC<EagerHideStaticTableProps> = (
                     columns={order}
                     clipped={clipped}
                     standing={standing}
-                    gripped={draggableRows}
+                    gripped={gripped[row]}
                     aloft={rowsTravel.aloft}
                     aloftColumn={columnsTravel.aloft}
                     onLift={row => rowLift(() => order, () => standing, grabbedRow(row))}

@@ -15,15 +15,12 @@ import {Row} from './Row';
 import '../sortable.css';
 
 export type EagerKeepStaticTableProps = TableProps & {
-    draggableColumns?: boolean;
-    draggableRows?: boolean;
-    sortable?: boolean;
 };
 
 export const EagerKeepStaticTable: FC<EagerKeepStaticTableProps> = (
-    {children, draggableColumns = false, draggableRows = false, resizableColumns = false, sortable, id}
+    {children, id}
 ) => {
-    const {columns, rows} = dealt(children);
+    const {columns, rows, gripped} = dealt(children);
     const [state, commit] = useTableState(columns.map(({column}) => column), rows);
     const cell: Cell = {state: () => state, commit};
     const {order, shares, rule} = state;
@@ -32,7 +29,7 @@ export const EagerKeepStaticTable: FC<EagerKeepStaticTableProps> = (
         const definition = columns.find(({column}) => column === name);
         return has(definition) ? [definition] : [];
     });
-    const clipped = resizableColumns;
+    const clipped = columns.some(({resizable}) => resizable);
 
     const awaken = (table: HTMLTableElement): void =>
         commit(current => has(current.shares) ? current : sharedAs(measuredShares(current.order, table))(current));
@@ -89,7 +86,7 @@ export const EagerKeepStaticTable: FC<EagerKeepStaticTableProps> = (
                className={classNames(
                    'fancy-table',
                    clipped && 'apportioned',
-                   (draggableColumns || draggableRows) && 'sortable'
+                   (columns.some(({draggable}) => draggable) || gripped.some(Boolean)) && 'sortable'
                )}>
             <thead className="header">
             <tr className="row">{ordered.map(column =>
@@ -97,15 +94,15 @@ export const EagerKeepStaticTable: FC<EagerKeepStaticTableProps> = (
                     column={column}
                     order={order}
                     share={shares?.[column.column]}
-                    resizable={resizableColumns}
+                    resizable={column.resizable}
                     onAwaken={awaken}
                     rule={rule}
-                    draggable={draggableColumns}
+                    draggable={column.draggable}
                     onLift={column => columnLift(column, () => order, () => standing, grabbedColumn(column))}
                     onOrdered={(column, to) =>
                         commit(orderedTo(order.indexOf(column), to))}
                     onTraded={(column, delta) => commit(tradedBy(column, delta))}
-                    onRule={sortable ? ruled : undefined}/>
+                    onRule={ruled}/>
             )}</tr>
             </thead>
             <tbody className="body">{standing.map(row =>
@@ -115,7 +112,7 @@ export const EagerKeepStaticTable: FC<EagerKeepStaticTableProps> = (
                     columns={order}
                     clipped={clipped}
                     standing={standing}
-                    gripped={draggableRows}
+                    gripped={gripped[row]}
                     onLift={row => rowLift(() => order, () => standing, grabbedRow(row))}
                     onArranged={to =>
                         commit(current => nudgedTo(row, to)(baked(current)))}/>

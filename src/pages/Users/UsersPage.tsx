@@ -7,7 +7,7 @@ import {equalAddresses} from './addresses';
 import {Paths} from '@pages/Paths';
 import {has} from '@ryandur/sand';
 import {EagerHideAnimatedTable} from '@components/DragSortableTable';
-import {Cell, Column, Row} from '@components/Table';
+import {Cell, Column, DraggableColumn, DraggableRow, ResizeHandle, SortMenu} from '@components/Table';
 import {age, formatAge, FriendsList, UserMenu} from '@components/Users';
 import './UsersPage.css';
 
@@ -48,18 +48,18 @@ export const UsersPage: FC = () => {
         <h2 className="roster-title title bold">User Candidates</h2>
         {mode === 'view' &&
             <Link to={Paths.users} id="add-new-user" className="add-new-user button primary">Add New User</Link>}
-        <EagerHideAnimatedTable id="users-table" draggableColumns draggableRows sortable resizableColumns>
-          <Column name="fullName" className="full-name">Full Name</Column>
-          <Column name="homeCity" className="home-city">Home City</Column>
-          <Column name="age" className="age" sortable>Age</Column>
-          <Column name="friends" className="friends">Friends</Column>
-          <Column name="worksFromHome" className="works-from-home" sortable>Works from Home</Column>
+        <EagerHideAnimatedTable id="users-table">
+          <Column name="fullName" className="full-name">Full Name<ResizeHandle/></Column>
+          <DraggableColumn name="homeCity" className="home-city">Home City<ResizeHandle/></DraggableColumn>
+          <DraggableColumn name="age" className="age">Age<SortMenu/><ResizeHandle/></DraggableColumn>
+          <DraggableColumn name="friends" className="friends">Friends<ResizeHandle/></DraggableColumn>
+          <Column name="worksFromHome" className="works-from-home">Works from Home<SortMenu/><ResizeHandle/></Column>
 
           {users.map(user => {
             const name = `${user.info.firstName} ${user.info.lastName}`;
             const worksFromHome = equalAddresses(user.homeAddress, user.workAddress) ? 'Yes' : 'No';
 
-            return <Row key={user.id}>
+            return <DraggableRow key={user.id}>
               <Cell column="fullName">{name}</Cell>
               <Cell column="homeCity">{user.homeAddress.city}</Cell>
               <Cell column="age" value={has(user.info.dob) ? -user.info.dob.getTime() : undefined}>
@@ -77,7 +77,7 @@ export const UsersPage: FC = () => {
                               .onSuccess(() => navigate(Paths.users))}/>
                 </section>
               </Cell>
-            </Row>;
+            </DraggableRow>;
           })}
         </EagerHideAnimatedTable>
       </section>

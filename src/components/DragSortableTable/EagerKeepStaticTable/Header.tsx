@@ -1,7 +1,8 @@
 import {FC, MouseEvent, PointerEvent} from 'react';
 import {Maybe, has, not, nothing} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
-import {ColumnData, ResizeHandle} from '@components/Table';
+import {ColumnData} from '@components/Table';
+import {ResizeHandle} from '@components/Table/ResizeHandle';
 import {anchored} from '../survey';
 import {staticColumnArrows} from '../travel';
 import {Direction, SortMenu} from '../SortMenu';
