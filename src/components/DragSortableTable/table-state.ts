@@ -26,9 +26,28 @@ export const moveReport = (landed: Landed): string => {
   }
 };
 
-export type Cell = {
+export type Transition = (state: TableState) => TableState;
+
+export type TableStore = {
   state: () => TableState;
-  commit: (transition: (state: TableState) => TableState) => void;
+  commit: (transition: Transition) => void;
+  subscribe: (listener: () => void) => () => void;
+};
+
+export const tableStore = (dealt: TableState): TableStore => {
+  let state = dealt;
+  const listeners = new Set<() => void>();
+  return {
+    state: () => state,
+    commit: transition => {
+      state = transition(state);
+      listeners.forEach(listener => listener());
+    },
+    subscribe: listener => {
+      listeners.add(listener);
+      return () => listeners.delete(listener);
+    }
+  };
 };
 
 export type TableState = {
@@ -60,10 +79,10 @@ export const rowLanding = (landing: number | undefined) => (state: TableState): 
 export const dropped = (state: TableState): TableState =>
   ({...state, aloft: undefined, bounds: undefined, flight: undefined, origin: undefined, drift: still});
 
-export const columnAloft = ({aloft}: TableState): Maybe<string> =>
+export const columnAloft = ({aloft}: Pick<TableState, 'aloft'>): Maybe<string> =>
   has(aloft) && aloft.axis === 'column' ? maybe(aloft.held) : nothing();
 
-export const rowAloft = ({aloft}: TableState): Maybe<number> =>
+export const rowAloft = ({aloft}: Pick<TableState, 'aloft'>): Maybe<number> =>
   has(aloft) && aloft.axis === 'row' ? maybe(aloft.held) : nothing();
 
 export const landedColumn = ({aloft}: TableState): Maybe<string> =>
@@ -122,3 +141,16 @@ export const dealtTableState = (order: readonly string[], lanes: number): TableS
 
 export const standingOf = (rows: RowData[], state: TableState): readonly number[] =>
   has(state.rule) ? ranked(rows, state.seats, state.rule) : state.seats;
+
+export const seatedBy = (rows: RowData[]) => (transition: Transition): Transition => state => {
+  const next = transition(state);
+  return {...next, seated: standingOf(rows, next)};
+};
+
+export const dealtIn = (lanes: number) => (state: TableState): TableState => {
+  if (state.seats.length === lanes) {
+    return state;
+  }
+  const seats = Array.from({length: lanes}, (_, at) => at);
+  return {...state, seats, seated: seats};
+};

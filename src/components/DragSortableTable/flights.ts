@@ -1,58 +1,58 @@
 import {maybe} from '@ryandur/sand';
 import {columnUnder, rowUnder} from '@components/DragSortableTable/survey';
 import {eagerTravel, lazyTravel} from '@components/DragSortableTable/travel';
-import {Cell, columnAloft, columnLanding, landedColumn, landedRow, rowAloft, rowLanding} from './table-state';
+import {TableStore, columnAloft, columnLanding, landedColumn, landedRow, rowAloft, rowLanding} from './table-state';
 
-export type FlightAnswers<C extends Cell> = {
-  travel: (cell: C, moving: {clientX: number; clientY: number}) => void;
-  land?: (cell: C) => void;
+export type FlightAnswers<S extends TableStore> = {
+  travel: (store: S, moving: {clientX: number; clientY: number}) => void;
+  land?: (store: S) => void;
 };
 
-type SettleColumn<C extends Cell> = (cell: C, held: string, struck: string) => void;
-type SettleRow<C extends Cell> = (cell: C, held: number, struck: number) => void;
+type SettleColumn<S extends TableStore> = (store: S, held: string, struck: string) => void;
+type SettleRow<S extends TableStore> = (store: S, held: number, struck: number) => void;
 
-export const eagerColumnFlight = <C extends Cell>(settle: SettleColumn<C>): FlightAnswers<C> => ({
-  travel: (cell, moving) => {
-    const {order} = cell.state();
-    columnAloft(cell.state()).and(maybe(cell.state().bounds)).map(([held, measured]) =>
+export const eagerColumnFlight = <S extends TableStore>(settle: SettleColumn<S>): FlightAnswers<S> => ({
+  travel: (store, moving) => {
+    const {order} = store.state();
+    columnAloft(store.state()).and(maybe(store.state().bounds)).map(([held, measured]) =>
       eagerTravel(columnUnder(order, measured), struck =>
-        settle(cell, held, struck))(held, moving));
+        settle(store, held, struck))(held, moving));
   }
 });
 
-export const eagerRowFlight = <C extends Cell>(settle: SettleRow<C>): FlightAnswers<C> => ({
-  travel: (cell, moving) => {
-    const {seated: standing} = cell.state();
-    rowAloft(cell.state()).and(maybe(cell.state().bounds)).map(([held, measured]) =>
+export const eagerRowFlight = <S extends TableStore>(settle: SettleRow<S>): FlightAnswers<S> => ({
+  travel: (store, moving) => {
+    const {seated: standing} = store.state();
+    rowAloft(store.state()).and(maybe(store.state().bounds)).map(([held, measured]) =>
       eagerTravel(rowUnder(standing, measured), struck =>
-        settle(cell, held, struck))(held, moving));
+        settle(store, held, struck))(held, moving));
   }
 });
 
-export const lazyColumnFlight = <C extends Cell>(settle: SettleColumn<C>): FlightAnswers<C> => ({
-  travel: (cell, moving) => {
-    const {order} = cell.state();
-    const landing = landedColumn(cell.state());
-    columnAloft(cell.state()).and(maybe(cell.state().bounds)).map(([held, measured]) =>
-      cell.commit(columnLanding(
+export const lazyColumnFlight = <S extends TableStore>(settle: SettleColumn<S>): FlightAnswers<S> => ({
+  travel: (store, moving) => {
+    const {order} = store.state();
+    const landing = landedColumn(store.state());
+    columnAloft(store.state()).and(maybe(store.state().bounds)).map(([held, measured]) =>
+      store.commit(columnLanding(
         lazyTravel(columnUnder(order, measured))(held, moving, landing.orElse(undefined)))));
   },
-  land: cell => {
-    columnAloft(cell.state()).and(landedColumn(cell.state())).map(([held, struck]) =>
-      settle(cell, held, struck));
+  land: store => {
+    columnAloft(store.state()).and(landedColumn(store.state())).map(([held, struck]) =>
+      settle(store, held, struck));
   }
 });
 
-export const lazyRowFlight = <C extends Cell>(settle: SettleRow<C>): FlightAnswers<C> => ({
-  travel: (cell, moving) => {
-    const {seated: standing} = cell.state();
-    const landing = landedRow(cell.state());
-    rowAloft(cell.state()).and(maybe(cell.state().bounds)).map(([held, measured]) =>
-      cell.commit(rowLanding(
+export const lazyRowFlight = <S extends TableStore>(settle: SettleRow<S>): FlightAnswers<S> => ({
+  travel: (store, moving) => {
+    const {seated: standing} = store.state();
+    const landing = landedRow(store.state());
+    rowAloft(store.state()).and(maybe(store.state().bounds)).map(([held, measured]) =>
+      store.commit(rowLanding(
         lazyTravel(rowUnder(standing, measured))(held, moving, landing.orElse(undefined)))));
   },
-  land: cell => {
-    rowAloft(cell.state()).and(landedRow(cell.state())).map(([held, struck]) =>
-      settle(cell, held, struck));
+  land: store => {
+    rowAloft(store.state()).and(landedRow(store.state())).map(([held, struck]) =>
+      settle(store, held, struck));
   }
 });

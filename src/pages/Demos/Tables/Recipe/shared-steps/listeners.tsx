@@ -19,23 +19,25 @@ export const listenersOnce = (world: World, tableSource: string): ReactNode =>
         and never needed the discipline; the vanilla page attaches once and cannot live without
         it.</Says>
       <Says>Writing back is the same shape in reverse: every handler ends in a commit, a function
-        taking a pure transition from the old state to the new. Ask and commit together are the
-        cell: React’s is useState wearing the commit signature, the vanilla build’s is a variable
-        behind a reconcile. Every listener from here on speaks to the cell and nothing else,
-        which is why each lives in one shared file and every shared block below appears in both
-        worlds unchanged.</Says>
+        taking a pure transition from the old state to the new. Ask, commit and subscribe together
+        are the store, and it is one plain object that both worlds mount unchanged. What differs is
+        who subscribes: React subscribes a component, which re-renders; the vanilla build subscribes
+        a reconcile, which moves nodes. Every listener from here on speaks to the store and nothing
+        else, which is why each lives in one shared file and every shared block below appears in
+        both worlds unchanged.</Says>
       <Codes>
         <Snippet label="TS" lines={[
-          ...unit(stateSource, 'export type Cell'), gap,
+          ...unit(stateSource, 'export type TableStore'), gap,
+          ...unit(stateSource, 'export const tableStore'), gap,
           ...span(travelSource, 'export const columnLift', ') => (event: GrabEvent): void => {'),
           aside('// the order is a question the event asks, not a value the listener keeps')
         ]}/>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...span(tableSource, 'const [state, commit] = useTableState', 'const cell: Cell = ')
+            ...span(tableSource, 'const store = useTableStore', 'useSyncExternalStore(store.subscribe, store.state)')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...unit(frameMount, '  const commit = '), gap,
+            ...span(frameMount, 'const store = tableStore(', '  });'), gap,
             ...span(frameMount, 'const mounted: MountedTable', 'const mounted: MountedTable')
           ]}/>}
       </Codes>

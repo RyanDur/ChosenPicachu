@@ -14,7 +14,7 @@ describe('the hand-written tutorial fragments still tell the truth', () => {
   test.each([
     ['headers render through the order', tableSource, 'order.map(name =>'],
     ['the lifted header blanks by comparison', animatedHeaderSource, "hidden && 'hide',"],
-    ['the lifted column blanks across rows', cellSource, "columnAloft(state).map(held => held === column).orElse(false) && 'hide',"],
+    ['the lifted column blanks across rows', cellSource, "columnAloft({aloft}).map(held => held === column).orElse(false) && 'hide',"],
     ['headers are real column headers', headerSource, 'scope="col"'],
     ['a header names itself to the view transition', animatedHeaderSource, 'viewTransitionName: `header-${name}`'],
     ['a cell names itself to the view transition', rowSource, 'viewTransitionName: `cell-${row}-${column}`'],

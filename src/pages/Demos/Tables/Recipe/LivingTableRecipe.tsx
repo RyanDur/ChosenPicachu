@@ -6,7 +6,7 @@ import {World, worldParam} from '../params';
 import feedSource from '@pages/Demos/Charts/live-trades.ts?raw';
 import foldSource from '@pages/Demos/Tables/Aggregations/fold.ts?raw';
 import dealSource from '@pages/Demos/Tables/Aggregations/Aggregations.tsx?raw';
-import useTableStateSource from '@components/DragSortableTable/useTableState.ts?raw';
+import useTableStoreSource from '@components/DragSortableTable/useTableStore.ts?raw';
 import headerSource from '@components/DragSortableTable/elements/DraggableColumn.tsx?raw';
 import rowSource from '@components/DragSortableTable/elements/Cell.tsx?raw';
 import hydrateSource from '@pages/Demos/Tables/Aggregations/recent-trades.ts?raw';
@@ -93,7 +93,7 @@ const foldCodes: Record<World, ReactNode> = {
   vanilla: <Codes>
     <Snippet label="TS" lines={[
       ...unit(foldSource, 'export const windows'), gap,
-      ...unit(frameMount, 'const reconciled = ')
+      ...unit(frameMount, 'const reconcile = ')
     ]}/>
   </Codes>
 };
@@ -114,13 +114,14 @@ const statePlans: Record<World, ReactNode> = {
 };
 
 const stateFollows: Record<World, ReactNode> = {
-  react: <Says>What follows the commit is React’s half of the deal: the component re-renders, the
-    markup renders through the new state, and React reconciles the real DOM to match, moving
-    only the nodes whose place changed. You never touch the DOM; you only commit the next state.</Says>,
-  vanilla: <Says>What React did for you is the other half: the build holds the same cell with the same
-    write path, and its commit reconciles the page against the new state by hand, moving only
-    the cells whose place changed and writing only the text that differs. The seam between
-    the worlds is exactly here: the state machine is identical; the projection is the
+  react: <Says>What follows the commit is React’s half of the deal: the component is subscribed to the
+    store, so it re-renders, the markup renders through the new state, and React reconciles the
+    real DOM to match, moving only the nodes whose place changed. You never touch the DOM; you
+    only commit the next state.</Says>,
+  vanilla: <Says>What React did for you is the other half: the build mounts the same store with the same
+    write path, and the subscriber it hands the store reconciles the page against the new state
+    by hand, moving only the cells whose place changed and writing only the text that differs.
+    The seam between the worlds is exactly here: the store is identical; the subscriber is the
     difference.</Says>
 };
 
@@ -128,7 +129,7 @@ const stateCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="TS" lines={[
       ...unit(stateSource, 'export type TableState'), gap,
-      ...unit(useTableStateSource, 'export const useTableState')
+      ...unit(useTableStoreSource, 'export const useTableStore')
     ]}/>
   </Codes>,
   vanilla: <Codes>

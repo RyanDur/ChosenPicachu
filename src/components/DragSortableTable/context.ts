@@ -1,29 +1,32 @@
-import {createContext, useContext} from 'react';
+import {createContext, useContext, useSyncExternalStore} from 'react';
 import {RowData} from '@components/Table';
-import {TableState, dealtTableState} from './table-state';
+import {TableState, TableStore, Transition, dealtTableState, tableStore} from './table-state';
 
-export type Transition = (state: TableState) => TableState;
+export type {Transition};
 
 export type TableContext = {
-  state: TableState;
+  store: TableStore;
   rows: RowData[];
   standing: readonly number[];
   clipped: boolean;
-  commit: (transition: Transition) => void;
   settle: (transition: Transition) => void;
 };
 
 const unmounted: TableContext = {
-  state: dealtTableState([], 0),
+  store: tableStore(dealtTableState([], 0)),
   rows: [],
   standing: [],
   clipped: false,
-  commit: () => undefined,
   settle: () => undefined
 };
 
 export const Table = createContext<TableContext>(unmounted);
 export const useTable = (): TableContext => useContext(Table);
+
+export const useTableState = <Slice,>(select: (state: TableState) => Slice): Slice => {
+  const {store} = useTable();
+  return useSyncExternalStore(store.subscribe, () => select(store.state()));
+};
 
 export const Seat = createContext<number>(0);
 export const useSeat = (): number => useContext(Seat);

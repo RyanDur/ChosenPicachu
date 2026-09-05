@@ -3,7 +3,7 @@ import {Codes, Reveal, Says, Snippet, Step, Words, aside, plain} from '../../../
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {Term} from '../Term';
-import {stateSource, frameMount, gap, useTableStateSource} from './sources';
+import {stateSource, frameMount, gap, useTableStoreSource} from './sources';
 
 export const orderInState = (world: World): ReactNode =>
   <Step title="Keep the order in state, not in the data">
@@ -28,7 +28,7 @@ export const orderInState = (world: World): ReactNode =>
         ? <Codes>
           <Snippet label="TS" lines={[
             ...unit(stateSource, 'export type TableState'), gap,
-            ...unit(useTableStateSource, 'export const useTableState')
+            ...unit(useTableStoreSource, 'export const useTableStore')
           ]}/>
           <Snippet label="HTML" lines={[
             plain('<tr>{order.map(key =>'),
@@ -39,8 +39,8 @@ export const orderInState = (world: World): ReactNode =>
           <Snippet label="TS" lines={[
             ...unit(stateSource, 'export type TableState'), gap,
             ...span(frameMount, "const order = [...table.querySelectorAll('thead th')]",
-              'aloft: undefined, bounds: undefined, flight: undefined, origin: undefined, drift: still'),
-            plain('  };')
+              "const order = [...table.querySelectorAll('thead th')]"), gap,
+            ...span(frameMount, 'const store = tableStore(', 'const store = tableStore(')
           ]}/>
           <Snippet label="TS" lines={[
             ...span(frameMount, 'seated.forEach((at, position) => {',

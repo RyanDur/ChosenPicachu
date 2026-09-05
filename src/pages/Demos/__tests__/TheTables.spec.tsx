@@ -320,7 +320,7 @@ describe('the tables demo', () => {
     expect(term).toHaveClass('term');
     const definition = document.getElementById(term.getAttribute('popovertarget') ?? '');
     expect(definition).toHaveTextContent(/the one measurement taken at the grab/);
-    expect(recipe).toHaveTextContent(/export type Cell/);
+    expect(recipe).toHaveTextContent(/export type TableStore/);
     expect(within(recipe).getAllByText('how we built it').length).toBeGreaterThan(0);
     expect(recipe.querySelectorAll('details.step-reveal[open]')).toHaveLength(0);
     expect(recipe).toHaveTextContent(/Commit inside the move/);

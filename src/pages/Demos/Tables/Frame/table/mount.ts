@@ -8,9 +8,9 @@ import {cells} from '@pages/Demos/Tables/Aggregations/cells';
 import {hydrated, recentTrades} from '@pages/Demos/Tables/Aggregations/recent-trades';
 import {LiveTradesState, liveTrades, opening} from '@pages/Demos/Charts/live-trades';
 import {Trade} from '@pages/Demos/Charts/coinbase';
-import {ArrowKey, Grab, columnLift, rowLift, still, surfaceTravel} from '@components/DragSortableTable/travel';
+import {ArrowKey, Grab, columnLift, rowLift, surfaceTravel} from '@components/DragSortableTable/travel';
 import {FlightAnswers} from '@components/DragSortableTable/flights';
-import {Aloft, TableState, MountedTable, baked, columnOf, drifting, dropped, lifted, moveReport, ruledBy, standingOf} from './table-state';
+import {Aloft, MountedTable, TableState, Transition, baked, columnOf, dealtTableState, drifting, dropped, lifted, moveReport, ruledBy, seatedBy, tableStore} from './table-state';
 import {GhostFlight, columnGhost, rowGhost} from './ghosts';
 import {announce, wireMenu} from './menus';
 import {dressShares, wireResize} from './resize';
@@ -58,25 +58,20 @@ const mountTable = (
   {flights, arrows, veils, settle}: Build
 ): void => {
   const lanes = [...body.querySelectorAll('tr')];
-  const dealt = lanes.map((_, at) => at);
   const order = [...table.querySelectorAll('thead th')].map(th => th.classList.item(1) ?? '');
   const measures = order.filter(column => is(document.getElementById(`sort-${column}`)));
   const env = {...unconfigured, ...window.__env};
 
   let history: readonly Trade[] = [];
   let live: LiveTradesState = opening;
-  let state: TableState = {
-    order, seats: dealt, seated: dealt, shares: undefined, rule: undefined,
-    aloft: undefined, bounds: undefined, flight: undefined, origin: undefined, drift: still,
-    landed: undefined
-  };
   let ghost: GhostFlight | undefined;
   let surface: HTMLElement | undefined;
 
   const folded = (): RowData[] =>
     windowedAggregates(hydrated(history, live.trades)).map(cells);
+  let rows: RowData[] = folded();
 
-  const writeCells = (rows: RowData[], next: TableState): void => {
+  const writeCells = (next: TableState): void => {
     lanes.forEach((lane, at) =>
       measures.forEach(measure => {
         const {display} = rows[at][measure];
@@ -156,17 +151,15 @@ const mountTable = (
     }
   };
 
-  const reconciled = (previous: TableState, next: TableState): TableState => {
+  const reconcile = (previous: TableState, next: TableState): void => {
     reconcileFlight(previous, next);
     if (next.order !== previous.order) {
       reconcileColumns(previous.order, next.order);
       dressGrips(table, next);
     }
-    const rows = folded();
-    writeCells(rows, next);
-    const standing = standingOf(rows, next);
-    if (changed(previous.seated, standing)) {
-      reseatRows(standing);
+    writeCells(next);
+    if (changed(previous.seated, next.seated)) {
+      reseatRows(next.seated);
     }
     if (next.rule !== previous.rule) {
       measures.forEach(column => announce(document, column, next.rule));
@@ -183,14 +176,17 @@ const mountTable = (
     if (next.shares !== previous.shares || next.order !== previous.order) {
       dressShares(table, next);
     }
-    return {...next, seated: standing};
   };
 
-  const commit = (transition: (current: TableState) => TableState): void => {
-    state = reconciled(state, transition(state));
-  };
+  const store = tableStore(dealtTableState(order, lanes.length));
+  const commit = (transition: Transition): void => store.commit(seatedBy(rows)(transition));
+  let shown = store.state();
+  store.subscribe(() => {
+    reconcile(shown, store.state());
+    shown = store.state();
+  });
 
-  const mounted: MountedTable = {document, table, body, lanes, state: () => state, commit};
+  const mounted: MountedTable = {...store, commit, document, table, body, lanes};
 
   const choose = (next?: Rule): void => settle(() => commit(ruledBy(next)));
 
@@ -200,7 +196,7 @@ const mountTable = (
     chrome.addEventListener('pointerdown', event => event.stopPropagation()));
 
   const wireColumnGrip = (th: HTMLTableCellElement): void => {
-    const held = columnOf(state, th);
+    const held = columnOf(store.state(), th);
 
     const grabbed = (grab: Grab): void => {
       maybe(veils).map(veil => veil.column.veil(mounted, held));
@@ -223,13 +219,13 @@ const mountTable = (
 
   [...table.querySelectorAll('thead th')].forEach(th => {
     if (th instanceof HTMLElement) {
-      th.style.viewTransitionName = `header-${columnOf(state, th)}`;
+      th.style.viewTransitionName = `header-${columnOf(store.state(), th)}`;
     }
   });
   lanes.forEach((lane, row) => [...lane.cells].forEach((cell, at) => {
     cell.style.viewTransitionName = `cell-${row}-${order[at]}`;
   }));
-  dressGrips(table, state);
+  dressGrips(table, store.state());
   [...table.querySelectorAll('thead th')]
     .filter(th => th instanceof HTMLTableCellElement)
     .forEach(wireColumnGrip);
@@ -241,12 +237,14 @@ const mountTable = (
   if (env.tradeHistory) {
     recentTrades(env.tradeHistory, env.tradeProduct, trades => {
       history = trades;
+      rows = folded();
       commit(current => current);
     });
   }
   if (env.tradeFeed) {
     liveTrades(env.tradeFeed, env.tradeProduct, next => {
       live = next(live);
+      rows = folded();
       commit(current => current);
     }, () => undefined);
   }

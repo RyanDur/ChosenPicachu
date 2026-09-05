@@ -1,4 +1,4 @@
-import {FC, Fragment} from 'react';
+import {FC, Fragment, useSyncExternalStore} from 'react';
 import {has, maybe} from '@ryandur/sand';
 
 import {classNames} from '@components/class-names';
@@ -6,8 +6,8 @@ import {Kit, TableProps, dealt} from '@components/Table';
 import {interior} from '../survey';
 import {grounded, surfaceTravel} from '../travel';
 import {eagerColumnFlight, eagerRowFlight} from '../flights';
-import {Cell, columnAloft, drifting as drifts, dropped, orderedTo, rowAloft, seatedTo, standingOf} from '../table-state';
-import {useTableState} from '../useTableState';
+import {TableStore, columnAloft, drifting as drifts, dropped, orderedTo, rowAloft, seatedTo, standingOf, dealtIn} from '../table-state';
+import {useTableStore} from '../useTableStore';
 import {Aloft} from '../Aloft';
 import {MoveReport} from '../MoveReport';
 import {Column} from '../elements/Column';
@@ -27,9 +27,9 @@ export const EagerKeepAnimatedTable: FC<TableProps> = (
     {children, id}
 ) => {
     const {columns, rows, gripped, columnElements, rowElements} = dealt(children, kit);
-    const [state, commit] = useTableState(columns.map(({column}) => column), rows);
-    const cell: Cell = {state: () => state, commit};
-    const settle = (transition: Transition): void => glide(true)(() => commit(transition));
+    const store = useTableStore(columns.map(({column}) => column), rows);
+    const state = dealtIn(rows.length)(useSyncExternalStore(store.subscribe, store.state));
+    const settle = (transition: Transition): void => glide(true)(() => store.commit(transition));
 
     const {order} = state;
     const standing = standingOf(rows, state);
@@ -45,13 +45,13 @@ export const EagerKeepAnimatedTable: FC<TableProps> = (
     const settleRow = (held: number, struck: number): void =>
         settle(seatedTo(held, struck));
 
-    const drop = (): void => commit(dropped);
+    const drop = (): void => store.commit(dropped);
 
     const drifting = (moving: {clientX: number; clientY: number}): void =>
-        commit(drifts(moving));
+        store.commit(drifts(moving));
 
-    const columnFlight = eagerColumnFlight<Cell>((_cell, held, struck) => settleColumn(held, struck));
-    const rowFlight = eagerRowFlight<Cell>((_cell, held, struck) => settleRow(held, struck));
+    const columnFlight = eagerColumnFlight<TableStore>((_store, held, struck) => settleColumn(held, struck));
+    const rowFlight = eagerRowFlight<TableStore>((_store, held, struck) => settleRow(held, struck));
     const surface = (travel: (moving: {clientX: number; clientY: number}) => void) => ({
         onPointerMove: surfaceTravel(drifting, travel, drop),
         onPointerUp: drop,
@@ -64,17 +64,17 @@ export const EagerKeepAnimatedTable: FC<TableProps> = (
         survey: maybe(state.bounds),
         flight: state.flight ?? grounded,
         drift: state.drift,
-        surface: surface(moving => columnFlight.travel(cell, moving))
+        surface: surface(moving => columnFlight.travel(store, moving))
     };
     const rowsTravel = {
         aloft: rowAloft(state),
         survey: maybe(state.bounds),
         flight: state.flight ?? grounded,
         drift: state.drift,
-        surface: surface(moving => rowFlight.travel(cell, moving))
+        surface: surface(moving => rowFlight.travel(store, moving))
     };
 
-    return <Table.Provider value={{state, rows, standing, clipped, commit, settle}}>
+    return <Table.Provider value={{store, rows, standing, clipped, settle}}>
         <table id={id}
                className={classNames(
                    'fancy-table',

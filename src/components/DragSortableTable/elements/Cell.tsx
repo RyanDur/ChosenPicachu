@@ -1,25 +1,26 @@
 import {FC} from 'react';
 import {classNames} from '@components/class-names';
 import {CellProps} from '@components/Table';
-import {useRow, useTable} from '../context';
+import {useRow, useTable, useTableState} from '../context';
 import {RowGrip} from '../RowGrip';
 import {baked, columnAloft, lifted, nudgedTo, rowAloft} from '../table-state';
 import {Grab, rowArrows, rowLift} from '../travel';
 
 export const Cell: FC<CellProps> = ({column, className, children}) => {
-  const {state, standing, clipped, commit, settle} = useTable();
+  const {store, standing, clipped, settle} = useTable();
   const {row, position, gripped} = useRow();
-  const {order} = state;
+  const order = useTableState(state => state.order);
+  const aloft = useTableState(state => state.aloft);
   const rowHeader = gripped && order[0] === column;
   const dress = classNames(
     'cell', className,
     rowHeader && 'row-header',
     clipped && 'ellipsis',
-    columnAloft(state).map(held => held === column).orElse(false) && 'hide',
-    rowAloft(state).map(held => held === row).orElse(false) && 'hide-across'
+    columnAloft({aloft}).map(held => held === column).orElse(false) && 'hide',
+    rowAloft({aloft}).map(held => held === row).orElse(false) && 'hide-across'
   );
   const drawn = {viewTransitionName: `cell-${row}-${column}`};
-  const grabbed = (grab: Grab): void => commit(current => lifted({axis: 'row', held: row}, grab)(baked(current)));
+  const grabbed = (grab: Grab): void => store.commit(current => lifted({axis: 'row', held: row}, grab)(baked(current)));
   const walked = ({to}: {to: number; after: number[]}): void => settle(current => nudgedTo(row, to)(baked(current)));
 
   return rowHeader

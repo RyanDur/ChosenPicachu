@@ -1,12 +1,12 @@
-import {FC, Fragment} from 'react';
+import {FC, Fragment, useSyncExternalStore} from 'react';
 import {has, maybe} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {Kit, TableProps, dealt} from '@components/Table';
 import {interior} from '../survey';
 import {grounded, surfaceTravel} from '../travel';
 import {lazyColumnFlight, lazyRowFlight} from '../flights';
-import {Cell, columnAloft, drifting as drifts, dropped, orderedTo, rowAloft, seatedTo, standingOf} from '../table-state';
-import {useTableState} from '../useTableState';
+import {TableStore, columnAloft, drifting as drifts, dropped, orderedTo, rowAloft, seatedTo, standingOf, dealtIn} from '../table-state';
+import {useTableStore} from '../useTableStore';
 import {Aloft} from '../Aloft';
 import {MoveReport} from '../MoveReport';
 
@@ -17,7 +17,7 @@ import {DraggableRow} from '../elements/DraggableRow';
 import {Cell as TableCell} from '../elements/Cell';
 import {SortMenu} from '../SortMenu';
 import {ResizeHandle} from '@components/Table/ResizeHandle';
-import {Seat, Table, Transition} from '../context';
+import {Seat, Table} from '../context';
 import '../sortable.css';
 
 const kit: Kit = {Column, DraggableColumn, Row, DraggableRow, Cell: TableCell, SortMenu, ResizeHandle};
@@ -26,9 +26,9 @@ export const LazyKeepStaticTable: FC<TableProps> = (
     {children, id}
 ) => {
     const {columns, rows, gripped, columnElements, rowElements} = dealt(children, kit);
-    const [state, commit] = useTableState(columns.map(({column}) => column), rows);
-    const cell: Cell = {state: () => state, commit};
-    const settle = (transition: Transition): void => commit(transition);
+    const store = useTableStore(columns.map(({column}) => column), rows);
+    const state = dealtIn(rows.length)(useSyncExternalStore(store.subscribe, store.state));
+    const settle = store.commit;
     const {order} = state;
     const standing = standingOf(rows, state);
     const ordered = order.flatMap(name => {
@@ -43,13 +43,13 @@ export const LazyKeepStaticTable: FC<TableProps> = (
     const settleRow = (held: number, struck: number): void =>
         settle(seatedTo(held, struck));
 
-    const drop = (): void => commit(dropped);
+    const drop = (): void => store.commit(dropped);
 
     const drifting = (moving: {clientX: number; clientY: number}): void =>
-        commit(drifts(moving));
+        store.commit(drifts(moving));
 
-    const columnFlight = lazyColumnFlight<Cell>((_cell, held, struck) => settleColumn(held, struck));
-    const rowFlight = lazyRowFlight<Cell>((_cell, held, struck) => settleRow(held, struck));
+    const columnFlight = lazyColumnFlight<TableStore>((_store, held, struck) => settleColumn(held, struck));
+    const rowFlight = lazyRowFlight<TableStore>((_store, held, struck) => settleRow(held, struck));
     const surface = (travel: (moving: {clientX: number; clientY: number}) => void, land: () => void) => {
         const landed = (): void => {
             land();
@@ -68,17 +68,17 @@ export const LazyKeepStaticTable: FC<TableProps> = (
         survey: maybe(state.bounds),
         flight: state.flight ?? grounded,
         drift: state.drift,
-        surface: surface(moving => columnFlight.travel(cell, moving), () => maybe(columnFlight.land).map(land => land(cell)))
+        surface: surface(moving => columnFlight.travel(store, moving), () => maybe(columnFlight.land).map(land => land(store)))
     };
     const rowsTravel = {
         aloft: rowAloft(state),
         survey: maybe(state.bounds),
         flight: state.flight ?? grounded,
         drift: state.drift,
-        surface: surface(moving => rowFlight.travel(cell, moving), () => maybe(rowFlight.land).map(land => land(cell)))
+        surface: surface(moving => rowFlight.travel(store, moving), () => maybe(rowFlight.land).map(land => land(store)))
     };
 
-    return <Table.Provider value={{state, rows, standing, clipped, commit, settle}}>
+    return <Table.Provider value={{store, rows, standing, clipped, settle}}>
         <table id={id}
                className={classNames(
                    'fancy-table',

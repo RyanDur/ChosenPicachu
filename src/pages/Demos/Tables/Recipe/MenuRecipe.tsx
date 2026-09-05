@@ -204,7 +204,7 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
             ]}/>
             {world === 'react'
               ? <Snippet label="HTML" lines={[
-                ...span(headerSrc, 'aria-sort={sortedBy(name, state.rule)}', 'aria-sort={sortedBy(name, state.rule)}')
+                ...span(headerSrc, 'aria-sort={sortedBy(name, rule)}', 'aria-sort={sortedBy(name, rule)}')
               ]}/>
               : <Snippet label="HTML" lines={[
                 ...span(tableSource, '<th scope="col" class="cell trades header-cell clipped">', 'aria-label="sort trades"></button>')

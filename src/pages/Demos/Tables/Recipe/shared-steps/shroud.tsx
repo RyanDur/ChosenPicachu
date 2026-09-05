@@ -28,7 +28,7 @@ export const hideOrigin = (world: World, headerSource: string, cssSource: string
       <Codes>
         {world === 'react'
           ? <Snippet label="HTML" lines={[
-            ...span(headerSource, 'const hidden = columnAloft(state)', 'const hidden = columnAloft(state)'), gap,
+            ...span(headerSource, 'const hidden = columnAloft({aloft})', 'const hidden = columnAloft({aloft})'), gap,
             ...span(headerSource, "hidden && 'hide',", "hidden && 'hide',")
           ]}/>
           : <Snippet label="TS" lines={[
@@ -37,7 +37,7 @@ export const hideOrigin = (world: World, headerSource: string, cssSource: string
           ]}/>}
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...span(headerSource, 'const hidden = columnAloft(state).map(held => held === name).orElse(false);', 'const hidden = columnAloft(state).map(held => held === name).orElse(false);'),
+            ...span(headerSource, 'const hidden = columnAloft({aloft}).map(held => held === name).orElse(false);', 'const hidden = columnAloft({aloft}).map(held => held === name).orElse(false);'),
             aside('// the hide table needs no flag; each header compares itself to the aloft key')
           ]}/>
           : undefined}
