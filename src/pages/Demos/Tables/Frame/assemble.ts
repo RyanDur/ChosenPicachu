@@ -5,10 +5,8 @@ import headerCss from '@components/DragSortableTable/Header.css?raw';
 import sortableCss from '@components/DragSortableTable/sortable.css?raw';
 import rowGripCss from '@components/DragSortableTable/RowGrip.css?raw';
 import ghostCss from '@components/DragSortableTable/ghosts/Ghost.css?raw';
-import eagerKeepAnimatedCss from '@components/DragSortableTable/EagerKeepAnimatedTable/EagerKeepAnimatedTable.css?raw';
 import eagerHideAnimatedCss from '@components/DragSortableTable/EagerHideAnimatedTable/EagerHideAnimatedTable.css?raw';
 import eagerHideStaticCss from '@components/DragSortableTable/EagerHideStaticTable/EagerHideStaticTable.css?raw';
-import lazyKeepAnimatedCss from '@components/DragSortableTable/LazyKeepAnimatedTable/LazyKeepAnimatedTable.css?raw';
 import lazyHideAnimatedCss from '@components/DragSortableTable/LazyHideAnimatedTable/LazyHideAnimatedTable.css?raw';
 import lazyHideStaticCss from '@components/DragSortableTable/LazyHideStaticTable/LazyHideStaticTable.css?raw';
 import type {Motion, Origin, Pace} from '../../Controls';
@@ -44,11 +42,11 @@ export type FrameConfig = {pace: Pace; origin: Origin; motion: Motion};
 
 const variantSheets: Record<Pace, Record<Origin, Record<Motion, {name: string; css: string} | undefined>>> = {
   eager: {
-    keep: {animated: {name: 'EagerKeepAnimatedTable.css', css: eagerKeepAnimatedCss}, static: undefined},
+    keep: {animated: undefined, static: undefined},
     hide: {animated: {name: 'EagerHideAnimatedTable.css', css: eagerHideAnimatedCss}, static: {name: 'EagerHideStaticTable.css', css: eagerHideStaticCss}}
   },
   lazy: {
-    keep: {animated: {name: 'LazyKeepAnimatedTable.css', css: lazyKeepAnimatedCss}, static: undefined},
+    keep: {animated: undefined, static: undefined},
     hide: {animated: {name: 'LazyHideAnimatedTable.css', css: lazyHideAnimatedCss}, static: {name: 'LazyHideStaticTable.css', css: lazyHideStaticCss}}
   }
 };

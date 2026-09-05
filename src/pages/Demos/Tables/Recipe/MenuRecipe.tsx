@@ -28,23 +28,21 @@ type Build = {
   buildSrc: string;
 };
 
-const ruled = ({world, headerSrc, buildSrc}: Build, motion: Motion, dial: ReactNode) => motion === 'animated'
-  ? <Step title="Rule, measure, and mark" dial={dial}>
+const ruled = ({world, headerSrc}: Build, motion: Motion, dial: ReactNode) => motion === 'animated'
+  ? <Step title="Rule, and let the platform draw the reseat" dial={dial}>
       <Words want="Choosing a direction reorders every row at once. On the animated table, each row deserves to be drawn sliding from where it was.">
-        <Says>A sort is a reorder like any drag, so the slide machinery should serve it:
-          measure the <Term word="seats">seats</Term> before the rule lands, mark every moved
-          row with its old offset, and commit the rule last.</Says>
+        <Says>A sort is a reorder like any drag, so it should settle like one: the rule
+          lands through the same view transition the drags use, and every named cell slides
+          to its ranked seat.</Says>
       </Words>
       <Reveal>
         {world === 'react'
-          ? <Says>The menu click’s own event reaches the table element, so the animated table’s
-            ruled handler measures the seats before the rule lands and marks every moved row with
-            its old offset. The same slide the drags play runs for the sort; the rule
-            itself is one state update at the end.</Says>
-          : <Says>Choosing measures the seats before the rule lands: choose reads the
-            row heights first, reseats, and then the variant’s ruled hook marks every moved row
-            with its old offset. The same slide the drags play runs for the sort; the
-            animated build declares the hook, and the static builds simply do not.</Says>}
+          ? <Says>The column settles the rule; the settle is a view transition, so the rows are
+            snapshotted before the rule lands and drawn sliding to where the rank puts them.
+            The rule itself is one state update, and the table never measured a seat.</Says>
+          : <Says>Choosing settles the rule; the build’s settle is a view transition, so the
+            reseat is snapshotted and drawn by the platform. The rule itself is one commit, and
+            the mount never measured a seat.</Says>}
         <Codes>
           {world === 'react'
             ? <Snippet label="TS" lines={[
@@ -52,8 +50,7 @@ const ruled = ({world, headerSrc, buildSrc}: Build, motion: Motion, dial: ReactN
             ]}/>
             : <Snippet label="TS" lines={[
               ...unit(frameMount, '  const choose = '), gap,
-              ...unit(settlesSource, 'export const shiftsRuled'), gap,
-              ...span(buildSrc, 'ruled: shiftsRuled', 'ruled: shiftsRuled')
+              ...unit(settlesSource, 'export const glided')
             ]}/>}
         </Codes>
       </Reveal>
@@ -65,10 +62,10 @@ const ruled = ({world, headerSrc, buildSrc}: Build, motion: Motion, dial: ReactN
       </Words>
       <Reveal>
         {world === 'react'
-          ? <Says>This is the static table: ruled sets the rule, and nothing else exists in the
-            file. The rows cut to their ranked seats on the next frame.</Says>
-          : <Says>This is the static build: choose sets the rule and paints, and no ruled hook
-            exists in the file. The rows cut to their ranked seats in the same breath.</Says>}
+          ? <Says>This is the static table: ruled settles the rule, and its settle is the commit.
+            The rows cut to their ranked seats on the next frame.</Says>
+          : <Says>This is the static build: choose settles the rule, and its settle calls the
+            update directly. The rows cut to their ranked seats in the same breath.</Says>}
         <Codes>
           {world === 'react'
             ? <Snippet label="TS" lines={[

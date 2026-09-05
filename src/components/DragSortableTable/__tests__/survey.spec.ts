@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest';
-import {columnNudge, columnSteps, gripLabel, nudgedColumn, nudgedRow, rowNudge, rowSteps, struckAway, swapped} from '../survey';
+import {columnNudge, columnSteps, gripLabel, nudgedColumn, nudgedRow, rowNudge, rowSteps, struckAway} from '../survey';
 
 describe('the keyboard vocabulary', () => {
   it('claims exactly the two arrows per axis', () => {
@@ -21,37 +21,19 @@ describe('the keyboard vocabulary', () => {
     expect(nudgedRow([2, 0, 1], 1, 1)).toEqual({from: 2, to: 2});
   });
 
-  it('marks both parties of a swap, each by the other’s share of the gap', () => {
-    const measured = {left: 0, top: 0, width: 110, height: 40, columnWidths: {trades: 40, buys: 60}};
 
-    expect(swapped(measured, ['trades', 'buys'])('trades', 'buys', 1)).toEqual({
-      trades: {toward: 'right', by: 70},
-      buys: {toward: 'left', by: 50}
-    });
-  });
-
-  it('rules a column nudge whole: the walk, the clamp, and both marks', () => {
-    const measured = {left: 0, top: 0, width: 110, height: 40, columnWidths: {window: 10, trades: 40, buys: 60, change: 0}};
+  it('rules a column nudge whole: the walk and the clamp', () => {
     const order = ['window', 'trades', 'buys', 'change'];
 
-    expect(columnNudge(order, measured)('trades', 1)).toEqual({
-      from: 1,
-      to: 2,
-      moved: {
-        trades: {toward: 'right', by: 60},
-        buys: {toward: 'left', by: 40}
-      }
-    });
-    expect(columnNudge(order, measured)('trades', -1)).toBeUndefined();
+    expect(columnNudge(order)('trades', 1)).toEqual({from: 1, to: 2});
+    expect(columnNudge(order)('trades', -1)).toBeUndefined();
   });
 
-  it('rules a row nudge whole: the seat, the seating after, and the drops', () => {
-    const nudge = rowNudge([0, 1, 2], {0: 40, 1: 40, 2: 40})(0, 1);
+  it('rules a row nudge whole: the seat and the seating after', () => {
+    const nudge = rowNudge([0, 1, 2])(0, 1);
 
     expect(nudge.to).toBe(1);
     expect(nudge.after).toEqual([1, 0, 2]);
-    expect(nudge.moved).toEqual({0: -40, 1: 40});
-    expect(rowNudge([0, 1, 2], {0: 40, 1: 40, 2: 40})(0, -1).moved).toEqual({});
   });
 
   it('rules a strike: another seat strikes, home and nothing never do', () => {

@@ -1,17 +1,18 @@
-import {staticColumnArrows, staticRowArrows} from '@components/DragSortableTable/travel';
+import {columnArrows, rowArrows} from '@components/DragSortableTable/travel';
 import {mount, veiled} from '../table';
-import {staticArranged, staticOrdered, staticSettleColumn, staticSettleRow} from './settles';
+import {arranged, cut, ordered, settleColumn, settleRow} from './settles';
 import {lazyColumnFlight, lazyRowFlight} from '@components/DragSortableTable/flights';
 
 export const wire = (document: Document): void =>
   mount(document, {
     flights: {
-      column: lazyColumnFlight(staticSettleColumn),
-      row: lazyRowFlight(staticSettleRow)
+      column: lazyColumnFlight(settleColumn(cut)),
+      row: lazyRowFlight(settleRow(cut))
     },
     arrows: {
-      column: (mounted, held) => staticColumnArrows(held, () => mounted.state().order, staticOrdered(mounted)),
-      row: (mounted, held) => staticRowArrows(held, () => mounted.state().seated, staticArranged(mounted, held))
+      column: (mounted, held) => columnArrows(held, () => mounted.state().order, ordered(cut)(mounted)),
+      row: (mounted, held) => rowArrows(held, () => mounted.state().seated, arranged(cut)(mounted, held))
     },
+    settle: cut,
     veils: veiled,
   });

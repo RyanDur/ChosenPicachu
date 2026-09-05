@@ -10,7 +10,7 @@ import {columnAloft, ruledBy, sharedAs, tradedBy} from '../table-state';
 import '../Header.css';
 
 export const Column: FC<ColumnProps> = ({name, className, children}) => {
-  const {state, clipped, commit} = useTable();
+  const {state, clipped, commit, settle} = useTable();
   const {order} = state;
   const share = state.shares?.[name];
   const hidden = columnAloft(state).map(held => held === name).orElse(false);
@@ -20,7 +20,7 @@ export const Column: FC<ColumnProps> = ({name, className, children}) => {
   const awaken = (table: HTMLTableElement): void =>
     commit(current => has(current.shares) ? current : sharedAs(measuredShares(current.order, table))(current));
   const ruled: ColumnContext['onRule'] = direction =>
-    commit(ruledBy(has(direction) ? {column: name, direction} : undefined));
+    settle(ruledBy(has(direction) ? {column: name, direction} : undefined));
 
   return <ColumnSetting.Provider value={{name, share, onAwaken: awaken, onTrade: delta => commit(tradedBy(name, delta)), onRule: ruled}}>
     <th className={classNames(
@@ -32,7 +32,7 @@ export const Column: FC<ColumnProps> = ({name, className, children}) => {
     )}
         scope="col"
         aria-sort={sortedBy(name, state.rule)}
-        style={has(share) ? {'--share': `${share}%`} : undefined}>
+        style={{viewTransitionName: `header-${name}`, ...(has(share) ? {'--share': `${share}%`} : {})}}>
       <div className={classNames('header-cell-content',
         rankable && 'rankable',
         resizable && order.length > 1 && 'resizable')}>

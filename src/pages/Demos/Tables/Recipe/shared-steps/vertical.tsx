@@ -37,8 +37,7 @@ export const carryVertical = (world: World, tableSource: string): ReactNode =>
           ]}/>
           : <Snippet label="TS" lines={[
             ...unit(surveySource, 'export const rowUnder'), gap,
-            ...unit(settlesSource, 'export const animatedSettleRow'), gap,
-            ...unit(settlesSource, 'export const staticSettleRow')
+            ...unit(settlesSource, 'export const settleRow')
           ]}/>}
       </Codes>
     </Reveal>

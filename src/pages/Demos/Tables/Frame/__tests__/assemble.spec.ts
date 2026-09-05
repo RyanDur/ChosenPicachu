@@ -35,7 +35,7 @@ describe('the frame assembly', () => {
     expect(document).toContain(tableHtml);
     expect(document).toContain('"tradeFeed":"wss://feed.test/"');
     expect(document).toContain('"pace":"eager"');
-    expect(document).toContain('@keyframes displaced');
+    expect(document).toContain('::view-transition-group(*)');
     expect(document).not.toContain('@import');
   });
 });

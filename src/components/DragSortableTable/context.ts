@@ -1,14 +1,16 @@
 import {createContext, useContext} from 'react';
 import {RowData} from '@components/Table';
 import {TableState, dealtTableState} from './table-state';
-import {RowsMoved, ColumnsMoved} from './survey';
+
+export type Transition = (state: TableState) => TableState;
 
 export type TableContext = {
   state: TableState;
   rows: RowData[];
   standing: readonly number[];
   clipped: boolean;
-  commit: (transition: (state: TableState) => TableState) => void;
+  commit: (transition: Transition) => void;
+  settle: (transition: Transition) => void;
 };
 
 const unmounted: TableContext = {
@@ -16,21 +18,12 @@ const unmounted: TableContext = {
   rows: [],
   standing: [],
   clipped: false,
-  commit: () => undefined
+  commit: () => undefined,
+  settle: () => undefined
 };
 
 export const Table = createContext<TableContext>(unmounted);
 export const useTable = (): TableContext => useContext(Table);
-
-export type MovedContext = {
-  columnsMoved?: ColumnsMoved;
-  rowsMoved?: RowsMoved;
-  columnsMove: (marks?: ColumnsMoved) => void;
-  rowsMove: (drops?: RowsMoved) => void;
-};
-
-export const Moved = createContext<MovedContext>({columnsMove: () => undefined, rowsMove: () => undefined});
-export const useMoved = (): MovedContext => useContext(Moved);
 
 export const Seat = createContext<number>(0);
 export const useSeat = (): number => useContext(Seat);

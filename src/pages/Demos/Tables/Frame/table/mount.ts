@@ -2,7 +2,7 @@ import {has, is, maybe} from '@ryandur/sand';
 import {unconfigured} from '@env';
 import {RowData} from '@components/Table';
 import {Rule} from '@components/DragSortableTable/sorting';
-import {anchored, gripLabel, surveyed} from '@components/DragSortableTable/survey';
+import {anchored, gripLabel} from '@components/DragSortableTable/survey';
 import {windowedAggregates} from '@pages/Demos/Tables/Aggregations/fold';
 import {cells} from '@pages/Demos/Tables/Aggregations/cells';
 import {hydrated, recentTrades} from '@pages/Demos/Tables/Aggregations/recent-trades';
@@ -25,7 +25,7 @@ export type Build = {
     column: {veil: (mounted: MountedTable, held: string) => void; unveil: (mounted: MountedTable, held: string) => void};
     row: {veil: (mounted: MountedTable, held: number) => void; unveil: (mounted: MountedTable, held: number) => void};
   };
-  ruled?: (mounted: MountedTable, heights: Readonly<Record<number, number>>, before: readonly number[], after: readonly number[]) => void;
+  settle: (update: () => void) => void;
 };
 
 export const mount = (document: Document, build: Build): void => {
@@ -55,7 +55,7 @@ const mountTable = (
   document: Document,
   table: HTMLTableElement,
   body: HTMLTableSectionElement,
-  {flights, arrows, veils, ruled}: Build
+  {flights, arrows, veils, settle}: Build
 ): void => {
   const lanes = [...body.querySelectorAll('tr')];
   const dealt = lanes.map((_, at) => at);
@@ -192,14 +192,7 @@ const mountTable = (
 
   const mounted: MountedTable = {document, table, body, lanes, state: () => state, commit};
 
-  const choose = (next?: Rule): void => {
-    const before = state.seated;
-    const heights = surveyed(table, state.order, before).rowHeights;
-    commit(ruledBy(next));
-    if (has(ruled) && changed(before, state.seated)) {
-      ruled(mounted, heights, before, state.seated);
-    }
-  };
+  const choose = (next?: Rule): void => settle(() => commit(ruledBy(next)));
 
   measures.forEach(column => wireMenu(document, column, choose));
   wireResize(mounted);
@@ -228,6 +221,14 @@ const mountTable = (
     grip.addEventListener('keydown', arrows.row(mounted, held));
   };
 
+  [...table.querySelectorAll('thead th')].forEach(th => {
+    if (th instanceof HTMLElement) {
+      th.style.viewTransitionName = `header-${columnOf(state, th)}`;
+    }
+  });
+  lanes.forEach((lane, row) => [...lane.cells].forEach((cell, at) => {
+    cell.style.viewTransitionName = `cell-${row}-${order[at]}`;
+  }));
   dressGrips(table, state);
   [...table.querySelectorAll('thead th')]
     .filter(th => th instanceof HTMLTableCellElement)

@@ -576,7 +576,7 @@ describe('animated moves', () => {
     delete (document as {startViewTransition?: unknown}).startViewTransition;
   });
 
-  test('arrow keys walk a column, and both parties slide', async () => {
+  test('arrow keys walk a column, and the platform draws the move', async () => {
     const four = [
       {display: 'name', column: 'name'},
       {display: 'age', column: 'age'},
@@ -586,60 +586,42 @@ describe('animated moves', () => {
     const crew = [{
       name: {display: 'Ada'}, age: {display: '36'}, city: {display: 'London'}, job: {display: 'Analyst'}
     }];
-    render(<EagerKeepAnimated.Table>{deal(EagerKeepAnimated, four, crew, {draggable: true})}</EagerKeepAnimated.Table>);
-    const table = screen.getAllByRole('table')[0];
-    table.getBoundingClientRect = () => ({
-      left: 0, right: 600, top: 0, bottom: 100, width: 600, height: 100, x: 0, y: 0, toJSON: () => ({})
-    });
-    spanned(table, {name: 200, age: 120, city: 120, job: 160});
-    const headerTexts = () => within(table).getAllByRole('columnheader')
-      .map(head => head.textContent?.trim().split('⇅')[0].trim());
+    const transitions: Array<() => void> = [];
+    document.startViewTransition = (update: () => void) => {
+      transitions.push(update);
+      update();
+      return {} as ViewTransition;
+    };
+    try {
+      render(<EagerKeepAnimated.Table>{deal(EagerKeepAnimated, four, crew, {draggable: true})}</EagerKeepAnimated.Table>);
+      const table = screen.getAllByRole('table')[0];
+      const headerTexts = () => within(table).getAllByRole('columnheader')
+        .map(head => head.textContent?.trim().split('\u21c5')[0].trim());
 
-    const age = within(table).getByRole('columnheader', {name: /^age/});
-    age.focus();
-    await userEvent.keyboard('{ArrowRight}');
+      const age = within(table).getByRole('columnheader', {name: /^age/});
+      age.focus();
+      await userEvent.keyboard('{ArrowRight}');
 
-    expect(headerTexts()).toEqual(['name', 'city', 'age', 'job']);
-    expect(within(table).getByRole('columnheader', {name: /^age/}).classList).toContain('displaced');
-    expect(within(table).getByRole('columnheader', {name: /^age/})).toHaveStyle({'--toward': '-1'});
-    expect(within(table).getByRole('columnheader', {name: /^age/})).toHaveStyle({'--carried': '120px'});
-    expect(within(table).getByRole('columnheader', {name: /^city/}).classList).toContain('displaced');
-    expect(within(table).getByRole('columnheader', {name: /^city/})).toHaveStyle({'--toward': '1'});
-    expect(within(table).getByRole('columnheader', {name: /^city/})).toHaveStyle({'--carried': '120px'});
-
-    await userEvent.keyboard('{ArrowLeft}');
-    expect(headerTexts()).toEqual(['name', 'age', 'city', 'job']);
+      expect(headerTexts()).toEqual(['name', 'city', 'age', 'job']);
+      expect(transitions).toHaveLength(1);
+      expect(age.style.viewTransitionName).toBe('header-age');
+    } finally {
+      delete (document as Partial<Document>).startViewTransition;
+    }
   });
 
-  test('an animated nudge slides the displaced row, not a transition', async () => {
+  test('an animated nudge settles through a view transition', async () => {
     const transition = vi.fn((update: () => void) => update());
     (document as {startViewTransition?: unknown}).startViewTransition = transition;
     render(<EagerKeepAnimated.Table>{deal(EagerKeepAnimated, sized, people, {gripped: true})}</EagerKeepAnimated.Table>);
-    const table = screen.getAllByRole('table')[0];
-    table.getBoundingClientRect = () => ({
-      left: 0, right: 320, top: 0, bottom: 80, width: 320, height: 80, x: 0, y: 0, toJSON: () => ({})
-    });
-    within(within(table).getAllByRole('rowgroup')[1]).getAllByRole('row').forEach(row => {
-      row.getBoundingClientRect = () => ({
-        left: 0, right: 320, top: 0, bottom: 40, width: 320, height: 40, x: 0, y: 0, toJSON: () => ({})
-      });
-    });
 
     within(screen.getByText('Ada').closest('tr') as HTMLElement)
       .getByRole('button', {name: /move row/}).focus();
     await userEvent.keyboard('{ArrowDown}');
 
     expect(firstCells()).toEqual(['Grace', 'Ada']);
-    const displaced = screen.getByText('Grace').closest('tr') as HTMLElement;
-    expect(displaced.classList).toContain('shifted');
-    expect(displaced).toHaveStyle({'--drop': '40px'});
-    expect(transition).not.toHaveBeenCalled();
-
-    for (const name of ['animationend', 'webkitAnimationEnd']) {
-      fireEvent(displaced, Object.assign(new Event(name, {bubbles: true}), {animationName: 'shifted'}));
-    }
-    expect((screen.getByText('Grace').closest('tr') as HTMLElement).classList)
-      .not.toContain('shifted');
+    expect(transition).toHaveBeenCalledTimes(1);
+    expect((screen.getByText('Grace').closest('td, th') as HTMLElement).style.viewTransitionName).toBe('cell-1-name');
   });
 
   test('a static move never asks for a transition', async () => {
@@ -655,40 +637,21 @@ describe('animated moves', () => {
     expect(firstCells()).toEqual(['Grace', 'Ada']);
   });
 
-  test('an animated swap slides the displaced column — drawn, not layout', () => {
+  test('an animated crossing settles through a view transition', () => {
     const transition = vi.fn((update: () => void) => update());
     (document as {startViewTransition?: unknown}).startViewTransition = transition;
-    const four = [
-      {display: 'name', column: 'name'},
-      {display: 'age', column: 'age'},
-      {display: 'city', column: 'city'},
-      {display: 'job', column: 'job'}
-    ];
-    const crew = [{
-      name: {display: 'Ada'}, age: {display: '36'}, city: {display: 'London'}, job: {display: 'Analyst'}
-    }];
-    render(<EagerKeepAnimated.Table>{deal(EagerKeepAnimated, four, crew, {draggable: true})}</EagerKeepAnimated.Table>);
+    render(<EagerKeepAnimated.Table>{deal(EagerKeepAnimated, sized, people, {draggable: true})}</EagerKeepAnimated.Table>);
     const table = screen.getAllByRole('table')[0];
     table.getBoundingClientRect = () => ({
-      left: 0, right: 600, top: 0, bottom: 100, width: 600, height: 100, x: 0, y: 0, toJSON: () => ({})
+      left: 0, right: 320, top: 0, bottom: 80, width: 320, height: 80, x: 0, y: 0, toJSON: () => ({})
     });
-    spanned(table, {name: 200, age: 120, city: 120, job: 160});
+    spanned(table, {name: 160, age: 160});
+    const headerTexts = () => within(table).getAllByRole('columnheader')
+      .map(head => head.textContent?.trim().split('\u21c5')[0].trim());
 
-    fireEvent.pointerDown(within(table).getByRole('columnheader', {name: /^age/}), {clientX: 260, clientY: 20, pointerId: 1});
-    const surface = document.querySelector('.drag-surface');
-    if (!surface) throw new Error('nothing is aloft');
-    fireEvent.pointerMove(surface, {buttons: 1, clientX: 410, clientY: 50, pointerId: 1});
-
-    const displaced = within(table).getByRole('columnheader', {name: /^city/});
-    expect(displaced.classList).toContain('displaced');
-    expect(displaced).toHaveStyle({'--carried': '120px'});
+    expect(headerTexts()).toEqual(['name', 'age']);
+    expect(within(table).getByRole('columnheader', {name: /^name/}).style.viewTransitionName).toBe('header-name');
     expect(transition).not.toHaveBeenCalled();
-
-    for (const name of ['animationend', 'webkitAnimationEnd']) {
-      fireEvent(displaced, Object.assign(new Event(name, {bubbles: true}), {animationName: 'displaced'}));
-    }
-    expect(within(table).getByRole('columnheader', {name: /^city/}).classList)
-      .not.toContain('displaced');
   });
 
 });

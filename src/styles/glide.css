@@ -1,4 +1,3 @@
-/* the UA animates a root cross-fade and swallows input while it runs; only named groups may animate */
 ::view-transition {
   pointer-events: none;
 }
@@ -6,4 +5,9 @@
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation: none;
+}
+
+::view-transition-group(*) {
+  animation-duration: 200ms;
+  animation-timing-function: ease-out;
 }

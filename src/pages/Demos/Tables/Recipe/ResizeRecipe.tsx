@@ -7,7 +7,7 @@ import {Term} from './Term';
 import sharesSource from '@components/Table/shares.ts?raw';
 import resizeSource from '@components/Table/ResizeHandle.tsx?raw';
 import baseCss from '@components/Table/Table.css?raw';
-import headerSource from '@components/DragSortableTable/EagerHideAnimatedTable/DraggableColumn.tsx?raw';
+import headerSource from '@components/DragSortableTable/elements/DraggableColumn.tsx?raw';
 import headerCss from '@components/DragSortableTable/Header.css?raw';
 import tableSource from '../Frame/table.html?raw';
 import frameResize from '../Frame/table/resize.ts?raw';

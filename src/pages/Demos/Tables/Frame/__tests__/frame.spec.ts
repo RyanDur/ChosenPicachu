@@ -408,35 +408,50 @@ describe('the frame table', () => {
       expect(document.querySelector('table.column-ghost')).not.toBeInTheDocument();
     });
 
-    it('a menu sort slides the rows in an animated world', async () => {
-      const feed = await streamingFeed();
-      deal(urlOf(feed), eagerKeepAnimated);
-      rowRects();
-      await waitFor(() => expect(subscribed.size).toBeGreaterThan(0));
-      broadcast(feed, [tradeFrame(100), tradeFrame(101, 1700000000000 - 120000)]);
-      await waitFor(() => expect(measure('session', 0)).toHaveTextContent('2'));
+    it('a menu sort in an animated world settles through a view transition', async () => {
+      const transitions: Array<() => void> = [];
+      document.startViewTransition = (update: () => void) => {
+        transitions.push(update);
+        update();
+        return {} as ViewTransition;
+      };
+      try {
+        deal(undefined, eagerKeepAnimated);
 
-      await userEvent.click(sortMenu('trades').getByRole('button', {name: 'descending', hidden: true}));
+        await userEvent.click(sortMenu('trades').getByRole('button', {name: 'descending', hidden: true}));
 
-      const slid = screen.getByRole('row', {name: /this minute/});
-      expect(slid.classList).toContain('shifted');
-      expect(slid.style.getPropertyValue('--drop')).not.toBe('');
+        expect(transitions).toHaveLength(1);
+        expect(screen.getByRole('columnheader', {name: /trades/})).toHaveAttribute('aria-sort', 'descending');
+      } finally {
+        delete (document as Partial<Document>).startViewTransition;
+      }
     });
 
-    it('animated commits wear their marks and shed them when the slide ends', async () => {
+    it('every cell names itself, so the platform can draw the move', () => {
       deal(undefined, eagerKeepAnimated);
-      stubbedRects();
 
-      const trades = screen.getByRole('columnheader', {name: /trades/});
-      trades.focus();
-      await userEvent.keyboard('{ArrowRight}');
+      expect(screen.getByRole('columnheader', {name: /trades/}).style.viewTransitionName).toBe('header-trades');
+      expect(measure('this minute', 0).style.viewTransitionName).toBe('cell-0-trades');
+    });
 
-      expect(trades.classList).toContain('displaced');
-      expect(trades.style.getPropertyValue('--carried')).not.toBe('');
+    it('a static world cuts: no view transition is asked for', async () => {
+      const transitions: Array<() => void> = [];
+      document.startViewTransition = (update: () => void) => {
+        transitions.push(update);
+        update();
+        return {} as ViewTransition;
+      };
+      try {
+        deal(undefined, eagerKeepStatic);
 
-      fireEvent(trades, Object.assign(new Event('animationend', {bubbles: true}), {animationName: 'displaced'}));
-      expect(trades.classList).not.toContain('displaced');
-      expect(trades.style.getPropertyValue('--carried')).toBe('');
+        screen.getByRole('columnheader', {name: /trades/}).focus();
+        await userEvent.keyboard('{ArrowRight}');
+
+        expect(transitions).toHaveLength(0);
+        expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
+      } finally {
+        delete (document as Partial<Document>).startViewTransition;
+      }
     });
   });
 });

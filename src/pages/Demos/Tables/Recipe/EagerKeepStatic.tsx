@@ -27,9 +27,9 @@ import {
   twoRoads
 } from './shared-steps';
 import buildSrc from '../Frame/builds/EagerKeepStatic.ts?raw';
-import rowSource from '@components/DragSortableTable/EagerKeepStaticTable/Cell.tsx?raw';
+import rowSource from '@components/DragSortableTable/elements/Cell.tsx?raw';
 import tableSource from '@components/DragSortableTable/EagerKeepStaticTable/EagerKeepStaticTable.tsx?raw';
-import headerSource from '@components/DragSortableTable/EagerKeepStaticTable/DraggableColumn.tsx?raw';
+import headerSource from '@components/DragSortableTable/elements/DraggableColumn.tsx?raw';
 
 export const EagerKeepStaticRecipe: FC<{track: Track; world: World}> = ({track, world}) => track === 'pointer'
   ? <>
@@ -78,7 +78,7 @@ export const EagerKeepStaticRecipe: FC<{track: Track; world: World}> = ({track, 
            can="The trader can sort by row"
            soThat="the windows they watch closest sit on top">
       <Steps>
-        {gripArrows(world, rowSource, buildSrc, 'staticRowArrows')}
+        {gripArrows(world, rowSource, buildSrc, 'rowArrows')}
       </Steps>
     </Story>
   </>;

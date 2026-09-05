@@ -1,23 +1,24 @@
-import {FC, Fragment, useState} from 'react';
+import {FC, Fragment} from 'react';
 import {has, maybe} from '@ryandur/sand';
-import {array} from '@components/arrays';
+
 import {classNames} from '@components/class-names';
 import {Kit, TableProps, dealt} from '@components/Table';
-import {displaced, interior, RowsMoved, shifts, ColumnsMoved} from '../survey';
+import {interior} from '../survey';
 import {grounded, surfaceTravel} from '../travel';
 import {eagerColumnFlight, eagerRowFlight} from '../flights';
 import {Cell, columnAloft, drifting as drifts, dropped, orderedTo, rowAloft, seatedTo, standingOf} from '../table-state';
 import {useTableState} from '../useTableState';
 import {Aloft} from '../Aloft';
 import {MoveReport} from '../MoveReport';
-import {Column} from './Column';
-import {DraggableColumn} from './DraggableColumn';
-import {Row} from './Row';
-import {DraggableRow} from './DraggableRow';
-import {Cell as TableCell} from './Cell';
+import {Column} from '../elements/Column';
+import {DraggableColumn} from '../elements/DraggableColumn';
+import {Row} from '../elements/Row';
+import {DraggableRow} from '../elements/DraggableRow';
+import {Cell as TableCell} from '../elements/Cell';
 import {SortMenu} from '../SortMenu';
 import {ResizeHandle} from '@components/Table/ResizeHandle';
-import {Moved, Seat, Table} from '../context';
+import {Seat, Table, Transition} from '../context';
+import {glide} from '@components/glide';
 import '../sortable.css';
 import './EagerHideAnimatedTable.css';
 
@@ -29,8 +30,7 @@ export const EagerHideAnimatedTable: FC<TableProps> = (
     const {columns, rows, gripped, columnElements, rowElements} = dealt(children, kit);
     const [state, commit] = useTableState(columns.map(({column}) => column), rows);
     const cell: Cell = {state: () => state, commit};
-    const [columnsMoved, setColumnsMoved] = useState<ColumnsMoved>();
-    const [rowsMoved, setRowsMoved] = useState<RowsMoved>();
+    const settle = (transition: Transition): void => glide(true)(() => commit(transition));
 
     const {order} = state;
     const standing = standingOf(rows, state);
@@ -40,18 +40,11 @@ export const EagerHideAnimatedTable: FC<TableProps> = (
     });
     const clipped = columns.some(({resizable}) => resizable);
 
-    const settleColumn = (held: string, struck: string): void => {
-        maybe(state.bounds).map(measured => setColumnsMoved(displaced(order, held, struck, measured)));
-        commit(orderedTo(order.indexOf(held), interior(order.indexOf(struck), order.length)));
-    };
+    const settleColumn = (held: string, struck: string): void =>
+        settle(orderedTo(order.indexOf(held), interior(order.indexOf(struck), order.length)));
 
-    const settleRow = (held: number, struck: number): void => {
-        maybe(state.bounds).map(measured => {
-            const after = array.moveToIndex(state.seats.indexOf(struck), held, state.seats);
-            setRowsMoved(shifts(measured.rowHeights, state.seats, after, held));
-        });
-        commit(seatedTo(held, struck));
-    };
+    const settleRow = (held: number, struck: number): void =>
+        settle(seatedTo(held, struck));
 
     const drop = (): void => commit(dropped);
 
@@ -82,17 +75,8 @@ export const EagerHideAnimatedTable: FC<TableProps> = (
         surface: surface(moving => rowFlight.travel(cell, moving))
     };
 
-    return <Table.Provider value={{state, rows, standing, clipped, commit}}>
-        <Moved.Provider value={{columnsMoved, rowsMoved, columnsMove: setColumnsMoved, rowsMove: setRowsMoved}}>
+    return <Table.Provider value={{state, rows, standing, clipped, commit, settle}}>
         <table id={id}
-               onAnimationEnd={event => {
-                   if (event.animationName === 'displaced') {
-                       setColumnsMoved(undefined);
-                   }
-                   if (event.animationName === 'shifted') {
-                       setRowsMoved(undefined);
-                   }
-               }}
                className={classNames(
                    'fancy-table',
                    clipped && 'apportioned',
@@ -108,6 +92,5 @@ export const EagerHideAnimatedTable: FC<TableProps> = (
         <MoveReport landed={state.landed}/>
         <Aloft columnsTravel={columnsTravel} rowsTravel={rowsTravel}
                ordered={ordered} rows={rows} standing={standing}/>
-        </Moved.Provider>
     </Table.Provider>;
 };

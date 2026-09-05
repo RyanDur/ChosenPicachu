@@ -2,28 +2,3 @@
 .sortable .hide-across {
   visibility: hidden;
 }
-
-.sortable .displaced {
-  --carried: 0;
-  --toward: 1;
-
-  animation: displaced 200ms ease-out;
-}
-
-@keyframes displaced {
-  from {
-    transform: translateX(calc(var(--toward) * var(--carried)));
-  }
-}
-
-.sortable .shifted {
-  --drop: 0px;
-
-  animation: shifted 200ms ease-out;
-}
-
-@keyframes shifted {
-  from {
-    transform: translateY(var(--drop));
-  }
-}

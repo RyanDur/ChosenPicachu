@@ -3,7 +3,6 @@ export type {Aloft} from './table-state';
 export {baked, columnAloft, columnLanding, columnOf, drifting, dropped, landedColumn, landedRow, lifted, nudgedTo, orderedTo, rowAloft, rowLanding, ruledBy, seatedTo, sharedAs, tradedBy} from './table-state';
 export type {GhostFlight} from './ghosts';
 export {columnGhost, rowGhost} from './ghosts';
-export {drawColumnsMoved, drawRowsMoved} from './moved';
 export {hideColumn, hideRow, unhideColumn, unhideRow, veiled} from './hide';
 export {announce, wireMenu} from './menus';
 export {dressShares, wireResize} from './resize';

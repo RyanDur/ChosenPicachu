@@ -10,14 +10,14 @@ import {useTableState} from '../useTableState';
 import {Aloft} from '../Aloft';
 import {MoveReport} from '../MoveReport';
 
-import {Column} from './Column';
-import {DraggableColumn} from './DraggableColumn';
-import {Row} from './Row';
-import {DraggableRow} from './DraggableRow';
-import {Cell as TableCell} from './Cell';
+import {Column} from '../elements/Column';
+import {DraggableColumn} from '../elements/DraggableColumn';
+import {Row} from '../elements/Row';
+import {DraggableRow} from '../elements/DraggableRow';
+import {Cell as TableCell} from '../elements/Cell';
 import {SortMenu} from '../SortMenu';
 import {ResizeHandle} from '@components/Table/ResizeHandle';
-import {Seat, Table} from '../context';
+import {Seat, Table, Transition} from '../context';
 import '../sortable.css';
 import './LazyHideStaticTable.css';
 
@@ -29,6 +29,7 @@ export const LazyHideStaticTable: FC<TableProps> = (
     const {columns, rows, gripped, columnElements, rowElements} = dealt(children, kit);
     const [state, commit] = useTableState(columns.map(({column}) => column), rows);
     const cell: Cell = {state: () => state, commit};
+    const settle = (transition: Transition): void => commit(transition);
     const {order} = state;
     const standing = standingOf(rows, state);
     const ordered = order.flatMap(name => {
@@ -38,10 +39,10 @@ export const LazyHideStaticTable: FC<TableProps> = (
     const clipped = columns.some(({resizable}) => resizable);
 
     const settleColumn = (held: string, struck: string): void =>
-        commit(orderedTo(order.indexOf(held), interior(order.indexOf(struck), order.length)));
+        settle(orderedTo(order.indexOf(held), interior(order.indexOf(struck), order.length)));
 
     const settleRow = (held: number, struck: number): void =>
-        commit(seatedTo(held, struck));
+        settle(seatedTo(held, struck));
 
     const drop = (): void => commit(dropped);
 
@@ -78,7 +79,7 @@ export const LazyHideStaticTable: FC<TableProps> = (
         surface: surface(moving => rowFlight.travel(cell, moving), () => maybe(rowFlight.land).map(land => land(cell)))
     };
 
-    return <Table.Provider value={{state, rows, standing, clipped, commit}}>
+    return <Table.Provider value={{state, rows, standing, clipped, commit, settle}}>
         <table id={id}
                className={classNames(
                    'fancy-table',

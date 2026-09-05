@@ -49,4 +49,4 @@ export const accessTrack =
 export const quietDials =
   <Tell>Two of the dials go quiet here: pace and origin describe a drag session, what happens
     while something is held aloft, and a keyboard nudge holds nothing aloft. Only motion
-    still chooses, and the marked step below is written the way that dial sits.</Tell>;
+    still chooses, and the motion step below is written the way that dial sits.</Tell>;

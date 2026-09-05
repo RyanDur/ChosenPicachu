@@ -326,9 +326,9 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/Commit inside the move/);
     expect(recipe).toHaveTextContent(/Blank the origin while it is aloft/);
     expect(recipe).toHaveTextContent(/visibility: hidden/);
-    expect(recipe).toHaveTextContent(/Slide the drawing, not the layout/);
-    expect(recipe).toHaveTextContent(/measured by the survey/);
-    expect(recipe).toHaveTextContent(/translateY\(var\(--drop\)\)/);
+    expect(recipe).toHaveTextContent(/Let the platform draw the move/);
+    expect(recipe).toHaveTextContent(/the platform pairs old and new/);
+    expect(recipe).toHaveTextContent(/::view-transition-group\(\*\)/);
     expect(recipe).toHaveTextContent(/Turn the carry vertical/);
     expect(within(recipe).getByRole('link', {name: 'insertBefore'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/Node/insertBefore'));
@@ -380,23 +380,23 @@ describe('the tables demo', () => {
 
     expect(recipe).toHaveTextContent(/Give focus a place to land/);
     expect(recipe).toHaveTextContent(/Arrows speak direction/);
-    expect(recipe).toHaveTextContent(/Both parties slide, each by the other\u2019s share/);
-    expect(recipe).toHaveTextContent(/Let the slide pace the key/);
-    expect(recipe).toHaveTextContent(/getAnimations/);
+    expect(recipe).toHaveTextContent(/Both parties move, and the platform draws both/);
+    expect(recipe).toHaveTextContent(/Let the platform pace the key/);
+    expect(recipe).toHaveTextContent(/supersedes a running one/);
     await userEvent.click(within(recipe).getByText(/The trader can sort by column/));
     expect(recipe).toHaveTextContent(/a timer matched to the CSS by hand/);
     expect(recipe).toHaveTextContent(/The trader can sort by row/);
     expect(recipe).toHaveTextContent(/Turn the arrows vertical/);
     expect(recipe.querySelectorAll('.story')).toHaveLength(2);
-    expect(within(recipe).getByRole('link', {name: 'getAnimations'}))
-      .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/Element/getAnimations'));
+    expect(within(recipe).getByRole('link', {name: 'startViewTransition'}))
+      .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/Document/startViewTransition'));
     expect(recipe).not.toHaveTextContent(/Draw the ghost by hand/);
     expect(within(recipe).queryByRole('radio', {name: 'Lazy'})).toBeNull();
 
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Static'}));
 
     expect(recipe).toHaveTextContent(/Cut on the keypress/);
-    expect(recipe).not.toHaveTextContent(/Let the slide pace the key/);
+    expect(recipe).not.toHaveTextContent(/Let the platform pace the key/);
 
     await userEvent.click(within(recipe).getByRole('button', {name: 'By pointer'}));
     expect(recipe).toHaveTextContent(/Draw the ghost by hand/);
@@ -487,7 +487,7 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/position-area/);
     expect(recipe).toHaveTextContent(/The rule is a drape, not a bake/);
     expect(recipe).toHaveTextContent(/A hand ends the rule/);
-    expect(recipe).toHaveTextContent(/rowsMove\(shifts\(/);
+    expect(recipe).toHaveTextContent(/settle\(ruledBy\(/);
     expect(recipe).not.toHaveTextContent(/Dress the menu as a card/);
     expect(within(recipe).getByRole('link', {name: 'position-area'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/CSS/position-area'));
@@ -500,7 +500,7 @@ describe('the tables demo', () => {
     await userEvent.click(within(recipe).getByText(/The trader can sort the windows/));
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Static'}));
     expect(recipe).toHaveTextContent(/Rule directly/);
-    expect(recipe).not.toHaveTextContent(/setRowsMoved\(shifts\(surveyed/);
+    expect(recipe).not.toHaveTextContent(/Rule, and let the platform draw/);
   });
 
   test('the chosen tutorial travels in the url', async () => {

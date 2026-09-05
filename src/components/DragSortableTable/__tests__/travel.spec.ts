@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest';
-import {carried, drifted, eagerTravel, staticColumnArrows, staticRowArrows, surfaceTravel} from '../travel';
+import {carried, drifted, eagerTravel, columnArrows, rowArrows, surfaceTravel} from '../travel';
 
 const pressed = (key: string) => ({key, preventDefault: (): void => undefined, currentTarget: null});
 
@@ -37,9 +37,9 @@ describe('the travel vocabulary', () => {
     expect(happened).toEqual(['drift', 'strike', 'drop']);
   });
 
-  it('static column arrows claim the keys, arrange inside the anchors, and never at the rail', () => {
+  it('column arrows claim the keys, arrange inside the anchors, and never at the rail', () => {
     const arranged: {from: number; to: number}[] = [];
-    const listener = staticColumnArrows('trades', () => ['window', 'trades', 'buys', 'change'],
+    const listener = columnArrows('trades', () => ['window', 'trades', 'buys', 'change'],
       nudge => arranged.push(nudge));
 
     listener(pressed('ArrowRight'));
@@ -49,11 +49,11 @@ describe('the travel vocabulary', () => {
     expect(arranged).toEqual([{from: 1, to: 2}]);
   });
 
-  it('static row arrows always arrange, so the rail nudge still bakes', () => {
+  it('row arrows always arrange, so the rail nudge still bakes', () => {
     const arranged: {to: number; after: number[]}[] = [];
 
-    staticRowArrows(0, () => [0, 1, 2], nudge => arranged.push(nudge))(pressed('ArrowDown'));
-    staticRowArrows(2, () => [0, 1, 2], nudge => arranged.push(nudge))(pressed('ArrowDown'));
+    rowArrows(0, () => [0, 1, 2], nudge => arranged.push(nudge))(pressed('ArrowDown'));
+    rowArrows(2, () => [0, 1, 2], nudge => arranged.push(nudge))(pressed('ArrowDown'));
 
     expect(arranged).toEqual([
       {to: 1, after: [1, 0, 2]},

@@ -1,54 +1,28 @@
-import {has} from '@ryandur/sand';
-import {ColumnNudge, RowNudge, displaced, interior, shifts} from '@components/DragSortableTable/survey';
-import {MountedTable, baked, drawColumnsMoved, drawRowsMoved, nudgedTo, orderedTo, seatedTo} from '../table';
+import {ColumnNudge, RowNudge, interior} from '@components/DragSortableTable/survey';
+import {MountedTable, baked, nudgedTo, orderedTo, seatedTo} from '../table';
 
-export const animatedSettleColumn = (mounted: MountedTable, held: string, struck: string): void => {
-  const {order, bounds} = mounted.state();
-  if (!has(bounds)) {
-    return;
+export type Settle = (update: () => void) => void;
+
+export const glided: Settle = update => {
+  if ('startViewTransition' in document) {
+    document.startViewTransition(update);
+  } else {
+    update();
   }
-  const marks = displaced(order, held, struck, bounds);
-  mounted.commit(orderedTo(order.indexOf(held), interior(order.indexOf(struck), order.length)));
-  drawColumnsMoved(mounted, marks);
 };
 
-export const staticSettleColumn = (mounted: MountedTable, held: string, struck: string): void => {
+export const cut: Settle = update => update();
+
+export const settleColumn = (settle: Settle) => (mounted: MountedTable, held: string, struck: string): void => {
   const {order} = mounted.state();
-  mounted.commit(orderedTo(order.indexOf(held), interior(order.indexOf(struck), order.length)));
+  settle(() => mounted.commit(orderedTo(order.indexOf(held), interior(order.indexOf(struck), order.length))));
 };
 
-export const animatedSettleRow = (mounted: MountedTable, held: number, struck: number): void => {
-  const {bounds, seated} = mounted.state();
-  if (!has(bounds)) {
-    return;
-  }
-  mounted.commit(seatedTo(held, struck));
-  drawRowsMoved(mounted, shifts(bounds.rowHeights, seated, mounted.state().seated, held));
-};
+export const settleRow = (settle: Settle) => (mounted: MountedTable, held: number, struck: number): void =>
+  settle(() => mounted.commit(seatedTo(held, struck)));
 
-export const staticSettleRow = (mounted: MountedTable, held: number, struck: number): void => {
-  mounted.commit(seatedTo(held, struck));
-};
+export const ordered = (settle: Settle) => (mounted: MountedTable) => ({from, to}: ColumnNudge): void =>
+  settle(() => mounted.commit(orderedTo(from, to)));
 
-export const animatedOrdered = (mounted: MountedTable) => (nudge: ColumnNudge): void => {
-  mounted.commit(orderedTo(nudge.from, nudge.to));
-  drawColumnsMoved(mounted, nudge.moved);
-};
-
-export const staticOrdered = (mounted: MountedTable) => ({from, to}: {from: number; to: number}): void =>
-  mounted.commit(orderedTo(from, to));
-
-export const animatedArranged = (mounted: MountedTable, held: number) => (nudge: RowNudge): void => {
-  mounted.commit(state => nudgedTo(held, nudge.to)(baked(state)));
-  drawRowsMoved(mounted, nudge.moved);
-};
-
-export const staticArranged = (mounted: MountedTable, held: number) => ({to}: {to: number; after: number[]}): void =>
-  mounted.commit(state => nudgedTo(held, to)(baked(state)));
-
-export const shiftsRuled = (
-  mounted: MountedTable,
-  heights: Readonly<Record<number, number>>,
-  before: readonly number[],
-  after: readonly number[]
-): void => drawRowsMoved(mounted, shifts(heights, before, after));
+export const arranged = (settle: Settle) => (mounted: MountedTable, held: number) => ({to}: RowNudge): void =>
+  settle(() => mounted.commit(state => nudgedTo(held, to)(baked(state))));

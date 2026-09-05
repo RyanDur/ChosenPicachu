@@ -1,8 +1,8 @@
 import tableSource from '@components/DragSortableTable/EagerHideAnimatedTable/EagerHideAnimatedTable.tsx?raw';
-import headerSource from '@components/DragSortableTable/EagerKeepStaticTable/DraggableColumn.tsx?raw';
-import animatedHeaderSource from '@components/DragSortableTable/EagerKeepAnimatedTable/DraggableColumn.tsx?raw';
-import cellSource from '@components/DragSortableTable/EagerKeepAnimatedTable/Cell.tsx?raw';
-import rowSource from '@components/DragSortableTable/EagerKeepAnimatedTable/Row.tsx?raw';
+import headerSource from '@components/DragSortableTable/elements/DraggableColumn.tsx?raw';
+import animatedHeaderSource from '@components/DragSortableTable/elements/DraggableColumn.tsx?raw';
+import cellSource from '@components/DragSortableTable/elements/Cell.tsx?raw';
+import rowSource from '@components/DragSortableTable/elements/Cell.tsx?raw';
 import lazyStaticList from '@pages/Demos/DragAndDrop/LazyKeepStaticList/LazyKeepStaticList.tsx?raw';
 import lazyAnimatedList from '@pages/Demos/DragAndDrop/LazyKeepAnimatedList/LazyKeepAnimatedList.tsx?raw';
 import sessionSource from '@pages/Demos/DragAndDrop/session.ts?raw';
@@ -16,9 +16,8 @@ describe('the hand-written tutorial fragments still tell the truth', () => {
     ['the lifted header blanks by comparison', animatedHeaderSource, "hidden && 'hide',"],
     ['the lifted column blanks across rows', cellSource, "columnAloft(state).map(held => held === column).orElse(false) && 'hide',"],
     ['headers are real column headers', headerSource, 'scope="col"'],
-    ["a displaced header carries its direction as data", animatedHeaderSource, "'--toward': displaced.toward === 'left' ? '1' : '-1'"],
-    ['a shifted row wears the class', rowSource, "has(drop) && 'shifted'"],
-    ['a shifted row carries its drop', rowSource, "'--drop': `${drop}px`"],
+    ['a header names itself to the view transition', animatedHeaderSource, 'viewTransitionName: `header-${name}`'],
+    ['a cell names itself to the view transition', rowSource, 'viewTransitionName: `cell-${row}-${column}`'],
     ['the grip arms the native drag', draggableSource, 'draggable={dragging}'],
     ['a lazy list stashes the landing', lazyStaticList, 'setLanding(maybe(index))'],
     ['a lazy settle glides', lazyAnimatedList, 'landedOrder(aloft, landing, order).map(glided(setOrder))'],

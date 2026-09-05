@@ -28,10 +28,9 @@ import {
   twoRoads
 } from './shared-steps';
 import buildSrc from '../Frame/builds/EagerKeepAnimated.ts?raw';
-import rowSource from '@components/DragSortableTable/EagerKeepAnimatedTable/Cell.tsx?raw';
+import rowSource from '@components/DragSortableTable/elements/Cell.tsx?raw';
 import tableSource from '@components/DragSortableTable/EagerKeepAnimatedTable/EagerKeepAnimatedTable.tsx?raw';
-import headerSource from '@components/DragSortableTable/EagerKeepAnimatedTable/DraggableColumn.tsx?raw';
-import cssSource from '@components/DragSortableTable/EagerKeepAnimatedTable/EagerKeepAnimatedTable.css?raw';
+import headerSource from '@components/DragSortableTable/elements/DraggableColumn.tsx?raw';
 
 export const EagerKeepAnimatedRecipe: FC<{track: Track; world: World}> = ({track, world}) => track === 'pointer'
   ? <>
@@ -52,7 +51,7 @@ export const EagerKeepAnimatedRecipe: FC<{track: Track; world: World}> = ({track
         {deadZone}
         {eagerPace(world, tableSource, buildSrc)}
         {keepOrigin(world)}
-        {animatedMotion(world, tableSource, cssSource)}
+        {animatedMotion(world, tableSource)}
       </Steps>
     </Story>
     <Story param="sort" id="row" steps={1}
@@ -73,15 +72,15 @@ export const EagerKeepAnimatedRecipe: FC<{track: Track; world: World}> = ({track
       <Steps>
       {focusLands(world, headerSource)}
       {arrowsSpeak(world, headerSource)}
-      {bothSlide(world, headerSource, buildSrc, cssSource)}
-      {paceKey(cssSource)}
+      {bothSlide(world, headerSource, buildSrc)}
+      {paceKey()}
       </Steps>
     </Story>
     <Story param="sort" id="row" steps={1}
            can="The trader can sort by row"
            soThat="the windows they watch closest sit on top">
       <Steps>
-        {gripArrows(world, rowSource, buildSrc, 'animatedRowArrows')}
+        {gripArrows(world, rowSource, buildSrc, 'rowArrows')}
       </Steps>
     </Story>
   </>;

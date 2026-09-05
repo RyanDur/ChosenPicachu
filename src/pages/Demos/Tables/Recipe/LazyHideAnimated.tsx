@@ -28,9 +28,9 @@ import {
   twoRoads
 } from './shared-steps';
 import buildSrc from '../Frame/builds/LazyHideAnimated.ts?raw';
-import rowSource from '@components/DragSortableTable/LazyHideAnimatedTable/Cell.tsx?raw';
+import rowSource from '@components/DragSortableTable/elements/Cell.tsx?raw';
 import tableSource from '@components/DragSortableTable/LazyHideAnimatedTable/LazyHideAnimatedTable.tsx?raw';
-import headerSource from '@components/DragSortableTable/LazyHideAnimatedTable/DraggableColumn.tsx?raw';
+import headerSource from '@components/DragSortableTable/elements/DraggableColumn.tsx?raw';
 import cssSource from '@components/DragSortableTable/LazyHideAnimatedTable/LazyHideAnimatedTable.css?raw';
 
 export const LazyHideAnimatedRecipe: FC<{track: Track; world: World}> = ({track, world}) => track === 'pointer'
@@ -52,7 +52,7 @@ export const LazyHideAnimatedRecipe: FC<{track: Track; world: World}> = ({track,
         {deadZone}
         {lazyPace(world, tableSource, buildSrc)}
         {hideOrigin(world, headerSource, cssSource)}
-        {animatedMotion(world, tableSource, cssSource)}
+        {animatedMotion(world, tableSource)}
       </Steps>
     </Story>
     <Story param="sort" id="row" steps={1}
@@ -73,15 +73,15 @@ export const LazyHideAnimatedRecipe: FC<{track: Track; world: World}> = ({track,
       <Steps>
       {focusLands(world, headerSource)}
       {arrowsSpeak(world, headerSource)}
-      {bothSlide(world, headerSource, buildSrc, cssSource)}
-      {paceKey(cssSource)}
+      {bothSlide(world, headerSource, buildSrc)}
+      {paceKey()}
       </Steps>
     </Story>
     <Story param="sort" id="row" steps={1}
            can="The trader can sort by row"
            soThat="the windows they watch closest sit on top">
       <Steps>
-        {gripArrows(world, rowSource, buildSrc, 'animatedRowArrows')}
+        {gripArrows(world, rowSource, buildSrc, 'rowArrows')}
       </Steps>
     </Story>
   </>;

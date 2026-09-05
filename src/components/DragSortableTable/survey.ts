@@ -2,9 +2,6 @@ import {has} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {ColumnData} from '@components/Table';
 
-export type ColumnsMoved = Readonly<Record<string, {toward: 'left' | 'right'; by: number}>>;
-export type RowsMoved = Readonly<Record<number, number>>;
-
 export type Bounds = {
     left: number;
     top: number;
@@ -112,39 +109,23 @@ export const nudgedRow = (seats: readonly number[], held: number, toward: number
     return {from, to: Math.min(Math.max(from + toward, 0), seats.length - 1)};
 };
 
-export const swapped = (measured: Bounds, order: readonly string[]) =>
-    (held: string, neighbour: string, toward: number): ColumnsMoved => {
-        const spanned = order.reduce((sum, name) => sum + (measured.columnWidths[name] ?? 0), 0);
-        const gap = order.length > 1 ? Math.max(measured.width - spanned, 0) / (order.length - 1) : 0;
-        const carried = (name: string): number => (measured.columnWidths[name] ?? 0) + gap;
-        return {
-            [held]: {toward: toward > 0 ? 'right' : 'left', by: carried(neighbour)},
-            [neighbour]: {toward: toward > 0 ? 'left' : 'right', by: carried(held)}
-        };
-    };
-
 export const struckAway = <Seat,>(held: Seat, struck: Seat | undefined): struck is Seat =>
     has(struck) && struck !== held;
 
-export type ColumnNudge = {from: number; to: number; moved: ColumnsMoved};
+export type ColumnNudge = {from: number; to: number};
 
-export const columnNudge = (order: readonly string[], measured: Bounds) =>
+export const columnNudge = (order: readonly string[]) =>
     (held: string, toward: number): ColumnNudge | undefined => {
         const {from, to} = nudgedColumn(order, held, toward);
-        if (to === from) {
-            return undefined;
-        }
-        const neighbour = order[to];
-        return {from, to, moved: swapped(measured, order)(held, neighbour, toward)};
+        return to === from ? undefined : {from, to};
     };
 
-export type RowNudge = {to: number; after: number[]; moved: RowsMoved};
+export type RowNudge = {to: number; after: number[]};
 
-export const rowNudge = (seats: readonly number[], heights: Readonly<Record<number, number>>) =>
+export const rowNudge = (seats: readonly number[]) =>
     (held: number, toward: number): RowNudge => {
         const {to} = nudgedRow(seats, held, toward);
-        const after = array.moveToIndex(to, held, seats);
-        return {to, after, moved: shifts(heights, seats, after)};
+        return {to, after: array.moveToIndex(to, held, seats)};
     };
 
 export const gripLabel = (position: number): string => `move row ${position + 1}`;
@@ -159,41 +140,4 @@ export const placed = (
 ): ColumnData[] => {
     const lifted = ordered.find(definition => definition.column === column);
     return has(lifted) ? array.moveToIndex(to, lifted, ordered) : [...ordered];
-};
-
-export const displaced = (
-    order: readonly string[],
-    column: string,
-    struck: string,
-    survey: Bounds
-): ColumnsMoved => {
-    const from = order.indexOf(column);
-    const to = Math.min(Math.max(order.indexOf(struck), 1), order.length - 2);
-    const between = from < to ? order.slice(from + 1, to + 1) : order.slice(to, from);
-    const spanned = order.reduce((sum, name) => sum + (survey.columnWidths[name] ?? 0), 0);
-    const gap = order.length > 1 ? Math.max(survey.width - spanned, 0) / (order.length - 1) : 0;
-    return Object.fromEntries(between.map(neighbour =>
-        [neighbour, {toward: from < to ? 'left' : 'right',
-            by: (survey.columnWidths[column] ?? 0) + gap}]));
-};
-
-export const shifts = (
-    heights: Readonly<Record<number, number>>,
-    before: readonly number[],
-    after: readonly number[],
-    riding?: number
-): Record<number, number> => {
-    const tops = (seated: readonly number[]): Record<number, number> => {
-        let y = 0;
-        return seated.reduce<Record<number, number>>((at, row) => {
-            at[row] = y;
-            y += heights[row] ?? 0;
-            return at;
-        }, {});
-    };
-    const was = tops(before);
-    const now = tops(after);
-    return Object.fromEntries(after
-        .filter(row => row !== riding && (was[row] ?? 0) !== (now[row] ?? 0))
-        .map(row => [row, (was[row] ?? 0) - (now[row] ?? 0)]));
 };
