@@ -15,7 +15,9 @@ import frameMenus from '../Frame/table/menus.ts?raw';
 import frameMount from '../Frame/table/mount.ts?raw';
 import {buildSources} from '../Frame/builds/sources';
 import settlesSource from '../Frame/builds/settles.ts?raw';
-import {cellSources, headerSources, tableSources} from './sources';
+import {headerSource, rowHeaderSource, tableSources} from './sources';
+import baseCss from '@components/Table/Table.css?raw';
+import {pageSource} from './shared-steps/sources';
 import '../../Recipe/Recipe.css';
 
 const gap = plain(' ');
@@ -41,7 +43,7 @@ const ruled = ({world, headerSrc}: Build, motion: Motion, dial: ReactNode) => mo
             snapshotted before the rule lands and drawn sliding to where the rank puts them.
             The rule itself is one state update, and the table never measured a seat.</Says>
           : <Says>Choosing settles the rule; the build’s settle is a view transition, so the
-            reseat is snapshotted and drawn by the platform. The rule itself is one commit, and
+            reseat is snapshotted and drawn by the platform. The rule itself is one dispatch, and
             the mount never measured a seat.</Says>}
         <Codes>
           {world === 'react'
@@ -62,7 +64,7 @@ const ruled = ({world, headerSrc}: Build, motion: Motion, dial: ReactNode) => mo
       </Words>
       <Reveal>
         {world === 'react'
-          ? <Says>This is the static table: ruled settles the rule, and its settle is the commit.
+          ? <Says>This is the static table: ruled dispatches the rule, and the table shows it plainly.
             The rows cut to their ranked seats on the next frame.</Says>
           : <Says>This is the static build: choose settles the rule, and its settle calls the
             update directly. The rows cut to their ranked seats in the same breath.</Says>}
@@ -197,7 +199,7 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
                 ...unit(frameMenus, 'const announce = ')
               ]}/>}
             <Snippet label="CSS" lines={[
-              ...unit(headerCss, ".sortable .rankable .menu-toggle::before {"), gap,
+              ...unit(headerCss, ".sortable .menu-toggle::before {"), gap,
               ...unit(headerCss, ".sortable [aria-sort='ascending'] .menu-toggle::before {"), gap,
               ...unit(headerCss, ".sortable [aria-sort='descending'] .menu-toggle::before {"),
               aside('/* the glyph is CSS reading the one attribute; no world writes it */')
@@ -207,7 +209,7 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
                 ...span(headerSrc, 'aria-sort={sortedBy(name, rule)}', 'aria-sort={sortedBy(name, rule)}')
               ]}/>
               : <Snippet label="HTML" lines={[
-                ...span(tableSource, '<th scope="col" class="cell trades header-cell clipped">', 'aria-label="sort trades"></button>')
+                ...span(tableSource, '<th scope="col" class="cell trades header-cell">', 'aria-label="sort trades"></button>')
               ]}/>}
           </Codes>
         </Reveal>
@@ -252,11 +254,11 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
             {world === 'react'
               ? <Snippet label="TS" lines={[
                 ...unit(stateSource, 'export const baked'), gap,
-                ...span(cellSrc, 'const grabbed = ', 'baked(current)));')
+                ...span(cellSrc, 'const grabbed = ', 'baked(standing)(current)));')
               ]}/>
               : <Snippet label="TS" lines={[
                 ...unit(stateSource, 'export const baked = '),
-                aside('// the grab commits it outright; a nudge folds it into its own move')
+                aside('// the grab dispatches it outright; a nudge folds it into its own move')
               ]}/>}
           </Codes>
         </Reveal>
@@ -272,8 +274,9 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
           {world === 'react'
             ? <Says>The header never hears your press. The toggle itself rides the header’s right
               edge, a track in the cell’s own grid, undressed of its button chrome. And not every
-              column offers a menu: each column declares whether ranking it means anything, and
-              the header only deals a menu where it does.</Says>
+              column offers a menu: a menu exists only where the page writes one inside the
+              header, and the header’s grid makes room for it by asking the cascade what it
+              holds.</Says>
             : <Says>The header never hears your press. The toggle itself rides the header’s right
               edge, a track in the cell’s own grid, undressed of its button chrome. And not every
               column offers a menu: menus exist only where the markup writes them, and the page
@@ -291,7 +294,9 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
               ]}/>}
             {world === 'react'
               ? <Snippet label="HTML" lines={[
-                ...span(headerSrc, 'const rankable = carries(children, SortMenu);', 'const rankable = carries(children, SortMenu);')
+                ...span(pageSource, '<Column key="window"', '<Column key="window"'),
+                ...span(pageSource, '<DraggableColumn key="trades"', '<DraggableColumn key="trades"'), gap,
+                ...unit(baseCss, '.header-cell-content:has(> .menu-toggle),')
               ]}/>
               : <Snippet label="HTML" lines={[
                 ...span(frameMount, 'const measures = order.filter', 'sort-${column}`)));')
@@ -312,8 +317,8 @@ export const MenuRecipe: FC = () => {
   const build: Build = {
     world,
     source: tableSources[pace][origin][motion],
-    headerSrc: headerSources[pace][origin][motion],
-    cellSrc: cellSources[pace][origin][motion],
+    headerSrc: headerSource,
+    cellSrc: rowHeaderSource,
     buildSrc: buildSources[pace][origin][motion]
   };
   return <section aria-label="build the sort menu yourself" className="build-steps">

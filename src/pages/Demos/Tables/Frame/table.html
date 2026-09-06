@@ -1,15 +1,14 @@
 <section aria-label="live aggregations" class="aggregations">
-  <table class="fancy-table sortable">
+  <table class="fancy-table sortable apportioned">
     <thead class="header">
     <tr class="row">
-      <th scope="col" class="cell window header-cell clipped">
-        <div class="header-cell-content resizable">window
+      <th scope="col" class="cell window header-cell">
+        <div class="header-cell-content">window
           <button type="button" class="resize-handle"
                   aria-label="resize window"></button>
-        </div>
       </th>
-      <th scope="col" class="cell trades header-cell clipped">
-        <div class="header-cell-content rankable resizable">trades
+      <th scope="col" class="cell trades header-cell">
+        <div class="header-cell-content">trades
           <button type="button" class="menu-toggle rounded-corners"
                   popovertarget="sort-trades" aria-label="sort trades"></button>
           <menu id="sort-trades" popover="auto"
@@ -29,10 +28,9 @@
           </menu>
           <button type="button" class="resize-handle"
                   aria-label="resize trades"></button>
-        </div>
       </th>
-      <th scope="col" class="cell buys header-cell clipped">
-        <div class="header-cell-content rankable resizable">buys
+      <th scope="col" class="cell buys header-cell">
+        <div class="header-cell-content">buys
           <button type="button" class="menu-toggle rounded-corners"
                   popovertarget="sort-buys" aria-label="sort buys"></button>
           <menu id="sort-buys" popover="auto"
@@ -52,10 +50,9 @@
           </menu>
           <button type="button" class="resize-handle"
                   aria-label="resize buys"></button>
-        </div>
       </th>
-      <th scope="col" class="cell sells header-cell clipped">
-        <div class="header-cell-content rankable resizable">sells
+      <th scope="col" class="cell sells header-cell">
+        <div class="header-cell-content">sells
           <button type="button" class="menu-toggle rounded-corners"
                   popovertarget="sort-sells" aria-label="sort sells"></button>
           <menu id="sort-sells" popover="auto"
@@ -75,10 +72,9 @@
           </menu>
           <button type="button" class="resize-handle"
                   aria-label="resize sells"></button>
-        </div>
       </th>
-      <th scope="col" class="cell volume header-cell clipped">
-        <div class="header-cell-content rankable resizable">volume
+      <th scope="col" class="cell volume header-cell">
+        <div class="header-cell-content">volume
           <button type="button" class="menu-toggle rounded-corners"
                   popovertarget="sort-volume" aria-label="sort volume"></button>
           <menu id="sort-volume" popover="auto"
@@ -98,10 +94,9 @@
           </menu>
           <button type="button" class="resize-handle"
                   aria-label="resize volume"></button>
-        </div>
       </th>
-      <th scope="col" class="cell vwap header-cell clipped">
-        <div class="header-cell-content rankable resizable">vwap
+      <th scope="col" class="cell vwap header-cell">
+        <div class="header-cell-content">vwap
           <button type="button" class="menu-toggle rounded-corners"
                   popovertarget="sort-vwap" aria-label="sort vwap"></button>
           <menu id="sort-vwap" popover="auto"
@@ -121,10 +116,9 @@
           </menu>
           <button type="button" class="resize-handle"
                   aria-label="resize vwap"></button>
-        </div>
       </th>
-      <th scope="col" class="cell change header-cell clipped">
-        <div class="header-cell-content rankable resizable">change
+      <th scope="col" class="cell change header-cell">
+        <div class="header-cell-content">change
           <button type="button" class="menu-toggle rounded-corners"
                   popovertarget="sort-change" aria-label="sort change"></button>
           <menu id="sort-change" popover="auto"
@@ -144,105 +138,94 @@
           </menu>
           <button type="button" class="resize-handle"
                   aria-label="resize change"></button>
-        </div>
       </th>
     </tr>
     </thead>
     <tbody class="body">
     <tr class="row">
-      <th scope="row" class="cell ellipsis row-header">
-        <div class="row-header-content">
-          <button type="button" class="grip grabbable" aria-label="move row 1">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16"
+      <th scope="row" class="cell row-header">
+        <button type="button" class="grip grabbable" aria-label="move row 1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16"
                fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
             <path d="M4 9.5h16"/>
             <path d="M4 14.5h16"/>
           </svg>
-          </button>this minute
-        </div>
+        </button>this minute
       </th>
-      <td class="cell ellipsis">0</td>
-      <td class="cell ellipsis">0</td>
-      <td class="cell ellipsis">0</td>
-      <td class="cell ellipsis">0.00</td>
-      <td class="cell ellipsis">—</td>
-      <td class="cell ellipsis">—</td>
+      <td class="cell">0</td>
+      <td class="cell">0</td>
+      <td class="cell">0</td>
+      <td class="cell">0.00</td>
+      <td class="cell">—</td>
+      <td class="cell">—</td>
     </tr>
     <tr class="row">
-      <th scope="row" class="cell ellipsis row-header">
-        <div class="row-header-content">
-          <button type="button" class="grip grabbable" aria-label="move row 2">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16"
+      <th scope="row" class="cell row-header">
+        <button type="button" class="grip grabbable" aria-label="move row 2">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16"
                fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
             <path d="M4 9.5h16"/>
             <path d="M4 14.5h16"/>
           </svg>
-          </button>last 5 minutes
-        </div>
+        </button>last 5 minutes
       </th>
-      <td class="cell ellipsis">0</td>
-      <td class="cell ellipsis">0</td>
-      <td class="cell ellipsis">0</td>
-      <td class="cell ellipsis">0.00</td>
-      <td class="cell ellipsis">—</td>
-      <td class="cell ellipsis">—</td>
+      <td class="cell">0</td>
+      <td class="cell">0</td>
+      <td class="cell">0</td>
+      <td class="cell">0.00</td>
+      <td class="cell">—</td>
+      <td class="cell">—</td>
     </tr>
     <tr class="row">
-      <th scope="row" class="cell ellipsis row-header">
-        <div class="row-header-content">
-          <button type="button" class="grip grabbable" aria-label="move row 3">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16"
+      <th scope="row" class="cell row-header">
+        <button type="button" class="grip grabbable" aria-label="move row 3">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16"
                fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
             <path d="M4 9.5h16"/>
             <path d="M4 14.5h16"/>
           </svg>
-          </button>last 15 minutes
-        </div>
+        </button>last 15 minutes
       </th>
-      <td class="cell ellipsis">0</td>
-      <td class="cell ellipsis">0</td>
-      <td class="cell ellipsis">0</td>
-      <td class="cell ellipsis">0.00</td>
-      <td class="cell ellipsis">—</td>
-      <td class="cell ellipsis">—</td>
+      <td class="cell">0</td>
+      <td class="cell">0</td>
+      <td class="cell">0</td>
+      <td class="cell">0.00</td>
+      <td class="cell">—</td>
+      <td class="cell">—</td>
     </tr>
     <tr class="row">
-      <th scope="row" class="cell ellipsis row-header">
-        <div class="row-header-content">
-          <button type="button" class="grip grabbable" aria-label="move row 4">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16"
+      <th scope="row" class="cell row-header">
+        <button type="button" class="grip grabbable" aria-label="move row 4">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16"
                fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
             <path d="M4 9.5h16"/>
             <path d="M4 14.5h16"/>
           </svg>
-          </button>this hour
-        </div>
+        </button>this hour
       </th>
-      <td class="cell ellipsis">0</td>
-      <td class="cell ellipsis">0</td>
-      <td class="cell ellipsis">0</td>
-      <td class="cell ellipsis">0.00</td>
-      <td class="cell ellipsis">—</td>
-      <td class="cell ellipsis">—</td>
+      <td class="cell">0</td>
+      <td class="cell">0</td>
+      <td class="cell">0</td>
+      <td class="cell">0.00</td>
+      <td class="cell">—</td>
+      <td class="cell">—</td>
     </tr>
     <tr class="row">
-      <th scope="row" class="cell ellipsis row-header">
-        <div class="row-header-content">
-          <button type="button" class="grip grabbable" aria-label="move row 5">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16"
+      <th scope="row" class="cell row-header">
+        <button type="button" class="grip grabbable" aria-label="move row 5">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16"
                fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
             <path d="M4 9.5h16"/>
             <path d="M4 14.5h16"/>
           </svg>
-          </button>session
-        </div>
+        </button>session
       </th>
-      <td class="cell ellipsis">0</td>
-      <td class="cell ellipsis">0</td>
-      <td class="cell ellipsis">0</td>
-      <td class="cell ellipsis">0.00</td>
-      <td class="cell ellipsis">—</td>
-      <td class="cell ellipsis">—</td>
+      <td class="cell">0</td>
+      <td class="cell">0</td>
+      <td class="cell">0</td>
+      <td class="cell">0.00</td>
+      <td class="cell">—</td>
+      <td class="cell">—</td>
     </tr>
     </tbody>
   </table>
@@ -253,7 +236,7 @@
   <table class="fancy-table column-ghost" aria-hidden="true">
     <thead class="header">
     <tr class="row">
-      <th scope="col" class="cell header-cell clipped">
+      <th scope="col" class="cell header-cell">
         <div class="header-cell-content"></div>
       </th>
     </tr>
@@ -272,23 +255,21 @@
   <table class="fancy-table column-ghost" aria-hidden="true">
     <tbody class="body">
     <tr class="row">
-      <th scope="row" class="cell ellipsis row-header">
-        <div class="row-header-content">
-          <span class="grip">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16"
+      <th scope="row" class="cell row-header">
+        <span class="grip">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16"
                fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
             <path d="M4 9.5h16"/>
             <path d="M4 14.5h16"/>
           </svg>
-          </span>
-        </div>
+        </span>
       </th>
-        <td class="cell ellipsis"></td>
-        <td class="cell ellipsis"></td>
-        <td class="cell ellipsis"></td>
-        <td class="cell ellipsis"></td>
-        <td class="cell ellipsis"></td>
-        <td class="cell ellipsis"></td>
+        <td class="cell"></td>
+        <td class="cell"></td>
+        <td class="cell"></td>
+        <td class="cell"></td>
+        <td class="cell"></td>
+        <td class="cell"></td>
     </tr>
     </tbody>
   </table>

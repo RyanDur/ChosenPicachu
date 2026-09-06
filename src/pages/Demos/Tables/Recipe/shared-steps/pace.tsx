@@ -9,7 +9,7 @@ import {flightsSource, frameMount, gap, travelSource} from './sources';
 export const eagerPace = (world: World, tableSource: string, buildSrc: string): ReactNode =>
   <Step title="Commit inside the move" dial={<PaceDial name="step-pace"/>}>
     <Words want="The trader wants the table to answer inside the move, so they can change their mind before the drop.">
-      <Says>Answering mid-drag means a <Term word="strike">strike</Term> is simply a commit: the same state change a drop
+      <Says>Answering mid-drag means a <Term word="strike">strike</Term> is simply a dispatch: the same state change a drop
         would make, made early. One thing has to hold: the reorder moves real nodes, not copies,
         so the drag keeps flying over a table that has already reordered.</Says>
     </Words>
@@ -19,7 +19,7 @@ export const eagerPace = (world: World, tableSource: string, buildSrc: string): 
           renders through it, and the same key finds its new seat. Carrying the column back is
           just more crossings: home is always reachable. No style changes hands here at
           all.</Says>
-        : <Says>Commit as soon as a neighbour is struck: the commit writes a new column order
+        : <Says>Dispatch as soon as a neighbour is struck: the dispatch writes a new column order
           into the state, and the <Term word="reconcile">reconcile</Term> moves the real cells to match it. Carrying the
           column back is just more crossings: home is always reachable. No style changes hands
           here at all.</Says>}
@@ -29,7 +29,7 @@ export const eagerPace = (world: World, tableSource: string, buildSrc: string): 
           pointer capture, the drift moves the ghost, and a strike settles on the spot.</Says>
         : <Says>This is the whole travel of the eager build, and there is no landing state to keep
           anywhere in it: the drift moves the ghost, columnUnder answers from the survey, and a
-          strike commits on the spot; the buttons-at-zero healing lives in the shared surface
+          strike dispatches on the spot; the buttons-at-zero healing lives in the shared surface
           listener, once, for every build.</Says>}
       <Codes>
         {world === 'react'
@@ -59,9 +59,9 @@ export const eagerPace = (world: World, tableSource: string, buildSrc: string): 
   </Step>;
 
 export const lazyPace = (world: World, tableSource: string, buildSrc: string): ReactNode =>
-  <Step title="Hold still, commit on release" dial={<PaceDial name="step-pace"/>}>
+  <Step title="Hold still, dispatch on release" dial={<PaceDial name="step-pace"/>}>
     <Words want="The trader wants the table calm while they drag, because motion during the drag distracts, and only the destination matters.">
-      <Says>Instead of committing, a <Term word="strike">strike</Term> only remembers a <Term word="landing">landing</Term>, and the release commits
+      <Says>Instead of dispatching, a <Term word="strike">strike</Term> only remembers a <Term word="landing">landing</Term>, and the release dispatches
         it. The landing is state like everything else: drifting back over home must clear it,
         and release, cancel, and lost capture must all resolve it the same way.</Says>
     </Words>
@@ -69,15 +69,15 @@ export const lazyPace = (world: World, tableSource: string, buildSrc: string): R
       {world === 'react'
         ? <Says>The table holds still, and one moveToIndex runs on pointer up. Drifting back over
           your own slot clears the landing, so a drop at home changes nothing.</Says>
-        : <Says>The table holds still, and one commit runs at the landing. Drifting back over
+        : <Says>The table holds still, and one dispatch runs at the landing. Drifting back over
           your own slot clears the landing, so a drop at home changes nothing.</Says>}
       {world === 'react'
         ? <Says>The lazy hook is its own handler, not a flag on the eager one: a strike is only ever
           remembered as the landing, and drop, which also answers cancel and a lost capture,
-          commits it.</Says>
+          dispatches it.</Says>
         : <Says>The lazy build is its own file, not a flag on the eager one: the travel records the
           landing in the state, and the land, which also answers cancel and a lost capture,
-          commits whatever the state is holding.</Says>}
+          dispatches whatever the state is holding.</Says>}
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[

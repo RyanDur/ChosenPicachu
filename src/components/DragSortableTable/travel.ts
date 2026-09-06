@@ -76,11 +76,30 @@ export const rowArrows = (
     });
 };
 
+export type Faces = {
+    heading: string | undefined;
+    cells: readonly string[];
+};
+
+export const faceOf = (cell: Element): string =>
+    ((cell instanceof HTMLElement ? cell.innerText : undefined) ?? cell.textContent ?? '')
+        .split('\n')
+        .map(line => line.trim())
+        .find(line => line.length > 0) ?? '';
+
+const headingFace = (th: Element): string =>
+    [...(th.querySelector('.header-cell-content') ?? th).childNodes]
+        .filter(node => node.nodeType === Node.TEXT_NODE)
+        .map(node => node.textContent ?? '')
+        .join('')
+        .trim();
+
 export type Grab = {
     survey: Survey;
     box: Flight;
     at: Drift;
     pointerId: number;
+    faces: Faces;
 };
 
 type GrabEvent = {
@@ -105,12 +124,17 @@ export const columnLift = (
         return;
     }
     const box = th.getBoundingClientRect();
+    const at = columns.indexOf(held);
     maybe(th.closest('table')).map(table =>
         grabbed({
             survey: surveyed(table, columns, standing()),
             box: {x: box.x, y: box.y, width: box.width},
             at: {x: event.clientX, y: event.clientY},
-            pointerId: event.pointerId
+            pointerId: event.pointerId,
+            faces: {
+                heading: headingFace(th),
+                cells: [...table.tBodies[0]?.rows ?? []].map(lane => maybe(lane.cells[at]).map(faceOf).orElse(''))
+            }
         }));
 };
 
@@ -123,16 +147,21 @@ export const rowLift = (
     if (!(grip instanceof Element)) {
         return;
     }
-    const lane = maybe(grip.closest('tr'))
+    const lane = maybe(grip.closest('tr'));
+    const box = lane
         .map(row => row.getBoundingClientRect())
         .map(({x, y, width}) => ({x, y, width}))
         .orElse(grounded);
     maybe(grip.closest('table')).map(table =>
         grabbed({
             survey: surveyed(table, order(), standing()),
-            box: lane,
+            box,
             at: {x: event.clientX, y: event.clientY},
-            pointerId: event.pointerId
+            pointerId: event.pointerId,
+            faces: {
+                heading: undefined,
+                cells: lane.map(row => [...row.cells].map(faceOf)).orElse([])
+            }
         }));
 };
 

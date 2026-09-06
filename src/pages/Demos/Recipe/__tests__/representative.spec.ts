@@ -1,4 +1,4 @@
-import tableSource from '@components/DragSortableTable/EagerHideAnimatedTable/EagerHideAnimatedTable.tsx?raw';
+import pageSource from '@pages/Demos/Tables/Aggregations/AggregatesTable.tsx?raw';
 import headerSource from '@components/DragSortableTable/elements/DraggableColumn.tsx?raw';
 import animatedHeaderSource from '@components/DragSortableTable/elements/DraggableColumn.tsx?raw';
 import cellSource from '@components/DragSortableTable/elements/Cell.tsx?raw';
@@ -12,12 +12,12 @@ import pushedCss from '@pages/Demos/DragAndDrop/EagerKeepAnimatedList/EagerKeepA
 
 describe('the hand-written tutorial fragments still tell the truth', () => {
   test.each([
-    ['headers render through the order', tableSource, 'order.map(name =>'],
+    ['headers render through the order', pageSource, '{order.map(name => headers[name])}'],
     ['the lifted header blanks by comparison', animatedHeaderSource, "hidden && 'hide',"],
-    ['the lifted column blanks across rows', cellSource, "columnAloft({aloft}).map(held => held === column).orElse(false) && 'hide',"],
+    ['the lifted column blanks across rows', cellSource, "columnAloft({aloft}).map(held => held === column).orElse(false)"],
     ['headers are real column headers', headerSource, 'scope="col"'],
     ['a header names itself to the view transition', animatedHeaderSource, 'viewTransitionName: `header-${name}`'],
-    ['a cell names itself to the view transition', rowSource, 'viewTransitionName: `cell-${row}-${column}`'],
+    ['a cell names itself to the view transition', rowSource, 'viewTransitionName: `cell-${seat}-${column}`'],
     ['the grip arms the native drag', draggableSource, 'draggable={dragging}'],
     ['a lazy list stashes the landing', lazyStaticList, 'setLanding(maybe(index))'],
     ['a lazy settle glides', lazyAnimatedList, 'landedOrder(aloft, landing, order).map(glided(setOrder))'],

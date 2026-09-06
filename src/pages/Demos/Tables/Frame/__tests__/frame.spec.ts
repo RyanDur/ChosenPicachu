@@ -427,6 +427,29 @@ describe('the frame table', () => {
       }
     });
 
+    it('the platform draws the reseat later, and the reconcile still moves the row it was asked to', async () => {
+      const pending: Array<() => void> = [];
+      document.startViewTransition = (update: () => void) => {
+        pending.push(update);
+        return {} as ViewTransition;
+      };
+      try {
+        deal(undefined, eagerKeepAnimated);
+        const windows = () => screen.getAllByRole('rowheader').map(({textContent}) => textContent?.trim());
+
+        within(screen.getByRole('row', {name: /this minute/})).getByRole('button', {name: 'move row 1'}).focus();
+        await userEvent.keyboard('{ArrowDown}');
+        expect(pending).toHaveLength(1);
+        expect(windows().slice(0, 2)).toEqual(['this minute', 'last 5 minutes']);
+
+        pending.forEach(draw => draw());
+
+        expect(windows().slice(0, 2)).toEqual(['last 5 minutes', 'this minute']);
+      } finally {
+        delete (document as Partial<Document>).startViewTransition;
+      }
+    });
+
     it('every cell names itself, so the platform can draw the move', () => {
       deal(undefined, eagerKeepAnimated);
 

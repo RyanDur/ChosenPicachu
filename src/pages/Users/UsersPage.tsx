@@ -3,13 +3,9 @@ import {Link, useNavigate} from 'react-router';
 import {useSearchParamsObject} from '@components/search-params';
 import * as schema from 'schemawax';
 import {User, UserInformation, users as usersApi, UsersLinks} from '@components/Users';
-import {equalAddresses} from './addresses';
 import {Paths} from '@pages/Paths';
-import {has} from '@ryandur/sand';
-import {
-  Cell, Column, DraggableColumn, DraggableRow, EagerHideAnimatedTable, ResizeHandle, SortMenu
-} from '@components/DragSortableTable/EagerHideAnimatedTable';
-import {age, formatAge, FriendsList, UserMenu} from '@components/Users';
+import {EagerHideAnimatedTable, SeatedTable} from '@components/DragSortableTable/EagerHideAnimatedTable';
+import {CandidatesTable, candidateValues, columns} from './CandidatesTable';
 import './UsersPage.css';
 
 export const UsersPage: FC = () => {
@@ -35,52 +31,32 @@ export const UsersPage: FC = () => {
 
   return <>
     <section id="user-info" className="user-info users card rounded-corners lifted padded" key={currentUser?.id}>
-        <UsersLinks.Provider value={{users: Paths.users}}><UserInformation currentUser={currentUser}
-                         readOnly={mode === 'view'}
-                         editing={mode === 'edit'}
-                         onAdd={user => usersApi.add(user)
-                           .onSuccess(updateUsers)}
-                         onUpdate={user => usersApi.update({...user, friends: currentFriendsOf(user)})
-                           .onSuccess(updateUsers)
-                           .onSuccess(() => navigate(Paths.users))}/></UsersLinks.Provider>
-      </section>
+      <UsersLinks.Provider value={{users: Paths.users}}>
+        <UserInformation
+          currentUser={currentUser}
+          readOnly={mode === 'view'}
+          editing={mode === 'edit'}
+          onAdd={user => usersApi.add(user)
+            .onSuccess(updateUsers)}
+          onUpdate={user => usersApi.update({...user, friends: currentFriendsOf(user)})
+            .onSuccess(updateUsers)
+            .onSuccess(() => navigate(Paths.users))}/></UsersLinks.Provider>
+    </section>
 
-      <section id="user-candidates" className="user-candidates users card rounded-corners lifted padded">
-        <h2 className="roster-title title bold">User Candidates</h2>
-        {mode === 'view' &&
-            <Link to={Paths.users} id="add-new-user" className="add-new-user button primary">Add New User</Link>}
-        <EagerHideAnimatedTable id="users-table">
-          <Column name="fullName" className="full-name">Full Name<ResizeHandle/></Column>
-          <DraggableColumn name="homeCity" className="home-city">Home City<ResizeHandle/></DraggableColumn>
-          <DraggableColumn name="age" className="age">Age<SortMenu/><ResizeHandle/></DraggableColumn>
-          <DraggableColumn name="friends" className="friends">Friends<ResizeHandle/></DraggableColumn>
-          <Column name="worksFromHome" className="works-from-home">Works from Home<SortMenu/><ResizeHandle/></Column>
-
-          {users.map(user => {
-            const name = `${user.info.firstName} ${user.info.lastName}`;
-            const worksFromHome = equalAddresses(user.homeAddress, user.workAddress) ? 'Yes' : 'No';
-
-            return <DraggableRow key={user.id}>
-              <Cell column="fullName">{name}</Cell>
-              <Cell column="homeCity">{user.homeAddress.city}</Cell>
-              <Cell column="age" value={has(user.info.dob) ? -user.info.dob.getTime() : undefined}>
-                {formatAge(age(user.info.dob))}
-              </Cell>
-              <Cell column="friends">
-                <FriendsList user={user} users={users} onChange={update(user)}/>
-              </Cell>
-              <Cell column="worksFromHome" value={worksFromHome}>
-                <section className="last-column">
-                  {worksFromHome}
-                  <UserMenu user={user} name={name}
-                            onRemove={() => usersApi.delete(user)
-                              .onSuccess(updateUsers)
-                              .onSuccess(() => navigate(Paths.users))}/>
-                </section>
-              </Cell>
-            </DraggableRow>;
-          })}
+    <section id="user-candidates" className="user-candidates users card rounded-corners lifted padded">
+      <h2 className="roster-title title bold">User Candidates</h2>
+      {mode === 'view' &&
+          <Link to={Paths.users} id="add-new-user" className="add-new-user button primary">Add New User</Link>}
+      <SeatedTable columns={columns} values={users.map(candidateValues)}>
+        <EagerHideAnimatedTable>
+          <CandidatesTable
+            users={users}
+            onFriends={update}
+            onRemove={user => usersApi.delete(user)
+              .onSuccess(updateUsers)
+              .onSuccess(() => navigate(Paths.users))}/>
         </EagerHideAnimatedTable>
-      </section>
+      </SeatedTable>
+    </section>
   </>;
 };

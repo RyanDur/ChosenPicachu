@@ -1,14 +1,14 @@
-import {dealtTableState, dealtIn, orderedTo, ruledBy, seatedBy, tableStore} from '../table-state';
+import {dealtTableState, dealtIn, orderedTo, ruledBy, standingOf, tableStore} from '../table-state';
 
 describe('the table store', () => {
   const dealt = dealtTableState(['window', 'trades', 'buys'], 2);
 
-  test('a commit applies the transition and every subscriber hears it once', () => {
+  test('a dispatch applies the transition and every subscriber hears it once', () => {
     const store = tableStore(dealt);
     const heard: string[][] = [];
     store.subscribe(() => heard.push([...store.state().order]));
 
-    store.commit(orderedTo(1, 2));
+    store.dispatch(orderedTo(1, 2));
 
     expect(store.state().order).toEqual(['window', 'buys', 'trades']);
     expect(heard).toEqual([['window', 'buys', 'trades']]);
@@ -19,29 +19,30 @@ describe('the table store', () => {
     let heard = 0;
     const leave = store.subscribe(() => heard++);
 
-    store.commit(orderedTo(1, 2));
+    store.dispatch(orderedTo(1, 2));
     leave();
-    store.commit(orderedTo(1, 2));
+    store.dispatch(orderedTo(1, 2));
 
     expect(heard).toBe(1);
   });
 
-  test('the state read between commits is the same value', () => {
+  test('the state read between dispatches is the same value', () => {
     const store = tableStore(dealt);
 
     expect(store.state()).toBe(store.state());
-    store.commit(orderedTo(1, 2));
+    store.dispatch(orderedTo(1, 2));
     expect(store.state()).toBe(store.state());
   });
 
-  test('seating by the rows ranks the seats after every transition', () => {
-    const rows = [{trades: {display: '3', value: 3}}, {trades: {display: '9', value: 9}}];
+  test('the standing ranks the seats by the rule, and the store never stores it', () => {
+    const rows = [{trades: 3}, {trades: 9}];
     const store = tableStore(dealt);
 
-    store.commit(seatedBy(rows)(ruledBy({column: 'trades', direction: 'descending'})));
+    store.dispatch(ruledBy({column: 'trades', direction: 'descending'}));
 
     expect(store.state().seats).toEqual([0, 1]);
-    expect(store.state().seated).toEqual([1, 0]);
+    expect(standingOf(rows, store.state())).toEqual([1, 0]);
+    expect('seated' in store.state()).toBe(false);
   });
 
   test('rows that arrive after the deal take the seats that were missing', () => {

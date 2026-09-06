@@ -1,33 +1,31 @@
 import {FC} from 'react';
 import {has} from '@ryandur/sand';
-import {classNames} from '@components/class-names';
-import {ColumnData, RowData} from '@components/Table';
 import {Ghost} from './dress';
 
 type Props = {
     at: {x: number; y: number; width: number};
     drift: {x: number; y: number};
-    column: ColumnData;
-    rows: readonly RowData[];
+    heading: string | undefined;
+    cells: readonly string[];
     heights: readonly (number | undefined)[];
 };
 
-export const ColumnGhost: FC<Props> = ({at, drift, column, rows, heights}) =>
-    <Ghost at={at} drift={drift} className="fancy-table">
+export const ColumnGhost: FC<Props> = ({at, drift, heading, cells, heights}) =>
+    <Ghost at={at} drift={drift} className="fancy-table apportioned">
         <thead className="header">
         <tr className="row">
-            <th className={classNames('cell', column.className, 'header-cell', 'clipped')} scope="col">
+            <th className="cell header-cell" scope="col">
                 <div className="header-cell-content">
-                    {column.display}
+                    {heading}
                 </div>
             </th>
         </tr>
         </thead>
-        <tbody className="body">{rows.map((row, place) =>
+        <tbody className="body">{cells.map((cell, place) =>
             <tr className="row" key={place}
                 style={has(heights[place]) ? {'--seat-height': `${heights[place]}px`} : undefined}>
-                <td className={classNames('cell', row[column.column].className, 'ellipsis')}>
-                    {row[column.column].display}
+                <td className="cell">
+                    {cell}
                 </td>
             </tr>
         )}</tbody>

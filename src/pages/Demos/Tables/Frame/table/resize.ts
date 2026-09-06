@@ -29,7 +29,7 @@ const wireHandle = (mounted: MountedTable, column: string, handle: HTMLButtonEle
 
   const awaken = (): void => {
     const shares = mounted.state().shares ?? measuredShares(mounted.state().order, table);
-    mounted.commit(sharedAs(shares));
+    mounted.dispatch(sharedAs(shares));
   };
 
   handle.addEventListener('focus', awaken);
@@ -45,7 +45,7 @@ const wireHandle = (mounted: MountedTable, column: string, handle: HTMLButtonEle
     }
     handle.setPointerCapture(event.pointerId);
     const trade = soughtTrade(grip, event.clientX, carried);
-    mounted.commit(tradedBy(column, trade.delta));
+    mounted.dispatch(tradedBy(column, trade.delta));
     carried = trade.carried;
   });
   ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(landing =>
@@ -57,7 +57,7 @@ const wireHandle = (mounted: MountedTable, column: string, handle: HTMLButtonEle
       event.preventDefault();
       event.stopPropagation();
       awaken();
-      mounted.commit(tradedBy(column, toward * STEP_SHARE));
+      mounted.dispatch(tradedBy(column, toward * STEP_SHARE));
     });
   });
 };

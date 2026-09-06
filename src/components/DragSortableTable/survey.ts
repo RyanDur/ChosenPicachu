@@ -1,6 +1,5 @@
 import {has} from '@ryandur/sand';
 import {array} from '@components/arrays';
-import {ColumnData} from '@components/Table';
 
 export type Bounds = {
     left: number;
@@ -132,12 +131,3 @@ export const gripLabel = (position: number): string => `move row ${position + 1}
 
 export const interior = (at: number, count: number): number =>
     Math.min(Math.max(at, 1), count - 2);
-
-export const placed = (
-    ordered: readonly ColumnData[],
-    column: string,
-    to: number
-): ColumnData[] => {
-    const lifted = ordered.find(definition => definition.column === column);
-    return has(lifted) ? array.moveToIndex(to, lifted, ordered) : [...ordered];
-};

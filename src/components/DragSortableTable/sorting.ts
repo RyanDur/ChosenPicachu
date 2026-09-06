@@ -1,7 +1,8 @@
 import {has} from '@ryandur/sand';
-import {RowData} from '@components/Table';
 
 export type Direction = 'ascending' | 'descending';
+
+export type Values = Readonly<Record<string, number | string | undefined>>;
 
 export type Rule = {
     column: string;
@@ -27,10 +28,10 @@ export const directionOf = (label: string): Direction | undefined => {
     return has(choice) ? choice.direction : undefined;
 };
 
-export const ranked = (rows: RowData[], dealt: readonly number[], rule: Rule): number[] =>
+export const ranked = (values: readonly Values[], dealt: readonly number[], rule: Rule): number[] =>
     [...dealt].sort((left, right) => {
-        const first = rows[left][rule.column]?.value;
-        const second = rows[right][rule.column]?.value;
+        const first = values[left]?.[rule.column];
+        const second = values[right]?.[rule.column];
         const gap = typeof first === 'string' || typeof second === 'string'
             ? String(first ?? '').localeCompare(String(second ?? ''))
             : (first ?? Number.NEGATIVE_INFINITY) - (second ?? Number.NEGATIVE_INFINITY);

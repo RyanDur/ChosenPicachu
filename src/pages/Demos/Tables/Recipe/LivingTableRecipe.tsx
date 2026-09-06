@@ -5,8 +5,8 @@ import {span, unit} from '../../Recipe/carve';
 import {World, worldParam} from '../params';
 import feedSource from '@pages/Demos/Charts/live-trades.ts?raw';
 import foldSource from '@pages/Demos/Tables/Aggregations/fold.ts?raw';
-import dealSource from '@pages/Demos/Tables/Aggregations/Aggregations.tsx?raw';
-import useTableStoreSource from '@components/DragSortableTable/useTableStore.ts?raw';
+import dealSource from '@pages/Demos/Tables/Aggregations/AggregatesTable.tsx?raw';
+import seatedTableSource from '@components/DragSortableTable/SeatedTable.tsx?raw';
 import headerSource from '@components/DragSortableTable/elements/DraggableColumn.tsx?raw';
 import rowSource from '@components/DragSortableTable/elements/Cell.tsx?raw';
 import hydrateSource from '@pages/Demos/Tables/Aggregations/recent-trades.ts?raw';
@@ -46,14 +46,14 @@ const dealPlans: Record<World, ReactNode> = {
 const dealCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="HTML" lines={[
-      ...span(dealSource, '<Column name="window"', '<Column name="change" className="change">change<SortMenu/><ResizeHandle/></Column>')
+      ...span(dealSource, 'const headers: Record<string, ReactElement> = {', '  };')
     ]}/>
     <Snippet label="CSS" lines={[
       ...unit(widthsSource, '.aggregations {')
     ]}/>
     <Snippet label="HTML" lines={[
       ...span(headerSource, '<th className={classNames(', 'scope="col"'), gap,
-      ...span(rowSource, 'return rowHeader', '<td className={dress} style={drawn}>{children}</td>;')
+      ...span(rowSource, 'return <td className=', '</td>;')
     ]}/>
   </Codes>,
   vanilla: <Codes>
@@ -79,7 +79,7 @@ const foldSays: Record<World, ReactNode> = {
   vanilla: <Says>Every arrival refolds the same trades into per-window aggregates, because
     refolding is simple math and cannot drift out of sync. The fold is the same module the
     React world runs. What React did for you ends here: there is no render to catch the
-    change, so every commit reconciles the page against the state, writing only the cells
+    change, so every dispatch reconciles the page against the state, writing only the cells
     whose text changed and reseating only the rows whose seat changed.</Says>
 };
 
@@ -105,7 +105,7 @@ const refolds: Record<World, string> = {
 
 const statePlans: Record<World, ReactNode> = {
   react: <Says>The table’s state is one value held in a single cell, and the setter is the
-    commit. Nothing ever edits the state in place: a change is a pure transition, a function
+    dispatch. Nothing ever edits the state in place: a change is a pure transition, a function
     from the old state to the new; the previous value is never mutated, only replaced.</Says>,
   vanilla: <Says>The vanilla build keeps the same single value: the table state, which holds order, seats,
     seated, shares, and the rule together, every field readonly. Nothing ever edits the state in place: a
@@ -114,10 +114,10 @@ const statePlans: Record<World, ReactNode> = {
 };
 
 const stateFollows: Record<World, ReactNode> = {
-  react: <Says>What follows the commit is React’s half of the deal: the component is subscribed to the
+  react: <Says>What follows the dispatch is React’s half of the deal: the table is subscribed to the
     store, so it re-renders, the markup renders through the new state, and React reconciles the
     real DOM to match, moving only the nodes whose place changed. You never touch the DOM; you
-    only commit the next state.</Says>,
+    only dispatch the next state.</Says>,
   vanilla: <Says>What React did for you is the other half: the build mounts the same store with the same
     write path, and the subscriber it hands the store reconciles the page against the new state
     by hand, moving only the cells whose place changed and writing only the text that differs.
@@ -129,7 +129,7 @@ const stateCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="TS" lines={[
       ...unit(stateSource, 'export type TableState'), gap,
-      ...unit(useTableStoreSource, 'export const useTableStore')
+      ...unit(seatedTableSource, 'export const SeatedTable')
     ]}/>
   </Codes>,
   vanilla: <Codes>
@@ -139,7 +139,7 @@ const stateCodes: Record<World, ReactNode> = {
       ...unit(stateSource, 'export const baked')
     ]}/>
     <Snippet label="TS" lines={[
-      ...unit(frameMount, 'const commit = ')
+      ...span(frameMount, 'store.subscribe(() => {', '  });')
     ]}/>
   </Codes>
 };

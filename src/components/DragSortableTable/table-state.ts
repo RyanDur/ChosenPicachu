@@ -1,9 +1,8 @@
 import {Maybe, has, maybe, nothing} from '@ryandur/sand';
-import {Drift, Flight as FlightBox, Grab, carried, still} from './travel';
+import {Drift, Faces, Flight as FlightBox, Grab, carried, still} from './travel';
 import {Survey} from './survey';
 import {Shares, neighborOf, traded} from '@components/Table/shares';
-import {RowData} from '@components/Table';
-import {Rule, ranked} from './sorting';
+import {Rule, Values, ranked} from './sorting';
 import {array} from '@components/arrays';
 
 export type Aloft =
@@ -30,7 +29,7 @@ export type Transition = (state: TableState) => TableState;
 
 export type TableStore = {
   state: () => TableState;
-  commit: (transition: Transition) => void;
+  dispatch: (transition: Transition) => void;
   subscribe: (listener: () => void) => () => void;
 };
 
@@ -39,7 +38,7 @@ export const tableStore = (dealt: TableState): TableStore => {
   const listeners = new Set<() => void>();
   return {
     state: () => state,
-    commit: transition => {
+    dispatch: transition => {
       state = transition(state);
       listeners.forEach(listener => listener());
     },
@@ -53,19 +52,19 @@ export const tableStore = (dealt: TableState): TableStore => {
 export type TableState = {
   readonly order: readonly string[];
   readonly seats: readonly number[];
-  readonly seated: readonly number[];
   readonly shares: Shares | undefined;
   readonly rule: Rule | undefined;
   readonly aloft: Aloft | undefined;
   readonly bounds: Survey | undefined;
   readonly flight: FlightBox | undefined;
+  readonly faces: Faces | undefined;
   readonly origin: Drift | undefined;
   readonly drift: Drift;
   readonly landed: Landed | undefined;
 };
 
 export const lifted = (aloft: Aloft, grab: Grab) => (state: TableState): TableState =>
-  ({...state, aloft, bounds: grab.survey, flight: grab.box, origin: undefined, drift: still});
+  ({...state, aloft, bounds: grab.survey, flight: grab.box, faces: grab.faces, origin: undefined, drift: still});
 
 export const drifting = (moving: {clientX: number; clientY: number}) => (state: TableState): TableState =>
   ({...state, ...carried(state.origin, moving)});
@@ -77,7 +76,7 @@ export const rowLanding = (landing: number | undefined) => (state: TableState): 
   has(state.aloft) && state.aloft.axis === 'row' ? {...state, aloft: {...state.aloft, landing}} : state;
 
 export const dropped = (state: TableState): TableState =>
-  ({...state, aloft: undefined, bounds: undefined, flight: undefined, origin: undefined, drift: still});
+  ({...state, aloft: undefined, bounds: undefined, flight: undefined, faces: undefined, origin: undefined, drift: still});
 
 export const columnAloft = ({aloft}: Pick<TableState, 'aloft'>): Maybe<string> =>
   has(aloft) && aloft.axis === 'column' ? maybe(aloft.held) : nothing();
@@ -91,8 +90,8 @@ export const landedColumn = ({aloft}: TableState): Maybe<string> =>
 export const landedRow = ({aloft}: TableState): Maybe<number> =>
   has(aloft) && aloft.axis === 'row' ? maybe(aloft.landing) : nothing();
 
-export const baked = (state: TableState): TableState =>
-  ({...state, seats: state.seated, rule: undefined});
+export const baked = (standing: readonly number[]) => (state: TableState): TableState =>
+  ({...state, seats: standing, rule: undefined});
 
 export const ruledBy = (rule?: Rule) => (state: TableState): TableState =>
   ({...state, rule});
@@ -133,24 +132,24 @@ export const columnOf = (state: TableState, cell: Element): string =>
 export const dealtTableState = (order: readonly string[], lanes: number): TableState => {
   const dealt = Array.from({length: lanes}, (_, at) => at);
   return {
-    order, seats: dealt, seated: dealt, shares: undefined, rule: undefined,
-    aloft: undefined, bounds: undefined, flight: undefined, origin: undefined, drift: still,
+    order, seats: dealt, shares: undefined, rule: undefined,
+    aloft: undefined, bounds: undefined, flight: undefined, faces: undefined, origin: undefined, drift: still,
     landed: undefined
   };
 };
 
-export const standingOf = (rows: RowData[], state: TableState): readonly number[] =>
-  has(state.rule) ? ranked(rows, state.seats, state.rule) : state.seats;
+export const standingOf = (values: readonly Values[], state: TableState): readonly number[] =>
+  has(state.rule) ? ranked(values, state.seats, state.rule) : state.seats;
 
-export const seatedBy = (rows: RowData[]) => (transition: Transition): Transition => state => {
-  const next = transition(state);
-  return {...next, seated: standingOf(rows, next)};
-};
+const moved = (before: readonly number[], after: readonly number[]): boolean =>
+  before.length === after.length && before.some((seat, at) => seat !== after[at]);
+
+export const reseated = (before: TableState, after: TableState): boolean =>
+  before.order !== after.order || before.rule !== after.rule || moved(before.seats, after.seats);
 
 export const dealtIn = (lanes: number) => (state: TableState): TableState => {
   if (state.seats.length === lanes) {
     return state;
   }
-  const seats = Array.from({length: lanes}, (_, at) => at);
-  return {...state, seats, seated: seats};
+  return {...state, seats: Array.from({length: lanes}, (_, at) => at)};
 };

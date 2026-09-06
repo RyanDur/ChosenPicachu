@@ -242,11 +242,35 @@ describe('the tables demo', () => {
     await userEvent.click(within(controls).getByRole('radio', {name: 'Keep'}));
     await userEvent.click(within(controls).getByRole('radio', {name: 'Static'}));
 
-    expect(controls).toHaveTextContent(/commits the new order on drop/);
+    expect(controls).toHaveTextContent(/dispatches the new order on drop/);
     expect(controls).toHaveTextContent(/stays where it was/);
     expect(controls).toHaveTextContent(/single frame/);
     expect(screen.getByText('<LazyKeepStaticTable/>')).toBeVisible();
     expect(controls).not.toHaveTextContent(/Neighbours swap/);
+  });
+
+  test('the seating survives a change of table', async () => {
+    const feed = await streamingFeed();
+
+    renderTables(urlOf(feed));
+
+    await feedIsSubscribed();
+    const card = screen.getByRole('region', {name: 'live aggregations'});
+    const windows = () => within(card).getAllByRole('rowheader').map(({textContent}) => textContent);
+    const headers = () => within(card).getAllByRole('columnheader').map(header => header.classList.item(1));
+    expect(windows().slice(0, 2)).toEqual(['this minute', 'last 5 minutes']);
+
+    fireEvent.keyDown(within(card).getByRole('button', {name: 'move row 1'}), {key: 'ArrowDown'});
+    fireEvent.keyDown(within(card).getByRole('columnheader', {name: /^trades/}), {key: 'ArrowRight'});
+    expect(windows().slice(0, 2)).toEqual(['last 5 minutes', 'this minute']);
+
+    const controls = await screen.findByRole('region', {name: 'table controls'}, {timeout: 5000});
+    await userEvent.click(within(controls).getByRole('radio', {name: 'Lazy'}));
+    await userEvent.click(within(controls).getByRole('radio', {name: 'Static'}));
+
+    expect(screen.getByText('<LazyHideStaticTable/>')).toBeVisible();
+    expect(windows().slice(0, 2)).toEqual(['last 5 minutes', 'this minute']);
+    expect(headers().slice(0, 3)).toEqual(['window', 'buys', 'trades']);
   });
 
   test('the recipe teaches whatever the dials are set to', async () => {
@@ -339,7 +363,7 @@ describe('the tables demo', () => {
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Keep'}));
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Static'}));
 
-    expect(recipe).toHaveTextContent(/Hold still, commit on release/);
+    expect(recipe).toHaveTextContent(/Hold still, dispatch on release/);
     expect(recipe).toHaveTextContent(/the sort lands on the drop/);
     expect(recipe).toHaveTextContent(/stays in sight while its copy travels/);
     expect(recipe).toHaveTextContent(/instantly, with no motion/);
@@ -487,7 +511,7 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/position-area/);
     expect(recipe).toHaveTextContent(/The rule is a drape, not a bake/);
     expect(recipe).toHaveTextContent(/A hand ends the rule/);
-    expect(recipe).toHaveTextContent(/settle\(ruledBy\(/);
+    expect(recipe).toHaveTextContent(/dispatch\(ruledBy\(/);
     expect(recipe).not.toHaveTextContent(/Dress the menu as a card/);
     expect(within(recipe).getByRole('link', {name: 'position-area'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/CSS/position-area'));

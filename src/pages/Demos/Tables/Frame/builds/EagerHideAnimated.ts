@@ -6,13 +6,13 @@ import {eagerColumnFlight, eagerRowFlight} from '@components/DragSortableTable/f
 export const wire = (document: Document): void =>
   mount(document, {
     flights: {
-      column: eagerColumnFlight(settleColumn(glided)),
-      row: eagerRowFlight(settleRow(glided))
+      column: eagerColumnFlight(settleColumn),
+      row: eagerRowFlight(settleRow)
     },
     arrows: {
-      column: (mounted, held) => columnArrows(held, () => mounted.state().order, ordered(glided)(mounted)),
-      row: (mounted, held) => rowArrows(held, () => mounted.state().seated, arranged(glided)(mounted, held))
+      column: (mounted, held) => columnArrows(held, () => mounted.state().order, ordered(mounted)),
+      row: (mounted, held) => rowArrows(held, mounted.standing, arranged(mounted, held))
     },
-    settle: glided,
+    show: glided,
     veils: veiled,
   });

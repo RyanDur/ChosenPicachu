@@ -1,5 +1,5 @@
 import {has} from '@ryandur/sand';
-import {RowData} from '@components/Table';
+import {Values} from '@components/DragSortableTable/sorting';
 import {cents, deltaLabel} from '../../Charts/money';
 import {WindowAggregate} from './fold';
 
@@ -8,7 +8,17 @@ const moved = ({opened, closed}: WindowAggregate) =>
     ? {display: deltaLabel(opened, closed), value: closed - opened}
     : {display: '—'};
 
-export const cells = (aggregate: WindowAggregate): RowData => ({
+export type Measure = {
+  display: string;
+  value?: number;
+};
+
+export type Measures = Readonly<Record<string, Measure>>;
+
+export const valuesOf = (row: Measures): Values =>
+  Object.fromEntries(Object.entries(row).map(([column, {value}]) => [column, value]));
+
+export const cells = (aggregate: WindowAggregate): Measures => ({
   window: {display: aggregate.window},
   trades: {display: String(aggregate.trades), value: aggregate.trades},
   buys: {display: String(aggregate.buys), value: aggregate.buys},

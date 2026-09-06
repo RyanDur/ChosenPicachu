@@ -28,7 +28,7 @@ import {
   twoRoads
 } from './shared-steps';
 import buildSrc from '../Frame/builds/EagerKeepAnimated.ts?raw';
-import rowSource from '@components/DragSortableTable/elements/Cell.tsx?raw';
+import rowSource from '@components/DragSortableTable/elements/RowHeader.tsx?raw';
 import tableSource from '@components/DragSortableTable/EagerKeepAnimatedTable/EagerKeepAnimatedTable.tsx?raw';
 import headerSource from '@components/DragSortableTable/elements/DraggableColumn.tsx?raw';
 
@@ -44,7 +44,7 @@ export const EagerKeepAnimatedRecipe: FC<{track: Track; world: World}> = ({track
       <Steps>
         {cssShare(world)}
         {orderInState(world)}
-        {listenersOnce(world, tableSource)}
+        {listenersOnce(world)}
         {liftOnce(world, headerSource)}
         {dragSurface(world, tableSource)}
         {ghostByHand(world, tableSource)}

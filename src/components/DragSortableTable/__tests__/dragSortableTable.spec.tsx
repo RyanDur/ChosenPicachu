@@ -1,6 +1,6 @@
 import {fireEvent, render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {deal} from '@test-support/deal';
+import {Dealt} from '@test-support/deal';
 import * as EagerHideStatic from '../EagerHideStaticTable';
 import * as EagerKeepAnimated from '../EagerKeepAnimatedTable';
 import * as EagerKeepStatic from '../EagerKeepStaticTable';
@@ -61,7 +61,7 @@ describe('drag sortable columns', () => {
   const drop = () => fireEvent.pointerUp(surface(), {pointerId: 1});
 
   test('an eager column follows the pointer as it crosses its neighbors', () => {
-    render(<EagerKeepStatic.Table>{deal(EagerKeepStatic, sized, people, {draggable: true})}</EagerKeepStatic.Table>);
+    render(<Dealt kit={EagerKeepStatic} columns={sized} rows={people} kinds={{draggable: true}}/>);
 
     lift('age');
     carryOver('city');
@@ -72,7 +72,7 @@ describe('drag sortable columns', () => {
   });
 
   test('a lazy column waits for the drop', () => {
-    render(<LazyKeepStatic.Table>{deal(LazyKeepStatic, sized, people, {draggable: true})}</LazyKeepStatic.Table>);
+    render(<Dealt kit={LazyKeepStatic} columns={sized} rows={people} kinds={{draggable: true}}/>);
 
     lift('age');
     carryOver('city');
@@ -83,7 +83,7 @@ describe('drag sortable columns', () => {
   });
 
   test('a hiding column vanishes while it travels and returns on arrival', () => {
-    render(<EagerHideStatic.Table>{deal(EagerHideStatic, sized, people, {draggable: true})}</EagerHideStatic.Table>);
+    render(<Dealt kit={EagerHideStatic} columns={sized} rows={people} kinds={{draggable: true}}/>);
 
     lift('city');
     expect(header('city').classList).toContain('hide');
@@ -98,7 +98,7 @@ describe('drag sortable columns', () => {
   });
 
   test('a column carried back without dropping comes home', () => {
-    render(<EagerKeepStatic.Table>{deal(EagerKeepStatic, sized, people, {draggable: true})}</EagerKeepStatic.Table>);
+    render(<Dealt kit={EagerKeepStatic} columns={sized} rows={people} kinds={{draggable: true}}/>);
 
     lift('age');
     carryOver('city');
@@ -111,7 +111,7 @@ describe('drag sortable columns', () => {
   });
 
   test('a lazy column carried home lands nowhere', () => {
-    render(<LazyKeepStatic.Table>{deal(LazyKeepStatic, sized, people, {draggable: true})}</LazyKeepStatic.Table>);
+    render(<Dealt kit={LazyKeepStatic} columns={sized} rows={people} kinds={{draggable: true}}/>);
 
     lift('age');
     carryOver('city');
@@ -122,7 +122,7 @@ describe('drag sortable columns', () => {
   });
 
   test('the switch waits for the inner half of the neighbor', () => {
-    render(<EagerKeepStatic.Table>{deal(EagerKeepStatic, sized, people, {draggable: true})}</EagerKeepStatic.Table>);
+    render(<Dealt kit={EagerKeepStatic} columns={sized} rows={people} kinds={{draggable: true}}/>);
 
     lift('age');
     fireEvent.pointerMove(surface(), {buttons: 1, clientX: 332, clientY: 100, pointerId: 1});
@@ -144,7 +144,7 @@ describe('drag sortable columns', () => {
     const person = [{
       name: {display: 'Ada'}, slim: {display: 'few'}, wide: {display: 'many'}, job: {display: 'Analyst'}
     }];
-    render(<EagerKeepStatic.Table>{deal(EagerKeepStatic, stretched, person, {draggable: true})}</EagerKeepStatic.Table>);
+    render(<Dealt kit={EagerKeepStatic} columns={stretched} rows={person} kinds={{draggable: true}}/>);
 
     lift('slim');
     fireEvent.pointerMove(surface(), {buttons: 1, clientX: 260, clientY: 100, pointerId: 1});
@@ -156,7 +156,7 @@ describe('drag sortable columns', () => {
   });
 
   test('arrow keys on the resize handle trade shares, never seats', () => {
-    render(<EagerKeepStatic.Table>{deal(EagerKeepStatic, sized, people, {draggable: true, resizable: true})}</EagerKeepStatic.Table>);
+    render(<Dealt kit={EagerKeepStatic} columns={sized} rows={people} kinds={{draggable: true, resizable: true}}/>);
 
     const handle = screen.getByRole('button', {name: /resize age/});
     fireEvent.focus(handle);
@@ -166,7 +166,7 @@ describe('drag sortable columns', () => {
   });
 
   test('the first and last columns hold their posts', () => {
-    render(<EagerKeepStatic.Table>{deal(EagerKeepStatic, sized, people, {draggable: true})}</EagerKeepStatic.Table>);
+    render(<Dealt kit={EagerKeepStatic} columns={sized} rows={people} kinds={{draggable: true}}/>);
 
     expect(header('name').classList).not.toContain('grabbable');
     expect(header('job').classList).not.toContain('grabbable');
@@ -182,7 +182,7 @@ describe('drag sortable columns', () => {
   });
 
   test('the travelling ghost carries the whole column', () => {
-    render(<EagerKeepStatic.Table>{deal(EagerKeepStatic, sized, people, {draggable: true})}</EagerKeepStatic.Table>);
+    render(<Dealt kit={EagerKeepStatic} columns={sized} rows={people} kinds={{draggable: true}}/>);
     [...sourceTable().querySelectorAll('tr')].slice(1).forEach((lane, at) => {
       lane.getBoundingClientRect = () => ({
         left: 0, right: 0, top: 0, bottom: 0, width: 0, height: 40 + at * 10, x: 0, y: 0, toJSON: () => ({})
@@ -212,7 +212,7 @@ describe('drag sortable columns', () => {
   });
 
   test('columns hold still without the opt-in', () => {
-    render(<EagerKeepStatic.Table>{deal(EagerKeepStatic, sized, people)}</EagerKeepStatic.Table>);
+    render(<Dealt kit={EagerKeepStatic} columns={sized} rows={people}/>);
 
     fireEvent.pointerDown(header('age'), {clientX: 100, clientY: 50, pointerId: 1});
     expect(document.querySelector('.drag-surface')).toBeNull();
@@ -220,7 +220,7 @@ describe('drag sortable columns', () => {
   });
 
   test('a keyboard walk says the move', async () => {
-    render(<EagerKeepStatic.Table>{deal(EagerKeepStatic, sized, people, {draggable: true})}</EagerKeepStatic.Table>);
+    render(<Dealt kit={EagerKeepStatic} columns={sized} rows={people} kinds={{draggable: true}}/>);
 
     header('age').focus();
     await userEvent.keyboard('{ArrowRight}');
@@ -230,7 +230,7 @@ describe('drag sortable columns', () => {
   });
 
   test('a dropped column says where it landed', () => {
-    render(<EagerKeepStatic.Table>{deal(EagerKeepStatic, sized, people, {draggable: true})}</EagerKeepStatic.Table>);
+    render(<Dealt kit={EagerKeepStatic} columns={sized} rows={people} kinds={{draggable: true}}/>);
 
     lift('age');
     carryOver('city');
@@ -298,7 +298,7 @@ describe('drag sortable rows', () => {
   const drop = () => fireEvent.pointerUp(surface(), {pointerId: 1});
 
   test('the row in hand keeps its grip and the table’s proportions', () => {
-    render(<EagerKeepStatic.Table>{deal(EagerKeepStatic, sized, people, {gripped: true})}</EagerKeepStatic.Table>);
+    render(<Dealt kit={EagerKeepStatic} columns={sized} rows={people} kinds={{gripped: true}}/>);
 
     lift('Grace');
 
@@ -310,7 +310,7 @@ describe('drag sortable rows', () => {
     const age = ghost.querySelector('td');
     if (name === null || age === null) throw new Error('the ghost row lost a seat');
     expect(name.classList).toContain('row-header');
-    expect(name.querySelector('.row-header-content .grip')).not.toBeNull();
+    expect(name.querySelector('.grip')).not.toBeNull();
     expect(age.querySelector('.grip')).toBeNull();
     expect(name.style.getPropertyValue('--share')).toBe('62.5%');
     expect(age.style.getPropertyValue('--share')).toBe('37.5%');
@@ -318,7 +318,7 @@ describe('drag sortable rows', () => {
   });
 
   test('an eager row follows the pointer as it crosses its neighbors', () => {
-    render(<EagerKeepStatic.Table>{deal(EagerKeepStatic, sized, people, {gripped: true})}</EagerKeepStatic.Table>);
+    render(<Dealt kit={EagerKeepStatic} columns={sized} rows={people} kinds={{gripped: true}}/>);
 
     lift('Ada');
     carryOver('Alan');
@@ -327,7 +327,7 @@ describe('drag sortable rows', () => {
   });
 
   test('a lazy row waits for the drop', () => {
-    render(<LazyKeepStatic.Table>{deal(LazyKeepStatic, sized, people, {gripped: true})}</LazyKeepStatic.Table>);
+    render(<Dealt kit={LazyKeepStatic} columns={sized} rows={people} kinds={{gripped: true}}/>);
 
     lift('Ada');
     carryOver('Alan');
@@ -338,7 +338,7 @@ describe('drag sortable rows', () => {
   });
 
   test('a hiding row vanishes while it travels and returns on arrival', () => {
-    render(<EagerHideStatic.Table>{deal(EagerHideStatic, sized, people, {gripped: true})}</EagerHideStatic.Table>);
+    render(<Dealt kit={EagerHideStatic} columns={sized} rows={people} kinds={{gripped: true}}/>);
 
     lift('Grace');
     [...rowOf('Grace').querySelectorAll('th, td')]
@@ -352,7 +352,7 @@ describe('drag sortable rows', () => {
   });
 
   test('a row carried back without dropping comes home', () => {
-    render(<EagerKeepStatic.Table>{deal(EagerKeepStatic, sized, people, {gripped: true})}</EagerKeepStatic.Table>);
+    render(<Dealt kit={EagerKeepStatic} columns={sized} rows={people} kinds={{gripped: true}}/>);
 
     lift('Ada');
     carryOver('Grace');
@@ -364,7 +364,7 @@ describe('drag sortable rows', () => {
   });
 
   test('the travelling ghost carries the whole row', () => {
-    render(<EagerKeepStatic.Table>{deal(EagerKeepStatic, sized, people, {gripped: true})}</EagerKeepStatic.Table>);
+    render(<Dealt kit={EagerKeepStatic} columns={sized} rows={people} kinds={{gripped: true}}/>);
 
     lift('Grace');
 
@@ -378,7 +378,7 @@ describe('drag sortable rows', () => {
   });
 
   test('the keyboard walks a row up and down', async () => {
-    render(<EagerKeepStatic.Table>{deal(EagerKeepStatic, sized, people, {gripped: true})}</EagerKeepStatic.Table>);
+    render(<Dealt kit={EagerKeepStatic} columns={sized} rows={people} kinds={{gripped: true}}/>);
 
     grip('Ada').focus();
     await userEvent.keyboard('{ArrowDown}');
@@ -390,8 +390,8 @@ describe('drag sortable rows', () => {
   });
 
   test('rows that arrive after the deal still walk and speak', async () => {
-    const {rerender} = render(<EagerKeepStatic.Table>{deal(EagerKeepStatic, sized, [], {gripped: true})}</EagerKeepStatic.Table>);
-    rerender(<EagerKeepStatic.Table>{deal(EagerKeepStatic, sized, people, {gripped: true})}</EagerKeepStatic.Table>);
+    const {rerender} = render(<Dealt kit={EagerKeepStatic} columns={sized} rows={[]} kinds={{gripped: true}}/>);
+    rerender(<Dealt kit={EagerKeepStatic} columns={sized} rows={people} kinds={{gripped: true}}/>);
 
     grip('Ada').focus();
     await userEvent.keyboard('{ArrowDown}');
@@ -400,9 +400,27 @@ describe('drag sortable rows', () => {
     expect(screen.getByRole('status')).toHaveTextContent('row moved to 2 of 3');
   });
 
+  test('rows that arrive after the deal still walk on the animated table', async () => {
+    const transition = vi.fn((update: () => void) => update());
+    (document as {startViewTransition?: unknown}).startViewTransition = transition;
+    try {
+      const {rerender} = render(<Dealt kit={EagerKeepAnimated} columns={sized} rows={[]} kinds={{gripped: true}}/>);
+      rerender(<Dealt kit={EagerKeepAnimated} columns={sized} rows={people} kinds={{gripped: true}}/>);
+
+      grip('Ada').focus();
+      await userEvent.keyboard('{ArrowDown}');
+
+      expect(firstCells()).toEqual(['Grace', 'Ada', 'Alan']);
+      expect(screen.getByRole('status')).toHaveTextContent('row moved to 2 of 3');
+      expect(transition).toHaveBeenCalledTimes(1);
+    } finally {
+      delete (document as Partial<Document>).startViewTransition;
+    }
+  });
+
   test('rows that arrive after the deal still drag', () => {
-    const {rerender} = render(<EagerKeepStatic.Table>{deal(EagerKeepStatic, sized, [], {gripped: true})}</EagerKeepStatic.Table>);
-    rerender(<EagerKeepStatic.Table>{deal(EagerKeepStatic, sized, people, {gripped: true})}</EagerKeepStatic.Table>);
+    const {rerender} = render(<Dealt kit={EagerKeepStatic} columns={sized} rows={[]} kinds={{gripped: true}}/>);
+    rerender(<Dealt kit={EagerKeepStatic} columns={sized} rows={people} kinds={{gripped: true}}/>);
 
     lift('Ada');
     carryOver('Alan');
@@ -412,13 +430,13 @@ describe('drag sortable rows', () => {
   });
 
   test('rows hold still without the opt-in', () => {
-    render(<EagerKeepStatic.Table>{deal(EagerKeepStatic, sized, people)}</EagerKeepStatic.Table>);
+    render(<Dealt kit={EagerKeepStatic} columns={sized} rows={people}/>);
 
     expect(within(sourceTable()).queryByRole('button', {name: /move row/})).toBeNull();
   });
 
   test('a keyboard nudge says the move', async () => {
-    render(<EagerKeepStatic.Table>{deal(EagerKeepStatic, sized, people, {gripped: true})}</EagerKeepStatic.Table>);
+    render(<Dealt kit={EagerKeepStatic} columns={sized} rows={people} kinds={{gripped: true}}/>);
 
     grip('Ada').focus();
     await userEvent.keyboard('{ArrowDown}');
@@ -428,7 +446,7 @@ describe('drag sortable rows', () => {
   });
 
   test('a dropped row says where it landed', () => {
-    render(<EagerKeepStatic.Table>{deal(EagerKeepStatic, sized, people, {gripped: true})}</EagerKeepStatic.Table>);
+    render(<Dealt kit={EagerKeepStatic} columns={sized} rows={people} kinds={{gripped: true}}/>);
 
     lift('Ada');
     carryOver('Alan');
@@ -468,7 +486,7 @@ describe('sort criteria menus', () => {
   };
 
   test('a criterion chosen from the column menu rules the rows', async () => {
-    render(<EagerKeepStatic.Table>{deal(EagerKeepStatic, sized, people, {sortable: true})}</EagerKeepStatic.Table>);
+    render(<Dealt kit={EagerKeepStatic} columns={sized} rows={people} kinds={{sortable: true}}/>);
 
     await userEvent.click(within(menuFor('sort age')).getByText('descending'));
 
@@ -477,17 +495,17 @@ describe('sort criteria menus', () => {
   });
 
   test('the rule keeps sorting as the values change', async () => {
-    const {rerender} = render(<EagerKeepStatic.Table>{deal(EagerKeepStatic, sized, people, {sortable: true})}</EagerKeepStatic.Table>);
+    const {rerender} = render(<Dealt kit={EagerKeepStatic} columns={sized} rows={people} kinds={{sortable: true}}/>);
 
     await userEvent.click(within(menuFor('sort age')).getByText('ascending'));
     expect(firstCells()).toEqual(['Ada', 'Alan', 'Grace']);
 
-    rerender(<EagerKeepStatic.Table>{deal(EagerKeepStatic, sized, aged(50), {sortable: true})}</EagerKeepStatic.Table>);
+    rerender(<Dealt kit={EagerKeepStatic} columns={sized} rows={aged(50)} kinds={{sortable: true}}/>);
     expect(firstCells()).toEqual(['Alan', 'Grace', 'Ada']);
   });
 
   test('as dealt restores the deal', async () => {
-    render(<EagerKeepStatic.Table>{deal(EagerKeepStatic, sized, people, {sortable: true})}</EagerKeepStatic.Table>);
+    render(<Dealt kit={EagerKeepStatic} columns={sized} rows={people} kinds={{sortable: true}}/>);
 
     await userEvent.click(within(menuFor('sort age')).getByText('descending'));
     await userEvent.click(within(menuFor('sort age')).getByText('as dealt'));
@@ -498,7 +516,7 @@ describe('sort criteria menus', () => {
 
   test('a hand on a row ends the rule and keeps the standing order', async () => {
     const {rerender} = render(
-      <EagerKeepStatic.Table>{deal(EagerKeepStatic, sized, people, {sortable: true, gripped: true})}</EagerKeepStatic.Table>);
+      <Dealt kit={EagerKeepStatic} columns={sized} rows={people} kinds={{sortable: true, gripped: true}}/>);
 
     await userEvent.click(within(menuFor('sort age')).getByText('descending'));
     expect(firstCells()).toEqual(['Grace', 'Alan', 'Ada']);
@@ -511,12 +529,12 @@ describe('sort criteria menus', () => {
     expect(firstCells()).toEqual(['Grace', 'Ada', 'Alan']);
     expect(ageHeader()).not.toHaveAttribute('aria-sort');
 
-    rerender(<EagerKeepStatic.Table>{deal(EagerKeepStatic, sized, aged(50), {sortable: true, gripped: true})}</EagerKeepStatic.Table>);
+    rerender(<Dealt kit={EagerKeepStatic} columns={sized} rows={aged(50)} kinds={{sortable: true, gripped: true}}/>);
     expect(firstCells()).toEqual(['Grace', 'Ada', 'Alan']);
   });
 
   test('the menu toggle never lifts the column', () => {
-    render(<EagerKeepStatic.Table>{deal(EagerKeepStatic, sized, people, {sortable: true, draggable: true})}</EagerKeepStatic.Table>);
+    render(<Dealt kit={EagerKeepStatic} columns={sized} rows={people} kinds={{sortable: true, draggable: true}}/>);
 
     fireEvent.pointerDown(screen.getByRole('button', {name: 'sort age'}), {clientX: 100, clientY: 50, pointerId: 1});
 
@@ -524,7 +542,7 @@ describe('sort criteria menus', () => {
   });
 
   test('choosing a direction never lifts the column', async () => {
-    render(<EagerKeepStatic.Table>{deal(EagerKeepStatic, sized, people, {sortable: true, draggable: true})}</EagerKeepStatic.Table>);
+    render(<Dealt kit={EagerKeepStatic} columns={sized} rows={people} kinds={{sortable: true, draggable: true}}/>);
 
     await userEvent.click(within(menuFor('sort age')).getByText('descending'));
 
@@ -533,20 +551,20 @@ describe('sort criteria menus', () => {
   });
 
   test('a menu appears only where the column asks for one', () => {
-    render(<EagerKeepStatic.Table>{deal(EagerKeepStatic, sized, people, {sortable: true, resizable: true})}</EagerKeepStatic.Table>);
+    render(<Dealt kit={EagerKeepStatic} columns={sized} rows={people} kinds={{sortable: true, resizable: true}}/>);
 
     expect(screen.queryByRole('button', {name: 'sort name'})).toBeNull();
     expect(screen.getByRole('button', {name: 'sort age'})).toBeVisible();
     const contentOf = (name: string) => screen.getByRole('columnheader', {name: new RegExp(`^${name}`)})
       .querySelector('.header-cell-content');
-    expect(contentOf('age')?.classList.contains('rankable')).toBe(true);
-    expect(contentOf('age')?.classList.contains('resizable')).toBe(true);
-    expect(contentOf('name')?.classList.contains('rankable')).toBe(false);
-    expect(contentOf('name')?.classList.contains('resizable')).toBe(true);
+    expect(contentOf('age')?.querySelector(':scope > .menu-toggle')).not.toBeNull();
+    expect(contentOf('age')?.querySelector(':scope > .resize-handle')).not.toBeNull();
+    expect(contentOf('name')?.querySelector(':scope > .menu-toggle')).toBeNull();
+    expect(contentOf('name')?.querySelector(':scope > .resize-handle')).not.toBeNull();
   });
 
   test('no menus without the opt-in', () => {
-    render(<EagerKeepStatic.Table>{deal(EagerKeepStatic, sized, people)}</EagerKeepStatic.Table>);
+    render(<Dealt kit={EagerKeepStatic} columns={sized} rows={people}/>);
 
     expect(screen.queryByRole('button', {name: /^sort/})).toBeNull();
   });
@@ -593,7 +611,7 @@ describe('animated moves', () => {
       return {} as ViewTransition;
     };
     try {
-      render(<EagerKeepAnimated.Table>{deal(EagerKeepAnimated, four, crew, {draggable: true})}</EagerKeepAnimated.Table>);
+      render(<Dealt kit={EagerKeepAnimated} columns={four} rows={crew} kinds={{draggable: true}}/>);
       const table = screen.getAllByRole('table')[0];
       const headerTexts = () => within(table).getAllByRole('columnheader')
         .map(head => head.textContent?.trim().split('\u21c5')[0].trim());
@@ -613,7 +631,7 @@ describe('animated moves', () => {
   test('an animated nudge settles through a view transition', async () => {
     const transition = vi.fn((update: () => void) => update());
     (document as {startViewTransition?: unknown}).startViewTransition = transition;
-    render(<EagerKeepAnimated.Table>{deal(EagerKeepAnimated, sized, people, {gripped: true})}</EagerKeepAnimated.Table>);
+    render(<Dealt kit={EagerKeepAnimated} columns={sized} rows={people} kinds={{gripped: true}}/>);
 
     within(screen.getByText('Ada').closest('tr') as HTMLElement)
       .getByRole('button', {name: /move row/}).focus();
@@ -627,7 +645,7 @@ describe('animated moves', () => {
   test('a static move never asks for a transition', async () => {
     const transition = vi.fn((update: () => void) => update());
     (document as {startViewTransition?: unknown}).startViewTransition = transition;
-    render(<EagerKeepStatic.Table>{deal(EagerKeepStatic, sized, people, {gripped: true})}</EagerKeepStatic.Table>);
+    render(<Dealt kit={EagerKeepStatic} columns={sized} rows={people} kinds={{gripped: true}}/>);
 
     within(screen.getByText('Ada').closest('tr') as HTMLElement)
       .getByRole('button', {name: /move row/}).focus();
@@ -637,21 +655,32 @@ describe('animated moves', () => {
     expect(firstCells()).toEqual(['Grace', 'Ada']);
   });
 
-  test('an animated crossing settles through a view transition', () => {
+  test('only a reseat glides: the lift, the drift and the drop write plainly', () => {
     const transition = vi.fn((update: () => void) => update());
     (document as {startViewTransition?: unknown}).startViewTransition = transition;
-    render(<EagerKeepAnimated.Table>{deal(EagerKeepAnimated, sized, people, {draggable: true})}</EagerKeepAnimated.Table>);
+    const four = [...sized, {display: 'city', column: 'city'}, {display: 'job', column: 'job'}];
+    const crew = people.map(person => ({...person, city: {display: 'London'}, job: {display: 'Analyst'}}));
+    render(<Dealt kit={EagerKeepAnimated} columns={four} rows={crew} kinds={{draggable: true}}/>);
     const table = screen.getAllByRole('table')[0];
     table.getBoundingClientRect = () => ({
-      left: 0, right: 320, top: 0, bottom: 80, width: 320, height: 80, x: 0, y: 0, toJSON: () => ({})
+      left: 0, right: 640, top: 0, bottom: 80, width: 640, height: 80, x: 0, y: 0, toJSON: () => ({})
     });
-    spanned(table, {name: 160, age: 160});
+    spanned(table, {name: 160, age: 160, city: 160, job: 160});
     const headerTexts = () => within(table).getAllByRole('columnheader')
       .map(head => head.textContent?.trim().split('\u21c5')[0].trim());
+    const surface = () => document.querySelector('.drag-surface') as HTMLElement;
 
-    expect(headerTexts()).toEqual(['name', 'age']);
-    expect(within(table).getByRole('columnheader', {name: /^name/}).style.viewTransitionName).toBe('header-name');
+    fireEvent.pointerDown(within(table).getByRole('columnheader', {name: /^age/}), {clientX: 240, clientY: 40, pointerId: 1});
+    fireEvent.pointerMove(surface(), {buttons: 1, clientX: 250, clientY: 40, pointerId: 1});
     expect(transition).not.toHaveBeenCalled();
+
+    fireEvent.pointerMove(surface(), {buttons: 1, clientX: 440, clientY: 40, pointerId: 1});
+    expect(headerTexts()).toEqual(['name', 'city', 'age', 'job']);
+    expect(transition).toHaveBeenCalledTimes(1);
+
+    fireEvent.pointerUp(surface(), {pointerId: 1});
+    expect(document.querySelector('.drag-surface')).toBeNull();
+    expect(transition).toHaveBeenCalledTimes(1);
   });
 
 });

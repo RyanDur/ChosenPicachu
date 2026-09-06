@@ -3,7 +3,7 @@ import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, aside} from '../../../Re
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {Term} from '../Term';
-import {aloftSource, frameMount, gap, sortableCss, travelSource} from './sources';
+import {frameMount, gap, sortableCss, travelSource} from './sources';
 
 export const dragSurface = (world: World, tableSource: string): ReactNode =>
   <Step title="Give the drag a surface of its own">
@@ -35,12 +35,12 @@ export const dragSurface = (world: World, tableSource: string): ReactNode =>
       <Codes>
         {world === 'react'
           ? <Snippet label="HTML" lines={[
-            ...span(aloftSource, '(!columnsTravel.aloft.isNothing || !rowsTravel.aloft.isNothing)', '{...surface}')
+            ...span(tableSource, 'className="drag-surface"', 'className="drag-surface"')
           ]}/>
           : undefined}
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...span(tableSource, 'onPointerMove: surfaceTravel(drifting, travel,', 'onLostPointerCapture:'), gap,
+            ...span(tableSource, 'onPointerMove={surfaceTravel(drifting', 'onLostPointerCapture='), gap,
             ...unit(tableSource, 'const drop = '),
             aside('// cancel and lost capture are not delegates; they ARE the drop')
           ]}/>

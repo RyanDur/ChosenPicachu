@@ -27,7 +27,7 @@ import {
   twoRoads
 } from './shared-steps';
 import buildSrc from '../Frame/builds/LazyHideStatic.ts?raw';
-import rowSource from '@components/DragSortableTable/elements/Cell.tsx?raw';
+import rowSource from '@components/DragSortableTable/elements/RowHeader.tsx?raw';
 import tableSource from '@components/DragSortableTable/LazyHideStaticTable/LazyHideStaticTable.tsx?raw';
 import headerSource from '@components/DragSortableTable/elements/DraggableColumn.tsx?raw';
 import cssSource from '@components/DragSortableTable/LazyHideStaticTable/LazyHideStaticTable.css?raw';
@@ -44,7 +44,7 @@ export const LazyHideStaticRecipe: FC<{track: Track; world: World}> = ({track, w
       <Steps>
         {cssShare(world)}
         {orderInState(world)}
-        {listenersOnce(world, tableSource)}
+        {listenersOnce(world)}
         {liftOnce(world, headerSource)}
         {dragSurface(world, tableSource)}
         {ghostByHand(world, tableSource)}

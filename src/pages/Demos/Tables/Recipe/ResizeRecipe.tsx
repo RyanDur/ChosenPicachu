@@ -45,10 +45,10 @@ const ledgerCodes: Record<World, ReactNode> = {
 
 const gridMarkup: Record<World, ReactNode> = {
   react: <Snippet label="HTML" lines={[
-    ...span(headerSource, "<div className={classNames('header-cell-content'", '</div>')
+    ...span(headerSource, '<div className="header-cell-content">', '</div>')
   ]}/>,
   vanilla: <Snippet label="HTML" lines={[
-    ...span(tableSource, '<div class="header-cell-content rankable resizable">trades', 'aria-label="sort trades"></button>'), gap,
+    ...span(tableSource, '<div class="header-cell-content">trades', 'aria-label="sort trades"></button>'), gap,
     ...span(tableSource, 'aria-label="resize trades"></button>', '</div>')
   ]}/>
 };
@@ -191,9 +191,8 @@ const widenStory = (world: World) =>
             <Snippet label="CSS" lines={[
               ...unit(baseCss, '.header-cell {'), gap,
               ...unit(baseCss, '.header-cell-content {'), gap,
-              ...unit(baseCss, '.header-cell-content.rankable {'), gap,
-              ...unit(baseCss, '.header-cell-content.resizable {'), gap,
-              ...unit(baseCss, '.header-cell-content.rankable.resizable {')
+              ...unit(baseCss, '.header-cell-content:has(> .menu-toggle),'), gap,
+              ...unit(baseCss, '.header-cell-content:has(> .menu-toggle):has(> .resize-handle) {')
             ]}/>
           </Codes>
         </Reveal>

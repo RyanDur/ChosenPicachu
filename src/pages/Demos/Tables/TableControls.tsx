@@ -9,7 +9,7 @@ const copy: Copy = {
   readout: (pace, origin, motion) => `<${cap(pace)}${cap(origin)}${cap(motion)}Table/>`,
   pace: {
     eager: 'Neighbours swap the moment you drag past them, so the order is already settled when you let go.',
-    lazy: 'The table holds its shape while you drag and commits the new order on drop.'
+    lazy: 'The table holds its shape while you drag and dispatches the new order on drop.'
   },
   origin: {
     keep: 'The lifted row or column stays where it was, so you can see the gap it will leave.',

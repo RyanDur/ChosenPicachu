@@ -74,7 +74,7 @@ export const rowGhost = ({document, lanes}: MountedTable, row: number): GhostFli
       cell.style.width = `${lane.cells[at].getBoundingClientRect().width}px`;
       const text = (lane.cells[at].textContent ?? '').trim();
       if (at === 0) {
-        maybe(cell.querySelector('.row-header-content')).map(content => content.append(text));
+        cell.append(text);
       } else {
         cell.textContent = text;
       }

@@ -1,35 +1,15 @@
-import {FC} from 'react';
+import {FC, PropsWithChildren} from 'react';
 import {classNames} from '@components/class-names';
-import {CellProps} from '@components/Table';
-import {useRow, useTable, useTableState} from '../context';
-import {RowGrip} from '../RowGrip';
-import {baked, columnAloft, lifted, nudgedTo, rowAloft} from '../table-state';
-import {Grab, rowArrows, rowLift} from '../travel';
+import {useSelector} from '../context';
+import {columnAloft, rowAloft} from '../table-state';
 
-export const Cell: FC<CellProps> = ({column, className, children}) => {
-  const {store, standing, clipped, settle} = useTable();
-  const {row, position, gripped} = useRow();
-  const order = useTableState(state => state.order);
-  const aloft = useTableState(state => state.aloft);
-  const rowHeader = gripped && order[0] === column;
-  const dress = classNames(
-    'cell', className,
-    rowHeader && 'row-header',
-    clipped && 'ellipsis',
-    columnAloft({aloft}).map(held => held === column).orElse(false) && 'hide',
-    rowAloft({aloft}).map(held => held === row).orElse(false) && 'hide-across'
-  );
-  const drawn = {viewTransitionName: `cell-${row}-${column}`};
-  const grabbed = (grab: Grab): void => store.commit(current => lifted({axis: 'row', held: row}, grab)(baked(current)));
-  const walked = ({to}: {to: number; after: number[]}): void => settle(current => nudgedTo(row, to)(baked(current)));
+export const Cell: FC<PropsWithChildren<{seat: number; column: string; className?: string}>> = ({seat, column, className, children}) => {
+  const aloft = useSelector(state => state.aloft);
+  const hidden = columnAloft({aloft}).map(held => held === column).orElse(false);
+  const carried = rowAloft({aloft}).map(held => held === seat).orElse(false);
 
-  return rowHeader
-    ? <th scope="row" className={dress} style={drawn}>
-      <div className="row-header-content">
-        <RowGrip position={position} onLift={rowLift(() => order, () => standing, grabbed)}
-                 onArrows={rowArrows(row, () => standing, walked)}/>
-        {children}
-      </div>
-    </th>
-    : <td className={dress} style={drawn}>{children}</td>;
+  return <td className={classNames('cell', className, hidden && 'hide', carried && 'hide-across')}
+             style={{viewTransitionName: `cell-${seat}-${column}`}}>
+    {children}
+  </td>;
 };

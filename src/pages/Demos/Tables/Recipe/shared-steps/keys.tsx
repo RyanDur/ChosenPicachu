@@ -13,7 +13,7 @@ export const bothSlide = (world: World, headerSource: string, buildSrc: string):
         reorder settles the same way the pointer’s crossings do.</Says>
     </Words>
     <Reveal>
-      <Says>The walk commits through the settle, and the settle is a view transition. Both
+      <Says>The walk is a dispatch that changes the order, so the animated table shows it through a view transition. Both
         cells are named, so both get a snapshot pair and both slide, each by exactly the other’s
         share, without a keyframe, a measurement, or a line of new CSS. The old version of this
         step measured both shares and marked both columns by hand; that work now belongs to the
