@@ -1,4 +1,4 @@
-import {render, screen} from '@testing-library/react';
+import {render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {PillGlider} from '../index';
 
@@ -32,21 +32,24 @@ describe('the pill glider', () => {
   });
 
   test('the glider stretches and slides to the chosen pill', async () => {
-    const {container} = render(
+    render(
       <PillGlider label="drag style" name="drag-style" options={styles}
                   chosen="eager" onChoose={vi.fn()}/>);
     const widths = [60, 50, 90, 80];
-    container.querySelectorAll('label').forEach((pill, index) => {
+    styles.forEach(({display}, index) => {
+      const pill = screen.getByText(display);
       Object.defineProperty(pill, 'offsetWidth', {value: widths[index]});
       Object.defineProperty(pill, 'offsetLeft', {
         value: widths.slice(0, index).reduce((sum, width) => sum + width, 0)
       });
     });
-    expect(container.querySelector('.glider')).toBeNull();
+    const pills = screen.getByRole('group', {name: 'drag style'});
+    const glider = () => within(pills).getAllByRole('article').find(article => article.textContent === '');
+    expect(glider()).toBeUndefined();
 
     await userEvent.click(screen.getByRole('radio', {name: 'Hide Eager'}));
 
-    expect(container.querySelector('.glider')).toHaveStyle({
+    expect(glider()).toHaveStyle({
       '--glider-width': '90px',
       '--glider-x': '110px'
     });

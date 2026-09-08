@@ -38,14 +38,15 @@ describe('the home page', () => {
     const timeline = within(screen.getByRole('list', {name: 'the timeline'}));
 
     expect(timeline.getAllByText('the fuller story')).toHaveLength(13);
-    expect(document.querySelectorAll('.timeline details[open]')).toHaveLength(0);
+    const folds = timeline.getAllByRole('group').filter(group => group.tagName === 'DETAILS');
+    expect(folds.filter(fold => fold.hasAttribute('open'))).toHaveLength(0);
     [/Viola/, /Mocha/, /ham is to hamster/, /MULTICOL/, /Wired News/, /React in 2013/, /CSS-in-JS/, /Next\.js/, /island of behavior/, /WorldWideWeb/, /Self-ish/, /eczema/, /aural/, /namespaces/, /ill-fated ES4/, /Chedeau/, /Sylor-Miller/, /you’re screwed/, /40% helvetica/, /Fahrner/, /Enquire/, /dictatorship/, /WHATWG/, /Living Standard/, /real-world web developers/]
       .forEach(depth => expect(timeline.getAllByText(depth).length).toBeGreaterThan(0));
     expect(timeline.getByRole('link', {name: 'the essay', hidden: true}))
       .toHaveAttribute('href', expect.stringContaining('adaptivepath'));
-    document.querySelectorAll('.timeline .fuller-story').forEach(story => {
+    folds.forEach(story => {
       expect(story).toHaveAttribute('name', 'record');
-      expect(story.querySelectorAll('.paragraph').length).toBeGreaterThanOrEqual(3);
+      expect(within(story).getAllByText(/\S/, {selector: 'p'}).length).toBeGreaterThanOrEqual(3);
     });
   });
 
@@ -119,13 +120,15 @@ describe('the home page', () => {
     const bibliography = screen.getByRole('region', {name: 'The research'});
 
     expect(within(bibliography).getByRole('heading', {name: 'The research'})).toBeVisible();
-    expect(bibliography.querySelector('details[open]')).toBeNull();
-    const works = bibliography.querySelectorAll('.work');
+    within(bibliography).getAllByRole('group', {hidden: true}).filter(group => group.tagName === 'DETAILS')
+      .forEach(shelf => expect(shelf).not.toHaveAttribute('open'));
+    const works = within(bibliography).getAllByRole('listitem', {hidden: true});
     expect(works.length).toBeGreaterThanOrEqual(25);
-    works.forEach(work => expect(work.querySelector('a.signpost')).not.toBeNull());
-    expect(bibliography.querySelector('a[href*="w3.org/Style/LieBos2e"]')).not.toBeNull();
-    expect(bibliography.querySelector('a[href*="web.archive.org"]')).not.toBeNull();
-    expect(bibliography.querySelector('a[href*="w3.org/History/1989"]')).not.toBeNull();
+    works.forEach(work => expect(within(work).getAllByRole('link', {hidden: true}).length).toBeGreaterThan(0));
+    const cited = within(bibliography).getAllByRole('link', {hidden: true}).map(link => link.getAttribute('href') ?? '');
+    expect(cited.some(href => href.includes('w3.org/Style/LieBos2e'))).toBe(true);
+    expect(cited.some(href => href.includes('web.archive.org'))).toBe(true);
+    expect(cited.some(href => href.includes('w3.org/History/1989'))).toBe(true);
   });
 
   test('the doors define before the history argues, and the closing walks in', () => {

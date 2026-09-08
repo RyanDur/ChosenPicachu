@@ -1,4 +1,4 @@
-export type Kind = 'plain' | 'keyword' | 'string' | 'number' | 'comment' | 'tag';
+export type Kind = 'plain' | 'keyword' | 'string' | 'number' | 'comment' | 'tag' | 'attribute' | 'type' | 'call' | 'punctuation';
 
 export type Token = {
   text: string;
@@ -39,11 +39,26 @@ const scan = (line: string, patterns: ReadonlyArray<{match: RegExp; kind: Kind}>
   return tokens;
 };
 
+const keywords = [
+  'const', 'let', 'return', 'if', 'else', 'new', 'function', 'undefined', 'true', 'false', 'null',
+  'export', 'import', 'from', 'type', 'readonly', 'extends', 'typeof', 'in', 'of', 'as', 'void',
+  'switch', 'case', 'default', 'throw', 'try', 'catch', 'finally', 'await', 'async', 'while', 'for', 'declare'
+];
+
 const ts: ReadonlyArray<{match: RegExp; kind: Kind}> = [
   {match: /\/\/.*$/g, kind: 'comment'},
+  {match: /\{\/\*.*?\*\/\}/g, kind: 'comment'},
   {match: /'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|"(?:[^"\\]|\\.)*"/g, kind: 'string'},
-  {match: /\b(?:const|let|return|if|else|new|function|undefined|true|false)\b/g, kind: 'keyword'},
-  {match: /\b\d+(?:\.\d+)?\b/g, kind: 'number'}
+  {match: /(?<=\w<)[A-Z]\w*(?=,|>[(;)=])/g, kind: 'type'},
+  {match: /(?<=<\/?)[A-Za-z][\w.]*/g, kind: 'tag'},
+  {match: /(?<=<[A-Za-z][\w.]*\s[^>]*?)\b[a-zA-Z][\w-]*(?==)/g, kind: 'attribute'},
+  {match: new RegExp(`\\b(?:${keywords.join('|')})\\b`, 'g'), kind: 'keyword'},
+  {match: /(?<=:\s*)(?:readonly\s+)?[A-Z]\w*(?=[[<,;)=\s|]|$)/g, kind: 'type'},
+  {match: /(?<=\b(?:type|extends|new)\s+)[A-Z]\w*/g, kind: 'type'},
+  {match: /(?<=<)[A-Z]\w*(?=[,>])|(?<=, )[A-Z]\w*(?=>)/g, kind: 'type'},
+  {match: /\b[a-zA-Z_$][\w$]*(?=\()/g, kind: 'call'},
+  {match: /\b\d+(?:\.\d+)?\b/g, kind: 'number'},
+  {match: /[{}()[\]<>;,=]|=>|\?\.|\?\?|\.\.\./g, kind: 'punctuation'}
 ];
 
 const css: ReadonlyArray<{match: RegExp; kind: Kind}> = [
@@ -52,14 +67,19 @@ const css: ReadonlyArray<{match: RegExp; kind: Kind}> = [
   {match: /@[\w-]+/g, kind: 'keyword'},
   {match: /^[ \t]*[^:;{}@][^:;{}]*(?=\s*\{)/g, kind: 'tag'},
   {match: /^[ \t]*[.&][^:;{}]*,$/g, kind: 'tag'},
-  {match: /(?<![\w-])-?\d+(?:\.\d+)?[a-z%]*/g, kind: 'number'}
+  {match: /(?<![\w-])-?\d+(?:\.\d+)?[a-z%]*/g, kind: 'number'},
+  {match: /(?<=^[ \t]*)[a-z-]+(?=\s*:)/gm, kind: 'attribute'},
+  {match: /[a-z-]+(?=\()/g, kind: 'call'},
+  {match: /[{}();:,]/g, kind: 'punctuation'}
 ];
 
 const html: ReadonlyArray<{match: RegExp; kind: Kind}> = [
-  {match: /\{\/\*.*?\*\/\}/g, kind: 'comment'},
+  {match: /\{\/\*.*?\*\/\}|<!--.*?-->/g, kind: 'comment'},
   {match: /'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|"(?:[^"\\]|\\.)*"/g, kind: 'string'},
   {match: /(?<=<\/?)[\w.-]+/g, kind: 'tag'},
-  {match: /\b\d+(?:\.\d+)?\b/g, kind: 'number'}
+  {match: /(?<=<[\w.-]+\s[^>]*?)\b[a-zA-Z][\w-]*(?==)/g, kind: 'attribute'},
+  {match: /\b\d+(?:\.\d+)?\b/g, kind: 'number'},
+  {match: /<\/?|\/?>|[{}=]/g, kind: 'punctuation'}
 ];
 
 const grammars = {TS: ts, CSS: css, HTML: html};

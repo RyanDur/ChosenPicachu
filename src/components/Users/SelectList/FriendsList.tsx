@@ -6,7 +6,7 @@ import cancelIcon from '../../../assets/icons/cancel.svg?url';
 import './fiends-list.css';
 
 type Props = {
-  users: User[];
+  users: readonly User[];
   user: User;
   onChange: Consumer<string[]>
 }

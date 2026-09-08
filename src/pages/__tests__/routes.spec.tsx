@@ -6,13 +6,19 @@ import {Games} from '@pages/Games';
 import {Users} from '@pages/Users';
 import {PageError} from '@pages/PageError';
 import {createMemoryRouter, RouterProvider} from 'react-router';
+import {RouteObject} from 'react-router';
 import {router} from '../../router';
 
 describe('page error boundaries', () => {
   test('every page route declares one, split or not', async () => {
-    const split = await Promise.all(router.children.flatMap(child => 'lazy' in child && child.lazy !== undefined ? [child.lazy()] : []));
+    const lazily = (routes: readonly RouteObject[]): Promise<Omit<RouteObject, 'path'>>[] =>
+      routes.flatMap(route => [
+        ...(route.lazy !== undefined && typeof route.lazy === 'function' ? [route.lazy()] : []),
+        ...(route.children !== undefined ? lazily(route.children) : [])
+      ]);
+    const split = await Promise.all(lazily(router.children));
 
-    expect(split).toHaveLength(2);
+    expect(split).toHaveLength(3);
     [...split, Users, Gallery, Games].forEach(route => {
       expect(route.errorElement).toBeDefined();
       expect(route.element).toBeDefined();

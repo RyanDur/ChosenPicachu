@@ -34,6 +34,10 @@
   --code-number: rgb(121, 168, 204);
   --code-comment: rgb(153, 153, 153);
   --code-tag: rgb(232, 191, 106);
+  --code-attribute: rgb(187, 181, 226);
+  --code-type: rgb(232, 191, 106);
+  --code-call: rgb(255, 198, 109);
+  --code-punctuation: rgb(204, 204, 204);
   --white-clear: rgba(255, 255, 255, 0);
   --black: rgb(0, 0, 0);
   --smoke: rgb(153, 153, 153);

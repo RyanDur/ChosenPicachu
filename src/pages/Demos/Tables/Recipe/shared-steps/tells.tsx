@@ -2,8 +2,26 @@ import {ReactNode} from 'react';
 import {Link} from 'react-router';
 import {Paths} from '@pages/Paths';
 import {DemoTopics} from '../../../types';
-import {Mdn, Tell} from '../../../Recipe';
+import {Codes, Mdn, Snippet, Tell} from '../../../Recipe';
+import {withoutImports} from '../../../Recipe/carve';
 import {World} from '../../params';
+
+const sourceOf = (world: World, path: string): string =>
+  `${Paths.repo}/${world === 'react' ? 'tree' : 'blob'}/main/src/pages/Demos/Tables/${path}`;
+
+export const theImplementation = (world: World, react: string, vanilla: string): ReactNode =>
+  <Tell>Every block below is carved from the source as it stands, so it cannot drift from the
+    build. To read the whole thing in one place, here is <a className="signpost"
+    href={sourceOf(world, world === 'react' ? react : vanilla)}
+    target="_blank"
+    rel="noreferrer">the implementation</a>.</Tell>;
+
+export const theWholeBuild = (world: World, tableSource: string, buildSrc: string): ReactNode =>
+  <Codes>
+    {world === 'react'
+      ? <Snippet label="TS" lines={withoutImports(tableSource)}/>
+      : <Snippet label="TS" lines={withoutImports(buildSrc)}/>}
+  </Codes>;
 
 export const twoRoads =
   <Tell>There are two roads to dragging something across a page, and this site walks
@@ -17,9 +35,10 @@ export const twoRoads =
 
 export const againstTheStream =
   <Tell>The trader needs to move a column while the stream writes. We could reorder
-    the data itself, but every trade that lands would fight every drag; so the order is
-    its own piece of state, and the markup renders through it. Moving a column is just
-    changing the order. We could ask the DOM where everything is as the pointer moves,
+    the data itself, but every trade that lands would fight every drag; so the rows and
+    columns are the state, in their order, a trade writes into the row that holds its
+    seat, and the markup renders through them. Moving a column is just changing the
+    order. We could ask the DOM where everything is as the pointer moves,
     but layout queries during a drag cause the jank we are trying to avoid; so
     everything the drag needs gets measured once, when you grab.</Tell>;
 

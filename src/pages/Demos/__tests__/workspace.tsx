@@ -4,6 +4,7 @@ import {renderWithMemoryRouter} from '@test-support';
 import {ReactElement} from 'react';
 import {EnvProvider} from '@components/Env';
 import {DemosPage} from '@pages/Demos/DemosPage';
+import {Trading} from '@pages/Demos/Trading';
 import {ChartPage} from '@pages/Demos/Charts/ChartPage';
 import {Paths} from '@pages/Paths';
 
@@ -13,8 +14,10 @@ const dressed = (feedUrl: string, page: ReactElement) =>
   </EnvProvider>;
 
 const routes = (feedUrl: string) => ({children: [
-  {path: Paths.demos, element: dressed(feedUrl, <DemosPage/>)},
-  {path: `${Paths.demos}charts/:kind/`, element: dressed(feedUrl, <ChartPage/>)}
+  {element: dressed(feedUrl, <Trading/>), children: [
+    {path: Paths.demos, element: <DemosPage/>},
+    {path: `${Paths.demos}charts/:kind/`, element: <ChartPage/>}
+  ]}
 ]});
 
 export const renderDemos = (feedUrl: string, search = '?tab=charts') =>

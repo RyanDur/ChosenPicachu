@@ -1,24 +1,36 @@
 import {cleanup, createEvent, fireEvent, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {interceptedNetwork, listeningFeed, realSockets, subscribed, urlOf} from '@test-support/feed';
-import {WebSocketServer} from 'ws';
+import {listeningFeed, subscribed, urlOf} from '@test-support/feed';
 import {renderWithMemoryRouter} from '@test-support';
 import {EnvProvider} from '@components/Env';
 import {DemosPage} from '@pages/Demos/DemosPage';
+import {Trading} from '@pages/Demos/Trading';
 import {Paths} from '@pages/Paths';
 
-beforeAll(realSockets);
-afterAll(interceptedNetwork);
+const folds = (root: HTMLElement): HTMLElement[] =>
+  within(root).getAllByRole('group').filter(group => group.tagName === 'DETAILS');
+const built = (fold: HTMLElement): boolean => [...fold.children].some(child => child.textContent === 'how we built it');
+const stories = (root: HTMLElement): HTMLElement[] => folds(root).filter(fold => !built(fold));
+const opened = (details: readonly HTMLElement[]): HTMLElement[] => details.filter(fold => fold.hasAttribute('open'));
 
 const renderSortables = (feedUrl: string, search = '?tab=dragAndDrop') =>
   renderWithMemoryRouter({
     path: Paths.demos,
-    element: <EnvProvider env={{tradeFeed: feedUrl, tradeHistory: 'http://127.0.0.1:9'}}><DemosPage/></EnvProvider>
+    element: <EnvProvider env={{tradeFeed: feedUrl, tradeHistory: 'http://127.0.0.1:9'}}><Trading/></EnvProvider>,
+    children: [{index: true, element: <DemosPage/>}]
   }, {path: `${Paths.demos}${search}`});
 
 const feedIsSubscribed = async (): Promise<void> => {
   await waitFor(() => expect(subscribed.size).toBeGreaterThan(0));
 };
+
+const seatOf = (item: string): HTMLElement => {
+  const seat = screen.getAllByRole('listitem').find(candidate => within(candidate).queryByText(item) !== null);
+  if (!seat) throw new Error(`no seat for ${item}`);
+  return seat;
+};
+
+const draggable = (item: string): HTMLElement => within(seatOf(item)).getAllByRole('article')[0];
 
 const seats = (): string[] =>
   within(screen.getByRole('list', {name: 'sortable list'}))
@@ -37,34 +49,23 @@ const draggedOver = (item: string, clientX: number) => {
 };
 
 describe('the sortable list demo', () => {
-  const feeds: WebSocketServer[] = [];
-
-  const streamingFeed = async (): Promise<WebSocketServer> => {
-    const feed = await listeningFeed();
-    feeds.push(feed);
-    return feed;
-  };
-
-  afterEach(async () => {
+  afterEach(() => {
     cleanup();
-    subscribed.clear();
-    await Promise.all(feeds.map(feed => new Promise(resolve => feed.close(resolve))));
-    feeds.length = 0;
   });
 
   test('the open cards travel in the url', async () => {
-    const feed = await streamingFeed();
+    const feed = await listeningFeed();
 
     renderSortables(urlOf(feed), '?tab=dragAndDrop&native=sort');
 
     await feedIsSubscribed();
     const recipe = await screen.findByRole('region', {name: 'build the native drag sort yourself'});
-    expect(recipe.querySelectorAll('details.arc[open]')).toHaveLength(1);
-    expect(recipe.querySelectorAll('details.arc')[0]).toHaveAttribute('open');
+    expect(opened(stories(recipe))).toHaveLength(1);
+    expect(stories(recipe)[0]).toHaveAttribute('open');
   });
 
   test('one list answers the dials', async () => {
-    const feed = await streamingFeed();
+    const feed = await listeningFeed();
 
     renderSortables(urlOf(feed));
 
@@ -78,7 +79,7 @@ describe('the sortable list demo', () => {
   });
 
   test('an eager drag commits on the crossing', async () => {
-    const feed = await streamingFeed();
+    const feed = await listeningFeed();
 
     renderSortables(urlOf(feed));
 
@@ -90,7 +91,7 @@ describe('the sortable list demo', () => {
   });
 
   test('a lazy drag holds its shape and settles on release', async () => {
-    const feed = await streamingFeed();
+    const feed = await listeningFeed();
 
     renderSortables(urlOf(feed));
 
@@ -107,23 +108,23 @@ describe('the sortable list demo', () => {
   });
 
   test('hide blanks the origin while something is aloft', async () => {
-    const feed = await streamingFeed();
+    const feed = await listeningFeed();
 
     renderSortables(urlOf(feed));
 
     await feedIsSubscribed();
     lifted('A');
-    expect(screen.getByText('A').closest('.draggable')).toHaveClass('hide');
+    expect(draggable('A')).toHaveClass('hide');
     fireEvent.dragEnd(screen.getByText('A'), {dataTransfer: {dropEffect: 'none'}});
 
     const controls = screen.getByRole('region', {name: 'list controls'});
     await userEvent.click(within(controls).getByRole('radio', {name: 'Keep'}));
     lifted('B');
-    expect(screen.getByText('B').closest('.draggable')).not.toHaveClass('hide');
+    expect(draggable('B')).not.toHaveClass('hide');
   });
 
   test('the dials travel in the url', async () => {
-    const feed = await streamingFeed();
+    const feed = await listeningFeed();
 
     renderSortables(urlOf(feed), '?tab=dragAndDrop&pace=lazy&origin=keep&motion=static');
 
@@ -136,7 +137,7 @@ describe('the sortable list demo', () => {
   });
 
   test('arrow keys walk an item, and both parties slide', async () => {
-    const feed = await streamingFeed();
+    const feed = await listeningFeed();
 
     renderSortables(urlOf(feed));
 
@@ -146,17 +147,17 @@ describe('the sortable list demo', () => {
     fireEvent.keyDown(grip, {key: 'ArrowRight'});
 
     expect(seats()).toEqual(['B', 'A', 'C']);
-    expect(screen.getByText('A').closest('li')).toHaveClass('pushed');
-    expect(screen.getByText('A').closest('li')).toHaveStyle({'--toward': '-1'});
-    expect(screen.getByText('B').closest('li')).toHaveClass('pushed');
-    expect(screen.getByText('B').closest('li')).toHaveStyle({'--toward': '1'});
+    expect(seatOf('A')).toHaveClass('pushed');
+    expect(seatOf('A')).toHaveStyle({'--toward': '-1'});
+    expect(seatOf('B')).toHaveClass('pushed');
+    expect(seatOf('B')).toHaveStyle({'--toward': '1'});
 
     fireEvent.keyDown(screen.getByRole('button', {name: 'grip for A'}), {key: 'ArrowLeft'});
     expect(seats()).toEqual(['A', 'B', 'C']);
   });
 
   test('an arrow walk says the move', async () => {
-    const feed = await streamingFeed();
+    const feed = await listeningFeed();
 
     renderSortables(urlOf(feed));
 
@@ -169,7 +170,7 @@ describe('the sortable list demo', () => {
   });
 
   test('an eager crossing says the move', async () => {
-    const feed = await streamingFeed();
+    const feed = await listeningFeed();
 
     renderSortables(urlOf(feed));
 
@@ -181,7 +182,7 @@ describe('the sortable list demo', () => {
   });
 
   test('a lazy release says the move', async () => {
-    const feed = await streamingFeed();
+    const feed = await listeningFeed();
 
     renderSortables(urlOf(feed));
 
@@ -197,7 +198,7 @@ describe('the sortable list demo', () => {
   });
 
   test('the recipe teaches the native road as the dials sit', async () => {
-    const feed = await streamingFeed();
+    const feed = await listeningFeed();
 
     renderSortables(urlOf(feed));
 
@@ -213,10 +214,11 @@ describe('the sortable list demo', () => {
     expect(screen.getByRole('heading', {name: 'Slice the design into stories'})).toBeVisible();
     const sliced = within(screen.getByRole('list', {name: 'the slices'}));
     ['The user can arrange the list by hand', 'The user can arrange the list from the keyboard']
-      .forEach(slice => expect(sliced.getByText(slice).closest('li')).toHaveTextContent('station 4'));
+      .forEach(slice => expect(sliced.getAllByRole('listitem').find(item => within(item).queryByText(slice) !== null)).toHaveTextContent('station 4'));
     expect(sliced.getAllByRole('link').map(link => link.getAttribute('href')))
       .toEqual(['#station-4', '#station-4']);
-    expect(document.getElementById('station-4')).toHaveTextContent('Layer on functionality, in the order it was asked for');
+    expect(within(screen.getByRole('list', {name: 'the stations'})).getAllByRole('listitem')
+      .filter(station => within(station).queryAllByText('Layer on functionality, in the order it was asked for').length > 0).map(station => station.id)).toContain('station-4');
     expect(screen.getByRole('heading', {name: 'The user can keep the list in the order they mean'})).toBeVisible();
     expect(screen.getByRole('link', {name: 'user story'}))
       .toHaveAttribute('href', expect.stringContaining('initialcapacity.io/insights/user-story'));
@@ -231,7 +233,7 @@ describe('the sortable list demo', () => {
     expect(recipe).toHaveTextContent(/Know where the road ends/);
     expect(within(recipe).getByRole('link', {name: 'dataTransfer'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/DataTransfer'));
-    expect(recipe.querySelectorAll('.story')).toHaveLength(2);
+    expect(stories(recipe)).toHaveLength(2);
     expect(recipe).toHaveTextContent(/The user can arrange the list by hand/);
     expect(recipe).toHaveTextContent(/The list answers as they drag/);
 

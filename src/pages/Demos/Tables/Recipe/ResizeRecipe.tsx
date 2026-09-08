@@ -7,10 +7,11 @@ import {Term} from './Term';
 import sharesSource from '@components/Table/shares.ts?raw';
 import resizeSource from '@components/Table/ResizeHandle.tsx?raw';
 import baseCss from '@components/Table/Table.css?raw';
-import headerSource from '@components/DragSortableTable/elements/DraggableColumn.tsx?raw';
 import headerCss from '@components/DragSortableTable/Header.css?raw';
 import tableSource from '../Frame/table.html?raw';
+import buildSource from '@components/DragSortableTable/DraggableColumn.tsx?raw';
 import frameResize from '../Frame/table/resize.ts?raw';
+import {theImplementation} from './shared-steps';
 import '../../Recipe/Recipe.css';
 
 const gap = plain(' ');
@@ -18,7 +19,7 @@ const gap = plain(' ');
 const ledgerCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="TS" lines={[
-      ...unit(sharesSource, 'export const measuredShares')
+      ...unit(sharesSource, 'export const measuredWidths')
     ]}/>
     <Snippet label="HTML" lines={[
       plain("<th className=\"header-cell\" style={{'--share': `${share}%`}}>")
@@ -30,7 +31,7 @@ const ledgerCodes: Record<World, ReactNode> = {
   </Codes>,
   vanilla: <Codes>
     <Snippet label="TS" lines={[
-      ...unit(sharesSource, 'export const measuredShares'), gap,
+      ...unit(sharesSource, 'export const measuredWidths'), gap,
       ...unit(frameResize, '  const awaken = ')
     ]}/>
     <Snippet label="TS" lines={[
@@ -43,13 +44,13 @@ const ledgerCodes: Record<World, ReactNode> = {
   </Codes>
 };
 
-const gridMarkup: Record<World, ReactNode> = {
+const edgeMarkup: Record<World, ReactNode> = {
   react: <Snippet label="HTML" lines={[
-    ...span(headerSource, '<div className="header-cell-content">', '</div>')
+    ...span(buildSource, "return <th {...th}", '{children}')
   ]}/>,
   vanilla: <Snippet label="HTML" lines={[
-    ...span(tableSource, '<div class="header-cell-content">trades', 'aria-label="sort trades"></button>'), gap,
-    ...span(tableSource, 'aria-label="resize trades"></button>', '</div>')
+    ...span(tableSource, '<th scope="col" class="cell trades header-cell"', 'aria-label="sort trades"></button>'), gap,
+    ...span(tableSource, 'aria-label="resize trades"></button>', '</th>')
   ]}/>
 };
 
@@ -60,7 +61,7 @@ const spokenLabel =
 
 const handleMarkup: Record<World, ReactNode> = {
   react: <Snippet label="HTML" lines={[
-    ...span(resizeSource, '<button type="button"', 'aria-label={resizeLabel(name, share)}')
+    ...span(resizeSource, '<button type="button"', 'aria-label={resizeLabel(column, width)}')
   ]}/>,
   vanilla: <Snippet label="HTML" lines={[
     ...span(tableSource, '<button type="button" class="resize-handle"', 'aria-label="resize window"></button>')
@@ -69,17 +70,17 @@ const handleMarkup: Record<World, ReactNode> = {
 
 const handleSays: Record<World, ReactNode> = {
   react: <Says>The handle is focusable by birth, announcing itself by name, and once the ledger
-    exists its label speaks the <Term word="share">share</Term> too. The grid from the last step
-    deals it the header’s end track, and the button carries no width of its own: it is a grid
-    container whose only item is the 8px line its ::after paints, so the painted line is the
-    hit area. The col-resize <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
+    exists its label speaks the <Term word="share">share</Term> too. It pins itself to the
+    header’s end edge, stretched to the cell’s height, and the button carries no width of its
+    own: it is a grid container whose only item is the 8px line its ::after paints, so the
+    painted line is the hit area. The col-resize <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
     and <Mdn path="Web/CSS/touch-action">touch-action</Mdn>: none lets the pointer drag it
     on a touchscreen.</Says>,
   vanilla: <Says>The handle is focusable by birth, announcing the name the markup gives it, and
     once the ledger exists dressColumn rewrites that label to speak
-    the <Term word="share">share</Term> too. The grid from the last step deals it the header’s
-    end track, and the button carries no width of its own: it is a grid container whose only
-    item is the 8px line its ::after paints, so the painted line is the hit area. The
+    the <Term word="share">share</Term> too. It pins itself to the header’s end edge, stretched
+    to the cell’s height, and the button carries no width of its own: it is a grid container
+    whose only item is the 8px line its ::after paints, so the painted line is the hit area. The
     col-resize <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
     and <Mdn path="Web/CSS/touch-action">touch-action</Mdn>: none lets the pointer drag it
     on a touchscreen.</Says>
@@ -126,7 +127,7 @@ const gestureCodes: Record<World, ReactNode> = {
       ...span(resizeSource, 'onMouseDown={event => event.stopPropagation()}',
         'onMouseDown={event => event.stopPropagation()}'), gap,
       ...unit(sharesSource, 'export const resizeArrows'), gap,
-      ...span(resizeSource, 'onKeyDown={resizeArrows(onTrade)}', 'onKeyDown={resizeArrows(onTrade)}'),
+      ...span(resizeSource, 'onKeyDown={resizeArrows(trade)}', 'onKeyDown={resizeArrows(trade)}'),
       aside('// the column dial above never hears a thing')
     ]}/>
   </Codes>,
@@ -144,13 +145,15 @@ const widenStory = (world: World) =>
   <Story param="resize" id="widen" steps={6}
          can="The trader can widen a column"
          soThat="what they read most gets the room, and the table keeps its shape">
+    {theImplementation(world, 'Builds', 'Frame/table/resize.ts')}
     <Tell>We could resize with absolute pixel widths, but one drag would break the
       table’s promise to fill its container; so widths are shares of a hundred, born by
       measuring the rendered headers at the first touch, and every resize is a trade
       between neighbours: whatever one column gains, the next gives, and the sum cannot
       change.</Tell>
-    <Tell>The header cell lays its furniture on a grid, so the handle has a track instead of a
-      post. It captures its pointer and measures the table once, pixels per share; it
+    <Tell>The header cell lets each control find its own edge, and pads for whatever it holds,
+      so the handle sits at the boundary without a box to arrange it. It captures its pointer
+      and measures the table once, pixels per share; it
       stops pointer descent, so a boundary drag never becomes a column drag; and the
       keyboard gets the same road, one fixed step per arrow.</Tell>
     <Steps>
@@ -170,31 +173,25 @@ const widenStory = (world: World) =>
           {ledgerCodes[world]}
         </Reveal>
       </Step>
-      <Step title="Lay the header out on a grid">
-        <Words want="A header cell seats a title, sometimes a menu, sometimes a handle; the cell must tell that furniture where to live, and a table cell cannot become a grid without ceasing to be a table cell.">
-          <Says>A <Mdn path="Web/CSS/CSS_grid_layout">grid</Mdn> inside the cell: a full-size div
-            whose columns compose from the furniture classes the header actually carries.</Says>
+      <Step title="Let each control find the cell’s edge">
+        <Words want="A header cell holds a title, sometimes a menu, sometimes a handle; the controls must sit at the cell’s end edge, and a table cell cannot become a grid without ceasing to be a table cell.">
+          <Says>No box arranges them. The cell holds its title as text and each control places
+            itself: <Mdn path="Web/CSS/position">position</Mdn>: absolute against the cell’s end
+            edge, with the cell reserving the room in its own padding.</Says>
         </Words>
         <Reveal>
-          <Says>You reach for absolute positioning: pin the furniture to the cell’s edge and
-            reserve room for it with padding. It works until it does not: the pinned widths, the
-            reserved padding, and the layout are three numbers agreeing by luck, and nothing
-            breaks loudly when one drifts.</Says>
-          <Says>So the cell surrenders its padding and a plain div takes the whole cell (an explicit
-            height keeps the header’s stature, since block padding would inset the furniture). The
-            div is the grid; its columns compose from what
-            the header actually carries: a class per piece of furniture, and each combination
-            declares its own tracks. The parent tells the children where they live, and the classes
-            say why.</Says>
-          <Codes>
-            {gridMarkup[world]}
-            <Snippet label="CSS" lines={[
-              ...unit(baseCss, '.header-cell {'), gap,
-              ...unit(baseCss, '.header-cell-content {'), gap,
-              ...unit(baseCss, '.header-cell-content:has(> .menu-toggle),'), gap,
-              ...unit(baseCss, '.header-cell-content:has(> .menu-toggle):has(> .resize-handle) {')
-            ]}/>
-          </Codes>
+          <Says>You reach for a wrapper: a div inside the cell that becomes a grid and deals every
+            piece of furniture a track. It works, and it costs a generic element whose only job is
+            to arrange three children, plus an id to hang the column’s name on, because the title
+            text is no longer the cell’s own.</Says>
+          <Says>So the cell stays honest: a title, a menu where the page writes one, a handle, and
+            nothing else. Each control pins itself to the end edge, and the cell pads for what it
+            holds by asking the cascade: more room when a menu is present, less when only the
+            handle is. The cost is real and it is stated: the padding and the controls’ offsets are
+            two numbers that must agree, so both live in the one header sheet and nowhere else.
+            The column names itself with aria-label, since the title is bare text with no element
+            to point at.</Says>
+            {edgeMarkup[world]}
         </Reveal>
       </Step>
       <Step title="A handle that is a button">

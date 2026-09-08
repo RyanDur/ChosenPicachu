@@ -7,30 +7,31 @@ import {
   againstTheStream,
   animatedMotion,
   arrowsSpeak,
-  bothSlide,
   cssShare,
   deadZone,
   dragSurface,
   eagerPace,
   focusLands,
   gripArrows,
-  ghostByHand,
   keepOrigin,
   liftOnce,
   listenersOnce,
   orderInState,
   ownedPixels,
-  paceKey,
   promises,
   quietDials,
   carryVertical,
   turnedVertical,
-  twoRoads
+  theImplementation,
+  theWholeBuild,
+  twoRoads,
+  walkSlides
 } from './shared-steps';
 import buildSrc from '../Frame/builds/EagerKeepAnimated.ts?raw';
-import rowSource from '@components/DragSortableTable/elements/RowHeader.tsx?raw';
-import tableSource from '@components/DragSortableTable/EagerKeepAnimatedTable/EagerKeepAnimatedTable.tsx?raw';
-import headerSource from '@components/DragSortableTable/elements/DraggableColumn.tsx?raw';
+import tableSource from '../Builds/EagerKeepAnimatedTable/EagerKeepAnimatedTable.tsx?raw';
+import headerSource from '../Builds/EagerKeepAnimatedTable/DraggableColumn.tsx?raw';
+import rowSource from '../Builds/EagerKeepAnimatedTable/RowHeader.tsx?raw';
+import cssSource from '../Builds/EagerKeepAnimatedTable/EagerKeepAnimatedTable.css?raw';
 
 export const EagerKeepAnimatedRecipe: FC<{track: Track; world: World}> = ({track, world}) => track === 'pointer'
   ? <>
@@ -38,20 +39,21 @@ export const EagerKeepAnimatedRecipe: FC<{track: Track; world: World}> = ({track
            can="The trader can sort by column"
            soThat="the measures they compare sit beside each other">
       {twoRoads}
+      {theImplementation(world, 'Builds/EagerKeepAnimatedTable', 'Frame/builds/EagerKeepAnimated.ts')}
+      {theWholeBuild(world, tableSource, buildSrc)}
       {againstTheStream}
       {ownedPixels(world)}
       {promises('eager', 'keep', 'animated')}
       <Steps>
         {cssShare(world)}
-        {orderInState(world)}
-        {listenersOnce(world)}
-        {liftOnce(world, headerSource)}
-        {dragSurface(world, tableSource)}
-        {ghostByHand(world, tableSource)}
+        {orderInState(world, tableSource, buildSrc)}
+        {listenersOnce(world, buildSrc)}
+        {liftOnce(world, headerSource, buildSrc)}
+        {dragSurface(world, headerSource, buildSrc)}
         {deadZone}
-        {eagerPace(world, tableSource, buildSrc)}
+        {eagerPace(world, headerSource, buildSrc)}
         {keepOrigin(world)}
-        {animatedMotion(world, tableSource)}
+        {animatedMotion(world, headerSource, cssSource, buildSrc)}
       </Steps>
     </Story>
     <Story param="sort" id="row" steps={1}
@@ -59,28 +61,28 @@ export const EagerKeepAnimatedRecipe: FC<{track: Track; world: World}> = ({track
            soThat="the windows they watch closest sit on top">
       {turnedVertical}
       <Steps>
-        {carryVertical(world, tableSource)}
+        {carryVertical(world, rowSource, buildSrc)}
       </Steps>
     </Story>
   </>
   : <>
-    <Story param="sort" id="column" steps={4}
+    <Story param="sort" id="column" steps={3}
            can="The trader can sort by column"
            soThat="the measures they compare sit beside each other">
       {accessTrack}
+      {theImplementation(world, 'Builds/EagerKeepAnimatedTable', 'Frame/builds/EagerKeepAnimated.ts')}
       {quietDials}
       <Steps>
-      {focusLands(world, headerSource)}
-      {arrowsSpeak(world, headerSource)}
-      {bothSlide(world, headerSource, buildSrc)}
-      {paceKey()}
+      {focusLands(world, headerSource, buildSrc)}
+      {arrowsSpeak(world, headerSource, buildSrc)}
+      {walkSlides(world, headerSource, buildSrc)}
       </Steps>
     </Story>
     <Story param="sort" id="row" steps={1}
            can="The trader can sort by row"
            soThat="the windows they watch closest sit on top">
       <Steps>
-        {gripArrows(world, rowSource, buildSrc, 'rowArrows')}
+        {gripArrows(world, rowSource, buildSrc)}
       </Steps>
     </Story>
   </>;

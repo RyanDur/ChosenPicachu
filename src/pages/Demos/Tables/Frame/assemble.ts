@@ -4,11 +4,12 @@ import tableCss from '@components/Table/Table.css?raw';
 import headerCss from '@components/DragSortableTable/Header.css?raw';
 import sortableCss from '@components/DragSortableTable/sortable.css?raw';
 import rowGripCss from '@components/DragSortableTable/RowGrip.css?raw';
-import ghostCss from '@components/DragSortableTable/ghosts/Ghost.css?raw';
-import eagerHideAnimatedCss from '@components/DragSortableTable/EagerHideAnimatedTable/EagerHideAnimatedTable.css?raw';
-import eagerHideStaticCss from '@components/DragSortableTable/EagerHideStaticTable/EagerHideStaticTable.css?raw';
-import lazyHideAnimatedCss from '@components/DragSortableTable/LazyHideAnimatedTable/LazyHideAnimatedTable.css?raw';
-import lazyHideStaticCss from '@components/DragSortableTable/LazyHideStaticTable/LazyHideStaticTable.css?raw';
+import eagerHideAnimatedCss from '@components/DragSortableTable/motion.css?raw';
+import eagerHideStaticCss from '@pages/Demos/Tables/Builds/EagerHideStaticTable/EagerHideStaticTable.css?raw';
+import eagerKeepAnimatedCss from '@pages/Demos/Tables/Builds/EagerKeepAnimatedTable/EagerKeepAnimatedTable.css?raw';
+import lazyHideAnimatedCss from '@pages/Demos/Tables/Builds/LazyHideAnimatedTable/LazyHideAnimatedTable.css?raw';
+import lazyHideStaticCss from '@pages/Demos/Tables/Builds/LazyHideStaticTable/LazyHideStaticTable.css?raw';
+import lazyKeepAnimatedCss from '@pages/Demos/Tables/Builds/LazyKeepAnimatedTable/LazyKeepAnimatedTable.css?raw';
 import type {Motion, Origin, Pace} from '../../Controls';
 import aggregationsCss from '../Aggregations/Aggregations.css?raw';
 import tableHtml from './table.html?raw';
@@ -34,7 +35,6 @@ export const sheets = [
   {name: 'Header.css', css: headerCss},
   {name: 'sortable.css', css: sortableCss},
   {name: 'RowGrip.css', css: rowGripCss},
-  {name: 'Ghost.css', css: ghostCss},
   {name: 'Aggregations.css', css: aggregationsCss}
 ];
 
@@ -42,11 +42,11 @@ export type FrameConfig = {pace: Pace; origin: Origin; motion: Motion};
 
 const variantSheets: Record<Pace, Record<Origin, Record<Motion, {name: string; css: string} | undefined>>> = {
   eager: {
-    keep: {animated: undefined, static: undefined},
+    keep: {animated: {name: 'EagerKeepAnimatedTable.css', css: eagerKeepAnimatedCss}, static: undefined},
     hide: {animated: {name: 'EagerHideAnimatedTable.css', css: eagerHideAnimatedCss}, static: {name: 'EagerHideStaticTable.css', css: eagerHideStaticCss}}
   },
   lazy: {
-    keep: {animated: undefined, static: undefined},
+    keep: {animated: {name: 'LazyKeepAnimatedTable.css', css: lazyKeepAnimatedCss}, static: undefined},
     hide: {animated: {name: 'LazyHideAnimatedTable.css', css: lazyHideAnimatedCss}, static: {name: 'LazyHideStaticTable.css', css: lazyHideStaticCss}}
   }
 };
@@ -62,7 +62,7 @@ export const frameDocument = (env: FrameEnv, frame: FrameConfig): string => {
     .map(({css}) => css).join('\n');
   return scaffold
     .replace('/* the cascade */', () => cascade)
-    .replace('<!-- the dealt table -->', () => tableHtml)
+    .replace('<!-- the table as it starts -->', () => tableHtml)
     .replace('/* the environment */', () => `window.__env = ${JSON.stringify(env)}; window.__frame = ${JSON.stringify(frame)};`)
     .replace('/* the shell */', () => frameJs);
 };

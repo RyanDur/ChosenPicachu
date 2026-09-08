@@ -27,7 +27,7 @@ describe('the top layer', () => {
     const raised = troublesIn(alert);
     expect(raised).toHaveLength(alreadyStanding + 1);
     const newest = raised[raised.length - 1];
-    const item = newest.closest('li');
+    const item = within(alert).getAllByRole('listitem', {hidden: true}).find(standing => standing.contains(newest));
     if (!item) {
       throw new Error('the raised trouble stands in no list item');
     }

@@ -33,7 +33,7 @@
     justify-self: flex-end;
   }
 
-  .fancy-table {
+  .fancy-table:not(.column-ghost) {
     grid-area: table;
     table-layout: fixed;
     width: 100%;

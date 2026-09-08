@@ -11,13 +11,12 @@ declare module 'csstype' {
     '--stage-block-size'?: string;
     '--toward'?: string;
     '--drop'?: string;
-    '--seat-height'?: string;
     '--share'?: string;
-    '--flight-x'?: string;
-    '--flight-y'?: string;
-    '--flight-width'?: string;
     '--drift-x'?: string;
     '--drift-y'?: string;
+    '--carried-by'?: string;
+    '--settling-from'?: string;
+    '--shoved-by'?: string;
     '--explode-x'?: string;
     '--explode-y'?: string;
     '--turn'?: string;

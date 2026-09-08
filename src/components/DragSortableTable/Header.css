@@ -6,7 +6,11 @@
   }
 }
 
-.sortable .menu-toggle {
+.sortable .header-cell > .menu-toggle {
+  position: absolute;
+  inset-inline-end: var(--base-x-1_5);
+  top: 50%;
+  translate: 0 -50%;
   min-width: var(--base-x-3);
   min-height: var(--base-x-3);
   display: inline-grid;
@@ -22,20 +26,20 @@
   }
 }
 
-.sortable .menu-toggle::before {
+.sortable .header-cell > .menu-toggle::before {
   content: '\21C5';
 }
 
-.sortable [aria-sort='ascending'] .menu-toggle::before {
+.sortable [aria-sort='ascending'] > .menu-toggle::before {
   content: '\25B2';
 }
 
-.sortable [aria-sort='descending'] .menu-toggle::before {
+.sortable [aria-sort='descending'] > .menu-toggle::before {
   content: '\25BC';
 }
 
 @media (pointer: coarse) {
-  .sortable .menu-toggle {
+  .sortable .header-cell > .menu-toggle {
     min-width: var(--base-x-5_5);
     min-height: var(--base-x-5_5);
   }

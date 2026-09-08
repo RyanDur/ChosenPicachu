@@ -1,9 +1,10 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
 import {Paths} from '@pages/Paths';
-import {Trade} from './coinbase';
 import {ChartKind, matchChartKind} from './kinds';
-import {LiveTradesState, statusCopy} from './useLiveTrades';
+import {statusCopy} from './live-trades';
+import {useDemosSelector} from '../Provider';
+import {selectFeedStatus, selectLiveTrades} from '../store';
 import {useDesk} from './useDesk';
 import {useChartTravel} from './useChartTravel';
 import {Grip} from './Grip';
@@ -29,12 +30,12 @@ const doorways: Record<ChartKind, Paths> = {
 };
 
 type Props = {
-  trades: readonly Trade[];
-  status: LiveTradesState['status'];
   product: string;
 };
 
-export const Workspace: FC<Props> = ({trades, status, product}) => {
+export const Workspace: FC<Props> = ({product}) => {
+  const trades = useDemosSelector(selectLiveTrades);
+  const status = useDemosSelector(selectFeedStatus);
   const {chartKinds, absentKinds, add, remove, reorder} = useDesk();
   const {isArmed, arm, dress, lift, travel, release, keys, settled} =
     useChartTravel({seats: chartKinds.length, onSeated: reorder, onRemoved: remove});

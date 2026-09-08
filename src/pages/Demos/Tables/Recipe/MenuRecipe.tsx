@@ -1,23 +1,22 @@
-import {FC, ReactNode} from 'react';
+import {FC} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
-import {Motion, MotionDial, motionParam, originParam, paceParam} from '../../Controls';
+import {motionParam, originParam, paceParam} from '../../Controls';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, aside, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
 import {World, worldParam} from '../params';
 import {Term} from './Term';
 import menuCss from '../../../../styles/menu.css?raw';
 import headerCss from '@components/DragSortableTable/Header.css?raw';
-import sortMenuSource from '@components/DragSortableTable/SortMenu.tsx?raw';
 import sortingSource from '@components/DragSortableTable/sorting.ts?raw';
 import tableSource from '../Frame/table.html?raw';
 import stateSource from '@components/DragSortableTable/table-state.ts?raw';
+import selectorsSource from '@components/DragSortableTable/selectors.ts?raw';
 import frameMenus from '../Frame/table/menus.ts?raw';
-import frameMount from '../Frame/table/mount.ts?raw';
 import {buildSources} from '../Frame/builds/sources';
-import settlesSource from '../Frame/builds/settles.ts?raw';
-import {headerSource, rowHeaderSource, tableSources} from './sources';
+import {headerSources, rowSources, tableSources} from './sources';
+import {menuSource} from './shared-steps/sources';
+import {theImplementation} from './shared-steps';
 import baseCss from '@components/Table/Table.css?raw';
-import {pageSource} from './shared-steps/sources';
 import '../../Recipe/Recipe.css';
 
 const gap = plain(' ');
@@ -25,66 +24,44 @@ const gap = plain(' ');
 type Build = {
   world: World;
   source: string;
-  headerSrc: string;
-  cellSrc: string;
+  menuSrc: string;
+  tableSrc: string;
+  rowSrc: string;
   buildSrc: string;
 };
 
-const ruled = ({world, headerSrc}: Build, motion: Motion, dial: ReactNode) => motion === 'animated'
-  ? <Step title="Rule, and let the platform draw the reseat" dial={dial}>
-      <Words want="Choosing a direction reorders every row at once. On the animated table, each row deserves to be drawn sliding from where it was.">
-        <Says>A sort is a reorder like any drag, so it should settle like one: the rule
-          lands through the same view transition the drags use, and every named cell slides
-          to its ranked seat.</Says>
-      </Words>
-      <Reveal>
+const ruled = ({world, menuSrc, buildSrc}: Build) =>
+  <Step title="Rule directly">
+    <Words want="A sort reorders everything at once, and no hand is on the table to explain it.">
+      <Says>The answer is the rule alone: dispatch it and let the rows cut to their ranked
+        seats. Motion in these tables belongs to the hand, and a menu click has none.</Says>
+    </Words>
+    <Reveal>
+      {world === 'react'
+        ? <Says>The column raises the rule, and the dispatch is the whole answer. The rows cut
+          to their ranked seats on the next frame, in the animated table and the static one
+          alike.</Says>
+        : <Says>Choose dispatches the rule, and the reconcile moves the lanes in the same
+          breath. The rows cut to their ranked seats, in the animated build and the static one
+          alike.</Says>}
+      <Codes>
         {world === 'react'
-          ? <Says>The column settles the rule; the settle is a view transition, so the rows are
-            snapshotted before the rule lands and drawn sliding to where the rank puts them.
-            The rule itself is one state update, and the table never measured a seat.</Says>
-          : <Says>Choosing settles the rule; the build’s settle is a view transition, so the
-            reseat is snapshotted and drawn by the platform. The rule itself is one dispatch, and
-            the mount never measured a seat.</Says>}
-        <Codes>
-          {world === 'react'
-            ? <Snippet label="TS" lines={[
-              ...unit(headerSrc, 'const ruled')
-            ]}/>
-            : <Snippet label="TS" lines={[
-              ...unit(frameMount, '  const choose = '), gap,
-              ...unit(settlesSource, 'export const glided')
-            ]}/>}
-        </Codes>
-      </Reveal>
-    </Step>
-  : <Step title="Rule directly" dial={dial}>
-      <Words want="Motion is not free, and a sort reorders everything at once. The static table answers a menu click with nothing but the rule.">
-        <Says>The static answer is the rule alone: set it and let the rows cut to their ranked
-          seats.</Says>
-      </Words>
-      <Reveal>
-        {world === 'react'
-          ? <Says>This is the static table: ruled dispatches the rule, and the table shows it plainly.
-            The rows cut to their ranked seats on the next frame.</Says>
-          : <Says>This is the static build: choose settles the rule, and its settle calls the
-            update directly. The rows cut to their ranked seats in the same breath.</Says>}
-        <Codes>
-          {world === 'react'
-            ? <Snippet label="TS" lines={[
-              ...unit(headerSrc, 'const ruled')
-            ]}/>
-            : <Snippet label="TS" lines={[
-              ...unit(frameMount, '  const choose = ')
-            ]}/>}
-        </Codes>
-      </Reveal>
-    </Step>;
+          ? <Snippet label="TS" lines={[
+            ...span(menuSrc, 'onClick={() => dispatch(has(direction)', 'onClick={() => dispatch(has(direction)')
+          ]}/>
+          : <Snippet label="TS" lines={[
+            ...unit(buildSrc, '  const choose = ')
+          ]}/>}
+      </Codes>
+    </Reveal>
+  </Step>;
 
-const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
-  const {world, headerSrc, cellSrc} = build;
+const rankStory = (build: Build) => {
+  const {world, source, menuSrc, tableSrc, rowSrc, buildSrc} = build;
   return <Story param="menu" id="rank" steps={7}
                 can="The trader can sort the windows by any measure, or take the order back"
                 soThat="the table ranks itself, and the hand still outranks it">
+    {theImplementation(world, 'Builds', 'Frame/table/menus.ts')}
     <Tell>We could build the popup from divs, but then we owe focus, dismissal, and
       stacking, and choosing starts to feel like fighting the menu instead of using it;
       so the chooser leans on the platform, and the first steps below collect what that
@@ -124,8 +101,8 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
           <Codes>
             {world === 'react'
               ? <Snippet label="HTML" lines={[
-                ...span(sortMenuSource, '<button type="button" className="menu-toggle rounded-corners"', 'aria-label={`sort ${name}`}/>'), gap,
-                ...span(sortMenuSource, '<menu id={`sort-${name}`}', '</menu>')
+                ...span(menuSrc, '<button type="button" className="menu-toggle rounded-corners"', 'aria-label={`sort ${column}`}/>'), gap,
+                ...span(menuSrc, '<menu id={`sort-${column}`}', '</menu>')
               ]}/>
               : <Snippet label="HTML" lines={[
                 ...span(tableSource, '<button type="button" class="menu-toggle rounded-corners"', '</menu>')
@@ -174,90 +151,90 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
       </Step>
       <Step title="The glyph derives from the rule">
         <Words want="A sorted column must say so, to the eye and to assistive tech, without a second source of truth appearing anywhere.">
-          <Says>Nothing should store which column is sorted: derive everything from the
-            one <Term word="rule">rule</Term>,
+          <Says>Which column is sorted should be written once, on that column, as
+            the <Term word="rule">rule</Term>;
             let <Mdn path="Web/Accessibility/ARIA/Attributes/aria-sort">aria-sort</Mdn> be
-            the single written signal, and let the glyph be CSS reading that attribute.</Says>
+            the single signal read from it, and let the glyph be CSS reading that attribute.</Says>
         </Words>
         <Reveal>
           {world === 'react'
-            ? <Says>The header compares itself against the rule: the toggle wears the
-              direction’s glyph, and the th announces aria-sort from the same comparison. SortMenu
-              is the whole chooser: three buttons naming the three choices, reporting which column
-              asked for what.</Says>
-            : <Says>When the rule changes, announce walks the headers and compares each
-              against it: the sorted th gains aria-sort, and every other column returns to rest.
-              Derive, never store, and the header cannot lie.</Says>}
+            ? <Says>The rule lives on the column: ruledBy marks exactly one column sorted and
+              clears the rest, so the th announces aria-sort from its own column and the toggle
+              wears the direction’s glyph from that attribute. SortMenu is the whole chooser: three
+              buttons naming the three choices, reporting which column asked for what.</Says>
+            : <Says>The rule lives on the column: ruledBy marks exactly one column sorted and
+              clears the rest. When the columns change, announce walks the headers with what each
+              column says: the sorted th gains aria-sort, and every other column returns to rest.
+              One column holds the rule, and the header cannot lie.</Says>}
           <Codes>
             {world === 'react'
               ? <Snippet label="TS" lines={[
-                ...unit(sortingSource, 'export const sortedBy'), gap,
-                ...span(sortMenuSource, 'export const SortMenu', '</>;')
+                ...unit(stateSource, 'export const rule'), gap,
+                ...span(menuSrc, 'export const SortMenu', '</>;')
               ]}/>
               : <Snippet label="TS" lines={[
-                ...unit(sortingSource, 'export const sortedBy'), gap,
-                ...unit(frameMenus, 'const announce = ')
+                ...unit(stateSource, 'export const rule'), gap,
+                ...unit(frameMenus, 'export const announce = ')
               ]}/>}
             <Snippet label="CSS" lines={[
-              ...unit(headerCss, ".sortable .menu-toggle::before {"), gap,
-              ...unit(headerCss, ".sortable [aria-sort='ascending'] .menu-toggle::before {"), gap,
-              ...unit(headerCss, ".sortable [aria-sort='descending'] .menu-toggle::before {"),
+              ...unit(headerCss, ".sortable .header-cell > .menu-toggle::before {"), gap,
+              ...unit(headerCss, ".sortable [aria-sort='ascending'] > .menu-toggle::before {"), gap,
+              ...unit(headerCss, ".sortable [aria-sort='descending'] > .menu-toggle::before {"),
               aside('/* the glyph is CSS reading the one attribute; no world writes it */')
             ]}/>
             {world === 'react'
               ? <Snippet label="HTML" lines={[
-                ...span(headerSrc, 'aria-sort={sortedBy(name, rule)}', 'aria-sort={sortedBy(name, rule)}')
+                ...span(source, 'aria-sort={sorted}', 'aria-sort={sorted}')
               ]}/>
               : <Snippet label="HTML" lines={[
-                ...span(tableSource, '<th scope="col" class="cell trades header-cell">', 'aria-label="sort trades"></button>')
+                ...span(tableSource, '<th scope="col" class="cell trades header-cell"', 'aria-label="sort trades"></button>')
               ]}/>}
           </Codes>
         </Reveal>
       </Step>
       <Step title="The rule is a drape, not a bake">
         <Words want="The data keeps streaming under the sort, so the rule has to keep ruling.">
-          <Says>The <Term word="rule">rule</Term> should never rewrite
-            the <Term word="seats">seats</Term>:
-            it <Term word="drape">drapes</Term> over them, the display re-ranking through it on
-            every {world === 'react' ? 'render' : 'paint'}, with the ranking living in one
-            function both worlds call.</Says>
+          <Says>The <Term word="rule">rule</Term> should never be applied once:
+            it <Term word="drape">drapes</Term> over the rows, re-ranking them every time the
+            stream writes, with the ranking living in one selector both worlds ask.</Says>
         </Words>
         <Reveal>
           <Says>Your first instinct is to <Term word="bake">bake</Term>: rank the seats once
             when the direction is chosen, store the result, move on. It even looks right, until
             the feed writes the next value and the table quietly stops being sorted. A sort
             applied once is stale by the next trade, and this data never stops trading.</Says>
-          <Says>So the rule drapes: <Term word="standing">standing</Term> re-ranks on
-            every {world === 'react' ? 'render' : 'paint'}, and as values change underneath, the rows keep trading places to
-            stay sorted. Bake and the sort is a moment; drape and it is a property.</Says>
+          <Says>So the rule drapes: the standing is asked, never stored, and every read re-ranks
+            the rows through the column that holds the rule, so as values change underneath, the
+            rows keep trading places to stay sorted. Bake and the sort is a moment; drape and it
+            is a property.</Says>
           <Codes>
             <Snippet label="TS" lines={[
               ...unit(sortingSource, 'export const ranked'), gap,
-              ...unit(stateSource, 'export const standingOf'),
-              aside('// both worlds drape through the same standing')
+              ...unit(selectorsSource, 'export const selectStanding'),
+              aside('// both worlds ask the same selector')
             ]}/>
           </Codes>
         </Reveal>
       </Step>
-      {ruled(build, motion, dial)}
+      {ruled(build)}
       <Step title="A hand ends the rule">
         <Words want="Manual order and ruled order cannot both own the table. The moment you drag a row, whose order is it?">
           <Says>The hand should win: the moment a drag starts, the ruled order must become the
             real order, and the rule must end.</Says>
         </Words>
         <Reveal>
-          <Says>Touch a row and the current <Term word="standing">standing</Term> bakes into
-            the seats as the rule clears: the drape becomes the fabric, and your drag proceeds
-            from exactly what you saw. Choosing "as dealt" clears the rule the other way: back
-            to the seats as they stand, no drape at all.</Says>
+          <Says>Touch a row and the <Term word="standing">standing</Term> bakes: the rule
+            clears and the rows stay exactly where the drape left them, so your drag proceeds
+            from what you saw. Choosing "reset" clears the rule the other way: back to
+            the <Term word="seats">seats</Term> in the order they arrived, no drape at all.</Says>
           <Codes>
             {world === 'react'
               ? <Snippet label="TS" lines={[
-                ...unit(stateSource, 'export const baked'), gap,
-                ...span(cellSrc, 'const grabbed = ', 'baked(standing)(current)));')
+                ...unit(stateSource, 'export const bake'), gap,
+                ...unit(rowSrc, 'const lift = ')
               ]}/>
               : <Snippet label="TS" lines={[
-                ...unit(stateSource, 'export const baked = '),
+                ...unit(stateSource, 'export const bake = '),
                 aside('// the grab dispatches it outright; a nudge folds it into its own move')
               ]}/>}
           </Codes>
@@ -272,37 +249,36 @@ const rankStory = (build: Build, motion: Motion, dial: ReactNode) => {
         </Words>
         <Reveal>
           {world === 'react'
-            ? <Says>The header never hears your press. The toggle itself rides the header’s right
-              edge, a track in the cell’s own grid, undressed of its button chrome. And not every
-              column offers a menu: a menu exists only where the page writes one inside the
-              header, and the header’s grid makes room for it by asking the cascade what it
-              holds.</Says>
-            : <Says>The header never hears your press. The toggle itself rides the header’s right
-              edge, a track in the cell’s own grid, undressed of its button chrome. And not every
-              column offers a menu: menus exist only where the markup writes them, and the page
-              itself declares the sortable set.</Says>}
+            ? <Says>The header never hears your press. The toggle sits itself at the header’s end
+              edge, undressed of its button chrome. And not every column offers a menu: a menu
+              exists only where the page writes one inside the header, and the cell pads for it
+              by asking the cascade what it holds.</Says>
+            : <Says>The header never hears your press. The toggle sits itself at the header’s end
+              edge, undressed of its button chrome. And not every column offers a menu: menus
+              exist only where the markup writes them, the cell pads for them by asking the
+              cascade what it holds, and the page itself declares the sortable set.</Says>}
           <Codes>
             {world === 'react'
               ? <Snippet label="TS" lines={[
-                ...span(sortMenuSource, 'onPointerDown={event => event.stopPropagation()}',
+                ...span(menuSrc, 'onPointerDown={event => event.stopPropagation()}',
                   'onPointerDown={event => event.stopPropagation()}'),
                 aside('// on the toggle and on the menu both')
               ]}/>
               : <Snippet label="TS" lines={[
-                ...span(frameMount, "  [...table.querySelectorAll('.menu-toggle, .menu')]", 'event.stopPropagation()));'),
+                ...span(buildSrc, "  [...table.querySelectorAll('.menu-toggle, .menu')]", 'event.stopPropagation()));'),
                 aside('// on the toggle and on the menu both')
               ]}/>}
             {world === 'react'
               ? <Snippet label="HTML" lines={[
-                ...span(pageSource, '<Column key="window"', '<Column key="window"'),
-                ...span(pageSource, '<DraggableColumn key="trades"', '<DraggableColumn key="trades"'), gap,
-                ...unit(baseCss, '.header-cell-content:has(> .menu-toggle),')
+                ...span(tableSrc, '<Column column="window"', '<Column column="window"'),
+                ...span(tableSrc, '<DraggableColumn column="trades"', '<DraggableColumn column="trades"'), gap,
+                ...unit(baseCss, '    &:has(> .menu-toggle) {')
               ]}/>
               : <Snippet label="HTML" lines={[
-                ...span(frameMount, 'const measures = order.filter', 'sort-${column}`)));')
+                ...span(buildSrc, 'const sortable = order.filter', 'sort-${column}`)));')
               ]}/>}
             <Snippet label="CSS" lines={[
-              ...unit(headerCss, '.sortable .menu-toggle {')
+              ...unit(headerCss, '.sortable .header-cell > .menu-toggle {')
             ]}/>
           </Codes>
         </Reveal>
@@ -316,12 +292,13 @@ export const MenuRecipe: FC = () => {
     useSearchParamsObject({pace: paceParam, origin: originParam, motion: motionParam, world: worldParam});
   const build: Build = {
     world,
-    source: tableSources[pace][origin][motion],
-    headerSrc: headerSource,
-    cellSrc: rowHeaderSource,
+    source: headerSources[pace][origin][motion],
+    menuSrc: menuSource,
+    tableSrc: tableSources[pace][origin][motion],
+    rowSrc: rowSources[pace][origin][motion],
     buildSrc: buildSources[pace][origin][motion]
   };
   return <section aria-label="build the sort menu yourself" className="build-steps">
-    <Stories>{rankStory(build, motion, <MotionDial name="menu-motion"/>)}</Stories>
+    <Stories>{rankStory(build)}</Stories>
   </section>;
 };

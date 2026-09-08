@@ -21,9 +21,3 @@
     cursor: grabbing;
   }
 }
-
-.drag-surface {
-  position: fixed;
-  inset: 0;
-  cursor: grabbing;
-}

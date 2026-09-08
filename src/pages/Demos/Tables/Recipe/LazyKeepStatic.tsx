@@ -12,7 +12,6 @@ import {
   dragSurface,
   focusLands,
   gripArrows,
-  ghostByHand,
   keepOrigin,
   lazyPace,
   liftOnce,
@@ -24,12 +23,15 @@ import {
   staticMotion,
   carryVertical,
   turnedVertical,
+  theImplementation,
+  theWholeBuild,
   twoRoads
 } from './shared-steps';
 import buildSrc from '../Frame/builds/LazyKeepStatic.ts?raw';
-import rowSource from '@components/DragSortableTable/elements/RowHeader.tsx?raw';
-import tableSource from '@components/DragSortableTable/LazyKeepStaticTable/LazyKeepStaticTable.tsx?raw';
-import headerSource from '@components/DragSortableTable/elements/DraggableColumn.tsx?raw';
+import tableSource from '../Builds/LazyKeepStaticTable/LazyKeepStaticTable.tsx?raw';
+import headerSource from '../Builds/LazyKeepStaticTable/DraggableColumn.tsx?raw';
+import rowSource from '../Builds/LazyKeepStaticTable/RowHeader.tsx?raw';
+import paceSource from '../Builds/LazyKeepStaticTable/travel.ts?raw';
 
 export const LazyKeepStaticRecipe: FC<{track: Track; world: World}> = ({track, world}) => track === 'pointer'
   ? <>
@@ -37,20 +39,21 @@ export const LazyKeepStaticRecipe: FC<{track: Track; world: World}> = ({track, w
            can="The trader can sort by column"
            soThat="the measures they compare sit beside each other">
       {twoRoads}
+      {theImplementation(world, 'Builds/LazyKeepStaticTable', 'Frame/builds/LazyKeepStatic.ts')}
+      {theWholeBuild(world, tableSource, buildSrc)}
       {againstTheStream}
       {ownedPixels(world)}
       {promises('lazy', 'keep', 'static')}
       <Steps>
         {cssShare(world)}
-        {orderInState(world)}
-        {listenersOnce(world)}
-        {liftOnce(world, headerSource)}
-        {dragSurface(world, tableSource)}
-        {ghostByHand(world, tableSource)}
+        {orderInState(world, tableSource, buildSrc)}
+        {listenersOnce(world, buildSrc)}
+        {liftOnce(world, headerSource, buildSrc)}
+        {dragSurface(world, headerSource, buildSrc)}
         {deadZone}
-        {lazyPace(world, tableSource, buildSrc)}
+        {lazyPace(world, headerSource, paceSource, buildSrc)}
         {keepOrigin(world)}
-        {staticMotion(world, tableSource)}
+        {staticMotion(world, headerSource, buildSrc)}
       </Steps>
     </Story>
     <Story param="sort" id="row" steps={1}
@@ -58,7 +61,7 @@ export const LazyKeepStaticRecipe: FC<{track: Track; world: World}> = ({track, w
            soThat="the windows they watch closest sit on top">
       {turnedVertical}
       <Steps>
-        {carryVertical(world, tableSource)}
+        {carryVertical(world, rowSource, buildSrc)}
       </Steps>
     </Story>
   </>
@@ -67,10 +70,11 @@ export const LazyKeepStaticRecipe: FC<{track: Track; world: World}> = ({track, w
            can="The trader can sort by column"
            soThat="the measures they compare sit beside each other">
       {accessTrack}
+      {theImplementation(world, 'Builds/LazyKeepStaticTable', 'Frame/builds/LazyKeepStatic.ts')}
       {quietDials}
       <Steps>
-      {focusLands(world, headerSource)}
-      {arrowsSpeak(world, headerSource)}
+      {focusLands(world, headerSource, buildSrc)}
+      {arrowsSpeak(world, headerSource, buildSrc)}
       {cutKey(world, headerSource, buildSrc)}
       </Steps>
     </Story>
@@ -78,7 +82,7 @@ export const LazyKeepStaticRecipe: FC<{track: Track; world: World}> = ({track, w
            can="The trader can sort by row"
            soThat="the windows they watch closest sit on top">
       <Steps>
-        {gripArrows(world, rowSource, buildSrc, 'rowArrows')}
+        {gripArrows(world, rowSource, buildSrc)}
       </Steps>
     </Story>
   </>;

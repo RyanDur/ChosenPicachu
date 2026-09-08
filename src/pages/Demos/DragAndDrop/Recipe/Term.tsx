@@ -10,4 +10,4 @@ const definitions: Record<Word, ReactNode> = {
 };
 
 export const Term: FC<PropsWithChildren<{word: Word}>> = ({word, children}) =>
-  <Defined definition={definitions[word]}>{children ?? word}</Defined>;
+  <Defined term={word} definition={definitions[word]}>{children ?? word}</Defined>;

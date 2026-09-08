@@ -26,7 +26,7 @@ describe('the frame assembly', () => {
     Object.keys(styleSheets).map(named).forEach(name => expect(manifest).toContain(name));
   });
 
-  it('the document carries the cascade, the dealt table, and its environment, with no unresolvable imports', () => {
+  it('the document carries the cascade, the starting table, and its environment, with no unresolvable imports', () => {
     const document = frameDocument(
       {tradeFeed: 'wss://feed.test/', tradeHistory: 'http://history.test', tradeProduct: 'BTC-USD'},
       {pace: 'eager', origin: 'hide', motion: 'animated'});

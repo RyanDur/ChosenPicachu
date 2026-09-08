@@ -35,7 +35,7 @@ export const ListTutorials: FC = () => {
   useArrival();
   return <section className="tutorials">
     <h2 className="tutorials-title">let’s build this feature</h2>
-    <ol className="spine">
+    <ol className="spine" aria-label="the stations">
       <li className="station" id={stationId(1)}>
         <Clues quote="These priorities are mine, and the order is mine. When something belongs above something else, I want to pick it up and put it there, and see it stay where I dropped it."
                by="a user"

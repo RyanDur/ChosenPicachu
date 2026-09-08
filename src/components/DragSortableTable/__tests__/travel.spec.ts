@@ -1,5 +1,6 @@
 import {describe, expect, it} from 'vitest';
-import {carried, drifted, eagerTravel, columnArrows, rowArrows, surfaceTravel} from '../travel';
+import {carried, drifted, eagerTravel, pointerTravel} from '../travel';
+import {columnArrows, rowArrows} from '../arrows';
 
 const pressed = (key: string) => ({key, preventDefault: (): void => undefined, currentTarget: null});
 
@@ -12,9 +13,9 @@ describe('the travel vocabulary', () => {
     const settled: string[] = [];
     const under = (x: number) => x > 100 ? 'buys' : x > 50 ? 'trades' : undefined;
 
-    eagerTravel(under, struck => settled.push(struck))('trades', {clientX: 130, clientY: 10});
-    eagerTravel(under, struck => settled.push(struck))('trades', {clientX: 60, clientY: 10});
-    eagerTravel(under, struck => settled.push(struck))('trades', {clientX: 10, clientY: 10});
+    eagerTravel(under, 'trades', struck => settled.push(struck))({clientX: 130, clientY: 10});
+    eagerTravel(under, 'trades', struck => settled.push(struck))({clientX: 60, clientY: 10});
+    eagerTravel(under, 'trades', struck => settled.push(struck))({clientX: 10, clientY: 10});
 
     expect(settled).toEqual(['buys']);
   });
@@ -27,20 +28,48 @@ describe('the travel vocabulary', () => {
       .toEqual({origin: {x: 100, y: 50}, drift: {x: 30, y: -5}});
   });
 
-  it('a surface move with no buttons is the drop; otherwise it drifts and strikes', () => {
+  it('a move with no buttons is the drop; otherwise the holder takes the capture, moves, and takes it again once the move has settled', async () => {
     const happened: string[] = [];
-    const listener = surfaceTravel(() => happened.push('drift'), () => happened.push('strike'), () => happened.push('drop'));
+    const holder = document.createElement('th');
+    holder.setPointerCapture = id => happened.push(`captured ${id}`);
+    const listener = pointerTravel(() => happened.push('moved'), () => happened.push('drop'));
 
-    listener({buttons: 1, pointerId: 1, clientX: 0, clientY: 0, currentTarget: null});
-    listener({buttons: 0, pointerId: 1, clientX: 0, clientY: 0, currentTarget: null});
+    listener({buttons: 1, pointerId: 7, clientX: 0, clientY: 0, currentTarget: holder});
+    expect(happened).toEqual(['captured 7', 'moved']);
+    await Promise.resolve();
+    expect(happened).toEqual(['captured 7', 'moved', 'captured 7']);
 
-    expect(happened).toEqual(['drift', 'strike', 'drop']);
+    listener({buttons: 0, pointerId: 7, clientX: 0, clientY: 0, currentTarget: holder});
+    await Promise.resolve();
+    expect(happened).toEqual(['captured 7', 'moved', 'captured 7', 'drop']);
+  });
+
+
+  it('the arrows measure the table at the keypress and hand the widths and heights over', () => {
+    const table = document.createElement('table');
+    table.innerHTML = '<thead><tr><th class="cell window"></th><th class="cell trades"></th><th class="cell buys"></th><th class="cell change"></th></tr></thead><tbody><tr><td></td></tr><tr><td></td></tr></tbody>';
+    [...table.tHead?.rows[0]?.cells ?? []].forEach((th, at) => {
+      th.getBoundingClientRect = () => new DOMRect(0, 0, 100 + at, 0);
+    });
+    [...table.tBodies[0]?.rows ?? []].forEach((lane, at) => {
+      lane.getBoundingClientRect = () => new DOMRect(0, 0, 0, 40 + at);
+    });
+    const th = table.tHead?.rows[0]?.cells[1];
+    const grip = table.tBodies[0]?.rows[0]?.cells[0];
+    const widths: Readonly<Record<string, number>>[] = [];
+    const heights: Readonly<Record<string, number>>[] = [];
+
+    columnArrows('trades', () => ['window', 'trades', 'buys', 'change'], nudge => widths.push(nudge.widths))({...pressed('ArrowRight'), currentTarget: th ?? null});
+    rowArrows('this minute', () => ['this minute', 'this hour'], nudge => heights.push(nudge.heights))({...pressed('ArrowDown'), currentTarget: grip ?? null});
+
+    expect(widths).toEqual([{window: 100, trades: 101, buys: 102, change: 103}]);
+    expect(heights).toEqual([{'this minute': 40, 'this hour': 41}]);
   });
 
   it('column arrows claim the keys, arrange inside the anchors, and never at the rail', () => {
     const arranged: {from: number; to: number}[] = [];
     const listener = columnArrows('trades', () => ['window', 'trades', 'buys', 'change'],
-      nudge => arranged.push(nudge));
+      ({from, to}) => arranged.push({from, to}));
 
     listener(pressed('ArrowRight'));
     listener(pressed('ArrowLeft'));
@@ -50,14 +79,15 @@ describe('the travel vocabulary', () => {
   });
 
   it('row arrows always arrange, so the rail nudge still bakes', () => {
-    const arranged: {to: number; after: number[]}[] = [];
+    const arranged: {to: number; after: string[]}[] = [];
+    const rows = ['this minute', 'this hour', 'session'];
 
-    rowArrows(0, () => [0, 1, 2], nudge => arranged.push(nudge))(pressed('ArrowDown'));
-    rowArrows(2, () => [0, 1, 2], nudge => arranged.push(nudge))(pressed('ArrowDown'));
+    rowArrows('this minute', () => rows, ({to, after}) => arranged.push({to, after}))(pressed('ArrowDown'));
+    rowArrows('session', () => rows, ({to, after}) => arranged.push({to, after}))(pressed('ArrowDown'));
 
     expect(arranged).toEqual([
-      {to: 1, after: [1, 0, 2]},
-      {to: 2, after: [0, 1, 2]}
+      {to: 1, after: ['this hour', 'this minute', 'session']},
+      {to: 2, after: ['this minute', 'this hour', 'session']}
     ]);
   });
 });

@@ -3,9 +3,9 @@ import {Codes, Reveal, Says, Snippet, Step, Words, aside} from '../../../Recipe'
 import {Term} from '../Term';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
-import {frameMount, gap, seatedTableSource, stateSource, travelSource} from './sources';
+import {gap, elementSource, storeSource, liftSource} from './sources';
 
-export const listenersOnce = (world: World): ReactNode =>
+export const listenersOnce = (world: World, buildSrc: string): ReactNode =>
   <Step title="Write each listener once, for both worlds">
     <Words want={<>A pointer does not know which world it landed in: the lift, the <Term word="travel">travel</Term>, and the arrows should each be one function, written once and attached twice.</>}>
       <Says>The trap to check before sharing anything: a listener that closes over state
@@ -18,8 +18,9 @@ export const listenersOnce = (world: World): ReactNode =>
         as a function and calls it when the event fires. React remakes its handlers every render
         and never needed the discipline; the vanilla page attaches once and cannot live without
         it.</Says>
-      <Says>Writing back is the same shape in reverse: every handler ends in a dispatch, a function
-        taking a pure transition from the old state to the new. Ask, dispatch and subscribe together
+      <Says>Writing back is the same shape in reverse: every handler ends in a dispatch of an
+        action, columnMovedBeside, rowLifted, dropped, a record of what happened that one reducer
+        turns into the next state. Ask, dispatch and subscribe together
         are the store, and it is one plain object that both worlds mount unchanged. What differs is
         who subscribes: React subscribes a component, which re-renders; the vanilla build subscribes
         a reconcile, which moves nodes. Every listener from here on speaks to the store and nothing
@@ -27,18 +28,19 @@ export const listenersOnce = (world: World): ReactNode =>
         both worlds unchanged.</Says>
       <Codes>
         <Snippet label="TS" lines={[
-          ...unit(stateSource, 'export type TableStore'), gap,
-          ...unit(stateSource, 'export const tableStore'), gap,
-          ...span(travelSource, 'export const columnLift', ') => (event: GrabEvent): void => {'),
+          ...unit(storeSource, 'export type Store'), gap,
+          ...unit(storeSource, 'export const store'), gap,
+          ...span(liftSource, 'export const columnLift', ') => (event: GrabEvent): void => {'),
           aside('// the order is a question the event asks, not a value the listener keeps')
         ]}/>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...unit(seatedTableSource, 'export const SeatedTable')
+            ...unit(elementSource, 'export const DragSortableTable')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...span(frameMount, 'const store = tableStore(', '  });'), gap,
-            ...span(frameMount, 'const mounted: MountedTable', 'const mounted: MountedTable')
+            ...span(buildSrc, 'const trades = demosStore(', 'const store = tableStore('), gap,
+            ...span(buildSrc, 'store.subscribe(', 'store.subscribe('), gap,
+            ...span(buildSrc, 'const mounted: MountedTable', 'const mounted: MountedTable')
           ]}/>}
       </Codes>
     </Reveal>

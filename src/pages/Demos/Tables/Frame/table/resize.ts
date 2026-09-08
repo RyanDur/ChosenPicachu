@@ -1,7 +1,7 @@
 import {has, maybe} from '@ryandur/sand';
-import {Grip, STEP_SHARE, grippedAt, measuredShares, resizeLabel, soughtTrade} from '@components/Table/shares';
+import {Grip, STEP_SHARE, grippedAt, measuredWidths, resizeLabel, soughtTrade} from '@components/Table/shares';
 import {columnSteps} from '@components/DragSortableTable/survey';
-import {TableState, MountedTable, columnOf, sharedAs, tradedBy} from './table-state';
+import {MeasuresState, MountedTable, columnOf, measured, orderOf, tradedBy, widthsOf} from './table-state';
 
 const dressColumn = (table: HTMLTableElement, column: string, share: number): void => {
   maybe(table.querySelector(`th.${column}`)).map(header => {
@@ -15,10 +15,10 @@ const dressColumn = (table: HTMLTableElement, column: string, share: number): vo
   });
 };
 
-export const dressShares = (table: HTMLTableElement, state: TableState): void => {
-  maybe(state.shares).map(shares => {
+export const dressWidths = (table: HTMLTableElement, state: MeasuresState): void => {
+  maybe(widthsOf(state)).map(widths => {
     table.classList.add('apportioned');
-    state.order.forEach(column => dressColumn(table, column, shares[column]));
+    orderOf(state).forEach(column => dressColumn(table, column, widths[column]));
   });
 };
 
@@ -28,8 +28,8 @@ const wireHandle = (mounted: MountedTable, column: string, handle: HTMLButtonEle
   let carried = 0;
 
   const awaken = (): void => {
-    const shares = mounted.state().shares ?? measuredShares(mounted.state().order, table);
-    mounted.dispatch(sharedAs(shares));
+    const widths = widthsOf(mounted.store.state) ?? measuredWidths(orderOf(mounted.store.state), table);
+    mounted.store.dispatch(measured(widths));
   };
 
   handle.addEventListener('focus', awaken);
@@ -45,7 +45,8 @@ const wireHandle = (mounted: MountedTable, column: string, handle: HTMLButtonEle
     }
     handle.setPointerCapture(event.pointerId);
     const trade = soughtTrade(grip, event.clientX, carried);
-    mounted.dispatch(tradedBy(column, trade.delta));
+    mounted.store.dispatch(tradedBy(column, trade.delta));
+    reportShare(mounted, column);
     carried = trade.carried;
   });
   ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(landing =>
@@ -57,14 +58,22 @@ const wireHandle = (mounted: MountedTable, column: string, handle: HTMLButtonEle
       event.preventDefault();
       event.stopPropagation();
       awaken();
-      mounted.dispatch(tradedBy(column, toward * STEP_SHARE));
+      mounted.store.dispatch(tradedBy(column, toward * STEP_SHARE));
+      reportShare(mounted, column);
     });
   });
+};
+
+const reportShare = (mounted: MountedTable, column: string): void => {
+  const share = widthsOf(mounted.store.state)?.[column];
+  if (share !== undefined) {
+    mounted.report({axis: 'share', name: column, share});
+  }
 };
 
 export const wireResize = (mounted: MountedTable): void => {
   [...mounted.table.querySelectorAll('.resize-handle')]
     .filter(handle => handle instanceof HTMLButtonElement)
     .forEach(handle => maybe(handle.closest('th')).map(th =>
-      wireHandle(mounted, columnOf(mounted.state(), th), handle)));
+      wireHandle(mounted, columnOf(mounted.store.state, th), handle)));
 };

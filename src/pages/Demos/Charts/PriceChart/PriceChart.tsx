@@ -1,7 +1,7 @@
 import {FC, useState, ReactNode} from 'react';
 import {has, notEmpty} from '@ryandur/sand';
 import {Loading} from '@components/Loading';
-import {LiveTradesState} from '../useLiveTrades';
+import {LiveTradesState} from '../live-trades';
 import {cents, deltaLabel} from '../money';
 import {usePeriodCandles} from '../usePeriodCandles';
 import {bucketLabel, bucketMs, Period, periodCap, tickEveryMs, timePattern} from '../period';
@@ -58,7 +58,7 @@ export const PriceChart: FC<Props> = ({trades, id = 'price', actions}) => {
       <button type="button" className="menu-toggle rounded-corners period-toggle field caption"
               popoverTarget={`${id}-period`}
               aria-label="price period">{period}</button>
-      <menu id={`${id}-period`} popover="auto" className="menu card rounded-corners lifted">
+      <menu id={`${id}-period`} tabIndex={-1} popover="auto" className="menu card rounded-corners lifted" aria-label="price period by">
         {Object.values(Period).map(option =>
           <li className="entry" key={option}>
             <button type="button" className="item sub-title"

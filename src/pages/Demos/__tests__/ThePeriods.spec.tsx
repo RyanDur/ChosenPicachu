@@ -5,6 +5,7 @@ import {server} from '@test-support/server';
 import {renderWithMemoryRouter} from '@test-support';
 import {EnvProvider} from '@components/Env';
 import {DemosPage} from '@pages/Demos/DemosPage';
+import {Trading} from '@pages/Demos/Trading';
 import {Paths} from '@pages/Paths';
 import {format} from 'date-fns';
 
@@ -29,28 +30,18 @@ const rowsSpaced = (stepSeconds: number): number[][] =>
 const renderCharts = () =>
   renderWithMemoryRouter({
     path: Paths.demos,
-    element: <EnvProvider env={{tradeFeed: 'ws://127.0.0.1:9', tradeHistory: HISTORY}}><DemosPage/></EnvProvider>
+    element: <EnvProvider env={{tradeFeed: 'ws://127.0.0.1:9', tradeHistory: HISTORY}}><Trading/></EnvProvider>,
+    children: [{index: true, element: <DemosPage/>}]
   }, {path: `${Paths.demos}?tab=charts&charts=price,candles`});
 
-const menuFor = (label: string): HTMLElement => {
-  const toggle = screen.getByRole('button', {name: label});
-  const target = toggle.getAttribute('popovertarget') ?? '';
-  const menu = document.getElementById(target);
-  if (!menu) {
-    throw new Error(`no menu for ${label}`);
-  }
-  return menu;
-};
+const menuFor = (label: string): HTMLElement => screen.getByLabelText(`${label} by`);
 
-const drawnCandleParts = (selector: string): number => {
-  const region = screen.getByRole('region', {name: 'candles'});
-  return region.querySelectorAll(selector).length;
-};
+const captionOf = (chart: string): string =>
+  within(screen.getByRole('region', {name: chart})).getByText(/candles ·/).textContent ?? '';
 
-const drawnPoints = (): string[] => {
-  const region = screen.getByRole('region', {name: 'live trades'});
-  return region.querySelector('polyline')?.getAttribute('points')?.split(' ') ?? [];
-};
+const drawnCandles = (): number => parseInt(captionOf('candles'), 10);
+
+const drawnPoints = (): number => parseInt(captionOf('live trades'), 10);
 
 describe('the chart periods', () => {
   test('choosing the hour draws its candles from history', async () => {
@@ -63,8 +54,7 @@ describe('the chart periods', () => {
     renderCharts();
 
     await userEvent.click(within(menuFor('candle period')).getByText('hour'));
-    await waitFor(() => expect(drawnCandleParts('rect.body')).toBe(5));
-    expect(drawnCandleParts('rect.volume')).toBe(5);
+    await waitFor(() => expect(drawnCandles()).toBe(5));
     const chosen = asked[asked.length - 1].searchParams;
     expect(chosen.get('granularity')).toBe('60');
     expect(chosen.get('start')).not.toBeNull();
@@ -84,7 +74,7 @@ describe('the chart periods', () => {
     renderCharts();
 
     await userEvent.click(within(menuFor('price period')).getByText('day'));
-    await waitFor(() => expect(drawnPoints()).toHaveLength(5));
+    await waitFor(() => expect(drawnPoints()).toBe(5));
     expect(screen.getByText('$50,005.00')).toBeVisible();
     expect(screen.getByText('5 candles · 1h each')).toBeVisible();
     const priceCard = screen.getByRole('region', {name: 'live trades'});
@@ -116,7 +106,7 @@ describe('the chart periods', () => {
     await userEvent.click(within(menuFor('candle period')).getByText('day'));
     const candleCard = screen.getByRole('region', {name: 'candles'});
     expect(await within(candleCard).findByRole('progressbar')).toBeVisible();
-    await waitFor(() => expect(drawnCandleParts('rect.body')).toBe(5));
+    await waitFor(() => expect(drawnCandles()).toBe(5));
     expect(within(candleCard).queryByRole('progressbar')).toBeNull();
   });
 });

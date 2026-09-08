@@ -26,4 +26,20 @@
   .tag {
     color: var(--code-tag);
   }
+
+  .attribute {
+    color: var(--code-attribute);
+  }
+
+  .type {
+    color: var(--code-type);
+  }
+
+  .call {
+    color: var(--code-call);
+  }
+
+  .punctuation {
+    color: var(--code-punctuation);
+  }
 }

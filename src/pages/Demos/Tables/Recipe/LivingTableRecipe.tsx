@@ -3,17 +3,18 @@ import {useSearchParamsObject} from '@components/search-params';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
 import {World, worldParam} from '../params';
-import feedSource from '@pages/Demos/Charts/live-trades.ts?raw';
+import {theImplementation} from './shared-steps';
+import {storeStory} from './StoreRecipe';
+import exchangeSource from '@pages/Demos/exchange.ts?raw';
+import demosSource from '@pages/Demos/store.ts?raw';
 import foldSource from '@pages/Demos/Tables/Aggregations/fold.ts?raw';
-import dealSource from '@pages/Demos/Tables/Aggregations/AggregatesTable.tsx?raw';
-import seatedTableSource from '@components/DragSortableTable/SeatedTable.tsx?raw';
-import headerSource from '@components/DragSortableTable/elements/DraggableColumn.tsx?raw';
-import rowSource from '@components/DragSortableTable/elements/Cell.tsx?raw';
+import dealSource from '../Builds/EagerHideAnimatedTable/EagerHideAnimatedTable.tsx?raw';
+import headerSource from '@components/DragSortableTable/DraggableColumn.tsx?raw';
+import cellSource from '@components/DragSortableTable/Cell.tsx?raw';
+import buildSrc from '../Frame/builds/EagerHideAnimated.ts?raw';
 import hydrateSource from '@pages/Demos/Tables/Aggregations/recent-trades.ts?raw';
 import widthsSource from '@pages/Demos/Tables/Aggregations/Aggregations.css?raw';
 import tableSource from '../Frame/table.html?raw';
-import stateSource from '@components/DragSortableTable/table-state.ts?raw';
-import frameMount from '../Frame/table/mount.ts?raw';
 import {DataPath} from './DataPath';
 import '../../Recipe/Recipe.css';
 
@@ -46,14 +47,14 @@ const dealPlans: Record<World, ReactNode> = {
 const dealCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="HTML" lines={[
-      ...span(dealSource, 'const headers: Record<string, ReactElement> = {', '  };')
+      ...span(dealSource, '<Headers className="row">', '</Headers>')
     ]}/>
     <Snippet label="CSS" lines={[
       ...unit(widthsSource, '.aggregations {')
     ]}/>
     <Snippet label="HTML" lines={[
-      ...span(headerSource, '<th className={classNames(', 'scope="col"'), gap,
-      ...span(rowSource, 'return <td className=', '</td>;')
+      ...span(headerSource, "return <th {...th}", 'scope="col"'), gap,
+      ...span(cellSource, "return <td {...td}", '</td>;')
     ]}/>
   </Codes>,
   vanilla: <Codes>
@@ -93,7 +94,7 @@ const foldCodes: Record<World, ReactNode> = {
   vanilla: <Codes>
     <Snippet label="TS" lines={[
       ...unit(foldSource, 'export const windows'), gap,
-      ...unit(frameMount, 'const reconcile = ')
+      ...unit(buildSrc, 'const reconcile = ')
     ]}/>
   </Codes>
 };
@@ -103,54 +104,14 @@ const refolds: Record<World, string> = {
   vanilla: 'Then every arrival refolds everything we hold into the windows, and the page writes what changed.'
 };
 
-const statePlans: Record<World, ReactNode> = {
-  react: <Says>The table’s state is one value held in a single cell, and the setter is the
-    dispatch. Nothing ever edits the state in place: a change is a pure transition, a function
-    from the old state to the new; the previous value is never mutated, only replaced.</Says>,
-  vanilla: <Says>The vanilla build keeps the same single value: the table state, which holds order, seats,
-    seated, shares, and the rule together, every field readonly. Nothing ever edits the state in place: a
-    change is a pure transition, a function from the old state to the new; the previous
-    value is never mutated, only replaced.</Says>
-};
-
-const stateFollows: Record<World, ReactNode> = {
-  react: <Says>What follows the dispatch is React’s half of the deal: the table is subscribed to the
-    store, so it re-renders, the markup renders through the new state, and React reconciles the
-    real DOM to match, moving only the nodes whose place changed. You never touch the DOM; you
-    only dispatch the next state.</Says>,
-  vanilla: <Says>What React did for you is the other half: the build mounts the same store with the same
-    write path, and the subscriber it hands the store reconciles the page against the new state
-    by hand, moving only the cells whose place changed and writing only the text that differs.
-    The seam between the worlds is exactly here: the store is identical; the subscriber is the
-    difference.</Says>
-};
-
-const stateCodes: Record<World, ReactNode> = {
-  react: <Codes>
-    <Snippet label="TS" lines={[
-      ...unit(stateSource, 'export type TableState'), gap,
-      ...unit(seatedTableSource, 'export const SeatedTable')
-    ]}/>
-  </Codes>,
-  vanilla: <Codes>
-    <Snippet label="TS" lines={[
-      ...unit(stateSource, 'export type TableState'), gap,
-      ...unit(stateSource, 'export const orderedTo'), gap,
-      ...unit(stateSource, 'export const baked')
-    ]}/>
-    <Snippet label="TS" lines={[
-      ...span(frameMount, 'store.subscribe(() => {', '  });')
-    ]}/>
-  </Codes>
-};
-
 const stillStory = (world: World) =>
-  <Story param="living" id="still" steps={2}
+  <Story param="living" id="still" steps={1}
          can="The trader can read the market in a table"
          soThat="the shape is right before anything moves">
+    {theImplementation(world, 'Aggregations', 'Frame/frame.main.ts')}
     <Tell>The shape comes from the design, in the element the story chose: a few measures
       across a few time windows, numbers on two axes; that is what a table is for. It stands
-      first as a still, dealt from whatever trades we hold: headers on both axes, and the
+      first as a still, built from whatever trades we hold: headers on both axes, and the
       reading order correct before a single interaction exists.</Tell>
     <Steps>
       <Step title="Deal a real HTML table">
@@ -164,7 +125,7 @@ const stillStory = (world: World) =>
             A <Mdn path="Web/HTML/Element/thead">thead</Mdn> of th headers, one per column, each
             announcing <Mdn path="Web/HTML/Element/th#scope">scope="col"</Mdn>: that one attribute
             is how a screen reader knows to say the column’s name with every cell below it.
-            A <Mdn path="Web/HTML/Element/tbody">tbody</Mdn> of rows dealt from the trades we hold;
+            A <Mdn path="Web/HTML/Element/tbody">tbody</Mdn> of rows built from the trades we hold;
             each row leads with a th of its own,
             announcing <Mdn path="Web/HTML/Element/th#scope">scope="row"</Mdn> so the window’s name
             travels with every cell beside it, then a td per measure.</Says>
@@ -175,15 +136,6 @@ const stillStory = (world: World) =>
             first rule of <Mdn path="Web/Accessibility/ARIA">ARIA</Mdn>: prefer the native element,
             and accessibility stops being work you add and becomes behavior you inherit.</Says>
           {dealCodes[world]}
-        </Reveal>
-      </Step>
-      <Step title="Hold the state in one place">
-        <Words want="A live table is state before it is pixels: something must own the order, the seats, and the rule, and the page must follow it.">
-          {statePlans[world]}
-        </Words>
-        <Reveal>
-          {stateFollows[world]}
-          {stateCodes[world]}
         </Reveal>
       </Step>
     </Steps>
@@ -232,8 +184,8 @@ const flowStory = (world: World) =>
             pretending.</Says>
           <Codes>
             <Snippet label="TS" lines={[
-              ...unit(feedSource, 'const stream = streaming('), gap,
-              ...unit(feedSource, 'const appendTrade = ')
+              ...unit(exchangeSource, 'const stream = streaming('), gap,
+              ...unit(demosSource, 'const tradesReducer')
             ]}/>
           </Codes>
         </Reveal>
@@ -254,7 +206,7 @@ const flowStory = (world: World) =>
 export const StillTableRecipe: FC = () => {
   const {world = 'react'} = useSearchParamsObject({world: worldParam});
   return <section aria-label="the still table" className="build-steps">
-    <Stories>{stillStory(world)}</Stories>
+    <Stories>{stillStory(world)}{storeStory(world)}</Stories>
   </section>;
 };
 

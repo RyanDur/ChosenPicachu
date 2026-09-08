@@ -4,6 +4,7 @@ import {server} from '@test-support/server';
 import {renderWithMemoryRouter} from '@test-support';
 import {EnvProvider} from '@components/Env';
 import {DemosPage} from '@pages/Demos/DemosPage';
+import {Trading} from '@pages/Demos/Trading';
 import {Paths} from '@pages/Paths';
 
 const HISTORY = 'https://api.exchange.coinbase.com';
@@ -20,7 +21,8 @@ const recentTradesNewestFirst = [
 const renderTables = () =>
   renderWithMemoryRouter({
     path: Paths.demos,
-    element: <EnvProvider env={{tradeFeed: 'wss://feed.test', tradeHistory: HISTORY}}><DemosPage/></EnvProvider>
+    element: <EnvProvider env={{tradeFeed: 'wss://feed.test', tradeHistory: HISTORY}}><Trading/></EnvProvider>,
+    children: [{index: true, element: <DemosPage/>}]
   }, {path: `${Paths.demos}?tab=tables`});
 
 describe('the windows hydrate from history', () => {
@@ -31,13 +33,8 @@ describe('the windows hydrate from history', () => {
     renderTables();
 
     const card = screen.getByRole('region', {name: 'live aggregations'});
-    const texts = (row: HTMLElement) => [...row.querySelectorAll('th, td')].map(cell => cell.textContent);
-    const rowFor = (label: string) => {
-      const cell = within(card).getByText(label);
-      const row = cell.closest('tr');
-      if (!row) throw new Error(`no row for ${label}`);
-      return row;
-    };
+    const texts = (row: HTMLElement) => [within(row).getByRole('rowheader'), ...within(row).getAllByRole('cell')].map(cell => cell.textContent);
+    const rowFor = (label: string) => within(card).getByRole('row', {name: new RegExp(`^${label}`)});
     await waitFor(() => expect(texts(rowFor('this minute'))).toEqual(
       ['this minute', '1', '1', '0', '0.01', '$50,004.00', '+$0.00']));
     expect(texts(rowFor('this hour'))).toEqual(
@@ -51,7 +48,7 @@ describe('the windows hydrate from history', () => {
 
     const card = screen.getByRole('region', {name: 'live aggregations'});
     expect(await within(card).findByText('session')).toBeVisible();
-    const sessionRow = within(card).getByText('session').closest('tr');
+    const sessionRow = within(card).getByRole('row', {name: /^session/});
     expect(sessionRow).toHaveTextContent('0');
   });
 });

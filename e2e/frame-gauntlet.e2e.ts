@@ -17,12 +17,12 @@ for (const world of worlds) {
     page.on('pageerror', error => troubles.push(String(error)));
 
     await page.goto(`/ChosenPicachu/demos/?tab=tables&world=vanilla&${world}`);
-    const frame = page.frameLocator('iframe.table-frame');
-    await frame.locator('th.trades').waitFor();
+    const frame = page.frameLocator('iframe[title="the living table, in vanilla"]');
+    await frame.getByRole('columnheader', {name: 'trades'}).waitFor();
 
-    const order = () => frame.locator('thead th').evaluateAll(headers =>
-      headers.map(header => header.className.split(' ')[1]));
-    const rows = () => frame.locator('tbody .row-header-content').evaluateAll(cells =>
+    const order = () => frame.getByRole('columnheader').evaluateAll(headers =>
+      headers.map(header => header.getAttribute('aria-label')));
+    const rows = () => frame.getByRole('rowheader').evaluateAll(cells =>
       cells.map(cell => (cell.textContent ?? '').trim()));
 
     const dragTo = async (fromBox: {x: number; y: number; width: number; height: number}, x: number, y: number) => {
@@ -38,8 +38,8 @@ for (const world of worlds) {
     };
 
     // column drag across several seats: trades toward vwap
-    const trades = await frame.locator('th.trades').boundingBox();
-    const vwap = await frame.locator('th.vwap').boundingBox();
+    const trades = await frame.getByRole('columnheader', {name: 'trades'}).boundingBox();
+    const vwap = await frame.getByRole('columnheader', {name: 'vwap'}).boundingBox();
     if (!trades || !vwap) {
       throw new Error('headers missing');
     }
@@ -47,8 +47,8 @@ for (const world of worlds) {
     expect(await order()).toEqual(['window', 'buys', 'sells', 'volume', 'vwap', 'trades', 'change']);
 
     // row drag: first grip down past the third row
-    const grip = await frame.locator('tbody .grip').first().boundingBox();
-    const thirdRow = await frame.locator('tbody tr').nth(2).boundingBox();
+    const grip = await frame.getByRole('button', {name: 'move row 1'}).boundingBox();
+    const thirdRow = await frame.getByRole('row', {name: /last 15 minutes/}).boundingBox();
     if (!grip || !thirdRow) {
       throw new Error('rows missing');
     }

@@ -8,8 +8,8 @@ const paces: Record<Pace, string> = {
 };
 
 const origins: Record<Origin, string> = {
-  keep: 'The column stays in sight while its copy travels, so nothing vanishes while you decide.',
-  hide: 'A gap opens where the column left, so the landing is never a guess.'
+  keep: 'The column stays where it stands while you drag, so nothing moves but the order while you decide.',
+  hide: 'The column rides in your hand and a gap opens where it left, so the landing is never a guess.'
 };
 
 const motions: Record<Motion, string> = {

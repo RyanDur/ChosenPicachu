@@ -2,15 +2,7 @@ import {has} from '@ryandur/sand';
 
 export type Direction = 'ascending' | 'descending';
 
-export type Values = Readonly<Record<string, number | string | undefined>>;
-
-export type Rule = {
-    column: string;
-    direction: Direction;
-};
-
-export const sortedBy = (column: string, rule?: Rule): Direction | undefined =>
-    has(rule) && rule.column === column ? rule.direction : undefined;
+export type Value = number | string;
 
 export type Choice = {
     display: string;
@@ -20,7 +12,7 @@ export type Choice = {
 export const choices: readonly Choice[] = [
     {display: 'ascending', direction: 'ascending'},
     {display: 'descending', direction: 'descending'},
-    {display: 'as dealt'}
+    {display: 'reset'}
 ];
 
 export const directionOf = (label: string): Direction | undefined => {
@@ -28,12 +20,12 @@ export const directionOf = (label: string): Direction | undefined => {
     return has(choice) ? choice.direction : undefined;
 };
 
-export const ranked = (values: readonly Values[], dealt: readonly number[], rule: Rule): number[] =>
-    [...dealt].sort((left, right) => {
-        const first = values[left]?.[rule.column];
-        const second = values[right]?.[rule.column];
+export const ranked = <Seat>(seats: readonly Seat[], valueOf: (seat: Seat) => Value | undefined, direction: Direction): Seat[] =>
+    [...seats].sort((left, right) => {
+        const first = valueOf(left);
+        const second = valueOf(right);
         const gap = typeof first === 'string' || typeof second === 'string'
             ? String(first ?? '').localeCompare(String(second ?? ''))
             : (first ?? Number.NEGATIVE_INFINITY) - (second ?? Number.NEGATIVE_INFINITY);
-        return rule.direction === 'ascending' ? gap : -gap;
+        return direction === 'ascending' ? gap : -gap;
     });

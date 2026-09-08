@@ -2,9 +2,9 @@ import {ReactNode} from 'react';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
-import {frameMount, gap, gripSource, headerCss, surveySource} from './sources';
+import {gap, gripSource, headerCss, surveySource} from './sources';
 
-export const focusLands = (world: World, headerSource: string): ReactNode =>
+export const focusLands = (world: World, headerSource: string, buildSrc: string): ReactNode =>
   <Step title="Give focus a place to land">
     <Words want="The trader without a pointer expects the same reorders. First, focus needs a place to land; a plain header holds none.">
       <Says>HTML already focuses more than it gets credit for: a button is focusable by birth,
@@ -30,7 +30,7 @@ export const focusLands = (world: World, headerSource: string): ReactNode =>
             aside('{/* the button was focusable all along; the header asks */}')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...unit(frameMount, 'const dressGrips = '),
+            ...unit(buildSrc, 'const dressGrips = '),
             aside('// the button was focusable all along; JavaScript asks for the headers')
           ]}/>}
         <Snippet label="CSS" lines={[
@@ -40,7 +40,7 @@ export const focusLands = (world: World, headerSource: string): ReactNode =>
     </Reveal>
   </Step>;
 
-export const arrowsSpeak = (world: World, headerSource: string): ReactNode =>
+export const arrowsSpeak = (world: World, headerSource: string, buildSrc: string): ReactNode =>
   <Step title="Arrows speak direction">
     <Words want="The trader’s focus can reach a column, but the platform ships no verb for “swap left”; they need one.">
       <Says>The verb gets claimed with
@@ -62,7 +62,7 @@ export const arrowsSpeak = (world: World, headerSource: string): ReactNode =>
             aside('// the anchors hold; the walk stops beside them')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...unit(frameMount, "th.addEventListener('keydown'"),
+            ...unit(buildSrc, "th.addEventListener('keydown'"),
             aside('// the anchors hold; the walk stops beside them')
           ]}/>}
         <Snippet label="TS" lines={[

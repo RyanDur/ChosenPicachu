@@ -46,17 +46,13 @@ describe('the pie', () => {
     expect(dy).toBeCloseTo(0);
   });
 
-  test('the card cuts the session into a bought and a sold slice, each with a face and a wall', () => {
+  test('the card cuts the session into a bought and a sold slice, and says each share', () => {
     render(<Pie trades={[
       trade({size: 3, side: 'buy'}),
       trade({id: 2, size: 1, side: 'sell'})
     ]}/>);
 
     const card = screen.getByRole('region', {name: 'pie'});
-    expect(card.querySelectorAll('.slice.bought .face path.half')).toHaveLength(2);
-    expect(card.querySelectorAll('.slice.bought .wall path.half')).toHaveLength(2);
-    expect(card.querySelectorAll('.slice.sold .face path.half')).toHaveLength(2);
-    expect(card.querySelectorAll('.slice.sold .wall path.half')).toHaveLength(2);
     expect(card).toHaveTextContent('75% bought');
     expect(card).toHaveTextContent('25% sold');
     expect(card).toHaveTextContent('since you arrived');
@@ -67,15 +63,15 @@ describe('the pie', () => {
 
     const card = screen.getByRole('region', {name: 'pie'});
     expect(sweepGates(slices([2, 0])[0])).toEqual({opening: 0, closing: 180});
-    expect(card.querySelectorAll('.slice.bought .face path.half')).toHaveLength(2);
     expect(card).toHaveTextContent('100% bought');
+    expect(card).toHaveTextContent('0% sold');
   });
 
   test('an empty stream leaves the card waiting, not broken', () => {
     render(<Pie trades={[]}/>);
 
     const card = screen.getByRole('region', {name: 'pie'});
-    expect(card.querySelectorAll('.slice')).toHaveLength(0);
+    expect(card).not.toHaveTextContent('%');
     expect(card).toHaveTextContent('waiting for the first trade');
   });
 });

@@ -10,13 +10,8 @@ describe('the row menu is a popover anchored to its toggle', () => {
     return screen.getAllByRole('row')[1];
   };
 
-  const menuFor = (toggle: HTMLElement): HTMLElement => {
-    const target = toggle.getAttribute('popovertarget') ?? '';
-    expect(target).toMatch(/^menu-/);
-    const menu = document.getElementById(target);
-    if (!menu) throw new Error(`no menu with id ${target}`);
-    return menu;
-  };
+  const menuFor = (toggle: HTMLElement): HTMLElement =>
+    screen.getByLabelText(`${toggle.getAttribute('aria-label') ?? ''}, chosen`);
 
   test('the toggle is a real button wired to its own menu', async () => {
     const row = await firstRow();

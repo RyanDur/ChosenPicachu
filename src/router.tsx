@@ -49,8 +49,13 @@ export const router = {
   element: <MountedTable/>,
   children: [
     Home,
-    {path: Paths.demos, lazy: () => import('@pages/Demos').then(({Demos}) => Demos)},
-    {path: Paths.chartTutorial, lazy: () => import('@pages/Demos').then(({ChartTutorial}) => ChartTutorial)},
+    {
+      lazy: () => import('@pages/Demos').then(({TradingFloor}) => TradingFloor),
+      children: [
+        {path: Paths.demos, lazy: () => import('@pages/Demos').then(({Demos}) => Demos)},
+        {path: Paths.chartTutorial, lazy: () => import('@pages/Demos').then(({ChartTutorial}) => ChartTutorial)}
+      ]
+    },
     Users,
     Gallery,
     Games

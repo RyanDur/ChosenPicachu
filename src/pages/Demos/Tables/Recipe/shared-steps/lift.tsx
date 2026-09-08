@@ -3,9 +3,9 @@ import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, aside} from '../../../Re
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {Term} from '../Term';
-import {frameMount, gap, sortableCss, travelSource} from './sources';
+import {gap, sortableCss, stateSource, liftSource} from './sources';
 
-export const liftOnce = (world: World, headerSource: string): ReactNode =>
+export const liftOnce = (world: World, headerSource: string, buildSrc: string): ReactNode =>
   <Step title="Lift on pointer down, and measure the table once" id="step-lift">
     <Words want="A carry must know the ground it stands on without asking the DOM again on every move.">
       <Says>Asking the DOM where things are mid-drag causes the layout thrash we came here to
@@ -16,17 +16,21 @@ export const liftOnce = (world: World, headerSource: string): ReactNode =>
     <Reveal>
       {world === 'react'
         ? <Says>The hand is CSS before anything happens, grab on hover, grabbing on press, and
-          touch-action: none is why the pointer can drag on touch at all. On pointerdown,
-          JavaScript records which key is <Term word="aloft">aloft</Term> and takes the survey. Two words in
-          the code come from a small library called <a className="signpost"
+          touch-action: none is why the pointer can drag on touch at all. On pointerdown, the
+          header takes the survey, takes the pointer, and lifts: one dispatch, and the store
+          learns which column is <Term word="aloft">carried</Term> and holds the drag beside the
+          columns and the rows, in a slice of its own that a table with no carry never
+          has. One word in the code comes from a small library
+          called <a className="signpost"
             href="https://ryandur.github.io/sand/"
             target="_blank"
-            rel="noreferrer">sand</a>: aloft rides its Maybe, nothing until a lift, and has is
-          its null check, false for nothing and for empty.</Says>
+            rel="noreferrer">sand</a>: has, its null check, false for nothing and for
+          empty.</Says>
         : <Says>The hand is CSS before anything happens, grab on hover, grabbing on press, and
           touch-action: none is why the pointer can drag on touch at all. On pointerdown,
-          JavaScript takes the survey; then the grab fills the <Term word="ghost">ghost</Term> and the carry
-          begins. One word in the code comes from a small library called <a className="signpost"
+          JavaScript takes the survey and the pointer, and one dispatch puts the drag in the
+          store beside the columns and the rows, in a slice of its own. One word in the code
+          comes from a small library called <a className="signpost"
             href="https://ryandur.github.io/sand/"
             target="_blank"
             rel="noreferrer">sand</a>: has, its null check, false for nothing and for
@@ -34,16 +38,20 @@ export const liftOnce = (world: World, headerSource: string): ReactNode =>
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...unit(headerSource, 'const grabbed = '), gap,
-            ...span(headerSource, 'onPointerDown={travels ? columnLift(name', 'onPointerDown={travels ? columnLift(name')
+            ...span(headerSource, 'onPointerDown={travels ? columnLift(column', 'onPointerDown={travels ? columnLift(column'), gap,
+            ...unit(headerSource, 'const lift = '), gap,
+            ...unit(stateSource, 'export const lifted'), gap,
+            ...unit(stateSource, 'export const lift')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...unit(frameMount, '    const grabbed = '), gap,
-            ...span(frameMount, "th.addEventListener('pointerdown', columnLift",
-              "th.addEventListener('pointerdown', columnLift")
+            ...span(buildSrc, "th.addEventListener('pointerdown', columnLift",
+              "th.addEventListener('pointerdown', columnLift"), gap,
+            ...unit(buildSrc, '  const lift = '), gap,
+            ...unit(stateSource, 'export const lifted'), gap,
+            ...unit(stateSource, 'export const lift')
           ]}/>}
         <Snippet label="TS" lines={[
-          ...unit(travelSource, 'export const columnLift'),
+          ...unit(liftSource, 'export const columnLift'),
           aside('// one lift; each world grabs with its own hands')
         ]}/>
         <Snippet label="CSS" lines={[

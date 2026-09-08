@@ -35,7 +35,7 @@ describe('The gallery.', () => {
     renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
 
     const figures = await screen.findAllByRole('figure');
-    const walls = figures.map(figure => figure.querySelector('img.piece'));
+    const walls = figures.map(figure => within(figure).getByRole('img'));
     expect(walls.length).toBeGreaterThan(6);
     walls.slice(0, 6).forEach(img => expect(img).not.toHaveAttribute('loading', 'lazy'));
     walls.slice(6).forEach(img => expect(img).toHaveAttribute('loading', 'lazy'));

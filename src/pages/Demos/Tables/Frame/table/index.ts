@@ -1,10 +1,7 @@
-export type {TableState, MountedTable} from './table-state';
-export type {Aloft} from './table-state';
-export {baked, columnAloft, columnLanding, columnOf, drifting, dropped, landedColumn, landedRow, lifted, nudgedTo, orderedTo, rowAloft, rowLanding, ruledBy, seatedTo, sharedAs, tradedBy} from './table-state';
-export type {GhostFlight} from './ghosts';
-export {columnGhost, rowGhost} from './ghosts';
-export {hideColumn, hideRow, unhideColumn, unhideRow, veiled} from './hide';
+export type {Carry, Drag, Landed, MeasuresState, MountedTable} from './table-state';
+export {baked, columnOf, orderedTo, rowNudgedTo, ruledBy, seatedTo, measured, tradedBy} from './table-state';
+export {dressCarried} from './carry';
+export {keepingFocus} from './focus';
+export {settleColumn, settleRow, shoveColumns, shoveRows, unmarked} from './settle';
 export {announce, wireMenu} from './menus';
-export {dressShares, wireResize} from './resize';
-export type {Build} from './mount';
-export {mount} from './mount';
+export {dressWidths, wireResize} from './resize';

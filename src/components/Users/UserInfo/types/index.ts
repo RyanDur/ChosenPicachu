@@ -26,6 +26,8 @@ export type User = {
     id: string;
 } & NewUser
 
+export type UserEdit = Omit<User, 'friends'>;
+
 export const isPersisted = (user: NewUser | User): user is User => 'id' in user;
 
 export enum FormActions {

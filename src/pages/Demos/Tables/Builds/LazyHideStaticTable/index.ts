@@ -1,0 +1,1 @@
+export {LazyHideStaticTable} from './LazyHideStaticTable';

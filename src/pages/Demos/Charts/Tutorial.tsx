@@ -19,7 +19,7 @@ import moneySource from './money.ts?raw';
 import slotsSource from './slots.ts?raw';
 import coinbaseSource from './coinbase/index.ts?raw';
 import historySource from './coinbase/history.ts?raw';
-import liveTradesSource from './live-trades.ts?raw';
+import demosSource from '@pages/Demos/store.ts?raw';
 import axesSource from './Axes/Axes.tsx?raw';
 import workspaceSource from './Workspace.tsx?raw';
 import travelSource from './useChartTravel.ts?raw';
@@ -56,8 +56,8 @@ const priceStory =
           <Snippet label="TS" lines={[
             ...unit(coinbaseSource, 'export const subscribeTo'), gap,
             ...unit(coinbaseSource, 'export const decodeTrade'), gap,
-            ...unit(liveTradesSource, 'const LATEST_TRADES_CAP'), gap,
-            ...unit(liveTradesSource, 'const appendTrade')
+            ...unit(demosSource, 'const LATEST_TRADES_CAP'), gap,
+            ...unit(demosSource, 'const tradesReducer')
           ]}/>
         </Codes>
       </Step>

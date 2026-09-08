@@ -1,0 +1,1 @@
+export {EagerHideStaticTable} from './EagerHideStaticTable';

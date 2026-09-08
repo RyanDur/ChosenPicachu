@@ -1,12 +1,12 @@
 import {ReactNode} from 'react';
 import {PaceDial} from '../../../Controls';
 import {Codes, Reveal, Says, Snippet, Step, Words, aside, plain} from '../../../Recipe';
-import {span, unit} from '../../../Recipe/carve';
+import {unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {Term} from '../Term';
-import {flightsSource, frameMount, gap, travelSource} from './sources';
+import {gap, travelSource} from './sources';
 
-export const eagerPace = (world: World, tableSource: string, buildSrc: string): ReactNode =>
+export const eagerPace = (world: World, headerSource: string, buildSrc: string): ReactNode =>
   <Step title="Commit inside the move" dial={<PaceDial name="step-pace"/>}>
     <Words want="The trader wants the table to answer inside the move, so they can change their mind before the drop.">
       <Says>Answering mid-drag means a <Term word="strike">strike</Term> is simply a dispatch: the same state change a drop
@@ -17,37 +17,37 @@ export const eagerPace = (world: World, tableSource: string, buildSrc: string): 
       {world === 'react'
         ? <Says><Term word="settle">Settle</Term> as soon as a neighbour is struck: the order updates mid-drag, the markup
           renders through it, and the same key finds its new seat. Carrying the column back is
-          just more crossings: home is always reachable. No style changes hands here at
-          all.</Says>
+          just more crossings: home is always reachable. The only style that changes hands is
+          the shove the animated builds mark, and that is the motion step’s story.</Says>
         : <Says>Dispatch as soon as a neighbour is struck: the dispatch writes a new column order
           into the state, and the <Term word="reconcile">reconcile</Term> moves the real cells to match it. Carrying the
-          column back is just more crossings: home is always reachable. No style changes hands
-          here at all.</Says>}
+          column back is just more crossings: home is always reachable. The only style that
+          changes hands is the shove the animated builds mark, and that is the motion step’s
+          story.</Says>}
       {world === 'react'
-        ? <Says>This is the whole eager hook’s handler, and there is no landing state to keep anywhere
-          in it: buttons at zero heals a drag whose release was swallowed, the surface claims the
-          pointer capture, the drift moves the ghost, and a strike settles on the spot.</Says>
+        ? <Says>This is the whole of the eager table’s travel, and there is no landing to keep
+          anywhere in it: the header keeps the pointer capture, columnUnder answers from the
+          survey, and a strike dispatches on the spot. Eager listens on the move.</Says>
         : <Says>This is the whole travel of the eager build, and there is no landing state to keep
-          anywhere in it: the drift moves the ghost, columnUnder answers from the survey, and a
-          strike dispatches on the spot; the buttons-at-zero healing lives in the shared surface
-          listener, once, for every build.</Says>}
+          anywhere in it: columnUnder answers from the survey, and a strike dispatches on the
+          spot; the buttons-at-zero healing lives in the shared pointer travel, once, for every
+          build.</Says>}
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...unit(tableSource, 'const settleColumn = '), gap,
-            ...span(tableSource, 'const columnFlight = eagerColumnFlight', 'const columnFlight = eagerColumnFlight')
+            ...unit(headerSource, 'const beside = '), gap,
+            ...unit(headerSource, 'const moved = ')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...unit(flightsSource, 'export const eagerColumnFlight'), gap,
-            ...span(buildSrc, 'column: eagerColumnFlight', 'column: eagerColumnFlight')
+            ...unit(buildSrc, 'const moved = ')
           ]}/>}
         {world === 'react'
           ? <Snippet label="HTML" lines={[
-            plain('<DraggableHeader key={key} ... />'),
+            plain('<DraggableColumn key="trades" name="trades">trades ...</DraggableColumn>'),
             aside('{/* same key, new seat: React moves the node, not a copy */}')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...unit(frameMount, 'const reconcileColumns = '),
+            ...unit(buildSrc, 'const reconcileColumns = '),
             aside('// the same cells, new seats: the reconcile moves the node, not a copy')
           ]}/>}
         <Snippet label="TS" lines={[
@@ -58,35 +58,38 @@ export const eagerPace = (world: World, tableSource: string, buildSrc: string): 
     </Reveal>
   </Step>;
 
-export const lazyPace = (world: World, tableSource: string, buildSrc: string): ReactNode =>
+export const lazyPace = (world: World, headerSource: string, paceSource: string, buildSrc: string): ReactNode =>
   <Step title="Hold still, dispatch on release" dial={<PaceDial name="step-pace"/>}>
     <Words want="The trader wants the table calm while they drag, because motion during the drag distracts, and only the destination matters.">
-      <Says>Instead of dispatching, a <Term word="strike">strike</Term> only remembers a <Term word="landing">landing</Term>, and the release dispatches
-        it. The landing is state like everything else: drifting back over home must clear it,
-        and release, cancel, and lost capture must all resolve it the same way.</Says>
+      <Says>Instead of dispatching the order, a <Term word="strike">strike</Term> only remembers a <Term word="landing">landing</Term>, and the
+        release dispatches it. The landing rides in the drag slice, never in the order:
+        drifting back over home must clear it, and release and cancel must resolve it the same
+        way.</Says>
     </Words>
     <Reveal>
       {world === 'react'
-        ? <Says>The table holds still, and one moveToIndex runs on pointer up. Drifting back over
+        ? <Says>The table holds still, and one dispatch runs on pointer up. Drifting back over
           your own slot clears the landing, so a drop at home changes nothing.</Says>
         : <Says>The table holds still, and one dispatch runs at the landing. Drifting back over
           your own slot clears the landing, so a drop at home changes nothing.</Says>}
       {world === 'react'
-        ? <Says>The lazy hook is its own handler, not a flag on the eager one: a strike is only ever
-          remembered as the landing, and drop, which also answers cancel and a lost capture,
-          dispatches it.</Says>
-        : <Says>The lazy build is its own file, not a flag on the eager one: the travel records the
-          landing in the state, and the land, which also answers cancel and a lost capture,
-          dispatches whatever the state is holding.</Says>}
+        ? <Says>The lazy table is its own file, not a flag on the eager one: its travel only ever
+          dispatches the landing into the drag, and its release, which also answers cancel,
+          dispatches the order. Lazy listens on the drop.</Says>
+        : <Says>The lazy build is its own file, not a flag on the eager one: its travel records the
+          landing in the drag, and its release, which also answers cancel, dispatches whatever
+          the drag is holding.</Says>}
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...unit(tableSource, 'const settleColumn = '), gap,
-            ...span(tableSource, 'const columnFlight = lazyColumnFlight', 'const columnFlight = lazyColumnFlight')
+            ...unit(headerSource, 'const moved = '), gap,
+            ...unit(headerSource, 'const release = '), gap,
+            ...unit(paceSource, 'export const travelledColumn'), gap,
+            ...unit(paceSource, 'export const releasedColumn')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...unit(flightsSource, 'export const lazyColumnFlight'), gap,
-            ...span(buildSrc, 'column: lazyColumnFlight', 'column: lazyColumnFlight')
+            ...unit(buildSrc, 'const moved = '), gap,
+            ...unit(buildSrc, 'const landed = ')
           ]}/>}
         <Snippet label="TS" lines={[
           ...unit(travelSource, 'export const lazyTravel'),

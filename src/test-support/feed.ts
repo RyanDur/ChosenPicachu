@@ -1,15 +1,6 @@
-import {WebSocket as RealWebSocket, WebSocketServer} from 'ws';
-import {server as mswServer} from './server';
-
-export const realSockets = () => {
-  mswServer.close();
-  vi.stubGlobal('WebSocket', RealWebSocket);
-};
-
-export const interceptedNetwork = () => {
-  vi.unstubAllGlobals();
-  mswServer.listen({onUnhandledRequest: 'error'});
-};
+import {HttpResponse, http, ws} from 'msw';
+import {WebSocketClientConnectionProtocol as Client} from '@mswjs/interceptors/WebSocket';
+import {server} from './server';
 
 type FrameParts = {
   price: string;
@@ -43,7 +34,7 @@ export const nonTradeFrame = (price: number): string => JSON.stringify({
   time: new Date(1700000000000).toISOString()
 });
 
-export const subscribed = new Set<RealWebSocket>();
+export const subscribed = new Set<Client>();
 
 const subscribesMatches = (raw: unknown): boolean => {
   const frame: unknown = JSON.parse(String(raw));
@@ -53,32 +44,44 @@ const subscribesMatches = (raw: unknown): boolean => {
     JSON.stringify(Reflect.get(frame, 'channels')).includes('BTC-USD');
 };
 
-export const listeningFeed = async (refusing = false): Promise<WebSocketServer> => {
-  const feed = new WebSocketServer({
-    host: '127.0.0.1',
-    port: 0,
-    verifyClient: () => !refusing
-  });
-  feed.on('connection', socket => {
-    socket.on('message', raw => {
-      if (subscribesMatches(raw)) {
-        subscribed.add(socket);
+export type Feed = {
+  readonly url: string;
+  readonly clients: Set<Client>;
+  readonly connections: () => number;
+};
+
+let feeds = 0;
+
+// the socket laws point the history at a port nobody answers; the fetch fails the way it would on the wire
+export const NO_HISTORY = 'http://127.0.0.1:9';
+
+// a refused feed hangs up abnormally on connection, which the page hears as a handshake failure
+export const listeningFeed = (refusing = false): Promise<Feed> => {
+  feeds += 1;
+  const url = `ws://feed.test/${feeds}`;
+  server.use(http.all(`${NO_HISTORY}/*`, () => HttpResponse.error()));
+  const clients = new Set<Client>();
+  let connections = 0;
+  server.use(ws.link(url).addEventListener('connection', ({client}) => {
+    connections += 1;
+    if (refusing) {
+      client.close(1006);
+      return;
+    }
+    clients.add(client);
+    client.addEventListener('message', event => {
+      if (subscribesMatches(event.data)) {
+        subscribed.add(client);
       }
     });
-  });
-  await new Promise(resolve => feed.once('listening', resolve));
-  return feed;
+    client.addEventListener('close', () => clients.delete(client));
+  }));
+  return Promise.resolve({url, clients, connections: () => connections});
 };
 
-export const urlOf = (feed: WebSocketServer): string => {
-  const address = feed.address();
-  if (typeof address === 'string' || address === null) {
-    throw new Error('the feed never bound a port');
-  }
-  return `ws://127.0.0.1:${address.port}`;
-};
+export const urlOf = ({url}: Feed): string => url;
 
-export const broadcast = (feed: WebSocketServer, frames: string[]): void =>
+export const broadcast = (feed: Feed, frames: string[]): void =>
   feed.clients.forEach(socket => {
     if (subscribed.has(socket)) {
       frames.forEach(frame => socket.send(frame));

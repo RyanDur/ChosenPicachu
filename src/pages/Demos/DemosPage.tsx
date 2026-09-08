@@ -23,7 +23,6 @@ import {ChartsTutorial} from './Charts/Tutorial';
 import {TopLayerTutorial} from './ZIndexDemo/Tutorial';
 import {motionParam, originParam, paceParam} from './Controls';
 import {Aggregations, trackParam, tutorialParam, worldParam} from './Tables';
-import {useLiveTrades} from './Charts/useLiveTrades';
 import {Workspace} from './Charts/Workspace';
 import {useEnv} from '@components/Env';
 
@@ -39,8 +38,7 @@ export const DemosPage = () => {
       {tab: demoTopicParam, pace: paceParam, origin: originParam, motion: motionParam, tut: tutorialParam, track: trackParam, world: worldParam},
       {tab: DemoTopics.accordions});
   const [accordionContents] = useState(() => Array.from({length: 5}, () => paragraphs(5)));
-  const {tradeFeed, tradeProduct} = useEnv();
-  const liveTrades = useLiveTrades(tradeFeed, tradeProduct);
+  const {tradeProduct} = useEnv();
 
   return <>
       <Tabs
@@ -81,11 +79,11 @@ export const DemosPage = () => {
               <TopLayerTutorial/>
             </>,
             [DemoTopics.charts]: <>
-              <Workspace trades={liveTrades.trades} status={liveTrades.status} product={tradeProduct}/>
+              <Workspace product={tradeProduct}/>
               <ChartsTutorial/>
             </>,
             [DemoTopics.tables]: <>
-              <Aggregations trades={liveTrades.trades} pace={pace} origin={origin} motion={motion} world={world}/>
+              <Aggregations pace={pace} origin={origin} motion={motion} world={world}/>
               <Tutorials shown={tut} onShow={next => updateSearchParams({tut: next})}
                          track={track} onTrack={next => updateSearchParams({track: next})}/>
             </>,

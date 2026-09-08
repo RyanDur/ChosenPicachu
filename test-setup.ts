@@ -4,14 +4,24 @@ import '@testing-library/jest-dom/vitest';
 import {afterAll, afterEach, beforeAll, expect} from 'vitest';
 import 'vitest-location-mock';
 import {server} from './src/test-support/server';
+import {subscribed} from './src/test-support/feed';
 
 beforeAll(() => server.listen({onUnhandledRequest: 'error'}));
-afterEach(() => server.resetHandlers());
+afterEach(() => {
+  server.resetHandlers();
+  subscribed.clear();
+});
 afterAll(() => server.close());
 
 expect.extend(matchers);
 
 // jsdom lacks these platform pieces; the suite supplies inert ones
+// React picks the unprefixed animationend only when AnimationEvent exists at load
+globalThis.AnimationEvent ??= class extends Event {
+  readonly animationName = '';
+  readonly elapsedTime = 0;
+  readonly pseudoElement = '';
+};
 HTMLElement.prototype.setPointerCapture = () => undefined;
 Element.prototype.getAnimations = () => [];
 HTMLElement.prototype.showPopover = () => undefined;

@@ -61,3 +61,16 @@ export const span = (source: string, from: string, to: string): Line[] => {
   const close = source.indexOf('\n', last);
   return dedented(source.slice(start, close < 0 ? source.length : close).split('\n'));
 };
+
+export const withoutImports = (source: string): Line[] => {
+  const lines = source.split('\n');
+  const lastImport = lines.reduce((found, line, at) => line.startsWith('import ') ? at : found, -1);
+  const body = lines.slice(lastImport + 1);
+  while (body[0]?.trim() === '') {
+    body.shift();
+  }
+  while (body[body.length - 1]?.trim() === '') {
+    body.pop();
+  }
+  return dedented(body);
+};

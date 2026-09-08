@@ -3,58 +3,53 @@ import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, aside} from '../../../Re
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {Term} from '../Term';
-import {frameMount, gap, sortableCss, travelSource} from './sources';
+import {gap, travelSource} from './sources';
 
-export const dragSurface = (world: World, tableSource: string): ReactNode =>
-  <Step title="Give the drag a surface of its own">
+export const dragSurface = (world: World, headerSource: string, buildSrc: string): ReactNode =>
+  <Step title="Hold the pointer from the lift">
     <Words want="The carry outruns the header it grabbed: the pointer leaves the element mid-drag, and the release can land anywhere, even outside the window.">
-      <Says>So the listeners cannot live on the header. The plan: give the drag its own element
-        for exactly as long as the drag exists, and hold pointer capture on it, because losing
-        the capture is the one drop signal the platform always delivers.</Says>
+      <Says>So nothing can wait for the pointer to come back. Whoever lifts
+        takes <Mdn path="Web/API/Element/setPointerCapture">pointer capture</Mdn> on the
+        pointerdown itself, and from then on every move and the release come to it wherever
+        the pointer goes. No surface, no document listeners, no copy of the thing to be
+        hit: the header that lifted is the listener.</Says>
     </Words>
     <Reveal>
-      <Says>Your first surface is the document: add two listeners at lift, remove them at drop.
-        Now <Term word="travel">travel</Term> is running against the order as it stood when the drag began, and every path
-        out of the drag owes you a cleanup.</Says>
+      <Says>Your first instinct is a full-viewport surface, or the document itself: add listeners
+        at lift, remove them at drop. Both add an element or a cleanup whose only job is to be
+        hit. Capture makes the platform route the pointer to the holder instead.</Says>
       {world === 'react'
-        ? <Says>While something is <Term word="aloft">aloft</Term>, the markup grows a fixed, full-viewport element carrying
-          the move and drop handlers. Because React re-renders it on every settle, the handlers
-          are always fresh: no stale closures, no document listeners. CSS gives it the grabbing
-          cursor, and by existing it blocks hover styles beneath it, with no state and no
-          class-toggling. Hold <Mdn path="Web/API/Element/setPointerCapture">pointer capture</Mdn> on
-          it, and treat <Mdn path="Web/API/Element/lostpointercapture_event">losing the capture</Mdn> as
-          the drop: releases can vanish into odd corners of the platform.</Says>
-        : <Says>While something is <Term word="aloft">aloft</Term>, JavaScript appends a fixed, full-viewport surface carrying
-          the move and drop handlers, and removes it at the landing: the surface exists exactly as
-          long as the drag does, so nothing can go stale. CSS gives it the grabbing cursor, and by
-          existing it blocks hover styles beneath it, with no state and no class-toggling.
-          Hold <Mdn path="Web/API/Element/setPointerCapture">pointer capture</Mdn> on
-          it, and treat <Mdn path="Web/API/Element/lostpointercapture_event">losing the capture</Mdn>,
-          or a move with no buttons pressed, as the drop: releases can vanish into odd corners of
-          the platform.</Says>}
+        ? <Says>While something is <Term word="aloft">aloft</Term>, the header cell carries the move and
+          release handlers, and only then: the props are there when the state says the column
+          is held and gone when it is not, so nothing is ever stale. Every move retakes the
+          capture. Treat a cancel or a move with no buttons pressed as the drop: releases can
+          vanish into odd corners of the platform. Losing the capture is not the drop. When a
+          settle moves the header cell in the DOM, the browser drops the capture with it and
+          says so at the next move, with that move’s coordinates on the event; so the loss is
+          handled as the move it is, and the header takes the pointer back in the same
+          breath.</Says>
+        : <Says>While something is <Term word="aloft">aloft</Term>, the header that lifted, or the grip
+          for a row, answers the move and the release, and a guard on the store keeps the
+          listeners quiet when nothing is held. Every move retakes the capture. Treat a cancel
+          or a move with no buttons pressed as the drop: releases can vanish into odd corners of
+          the platform. Losing the capture is not the drop. When the reconcile moves the cell in
+          the DOM, the browser drops the capture with it and says so at the next move, with that
+          move’s coordinates on the event; so the loss is handled as the move it is, and the
+          holder takes the pointer back in the same breath.</Says>}
       <Codes>
         {world === 'react'
-          ? <Snippet label="HTML" lines={[
-            ...span(tableSource, 'className="drag-surface"', 'className="drag-surface"')
-          ]}/>
-          : undefined}
-        {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...span(tableSource, 'onPointerMove={surfaceTravel(drifting', 'onLostPointerCapture='), gap,
-            ...unit(tableSource, 'const drop = '),
-            aside('// cancel and lost capture are not delegates; they ARE the drop')
+            ...span(headerSource, 'onPointerMove={has(drag) ? pointerTravel(', 'onLostPointerCapture={has(drag) ? pointerTravel(moved(drag), release) : undefined}'), gap,
+            ...unit(headerSource, 'const release = '),
+            aside('// cancel and buttons at zero are not delegates; they ARE the drop')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...unit(frameMount, '  const mountSurface = '),
-            aside('// cancel, lost capture, and buttons at zero are not delegates; they ARE the drop')
+            ...unit(buildSrc, 'const wireCarry = '),
+            aside('// cancel and buttons at zero are not delegates; they ARE the drop')
           ]}/>}
         <Snippet label="TS" lines={[
-          ...unit(travelSource, 'export const surfaceTravel'),
-          aside('// one surface move; each world drifts, strikes, and drops its own way')
-        ]}/>
-        <Snippet label="CSS" lines={[
-          ...unit(sortableCss, '.drag-surface {'),
-          aside('/* hover below is blocked by existence */')
+          ...unit(travelSource, 'export const pointerTravel'),
+          aside('// one move; each world moves and drops its own way; losing the capture is a move too')
         ]}/>
       </Codes>
     </Reveal>

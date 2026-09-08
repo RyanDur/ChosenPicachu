@@ -1,0 +1,60 @@
+.sortable .carried {
+  position: relative;
+  z-index: 1;
+  background: var(--paper);
+}
+
+.sortable .settling {
+  background: var(--paper);
+  animation: settle 200ms ease-out;
+}
+
+.sortable .shoved-start {
+  background: var(--paper);
+  animation: shoved-start 200ms ease-out;
+}
+
+.sortable .shoved-end {
+  background: var(--paper);
+  animation: shoved-end 200ms ease-out;
+}
+
+.sortable .shoved-up {
+  background: var(--paper);
+  animation: shoved-up 200ms ease-out;
+}
+
+.sortable .shoved-down {
+  background: var(--paper);
+  animation: shoved-down 200ms ease-out;
+}
+
+@keyframes settle {
+  from {
+    translate: var(--settling-from, 0 0);
+  }
+}
+
+@keyframes shoved-start {
+  from {
+    translate: var(--shoved-by, 0px) 0;
+  }
+}
+
+@keyframes shoved-end {
+  from {
+    translate: calc(-1 * var(--shoved-by, 0px)) 0;
+  }
+}
+
+@keyframes shoved-up {
+  from {
+    translate: 0 var(--shoved-by, 0px);
+  }
+}
+
+@keyframes shoved-down {
+  from {
+    translate: 0 calc(-1 * var(--shoved-by, 0px));
+  }
+}

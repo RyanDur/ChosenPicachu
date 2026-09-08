@@ -1,5 +1,5 @@
 import {has} from '@ryandur/sand';
-import {Values} from '@components/DragSortableTable/sorting';
+import {Labelled, Seated} from '@components/DragSortableTable/table-state';
 import {cents, deltaLabel} from '../../Charts/money';
 import {WindowAggregate} from './fold';
 
@@ -15,8 +15,19 @@ export type Measure = {
 
 export type Measures = Readonly<Record<string, Measure>>;
 
-export const valuesOf = (row: Measures): Values =>
-  Object.fromEntries(Object.entries(row).map(([column, {value}]) => [column, value]));
+export type Measured = Labelled;
+
+export const measures: readonly {name: string; data: Measured}[] =
+  ['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']
+    .map(name => ({name, data: {label: name}}));
+
+// what the table is told about a window: its key, and its value under each measure
+export const seated = (rows: readonly Measures[]): readonly Seated[] =>
+  rows.map(row => ({
+    key: row.window?.display ?? '',
+    values: Object.fromEntries(measures.map(({name}) => [name, row[name]?.value]))
+  }));
+
 
 export const cells = (aggregate: WindowAggregate): Measures => ({
   window: {display: aggregate.window},

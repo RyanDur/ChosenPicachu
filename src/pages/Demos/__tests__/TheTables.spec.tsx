@@ -2,26 +2,29 @@ import {cleanup, fireEvent, screen, waitFor, within} from '@testing-library/reac
 import userEvent from '@testing-library/user-event';
 import {
   broadcast,
-  interceptedNetwork,
   listeningFeed,
-  realSockets,
   subscribed,
   tradeFrame,
   urlOf
 } from '@test-support/feed';
-import {WebSocketServer} from 'ws';
 import {renderWithMemoryRouter} from '@test-support';
 import {EnvProvider} from '@components/Env';
 import {DemosPage} from '@pages/Demos/DemosPage';
+import {Trading} from '@pages/Demos/Trading';
 import {Paths} from '@pages/Paths';
 
-beforeAll(realSockets);
-afterAll(interceptedNetwork);
+const folds = (root: HTMLElement): HTMLElement[] =>
+  within(root).getAllByRole('group').filter(group => group.tagName === 'DETAILS');
+const built = (fold: HTMLElement): boolean => [...fold.children].some(child => child.textContent === 'how we built it');
+const stories = (root: HTMLElement): HTMLElement[] => folds(root).filter(fold => !built(fold));
+const reveals = (root: HTMLElement): HTMLElement[] => folds(root).filter(built);
+const opened = (details: readonly HTMLElement[]): HTMLElement[] => details.filter(fold => fold.hasAttribute('open'));
 
 const renderTables = (feedUrl: string, search = '?tab=tables') =>
   renderWithMemoryRouter({
     path: Paths.demos,
-    element: <EnvProvider env={{tradeFeed: feedUrl, tradeHistory: 'http://127.0.0.1:9'}}><DemosPage/></EnvProvider>
+    element: <EnvProvider env={{tradeFeed: feedUrl, tradeHistory: 'http://127.0.0.1:9'}}><Trading/></EnvProvider>,
+    children: [{index: true, element: <DemosPage/>}]
   }, {path: `${Paths.demos}${search}`});
 
 const feedIsSubscribed = async (): Promise<void> => {
@@ -34,23 +37,12 @@ const dialCombos = ['eager', 'lazy'].flatMap(pace =>
 const builds = ['react', 'vanilla'].flatMap(world => dialCombos.map(dials => `world=${world}&${dials}`));
 
 describe('the tables demo', () => {
-  const feeds: WebSocketServer[] = [];
-
-  const streamingFeed = async (): Promise<WebSocketServer> => {
-    const feed = await listeningFeed();
-    feeds.push(feed);
-    return feed;
-  };
-
-  afterEach(async () => {
+  afterEach(() => {
     cleanup();
-    subscribed.clear();
-    await Promise.all(feeds.map(feed => new Promise(resolve => feed.close(resolve))));
-    feeds.length = 0;
   });
 
   test('the fixed windows hold their rows while the stream fills the cells', async () => {
-    const feed = await streamingFeed();
+    const feed = await listeningFeed();
 
     renderTables(urlOf(feed));
 
@@ -67,13 +59,8 @@ describe('the tables demo', () => {
       tradeFrame(50003, now - 3 * 60000, '0.05', 'buy'),
       tradeFrame(50004, now, '0.01', 'buy')
     ]);
-    const texts = (row: HTMLElement) => [...row.querySelectorAll('th, td')].map(cell => cell.textContent);
-    const rowFor = (label: string) => {
-      const cell = within(card).getByText(label);
-      const row = cell.closest('tr');
-      if (!row) throw new Error(`no row for ${label}`);
-      return row;
-    };
+    const texts = (row: HTMLElement) => [within(row).getByRole('rowheader'), ...within(row).getAllByRole('cell')].map(cell => cell.textContent);
+    const rowFor = (label: string) => within(card).getByRole('row', {name: new RegExp(`^${label}`)});
     await waitFor(() => expect(texts(rowFor('this minute'))).toEqual(
       ['this minute', '1', '1', '0', '0.01', '$50,004.00', '+$0.00']));
     expect(texts(rowFor('last 5 minutes'))).toEqual(
@@ -87,7 +74,7 @@ describe('the tables demo', () => {
   });
 
   test('the glider chooses how a dragged column travels', async () => {
-    const feed = await streamingFeed();
+    const feed = await listeningFeed();
 
     renderTables(urlOf(feed));
 
@@ -117,10 +104,8 @@ describe('the tables demo', () => {
       });
     });
     fireEvent.pointerDown(header('vwap'), {clientX: 700, clientY: 20, pointerId: 1});
-    const surface = document.querySelector('.drag-surface');
-    if (!surface) throw new Error('nothing is aloft');
-    fireEvent.pointerMove(surface, {buttons: 1, clientX: 40, clientY: 120, pointerId: 1});
-    fireEvent.pointerUp(surface, {pointerId: 1});
+    fireEvent.pointerMove(header('vwap'), {buttons: 1, clientX: 40, clientY: 120, pointerId: 1});
+    fireEvent.pointerUp(header('vwap'), {pointerId: 1});
 
     const headerTexts = within(card).getAllByRole('columnheader').map(head => head.textContent);
     ['window', 'vwap', 'trades', 'buys', 'sells', 'volume', 'change'].forEach((name, at) =>
@@ -128,14 +113,14 @@ describe('the tables demo', () => {
   });
 
   test('the windows can trade places by hand', async () => {
-    const feed = await streamingFeed();
+    const feed = await listeningFeed();
 
     renderTables(urlOf(feed));
 
     await feedIsSubscribed();
     const card = screen.getByRole('region', {name: 'live aggregations'});
     const rowOf = (label: string) => {
-      const row = within(card).getByText(label).closest('tr');
+      const row = within(card).getByRole('row', {name: new RegExp(`^${label}`)});
       if (!row) throw new Error(`no row for ${label}`);
       return row;
     };
@@ -148,19 +133,17 @@ describe('the tables demo', () => {
         left: 0, right: 860, top: 0, bottom: 40, width: 860, height: 40, x: 0, y: 0, toJSON: () => ({})
       });
     });
-    fireEvent.pointerDown(within(rowOf('session')).getByLabelText(/move row/), {clientX: 100, clientY: 300, pointerId: 1});
-    const lifted = document.querySelector('.drag-surface');
-    if (!lifted) throw new Error('nothing is aloft');
-    fireEvent.pointerMove(lifted, {buttons: 1, clientX: 100, clientY: 50, pointerId: 1});
-    fireEvent.pointerUp(lifted, {pointerId: 1});
+    const grip = within(rowOf('session')).getByLabelText(/move row/);
+    fireEvent.pointerDown(grip, {clientX: 100, clientY: 300, pointerId: 1});
+    fireEvent.pointerMove(grip, {buttons: 1, clientX: 100, clientY: 50, pointerId: 1});
+    fireEvent.pointerUp(grip, {pointerId: 1});
 
-    const labels = within(card).getAllByRole('row').slice(1)
-      .map(row => row.querySelector('th, td')?.textContent);
+    const labels = within(card).getAllByRole('rowheader').map(header => header.getAttribute('aria-label'));
     expect(labels).toEqual(['session', 'this minute', 'last 5 minutes', 'last 15 minutes', 'this hour']);
   });
 
   test('a criterion from a column menu rules the windows', async () => {
-    const feed = await streamingFeed();
+    const feed = await listeningFeed();
 
     renderTables(urlOf(feed));
 
@@ -174,14 +157,8 @@ describe('the tables demo', () => {
       tradeFrame(50004, now, '0.01', 'buy')
     ]);
     const labels = () => within(card).getAllByRole('row').slice(1)
-      .map(row => row.querySelector('th, td')?.textContent);
-    const menuFor = (label: string) => {
-      const toggle = within(card).getByRole('button', {name: label});
-      const target = toggle.getAttribute('popovertarget') ?? '';
-      const menu = document.getElementById(target);
-      if (!menu) throw new Error(`no menu for ${label}`);
-      return menu;
-    };
+      .map(row => within(row).getByRole('rowheader').textContent);
+    const menuFor = (label: string) => within(card).getByLabelText(`${label} by`);
     await waitFor(() => expect(within(card).getAllByText('4')).not.toHaveLength(0));
 
     await userEvent.click(within(menuFor('sort trades')).getByText('descending'));
@@ -192,13 +169,13 @@ describe('the tables demo', () => {
   });
 
   test('the controls fold behind their readout', async () => {
-    const feed = await streamingFeed();
+    const feed = await listeningFeed();
 
     renderTables(urlOf(feed));
 
     await feedIsSubscribed();
     const opener = await screen.findByText('settings', {}, {timeout: 5000});
-    const fold = opener.closest('details');
+    const fold = folds(document.body).find(details => details.contains(opener));
     expect(fold).toHaveAttribute('open');
     expect(screen.getByText('<EagerHideAnimatedTable/>')).toBeVisible();
 
@@ -208,7 +185,7 @@ describe('the tables demo', () => {
   });
 
   test('a phone viewport starts the controls closed', async () => {
-    const feed = await streamingFeed();
+    const feed = await listeningFeed();
     document.documentElement.style.setProperty('--phone', '600px');
     const wideMedia = window.matchMedia;
     window.matchMedia = (query: string) =>
@@ -218,7 +195,7 @@ describe('the tables demo', () => {
 
       await feedIsSubscribed();
       const opener = await screen.findByText('settings', {}, {timeout: 5000});
-      expect(opener.closest('details')).not.toHaveAttribute('open');
+      expect(folds(document.body).find(details => details.contains(opener))).not.toHaveAttribute('open');
       expect(screen.getByRole('region', {name: 'table controls'})).not.toBeVisible();
     } finally {
       window.matchMedia = wideMedia;
@@ -227,7 +204,7 @@ describe('the tables demo', () => {
   });
 
   test('the controls read out whatever is chosen', async () => {
-    const feed = await streamingFeed();
+    const feed = await listeningFeed();
 
     renderTables(urlOf(feed));
 
@@ -249,15 +226,15 @@ describe('the tables demo', () => {
     expect(controls).not.toHaveTextContent(/Neighbours swap/);
   });
 
-  test('the seating survives a change of table', async () => {
-    const feed = await streamingFeed();
+  test('a change of table stands a fresh arrangement: the seating belongs to the table, not the page', async () => {
+    const feed = await listeningFeed();
 
     renderTables(urlOf(feed));
 
     await feedIsSubscribed();
     const card = screen.getByRole('region', {name: 'live aggregations'});
-    const windows = () => within(card).getAllByRole('rowheader').map(({textContent}) => textContent);
-    const headers = () => within(card).getAllByRole('columnheader').map(header => header.classList.item(1));
+    const windows = () => within(card).getAllByRole('rowheader').map(header => header.getAttribute('aria-label'));
+    const headers = () => within(card).getAllByRole('columnheader').map(header => header.getAttribute('aria-label'));
     expect(windows().slice(0, 2)).toEqual(['this minute', 'last 5 minutes']);
 
     fireEvent.keyDown(within(card).getByRole('button', {name: 'move row 1'}), {key: 'ArrowDown'});
@@ -269,12 +246,12 @@ describe('the tables demo', () => {
     await userEvent.click(within(controls).getByRole('radio', {name: 'Static'}));
 
     expect(screen.getByText('<LazyHideStaticTable/>')).toBeVisible();
-    expect(windows().slice(0, 2)).toEqual(['last 5 minutes', 'this minute']);
-    expect(headers().slice(0, 3)).toEqual(['window', 'buys', 'trades']);
+    expect(windows().slice(0, 2)).toEqual(['this minute', 'last 5 minutes']);
+    expect(headers().slice(0, 3)).toEqual(['window', 'trades', 'buys']);
   });
 
   test('the recipe teaches whatever the dials are set to', async () => {
-    const feed = await streamingFeed();
+    const feed = await listeningFeed();
 
     renderTables(urlOf(feed));
 
@@ -283,9 +260,8 @@ describe('the tables demo', () => {
     expect(recipe).toBeVisible();
     expect(recipe).toHaveTextContent(/no drag-and-drop library/);
     expect(recipe).toHaveTextContent(/The trader can sort by column/);
-    expect(recipe.querySelectorAll('.story')).toHaveLength(2);
-    expect(recipe.querySelectorAll('details.arc')).toHaveLength(2);
-    expect(recipe.querySelectorAll('details.arc[open]')).toHaveLength(0);
+    expect(stories(recipe)).toHaveLength(2);
+    expect(opened(stories(recipe))).toHaveLength(0);
     expect(screen.getByRole('heading', {name: 'let’s build this feature'})).toBeVisible();
     expect(screen.getByText(/I watch the market all day/)).toBeVisible();
     expect(screen.getByRole('heading', {name: 'Start with the need, and let it pick the element'})).toBeVisible();
@@ -302,13 +278,15 @@ describe('the tables demo', () => {
       ['The trader can sort the windows by any measure, or take the order back', 'station 6'],
       ['The trader can widen a column', 'station 6']
     ].forEach(([slice, station]) =>
-      expect(sliced.getByText(slice).closest('li')).toHaveTextContent(station));
+      expect(sliced.getAllByRole('listitem').find(item => within(item).queryByText(slice) !== null)).toHaveTextContent(station));
     expect(sliced.getAllByRole('link').map(link => link.getAttribute('href')))
       .toEqual(['#station-4', '#station-5', '#station-6', '#station-6', '#station-6']);
     [['station-4', 'The trader can read the market in a table'],
       ['station-5', 'The trader can watch the market live, in windows'],
       ['station-6', 'Layer on functionality, in the order it was asked for']
-    ].forEach(([id, holds]) => expect(document.getElementById(id)).toHaveTextContent(holds));
+    ].forEach(([id, holds]) =>
+      expect(within(screen.getByRole('list', {name: 'the stations'})).getAllByRole('listitem')
+        .filter(station => within(station).queryAllByText(holds).length > 0).map(station => station.id)).toContain(id));
     expect(screen.getByRole('link', {name: 'user story'}))
       .toHaveAttribute('href', expect.stringContaining('initialcapacity.io/insights/user-story'));
     expect(screen.getByRole('complementary', {name: 'what a design cannot tell you'})).toBeVisible();
@@ -320,17 +298,20 @@ describe('the tables demo', () => {
     expect(still).toHaveTextContent(/The trader can read the market in a table/);
     expect(still).toHaveTextContent(/Deal a real HTML table/);
     expect(still).toHaveTextContent(/scope="col"/);
-    expect(still.querySelectorAll('.story')).toHaveLength(1);
+    expect(stories(still)).toHaveLength(2);
     expect(still).toHaveTextContent(/that is what a table is for/);
+    expect(still).toHaveTextContent(/The page is a store/);
+    expect(still).toHaveTextContent(/Actions are data, and one reducer reads them/);
+    expect(still).toHaveTextContent(/The exchange is middleware/);
+    expect(still).toHaveTextContent(/export const demosStore/);
     const living = screen.getByRole('region', {name: 'the living table'});
     expect(living).toBeVisible();
     expect(living).toHaveTextContent(/The trader can watch the market live/);
-    expect(living.querySelectorAll('.story')).toHaveLength(1);
+    expect(stories(living)).toHaveLength(1);
     expect(living).toHaveTextContent(/a socket comes next/);
     expect(living).toHaveTextContent(/Hydrate with one fetch/);
     expect(living).toHaveTextContent(/where a number comes from/);
     expect(living).toHaveTextContent(/Drawn, not recorded/);
-    expect(living.querySelector('video')).toBeNull();
     expect(screen.getByRole('heading', {name: 'Layer on functionality, in the order it was asked for'})).toBeVisible();
     expect(screen.getByText(/Both axes, every layer, or the layer is not done/)).toBeVisible();
     expect(screen.getByRole('columnheader', {name: 'by keyboard'})).toBeVisible();
@@ -342,30 +323,33 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/Write each listener once, for both worlds/);
     const [term] = within(recipe).getAllByRole('button', {name: 'survey'});
     expect(term).toHaveClass('term');
-    const definition = document.getElementById(term.getAttribute('popovertarget') ?? '');
+    expect(term).toHaveAttribute('popovertarget');
+    const [definition] = within(recipe).getAllByLabelText('survey');
     expect(definition).toHaveTextContent(/the one measurement taken at the grab/);
-    expect(recipe).toHaveTextContent(/export type TableStore/);
+    expect(recipe).toHaveTextContent(/export type Store<State, Action>/);
     expect(within(recipe).getAllByText('how we built it').length).toBeGreaterThan(0);
-    expect(recipe.querySelectorAll('details.step-reveal[open]')).toHaveLength(0);
+    expect(opened(reveals(recipe))).toHaveLength(0);
     expect(recipe).toHaveTextContent(/Commit inside the move/);
-    expect(recipe).toHaveTextContent(/Blank the origin while it is aloft/);
-    expect(recipe).toHaveTextContent(/visibility: hidden/);
-    expect(recipe).toHaveTextContent(/Let the platform draw the move/);
-    expect(recipe).toHaveTextContent(/the platform pairs old and new/);
-    expect(recipe).toHaveTextContent(/::view-transition-group\(\*\)/);
+    expect(recipe).toHaveTextContent(/Carry the real thing/);
+    expect(recipe).toHaveTextContent(/translate: var\(--carried-by, 0 0\)/);
+    expect(within(recipe).getAllByRole('link', {name: 'the implementation'})[0])
+      .toHaveAttribute('href', 'https://github.com/RyanDur/ChosenPicachu/tree/main/src/pages/Demos/Tables/Builds/EagerHideAnimatedTable');
+    expect(recipe).toHaveTextContent(/Let the column settle/);
+    expect(recipe).toHaveTextContent(/the only motion code there is/);
+    expect(recipe).toHaveTextContent(/@keyframes settle \{/);
     expect(recipe).toHaveTextContent(/Turn the carry vertical/);
     expect(within(recipe).getByRole('link', {name: 'insertBefore'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/Node/insertBefore'));
 
     await userEvent.click(within(recipe).getByText(/The trader can sort by row/));
-    expect(recipe.querySelectorAll('details.arc[open]')).toHaveLength(2);
+    expect(opened(stories(recipe))).toHaveLength(2);
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Lazy'}));
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Keep'}));
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Static'}));
 
     expect(recipe).toHaveTextContent(/Hold still, dispatch on release/);
     expect(recipe).toHaveTextContent(/the sort lands on the drop/);
-    expect(recipe).toHaveTextContent(/stays in sight while its copy travels/);
+    expect(recipe).toHaveTextContent(/stays where it stands while you drag/);
     expect(recipe).toHaveTextContent(/instantly, with no motion/);
     expect(recipe).toHaveTextContent(/Leave the origin in place/);
     expect(recipe).toHaveTextContent(/Leave the motion out/);
@@ -383,7 +367,7 @@ describe('the tables demo', () => {
       brought.push(this.id);
     };
     location.hash = '#station-5';
-    const feed = await streamingFeed();
+    const feed = await listeningFeed();
 
     renderTables(urlOf(feed));
 
@@ -394,7 +378,7 @@ describe('the tables demo', () => {
   });
 
   test('the keyboard track teaches the same sort by other hands', async () => {
-    const feed = await streamingFeed();
+    const feed = await listeningFeed();
 
     renderTables(urlOf(feed));
 
@@ -404,44 +388,42 @@ describe('the tables demo', () => {
 
     expect(recipe).toHaveTextContent(/Give focus a place to land/);
     expect(recipe).toHaveTextContent(/Arrows speak direction/);
-    expect(recipe).toHaveTextContent(/Both parties move, and the platform draws both/);
-    expect(recipe).toHaveTextContent(/Let the platform pace the key/);
-    expect(recipe).toHaveTextContent(/supersedes a running one/);
+    expect(recipe).toHaveTextContent(/Both parties slide/);
+    expect(recipe).toHaveTextContent(/the stylesheet slides them/);
     await userEvent.click(within(recipe).getByText(/The trader can sort by column/));
-    expect(recipe).toHaveTextContent(/a timer matched to the CSS by hand/);
+    expect(recipe).toHaveTextContent(/measures the header row at the keypress/);
     expect(recipe).toHaveTextContent(/The trader can sort by row/);
     expect(recipe).toHaveTextContent(/Turn the arrows vertical/);
-    expect(recipe.querySelectorAll('.story')).toHaveLength(2);
-    expect(within(recipe).getByRole('link', {name: 'startViewTransition'}))
-      .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/Document/startViewTransition'));
-    expect(recipe).not.toHaveTextContent(/Draw the ghost by hand/);
+    expect(stories(recipe)).toHaveLength(2);
+    expect(recipe).not.toHaveTextContent(/Hold the pointer from the lift/);
     expect(within(recipe).queryByRole('radio', {name: 'Lazy'})).toBeNull();
 
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Static'}));
 
     expect(recipe).toHaveTextContent(/Cut on the keypress/);
-    expect(recipe).not.toHaveTextContent(/Let the platform pace the key/);
+    expect(recipe).not.toHaveTextContent(/Both parties slide/);
 
     await userEvent.click(within(recipe).getByRole('button', {name: 'By pointer'}));
-    expect(recipe).toHaveTextContent(/Draw the ghost by hand/);
+    expect(recipe).toHaveTextContent(/Hold the pointer from the lift/);
   });
 
   test('the chosen track travels in the url', async () => {
-    const feed = await streamingFeed();
+    const feed = await listeningFeed();
 
     renderWithMemoryRouter({
       path: Paths.demos,
-      element: <EnvProvider env={{tradeFeed: urlOf(feed), tradeHistory: 'http://127.0.0.1:9'}}><DemosPage/></EnvProvider>
+      element: <EnvProvider env={{tradeFeed: urlOf(feed), tradeHistory: 'http://127.0.0.1:9'}}><Trading/></EnvProvider>,
+    children: [{index: true, element: <DemosPage/>}]
     }, {path: `${Paths.demos}?tab=tables&track=keyboard`});
 
     await feedIsSubscribed();
     const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
     expect(recipe).toHaveTextContent(/Arrows speak direction/);
-    expect(recipe).not.toHaveTextContent(/Draw the ghost by hand/);
+    expect(recipe).not.toHaveTextContent(/Hold the pointer from the lift/);
   });
 
   test('a second tutorial answers the resize', async () => {
-    const feed = await streamingFeed();
+    const feed = await listeningFeed();
 
     renderTables(urlOf(feed));
 
@@ -456,7 +438,7 @@ describe('the tables demo', () => {
     expect(resize).toHaveTextContent(/zero-sum ledger/);
     expect(resize).toHaveTextContent(/Trade, never take/);
     expect(resize).toHaveTextContent(/A handle that is a button/);
-    expect(resize.querySelectorAll('.story')).toHaveLength(1);
+    expect(stories(resize)).toHaveLength(1);
     expect(resize).toHaveTextContent(/The trader can widen a column/);
     expect(within(resize).getByRole('link', {name: 'captures its pointer'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/Element/setPointerCapture'));
@@ -469,24 +451,25 @@ describe('the tables demo', () => {
   });
 
   test('the open cards travel in the url', async () => {
-    const feed = await streamingFeed();
+    const feed = await listeningFeed();
 
     renderTables(urlOf(feed), '?tab=tables&sort=column');
 
     await feedIsSubscribed();
     const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
-    expect(recipe.querySelectorAll('details.arc[open]')).toHaveLength(1);
-    expect(recipe.querySelectorAll('details.arc')[0]).toHaveAttribute('open');
+    expect(opened(stories(recipe))).toHaveLength(1);
+    expect(stories(recipe)[0]).toHaveAttribute('open');
     const living = screen.getByRole('region', {name: 'the living table'});
-    expect(living.querySelector('details.arc[open]')).toBeNull();
+    expect(opened(stories(living))).toHaveLength(0);
   });
 
   test('the dials travel in the url', async () => {
-    const feed = await streamingFeed();
+    const feed = await listeningFeed();
 
     renderWithMemoryRouter({
       path: Paths.demos,
-      element: <EnvProvider env={{tradeFeed: urlOf(feed), tradeHistory: 'http://127.0.0.1:9'}}><DemosPage/></EnvProvider>
+      element: <EnvProvider env={{tradeFeed: urlOf(feed), tradeHistory: 'http://127.0.0.1:9'}}><Trading/></EnvProvider>,
+    children: [{index: true, element: <DemosPage/>}]
     }, {path: `${Paths.demos}?tab=tables&pace=lazy&origin=keep&motion=static`});
 
     await feedIsSubscribed();
@@ -498,7 +481,7 @@ describe('the tables demo', () => {
   });
 
   test('a third tutorial answers the menu', async () => {
-    const feed = await streamingFeed();
+    const feed = await listeningFeed();
 
     renderTables(urlOf(feed));
 
@@ -511,28 +494,27 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/position-area/);
     expect(recipe).toHaveTextContent(/The rule is a drape, not a bake/);
     expect(recipe).toHaveTextContent(/A hand ends the rule/);
-    expect(recipe).toHaveTextContent(/dispatch\(ruledBy\(/);
+    expect(recipe).toHaveTextContent(/ruledBy\(column, direction\) : reset\(arrival\)/);
     expect(recipe).not.toHaveTextContent(/Dress the menu as a card/);
     expect(within(recipe).getByRole('link', {name: 'position-area'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/CSS/position-area'));
-    expect(recipe.querySelectorAll('.story')).toHaveLength(1);
+    expect(stories(recipe)).toHaveLength(1);
     expect(recipe).toHaveTextContent(/The trader can sort the windows by any measure/);
     expect(screen.queryByRole('region', {name: 'build the drag sort yourself'})).toBeNull();
     expect(screen.queryByRole('region', {name: 'table controls'})).toBeNull();
     expect(screen.getByRole('region', {name: 'the living table'})).toBeVisible();
 
-    await userEvent.click(within(recipe).getByText(/The trader can sort the windows/));
-    await userEvent.click(within(recipe).getByRole('radio', {name: 'Static'}));
     expect(recipe).toHaveTextContent(/Rule directly/);
-    expect(recipe).not.toHaveTextContent(/Rule, and let the platform draw/);
+    expect(recipe).toHaveTextContent(/a menu click has none/);
   });
 
   test('the chosen tutorial travels in the url', async () => {
-    const feed = await streamingFeed();
+    const feed = await listeningFeed();
 
     renderWithMemoryRouter({
       path: Paths.demos,
-      element: <EnvProvider env={{tradeFeed: urlOf(feed), tradeHistory: 'http://127.0.0.1:9'}}><DemosPage/></EnvProvider>
+      element: <EnvProvider env={{tradeFeed: urlOf(feed), tradeHistory: 'http://127.0.0.1:9'}}><Trading/></EnvProvider>,
+    children: [{index: true, element: <DemosPage/>}]
     }, {path: `${Paths.demos}?tab=tables&tut=resize`});
 
     await feedIsSubscribed();
@@ -541,7 +523,7 @@ describe('the tables demo', () => {
   });
 
   test('every column is resizable', async () => {
-    const feed = await streamingFeed();
+    const feed = await listeningFeed();
 
     renderTables(urlOf(feed));
 
@@ -560,7 +542,7 @@ describe('the tables demo', () => {
     };
 
     test('react holds the stage by default, and no frame stands', async () => {
-      const feed = await streamingFeed();
+      const feed = await listeningFeed();
 
       renderTables(urlOf(feed));
 
@@ -569,7 +551,7 @@ describe('the tables demo', () => {
     });
 
     test('the html world deals the table in its own document', async () => {
-      const feed = await streamingFeed();
+      const feed = await listeningFeed();
 
       renderTables(urlOf(feed), '?tab=tables&world=vanilla');
 
@@ -581,7 +563,7 @@ describe('the tables demo', () => {
     });
 
     test('one tutorial stands in both worlds; only the build swaps', async () => {
-      const feed = await streamingFeed();
+      const feed = await listeningFeed();
 
       renderTables(urlOf(feed), '?tab=tables&world=vanilla');
 
@@ -592,7 +574,7 @@ describe('the tables demo', () => {
     });
 
     test('the menu story stands in the html world', async () => {
-      const feed = await streamingFeed();
+      const feed = await listeningFeed();
 
       renderTables(urlOf(feed), '?tab=tables&world=vanilla&tut=menu');
 
@@ -600,7 +582,7 @@ describe('the tables demo', () => {
     });
 
     test('the resize story stands in the html world', async () => {
-      const feed = await streamingFeed();
+      const feed = await listeningFeed();
 
       renderTables(urlOf(feed), '?tab=tables&world=vanilla&tut=resize');
 
@@ -608,7 +590,7 @@ describe('the tables demo', () => {
     });
 
     test('the sort tutorial stands in every build, in both worlds, on both tracks', async () => {
-      const feed = await streamingFeed();
+      const feed = await listeningFeed();
       for (const build of builds) {
         const {unmount} = renderTables(urlOf(feed), `?tab=tables&tut=sort&${build}`);
         expect(await screen.findByText('The trader can sort by column')).toBeInTheDocument();
@@ -619,7 +601,7 @@ describe('the tables demo', () => {
     }, 20000);
 
     test('the explainer stands in the html world too', async () => {
-      const feed = await streamingFeed();
+      const feed = await listeningFeed();
 
       renderTables(urlOf(feed), '?tab=tables&world=vanilla');
 
@@ -628,7 +610,7 @@ describe('the tables demo', () => {
     });
 
     test('the frame wears its own document\u2019s height', async () => {
-      const feed = await streamingFeed();
+      const feed = await listeningFeed();
 
       renderTables(urlOf(feed), '?tab=tables&world=vanilla');
 
@@ -638,7 +620,7 @@ describe('the tables demo', () => {
     });
 
     test('the world dial swaps the stage', async () => {
-      const feed = await streamingFeed();
+      const feed = await listeningFeed();
 
       renderTables(urlOf(feed));
 

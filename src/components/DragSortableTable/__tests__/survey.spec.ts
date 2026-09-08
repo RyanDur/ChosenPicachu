@@ -16,9 +16,9 @@ describe('the keyboard vocabulary', () => {
   });
 
   it('walks a row the full range, and stops at the rails', () => {
-    expect(nudgedRow([2, 0, 1], 0, 1)).toEqual({from: 1, to: 2});
-    expect(nudgedRow([2, 0, 1], 2, -1)).toEqual({from: 0, to: 0});
-    expect(nudgedRow([2, 0, 1], 1, 1)).toEqual({from: 2, to: 2});
+    expect(nudgedRow(['session', 'this minute', 'this hour'], 'this minute', 1)).toEqual({from: 1, to: 2});
+    expect(nudgedRow(['session', 'this minute', 'this hour'], 'session', -1)).toEqual({from: 0, to: 0});
+    expect(nudgedRow(['session', 'this minute', 'this hour'], 'this hour', 1)).toEqual({from: 2, to: 2});
   });
 
 
@@ -30,10 +30,10 @@ describe('the keyboard vocabulary', () => {
   });
 
   it('rules a row nudge whole: the seat and the seating after', () => {
-    const nudge = rowNudge([0, 1, 2])(0, 1);
+    const nudge = rowNudge(['this minute', 'this hour', 'session'])('this minute', 1);
 
     expect(nudge.to).toBe(1);
-    expect(nudge.after).toEqual([1, 0, 2]);
+    expect(nudge.after).toEqual(['this hour', 'this minute', 'session']);
   });
 
   it('rules a strike: another seat strikes, home and nothing never do', () => {

@@ -1,4 +1,4 @@
-import {expect, Page, test} from '@playwright/test';
+import {expect, Locator, Page, test} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import {HtmlValidate} from 'html-validate';
 
@@ -14,22 +14,25 @@ const validator = new HtmlValidate({
 });
 
 type Role = Parameters<Page['getByRole']>[0];
-type A11yPage = {name: string, path: string, ready: Role, loaded?: string};
+type A11yPage = {name: string, path: string, ready: Role, loaded?: (page: Page) => Locator};
+const delta = (page: Page): Locator => page.getByRole('region', {name: 'live trades'}).getByText(/^[+-]\$/);
+const story = (page: Page): Locator => page.getByRole('region', {name: /yourself$/}).getByRole('group').first();
+
 const pages: A11yPage[] = [
   {name: 'root', path: '', ready: 'navigation'},
   {name: 'demos', path: 'demos?tab=accordions', ready: 'navigation'},
-  {name: 'charts', path: 'demos?tab=charts', ready: 'navigation', loaded: '.price-chart .delta'},
-  {name: 'tables', path: 'demos?tab=tables', ready: 'navigation', loaded: '.aggregations .header-cell'},
-  {name: 'tables in vanilla', path: 'demos?tab=tables&world=vanilla', ready: 'navigation', loaded: '.table-frame'},
-  {name: 'price chart tutorial', path: 'demos/charts/price/', ready: 'navigation', loaded: '.build-steps .story'},
-  {name: 'candles chart tutorial', path: 'demos/charts/candles/', ready: 'navigation', loaded: '.build-steps .story'},
-  {name: 'pressure chart tutorial', path: 'demos/charts/pressure/', ready: 'navigation', loaded: '.build-steps .story'},
-  {name: 'pie chart tutorial', path: 'demos/charts/pie/', ready: 'navigation', loaded: '.build-steps .story'},
-  {name: 'menu tutorial', path: 'demos?tab=tables&tut=menu', ready: 'navigation', loaded: '.build-steps .story'},
-  {name: 'resize tutorial', path: 'demos?tab=tables&tut=resize', ready: 'navigation', loaded: '.build-steps .story'},
-  {name: 'drag sort', path: 'demos?tab=dragAndDrop', ready: 'navigation', loaded: '.sortable-list .draggable'},
+  {name: 'charts', path: 'demos?tab=charts', ready: 'navigation', loaded: delta},
+  {name: 'tables', path: 'demos?tab=tables', ready: 'navigation', loaded: page => page.getByRole('columnheader', {name: 'trades'})},
+  {name: 'tables in vanilla', path: 'demos?tab=tables&world=vanilla', ready: 'navigation', loaded: page => page.getByTitle('the living table, in vanilla')},
+  {name: 'price chart tutorial', path: 'demos/charts/price/', ready: 'navigation', loaded: story},
+  {name: 'candles chart tutorial', path: 'demos/charts/candles/', ready: 'navigation', loaded: story},
+  {name: 'pressure chart tutorial', path: 'demos/charts/pressure/', ready: 'navigation', loaded: story},
+  {name: 'pie chart tutorial', path: 'demos/charts/pie/', ready: 'navigation', loaded: story},
+  {name: 'menu tutorial', path: 'demos?tab=tables&tut=menu', ready: 'navigation', loaded: story},
+  {name: 'resize tutorial', path: 'demos?tab=tables&tut=resize', ready: 'navigation', loaded: story},
+  {name: 'drag sort', path: 'demos?tab=dragAndDrop', ready: 'navigation', loaded: page => page.getByRole('list', {name: 'sortable list'}).getByRole('listitem').first()},
   {name: 'users', path: 'users', ready: 'table'},
-  {name: 'gallery', path: 'gallery', ready: 'navigation', loaded: 'figure.frame'},
+  {name: 'gallery', path: 'gallery', ready: 'navigation', loaded: page => page.getByRole('figure').first()},
   {name: 'games', path: 'games', ready: 'banner'},
   {name: 'three-in-a-row', path: 'games/colorGame', ready: 'main'},
 ];
@@ -38,7 +41,7 @@ for (const {name, path, ready, loaded} of pages) {
   test(`the ${name} page has no accessibility violations`, async ({page}) => {
     await page.goto(path);
     await expect(page.getByRole(ready).first()).toBeVisible({timeout: 30_000});
-    if (loaded) await expect(page.locator(loaded).first()).toBeVisible({timeout: 30_000});
+    if (loaded) await expect(loaded(page)).toBeVisible({timeout: 30_000});
 
     const results = await new AxeBuilder({page}).withTags(['wcag2a', 'wcag2aa']).analyze();
 
@@ -73,7 +76,7 @@ for (const {name, path, ready, loaded} of pages) {
     test.skip(browserName !== 'chromium', 'the serialized DOM is engine-independent');
     await page.goto(path);
     await expect(page.getByRole(ready).first()).toBeVisible({timeout: 30_000});
-    if (loaded) await expect(page.locator(loaded).first()).toBeVisible({timeout: 30_000});
+    if (loaded) await expect(loaded(page)).toBeVisible({timeout: 30_000});
 
     const report = await validator.validateString(await page.content());
 
@@ -87,7 +90,8 @@ test('the period menu stays hidden until asked', async ({page}) => {
   await scriptedMarket(page, [50000, 50100]);
   await page.goto('demos?tab=charts');
 
-  await expect(page.locator(`.price-chart[data-trend='rising'] .delta`)).toBeVisible({timeout: 30_000});
+  await expect(delta(page)).toBeVisible({timeout: 30_000});
+  await expect(page.getByRole('region', {name: 'live trades'})).toHaveAttribute('data-trend', 'rising');
   await expect(page.getByRole('button', {name: 'price period'})).toBeVisible();
   await expect(page.getByText('week').first()).toBeHidden();
 
@@ -97,14 +101,15 @@ test('the period menu stays hidden until asked', async ({page}) => {
 
 test('only one fuller story stands open at a time', async ({page}) => {
   await page.goto('');
-  const stories = page.locator('.timeline .fuller-story');
+  const stories = page.getByRole('list', {name: 'the timeline'}).getByRole('group');
 
-  await stories.nth(0).locator('summary').click();
-  await expect(page.locator('.timeline .fuller-story[open]')).toHaveCount(1);
+  await stories.nth(0).getByText('the fuller story').click();
+  await expect(stories.nth(0)).toHaveAttribute('open', '');
+  await expect(stories.nth(1)).not.toHaveAttribute('open', '');
 
-  await stories.nth(1).locator('summary').click();
-  await expect(page.locator('.timeline .fuller-story[open]')).toHaveCount(1);
+  await stories.nth(1).getByText('the fuller story').click();
   await expect(stories.nth(1)).toHaveAttribute('open', '');
+  await expect(stories.nth(0)).not.toHaveAttribute('open', '');
 });
 
 const markets = [
@@ -117,9 +122,10 @@ for (const {trend, prices} of markets) {
     await scriptedMarket(page, prices);
     await page.goto('demos?tab=charts');
 
-    await expect(page.locator(`.price-chart[data-trend='${trend}'] .delta`)).toBeVisible({timeout: 30_000});
+    await expect(delta(page)).toBeVisible({timeout: 30_000});
+    await expect(page.getByRole('region', {name: 'live trades'})).toHaveAttribute('data-trend', trend);
 
-    const results = await new AxeBuilder({page}).include('.price-chart').withTags(['wcag2a', 'wcag2aa']).analyze();
+    const results = await new AxeBuilder({page}).include('section[aria-label="live trades"]').withTags(['wcag2a', 'wcag2aa']).analyze();
 
     expect(results.violations.map(v => ({
       id: v.id,

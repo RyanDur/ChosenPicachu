@@ -85,7 +85,7 @@ const quotes = ['Simplicity is the whole of the craft.',
 
 export const news: readonly string[] = [...phrases, ...catchPhrases, ...quotes];
 
-export const decked = <T,>(pool: readonly T[]): () => T => {
+export const decked = <T>(pool: readonly T[]): () => T => {
   let standing: T[] = [];
   return () => {
     if (standing.length === 0) {
@@ -97,8 +97,8 @@ export const decked = <T,>(pool: readonly T[]): () => T => {
   };
 };
 
-export const randFirstName = (): string => rand(firstNames);
-export const randLastName = (): string => rand(lastNames);
+export const randFirstName: () => string = decked(firstNames);
+export const randLastName: () => string = decked(lastNames);
 export const randCity = (): string => rand(cities);
 export const randStreetName = (): string => rand(streets);
 export const randStateAbbr = (): string => rand(states);

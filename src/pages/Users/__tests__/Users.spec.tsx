@@ -11,7 +11,7 @@ import {UsersPage} from '@pages/Users/UsersPage';
 const cellAt = (column: number, row: number): HTMLElement => {
   const [, tbody] = screen.getAllByRole('rowgroup');
   const lane = within(tbody).getAllByRole('row')[row];
-  const seat = [lane.querySelector('th'), ...lane.querySelectorAll('td')][column];
+  const seat = [within(lane).getByRole('rowheader'), ...within(lane).getAllByRole('cell')][column];
   if (!seat) throw new Error(`no cell ${column} in row ${row}`);
   return seat;
 };
@@ -33,20 +33,18 @@ describe('the users page', () => {
     it('groups by a column menu criterion', async () => {
       renderWithRouter(<UsersPage/>, {});
       const homes = () => within(screen.getAllByRole('rowgroup')[1]).getAllByRole('row')
-        .map(row => row.querySelectorAll('th, td')[4]?.textContent ?? '');
+        .map(row => within(row).getAllByRole('cell')[3]?.textContent ?? '');
       await waitFor(() => expect(homes().length).toBeGreaterThan(1));
 
-      const toggle = screen.getByRole('button', {name: 'sort worksFromHome'});
-      const menu = document.getElementById(toggle.getAttribute('popovertarget') ?? '');
-      if (!menu) throw new Error('no menu for worksFromHome');
+      const menu = screen.getByLabelText('sort works-from-home by');
       await userEvent.click(within(menu).getByText('ascending'));
 
       expect(homes()).toEqual([...homes()].sort((left, right) => left.localeCompare(right)));
       expect(screen.getAllByRole('button', {name: /move row/}).length).toBeGreaterThan(0);
-      expect(screen.getAllByRole('button', {name: /resize homeCity/}).length).toBe(1);
+      expect(screen.getAllByRole('button', {name: /resize home-city/}).length).toBe(1);
       expect(screen.getByRole('button', {name: 'sort age'})).toBeVisible();
-      expect(screen.queryByRole('button', {name: 'sort fullName'})).toBeNull();
-      expect(screen.queryByRole('button', {name: 'sort homeCity'})).toBeNull();
+      expect(screen.queryByRole('button', {name: 'sort full-name'})).toBeNull();
+      expect(screen.queryByRole('button', {name: 'sort home-city'})).toBeNull();
       expect(screen.queryByRole('button', {name: 'sort friends'})).toBeNull();
     });
   });

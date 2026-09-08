@@ -314,8 +314,7 @@
     margin: 0;
     padding: var(--base-x-1_5) var(--base-x-2);
     white-space: pre-wrap;
-    overflow-wrap: break-word;
-    overflow-x: auto;
+    overflow-wrap: anywhere;
 
     .lang {
       position: absolute;
@@ -327,8 +326,12 @@
     }
 
     .line {
+      --hanging: 2ch;
+
       display: block;
-      white-space: pre;
+      white-space: pre-wrap;
+      padding-inline-start: var(--hanging);
+      text-indent: calc(-1 * var(--hanging));
     }
   }
 

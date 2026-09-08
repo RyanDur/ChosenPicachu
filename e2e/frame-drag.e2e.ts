@@ -4,15 +4,15 @@ import {expect, test} from '@playwright/test';
 // hit-testing and pointer capture, which is where the frame's drags have broken before
 test('a real drag reorders the frame columns in the default world', async ({page}) => {
   await page.goto('/ChosenPicachu/demos/?tab=tables&world=vanilla');
-  const frame = page.frameLocator('iframe.table-frame');
-  const trades = frame.locator('th.trades');
+  const frame = page.frameLocator('iframe[title="the living table, in vanilla"]');
+  const trades = frame.getByRole('columnheader', {name: 'trades'});
   await expect(trades).toBeVisible();
 
-  const order = () => frame.locator('thead th').evaluateAll(headers =>
-    headers.map(header => header.className.split(' ')[1]));
+  const order = () => frame.getByRole('columnheader').evaluateAll(headers =>
+    headers.map(header => header.getAttribute('aria-label')));
 
   const from = await trades.boundingBox();
-  const to = await frame.locator('th.sells').boundingBox();
+  const to = await frame.getByRole('columnheader', {name: 'sells'}).boundingBox();
   if (!from || !to) {
     throw new Error('the headers never stood');
   }
@@ -31,14 +31,13 @@ test('a real drag reorders the frame columns in the default world', async ({page
 
 test('a menu choice sorts, and never lifts the column', async ({page}) => {
   await page.goto('/ChosenPicachu/demos/?tab=tables&world=vanilla');
-  const frame = page.frameLocator('iframe.table-frame');
-  await frame.locator('th.trades').waitFor();
+  const frame = page.frameLocator('iframe[title="the living table, in vanilla"]');
+  const trades = frame.getByRole('columnheader', {name: 'trades'});
+  await expect(trades).toBeVisible();
 
-  await frame.locator('th.trades .menu-toggle').click();
-  await frame.locator('#sort-trades button.item', {hasText: 'descending'}).click();
+  await frame.getByRole('button', {name: 'sort trades'}).click();
+  await frame.getByRole('button', {name: 'descending'}).click();
 
-  await expect(frame.locator('th.trades')).toHaveAttribute('aria-sort', 'descending');
-  await expect(frame.locator('table.column-ghost')).toHaveCount(0);
-  await expect(frame.locator('article.drag-surface')).toHaveCount(0);
-  await expect(frame.locator('th.trades')).not.toHaveClass(/hide/);
+  await expect(trades).toHaveAttribute('aria-sort', 'descending');
+  await expect(trades).not.toHaveClass(/carried/);
 });

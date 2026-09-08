@@ -10,12 +10,12 @@ export type Bounds = {
 };
 
 export type Survey = Bounds & {
-    rowHeights: Readonly<Record<number, number>>;
+    rowHeights: Readonly<Record<string, number>>;
 };
 
 export const bounded = (surface: HTMLTableElement, order: readonly string[]): Bounds => {
     const bounds = surface.getBoundingClientRect();
-    const headers = [...surface.querySelectorAll('thead th')];
+    const headers = [...(surface.tHead?.rows[0]?.cells ?? [])];
     return {
         left: bounds.left, top: bounds.top, width: bounds.width, height: bounds.height,
         columnWidths: order.reduce((widths, column, at) => ({
@@ -25,20 +25,19 @@ export const bounded = (surface: HTMLTableElement, order: readonly string[]): Bo
     };
 };
 
+export const rowHeights = (surface: HTMLTableElement, seats: readonly string[]): Readonly<Record<string, number>> => {
+    const body = surface.tBodies[0];
+    return seats.reduce((heights, row, position) => ({
+        ...heights,
+        [row]: body?.rows[position]?.getBoundingClientRect().height ?? 0
+    }), {});
+};
+
 export const surveyed = (
     surface: HTMLTableElement,
     order: readonly string[],
-    seats: readonly number[]
-): Survey => {
-    const body = surface.tBodies[0];
-    return {
-        ...bounded(surface, order),
-        rowHeights: seats.reduce((heights, row, position) => ({
-            ...heights,
-            [row]: body?.rows[position]?.getBoundingClientRect().height ?? 0
-        }), {})
-    };
-};
+    seats: readonly string[]
+): Survey => ({...bounded(surface, order), rowHeights: rowHeights(surface, seats)});
 
 const deadZone = (struckSize: number, aloftSize: number): number =>
     Math.max(struckSize / 4, (struckSize - aloftSize) / 2);
@@ -75,8 +74,20 @@ export const columnUnder = (order: readonly string[], survey: Bounds) =>
         return undefined;
     };
 
-export const rowUnder = (seats: readonly number[], survey: Survey) =>
-    (x: number, y: number, aloft: number): number | undefined => {
+export const columnLeft = (order: readonly string[], survey: Bounds) => (column: string): number => {
+    const total = order.reduce((sum, name) => sum + (survey.columnWidths[name] ?? 0), 0) || 1;
+    const before = order.slice(0, order.indexOf(column)).reduce((sum, name) => sum + (survey.columnWidths[name] ?? 0), 0);
+    return survey.left + before / total * survey.width;
+};
+
+export const rowTop = (seats: readonly string[], survey: Survey) => (seat: string): number => {
+    const all = seats.reduce((sum, row) => sum + (survey.rowHeights[row] ?? 0), 0);
+    const before = seats.slice(0, seats.indexOf(seat)).reduce((sum, row) => sum + (survey.rowHeights[row] ?? 0), 0);
+    return survey.top + survey.height - all + before;
+};
+
+export const rowUnder = (seats: readonly string[], survey: Survey) =>
+    (x: number, y: number, aloft: string): string | undefined => {
         if (x >= survey.left && x <= survey.left + survey.width) {
             const {top, height, rowHeights} = survey;
             let edge = top + height -
@@ -91,6 +102,16 @@ export const rowUnder = (seats: readonly number[], survey: Survey) =>
         return undefined;
     };
 
+export const displacedBetween = <Seat>(seats: readonly Seat[], from: number, to: number): Seat[] =>
+    seats.slice(Math.min(from, to), Math.max(from, to) + 1).filter((_seat, at) => at !== from - Math.min(from, to));
+
+export const spanCrossed = <Seat extends string | number>(
+    seats: readonly Seat[],
+    sizes: Readonly<Partial<Record<Seat, number>>>,
+    from: number,
+    to: number
+): number => displacedBetween(seats, from, to).reduce((sum, seat) => sum + (sizes[seat] ?? 0), 0);
+
 export const anchored = (position: number, count: number): boolean =>
     position === 0 || position === count - 1;
 
@@ -103,12 +124,12 @@ export const nudgedColumn = (order: readonly string[], held: string, toward: num
     return {from, to: interior(from + toward, order.length)};
 };
 
-export const nudgedRow = (seats: readonly number[], held: number, toward: number): {from: number; to: number} => {
+export const nudgedRow = (seats: readonly string[], held: string, toward: number): {from: number; to: number} => {
     const from = seats.indexOf(held);
     return {from, to: Math.min(Math.max(from + toward, 0), seats.length - 1)};
 };
 
-export const struckAway = <Seat,>(held: Seat, struck: Seat | undefined): struck is Seat =>
+export const struckAway = <Seat>(held: Seat, struck: Seat | undefined): struck is Seat =>
     has(struck) && struck !== held;
 
 export type ColumnNudge = {from: number; to: number};
@@ -119,10 +140,10 @@ export const columnNudge = (order: readonly string[]) =>
         return to === from ? undefined : {from, to};
     };
 
-export type RowNudge = {to: number; after: number[]};
+export type RowNudge = {to: number; after: string[]};
 
-export const rowNudge = (seats: readonly number[]) =>
-    (held: number, toward: number): RowNudge => {
+export const rowNudge = (seats: readonly string[]) =>
+    (held: string, toward: number): RowNudge => {
         const {to} = nudgedRow(seats, held, toward);
         return {to, after: array.moveToIndex(to, held, seats)};
     };

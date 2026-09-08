@@ -3,63 +3,36 @@ import {MotionDial} from '../../../Controls';
 import {Codes, Reveal, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
-import {frameMount, gap, glideCss, glideSource, settlesSource, travelSource} from './sources';
+import {gap, arrowsSource} from './sources';
 
-export const bothSlide = (world: World, headerSource: string, buildSrc: string): ReactNode =>
-  <Step title="Both parties move, and the platform draws both" dial={<MotionDial name="step-motion"/>}>
-    <Words want="A pointer swap explains itself with a ghost in hand; the trader’s keyboard swap has no hand, and if only the neighbour slid, the walked column would simply teleport.">
+export const walkSlides = (world: World, headerSource: string, buildSrc: string): ReactNode =>
+  <Step title="Both parties slide" dial={<MotionDial name="step-motion"/>}>
+    <Words want="A pointer swap explains itself with the column in hand; the trader’s keyboard swap has no hand, and if only the neighbour slid, the walked column would simply teleport.">
       <Says>Both parties should explain themselves: each starts where it was and slides to
-        where it now sits. Nothing here is special to the keyboard; a walk is a reorder, and a
-        reorder settles the same way the pointer’s crossings do.</Says>
+        where it now sits. A walk is a reorder, and it wears the same marks a strike does, plus
+        one for the column that walked.</Says>
     </Words>
     <Reveal>
-      <Says>The walk is a dispatch that changes the order, so the animated table shows it through a view transition. Both
-        cells are named, so both get a snapshot pair and both slide, each by exactly the other’s
-        share, without a keyframe, a measurement, or a line of new CSS. The old version of this
-        step measured both shares and marked both columns by hand; that work now belongs to the
-        platform.</Says>
+      <Says>The arrow measures the header row at the keypress, the way the lift takes its
+        survey, and hands the widths to the walk. The walk dispatches the reorder with two
+        marks: the neighbour is shoved by the walked column’s width, and the walked column
+        settles from across the neighbour’s. The stylesheet slides both, and each clears its
+        own mark when its keyframe ends, so a held key walks the column step by step, sliding
+        every step.</Says>
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...unit(travelSource, 'export const columnArrows'), gap,
-            ...unit(headerSource, 'const walked = '), gap,
-            ...span(headerSource, 'onKeyDown={travels ? columnArrows', 'onKeyDown={travels ? columnArrows'),
-            aside('// the walk settles; the platform draws both parties')
+            ...unit(arrowsSource, 'export const columnArrows'), gap,
+            ...span(headerSource, 'onKeyDown={travels ? columnArrows', 'onKeyDown={travels ? columnArrows'), gap,
+            ...unit(headerSource, 'const movedTo = '),
+            aside('// the walk marks both parties; the stylesheet slides them')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...unit(travelSource, 'export const columnArrows'), gap,
-            ...unit(settlesSource, 'export const ordered'), gap,
-            ...span(buildSrc, 'column: (mounted, held) => columnArrows', 'column: (mounted, held) => columnArrows'),
-            aside('// the walk settles; the platform draws both parties')
+            ...unit(arrowsSource, 'export const columnArrows'), gap,
+            ...unit(buildSrc, 'const columnTo = '), gap,
+            ...span(buildSrc, "th.addEventListener('keydown', columnArrows", "th.addEventListener('keydown', columnArrows"),
+            aside('// the walk marks both parties; the stylesheet slides them')
           ]}/>}
-      </Codes>
-    </Reveal>
-  </Step>;
-
-export const paceKey = (): ReactNode =>
-  <Step title="Let the platform pace the key">
-    <Words want="The trader holds the arrow, and autorepeat must not outrun the slide.">
-      <Says>The reflex fix, a timer matched to the CSS by hand, rots the day the CSS changes.
-        The next fix, asking each element whether its keyframe is still running, is what this
-        step used to teach. A view transition needs neither.</Says>
-    </Words>
-    <Reveal>
-      <Says>A document runs one view transition at a time. When{' '}
-        <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document/startViewTransition">startViewTransition</a>
-        {' '}is called again while another is still drawing, the platform skips the running one to
-        its end and starts the next from the true current positions; nothing is lost and nothing
-        bounces. The debounce
-        clock is the transition itself, and it is never out of step with the CSS because it is
-        the CSS.</Says>
-      <Codes>
-        <Snippet label="TS" lines={[
-          ...unit(glideSource, 'export const glide'),
-          aside('// no guard; a newer transition supersedes a running one')
-        ]}/>
-        <Snippet label="CSS" lines={[
-          ...unit(glideCss, '::view-transition-group(*)'),
-          aside('/* the 200ms is the pace of every move, keyed or not */')
-        ]}/>
       </Codes>
     </Reveal>
   </Step>;
@@ -77,46 +50,44 @@ export const cutKey = (world: World, headerSource: string, buildSrc: string): Re
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...unit(travelSource, 'export const columnArrows'), gap,
-            ...unit(headerSource, 'const walked = '), gap,
-            ...span(headerSource, 'onKeyDown={travels ? columnArrows', 'onKeyDown={travels ? columnArrows'),
+            ...unit(arrowsSource, 'export const columnArrows'), gap,
+            ...span(headerSource, 'onKeyDown={travels ? columnArrows', 'onKeyDown={travels ? columnArrows'), gap,
+            ...unit(headerSource, 'const movedTo = '),
             aside('// the whole walk; nothing marked, nothing to wait for')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...unit(travelSource, 'export const columnArrows'), gap,
-            ...unit(settlesSource, 'export const cut'), gap,
-            ...span(buildSrc, 'column: (mounted, held) => columnArrows', 'column: (mounted, held) => columnArrows'),
+            ...unit(arrowsSource, 'export const columnArrows'), gap,
+            ...unit(buildSrc, 'const columnTo = '), gap,
+            ...span(buildSrc, "th.addEventListener('keydown', columnArrows", "th.addEventListener('keydown', columnArrows"),
             aside('// the whole walk; nothing marked, nothing to wait for')
           ]}/>}
       </Codes>
     </Reveal>
   </Step>;
 
-export const gripArrows = (world: World, rowSrc: string, buildSrc: string, arrows: string): ReactNode =>
+export const gripArrows = (world: World, rowSource: string, buildSrc: string): ReactNode =>
   <Step title="Turn the arrows vertical">
     <Words want="A row is the same walk turned vertical, and the grip is already a button under the fingers.">
       <Says>Nothing new should be needed: the grip was focusable from its first appearance, so
         up and down claim the vertical walk the way left and right claimed the horizontal one,
-        with the same anchors holding and the same pacing riding whatever motion the build
-        declares.</Says>
+        with the same anchors holding.</Says>
     </Words>
     <Reveal>
       <Says>The grip listens for the arrows itself, and the walk is the column walk with the
-        axis turned: the seats shuffle instead of the order, the dealt edges hold, and the
-        marks and pacing ride the build unchanged.</Says>
+        axis turned: the seats shuffle instead of the order, and the outer edges hold.</Says>
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...span(rowSrc, 'onArrows={', 'onArrows={'),
+            ...span(rowSource, 'onArrows={', 'onArrows={'),
             aside('// the grip hears its own arrows; the walk is shared')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...span(frameMount, "grip.addEventListener('keydown'", "grip.addEventListener('keydown'"), gap,
-            ...span(buildSrc, arrows, arrows),
+            ...span(buildSrc, "grip.addEventListener('keydown'", "grip.addEventListener('keydown'"), gap,
+            ...unit(buildSrc, 'const rowTo = '),
             aside('// the grip hears its own arrows; the walk is shared')
           ]}/>}
         <Snippet label="TS" lines={[
-          ...unit(travelSource, `export const ${arrows}`)
+          ...unit(arrowsSource, 'export const rowArrows')
         ]}/>
       </Codes>
     </Reveal>

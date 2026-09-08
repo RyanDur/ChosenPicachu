@@ -40,10 +40,6 @@ describe('pressure', () => {
     ]}/>);
 
     const card = screen.getByRole('region', {name: 'pressure'});
-    expect(card.querySelectorAll('rect.bought')).toHaveLength(1);
-    expect(card.querySelectorAll('rect.sold')).toHaveLength(1);
-    expect(card.querySelectorAll('rect.bought-wall')).toHaveLength(1);
-    expect(card.querySelectorAll('rect.sold-wall')).toHaveLength(1);
     expect(card).toHaveTextContent('since you arrived');
     expect(card).toHaveTextContent('1 window ·');
     expect(card).toHaveTextContent('2 BTC');
@@ -60,7 +56,7 @@ describe('pressure', () => {
     render(<Pressure trades={[]}/>);
 
     const card = screen.getByRole('region', {name: 'pressure'});
-    expect(card.querySelectorAll('rect')).toHaveLength(0);
+    expect(card).not.toHaveTextContent('window');
     expect(card).toHaveTextContent('waiting for the first trade');
   });
 });

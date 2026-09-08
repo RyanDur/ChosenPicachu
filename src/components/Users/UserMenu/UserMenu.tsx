@@ -27,7 +27,7 @@ export const UserMenu: FC<Props> = ({user, name, onRemove}) => {
     <button type="button" className="menu-toggle rounded-corners raisable"
             popoverTarget={id}
             aria-label={`Actions for ${name}`}/>
-    <menu id={id} popover="auto" className="menu card rounded-corners lifted">
+    <menu id={id} tabIndex={-1} popover="auto" className="menu card rounded-corners lifted" aria-label={`Actions for ${name}, chosen`}>
       <li className="entry">
         <Link to={`${path}${createSearchParams({id: user.id, mode: 'view'})}`}
               onClick={dismissed} className="item sub-title">View</Link>

@@ -1,9 +1,9 @@
 import {FC, ReactNode} from 'react';
 import {Navigate, useParams} from 'react-router';
-import {useEnv} from '@components/Env';
 import {Paths} from '@pages/Paths';
 import {DemoTopics} from '../types';
-import {useLiveTrades} from './useLiveTrades';
+import {useDemosSelector} from '../Provider';
+import {selectLiveTrades} from '../store';
 import {PriceChart} from './PriceChart';
 import {Candles} from './Candles';
 import {Pressure} from './Pressure';
@@ -54,10 +54,13 @@ const features: Record<ChartKind, Feature> = {
   }
 };
 
+const LivePrice: FC = () => <PriceChart trades={useDemosSelector(selectLiveTrades)}/>;
+const LiveCandles: FC = () => <Candles trades={useDemosSelector(selectLiveTrades)}/>;
+const LivePressure: FC = () => <Pressure trades={useDemosSelector(selectLiveTrades)}/>;
+const LivePie: FC = () => <Pie trades={useDemosSelector(selectLiveTrades)}/>;
+
 export const ChartPage: FC = () => {
   const {kind} = useParams();
-  const {tradeFeed, tradeProduct} = useEnv();
-  const liveTrades = useLiveTrades(tradeFeed, tradeProduct);
   const page = ({kind: dealt, name, reference, quote}: Feature, chart: ReactNode) => () =>
     <article aria-label={`${name} tutorial`} className="chart-page tutorials">
     {chart}
@@ -90,9 +93,9 @@ export const ChartPage: FC = () => {
     </section>
     </article>;
   return matchChartKind(isChartKind(kind) ? kind : undefined, {
-    price: page(features.price, <PriceChart trades={liveTrades.trades}/>),
-    candles: page(features.candles, <Candles trades={liveTrades.trades}/>),
-    pressure: page(features.pressure, <Pressure trades={liveTrades.trades}/>),
-    pie: page(features.pie, <Pie trades={liveTrades.trades}/>)
-  }).orElse(<Navigate to={`${Paths.demos}?tab=${DemoTopics.charts}`} replace/>);
+      price: page(features.price, <LivePrice/>),
+      candles: page(features.candles, <LiveCandles/>),
+      pressure: page(features.pressure, <LivePressure/>),
+      pie: page(features.pie, <LivePie/>)
+    }).orElse(<Navigate to={`${Paths.demos}?tab=${DemoTopics.charts}`} replace/>);
 };

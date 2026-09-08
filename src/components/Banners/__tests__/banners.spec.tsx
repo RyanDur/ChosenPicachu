@@ -21,7 +21,7 @@ const renderWithTrouble = (message: string) => render(
 );
 
 const troubleOf = (alert: HTMLElement, message: string): HTMLElement => {
-  const item = within(alert).getByText(message).closest('li');
+  const item = within(alert).getAllByRole('listitem', {hidden: true}).find(standing => within(standing).queryByText(message) !== null);
   if (!item) {
     throw new Error(`no standing trouble says "${message}"`);
   }
@@ -100,7 +100,7 @@ describe('the banners', () => {
   test('with nothing raised, the panel holds no messages', () => {
     renderWithTrouble('unraised');
 
-    expect(screen.getByRole('alert', {hidden: true}).querySelectorAll('li')).toHaveLength(0);
+    expect(within(screen.getByRole('alert', {hidden: true})).queryAllByRole('listitem', {hidden: true})).toHaveLength(0);
   });
 
   test('the panel stands where the dials say, facing its entrance', async () => {

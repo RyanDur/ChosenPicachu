@@ -1,25 +1,13 @@
 import {fireEvent, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {WebSocketServer} from 'ws';
-import {broadcast, interceptedNetwork, listeningFeed, realSockets, subscribed, tradeFrame, urlOf} from '@test-support/feed';
+import {broadcast, listeningFeed, subscribed, tradeFrame, urlOf} from '@test-support/feed';
 import {wire as eagerKeepStatic} from '../builds/EagerKeepStatic';
 import {wire as eagerKeepAnimated} from '../builds/EagerKeepAnimated';
 import {wire as eagerHideStatic} from '../builds/EagerHideStatic';
 import {wire as lazyKeepStatic} from '../builds/LazyKeepStatic';
 import tableHtml from '../table.html?raw';
 
-beforeAll(realSockets);
-afterAll(interceptedNetwork);
-
 describe('the frame table', () => {
-  const feeds: WebSocketServer[] = [];
-
-  const streamingFeed = async (): Promise<WebSocketServer> => {
-    const feed = await listeningFeed();
-    feeds.push(feed);
-    return feed;
-  };
-
   const deal = (feedUrl?: string, wire: (document: Document) => void = eagerKeepStatic): void => {
     window.__env = feedUrl
       ? {tradeFeed: feedUrl, tradeHistory: 'http://127.0.0.1:9', tradeProduct: 'BTC-USD',
@@ -38,18 +26,12 @@ describe('the frame table', () => {
   const measure = (window: string, at: number): HTMLElement =>
     within(screen.getByRole('row', {name: new RegExp(window)})).getAllByRole('cell')[at];
 
-  afterEach(async () => {
+  afterEach(() => {
     document.body.innerHTML = '';
     window.__env = undefined;
-    subscribed.clear();
-    await Promise.all(feeds.map(feed => new Promise(resolve => {
-      feed.clients.forEach(client => client.terminate());
-      feed.close(resolve);
-    })));
-    feeds.length = 0;
   });
 
-  it('without an environment the dealt zeros stand, and the rule still announces', async () => {
+  it('without an environment the starting zeros stand, and the rule still announces', async () => {
     deal();
 
     expect(windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
@@ -60,11 +42,11 @@ describe('the frame table', () => {
     expect(screen.getByRole('columnheader', {name: /trades/})).toHaveAttribute('aria-sort', 'descending');
   });
 
-  it('as dealt restores the birth order and withdraws the announcement', async () => {
+  it('reset restores the birth order and withdraws the announcement', async () => {
     deal();
 
     await userEvent.click(sortMenu('buys').getByRole('button', {name: 'ascending', hidden: true}));
-    await userEvent.click(sortMenu('buys').getByRole('button', {name: 'as dealt', hidden: true}));
+    await userEvent.click(sortMenu('buys').getByRole('button', {name: 'reset', hidden: true}));
 
     expect(windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
     expect(screen.getByRole('columnheader', {name: /buys/})).not.toHaveAttribute('aria-sort');
@@ -82,7 +64,7 @@ describe('the frame table', () => {
   });
 
   it('trades fold into the windows', async () => {
-    const feed = await streamingFeed();
+    const feed = await listeningFeed();
     deal(urlOf(feed));
     await waitFor(() => expect(subscribed.size).toBeGreaterThan(0));
 
@@ -93,7 +75,7 @@ describe('the frame table', () => {
   });
 
   const columnOrder = (): string[] =>
-    screen.getAllByRole('columnheader').map(header => header.className.split(' ')[1]);
+    screen.getAllByRole('columnheader').map(header => header.getAttribute('aria-label') ?? '');
 
   const stubbedRects = (): void => {
     const widths: Record<string, number> = {window: 160, trades: 100, buys: 100, sells: 100, volume: 100, vwap: 120, change: 120};
@@ -101,7 +83,7 @@ describe('the frame table', () => {
       left: 0, right: 800, top: 0, bottom: 200, width: 800, height: 200, x: 0, y: 0, toJSON: () => ({})
     });
     screen.getAllByRole('columnheader').forEach(header => {
-      const name = header.className.split(' ')[1];
+      const name = header.getAttribute('aria-label') ?? '';
       header.getBoundingClientRect = () => ({
         left: 0, right: 0, top: 0, bottom: 0, width: widths[name] ?? 0, height: 0, x: 0, y: 0, toJSON: () => ({})
       });
@@ -115,6 +97,52 @@ describe('the frame table', () => {
     await userEvent.keyboard('{ArrowRight}');
 
     expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
+  });
+
+  // the browser blurs a focused node when it is moved in the DOM; jsdom does not, so the suite supplies the loss
+  const blurringMoves = (): (() => void) => {
+    const untouched = Object.getOwnPropertyDescriptor(Node.prototype, 'insertBefore');
+    if (untouched === undefined) throw new Error('no insertBefore to blur');
+    Node.prototype.insertBefore = function <T extends Node>(this: Node, node: T, child: Node | null): T {
+      const focused = document.activeElement;
+      if (node instanceof HTMLElement && focused instanceof HTMLElement && node.contains(focused)) {
+        focused.blur();
+      }
+      return Reflect.apply(untouched.value as (this: Node, node: T, child: Node | null) => T, this, [node, child]);
+    };
+    return () => {
+      Object.defineProperty(Node.prototype, 'insertBefore', untouched);
+    };
+  };
+
+  it('a column walks right to the end and left back home, keypress after keypress, keeping the focus the moves take', async () => {
+    const restore = blurringMoves();
+    deal(undefined, eagerKeepAnimated);
+
+    const trades = screen.getByRole('columnheader', {name: /trades/});
+    trades.focus();
+    await userEvent.keyboard('{ArrowRight}{ArrowRight}{ArrowRight}{ArrowRight}{ArrowRight}');
+    expect(columnOrder()).toEqual(['window', 'buys', 'sells', 'volume', 'vwap', 'trades', 'change']);
+
+    await userEvent.keyboard('{ArrowLeft}{ArrowLeft}{ArrowLeft}{ArrowLeft}{ArrowLeft}');
+    expect(columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
+    expect(document.activeElement).toBe(trades);
+    restore();
+  });
+
+  it('a row walks to the bottom and back to the top, keypress after keypress, keeping the focus the moves take', async () => {
+    const restore = blurringMoves();
+    deal(undefined, eagerKeepAnimated);
+
+    const grip = within(screen.getByRole('row', {name: /this minute/})).getByRole('button', {name: /move row/});
+    grip.focus();
+    await userEvent.keyboard('{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}');
+    expect(windowNames()).toEqual(['last 5 minutes', 'last 15 minutes', 'this hour', 'session', 'this minute']);
+
+    await userEvent.keyboard('{ArrowUp}{ArrowUp}{ArrowUp}{ArrowUp}{ArrowUp}');
+    expect(windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
+    expect(document.activeElement).toBe(grip);
+    restore();
   });
 
   it('the first seat is anchored', async () => {
@@ -131,7 +159,7 @@ describe('the frame table', () => {
     stubbedRects();
 
     const trades = screen.getByRole('columnheader', {name: /trades/});
-    fireEvent.pointerDown(trades, {clientX: 200, clientY: 50, pointerId: 1});
+    held(trades, {clientX: 200, clientY: 50, pointerId: 1});
     fireEvent.pointerMove(surface(), {buttons: 1, clientX: 335, clientY: 100, pointerId: 1});
 
     expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
@@ -139,7 +167,7 @@ describe('the frame table', () => {
   });
 
   it('the fold finds its columns after they move', async () => {
-    const feed = await streamingFeed();
+    const feed = await listeningFeed();
     deal(urlOf(feed));
     await waitFor(() => expect(subscribed.size).toBeGreaterThan(0));
     screen.getByRole('columnheader', {name: /trades/}).focus();
@@ -155,13 +183,20 @@ describe('the frame table', () => {
     });
   });
 
-  const surface = (): HTMLElement => {
-    const flying = document.querySelector('article.drag-surface');
-    if (!(flying instanceof HTMLElement)) {
-      throw new Error('no drag surface aloft');
-    }
-    return flying;
+  let holder: HTMLElement | undefined;
+  const held = (element: HTMLElement, at: {clientX: number; clientY: number; pointerId: number}): void => {
+    holder = element;
+    fireEvent.pointerDown(element, at);
   };
+  const surface = (): HTMLElement => {
+    if (holder === undefined) {
+      throw new Error('nothing was lifted');
+    }
+    return holder;
+  };
+  const carried = (): Element[] =>
+    [...screen.getAllByRole('columnheader'), ...screen.getAllByRole('rowheader'), ...screen.getAllByRole('cell')]
+      .filter(seat => seat.classList.contains('carried'));
 
   const rowRects = (): void => {
     stubbedRects();
@@ -176,10 +211,7 @@ describe('the frame table', () => {
     deal();
 
     const still = screen.getByRole('row', {name: /this hour/});
-    const hold = still.closest('tbody');
-    if (!(hold instanceof HTMLElement)) {
-      throw new Error('no tbody');
-    }
+    const [, hold] = screen.getAllByRole('rowgroup');
     let touched = false;
     const observer = new MutationObserver(records =>
       records.forEach(record => {
@@ -241,7 +273,7 @@ describe('the frame table', () => {
     rowRects();
 
     const grip = within(screen.getByRole('row', {name: /this minute/})).getByRole('button', {name: 'move row 1'});
-    fireEvent.pointerDown(grip, {clientX: 20, clientY: 20, pointerId: 1});
+    held(grip, {clientX: 20, clientY: 20, pointerId: 1});
     fireEvent.pointerMove(surface(), {buttons: 1, clientX: 20, clientY: 75, pointerId: 1});
 
     expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
@@ -299,7 +331,7 @@ describe('the frame table', () => {
   });
 
   it('the rule stands while trades land', async () => {
-    const feed = await streamingFeed();
+    const feed = await listeningFeed();
     deal(urlOf(feed));
     await waitFor(() => expect(subscribed.size).toBeGreaterThan(0));
     await userEvent.click(sortMenu('trades').getByRole('button', {name: 'descending', hidden: true}));
@@ -317,7 +349,7 @@ describe('the frame table', () => {
       stubbedRects();
 
       const trades = screen.getByRole('columnheader', {name: /trades/});
-      fireEvent.pointerDown(trades, {clientX: 200, clientY: 50, pointerId: 1});
+      held(trades, {clientX: 200, clientY: 50, pointerId: 1});
       fireEvent.pointerMove(surface(), {buttons: 1, clientX: 335, clientY: 100, pointerId: 1});
 
       expect(columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
@@ -331,7 +363,7 @@ describe('the frame table', () => {
       stubbedRects();
 
       const trades = screen.getByRole('columnheader', {name: /trades/});
-      fireEvent.pointerDown(trades, {clientX: 200, clientY: 50, pointerId: 1});
+      held(trades, {clientX: 200, clientY: 50, pointerId: 1});
       fireEvent.pointerMove(surface(), {buttons: 1, clientX: 335, clientY: 100, pointerId: 1});
       fireEvent.pointerMove(surface(), {buttons: 1, clientX: 200, clientY: 50, pointerId: 1});
       fireEvent.pointerUp(surface(), {pointerId: 1});
@@ -344,7 +376,7 @@ describe('the frame table', () => {
       rowRects();
 
       const grip = within(screen.getByRole('row', {name: /this minute/})).getByRole('button', {name: 'move row 1'});
-      fireEvent.pointerDown(grip, {clientX: 20, clientY: 20, pointerId: 1});
+      held(grip, {clientX: 20, clientY: 20, pointerId: 1});
       fireEvent.pointerMove(surface(), {buttons: 1, clientX: 20, clientY: 75, pointerId: 1});
       fireEvent.pointerMove(surface(), {buttons: 1, clientX: 20, clientY: 20, pointerId: 1});
       fireEvent.pointerUp(surface(), {pointerId: 1});
@@ -352,129 +384,123 @@ describe('the frame table', () => {
       expect(windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
     });
 
-    it('keep flies a row ghost and never blanks the lane', () => {
+    it('keep leaves the lifted row where it stands, and nothing wears a carry', () => {
       deal(undefined, lazyKeepStatic);
       rowRects();
 
       const grip = within(screen.getByRole('row', {name: /this minute/})).getByRole('button', {name: 'move row 1'});
-      fireEvent.pointerDown(grip, {clientX: 20, clientY: 20, pointerId: 1});
+      held(grip, {clientX: 20, clientY: 20, pointerId: 1});
+      fireEvent.pointerMove(surface(), {buttons: 1, clientX: 20, clientY: 30, pointerId: 1});
 
-      expect(document.querySelector('table.column-ghost .grip')).toBeInTheDocument();
-      expect(document.querySelector('.hide-across')).not.toBeInTheDocument();
+      expect(carried()).toEqual([]);
+      expect(windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
 
       fireEvent.pointerUp(surface(), {pointerId: 1});
-      expect(document.querySelector('table.column-ghost')).not.toBeInTheDocument();
+      expect(carried()).toEqual([]);
     });
 
-    it('keep flies a ghost and never blanks the origin', () => {
+    it('keep leaves the lifted column where it stands, and nothing wears a carry', () => {
       deal(undefined, lazyKeepStatic);
       stubbedRects();
 
       const trades = screen.getByRole('columnheader', {name: /trades/});
-      fireEvent.pointerDown(trades, {clientX: 200, clientY: 50, pointerId: 1});
+      held(trades, {clientX: 200, clientY: 50, pointerId: 1});
+      fireEvent.pointerMove(surface(), {buttons: 1, clientX: 220, clientY: 50, pointerId: 1});
 
-      expect(trades.classList).not.toContain('hide');
-      expect(document.querySelector('table.column-ghost')).toBeInTheDocument();
+      expect(carried()).toEqual([]);
+      expect(trades.style.getPropertyValue('--carried-by')).toBe('');
 
       fireEvent.pointerUp(surface(), {pointerId: 1});
-      expect(document.querySelector('table.column-ghost')).not.toBeInTheDocument();
+      expect(carried()).toEqual([]);
     });
 
-    it('hide blanks the lifted column and flies a ghost', () => {
+    it('hide carries the lifted column, every cell of it, by the offset from home, and lands it as itself', () => {
       deal(undefined, eagerHideStatic);
       stubbedRects();
 
       const trades = screen.getByRole('columnheader', {name: /trades/});
-      fireEvent.pointerDown(trades, {clientX: 200, clientY: 50, pointerId: 1});
+      held(trades, {clientX: 200, clientY: 50, pointerId: 1});
+      fireEvent.pointerMove(surface(), {buttons: 1, clientX: 200, clientY: 50, pointerId: 1});
+      fireEvent.pointerMove(surface(), {buttons: 1, clientX: 230, clientY: 60, pointerId: 1});
 
-      expect(trades.classList).toContain('hide');
-      expect(document.querySelector('table.column-ghost')).toBeInTheDocument();
+      const column = [trades, ...screen.getAllByRole('row').slice(1).map(lane => lane.children[1])];
+      column.forEach(cell => {
+        expect(cell).toHaveClass('carried');
+        expect(cell).toHaveStyle({'--carried-by': '-130px 10px'});
+      });
 
       fireEvent.pointerUp(surface(), {pointerId: 1});
-      expect(trades.classList).not.toContain('hide');
-      expect(document.querySelector('table.column-ghost')).not.toBeInTheDocument();
+      expect(carried()).toEqual([]);
+      expect(trades.style.getPropertyValue('--carried-by')).toBe('');
     });
 
-    it('the row ghost carries its grip', () => {
+    it('hide carries the lifted row, every cell of it', () => {
       deal(undefined, eagerHideStatic);
       rowRects();
 
       const grip = within(screen.getByRole('row', {name: /this minute/})).getByRole('button', {name: 'move row 1'});
-      fireEvent.pointerDown(grip, {clientX: 20, clientY: 20, pointerId: 1});
+      held(grip, {clientX: 20, clientY: 20, pointerId: 1});
+      fireEvent.pointerMove(surface(), {buttons: 1, clientX: 20, clientY: 20, pointerId: 1});
+      fireEvent.pointerMove(surface(), {buttons: 1, clientX: 25, clientY: 35, pointerId: 1});
 
-      expect(document.querySelector('table.column-ghost .grip')).toBeInTheDocument();
+      [...screen.getByRole('row', {name: /this minute/}).children].forEach(cell => {
+        expect(cell).toHaveClass('carried');
+        expect(cell).toHaveStyle({'--carried-by': '5px 15px'});
+      });
 
       fireEvent.pointerUp(surface(), {pointerId: 1});
-      expect(document.querySelector('table.column-ghost')).not.toBeInTheDocument();
+      expect(carried()).toEqual([]);
     });
 
-    it('a menu sort in an animated world settles through a view transition', async () => {
-      const transitions: Array<() => void> = [];
-      document.startViewTransition = (update: () => void) => {
-        transitions.push(update);
-        update();
-        return {} as ViewTransition;
-      };
-      try {
-        deal(undefined, eagerKeepAnimated);
-
-        await userEvent.click(sortMenu('trades').getByRole('button', {name: 'descending', hidden: true}));
-
-        expect(transitions).toHaveLength(1);
-        expect(screen.getByRole('columnheader', {name: /trades/})).toHaveAttribute('aria-sort', 'descending');
-      } finally {
-        delete (document as Partial<Document>).startViewTransition;
-      }
-    });
-
-    it('the platform draws the reseat later, and the reconcile still moves the row it was asked to', async () => {
-      const pending: Array<() => void> = [];
-      document.startViewTransition = (update: () => void) => {
-        pending.push(update);
-        return {} as ViewTransition;
-      };
-      try {
-        deal(undefined, eagerKeepAnimated);
-        const windows = () => screen.getAllByRole('rowheader').map(({textContent}) => textContent?.trim());
-
-        within(screen.getByRole('row', {name: /this minute/})).getByRole('button', {name: 'move row 1'}).focus();
-        await userEvent.keyboard('{ArrowDown}');
-        expect(pending).toHaveLength(1);
-        expect(windows().slice(0, 2)).toEqual(['this minute', 'last 5 minutes']);
-
-        pending.forEach(draw => draw());
-
-        expect(windows().slice(0, 2)).toEqual(['last 5 minutes', 'this minute']);
-      } finally {
-        delete (document as Partial<Document>).startViewTransition;
-      }
-    });
-
-    it('every cell names itself, so the platform can draw the move', () => {
+    it('a menu sort in an animated world cuts: nothing is carried, nothing to land', async () => {
       deal(undefined, eagerKeepAnimated);
 
-      expect(screen.getByRole('columnheader', {name: /trades/}).style.viewTransitionName).toBe('header-trades');
-      expect(measure('this minute', 0).style.viewTransitionName).toBe('cell-0-trades');
+      await userEvent.click(sortMenu('trades').getByRole('button', {name: 'descending', hidden: true}));
+
+      expect(screen.getByRole('columnheader', {name: /trades/})).toHaveAttribute('aria-sort', 'descending');
+      expect(carried()).toEqual([]);
     });
 
-    it('a static world cuts: no view transition is asked for', async () => {
-      const transitions: Array<() => void> = [];
-      document.startViewTransition = (update: () => void) => {
-        transitions.push(update);
-        update();
-        return {} as ViewTransition;
-      };
-      try {
-        deal(undefined, eagerKeepStatic);
+    it('a strike shoves the neighbour, and on release the real column settles from where it was dropped', () => {
+      deal(undefined, eagerKeepAnimated);
+      stubbedRects();
 
-        screen.getByRole('columnheader', {name: /trades/}).focus();
-        await userEvent.keyboard('{ArrowRight}');
+      const trades = screen.getByRole('columnheader', {name: /trades/});
+      const buys = screen.getByRole('columnheader', {name: /buys/});
+      held(trades, {clientX: 200, clientY: 50, pointerId: 1});
+      fireEvent.pointerMove(surface(), {buttons: 1, clientX: 300, clientY: 50, pointerId: 1});
+      expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
+      const shoved = [buys, ...screen.getAllByRole('row').slice(1).map(lane => lane.children[1])];
+      shoved.forEach(cell => {
+        expect(cell).toHaveClass('shoved-start');
+        expect(cell).toHaveStyle({'--shoved-by': '100px'});
+      });
 
-        expect(transitions).toHaveLength(0);
-        expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
-      } finally {
-        delete (document as Partial<Document>).startViewTransition;
-      }
+      fireEvent.pointerUp(surface(), {pointerId: 1});
+      expect(carried()).toEqual([]);
+      const settling = [trades, ...screen.getAllByRole('row').slice(1).map(lane => lane.children[2])];
+      settling.forEach(cell => {
+        expect(cell).toHaveClass('settling');
+        expect(cell).toHaveStyle({'--settling-from': '-260px 0px'});
+      });
+
+      held(buys, {clientX: 200, clientY: 50, pointerId: 1});
+      expect(trades).not.toHaveClass('settling');
+      expect(buys).not.toHaveClass('shoved-start');
+    });
+
+    it('a static release settles nothing', () => {
+      deal(undefined, eagerKeepStatic);
+      stubbedRects();
+
+      const trades = screen.getByRole('columnheader', {name: /trades/});
+      held(trades, {clientX: 200, clientY: 50, pointerId: 1});
+      fireEvent.pointerMove(surface(), {buttons: 1, clientX: 300, clientY: 50, pointerId: 1});
+      fireEvent.pointerUp(surface(), {pointerId: 1});
+
+      expect(carried()).toEqual([]);
+      expect(trades).not.toHaveClass('settling');
+      expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
     });
   });
 });

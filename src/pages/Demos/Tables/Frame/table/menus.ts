@@ -1,9 +1,8 @@
 import {has, maybe} from '@ryandur/sand';
-import {Rule, directionOf, sortedBy} from '@components/DragSortableTable/sorting';
+import {Direction, directionOf} from '@components/DragSortableTable/sorting';
 
-export const announce = (document: Document, column: string, rule?: Rule): void => {
+export const announce = (document: Document, column: string, sorted?: Direction): void => {
   maybe(document.querySelector(`th.${column}`)).map(header => {
-    const sorted = sortedBy(column, rule);
     if (has(sorted)) {
       header.setAttribute('aria-sort', sorted);
     } else {
@@ -12,11 +11,8 @@ export const announce = (document: Document, column: string, rule?: Rule): void 
   });
 };
 
-export const wireMenu = (document: Document, column: string, choose: (rule?: Rule) => void): void => {
+export const wireMenu = (document: Document, column: string, choose: (direction?: Direction) => void): void => {
   maybe(document.getElementById(`sort-${column}`)).map(menu =>
     [...menu.querySelectorAll('button.item')].forEach(item =>
-      item.addEventListener('click', () => {
-        const direction = directionOf((item.textContent ?? '').trim());
-        choose(has(direction) ? {column, direction} : undefined);
-      })));
+      item.addEventListener('click', () => choose(directionOf((item.textContent ?? '').trim())))));
 };

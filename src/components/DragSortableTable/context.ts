@@ -1,26 +1,20 @@
-import {createContext, useContext} from 'react';
-import {TableState, TableStore, Transition, dealtTableState, tableStore} from './table-state';
-import {Values} from './sorting';
+import {Dispatch, createContext, useContext} from 'react';
+import {TableAction} from './actions';
+import {Labelled, Seated, TableState} from './table-state';
 
-export type {Transition};
+export type Selector<Slice> = (state: TableState<Labelled>, seated: readonly Seated[]) => Slice;
 
-export type Seat = {
-  store: TableStore;
-  values: readonly Values[];
+export type TableContext<C extends Labelled> = {
+  state: TableState<C>;
+  seated: readonly Seated[];
+  dispatch: Dispatch<TableAction>;
 };
 
-export const Seated = createContext<Seat>({store: tableStore(dealtTableState([], 0)), values: []});
+export const Table = createContext<TableContext<Labelled>>({state: {columns: [], seats: []}, seated: [], dispatch: () => undefined});
 
-export const useStore = (): TableStore => useContext(Seated).store;
-export const useValues = (): readonly Values[] => useContext(Seated).values;
-export const useDispatch = (): ((transition: Transition) => void) => useContext(Seated).store.dispatch;
-
-export type Showing = {
-  state: TableState;
-  standing: readonly number[];
+export const useTableSelector = <Slice>(select: Selector<Slice>): Slice => {
+  const {state, seated} = useContext(Table);
+  return select(state, seated);
 };
 
-export const Shown = createContext<Showing>({state: dealtTableState([], 0), standing: []});
-
-export const useSelector = <Slice,>(select: (state: TableState) => Slice): Slice => select(useContext(Shown).state);
-export const useStanding = (): readonly number[] => useContext(Shown).standing;
+export const useTableDispatch = (): Dispatch<TableAction> => useContext(Table).dispatch;

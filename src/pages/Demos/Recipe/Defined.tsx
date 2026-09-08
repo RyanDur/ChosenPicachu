@@ -20,7 +20,7 @@ const concealed = (id: string): void => {
   }
 };
 
-export const Defined: FC<PropsWithChildren<{definition: ReactNode}>> = ({definition, children}) => {
+export const Defined: FC<PropsWithChildren<{term: string; definition: ReactNode}>> = ({term, definition, children}) => {
   const anchor = `--term-${useId().replace(/[^a-zA-Z0-9-]/g, '')}`;
   const id = `definition${anchor}`;
   const [intent, setIntent] = useState<number>();
@@ -37,6 +37,8 @@ export const Defined: FC<PropsWithChildren<{definition: ReactNode}>> = ({definit
             onFocus={() => revealed(id)}
             onBlur={() => concealed(id)}>{children}</button>
     <span id={id}
+          role="definition"
+          aria-label={term}
           popover="auto"
           className="term-definition card rounded-corners lifted"
           style={{'--term-anchor': anchor}}>{definition}</span>

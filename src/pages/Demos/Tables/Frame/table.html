@@ -2,142 +2,135 @@
   <table class="fancy-table sortable apportioned">
     <thead class="header">
     <tr class="row">
-      <th scope="col" class="cell window header-cell">
-        <div class="header-cell-content">window
-          <button type="button" class="resize-handle"
-                  aria-label="resize window"></button>
+      <th scope="col" class="cell window header-cell" aria-label="window">window
+        <button type="button" class="resize-handle"
+                aria-label="resize window"></button>
       </th>
-      <th scope="col" class="cell trades header-cell">
-        <div class="header-cell-content">trades
-          <button type="button" class="menu-toggle rounded-corners"
-                  popovertarget="sort-trades" aria-label="sort trades"></button>
-          <menu id="sort-trades" popover="auto"
-                class="menu field rounded-corners lifted">
-            <li class="entry">
-              <button type="button" class="item sub-title"
-                      popovertarget="sort-trades" popovertargetaction="hide">ascending</button>
-            </li>
-            <li class="entry">
-              <button type="button" class="item sub-title"
-                      popovertarget="sort-trades" popovertargetaction="hide">descending</button>
-            </li>
-            <li class="entry">
-              <button type="button" class="item sub-title"
-                      popovertarget="sort-trades" popovertargetaction="hide">as dealt</button>
-            </li>
-          </menu>
-          <button type="button" class="resize-handle"
-                  aria-label="resize trades"></button>
+      <th scope="col" class="cell trades header-cell" aria-label="trades">trades
+        <button type="button" class="menu-toggle rounded-corners"
+                popovertarget="sort-trades" aria-label="sort trades"></button>
+        <menu id="sort-trades" tabindex="-1" popover="auto" aria-label="sort trades by"
+              class="menu field rounded-corners lifted">
+          <li class="entry">
+            <button type="button" class="item sub-title"
+                    popovertarget="sort-trades" popovertargetaction="hide">ascending</button>
+          </li>
+          <li class="entry">
+            <button type="button" class="item sub-title"
+                    popovertarget="sort-trades" popovertargetaction="hide">descending</button>
+          </li>
+          <li class="entry">
+            <button type="button" class="item sub-title"
+                    popovertarget="sort-trades" popovertargetaction="hide">reset</button>
+          </li>
+        </menu>
+        <button type="button" class="resize-handle"
+                aria-label="resize trades"></button>
       </th>
-      <th scope="col" class="cell buys header-cell">
-        <div class="header-cell-content">buys
-          <button type="button" class="menu-toggle rounded-corners"
-                  popovertarget="sort-buys" aria-label="sort buys"></button>
-          <menu id="sort-buys" popover="auto"
-                class="menu field rounded-corners lifted">
-            <li class="entry">
-              <button type="button" class="item sub-title"
-                      popovertarget="sort-buys" popovertargetaction="hide">ascending</button>
-            </li>
-            <li class="entry">
-              <button type="button" class="item sub-title"
-                      popovertarget="sort-buys" popovertargetaction="hide">descending</button>
-            </li>
-            <li class="entry">
-              <button type="button" class="item sub-title"
-                      popovertarget="sort-buys" popovertargetaction="hide">as dealt</button>
-            </li>
-          </menu>
-          <button type="button" class="resize-handle"
-                  aria-label="resize buys"></button>
+      <th scope="col" class="cell buys header-cell" aria-label="buys">buys
+        <button type="button" class="menu-toggle rounded-corners"
+                popovertarget="sort-buys" aria-label="sort buys"></button>
+        <menu id="sort-buys" tabindex="-1" popover="auto" aria-label="sort buys by"
+              class="menu field rounded-corners lifted">
+          <li class="entry">
+            <button type="button" class="item sub-title"
+                    popovertarget="sort-buys" popovertargetaction="hide">ascending</button>
+          </li>
+          <li class="entry">
+            <button type="button" class="item sub-title"
+                    popovertarget="sort-buys" popovertargetaction="hide">descending</button>
+          </li>
+          <li class="entry">
+            <button type="button" class="item sub-title"
+                    popovertarget="sort-buys" popovertargetaction="hide">reset</button>
+          </li>
+        </menu>
+        <button type="button" class="resize-handle"
+                aria-label="resize buys"></button>
       </th>
-      <th scope="col" class="cell sells header-cell">
-        <div class="header-cell-content">sells
-          <button type="button" class="menu-toggle rounded-corners"
-                  popovertarget="sort-sells" aria-label="sort sells"></button>
-          <menu id="sort-sells" popover="auto"
-                class="menu field rounded-corners lifted">
-            <li class="entry">
-              <button type="button" class="item sub-title"
-                      popovertarget="sort-sells" popovertargetaction="hide">ascending</button>
-            </li>
-            <li class="entry">
-              <button type="button" class="item sub-title"
-                      popovertarget="sort-sells" popovertargetaction="hide">descending</button>
-            </li>
-            <li class="entry">
-              <button type="button" class="item sub-title"
-                      popovertarget="sort-sells" popovertargetaction="hide">as dealt</button>
-            </li>
-          </menu>
-          <button type="button" class="resize-handle"
-                  aria-label="resize sells"></button>
+      <th scope="col" class="cell sells header-cell" aria-label="sells">sells
+        <button type="button" class="menu-toggle rounded-corners"
+                popovertarget="sort-sells" aria-label="sort sells"></button>
+        <menu id="sort-sells" tabindex="-1" popover="auto" aria-label="sort sells by"
+              class="menu field rounded-corners lifted">
+          <li class="entry">
+            <button type="button" class="item sub-title"
+                    popovertarget="sort-sells" popovertargetaction="hide">ascending</button>
+          </li>
+          <li class="entry">
+            <button type="button" class="item sub-title"
+                    popovertarget="sort-sells" popovertargetaction="hide">descending</button>
+          </li>
+          <li class="entry">
+            <button type="button" class="item sub-title"
+                    popovertarget="sort-sells" popovertargetaction="hide">reset</button>
+          </li>
+        </menu>
+        <button type="button" class="resize-handle"
+                aria-label="resize sells"></button>
       </th>
-      <th scope="col" class="cell volume header-cell">
-        <div class="header-cell-content">volume
-          <button type="button" class="menu-toggle rounded-corners"
-                  popovertarget="sort-volume" aria-label="sort volume"></button>
-          <menu id="sort-volume" popover="auto"
-                class="menu field rounded-corners lifted">
-            <li class="entry">
-              <button type="button" class="item sub-title"
-                      popovertarget="sort-volume" popovertargetaction="hide">ascending</button>
-            </li>
-            <li class="entry">
-              <button type="button" class="item sub-title"
-                      popovertarget="sort-volume" popovertargetaction="hide">descending</button>
-            </li>
-            <li class="entry">
-              <button type="button" class="item sub-title"
-                      popovertarget="sort-volume" popovertargetaction="hide">as dealt</button>
-            </li>
-          </menu>
-          <button type="button" class="resize-handle"
-                  aria-label="resize volume"></button>
+      <th scope="col" class="cell volume header-cell" aria-label="volume">volume
+        <button type="button" class="menu-toggle rounded-corners"
+                popovertarget="sort-volume" aria-label="sort volume"></button>
+        <menu id="sort-volume" tabindex="-1" popover="auto" aria-label="sort volume by"
+              class="menu field rounded-corners lifted">
+          <li class="entry">
+            <button type="button" class="item sub-title"
+                    popovertarget="sort-volume" popovertargetaction="hide">ascending</button>
+          </li>
+          <li class="entry">
+            <button type="button" class="item sub-title"
+                    popovertarget="sort-volume" popovertargetaction="hide">descending</button>
+          </li>
+          <li class="entry">
+            <button type="button" class="item sub-title"
+                    popovertarget="sort-volume" popovertargetaction="hide">reset</button>
+          </li>
+        </menu>
+        <button type="button" class="resize-handle"
+                aria-label="resize volume"></button>
       </th>
-      <th scope="col" class="cell vwap header-cell">
-        <div class="header-cell-content">vwap
-          <button type="button" class="menu-toggle rounded-corners"
-                  popovertarget="sort-vwap" aria-label="sort vwap"></button>
-          <menu id="sort-vwap" popover="auto"
-                class="menu field rounded-corners lifted">
-            <li class="entry">
-              <button type="button" class="item sub-title"
-                      popovertarget="sort-vwap" popovertargetaction="hide">ascending</button>
-            </li>
-            <li class="entry">
-              <button type="button" class="item sub-title"
-                      popovertarget="sort-vwap" popovertargetaction="hide">descending</button>
-            </li>
-            <li class="entry">
-              <button type="button" class="item sub-title"
-                      popovertarget="sort-vwap" popovertargetaction="hide">as dealt</button>
-            </li>
-          </menu>
-          <button type="button" class="resize-handle"
-                  aria-label="resize vwap"></button>
+      <th scope="col" class="cell vwap header-cell" aria-label="vwap">vwap
+        <button type="button" class="menu-toggle rounded-corners"
+                popovertarget="sort-vwap" aria-label="sort vwap"></button>
+        <menu id="sort-vwap" tabindex="-1" popover="auto" aria-label="sort vwap by"
+              class="menu field rounded-corners lifted">
+          <li class="entry">
+            <button type="button" class="item sub-title"
+                    popovertarget="sort-vwap" popovertargetaction="hide">ascending</button>
+          </li>
+          <li class="entry">
+            <button type="button" class="item sub-title"
+                    popovertarget="sort-vwap" popovertargetaction="hide">descending</button>
+          </li>
+          <li class="entry">
+            <button type="button" class="item sub-title"
+                    popovertarget="sort-vwap" popovertargetaction="hide">reset</button>
+          </li>
+        </menu>
+        <button type="button" class="resize-handle"
+                aria-label="resize vwap"></button>
       </th>
-      <th scope="col" class="cell change header-cell">
-        <div class="header-cell-content">change
-          <button type="button" class="menu-toggle rounded-corners"
-                  popovertarget="sort-change" aria-label="sort change"></button>
-          <menu id="sort-change" popover="auto"
-                class="menu field rounded-corners lifted">
-            <li class="entry">
-              <button type="button" class="item sub-title"
-                      popovertarget="sort-change" popovertargetaction="hide">ascending</button>
-            </li>
-            <li class="entry">
-              <button type="button" class="item sub-title"
-                      popovertarget="sort-change" popovertargetaction="hide">descending</button>
-            </li>
-            <li class="entry">
-              <button type="button" class="item sub-title"
-                      popovertarget="sort-change" popovertargetaction="hide">as dealt</button>
-            </li>
-          </menu>
-          <button type="button" class="resize-handle"
-                  aria-label="resize change"></button>
+      <th scope="col" class="cell change header-cell" aria-label="change">change
+        <button type="button" class="menu-toggle rounded-corners"
+                popovertarget="sort-change" aria-label="sort change"></button>
+        <menu id="sort-change" tabindex="-1" popover="auto" aria-label="sort change by"
+              class="menu field rounded-corners lifted">
+          <li class="entry">
+            <button type="button" class="item sub-title"
+                    popovertarget="sort-change" popovertargetaction="hide">ascending</button>
+          </li>
+          <li class="entry">
+            <button type="button" class="item sub-title"
+                    popovertarget="sort-change" popovertargetaction="hide">descending</button>
+          </li>
+          <li class="entry">
+            <button type="button" class="item sub-title"
+                    popovertarget="sort-change" popovertargetaction="hide">reset</button>
+          </li>
+        </menu>
+        <button type="button" class="resize-handle"
+                aria-label="resize change"></button>
       </th>
     </tr>
     </thead>
@@ -231,46 +224,3 @@
   </table>
   <output class="move-report off-screen"></output>
 </section>
-
-<template id="column-ghost">
-  <table class="fancy-table column-ghost" aria-hidden="true">
-    <thead class="header">
-    <tr class="row">
-      <th scope="col" class="cell header-cell">
-        <div class="header-cell-content"></div>
-      </th>
-    </tr>
-    </thead>
-    <tbody class="body">
-    <tr class="row"><td class="cell"></td></tr>
-    <tr class="row"><td class="cell"></td></tr>
-    <tr class="row"><td class="cell"></td></tr>
-    <tr class="row"><td class="cell"></td></tr>
-    <tr class="row"><td class="cell"></td></tr>
-    </tbody>
-  </table>
-</template>
-
-<template id="row-ghost">
-  <table class="fancy-table column-ghost" aria-hidden="true">
-    <tbody class="body">
-    <tr class="row">
-      <th scope="row" class="cell row-header">
-        <span class="grip">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16"
-               fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
-            <path d="M4 9.5h16"/>
-            <path d="M4 14.5h16"/>
-          </svg>
-        </span>
-      </th>
-        <td class="cell"></td>
-        <td class="cell"></td>
-        <td class="cell"></td>
-        <td class="cell"></td>
-        <td class="cell"></td>
-        <td class="cell"></td>
-    </tr>
-    </tbody>
-  </table>
-</template>

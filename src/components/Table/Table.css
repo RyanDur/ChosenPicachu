@@ -35,7 +35,18 @@
   }
 
   .header-cell {
-    padding: 0;
+    position: relative;
+    height: var(--base-x-5);
+    vertical-align: middle;
+    padding: 0 0 0 var(--base-x-1_25);
+
+    &:has(> .resize-handle) {
+      padding-inline-end: var(--base-x-2);
+    }
+
+    &:has(> .menu-toggle) {
+      padding-inline-end: var(--base-x-5_5);
+    }
   }
 
   .header .header-cell {
@@ -48,29 +59,13 @@
   }
 }
 
-.header-cell-content {
-  display: grid;
-  grid-template-columns: 1fr;
-  align-items: center;
-  column-gap: var(--base);
-  min-height: var(--base-x-5);
-  padding-inline-start: var(--base-x-1_25);
-}
-
-.header-cell-content:has(> .menu-toggle),
-.header-cell-content:has(> .resize-handle) {
-  grid-template-columns: 1fr auto;
-}
-
-.header-cell-content:has(> .menu-toggle):has(> .resize-handle) {
-  grid-template-columns: 1fr auto auto;
-}
-
 .resize-handle {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0;
   border: none;
   padding: 0;
   background: none;
-  align-self: stretch;
   cursor: col-resize;
   touch-action: none;
   display: grid;
