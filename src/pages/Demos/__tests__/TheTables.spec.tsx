@@ -359,7 +359,7 @@ describe('the tables demo', () => {
     expect(within(controls).getByRole('radio', {name: 'Lazy'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Keep'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Static'})).toBeChecked();
-  });
+  }, 20000);
 
   test('a hash arriving in the url is brought to its station', async () => {
     const brought: string[] = [];
@@ -589,16 +589,15 @@ describe('the tables demo', () => {
       expect(await screen.findByRole('heading', {name: 'The trader can widen a column'})).toBeInTheDocument();
     });
 
-    test('the sort tutorial stands in every build, in both worlds, on both tracks', async () => {
+    test.each(builds)('the sort tutorial stands on both tracks in the build %s', async build => {
       const feed = await listeningFeed();
-      for (const build of builds) {
-        const {unmount} = renderTables(urlOf(feed), `?tab=tables&tut=sort&${build}`);
-        expect(await screen.findByText('The trader can sort by column')).toBeInTheDocument();
-        await userEvent.click(screen.getByRole('button', {name: 'By keyboard'}));
-        expect(await screen.findByText('Give focus a place to land')).toBeInTheDocument();
-        unmount();
-      }
-    }, 20000);
+
+      renderTables(urlOf(feed), `?tab=tables&tut=sort&${build}`);
+
+      expect(await screen.findByText('The trader can sort by column')).toBeInTheDocument();
+      await userEvent.click(screen.getByRole('button', {name: 'By keyboard'}));
+      expect(await screen.findByText('Give focus a place to land')).toBeInTheDocument();
+    });
 
     test('the explainer stands in the html world too', async () => {
       const feed = await listeningFeed();

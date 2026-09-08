@@ -43,7 +43,7 @@ export const eagerPace = (world: World, headerSource: string, buildSrc: string):
           ]}/>}
         {world === 'react'
           ? <Snippet label="HTML" lines={[
-            plain('<DraggableColumn key="trades" name="trades">trades ...</DraggableColumn>'),
+            plain('<DraggableColumn column="trades">trades ...</DraggableColumn>'),
             aside('{/* same key, new seat: React moves the node, not a copy */}')
           ]}/>
           : <Snippet label="TS" lines={[

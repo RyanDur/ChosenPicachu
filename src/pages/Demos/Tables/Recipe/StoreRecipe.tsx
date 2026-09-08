@@ -113,7 +113,7 @@ const actionsAreData =
           ...unit(reducerSource, 'export const tableReducer'), gap,
           ...unit(reducerSource, 'const ordering = '), gap,
           ...unit(stateSource, 'export const reorder'), gap,
-          ...unit(stateSource, 'export const seat'), gap,
+          ...unit(stateSource, 'export const seat = '), gap,
           ...unit(selectorsSource, 'export const selectStanding'), gap,
           ...unit(demosSource, 'export const demosStore'),
           aside('// a slice is a reducer and its beginning; six table reducers read the type in turn; the standing is a question, not a feed')
