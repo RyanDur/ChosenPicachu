@@ -3,7 +3,7 @@
   overflow-x: auto;
   overscroll-behavior-x: contain;
 
-  .fancy-table:not(.column-ghost) {
+  .fancy-table {
     table-layout: fixed;
     width: 100%;
     min-width: 86rem;
@@ -20,7 +20,7 @@
 
 @media (max-width: 600px) {
   .aggregations {
-    .fancy-table:not(.column-ghost) {
+    .fancy-table {
       min-width: 64rem;
     }
 

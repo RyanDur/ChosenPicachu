@@ -33,7 +33,7 @@
     justify-self: flex-end;
   }
 
-  .fancy-table:not(.column-ghost) {
+  .fancy-table {
     grid-area: table;
     table-layout: fixed;
     width: 100%;
@@ -42,6 +42,7 @@
       min-width: 64rem;
     }
   }
+
 
   .last-column {
     display: flex;
@@ -65,9 +66,9 @@
 
   .cell.full-name { width: 22%; }
   .cell.home-city { width: 18%; }
-  .cell.age { width: 9%; }
-  .cell.friends { width: 26%; }
-  .cell.works-from-home { width: 25%; }
+  .cell.age { width: 14%; }
+  .cell.friends { width: 24%; }
+  .cell.works-from-home { width: 22%; }
 }
 
 @media (width <= 600px) {

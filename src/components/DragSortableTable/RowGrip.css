@@ -1,5 +1,4 @@
-.sortable .grip,
-.column-ghost .grip {
+.sortable .grip {
   border: none;
   padding: 0;
   background: none;
