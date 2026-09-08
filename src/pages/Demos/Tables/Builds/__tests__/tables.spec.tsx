@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {fireEvent, render, screen, within} from '@testing-library/react';
+import {act, fireEvent, render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {Measures, measures} from '../../Aggregations/cells';
 import {EagerKeepStaticTable} from '../EagerKeepStaticTable';
@@ -523,7 +523,7 @@ describe('resizable columns', () => {
     surveyed();
 
     const handle = screen.getByRole('button', {name: 'resize window'});
-    handle.focus();
+    act(() => handle.focus());
     await userEvent.keyboard('{ArrowRight}');
     expect(header('window').style.getPropertyValue('--share')).toBe('52%');
     expect(header('trades').style.getPropertyValue('--share')).toBe('38%');
@@ -551,7 +551,7 @@ describe('resizable columns', () => {
     surveyed();
 
     const handle = screen.getByRole('button', {name: 'resize window'});
-    handle.focus();
+    act(() => handle.focus());
     await userEvent.keyboard('{ArrowRight}');
 
     expect(announced()).toEqual(['window resized to 52%']);
@@ -562,7 +562,7 @@ describe('resizable columns', () => {
     surveyed();
 
     const handle = screen.getByRole('button', {name: 'resize window'});
-    handle.focus();
+    act(() => handle.focus());
     await userEvent.keyboard('{ArrowRight}'.repeat(30));
     expect(header('window').style.getPropertyValue('--share')).toBe('85%');
     expect(header('trades').style.getPropertyValue('--share')).toBe('5%');
