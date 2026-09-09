@@ -142,7 +142,7 @@ describe('the tables demo', () => {
     expect(labels).toEqual(['session', 'this minute', 'last 5 minutes', 'last 15 minutes', 'this hour']);
   });
 
-  test('a criterion from a column menu rules the windows', async () => {
+  test('a direction from a column menu sorts the windows', async () => {
     const feed = await listeningFeed();
 
     renderTables(urlOf(feed));
@@ -226,7 +226,7 @@ describe('the tables demo', () => {
     expect(controls).not.toHaveTextContent(/Neighbours swap/);
   });
 
-  test('a change of table stands a fresh arrangement: the seating belongs to the table, not the page', async () => {
+  test('the arrangement survives a change of table: the order belongs to the page', async () => {
     const feed = await listeningFeed();
 
     renderTables(urlOf(feed));
@@ -246,8 +246,8 @@ describe('the tables demo', () => {
     await userEvent.click(within(controls).getByRole('radio', {name: 'Static'}));
 
     expect(screen.getByText('<LazyHideStaticTable/>')).toBeVisible();
-    expect(windows().slice(0, 2)).toEqual(['this minute', 'last 5 minutes']);
-    expect(headers().slice(0, 3)).toEqual(['window', 'trades', 'buys']);
+    expect(windows().slice(0, 2)).toEqual(['last 5 minutes', 'this minute']);
+    expect(headers().slice(0, 3)).toEqual(['window', 'buys', 'trades']);
   });
 
   test('the recipe teaches whatever the dials are set to', async () => {
@@ -492,9 +492,9 @@ describe('the tables demo', () => {
     expect(recipe).toBeVisible();
     expect(recipe).toHaveTextContent(/popover/);
     expect(recipe).toHaveTextContent(/position-area/);
-    expect(recipe).toHaveTextContent(/The rule is a drape, not a bake/);
-    expect(recipe).toHaveTextContent(/A hand ends the rule/);
-    expect(recipe).toHaveTextContent(/ruledBy\(column, direction\) : reset\(arrival\)/);
+    expect(recipe).toHaveTextContent(/The sort keeps sorting/);
+    expect(recipe).toHaveTextContent(/A hand ends the sort/);
+    expect(recipe).toHaveTextContent(/onSorted\?\.\(\{column, direction\}\)/);
     expect(recipe).not.toHaveTextContent(/Dress the menu as a card/);
     expect(within(recipe).getByRole('link', {name: 'position-area'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/CSS/position-area'));
@@ -504,7 +504,7 @@ describe('the tables demo', () => {
     expect(screen.queryByRole('region', {name: 'table controls'})).toBeNull();
     expect(screen.getByRole('region', {name: 'the living table'})).toBeVisible();
 
-    expect(recipe).toHaveTextContent(/Rule directly/);
+    expect(recipe).toHaveTextContent(/Sort directly/);
     expect(recipe).toHaveTextContent(/a menu click has none/);
   });
 

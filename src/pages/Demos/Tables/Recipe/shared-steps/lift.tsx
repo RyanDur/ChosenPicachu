@@ -18,8 +18,8 @@ export const liftOnce = (world: World, headerSource: string, buildSrc: string): 
         ? <Says>The hand is CSS before anything happens, grab on hover, grabbing on press, and
           touch-action: none is why the pointer can drag on touch at all. On pointerdown, the
           header takes the survey, takes the pointer, and lifts: one dispatch, and the store
-          learns which column is <Term word="aloft">carried</Term> and holds the drag beside the
-          columns and the rows, in a slice of its own that a table with no carry never
+          holds the drag beside the columns and the seats, the one mark of what
+          is <Term word="aloft">carried</Term>, a key that a table with no carry never
           has. One word in the code comes from a small library
           called <a className="signpost"
             href="https://ryandur.github.io/sand/"
@@ -29,7 +29,7 @@ export const liftOnce = (world: World, headerSource: string, buildSrc: string): 
         : <Says>The hand is CSS before anything happens, grab on hover, grabbing on press, and
           touch-action: none is why the pointer can drag on touch at all. On pointerdown,
           JavaScript takes the survey and the pointer, and one dispatch puts the drag in the
-          store beside the columns and the rows, in a slice of its own. One word in the code
+          store beside the columns and the seats, the one mark of what is carried. One word in the code
           comes from a small library called <a className="signpost"
             href="https://ryandur.github.io/sand/"
             target="_blank"
@@ -41,14 +41,14 @@ export const liftOnce = (world: World, headerSource: string, buildSrc: string): 
             ...span(headerSource, 'onPointerDown={travels ? columnLift(column', 'onPointerDown={travels ? columnLift(column'), gap,
             ...unit(headerSource, 'const lift = '), gap,
             ...unit(stateSource, 'export const lifted'), gap,
-            ...unit(stateSource, 'export const lift')
+            ...unit(stateSource, 'export const lift = ')
           ]}/>
           : <Snippet label="TS" lines={[
             ...span(buildSrc, "th.addEventListener('pointerdown', columnLift",
               "th.addEventListener('pointerdown', columnLift"), gap,
             ...unit(buildSrc, '  const lift = '), gap,
             ...unit(stateSource, 'export const lifted'), gap,
-            ...unit(stateSource, 'export const lift')
+            ...unit(stateSource, 'export const lift = ')
           ]}/>}
         <Snippet label="TS" lines={[
           ...unit(liftSource, 'export const columnLift'),

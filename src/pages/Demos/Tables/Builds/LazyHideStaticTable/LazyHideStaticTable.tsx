@@ -1,7 +1,9 @@
 import {FC} from 'react';
 import {ResizeHandle} from '@components/Table/ResizeHandle';
 import {SortMenu} from '@components/DragSortableTable/SortMenu';
-import {Measures, measures, seated} from '../../Aggregations/cells';
+import {Measured, Measures, seated} from '../../Aggregations/cells';
+import {BodyEvents, HeaderEvents} from '@components/DragSortableTable/context';
+import {TableColumn} from '@components/DragSortableTable/table-state';
 import {Body, DragSortableTable, Headers, Row} from '@components/DragSortableTable';
 import {Column} from './Column';
 import {DraggableColumn} from './DraggableColumn';
@@ -10,10 +12,15 @@ import {Cell} from './Cell';
 import '@components/DragSortableTable/sortable.css';
 import './LazyHideStaticTable.css';
 
-export const LazyHideStaticTable: FC<{rows: readonly Measures[]}> = ({rows}) =>
-  <DragSortableTable className="fancy-table sortable apportioned" columns={measures} rows={seated(rows)}>
+type Props = HeaderEvents & BodyEvents & {
+  columns: readonly TableColumn<Measured>[];
+  rows: readonly Measures[];
+};
+
+export const LazyHideStaticTable: FC<Props> = ({columns, rows, onColumnMoved, onSorted, onRowMoved}) =>
+  <DragSortableTable className="fancy-table sortable apportioned" columns={columns} rows={seated(rows)}>
     <thead className="header">
-    <Headers className="row">
+    <Headers className="row" onColumnMoved={onColumnMoved} onSorted={onSorted}>
       <Column column="window" className="cell window header-cell">window<ResizeHandle column="window"/></Column>
       <DraggableColumn column="trades" className="cell trades header-cell">trades<SortMenu column="trades"/><ResizeHandle column="trades"/></DraggableColumn>
       <DraggableColumn column="buys" className="cell buys header-cell">buys<SortMenu column="buys"/><ResizeHandle column="buys"/></DraggableColumn>
@@ -23,7 +30,7 @@ export const LazyHideStaticTable: FC<{rows: readonly Measures[]}> = ({rows}) =>
       <Column column="change" className="cell change header-cell">change<SortMenu column="change"/><ResizeHandle column="change"/></Column>
     </Headers>
     </thead>
-    <Body className="body">
+    <Body className="body" onRowMoved={onRowMoved}>
     {rows.map(row => {
       const window = row.window?.display ?? '';
       return <Row key={window} row={window} className="row">

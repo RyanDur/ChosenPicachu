@@ -1,11 +1,11 @@
 import {Middleware, Store, store} from '@components/store';
 import {TableAction} from './actions';
+import {TableState, resting} from './table-state';
 import {tableReducer} from './reducer';
-import {TableState} from './table-state';
 
-export type TableStore<C> = Store<TableState<C>, TableAction>;
+export type TableStore = Store<TableState, TableAction>;
 
-export type TableMiddleware<C> = Middleware<TableState<C>, TableAction>;
+export type TableMiddleware = Middleware<TableState, TableAction>;
 
-export const tableStore = <C>(initial: TableState<C>, ...middleware: TableMiddleware<C>[]): TableStore<C> =>
-  store<TableState<C>, TableAction>({slice: {initial, reduce: tableReducer}, middleware});
+export const tableStore = (...middleware: TableMiddleware[]): TableStore =>
+  store({slice: {initial: resting, reduce: tableReducer}, middleware});

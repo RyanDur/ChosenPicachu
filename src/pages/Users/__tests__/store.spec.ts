@@ -11,7 +11,7 @@ describe('the users store', () => {
 
     store.dispatch(usersArrived(someUsers));
 
-    expect(store.state.users).toBe(someUsers);
+    expect(store.state.users).toEqual(someUsers);
   });
 
   it('opening asks the api for everyone, and they arrive through the middleware', async () => {

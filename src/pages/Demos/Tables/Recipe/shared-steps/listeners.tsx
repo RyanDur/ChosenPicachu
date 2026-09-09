@@ -19,8 +19,9 @@ export const listenersOnce = (world: World, buildSrc: string): ReactNode =>
         and never needed the discipline; the vanilla page attaches once and cannot live without
         it.</Says>
       <Says>Writing back is the same shape in reverse: every handler ends in a dispatch of an
-        action, columnMovedBeside, rowLifted, dropped, a record of what happened that one reducer
-        turns into the next state. Ask, dispatch and subscribe together
+        action, columnMovedBeside, carrying, dropped, a record of what happened that one reducer
+        turns into the next state, and what changes the order goes up to the page as an event,
+        onColumnMoved, onRowMoved, and comes back down as the next order. Ask, dispatch and subscribe together
         are the store, and it is one plain object that both worlds mount unchanged. What differs is
         who subscribes: React subscribes a component, which re-renders; the vanilla build subscribes
         a reconcile, which moves nodes. Every listener from here on speaks to the store and nothing
@@ -29,7 +30,6 @@ export const listenersOnce = (world: World, buildSrc: string): ReactNode =>
       <Codes>
         <Snippet label="TS" lines={[
           ...unit(storeSource, 'export type Store'), gap,
-          ...unit(storeSource, 'export const store'), gap,
           ...span(liftSource, 'export const columnLift', ') => (event: GrabEvent): void => {'),
           aside('// the order is a question the event asks, not a value the listener keeps')
         ]}/>
@@ -38,8 +38,8 @@ export const listenersOnce = (world: World, buildSrc: string): ReactNode =>
             ...unit(elementSource, 'export const DragSortableTable')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...span(buildSrc, 'const trades = demosStore(', 'const store = tableStore('), gap,
-            ...span(buildSrc, 'store.subscribe(', 'store.subscribe('), gap,
+            ...span(buildSrc, 'const trades = demosStore(', 'const hand = tableStore('), gap,
+            ...span(buildSrc, 'arrangement.subscribe(', 'hand.subscribe('), gap,
             ...span(buildSrc, 'const mounted: MountedTable', 'const mounted: MountedTable')
           ]}/>}
       </Codes>

@@ -11,7 +11,7 @@ import pushedCss from '@pages/Demos/DragAndDrop/EagerKeepAnimatedList/EagerKeepA
 
 describe('the hand-written tutorial fragments still tell the truth', () => {
   test.each([
-    ['headers are placed by the order', pageSource, '<Headers className="row">'],
+    ['headers are placed by the order', pageSource, '<Headers className="row" onColumnMoved={onColumnMoved} onSorted={onSorted}>'],
     ['the lifted header is carried by the offset from home', headerSource, "'--carried-by': translation(offset)"],
     ['the lifted column is carried across rows', cellSource, "'--carried-by': translation(columnOffset ?? rowOffset)"],
     ['headers are real column headers', headerSource, 'scope="col"'],

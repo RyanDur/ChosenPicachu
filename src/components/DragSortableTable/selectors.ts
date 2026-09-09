@@ -1,29 +1,16 @@
 import {has, not} from '@ryandur/sand';
 import {ColumnWidths, neighborOf} from '@components/Table/shares';
-import {Column, ColumnDrag, Drag, RowDrag, Seat, Seated, TableState, carriedOffset, orderOf, seatingOf, standingOf, widthsOf} from './table-state';
+import {TableColumn, ColumnDrag, ColumnShove, Drag, Labelled, Marks, RowDrag, RowShove, carriedOffset} from './table-state';
+import {TableView} from './context';
 import {anchored} from './survey';
-import {ranked} from './sorting';
 import {Drift} from './travel';
 
-export const selectOrder = orderOf;
-export const selectWidths: <C>(state: TableState<C>) => ColumnWidths | undefined = widthsOf;
-export const selectColumns = <C>({columns}: TableState<C>): readonly Column<C>[] => columns;
-export const selectSeats = <C>({seats}: TableState<C>): readonly Seat[] => seats;
+export const selectOrder = ({columns}: TableView): readonly string[] => columns.map(({name}) => name);
+export const selectStanding = ({rows}: TableView): readonly string[] => rows.map(({key}) => key);
+export const selectWidths = ({state}: TableView): ColumnWidths | undefined => state.widths;
+export const selectColumns = ({columns}: TableView): readonly TableColumn<Labelled>[] => columns;
 
-// the seats as they stand on screen: every seated key, ranked by the rule while one holds, as the hand left them otherwise
-export const selectStanding = <C>(state: TableState<C>, seated: readonly Seated[]): readonly string[] => {
-  const standing = seatingOf(standingOf(state), seated.map(({key}) => key));
-  const {rule} = state;
-  if (!has(rule)) {
-    return standing;
-  }
-  const valueOf = (key: string) => seated.find(seat => seat.key === key)?.values[rule.name];
-  return ranked(standing, valueOf, rule.direction);
-};
-
-export const selectArrival = <C>(_state: TableState<C>, seated: readonly Seated[]): readonly string[] => seated.map(({key}) => key);
-
-export const columnNamed = <C>(name: string) => ({columns}: TableState<C>): Column<C> => {
+export const columnNamed = (name: string) => ({columns}: TableView): TableColumn<Labelled> => {
   const found = columns.find(column => column.name === name);
   if (found === undefined) {
     throw new Error(`no column named ${name}`);
@@ -31,32 +18,47 @@ export const columnNamed = <C>(name: string) => ({columns}: TableState<C>): Colu
   return found;
 };
 
-export const rowAt = (key: string) => <C>({seats}: TableState<C>): Seat =>
-  seats.find(seat => seat.key === key) ?? {key, carried: false};
+export const widthOfColumn = (name: string) => ({state}: TableView): number | undefined => state.widths?.[name];
 
-export const positionOfColumn = (name: string) => <C>(state: TableState<C>): number => orderOf(state).indexOf(name);
+export const columnMarks = (name: string) => ({state}: TableView): Marks<ColumnShove> => state.columnMarks[name] ?? {};
 
-export const positionOfRow = (key: string) => <C>(state: TableState<C>, seated: readonly Seated[]): number =>
-  selectStanding(state, seated).indexOf(key);
+export const rowMarks = (key: string) => ({state}: TableView): Marks<RowShove> => state.rowMarks[key] ?? {};
 
-export const selectColumnCount = <C>({columns}: TableState<C>): number => columns.length;
-export const selectRowCount = <C>(_state: TableState<C>, seated: readonly Seated[]): number => seated.length;
+export const positionOfColumn = (name: string) => (view: TableView): number => selectOrder(view).indexOf(name);
 
-export const columnTravels = (name: string) => <C>(state: TableState<C>): boolean =>
-  not(anchored(positionOfColumn(name)(state), selectColumnCount(state)));
+export const positionOfRow = (key: string) => (view: TableView): number => selectStanding(view).indexOf(key);
 
-export const neighbourOfColumn = (name: string) => <C>(state: TableState<C>): string => neighborOf(orderOf(state), name);
+export const selectColumnCount = ({columns}: TableView): number => columns.length;
+export const selectRowCount = ({rows}: TableView): number => rows.length;
 
-export const selectDrag = <C>({drag}: TableState<C>): Drag | undefined => drag;
+export const columnTravels = (name: string) => (view: TableView): boolean =>
+  not(anchored(positionOfColumn(name)(view), selectColumnCount(view)));
 
-export const columnDrag = (name: string) => <C>({drag}: TableState<C>): ColumnDrag | undefined =>
-  drag?.axis === 'column' && drag.held === name ? drag : undefined;
+export const neighbourOfColumn = (name: string) => (view: TableView): string => neighborOf(selectOrder(view), name);
 
-export const rowDrag = (key: string) => <C>({drag}: TableState<C>): RowDrag | undefined =>
-  drag?.axis === 'row' && drag.held === key ? drag : undefined;
+export const selectDrag = ({state}: TableView): Drag | undefined => state.drag;
 
-export const offsetOfColumn = (name: string) => <C>(state: TableState<C>): Drift | undefined =>
-  has(columnDrag(name)(state)) ? carriedOffset(state) : undefined;
+export const columnDrag = (name: string) => ({state}: TableView): ColumnDrag | undefined =>
+  state.drag?.axis === 'column' && state.drag.held === name ? state.drag : undefined;
 
-export const offsetOfRow = (key: string) => <C>(state: TableState<C>): Drift | undefined =>
-  has(rowDrag(key)(state)) ? carriedOffset(state) : undefined;
+export const rowDrag = (key: string) => ({state}: TableView): RowDrag | undefined =>
+  state.drag?.axis === 'row' && state.drag.held === key ? state.drag : undefined;
+
+export const columnHeld = (name: string) => (view: TableView): boolean => has(columnDrag(name)(view));
+
+export const rowHeld = (key: string) => (view: TableView): boolean => has(rowDrag(key)(view));
+
+export const selectCarriedOffset = (view: TableView): Drift | undefined =>
+  carriedOffset(view.state, selectOrder(view), selectStanding(view));
+
+export const offsetOfColumn = (name: string) => (view: TableView): Drift | undefined =>
+  columnHeld(name)(view) ? selectCarriedOffset(view) : undefined;
+
+export const offsetOfRow = (key: string) => (view: TableView): Drift | undefined =>
+  rowHeld(key)(view) ? selectCarriedOffset(view) : undefined;
+
+export const offsetOfColumnIn = (name: string, order: readonly string[]) => (view: TableView): Drift | undefined =>
+  columnHeld(name)(view) ? carriedOffset(view.state, order, selectStanding(view)) : undefined;
+
+export const offsetOfRowIn = (key: string, standing: readonly string[]) => (view: TableView): Drift | undefined =>
+  rowHeld(key)(view) ? carriedOffset(view.state, selectOrder(view), standing) : undefined;

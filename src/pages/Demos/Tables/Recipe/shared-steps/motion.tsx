@@ -1,7 +1,7 @@
 import {ReactNode} from 'react';
 import {MotionDial} from '../../../Controls';
 import {Codes, Reveal, Says, Snippet, Step, Words, aside} from '../../../Recipe';
-import {unit} from '../../../Recipe/carve';
+import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {frameSettle, gap, reducerSource, stateSource, surveySource} from './sources';
 
@@ -41,9 +41,8 @@ export const animatedMotion = (world: World, headerSource: string, cssSource: st
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...unit(headerSource, 'const beside = '), gap,
-            ...unit(headerSource, 'const movedTo = '), gap,
             ...unit(headerSource, 'const release = '), gap,
+            ...span(headerSource, 'onAnimationEnd={() => dispatch(settled', 'onAnimationEnd={() => dispatch(settled'), gap,
             ...unit(reducerSource, 'const motion = '), gap,
             ...unit(stateSource, 'export const shoveColumns'), gap,
             ...unit(stateSource, 'export const settle'),
@@ -54,7 +53,7 @@ export const animatedMotion = (world: World, headerSource: string, cssSource: st
             ...unit(buildSrc, 'const columnTo = '), gap,
             ...unit(buildSrc, 'const drop = '), gap,
             ...unit(frameSettle, 'const untilSettled = '),
-            aside('// the marks dress the cells; the stylesheet moves them; the lift undresses them')
+            aside('// the marks dress the cells; the stylesheet moves them; the cells undress when the keyframe ends')
           ]}/>}
         <Snippet label="TS" lines={[
           ...unit(surveySource, 'export const displacedBetween'), gap,

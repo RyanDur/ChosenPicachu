@@ -16,9 +16,9 @@ export const hideOrigin = (world: World, headerSource: string, cssSource: string
         hidden.</Says>
     </Words>
     <Reveal>
-      <Says>The <Term word="drift">drift</Term> is state, in a slice of its own with its own reducer: the survey
+      <Says>The <Term word="drift">drift</Term> is state on the drag, with a reducer of its own: the survey
         from the lift, the box the thing was grabbed in, and how far the pointer has moved
-        since. Every move dispatches the pointer, and one selector turns the slice into the
+        since. Every move dispatches the pointer, and one selector turns the drag into the
         offset from the cell’s home: the grab box plus the drift, minus where the column rests
         in the order as it stands now. That subtraction is why a settle mid-drag never makes
         the carried column jump: the order changes, the home moves, the offset moves with
@@ -47,7 +47,7 @@ export const hideOrigin = (world: World, headerSource: string, cssSource: string
           ...unit(stateSource, 'export const drift'), gap,
           ...unit(stateSource, 'export const carriedOffset'), gap,
           ...unit(selectorsSource, 'export const offsetOfColumn'),
-          aside('// the drift is its own slice; the offset is a selector over it and the order')
+          aside('// the drift rides in the drag; the offset is a selector over it and the order')
         ]}/>
         <Snippet label="CSS" lines={[
           ...unit(cssSource, '.sortable .carried {'),

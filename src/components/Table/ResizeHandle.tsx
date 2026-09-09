@@ -3,7 +3,7 @@ import {Maybe, maybe, nothing} from '@ryandur/sand';
 import {Landed} from '@components/DragSortableTable/report';
 import {MoveReport} from '@components/DragSortableTable/MoveReport';
 import {useTableDispatch, useTableSelector} from '@components/DragSortableTable/context';
-import {columnNamed, neighbourOfColumn, selectOrder, selectWidths} from '@components/DragSortableTable/selectors';
+import {neighbourOfColumn, selectOrder, selectWidths, widthOfColumn} from '@components/DragSortableTable/selectors';
 import {awoken, tradedBy} from '@components/DragSortableTable/actions';
 import {Grip, grippedAt, measuredWidths, resizeArrows, resizeLabel, soughtTrade, traded} from './shares';
 
@@ -13,14 +13,14 @@ export const ResizeHandle: FC<{column: string}> = ({column}) => {
     const order = useTableSelector(selectOrder);
     const neighbour = useTableSelector(neighbourOfColumn(column));
     const widths = useTableSelector(selectWidths);
-    const {width} = useTableSelector(columnNamed(column));
+    const width = useTableSelector(widthOfColumn(column));
     const [grip, setGrip] = useState<Maybe<Grip>>(nothing());
     const [carried, setCarried] = useState(0);
 
     const awaken = (table: HTMLTableElement): void =>
         dispatch(awoken(measuredWidths(order, table)));
     const trade = (delta: number): void => {
-        dispatch(tradedBy(column, delta));
+        dispatch(tradedBy(column, neighbour, delta));
         maybe(widths).map(current =>
             setLanded({axis: 'share', name: column, share: traded(column, neighbour, delta)(current)[column]}));
     };

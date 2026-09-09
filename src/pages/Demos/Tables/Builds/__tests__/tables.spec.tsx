@@ -1,7 +1,10 @@
-import {FC} from 'react';
+import {FC, useReducer} from 'react';
 import {act, fireEvent, render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {Measures, measures} from '../../Aggregations/cells';
+import {Measured, Measures, measures, seated as projected} from '../../Aggregations/cells';
+import {BodyEvents, HeaderEvents} from '@components/DragSortableTable/context';
+import {TableColumn} from '@components/DragSortableTable/table-state';
+import {arrangementOf, arrangementReducer, arrived, columnMoved, rowMoved, sorted, standingOf} from '@components/DragSortableTable/arrangement';
 import {EagerKeepStaticTable} from '../EagerKeepStaticTable';
 import {EagerKeepAnimatedTable} from '../EagerKeepAnimatedTable';
 import {EagerHideStaticTable} from '../EagerHideStaticTable';
@@ -9,7 +12,7 @@ import {LazyKeepStaticTable} from '../LazyKeepStaticTable';
 import {LazyKeepAnimatedTable} from '../LazyKeepAnimatedTable';
 import {EagerHideAnimatedTable} from '../EagerHideAnimatedTable';
 
-type Table = FC<{rows: readonly Measures[]}>;
+type Table = FC<HeaderEvents & BodyEvents & {columns: readonly TableColumn<Measured>[]; rows: readonly Measures[]}>;
 
 const windows = ['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session'];
 
@@ -25,7 +28,29 @@ const measured = (window: string, trades: number): Measures => ({
 
 const startingRows = [3, 9, 5, 7, 1].map((trades, at) => measured(windows[at], trades));
 
-const seated = (Table: Table, rows: readonly Measures[]) => <Table rows={rows}/>;
+const windowOf = (row: Measures): string => row.window?.display ?? '';
+
+const Page: FC<{Table: Table; rows: readonly Measures[]}> = ({Table, rows}) => {
+  const [arrangement, dispatch] = useReducer(
+    arrangementReducer,
+    arrangementOf(measures.map(({name}) => name), rows.map(windowOf)));
+  const shown = projected(rows);
+  const valueOf = (row: string, column: string) => shown.find(({key}) => key === row)?.values[column];
+  const arranged = arrangementReducer(arrangement, arrived(rows.map(windowOf)));
+  const columns = arranged.columns.map(name => ({
+    name,
+    data: {label: name},
+    sorted: arranged.sort?.column === name ? arranged.sort.direction : undefined
+  }));
+  const standing = standingOf(arranged, valueOf).flatMap(key => rows.filter(row => windowOf(row) === key));
+
+  return <Table columns={columns} rows={standing}
+                onColumnMoved={({column, to}) => dispatch(columnMoved(column, to))}
+                onSorted={({column, direction}) => dispatch(sorted(column, direction))}
+                onRowMoved={({row, to, standing: shownStanding}) => dispatch(rowMoved(row, to, shownStanding))}/>;
+};
+
+const seated = (Table: Table, rows: readonly Measures[]) => <Page Table={Table} rows={rows}/>;
 
 const seat = (Table: Table, rows: readonly Measures[] = startingRows) => render(seated(Table, rows));
 
@@ -426,7 +451,7 @@ describe('sort criteria menus', () => {
   const retraded = (thisMinute: number): Measures[] => [measured('this minute', thisMinute), ...startingRows.slice(1)];
   const tradesHeader = (): HTMLElement => header('trades');
 
-  test('a criterion chosen from the column menu rules the rows', async () => {
+  test('a direction chosen from the column menu sorts the rows', async () => {
     seat(EagerKeepStaticTable);
 
     await userEvent.click(within(menuFor('sort trades')).getByText('descending'));
@@ -435,7 +460,7 @@ describe('sort criteria menus', () => {
     expect(tradesHeader()).toHaveAttribute('aria-sort', 'descending');
   });
 
-  test('the rule keeps sorting as the values change', async () => {
+  test('the sort keeps sorting as the values change', async () => {
     const {rerender} = seat(EagerKeepStaticTable);
 
     await userEvent.click(within(menuFor('sort trades')).getByText('ascending'));
@@ -455,7 +480,7 @@ describe('sort criteria menus', () => {
     expect(tradesHeader()).not.toHaveAttribute('aria-sort');
   });
 
-  test('a hand on a row ends the rule and keeps the standing order', async () => {
+  test('a hand on a row ends the sort and keeps the standing order', async () => {
     const {rerender} = seat(EagerKeepStaticTable);
 
     await userEvent.click(within(menuFor('sort trades')).getByText('descending'));

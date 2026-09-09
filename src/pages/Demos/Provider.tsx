@@ -17,3 +17,5 @@ export const DemosProvider = ({store, children}: PropsWithChildren<{store: Demos
 };
 
 export const useDemosSelector = <Slice,>(select: (state: DemosState) => Slice): Slice => select(useContext(Demos).state);
+
+export const useDemosDispatch = (): Dispatch<DemosAction> => useContext(Demos).dispatch;

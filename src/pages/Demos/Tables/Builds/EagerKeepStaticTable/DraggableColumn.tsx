@@ -4,11 +4,11 @@ import {classNames} from '@components/class-names';
 import {shareWidth} from '@components/Table';
 import {Landed} from '@components/DragSortableTable/report';
 import {MoveReport} from '@components/DragSortableTable/MoveReport';
-import {useTableDispatch, useTableSelector} from '@components/DragSortableTable/context';
-import {columnDrag, columnNamed, columnTravels, positionOfColumn, selectColumnCount, selectOrder, selectStanding} from '@components/DragSortableTable/selectors';
+import {useHeaderEvents, useTableDispatch, useTableSelector} from '@components/DragSortableTable/context';
+import {columnDrag, columnHeld, columnNamed, columnTravels, selectColumnCount, selectOrder, selectStanding, widthOfColumn} from '@components/DragSortableTable/selectors';
 import {columnUnder, interior} from '@components/DragSortableTable/survey';
 import {ColumnDrag} from '@components/DragSortableTable/table-state';
-import {carrying, orderedTo, released} from '@components/DragSortableTable/actions';
+import {carrying, released} from '@components/DragSortableTable/actions';
 import {Moving, eagerTravel, pointerTravel} from '@components/DragSortableTable/travel';
 import {Grab, columnLift} from '@components/DragSortableTable/lift';
 import {columnArrows} from '@components/DragSortableTable/arrows';
@@ -16,20 +16,22 @@ import '@components/DragSortableTable/Header.css';
 
 export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({column, className, children, ...th}) => {
   const dispatch = useTableDispatch();
+  const {onColumnMoved} = useHeaderEvents();
   const [landed, setLanded] = useState<Landed>();
   const order = useTableSelector(selectOrder);
   const standing = useTableSelector(selectStanding);
-  const {width, sorted, carried, data} = useTableSelector(columnNamed(column));
+  const {sorted, data} = useTableSelector(columnNamed(column));
+  const width = useTableSelector(widthOfColumn(column));
+  const carried = useTableSelector(columnHeld(column));
   const drag = useTableSelector(columnDrag(column));
-  const position = useTableSelector(positionOfColumn(column));
   const count = useTableSelector(selectColumnCount);
   const travels = useTableSelector(columnTravels(column));
 
-  const movedTo = (to: number): void => {
-    dispatch(orderedTo(position, to));
+  const walkedTo = (to: number): void => {
+    onColumnMoved?.({column, to});
     setLanded({axis: 'column', name: column, position: to, of: count});
   };
-  const beside = (neighbour: string): void => movedTo(interior(order.indexOf(neighbour), count));
+  const beside = (neighbour: string): void => walkedTo(interior(order.indexOf(neighbour), count));
 
   const lift = (grab: Grab): void => dispatch(carrying({axis: 'column', held: column}, grab));
   const moved = (held: ColumnDrag) => (moving: Moving): void => {
@@ -50,7 +52,7 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
              onPointerUp={has(drag) ? release : undefined}
              onPointerCancel={has(drag) ? release : undefined}
              onLostPointerCapture={has(drag) ? pointerTravel(moved(drag), release) : undefined}
-             onKeyDown={travels ? columnArrows(column, () => order, ({to}) => movedTo(to)) : undefined}
+             onKeyDown={travels ? columnArrows(column, () => order, ({to}) => walkedTo(to)) : undefined}
              style={{'--share': shareWidth(width)}}>
     {children}
     <MoveReport landed={landed}/>

@@ -1,13 +1,9 @@
 import {FC} from 'react';
 import {choices} from './sorting';
-import {has} from '@ryandur/sand';
-import {reset, ruledBy} from './actions';
-import {useTableDispatch, useTableSelector} from './context';
-import {selectArrival} from './selectors';
+import {useHeaderEvents} from './context';
 
 export const SortMenu: FC<{column: string}> = ({column}) => {
-  const dispatch = useTableDispatch();
-  const arrival = useTableSelector(selectArrival);
+  const {onSorted} = useHeaderEvents();
 
   return <>
     <button type="button" className="menu-toggle rounded-corners"
@@ -20,7 +16,7 @@ export const SortMenu: FC<{column: string}> = ({column}) => {
         <li className="entry" key={display}>
           <button type="button" className="item sub-title"
                   popoverTarget={`sort-${column}`} popoverTargetAction="hide"
-                  onClick={() => dispatch(has(direction) ? ruledBy(column, direction) : reset(arrival))}>{display}</button>
+                  onClick={() => onSorted?.({column, direction})}>{display}</button>
         </li>)}
     </menu>
   </>;

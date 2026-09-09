@@ -3,7 +3,7 @@ import {MotionDial} from '../../../Controls';
 import {Codes, Reveal, Says, Snippet, Step, Words, aside} from '../../../Recipe';
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
-import {gap, arrowsSource} from './sources';
+import {arrowsSource, frameSettle, gap} from './sources';
 
 export const walkSlides = (world: World, headerSource: string, buildSrc: string): ReactNode =>
   <Step title="Both parties slide" dial={<MotionDial name="step-motion"/>}>
@@ -23,15 +23,15 @@ export const walkSlides = (world: World, headerSource: string, buildSrc: string)
         {world === 'react'
           ? <Snippet label="TS" lines={[
             ...unit(arrowsSource, 'export const columnArrows'), gap,
-            ...span(headerSource, 'onKeyDown={travels ? columnArrows', 'onKeyDown={travels ? columnArrows'), gap,
-            ...unit(headerSource, 'const movedTo = '),
-            aside('// the walk marks both parties; the stylesheet slides them')
+            ...unit(headerSource, 'const walkedTo = '), gap,
+            ...span(headerSource, 'onAnimationEnd={() => dispatch(settled', 'onAnimationEnd={() => dispatch(settled'),
+            aside('// the walk marks both parties; the stylesheet slides them; the keyframe’s end clears the mark')
           ]}/>
           : <Snippet label="TS" lines={[
             ...unit(arrowsSource, 'export const columnArrows'), gap,
             ...unit(buildSrc, 'const columnTo = '), gap,
-            ...span(buildSrc, "th.addEventListener('keydown', columnArrows", "th.addEventListener('keydown', columnArrows"),
-            aside('// the walk marks both parties; the stylesheet slides them')
+            ...unit(frameSettle, 'const untilSettled = '),
+            aside('// the walk marks both parties; the stylesheet slides them; the keyframe’s end clears the mark')
           ]}/>}
       </Codes>
     </Reveal>
@@ -52,7 +52,7 @@ export const cutKey = (world: World, headerSource: string, buildSrc: string): Re
           ? <Snippet label="TS" lines={[
             ...unit(arrowsSource, 'export const columnArrows'), gap,
             ...span(headerSource, 'onKeyDown={travels ? columnArrows', 'onKeyDown={travels ? columnArrows'), gap,
-            ...unit(headerSource, 'const movedTo = '),
+            ...unit(headerSource, 'const walkedTo = '),
             aside('// the whole walk; nothing marked, nothing to wait for')
           ]}/>
           : <Snippet label="TS" lines={[

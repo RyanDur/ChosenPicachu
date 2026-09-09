@@ -1,9 +1,9 @@
 import {ColumnShove, RowShove} from '@components/DragSortableTable/table-state';
 import {Drift} from '@components/DragSortableTable/travel';
-import {MountedTable, orderOf} from './table-state';
+import {MountedTable} from './table-state';
 
 export const columnCells = (mounted: MountedTable, column: string): HTMLTableCellElement[] => {
-  const at = orderOf(mounted.store.state).indexOf(column);
+  const at = mounted.order().indexOf(column);
   return [...mounted.table.rows].map(row => row.cells[at]);
 };
 

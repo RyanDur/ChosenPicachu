@@ -15,10 +15,11 @@ import frameCarry from '../../Frame/table/carry.ts?raw';
 import selectorsSource from '@components/DragSortableTable/selectors.ts?raw';
 import menuSource from '@components/DragSortableTable/SortMenu.tsx?raw';
 import rowSource from '@components/DragSortableTable/Row.tsx?raw';
-import bodySource from '@components/DragSortableTable/Body.tsx?raw';
+import headersSource from '@components/DragSortableTable/Headers.tsx?raw';
+import arrangementSource from '@components/DragSortableTable/arrangement.ts?raw';
 import placingSource from '@components/DragSortableTable/placing.ts?raw';
 import {plain} from '../../../Recipe';
 
-export {surveySource, gripSource, sortableCss, headerCss, frameHtml, stateSource, reducerSource, selectorsSource, frameCarry, frameSettle, travelSource, liftSource, arrowsSource, elementSource, storeSource, menuSource, rowSource, bodySource, placingSource};
+export {surveySource, gripSource, sortableCss, headerCss, frameHtml, stateSource, reducerSource, selectorsSource, frameCarry, frameSettle, travelSource, liftSource, arrowsSource, elementSource, storeSource, menuSource, rowSource, headersSource, arrangementSource, placingSource};
 
 export const gap = plain(' ');

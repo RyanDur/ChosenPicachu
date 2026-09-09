@@ -9,8 +9,8 @@ import menuCss from '../../../../styles/menu.css?raw';
 import headerCss from '@components/DragSortableTable/Header.css?raw';
 import sortingSource from '@components/DragSortableTable/sorting.ts?raw';
 import tableSource from '../Frame/table.html?raw';
-import stateSource from '@components/DragSortableTable/table-state.ts?raw';
-import selectorsSource from '@components/DragSortableTable/selectors.ts?raw';
+import arrangementSource from '@components/DragSortableTable/arrangement.ts?raw';
+import demosSource from '@pages/Demos/store.ts?raw';
 import frameMenus from '../Frame/table/menus.ts?raw';
 import {buildSources} from '../Frame/builds/sources';
 import {headerSources, rowSources, tableSources} from './sources';
@@ -30,24 +30,24 @@ type Build = {
   buildSrc: string;
 };
 
-const ruled = ({world, menuSrc, buildSrc}: Build) =>
-  <Step title="Rule directly">
+const sortedDirectly = ({world, menuSrc, buildSrc}: Build) =>
+  <Step title="Sort directly">
     <Words want="A sort reorders everything at once, and no hand is on the table to explain it.">
-      <Says>The answer is the rule alone: dispatch it and let the rows cut to their ranked
+      <Says>The answer is the sort alone: dispatch it and let the rows cut to their ranked
         seats. Motion in these tables belongs to the hand, and a menu click has none.</Says>
     </Words>
     <Reveal>
       {world === 'react'
-        ? <Says>The column raises the rule, and the dispatch is the whole answer. The rows cut
-          to their ranked seats on the next frame, in the animated table and the static one
-          alike.</Says>
-        : <Says>Choose dispatches the rule, and the reconcile moves the lanes in the same
-          breath. The rows cut to their ranked seats, in the animated build and the static one
-          alike.</Says>}
+        ? <Says>The menu raises onSorted, the page dispatches it, and that is the whole answer.
+          The rows cut to their ranked seats on the next frame, in the animated table and the
+          static one alike.</Says>
+        : <Says>Choose dispatches the sort into the arrangement, and the reconcile moves the lanes
+          in the same breath. The rows cut to their ranked seats, in the animated build and the
+          static one alike.</Says>}
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...span(menuSrc, 'onClick={() => dispatch(has(direction)', 'onClick={() => dispatch(has(direction)')
+            ...span(menuSrc, 'onClick={() => onSorted?.(', 'onClick={() => onSorted?.(')
           ]}/>
           : <Snippet label="TS" lines={[
             ...unit(buildSrc, '  const choose = ')
@@ -149,31 +149,35 @@ const rankStory = (build: Build) => {
           </Codes>
         </Reveal>
       </Step>
-      <Step title="The glyph derives from the rule">
+      <Step title="The glyph derives from the sort">
         <Words want="A sorted column must say so, to the eye and to assistive tech, without a second source of truth appearing anywhere.">
-          <Says>Which column is sorted should be written once, on that column, as
-            the <Term word="rule">rule</Term>;
+          <Says>Which column is sorted should be written once, as
+            the <Term word="sort">sort</Term>, and every column should wear it from there;
             let <Mdn path="Web/Accessibility/ARIA/Attributes/aria-sort">aria-sort</Mdn> be
             the single signal read from it, and let the glyph be CSS reading that attribute.</Says>
         </Words>
         <Reveal>
           {world === 'react'
-            ? <Says>The rule lives on the column: ruledBy marks exactly one column sorted and
-              clears the rest, so the th announces aria-sort from its own column and the toggle
-              wears the direction’s glyph from that attribute. SortMenu is the whole chooser: three
-              buttons naming the three choices, reporting which column asked for what.</Says>
-            : <Says>The rule lives on the column: ruledBy marks exactly one column sorted and
-              clears the rest. When the columns change, announce walks the headers with what each
-              column says: the sorted th gains aria-sort, and every other column returns to rest.
-              One column holds the rule, and the header cannot lie.</Says>}
+            ? <Says>The sort is one value in the page’s arrangement, a column name and a
+              direction. When the page hands the table its columns it marks the sorting one, and
+              only that one, so the th announces aria-sort from what it was handed and the toggle
+              wears the direction’s glyph from that attribute. SortMenu is the whole chooser:
+              three buttons naming the three choices, raising onSorted with which column asked for
+              what.</Says>
+            : <Says>The sort is one value in the arrangement, a column name and a direction. When
+              it changes, announce walks the headers asking it for each: the sorting th gains
+              aria-sort, and every other column returns to rest. One value holds the sort, and the
+              header cannot lie.</Says>}
           <Codes>
             {world === 'react'
               ? <Snippet label="TS" lines={[
-                ...unit(stateSource, 'export const rule'), gap,
+                ...unit(arrangementSource, 'export type Arrangement'), gap,
+                ...unit(demosSource, 'export const selectColumns'), gap,
                 ...span(menuSrc, 'export const SortMenu', '</>;')
               ]}/>
               : <Snippet label="TS" lines={[
-                ...unit(stateSource, 'export const rule'), gap,
+                ...unit(arrangementSource, 'export type Arrangement'), gap,
+                ...span(buildSrc, 'if (previous.sort !== next.sort) {', 'announce(document, name'), gap,
                 ...unit(frameMenus, 'export const announce = ')
               ]}/>}
             <Snippet label="CSS" lines={[
@@ -184,6 +188,7 @@ const rankStory = (build: Build) => {
             ]}/>
             {world === 'react'
               ? <Snippet label="HTML" lines={[
+                ...span(source, 'const {sorted, data} = useTableSelector(columnNamed', 'const {sorted, data} = useTableSelector(columnNamed'), gap,
                 ...span(source, 'aria-sort={sorted}', 'aria-sort={sorted}')
               ]}/>
               : <Snippet label="HTML" lines={[
@@ -192,50 +197,56 @@ const rankStory = (build: Build) => {
           </Codes>
         </Reveal>
       </Step>
-      <Step title="The rule is a drape, not a bake">
-        <Words want="The data keeps streaming under the sort, so the rule has to keep ruling.">
-          <Says>The <Term word="rule">rule</Term> should never be applied once:
-            it <Term word="drape">drapes</Term> over the rows, re-ranking them every time the
-            stream writes, with the ranking living in one selector both worlds ask.</Says>
+      <Step title="The sort keeps sorting">
+        <Words want="The data keeps streaming under the sort, so the sort has to keep sorting.">
+          <Says>The <Term word="sort">sort</Term> should never be applied once: it is asked of
+            the rows every time a value changes, with the ranking living in one function both
+            worlds call.</Says>
         </Words>
         <Reveal>
-          <Says>Your first instinct is to <Term word="bake">bake</Term>: rank the seats once
-            when the direction is chosen, store the result, move on. It even looks right, until
-            the feed writes the next value and the table quietly stops being sorted. A sort
-            applied once is stale by the next trade, and this data never stops trading.</Says>
-          <Says>So the rule drapes: the standing is asked, never stored, and every read re-ranks
-            the rows through the column that holds the rule, so as values change underneath, the
-            rows keep trading places to stay sorted. Bake and the sort is a moment; drape and it
-            is a property.</Says>
+          <Says>Your first instinct is to sort once: rank the rows when the direction is chosen,
+            store the result, move on. It even looks right, until the next trade changes a value
+            and the table quietly stops being sorted. A sort applied once is stale by the next
+            trade, and this data never stops trading.</Says>
+          <Says>So the sort is a question, never an answer that is stored: every read re-ranks
+            the rows through the sorting column, so as values change underneath, the rows keep
+            trading places to stay sorted. Sort once and the sort is a moment; keep asking and
+            it is a property.</Says>
           <Codes>
             <Snippet label="TS" lines={[
               ...unit(sortingSource, 'export const ranked'), gap,
-              ...unit(selectorsSource, 'export const selectStanding'),
-              aside('// both worlds ask the same selector')
+              ...unit(arrangementSource, 'export const standingOf'), gap,
+              ...unit(demosSource, 'export const selectRows'),
+              aside('// both worlds ask the arrangement the same question')
             ]}/>
           </Codes>
         </Reveal>
       </Step>
-      {ruled(build)}
-      <Step title="A hand ends the rule">
-        <Words want="Manual order and ruled order cannot both own the table. The moment you drag a row, whose order is it?">
-          <Says>The hand should win: the moment a drag starts, the ruled order must become the
-            real order, and the rule must end.</Says>
+      {sortedDirectly(build)}
+      <Step title="A hand ends the sort">
+        <Words want="Manual order and sorted order cannot both own the table. The moment you drag a row, whose order is it?">
+          <Says>The hand should win: the moment a hand moves a row, the sorted order must become
+            the real order, and the sort must end.</Says>
         </Words>
         <Reveal>
-          <Says>Touch a row and the <Term word="standing">standing</Term> bakes: the rule
-            clears and the rows stay exactly where the drape left them, so your drag proceeds
-            from what you saw. Choosing "reset" clears the rule the other way: back to
-            the <Term word="seats">seats</Term> in the order they arrived, no drape at all.</Says>
+          <Says>Move a row and the sort ends: the table raises onRowMoved with
+            the <Term word="standing">standing</Term> it showed, and the page keeps the rows
+            exactly where the sort left them, moves the one you moved, and clears the sort, so
+            your drag proceeds from what you saw. Choosing "reset" clears the sort the other way:
+            back to the <Term word="seats">seats</Term> in the order they arrived, nothing
+            sorting them at all.</Says>
           <Codes>
             {world === 'react'
               ? <Snippet label="TS" lines={[
-                ...unit(stateSource, 'export const bake'), gap,
-                ...unit(rowSrc, 'const lift = ')
+                ...unit(arrangementSource, 'export const sortEnded'), gap,
+                ...span(arrangementSource, "case 'rowMoved':", "case 'rowMoved':"), gap,
+                ...unit(rowSrc, 'const beside = ')
               ]}/>
               : <Snippet label="TS" lines={[
-                ...unit(stateSource, 'export const bake = '),
-                aside('// the grab dispatches it outright; a nudge folds it into its own move')
+                ...unit(arrangementSource, 'export const sortEnded'), gap,
+                ...span(arrangementSource, "case 'rowMoved':", "case 'rowMoved':"), gap,
+                ...unit(buildSrc, 'const rowBeside = '),
+                aside('// the strike and the nudge each carry the standing in their own action; the sort ends as the row moves')
               ]}/>}
           </Codes>
         </Reveal>

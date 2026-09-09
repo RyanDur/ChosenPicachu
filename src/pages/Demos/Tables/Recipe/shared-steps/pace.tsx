@@ -35,10 +35,12 @@ export const eagerPace = (world: World, headerSource: string, buildSrc: string):
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
+            ...unit(headerSource, 'const walkedTo = '), gap,
             ...unit(headerSource, 'const beside = '), gap,
             ...unit(headerSource, 'const moved = ')
           ]}/>
           : <Snippet label="TS" lines={[
+            ...unit(buildSrc, 'const columnBeside = '), gap,
             ...unit(buildSrc, 'const moved = ')
           ]}/>}
         {world === 'react'

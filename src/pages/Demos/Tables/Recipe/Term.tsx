@@ -4,13 +4,13 @@ import {Defined} from '../../Recipe/Defined';
 export type Word =
   | 'aloft' | 'survey' | 'drift'
   | 'strike' | 'settle' | 'landing' | 'seats' | 'share' | 'travel' | 'reconcile'
-  | 'rule' | 'standing' | 'drape' | 'bake'
+  | 'sort' | 'standing'
   | 'store' | 'action' | 'reducer' | 'selector' | 'middleware';
 
 const definitions: Record<Word, ReactNode> = {
-  aloft: 'whatever the hand is carrying, named by its key or its seat; the store holds it as state, absent until a lift',
+  aloft: 'whatever the hand is carrying, a column by its name or a row by its key; the store holds it as the drag, absent until a lift',
   survey: 'the one measurement taken at the grab: the table’s box, every column’s width, later the row heights',
-  drift: 'how far the pointer has moved since the grab; state in a slice of its own, dispatched on every move',
+  drift: 'how far the pointer has moved since the grab; state on the drag, dispatched on every move',
   strike: 'the moment the pointer crosses far enough into a neighbour to count',
   settle: 'what a strike does: the reorder, and the shove it hands the neighbours it passed',
   landing: 'the destination a lazy drag remembers instead of settling',
@@ -18,11 +18,9 @@ const definitions: Record<Word, ReactNode> = {
   share: 'a column’s slice of the table’s width: a fraction, not a pixel',
   travel: 'everything between the lift and the drop: the shared move handling',
   reconcile: 'walking the DOM to match the state, moving only what changed',
-  rule: 'the chosen column and direction: what the table ranks by',
-  standing: 'the rows’ order on screen: the seats as they stand, ranked by the rule while one holds',
-  drape: 'ranking the rows through the rule every time the standing is read, so the sort keeps holding',
-  bake: 'clearing the rule and keeping the rows where the drape left them',
-  store: 'one value, one dispatch, one subscribe: the table state and the only way in or out',
+  sort: 'the chosen column and direction: what the rows rank by, held by the page beside its order',
+  standing: 'the rows’ order on screen: the seats as they stand, ranked by the sort while one holds',
+  store: 'one value, one dispatch, one subscribe: a state and the only way in or out',
   action: 'a record of what happened: a type and the facts; dispatch hands it to the reducer',
   reducer: 'the one function from the old state and an action to the new state; it reads the type and calls the verb',
   selector: 'a named function from the state to an answer; the name is the question',

@@ -31,7 +31,7 @@ describe('the frame table', () => {
     window.__env = undefined;
   });
 
-  it('without an environment the starting zeros stand, and the rule still announces', async () => {
+  it('without an environment the starting zeros stand, and the sort still announces', async () => {
     deal();
 
     expect(windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
@@ -53,7 +53,7 @@ describe('the frame table', () => {
     expect(screen.getByRole('columnheader', {name: /buys/})).not.toHaveAttribute('aria-sort');
   });
 
-  it('a new rule releases the old column', async () => {
+  it('a new sort releases the old column', async () => {
     deal();
 
     await userEvent.click(sortMenu('buys').getByRole('button', {name: 'ascending', hidden: true}));
@@ -280,7 +280,7 @@ describe('the frame table', () => {
     fireEvent.pointerUp(surface(), {pointerId: 1});
   });
 
-  it('a hand on a row bakes the standing and ends the rule', async () => {
+  it('a hand that lifts a row and drops it where it was leaves the sort standing', async () => {
     deal();
 
     await userEvent.click(sortMenu('trades').getByRole('button', {name: 'ascending', hidden: true}));
@@ -289,11 +289,11 @@ describe('the frame table', () => {
     fireEvent.pointerDown(screen.getByRole('button', {name: 'move row 1'}), {clientX: 20, clientY: 20, pointerId: 1});
     fireEvent.pointerUp(surface(), {pointerId: 1});
 
-    expect(screen.getByRole('columnheader', {name: /trades/})).not.toHaveAttribute('aria-sort');
+    expect(screen.getByRole('columnheader', {name: /trades/})).toHaveAttribute('aria-sort', 'ascending');
     expect(windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
   });
 
-  it('a keyboard nudge bakes the standing and ends the rule', async () => {
+  it('a keyboard nudge ends the sort and keeps the rows where it left them', async () => {
     deal();
 
     await userEvent.click(sortMenu('trades').getByRole('button', {name: 'ascending', hidden: true}));
@@ -330,7 +330,7 @@ describe('the frame table', () => {
     expect(screen.getByRole('status')).toHaveTextContent('trades resized to 15%');
   });
 
-  it('the rule stands while trades land', async () => {
+  it('the sort stands while trades land', async () => {
     const feed = await listeningFeed();
     deal(urlOf(feed));
     await waitFor(() => expect(subscribed.size).toBeGreaterThan(0));

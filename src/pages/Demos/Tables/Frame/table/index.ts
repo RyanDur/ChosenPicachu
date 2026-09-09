@@ -1,5 +1,5 @@
-export type {Carry, Drag, Landed, MeasuresState, MountedTable} from './table-state';
-export {baked, columnOf, orderedTo, rowNudgedTo, ruledBy, seatedTo, measured, tradedBy} from './table-state';
+export type {Carry, Drag, Landed, MountedTable, TableState} from './table-state';
+export {columnMoved, columnOf, measured, rowMoved, sorted, tradedBy} from './table-state';
 export {dressCarried} from './carry';
 export {keepingFocus} from './focus';
 export {settleColumn, settleRow, shoveColumns, shoveRows, unmarked} from './settle';

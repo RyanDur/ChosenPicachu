@@ -47,7 +47,7 @@ const dealPlans: Record<World, ReactNode> = {
 const dealCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="HTML" lines={[
-      ...span(dealSource, '<Headers className="row">', '</Headers>')
+      ...span(dealSource, '<Headers className="row"', '</Headers>')
     ]}/>
     <Snippet label="CSS" lines={[
       ...unit(widthsSource, '.aggregations {')
@@ -80,8 +80,9 @@ const foldSays: Record<World, ReactNode> = {
   vanilla: <Says>Every arrival refolds the same trades into per-window aggregates, because
     refolding is simple math and cannot drift out of sync. The fold is the same module the
     React world runs. What React did for you ends here: there is no render to catch the
-    change, so every dispatch reconciles the page against the state, writing only the cells
-    whose text changed and reseating only the rows whose seat changed.</Says>
+    change, so a writer subscribed to the trades refolds the state, writes only the cells whose
+    text changed, and reseats the rows when the sort ranks them anew. The arrangement has a
+    listener of its own, and that is the store story.</Says>
 };
 
 const foldCodes: Record<World, ReactNode> = {
@@ -94,7 +95,8 @@ const foldCodes: Record<World, ReactNode> = {
   vanilla: <Codes>
     <Snippet label="TS" lines={[
       ...unit(foldSource, 'export const windows'), gap,
-      ...unit(buildSrc, 'const reconcile = ')
+      ...unit(buildSrc, 'const writeCells = '), gap,
+      ...span(buildSrc, 'trades.subscribe(', '});')
     ]}/>
   </Codes>
 };
@@ -145,11 +147,11 @@ const flowStory = (world: World) =>
   <Story param="living" id="flow" steps={3}
          can="The trader can watch the market live, in windows"
          soThat="the numbers stay current without a single refresh">
-    <Tell>The still becomes a stream. The trader arrives mid-session, so we start with one
-      plain fetch of the recent history. And the numbers have to keep themselves current: we
-      could poll, but polling is always a little late and mostly wasted requests. The exchange
-      offers a stream, so a socket comes next, and from then on the trades come to us,
-      kept under a cap so a long session cannot grow forever. {refolds[world]}</Tell>
+    <Tell>The still becomes a stream. The trader arrives mid-session, so the page starts with
+      one plain fetch of the recent history. And the numbers have to keep themselves current:
+      polling is always a little late and mostly wasted requests. The exchange offers a stream,
+      so a socket comes next, and from then on the trades arrive on their own, kept under a cap
+      so a long session cannot grow forever. {refolds[world]}</Tell>
     <DataPath/>
     <Steps>
       <Step title="Hydrate with one fetch">

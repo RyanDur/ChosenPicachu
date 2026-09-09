@@ -2,13 +2,15 @@ import {ComponentProps, FC} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {useTableSelector} from '@components/DragSortableTable/context';
-import {columnNamed, rowAt} from '@components/DragSortableTable/selectors';
+import {columnHeld, columnMarks, rowHeld, rowMarks} from '@components/DragSortableTable/selectors';
 import {shoveDistance, shovedClass, translation} from '@components/DragSortableTable/table-state';
 import './LazyKeepAnimatedTable.css';
 
-export const Cell: FC<ComponentProps<'td'> & {column: string; row: string}> = ({column, row: seat, className, children, ...td}) => {
-  const {carried: columnCarried, settlingFrom: columnFrom, shoved: columnShove} = useTableSelector(columnNamed(column));
-  const {carried: rowCarried, settlingFrom: rowFrom, shoved: rowShove} = useTableSelector(rowAt(seat));
+export const Cell: FC<ComponentProps<'td'> & {column: string; row: string}> = ({column, row, className, children, ...td}) => {
+  const {settlingFrom: columnFrom, shoved: columnShove} = useTableSelector(columnMarks(column));
+  const {settlingFrom: rowFrom, shoved: rowShove} = useTableSelector(rowMarks(row));
+  const columnCarried = useTableSelector(columnHeld(column));
+  const rowCarried = useTableSelector(rowHeld(row));
   const from = columnFrom ?? rowFrom;
   const shove = columnShove ?? rowShove;
 

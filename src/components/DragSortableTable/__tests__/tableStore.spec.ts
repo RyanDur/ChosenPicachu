@@ -1,149 +1,175 @@
 import {TableMiddleware, tableStore} from '../store';
-import {Labelled, Seated, orderOf, standingOf, tableOf} from '../table-state';
-import {orderedTo, ruledBy, seated as seating} from '../actions';
+import {measured} from '../actions';
 import {tableReducer} from '../reducer';
-import {selectStanding} from '../selectors';
+import {resting, widthsOf} from '../table-state';
+import {arrangementOf, arrangementReducer, arrived, columnMoved, rowMoved, sorted, standingOf} from '../arrangement';
 
-const labelled = (name: string) => ({name, data: {label: name}});
-
-const window = (key: string, trades: number): Seated => ({key, values: {trades}});
+const shares = (window: number, trades: number): Readonly<Record<string, number>> => ({window, trades, buys: 100 - window - trades});
+const widths = (state: typeof resting): readonly number[] => Object.values(widthsOf(state) ?? {});
 
 describe('the table store', () => {
-  const seated = tableOf([labelled('window'), labelled('trades'), labelled('buys')], ['this minute', 'this hour']);
-  const rows = [window('this minute', 3), window('this hour', 9)];
-
   test('a dispatch applies the reducer and every subscriber hears it once', () => {
-    const store = tableStore(seated);
-    const heard: (readonly string[])[] = [];
-    store.subscribe(() => heard.push(orderOf(store.state)));
+    const store = tableStore();
+    const heard: (readonly number[])[] = [];
+    store.subscribe(() => heard.push(widths(store.state)));
 
-    store.dispatch(orderedTo(1, 2));
+    store.dispatch(measured(shares(40, 30)));
 
-    expect(orderOf(store.state)).toEqual(['window', 'buys', 'trades']);
-    expect(heard).toEqual([['window', 'buys', 'trades']]);
+    expect(widths(store.state)).toEqual([40, 30, 30]);
+    expect(heard).toEqual([[40, 30, 30]]);
   });
 
   test('the reducer answers its own actions and hands back the same state for anyone else’s', () => {
-    const reordered = tableReducer(seated, orderedTo(1, 2));
-    const untouched = tableReducer(seated, {type: 'userArrived'});
+    const measuredState = tableReducer(resting, measured(shares(40, 30)));
+    const untouched = tableReducer(resting, {type: 'userArrived'});
 
-    expect(orderOf(reordered)).toEqual(['window', 'buys', 'trades']);
-    expect(untouched).toBe(seated);
+    expect(widths(measuredState)).toEqual([40, 30, 30]);
+    expect(untouched).toBe(resting);
   });
 
   test('an unsubscribed listener hears nothing more', () => {
-    const store = tableStore(seated);
+    const store = tableStore();
     let heard = 0;
     const leave = store.subscribe(() => heard++);
 
-    store.dispatch(orderedTo(1, 2));
+    store.dispatch(measured(shares(40, 30)));
     leave();
-    store.dispatch(orderedTo(1, 2));
+    store.dispatch(measured(shares(50, 20)));
 
     expect(heard).toBe(1);
   });
 
   test('the state read between dispatches is the same value', () => {
-    const store = tableStore(seated);
+    const store = tableStore();
 
     expect(store.state).toBe(store.state);
-    store.dispatch(orderedTo(1, 2));
+    store.dispatch(measured(shares(40, 30)));
     expect(store.state).toBe(store.state);
-  });
-
-  test('a rule marks the column and ranks the standing over the rows given; the seats stay as the hand left them', () => {
-    const store = tableStore(seated);
-
-    store.dispatch(ruledBy('trades', 'descending'));
-
-    expect(store.state.columns.map(({sorted}) => sorted)).toEqual([undefined, 'descending', undefined]);
-    expect(standingOf(store.state)).toEqual(['this minute', 'this hour']);
-    expect(selectStanding(store.state, rows)).toEqual(['this hour', 'this minute']);
   });
 
   test('middleware sees every dispatch before the reducer runs', () => {
-    const seen: string[] = [];
-    const watching: TableMiddleware<Labelled> = () => next => action => {
-      seen.push(orderOf(store.state).join());
+    const seen: (readonly number[])[] = [];
+    const watching: TableMiddleware = () => next => action => {
+      seen.push(widths(store.state));
       next(action);
     };
-    const store = tableStore(seated, watching);
+    const store = tableStore(watching);
 
-    store.dispatch(orderedTo(1, 2));
+    store.dispatch(measured(shares(40, 30)));
 
-    expect(seen).toEqual(['window,trades,buys']);
-    expect(orderOf(store.state)).toEqual(['window', 'buys', 'trades']);
+    expect(seen).toEqual([[]]);
+    expect(widths(store.state)).toEqual([40, 30, 30]);
   });
 
-  test('keys that arrive later take the seats after the ones still seated, and the rule ranks them all', () => {
-    const ruled = tableReducer(seated, ruledBy('trades', 'descending'));
-    const arrival = [...rows, window('session', 5)];
-
-    const arrived = tableReducer(ruled, seating(arrival.map(({key}) => key)));
-
-    expect(standingOf(arrived)).toEqual(['this minute', 'this hour', 'session']);
-    expect(selectStanding(arrived, arrival)).toEqual(['this hour', 'session', 'this minute']);
-  });
   test('the store is frozen: nothing can swap its dispatch or its state from outside', () => {
-    const store = tableStore(seated);
+    const store = tableStore();
 
     expect(Object.isFrozen(store)).toBe(true);
     expect(() => {
       (store as {dispatch: unknown}).dispatch = () => undefined;
     }).toThrow(TypeError);
     expect(() => {
-      (store as {state: unknown}).state = seated;
+      (store as {state: unknown}).state = resting;
     }).toThrow(TypeError);
   });
+
   test('a middleware has two dispatches: next goes down the chain, the api goes back to the top', () => {
     const passed: string[] = [];
-    const outer: TableMiddleware<Labelled> = () => next => action => {
+    const outer: TableMiddleware = () => next => action => {
       passed.push('outer');
       next(action);
     };
-    const inner: TableMiddleware<Labelled> = api => next => action => {
+    const inner: TableMiddleware = api => next => action => {
       passed.push('inner');
       next(action);
       if (passed.length === 2) {
-        api.dispatch(orderedTo(1, 2));
+        api.dispatch(measured(shares(50, 20)));
       }
     };
-    const store = tableStore(seated, outer, inner);
+    const store = tableStore(outer, inner);
 
-    store.dispatch(orderedTo(1, 2));
+    store.dispatch(measured(shares(40, 30)));
 
     expect(passed).toEqual(['outer', 'inner', 'outer', 'inner']);
-    expect(orderOf(store.state)).toEqual(['window', 'trades', 'buys']);
+    expect(widths(store.state)).toEqual([50, 20, 30]);
   });
+
   test('a listener hears the state before, a way to read the state now, and the dispatch', () => {
-    const store = tableStore(seated);
-    const heard: [readonly string[], readonly string[]][] = [];
+    const store = tableStore();
+    const heard: [readonly number[], readonly number[]][] = [];
     store.subscribe((previous, current, dispatch) => {
-      heard.push([orderOf(previous), orderOf(current())]);
+      heard.push([widths(previous), widths(current())]);
       if (heard.length === 1) {
-        dispatch(orderedTo(1, 2));
+        dispatch(measured(shares(50, 20)));
       }
     });
 
-    store.dispatch(orderedTo(1, 2));
+    store.dispatch(measured(shares(40, 30)));
 
     expect(heard).toEqual([
-      [['window', 'trades', 'buys'], ['window', 'buys', 'trades']],
-      [['window', 'buys', 'trades'], ['window', 'trades', 'buys']]
+      [[], [40, 30, 30]],
+      [[40, 30, 30], [50, 20, 30]]
     ]);
   });
+
   test('the pattern holds its order: middleware, then the reducer, then the listeners', () => {
     const order: string[] = [];
-    const layer: TableMiddleware<Labelled> = () => next => action => {
+    const layer: TableMiddleware = () => next => action => {
       order.push('middleware');
       next(action);
       order.push('middleware after');
     };
-    const store = tableStore(seated, layer);
-    store.subscribe(previous => order.push(`listener saw ${orderOf(previous).join()} become ${orderOf(store.state).join()}`));
+    const store = tableStore(layer);
+    store.subscribe(previous => order.push(`listener saw ${widths(previous).join()} become ${widths(store.state).join()}`));
 
-    store.dispatch(orderedTo(1, 2));
+    store.dispatch(measured(shares(40, 30)));
 
-    expect(order).toEqual(['middleware', 'listener saw window,trades,buys become window,buys,trades', 'middleware after']);
+    expect(order).toEqual(['middleware', 'listener saw  become 40,30,30', 'middleware after']);
+  });
+});
+
+describe('the arrangement', () => {
+  const trades: Readonly<Record<string, number>> = {'this minute': 3, 'this hour': 9, session: 5};
+  const valueOf = (row: string, column: string) => column === 'trades' ? trades[row] : undefined;
+  const arranged = arrangementOf(['window', 'trades', 'buys'], ['this minute', 'this hour']);
+
+  test('a column moves to the seat the hand chose', () => {
+    expect(arrangementReducer(arranged, columnMoved('trades', 2)).columns).toEqual(['window', 'buys', 'trades']);
+  });
+
+  test('a sort ranks the standing over the values given; the rows stay as the hand left them', () => {
+    const byTrades = arrangementReducer(arranged, sorted('trades', 'descending'));
+
+    expect(byTrades.rows).toEqual(['this minute', 'this hour']);
+    expect(standingOf(byTrades, valueOf)).toEqual(['this hour', 'this minute']);
+  });
+
+  test('keys that arrive later sit after the ones still seated, and the sort ranks them all', () => {
+    const byTrades = arrangementReducer(arranged, sorted('trades', 'descending'));
+
+    const more = arrangementReducer(byTrades, arrived(['this minute', 'this hour', 'session']));
+
+    expect(more.rows).toEqual(['this minute', 'this hour', 'session']);
+    expect(standingOf(more, valueOf)).toEqual(['this hour', 'session', 'this minute']);
+  });
+
+  test('a row moved under a sort ends the sort, and the rows stay where the sort showed them', () => {
+    const byTrades = arrangementReducer(arranged, sorted('trades', 'descending'));
+
+    const ended = arrangementReducer(byTrades, rowMoved('this hour', 0, ['this hour', 'this minute']));
+
+    expect(ended.sort).toBeUndefined();
+    expect(ended.rows).toEqual(['this hour', 'this minute']);
+    expect(standingOf(ended, valueOf)).toEqual(['this hour', 'this minute']);
+  });
+
+  test('a moved row takes the seat the hand chose in the standing it was shown', () => {
+    const moved = arrangementReducer(arranged, rowMoved('this minute', 1, ['this minute', 'this hour']));
+
+    expect(moved.rows).toEqual(['this hour', 'this minute']);
+  });
+
+  test('a foreign action leaves the arrangement as it was', () => {
+    expect(arrangementReducer(arranged, {type: 'tradeArrived'})).toBe(arranged);
   });
 });

@@ -35,7 +35,7 @@ import cssSource from '../Builds/EagerHideStaticTable/EagerHideStaticTable.css?r
 
 export const EagerHideStaticRecipe: FC<{track: Track; world: World}> = ({track, world}) => track === 'pointer'
   ? <>
-    <Story param="sort" id="column" steps={10}
+    <Story param="sort" id="column" steps={9}
            can="The trader can sort by column"
            soThat="the measures they compare sit beside each other">
       {twoRoads}

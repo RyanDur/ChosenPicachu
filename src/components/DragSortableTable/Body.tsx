@@ -1,10 +1,7 @@
 import {ComponentProps, FC} from 'react';
-import {useTableSelector} from './context';
-import {selectStanding} from './selectors';
-import {placed} from './placing';
+import {Body as BodyEventsContext, BodyEvents} from './context';
 
-export const Body: FC<ComponentProps<'tbody'>> = ({children, ...tbody}) => {
-  const standing = useTableSelector(selectStanding);
-
-  return <tbody {...tbody}>{placed(children, standing, 'row')}</tbody>;
-};
+export const Body: FC<ComponentProps<'tbody'> & BodyEvents> = ({onRowMoved, children, ...tbody}) =>
+  <BodyEventsContext.Provider value={{onRowMoved}}>
+    <tbody {...tbody}>{children}</tbody>
+  </BodyEventsContext.Provider>;
