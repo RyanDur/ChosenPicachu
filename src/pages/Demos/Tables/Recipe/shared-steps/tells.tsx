@@ -34,10 +34,10 @@ export const twoRoads =
     yours to own and no drag-and-drop library is anywhere in the build.</Tell>;
 
 export const againstTheStream =
-  <Tell>The trader needs to move a column while the stream writes. We could reorder
-    the data itself, but every trade that lands would fight every drag; so the rows and
-    columns are the state, in their order, a trade writes into the row that holds its
-    seat, and the markup renders through them. Moving a column is just changing the
+  <Tell>The trader needs to move a column while the trades keep landing. We could reorder
+    the data itself, but every trade that lands would fight every drag; so the columns and
+    the seats are the state, in their order, a trade rewrites a row’s values under its key,
+    and the markup renders through them. Moving a column is just changing the
     order. We could ask the DOM where everything is as the pointer moves,
     but layout queries during a drag cause the jank you are trying to avoid; so
     everything the drag needs gets measured once, when you grab.</Tell>;

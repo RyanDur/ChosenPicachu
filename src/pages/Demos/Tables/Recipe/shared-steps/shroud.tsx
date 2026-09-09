@@ -9,7 +9,7 @@ import {frameCarry, gap, selectorsSource, stateSource} from './sources';
 export const hideOrigin = (world: World, headerSource: string, cssSource: string, buildSrc: string): ReactNode =>
   <Step title="Carry the real thing" dial={<OriginDial name="step-origin"/>}>
     <Words want="The trader wants the column they grabbed in their hand, buttons and all, and a gap where it came from that says where the drop will land.">
-      <Says>Copying the column would go stale the moment the stream writes, and a copy never has
+      <Says>Copying the column would go stale on the next trade, and a copy never has
         the real buttons in it. So nothing is copied: the carried cells themselves ride the
         pointer with <Mdn path="Web/CSS/translate">translate</Mdn>, and the layout box they left
         behind stays exactly where it was, empty, as the gap. Nothing unmounts and nothing is
