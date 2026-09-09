@@ -65,7 +65,7 @@ const handleMarkup: Record<World, ReactNode> = {
     ...span(resizeSource, '<button type="button"', 'aria-label={resizeLabel(column, width)}')
   ]}/>,
   vanilla: <Snippet label="HTML" lines={[
-    ...span(tableSource, '<button type="button" class="resize-handle"', 'aria-label="resize window"></button>')
+    ...span(tableSource, '<button type="button" tabindex="0" class="resize-handle"', 'aria-label="resize window"></button>')
   ]}/>
 };
 

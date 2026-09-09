@@ -22,16 +22,21 @@ export const focusLands = (world: World, headerSource: string, buildSrc: string)
           header for focus with a tabindex as it dresses the grips (the anchored edges hold the
           table, so their headers ask for nothing), so Tab walks every movable piece of the
           table in order. The focus-visible ring draws for the keyboard only.</Says>}
+      <Says>The buttons say their tab stop outright: a tabindex of zero on an element that is
+        focusable by birth. That is Safari’s doing. Its plain Tab visits text fields and anything
+        that writes a tabindex, and skips buttons and links unless you hold Option; every other
+        browser ignores the attribute on a button. Without it a Safari user reaches every header
+        and never a grip.</Says>
       <Codes>
         {world === 'react'
           ? <Snippet label="HTML" lines={[
             ...span(headerSource, 'tabIndex={travels', 'tabIndex={travels'), gap,
             ...span(gripSource, '<button', '</button>'),
-            aside('{/* the button was focusable all along; the header asks */}')
+            aside('{/* the button was focusable all along; Safari’s Tab still wants it written */}')
           ]}/>
           : <Snippet label="TS" lines={[
             ...unit(buildSrc, 'const dressGrips = '),
-            aside('// the button was focusable all along; JavaScript asks for the headers')
+            aside('// the button was focusable all along; Safari’s Tab still wants it written; JavaScript asks for the headers')
           ]}/>}
         <Snippet label="CSS" lines={[
           ...unit(headerCss, '.sortable .header-cell {')

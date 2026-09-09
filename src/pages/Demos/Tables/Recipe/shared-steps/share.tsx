@@ -8,13 +8,13 @@ import {gap, sortableCss} from './sources';
 const shareMarkup: Record<World, ReactNode> = {
   react: <Snippet label="HTML" lines={[
     plain('<table><thead><tr><th scope="col">window</th> ...'),
-    plain('<button className="grip" aria-label="move row 2"><Handle/></button>'),
-    plain('<button className="resize-handle" aria-label="resize trades, 24%"/>')
+    plain('<button className="grip" tabIndex={0} aria-label="move row 2"><Handle/></button>'),
+    plain('<button className="resize-handle" tabIndex={0} aria-label="resize trades, 24%"/>')
   ]}/>,
   vanilla: <Snippet label="HTML" lines={[
     plain('<th scope="col" class="cell window header-cell">'),
-    plain('<button type="button" class="grip grabbable" aria-label="move row 2">'),
-    plain('<button type="button" class="resize-handle" aria-label="resize trades">')
+    plain('<button type="button" tabindex="0" class="grip grabbable" aria-label="move row 2">'),
+    plain('<button type="button" tabindex="0" class="resize-handle" aria-label="resize trades">')
   ]}/>
 };
 
@@ -34,7 +34,8 @@ export const cssShare = (world: World): ReactNode =>
       <Says>The markup stays honest HTML, a real table with real headers. The row grip is a
         button that will reorder rows from the arrow keys without a line of drag code, and the
         resize handle is a button that announces itself by name, and its <Term word="share">share</Term> once the ledger
-        exists.</Says>
+        exists. Each button writes a tabindex it would not need anywhere but Safari, whose
+        plain Tab skips a bare button; the keyboard track says why.</Says>
       <Says>JavaScript is left holding only what CSS cannot: one measurement, some arithmetic,
         and the order.</Says>
       <Codes>

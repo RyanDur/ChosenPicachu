@@ -78,7 +78,7 @@ export const gripArrows = (world: World, rowSource: string, buildSrc: string): R
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...span(rowSource, 'onArrows={', 'onArrows={'),
+            ...span(rowSource, 'onKeyDown={rowArrows(', 'onKeyDown={rowArrows('),
             aside('// the grip hears its own arrows; the walk is shared')
           ]}/>
           : <Snippet label="TS" lines={[

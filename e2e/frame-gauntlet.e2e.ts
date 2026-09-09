@@ -11,19 +11,21 @@ const worlds = [
   'pace=lazy&origin=keep&motion=static'
 ];
 
-for (const world of worlds) {
-  test(`the gauntlet: ${world}`, async ({page}) => {
+for (const stage of ['react', 'vanilla']) for (const world of worlds) {
+  test(`the gauntlet, in ${stage}: ${world}`, async ({page}) => {
     const troubles: string[] = [];
     page.on('pageerror', error => troubles.push(String(error)));
 
-    await page.goto(`/ChosenPicachu/demos/?tab=tables&world=vanilla&${world}`);
-    const frame = page.frameLocator('iframe[title="the living table, in vanilla"]');
+    await page.goto(`/ChosenPicachu/demos/?tab=tables&world=${stage}&${world}`);
+    const frame = stage === 'vanilla'
+      ? page.frameLocator('iframe[title="the living table, in vanilla"]')
+      : page.getByRole('region', {name: 'live aggregations'});
     await frame.getByRole('columnheader', {name: 'trades'}).waitFor();
 
     const order = () => frame.getByRole('columnheader').evaluateAll(headers =>
       headers.map(header => header.getAttribute('aria-label')));
     const rows = () => frame.getByRole('rowheader').evaluateAll(cells =>
-      cells.map(cell => (cell.textContent ?? '').trim()));
+      cells.map(cell => cell.getAttribute('aria-label') ?? (cell.textContent ?? '').trim()));
 
     const dragTo = async (fromBox: {x: number; y: number; width: number; height: number}, x: number, y: number) => {
       await page.mouse.move(fromBox.x + fromBox.width / 2, fromBox.y + fromBox.height / 2);

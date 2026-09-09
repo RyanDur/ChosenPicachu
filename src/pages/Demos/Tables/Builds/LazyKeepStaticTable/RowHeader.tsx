@@ -40,14 +40,14 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
   };
 
   return <th {...th} scope="row" aria-label={label}
+             className={className}>
+    <RowGrip position={position}
+             onPointerDown={rowLift(() => order, () => standing, lift)}
              onPointerMove={has(drag) ? pointerTravel(moved(drag), release) : undefined}
              onPointerUp={has(drag) ? release : undefined}
              onPointerCancel={has(drag) ? release : undefined}
              onLostPointerCapture={has(drag) ? pointerTravel(moved(drag), release) : undefined}
-             className={className}>
-    <RowGrip position={position}
-             onLift={rowLift(() => order, () => standing, lift)}
-             onArrows={rowArrows(row, () => standing, ({to}) => walkedTo(to))}/>
+             onKeyDown={rowArrows(row, () => standing, ({to}) => walkedTo(to))}/>
     {label}
     <MoveReport landed={landed}/>
   </th>;

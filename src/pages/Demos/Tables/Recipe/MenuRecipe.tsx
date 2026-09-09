@@ -101,11 +101,11 @@ const rankStory = (build: Build) => {
           <Codes>
             {world === 'react'
               ? <Snippet label="HTML" lines={[
-                ...span(menuSrc, '<button type="button" className="menu-toggle rounded-corners"', 'aria-label={`sort ${column}`}/>'), gap,
+                ...span(menuSrc, '<button type="button" tabIndex={0} className="menu-toggle rounded-corners"', 'aria-label={`sort ${column}`}/>'), gap,
                 ...span(menuSrc, '<menu id={`sort-${column}`}', '</menu>')
               ]}/>
               : <Snippet label="HTML" lines={[
-                ...span(tableSource, '<button type="button" class="menu-toggle rounded-corners"', '</menu>')
+                ...span(tableSource, '<button type="button" tabindex="0" class="menu-toggle rounded-corners"', '</menu>')
               ]}/>}
           </Codes>
         </Reveal>

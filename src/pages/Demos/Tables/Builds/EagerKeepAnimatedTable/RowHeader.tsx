@@ -51,16 +51,16 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
   };
 
   return <th {...th} scope="row" aria-label={label}
-             onPointerMove={has(drag) ? pointerTravel(moved(drag), release) : undefined}
-             onPointerUp={has(drag) ? release : undefined}
-             onPointerCancel={has(drag) ? release : undefined}
-             onLostPointerCapture={has(drag) ? pointerTravel(moved(drag), release) : undefined}
              onAnimationEnd={() => dispatch(settled({axis: 'row', held: row}))}
              className={classNames(className, (columnCarried || carried) && 'carried', has(settlingFrom) && 'settling', shovedClass(shoved))}
              style={{'--settling-from': translation(settlingFrom), '--shoved-by': shoveDistance(shoved)}}>
     <RowGrip position={position}
-             onLift={rowLift(() => order, () => standing, lift)}
-             onArrows={rowArrows(row, () => standing, ({to, heights}) => walkedTo(to, heights))}/>
+             onPointerDown={rowLift(() => order, () => standing, lift)}
+             onPointerMove={has(drag) ? pointerTravel(moved(drag), release) : undefined}
+             onPointerUp={has(drag) ? release : undefined}
+             onPointerCancel={has(drag) ? release : undefined}
+             onLostPointerCapture={has(drag) ? pointerTravel(moved(drag), release) : undefined}
+             onKeyDown={rowArrows(row, () => standing, ({to, heights}) => walkedTo(to, heights))}/>
     {label}
     <MoveReport landed={landed}/>
   </th>;

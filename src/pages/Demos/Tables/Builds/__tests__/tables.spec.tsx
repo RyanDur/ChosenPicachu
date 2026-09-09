@@ -332,6 +332,31 @@ describe('rows by hand', () => {
     expect(windowNames()).toEqual(['last 5 minutes', 'last 15 minutes', 'this minute', 'this hour', 'session']);
   });
 
+  test('every control says its tab stop outright, so a browser that tabs only to fields still reaches it', () => {
+    seat(EagerKeepStaticTable);
+
+    expect(grip('this minute')).toHaveAttribute('tabindex', '0');
+    expect(screen.getByRole('button', {name: 'sort trades'})).toHaveAttribute('tabindex', '0');
+    expect(screen.getByRole('button', {name: 'resize trades'})).toHaveAttribute('tabindex', '0');
+    expect(within(menuFor('sort trades')).getByRole('button', {name: 'ascending', hidden: true})).toHaveAttribute('tabindex', '0');
+  });
+
+  test('the grip that lifted the row keeps the pointer: every retake lands on it, never on the header cell', () => {
+    seat(EagerKeepStaticTable);
+    const retaken: string[] = [];
+    lift('this minute');
+    grip('this minute').setPointerCapture = () => retaken.push('grip');
+    rowOf('this minute').cells[0].setPointerCapture = () => retaken.push('header cell');
+
+    carryOver('last 5 minutes');
+    fireEvent.lostPointerCapture(rowOf('this minute').cells[0], {buttons: 0, clientX: 100, clientY: 70, pointerId: 1});
+
+    expect(retaken).toEqual(['grip']);
+    expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
+    carryOver('last 15 minutes');
+    expect(windowNames()).toEqual(['last 5 minutes', 'last 15 minutes', 'this minute', 'this hour', 'session']);
+  });
+
   test('a lazy row waits for the drop', () => {
     seat(LazyKeepStaticTable);
 
@@ -638,9 +663,11 @@ describe('animated moves', () => {
   };
   const surface = (): Element => {
     const table = within(sourceTable());
-    const found = [...table.getAllByRole('columnheader'), ...table.getAllByRole('rowheader')].find(head => head.classList.contains('carried'));
-    if (!found) throw new Error('nothing is aloft');
-    return found;
+    const column = table.getAllByRole('columnheader').find(head => head.classList.contains('carried'));
+    const row = table.getAllByRole('rowheader').find(head => head.classList.contains('carried'));
+    if (column) return column;
+    if (row) return within(row).getByRole('button', {name: /move row/});
+    throw new Error('nothing is aloft');
   };
   const columnCells = (name: string): Element[] => [header(name), ...lanes().map(lane => lane.cells[columnOrder().indexOf(name)])];
   const settledRows = (): void => lanes().forEach((lane, at) => {

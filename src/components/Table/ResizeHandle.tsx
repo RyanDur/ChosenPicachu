@@ -27,6 +27,7 @@ export const ResizeHandle: FC<{column: string}> = ({column}) => {
 
     return <>
         <button type="button"
+              tabIndex={0}
               className="resize-handle"
               aria-label={resizeLabel(column, width)}
               onFocus={(event: FocusEvent<HTMLElement>) =>

@@ -1,19 +1,13 @@
-import {FC, KeyboardEvent, PointerEvent} from 'react';
+import {ComponentProps, FC} from 'react';
 import Handle from '@components/grip.svg';
 import {gripLabel} from './survey';
 import './RowGrip.css';
 
-type Props = {
-    position: number;
-    onLift: (event: PointerEvent<HTMLElement>) => void;
-    onArrows: (event: KeyboardEvent<HTMLElement>) => void;
-};
-
-export const RowGrip: FC<Props> = ({position, onLift, onArrows}) =>
-    <button type="button"
+export const RowGrip: FC<ComponentProps<'button'> & {position: number}> = ({position, ...button}) =>
+    <button {...button}
+            type="button"
+            tabIndex={0}
             className="grip grabbable"
-            aria-label={gripLabel(position)}
-            onKeyDown={onArrows}
-            onPointerDown={onLift}>
+            aria-label={gripLabel(position)}>
         <Handle/>
     </button>;
