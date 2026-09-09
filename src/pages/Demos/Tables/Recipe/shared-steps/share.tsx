@@ -1,5 +1,5 @@
 import {ReactNode} from 'react';
-import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, aside, plain} from '../../../Recipe';
+import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, plain} from '../../../Recipe';
 import {unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {Term} from '../Term';
@@ -42,9 +42,6 @@ export const cssShare = (world: World): ReactNode =>
         <Snippet label="CSS" lines={[
           ...unit(sortableCss, '.grabbable {'), gap,
           ...unit(sortableCss, '.sortable {')
-        ]}/>
-        <Snippet label="TS" lines={[
-          aside('// one measurement, slot arithmetic, and the order; nothing else')
         ]}/>
       </Codes>
     </Reveal>

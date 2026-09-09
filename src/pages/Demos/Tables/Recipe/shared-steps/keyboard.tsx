@@ -58,17 +58,15 @@ export const arrowsSpeak = (world: World, headerSource: string, buildSrc: string
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...unit(headerSource, 'onKeyDown={travels'),
-            aside('// the anchors hold; the walk stops beside them')
+            ...unit(headerSource, 'onKeyDown={travels')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...unit(buildSrc, "th.addEventListener('keydown'"),
-            aside('// the anchors hold; the walk stops beside them')
+            ...unit(buildSrc, "th.addEventListener('keydown'")
           ]}/>}
         <Snippet label="TS" lines={[
           ...unit(surveySource, 'export const nudgedColumn'), gap,
           ...unit(surveySource, 'export const nudgedRow'),
-          aside('// both worlds walk with the same feet')
+          aside('// the anchors hold and the walk stops beside them; both worlds walk with the same feet')
         ]}/>
       </Codes>
     </Reveal>

@@ -18,7 +18,7 @@ const closesTheUnit = (source: string, at: number, closer: string): boolean => {
   if (ahead[0] === '.') {
     return closer !== ')';
   }
-  return !'=:{'.includes(ahead[0]);
+  return !'=:{>'.includes(ahead[0]);
 };
 
 export const unit = (source: string, anchor: string): Line[] => {

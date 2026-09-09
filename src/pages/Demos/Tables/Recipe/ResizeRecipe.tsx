@@ -7,10 +7,10 @@ import {Term} from './Term';
 import sharesSource from '@components/Table/shares.ts?raw';
 import resizeSource from '@components/Table/ResizeHandle.tsx?raw';
 import baseCss from '@components/Table/Table.css?raw';
-import headerCss from '@components/DragSortableTable/Header.css?raw';
 import tableSource from '../Frame/table.html?raw';
 import buildSource from '@components/DragSortableTable/DraggableColumn.tsx?raw';
 import frameResize from '../Frame/table/resize.ts?raw';
+import widthsSource from '../Aggregations/Aggregations.css?raw';
 import {theImplementation} from './shared-steps';
 import '../../Recipe/Recipe.css';
 
@@ -22,11 +22,12 @@ const ledgerCodes: Record<World, ReactNode> = {
       ...unit(sharesSource, 'export const measuredWidths')
     ]}/>
     <Snippet label="HTML" lines={[
-      plain("<th className=\"header-cell\" style={{'--share': `${share}%`}}>")
+      ...span(buildSource, "has(width) && 'shared'", "has(width) && 'shared'"), gap,
+      ...span(buildSource, "'--share': shareWidth(width)", "'--share': shareWidth(width)")
     ]}/>
     <Snippet label="CSS" lines={[
       ...unit(baseCss, '.fancy-table.apportioned .header-cell.shared {'), gap,
-      ...unit(headerCss, '.sortable .header-cell {')
+      ...unit(widthsSource, '.fancy-table {')
     ]}/>
   </Codes>,
   vanilla: <Codes>
@@ -39,7 +40,7 @@ const ledgerCodes: Record<World, ReactNode> = {
     ]}/>
     <Snippet label="CSS" lines={[
       ...unit(baseCss, '.fancy-table.apportioned .header-cell.shared {'), gap,
-      ...unit(headerCss, '.sortable .header-cell {')
+      ...unit(widthsSource, '.fancy-table {')
     ]}/>
   </Codes>
 };
@@ -124,17 +125,17 @@ const captureCodes: Record<World, ReactNode> = {
 const gestureCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="TS" lines={[
-      ...span(resizeSource, 'onMouseDown={event => event.stopPropagation()}',
-        'onMouseDown={event => event.stopPropagation()}'), gap,
+      ...span(resizeSource, 'onPointerDown={(event', 'event.stopPropagation();'),
+      aside('// …the press measures; the descent stops here'), gap,
       ...unit(sharesSource, 'export const resizeArrows'), gap,
       ...span(resizeSource, 'onKeyDown={resizeArrows(trade)}', 'onKeyDown={resizeArrows(trade)}'),
-      aside('// the column dial above never hears a thing')
+      aside('// the column drag above never hears a thing')
     ]}/>
   </Codes>,
   vanilla: <Codes>
     <Snippet label="TS" lines={[
       ...span(frameResize, "handle.addEventListener('pointerdown', event => {", 'event.stopPropagation();'),
-      plain('    // …the press measures; the descent stops here'), gap,
+      aside('// …the press measures; the descent stops here'), gap,
       ...unit(frameResize, "handle.addEventListener('keydown'"),
       aside('// the column drag above never hears a thing')
     ]}/>
