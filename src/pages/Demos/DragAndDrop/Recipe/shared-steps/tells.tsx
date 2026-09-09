@@ -11,7 +11,7 @@ export const platformCurrency =
     consents.</Tell>;
 
 export const neverOurs =
-  <Tell>Some pixels are never ours on this road: the snapshot, the cursor, the macOS
-    cancel. We name them instead of faking them, and the <Link className="signpost"
+  <Tell>Some pixels are never yours on this road: the snapshot, the cursor, the macOS
+    cancel. The steps name them instead of faking them, and the <Link className="signpost"
     to={`${Paths.demos}?tab=${DemoTopics.tables}`}>Tables demo</Link> walks the road that
     owns them.</Tell>;

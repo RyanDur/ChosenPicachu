@@ -4,7 +4,7 @@ import {Clues} from '../../Recipe/Arc';
 const clues: [string, string][] = [
   ['keep themselves current', 'The data arrives over time. Nothing here is a page you load once.'],
   ['comparing side by side', 'Several measures over one shared set of periods. Two dimensions, not a list.'],
-  ['what matters most on top', 'The order is the trader’s, not ours. Ranking is a feature, not a default.'],
+  ['what matters most on top', 'The order is the trader’s, not yours. Ranking is a feature, not a default.'],
   ['arranged the way I think', 'Both axes move. Columns and rows are things the hand can reach.'],
   ['it should just happen', 'No submit, no reload. The arrangement responds under the hand.']
 ];

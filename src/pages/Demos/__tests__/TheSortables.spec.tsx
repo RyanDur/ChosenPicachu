@@ -235,7 +235,7 @@ describe('the sortable list demo', () => {
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/DataTransfer'));
     expect(stories(recipe)).toHaveLength(2);
     expect(recipe).toHaveTextContent(/The user can arrange the list by hand/);
-    expect(recipe).toHaveTextContent(/The list answers as they drag/);
+    expect(recipe).toHaveTextContent(/The list answers as you drag/);
 
     await userEvent.click(within(recipe).getByText(/The user can arrange the list by hand/));
     expect(within(recipe).getByRole('link', {name: /Tables demo/}))

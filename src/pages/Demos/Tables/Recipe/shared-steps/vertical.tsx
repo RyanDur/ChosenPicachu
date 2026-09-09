@@ -24,11 +24,11 @@ export const carryVertical = (world: World, rowSource: string, buildSrc: string)
         {world === 'react'
           ? <Snippet label="HTML" lines={[
             ...span(gripSource, '<button', '</button>'),
-            aside('{/* focusable by birth; the keyboard track will thank us */}')
+            aside('{/* focusable by birth; the keyboard track will thank you */}')
           ]}/>
           : <Snippet label="HTML" lines={[
             ...span(frameHtml, '<button type="button" class="grip grabbable" aria-label="move row 1">', '</button>'),
-            aside('<!-- focusable by birth; the keyboard track will thank us -->')
+            aside('<!-- focusable by birth; the keyboard track will thank you -->')
           ]}/>}
         {world === 'react'
           ? <Snippet label="TS" lines={[

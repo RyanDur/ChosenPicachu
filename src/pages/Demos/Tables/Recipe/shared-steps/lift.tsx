@@ -8,7 +8,7 @@ import {gap, sortableCss, stateSource, liftSource} from './sources';
 export const liftOnce = (world: World, headerSource: string, buildSrc: string): ReactNode =>
   <Step title="Lift on pointer down, and measure the table once" id="step-lift">
     <Words want="A carry must know the ground it stands on without asking the DOM again on every move.">
-      <Says>Asking the DOM where things are mid-drag causes the layout thrash we came here to
+      <Says>Asking the DOM where things are mid-drag causes the layout thrash you came here to
         avoid, so everything gets measured once, at the grab: the
         table’s <Mdn path="Web/API/Element/getBoundingClientRect">bounding rect</Mdn> and every
         header in it. Every later answer is arithmetic against that one <Term word="survey">survey</Term>.</Says>

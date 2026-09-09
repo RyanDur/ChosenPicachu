@@ -21,7 +21,7 @@ const shareMarkup: Record<World, ReactNode> = {
 export const cssShare = (world: World): ReactNode =>
   <Step title="Let CSS carry its share">
     <Words want="Whatever the trader arrives with (mouse, touchscreen, keyboard), the platform’s manners come first, and most of them are declarations, not code.">
-      <Says>Our first pass writes no behavior: the stylesheet already covers most of
+      <Says>Your first pass writes no behavior: the stylesheet already covers most of
         this. <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the open hand and the closed
         fist, <Mdn path="Web/CSS/touch-action">touch-action</Mdn>: none lets pointer events drag
         on a touchscreen instead of scrolling it,

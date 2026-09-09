@@ -31,7 +31,7 @@ export const twoRoads =
     its edges (the snapshot that cannot be animated, the cursor that belongs to the
     platform, the macOS cancel) are that road’s own story. This table takes the other
     road: <Mdn path="Web/API/Pointer_events">pointer events</Mdn>, where every pixel is
-    ours to own and no drag-and-drop library is anywhere in the build.</Tell>;
+    yours to own and no drag-and-drop library is anywhere in the build.</Tell>;
 
 export const againstTheStream =
   <Tell>The trader needs to move a column while the stream writes. We could reorder
@@ -39,7 +39,7 @@ export const againstTheStream =
     columns are the state, in their order, a trade writes into the row that holds its
     seat, and the markup renders through them. Moving a column is just changing the
     order. We could ask the DOM where everything is as the pointer moves,
-    but layout queries during a drag cause the jank we are trying to avoid; so
+    but layout queries during a drag cause the jank you are trying to avoid; so
     everything the drag needs gets measured once, when you grab.</Tell>;
 
 export const ownedPixels = (world: World): ReactNode =>

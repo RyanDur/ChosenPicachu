@@ -3,12 +3,12 @@ import {Motion, Origin, Pace} from '../../../Controls';
 import {Tell} from '../../../Recipe';
 
 const paces: Record<Pace, string> = {
-  eager: 'The list answers as they drag, so home stays reachable until they let go.',
+  eager: 'The list answers as you drag, so home stays reachable until you let go.',
   lazy: 'The list holds calm and settles on the drop, so only the destination matters.'
 };
 
 const origins: Record<Origin, string> = {
-  keep: 'The card at rest stays in sight, so nothing vanishes while they decide.',
+  keep: 'The card at rest stays in sight, so nothing vanishes while you decide.',
   hide: 'One card rides the pointer, so no duplicate muddies the carry.'
 };
 

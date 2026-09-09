@@ -23,20 +23,20 @@ const gap = plain(' ');
 const dealPlans: Record<World, ReactNode> = {
   react: <>
     <Says>The columns are declared once, each with a name and a class; how wide they open is CSS.
-      We could let the browser size the columns by their content, but a live table
-      would never hold still: every new number re-negotiates the layout. And we could carry widths in
+      You could let the browser size the columns by their content, but a live table
+      would never hold still: every new number re-negotiates the layout. And you could carry widths in
       the data, but they are layout, not data. So the page’s stylesheet deals the opening
       widths, and with <Mdn path="Web/CSS/table-layout">table-layout</Mdn>: fixed, the header
       widths govern their whole columns: the table always fills its container, and the
       columns hold still while the values change.</Says>
-    <Says>And no JavaScript knows these widths at all, because we do not need to know the
+    <Says>And no JavaScript knows these widths at all, because nothing needs to know the
       size until you touch something. The resize ledger is born at the first touch by
       measuring the headers as they stand, and the drag surveys them at the lift; a value
       that changes at runtime is state, and until then nothing has changed.</Says>
   </>,
   vanilla: <Says>The columns are declared once, each a header cell with a name and a class; how
-    wide they open is CSS. We could let the browser size the columns by their content,
-    but a live table would never hold still: every new number re-negotiates the layout. And we
+    wide they open is CSS. You could let the browser size the columns by their content,
+    but a live table would never hold still: every new number re-negotiates the layout. And you
     could carry widths in the markup, but they are layout, not content. So the page’s
     stylesheet deals the opening widths, and
     with <Mdn path="Web/CSS/table-layout">table-layout</Mdn>: fixed, the header widths
@@ -102,8 +102,8 @@ const foldCodes: Record<World, ReactNode> = {
 };
 
 const refolds: Record<World, string> = {
-  react: 'Then every render refolds everything we hold into the windows, because refolding is simple math and cannot drift out of sync.',
-  vanilla: 'Then every arrival refolds everything we hold into the windows, and the page writes what changed.'
+  react: 'Then every render refolds every trade the page holds into the windows, because refolding is simple math and cannot drift out of sync.',
+  vanilla: 'Then every arrival refolds every trade the page holds into the windows, and the page writes what changed.'
 };
 
 const stillStory = (world: World) =>
@@ -113,7 +113,7 @@ const stillStory = (world: World) =>
     {theImplementation(world, 'Aggregations', 'Frame/frame.main.ts')}
     <Tell>The shape comes from the design, in the element the story chose: a few measures
       across a few time windows, numbers on two axes; that is what a table is for. It stands
-      first as a still, built from whatever trades we hold: headers on both axes, and the
+      first as a still, built from whatever trades the page holds: headers on both axes, and the
       reading order correct before a single interaction exists.</Tell>
     <Steps>
       <Step title="Deal a real HTML table">
@@ -127,12 +127,12 @@ const stillStory = (world: World) =>
             A <Mdn path="Web/HTML/Element/thead">thead</Mdn> of th headers, one per column, each
             announcing <Mdn path="Web/HTML/Element/th#scope">scope="col"</Mdn>: that one attribute
             is how a screen reader knows to say the column’s name with every cell below it.
-            A <Mdn path="Web/HTML/Element/tbody">tbody</Mdn> of rows built from the trades we hold;
+            A <Mdn path="Web/HTML/Element/tbody">tbody</Mdn> of rows built from the trades the page holds;
             each row leads with a th of its own,
             announcing <Mdn path="Web/HTML/Element/th#scope">scope="row"</Mdn> so the window’s name
             travels with every cell beside it, then a td per measure.</Says>
-          <Says>We could build this out of divs and grid, and it would look identical. But the table
-            element carries behavior we would otherwise owe: readers walk it row by row and cell by
+          <Says>You could build this out of divs and grid, and it would look identical. But the table
+            element carries behavior you would otherwise owe: readers walk it row by row and cell by
             cell, headers belong to their columns, and everything later, the sorting announcements,
             the drags, the keyboard, hangs off these roles instead of reinventing them. This is the
             first rule of <Mdn path="Web/Accessibility/ARIA">ARIA</Mdn>: prefer the native element,
@@ -194,7 +194,7 @@ const flowStory = (world: World) =>
       </Step>
       <Step title="Fold the stream into windows">
         <Words want="Raw trades tick too fast to read; the trader reads windows: this minute, the last five, the hour, the whole session.">
-          <Says>The windows should be derived, never accumulated: refold every trade we hold
+          <Says>The windows should be derived, never accumulated: refold every trade the page holds
             each time, so the aggregates cannot drift from the trades that made them.</Says>
         </Words>
         <Reveal>
