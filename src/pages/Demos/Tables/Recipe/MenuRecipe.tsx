@@ -38,16 +38,17 @@ const sortedDirectly = ({world, menuSrc, buildSrc}: Build) =>
     </Words>
     <Reveal>
       {world === 'react'
-        ? <Says>The menu raises onSorted, the page dispatches it, and that is the whole answer.
-          The rows cut to their ranked seats on the next frame, in the animated table and the
-          static one alike.</Says>
+        ? <Says>SortMenu is the whole chooser: three buttons naming the three choices, raising
+          onSorted with which column asked for what. The page dispatches it, and that is the
+          whole answer. The rows cut to their ranked seats on the next frame, in the animated
+          table and the static one alike.</Says>
         : <Says>Choose dispatches the sort into the arrangement, and the reconcile moves the lanes
           in the same breath. The rows cut to their ranked seats, in the animated build and the
           static one alike.</Says>}
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...span(menuSrc, 'onClick={() => onSorted?.(', 'onClick={() => onSorted?.(')
+            ...span(menuSrc, 'export const SortMenu', '</>;')
           ]}/>
           : <Snippet label="TS" lines={[
             ...unit(buildSrc, '  const choose = ')
@@ -161,9 +162,7 @@ const rankStory = (build: Build) => {
             ? <Says>The sort is one value in the page’s arrangement, a column name and a
               direction. When the page hands the table its columns it marks the sorting one, and
               only that one, so the th announces aria-sort from what it was handed and the toggle
-              wears the direction’s glyph from that attribute. SortMenu is the whole chooser:
-              three buttons naming the three choices, raising onSorted with which column asked for
-              what.</Says>
+              wears the direction’s glyph from that attribute.</Says>
             : <Says>The sort is one value in the arrangement, a column name and a direction. When
               it changes, announce walks the headers asking it for each: the sorting th gains
               aria-sort, and every other column returns to rest. One value holds the sort, and the
@@ -172,8 +171,7 @@ const rankStory = (build: Build) => {
             {world === 'react'
               ? <Snippet label="TS" lines={[
                 ...unit(arrangementSource, 'export type Arrangement'), gap,
-                ...unit(demosSource, 'export const selectColumns'), gap,
-                ...span(menuSrc, 'export const SortMenu', '</>;')
+                ...unit(demosSource, 'export const selectColumns')
               ]}/>
               : <Snippet label="TS" lines={[
                 ...unit(arrangementSource, 'export type Arrangement'), gap,

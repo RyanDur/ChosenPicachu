@@ -38,8 +38,4 @@
   .call {
     color: var(--code-call);
   }
-
-  .punctuation {
-    color: var(--code-punctuation);
-  }
 }

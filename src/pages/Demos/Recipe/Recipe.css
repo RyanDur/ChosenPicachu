@@ -101,6 +101,12 @@
 
   .step-reveal {
     flex-basis: 100%;
+
+    &::details-content {
+      margin-top: var(--base-x-2);
+      display: grid;
+      gap: var(--base-x-2);
+    }
   }
 
   .term {
@@ -153,12 +159,6 @@
       margin: auto;
       height: fit-content;
     }
-  }
-
-  .step-built {
-    margin-top: var(--base-x-2);
-    display: grid;
-    gap: var(--base-x-2);
   }
 
   .data-path {

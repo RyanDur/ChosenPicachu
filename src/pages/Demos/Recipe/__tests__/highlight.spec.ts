@@ -17,7 +17,7 @@ describe('the code voice', () => {
     expect(found['"trades"']).toBe('string');
   });
 
-  it('reads a TS line: keywords, types, calls, punctuation', () => {
+  it('reads a TS line: keywords, types and calls; the brackets stay plain', () => {
     const line = `export const columns = useTableSelector(selectColumns<Measured, Measures>);`;
 
     const found = kinds('TS', line);
@@ -27,7 +27,7 @@ describe('the code voice', () => {
     expect(found.useTableSelector).toBe('call');
     expect(found.Measured).toBe('type');
     expect(found.Measures).toBe('type');
-    expect(found['(']).toBe('punctuation');
+    expect(found['(']).toBeUndefined();
   });
 
   it('types after a colon and generics on a type alias are types', () => {

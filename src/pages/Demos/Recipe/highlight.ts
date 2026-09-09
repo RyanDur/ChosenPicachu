@@ -1,4 +1,4 @@
-export type Kind = 'plain' | 'keyword' | 'string' | 'number' | 'comment' | 'tag' | 'attribute' | 'type' | 'call' | 'punctuation';
+export type Kind = 'plain' | 'keyword' | 'string' | 'number' | 'comment' | 'tag' | 'attribute' | 'type' | 'call';
 
 export type Token = {
   text: string;
@@ -57,8 +57,7 @@ const ts: ReadonlyArray<{match: RegExp; kind: Kind}> = [
   {match: /(?<=\b(?:type|extends|new)\s+)[A-Z]\w*/g, kind: 'type'},
   {match: /(?<=<)[A-Z]\w*(?=[,>])|(?<=, )[A-Z]\w*(?=>)/g, kind: 'type'},
   {match: /\b[a-zA-Z_$][\w$]*(?=\()/g, kind: 'call'},
-  {match: /\b\d+(?:\.\d+)?\b/g, kind: 'number'},
-  {match: /[{}()[\]<>;,=]|=>|\?\.|\?\?|\.\.\./g, kind: 'punctuation'}
+  {match: /\b\d+(?:\.\d+)?\b/g, kind: 'number'}
 ];
 
 const css: ReadonlyArray<{match: RegExp; kind: Kind}> = [
@@ -69,8 +68,7 @@ const css: ReadonlyArray<{match: RegExp; kind: Kind}> = [
   {match: /^[ \t]*[.&][^:;{}]*,$/g, kind: 'tag'},
   {match: /(?<![\w-])-?\d+(?:\.\d+)?[a-z%]*/g, kind: 'number'},
   {match: /(?<=^[ \t]*)[a-z-]+(?=\s*:)/gm, kind: 'attribute'},
-  {match: /[a-z-]+(?=\()/g, kind: 'call'},
-  {match: /[{}();:,]/g, kind: 'punctuation'}
+  {match: /[a-z-]+(?=\()/g, kind: 'call'}
 ];
 
 const html: ReadonlyArray<{match: RegExp; kind: Kind}> = [
@@ -78,8 +76,7 @@ const html: ReadonlyArray<{match: RegExp; kind: Kind}> = [
   {match: /'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|"(?:[^"\\]|\\.)*"/g, kind: 'string'},
   {match: /(?<=<\/?)[\w.-]+/g, kind: 'tag'},
   {match: /(?<=<[\w.-]+\s[^>]*?)\b[a-zA-Z][\w-]*(?==)/g, kind: 'attribute'},
-  {match: /\b\d+(?:\.\d+)?\b/g, kind: 'number'},
-  {match: /<\/?|\/?>|[{}=]/g, kind: 'punctuation'}
+  {match: /\b\d+(?:\.\d+)?\b/g, kind: 'number'}
 ];
 
 const grammars = {TS: ts, CSS: css, HTML: html};

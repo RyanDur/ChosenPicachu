@@ -3,7 +3,7 @@ import {Codes, Reveal, Says, Snippet, Step, Words, aside} from '../../../Recipe'
 import {span, unit} from '../../../Recipe/carve';
 import {World} from '../../params';
 import {Term} from '../Term';
-import {arrangementSource, elementSource, gap, headersSource, placingSource, rowSource, stateSource} from './sources';
+import {arrangementSource, gap, headersSource, placingSource, rowSource} from './sources';
 
 export const orderInState = (world: World, tableSource: string, buildSrc: string): ReactNode =>
   <Step title="Keep the order in state, not in the data">
@@ -34,9 +34,7 @@ export const orderInState = (world: World, tableSource: string, buildSrc: string
       {world === 'react'
         ? <Codes>
           <Snippet label="TS" lines={[
-            ...unit(arrangementSource, 'export type Arrangement'), gap,
-            ...unit(stateSource, 'export type TableState'), gap,
-            ...unit(elementSource, 'export const DragSortableTable')
+            ...unit(arrangementSource, 'export type Arrangement')
           ]}/>
           <Snippet label="HTML" lines={[
             ...span(tableSource, '<DragSortableTable className', 'rows={seated(rows)}>'), gap,

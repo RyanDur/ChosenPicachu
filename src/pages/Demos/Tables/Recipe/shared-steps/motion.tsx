@@ -41,9 +41,8 @@ export const animatedMotion = (world: World, headerSource: string, cssSource: st
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...unit(headerSource, 'const release = '), gap,
             ...span(headerSource, 'onAnimationEnd={() => dispatch(settled', 'onAnimationEnd={() => dispatch(settled'), gap,
-            ...unit(reducerSource, 'const motion = '), gap,
+            ...span(reducerSource, "case 'columnMovedBeside':", "return unsettle(shoved, {axis: 'column', held: action.name}"), gap,
             ...unit(stateSource, 'export const shoveColumns'), gap,
             ...unit(stateSource, 'export const settle'),
             aside('// the marks are state; the strike and the drop set them, the cells wear them, the stylesheet moves them')

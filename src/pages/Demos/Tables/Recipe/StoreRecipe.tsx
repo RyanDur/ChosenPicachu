@@ -50,15 +50,12 @@ const oneState = (world: World): ReactNode =>
         <Snippet label="TS" lines={[
           ...unit(demosSource, 'export type DemosState'), gap,
           ...unit(stateSource, 'export type TableState'), gap,
-          ...unit(storeSource, 'export type Store'), gap,
-          ...unit(storeSource, 'export const store'), gap,
-          ...unit(demosSource, 'export const demosStore'),
+          ...unit(storeSource, 'export type Store'),
           aside('// a value, a dispatch, a subscribe; the whole store, and the page only names its state')
         ]}/>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...unit(openingSource, 'export const useExchange'), gap,
-            ...unit(elementSource, 'export const DragSortableTable')
+            ...unit(demosSource, 'export const demosStore')
           ]}/>
           : <Snippet label="TS" lines={[
             ...span(buildSrc, 'const trades = demosStore(', 'const hand = tableStore(')
@@ -110,13 +107,8 @@ const actionsAreData =
         <Snippet label="TS" lines={[
           ...unit(demosSource, 'export const demosSlice'), gap,
           ...unit(storeSource, 'export type Slice'), gap,
-          ...unit(storeSource, 'export const sliced'), gap,
           ...unit(arrangementSource, 'const answering = '), gap,
-          ...unit(arrangementSource, 'export const sortEnded'), gap,
-          ...unit(arrangementSource, 'export const standingOf'), gap,
-          ...unit(storeSource, 'export const combined'), gap,
-          ...unit(reducerSource, 'export const tableReducer'), gap,
-          ...unit(demosSource, 'export const demosStore'),
+          ...unit(reducerSource, 'export const tableReducer'),
           aside('// two slices by key; the arrangement answers the hand and the menu; three table reducers read the type in turn')
         ]}/>
       </Codes>
