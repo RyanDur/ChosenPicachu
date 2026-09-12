@@ -180,6 +180,9 @@ jobs:
           urls: ${{ matrix.url }}
           configPath: ./lighthouserc.json
           uploadArtifacts: false
+      - name: Read the scores in the run
+        if: always() && steps.audit.outputs.resultsPath != ''
+        run: node scripts/lighthouse/summary.mjs "${{ matrix.page }}" "${{ steps.audit.outputs.resultsPath }}" >> "$GITHUB_STEP_SUMMARY"
       - name: Keep the reports
         if: always()
         uses: actions/upload-artifact@v6
