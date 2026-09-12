@@ -37,9 +37,11 @@ describe('the review prompt', () => {
         expect(prompt).toContain('Review the whole of src/');
     });
 
-    test('a review of the changes names the two commits to diff', () => {
-        expect(promptFor({scope: 'changes', before: 'abc', after: 'def'})).toContain('git diff abc def');
-    });
+  test('a review of the changes names the two commits to diff', () => {
+    const prompt = promptFor({scope: 'changes', before: 'abc', after: 'def'});
+    expect(prompt).toContain('git diff abc def');
+    expect(prompt).toContain('git log abc..def');
+  });
 
     test('an unknown scope is refused by name', () => {
         expect(() => promptFor({scope: 'some'})).toThrow('no review scope named "some"');

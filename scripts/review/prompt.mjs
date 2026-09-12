@@ -2,8 +2,8 @@ const doors = ['Structure', 'Presentation', 'DynamicInteraction', 'TeeUp'].map(d
 
 const scopes = {
     full: () => 'Review the whole of src/ and e2e/: every page, component, sheet and spec.',
-    changes: ({before, after}) =>
-        `Review what this push changed: run \`git diff ${before} ${after}\` for the change and read each touched file whole for its context.`
+  changes: ({before, after}) =>
+    `Review what this push changed: run \`git diff ${before} ${after}\` for the change, read each touched file whole, and read any other file the change leans on when you need it for context. Read \`git log ${before}..${after}\` too, for what each commit says it answers: a commit may quote an earlier finding and say how the change answers it.`
 };
 
 export const promptFor = ({scope, before, after}) => {
