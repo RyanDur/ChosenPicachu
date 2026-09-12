@@ -10,10 +10,10 @@ export const NaturalZIndex: FC<PropsWithClassName> = ({className}) => {
 
   return <article id="z-index-demo" className={className}>
     <button className='button primary' onClick={onClick}>{isCollapsed ? 'Collapse' : 'Expand'}</button>
-    <section className='demo-container'>
+    <div className='demo-container'>
       <p className={classNames('layer card rounded-corners floating', isCollapsed && 'closed')}>First</p>
       <p className={classNames('layer card rounded-corners floating', isCollapsed && 'closed')}>Second</p>
       <p className={classNames('layer card rounded-corners floating', isCollapsed && 'closed')}>Third</p>
-    </section>
+    </div>
   </article>;
 };

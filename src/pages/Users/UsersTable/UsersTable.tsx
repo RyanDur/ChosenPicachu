@@ -38,10 +38,10 @@ export const UsersTable: FC = () => {
           <FriendsList user={user} users={users} onChange={friends => dispatch(friendsChanged(user, friends))}/>
         </Cell>
         <Cell column="works-from-home" row={user.id} className="cell">
-          <section className="last-column">
+          <div className="last-column">
             {worksFromHome(user)}
             <UserMenu user={user} name={name} onRemove={() => dispatch(userRemoved(user))}/>
-          </section>
+          </div>
         </Cell>
       </Row>;
     })}

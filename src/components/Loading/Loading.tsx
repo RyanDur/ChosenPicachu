@@ -8,6 +8,6 @@ type LoadingProps = {
 }
 
 export const Loading: FC<LoadingProps> = ({className, label = 'loading'}) =>
-    <section className={classNames('loading-screen', className)}>
+    <div className={classNames('loading-screen', className)}>
         <progress className="loading" aria-label={label}/>
-    </section>;
+    </div>;

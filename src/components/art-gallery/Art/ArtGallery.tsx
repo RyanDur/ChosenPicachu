@@ -41,7 +41,7 @@ export const ArtGallery: FC = () => {
     };
   }, [page, search, tab, size, reset, updateArt, raise]);
 
-  return <section id="art-gallery">
+  return <div id="art-gallery">
     {art?.pieces.map((piece, index) => <figure
       className="frame" key={piece.id}>
       <div className="wall-slot">
@@ -53,5 +53,5 @@ export const ArtGallery: FC = () => {
     {!loading && errored && <img src={noImageGallery}
                                  id="empty-gallery"
                                  alt="empty gallery"/>}
-  </section>;
+  </div>;
 };
