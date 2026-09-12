@@ -174,6 +174,7 @@ describe('the users page', () => {
     await userEvent.click(removeControl);
 
     expect(spy).toHaveBeenCalledWith(firstUser);
+    expect(screen.getByLabelText('url search')).not.toHaveTextContent('id=');
   });
 
   test('cloning a user', async () => {
