@@ -1,14 +1,12 @@
 import {fireEvent, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {broadcast, listeningFeed, subscribed, tradeFrame, urlOf} from '@test-support/feed';
-import {wire as eagerKeepStatic} from '../builds/EagerKeepStatic';
-import {wire as eagerKeepAnimated} from '../builds/EagerKeepAnimated';
-import {wire as eagerHideStatic} from '../builds/EagerHideStatic';
-import {wire as lazyKeepStatic} from '../builds/LazyKeepStatic';
+import {wire as eager} from '../builds/Eager';
+import {wire as lazy} from '../builds/Lazy';
 import tableHtml from '../table.html?raw';
 
 describe('the frame table', () => {
-  const deal = (feedUrl?: string, wire: (document: Document) => void = eagerKeepStatic): void => {
+  const deal = (feedUrl?: string, wire: (document: Document) => void = eager): void => {
     window.__env = feedUrl
       ? {tradeFeed: feedUrl, tradeHistory: 'http://127.0.0.1:9', tradeProduct: 'BTC-USD',
          aicDomain: '', harvardDomain: '', harvardAPIKey: '', vamDomain: ''}
@@ -117,7 +115,7 @@ describe('the frame table', () => {
 
   it('a column walks right to the end and left back home, keypress after keypress, keeping the focus the moves take', async () => {
     const restore = blurringMoves();
-    deal(undefined, eagerKeepAnimated);
+    deal(undefined, eager);
 
     const trades = screen.getByRole('columnheader', {name: /trades/});
     trades.focus();
@@ -132,7 +130,7 @@ describe('the frame table', () => {
 
   it('a row walks to the bottom and back to the top, keypress after keypress, keeping the focus the moves take', async () => {
     const restore = blurringMoves();
-    deal(undefined, eagerKeepAnimated);
+    deal(undefined, eager);
 
     const grip = within(screen.getByRole('row', {name: /this minute/})).getByRole('button', {name: /move row/});
     grip.focus();
@@ -345,7 +343,7 @@ describe('the frame table', () => {
 
   describe('the worlds of pace, origin, and motion', () => {
     it('lazy holds its shape and commits on drop', () => {
-      deal(undefined, lazyKeepStatic);
+      deal(undefined, lazy);
       stubbedRects();
 
       const trades = screen.getByRole('columnheader', {name: /trades/});
@@ -359,7 +357,7 @@ describe('the frame table', () => {
     });
 
     it('a lazy drop at home changes nothing', () => {
-      deal(undefined, lazyKeepStatic);
+      deal(undefined, lazy);
       stubbedRects();
 
       const trades = screen.getByRole('columnheader', {name: /trades/});
@@ -372,7 +370,7 @@ describe('the frame table', () => {
     });
 
     it('a lazy row dropped at home changes nothing', () => {
-      deal(undefined, lazyKeepStatic);
+      deal(undefined, lazy);
       rowRects();
 
       const grip = within(screen.getByRole('row', {name: /this minute/})).getByRole('button', {name: 'move row 1'});
@@ -384,38 +382,40 @@ describe('the frame table', () => {
       expect(windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
     });
 
-    it('keep leaves the lifted row where it stands, and nothing wears a carry', () => {
-      deal(undefined, lazyKeepStatic);
+    it('a lazy build carries the lifted row in the store and dresses it, and moves nothing until the drop', () => {
+      deal(undefined, lazy);
       rowRects();
 
       const grip = within(screen.getByRole('row', {name: /this minute/})).getByRole('button', {name: 'move row 1'});
       held(grip, {clientX: 20, clientY: 20, pointerId: 1});
       fireEvent.pointerMove(surface(), {buttons: 1, clientX: 20, clientY: 30, pointerId: 1});
 
-      expect(carried()).toEqual([]);
+      expect(carried().length).toBeGreaterThan(0);
       expect(windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
 
       fireEvent.pointerUp(surface(), {pointerId: 1});
       expect(carried()).toEqual([]);
     });
 
-    it('keep leaves the lifted column where it stands, and nothing wears a carry', () => {
-      deal(undefined, lazyKeepStatic);
+    it('a lazy build dresses the carried column the same way; whether it moves is the sheet’s word', () => {
+      deal(undefined, lazy);
       stubbedRects();
 
       const trades = screen.getByRole('columnheader', {name: /trades/});
       held(trades, {clientX: 200, clientY: 50, pointerId: 1});
+      fireEvent.pointerMove(surface(), {buttons: 1, clientX: 200, clientY: 50, pointerId: 1});
       fireEvent.pointerMove(surface(), {buttons: 1, clientX: 220, clientY: 50, pointerId: 1});
 
-      expect(carried()).toEqual([]);
-      expect(trades.style.getPropertyValue('--carried-by')).toBe('');
+      expect(trades).toHaveClass('carried');
+      expect(trades).toHaveStyle({'--drift-x': '20px', '--drift-y': '0px'});
 
       fireEvent.pointerUp(surface(), {pointerId: 1});
       expect(carried()).toEqual([]);
+      expect(trades.style.getPropertyValue('--drift-x')).toBe('');
     });
 
     it('hide carries the lifted column, every cell of it, by the offset from home, and lands it as itself', () => {
-      deal(undefined, eagerHideStatic);
+      deal(undefined, eager);
       stubbedRects();
 
       const trades = screen.getByRole('columnheader', {name: /trades/});
@@ -426,16 +426,16 @@ describe('the frame table', () => {
       const column = [trades, ...screen.getAllByRole('row').slice(1).map(lane => lane.children[1])];
       column.forEach(cell => {
         expect(cell).toHaveClass('carried');
-        expect(cell).toHaveStyle({'--carried-by': '-130px 10px'});
+        expect(cell).toHaveStyle({'--seat-x': '-160px', '--drift-x': '30px', '--drift-y': '10px'});
       });
 
       fireEvent.pointerUp(surface(), {pointerId: 1});
       expect(carried()).toEqual([]);
-      expect(trades.style.getPropertyValue('--carried-by')).toBe('');
+      expect(trades.style.getPropertyValue('--seat-x')).toBe('');
     });
 
     it('hide carries the lifted row, every cell of it', () => {
-      deal(undefined, eagerHideStatic);
+      deal(undefined, eager);
       rowRects();
 
       const grip = within(screen.getByRole('row', {name: /this minute/})).getByRole('button', {name: 'move row 1'});
@@ -445,7 +445,7 @@ describe('the frame table', () => {
 
       [...screen.getByRole('row', {name: /this minute/}).children].forEach(cell => {
         expect(cell).toHaveClass('carried');
-        expect(cell).toHaveStyle({'--carried-by': '5px 15px'});
+        expect(cell).toHaveStyle({'--seat-y': '0px', '--drift-x': '5px', '--drift-y': '15px'});
       });
 
       fireEvent.pointerUp(surface(), {pointerId: 1});
@@ -453,7 +453,7 @@ describe('the frame table', () => {
     });
 
     it('a menu sort in an animated world cuts: nothing is carried, nothing to land', async () => {
-      deal(undefined, eagerKeepAnimated);
+      deal(undefined, eager);
 
       await userEvent.click(sortMenu('trades').getByRole('button', {name: 'descending', hidden: true}));
 
@@ -462,7 +462,7 @@ describe('the frame table', () => {
     });
 
     it('a strike shoves the neighbour, and on release the real column settles from where it was dropped', () => {
-      deal(undefined, eagerKeepAnimated);
+      deal(undefined, eager);
       stubbedRects();
 
       const trades = screen.getByRole('columnheader', {name: /trades/});
@@ -481,7 +481,7 @@ describe('the frame table', () => {
       const settling = [trades, ...screen.getAllByRole('row').slice(1).map(lane => lane.children[2])];
       settling.forEach(cell => {
         expect(cell).toHaveClass('settling');
-        expect(cell).toHaveStyle({'--settling-from': '-260px 0px'});
+        expect(cell).toHaveStyle({'--settle-x': '-260px', '--settle-y': '0px'});
       });
 
       held(buys, {clientX: 200, clientY: 50, pointerId: 1});
@@ -489,8 +489,8 @@ describe('the frame table', () => {
       expect(buys).not.toHaveClass('shoved-start');
     });
 
-    it('a static release settles nothing', () => {
-      deal(undefined, eagerKeepStatic);
+    it('every release marks what settles; the word on the table decides whether it plays', () => {
+      deal(undefined, eager);
       stubbedRects();
 
       const trades = screen.getByRole('columnheader', {name: /trades/});
@@ -499,7 +499,7 @@ describe('the frame table', () => {
       fireEvent.pointerUp(surface(), {pointerId: 1});
 
       expect(carried()).toEqual([]);
-      expect(trades).not.toHaveClass('settling');
+      expect(trades).toHaveClass('settling');
       expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
     });
   });

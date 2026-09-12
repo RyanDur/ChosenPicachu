@@ -1,49 +1,56 @@
 import {FC} from 'react';
+import {Motion, Origin} from '../../Controls';
 import {Steps, Story} from '../../Recipe';
 import {
   Track,
   World,
   accessTrack,
   againstTheStream,
+  animatedMotion,
   arrowsSpeak,
   cssShare,
   cutKey,
   deadZone,
   dragSurface,
-  eagerPace,
+  lazyPace,
   focusLands,
   gripArrows,
   hideOrigin,
+  keepOrigin,
   liftOnce,
   listenersOnce,
   orderInState,
   ownedPixels,
   promises,
   quietDials,
-  staticMotion,
   carryVertical,
+  staticMotion,
   turnedVertical,
   theImplementation,
   theWholeBuild,
-  twoRoads
+  twoRoads,
+  walkSlides
 } from './shared-steps';
-import buildSrc from '../Frame/builds/EagerHideStatic.ts?raw';
-import tableSource from '../Builds/EagerHideStaticTable/EagerHideStaticTable.tsx?raw';
-import headerSource from '../Builds/EagerHideStaticTable/DraggableColumn.tsx?raw';
-import rowSource from '../Builds/EagerHideStaticTable/RowHeader.tsx?raw';
-import cssSource from '../Builds/EagerHideStaticTable/EagerHideStaticTable.css?raw';
+import buildSrc from '../Frame/builds/Lazy.ts?raw';
+import tableSource from '../Builds/LazyTable/LazyTable.tsx?raw';
+import headerSource from '../Builds/LazyTable/DraggableColumn.tsx?raw';
+import rowSource from '../Builds/LazyTable/RowHeader.tsx?raw';
+import paceSource from '../Builds/LazyTable/travel.ts?raw';
+import cssSource from '@components/DragSortableTable/motion.css?raw';
 
-export const EagerHideStaticRecipe: FC<{track: Track; world: World}> = ({track, world}) => track === 'pointer'
+type Props = {track: Track; world: World; origin: Origin; motion: Motion};
+
+export const LazyRecipe: FC<Props> = ({track, world, origin, motion}) => track === 'pointer'
   ? <>
     <Story param="sort" id="column" steps={9}
            can="The trader can sort by column"
            soThat="the measures they compare sit beside each other">
       {twoRoads}
-      {theImplementation(world, 'Builds/EagerHideStaticTable', 'Frame/builds/EagerHideStatic.ts')}
+      {theImplementation(world, 'Builds/LazyTable', 'Frame/builds/Lazy.ts')}
       {theWholeBuild(world, tableSource, buildSrc)}
       {againstTheStream}
       {ownedPixels(world)}
-      {promises('eager', 'hide', 'static')}
+      {promises('lazy', origin, motion)}
       <Steps>
         {cssShare(world)}
         {orderInState(world, tableSource, buildSrc)}
@@ -51,9 +58,9 @@ export const EagerHideStaticRecipe: FC<{track: Track; world: World}> = ({track, 
         {liftOnce(world, headerSource, buildSrc)}
         {dragSurface(world, headerSource, buildSrc)}
         {deadZone}
-        {eagerPace(world, headerSource, buildSrc)}
-        {hideOrigin(world, headerSource, cssSource, buildSrc)}
-        {staticMotion(world, headerSource, buildSrc)}
+        {lazyPace(world, headerSource, paceSource, buildSrc)}
+        {origin === 'hide' ? hideOrigin(world, headerSource, cssSource, buildSrc) : keepOrigin(world, cssSource)}
+        {motion === 'animated' ? animatedMotion(world, headerSource, cssSource, buildSrc) : staticMotion(world, cssSource)}
       </Steps>
     </Story>
     <Story param="sort" id="row" steps={1}
@@ -70,12 +77,12 @@ export const EagerHideStaticRecipe: FC<{track: Track; world: World}> = ({track, 
            can="The trader can sort by column"
            soThat="the measures they compare sit beside each other">
       {accessTrack}
-      {theImplementation(world, 'Builds/EagerHideStaticTable', 'Frame/builds/EagerHideStatic.ts')}
+      {theImplementation(world, 'Builds/LazyTable', 'Frame/builds/Lazy.ts')}
       {quietDials}
       <Steps>
       {focusLands(world, headerSource, buildSrc)}
       {arrowsSpeak(world, headerSource, buildSrc)}
-      {cutKey(world, headerSource, buildSrc)}
+      {motion === 'animated' ? walkSlides(world, headerSource, buildSrc) : cutKey(world, headerSource, buildSrc)}
       </Steps>
     </Story>
     <Story param="sort" id="row" steps={1}

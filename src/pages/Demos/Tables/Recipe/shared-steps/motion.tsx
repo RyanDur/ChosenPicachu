@@ -60,43 +60,43 @@ export const animatedMotion = (world: World, headerSource: string, cssSource: st
           aside('// who a move displaces, and where the moved column rests, from the survey the lift already took')
         ]}/>
         <Snippet label="CSS" lines={[
-          ...unit(cssSource, '.sortable .settling {'), gap,
-          ...unit(cssSource, '.sortable .shoved-start {'), gap,
+          ...unit(cssSource, '.sortable.animated .settling {'), gap,
+          ...unit(cssSource, '.sortable.animated.hide .settling {'), gap,
+          ...unit(cssSource, '.sortable.animated .shoved-start {'), gap,
           ...unit(cssSource, '@keyframes settle {'), gap,
+          ...unit(cssSource, '@keyframes settle-from-pointer {'), gap,
           ...unit(cssSource, '@keyframes shoved-start {'),
-          aside('/* the only motion code there is */')
+          aside('/* the only motion code there is; the table wears the word animated, and hide chooses where the settle starts */')
         ]}/>
       </Codes>
     </Reveal>
   </Step>;
 
-export const staticMotion = (world: World, headerSource: string, buildSrc: string): ReactNode =>
+export const staticMotion = (world: World, cssSource: string): ReactNode =>
   <Step title="Leave the motion out" dial={<MotionDial name="step-motion"/>} id="step-motion">
     <Words want="Motion is not free: it competes with the pointer, costs a frame budget, and some traders ask for none at all.">
-      <Says>No motion should mean no motion code: not the animated table with its transition
-        switched off, but a file with nothing to switch. Its release should read as the whole
-        story.</Says>
+      <Says>No motion should be the stylesheet’s decision, not a second table: the same marks
+        are dispatched and worn, and the static sheet gives them no time to play.</Says>
     </Words>
     <Reveal>
       {world === 'react'
-        ? <Says>The static table is a different file. Its release dispatches the release at
-          once, and no settling exists in the file to switch off. There is real value beyond
-          taste: nothing competes with the pointer, and no motion for prefers-reduced-motion
-          users to endure.</Says>
-        : <Says>The static build is a different file. Its drop dispatches the release at once,
-          and no settling exists in the file to switch off. There is real value beyond taste:
+        ? <Says>The static table is the animated table wearing a different word. Every drop and
+          every walk still marks what settles and what is shoved, because the marks are what
+          happened; the sheet runs each mark for no time at all, so the keyframe ends the moment
+          it starts and the mark clears in the same breath. There is real value beyond taste:
+          nothing competes with the pointer, and no motion for prefers-reduced-motion users to
+          endure.</Says>
+        : <Says>The static build is the animated build wearing a different word. Every drop and
+          every walk still dresses what settles and what is shoved, because the marks are what
+          happened; the sheet runs each mark for no time at all, so the keyframe ends the moment
+          it starts and the cells undress in the same breath. There is real value beyond taste:
           nothing competes with the pointer, and no motion for prefers-reduced-motion users to
           endure.</Says>}
       <Codes>
-        {world === 'react'
-          ? <Snippet label="TS" lines={[
-            ...unit(headerSource, 'const release = '),
-            aside('// the whole release; no motion code exists in this table')
-          ]}/>
-          : <Snippet label="TS" lines={[
-            ...unit(buildSrc, 'const drop = '),
-            aside('// the whole drop; no motion code exists in this build')
-          ]}/>}
+        <Snippet label="CSS" lines={[
+          ...unit(cssSource, '.sortable.static :is(.settling, .shoved-start, .shoved-end, .shoved-up, .shoved-down) {'),
+          aside('/* the marks still land; the sheet gives them no time */')
+        ]}/>
       </Codes>
     </Reveal>
   </Step>;

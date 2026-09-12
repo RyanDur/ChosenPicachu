@@ -2,14 +2,14 @@ import {has, is, maybe} from '@ryandur/sand';
 import {unconfigured} from '@env';
 import {Direction} from '@components/DragSortableTable/sorting';
 import {anchored, columnUnder, displacedBetween, gripLabel, interior, rowUnder, spanCrossed} from '@components/DragSortableTable/survey';
-import {Moving, eagerTravel, pointerTravel, still} from '@components/DragSortableTable/travel';
+import {Moving, eagerTravel, pointerTravel} from '@components/DragSortableTable/travel';
 import {Grab, columnLift, rowLift} from '@components/DragSortableTable/lift';
 import {columnArrows, rowArrows} from '@components/DragSortableTable/arrows';
 import {Seated} from '@components/DragSortableTable/table-state';
 import {store} from '@components/store';
 import {seated} from '@pages/Demos/Tables/Aggregations/cells';
 import {
-  Arrangement, Carry, Landed, MountedTable, TableState, arrangementOf, arrangementReducer, carriedOffset, carrying, changed, columnMoved, columnOf, demosStore, drifted, feedRequested, moveReport, released, rowMoved, selectMeasures, sorted, standingOf, tableStore
+  Arrangement, Carry, Landed, MountedTable, TableState, arrangementOf, arrangementReducer, carrying, changed, columnMoved, columnOf, demosStore, drifted, feedRequested, moveReport, released, rowMoved, selectMeasures, settlingAt, settlingFromSeat, sorted, standingOf, tableStore
 } from '../table/table-state';
 import {exchange} from '@pages/Demos/exchange';
 import {keepingFocus} from '../table/focus';
@@ -61,7 +61,7 @@ const mount = (document: Document, table: HTMLTableElement, body: HTMLTableSecti
     const from = current.indexOf(name);
     const over = spanCrossed(current, widths, from, to);
     columnShoving(name, to, widths);
-    settleColumn(mounted, name, {x: to > from ? -over : over, y: 0});
+    settleColumn(mounted, name, settlingFromSeat({x: to > from ? -over : over, y: 0}));
   };
   const columnBeside = (name: string, neighbour: string): void => {
     const current = columns();
@@ -77,7 +77,7 @@ const mount = (document: Document, table: HTMLTableElement, body: HTMLTableSecti
     arrangement.dispatch(rowMoved(row, to, before));
     report({axis: 'row', position: to, of: before.length});
     rowShoving(row, before, to, heights);
-    settleRow(mounted, row, {x: 0, y: to > from ? -spanCrossed(before, heights, from, to) : spanCrossed(before, heights, from, to)});
+    settleRow(mounted, row, settlingFromSeat({x: 0, y: to > from ? -spanCrossed(before, heights, from, to) : spanCrossed(before, heights, from, to)}));
   };
   const rowBeside = (row: string, neighbour: string): void => {
     const before = standing();
@@ -183,7 +183,7 @@ const mount = (document: Document, table: HTMLTableElement, body: HTMLTableSecti
     if (!has(drag)) {
       return;
     }
-    const from = carriedOffset(hand.state, columns(), standing()) ?? still;
+    const from = settlingAt(hand.state, columns(), standing());
     hand.dispatch(released());
     if (drag.axis === 'column') {
       settleColumn(mounted, drag.held, from);

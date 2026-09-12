@@ -1,4 +1,5 @@
 import {FC} from 'react';
+import {Motion, Origin} from '../../Controls';
 import {Steps, Story} from '../../Recipe';
 import {
   Track,
@@ -8,12 +9,14 @@ import {
   animatedMotion,
   arrowsSpeak,
   cssShare,
+  cutKey,
   deadZone,
   dragSurface,
+  eagerPace,
   focusLands,
   gripArrows,
+  hideOrigin,
   keepOrigin,
-  lazyPace,
   liftOnce,
   listenersOnce,
   orderInState,
@@ -21,30 +24,33 @@ import {
   promises,
   quietDials,
   carryVertical,
+  staticMotion,
   turnedVertical,
   theImplementation,
   theWholeBuild,
   twoRoads,
   walkSlides
 } from './shared-steps';
-import buildSrc from '../Frame/builds/LazyKeepAnimated.ts?raw';
-import tableSource from '../Builds/LazyKeepAnimatedTable/LazyKeepAnimatedTable.tsx?raw';
-import headerSource from '../Builds/LazyKeepAnimatedTable/DraggableColumn.tsx?raw';
-import rowSource from '../Builds/LazyKeepAnimatedTable/RowHeader.tsx?raw';
-import paceSource from '../Builds/LazyKeepAnimatedTable/travel.ts?raw';
-import cssSource from '../Builds/LazyKeepAnimatedTable/LazyKeepAnimatedTable.css?raw';
+import buildSrc from '../Frame/builds/Eager.ts?raw';
+import tableSource from '../Builds/EagerTable/EagerTable.tsx?raw';
+import headerSource from '@components/DragSortableTable/DraggableColumn.tsx?raw';
+import rowSource from '@components/DragSortableTable/RowHeader.tsx?raw';
 
-export const LazyKeepAnimatedRecipe: FC<{track: Track; world: World}> = ({track, world}) => track === 'pointer'
+import cssSource from '@components/DragSortableTable/motion.css?raw';
+
+type Props = {track: Track; world: World; origin: Origin; motion: Motion};
+
+export const EagerRecipe: FC<Props> = ({track, world, origin, motion}) => track === 'pointer'
   ? <>
     <Story param="sort" id="column" steps={9}
            can="The trader can sort by column"
            soThat="the measures they compare sit beside each other">
       {twoRoads}
-      {theImplementation(world, 'Builds/LazyKeepAnimatedTable', 'Frame/builds/LazyKeepAnimated.ts')}
+      {theImplementation(world, 'Builds/EagerTable', 'Frame/builds/Eager.ts')}
       {theWholeBuild(world, tableSource, buildSrc)}
       {againstTheStream}
       {ownedPixels(world)}
-      {promises('lazy', 'keep', 'animated')}
+      {promises('eager', origin, motion)}
       <Steps>
         {cssShare(world)}
         {orderInState(world, tableSource, buildSrc)}
@@ -52,9 +58,9 @@ export const LazyKeepAnimatedRecipe: FC<{track: Track; world: World}> = ({track,
         {liftOnce(world, headerSource, buildSrc)}
         {dragSurface(world, headerSource, buildSrc)}
         {deadZone}
-        {lazyPace(world, headerSource, paceSource, buildSrc)}
-        {keepOrigin(world)}
-        {animatedMotion(world, headerSource, cssSource, buildSrc)}
+        {eagerPace(world, headerSource, buildSrc)}
+        {origin === 'hide' ? hideOrigin(world, headerSource, cssSource, buildSrc) : keepOrigin(world, cssSource)}
+        {motion === 'animated' ? animatedMotion(world, headerSource, cssSource, buildSrc) : staticMotion(world, cssSource)}
       </Steps>
     </Story>
     <Story param="sort" id="row" steps={1}
@@ -71,12 +77,12 @@ export const LazyKeepAnimatedRecipe: FC<{track: Track; world: World}> = ({track,
            can="The trader can sort by column"
            soThat="the measures they compare sit beside each other">
       {accessTrack}
-      {theImplementation(world, 'Builds/LazyKeepAnimatedTable', 'Frame/builds/LazyKeepAnimated.ts')}
+      {theImplementation(world, 'Builds/EagerTable', 'Frame/builds/Eager.ts')}
       {quietDials}
       <Steps>
       {focusLands(world, headerSource, buildSrc)}
       {arrowsSpeak(world, headerSource, buildSrc)}
-      {walkSlides(world, headerSource, buildSrc)}
+      {motion === 'animated' ? walkSlides(world, headerSource, buildSrc) : cutKey(world, headerSource, buildSrc)}
       </Steps>
     </Story>
     <Story param="sort" id="row" steps={1}

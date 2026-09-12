@@ -2,7 +2,7 @@ import {Reducer, combined} from '@components/store';
 import {Foreign, TableAction, isTableAction} from './actions';
 import {displacedBetween, interior, spanCrossed} from './survey';
 import {
-  TableState, awaken, drift, ground, landColumn, landRow, lift, measure, settle, shoveColumns, shoveRows, trade, unsettle
+  TableState, awaken, drift, ground, landColumn, landRow, lift, measure, settle, settlingFromSeat, shoveColumns, shoveRows, trade, unsettle
 } from './table-state';
 
 export type TableReducer = Reducer<TableState, Foreign>;
@@ -24,7 +24,7 @@ const motion = (state: TableState, action: TableAction): TableState => {
         return shoved;
       }
       const over = spanCrossed(order, action.widths, from, to);
-      return unsettle(shoved, {axis: 'column', held: action.name}, {x: to > from ? -over : over, y: 0});
+      return unsettle(shoved, {axis: 'column', held: action.name}, settlingFromSeat({x: to > from ? -over : over, y: 0}));
     }
     case 'rowMovedBeside':
     case 'rowWalkedTo': {
@@ -36,7 +36,7 @@ const motion = (state: TableState, action: TableAction): TableState => {
         return shoved;
       }
       const over = spanCrossed(standing, action.heights, from, to);
-      return unsettle(shoved, {axis: 'row', held: action.row}, {x: 0, y: to > from ? -over : over});
+      return unsettle(shoved, {axis: 'row', held: action.row}, settlingFromSeat({x: 0, y: to > from ? -over : over}));
     }
     default: return state;
   }

@@ -54,8 +54,13 @@ export type Drag = Flying & (
 export type ColumnDrag = Extract<Drag, {axis: 'column'}>;
 export type RowDrag = Extract<Drag, {axis: 'row'}>;
 
+export type Settling = {
+  readonly seat: Drift;
+  readonly drift: Drift;
+};
+
 export type Marks<Shove> = {
-  readonly settlingFrom?: Drift;
+  readonly settlingFrom?: Settling;
   readonly shoved?: Shove;
 };
 
@@ -91,10 +96,12 @@ const marked = <Shove>(marks: Readonly<Record<string, Marks<Shove>>>, key: strin
 const unsettledMark = <Shove>(marks: Readonly<Record<string, Marks<Shove>>>, key: string): Readonly<Record<string, Marks<Shove>>> =>
   Object.fromEntries(Object.entries(marks).filter(([marked]) => marked !== key));
 
-export const unsettle = (state: TableState, target: Carry, from: Drift): TableState =>
+export const unsettle = (state: TableState, target: Carry, from: Settling): TableState =>
   target.axis === 'column'
     ? {...state, columnMarks: marked(state.columnMarks, target.held, {settlingFrom: from})}
     : {...state, rowMarks: marked(state.rowMarks, target.held, {settlingFrom: from})};
+
+export const settlingFromSeat = (seat: Drift): Settling => ({seat, drift: still});
 
 export const settle = (state: TableState, target: Carry): TableState =>
   target.axis === 'column'
@@ -107,8 +114,7 @@ export const shoveColumns = (state: TableState, names: readonly string[], shove:
 export const shoveRows = (state: TableState, keys: readonly string[], shove: RowShove): TableState =>
   ({...state, rowMarks: keys.reduce((marks, key) => marked(marks, key, {shoved: shove}), state.rowMarks)});
 
-export const translation = (offset?: Drift): string | undefined =>
-  has(offset) ? `${offset.x}px ${offset.y}px` : undefined;
+export const pixels = (length?: number): string | undefined => has(length) ? `${length}px` : undefined;
 
 const flying = (grab: Grab): Flying =>
   ({survey: grab.survey, box: grab.box, drift: still});
@@ -130,16 +136,18 @@ export const landRow = (state: TableState, landing?: string): TableState =>
 
 export const ground = ({drag: _drag, ...state}: TableState): TableState => state;
 
-export const carriedOffset = (state: TableState, order: readonly string[], standing: readonly string[]): Drift | undefined => {
+export const seatOffset = (state: TableState, order: readonly string[], standing: readonly string[]): Drift | undefined => {
   const {drag} = state;
   if (!has(drag)) {
     return undefined;
   }
-  const {box, drift: moved} = drag;
   return drag.axis === 'column'
-    ? {x: box.x + moved.x - columnLeft(order, drag.survey)(drag.held), y: moved.y}
-    : {x: moved.x, y: box.y + moved.y - rowTop(standing, drag.survey)(drag.held)};
+    ? {x: drag.box.x - columnLeft(order, drag.survey)(drag.held), y: 0}
+    : {x: 0, y: drag.box.y - rowTop(standing, drag.survey)(drag.held)};
 };
+
+export const settlingAt = (state: TableState, order: readonly string[], standing: readonly string[]): Settling =>
+  ({seat: seatOffset(state, order, standing) ?? still, drift: state.drag?.drift ?? still});
 
 export const shoveDistance = (shove?: ColumnShove | RowShove): string | undefined =>
   has(shove) ? `${shove.by}px` : undefined;

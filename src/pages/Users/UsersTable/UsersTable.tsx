@@ -14,7 +14,7 @@ export const UsersTable: FC = () => {
   const users = useUsersSelector(selectUsers);
   const columns = useUsersSelector(selectColumns);
 
-  return <DragSortableTable id="users-table" className="fancy-table sortable apportioned" columns={columns} rows={seated(users)}>
+  return <DragSortableTable id="users-table" className="fancy-table sortable apportioned hide animated" columns={columns} rows={seated(users)}>
     <thead className="header">
     <Headers className="row"
              onColumnMoved={({column, to}) => dispatch(columnMoved(column, to))}

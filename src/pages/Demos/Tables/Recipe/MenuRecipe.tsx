@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
-import {motionParam, originParam, paceParam} from '../../Controls';
+import {paceParam} from '../../Controls';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, aside, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
 import {World, worldParam} from '../params';
@@ -297,15 +297,14 @@ const rankStory = (build: Build) => {
 };
 
 export const MenuRecipe: FC = () => {
-  const {pace = 'eager', origin = 'hide', motion = 'animated', world = 'react'} =
-    useSearchParamsObject({pace: paceParam, origin: originParam, motion: motionParam, world: worldParam});
+  const {pace = 'eager', world = 'react'} = useSearchParamsObject({pace: paceParam, world: worldParam});
   const build: Build = {
     world,
-    source: headerSources[pace][origin][motion],
+    source: headerSources[pace],
     menuSrc: menuSource,
-    tableSrc: tableSources[pace][origin][motion],
-    rowSrc: rowSources[pace][origin][motion],
-    buildSrc: buildSources[pace][origin][motion]
+    tableSrc: tableSources[pace],
+    rowSrc: rowSources[pace],
+    buildSrc: buildSources[pace]
   };
   return <section aria-label="build the sort menu yourself" className="build-steps">
     <Stories>{rankStory(build)}</Stories>

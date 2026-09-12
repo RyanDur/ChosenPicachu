@@ -1,23 +1,20 @@
-import {FC} from 'react';
+import {ComponentProps, FC} from 'react';
+import {classNames} from '@components/class-names';
 import {ResizeHandle} from '@components/Table/ResizeHandle';
 import {SortMenu} from '@components/DragSortableTable/SortMenu';
 import {Measured, Measures, seated} from '../../Aggregations/cells';
 import {BodyEvents, HeaderEvents} from '@components/DragSortableTable/context';
 import {TableColumn} from '@components/DragSortableTable/table-state';
-import {Body, DragSortableTable, Headers, Row} from '@components/DragSortableTable';
-import {Column} from './Column';
-import {DraggableColumn} from './DraggableColumn';
-import {RowHeader} from './RowHeader';
-import {Cell} from './Cell';
+import {Body, Cell, Column, DraggableColumn, DragSortableTable, Headers, Row, RowHeader} from '@components/DragSortableTable';
 import '@components/DragSortableTable/sortable.css';
 
-type Props = HeaderEvents & BodyEvents & {
+type Props = ComponentProps<'table'> & HeaderEvents & BodyEvents & {
   columns: readonly TableColumn<Measured>[];
   rows: readonly Measures[];
 };
 
-export const LazyKeepStaticTable: FC<Props> = ({columns, rows, onColumnMoved, onSorted, onRowMoved}) =>
-  <DragSortableTable className="fancy-table sortable apportioned" columns={columns} rows={seated(rows)}>
+export const EagerTable: FC<Props> = ({columns, rows, onColumnMoved, onSorted, onRowMoved, className, ...table}) =>
+  <DragSortableTable {...table} className={classNames('fancy-table sortable apportioned', className)} columns={columns} rows={seated(rows)}>
     <thead className="header">
     <Headers className="row" onColumnMoved={onColumnMoved} onSorted={onSorted}>
       <Column column="window" className="cell window header-cell">window<ResizeHandle column="window"/></Column>

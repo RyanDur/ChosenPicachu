@@ -1,12 +1,7 @@
 import {FC, useEffect, useState} from 'react';
-import {EagerKeepAnimatedTable} from '../Builds/EagerKeepAnimatedTable';
-import {EagerKeepStaticTable} from '../Builds/EagerKeepStaticTable';
-import {EagerHideAnimatedTable} from '../Builds/EagerHideAnimatedTable';
-import {EagerHideStaticTable} from '../Builds/EagerHideStaticTable';
-import {LazyKeepAnimatedTable} from '../Builds/LazyKeepAnimatedTable';
-import {LazyKeepStaticTable} from '../Builds/LazyKeepStaticTable';
-import {LazyHideAnimatedTable} from '../Builds/LazyHideAnimatedTable';
-import {LazyHideStaticTable} from '../Builds/LazyHideStaticTable';
+import {classNames} from '@components/class-names';
+import {EagerTable} from '../Builds/EagerTable';
+import {LazyTable} from '../Builds/LazyTable';
 import {Motion, Origin, Pace} from '../../Controls';
 import {World} from '../params';
 import {TableFrame, warmed} from '../Frame/TableFrame';
@@ -22,19 +17,8 @@ type Props = {
   world: World;
 };
 
-const tables = {
-  eager: {
-    keep: {animated: EagerKeepAnimatedTable, static: EagerKeepStaticTable},
-    hide: {animated: EagerHideAnimatedTable, static: EagerHideStaticTable}
-  },
-  lazy: {
-    keep: {animated: LazyKeepAnimatedTable, static: LazyKeepStaticTable},
-    hide: {animated: LazyHideAnimatedTable, static: LazyHideStaticTable}
-  }
-};
-
 export const Aggregations: FC<Props> = ({pace, origin, motion, world}) => {
-  const Table = tables[pace][origin][motion];
+  const Table = pace === 'eager' ? EagerTable : LazyTable;
   const dispatch = useDemosDispatch();
   const columns = useDemosSelector(selectColumns);
   const rows = useDemosSelector(selectRows);
@@ -53,7 +37,7 @@ export const Aggregations: FC<Props> = ({pace, origin, motion, world}) => {
     {vanilla &&
       <TableFrame pace={pace} origin={origin} motion={motion}
                   veiled={!stood} onStand={() => setStood(true)}/>}
-    {(!vanilla || !stood) && <Table columns={columns} rows={rows}
+    {(!vanilla || !stood) && <Table className={classNames(origin, motion)} columns={columns} rows={rows}
                                      onColumnMoved={({column, to}) => dispatch(columnMoved(column, to))}
                                      onSorted={({column, direction}) => dispatch(sorted(column, direction))}
                                      onRowMoved={({row, to, standing}) => dispatch(rowMoved(row, to, standing))}/>}

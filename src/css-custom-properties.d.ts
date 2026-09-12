@@ -14,8 +14,14 @@ declare module 'csstype' {
     '--share'?: string;
     '--drift-x'?: string;
     '--drift-y'?: string;
-    '--carried-by'?: string;
-    '--settling-from'?: string;
+    '--seat-x'?: string;
+    '--seat-y'?: string;
+    '--drift-x'?: string;
+    '--drift-y'?: string;
+    '--settle-x'?: string;
+    '--settle-y'?: string;
+    '--settle-drift-x'?: string;
+    '--settle-drift-y'?: string;
     '--shoved-by'?: string;
     '--explode-x'?: string;
     '--explode-y'?: string;

@@ -1,5 +1,4 @@
-import {ColumnShove, RowShove} from '@components/DragSortableTable/table-state';
-import {Drift} from '@components/DragSortableTable/travel';
+import {ColumnShove, RowShove, Settling} from '@components/DragSortableTable/table-state';
 import {MountedTable} from './table-state';
 
 export const columnCells = (mounted: MountedTable, column: string): HTMLTableCellElement[] => {
@@ -10,7 +9,7 @@ export const columnCells = (mounted: MountedTable, column: string): HTMLTableCel
 const undressed = (cells: readonly HTMLTableCellElement[]): void =>
   cells.forEach(cell => {
     cell.classList.remove('settling', 'shoved-start', 'shoved-end', 'shoved-up', 'shoved-down');
-    cell.style.removeProperty('--settling-from');
+    ['--settle-x', '--settle-y', '--settle-drift-x', '--settle-drift-y'].forEach(property => cell.style.removeProperty(property));
     cell.style.removeProperty('--shoved-by');
   });
 
@@ -21,9 +20,12 @@ export const unmarked = ({table}: MountedTable): void =>
 const untilSettled = (cells: readonly HTMLTableCellElement[]): void =>
   cells[0]?.addEventListener('animationend', () => undressed(cells), {once: true});
 
-const settling = (cells: readonly HTMLTableCellElement[], from: Drift): void => {
+const settling = (cells: readonly HTMLTableCellElement[], from: Settling): void => {
   cells.forEach(cell => {
-    cell.style.setProperty('--settling-from', `${from.x}px ${from.y}px`);
+    cell.style.setProperty('--settle-x', `${from.seat.x}px`);
+    cell.style.setProperty('--settle-y', `${from.seat.y}px`);
+    cell.style.setProperty('--settle-drift-x', `${from.drift.x}px`);
+    cell.style.setProperty('--settle-drift-y', `${from.drift.y}px`);
     cell.classList.add('settling');
   });
   untilSettled(cells);
@@ -38,10 +40,10 @@ const shoving = (cells: readonly HTMLTableCellElement[], {toward, by}: ColumnSho
   untilSettled(cells);
 };
 
-export const settleColumn = (mounted: MountedTable, column: string, from: Drift): void =>
+export const settleColumn = (mounted: MountedTable, column: string, from: Settling): void =>
   settling(columnCells(mounted, column), from);
 
-export const settleRow = ({lanes}: MountedTable, row: string, from: Drift): void =>
+export const settleRow = ({lanes}: MountedTable, row: string, from: Settling): void =>
   settling([...(lanes.get(row)?.cells ?? [])], from);
 
 export const shoveColumns = (mounted: MountedTable, columns: readonly string[], shove: ColumnShove): void =>

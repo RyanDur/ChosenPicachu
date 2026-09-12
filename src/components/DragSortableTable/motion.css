@@ -2,37 +2,53 @@
   position: relative;
   z-index: 1;
   background: var(--paper);
-  translate: var(--carried-by, 0 0);
 }
 
-.sortable .settling {
+.sortable.hide .carried {
+  translate: calc(var(--seat-x, 0px) + var(--drift-x, 0px)) calc(var(--seat-y, 0px) + var(--drift-y, 0px));
+}
+
+.sortable :is(.settling, .shoved-start, .shoved-end, .shoved-up, .shoved-down) {
   background: var(--paper);
+}
+
+.sortable.animated .settling {
   animation: settle 200ms ease-out;
 }
 
-.sortable .shoved-start {
-  background: var(--paper);
+.sortable.animated.hide .settling {
+  animation-name: settle-from-pointer;
+}
+
+.sortable.animated .shoved-start {
   animation: shoved-start 200ms ease-out;
 }
 
-.sortable .shoved-end {
-  background: var(--paper);
+.sortable.animated .shoved-end {
   animation: shoved-end 200ms ease-out;
 }
 
-.sortable .shoved-up {
-  background: var(--paper);
+.sortable.animated .shoved-up {
   animation: shoved-up 200ms ease-out;
 }
 
-.sortable .shoved-down {
-  background: var(--paper);
+.sortable.animated .shoved-down {
   animation: shoved-down 200ms ease-out;
+}
+
+.sortable.static :is(.settling, .shoved-start, .shoved-end, .shoved-up, .shoved-down) {
+  animation: settle 0s;
 }
 
 @keyframes settle {
   from {
-    translate: var(--settling-from, 0 0);
+    translate: var(--settle-x, 0px) var(--settle-y, 0px);
+  }
+}
+
+@keyframes settle-from-pointer {
+  from {
+    translate: calc(var(--settle-x, 0px) + var(--settle-drift-x, 0px)) calc(var(--settle-y, 0px) + var(--settle-drift-y, 0px));
   }
 }
 

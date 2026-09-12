@@ -9,6 +9,6 @@ declare global {
   }
 }
 
-const {pace = 'eager', origin = 'hide', motion = 'animated'} = window.__frame ?? {};
+const {pace = 'eager'} = window.__frame ?? {};
 
-wires[pace][origin][motion](document);
+wires[pace](document);

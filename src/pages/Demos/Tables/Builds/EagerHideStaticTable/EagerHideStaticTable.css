@@ -1,6 +1,0 @@
-.sortable .carried {
-  position: relative;
-  z-index: 1;
-  background: var(--paper);
-  translate: var(--carried-by, 0 0);
-}

@@ -1,20 +1,22 @@
 import {has, is, maybe} from '@ryandur/sand';
 import {unconfigured} from '@env';
 import {Direction} from '@components/DragSortableTable/sorting';
-import {anchored, columnUnder, gripLabel, interior, rowUnder} from '@components/DragSortableTable/survey';
-import {Moving, eagerTravel, pointerTravel} from '@components/DragSortableTable/travel';
+import {anchored, columnUnder, displacedBetween, gripLabel, interior, rowUnder, spanCrossed} from '@components/DragSortableTable/survey';
+import {Moving, lazyTravel, pointerTravel} from '@components/DragSortableTable/travel';
 import {Grab, columnLift, rowLift} from '@components/DragSortableTable/lift';
 import {columnArrows, rowArrows} from '@components/DragSortableTable/arrows';
 import {Seated} from '@components/DragSortableTable/table-state';
 import {store} from '@components/store';
 import {seated} from '@pages/Demos/Tables/Aggregations/cells';
 import {
-  Arrangement, Carry, Landed, MountedTable, TableState, arrangementOf, arrangementReducer, carrying, changed, columnMoved, columnOf, demosStore, feedRequested, moveReport, released, rowMoved, selectMeasures, sorted, standingOf, tableStore
+  Arrangement, Carry, Landed, MountedTable, TableState, arrangementOf, arrangementReducer, carrying, changed, columnMoved, columnOf, columnLandingAt, demosStore, drifted, feedRequested, moveReport, released, rowLandingAt, rowMoved, selectMeasures, settlingAt, settlingFromSeat, sorted, standingOf, tableStore
 } from '../table/table-state';
 import {exchange} from '@pages/Demos/exchange';
 import {keepingFocus} from '../table/focus';
 import {announce, wireMenu} from '../table/menus';
 import {dressWidths, wireResize} from '../table/resize';
+import {settleColumn, settleRow, shoveColumns, shoveRows, unmarked} from '../table/settle';
+import {dressCarried} from '../table/carry';
 
 export const wire = (document: Document): void => {
   maybe(document.querySelector('table')).map(table =>
@@ -47,24 +49,42 @@ const mount = (document: Document, table: HTMLTableElement, body: HTMLTableSecti
 
   const mounted: MountedTable = {store: hand, order: columns, standing, report, document, table, body, lanes};
 
-  const columnTo = (name: string, to: number): void => {
+  const columnShoving = (name: string, to: number, widths: Readonly<Record<string, number>>): void => {
     const current = columns();
+    const from = current.indexOf(name);
     arrangement.dispatch(columnMoved(name, to));
     report({axis: 'column', name, position: to, of: current.length});
+    shoveColumns(mounted, displacedBetween(current, from, to), {toward: to > from ? 'start' : 'end', by: widths[name] ?? 0});
+  };
+  const columnTo = (name: string, to: number, widths: Readonly<Record<string, number>>): void => {
+    const current = columns();
+    const from = current.indexOf(name);
+    const over = spanCrossed(current, widths, from, to);
+    columnShoving(name, to, widths);
+    settleColumn(mounted, name, settlingFromSeat({x: to > from ? -over : over, y: 0}));
   };
   const columnBeside = (name: string, neighbour: string): void => {
     const current = columns();
-    columnTo(name, interior(current.indexOf(neighbour), current.length));
+    columnShoving(name, interior(current.indexOf(neighbour), current.length), hand.state.drag?.survey.columnWidths ?? {});
   };
-  const rowTo = (row: string, to: number): void => {
+  const rowShoving = (row: string, before: readonly string[], to: number, heights: Readonly<Record<string, number>>): void => {
+    const from = before.indexOf(row);
+    shoveRows(mounted, displacedBetween(before, from, to), {toward: to > from ? 'up' : 'down', by: heights[row] ?? 0});
+  };
+  const rowTo = (row: string, to: number, heights: Readonly<Record<string, number>>): void => {
     const before = standing();
+    const from = before.indexOf(row);
     arrangement.dispatch(rowMoved(row, to, before));
     report({axis: 'row', position: to, of: before.length});
+    rowShoving(row, before, to, heights);
+    settleRow(mounted, row, settlingFromSeat({x: 0, y: to > from ? -spanCrossed(before, heights, from, to) : spanCrossed(before, heights, from, to)}));
   };
   const rowBeside = (row: string, neighbour: string): void => {
     const before = standing();
-    arrangement.dispatch(rowMoved(row, before.indexOf(neighbour), before));
-    report({axis: 'row', position: before.indexOf(neighbour), of: before.length});
+    const to = before.indexOf(neighbour);
+    arrangement.dispatch(rowMoved(row, to, before));
+    report({axis: 'row', position: to, of: before.length});
+    rowShoving(row, before, to, hand.state.drag?.survey.rowHeights ?? {});
   };
 
   const writeCells = (): void => {
@@ -146,6 +166,9 @@ const mount = (document: Document, table: HTMLTableElement, body: HTMLTableSecti
     if (previous.widths !== next.widths) {
       dressWidths(mounted);
     }
+    if (previous.drag !== next.drag) {
+      dressCarried(mounted, next);
+    }
   };
 
   arrangement.subscribe((previous, current) => reconcile(previous, current()));
@@ -155,24 +178,42 @@ const mount = (document: Document, table: HTMLTableElement, body: HTMLTableSecti
     reseatRows();
   });
 
+  const landed = (): void => {
+    const {drag} = hand.state;
+    if (drag?.axis === 'column' && drag.landing !== undefined) {
+      columnBeside(drag.held, drag.landing);
+    } else if (drag?.axis === 'row' && drag.landing !== undefined) {
+      rowBeside(drag.held, drag.landing);
+    }
+  };
+
   const drop = (): void => {
     const {drag} = hand.state;
     if (!has(drag)) {
       return;
     }
+    landed();
+    const from = settlingAt(hand.state, columns(), standing());
     hand.dispatch(released());
+    if (drag.axis === 'column') {
+      settleColumn(mounted, drag.held, from);
+    } else {
+      settleRow(mounted, drag.held, from);
+    }
   };
 
   const moved = (moving: Moving): void => {
+    hand.dispatch(drifted(moving));
     const {drag} = hand.state;
     if (drag?.axis === 'column') {
-      eagerTravel(columnUnder(columns(), drag.survey), drag.held, neighbour => columnBeside(drag.held, neighbour))(moving);
+      hand.dispatch(columnLandingAt(lazyTravel(columnUnder(columns(), drag.survey))(drag.held, moving, drag.landing)));
     } else if (drag?.axis === 'row') {
-      eagerTravel(rowUnder(standing(), drag.survey), drag.held, neighbour => rowBeside(drag.held, neighbour))(moving);
+      hand.dispatch(rowLandingAt(lazyTravel(rowUnder(standing(), drag.survey))(drag.held, moving, drag.landing)));
     }
   };
 
   const lift = (carry: Carry, grab: Grab): void => {
+    unmarked(mounted);
     hand.dispatch(carrying(carry, grab));
   };
 
@@ -197,13 +238,13 @@ const mount = (document: Document, table: HTMLTableElement, body: HTMLTableSecti
 
     th.addEventListener('pointerdown', columnLift(held, columns, standing, grab => lift({axis: 'column', held}, grab)));
     wireCarry(th);
-    th.addEventListener('keydown', columnArrows(held, columns, ({to}) => columnTo(held, to)));
+    th.addEventListener('keydown', columnArrows(held, columns, ({to, widths}) => columnTo(held, to, widths)));
   };
 
   const wireRowGrip = (held: string, grip: HTMLButtonElement): void => {
     grip.addEventListener('pointerdown', rowLift(columns, standing, grab => lift({axis: 'row', held}, grab)));
     wireCarry(grip);
-    grip.addEventListener('keydown', rowArrows(held, standing, ({to}) => rowTo(held, to)));
+    grip.addEventListener('keydown', rowArrows(held, standing, ({to, heights}) => rowTo(held, to, heights)));
   };
 
   dressGrips();

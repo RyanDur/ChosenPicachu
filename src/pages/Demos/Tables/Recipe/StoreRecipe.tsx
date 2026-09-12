@@ -15,7 +15,7 @@ import demosSource from '@pages/Demos/store.ts?raw';
 import exchangeSource from '@pages/Demos/exchange.ts?raw';
 import openingSource from '@pages/Demos/useExchange.ts?raw';
 import headerSource from '@components/DragSortableTable/DraggableColumn.tsx?raw';
-import buildSrc from '../Frame/builds/EagerHideAnimated.ts?raw';
+import buildSrc from '../Frame/builds/Eager.ts?raw';
 
 const gap = plain(' ');
 

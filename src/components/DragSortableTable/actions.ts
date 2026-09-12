@@ -1,6 +1,6 @@
 import {ColumnWidths} from '@components/Table/shares';
-import {Carry, ColumnShove, RowShove} from './table-state';
-import {Drift, Moving} from './travel';
+import {Carry, ColumnShove, RowShove, Settling} from './table-state';
+import {Moving} from './travel';
 import {Grab} from './lift';
 
 export type TableAction =
@@ -12,8 +12,8 @@ export type TableAction =
   | {readonly type: 'columnLandingAt'; readonly neighbour?: string}
   | {readonly type: 'rowLandingAt'; readonly neighbour?: string}
   | {readonly type: 'released'}
-  | {readonly type: 'dropped'; readonly carry: Carry; readonly from: Drift}
-  | {readonly type: 'unsettled'; readonly target: Carry; readonly from: Drift}
+  | {readonly type: 'dropped'; readonly carry: Carry; readonly from: Settling}
+  | {readonly type: 'unsettled'; readonly target: Carry; readonly from: Settling}
   | {readonly type: 'settled'; readonly target: Carry}
   | {readonly type: 'shovedColumns'; readonly names: readonly string[]; readonly shove: ColumnShove}
   | {readonly type: 'shovedRows'; readonly keys: readonly string[]; readonly shove: RowShove}
@@ -56,8 +56,8 @@ export const drifted = (moving: Moving): Action => ({type: 'drifted', moving: {c
 export const columnLandingAt = (neighbour?: string): Action => ({type: 'columnLandingAt', neighbour});
 export const rowLandingAt = (neighbour?: string): Action => ({type: 'rowLandingAt', neighbour});
 export const released = (): Action => ({type: 'released'});
-export const dropped = (carry: Carry, from: Drift): Action => ({type: 'dropped', carry, from});
-export const unsettled = (target: Carry, from: Drift): Action => ({type: 'unsettled', target, from});
+export const dropped = (carry: Carry, from: Settling): Action => ({type: 'dropped', carry, from});
+export const unsettled = (target: Carry, from: Settling): Action => ({type: 'unsettled', target, from});
 export const settled = (target: Carry): Action => ({type: 'settled', target});
 export const shovedColumns = (names: readonly string[], shove: ColumnShove): Action => ({type: 'shovedColumns', names, shove});
 export const shovedRows = (keys: readonly string[], shove: RowShove): Action => ({type: 'shovedRows', keys, shove});

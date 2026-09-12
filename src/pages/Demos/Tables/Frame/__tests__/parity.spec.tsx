@@ -1,8 +1,8 @@
 import {render, within} from '@testing-library/react';
 import {windowedAggregates} from '@pages/Demos/Tables/Aggregations/fold';
 import {cells, measures} from '@pages/Demos/Tables/Aggregations/cells';
-import {EagerHideAnimatedTable} from '../../Builds/EagerHideAnimatedTable';
-import {wire} from '../builds/EagerHideAnimated';
+import {EagerTable} from '../../Builds/EagerTable';
+import {wire} from '../builds/Eager';
 import tableHtml from '../table.html?raw';
 
 type CellShape = {
@@ -30,7 +30,7 @@ const shapeOf = (root: HTMLElement): {headers: CellShape[]; rows: CellShape[][]}
 describe('the two worlds deal the same table', () => {
   it('the frame markup stands exactly as the react table renders', () => {
     const rows = windowedAggregates([]).map(cells);
-    const {container, unmount} = render(<EagerHideAnimatedTable columns={measures} rows={rows}/>);
+    const {container, unmount} = render(<EagerTable className="hide animated" columns={measures} rows={rows}/>);
     const react = shapeOf(container);
     unmount();
 

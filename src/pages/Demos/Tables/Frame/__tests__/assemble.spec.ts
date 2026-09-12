@@ -32,7 +32,7 @@ describe('the frame assembly', () => {
       {pace: 'eager', origin: 'hide', motion: 'animated'});
 
     sheets.forEach(({css}) => expect(document).toContain(css));
-    expect(document).toContain(tableHtml);
+    expect(document).toContain(tableHtml.replace('class="fancy-table sortable apportioned"', 'class="fancy-table sortable apportioned hide animated"'));
     expect(document).toContain('"tradeFeed":"wss://feed.test/"');
     expect(document).toContain('"pace":"eager"');
     expect(document).toContain('::view-transition-group(*)');

@@ -177,11 +177,11 @@ describe('the tables demo', () => {
     const opener = await screen.findByText('settings', {}, {timeout: 5000});
     const fold = folds(document.body).find(details => details.contains(opener));
     expect(fold).toHaveAttribute('open');
-    expect(screen.getByText('<EagerHideAnimatedTable/>')).toBeVisible();
+    expect(screen.getByText('<EagerTable className="hide animated"/>')).toBeVisible();
 
     await userEvent.click(opener);
     expect(screen.getByRole('region', {name: 'table controls'})).not.toBeVisible();
-    expect(screen.getByText('<EagerHideAnimatedTable/>')).toBeVisible();
+    expect(screen.getByText('<EagerTable className="hide animated"/>')).toBeVisible();
   });
 
   test('a phone viewport starts the controls closed', async () => {
@@ -211,9 +211,9 @@ describe('the tables demo', () => {
     await feedIsSubscribed();
     const controls = await screen.findByRole('region', {name: 'table controls'}, {timeout: 5000});
     expect(controls).toHaveTextContent(/Neighbours swap the moment you drag past them/);
-    expect(controls).toHaveTextContent(/blanks out at its origin/);
+    expect(controls).toHaveTextContent(/rides the pointer, cells and all/);
     expect(controls).toHaveTextContent(/slide to their new seats/);
-    expect(screen.getByText('<EagerHideAnimatedTable/>')).toBeVisible();
+    expect(screen.getByText('<EagerTable className="hide animated"/>')).toBeVisible();
 
     await userEvent.click(within(controls).getByRole('radio', {name: 'Lazy'}));
     await userEvent.click(within(controls).getByRole('radio', {name: 'Keep'}));
@@ -221,8 +221,8 @@ describe('the tables demo', () => {
 
     expect(controls).toHaveTextContent(/dispatches the new order on drop/);
     expect(controls).toHaveTextContent(/stays where it was/);
-    expect(controls).toHaveTextContent(/single frame/);
-    expect(screen.getByText('<LazyKeepStaticTable/>')).toBeVisible();
+    expect(controls).toHaveTextContent(/gives them no time/);
+    expect(screen.getByText('<LazyTable className="keep static"/>')).toBeVisible();
     expect(controls).not.toHaveTextContent(/Neighbours swap/);
   });
 
@@ -245,7 +245,7 @@ describe('the tables demo', () => {
     await userEvent.click(within(controls).getByRole('radio', {name: 'Lazy'}));
     await userEvent.click(within(controls).getByRole('radio', {name: 'Static'}));
 
-    expect(screen.getByText('<LazyHideStaticTable/>')).toBeVisible();
+    expect(screen.getByText('<LazyTable className="hide static"/>')).toBeVisible();
     expect(windows().slice(0, 2)).toEqual(['last 5 minutes', 'this minute']);
     expect(headers().slice(0, 3)).toEqual(['window', 'buys', 'trades']);
   });
@@ -331,11 +331,11 @@ describe('the tables demo', () => {
     expect(opened(reveals(recipe))).toHaveLength(0);
     expect(recipe).toHaveTextContent(/Commit inside the move/);
     expect(recipe).toHaveTextContent(/Carry the real thing/);
-    expect(recipe).toHaveTextContent(/translate: var\(--carried-by, 0 0\)/);
+    expect(recipe).toHaveTextContent(/translate: calc\(var\(--seat-x, 0px\) \+ var\(--drift-x, 0px\)\)/);
     expect(within(recipe).getAllByRole('link', {name: 'the implementation'})[0])
-      .toHaveAttribute('href', 'https://github.com/RyanDur/ChosenPicachu/tree/main/src/pages/Demos/Tables/Builds/EagerHideAnimatedTable');
+      .toHaveAttribute('href', 'https://github.com/RyanDur/ChosenPicachu/tree/main/src/pages/Demos/Tables/Builds/EagerTable');
     expect(recipe).toHaveTextContent(/Let the column settle/);
-    expect(recipe).toHaveTextContent(/the only motion code there is/);
+    expect(recipe).toHaveTextContent(/the only motion code there is; the table wears the word animated/);
     expect(recipe).toHaveTextContent(/@keyframes settle \{/);
     expect(recipe).toHaveTextContent(/Turn the carry vertical/);
     expect(within(recipe).getByRole('link', {name: 'insertBefore'}))
@@ -477,7 +477,7 @@ describe('the tables demo', () => {
     expect(within(controls).getByRole('radio', {name: 'Lazy'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Keep'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Static'})).toBeChecked();
-    expect(screen.getByText('<LazyKeepStaticTable/>')).toBeVisible();
+    expect(screen.getByText('<LazyTable className="keep static"/>')).toBeVisible();
   });
 
   test('a third tutorial answers the menu', async () => {

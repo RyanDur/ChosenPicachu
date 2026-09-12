@@ -1,6 +1,6 @@
 import {has, not} from '@ryandur/sand';
 import {ColumnWidths, neighborOf} from '@components/Table/shares';
-import {TableColumn, ColumnDrag, ColumnShove, Drag, Labelled, Marks, RowDrag, RowShove, carriedOffset} from './table-state';
+import {TableColumn, ColumnDrag, ColumnShove, Drag, Labelled, Marks, RowDrag, RowShove, Settling, seatOffset, settlingAt} from './table-state';
 import {TableView} from './context';
 import {anchored} from './survey';
 import {Drift} from './travel';
@@ -48,17 +48,21 @@ export const columnHeld = (name: string) => (view: TableView): boolean => has(co
 
 export const rowHeld = (key: string) => (view: TableView): boolean => has(rowDrag(key)(view));
 
-export const selectCarriedOffset = (view: TableView): Drift | undefined =>
-  carriedOffset(view.state, selectOrder(view), selectStanding(view));
+export const selectSeatOffset = (view: TableView): Drift | undefined =>
+  seatOffset(view.state, selectOrder(view), selectStanding(view));
 
-export const offsetOfColumn = (name: string) => (view: TableView): Drift | undefined =>
-  columnHeld(name)(view) ? selectCarriedOffset(view) : undefined;
+export const seatOfColumn = (name: string) => (view: TableView): Drift | undefined =>
+  columnHeld(name)(view) ? selectSeatOffset(view) : undefined;
 
-export const offsetOfRow = (key: string) => (view: TableView): Drift | undefined =>
-  rowHeld(key)(view) ? selectCarriedOffset(view) : undefined;
+export const seatOfRow = (key: string) => (view: TableView): Drift | undefined =>
+  rowHeld(key)(view) ? selectSeatOffset(view) : undefined;
 
-export const offsetOfColumnIn = (name: string, order: readonly string[]) => (view: TableView): Drift | undefined =>
-  columnHeld(name)(view) ? carriedOffset(view.state, order, selectStanding(view)) : undefined;
+export const driftOfColumn = (name: string) => (view: TableView): Drift | undefined => columnDrag(name)(view)?.drift;
 
-export const offsetOfRowIn = (key: string, standing: readonly string[]) => (view: TableView): Drift | undefined =>
-  rowHeld(key)(view) ? carriedOffset(view.state, selectOrder(view), standing) : undefined;
+export const driftOfRow = (key: string) => (view: TableView): Drift | undefined => rowDrag(key)(view)?.drift;
+
+export const settlingOfColumnIn = (name: string, order: readonly string[]) => (view: TableView): Settling | undefined =>
+  columnHeld(name)(view) ? settlingAt(view.state, order, selectStanding(view)) : undefined;
+
+export const settlingOfRowIn = (key: string, standing: readonly string[]) => (view: TableView): Settling | undefined =>
+  rowHeld(key)(view) ? settlingAt(view.state, selectOrder(view), standing) : undefined;
