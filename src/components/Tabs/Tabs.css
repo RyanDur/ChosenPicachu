@@ -25,7 +25,7 @@
       margin: 0;
     }
 
-    &.current {
+    &:has(> [aria-current="page"]) {
       box-shadow: none;
     }
 

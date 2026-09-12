@@ -34,4 +34,15 @@ describe('Tabs', () => {
 
     expect(screen.getByLabelText('url search')).toHaveTextContent(`?tab=${tab1.param}`);
   });
+
+  it('the chosen tab says it is current, styles or not', async () => {
+    render(<TestApp at={path}><Tabs label="tabs under test" defaultTab={tab1.param} values={[tab1, tab2, tab3]}/></TestApp>);
+
+    expect(screen.getByRole('link', {name: tab1.display, current: 'page'})).toBeInTheDocument();
+
+    await userEvent.click(screen.getByText(tab2.display));
+
+    expect(screen.getByRole('link', {name: tab2.display, current: 'page'})).toBeInTheDocument();
+    expect(screen.getByRole('link', {name: tab1.display})).not.toHaveAttribute('aria-current');
+  });
 });

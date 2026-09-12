@@ -1,6 +1,5 @@
 import {FC, useEffect} from 'react';
 import {Link, useLocation} from 'react-router';
-import {classNames} from '@components/class-names';
 import {useSearchParamsObject} from '@components/search-params';
 import * as schema from 'schemawax';
 import {not} from '@ryandur/sand';
@@ -27,8 +26,9 @@ export const Tabs: FC<Props> = ({values, id, label, defaultTab}) => {
   }, [tab, updateSearchParams, values, defaultTab]);
 
   return <nav aria-label={label} id={id} className="backdrop tabs">{values.map(({param, display}) =>
-    <span className={classNames('field', 'tab', 'attentive', tab === param && 'current')} key={param}>
+    <span className="field tab attentive" key={param}>
       <Link to={`${pathname}${createSearchParams({tab: param})}`}
+            aria-current={tab === param ? 'page' : undefined}
             className="path">{display}</Link>
     </span>
   )}</nav>;
