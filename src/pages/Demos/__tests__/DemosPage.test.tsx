@@ -1,13 +1,12 @@
-import {renderWithMemoryRouter} from '@test-support';
+import {TestApp} from '@test-support/TestApp';
+import {demosAt} from '@pages/Demos/__test_support/demos';
 import {expect, test} from 'vitest';
 import userEvent from '@testing-library/user-event';
-import {screen, waitFor, within} from '@testing-library/react';
-import {Paths} from '@pages/Paths';
-import {Demos} from '@pages/Demos';
+import {render, screen, waitFor, within} from '@testing-library/react';
 
 describe('The Demos page', () => {
   test('on initial render', async () => {
-    renderWithMemoryRouter({path: Paths.demos, ...Demos}, {path: Paths.demos});
+    render(<TestApp at={demosAt()}/>);
 
     await waitFor(() => {
       const main = screen.getByRole('main');
@@ -16,7 +15,7 @@ describe('The Demos page', () => {
   });
 
   test('when going to the z-index demo', async () => {
-    renderWithMemoryRouter({path: Paths.demos, ...Demos}, {path: Paths.demos});
+    render(<TestApp at={demosAt()}/>);
 
     const demoTabs = await screen.findByRole('navigation', {name: 'demos'});
     await userEvent.click(within(demoTabs).getByText('Z-Index'));

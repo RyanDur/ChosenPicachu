@@ -1,11 +1,11 @@
-import {useRouteError} from 'react-router';
+import {FC} from 'react';
+import {Link} from 'react-router';
+import {Paths} from '@pages/Paths';
+import './PageError.css';
 
-export const PageError = () => {
-  const error = useRouteError();
-  console.error(error);
-
-  return <section className="page-error in-view" aria-labelledby="closed-room">
+export const PageError: FC = () =>
+  <section className="closed-room" aria-labelledby="closed-room">
     <h2 id="closed-room" className="title bold">This room is closed.</h2>
-    <p>Something broke on this page — the rest of the gallery still works.</p>
+    <p className="paragraph">Something in this room broke. The rest of the site is open.</p>
+    <Link className="signpost" to={Paths.home}>Back to the front door</Link>
   </section>;
-};

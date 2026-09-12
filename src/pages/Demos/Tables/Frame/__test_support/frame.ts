@@ -13,7 +13,7 @@ type Stage = {
 };
 
 export const standFrame = ({feed, pace = 'eager', origin = 'hide', motion = 'animated'}: Stage = {}): void => {
-  window.__env = has(feed) ? {...env, tradeFeed: feed.url} : env;
+  window.__env = {...env, tradeFeed: has(feed) ? feed.url : ''};
   window.__frame = {pace, origin, motion};
   document.body.innerHTML = startingTable({origin, motion});
   boot(document);

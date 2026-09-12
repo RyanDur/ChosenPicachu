@@ -1,20 +1,10 @@
 import {fireEvent, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {broadcast, listeningFeed, subscribed, tradeFrame, urlOf} from '@test-support/feed';
-import {wire as eager} from '../builds/Eager';
-import {wire as lazy} from '../builds/Lazy';
-import tableHtml from '../table.html?raw';
+import {broadcast, listeningFeed, tradeFrame} from '@test-support/feed';
+import {feedIsSubscribed} from '@test-support';
+import {standFrame} from '../__test_support/frame';
 
 describe('the frame table', () => {
-  const deal = (feedUrl?: string, wire: (document: Document) => void = eager): void => {
-    window.__env = feedUrl
-      ? {tradeFeed: feedUrl, tradeHistory: 'http://127.0.0.1:9', tradeProduct: 'BTC-USD',
-         aicDomain: '', harvardDomain: '', harvardAPIKey: '', vamDomain: ''}
-      : undefined;
-    document.body.innerHTML = tableHtml;
-    wire(document);
-  };
-
   const windowNames = (): string[] =>
     screen.getAllByRole('rowheader').map(header => (header.textContent ?? '').trim());
 
@@ -26,11 +16,10 @@ describe('the frame table', () => {
 
   afterEach(() => {
     document.body.innerHTML = '';
-    window.__env = undefined;
   });
 
-  it('without an environment the starting zeros stand, and the sort still announces', async () => {
-    deal();
+  it('without a feed the starting zeros stand, and the sort still announces', async () => {
+    standFrame();
 
     expect(windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
     await userEvent.click(sortMenu('trades').getByRole('button', {name: 'descending', hidden: true}));
@@ -41,7 +30,7 @@ describe('the frame table', () => {
   });
 
   it('reset restores the birth order and withdraws the announcement', async () => {
-    deal();
+    standFrame();
 
     await userEvent.click(sortMenu('buys').getByRole('button', {name: 'ascending', hidden: true}));
     await userEvent.click(sortMenu('buys').getByRole('button', {name: 'reset', hidden: true}));
@@ -52,7 +41,7 @@ describe('the frame table', () => {
   });
 
   it('a new sort releases the old column', async () => {
-    deal();
+    standFrame();
 
     await userEvent.click(sortMenu('buys').getByRole('button', {name: 'ascending', hidden: true}));
     await userEvent.click(sortMenu('trades').getByRole('button', {name: 'descending', hidden: true}));
@@ -63,8 +52,8 @@ describe('the frame table', () => {
 
   it('trades fold into the windows', async () => {
     const feed = await listeningFeed();
-    deal(urlOf(feed));
-    await waitFor(() => expect(subscribed.size).toBeGreaterThan(0));
+    standFrame({feed});
+    await feedIsSubscribed();
 
     broadcast(feed, [tradeFrame(100), tradeFrame(101, 1700000000000 - 120000)]);
 
@@ -89,7 +78,7 @@ describe('the frame table', () => {
   };
 
   it('the keyboard walks a column', async () => {
-    deal();
+    standFrame();
 
     screen.getByRole('columnheader', {name: /trades/}).focus();
     await userEvent.keyboard('{ArrowRight}');
@@ -115,7 +104,7 @@ describe('the frame table', () => {
 
   it('a column walks right to the end and left back home, keypress after keypress, keeping the focus the moves take', async () => {
     const restore = blurringMoves();
-    deal(undefined, eager);
+    standFrame({pace: 'eager'});
 
     const trades = screen.getByRole('columnheader', {name: /trades/});
     trades.focus();
@@ -130,7 +119,7 @@ describe('the frame table', () => {
 
   it('a row walks to the bottom and back to the top, keypress after keypress, keeping the focus the moves take', async () => {
     const restore = blurringMoves();
-    deal(undefined, eager);
+    standFrame({pace: 'eager'});
 
     const grip = within(screen.getByRole('row', {name: /this minute/})).getByRole('button', {name: /move row/});
     grip.focus();
@@ -144,7 +133,7 @@ describe('the frame table', () => {
   });
 
   it('the first seat is anchored', async () => {
-    deal();
+    standFrame();
 
     screen.getByRole('columnheader', {name: /trades/}).focus();
     await userEvent.keyboard('{ArrowLeft}');
@@ -153,7 +142,7 @@ describe('the frame table', () => {
   });
 
   it('a column drags past its neighbour and the swap is eager', () => {
-    deal();
+    standFrame();
     stubbedRects();
 
     const trades = screen.getByRole('columnheader', {name: /trades/});
@@ -166,8 +155,8 @@ describe('the frame table', () => {
 
   it('the fold finds its columns after they move', async () => {
     const feed = await listeningFeed();
-    deal(urlOf(feed));
-    await waitFor(() => expect(subscribed.size).toBeGreaterThan(0));
+    standFrame({feed});
+    await feedIsSubscribed();
     screen.getByRole('columnheader', {name: /trades/}).focus();
     await userEvent.keyboard('{ArrowRight}');
 
@@ -206,7 +195,7 @@ describe('the frame table', () => {
   };
 
   it('a reseat leaves settled rows untouched', async () => {
-    deal();
+    standFrame();
 
     const still = screen.getByRole('row', {name: /this hour/});
     const [, hold] = screen.getAllByRole('rowgroup');
@@ -229,7 +218,7 @@ describe('the frame table', () => {
   });
 
   it('the keyboard walks a row, and its label follows', async () => {
-    deal();
+    standFrame();
 
     await userEvent.click(screen.getByRole('button', {name: 'move row 1'}));
     await userEvent.keyboard('{ArrowDown}');
@@ -240,7 +229,7 @@ describe('the frame table', () => {
   });
 
   it('a row nudge says the move', async () => {
-    deal();
+    standFrame();
 
     await userEvent.click(screen.getByRole('button', {name: 'move row 1'}));
     await userEvent.keyboard('{ArrowDown}');
@@ -249,7 +238,7 @@ describe('the frame table', () => {
   });
 
   it('a column walk says the move', async () => {
-    deal();
+    standFrame();
 
     screen.getByRole('columnheader', {name: /trades/}).focus();
     await userEvent.keyboard('{ArrowRight}');
@@ -258,7 +247,7 @@ describe('the frame table', () => {
   });
 
   it('the last seat clamps the walk', async () => {
-    deal();
+    standFrame();
 
     await userEvent.click(screen.getByRole('button', {name: 'move row 5'}));
     await userEvent.keyboard('{ArrowDown}');
@@ -267,7 +256,7 @@ describe('the frame table', () => {
   });
 
   it('a row drags past its neighbour and the swap is eager', () => {
-    deal();
+    standFrame();
     rowRects();
 
     const grip = within(screen.getByRole('row', {name: /this minute/})).getByRole('button', {name: 'move row 1'});
@@ -279,7 +268,7 @@ describe('the frame table', () => {
   });
 
   it('a hand that lifts a row and drops it where it was leaves the sort standing', async () => {
-    deal();
+    standFrame();
 
     await userEvent.click(sortMenu('trades').getByRole('button', {name: 'ascending', hidden: true}));
     expect(screen.getByRole('columnheader', {name: /trades/})).toHaveAttribute('aria-sort', 'ascending');
@@ -292,7 +281,7 @@ describe('the frame table', () => {
   });
 
   it('a keyboard nudge ends the sort and keeps the rows where it left them', async () => {
-    deal();
+    standFrame();
 
     await userEvent.click(sortMenu('trades').getByRole('button', {name: 'ascending', hidden: true}));
     expect(screen.getByRole('columnheader', {name: /trades/})).toHaveAttribute('aria-sort', 'ascending');
@@ -305,7 +294,7 @@ describe('the frame table', () => {
   });
 
   it('the keyboard trades shares between neighbours', async () => {
-    deal();
+    standFrame();
     stubbedRects();
 
     const handle = screen.getByRole('button', {name: 'resize trades'});
@@ -318,7 +307,7 @@ describe('the frame table', () => {
   });
 
   it('a share trade says the new share', async () => {
-    deal();
+    standFrame();
     stubbedRects();
 
     const handle = screen.getByRole('button', {name: 'resize trades'});
@@ -330,8 +319,8 @@ describe('the frame table', () => {
 
   it('the sort stands while trades land', async () => {
     const feed = await listeningFeed();
-    deal(urlOf(feed));
-    await waitFor(() => expect(subscribed.size).toBeGreaterThan(0));
+    standFrame({feed});
+    await feedIsSubscribed();
     await userEvent.click(sortMenu('trades').getByRole('button', {name: 'descending', hidden: true}));
 
     broadcast(feed, [tradeFrame(100), tradeFrame(101, 1700000000000 - 120000)]);
@@ -343,7 +332,7 @@ describe('the frame table', () => {
 
   describe('the worlds of pace, origin, and motion', () => {
     it('lazy holds its shape and commits on drop', () => {
-      deal(undefined, lazy);
+      standFrame({pace: 'lazy'});
       stubbedRects();
 
       const trades = screen.getByRole('columnheader', {name: /trades/});
@@ -357,7 +346,7 @@ describe('the frame table', () => {
     });
 
     it('a lazy drop at home changes nothing', () => {
-      deal(undefined, lazy);
+      standFrame({pace: 'lazy'});
       stubbedRects();
 
       const trades = screen.getByRole('columnheader', {name: /trades/});
@@ -370,7 +359,7 @@ describe('the frame table', () => {
     });
 
     it('a lazy row dropped at home changes nothing', () => {
-      deal(undefined, lazy);
+      standFrame({pace: 'lazy'});
       rowRects();
 
       const grip = within(screen.getByRole('row', {name: /this minute/})).getByRole('button', {name: 'move row 1'});
@@ -383,7 +372,7 @@ describe('the frame table', () => {
     });
 
     it('a lazy build carries the lifted row in the store and dresses it, and moves nothing until the drop', () => {
-      deal(undefined, lazy);
+      standFrame({pace: 'lazy'});
       rowRects();
 
       const grip = within(screen.getByRole('row', {name: /this minute/})).getByRole('button', {name: 'move row 1'});
@@ -398,7 +387,7 @@ describe('the frame table', () => {
     });
 
     it('a lazy build dresses the carried column the same way; whether it moves is the sheet’s word', () => {
-      deal(undefined, lazy);
+      standFrame({pace: 'lazy'});
       stubbedRects();
 
       const trades = screen.getByRole('columnheader', {name: /trades/});
@@ -415,7 +404,7 @@ describe('the frame table', () => {
     });
 
     it('hide carries the lifted column, every cell of it, by the offset from home, and lands it as itself', () => {
-      deal(undefined, eager);
+      standFrame({pace: 'eager'});
       stubbedRects();
 
       const trades = screen.getByRole('columnheader', {name: /trades/});
@@ -435,7 +424,7 @@ describe('the frame table', () => {
     });
 
     it('hide carries the lifted row, every cell of it', () => {
-      deal(undefined, eager);
+      standFrame({pace: 'eager'});
       rowRects();
 
       const grip = within(screen.getByRole('row', {name: /this minute/})).getByRole('button', {name: 'move row 1'});
@@ -453,7 +442,7 @@ describe('the frame table', () => {
     });
 
     it('a menu sort in an animated world cuts: nothing is carried, nothing to land', async () => {
-      deal(undefined, eager);
+      standFrame({pace: 'eager'});
 
       await userEvent.click(sortMenu('trades').getByRole('button', {name: 'descending', hidden: true}));
 
@@ -462,7 +451,7 @@ describe('the frame table', () => {
     });
 
     it('a strike shoves the neighbour, and on release the real column settles from where it was dropped', () => {
-      deal(undefined, eager);
+      standFrame({pace: 'eager'});
       stubbedRects();
 
       const trades = screen.getByRole('columnheader', {name: /trades/});
@@ -490,7 +479,7 @@ describe('the frame table', () => {
     });
 
     it('every release marks what settles; the word on the table decides whether it plays', () => {
-      deal(undefined, eager);
+      standFrame({pace: 'eager'});
       stubbedRects();
 
       const trades = screen.getByRole('columnheader', {name: /trades/});

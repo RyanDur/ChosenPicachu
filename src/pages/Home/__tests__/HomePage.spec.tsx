@@ -1,10 +1,11 @@
-import {screen, within} from '@testing-library/react';
-import {renderWithMemoryRouter} from '@test-support';
-import {Home} from '@pages/Home';
+import {TestApp} from '@test-support/TestApp';
+import {render, screen, within} from '@testing-library/react';
 import {Paths} from '@pages/Paths';
 
 describe('the home page', () => {
-  beforeEach(() => renderWithMemoryRouter(Home, {path: Paths.home}));
+  beforeEach(() => {
+    render(<TestApp at={Paths.home}/>);
+  });
 
   test('the page opens on the thesis', () => {
     expect(screen.getByText(/three languages working in concert/)).toBeVisible();

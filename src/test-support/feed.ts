@@ -1,6 +1,5 @@
-import {HttpResponse, http, ws} from 'msw';
 import {WebSocketClientConnectionProtocol as Client} from '@mswjs/interceptors/WebSocket';
-import {server} from './server';
+import {FEED, feedLink, server} from './server';
 
 type FrameParts = {
   price: string;
@@ -53,28 +52,31 @@ export type Feed = {
 let feeds = 0;
 
 // the socket laws point the history at a port nobody answers; the fetch fails the way it would on the wire
-export const NO_HISTORY = 'http://127.0.0.1:9';
-
 // a refused feed hangs up abnormally on connection, which the page hears as a handshake failure
 export const listeningFeed = (refusing = false): Promise<Feed> => {
   feeds += 1;
-  const url = `ws://feed.test/${feeds}`;
-  server.use(http.all(`${NO_HISTORY}/*`, () => HttpResponse.error()));
+  const url = `${FEED}/${feeds}`;
   const clients = new Set<Client>();
   let connections = 0;
-  server.use(ws.link(url).addEventListener('connection', ({client}) => {
+  server.use(feedLink.addEventListener('connection', ({client}) => {
+    if (client.url.href !== url) {
+      return;
+    }
     connections += 1;
     if (refusing) {
       client.close(1006);
       return;
     }
-    clients.add(client);
     client.addEventListener('message', event => {
       if (subscribesMatches(event.data)) {
         subscribed.add(client);
+        clients.add(client);
       }
     });
-    client.addEventListener('close', () => clients.delete(client));
+    client.addEventListener('close', () => {
+      clients.delete(client);
+      subscribed.delete(client);
+    });
   }));
   return Promise.resolve({url, clients, connections: () => connections});
 };

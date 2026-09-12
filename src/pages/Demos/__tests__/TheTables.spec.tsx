@@ -1,35 +1,20 @@
-import {cleanup, fireEvent, screen, waitFor, within} from '@testing-library/react';
+import {TestApp} from '@test-support/TestApp';
+import {demosAt} from '@pages/Demos/__test_support/demos';
+import {fireEvent, render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {
-  broadcast,
-  listeningFeed,
-  subscribed,
-  tradeFrame,
-  urlOf
-} from '@test-support/feed';
-import {renderWithMemoryRouter} from '@test-support';
-import {EnvProvider} from '@components/Env';
-import {DemosPage} from '@pages/Demos/DemosPage';
-import {Trading} from '@pages/Demos/Trading';
-import {Paths} from '@pages/Paths';
+import {broadcast, listeningFeed, tradeFrame} from '@test-support/feed';
+import {feedIsSubscribed} from '@test-support';
+import {folds, opened, reveals, stories} from '@pages/Demos/Recipe/__test_support/folds';
+import {tableControls} from '@pages/Demos/Tables/__test_support/controls';
+import {texts} from '@components/DragSortableTable/__test_support/rows';
 
-const folds = (root: HTMLElement): HTMLElement[] =>
-  within(root).getAllByRole('group').filter(group => group.tagName === 'DETAILS');
-const built = (fold: HTMLElement): boolean => [...fold.children].some(child => child.textContent === 'how we built it');
-const stories = (root: HTMLElement): HTMLElement[] => folds(root).filter(fold => !built(fold));
-const reveals = (root: HTMLElement): HTMLElement[] => folds(root).filter(built);
-const opened = (details: readonly HTMLElement[]): HTMLElement[] => details.filter(fold => fold.hasAttribute('open'));
-
-const renderTables = (feedUrl: string, search = '?tab=tables') =>
-  renderWithMemoryRouter({
-    path: Paths.demos,
-    element: <EnvProvider env={{tradeFeed: feedUrl, tradeHistory: 'http://127.0.0.1:9'}}><Trading/></EnvProvider>,
-    children: [{index: true, element: <DemosPage/>}]
-  }, {path: `${Paths.demos}${search}`});
-
-const feedIsSubscribed = async (): Promise<void> => {
-  await waitFor(() => expect(subscribed.size).toBeGreaterThan(0));
-};
+const now = 1700000000000;
+const fourTrades = [
+  tradeFrame(50001, now - 30 * 60000, '0.10', 'buy'),
+  tradeFrame(50002, now - 10 * 60000, '0.25', 'sell'),
+  tradeFrame(50003, now - 3 * 60000, '0.05', 'buy'),
+  tradeFrame(50004, now, '0.01', 'buy')
+];
 
 const dialCombos = ['eager', 'lazy'].flatMap(pace =>
   ['keep', 'hide'].flatMap(origin =>
@@ -37,14 +22,10 @@ const dialCombos = ['eager', 'lazy'].flatMap(pace =>
 const builds = ['react', 'vanilla'].flatMap(world => dialCombos.map(dials => `world=${world}&${dials}`));
 
 describe('the tables demo', () => {
-  afterEach(() => {
-    cleanup();
-  });
-
   test('the fixed windows hold their rows while the stream fills the cells', async () => {
     const feed = await listeningFeed();
 
-    renderTables(urlOf(feed));
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed();
     const card = screen.getByRole('region', {name: 'live aggregations'});
@@ -52,14 +33,7 @@ describe('the tables demo', () => {
       expect(within(card).getByRole('columnheader', {name: new RegExp(`^${measure}`)})).toBeVisible();
     }
     expect(within(card).getAllByRole('row')).toHaveLength(6);
-    const now = 1700000000000;
-    broadcast(feed, [
-      tradeFrame(50001, now - 30 * 60000, '0.10', 'buy'),
-      tradeFrame(50002, now - 10 * 60000, '0.25', 'sell'),
-      tradeFrame(50003, now - 3 * 60000, '0.05', 'buy'),
-      tradeFrame(50004, now, '0.01', 'buy')
-    ]);
-    const texts = (row: HTMLElement) => [within(row).getByRole('rowheader'), ...within(row).getAllByRole('cell')].map(cell => cell.textContent);
+    broadcast(feed, fourTrades);
     const rowFor = (label: string) => within(card).getByRole('row', {name: new RegExp(`^${label}`)});
     await waitFor(() => expect(texts(rowFor('this minute'))).toEqual(
       ['this minute', '1', '1', '0', '0.01', '$50,004.00', '+$0.00']));
@@ -76,11 +50,11 @@ describe('the tables demo', () => {
   test('the glider chooses how a dragged column travels', async () => {
     const feed = await listeningFeed();
 
-    renderTables(urlOf(feed));
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed();
     const card = screen.getByRole('region', {name: 'live aggregations'});
-    const controls = await screen.findByRole('region', {name: 'table controls'}, {timeout: 5000});
+    const controls = await tableControls();
     for (const axis of ['pace', 'origin', 'motion']) {
       expect(within(controls).getByRole('group', {name: axis})).toBeVisible();
     }
@@ -115,7 +89,7 @@ describe('the tables demo', () => {
   test('the windows can trade places by hand', async () => {
     const feed = await listeningFeed();
 
-    renderTables(urlOf(feed));
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed();
     const card = screen.getByRole('region', {name: 'live aggregations'});
@@ -145,17 +119,11 @@ describe('the tables demo', () => {
   test('a direction from a column menu sorts the windows', async () => {
     const feed = await listeningFeed();
 
-    renderTables(urlOf(feed));
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed();
     const card = screen.getByRole('region', {name: 'live aggregations'});
-    const now = 1700000000000;
-    broadcast(feed, [
-      tradeFrame(50001, now - 30 * 60000, '0.10', 'buy'),
-      tradeFrame(50002, now - 10 * 60000, '0.25', 'sell'),
-      tradeFrame(50003, now - 3 * 60000, '0.05', 'buy'),
-      tradeFrame(50004, now, '0.01', 'buy')
-    ]);
+    broadcast(feed, fourTrades);
     const labels = () => within(card).getAllByRole('row').slice(1)
       .map(row => within(row).getByRole('rowheader').textContent);
     const menuFor = (label: string) => within(card).getByLabelText(`${label} by`);
@@ -171,7 +139,7 @@ describe('the tables demo', () => {
   test('the controls fold behind their readout', async () => {
     const feed = await listeningFeed();
 
-    renderTables(urlOf(feed));
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed();
     const opener = await screen.findByText('settings', {}, {timeout: 5000});
@@ -191,7 +159,7 @@ describe('the tables demo', () => {
     window.matchMedia = (query: string) =>
       ({matches: query.includes('600px'), media: query} as MediaQueryList);
     try {
-      renderTables(urlOf(feed));
+      render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
       await feedIsSubscribed();
       const opener = await screen.findByText('settings', {}, {timeout: 5000});
@@ -206,10 +174,10 @@ describe('the tables demo', () => {
   test('the controls read out whatever is chosen', async () => {
     const feed = await listeningFeed();
 
-    renderTables(urlOf(feed));
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed();
-    const controls = await screen.findByRole('region', {name: 'table controls'}, {timeout: 5000});
+    const controls = await tableControls();
     expect(controls).toHaveTextContent(/Neighbours swap the moment you drag past them/);
     expect(controls).toHaveTextContent(/rides the pointer, cells and all/);
     expect(controls).toHaveTextContent(/slide to their new seats/);
@@ -229,7 +197,7 @@ describe('the tables demo', () => {
   test('the arrangement survives a change of table: the order belongs to the page', async () => {
     const feed = await listeningFeed();
 
-    renderTables(urlOf(feed));
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed();
     const card = screen.getByRole('region', {name: 'live aggregations'});
@@ -237,11 +205,13 @@ describe('the tables demo', () => {
     const headers = () => within(card).getAllByRole('columnheader').map(header => header.getAttribute('aria-label'));
     expect(windows().slice(0, 2)).toEqual(['this minute', 'last 5 minutes']);
 
-    fireEvent.keyDown(within(card).getByRole('button', {name: 'move row 1'}), {key: 'ArrowDown'});
-    fireEvent.keyDown(within(card).getByRole('columnheader', {name: /^trades/}), {key: 'ArrowRight'});
+    within(card).getByRole('button', {name: 'move row 1'}).focus();
+    await userEvent.keyboard('{ArrowDown}');
+    within(card).getByRole('columnheader', {name: /^trades/}).focus();
+    await userEvent.keyboard('{ArrowRight}');
     expect(windows().slice(0, 2)).toEqual(['last 5 minutes', 'this minute']);
 
-    const controls = await screen.findByRole('region', {name: 'table controls'}, {timeout: 5000});
+    const controls = await tableControls();
     await userEvent.click(within(controls).getByRole('radio', {name: 'Lazy'}));
     await userEvent.click(within(controls).getByRole('radio', {name: 'Static'}));
 
@@ -253,7 +223,7 @@ describe('the tables demo', () => {
   test('the recipe teaches whatever the dials are set to', async () => {
     const feed = await listeningFeed();
 
-    renderTables(urlOf(feed));
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed();
     const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
@@ -298,16 +268,17 @@ describe('the tables demo', () => {
     expect(still).toHaveTextContent(/The trader can read the market in a table/);
     expect(still).toHaveTextContent(/Deal a real HTML table/);
     expect(still).toHaveTextContent(/scope="col"/);
-    expect(stories(still)).toHaveLength(2);
+    expect(stories(still)).toHaveLength(1);
     expect(still).toHaveTextContent(/that is what a table is for/);
-    expect(still).toHaveTextContent(/The page is a store/);
-    expect(still).toHaveTextContent(/Actions are data, and one reducer reads them/);
-    expect(still).toHaveTextContent(/The exchange is middleware/);
-    expect(still).toHaveTextContent(/export const demosStore/);
+    expect(still).not.toHaveTextContent(/The page is a store/);
     const living = screen.getByRole('region', {name: 'the living table'});
     expect(living).toBeVisible();
     expect(living).toHaveTextContent(/The trader can watch the market live/);
-    expect(stories(living)).toHaveLength(1);
+    expect(stories(living)).toHaveLength(2);
+    expect(living).toHaveTextContent(/The page is a store/);
+    expect(living).toHaveTextContent(/Actions are data, and one reducer reads them/);
+    expect(living).toHaveTextContent(/The exchange is middleware/);
+    expect(living).toHaveTextContent(/export const demosStore/);
     expect(living).toHaveTextContent(/a socket comes next/);
     expect(living).toHaveTextContent(/Hydrate with one fetch/);
     expect(living).toHaveTextContent(/where a number comes from/);
@@ -355,7 +326,7 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/Leave the motion out/);
     expect(recipe).not.toHaveTextContent(/1cqi/);
     expect(recipe).not.toHaveTextContent(/Commit inside the move/);
-    const controls = await screen.findByRole('region', {name: 'table controls'}, {timeout: 5000});
+    const controls = await tableControls();
     expect(within(controls).getByRole('radio', {name: 'Lazy'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Keep'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Static'})).toBeChecked();
@@ -369,7 +340,7 @@ describe('the tables demo', () => {
     location.hash = '#station-5';
     const feed = await listeningFeed();
 
-    renderTables(urlOf(feed));
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await screen.findByRole('heading', {name: 'Slice the design into stories'});
     expect(brought).toContain('station-5');
@@ -380,7 +351,7 @@ describe('the tables demo', () => {
   test('the keyboard track teaches the same sort by other hands', async () => {
     const feed = await listeningFeed();
 
-    renderTables(urlOf(feed));
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed();
     const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
@@ -410,11 +381,7 @@ describe('the tables demo', () => {
   test('the chosen track travels in the url', async () => {
     const feed = await listeningFeed();
 
-    renderWithMemoryRouter({
-      path: Paths.demos,
-      element: <EnvProvider env={{tradeFeed: urlOf(feed), tradeHistory: 'http://127.0.0.1:9'}}><Trading/></EnvProvider>,
-    children: [{index: true, element: <DemosPage/>}]
-    }, {path: `${Paths.demos}?tab=tables&track=keyboard`});
+    render(<TestApp at={demosAt('?tab=tables&track=keyboard')} feed={feed}/>);
 
     await feedIsSubscribed();
     const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
@@ -425,7 +392,7 @@ describe('the tables demo', () => {
   test('a second tutorial answers the resize', async () => {
     const feed = await listeningFeed();
 
-    renderTables(urlOf(feed));
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed();
     expect(await screen.findByRole('region', {name: 'build the drag sort yourself'})).toBeVisible();
@@ -453,7 +420,7 @@ describe('the tables demo', () => {
   test('the open cards travel in the url', async () => {
     const feed = await listeningFeed();
 
-    renderTables(urlOf(feed), '?tab=tables&sort=column');
+    render(<TestApp at={demosAt('?tab=tables&sort=column')} feed={feed}/>);
 
     await feedIsSubscribed();
     const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
@@ -466,14 +433,10 @@ describe('the tables demo', () => {
   test('the dials travel in the url', async () => {
     const feed = await listeningFeed();
 
-    renderWithMemoryRouter({
-      path: Paths.demos,
-      element: <EnvProvider env={{tradeFeed: urlOf(feed), tradeHistory: 'http://127.0.0.1:9'}}><Trading/></EnvProvider>,
-    children: [{index: true, element: <DemosPage/>}]
-    }, {path: `${Paths.demos}?tab=tables&pace=lazy&origin=keep&motion=static`});
+    render(<TestApp at={demosAt('?tab=tables&pace=lazy&origin=keep&motion=static')} feed={feed}/>);
 
     await feedIsSubscribed();
-    const controls = await screen.findByRole('region', {name: 'table controls'}, {timeout: 5000});
+    const controls = await tableControls();
     expect(within(controls).getByRole('radio', {name: 'Lazy'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Keep'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Static'})).toBeChecked();
@@ -483,7 +446,7 @@ describe('the tables demo', () => {
   test('a third tutorial answers the menu', async () => {
     const feed = await listeningFeed();
 
-    renderTables(urlOf(feed));
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed();
     await userEvent.click(screen.getByRole('button', {name: 'Sort menu'}));
@@ -494,7 +457,7 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/position-area/);
     expect(recipe).toHaveTextContent(/The sort keeps sorting/);
     expect(recipe).toHaveTextContent(/A hand ends the sort/);
-    expect(recipe).toHaveTextContent(/onSorted\?\.\(\{column, direction\}\)/);
+    expect(recipe).toHaveTextContent(/onSorted\?\.\(\{column, direction}\)/);
     expect(recipe).not.toHaveTextContent(/Dress the menu as a card/);
     expect(within(recipe).getByRole('link', {name: 'position-area'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/CSS/position-area'));
@@ -511,11 +474,7 @@ describe('the tables demo', () => {
   test('the chosen tutorial travels in the url', async () => {
     const feed = await listeningFeed();
 
-    renderWithMemoryRouter({
-      path: Paths.demos,
-      element: <EnvProvider env={{tradeFeed: urlOf(feed), tradeHistory: 'http://127.0.0.1:9'}}><Trading/></EnvProvider>,
-    children: [{index: true, element: <DemosPage/>}]
-    }, {path: `${Paths.demos}?tab=tables&tut=resize`});
+    render(<TestApp at={demosAt('?tab=tables&tut=resize')} feed={feed}/>);
 
     await feedIsSubscribed();
     expect(await screen.findByRole('region', {name: 'build the drag resize yourself'})).toBeVisible();
@@ -525,8 +484,9 @@ describe('the tables demo', () => {
   test('every column is resizable', async () => {
     const feed = await listeningFeed();
 
-    renderTables(urlOf(feed));
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
+    await feedIsSubscribed();
     const card = screen.getByRole('region', {name: 'live aggregations'});
     expect(within(card).getAllByRole('button', {name: /^resize/})).toHaveLength(7);
   });
@@ -544,7 +504,7 @@ describe('the tables demo', () => {
     test('react holds the stage by default, and no frame stands', async () => {
       const feed = await listeningFeed();
 
-      renderTables(urlOf(feed));
+      render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
       expect(await screen.findByRole('region', {name: 'live aggregations'})).toBeInTheDocument();
       expect(screen.queryByTitle('the living table, in vanilla')).not.toBeInTheDocument();
@@ -553,7 +513,7 @@ describe('the tables demo', () => {
     test('the html world deals the table in its own document', async () => {
       const feed = await listeningFeed();
 
-      renderTables(urlOf(feed), '?tab=tables&world=vanilla');
+      render(<TestApp at={demosAt('?tab=tables&world=vanilla')} feed={feed}/>);
 
       const frame = await standFrame();
       expect(frame).toHaveAttribute('srcdoc', expect.stringContaining('<table'));
@@ -565,7 +525,7 @@ describe('the tables demo', () => {
     test('one tutorial stands in both worlds; only the build swaps', async () => {
       const feed = await listeningFeed();
 
-      renderTables(urlOf(feed), '?tab=tables&world=vanilla');
+      render(<TestApp at={demosAt('?tab=tables&world=vanilla')} feed={feed}/>);
 
       expect(await screen.findByRole('heading', {name: 'The trader can watch the market live, in windows'})).toBeInTheDocument();
       expect(screen.getByText('Drag resize')).toBeInTheDocument();
@@ -576,7 +536,7 @@ describe('the tables demo', () => {
     test('the menu story stands in the html world', async () => {
       const feed = await listeningFeed();
 
-      renderTables(urlOf(feed), '?tab=tables&world=vanilla&tut=menu');
+      render(<TestApp at={demosAt('?tab=tables&world=vanilla&tut=menu')} feed={feed}/>);
 
       expect(await screen.findByRole('heading', {name: 'The trader can sort the windows by any measure, or take the order back'})).toBeInTheDocument();
     });
@@ -584,7 +544,7 @@ describe('the tables demo', () => {
     test('the resize story stands in the html world', async () => {
       const feed = await listeningFeed();
 
-      renderTables(urlOf(feed), '?tab=tables&world=vanilla&tut=resize');
+      render(<TestApp at={demosAt('?tab=tables&world=vanilla&tut=resize')} feed={feed}/>);
 
       expect(await screen.findByRole('heading', {name: 'The trader can widen a column'})).toBeInTheDocument();
     });
@@ -592,7 +552,7 @@ describe('the tables demo', () => {
     test.each(builds)('the sort tutorial stands on both tracks in the build %s', async build => {
       const feed = await listeningFeed();
 
-      renderTables(urlOf(feed), `?tab=tables&tut=sort&${build}`);
+      render(<TestApp at={demosAt(`?tab=tables&tut=sort&${build}`)} feed={feed}/>);
 
       expect(await screen.findByText('The trader can sort by column')).toBeInTheDocument();
       await userEvent.click(screen.getByRole('button', {name: 'By keyboard'}));
@@ -602,7 +562,7 @@ describe('the tables demo', () => {
     test('the explainer stands in the html world too', async () => {
       const feed = await listeningFeed();
 
-      renderTables(urlOf(feed), '?tab=tables&world=vanilla');
+      render(<TestApp at={demosAt('?tab=tables&world=vanilla')} feed={feed}/>);
 
       expect(await screen.findByText('what am I looking at?')).toBeInTheDocument();
       expect(screen.getByTitle('the living table, in vanilla')).toBeInTheDocument();
@@ -611,7 +571,7 @@ describe('the tables demo', () => {
     test('the frame wears its own document\u2019s height', async () => {
       const feed = await listeningFeed();
 
-      renderTables(urlOf(feed), '?tab=tables&world=vanilla');
+      render(<TestApp at={demosAt('?tab=tables&world=vanilla')} feed={feed}/>);
 
       const frame = await standFrame();
 
@@ -621,7 +581,7 @@ describe('the tables demo', () => {
     test('the world dial swaps the stage', async () => {
       const feed = await listeningFeed();
 
-      renderTables(urlOf(feed));
+      render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
       await userEvent.click(await screen.findByRole('radio', {name: 'Vanilla'}));
 

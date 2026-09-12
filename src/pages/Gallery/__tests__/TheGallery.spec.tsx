@@ -1,18 +1,12 @@
+import {TestApp} from '@test-support/TestApp';
 import {aicArtResponse, harvardArtResponse, vamArtResponse} from '@test-support/fixtures';
-import {renderWithMemoryRouter} from '@test-support';
-import {screen, waitFor, within} from '@testing-library/react';
+import {render, screen, waitFor, within} from '@testing-library/react';
 import {has} from '@ryandur/sand';
 import {Paths} from '@pages/Paths';
-import {Gallery} from '@pages/Gallery';
 import userEvent from '@testing-library/user-event';
 import {AICArtResponse} from '@components/art-gallery/museums/aic/types';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
-import {
-  setupAICAllArtResponse,
-  setupAICArtPieceResponse,
-  setupHarvardAllArtResponse,
-  setupVAMAllArtResponse
-} from '@components/art-gallery/__tests__/galleryApiTestHelper';
+import {setupAICAllArtResponse, setupAICArtPieceResponse, setupHarvardAllArtResponse, setupVAMAllArtResponse} from '@components/art-gallery/__tests__/galleryApiTestHelper';
 
 const firstPiece = aicArtResponse.data[0];
 
@@ -38,7 +32,7 @@ describe('The gallery.', () => {
 
   test('When the art has loaded', async () => {
     setupAICAllArtResponse(aicArtResponse);
-    renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
+    render(<TestApp at={Paths.artGallery}/>);
 
     expect(await screen.findAllByRole('figure')).toHaveLength(defaultRecordLimit);
     expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument();
@@ -48,7 +42,7 @@ describe('The gallery.', () => {
   describe('when looking at an individual piece', () => {
     it('should allow a user to take a closer look at the art', async () => {
       setupAICAllArtResponse(aicArtResponse);
-      renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
+      render(<TestApp at={Paths.artGallery}/>);
       setupAICArtPieceResponse(aicArtPieceResponse, firstPiece.id);
 
       await userEvent.click(within(await frameTitled(firstPiece.title)).getByRole('img'));
@@ -59,7 +53,7 @@ describe('The gallery.', () => {
 
     it('should update the header with the piece title', async () => {
       setupAICAllArtResponse(aicArtResponse);
-      renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
+      render(<TestApp at={Paths.artGallery}/>);
       setupAICArtPieceResponse(aicArtPieceResponse, firstPiece.id);
 
       await userEvent.click(within(await frameTitled(firstPiece.title)).getByRole('img'));
@@ -71,7 +65,7 @@ describe('The gallery.', () => {
 
   test('when looking at the harvard gallery', async () => {
     setupAICAllArtResponse(aicArtResponse);
-    renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
+    render(<TestApp at={Paths.artGallery}/>);
     setupHarvardAllArtResponse(harvardArtResponse);
 
     await userEvent.click(await screen.findByText('Harvard Art Museums'));
@@ -83,7 +77,7 @@ describe('The gallery.', () => {
 
   test('when looking at the vam gallery', async () => {
     setupAICAllArtResponse(aicArtResponse);
-    renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
+    render(<TestApp at={Paths.artGallery}/>);
     setupVAMAllArtResponse(vamArtResponse);
 
     await userEvent.click(await screen.findByText('The Victoria and Albert Museum'));

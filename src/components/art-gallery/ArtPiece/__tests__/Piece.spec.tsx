@@ -1,7 +1,9 @@
+import {GalleryProviders} from '@pages/Gallery';
+import {TestApp} from '@test-support/TestApp';
+import {Route} from 'react-router';
 import {anyRequestRespondsWith} from '@test-support/server';
-import {screen, waitFor, within} from '@testing-library/react';
-import {ArtPiece} from '@components/art-gallery/ArtPiece/index';
-import {renderWithArtPieceContext} from '@test-support';
+import {render, screen, waitFor, within} from '@testing-library/react';
+import {ArtPiece} from '@components/art-gallery';
 import {HTTPError} from '@transport/types';
 import {faker} from '@faker-js/faker';
 import {Paths} from '@pages/Paths';
@@ -23,10 +25,7 @@ describe('viewing a piece', () => {
   test('when loading the piece of art', async () => {
     setupAICArtPieceResponse(aicArtResponse, aicArtResponse.data.id);
 
-    renderWithArtPieceContext(<ArtPiece/>, {
-      initialRoute: `${Paths.artGallery}1234`,
-      path: `${Paths.artGalleryPiece}`
-    });
+    render(<TestApp at={`${Paths.artGallery}1234`}><Route path={`${Paths.artGalleryPiece}`} element={<GalleryProviders><ArtPiece/></GalleryProviders>}/></TestApp>);
 
     await waitFor(() => expect(screen.getByRole('progressbar', {name: 'loading piece'})).toBeInTheDocument());
   });
@@ -34,11 +33,7 @@ describe('viewing a piece', () => {
   test('when the art piece is loaded', async () => {
     setupAICArtPieceResponse(aicArtResponse, aicArtResponse.data.id);
 
-    renderWithArtPieceContext(<ArtPiece/>, {
-      initialRoute: `${Paths.artGallery}${aicArtResponse.data.id}`,
-      path: Paths.artGalleryPiece,
-      params: {tab: Source.AIC}
-    });
+    render(<TestApp at={`${Paths.artGallery}${aicArtResponse.data.id}?tab=${Source.AIC}`}><Route path={Paths.artGalleryPiece} element={<GalleryProviders><ArtPiece/></GalleryProviders>}/></TestApp>);
 
     expect(await screen.findByText(aicArtResponse.data.artist_display)).toBeInTheDocument();
     await waitFor(() => expect(screen.queryByAltText('Load Error')).not.toBeInTheDocument());
@@ -46,10 +41,7 @@ describe('viewing a piece', () => {
 
   test('when getting the piece has errored', async () => {
     anyRequestRespondsWith(HTTPError.SERVER_ERROR, 500);
-    renderWithArtPieceContext(<ArtPiece/>, {
-      initialRoute: `${Paths.artGallery}1234`,
-      path: `${Paths.artGalleryPiece}`
-    });
+    render(<TestApp at={`${Paths.artGallery}1234`}><Route path={`${Paths.artGalleryPiece}`} element={<GalleryProviders><ArtPiece/></GalleryProviders>}/></TestApp>);
 
     await waitFor(() => expect(screen.queryByAltText('Load Error')).toBeInTheDocument());
     expect(screen.queryByRole('figure')).not.toBeInTheDocument();

@@ -1,7 +1,7 @@
 .closed-room {
-  display: grid;
-  gap: var(--base-x-2);
-  padding: var(--base-x-3);
-  max-inline-size: var(--measure);
-  text-wrap: pretty;
+    display: grid;
+    gap: var(--base-x-2);
+    padding: var(--base-x-3);
+    max-inline-size: var(--measure);
+    text-wrap: pretty;
 }

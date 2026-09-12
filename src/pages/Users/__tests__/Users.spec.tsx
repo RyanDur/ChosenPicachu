@@ -1,12 +1,12 @@
-import {screen, waitFor, within} from '@testing-library/react';
+import {Paths} from '@pages/Paths';
+import {TestApp} from '@test-support/TestApp';
+import {render, screen, waitFor, within} from '@testing-library/react';
 import {format} from 'date-fns';
 import {users as someUsers} from '@test-support/fixtures';
-import {renderWithRouter} from '@test-support';
 import userEvent from '@testing-library/user-event';
 import {AddressInfo, User} from '@components/Users/UserInfo/types';
 import {createUser, usersApi} from '@components/Users/resource/usersApi';
 import {users} from '@components/Users/resource/users';
-import {UsersPage} from '@pages/Users/UsersPage';
 
 const cellAt = (column: number, row: number): HTMLElement => {
   const [, tbody] = screen.getAllByRole('rowgroup');
@@ -31,7 +31,7 @@ describe('the users page', () => {
 
   describe('ranking the users', () => {
     it('groups by a column menu criterion', async () => {
-      renderWithRouter(<UsersPage/>, {});
+      render(<TestApp at={Paths.users}/>);
       const homes = () => within(screen.getAllByRole('rowgroup')[1]).getAllByRole('row')
         .map(row => within(row).getAllByRole('cell')[3]?.textContent ?? '');
       await waitFor(() => expect(homes().length).toBeGreaterThan(1));
@@ -81,7 +81,7 @@ describe('the users page', () => {
     const anotherUser = conciseUser('Bram', false);
 
     beforeEach(async () => {
-      renderWithRouter(<UsersPage/>, {});
+      render(<TestApp at={Paths.users}/>);
       await addUser(aUser);
       await addUser(anotherUser);
     });
@@ -99,7 +99,7 @@ describe('the users page', () => {
 
   describe('viewing a user', () => {
     beforeEach(async () => {
-      renderWithRouter(<UsersPage/>);
+      render(<TestApp at={Paths.users}/>);
       const view = await waitFor(() => within(cellAt(4, 0)).getByText('View'));
       await userEvent.click(view);
     });
@@ -120,7 +120,7 @@ describe('the users page', () => {
   describe('editing a user', () => {
     beforeEach(async () => {
 
-      renderWithRouter(<UsersPage/>);
+      render(<TestApp at={Paths.users}/>);
       const edit = await waitFor(() => within(cellAt(4, 0)).getByText('Edit'));
       await userEvent.click(edit);
     });
@@ -154,7 +154,7 @@ describe('the users page', () => {
   test('updating a user', async () => {
     const spy = vi.spyOn(users, 'update');
 
-    renderWithRouter(<UsersPage/>);
+    render(<TestApp at={Paths.users}/>);
 
     const editControl = await waitFor(() => within(cellAt(4, 0)).getByText('Edit'));
     await userEvent.click(editControl);
@@ -168,7 +168,7 @@ describe('the users page', () => {
   test('removing a user', async () => {
     const spy = vi.spyOn(users, 'delete');
 
-    renderWithRouter(<UsersPage/>);
+    render(<TestApp at={Paths.users}/>);
 
     const removeControl = await waitFor(() => within(cellAt(4, 0)).getByText('Remove'));
     await userEvent.click(removeControl);
@@ -178,7 +178,7 @@ describe('the users page', () => {
 
   test('cloning a user', async () => {
     const spy = vi.spyOn(users, 'add');
-    renderWithRouter(<UsersPage/>);
+    render(<TestApp at={Paths.users}/>);
 
     const cloneControl = await waitFor(() => within(cellAt(4, 0)).getByText('Clone'));
     await userEvent.click(cloneControl);

@@ -1,11 +1,11 @@
 import {FC, PropsWithChildren, ReactNode} from 'react';
-import {Defined} from '../../Recipe/Defined';
+import {Defined} from '@pages/Demos/Recipe';
 
 export type Word =
   | 'aloft' | 'survey' | 'drift'
   | 'strike' | 'settle' | 'landing' | 'seats' | 'share' | 'travel' | 'reconcile'
   | 'sort' | 'standing'
-  | 'store' | 'action' | 'reducer' | 'selector' | 'middleware';
+  | 'store' | 'slice' | 'action' | 'reducer' | 'selector' | 'middleware';
 
 const definitions: Record<Word, ReactNode> = {
   aloft: 'whatever the hand is carrying, a column by its name or a row by its key; the store holds it as the drag, absent until a lift',
@@ -21,6 +21,7 @@ const definitions: Record<Word, ReactNode> = {
   sort: 'the chosen column and direction: what the rows rank by, held by the page beside its order',
   standing: 'the rows’ order on screen: the seats as they stand, ranked by the sort while one holds',
   store: 'one value, one dispatch, one subscribe: a state and the only way in or out',
+  slice: 'a reducer with the state it starts from; slices combine by key, each seeing only its own',
   action: 'a record of what happened: a type and the facts; dispatch hands it to the reducer',
   reducer: 'the one function from the old state and an action to the new state; it reads the type and calls the verb',
   selector: 'a named function from the state to an answer; the name is the question',

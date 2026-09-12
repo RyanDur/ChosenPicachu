@@ -1,15 +1,10 @@
-import {screen, waitFor, within} from '@testing-library/react';
+import {TestApp} from '@test-support/TestApp';
+import {demosAt} from '@pages/Demos/__test_support/demos';
+import {render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {delay, http, HttpResponse} from 'msw';
-import {server} from '@test-support/server';
-import {renderWithMemoryRouter} from '@test-support';
-import {EnvProvider} from '@components/Env';
-import {DemosPage} from '@pages/Demos/DemosPage';
-import {Trading} from '@pages/Demos/Trading';
-import {Paths} from '@pages/Paths';
+import {HISTORY, server} from '@test-support/server';
 import {format} from 'date-fns';
-
-const HISTORY = 'https://api.exchange.coinbase.com';
 
 const HOUR_ALIGNED = 1699995600;
 
@@ -26,13 +21,6 @@ const rowsSpaced = (stepSeconds: number): number[][] =>
     .map(([low, high, open, close, volume], index) =>
       [HOUR_ALIGNED + index * stepSeconds, low, high, open, close, volume])
     .reverse();
-
-const renderCharts = () =>
-  renderWithMemoryRouter({
-    path: Paths.demos,
-    element: <EnvProvider env={{tradeFeed: 'ws://127.0.0.1:9', tradeHistory: HISTORY}}><Trading/></EnvProvider>,
-    children: [{index: true, element: <DemosPage/>}]
-  }, {path: `${Paths.demos}?tab=charts&charts=price,candles`});
 
 const menuFor = (label: string): HTMLElement => screen.getByLabelText(`${label} by`);
 
@@ -51,7 +39,8 @@ describe('the chart periods', () => {
       return HttpResponse.json(rowsSpaced(60));
     }));
 
-    renderCharts();
+    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')}/>);
+    await screen.findByRole('region', {name: 'candles'});
 
     await userEvent.click(within(menuFor('candle period')).getByText('hour'));
     await waitFor(() => expect(drawnCandles()).toBe(5));
@@ -71,7 +60,8 @@ describe('the chart periods', () => {
   test('choosing the day draws the price line from history closes', async () => {
     server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, () => HttpResponse.json(rowsSpaced(3600))));
 
-    renderCharts();
+    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')}/>);
+    await screen.findByRole('region', {name: 'candles'});
 
     await userEvent.click(within(menuFor('price period')).getByText('day'));
     await waitFor(() => expect(drawnPoints()).toBe(5));
@@ -86,7 +76,8 @@ describe('the chart periods', () => {
   test('history that cannot load says so', async () => {
     server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, () => HttpResponse.error()));
 
-    renderCharts();
+    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')}/>);
+    await screen.findByRole('region', {name: 'candles'});
 
     await userEvent.click(within(menuFor('candle period')).getByText('week'));
     const candleCard = screen.getByRole('region', {name: 'candles'});
@@ -101,7 +92,8 @@ describe('the chart periods', () => {
       return HttpResponse.json(rowsSpaced(3600));
     }));
 
-    renderCharts();
+    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')}/>);
+    await screen.findByRole('region', {name: 'candles'});
 
     await userEvent.click(within(menuFor('candle period')).getByText('day'));
     const candleCard = screen.getByRole('region', {name: 'candles'});

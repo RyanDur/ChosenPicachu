@@ -1,14 +1,14 @@
+import {GalleryProviders} from '@pages/Gallery';
+import {TestApp} from '@test-support/TestApp';
 import {anyRequestFailsToConnect} from '@test-support/server';
 import {delay, http as handle, HttpResponse} from 'msw';
 import {server} from '@test-support/server';
 import {env} from '@env';
-import {screen, waitFor, within} from '@testing-library/react';
-import {renderWithGalleryContext, renderWithMemoryRouter} from '@test-support';
-import {ArtGallery} from '@components/art-gallery/Art/index';
+import {render, screen, waitFor, within} from '@testing-library/react';
+import {ArtGallery} from '@components/art-gallery';
 import {Source} from '@components/art-gallery/museums/types/resource';
 import {aicArtResponse} from '@test-support/fixtures';
 import {test} from 'vitest';
-import {Gallery} from '@pages/Gallery';
 import {Paths} from '@pages/Paths';
 import {setupAICAllArtResponse} from '@components/art-gallery/__tests__/galleryApiTestHelper';
 
@@ -22,7 +22,7 @@ describe('The gallery.', () => {
     const count = () => hits++;
     server.events.on('request:start', count);
     setupAICAllArtResponse(aicArtResponse);
-    renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
+    render(<TestApp at={Paths.artGallery}/>);
 
     await screen.findAllByRole('figure');
     server.events.removeListener('request:start', count);
@@ -32,7 +32,7 @@ describe('The gallery.', () => {
 
   test('only the first rows race for the wire; the rest wait below the fold', async () => {
     setupAICAllArtResponse(aicArtResponse);
-    renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
+    render(<TestApp at={Paths.artGallery}/>);
 
     const figures = await screen.findAllByRole('figure');
     const walls = figures.map(figure => within(figure).getByRole('img'));
@@ -46,7 +46,7 @@ describe('The gallery.', () => {
       await delay(150);
       return HttpResponse.json(aicArtResponse);
     }));
-    renderWithMemoryRouter(Gallery, {path: Paths.artGallery});
+    render(<TestApp at={Paths.artGallery}/>);
 
     expect(await screen.findByRole('progressbar', {name: 'loading gallery'})).toBeInTheDocument();
     expect(screen.queryByRole('figure')).not.toBeInTheDocument();
@@ -55,7 +55,7 @@ describe('The gallery.', () => {
 
   test('when there is no art to show', async () => {
     setupAICAllArtResponse({...aicArtResponse, data: []}, {page: 0, search: 'g', limit: 8});
-    renderWithGalleryContext(<ArtGallery/>, {params: {page: 0, search: 'g', size: 8, tab: Source.AIC}});
+    render(<TestApp at={`${Paths.artGallery}?page=0&search=g&size=8&tab=${Source.AIC}`}><GalleryProviders><ArtGallery/></GalleryProviders></TestApp>);
 
     expect(await screen.findByAltText('empty gallery')).toBeInTheDocument();
     expect(screen.queryByRole('figure')).not.toBeInTheDocument();
@@ -65,7 +65,7 @@ describe('The gallery.', () => {
   test('when the art has errored', async () => {
     anyRequestFailsToConnect();
 
-    renderWithGalleryContext(<ArtGallery/>, {params: {page: 23, search: 'g', size: 8, tab: Source.HARVARD}});
+    render(<TestApp at={`${Paths.artGallery}?page=23&search=g&size=8&tab=${Source.HARVARD}`}><GalleryProviders><ArtGallery/></GalleryProviders></TestApp>);
 
     expect(await screen.findByAltText('empty gallery')).toBeInTheDocument();
     expect(screen.queryByRole('figure')).not.toBeInTheDocument();

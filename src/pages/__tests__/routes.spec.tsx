@@ -1,11 +1,12 @@
+import {TestApp} from '@test-support/TestApp';
 import {render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {renderWithMemoryRouter} from '@test-support';
 import {Gallery} from '@pages/Gallery';
 import {Games} from '@pages/Games';
 import {Users} from '@pages/Users';
 import {PageError} from '@pages/PageError';
-import {createMemoryRouter, RouterProvider} from 'react-router';
+import {Paths} from '@pages/Paths';
+import {createMemoryRouter, Route, RouterProvider} from 'react-router';
 import {RouteObject} from 'react-router';
 import {router} from '../../router';
 
@@ -26,12 +27,22 @@ describe('page error boundaries', () => {
   });
 
   test('a crashing page shows the closed-room message instead of dying', async () => {
+    const boom = new Error('boom');
     const Boom = () => {
-      throw new Error('boom');
+      throw boom;
     };
-    renderWithMemoryRouter({path: '/', element: <Boom/>, errorElement: <PageError/>}, {path: '/'});
+    const caught: unknown[] = [];
+    render(
+      <TestApp>
+        <Route path="/" element={<Boom/>} errorElement={<PageError/>}/>
+      </TestApp>,
+      {onCaughtError: error => caught.push(error)}
+    );
 
     expect(await screen.findByText('This room is closed.')).toBeVisible();
+    expect(screen.getByRole('link', {name: 'Back to the front door'})).toHaveAttribute('href', Paths.home);
+    expect(screen.getByLabelText('errors reported')).toHaveTextContent(/^boom$/);
+    expect(caught).toEqual([boom]);
   });
 });
 

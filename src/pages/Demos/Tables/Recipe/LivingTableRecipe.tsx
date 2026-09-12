@@ -208,13 +208,13 @@ const flowStory = (world: World) =>
 export const StillTableRecipe: FC = () => {
   const {world = 'react'} = useSearchParamsObject({world: worldParam});
   return <section aria-label="the still table" className="build-steps">
-    <Stories>{stillStory(world)}{storeStory(world)}</Stories>
+    <Stories>{stillStory(world)}</Stories>
   </section>;
 };
 
 export const FlowTableRecipe: FC = () => {
   const {world = 'react'} = useSearchParamsObject({world: worldParam});
   return <section aria-label="the living table" className="build-steps">
-    <Stories>{flowStory(world)}</Stories>
+    <Stories>{flowStory(world)}{storeStory(world)}</Stories>
   </section>;
 };

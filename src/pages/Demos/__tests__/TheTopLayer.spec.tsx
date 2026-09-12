@@ -1,9 +1,8 @@
-import {fireEvent, screen, within} from '@testing-library/react';
+import {TestApp} from '@test-support/TestApp';
+import {demosAt} from '@pages/Demos/__test_support/demos';
+import {fireEvent, render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {seed} from '@components/fibs';
-import {renderWithMemoryRouter} from '@test-support';
-import {Paths} from '@pages/Paths';
-import {Demos} from '@pages/Demos';
 
 beforeEach(() => seed('top-layer'));
 
@@ -11,7 +10,7 @@ const troublesIn = (alert: HTMLElement): HTMLElement[] =>
   within(alert).queryAllByRole('button', {name: /^dismiss /, hidden: true});
 
 const openZIndexTab = async () => {
-  renderWithMemoryRouter({path: Paths.demos, ...Demos}, {path: Paths.demos});
+  render(<TestApp at={demosAt()}/>);
   const demoTabs = await screen.findByRole('navigation', {name: 'demos'});
   await userEvent.click(within(demoTabs).getByText('Z-Index'));
 };

@@ -1,7 +1,8 @@
-import {fireEvent, screen} from '@testing-library/react';
-import {Image} from '@components/art-gallery/Image/index';
+import {GalleryProviders} from '@pages/Gallery';
+import {TestApp} from '@test-support/TestApp';
+import {fireEvent, render, screen} from '@testing-library/react';
+import {Image} from '@components/art-gallery/Image';
 import userEvent from '@testing-library/user-event';
-import {renderWithRouter} from '@test-support';
 import {Art} from '@components/art-gallery/museums/types/response';
 import {Source} from '@components/art-gallery/museums/types/resource';
 import {faker} from '@faker-js/faker';
@@ -19,14 +20,14 @@ describe('the image', () => {
   beforeEach(() => window.scrollTo = vi.fn());
 
   test('on loading', () => {
-    renderWithRouter(<Image piece={piece}/>, {params: {page: 3, tab: 'aic'}});
+    render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><GalleryProviders><Image piece={piece}/></GalleryProviders></TestApp>);
 
     expect(screen.queryByRole('progressbar', {name: 'loading'})).toBeInTheDocument();
     expect(screen.queryByAltText('oops')).not.toBeInTheDocument();
   });
 
   test('when image loaded', () => {
-    renderWithRouter(<Image piece={piece}/>, {params: {page: 3, tab: 'aic'}});
+    render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><GalleryProviders><Image piece={piece}/></GalleryProviders></TestApp>);
 
     fireEvent.load(screen.getByAltText(piece.altText));
 
@@ -36,7 +37,7 @@ describe('the image', () => {
   });
 
   test('when choosing an image', async () => {
-    renderWithRouter(<Image piece={piece}/>, {params: {page: 3, tab: 'aic'}});
+    render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><GalleryProviders><Image piece={piece}/></GalleryProviders></TestApp>);
 
     fireEvent.load(screen.getByAltText(piece.altText));
     await userEvent.click(screen.getByAltText(piece.altText));
@@ -46,7 +47,7 @@ describe('the image', () => {
   });
 
   test('on image load error', () => {
-    renderWithRouter(<Image piece={piece}/>, {params: {page: 3, tab: 'aic'}});
+    render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><GalleryProviders><Image piece={piece}/></GalleryProviders></TestApp>);
 
     fireEvent.error(screen.getByAltText(piece.altText));
 
@@ -56,9 +57,7 @@ describe('the image', () => {
   });
 
   test('without an image', () => {
-    renderWithRouter(<Image piece={{...piece, image: undefined}}/>, {
-      params: {page: 3, tab: Source.AIC}
-    });
+    render(<TestApp at={`${Paths.artGallery}?page=3&tab=${Source.AIC}`}><GalleryProviders><Image piece={{...piece, image: undefined}}/></GalleryProviders></TestApp>);
 
     expect(screen.queryByAltText('oops')).toBeInTheDocument();
     expect(screen.queryByRole('progressbar', {name: 'loading'})).not.toBeInTheDocument();
@@ -66,13 +65,13 @@ describe('the image', () => {
   });
 
   test('when the image is disabled', async () => {
-    renderWithRouter(<Image piece={piece} linkEnabled={false}/>,
-      {path: Paths.artGallery, initialRoute: Paths.artGallery, params: {page: 3, tab: Source.AIC}});
+    render(<TestApp at={`${Paths.artGallery}?page=3&tab=${Source.AIC}`}><GalleryProviders><Image piece={piece} linkEnabled={false}/></GalleryProviders></TestApp>);
+    const landings = vi.mocked(window.scrollTo).mock.calls.length;
 
     fireEvent.load(screen.getByAltText(piece.altText));
     await userEvent.click(await screen.findByAltText(piece.altText));
 
     expect(screen.getByLabelText('url path').innerHTML).toEqual(Paths.artGallery);
-    expect(window.scrollTo).not.toHaveBeenCalled();
+    expect(window.scrollTo).toHaveBeenCalledTimes(landings);
   });
 });

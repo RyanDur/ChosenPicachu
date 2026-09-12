@@ -31,10 +31,9 @@ const oneState = (world: World): ReactNode =>
         value in place: the previous value is never mutated, only replaced.</Says>
     </Words>
     <Reveal>
-      <Says>This is the Redux shape without Redux: a value, a dispatch, a subscribe, and nothing
-        else. The store knows nothing about tables; it holds one cell, the state and its
-        listeners together, and replaces that cell whole on every change, so the single mutable
-        reference in either world lives here and nowhere else. The store is frozen once built,
+      <Says>A value, a dispatch, a subscribe, and nothing else. The store knows nothing about
+        tables; it holds the state and its listeners together, and replaces them whole on every
+        change, so the single mutable reference in either world lives here and nowhere else. The store is frozen once built,
         and it is one plain object both worlds mount unchanged. The seam between the worlds is
         exactly here: the store is identical; what differs is who subscribes, and that is the
         last step of this story.</Says>
@@ -75,10 +74,10 @@ const actionsAreData =
     <Reveal>
       <Says>The first draft dispatched functions from state to state and called them reducers.
         They were not: a reducer interprets an action it did not write. Making the action data
-        costs a union of types and one switch, and buys what Redux promises: the store knows
+        costs a union of types and one switch, and buys what the shape promises: the store knows
         nothing about tables, a layer of middleware can read what kind of action is passing, and
         a dispatch can be logged or replayed as a record.</Says>
-      <Says>A slice is a reducer with the state it starts from, and a store starts from its
+      <Says>A <Term word="slice">slice</Term> is a reducer with the state it starts from, and a store starts from its
         slice’s beginning, so nobody names an initial state. Slices combine by key when a state
         has more than one concern, each seeing only its own: the page’s store is two, the trades
         and the arrangement. The arrangement’s reducer answers what the hand and the menu
@@ -88,11 +87,12 @@ const actionsAreData =
       <Says>The table’s reducer is three small reducers combined, one per concern: motion,
         widths, dragging. Each is a short switch that answers the actions it cares about and
         returns the state untouched for the rest, and each case hands the state and the facts to
-        a verb in the table’s vocabulary, shove, settle, lift, drift. The marks a move leaves are
-        measured from the order the page showed, which rides in the action, because the table
-        keeps no order of its own. The drag is a key on the same state, absent from a table that
-        never lifts, and dragging is the only reducer that writes it. Components compose
-        nothing.</Says>
+        one verb of the table’s own, the way a move hands its neighbours a shove and the thing
+        that moved a <Term word="settle">settle</Term>. The marks a move leaves are measured from
+        the order the page showed, which rides in the action, because the table keeps no order of
+        its own. The drag is a key on the same state, absent from a table that never lifts, and
+        dragging is the only reducer that writes it. The parts hold no state and compose no
+        reducers: they ask the store, and they dispatch to it.</Says>
       <Says>The table is never handed the trades. The page projects them into rows, a key and the
         value under each column, ranked by the sort while one holds, and hands that projection to
         the table element beside its markup in the order it should stand. What the table shows
@@ -150,7 +150,7 @@ const selectorsAnswer = (world: World): ReactNode =>
 const exchangeIsMiddleware = (world: World): ReactNode =>
   <Step title="The exchange is middleware">
     <Words want="Trades must reach the store without any chart or table knowing where they come from.">
-      <Says><Term word="middleware">Middleware</Term> in the Redux shape: given the store’s face, then given the next
+      <Says><Term word="middleware">Middleware</Term> in that same shape: given the store’s face, then given the next
         dispatch, a layer returns the dispatch for its place in the chain. It is composed inside
         the store’s own dispatch, so every action passes through it before the reducer runs, and
         the path is strict: middleware, then the reducer, then the listeners. A store built with
@@ -183,7 +183,7 @@ const exchangeIsMiddleware = (world: World): ReactNode =>
             ...unit(openingSource, 'export const useExchange')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...span(buildSrc, 'const trades = demosStore(', 'const hand = tableStore(')
+            ...span(buildSrc, 'trades.dispatch(feedRequested());', 'trades.dispatch(feedRequested());')
           ]}/>}
       </Codes>
     </Reveal>

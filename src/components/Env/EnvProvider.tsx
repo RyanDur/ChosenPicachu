@@ -1,11 +1,11 @@
 import {createContext, FC, PropsWithChildren, useContext} from 'react';
-import {Env, env} from '@env';
+import {Env, unconfigured} from '@env';
 
-const EnvContext = createContext<Env>(env);
+const EnvContext = createContext<Env>(unconfigured);
 
-type Props = PropsWithChildren<{ env?: Partial<Env> }>;
+type Props = PropsWithChildren<{readonly env: Env}>;
 
-export const EnvProvider: FC<Props> = ({env: overrides, children}) =>
-  <EnvContext.Provider value={{...env, ...overrides}}>{children}</EnvContext.Provider>;
+export const EnvProvider: FC<Props> = ({env, children}) =>
+  <EnvContext.Provider value={env}>{children}</EnvContext.Provider>;
 
 export const useEnv = (): Env => useContext(EnvContext);

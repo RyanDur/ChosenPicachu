@@ -1,8 +1,8 @@
+import {TestApp} from '@test-support/TestApp';
 import {FC} from 'react';
-import {screen} from '@testing-library/react';
+import {render, screen} from '@testing-library/react';
 import * as schema from 'schemawax';
 import {numberParam, useSearchParamsObject} from '@components/search-params';
-import {renderWithMemoryRouter} from '@test-support';
 
 const Probe: FC = () => {
   const {page, tab} = useSearchParamsObject({page: numberParam, tab: schema.string}, {page: 1, tab: 'aic'});
@@ -10,7 +10,7 @@ const Probe: FC = () => {
 };
 
 const probeAt = (search: string) =>
-  renderWithMemoryRouter({path: '/', element: <Probe/>}, {path: `/${search}`});
+  render(<TestApp at={`/${search}`}><Probe/></TestApp>);
 
 describe('search params are decoded, never trusted', () => {
   it('delivers params that match their decoders, as their real types', () => {

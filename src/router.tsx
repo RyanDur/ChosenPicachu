@@ -1,7 +1,7 @@
 import {classNames} from '@components/class-names';
 import {BannerProvider, Banners} from '@components/Banners';
 import {Outlet, useLocation, useMatches} from 'react-router';
-import {Fragment, useEffect} from 'react';
+import {FC, Fragment, useEffect} from 'react';
 import {SideNav} from '@pages/BasePage/SideNav';
 import {isRegions, Regions} from '@pages/regions';
 import {gotoTopOfPage} from '@pages/scroll';
@@ -13,7 +13,7 @@ import {Games} from '@pages/Games';
 
 const NoHeader = () => null;
 
-export const MountedTable = () => {
+export const Site: FC = () => {
   const {pathname, hash} = useLocation();
   useEffect(() => {
     if (hash === '') {
@@ -46,7 +46,8 @@ export const MountedTable = () => {
 
 export const router = {
   path: '/',
-  element: <MountedTable/>,
+  element: <Site/>,
+  hydrateFallbackElement: <Site/>,
   children: [
     Home,
     {

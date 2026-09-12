@@ -1,11 +1,10 @@
-import {screen, waitFor, within} from '@testing-library/react';
-import {renderWithMemoryRouter} from '@test-support';
-import {Users} from '@pages/Users';
+import {TestApp} from '@test-support/TestApp';
+import {render, screen, waitFor, within} from '@testing-library/react';
 import {Paths} from '@pages/Paths';
 
 describe('the row menu is a popover anchored to its toggle', () => {
   const firstRow = async () => {
-    renderWithMemoryRouter(Users, {path: Paths.users});
+    render(<TestApp at={Paths.users}/>);
     await waitFor(() => expect(screen.getAllByRole('row').length).toBeGreaterThan(1));
     return screen.getAllByRole('row')[1];
   };

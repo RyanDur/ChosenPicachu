@@ -1,13 +1,9 @@
-import {screen, waitFor, within} from '@testing-library/react';
+import {TestApp} from '@test-support/TestApp';
+import {demosAt} from '@pages/Demos/__test_support/demos';
+import {render, screen, waitFor, within} from '@testing-library/react';
 import {http, HttpResponse} from 'msw';
-import {server} from '@test-support/server';
-import {renderWithMemoryRouter} from '@test-support';
-import {EnvProvider} from '@components/Env';
-import {DemosPage} from '@pages/Demos/DemosPage';
-import {Trading} from '@pages/Demos/Trading';
-import {Paths} from '@pages/Paths';
-
-const HISTORY = 'https://api.exchange.coinbase.com';
+import {HISTORY, server} from '@test-support/server';
+import {texts} from '@components/DragSortableTable/__test_support/rows';
 
 const NOW = 1700000000000;
 
@@ -18,22 +14,14 @@ const recentTradesNewestFirst = [
   {trade_id: 1, price: '50001.00', size: '0.10', side: 'buy', time: new Date(NOW - 30 * 60000).toISOString()}
 ];
 
-const renderTables = () =>
-  renderWithMemoryRouter({
-    path: Paths.demos,
-    element: <EnvProvider env={{tradeFeed: 'wss://feed.test', tradeHistory: HISTORY}}><Trading/></EnvProvider>,
-    children: [{index: true, element: <DemosPage/>}]
-  }, {path: `${Paths.demos}?tab=tables`});
-
 describe('the windows hydrate from history', () => {
   test('a pull of recent trades fills the windows before the socket speaks', async () => {
     server.use(http.get(`${HISTORY}/products/BTC-USD/trades`, () =>
       HttpResponse.json(recentTradesNewestFirst)));
 
-    renderTables();
+    render(<TestApp at={demosAt('?tab=tables')}/>);
 
-    const card = screen.getByRole('region', {name: 'live aggregations'});
-    const texts = (row: HTMLElement) => [within(row).getByRole('rowheader'), ...within(row).getAllByRole('cell')].map(cell => cell.textContent);
+    const card = await screen.findByRole('region', {name: 'live aggregations'});
     const rowFor = (label: string) => within(card).getByRole('row', {name: new RegExp(`^${label}`)});
     await waitFor(() => expect(texts(rowFor('this minute'))).toEqual(
       ['this minute', '1', '1', '0', '0.01', '$50,004.00', '+$0.00']));
@@ -44,9 +32,9 @@ describe('the windows hydrate from history', () => {
   test('a history that cannot load leaves the windows quietly empty', async () => {
     server.use(http.get(`${HISTORY}/products/BTC-USD/trades`, () => HttpResponse.error()));
 
-    renderTables();
+    render(<TestApp at={demosAt('?tab=tables')}/>);
 
-    const card = screen.getByRole('region', {name: 'live aggregations'});
+    const card = await screen.findByRole('region', {name: 'live aggregations'});
     expect(await within(card).findByText('session')).toBeVisible();
     const sessionRow = within(card).getByRole('row', {name: /^session/});
     expect(sessionRow).toHaveTextContent('0');

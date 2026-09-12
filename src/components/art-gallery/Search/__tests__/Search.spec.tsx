@@ -1,8 +1,9 @@
+import {GalleryProviders} from '@pages/Gallery';
+import {TestApp} from '@test-support/TestApp';
 import {anyRequestRespondsWith} from '@test-support/server';
-import {screen, waitFor} from '@testing-library/react';
-import {Search} from '@components/art-gallery/Search/index';
+import {render, screen, waitFor} from '@testing-library/react';
+import {Search} from '@components/art-gallery/Search';
 import userEvent from '@testing-library/user-event';
-import {renderWithRouter} from '@test-support';
 import {Source} from '@components/art-gallery/museums/types/resource';
 import {faker} from '@faker-js/faker';
 import {Paths} from '@pages/Paths';
@@ -25,7 +26,7 @@ describe('search', () => {
   });
 
   it('should give suggestions for completion', async () => {
-    renderWithRouter(<Search/>, {params: {tab: Source.AIC}});
+    render(<TestApp at={`${Paths.artGallery}?tab=${Source.AIC}`}><GalleryProviders><Search/></GalleryProviders></TestApp>);
 
     await userEvent.type(screen.getByLabelText(/Search For/), searchWord);
 
@@ -33,7 +34,7 @@ describe('search', () => {
   });
 
   it('should update the url when the user wants to search', async () => {
-    renderWithRouter(<Search/>);
+    render(<TestApp at={Paths.artGallery}><GalleryProviders><Search/></GalleryProviders></TestApp>);
     await userEvent.click(screen.getByRole('button', {name: 'submit search'}));
 
     expect(screen.getByLabelText('url search')).not.toHaveTextContent('search');
@@ -46,7 +47,7 @@ describe('search', () => {
   });
 
   it('should remove the page query param', async () => {
-    renderWithRouter(<Search/>, {params: {page: 1, tab: 'aic'}});
+    render(<TestApp at={`${Paths.artGallery}?page=1&tab=aic`}><GalleryProviders><Search/></GalleryProviders></TestApp>);
 
     await userEvent.type(screen.getByLabelText(/Search For/), 'a');
     await userEvent.click(screen.getByRole('button', {name: 'submit search'}));
@@ -55,7 +56,7 @@ describe('search', () => {
   });
 
   it('should leave the original query alone when search is empty', async () => {
-    renderWithRouter(<Search/>, {params: {page: 1, search: 'cat', tab: 'some-tab'}});
+    render(<TestApp at={`${Paths.artGallery}?page=1&search=cat&tab=some-tab`}><GalleryProviders><Search/></GalleryProviders></TestApp>);
 
     await userEvent.click(screen.getByRole('button', {name: 'submit search'}));
 
@@ -63,7 +64,7 @@ describe('search', () => {
   });
 
   it('should be able to reset the query', async () => {
-    renderWithRouter(<Search/>, {params: {search: 'cat', tab: 'bat'}});
+    render(<TestApp at={`${Paths.artGallery}?search=cat&tab=bat`}><GalleryProviders><Search/></GalleryProviders></TestApp>);
 
     await userEvent.click(screen.getByRole('button', {name: 'reset search'}));
 

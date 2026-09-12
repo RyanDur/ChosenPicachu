@@ -6,9 +6,9 @@ import rowGripCss from '@components/DragSortableTable/RowGrip.css?raw';
 import motionCss from '@components/DragSortableTable/motion.css?raw';
 import type {Motion, Origin, Pace} from '../../Controls';
 import aggregationsCss from '../Aggregations/Aggregations.css?raw';
-import tableHtml from './table.html?raw';
 import scaffold from './frame.html?raw';
 import frameJs from './frame.main.ts?frame';
+import {startingTable} from './starting';
 
 const styleSheets = import.meta.glob<string>('../../../../styles/*.css', {query: '?raw', import: 'default', eager: true});
 
@@ -45,7 +45,7 @@ export const frameDocument = (env: FrameEnv, frame: FrameConfig): string => {
   const cascade = sheets.map(({css}) => css).join('\n');
   return scaffold
     .replace('/* the cascade */', () => cascade)
-    .replace('<!-- the table as it starts -->', () => tableHtml.replace('class="fancy-table sortable apportioned"', `class="fancy-table sortable apportioned ${frame.origin} ${frame.motion}"`))
+    .replace('<!-- the table as it starts -->', () => startingTable(frame))
     .replace('/* the environment */', () => `window.__env = ${JSON.stringify(env)}; window.__frame = ${JSON.stringify(frame)};`)
     .replace('/* the shell */', () => frameJs);
 };
