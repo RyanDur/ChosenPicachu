@@ -73,7 +73,11 @@ jobs:
             --json-schema "$(cat scripts/review/findings.schema.json)" \
             --allowedTools "Read,Grep,Glob,Bash(git diff:*),Bash(git log:*)" \
             --max-turns 80 \
-            --no-session-persistence > review.json
+            --no-session-persistence > review.json || {
+              echo "::error::the review did not run"
+              cat review.json
+              exit 1
+            }
       - name: Report
         run: node scripts/review/report.mjs < review.json >> "$GITHUB_STEP_SUMMARY"
       - name: Leave the findings on the commit

@@ -28,3 +28,6 @@ dist-ssr
 test-results/
 playwright-report/
 .lighthouseci/
+
+review.json
+review-comment.md
