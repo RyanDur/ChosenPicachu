@@ -46,7 +46,7 @@ jobs:
     permissions:
       contents: write
     env:
-      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
       REVIEW_SCOPE: ${{ vars.REVIEW_SCOPE || 'full' }}
       REVIEW_MODEL: ${{ vars.REVIEW_MODEL || 'claude-fable-5-1' }}
       REVIEW_BEFORE: ${{ github.event.before }}
