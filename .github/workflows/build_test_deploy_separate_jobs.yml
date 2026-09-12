@@ -67,17 +67,14 @@ jobs:
         run: npm ci
       - name: The home page reviews the code
         run: |
+          set -o pipefail
           npx --yes @anthropic-ai/claude-code@2.1.270 --print "$(node scripts/review/prompt.mjs)" \
             --model "$REVIEW_MODEL" \
-            --output-format json \
+            --output-format stream-json --verbose \
             --json-schema "$(cat scripts/review/findings.schema.json)" \
             --allowedTools "Read,Grep,Glob,Bash(git diff:*),Bash(git log:*)" \
             --max-turns 80 \
-            --no-session-persistence > review.json || {
-              echo "::error::the review did not run"
-              cat review.json
-              exit 1
-            }
+            --no-session-persistence | node scripts/review/narrate.mjs
       - name: Report
         run: node scripts/review/report.mjs < review.json >> "$GITHUB_STEP_SUMMARY"
       - name: Leave the findings on the commit
