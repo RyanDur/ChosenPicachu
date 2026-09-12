@@ -40,6 +40,48 @@ jobs:
           name: dist
           path: ./dist
 
+  review:
+    needs: build_test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      REVIEW_SCOPE: ${{ vars.REVIEW_SCOPE || 'full' }}
+      REVIEW_MODEL: ${{ vars.REVIEW_MODEL || 'claude-fable-5-1' }}
+      REVIEW_BEFORE: ${{ github.event.before }}
+      REVIEW_AFTER: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: 'npm'
+          registry-url: 'https://npm.pkg.github.com'
+      - name: Install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm ci
+      - name: The home page reviews the code
+        run: |
+          npx --yes @anthropic-ai/claude-code@2.1.270 --print "$(node scripts/review/prompt.mjs)" \
+            --model "$REVIEW_MODEL" \
+            --output-format json \
+            --json-schema "$(cat scripts/review/findings.schema.json)" \
+            --allowedTools "Read,Grep,Glob,Bash(git diff:*),Bash(git log:*)" \
+            --max-turns 80 \
+            --no-session-persistence > review.json
+      - name: Report
+        run: node scripts/review/report.mjs < review.json >> "$GITHUB_STEP_SUMMARY"
+      - name: Leave the findings on the commit
+        if: always() && hashFiles('review-comment.md') != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh api "repos/${{ github.repository }}/commits/${{ github.sha }}/comments" -F body=@review-comment.md
+
   pages:
     needs: build_test
     runs-on: ubuntu-latest
