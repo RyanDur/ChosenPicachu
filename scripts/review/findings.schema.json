@@ -1,0 +1,23 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["findings"],
+  "properties": {
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["door", "severity", "file", "line", "what", "principle"],
+        "properties": {
+          "door": {"type": "string", "enum": ["structure", "presentation", "dynamic interaction"]},
+          "severity": {"type": "string", "enum": ["violation", "concern", "note"]},
+          "file": {"type": "string"},
+          "line": {"type": "integer", "minimum": 1},
+          "what": {"type": "string"},
+          "principle": {"type": "string"}
+        }
+      }
+    }
+  }
+}

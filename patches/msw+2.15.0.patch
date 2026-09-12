@@ -1,0 +1,28 @@
+diff --git a/node_modules/msw/lib/core/ws/WebSocketClientManager.js b/node_modules/msw/lib/core/ws/WebSocketClientManager.js
+index 573df48..c5bcfe7 100644
+--- a/node_modules/msw/lib/core/ws/WebSocketClientManager.js
++++ b/node_modules/msw/lib/core/ws/WebSocketClientManager.js
+@@ -96,6 +96,9 @@ class WebSocketClientManager {
+   async addConnection(client) {
+     this.runtimeClients.set(client.id, client);
+     await this.addClient(client);
++    if (client.socket.readyState === client.socket.CLOSED) {
++      return;
++    }
+     const handleExtraneousMessage = (message) => {
+       const { type, payload } = message.data;
+       if (typeof payload === "object" && "clientId" in payload && payload.clientId !== client.id) {
+diff --git a/node_modules/msw/lib/core/ws/WebSocketClientManager.mjs b/node_modules/msw/lib/core/ws/WebSocketClientManager.mjs
+index 1b697c8..a401cf9 100644
+--- a/node_modules/msw/lib/core/ws/WebSocketClientManager.mjs
++++ b/node_modules/msw/lib/core/ws/WebSocketClientManager.mjs
+@@ -72,6 +72,9 @@ class WebSocketClientManager {
+   async addConnection(client) {
+     this.runtimeClients.set(client.id, client);
+     await this.addClient(client);
++    if (client.socket.readyState === client.socket.CLOSED) {
++      return;
++    }
+     const handleExtraneousMessage = (message) => {
+       const { type, payload } = message.data;
+       if (typeof payload === "object" && "clientId" in payload && payload.clientId !== client.id) {
