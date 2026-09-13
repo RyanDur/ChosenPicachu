@@ -7,7 +7,7 @@ import {useGallery} from '@components/art-gallery/Art/Context';
 import {empty, has} from '@ryandur/sand';
 import {useBanners} from '@components/Banners';
 import {troubleWith} from '@transport/trouble';
-import {Source, sourceParam} from '@components/art-gallery/museums/types/resource';
+import {sourceParam} from '@components/art-gallery/museums/types/resource';
 import {art as artResource} from '@components/art-gallery/museums';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
 import noImageGallery from '../../../assets/icons/missing-wall.svg?url';
@@ -21,8 +21,7 @@ export const ArtGallery: FC = () => {
   const {page, size, search, tab} =
     useSearchParamsObject({page: numberParam, size: numberParam, tab: sourceParam, search: schema.string}, {
       size: defaultRecordLimit,
-      page: 1,
-      tab: Source.AIC
+      page: 1
     });
 
   useEffect(() => {
@@ -52,9 +51,8 @@ export const ArtGallery: FC = () => {
         </figure>
       </li>)}
     </ul>
-    {loading && <Loading className="loader" label="loading gallery"/>}
+    {loading && <Loading label="loading gallery"/>}
     {!loading && errored && <img src={noImageGallery}
-                                 id="empty-gallery"
                                  alt="empty gallery"/>}
   </>;
 };

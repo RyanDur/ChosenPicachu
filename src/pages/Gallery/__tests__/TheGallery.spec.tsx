@@ -7,7 +7,10 @@ import userEvent from '@testing-library/user-event';
 import {AICArtResponse} from '@components/art-gallery/museums/aic/types';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
 import {
+  delayAICPictures,
+  delayVAMPictures,
   refuseAICPictures,
+  refuseVAMPictures,
   setupAICAllArtResponse,
   setupAICArtPieceResponse,
   setupClevelandAllArtResponse,
@@ -127,5 +130,47 @@ describe('The gallery.', () => {
 
     await waitFor(() => expect(screen.getByLabelText('url search')).toHaveTextContent('tab=harvard'));
     await waitFor(() => expect(screen.getAllByRole('figure').length).toEqual(defaultRecordLimit));
+  });
+
+  test('a door that names no museum leads to the first open one', async () => {
+    setupAICAllArtResponse(aicArtResponse);
+
+    render(<TestApp at={`${Paths.artGallery}?tab=bogus`}/>);
+
+    await waitFor(() => expect(screen.getByLabelText('url search')).toHaveTextContent('tab=aic'));
+    await waitFor(() => expect(screen.getAllByRole('figure').length).toEqual(defaultRecordLimit));
+  });
+
+  test('the first open museum is the door, however quickly the museums answer', async () => {
+    setupAICAllArtResponse(aicArtResponse);
+    delayAICPictures(150);
+
+    render(<TestApp at={Paths.artGallery}/>);
+
+    await waitFor(() => expect(screen.getByLabelText('url search')).toHaveTextContent('tab=aic'));
+    expect(screen.getByRole('link', {name: 'The Art Institute of Chicago', current: 'page'})).toBeInTheDocument();
+  });
+
+  test('while the museums are asked there are no doors, only the loading sign', async () => {
+    setupAICAllArtResponse(aicArtResponse);
+    delayAICPictures(150);
+    delayVAMPictures(150);
+
+    render(<TestApp at={Paths.artGallery}/>);
+
+    expect(screen.getByRole('progressbar', {name: 'loading gallery'})).toBeInTheDocument();
+    expect(screen.queryByRole('navigation', {name: 'museums'})).not.toBeInTheDocument();
+    expect(await screen.findByRole('navigation', {name: 'museums'})).toBeInTheDocument();
+  });
+
+  test('when no museum is open the page says so', async () => {
+    refuseAICPictures();
+    refuseVAMPictures();
+
+    render(<TestApp at={Paths.artGallery}/>);
+
+    expect(await screen.findByAltText('no museum is open')).toBeInTheDocument();
+    expect(screen.queryByRole('navigation', {name: 'museums'})).not.toBeInTheDocument();
+    expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument();
   });
 });

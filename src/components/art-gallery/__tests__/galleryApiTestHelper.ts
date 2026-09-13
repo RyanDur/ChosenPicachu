@@ -1,4 +1,4 @@
-import {http, HttpResponse} from 'msw';
+import {delay, http, HttpResponse} from 'msw';
 import {server} from '@test-support/server';
 import {AICAllArtResponse, AICArtResponse} from '@components/art-gallery/museums/aic/types';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
@@ -9,7 +9,7 @@ import {harvardFields} from '@components/art-gallery/museums/harvard';
 import {VAMAllArtResponse} from '@components/art-gallery/museums/vam/types';
 import {ClevelandAllArtResponse} from '@components/art-gallery/museums/cleveland/types';
 
-const {aicDomain, aicPictures, clevelandDomain, harvardAPIKey, harvardDomain, vamDomain} = env;
+const {aicDomain, aicPictures, clevelandDomain, harvardAPIKey, harvardDomain, vamDomain, vamPictures} = env;
 
 const paramsMatch = (request: Request, expected: Record<string, string>) => {
   const params = new URL(request.url).searchParams;
@@ -48,6 +48,21 @@ export const setupAICArtPieceResponse = (response: AICArtResponse, id: number) =
 
 export const refuseAICPictures = () =>
   server.use(http.get(`${aicPictures}/:image/info.json`, () => HttpResponse.error()));
+
+export const refuseVAMPictures = () =>
+  server.use(http.get(`${vamPictures}/:image/info.json`, () => HttpResponse.error()));
+
+export const delayAICPictures = (ms: number) =>
+  server.use(http.get(`${aicPictures}/:image/info.json`, async () => {
+    await delay(ms);
+    return HttpResponse.json({});
+  }));
+
+export const delayVAMPictures = (ms: number) =>
+  server.use(http.get(`${vamPictures}/:image/info.json`, async () => {
+    await delay(ms);
+    return HttpResponse.json({});
+  }));
 
 export const setupClevelandAllArtResponse = (response: ClevelandAllArtResponse, limit = defaultRecordLimit) =>
   server.use(http.get(`${clevelandDomain}/`, ({request}) =>
