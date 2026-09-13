@@ -13,7 +13,7 @@ import {
   roadEnd,
   slideCrossed,
   straightToOrder
-} from './shared-steps';
+} from './steps';
 import gripSource from '../items/Grip.tsx?raw';
 import listSource from '../EagerKeepAnimatedList/EagerKeepAnimatedList.tsx?raw';
 import itemSource from '../items/KeepItem.tsx?raw';

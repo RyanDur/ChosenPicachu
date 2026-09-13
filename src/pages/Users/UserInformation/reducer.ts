@@ -1,4 +1,5 @@
-import {FormAction, FormActions, NewUser, User} from '@components/Users/UserInfo/types';
+import {NewUser, User} from '@components/Users/UserInfo/user';
+import {FormAction, FormActions} from './actions';
 
 export type Draft = {
   user: NewUser | User;

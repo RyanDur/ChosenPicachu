@@ -3,7 +3,7 @@ import {classNames} from '@components/class-names';
 import {FancyInput} from '@components/FancyFormElements/FancyInput';
 import {FancySelect} from '@components/FancyFormElements/FancySelect';
 import {stateAbbreviations} from './states';
-import {AddressInfo} from '@components/Users/UserInfo/types';
+import {AddressInfo} from '@components/Users/UserInfo/user';
 import './Address.css';
 
 type AddressProps = {

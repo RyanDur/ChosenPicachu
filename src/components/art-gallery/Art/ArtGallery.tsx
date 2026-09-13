@@ -7,7 +7,7 @@ import {useGallery} from '@components/art-gallery/Art/Context';
 import {empty, has} from '@ryandur/sand';
 import {useBanners} from '@components/Banners';
 import {troubleWith} from '@transport/trouble';
-import {sourceParam} from '@components/art-gallery/museums/types/resource';
+import {sourceParam} from '@components/art-gallery/museums/source';
 import {art as artResource} from '@components/art-gallery/museums';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
 import noImageGallery from '../../../assets/icons/missing-wall.svg?url';

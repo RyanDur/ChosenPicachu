@@ -1,5 +1,5 @@
 import {ChangeEvent, FC} from 'react';
-import {User} from '@components/Users/UserInfo/types';
+import {User} from '@components/Users/UserInfo/user';
 import {classNames} from '@components/class-names';
 import {Consumer, has} from '@ryandur/sand';
 import cancelIcon from '../../../assets/icons/cancel.svg?url';

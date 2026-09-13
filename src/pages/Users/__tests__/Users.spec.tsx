@@ -2,7 +2,7 @@ import {Paths} from '@pages/Paths';
 import {TestApp} from '@test-support/TestApp';
 import {render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {AddressInfo, User} from '@components/Users/UserInfo/types';
+import {AddressInfo, User} from '@components/Users/UserInfo/user';
 import {createUser} from '@components/Users/resource/usersApi';
 import {addressGroup} from '../UserInformation/__test_support';
 import {

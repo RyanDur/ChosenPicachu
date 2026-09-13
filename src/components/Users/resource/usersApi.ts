@@ -1,4 +1,4 @@
-import {AddressInfo, NewUser, User, UserInfo} from '@components/Users/UserInfo/types';
+import {AddressInfo, NewUser, User, UserInfo} from '@components/Users/UserInfo/user';
 import {asyncFailure, asyncSuccess, maybe, Result} from '@ryandur/sand';
 import {HTTPError} from '@transport/types';
 import {nanoid} from 'nanoid';

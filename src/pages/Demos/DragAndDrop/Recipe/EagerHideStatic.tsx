@@ -13,7 +13,7 @@ import {
   promises,
   roadEnd,
   straightToOrder
-} from './shared-steps';
+} from './steps';
 import gripSource from '../items/Grip.tsx?raw';
 import listSource from '../EagerHideStaticList/EagerHideStaticList.tsx?raw';
 import itemSource from '../items/HideItem.tsx?raw';

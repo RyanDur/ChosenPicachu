@@ -4,7 +4,7 @@ import {Loading} from '@components/Loading';
 import {useArtPiece} from '@components/art-gallery/ArtPiece/Context';
 import {Image} from '@components/art-gallery/Image';
 import {useSearchParamsObject} from '@components/search-params';
-import {Source, sourceParam} from '@components/art-gallery/museums/types/resource';
+import {Source, sourceParam} from '@components/art-gallery/museums/source';
 import {has} from '@ryandur/sand';
 import {useBanners} from '@components/Banners';
 import {troubleWith} from '@transport/trouble';

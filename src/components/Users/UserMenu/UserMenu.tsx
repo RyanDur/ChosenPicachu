@@ -3,7 +3,7 @@ import {Link, useLocation} from 'react-router';
 import * as schema from 'schemawax';
 import {maybe} from '@ryandur/sand';
 import {useSearchParamsObject} from '@components/search-params';
-import {User} from '../UserInfo/types';
+import {User} from '../UserInfo/user';
 
 type Props = {
   user: User;

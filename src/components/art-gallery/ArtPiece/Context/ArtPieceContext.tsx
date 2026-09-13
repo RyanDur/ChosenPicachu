@@ -1,5 +1,5 @@
 import {FC, PropsWithChildren, useCallback, useMemo, useState} from 'react';
-import {Art} from '@components/art-gallery/museums/types/response';
+import {Art} from '@components/art-gallery/museums/art';
 import {Maybe, nothing, some} from '@ryandur/sand';
 import {Context, PieceContext} from '@components/art-gallery/ArtPiece/Context/useArtPiece';
 

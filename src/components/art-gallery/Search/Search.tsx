@@ -1,8 +1,8 @@
 import {FC, SubmitEvent, useContext, useEffect, useState} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
 import {useNavigate} from 'react-router';
-import {SearchOptions} from '@components/art-gallery/museums/types/response';
-import {sourceParam} from '@components/art-gallery/museums/types/resource';
+import {SearchOptions} from '@components/art-gallery/museums/art';
+import {sourceParam} from '@components/art-gallery/museums/source';
 import * as schema from 'schemawax';
 import {GalleryLinks} from '@components/art-gallery/Links';
 import {classNames} from '@components/class-names';

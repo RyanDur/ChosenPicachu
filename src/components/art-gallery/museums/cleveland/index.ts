@@ -12,10 +12,10 @@ import {
 import {defaultRecordLimit, defaultSearchLimit} from '@components/art-gallery/limits';
 import {env} from '@env';
 import {toQueryString} from '@transport/url';
-import {AllArt, Art, SearchOptions} from '@components/art-gallery/museums/types/response';
+import {AllArt, Art, SearchOptions} from '@components/art-gallery/museums/art';
 import {validate} from '@transport/validate';
 import {http} from '@transport/http';
-import {GetAllArtRequest} from '@components/art-gallery/museums/types/resource';
+import {GetAllArtRequest} from '@components/art-gallery/museums/source';
 
 const {clevelandDomain} = env;
 

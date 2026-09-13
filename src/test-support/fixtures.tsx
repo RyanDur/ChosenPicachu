@@ -8,7 +8,7 @@ import {
   HarvardPeople,
   HarvardSearchResponse
 } from '@components/art-gallery/museums/harvard/types';
-import {AllArt, Art} from '@components/art-gallery/museums/types/response';
+import {AllArt, Art} from '@components/art-gallery/museums/art';
 import {pictured} from '@components/art-gallery/museums/pictured';
 import {VAMAllArtResponse, VAMArtResponse} from '@components/art-gallery/museums/vam/types';
 import {

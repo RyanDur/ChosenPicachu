@@ -30,7 +30,7 @@ import {
   theWholeBuild,
   twoRoads,
   walkSlides
-} from './shared-steps';
+} from './steps';
 import buildSrc from '../Frame/builds/Lazy.ts?raw';
 import tableSource from '../Builds/LazyTable/LazyTable.tsx?raw';
 import headerSource from '../Builds/LazyTable/DraggableColumn.tsx?raw';

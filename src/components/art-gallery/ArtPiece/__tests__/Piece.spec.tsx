@@ -4,7 +4,7 @@ import {render, screen, waitFor, within} from '@testing-library/react';
 import {HTTPError} from '@transport/types';
 import {faker} from '@faker-js/faker';
 import {Paths} from '@pages/Paths';
-import {Source} from '@components/art-gallery/museums/types/resource';
+import {Source} from '@components/art-gallery/museums/source';
 import {AICArtResponse} from '@components/art-gallery/museums/aic/types';
 import {heldAICArtPieceResponse, setupAICArtPieceResponse} from '@components/art-gallery/__test_support';
 

@@ -11,7 +11,7 @@ import tableSource from '../Frame/table.html?raw';
 import buildSource from '@components/DragSortableTable/DraggableColumn.tsx?raw';
 import frameResize from '../Frame/table/resize.ts?raw';
 import widthsSource from '../Aggregations/Aggregations.css?raw';
-import {theImplementation} from './shared-steps';
+import {theImplementation} from './steps';
 import '../../Recipe/Recipe.css';
 
 const gap = plain(' ');

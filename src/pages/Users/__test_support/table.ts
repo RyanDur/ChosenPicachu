@@ -1,6 +1,6 @@
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {User} from '@components/Users/UserInfo/types';
+import {User} from '@components/Users/UserInfo/user';
 import {fillOutAddress, fillOutUser} from '../UserInformation/__test_support';
 
 const swiftKeys = userEvent.setup({delay: null});

@@ -1,4 +1,4 @@
-import {AllArt} from '@components/art-gallery/museums/types/response';
+import {AllArt} from '@components/art-gallery/museums/art';
 import {Consumer} from '@ryandur/sand';
 import {createContext, useContext} from 'react';
 

@@ -13,7 +13,7 @@ import {
   roadEnd,
   stashLanding,
   straightToOrder
-} from './shared-steps';
+} from './steps';
 import gripSource from '../items/Grip.tsx?raw';
 import listSource from '../LazyHideStaticList/LazyHideStaticList.tsx?raw';
 import itemSource from '../items/HideItem.tsx?raw';

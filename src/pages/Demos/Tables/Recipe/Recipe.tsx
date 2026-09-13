@@ -4,13 +4,13 @@ import {Picks} from '../Picks';
 import {motionParam, originParam, paceParam} from '../../Controls';
 import {worldParam} from '../params';
 import {Stories} from '../../Recipe';
-import {Track} from './shared-steps';
+import {Track} from './steps';
 import {EagerRecipe} from './EagerRecipe';
 import {LazyRecipe} from './LazyRecipe';
 import '../../Recipe/Recipe.css';
 
-export type {Track} from './shared-steps';
-export {trackParam} from './shared-steps';
+export type {Track} from './steps';
+export {trackParam} from './steps';
 
 type Props = {
   track: Track;

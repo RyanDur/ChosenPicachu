@@ -9,4 +9,4 @@ export {Image} from './Image';
 export {Loading} from '@components/Loading';
 export {GalleryLinks} from './Links';
 export {art} from './museums';
-export {Source} from './museums/types/resource';
+export {Source} from './museums/source';

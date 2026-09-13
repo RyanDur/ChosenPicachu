@@ -1,6 +1,6 @@
 import {Result} from '@ryandur/sand';
-import {GetAllArt, GetArt, SearchArt, Source} from '@components/art-gallery/museums/types/resource';
-import {AllArt, Art, SearchOptions} from '@components/art-gallery/museums/types/response';
+import {GetAllArt, GetArt, SearchArt, Source} from '@components/art-gallery/museums/source';
+import {AllArt, Art, SearchOptions} from '@components/art-gallery/museums/art';
 import {HTTPError} from '@transport/types';
 import {aic} from '@components/art-gallery/museums/aic';
 import {harvard} from '@components/art-gallery/museums/harvard';

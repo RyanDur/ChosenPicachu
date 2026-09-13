@@ -5,7 +5,7 @@ import {Loading} from '@components/Loading';
 import {useSearchParamsObject} from '@components/search-params';
 import {ArtGallery, Source} from '@components/art-gallery';
 import {art} from '@components/art-gallery/museums';
-import {sourceParam} from '@components/art-gallery/museums/types/resource';
+import {sourceParam} from '@components/art-gallery/museums/source';
 import {HTTPError} from '@transport/types';
 import missingWall from '../../assets/icons/missing-wall.svg?url';
 

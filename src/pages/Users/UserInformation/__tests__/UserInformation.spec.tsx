@@ -5,7 +5,7 @@ import {UsersAction, UsersListener, usersStore} from '../../store';
 import {render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {addressGroup, fillOutForm} from '../__test_support';
-import {AddressInfo, NewUser} from '@components/Users/UserInfo/types';
+import {AddressInfo, NewUser} from '@components/Users/UserInfo/user';
 
 
 const added = (): { form: ReactNode; adds: () => readonly unknown[] } => {

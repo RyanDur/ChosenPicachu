@@ -1,6 +1,6 @@
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {AddressInfo, NewUser} from '@components/Users/UserInfo/types';
+import {AddressInfo, NewUser} from '@components/Users/UserInfo/user';
 import {format} from 'date-fns';
 
 const swiftKeys = userEvent.setup({delay: null});

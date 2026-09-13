@@ -5,7 +5,7 @@ import {Loading} from '@components/Loading';
 import {useSearchParamsObject} from '@components/search-params';
 import * as schema from 'schemawax';
 import {toQueryString} from '@transport/url';
-import {Art} from '@components/art-gallery/museums/types/response';
+import {Art} from '@components/art-gallery/museums/art';
 import {GalleryLinks} from '@components/art-gallery/Links';
 import noImage from '../../../assets/icons/missing-art.svg?url';
 import './Image.css';

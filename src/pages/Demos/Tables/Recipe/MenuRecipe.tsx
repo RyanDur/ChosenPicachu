@@ -14,8 +14,8 @@ import demosSource from '@pages/Demos/store.ts?raw';
 import frameMenus from '../Frame/table/menus.ts?raw';
 import {buildSources} from '../Frame/builds/sources';
 import {headerSources, rowSources, tableSources} from './sources';
-import {menuSource} from './shared-steps/sources';
-import {theImplementation} from './shared-steps';
+import {menuSource} from './steps/sources';
+import {theImplementation} from './steps';
 import baseCss from '@components/Table/Table.css?raw';
 import '../../Recipe/Recipe.css';
 

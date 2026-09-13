@@ -30,7 +30,7 @@ import {
   theWholeBuild,
   twoRoads,
   walkSlides
-} from './shared-steps';
+} from './steps';
 import buildSrc from '../Frame/builds/Eager.ts?raw';
 import tableSource from '../Builds/EagerTable/EagerTable.tsx?raw';
 import headerSource from '@components/DragSortableTable/DraggableColumn.tsx?raw';

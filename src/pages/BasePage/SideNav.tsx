@@ -3,7 +3,7 @@ import '../BasePage.css';
 import {Link} from 'react-router';
 import {toQueryString} from '@transport/url';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
-import {Source} from '@components/art-gallery/museums/types/resource';
+import {Source} from '@components/art-gallery/museums/source';
 import {Paths} from '@pages/Paths';
 
 const AboutNav: FC = () =>

@@ -2,7 +2,7 @@ import {TestApp} from '@test-support/TestApp';
 import {anyRequestRespondsWith, server} from '@test-support/server';
 import {render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {Source} from '@components/art-gallery/museums/types/resource';
+import {Source} from '@components/art-gallery/museums/source';
 import {faker} from '@faker-js/faker';
 import {Paths} from '@pages/Paths';
 import {AICSearchResponse} from '@components/art-gallery/museums/aic/types';

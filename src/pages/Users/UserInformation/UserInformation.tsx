@@ -1,5 +1,5 @@
 import {FC, useReducer} from 'react';
-import {NewUser, User, isPersisted} from '@components/Users/UserInfo/types';
+import {NewUser, User, isPersisted} from '@components/Users/UserInfo/user';
 import {FancyInput} from '@components/FancyFormElements/FancyInput';
 import {classNames} from '@components/class-names';
 import {FancyTextarea} from '@components/FancyFormElements/FancyTextarea';

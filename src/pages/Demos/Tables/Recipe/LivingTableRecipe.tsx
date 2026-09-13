@@ -3,7 +3,7 @@ import {useSearchParamsObject} from '@components/search-params';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
 import {World, worldParam} from '../params';
-import {theImplementation} from './shared-steps';
+import {theImplementation} from './steps';
 import {storeStory} from './StoreRecipe';
 import exchangeSource from '@pages/Demos/exchange.ts?raw';
 import demosSource from '@pages/Demos/store.ts?raw';
