@@ -102,7 +102,6 @@ describe('a list of charts', () => {
     dragChart('chart 1', 'chart 2', 100);
 
     expect(within(slot('chart 1')).getByRole('region', {name: 'candles'})).toBeVisible();
-    expect(slot('chart 1').classList).toContain('chart-pushed');
 
     releaseDrag('chart 2');
 

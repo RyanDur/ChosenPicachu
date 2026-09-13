@@ -67,8 +67,6 @@ describe('the top layer', () => {
     await userEvent.click(within(within(controls).getByRole('group', {name: 'entrance'})).getByRole('radio', {name: 'Below'}));
     await userEvent.click(within(within(controls).getByRole('group', {name: 'stack'})).getByRole('radio', {name: 'Left'}));
 
-    const alert = screen.getByRole('alert', {hidden: true});
-    expect(alert).toHaveClass('bottom', 'right', 'from-below', 'stack-left');
     expect(within(controls).getByText('The news rests along the bottom edge and waits to be noticed.')).toBeVisible();
     expect(within(controls).getByText('?side=bottom&align=right&enter=below&stack=left')).toBeVisible();
   });

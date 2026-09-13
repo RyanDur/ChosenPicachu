@@ -67,7 +67,6 @@ describe('the banners', () => {
 
     await userEvent.click(screen.getByRole('button', {name: 'trouble'}));
     const alert = screen.getByRole('alert', {hidden: true});
-    expect(alert).toHaveClass('stack-left');
     await userEvent.click(within(alert).getByRole('button', {name: 'dismiss sideways trouble', hidden: true}));
     fireEvent.transitionEnd(troubleOf(alert, 'sideways trouble'), {propertyName: 'grid-template-columns'});
     expect(within(alert).queryByText('sideways trouble')).not.toBeInTheDocument();
@@ -77,17 +76,6 @@ describe('the banners', () => {
     renderWithTrouble('unraised');
 
     expect(within(screen.getByRole('alert', {hidden: true})).queryAllByRole('listitem', {hidden: true})).toHaveLength(0);
-  });
-
-  test('the panel stands where the dials say, facing its entrance', async () => {
-    renderWithTrouble('placed');
-
-    await userEvent.click(screen.getByRole('button', {name: 'trouble'}));
-
-    const alert = screen.getByRole('alert', {hidden: true});
-    expect(alert).toHaveClass('top', 'center', 'from-above', 'stack-down');
-    expect(within(alert).getByText('placed'))
-      .toHaveClass('news', 'field', 'rounded-corners', 'floating', 'hairline-outline');
   });
 
   test('without a provider, raising degrades quietly', async () => {

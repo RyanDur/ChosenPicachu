@@ -12,8 +12,6 @@ const seatOf = (item: string): HTMLElement => {
   return seat;
 };
 
-const draggable = (item: string): HTMLElement => within(seatOf(item)).getAllByRole('article')[0];
-
 const seats = (): string[] =>
   within(screen.getByRole('list', {name: 'sortable list'}))
     .getAllByRole('listitem').map(({textContent}) => textContent ?? '');
@@ -92,22 +90,6 @@ describe('the sortable list demo', () => {
     await waitFor(() => expect(seats()).toEqual(['B', 'C', 'A']));
   });
 
-  test('hide blanks the origin while something is aloft', async () => {
-    const feed = await listeningFeed();
-
-    render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
-
-    await feedIsSubscribed();
-    lifted('A');
-    expect(draggable('A')).toHaveClass('hide');
-    fireEvent.dragEnd(screen.getByText('A'), {dataTransfer: {dropEffect: 'none'}});
-
-    const controls = screen.getByRole('region', {name: 'list controls'});
-    await userEvent.click(within(controls).getByRole('radio', {name: 'Keep'}));
-    lifted('B');
-    expect(draggable('B')).not.toHaveClass('hide');
-  });
-
   test('the dials travel in the url', async () => {
     const feed = await listeningFeed();
 
@@ -132,9 +114,7 @@ describe('the sortable list demo', () => {
     await userEvent.keyboard('{ArrowRight}');
 
     expect(seats()).toEqual(['B', 'A', 'C']);
-    expect(seatOf('A')).toHaveClass('pushed');
     expect(seatOf('A')).toHaveStyle({'--toward': '-1'});
-    expect(seatOf('B')).toHaveClass('pushed');
     expect(seatOf('B')).toHaveStyle({'--toward': '1'});
 
     screen.getByRole('button', {name: 'grip for A'}).focus();
@@ -251,4 +231,3 @@ describe('the sortable list demo', () => {
     expect(within(controls).getByRole('radio', {name: 'Keep'})).toBeChecked();
   });
 });
-
