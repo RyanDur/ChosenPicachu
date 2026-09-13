@@ -1,9 +1,10 @@
 import {TestApp} from '@test-support/TestApp';
-import {render, screen, within} from '@testing-library/react';
+import {render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {Paths} from '@pages/Paths';
 import {Route} from 'react-router';
 import {atTheTop, landingsDuring} from '@test-support/landings';
+import {announced, followSignpost, frontDoor, pageTitle, pageTitled, roomSays, siteRail} from '../__test_support';
 
 describe('page error boundaries', () => {
   test('a crashing page shows the closed room inside the site, even with no boundary of its own', async () => {
@@ -19,36 +20,36 @@ describe('page error boundaries', () => {
       {onCaughtError: error => caught.push(error)}
     );
 
-    expect(await within(screen.getByRole('main')).findByText('This room is closed.')).toBeVisible();
-    expect(screen.getByRole('heading', {level: 1})).toHaveTextContent('Closed room');
-    expect(screen.getByRole('navigation', {name: 'site'})).toBeInTheDocument();
-    expect(screen.getByRole('link', {name: 'Back to the front door'})).toHaveAttribute('href', Paths.home);
+    expect(await roomSays('This room is closed.')).toBeVisible();
+    expect(pageTitle()).toHaveTextContent('Closed room');
+    expect(await siteRail()).toBeInTheDocument();
+    expect(frontDoor()).toHaveAttribute('href', Paths.home);
     expect(screen.getByRole('list', {name: 'errors reported'})).toHaveTextContent(/^boom$/);
     expect(caught).toEqual([boom]);
-    expect(within(screen.getByRole('alert', {hidden: true})).getByText('This room is closed.')).toBeInTheDocument();
+    expect(announced('This room is closed.')).toBeInTheDocument();
   });
 
   test('an address the site does not know says so, inside the site', async () => {
     render(<TestApp at="/nowhere/"/>);
 
-    expect(await within(screen.getByRole('main')).findByText('There is no room at this address.')).toBeVisible();
-    expect(screen.getByRole('heading', {level: 1})).toHaveTextContent('No such room');
-    expect(screen.getByRole('link', {name: 'Back to the front door'})).toHaveAttribute('href', Paths.home);
-    expect(screen.getByRole('navigation', {name: 'site'})).toBeInTheDocument();
-    expect(within(screen.getByRole('alert', {hidden: true})).getByText('There is no room at this address.')).toBeInTheDocument();
+    expect(await roomSays('There is no room at this address.')).toBeVisible();
+    expect(pageTitle()).toHaveTextContent('No such room');
+    expect(frontDoor()).toHaveAttribute('href', Paths.home);
+    expect(await siteRail()).toBeInTheDocument();
+    expect(announced('There is no room at this address.')).toBeInTheDocument();
   });
 
   test('an unknown address under the games is no room either', async () => {
     render(<TestApp at="/games/nowhere/"/>);
 
-    expect(await within(screen.getByRole('main')).findByText('There is no room at this address.')).toBeVisible();
-    expect(screen.getByRole('heading', {level: 1})).toHaveTextContent('No such room');
+    expect(await roomSays('There is no room at this address.')).toBeVisible();
+    expect(pageTitle()).toHaveTextContent('No such room');
   });
 
   test('a room still loading is not called closed', async () => {
     render(<TestApp><Route path="/" lazy={() => new Promise(() => undefined)}/></TestApp>);
 
-    await screen.findByRole('navigation', {name: 'site'});
+    await siteRail();
     expect(screen.queryByRole('heading', {level: 1})).not.toBeInTheDocument();
     expect(screen.queryByText('This room is closed.')).not.toBeInTheDocument();
   });
@@ -57,10 +58,10 @@ describe('page error boundaries', () => {
 describe('leaving a page', () => {
   test('a new page starts at the top', async () => {
     render(<TestApp at="/"/>);
-    await screen.findByRole('heading', {level: 1});
+    await pageTitled();
 
     const landings = await landingsDuring(async () => {
-      await userEvent.click(screen.getByRole('link', {name: /Start where the demos start/}));
+      await userEvent.click(followSignpost(/Start where the demos start/));
       await screen.findByRole('navigation', {name: 'demos'});
     });
 
@@ -70,7 +71,7 @@ describe('leaving a page', () => {
   test('arriving at a place on the page keeps that place', async () => {
     const landings = await landingsDuring(async () => {
       render(<TestApp at="/#the-record"/>);
-      await screen.findByRole('heading', {level: 1});
+      await pageTitled();
     });
 
     expect(landings).toEqual([]);
@@ -81,7 +82,7 @@ describe('the root path', () => {
   test('opens the front door, which tees up the demos', async () => {
     render(<TestApp at="/"/>);
 
-    expect(await screen.findByRole('heading', {level: 1})).toHaveTextContent('The three languages');
-    expect(screen.getByRole('link', {name: /Start where the demos start/})).toBeVisible();
+    expect(await pageTitled()).toHaveTextContent('The three languages');
+    expect(followSignpost(/Start where the demos start/)).toBeVisible();
   });
 });
