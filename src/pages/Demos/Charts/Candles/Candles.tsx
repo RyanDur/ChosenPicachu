@@ -46,7 +46,7 @@ export const Candles: FC<Props> = ({trades, id = 'candle', actions}) => {
         )}
       </menu>
     </header>
-    <div className="chart-stage">
+    <figure className="chart-stage">
       <Axes high={notEmpty(candles) ? Math.max(...candles.map(candle => candle.high)) : 0}
             low={notEmpty(candles) ? Math.min(...candles.map(candle => candle.low)) : 0}
             times={candles.map(candle => candle.openedAt)}
@@ -72,11 +72,11 @@ export const Candles: FC<Props> = ({trades, id = 'candle', actions}) => {
           </g>)}
         </svg>
       </Axes>
-      <small className="chart-caption caption">
+      <figcaption className="chart-caption caption">
         {notEmpty(candles) ? captionFor(period, candles.length) : history.unavailable && 'history unavailable'}
-      </small>
+      </figcaption>
       {history.pending && <Loading className="chart-loading"/>}
-    </div>
+    </figure>
     <details className="explainer">
       <summary className="prompt">what am I looking at?</summary>
       <p className="explanation">

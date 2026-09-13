@@ -68,30 +68,26 @@ export const PriceChart: FC<Props> = ({trades, id = 'price', actions}) => {
         )}
       </menu>
     </header>
-    <div className="chart-stage">
-      <figure className="graph">
-        <Axes high={view.high} low={view.low} times={view.series.map(timed => timed.at)}
-              pattern={timePattern[period]} tickEvery={tickEveryMs[period]}
-              headroomMs={2 * bucketMs[period]}>
-          <svg className="sparkline" aria-hidden="true"
-               viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
-               preserveAspectRatio="none">
-            {notEmpty(points) && <line className="baseline"
-                                       x1={0} y1={points[0].y}
-                                       x2={CHART_WIDTH} y2={points[0].y}/>}
-            <polyline className="trend" points={line} fill="none" vectorEffect="non-scaling-stroke"/>
-            {notEmpty(points) && <circle className="marker"
-                                         cx={points[points.length - 1].x}
-                                         cy={points[points.length - 1].y}
-                                         r={3}/>}
-          </svg>
-        </Axes>
-        <figcaption>
-          <small className="chart-caption caption">
-            {showing ? view.caption : history.unavailable && 'history unavailable'}
-          </small>
-        </figcaption>
-      </figure>
+    <figure className="chart-stage">
+      <Axes high={view.high} low={view.low} times={view.series.map(timed => timed.at)}
+            pattern={timePattern[period]} tickEvery={tickEveryMs[period]}
+            headroomMs={2 * bucketMs[period]}>
+        <svg className="sparkline" aria-hidden="true"
+             viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
+             preserveAspectRatio="none">
+          {notEmpty(points) && <line className="baseline"
+                                     x1={0} y1={points[0].y}
+                                     x2={CHART_WIDTH} y2={points[0].y}/>}
+          <polyline className="trend" points={line} fill="none" vectorEffect="non-scaling-stroke"/>
+          {notEmpty(points) && <circle className="marker"
+                                       cx={points[points.length - 1].x}
+                                       cy={points[points.length - 1].y}
+                                       r={3}/>}
+        </svg>
+      </Axes>
+      <figcaption className="chart-caption caption">
+        {showing ? view.caption : history.unavailable && 'history unavailable'}
+      </figcaption>
       <p className="headline">
         {showing && <>
           <data className="price" value={view.last}>{cents.format(view.last)}</data>
@@ -99,7 +95,7 @@ export const PriceChart: FC<Props> = ({trades, id = 'price', actions}) => {
         </>}
       </p>
       {history.pending && <Loading className="chart-loading"/>}
-    </div>
+    </figure>
     <details className="explainer">
       <summary className="prompt">what am I looking at?</summary>
       <p className="explanation">

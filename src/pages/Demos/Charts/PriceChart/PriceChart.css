@@ -1,6 +1,6 @@
 .price-chart {
 
-  .graph {
+  .chart-stage {
     position: relative;
     margin: var(--base-x-2) 0 0;
 
@@ -34,7 +34,7 @@
 
   }
 
-  &[data-trend='rising'] .graph .sparkline {
+  &[data-trend='rising'] .chart-stage .sparkline {
     .trend {
       stroke: var(--mint-dim);
     }
@@ -44,7 +44,7 @@
     }
   }
 
-  &[data-trend='falling'] .graph .sparkline {
+  &[data-trend='falling'] .chart-stage .sparkline {
     .trend {
       stroke: var(--internationl-orange-engineering);
     }
