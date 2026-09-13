@@ -2,7 +2,7 @@ import {FC, useState, ReactNode} from 'react';
 import {notEmpty} from '@ryandur/sand';
 import {Trade} from '../coinbase';
 import {bucketTrades, candleShapes, mergeLive, volumeShapes} from './shapes';
-import {captionFor, usePeriodCandles} from '../usePeriodCandles';
+import {candlesOf, captionFor, usePeriodCandles} from '../usePeriodCandles';
 import {Loading} from '@components/Loading';
 import {bucketMs, Period, periodCap, tickEveryMs, timePattern} from '../period';
 import {Axes} from '../Axes';
@@ -24,7 +24,7 @@ type Props = {
 export const Candles: FC<Props> = ({trades, id = 'candle', actions}) => {
   const [period, setPeriod] = useState<Period>(Period.hour);
   const history = usePeriodCandles(period);
-  const candles = mergeLive(history.candles, bucketTrades(trades, bucketMs[period]), periodCap[period]);
+  const candles = mergeLive(candlesOf(history), bucketTrades(trades, bucketMs[period]), periodCap[period]);
   const bodies = candleShapes(candles, CHART_WIDTH, CANDLE_HEIGHT, bucketMs[period]);
   const bars = volumeShapes(candles, CHART_WIDTH, VOLUME_HEIGHT, bucketMs[period]);
   return <section aria-label="candles" className="candles chart card rounded-corners lifted padded">
@@ -72,7 +72,7 @@ export const Candles: FC<Props> = ({trades, id = 'candle', actions}) => {
           </g>)}
         </svg>
       </Axes>
-      {history.pending && <Loading className="chart-loading"/>}
+      {history.state === 'loading' && <Loading className="chart-loading"/>}
       <figcaption className="chart-caption caption">{captionFor(history, candles.length, period)}</figcaption>
     </figure>
     <details className="explainer">

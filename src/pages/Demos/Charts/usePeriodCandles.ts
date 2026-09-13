@@ -6,19 +6,26 @@ import {Candle} from './Candles/shapes';
 import {bucketLabel, granularitySeconds, Period, periodSpanMs} from './period';
 import {periodCandles} from './coinbase/history';
 
-export type PeriodHistory = {
-  candles: readonly Candle[];
-  unavailable: boolean;
-  pending: boolean;
-};
+export type PeriodHistory =
+  | {state: 'loading'}
+  | {state: 'unavailable'}
+  | {state: 'arrived'; candles: readonly Candle[]};
 
-const clean: PeriodHistory = {candles: [], unavailable: false, pending: true};
+const loading: PeriodHistory = {state: 'loading'};
+
+export const candlesOf = (history: PeriodHistory): readonly Candle[] =>
+  history.state === 'arrived' ? history.candles : [];
 
 export const captionFor = (history: PeriodHistory, candles: number, period: Period): string => {
   if (candles > 0) return `${candles} candles · ${bucketLabel[period]}`;
-  if (history.pending) return 'loading history';
-  if (history.unavailable) return 'history unavailable';
-  return 'waiting for the first trade';
+  switch (history.state) {
+    case 'loading':
+      return 'loading history';
+    case 'unavailable':
+      return 'history unavailable';
+    case 'arrived':
+      return 'waiting for the first trade';
+  }
 };
 
 const queryFor = (period: Period): string => {
@@ -32,14 +39,14 @@ const queryFor = (period: Period): string => {
 export const usePeriodCandles = (period: Period): PeriodHistory => {
   const {tradeHistory, tradeProduct} = useEnv();
   const {raise} = useBanners();
-  const [history, setHistory] = useState<PeriodHistory>(clean);
+  const [history, setHistory] = useState<PeriodHistory>(loading);
 
   useEffect(() => {
-    setHistory(clean);
+    setHistory(loading);
     const fetching = periodCandles(tradeHistory, tradeProduct, queryFor(period))
-      .onSuccess(candles => setHistory({candles, unavailable: false, pending: false}))
+      .onSuccess(candles => setHistory({state: 'arrived', candles}))
       .onFailure(error => {
-        setHistory({candles: [], unavailable: true, pending: false});
+        setHistory({state: 'unavailable'});
         raise(troubleWith('the candle history')(error));
       });
     return () => fetching.cancel();

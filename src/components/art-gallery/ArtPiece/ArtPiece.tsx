@@ -5,7 +5,7 @@ import {useArtPiece} from '@components/art-gallery/ArtPiece/Context';
 import {Image} from '@components/art-gallery/Image';
 import {useSearchParamsObject} from '@components/search-params';
 import {Source, sourceParam} from '@components/art-gallery/museums/types/resource';
-import {has, not} from '@ryandur/sand';
+import {has} from '@ryandur/sand';
 import {useBanners} from '@components/Banners';
 import {troubleWith} from '@transport/trouble';
 import {art} from '@components/art-gallery/museums';
@@ -17,17 +17,19 @@ export const ArtPiece = () => {
     const {raise} = useBanners();
     const {tab} = useSearchParamsObject({tab: sourceParam});
     const {id} = useParams<{ id: string }>();
-    const [errored, hasErrored] = useState(false);
-    const [loading, isLoading] = useState(false);
+    const [showing, setShowing] = useState<'nothing' | 'loading' | 'hung' | 'refused'>('nothing');
     const hung = piece.orNull();
 
     useEffect(() => {
         if (!id) return reset;
         const {cancel} = art.get({id, source: tab ?? Source.AIC})
-            .onPending(isLoading)
-            .onSuccess(updatePiece)
+            .onPending(pending => pending && setShowing('loading'))
+            .onSuccess(found => {
+                updatePiece(found);
+                setShowing('hung');
+            })
             .onFailure(error => {
-                hasErrored(true);
+                setShowing('refused');
                 raise(troubleWith('the museum')(error));
             });
         return () => {
@@ -37,12 +39,12 @@ export const ArtPiece = () => {
     }, [id, updatePiece, tab, reset, raise]);
 
     return <>
-        {loading && <Loading label="loading piece"/>}
-        {not(errored) && has(hung) && <figure className="art-piece art-work">
+        {showing === 'loading' && <Loading label="loading piece"/>}
+        {showing !== 'refused' && has(hung) && <figure className="art-piece art-work">
           <Image piece={hung} linkEnabled={false} className="piece hung"/>
           <figcaption className="trim artist-display hairline-outline italic">{hung.artistInfo}</figcaption>
         </figure>}
-        {errored && <article className="art-piece err">
+        {showing === 'refused' && <article className="art-piece err">
           <img src={noImage}
                alt="Load Error"/>
         </article>}

@@ -4,7 +4,7 @@ import {Loading} from '@components/Loading';
 import {classNames} from '@components/class-names';
 import {LiveTradesState} from '../live-trades';
 import {cents, deltaLabel} from '../money';
-import {captionFor, usePeriodCandles} from '../usePeriodCandles';
+import {candlesOf, captionFor, usePeriodCandles} from '../usePeriodCandles';
 import {bucketMs, Period, periodCap, tickEveryMs, timePattern} from '../period';
 import {sparklinePoints, TimedPrice} from '../sparkline';
 import {Axes} from '../Axes';
@@ -43,7 +43,7 @@ type Props = Pick<LiveTradesState, 'trades'> & {
 export const PriceChart: FC<Props> = ({trades, id = 'price', actions}) => {
   const [period, setPeriod] = useState<Period>(Period.hour);
   const history = usePeriodCandles(period);
-  const candles = mergeLive(history.candles, bucketTrades(trades, bucketMs[period]), periodCap[period]);
+  const candles = mergeLive(candlesOf(history), bucketTrades(trades, bucketMs[period]), periodCap[period]);
   const showing = candles.length > 0;
   const windowed = candlesView(candles);
   const lastTrade = trades[trades.length - 1];
@@ -94,7 +94,7 @@ export const PriceChart: FC<Props> = ({trades, id = 'price', actions}) => {
           <data className="price" value={view.last}>{cents.format(view.last)}</data>
           <data className="delta" value={view.last - view.first}>{deltaLabel(view.first, view.last)}</data>
       </p>}
-      {history.pending && <Loading className="chart-loading"/>}
+      {history.state === 'loading' && <Loading className="chart-loading"/>}
       <figcaption className="chart-caption caption">{captionFor(history, candles.length, period)}</figcaption>
     </figure>
     <details className="explainer">
