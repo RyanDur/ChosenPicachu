@@ -1,6 +1,6 @@
 import {readFileSync, writeFileSync} from 'node:fs';
 
-const doors = ['structure', 'presentation', 'dynamic interaction'];
+const doors = ['structure', 'presentation', 'dynamic interaction', 'tests'];
 const severities = ['violation', 'concern', 'note'];
 
 export const findingsIn = (answer) => {

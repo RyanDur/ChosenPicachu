@@ -1,11 +1,11 @@
 import {readFileSync} from 'node:fs';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {doors, qaNames} from './agents.mjs';
+import {doors, halves, qaNames, tests} from './agents.mjs';
 
 const values = readFileSync(join(dirname(fileURLToPath(import.meta.url)), 'values.md'), 'utf8');
 
-const rubric = [...doors.map(({file}) => file), 'src/pages/Home/TeeUp.tsx'];
+const rubric = [...doors.map(({file}) => file), 'src/pages/Home/TeeUp.tsx', tests.file];
 
 const scopes = {
   full: () => 'The scope is the whole of src/ and e2e/: every page, component, sheet and spec.',
@@ -21,9 +21,10 @@ export const promptFor = ({scope, before, after}) => {
   return [
     values,
     '## Your part',
-    `You lead the review. Read the rubric first and whole, in the author's words: ${rubric.join(', ')}. Each door says what things are, how they show, or how they respond, then how the author organizes it, and ends with the test of the organization.`,
+    `You lead the review. Read the rubric first and whole, in the author's words: ${rubric.join(', ')}. Each door of the home page says what things are, how they show, or how they respond, then how the author organizes it, and ends with the test of the organization. The tests door says what a test is for.`,
     describeScope({before, after}),
-    `Three QAs hold one door each: ${qaNames.join(', ')}. Send all three the scope, word for word, at the same time, and ask each for its door's findings.`,
+    `The scope has two halves. ${halves.tests} ${halves.site} The three door QAs review the site and the tests QA reviews the tests; each may read the other half for context. The door QAs report nothing on the tests; the tests QA reports on the site only that a test is missing.`,
+    `Four QAs hold one door each: ${qaNames.join(', ')}. Send all four the scope, word for word, at the same time, and ask each for its door's findings.`,
     'When they answer, corroborate every finding yourself before you keep it: open the file at the line, read the principle on its door, and keep the finding only if it holds. Merge what two QAs saw as one. Drop what does not hold and say nothing of it.',
     'Answer with the findings that held, in the shape you were given.'
   ].join('\n\n');

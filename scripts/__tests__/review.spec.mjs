@@ -27,6 +27,14 @@ const note = {
     what: 'a section has no heading',
     principle: 'Sections name themselves through their headings'
 };
+const testNote = {
+    door: 'tests',
+    severity: 'note',
+    file: 'src/__tests__/c.spec.tsx',
+    line: 4,
+    what: 'a spec finds a button by class',
+    principle: 'It finds by role, label and text, like every test'
+};
 
 describe('the review prompt', () => {
     test('sends the reviewer to the doors on the home page first', () => {
@@ -34,14 +42,14 @@ describe('the review prompt', () => {
         expect(prompt).toContain('src/pages/Home/Structure.tsx');
         expect(prompt).toContain('src/pages/Home/Presentation.tsx');
         expect(prompt).toContain('src/pages/Home/DynamicInteraction.tsx');
-    expect(prompt).toContain('The scope is the whole of src/');
+        expect(prompt).toContain('The scope is the whole of src/');
     });
 
-  test('a review of the changes names the two commits to diff', () => {
-    const prompt = promptFor({scope: 'changes', before: 'abc', after: 'def'});
-    expect(prompt).toContain('git diff abc def');
-    expect(prompt).toContain('git log abc..def');
-  });
+    test('a review of the changes names the two commits to diff', () => {
+        const prompt = promptFor({scope: 'changes', before: 'abc', after: 'def'});
+        expect(prompt).toContain('git diff abc def');
+        expect(prompt).toContain('git log abc..def');
+    });
 
     test('an unknown scope is refused by name', () => {
         expect(() => promptFor({scope: 'some'})).toThrow('no review scope named "some"');
@@ -65,12 +73,14 @@ describe('the review report', () => {
     });
 
     test('findings are counted and grouped by door, worst first', () => {
-        const summary = summaryOf([note, concern, violation]);
-        expect(summary).toContain('1 violation, 1 concern, 1 note.');
+        const summary = summaryOf([testNote, note, concern, violation]);
+        expect(summary).toContain('1 violation, 1 concern, 2 notes.');
         expect(summary.indexOf('### structure')).toBeLessThan(summary.indexOf('### presentation'));
+        expect(summary.indexOf('### presentation')).toBeLessThan(summary.indexOf('### tests'));
         expect(summary.indexOf('a div wraps a list')).toBeLessThan(summary.indexOf('a section has no heading'));
         expect(summary).toContain('`src/b.css:9`');
         expect(summary).toContain('_Tag selectors are for resets only_');
+        expect(summary).toContain('`src/__tests__/c.spec.tsx:4`');
     });
 
     test('only a violation fails the job', () => {
