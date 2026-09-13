@@ -1,6 +1,7 @@
-import {expect, Locator, Page, test} from '@playwright/test';
+import {expect, Page, test} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import {HtmlValidate} from 'html-validate';
+import {delta, pages} from './pages';
 
 const validator = new HtmlValidate({
   extends: ['html-validate:recommended'],
@@ -12,30 +13,6 @@ const validator = new HtmlValidate({
     'form-dup-name': ['error', {shared: ['radio', 'checkbox']}]
   }
 });
-
-type Role = Parameters<Page['getByRole']>[0];
-type A11yPage = {name: string, path: string, ready: Role, loaded?: (page: Page) => Locator};
-const delta = (page: Page): Locator => page.getByRole('region', {name: 'live trades'}).getByText(/^[+-]\$/);
-const story = (page: Page): Locator => page.getByRole('region', {name: /yourself$/}).getByRole('group').first();
-
-const pages: A11yPage[] = [
-  {name: 'root', path: '', ready: 'navigation'},
-  {name: 'demos', path: 'demos?tab=accordions', ready: 'navigation'},
-  {name: 'charts', path: 'demos?tab=charts', ready: 'navigation', loaded: delta},
-  {name: 'tables', path: 'demos?tab=tables', ready: 'navigation', loaded: page => page.getByRole('columnheader', {name: 'trades'})},
-  {name: 'tables in vanilla', path: 'demos?tab=tables&world=vanilla', ready: 'navigation', loaded: page => page.getByTitle('the living table, in vanilla')},
-  {name: 'price chart tutorial', path: 'demos/charts/price/', ready: 'navigation', loaded: story},
-  {name: 'candles chart tutorial', path: 'demos/charts/candles/', ready: 'navigation', loaded: story},
-  {name: 'pressure chart tutorial', path: 'demos/charts/pressure/', ready: 'navigation', loaded: story},
-  {name: 'pie chart tutorial', path: 'demos/charts/pie/', ready: 'navigation', loaded: story},
-  {name: 'menu tutorial', path: 'demos?tab=tables&tut=menu', ready: 'navigation', loaded: story},
-  {name: 'resize tutorial', path: 'demos?tab=tables&tut=resize', ready: 'navigation', loaded: story},
-  {name: 'drag sort', path: 'demos?tab=dragAndDrop', ready: 'navigation', loaded: page => page.getByRole('list', {name: 'sortable list'}).getByRole('listitem').first()},
-  {name: 'users', path: 'users', ready: 'table'},
-  {name: 'gallery', path: 'gallery', ready: 'navigation', loaded: page => page.getByRole('figure').first()},
-  {name: 'games', path: 'games', ready: 'banner'},
-  {name: 'three-in-a-row', path: 'games/colorGame', ready: 'main'},
-];
 
 for (const {name, path, ready, loaded} of pages) {
   test(`the ${name} page has no accessibility violations`, async ({page}) => {
