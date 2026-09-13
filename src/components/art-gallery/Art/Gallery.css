@@ -7,11 +7,8 @@
   width: 100%;
   padding: var(--base-x-5);
 
-  .loader,
-  #empty-gallery {
-    align-self: center;
-    justify-self: center;
-    grid-column: 1 / span 4;
+  &:empty {
+    display: none;
   }
 
   .frame {
@@ -19,9 +16,10 @@
 
       outline: none;
 
-    .loading-screen {
+    .loading {
       position: absolute;
       inset: 0;
+      margin: auto;
     }
 
     .wall-slot {

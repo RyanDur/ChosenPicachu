@@ -41,17 +41,20 @@ export const ArtGallery: FC = () => {
     };
   }, [page, search, tab, size, reset, updateArt, raise]);
 
-  return <div id="art-gallery">
-    {art?.pieces.map((piece, index) => <figure
-      className="frame" key={piece.id}>
-      <div className="wall-slot">
-        <Image className="piece hung" piece={piece} priority={index < 4} lazy={index >= 6}/>
-      </div>
-      <figcaption className="trim placard hairline-outline italic">{piece.title}</figcaption>
-    </figure>)}
+  return <>
+    <ul id="art-gallery">
+      {art?.pieces.map((piece, index) => <li className="frame" key={piece.id}>
+        <figure>
+          <div className="wall-slot">
+            <Image className="piece hung" piece={piece} priority={index < 4} lazy={index >= 6}/>
+          </div>
+          <figcaption className="trim placard hairline-outline italic">{piece.title}</figcaption>
+        </figure>
+      </li>)}
+    </ul>
     {loading && <Loading className="loader" label="loading gallery"/>}
     {!loading && errored && <img src={noImageGallery}
                                  id="empty-gallery"
                                  alt="empty gallery"/>}
-  </div>;
+  </>;
 };
