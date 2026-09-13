@@ -5,13 +5,16 @@ import {troubleWith} from '@transport/trouble';
 import {exchange, FeedTrouble} from './exchange';
 import {DemosStore, demosStore, feedReleased, feedRequested} from './store';
 
-const sentences = {
-  handshakeRefused: 'the live feed refused the handshake',
-  hungUp: 'the live feed hung up mid-stream'
+const said = (trouble: FeedTrouble): string => {
+  switch (trouble.type) {
+    case 'handshakeRefused':
+      return 'the live feed refused the handshake';
+    case 'hungUp':
+      return 'the live feed hung up mid-stream';
+    case 'historyUnavailable':
+      return troubleWith('the trade history')(trouble.cause);
+  }
 };
-
-const said = (trouble: FeedTrouble): string =>
-  typeof trouble === 'string' ? sentences[trouble] : troubleWith('the trade history')(trouble.history);
 
 export const useExchange = (): DemosStore => {
   const env = useEnv();

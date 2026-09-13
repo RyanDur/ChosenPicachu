@@ -44,7 +44,7 @@ export const ArtGalleryPage: FC = () => {
   return <>
     {notEmpty(open) && <Tabs label="museums" values={open}/>}
     {showing && <ArtGallery/>}
-    {settled && empty(open) && <img src={missingWall} alt="no museum is open"/>}
+    {settled && empty(open) && <img className="stand-in" src={missingWall} alt="no museum is open"/>}
     {settled || <Loading label="loading gallery"/>}
   </>;
 };

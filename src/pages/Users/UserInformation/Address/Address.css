@@ -9,6 +9,12 @@
     "city state zip";
 }
 
+.address-title {
+  display: flex;
+  align-items: center;
+  gap: var(--base-x-2);
+}
+
 .address .street {
   grid-area: street_address;
 }

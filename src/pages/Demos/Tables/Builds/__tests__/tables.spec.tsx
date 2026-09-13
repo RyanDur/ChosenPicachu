@@ -54,7 +54,7 @@ const seat = (Table: Table, dials = 'hide animated', rows: readonly Measures[] =
 describe('a header the table does not know', () => {
   test('stands on its own and wears its own name', () => {
     render(<DragSortableTable columns={[{name: 'window', data: {label: 'window'}}]} rows={[]}>
-      <thead><tr><Column column="ghost" className="cell">ghost</Column></tr></thead>
+      <thead><tr><Column column="ghost" className="cell">a header</Column></tr></thead>
     </DragSortableTable>);
 
     expect(screen.getByRole('columnheader', {name: 'ghost'})).toBeVisible();

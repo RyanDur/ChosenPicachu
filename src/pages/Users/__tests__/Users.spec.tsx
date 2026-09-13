@@ -216,6 +216,20 @@ describe('the users page', () => {
     });
   });
 
+  test('a user with a work address shows it when edited and keeps it after Update', async () => {
+    const person = conciseUser('Ivo');
+    render(<TestApp at={Paths.users}/>);
+    await roster();
+    await addUser(person);
+
+    await edit(fullName(person));
+
+    expect(addressGroup('work').getByLabelText('Street')).toHaveValue(person.work.streetAddress);
+    await userEvent.click(within(screen.getByRole('form', {name: 'User Information'})).getByRole('button', {name: 'Update'}));
+    await view(fullName(person));
+    expect(addressGroup('work').getByLabelText('Street')).toHaveValue(person.work.streetAddress);
+  });
+
   test('an updated user shows their new name in the roster', async () => {
     const person = conciseUser('Cleo');
     render(<TestApp at={Paths.users}/>);

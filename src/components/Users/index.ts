@@ -1,5 +1,5 @@
 export {users} from './resource/users';
-export {FriendsList} from './SelectList';
+export {FriendsList} from './FriendsList';
 export {UserMenu} from './UserMenu';
 export {age, formatAge, AgeIn} from './age';
 export type {AddressInfo, NewUser, User, UserEdit} from './UserInfo/user';

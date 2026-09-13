@@ -8,6 +8,7 @@ import {empty, has} from '@ryandur/sand';
 import {useBanners} from '@components/Banners';
 import {troubleWith} from '@transport/trouble';
 import {sourceParam} from '@components/art-gallery/museums/source';
+import {MuseumReply} from '@components/art-gallery/museums/reply';
 import {art as artResource} from '@components/art-gallery/museums';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
 import noImageGallery from '../../../assets/icons/missing-wall.svg?url';
@@ -16,7 +17,7 @@ import './Gallery.css';
 export const ArtGallery: FC = () => {
   const {art, updateArt, reset} = useGallery();
   const {raise} = useBanners();
-  const [museum, setMuseum] = useState<'answered' | 'asked' | 'refused'>('answered');
+  const [museum, setMuseum] = useState<MuseumReply>('unasked');
   const {page, size, search, tab} =
     useSearchParamsObject({page: numberParam, size: numberParam, tab: sourceParam, search: schema.string}, {
       size: defaultRecordLimit,
@@ -51,7 +52,7 @@ export const ArtGallery: FC = () => {
       </li>)}
     </ul>
     {museum === 'asked' && <Loading label="loading gallery"/>}
-    {museum === 'answered' && has(art) && empty(art.pieces) && <img src={noImageGallery} alt="empty gallery"/>}
-    {museum === 'refused' && <img src={noImageGallery} alt="the museum refused to answer"/>}
+    {museum === 'answered' && has(art) && empty(art.pieces) && <img className="stand-in" src={noImageGallery} alt="empty gallery"/>}
+    {museum === 'refused' && <img className="stand-in" src={noImageGallery} alt="the museum refused to answer"/>}
   </>;
 };

@@ -1,7 +1,7 @@
 import {describe, expect, it, vi} from 'vitest';
-import {http, HttpResponse, ws} from 'msw';
+import {ws} from 'msw';
 import {WebSocketClientConnectionProtocol as Client} from '@mswjs/interceptors/WebSocket';
-import {HISTORY, server} from '@test-support/server';
+import {HISTORY, server, tradeHistoryRefuses} from '@test-support/server';
 import {tradeFrame} from '@test-support/feed';
 import {HTTPError} from '@transport/types';
 import {exchange, FeedTrouble} from '../exchange';
@@ -44,13 +44,13 @@ describe('the exchange as middleware', () => {
   });
 
   it('says when the trade history cannot be loaded', async () => {
-    server.use(http.get(`${HISTORY}/products/BTC-USD/trades`, () => HttpResponse.json([], {status: 500})));
+    tradeHistoryRefuses();
     const troubles: FeedTrouble[] = [];
     const store = demosStore(exchange({tradeFeed: '', tradeHistory: HISTORY, tradeProduct: 'BTC-USD'}, trouble => troubles.push(trouble)));
 
     store.dispatch(feedRequested());
 
-    await vi.waitFor(() => expect(troubles).toEqual([{history: HTTPError.SERVER_ERROR}]));
+    await vi.waitFor(() => expect(troubles).toEqual([{type: 'historyUnavailable', cause: HTTPError.SERVER_ERROR}]));
   });
 
   it('an action that is not a feed request reaches the store untouched', () => {

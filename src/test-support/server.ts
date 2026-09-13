@@ -23,3 +23,14 @@ export const anyRequestRespondsWith = (body: string, status = 200) =>
 
 export const anyRequestFailsToConnect = () =>
   server.use(http.all('*', () => HttpResponse.error()));
+
+const tradeHistory = `${HISTORY}/products/${env.tradeProduct}/trades`;
+
+export const tradeHistoryAnswers = (rows: readonly unknown[]) =>
+  server.use(http.get(tradeHistory, () => HttpResponse.json(rows)));
+
+export const tradeHistoryRefuses = (status = 500) =>
+  server.use(http.get(tradeHistory, () => HttpResponse.json([], {status})));
+
+export const tradeHistoryUnreachable = () =>
+  server.use(http.get(tradeHistory, () => HttpResponse.error()));

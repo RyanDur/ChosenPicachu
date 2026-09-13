@@ -12,7 +12,10 @@ export type Exchange = {
 
 type Closer = () => void;
 
-export type FeedTrouble = 'handshakeRefused' | 'hungUp' | {history: HTTPError};
+export type FeedTrouble =
+  | {type: 'handshakeRefused'}
+  | {type: 'hungUp'}
+  | {type: 'historyUnavailable'; cause: HTTPError};
 
 const historyOf = (
   base: string,
@@ -22,7 +25,7 @@ const historyOf = (
 ): Closer => {
   const fetching = recentTrades(base, product)
     .onSuccess(trades => dispatch(historyArrived(trades)))
-    .onFailure(error => onTrouble({history: error}));
+    .onFailure(cause => onTrouble({type: 'historyUnavailable', cause}));
   return () => fetching.cancel();
 };
 
@@ -35,7 +38,7 @@ const opened = (
   if (!tradeFeed) {
     return history;
   }
-  const stream = streaming(tradeFeed, (): FeedTrouble => 'handshakeRefused')
+  const stream = streaming(tradeFeed, (): FeedTrouble => ({type: 'handshakeRefused'}))
     .onOpen(socket => {
       socket.send(subscribeTo(tradeProduct));
       dispatch(feedOpened());
@@ -43,7 +46,7 @@ const opened = (
     .onMessage(event => decodeTrade(event.data).map(trade => dispatch(tradeArrived(trade))))
     .onClose(() => {
       dispatch(feedFailed());
-      onTrouble('hungUp');
+      onTrouble({type: 'hungUp'});
     })
     .onFailure(trouble => {
       dispatch(feedFailed());

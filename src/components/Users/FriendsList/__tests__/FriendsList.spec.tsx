@@ -1,6 +1,6 @@
 import userEvent from '@testing-library/user-event';
 import {render, screen} from '@testing-library/react';
-import {FriendsList} from '@components/Users/SelectList';
+import {FriendsList} from '@components/Users/FriendsList';
 import {users} from '@test-support/fixtures';
 
 describe('the friends list', () => {
@@ -19,6 +19,12 @@ describe('the friends list', () => {
         await userEvent.selectOptions(screen.getByRole('combobox', {name: 'Add a friend'}), [fullName(secondUser)]);
 
         expect(consumer).toHaveBeenCalledWith([secondUser.id]);
+    });
+
+    it('the friends of a user are a group that says whose friends they are', () => {
+        render(<FriendsList users={users} user={firstUser} onChange={consumer}/>);
+
+        expect(screen.getByRole('group', {name: `friends of ${fullName(firstUser)}`})).toBeInTheDocument();
     });
 
     it('should not allow you to pick yourself', () => {

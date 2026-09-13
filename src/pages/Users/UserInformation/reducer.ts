@@ -20,6 +20,9 @@ export const draftOf = ({work, ...user}: NewUser | User): Draft => ({
 export const userOf = ({user, sameAsHome, typedWork}: Draft): NewUser | User =>
   ({...user, work: sameAsHome ? 'home' : typedWork});
 
+export const avatarReport = ({avatarsDrawn}: Draft): string =>
+  avatarsDrawn === 0 ? '' : `${avatarsDrawn} new avatar${avatarsDrawn === 1 ? '' : 's'} drawn.`;
+
 const edited = (draft: Draft, user: Draft['user']): Draft => ({...draft, user});
 
 export const formReducer = (draft: Draft, action: FormAction): Draft => {

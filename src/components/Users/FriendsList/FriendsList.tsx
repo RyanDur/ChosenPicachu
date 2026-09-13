@@ -3,7 +3,7 @@ import {User} from '@components/Users/UserInfo/user';
 import {classNames} from '@components/class-names';
 import {Consumer, has} from '@ryandur/sand';
 import cancelIcon from '../../../assets/icons/cancel.svg?url';
-import './fiends-list.css';
+import './friends-list.css';
 
 type Props = {
   users: readonly User[];
@@ -25,7 +25,7 @@ export const FriendsList: FC<Props> = ({users, user, onChange}) => {
 
   const remove = (friend: User) => onChange(user.friends.filter(id => id !== friend.id));
 
-  return <fieldset className={classNames('friends-list', 'unframed', has(friends) && 'not-empty')}>
+  return <fieldset className={classNames('friends-list', 'shrinkable', has(friends) && 'not-empty')}>
     <legend className="off-screen">friends of {displayFullName(user)}</legend>
     <ul className="friends" aria-label="friends">{friends.map(friend =>
       <li className="friend" key={friend.id}>

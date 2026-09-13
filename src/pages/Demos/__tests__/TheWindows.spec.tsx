@@ -1,8 +1,7 @@
 import {TestApp} from '@test-support/TestApp';
 import {demosAt} from '@pages/Demos/__test_support';
 import {render, screen, waitFor, within} from '@testing-library/react';
-import {http, HttpResponse} from 'msw';
-import {HISTORY, server} from '@test-support/server';
+import {tradeHistoryAnswers, tradeHistoryUnreachable} from '@test-support/server';
 import {texts} from '@components/DragSortableTable/__test_support';
 
 const NOW = 1700000000000;
@@ -16,8 +15,7 @@ const recentTradesNewestFirst = [
 
 describe('the windows hydrate from history', () => {
   test('a pull of recent trades fills the windows before the socket speaks', async () => {
-    server.use(http.get(`${HISTORY}/products/BTC-USD/trades`, () =>
-      HttpResponse.json(recentTradesNewestFirst)));
+    tradeHistoryAnswers(recentTradesNewestFirst);
 
     render(<TestApp at={demosAt('?tab=tables')}/>);
 
@@ -30,7 +28,7 @@ describe('the windows hydrate from history', () => {
   });
 
   test('a history that cannot load leaves the windows quietly empty', async () => {
-    server.use(http.get(`${HISTORY}/products/BTC-USD/trades`, () => HttpResponse.error()));
+    tradeHistoryUnreachable();
 
     render(<TestApp at={demosAt('?tab=tables')}/>);
 

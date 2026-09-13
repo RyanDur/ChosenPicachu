@@ -5,6 +5,7 @@ import {useArtPiece} from '@components/art-gallery/ArtPiece/Context';
 import {Image} from '@components/art-gallery/Image';
 import {useSearchParamsObject} from '@components/search-params';
 import {Source, sourceParam} from '@components/art-gallery/museums/source';
+import {MuseumReply} from '@components/art-gallery/museums/reply';
 import {has} from '@ryandur/sand';
 import {useBanners} from '@components/Banners';
 import {troubleWith} from '@transport/trouble';
@@ -17,7 +18,7 @@ export const ArtPiece = () => {
     const {raise} = useBanners();
     const {tab} = useSearchParamsObject({tab: sourceParam});
     const {id} = useParams<{ id: string }>();
-    const [museum, setMuseum] = useState<'answered' | 'asked' | 'refused'>('answered');
+    const [museum, setMuseum] = useState<MuseumReply>('unasked');
     const hung = piece.orNull();
 
     useEffect(() => {
@@ -40,7 +41,7 @@ export const ArtPiece = () => {
 
     return <>
         {museum === 'asked' && <Loading label="loading piece"/>}
-        {museum !== 'refused' && has(hung) && <figure className="art-piece art-work">
+        {has(hung) && <figure className="art-piece art-work">
           <Image piece={hung} linkEnabled={false} className="piece hung"/>
           <figcaption className="trim artist-display hairline-outline italic">{hung.artistInfo}</figcaption>
         </figure>}

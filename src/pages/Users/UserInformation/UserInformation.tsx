@@ -16,7 +16,7 @@ import {
   workAddressEdited
 } from './actions';
 import {Address} from './Address';
-import {draftOf, formReducer, userOf} from './reducer';
+import {avatarReport, draftOf, formReducer, userOf} from './reducer';
 import {generateAvatar} from './avatars';
 import {Link} from 'react-router';
 import {FancyDateInput} from '@components/FancyFormElements/FancyDateInput';
@@ -96,19 +96,20 @@ const Draft: FC<{ currentUser?: User; mode: Mode }> = ({currentUser, mode}) => {
       <img id="avatar" src={user.avatar} width="244" height="244" fetchPriority="high" alt="avatar"/>
     </button>
     <output className="avatar-report off-screen"
-            aria-label="avatar report">{draft.avatarsDrawn === 0 ? '' : `${draft.avatarsDrawn} new avatar${draft.avatarsDrawn === 1 ? '' : 's'} drawn.`}</output>
+            aria-label="avatar report">{avatarReport(draft)}</output>
 
     <Address id="home-address" title="Home Address" className="home-address" value={user.homeAddress} readOnly={readOnly} required
              onChange={address => dispatch(homeAddressEdited(address))}/>
 
-    {!readOnly && <label id="same-as-home-cell" className="same-as-home attentive">
+    <Address id="work-address" title="Work Address" className="work-address" value={draft.sameAsHome ? user.homeAddress : draft.typedWork} readOnly={readOnly}
+             disabled={draft.sameAsHome}
+             onChange={address => dispatch(workAddressEdited(address))}>
+      {!readOnly && <label id="same-as-home-cell" className="same-as-home attentive">
         <span id="same-as-home-title">Same as Home</span>
         <input id="same-as-home" className="fancy-check" type="checkbox" checked={draft.sameAsHome}
                onChange={event => dispatch(sameAsHomeChosen(event.currentTarget.checked))}/>
-    </label>}
-    <Address id="work-address" title="Work Address" className="work-address" value={draft.sameAsHome ? user.homeAddress : draft.typedWork} readOnly={readOnly}
-             disabled={draft.sameAsHome}
-             onChange={address => dispatch(workAddressEdited(address))}/>
+      </label>}
+    </Address>
 
     <FancyTextarea value={user.details} readOnly={readOnly}
                    onChange={event => dispatch(detailsEdited(event.currentTarget.value))}/>

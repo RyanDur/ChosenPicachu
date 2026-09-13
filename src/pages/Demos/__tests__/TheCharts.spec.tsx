@@ -7,8 +7,7 @@ import userEvent from '@testing-library/user-event';
 import {addChart, addMenu, doorway, dragChart, keys, releaseDrag, slot, walkThrough} from '@pages/Demos/Charts/__test_support';
 import {story} from '@pages/Demos/Recipe/__test_support';
 import {format} from 'date-fns';
-import {http, HttpResponse} from 'msw';
-import {HISTORY, server} from '@test-support/server';
+import {tradeHistoryRefuses} from '@test-support/server';
 
 const feedIsLive = async (): Promise<void> => {
   await waitFor(() => expect(screen.getByRole('status', {name: 'feed'})).toHaveTextContent(/^live$/));
@@ -414,7 +413,7 @@ describe('the demos page', () => {
     });
 
     test('a trade history that cannot be loaded tells the user', async () => {
-      server.use(http.get(`${HISTORY}/products/BTC-USD/trades`, () => HttpResponse.json([], {status: 500})));
+      tradeHistoryRefuses();
       const feed = await listeningFeed();
 
       render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);

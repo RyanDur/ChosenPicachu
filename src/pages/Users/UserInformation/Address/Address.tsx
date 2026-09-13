@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, PropsWithChildren} from 'react';
 import {classNames} from '@components/class-names';
 import {FancyInput} from '@components/FancyFormElements/FancyInput';
 import {FancySelect} from '@components/FancyFormElements/FancySelect';
@@ -17,9 +17,10 @@ type AddressProps = {
     readOnly?: boolean;
 }
 
-export const Address: FC<AddressProps> = (
+export const Address: FC<PropsWithChildren<AddressProps>> = (
     {
         title,
+        children,
         className,
         onChange,
         id,
@@ -27,8 +28,8 @@ export const Address: FC<AddressProps> = (
         disabled,
         readOnly,
         value = {streetAddress: '', city: '', state: '', zip: ''}
-    }) => <fieldset id={id} className={classNames('address', 'unframed', className)} disabled={disabled}>
-    <legend className="sub-title bold">{title}</legend>
+    }) => <fieldset id={id} className={classNames('address', 'shrinkable', className)} disabled={disabled}>
+    <legend className="address-title sub-title bold">{title}{children}</legend>
     <FancyInput inputId={`${id}-street`} className="street"
                 required={required} value={value.streetAddress} readOnly={readOnly}
                 onChange={event => onChange({...value, streetAddress: event.currentTarget.value})}>
