@@ -1,7 +1,19 @@
-import {expect, Page, test} from '@playwright/test';
+import {expect, test} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import {HtmlValidate} from 'html-validate';
-import {delta, pages} from './pages';
+import {pages} from './pages';
+import {
+  feedDot,
+  fullerStory,
+  inkNamed,
+  priceCardScope,
+  priceDelta,
+  pricePeriod,
+  pricePeriodToggle,
+  resolved,
+  scriptedMarket,
+  timelineStories
+} from './__test_support';
 
 const validator = new HtmlValidate({
   extends: ['html-validate:recommended'],
@@ -31,23 +43,6 @@ for (const {name, path, ready, loaded} of pages) {
   });
 }
 
-const tradeFrame = (id: number, price: number): string => JSON.stringify({
-  type: 'match',
-  trade_id: id,
-  price: `${price}`,
-  size: '0.01',
-  side: 'buy',
-  time: new Date().toISOString()
-});
-
-const scriptedMarket = async (page: Page, prices: number[]): Promise<void> => {
-  await page.route(/\/products\/.*\/candles/, route =>
-    route.fulfill({json: [], headers: {'access-control-allow-origin': '*'}}));
-  await page.routeWebSocket(/ws-feed/, socket => {
-    socket.onMessage(() => prices.forEach((price, id) => socket.send(tradeFrame(id, price))));
-  });
-};
-
 for (const {name, path, ready, loaded} of pages) {
   test(`the ${name} page is conforming html`, async ({page, browserName}) => {
     test.skip(browserName !== 'chromium', 'the serialized DOM is engine-independent');
@@ -67,36 +62,35 @@ test('the period menu stays hidden until asked', async ({page}) => {
   await scriptedMarket(page, [50000, 50100]);
   await page.goto('demos?tab=charts');
 
-  await expect(delta(page)).toBeVisible({timeout: 30_000});
-  await expect(delta(page)).toHaveText(/^\+/);
-  await expect(page.getByRole('button', {name: 'price period'})).toBeVisible();
-  await expect(page.getByLabel('price period by').getByRole('button', {name: 'week'})).toBeHidden();
+  await expect(priceDelta(page)).toBeVisible({timeout: 30_000});
+  await expect(priceDelta(page)).toHaveText(/^\+/);
+  await expect(pricePeriodToggle(page)).toBeVisible();
+  await expect(pricePeriod(page, 'week')).toBeHidden();
 
-  await page.getByRole('button', {name: 'price period'}).click();
-  await expect(page.getByLabel('price period by').getByRole('button', {name: 'week'})).toBeVisible();
+  await pricePeriodToggle(page).click();
+  await expect(pricePeriod(page, 'week')).toBeVisible();
 });
 
 test('the chosen period glows, and its neighbours do not', async ({page}) => {
   await scriptedMarket(page, [50000, 50100]);
   await page.goto('demos?tab=charts');
 
-  await expect(delta(page)).toBeVisible({timeout: 30_000});
-  await page.getByRole('button', {name: 'price period'}).click();
+  await expect(priceDelta(page)).toBeVisible({timeout: 30_000});
+  await pricePeriodToggle(page).click();
 
-  const menu = page.getByLabel('price period by');
-  await expect(menu.getByRole('button', {name: 'hour'})).toHaveCSS('box-shadow', await resolved(page, 'box-shadow', '--press-glow-soft'));
-  await expect(menu.getByRole('button', {name: 'week'})).toHaveCSS('box-shadow', 'none');
+  await expect(pricePeriod(page, 'hour')).toHaveCSS('box-shadow', await resolved(page, 'box-shadow', '--press-glow-soft'));
+  await expect(pricePeriod(page, 'week')).toHaveCSS('box-shadow', 'none');
 });
 
 test('only one fuller story stands open at a time', async ({page}) => {
   await page.goto('');
-  const stories = page.getByRole('list', {name: 'the timeline'}).getByRole('group');
+  const stories = timelineStories(page);
 
-  await stories.nth(0).getByText('the fuller story').click();
+  await fullerStory(stories.nth(0)).click();
   await expect(stories.nth(0)).toHaveAttribute('open', '');
   await expect(stories.nth(1)).not.toHaveAttribute('open', '');
 
-  await stories.nth(1).getByText('the fuller story').click();
+  await fullerStory(stories.nth(1)).click();
   await expect(stories.nth(1)).toHaveAttribute('open', '');
   await expect(stories.nth(0)).not.toHaveAttribute('open', '');
 });
@@ -106,26 +100,11 @@ const markets = [
   {trend: 'falling', sign: /^-/, ink: '--internationl-orange-engineering', prices: [50100, 50000]},
 ];
 
-const resolved = (page: Page, property: string, token: string): Promise<string> =>
-  page.evaluate(([property, name]) => {
-    const swatch = document.createElement('span');
-    swatch.style.setProperty(property, `var(${name})`);
-    document.body.append(swatch);
-    const value = getComputedStyle(swatch).getPropertyValue(property);
-    swatch.remove();
-    return value;
-  }, [property, token]);
-
-const inkNamed = (page: Page, token: string): Promise<string> => resolved(page, 'color', token);
-
-const feedDot = (page: Page): Promise<string> =>
-  page.getByRole('status', {name: 'feed'}).evaluate(feed => getComputedStyle(feed, '::before').backgroundColor);
-
 test('the feed dot glows live', async ({page}) => {
   await scriptedMarket(page, [50000, 50100]);
   await page.goto('demos?tab=charts');
 
-  await expect(delta(page)).toBeVisible({timeout: 30_000});
+  await expect(priceDelta(page)).toBeVisible({timeout: 30_000});
   await expect.poll(() => feedDot(page)).toBe(await inkNamed(page, '--mint'));
 });
 
@@ -134,10 +113,10 @@ for (const {trend, sign, ink, prices} of markets) {
     await scriptedMarket(page, prices);
     await page.goto('demos?tab=charts');
 
-    await expect(delta(page)).toBeVisible({timeout: 30_000});
-    await expect(delta(page)).toHaveText(sign);
+    await expect(priceDelta(page)).toBeVisible({timeout: 30_000});
+    await expect(priceDelta(page)).toHaveText(sign);
 
-    const results = await new AxeBuilder({page}).include('section[aria-label="live trades"]').withTags(['wcag2a', 'wcag2aa']).analyze();
+    const results = await new AxeBuilder({page}).include(priceCardScope).withTags(['wcag2a', 'wcag2aa']).analyze();
 
     expect(results.violations.map(v => ({
       id: v.id,
@@ -151,8 +130,8 @@ for (const {trend, sign, ink, prices} of markets) {
     await scriptedMarket(page, prices);
     await page.goto('demos?tab=charts');
 
-    await expect(delta(page)).toBeVisible({timeout: 30_000});
-    await expect(delta(page)).toHaveText(sign);
-    await expect(delta(page)).toHaveCSS('color', await inkNamed(page, ink));
+    await expect(priceDelta(page)).toBeVisible({timeout: 30_000});
+    await expect(priceDelta(page)).toHaveText(sign);
+    await expect(priceDelta(page)).toHaveCSS('color', await inkNamed(page, ink));
   });
 }
