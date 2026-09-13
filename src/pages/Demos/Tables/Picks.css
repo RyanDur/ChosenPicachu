@@ -18,7 +18,7 @@
     }
   }
 
-  .pick.current {
+  .pick[aria-pressed="true"] {
     color: var(--ink);
     border-bottom-color: var(--ink-muted);
   }
