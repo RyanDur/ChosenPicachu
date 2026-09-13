@@ -11,6 +11,17 @@ The home page states what the site is, how it shows, and how it responds. This d
 5. **Does it test reality?** Real collaborators: the real router, the real store, the real components beneath. The world is stubbed only at its edge, the network through msw and the clock when time is the subject. Nothing of ours is mocked, spied or replaced. A warning printed during the run is a defect the test is hiding, never something to silence.
 6. **Is a test missing?** Read the code under test and ask what it does that no spec at any level names: a state it can be in, a branch it takes, an edge it handles, a thing a person would notice broken. A behaviour with no test pinning it is a finding on this door, pointed at the code line that has no test, with the test it wants named in a sentence. Not every function needs a test; every behaviour does.
 
+## Every test is a sentence about behaviour, North's way
+
+Dan North, Introducing BDD: https://dannorth.net/blog/introducing-bdd/
+
+- The name is a sentence: the thing under test should do something. Read the name and you know the behaviour. Read a failing name and you know what happened: a bug came in, the behaviour moved elsewhere, or a premise of the system changed, and in that last case the test is deleted, not mended.
+- "Should" is the word that invites the challenge: should it, really? A name that cannot carry it is describing structure, not behaviour.
+- One sentence is one test's worth. The body verifies what the sentence says and nothing more.
+- Given, when, then. The arrangement is the given, the act is the when, the assertion is the then, and a reader can find each without a comment.
+- A name that does not fit the thing under test is the behaviour saying it lives elsewhere; move it before pinning it.
+- The next test to write is the next most important thing the system does not do yet.
+
 ## Unit tests hold Beck's properties
 
 Kent Beck, Desirable Unit Tests: https://newsletter.kentbeck.com/p/desirable-unit-tests
@@ -42,8 +53,6 @@ Playwright, Best Practices: https://playwright.dev/docs/best-practices
 - Locators by role with a name, then label, then text. Never CSS, XPath or test ids.
 - Web-first assertions that wait: `expect(locator).toBeVisible()`, never `expect(await locator.isVisible())`, and never a manual sleep.
 - Each journey stands alone with its own state. It runs in every browser the site ships to.
-
-## Page objects hold Fowler
 
 ## Smoke tests hold the deployed site to life
 

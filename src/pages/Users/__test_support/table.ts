@@ -2,7 +2,6 @@ import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {User} from '@components/Users/UserInfo/types';
 import {fillOutAddress, fillOutUser} from '../UserInformation/__test_support';
-import {equalAddresses} from '../addresses';
 
 const swiftKeys = userEvent.setup({delay: null});
 
@@ -41,16 +40,18 @@ export const edit = (name: string): Promise<void> => actionOn(name, 'Edit', 'lin
 export const clone = (name: string): Promise<void> => actionOn(name, 'Clone', 'link');
 export const remove = (name: string): Promise<void> => actionOn(name, 'Remove', 'button');
 
-export const addUser = async (user: User): Promise<void> => {
+const submitting = async (user: User, workAddress: () => Promise<void>): Promise<void> => {
   await fillOutUser(user);
   await fillOutAddress(user.homeAddress, 'home');
-  if (equalAddresses(user.homeAddress, user.workAddress)) {
-    await swiftKeys.click(screen.getByRole('checkbox', {name: 'Same as Home'}));
-  } else {
-    await fillOutAddress(user.workAddress!, 'work');
-  }
+  await workAddress();
   if (user.details !== undefined) {
     await swiftKeys.type(screen.getByLabelText('Details'), user.details);
   }
   await swiftKeys.click(await screen.findByRole('button', {name: 'Add'}));
 };
+
+export const addUser = (user: User): Promise<void> =>
+  submitting(user, () => fillOutAddress(user.workAddress!, 'work'));
+
+export const addUserWhoWorksFromHome = (user: User): Promise<void> =>
+  submitting(user, () => swiftKeys.click(screen.getByRole('checkbox', {name: 'Same as Home'})));

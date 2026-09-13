@@ -121,7 +121,7 @@ describe('a user form', () => {
         }]);
       });
 
-      test('the work address reads as the home address while the box is ticked, and as what was typed when it is not', async () => {
+      test('ticking Same as Home shows the home address in the work fields, disabled', async () => {
         const {form} = added();
         render(form);
         await fillOutForm(info);
@@ -132,6 +132,13 @@ describe('a user form', () => {
         expect(addressGroup('work').getByLabelText('City')).toHaveValue(info.homeAddress.city);
         expect(addressGroup('work').getByLabelText('Postal / Zip code')).toHaveValue(info.homeAddress.zip);
         expect(addressGroup('work').getByLabelText('Street')).toBeDisabled();
+      });
+
+      test('unticking Same as Home gives back the work address that was typed', async () => {
+        const {form} = added();
+        render(form);
+        await fillOutForm(info);
+        await userEvent.click(sameAsHome());
 
         await userEvent.click(sameAsHome());
 

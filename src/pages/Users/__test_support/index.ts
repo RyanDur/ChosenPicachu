@@ -1,5 +1,6 @@
 export {
   addUser,
+  addUserWhoWorksFromHome,
   clone,
   edit,
   fullName,

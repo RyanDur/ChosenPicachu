@@ -7,6 +7,7 @@ import {createUser} from '@components/Users/resource/usersApi';
 import {addressGroup} from '../UserInformation/__test_support';
 import {
   addUser,
+  addUserWhoWorksFromHome,
   clone,
   edit,
   fullName,
@@ -20,7 +21,7 @@ import {
   worksFromHomeColumn
 } from '../__test_support';
 
-const conciseUser = (firstName: string, worksFromHome: boolean): User => {
+const conciseUser = (firstName: string): User => {
   const homeAddress: AddressInfo = {
     streetAddress: '12 Elm St',
     city: 'Springfield',
@@ -28,7 +29,7 @@ const conciseUser = (firstName: string, worksFromHome: boolean): User => {
     zip: '62704'
   };
   return {
-    ...createUser(worksFromHome),
+    ...createUser(),
     info: {
       firstName,
       lastName: 'Tester',
@@ -36,7 +37,7 @@ const conciseUser = (firstName: string, worksFromHome: boolean): User => {
       dob: new Date(1984, 5, 2)
     },
     homeAddress,
-    workAddress: worksFromHome ? homeAddress : {
+    workAddress: {
       streetAddress: '9 Oak Ave',
       city: 'Chatham',
       state: 'IL',
@@ -48,7 +49,7 @@ const conciseUser = (firstName: string, worksFromHome: boolean): User => {
 
 describe('the users page', () => {
   describe('ranking the users', () => {
-    it('groups by a column menu criterion', async () => {
+    it('sorting works-from-home ascending puts every No before every Yes', async () => {
       render(<TestApp at={Paths.users}/>);
       await roster();
 
@@ -86,12 +87,12 @@ describe('the users page', () => {
 
   describe('adding a user', () => {
     it('a new user joins the roster, saying whether they work from home', async () => {
-      const aUser = conciseUser('Aiko', true);
-      const anotherUser = conciseUser('Bram', false);
+      const aUser = conciseUser('Aiko');
+      const anotherUser = conciseUser('Bram');
       render(<TestApp at={Paths.users}/>);
       await roster();
 
-      await addUser(aUser);
+      await addUserWhoWorksFromHome(aUser);
       await addUser(anotherUser);
 
       expect(worksFromHome(await rowOf(fullName(aUser)))).toBe('Yes');
@@ -99,7 +100,7 @@ describe('the users page', () => {
     });
 
     it('a user born on a day is shown that day, viewing and editing', async () => {
-      const born = conciseUser('Faye', false);
+      const born = conciseUser('Faye');
       render(<TestApp at={Paths.users}/>);
       await roster();
       await addUser(born);
@@ -196,7 +197,7 @@ describe('the users page', () => {
   });
 
   test('an updated user shows their new name in the roster', async () => {
-    const person = conciseUser('Cleo', false);
+    const person = conciseUser('Cleo');
     render(<TestApp at={Paths.users}/>);
     await roster();
     await addUser(person);
@@ -209,7 +210,7 @@ describe('the users page', () => {
   });
 
   test('a removed user leaves the roster', async () => {
-    const person = conciseUser('Dev', false);
+    const person = conciseUser('Dev');
     render(<TestApp at={Paths.users}/>);
     await roster();
     await addUser(person);
@@ -222,7 +223,7 @@ describe('the users page', () => {
   });
 
   test('a cloned user stands once more in the roster', async () => {
-    const person = conciseUser('Eli', false);
+    const person = conciseUser('Eli');
     render(<TestApp at={Paths.users}/>);
     await roster();
     await addUser(person);

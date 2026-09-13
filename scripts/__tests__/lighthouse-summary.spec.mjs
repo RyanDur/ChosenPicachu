@@ -31,24 +31,30 @@ describe('the lighthouse summary', () => {
     expect(table).toContain('| performance | 80 | 80 | 85 | below the floor |');
   });
 
-  test('a page folds its runs behind its name, with the floors from the rc entry whose pattern matches the url', () => {
+  test('a page folds its runs behind its name and url', () => {
     const fold = foldOf({page: 'demos', runs, rc});
     expect(fold).toMatch(/^<details><summary>demos · http:\/\/localhost:4517\/ChosenPicachu\/demos\/, 3 runs<\/summary>/);
-    expect(fold).toContain('| accessibility | 100 | 96 to 100 | 100 | holds |');
     expect(fold).not.toContain('what fell short');
     expect(fold).toMatch(/<\/details>$/);
   });
 
-  test('every page is a row of representative scores, a score under its floor naming the floor', () => {
-    const table = pageTable([
-      {page: 'demos', runs, rc},
-      {page: 'gallery', runs: [run({performance: 0.8, accessibility: 1, 'best-practices': 1, seo: 1}, true)], rc},
-      {page: 'users'}
-    ]);
+  test('the floors come from the rc entry whose pattern matches the url', () => {
+    expect(foldOf({page: 'demos', runs, rc})).toContain('| accessibility | 100 | 96 to 100 | 100 | holds |');
+  });
+
+  test('a page is a row of its representative scores', () => {
+    const table = pageTable([{page: 'demos', runs, rc}]);
     expect(table).toContain('| page | performance | accessibility | best-practices | seo |');
     expect(table).toContain('| demos | 92 | 100 | 100 | 100 |');
-    expect(table).toContain('| gallery | 80 (floor 85) | 100 | 100 | 100 |');
-    expect(table).toContain('| users | the audit did not run |  |  |  |');
+  });
+
+  test('a score under its floor names the floor', () => {
+    const under = [run({performance: 0.8, accessibility: 1, 'best-practices': 1, seo: 1}, true)];
+    expect(pageTable([{page: 'gallery', runs: under, rc}])).toContain('| gallery | 80 (floor 85) | 100 | 100 | 100 |');
+  });
+
+  test('a page with no reports says the audit did not run', () => {
+    expect(pageTable([{page: 'users'}])).toContain('| users | the audit did not run |  |  |  |');
   });
 
   test('the run summary is the table of pages, then a fold for each page that was audited', () => {
@@ -58,7 +64,7 @@ describe('the lighthouse summary', () => {
     expect(summary).not.toContain('<details><summary>users');
   });
 
-  test('node reads the downloaded reports the way the workflow lays them out, one directory per page', () => {
+  test('node reads one directory of reports per page', () => {
     const reports = mkdtempSync(join(tmpdir(), 'lighthouse-reports-'));
     mkdirSync(join(reports, 'lighthouse-demos'));
     writeFileSync(join(reports, 'lighthouse-demos', 'manifest.json'), JSON.stringify(runs));
