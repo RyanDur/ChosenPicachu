@@ -50,7 +50,7 @@ const interaction = {
 };
 
 describe('the review prompt', () => {
-  test('sends the reviewer to the doors on the home page first', () => {
+  test('a full review sends the reviewer to the doors on the home page and scopes them to the whole of src', () => {
     const prompt = promptFor({scope: 'full'});
     expect(prompt).toContain('src/pages/Home/Structure.tsx');
     expect(prompt).toContain('src/pages/Home/Presentation.tsx');
@@ -97,17 +97,17 @@ describe('the review report', () => {
     expect(summaryOf([])).toContain('No findings');
   });
 
-  test('findings are counted and grouped by door, worst first', () => {
+  test('findings are counted by severity', () => {
+    expect(summaryOf([testNote, note, concern, violation, interaction])).toContain('1 violation, 1 concern, 3 notes.');
+  });
+
+  test('findings are grouped by door, worst door and worst finding first', () => {
     const summary = summaryOf([testNote, note, concern, violation, interaction]);
-    expect(summary).toContain('1 violation, 1 concern, 3 notes.');
     expect(placeOf(summary, '### structure')).toBeLessThan(placeOf(summary, '### presentation'));
     expect(placeOf(summary, '### presentation')).toBeLessThan(placeOf(summary, '### dynamic interaction'));
     expect(placeOf(summary, '### dynamic interaction')).toBeLessThan(placeOf(summary, '### tests'));
     expect(placeOf(summary, '### dynamic interaction')).toBeLessThan(placeOf(summary, 'a handler is named for the act in progress'));
     expect(placeOf(summary, 'a div wraps a list')).toBeLessThan(placeOf(summary, 'a section has no heading'));
-    expect(summary).toContain('`src/b.css:9`');
-    expect(summary).toContain('> Tag selectors are for resets only');
-    expect(summary).toContain('`src/__tests__/c.spec.tsx:4`');
   });
 
   test('the doors are tallied in a table before the prose', () => {

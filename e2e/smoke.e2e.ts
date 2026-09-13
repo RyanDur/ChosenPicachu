@@ -16,7 +16,13 @@ test('every door the gallery offers hangs art from its museum', async ({page}) =
   }
 });
 
-test('vam art truly renders and opens into a piece', async ({page}) => {
+test('the V&A wall hangs its art', async ({page}) => {
+  await page.goto(`gallery?page=1&size=8&tab=vam`);
+
+  await expect(firstPainting(page)).toBeVisible({timeout: 30_000});
+});
+
+test('a piece on the V&A wall opens into its own page', async ({page}) => {
   await page.goto(`gallery?page=1&size=8&tab=vam`);
   await expect(firstPainting(page)).toBeVisible({timeout: 30_000});
 
@@ -33,7 +39,7 @@ test('a search still hangs art', async ({page}) => {
   await expect(emptyWall(page)).toHaveCount(0);
 });
 
-test('searching through the ui filters the wall', async ({page}) => {
+test('a search typed into the box lands in the address and the wall stays hung', async ({page}) => {
   await page.goto('gallery?page=1&size=8');
   await expect(wall(page)).toHaveCount(8, {timeout: 30_000});
 
@@ -43,13 +49,13 @@ test('searching through the ui filters the wall', async ({page}) => {
   await expect(wall(page)).toHaveCount(8, {timeout: 30_000});
 });
 
-test('a piece page presents its artwork data', async ({page}) => {
+test('a piece page names the artwork it shows', async ({page}) => {
   await page.goto(`gallery/27992?tab=aic`);
 
   await expect(page.getByRole('banner')).toContainText('La Grande Jatte', {timeout: 30_000});
 });
 
-test('the users page presents the form and the seeded table', async ({page}) => {
+test('the users page opens with somewhere to add a person and the people already there', async ({page}) => {
   await page.goto(`users`);
 
   await expect(page.getByLabel('First Name')).toBeVisible({timeout: 15_000});

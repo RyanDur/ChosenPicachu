@@ -3,14 +3,20 @@ import {audited, slug, stage} from '../lighthouse/audited.mjs';
 import {pages} from '../../e2e/pages';
 
 describe('the pages under a performance budget', () => {
-  test('are the site pages that say so, named for their artifacts and addressed on the stub stage', () => {
+  test('are the site pages that say so', () => {
     const matrix = audited();
     const budgeted = pages.filter(page => page.budgeted === true);
 
     expect(matrix).toHaveLength(budgeted.length);
     expect(matrix.length).toBeGreaterThan(0);
+    matrix.forEach(({page}, at) => expect(page).toBe(slug(budgeted[at].name)));
+  });
+
+  test('are each named for their artifact and addressed on the stub stage', () => {
+    const matrix = audited();
+    const budgeted = pages.filter(page => page.budgeted === true);
+
     matrix.forEach(({page, url}, at) => {
-      expect(page).toBe(slug(budgeted[at].name));
       expect(page).not.toMatch(/\s/);
       expect(url).toBe(`${stage}${budgeted[at].path}`);
     });

@@ -1,4 +1,8 @@
-import {baseOf, demosLinks, preloaded} from '../entry-points.mjs';
+import {readFileSync} from 'node:fs';
+import {baseOf, demosLinks, preloaded, staticRoutesOf} from '../entry-points.mjs';
+import {Paths} from '@pages/Paths';
+
+const pathsSource = readFileSync('src/pages/Paths.ts', 'utf-8');
 
 const manifest = {
   'index.html': {file: 'assets/index-abc.js', imports: ['shared.ts']},
@@ -58,5 +62,24 @@ describe('the entry points', () => {
       '    <link rel="modulepreload" crossorigin href="/app/assets/a-abc.js">',
       '    <link rel="modulepreload" crossorigin href="/app/assets/b-abc.js">'
     ]);
+  });
+});
+
+describe('the entry points the build writes', () => {
+  test('are every path of the site that carries no parameter', () => {
+    const fixed = Object.values(Paths).filter(path => path.startsWith('/') && path !== '/' && !path.includes(':'));
+
+    expect(staticRoutesOf(pathsSource)).toEqual(fixed);
+  });
+
+  test('preload the demos on every demos path, and nowhere else', () => {
+    const links = demosLinks(manifest, baseOf(shell));
+    const routes = staticRoutesOf(pathsSource);
+    const demos = routes.filter(route => route.startsWith('/demos/'));
+    const elsewhere = routes.filter(route => !route.startsWith('/demos/'));
+
+    expect(demos.length).toBeGreaterThan(0);
+    demos.forEach(route => expect(preloaded(shell, links, route)).toContain('modulepreload'));
+    elsewhere.forEach(route => expect(preloaded(shell, links, route)).toBe(shell));
   });
 });

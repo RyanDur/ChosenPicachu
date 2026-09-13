@@ -2,7 +2,7 @@ import {agents, doors, qaNames, reading, tests} from '../review/agents.mjs';
 import {promptFor} from '../review/prompt.mjs';
 
 describe('the review\'s QAs', () => {
-  test('one QA per door, on opus, reading only', () => {
+  test('every door gets its own QA that runs on opus and can only read', () => {
     const qas = agents();
     expect(Object.keys(qas)).toEqual(['structure-qa', 'presentation-qa', 'dynamic-interaction-qa', 'tests-qa']);
     Object.values(qas).forEach(qa => {
@@ -31,17 +31,25 @@ describe('the review\'s QAs', () => {
     });
     expect(qas['tests-qa'].prompt).toContain('You review the tests.');
     expect(qas['tests-qa'].prompt).toContain('the only finding you make on the site is that a test is missing');
+  });
+
+  test('the tests QA is sent to the tests door and the test support', () => {
+    const qas = agents();
     expect(qas['tests-qa'].prompt).toContain('scripts/review/tests.md');
     expect(qas['tests-qa'].prompt).toContain('src/test-support/');
   });
 
-  test('the lead carries the values, splits the scope, sends the four QAs their halves, and corroborates what comes back', () => {
+  test('the lead carries the values and splits the scope between the four QAs', () => {
     const lead = promptFor({scope: 'changes', before: 'abc', after: 'def'});
     expect(lead).toContain('# What every reviewer here holds');
     expect(lead).toContain('scripts/review/tests.md');
     expect(lead).toContain('The scope has two halves.');
     qaNames.forEach(name => expect(lead).toContain(name));
     expect(lead).toContain('git diff abc def');
+  });
+
+  test('the lead corroborates every finding that comes back', () => {
+    const lead = promptFor({scope: 'changes', before: 'abc', after: 'def'});
     expect(lead).toContain('corroborate every finding yourself');
   });
 });

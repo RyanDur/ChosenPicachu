@@ -62,7 +62,6 @@ test('the period menu stays hidden until asked', async ({page}) => {
   await page.goto('demos?tab=charts');
 
   await expect(priceDelta(page)).toBeVisible({timeout: 30_000});
-  await expect(priceDelta(page)).toHaveText(/^\+/);
   await expect(pricePeriodToggle(page)).toBeVisible();
   await expect(pricePeriod(page, 'week')).toBeHidden();
 

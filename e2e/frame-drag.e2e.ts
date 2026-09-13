@@ -2,7 +2,7 @@ import {expect, test} from '@playwright/test';
 import {columnHeader, columnOrder, dragColumnPast, dragRowPast, rowOrder, sortBy, stages} from './__test_support';
 
 for (const {name, at, table} of stages) {
-  test(`a trader drags a column and a row into new seats, in ${name}`, async ({page}) => {
+  test(`a trader drags a column and a row into new seats without the page erring, in ${name}`, async ({page}) => {
     const troubles: string[] = [];
     page.on('pageerror', error => troubles.push(String(error)));
     await page.goto(at);

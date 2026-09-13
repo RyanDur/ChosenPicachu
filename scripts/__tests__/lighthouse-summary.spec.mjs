@@ -19,7 +19,7 @@ const runs = [
 ];
 
 describe('the lighthouse summary', () => {
-  test('the representative run scores, with the spread across runs and the floor beside it', () => {
+  test("the score table shows the representative run's score, with the spread across runs and the floor beside it", () => {
     const table = scoreTable(runs, {performance: 0.85, accessibility: 1});
     expect(table).toContain('| performance | 92 | 75 to 92 | 85 | holds |');
     expect(table).toContain('| accessibility | 100 | 96 to 100 | 100 | holds |');
