@@ -1,14 +1,12 @@
 import {TestApp} from '@test-support/TestApp';
-import {anyRequestRespondsWith, server} from '@test-support/server';
-import {delay, http, HttpResponse} from 'msw';
-import {env} from '@env';
+import {anyRequestRespondsWith} from '@test-support/server';
 import {render, screen, waitFor, within} from '@testing-library/react';
 import {HTTPError} from '@transport/types';
 import {faker} from '@faker-js/faker';
 import {Paths} from '@pages/Paths';
 import {Source} from '@components/art-gallery/museums/types/resource';
 import {AICArtResponse} from '@components/art-gallery/museums/aic/types';
-import {setupAICArtPieceResponse} from '@components/art-gallery/__test_support';
+import {heldAICArtPieceResponse, setupAICArtPieceResponse} from '@components/art-gallery/__test_support';
 
 describe('viewing a piece', () => {
   const aicArtResponse: AICArtResponse = {
@@ -22,14 +20,14 @@ describe('viewing a piece', () => {
   };
 
   test('when loading the piece of art', async () => {
-    server.use(http.get(`${env.aicDomain}/:id`, async () => {
-      await delay(150);
-      return HttpResponse.json(aicArtResponse);
-    }));
+    const pieceArrives = heldAICArtPieceResponse(aicArtResponse, aicArtResponse.data.id);
 
     render(<TestApp at={`${Paths.artGallery}${aicArtResponse.data.id}?tab=${Source.AIC}`}/>);
 
     expect(await screen.findByRole('progressbar', {name: 'loading piece'})).toBeInTheDocument();
+
+    pieceArrives();
+
     await waitFor(() => expect(screen.queryByRole('progressbar', {name: 'loading piece'})).not.toBeInTheDocument());
     expect(screen.getByText(aicArtResponse.data.artist_display)).toBeInTheDocument();
   });

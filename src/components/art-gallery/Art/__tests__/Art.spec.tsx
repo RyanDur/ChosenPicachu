@@ -8,19 +8,19 @@ import {Source} from '@components/art-gallery/museums/types/resource';
 import {aicArtResponse} from '@test-support/fixtures';
 import {test} from 'vitest';
 import {Paths} from '@pages/Paths';
-import {heldAICAllArtResponse, setupAICAllArtResponse} from '@components/art-gallery/__test_support';
+import {heldAICAllArtResponse, setupAICAllArtResponse, wallHangs} from '@components/art-gallery/__test_support';
 
 describe('The gallery.', () => {
   test('loads the wall exactly once on mount', async () => {
     let hits = 0;
-    const count = ({request}: {request: Request}) => {
+    const count = ({request}: { request: Request }) => {
       if (request.url.startsWith(`${env.aicDomain}/search`)) hits++;
     };
     server.events.on('response:mocked', count);
     setupAICAllArtResponse(aicArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
 
-    await screen.findAllByRole('figure');
+    await wallHangs();
     server.events.removeListener('response:mocked', count);
 
     expect(hits).toEqual(1);
@@ -30,7 +30,7 @@ describe('The gallery.', () => {
     setupAICAllArtResponse(aicArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
 
-    const figures = await screen.findAllByRole('figure');
+    const figures = await wallHangs();
     const walls = figures.map(figure => within(figure).getByRole('img'));
     expect(walls.length).toBeGreaterThan(6);
     walls.slice(0, 6).forEach(img => expect(img).not.toHaveAttribute('loading', 'lazy'));

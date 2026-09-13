@@ -1,4 +1,4 @@
-import {delay, http, HttpResponse} from 'msw';
+import {http, HttpResponse} from 'msw';
 import {server} from '@test-support/server';
 import {AICAllArtResponse, AICArtResponse} from '@components/art-gallery/museums/aic/types';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
@@ -14,6 +14,14 @@ const {aicDomain, aicPictures, clevelandDomain, harvardAPIKey, harvardDomain, va
 const paramsMatch = (request: Request, expected: Record<string, string>) => {
   const params = new URL(request.url).searchParams;
   return Object.entries(expected).every(([key, value]) => params.get(key) === value);
+};
+
+const holding = (): {held: Promise<void>, release: () => void} => {
+  let release = (): void => undefined;
+  const held = new Promise<void>(resolve => {
+    release = resolve;
+  });
+  return {held, release};
 };
 
 type AllArt = {
@@ -35,10 +43,7 @@ export const setupAICAllArtResponse = (response: AICAllArtResponse, options: All
     paramsMatch(request, allArtParams(options)) ? HttpResponse.json(response) : undefined));
 
 export const heldAICAllArtResponse = (response: AICAllArtResponse, options: AllArt = {limit: defaultRecordLimit, page: 1}): () => void => {
-  let release = (): void => undefined;
-  const held = new Promise<void>(resolve => {
-    release = resolve;
-  });
+  const {held, release} = holding();
   server.use(http.get(`${aicDomain}/search`, async ({request}) => {
     if (!paramsMatch(request, allArtParams(options))) return undefined;
     await held;
@@ -69,23 +74,39 @@ export const setupAICArtPieceResponse = (response: AICArtResponse, id: number) =
       ? HttpResponse.json(response)
       : undefined));
 
+export const heldAICArtPieceResponse = (response: AICArtResponse, id: number): () => void => {
+  const {held, release} = holding();
+  server.use(http.get(`${aicDomain}/:id`, async ({request, params}) => {
+    if (params.id !== String(id) || !paramsMatch(request, {fields: fields.join()})) return undefined;
+    await held;
+    return HttpResponse.json(response);
+  }));
+  return release;
+};
+
 export const refuseAICPictures = () =>
   server.use(http.get(`${aicPictures}/:image/info.json`, () => HttpResponse.error()));
 
 export const refuseVAMPictures = () =>
   server.use(http.get(`${vamPictures}/:image/info.json`, () => HttpResponse.error()));
 
-export const delayAICPictures = (ms: number) =>
+export const heldAICPictures = (): () => void => {
+  const {held, release} = holding();
   server.use(http.get(`${aicPictures}/:image/info.json`, async () => {
-    await delay(ms);
+    await held;
     return HttpResponse.json({});
   }));
+  return release;
+};
 
-export const delayVAMPictures = (ms: number) =>
+export const heldVAMPictures = (): () => void => {
+  const {held, release} = holding();
   server.use(http.get(`${vamPictures}/:image/info.json`, async () => {
-    await delay(ms);
+    await held;
     return HttpResponse.json({});
   }));
+  return release;
+};
 
 export const setupClevelandAllArtResponse = (response: ClevelandAllArtResponse, limit = defaultRecordLimit) =>
   server.use(http.get(`${clevelandDomain}/`, ({request}) =>
