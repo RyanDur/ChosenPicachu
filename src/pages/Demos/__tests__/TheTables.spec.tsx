@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 import {broadcast, listeningFeed, tradeFrame} from '@test-support/feed';
 import {feedIsSubscribed} from '@test-support';
 import {opened, reveals, story} from '@pages/Demos/Recipe/__test_support';
-import {tableControls} from '@pages/Demos/Tables/__test_support';
+import {chosenDials, tableControls} from '@pages/Demos/Tables/__test_support';
 import {texts} from '@components/DragSortableTable/__test_support';
 
 const now = 1700000000000;
@@ -343,10 +343,7 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/Leave the motion out/);
     expect(recipe).not.toHaveTextContent(/1cqi/);
     expect(recipe).not.toHaveTextContent(/Commit inside the move/);
-    const controls = await tableControls();
-    expect(within(controls).getByRole('radio', {name: 'Lazy'})).toBeChecked();
-    expect(within(controls).getByRole('radio', {name: 'Keep'})).toBeChecked();
-    expect(within(controls).getByRole('radio', {name: 'Static'})).toBeChecked();
+    expect(await chosenDials()).toEqual(['Lazy', 'Keep', 'Static']);
   });
 
   test('a hash arriving in the url is brought to its station', async () => {
@@ -358,6 +355,7 @@ describe('the tables demo', () => {
     const feed = await listeningFeed();
     try {
       render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+      await feedIsSubscribed();
 
       await screen.findByRole('heading', {name: 'Slice the design into stories'});
       expect(brought).toContain('station-5');
@@ -455,10 +453,7 @@ describe('the tables demo', () => {
     render(<TestApp at={demosAt('?tab=tables&pace=lazy&origin=keep&motion=static')} feed={feed}/>);
 
     await feedIsSubscribed();
-    const controls = await tableControls();
-    expect(within(controls).getByRole('radio', {name: 'Lazy'})).toBeChecked();
-    expect(within(controls).getByRole('radio', {name: 'Keep'})).toBeChecked();
-    expect(within(controls).getByRole('radio', {name: 'Static'})).toBeChecked();
+    expect(await chosenDials()).toEqual(['Lazy', 'Keep', 'Static']);
     expect(screen.getByText('<LazyTable className="keep static"/>')).toBeVisible();
   });
 
@@ -523,6 +518,7 @@ describe('the tables demo', () => {
       const feed = await listeningFeed();
 
       render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+      await feedIsSubscribed();
 
       expect(await screen.findByRole('region', {name: 'live aggregations'})).toBeInTheDocument();
       expect(screen.queryByTitle('the living table, in vanilla')).not.toBeInTheDocument();
@@ -532,6 +528,7 @@ describe('the tables demo', () => {
       const feed = await listeningFeed();
 
       render(<TestApp at={demosAt('?tab=tables&world=vanilla')} feed={feed}/>);
+      await feedIsSubscribed();
 
       const frame = await standFrame();
       expect(frame).toHaveAttribute('srcdoc', expect.stringContaining('<table'));
@@ -544,6 +541,7 @@ describe('the tables demo', () => {
       const feed = await listeningFeed();
 
       render(<TestApp at={demosAt('?tab=tables&world=vanilla')} feed={feed}/>);
+      await feedIsSubscribed();
 
       expect(await screen.findByRole('heading', {name: 'The trader can watch the market live, in windows'})).toBeInTheDocument();
       expect(screen.getByText('Drag resize')).toBeInTheDocument();
@@ -555,6 +553,7 @@ describe('the tables demo', () => {
       const feed = await listeningFeed();
 
       render(<TestApp at={demosAt('?tab=tables&world=vanilla&tut=menu')} feed={feed}/>);
+      await feedIsSubscribed();
 
       expect(await screen.findByRole('heading', {name: 'The trader can sort the windows by any measure, or take the order back'})).toBeInTheDocument();
     });
@@ -563,6 +562,7 @@ describe('the tables demo', () => {
       const feed = await listeningFeed();
 
       render(<TestApp at={demosAt('?tab=tables&world=vanilla&tut=resize')} feed={feed}/>);
+      await feedIsSubscribed();
 
       expect(await screen.findByRole('heading', {name: 'The trader can widen a column'})).toBeInTheDocument();
     });
@@ -581,6 +581,7 @@ describe('the tables demo', () => {
       const feed = await listeningFeed();
 
       render(<TestApp at={demosAt('?tab=tables&world=vanilla')} feed={feed}/>);
+      await feedIsSubscribed();
 
       expect(await screen.findByText('what am I looking at?')).toBeInTheDocument();
       expect(screen.getByTitle('the living table, in vanilla')).toBeInTheDocument();
@@ -590,6 +591,7 @@ describe('the tables demo', () => {
       const feed = await listeningFeed();
 
       render(<TestApp at={demosAt('?tab=tables&world=vanilla')} feed={feed}/>);
+      await feedIsSubscribed();
 
       const frame = await standFrame();
 
@@ -600,6 +602,7 @@ describe('the tables demo', () => {
       const feed = await listeningFeed();
 
       render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+      await feedIsSubscribed();
 
       await userEvent.click(await screen.findByRole('radio', {name: 'Vanilla'}));
 

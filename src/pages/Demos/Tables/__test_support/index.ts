@@ -1,1 +1,1 @@
-export {tableControls} from './controls';
+export {chosenDials, tableControls} from './controls';

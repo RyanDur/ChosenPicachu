@@ -13,6 +13,11 @@ export const addChart = async (name: string): Promise<void> => {
 
 export const doorway = (name: string): HTMLElement => screen.getByRole('link', {name});
 
+export const walkThrough = async (chart: string, recipe: string): Promise<HTMLElement> => {
+  await userEvent.click(doorway(chart));
+  return screen.findByRole('region', {name: recipe});
+};
+
 export const slot = (name: string): HTMLElement => {
   const seat = screen.getAllByRole('listitem').find(item => within(item).queryByRole('link', {name}) !== null);
   if (!seat) {

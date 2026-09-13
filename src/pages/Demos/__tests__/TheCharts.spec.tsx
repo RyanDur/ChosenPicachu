@@ -4,7 +4,7 @@ import {render, screen, waitFor, within} from '@testing-library/react';
 import {broadcast, listeningFeed, nonTradeFrame, tradeFrame, tradeFrameWith} from '@test-support/feed';
 import {feedIsSubscribed} from '@test-support';
 import userEvent from '@testing-library/user-event';
-import {addChart, addMenu, doorway, dragChart, keys, releaseDrag, slot} from '@pages/Demos/Charts/__test_support';
+import {addChart, addMenu, doorway, dragChart, keys, releaseDrag, slot, walkThrough} from '@pages/Demos/Charts/__test_support';
 import {story} from '@pages/Demos/Recipe/__test_support';
 import {format} from 'date-fns';
 
@@ -27,6 +27,7 @@ describe('a list of charts', () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
+    await feedIsSubscribed();
 
     expect(await screen.findByRole('region', {name: 'live trades'})).toBeVisible();
     expect(screen.queryByRole('region', {name: 'candles'})).not.toBeInTheDocument();
@@ -36,6 +37,7 @@ describe('a list of charts', () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
+    await feedIsSubscribed();
     await screen.findByRole('region', {name: 'live trades'});
 
     await addChart('Candles');
@@ -49,6 +51,7 @@ describe('a list of charts', () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
+    await feedIsSubscribed();
     await screen.findByRole('region', {name: 'live trades'});
 
     await userEvent.click(screen.getAllByRole('button', {name: 'remove chart'})[0]);
@@ -61,6 +64,7 @@ describe('a list of charts', () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
+    await feedIsSubscribed();
     await screen.findByRole('region', {name: 'live trades'});
 
     expect(screen.queryByRole('button', {name: 'remove chart'})).not.toBeInTheDocument();
@@ -71,6 +75,7 @@ describe('a list of charts', () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
+    await feedIsSubscribed();
     await screen.findByRole('region', {name: 'live trades'});
 
     await keys('chart 1', 'ArrowDown');
@@ -85,6 +90,7 @@ describe('a list of charts', () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
+    await feedIsSubscribed();
     await screen.findByRole('region', {name: 'live trades'});
 
     await keys('chart 1', 'Delete');
@@ -98,6 +104,7 @@ describe('a list of charts', () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
+    await feedIsSubscribed();
     await screen.findByRole('region', {name: 'live trades'});
     dragChart('chart 1', 'chart 2', 100);
 
@@ -113,6 +120,7 @@ describe('a list of charts', () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('?tab=charts&graph=workspace')} feed={feed}/>);
+    await feedIsSubscribed();
     await screen.findByRole('region', {name: 'live trades'});
 
     expect(await screen.findByRole('heading', {name: 'let’s build this feature'})).toBeVisible();
@@ -130,6 +138,7 @@ describe('a list of charts', () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('?tab=charts&charts=candles')} feed={feed}/>);
+    await feedIsSubscribed();
     await screen.findByRole('region', {name: 'candles'});
 
     await userEvent.click(doorway('chart 1'));
@@ -143,10 +152,9 @@ describe('a list of charts', () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('?tab=charts&charts=candles')} feed={feed}/>);
+    await feedIsSubscribed();
     await screen.findByRole('region', {name: 'candles'});
-    await userEvent.click(doorway('chart 1'));
-
-    const recipe = await screen.findByRole('region', {name: 'build the candles yourself'});
+    const recipe = await walkThrough('chart 1', 'build the candles yourself');
     await within(recipe).findByText(/read the same trades as candles/);
     expect(recipe).toHaveTextContent('className="candlesticks"');
     expect(recipe).toHaveTextContent('.up .body');
@@ -158,6 +166,7 @@ describe('a list of charts', () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
+    await feedIsSubscribed();
     await screen.findByRole('region', {name: 'live trades'});
 
     await addChart('Pressure');
@@ -173,6 +182,7 @@ describe('a list of charts', () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
+    await feedIsSubscribed();
     await screen.findByRole('region', {name: 'live trades'});
 
     const page = screen.getByRole('article', {name: 'price line tutorial'});
@@ -189,6 +199,7 @@ describe('a list of charts', () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
+    await feedIsSubscribed();
     await screen.findByRole('region', {name: 'live trades'});
 
     const recipe = screen.getByRole('region', {name: 'build the price line yourself'});
@@ -207,10 +218,9 @@ describe('a list of charts', () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('?tab=charts&charts=candles')} feed={feed}/>);
+    await feedIsSubscribed();
     await screen.findByRole('region', {name: 'candles'});
-    await userEvent.click(doorway('chart 1'));
-
-    const recipe = await screen.findByRole('region', {name: 'build the candles yourself'});
+    const recipe = await walkThrough('chart 1', 'build the candles yourself');
     await within(recipe).findByText(/read the same trades as candles/);
     expect(recipe).toHaveTextContent('export const bucketTrades');
     expect(recipe).toHaveTextContent('export const mergeLive');
@@ -221,10 +231,9 @@ describe('a list of charts', () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('?tab=charts&charts=pressure')} feed={feed}/>);
+    await feedIsSubscribed();
     await screen.findByRole('region', {name: 'pressure'});
-    await userEvent.click(doorway('chart 1'));
-
-    const recipe = await screen.findByRole('region', {name: 'build the pressure yourself'});
+    const recipe = await walkThrough('chart 1', 'build the pressure yourself');
     expect(recipe).toHaveTextContent("side: schema.literalUnion('buy', 'sell')");
   });
 
@@ -232,6 +241,7 @@ describe('a list of charts', () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('?tab=charts&charts=candles,price,price')} feed={feed}/>);
+    await feedIsSubscribed();
 
     expect(await screen.findByRole('region', {name: 'candles'})).toBeVisible();
     expect(screen.getAllByRole('region', {name: 'live trades'})).toHaveLength(1);
@@ -241,6 +251,7 @@ describe('a list of charts', () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles,pressure')} feed={feed}/>);
+    await feedIsSubscribed();
     await screen.findByRole('region', {name: 'live trades'});
 
     const menu = addMenu();
@@ -258,6 +269,7 @@ describe('a list of charts', () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={chartPageAt('bogus')} feed={feed}/>);
+    await feedIsSubscribed();
 
     expect(await screen.findByRole('heading', {name: /BTC-USD/})).toBeVisible();
     expect(screen.queryByRole('article', {name: /tutorial/})).not.toBeInTheDocument();
@@ -267,10 +279,9 @@ describe('a list of charts', () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('?tab=charts&charts=pie,price')} feed={feed}/>);
+    await feedIsSubscribed();
     await screen.findByRole('region', {name: 'pie'});
-    await userEvent.click(doorway('chart 1'));
-
-    const recipe = await screen.findByRole('region', {name: 'build the pie yourself'});
+    const recipe = await walkThrough('chart 1', 'build the pie yourself');
     expect(recipe).toHaveTextContent('export const sideTotals');
     expect(recipe).toHaveTextContent('export const slices');
     expect(recipe).toHaveTextContent('export const sweepGates');
@@ -312,6 +323,7 @@ describe('the demos page', () => {
       const feed = await listeningFeed();
 
       render(<TestApp at={demosAt()} feed={feed}/>);
+      await feedIsSubscribed();
 
       const demoTabs = await screen.findByRole('navigation', {name: 'demos'});
       await userEvent.click(within(demoTabs).getByText('Charts'));
@@ -351,6 +363,7 @@ describe('the demos page', () => {
       const feed = await listeningFeed();
 
       render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
+      await feedIsSubscribed();
 
       await waitFor(() => expect(screen.getByRole('status', {name: 'feed'})).toHaveTextContent(/^live$/));
     });
@@ -392,6 +405,7 @@ describe('the demos page', () => {
       const feed = await listeningFeed();
 
       render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
+      await feedIsSubscribed();
 
       expect(await screen.findByRole('heading', {name: /BTC-USD/})).toBeVisible();
     });
@@ -400,6 +414,7 @@ describe('the demos page', () => {
       const feed = await listeningFeed();
 
       render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
+      await feedIsSubscribed();
 
       const explainers = await screen.findAllByText('what am I looking at?');
       expect(explainers).toHaveLength(2);
