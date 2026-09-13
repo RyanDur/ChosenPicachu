@@ -1,22 +1,14 @@
 import {defineConfig} from '@playwright/test';
 
-const stage = 'http://localhost:4517/ChosenPicachu/';
-
 export default defineConfig({
   testDir: './e2e',
-  testMatch: '**/*.e2e.ts',
-  testIgnore: '**/smoke.e2e.ts',
+  testMatch: '**/smoke.e2e.ts',
   retries: 2,
-  workers: process.env.CI ? 1 : undefined,
+  workers: 1,
   timeout: 60_000,
   use: {
-    baseURL: stage,
+    baseURL: process.env.SMOKE_URL ?? 'https://ryandur.github.io/ChosenPicachu/',
     trace: 'on-first-retry'
-  },
-  webServer: {
-    command: 'node scripts/lighthouse/server.mjs',
-    url: stage,
-    reuseExistingServer: !process.env.CI
   },
   projects: [
     {name: 'chromium', use: {browserName: 'chromium'}},

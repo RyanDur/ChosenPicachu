@@ -118,6 +118,31 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v5
 
+  journeys:
+    needs: build_test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: 'npm'
+          registry-url: 'https://npm.pkg.github.com'
+      - name: Install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm ci
+      - name: Install browsers
+        run: npx playwright install --with-deps chromium firefox webkit
+      - name: Take the shipped bundle
+        uses: actions/download-artifact@v7
+        with:
+          name: dist
+          path: ./dist
+      - name: Walk the journeys on the stub stage
+        run: npx playwright test --reporter=line
+
   smoke:
     needs: pages
     runs-on: ubuntu-latest
@@ -136,7 +161,7 @@ jobs:
       - name: Install browser
         run: npx playwright install --with-deps chromium firefox webkit
       - name: Smoke the deployed site
-        run: npx playwright test
+        run: npx playwright test --config=playwright.smoke.config.ts
 
   lighthouse:
     needs: build_test

@@ -45,6 +45,12 @@ Playwright, Best Practices: https://playwright.dev/docs/best-practices
 
 ## Page objects hold Fowler
 
+## Smoke tests hold the deployed site to life
+
+A smoke test asks one question after a deploy: is the thing we shipped alive where we shipped it? It runs against the deployed site with nothing stubbed, because the real world is what it checks: a museum answers, a piece opens, a deep link is served. It is shallow and broad, and fewer than the journeys. A smoke test that goes red because a museum is down is signal, not flake; do not ask it to stub what it exists to touch. It lives in `e2e/smoke.e2e.ts` under its own config; everything else in `e2e/` is a journey and runs on the stub stage with the world recorded at its edge.
+
+## Page objects hold Fowler
+
 Martin Fowler, Page Object: https://martinfowler.com/bliki/PageObject.html
 
 - A page object offers the services a page or component offers a person, in the domain's words, and hides how the markup is built. Its methods say what a person does, not what element they touch.
