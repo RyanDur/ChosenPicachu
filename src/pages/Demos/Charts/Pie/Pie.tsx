@@ -26,7 +26,7 @@ export const Pie: FC<Props> = ({trades, actions}) => {
     <header className="chart-header">
       {actions}
     </header>
-    <section className="chart-stage">
+    <div className="chart-stage">
       <svg className="split" aria-hidden="true" viewBox={`0 0 ${SIZE} ${SIZE + DEPTH}`}>
         {['wall', 'face'].map(dressed => cut.map((slice, at) => {
           const {dx, dy} = slice.share === 1 ? {dx: 0, dy: 0} : explodedBy(slice, EXPLODE);
@@ -60,7 +60,7 @@ export const Pie: FC<Props> = ({trades, actions}) => {
           ? 'the session’s volume by side · since you arrived'
           : 'waiting for the first trade'}
       </small>
-    </section>
+    </div>
     <details className="explainer">
       <summary className="prompt">what am I looking at?</summary>
       <p className="explanation">

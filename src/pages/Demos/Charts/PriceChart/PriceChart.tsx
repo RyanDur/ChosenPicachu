@@ -68,7 +68,7 @@ export const PriceChart: FC<Props> = ({trades, id = 'price', actions}) => {
         )}
       </menu>
     </header>
-    <section className="chart-stage">
+    <div className="chart-stage">
       <figure className="graph">
         <Axes high={view.high} low={view.low} times={view.series.map(timed => timed.at)}
               pattern={timePattern[period]} tickEvery={tickEveryMs[period]}
@@ -99,7 +99,7 @@ export const PriceChart: FC<Props> = ({trades, id = 'price', actions}) => {
         </>}
       </p>
       {history.pending && <Loading className="chart-loading"/>}
-    </section>
+    </div>
     <details className="explainer">
       <summary className="prompt">what am I looking at?</summary>
       <p className="explanation">

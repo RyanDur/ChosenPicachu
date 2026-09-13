@@ -28,7 +28,7 @@ export const Pressure: FC<Props> = ({trades, actions}) => {
     <header className="chart-header">
       {actions}
     </header>
-    <section className="chart-stage">
+    <div className="chart-stage">
       <Axes high={peak} low={-peak} label={bitcoin}
             times={pressures.map(pressure => pressure.openedAt)}
             pattern="HH:mm"
@@ -53,7 +53,7 @@ export const Pressure: FC<Props> = ({trades, actions}) => {
           ? `${pressures.length} ${pressures.length === 1 ? 'window' : 'windows'} · 1m each · since you arrived`
           : 'waiting for the first trade'}
       </small>
-    </section>
+    </div>
     <details className="explainer">
       <summary className="prompt">what am I looking at?</summary>
       <p className="explanation">

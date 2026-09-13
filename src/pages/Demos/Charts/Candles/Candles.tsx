@@ -46,7 +46,7 @@ export const Candles: FC<Props> = ({trades, id = 'candle', actions}) => {
         )}
       </menu>
     </header>
-    <section className="chart-stage">
+    <div className="chart-stage">
       <Axes high={notEmpty(candles) ? Math.max(...candles.map(candle => candle.high)) : 0}
             low={notEmpty(candles) ? Math.min(...candles.map(candle => candle.low)) : 0}
             times={candles.map(candle => candle.openedAt)}
@@ -76,7 +76,7 @@ export const Candles: FC<Props> = ({trades, id = 'candle', actions}) => {
         {notEmpty(candles) ? captionFor(period, candles.length) : history.unavailable && 'history unavailable'}
       </small>
       {history.pending && <Loading className="chart-loading"/>}
-    </section>
+    </div>
     <details className="explainer">
       <summary className="prompt">what am I looking at?</summary>
       <p className="explanation">

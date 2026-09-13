@@ -38,18 +38,18 @@ export const Axes: FC<Props> = ({
   label = value => dollars.format(value), children
 }) => {
   const populated = times.length > 0;
-  return <section className="axes">
+  return <div className="axes">
     {populated && <p className="y-labels">
       <data value={high}>{label(high)}</data>
       <data value={(high + low) / 2}>{label((high + low) / 2)}</data>
       <data value={low}>{label(low)}</data>
     </p>}
-    <section className="chart-area">{children}</section>
+    <div className="chart-area">{children}</div>
     {populated && <p className="x-labels">{placed(times, chosenTicks(times, tickEvery), headroomMs).map(tick =>
       <time key={tick.at}
             className="tick"
             dateTime={new Date(tick.at).toISOString()}
             style={{'--along': `${tick.along}%`}}>{format(tick.at, pattern)}</time>
     )}</p>}
-  </section>;
+  </div>;
 };
