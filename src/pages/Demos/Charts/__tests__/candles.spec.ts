@@ -1,4 +1,4 @@
-import {bucketTrades, mergeLive} from '../Candles/shapes';
+import {bucketTrades, candleShapes, mergeLive} from '../Candles/shapes';
 
 describe('bucketTrades', () => {
   test('no trades bucket to no candles', () => {
@@ -57,5 +57,24 @@ describe('mergeLive', () => {
 
     expect(mergeLive(seed, [], 60)).toHaveLength(60);
     expect(mergeLive(seed, [], 60)[0]).toEqual(candleAt(10 * 60000, 50010));
+  });
+});
+
+describe('candleShapes', () => {
+  test('a candle that closed under its open is drawn down, and one that closed above is drawn up', () => {
+    const shapes = candleShapes([
+      {openedAt: 0, open: 50002, high: 50003, low: 50000, close: 50001, volume: 1},
+      {openedAt: 60000, open: 50001, high: 50003, low: 50000, close: 50002, volume: 1}
+    ], 100, 40, 60000);
+
+    expect(shapes.map(shape => shape.direction)).toEqual(['down', 'up']);
+  });
+
+  test('a flat candle keeps a visible body of one pixel', () => {
+    const [flat] = candleShapes([
+      {openedAt: 0, open: 50001, high: 50003, low: 50000, close: 50001, volume: 1}
+    ], 100, 40, 60000);
+
+    expect(flat.bodyHeight).toBe(1);
   });
 });

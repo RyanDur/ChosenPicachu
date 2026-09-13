@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 import {render, screen, waitFor, within} from '@testing-library/react';
 
 describe('The Demos page', () => {
-  test('on initial render', async () => {
+  test('the demos page opens on the accordions', async () => {
     render(<TestApp at={demosAt()}/>);
 
     await waitFor(() => {
@@ -14,7 +14,7 @@ describe('The Demos page', () => {
     });
   });
 
-  test('when going to the z-index demo', async () => {
+  test('the z-index door leads to its demo and titles the page', async () => {
     render(<TestApp at={demosAt()}/>);
 
     const demoTabs = await screen.findByRole('navigation', {name: 'demos'});

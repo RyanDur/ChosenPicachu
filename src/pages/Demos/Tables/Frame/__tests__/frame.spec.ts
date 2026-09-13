@@ -22,10 +22,11 @@ describe('the frame table', () => {
     standFrame();
 
     expect(windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
+    expect(measure('this minute', 0)).toHaveTextContent('0');
     await userEvent.click(sortMenu('trades').getByRole('button', {name: 'descending', hidden: true}));
 
     expect(windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
-    expect(screen.getByRole('columnheader', {name: /trades/})).toHaveAttribute('aria-sort', 'descending');
+    expect(measure('this minute', 0)).toHaveTextContent('0');
     expect(screen.getByRole('columnheader', {name: /trades/})).toHaveAttribute('aria-sort', 'descending');
   });
 
@@ -36,7 +37,6 @@ describe('the frame table', () => {
     await userEvent.click(sortMenu('buys').getByRole('button', {name: 'reset', hidden: true}));
 
     expect(windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
-    expect(screen.getByRole('columnheader', {name: /buys/})).not.toHaveAttribute('aria-sort');
     expect(screen.getByRole('columnheader', {name: /buys/})).not.toHaveAttribute('aria-sort');
   });
 
@@ -171,6 +171,9 @@ describe('the frame table', () => {
   });
 
   let holder: HTMLElement | undefined;
+  afterEach(() => {
+    holder = undefined;
+  });
   const held = (element: HTMLElement, at: {clientX: number; clientY: number; pointerId: number}): void => {
     holder = element;
     fireEvent.pointerDown(element, at);
@@ -273,7 +276,7 @@ describe('the frame table', () => {
     await userEvent.click(sortMenu('trades').getByRole('button', {name: 'ascending', hidden: true}));
     expect(screen.getByRole('columnheader', {name: /trades/})).toHaveAttribute('aria-sort', 'ascending');
 
-    fireEvent.pointerDown(screen.getByRole('button', {name: 'move row 1'}), {clientX: 20, clientY: 20, pointerId: 1});
+    held(screen.getByRole('button', {name: 'move row 1'}), {clientX: 20, clientY: 20, pointerId: 1});
     fireEvent.pointerUp(surface(), {pointerId: 1});
 
     expect(screen.getByRole('columnheader', {name: /trades/})).toHaveAttribute('aria-sort', 'ascending');

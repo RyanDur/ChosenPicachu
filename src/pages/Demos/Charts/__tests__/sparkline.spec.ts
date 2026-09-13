@@ -29,4 +29,13 @@ describe('sparklinePoints', () => {
       {x: 100, y: 20}
     ]);
   });
+
+  test('with headroom the last point stops short of the right edge', () => {
+    const points = sparklinePoints([
+      {at: 0, price: 1},
+      {at: 1000, price: 2}
+    ], 100, 40, 1000);
+
+    expect(points[points.length - 1].x).toBe(50);
+  });
 });

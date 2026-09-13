@@ -25,4 +25,13 @@ describe('the demos store', () => {
 
     expect(selectMeasures(store.state)[0]?.trades?.display).toBe('1');
   });
+
+  it('past the newest 1500 trades the oldest fall off the front', () => {
+    const store = demosStore();
+
+    Array.from({length: 1501}, (_, at) => trade(at + 1, 100)).forEach(arrived => store.dispatch(tradeArrived(arrived)));
+
+    expect(selectLiveTrades(store.state)).toHaveLength(1500);
+    expect(selectLiveTrades(store.state)[0].id).toBe(2);
+  });
 });

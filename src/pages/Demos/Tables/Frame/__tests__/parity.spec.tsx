@@ -29,8 +29,8 @@ const shapeOf = (root: HTMLElement): {headers: CellShape[]; rows: CellShape[][]}
 describe('the two worlds deal the same table', () => {
   it('the frame markup stands exactly as the react table renders', () => {
     const rows = windowedAggregates([]).map(cells);
-    const {container, unmount} = render(<EagerTable className="hide animated" columns={measures} rows={rows}/>);
-    const react = shapeOf(container);
+    const {unmount} = render(<EagerTable className="hide animated" columns={measures} rows={rows}/>);
+    const react = shapeOf(document.body);
     unmount();
 
     standFrame();

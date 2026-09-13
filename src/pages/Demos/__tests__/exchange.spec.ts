@@ -30,7 +30,7 @@ describe('the exchange as middleware', () => {
     await vi.waitFor(() => expect(hungUp).toHaveLength(1));
   });
 
-  it('lets every other action through untouched, and asks nothing of the network', () => {
+  it('an action that is not a feed request reaches the store untouched', () => {
     const store = demosStore(exchange({tradeFeed: 'ws://exchange.test', tradeHistory: '', tradeProduct: 'BTC-USD'}, () => undefined));
 
     store.dispatch({type: 'feedOpened'});

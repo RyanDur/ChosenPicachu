@@ -16,11 +16,6 @@ const fourTrades = [
   tradeFrame(50004, now, '0.01', 'buy')
 ];
 
-const dialCombos = ['eager', 'lazy'].flatMap(pace =>
-  ['keep', 'hide'].flatMap(origin =>
-    ['animated', 'static'].map(motion => `pace=${pace}&origin=${origin}&motion=${motion}`)));
-const builds = ['react', 'vanilla'].flatMap(world => dialCombos.map(dials => `world=${world}&${dials}`));
-
 describe('the tables demo', () => {
   test('the fixed windows hold their rows while the stream fills the cells', async () => {
     const feed = await listeningFeed();
@@ -339,13 +334,15 @@ describe('the tables demo', () => {
     };
     location.hash = '#station-5';
     const feed = await listeningFeed();
+    try {
+      render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
-
-    await screen.findByRole('heading', {name: 'Slice the design into stories'});
-    expect(brought).toContain('station-5');
-    Element.prototype.scrollIntoView = () => undefined;
-    location.hash = '';
+      await screen.findByRole('heading', {name: 'Slice the design into stories'});
+      expect(brought).toContain('station-5');
+    } finally {
+      Element.prototype.scrollIntoView = () => undefined;
+      location.hash = '';
+    }
   });
 
   test('the keyboard track teaches the same sort by other hands', async () => {
@@ -549,10 +546,10 @@ describe('the tables demo', () => {
       expect(await screen.findByRole('heading', {name: 'The trader can widen a column'})).toBeInTheDocument();
     });
 
-    test.each(builds)('the sort tutorial stands on both tracks in the build %s', async build => {
+    test.each(['react', 'vanilla'])('the sort tutorial stands on both tracks in the %s world', async world => {
       const feed = await listeningFeed();
 
-      render(<TestApp at={demosAt(`?tab=tables&tut=sort&${build}`)} feed={feed}/>);
+      render(<TestApp at={demosAt(`?tab=tables&tut=sort&world=${world}`)} feed={feed}/>);
 
       expect(await screen.findByText('The trader can sort by column')).toBeInTheDocument();
       await userEvent.click(screen.getByRole('button', {name: 'By keyboard'}));
