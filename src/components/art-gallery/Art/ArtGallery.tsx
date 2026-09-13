@@ -16,7 +16,7 @@ import './Gallery.css';
 export const ArtGallery: FC = () => {
   const {art, updateArt, reset} = useGallery();
   const {raise} = useBanners();
-  const [wall, setWall] = useState<'bare' | 'loading' | 'hung' | 'empty' | 'refused'>('bare');
+  const [museum, setMuseum] = useState<'answered' | 'asked' | 'refused'>('answered');
   const {page, size, search, tab} =
     useSearchParamsObject({page: numberParam, size: numberParam, tab: sourceParam, search: schema.string}, {
       size: defaultRecordLimit,
@@ -26,11 +26,11 @@ export const ArtGallery: FC = () => {
   useEffect(() => {
     if (!has(page) || !has(size) || !has(tab)) return reset;
     const {cancel} = artResource.getAll({page, size, search, source: tab})
-      .onPending(pending => pending && setWall('loading'))
+      .onPending(pending => pending && setMuseum('asked'))
       .onSuccess(updateArt)
-      .onSuccess(data => setWall(empty(data.pieces) ? 'empty' : 'hung'))
+      .onSuccess(() => setMuseum('answered'))
       .onFailure(error => {
-        setWall('refused');
+        setMuseum('refused');
         raise(troubleWith('the museum')(error));
       });
     return () => {
@@ -50,8 +50,8 @@ export const ArtGallery: FC = () => {
         </figure>
       </li>)}
     </ul>
-    {wall === 'loading' && <Loading label="loading gallery"/>}
-    {wall === 'empty' && <img src={noImageGallery} alt="empty gallery"/>}
-    {wall === 'refused' && <img src={noImageGallery} alt="the museum refused to answer"/>}
+    {museum === 'asked' && <Loading label="loading gallery"/>}
+    {museum === 'answered' && has(art) && empty(art.pieces) && <img src={noImageGallery} alt="empty gallery"/>}
+    {museum === 'refused' && <img src={noImageGallery} alt="the museum refused to answer"/>}
   </>;
 };

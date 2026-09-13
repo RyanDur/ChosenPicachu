@@ -17,19 +17,19 @@ export const ArtPiece = () => {
     const {raise} = useBanners();
     const {tab} = useSearchParamsObject({tab: sourceParam});
     const {id} = useParams<{ id: string }>();
-    const [showing, setShowing] = useState<'nothing' | 'loading' | 'hung' | 'refused'>('nothing');
+    const [museum, setMuseum] = useState<'answered' | 'asked' | 'refused'>('answered');
     const hung = piece.orNull();
 
     useEffect(() => {
         if (!id) return reset;
         const {cancel} = art.get({id, source: tab ?? Source.AIC})
-            .onPending(pending => pending && setShowing('loading'))
+            .onPending(pending => pending && setMuseum('asked'))
             .onSuccess(found => {
                 updatePiece(found);
-                setShowing('hung');
+                setMuseum('answered');
             })
             .onFailure(error => {
-                setShowing('refused');
+                setMuseum('refused');
                 raise(troubleWith('the museum')(error));
             });
         return () => {
@@ -39,11 +39,11 @@ export const ArtPiece = () => {
     }, [id, updatePiece, tab, reset, raise]);
 
     return <>
-        {showing === 'loading' && <Loading label="loading piece"/>}
-        {showing !== 'refused' && has(hung) && <figure className="art-piece art-work">
+        {museum === 'asked' && <Loading label="loading piece"/>}
+        {museum !== 'refused' && has(hung) && <figure className="art-piece art-work">
           <Image piece={hung} linkEnabled={false} className="piece hung"/>
           <figcaption className="trim artist-display hairline-outline italic">{hung.artistInfo}</figcaption>
         </figure>}
-        {showing === 'refused' && <img className="stand-in" src={noImage} alt="Load Error"/>}
+        {museum === 'refused' && <img className="stand-in" src={noImage} alt="Load Error"/>}
     </>;
 };

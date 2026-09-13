@@ -1,4 +1,5 @@
 import {streaming} from '@ryandur/sand';
+import {HTTPError} from '@transport/types';
 import {decodeTrade, subscribeTo} from './Charts/coinbase';
 import {recentTrades} from './Tables/Aggregations/recent-trades';
 import {DemosAction, DemosMiddleware, feedFailed, feedOpened, historyArrived, tradeArrived} from './store';
@@ -11,16 +12,26 @@ export type Exchange = {
 
 type Closer = () => void;
 
-export type FeedTrouble = 'handshakeRefused' | 'hungUp' | 'historyUnavailable';
+export type FeedTrouble = 'handshakeRefused' | 'hungUp' | {history: HTTPError};
+
+const historyOf = (
+  base: string,
+  product: string,
+  dispatch: (action: DemosAction) => void,
+  onTrouble: (trouble: FeedTrouble) => void
+): Closer => {
+  const fetching = recentTrades(base, product)
+    .onSuccess(trades => dispatch(historyArrived(trades)))
+    .onFailure(error => onTrouble({history: error}));
+  return () => fetching.cancel();
+};
 
 const opened = (
   {tradeFeed, tradeHistory, tradeProduct}: Exchange,
   dispatch: (action: DemosAction) => void,
   onTrouble: (trouble: FeedTrouble) => void
 ): readonly Closer[] => {
-  const history = tradeHistory
-    ? [recentTrades(tradeHistory, tradeProduct, trades => dispatch(historyArrived(trades)), () => onTrouble('historyUnavailable')).cancel]
-    : [];
+  const history = tradeHistory ? [historyOf(tradeHistory, tradeProduct, dispatch, onTrouble)] : [];
   if (!tradeFeed) {
     return history;
   }

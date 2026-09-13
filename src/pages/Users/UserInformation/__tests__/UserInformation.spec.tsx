@@ -256,13 +256,15 @@ describe('the avatar control plays fair with the keyboard', () => {
     expect(screen.getByAltText<HTMLImageElement>('avatar').src).not.toEqual(before);
   });
 
-  test('a new avatar is announced', async () => {
+  test('every new avatar is announced', async () => {
     render(added().form);
     expect(screen.getByRole('status', {name: 'avatar report'})).toBeEmptyDOMElement();
 
     await userEvent.click(screen.getByRole('button', {name: 'Generate a new avatar'}));
+    expect(screen.getByRole('status', {name: 'avatar report'})).toHaveTextContent('1 new avatar drawn.');
 
-    expect(screen.getByRole('status', {name: 'avatar report'})).toHaveTextContent('A new avatar was drawn.');
+    await userEvent.click(screen.getByRole('button', {name: 'Generate a new avatar'}));
+    expect(screen.getByRole('status', {name: 'avatar report'})).toHaveTextContent('2 new avatars drawn.');
   });
 });
 

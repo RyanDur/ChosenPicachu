@@ -1,6 +1,8 @@
 import * as schema from 'schemawax';
+import {Result} from '@ryandur/sand';
 import {http} from '@transport/http';
 import {validate} from '@transport/validate';
+import {HTTPError} from '@transport/types';
 import {Trade} from '../../Charts/coinbase';
 
 const RecentTradesDecoder = schema.array(schema.object({
@@ -24,19 +26,10 @@ const toTrades = (rows: schema.Output<typeof RecentTradesDecoder>): readonly Tra
     !Number.isNaN(trade.price) && !Number.isNaN(trade.tradedAt) && !Number.isNaN(trade.size)
   ).reverse();
 
-export const recentTrades = (
-  base: string,
-  product: string,
-  onHistory: (trades: readonly Trade[]) => void,
-  onUnavailable: () => void
-): {cancel: () => void} => {
-  const fetching = http.get(`${base}/products/${product}/trades?limit=1000`)
+export const recentTrades = (base: string, product: string): Result.Async<readonly Trade[], HTTPError> =>
+  http.get(`${base}/products/${product}/trades?limit=1000`)
     .mBind(validate(RecentTradesDecoder))
-    .map(toTrades)
-    .onSuccess(onHistory)
-    .onFailure(onUnavailable);
-  return {cancel: () => fetching.cancel()};
-};
+    .map(toTrades);
 
 export const hydrated = (history: readonly Trade[], streamed: readonly Trade[]): readonly Trade[] => {
   const streaming = new Set(streamed.map(trade => trade.id));

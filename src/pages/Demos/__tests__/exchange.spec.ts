@@ -3,6 +3,7 @@ import {http, HttpResponse, ws} from 'msw';
 import {WebSocketClientConnectionProtocol as Client} from '@mswjs/interceptors/WebSocket';
 import {HISTORY, server} from '@test-support/server';
 import {tradeFrame} from '@test-support/feed';
+import {HTTPError} from '@transport/types';
 import {exchange, FeedTrouble} from '../exchange';
 import {demosStore, feedReleased, feedRequested, selectFeedStatus, selectLiveTrades} from '../store';
 
@@ -49,7 +50,7 @@ describe('the exchange as middleware', () => {
 
     store.dispatch(feedRequested());
 
-    await vi.waitFor(() => expect(troubles).toEqual(['historyUnavailable']));
+    await vi.waitFor(() => expect(troubles).toEqual([{history: HTTPError.SERVER_ERROR}]));
   });
 
   it('an action that is not a feed request reaches the store untouched', () => {
