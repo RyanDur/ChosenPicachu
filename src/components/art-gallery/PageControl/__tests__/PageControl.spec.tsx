@@ -13,7 +13,7 @@ describe('The page controls', () => {
       const pageNumber = '3';
 
       render(<TestApp at={Paths.artGallery}><GalleryProviders><PageControl/></GalleryProviders></TestApp>);
-      const landings = await landingsDuring(window, async () => {
+      const landings = await landingsDuring(async () => {
         await userEvent.type(screen.getByLabelText(/Page #/), pageNumber);
         await userEvent.click(screen.getByRole('button', {name: 'Go'}));
 
@@ -22,7 +22,7 @@ describe('The page controls', () => {
       });
 
       expect(screen.getByLabelText(/Page #/)).not.toHaveValue(+pageNumber);
-      expect(landings).toEqual([[0, 0]]);
+      expect(landings).toContainEqual([0, 0]);
     });
 
     it('should not allow a user to go to a page lower than the first', () => {

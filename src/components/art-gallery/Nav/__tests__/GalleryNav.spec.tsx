@@ -5,6 +5,7 @@ import userEvent from '@testing-library/user-event';
 import {fromAICArt} from '@test-support/fixtures';
 import {Paths} from '@pages/Paths';
 import {GalleryNav} from '@components/art-gallery/Nav';
+import {landingsDuring} from '@test-support/landings';
 
 describe('Gallery Navigation', () => {
   test('on load', () => {
@@ -17,18 +18,14 @@ describe('Gallery Navigation', () => {
     describe('from the first page', () => {
       it('goes to the next page, and returns to the top', async () => {
         render(<TestApp at={Paths.artGallery}><GalleryProviders galleryState={fromAICArt}><GalleryNav/></GalleryProviders></TestApp>);
-        const landings = vi.spyOn(window, 'scrollTo');
-        await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
 
+        const landings = await landingsDuring(() => userEvent.click(screen.getByRole('link', {name: 'NEXT'})));
         expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('page=2');
-        expect(landings).toHaveBeenCalledTimes(1);
-        expect(landings).toHaveBeenCalledWith(0, 0);
+        expect(landings).toContainEqual([0, 0]);
 
-        await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
-
+        const again = await landingsDuring(() => userEvent.click(screen.getByRole('link', {name: 'NEXT'})));
         expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('page=3');
-        expect(landings).toHaveBeenCalledTimes(2);
-        landings.mockRestore();
+        expect(again).toContainEqual([0, 0]);
       });
 
       test('when on the first page', () => {

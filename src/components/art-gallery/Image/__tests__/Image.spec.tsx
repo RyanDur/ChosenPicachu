@@ -7,6 +7,7 @@ import {Art} from '@components/art-gallery/museums/types/response';
 import {Source} from '@components/art-gallery/museums/types/resource';
 import {faker} from '@faker-js/faker';
 import {Paths} from '@pages/Paths';
+import {landingsDuring} from '@test-support/landings';
 
 describe('the image', () => {
   const piece: Art = {
@@ -16,14 +17,6 @@ describe('the image', () => {
     altText: faker.lorem.sentence(),
     artistInfo: faker.lorem.sentence()
   };
-
-  let landings: ReturnType<typeof vi.spyOn>;
-
-  beforeEach(() => {
-    landings = vi.spyOn(window, 'scrollTo');
-  });
-
-  afterEach(() => landings.mockRestore());
 
   test('on loading', () => {
     render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><GalleryProviders><Image piece={piece}/></GalleryProviders></TestApp>);
@@ -46,10 +39,10 @@ describe('the image', () => {
     render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><GalleryProviders><Image piece={piece}/></GalleryProviders></TestApp>);
 
     fireEvent.load(screen.getByAltText(piece.altText));
-    await userEvent.click(screen.getByAltText(piece.altText));
+    const landings = await landingsDuring(() => userEvent.click(screen.getByAltText(piece.altText)));
 
     expect(screen.getByRole('status', {name: 'url path'})).toHaveTextContent(`${Paths.artGallery}${piece.id}`);
-    expect(landings).toHaveBeenCalledWith(0, 0);
+    expect(landings).toContainEqual([0, 0]);
   });
 
   test('on image load error', () => {
@@ -72,12 +65,13 @@ describe('the image', () => {
 
   test('when the image is disabled', async () => {
     render(<TestApp at={`${Paths.artGallery}?page=3&tab=${Source.AIC}`}><GalleryProviders><Image piece={piece} linkEnabled={false}/></GalleryProviders></TestApp>);
-    const landed = landings.mock.calls.length;
 
     fireEvent.load(screen.getByAltText(piece.altText));
-    await userEvent.click(await screen.findByAltText(piece.altText));
+    const landings = await landingsDuring(async () => {
+      await userEvent.click(await screen.findByAltText(piece.altText));
+    });
 
     expect(screen.getByRole('status', {name: 'url path'})).toHaveTextContent(new RegExp(`^${Paths.artGallery}$`));
-    expect(landings).toHaveBeenCalledTimes(landed);
+    expect(landings).toEqual([]);
   });
 });

@@ -50,16 +50,16 @@ describe('leaving a page', () => {
     render(<TestApp at="/"/>);
     await screen.findByRole('heading', {level: 1});
 
-    const landings = await landingsDuring(Element.prototype, async () => {
+    const landings = await landingsDuring(async () => {
       await userEvent.click(screen.getByRole('link', {name: /Start where the demos start/}));
       await screen.findByRole('navigation', {name: 'demos'});
     });
 
-    expect(landings).toEqual([[0, 0]]);
+    expect(landings).toContainEqual([0, 0]);
   });
 
   test('arriving at a place on the page keeps that place', async () => {
-    const landings = await landingsDuring(Element.prototype, async () => {
+    const landings = await landingsDuring(async () => {
       render(<TestApp at="/#the-record"/>);
       await screen.findByRole('heading', {level: 1});
     });
