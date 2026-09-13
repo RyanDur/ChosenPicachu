@@ -43,6 +43,15 @@
   letter-spacing: 0.08em;
 }
 
+/* prose — a measured column whose runs stand apart and wrap prettily */
+.prose {
+  display: grid;
+  gap: var(--base-x-2);
+  padding: var(--base-x-3);
+  max-inline-size: var(--measure);
+  text-wrap: pretty;
+}
+
 /* signpost — the link a run of prose points with */
 .signpost {
   color: var(--primary-blue);
