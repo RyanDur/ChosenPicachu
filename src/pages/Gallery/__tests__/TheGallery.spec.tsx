@@ -147,8 +147,8 @@ describe('The gallery.', () => {
 
     render(<TestApp at={Paths.artGallery}/>);
 
-    await waitFor(() => expect(screen.getByLabelText('url search')).toHaveTextContent('tab=aic'));
-    expect(screen.getByRole('link', {name: 'The Art Institute of Chicago', current: 'page'})).toBeInTheDocument();
+    expect(await screen.findByRole('link', {name: 'The Art Institute of Chicago', current: 'page'})).toBeInTheDocument();
+    expect(screen.getByLabelText('url search')).toHaveTextContent('tab=aic');
   });
 
   test('while the museums are asked there are no doors, only the loading sign', async () => {
