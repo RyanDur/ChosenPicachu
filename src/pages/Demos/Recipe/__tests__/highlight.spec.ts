@@ -1,5 +1,8 @@
 import {Kind, highlight} from '../highlight';
 
+// language=TypeScript
+const columnAlias = `export type Column<C> = {readonly name: string; readonly width?: number; readonly data: C};`;
+
 const kinds = (label: 'HTML' | 'CSS' | 'TS', line: string): Record<string, Kind> =>
   Object.fromEntries(highlight(label, line).filter(({kind}) => kind !== 'plain').map(({text, kind}) => [text, kind]));
 
@@ -36,13 +39,13 @@ describe('the code voice', () => {
   });
 
   it('generics on a type alias are types', () => {
-    const found = kinds('TS', `export type Column<C> = {readonly name: string; readonly width?: number; readonly data: C};`);
+    const found = kinds('TS', columnAlias);
 
     expect(found.Column).toBe('type');
   });
 
   it('readonly is a keyword', () => {
-    const found = kinds('TS', `export type Column<C> = {readonly name: string; readonly width?: number; readonly data: C};`);
+    const found = kinds('TS', columnAlias);
 
     expect(found.readonly).toBe('keyword');
   });

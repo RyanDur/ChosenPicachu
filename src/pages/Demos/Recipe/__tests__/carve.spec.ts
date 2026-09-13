@@ -1,5 +1,6 @@
 import {span, unit} from '../carve';
 
+// language=TEXT
 const source = `const still = 0;
 
 const travel = (event) => {
@@ -108,11 +109,13 @@ describe('carving examples out of the source they teach', () => {
   });
 
   test('a brace inside a type parameter never ends a unit early', () => {
+    // language=TEXT
+    const row = "    return <tr {...tr}>{placed(children, order, 'column')}</tr>;";
     expect(unit(source, 'const Row').map(({text}) => text)).toEqual([
       'const Row: FC<Props & {row: string}> = ({row: _row, children, ...tr}) => {',
       '    const order = useTableSelector(selectOrder);',
       '',
-      "    return <tr {...tr}>{placed(children, order, 'column')}</tr>;",
+      row,
       '};'
     ]);
   });
