@@ -6,9 +6,10 @@ export const resolved = (page: Page, property: string, token: string): Promise<s
     swatch.style.setProperty(property, `var(${name})`);
     document.body.append(swatch);
     const value = getComputedStyle(swatch).getPropertyValue(property);
+    const defined = getComputedStyle(swatch).getPropertyValue(name).trim();
     swatch.remove();
-    if (value === '' || value === 'none') {
-      throw new Error(`${name} paints nothing for ${property}`);
+    if (defined === '') {
+      throw new Error(`${name} is not a token this page defines`);
     }
     return value;
   }, [property, token]);

@@ -9,13 +9,12 @@ const outcomesOf = (spec, path) => (spec.tests ?? []).map(test => ({
   said: saidBy(test.results ?? [])
 }));
 
-const walk = (suites, path = []) => suites.flatMap(suite => {
-  const here = suite.file === undefined ? [...path, suite.title] : [];
-  const own = (suite.specs ?? []).flatMap(spec => outcomesOf(spec, here));
-  return [...own, ...walk(suite.suites ?? [], here)];
-});
+const outcomesUnder = (suite, path) => [
+  ...(suite.specs ?? []).flatMap(spec => outcomesOf(spec, path)),
+  ...(suite.suites ?? []).flatMap(describe => outcomesUnder(describe, [...path, describe.title]))
+];
 
-export const outcomesIn = (report) => walk(report.suites ?? []);
+export const outcomesIn = (report) => (report.suites ?? []).flatMap(file => outcomesUnder(file, []));
 
 const counted = (outcomes, status) => outcomes.filter(outcome => outcome.status === status).length;
 

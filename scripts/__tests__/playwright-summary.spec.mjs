@@ -12,6 +12,7 @@ const report = {
     ],
     suites: [{
       title: 'the price card',
+      file: 'a11y.e2e.ts',
       specs: [{title: 'wears its ink', tests: [outcome('chromium', 'flaky'), outcome('webkit', 'skipped')]}]
     }]
   }]
