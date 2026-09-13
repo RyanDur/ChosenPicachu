@@ -44,9 +44,6 @@ export const ArtPiece = () => {
           <Image piece={hung} linkEnabled={false} className="piece hung"/>
           <figcaption className="trim artist-display hairline-outline italic">{hung.artistInfo}</figcaption>
         </figure>}
-        {showing === 'refused' && <div className="art-piece err">
-          <img src={noImage}
-               alt="Load Error"/>
-        </div>}
+        {showing === 'refused' && <img className="art-piece err" src={noImage} alt="Load Error"/>}
     </>;
 };

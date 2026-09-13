@@ -25,7 +25,8 @@ export const FriendsList: FC<Props> = ({users, user, onChange}) => {
 
   const remove = (friend: User) => onChange(user.friends.filter(id => id !== friend.id));
 
-  return <div className={classNames('friends-list', has(friends) && 'not-empty')}>
+  return <fieldset className={classNames('friends-list', has(friends) && 'not-empty')}>
+    <legend className="off-screen">friends of {displayFullName(user)}</legend>
     <ul className="friends" aria-label="friends">{friends.map(friend =>
       <li className="friend" key={friend.id}>
         <label className="friend-title ellipsis"
@@ -46,5 +47,5 @@ export const FriendsList: FC<Props> = ({users, user, onChange}) => {
             displayFullName(potentialFriend)
           }</option>)
       ]}</select>}
-  </div>;
+  </fieldset>;
 };
