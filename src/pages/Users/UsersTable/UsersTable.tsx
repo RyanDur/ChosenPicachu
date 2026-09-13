@@ -37,11 +37,9 @@ export const UsersTable: FC = () => {
         <Cell column="friends" row={user.id} className="cell">
           <FriendsList user={user} users={users} onChange={friends => dispatch(friendsChanged(user, friends))}/>
         </Cell>
-        <Cell column="works-from-home" row={user.id} className="cell">
-          <div className="last-column">
-            {worksFromHome(user)}
-            <UserMenu user={user} name={name} onRemove={() => dispatch(userRemoved(user))}/>
-          </div>
+        <Cell column="works-from-home" row={user.id} className="cell last-column">
+          {worksFromHome(user)}
+          <UserMenu user={user} name={name} onRemove={() => dispatch(userRemoved(user))}/>
         </Cell>
       </Row>;
     })}

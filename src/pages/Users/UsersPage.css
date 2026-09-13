@@ -45,10 +45,14 @@
 
 
   .last-column {
-    display: flex;
-    justify-content: space-between;
+    position: relative;
+    padding-inline-end: var(--base-x-4);
 
     .menu-toggle {
+      position: absolute;
+      inset-inline-end: var(--base);
+      inset-block-start: 50%;
+      translate: 0 -50%;
       width: var(--base-x-2_5);
       height: var(--base-x-2_5);
       border: none;
