@@ -70,10 +70,10 @@ test('the period menu stays hidden until asked', async ({page}) => {
   await expect(delta(page)).toBeVisible({timeout: 30_000});
   await expect(delta(page)).toHaveText(/^\+/);
   await expect(page.getByRole('button', {name: 'price period'})).toBeVisible();
-  await expect(page.getByText('week').first()).toBeHidden();
+  await expect(page.getByLabel('price period by').getByRole('button', {name: 'week'})).toBeHidden();
 
   await page.getByRole('button', {name: 'price period'}).click();
-  await expect(page.getByText('week').first()).toBeVisible();
+  await expect(page.getByLabel('price period by').getByRole('button', {name: 'week'})).toBeVisible();
 });
 
 test('only one fuller story stands open at a time', async ({page}) => {

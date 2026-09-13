@@ -131,7 +131,7 @@ describe('the tables demo', () => {
     const menuFor = (label: string) => within(card).getByLabelText(`${label} by`);
     await waitFor(() => expect(within(card).getAllByText('4')).not.toHaveLength(0));
 
-    await userEvent.click(within(menuFor('sort trades')).getByText('descending'));
+    await userEvent.click(within(menuFor('sort trades')).getByRole('button', {name: 'descending', hidden: true}));
 
     expect(labels()).toEqual(['this hour', 'session', 'last 15 minutes', 'last 5 minutes', 'this minute']);
     expect(within(card).getByRole('columnheader', {name: /^trades/}))

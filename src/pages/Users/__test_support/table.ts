@@ -12,15 +12,8 @@ export const rowOf = (name: string): Promise<HTMLElement> =>
 export const rows = (): HTMLElement[] =>
   within(usersTable()).getAllByRole('row').filter(row => within(row).queryByRole('rowheader') !== null);
 
-export const worksFromHome = (row: HTMLElement): string => {
-  let answer = '';
-  within(row).getByText(content => {
-    if (!/^(Yes|No)$/.test(content)) return false;
-    answer = content;
-    return true;
-  });
-  return answer;
-};
+export const worksFromHome = (row: HTMLElement): string =>
+  ['Yes', 'No'].find(answer => within(row).queryByRole('cell', {name: answer}) !== null) ?? '';
 
 export const worksFromHomeColumn = (): string[] => rows().map(worksFromHome);
 

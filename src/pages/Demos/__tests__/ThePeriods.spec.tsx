@@ -42,7 +42,7 @@ describe('the chart periods', () => {
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles')}/>);
     await screen.findByRole('region', {name: 'candles'});
 
-    await userEvent.click(within(menuFor('candle period')).getByText('hour'));
+    await userEvent.click(within(menuFor('candle period')).getByRole('button', {name: 'hour', hidden: true}));
     await waitFor(() => expect(drawnCandles()).toBe(5));
     const chosen = asked[asked.length - 1].searchParams;
     expect(chosen.get('granularity')).toBe('60');
@@ -63,7 +63,7 @@ describe('the chart periods', () => {
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles')}/>);
     await screen.findByRole('region', {name: 'candles'});
 
-    await userEvent.click(within(menuFor('price period')).getByText('day'));
+    await userEvent.click(within(menuFor('price period')).getByRole('button', {name: 'day', hidden: true}));
     await waitFor(() => expect(drawnPoints()).toBe(5));
     expect(screen.getByRole('button', {name: 'price period day'})).toBeInTheDocument();
     expect(within(menuFor('price period')).getByRole('button', {name: 'day', current: true, hidden: true})).toBeInTheDocument();
@@ -81,7 +81,7 @@ describe('the chart periods', () => {
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles')}/>);
     await screen.findByRole('region', {name: 'candles'});
 
-    await userEvent.click(within(menuFor('candle period')).getByText('week'));
+    await userEvent.click(within(menuFor('candle period')).getByRole('button', {name: 'week', hidden: true}));
     const candleCard = screen.getByRole('region', {name: 'candles'});
     expect(await within(candleCard).findByText('history unavailable')).toBeVisible();
     expect(within(screen.getByRole('alert', {hidden: true}))
@@ -97,7 +97,7 @@ describe('the chart periods', () => {
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles')}/>);
     await screen.findByRole('region', {name: 'candles'});
 
-    await userEvent.click(within(menuFor('candle period')).getByText('day'));
+    await userEvent.click(within(menuFor('candle period')).getByRole('button', {name: 'day', hidden: true}));
     const candleCard = screen.getByRole('region', {name: 'candles'});
     expect(await within(candleCard).findByRole('progressbar')).toBeVisible();
     await waitFor(() => expect(drawnCandles()).toBe(5));
@@ -114,8 +114,8 @@ describe('the chart periods', () => {
     const candleCard = await screen.findByRole('region', {name: 'candles'});
     const priceCard = screen.getByRole('region', {name: 'live trades'});
 
-    await userEvent.click(within(menuFor('candle period')).getByText('day'));
-    await userEvent.click(within(menuFor('price period')).getByText('day'));
+    await userEvent.click(within(menuFor('candle period')).getByRole('button', {name: 'day', hidden: true}));
+    await userEvent.click(within(menuFor('price period')).getByRole('button', {name: 'day', hidden: true}));
 
     expect(await within(candleCard).findByText('loading history')).toBeInTheDocument();
     expect(await within(priceCard).findByText('loading history')).toBeInTheDocument();

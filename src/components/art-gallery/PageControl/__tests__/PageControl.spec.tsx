@@ -9,7 +9,7 @@ import {Paths} from '@pages/Paths';
 describe('The page controls', () => {
   describe('going to a specific page', () => {
     test('going to a page lands at its top, and clears the field', async () => {
-      const pageNumber = String(Math.floor(Math.random() * 1000));
+      const pageNumber = '3';
 
       render(<TestApp at={Paths.artGallery}><GalleryProviders><PageControl/></GalleryProviders></TestApp>);
       const landings = vi.spyOn(window, 'scrollTo');
