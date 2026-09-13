@@ -1,15 +1,15 @@
 # The tests door
 
-The home page states what the site is, how it shows, and how it responds. This door states what a test is for. A test earns its place by pinning behaviour a reader can name, at the level where that behaviour lives, against the real thing. You hold every spec, journey, page object and test support file to this door and to nothing outside it.
+The home page states what the site is, how it shows, and how it responds. This door states what a test is for. Tests give us confidence that things work while giving us the freedom to change and refactor. A test earns its place by pinning behaviour a reader can name, at the level where that behaviour lives, against the real thing. You hold every spec, journey, page object and test support file to this door and to nothing outside it.
 
 ## Six questions, in order
 
 1. **Is it readable?** The name says what the reader will believe when it passes. The body reads as arrange, act, assert with nothing between them to decode. A reader who knows the domain and not the code can say what it protects.
 2. **Is it worth it?** It pins something a person would notice broken. It does not restate another test's protection at a different address. A test nobody would miss is a cost with no return.
 3. **Does it pin behaviour, not implementation?** It survives a rename, a moved file, a swapped hook or a reshaped tree. It reads what the page says and does, never how the page is built. Beck calls this structure-insensitive and it is the property that bites most here.
-4. **Is it at the right level?** A rule of the domain is a unit test. What a page says and does for one person on one screen is a component spec. What a person does across screens to reach a goal is a journey. A vitest spec that reads like a journey belongs in Playwright; a Playwright spec that pins one component belongs in vitest.
+4. **Is it at the right level?** A behaviour is pinned once, at the level where a reader would look for it. A rule of the domain can be a unit test; it can as well be pinned through the component that applies it, when that test says the rule plainly. What a page says and does for one person on one screen is a component spec. What a person does across screens to reach a goal is a journey. A vitest spec that reads like a journey belongs in Playwright; a Playwright spec that pins one component belongs in vitest. A function with no spec of its own is not a finding when a spec above it pins what the function does; a second spec saying the same thing lower down is a cost with no return, and one more thing to change when the code changes.
 5. **Does it test reality?** Real collaborators: the real router, the real store, the real components beneath. The world is stubbed only at its edge, the network through msw and the clock when time is the subject. Nothing of ours is mocked, spied or replaced. A warning printed during the run is a defect the test is hiding, never something to silence.
-6. **Is a test missing?** Read the code under test and ask what it does that no spec names: a state it can be in, a branch it takes, an edge it handles, a thing a person would notice broken. A behaviour with no test pinning it is a finding on this door, pointed at the code line that has no test, with the test it wants named in a sentence.
+6. **Is a test missing?** Read the code under test and ask what it does that no spec at any level names: a state it can be in, a branch it takes, an edge it handles, a thing a person would notice broken. A behaviour with no test pinning it is a finding on this door, pointed at the code line that has no test, with the test it wants named in a sentence. Not every function needs a test; every behaviour does.
 
 ## Unit tests hold Beck's properties
 

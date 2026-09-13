@@ -1,24 +1,12 @@
 import {FormAction, FormActions, NewUser, User} from '@components/Users/UserInfo/types';
-import {generateAvatar} from './avatars';
-
-export const initialState: NewUser = {
-  info: {firstName: '', lastName: '', email: ''},
-  friends: [],
-  homeAddress: {
-    city: '',
-    state: '',
-    streetAddress: '',
-    zip: ''
-  },
-  avatar: generateAvatar()
-};
 
 export type Draft = {
   user: NewUser | User;
   sameAsHome: boolean;
+  avatarDrawn: boolean;
 };
 
-export const draftOf = (user: NewUser | User): Draft => ({user, sameAsHome: false});
+export const draftOf = (user: NewUser | User): Draft => ({user, sameAsHome: false, avatarDrawn: false});
 
 export const userOf = ({user, sameAsHome}: Draft): NewUser | User =>
   sameAsHome ? {...user, workAddress: user.homeAddress} : user;
@@ -43,11 +31,11 @@ export const formReducer = (draft: Draft, action: FormAction): Draft => {
     case FormActions.DETAILS_EDITED:
       return edited(draft, {...user, details: action.details});
     case FormActions.AVATAR_GENERATED:
-      return edited(draft, {...user, avatar: action.avatar});
+      return {...draft, user: {...user, avatar: action.avatar}, avatarDrawn: true};
     case FormActions.SAME_AS_HOME_CHOSEN:
       return {...draft, sameAsHome: action.sameAsHome};
     case FormActions.FORM_RESET:
-      return draftOf(action.userInfo || initialState);
+      return draftOf(action.user);
   }
   return draft;
 };

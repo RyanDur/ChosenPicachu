@@ -5,8 +5,7 @@ import {UsersAction, UsersListener, usersStore} from '../../store';
 import {render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {addressGroup, fillOutForm} from '../__test_support';
-import {initialState} from '../reducer';
-import {NewUser} from '@components/Users/UserInfo/types';
+import {AddressInfo, NewUser} from '@components/Users/UserInfo/types';
 
 
 const added = (): { form: ReactNode; adds: () => readonly unknown[] } => {
@@ -21,15 +20,20 @@ const added = (): { form: ReactNode; adds: () => readonly unknown[] } => {
   };
 };
 
+const avatarShown = (): string => screen.getByAltText<HTMLImageElement>('avatar').src;
+
+const addButton = (): HTMLElement => screen.getByRole('button', {name: 'Add'});
+
+const sameAsHome = (): HTMLElement => screen.getByRole('checkbox', {name: 'Same as Home'});
+
 describe('a user form', () => {
-  const info: NewUser = {
+  const info: Pick<NewUser, 'info' | 'homeAddress'> & { workAddress: AddressInfo; details: string } = {
     info: {
       firstName: 'Teruko',
       lastName: 'Okada',
       email: 'teruko@example.com',
       dob: new Date(1984, 5, 2)
     },
-    friends: [],
     homeAddress: {
       streetAddress: '12 Elm St',
       streetAddressTwo: 'Apt. 3',
@@ -44,20 +48,18 @@ describe('a user form', () => {
       state: 'IL',
       zip: '62629'
     },
-    details: 'short notes',
-    avatar: initialState.avatar
+    details: 'short notes'
   };
-  const userInfo = info;
 
   describe('filled out', () => {
     it('should be resettable', async () => {
       const {form, adds} = added();
       render(form);
-      await fillOutForm(userInfo);
+      await fillOutForm(info);
 
-      await userEvent.type(screen.getByLabelText('Details'), userInfo.details!);
-      await userEvent.click(screen.getByText('Reset'));
-      await userEvent.click(screen.getByText('Add'));
+      await userEvent.type(screen.getByLabelText('Details'), info.details);
+      await userEvent.click(screen.getByRole('button', {name: 'Reset'}));
+      await userEvent.click(addButton());
 
       expect(screen.getByLabelText('First Name')).toHaveValue('');
       expect(adds()).toEqual([]);
@@ -70,22 +72,33 @@ describe('a user form', () => {
         render(form);
 
         await fillOutForm(info);
-        await userEvent.type(screen.getByLabelText('Details'), userInfo.details!);
-        await userEvent.click(screen.getByText('Add'));
+        await userEvent.type(screen.getByLabelText('Details'), info.details);
+        const avatar = avatarShown();
+        await userEvent.click(addButton());
 
-        await waitFor(() => expect(adds()).toEqual([info]));
+        await waitFor(() => expect(adds()).toEqual([{...info, friends: [], avatar}]));
       });
 
       it('should reset the form', async () => {
         const {form, adds} = added();
         render(form);
-        await fillOutForm(userInfo);
+        await fillOutForm(info);
 
-        await userEvent.click(screen.getByText('Add'));
-        await userEvent.click(screen.getByText('Add'));
+        await userEvent.click(addButton());
+        await userEvent.click(addButton());
 
         expect(screen.getByLabelText('First Name')).toHaveValue('');
         expect(adds()).toHaveLength(1);
+      });
+
+      it('the fresh form after adding wears a new avatar', async () => {
+        render(added().form);
+        await fillOutForm(info);
+        const submitted = avatarShown();
+
+        await userEvent.click(addButton());
+
+        expect(avatarShown()).not.toEqual(submitted);
       });
     });
 
@@ -95,40 +108,47 @@ describe('a user form', () => {
         render(form);
 
         await fillOutForm(info);
-        await userEvent.type(screen.getByLabelText('Details'), info.details!);
-        await userEvent.click(screen.getByLabelText('Same as Home'));
-        await userEvent.click(screen.getByText('Add'));
+        await userEvent.type(screen.getByLabelText('Details'), info.details);
+        await userEvent.click(sameAsHome());
+        const avatar = avatarShown();
+        await userEvent.click(addButton());
 
         expect(adds()).toEqual([{
           ...info,
+          friends: [],
+          avatar,
           workAddress: info.homeAddress
         }]);
       });
 
-      test('the work fields show the home address while the box is ticked, and give back what was typed when it is not', async () => {
+      test('the work address reads as the home address while the box is ticked, and as what was typed when it is not', async () => {
         const {form} = added();
         render(form);
         await fillOutForm(info);
 
-        await userEvent.click(screen.getByLabelText('Same as Home'));
+        await userEvent.click(sameAsHome());
 
         expect(addressGroup('work').getByLabelText('Street')).toHaveValue(info.homeAddress.streetAddress);
+        expect(addressGroup('work').getByLabelText('City')).toHaveValue(info.homeAddress.city);
+        expect(addressGroup('work').getByLabelText('Postal / Zip code')).toHaveValue(info.homeAddress.zip);
         expect(addressGroup('work').getByLabelText('Street')).toBeDisabled();
 
-        await userEvent.click(screen.getByLabelText('Same as Home'));
+        await userEvent.click(sameAsHome());
 
-        expect(addressGroup('work').getByLabelText('Street')).toHaveValue(info.workAddress!.streetAddress);
+        expect(addressGroup('work').getByLabelText('Street')).toHaveValue(info.workAddress.streetAddress);
+        expect(addressGroup('work').getByLabelText('City')).toHaveValue(info.workAddress.city);
+        expect(addressGroup('work').getByLabelText('Postal / Zip code')).toHaveValue(info.workAddress.zip);
         expect(addressGroup('work').getByLabelText('Street')).toBeEnabled();
       });
 
       test('the fresh form after adding has the box unticked and the work address open', async () => {
         render(added().form);
         await fillOutForm(info);
-        await userEvent.click(screen.getByLabelText('Same as Home'));
+        await userEvent.click(sameAsHome());
 
-        await userEvent.click(screen.getByText('Add'));
+        await userEvent.click(addButton());
 
-        expect(screen.getByLabelText('Same as Home')).not.toBeChecked();
+        expect(sameAsHome()).not.toBeChecked();
         expect(addressGroup('work').getByLabelText('Street')).toBeEnabled();
         expect(addressGroup('work').getByLabelText('Street')).toHaveValue('');
       });
@@ -213,12 +233,21 @@ describe('the avatar control plays fair with the keyboard', () => {
 
     expect(screen.getByAltText<HTMLImageElement>('avatar').src).not.toEqual(before);
   });
+
+  test('a new avatar is announced', async () => {
+    render(added().form);
+    expect(screen.getByRole('status', {name: 'avatar report'})).toBeEmptyDOMElement();
+
+    await userEvent.click(screen.getByRole('button', {name: 'Generate a new avatar'}));
+
+    expect(screen.getByRole('status', {name: 'avatar report'})).toHaveTextContent('A new avatar was drawn.');
+  });
 });
 
 describe('the keyboard walks the whole form', () => {
   test('tab visits each control once and always gets out the other side', async () => {
     render(added().form);
-    const form = screen.getByRole('form', {name: 'user info'});
+    const form = screen.getByRole('form', {name: 'User Information'});
     await userEvent.click(screen.getByLabelText('First Name'));
 
     const visited: Element[] = [];

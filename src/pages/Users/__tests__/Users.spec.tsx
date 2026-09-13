@@ -152,7 +152,7 @@ describe('the users page', () => {
     });
 
     it('should be able to edit', () => {
-      expect(within(screen.getByRole('form', {name: 'user info'})).getByRole('link', {name: 'Edit'})).toBeInTheDocument();
+      expect(within(screen.getByRole('form', {name: 'User Information'})).getByRole('link', {name: 'Edit'})).toBeInTheDocument();
     });
   });
 
@@ -167,7 +167,7 @@ describe('the users page', () => {
 
     it('should populate the form', () => {
       const [firstName, lastName] = chosen.split(' ');
-      const form = screen.getByRole('form', {name: 'user info'});
+      const form = screen.getByRole('form', {name: 'User Information'});
       expect(within(form).getByLabelText('First Name')).toHaveDisplayValue(firstName);
       expect(within(form).getByLabelText('Last Name')).toHaveDisplayValue(lastName);
     });
@@ -182,7 +182,7 @@ describe('the users page', () => {
 
     it('should be able to reset the form to the original information', async () => {
       const [firstName] = chosen.split(' ');
-      const form = screen.getByRole('form', {name: 'user info'});
+      const form = screen.getByRole('form', {name: 'User Information'});
       await userEvent.type(within(form).getByLabelText('First Name'), ' with more text');
 
       expect(within(form).getByLabelText('First Name')).toHaveDisplayValue(`${firstName} with more text`);
@@ -193,7 +193,7 @@ describe('the users page', () => {
     });
 
     it('should be able to cancel the form to the original information', async () => {
-      const form = screen.getByRole('form', {name: 'user info'});
+      const form = screen.getByRole('form', {name: 'User Information'});
       await userEvent.click(within(form).getByRole('link', {name: 'Cancel'}));
       expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('mode=view');
     });
@@ -206,8 +206,8 @@ describe('the users page', () => {
     await addUser(person);
     await edit(fullName(person));
 
-    await userEvent.type(within(screen.getByRole('form', {name: 'user info'})).getByLabelText('Last Name'), ' Jr');
-    await userEvent.click(within(screen.getByRole('form', {name: 'user info'})).getByRole('button', {name: 'Update'}));
+    await userEvent.type(within(screen.getByRole('form', {name: 'User Information'})).getByLabelText('Last Name'), ' Jr');
+    await userEvent.click(within(screen.getByRole('form', {name: 'User Information'})).getByRole('button', {name: 'Update'}));
 
     expect(await rowOf(`${fullName(person)} Jr`)).toBeInTheDocument();
   });
@@ -234,7 +234,7 @@ describe('the users page', () => {
     const standing = names().filter(name => name === fullName(person)).length;
     await clone(fullName(person));
 
-    await userEvent.click(within(screen.getByRole('form', {name: 'user info'})).getByRole('button', {name: 'Add'}));
+    await userEvent.click(within(screen.getByRole('form', {name: 'User Information'})).getByRole('button', {name: 'Add'}));
 
     await waitFor(() => expect(names().filter(name => name === fullName(person))).toHaveLength(standing + 1));
   });

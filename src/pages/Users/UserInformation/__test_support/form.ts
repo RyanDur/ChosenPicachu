@@ -15,13 +15,13 @@ export const fillOutAddress = (address: AddressInfo, kind: string) =>
     .then(() => swiftKeys.selectOptions(addressGroup(kind).getByLabelText('State'), address.state))
     .then(() => swiftKeys.type(addressGroup(kind).getByLabelText('Postal / Zip code'), address.zip));
 
-export const fillOutUser = (info: NewUser) =>
+export const fillOutUser = (info: Pick<NewUser, 'info'>) =>
   swiftKeys.type(screen.getByLabelText('First Name'), info.info.firstName)
     .then(() => swiftKeys.type(screen.getByLabelText('Last Name'), info.info.lastName))
     .then(() => swiftKeys.type(screen.getByLabelText('Email'), info.info.email!))
     .then(() => swiftKeys.type(screen.getByLabelText('Date Of Birth'), format(info.info.dob!, 'yyyy-MM-dd')));
 
-export const fillOutForm = (info: NewUser) =>
+export const fillOutForm = (info: Pick<NewUser, 'info' | 'homeAddress' | 'workAddress'>) =>
   fillOutUser(info)
     .then(() => fillOutAddress(info.homeAddress, 'home'))
     .then(() => fillOutAddress(info.workAddress!, 'work'));

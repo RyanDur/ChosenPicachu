@@ -75,7 +75,7 @@ export type SameAsHomeChosen = Action<FormActions.SAME_AS_HOME_CHOSEN> & {
   sameAsHome: boolean;
 }
 export type FormReset = Action<FormActions.FORM_RESET> & {
-  userInfo?: NewUser | User;
+  user: NewUser | User;
 }
 
 export type FormAction =

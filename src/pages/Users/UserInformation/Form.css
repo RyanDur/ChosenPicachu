@@ -84,10 +84,6 @@
     [type='checkbox'] {
       margin-left: var(--base-x-1_25);
     }
-
-    &.read-only {
-      opacity: 0;
-    }
   }
 
   .home-address {

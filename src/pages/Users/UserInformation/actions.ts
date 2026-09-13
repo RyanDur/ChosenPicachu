@@ -35,5 +35,4 @@ export const sameAsHomeChosen = (sameAsHome: boolean): SameAsHomeChosen => ({
   type: FormActions.SAME_AS_HOME_CHOSEN,
   sameAsHome
 });
-export const formReset = (userInfo?: NewUser | User): FormReset => ({type: FormActions.FORM_RESET, userInfo});
-
+export const formReset = (user: NewUser | User): FormReset => ({type: FormActions.FORM_RESET, user});
