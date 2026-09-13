@@ -236,6 +236,7 @@ describe('the users page', () => {
     await roster();
     await addUser(person);
     await view(fullName(person));
+    await waitFor(() => expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('id='));
 
     await remove(fullName(person));
 
