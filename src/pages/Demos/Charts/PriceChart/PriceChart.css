@@ -1,7 +1,6 @@
 .price-chart {
 
   .chart-stage {
-    position: relative;
     margin: var(--base-x-2) 0 0;
 
     .sparkline {

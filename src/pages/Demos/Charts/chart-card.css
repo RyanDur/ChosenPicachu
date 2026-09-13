@@ -19,7 +19,6 @@
   }
 
   .chart-caption {
-    display: block;
     width: fit-content;
     min-height: var(--base-x-2);
     margin: var(--base-x-0_5) auto 0;
