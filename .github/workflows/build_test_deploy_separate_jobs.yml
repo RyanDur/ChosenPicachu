@@ -227,9 +227,6 @@ jobs:
           urls: ${{ matrix.url }}
           configPath: ./lighthouserc.json
           uploadArtifacts: false
-      - name: Read the scores in the run
-        if: always() && steps.audit.outputs.resultsPath != ''
-        run: node scripts/lighthouse/summary.mjs "${{ matrix.page }}" "${{ steps.audit.outputs.resultsPath }}" >> "$GITHUB_STEP_SUMMARY"
       - name: Keep the reports
         if: always()
         uses: actions/upload-artifact@v6
@@ -238,3 +235,28 @@ jobs:
           path: ${{ steps.audit.outputs.resultsPath }}
           include-hidden-files: true
           if-no-files-found: error
+
+  lighthouse_scores:
+    needs: [build_test, lighthouse]
+    if: always() && needs.build_test.result == 'success'
+    runs-on: ubuntu-latest
+    name: lighthouse scores
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: 'npm'
+          registry-url: 'https://npm.pkg.github.com'
+      - name: Install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm ci
+      - name: Take every page's reports
+        uses: actions/download-artifact@v7
+        with:
+          pattern: lighthouse-*
+          path: lighthouse-reports
+      - name: Read the scores in the run
+        run: node --import ./scripts/node/imports-like-vite.mjs scripts/lighthouse/summary.mjs lighthouse-reports >> "$GITHUB_STEP_SUMMARY"
