@@ -1,6 +1,7 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
 import {GamePaths} from './GamePaths';
+import './GamesPage.css';
 
 export const GamesPage: FC = () =>
   <nav className="games" aria-label="games">

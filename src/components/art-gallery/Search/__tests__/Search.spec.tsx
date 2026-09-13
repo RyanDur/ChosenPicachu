@@ -50,6 +50,17 @@ describe('search', () => {
     expect(screen.getByRole('status', {name: 'url path'})).toHaveTextContent(new RegExp(`^${Paths.artGallery}$`));
   });
 
+  it('the keyboard walks from the query to reset, then submit', async () => {
+    render(<TestApp at={Paths.artGallery}/>);
+    await userEvent.type(screen.getByLabelText(/Search For/), 'a');
+
+    await userEvent.tab();
+    expect(screen.getByRole('button', {name: 'reset search'})).toHaveFocus();
+
+    await userEvent.tab();
+    expect(screen.getByRole('button', {name: 'submit search'})).toHaveFocus();
+  });
+
   it('a search keeps the page and museum it was made on', async () => {
     render(<TestApp at={`${Paths.artGallery}?page=1&tab=aic`}/>);
 

@@ -71,24 +71,12 @@
       }
     }
 
-    &:focus ~ .fancy-title,
-    &:disabled ~ .fancy-title {
-      opacity: 1;
-      top: -1rem;
-    }
-
     &:disabled,
     &:read-only:not(.fancy-select-box) {
       border: none;
       border-bottom: var(--hairline) solid var(--focus-blue);
       box-shadow: none;
       border-radius: 0;
-
-      & ~ .fancy-title {
-        opacity: 1;
-        top: -1rem;
-        z-index: 1;
-      }
     }
   }
 }
@@ -105,12 +93,6 @@
 
   &:hover,
   &:focus {
-    box-shadow: var(--drop-shadow);
-  }
-
-  &:hover ~ label,
-  &:focus ~ label {
-    font-weight: bold;
     box-shadow: var(--drop-shadow);
   }
 }
