@@ -1,8 +1,7 @@
 import {copyFileSync, mkdirSync, readFileSync, rmSync, writeFileSync} from 'node:fs';
-import {baseOf, demosLinks, preloaded} from './entry-points.mjs';
+import {baseOf, demosLinks, preloaded, staticRoutesOf} from './entry-points.mjs';
 
-const paths = readFileSync('src/pages/Paths.ts', 'utf-8');
-const staticRoutes = [...paths.matchAll(/= '(\/[^':]+)'/g)].map(([, route]) => route);
+const staticRoutes = staticRoutesOf(readFileSync('src/pages/Paths.ts', 'utf-8'));
 
 const manifest = JSON.parse(readFileSync('dist/.vite/manifest.json', 'utf-8'));
 const shell = readFileSync('dist/index.html', 'utf-8');

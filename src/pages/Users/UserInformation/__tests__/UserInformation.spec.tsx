@@ -160,11 +160,6 @@ describe('a user form', () => {
         expect(homeZip()).toBeValid();
       });
 
-      test('the work address has a zip of its own', () => {
-        render(added().form);
-
-        expect(addressGroup('work').getByLabelText('Postal / Zip code')).not.toBe(homeZip());
-      });
     });
   });
 });

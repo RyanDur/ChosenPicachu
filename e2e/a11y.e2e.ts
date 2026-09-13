@@ -105,10 +105,15 @@ const inkNamed = (page: Page, token: string): Promise<string> =>
   }, token);
 
 const feedDot = (page: Page): Promise<string> =>
-  page.evaluate(() => {
-    const feed = document.querySelector('[aria-label="feed"]');
-    return feed === null ? '' : getComputedStyle(feed, '::before').backgroundColor;
-  });
+  page.getByRole('status', {name: 'feed'}).evaluate(feed => getComputedStyle(feed, '::before').backgroundColor);
+
+test('the feed dot glows live', async ({page}) => {
+  await scriptedMarket(page, [50000, 50100]);
+  await page.goto('demos?tab=charts');
+
+  await expect(delta(page)).toBeVisible({timeout: 30_000});
+  await expect.poll(() => feedDot(page)).toBe(await inkNamed(page, '--mint'));
+});
 
 for (const {trend, sign, ink, prices} of markets) {
   test(`the ${trend} price card has no accessibility violations`, async ({page}) => {
@@ -128,13 +133,12 @@ for (const {trend, sign, ink, prices} of markets) {
     }))).toEqual([]);
   });
 
-  test(`the ${trend} price card wears its ink, and the feed dot glows live`, async ({page}) => {
+  test(`the ${trend} price card wears its ink`, async ({page}) => {
     await scriptedMarket(page, prices);
     await page.goto('demos?tab=charts');
 
     await expect(delta(page)).toBeVisible({timeout: 30_000});
     await expect(delta(page)).toHaveText(sign);
     await expect(delta(page)).toHaveCSS('color', await inkNamed(page, ink));
-    await expect.poll(() => feedDot(page)).toBe(await inkNamed(page, '--mint'));
   });
 }

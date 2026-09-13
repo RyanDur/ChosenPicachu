@@ -1,3 +1,6 @@
+export const staticRoutesOf = (pathsSource) =>
+  [...pathsSource.matchAll(/= '(\/[^':]+)'/g)].map(([, route]) => route);
+
 export const baseOf = shell => {
   const match = shell.match(/src="(.*?)assets\//);
   if (match === null) throw new Error('the shell has no assets script tag to read the base from');
