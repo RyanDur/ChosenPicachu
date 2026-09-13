@@ -1,5 +1,5 @@
 import {promptFor} from '../review/prompt.mjs';
-import {findingsIn, summaryOf, verdictOf} from '../review/report.mjs';
+import {doorTable, entryOf, findingsIn, summaryOf, verdictOf} from '../review/report.mjs';
 
 const answer = (findings) => JSON.stringify({type: 'result', structured_output: {findings}});
 
@@ -101,8 +101,34 @@ describe('the review report', () => {
         expect(summary.indexOf('### dynamic interaction')).toBeLessThan(summary.indexOf('a handler is named for the act in progress'));
         expect(summary.indexOf('a div wraps a list')).toBeLessThan(summary.indexOf('a section has no heading'));
         expect(summary).toContain('`src/b.css:9`');
-        expect(summary).toContain('_Tag selectors are for resets only_');
+        expect(summary).toContain('> Tag selectors are for resets only');
         expect(summary).toContain('`src/__tests__/c.spec.tsx:4`');
+    });
+
+    test('the doors are tallied in a table before the prose', () => {
+        const table = doorTable([testNote, note, concern, violation, interaction]);
+        expect(table).toContain('| structure | 1 | 0 | 1 |');
+        expect(table).toContain('| presentation | 0 | 1 | 0 |');
+        expect(table).toContain('| tests | 0 | 0 | 1 |');
+        expect(table).not.toContain('| dynamic interaction | 0 | 0 | 0 |');
+    });
+
+    test('a finding is a heading with its mark, its place, its words, and the door\'s words quoted', () => {
+        const entry = entryOf(concern);
+        expect(entry).toContain('#### ▲ concern · `src/b.css:9`');
+        expect(entry).toContain('\n\na tag selector styles a button\n\n');
+        expect(entry).toContain('> Tag selectors are for resets only');
+    });
+
+    test('the place links to the line at the reviewed commit when the commit is known', () => {
+        const entry = entryOf(violation, {repository: 'RyanDur/ChosenPicachu', sha: 'abc123'});
+        expect(entry).toContain('[src/a.tsx:3](https://github.com/RyanDur/ChosenPicachu/blob/abc123/src/a.tsx#L3)');
+    });
+
+    test('what the reviewer checked folds away under the finding', () => {
+        const entry = entryOf({...note, what: 'a section has no heading. Checked: read the file whole.'});
+        expect(entry).toContain('a section has no heading.\n\n<details><summary>what was checked</summary>\n\nChecked: read the file whole.\n\n</details>');
+        expect(entryOf(note)).not.toContain('<details>');
     });
 
     test('only a violation fails the job', () => {
