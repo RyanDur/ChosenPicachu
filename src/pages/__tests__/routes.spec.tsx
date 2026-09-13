@@ -3,6 +3,7 @@ import {render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {Paths} from '@pages/Paths';
 import {Route} from 'react-router';
+import {landingsDuring} from '@test-support/landings';
 
 describe('page error boundaries', () => {
   test('a crashing page shows the closed room inside the site, even with no boundary of its own', async () => {
@@ -34,30 +35,22 @@ describe('page error boundaries', () => {
     expect(screen.getByRole('link', {name: 'Back to the front door'})).toHaveAttribute('href', Paths.home);
     expect(screen.getByRole('navigation', {name: 'site'})).toBeInTheDocument();
   });
-});
 
-const recordingLandings = async (act: () => Promise<void>): Promise<[number, number][]> => {
-  const landings: [number, number][] = [];
-  const recorder = vi.spyOn(Element.prototype, 'scrollTo').mockImplementation((...args: unknown[]) => {
-    const [x, y] = args;
-    if (typeof x === 'number' && typeof y === 'number') {
-      landings.push([x, y]);
-    }
+  test('a room still loading is not called closed', async () => {
+    render(<TestApp><Route path="/" lazy={() => new Promise(() => undefined)}/></TestApp>);
+
+    await screen.findByRole('navigation', {name: 'site'});
+    expect(screen.queryByRole('heading', {level: 1})).not.toBeInTheDocument();
+    expect(screen.queryByText('This room is closed.')).not.toBeInTheDocument();
   });
-  try {
-    await act();
-  } finally {
-    recorder.mockRestore();
-  }
-  return landings;
-};
+});
 
 describe('leaving a page', () => {
   test('a new page starts at the top', async () => {
     render(<TestApp at="/"/>);
     await screen.findByRole('heading', {level: 1});
 
-    const landings = await recordingLandings(async () => {
+    const landings = await landingsDuring(Element.prototype, async () => {
       await userEvent.click(screen.getByRole('link', {name: /Start where the demos start/}));
       await screen.findByRole('navigation', {name: 'demos'});
     });
@@ -66,7 +59,7 @@ describe('leaving a page', () => {
   });
 
   test('arriving at a place on the page keeps that place', async () => {
-    const landings = await recordingLandings(async () => {
+    const landings = await landingsDuring(Element.prototype, async () => {
       render(<TestApp at="/#the-record"/>);
       await screen.findByRole('heading', {level: 1});
     });

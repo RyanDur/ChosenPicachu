@@ -18,7 +18,7 @@ const NoHeader = () => null;
 const ClosedRoomHeader = () => <Header title="Closed room"/>;
 const NoRoomHeader = () => <Header title="No such room"/>;
 
-export const Site: FC = () => {
+export const Site: FC<{closed?: boolean}> = ({closed = false}) => {
   const {pathname, hash} = useLocation();
   useEffect(() => {
     if (hash === '') {
@@ -29,13 +29,14 @@ export const Site: FC = () => {
     .map(match => match.handle)
     .filter(isRegions)
     .reduce<Regions>((parent, child) => ({...parent, ...child}), {header: NoHeader});
-  const {header: HeaderRegion, aside: AsideRegion, footer: FooterRegion, provider: Provider = Fragment, mainClassName} = regions;
+  const {header: HeaderRegion, aside: AsideRegion, footer: FooterRegion, provider: Provider = Fragment, mainClassName} =
+    closed ? {...regions, header: ClosedRoomHeader} : regions;
 
   return <BannerProvider>
     <Provider>
       <HeaderRegion/>
       <main className={classNames('app-main', 'field', mainClassName)}>
-        <Outlet/>
+        {closed ? <PageError/> : <Outlet/>}
       </main>
       {AsideRegion !== undefined && <aside id="filter" className="filter field" aria-label="filters">
         <AsideRegion/>
@@ -49,9 +50,11 @@ export const Site: FC = () => {
   </BannerProvider>;
 };
 
-export const rooms = {
-  errorElement: <PageError/>,
-  handle: {header: ClosedRoomHeader},
+export const router = {
+  path: '/',
+  element: <Site/>,
+  errorElement: <Site closed/>,
+  hydrateFallbackElement: <Site/>,
   children: [
     Home,
     {
@@ -66,11 +69,4 @@ export const rooms = {
     Games,
     {path: '*', handle: {header: NoRoomHeader}, element: <NoRoom/>}
   ]
-};
-
-export const router = {
-  path: '/',
-  element: <Site/>,
-  hydrateFallbackElement: <Site/>,
-  children: [rooms]
 };
