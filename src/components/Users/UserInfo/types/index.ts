@@ -1,29 +1,29 @@
 export type AddressInfo = {
-    streetAddress: string;
-    streetAddressTwo?: string;
-    city: string;
-    state: string;
-    zip: string;
+  streetAddress: string;
+  streetAddressTwo?: string;
+  city: string;
+  state: string;
+  zip: string;
 }
 
 export type UserInfo = {
-    firstName: string;
-    lastName: string;
-    email: string;
-    dob?: Date;
+  firstName: string;
+  lastName: string;
+  email: string;
+  dob?: Date;
 }
 
 export type NewUser = {
-    info: UserInfo;
-    friends: string[];
-    homeAddress: AddressInfo;
-    avatar: string;
-    workAddress?: AddressInfo;
-    details?: string;
+  info: UserInfo;
+  friends: string[];
+  homeAddress: AddressInfo;
+  avatar: string;
+  workAddress?: AddressInfo;
+  details?: string;
 }
 
 export type User = {
-    id: string;
+  id: string;
 } & NewUser
 
 export type UserEdit = Omit<User, 'friends'>;
@@ -31,61 +31,61 @@ export type UserEdit = Omit<User, 'friends'>;
 export const isPersisted = (user: NewUser | User): user is User => 'id' in user;
 
 export enum FormActions {
-    UPDATE_FIRST_NAME = 'UPDATE_FIRST_NAME',
-    UPDATE_LAST_NAME = 'UPDATE_LAST_NAME',
-    UPDATE_EMAIL = 'UPDATE_EMAIL',
-    UPDATE_DATE_OF_BIRTH = 'UPDATE_DATE_OF_BIRTH',
-    UPDATE_HOME_ADDRESS = 'UPDATE_HOME_ADDRESS',
-    UPDATE_WORK_ADDRESS = 'UPDATE_WORK_ADDRESS',
-    UPDATE_DETAILS = 'UPDATED_DETAILS',
-    UPDATE_AVATAR = 'UPDATED_AVATAR',
-    SAME_AS_HOME_CHOSEN = 'SAME_AS_HOME_CHOSEN',
-    RESET_FORM = 'RESET_FORM'
+  FIRST_NAME_EDITED = 'FIRST_NAME_EDITED',
+  LAST_NAME_EDITED = 'LAST_NAME_EDITED',
+  EMAIL_EDITED = 'EMAIL_EDITED',
+  DATE_OF_BIRTH_EDITED = 'DATE_OF_BIRTH_EDITED',
+  HOME_ADDRESS_EDITED = 'HOME_ADDRESS_EDITED',
+  WORK_ADDRESS_EDITED = 'WORK_ADDRESS_EDITED',
+  DETAILS_EDITED = 'DETAILS_EDITED',
+  AVATAR_GENERATED = 'AVATAR_GENERATED',
+  SAME_AS_HOME_CHOSEN = 'SAME_AS_HOME_CHOSEN',
+  FORM_RESET = 'FORM_RESET'
 }
 
 type Action<T> = {
-    type: T;
+  type: T;
 }
 
-export type UpdateFirstName = Action<FormActions.UPDATE_FIRST_NAME> & {
-    firstName: string;
+export type FirstNameEdited = Action<FormActions.FIRST_NAME_EDITED> & {
+  firstName: string;
 }
-export type UpdateLastName = Action<FormActions.UPDATE_LAST_NAME> & {
-    lastName: string;
+export type LastNameEdited = Action<FormActions.LAST_NAME_EDITED> & {
+  lastName: string;
 }
-export type UpdateEmail = Action<FormActions.UPDATE_EMAIL> & {
-    email: string;
+export type EmailEdited = Action<FormActions.EMAIL_EDITED> & {
+  email: string;
 }
-export type UpdateDob = Action<FormActions.UPDATE_DATE_OF_BIRTH> & {
-    dob: Date;
+export type DateOfBirthEdited = Action<FormActions.DATE_OF_BIRTH_EDITED> & {
+  dob: Date;
 }
-export type UpdateHomeAddress = Action<FormActions.UPDATE_HOME_ADDRESS> & {
-    homeAddress: AddressInfo;
+export type HomeAddressEdited = Action<FormActions.HOME_ADDRESS_EDITED> & {
+  homeAddress: AddressInfo;
 }
-export type UpdateWorkAddress = Action<FormActions.UPDATE_WORK_ADDRESS> & {
-    workAddress: AddressInfo;
+export type WorkAddressEdited = Action<FormActions.WORK_ADDRESS_EDITED> & {
+  workAddress: AddressInfo;
 }
-export type UpdateDetails = Action<FormActions.UPDATE_DETAILS> & {
-    details: string;
+export type DetailsEdited = Action<FormActions.DETAILS_EDITED> & {
+  details: string;
 }
-export type UpdateAvatar = Action<FormActions.UPDATE_AVATAR> & {
-    avatar: string;
+export type AvatarGenerated = Action<FormActions.AVATAR_GENERATED> & {
+  avatar: string;
 }
 export type SameAsHomeChosen = Action<FormActions.SAME_AS_HOME_CHOSEN> & {
-    sameAsHome: boolean;
+  sameAsHome: boolean;
 }
-export type ResetForm = Action<FormActions.RESET_FORM> & {
-    userInfo?: NewUser | User;
+export type FormReset = Action<FormActions.FORM_RESET> & {
+  userInfo?: NewUser | User;
 }
 
 export type FormAction =
-    | UpdateFirstName
-    | UpdateLastName
-    | UpdateEmail
-    | UpdateDob
-    | UpdateHomeAddress
-    | UpdateWorkAddress
-    | UpdateDetails
-    | UpdateAvatar
-    | SameAsHomeChosen
-    | ResetForm;
+  | FirstNameEdited
+  | LastNameEdited
+  | EmailEdited
+  | DateOfBirthEdited
+  | HomeAddressEdited
+  | WorkAddressEdited
+  | DetailsEdited
+  | AvatarGenerated
+  | SameAsHomeChosen
+  | FormReset;

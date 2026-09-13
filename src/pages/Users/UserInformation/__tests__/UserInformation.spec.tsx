@@ -104,6 +104,34 @@ describe('a user form', () => {
           workAddress: info.homeAddress
         }]);
       });
+
+      test('the work fields show the home address while the box is ticked, and give back what was typed when it is not', async () => {
+        const {form} = added();
+        render(form);
+        await fillOutForm(info);
+
+        await userEvent.click(screen.getByLabelText('Same as Home'));
+
+        expect(addressGroup('work').getByLabelText('Street')).toHaveValue(info.homeAddress.streetAddress);
+        expect(addressGroup('work').getByLabelText('Street')).toBeDisabled();
+
+        await userEvent.click(screen.getByLabelText('Same as Home'));
+
+        expect(addressGroup('work').getByLabelText('Street')).toHaveValue(info.workAddress!.streetAddress);
+        expect(addressGroup('work').getByLabelText('Street')).toBeEnabled();
+      });
+
+      test('the fresh form after adding has the box unticked and the work address open', async () => {
+        render(added().form);
+        await fillOutForm(info);
+        await userEvent.click(screen.getByLabelText('Same as Home'));
+
+        await userEvent.click(screen.getByText('Add'));
+
+        expect(screen.getByLabelText('Same as Home')).not.toBeChecked();
+        expect(addressGroup('work').getByLabelText('Street')).toBeEnabled();
+        expect(addressGroup('work').getByLabelText('Street')).toHaveValue('');
+      });
     });
   });
 

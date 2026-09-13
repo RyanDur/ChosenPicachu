@@ -44,8 +44,7 @@ for (const {name, path, ready, loaded} of pages) {
 }
 
 for (const {name, path, ready, loaded} of pages) {
-  test(`the ${name} page is conforming html`, async ({page, browserName}) => {
-    test.skip(browserName !== 'chromium', 'the serialized DOM is engine-independent');
+  test(`the ${name} page is conforming html`, async ({page}) => {
     await page.goto(path);
     await expect(page.getByRole(ready).first()).toBeVisible({timeout: 30_000});
     if (loaded) await expect(loaded(page)).toBeVisible({timeout: 30_000});

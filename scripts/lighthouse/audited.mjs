@@ -1,4 +1,4 @@
-import {budgeted} from '../../e2e/pages.ts';
+import {budgeted} from '../../e2e/pages';
 
 export const stage = 'http://localhost:4517/ChosenPicachu/';
 

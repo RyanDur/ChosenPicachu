@@ -1,36 +1,39 @@
 import {
-    AddressInfo,
-    FormActions,
-    ResetForm,
-    SameAsHomeChosen,
-    UpdateAvatar,
-    UpdateDetails,
-    UpdateDob,
-    UpdateEmail,
-    UpdateFirstName,
-    UpdateHomeAddress,
-    UpdateLastName,
-    NewUser,
-    UpdateWorkAddress, User
+  AddressInfo,
+  FormActions,
+  FormReset,
+  SameAsHomeChosen,
+  AvatarGenerated,
+  DetailsEdited,
+  DateOfBirthEdited,
+  EmailEdited,
+  FirstNameEdited,
+  HomeAddressEdited,
+  LastNameEdited,
+  NewUser,
+  WorkAddressEdited, User
 } from '@components/Users/UserInfo/types';
 
-export const updateFirstName = (firstName: string): UpdateFirstName => ({
-    type: FormActions.UPDATE_FIRST_NAME,
-    firstName
+export const firstNameEdited = (firstName: string): FirstNameEdited => ({
+  type: FormActions.FIRST_NAME_EDITED,
+  firstName
 });
-export const updateLastName = (lastName: string): UpdateLastName => ({type: FormActions.UPDATE_LAST_NAME, lastName});
-export const updateEmail = (email: string): UpdateEmail => ({type: FormActions.UPDATE_EMAIL, email});
-export const updateDOB = (dob: Date): UpdateDob => ({type: FormActions.UPDATE_DATE_OF_BIRTH, dob});
-export const updateHomeAddress = (homeAddress: AddressInfo): UpdateHomeAddress => ({
-    type: FormActions.UPDATE_HOME_ADDRESS,
-    homeAddress
+export const lastNameEdited = (lastName: string): LastNameEdited => ({type: FormActions.LAST_NAME_EDITED, lastName});
+export const emailEdited = (email: string): EmailEdited => ({type: FormActions.EMAIL_EDITED, email});
+export const dateOfBirthEdited = (dob: Date): DateOfBirthEdited => ({type: FormActions.DATE_OF_BIRTH_EDITED, dob});
+export const homeAddressEdited = (homeAddress: AddressInfo): HomeAddressEdited => ({
+  type: FormActions.HOME_ADDRESS_EDITED,
+  homeAddress
 });
-export const updateWorkAddress = (workAddress: AddressInfo): UpdateWorkAddress => ({
-    type: FormActions.UPDATE_WORK_ADDRESS,
-    workAddress
+export const workAddressEdited = (workAddress: AddressInfo): WorkAddressEdited => ({
+  type: FormActions.WORK_ADDRESS_EDITED,
+  workAddress
 });
-export const updateDetails = (details: string): UpdateDetails => ({type: FormActions.UPDATE_DETAILS, details});
-export const updateAvatar = (avatar: string): UpdateAvatar => ({type: FormActions.UPDATE_AVATAR, avatar});
-export const sameAsHomeChosen = (sameAsHome: boolean): SameAsHomeChosen => ({type: FormActions.SAME_AS_HOME_CHOSEN, sameAsHome});
-export const resetForm = (userInfo?: NewUser | User): ResetForm => ({type: FormActions.RESET_FORM, userInfo});
+export const detailsEdited = (details: string): DetailsEdited => ({type: FormActions.DETAILS_EDITED, details});
+export const avatarGenerated = (avatar: string): AvatarGenerated => ({type: FormActions.AVATAR_GENERATED, avatar});
+export const sameAsHomeChosen = (sameAsHome: boolean): SameAsHomeChosen => ({
+  type: FormActions.SAME_AS_HOME_CHOSEN,
+  sameAsHome
+});
+export const formReset = (userInfo?: NewUser | User): FormReset => ({type: FormActions.FORM_RESET, userInfo});
 

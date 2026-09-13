@@ -117,7 +117,11 @@ describe('the review report', () => {
     expect(doorTable(findings)).toContain('| structure | 1 | 0 | 1 |');
     expect(doorTable(findings)).toContain('| presentation | 0 | 1 | 0 |');
     expect(doorTable(findings)).toContain('| tests | 0 | 0 | 1 |');
-    expect(doorTable(findings)).not.toContain('| dynamic interaction | 0 | 0 | 0 |');
+  });
+
+  test('a door nobody found anything in gets no row', () => {
+    expect(doorTable([note])).toContain('| structure | 0 | 0 | 1 |');
+    expect(doorTable([note])).not.toContain('presentation');
   });
 
   test('a finding is a heading with its mark, its place, its words, and the door\'s words quoted', () => {
