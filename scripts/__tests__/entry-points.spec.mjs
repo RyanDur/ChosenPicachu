@@ -44,4 +44,19 @@ describe('the entry points', () => {
     expect(() => baseOf('<html><head></head></html>'))
       .toThrow('the shell has no assets script tag to read the base from');
   });
+
+  test('chunks that import each other are each preloaded once', () => {
+    const circling = {
+      ...manifest,
+      'src/pages/Demos/index.tsx': {file: 'assets/Demos-abc.js', imports: ['a.ts']},
+      'a.ts': {file: 'assets/a-abc.js', imports: ['b.ts']},
+      'b.ts': {file: 'assets/b-abc.js', imports: ['a.ts']}
+    };
+
+    expect(demosLinks(circling, '/app/')).toEqual([
+      '    <link rel="modulepreload" crossorigin href="/app/assets/Demos-abc.js">',
+      '    <link rel="modulepreload" crossorigin href="/app/assets/a-abc.js">',
+      '    <link rel="modulepreload" crossorigin href="/app/assets/b-abc.js">'
+    ]);
+  });
 });

@@ -35,6 +35,14 @@ const testNote = {
     what: 'a spec finds a button by class',
     principle: 'It finds by role, label and text, like every test'
 };
+const interaction = {
+    door: 'dynamic interaction',
+    severity: 'note',
+    file: 'src/d.tsx',
+    line: 7,
+    what: 'a handler is named for the act in progress',
+    principle: 'Events are what happened, so they are named in the past tense'
+};
 
 describe('the review prompt', () => {
     test('sends the reviewer to the doors on the home page first', () => {
@@ -85,10 +93,12 @@ describe('the review report', () => {
     });
 
     test('findings are counted and grouped by door, worst first', () => {
-        const summary = summaryOf([testNote, note, concern, violation]);
-        expect(summary).toContain('1 violation, 1 concern, 2 notes.');
+        const summary = summaryOf([testNote, note, concern, violation, interaction]);
+        expect(summary).toContain('1 violation, 1 concern, 3 notes.');
         expect(summary.indexOf('### structure')).toBeLessThan(summary.indexOf('### presentation'));
-        expect(summary.indexOf('### presentation')).toBeLessThan(summary.indexOf('### tests'));
+        expect(summary.indexOf('### presentation')).toBeLessThan(summary.indexOf('### dynamic interaction'));
+        expect(summary.indexOf('### dynamic interaction')).toBeLessThan(summary.indexOf('### tests'));
+        expect(summary.indexOf('### dynamic interaction')).toBeLessThan(summary.indexOf('a handler is named for the act in progress'));
         expect(summary.indexOf('a div wraps a list')).toBeLessThan(summary.indexOf('a section has no heading'));
         expect(summary).toContain('`src/b.css:9`');
         expect(summary).toContain('_Tag selectors are for resets only_');
