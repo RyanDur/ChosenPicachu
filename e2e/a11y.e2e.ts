@@ -74,8 +74,18 @@ test('the period menu stays hidden until asked', async ({page}) => {
 
   await page.getByRole('button', {name: 'price period'}).click();
   await expect(page.getByLabel('price period by').getByRole('button', {name: 'week'})).toBeVisible();
-  await expect(page.getByLabel('price period by').getByRole('button', {name: 'hour'})).not.toHaveCSS('box-shadow', 'none');
-  await expect(page.getByLabel('price period by').getByRole('button', {name: 'week'})).toHaveCSS('box-shadow', 'none');
+});
+
+test('the chosen period glows, and its neighbours do not', async ({page}) => {
+  await scriptedMarket(page, [50000, 50100]);
+  await page.goto('demos?tab=charts');
+
+  await expect(delta(page)).toBeVisible({timeout: 30_000});
+  await page.getByRole('button', {name: 'price period'}).click();
+
+  const menu = page.getByLabel('price period by');
+  await expect(menu.getByRole('button', {name: 'hour'})).toHaveCSS('box-shadow', await resolved(page, 'box-shadow', '--press-glow-soft'));
+  await expect(menu.getByRole('button', {name: 'week'})).toHaveCSS('box-shadow', 'none');
 });
 
 test('only one fuller story stands open at a time', async ({page}) => {
@@ -96,15 +106,17 @@ const markets = [
   {trend: 'falling', sign: /^-/, ink: '--internationl-orange-engineering', prices: [50100, 50000]},
 ];
 
-const inkNamed = (page: Page, token: string): Promise<string> =>
-  page.evaluate(name => {
+const resolved = (page: Page, property: string, token: string): Promise<string> =>
+  page.evaluate(([property, name]) => {
     const swatch = document.createElement('span');
-    swatch.style.color = `var(${name})`;
+    swatch.style.setProperty(property, `var(${name})`);
     document.body.append(swatch);
-    const color = getComputedStyle(swatch).color;
+    const value = getComputedStyle(swatch).getPropertyValue(property);
     swatch.remove();
-    return color;
-  }, token);
+    return value;
+  }, [property, token]);
+
+const inkNamed = (page: Page, token: string): Promise<string> => resolved(page, 'color', token);
 
 const feedDot = (page: Page): Promise<string> =>
   page.getByRole('status', {name: 'feed'}).evaluate(feed => getComputedStyle(feed, '::before').backgroundColor);
