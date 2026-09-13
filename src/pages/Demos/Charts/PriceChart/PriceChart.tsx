@@ -3,8 +3,8 @@ import {has, notEmpty} from '@ryandur/sand';
 import {Loading} from '@components/Loading';
 import {LiveTradesState} from '../live-trades';
 import {cents, deltaLabel} from '../money';
-import {usePeriodCandles} from '../usePeriodCandles';
-import {bucketLabel, bucketMs, Period, periodCap, tickEveryMs, timePattern} from '../period';
+import {captionFor, usePeriodCandles} from '../usePeriodCandles';
+import {bucketMs, Period, periodCap, tickEveryMs, timePattern} from '../period';
 import {sparklinePoints, TimedPrice} from '../sparkline';
 import {Axes} from '../Axes';
 import {bucketTrades, Candle, mergeLive} from '../Candles/shapes';
@@ -20,18 +20,16 @@ type PriceView = {
   low: number;
   first: number;
   last: number;
-  caption: string;
 };
 
-const emptyView: PriceView = {series: [], high: 0, low: 0, first: 0, last: 0, caption: ''};
+const emptyView: PriceView = {series: [], high: 0, low: 0, first: 0, last: 0};
 
-const candlesView = (candles: readonly Candle[], bucket: string): PriceView => ({
+const candlesView = (candles: readonly Candle[]): PriceView => ({
   series: candles.map(candle => ({at: candle.openedAt, price: candle.close})),
   high: Math.max(...candles.map(candle => candle.high)),
   low: Math.min(...candles.map(candle => candle.low)),
   first: candles[0]?.open ?? 0,
-  last: candles[candles.length - 1]?.close ?? 0,
-  caption: `${candles.length} candles · ${bucket}`
+  last: candles[candles.length - 1]?.close ?? 0
 });
 
 type Props = Pick<LiveTradesState, 'trades'> & {
@@ -44,7 +42,7 @@ export const PriceChart: FC<Props> = ({trades, id = 'price', actions}) => {
   const history = usePeriodCandles(period);
   const candles = mergeLive(history.candles, bucketTrades(trades, bucketMs[period]), periodCap[period]);
   const showing = candles.length > 0;
-  const windowed = candlesView(candles, bucketLabel[period]);
+  const windowed = candlesView(candles);
   const lastTrade = trades[trades.length - 1];
   const view = showing
     ? {...windowed, last: has(lastTrade) ? lastTrade.price : windowed.last}
@@ -52,13 +50,15 @@ export const PriceChart: FC<Props> = ({trades, id = 'price', actions}) => {
   const points = sparklinePoints(view.series, CHART_WIDTH, CHART_HEIGHT, 2 * bucketMs[period]);
   const line = points.map(point => `${point.x},${point.y}`).join(' ');
   const trend = showing && view.last >= view.first ? 'rising' : 'falling';
-  return <section aria-label="live trades" className="price-chart chart card rounded-corners lifted padded" data-trend={trend}>
+  return <section aria-label="live trades" className="price-chart chart card rounded-corners lifted padded"
+                  data-trend={trend}>
     <header className="chart-header">
       {actions}
       <button type="button" className="menu-toggle rounded-corners period-toggle field caption"
               popoverTarget={`${id}-period`}
               aria-label="price period">{period}</button>
-      <menu id={`${id}-period`} tabIndex={-1} popover="auto" className="menu card rounded-corners lifted" aria-label="price period by">
+      <menu id={`${id}-period`} tabIndex={-1} popover="auto" className="menu card rounded-corners lifted"
+            aria-label="price period by">
         {Object.values(Period).map(option =>
           <li className="entry" key={option}>
             <button type="button" className="item sub-title"
@@ -85,16 +85,12 @@ export const PriceChart: FC<Props> = ({trades, id = 'price', actions}) => {
                                        r={3}/>}
         </svg>
       </Axes>
-      <p className="headline">
-        {showing && <>
+      {showing && <p className="headline">
           <data className="price" value={view.last}>{cents.format(view.last)}</data>
           <data className="delta" value={view.last - view.first}>{deltaLabel(view.first, view.last)}</data>
-        </>}
-      </p>
+      </p>}
       {history.pending && <Loading className="chart-loading"/>}
-      <figcaption className="chart-caption caption">
-        {showing ? view.caption : history.unavailable && 'history unavailable'}
-      </figcaption>
+      <figcaption className="chart-caption caption">{captionFor(history, candles.length, period)}</figcaption>
     </figure>
     <details className="explainer">
       <summary className="prompt">what am I looking at?</summary>

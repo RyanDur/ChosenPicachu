@@ -3,7 +3,7 @@ import {useEnv} from '@components/Env';
 import {useBanners} from '@components/Banners';
 import {troubleWith} from '@transport/trouble';
 import {Candle} from './Candles/shapes';
-import {granularitySeconds, Period, periodSpanMs} from './period';
+import {bucketLabel, granularitySeconds, Period, periodSpanMs} from './period';
 import {periodCandles} from './coinbase/history';
 
 export type PeriodHistory = {
@@ -13,6 +13,13 @@ export type PeriodHistory = {
 };
 
 const clean: PeriodHistory = {candles: [], unavailable: false, pending: true};
+
+export const captionFor = (history: PeriodHistory, candles: number, period: Period): string => {
+  if (candles > 0) return `${candles} candles · ${bucketLabel[period]}`;
+  if (history.pending) return 'loading history';
+  if (history.unavailable) return 'history unavailable';
+  return 'waiting for the first trade';
+};
 
 const queryFor = (period: Period): string => {
   const now = new Date();

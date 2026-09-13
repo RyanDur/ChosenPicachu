@@ -101,4 +101,33 @@ describe('the chart periods', () => {
     await waitFor(() => expect(drawnCandles()).toBe(5));
     expect(within(candleCard).queryByRole('progressbar')).toBeNull();
   });
+
+  test('while history loads the captions say so, and the price holds its tongue', async () => {
+    server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, async () => {
+      await delay(150);
+      return HttpResponse.json(rowsSpaced(3600));
+    }));
+
+    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')}/>);
+    const candleCard = await screen.findByRole('region', {name: 'candles'});
+    const priceCard = screen.getByRole('region', {name: 'live trades'});
+
+    await userEvent.click(within(menuFor('candle period')).getByText('day'));
+    await userEvent.click(within(menuFor('price period')).getByText('day'));
+
+    expect(await within(candleCard).findByText('loading history')).toBeInTheDocument();
+    expect(await within(priceCard).findByText('loading history')).toBeInTheDocument();
+    expect(within(priceCard).queryByText(/^\$/)).not.toBeInTheDocument();
+    await waitFor(() => expect(drawnCandles()).toBe(5));
+    await waitFor(() => expect(drawnPoints()).toBe(5));
+  });
+
+  test('with history in hand and no trade yet, the captions wait', async () => {
+    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')}/>);
+    const candleCard = await screen.findByRole('region', {name: 'candles'});
+    const priceCard = screen.getByRole('region', {name: 'live trades'});
+
+    expect(await within(candleCard).findByText('waiting for the first trade')).toBeInTheDocument();
+    expect(await within(priceCard).findByText('waiting for the first trade')).toBeInTheDocument();
+  });
 });

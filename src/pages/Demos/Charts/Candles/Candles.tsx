@@ -2,9 +2,9 @@ import {FC, useState, ReactNode} from 'react';
 import {notEmpty} from '@ryandur/sand';
 import {Trade} from '../coinbase';
 import {bucketTrades, candleShapes, mergeLive, volumeShapes} from './shapes';
-import {usePeriodCandles} from '../usePeriodCandles';
+import {captionFor, usePeriodCandles} from '../usePeriodCandles';
 import {Loading} from '@components/Loading';
-import {bucketLabel, bucketMs, Period, periodCap, tickEveryMs, timePattern} from '../period';
+import {bucketMs, Period, periodCap, tickEveryMs, timePattern} from '../period';
 import {Axes} from '../Axes';
 import '../chart-card.css';
 import './Candles.css';
@@ -21,9 +21,6 @@ type Props = {
   actions?: ReactNode;
 };
 
-const captionFor = (period: Period, count: number): string =>
-  `${count} candles · ${bucketLabel[period]}`;
-
 export const Candles: FC<Props> = ({trades, id = 'candle', actions}) => {
   const [period, setPeriod] = useState<Period>(Period.hour);
   const history = usePeriodCandles(period);
@@ -36,7 +33,8 @@ export const Candles: FC<Props> = ({trades, id = 'candle', actions}) => {
       <button type="button" className="menu-toggle rounded-corners period-toggle field caption"
               popoverTarget={`${id}-period`}
               aria-label="candle period">{period}</button>
-      <menu id={`${id}-period`} tabIndex={-1} popover="auto" className="menu card rounded-corners lifted" aria-label="candle period by">
+      <menu id={`${id}-period`} tabIndex={-1} popover="auto" className="menu card rounded-corners lifted"
+            aria-label="candle period by">
         {Object.values(Period).map(option =>
           <li className="entry" key={option}>
             <button type="button" className="item sub-title"
@@ -73,9 +71,7 @@ export const Candles: FC<Props> = ({trades, id = 'candle', actions}) => {
         </svg>
       </Axes>
       {history.pending && <Loading className="chart-loading"/>}
-      <figcaption className="chart-caption caption">
-        {notEmpty(candles) ? captionFor(period, candles.length) : history.unavailable && 'history unavailable'}
-      </figcaption>
+      <figcaption className="chart-caption caption">{captionFor(history, candles.length, period)}</figcaption>
     </figure>
     <details className="explainer">
       <summary className="prompt">what am I looking at?</summary>
