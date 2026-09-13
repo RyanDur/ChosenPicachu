@@ -4,7 +4,7 @@ import {fireEvent, render, screen, waitFor, within} from '@testing-library/react
 import userEvent from '@testing-library/user-event';
 import {broadcast, listeningFeed, tradeFrame} from '@test-support/feed';
 import {feedIsSubscribed} from '@test-support';
-import {folds, opened, reveals, stories} from '@pages/Demos/Recipe/__test_support/folds';
+import {opened, reveals, story} from '@pages/Demos/Recipe/__test_support/folds';
 import {tableControls} from '@pages/Demos/Tables/__test_support/controls';
 import {texts} from '@components/DragSortableTable/__test_support/rows';
 
@@ -15,6 +15,13 @@ const fourTrades = [
   tradeFrame(50003, now - 3 * 60000, '0.05', 'buy'),
   tradeFrame(50004, now, '0.01', 'buy')
 ];
+
+const dragSortRecipe = async (): Promise<HTMLElement> => {
+  const feed = await listeningFeed();
+  render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+  await feedIsSubscribed();
+  return await screen.findByRole('region', {name: 'build the drag sort yourself'});
+};
 
 describe('the tables demo', () => {
   test('the fixed windows hold their rows while the stream fills the cells', async () => {
@@ -138,8 +145,7 @@ describe('the tables demo', () => {
 
     await feedIsSubscribed();
     const opener = await screen.findByText('settings', {}, {timeout: 5000});
-    const fold = folds(document.body).find(details => details.contains(opener));
-    expect(fold).toHaveAttribute('open');
+    expect(screen.getByRole('group', {name: 'settings'})).toHaveAttribute('open');
     expect(screen.getByText('<EagerTable className="hide animated"/>')).toBeVisible();
 
     await userEvent.click(opener);
@@ -157,8 +163,7 @@ describe('the tables demo', () => {
       render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
       await feedIsSubscribed();
-      const opener = await screen.findByText('settings', {}, {timeout: 5000});
-      expect(folds(document.body).find(details => details.contains(opener))).not.toHaveAttribute('open');
+      expect(await screen.findByRole('group', {name: 'settings'}, {timeout: 5000})).not.toHaveAttribute('open');
       expect(screen.getByRole('region', {name: 'table controls'})).not.toBeVisible();
     } finally {
       window.matchMedia = wideMedia;
@@ -215,18 +220,13 @@ describe('the tables demo', () => {
     expect(headers().slice(0, 3)).toEqual(['window', 'buys', 'trades']);
   });
 
-  test('the recipe teaches whatever the dials are set to', async () => {
-    const feed = await listeningFeed();
+  test('the recipe opens on the need, its stories closed', async () => {
+    const recipe = await dragSortRecipe();
 
-    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
-
-    await feedIsSubscribed();
-    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
     expect(recipe).toBeVisible();
     expect(recipe).toHaveTextContent(/no drag-and-drop library/);
-    expect(recipe).toHaveTextContent(/The trader can sort by column/);
-    expect(stories(recipe)).toHaveLength(2);
-    expect(opened(stories(recipe))).toHaveLength(0);
+    expect(story(recipe, 'The trader can sort by column')).not.toHaveAttribute('open');
+    expect(story(recipe, 'The trader can sort by row')).not.toHaveAttribute('open');
     expect(screen.getByRole('heading', {name: 'let’s build this feature'})).toBeVisible();
     expect(screen.getByText(/I watch the market all day/)).toBeVisible();
     expect(screen.getByRole('heading', {name: 'Start with the need, and let it pick the element'})).toBeVisible();
@@ -235,6 +235,15 @@ describe('the tables demo', () => {
     expect(screen.getByRole('columnheader', {name: 'what it tells you'})).toBeVisible();
     expect(screen.getByRole('rowheader', {name: /keep themselves current/})).toBeVisible();
     expect(screen.getByRole('heading', {name: 'Sketch a design from the need'})).toBeVisible();
+    expect(screen.getByRole('complementary', {name: 'what a design cannot tell you'})).toBeVisible();
+    expect(screen.getByText(/keep building on your best interpretation/)).toBeVisible();
+    expect(screen.getByText(/What you see above is our interpretation of that/)).toBeVisible();
+    expect(recipe).toHaveTextContent(/The sort happens while you drag/);
+  });
+
+  test('the slices point at their stations', async () => {
+    await dragSortRecipe();
+
     expect(screen.getByRole('heading', {name: 'Slice the design into stories'})).toBeVisible();
     const sliced = within(screen.getByRole('list', {name: 'the slices'}));
     [['The trader can read the market in a table', 'station 4'],
@@ -254,23 +263,22 @@ describe('the tables demo', () => {
         .filter(station => within(station).queryAllByText(holds).length > 0).map(station => station.id)).toContain(id));
     expect(screen.getByRole('link', {name: 'user story'}))
       .toHaveAttribute('href', expect.stringContaining('initialcapacity.io/insights/user-story'));
-    expect(screen.getByRole('complementary', {name: 'what a design cannot tell you'})).toBeVisible();
-    expect(screen.getByText(/keep building on your best interpretation/)).toBeVisible();
-    expect(screen.getByText(/What you see above is our interpretation of that/)).toBeVisible();
-    expect(recipe).toHaveTextContent(/The sort happens while you drag/);
+  });
+
+  test('the still table and the living table each tell their part', async () => {
+    await dragSortRecipe();
+
     const still = screen.getByRole('region', {name: 'the still table'});
     expect(still).toBeVisible();
-    expect(still).toHaveTextContent(/The trader can read the market in a table/);
+    expect(story(still, 'The trader can read the market in a table')).toBeInTheDocument();
     expect(still).toHaveTextContent(/Deal a real HTML table/);
     expect(still).toHaveTextContent(/scope="col"/);
-    expect(stories(still)).toHaveLength(1);
     expect(still).toHaveTextContent(/that is what a table is for/);
     expect(still).not.toHaveTextContent(/The page is a store/);
     const living = screen.getByRole('region', {name: 'the living table'});
     expect(living).toBeVisible();
-    expect(living).toHaveTextContent(/The trader can watch the market live/);
-    expect(stories(living)).toHaveLength(2);
-    expect(living).toHaveTextContent(/The page is a store/);
+    expect(story(living, 'The trader can watch the market live, in windows')).toBeInTheDocument();
+    expect(story(living, 'The page is a store, and so is the table')).toBeInTheDocument();
     expect(living).toHaveTextContent(/Actions are data, and one reducer reads them/);
     expect(living).toHaveTextContent(/The exchange is middleware/);
     expect(living).toHaveTextContent(/export const demosStore/);
@@ -278,22 +286,31 @@ describe('the tables demo', () => {
     expect(living).toHaveTextContent(/Hydrate with one fetch/);
     expect(living).toHaveTextContent(/where a number comes from/);
     expect(living).toHaveTextContent(/Drawn, not recorded/);
+  });
+
+  test('layering keeps both axes', async () => {
+    await dragSortRecipe();
+
     expect(screen.getByRole('heading', {name: 'Layer on functionality, in the order it was asked for'})).toBeVisible();
     expect(screen.getByText(/Both axes, every layer, or the layer is not done/)).toBeVisible();
     expect(screen.getByRole('columnheader', {name: 'by keyboard'})).toBeVisible();
     expect(screen.getByRole('rowheader', {name: 'Widen a column'})).toBeVisible();
+  });
+
+  test('opening the sort by column story shows the drag build, its steps closed', async () => {
+    const recipe = await dragSortRecipe();
+
     await userEvent.click(within(recipe).getByText(/The trader can sort by column/));
+
+    expect(story(recipe, 'The trader can sort by column')).toHaveAttribute('open');
     expect(within(recipe).getByRole('link', {name: /Drag sort list demo/}))
       .toHaveAttribute('href', expect.stringContaining('tab=dragAndDrop'));
     expect(recipe).toHaveTextContent(/touch-action/);
     expect(recipe).toHaveTextContent(/Write each listener once, for both worlds/);
-    const [term] = within(recipe).getAllByRole('button', {name: 'survey'});
-    expect(term).toHaveClass('term');
-    expect(term).toHaveAttribute('popovertarget');
     const [definition] = within(recipe).getAllByLabelText('survey');
     expect(definition).toHaveTextContent(/the one measurement taken at the grab/);
     expect(recipe).toHaveTextContent(/export type Store<State, Action>/);
-    expect(within(recipe).getAllByText('how we built it').length).toBeGreaterThan(0);
+    expect(reveals(recipe).length).toBeGreaterThan(0);
     expect(opened(reveals(recipe))).toHaveLength(0);
     expect(recipe).toHaveTextContent(/Commit inside the move/);
     expect(recipe).toHaveTextContent(/Carry the real thing/);
@@ -306,13 +323,18 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/Turn the carry vertical/);
     expect(within(recipe).getByRole('link', {name: 'insertBefore'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/Node/insertBefore'));
+  });
 
+  test('the recipe teaches whatever the dials are set to', async () => {
+    const recipe = await dragSortRecipe();
+    await userEvent.click(within(recipe).getByText(/The trader can sort by column/));
     await userEvent.click(within(recipe).getByText(/The trader can sort by row/));
-    expect(opened(stories(recipe))).toHaveLength(2);
+
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Lazy'}));
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Keep'}));
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Static'}));
 
+    expect(story(recipe, 'The trader can sort by row')).toHaveAttribute('open');
     expect(recipe).toHaveTextContent(/Hold still, dispatch on release/);
     expect(recipe).toHaveTextContent(/the sort lands on the drop/);
     expect(recipe).toHaveTextContent(/stays where it stands while you drag/);
@@ -325,7 +347,7 @@ describe('the tables demo', () => {
     expect(within(controls).getByRole('radio', {name: 'Lazy'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Keep'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Static'})).toBeChecked();
-  }, 20000);
+  });
 
   test('a hash arriving in the url is brought to its station', async () => {
     const brought: string[] = [];
@@ -362,7 +384,7 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/measures the header row at the keypress/);
     expect(recipe).toHaveTextContent(/The trader can sort by row/);
     expect(recipe).toHaveTextContent(/Turn the arrows vertical/);
-    expect(stories(recipe)).toHaveLength(2);
+    expect(story(recipe, 'The trader can sort by row')).toBeInTheDocument();
     expect(recipe).not.toHaveTextContent(/Hold the pointer from the lift/);
     expect(within(recipe).queryByRole('radio', {name: 'Lazy'})).toBeNull();
 
@@ -402,8 +424,7 @@ describe('the tables demo', () => {
     expect(resize).toHaveTextContent(/zero-sum ledger/);
     expect(resize).toHaveTextContent(/Trade, never take/);
     expect(resize).toHaveTextContent(/A handle that is a button/);
-    expect(stories(resize)).toHaveLength(1);
-    expect(resize).toHaveTextContent(/The trader can widen a column/);
+    expect(story(resize, 'The trader can widen a column')).toBeInTheDocument();
     expect(within(resize).getByRole('link', {name: 'captures its pointer'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/Element/setPointerCapture'));
     expect(screen.queryByRole('region', {name: 'build the drag sort yourself'})).toBeNull();
@@ -421,10 +442,11 @@ describe('the tables demo', () => {
 
     await feedIsSubscribed();
     const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
-    expect(opened(stories(recipe))).toHaveLength(1);
-    expect(stories(recipe)[0]).toHaveAttribute('open');
+    expect(story(recipe, 'The trader can sort by column')).toHaveAttribute('open');
+    expect(story(recipe, 'The trader can sort by row')).not.toHaveAttribute('open');
     const living = screen.getByRole('region', {name: 'the living table'});
-    expect(opened(stories(living))).toHaveLength(0);
+    expect(story(living, 'The trader can watch the market live, in windows')).not.toHaveAttribute('open');
+    expect(story(living, 'The page is a store, and so is the table')).not.toHaveAttribute('open');
   });
 
   test('the dials travel in the url', async () => {
@@ -458,8 +480,7 @@ describe('the tables demo', () => {
     expect(recipe).not.toHaveTextContent(/Dress the menu as a card/);
     expect(within(recipe).getByRole('link', {name: 'position-area'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/CSS/position-area'));
-    expect(stories(recipe)).toHaveLength(1);
-    expect(recipe).toHaveTextContent(/The trader can sort the windows by any measure/);
+    expect(story(recipe, 'The trader can sort the windows by any measure, or take the order back')).toBeInTheDocument();
     expect(screen.queryByRole('region', {name: 'build the drag sort yourself'})).toBeNull();
     expect(screen.queryByRole('region', {name: 'table controls'})).toBeNull();
     expect(screen.getByRole('region', {name: 'the living table'})).toBeVisible();

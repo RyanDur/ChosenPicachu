@@ -39,7 +39,7 @@ describe('the home page', () => {
     const timeline = within(screen.getByRole('list', {name: 'the timeline'}));
 
     expect(timeline.getAllByText('the fuller story')).toHaveLength(13);
-    const folds = timeline.getAllByRole('group').filter(group => group.tagName === 'DETAILS');
+    const folds = timeline.getAllByRole('group');
     expect(folds.filter(fold => fold.hasAttribute('open'))).toHaveLength(0);
     [/Viola/, /Mocha/, /ham is to hamster/, /MULTICOL/, /Wired News/, /React in 2013/, /CSS-in-JS/, /Next\.js/, /island of behavior/, /WorldWideWeb/, /Self-ish/, /eczema/, /aural/, /namespaces/, /ill-fated ES4/, /Chedeau/, /Sylor-Miller/, /you’re screwed/, /40% helvetica/, /Fahrner/, /Enquire/, /dictatorship/, /WHATWG/, /Living Standard/, /real-world web developers/]
       .forEach(depth => expect(timeline.getAllByText(depth).length).toBeGreaterThan(0));
@@ -47,7 +47,7 @@ describe('the home page', () => {
       .toHaveAttribute('href', expect.stringContaining('adaptivepath'));
     folds.forEach(story => {
       expect(story).toHaveAttribute('name', 'record');
-      expect(within(story).getAllByText(/\S/, {selector: 'p'}).length).toBeGreaterThanOrEqual(3);
+      expect(within(story).getAllByRole('paragraph').length).toBeGreaterThanOrEqual(3);
     });
   });
 
@@ -121,8 +121,7 @@ describe('the home page', () => {
     const bibliography = screen.getByRole('region', {name: 'The research'});
 
     expect(within(bibliography).getByRole('heading', {name: 'The research'})).toBeVisible();
-    within(bibliography).getAllByRole('group', {hidden: true}).filter(group => group.tagName === 'DETAILS')
-      .forEach(shelf => expect(shelf).not.toHaveAttribute('open'));
+    expect(within(bibliography).getByRole('group', {hidden: true})).not.toHaveAttribute('open');
     const works = within(bibliography).getAllByRole('listitem', {hidden: true});
     expect(works.length).toBeGreaterThanOrEqual(25);
     works.forEach(work => expect(within(work).getAllByRole('link', {hidden: true}).length).toBeGreaterThan(0));

@@ -52,7 +52,8 @@ export const Workspace: FC<Props> = ({product}) => {
                       popoverTarget="add-chart"
                       aria-label="Add a chart">+
               </button>
-              <menu id="add-chart" popover="auto" className="menu card rounded-corners lifted">
+              <menu id="add-chart" tabIndex={-1} popover="auto" className="menu card rounded-corners lifted"
+                    aria-label="charts to add">
                 {absentKinds.map(kind =>
                   <li className="entry" key={kind}>
                     <button type="button" className="item sub-title"

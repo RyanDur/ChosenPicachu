@@ -4,7 +4,7 @@ import {createEvent, fireEvent, render, screen, waitFor, within} from '@testing-
 import userEvent from '@testing-library/user-event';
 import {listeningFeed} from '@test-support/feed';
 import {feedIsSubscribed} from '@test-support';
-import {opened, stories} from '@pages/Demos/Recipe/__test_support/folds';
+import {story} from '@pages/Demos/Recipe/__test_support/folds';
 
 const seatOf = (item: string): HTMLElement => {
   const seat = screen.getAllByRole('listitem').find(candidate => within(candidate).queryByText(item) !== null);
@@ -30,6 +30,13 @@ const draggedOver = (item: string, clientX: number) => {
   fireEvent(screen.getByText(item), over);
 };
 
+const nativeRecipe = async (): Promise<HTMLElement> => {
+  const feed = await listeningFeed();
+  render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
+  await feedIsSubscribed();
+  return await screen.findByRole('region', {name: 'build the native drag sort yourself'});
+};
+
 describe('the sortable list demo', () => {
   test('the open cards travel in the url', async () => {
     const feed = await listeningFeed();
@@ -38,8 +45,8 @@ describe('the sortable list demo', () => {
 
     await feedIsSubscribed();
     const recipe = await screen.findByRole('region', {name: 'build the native drag sort yourself'});
-    expect(opened(stories(recipe))).toHaveLength(1);
-    expect(stories(recipe)[0]).toHaveAttribute('open');
+    expect(story(recipe, 'The user can arrange the list by hand')).toHaveAttribute('open');
+    expect(story(recipe, 'The user can arrange the list from the keyboard')).not.toHaveAttribute('open');
   });
 
   test('one list answers the dials', async () => {
@@ -176,13 +183,9 @@ describe('the sortable list demo', () => {
     await waitFor(() => expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent('A moved to 3 of 3'));
   });
 
-  test('the recipe teaches the native road as the dials sit', async () => {
-    const feed = await listeningFeed();
+  test('the recipe opens on the need, both stories told', async () => {
+    const recipe = await nativeRecipe();
 
-    render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
-
-    await feedIsSubscribed();
-    const recipe = await screen.findByRole('region', {name: 'build the native drag sort yourself'});
     expect(recipe).toBeVisible();
     expect(screen.getByRole('heading', {name: 'let’s build this feature'})).toBeVisible();
     expect(screen.getAllByText(/the order is mine/).length).toBeGreaterThan(0);
@@ -190,14 +193,6 @@ describe('the sortable list demo', () => {
     expect(screen.getByRole('rowheader', {name: /pick it up and put it there/})).toBeVisible();
     expect(screen.getByRole('heading', {name: 'Sketch a design from the need'})).toBeVisible();
     expect(screen.getByRole('complementary', {name: 'what a design cannot tell you'})).toBeVisible();
-    expect(screen.getByRole('heading', {name: 'Slice the design into stories'})).toBeVisible();
-    const sliced = within(screen.getByRole('list', {name: 'the slices'}));
-    ['The user can arrange the list by hand', 'The user can arrange the list from the keyboard']
-      .forEach(slice => expect(sliced.getAllByRole('listitem').find(item => within(item).queryByText(slice) !== null)).toHaveTextContent('station 4'));
-    expect(sliced.getAllByRole('link').map(link => link.getAttribute('href')))
-      .toEqual(['#station-4', '#station-4']);
-    expect(within(screen.getByRole('list', {name: 'the stations'})).getAllByRole('listitem')
-      .filter(station => within(station).queryAllByText('Layer on functionality, in the order it was asked for').length > 0).map(station => station.id)).toContain('station-4');
     expect(screen.getByRole('heading', {name: 'The user can keep the list in the order they mean'})).toBeVisible();
     expect(screen.getByRole('link', {name: 'user story'}))
       .toHaveAttribute('href', expect.stringContaining('initialcapacity.io/insights/user-story'));
@@ -212,13 +207,38 @@ describe('the sortable list demo', () => {
     expect(recipe).toHaveTextContent(/Know where the road ends/);
     expect(within(recipe).getByRole('link', {name: 'dataTransfer'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/DataTransfer'));
-    expect(stories(recipe)).toHaveLength(2);
-    expect(recipe).toHaveTextContent(/The user can arrange the list by hand/);
+    expect(story(recipe, 'The user can arrange the list by hand')).toBeInTheDocument();
+    expect(story(recipe, 'The user can arrange the list from the keyboard')).toBeInTheDocument();
     expect(recipe).toHaveTextContent(/The list answers as you drag/);
+  });
+
+  test('the slices point at their station', async () => {
+    await nativeRecipe();
+
+    expect(screen.getByRole('heading', {name: 'Slice the design into stories'})).toBeVisible();
+    const sliced = within(screen.getByRole('list', {name: 'the slices'}));
+    ['The user can arrange the list by hand', 'The user can arrange the list from the keyboard']
+      .forEach(slice => expect(sliced.getAllByRole('listitem').find(item => within(item).queryByText(slice) !== null)).toHaveTextContent('station 4'));
+    expect(sliced.getAllByRole('link').map(link => link.getAttribute('href')))
+      .toEqual(['#station-4', '#station-4']);
+    expect(within(screen.getByRole('list', {name: 'the stations'})).getAllByRole('listitem')
+      .filter(station => within(station).queryAllByText('Layer on functionality, in the order it was asked for').length > 0).map(station => station.id)).toContain('station-4');
+  });
+
+  test('opening the by-hand story points at the tables demo', async () => {
+    const recipe = await nativeRecipe();
 
     await userEvent.click(within(recipe).getByText(/The user can arrange the list by hand/));
+
+    expect(story(recipe, 'The user can arrange the list by hand')).toHaveAttribute('open');
     expect(within(recipe).getByRole('link', {name: /Tables demo/}))
       .toHaveAttribute('href', expect.stringContaining('tab=tables'));
+  });
+
+  test('the recipe teaches the native road as the dials sit', async () => {
+    const recipe = await nativeRecipe();
+    await userEvent.click(within(recipe).getByText(/The user can arrange the list by hand/));
+
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Lazy'}));
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Keep'}));
 
@@ -231,3 +251,4 @@ describe('the sortable list demo', () => {
     expect(within(controls).getByRole('radio', {name: 'Keep'})).toBeChecked();
   });
 });
+

@@ -5,7 +5,7 @@ import {broadcast, listeningFeed, nonTradeFrame, tradeFrame, tradeFrameWith} fro
 import {feedIsSubscribed} from '@test-support';
 import userEvent from '@testing-library/user-event';
 import {addChart, addMenu, doorway, dragChart, keys, releaseDrag, slot} from '@pages/Demos/Charts/__test_support/desk';
-import {opened, stories} from '@pages/Demos/Recipe/__test_support/folds';
+import {story} from '@pages/Demos/Recipe/__test_support/folds';
 import {format} from 'date-fns';
 
 const feedIsLive = async (): Promise<void> => {
@@ -119,8 +119,7 @@ describe('a list of charts', () => {
     expect(await screen.findByRole('heading', {name: 'let’s build this feature'})).toBeVisible();
     expect(screen.getByText(/the shape of the session/)).toBeVisible();
     const recipe = screen.getByRole('region', {name: 'build the charts yourself'});
-    expect(stories(recipe)).toHaveLength(1);
-    expect(opened(stories(recipe))).toHaveLength(1);
+    expect(story(recipe, 'The trader can lay out the workspace')).toHaveAttribute('open');
     expect(recipe).toHaveTextContent(/strays a third of the seat’s height/);
     expect(recipe).toHaveTextContent(/export const strayed/);
 
@@ -184,7 +183,7 @@ describe('a list of charts', () => {
     expect(screen.getByText(/build the story yourself first/)).toBeVisible();
     const recipe = screen.getByRole('region', {name: 'build the price line yourself'});
     await within(recipe).findByText(/watch the price move, live/);
-    expect(stories(recipe)).toHaveLength(1);
+    expect(story(recipe, 'The trader can watch the price move, live')).toBeInTheDocument();
   });
 
   test('the price story teaches the whole journey, data to drawn chart', async () => {

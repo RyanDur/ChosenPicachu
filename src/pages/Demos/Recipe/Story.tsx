@@ -34,10 +34,10 @@ export const Story: FC<Props> = ({param, id, can, soThat, steps, children}) => {
     }, {replace: true});
   };
   return <li>
-    <details className="arc" open={openedIn(searchParams, param).has(id)}>
+    <details className="arc" open={openedIn(searchParams, param).has(id)} aria-labelledby={`${param}-${id}-story`}>
       <summary className="opener" onClick={toggled}>
         <hgroup className="story card rounded-corners lifted">
-          <h3 className="can">{can}</h3>
+          <h3 className="can" id={`${param}-${id}-story`}>{can}</h3>
           <p className="so-that">so that {soThat}</p>
           {has(steps) && <p className="step-tally">{steps === 1 ? '1 step' : `${steps} steps`}</p>}
         </hgroup>

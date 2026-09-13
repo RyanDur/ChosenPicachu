@@ -1,17 +1,7 @@
 import {createEvent, fireEvent, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-export const addMenu = (): HTMLElement | null => {
-  const toggle = screen.queryByRole('button', {name: 'Add a chart'});
-  if (!toggle) {
-    return null;
-  }
-  const menu = document.getElementById(toggle.getAttribute('popovertarget') ?? '');
-  if (!menu) {
-    throw new Error('the add-chart toggle points at no menu');
-  }
-  return menu;
-};
+export const addMenu = (): HTMLElement | null => screen.queryByLabelText('charts to add');
 
 export const addChart = async (name: string): Promise<void> => {
   const menu = addMenu();
@@ -24,7 +14,7 @@ export const addChart = async (name: string): Promise<void> => {
 export const doorway = (name: string): HTMLElement => screen.getByRole('link', {name});
 
 export const slot = (name: string): HTMLElement => {
-  const seat = doorway(name).closest('li');
+  const seat = screen.getAllByRole('listitem').find(item => within(item).queryByRole('link', {name}) !== null);
   if (!seat) {
     throw new Error(`the ${name} doorway sits in no seat`);
   }

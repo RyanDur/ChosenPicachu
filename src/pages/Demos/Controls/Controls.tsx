@@ -43,7 +43,7 @@ export type ControlsProps = {
 
 export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({copy, pace, origin, motion, onPace, onOrigin, onMotion, children}) => {
   const [startsOpen] = useState(roomy);
-  return <details className="controls-fold" open={startsOpen}>
+  return <details className="controls-fold" open={startsOpen} aria-label="settings">
   <summary className="prompt">
     settings
     <code className="readout caption">{copy.readout(pace, origin, motion)}</code>
