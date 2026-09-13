@@ -90,17 +90,35 @@ test('only one fuller story stands open at a time', async ({page}) => {
 });
 
 const markets = [
-  {trend: 'rising', sign: /^\+/, prices: [50000, 50100]},
-  {trend: 'falling', sign: /^-/, prices: [50100, 50000]},
+  {trend: 'rising', sign: /^\+/, ink: '--mint-ink', prices: [50000, 50100]},
+  {trend: 'falling', sign: /^-/, ink: '--internationl-orange-engineering', prices: [50100, 50000]},
 ];
 
-for (const {trend, sign, prices} of markets) {
+const inkNamed = (page: Page, token: string): Promise<string> =>
+  page.evaluate(name => {
+    const swatch = document.createElement('span');
+    swatch.style.color = `var(${name})`;
+    document.body.append(swatch);
+    const color = getComputedStyle(swatch).color;
+    swatch.remove();
+    return color;
+  }, token);
+
+const feedDot = (page: Page): Promise<string> =>
+  page.evaluate(() => {
+    const feed = document.querySelector('[aria-label="feed"]');
+    return feed === null ? '' : getComputedStyle(feed, '::before').backgroundColor;
+  });
+
+for (const {trend, sign, ink, prices} of markets) {
   test(`the ${trend} price card has no accessibility violations`, async ({page}) => {
     await scriptedMarket(page, prices);
     await page.goto('demos?tab=charts');
 
     await expect(delta(page)).toBeVisible({timeout: 30_000});
     await expect(delta(page)).toHaveText(sign);
+    await expect(delta(page)).toHaveCSS('color', await inkNamed(page, ink));
+    await expect.poll(() => feedDot(page)).toBe(await inkNamed(page, '--mint'));
 
     const results = await new AxeBuilder({page}).include('section[aria-label="live trades"]').withTags(['wcag2a', 'wcag2aa']).analyze();
 

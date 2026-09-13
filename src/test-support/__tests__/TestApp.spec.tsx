@@ -27,7 +27,7 @@ describe('the test app', () => {
       {onCaughtError: error => caught.push(error)});
 
     const errors = await screen.findByRole('list', {name: 'errors reported'});
-    expect(within(errors).getAllByRole('listitem').map(item => item.textContent)).toEqual(['boom']);
+    expect((await within(errors).findAllByRole('listitem')).map(item => item.textContent)).toEqual(['boom']);
     expect(screen.getByRole('status', {name: 'url path'})).toHaveTextContent('/nowhere');
     expect(caught).toEqual([boom]);
   });

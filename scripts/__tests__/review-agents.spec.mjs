@@ -18,9 +18,9 @@ describe('the review\'s QAs', () => {
       const qa = qas[`${name}-qa`];
       expect(qa.prompt).toContain('# What every reviewer here holds');
       expect(qa.prompt).toContain(`You hold the ${name} door. Read ${file} first`);
-   expect(qa.prompt).toContain('Corroborate before you report');
-   expect(qa.prompt).toContain('Never invent a finding');
-  });
+      expect(qa.prompt).toContain('Corroborate before you report');
+      expect(qa.prompt).toContain('Never invent a finding');
+    });
   });
 
   test('the door QAs review the site and leave the tests to the tests QA', () => {

@@ -33,6 +33,8 @@ const candlesView = (candles: readonly Candle[]): PriceView => ({
   last: candles[candles.length - 1]?.close ?? 0
 });
 
+const trendOf = ({first, last}: PriceView): 'rising' | 'falling' => last >= first ? 'rising' : 'falling';
+
 type Props = Pick<LiveTradesState, 'trades'> & {
   id?: string;
   actions?: ReactNode;
@@ -50,7 +52,7 @@ export const PriceChart: FC<Props> = ({trades, id = 'price', actions}) => {
     : emptyView;
   const points = sparklinePoints(view.series, CHART_WIDTH, CHART_HEIGHT, 2 * bucketMs[period]);
   const line = points.map(point => `${point.x},${point.y}`).join(' ');
-  const trend = showing && view.last >= view.first ? 'rising' : 'falling';
+  const trend = showing && trendOf(view);
   return <section aria-label="live trades"
                   className={classNames('price-chart chart card rounded-corners lifted padded', trend)}>
     <header className="chart-header">
