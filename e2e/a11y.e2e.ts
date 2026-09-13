@@ -117,8 +117,6 @@ for (const {trend, sign, ink, prices} of markets) {
 
     await expect(delta(page)).toBeVisible({timeout: 30_000});
     await expect(delta(page)).toHaveText(sign);
-    await expect(delta(page)).toHaveCSS('color', await inkNamed(page, ink));
-    await expect.poll(() => feedDot(page)).toBe(await inkNamed(page, '--mint'));
 
     const results = await new AxeBuilder({page}).include('section[aria-label="live trades"]').withTags(['wcag2a', 'wcag2aa']).analyze();
 
@@ -128,5 +126,15 @@ for (const {trend, sign, ink, prices} of markets) {
       nodes: v.nodes.length,
       sample: v.nodes[0]?.html.slice(0, 120)
     }))).toEqual([]);
+  });
+
+  test(`the ${trend} price card wears its ink, and the feed dot glows live`, async ({page}) => {
+    await scriptedMarket(page, prices);
+    await page.goto('demos?tab=charts');
+
+    await expect(delta(page)).toBeVisible({timeout: 30_000});
+    await expect(delta(page)).toHaveText(sign);
+    await expect(delta(page)).toHaveCSS('color', await inkNamed(page, ink));
+    await expect.poll(() => feedDot(page)).toBe(await inkNamed(page, '--mint'));
   });
 }

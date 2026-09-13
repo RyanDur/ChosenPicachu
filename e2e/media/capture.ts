@@ -222,8 +222,8 @@ export const clearCallouts = (page: Page): Promise<void> =>
   });
 
 export const headerOrder = (card: Locator): Promise<string[]> =>
-  card.locator('thead th').evaluateAll(headers =>
-    headers.map(header => header.className.split(' ')[1]));
+  card.getByRole('columnheader').evaluateAll(headers =>
+    headers.map(header => header.getAttribute('aria-label') ?? ''));
 
 type Gait = {steps?: number; anchor?: number};
 

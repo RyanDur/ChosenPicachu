@@ -46,7 +46,7 @@ for (const stage of ['react', 'vanilla']) for (const world of worlds) {
       throw new Error('headers missing');
     }
     await dragTo(trades, vwap.x + vwap.width * 0.8, trades.y + trades.height / 2);
-    expect(await order()).toEqual(['window', 'buys', 'sells', 'volume', 'vwap', 'trades', 'change']);
+    await expect.poll(order).toEqual(['window', 'buys', 'sells', 'volume', 'vwap', 'trades', 'change']);
 
     // row drag: first grip down past the third row
     const grip = await frame.getByRole('button', {name: 'move row 1'}).boundingBox();
@@ -55,7 +55,7 @@ for (const stage of ['react', 'vanilla']) for (const world of worlds) {
       throw new Error('rows missing');
     }
     await dragTo(grip, grip.x + grip.width / 2, thirdRow.y + thirdRow.height * 0.8);
-    expect(await rows()).toEqual(['last 5 minutes', 'last 15 minutes', 'this minute', 'this hour', 'session']);
+    await expect.poll(rows).toEqual(['last 5 minutes', 'last 15 minutes', 'this minute', 'this hour', 'session']);
 
     expect(troubles).toEqual([]);
   });

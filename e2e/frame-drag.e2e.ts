@@ -26,7 +26,7 @@ test('a real drag reorders the frame columns in the default world', async ({page
   }
   await page.mouse.up();
 
-  expect(await order()).toEqual(['window', 'buys', 'sells', 'trades', 'volume', 'vwap', 'change']);
+  await expect.poll(order).toEqual(['window', 'buys', 'sells', 'trades', 'volume', 'vwap', 'change']);
 });
 
 test('a menu choice sorts, and never lifts the column', async ({page}) => {
