@@ -9,7 +9,7 @@ import {opened, stories} from '@pages/Demos/Recipe/__test_support/folds';
 import {format} from 'date-fns';
 
 const feedIsLive = async (): Promise<void> => {
-  await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/^live$/));
+  await waitFor(() => expect(screen.getByRole('status', {name: 'feed'})).toHaveTextContent(/^live$/));
   await feedIsSubscribed();
 };
 
@@ -354,7 +354,7 @@ describe('the demos page', () => {
 
       render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
 
-      await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/^live$/));
+      await waitFor(() => expect(screen.getByRole('status', {name: 'feed'})).toHaveTextContent(/^live$/));
     });
 
     test('frames that are not trades never reach the user', async () => {
@@ -374,7 +374,7 @@ describe('the demos page', () => {
       render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
 
       await waitFor(() =>
-        expect(screen.getByRole('status')).toHaveTextContent('live feed unavailable'));
+        expect(screen.getByRole('status', {name: 'feed'})).toHaveTextContent('live feed unavailable'));
       expect(within(screen.getByRole('alert', {hidden: true}))
         .getByText('the live feed refused the handshake')).toBeInTheDocument();
     });
@@ -458,7 +458,7 @@ describe('the demos page', () => {
       expect(await within(priceCard()).findByText('$50,001.00')).toBeVisible();
       feed.clients.forEach(socket => socket.close());
       await waitFor(() =>
-        expect(screen.getByRole('status')).toHaveTextContent('live feed unavailable'));
+        expect(screen.getByRole('status', {name: 'feed'})).toHaveTextContent('live feed unavailable'));
       expect(within(priceCard()).getByText('$50,001.00')).toBeVisible();
       expect(within(screen.getByRole('alert', {hidden: true}))
         .getByText('the live feed hung up mid-stream')).toBeInTheDocument();

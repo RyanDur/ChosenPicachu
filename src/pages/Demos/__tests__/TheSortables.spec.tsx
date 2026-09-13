@@ -145,7 +145,7 @@ describe('the sortable list demo', () => {
     grip.focus();
     await userEvent.keyboard('{ArrowRight}');
 
-    expect(screen.getByRole('status')).toHaveTextContent('A moved to 2 of 3');
+    expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent('A moved to 2 of 3');
   });
 
   test('an eager crossing says the move', async () => {
@@ -157,7 +157,7 @@ describe('the sortable list demo', () => {
     lifted('A');
     draggedOver('C', 10);
 
-    expect(screen.getByRole('status')).toHaveTextContent('A moved to 3 of 3');
+    expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent('A moved to 3 of 3');
   });
 
   test('a lazy release says the move', async () => {
@@ -173,7 +173,7 @@ describe('the sortable list demo', () => {
     draggedOver('C', 10);
     fireEvent.dragEnd(screen.getByText('A'), {dataTransfer: {dropEffect: 'move'}});
 
-    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent('A moved to 3 of 3'));
+    await waitFor(() => expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent('A moved to 3 of 3'));
   });
 
   test('the recipe teaches the native road as the dials sit', async () => {

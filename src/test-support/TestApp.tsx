@@ -6,6 +6,7 @@ import {
   ReactNode,
   createContext,
   isValidElement,
+  startTransition,
   useContext,
   useState,
 } from 'react';
@@ -28,9 +29,9 @@ const Probes: FC = () => {
 
   return <>
     <Outlet/>
-    <data aria-label="url path">{pathname}</data>
-    <data aria-label="url search">{search}</data>
-    <data aria-label="errors reported">{errors.join('\n')}</data>
+    <output aria-label="url path">{pathname}</output>
+    <output aria-label="url search">{search}</output>
+    <output aria-label="errors reported">{errors.join('\n')}</output>
   </>;
 };
 
@@ -48,6 +49,7 @@ export const TestApp: FC<Props> = ({at = '/', feed, children}) => {
   const [memory] = useState(() => createMemoryRouter([{
     id: 'probes',
     element: <Probes/>,
+    errorElement: <Probes/>,
     children: [has(children) ? {
       ...router,
       id: 'root',
@@ -55,7 +57,8 @@ export const TestApp: FC<Props> = ({at = '/', feed, children}) => {
     } : router]
   }], {initialEntries: [at]}));
   const [reported, setReported] = useState<readonly string[]>([]);
-  const report = (error: unknown): void => setReported(errors => [...errors, described(error)]);
+  const report = (error: unknown): void =>
+    startTransition(() => setReported(errors => [...errors, described(error)]));
 
   return <Reported.Provider value={reported}>
     <App router={memory} onError={report} env={has(feed) ? {...env, tradeFeed: feed.url} : env}/>

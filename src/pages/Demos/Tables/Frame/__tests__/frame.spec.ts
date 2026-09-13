@@ -234,7 +234,7 @@ describe('the frame table', () => {
     await userEvent.click(screen.getByRole('button', {name: 'move row 1'}));
     await userEvent.keyboard('{ArrowDown}');
 
-    expect(screen.getByRole('status')).toHaveTextContent('row moved to 2 of 5');
+    expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent('row moved to 2 of 5');
   });
 
   it('a column walk says the move', async () => {
@@ -243,7 +243,7 @@ describe('the frame table', () => {
     screen.getByRole('columnheader', {name: /trades/}).focus();
     await userEvent.keyboard('{ArrowRight}');
 
-    expect(screen.getByRole('status')).toHaveTextContent('trades moved to column 3 of 7');
+    expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent('trades moved to column 3 of 7');
   });
 
   it('the last seat clamps the walk', async () => {
@@ -314,7 +314,7 @@ describe('the frame table', () => {
     handle.focus();
     await userEvent.keyboard('{ArrowRight}');
 
-    expect(screen.getByRole('status')).toHaveTextContent('trades resized to 15%');
+    expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent('trades resized to 15%');
   });
 
   it('the sort stands while trades land', async () => {

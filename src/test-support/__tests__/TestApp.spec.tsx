@@ -1,5 +1,6 @@
 import {render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import {Route} from 'react-router';
 import {Tabs} from '@components/Tabs';
 import {TestApp} from '../TestApp';
 
@@ -13,5 +14,20 @@ describe('the test app', () => {
 
     await waitFor(() => expect(screen.getByLabelText('url search')).toHaveTextContent('tab=second'));
     expect(screen.getByRole('link', {name: 'Second', current: 'page'})).toBeInTheDocument();
+  });
+
+  test('the probes outlive an error no page catches', async () => {
+    const boom = new Error('boom');
+    const Boom = () => {
+      throw boom;
+    };
+    const caught: unknown[] = [];
+
+    render(<TestApp at="/nowhere"><Route path="/nowhere" element={<Boom/>}/></TestApp>,
+      {onCaughtError: error => caught.push(error)});
+
+    expect(await screen.findByLabelText('errors reported')).toHaveTextContent(/^boom$/);
+    expect(screen.getByLabelText('url path')).toHaveTextContent('/nowhere');
+    expect(caught).toEqual([boom]);
   });
 });

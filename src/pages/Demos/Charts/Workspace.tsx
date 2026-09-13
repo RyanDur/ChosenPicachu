@@ -44,21 +44,22 @@ export const Workspace: FC<Props> = ({product}) => {
   return <>
     <header className="charts-heading">
       <h2 className="headline">{`Bitcoin, live — every ${product} trade on Coinbase`}</h2>
-      <output className="status" data-status={status}>{statusCopy[status]}</output>
+      <output className="status" aria-label="feed" data-status={status}>{statusCopy[status]}</output>
       {absentKinds.length > 0 &&
-        <>
-        <button type="button" className="menu-toggle rounded-corners add-chart button secondary"
-                popoverTarget="add-chart"
-                aria-label="Add a chart">+</button>
-        <menu id="add-chart" popover="auto" className="menu card rounded-corners lifted">
-          {absentKinds.map(kind =>
-            <li className="entry" key={kind}>
-              <button type="button" className="item sub-title"
-                      popoverTarget="add-chart" popoverTargetAction="hide"
-                      onClick={() => add(kind)}>{chartNames[kind]}</button>
-            </li>)}
-        </menu>
-        </>}
+          <>
+              <button type="button" className="menu-toggle rounded-corners add-chart button secondary"
+                      popoverTarget="add-chart"
+                      aria-label="Add a chart">+
+              </button>
+              <menu id="add-chart" popover="auto" className="menu card rounded-corners lifted">
+                {absentKinds.map(kind =>
+                  <li className="entry" key={kind}>
+                    <button type="button" className="item sub-title"
+                            popoverTarget="add-chart" popoverTargetAction="hide"
+                            onClick={() => add(kind)}>{chartNames[kind]}</button>
+                  </li>)}
+              </menu>
+          </>}
     </header>
     <ul className="chart-list">{chartKinds.map((kind, at) => {
       const actions = plural ? <Dismissal onRemove={() => remove(at)}/> : undefined;
