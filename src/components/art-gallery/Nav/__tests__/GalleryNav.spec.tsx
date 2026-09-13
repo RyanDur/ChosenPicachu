@@ -21,11 +21,11 @@ describe('Gallery Navigation', () => {
 
         const landings = await landingsDuring(() => userEvent.click(screen.getByRole('link', {name: 'NEXT'})));
         expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('page=2');
-        expect(landings).toContainEqual([0, 0]);
+        expect(landings).toContainEqual({where: 'main', x: 0, y: 0});
 
         const again = await landingsDuring(() => userEvent.click(screen.getByRole('link', {name: 'NEXT'})));
         expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('page=3');
-        expect(again).toContainEqual([0, 0]);
+        expect(again).toContainEqual({where: 'main', x: 0, y: 0});
       });
 
       test('when on the first page', () => {

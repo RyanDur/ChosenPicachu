@@ -22,7 +22,7 @@ describe('The page controls', () => {
       });
 
       expect(screen.getByLabelText(/Page #/)).not.toHaveValue(+pageNumber);
-      expect(landings).toContainEqual([0, 0]);
+      expect(landings).toContainEqual({where: 'main', x: 0, y: 0});
     });
 
     it('should not allow a user to go to a page lower than the first', () => {

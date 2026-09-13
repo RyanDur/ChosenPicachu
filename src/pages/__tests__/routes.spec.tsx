@@ -55,7 +55,7 @@ describe('leaving a page', () => {
       await screen.findByRole('navigation', {name: 'demos'});
     });
 
-    expect(landings).toContainEqual([0, 0]);
+    expect(landings).toContainEqual({where: 'main', x: 0, y: 0});
   });
 
   test('arriving at a place on the page keeps that place', async () => {

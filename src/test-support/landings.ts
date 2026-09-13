@@ -1,27 +1,31 @@
 import {maybe} from '@ryandur/sand';
 import * as schema from 'schemawax';
+import {screen} from '@testing-library/react';
 
-export type Landing = [number, number];
+export type Landing = {where: 'page' | 'main' | 'elsewhere', x: number, y: number};
 
-const options = schema.object({optional: {left: schema.number, top: schema.number}});
+const options = schema.object({required: {left: schema.number, top: schema.number}});
 
-const landingOf = ([first, second]: unknown[]): Landing | undefined =>
+const placeOf = ([first, second]: unknown[]): [number, number] | undefined =>
   typeof first === 'number' && typeof second === 'number'
     ? [first, second]
-    : maybe(options.decode(first)).map(({left = 0, top = 0}): Landing => [left, top]).orElse(undefined);
+    : maybe(options.decode(first)).map(({left, top}): [number, number] => [left, top]).orElse(undefined);
+
+const whereIs = (scrolled: unknown): Landing['where'] =>
+  scrolled === window ? 'page' : scrolled === screen.queryByRole('main') ? 'main' : 'elsewhere';
 
 export const landingsDuring = async (act: () => Promise<void>): Promise<Landing[]> => {
   const landings: Landing[] = [];
-  const record = (...args: unknown[]): void => {
-    maybe(landingOf(args)).map(landing => landings.push(landing));
+  const record = function (this: unknown, ...args: unknown[]): void {
+    maybe(placeOf(args)).map(([x, y]) => landings.push({where: whereIs(this), x, y}));
   };
   const page = vi.spyOn(window, 'scrollTo').mockImplementation(record);
-  const scroller = vi.spyOn(Element.prototype, 'scrollTo').mockImplementation(record);
+  const scrollers = vi.spyOn(Element.prototype, 'scrollTo').mockImplementation(record);
   try {
     await act();
   } finally {
     page.mockRestore();
-    scroller.mockRestore();
+    scrollers.mockRestore();
   }
   return landings;
 };
