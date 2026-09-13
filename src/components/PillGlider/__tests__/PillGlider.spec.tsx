@@ -30,4 +30,16 @@ describe('the pill glider', () => {
 
     expect(onChoose).toHaveBeenCalledWith('hide-lazy');
   });
+
+  test('the group carries the chosen pill\'s place once a pill is chosen, and none before', async () => {
+    render(<PillGlider label="drag style" name="drag-style" options={styles}
+                       chosen="eager" onChoose={vi.fn()}/>);
+    const group = screen.getByRole('group', {name: 'drag style'});
+    expect(group.style.getPropertyValue('--glider-x')).toBe('');
+
+    await userEvent.click(screen.getByRole('radio', {name: 'Hide Lazy'}));
+
+    expect(group.style.getPropertyValue('--glider-x')).toBe('0px');
+    expect(group.style.getPropertyValue('--glider-width')).toBe('0px');
+  });
 });

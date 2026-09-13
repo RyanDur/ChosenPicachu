@@ -31,23 +31,19 @@ export const PillGlider = <T extends string>({label, name, options, chosen, onCh
     onChoose(value);
   };
 
-  return <fieldset className="pill-glider">
+  return <fieldset className="pill-glider"
+                   style={has(geometry) ? {'--glider-width': `${geometry.width}px`, '--glider-x': `${geometry.left}px`} : undefined}>
     <legend className="off-screen">{label}</legend>
-    <article className="pills">
-      {has(geometry) &&
-        <article className="glider"
-                 style={{'--glider-width': `${geometry.width}px`, '--glider-x': `${geometry.left}px`}}/>}
-      {options.map(({display, value}) =>
-        <label className="pill"
-               key={value}>
-          {display}
-          <input type="radio"
-                 className="off-screen"
-                 name={name}
-                 value={value}
-                 checked={chosen === value}
-                 onChange={choose(value)}/>
-        </label>)}
-    </article>
+    {options.map(({display, value}) =>
+      <label className="pill"
+             key={value}>
+        {display}
+        <input type="radio"
+               className="off-screen"
+               name={name}
+               value={value}
+               checked={chosen === value}
+               onChange={choose(value)}/>
+      </label>)}
   </fieldset>;
 };
