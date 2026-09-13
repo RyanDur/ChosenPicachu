@@ -6,7 +6,8 @@ import {DemosStore, demosStore, feedReleased, feedRequested} from './store';
 
 const said: Readonly<Record<FeedTrouble, string>> = {
   handshakeRefused: 'the live feed refused the handshake',
-  hungUp: 'the live feed hung up mid-stream'
+  hungUp: 'the live feed hung up mid-stream',
+  historyUnavailable: 'the trade history could not be loaded'
 };
 
 export const useExchange = (): DemosStore => {

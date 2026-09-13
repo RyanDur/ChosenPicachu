@@ -7,7 +7,7 @@ import {rowMoved} from '@components/DragSortableTable/arrangement';
 describe('the users store', () => {
   const [first, second] = someUsers;
   const openedStore = async () => {
-    const store = usersStore(syncing(usersApi(someUsers), () => undefined));
+    const store = usersStore(syncing(usersApi(someUsers), () => undefined, () => undefined));
     store.dispatch(opened());
     await vi.waitFor(() => expect(store.state.users).toHaveLength(someUsers.length));
     return store;
@@ -34,7 +34,7 @@ describe('the users store', () => {
   });
 
   it('opening fills the roster with everyone the api has', async () => {
-    const store = usersStore(syncing(usersApi(someUsers), () => undefined));
+    const store = usersStore(syncing(usersApi(someUsers), () => undefined, () => undefined));
 
     store.dispatch(opened());
 
@@ -107,7 +107,7 @@ describe('the users store', () => {
 
   it('an update says once when it is saved', async () => {
     const saved = vi.fn();
-    const store = usersStore(syncing(usersApi(someUsers), saved));
+    const store = usersStore(syncing(usersApi(someUsers), saved, () => undefined));
     store.dispatch(opened());
     await vi.waitFor(() => expect(store.state.users).toHaveLength(someUsers.length));
 

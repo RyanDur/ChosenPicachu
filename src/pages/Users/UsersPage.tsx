@@ -1,6 +1,8 @@
 import {FC, useEffect, useState} from 'react';
 import {Link, useNavigate} from 'react-router';
 import {useSearchParamsObject} from '@components/search-params';
+import {useBanners} from '@components/Banners';
+import {troubleWith} from '@transport/trouble';
 import * as schema from 'schemawax';
 import {users as usersApi} from '@components/Users';
 import {Paths} from '@pages/Paths';
@@ -14,9 +16,10 @@ import './UsersPage.css';
 
 export const UsersPage: FC = () => {
   const navigate = useNavigate();
+  const {raise} = useBanners();
   const {id, mode: param} = useSearchParamsObject({id: schema.string, mode: schema.string});
   const mode = modeOf(param);
-  const [store] = useState(() => usersStore(syncing(usersApi, () => navigate(Paths.users))));
+  const [store] = useState(() => usersStore(syncing(usersApi, () => navigate(Paths.users), error => raise(troubleWith('the users')(error)))));
 
   useEffect(() => {
     store.dispatch(opened());

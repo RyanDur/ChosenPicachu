@@ -11,7 +11,7 @@ export type Exchange = {
 
 type Closer = () => void;
 
-export type FeedTrouble = 'handshakeRefused' | 'hungUp';
+export type FeedTrouble = 'handshakeRefused' | 'hungUp' | 'historyUnavailable';
 
 const opened = (
   {tradeFeed, tradeHistory, tradeProduct}: Exchange,
@@ -19,7 +19,7 @@ const opened = (
   onTrouble: (trouble: FeedTrouble) => void
 ): readonly Closer[] => {
   const history = tradeHistory
-    ? [recentTrades(tradeHistory, tradeProduct, trades => dispatch(historyArrived(trades))).cancel]
+    ? [recentTrades(tradeHistory, tradeProduct, trades => dispatch(historyArrived(trades)), () => onTrouble('historyUnavailable')).cancel]
     : [];
   if (!tradeFeed) {
     return history;
