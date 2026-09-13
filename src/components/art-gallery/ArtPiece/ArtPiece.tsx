@@ -19,6 +19,7 @@ export const ArtPiece = () => {
     const {id} = useParams<{ id: string }>();
     const [errored, hasErrored] = useState(false);
     const [loading, isLoading] = useState(false);
+    const hung = piece.orNull();
 
     useEffect(() => {
         if (!id) return reset;
@@ -37,9 +38,9 @@ export const ArtPiece = () => {
 
     return <>
         {loading && <Loading label="loading piece"/>}
-        {has(piece) && not(errored) && <figure className="art-piece art-work">
-          <Image piece={piece} linkEnabled={false} className="piece hung"/>
-          <figcaption className="trim artist-display hairline-outline italic">{piece.artistInfo}</figcaption>
+        {not(errored) && has(hung) && <figure className="art-piece art-work">
+          <Image piece={hung} linkEnabled={false} className="piece hung"/>
+          <figcaption className="trim artist-display hairline-outline italic">{hung.artistInfo}</figcaption>
         </figure>}
         {errored && <article className="art-piece err">
           <img src={noImage}

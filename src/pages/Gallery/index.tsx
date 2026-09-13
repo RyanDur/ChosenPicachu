@@ -28,7 +28,7 @@ const GalleryHeader = () =>
 
 const PieceHeader = () => {
   const {piece} = useArtPiece();
-  return <Header title={piece.title ?? 'A piece'}>
+  return <Header title={piece.map(({title}) => title).orElse('A piece')}>
     <Search id="gallery-search" className="gallery-search"/>
   </Header>;
 };

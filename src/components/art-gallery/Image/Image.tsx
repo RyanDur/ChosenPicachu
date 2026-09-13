@@ -11,7 +11,7 @@ import noImage from '../../../assets/icons/missing-art.svg?url';
 import './Image.css';
 
 type ImageProps = {
-  piece: Partial<Art>;
+  piece: Art;
   className?: string;
   linkEnabled?: boolean;
   priority?: boolean;
