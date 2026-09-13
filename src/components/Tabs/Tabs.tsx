@@ -22,7 +22,7 @@ export const Tabs: FC<Props> = ({values, id, label, defaultTab}) => {
   const {tab, updateSearchParams, createSearchParams} = useSearchParamsObject({tab: schema.string});
 
   useEffect(() => {
-    if (not(tab)) updateSearchParams({tab: defaultTab});
+    if (not(tab)) updateSearchParams({tab: defaultTab}, {replace: true});
   }, [tab, updateSearchParams, values, defaultTab]);
 
   return <nav aria-label={label} id={id} className="backdrop tabs">{values.map(({param, display}) =>
