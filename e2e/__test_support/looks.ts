@@ -11,6 +11,9 @@ export const resolved = (page: Page, property: string, token: string): Promise<s
     if (defined === '') {
       throw new Error(`${name} is not a token this page defines`);
     }
+    if (value === '' || value === 'none') {
+      throw new Error(`${name} paints nothing for ${property}`);
+    }
     return value;
   }, [property, token]);
 

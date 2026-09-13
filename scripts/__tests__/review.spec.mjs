@@ -1,6 +1,11 @@
 import {promptFor} from '../review/prompt.mjs';
 import {doorTable, entryOf, findingsIn, summaryOf, verdictOf} from '../review/report.mjs';
 
+const placeOf = (text, needle) => {
+  expect(text).toContain(needle);
+  return text.indexOf(needle);
+};
+
 const answer = (findings) => JSON.stringify({type: 'result', structured_output: {findings}});
 
 const violation = {
@@ -95,11 +100,11 @@ describe('the review report', () => {
   test('findings are counted and grouped by door, worst first', () => {
     const summary = summaryOf([testNote, note, concern, violation, interaction]);
     expect(summary).toContain('1 violation, 1 concern, 3 notes.');
-    expect(summary.indexOf('### structure')).toBeLessThan(summary.indexOf('### presentation'));
-    expect(summary.indexOf('### presentation')).toBeLessThan(summary.indexOf('### dynamic interaction'));
-    expect(summary.indexOf('### dynamic interaction')).toBeLessThan(summary.indexOf('### tests'));
-    expect(summary.indexOf('### dynamic interaction')).toBeLessThan(summary.indexOf('a handler is named for the act in progress'));
-    expect(summary.indexOf('a div wraps a list')).toBeLessThan(summary.indexOf('a section has no heading'));
+    expect(placeOf(summary, '### structure')).toBeLessThan(placeOf(summary, '### presentation'));
+    expect(placeOf(summary, '### presentation')).toBeLessThan(placeOf(summary, '### dynamic interaction'));
+    expect(placeOf(summary, '### dynamic interaction')).toBeLessThan(placeOf(summary, '### tests'));
+    expect(placeOf(summary, '### dynamic interaction')).toBeLessThan(placeOf(summary, 'a handler is named for the act in progress'));
+    expect(placeOf(summary, 'a div wraps a list')).toBeLessThan(placeOf(summary, 'a section has no heading'));
     expect(summary).toContain('`src/b.css:9`');
     expect(summary).toContain('> Tag selectors are for resets only');
     expect(summary).toContain('`src/__tests__/c.spec.tsx:4`');
@@ -108,7 +113,7 @@ describe('the review report', () => {
   test('the doors are tallied in a table before the prose', () => {
     const findings = [testNote, note, concern, violation, interaction];
     const summary = summaryOf(findings);
-    expect(summary.indexOf(doorTable(findings))).toBeLessThan(summary.indexOf('### structure'));
+    expect(placeOf(summary, '| structure | 1 | 0 | 1 |')).toBeLessThan(placeOf(summary, '### structure'));
     expect(doorTable(findings)).toContain('| structure | 1 | 0 | 1 |');
     expect(doorTable(findings)).toContain('| presentation | 0 | 1 | 0 |');
     expect(doorTable(findings)).toContain('| tests | 0 | 0 | 1 |');
