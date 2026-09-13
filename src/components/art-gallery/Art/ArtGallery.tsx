@@ -51,7 +51,7 @@ export const ArtGallery: FC = () => {
       </li>)}
     </ul>
     {wall === 'loading' && <Loading label="loading gallery"/>}
-    {(wall === 'empty' || wall === 'refused') && <img src={noImageGallery}
-                                                       alt="empty gallery"/>}
+    {wall === 'empty' && <img src={noImageGallery} alt="empty gallery"/>}
+    {wall === 'refused' && <img src={noImageGallery} alt="the museum refused to answer"/>}
   </>;
 };

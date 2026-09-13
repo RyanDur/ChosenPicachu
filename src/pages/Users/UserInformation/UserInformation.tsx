@@ -98,17 +98,15 @@ const Draft: FC<{ currentUser?: User; mode: Mode }> = ({currentUser, mode}) => {
     <output className="avatar-report off-screen"
             aria-label="avatar report">{draft.avatarDrawn ? 'A new avatar was drawn.' : ''}</output>
 
-    <h3 id="home-address-title" className="home-address-title sub-title bold">Home Address</h3>
-    <Address id="home-address" className="home-address" value={user.homeAddress} readOnly={readOnly} required
+    <Address id="home-address" title="Home Address" className="home-address" value={user.homeAddress} readOnly={readOnly} required
              onChange={address => dispatch(homeAddressEdited(address))}/>
 
-    <h3 id="work-address-title" className="work-address-title sub-title bold">Work Address</h3>
     {!readOnly && <label id="same-as-home-cell" className="same-as-home attentive">
         <span id="same-as-home-title">Same as Home</span>
         <input id="same-as-home" className="fancy-check" type="checkbox" checked={draft.sameAsHome}
                onChange={event => dispatch(sameAsHomeChosen(event.currentTarget.checked))}/>
     </label>}
-    <Address id="work-address" className="work-address" value={draft.sameAsHome ? user.homeAddress : typedWork(draft)} readOnly={readOnly}
+    <Address id="work-address" title="Work Address" className="work-address" value={draft.sameAsHome ? user.homeAddress : typedWork(draft)} readOnly={readOnly}
              disabled={draft.sameAsHome}
              onChange={address => dispatch(workAddressEdited(address))}/>
 

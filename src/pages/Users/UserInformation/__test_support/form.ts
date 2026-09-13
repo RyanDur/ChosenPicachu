@@ -6,7 +6,7 @@ import {format} from 'date-fns';
 const swiftKeys = userEvent.setup({delay: null});
 
 export const addressGroup = (kind: string) =>
-  within(screen.getByRole('article', {name: new RegExp(`${kind} address`, 'i')}));
+  within(screen.getByRole('group', {name: new RegExp(`${kind} address`, 'i')}));
 
 const paste = (field: HTMLElement, text: string): Promise<void> =>
   swiftKeys.click(field).then(() => swiftKeys.paste(text));

@@ -25,7 +25,7 @@ export const FriendsList: FC<Props> = ({users, user, onChange}) => {
 
   const remove = (friend: User) => onChange(user.friends.filter(id => id !== friend.id));
 
-  return <article className={classNames('friends-list', has(friends) && 'not-empty')}>
+  return <div className={classNames('friends-list', has(friends) && 'not-empty')}>
     <ul className="friends" aria-label="friends">{friends.map(friend =>
       <li className="friend" key={friend.id}>
         <label className="friend-title ellipsis"
@@ -46,5 +46,5 @@ export const FriendsList: FC<Props> = ({users, user, onChange}) => {
             displayFullName(potentialFriend)
           }</option>)
       ]}</select>}
-  </article>;
+  </div>;
 };

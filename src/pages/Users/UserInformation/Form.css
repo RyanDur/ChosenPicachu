@@ -60,15 +60,6 @@
     }
   }
 
-  .home-address-title {
-    grid-area: home_address_title;
-  }
-
-  .work-address-title {
-    grid-area: work_address_title;
-    white-space: nowrap;
-  }
-
   .same-as-home {
     grid-area: same_as_home;
     justify-self: flex-start;

@@ -36,8 +36,11 @@ export const Image: FC<ImageProps> = (
             aria-label={piece.title}
             className="scrim">{children}</Link> : <>{children}</>;
 
-    return (errored || !piece.image) ?
-        <img alt="oops"
+    return errored ?
+        <img alt={`${piece.title} would not load`}
+             className="image error"
+             src={noImage}/> : !piece.image ?
+        <img alt={`${piece.title} has nothing to show`}
              className="image error"
              src={noImage}/> :
         (<>

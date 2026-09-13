@@ -21,7 +21,7 @@ describe('the image', () => {
     render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><Image piece={piece}/></TestApp>);
 
     expect(screen.getByRole('progressbar', {name: 'loading'})).toBeInTheDocument();
-    expect(screen.queryByAltText('oops')).not.toBeInTheDocument();
+    expect(screen.queryByAltText(/would not load|has nothing to show/)).not.toBeInTheDocument();
   });
 
   test('shows the picture and drops the loading sign once it arrives', () => {
@@ -31,7 +31,7 @@ describe('the image', () => {
 
     expect(screen.queryByRole('progressbar', {name: 'loading'})).not.toBeInTheDocument();
     expect(screen.getByAltText(piece.altText)).toBeInTheDocument();
-    expect(screen.queryByAltText('oops')).not.toBeInTheDocument();
+    expect(screen.queryByAltText(/would not load|has nothing to show/)).not.toBeInTheDocument();
   });
 
   test('clicking a picture opens that piece', async () => {
@@ -49,14 +49,14 @@ describe('the image', () => {
     fireEvent.error(screen.getByAltText(piece.altText));
 
     expect(screen.queryByAltText(piece.altText)).not.toBeInTheDocument();
-    expect(screen.getByAltText('oops')).toBeInTheDocument();
+    expect(screen.getByAltText(`${piece.title} would not load`)).toBeInTheDocument();
     expect(screen.queryByRole('progressbar', {name: 'loading'})).not.toBeInTheDocument();
   });
 
   test('shows a stand-in when the piece has no picture', () => {
     render(<TestApp at={`${Paths.artGallery}?page=3&tab=${Source.AIC}`}><Image piece={{...piece, image: undefined}}/></TestApp>);
 
-    expect(screen.getByAltText('oops')).toBeInTheDocument();
+    expect(screen.getByAltText(`${piece.title} has nothing to show`)).toBeInTheDocument();
     expect(screen.queryByRole('progressbar', {name: 'loading'})).not.toBeInTheDocument();
     expect(screen.queryByAltText(piece.altText)).not.toBeInTheDocument();
   });

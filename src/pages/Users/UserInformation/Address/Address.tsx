@@ -7,6 +7,7 @@ import {AddressInfo} from '@components/Users/UserInfo/user';
 import './Address.css';
 
 type AddressProps = {
+    title: string;
     className?: string;
     onChange: (address: AddressInfo) => void;
     id: string;
@@ -18,6 +19,7 @@ type AddressProps = {
 
 export const Address: FC<AddressProps> = (
     {
+        title,
         className,
         onChange,
         id,
@@ -25,19 +27,20 @@ export const Address: FC<AddressProps> = (
         disabled,
         readOnly,
         value = {streetAddress: '', city: '', state: '', zip: ''}
-    }) => <article id={id} className={classNames('address', className)} aria-labelledby={`${id}-title`}>
+    }) => <fieldset id={id} className={classNames('address', className)} disabled={disabled}>
+    <legend className="address-title sub-title bold">{title}</legend>
     <FancyInput inputId={`${id}-street`} className="street"
-                required={required} disabled={disabled} value={value.streetAddress} readOnly={readOnly}
+                required={required} value={value.streetAddress} readOnly={readOnly}
                 onChange={event => onChange({...value, streetAddress: event.currentTarget.value})}>
         Street
     </FancyInput>
     <FancyInput inputId={`${id}-street-2`} className="street-2"
-                disabled={disabled} value={value.streetAddressTwo} readOnly={readOnly}
+                value={value.streetAddressTwo} readOnly={readOnly}
                 onChange={event => onChange({...value, streetAddressTwo: event.currentTarget.value})}>
         Street Line 2
     </FancyInput>
     <FancyInput inputId={`${id}-city`} className="city"
-                required={required} disabled={disabled} value={value.city} readOnly={readOnly}
+                required={required} value={value.city} readOnly={readOnly}
                 onChange={event => onChange({...value, city: event.currentTarget.value})}>
         City
     </FancyInput>
@@ -46,7 +49,6 @@ export const Address: FC<AddressProps> = (
         className="state"
         selectId={`${id}-state`}
         required={required}
-        disabled={disabled}
         readOnly={readOnly}
         value={value.state}
         optionValues={new Set(stateAbbreviations)}
@@ -59,8 +61,8 @@ export const Address: FC<AddressProps> = (
                 pattern="^[0-9]{5}(?:-[0-9]{4})?$"
                 value={value.zip}
                 readOnly={readOnly}
-                required={required} disabled={disabled}
+                required={required}
                 onChange={event => onChange({...value, zip: event.currentTarget.value})}>
         Postal / Zip code
     </FancyInput>
-</article>;
+</fieldset>;

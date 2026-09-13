@@ -1,4 +1,8 @@
 .address {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-inline-size: 0;
   display: grid;
   column-gap: var(--base-x-2);
   row-gap: var(--base-x-2);

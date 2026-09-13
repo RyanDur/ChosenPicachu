@@ -63,7 +63,7 @@ describe('The gallery.', () => {
 
     render(<TestApp at={`${Paths.artGallery}?page=23&search=g&size=8&tab=${Source.HARVARD}`}><ArtGallery/></TestApp>);
 
-    expect(await screen.findByAltText('empty gallery')).toBeInTheDocument();
+    expect(await screen.findByAltText('the museum refused to answer')).toBeInTheDocument();
     expect(screen.queryByRole('figure')).not.toBeInTheDocument();
     expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument();
     expect(within(screen.getByRole('alert', {hidden: true}))
