@@ -8,7 +8,7 @@ import {faker} from '@faker-js/faker';
 import {Paths} from '@pages/Paths';
 import {Source} from '@components/art-gallery/museums/types/resource';
 import {AICArtResponse} from '@components/art-gallery/museums/aic/types';
-import {setupAICArtPieceResponse} from '@components/art-gallery/__tests__/galleryApiTestHelper';
+import {setupAICArtPieceResponse} from '@components/art-gallery/__test_support';
 
 describe('viewing a piece', () => {
   const aicArtResponse: AICArtResponse = {

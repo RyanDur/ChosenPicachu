@@ -1,0 +1,1 @@
+export {standFrame} from './frame';

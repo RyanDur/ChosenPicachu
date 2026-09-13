@@ -1,5 +1,5 @@
 import {TestApp} from '@test-support/TestApp';
-import {demosAt} from '@pages/Demos/__test_support/demos';
+import {demosAt} from '@pages/Demos/__test_support';
 import {render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {delay, http, HttpResponse} from 'msw';

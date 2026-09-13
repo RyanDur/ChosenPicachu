@@ -1,0 +1,1 @@
+export {tableControls} from './controls';

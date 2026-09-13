@@ -1,11 +1,11 @@
 import {TestApp} from '@test-support/TestApp';
-import {chartPageAt, demosAt} from '@pages/Demos/__test_support/demos';
+import {chartPageAt, demosAt} from '@pages/Demos/__test_support';
 import {render, screen, waitFor, within} from '@testing-library/react';
 import {broadcast, listeningFeed, nonTradeFrame, tradeFrame, tradeFrameWith} from '@test-support/feed';
 import {feedIsSubscribed} from '@test-support';
 import userEvent from '@testing-library/user-event';
-import {addChart, addMenu, doorway, dragChart, keys, releaseDrag, slot} from '@pages/Demos/Charts/__test_support/desk';
-import {story} from '@pages/Demos/Recipe/__test_support/folds';
+import {addChart, addMenu, doorway, dragChart, keys, releaseDrag, slot} from '@pages/Demos/Charts/__test_support';
+import {story} from '@pages/Demos/Recipe/__test_support';
 import {format} from 'date-fns';
 
 const feedIsLive = async (): Promise<void> => {

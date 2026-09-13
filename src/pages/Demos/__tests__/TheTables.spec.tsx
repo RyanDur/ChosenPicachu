@@ -1,12 +1,12 @@
 import {TestApp} from '@test-support/TestApp';
-import {demosAt} from '@pages/Demos/__test_support/demos';
+import {demosAt} from '@pages/Demos/__test_support';
 import {fireEvent, render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {broadcast, listeningFeed, tradeFrame} from '@test-support/feed';
 import {feedIsSubscribed} from '@test-support';
-import {opened, reveals, story} from '@pages/Demos/Recipe/__test_support/folds';
-import {tableControls} from '@pages/Demos/Tables/__test_support/controls';
-import {texts} from '@components/DragSortableTable/__test_support/rows';
+import {opened, reveals, story} from '@pages/Demos/Recipe/__test_support';
+import {tableControls} from '@pages/Demos/Tables/__test_support';
+import {texts} from '@components/DragSortableTable/__test_support';
 
 const now = 1700000000000;
 const fourTrades = [

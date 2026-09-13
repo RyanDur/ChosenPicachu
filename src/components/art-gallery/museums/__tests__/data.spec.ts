@@ -29,7 +29,7 @@ import {Source} from '@components/art-gallery/museums/types/resource';
 import {faker} from '@faker-js/faker';
 import {env} from '@env';
 import {expect} from 'vitest';
-import {setupAICAllArtResponse} from '@components/art-gallery/__tests__/galleryApiTestHelper';
+import {setupAICAllArtResponse} from '@components/art-gallery/__test_support';
 
 describe('data', () => {
     describe('retrieving all the artwork', () => {

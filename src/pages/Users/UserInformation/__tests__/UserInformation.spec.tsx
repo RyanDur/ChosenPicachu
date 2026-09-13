@@ -4,7 +4,7 @@ import {UsersProvider} from '../../Provider';
 import {UsersAction, UsersListener, usersStore} from '../../store';
 import {render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {addressGroup, fillOutForm} from '../__test_support/form';
+import {addressGroup, fillOutForm} from '../__test_support';
 import {initialState} from '../reducer';
 import {NewUser} from '@components/Users/UserInfo/types';
 import {toDate} from 'date-fns';

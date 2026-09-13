@@ -17,7 +17,7 @@ import {
   view,
   worksFromHome,
   worksFromHomeColumn
-} from '../__test_support/table';
+} from '../__test_support';
 
 describe('the users page', () => {
   describe('ranking the users', () => {

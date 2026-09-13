@@ -34,12 +34,18 @@ export const setupAICAllArtResponse = (response: AICAllArtResponse, options: All
   server.use(http.get(`${aicDomain}/search`, ({request}) =>
     paramsMatch(request, allArtParams(options)) ? HttpResponse.json(response) : undefined));
 
-export const slowAICAllArtResponse = (response: AICAllArtResponse, options: AllArt = {limit: defaultRecordLimit, page: 1}, ms = 150) =>
+export const heldAICAllArtResponse = (response: AICAllArtResponse, options: AllArt = {limit: defaultRecordLimit, page: 1}): () => void => {
+  let release = (): void => undefined;
+  const held = new Promise<void>(resolve => {
+    release = resolve;
+  });
   server.use(http.get(`${aicDomain}/search`, async ({request}) => {
     if (!paramsMatch(request, allArtParams(options))) return undefined;
-    await delay(ms);
+    await held;
     return HttpResponse.json(response);
   }));
+  return release;
+};
 
 export const setupAICEveryPage = (response: AICAllArtResponse) =>
   server.use(http.get(`${aicDomain}/search`, ({request}) => {

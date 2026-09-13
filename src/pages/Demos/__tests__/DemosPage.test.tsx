@@ -1,5 +1,5 @@
 import {TestApp} from '@test-support/TestApp';
-import {demosAt} from '@pages/Demos/__test_support/demos';
+import {demosAt} from '@pages/Demos/__test_support';
 import {expect, test} from 'vitest';
 import userEvent from '@testing-library/user-event';
 import {render, screen, waitFor, within} from '@testing-library/react';

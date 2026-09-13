@@ -1,9 +1,9 @@
 import {TestApp} from '@test-support/TestApp';
-import {demosAt} from '@pages/Demos/__test_support/demos';
+import {demosAt} from '@pages/Demos/__test_support';
 import {render, screen, waitFor, within} from '@testing-library/react';
 import {http, HttpResponse} from 'msw';
 import {HISTORY, server} from '@test-support/server';
-import {texts} from '@components/DragSortableTable/__test_support/rows';
+import {texts} from '@components/DragSortableTable/__test_support';
 
 const NOW = 1700000000000;
 

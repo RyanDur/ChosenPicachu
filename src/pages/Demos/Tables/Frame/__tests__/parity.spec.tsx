@@ -2,7 +2,7 @@ import {render, within} from '@testing-library/react';
 import {windowedAggregates} from '@pages/Demos/Tables/Aggregations/fold';
 import {cells, measures} from '@pages/Demos/Tables/Aggregations/cells';
 import {EagerTable} from '../../Builds/EagerTable';
-import {standFrame} from '../__test_support/frame';
+import {standFrame} from '../__test_support';
 
 type CellShape = {
   tag: string;
