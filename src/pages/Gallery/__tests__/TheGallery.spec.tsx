@@ -6,9 +6,6 @@ import {Paths} from '@pages/Paths';
 import userEvent from '@testing-library/user-event';
 import {AICArtResponse} from '@components/art-gallery/museums/aic/types';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
-import {delay, http, HttpResponse} from 'msw';
-import {server} from '@test-support/server';
-import {env} from '@env';
 import {
   delayAICPictures,
   delayVAMPictures,
@@ -18,6 +15,7 @@ import {
   setupAICArtPieceResponse,
   setupClevelandAllArtResponse,
   setupHarvardAllArtResponse,
+  slowAICAllArtResponse,
   setupVAMAllArtResponse
 } from '@components/art-gallery/__tests__/galleryApiTestHelper';
 
@@ -177,11 +175,7 @@ describe('The gallery.', () => {
 
   test('the count of works stays while the next page loads', async () => {
     setupAICAllArtResponse(aicArtResponse);
-    server.use(http.get(`${env.aicDomain}/search`, async ({request}) => {
-      if (new URL(request.url).searchParams.get('page') !== '2') return undefined;
-      await delay(150);
-      return HttpResponse.json(aicArtResponse);
-    }));
+    slowAICAllArtResponse(aicArtResponse, {limit: defaultRecordLimit, page: 2});
     render(<TestApp at={Paths.artGallery}/>);
     await screen.findAllByRole('figure');
 
@@ -190,5 +184,14 @@ describe('The gallery.', () => {
     await screen.findByRole('progressbar', {name: 'loading gallery'});
     expect(screen.getByRole('navigation', {name: 'pagination'})).toHaveTextContent(`of${aicArtResponse.pagination.total}`);
     await waitFor(() => expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument());
+  });
+
+  test('on the last page the count ends at the total', async () => {
+    const {total_pages: last, limit, total} = aicArtResponse.pagination;
+    setupAICAllArtResponse({...aicArtResponse, pagination: {...aicArtResponse.pagination, current_page: last}}, {limit, page: last});
+    render(<TestApp at={`${Paths.artGallery}?page=${last}`}/>);
+    await screen.findAllByRole('figure');
+
+    expect(screen.getByRole('navigation', {name: 'pagination'})).toHaveTextContent(`${1 + limit * (last - 1)} - ${total}of${total}`);
   });
 });

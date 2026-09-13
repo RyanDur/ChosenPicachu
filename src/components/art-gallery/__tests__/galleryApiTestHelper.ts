@@ -16,19 +16,30 @@ const paramsMatch = (request: Request, expected: Record<string, string>) => {
   return Object.entries(expected).every(([key, value]) => params.get(key) === value);
 };
 
-export const setupAICAllArtResponse = (response: AICAllArtResponse, options: {
+type AllArt = {
   limit: number,
   page: number
   search?: string,
-} = {limit: defaultRecordLimit, page: 1}) =>
+};
+
+const allArtParams = (options: AllArt) => ({
+  'query[exists][field]': 'image_id',
+  fields: fields.join(),
+  page: String(options.page),
+  limit: String(options.limit),
+  ...(options.search ? {q: options.search} : {})
+});
+
+export const setupAICAllArtResponse = (response: AICAllArtResponse, options: AllArt = {limit: defaultRecordLimit, page: 1}) =>
   server.use(http.get(`${aicDomain}/search`, ({request}) =>
-    paramsMatch(request, {
-      'query[exists][field]': 'image_id',
-      fields: fields.join(),
-      page: String(options.page),
-      limit: String(options.limit),
-      ...(options.search ? {q: options.search} : {})
-    }) ? HttpResponse.json(response) : undefined));
+    paramsMatch(request, allArtParams(options)) ? HttpResponse.json(response) : undefined));
+
+export const slowAICAllArtResponse = (response: AICAllArtResponse, options: AllArt = {limit: defaultRecordLimit, page: 1}, ms = 150) =>
+  server.use(http.get(`${aicDomain}/search`, async ({request}) => {
+    if (!paramsMatch(request, allArtParams(options))) return undefined;
+    await delay(ms);
+    return HttpResponse.json(response);
+  }));
 
 export const setupHarvardAllArtResponse = (response: HarvardAllArtResponse, limit = defaultRecordLimit) =>
   server.use(http.get(harvardDomain, ({request}) =>

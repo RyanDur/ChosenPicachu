@@ -1,7 +1,6 @@
 import {GalleryProviders} from '@pages/Gallery';
 import {TestApp} from '@test-support/TestApp';
 import {anyRequestFailsToConnect} from '@test-support/server';
-import {delay, http as handle, HttpResponse} from 'msw';
 import {server} from '@test-support/server';
 import {env} from '@env';
 import {render, screen, waitFor, within} from '@testing-library/react';
@@ -10,9 +9,7 @@ import {Source} from '@components/art-gallery/museums/types/resource';
 import {aicArtResponse} from '@test-support/fixtures';
 import {test} from 'vitest';
 import {Paths} from '@pages/Paths';
-import {setupAICAllArtResponse} from '@components/art-gallery/__tests__/galleryApiTestHelper';
-
-const {aicDomain} = env;
+import {setupAICAllArtResponse, slowAICAllArtResponse} from '@components/art-gallery/__tests__/galleryApiTestHelper';
 
 describe('The gallery.', () => {
   test('loads the wall exactly once on mount', async () => {
@@ -42,10 +39,7 @@ describe('The gallery.', () => {
   });
 
   test('when the art is loading', async () => {
-    server.use(handle.get(`${aicDomain}/search`, async () => {
-      await delay(150);
-      return HttpResponse.json(aicArtResponse);
-    }));
+    slowAICAllArtResponse(aicArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
 
     await screen.findByRole('progressbar', {name: 'loading gallery'});
