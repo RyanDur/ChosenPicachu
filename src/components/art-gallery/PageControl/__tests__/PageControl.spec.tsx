@@ -13,14 +13,17 @@ describe('The page controls', () => {
 
       render(<TestApp at={Paths.artGallery}><GalleryProviders><PageControl/></GalleryProviders></TestApp>);
       const landings = vi.spyOn(window, 'scrollTo');
-      await userEvent.type(screen.getByLabelText(/Page #/), pageNumber);
-      await userEvent.click(screen.getByText('Go'));
+      try {
+        await userEvent.type(screen.getByLabelText(/Page #/), pageNumber);
+        await userEvent.click(screen.getByRole('button', {name: 'Go'}));
 
-      await waitFor(() =>
-        expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(`?page=${pageNumber}`));
-      expect(screen.getByLabelText(/Page #/)).not.toHaveValue(+pageNumber);
-      expect(landings).toHaveBeenCalledTimes(1);
-      landings.mockRestore();
+        await waitFor(() =>
+          expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(`?page=${pageNumber}`));
+        expect(screen.getByLabelText(/Page #/)).not.toHaveValue(+pageNumber);
+        expect(landings).toHaveBeenCalledTimes(1);
+      } finally {
+        landings.mockRestore();
+      }
     });
 
     it('should not allow a user to go to a page lower than the first', () => {
@@ -40,7 +43,7 @@ describe('The page controls', () => {
       render(<TestApp at={Paths.artGallery}><GalleryProviders><PageControl/></GalleryProviders></TestApp>);
 
       await userEvent.type(screen.getByLabelText(/Per Page/), '45');
-      await userEvent.click(screen.getByText('Go'));
+      await userEvent.click(screen.getByRole('button', {name: 'Go'}));
 
       expect(await screen.findByRole('status', {name: 'url search'})).toHaveTextContent('size=45');
     });

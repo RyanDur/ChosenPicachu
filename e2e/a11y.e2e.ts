@@ -74,6 +74,8 @@ test('the period menu stays hidden until asked', async ({page}) => {
 
   await page.getByRole('button', {name: 'price period'}).click();
   await expect(page.getByLabel('price period by').getByRole('button', {name: 'week'})).toBeVisible();
+  await expect(page.getByLabel('price period by').getByRole('button', {name: 'hour'})).not.toHaveCSS('box-shadow', 'none');
+  await expect(page.getByLabel('price period by').getByRole('button', {name: 'week'})).toHaveCSS('box-shadow', 'none');
 });
 
 test('only one fuller story stands open at a time', async ({page}) => {

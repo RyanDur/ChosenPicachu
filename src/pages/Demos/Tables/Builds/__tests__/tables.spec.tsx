@@ -475,7 +475,7 @@ describe('sort criteria menus', () => {
   test('a direction chosen from the column menu sorts the rows', async () => {
     seat(EagerTable, 'keep static');
 
-    await userEvent.click(within(menuFor('sort trades')).getByText('descending'));
+    await userEvent.click(within(menuFor('sort trades')).getByRole('button', {name: 'descending', hidden: true}));
 
     expect(windowNames()).toEqual(['last 5 minutes', 'this hour', 'last 15 minutes', 'this minute', 'session']);
     expect(tradesHeader()).toHaveAttribute('aria-sort', 'descending');
@@ -484,7 +484,7 @@ describe('sort criteria menus', () => {
   test('the sort keeps sorting as the values change', async () => {
     const {rerender} = seat(EagerTable, 'keep static');
 
-    await userEvent.click(within(menuFor('sort trades')).getByText('ascending'));
+    await userEvent.click(within(menuFor('sort trades')).getByRole('button', {name: 'ascending', hidden: true}));
     expect(windowNames()).toEqual(['session', 'this minute', 'last 15 minutes', 'this hour', 'last 5 minutes']);
 
     rerender(seated(EagerTable, retraded(10), 'keep static'));
@@ -494,8 +494,8 @@ describe('sort criteria menus', () => {
   test('reset restores the starting order', async () => {
     seat(EagerTable, 'keep static');
 
-    await userEvent.click(within(menuFor('sort trades')).getByText('descending'));
-    await userEvent.click(within(menuFor('sort trades')).getByText('reset'));
+    await userEvent.click(within(menuFor('sort trades')).getByRole('button', {name: 'descending', hidden: true}));
+    await userEvent.click(within(menuFor('sort trades')).getByRole('button', {name: 'reset', hidden: true}));
 
     expect(windowNames()).toEqual(windows);
     expect(tradesHeader()).not.toHaveAttribute('aria-sort');
@@ -504,7 +504,7 @@ describe('sort criteria menus', () => {
   test('a hand on a row ends the sort and keeps the standing order', async () => {
     const {rerender} = seat(EagerTable, 'keep static');
 
-    await userEvent.click(within(menuFor('sort trades')).getByText('descending'));
+    await userEvent.click(within(menuFor('sort trades')).getByRole('button', {name: 'descending', hidden: true}));
     expect(windowNames()).toEqual(['last 5 minutes', 'this hour', 'last 15 minutes', 'this minute', 'session']);
 
     grip('this minute').focus();
@@ -528,7 +528,7 @@ describe('sort criteria menus', () => {
   test('choosing a direction never lifts the column', async () => {
     seat(EagerTable, 'keep static');
 
-    await userEvent.click(within(menuFor('sort trades')).getByText('descending'));
+    await userEvent.click(within(menuFor('sort trades')).getByRole('button', {name: 'descending', hidden: true}));
 
     expect(carried()).toEqual([]);
     expect(screen.getAllByRole('table')).toHaveLength(1);
