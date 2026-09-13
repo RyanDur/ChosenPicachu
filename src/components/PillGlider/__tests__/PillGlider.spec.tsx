@@ -10,9 +10,9 @@ const styles = [
 ];
 
 describe('the pill glider', () => {
-  test('offers every style as a radio in a named group', () => {
+  test('offers every style as a radio in a named group, the chosen one checked', () => {
     render(<PillGlider label="drag style" name="drag-style" options={styles}
-                       chosen="eager" onChoose={vi.fn()}/>);
+                       chosen="eager" onChosen={vi.fn()}/>);
 
     expect(screen.getByRole('group', {name: 'drag style'})).toBeVisible();
     for (const {display} of styles) {
@@ -21,25 +21,13 @@ describe('the pill glider', () => {
     expect(screen.getByRole('radio', {name: 'Eager'})).toBeChecked();
   });
 
-  test('choosing a pill reports the value', async () => {
-    const onChoose = vi.fn();
+  test('choosing a pill says which was chosen', async () => {
+    const onChosen = vi.fn();
     render(<PillGlider label="drag style" name="drag-style" options={styles}
-                       chosen="eager" onChoose={onChoose}/>);
+                       chosen="eager" onChosen={onChosen}/>);
 
     await userEvent.click(screen.getByRole('radio', {name: 'Hide Lazy'}));
 
-    expect(onChoose).toHaveBeenCalledWith('hide-lazy');
-  });
-
-  test('the group carries the chosen pill\'s place once a pill is chosen, and none before', async () => {
-    render(<PillGlider label="drag style" name="drag-style" options={styles}
-                       chosen="eager" onChoose={vi.fn()}/>);
-    const group = screen.getByRole('group', {name: 'drag style'});
-    expect(group.style.getPropertyValue('--glider-x')).toBe('');
-
-    await userEvent.click(screen.getByRole('radio', {name: 'Hide Lazy'}));
-
-    expect(group.style.getPropertyValue('--glider-x')).toBe('0px');
-    expect(group.style.getPropertyValue('--glider-width')).toBe('0px');
+    expect(onChosen).toHaveBeenCalledWith('hide-lazy');
   });
 });

@@ -77,7 +77,7 @@
 
     &:has(:checked) {
       outline: var(--hairline) solid var(--chosen-color);
-      outline-offset: -4px;
+      outline-offset: calc(var(--hairline-x-4) * -1);
     }
 
     &:focus-within:has(:checked),
@@ -85,7 +85,7 @@
       outline: var(--hairline) solid var(--not-chosen-color);
       background: var(--chosen-color);
       color: var(--not-chosen-color);
-      outline-offset: -4px;
+      outline-offset: calc(var(--hairline-x-4) * -1);
     }
 
   }

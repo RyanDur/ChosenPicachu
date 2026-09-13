@@ -12,5 +12,5 @@ export const OriginDial: FC<{name: string}> = ({name}) => {
                        {display: 'Hide', value: 'hide'}
                      ]}
                      chosen={origin}
-                     onChoose={next => updateSearchParams({origin: next})}/>;
+                     onChosen={next => updateSearchParams({origin: next})}/>;
 };

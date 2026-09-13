@@ -48,7 +48,7 @@ export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack}) => {
                     {display: 'Vanilla', value: 'vanilla'}
                   ]}
                   chosen={world}
-                  onChoose={next => updateSearchParams({world: next})}/>
+                  onChosen={next => updateSearchParams({world: next})}/>
     </header>
     <p className="paragraph">{worldCopy[world]}</p>
     <ol className="spine" aria-label="the stations">

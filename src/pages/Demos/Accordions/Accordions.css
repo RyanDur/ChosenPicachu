@@ -81,7 +81,7 @@
       &:hover {
         background: var(--paper);
         outline: var(--hairline) solid var(--charcoal);
-        outline-offset: -3px;
+        outline-offset: calc(var(--hairline-x-3) * -1);
         color: var(--charcoal);
       }
 
@@ -93,7 +93,7 @@
       &:active,
       &:has(input:focus-visible) {
         outline: var(--hairline) solid var(--paper);
-        outline-offset: -3px;
+        outline-offset: calc(var(--hairline-x-3) * -1);
       }
     }
 

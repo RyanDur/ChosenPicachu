@@ -14,5 +14,5 @@ export const StackDial: FC<{name: string}> = ({name}) => {
                        {display: 'Right', value: 'right'}
                      ]}
                      chosen={stack}
-                     onChoose={next => updateSearchParams({stack: next})}/>;
+                     onChosen={next => updateSearchParams({stack: next})}/>;
 };

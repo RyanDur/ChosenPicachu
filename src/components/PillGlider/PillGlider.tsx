@@ -1,5 +1,4 @@
-import {ChangeEvent, ReactNode, useState} from 'react';
-import {has} from '@ryandur/sand';
+import {ReactNode} from 'react';
 import './PillGlider.css';
 
 type Option<T extends string> = {
@@ -12,27 +11,11 @@ type Props<T extends string> = {
   name: string;
   options: readonly Option<T>[];
   chosen: T;
-  onChoose: (value: T) => void;
+  onChosen: (value: T) => void;
 };
 
-type Geometry = {
-  left: number;
-  width: number;
-};
-
-export const PillGlider = <T extends string>({label, name, options, chosen, onChoose}: Props<T>) => {
-  const [geometry, setGeometry] = useState<Geometry>();
-
-  const choose = (value: T) => (event: ChangeEvent<HTMLInputElement>): void => {
-    const pill = event.currentTarget.closest('label');
-    if (has(pill)) {
-      setGeometry({left: pill.offsetLeft, width: pill.offsetWidth});
-    }
-    onChoose(value);
-  };
-
-  return <fieldset className="pill-glider"
-                   style={has(geometry) ? {'--glider-width': `${geometry.width}px`, '--glider-x': `${geometry.left}px`} : undefined}>
+export const PillGlider = <T extends string>({label, name, options, chosen, onChosen}: Props<T>) =>
+  <fieldset className="pill-glider">
     <legend className="off-screen">{label}</legend>
     {options.map(({display, value}) =>
       <label className="pill"
@@ -43,7 +26,6 @@ export const PillGlider = <T extends string>({label, name, options, chosen, onCh
                name={name}
                value={value}
                checked={chosen === value}
-               onChange={choose(value)}/>
+               onChange={() => onChosen(value)}/>
       </label>)}
   </fieldset>;
-};

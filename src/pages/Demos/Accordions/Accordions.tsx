@@ -77,7 +77,7 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
                   name="checkbox-animate-or-static-tab"
                   options={[{display: 'Animate', value: 'animated'}, {display: 'Static', value: 'static'}]}
                   chosen={tab}
-                  onChoose={value => {
+                  onChosen={value => {
                     updateChecked(undefined);
                     updateTab(value);
                   }}/>

@@ -58,7 +58,7 @@ export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({c
                     {display: 'Lazy', value: 'lazy'}
                   ]}
                   chosen={pace}
-                  onChoose={onPace}/>
+                  onChosen={onPace}/>
       <p className="reading paragraph">{copy.pace[pace]}</p>
     </article>
     <article className="control">
@@ -70,7 +70,7 @@ export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({c
                     {display: 'Hide', value: 'hide'}
                   ]}
                   chosen={origin}
-                  onChoose={onOrigin}/>
+                  onChosen={onOrigin}/>
       <p className="reading paragraph">{copy.origin[origin]}</p>
     </article>
     <article className="control">
@@ -82,7 +82,7 @@ export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({c
                     {display: 'Static', value: 'static'}
                   ]}
                   chosen={motion}
-                  onChoose={onMotion}/>
+                  onChosen={onMotion}/>
       <p className="reading paragraph">{copy.motion[motion]}</p>
     </article>
     {children}

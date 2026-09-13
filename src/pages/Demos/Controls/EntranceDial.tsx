@@ -14,5 +14,5 @@ export const EntranceDial: FC<{name: string}> = ({name}) => {
                        {display: 'Right', value: 'right'}
                      ]}
                      chosen={enter}
-                     onChoose={next => updateSearchParams({enter: next})}/>;
+                     onChosen={next => updateSearchParams({enter: next})}/>;
 };

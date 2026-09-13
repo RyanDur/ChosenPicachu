@@ -12,5 +12,5 @@ export const MotionDial: FC<{name: string}> = ({name}) => {
                        {display: 'Static', value: 'static'}
                      ]}
                      chosen={motion}
-                     onChoose={next => updateSearchParams({motion: next})}/>;
+                     onChosen={next => updateSearchParams({motion: next})}/>;
 };

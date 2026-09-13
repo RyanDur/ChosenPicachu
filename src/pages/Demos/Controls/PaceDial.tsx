@@ -12,5 +12,5 @@ export const PaceDial: FC<{name: string}> = ({name}) => {
                        {display: 'Lazy', value: 'lazy'}
                      ]}
                      chosen={pace}
-                     onChoose={next => updateSearchParams({pace: next})}/>;
+                     onChosen={next => updateSearchParams({pace: next})}/>;
 };

@@ -58,7 +58,7 @@ export const BannerControls: FC<BannerControlsProps> = ({side, align, enter, sta
                     {display: 'Bottom', value: 'bottom'}
                   ]}
                   chosen={side}
-                  onChoose={onSide}/>
+                  onChosen={onSide}/>
       <p className="reading paragraph">{copy.side[side]}</p>
     </article>
     <article className="control">
@@ -71,7 +71,7 @@ export const BannerControls: FC<BannerControlsProps> = ({side, align, enter, sta
                     {display: 'Right', value: 'right'}
                   ]}
                   chosen={align}
-                  onChoose={onAlign}/>
+                  onChosen={onAlign}/>
       <p className="reading paragraph">{copy.align[align]}</p>
     </article>
     <article className="control">
@@ -85,7 +85,7 @@ export const BannerControls: FC<BannerControlsProps> = ({side, align, enter, sta
                     {display: 'Right', value: 'right'}
                   ]}
                   chosen={enter}
-                  onChoose={onEnter}/>
+                  onChosen={onEnter}/>
       <p className="reading paragraph">{copy.enter[enter]}</p>
     </article>
     <article className="control">
@@ -99,7 +99,7 @@ export const BannerControls: FC<BannerControlsProps> = ({side, align, enter, sta
                     {display: 'Right', value: 'right'}
                   ]}
                   chosen={stack}
-                  onChoose={onStack}/>
+                  onChosen={onStack}/>
       <p className="reading paragraph">{copy.stack[stack]}</p>
     </article>
     <p className="readout caption">

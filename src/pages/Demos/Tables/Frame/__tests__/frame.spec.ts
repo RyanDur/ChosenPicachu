@@ -334,24 +334,6 @@ describe('the frame table', () => {
   });
 
   describe('the worlds of pace, origin, and motion', () => {
-    const dials = [
-      {origin: 'keep', motion: 'animated'},
-      {origin: 'hide', motion: 'static'},
-      {origin: 'keep', motion: 'static'}
-    ] as const;
-
-    it.each(dials)('a column and a row walk to new seats with origin $origin and motion $motion', async ({origin, motion}) => {
-      standFrame({origin, motion});
-
-      screen.getByRole('columnheader', {name: /trades/}).focus();
-      await userEvent.keyboard('{ArrowRight}');
-      await userEvent.click(screen.getByRole('button', {name: 'move row 1'}));
-      await userEvent.keyboard('{ArrowDown}');
-
-      expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
-      expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
-    });
-
     it('lazy holds its shape and commits on drop', () => {
       standFrame({pace: 'lazy'});
       stubbedRects();

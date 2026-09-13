@@ -13,5 +13,5 @@ export const AlignDial: FC<{name: string}> = ({name}) => {
                        {display: 'Right', value: 'right'}
                      ]}
                      chosen={align}
-                     onChoose={next => updateSearchParams({align: next})}/>;
+                     onChosen={next => updateSearchParams({align: next})}/>;
 };

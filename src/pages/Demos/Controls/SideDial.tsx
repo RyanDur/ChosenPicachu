@@ -13,5 +13,5 @@ export const SideDial: FC<{name: string}> = ({name}) => {
                        {display: 'Bottom', value: 'bottom'}
                      ]}
                      chosen={side}
-                     onChoose={next => updateSearchParams({side: next})}/>;
+                     onChosen={next => updateSearchParams({side: next})}/>;
 };
