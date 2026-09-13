@@ -8,17 +8,23 @@ const swiftKeys = userEvent.setup({delay: null});
 export const addressGroup = (kind: string) =>
   within(screen.getByRole('article', {name: new RegExp(`${kind} address`, 'i')}));
 
+const paste = (field: HTMLElement, text: string): Promise<void> =>
+  swiftKeys.click(field).then(() => swiftKeys.paste(text));
+
+const pasteIfGiven = (field: HTMLElement, text?: string): Promise<void> =>
+  text === undefined ? Promise.resolve() : paste(field, text);
+
 export const fillOutAddress = (address: AddressInfo, kind: string) =>
-  swiftKeys.type(addressGroup(kind).getByLabelText('Street'), address.streetAddress)
-    .then(() => swiftKeys.type(addressGroup(kind).getByLabelText('Street Line 2'), address.streetAddressTwo!))
-    .then(() => swiftKeys.type(addressGroup(kind).getByLabelText('City'), address.city))
+  paste(addressGroup(kind).getByLabelText('Street'), address.streetAddress)
+    .then(() => pasteIfGiven(addressGroup(kind).getByLabelText('Street Line 2'), address.streetAddressTwo))
+    .then(() => paste(addressGroup(kind).getByLabelText('City'), address.city))
     .then(() => swiftKeys.selectOptions(addressGroup(kind).getByLabelText('State'), address.state))
-    .then(() => swiftKeys.type(addressGroup(kind).getByLabelText('Postal / Zip code'), address.zip));
+    .then(() => paste(addressGroup(kind).getByLabelText('Postal / Zip code'), address.zip));
 
 export const fillOutUser = (info: Pick<NewUser, 'info'>) =>
-  swiftKeys.type(screen.getByLabelText('First Name'), info.info.firstName)
-    .then(() => swiftKeys.type(screen.getByLabelText('Last Name'), info.info.lastName))
-    .then(() => swiftKeys.type(screen.getByLabelText('Email'), info.info.email!))
+  paste(screen.getByLabelText('First Name'), info.info.firstName)
+    .then(() => paste(screen.getByLabelText('Last Name'), info.info.lastName))
+    .then(() => paste(screen.getByLabelText('Email'), info.info.email))
     .then(() => swiftKeys.type(screen.getByLabelText('Date Of Birth'), format(info.info.dob!, 'yyyy-MM-dd')));
 
 export const fillOutForm = (info: Pick<NewUser, 'info' | 'homeAddress' | 'workAddress'>) =>

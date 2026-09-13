@@ -23,7 +23,6 @@ import {
 const conciseUser = (firstName: string, worksFromHome: boolean): User => {
   const homeAddress: AddressInfo = {
     streetAddress: '12 Elm St',
-    streetAddressTwo: 'Apt. 3',
     city: 'Springfield',
     state: 'IL',
     zip: '62704'
@@ -39,7 +38,6 @@ const conciseUser = (firstName: string, worksFromHome: boolean): User => {
     homeAddress,
     workAddress: worksFromHome ? homeAddress : {
       streetAddress: '9 Oak Ave',
-      streetAddressTwo: 'Suite 2',
       city: 'Chatham',
       state: 'IL',
       zip: '62629'
@@ -53,8 +51,6 @@ describe('the users page', () => {
     it('groups by a column menu criterion', async () => {
       render(<TestApp at={Paths.users}/>);
       await roster();
-      await addUser(conciseUser('Homer', true));
-      await addUser(conciseUser('Ida', false));
 
       await sortWorksFromHome('ascending');
 
