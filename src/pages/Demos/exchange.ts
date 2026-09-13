@@ -11,10 +11,12 @@ export type Exchange = {
 
 type Closer = () => void;
 
+export type FeedTrouble = 'handshakeRefused' | 'hungUp';
+
 const opened = (
   {tradeFeed, tradeHistory, tradeProduct}: Exchange,
   dispatch: (action: DemosAction) => void,
-  onTrouble: (trouble: string) => void
+  onTrouble: (trouble: FeedTrouble) => void
 ): readonly Closer[] => {
   const history = tradeHistory
     ? [recentTrades(tradeHistory, tradeProduct, trades => dispatch(historyArrived(trades))).cancel]
@@ -22,7 +24,7 @@ const opened = (
   if (!tradeFeed) {
     return history;
   }
-  const stream = streaming(tradeFeed, () => 'the live feed refused the handshake')
+  const stream = streaming(tradeFeed, (): FeedTrouble => 'handshakeRefused')
     .onOpen(socket => {
       socket.send(subscribeTo(tradeProduct));
       dispatch(feedOpened());
@@ -30,7 +32,7 @@ const opened = (
     .onMessage(event => decodeTrade(event.data).map(trade => dispatch(tradeArrived(trade))))
     .onClose(() => {
       dispatch(feedFailed());
-      onTrouble('the live feed hung up mid-stream');
+      onTrouble('hungUp');
     })
     .onFailure(trouble => {
       dispatch(feedFailed());
@@ -39,7 +41,7 @@ const opened = (
   return [...history, () => stream.close()];
 };
 
-export const exchange = (env: Exchange, onTrouble: (trouble: string) => void): DemosMiddleware => api => {
+export const exchange = (env: Exchange, onTrouble: (trouble: FeedTrouble) => void): DemosMiddleware => api => {
   let closers: readonly Closer[] = [];
   return next => action => {
     switch (action.type) {
