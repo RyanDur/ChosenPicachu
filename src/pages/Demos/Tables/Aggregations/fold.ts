@@ -1,5 +1,11 @@
 import {Trade} from '../../Charts/coinbase';
 
+export type Traded = {
+  vwap: number;
+  opened: number;
+  closed: number;
+};
+
 export type WindowAggregate = {
   window: string;
   span: number;
@@ -7,9 +13,7 @@ export type WindowAggregate = {
   buys: number;
   sells: number;
   volume: number;
-  vwap: number | undefined;
-  opened: number | undefined;
-  closed: number | undefined;
+  traded?: Traded;
 };
 
 const MINUTE = 60000;
@@ -23,7 +27,7 @@ export const windows = [
 ];
 
 const still = (label: string, span: number): WindowAggregate =>
-  ({window: label, span, trades: 0, buys: 0, sells: 0, volume: 0, vwap: undefined, opened: undefined, closed: undefined});
+  ({window: label, span, trades: 0, buys: 0, sells: 0, volume: 0});
 
 const aggregate = (label: string, span: number, trades: readonly Trade[]): WindowAggregate => {
   if (trades.length === 0) {
@@ -39,9 +43,11 @@ const aggregate = (label: string, span: number, trades: readonly Trade[]): Windo
     buys,
     sells: trades.length - buys,
     volume,
-    vwap: notional / volume,
-    opened: trades[0].price,
-    closed: trades[trades.length - 1].price
+    traded: {
+      vwap: notional / volume,
+      opened: trades[0].price,
+      closed: trades[trades.length - 1].price
+    }
   };
 };
 

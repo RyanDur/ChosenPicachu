@@ -75,7 +75,7 @@ export const selectRows = (state: DemosState): readonly Measures[] => {
   const folded = selectMeasures(state);
   const shown = seated(folded);
   const valueOf = (row: string, column: string) => shown.find(({key}) => key === row)?.values[column];
-  const byWindow = new Map(folded.map(row => [row.window?.display ?? '', row]));
+  const byWindow = new Map(folded.map(row => [row.window.display, row]));
   return standingOf(state.arrangement, valueOf).flatMap(key => {
     const row = byWindow.get(key);
     return row === undefined ? [] : [row];

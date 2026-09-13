@@ -24,7 +24,7 @@ const measured = (window: string, trades: number): Measures => ({
 
 const startingRows = [3, 9, 5, 7, 1].map((trades, at) => measured(windows[at], trades));
 
-const windowOf = (row: Measures): string => row.window?.display ?? '';
+const windowOf = (row: Measures): string => row.window.display;
 
 const Page: FC<{Table: Table; rows: readonly Measures[]; dials: string}> = ({Table, rows, dials}) => {
   const [arrangement, dispatch] = useReducer(

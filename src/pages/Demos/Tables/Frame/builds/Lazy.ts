@@ -7,7 +7,7 @@ import {Grab, columnLift, rowLift} from '@components/DragSortableTable/lift';
 import {columnArrows, rowArrows} from '@components/DragSortableTable/arrows';
 import {Seated} from '@components/DragSortableTable/table-state';
 import {store} from '@components/store';
-import {seated} from '@pages/Demos/Tables/Aggregations/cells';
+import {isMeasure, seated} from '@pages/Demos/Tables/Aggregations/cells';
 import {
   Arrangement, Carry, Landed, MountedTable, TableState, arrangementOf, arrangementReducer, carrying, changed, columnMoved, columnOf, columnLandingAt, demosStore, drifted, feedRequested, moveReport, released, rowLandingAt, rowMoved, selectMeasures, settlingAt, settlingFromSeat, sorted, standingOf, tableStore
 } from '../table/table-state';
@@ -90,9 +90,9 @@ const mount = (document: Document, table: HTMLTableElement, body: HTMLTableSecti
   const writeCells = (): void => {
     const order = columns();
     selectMeasures(trades.state).forEach(row =>
-      maybe(lanes.get(row.window?.display ?? '')).map(lane =>
+      maybe(lanes.get(row.window.display)).map(lane =>
         sortable.forEach(measure => {
-          const text = row[measure]?.display ?? '';
+          const text = isMeasure(measure) ? row[measure].display : '';
           const cell = lane.cells[order.indexOf(measure)];
           if (cell.textContent !== text) {
             cell.textContent = text;

@@ -30,15 +30,15 @@ export const LazyTable: FC<Props> = ({columns, rows, onColumnMoved, onSorted, on
     </thead>
     <Body className="body" onRowMoved={onRowMoved}>
     {rows.map(row => {
-      const window = row.window?.display ?? '';
+      const window = row.window.display;
       return <Row key={window} row={window} className="row">
         <RowHeader column="window" row={window} className="cell row-header" label={window}/>
-        <Cell column="trades" row={window} className="cell">{row.trades?.display}</Cell>
-        <Cell column="buys" row={window} className="cell">{row.buys?.display}</Cell>
-        <Cell column="sells" row={window} className="cell">{row.sells?.display}</Cell>
-        <Cell column="volume" row={window} className="cell">{row.volume?.display}</Cell>
-        <Cell column="vwap" row={window} className="cell">{row.vwap?.display}</Cell>
-        <Cell column="change" row={window} className="cell">{row.change?.display}</Cell>
+        <Cell column="trades" row={window} className="cell">{row.trades.display}</Cell>
+        <Cell column="buys" row={window} className="cell">{row.buys.display}</Cell>
+        <Cell column="sells" row={window} className="cell">{row.sells.display}</Cell>
+        <Cell column="volume" row={window} className="cell">{row.volume.display}</Cell>
+        <Cell column="vwap" row={window} className="cell">{row.vwap.display}</Cell>
+        <Cell column="change" row={window} className="cell">{row.change.display}</Cell>
       </Row>;
     })}
     </Body>
