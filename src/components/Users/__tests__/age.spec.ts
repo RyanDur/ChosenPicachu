@@ -1,21 +1,33 @@
-import {age, AgeIn} from '@components/Users/age';
+import {age, AgeIn, formatAge} from '@components/Users/age';
 
 describe('age', () => {
-  test('age', () => {
-    Date.now = () => new Date('2021-07-11').getTime();
-    const dob = new Date('1978-11-28');
-    expect(age(dob)).toEqual({value: 42, unit: AgeIn.YEARS});
-    const dob2 = new Date('1979-11-28');
-    expect(age(dob2)).toEqual({value: 41, unit: AgeIn.YEARS});
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2021-07-11'));
+  });
 
-    const dob3 = new Date('2021-06-09');
-    expect(age(dob3)).toEqual({value: 1, unit: AgeIn.MONTHS});
-    const dob4 = new Date('2021-01-09');
-    expect(age(dob4)).toEqual({value: 6, unit: AgeIn.MONTHS});
+  afterEach(() => {
+    vi.useRealTimers();
+  });
 
-    const dob5 = new Date('2021-07-05');
-    expect(age(dob5)).toEqual({value: 6, unit: AgeIn.DAYS});
-    const dob6 = new Date('2021-07-01');
-    expect(age(dob6)).toEqual({value: 10, unit: AgeIn.DAYS});
+  test('a birthday a year or more ago counts in years', () => {
+    expect(age(new Date('1978-11-28'))).toEqual({value: 42, unit: AgeIn.YEARS});
+    expect(age(new Date('1979-11-28'))).toEqual({value: 41, unit: AgeIn.YEARS});
+  });
+
+  test('a birthday a month or more ago, but under a year, counts in months', () => {
+    expect(age(new Date('2021-06-09'))).toEqual({value: 1, unit: AgeIn.MONTHS});
+    expect(age(new Date('2021-01-09'))).toEqual({value: 6, unit: AgeIn.MONTHS});
+  });
+
+  test('a birthday under a month ago counts in days', () => {
+    expect(age(new Date('2021-07-05'))).toEqual({value: 6, unit: AgeIn.DAYS});
+    expect(age(new Date('2021-07-01'))).toEqual({value: 10, unit: AgeIn.DAYS});
+  });
+
+  test('an age reads in its unit', () => {
+    expect(formatAge(age(new Date('1978-11-28')))).toBe('42 years old');
+    expect(formatAge(age(new Date('2021-01-09')))).toBe('6 months old');
+    expect(formatAge(age(new Date('2021-07-05')))).toBe('6 days old');
   });
 });

@@ -1,6 +1,6 @@
 import userEvent from '@testing-library/user-event';
-import {cleanup, render, screen} from '@testing-library/react';
-import {FriendsList} from '@components/Users/SelectList/index';
+import {render, screen} from '@testing-library/react';
+import {FriendsList} from '@components/Users/SelectList';
 import {users} from '@test-support/fixtures';
 
 describe('the friends list', () => {
@@ -11,7 +11,6 @@ describe('the friends list', () => {
     const fullName = ({info}: typeof firstUser) => `${info.firstName} ${info.lastName}`;
 
     afterEach(() => {
-        cleanup();
         vi.resetAllMocks();
     });
 

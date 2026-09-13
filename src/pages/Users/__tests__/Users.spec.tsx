@@ -30,18 +30,37 @@ describe('the users page', () => {
   });
 
   describe('ranking the users', () => {
-    it('groups by a column menu criterion', async () => {
+    const homes = () => within(screen.getAllByRole('rowgroup')[1]).getAllByRole('row')
+      .map(row => within(row).getAllByRole('cell')[3]?.textContent ?? '');
+    const tableStands = async () => {
       render(<TestApp at={Paths.users}/>);
-      const homes = () => within(screen.getAllByRole('rowgroup')[1]).getAllByRole('row')
-        .map(row => within(row).getAllByRole('cell')[3]?.textContent ?? '');
       await waitFor(() => expect(homes().length).toBeGreaterThan(1));
+    };
+
+    it('groups by a column menu criterion', async () => {
+      await tableStands();
 
       const menu = screen.getByLabelText('sort works-from-home by');
       await userEvent.click(within(menu).getByText('ascending'));
 
       expect(homes()).toEqual([...homes()].sort((left, right) => left.localeCompare(right)));
+    });
+
+    it('every row can be lifted by its grip', async () => {
+      await tableStands();
+
       expect(screen.getAllByRole('button', {name: /move row/}).length).toBeGreaterThan(0);
+    });
+
+    it('a column is resized from one handle', async () => {
+      await tableStands();
+
       expect(screen.getAllByRole('button', {name: /resize home-city/}).length).toBe(1);
+    });
+
+    it('a column offers a sort menu only where ranking means something', async () => {
+      await tableStands();
+
       expect(screen.getByRole('button', {name: 'sort age'})).toBeVisible();
       expect(screen.queryByRole('button', {name: 'sort full-name'})).toBeNull();
       expect(screen.queryByRole('button', {name: 'sort home-city'})).toBeNull();
@@ -106,6 +125,14 @@ describe('the users page', () => {
 
     test('populating the form with the chosen user', () => {
       expect(screen.getByLabelText('First Name')).toHaveDisplayValue(firstUser.info.firstName);
+    });
+
+    test('the form cannot be typed into', () => {
+      expect(screen.getByLabelText('First Name')).toHaveAttribute('readonly');
+    });
+
+    test('the avatar cannot be rerolled', () => {
+      expect(screen.getByRole('button', {name: 'Generate a new avatar'})).toBeDisabled();
     });
 
     it('should be able to add a user', () => {

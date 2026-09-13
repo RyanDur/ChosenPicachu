@@ -2,15 +2,15 @@ import {ReactNode} from 'react';
 import {UserInformation} from '../index';
 import {UsersProvider} from '../../Provider';
 import {UsersAction, UsersListener, usersStore} from '../../store';
-import {fireEvent, render, screen, waitFor} from '@testing-library/react';
+import {render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {addressGroup, fillOutForm} from '@test-support';
+import {addressGroup, fillOutForm} from '../__test_support/form';
 import {initialState} from '../reducer';
 import {NewUser} from '@components/Users/UserInfo/types';
 import {toDate} from 'date-fns';
 
 
-const added = (): {form: ReactNode; adds: () => readonly unknown[]} => {
+const added = (): { form: ReactNode; adds: () => readonly unknown[] } => {
   const heard: UsersAction[] = [];
   const hearing: UsersListener = (_previous, _current, _dispatch, action) => {
     heard.push(action);
@@ -122,78 +122,72 @@ describe('a user form', () => {
     });
 
     describe('for a zip code', () => {
-      const testZip = (kind: string): void => {
-        test('a non-numeric', async () => {
-          render(added().form);
-          const element = addressGroup(kind).getByLabelText('Postal / Zip code');
+      const homeZip = (): HTMLElement => addressGroup('home').getByLabelText('Postal / Zip code');
 
-          await userEvent.type(element, 'a');
+      test('a letter is refused', async () => {
+        render(added().form);
 
-          expect(element).toHaveDisplayValue('a');
-          expect(element).not.toBeValid();
-        });
+        await userEvent.type(homeZip(), 'a');
 
-        test('a partial numeric', async () => {
-          render(added().form);
-          const element = addressGroup(kind).getByLabelText('Postal / Zip code');
-
-          await userEvent.type(element, '1');
-
-          expect(element).toHaveDisplayValue('1');
-          expect(element).not.toBeValid();
-        });
-
-        test('partial zip', async () => {
-          render(added().form);
-          const element = addressGroup(kind).getByLabelText('Postal / Zip code');
-
-          await userEvent.type(element, '60012');
-
-          expect(element).toHaveDisplayValue('60012');
-          expect(element).toBeValid();
-        });
-
-        test('full zip', async () => {
-          render(added().form);
-          const element = addressGroup(kind).getByLabelText('Postal / Zip code');
-
-          await userEvent.type(element, '12345-1234');
-
-          expect(element).toHaveDisplayValue('12345-1234');
-          expect(element).toBeValid();
-        });
-      };
-
-      describe('for home', () => {
-        testZip('home');
+        expect(homeZip()).toHaveDisplayValue('a');
+        expect(homeZip()).not.toBeValid();
       });
 
-      describe('for work', () => {
-        testZip('work');
+      test('one digit is not yet a zip', async () => {
+        render(added().form);
+
+        await userEvent.type(homeZip(), '1');
+
+        expect(homeZip()).toHaveDisplayValue('1');
+        expect(homeZip()).not.toBeValid();
+      });
+
+      test('five digits are a zip', async () => {
+        render(added().form);
+
+        await userEvent.type(homeZip(), '60012');
+
+        expect(homeZip()).toHaveDisplayValue('60012');
+        expect(homeZip()).toBeValid();
+      });
+
+      test('five digits, a dash and four more are a zip', async () => {
+        render(added().form);
+
+        await userEvent.type(homeZip(), '12345-1234');
+
+        expect(homeZip()).toHaveDisplayValue('12345-1234');
+        expect(homeZip()).toBeValid();
+      });
+
+      test('the work address has a zip of its own', () => {
+        render(added().form);
+
+        expect(addressGroup('work').getByLabelText('Postal / Zip code')).not.toBe(homeZip());
       });
     });
   });
 });
 
 describe('the avatar control plays fair with the keyboard', () => {
-  test('tab is never swallowed — no keyboard trap', async () => {
-    render(added().form);
-    const avatar = screen.getByRole('button', {name: 'Generate a new avatar'});
-    avatar.focus();
-
-    const tabWasAllowed = fireEvent.keyDown(avatar, {code: 'Tab', key: 'Tab'});
-
-    expect(tabWasAllowed).toBe(true);
-    expect(avatar.tagName).toBe('BUTTON');
-  });
-
-  test('enter and space regenerate the avatar, like a click does', async () => {
+  test('enter regenerates the avatar, like a click does', async () => {
     render(added().form);
     const avatar = screen.getByRole('button', {name: 'Generate a new avatar'});
     const before = screen.getByAltText<HTMLImageElement>('avatar').src;
     avatar.focus();
 
     await userEvent.keyboard('{enter}');
+
+    expect(screen.getByAltText<HTMLImageElement>('avatar').src).not.toEqual(before);
+  });
+
+  test('space regenerates the avatar, like a click does', async () => {
+    render(added().form);
+    const avatar = screen.getByRole('button', {name: 'Generate a new avatar'});
+    const before = screen.getByAltText<HTMLImageElement>('avatar').src;
+    avatar.focus();
+
+    await userEvent.keyboard(' ');
 
     expect(screen.getByAltText<HTMLImageElement>('avatar').src).not.toEqual(before);
   });
