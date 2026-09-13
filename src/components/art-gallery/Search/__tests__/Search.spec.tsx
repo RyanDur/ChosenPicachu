@@ -6,6 +6,12 @@ import {Source} from '@components/art-gallery/museums/types/resource';
 import {faker} from '@faker-js/faker';
 import {Paths} from '@pages/Paths';
 import {AICSearchResponse} from '@components/art-gallery/museums/aic/types';
+import {heldAICSuggestions} from '@components/art-gallery/__test_support';
+
+const suggesting = (word: string): AICSearchResponse => ({
+  pagination: {total: 1, limit: 1, total_pages: 1, current_page: 1},
+  data: [{suggest_autocomplete_all: [{}, {input: [word]}]}]
+});
 
 describe('search', () => {
   const searchWord = faker.lorem.word().toUpperCase();
@@ -97,6 +103,34 @@ describe('search', () => {
       await expect(waitFor(() => expect(suggestions.length).toBeGreaterThan(1), {timeout: 700})).rejects.toThrow(/greater than 1/);
     } finally {
       server.events.removeListener('request:start', count);
+    }
+  });
+
+  it("a new word's suggestions replace the old, and a late answer for the old word never lands", async () => {
+    const asked: string[] = [];
+    const noted = ({request}: {request: Request}) => {
+      const word = new URL(request.url).searchParams.get('query[term][title]');
+      if (word !== null) asked.push(word);
+    };
+    server.events.on('request:start', noted);
+    const monkArrives = heldAICSuggestions('mon', suggesting('MONK'));
+    const monetArrives = heldAICSuggestions('monet', suggesting('MONET'));
+    try {
+      render(<TestApp at={`${Paths.artGallery}?tab=aic`}/>);
+
+      await userEvent.type(screen.getByLabelText(/Search For/), 'mon');
+      await waitFor(() => expect(asked).toContain('mon'));
+      await userEvent.type(screen.getByLabelText(/Search For/), 'et');
+      await waitFor(() => expect(asked).toContain('monet'));
+      monetArrives();
+      await waitFor(() => expect(screen.getByRole('listbox', {hidden: true})).toHaveTextContent('MONET'));
+      monkArrives();
+
+      await waitFor(() => expect(asked).toEqual(['mon', 'monet']));
+      expect(screen.getByRole('listbox', {hidden: true})).toHaveTextContent('MONET');
+      expect(screen.getByRole('listbox', {hidden: true})).not.toHaveTextContent('MONK');
+    } finally {
+      server.events.removeListener('request:start', noted);
     }
   });
 });

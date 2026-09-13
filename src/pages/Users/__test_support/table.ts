@@ -1,6 +1,7 @@
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {User} from '@components/Users/UserInfo/types';
+import {fillOutForm} from '../UserInformation/__test_support';
 
 export const fullName = ({info}: User): string => `${info.firstName} ${info.lastName}`;
 
@@ -36,3 +37,9 @@ export const view = (name: string): Promise<void> => actionOn(name, 'View', 'lin
 export const edit = (name: string): Promise<void> => actionOn(name, 'Edit', 'link');
 export const clone = (name: string): Promise<void> => actionOn(name, 'Clone', 'link');
 export const remove = (name: string): Promise<void> => actionOn(name, 'Remove', 'button');
+
+export const addUser = async (user: User): Promise<void> => {
+  await fillOutForm(user);
+  await userEvent.type(screen.getByLabelText('Details'), user.details ?? '');
+  await userEvent.click(await screen.findByRole('button', {name: 'Add'}));
+};

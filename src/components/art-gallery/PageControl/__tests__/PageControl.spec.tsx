@@ -78,6 +78,19 @@ describe('The page controls', () => {
 
       await waitFor(() => expect(screen.getByLabelText(/Page #/)).toHaveAttribute('max', `${aicArtResponse.pagination.total_pages}`));
     });
+
+    test('a page typed and then rubbed out leaves the page where the URL has it', async () => {
+      setupAICEveryPage(aicArtResponse);
+      render(<TestApp at={`${Paths.artGallery}?page=4`}/>);
+      await wallHangs();
+
+      await userEvent.type(screen.getByLabelText('Page #4'), '7');
+      await userEvent.clear(screen.getByLabelText('Page #4'));
+      await userEvent.click(screen.getByRole('button', {name: 'Go'}));
+
+      await waitFor(() => expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('page=4'));
+      expect(screen.getByRole('status', {name: 'url search'})).not.toHaveTextContent('page=7');
+    });
   });
 
   describe('changing the number of elements', () => {

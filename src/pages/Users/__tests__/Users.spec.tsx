@@ -1,12 +1,12 @@
 import {Paths} from '@pages/Paths';
 import {TestApp} from '@test-support/TestApp';
 import {render, screen, waitFor, within} from '@testing-library/react';
-import {format} from 'date-fns';
 import userEvent from '@testing-library/user-event';
 import {AddressInfo, User} from '@components/Users/UserInfo/types';
 import {createUser} from '@components/Users/resource/usersApi';
 import {addressGroup} from '../UserInformation/__test_support';
 import {
+  addUser,
   clone,
   edit,
   fullName,
@@ -239,26 +239,3 @@ describe('the users page', () => {
     await waitFor(() => expect(names().filter(name => name === fullName(person))).toHaveLength(standing + 1));
   });
 });
-
-const addUser = async (user: User) => {
-  await userEvent.type(screen.getByLabelText('First Name'), user.info.firstName);
-  await userEvent.type(screen.getByLabelText('Last Name'), user.info.lastName);
-  await userEvent.type(screen.getByLabelText('Email'), user.info.email);
-  await userEvent.type(screen.getByLabelText('Date Of Birth'), format(user.info.dob!, 'yyyy-MM-dd'));
-
-  await addAddress(user.homeAddress, screen.getByRole('article', {name: 'Home Address'}));
-
-  if (user.workAddress) await addAddress(user.workAddress, screen.getByRole('article', {name: 'Work Address'}));
-
-  await userEvent.type(screen.getByLabelText('Details'), user.details || '');
-
-  await userEvent.click(await screen.findByRole('button', {name: 'Add'}));
-};
-
-const addAddress = async (address: AddressInfo, element: HTMLElement) => {
-  await userEvent.type(within(element).getByLabelText('Street'), address.streetAddress);
-  await userEvent.type(within(element).getByLabelText('Street Line 2'), address.streetAddressTwo || '');
-  await userEvent.type(within(element).getByLabelText('City'), address.city);
-  await userEvent.selectOptions(within(element).getByLabelText('State'), [address.state]);
-  await userEvent.type(within(element).getByLabelText('Postal / Zip code'), address.zip);
-};

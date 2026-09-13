@@ -7,6 +7,9 @@ export const resolved = (page: Page, property: string, token: string): Promise<s
     document.body.append(swatch);
     const value = getComputedStyle(swatch).getPropertyValue(property);
     swatch.remove();
+    if (value === '' || value === 'none') {
+      throw new Error(`${name} paints nothing for ${property}`);
+    }
     return value;
   }, [property, token]);
 

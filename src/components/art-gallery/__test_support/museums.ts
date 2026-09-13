@@ -1,6 +1,6 @@
 import {http, HttpResponse} from 'msw';
 import {server} from '@test-support/server';
-import {AICAllArtResponse, AICArtResponse} from '@components/art-gallery/museums/aic/types';
+import {AICAllArtResponse, AICArtResponse, AICSearchResponse} from '@components/art-gallery/museums/aic/types';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
 import {env} from '@env';
 import {fields} from '@components/art-gallery/museums/aic';
@@ -57,6 +57,16 @@ export const setupAICEveryPage = (response: AICAllArtResponse) =>
     const page = Number(new URL(request.url).searchParams.get('page'));
     return HttpResponse.json({...response, pagination: {...response.pagination, current_page: page}});
   }));
+
+export const heldAICSuggestions = (word: string, response: AICSearchResponse): () => void => {
+  const {held, release} = holding();
+  server.use(http.get(`${aicDomain}/search`, async ({request}) => {
+    if (!paramsMatch(request, {'query[term][title]': word, fields: 'suggest_autocomplete_all'})) return undefined;
+    await held;
+    return HttpResponse.json(response);
+  }));
+  return release;
+};
 
 export const setupHarvardAllArtResponse = (response: HarvardAllArtResponse, limit = defaultRecordLimit) =>
   server.use(http.get(harvardDomain, ({request}) =>
