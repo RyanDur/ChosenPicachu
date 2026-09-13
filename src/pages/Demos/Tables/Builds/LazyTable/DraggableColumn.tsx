@@ -5,7 +5,7 @@ import {shareWidth} from '@components/Table';
 import {Landed} from '@components/DragSortableTable/report';
 import {MoveReport} from '@components/DragSortableTable/MoveReport';
 import {useHeaderEvents, useTableDispatch, useTableSelector} from '@components/DragSortableTable/context';
-import {columnDrag, columnHeld, columnMarks, columnNamed, columnTravels, driftOfColumn, seatOfColumn, selectColumnCount, selectOrder, selectStanding, settlingOfColumnIn, widthOfColumn} from '@components/DragSortableTable/selectors';
+import {columnDrag, columnHeld, columnMarks, columnNamed, unknownColumn, columnTravels, driftOfColumn, seatOfColumn, selectColumnCount, selectOrder, selectStanding, settlingOfColumnIn, widthOfColumn} from '@components/DragSortableTable/selectors';
 import {interior, Survey} from '@components/DragSortableTable/survey';
 import {ColumnDrag, pixels, shoveDistance, shovedClass} from '@components/DragSortableTable/table-state';
 import {carrying, columnLandingAt, columnMovedBeside, columnWalkedTo, drifted, dropped, settled} from '@components/DragSortableTable/actions';
@@ -23,7 +23,7 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
   const [landed, setLanded] = useState<Landed>();
   const order = useTableSelector(selectOrder);
   const standing = useTableSelector(selectStanding);
-  const {sorted, data} = useTableSelector(columnNamed(column));
+  const {sorted, data} = useTableSelector(columnNamed(column)).orElse(unknownColumn(column));
   const width = useTableSelector(widthOfColumn(column));
   const {settlingFrom, shoved} = useTableSelector(columnMarks(column));
   const carried = useTableSelector(columnHeld(column));

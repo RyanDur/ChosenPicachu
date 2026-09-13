@@ -3,11 +3,11 @@ import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {shareWidth} from '@components/Table';
 import {useTableSelector} from './context';
-import {columnNamed, widthOfColumn} from './selectors';
+import {columnNamed, unknownColumn, widthOfColumn} from './selectors';
 import './Header.css';
 
 export const Column: FC<ComponentProps<'th'> & {column: string}> = ({column, className, children, ...th}) => {
-  const {sorted, data} = useTableSelector(columnNamed(column));
+  const {sorted, data} = useTableSelector(columnNamed(column)).orElse(unknownColumn(column));
   const width = useTableSelector(widthOfColumn(column));
 
   return <th {...th}

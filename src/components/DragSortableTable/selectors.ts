@@ -1,4 +1,4 @@
-import {has, not} from '@ryandur/sand';
+import {has, maybe, Maybe, not} from '@ryandur/sand';
 import {ColumnWidths, neighborOf} from '@components/Table/shares';
 import {TableColumn, ColumnDrag, ColumnShove, Drag, Labelled, Marks, RowDrag, RowShove, Settling, seatOffset, settlingAt} from './table-state';
 import {TableView} from './context';
@@ -10,13 +10,10 @@ export const selectStanding = ({rows}: TableView): readonly string[] => rows.map
 export const selectWidths = ({state}: TableView): ColumnWidths | undefined => state.widths;
 export const selectColumns = ({columns}: TableView): readonly TableColumn<Labelled>[] => columns;
 
-export const columnNamed = (name: string) => ({columns}: TableView): TableColumn<Labelled> => {
-  const found = columns.find(column => column.name === name);
-  if (found === undefined) {
-    throw new Error(`no column named ${name}`);
-  }
-  return found;
-};
+export const columnNamed = (name: string) => ({columns}: TableView): Maybe<TableColumn<Labelled>> =>
+  maybe(columns.find(column => column.name === name));
+
+export const unknownColumn = (name: string): TableColumn<Labelled> => ({name, data: {label: name}});
 
 export const widthOfColumn = (name: string) => ({state}: TableView): number | undefined => state.widths?.[name];
 
