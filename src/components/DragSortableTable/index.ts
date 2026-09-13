@@ -7,7 +7,3 @@ export {Headers} from './Headers';
 export {Row} from './Row';
 export {Body} from './Body';
 export {DragSortableTable} from './DragSortableTable';
-export {ResizeHandle} from './ResizeHandle';
-export {MoveReport} from './MoveReport';
-export {SortMenu} from './SortMenu';
-export {RowGrip} from './RowGrip';

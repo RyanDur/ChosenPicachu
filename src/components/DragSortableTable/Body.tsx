@@ -1,7 +1,5 @@
 import {ComponentProps, FC} from 'react';
 import {Body as BodyEventsContext, BodyEvents} from './context';
-import './Table.css';
-import './sortable.css';
 
 export const Body: FC<ComponentProps<'tbody'> & BodyEvents> = ({onRowMoved, children, ...tbody}) =>
   <BodyEventsContext.Provider value={{onRowMoved}}>

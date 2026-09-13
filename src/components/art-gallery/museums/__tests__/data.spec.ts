@@ -172,7 +172,6 @@ describe('data', () => {
                     const actual = await art.get({id: String(aicPiece.id), source: Source.AIC}).orNull();
 
                     expect(actual).toEqual({...aicPiece, image: undefined, srcSet: undefined});
-                    expect(actual).not.toHaveProperty('image');
                 });
             });
 

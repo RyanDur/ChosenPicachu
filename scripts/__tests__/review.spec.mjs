@@ -48,6 +48,14 @@ const interaction = {
   what: 'a handler is named for the act in progress',
   principle: 'Events are what happened, so they are named in the past tense'
 };
+const design = {
+  door: 'design',
+  severity: 'concern',
+  file: 'src/e.ts',
+  line: 2,
+  what: 'two booleans stand where a union belongs',
+  principle: 'A state is a union of its cases'
+};
 
 describe('the review prompt', () => {
   test('a full review sends the reviewer to the doors on the home page and scopes them to the whole of src', () => {
@@ -109,10 +117,11 @@ describe('the review report', () => {
   });
 
   test('findings are grouped by door, worst door and worst finding first', () => {
-    const summary = summaryOf([testNote, note, concern, violation, interaction]);
+    const summary = summaryOf([testNote, note, concern, violation, interaction, design]);
     expect(placeOf(summary, '### structure')).toBeLessThan(placeOf(summary, '### presentation'));
     expect(placeOf(summary, '### presentation')).toBeLessThan(placeOf(summary, '### dynamic interaction'));
-    expect(placeOf(summary, '### dynamic interaction')).toBeLessThan(placeOf(summary, '### tests'));
+    expect(placeOf(summary, '### dynamic interaction')).toBeLessThan(placeOf(summary, '### design'));
+    expect(placeOf(summary, '### design')).toBeLessThan(placeOf(summary, '### tests'));
     expect(placeOf(summary, '### dynamic interaction')).toBeLessThan(placeOf(summary, 'a handler is named for the act in progress'));
     expect(placeOf(summary, 'a div wraps a list')).toBeLessThan(placeOf(summary, 'a section has no heading'));
   });
@@ -129,6 +138,12 @@ describe('the review report', () => {
   test('a door nobody found anything in gets no row', () => {
     expect(doorTable([note])).toContain('| structure | 0 | 0 | 1 |');
     expect(doorTable([note])).not.toContain('presentation');
+  });
+
+  test('a design finding is tallied and told under its own door', () => {
+    expect(doorTable([design])).toContain('| design | 0 | 1 | 0 |');
+    expect(summaryOf([design])).toContain('### design');
+    expect(summaryOf([design])).toContain('two booleans stand where a union belongs');
   });
 
   test('a finding is a heading with its mark, its place, its words, and the door\'s words quoted', () => {

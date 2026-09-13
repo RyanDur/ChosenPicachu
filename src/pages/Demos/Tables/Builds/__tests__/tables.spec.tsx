@@ -7,6 +7,7 @@ import {TableColumn} from '@components/DragSortableTable/table-state';
 import {arrangementOf, arrangementReducer, arrived, columnMoved, rowMoved, sorted, standingOf} from '@components/DragSortableTable/arrangement';
 import {EagerTable} from '../EagerTable';
 import {LazyTable} from '../LazyTable';
+import {Column, DragSortableTable} from '@components/DragSortableTable';
 
 type Table = FC<HeaderEvents & BodyEvents & {className?: string; columns: readonly TableColumn<Measured>[]; rows: readonly Measures[]}>;
 
@@ -49,6 +50,16 @@ const Page: FC<{Table: Table; rows: readonly Measures[]; dials: string}> = ({Tab
 const seated = (Table: Table, rows: readonly Measures[], dials = 'hide animated') => <Page Table={Table} rows={rows} dials={dials}/>;
 
 const seat = (Table: Table, dials = 'hide animated', rows: readonly Measures[] = startingRows) => render(seated(Table, rows, dials));
+
+describe('a header the table does not know', () => {
+  test('stands on its own and wears its own name', () => {
+    render(<DragSortableTable columns={[{name: 'window', data: {label: 'window'}}]} rows={[]}>
+      <thead><tr><Column column="ghost" className="cell">ghost</Column></tr></thead>
+    </DragSortableTable>);
+
+    expect(screen.getByRole('columnheader', {name: 'ghost'})).toBeVisible();
+  });
+});
 
 const sourceTable = (): HTMLTableElement => {
   const found = screen.getAllByRole('table')[0];

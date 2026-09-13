@@ -9,7 +9,6 @@ import {
   HarvardSearchResponse
 } from '@components/art-gallery/museums/harvard/types';
 import {AllArt, Art} from '@components/art-gallery/museums/art';
-import {pictured} from '@components/art-gallery/museums/pictured';
 import {VAMAllArtResponse, VAMArtResponse} from '@components/art-gallery/museums/vam/types';
 import {
   ClevelandAllArtResponse,
@@ -61,7 +60,7 @@ export const person = (): HarvardPeople => ({
   displayname: faker.lorem.word()
 });
 
-const harvardToPieceResponse = (_: unknown, index: number): HarvardArtResponse => ({
+const harvardToPieceResponse = (_: unknown, index: number): HarvardArtResponse & {primaryimageurl: string} => ({
   id: index,
   title: index === 0 ? null : faker.lorem.sentence(),
   people: [person()],
@@ -73,14 +72,16 @@ export const harvardPieceResponse = harvardToPieceResponse(undefined, faker.numb
 export const harvardPiece: Art = {
   id: String(harvardPieceResponse.id),
   title: harvardPieceResponse.title || 'Untitled',
-  ...pictured(harvardPieceResponse.primaryimageurl),
+  image: harvardPieceResponse.primaryimageurl,
   altText: harvardPieceResponse.title || 'Untitled',
   artistInfo: harvardPieceResponse.people?.[0].displayname || ''
 };
 
+const harvardRecords = [...Array(info.totalrecordsperquery)].map(harvardToPieceResponse);
+
 export const harvardArtResponse: HarvardAllArtResponse = {
   info,
-  records: [...Array(info.totalrecordsperquery)].map(harvardToPieceResponse)
+  records: harvardRecords
 };
 export const options: string[] = faker.helpers.uniqueArray(() => faker.lorem.words(), 3);
 export const harvardArtOptions: HarvardSearchResponse = {
@@ -155,10 +156,10 @@ export const fromHarvardArt: AllArt = {
     totalPages: harvardArtResponse.info.pages,
     currentPage: harvardArtResponse.info.page
   },
-  pieces: harvardArtResponse.records.map(piece => ({
+  pieces: harvardRecords.map(piece => ({
     id: String(piece.id),
     title: piece.title || 'Untitled',
-    ...pictured(piece.primaryimageurl),
+    image: piece.primaryimageurl,
     artistInfo: piece.people?.[0].displayname || '',
     altText: piece.title || 'Untitled'
   }))
