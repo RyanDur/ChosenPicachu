@@ -68,7 +68,7 @@ test('the period menu stays hidden until asked', async ({page}) => {
   await page.goto('demos?tab=charts');
 
   await expect(delta(page)).toBeVisible({timeout: 30_000});
-  await expect(page.getByRole('region', {name: 'live trades'})).toHaveAttribute('data-trend', 'rising');
+  await expect(delta(page)).toHaveText(/^\+/);
   await expect(page.getByRole('button', {name: 'price period'})).toBeVisible();
   await expect(page.getByText('week').first()).toBeHidden();
 
@@ -90,17 +90,17 @@ test('only one fuller story stands open at a time', async ({page}) => {
 });
 
 const markets = [
-  {trend: 'rising', prices: [50000, 50100]},
-  {trend: 'falling', prices: [50100, 50000]},
+  {trend: 'rising', sign: /^\+/, prices: [50000, 50100]},
+  {trend: 'falling', sign: /^-/, prices: [50100, 50000]},
 ];
 
-for (const {trend, prices} of markets) {
+for (const {trend, sign, prices} of markets) {
   test(`the ${trend} price card has no accessibility violations`, async ({page}) => {
     await scriptedMarket(page, prices);
     await page.goto('demos?tab=charts');
 
     await expect(delta(page)).toBeVisible({timeout: 30_000});
-    await expect(page.getByRole('region', {name: 'live trades'})).toHaveAttribute('data-trend', trend);
+    await expect(delta(page)).toHaveText(sign);
 
     const results = await new AxeBuilder({page}).include('section[aria-label="live trades"]').withTags(['wcag2a', 'wcag2aa']).analyze();
 

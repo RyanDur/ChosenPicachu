@@ -1,4 +1,4 @@
-import {render, screen, waitFor} from '@testing-library/react';
+import {render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {Route} from 'react-router';
 import {Tabs} from '@components/Tabs';
@@ -12,7 +12,7 @@ describe('the test app', () => {
 
     await userEvent.click(screen.getByRole('link', {name: 'Second'}));
 
-    await waitFor(() => expect(screen.getByLabelText('url search')).toHaveTextContent('tab=second'));
+    await waitFor(() => expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('tab=second'));
     expect(screen.getByRole('link', {name: 'Second', current: 'page'})).toBeInTheDocument();
   });
 
@@ -26,8 +26,9 @@ describe('the test app', () => {
     render(<TestApp at="/nowhere"><Route path="/nowhere" element={<Boom/>}/></TestApp>,
       {onCaughtError: error => caught.push(error)});
 
-    expect(await screen.findByLabelText('errors reported')).toHaveTextContent(/^boom$/);
-    expect(screen.getByLabelText('url path')).toHaveTextContent('/nowhere');
+    const errors = await screen.findByRole('list', {name: 'errors reported'});
+    expect(within(errors).getAllByRole('listitem').map(item => item.textContent)).toEqual(['boom']);
+    expect(screen.getByRole('status', {name: 'url path'})).toHaveTextContent('/nowhere');
     expect(caught).toEqual([boom]);
   });
 });

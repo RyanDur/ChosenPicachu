@@ -33,7 +33,7 @@
 
   }
 
-  &[data-trend='rising'] .chart-stage .sparkline {
+  &.rising .chart-stage .sparkline {
     .trend {
       stroke: var(--mint-dim);
     }
@@ -43,7 +43,7 @@
     }
   }
 
-  &[data-trend='falling'] .chart-stage .sparkline {
+  &.falling .chart-stage .sparkline {
     .trend {
       stroke: var(--internationl-orange-engineering);
     }
@@ -74,11 +74,11 @@
     }
   }
 
-  &[data-trend='rising'] .headline .delta {
+  &.rising .headline .delta {
     color: var(--mint-ink);
   }
 
-  &[data-trend='falling'] .headline .delta {
+  &.falling .headline .delta {
     color: var(--internationl-orange-engineering);
   }
 }

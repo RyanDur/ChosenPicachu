@@ -3,6 +3,7 @@ import {Link} from 'react-router';
 import {Paths} from '@pages/Paths';
 import {ChartKind, matchChartKind} from './kinds';
 import {statusCopy} from './live-trades';
+import {classNames} from '@components/class-names';
 import {useDemosSelector} from '../Provider';
 import {selectFeedStatus, selectLiveTrades} from '../store';
 import {useDesk} from './useDesk';
@@ -44,7 +45,7 @@ export const Workspace: FC<Props> = ({product}) => {
   return <>
     <header className="charts-heading">
       <h2 className="headline">{`Bitcoin, live — every ${product} trade on Coinbase`}</h2>
-      <output className="status" aria-label="feed" data-status={status}>{statusCopy[status]}</output>
+      <output className={classNames('status', status)} aria-label="feed">{statusCopy[status]}</output>
       {absentKinds.length > 0 &&
           <>
               <button type="button" className="menu-toggle rounded-corners add-chart button secondary"

@@ -1,6 +1,7 @@
 import {FC, useState, ReactNode} from 'react';
 import {has, notEmpty} from '@ryandur/sand';
 import {Loading} from '@components/Loading';
+import {classNames} from '@components/class-names';
 import {LiveTradesState} from '../live-trades';
 import {cents, deltaLabel} from '../money';
 import {captionFor, usePeriodCandles} from '../usePeriodCandles';
@@ -50,8 +51,8 @@ export const PriceChart: FC<Props> = ({trades, id = 'price', actions}) => {
   const points = sparklinePoints(view.series, CHART_WIDTH, CHART_HEIGHT, 2 * bucketMs[period]);
   const line = points.map(point => `${point.x},${point.y}`).join(' ');
   const trend = showing && view.last >= view.first ? 'rising' : 'falling';
-  return <section aria-label="live trades" className="price-chart chart card rounded-corners lifted padded"
-                  data-trend={trend}>
+  return <section aria-label="live trades"
+                  className={classNames('price-chart chart card rounded-corners lifted padded', trend)}>
     <header className="chart-header">
       {actions}
       <button type="button" className="menu-toggle rounded-corners period-toggle field caption"
