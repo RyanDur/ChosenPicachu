@@ -1,5 +1,4 @@
 import {FC, PropsWithChildren, useContext, useState} from 'react';
-import {gotoTopOfPage} from '@pages/scroll';
 import {Link} from 'react-router';
 import {classNames} from '@components/class-names';
 import {Loading} from '@components/Loading';
@@ -33,7 +32,7 @@ export const Image: FC<ImageProps> = (
   const {gallery} = useContext(GalleryLinks);
   const ConditionalLink: FC<PropsWithChildren & { enabled: boolean, area: string }> =
     ({children, enabled, area}) => enabled ?
-      <Link onClick={gotoTopOfPage} to={`${gallery}${piece.id}${toQueryString({tab: area})}`}
+      <Link to={`${gallery}${piece.id}${toQueryString({tab: area})}`}
             aria-label={piece.title}
             className="scrim">{children}</Link> : <>{children}</>;
 

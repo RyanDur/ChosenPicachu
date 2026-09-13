@@ -25,6 +25,7 @@ describe('page error boundaries', () => {
     expect(screen.getByRole('link', {name: 'Back to the front door'})).toHaveAttribute('href', Paths.home);
     expect(screen.getByRole('list', {name: 'errors reported'})).toHaveTextContent(/^boom$/);
     expect(caught).toEqual([boom]);
+    expect(within(screen.getByRole('alert', {hidden: true})).getByText('This room is closed.')).toBeInTheDocument();
   });
 
   test('an address the site does not know says so, inside the site', async () => {
@@ -34,6 +35,14 @@ describe('page error boundaries', () => {
     expect(screen.getByRole('heading', {level: 1})).toHaveTextContent('No such room');
     expect(screen.getByRole('link', {name: 'Back to the front door'})).toHaveAttribute('href', Paths.home);
     expect(screen.getByRole('navigation', {name: 'site'})).toBeInTheDocument();
+    expect(within(screen.getByRole('alert', {hidden: true})).getByText('There is no room at this address.')).toBeInTheDocument();
+  });
+
+  test('an unknown address under the games is no room either', async () => {
+    render(<TestApp at="/games/nowhere/"/>);
+
+    expect(await within(screen.getByRole('main')).findByText('There is no room at this address.')).toBeVisible();
+    expect(screen.getByRole('heading', {level: 1})).toHaveTextContent('No such room');
   });
 
   test('a room still loading is not called closed', async () => {

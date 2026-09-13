@@ -25,11 +25,13 @@ describe('viewing a piece', () => {
     render(<TestApp at={`${Paths.artGallery}${aicArtResponse.data.id}?tab=${Source.AIC}`}/>);
 
     expect(await screen.findByRole('progressbar', {name: 'loading piece'})).toBeInTheDocument();
+    expect(screen.getByRole('heading', {level: 1})).toHaveTextContent('A piece');
 
     pieceArrives();
 
     await waitFor(() => expect(screen.queryByRole('progressbar', {name: 'loading piece'})).not.toBeInTheDocument());
     expect(screen.getByText(aicArtResponse.data.artist_display)).toBeInTheDocument();
+    expect(screen.getByRole('heading', {level: 1})).toHaveTextContent(aicArtResponse.data.title);
   });
 
   test('when the art piece is loaded', async () => {
@@ -50,5 +52,6 @@ describe('viewing a piece', () => {
     expect(screen.queryByRole('progressbar', {name: 'loading piece'})).not.toBeInTheDocument();
     expect(within(screen.getByRole('alert', {hidden: true}))
       .getByText('the museum is having trouble')).toBeInTheDocument();
+    expect(screen.getByRole('heading', {level: 1})).toHaveTextContent('A piece');
   });
 });
