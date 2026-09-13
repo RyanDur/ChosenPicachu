@@ -1,6 +1,12 @@
 import {AllArt} from '@components/art-gallery/museums/types/response';
+import {Consumer} from '@ryandur/sand';
 import {createContext, useContext} from 'react';
-import {GalleryContextState} from '@components/art-gallery/Art/Context/GalleryContext';
+
+export type GalleryContextState = {
+  art?: AllArt;
+  updateArt: Consumer<AllArt>;
+  reset: Consumer<void>;
+}
 
 export const Context = createContext<GalleryContextState>({
   updateArt: (art: AllArt) => void art,

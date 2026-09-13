@@ -1,6 +1,6 @@
 import {SubmitEvent, useState} from 'react';
 import {Maybe, nothing, some} from '@ryandur/sand';
-import {gotoTopOfPage} from '@pages/scroll';
+import {gotoTopOfPage} from '@components/scroll';
 import {useGallery} from '@components/art-gallery/Art/Context';
 import {numberParam, useSearchParamsObject} from '@components/search-params';
 import {defaultRecordLimit} from '@components/art-gallery/limits';

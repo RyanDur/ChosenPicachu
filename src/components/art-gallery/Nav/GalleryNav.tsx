@@ -1,5 +1,5 @@
 import {Link, useLocation} from 'react-router';
-import {gotoTopOfPage} from '@pages/scroll';
+import {gotoTopOfPage} from '@components/scroll';
 import {FC} from 'react';
 import {numberParam, useSearchParamsObject} from '@components/search-params';
 import {useGallery} from '@components/art-gallery/Art/Context';

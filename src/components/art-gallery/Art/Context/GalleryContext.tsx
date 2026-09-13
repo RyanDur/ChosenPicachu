@@ -1,13 +1,7 @@
 import {FC, PropsWithChildren, useCallback, useMemo, useState} from 'react';
 import {AllArt} from '@components/art-gallery/museums/types/response';
-import {Consumer, maybe} from '@ryandur/sand';
-import {Context} from '@components/art-gallery/Art/Context/useGallery';
-
-export type GalleryContextState = {
-  art?: AllArt;
-  updateArt: Consumer<AllArt>;
-  reset: Consumer<void>;
-}
+import {maybe} from '@ryandur/sand';
+import {Context, GalleryContextState} from '@components/art-gallery/Art/Context/useGallery';
 
 const useGalleryContext = (): GalleryContextState => {
   const [art, updateArt] = useState<AllArt>();

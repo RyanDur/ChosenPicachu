@@ -4,7 +4,7 @@ import {Outlet, useLocation, useMatches} from 'react-router';
 import {FC, Fragment, useEffect} from 'react';
 import {SideNav} from '@pages/BasePage/SideNav';
 import {isRegions, Regions} from '@pages/regions';
-import {gotoTopOfPage} from '@pages/scroll';
+import {gotoTopOfPage} from '@components/scroll';
 import {Paths} from '@pages/Paths';
 import {Home} from '@pages/Home';
 import {Users} from '@pages/Users';
