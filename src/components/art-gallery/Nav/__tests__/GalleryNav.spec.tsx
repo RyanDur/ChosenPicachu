@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 import {fromAICArt} from '@test-support/fixtures';
 import {Paths} from '@pages/Paths';
 import {GalleryNav} from '@components/art-gallery/Nav';
-import {landingsDuring} from '@test-support/landings';
+import {atTheTop, landingsDuring} from '@test-support/landings';
 
 describe('Gallery Navigation', () => {
   test('on load', () => {
@@ -21,11 +21,13 @@ describe('Gallery Navigation', () => {
 
         const landings = await landingsDuring(() => userEvent.click(screen.getByRole('link', {name: 'NEXT'})));
         expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('page=2');
-        expect(landings).toContainEqual({where: 'main', x: 0, y: 0});
+        expect(landings).toHaveLength(2);
+        expect(landings).toContainEqual(atTheTop('page'));
+        expect(landings).toContainEqual(atTheTop('main'));
 
         const again = await landingsDuring(() => userEvent.click(screen.getByRole('link', {name: 'NEXT'})));
         expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('page=3');
-        expect(again).toContainEqual({where: 'main', x: 0, y: 0});
+        expect(again).toContainEqual(atTheTop('main'));
       });
 
       test('when on the first page', () => {

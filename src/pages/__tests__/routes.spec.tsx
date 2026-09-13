@@ -3,7 +3,7 @@ import {render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {Paths} from '@pages/Paths';
 import {Route} from 'react-router';
-import {landingsDuring} from '@test-support/landings';
+import {atTheTop, landingsDuring} from '@test-support/landings';
 
 describe('page error boundaries', () => {
   test('a crashing page shows the closed room inside the site, even with no boundary of its own', async () => {
@@ -55,7 +55,7 @@ describe('leaving a page', () => {
       await screen.findByRole('navigation', {name: 'demos'});
     });
 
-    expect(landings).toContainEqual({where: 'main', x: 0, y: 0});
+    expect(landings).toContainEqual(atTheTop('main'));
   });
 
   test('arriving at a place on the page keeps that place', async () => {

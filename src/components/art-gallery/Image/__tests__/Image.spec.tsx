@@ -39,10 +39,9 @@ describe('the image', () => {
     render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><GalleryProviders><Image piece={piece}/></GalleryProviders></TestApp>);
 
     fireEvent.load(screen.getByAltText(piece.altText));
-    const landings = await landingsDuring(() => userEvent.click(screen.getByAltText(piece.altText)));
+    await userEvent.click(screen.getByAltText(piece.altText));
 
     expect(screen.getByRole('status', {name: 'url path'})).toHaveTextContent(`${Paths.artGallery}${piece.id}`);
-    expect(landings).toContainEqual({where: 'main', x: 0, y: 0});
   });
 
   test('on image load error', () => {

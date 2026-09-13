@@ -5,7 +5,7 @@ import {render, screen, waitFor} from '@testing-library/react';
 import {fromAICArt} from '@test-support/fixtures';
 import {PageControl} from '@components/art-gallery/PageControl';
 import {Paths} from '@pages/Paths';
-import {landingsDuring} from '@test-support/landings';
+import {atTheTop, landingsDuring} from '@test-support/landings';
 
 describe('The page controls', () => {
   describe('going to a specific page', () => {
@@ -22,7 +22,7 @@ describe('The page controls', () => {
       });
 
       expect(screen.getByLabelText(/Page #/)).not.toHaveValue(+pageNumber);
-      expect(landings).toContainEqual({where: 'main', x: 0, y: 0});
+      expect(landings).toContainEqual(atTheTop('main'));
     });
 
     it('should not allow a user to go to a page lower than the first', () => {

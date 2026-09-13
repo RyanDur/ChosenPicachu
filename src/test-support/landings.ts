@@ -4,6 +4,8 @@ import {screen} from '@testing-library/react';
 
 export type Landing = {where: 'page' | 'main' | 'elsewhere', x: number, y: number};
 
+export const atTheTop = (where: Landing['where']): Landing => ({where, x: 0, y: 0});
+
 const options = schema.object({required: {left: schema.number, top: schema.number}});
 
 const placeOf = ([first, second]: unknown[]): [number, number] | undefined =>
