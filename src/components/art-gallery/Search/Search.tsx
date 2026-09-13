@@ -1,4 +1,4 @@
-import {FC, FormEvent, useContext, useEffect, useState} from 'react';
+import {FC, SubmitEvent, useContext, useEffect, useState} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
 import {useNavigate} from 'react-router';
 import {SearchOptions} from '@components/art-gallery/museums/types/response';
@@ -33,7 +33,7 @@ export const Search: FC<Props> = ({id, className}) => {
     searchString && searchString.length && debounceSearch(searchString.toLowerCase());
   }, [searchString, debounceSearch]);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (searchString) void navigate({
       pathname: gallery,

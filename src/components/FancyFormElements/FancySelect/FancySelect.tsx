@@ -1,4 +1,4 @@
-import {FC, FormEvent, PropsWithChildren} from 'react';
+import {FC, ChangeEvent, PropsWithChildren} from 'react';
 import {classNames} from '@components/class-names';
 import {FancyInput} from '../FancyInput';
 import {Consumer} from '@ryandur/sand';
@@ -8,7 +8,7 @@ import '../fancy.css';
 type FancySelectProps = {
     selectId: string;
     optionValues: Set<string>;
-    onChange: Consumer<FormEvent<HTMLSelectElement>>;
+    onChange: Consumer<ChangeEvent<HTMLSelectElement>>;
     value?: string;
     id?: string;
     className?: string;

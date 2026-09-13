@@ -1,4 +1,4 @@
-import {FC, FormEvent, PropsWithChildren} from 'react';
+import {FC, ChangeEvent, PropsWithChildren} from 'react';
 import {classNames} from '@components/class-names';
 import {format} from 'date-fns';
 import '../fancy.css';
@@ -8,7 +8,7 @@ type FancyTextInputProps = {
   type?: string;
   id?: string;
   required?: boolean;
-  onChange?: (event: FormEvent<HTMLInputElement>) => void;
+  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   className?: string;
   inputClass?: string;
   labelId?: string;

@@ -1,4 +1,4 @@
-import {FormEvent, useState} from 'react';
+import {SubmitEvent, useState} from 'react';
 import {gotoTopOfPage} from '@pages/scroll';
 import {useGallery} from '@components/art-gallery/Art/Context';
 import {numberParam, useSearchParamsObject} from '@components/search-params';
@@ -14,7 +14,7 @@ export const PageControl = () => {
   const firstPage = 1;
   const lastPage = art?.pagination.totalPages;
 
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const onSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     gotoTopOfPage();
     event.currentTarget.reset();
