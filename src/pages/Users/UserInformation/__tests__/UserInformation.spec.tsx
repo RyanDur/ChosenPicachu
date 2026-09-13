@@ -7,7 +7,6 @@ import userEvent from '@testing-library/user-event';
 import {addressGroup, fillOutForm} from '../__test_support';
 import {initialState} from '../reducer';
 import {NewUser} from '@components/Users/UserInfo/types';
-import {toDate} from 'date-fns';
 
 
 const added = (): { form: ReactNode; adds: () => readonly unknown[] } => {
@@ -28,7 +27,7 @@ describe('a user form', () => {
       firstName: 'Teruko',
       lastName: 'Okada',
       email: 'teruko@example.com',
-      dob: toDate('1984-06-02')
+      dob: new Date(1984, 5, 2)
     },
     friends: [],
     homeAddress: {

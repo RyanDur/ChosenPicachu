@@ -31,7 +31,7 @@ export const FancySelect: FC<PropsWithChildren<FancySelectProps>> = (
         readOnly
     }
 ) => (readOnly || disabled) ? <FancyInput className={className} id={id} value={value} readOnly={readOnly} disabled={disabled} inputId={selectId}>{children}</FancyInput> :
-    <article id={id} className={classNames('fancy-select', 'fancy', value && 'not-empty', className)}>
+    <label id={id} className={classNames('fancy-select', 'fancy', value && 'not-empty', className)}>
         <select id={selectId}
                 className={'fancy-select-box fancy-text'}
                 {...(value ? {value} : {defaultValue: ''})}
@@ -42,5 +42,5 @@ export const FancySelect: FC<PropsWithChildren<FancySelectProps>> = (
                 ...Array.from(optionValues).map(state => <option key={state}>{state}</option>)
             ]}
         </select>
-        <label className={classNames('fancy-title', 'bold')} htmlFor={selectId}>{children}</label>
-    </article>;
+        <span className={classNames('fancy-title', 'bold')}>{children}</span>
+    </label>;

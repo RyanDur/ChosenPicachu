@@ -5,6 +5,7 @@ import {format} from 'date-fns';
 import userEvent from '@testing-library/user-event';
 import {AddressInfo, User} from '@components/Users/UserInfo/types';
 import {createUser} from '@components/Users/resource/usersApi';
+import {addressGroup} from '../UserInformation/__test_support';
 import {
   clone,
   edit,
@@ -19,14 +20,46 @@ import {
   worksFromHomeColumn
 } from '../__test_support';
 
+const conciseUser = (firstName: string, worksFromHome: boolean): User => {
+  const homeAddress: AddressInfo = {
+    streetAddress: '12 Elm St',
+    streetAddressTwo: 'Apt. 3',
+    city: 'Springfield',
+    state: 'IL',
+    zip: '62704'
+  };
+  return {
+    ...createUser(worksFromHome),
+    info: {
+      firstName,
+      lastName: 'Tester',
+      email: `${firstName.toLowerCase()}@example.com`,
+      dob: new Date(1984, 5, 2)
+    },
+    homeAddress,
+    workAddress: worksFromHome ? homeAddress : {
+      streetAddress: '9 Oak Ave',
+      streetAddressTwo: 'Suite 2',
+      city: 'Chatham',
+      state: 'IL',
+      zip: '62629'
+    },
+    details: 'short notes'
+  };
+};
+
 describe('the users page', () => {
   describe('ranking the users', () => {
     it('groups by a column menu criterion', async () => {
       render(<TestApp at={Paths.users}/>);
       await roster();
+      await addUser(conciseUser('Homer', true));
+      await addUser(conciseUser('Ida', false));
 
       await sortWorksFromHome('ascending');
 
+      expect(worksFromHomeColumn()).toContain('Yes');
+      expect(worksFromHomeColumn()).toContain('No');
       expect(worksFromHomeColumn()).toEqual([...worksFromHomeColumn()].sort((left, right) => left.localeCompare(right)));
     });
 
@@ -56,34 +89,6 @@ describe('the users page', () => {
   });
 
   describe('adding a user', () => {
-    const conciseUser = (firstName: string, worksFromHome: boolean): User => {
-      const homeAddress: AddressInfo = {
-        streetAddress: '12 Elm St',
-        streetAddressTwo: 'Apt. 3',
-        city: 'Springfield',
-        state: 'IL',
-        zip: '62704'
-      };
-      return {
-        ...createUser(worksFromHome),
-        info: {
-          firstName,
-          lastName: 'Tester',
-          email: `${firstName.toLowerCase()}@example.com`,
-          dob: new Date(1984, 5, 2)
-        },
-        homeAddress,
-        workAddress: worksFromHome ? homeAddress : {
-          streetAddress: '9 Oak Ave',
-          streetAddressTwo: 'Suite 2',
-          city: 'Chatham',
-          state: 'IL',
-          zip: '62629'
-        },
-        details: 'short notes'
-      };
-    };
-
     it('a new user joins the roster, saying whether they work from home', async () => {
       const aUser = conciseUser('Aiko', true);
       const anotherUser = conciseUser('Bram', false);
@@ -95,6 +100,19 @@ describe('the users page', () => {
 
       expect(worksFromHome(await rowOf(fullName(aUser)))).toBe('Yes');
       expect(worksFromHome(await rowOf(fullName(anotherUser)))).toBe('No');
+    });
+
+    it('a user born on a day is shown that day, viewing and editing', async () => {
+      const born = conciseUser('Faye', false);
+      render(<TestApp at={Paths.users}/>);
+      await roster();
+      await addUser(born);
+
+      await view(fullName(born));
+      expect(screen.getByLabelText('Date Of Birth')).toHaveDisplayValue('1984-06-02');
+
+      await edit(fullName(born));
+      expect(screen.getByLabelText('Date Of Birth')).toHaveDisplayValue('1984-06-02');
     });
   });
 
@@ -114,6 +132,15 @@ describe('the users page', () => {
 
     test('the form cannot be typed into', () => {
       expect(screen.getByLabelText('First Name')).toHaveAttribute('readonly');
+    });
+
+    test('the date of birth reads as text that cannot be changed', () => {
+      expect(screen.getByLabelText('Date Of Birth')).toHaveAttribute('type', 'text');
+      expect(screen.getByLabelText('Date Of Birth')).toHaveAttribute('readonly');
+    });
+
+    test('the state reads as a field that cannot be chosen', () => {
+      expect(addressGroup('home').getByRole('textbox', {name: 'State'})).toHaveAttribute('readonly');
     });
 
     test('the avatar cannot be rerolled', () => {
@@ -145,6 +172,14 @@ describe('the users page', () => {
       expect(within(form).getByLabelText('Last Name')).toHaveDisplayValue(lastName);
     });
 
+    test('the date of birth is picked from a date field', () => {
+      expect(screen.getByLabelText('Date Of Birth')).toHaveAttribute('type', 'date');
+    });
+
+    test('the state is chosen from a list', () => {
+      expect(addressGroup('home').getByRole('combobox', {name: 'State'})).toBeInTheDocument();
+    });
+
     it('should be able to reset the form to the original information', async () => {
       const [firstName] = chosen.split(' ');
       const form = screen.getByRole('form', {name: 'user info'});
@@ -165,34 +200,43 @@ describe('the users page', () => {
   });
 
   test('an updated user shows their new name in the roster', async () => {
+    const person = conciseUser('Cleo', false);
     render(<TestApp at={Paths.users}/>);
-    const [chosen] = await roster();
-    await edit(chosen);
+    await roster();
+    await addUser(person);
+    await edit(fullName(person));
 
     await userEvent.type(within(screen.getByRole('form', {name: 'user info'})).getByLabelText('Last Name'), ' Jr');
     await userEvent.click(within(screen.getByRole('form', {name: 'user info'})).getByRole('button', {name: 'Update'}));
 
-    expect(await rowOf(`${chosen} Jr`)).toBeInTheDocument();
+    expect(await rowOf(`${fullName(person)} Jr`)).toBeInTheDocument();
   });
 
   test('a removed user leaves the roster', async () => {
+    const person = conciseUser('Dev', false);
     render(<TestApp at={Paths.users}/>);
-    const [chosen] = await roster();
+    await roster();
+    await addUser(person);
+    await rowOf(fullName(person));
 
-    await remove(chosen);
+    await remove(fullName(person));
 
-    await waitFor(() => expect(names()).not.toContain(chosen));
+    await waitFor(() => expect(names()).not.toContain(fullName(person)));
     expect(screen.getByRole('status', {name: 'url search'})).not.toHaveTextContent('id=');
   });
 
-  test('a cloned user stands twice in the roster', async () => {
+  test('a cloned user stands once more in the roster', async () => {
+    const person = conciseUser('Eli', false);
     render(<TestApp at={Paths.users}/>);
-    const [chosen] = await roster();
-    await clone(chosen);
+    await roster();
+    await addUser(person);
+    await rowOf(fullName(person));
+    const standing = names().filter(name => name === fullName(person)).length;
+    await clone(fullName(person));
 
     await userEvent.click(within(screen.getByRole('form', {name: 'user info'})).getByRole('button', {name: 'Add'}));
 
-    await waitFor(() => expect(names().filter(name => name === chosen)).toHaveLength(2));
+    await waitFor(() => expect(names().filter(name => name === fullName(person))).toHaveLength(standing + 1));
   });
 });
 

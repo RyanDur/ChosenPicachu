@@ -13,7 +13,6 @@ type FancyDateInputProps = {
     value?: string | Date;
     readOnly?: boolean;
     disabled?: boolean;
-    autoFocus?: boolean;
     pattern?: string;
 }
 

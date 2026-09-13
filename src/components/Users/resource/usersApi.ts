@@ -16,7 +16,7 @@ import {
   randZipCode
 } from '@components/fibs';
 import {AvatarGenerator} from 'random-avatar-generator';
-import {toDate} from 'date-fns';
+import {startOfDay} from 'date-fns';
 
 export type UsersAPI = {
   getAll: () => Result.Async<User[], HTTPError>;
@@ -88,10 +88,10 @@ export const createUserInfo = (): UserInfo => ({
   firstName: randFirstName(),
   lastName: randLastName(),
   email: randEmail(),
-  dob: toDate(randBetweenDate({
+  dob: startOfDay(randBetweenDate({
     from: new Date(1946, 0, 1),
     to: new Date(2006, 0, 1)
-  }).toISOString().split('T')[0])
+  }))
 });
 
 export const createAddress = (): AddressInfo => ({

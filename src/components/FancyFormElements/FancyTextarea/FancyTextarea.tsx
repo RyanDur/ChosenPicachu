@@ -15,16 +15,15 @@ export const FancyTextarea: FC<FancyTextareaProps> = (
         value = '',
         readOnly
     }) =>
-    <article id="details-cell" className={classNames(
+    <label id="details-cell" className={classNames(
         'fancy-textarea',
         'details-cell',
         'fancy',
         value && 'not-empty'
     )}>
-        <label id="details-label" className="fancy-title bold" htmlFor="details">Details</label>
+        <span id="details-label" className="fancy-title bold">Details</span>
         <textarea name="details" className="fancy-text" id="details"
                   value={value}
                   readOnly={readOnly}
                   onChange={onChange}/>
-    </article>;
-
+    </label>;

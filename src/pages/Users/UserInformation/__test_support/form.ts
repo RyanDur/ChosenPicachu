@@ -1,7 +1,7 @@
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {AddressInfo, NewUser} from '@components/Users/UserInfo/types';
-import {toDate} from 'date-fns';
+import {format} from 'date-fns';
 
 const swiftKeys = userEvent.setup({delay: null});
 
@@ -19,10 +19,7 @@ export const fillOutUser = (info: NewUser) =>
   swiftKeys.type(screen.getByLabelText('First Name'), info.info.firstName)
     .then(() => swiftKeys.type(screen.getByLabelText('Last Name'), info.info.lastName))
     .then(() => swiftKeys.type(screen.getByLabelText('Email'), info.info.email!))
-    .then(() => {
-      const text = toDate(info.info.dob!).toISOString().split('T')[0];
-      return swiftKeys.type(screen.getByLabelText('Date Of Birth'), text);
-    });
+    .then(() => swiftKeys.type(screen.getByLabelText('Date Of Birth'), format(info.info.dob!, 'yyyy-MM-dd')));
 
 export const fillOutForm = (info: NewUser) =>
   fillOutUser(info)
