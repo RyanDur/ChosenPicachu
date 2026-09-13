@@ -12,6 +12,13 @@ export const rowOf = (name: string): Promise<HTMLElement> =>
 export const rows = (): HTMLElement[] =>
   within(usersTable()).getAllByRole('row').filter(row => within(row).queryByRole('rowheader') !== null);
 
+export const names = (): string[] => rows().map(row => within(row).getByRole('rowheader').textContent ?? '');
+
+export const roster = async (): Promise<string[]> => {
+  await within(usersTable()).findAllByRole('rowheader');
+  return names();
+};
+
 export const worksFromHome = (row: HTMLElement): string =>
   ['Yes', 'No'].find(answer => within(row).queryByRole('cell', {name: answer}) !== null) ?? '';
 

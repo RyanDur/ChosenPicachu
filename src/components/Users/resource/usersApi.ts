@@ -2,7 +2,19 @@ import {AddressInfo, NewUser, User, UserInfo} from '@components/Users/UserInfo/t
 import {asyncFailure, asyncSuccess, maybe, Result} from '@ryandur/sand';
 import {HTTPError} from '@transport/types';
 import {nanoid} from 'nanoid';
-import {randBetweenDate, randCity, randEmail, randFirstName, randLastName, randNumber, randSentence, randStateAbbr, randStreetName, randZipCode} from '@components/fibs';
+import {
+  rand,
+  randBetweenDate,
+  randCity,
+  randEmail,
+  randFirstName,
+  randLastName,
+  randNumber,
+  randSentence,
+  randStateAbbr,
+  randStreetName,
+  randZipCode
+} from '@components/fibs';
 import {AvatarGenerator} from 'random-avatar-generator';
 import {toDate} from 'date-fns';
 
@@ -14,12 +26,11 @@ export type UsersAPI = {
   delete: (user: User) => Result.Async<User[], HTTPError>;
 }
 
-const randomNumberFromRange = (min: number, max = 6) => Math.floor(Math.random() * max) + min;
+const randomNumberFromRange = (min: number, max = 6) => randNumber({min, max: min + max - 1});
 const generator = new AvatarGenerator();
 
 export const createRandomUsers = (num = randomNumberFromRange(3, 15)): User[] =>
-  [...Array(num)].map(() => createUser(Math.random() > 0.5)
-  );
+  [...Array(num)].map(() => createUser(rand([true, false])));
 
 export const usersApi = (randomUsers: User[]): UsersAPI => ({
   getAll: () => asyncSuccess(randomUsers),

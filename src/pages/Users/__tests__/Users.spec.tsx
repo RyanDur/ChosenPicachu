@@ -2,18 +2,17 @@ import {Paths} from '@pages/Paths';
 import {TestApp} from '@test-support/TestApp';
 import {render, screen, waitFor, within} from '@testing-library/react';
 import {format} from 'date-fns';
-import {users as someUsers} from '@test-support/fixtures';
 import userEvent from '@testing-library/user-event';
 import {AddressInfo, User} from '@components/Users/UserInfo/types';
-import {createUser, usersApi} from '@components/Users/resource/usersApi';
-import {users} from '@components/Users/resource/users';
+import {createUser} from '@components/Users/resource/usersApi';
 import {
   clone,
   edit,
   fullName,
+  names,
   remove,
+  roster,
   rowOf,
-  rows,
   sortWorksFromHome,
   view,
   worksFromHome,
@@ -21,26 +20,10 @@ import {
 } from '../__test_support/table';
 
 describe('the users page', () => {
-  const currentUsers = someUsers;
-  const firstUser = currentUsers[0];
-
-  beforeEach(() => {
-    const testResource = usersApi(someUsers);
-    users.getAll = testResource.getAll;
-    users.get = testResource.get;
-    users.add = testResource.add;
-    users.update = testResource.update;
-    users.delete = testResource.delete;
-  });
-
   describe('ranking the users', () => {
-    const tableStands = async () => {
-      render(<TestApp at={Paths.users}/>);
-      await waitFor(() => expect(rows().length).toBeGreaterThan(1));
-    };
-
     it('groups by a column menu criterion', async () => {
-      await tableStands();
+      render(<TestApp at={Paths.users}/>);
+      await roster();
 
       await sortWorksFromHome('ascending');
 
@@ -48,19 +31,22 @@ describe('the users page', () => {
     });
 
     it('every row can be lifted by its grip', async () => {
-      await tableStands();
+      render(<TestApp at={Paths.users}/>);
+      const people = await roster();
 
-      expect(screen.getAllByRole('button', {name: /move row/}).length).toBeGreaterThan(0);
+      expect(screen.getAllByRole('button', {name: /move row/})).toHaveLength(people.length);
     });
 
     it('a column is resized from one handle', async () => {
-      await tableStands();
+      render(<TestApp at={Paths.users}/>);
+      await roster();
 
-      expect(screen.getAllByRole('button', {name: /resize home-city/}).length).toBe(1);
+      expect(screen.getAllByRole('button', {name: /resize home-city/})).toHaveLength(1);
     });
 
     it('a column offers a sort menu only where ranking means something', async () => {
-      await tableStands();
+      render(<TestApp at={Paths.users}/>);
+      await roster();
 
       expect(screen.getByRole('button', {name: 'sort age'})).toBeVisible();
       expect(screen.queryByRole('button', {name: 'sort full-name'})).toBeNull();
@@ -97,33 +83,33 @@ describe('the users page', () => {
         details: 'short notes'
       };
     };
-    const aUser = conciseUser('Aiko', true);
-    const anotherUser = conciseUser('Bram', false);
 
-    beforeEach(async () => {
+    it('a new user joins the roster, saying whether they work from home', async () => {
+      const aUser = conciseUser('Aiko', true);
+      const anotherUser = conciseUser('Bram', false);
       render(<TestApp at={Paths.users}/>);
+      await roster();
+
       await addUser(aUser);
       await addUser(anotherUser);
-    });
 
-    it('should display the new user', async () => {
-      expect(await rowOf(fullName(aUser))).toBeInTheDocument();
-    });
-
-    it('should indicate a user works from home when there work and home address match', async () => {
-      expect(worksFromHome(await rowOf(fullName(anotherUser)))).toBe('No');
       expect(worksFromHome(await rowOf(fullName(aUser)))).toBe('Yes');
+      expect(worksFromHome(await rowOf(fullName(anotherUser)))).toBe('No');
     });
   });
 
   describe('viewing a user', () => {
+    let chosen = '';
+
     beforeEach(async () => {
       render(<TestApp at={Paths.users}/>);
-      await view(fullName(firstUser));
+      [chosen] = await roster();
+      await view(chosen);
     });
 
     test('populating the form with the chosen user', () => {
-      expect(screen.getByLabelText('First Name')).toHaveDisplayValue(firstUser.info.firstName);
+      const [firstName] = chosen.split(' ');
+      expect(screen.getByLabelText('First Name')).toHaveDisplayValue(firstName);
     });
 
     test('the form cannot be typed into', () => {
@@ -144,69 +130,69 @@ describe('the users page', () => {
   });
 
   describe('editing a user', () => {
+    let chosen = '';
+
     beforeEach(async () => {
       render(<TestApp at={Paths.users}/>);
-      await edit(fullName(firstUser));
+      [chosen] = await roster();
+      await edit(chosen);
     });
 
     it('should populate the form', () => {
+      const [firstName, lastName] = chosen.split(' ');
       const form = screen.getByRole('form', {name: 'user info'});
-      expect(within(form).getByLabelText('First Name')).toHaveDisplayValue(firstUser.info.firstName);
-      expect(within(form).getByLabelText('Last Name')).toHaveDisplayValue(firstUser.info.lastName);
+      expect(within(form).getByLabelText('First Name')).toHaveDisplayValue(firstName);
+      expect(within(form).getByLabelText('Last Name')).toHaveDisplayValue(lastName);
     });
 
     it('should be able to reset the form to the original information', async () => {
+      const [firstName] = chosen.split(' ');
       const form = screen.getByRole('form', {name: 'user info'});
       await userEvent.type(within(form).getByLabelText('First Name'), ' with more text');
 
-      expect(within(form).getByLabelText('First Name'))
-        .toHaveDisplayValue(`${firstUser.info.firstName} with more text`);
+      expect(within(form).getByLabelText('First Name')).toHaveDisplayValue(`${firstName} with more text`);
 
       await userEvent.click(within(form).getByRole('button', {name: 'Reset'}));
 
-      expect(within(form).getByLabelText('First Name'))
-        .toHaveDisplayValue(`${firstUser.info.firstName}`);
+      expect(within(form).getByLabelText('First Name')).toHaveDisplayValue(firstName);
     });
 
     it('should be able to cancel the form to the original information', async () => {
       const form = screen.getByRole('form', {name: 'user info'});
       await userEvent.click(within(form).getByRole('link', {name: 'Cancel'}));
-      expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(`id=${firstUser.id}&mode=view`);
+      expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('mode=view');
     });
   });
 
-  test('updating a user', async () => {
-    const spy = vi.spyOn(users, 'update');
-
+  test('an updated user shows their new name in the roster', async () => {
     render(<TestApp at={Paths.users}/>);
+    const [chosen] = await roster();
+    await edit(chosen);
 
-    await edit(fullName(firstUser));
+    await userEvent.type(within(screen.getByRole('form', {name: 'user info'})).getByLabelText('Last Name'), ' Jr');
+    await userEvent.click(within(screen.getByRole('form', {name: 'user info'})).getByRole('button', {name: 'Update'}));
 
-    await userEvent.click(await within(screen.getByRole('form', {name: 'user info'})).findByRole('button', {name: 'Update'}));
-
-    expect(spy).toHaveBeenCalled();
+    expect(await rowOf(`${chosen} Jr`)).toBeInTheDocument();
   });
 
-  test('removing a user', async () => {
-    const spy = vi.spyOn(users, 'delete');
-
+  test('a removed user leaves the roster', async () => {
     render(<TestApp at={Paths.users}/>);
+    const [chosen] = await roster();
 
-    await remove(fullName(firstUser));
+    await remove(chosen);
 
-    expect(spy).toHaveBeenCalledWith(firstUser);
-    await waitFor(() => expect(screen.getByRole('status', {name: 'url search'})).not.toHaveTextContent('id='));
+    await waitFor(() => expect(names()).not.toContain(chosen));
+    expect(screen.getByRole('status', {name: 'url search'})).not.toHaveTextContent('id=');
   });
 
-  test('cloning a user', async () => {
-    const spy = vi.spyOn(users, 'add');
+  test('a cloned user stands twice in the roster', async () => {
     render(<TestApp at={Paths.users}/>);
+    const [chosen] = await roster();
+    await clone(chosen);
 
-    await clone(fullName(firstUser));
+    await userEvent.click(within(screen.getByRole('form', {name: 'user info'})).getByRole('button', {name: 'Add'}));
 
-    await userEvent.click(await within(screen.getByRole('form', {name: 'user info'})).findByRole('button', {name: 'Add'}));
-
-    expect(spy).toHaveBeenCalled();
+    await waitFor(() => expect(names().filter(name => name === chosen)).toHaveLength(2));
   });
 });
 
