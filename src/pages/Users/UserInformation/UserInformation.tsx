@@ -21,15 +21,14 @@ import {generateAvatar} from './avatars';
 import {Link} from 'react-router';
 import {FancyDateInput} from '@components/FancyFormElements/FancyDateInput';
 import {isValid, parse} from 'date-fns';
-import {Paths} from '@pages/Paths';
+import {Mode, userAt} from '../mode';
 import {useUsersDispatch, useUsersSelector} from '../Provider';
 import {userWithId} from '../store';
 import {userAdded, userUpdated} from '../store';
 import './Form.css';
 
 type FormProps = {
-  readOnly?: boolean;
-  editing?: boolean;
+  mode?: Mode;
 }
 
 const newUser = (): NewUser => ({
@@ -39,15 +38,17 @@ const newUser = (): NewUser => ({
   avatar: generateAvatar()
 });
 
-export const UserInformation: FC<FormProps & { id?: string }> = ({id, readOnly = false, editing = false}) => {
+export const UserInformation: FC<FormProps & { id?: string }> = ({id, mode = 'adding'}) => {
   const currentUser = useUsersSelector(userWithId(id));
-  return <Draft key={currentUser?.id} currentUser={currentUser} readOnly={readOnly} editing={editing}/>;
+  return <Draft key={currentUser?.id} currentUser={currentUser} mode={mode}/>;
 };
 
-const Draft: FC<FormProps & { currentUser?: User }> = ({currentUser, readOnly = false, editing = false}) => {
+const Draft: FC<{ currentUser?: User; mode: Mode }> = ({currentUser, mode}) => {
   const users = useUsersDispatch();
   const [draft, dispatch] = useReducer(formReducer, currentUser, opened => draftOf(opened ?? newUser()));
   const user = userOf(draft);
+  const readOnly = mode === 'viewing';
+  const editing = mode === 'editing';
 
   const reset = () => dispatch(formReset(currentUser ?? newUser()));
 
@@ -117,11 +118,11 @@ const Draft: FC<FormProps & { currentUser?: User }> = ({currentUser, readOnly = 
 
     {!readOnly &&
         <button id="reset-form" type="reset" className="reset button secondary">Reset</button>}
-    {readOnly && isPersisted(user) && <Link id="reset-form" to={`${Paths.users}?id=${user.id}&mode=edit`}
+    {readOnly && isPersisted(user) && <Link id="reset-form" to={userAt(user.id, 'edit')}
                                             className="reset button secondary">Edit</Link>}
     {!editing && !readOnly &&
         <button id="submit" type="submit" className="submit button primary">Add</button>}
-    {editing && isPersisted(user) && <Link id="cancel" to={`${Paths.users}?id=${user.id}&mode=view`}
+    {editing && isPersisted(user) && <Link id="cancel" to={userAt(user.id, 'view')}
                                            className="cancel button secondary" onClick={reset}>Cancel</Link>}
     {editing && <button id="submit" type="submit" className="submit button primary">Update</button>}
 
