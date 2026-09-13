@@ -19,7 +19,7 @@ import {createUser} from '@components/Users/resource/usersApi';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
 import {env} from '@env';
 
-const randomNumberFromRange = (min: number, max = 6) => Math.floor(Math.random() * max) + min;
+const randomNumberFromRange = (min: number, max = 6) => faker.number.int({min, max: min + max - 1});
 export const words = (num = 6) => faker.lorem.words(randomNumberFromRange(1, num));
 
 export const users = [
@@ -50,9 +50,9 @@ export const aicArtResponse: AICAllArtResponse = {
 
 export const info: HarvardInfo = {
   totalrecordsperquery: defaultRecordLimit,
-  totalrecords: Math.floor(Math.random() * 10000),
-  pages: Math.floor(Math.random() * 1000),
-  page: Math.floor(Math.random() * 10)
+  totalrecords: faker.number.int({max: 9999}),
+  pages: faker.number.int({max: 999}),
+  page: faker.number.int({max: 9})
 };
 
 export const person = (): HarvardPeople => ({
@@ -67,7 +67,7 @@ const harvardToPieceResponse = (_: unknown, index: number): HarvardArtResponse =
   primaryimageurl: faker.internet.url()
 });
 
-export const harvardPieceResponse = harvardToPieceResponse(undefined, Math.floor(Math.random() * 1000));
+export const harvardPieceResponse = harvardToPieceResponse(undefined, faker.number.int({max: 999}));
 
 export const harvardPiece: Art = {
   id: String(harvardPieceResponse.id),
@@ -81,7 +81,7 @@ export const harvardArtResponse: HarvardAllArtResponse = {
   info,
   records: [...Array(info.totalrecordsperquery)].map(harvardToPieceResponse)
 };
-export const options: string[] = [faker.lorem.words(), faker.lorem.words(), faker.lorem.words()];
+export const options: string[] = faker.helpers.uniqueArray(() => faker.lorem.words(), 3);
 export const harvardArtOptions: HarvardSearchResponse = {
   info,
   records: options.map(option => ({title: option}))
@@ -125,9 +125,10 @@ export const fromVAMToPiece: Art = {
   artistInfo: vamPieceRecord.artistMakerPerson[0].name.text,
   altText: vamPieceRecord.titles[0].title
 };
+const vamOptionNumbers = faker.helpers.uniqueArray(() => faker.lorem.word(), options.length);
 export const vamArtOptions: VAMAllArtResponse = {
   info: vamInfo,
-  records: options.map(title => ({systemNumber: faker.lorem.word(), _primaryTitle: title}))
+  records: options.map((title, at) => ({systemNumber: vamOptionNumbers[at], _primaryTitle: title}))
 };
 
 export const fromAICArt: AllArt = {

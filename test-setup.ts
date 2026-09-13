@@ -3,8 +3,13 @@ import * as matchers from '@testing-library/jest-dom/matchers';
 import '@testing-library/jest-dom/vitest';
 import {afterAll, afterEach, beforeAll, expect} from 'vitest';
 import 'vitest-location-mock';
-import {server} from './src/test-support/server';
-import {subscribed} from './src/test-support/feed';
+import {faker} from '@faker-js/faker';
+import {seed} from '@components/fibs';
+import {server} from '@test-support/server';
+import {subscribed} from '@test-support/feed';
+
+faker.seed(1978);
+seed('the same draw every run');
 
 beforeAll(() => server.listen({onUnhandledRequest: 'error'}));
 afterEach(() => {
