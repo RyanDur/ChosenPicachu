@@ -133,8 +133,18 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm ci
+      - name: Remember the browsers
+        id: browsers
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('node_modules/@playwright/test/package.json') }}
       - name: Install browsers
+        if: steps.browsers.outputs.cache-hit != 'true'
         run: npx playwright install --with-deps chromium firefox webkit
+      - name: Install the browsers' system libraries
+        if: steps.browsers.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium firefox webkit
       - name: Take the shipped bundle
         uses: actions/download-artifact@v7
         with:
@@ -163,8 +173,18 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm ci
-      - name: Install browser
+      - name: Remember the browsers
+        id: browsers
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('node_modules/@playwright/test/package.json') }}
+      - name: Install browsers
+        if: steps.browsers.outputs.cache-hit != 'true'
         run: npx playwright install --with-deps chromium firefox webkit
+      - name: Install the browsers' system libraries
+        if: steps.browsers.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium firefox webkit
       - name: Smoke the deployed site
         env:
           PLAYWRIGHT_JSON_OUTPUT_NAME: smoke.json
