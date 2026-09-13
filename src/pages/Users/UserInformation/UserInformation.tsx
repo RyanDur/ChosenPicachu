@@ -1,10 +1,11 @@
-import {FC, useEffect, useReducer, useState} from 'react';
+import {FC, useReducer} from 'react';
 import {NewUser, User, isPersisted} from '@components/Users/UserInfo/types';
 import {FancyInput} from '@components/FancyFormElements/FancyInput';
 import {classNames} from '@components/class-names';
 import {FancyTextarea} from '@components/FancyFormElements/FancyTextarea';
 import {
   resetForm,
+  sameAsHomeChosen,
   updateAvatar,
   updateDetails,
   updateDOB,
@@ -15,7 +16,7 @@ import {
   updateWorkAddress
 } from './actions';
 import {Address} from './Address';
-import {formReducer, initialState} from './reducer';
+import {draftOf, formReducer, initialState, userOf} from './reducer';
 import {generateAvatar} from './avatars';
 import {Link} from 'react-router';
 import {FancyDateInput} from '@components/FancyFormElements/FancyDateInput';
@@ -38,18 +39,10 @@ export const UserInformation: FC<FormProps & {id?: string}> = ({id, readOnly = f
 
 const Draft: FC<FormProps & {currentUser: NewUser | User}> = ({currentUser, readOnly = false, editing = false}) => {
     const users = useUsersDispatch();
-    const [user, dispatch] = useReducer(formReducer, currentUser, () => currentUser);
-    const [sameAsHome, updateSameAsHome] = useState(false);
+    const [draft, dispatch] = useReducer(formReducer, currentUser, draftOf);
+    const user = userOf(draft);
 
-    useEffect(() => {
-        if (sameAsHome) dispatch(updateWorkAddress(user.homeAddress));
-    }, [sameAsHome, user.homeAddress]);
-
-    const reset = () => {
-        if (editing) dispatch(resetForm(currentUser));
-        else dispatch(resetForm());
-        updateSameAsHome(false);
-    };
+    const reset = () => dispatch(editing ? resetForm(currentUser) : resetForm());
 
     return <form id="user-info-form"
                  aria-label="user info"
@@ -60,7 +53,6 @@ const Draft: FC<FormProps & {currentUser: NewUser | User}> = ({currentUser, read
                      if (editing && isPersisted(user)) users(userUpdated(user));
                      else users(userAdded(user));
 
-                     updateSameAsHome(false);
                      dispatch(resetForm());
                  }}
                  onReset={() => reset()}>
@@ -103,10 +95,10 @@ const Draft: FC<FormProps & {currentUser: NewUser | User}> = ({currentUser, read
         <h3 id="work-address-title" className="work-address-title sub-title bold">Work Address</h3>
         <label id="same-as-home-cell" className={classNames('same-as-home', 'attentive', readOnly && 'read-only')}>
             <span id="same-as-home-title">Same as Home</span>
-            <input id="same-as-home" className="fancy-check" type="checkbox" checked={sameAsHome} disabled={readOnly}
-                   onChange={event => updateSameAsHome(event.currentTarget.checked)}/>
+            <input id="same-as-home" className="fancy-check" type="checkbox" checked={draft.sameAsHome} disabled={readOnly}
+                   onChange={event => dispatch(sameAsHomeChosen(event.currentTarget.checked))}/>
         </label>
-        <Address id="work-address" className="work-address" value={user.workAddress} readOnly={readOnly} disabled={sameAsHome}
+        <Address id="work-address" className="work-address" value={user.workAddress} readOnly={readOnly} disabled={draft.sameAsHome}
                  onChange={address => dispatch(updateWorkAddress(address))}/>
 
         <FancyTextarea value={user.details} readOnly={readOnly}

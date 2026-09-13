@@ -39,6 +39,7 @@ export enum FormActions {
     UPDATE_WORK_ADDRESS = 'UPDATE_WORK_ADDRESS',
     UPDATE_DETAILS = 'UPDATED_DETAILS',
     UPDATE_AVATAR = 'UPDATED_AVATAR',
+    SAME_AS_HOME_CHOSEN = 'SAME_AS_HOME_CHOSEN',
     RESET_FORM = 'RESET_FORM'
 }
 
@@ -70,6 +71,9 @@ export type UpdateDetails = Action<FormActions.UPDATE_DETAILS> & {
 export type UpdateAvatar = Action<FormActions.UPDATE_AVATAR> & {
     avatar: string;
 }
+export type SameAsHomeChosen = Action<FormActions.SAME_AS_HOME_CHOSEN> & {
+    sameAsHome: boolean;
+}
 export type ResetForm = Action<FormActions.RESET_FORM> & {
     userInfo?: NewUser | User;
 }
@@ -83,4 +87,5 @@ export type FormAction =
     | UpdateWorkAddress
     | UpdateDetails
     | UpdateAvatar
+    | SameAsHomeChosen
     | ResetForm;

@@ -13,26 +13,41 @@ export const initialState: NewUser = {
     avatar: generateAvatar()
 };
 
-export const formReducer = (state: NewUser | User, action: FormAction): NewUser | User => {
+export type Draft = {
+    user: NewUser | User;
+    sameAsHome: boolean;
+};
+
+export const draftOf = (user: NewUser | User): Draft => ({user, sameAsHome: false});
+
+export const userOf = ({user, sameAsHome}: Draft): NewUser | User =>
+    sameAsHome ? {...user, workAddress: user.homeAddress} : user;
+
+const edited = (draft: Draft, user: NewUser | User): Draft => ({...draft, user});
+
+export const formReducer = (draft: Draft, action: FormAction): Draft => {
+    const {user} = draft;
     switch (action.type) {
         case FormActions.UPDATE_FIRST_NAME:
-            return {...state, info: {...state.info, firstName: action.firstName}};
+            return edited(draft, {...user, info: {...user.info, firstName: action.firstName}});
         case FormActions.UPDATE_LAST_NAME:
-            return {...state, info: {...state.info, lastName: action.lastName}};
+            return edited(draft, {...user, info: {...user.info, lastName: action.lastName}});
         case FormActions.UPDATE_EMAIL:
-            return {...state, info: {...state.info, email: action.email}};
+            return edited(draft, {...user, info: {...user.info, email: action.email}});
         case FormActions.UPDATE_DATE_OF_BIRTH:
-            return {...state, info: {...state.info, dob: action.dob}};
+            return edited(draft, {...user, info: {...user.info, dob: action.dob}});
         case FormActions.UPDATE_HOME_ADDRESS:
-            return {...state, homeAddress: action.homeAddress};
+            return edited(draft, {...user, homeAddress: action.homeAddress});
         case FormActions.UPDATE_WORK_ADDRESS:
-            return {...state, workAddress: action.workAddress};
+            return edited(draft, {...user, workAddress: action.workAddress});
         case FormActions.UPDATE_DETAILS:
-            return {...state, details: action.details};
+            return edited(draft, {...user, details: action.details});
         case FormActions.UPDATE_AVATAR:
-            return {...state, avatar: action.avatar};
+            return edited(draft, {...user, avatar: action.avatar});
+        case FormActions.SAME_AS_HOME_CHOSEN:
+            return {...draft, sameAsHome: action.sameAsHome};
         case FormActions.RESET_FORM:
-            return action.userInfo || initialState;
+            return draftOf(action.userInfo || initialState);
     }
-    return state;
+    return draft;
 };

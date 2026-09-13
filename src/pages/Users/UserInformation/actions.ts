@@ -2,6 +2,7 @@ import {
     AddressInfo,
     FormActions,
     ResetForm,
+    SameAsHomeChosen,
     UpdateAvatar,
     UpdateDetails,
     UpdateDob,
@@ -30,5 +31,6 @@ export const updateWorkAddress = (workAddress: AddressInfo): UpdateWorkAddress =
 });
 export const updateDetails = (details: string): UpdateDetails => ({type: FormActions.UPDATE_DETAILS, details});
 export const updateAvatar = (avatar: string): UpdateAvatar => ({type: FormActions.UPDATE_AVATAR, avatar});
+export const sameAsHomeChosen = (sameAsHome: boolean): SameAsHomeChosen => ({type: FormActions.SAME_AS_HOME_CHOSEN, sameAsHome});
 export const resetForm = (userInfo?: NewUser | User): ResetForm => ({type: FormActions.RESET_FORM, userInfo});
 
