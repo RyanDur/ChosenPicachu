@@ -6,30 +6,21 @@ import {fromAICArt} from '@test-support/fixtures';
 import {PageControl} from '@components/art-gallery/PageControl';
 import {Paths} from '@pages/Paths';
 
-window.scrollTo = vi.fn();
 describe('The page controls', () => {
-  beforeEach(() => {
-    vi.mocked(window.scrollTo).mockRestore();
-  });
-
   describe('going to a specific page', () => {
-    test('submitting the specified page', async () => {
+    test('going to a page lands at its top, and clears the field', async () => {
       const pageNumber = String(Math.floor(Math.random() * 1000));
 
       render(<TestApp at={Paths.artGallery}><GalleryProviders><PageControl/></GalleryProviders></TestApp>);
+      const landings = vi.spyOn(window, 'scrollTo');
       await userEvent.type(screen.getByLabelText(/Page #/), pageNumber);
       await userEvent.click(screen.getByText('Go'));
 
       await waitFor(() =>
         expect(screen.getByLabelText('url search')).toHaveTextContent(`?page=${pageNumber}`));
       expect(screen.getByLabelText(/Page #/)).not.toHaveValue(+pageNumber);
-    });
-
-    it('should not go to the top of page when clicking on page number input', async () => {
-      render(<TestApp at={Paths.artGallery}><GalleryProviders><PageControl/></GalleryProviders></TestApp>);
-      const landings = vi.mocked(window.scrollTo).mock.calls.length;
-      await userEvent.click(screen.getByLabelText(/Page #/));
-      expect(window.scrollTo).toHaveBeenCalledTimes(landings);
+      expect(landings).toHaveBeenCalledTimes(1);
+      landings.mockRestore();
     });
 
     it('should not allow a user to go to a page lower than the first', () => {

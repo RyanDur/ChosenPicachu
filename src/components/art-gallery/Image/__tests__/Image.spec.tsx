@@ -17,12 +17,18 @@ describe('the image', () => {
     artistInfo: faker.lorem.sentence()
   };
 
-  beforeEach(() => window.scrollTo = vi.fn());
+  let landings: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    landings = vi.spyOn(window, 'scrollTo');
+  });
+
+  afterEach(() => landings.mockRestore());
 
   test('on loading', () => {
     render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><GalleryProviders><Image piece={piece}/></GalleryProviders></TestApp>);
 
-    expect(screen.queryByRole('progressbar', {name: 'loading'})).toBeInTheDocument();
+    expect(screen.getByRole('progressbar', {name: 'loading'})).toBeInTheDocument();
     expect(screen.queryByAltText('oops')).not.toBeInTheDocument();
   });
 
@@ -32,7 +38,7 @@ describe('the image', () => {
     fireEvent.load(screen.getByAltText(piece.altText));
 
     expect(screen.queryByRole('progressbar', {name: 'loading'})).not.toBeInTheDocument();
-    expect(screen.queryByAltText(piece.altText)).toBeInTheDocument();
+    expect(screen.getByAltText(piece.altText)).toBeInTheDocument();
     expect(screen.queryByAltText('oops')).not.toBeInTheDocument();
   });
 
@@ -42,8 +48,8 @@ describe('the image', () => {
     fireEvent.load(screen.getByAltText(piece.altText));
     await userEvent.click(screen.getByAltText(piece.altText));
 
-    expect(screen.getByLabelText('url path').innerHTML).toEqual(`${Paths.artGallery}${piece.id}`);
-    expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
+    expect(screen.getByRole('status', {name: 'url path'})).toHaveTextContent(`${Paths.artGallery}${piece.id}`);
+    expect(landings).toHaveBeenCalledWith(0, 0);
   });
 
   test('on image load error', () => {
@@ -52,26 +58,26 @@ describe('the image', () => {
     fireEvent.error(screen.getByAltText(piece.altText));
 
     expect(screen.queryByAltText(piece.altText)).not.toBeInTheDocument();
-    expect(screen.queryByAltText('oops')).toBeInTheDocument();
+    expect(screen.getByAltText('oops')).toBeInTheDocument();
     expect(screen.queryByRole('progressbar', {name: 'loading'})).not.toBeInTheDocument();
   });
 
   test('without an image', () => {
     render(<TestApp at={`${Paths.artGallery}?page=3&tab=${Source.AIC}`}><GalleryProviders><Image piece={{...piece, image: undefined}}/></GalleryProviders></TestApp>);
 
-    expect(screen.queryByAltText('oops')).toBeInTheDocument();
+    expect(screen.getByAltText('oops')).toBeInTheDocument();
     expect(screen.queryByRole('progressbar', {name: 'loading'})).not.toBeInTheDocument();
     expect(screen.queryByAltText(piece.altText)).not.toBeInTheDocument();
   });
 
   test('when the image is disabled', async () => {
     render(<TestApp at={`${Paths.artGallery}?page=3&tab=${Source.AIC}`}><GalleryProviders><Image piece={piece} linkEnabled={false}/></GalleryProviders></TestApp>);
-    const landings = vi.mocked(window.scrollTo).mock.calls.length;
+    const landed = landings.mock.calls.length;
 
     fireEvent.load(screen.getByAltText(piece.altText));
     await userEvent.click(await screen.findByAltText(piece.altText));
 
-    expect(screen.getByLabelText('url path').innerHTML).toEqual(Paths.artGallery);
-    expect(window.scrollTo).toHaveBeenCalledTimes(landings);
+    expect(screen.getByRole('status', {name: 'url path'})).toHaveTextContent(new RegExp(`^${Paths.artGallery}$`));
+    expect(landings).toHaveBeenCalledTimes(landed);
   });
 });

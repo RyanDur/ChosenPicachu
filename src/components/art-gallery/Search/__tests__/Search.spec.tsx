@@ -43,10 +43,10 @@ describe('search', () => {
     await userEvent.click(screen.getByRole('button', {name: 'submit search'}));
 
     await waitFor(() => expect(screen.getByLabelText('url search')).toHaveTextContent('?search=A'));
-    expect(screen.getByLabelText('url path').innerHTML).toEqual(Paths.artGallery);
+    expect(screen.getByRole('status', {name: 'url path'})).toHaveTextContent(new RegExp(`^${Paths.artGallery}$`));
   });
 
-  it('should remove the page query param', async () => {
+  it('a search keeps the page and museum it was made on', async () => {
     render(<TestApp at={`${Paths.artGallery}?page=1&tab=aic`}><GalleryProviders><Search/></GalleryProviders></TestApp>);
 
     await userEvent.type(screen.getByLabelText(/Search For/), 'a');

@@ -38,8 +38,6 @@ const aicArtPieceResponse: AICArtResponse = {
 };
 
 describe('The gallery.', () => {
-  window.scrollTo = vi.fn();
-
   test('When the art has loaded', async () => {
     setupAICAllArtResponse(aicArtResponse);
     render(<TestApp at={Paths.artGallery}/>);

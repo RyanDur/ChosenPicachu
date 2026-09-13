@@ -1,7 +1,9 @@
 import {GalleryProviders} from '@pages/Gallery';
 import {TestApp} from '@test-support/TestApp';
 import {Route} from 'react-router';
-import {anyRequestRespondsWith} from '@test-support/server';
+import {anyRequestRespondsWith, server} from '@test-support/server';
+import {delay, http, HttpResponse} from 'msw';
+import {env} from '@env';
 import {render, screen, waitFor, within} from '@testing-library/react';
 import {ArtPiece} from '@components/art-gallery';
 import {HTTPError} from '@transport/types';
@@ -23,11 +25,16 @@ describe('viewing a piece', () => {
   };
 
   test('when loading the piece of art', async () => {
-    setupAICArtPieceResponse(aicArtResponse, aicArtResponse.data.id);
+    server.use(http.get(`${env.aicDomain}/:id`, async () => {
+      await delay(150);
+      return HttpResponse.json(aicArtResponse);
+    }));
 
-    render(<TestApp at={`${Paths.artGallery}1234`}><Route path={`${Paths.artGalleryPiece}`} element={<GalleryProviders><ArtPiece/></GalleryProviders>}/></TestApp>);
+    render(<TestApp at={`${Paths.artGallery}${aicArtResponse.data.id}?tab=${Source.AIC}`}><Route path={Paths.artGalleryPiece} element={<GalleryProviders><ArtPiece/></GalleryProviders>}/></TestApp>);
 
-    await waitFor(() => expect(screen.getByRole('progressbar', {name: 'loading piece'})).toBeInTheDocument());
+    expect(await screen.findByRole('progressbar', {name: 'loading piece'})).toBeInTheDocument();
+    await waitFor(() => expect(screen.queryByRole('progressbar', {name: 'loading piece'})).not.toBeInTheDocument());
+    expect(screen.getByText(aicArtResponse.data.artist_display)).toBeInTheDocument();
   });
 
   test('when the art piece is loaded', async () => {
@@ -43,7 +50,7 @@ describe('viewing a piece', () => {
     anyRequestRespondsWith(HTTPError.SERVER_ERROR, 500);
     render(<TestApp at={`${Paths.artGallery}1234`}><Route path={`${Paths.artGalleryPiece}`} element={<GalleryProviders><ArtPiece/></GalleryProviders>}/></TestApp>);
 
-    await waitFor(() => expect(screen.queryByAltText('Load Error')).toBeInTheDocument());
+    expect(await screen.findByAltText('Load Error')).toBeInTheDocument();
     expect(screen.queryByRole('figure')).not.toBeInTheDocument();
     expect(screen.queryByRole('progressbar', {name: 'loading piece'})).not.toBeInTheDocument();
     expect(within(screen.getByRole('alert', {hidden: true}))

@@ -15,8 +15,6 @@ import {setupAICAllArtResponse} from '@components/art-gallery/__tests__/galleryA
 const {aicDomain} = env;
 
 describe('The gallery.', () => {
-  window.scrollTo = vi.fn();
-
   test('loads the wall exactly once on mount', async () => {
     let hits = 0;
     const count = ({request}: {request: Request}) => {

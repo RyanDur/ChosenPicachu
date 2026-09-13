@@ -1,4 +1,5 @@
-import {anyRequestRespondsWith} from '@test-support/server';
+import {anyRequestRespondsWith, server} from '@test-support/server';
+import {http, HttpResponse} from 'msw';
 import {
     aicArtResponse,
     clevelandArtOptions,
@@ -70,11 +71,16 @@ describe('data', () => {
             });
 
             test('when it has a search term', async () => {
-                anyRequestRespondsWith(JSON.stringify(harvardArtResponse));
+                const asked: URL[] = [];
+                server.use(http.get(env.harvardDomain, ({request}) => {
+                    asked.push(new URL(request.url));
+                    return HttpResponse.json(harvardArtResponse);
+                }));
 
-                const actual = await art.getAll({page: 1, size: 12, source: Source.HARVARD}).orNull();
+                const actual = await art.getAll({page: 1, size: 12, search: 'rad', source: Source.HARVARD}).orNull();
 
                 expect(actual).toEqual(fromHarvardArt);
+                expect(asked[0]?.searchParams.get('q')).toContain('(rad)');
             });
 
             test('when it is not successful', async () => {
@@ -87,8 +93,6 @@ describe('data', () => {
                 expect(consumer).toHaveBeenCalledWith(HTTPError.UNKNOWN);
             });
         });
-
-    });
 
         describe('when the source is VAM', () => {
             test('when it is successful', async () => {
@@ -108,6 +112,7 @@ describe('data', () => {
 
                 expect(consumer).toHaveBeenCalledWith(HTTPError.UNKNOWN);
             });
+        });
 
         describe('when the source is Cleveland', () => {
             test('when it is successful', async () => {
