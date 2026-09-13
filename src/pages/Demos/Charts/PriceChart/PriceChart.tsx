@@ -85,9 +85,6 @@ export const PriceChart: FC<Props> = ({trades, id = 'price', actions}) => {
                                        r={3}/>}
         </svg>
       </Axes>
-      <figcaption className="chart-caption caption">
-        {showing ? view.caption : history.unavailable && 'history unavailable'}
-      </figcaption>
       <p className="headline">
         {showing && <>
           <data className="price" value={view.last}>{cents.format(view.last)}</data>
@@ -95,6 +92,9 @@ export const PriceChart: FC<Props> = ({trades, id = 'price', actions}) => {
         </>}
       </p>
       {history.pending && <Loading className="chart-loading"/>}
+      <figcaption className="chart-caption caption">
+        {showing ? view.caption : history.unavailable && 'history unavailable'}
+      </figcaption>
     </figure>
     <details className="explainer">
       <summary className="prompt">what am I looking at?</summary>

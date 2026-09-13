@@ -72,10 +72,10 @@ export const Candles: FC<Props> = ({trades, id = 'candle', actions}) => {
           </g>)}
         </svg>
       </Axes>
+      {history.pending && <Loading className="chart-loading"/>}
       <figcaption className="chart-caption caption">
         {notEmpty(candles) ? captionFor(period, candles.length) : history.unavailable && 'history unavailable'}
       </figcaption>
-      {history.pending && <Loading className="chart-loading"/>}
     </figure>
     <details className="explainer">
       <summary className="prompt">what am I looking at?</summary>
