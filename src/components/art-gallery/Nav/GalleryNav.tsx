@@ -1,6 +1,6 @@
 import {Link, useLocation} from 'react-router';
 import {gotoTopOfPage} from '@pages/scroll';
-import {FC, useState} from 'react';
+import {FC} from 'react';
 import {numberParam, useSearchParamsObject} from '@components/search-params';
 import {useGallery} from '@components/art-gallery/Art/Context';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
@@ -19,52 +19,42 @@ export const GalleryNav: FC<Props> = ({id}) => {
   } = useSearchParamsObject({page: numberParam, size: numberParam}, {page: 1});
   const location = useLocation();
   const path = location.pathname;
-  const [remembered, setRemembered] = useState<number>();
-  const total = art?.pagination.total;
-  if (total !== undefined && total !== remembered) {
-    setRemembered(total);
-  }
+  const pagination = art?.pagination;
   const firstPage = 1;
   const currentPage = page ?? firstPage;
-  const lastPage = art?.pagination.totalPages ?? currentPage;
+  const lastPage = pagination?.totalPages ?? currentPage;
 
   const hasNextPage = currentPage < lastPage;
   const nextPage = hasNextPage ? currentPage + 1 : currentPage;
   const hasPrevPage = currentPage > firstPage;
   const prevPage = hasPrevPage ? currentPage - 1 : currentPage;
 
-  const totalRecords = total ?? remembered;
-  const pageSize = art?.pagination.limit ?? size ?? defaultRecordLimit;
-  const firstRecord = 1 + pageSize * ((art?.pagination.currentPage ?? currentPage) - 1);
-  const lastRecord = art?.pagination.totalPages === currentPage ? totalRecords : pageSize * currentPage;
+  const totalRecords = pagination?.total;
+  const pageSize = pagination?.limit ?? size ?? defaultRecordLimit;
+  const firstRecord = 1 + pageSize * (currentPage - 1);
+  const lastRecord = currentPage === lastPage ? totalRecords : pageSize * currentPage;
 
   return <nav className="gallery-nav pagination" aria-label="pagination" id={id}>
-    {!hasPrevPage && <article className="fill-left"/>}
-    {hasPrevPage && <Link to={`${path}${createSearchParams({page: firstPage})}`}
-                          onClick={gotoTopOfPage}
-                          id="first" className="page">
+    {hasPrevPage && <>
+      <Link to={`${path}${createSearchParams({page: firstPage})}`} onClick={gotoTopOfPage} id="first" className="page">
         FIRST
-    </Link>}
-    {hasPrevPage && <Link to={`${path}${createSearchParams({page: prevPage})}`}
-                          onClick={gotoTopOfPage}
-                          id="prev" className="page">
+      </Link>
+      <Link to={`${path}${createSearchParams({page: prevPage})}`} onClick={gotoTopOfPage} id="prev" className="page">
         PREV
-    </Link>}
-    <article id="info">
-      <article>{firstRecord} - {lastRecord}</article>
-      <article>of</article>
-      <article>{totalRecords || '—'}</article>
-    </article>
-    {hasNextPage && <Link to={`${path}${createSearchParams({page: nextPage})}`}
-                          onClick={gotoTopOfPage}
-                          id="next" className="page">
+      </Link>
+    </>}
+    <output id="info">
+      <span>{firstRecord} - {lastRecord}</span>
+      <span>of</span>
+      <span>{totalRecords || '—'}</span>
+    </output>
+    {hasNextPage && <>
+      <Link to={`${path}${createSearchParams({page: nextPage})}`} onClick={gotoTopOfPage} id="next" className="page">
         NEXT
-    </Link>}
-    {hasNextPage && <Link to={`${path}${createSearchParams({page: lastPage})}`}
-                          onClick={gotoTopOfPage}
-                          id="last" className="page">
+      </Link>
+      <Link to={`${path}${createSearchParams({page: lastPage})}`} onClick={gotoTopOfPage} id="last" className="page">
         LAST
-    </Link>}
-    {!hasNextPage && <article className="fill-right"/>}
+      </Link>
+    </>}
   </nav>;
 };

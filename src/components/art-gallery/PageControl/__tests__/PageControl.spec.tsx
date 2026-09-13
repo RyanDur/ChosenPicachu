@@ -4,9 +4,7 @@ import {render, screen, waitFor} from '@testing-library/react';
 import {aicArtResponse} from '@test-support/fixtures';
 import {Paths} from '@pages/Paths';
 import {atTheTop, landingsDuring} from '@test-support/landings';
-import {heldAICAllArtResponse, setupAICEveryPage} from '@components/art-gallery/__test_support';
-
-const wallHangs = () => screen.findAllByRole('figure');
+import {heldAICAllArtResponse, setupAICEveryPage, wallHangs} from '@components/art-gallery/__test_support';
 
 describe('The page controls', () => {
   describe('going to a specific page', () => {
@@ -25,6 +23,33 @@ describe('The page controls', () => {
 
       expect(screen.getByLabelText(/Page #/)).not.toHaveValue(3);
       expect(landings).toContainEqual(atTheTop('main'));
+    });
+
+    test('after going to a page, the field says which page it is', async () => {
+      setupAICEveryPage(aicArtResponse);
+      render(<TestApp at={Paths.artGallery}/>);
+      await wallHangs();
+
+      await userEvent.type(screen.getByLabelText('Page #1'), '3');
+      await userEvent.click(screen.getByRole('button', {name: 'Go'}));
+
+      expect(await screen.findByLabelText('Page #3')).toBeInTheDocument();
+    });
+
+    test('changing only the page size keeps the page the nav walked to', async () => {
+      setupAICEveryPage(aicArtResponse);
+      render(<TestApp at={Paths.artGallery}/>);
+      await wallHangs();
+      await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
+      await screen.findByLabelText('Page #2');
+      await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
+      await screen.findByLabelText('Page #3');
+
+      await userEvent.type(screen.getByLabelText(/Per Page/), '45');
+      await userEvent.click(screen.getByRole('button', {name: 'Go'}));
+
+      await waitFor(() => expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('size=45'));
+      expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('page=3');
     });
 
     it('should not allow a user to go to a page lower than the first', async () => {

@@ -4,11 +4,10 @@ import userEvent from '@testing-library/user-event';
 import {aicArtResponse} from '@test-support/fixtures';
 import {Paths} from '@pages/Paths';
 import {atTheTop, landingsDuring} from '@test-support/landings';
-import {heldAICAllArtResponse, setupAICEveryPage} from '@components/art-gallery/__test_support';
+import {heldAICAllArtResponse, setupAICAllArtResponse, setupAICEveryPage, wallHangs} from '@components/art-gallery/__test_support';
+import {defaultRecordLimit} from '@components/art-gallery/limits';
 
 const {total_pages: lastPage, limit, total} = aicArtResponse.pagination;
-
-const wallHangs = () => screen.findAllByRole('figure');
 
 describe('Gallery Navigation', () => {
   test('no page is asked for until someone asks', async () => {
@@ -116,5 +115,23 @@ describe('Gallery Navigation', () => {
 
     expect(await screen.findByRole('link', {name: 'NEXT'})).toBeInTheDocument();
     expect(screen.getByRole('link', {name: 'LAST'})).toBeInTheDocument();
+  });
+
+  test('while the next page is on its way, the way forward and the count stay', async () => {
+    setupAICAllArtResponse(aicArtResponse);
+    const nextPageArrives = heldAICAllArtResponse(aicArtResponse, {limit: defaultRecordLimit, page: 2});
+    render(<TestApp at={Paths.artGallery}/>);
+    await wallHangs();
+
+    await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
+
+    expect(screen.getByRole('link', {name: 'NEXT'})).toBeInTheDocument();
+    expect(screen.getByRole('link', {name: 'LAST'})).toBeInTheDocument();
+    expect(screen.getByRole('navigation', {name: 'pagination'})).toHaveTextContent(`${limit + 1} - ${limit * 2}of${total}`);
+
+    nextPageArrives();
+
+    await wallHangs();
+    expect(screen.getByRole('link', {name: 'NEXT'})).toBeInTheDocument();
   });
 });

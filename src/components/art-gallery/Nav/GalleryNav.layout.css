@@ -8,11 +8,13 @@
     grid-area: first;
   }
 
-  .fill-left {
+  &:not(:has(#prev))::before {
+    content: '';
     grid-column: 1 / span 2;
   }
 
-  .fill-right {
+  &:not(:has(#next))::after {
+    content: '';
     grid-column: 4 / span 2;
   }
 

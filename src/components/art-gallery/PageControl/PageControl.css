@@ -33,22 +33,23 @@
   .submit-page {
     grid-area: submit;
     height: 100%;
+    font-size: var(--base-x-2);
   }
 
   .control {
     width: 100%;
 
       border-radius: 0;
+  }
 
-    & + .control-label {
-      width: 100%;
-      display: block;
-    }
+  .control-label {
+    width: 100%;
+    display: block;
+  }
 
-      &:hover + .control-label,
-    &:focus + .control-label {
-      background-color: var(--mint);
-    }
+  .control-label:has(+ .control:hover),
+  .control-label:has(+ .control:focus) {
+    background-color: var(--mint);
   }
 
   .go-to-label,
@@ -65,10 +66,6 @@
     padding: 0 0 0 var(--base);
 
       outline: none;
-  }
-
-  .submit-page-button {
-      font-size: var(--base-x-2);
   }
 }
 

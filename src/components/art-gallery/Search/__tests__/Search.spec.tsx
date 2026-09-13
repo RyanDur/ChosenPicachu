@@ -1,5 +1,5 @@
 import {TestApp} from '@test-support/TestApp';
-import {anyRequestRespondsWith} from '@test-support/server';
+import {anyRequestRespondsWith, server} from '@test-support/server';
 import {render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {Source} from '@components/art-gallery/museums/types/resource';
@@ -68,5 +68,35 @@ describe('search', () => {
 
     await waitFor(() => expect(screen.getByRole('status', {name: 'url search'})).not.toHaveTextContent('search'));
     expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('tab=aic');
+  });
+
+  it('a reset empties the box and puts the submit to rest', async () => {
+    render(<TestApp at={`${Paths.artGallery}?tab=aic`}/>);
+    await userEvent.type(screen.getByLabelText(/Search For/), 'A');
+    expect(screen.getByRole('button', {name: 'submit search'})).toBeEnabled();
+
+    await userEvent.click(screen.getByRole('button', {name: 'reset search'}));
+
+    expect(screen.getByLabelText(/Search For/)).toHaveValue('');
+    expect(screen.getByRole('button', {name: 'submit search'})).toBeDisabled();
+  });
+
+  it('a word asks the museum for suggestions once, and not again while it stands', async () => {
+    const suggestions: string[] = [];
+    const count = ({request}: {request: Request}) => {
+      if (request.url.includes('suggest_autocomplete_all')) suggestions.push(request.url);
+    };
+    server.events.on('request:start', count);
+    try {
+      render(<TestApp at={`${Paths.artGallery}?tab=aic`}/>);
+
+      await userEvent.type(screen.getByLabelText(/Search For/), searchWord);
+      await waitFor(() => expect(screen.getByRole('listbox', {hidden: true})).toHaveTextContent(searchWord));
+
+      expect(suggestions).toHaveLength(1);
+      await expect(waitFor(() => expect(suggestions.length).toBeGreaterThan(1), {timeout: 700})).rejects.toThrow(/greater than 1/);
+    } finally {
+      server.events.removeListener('request:start', count);
+    }
   });
 });

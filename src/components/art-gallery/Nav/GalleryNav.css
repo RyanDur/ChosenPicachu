@@ -6,8 +6,8 @@
   background-color: var(--void);
 
   #info,
-  .fill-left,
-  .fill-right {
+  &::before,
+  &::after {
     width: 100%;
     background-color: var(--paper);
   }
