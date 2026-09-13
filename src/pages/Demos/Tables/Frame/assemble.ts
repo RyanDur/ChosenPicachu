@@ -1,5 +1,5 @@
 import indexCss from '../../../../index.css?raw';
-import tableCss from '@components/Table/Table.css?raw';
+import tableCss from '@components/DragSortableTable/Table.css?raw';
 import headerCss from '@components/DragSortableTable/Header.css?raw';
 import sortableCss from '@components/DragSortableTable/sortable.css?raw';
 import rowGripCss from '@components/DragSortableTable/RowGrip.css?raw';

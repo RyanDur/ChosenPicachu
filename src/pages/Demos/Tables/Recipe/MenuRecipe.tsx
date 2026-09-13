@@ -16,7 +16,7 @@ import {buildSources} from '../Frame/builds/sources';
 import {headerSources, rowSources, tableSources} from './sources';
 import {menuSource} from './steps/sources';
 import {theImplementation} from './steps';
-import baseCss from '@components/Table/Table.css?raw';
+import baseCss from '@components/DragSortableTable/Table.css?raw';
 import '../../Recipe/Recipe.css';
 
 const gap = plain(' ');

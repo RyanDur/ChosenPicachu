@@ -1,7 +1,7 @@
 import {ComponentProps, FC, useState} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
-import {shareWidth} from '@components/Table';
+import {shareWidth} from '@components/Table/shares';
 import {Landed} from './report';
 import {MoveReport} from './MoveReport';
 import {useHeaderEvents, useTableDispatch, useTableSelector} from './context';

@@ -1,7 +1,7 @@
 import {ComponentProps, FC, useState} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
-import {shareWidth} from '@components/Table';
+import {shareWidth} from '@components/Table/shares';
 import {Landed} from '@components/DragSortableTable/report';
 import {MoveReport} from '@components/DragSortableTable/MoveReport';
 import {useHeaderEvents, useTableDispatch, useTableSelector} from '@components/DragSortableTable/context';

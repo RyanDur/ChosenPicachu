@@ -1,6 +1,6 @@
 import {ComponentProps, FC} from 'react';
 import {classNames} from '@components/class-names';
-import {ResizeHandle} from '@components/Table/ResizeHandle';
+import {ResizeHandle} from '@components/DragSortableTable/ResizeHandle';
 import {SortMenu} from '@components/DragSortableTable/SortMenu';
 import {Measured, Measures, seated} from '../../Aggregations/cells';
 import {BodyEvents, HeaderEvents} from '@components/DragSortableTable/context';

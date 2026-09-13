@@ -1,7 +1,7 @@
 import {ComponentProps, FC} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
-import {shareWidth} from '@components/Table';
+import {shareWidth} from '@components/Table/shares';
 import {useTableSelector} from './context';
 import {columnNamed, unknownColumn, widthOfColumn} from './selectors';
 import './Header.css';

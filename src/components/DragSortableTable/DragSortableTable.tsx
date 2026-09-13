@@ -2,6 +2,8 @@ import {ComponentProps, ReactNode, useState, useSyncExternalStore} from 'react';
 import {Table, TableContext} from './context';
 import {tableStore} from './store';
 import {TableColumn, Labelled, Seated} from './table-state';
+import './Table.css';
+import './sortable.css';
 
 type Props<C extends Labelled> = ComponentProps<'table'> & {
   columns: readonly TableColumn<C>[];

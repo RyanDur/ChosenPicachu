@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {ResizeHandle} from '@components/Table/ResizeHandle';
+import {ResizeHandle} from '@components/DragSortableTable/ResizeHandle';
 import {SortMenu} from '@components/DragSortableTable/SortMenu';
 import {age, formatAge, FriendsList, UserMenu} from '@components/Users';
 import {Body, Cell, Column, DraggableColumn, DragSortableTable, Headers, Row, RowHeader} from '@components/DragSortableTable';

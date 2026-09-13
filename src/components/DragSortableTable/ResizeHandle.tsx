@@ -1,11 +1,12 @@
 import {FC, FocusEvent, PointerEvent, useState} from 'react';
 import {Maybe, maybe, nothing} from '@ryandur/sand';
-import {Landed} from '@components/DragSortableTable/report';
-import {MoveReport} from '@components/DragSortableTable/MoveReport';
-import {useTableDispatch, useTableSelector} from '@components/DragSortableTable/context';
-import {neighbourOfColumn, selectOrder, selectWidths, widthOfColumn} from '@components/DragSortableTable/selectors';
-import {awoken, tradedBy} from '@components/DragSortableTable/actions';
-import {Grip, grippedAt, measuredWidths, resizeArrows, resizeLabel, soughtTrade, traded} from './shares';
+import './Table.css';
+import {Landed} from './report';
+import {MoveReport} from './MoveReport';
+import {useTableDispatch, useTableSelector} from './context';
+import {neighbourOfColumn, selectOrder, selectWidths, widthOfColumn} from './selectors';
+import {awoken, tradedBy} from './actions';
+import {Grip, grippedAt, measuredWidths, resizeArrows, resizeLabel, soughtTrade, traded} from '@components/Table/shares';
 
 export const ResizeHandle: FC<{column: string}> = ({column}) => {
     const dispatch = useTableDispatch();
