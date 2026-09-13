@@ -65,6 +65,8 @@ describe('the chart periods', () => {
 
     await userEvent.click(within(menuFor('price period')).getByText('day'));
     await waitFor(() => expect(drawnPoints()).toBe(5));
+    expect(screen.getByRole('button', {name: 'price period day'})).toBeInTheDocument();
+    expect(within(menuFor('price period')).getByRole('button', {name: 'day', current: true, hidden: true})).toBeInTheDocument();
     expect(screen.getByText('$50,005.00')).toBeVisible();
     expect(screen.getByText('5 candles · 1h each')).toBeVisible();
     const priceCard = screen.getByRole('region', {name: 'live trades'});

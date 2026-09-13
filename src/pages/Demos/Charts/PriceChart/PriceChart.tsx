@@ -58,14 +58,16 @@ export const PriceChart: FC<Props> = ({trades, id = 'price', actions}) => {
     <header className="chart-header">
       {actions}
       <button type="button" className="menu-toggle rounded-corners period-toggle field caption"
-              popoverTarget={`${id}-period`}
-              aria-label="price period">{period}</button>
+              popoverTarget={`${id}-period`}>
+        <span className="off-screen">price period</span>{' '}{period}
+      </button>
       <menu id={`${id}-period`} tabIndex={-1} popover="auto" className="menu card rounded-corners lifted"
             aria-label="price period by">
         {Object.values(Period).map(option =>
           <li className="entry" key={option}>
             <button type="button" className="item sub-title"
                     popoverTarget={`${id}-period`} popoverTargetAction="hide"
+                    aria-current={option === period ? 'true' : undefined}
                     onClick={() => setPeriod(option)}>{option}</button>
           </li>
         )}
