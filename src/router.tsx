@@ -11,8 +11,12 @@ import {Users} from '@pages/Users';
 import {Gallery} from '@pages/Gallery';
 import {Games} from '@pages/Games';
 import {PageError} from '@pages/PageError';
+import {NoRoom} from '@pages/NoRoom';
+import {Header} from '@pages/BasePage/Header';
 
 const NoHeader = () => null;
+const ClosedRoomHeader = () => <Header title="Closed room"/>;
+const NoRoomHeader = () => <Header title="No such room"/>;
 
 export const Site: FC = () => {
   const {pathname, hash} = useLocation();
@@ -47,6 +51,7 @@ export const Site: FC = () => {
 
 export const rooms = {
   errorElement: <PageError/>,
+  handle: {header: ClosedRoomHeader},
   children: [
     Home,
     {
@@ -59,7 +64,7 @@ export const rooms = {
     Users,
     Gallery,
     Games,
-    {path: '*', element: <PageError/>}
+    {path: '*', handle: {header: NoRoomHeader}, element: <NoRoom/>}
   ]
 };
 
