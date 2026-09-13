@@ -37,12 +37,12 @@ describe('search', () => {
     render(<TestApp at={Paths.artGallery}><GalleryProviders><Search/></GalleryProviders></TestApp>);
     await userEvent.click(screen.getByRole('button', {name: 'submit search'}));
 
-    expect(screen.getByLabelText('url search')).not.toHaveTextContent('search');
+    expect(screen.getByRole('status', {name: 'url search'})).not.toHaveTextContent('search');
 
     await userEvent.type(screen.getByLabelText(/Search For/), 'A');
     await userEvent.click(screen.getByRole('button', {name: 'submit search'}));
 
-    await waitFor(() => expect(screen.getByLabelText('url search')).toHaveTextContent('?search=A'));
+    await waitFor(() => expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('?search=A'));
     expect(screen.getByRole('status', {name: 'url path'})).toHaveTextContent(new RegExp(`^${Paths.artGallery}$`));
   });
 
@@ -52,7 +52,7 @@ describe('search', () => {
     await userEvent.type(screen.getByLabelText(/Search For/), 'a');
     await userEvent.click(screen.getByRole('button', {name: 'submit search'}));
 
-    expect(screen.getByLabelText('url search')).toHaveTextContent('?page=1&tab=aic&search=a');
+    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('?page=1&tab=aic&search=a');
   });
 
   it('should leave the original query alone when search is empty', async () => {
@@ -60,7 +60,7 @@ describe('search', () => {
 
     await userEvent.click(screen.getByRole('button', {name: 'submit search'}));
 
-    expect(screen.getByLabelText('url search')).toHaveTextContent('?page=1&search=cat&tab=some-tab');
+    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('?page=1&search=cat&tab=some-tab');
   });
 
   it('should be able to reset the query', async () => {
@@ -68,6 +68,6 @@ describe('search', () => {
 
     await userEvent.click(screen.getByRole('button', {name: 'reset search'}));
 
-    await waitFor(() => expect(screen.getByLabelText('url search')).toHaveTextContent('tab=bat'));
+    await waitFor(() => expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('tab=bat'));
   });
 });

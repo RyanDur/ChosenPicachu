@@ -116,7 +116,7 @@ describe('The gallery.', () => {
     await waitFor(() => expect(screen.getAllByRole('figure').length).toEqual(defaultRecordLimit));
     expect(screen.getByRole('link', {name: 'Harvard Art Museums'})).toBeInTheDocument();
     expect(screen.queryByRole('link', {name: 'The Art Institute of Chicago'})).not.toBeInTheDocument();
-    expect(screen.getByLabelText('url search')).toHaveTextContent('tab=harvard');
+    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('tab=harvard');
   });
 
   test('a door to a closed museum leads to an open one', async () => {
@@ -126,7 +126,7 @@ describe('The gallery.', () => {
 
     render(<TestApp at={`${Paths.artGallery}?tab=aic`}/>);
 
-    await waitFor(() => expect(screen.getByLabelText('url search')).toHaveTextContent('tab=harvard'));
+    await waitFor(() => expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('tab=harvard'));
     await waitFor(() => expect(screen.getAllByRole('figure').length).toEqual(defaultRecordLimit));
   });
 
@@ -135,7 +135,7 @@ describe('The gallery.', () => {
 
     render(<TestApp at={`${Paths.artGallery}?tab=bogus`}/>);
 
-    await waitFor(() => expect(screen.getByLabelText('url search')).toHaveTextContent('tab=aic'));
+    await waitFor(() => expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('tab=aic'));
     await waitFor(() => expect(screen.getAllByRole('figure').length).toEqual(defaultRecordLimit));
   });
 
@@ -146,7 +146,7 @@ describe('The gallery.', () => {
     render(<TestApp at={Paths.artGallery}/>);
 
     expect(await screen.findByRole('link', {name: 'The Art Institute of Chicago', current: 'page'})).toBeInTheDocument();
-    expect(screen.getByLabelText('url search')).toHaveTextContent('tab=aic');
+    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('tab=aic');
   });
 
   test('while the museums are asked there are no doors, only the loading sign', async () => {

@@ -10,7 +10,7 @@ describe('Gallery Navigation', () => {
   test('on load', () => {
     render(<TestApp at={Paths.artGallery}><GalleryProviders galleryState={fromAICArt}><GalleryNav/></GalleryProviders></TestApp>);
 
-    expect(screen.getByLabelText('url search')).not.toHaveTextContent('page');
+    expect(screen.getByRole('status', {name: 'url search'})).not.toHaveTextContent('page');
   });
 
   describe('without params', () => {
@@ -20,13 +20,13 @@ describe('Gallery Navigation', () => {
         const landings = vi.spyOn(window, 'scrollTo');
         await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
 
-        expect(screen.getByLabelText('url search')).toHaveTextContent('page=2');
+        expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('page=2');
         expect(landings).toHaveBeenCalledTimes(1);
         expect(landings).toHaveBeenCalledWith(0, 0);
 
         await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
 
-        expect(screen.getByLabelText('url search')).toHaveTextContent('page=3');
+        expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('page=3');
         expect(landings).toHaveBeenCalledTimes(2);
         landings.mockRestore();
       });
@@ -42,7 +42,7 @@ describe('Gallery Navigation', () => {
         render(<TestApp at={Paths.artGallery}><GalleryProviders galleryState={fromAICArt}><GalleryNav/></GalleryProviders></TestApp>);
         await userEvent.click(screen.getByRole('link', {name: 'LAST'}));
 
-        expect(screen.getByLabelText('url search')).toHaveTextContent(`?page=${fromAICArt.pagination.totalPages}`);
+        expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(`?page=${fromAICArt.pagination.totalPages}`);
         expect(screen.queryByRole('link', {name: 'LAST'})).not.toBeInTheDocument();
         expect(screen.queryByRole('link', {name: 'NEXT'})).not.toBeInTheDocument();
         expect(screen.getByRole('link', {name: 'FIRST'})).toBeInTheDocument();
@@ -57,13 +57,13 @@ describe('Gallery Navigation', () => {
         await userEvent.click(screen.getByRole('link', {name: 'LAST'}));
         await userEvent.click(screen.getByRole('link', {name: 'PREV'}));
 
-        expect(screen.getByLabelText('url search')).toHaveTextContent(
+        expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(
           `page=${fromAICArt.pagination.totalPages - 1}`
         );
 
         await userEvent.click(screen.getByRole('link', {name: 'PREV'}));
 
-        expect(screen.getByLabelText('url search')).toHaveTextContent(
+        expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(
           `page=${fromAICArt.pagination.totalPages - 2}`
         );
       });
@@ -90,7 +90,7 @@ describe('Gallery Navigation', () => {
         await userEvent.click(screen.getByRole('link', {name: 'LAST'}));
         await userEvent.click(screen.getByRole('link', {name: 'FIRST'}));
 
-        expect(screen.getByLabelText('url search')).toHaveTextContent('page=1');
+        expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('page=1');
         expect(screen.getByRole('link', {name: 'LAST'})).toBeInTheDocument();
         expect(screen.getByRole('link', {name: 'NEXT'})).toBeInTheDocument();
         expect(screen.queryByRole('link', {name: 'FIRST'})).not.toBeInTheDocument();
@@ -103,28 +103,28 @@ describe('Gallery Navigation', () => {
     render(<TestApp at={`${Paths.artGallery}?search=q`}><GalleryProviders galleryState={fromAICArt}><GalleryNav/></GalleryProviders></TestApp>);
 
     await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
-    expect(screen.getByLabelText('url search')).toHaveTextContent('search=q&page=2');
+    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('search=q&page=2');
 
     await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
-    expect(screen.getByLabelText('url search')).toHaveTextContent('search=q&page=3');
+    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('search=q&page=3');
 
     await userEvent.click(screen.getByRole('link', {name: 'LAST'}));
-    expect(screen.getByLabelText('url search')).toHaveTextContent(
+    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(
       `search=q&page=${fromAICArt.pagination.totalPages}`
     );
 
     await userEvent.click(screen.getByRole('link', {name: 'PREV'}));
-    expect(screen.getByLabelText('url search')).toHaveTextContent(
+    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(
       `search=q&page=${fromAICArt.pagination.totalPages - 1}`
     );
 
     await userEvent.click(screen.getByRole('link', {name: 'PREV'}));
-    expect(screen.getByLabelText('url search')).toHaveTextContent(
+    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(
       `search=q&page=${fromAICArt.pagination.totalPages - 2}`
     );
 
     await userEvent.click(screen.getByRole('link', {name: 'FIRST'}));
-    expect(screen.getByLabelText('url search')).toHaveTextContent(
+    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(
       'search=q&page=1'
     );
   });

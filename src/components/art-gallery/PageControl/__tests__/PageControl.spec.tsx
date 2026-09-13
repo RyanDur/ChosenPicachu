@@ -17,7 +17,7 @@ describe('The page controls', () => {
       await userEvent.click(screen.getByText('Go'));
 
       await waitFor(() =>
-        expect(screen.getByLabelText('url search')).toHaveTextContent(`?page=${pageNumber}`));
+        expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(`?page=${pageNumber}`));
       expect(screen.getByLabelText(/Page #/)).not.toHaveValue(+pageNumber);
       expect(landings).toHaveBeenCalledTimes(1);
       landings.mockRestore();
@@ -42,7 +42,7 @@ describe('The page controls', () => {
       await userEvent.type(screen.getByLabelText(/Per Page/), '45');
       await userEvent.click(screen.getByText('Go'));
 
-      expect(await screen.findByLabelText('url search')).toHaveTextContent('size=45');
+      expect(await screen.findByRole('status', {name: 'url search'})).toHaveTextContent('size=45');
     });
   });
 });

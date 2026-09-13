@@ -13,26 +13,26 @@ describe('Tabs', () => {
   it('should start with the default', () => {
     render(<TestApp at={path}><Tabs label="tabs under test" defaultTab={tab1.param} values={[tab1, tab2, tab3]}/></TestApp>);
 
-    expect(screen.getByLabelText('url search')).toHaveTextContent(tab1.param);
+    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(tab1.param);
   });
 
   it('should update the url', async () => {
     render(<TestApp at={path}><Tabs label="tabs under test" defaultTab={tab1.param} values={[tab1, tab2, tab3]}/></TestApp>);
 
     await userEvent.click(screen.getByText(tab1.display));
-    expect(screen.getByLabelText('url search')).toHaveTextContent(`?tab=${tab1.param}`);
+    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(`?tab=${tab1.param}`);
 
     await userEvent.click(screen.getByText(tab2.display));
-    expect(screen.getByLabelText('url search')).toHaveTextContent(`?tab=${tab2.param}`);
+    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(`?tab=${tab2.param}`);
 
     await userEvent.click(screen.getByText(tab3.display));
-    expect(screen.getByLabelText('url search')).toHaveTextContent(`?tab=${tab3.param}`);
+    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(`?tab=${tab3.param}`);
   });
 
   it('should default to the first choice if the param is not present', async () => {
     render(<TestApp at={path}><Tabs label="tabs under test" defaultTab={tab1.param} values={[tab1, tab2, tab3]}/></TestApp>);
 
-    expect(screen.getByLabelText('url search')).toHaveTextContent(`?tab=${tab1.param}`);
+    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(`?tab=${tab1.param}`);
   });
 
   it('the chosen tab says it is current, styles or not', async () => {
