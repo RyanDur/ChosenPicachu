@@ -2,7 +2,7 @@ import {FC, useEffect} from 'react';
 import {Link, useLocation} from 'react-router';
 import {useSearchParamsObject} from '@components/search-params';
 import * as schema from 'schemawax';
-import {not} from '@ryandur/sand';
+import {has, not} from '@ryandur/sand';
 import './Tabs.css';
 
 type Tab = {
@@ -11,7 +11,7 @@ type Tab = {
 }
 
 type Props = {
-  defaultTab: string;
+  defaultTab?: string;
   values: Tab[];
   label: string;
   id?: string;
@@ -22,7 +22,7 @@ export const Tabs: FC<Props> = ({values, id, label, defaultTab}) => {
   const {tab, updateSearchParams, createSearchParams} = useSearchParamsObject({tab: schema.string});
 
   useEffect(() => {
-    if (not(tab)) updateSearchParams({tab: defaultTab}, {replace: true});
+    if (not(tab) && has(defaultTab)) updateSearchParams({tab: defaultTab}, {replace: true});
   }, [tab, updateSearchParams, values, defaultTab]);
 
   return <nav aria-label={label} id={id} className="backdrop tabs">{values.map(({param, display}) =>

@@ -22,6 +22,9 @@ export const art = {
   get: ({source, id}: GetArt): Result.Async<Art, HTTPError> =>
     fromSource(source, resource => resource.art(id)),
 
+  open: (source: Source): Result.Async<boolean, HTTPError> =>
+    fromSource(source, resource => resource.open()),
+
   search: ({source, search}: SearchArt): Result.Async<SearchOptions, HTTPError> =>
     fromSource(source, resource => resource.searchOptions(search))
 };

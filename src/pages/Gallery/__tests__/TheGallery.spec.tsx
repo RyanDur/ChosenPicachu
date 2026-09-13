@@ -6,7 +6,13 @@ import {Paths} from '@pages/Paths';
 import userEvent from '@testing-library/user-event';
 import {AICArtResponse} from '@components/art-gallery/museums/aic/types';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
-import {setupAICAllArtResponse, setupAICArtPieceResponse, setupHarvardAllArtResponse, setupVAMAllArtResponse} from '@components/art-gallery/__tests__/galleryApiTestHelper';
+import {
+  refuseAICPictures,
+  setupAICAllArtResponse,
+  setupAICArtPieceResponse,
+  setupHarvardAllArtResponse,
+  setupVAMAllArtResponse
+} from '@components/art-gallery/__tests__/galleryApiTestHelper';
 
 const firstPiece = aicArtResponse.data[0];
 
@@ -65,8 +71,8 @@ describe('The gallery.', () => {
 
   test('when looking at the harvard gallery', async () => {
     setupAICAllArtResponse(aicArtResponse);
-    render(<TestApp at={Paths.artGallery}/>);
     setupHarvardAllArtResponse(harvardArtResponse);
+    render(<TestApp at={Paths.artGallery}/>);
 
     await userEvent.click(await screen.findByText('Harvard Art Museums'));
 
@@ -77,13 +83,37 @@ describe('The gallery.', () => {
 
   test('when looking at the vam gallery', async () => {
     setupAICAllArtResponse(aicArtResponse);
-    render(<TestApp at={Paths.artGallery}/>);
     setupVAMAllArtResponse(vamArtResponse);
+    render(<TestApp at={Paths.artGallery}/>);
 
     await userEvent.click(await screen.findByText('The Victoria and Albert Museum'));
 
     await waitFor(() => expect(screen.getAllByRole('figure').length).toEqual(defaultRecordLimit));
     expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument();
     expect(screen.queryByAltText('empty gallery')).not.toBeInTheDocument();
+  });
+
+  test('a museum whose pictures are refused has no door, and the gallery opens elsewhere', async () => {
+    setupAICAllArtResponse(aicArtResponse);
+    refuseAICPictures();
+    setupHarvardAllArtResponse(harvardArtResponse);
+
+    render(<TestApp at={Paths.artGallery}/>);
+
+    await waitFor(() => expect(screen.getAllByRole('figure').length).toEqual(defaultRecordLimit));
+    expect(screen.getByRole('link', {name: 'Harvard Art Museums'})).toBeInTheDocument();
+    expect(screen.queryByRole('link', {name: 'The Art Institute of Chicago'})).not.toBeInTheDocument();
+    expect(screen.getByLabelText('url search')).toHaveTextContent('tab=harvard');
+  });
+
+  test('a door to a closed museum leads to an open one', async () => {
+    setupAICAllArtResponse(aicArtResponse);
+    refuseAICPictures();
+    setupHarvardAllArtResponse(harvardArtResponse);
+
+    render(<TestApp at={`${Paths.artGallery}?tab=aic`}/>);
+
+    await waitFor(() => expect(screen.getByLabelText('url search')).toHaveTextContent('tab=harvard'));
+    await waitFor(() => expect(screen.getAllByRole('figure').length).toEqual(defaultRecordLimit));
   });
 });

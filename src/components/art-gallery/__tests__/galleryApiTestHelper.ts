@@ -8,7 +8,7 @@ import {HarvardAllArtResponse} from '@components/art-gallery/museums/harvard/typ
 import {harvardFields} from '@components/art-gallery/museums/harvard';
 import {VAMAllArtResponse} from '@components/art-gallery/museums/vam/types';
 
-const {aicDomain, harvardAPIKey, harvardDomain, vamDomain} = env;
+const {aicDomain, aicPictures, harvardAPIKey, harvardDomain, vamDomain} = env;
 
 const paramsMatch = (request: Request, expected: Record<string, string>) => {
   const params = new URL(request.url).searchParams;
@@ -44,6 +44,9 @@ export const setupAICArtPieceResponse = (response: AICArtResponse, id: number) =
     params.id === String(id) && paramsMatch(request, {fields: fields.join()})
       ? HttpResponse.json(response)
       : undefined));
+
+export const refuseAICPictures = () =>
+  server.use(http.get(`${aicPictures}/:image/info.json`, () => HttpResponse.error()));
 
 export const setupVAMAllArtResponse = (response: VAMAllArtResponse, limit = defaultRecordLimit) =>
   server.use(http.get(`${vamDomain}/objects/search`, ({request}) =>

@@ -15,9 +15,13 @@ import {validate} from '@transport/validate';
 import {http} from '@transport/http';
 import {GetAllArtRequest} from '@components/art-gallery/museums/types/resource';
 
-const {aicDomain} = env;
+const {aicDomain, aicPictures} = env;
 
 export const fields = ['id', 'title', 'image_id', 'artist_display', 'term_titles', 'thumbnail'];
+
+const iiif = (imageId: string) => `${aicPictures}/${imageId}`;
+
+const aSundayOnLaGrandeJatte = '2d484387-2509-5e8e-2c43-22f9981972eb';
 
 export const aic = {
   allArt: ({page, search, size = defaultRecordLimit}: GetAllArtRequest) => http
@@ -32,6 +36,8 @@ export const aic = {
       },
       pieces: data.map(aicToPiece(800))
     })),
+
+  open: () => http.get(`${iiif(aSundayOnLaGrandeJatte)}/info.json`, {cache: 'force-cache'}).map(() => true),
 
   art: (id: string) => http
     .get(`${aicDomain}/${id}${toQueryString({fields})}`, {cache: 'force-cache'})
@@ -51,7 +57,7 @@ export const aic = {
 };
 
 const aicImage = (imageId: string | null | undefined, width: number) =>
-  `https://www.artic.edu/iiif/2/${imageId}/full/${width},/0/default.jpg`;
+  `${iiif(String(imageId))}/full/${width},/0/default.jpg`;
 
 const aicSrcSet = (imageId: string | null | undefined) =>
   [400, 800, 1200].map(width => `${aicImage(imageId, width)} ${width}w`).join(', ');

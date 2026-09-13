@@ -66,9 +66,11 @@ const runtimeEnv = (env: Record<string, string>): Plugin => {
     tradeProduct: env.VITE_APP_TRADE_PRODUCT ?? '',
     tradeHistory: env.VITE_APP_TRADE_HISTORY ?? '',
     aicDomain: env.VITE_APP_API_AIC ?? '',
+    aicPictures: env.VITE_APP_AIC_PICTURES ?? '',
     harvardDomain: env.VITE_APP_HARVARD_API ?? '',
     harvardAPIKey: env.VITE_APP_HARVARD_API_KEY ?? '',
-    vamDomain: env.VITE_APP_VAM_API ?? ''
+    vamDomain: env.VITE_APP_VAM_API ?? '',
+    vamPictures: env.VITE_APP_VAM_PICTURES ?? ''
   }, null, 2)};\n`;
   let base = '/';
   return {

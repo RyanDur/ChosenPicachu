@@ -7,7 +7,7 @@ import {validate} from '@transport/validate';
 import {http} from '@transport/http';
 import {GetAllArtRequest} from '@components/art-gallery/museums/types/resource';
 
-const {vamDomain} = env;
+const {vamDomain, vamPictures} = env;
 
 const iiifImage = (base: string, size: number) => `${base}full/!${size},${size}/0/default.jpg`;
 
@@ -23,6 +23,8 @@ const vamRecordToArt = (record: VAMSearchRecord): Art => ({
   altText: record._primaryTitle || 'Untitled'
 });
 
+const tipuSultan = '2009BY1329';
+
 export const vam = {
   allArt: ({page, search, size = defaultRecordLimit}: GetAllArtRequest) => http
     .get(`${vamDomain}/objects/search${toQueryString({q: search, page, page_size: size, images_exist: true})}`, {cache: 'force-cache'})
@@ -36,6 +38,8 @@ export const vam = {
       },
       pieces: records.map(vamRecordToArt)
     })),
+
+  open: () => http.get(`${vamPictures}/${tipuSultan}/info.json`, {cache: 'force-cache'}).map(() => true),
 
   art: (id: string) => http
     .get(`${vamDomain}/museumobject/${id}`, {cache: 'force-cache'})

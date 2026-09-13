@@ -1,16 +1,20 @@
 import {expect, test} from '@playwright/test';
 
-const tabs = ['aic', 'harvard', 'vam'];
+test('every door the gallery offers hangs art from its museum', async ({page}) => {
+  await page.goto('gallery?page=1&size=8');
+  const doors = page.getByRole('navigation', {name: 'museums'}).getByRole('link');
+  await expect(doors.first()).toBeVisible({timeout: 30_000});
 
-for (const tab of tabs) {
-  test(`the ${tab} gallery hangs art from the real museum`, async ({page}) => {
-    await page.goto(`gallery?page=1&size=8&tab=${tab}`);
+  const offered = await doors.count();
+  expect(offered).toBeGreaterThan(0);
+  for (let door = 0; door < offered; door += 1) {
+    await doors.nth(door).click();
 
     await expect(page.getByRole('figure')).toHaveCount(8, {timeout: 30_000});
     await expect(page.getByAltText('empty gallery')).toHaveCount(0);
     await expect(page.getByRole('figure').first()).not.toBeEmpty();
-  });
-}
+  }
+});
 
 test('vam art truly renders and opens into a piece', async ({page}) => {
   await page.goto(`gallery?page=1&size=8&tab=vam`);
@@ -23,15 +27,15 @@ test('vam art truly renders and opens into a piece', async ({page}) => {
   await expect(page.getByRole('figure')).toBeVisible({timeout: 30_000});
 });
 
-test('an aic search still hangs art', async ({page}) => {
-  await page.goto('gallery?page=1&size=8&tab=aic&search=monet');
+test('a search still hangs art', async ({page}) => {
+  await page.goto('gallery?page=1&size=8&search=monet');
 
   await expect(page.getByRole('figure')).toHaveCount(8, {timeout: 30_000});
   await expect(page.getByAltText('empty gallery')).toHaveCount(0);
 });
 
-test('searching the aic through the ui filters the wall', async ({page}) => {
-  await page.goto(`gallery?page=1&size=8&tab=aic`);
+test('searching through the ui filters the wall', async ({page}) => {
+  await page.goto('gallery?page=1&size=8');
   await expect(page.getByRole('figure')).toHaveCount(8, {timeout: 30_000});
 
   await page.getByLabel(/Search For/).fill('monet');

@@ -19,13 +19,15 @@ describe('The gallery.', () => {
 
   test('loads the wall exactly once on mount', async () => {
     let hits = 0;
-    const count = () => hits++;
-    server.events.on('request:start', count);
+    const count = ({request}: {request: Request}) => {
+      if (request.url.startsWith(`${env.aicDomain}/search`)) hits++;
+    };
+    server.events.on('response:mocked', count);
     setupAICAllArtResponse(aicArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
 
     await screen.findAllByRole('figure');
-    server.events.removeListener('request:start', count);
+    server.events.removeListener('response:mocked', count);
 
     expect(hits).toEqual(1);
   });
@@ -48,7 +50,7 @@ describe('The gallery.', () => {
     }));
     render(<TestApp at={Paths.artGallery}/>);
 
-    expect(await screen.findByRole('progressbar', {name: 'loading gallery'})).toBeInTheDocument();
+    await screen.findByRole('progressbar', {name: 'loading gallery'});
     expect(screen.queryByRole('figure')).not.toBeInTheDocument();
     await waitFor(() => expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument());
   });

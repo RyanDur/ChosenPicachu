@@ -3,9 +3,11 @@ export type Env = {
   tradeProduct: string;
   tradeHistory: string;
   aicDomain: string;
+  aicPictures: string;
   harvardDomain: string;
   harvardAPIKey: string;
   vamDomain: string;
+  vamPictures: string;
 };
 
 declare global {
@@ -21,9 +23,11 @@ export const unconfigured: Env = {
   tradeProduct: '',
   tradeHistory: '',
   aicDomain: '',
+  aicPictures: '',
   harvardDomain: '',
   harvardAPIKey: '',
-  vamDomain: ''
+  vamDomain: '',
+  vamPictures: ''
 };
 
 export const env: Env = window.__env ?? unconfigured;

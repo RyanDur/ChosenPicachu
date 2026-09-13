@@ -12,6 +12,7 @@ import {AllArt, Art} from '@components/art-gallery/museums/types/response';
 import {VAMAllArtResponse, VAMArtResponse} from '@components/art-gallery/museums/vam/types';
 import {createUser} from '@components/Users/resource/usersApi';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
+import {env} from '@env';
 
 const randomNumberFromRange = (min: number, max = 6) => Math.floor(Math.random() * max) + min;
 export const words = (num = 6) => faker.lorem.words(randomNumberFromRange(1, num));
@@ -134,8 +135,8 @@ export const fromAICArt: AllArt = {
   pieces: aicArtResponse.data.map(piece => ({
     id: String(piece.id),
     title: piece.title,
-    image: `https://www.artic.edu/iiif/2/${piece.image_id}/full/800,/0/default.jpg`,
-    srcSet: [400, 800, 1200].map(width => `https://www.artic.edu/iiif/2/${piece.image_id}/full/${width},/0/default.jpg ${width}w`).join(', '),
+    image: `${env.aicPictures}/${piece.image_id}/full/800,/0/default.jpg`,
+    srcSet: [400, 800, 1200].map(width => `${env.aicPictures}/${piece.image_id}/full/${width},/0/default.jpg ${width}w`).join(', '),
     artistInfo: piece.artist_display,
     altText: piece.term_titles.join(' ')
   }))
@@ -155,4 +156,5 @@ export const fromHarvardArt: AllArt = {
     altText: piece.title || 'Untitled'
   }))
 };
+
 

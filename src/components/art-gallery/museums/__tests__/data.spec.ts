@@ -17,10 +17,11 @@ import {
 import {nanoid} from 'nanoid';
 import {AICPieceData, AICSearchResponse} from '@components/art-gallery/museums/aic/types';
 import {HTTPError} from '@transport/types';
-import {art} from '@components/art-gallery/museums/index';
+import {art} from '@components/art-gallery/museums';
 import {Art} from '@components/art-gallery/museums/types/response';
 import {Source} from '@components/art-gallery/museums/types/resource';
 import {faker} from '@faker-js/faker';
+import {env} from '@env';
 import {expect} from 'vitest';
 import {setupAICAllArtResponse} from '@components/art-gallery/__tests__/galleryApiTestHelper';
 
@@ -102,7 +103,8 @@ describe('data', () => {
 
                 expect(consumer).toHaveBeenCalledWith(HTTPError.UNKNOWN);
             });
-        });
+
+    });
 
     describe('retrieving an artwork', () => {
         describe('for AIC', () => {
@@ -233,8 +235,8 @@ describe('data', () => {
     const aicPiece: Art = {
         id: String(pieceAICResponse.data.id),
         title: pieceAICResponse.data.title,
-        image: `https://www.artic.edu/iiif/2/${pieceAICResponse.data.image_id}/full/843,/0/default.jpg`,
-        srcSet: [400, 800, 1200].map(width => `https://www.artic.edu/iiif/2/${pieceAICResponse.data.image_id}/full/${width},/0/default.jpg ${width}w`).join(', '),
+        image: `${env.aicPictures}/${pieceAICResponse.data.image_id}/full/843,/0/default.jpg`,
+        srcSet: [400, 800, 1200].map(width => `${env.aicPictures}/${pieceAICResponse.data.image_id}/full/${width},/0/default.jpg ${width}w`).join(', '),
         altText: pieceAICResponse.data.thumbnail?.alt_text || '',
         artistInfo: pieceAICResponse.data.artist_display
     };

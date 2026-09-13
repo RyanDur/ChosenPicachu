@@ -23,10 +23,12 @@ const baseQueryString = {
 const withImages = (search?: string) =>
   [search && `(${search})`, 'imagepermissionlevel:0', '_exists_:primaryimageurl'].filter(Boolean).join(' AND ');
 
+const searched = ({page, search, size = defaultRecordLimit}: GetAllArtRequest) => http
+  .get(`${harvardDomain}${toQueryString({q: withImages(search), page, size, ...baseQueryString})}`, {cache: 'force-cache'})
+  .mBind(validate(HarvardAllArtSchema));
+
 export const harvard = {
-  allArt: ({page, search, size = defaultRecordLimit}: GetAllArtRequest) => http
-    .get(`${harvardDomain}${toQueryString({q: withImages(search), page, size, ...baseQueryString})}`, {cache: 'force-cache'})
-    .mBind(validate(HarvardAllArtSchema))
+  allArt: (request: GetAllArtRequest) => searched(request)
     .map(({info, records}: HarvardAllArtResponse): AllArt => ({
       pagination: {
         total: info.totalrecords,
@@ -36,6 +38,8 @@ export const harvard = {
       },
       pieces: records.map(harvardArtToArt)
     })),
+
+  open: () => searched({page: 1}).map(({records}) => records.length > 0),
 
   art: (id: string) => http
     .get(`${harvardDomain}/${id}${toQueryString(baseQueryString)}`, {cache: 'force-cache'})

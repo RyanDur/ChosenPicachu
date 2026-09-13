@@ -41,10 +41,16 @@ const server = createServer((request, response) => {
       tradeProduct: 'BTC-USD',
       tradeHistory: '/trade-history',
       aicDomain: '/aic',
+      aicPictures: '/aic-image',
       harvardDomain: '/harvard',
       harvardAPIKey: 'recorded',
-      vamDomain: '/vam'
+      vamDomain: '/vam',
+      vamPictures: '/vam-image'
     })};`, 'text/javascript', true);
+  }
+
+  if (/^\/(aic|vam)-image\/[^/]+\/info\.json$/.test(url)) {
+    return send(200, '{}', 'application/json', false);
   }
 
   const image = url.match(/^\/vam-image\/(\d+)\/full\/!(\d+),/);
