@@ -72,7 +72,8 @@ jobs:
             --model "$REVIEW_MODEL" \
             --output-format stream-json --verbose \
             --json-schema "$(cat scripts/review/findings.schema.json)" \
-            --allowedTools "Read,Grep,Glob,Bash(git diff:*),Bash(git log:*)" \
+            --agents "$(node scripts/review/agents.mjs)" \
+            --allowedTools "Agent,Read,Grep,Glob,Bash(git diff:*),Bash(git log:*)" \
             --max-turns 80 \
             --no-session-persistence | node scripts/review/narrate.mjs
       - name: Report

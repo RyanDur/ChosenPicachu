@@ -9,6 +9,7 @@ describe('the review narration', () => {
       {type: 'tool_use', name: 'Grep', input: {pattern: 'aria-label', path: 'src'}},
       {type: 'tool_use', name: 'Glob', input: {pattern: 'src/**/*.css'}},
       {type: 'tool_use', name: 'Bash', input: {command: 'git diff abc def'}},
+      {type: 'tool_use', name: 'Agent', input: {subagent_type: 'structure-qa', description: 'review the push for the structure door', prompt: '...'}},
       {type: 'tool_use', name: 'StructuredOutput', input: {findings: [{}, {}, {}]}}
     ));
     expect(told.split('\n')).toEqual([
@@ -16,6 +17,7 @@ describe('the review narration', () => {
       'greps "aria-label" in src',
       'globs src/**/*.css',
       'runs git diff abc def',
+      'asks structure-qa: review the push for the structure door',
       'answers with 3 findings'
     ]);
   });

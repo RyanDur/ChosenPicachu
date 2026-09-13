@@ -9,6 +9,7 @@ const step = ({name, input}) => {
     case 'Grep': return `greps ${JSON.stringify(input.pattern)} in ${input.path ?? '.'}`;
     case 'Glob': return `globs ${input.pattern}`;
     case 'Bash': return `runs ${input.command}`;
+    case 'Agent': return `asks ${input.subagent_type}: ${said(input.description ?? '')}`;
     case 'StructuredOutput': return `answers with ${input.findings?.length ?? 0} findings`;
     default: return `${name} ${JSON.stringify(input).slice(0, 120)}`;
   }

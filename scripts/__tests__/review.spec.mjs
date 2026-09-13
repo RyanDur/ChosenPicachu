@@ -34,7 +34,7 @@ describe('the review prompt', () => {
         expect(prompt).toContain('src/pages/Home/Structure.tsx');
         expect(prompt).toContain('src/pages/Home/Presentation.tsx');
         expect(prompt).toContain('src/pages/Home/DynamicInteraction.tsx');
-        expect(prompt).toContain('Review the whole of src/');
+    expect(prompt).toContain('The scope is the whole of src/');
     });
 
   test('a review of the changes names the two commits to diff', () => {
