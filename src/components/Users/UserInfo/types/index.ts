@@ -57,7 +57,7 @@ export type EmailEdited = Action<FormActions.EMAIL_EDITED> & {
   email: string;
 }
 export type DateOfBirthEdited = Action<FormActions.DATE_OF_BIRTH_EDITED> & {
-  dob: Date;
+  dob?: Date;
 }
 export type HomeAddressEdited = Action<FormActions.HOME_ADDRESS_EDITED> & {
   homeAddress: AddressInfo;

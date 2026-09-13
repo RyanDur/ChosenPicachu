@@ -2,6 +2,7 @@ import {FC, useEffect, useState} from 'react';
 import {has, maybe} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {useEnv} from '@components/Env';
+import {useBanners} from '@components/Banners';
 import {Motion, Origin, Pace} from '../../Controls';
 import './TableFrame.css';
 
@@ -28,6 +29,7 @@ const measured = (frame: HTMLIFrameElement, grown: (height: number) => void): vo
 
 export const TableFrame: FC<Props> = ({pace, origin, motion, veiled = false, onStand = () => undefined}) => {
   const {tradeFeed, tradeHistory, tradeProduct} = useEnv();
+  const {raise} = useBanners();
   const [document, setDocument] = useState<string>();
   const [frame, setFrame] = useState<HTMLIFrameElement>();
   const [height, setHeight] = useState<number>();
@@ -42,11 +44,11 @@ export const TableFrame: FC<Props> = ({pace, origin, motion, veiled = false, onS
       if (standing) {
         setDocument(frameDocument({tradeFeed, tradeHistory, tradeProduct}, {pace, origin, motion}));
       }
-    }).catch(() => undefined);
+    }).catch(() => raise('the table could not be assembled'));
     return () => {
       standing = false;
     };
-  }, [pace, origin, motion, tradeFeed, tradeHistory, tradeProduct]);
+  }, [pace, origin, motion, tradeFeed, tradeHistory, tradeProduct, raise]);
 
   useEffect(() => {
     if (!has(frame)) {

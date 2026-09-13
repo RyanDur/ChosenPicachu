@@ -20,7 +20,7 @@ import {draftOf, formReducer, userOf} from './reducer';
 import {generateAvatar} from './avatars';
 import {Link} from 'react-router';
 import {FancyDateInput} from '@components/FancyFormElements/FancyDateInput';
-import {parse} from 'date-fns';
+import {isValid, parse} from 'date-fns';
 import {Paths} from '@pages/Paths';
 import {useUsersDispatch, useUsersSelector} from '../Provider';
 import {userWithId} from '../store';
@@ -82,7 +82,8 @@ const Draft: FC<FormProps & { currentUser?: User }> = ({currentUser, readOnly = 
     <FancyDateInput id="dob-cell" className="dob" inputId="dob" value={user.info.dob}
                     readOnly={readOnly} required
                     onChange={event => {
-                      dispatch(dateOfBirthEdited(parse(event.currentTarget.value, 'yyyy-MM-dd', new Date())));
+                      const born = parse(event.currentTarget.value, 'yyyy-MM-dd', new Date());
+                      dispatch(dateOfBirthEdited(isValid(born) ? born : undefined));
                     }}>
       Date Of Birth
     </FancyDateInput>

@@ -180,6 +180,16 @@ describe('a user form', () => {
       expect(addressGroup('home').getByLabelText('Postal / Zip code')).not.toBeValid();
     });
 
+    test('clearing the date of birth leaves it empty and wanting', async () => {
+      render(added().form);
+      await userEvent.type(screen.getByLabelText('Date Of Birth'), '1984-06-02');
+
+      await userEvent.clear(screen.getByLabelText('Date Of Birth'));
+
+      expect(screen.getByLabelText('Date Of Birth')).toHaveValue('');
+      expect(screen.getByLabelText('Date Of Birth')).not.toBeValid();
+    });
+
     describe('for a zip code', () => {
       const homeZip = (): HTMLElement => addressGroup('home').getByLabelText('Postal / Zip code');
 

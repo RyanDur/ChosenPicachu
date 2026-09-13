@@ -20,7 +20,7 @@ export const firstNameEdited = (firstName: string): FirstNameEdited => ({
 });
 export const lastNameEdited = (lastName: string): LastNameEdited => ({type: FormActions.LAST_NAME_EDITED, lastName});
 export const emailEdited = (email: string): EmailEdited => ({type: FormActions.EMAIL_EDITED, email});
-export const dateOfBirthEdited = (dob: Date): DateOfBirthEdited => ({type: FormActions.DATE_OF_BIRTH_EDITED, dob});
+export const dateOfBirthEdited = (dob?: Date): DateOfBirthEdited => ({type: FormActions.DATE_OF_BIRTH_EDITED, dob});
 export const homeAddressEdited = (homeAddress: AddressInfo): HomeAddressEdited => ({
   type: FormActions.HOME_ADDRESS_EDITED,
   homeAddress
