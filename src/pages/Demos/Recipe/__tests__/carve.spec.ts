@@ -133,7 +133,7 @@ describe('carving examples out of the source they teach', () => {
     ]);
   });
 
-  test('css rules and keyframes carve the same way', () => {
+  test('a keyframes block carves whole', () => {
     expect(unit(css, '@keyframes displaced-left').map(({text}) => text)).toEqual([
       '@keyframes displaced-left {',
       '    from {',

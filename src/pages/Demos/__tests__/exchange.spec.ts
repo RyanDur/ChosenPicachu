@@ -9,8 +9,7 @@ import {demosStore, feedReleased, feedRequested, selectFeedStatus, selectLiveTra
 describe('the exchange as middleware', () => {
   const coinbase = ws.link('ws://exchange.test');
 
-  it('opens the feed when the feed is requested, dispatches what arrives, and hangs up when the feed is released', async () => {
-    const hungUp: Client[] = [];
+  const coinbaseAnswering = (hungUp: Client[]) =>
     server.use(coinbase.addEventListener('connection', ({client}) => {
       client.addEventListener('message', event => {
         if (typeof event.data === 'string' && event.data.includes('subscribe')) {
@@ -19,14 +18,27 @@ describe('the exchange as middleware', () => {
       });
       client.addEventListener('close', () => hungUp.push(client));
     }));
+
+  it('opens the feed and dispatches what arrives when the feed is requested', async () => {
+    coinbaseAnswering([]);
     const store = demosStore(exchange({tradeFeed: 'ws://exchange.test', tradeHistory: '', tradeProduct: 'BTC-USD'}, () => undefined));
     expect(selectFeedStatus(store.state)).toBe('connecting');
 
     store.dispatch(feedRequested());
+
     await vi.waitFor(() => expect(selectFeedStatus(store.state)).toBe('streaming'));
     await vi.waitFor(() => expect(selectLiveTrades(store.state)).toHaveLength(1));
+  });
+
+  it('hangs up when the feed is released', async () => {
+    const hungUp: Client[] = [];
+    coinbaseAnswering(hungUp);
+    const store = demosStore(exchange({tradeFeed: 'ws://exchange.test', tradeHistory: '', tradeProduct: 'BTC-USD'}, () => undefined));
+    store.dispatch(feedRequested());
+    await vi.waitFor(() => expect(selectFeedStatus(store.state)).toBe('streaming'));
 
     store.dispatch(feedReleased());
+
     await vi.waitFor(() => expect(hungUp).toHaveLength(1));
   });
 

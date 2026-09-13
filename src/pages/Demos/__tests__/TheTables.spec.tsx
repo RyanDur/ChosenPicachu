@@ -49,13 +49,12 @@ describe('the tables demo', () => {
       ['session', '4', '3', '1', '0.41', '$50,001.93', '+$3.00']);
   });
 
-  test('the glider chooses how a dragged column travels', async () => {
+  test('the glider offers a pace, an origin and a motion, eager by default', async () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed();
-    const card = screen.getByRole('region', {name: 'live aggregations'});
     const controls = await tableControls();
     for (const axis of ['pace', 'origin', 'motion']) {
       expect(within(controls).getByRole('group', {name: axis})).toBeVisible();
@@ -66,7 +65,15 @@ describe('the tables demo', () => {
     expect(within(controls).getByRole('radio', {name: 'Eager'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Hide'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Animate'})).toBeChecked();
+  });
 
+  test('a dragged column crosses its neighbour under the pointer', async () => {
+    const feed = await listeningFeed();
+
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+
+    await feedIsSubscribed();
+    const card = screen.getByRole('region', {name: 'live aggregations'});
     const header = (name: string) =>
       within(card).getByRole('columnheader', {name: new RegExp(`^${name}`)});
     const table = within(card).getAllByRole('table')[0];
@@ -220,13 +227,19 @@ describe('the tables demo', () => {
     expect(headers().slice(0, 3)).toEqual(['window', 'buys', 'trades']);
   });
 
-  test('the recipe opens on the need, its stories closed', async () => {
+  test('the recipe opens on the need with its stories closed', async () => {
     const recipe = await dragSortRecipe();
 
     expect(recipe).toBeVisible();
     expect(recipe).toHaveTextContent(/no drag-and-drop library/);
     expect(story(recipe, 'The trader can sort by column')).not.toHaveAttribute('open');
     expect(story(recipe, 'The trader can sort by row')).not.toHaveAttribute('open');
+    expect(recipe).toHaveTextContent(/The sort happens while you drag/);
+  });
+
+  test('the recipe walks from need to design to interpretation', async () => {
+    await dragSortRecipe();
+
     expect(screen.getByRole('heading', {name: 'let’s build this feature'})).toBeVisible();
     expect(screen.getByText(/I watch the market all day/)).toBeVisible();
     expect(screen.getByRole('heading', {name: 'Start with the need, and let it pick the element'})).toBeVisible();
@@ -238,7 +251,6 @@ describe('the tables demo', () => {
     expect(screen.getByRole('complementary', {name: 'what a design cannot tell you'})).toBeVisible();
     expect(screen.getByText(/keep building on your best interpretation/)).toBeVisible();
     expect(screen.getByText(/What you see above is our interpretation of that/)).toBeVisible();
-    expect(recipe).toHaveTextContent(/The sort happens while you drag/);
   });
 
   test('the slices point at their stations', async () => {
@@ -261,6 +273,11 @@ describe('the tables demo', () => {
     ].forEach(([id, holds]) =>
       expect(within(screen.getByRole('list', {name: 'the stations'})).getAllByRole('listitem')
         .filter(station => within(station).queryAllByText(holds).length > 0).map(station => station.id)).toContain(id));
+  });
+
+  test('the recipe links out to the user story', async () => {
+    await dragSortRecipe();
+
     expect(screen.getByRole('link', {name: 'user story'}))
       .toHaveAttribute('href', expect.stringContaining('initialcapacity.io/insights/user-story'));
   });
@@ -297,12 +314,21 @@ describe('the tables demo', () => {
     expect(screen.getByRole('rowheader', {name: 'Widen a column'})).toBeVisible();
   });
 
-  test('opening the sort by column story shows the drag build, its steps closed', async () => {
+  test('opening the sort by column story shows the drag build with its steps closed', async () => {
     const recipe = await dragSortRecipe();
 
     await userEvent.click(within(recipe).getByText(/The trader can sort by column/));
 
     expect(story(recipe, 'The trader can sort by column')).toHaveAttribute('open');
+    expect(reveals(recipe).length).toBeGreaterThan(0);
+    expect(opened(reveals(recipe))).toHaveLength(0);
+  });
+
+  test('the drag build shows the code and links out to it', async () => {
+    const recipe = await dragSortRecipe();
+
+    await userEvent.click(within(recipe).getByText(/The trader can sort by column/));
+
     expect(within(recipe).getByRole('link', {name: /Drag sort list demo/}))
       .toHaveAttribute('href', expect.stringContaining('tab=dragAndDrop'));
     expect(recipe).toHaveTextContent(/touch-action/);
@@ -310,8 +336,6 @@ describe('the tables demo', () => {
     const [definition] = within(recipe).getAllByLabelText('survey');
     expect(definition).toHaveTextContent(/the one measurement taken at the grab/);
     expect(recipe).toHaveTextContent(/export type Store<State, Action>/);
-    expect(reveals(recipe).length).toBeGreaterThan(0);
-    expect(opened(reveals(recipe))).toHaveLength(0);
     expect(recipe).toHaveTextContent(/Commit inside the move/);
     expect(recipe).toHaveTextContent(/Carry the real thing/);
     expect(recipe).toHaveTextContent(/translate: calc\(var\(--seat-x, 0px\) \+ var\(--drift-x, 0px\)\)/);
@@ -385,13 +409,33 @@ describe('the tables demo', () => {
     expect(story(recipe, 'The trader can sort by row')).toBeInTheDocument();
     expect(recipe).not.toHaveTextContent(/Hold the pointer from the lift/);
     expect(within(recipe).queryByRole('radio', {name: 'Lazy'})).toBeNull();
+  });
+
+  test('the keyboard track answers the motion dial', async () => {
+    const feed = await listeningFeed();
+
+    render(<TestApp at={demosAt('?tab=tables&track=keyboard')} feed={feed}/>);
+
+    await feedIsSubscribed();
+    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
+    expect(recipe).toHaveTextContent(/Both parties slide/);
 
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Static'}));
 
     expect(recipe).toHaveTextContent(/Cut on the keypress/);
     expect(recipe).not.toHaveTextContent(/Both parties slide/);
+  });
+
+  test('switching back to the pointer track restores its road', async () => {
+    const feed = await listeningFeed();
+
+    render(<TestApp at={demosAt('?tab=tables&track=keyboard')} feed={feed}/>);
+
+    await feedIsSubscribed();
+    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
 
     await userEvent.click(within(recipe).getByRole('button', {name: 'By pointer'}));
+
     expect(recipe).toHaveTextContent(/Hold the pointer from the lift/);
   });
 
@@ -406,7 +450,7 @@ describe('the tables demo', () => {
     expect(recipe).not.toHaveTextContent(/Hold the pointer from the lift/);
   });
 
-  test('a second tutorial answers the resize', async () => {
+  test('choosing drag resize swaps in the resize tutorial', async () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
@@ -428,8 +472,19 @@ describe('the tables demo', () => {
     expect(screen.queryByRole('region', {name: 'build the drag sort yourself'})).toBeNull();
     expect(screen.queryByRole('region', {name: 'table controls'})).toBeNull();
     expect(screen.getByRole('region', {name: 'the living table'})).toBeVisible();
+  });
+
+  test('choosing drag sort brings the sort tutorial back', async () => {
+    const feed = await listeningFeed();
+
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+
+    await feedIsSubscribed();
+    await userEvent.click(await screen.findByRole('button', {name: 'Drag resize'}));
+    await screen.findByRole('region', {name: 'build the drag resize yourself'});
 
     await userEvent.click(screen.getByRole('button', {name: 'Drag sort'}));
+
     expect(await screen.findByRole('region', {name: 'build the drag sort yourself'})).toBeVisible();
   });
 
@@ -457,7 +512,7 @@ describe('the tables demo', () => {
     expect(screen.getByText('<LazyTable className="keep static"/>')).toBeVisible();
   });
 
-  test('a third tutorial answers the menu', async () => {
+  test('choosing the sort menu swaps in the sort menu tutorial', async () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
@@ -537,7 +592,7 @@ describe('the tables demo', () => {
       await waitFor(() => expect(within(card).queryByRole('table')).not.toBeInTheDocument());
     });
 
-    test('one tutorial stands in both worlds; only the build swaps', async () => {
+    test('the tutorial stands unchanged in the html world', async () => {
       const feed = await listeningFeed();
 
       render(<TestApp at={demosAt('?tab=tables&world=vanilla')} feed={feed}/>);
@@ -545,6 +600,14 @@ describe('the tables demo', () => {
 
       expect(await screen.findByRole('heading', {name: 'The trader can watch the market live, in windows'})).toBeInTheDocument();
       expect(screen.getByText('Drag resize')).toBeInTheDocument();
+    });
+
+    test('only the build under the tutorial swaps', async () => {
+      const feed = await listeningFeed();
+
+      render(<TestApp at={demosAt('?tab=tables&world=vanilla')} feed={feed}/>);
+      await feedIsSubscribed();
+
       expect((await screen.findAllByRole('radio', {name: 'Eager', hidden: true})).length).toBeGreaterThan(0);
       expect(screen.queryByText('The trader can read the market in windows')).not.toBeInTheDocument();
     });

@@ -14,6 +14,10 @@ describe('the frame assembly', () => {
     expect(new Set(names).size).toBe(names.length);
     const everything = sheets.map(({css}) => css).join('\n');
     expect(everything.match(/\.off-screen\s*\{/g)).toHaveLength(1);
+  });
+
+  it('no import survives into the frame', () => {
+    const everything = sheets.map(({css}) => css).join('\n');
     expect(everything.match(/@import/g)).toBeNull();
   });
 
@@ -26,16 +30,23 @@ describe('the frame assembly', () => {
     Object.keys(styleSheets).map(named).forEach(name => expect(manifest).toContain(name));
   });
 
-  it('the document carries the cascade, the starting table, and its environment, with no unresolvable imports', () => {
-    const document = frameDocument(
+  const document = () =>
+    frameDocument(
       {tradeFeed: 'wss://feed.test/', tradeHistory: 'http://history.test', tradeProduct: 'BTC-USD'},
       {pace: 'eager', origin: 'hide', motion: 'animated'});
 
-    sheets.forEach(({css}) => expect(document).toContain(css));
-    expect(document).toContain(tableHtml.replace('class="fancy-table sortable apportioned"', 'class="fancy-table sortable apportioned hide animated"'));
-    expect(document).toContain('"tradeFeed":"wss://feed.test/"');
-    expect(document).toContain('"pace":"eager"');
-    expect(document).toContain('::view-transition-group(*)');
-    expect(document).not.toContain('@import');
+  it('the document carries the whole cascade', () => {
+    sheets.forEach(({css}) => expect(document()).toContain(css));
+    expect(document()).toContain('::view-transition-group(*)');
+    expect(document()).not.toContain('@import');
+  });
+
+  it('the document carries the starting table dressed by the dials', () => {
+    expect(document()).toContain(tableHtml.replace('class="fancy-table sortable apportioned"', 'class="fancy-table sortable apportioned hide animated"'));
+  });
+
+  it('the document carries its environment', () => {
+    expect(document()).toContain('"tradeFeed":"wss://feed.test/"');
+    expect(document()).toContain('"pace":"eager"');
   });
 });

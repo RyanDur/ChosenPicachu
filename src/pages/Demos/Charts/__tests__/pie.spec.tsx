@@ -30,7 +30,7 @@ describe('the pie', () => {
     expect(slices([0, 0])).toEqual([]);
   });
 
-  test('a share opens its gates in degrees, which the compositor can tween', () => {
+  test('a share opens its gates in degrees', () => {
     const [threeQuarters, quarter] = slices([3, 1]);
 
     expect(sweepGates(threeQuarters)).toEqual({opening: 0, closing: 90});
@@ -55,14 +55,22 @@ describe('the pie', () => {
     const card = screen.getByRole('region', {name: 'pie'});
     expect(card).toHaveTextContent('75% bought');
     expect(card).toHaveTextContent('25% sold');
-    expect(card).toHaveTextContent('since you arrived');
   });
 
-  test('a one-sided session opens both gates fully, no special case', () => {
+  test('the card says the session started when the trader arrived', () => {
+    render(<Pie trades={[trade({size: 3, side: 'buy'})]}/>);
+
+    expect(screen.getByRole('region', {name: 'pie'})).toHaveTextContent('since you arrived');
+  });
+
+  test('a one-sided session opens both gates fully', () => {
+    expect(sweepGates(slices([2, 0])[0])).toEqual({opening: 0, closing: 180});
+  });
+
+  test('the card reads a one-sided session as all bought', () => {
     render(<Pie trades={[trade({size: 2, side: 'buy'})]}/>);
 
     const card = screen.getByRole('region', {name: 'pie'});
-    expect(sweepGates(slices([2, 0])[0])).toEqual({opening: 0, closing: 180});
     expect(card).toHaveTextContent('100% bought');
     expect(card).toHaveTextContent('0% sold');
   });

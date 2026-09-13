@@ -1,9 +1,15 @@
 import {absent, added, dealt, seated, without} from '@pages/Demos/Charts/desk';
 
 describe('the desk', () => {
-  test('deals one of each kind, price when empty', () => {
+  test('the desk deals one of each kind', () => {
     expect(dealt('candles,price,price')).toEqual(['candles', 'price']);
+  });
+
+  test('an empty desk deals the price line', () => {
     expect(dealt('')).toEqual(['price']);
+  });
+
+  test('an unknown kind is never dealt', () => {
     expect(dealt('bogus,pie')).toEqual(['pie']);
   });
 

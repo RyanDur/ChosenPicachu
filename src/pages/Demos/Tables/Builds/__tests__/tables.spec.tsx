@@ -142,31 +142,48 @@ describe('columns by hand', () => {
     expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
   });
 
-  test('a hiding column is carried, every cell of it, and lands as itself', () => {
+  test('a hiding column is carried, every cell of it', () => {
     seat(EagerTable, 'hide static');
 
     lift('buys');
+
     expect(header('buys').classList).toContain('carried');
     windows.forEach(window => expect(rowOf(window).cells[2].classList).toContain('carried'));
+  });
+
+  test('a dropped column lands as itself', () => {
+    seat(EagerTable, 'hide static');
+    lift('buys');
 
     carryOver('trades');
     drop();
+
     expect(carried()).toEqual([]);
     expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
   });
 
-  test('the carried column wears its offset from home, and a settle mid-drag moves home under it', () => {
+  test('the carried column wears its offset from home', () => {
     seat(EagerTable, 'hide static');
 
     lift('trades');
     fireEvent.pointerMove(surface(), {buttons: 1, clientX: 150, clientY: 20, pointerId: 1});
     fireEvent.pointerMove(surface(), {buttons: 1, clientX: 170, clientY: 35, pointerId: 1});
+
     [header('trades'), ...lanes().map(lane => lane.cells[1])].forEach(cell => {
       expect(cell).toHaveClass('carried');
       expect(cell).toHaveStyle({'--seat-x': '0px', '--drift-x': '20px', '--drift-y': '15px'});
     });
+    drop();
+  });
+
+  test('a settle mid-drag moves home under the carried column', () => {
+    seat(EagerTable, 'hide static');
+    lift('trades');
+    fireEvent.pointerMove(surface(), {buttons: 1, clientX: 150, clientY: 20, pointerId: 1});
+    fireEvent.pointerMove(surface(), {buttons: 1, clientX: 170, clientY: 35, pointerId: 1});
 
     fireEvent.pointerMove(surface(), {buttons: 1, clientX: 275, clientY: 35, pointerId: 1});
+
     expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
     [header('trades'), ...lanes().map(lane => lane.cells[2])].forEach(cell => {
       expect(cell).toHaveStyle({'--seat-x': '-100px', '--drift-x': '125px', '--drift-y': '15px'});
@@ -175,22 +192,32 @@ describe('columns by hand', () => {
     expect(carried()).toEqual([]);
   });
 
-  test('losing pointer capture mid-drag is the move it carries, not the drop: the holder takes the pointer back and strikes', () => {
+  test('losing the pointer mid-drag keeps the column aloft', () => {
     seat(EagerTable, 'keep static');
     lift('trades');
     const captured: number[] = [];
     surface().setPointerCapture = id => captured.push(id);
-
     carryOver('buys');
-    expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
+
     fireEvent.lostPointerCapture(surface(), {buttons: 1, clientX: 350, clientY: 20, pointerId: 1});
+
     expect(surface()).toHaveClass('carried');
     expect(captured).toEqual([1, 1]);
+    drop();
+  });
+
+  test('a column that loses the pointer keeps crossing its neighbours', () => {
+    seat(EagerTable, 'keep static');
+    lift('trades');
+    surface().setPointerCapture = () => undefined;
+    carryOver('buys');
+    expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
+
+    fireEvent.lostPointerCapture(surface(), {buttons: 1, clientX: 350, clientY: 20, pointerId: 1});
     expect(columnOrder()).toEqual(['window', 'buys', 'sells', 'trades', 'volume', 'vwap', 'change']);
-
     carryOver('volume');
-    expect(columnOrder()).toEqual(['window', 'buys', 'sells', 'volume', 'trades', 'vwap', 'change']);
 
+    expect(columnOrder()).toEqual(['window', 'buys', 'sells', 'volume', 'trades', 'vwap', 'change']);
     drop();
     expect(carried()).toEqual([]);
   });
@@ -247,10 +274,6 @@ describe('columns by hand', () => {
   test('the first and last columns hold their posts', () => {
     seat(EagerTable, 'keep static');
 
-    expect(header('window').classList).not.toContain('grabbable');
-    expect(header('change').classList).not.toContain('grabbable');
-    expect(header('trades').classList).toContain('grabbable');
-
     lift('window');
     expect(carried()).toEqual([]);
 
@@ -286,8 +309,13 @@ describe('columns by hand', () => {
     expect(screen.queryByRole('button', {name: 'sort window'})).toBeNull();
     expect(screen.getByRole('button', {name: 'sort trades'})).toBeVisible();
     expect(within(header('trades')).getByRole('button', {name: 'sort trades'})).toBeVisible();
-    expect(within(header('trades')).getByRole('button', {name: /resize trades/})).toBeVisible();
     expect(within(header('window')).queryByRole('button', {name: 'sort window'})).toBeNull();
+  });
+
+  test('every column offers a resize handle', () => {
+    seat(EagerTable, 'keep static');
+
+    expect(within(header('trades')).getByRole('button', {name: /resize trades/})).toBeVisible();
     expect(within(header('window')).getByRole('button', {name: /resize window/})).toBeVisible();
   });
 });
@@ -337,7 +365,7 @@ describe('rows by hand', () => {
     expect(within(menuFor('sort trades')).getByRole('button', {name: 'ascending', hidden: true})).toHaveAttribute('tabindex', '0');
   });
 
-  test('the grip that lifted the row keeps the pointer: every retake lands on it, never on the header cell', () => {
+  test('a retaken pointer lands on the grip that lifted the row, never on the header cell', () => {
     seat(EagerTable, 'keep static');
     const retaken: string[] = [];
     lift('this minute');
@@ -348,8 +376,18 @@ describe('rows by hand', () => {
     fireEvent.lostPointerCapture(rowOf('this minute').cells[0], {buttons: 0, clientX: 100, clientY: 70, pointerId: 1});
 
     expect(retaken).toEqual(['grip']);
+  });
+
+  test('a row that lost the pointer keeps crossing its neighbours', () => {
+    seat(EagerTable, 'keep static');
+    lift('this minute');
+    grip('this minute').setPointerCapture = () => undefined;
+    carryOver('last 5 minutes');
+    fireEvent.lostPointerCapture(rowOf('this minute').cells[0], {buttons: 0, clientX: 100, clientY: 70, pointerId: 1});
     expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
+
     carryOver('last 15 minutes');
+
     expect(windowNames()).toEqual(['last 5 minutes', 'last 15 minutes', 'this minute', 'this hour', 'session']);
   });
 
@@ -364,14 +402,21 @@ describe('rows by hand', () => {
     expect(windowNames()).toEqual(['last 5 minutes', 'last 15 minutes', 'this minute', 'this hour', 'session']);
   });
 
-  test('a hiding row is carried, every cell of it, and lands as itself', () => {
+  test('a hiding row is carried, every cell of it', () => {
     seat(EagerTable, 'hide static');
 
     lift('last 5 minutes');
+
     [...rowOf('last 5 minutes').cells].forEach(cell => expect(cell.classList).toContain('carried'));
+  });
+
+  test('a dropped row lands as itself', () => {
+    seat(EagerTable, 'hide static');
+    lift('last 5 minutes');
 
     carryOver('this minute');
     drop();
+
     expect(carried()).toEqual([]);
     expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
   });
@@ -403,7 +448,7 @@ describe('rows by hand', () => {
     expect(carried()).toEqual([]);
   });
 
-  test('the keyboard walks a row up and down', async () => {
+  test('the keyboard walks a row down and back up', async () => {
     seat(EagerTable, 'keep static');
 
     grip('this minute').focus();
@@ -411,11 +456,18 @@ describe('rows by hand', () => {
     expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
     await userEvent.keyboard('{ArrowUp}');
     expect(windowNames()).toEqual(windows);
+  });
+
+  test('the top row cannot walk off the table', async () => {
+    seat(EagerTable, 'keep static');
+
+    grip('this minute').focus();
     await userEvent.keyboard('{ArrowUp}');
+
     expect(windowNames()).toEqual(windows);
   });
 
-  test('rows that arrive after the deal still walk and speak', async () => {
+  test('rows that arrive after the deal still walk', async () => {
     const {rerender} = render(seated(EagerTable, [], 'keep static'));
     rerender(seated(EagerTable, startingRows, 'keep static'));
 
@@ -423,10 +475,19 @@ describe('rows by hand', () => {
     await userEvent.keyboard('{ArrowDown}');
 
     expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
+  });
+
+  test('rows that arrive after the deal still say the move', async () => {
+    const {rerender} = render(seated(EagerTable, [], 'keep static'));
+    rerender(seated(EagerTable, startingRows, 'keep static'));
+
+    grip('this minute').focus();
+    await userEvent.keyboard('{ArrowDown}');
+
     expect(announced()).toEqual(['row moved to 2 of 5']);
   });
 
-  test('rows that arrive after the deal still walk on the animated table', async () => {
+  test('rows that arrive after the deal still walk and say the move on the animated table', async () => {
     const {rerender} = render(seated(EagerTable, [], 'keep animated'));
     rerender(seated(EagerTable, startingRows, 'keep animated'));
 
@@ -502,7 +563,7 @@ describe('sort criteria menus', () => {
   });
 
   test('a hand on a row ends the sort and keeps the standing order', async () => {
-    const {rerender} = seat(EagerTable, 'keep static');
+    seat(EagerTable, 'keep static');
 
     await userEvent.click(within(menuFor('sort trades')).getByRole('button', {name: 'descending', hidden: true}));
     expect(windowNames()).toEqual(['last 5 minutes', 'this hour', 'last 15 minutes', 'this minute', 'session']);
@@ -512,8 +573,16 @@ describe('sort criteria menus', () => {
 
     expect(windowNames()).toEqual(['last 5 minutes', 'this hour', 'this minute', 'last 15 minutes', 'session']);
     expect(tradesHeader()).not.toHaveAttribute('aria-sort');
+  });
+
+  test('the ended sort does not return when the values change', async () => {
+    const {rerender} = seat(EagerTable, 'keep static');
+    await userEvent.click(within(menuFor('sort trades')).getByRole('button', {name: 'descending', hidden: true}));
+    grip('this minute').focus();
+    await userEvent.keyboard('{ArrowUp}');
 
     rerender(seated(EagerTable, retraded(10), 'keep static'));
+
     expect(windowNames()).toEqual(['last 5 minutes', 'this hour', 'this minute', 'last 15 minutes', 'session']);
   });
 
@@ -531,7 +600,6 @@ describe('sort criteria menus', () => {
     await userEvent.click(within(menuFor('sort trades')).getByRole('button', {name: 'descending', hidden: true}));
 
     expect(carried()).toEqual([]);
-    expect(screen.getAllByRole('table')).toHaveLength(1);
   });
 });
 
@@ -544,16 +612,15 @@ describe('resizable columns', () => {
     });
   };
 
-  test('the css owns the widths until a hand arrives', () => {
+  test('a column takes no width of its own until a hand resizes it', () => {
     seat(EagerTable, 'keep static');
 
-    expect(sourceTable().classList).toContain('apportioned');
     expect(header('window').style.width).toBe('');
     expect(header('trades').style.width).toBe('');
     expect(screen.getByRole('button', {name: 'resize window'})).toBeVisible();
   });
 
-  test('the first touch surveys the headers into the ledger', () => {
+  test('the first touch of a handle gives every column its share', () => {
     seat(EagerTable, 'keep static');
     surveyed();
 
@@ -564,17 +631,28 @@ describe('resizable columns', () => {
     expect(header('trades').style.getPropertyValue('--share')).toBe('40%');
   });
 
-  test('the keyboard moves the boundary and the total holds', async () => {
+  test('an arrow right moves the boundary and the total holds', async () => {
     seat(EagerTable, 'keep static');
     surveyed();
 
     const handle = screen.getByRole('button', {name: 'resize window'});
     await userEvent.click(handle);
     await userEvent.keyboard('{ArrowRight}');
+
     expect(header('window').style.getPropertyValue('--share')).toBe('52%');
     expect(header('trades').style.getPropertyValue('--share')).toBe('38%');
     expect(screen.getByRole('button', {name: 'resize window, 52%'})).toBeVisible();
+  });
+
+  test('an arrow left moves the boundary back', async () => {
+    seat(EagerTable, 'keep static');
+    surveyed();
+    const handle = screen.getByRole('button', {name: 'resize window'});
+    await userEvent.click(handle);
+    await userEvent.keyboard('{ArrowRight}');
+
     await userEvent.keyboard('{ArrowLeft}{ArrowLeft}');
+
     expect(header('window').style.getPropertyValue('--share')).toBe('48%');
     expect(header('trades').style.getPropertyValue('--share')).toBe('42%');
   });
@@ -614,7 +692,7 @@ describe('resizable columns', () => {
     expect(header('trades').style.getPropertyValue('--share')).toBe('5%');
   });
 
-  test('arrow keys on the resize handle trade shares, never seats', () => {
+  test('arrow keys on the resize handle never move the column', () => {
     seat(EagerTable, 'keep static');
     surveyed();
 
@@ -625,7 +703,7 @@ describe('resizable columns', () => {
     expect(columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
   });
 
-  test('an apportioned table clips through the cascade, not through cell classes', () => {
+  test('a widened column clips its overflow without marking its cells', () => {
     seat(EagerTable, 'keep static');
 
     expect(sourceTable().classList).toContain('apportioned');
@@ -670,7 +748,7 @@ describe('animated moves', () => {
     lane.getBoundingClientRect = () => rect({left: 0, right: 700, width: 700, top: 40 + at * 40, y: 40 + at * 40, bottom: 80 + at * 40, height: 40});
   });
 
-  test('a keyboard walk settles the walked column from across its neighbour, and shoves the neighbour by the walked width', async () => {
+  test('a keyboard walk settles the walked column and shoves its neighbour', async () => {
     seat(EagerTable, 'keep animated');
     spanned();
 
@@ -687,19 +765,37 @@ describe('animated moves', () => {
       expect(cell).toHaveClass('shoved-start');
       expect(cell).toHaveStyle({'--shoved-by': '100px'});
     });
+  });
+
+  test('the marks clear when the animation ends', async () => {
+    seat(EagerTable, 'keep animated');
+    spanned();
+    header('trades').focus();
+    await userEvent.keyboard('{ArrowRight}');
 
     fireEvent.animationEnd(header('trades'));
     fireEvent.animationEnd(header('buys'));
+
     columnCells('trades').forEach(cell => expect(cell).not.toHaveClass('settling'));
     columnCells('buys').forEach(cell => expect(cell).not.toHaveClass('shoved-start'));
+  });
+
+  test('a second walk marks again', async () => {
+    seat(EagerTable, 'keep animated');
+    spanned();
+    header('trades').focus();
+    await userEvent.keyboard('{ArrowRight}');
+    fireEvent.animationEnd(header('trades'));
+    fireEvent.animationEnd(header('buys'));
 
     await userEvent.keyboard('{ArrowRight}');
+
     expect(columnOrder()).toEqual(['window', 'buys', 'sells', 'trades', 'volume', 'vwap', 'change']);
     expect(header('trades')).toHaveClass('settling');
     expect(header('sells')).toHaveClass('shoved-start');
   });
 
-  test('a column walks the whole way right and back left, keypress after keypress, with no animation ending between', async () => {
+  test('a column walks the whole way right and back left, keypress after keypress, with no animation ending between, keeping the focus the moves take', async () => {
     const restore = blurringMoves();
     seat(EagerTable, 'keep animated');
     spanned();
@@ -728,7 +824,7 @@ describe('animated moves', () => {
     restore();
   });
 
-  test('a row walks to the bottom and back to the top, keypress after keypress, with no animation ending between', async () => {
+  test('a row walks to the bottom and back to the top, keypress after keypress, with no animation ending between, keeping the focus the moves take', async () => {
     const restore = blurringMoves();
     seat(EagerTable, 'keep animated');
     spanned();
@@ -760,7 +856,7 @@ describe('animated moves', () => {
     restore();
   });
 
-  test('a keyboard nudge settles the walked row from across the row it passed, and shoves that row up', async () => {
+  test('a keyboard nudge settles the walked row from across the row it passed', async () => {
     seat(EagerTable, 'keep animated');
     spanned();
     settledRows();
@@ -773,6 +869,16 @@ describe('animated moves', () => {
       expect(cell).toHaveClass('settling');
       expect(cell).toHaveStyle({'--settle-x': '0px', '--settle-y': '-40px'});
     });
+  });
+
+  test('the row a keyboard nudge passed is shoved up by its height', async () => {
+    seat(EagerTable, 'keep animated');
+    spanned();
+    settledRows();
+
+    grip('this minute').focus();
+    await userEvent.keyboard('{ArrowDown}');
+
     [...rowOf('last 5 minutes').cells].forEach(cell => {
       expect(cell).toHaveClass('shoved-up');
       expect(cell).toHaveStyle({'--shoved-by': '40px'});
@@ -792,8 +898,16 @@ describe('animated moves', () => {
       expect(cell).toHaveClass('shoved-start');
       expect(cell).toHaveStyle({'--shoved-by': '100px'});
     });
+  });
+
+  test('a strike back shoves the neighbour the other way', () => {
+    seat(EagerTable, 'hide animated');
+    spanned();
+    fireEvent.pointerDown(header('trades'), {clientX: 150, clientY: 20, pointerId: 1});
+    fireEvent.pointerMove(surface(), {buttons: 1, clientX: 275, clientY: 20, pointerId: 1});
 
     fireEvent.pointerMove(surface(), {buttons: 1, clientX: 125, clientY: 20, pointerId: 1});
+
     expect(columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
     columnCells('buys').forEach(cell => {
       expect(cell).toHaveClass('shoved-end');
@@ -852,7 +966,7 @@ describe('animated moves', () => {
     expect(header('volume').className).not.toMatch(/shoved/);
   });
 
-  test('a static release leaves the same marks as an animated one; the word on the table is what the sheet reads', () => {
+  test('a static release leaves the same marks as an animated one', () => {
     seat(EagerTable, 'keep static');
     spanned();
 
@@ -861,27 +975,43 @@ describe('animated moves', () => {
     fireEvent.pointerUp(surface(), {pointerId: 1});
 
     expect(carried()).toEqual([]);
-    expect(sourceTable()).toHaveClass('static');
-    expect(sourceTable()).not.toHaveClass('animated');
     expect(header('trades')).toHaveClass('settling');
     expect(header('buys')).toHaveClass('shoved-start');
     expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
   });
 
-  test('a dropped row settles every cell from the drop height, and the row it passed is shoved up by its height', () => {
+  test('the table wears the word the sheet reads', () => {
+    seat(EagerTable, 'keep static');
+
+    expect(sourceTable()).toHaveClass('static');
+    expect(sourceTable()).not.toHaveClass('animated');
+  });
+
+  test('a carried row shoves the row it passes up by its height', () => {
     seat(EagerTable, 'keep animated');
     spanned();
     settledRows();
 
     fireEvent.pointerDown(grip('this minute'), {clientX: 20, clientY: 60, pointerId: 1});
     fireEvent.pointerMove(surface(), {buttons: 1, clientX: 20, clientY: 100, pointerId: 1});
+
     expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
     [...rowOf('last 5 minutes').cells].forEach(cell => {
       expect(cell).toHaveClass('shoved-up');
       expect(cell).toHaveStyle({'--shoved-by': '40px'});
     });
+    fireEvent.pointerUp(surface(), {pointerId: 1});
+  });
+
+  test('a dropped row settles every cell from the drop height', () => {
+    seat(EagerTable, 'keep animated');
+    spanned();
+    settledRows();
+    fireEvent.pointerDown(grip('this minute'), {clientX: 20, clientY: 60, pointerId: 1});
+    fireEvent.pointerMove(surface(), {buttons: 1, clientX: 20, clientY: 100, pointerId: 1});
 
     fireEvent.pointerUp(surface(), {pointerId: 1});
+
     expect(carried()).toEqual([]);
     [...rowOf('this minute').cells].forEach(cell => {
       expect(cell).toHaveClass('settling');

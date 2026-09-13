@@ -47,7 +47,7 @@ describe('the sortable list demo', () => {
     expect(story(recipe, 'The user can arrange the list from the keyboard')).not.toHaveAttribute('open');
   });
 
-  test('one list answers the dials', async () => {
+  test('the list starts eager, hiding and animated, and says so', async () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
@@ -73,20 +73,27 @@ describe('the sortable list demo', () => {
     expect(seats()).toEqual(['B', 'C', 'A']);
   });
 
-  test('a lazy drag holds its shape and settles on release', async () => {
+  const lazyListWithALifted = async (): Promise<void> => {
     const feed = await listeningFeed();
-
     render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
-
     await feedIsSubscribed();
     const controls = screen.getByRole('region', {name: 'list controls'});
     await userEvent.click(within(controls).getByRole('radio', {name: 'Lazy'}));
-
     lifted('A');
     draggedOver('C', 10);
+  };
+
+  test('a lazy drag holds its shape while it crosses', async () => {
+    await lazyListWithALifted();
+
     expect(seats()).toEqual(['A', 'B', 'C']);
+  });
+
+  test('a lazy drag settles on release', async () => {
+    await lazyListWithALifted();
 
     fireEvent.dragEnd(screen.getByText('A'), {dataTransfer: {dropEffect: 'move'}});
+
     await waitFor(() => expect(seats()).toEqual(['B', 'C', 'A']));
   });
 
@@ -103,7 +110,7 @@ describe('the sortable list demo', () => {
     expect(screen.getByText('<LazyKeepStaticList/>')).toBeVisible();
   });
 
-  test('arrow keys walk an item, and both parties slide', async () => {
+  test('an arrow key walks an item past its neighbour, and back', async () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
@@ -114,12 +121,23 @@ describe('the sortable list demo', () => {
     await userEvent.keyboard('{ArrowRight}');
 
     expect(seats()).toEqual(['B', 'A', 'C']);
-    expect(seatOf('A')).toHaveStyle({'--toward': '-1'});
-    expect(seatOf('B')).toHaveStyle({'--toward': '1'});
 
     screen.getByRole('button', {name: 'grip for A'}).focus();
     await userEvent.keyboard('{ArrowLeft}');
     expect(seats()).toEqual(['A', 'B', 'C']);
+  });
+
+  test('both parties slide toward their new seats', async () => {
+    const feed = await listeningFeed();
+
+    render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
+
+    await feedIsSubscribed();
+    screen.getByRole('button', {name: 'grip for A'}).focus();
+    await userEvent.keyboard('{ArrowRight}');
+
+    expect(seatOf('A')).toHaveStyle({'--toward': '-1'});
+    expect(seatOf('B')).toHaveStyle({'--toward': '1'});
   });
 
   test('an arrow walk says the move', async () => {
@@ -148,27 +166,27 @@ describe('the sortable list demo', () => {
   });
 
   test('a lazy release says the move', async () => {
-    const feed = await listeningFeed();
+    await lazyListWithALifted();
 
-    render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
-
-    await feedIsSubscribed();
-    const controls = screen.getByRole('region', {name: 'list controls'});
-    await userEvent.click(within(controls).getByRole('radio', {name: 'Lazy'}));
-
-    lifted('A');
-    draggedOver('C', 10);
     fireEvent.dragEnd(screen.getByText('A'), {dataTransfer: {dropEffect: 'move'}});
 
     await waitFor(() => expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent('A moved to 3 of 3'));
   });
 
-  test('the recipe opens on the need, both stories told', async () => {
+  test('the recipe opens on the need with both stories listed', async () => {
     const recipe = await nativeRecipe();
 
     expect(recipe).toBeVisible();
     expect(screen.getByRole('heading', {name: 'let’s build this feature'})).toBeVisible();
     expect(screen.getAllByText(/the order is mine/).length).toBeGreaterThan(0);
+    expect(story(recipe, 'The user can arrange the list by hand')).toBeInTheDocument();
+    expect(story(recipe, 'The user can arrange the list from the keyboard')).toBeInTheDocument();
+    expect(recipe).toHaveTextContent(/The list answers as you drag/);
+  });
+
+  test('the recipe walks the stations from need to design to slices', async () => {
+    const recipe = await nativeRecipe();
+
     expect(screen.getByRole('heading', {name: 'Start with the need, and let it pick the element'})).toBeVisible();
     expect(screen.getByRole('rowheader', {name: /pick it up and put it there/})).toBeVisible();
     expect(screen.getByRole('heading', {name: 'Sketch a design from the need'})).toBeVisible();
@@ -187,9 +205,6 @@ describe('the sortable list demo', () => {
     expect(recipe).toHaveTextContent(/Know where the road ends/);
     expect(within(recipe).getByRole('link', {name: 'dataTransfer'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/DataTransfer'));
-    expect(story(recipe, 'The user can arrange the list by hand')).toBeInTheDocument();
-    expect(story(recipe, 'The user can arrange the list from the keyboard')).toBeInTheDocument();
-    expect(recipe).toHaveTextContent(/The list answers as you drag/);
   });
 
   test('the slices point at their station', async () => {
@@ -215,17 +230,26 @@ describe('the sortable list demo', () => {
       .toHaveAttribute('href', expect.stringContaining('tab=tables'));
   });
 
-  test('the recipe teaches the native road as the dials sit', async () => {
+  const byHandStoryDialledLazyKeep = async (): Promise<HTMLElement> => {
     const recipe = await nativeRecipe();
     await userEvent.click(within(recipe).getByText(/The user can arrange the list by hand/));
-
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Lazy'}));
     await userEvent.click(within(recipe).getByRole('radio', {name: 'Keep'}));
+    return recipe;
+  };
+
+  test('the recipe teaches whatever the dials are set to', async () => {
+    const recipe = await byHandStoryDialledLazyKeep();
 
     expect(recipe).toHaveTextContent(/Stash the landing, settle after the drag/);
     expect(recipe).toHaveTextContent(/Leave the origin standing/);
     expect(recipe).toHaveTextContent(/Glide the settle, one tick after/);
     expect(recipe).not.toHaveTextContent(/Commit inside the crossing/);
+  });
+
+  test("turning a dial in the recipe turns the list's own controls", async () => {
+    await byHandStoryDialledLazyKeep();
+
     const controls = screen.getByRole('region', {name: 'list controls'});
     expect(within(controls).getByRole('radio', {name: 'Lazy'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Keep'})).toBeChecked();

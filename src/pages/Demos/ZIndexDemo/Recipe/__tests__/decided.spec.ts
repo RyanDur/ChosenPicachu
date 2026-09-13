@@ -13,11 +13,11 @@ describe('the decided-world fragments still tell the truth of Banners.css', () =
     ...declarationsOf(slotOpening),
     ...declarationsOf(closingSlot),
     ...declarationsOf(closingTransition)
-  ])('%s: %s', (_choice, declaration) => {
+  ])('the %s banner wears the declaration Banners.css gives it: %s', (_choice, declaration) => {
     expect(bannersCss).toContain(declaration);
   });
 
-  test.each(declarationsOf(ownedGap))('owned gap for %s', (_choice, rule) => {
+  test.each(declarationsOf(ownedGap))('the %s stack owns its gap, as Banners.css writes it', (_choice, rule) => {
     const [selector, declaration] = rule.split(' { ');
     expect(bannersCss).toContain(selector.replace('.trouble', '.trouble:where('));
     expect(bannersCss).toContain(declaration.replace(' }', ''));

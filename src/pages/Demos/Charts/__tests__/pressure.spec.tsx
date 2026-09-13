@@ -46,8 +46,11 @@ describe('pressure', () => {
     expect(card).toHaveTextContent('-2 BTC');
   });
 
-  test('the axis speaks tiny sizes instead of rounding them to nothing', () => {
+  test('a size under a whole unit keeps its digits', () => {
     expect(bitcoin(0.0042)).toBe('0.0042 BTC');
+  });
+
+  test('a larger size rounds to one decimal', () => {
     expect(bitcoin(12.63)).toBe('12.6 BTC');
     expect(bitcoin(0)).toBe('0 BTC');
   });

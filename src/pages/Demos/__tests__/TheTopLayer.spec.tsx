@@ -16,22 +16,31 @@ const openZIndexTab = async () => {
 };
 
 describe('the top layer', () => {
-  test('the user raises a banner from the demo, and dismisses it', async () => {
+  test('the user raises a banner from the demo', async () => {
     await openZIndexTab();
     const alert = screen.getByRole('alert', {hidden: true});
     const alreadyStanding = troublesIn(alert).length;
 
     await userEvent.click(await screen.findByRole('button', {name: 'raise a banner'}));
 
+    expect(troublesIn(alert)).toHaveLength(alreadyStanding + 1);
+  });
+
+  test('a dismissed banner leaves the pile', async () => {
+    await openZIndexTab();
+    const alert = screen.getByRole('alert', {hidden: true});
+    const alreadyStanding = troublesIn(alert).length;
+    await userEvent.click(await screen.findByRole('button', {name: 'raise a banner'}));
     const raised = troublesIn(alert);
-    expect(raised).toHaveLength(alreadyStanding + 1);
     const newest = raised[raised.length - 1];
     const item = within(alert).getAllByRole('listitem', {hidden: true}).find(standing => standing.contains(newest));
     if (!item) {
       throw new Error('the raised trouble stands in no list item');
     }
+
     await userEvent.click(newest);
     fireEvent.transitionEnd(item, {propertyName: 'grid-template-rows'});
+
     expect(troublesIn(alert)).toHaveLength(alreadyStanding);
   });
 
@@ -58,7 +67,7 @@ describe('the top layer', () => {
     expect(screen.queryByText('The news travels, and the pile makes room')).not.toBeInTheDocument();
   });
 
-  test('the dials move the panel, turn its entrance, and explain themselves', async () => {
+  test('the dials explain themselves and say their url', async () => {
     await openZIndexTab();
     const controls = await screen.findByRole('region', {name: 'banner controls'});
 
@@ -82,7 +91,13 @@ describe('the top layer', () => {
     expect(screen.getByText(/the slot is a column/)).toBeInTheDocument();
   });
 
-  test('the cards start stacked, and the button offers to spread them', async () => {
+  test('the cards start stacked', async () => {
+    await openZIndexTab();
+
+    expect(await screen.findByRole('button', {name: 'Expand', expanded: false})).toBeInTheDocument();
+  });
+
+  test('the button spreads the cards and offers to collapse them', async () => {
     await openZIndexTab();
 
     const spread = await screen.findByRole('button', {name: 'Expand', expanded: false});

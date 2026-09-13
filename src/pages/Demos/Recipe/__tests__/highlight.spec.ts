@@ -4,7 +4,7 @@ const kinds = (label: 'HTML' | 'CSS' | 'TS', line: string): Record<string, Kind>
   Object.fromEntries(highlight(label, line).filter(({kind}) => kind !== 'plain').map(({text, kind}) => [text, kind]));
 
 describe('the code voice', () => {
-  it('reads a JSX line the way an editor does: tags, props, strings, and calls', () => {
+  it('reads a JSX line the way an editor does: tags, props and strings', () => {
     const line = `    trades: <DraggableColumn key="trades" name="trades">trades<SortMenu column="trades"/></DraggableColumn>,`;
 
     const found = kinds('TS', line);
@@ -17,7 +17,7 @@ describe('the code voice', () => {
     expect(found['"trades"']).toBe('string');
   });
 
-  it('reads a TS line: keywords, types and calls; the brackets stay plain', () => {
+  it('reads a TS line as keywords, types and calls', () => {
     const line = `export const columns = useTableSelector(selectColumns<Measured, Measures>);`;
 
     const found = kinds('TS', line);
@@ -27,17 +27,27 @@ describe('the code voice', () => {
     expect(found.useTableSelector).toBe('call');
     expect(found.Measured).toBe('type');
     expect(found.Measures).toBe('type');
+  });
+
+  it('brackets stay plain', () => {
+    const found = kinds('TS', `export const columns = useTableSelector(selectColumns<Measured, Measures>);`);
+
     expect(found['(']).toBeUndefined();
   });
 
-  it('types after a colon and generics on a type alias are types', () => {
+  it('generics on a type alias are types', () => {
     const found = kinds('TS', `export type Column<C> = {readonly name: string; readonly width?: number; readonly data: C};`);
 
     expect(found.Column).toBe('type');
+  });
+
+  it('readonly is a keyword', () => {
+    const found = kinds('TS', `export type Column<C> = {readonly name: string; readonly width?: number; readonly data: C};`);
+
     expect(found.readonly).toBe('keyword');
   });
 
-  it('a CSS line names its property, its call, and its number', () => {
+  it('a CSS line names its property and its call', () => {
     const found = kinds('CSS', `  padding-inline-start: var(--base-x-1_25);`);
 
     expect(found['padding-inline-start']).toBe('attribute');

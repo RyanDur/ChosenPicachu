@@ -107,16 +107,19 @@ describe('array helpers', () => {
         .toEqual([[item]]);
     });
 
-    test('the item is taken out, and a row emptied by it is dropped', () => {
-      expect(array.removeFromGrid(item, [[item]])).toEqual([]);
-
+    test('the item is taken out of its row', () => {
       const text = faker.lorem.text();
       expect(array.removeFromGrid(item, [[text, item]])).toEqual([[text]]);
 
-      expect(array.removeFromGrid(item, [[text], [item]])).toEqual([[text]]);
-
       const otherText = faker.lorem.text();
       expect(array.removeFromGrid(item, [[text], [otherText, item]])).toEqual([[text], [otherText]]);
+    });
+
+    test('a row emptied by the removal is dropped', () => {
+      expect(array.removeFromGrid(item, [[item]])).toEqual([]);
+
+      const text = faker.lorem.text();
+      expect(array.removeFromGrid(item, [[text], [item]])).toEqual([[text]]);
     });
   });
 
@@ -159,13 +162,15 @@ describe('array helpers', () => {
         .toEqual([[text], [item, otherText]]);
     });
 
-    test('the item lands at the end of its row, and a row past the last is added', () => {
+    test('the item lands at the end of its row', () => {
       expect(array.addToGrid(0, 1, item, [[text]]))
         .toEqual([[text, item]]);
 
       expect(array.addToGrid(1, 1, item, [[text], [otherText]]))
         .toEqual([[text], [otherText, item]]);
+    });
 
+    test('a row past the last is added', () => {
       expect(array.addToGrid(1, 1, item, [[text]]))
         .toEqual([[text], [item]]);
 
@@ -174,7 +179,9 @@ describe('array helpers', () => {
 
       expect(array.addToGrid(300, 1, item, [[text], [otherText]]))
         .toEqual([[text], [otherText], [item]]);
+    });
 
+    test('a row before the first is clamped to the first', () => {
       expect(array.addToGrid(-1, 1, item, [[text]]))
         .toEqual([[text, item]]);
 
