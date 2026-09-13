@@ -31,3 +31,5 @@ playwright-report/
 
 review.json
 review-comment.md
+journeys.json
+smoke.json

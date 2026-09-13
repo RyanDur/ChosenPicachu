@@ -141,7 +141,12 @@ jobs:
           name: dist
           path: ./dist
       - name: Walk the journeys on the stub stage
-        run: npx playwright test --reporter=line
+        env:
+          PLAYWRIGHT_JSON_OUTPUT_NAME: journeys.json
+        run: npx playwright test --reporter=line,json
+      - name: Read the journeys in the run
+        if: always() && hashFiles('journeys.json') != ''
+        run: node scripts/playwright/summary.mjs journeys journeys.json >> "$GITHUB_STEP_SUMMARY"
 
   smoke:
     needs: pages
@@ -161,7 +166,12 @@ jobs:
       - name: Install browser
         run: npx playwright install --with-deps chromium firefox webkit
       - name: Smoke the deployed site
-        run: npx playwright test --config=playwright.smoke.config.ts
+        env:
+          PLAYWRIGHT_JSON_OUTPUT_NAME: smoke.json
+        run: npx playwright test --config=playwright.smoke.config.ts --reporter=line,json
+      - name: Read the smoke in the run
+        if: always() && hashFiles('smoke.json') != ''
+        run: node scripts/playwright/summary.mjs smoke smoke.json >> "$GITHUB_STEP_SUMMARY"
 
   lighthouse:
     needs: build_test
