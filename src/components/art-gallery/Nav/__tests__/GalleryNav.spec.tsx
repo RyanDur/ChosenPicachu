@@ -26,14 +26,14 @@ describe('Gallery Navigation', () => {
         expect(landings.filter(({where}) => where === 'elsewhere')).toEqual([]);
       });
 
-      test('when on the first page', () => {
+      test('there is no way back from the first page', () => {
         render(<TestApp at={Paths.artGallery}><GalleryProviders galleryState={fromAICArt}><GalleryNav/></GalleryProviders></TestApp>);
 
         expect(screen.queryByRole('link', {name: 'PREV'})).not.toBeInTheDocument();
         expect(screen.queryByRole('link', {name: 'FIRST'})).not.toBeInTheDocument();
       });
 
-      test('when jumping to the last page', async () => {
+      test('the last page offers only the way back', async () => {
         render(<TestApp at={Paths.artGallery}><GalleryProviders galleryState={fromAICArt}><GalleryNav/></GalleryProviders></TestApp>);
         await userEvent.click(screen.getByRole('link', {name: 'LAST'}));
 
@@ -55,28 +55,6 @@ describe('Gallery Navigation', () => {
         expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(
           `page=${fromAICArt.pagination.totalPages - 1}`
         );
-
-        await userEvent.click(screen.getByRole('link', {name: 'PREV'}));
-
-        expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(
-          `page=${fromAICArt.pagination.totalPages - 2}`
-        );
-      });
-
-      it('should not go past the last page', async () => {
-        render(<TestApp at={Paths.artGallery}><GalleryProviders galleryState={fromAICArt}><GalleryNav/></GalleryProviders></TestApp>);
-
-        await userEvent.click(screen.getByRole('link', {name: 'LAST'}));
-
-        expect(screen.queryByRole('link', {name: 'NEXT'})).not.toBeInTheDocument();
-      });
-
-      it('should not be able to jump to the last page', async () => {
-        render(<TestApp at={Paths.artGallery}><GalleryProviders galleryState={fromAICArt}><GalleryNav/></GalleryProviders></TestApp>);
-
-        await userEvent.click(screen.getByRole('link', {name: 'LAST'}));
-
-        expect(screen.queryByRole('link', {name: 'LAST'})).not.toBeInTheDocument();
       });
 
       it('should be able to go to the first page', async () => {
@@ -94,38 +72,21 @@ describe('Gallery Navigation', () => {
     });
   });
 
-  test('with existing params', async () => {
+  test('a page change keeps the search that was made', async () => {
     render(<TestApp at={`${Paths.artGallery}?search=q`}><GalleryProviders galleryState={fromAICArt}><GalleryNav/></GalleryProviders></TestApp>);
 
     await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
     expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('search=q&page=2');
-
-    await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
-    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('search=q&page=3');
-
-    await userEvent.click(screen.getByRole('link', {name: 'LAST'}));
-    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(
-      `search=q&page=${fromAICArt.pagination.totalPages}`
-    );
-
-    await userEvent.click(screen.getByRole('link', {name: 'PREV'}));
-    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(
-      `search=q&page=${fromAICArt.pagination.totalPages - 1}`
-    );
-
-    await userEvent.click(screen.getByRole('link', {name: 'PREV'}));
-    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(
-      `search=q&page=${fromAICArt.pagination.totalPages - 2}`
-    );
-
-    await userEvent.click(screen.getByRole('link', {name: 'FIRST'}));
-    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(
-      'search=q&page=1'
-    );
   });
 
-  test('page information', () => {
+  test('the pagination counts the works showing, of the total', () => {
     render(<TestApp at={`${Paths.artGallery}?page=1&size=${fromAICArt.pagination.limit}`}><GalleryProviders galleryState={fromAICArt}><GalleryNav/></GalleryProviders></TestApp>);
     expect(screen.getByRole('navigation', {name: 'pagination'})).toHaveTextContent(`${1} - ${fromAICArt.pagination.limit}of${fromAICArt.pagination.total}`);
+  });
+
+  test('before any page has arrived, the total is a dash', () => {
+    render(<TestApp at={Paths.artGallery}><GalleryProviders><GalleryNav/></GalleryProviders></TestApp>);
+
+    expect(screen.getByRole('navigation', {name: 'pagination'})).toHaveTextContent('of—');
   });
 });

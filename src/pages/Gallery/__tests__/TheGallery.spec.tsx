@@ -6,6 +6,9 @@ import {Paths} from '@pages/Paths';
 import userEvent from '@testing-library/user-event';
 import {AICArtResponse} from '@components/art-gallery/museums/aic/types';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
+import {delay, http, HttpResponse} from 'msw';
+import {server} from '@test-support/server';
+import {env} from '@env';
 import {
   delayAICPictures,
   delayVAMPictures,
@@ -170,5 +173,22 @@ describe('The gallery.', () => {
     expect(await screen.findByAltText('no museum is open')).toBeInTheDocument();
     expect(screen.queryByRole('navigation', {name: 'museums'})).not.toBeInTheDocument();
     expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument();
+  });
+
+  test('the count of works stays while the next page loads', async () => {
+    setupAICAllArtResponse(aicArtResponse);
+    server.use(http.get(`${env.aicDomain}/search`, async ({request}) => {
+      if (new URL(request.url).searchParams.get('page') !== '2') return undefined;
+      await delay(150);
+      return HttpResponse.json(aicArtResponse);
+    }));
+    render(<TestApp at={Paths.artGallery}/>);
+    await screen.findAllByRole('figure');
+
+    await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
+
+    await screen.findByRole('progressbar', {name: 'loading gallery'});
+    expect(screen.getByRole('navigation', {name: 'pagination'})).toHaveTextContent(`of${aicArtResponse.pagination.total}`);
+    await waitFor(() => expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument());
   });
 });
