@@ -1,4 +1,4 @@
-import {has} from '@ryandur/sand';
+import {has, maybe} from '@ryandur/sand';
 import {
   Children,
   FC,
@@ -42,8 +42,15 @@ const routed = (children: ReactNode): boolean =>
 
 const pathOf = (at: string): string => new URL(at, 'http://test').pathname;
 
+const roomAt = (at: string): RouteObject | undefined =>
+  router.children.find((room: RouteObject) => room.path === pathOf(at));
+
 const routesAt = (at: string, children: ReactNode): RouteObject[] =>
-  routed(children) ? createRoutesFromElements(children) : [{path: pathOf(at), element: children}];
+  routed(children)
+    ? createRoutesFromElements(children)
+    : maybe(roomAt(at))
+      .map(({path, errorElement, handle}): RouteObject[] => [{path, errorElement, handle, element: children}])
+      .orElse([{path: pathOf(at), element: children}]);
 
 export const TestApp: FC<Props> = ({at = '/', feed, children}) => {
   const [memory] = useState(() => createMemoryRouter([{

@@ -1,4 +1,3 @@
-import {GalleryProviders} from '@pages/Gallery';
 import {TestApp} from '@test-support/TestApp';
 import {fireEvent, render, screen} from '@testing-library/react';
 import {Image} from '@components/art-gallery/Image';
@@ -19,14 +18,14 @@ describe('the image', () => {
   };
 
   test('on loading', () => {
-    render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><GalleryProviders><Image piece={piece}/></GalleryProviders></TestApp>);
+    render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><Image piece={piece}/></TestApp>);
 
     expect(screen.getByRole('progressbar', {name: 'loading'})).toBeInTheDocument();
     expect(screen.queryByAltText('oops')).not.toBeInTheDocument();
   });
 
   test('when image loaded', () => {
-    render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><GalleryProviders><Image piece={piece}/></GalleryProviders></TestApp>);
+    render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><Image piece={piece}/></TestApp>);
 
     fireEvent.load(screen.getByAltText(piece.altText));
 
@@ -36,7 +35,7 @@ describe('the image', () => {
   });
 
   test('when choosing an image', async () => {
-    render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><GalleryProviders><Image piece={piece}/></GalleryProviders></TestApp>);
+    render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><Image piece={piece}/></TestApp>);
 
     fireEvent.load(screen.getByAltText(piece.altText));
     await userEvent.click(screen.getByAltText(piece.altText));
@@ -45,7 +44,7 @@ describe('the image', () => {
   });
 
   test('on image load error', () => {
-    render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><GalleryProviders><Image piece={piece}/></GalleryProviders></TestApp>);
+    render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><Image piece={piece}/></TestApp>);
 
     fireEvent.error(screen.getByAltText(piece.altText));
 
@@ -55,7 +54,7 @@ describe('the image', () => {
   });
 
   test('without an image', () => {
-    render(<TestApp at={`${Paths.artGallery}?page=3&tab=${Source.AIC}`}><GalleryProviders><Image piece={{...piece, image: undefined}}/></GalleryProviders></TestApp>);
+    render(<TestApp at={`${Paths.artGallery}?page=3&tab=${Source.AIC}`}><Image piece={{...piece, image: undefined}}/></TestApp>);
 
     expect(screen.getByAltText('oops')).toBeInTheDocument();
     expect(screen.queryByRole('progressbar', {name: 'loading'})).not.toBeInTheDocument();
@@ -63,7 +62,7 @@ describe('the image', () => {
   });
 
   test('when the image is disabled', async () => {
-    render(<TestApp at={`${Paths.artGallery}?page=3&tab=${Source.AIC}`}><GalleryProviders><Image piece={piece} linkEnabled={false}/></GalleryProviders></TestApp>);
+    render(<TestApp at={`${Paths.artGallery}?page=3&tab=${Source.AIC}`}><Image piece={piece} linkEnabled={false}/></TestApp>);
 
     fireEvent.load(screen.getByAltText(piece.altText));
     const landings = await landingsDuring(() => userEvent.click(screen.getByAltText(piece.altText)));

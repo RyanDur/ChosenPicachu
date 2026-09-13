@@ -41,6 +41,12 @@ export const slowAICAllArtResponse = (response: AICAllArtResponse, options: AllA
     return HttpResponse.json(response);
   }));
 
+export const setupAICEveryPage = (response: AICAllArtResponse) =>
+  server.use(http.get(`${aicDomain}/search`, ({request}) => {
+    const page = Number(new URL(request.url).searchParams.get('page'));
+    return HttpResponse.json({...response, pagination: {...response.pagination, current_page: page}});
+  }));
+
 export const setupHarvardAllArtResponse = (response: HarvardAllArtResponse, limit = defaultRecordLimit) =>
   server.use(http.get(harvardDomain, ({request}) =>
     paramsMatch(request, {

@@ -1,45 +1,54 @@
-import {GalleryProviders} from '@pages/Gallery';
 import {TestApp} from '@test-support/TestApp';
 import userEvent from '@testing-library/user-event';
 import {render, screen, waitFor} from '@testing-library/react';
-import {fromAICArt} from '@test-support/fixtures';
-import {PageControl} from '@components/art-gallery/PageControl';
+import {aicArtResponse} from '@test-support/fixtures';
 import {Paths} from '@pages/Paths';
 import {atTheTop, landingsDuring} from '@test-support/landings';
+import {setupAICEveryPage} from '@components/art-gallery/__tests__/galleryApiTestHelper';
+
+const wallHangs = () => screen.findAllByRole('figure');
 
 describe('The page controls', () => {
   describe('going to a specific page', () => {
     test('going to a page lands at its top, and clears the field', async () => {
-      const pageNumber = '3';
+      setupAICEveryPage(aicArtResponse);
+      render(<TestApp at={Paths.artGallery}/>);
+      await wallHangs();
 
-      render(<TestApp at={Paths.artGallery}><GalleryProviders><PageControl/></GalleryProviders></TestApp>);
       const landings = await landingsDuring(async () => {
-        await userEvent.type(screen.getByLabelText(/Page #/), pageNumber);
+        await userEvent.type(screen.getByLabelText(/Page #/), '3');
         await userEvent.click(screen.getByRole('button', {name: 'Go'}));
 
         await waitFor(() =>
-          expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(`?page=${pageNumber}`));
+          expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('page=3'));
       });
 
-      expect(screen.getByLabelText(/Page #/)).not.toHaveValue(+pageNumber);
+      expect(screen.getByLabelText(/Page #/)).not.toHaveValue(3);
       expect(landings).toContainEqual(atTheTop('main'));
     });
 
-    it('should not allow a user to go to a page lower than the first', () => {
-      render(<TestApp at={Paths.artGallery}><GalleryProviders><PageControl/></GalleryProviders></TestApp>);
+    it('should not allow a user to go to a page lower than the first', async () => {
+      setupAICEveryPage(aicArtResponse);
+      render(<TestApp at={Paths.artGallery}/>);
+      await wallHangs();
+
       expect(screen.getByLabelText(/Page #/)).toHaveAttribute('min', '1');
     });
 
     it('should not allow a user to go to a page higher than the last', async () => {
-      render(<TestApp at={Paths.artGallery}><GalleryProviders galleryState={fromAICArt}><PageControl/></GalleryProviders></TestApp>);
-      expect(await screen.findByLabelText(/Page #/))
-        .toHaveAttribute('max', `${fromAICArt.pagination.totalPages}`);
+      setupAICEveryPage(aicArtResponse);
+      render(<TestApp at={Paths.artGallery}/>);
+      await wallHangs();
+
+      expect(screen.getByLabelText(/Page #/)).toHaveAttribute('max', `${aicArtResponse.pagination.total_pages}`);
     });
   });
 
   describe('changing the number of elements', () => {
     it('should allow the user to change the elements per page', async () => {
-      render(<TestApp at={Paths.artGallery}><GalleryProviders><PageControl/></GalleryProviders></TestApp>);
+      setupAICEveryPage(aicArtResponse);
+      render(<TestApp at={Paths.artGallery}/>);
+      await wallHangs();
 
       await userEvent.type(screen.getByLabelText(/Per Page/), '45');
       await userEvent.click(screen.getByRole('button', {name: 'Go'}));

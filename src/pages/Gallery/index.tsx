@@ -6,7 +6,6 @@ import {Header} from '@pages/BasePage/Header';
 import {GalleryLinks} from '@components/art-gallery/Links';
 import {GalleryContext} from '@components/art-gallery/Art/Context';
 import {ArtPieceContext, useArtPiece} from '@components/art-gallery/ArtPiece/Context';
-import {AllArt, Art} from '@components/art-gallery/museums/types/response';
 import {GalleryPaths} from './GalleryRouter/GalleryPaths';
 
 import {ArtGalleryPage} from './ArtGalleryPage';
@@ -15,15 +14,10 @@ import {Search} from '@components/art-gallery/Search';
 import {PageControl} from '@components/art-gallery/PageControl';
 import {GalleryNav} from '@components/art-gallery/Nav';
 
-type Provided = PropsWithChildren<{
-  readonly galleryState?: AllArt;
-  readonly pieceState?: Partial<Art>;
-}>;
-
-export const GalleryProviders: FC<Provided> = ({galleryState, pieceState, children}) =>
+const GalleryProviders: FC<PropsWithChildren> = ({children}) =>
   <GalleryLinks.Provider value={{gallery: Paths.artGallery}}>
-    <GalleryContext galleryState={galleryState}>
-      <ArtPieceContext pieceState={pieceState}>{children}</ArtPieceContext>
+    <GalleryContext>
+      <ArtPieceContext>{children}</ArtPieceContext>
     </GalleryContext>
   </GalleryLinks.Provider>;
 

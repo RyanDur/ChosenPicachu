@@ -9,15 +9,13 @@ export type GalleryContextState = {
   reset: Consumer<void>;
 }
 
-const useGalleryContext = (defaultArt?: AllArt): GalleryContextState => {
-  const [art, updateArt] = useState<AllArt | undefined>(defaultArt);
+const useGalleryContext = (): GalleryContextState => {
+  const [art, updateArt] = useState<AllArt>();
   const reset = useCallback(() => updateArt(undefined), []);
   return useMemo(() => ({art, updateArt, reset}), [art, reset]);
 };
 
-export const GalleryContext: FC<PropsWithChildren & Partial<{
-  galleryState: AllArt
-}>> = ({galleryState, children}) =>
-  <Context.Provider value={useGalleryContext(galleryState)}>
+export const GalleryContext: FC<PropsWithChildren> = ({children}) =>
+  <Context.Provider value={useGalleryContext()}>
     {children}
   </Context.Provider>;

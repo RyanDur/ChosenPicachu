@@ -1,4 +1,3 @@
-import {GalleryProviders} from '@pages/Gallery';
 import {TestApp} from '@test-support/TestApp';
 import {anyRequestFailsToConnect} from '@test-support/server';
 import {server} from '@test-support/server';
@@ -49,7 +48,7 @@ describe('The gallery.', () => {
 
   test('when there is no art to show', async () => {
     setupAICAllArtResponse({...aicArtResponse, data: []}, {page: 0, search: 'g', limit: 8});
-    render(<TestApp at={`${Paths.artGallery}?page=0&search=g&size=8&tab=${Source.AIC}`}><GalleryProviders><ArtGallery/></GalleryProviders></TestApp>);
+    render(<TestApp at={`${Paths.artGallery}?page=0&search=g&size=8&tab=${Source.AIC}`}><ArtGallery/></TestApp>);
 
     expect(await screen.findByAltText('empty gallery')).toBeInTheDocument();
     expect(screen.queryByRole('figure')).not.toBeInTheDocument();
@@ -59,7 +58,7 @@ describe('The gallery.', () => {
   test('when the art has errored', async () => {
     anyRequestFailsToConnect();
 
-    render(<TestApp at={`${Paths.artGallery}?page=23&search=g&size=8&tab=${Source.HARVARD}`}><GalleryProviders><ArtGallery/></GalleryProviders></TestApp>);
+    render(<TestApp at={`${Paths.artGallery}?page=23&search=g&size=8&tab=${Source.HARVARD}`}><ArtGallery/></TestApp>);
 
     expect(await screen.findByAltText('empty gallery')).toBeInTheDocument();
     expect(screen.queryByRole('figure')).not.toBeInTheDocument();

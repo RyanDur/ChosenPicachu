@@ -1,11 +1,8 @@
-import {GalleryProviders} from '@pages/Gallery';
 import {TestApp} from '@test-support/TestApp';
-import {Route} from 'react-router';
 import {anyRequestRespondsWith, server} from '@test-support/server';
 import {delay, http, HttpResponse} from 'msw';
 import {env} from '@env';
 import {render, screen, waitFor, within} from '@testing-library/react';
-import {ArtPiece} from '@components/art-gallery';
 import {HTTPError} from '@transport/types';
 import {faker} from '@faker-js/faker';
 import {Paths} from '@pages/Paths';
@@ -30,7 +27,7 @@ describe('viewing a piece', () => {
       return HttpResponse.json(aicArtResponse);
     }));
 
-    render(<TestApp at={`${Paths.artGallery}${aicArtResponse.data.id}?tab=${Source.AIC}`}><Route path={Paths.artGalleryPiece} element={<GalleryProviders><ArtPiece/></GalleryProviders>}/></TestApp>);
+    render(<TestApp at={`${Paths.artGallery}${aicArtResponse.data.id}?tab=${Source.AIC}`}/>);
 
     expect(await screen.findByRole('progressbar', {name: 'loading piece'})).toBeInTheDocument();
     await waitFor(() => expect(screen.queryByRole('progressbar', {name: 'loading piece'})).not.toBeInTheDocument());
@@ -40,7 +37,7 @@ describe('viewing a piece', () => {
   test('when the art piece is loaded', async () => {
     setupAICArtPieceResponse(aicArtResponse, aicArtResponse.data.id);
 
-    render(<TestApp at={`${Paths.artGallery}${aicArtResponse.data.id}?tab=${Source.AIC}`}><Route path={Paths.artGalleryPiece} element={<GalleryProviders><ArtPiece/></GalleryProviders>}/></TestApp>);
+    render(<TestApp at={`${Paths.artGallery}${aicArtResponse.data.id}?tab=${Source.AIC}`}/>);
 
     expect(await screen.findByText(aicArtResponse.data.artist_display)).toBeInTheDocument();
     await waitFor(() => expect(screen.queryByAltText('Load Error')).not.toBeInTheDocument());
@@ -48,7 +45,7 @@ describe('viewing a piece', () => {
 
   test('when getting the piece has errored', async () => {
     anyRequestRespondsWith(HTTPError.SERVER_ERROR, 500);
-    render(<TestApp at={`${Paths.artGallery}1234`}><Route path={`${Paths.artGalleryPiece}`} element={<GalleryProviders><ArtPiece/></GalleryProviders>}/></TestApp>);
+    render(<TestApp at={`${Paths.artGallery}1234?tab=${Source.AIC}`}/>);
 
     expect(await screen.findByAltText('Load Error')).toBeInTheDocument();
     expect(screen.queryByRole('figure')).not.toBeInTheDocument();
