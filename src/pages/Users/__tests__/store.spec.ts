@@ -1,7 +1,8 @@
 import {users as someUsers} from '@test-support/fixtures';
 import {usersApi} from '@components/Users/resource/usersApi';
 import {syncing} from '../syncing';
-import {friendsChanged, opened, userRemoved, userUpdated, userWithId, usersArrived, usersStore} from '../store';
+import {friendsChanged, opened, selectUsers, userRemoved, userUpdated, userWithId, usersArrived, usersStore} from '../store';
+import {rowMoved} from '@components/DragSortableTable/arrangement';
 
 describe('the users store', () => {
   const [first, second] = someUsers;
@@ -19,6 +20,17 @@ describe('the users store', () => {
     store.dispatch(usersArrived(someUsers));
 
     expect(store.state.users).toEqual(someUsers);
+  });
+
+  it('a row moved to a new seat stays there when the roster arrives again', () => {
+    const store = usersStore();
+    const ids = someUsers.map(({id}) => id);
+    store.dispatch(usersArrived(someUsers));
+
+    store.dispatch(rowMoved(first.id, 2, ids));
+    store.dispatch(usersArrived(someUsers));
+
+    expect(selectUsers(store.state).map(({id}) => id)).toEqual([ids[1], ids[2], first.id, ...ids.slice(3)]);
   });
 
   it('opening asks the api for everyone, and they arrive through the middleware', async () => {

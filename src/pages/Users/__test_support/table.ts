@@ -12,18 +12,25 @@ export const rowOf = (name: string): Promise<HTMLElement> =>
 export const rows = (): HTMLElement[] =>
   within(usersTable()).getAllByRole('row').filter(row => within(row).queryByRole('rowheader') !== null);
 
-export const worksFromHome = (row: HTMLElement): string =>
-  within(row).getByText(/^(Yes|No)$/).textContent ?? '';
+export const worksFromHome = (row: HTMLElement): string => {
+  let answer = '';
+  within(row).getByText(content => {
+    if (!/^(Yes|No)$/.test(content)) return false;
+    answer = content;
+    return true;
+  });
+  return answer;
+};
 
 export const worksFromHomeColumn = (): string[] => rows().map(worksFromHome);
 
 export const sortWorksFromHome = async (direction: string): Promise<void> => {
-  const menu = screen.getByRole('menu', {name: 'sort works-from-home by'});
-  await userEvent.click(within(menu).getByRole('button', {name: direction}));
+  const menu = screen.getByLabelText('sort works-from-home by');
+  await userEvent.click(within(menu).getByRole('button', {name: direction, hidden: true}));
 };
 
 const actionOn = async (name: string, action: string, role: 'link' | 'button'): Promise<void> =>
-  userEvent.click(within(await rowOf(name)).getByRole(role, {name: action}));
+  userEvent.click(within(await rowOf(name)).getByRole(role, {name: action, hidden: true}));
 
 export const view = (name: string): Promise<void> => actionOn(name, 'View', 'link');
 export const edit = (name: string): Promise<void> => actionOn(name, 'Edit', 'link');

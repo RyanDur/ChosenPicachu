@@ -7,14 +7,18 @@ import userEvent from '@testing-library/user-event';
 import {AddressInfo, User} from '@components/Users/UserInfo/types';
 import {createUser, usersApi} from '@components/Users/resource/usersApi';
 import {users} from '@components/Users/resource/users';
-
-const cellAt = (column: number, row: number): HTMLElement => {
-  const [, tbody] = screen.getAllByRole('rowgroup');
-  const lane = within(tbody).getAllByRole('row')[row];
-  const seat = [within(lane).getByRole('rowheader'), ...within(lane).getAllByRole('cell')][column];
-  if (!seat) throw new Error(`no cell ${column} in row ${row}`);
-  return seat;
-};
+import {
+  clone,
+  edit,
+  fullName,
+  remove,
+  rowOf,
+  rows,
+  sortWorksFromHome,
+  view,
+  worksFromHome,
+  worksFromHomeColumn
+} from '../__test_support/table';
 
 describe('the users page', () => {
   const currentUsers = someUsers;
@@ -30,20 +34,17 @@ describe('the users page', () => {
   });
 
   describe('ranking the users', () => {
-    const homes = () => within(screen.getAllByRole('rowgroup')[1]).getAllByRole('row')
-      .map(row => within(row).getAllByRole('cell')[3]?.textContent ?? '');
     const tableStands = async () => {
       render(<TestApp at={Paths.users}/>);
-      await waitFor(() => expect(homes().length).toBeGreaterThan(1));
+      await waitFor(() => expect(rows().length).toBeGreaterThan(1));
     };
 
     it('groups by a column menu criterion', async () => {
       await tableStands();
 
-      const menu = screen.getByLabelText('sort works-from-home by');
-      await userEvent.click(within(menu).getByText('ascending'));
+      await sortWorksFromHome('ascending');
 
-      expect(homes()).toEqual([...homes()].sort((left, right) => left.localeCompare(right)));
+      expect(worksFromHomeColumn()).toEqual([...worksFromHomeColumn()].sort((left, right) => left.localeCompare(right)));
     });
 
     it('every row can be lifted by its grip', async () => {
@@ -106,21 +107,19 @@ describe('the users page', () => {
     });
 
     it('should display the new user', async () => {
-      const [, tbody] = screen.getAllByRole('rowgroup');
-      expect(tbody).toHaveTextContent(`${aUser.info.firstName} ${aUser.info.lastName}`);
+      expect(await rowOf(fullName(aUser))).toBeInTheDocument();
     });
 
-    it('should indicate a user works from home when there work and home address match', () => {
-      expect(cellAt(4, 0)).toHaveTextContent('No');
-      expect(cellAt(4, 1)).toHaveTextContent('Yes');
+    it('should indicate a user works from home when there work and home address match', async () => {
+      expect(worksFromHome(await rowOf(fullName(anotherUser)))).toBe('No');
+      expect(worksFromHome(await rowOf(fullName(aUser)))).toBe('Yes');
     });
   });
 
   describe('viewing a user', () => {
     beforeEach(async () => {
       render(<TestApp at={Paths.users}/>);
-      const view = await waitFor(() => within(cellAt(4, 0)).getByText('View'));
-      await userEvent.click(view);
+      await view(fullName(firstUser));
     });
 
     test('populating the form with the chosen user', () => {
@@ -136,20 +135,18 @@ describe('the users page', () => {
     });
 
     it('should be able to add a user', () => {
-      expect(screen.queryByText('Add New User')).toBeInTheDocument();
+      expect(screen.getByRole('link', {name: 'Add New User'})).toBeInTheDocument();
     });
 
     it('should be able to edit', () => {
-      expect(within(screen.getByRole('form', {name: 'user info'})).queryByText('Edit')).toBeInTheDocument();
+      expect(within(screen.getByRole('form', {name: 'user info'})).getByRole('link', {name: 'Edit'})).toBeInTheDocument();
     });
   });
 
   describe('editing a user', () => {
     beforeEach(async () => {
-
       render(<TestApp at={Paths.users}/>);
-      const edit = await waitFor(() => within(cellAt(4, 0)).getByText('Edit'));
-      await userEvent.click(edit);
+      await edit(fullName(firstUser));
     });
 
     it('should populate the form', () => {
@@ -165,7 +162,7 @@ describe('the users page', () => {
       expect(within(form).getByLabelText('First Name'))
         .toHaveDisplayValue(`${firstUser.info.firstName} with more text`);
 
-      await userEvent.click(within(form).getByText('Reset'));
+      await userEvent.click(within(form).getByRole('button', {name: 'Reset'}));
 
       expect(within(form).getByLabelText('First Name'))
         .toHaveDisplayValue(`${firstUser.info.firstName}`);
@@ -173,8 +170,8 @@ describe('the users page', () => {
 
     it('should be able to cancel the form to the original information', async () => {
       const form = screen.getByRole('form', {name: 'user info'});
-      await userEvent.click(within(form).getByText('Cancel'));
-      expect(screen.getByLabelText('url search')).toHaveTextContent(`id=${firstUser.id}&mode=view`);
+      await userEvent.click(within(form).getByRole('link', {name: 'Cancel'}));
+      expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(`id=${firstUser.id}&mode=view`);
     });
   });
 
@@ -183,11 +180,9 @@ describe('the users page', () => {
 
     render(<TestApp at={Paths.users}/>);
 
-    const editControl = await waitFor(() => within(cellAt(4, 0)).getByText('Edit'));
-    await userEvent.click(editControl);
+    await edit(fullName(firstUser));
 
-    const updateControl = await waitFor(() => within(screen.getByRole('form', {name: 'user info'})).getByText('Update'));
-    await userEvent.click(updateControl);
+    await userEvent.click(await within(screen.getByRole('form', {name: 'user info'})).findByRole('button', {name: 'Update'}));
 
     expect(spy).toHaveBeenCalled();
   });
@@ -197,22 +192,19 @@ describe('the users page', () => {
 
     render(<TestApp at={Paths.users}/>);
 
-    const removeControl = await waitFor(() => within(cellAt(4, 0)).getByText('Remove'));
-    await userEvent.click(removeControl);
+    await remove(fullName(firstUser));
 
     expect(spy).toHaveBeenCalledWith(firstUser);
-    await waitFor(() => expect(screen.getByLabelText('url search')).not.toHaveTextContent('id='));
+    await waitFor(() => expect(screen.getByRole('status', {name: 'url search'})).not.toHaveTextContent('id='));
   });
 
   test('cloning a user', async () => {
     const spy = vi.spyOn(users, 'add');
     render(<TestApp at={Paths.users}/>);
 
-    const cloneControl = await waitFor(() => within(cellAt(4, 0)).getByText('Clone'));
-    await userEvent.click(cloneControl);
+    await clone(fullName(firstUser));
 
-    const addControl = await waitFor(() => within(screen.getByRole('form', {name: 'user info'})).getByText('Add'));
-    await userEvent.click(addControl);
+    await userEvent.click(await within(screen.getByRole('form', {name: 'user info'})).findByRole('button', {name: 'Add'}));
 
     expect(spy).toHaveBeenCalled();
   });
@@ -230,7 +222,7 @@ const addUser = async (user: User) => {
 
   await userEvent.type(screen.getByLabelText('Details'), user.details || '');
 
-  await userEvent.click(await screen.findByText('Add'));
+  await userEvent.click(await screen.findByRole('button', {name: 'Add'}));
 };
 
 const addAddress = async (address: AddressInfo, element: HTMLElement) => {
