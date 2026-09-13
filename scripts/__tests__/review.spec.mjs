@@ -65,7 +65,14 @@ describe('the review prompt', () => {
   });
 
   test('an unknown scope is refused by name', () => {
-    expect(() => promptFor({scope: 'some'})).toThrow('no review scope named "some"; the scopes are full, changes and tests');
+    expect(() => promptFor({scope: 'some'})).toThrow('no review scope named "some"; the scopes are full, changes, tests and design');
+  });
+
+  test('a design review asks the design QA alone for the whole site', () => {
+    const prompt = promptFor({scope: 'design'});
+    expect(prompt).toContain('scripts/review/design.md');
+    expect(prompt).toContain('The scope is the whole site half');
+    expect(prompt).toContain('Only design-qa has a half in this scope');
   });
 
   test('a review of the tests asks the tests QA alone', () => {
@@ -75,9 +82,9 @@ describe('the review prompt', () => {
     expect(prompt).not.toContain('structure-qa');
   });
 
-  test('a review of the changes sends all four QAs', () => {
+  test('a review of the changes sends all five QAs', () => {
     const prompt = promptFor({scope: 'changes', before: 'abc', after: 'def'});
-    expect(prompt).toContain('four QAs hold one door each: structure-qa, presentation-qa, dynamic-interaction-qa, tests-qa');
+    expect(prompt).toContain('five QAs hold one door each: structure-qa, presentation-qa, dynamic-interaction-qa, design-qa, tests-qa');
   });
 });
 

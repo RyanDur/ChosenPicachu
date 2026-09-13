@@ -1,11 +1,11 @@
 import {readFileSync} from 'node:fs';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {doors, halves, qaNames, tests} from './agents.mjs';
+import {design, doors, halves, qaNames, tests} from './agents.mjs';
 
 const values = readFileSync(join(dirname(fileURLToPath(import.meta.url)), 'values.md'), 'utf8');
 
-const rubric = [...doors.map(({file}) => file), 'src/pages/Home/TeeUp.tsx', tests.file];
+const rubric = [...doors.map(({file}) => file), 'src/pages/Home/TeeUp.tsx', design.file, tests.file];
 
 const scopes = {
   full: {
@@ -20,10 +20,14 @@ const scopes = {
   tests: {
     describe: () => 'The scope is every test in the app: the whole tests half, read whole, with the code under test read for context.',
     asks: [`${tests.name}-qa`]
+  },
+  design: {
+    describe: () => 'The scope is the whole site half, read whole: every page, component, sheet and script that ships, with the tests read only for context.',
+    asks: [`${design.name}-qa`]
   }
 };
 
-const count = ['one', 'two', 'three', 'four'];
+const count = ['one', 'two', 'three', 'four', 'five'];
 
 const listed = (names) => `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
 
@@ -39,9 +43,9 @@ export const promptFor = ({scope, before, after}) => {
   return [
     values,
     '## Your part',
-    `You lead the review. Read the rubric first and whole, in the author's words: ${rubric.join(', ')}. Each door of the home page says what things are, how they show, or how they respond, then how the author organizes it, and ends with the test of the organization. The tests door says what a test is for.`,
+    `You lead the review. Read the rubric first and whole, in the author's words: ${rubric.join(', ')}. Each door of the home page says what things are, how they show, or how they respond, then how the author organizes it, and ends with the test of the organization. The design door says how the code is shaped so that change stays cheap. The tests door says what a test is for.`,
     chosen.describe({before, after}),
-    `The scope has two halves. ${halves.tests} ${halves.site} The three door QAs review the site and the tests QA reviews the tests; each may read the other half for context. The door QAs report nothing on the tests; the tests QA reports on the site only that a test is missing.`,
+    `The scope has two halves. ${halves.tests} ${halves.site} The three door QAs and the design QA review the site and the tests QA reviews the tests; each may read the other half for context. The site's QAs report nothing on the tests; the tests QA reports on the site only that a test is missing.`,
     dispatch(chosen.asks),
     'When they answer, corroborate every finding yourself before you keep it: open the file at the line, read the principle on its door, and keep the finding only if it holds. Merge what two QAs saw as one. Drop what does not hold and say nothing of it.',
     'Answer with the findings that held, in the shape you were given.'

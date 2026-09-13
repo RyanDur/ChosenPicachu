@@ -28,6 +28,12 @@ export const tests = {
   asks: 'what a test is for: readable, worth having, pinning behaviour and not implementation, at the right level, against the real thing, and whether a test is missing; Beck\'s properties for unit tests, Dodds\' practice for component specs, Fowler\'s journeys and Playwright\'s practices for e2e, Fowler\'s page objects beside their owner'
 };
 
+export const design = {
+  name: 'design',
+  file: 'scripts/review/design.md',
+  asks: 'how the code is shaped so that change stays cheap: where a thing lives on the app continuum, what the types allow and forbid, and how failure travels on the two tracks of a Result; a functional core under an imperative shell'
+};
+
 export const halves = {
   tests: 'The tests are the spec files (*.spec.* and *.test.*), everything under e2e/, every __test_support/ directory and src/test-support/.',
   site: 'The site is everything else in the scope: pages, components, sheets and all that ships.'
@@ -53,9 +59,9 @@ export const qaOf = ({name, file, asks}) => ({
   maxTurns: 60
 });
 
-export const qaNames = [...doors, tests].map(({name}) => `${name}-qa`);
+export const qaNames = [...doors, design, tests].map(({name}) => `${name}-qa`);
 
-export const agents = () => Object.fromEntries([...doors, tests].map(door => [`${door.name}-qa`, qaOf(door)]));
+export const agents = () => Object.fromEntries([...doors, design, tests].map(door => [`${door.name}-qa`, qaOf(door)]));
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   process.stdout.write(JSON.stringify(agents()));

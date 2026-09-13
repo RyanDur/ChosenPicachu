@@ -1,10 +1,10 @@
-import {agents, doors, qaNames, reading, tests} from '../review/agents.mjs';
+import {agents, design, doors, qaNames, reading, tests} from '../review/agents.mjs';
 import {promptFor} from '../review/prompt.mjs';
 
 describe('the review\'s QAs', () => {
   test('every door gets its own QA that runs on opus and can only read', () => {
     const qas = agents();
-    expect(Object.keys(qas)).toEqual(['structure-qa', 'presentation-qa', 'dynamic-interaction-qa', 'tests-qa']);
+    expect(Object.keys(qas)).toEqual(['structure-qa', 'presentation-qa', 'dynamic-interaction-qa', 'design-qa', 'tests-qa']);
     Object.values(qas).forEach(qa => {
       expect(qa.model).toBe('opus');
       expect(qa.tools).toEqual(reading);
@@ -14,7 +14,7 @@ describe('the review\'s QAs', () => {
 
   test('each QA carries the values and its own door', () => {
     const qas = agents();
-    [...doors, tests].forEach(({name, file}) => {
+    [...doors, design, tests].forEach(({name, file}) => {
       const qa = qas[`${name}-qa`];
       expect(qa.prompt).toContain('# What every reviewer here holds');
       expect(qa.prompt).toContain(`You hold the ${name} door. Read ${file} first`);
@@ -25,7 +25,7 @@ describe('the review\'s QAs', () => {
 
   test('the door QAs review the site and leave the tests to the tests QA', () => {
     const qas = agents();
-    doors.forEach(({name}) => {
+    [...doors, design].forEach(({name}) => {
       expect(qas[`${name}-qa`].prompt).toContain('You review the site.');
       expect(qas[`${name}-qa`].prompt).toContain('report nothing on it');
     });
@@ -39,7 +39,7 @@ describe('the review\'s QAs', () => {
     expect(qas['tests-qa'].prompt).toContain('src/test-support/');
   });
 
-  test('the lead carries the values and splits the scope between the four QAs', () => {
+  test('the lead carries the values and splits the scope between the five QAs', () => {
     const lead = promptFor({scope: 'changes', before: 'abc', after: 'def'});
     expect(lead).toContain('# What every reviewer here holds');
     expect(lead).toContain('scripts/review/tests.md');
