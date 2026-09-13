@@ -7,20 +7,17 @@ import {Paths} from '@pages/Paths';
 import {GalleryNav} from '@components/art-gallery/Nav';
 import {atTheTop, landingsDuring} from '@test-support/landings';
 
-const galleryNav = (search = '') =>
-  render(<TestApp at={`${Paths.artGallery}${search}`}><GalleryProviders galleryState={fromAICArt}><GalleryNav/></GalleryProviders></TestApp>);
-
 const lastPage = fromAICArt.pagination.totalPages;
 
 describe('Gallery Navigation', () => {
   test('no page is asked for until someone asks', () => {
-    galleryNav();
+    render(<TestApp at={Paths.artGallery}><GalleryProviders galleryState={fromAICArt}><GalleryNav/></GalleryProviders></TestApp>);
 
     expect(screen.getByRole('status', {name: 'url search'})).not.toHaveTextContent('page');
   });
 
   test('the next page is a page on, and starts at the top', async () => {
-    galleryNav();
+    render(<TestApp at={Paths.artGallery}><GalleryProviders galleryState={fromAICArt}><GalleryNav/></GalleryProviders></TestApp>);
 
     const landings = await landingsDuring(() => userEvent.click(screen.getByRole('link', {name: 'NEXT'})));
 
@@ -31,14 +28,14 @@ describe('Gallery Navigation', () => {
   });
 
   test('there is no way back from the first page', () => {
-    galleryNav();
+    render(<TestApp at={Paths.artGallery}><GalleryProviders galleryState={fromAICArt}><GalleryNav/></GalleryProviders></TestApp>);
 
     expect(screen.queryByRole('link', {name: 'PREV'})).not.toBeInTheDocument();
     expect(screen.queryByRole('link', {name: 'FIRST'})).not.toBeInTheDocument();
   });
 
   test('the last page offers only the way back', async () => {
-    galleryNav();
+    render(<TestApp at={Paths.artGallery}><GalleryProviders galleryState={fromAICArt}><GalleryNav/></GalleryProviders></TestApp>);
 
     await userEvent.click(screen.getByRole('link', {name: 'LAST'}));
 
@@ -50,7 +47,7 @@ describe('Gallery Navigation', () => {
   });
 
   test('the previous page is a page back', async () => {
-    galleryNav(`?page=${lastPage}`);
+    render(<TestApp at={`${Paths.artGallery}?page=${lastPage}`}><GalleryProviders galleryState={fromAICArt}><GalleryNav/></GalleryProviders></TestApp>);
 
     await userEvent.click(screen.getByRole('link', {name: 'PREV'}));
 
@@ -58,7 +55,7 @@ describe('Gallery Navigation', () => {
   });
 
   test('the first page is one jump back from anywhere', async () => {
-    galleryNav(`?page=${lastPage}`);
+    render(<TestApp at={`${Paths.artGallery}?page=${lastPage}`}><GalleryProviders galleryState={fromAICArt}><GalleryNav/></GalleryProviders></TestApp>);
 
     await userEvent.click(screen.getByRole('link', {name: 'FIRST'}));
 
@@ -70,7 +67,7 @@ describe('Gallery Navigation', () => {
   });
 
   test('a page change keeps the search that was made', async () => {
-    galleryNav('?search=q');
+    render(<TestApp at={`${Paths.artGallery}?search=q`}><GalleryProviders galleryState={fromAICArt}><GalleryNav/></GalleryProviders></TestApp>);
 
     await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
 
@@ -78,7 +75,7 @@ describe('Gallery Navigation', () => {
   });
 
   test('the pagination counts the works showing, of the total', () => {
-    galleryNav(`?page=1&size=${fromAICArt.pagination.limit}`);
+    render(<TestApp at={`${Paths.artGallery}?page=1&size=${fromAICArt.pagination.limit}`}><GalleryProviders galleryState={fromAICArt}><GalleryNav/></GalleryProviders></TestApp>);
 
     expect(screen.getByRole('navigation', {name: 'pagination'})).toHaveTextContent(`${1} - ${fromAICArt.pagination.limit}of${fromAICArt.pagination.total}`);
   });
