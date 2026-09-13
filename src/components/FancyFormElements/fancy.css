@@ -4,7 +4,7 @@
   transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
   border-radius: var(--radius-soft);
 
-  :required + .fancy-title::after {
+  &:has(:required) .fancy-title::after {
     content: '*';
     color: var(--internationl-orange-engineering);
   }
@@ -93,7 +93,7 @@
   }
 }
 
-.read-only .fancy :required + .fancy-title::after {
+.read-only .fancy:has(:required) .fancy-title::after {
   content: none;
 }
 

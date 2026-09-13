@@ -101,11 +101,11 @@ const Draft: FC<FormProps & {currentUser: NewUser | User}> = ({currentUser, read
                  onChange={address => dispatch(updateHomeAddress(address))}/>
 
         <h3 id="work-address-title" className="work-address-title sub-title bold">Work Address</h3>
-        <article id="same-as-home-cell" className={classNames('same-as-home', readOnly && 'read-only')}>
+        <label id="same-as-home-cell" className={classNames('same-as-home', readOnly && 'read-only')}>
+            <span id="same-as-home-title">Same as Home</span>
             <input id="same-as-home" className="fancy-check" type="checkbox" checked={sameAsHome} disabled={readOnly}
                    onChange={event => updateSameAsHome(event.currentTarget.checked)}/>
-            <label id="same-as-home-title" htmlFor="same-as-home">Same as Home</label>
-        </article>
+        </label>
         <Address id="work-address" className="work-address" value={user.workAddress} readOnly={readOnly} disabled={sameAsHome}
                  onChange={address => dispatch(updateWorkAddress(address))}/>
 

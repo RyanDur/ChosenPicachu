@@ -42,6 +42,7 @@ export const FancyInput: FC<PropsWithChildren<FancyTextInputProps>> = (
   value && 'not-empty',
   className
 )}>
+    <span id={labelId} className={classNames('fancy-title', 'ellipsis', 'bold', labelClass)}>{children}</span>
     <input id={inputId}
            className={classNames('fancy-text', inputClass)}
            pattern={pattern}
@@ -51,5 +52,4 @@ export const FancyInput: FC<PropsWithChildren<FancyTextInputProps>> = (
            value={value instanceof Date ? format(value, 'yyyy-MM-dd') : value}
            type={type}
            onChange={onChange}/>
-    <span id={labelId} className={classNames('fancy-title', 'ellipsis', 'bold', labelClass)}>{children}</span>
 </label>;
