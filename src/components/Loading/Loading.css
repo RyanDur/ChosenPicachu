@@ -1,35 +1,28 @@
-.loading-screen {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
+.loading {
+  appearance: none;
+  border: none;
+  background: none;
 
-  .loading {
-    appearance: none;
-    border: none;
+  &::-webkit-progress-bar {
     background: none;
-
-    &::-webkit-progress-bar {
-      background: none;
-    }
-
-    &::-moz-progress-bar {
-      background: none;
-    }
-
-    color: var(--ink);
-    font-size: var(--base-x-11);
-    text-indent: -9999em;
-    overflow: hidden;
-    width: 1em;
-    height: 1em;
-    border-radius: 50%;
-    margin: var(--base-x-9) auto;
-    position: relative;
-    transform: translateZ(0);
-    animation: load6 1.7s infinite ease, round 1.7s infinite ease;
   }
+
+  &::-moz-progress-bar {
+    background: none;
+  }
+
+  display: block;
+  color: var(--ink);
+  font-size: var(--base-x-11);
+  text-indent: -9999em;
+  overflow: hidden;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  margin: var(--base-x-9) auto;
+  position: relative;
+  transform: translateZ(0);
+  animation: load6 1.7s infinite ease, round 1.7s infinite ease;
 }
 
 @keyframes load6 {
