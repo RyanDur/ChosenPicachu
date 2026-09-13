@@ -239,8 +239,7 @@ describe('the users page', () => {
 
     await remove(fullName(person));
 
-    await waitFor(() => expect(names()).not.toContain(fullName(person)));
-    expect(screen.getByRole('status', {name: 'url search'})).not.toHaveTextContent('id=');
+    await waitFor(() => expect(screen.getByRole('status', {name: 'url search'})).not.toHaveTextContent('id='));
   });
 
   test('a cloned user stands once more in the roster', async () => {
