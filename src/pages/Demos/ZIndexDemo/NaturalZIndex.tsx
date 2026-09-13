@@ -9,8 +9,9 @@ export const NaturalZIndex: FC<PropsWithClassName> = ({className}) => {
   const onClick = () => updateCollapsed(toggle(isCollapsed));
 
   return <article id="z-index-demo" className={className}>
-    <button className='button primary' onClick={onClick}>{isCollapsed ? 'Collapse' : 'Expand'}</button>
-    <ol className='demo-container'>
+    <button className='button primary' aria-expanded={!isCollapsed} aria-controls="z-index-layers"
+            onClick={onClick}>{isCollapsed ? 'Expand' : 'Collapse'}</button>
+    <ol id="z-index-layers" className='demo-container'>
       <li className={classNames('layer card rounded-corners floating', isCollapsed && 'closed')}>First</li>
       <li className={classNames('layer card rounded-corners floating', isCollapsed && 'closed')}>Second</li>
       <li className={classNames('layer card rounded-corners floating', isCollapsed && 'closed')}>Third</li>

@@ -84,4 +84,13 @@ describe('the top layer', () => {
     expect(screen.getByText(/the slot is a column/)).toBeInTheDocument();
   });
 
+  test('the cards start stacked, and the button offers to spread them', async () => {
+    await openZIndexTab();
+
+    const spread = await screen.findByRole('button', {name: 'Expand', expanded: false});
+    await userEvent.click(spread);
+
+    expect(screen.getByRole('button', {name: 'Collapse', expanded: true})).toBeInTheDocument();
+    expect(screen.queryByRole('button', {name: 'Expand'})).not.toBeInTheDocument();
+  });
 });
