@@ -11,6 +11,7 @@
 .floating { box-shadow: var(--raised); }
 .bare { appearance: none; }
 .borderless { border: none; }
+.unframed { border: 0; padding: 0; margin: 0; min-inline-size: 0; }
 
 .attentive {
   &:hover,

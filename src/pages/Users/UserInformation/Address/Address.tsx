@@ -27,8 +27,8 @@ export const Address: FC<AddressProps> = (
         disabled,
         readOnly,
         value = {streetAddress: '', city: '', state: '', zip: ''}
-    }) => <fieldset id={id} className={classNames('address', className)} disabled={disabled}>
-    <legend className="address-title sub-title bold">{title}</legend>
+    }) => <fieldset id={id} className={classNames('address', 'unframed', className)} disabled={disabled}>
+    <legend className="sub-title bold">{title}</legend>
     <FancyInput inputId={`${id}-street`} className="street"
                 required={required} value={value.streetAddress} readOnly={readOnly}
                 onChange={event => onChange({...value, streetAddress: event.currentTarget.value})}>
