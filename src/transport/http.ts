@@ -33,5 +33,6 @@ const request = (uri: PATH, method?: HTTPMethod, body?: unknown, cache?: Request
 
 const fail = (response: Response) => matchFailStatusCode(response.status, {
   [FailStatusCode.FORBIDDEN]: () => asyncFailure(HTTPError.FORBIDDEN),
+  [FailStatusCode.NOT_FOUND]: () => asyncFailure(HTTPError.NOT_FOUND),
   [FailStatusCode.SERVER_ERROR]: () => asyncFailure(HTTPError.SERVER_ERROR)
 }).orElse(asyncFailure(HTTPError.UNKNOWN));

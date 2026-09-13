@@ -77,6 +77,14 @@ describe('http', () => {
       expect(actual).toEqual(failure(HTTPError.FORBIDDEN).inspect());
     });
 
+    test(`${httpMethod} fails as not found when the server has nothing at the address`, async () => {
+      respondWith(httpMethod, HTTPStatus.NOT_FOUND, JSON.stringify(testObject));
+
+      const actual = (await method(endpoint, body).value).inspect();
+
+      expect(actual).toEqual(failure(HTTPError.NOT_FOUND).inspect());
+    });
+
     test(`${httpMethod} fails as a network error when the network is down`, async () => {
       networkFailsFor(httpMethod);
 

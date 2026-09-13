@@ -16,7 +16,7 @@ export const FriendsList: FC<Props> = ({users, user, onChange}) => {
     .flatMap(friendId => users.filter(({id}) => id === friendId));
   const potentialFriends = users
     .filter(candidate => candidate.id !== user.id)
-    .filter(candidate => !user.friends.includes(candidate.id ?? ''));
+    .filter(candidate => !user.friends.includes(candidate.id));
 
   const displayFullName = ({info}: User) => `${info.firstName} ${info.lastName}`;
 

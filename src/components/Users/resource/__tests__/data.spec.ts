@@ -1,6 +1,7 @@
 import {users as allUsers} from '@test-support/fixtures';
 import {NewUser, User} from '@components/Users/UserInfo/types';
-import {Success} from '@ryandur/sand';
+import {failure, Success} from '@ryandur/sand';
+import {HTTPError} from '@transport/types';
 import {faker} from '@faker-js/faker';
 import {createUser, usersApi, UsersAPI} from '../usersApi';
 
@@ -56,6 +57,14 @@ describe('users data', () => {
 
     const nextUser = await api.get(lastUser.id || '').value;
     expect(nextUser.orNull()).toEqual(lastUser);
+  });
+
+  test('an id nobody has is not found', async () => {
+    const api: UsersAPI = usersApi(allUsers);
+
+    const nobody = await api.get('nobody').value;
+
+    expect(nobody.inspect()).toEqual(failure(HTTPError.NOT_FOUND).inspect());
   });
 
   describe('updating a user and friends', () => {

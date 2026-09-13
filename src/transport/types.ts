@@ -11,6 +11,7 @@ export enum HTTPMethod {
 
 export enum HTTPError {
   FORBIDDEN = 'FORBIDDEN',
+  NOT_FOUND = 'NOT_FOUND',
   UNKNOWN = 'UNKNOWN',
   SERVER_ERROR = 'SERVER_ERROR',
   CANNOT_DECODE = 'CANNOT_DECODE',
@@ -30,6 +31,7 @@ export const isNoContent = (response: Response): boolean => response.status === 
 
 export enum FailStatusCode {
   FORBIDDEN = 403,
+  NOT_FOUND = 404,
   SERVER_ERROR = 500,
 }
 
@@ -40,5 +42,6 @@ export enum HTTPStatus {
   CREATED = SuccessStatusCode.CREATED,
   NO_CONTENT = SuccessStatusCode.NO_CONTENT,
   FORBIDDEN = FailStatusCode.FORBIDDEN,
+  NOT_FOUND = FailStatusCode.NOT_FOUND,
   SERVER_ERROR = FailStatusCode.SERVER_ERROR
 }
