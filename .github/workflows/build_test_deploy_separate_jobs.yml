@@ -41,7 +41,9 @@ jobs:
         run: npm test
       - name: Name the pages under a performance budget
         id: budgeted
-        run: echo "matrix=$(node scripts/lighthouse/audited.mjs)" >> "$GITHUB_OUTPUT"
+        run: |
+          matrix=$(node --import ./scripts/node/imports-like-vite.mjs scripts/lighthouse/audited.mjs)
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
       - name: Upload
         uses: actions/upload-artifact@v6
         with:

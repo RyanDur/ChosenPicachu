@@ -1,3 +1,4 @@
+import {execFileSync} from 'node:child_process';
 import {audited, slug, stage} from '../lighthouse/audited.mjs';
 import {pages} from '../../e2e/pages.ts';
 
@@ -13,6 +14,11 @@ describe('the pages under a performance budget', () => {
       expect(page).not.toMatch(/\s/);
       expect(url).toBe(`${stage}${budgeted[at].path}`);
     });
+  });
+
+  test('node runs the script the way the workflow does and prints the same matrix', () => {
+    const printed = execFileSync(process.execPath, ['--import', './scripts/node/imports-like-vite.mjs', 'scripts/lighthouse/audited.mjs'], {encoding: 'utf8'});
+    expect(JSON.parse(printed)).toEqual(audited());
   });
 
   test('a page name becomes one word', () => {
