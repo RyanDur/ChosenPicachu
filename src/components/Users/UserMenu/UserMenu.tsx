@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Link, useLocation, useNavigate} from 'react-router';
+import {Link, useLocation} from 'react-router';
 import * as schema from 'schemawax';
 import {maybe} from '@ryandur/sand';
 import {useSearchParamsObject} from '@components/search-params';
@@ -13,7 +13,6 @@ type Props = {
 
 export const UserMenu: FC<Props> = ({user, name, onRemove}) => {
   const {pathname: path} = useLocation();
-  const navigate = useNavigate();
   const {createSearchParams} = useSearchParamsObject({id: schema.string, mode: schema.string});
   const id = `menu-${user.id}`;
   const dismissed = (): void => {
@@ -39,11 +38,8 @@ export const UserMenu: FC<Props> = ({user, name, onRemove}) => {
       </li>
       <li className="entry">
         <button type="button" className="item sub-title"
-                onClick={() => {
-                  dismissed();
-                  onRemove();
-                  void navigate(path);
-                }}>Remove</button>
+                popoverTarget={id} popoverTargetAction="hide"
+                onClick={onRemove}>Remove</button>
       </li>
       <li className="entry">
         <Link to={`${path}${createSearchParams({id: user.id})}`}
