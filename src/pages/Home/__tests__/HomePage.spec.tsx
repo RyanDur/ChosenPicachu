@@ -12,11 +12,15 @@ describe('the home page', () => {
     expect(screen.getByText(/That argument is this whole site/)).toBeVisible();
   });
 
-  test('the timeline walks the iteration', () => {
+  test('the record says why the languages arrived', () => {
     const record = within(screen.getByRole('region', {name: 'How the web got its languages'}));
     expect(record.getByText(/a web of nodes in which the user can browse at will/)).toBeVisible();
     expect(record.getByText(/Tim Berners-Lee and Robert Cailliau/)).toBeVisible();
     expect(record.getByText(/Someone needed something/)).toBeVisible();
+    expect(screen.getByText(/one sentence said thirteen ways/)).toBeVisible();
+  });
+
+  test('the timeline walks thirteen beats of the same need', () => {
     const timeline = within(screen.getByRole('list', {name: 'the timeline'}));
 
     expect(timeline.getAllByRole('listitem')).toHaveLength(13);
@@ -24,10 +28,9 @@ describe('the home page', () => {
       expect(timeline.getAllByText(year).length).toBeGreaterThan(0));
     [/Someone needs something/, /Researchers need to collaborate/, /Authors need control of the look/, /Author and reader need a referee/, /Pages need to respond/, /The need outruns the standards/, /The browsers need to agree/, /The separation needs proof/, /The standard needs the real world/, /The page needs to update in place/, /Someone needs components/, /The philosophy needs writing down/, /The document needs to come first/]
       .forEach(beat => expect(timeline.getByRole('heading', {name: beat})).toBeVisible());
-    expect(screen.getByText(/one sentence said thirteen ways/)).toBeVisible();
   });
 
-  test('three doors, each named by its responsibility', () => {
+  test('the page offers three doors, each named by its responsibility', () => {
     ['Structure', 'Presentation', 'Dynamic Interaction'].forEach(door =>
       expect(screen.getByRole('heading', {name: door, level: 2})).toBeVisible());
     expect(screen.getByText(/identifies the meaning, purpose, and structure/)).toBeVisible();
@@ -46,16 +49,19 @@ describe('the home page', () => {
     expect(timeline.getByRole('link', {name: 'the essay', hidden: true}))
       .toHaveAttribute('href', expect.stringContaining('adaptivepath'));
     folds.forEach(story => {
-      expect(story).toHaveAttribute('name', 'record');
       expect(within(story).getAllByRole('paragraph').length).toBeGreaterThanOrEqual(3);
     });
   });
 
-  test('the structure door folds open how I organize it, ungrouped', () => {
+  test("the beats' stories share one fold, so opening one closes the last", () => {
+    const timeline = within(screen.getByRole('list', {name: 'the timeline'}));
+
+    timeline.getAllByRole('group').forEach(story => expect(story).toHaveAttribute('name', 'record'));
+  });
+
+  test('the structure door tells how I organize structure', () => {
     const door = within(screen.getByRole('region', {name: 'Structure'}));
 
-    const fold = door.getByRole('group', {hidden: true});
-    expect(fold).not.toHaveAttribute('name');
     expect(door.getByText('how I organize it')).toBeVisible();
     expect(door.getByRole('link', {name: 'search', hidden: true}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
@@ -68,11 +74,9 @@ describe('the home page', () => {
     expect(door.getByText(/reading the markup with the styles off/)).toBeInTheDocument();
   });
 
-  test('the presentation door folds open how I organize it, ungrouped', () => {
+  test('the presentation door tells how I organize presentation', () => {
     const door = within(screen.getByRole('region', {name: 'Presentation'}));
 
-    const fold = door.getByRole('group', {hidden: true});
-    expect(fold).not.toHaveAttribute('name');
     expect(door.getByText('how I organize it')).toBeVisible();
     expect(door.getByRole('link', {name: 'custom property', hidden: true}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
@@ -86,11 +90,9 @@ describe('the home page', () => {
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org'));
   });
 
-  test('the dynamic interaction door folds open how I organize it, ungrouped', () => {
+  test('the dynamic interaction door tells how I organize behaviour', () => {
     const door = within(screen.getByRole('region', {name: 'Dynamic Interaction'}));
 
-    const fold = door.getByRole('group', {hidden: true});
-    expect(fold).not.toHaveAttribute('name');
     expect(door.getByText('how I organize it')).toBeVisible();
     expect(door.getByRole('link', {name: /operable through a keyboard interface/, hidden: true}))
       .toHaveAttribute('href', expect.stringContaining('w3.org'));

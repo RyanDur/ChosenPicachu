@@ -12,7 +12,7 @@ describe('the row menu is a popover anchored to its toggle', () => {
   const menuFor = (toggle: HTMLElement): HTMLElement =>
     screen.getByLabelText(`${toggle.getAttribute('aria-label') ?? ''}, chosen`);
 
-  test('the toggle is a real button wired to its own menu', async () => {
+  test("each row's actions button has a menu of its own that opens as a popover", async () => {
     const row = await firstRow();
     const toggle = within(row).getByRole('button', {name: /^Actions for /});
 

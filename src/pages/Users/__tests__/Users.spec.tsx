@@ -99,16 +99,25 @@ describe('the users page', () => {
       expect(worksFromHome(await rowOf(fullName(anotherUser)))).toBe('No');
     });
 
-    it('a user born on a day is shown that day, viewing and editing', async () => {
+    it('a user born on a day shows that day when viewed', async () => {
       const born = conciseUser('Faye');
       render(<TestApp at={Paths.users}/>);
       await roster();
       await addUser(born);
 
       await view(fullName(born));
+
       expect(screen.getByLabelText('Date Of Birth')).toHaveDisplayValue('1984-06-02');
+    });
+
+    it('a user born on a day shows that day when edited', async () => {
+      const born = conciseUser('Gabi');
+      render(<TestApp at={Paths.users}/>);
+      await roster();
+      await addUser(born);
 
       await edit(fullName(born));
+
       expect(screen.getByLabelText('Date Of Birth')).toHaveDisplayValue('1984-06-02');
     });
   });
@@ -122,7 +131,7 @@ describe('the users page', () => {
       await view(chosen);
     });
 
-    test('populating the form with the chosen user', () => {
+    test('viewing a user shows their details in the form', () => {
       const [firstName] = chosen.split(' ');
       expect(screen.getByLabelText('First Name')).toHaveDisplayValue(firstName);
     });
@@ -144,11 +153,11 @@ describe('the users page', () => {
       expect(screen.getByRole('button', {name: 'Generate a new avatar'})).toBeDisabled();
     });
 
-    it('should be able to add a user', () => {
+    it('viewing a user offers a door to add another', () => {
       expect(screen.getByRole('link', {name: 'Add New User'})).toBeInTheDocument();
     });
 
-    it('should be able to edit', () => {
+    it('viewing a user offers a door to edit them', () => {
       expect(within(screen.getByRole('form', {name: 'User Information'})).getByRole('link', {name: 'Edit'})).toBeInTheDocument();
     });
   });
@@ -189,7 +198,7 @@ describe('the users page', () => {
       expect(within(form).getByLabelText('First Name')).toHaveDisplayValue(firstName);
     });
 
-    it('should be able to cancel the form to the original information', async () => {
+    it('cancelling an edit returns to viewing the user', async () => {
       const form = screen.getByRole('form', {name: 'User Information'});
       await userEvent.click(within(form).getByRole('link', {name: 'Cancel'}));
       expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('mode=view');
@@ -215,6 +224,18 @@ describe('the users page', () => {
     await roster();
     await addUser(person);
     await rowOf(fullName(person));
+
+    await remove(fullName(person));
+
+    await waitFor(() => expect(names()).not.toContain(fullName(person)));
+  });
+
+  test('removing the chosen user clears them from the address', async () => {
+    const person = conciseUser('Dana');
+    render(<TestApp at={Paths.users}/>);
+    await roster();
+    await addUser(person);
+    await view(fullName(person));
 
     await remove(fullName(person));
 

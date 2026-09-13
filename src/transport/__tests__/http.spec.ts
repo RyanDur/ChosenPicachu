@@ -61,7 +61,7 @@ describe('http', () => {
     code: HTTPStatus,
     response: unknown
   }) => {
-    test(`${httpMethod} success`, async () => {
+    test(`${httpMethod} gives back the body the server answered with`, async () => {
       respondWith(httpMethod, code, response === undefined ? null : JSON.stringify(testObject));
 
       const actual = await method(endpoint, body).orNull();
@@ -69,7 +69,7 @@ describe('http', () => {
       expect(actual).toEqual(response);
     });
 
-    test(`${httpMethod} failure is FORBIDDEN`, async () => {
+    test(`${httpMethod} fails as forbidden when the server refuses`, async () => {
       respondWith(httpMethod, HTTPStatus.FORBIDDEN, JSON.stringify(testObject));
 
       const actual = (await method(endpoint, body).value).inspect();
@@ -77,7 +77,7 @@ describe('http', () => {
       expect(actual).toEqual(failure(HTTPError.FORBIDDEN).inspect());
     });
 
-    test(`${httpMethod} when the network is down`, async () => {
+    test(`${httpMethod} fails as a network error when the network is down`, async () => {
       networkFailsFor(httpMethod);
 
       const actual = (await method(endpoint, body).value).inspect();
@@ -85,7 +85,7 @@ describe('http', () => {
       expect(actual).toEqual(failure(HTTPError.NETWORK_ERROR).inspect());
     });
 
-    test(`${httpMethod} failure is SERVER_ERROR`, async () => {
+    test(`${httpMethod} fails as a server error when the server breaks`, async () => {
       respondWith(httpMethod, HTTPStatus.SERVER_ERROR, '');
 
       const actual = (await method(endpoint, body).value).inspect();
@@ -99,7 +99,7 @@ describe('http', () => {
     ${http.get}    | ${HTTPMethod.GET}    | ${undefined}  | ${HTTPStatus.OK}
     ${http.post}   | ${HTTPMethod.POST}   | ${testObject} | ${HTTPStatus.CREATED}
     ${http.put}    | ${HTTPMethod.PUT}    | ${testObject} | ${HTTPStatus.CREATED}
-    `('$httpMethod can handle improper json', async ({method, httpMethod, body, code}: {
+    `('$httpMethod fails as a bad json body when the answer is not json', async ({method, httpMethod, body, code}: {
     method: (endpoint: string, body?: unknown) => Result.Async<unknown, HTTPError>,
     httpMethod: HTTPMethod,
     body: unknown,

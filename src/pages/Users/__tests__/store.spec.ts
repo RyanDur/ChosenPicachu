@@ -33,7 +33,7 @@ describe('the users store', () => {
     expect(selectUsers(store.state).map(({id}) => id)).toEqual([ids[1], ids[2], first.id, ...ids.slice(3)]);
   });
 
-  it('opening asks the api for everyone, and they arrive through the middleware', async () => {
+  it('opening fills the roster with everyone the api has', async () => {
     const store = usersStore(syncing(usersApi(someUsers), () => undefined));
 
     store.dispatch(opened());
@@ -42,10 +42,14 @@ describe('the users store', () => {
       expect(store.state.users.map(({id}) => id)).toEqual(someUsers.map(({id}) => id)));
   });
 
-  it('a user is found by id in the roster, and reflects the roster as it refreshes', async () => {
-    const store = usersStore(syncing(usersApi(someUsers), () => undefined));
-    store.dispatch(opened());
-    await vi.waitFor(() => expect(userWithId(first.id)(store.state)?.id).toBe(first.id));
+  it('a user is found by id in the roster', async () => {
+    const store = await openedStore();
+
+    expect(userWithId(first.id)(store.state)?.id).toBe(first.id);
+  });
+
+  it('a user found by id shows the friends the roster now has', async () => {
+    const store = await openedStore();
 
     store.dispatch(friendsChanged(first, [second.id]));
 
@@ -87,11 +91,8 @@ describe('the users store', () => {
     expect(friendsOf(store)(first.id)).not.toContain(second.id);
   });
 
-  it('an update keeps the friends the table already changed, and says when it is saved', async () => {
-    const saved = vi.fn();
-    const store = usersStore(syncing(usersApi(someUsers), saved));
-    store.dispatch(opened());
-    await vi.waitFor(() => expect(store.state.users).toHaveLength(someUsers.length));
+  it('an update keeps the friends the table already changed', async () => {
+    const store = await openedStore();
     store.dispatch(friendsChanged(first, [second.id]));
     await vi.waitFor(() => expect(userWithId(first.id)(store.state)?.friends).toEqual([second.id]));
 
@@ -102,6 +103,17 @@ describe('the users store', () => {
       expect(renamed?.info.firstName).toBe('Renamed');
       expect(renamed?.friends).toEqual([second.id]);
     });
+  });
+
+  it('an update says once when it is saved', async () => {
+    const saved = vi.fn();
+    const store = usersStore(syncing(usersApi(someUsers), saved));
+    store.dispatch(opened());
+    await vi.waitFor(() => expect(store.state.users).toHaveLength(someUsers.length));
+
+    store.dispatch(userUpdated({...first, info: {...first.info, firstName: 'Renamed'}}));
+
+    await vi.waitFor(() => expect(userWithId(first.id)(store.state)?.info.firstName).toBe('Renamed'));
     expect(saved).toHaveBeenCalledTimes(1);
   });
 });

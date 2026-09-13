@@ -8,6 +8,23 @@ import {announced, followSignpost, frontDoor, pageTitle, pageTitled, roomSays, s
 
 describe('page error boundaries', () => {
   test('a crashing page shows the closed room inside the site, even with no boundary of its own', async () => {
+    const Boom = () => {
+      throw new Error('boom');
+    };
+    render(
+      <TestApp>
+        <Route path="/" element={<Boom/>}/>
+      </TestApp>,
+      {onCaughtError: () => undefined}
+    );
+
+    expect(await roomSays('This room is closed.')).toBeVisible();
+    expect(pageTitle()).toHaveTextContent('Closed room');
+    expect(await siteRail()).toBeInTheDocument();
+    expect(frontDoor()).toHaveAttribute('href', Paths.home);
+  });
+
+  test('a crash no page catches is reported and announced', async () => {
     const boom = new Error('boom');
     const Boom = () => {
       throw boom;
@@ -20,10 +37,7 @@ describe('page error boundaries', () => {
       {onCaughtError: error => caught.push(error)}
     );
 
-    expect(await roomSays('This room is closed.')).toBeVisible();
-    expect(pageTitle()).toHaveTextContent('Closed room');
-    expect(await siteRail()).toBeInTheDocument();
-    expect(frontDoor()).toHaveAttribute('href', Paths.home);
+    await roomSays('This room is closed.');
     expect(screen.getByRole('list', {name: 'errors reported'})).toHaveTextContent(/^boom$/);
     expect(caught).toEqual([boom]);
     expect(announced('This room is closed.')).toBeInTheDocument();

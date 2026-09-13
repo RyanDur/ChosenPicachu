@@ -29,6 +29,19 @@ describe('the test app', () => {
     const errors = await screen.findByRole('list', {name: 'errors reported'});
     expect((await within(errors).findAllByRole('listitem')).map(item => item.textContent)).toEqual(['boom']);
     expect(screen.getByRole('status', {name: 'url path'})).toHaveTextContent('/nowhere');
+  });
+
+  test("an error no page catches reaches the test's error handler", async () => {
+    const boom = new Error('boom');
+    const Boom = () => {
+      throw boom;
+    };
+    const caught: unknown[] = [];
+
+    render(<TestApp at="/nowhere"><Route path="/nowhere" element={<Boom/>}/></TestApp>,
+      {onCaughtError: error => caught.push(error)});
+
+    await screen.findByRole('list', {name: 'errors reported'});
     expect(caught).toEqual([boom]);
   });
 });

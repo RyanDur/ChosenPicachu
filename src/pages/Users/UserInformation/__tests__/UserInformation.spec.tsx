@@ -52,16 +52,22 @@ describe('a user form', () => {
   };
 
   describe('filled out', () => {
-    it('should be resettable', async () => {
-      const {form, adds} = added();
-      render(form);
+    it('resetting empties a filled-out form', async () => {
+      render(added().form);
       await fillOutForm(info);
-
       await userEvent.type(screen.getByLabelText('Details'), info.details);
+
       await userEvent.click(screen.getByRole('button', {name: 'Reset'}));
-      await userEvent.click(addButton());
 
       expect(screen.getByLabelText('First Name')).toHaveValue('');
+    });
+
+    it('an empty form adds nobody', async () => {
+      const {form, adds} = added();
+      render(form);
+
+      await userEvent.click(addButton());
+
       expect(adds()).toEqual([]);
     });
 
@@ -79,12 +85,11 @@ describe('a user form', () => {
         await waitFor(() => expect(adds()).toEqual([{...info, friends: [], avatar}]));
       });
 
-      it('should reset the form', async () => {
+      it('the form empties once a user is added', async () => {
         const {form, adds} = added();
         render(form);
         await fillOutForm(info);
 
-        await userEvent.click(addButton());
         await userEvent.click(addButton());
 
         expect(screen.getByLabelText('First Name')).toHaveValue('');
@@ -163,7 +168,7 @@ describe('a user form', () => {
   });
 
   describe('validity', () => {
-    it('should have some required fields', () => {
+    it('a user cannot be added without a name, a birthday and a home address', () => {
       render(added().form);
 
       expect(screen.getByLabelText('First Name')).not.toBeValid();
@@ -178,7 +183,7 @@ describe('a user form', () => {
     describe('for a zip code', () => {
       const homeZip = (): HTMLElement => addressGroup('home').getByLabelText('Postal / Zip code');
 
-      test('a letter is refused', async () => {
+      test('a letter in the zip leaves it invalid', async () => {
         render(added().form);
 
         await userEvent.type(homeZip(), 'a');

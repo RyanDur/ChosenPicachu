@@ -40,7 +40,7 @@ const aicArtPieceResponse: AICArtResponse = {
 };
 
 describe('The gallery.', () => {
-  test('When the art has loaded', async () => {
+  test('the wall hangs a full page of works once the art has loaded', async () => {
     setupAICAllArtResponse(aicArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
 
@@ -73,7 +73,7 @@ describe('The gallery.', () => {
     });
   });
 
-  test('when looking at the harvard gallery', async () => {
+  test("choosing Harvard hangs Harvard's works on the wall", async () => {
     setupAICAllArtResponse(aicArtResponse);
     setupHarvardAllArtResponse(harvardArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
@@ -85,7 +85,7 @@ describe('The gallery.', () => {
     expect(screen.queryByAltText('empty gallery')).not.toBeInTheDocument();
   });
 
-  test('when looking at the vam gallery', async () => {
+  test('choosing the Victoria and Albert hangs its works on the wall', async () => {
     setupAICAllArtResponse(aicArtResponse);
     setupVAMAllArtResponse(vamArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
@@ -97,7 +97,7 @@ describe('The gallery.', () => {
     expect(screen.queryByAltText('empty gallery')).not.toBeInTheDocument();
   });
 
-  test('when looking at the cleveland gallery', async () => {
+  test("choosing Cleveland hangs Cleveland's works on the wall", async () => {
     setupAICAllArtResponse(aicArtResponse);
     setupClevelandAllArtResponse(clevelandArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
@@ -108,7 +108,7 @@ describe('The gallery.', () => {
     expect(screen.queryByAltText('empty gallery')).not.toBeInTheDocument();
   });
 
-  test('a museum whose pictures are refused has no door, and the gallery opens elsewhere', async () => {
+  test('a museum whose pictures are refused has no door', async () => {
     setupAICAllArtResponse(aicArtResponse);
     refuseAICPictures();
     setupHarvardAllArtResponse(harvardArtResponse);
@@ -118,6 +118,16 @@ describe('The gallery.', () => {
     await waitFor(() => expect(screen.getAllByRole('figure').length).toEqual(defaultRecordLimit));
     expect(screen.getByRole('link', {name: 'Harvard Art Museums'})).toBeInTheDocument();
     expect(screen.queryByRole('link', {name: 'The Art Institute of Chicago'})).not.toBeInTheDocument();
+  });
+
+  test('the gallery opens at the first museum that answers', async () => {
+    setupAICAllArtResponse(aicArtResponse);
+    refuseAICPictures();
+    setupHarvardAllArtResponse(harvardArtResponse);
+
+    render(<TestApp at={Paths.artGallery}/>);
+
+    await waitFor(() => expect(screen.getAllByRole('figure').length).toEqual(defaultRecordLimit));
     expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('tab=harvard');
   });
 
@@ -156,13 +166,20 @@ describe('The gallery.', () => {
 
   test('while the museums are asked there are no doors, only the loading sign', async () => {
     setupAICAllArtResponse(aicArtResponse);
-    const aicAnswers = heldAICPictures();
-    const vamAnswers = heldVAMPictures();
+    heldAICPictures();
+    heldVAMPictures();
 
     render(<TestApp at={Paths.artGallery}/>);
 
     expect(screen.getByRole('progressbar', {name: 'loading gallery'})).toBeInTheDocument();
     expect(screen.queryByRole('navigation', {name: 'museums'})).not.toBeInTheDocument();
+  });
+
+  test('the doors appear once the museums answer', async () => {
+    setupAICAllArtResponse(aicArtResponse);
+    const aicAnswers = heldAICPictures();
+    const vamAnswers = heldVAMPictures();
+    render(<TestApp at={Paths.artGallery}/>);
 
     aicAnswers();
     vamAnswers();

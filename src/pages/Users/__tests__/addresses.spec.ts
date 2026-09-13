@@ -4,7 +4,7 @@ import {createAddress} from '@components/Users/resource/usersApi';
 describe('working from home means every part of both addresses matches', () => {
   const home = createAddress();
 
-  test('the same address on both sides', () => {
+  test('two addresses matching in every part are equal', () => {
     expect(equalAddresses(home, {...home})).toBe(true);
   });
 
@@ -12,7 +12,7 @@ describe('working from home means every part of both addresses matches', () => {
     expect(equalAddresses(home, {...home, streetAddress: `${home.streetAddress} apt 2`})).toBe(false);
   });
 
-  test('no work address at all', () => {
+  test('a missing work address is not the home address', () => {
     expect(equalAddresses(home, undefined)).toBe(false);
   });
 });
