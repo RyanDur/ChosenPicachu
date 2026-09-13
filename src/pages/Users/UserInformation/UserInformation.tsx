@@ -1,30 +1,29 @@
 import {FC, useReducer} from 'react';
-import {NewUser, User, isPersisted} from '@components/Users/UserInfo/user';
+import {isPersisted, NewUser, User} from '@components/Users/UserInfo/user';
 import {FancyInput} from '@components/FancyFormElements/FancyInput';
 import {classNames} from '@components/class-names';
 import {FancyTextarea} from '@components/FancyFormElements/FancyTextarea';
 import {
-  formReset,
-  sameAsHomeChosen,
   avatarGenerated,
-  detailsEdited,
   dateOfBirthEdited,
+  detailsEdited,
   emailEdited,
   firstNameEdited,
+  formReset,
   homeAddressEdited,
   lastNameEdited,
+  sameAsHomeChosen,
   workAddressEdited
 } from './actions';
 import {Address} from './Address';
-import {draftOf, formReducer, userOf} from './reducer';
+import {draftOf, formReducer, typedWork, userOf} from './reducer';
 import {generateAvatar} from './avatars';
 import {Link} from 'react-router';
 import {FancyDateInput} from '@components/FancyFormElements/FancyDateInput';
 import {isValid, parse} from 'date-fns';
 import {Mode, userAt} from '../mode';
 import {useUsersDispatch, useUsersSelector} from '../Provider';
-import {userWithId} from '../store';
-import {userAdded, userUpdated} from '../store';
+import {userAdded, userUpdated, userWithId} from '../store';
 import './Form.css';
 
 type FormProps = {
@@ -109,7 +108,7 @@ const Draft: FC<{ currentUser?: User; mode: Mode }> = ({currentUser, mode}) => {
         <input id="same-as-home" className="fancy-check" type="checkbox" checked={draft.sameAsHome}
                onChange={event => dispatch(sameAsHomeChosen(event.currentTarget.checked))}/>
     </label>}
-    <Address id="work-address" className="work-address" value={user.workAddress} readOnly={readOnly}
+    <Address id="work-address" className="work-address" value={draft.sameAsHome ? user.homeAddress : typedWork(draft)} readOnly={readOnly}
              disabled={draft.sameAsHome}
              onChange={address => dispatch(workAddressEdited(address))}/>
 

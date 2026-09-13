@@ -27,7 +27,7 @@ const addButton = (): HTMLElement => screen.getByRole('button', {name: 'Add'});
 const sameAsHome = (): HTMLElement => screen.getByRole('checkbox', {name: 'Same as Home'});
 
 describe('a user form', () => {
-  const info: Pick<NewUser, 'info' | 'homeAddress'> & { workAddress: AddressInfo; details: string } = {
+  const info: Pick<NewUser, 'info' | 'homeAddress'> & { work: AddressInfo; details: string } = {
     info: {
       firstName: 'Teruko',
       lastName: 'Okada',
@@ -41,7 +41,7 @@ describe('a user form', () => {
       state: 'IL',
       zip: '62704'
     },
-    workAddress: {
+    work: {
       streetAddress: '9 Oak Ave',
       streetAddressTwo: 'Suite 2',
       city: 'Chatham',
@@ -122,7 +122,7 @@ describe('a user form', () => {
           ...info,
           friends: [],
           avatar,
-          workAddress: info.homeAddress
+          work: 'home'
         }]);
       });
 
@@ -147,9 +147,9 @@ describe('a user form', () => {
 
         await userEvent.click(sameAsHome());
 
-        expect(addressGroup('work').getByLabelText('Street')).toHaveValue(info.workAddress.streetAddress);
-        expect(addressGroup('work').getByLabelText('City')).toHaveValue(info.workAddress.city);
-        expect(addressGroup('work').getByLabelText('Postal / Zip code')).toHaveValue(info.workAddress.zip);
+        expect(addressGroup('work').getByLabelText('Street')).toHaveValue(info.work.streetAddress);
+        expect(addressGroup('work').getByLabelText('City')).toHaveValue(info.work.city);
+        expect(addressGroup('work').getByLabelText('Postal / Zip code')).toHaveValue(info.work.zip);
         expect(addressGroup('work').getByLabelText('Street')).toBeEnabled();
       });
 

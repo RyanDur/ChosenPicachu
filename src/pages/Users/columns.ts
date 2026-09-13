@@ -1,10 +1,8 @@
 import {has} from '@ryandur/sand';
 import {Labelled, Seated} from '@components/DragSortableTable/table-state';
 import {User} from '@components/Users';
-import {equalAddresses} from './addresses';
 
-export const worksFromHome = (user: User): string =>
-  equalAddresses(user.homeAddress, user.workAddress) ? 'Yes' : 'No';
+export const worksFromHome = (user: User): string => user.work === 'home' ? 'Yes' : 'No';
 
 export type Candidate = Labelled;
 

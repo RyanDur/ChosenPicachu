@@ -78,7 +78,7 @@ export const createUser = (
     info: info(),
     friends: [],
     homeAddress,
-    workAddress: worksFromHome ? homeAddress : address(),
+    work: worksFromHome ? 'home' : address(),
     details: createDetails(),
     avatar: generator.generateRandomAvatar()
   });

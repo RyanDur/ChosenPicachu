@@ -18,7 +18,7 @@ export type NewUser = {
   friends: string[];
   homeAddress: AddressInfo;
   avatar: string;
-  workAddress?: AddressInfo;
+  work?: 'home' | AddressInfo;
   details?: string;
 }
 

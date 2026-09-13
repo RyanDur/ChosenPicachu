@@ -1,4 +1,4 @@
-import {NewUser, User} from '@components/Users/UserInfo/user';
+import {AddressInfo, NewUser, User} from '@components/Users/UserInfo/user';
 import {FormAction, FormActions} from './actions';
 
 export type Draft = {
@@ -7,10 +7,12 @@ export type Draft = {
   avatarDrawn: boolean;
 };
 
-export const draftOf = (user: NewUser | User): Draft => ({user, sameAsHome: false, avatarDrawn: false});
+export const draftOf = (user: NewUser | User): Draft => ({user, sameAsHome: user.work === 'home', avatarDrawn: false});
 
-export const userOf = ({user, sameAsHome}: Draft): NewUser | User =>
-  sameAsHome ? {...user, workAddress: user.homeAddress} : user;
+export const typedWork = ({user}: Draft): AddressInfo | undefined => user.work === 'home' ? undefined : user.work;
+
+export const userOf = (draft: Draft): NewUser | User =>
+  ({...draft.user, work: draft.sameAsHome ? 'home' : typedWork(draft)});
 
 const edited = (draft: Draft, user: NewUser | User): Draft => ({...draft, user});
 
@@ -28,7 +30,7 @@ export const formReducer = (draft: Draft, action: FormAction): Draft => {
     case FormActions.HOME_ADDRESS_EDITED:
       return edited(draft, {...user, homeAddress: action.homeAddress});
     case FormActions.WORK_ADDRESS_EDITED:
-      return edited(draft, {...user, workAddress: action.workAddress});
+      return edited(draft, {...user, work: action.workAddress});
     case FormActions.DETAILS_EDITED:
       return edited(draft, {...user, details: action.details});
     case FormActions.AVATAR_GENERATED:

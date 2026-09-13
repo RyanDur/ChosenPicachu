@@ -21,7 +21,7 @@ import {
   worksFromHomeColumn
 } from '../__test_support';
 
-const conciseUser = (firstName: string): User => {
+const conciseUser = (firstName: string): User & {work: AddressInfo} => {
   const homeAddress: AddressInfo = {
     streetAddress: '12 Elm St',
     city: 'Springfield',
@@ -37,7 +37,7 @@ const conciseUser = (firstName: string): User => {
       dob: new Date(1984, 5, 2)
     },
     homeAddress,
-    workAddress: {
+    work: {
       streetAddress: '9 Oak Ave',
       city: 'Chatham',
       state: 'IL',
@@ -97,6 +97,17 @@ describe('the users page', () => {
 
       expect(worksFromHome(await rowOf(fullName(aUser)))).toBe('Yes');
       expect(worksFromHome(await rowOf(fullName(anotherUser)))).toBe('No');
+    });
+
+    it('editing a user who works from home finds Same as Home ticked', async () => {
+      const homeWorker = conciseUser('Hana');
+      render(<TestApp at={Paths.users}/>);
+      await roster();
+      await addUserWhoWorksFromHome(homeWorker);
+
+      await edit(fullName(homeWorker));
+
+      expect(screen.getByRole('checkbox', {name: 'Same as Home'})).toBeChecked();
     });
 
     it('a user born on a day shows that day when viewed', async () => {

@@ -1,6 +1,6 @@
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {User} from '@components/Users/UserInfo/user';
+import {AddressInfo, User} from '@components/Users/UserInfo/user';
 import {fillOutAddress, fillOutUser} from '../UserInformation/__test_support';
 
 const swiftKeys = userEvent.setup({delay: null});
@@ -50,8 +50,8 @@ const submitting = async (user: User, workAddress: () => Promise<void>): Promise
   await swiftKeys.click(await screen.findByRole('button', {name: 'Add'}));
 };
 
-export const addUser = (user: User): Promise<void> =>
-  submitting(user, () => fillOutAddress(user.workAddress!, 'work'));
+export const addUser = (user: User & {work: AddressInfo}): Promise<void> =>
+  submitting(user, () => fillOutAddress(user.work, 'work'));
 
 export const addUserWhoWorksFromHome = (user: User): Promise<void> =>
   submitting(user, () => swiftKeys.click(screen.getByRole('checkbox', {name: 'Same as Home'})));
