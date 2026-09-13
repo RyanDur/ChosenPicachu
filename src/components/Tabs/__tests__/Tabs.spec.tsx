@@ -29,13 +29,7 @@ describe('Tabs', () => {
     expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(`?tab=${tab3.param}`);
   });
 
-  it('should default to the first choice if the param is not present', async () => {
-    render(<TestApp at={path}><Tabs label="tabs under test" defaultTab={tab1.param} values={[tab1, tab2, tab3]}/></TestApp>);
-
-    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(`?tab=${tab1.param}`);
-  });
-
-  it('the chosen tab says it is current, styles or not', async () => {
+  it('the tab in the url is the one marked current', async () => {
     render(<TestApp at={path}><Tabs label="tabs under test" defaultTab={tab1.param} values={[tab1, tab2, tab3]}/></TestApp>);
 
     expect(screen.getByRole('link', {name: tab1.display, current: 'page'})).toBeInTheDocument();

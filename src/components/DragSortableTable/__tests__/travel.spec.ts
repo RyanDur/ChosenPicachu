@@ -28,7 +28,19 @@ describe('the travel vocabulary', () => {
       .toEqual({origin: {x: 100, y: 50}, drift: {x: 30, y: -5}});
   });
 
-  it('a move with no buttons is the drop; otherwise the holder takes the capture, moves, and takes it again once the move has settled', async () => {
+  it('a move with no buttons is the drop', async () => {
+    const happened: string[] = [];
+    const holder = document.createElement('th');
+    holder.setPointerCapture = () => undefined;
+    const listener = pointerTravel(() => happened.push('moved'), () => happened.push('drop'));
+
+    listener({buttons: 0, pointerId: 7, clientX: 0, clientY: 0, currentTarget: holder});
+    await Promise.resolve();
+
+    expect(happened).toEqual(['drop']);
+  });
+
+  it('the holder keeps the pointer capture across a move', async () => {
     const happened: string[] = [];
     const holder = document.createElement('th');
     holder.setPointerCapture = id => happened.push(`captured ${id}`);
@@ -38,14 +50,10 @@ describe('the travel vocabulary', () => {
     expect(happened).toEqual(['captured 7', 'moved']);
     await Promise.resolve();
     expect(happened).toEqual(['captured 7', 'moved', 'captured 7']);
-
-    listener({buttons: 0, pointerId: 7, clientX: 0, clientY: 0, currentTarget: holder});
-    await Promise.resolve();
-    expect(happened).toEqual(['captured 7', 'moved', 'captured 7', 'drop']);
   });
 
 
-  it('the arrows measure the table at the keypress and hand the widths and heights over', () => {
+  const measuredTable = () => {
     const table = document.createElement('table');
     table.innerHTML = '<thead><tr><th class="cell window"></th><th class="cell trades"></th><th class="cell buys"></th><th class="cell change"></th></tr></thead><tbody><tr><td></td></tr><tr><td></td></tr></tbody>';
     [...table.tHead?.rows[0]?.cells ?? []].forEach((th, at) => {
@@ -54,28 +62,46 @@ describe('the travel vocabulary', () => {
     [...table.tBodies[0]?.rows ?? []].forEach((lane, at) => {
       lane.getBoundingClientRect = () => new DOMRect(0, 0, 0, 40 + at);
     });
-    const th = table.tHead?.rows[0]?.cells[1];
-    const grip = table.tBodies[0]?.rows[0]?.cells[0];
+    return table;
+  };
+
+  it('a column arrow hands over the column widths as they stand', () => {
+    const th = measuredTable().tHead?.rows[0]?.cells[1];
     const widths: Readonly<Record<string, number>>[] = [];
-    const heights: Readonly<Record<string, number>>[] = [];
 
     columnArrows('trades', () => ['window', 'trades', 'buys', 'change'], nudge => widths.push(nudge.widths))({...pressed('ArrowRight'), currentTarget: th ?? null});
-    rowArrows('this minute', () => ['this minute', 'this hour'], nudge => heights.push(nudge.heights))({...pressed('ArrowDown'), currentTarget: grip ?? null});
 
     expect(widths).toEqual([{window: 100, trades: 101, buys: 102, change: 103}]);
+  });
+
+  it('a row arrow hands over the row heights as they stand', () => {
+    const grip = measuredTable().tBodies[0]?.rows[0]?.cells[0];
+    const heights: Readonly<Record<string, number>>[] = [];
+
+    rowArrows('this minute', () => ['this minute', 'this hour'], nudge => heights.push(nudge.heights))({...pressed('ArrowDown'), currentTarget: grip ?? null});
+
     expect(heights).toEqual([{'this minute': 40, 'this hour': 41}]);
   });
 
-  it('column arrows claim the keys, arrange inside the anchors, and never at the rail', () => {
+  it('column arrows answer only to left and right', () => {
     const arranged: {from: number; to: number}[] = [];
     const listener = columnArrows('trades', () => ['window', 'trades', 'buys', 'change'],
       ({from, to}) => arranged.push({from, to}));
 
     listener(pressed('ArrowRight'));
-    listener(pressed('ArrowLeft'));
     listener(pressed('Enter'));
 
     expect(arranged).toEqual([{from: 1, to: 2}]);
+  });
+
+  it('a column arrow at the anchored edge arranges nothing', () => {
+    const arranged: {from: number; to: number}[] = [];
+    const listener = columnArrows('trades', () => ['window', 'trades', 'buys', 'change'],
+      ({from, to}) => arranged.push({from, to}));
+
+    listener(pressed('ArrowLeft'));
+
+    expect(arranged).toEqual([]);
   });
 
   it('row arrows always arrange, so the rail nudge still bakes', () => {

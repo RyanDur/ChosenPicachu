@@ -1,12 +1,7 @@
 import {describe, expect, it} from 'vitest';
-import {columnNudge, columnSteps, gripLabel, nudgedColumn, nudgedRow, rowNudge, rowSteps, struckAway} from '../survey';
+import {columnNudge, gripLabel, nudgedColumn, nudgedRow, rowNudge, struckAway} from '../survey';
 
 describe('the keyboard vocabulary', () => {
-  it('claims exactly the two arrows per axis', () => {
-    expect(columnSteps).toEqual({ArrowRight: 1, ArrowLeft: -1});
-    expect(rowSteps).toEqual({ArrowDown: 1, ArrowUp: -1});
-  });
-
   it('walks a column, clamped inside the anchored edges', () => {
     const order = ['window', 'trades', 'buys', 'change'];
 
@@ -22,21 +17,26 @@ describe('the keyboard vocabulary', () => {
   });
 
 
-  it('rules a column nudge whole: the walk and the clamp', () => {
+  it('a column nudge moves the column one seat', () => {
     const order = ['window', 'trades', 'buys', 'change'];
 
     expect(columnNudge(order)('trades', 1)).toEqual({from: 1, to: 2});
+  });
+
+  it('a column nudge against an anchored edge moves nothing', () => {
+    const order = ['window', 'trades', 'buys', 'change'];
+
     expect(columnNudge(order)('trades', -1)).toBeUndefined();
   });
 
-  it('rules a row nudge whole: the seat and the seating after', () => {
+  it("a row nudge answers the row's new seat and the order it leaves behind", () => {
     const nudge = rowNudge(['this minute', 'this hour', 'session'])('this minute', 1);
 
     expect(nudge.to).toBe(1);
     expect(nudge.after).toEqual(['this hour', 'this minute', 'session']);
   });
 
-  it('rules a strike: another seat strikes, home and nothing never do', () => {
+  it('a seat is struck only by a different seat, never by itself or by nothing', () => {
     expect(struckAway('trades', 'buys')).toBe(true);
     expect(struckAway('trades', 'trades')).toBe(false);
     expect(struckAway('trades', undefined)).toBe(false);

@@ -28,7 +28,7 @@ describe('the banners', () => {
     expect(within(screen.getByRole('alert', {hidden: true})).getByText('the live feed refused the handshake')).toBeInTheDocument();
   });
 
-  test('every raised error stands until dismissed, each on its own', async () => {
+  test('every raised error stands on its own until dismissed', async () => {
     render(<TestApp><Trouble message="first trouble"/><Trouble message="second trouble"/></TestApp>);
     const [first, second] = screen.getAllByRole('button', {name: 'trouble'});
 
@@ -39,12 +39,22 @@ describe('the banners', () => {
     expect(within(alert).getByText('second trouble')).toBeInTheDocument();
 
     await userEvent.click(within(alert).getByRole('button', {name: 'dismiss first trouble', hidden: true}));
+    fireEvent.transitionEnd(troubleOf(alert, 'first trouble'), {propertyName: 'grid-template-rows'});
+    expect(within(alert).queryByText('first trouble')).not.toBeInTheDocument();
+    expect(within(alert).getByText('second trouble')).toBeInTheDocument();
+  });
+
+  test('a dismissed trouble leaves only once it has finished closing', async () => {
+    render(<TestApp><Trouble message="first trouble"/></TestApp>);
+    await userEvent.click(screen.getByRole('button', {name: 'trouble'}));
+    const alert = screen.getByRole('alert', {hidden: true});
+
+    await userEvent.click(within(alert).getByRole('button', {name: 'dismiss first trouble', hidden: true}));
     expect(within(alert).getByText('first trouble')).toBeInTheDocument();
     fireEvent.transitionEnd(troubleOf(alert, 'first trouble'), {propertyName: 'translate'});
     expect(within(alert).getByText('first trouble')).toBeInTheDocument();
     fireEvent.transitionEnd(troubleOf(alert, 'first trouble'), {propertyName: 'grid-template-rows'});
     expect(within(alert).queryByText('first trouble')).not.toBeInTheDocument();
-    expect(within(alert).getByText('second trouble')).toBeInTheDocument();
   });
 
   test('the same trouble raised twice stands only once, until dismissed', async () => {
@@ -62,7 +72,7 @@ describe('the banners', () => {
     expect(within(alert).getAllByText('the feed is down')).toHaveLength(1);
   });
 
-  test('a sideways stack lets its trouble go when the column closes', async () => {
+  test('a trouble in a side stack leaves once its dismissal has finished', async () => {
     render(<TestApp at="/?stack=left"><Trouble message="sideways trouble"/></TestApp>);
 
     await userEvent.click(screen.getByRole('button', {name: 'trouble'}));

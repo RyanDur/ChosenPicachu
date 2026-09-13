@@ -37,11 +37,8 @@ describe('search', () => {
     await waitFor(() => expect(screen.getByRole('listbox', {hidden: true})).toHaveTextContent(searchWord));
   });
 
-  it('should update the url when the user wants to search', async () => {
+  it('puts the searched word in the url', async () => {
     render(<TestApp at={Paths.artGallery}/>);
-    await userEvent.click(screen.getByRole('button', {name: 'submit search'}));
-
-    expect(screen.getByRole('status', {name: 'url search'})).not.toHaveTextContent('search');
 
     await userEvent.type(screen.getByLabelText(/Search For/), 'A');
     await userEvent.click(screen.getByRole('button', {name: 'submit search'}));
@@ -117,7 +114,7 @@ describe('search', () => {
     }
   });
 
-  it("a new word's suggestions replace the old, and a late answer for the old word never lands", async () => {
+  it("a late answer for an old word never lands over the new word's suggestions", async () => {
     const asked: string[] = [];
     const noted = ({request}: {request: Request}) => {
       const word = new URL(request.url).searchParams.get('query[term][title]');

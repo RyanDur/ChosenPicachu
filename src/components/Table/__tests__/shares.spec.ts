@@ -15,25 +15,35 @@ describe('the shares vocabulary', () => {
     expect(soughtTrade(grip, 240, first.carried)).toEqual({delta: 10, carried: 20});
   });
 
-  it('claims the arrows for a step of shares, and swallows the press', () => {
-    const trades: number[] = [];
-    const swallowed: string[] = [];
-    const listener = resizeArrows(delta => trades.push(delta));
-    const press = (key: string) => ({
-      key,
-      preventDefault: (): void => {
-        swallowed.push('default');
-      },
-      stopPropagation: (): void => {
-        swallowed.push('descent');
-      }
-    });
+  const press = (key: string, swallowed: string[]) => ({
+    key,
+    preventDefault: (): void => {
+      swallowed.push('default');
+    },
+    stopPropagation: (): void => {
+      swallowed.push('descent');
+    }
+  });
 
-    listener(press('ArrowRight'));
-    listener(press('ArrowLeft'));
-    listener(press('Tab'));
+  it('a left or right arrow steps the share by two', () => {
+    const trades: number[] = [];
+    const listener = resizeArrows(delta => trades.push(delta));
+
+    listener(press('ArrowRight', []));
+    listener(press('ArrowLeft', []));
+    listener(press('Tab', []));
 
     expect(trades).toEqual([2, -2]);
+  });
+
+  it('a claimed arrow press goes no further', () => {
+    const swallowed: string[] = [];
+    const listener = resizeArrows(() => undefined);
+
+    listener(press('ArrowRight', swallowed));
+    listener(press('ArrowLeft', swallowed));
+    listener(press('Tab', swallowed));
+
     expect(swallowed).toEqual(['default', 'descent', 'default', 'descent']);
   });
 

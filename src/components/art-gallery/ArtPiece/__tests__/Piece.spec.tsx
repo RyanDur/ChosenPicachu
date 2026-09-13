@@ -19,7 +19,7 @@ describe('viewing a piece', () => {
     }
   };
 
-  test('when loading the piece of art', async () => {
+  test('shows a loading sign and a placeholder title until the piece arrives', async () => {
     const pieceArrives = heldAICArtPieceResponse(aicArtResponse, aicArtResponse.data.id);
 
     render(<TestApp at={`${Paths.artGallery}${aicArtResponse.data.id}?tab=${Source.AIC}`}/>);
@@ -34,7 +34,7 @@ describe('viewing a piece', () => {
     expect(screen.getByRole('heading', {level: 1})).toHaveTextContent(aicArtResponse.data.title);
   });
 
-  test('when the art piece is loaded', async () => {
+  test("shows the piece's title and artist once the museum answers", async () => {
     setupAICArtPieceResponse(aicArtResponse, aicArtResponse.data.id);
 
     render(<TestApp at={`${Paths.artGallery}${aicArtResponse.data.id}?tab=${Source.AIC}`}/>);
@@ -43,7 +43,7 @@ describe('viewing a piece', () => {
     await waitFor(() => expect(screen.queryByAltText('Load Error')).not.toBeInTheDocument());
   });
 
-  test('when getting the piece has errored', async () => {
+  test('shows nothing but an error and says the museum is having trouble', async () => {
     anyRequestRespondsWith(HTTPError.SERVER_ERROR, 500);
     render(<TestApp at={`${Paths.artGallery}1234?tab=${Source.AIC}`}/>);
 

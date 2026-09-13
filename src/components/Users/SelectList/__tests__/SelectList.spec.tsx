@@ -50,20 +50,20 @@ describe('the friends list', () => {
             render(<FriendsList users={users} user={userWithFriends} onChange={consumer}/>);
         });
 
-        test('on mouse click', async () => {
+        test('clicking a friend removes them', async () => {
             await userEvent.click(screen.getByRole('button', {name: fullName(thirdUser)}));
 
             expect(consumer).toHaveBeenCalledWith([secondUser.id]);
         });
 
-        test('on enter', async () => {
+        test('pressing enter on a friend removes them', async () => {
             screen.getByRole('button', {name: fullName(thirdUser)}).focus();
             await userEvent.keyboard('{enter}');
 
             expect(consumer).toHaveBeenCalledWith([secondUser.id]);
         });
 
-        test('on space', async () => {
+        test('pressing space on a friend removes them', async () => {
             screen.getByRole('button', {name: fullName(thirdUser)}).focus();
             await userEvent.keyboard(' ');
 

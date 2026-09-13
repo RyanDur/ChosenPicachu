@@ -9,8 +9,11 @@ describe('the sorting vocabulary', () => {
     expect(ranked(rows, row => row.trades, 'descending')).toEqual([{trades: 9}, {trades: 5}, {trades: 3}, {}]);
   });
 
-  it('speaks the three choices both worlds offer', () => {
+  it('offers ascending, descending and reset', () => {
     expect(choices.map(({display}) => display)).toEqual(['ascending', 'descending', 'reset']);
+  });
+
+  it('reads a direction from a choice, and none from reset or nonsense', () => {
     expect(directionOf('ascending')).toBe('ascending');
     expect(directionOf('descending')).toBe('descending');
     expect(directionOf('reset')).toBeUndefined();

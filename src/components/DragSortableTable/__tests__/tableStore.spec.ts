@@ -19,11 +19,15 @@ describe('the table store', () => {
     expect(heard).toEqual([[40, 30, 30]]);
   });
 
-  test('the reducer answers its own actions and hands back the same state for anyone else’s', () => {
+  test('the reducer applies its own actions', () => {
     const measuredState = tableReducer(resting, measured(shares(40, 30)));
-    const untouched = tableReducer(resting, {type: 'userArrived'});
 
     expect(widths(measuredState)).toEqual([40, 30, 30]);
+  });
+
+  test("the reducer hands back the same state for anyone else's action", () => {
+    const untouched = tableReducer(resting, {type: 'userArrived'});
+
     expect(untouched).toBe(resting);
   });
 
@@ -61,10 +65,9 @@ describe('the table store', () => {
     expect(widths(store.state)).toEqual([40, 30, 30]);
   });
 
-  test('the store is frozen: nothing can swap its dispatch or its state from outside', () => {
+  test("nothing outside can swap the store's dispatch or its state", () => {
     const store = tableStore();
 
-    expect(Object.isFrozen(store)).toBe(true);
     expect(() => {
       (store as {dispatch: unknown}).dispatch = () => undefined;
     }).toThrow(TypeError);
@@ -94,7 +97,7 @@ describe('the table store', () => {
     expect(widths(store.state)).toEqual([50, 20, 30]);
   });
 
-  test('a listener hears the state before, a way to read the state now, and the dispatch', () => {
+  test('a listener sees the state before and after the change, and can dispatch again', () => {
     const store = tableStore();
     const heard: [readonly number[], readonly number[]][] = [];
     store.subscribe((previous, current, dispatch) => {

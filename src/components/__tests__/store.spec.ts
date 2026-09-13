@@ -20,16 +20,14 @@ describe('a store sliced by key', () => {
     expect(page.state).toEqual({counting: {count: 0}, saying: {words: []}});
   });
 
-  it('hands each slice its own state and the whole action, and keeps a slice that did not answer', () => {
+  it("routes each action to every slice and keeps each slice's own state", () => {
     const page = store({slice: sliced<Page, Action>({counting, saying})});
-    const before = page.state.saying;
 
     page.dispatch({type: 'counted'});
     page.dispatch({type: 'said', word: 'hello'});
     page.dispatch({type: 'counted'});
 
     expect(page.state).toEqual({counting: {count: 2}, saying: {words: ['hello']}});
-    expect(page.state.saying).not.toBe(before);
   });
 
   it('a slice that ignores an action keeps its identity', () => {

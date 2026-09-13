@@ -17,14 +17,14 @@ describe('the image', () => {
     artistInfo: faker.lorem.sentence()
   };
 
-  test('on loading', () => {
+  test('shows a loading sign while the picture is on its way', () => {
     render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><Image piece={piece}/></TestApp>);
 
     expect(screen.getByRole('progressbar', {name: 'loading'})).toBeInTheDocument();
     expect(screen.queryByAltText('oops')).not.toBeInTheDocument();
   });
 
-  test('when image loaded', () => {
+  test('shows the picture and drops the loading sign once it arrives', () => {
     render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><Image piece={piece}/></TestApp>);
 
     fireEvent.load(screen.getByAltText(piece.altText));
@@ -34,7 +34,7 @@ describe('the image', () => {
     expect(screen.queryByAltText('oops')).not.toBeInTheDocument();
   });
 
-  test('when choosing an image', async () => {
+  test('clicking a picture opens that piece', async () => {
     render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><Image piece={piece}/></TestApp>);
 
     fireEvent.load(screen.getByAltText(piece.altText));
@@ -43,7 +43,7 @@ describe('the image', () => {
     expect(screen.getByRole('status', {name: 'url path'})).toHaveTextContent(`${Paths.artGallery}${piece.id}`);
   });
 
-  test('on image load error', () => {
+  test('shows a stand-in when the picture will not load', () => {
     render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><Image piece={piece}/></TestApp>);
 
     fireEvent.error(screen.getByAltText(piece.altText));
@@ -53,7 +53,7 @@ describe('the image', () => {
     expect(screen.queryByRole('progressbar', {name: 'loading'})).not.toBeInTheDocument();
   });
 
-  test('without an image', () => {
+  test('shows a stand-in when the piece has no picture', () => {
     render(<TestApp at={`${Paths.artGallery}?page=3&tab=${Source.AIC}`}><Image piece={{...piece, image: undefined}}/></TestApp>);
 
     expect(screen.getByAltText('oops')).toBeInTheDocument();
@@ -61,7 +61,7 @@ describe('the image', () => {
     expect(screen.queryByAltText(piece.altText)).not.toBeInTheDocument();
   });
 
-  test('when the image is disabled', async () => {
+  test('a picture with its link off goes nowhere when clicked', async () => {
     render(<TestApp at={`${Paths.artGallery}?page=3&tab=${Source.AIC}`}><Image piece={piece} linkEnabled={false}/></TestApp>);
 
     fireEvent.load(screen.getByAltText(piece.altText));

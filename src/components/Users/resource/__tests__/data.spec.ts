@@ -5,16 +5,14 @@ import {faker} from '@faker-js/faker';
 import {createUser, usersApi, UsersAPI} from '../usersApi';
 
 describe('users data', () => {
-  test('getting the users', async () => {
+  test('hands back every user it was given', async () => {
     const api: UsersAPI = usersApi(allUsers);
     const data = await api.getAll().value;
 
     expect(data.orNull()).toEqual(allUsers);
   });
 
-  test('adding a user', async () => {
-    const api: UsersAPI = usersApi(allUsers);
-    const user: NewUser = {
+  const someone: NewUser = {
       info: {
         firstName: faker.lorem.word(),
         lastName: faker.lorem.word(),
@@ -30,16 +28,25 @@ describe('users data', () => {
       }
     };
 
-    const usersSuccess = await api.add(user).value as Success<User[], never>;
+  test('an added user joins the list with an id of their own', async () => {
+    const api: UsersAPI = usersApi(allUsers);
+
+    const usersSuccess = await api.add(someone).value as Success<User[], never>;
+
     expect(usersSuccess.orNull().length).toEqual(allUsers.length + 1);
     expect(usersSuccess.orNull()[0].id).not.toBeUndefined();
+  });
 
-    const anotherUser = createUser();
-    const moreUsers = await api.add(anotherUser).value as Success<User[], never>;
+  test('each add builds on the list the last one left', async () => {
+    const api: UsersAPI = usersApi(allUsers);
+    await api.add(someone).value;
+
+    const moreUsers = await api.add(createUser()).value as Success<User[], never>;
+
     expect(moreUsers.orNull().length).toEqual(allUsers.length + 2);
   });
 
-  test('getting a user', async () => {
+  test('finds a user by their id', async () => {
     const api: UsersAPI = usersApi(allUsers);
     const firstUser = allUsers[0];
     const lastUser = allUsers[allUsers.length - 1];

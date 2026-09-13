@@ -34,7 +34,7 @@ import {setupAICAllArtResponse} from '@components/art-gallery/__test_support';
 describe('data', () => {
     describe('retrieving all the artwork', () => {
         describe('when the source is AIC', () => {
-            test('when it is successful', async () => {
+            test('turns an AIC page of works into art', async () => {
                 setupAICAllArtResponse(aicArtResponse, {limit: 12, page: 1});
 
                 const actual = await art.getAll({page: 1, size: 12, source: Source.AIC}).orNull();
@@ -42,7 +42,7 @@ describe('data', () => {
                 expect(actual).toEqual(fromAICArt);
             });
 
-            test('when it has a search term', async () => {
+            test('asks AIC for the works matching a search term', async () => {
                 setupAICAllArtResponse(aicArtResponse, {limit: 12, page: 1, search: 'rad'});
 
                 const actual = await art.getAll({page: 1, size: 12, search: 'rad', source: Source.AIC}).orNull();
@@ -50,7 +50,7 @@ describe('data', () => {
                 expect(actual).toEqual(fromAICArt);
             });
 
-            test('when it is not successful', async () => {
+            test('reports an unknown error when AIC refuses the request', async () => {
                 const consumer = vi.fn();
                 anyRequestRespondsWith('response', 400);
 
@@ -62,7 +62,7 @@ describe('data', () => {
         });
 
         describe('when the source is Harvard', () => {
-            test('when it is successful', async () => {
+            test('turns a Harvard page of works into art', async () => {
                 anyRequestRespondsWith(JSON.stringify(harvardArtResponse));
 
                 const actual = await art.getAll({page: 1, size: 12, source: Source.HARVARD}).orNull();
@@ -70,7 +70,7 @@ describe('data', () => {
                 expect(actual).toEqual(fromHarvardArt);
             });
 
-            test('when it has a search term', async () => {
+            test("puts the search term in Harvard's query", async () => {
                 const asked: URL[] = [];
                 server.use(http.get(env.harvardDomain, ({request}) => {
                     asked.push(new URL(request.url));
@@ -83,7 +83,7 @@ describe('data', () => {
                 expect(asked[0]?.searchParams.get('q')).toContain('(rad)');
             });
 
-            test('when it is not successful', async () => {
+            test('reports an unknown error when Harvard refuses the request', async () => {
                 const consumer = vi.fn();
                 anyRequestRespondsWith(HTTPError.UNKNOWN, 400);
 
@@ -95,7 +95,7 @@ describe('data', () => {
         });
 
         describe('when the source is VAM', () => {
-            test('when it is successful', async () => {
+            test('turns a VAM page of works into art', async () => {
                 anyRequestRespondsWith(JSON.stringify(vamArtResponse));
 
                 const actual = await art.getAll({page: 1, size: 8, source: Source.VAM}).orNull();
@@ -103,7 +103,7 @@ describe('data', () => {
                 expect(actual).toEqual(fromVAMArt);
             });
 
-            test('when it is not successful', async () => {
+            test('reports an unknown error when VAM refuses the request', async () => {
                 const consumer = vi.fn();
                 anyRequestRespondsWith(HTTPError.UNKNOWN, 400);
 
@@ -115,7 +115,7 @@ describe('data', () => {
         });
 
         describe('when the source is Cleveland', () => {
-            test('when it is successful', async () => {
+            test('turns a Cleveland page of works into art', async () => {
                 anyRequestRespondsWith(JSON.stringify(clevelandArtResponse));
 
                 const actual = await art.getAll({page: 1, size: 8, source: Source.CLEVELAND}).orNull();
@@ -123,7 +123,7 @@ describe('data', () => {
                 expect(actual).toEqual(fromClevelandArt);
             });
 
-            test('when it is not successful', async () => {
+            test('reports an unknown error when Cleveland refuses the request', async () => {
                 const consumer = vi.fn();
                 anyRequestRespondsWith(HTTPError.UNKNOWN, 400);
 
@@ -136,7 +136,7 @@ describe('data', () => {
     });
 
     describe('retrieving a Cleveland artwork', () => {
-        test('when it is successful', async () => {
+        test('turns a Cleveland piece into art', async () => {
             anyRequestRespondsWith(JSON.stringify(clevelandPieceResponse));
 
             const actual = await art.get({id: fromClevelandToPiece.id, source: Source.CLEVELAND}).orNull();
@@ -144,7 +144,7 @@ describe('data', () => {
             expect(actual).toEqual(fromClevelandToPiece);
         });
 
-        test('when it is not successful', async () => {
+        test('reports an unknown error when Cleveland will not give the piece', async () => {
             const consumer = vi.fn();
             anyRequestRespondsWith(HTTPError.UNKNOWN, 400);
 
@@ -158,7 +158,7 @@ describe('data', () => {
     describe('retrieving an artwork', () => {
         describe('for AIC', () => {
             describe('when it is successful', () => {
-                test('for a full response', async () => {
+                test('turns a full AIC piece into art, picture, srcset and alt text', async () => {
                     anyRequestRespondsWith(JSON.stringify(pieceAICResponse));
 
                     const actual = await art.get({id: String(aicPiece.id), source: Source.AIC}).orNull();
@@ -167,7 +167,7 @@ describe('data', () => {
                 });
             });
 
-            test('when it is not successful', async () => {
+            test('reports an unknown error when AIC will not give the piece', async () => {
                 const consumer = vi.fn();
                 anyRequestRespondsWith('some error', 400);
 
@@ -179,17 +179,16 @@ describe('data', () => {
         });
 
         describe('for Harvard', () => {
-            test('when it is successful', async () => {
-                const consumer = vi.fn();
+            test('turns a Harvard piece into art', async () => {
                 anyRequestRespondsWith(JSON.stringify(harvardPieceResponse));
 
                 const actual = await art.get({id: String(aicPiece.id), source: Source.HARVARD})
-                    .onSuccess(consumer).orNull();
+                    .orNull();
 
                 expect(actual).toEqual(harvardPiece);
             });
 
-            test('when it is not successful', async () => {
+            test('reports an unknown error when Harvard will not give the piece', async () => {
                 const consumer = vi.fn();
                 anyRequestRespondsWith(HTTPError.UNKNOWN, 400);
 
@@ -203,7 +202,7 @@ describe('data', () => {
     });
 
     describe('retrieving a VAM artwork', () => {
-        test('when it is successful', async () => {
+        test('turns a VAM piece into art', async () => {
             anyRequestRespondsWith(JSON.stringify(vamPieceResponse));
 
             const actual = await art.get({id: fromVAMToPiece.id, source: Source.VAM}).orNull();
@@ -211,7 +210,7 @@ describe('data', () => {
             expect(actual).toEqual(fromVAMToPiece);
         });
 
-        test('when it is not successful', async () => {
+        test('reports an unknown error when VAM will not give the piece', async () => {
             const consumer = vi.fn();
             anyRequestRespondsWith(HTTPError.UNKNOWN, 400);
 
@@ -226,7 +225,7 @@ describe('data', () => {
         const search = faker.lorem.word();
 
         describe('for AIC', () => {
-            test('when it is successful', async () => {
+            test("reads the suggestions out of AIC's autocomplete", async () => {
                 anyRequestRespondsWith(JSON.stringify(aicArtOptions));
 
                 const actual = await art.search({search, source: Source.AIC}).orNull();
@@ -236,7 +235,7 @@ describe('data', () => {
         });
 
         describe('for Harvard', () => {
-            test('when it is successful', async () => {
+            test("reads the suggestions out of Harvard's answer", async () => {
                 anyRequestRespondsWith(JSON.stringify(harvardArtOptions));
 
                 const actual = await art.search({search, source: Source.HARVARD}).orNull();
@@ -246,7 +245,7 @@ describe('data', () => {
         });
 
         describe('for VAM', () => {
-            test('when it is successful', async () => {
+            test("reads the suggestions out of VAM's answer", async () => {
                 anyRequestRespondsWith(JSON.stringify(vamArtOptions));
 
                 const actual = await art.search({search, source: Source.VAM}).orNull();
@@ -256,7 +255,7 @@ describe('data', () => {
         });
 
         describe('for Cleveland', () => {
-            test('when it is successful', async () => {
+            test("reads the suggestions out of Cleveland's answer", async () => {
                 anyRequestRespondsWith(JSON.stringify(clevelandArtOptions));
 
                 const actual = await art.search({search, source: Source.CLEVELAND}).orNull();
@@ -271,7 +270,7 @@ describe('data', () => {
         ${Source.HARVARD}
         ${Source.VAM}
         ${Source.CLEVELAND}
-        `('when the call fails', async ({source}) => {
+        `("reports a server error when any museum's suggestions fail", async ({source}) => {
             const consumer = vi.fn();
             anyRequestRespondsWith(HTTPError.SERVER_ERROR, 500);
 

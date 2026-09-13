@@ -52,7 +52,7 @@ describe('The page controls', () => {
       expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('page=3');
     });
 
-    it('should not allow a user to go to a page lower than the first', async () => {
+    it('the page field will not go before the first', async () => {
       setupAICEveryPage(aicArtResponse);
       render(<TestApp at={Paths.artGallery}/>);
       await wallHangs();
@@ -60,7 +60,7 @@ describe('The page controls', () => {
       expect(screen.getByLabelText(/Page #/)).toHaveAttribute('min', '1');
     });
 
-    it('should not allow a user to go to a page higher than the last', async () => {
+    it('the page field will not go past the last page the museum has', async () => {
       setupAICEveryPage(aicArtResponse);
       render(<TestApp at={Paths.artGallery}/>);
       await wallHangs();
