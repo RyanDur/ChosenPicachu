@@ -1,15 +1,15 @@
 import {has} from '@ryandur/sand';
 import {
   Children,
-  ComponentProps,
   FC,
   PropsWithChildren,
   ReactNode,
+  createContext,
   isValidElement,
+  useContext,
   useState,
-  useSyncExternalStore
 } from 'react';
-import {Route, RouteObject, createMemoryRouter, createRoutesFromElements} from 'react-router';
+import {Outlet, Route, RouteObject, createMemoryRouter, createRoutesFromElements, useLocation} from 'react-router';
 import {App} from '../App';
 import {router} from '../router';
 import {env} from '@env';
@@ -20,19 +20,19 @@ type Props = PropsWithChildren<{
   readonly feed?: Feed;
 }>;
 
-type Router = ComponentProps<typeof App>['router'];
+const Reported = createContext<readonly string[]>([]);
 
-const LocationProbe: FC<{ readonly router: Router }> = ({router: memory}) => {
-  const {pathname, search} = useSyncExternalStore(listen => memory.subscribe(listen), () => memory.state.location);
+const Probes: FC = () => {
+  const {pathname, search} = useLocation();
+  const errors = useContext(Reported);
 
   return <>
+    <Outlet/>
     <data aria-label="url path">{pathname}</data>
     <data aria-label="url search">{search}</data>
+    <data aria-label="errors reported">{errors.join('\n')}</data>
   </>;
 };
-
-const ErrorProbe: FC<{ readonly errors: readonly string[] }> = ({errors}) =>
-  <data aria-label="errors reported">{errors.join('\n')}</data>;
 
 const described = (error: unknown): string => error instanceof Error ? error.message : String(error);
 
@@ -45,20 +45,19 @@ const routesAt = (at: string, children: ReactNode): RouteObject[] =>
   routed(children) ? createRoutesFromElements(children) : [{path: pathOf(at), element: children}];
 
 export const TestApp: FC<Props> = ({at = '/', feed, children}) => {
-  const [memory] = useState(() => createMemoryRouter(
-    has(children) ? [{
+  const [memory] = useState(() => createMemoryRouter([{
+    id: 'probes',
+    element: <Probes/>,
+    children: [has(children) ? {
       ...router,
       id: 'root',
       children: [...routesAt(at, children), {path: '*', element: null}]
-    }] : [router],
-    {initialEntries: [at]}
-  ));
+    } : router]
+  }], {initialEntries: [at]}));
   const [reported, setReported] = useState<readonly string[]>([]);
   const report = (error: unknown): void => setReported(errors => [...errors, described(error)]);
 
-  return <>
+  return <Reported.Provider value={reported}>
     <App router={memory} onError={report} env={has(feed) ? {...env, tradeFeed: feed.url} : env}/>
-    <LocationProbe router={memory}/>
-    <ErrorProbe errors={reported}/>
-  </>;
+  </Reported.Provider>;
 };
