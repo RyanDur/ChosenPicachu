@@ -18,6 +18,10 @@
   &:focus-within {
     background-color: var(--approach);
   }
+
+  &:active {
+    box-shadow: var(--press-glow);
+  }
 }
 .accent { background: var(--accent); }
 

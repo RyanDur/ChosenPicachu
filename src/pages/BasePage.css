@@ -100,7 +100,7 @@
     grid-template-columns: 1fr;
     grid-template-areas: 'pager';
 
-    .gallery-nav {
+    .pagination {
       grid-area: pager;
     }
   }
@@ -139,7 +139,7 @@
       grid-template-columns: 1fr var(--base-x-16_5);
       grid-template-areas: 'pager .';
 
-      .gallery-nav {
+      .pagination {
         grid-area: pager;
       }
     }
@@ -203,7 +203,7 @@
       grid-template-columns: 1fr;
       grid-template-areas: 'pager';
 
-      .gallery-nav {
+      .pagination {
         grid-area: pager;
       }
     }
@@ -251,7 +251,7 @@
   }
 }
 
-@media (max-width: 600px), ((max-width: 1000px) and (max-height: 600px)) {
+@media (max-width: 600px), (max-width: 1000px) and (max-height: 600px) {
   #root {
     height: auto;
     min-height: 100dvh;

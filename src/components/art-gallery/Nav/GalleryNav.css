@@ -1,21 +1,51 @@
 .pagination {
-  pointer-events: none;
+  display: grid;
+  column-gap: var(--base);
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-areas: "first prev info next last";
   max-width: var(--base-x-50);
   width: 100%;
   height: 100%;
-  background-color: var(--void);
+  pointer-events: none;
 
-  #info,
-  &::before,
-  &::after {
-    width: 100%;
-    background-color: var(--paper);
+  &::before {
+    grid-column: 1 / span 2;
   }
 
-  #info {
-    pointer-events: all;
-    text-align: center;
+  &::after {
+    grid-column: 4 / span 2;
+  }
+
+  &:not(:has(.prev))::before,
+  &:not(:has(.next))::after {
+    content: '';
+    background: var(--field);
+  }
+
+  .first {
+    grid-area: first;
+  }
+
+  .prev {
+    grid-area: prev;
+  }
+
+  .info {
+    grid-area: info;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     width: var(--base-x-10_5);
+    pointer-events: all;
+  }
+
+  .next {
+    grid-area: next;
+  }
+
+  .last {
+    grid-area: last;
   }
 
   .page {
@@ -24,18 +54,6 @@
     justify-content: center;
     width: 100%;
     height: 100%;
-    outline: none;
     pointer-events: all;
-    background-color: var(--paper);
-    font-weight: bold;
-
-    &:active {
-      box-shadow: var(--press-glow);
-    }
-
-    &:hover,
-    &:focus {
-      background: var(--mint);
-    }
   }
 }

@@ -5,7 +5,6 @@ import {numberParam, useSearchParamsObject} from '@components/search-params';
 import {useGallery} from '@components/art-gallery/Art/Context';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
 import './GalleryNav.css';
-import './GalleryNav.layout.css';
 
 type Props = {
   id?: string;
@@ -34,25 +33,25 @@ export const GalleryNav: FC<Props> = ({id}) => {
   const firstRecord = 1 + pageSize * (currentPage - 1);
   const lastRecord = currentPage === lastPage ? totalRecords : pageSize * currentPage;
 
-  return <nav className="gallery-nav pagination" aria-label="pagination" id={id}>
+  return <nav className="pagination backdrop" aria-label="pagination" id={id}>
     {hasPrevPage && <>
-      <Link to={`${path}${createSearchParams({page: firstPage})}`} onClick={gotoTopOfPage} id="first" className="page">
+      <Link to={`${path}${createSearchParams({page: firstPage})}`} onClick={gotoTopOfPage} className="page first field attentive bold">
         FIRST
       </Link>
-      <Link to={`${path}${createSearchParams({page: prevPage})}`} onClick={gotoTopOfPage} id="prev" className="page">
+      <Link to={`${path}${createSearchParams({page: prevPage})}`} onClick={gotoTopOfPage} className="page prev field attentive bold">
         PREV
       </Link>
     </>}
-    <output id="info">
+    <output className="info field">
       <span>{firstRecord} - {lastRecord}</span>
       <span>of</span>
       <span>{totalRecords || '—'}</span>
     </output>
     {hasNextPage && <>
-      <Link to={`${path}${createSearchParams({page: nextPage})}`} onClick={gotoTopOfPage} id="next" className="page">
+      <Link to={`${path}${createSearchParams({page: nextPage})}`} onClick={gotoTopOfPage} className="page next field attentive bold">
         NEXT
       </Link>
-      <Link to={`${path}${createSearchParams({page: lastPage})}`} onClick={gotoTopOfPage} id="last" className="page">
+      <Link to={`${path}${createSearchParams({page: lastPage})}`} onClick={gotoTopOfPage} className="page last field attentive bold">
         LAST
       </Link>
     </>}
