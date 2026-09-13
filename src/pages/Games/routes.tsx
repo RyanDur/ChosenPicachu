@@ -3,12 +3,10 @@ import {Paths} from '@pages/Paths';
 import {PageError} from '@pages/PageError';
 import {Header} from '@pages/BasePage/Header';
 import {ThreeInARow} from './ThreeInARow';
+import {GamesPage} from './GamesPage';
+import {GamePaths} from './GamePaths';
 
 const GamesHeader = () => <Header title="Play Games"/>;
-
-export enum GamePaths {
-  colorGame = 'colorGame',
-}
 
 const ColorGame = {
   path: GamePaths.colorGame,
@@ -20,5 +18,5 @@ export const Games = {
   errorElement: <PageError/>,
   handle: {header: GamesHeader},
   element: <Outlet/>,
-  children: [ColorGame]
+  children: [{index: true, element: <GamesPage/>}, ColorGame]
 };
