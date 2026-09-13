@@ -22,6 +22,10 @@
       outline: var(--hairline-x-2) solid var(--shadow);
       outline-offset: calc(var(--hairline-x-2) * -1);
     }
+
+    &[aria-current="true"] {
+      box-shadow: var(--press-glow-soft);
+    }
   }
 
   .entry:not(:last-child) .item {

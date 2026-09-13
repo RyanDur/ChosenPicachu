@@ -12,7 +12,7 @@ import {
 } from 'react';
 import {Outlet, Route, RouteObject, createMemoryRouter, createRoutesFromElements, useLocation} from 'react-router';
 import {App} from '../App';
-import {router} from '../router';
+import {rooms, router} from '../router';
 import {env} from '@env';
 import {Feed} from './feed';
 
@@ -53,7 +53,7 @@ export const TestApp: FC<Props> = ({at = '/', feed, children}) => {
     children: [has(children) ? {
       ...router,
       id: 'root',
-      children: [...routesAt(at, children), {path: '*', element: null}]
+      children: [{...rooms, children: [...routesAt(at, children), {path: '*', element: null}]}]
     } : router]
   }], {initialEntries: [at]}));
   const [reported, setReported] = useState<readonly string[]>([]);

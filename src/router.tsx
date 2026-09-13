@@ -45,11 +45,8 @@ export const Site: FC = () => {
   </BannerProvider>;
 };
 
-export const router = {
-  path: '/',
-  element: <Site/>,
+export const rooms = {
   errorElement: <PageError/>,
-  hydrateFallbackElement: <Site/>,
   children: [
     Home,
     {
@@ -61,6 +58,14 @@ export const router = {
     },
     Users,
     Gallery,
-    Games
+    Games,
+    {path: '*', element: <PageError/>}
   ]
+};
+
+export const router = {
+  path: '/',
+  element: <Site/>,
+  hydrateFallbackElement: <Site/>,
+  children: [rooms]
 };
