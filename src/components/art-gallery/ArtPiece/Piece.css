@@ -16,8 +16,3 @@
     font-size: var(--text-caption);
   }
 }
-
-.err {
-  display: block;
-  margin: auto;
-}

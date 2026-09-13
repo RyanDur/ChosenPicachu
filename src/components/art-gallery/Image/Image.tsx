@@ -38,10 +38,10 @@ export const Image: FC<ImageProps> = (
 
     return errored ?
         <img alt={`${piece.title} would not load`}
-             className="image error"
+             className="image stand-in"
              src={noImage}/> : !piece.image ?
         <img alt={`${piece.title} has nothing to show`}
-             className="image error"
+             className="image stand-in"
              src={noImage}/> :
         (<>
             <ConditionalLink enabled={linkEnabled} area={tab ?? ''}>

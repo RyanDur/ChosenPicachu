@@ -9,6 +9,13 @@
   position: absolute;
   right: 1000vw;
 }
+
+.stand-in {
+  display: block;
+  margin: auto;
+  padding: var(--base-x-5);
+}
+
 .stick-to-bottom {
   position: sticky;
   bottom: 0;
