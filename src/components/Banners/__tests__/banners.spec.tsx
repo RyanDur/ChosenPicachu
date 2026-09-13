@@ -1,9 +1,7 @@
 import {fireEvent, render, screen, within} from '@testing-library/react';
-import {MemoryRouter} from 'react-router';
 import userEvent from '@testing-library/user-event';
 import {FC} from 'react';
-import {BannerProvider} from '@components/Banners/BannerProvider';
-import {Banners} from '@components/Banners/Banners';
+import {TestApp} from '@test-support/TestApp';
 import {useBanners} from '@components/Banners/useBanners';
 
 const Trouble: FC<{message: string}> = ({message}) => {
@@ -11,14 +9,7 @@ const Trouble: FC<{message: string}> = ({message}) => {
   return <button type="button" onClick={() => raise(message)}>trouble</button>;
 };
 
-const renderWithTrouble = (message: string) => render(
-  <MemoryRouter>
-    <BannerProvider>
-      <Trouble message={message}/>
-      <Banners/>
-    </BannerProvider>
-  </MemoryRouter>
-);
+const renderWithTrouble = (message: string) => render(<TestApp><Trouble message={message}/></TestApp>);
 
 const troubleOf = (alert: HTMLElement, message: string): HTMLElement => {
   const item = within(alert).getAllByRole('listitem', {hidden: true}).find(standing => within(standing).queryByText(message) !== null);
@@ -38,15 +29,7 @@ describe('the banners', () => {
   });
 
   test('every raised error stands until dismissed, each on its own', async () => {
-    render(
-      <MemoryRouter>
-        <BannerProvider>
-          <Trouble message="first trouble"/>
-          <Trouble message="second trouble"/>
-          <Banners/>
-        </BannerProvider>
-      </MemoryRouter>
-    );
+    render(<TestApp><Trouble message="first trouble"/><Trouble message="second trouble"/></TestApp>);
     const [first, second] = screen.getAllByRole('button', {name: 'trouble'});
 
     await userEvent.click(first);
@@ -80,14 +63,7 @@ describe('the banners', () => {
   });
 
   test('a sideways stack lets its trouble go when the column closes', async () => {
-    render(
-      <MemoryRouter initialEntries={['/?stack=left']}>
-        <BannerProvider>
-          <Trouble message="sideways trouble"/>
-          <Banners/>
-        </BannerProvider>
-      </MemoryRouter>
-    );
+    render(<TestApp at="/?stack=left"><Trouble message="sideways trouble"/></TestApp>);
 
     await userEvent.click(screen.getByRole('button', {name: 'trouble'}));
     const alert = screen.getByRole('alert', {hidden: true});

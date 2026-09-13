@@ -1,32 +1,12 @@
 import {TestApp} from '@test-support/TestApp';
 import {render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {Gallery} from '@pages/Gallery';
-import {Games} from '@pages/Games';
-import {Users} from '@pages/Users';
-import {PageError} from '@pages/PageError';
 import {Paths} from '@pages/Paths';
 import {createMemoryRouter, Route, RouterProvider} from 'react-router';
-import {RouteObject} from 'react-router';
 import {router} from '../../router';
 
 describe('page error boundaries', () => {
-  test('every page route declares one, split or not', async () => {
-    const lazily = (routes: readonly RouteObject[]): Promise<Omit<RouteObject, 'path'>>[] =>
-      routes.flatMap(route => [
-        ...(route.lazy !== undefined && typeof route.lazy === 'function' ? [route.lazy()] : []),
-        ...(route.children !== undefined ? lazily(route.children) : [])
-      ]);
-    const split = await Promise.all(lazily(router.children));
-
-    expect(split).toHaveLength(3);
-    [...split, Users, Gallery, Games].forEach(route => {
-      expect(route.errorElement).toBeDefined();
-      expect(route.element).toBeDefined();
-    });
-  });
-
-  test('a crashing page shows the closed-room message instead of dying', async () => {
+  test('a crashing page shows the closed room, even with no boundary of its own', async () => {
     const boom = new Error('boom');
     const Boom = () => {
       throw boom;
@@ -34,14 +14,14 @@ describe('page error boundaries', () => {
     const caught: unknown[] = [];
     render(
       <TestApp>
-        <Route path="/" element={<Boom/>} errorElement={<PageError/>}/>
+        <Route path="/" element={<Boom/>}/>
       </TestApp>,
       {onCaughtError: error => caught.push(error)}
     );
 
     expect(await screen.findByText('This room is closed.')).toBeVisible();
     expect(screen.getByRole('link', {name: 'Back to the front door'})).toHaveAttribute('href', Paths.home);
-    expect(screen.getByLabelText('errors reported')).toHaveTextContent(/^boom$/);
+    expect(screen.getByRole('list', {name: 'errors reported'})).toHaveTextContent(/^boom$/);
     expect(caught).toEqual([boom]);
   });
 });

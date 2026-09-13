@@ -10,6 +10,7 @@ import {Home} from '@pages/Home';
 import {Users} from '@pages/Users';
 import {Gallery} from '@pages/Gallery';
 import {Games} from '@pages/Games';
+import {PageError} from '@pages/PageError';
 
 const NoHeader = () => null;
 
@@ -47,6 +48,7 @@ export const Site: FC = () => {
 export const router = {
   path: '/',
   element: <Site/>,
+  errorElement: <PageError/>,
   hydrateFallbackElement: <Site/>,
   children: [
     Home,
