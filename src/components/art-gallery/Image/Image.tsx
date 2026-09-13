@@ -54,7 +54,7 @@ export const Image: FC<ImageProps> = (
                      }}
                      fetchPriority={priority ? 'high' : 'auto'}
                      loading={lazy ? 'lazy' : undefined}
-                     srcSet={piece.srcSet ?? undefined}
+                     srcSet={piece.srcSet}
                      sizes="(max-width: 600px) 85vw, (max-width: 1100px) 45vw, 33vw"
                      alt={piece.altText} title={piece.title}
                      src={piece.image}/>

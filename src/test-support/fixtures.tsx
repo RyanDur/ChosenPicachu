@@ -9,6 +9,7 @@ import {
   HarvardSearchResponse
 } from '@components/art-gallery/museums/harvard/types';
 import {AllArt, Art} from '@components/art-gallery/museums/types/response';
+import {pictured} from '@components/art-gallery/museums/pictured';
 import {VAMAllArtResponse, VAMArtResponse} from '@components/art-gallery/museums/vam/types';
 import {
   ClevelandAllArtResponse,
@@ -72,7 +73,7 @@ export const harvardPieceResponse = harvardToPieceResponse(undefined, faker.numb
 export const harvardPiece: Art = {
   id: String(harvardPieceResponse.id),
   title: harvardPieceResponse.title || 'Untitled',
-  image: harvardPieceResponse.primaryimageurl,
+  ...pictured(harvardPieceResponse.primaryimageurl),
   altText: harvardPieceResponse.title || 'Untitled',
   artistInfo: harvardPieceResponse.people?.[0].displayname || ''
 };
@@ -157,7 +158,7 @@ export const fromHarvardArt: AllArt = {
   pieces: harvardArtResponse.records.map(piece => ({
     id: String(piece.id),
     title: piece.title || 'Untitled',
-    image: piece.primaryimageurl,
+    ...pictured(piece.primaryimageurl),
     artistInfo: piece.people?.[0].displayname || '',
     altText: piece.title || 'Untitled'
   }))

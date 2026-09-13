@@ -11,8 +11,8 @@ export type Pagination = {
 export type Art = {
     id: string;
     title: string;
-    image?: string | null;
-    srcSet?: string | null;
+    image?: string;
+    srcSet?: string;
     altText: string;
     artistInfo: string;
 }

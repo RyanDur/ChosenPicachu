@@ -8,6 +8,7 @@ import {
   AICSearchSchema
 } from '@components/art-gallery/museums/aic/types';
 import {toQueryString} from '@transport/url';
+import {maybe} from '@ryandur/sand';
 import {defaultRecordLimit, defaultSearchLimit} from '@components/art-gallery/limits';
 import {env} from '@env';
 import {AllArt, Art, SearchOptions} from '@components/art-gallery/museums/types/response';
@@ -56,17 +57,19 @@ export const aic = {
       .flatMap(option => option.input))
 };
 
-const aicImage = (imageId: string | null | undefined, width: number) =>
-  `${iiif(String(imageId))}/full/${width},/0/default.jpg`;
+const aicImage = (imageId: string, width: number) =>
+  `${iiif(imageId)}/full/${width},/0/default.jpg`;
 
-const aicSrcSet = (imageId: string | null | undefined) =>
+const aicSrcSet = (imageId: string) =>
   [400, 800, 1200].map(width => `${aicImage(imageId, width)} ${width}w`).join(', ');
+
+const pictured = (imageId: string | null | undefined, width: number): Pick<Art, 'image' | 'srcSet'> =>
+  maybe(imageId).map(id => ({image: aicImage(id, width), srcSet: aicSrcSet(id)})).orElse({});
 
 const aicToPiece = (width: number) => (data: AICArt): Art => ({
   id: String(data.id),
   title: data.title,
-  image: aicImage(data.image_id, width),
-  srcSet: aicSrcSet(data.image_id),
+  ...pictured(data.image_id, width),
   artistInfo: data.artist_display,
   altText: data.thumbnail?.alt_text || data.term_titles.join(' ') || ''
 });

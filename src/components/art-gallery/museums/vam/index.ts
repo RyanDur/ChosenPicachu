@@ -1,6 +1,7 @@
 import {VAMAllArtResponse, VAMAllArtSchema, VAMArtResponse, VAMArtSchema, VAMSearchRecord} from '@components/art-gallery/museums/vam/types';
 import {defaultRecordLimit, defaultSearchLimit} from '@components/art-gallery/limits';
 import {env} from '@env';
+import {maybe} from '@ryandur/sand';
 import {toQueryString} from '@transport/url';
 import {AllArt, Art, SearchOptions} from '@components/art-gallery/museums/types/response';
 import {validate} from '@transport/validate';
@@ -17,8 +18,7 @@ const iiifSrcSet = (base: string) =>
 const vamRecordToArt = (record: VAMSearchRecord): Art => ({
   id: record.systemNumber,
   title: record._primaryTitle || 'Untitled',
-  image: record._images && iiifImage(record._images._iiif_image_base_url, 800),
-  srcSet: record._images && iiifSrcSet(record._images._iiif_image_base_url),
+  ...maybe(record._images).map(({_iiif_image_base_url: base}) => ({image: iiifImage(base, 800), srcSet: iiifSrcSet(base)})).orElse({}),
   artistInfo: record._primaryMaker?.name || 'Unknown',
   altText: record._primaryTitle || 'Untitled'
 });
@@ -47,7 +47,7 @@ export const vam = {
     .map(({record}: VAMArtResponse): Art => ({
       id: record.systemNumber,
       title: record.titles?.[0]?.title || record.objectType,
-      image: record.images?.[0] && iiifImage(`https://framemark.vam.ac.uk/collections/${record.images[0]}/`, 2000),
+      ...maybe(record.images?.[0]).map(first => ({image: iiifImage(`https://framemark.vam.ac.uk/collections/${first}/`, 2000)})).orElse({}),
       artistInfo: record.artistMakerPerson?.[0]?.name.text || 'Unknown',
       altText: record.titles?.[0]?.title || record.objectType
     })),

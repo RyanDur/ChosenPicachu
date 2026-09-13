@@ -165,6 +165,15 @@ describe('data', () => {
 
                     expect(actual).toEqual(aicPiece);
                 });
+
+                test('an AIC piece without an image has no picture and no srcset', async () => {
+                    anyRequestRespondsWith(JSON.stringify({data: {...pieceAICResponse.data, image_id: null}}));
+
+                    const actual = await art.get({id: String(aicPiece.id), source: Source.AIC}).orNull();
+
+                    expect(actual).toEqual({...aicPiece, image: undefined, srcSet: undefined});
+                    expect(actual).not.toHaveProperty('image');
+                });
             });
 
             test('reports an unknown error when AIC will not give the piece', async () => {
