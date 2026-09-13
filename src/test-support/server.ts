@@ -13,6 +13,7 @@ export const server = setupServer(
   http.get(`${env.aicDomain}/search`, () => HttpResponse.error()),
   http.get(env.harvardDomain, () => HttpResponse.error()),
   http.get(`${env.vamDomain}/objects/search`, () => HttpResponse.error()),
+  http.get(`${env.clevelandDomain}/`, () => HttpResponse.error()),
   http.get(`${env.aicPictures}/:image/info.json`, () => HttpResponse.json({})),
   http.get(`${env.vamPictures}/:image/info.json`, () => HttpResponse.json({}))
 );

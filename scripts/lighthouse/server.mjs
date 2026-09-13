@@ -45,7 +45,8 @@ const server = createServer((request, response) => {
       harvardDomain: '/harvard',
       harvardAPIKey: 'recorded',
       vamDomain: '/vam',
-      vamPictures: '/vam-image'
+      vamPictures: '/vam-image',
+      clevelandDomain: '/cleveland'
     })};`, 'text/javascript', true);
   }
 

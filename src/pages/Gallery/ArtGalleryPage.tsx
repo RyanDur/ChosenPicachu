@@ -11,7 +11,8 @@ import {HTTPError} from '@transport/types';
 const museums = [
   {display: 'The Art Institute of Chicago', param: Source.AIC},
   {display: 'Harvard Art Museums', param: Source.HARVARD},
-  {display: 'The Victoria and Albert Museum', param: Source.VAM}
+  {display: 'The Victoria and Albert Museum', param: Source.VAM},
+  {display: 'The Cleveland Museum of Art', param: Source.CLEVELAND}
 ];
 
 type Answers = Partial<Record<Source, boolean>>;

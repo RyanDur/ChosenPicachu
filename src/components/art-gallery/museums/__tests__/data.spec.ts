@@ -1,6 +1,11 @@
 import {anyRequestRespondsWith} from '@test-support/server';
 import {
     aicArtResponse,
+    clevelandArtOptions,
+    clevelandArtResponse,
+    clevelandPieceResponse,
+    fromClevelandArt,
+    fromClevelandToPiece,
     fromAICArt,
     fromHarvardArt,
     harvardArtOptions,
@@ -104,6 +109,45 @@ describe('data', () => {
                 expect(consumer).toHaveBeenCalledWith(HTTPError.UNKNOWN);
             });
 
+        describe('when the source is Cleveland', () => {
+            test('when it is successful', async () => {
+                anyRequestRespondsWith(JSON.stringify(clevelandArtResponse));
+
+                const actual = await art.getAll({page: 1, size: 8, source: Source.CLEVELAND}).orNull();
+
+                expect(actual).toEqual(fromClevelandArt);
+            });
+
+            test('when it is not successful', async () => {
+                const consumer = vi.fn();
+                anyRequestRespondsWith(HTTPError.UNKNOWN, 400);
+
+                await art.getAll({page: 1, size: 8, source: Source.CLEVELAND})
+                    .onFailure(consumer).orNull();
+
+                expect(consumer).toHaveBeenCalledWith(HTTPError.UNKNOWN);
+            });
+        });
+    });
+
+    describe('retrieving a Cleveland artwork', () => {
+        test('when it is successful', async () => {
+            anyRequestRespondsWith(JSON.stringify(clevelandPieceResponse));
+
+            const actual = await art.get({id: fromClevelandToPiece.id, source: Source.CLEVELAND}).orNull();
+
+            expect(actual).toEqual(fromClevelandToPiece);
+        });
+
+        test('when it is not successful', async () => {
+            const consumer = vi.fn();
+            anyRequestRespondsWith(HTTPError.UNKNOWN, 400);
+
+            await art.get({id: fromClevelandToPiece.id, source: Source.CLEVELAND})
+                .onFailure(consumer).orNull();
+
+            expect(consumer).toHaveBeenCalledWith(HTTPError.UNKNOWN);
+        });
     });
 
     describe('retrieving an artwork', () => {
@@ -206,11 +250,22 @@ describe('data', () => {
             });
         });
 
+        describe('for Cleveland', () => {
+            test('when it is successful', async () => {
+                anyRequestRespondsWith(JSON.stringify(clevelandArtOptions));
+
+                const actual = await art.search({search, source: Source.CLEVELAND}).orNull();
+
+                expect(actual).toEqual(options);
+            });
+        });
+
         test.each`
         source
         ${Source.AIC}
         ${Source.HARVARD}
         ${Source.VAM}
+        ${Source.CLEVELAND}
         `('when the call fails', async ({source}) => {
             const consumer = vi.fn();
             anyRequestRespondsWith(HTTPError.SERVER_ERROR, 500);

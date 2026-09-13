@@ -12,6 +12,7 @@ const localized = {
   'https://api.vam.ac.uk/v2': '/vam',
   'https://api.artic.edu/api/v1/artworks': '/aic',
   'https://api.harvardartmuseums.org/object': '/harvard',
+  'https://openaccess-api.clevelandart.org/api/artworks': '/cleveland',
   'https://api.exchange.coinbase.com': '/trade-history'
 };
 

@@ -10,6 +10,11 @@ import {
 } from '@components/art-gallery/museums/harvard/types';
 import {AllArt, Art} from '@components/art-gallery/museums/types/response';
 import {VAMAllArtResponse, VAMArtResponse} from '@components/art-gallery/museums/vam/types';
+import {
+  ClevelandAllArtResponse,
+  ClevelandArtResponse,
+  ClevelandSearchResponse
+} from '@components/art-gallery/museums/cleveland/types';
 import {createUser} from '@components/Users/resource/usersApi';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
 import {env} from '@env';
@@ -158,3 +163,42 @@ export const fromHarvardArt: AllArt = {
 };
 
 
+const clevelandRecords = [...Array(defaultRecordLimit)].map((_, index) => ({
+  id: 1000 + index,
+  title: faker.lorem.words(),
+  creators: [{description: faker.person.fullName()}],
+  tombstone: faker.lorem.sentence(),
+  images: {
+    web: {url: faker.internet.url(), width: '630', height: '893'},
+    print: {url: faker.internet.url(), width: '2398', height: '3400'}
+  }
+}));
+export const clevelandArtResponse: ClevelandAllArtResponse = {info: {total: 82}, data: clevelandRecords};
+export const fromClevelandArt: AllArt = {
+  pagination: {total: 82, limit: defaultRecordLimit, totalPages: Math.ceil(82 / defaultRecordLimit), currentPage: 1},
+  pieces: clevelandRecords.map(record => ({
+    id: String(record.id),
+    title: record.title,
+    image: record.images.web.url,
+    srcSet: `${record.images.web.url} 630w, ${record.images.print.url} 2398w`,
+    artistInfo: record.creators[0].description,
+    altText: record.title
+  }))
+};
+const clevelandPieceRecord = {
+  id: 94979,
+  title: faker.lorem.words(),
+  creators: [],
+  tombstone: faker.lorem.sentence(),
+  images: {web: {url: faker.internet.url(), width: '600', height: '400'}}
+};
+export const clevelandPieceResponse: ClevelandArtResponse = {data: clevelandPieceRecord};
+export const fromClevelandToPiece: Art = {
+  id: '94979',
+  title: clevelandPieceRecord.title,
+  image: clevelandPieceRecord.images.web.url,
+  srcSet: `${clevelandPieceRecord.images.web.url} 600w`,
+  artistInfo: clevelandPieceRecord.tombstone,
+  altText: clevelandPieceRecord.title
+};
+export const clevelandArtOptions: ClevelandSearchResponse = {data: options.map(title => ({title}))};

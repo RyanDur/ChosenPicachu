@@ -1,5 +1,5 @@
 import {TestApp} from '@test-support/TestApp';
-import {aicArtResponse, harvardArtResponse, vamArtResponse} from '@test-support/fixtures';
+import {aicArtResponse, clevelandArtResponse, harvardArtResponse, vamArtResponse} from '@test-support/fixtures';
 import {render, screen, waitFor, within} from '@testing-library/react';
 import {has} from '@ryandur/sand';
 import {Paths} from '@pages/Paths';
@@ -10,6 +10,7 @@ import {
   refuseAICPictures,
   setupAICAllArtResponse,
   setupAICArtPieceResponse,
+  setupClevelandAllArtResponse,
   setupHarvardAllArtResponse,
   setupVAMAllArtResponse
 } from '@components/art-gallery/__tests__/galleryApiTestHelper';
@@ -90,6 +91,17 @@ describe('The gallery.', () => {
 
     await waitFor(() => expect(screen.getAllByRole('figure').length).toEqual(defaultRecordLimit));
     expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument();
+    expect(screen.queryByAltText('empty gallery')).not.toBeInTheDocument();
+  });
+
+  test('when looking at the cleveland gallery', async () => {
+    setupAICAllArtResponse(aicArtResponse);
+    setupClevelandAllArtResponse(clevelandArtResponse);
+    render(<TestApp at={Paths.artGallery}/>);
+
+    await userEvent.click(await screen.findByText('The Cleveland Museum of Art'));
+
+    await waitFor(() => expect(screen.getAllByRole('figure').length).toEqual(defaultRecordLimit));
     expect(screen.queryByAltText('empty gallery')).not.toBeInTheDocument();
   });
 

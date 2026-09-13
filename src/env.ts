@@ -8,6 +8,7 @@ export type Env = {
   harvardAPIKey: string;
   vamDomain: string;
   vamPictures: string;
+  clevelandDomain: string;
 };
 
 declare global {
@@ -27,7 +28,8 @@ export const unconfigured: Env = {
   harvardDomain: '',
   harvardAPIKey: '',
   vamDomain: '',
-  vamPictures: ''
+  vamPictures: '',
+  clevelandDomain: ''
 };
 
 export const env: Env = window.__env ?? unconfigured;

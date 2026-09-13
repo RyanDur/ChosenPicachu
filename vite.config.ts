@@ -70,7 +70,8 @@ const runtimeEnv = (env: Record<string, string>): Plugin => {
     harvardDomain: env.VITE_APP_HARVARD_API ?? '',
     harvardAPIKey: env.VITE_APP_HARVARD_API_KEY ?? '',
     vamDomain: env.VITE_APP_VAM_API ?? '',
-    vamPictures: env.VITE_APP_VAM_PICTURES ?? ''
+    vamPictures: env.VITE_APP_VAM_PICTURES ?? '',
+    clevelandDomain: env.VITE_APP_CLEVELAND_API ?? ''
   }, null, 2)};\n`;
   let base = '/';
   return {
