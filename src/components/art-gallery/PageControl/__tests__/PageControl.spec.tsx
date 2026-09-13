@@ -4,7 +4,7 @@ import {render, screen, waitFor} from '@testing-library/react';
 import {aicArtResponse} from '@test-support/fixtures';
 import {Paths} from '@pages/Paths';
 import {atTheTop, landingsDuring} from '@test-support/landings';
-import {setupAICEveryPage} from '@components/art-gallery/__tests__/galleryApiTestHelper';
+import {heldAICAllArtResponse, setupAICEveryPage} from '@components/art-gallery/__test_support';
 
 const wallHangs = () => screen.findAllByRole('figure');
 
@@ -41,6 +41,17 @@ describe('The page controls', () => {
       await wallHangs();
 
       expect(screen.getByLabelText(/Page #/)).toHaveAttribute('max', `${aicArtResponse.pagination.total_pages}`);
+    });
+
+    it('has no ceiling until the museum says where the end is', async () => {
+      const artArrives = heldAICAllArtResponse(aicArtResponse);
+      render(<TestApp at={Paths.artGallery}/>);
+
+      expect(screen.getByLabelText(/Page #/)).not.toHaveAttribute('max');
+
+      artArrives();
+
+      await waitFor(() => expect(screen.getByLabelText(/Page #/)).toHaveAttribute('max', `${aicArtResponse.pagination.total_pages}`));
     });
   });
 

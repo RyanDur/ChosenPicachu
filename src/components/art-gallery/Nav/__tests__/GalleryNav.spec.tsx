@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import {aicArtResponse} from '@test-support/fixtures';
 import {Paths} from '@pages/Paths';
 import {atTheTop, landingsDuring} from '@test-support/landings';
-import {setupAICEveryPage, slowAICAllArtResponse} from '@components/art-gallery/__tests__/galleryApiTestHelper';
+import {heldAICAllArtResponse, setupAICEveryPage} from '@components/art-gallery/__test_support';
 
 const {total_pages: lastPage, limit, total} = aicArtResponse.pagination;
 
@@ -99,9 +99,22 @@ describe('Gallery Navigation', () => {
   });
 
   test('before any page has arrived, the total is a dash', () => {
-    slowAICAllArtResponse(aicArtResponse);
+    heldAICAllArtResponse(aicArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
 
     expect(screen.getByRole('navigation', {name: 'pagination'})).toHaveTextContent('of—');
+  });
+
+  test('until the museum says where the end is, there is no way forward', async () => {
+    const artArrives = heldAICAllArtResponse(aicArtResponse);
+    render(<TestApp at={Paths.artGallery}/>);
+
+    expect(screen.queryByRole('link', {name: 'NEXT'})).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', {name: 'LAST'})).not.toBeInTheDocument();
+
+    artArrives();
+
+    expect(await screen.findByRole('link', {name: 'NEXT'})).toBeInTheDocument();
+    expect(screen.getByRole('link', {name: 'LAST'})).toBeInTheDocument();
   });
 });

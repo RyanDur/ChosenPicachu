@@ -12,7 +12,7 @@ export const PageControl = () => {
   const [pageSize, updatePageSize] = useState(size);
 
   const firstPage = 1;
-  const lastPage = art?.pagination?.totalPages ?? Number.MAX_VALUE;
+  const lastPage = art?.pagination.totalPages;
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();

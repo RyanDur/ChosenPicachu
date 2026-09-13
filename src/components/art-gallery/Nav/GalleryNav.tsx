@@ -25,8 +25,8 @@ export const GalleryNav: FC<Props> = ({id}) => {
     setRemembered(total);
   }
   const firstPage = 1;
-  const lastPage = art?.pagination?.totalPages ?? Number.MAX_VALUE;
   const currentPage = page ?? firstPage;
+  const lastPage = art?.pagination.totalPages ?? currentPage;
 
   const hasNextPage = currentPage < lastPage;
   const nextPage = hasNextPage ? currentPage + 1 : currentPage;

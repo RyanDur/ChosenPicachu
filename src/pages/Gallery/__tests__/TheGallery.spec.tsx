@@ -15,9 +15,9 @@ import {
   setupAICArtPieceResponse,
   setupClevelandAllArtResponse,
   setupHarvardAllArtResponse,
-  slowAICAllArtResponse,
+  heldAICAllArtResponse,
   setupVAMAllArtResponse
-} from '@components/art-gallery/__tests__/galleryApiTestHelper';
+} from '@components/art-gallery/__test_support';
 
 const firstPiece = aicArtResponse.data[0];
 
@@ -175,7 +175,7 @@ describe('The gallery.', () => {
 
   test('the count of works stays while the next page loads', async () => {
     setupAICAllArtResponse(aicArtResponse);
-    slowAICAllArtResponse(aicArtResponse, {limit: defaultRecordLimit, page: 2});
+    const nextPageArrives = heldAICAllArtResponse(aicArtResponse, {limit: defaultRecordLimit, page: 2});
     render(<TestApp at={Paths.artGallery}/>);
     await screen.findAllByRole('figure');
 
@@ -183,6 +183,9 @@ describe('The gallery.', () => {
 
     await screen.findByRole('progressbar', {name: 'loading gallery'});
     expect(screen.getByRole('navigation', {name: 'pagination'})).toHaveTextContent(`of${aicArtResponse.pagination.total}`);
+
+    nextPageArrives();
+
     await waitFor(() => expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument());
   });
 

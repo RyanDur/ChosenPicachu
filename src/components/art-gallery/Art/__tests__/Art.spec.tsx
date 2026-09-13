@@ -8,7 +8,7 @@ import {Source} from '@components/art-gallery/museums/types/resource';
 import {aicArtResponse} from '@test-support/fixtures';
 import {test} from 'vitest';
 import {Paths} from '@pages/Paths';
-import {setupAICAllArtResponse, slowAICAllArtResponse} from '@components/art-gallery/__tests__/galleryApiTestHelper';
+import {heldAICAllArtResponse, setupAICAllArtResponse} from '@components/art-gallery/__test_support';
 
 describe('The gallery.', () => {
   test('loads the wall exactly once on mount', async () => {
@@ -37,16 +37,19 @@ describe('The gallery.', () => {
     walls.slice(6).forEach(img => expect(img).toHaveAttribute('loading', 'lazy'));
   });
 
-  test('when the art is loading', async () => {
-    slowAICAllArtResponse(aicArtResponse);
+  test('the loading sign stands until the art arrives, and no frame before it', async () => {
+    const artArrives = heldAICAllArtResponse(aicArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
 
     await screen.findByRole('progressbar', {name: 'loading gallery'});
     expect(screen.queryByRole('figure')).not.toBeInTheDocument();
+
+    artArrives();
+
     await waitFor(() => expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument());
   });
 
-  test('when there is no art to show', async () => {
+  test('a museum with nothing to show leaves the wall empty', async () => {
     setupAICAllArtResponse({...aicArtResponse, data: []}, {page: 0, search: 'g', limit: 8});
     render(<TestApp at={`${Paths.artGallery}?page=0&search=g&size=8&tab=${Source.AIC}`}><ArtGallery/></TestApp>);
 
@@ -55,7 +58,7 @@ describe('The gallery.', () => {
     expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument();
   });
 
-  test('when the art has errored', async () => {
+  test('a museum that cannot be reached leaves the wall empty, and says so', async () => {
     anyRequestFailsToConnect();
 
     render(<TestApp at={`${Paths.artGallery}?page=23&search=g&size=8&tab=${Source.HARVARD}`}><ArtGallery/></TestApp>);

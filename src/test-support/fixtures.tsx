@@ -29,10 +29,10 @@ export const users = [
 ];
 
 export const pagination = {
-  total: 1000,
+  total: 997,
   limit: defaultRecordLimit,
   offset: 0,
-  total_pages: 84,
+  total_pages: 125,
   current_page: 1,
   next_url: faker.internet.url()
 };
