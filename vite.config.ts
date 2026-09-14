@@ -10,8 +10,7 @@ const aliases = {
   '@pages': fileURLToPath(new URL('./src/pages', import.meta.url)),
   '@components': fileURLToPath(new URL('./src/components', import.meta.url)),
   '@transport': fileURLToPath(new URL('./src/transport', import.meta.url)),
-  '@test-support': fileURLToPath(new URL('./src/test-support', import.meta.url)),
-  crypto: fileURLToPath(new URL('./src/shims/empty.ts', import.meta.url))
+  '@test-support': fileURLToPath(new URL('./src/test-support', import.meta.url))
 };
 
 const frameScript = (): Plugin => ({
