@@ -223,14 +223,10 @@ describe('the review report', () => {
 
   test('the place links to the line at the reviewed commit when the commit is known', () => {
     const commit = {repository: 'RyanDur/ChosenPicachu', sha: 'abc123'};
-    const summary = summaryOf(review([plus], [violation]), {commit});
+    const summary = summaryOf(review([plus], [violation, testNote]), {commit});
     expect(summary).toContain('[`src/a.tsx:3`](https://github.com/RyanDur/ChosenPicachu/blob/abc123/src/a.tsx#L3)');
     expect(summary).toContain('[`src/f.tsx:5`](https://github.com/RyanDur/ChosenPicachu/blob/abc123/src/f.tsx#L5)');
-  });
-
-  test('a linked place keeps its underscores, so __tests__ is not read as emphasis', () => {
-    const commit = {repository: 'RyanDur/ChosenPicachu', sha: 'abc123'};
-    expect(deltaOf(testNote, commit)).toContain('[`src/__tests__/c.spec.tsx:4`](');
+    expect(summary).toContain('[`src/__tests__/c.spec.tsx:4`](https://github.com/RyanDur/ChosenPicachu/blob/abc123/src/__tests__/c.spec.tsx#L4)');
   });
 
   test('what the reviewer checked folds away under the entry', () => {
@@ -249,7 +245,16 @@ describe('the review report', () => {
     ['happened', 'why', 'change', 'checked', 'principle'].forEach(field => expect(deltaEntry).toContain(escaped(field)));
     expect(plusEntry).not.toContain('<b>');
     expect(deltaEntry).not.toContain('<b>');
-    expect(plusOf({...plus, why: 'reads `<ul>` whole'})).toContain('reads `<ul>` whole');
+    expect(plusOf({...plus, why: 'reads `<ul>` whole & <b>more</b>'})).toContain('reads `<ul>` whole &amp; &lt;b&gt;more&lt;/b&gt;');
+  });
+
+  test('every severity the schema allows has a mark in its heading', () => {
+    const schema = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), '../review/feedback.schema.json'), 'utf8'));
+    schema.$defs.severity['enum'].forEach(severity => {
+      const heading = deltaOf({...note, severity}).split('\n')[0];
+      expect(heading).not.toContain('undefined');
+      expect(heading).toMatch(new RegExp(`^##### \\S ${severity} · `));
+    });
   });
 
   test('a review with plusses and no deltas still leaves its feedback on the commit, and an empty one leaves none', () => {
