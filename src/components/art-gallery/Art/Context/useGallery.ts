@@ -1,9 +1,10 @@
-import {AllArt} from '@components/art-gallery/museums/art';
+import {AllArt, Art, Pagination} from '@components/art-gallery/museums/art';
 import {Consumer} from '@ryandur/sand';
 import {createContext, useContext} from 'react';
 
 export type GalleryContextState = {
-  art?: AllArt;
+  pagination?: Pagination;
+  pieces?: Art[];
   updateArt: Consumer<AllArt>;
   reset: Consumer<void>;
 }

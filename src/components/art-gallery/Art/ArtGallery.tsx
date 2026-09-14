@@ -4,7 +4,7 @@ import * as schema from 'schemawax';
 import {Loading} from '@components/Loading';
 import {Image} from '@components/art-gallery/Image';
 import {useGallery} from '@components/art-gallery/Art/Context';
-import {empty, has} from '@ryandur/sand';
+import {empty, has, is} from '@ryandur/sand';
 import {useBanners} from '@components/Banners';
 import {troubleWith} from '@transport/trouble';
 import {sourceParam} from '@components/art-gallery/museums/source';
@@ -15,7 +15,7 @@ import noImageGallery from '../../../assets/icons/missing-wall.svg?url';
 import './Gallery.css';
 
 export const ArtGallery: FC = () => {
-  const {art, updateArt, reset} = useGallery();
+  const {pieces, updateArt, reset} = useGallery();
   const {raise} = useBanners();
   const [museum, setMuseum] = useState<MuseumReply>('unasked');
   const {page, size, search, tab} =
@@ -42,7 +42,7 @@ export const ArtGallery: FC = () => {
 
   return <>
     <ul id="art-gallery">
-      {art?.pieces.map((piece, index) => <li className="frame" key={piece.id}>
+      {pieces?.map((piece, index) => <li className="frame" key={piece.id}>
         <figure>
           <div className="wall-slot">
             <Image className="piece hung" piece={piece} priority={index < 4} lazy={index >= 6}/>
@@ -52,7 +52,7 @@ export const ArtGallery: FC = () => {
       </li>)}
     </ul>
     {museum === 'asked' && <Loading label="loading gallery"/>}
-    {museum === 'answered' && has(art) && empty(art.pieces) && <img className="stand-in" src={noImageGallery} alt="empty gallery"/>}
+    {is(pieces) && empty(pieces) && <img className="stand-in" src={noImageGallery} alt="empty gallery"/>}
     {museum === 'refused' && <img className="stand-in" src={noImageGallery} alt="the museum refused to answer"/>}
   </>;
 };

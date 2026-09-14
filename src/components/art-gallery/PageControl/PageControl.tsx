@@ -9,13 +9,16 @@ import './PageControl.css';
 const typed = (value: string): Maybe<number> => value === '' ? nothing() : some(+value);
 
 export const PageControl = () => {
-  const {art} = useGallery();
-  const {page, size, updateSearchParams} = useSearchParamsObject({page: numberParam, size: numberParam}, {page: 1, size: defaultRecordLimit});
+  const {pagination} = useGallery();
+  const {page, size, updateSearchParams} = useSearchParamsObject({page: numberParam, size: numberParam}, {
+    page: 1,
+    size: defaultRecordLimit
+  });
   const [pageNumber, updatePageNumber] = useState<Maybe<number>>(nothing());
   const [pageSize, updatePageSize] = useState<Maybe<number>>(nothing());
 
   const firstPage = 1;
-  const lastPage = art?.pagination.totalPages;
+  const lastPage = pagination?.totalPages;
 
   const onSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -41,6 +44,7 @@ export const PageControl = () => {
            max={100}
            id="per-page"
            onChange={event => updatePageSize(typed(event.currentTarget.value))}/>
-    <button type="submit" id="submit-page-number" className="submit-page control borderless field bold attentive">Go</button>
+    <button type="submit" id="submit-page-number" className="submit-page control borderless field bold attentive">Go
+    </button>
   </form>;
 };
