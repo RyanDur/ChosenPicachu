@@ -24,11 +24,14 @@ export const Search: FC<Props> = ({id, className}) => {
   const [searchString, updateQuery] = useState<string>('');
   const navigate = useNavigate();
   const {gallery} = useContext(GalleryLinks);
-  const {tab, search, removeSearchParams, createSearchParams} = useSearchParamsObject({tab: sourceParam, search: schema.string});
+  const {tab, search, removeSearchParams, createSearchParams} = useSearchParamsObject({
+    tab: sourceParam,
+    search: schema.string
+  });
 
   useEffect(() => {
     if (searchString === '' || !has(tab)) return () => undefined;
-    let asked: Maybe<{cancel: () => void}> = nothing();
+    let asked: Maybe<{ cancel: () => void }> = nothing();
     const pause = setTimeout(() => {
       asked = some(art.search({search: searchString.toLowerCase(), source: tab}).onSuccess(updateSearchOptions));
     }, suggestionPause);
@@ -38,7 +41,7 @@ export const Search: FC<Props> = ({id, className}) => {
     };
   }, [searchString, tab]);
 
-  const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
+  const submitted = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (searchString) void navigate({
       pathname: gallery,
@@ -46,23 +49,28 @@ export const Search: FC<Props> = ({id, className}) => {
     });
   };
 
-  const handleReset = () => {
+  const reset = () => {
     updateQuery('');
     updateSearchOptions([]);
     removeSearchParams('search');
   };
 
-  return <search id={id} className={classNames('search', 'backdrop', className)}><form className="search-form" onSubmit={handleSubmit} onReset={handleReset}>
-    <label id="query-label" className='query-label field ellipsis' htmlFor="query"><span className='bold'>Search For:</span> {decodeURI(search || '')}</label>
-    <input type="search" autoComplete="off" list="search-options" id="query"
-           className="query bare card"
-           onInput={event => updateQuery(event.currentTarget.value)}/>
-    <button className="reset-query button icon-button borderless field attentive" type="reset" aria-label="reset search"><img src={resetIcon} width="24" height="24" alt=""/></button>
-    <button className="submit-query button icon-button borderless field attentive" disabled={!searchString.length} type="submit"
-            aria-label="submit search"><img src={searchIcon} width="24" height="24" alt=""/></button>
-    <datalist id="search-options" className="search-options field">
-      {searchOptions.map((searchOption, index) =>
-        <option value={searchOption} key={index}>{searchOption}</option>)}
-    </datalist>
-  </form></search>;
+  return <search id={id} className={classNames('search', 'backdrop', className)}>
+    <form className="search-form" onSubmit={submitted} onReset={reset}>
+      <label id="query-label" className='query-label field ellipsis' htmlFor="query"><span
+        className='bold'>Search For:</span> {decodeURI(search || '')}</label>
+      <input type="search" autoComplete="off" list="search-options" id="query"
+             className="query bare card"
+             onInput={event => updateQuery(event.currentTarget.value)}/>
+      <button className="reset-query button icon-button borderless field attentive" type="reset"
+              aria-label="reset search"><img src={resetIcon} width="24" height="24" alt=""/></button>
+      <button className="submit-query button icon-button borderless field attentive" disabled={!searchString.length}
+              type="submit"
+              aria-label="submit search"><img src={searchIcon} width="24" height="24" alt=""/></button>
+      <datalist id="search-options" className="search-options field">
+        {searchOptions.map((searchOption, index) =>
+          <option value={searchOption} key={index}>{searchOption}</option>)}
+      </datalist>
+    </form>
+  </search>;
 };
