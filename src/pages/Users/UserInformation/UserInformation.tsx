@@ -89,7 +89,7 @@ const Draft: FC<{ currentUser?: User; mode: Mode }> = ({currentUser, mode}) => {
     </FancyDateInput>
 
     <button type="button" id="avatar-cell"
-            aria-label="Generate a new avatar"
+            aria-label="Draw a new avatar"
             className="avatar borderless rounded-corners accent raisable"
             disabled={readOnly}
             onClick={() => dispatch(avatarGenerated(generateAvatar()))}>

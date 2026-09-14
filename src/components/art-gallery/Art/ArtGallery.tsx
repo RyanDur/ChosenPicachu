@@ -50,7 +50,7 @@ export const ArtGallery: FC = () => {
     </ul>
     {wall.reply === 'asked' && <Loading label="loading gallery"/>}
     {wall.reply === 'answered' && empty(wall.answer) &&
-        <img className="stand-in" src={noImageGallery} alt="empty gallery"/>}
+        <img className="stand-in" src={noImageGallery} alt="the museum answered with nothing"/>}
     {wall.reply === 'refused' && <img className="stand-in" src={noImageGallery} alt="the museum refused to answer"/>}
   </>;
 };

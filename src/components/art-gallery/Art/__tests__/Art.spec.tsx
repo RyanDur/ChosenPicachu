@@ -53,7 +53,7 @@ describe('The gallery.', () => {
     setupAICAllArtResponse({...aicArtResponse, data: []}, {page: 0, search: 'g', limit: 8});
     render(<TestApp at={`${Paths.artGallery}?page=0&search=g&size=8&tab=${Source.AIC}`}><ArtGallery/></TestApp>);
 
-    expect(await screen.findByAltText('empty gallery')).toBeInTheDocument();
+    expect(await screen.findByAltText('the museum answered with nothing')).toBeInTheDocument();
     expect(screen.queryByRole('figure')).not.toBeInTheDocument();
     expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument();
   });

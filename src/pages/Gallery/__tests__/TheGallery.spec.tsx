@@ -46,7 +46,7 @@ describe('The gallery.', () => {
 
     expect(await wallHangs()).toHaveLength(defaultRecordLimit);
     expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument();
-    expect(screen.queryByAltText('empty gallery')).not.toBeInTheDocument();
+    expect(screen.queryByAltText('the museum answered with nothing')).not.toBeInTheDocument();
   });
 
   describe('when looking at an individual piece', () => {
@@ -82,7 +82,7 @@ describe('The gallery.', () => {
 
     await waitFor(() => expect(screen.getAllByRole('figure').length).toEqual(defaultRecordLimit));
     expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument();
-    expect(screen.queryByAltText('empty gallery')).not.toBeInTheDocument();
+    expect(screen.queryByAltText('the museum answered with nothing')).not.toBeInTheDocument();
   });
 
   test('choosing the Victoria and Albert hangs its works on the wall', async () => {
@@ -94,7 +94,7 @@ describe('The gallery.', () => {
 
     await waitFor(() => expect(screen.getAllByRole('figure').length).toEqual(defaultRecordLimit));
     expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument();
-    expect(screen.queryByAltText('empty gallery')).not.toBeInTheDocument();
+    expect(screen.queryByAltText('the museum answered with nothing')).not.toBeInTheDocument();
   });
 
   test("choosing Cleveland hangs Cleveland's works on the wall", async () => {
@@ -105,7 +105,7 @@ describe('The gallery.', () => {
     await userEvent.click(await screen.findByText('The Cleveland Museum of Art'));
 
     await waitFor(() => expect(screen.getAllByRole('figure').length).toEqual(defaultRecordLimit));
-    expect(screen.queryByAltText('empty gallery')).not.toBeInTheDocument();
+    expect(screen.queryByAltText('the museum answered with nothing')).not.toBeInTheDocument();
   });
 
   test('a museum whose pictures are refused has no door', async () => {
@@ -228,7 +228,7 @@ describe('The gallery.', () => {
     await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
 
     await screen.findByRole('progressbar', {name: 'loading gallery'});
-    expect(screen.queryByAltText('empty gallery')).not.toBeInTheDocument();
+    expect(screen.queryByAltText('the museum answered with nothing')).not.toBeInTheDocument();
 
     nextPageArrives();
 

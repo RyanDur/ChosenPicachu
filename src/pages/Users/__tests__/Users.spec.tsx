@@ -161,7 +161,7 @@ describe('the users page', () => {
     });
 
     test('the avatar cannot be rerolled', () => {
-      expect(screen.getByRole('button', {name: 'Generate a new avatar'})).toBeDisabled();
+      expect(screen.getByRole('button', {name: 'Draw a new avatar'})).toBeDisabled();
     });
 
     it('viewing a user offers a door to add another', () => {

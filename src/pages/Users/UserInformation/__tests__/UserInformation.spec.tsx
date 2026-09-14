@@ -243,7 +243,7 @@ describe('a user form', () => {
 describe('the avatar control plays fair with the keyboard', () => {
   test('enter regenerates the avatar, like a click does', async () => {
     render(added().form);
-    const avatar = screen.getByRole('button', {name: 'Generate a new avatar'});
+    const avatar = screen.getByRole('button', {name: 'Draw a new avatar'});
     const before = screen.getByAltText<HTMLImageElement>('avatar').src;
     avatar.focus();
 
@@ -254,7 +254,7 @@ describe('the avatar control plays fair with the keyboard', () => {
 
   test('space regenerates the avatar, like a click does', async () => {
     render(added().form);
-    const avatar = screen.getByRole('button', {name: 'Generate a new avatar'});
+    const avatar = screen.getByRole('button', {name: 'Draw a new avatar'});
     const before = screen.getByAltText<HTMLImageElement>('avatar').src;
     avatar.focus();
 
@@ -267,10 +267,10 @@ describe('the avatar control plays fair with the keyboard', () => {
     render(added().form);
     expect(screen.getByRole('status', {name: 'avatar report'})).toBeEmptyDOMElement();
 
-    await userEvent.click(screen.getByRole('button', {name: 'Generate a new avatar'}));
+    await userEvent.click(screen.getByRole('button', {name: 'Draw a new avatar'}));
     expect(screen.getByRole('status', {name: 'avatar report'})).toHaveTextContent('1 new avatar drawn.');
 
-    await userEvent.click(screen.getByRole('button', {name: 'Generate a new avatar'}));
+    await userEvent.click(screen.getByRole('button', {name: 'Draw a new avatar'}));
     expect(screen.getByRole('status', {name: 'avatar report'})).toHaveTextContent('2 new avatars drawn.');
   });
 });

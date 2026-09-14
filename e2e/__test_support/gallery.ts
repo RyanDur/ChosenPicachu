@@ -4,7 +4,7 @@ export const doors = (page: Page): Locator => page.getByRole('navigation', {name
 
 export const wall = (page: Page): Locator => page.getByRole('figure');
 
-export const emptyWall = (page: Page): Locator => page.getByAltText('empty gallery');
+export const emptyWall = (page: Page): Locator => page.getByAltText('the museum answered with nothing');
 
 export const firstPainting = (page: Page): Locator => wall(page).first().getByRole('link').first();
 
