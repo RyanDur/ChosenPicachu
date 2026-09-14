@@ -8,13 +8,13 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["door", "file", "line", "happened", "reasoning", "principle"],
+        "required": ["door", "file", "line", "happened", "why", "principle"],
         "properties": {
           "door": {"type": "string", "enum": ["structure", "presentation", "dynamic interaction", "design", "tests"]},
           "file": {"type": "string"},
           "line": {"type": "integer", "minimum": 1},
           "happened": {"type": "string"},
-          "reasoning": {"type": "string"},
+          "why": {"type": "string"},
           "checked": {"type": "string"},
           "principle": {"type": "string"}
         }
@@ -25,14 +25,14 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["door", "severity", "file", "line", "happened", "reasoning", "change", "principle"],
+        "required": ["door", "severity", "file", "line", "happened", "why", "change", "principle"],
         "properties": {
           "door": {"type": "string", "enum": ["structure", "presentation", "dynamic interaction", "design", "tests"]},
           "severity": {"type": "string", "enum": ["violation", "concern", "note"]},
           "file": {"type": "string"},
           "line": {"type": "integer", "minimum": 1},
           "happened": {"type": "string"},
-          "reasoning": {"type": "string"},
+          "why": {"type": "string"},
           "change": {"type": "string"},
           "checked": {"type": "string"},
           "principle": {"type": "string"}

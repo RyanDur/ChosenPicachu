@@ -31,7 +31,7 @@ export const plusOf = (plus, commit) => [
   '',
   `**What happened:** ${plus.happened}`,
   '',
-  `**Why it works:** ${plus.reasoning}`,
+  `**Why it works:** ${plus.why}`,
   '',
   ...checkedFold(plus),
   `> ${plus.principle}`
@@ -42,7 +42,7 @@ export const entryOf = (delta, commit) => [
   '',
   `**What happened:** ${delta.happened}`,
   '',
-  `**Why it matters:** ${delta.reasoning}`,
+  `**Why it matters:** ${delta.why}`,
   '',
   `**Change:** ${delta.change}`,
   '',
