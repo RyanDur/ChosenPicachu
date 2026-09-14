@@ -4,7 +4,7 @@ import {FancyInput} from '@components/FancyFormElements/FancyInput';
 import {classNames} from '@components/class-names';
 import {FancyTextarea} from '@components/FancyFormElements/FancyTextarea';
 import {
-  avatarGenerated,
+  avatarDrawn,
   dateOfBirthEdited,
   detailsEdited,
   emailEdited,
@@ -17,7 +17,7 @@ import {
 } from './actions';
 import {Address} from './Address';
 import {avatarReport, draftOf, formReducer, userOf} from './reducer';
-import {generateAvatar} from './avatars';
+import {drawAvatar} from './avatars';
 import {Link} from 'react-router';
 import {FancyDateInput} from '@components/FancyFormElements/FancyDateInput';
 import {isValid, parse} from 'date-fns';
@@ -34,7 +34,7 @@ const newUser = (): NewUser => ({
   info: {firstName: '', lastName: '', email: ''},
   friends: [],
   homeAddress: {city: '', state: '', streetAddress: '', zip: ''},
-  avatar: generateAvatar()
+  avatar: drawAvatar()
 });
 
 export const UserInformation: FC<FormProps & { id?: string }> = ({id, mode = 'adding'}) => {
@@ -92,7 +92,7 @@ const Draft: FC<{ currentUser?: User; mode: Mode }> = ({currentUser, mode}) => {
             aria-label="Draw a new avatar"
             className="avatar borderless rounded-corners accent raisable"
             disabled={readOnly}
-            onClick={() => dispatch(avatarGenerated(generateAvatar()))}>
+            onClick={() => dispatch(avatarDrawn(drawAvatar()))}>
       <img id="avatar" src={user.avatar} width="244" height="244" fetchPriority="high" alt="avatar"/>
     </button>
     <output className="off-screen"

@@ -8,7 +8,7 @@ export enum FormActions {
   HOME_ADDRESS_EDITED = 'HOME_ADDRESS_EDITED',
   WORK_ADDRESS_EDITED = 'WORK_ADDRESS_EDITED',
   DETAILS_EDITED = 'DETAILS_EDITED',
-  AVATAR_GENERATED = 'AVATAR_GENERATED',
+  AVATAR_DRAWN = 'AVATAR_DRAWN',
   SAME_AS_HOME_CHOSEN = 'SAME_AS_HOME_CHOSEN',
   FORM_RESET = 'FORM_RESET'
 }
@@ -38,7 +38,7 @@ export type WorkAddressEdited = Action<FormActions.WORK_ADDRESS_EDITED> & {
 export type DetailsEdited = Action<FormActions.DETAILS_EDITED> & {
   details: string;
 }
-export type AvatarGenerated = Action<FormActions.AVATAR_GENERATED> & {
+export type AvatarDrawn = Action<FormActions.AVATAR_DRAWN> & {
   avatar: string;
 }
 export type SameAsHomeChosen = Action<FormActions.SAME_AS_HOME_CHOSEN> & {
@@ -56,7 +56,7 @@ export type FormAction =
   | HomeAddressEdited
   | WorkAddressEdited
   | DetailsEdited
-  | AvatarGenerated
+  | AvatarDrawn
   | SameAsHomeChosen
   | FormReset;
 
@@ -76,7 +76,7 @@ export const workAddressEdited = (workAddress: AddressInfo): WorkAddressEdited =
   workAddress
 });
 export const detailsEdited = (details: string): DetailsEdited => ({type: FormActions.DETAILS_EDITED, details});
-export const avatarGenerated = (avatar: string): AvatarGenerated => ({type: FormActions.AVATAR_GENERATED, avatar});
+export const avatarDrawn = (avatar: string): AvatarDrawn => ({type: FormActions.AVATAR_DRAWN, avatar});
 export const sameAsHomeChosen = (sameAsHome: boolean): SameAsHomeChosen => ({
   type: FormActions.SAME_AS_HOME_CHOSEN,
   sameAsHome

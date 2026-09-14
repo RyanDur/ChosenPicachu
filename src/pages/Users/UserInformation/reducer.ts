@@ -42,7 +42,7 @@ export const formReducer = (draft: Draft, action: FormAction): Draft => {
       return {...draft, typedWork: action.workAddress};
     case FormActions.DETAILS_EDITED:
       return edited(draft, {...user, details: action.details});
-    case FormActions.AVATAR_GENERATED:
+    case FormActions.AVATAR_DRAWN:
       return {...draft, user: {...user, avatar: action.avatar}, avatarsDrawn: draft.avatarsDrawn + 1};
     case FormActions.SAME_AS_HOME_CHOSEN:
       return {...draft, sameAsHome: action.sameAsHome};
