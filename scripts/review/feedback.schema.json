@@ -2,6 +2,10 @@
   "type": "object",
   "additionalProperties": false,
   "required": ["plusses", "deltas"],
+  "$defs": {
+    "door": {"type": "string", "enum": ["structure", "presentation", "dynamic interaction", "design", "tests"]},
+    "severity": {"type": "string", "enum": ["violation", "concern", "note"]}
+  },
   "properties": {
     "plusses": {
       "type": "array",
@@ -10,7 +14,7 @@
         "additionalProperties": false,
         "required": ["door", "file", "line", "happened", "why", "principle"],
         "properties": {
-          "door": {"type": "string", "enum": ["structure", "presentation", "dynamic interaction", "design", "tests"]},
+          "door": {"$ref": "#/$defs/door"},
           "file": {"type": "string"},
           "line": {"type": "integer", "minimum": 1},
           "happened": {"type": "string"},
@@ -27,8 +31,8 @@
         "additionalProperties": false,
         "required": ["door", "severity", "file", "line", "happened", "why", "change", "principle"],
         "properties": {
-          "door": {"type": "string", "enum": ["structure", "presentation", "dynamic interaction", "design", "tests"]},
-          "severity": {"type": "string", "enum": ["violation", "concern", "note"]},
+          "door": {"$ref": "#/$defs/door"},
+          "severity": {"$ref": "#/$defs/severity"},
           "file": {"type": "string"},
           "line": {"type": "integer", "minimum": 1},
           "happened": {"type": "string"},

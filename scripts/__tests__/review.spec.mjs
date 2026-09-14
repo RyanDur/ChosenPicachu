@@ -3,7 +3,6 @@ import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {promptFor} from '../review/prompt.mjs';
 import {deltaOf, doorTable, leavesFeedback, plusOf, reviewIn, summaryOf, verdictOf} from '../review/report.mjs';
-import {shapeOf} from '../review/agents.mjs';
 
 const placeOf = (text, needle) => {
   expect(text).toContain(needle);
@@ -166,6 +165,12 @@ describe('the review report', () => {
   test('plusses and deltas are counted, deltas by severity', () => {
     expect(summaryOf(review([plus, testPlus], [testNote, note, concern, violation, interaction])))
       .toContain('2 plusses. 1 violation, 1 concern, 3 notes.');
+  });
+
+  test('a review with no plusses says so and opens no Plusses section', () => {
+    const summary = summaryOf(review([], [note]));
+    expect(summary).toContain('0 plusses. 1 note.');
+    expect(summary).not.toContain('### Plusses');
   });
 
   test('deltas are grouped by door, worst door and worst delta first', () => {

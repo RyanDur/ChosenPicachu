@@ -1,7 +1,11 @@
 import {readFileSync, writeFileSync} from 'node:fs';
+import {dirname, join} from 'node:path';
+import {fileURLToPath} from 'node:url';
 
-const doors = ['structure', 'presentation', 'dynamic interaction', 'design', 'tests'];
-const severities = ['violation', 'concern', 'note'];
+const schema = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), 'feedback.schema.json'), 'utf8'));
+const casesOf = (kind) => schema.$defs[kind]['enum'];
+const doors = casesOf('door');
+const severities = casesOf('severity');
 const marks = {violation: '✖', concern: '▲', note: '○'};
 
 export const reviewIn = (answer) => {

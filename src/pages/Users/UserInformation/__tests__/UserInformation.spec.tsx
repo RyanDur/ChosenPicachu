@@ -241,7 +241,7 @@ describe('a user form', () => {
 });
 
 describe('the avatar control plays fair with the keyboard', () => {
-  test('enter regenerates the avatar, like a click does', async () => {
+  test('enter draws a new avatar, like a click does', async () => {
     render(added().form);
     const avatar = screen.getByRole('button', {name: 'Draw a new avatar'});
     const before = screen.getByAltText<HTMLImageElement>('avatar').src;
@@ -252,7 +252,7 @@ describe('the avatar control plays fair with the keyboard', () => {
     expect(screen.getByAltText<HTMLImageElement>('avatar').src).not.toEqual(before);
   });
 
-  test('space regenerates the avatar, like a click does', async () => {
+  test('space draws a new avatar, like a click does', async () => {
     render(added().form);
     const avatar = screen.getByRole('button', {name: 'Draw a new avatar'});
     const before = screen.getByAltText<HTMLImageElement>('avatar').src;

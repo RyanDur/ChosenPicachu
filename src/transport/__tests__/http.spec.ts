@@ -54,14 +54,14 @@ describe('http', () => {
     ${http.put}    | ${HTTPMethod.PUT}    | ${testObject} | ${HTTPStatus.NO_CONTENT} | ${undefined}
     ${http.put}    | ${HTTPMethod.PUT}    | ${testObject} | ${HTTPStatus.CREATED}    | ${testObject}
     ${http.delete} | ${HTTPMethod.DELETE} | ${undefined}  | ${HTTPStatus.NO_CONTENT} | ${undefined}
-    `('$httpMethod', ({method, httpMethod, body, code, response}: {
+    `('$httpMethod $code', ({method, httpMethod, body, code, response}: {
     method: (endpoint: string, body?: unknown) => Result.Async<unknown, HTTPError>,
     httpMethod: HTTPMethod,
     body: unknown,
     code: HTTPStatus,
     response: unknown
   }) => {
-    test(`${httpMethod} gives back the body the server answered with`, async () => {
+    test('gives back the body the server answered with', async () => {
       respondWith(httpMethod, code, response === undefined ? null : JSON.stringify(testObject));
 
       const actual = await method(endpoint, body).orNull();
