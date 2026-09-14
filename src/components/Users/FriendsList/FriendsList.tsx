@@ -33,7 +33,7 @@ export const FriendsList: FC<Props> = ({users, user, onChange}) => {
                htmlFor={`remove-${friend.id}`}>{displayFullName(friend)}</label>
         <button id={`remove-${friend.id}`} className="remove" type="button"
                 onClick={() => remove(friend)}>
-          <img src={cancelIcon}
+          <img src={cancelIcon} width="24" height="24"
                alt="remove"/>
         </button>
       </li>

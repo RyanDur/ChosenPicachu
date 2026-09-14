@@ -57,9 +57,9 @@ export const Search: FC<Props> = ({id, className}) => {
     <input type="search" autoComplete="off" list="search-options" id="query"
            className="query bare card"
            onInput={event => updateQuery(event.currentTarget.value)}/>
-    <button className="reset-query button icon-button borderless field attentive" type="reset" aria-label="reset search"><img src={resetIcon} alt=""/></button>
+    <button className="reset-query button icon-button borderless field attentive" type="reset" aria-label="reset search"><img src={resetIcon} width="24" height="24" alt=""/></button>
     <button className="submit-query button icon-button borderless field attentive" disabled={!searchString.length} type="submit"
-            aria-label="submit search"><img src={searchIcon} alt=""/></button>
+            aria-label="submit search"><img src={searchIcon} width="24" height="24" alt=""/></button>
     <datalist id="search-options" className="search-options field">
       {searchOptions.map((searchOption, index) =>
         <option value={searchOption} key={index}>{searchOption}</option>)}
