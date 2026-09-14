@@ -81,7 +81,7 @@ describe('http', () => {
     httpMethod: HTTPMethod,
     body: unknown
   }) => {
-    test(`${httpMethod} fails as forbidden when the server refuses`, async () => {
+    test('fails as forbidden when the server refuses', async () => {
       respondWith(httpMethod, HTTPStatus.FORBIDDEN, JSON.stringify(testObject));
 
       const actual = (await method(endpoint, body).value).inspect();
@@ -89,7 +89,7 @@ describe('http', () => {
       expect(actual).toEqual(failure(HTTPError.FORBIDDEN).inspect());
     });
 
-    test(`${httpMethod} fails as not found when the server has nothing at the address`, async () => {
+    test('fails as not found when the server has nothing at the address', async () => {
       respondWith(httpMethod, HTTPStatus.NOT_FOUND, JSON.stringify(testObject));
 
       const actual = (await method(endpoint, body).value).inspect();
@@ -97,7 +97,7 @@ describe('http', () => {
       expect(actual).toEqual(failure(HTTPError.NOT_FOUND).inspect());
     });
 
-    test(`${httpMethod} fails as a network error when the network is down`, async () => {
+    test('fails as a network error when the network is down', async () => {
       networkFailsFor(httpMethod);
 
       const actual = (await method(endpoint, body).value).inspect();
@@ -105,7 +105,7 @@ describe('http', () => {
       expect(actual).toEqual(failure(HTTPError.NETWORK_ERROR).inspect());
     });
 
-    test(`${httpMethod} fails as a server error when the server breaks`, async () => {
+    test('fails as a server error when the server breaks', async () => {
       respondWith(httpMethod, HTTPStatus.SERVER_ERROR, '');
 
       const actual = (await method(endpoint, body).value).inspect();
@@ -113,7 +113,7 @@ describe('http', () => {
       expect(actual).toEqual(failure(HTTPError.SERVER_ERROR).inspect());
     });
 
-    test(`${httpMethod} fails as unknown when the server answers with a status it has no name for`, async () => {
+    test('fails as unknown when the server answers with a status it has no name for', async () => {
       server.use(handlers[httpMethod](endpoint, () => new HttpResponse(null, {status: 400})));
 
       const actual = (await method(endpoint, body).value).inspect();

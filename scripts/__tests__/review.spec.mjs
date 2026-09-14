@@ -224,8 +224,13 @@ describe('the review report', () => {
   test('the place links to the line at the reviewed commit when the commit is known', () => {
     const commit = {repository: 'RyanDur/ChosenPicachu', sha: 'abc123'};
     const summary = summaryOf(review([plus], [violation]), {commit});
-    expect(summary).toContain('[src/a.tsx:3](https://github.com/RyanDur/ChosenPicachu/blob/abc123/src/a.tsx#L3)');
-    expect(summary).toContain('[src/f.tsx:5](https://github.com/RyanDur/ChosenPicachu/blob/abc123/src/f.tsx#L5)');
+    expect(summary).toContain('[`src/a.tsx:3`](https://github.com/RyanDur/ChosenPicachu/blob/abc123/src/a.tsx#L3)');
+    expect(summary).toContain('[`src/f.tsx:5`](https://github.com/RyanDur/ChosenPicachu/blob/abc123/src/f.tsx#L5)');
+  });
+
+  test('a linked place keeps its underscores, so __tests__ is not read as emphasis', () => {
+    const commit = {repository: 'RyanDur/ChosenPicachu', sha: 'abc123'};
+    expect(deltaOf(testNote, commit)).toContain('[`src/__tests__/c.spec.tsx:4`](');
   });
 
   test('what the reviewer checked folds away under the entry', () => {
@@ -235,12 +240,16 @@ describe('the review report', () => {
     expect(plusOf(plus)).not.toContain('<details>');
   });
 
-  test("a tag the reviewer writes in its prose stays words on the page, and a code span keeps its angle brackets", () => {
-    const entry = plusOf({...plus, happened: 'renders it inside <details><summary>what was checked</summary>, shared by both', why: 'reads `<ul>` whole & more'});
-    expect(entry).toContain('renders it inside &lt;details&gt;&lt;summary&gt;what was checked&lt;/summary&gt;, shared by both');
-    expect(entry).not.toContain('<details>');
-    expect(entry).toContain('reads `<ul>` whole &amp; more');
-    expect(deltaOf({...note, checked: 'opened <main> whole'})).toContain('<details><summary>what was checked</summary>\n\nopened &lt;main&gt; whole\n\n</details>');
+  test('a tag the reviewer writes in any field stays words on the page, and a code span keeps its angle brackets', () => {
+    const tagged = (field) => `${field} says <b>${field}</b> & more`;
+    const escaped = (field) => `${field} says &lt;b&gt;${field}&lt;/b&gt; &amp; more`;
+    const plusEntry = plusOf({...plus, happened: tagged('happened'), why: tagged('why'), checked: tagged('checked'), principle: tagged('principle')});
+    ['happened', 'why', 'checked', 'principle'].forEach(field => expect(plusEntry).toContain(escaped(field)));
+    const deltaEntry = deltaOf({...note, happened: tagged('happened'), why: tagged('why'), change: tagged('change'), checked: tagged('checked'), principle: tagged('principle')});
+    ['happened', 'why', 'change', 'checked', 'principle'].forEach(field => expect(deltaEntry).toContain(escaped(field)));
+    expect(plusEntry).not.toContain('<b>');
+    expect(deltaEntry).not.toContain('<b>');
+    expect(plusOf({...plus, why: 'reads `<ul>` whole'})).toContain('reads `<ul>` whole');
   });
 
   test('a review with plusses and no deltas still leaves its feedback on the commit, and an empty one leaves none', () => {

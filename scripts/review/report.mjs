@@ -27,7 +27,7 @@ const told = (prose) => prose.split(/(`[^`]*`)/).map((part, index) => index % 2 
 const placeOf = ({file, line}, commit) =>
   commit === undefined
     ? `\`${file}:${line}\``
-    : `[${file}:${line}](https://github.com/${commit.repository}/blob/${commit.sha}/${file}#L${line})`;
+    : `[\`${file}:${line}\`](https://github.com/${commit.repository}/blob/${commit.sha}/${file}#L${line})`;
 
 const checkedFold = ({checked}) =>
   checked === undefined || checked === '' ? [] : ['<details><summary>what was checked</summary>', '', told(checked), '', '</details>', ''];
@@ -56,10 +56,10 @@ export const deltaOf = (delta, commit) => [
   `> ${told(delta.principle)}`
 ].join('\n');
 
-const byDoor = (entries, told) => doors
+const byDoor = (entries, tell) => doors
   .map(door => ({door, own: entries.filter(entry => entry.door === door)}))
   .filter(({own}) => own.length > 0)
-  .map(({door, own}) => [`#### ${door}`, ...own.map(told)].join('\n\n'))
+  .map(({door, own}) => [`#### ${door}`, ...own.map(tell)].join('\n\n'))
   .join('\n\n');
 
 export const doorTable = ({plusses, deltas}) => {
@@ -70,7 +70,11 @@ export const doorTable = ({plusses, deltas}) => {
       const counts = severities.map(severity => own.filter(delta => delta.severity === severity).length);
       return `| ${door} | ${plusses.filter(plus => plus.door === door).length} | ${counts.join(' | ')} |`;
     });
-  return ['| door | plusses | violations | concerns | notes |', '| --- | ---: | ---: | ---: | ---: |', ...rows].join('\n');
+  return [
+    `| door | plusses | ${severities.map(severity => `${severity}s`).join(' | ')} |`,
+    `| --- | ---: | ${severities.map(() => '---:').join(' | ')} |`,
+    ...rows
+  ].join('\n');
 };
 
 const plussesTold = (plusses, commit) =>
