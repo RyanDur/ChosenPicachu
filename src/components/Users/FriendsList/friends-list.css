@@ -30,6 +30,10 @@
         background-color: transparent;
         padding: 0;
         display: flex;
+
+        .icon {
+          block-size: var(--base-x-3);
+        }
       }
     }
   }
