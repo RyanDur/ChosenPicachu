@@ -16,6 +16,8 @@ test('the header and nav keep their height while the gallery wall is still on it
 
   await page.goto('gallery?page=1&size=8&tab=vam');
   await expect(page.getByRole('progressbar', {name: 'loading gallery'})).toBeVisible();
+  await expect(header).toBeVisible();
+  await expect(nav).toBeVisible();
   const headerWhileLoading = await header.boundingBox();
   const navWhileLoading = await nav.boundingBox();
 
