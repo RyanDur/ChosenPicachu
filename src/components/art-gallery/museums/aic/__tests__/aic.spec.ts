@@ -35,8 +35,7 @@ describe('AIC as a source of art', () => {
     pagination: {
       total: fromAICArt.pagination.total,
       limit: fromAICArt.pagination.limit,
-      total_pages: fromAICArt.pagination.totalPages,
-      current_page: 1
+      total_pages: fromAICArt.pagination.totalPages
     },
     data: options.map(option => ({
       suggest_autocomplete_all: [{

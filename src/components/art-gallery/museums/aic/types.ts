@@ -9,8 +9,7 @@ const AICPaginationResponseDecoder = schema.object({
   required: {
     total: schema.number,
     limit: schema.number,
-    total_pages: schema.number,
-    current_page: schema.number
+    total_pages: schema.number
   }
 });
 export const AICPieceResponseDecoder = schema.object({

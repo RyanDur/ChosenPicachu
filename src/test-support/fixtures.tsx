@@ -51,8 +51,7 @@ export const aicArtResponse: AICAllArtResponse = {
 export const info: HarvardInfo = {
   totalrecordsperquery: defaultRecordLimit,
   totalrecords: faker.number.int({max: 9999}),
-  pages: faker.number.int({max: 999}),
-  page: faker.number.int({max: 9})
+  pages: faker.number.int({max: 999})
 };
 
 export const person = (): HarvardPeople => ({
