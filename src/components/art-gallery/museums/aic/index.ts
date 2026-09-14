@@ -26,14 +26,19 @@ const aSundayOnLaGrandeJatte = '2d484387-2509-5e8e-2c43-22f9981972eb';
 
 export const aic = {
   allArt: ({page, search, size = defaultRecordLimit}: GetAllArtRequest) => http
-    .get(`${aicDomain}/search${toQueryString({q: search, 'query[exists][field]': 'image_id', fields, page, limit: size})}`, {cache: 'force-cache'})
+    .get(`${aicDomain}/search${toQueryString({
+      q: search,
+      'query[exists][field]': 'image_id',
+      fields,
+      page,
+      limit: size
+    })}`, {cache: 'force-cache'})
     .mBind(validate(AICAllArtSchema))
     .map(({pagination, data}: AICAllArtResponse): AllArt => ({
       pagination: {
         total: pagination.total,
         limit: pagination.limit,
         totalPages: pagination.total_pages,
-        currentPage: pagination.current_page
       },
       pieces: data.map(aicToPiece(800))
     })),

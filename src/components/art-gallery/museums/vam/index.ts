@@ -1,4 +1,10 @@
-import {VAMAllArtResponse, VAMAllArtSchema, VAMArtResponse, VAMArtSchema, VAMSearchRecord} from '@components/art-gallery/museums/vam/types';
+import {
+  VAMAllArtResponse,
+  VAMAllArtSchema,
+  VAMArtResponse,
+  VAMArtSchema,
+  VAMSearchRecord
+} from '@components/art-gallery/museums/vam/types';
 import {defaultRecordLimit, defaultSearchLimit} from '@components/art-gallery/limits';
 import {env} from '@env';
 import {maybe} from '@ryandur/sand';
@@ -18,7 +24,10 @@ const iiifSrcSet = (base: string) =>
 const vamRecordToArt = (record: VAMSearchRecord): Art => ({
   id: record.systemNumber,
   title: record._primaryTitle || 'Untitled',
-  ...maybe(record._images).map(({_iiif_image_base_url: base}) => ({image: iiifImage(base, 800), srcSet: iiifSrcSet(base)})).orElse({}),
+  ...maybe(record._images).map(({_iiif_image_base_url: base}) => ({
+    image: iiifImage(base, 800),
+    srcSet: iiifSrcSet(base)
+  })).orElse({}),
   artistInfo: record._primaryMaker?.name || 'Unknown',
   altText: record._primaryTitle || 'Untitled'
 });
@@ -27,14 +36,18 @@ const tipuSultan = '2009BY1329';
 
 export const vam = {
   allArt: ({page, search, size = defaultRecordLimit}: GetAllArtRequest) => http
-    .get(`${vamDomain}/objects/search${toQueryString({q: search, page, page_size: size, images_exist: true})}`, {cache: 'force-cache'})
+    .get(`${vamDomain}/objects/search${toQueryString({
+      q: search,
+      page,
+      page_size: size,
+      images_exist: true
+    })}`, {cache: 'force-cache'})
     .mBind(validate(VAMAllArtSchema))
     .map(({info, records}: VAMAllArtResponse): AllArt => ({
       pagination: {
         total: info.record_count,
         limit: info.page_size,
         totalPages: info.pages,
-        currentPage: info.page
       },
       pieces: records.map(vamRecordToArt)
     })),
@@ -53,7 +66,10 @@ export const vam = {
     })),
 
   searchOptions: (search: string) => http
-    .get(`${vamDomain}/objects/search${toQueryString({q: search, page_size: defaultSearchLimit})}`, {cache: 'force-cache'})
+    .get(`${vamDomain}/objects/search${toQueryString({
+      q: search,
+      page_size: defaultSearchLimit
+    })}`, {cache: 'force-cache'})
     .mBind(validate(VAMAllArtSchema))
     .map(({records}: VAMAllArtResponse): SearchOptions => records.map(({_primaryTitle}) => _primaryTitle))
 };

@@ -25,7 +25,11 @@ const withImages = (search?: string) =>
   [search && `(${search})`, 'imagepermissionlevel:0', '_exists_:primaryimageurl'].filter(Boolean).join(' AND ');
 
 const searched = ({page, search, size = defaultRecordLimit}: GetAllArtRequest) => http
-  .get(`${harvardDomain}${toQueryString({q: withImages(search), page, size, ...baseQueryString})}`, {cache: 'force-cache'})
+  .get(`${harvardDomain}${toQueryString({
+    q: withImages(search),
+    page,
+    size, ...baseQueryString
+  })}`, {cache: 'force-cache'})
   .mBind(validate(HarvardAllArtSchema));
 
 export const harvard = {
@@ -35,7 +39,6 @@ export const harvard = {
         total: info.totalrecords,
         limit: info.totalrecordsperquery,
         totalPages: info.pages,
-        currentPage: info.page
       },
       pieces: records.map(harvardArtToArt)
     })),

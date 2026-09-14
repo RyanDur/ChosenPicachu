@@ -42,7 +42,13 @@ const toPiece = (record: ClevelandRecord): Art => ({
 });
 
 const searched = ({page, search, size = defaultRecordLimit}: GetAllArtRequest) => http
-  .get(`${clevelandDomain}/${toQueryString({q: search, skip: (page - 1) * size, limit: size, has_image: 1, fields: clevelandFields})}`, {cache: 'force-cache'})
+  .get(`${clevelandDomain}/${toQueryString({
+    q: search,
+    skip: (page - 1) * size,
+    limit: size,
+    has_image: 1,
+    fields: clevelandFields
+  })}`, {cache: 'force-cache'})
   .mBind(validate(ClevelandAllArtSchema));
 
 export const cleveland = {
@@ -54,7 +60,6 @@ export const cleveland = {
           total: info.total,
           limit: size,
           totalPages: Math.ceil(info.total / size),
-          currentPage: request.page
         },
         pieces: data.map(toPiece)
       };
@@ -68,7 +73,12 @@ export const cleveland = {
     .map(({data}: ClevelandArtResponse): Art => toPiece(data)),
 
   searchOptions: (search: string) => http
-    .get(`${clevelandDomain}/${toQueryString({q: search, limit: defaultSearchLimit, has_image: 1, fields: 'title'})}`, {cache: 'force-cache'})
+    .get(`${clevelandDomain}/${toQueryString({
+      q: search,
+      limit: defaultSearchLimit,
+      has_image: 1,
+      fields: 'title'
+    })}`, {cache: 'force-cache'})
     .mBind(validate(ClevelandSearchSchema))
     .map(({data}: ClevelandSearchResponse): SearchOptions => data.map(({title}) => title))
 };
