@@ -16,36 +16,40 @@ const bySeverity = (a, b) => severities.indexOf(a.severity) - severities.indexOf
 
 const plural = (count, word, words = `${word}s`) => `${count} ${count === 1 ? word : words}`;
 
+const asText = (part) => part.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+const told = (prose) => prose.split(/(`[^`]*`)/).map((part, index) => index % 2 === 1 ? part : asText(part)).join('');
+
 const placeOf = ({file, line}, commit) =>
   commit === undefined
     ? `\`${file}:${line}\``
     : `[${file}:${line}](https://github.com/${commit.repository}/blob/${commit.sha}/${file}#L${line})`;
 
 const checkedFold = ({checked}) =>
-  checked === undefined || checked === '' ? [] : ['<details><summary>what was checked</summary>', '', checked, '', '</details>', ''];
+  checked === undefined || checked === '' ? [] : ['<details><summary>what was checked</summary>', '', told(checked), '', '</details>', ''];
 
 export const plusOf = (plus, commit) => [
   `##### + ${placeOf(plus, commit)}`,
   '',
-  `**What happened:** ${plus.happened}`,
+  `**What happened:** ${told(plus.happened)}`,
   '',
-  `**Why it works:** ${plus.why}`,
+  `**Why it works:** ${told(plus.why)}`,
   '',
   ...checkedFold(plus),
-  `> ${plus.principle}`
+  `> ${told(plus.principle)}`
 ].join('\n');
 
 export const deltaOf = (delta, commit) => [
   `##### ${marks[delta.severity]} ${delta.severity} · ${placeOf(delta, commit)}`,
   '',
-  `**What happened:** ${delta.happened}`,
+  `**What happened:** ${told(delta.happened)}`,
   '',
-  `**Why it matters:** ${delta.why}`,
+  `**Why it matters:** ${told(delta.why)}`,
   '',
-  `**Change:** ${delta.change}`,
+  `**Change:** ${told(delta.change)}`,
   '',
   ...checkedFold(delta),
-  `> ${delta.principle}`
+  `> ${told(delta.principle)}`
 ].join('\n');
 
 const byDoor = (entries, told) => doors

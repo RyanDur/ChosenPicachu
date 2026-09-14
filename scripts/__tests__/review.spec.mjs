@@ -230,20 +230,31 @@ describe('the review report', () => {
     expect(plusOf(plus)).not.toContain('<details>');
   });
 
+  test("a tag the reviewer writes in its prose stays words on the page, and a code span keeps its angle brackets", () => {
+    const entry = plusOf({...plus, happened: 'renders it inside <details><summary>what was checked</summary>, shared by both', why: 'reads `<ul>` whole & more'});
+    expect(entry).toContain('renders it inside &lt;details&gt;&lt;summary&gt;what was checked&lt;/summary&gt;, shared by both');
+    expect(entry).not.toContain('<details>');
+    expect(entry).toContain('reads `<ul>` whole &amp; more');
+    expect(deltaOf({...note, checked: 'opened <main> whole'})).toContain('<details><summary>what was checked</summary>\n\nopened &lt;main&gt; whole\n\n</details>');
+  });
+
   test('a review with plusses and no deltas still leaves its feedback on the commit, and an empty one leaves none', () => {
     expect(leavesFeedback(review([plus], []))).toBe(true);
     expect(leavesFeedback(review([], [note]))).toBe(true);
     expect(leavesFeedback(review([], []))).toBe(false);
   });
 
-  test('the schema the review answers in names every field the report tells, and the QAs are asked for that shape', () => {
+  test('the schema the review answers in names every field the report tells, and the doors and severities once', () => {
     const schema = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), '../review/feedback.schema.json'), 'utf8'));
     expect(schema.properties.plusses.items.required).toEqual(expect.arrayContaining(['door', 'file', 'line', 'happened', 'why', 'principle']));
     expect(Object.keys(schema.properties.plusses.items.properties)).toContain('checked');
     expect(schema.properties.deltas.items.required).toEqual(expect.arrayContaining(['door', 'severity', 'file', 'line', 'happened', 'why', 'change', 'principle']));
     expect(Object.keys(schema.properties.deltas.items.properties)).toContain('checked');
-    expect(shapeOf('plusses')).toBe('{door, file, line, happened, why, checked, principle}');
-    expect(shapeOf('deltas')).toBe('{door, severity, file, line, happened, why, change, checked, principle}');
+    expect(schema.properties.plusses.items.properties.door).toEqual({$ref: '#/$defs/door'});
+    expect(schema.properties.deltas.items.properties.door).toEqual({$ref: '#/$defs/door'});
+    expect(schema.properties.deltas.items.properties.severity).toEqual({$ref: '#/$defs/severity'});
+    expect(schema.$defs.door['enum']).toEqual(['structure', 'presentation', 'dynamic interaction', 'design', 'tests']);
+    expect(schema.$defs.severity['enum']).toEqual(['violation', 'concern', 'note']);
   });
 
   test('only a violation fails the job', () => {
