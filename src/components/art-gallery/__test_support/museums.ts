@@ -16,7 +16,7 @@ const paramsMatch = (request: Request, expected: Record<string, string>) => {
   return Object.entries(expected).every(([key, value]) => params.get(key) === value);
 };
 
-const holding = (): {held: Promise<void>, release: () => void} => {
+const holding = (): { held: Promise<void>, release: () => void } => {
   let release = (): void => undefined;
   const held = new Promise<void>(resolve => {
     release = resolve;
@@ -38,11 +38,17 @@ const allArtParams = (options: AllArt) => ({
   ...(options.search ? {q: options.search} : {})
 });
 
-export const setupAICAllArtResponse = (response: AICAllArtResponse, options: AllArt = {limit: defaultRecordLimit, page: 1}) =>
+export const setupAICAllArtResponse = (response: AICAllArtResponse, options: AllArt = {
+  limit: defaultRecordLimit,
+  page: 1
+}) =>
   server.use(http.get(`${aicDomain}/search`, ({request}) =>
     paramsMatch(request, allArtParams(options)) ? HttpResponse.json(response) : undefined));
 
-export const heldAICAllArtResponse = (response: AICAllArtResponse, options: AllArt = {limit: defaultRecordLimit, page: 1}): () => void => {
+export const heldAICAllArtResponse = (response: AICAllArtResponse, options: AllArt = {
+  limit: defaultRecordLimit,
+  page: 1
+}): () => void => {
   const {held, release} = holding();
   server.use(http.get(`${aicDomain}/search`, async ({request}) => {
     if (!paramsMatch(request, allArtParams(options))) return undefined;
@@ -53,10 +59,7 @@ export const heldAICAllArtResponse = (response: AICAllArtResponse, options: AllA
 };
 
 export const setupAICEveryPage = (response: AICAllArtResponse) =>
-  server.use(http.get(`${aicDomain}/search`, ({request}) => {
-    const page = Number(new URL(request.url).searchParams.get('page'));
-    return HttpResponse.json({...response, pagination: {...response.pagination, current_page: page}});
-  }));
+  server.use(http.get(`${aicDomain}/search`, () => HttpResponse.json(response)));
 
 export const heldAICSuggestions = (word: string, response: AICSearchResponse): () => void => {
   const {held, release} = holding();

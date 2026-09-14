@@ -33,7 +33,6 @@ export const pagination = {
   limit: defaultRecordLimit,
   offset: 0,
   total_pages: 125,
-  current_page: 1,
   next_url: faker.internet.url()
 };
 
@@ -87,7 +86,7 @@ export const harvardArtOptions: HarvardSearchResponse = {
   info,
   records: options.map(option => ({title: option}))
 };
-const vamInfo = {record_count: 500, pages: 42, page: 1, page_size: defaultRecordLimit};
+const vamInfo = {record_count: 500, pages: 42, page_size: defaultRecordLimit};
 const vamSearchRecords = [...Array(vamInfo.page_size)].map((_, index) => ({
   systemNumber: `O${index}`,
   _primaryTitle: index === 0 ? '' : faker.lorem.words(),

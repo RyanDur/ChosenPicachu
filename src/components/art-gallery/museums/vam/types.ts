@@ -74,7 +74,6 @@ export const VAMArtSchema = schema.object({
   }
 });
 
-export type VAMInfo = schema.Output<typeof VAMInfoDecoder>;
 export type VAMSearchRecord = schema.Output<typeof VAMSearchRecordDecoder>;
 export type VAMAllArtResponse = schema.Output<typeof VAMAllArtSchema>;
 export type VAMArtResponse = schema.Output<typeof VAMArtSchema>;

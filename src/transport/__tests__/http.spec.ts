@@ -68,7 +68,19 @@ describe('http', () => {
 
       expect(actual).toEqual(response);
     });
+  });
 
+  describe.each`
+    method         | httpMethod           | body
+    ${http.get}    | ${HTTPMethod.GET}    | ${undefined}
+    ${http.post}   | ${HTTPMethod.POST}   | ${testObject}
+    ${http.put}    | ${HTTPMethod.PUT}    | ${testObject}
+    ${http.delete} | ${HTTPMethod.DELETE} | ${undefined}
+    `('$httpMethod', ({method, httpMethod, body}: {
+    method: (endpoint: string, body?: unknown) => Result.Async<unknown, HTTPError>,
+    httpMethod: HTTPMethod,
+    body: unknown
+  }) => {
     test(`${httpMethod} fails as forbidden when the server refuses`, async () => {
       respondWith(httpMethod, HTTPStatus.FORBIDDEN, JSON.stringify(testObject));
 

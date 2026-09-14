@@ -9,7 +9,7 @@ import {AICSearchResponse} from '@components/art-gallery/museums/aic/types';
 import {heldAICSuggestions} from '@components/art-gallery/__test_support';
 
 const suggesting = (word: string): AICSearchResponse => ({
-  pagination: {total: 1, limit: 1, total_pages: 1, current_page: 1},
+  pagination: {total: 1, limit: 1, total_pages: 1},
   data: [{suggest_autocomplete_all: [{}, {input: [word]}]}]
 });
 
@@ -19,8 +19,7 @@ describe('search', () => {
     pagination: {
       total: 5,
       limit: 2,
-      total_pages: 5,
-      current_page: 1
+      total_pages: 5
     },
     data: [{suggest_autocomplete_all: [{}, {input: [searchWord]}]}]
   };
@@ -97,7 +96,7 @@ describe('search', () => {
 
   it('a word asks the museum for suggestions once, and not again while it stands', async () => {
     const suggestions: string[] = [];
-    const count = ({request}: {request: Request}) => {
+    const count = ({request}: { request: Request }) => {
       if (request.url.includes('suggest_autocomplete_all')) suggestions.push(request.url);
     };
     server.events.on('request:start', count);
@@ -116,7 +115,7 @@ describe('search', () => {
 
   it("a late answer for an old word never lands over the new word's suggestions", async () => {
     const asked: string[] = [];
-    const noted = ({request}: {request: Request}) => {
+    const noted = ({request}: { request: Request }) => {
       const word = new URL(request.url).searchParams.get('query[term][title]');
       if (word !== null) asked.push(word);
     };

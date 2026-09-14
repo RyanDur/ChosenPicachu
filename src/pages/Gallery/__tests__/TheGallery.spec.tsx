@@ -244,7 +244,7 @@ describe('The gallery.', () => {
     await waitFor(() => expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument());
   });
 
-  test('while the next page is on its way the wall shows the loading sign and no empty-gallery sign', async () => {
+  test('while the next page is on its way the wall shows the loading sign and does not say the museum answered with nothing', async () => {
     const nextPageArrives = await wallHungWithTheNextPageHeld();
 
     await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
@@ -259,10 +259,7 @@ describe('The gallery.', () => {
 
   test('on the last page the count ends at the total', async () => {
     const {total_pages: last, limit, total} = aicArtResponse.pagination;
-    setupAICAllArtResponse({...aicArtResponse, pagination: {...aicArtResponse.pagination, current_page: last}}, {
-      limit,
-      page: last
-    });
+    setupAICAllArtResponse(aicArtResponse, {limit, page: last});
     render(<TestApp at={`${Paths.artGallery}?page=${last}`}/>);
     await wallHangs();
 
