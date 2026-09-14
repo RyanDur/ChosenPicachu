@@ -11,7 +11,7 @@ const said = (trouble: FeedTrouble): string => {
       return 'the live feed refused the handshake';
     case 'hungUp':
       return 'the live feed hung up mid-stream';
-    case 'historyUnavailable':
+    case 'historyRefused':
       return troubleWith('the trade history')(trouble.cause);
   }
 };

@@ -13,9 +13,9 @@ export type Exchange = {
 type Closer = () => void;
 
 export type FeedTrouble =
-  | {type: 'handshakeRefused'}
-  | {type: 'hungUp'}
-  | {type: 'historyUnavailable'; cause: HTTPError};
+  | { type: 'handshakeRefused' }
+  | { type: 'hungUp' }
+  | { type: 'historyRefused'; cause: HTTPError };
 
 const historyOf = (
   base: string,
@@ -25,7 +25,7 @@ const historyOf = (
 ): Closer => {
   const fetching = recentTrades(base, product)
     .onSuccess(trades => dispatch(historyArrived(trades)))
-    .onFailure(cause => onTrouble({type: 'historyUnavailable', cause}));
+    .onFailure(cause => onTrouble({type: 'historyRefused', cause}));
   return () => fetching.cancel();
 };
 

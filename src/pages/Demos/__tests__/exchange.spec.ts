@@ -22,7 +22,11 @@ describe('the exchange as middleware', () => {
 
   it('opens the feed and dispatches what arrives when the feed is requested', async () => {
     coinbaseAnswering([]);
-    const store = demosStore(exchange({tradeFeed: 'ws://exchange.test', tradeHistory: '', tradeProduct: 'BTC-USD'}, () => undefined));
+    const store = demosStore(exchange({
+      tradeFeed: 'ws://exchange.test',
+      tradeHistory: '',
+      tradeProduct: 'BTC-USD'
+    }, () => undefined));
     expect(selectFeedStatus(store.state)).toBe('connecting');
 
     store.dispatch(feedRequested());
@@ -34,7 +38,11 @@ describe('the exchange as middleware', () => {
   it('hangs up when the feed is released', async () => {
     const hungUp: Client[] = [];
     coinbaseAnswering(hungUp);
-    const store = demosStore(exchange({tradeFeed: 'ws://exchange.test', tradeHistory: '', tradeProduct: 'BTC-USD'}, () => undefined));
+    const store = demosStore(exchange({
+      tradeFeed: 'ws://exchange.test',
+      tradeHistory: '',
+      tradeProduct: 'BTC-USD'
+    }, () => undefined));
     store.dispatch(feedRequested());
     await vi.waitFor(() => expect(selectFeedStatus(store.state)).toBe('streaming'));
 
@@ -46,15 +54,23 @@ describe('the exchange as middleware', () => {
   it('says when the trade history cannot be loaded', async () => {
     tradeHistoryRefuses();
     const troubles: FeedTrouble[] = [];
-    const store = demosStore(exchange({tradeFeed: '', tradeHistory: HISTORY, tradeProduct: 'BTC-USD'}, trouble => troubles.push(trouble)));
+    const store = demosStore(exchange({
+      tradeFeed: '',
+      tradeHistory: HISTORY,
+      tradeProduct: 'BTC-USD'
+    }, trouble => troubles.push(trouble)));
 
     store.dispatch(feedRequested());
 
-    await vi.waitFor(() => expect(troubles).toEqual([{type: 'historyUnavailable', cause: HTTPError.SERVER_ERROR}]));
+    await vi.waitFor(() => expect(troubles).toEqual([{type: 'historyRefused', cause: HTTPError.SERVER_ERROR}]));
   });
 
   it('an action that is not a feed request reaches the store untouched', () => {
-    const store = demosStore(exchange({tradeFeed: 'ws://exchange.test', tradeHistory: '', tradeProduct: 'BTC-USD'}, () => undefined));
+    const store = demosStore(exchange({
+      tradeFeed: 'ws://exchange.test',
+      tradeHistory: '',
+      tradeProduct: 'BTC-USD'
+    }, () => undefined));
 
     store.dispatch({type: 'feedOpened'});
 
