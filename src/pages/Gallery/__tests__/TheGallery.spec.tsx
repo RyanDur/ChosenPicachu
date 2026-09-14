@@ -4,10 +4,11 @@ import {render, screen, waitFor, within} from '@testing-library/react';
 import {has} from '@ryandur/sand';
 import {Paths} from '@pages/Paths';
 import userEvent from '@testing-library/user-event';
-import {AICArtResponse} from '@components/art-gallery/museums/aic/types';
+import {AICAllArtResponse, AICArtResponse} from '@components/art-gallery/museums/aic/types';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
 import {
   heldAICAllArtResponse,
+  heldAICArtPieceResponse,
   heldAICPictures,
   heldVAMPictures,
   refuseAICPictures,
@@ -21,6 +22,7 @@ import {
 } from '@components/art-gallery/__test_support';
 
 const firstPiece = aicArtResponse.data[0];
+const secondPiece = aicArtResponse.data[1];
 
 const frameTitled = async (title: string): Promise<HTMLElement> => {
   const frames = await wallHangs();
@@ -29,15 +31,16 @@ const frameTitled = async (title: string): Promise<HTMLElement> => {
   throw new Error(`no frame titled ${title}`);
 };
 
-const aicArtPieceResponse: AICArtResponse = {
-  data: {
-    id: firstPiece.id,
-    title: firstPiece.title,
-    term_titles: firstPiece.term_titles,
-    artist_display: firstPiece.artist_display,
-    image_id: firstPiece.image_id
-  }
-};
+const pieceResponseFor = ({
+                            id,
+                            title,
+                            term_titles,
+                            artist_display,
+                            image_id
+                          }: AICAllArtResponse['data'][number]): AICArtResponse =>
+  ({data: {id, title, term_titles, artist_display, image_id}});
+
+const aicArtPieceResponse = pieceResponseFor(firstPiece);
 
 describe('The gallery.', () => {
   test('the wall hangs a full page of works once the art has loaded', async () => {
@@ -70,6 +73,25 @@ describe('The gallery.', () => {
 
       const header = within(screen.getByRole('banner'));
       expect(await header.findByText(firstPiece.title)).toBeInTheDocument();
+    });
+
+    it('opening a second piece leaves nothing of the first on the easel', async () => {
+      setupAICAllArtResponse(aicArtResponse);
+      render(<TestApp at={Paths.artGallery}/>);
+      setupAICArtPieceResponse(aicArtPieceResponse, firstPiece.id);
+      await userEvent.click(within(await frameTitled(firstPiece.title)).getByRole('img'));
+      await within(screen.getByRole('banner')).findByText(firstPiece.title);
+      const secondArrives = heldAICArtPieceResponse(pieceResponseFor(secondPiece), secondPiece.id);
+
+      await userEvent.click(screen.getByRole('link', {name: 'Gallery'}));
+      await userEvent.click(within(await frameTitled(secondPiece.title)).getByRole('img'));
+
+      expect(await screen.findByRole('progressbar', {name: 'loading piece'})).toBeInTheDocument();
+      expect(screen.getByRole('heading', {level: 1})).toHaveTextContent('A piece');
+      expect(screen.queryByRole('figure')).not.toBeInTheDocument();
+
+      secondArrives();
+      expect(await within(screen.getByRole('banner')).findByText(secondPiece.title)).toBeInTheDocument();
     });
   });
 
