@@ -19,7 +19,7 @@ describe('the review\'s QAs', () => {
       expect(qa.prompt).toContain('# What every reviewer here holds');
       expect(qa.prompt).toContain(`You hold the ${name} door. Read ${file} first`);
       expect(qa.prompt).toContain('Corroborate before you report');
-      expect(qa.prompt).toContain('Never invent a finding');
+      expect(qa.prompt).toContain('Never invent a delta');
     });
   });
 
@@ -50,6 +50,14 @@ describe('the review\'s QAs', () => {
 
   test('the lead corroborates every finding that comes back', () => {
     const lead = promptFor({scope: 'changes', before: 'abc', after: 'def'});
-    expect(lead).toContain('corroborate every finding yourself');
+    expect(lead).toContain('corroborate every plus and every delta yourself');
+  });
+
+  test('every QA answers in the feedback stance, plusses and deltas with what happened and the reasoning', () => {
+    Object.values(agents()).forEach(qa => {
+      expect(qa.prompt).toContain('You take a feedback stance: plusses and deltas, each with its reasoning.');
+      expect(qa.prompt).toContain('each plus {door, file, line, happened, reasoning, checked, principle}');
+      expect(qa.prompt).toContain('each delta {door, severity, file, line, happened, reasoning, change, checked, principle}');
+    });
   });
 });

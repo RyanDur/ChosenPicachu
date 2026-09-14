@@ -1,0 +1,43 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["plusses", "deltas"],
+  "properties": {
+    "plusses": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["door", "file", "line", "happened", "reasoning", "principle"],
+        "properties": {
+          "door": {"type": "string", "enum": ["structure", "presentation", "dynamic interaction", "design", "tests"]},
+          "file": {"type": "string"},
+          "line": {"type": "integer", "minimum": 1},
+          "happened": {"type": "string"},
+          "reasoning": {"type": "string"},
+          "checked": {"type": "string"},
+          "principle": {"type": "string"}
+        }
+      }
+    },
+    "deltas": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["door", "severity", "file", "line", "happened", "reasoning", "change", "principle"],
+        "properties": {
+          "door": {"type": "string", "enum": ["structure", "presentation", "dynamic interaction", "design", "tests"]},
+          "severity": {"type": "string", "enum": ["violation", "concern", "note"]},
+          "file": {"type": "string"},
+          "line": {"type": "integer", "minimum": 1},
+          "happened": {"type": "string"},
+          "reasoning": {"type": "string"},
+          "change": {"type": "string"},
+          "checked": {"type": "string"},
+          "principle": {"type": "string"}
+        }
+      }
+    }
+  }
+}

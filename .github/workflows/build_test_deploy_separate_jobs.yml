@@ -81,14 +81,14 @@ jobs:
           npx --yes @anthropic-ai/claude-code@2.1.270 --print "$(node scripts/review/prompt.mjs)" \
             --model "$REVIEW_MODEL" \
             --output-format stream-json --verbose \
-            --json-schema "$(cat scripts/review/findings.schema.json)" \
+            --json-schema "$(cat scripts/review/feedback.schema.json)" \
             --agents "$(node scripts/review/agents.mjs)" \
             --allowedTools "Agent,Read,Grep,Glob,Bash(git diff:*),Bash(git log:*)" \
             --max-turns 80 \
             --no-session-persistence | node scripts/review/narrate.mjs
       - name: Report
         run: node scripts/review/report.mjs < review.json >> "$GITHUB_STEP_SUMMARY"
-      - name: Leave the findings on the commit
+      - name: Leave the feedback on the commit
         if: always() && hashFiles('review-comment.md') != ''
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

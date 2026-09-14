@@ -32,8 +32,8 @@ const count = ['one', 'two', 'three', 'four', 'five'];
 const listed = (names) => `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
 
 const dispatch = (asks) => asks.length === 1
-  ? `Only ${asks[0]} has a half in this scope. Send it the scope, word for word, and ask for its door's findings; the other QAs have nothing to review here.`
-  : `${count[asks.length - 1]} QAs hold one door each: ${asks.join(', ')}. Send all ${count[asks.length - 1]} the scope, word for word, at the same time, and ask each for its door's findings.`;
+  ? `Only ${asks[0]} has a half in this scope. Send it the scope, word for word, and ask for its door's plusses and deltas; the other QAs have nothing to review here.`
+  : `${count[asks.length - 1]} QAs hold one door each: ${asks.join(', ')}. Send all ${count[asks.length - 1]} the scope, word for word, at the same time, and ask each for its door's plusses and deltas.`;
 
 export const promptFor = ({scope, before, after}) => {
   const chosen = scopes[scope];
@@ -47,8 +47,8 @@ export const promptFor = ({scope, before, after}) => {
     chosen.describe({before, after}),
     `The scope has two halves. ${halves.tests} ${halves.site} The three door QAs and the design QA review the site and the tests QA reviews the tests; each may read the other half for context. The site's QAs report nothing on the tests; the tests QA reports on the site only that a test is missing.`,
     dispatch(chosen.asks),
-    'When they answer, corroborate every finding yourself before you keep it: open the file at the line, read the principle on its door, and keep the finding only if it holds. Merge what two QAs saw as one. Drop what does not hold and say nothing of it.',
-    'Answer with the findings that held, in the shape you were given.'
+    'When they answer, corroborate every plus and every delta yourself before you keep it: open the file at the line, read the principle on its door, and keep it only if it holds. Merge what two QAs saw as one. Drop what does not hold and say nothing of it.',
+    'Answer in the feedback stance, in the shape you were given: the plusses and the deltas that held, each saying what happened, the reasoning, and for a delta the change.'
   ].join('\n\n');
 };
 

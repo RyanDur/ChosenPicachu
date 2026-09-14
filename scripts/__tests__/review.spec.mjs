@@ -1,19 +1,21 @@
 import {promptFor} from '../review/prompt.mjs';
-import {doorTable, entryOf, findingsIn, summaryOf, verdictOf} from '../review/report.mjs';
+import {doorTable, entryOf, plusOf, reviewIn, summaryOf, verdictOf} from '../review/report.mjs';
 
 const placeOf = (text, needle) => {
   expect(text).toContain(needle);
   return text.indexOf(needle);
 };
 
-const answer = (findings) => JSON.stringify({type: 'result', structured_output: {findings}});
+const answer = (review) => JSON.stringify({type: 'result', structured_output: review});
 
 const violation = {
   door: 'structure',
   severity: 'violation',
   file: 'src/a.tsx',
   line: 3,
-  what: 'a div wraps a list',
+  happened: 'a div wraps a list',
+  reasoning: 'with the styles off the list is a list no longer',
+  change: 'let the ul stand on its own',
   principle: 'lists admit they are lists'
 };
 const concern = {
@@ -21,7 +23,9 @@ const concern = {
   severity: 'concern',
   file: 'src/b.css',
   line: 9,
-  what: 'a tag selector styles a button',
+  happened: 'a tag selector styles a button',
+  reasoning: 'every button on the site now wears it',
+  change: 'give the button a class that names it',
   principle: 'Tag selectors are for resets only'
 };
 const note = {
@@ -29,7 +33,9 @@ const note = {
   severity: 'note',
   file: 'src/c.tsx',
   line: 1,
-  what: 'a section has no heading',
+  happened: 'a section has no heading',
+  reasoning: 'a reader walking the headings skips it',
+  change: 'name the section with a heading',
   principle: 'Sections name themselves through their headings'
 };
 const testNote = {
@@ -37,7 +43,9 @@ const testNote = {
   severity: 'note',
   file: 'src/__tests__/c.spec.tsx',
   line: 4,
-  what: 'a spec finds a button by class',
+  happened: 'a spec finds a button by class',
+  reasoning: 'a rename of the class breaks a test about behaviour',
+  change: 'find the button by its role and name',
   principle: 'It finds by role, label and text, like every test'
 };
 const interaction = {
@@ -45,7 +53,9 @@ const interaction = {
   severity: 'note',
   file: 'src/d.tsx',
   line: 7,
-  what: 'a handler is named for the act in progress',
+  happened: 'a handler is named for the act in progress',
+  reasoning: 'the reader cannot tell the event from the command',
+  change: 'name it for what happened',
   principle: 'Events are what happened, so they are named in the past tense'
 };
 const design = {
@@ -53,9 +63,29 @@ const design = {
   severity: 'concern',
   file: 'src/e.ts',
   line: 2,
-  what: 'two booleans stand where a union belongs',
+  happened: 'two booleans stand where a union belongs',
+  reasoning: 'the type lets them disagree',
+  change: 'one union of the cases',
   principle: 'A state is a union of its cases'
 };
+const plus = {
+  door: 'structure',
+  file: 'src/f.tsx',
+  line: 5,
+  happened: 'the friends list is a fieldset with a legend',
+  reasoning: 'the group names itself and the platform hands the name to a reader',
+  principle: 'The right tag hands most of that over for free'
+};
+const testPlus = {
+  door: 'tests',
+  file: 'src/__tests__/f.spec.tsx',
+  line: 8,
+  happened: 'the group is found by its exact name',
+  reasoning: 'a name that absorbs a control fails the test',
+  principle: 'The name says what the reader will believe when it passes'
+};
+
+const review = (plusses, deltas) => ({plusses, deltas});
 
 describe('the review prompt', () => {
   test('a full review sends the reviewer to the doors on the home page and scopes them to the whole of src', () => {
@@ -94,74 +124,98 @@ describe('the review prompt', () => {
     const prompt = promptFor({scope: 'changes', before: 'abc', after: 'def'});
     expect(prompt).toContain('five QAs hold one door each: structure-qa, presentation-qa, dynamic-interaction-qa, design-qa, tests-qa');
   });
+
+  test('the review answers in the feedback stance: plusses and deltas, each with what happened and the reasoning', () => {
+    const prompt = promptFor({scope: 'changes', before: 'abc', after: 'def'});
+    expect(prompt).toContain('You take a feedback stance: plusses and deltas, each with its reasoning.');
+    expect(prompt).toContain('A **plus** is a choice in the code that holds a door up.');
+    expect(prompt).toContain('A **delta** is a finding: something to change.');
+    expect(prompt).toContain('Answer in the feedback stance');
+  });
+
+  test('a violation carries a trace to what a person would see, or it is a concern', () => {
+    expect(promptFor({scope: 'full'})).toContain('a delta whose trace you cannot make is a **concern**');
+  });
+
+  test('a delta the author recorded as not taken is answered by name, not raised again', () => {
+    expect(promptFor({scope: 'full'})).toContain('answer that reason by name: accept it, or rebut it');
+  });
 });
 
 describe('the review report', () => {
-  test('reads the findings the reviewer structured', () => {
-    expect(findingsIn(answer([note]))).toEqual([note]);
+  test('reads the plusses and deltas the reviewer structured', () => {
+    expect(reviewIn(answer(review([plus], [note])))).toEqual({plusses: [plus], deltas: [note]});
   });
 
-  test('an answer without structured findings is refused', () => {
-    expect(() => findingsIn(JSON.stringify({
-      type: 'result',
-      result: 'prose'
-    }))).toThrow('structured output is missing');
+  test('an answer without structured plusses and deltas is refused', () => {
+    expect(() => reviewIn(JSON.stringify({type: 'result', result: 'prose'}))).toThrow('structured output is missing');
+    expect(() => reviewIn(JSON.stringify({type: 'result', structured_output: {findings: []}}))).toThrow('structured output is missing');
   });
 
-  test('no findings reads as the code holding up', () => {
-    expect(summaryOf([])).toContain('No findings');
+  test('no deltas reads as the code holding up, with the plusses still told', () => {
+    const summary = summaryOf(review([plus], []));
+    expect(summary).toContain('## The code holds up the home page');
+    expect(summary).toContain('1 plus, no deltas.');
+    expect(summary).toContain('the friends list is a fieldset with a legend');
   });
 
-  test('findings are counted by severity', () => {
-    expect(summaryOf([testNote, note, concern, violation, interaction])).toContain('1 violation, 1 concern, 3 notes.');
+  test('plusses and deltas are counted, deltas by severity', () => {
+    expect(summaryOf(review([plus, testPlus], [testNote, note, concern, violation, interaction])))
+      .toContain('2 plusses. 1 violation, 1 concern, 3 notes.');
   });
 
-  test('findings are grouped by door, worst door and worst finding first', () => {
-    const summary = summaryOf([testNote, note, concern, violation, interaction, design]);
-    expect(placeOf(summary, '### structure')).toBeLessThan(placeOf(summary, '### presentation'));
-    expect(placeOf(summary, '### presentation')).toBeLessThan(placeOf(summary, '### dynamic interaction'));
-    expect(placeOf(summary, '### dynamic interaction')).toBeLessThan(placeOf(summary, '### design'));
-    expect(placeOf(summary, '### design')).toBeLessThan(placeOf(summary, '### tests'));
-    expect(placeOf(summary, '### dynamic interaction')).toBeLessThan(placeOf(summary, 'a handler is named for the act in progress'));
+  test('plusses come before the deltas, and deltas are grouped by door, worst door and worst delta first', () => {
+    const summary = summaryOf(review([testPlus], [testNote, note, concern, violation, interaction, design]));
+    expect(placeOf(summary, '### Plusses')).toBeLessThan(placeOf(summary, '### Deltas'));
+    expect(placeOf(summary, '### Deltas')).toBeLessThan(placeOf(summary, '#### structure'));
+    expect(placeOf(summary, '#### structure')).toBeLessThan(placeOf(summary, '#### presentation'));
+    expect(placeOf(summary, '#### presentation')).toBeLessThan(placeOf(summary, '#### dynamic interaction'));
+    expect(placeOf(summary, '#### dynamic interaction')).toBeLessThan(placeOf(summary, '#### design'));
+    expect(placeOf(summary, '#### design')).toBeLessThan(placeOf(summary, '#### tests'));
     expect(placeOf(summary, 'a div wraps a list')).toBeLessThan(placeOf(summary, 'a section has no heading'));
   });
 
-  test('the doors are tallied in a table before the prose', () => {
-    const findings = [testNote, note, concern, violation, interaction];
-    const summary = summaryOf(findings);
-    expect(placeOf(summary, '| structure | 1 | 0 | 1 |')).toBeLessThan(placeOf(summary, '### structure'));
-    expect(doorTable(findings)).toContain('| structure | 1 | 0 | 1 |');
-    expect(doorTable(findings)).toContain('| presentation | 0 | 1 | 0 |');
-    expect(doorTable(findings)).toContain('| tests | 0 | 0 | 1 |');
+  test('the doors are tallied in a table before the prose, plusses beside the severities', () => {
+    const told = review([plus, testPlus], [testNote, note, concern, violation, interaction]);
+    const summary = summaryOf(told);
+    expect(placeOf(summary, '| structure | 1 | 1 | 0 | 1 |')).toBeLessThan(placeOf(summary, '### Plusses'));
+    expect(doorTable(told)).toContain('| door | plusses | violations | concerns | notes |');
+    expect(doorTable(told)).toContain('| presentation | 0 | 0 | 1 | 0 |');
+    expect(doorTable(told)).toContain('| tests | 1 | 0 | 0 | 1 |');
   });
 
-  test('a door nobody found anything in gets no row', () => {
-    expect(doorTable([note])).toContain('| structure | 0 | 0 | 1 |');
-    expect(doorTable([note])).not.toContain('presentation');
+  test('a door nobody said anything about gets no row', () => {
+    expect(doorTable(review([], [note]))).toContain('| structure | 0 | 0 | 0 | 1 |');
+    expect(doorTable(review([], [note]))).not.toContain('presentation');
+    expect(doorTable(review([testPlus], []))).toContain('| tests | 1 | 0 | 0 | 0 |');
   });
 
-  test('a design finding is tallied and told under its own door', () => {
-    expect(doorTable([design])).toContain('| design | 0 | 1 | 0 |');
-    expect(summaryOf([design])).toContain('### design');
-    expect(summaryOf([design])).toContain('two booleans stand where a union belongs');
-  });
-
-  test('a finding is a heading with its mark, its place, its words, and the door\'s words quoted', () => {
+  test('a delta is a heading with its mark and place, then what happened, why it matters, the change, and the door\'s words', () => {
     const entry = entryOf(concern);
-    expect(entry).toContain('#### ▲ concern · `src/b.css:9`');
-    expect(entry).toContain('\n\na tag selector styles a button\n\n');
+    expect(entry).toContain('##### ▲ concern · `src/b.css:9`');
+    expect(placeOf(entry, '**What happened:** a tag selector styles a button')).toBeLessThan(placeOf(entry, '**Why it matters:** every button on the site now wears it'));
+    expect(placeOf(entry, '**Why it matters:**')).toBeLessThan(placeOf(entry, '**Change:** give the button a class that names it'));
     expect(entry).toContain('> Tag selectors are for resets only');
   });
 
-  test('the place links to the line at the reviewed commit when the commit is known', () => {
-    const entry = entryOf(violation, {repository: 'RyanDur/ChosenPicachu', sha: 'abc123'});
-    expect(entry).toContain('[src/a.tsx:3](https://github.com/RyanDur/ChosenPicachu/blob/abc123/src/a.tsx#L3)');
+  test('a plus is a heading with its door and place, then what happened, why it works, and the door\'s words', () => {
+    const entry = plusOf(plus);
+    expect(entry).toContain('##### + structure · `src/f.tsx:5`');
+    expect(placeOf(entry, '**What happened:** the friends list is a fieldset with a legend')).toBeLessThan(placeOf(entry, '**Why it works:** the group names itself'));
+    expect(entry).toContain('> The right tag hands most of that over for free');
   });
 
-  test('what the reviewer checked folds away under the finding', () => {
-    const entry = entryOf({...note, what: 'a section has no heading. Checked: read the file whole.'});
-    expect(entry).toContain('a section has no heading.\n\n<details><summary>what was checked</summary>\n\nChecked: read the file whole.\n\n</details>');
+  test('the place links to the line at the reviewed commit when the commit is known', () => {
+    const commit = {repository: 'RyanDur/ChosenPicachu', sha: 'abc123'};
+    expect(entryOf(violation, commit)).toContain('[src/a.tsx:3](https://github.com/RyanDur/ChosenPicachu/blob/abc123/src/a.tsx#L3)');
+    expect(plusOf(plus, commit)).toContain('[src/f.tsx:5](https://github.com/RyanDur/ChosenPicachu/blob/abc123/src/f.tsx#L5)');
+  });
+
+  test('what the reviewer checked folds away under the entry', () => {
+    expect(entryOf({...note, checked: 'read the file whole'})).toContain('**Change:** name the section with a heading\n\n<details><summary>what was checked</summary>\n\nread the file whole\n\n</details>\n\n> Sections');
+    expect(plusOf({...plus, checked: 'read the legend'})).toContain('<details><summary>what was checked</summary>\n\nread the legend\n\n</details>');
     expect(entryOf(note)).not.toContain('<details>');
+    expect(plusOf(plus)).not.toContain('<details>');
   });
 
   test('only a violation fails the job', () => {

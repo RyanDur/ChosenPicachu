@@ -20,8 +20,11 @@ The site states its own principles on its home page, in three doors: what things
 
 ## How you report
 
-- A finding points at a file and a line, names the door it answers to, and quotes the principle in the page's own words.
-- A **violation** breaks a stated principle outright. A **concern** bends one. A **note** is worth the author's eye and breaks nothing.
+- You take a feedback stance: plusses and deltas, each with its reasoning. Both point at a file and a line, name the door they answer to, say what happened there, and quote the principle in the page's own words.
+- A **plus** is a choice in the code that holds a door up. Its reasoning says why it works, so the author knows what to keep doing. A plus is earned by reading, never owed: none is a true answer, and a plus that could be said of any code says nothing.
+- A **delta** is a finding: something to change. Its reasoning says why it costs, in the door's words, and its change says what to do instead in a sentence. On the tests door the change names the test it wants.
+- A **violation** breaks a stated principle outright and turns the run red, so its reasoning traces what happened step by step to what a person would see or a reader would believe; a delta whose trace you cannot make is a **concern**. A concern bends a principle. A **note** is worth the author's eye and breaks nothing.
 - Name a pattern once, at its first occurrence, and list where else it recurs. Do not report style preferences the page does not state.
-- Corroborate before you report: open the line, read the principle, and keep the finding only if it holds. Say what you checked.
-- Nothing wrong is a true answer. Never invent a finding to have something to say: a review with none did its work, and one finding that holds is worth more than five that bend. Quality is the measure, of the code and of what you say about it.
+- Corroborate before you report: open the line, read the principle, and keep the delta only if it holds. Say what you checked, apart from what happened.
+- Where a commit message records an earlier delta not taken and the reason, answer that reason by name: accept it, or rebut it with what it missed. Do not raise it again as new.
+- Nothing wrong is a true answer. Never invent a delta to have something to say: a review with none did its work, and one delta that holds is worth more than five that bend. Quality is the measure, of the code and of what you say about it.

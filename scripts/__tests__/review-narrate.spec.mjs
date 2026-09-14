@@ -10,7 +10,7 @@ describe('the review narration', () => {
       {type: 'tool_use', name: 'Glob', input: {pattern: 'src/**/*.css'}},
       {type: 'tool_use', name: 'Bash', input: {command: 'git diff abc def'}},
       {type: 'tool_use', name: 'Agent', input: {subagent_type: 'structure-qa', description: 'review the push for the structure door', prompt: '...'}},
-      {type: 'tool_use', name: 'StructuredOutput', input: {findings: [{}, {}, {}]}}
+      {type: 'tool_use', name: 'StructuredOutput', input: {plusses: [{}], deltas: [{}, {}, {}]}}
     ));
     expect(told.split('\n')).toEqual([
       'reads src/pages/Home/Structure.tsx',
@@ -18,7 +18,7 @@ describe('the review narration', () => {
       'globs src/**/*.css',
       'runs git diff abc def',
       'asks structure-qa: review the push for the structure door',
-      'answers with 3 findings'
+      'answers with 1 plusses and 3 deltas'
     ]);
   });
 
@@ -33,7 +33,7 @@ describe('the review narration', () => {
   });
 
   test('the result says how long it took and how much it found', () => {
-    expect(narration({type: 'result', is_error: false, num_turns: 12, structured_output: {findings: [{}, {}]}})).toBe('done in 12 turns: 2 findings');
+    expect(narration({type: 'result', is_error: false, num_turns: 12, structured_output: {plusses: [{}], deltas: [{}, {}]}})).toBe('done in 12 turns: 1 plusses and 2 deltas');
   });
 
   test('a result that is an error says why', () => {

@@ -10,7 +10,7 @@ const step = ({name, input}) => {
     case 'Glob': return `globs ${input.pattern}`;
     case 'Bash': return `runs ${input.command}`;
     case 'Agent': return `asks ${input.subagent_type}: ${said(input.description ?? '')}`;
-    case 'StructuredOutput': return `answers with ${input.findings?.length ?? 0} findings`;
+    case 'StructuredOutput': return `answers with ${input.plusses?.length ?? 0} plusses and ${input.deltas?.length ?? 0} deltas`;
     default: return `${name} ${JSON.stringify(input).slice(0, 120)}`;
   }
 };
@@ -23,10 +23,11 @@ export const narration = (event) => {
       .join('\n');
   }
   if (event.type === 'result') {
-    const findings = event.structured_output?.findings?.length;
+    const plusses = event.structured_output?.plusses?.length;
+    const deltas = event.structured_output?.deltas?.length;
     return event.is_error
       ? `the review did not finish: ${said(String(event.result))}`
-      : `done in ${event.num_turns} turns: ${findings ?? 'no'} findings`;
+      : `done in ${event.num_turns} turns: ${plusses ?? 'no'} plusses and ${deltas ?? 'no'} deltas`;
   }
   return '';
 };
