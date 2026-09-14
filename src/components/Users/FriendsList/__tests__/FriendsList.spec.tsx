@@ -1,7 +1,14 @@
 import userEvent from '@testing-library/user-event';
 import {render, screen} from '@testing-library/react';
+import {FC, useState} from 'react';
 import {FriendsList} from '@components/Users/FriendsList';
+import {User} from '@components/Users/UserInfo/user';
 import {users} from '@test-support/fixtures';
+
+const Befriending: FC<{user: User; among?: readonly User[]}> = ({user: first, among = users}) => {
+  const [user, update] = useState(first);
+  return <FriendsList users={among} user={user} onChange={friends => update({...user, friends})}/>;
+};
 
 describe('the friends list', () => {
   const consumer = vi.fn();
@@ -21,11 +28,18 @@ describe('the friends list', () => {
     expect(consumer).toHaveBeenCalledWith([secondUser.id]);
   });
 
-  it('adding a friend says who was added', async () => {
-    render(<FriendsList users={users} user={firstUser} onChange={consumer}/>);
+  it('adding a friend says who was added once they are on the list', async () => {
+    render(<Befriending user={firstUser}/>);
     await userEvent.selectOptions(screen.getByRole('combobox', {name: 'Add a friend'}), [fullName(secondUser)]);
 
     expect(screen.getByRole('status', {name: 'friends report'})).toHaveTextContent(`${fullName(secondUser)} added.`);
+  });
+
+  it('while a change is still on its way nothing is said', async () => {
+    render(<FriendsList users={users} user={{...firstUser, friends: [secondUser.id]}} onChange={consumer}/>);
+    await userEvent.click(screen.getByRole('button', {name: fullName(secondUser)}));
+
+    expect(screen.getByRole('status', {name: 'friends report'})).toBeEmptyDOMElement();
   });
 
   it('the friends of a user are a group that says whose friends they are', () => {
@@ -83,31 +97,52 @@ describe('the friends list', () => {
       expect(consumer).toHaveBeenCalledWith([secondUser.id]);
     });
 
-    test('removing a friend says who was removed', async () => {
+  });
+
+  describe('once a removal has arrived', () => {
+    const withTwoFriends = {...firstUser, friends: [secondUser.id, thirdUser.id]};
+
+    test('the list says who was removed', async () => {
+      render(<Befriending user={withTwoFriends}/>);
+
       await userEvent.click(screen.getByRole('button', {name: fullName(thirdUser)}));
 
+      expect(screen.queryByRole('button', {name: fullName(thirdUser)})).not.toBeInTheDocument();
       expect(screen.getByRole('status', {name: 'friends report'})).toHaveTextContent(`${fullName(thirdUser)} removed.`);
     });
 
-    test("removing a friend hands focus to the next friend's remove button", async () => {
+    test("focus lands on the next friend's remove button", async () => {
+      render(<Befriending user={withTwoFriends}/>);
+
       await userEvent.click(screen.getByRole('button', {name: fullName(secondUser)}));
 
       expect(screen.getByRole('button', {name: fullName(thirdUser)})).toHaveFocus();
     });
 
-    test('removing the last friend in the list hands focus to the one before it', async () => {
+    test('focus lands on the friend before when the last one goes', async () => {
+      render(<Befriending user={withTwoFriends}/>);
+
       await userEvent.click(screen.getByRole('button', {name: fullName(thirdUser)}));
 
       expect(screen.getByRole('button', {name: fullName(secondUser)})).toHaveFocus();
     });
-  });
 
-  test('removing the only friend hands focus to Add a friend', async () => {
-    render(<FriendsList users={users} user={{...firstUser, friends: [secondUser.id]}} onChange={consumer}/>);
+    test('focus lands on Add a friend when the only friend goes', async () => {
+      render(<Befriending user={{...firstUser, friends: [secondUser.id]}}/>);
 
-    await userEvent.click(screen.getByRole('button', {name: fullName(secondUser)}));
+      await userEvent.click(screen.getByRole('button', {name: fullName(secondUser)}));
 
-    expect(screen.getByRole('combobox', {name: 'Add a friend'})).toHaveFocus();
+      expect(screen.getByRole('combobox', {name: 'Add a friend'})).toHaveFocus();
+    });
+
+    test('focus lands on Add a friend even when it only appears once the friend is gone', async () => {
+      render(<Befriending user={{...firstUser, friends: [secondUser.id]}} among={[firstUser, secondUser]}/>);
+      expect(screen.queryByRole('combobox', {name: 'Add a friend'})).not.toBeInTheDocument();
+
+      await userEvent.click(screen.getByRole('button', {name: fullName(secondUser)}));
+
+      expect(screen.getByRole('combobox', {name: 'Add a friend'})).toHaveFocus();
+    });
   });
 
   it('should not allow a user to select something twice', () => {

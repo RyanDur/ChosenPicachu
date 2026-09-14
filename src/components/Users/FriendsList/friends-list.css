@@ -33,6 +33,7 @@
 
         .icon {
           block-size: var(--base-x-3);
+          inline-size: var(--base-x-3);
         }
       }
     }

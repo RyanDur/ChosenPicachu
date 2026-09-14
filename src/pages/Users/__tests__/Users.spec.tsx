@@ -291,4 +291,23 @@ describe('the users page', () => {
 
     await waitFor(() => expect(names().filter(name => name === fullName(person))).toHaveLength(standing + 1));
   });
+
+  test("removing a friend takes them off the row and hands focus to the next friend's remove button", async () => {
+    render(<TestApp at={Paths.users}/>);
+    const served = await roster();
+    const [first, ...others] = served.filter(name => served.indexOf(name) === served.lastIndexOf(name));
+    const row = await rowOf(first);
+    const strangers = others.filter(name => within(row).queryByRole('button', {name}) === null);
+    const [second, third] = strangers;
+    await userEvent.selectOptions(within(row).getByRole('combobox', {name: 'Add a friend'}), second);
+    await within(row).findByRole('button', {name: second});
+    await userEvent.selectOptions(within(row).getByRole('combobox', {name: 'Add a friend'}), third);
+    await within(row).findByRole('button', {name: third});
+
+    await userEvent.click(within(row).getByRole('button', {name: second}));
+
+    await waitFor(() => expect(within(row).queryByRole('button', {name: second})).not.toBeInTheDocument());
+    expect(within(row).getByRole('button', {name: third})).toHaveFocus();
+    expect(within(row).getByRole('status', {name: 'friends report'})).toHaveTextContent(`${second} removed.`);
+  });
 });
