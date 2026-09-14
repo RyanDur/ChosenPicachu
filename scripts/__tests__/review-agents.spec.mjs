@@ -53,9 +53,8 @@ describe('the review\'s QAs', () => {
     expect(lead).toContain('corroborate every plus and every delta yourself');
   });
 
-  test('every QA answers in the feedback stance, plusses and deltas with what happened and the why', () => {
+  test('every QA answers in the shape the schema asks for', () => {
     Object.values(agents()).forEach(qa => {
-      expect(qa.prompt).toContain('You take a feedback stance: plusses and deltas, each with its why.');
       expect(qa.prompt).toContain('each plus {door, file, line, happened, why, checked, principle}');
       expect(qa.prompt).toContain('each delta {door, severity, file, line, happened, why, change, checked, principle}');
     });

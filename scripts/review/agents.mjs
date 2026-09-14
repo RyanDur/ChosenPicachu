@@ -3,6 +3,9 @@ import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 const values = readFileSync(join(dirname(fileURLToPath(import.meta.url)), 'values.md'), 'utf8');
+const schema = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), 'feedback.schema.json'), 'utf8'));
+
+export const shapeOf = (kind) => `{${Object.keys(schema.properties[kind].items.properties).join(', ')}}`;
 
 export const doors = [
   {
@@ -52,7 +55,7 @@ export const qaOf = ({name, file, asks}) => ({
     `## Your door`,
     `You hold the ${name} door. Read ${file} first and whole; it is your rubric, in the author's words. Review only what that door asks about: ${asks}.`,
     `The lead tells you the scope. ${half(name)} Read every file in your half whole, and any other file it leans on when you need the context.`,
-    'Answer in the feedback stance with one JSON object {plusses, deltas} and nothing else: each plus {door, file, line, happened, why, checked, principle}, each delta {door, severity, file, line, happened, why, change, checked, principle}. Your door is the door of every plus and delta you make.'
+    `Answer in the feedback stance with one JSON object {plusses, deltas} and nothing else: each plus ${shapeOf('plusses')}, each delta ${shapeOf('deltas')}. Your door is the door of every plus and delta you make.`
   ].join('\n\n'),
   tools: reading,
   model: 'opus',

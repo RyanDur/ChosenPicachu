@@ -14,9 +14,7 @@ export const reviewIn = (answer) => {
 
 const bySeverity = (a, b) => severities.indexOf(a.severity) - severities.indexOf(b.severity);
 
-const plural = (count, word) => `${count} ${word}${count === 1 ? '' : 's'}`;
-
-const plusses = (count) => `${count} ${count === 1 ? 'plus' : 'plusses'}`;
+const plural = (count, word, words = `${word}s`) => `${count} ${count === 1 ? word : words}`;
 
 const placeOf = ({file, line}, commit) =>
   commit === undefined
@@ -27,7 +25,7 @@ const checkedFold = ({checked}) =>
   checked === undefined || checked === '' ? [] : ['<details><summary>what was checked</summary>', '', checked, '', '</details>', ''];
 
 export const plusOf = (plus, commit) => [
-  `##### + ${plus.door} · ${placeOf(plus, commit)}`,
+  `##### + ${placeOf(plus, commit)}`,
   '',
   `**What happened:** ${plus.happened}`,
   '',
@@ -37,7 +35,7 @@ export const plusOf = (plus, commit) => [
   `> ${plus.principle}`
 ].join('\n');
 
-export const entryOf = (delta, commit) => [
+export const deltaOf = (delta, commit) => [
   `##### ${marks[delta.severity]} ${delta.severity} · ${placeOf(delta, commit)}`,
   '',
   `**What happened:** ${delta.happened}`,
@@ -49,6 +47,12 @@ export const entryOf = (delta, commit) => [
   ...checkedFold(delta),
   `> ${delta.principle}`
 ].join('\n');
+
+const byDoor = (entries, told) => doors
+  .map(door => ({door, own: entries.filter(entry => entry.door === door)}))
+  .filter(({own}) => own.length > 0)
+  .map(({door, own}) => [`#### ${door}`, ...own.map(told)].join('\n\n'))
+  .join('\n\n');
 
 export const doorTable = ({plusses, deltas}) => {
   const rows = doors
@@ -62,17 +66,14 @@ export const doorTable = ({plusses, deltas}) => {
 };
 
 const plussesTold = (plusses, commit) =>
-  plusses.length === 0 ? [] : ['### Plusses', '', plusses.map(plus => plusOf(plus, commit)).join('\n\n'), ''];
+  plusses.length === 0 ? [] : ['### Plusses', '', byDoor(plusses, plus => plusOf(plus, commit)), ''];
 
-const deltasTold = (deltas, commit) => doors
-  .map(door => ({door, found: deltas.filter(delta => delta.door === door).sort(bySeverity)}))
-  .filter(({found}) => found.length > 0)
-  .map(({door, found}) => [`#### ${door}`, ...found.map(delta => entryOf(delta, commit))].join('\n\n'));
+const deltasTold = (deltas, commit) =>
+  ['### Deltas', '', byDoor([...deltas].sort(bySeverity), delta => deltaOf(delta, commit)), ''];
 
-export const summaryOf = (review, {commit} = {}) => {
-  const {deltas} = review;
+export const summaryOf = ({plusses, deltas}, {commit} = {}) => {
   if (deltas.length === 0) {
-    return ['## The code holds up the home page', '', `${plusses(review.plusses.length)}, no deltas.`, '', ...plussesTold(review.plusses, commit)].join('\n');
+    return ['## The code holds up the home page', '', `${plural(plusses.length, 'plus', 'plusses')}, no deltas.`, '', ...plussesTold(plusses, commit)].join('\n');
   }
   const counts = severities
     .map(severity => ({severity, count: deltas.filter(delta => delta.severity === severity).length}))
@@ -81,17 +82,16 @@ export const summaryOf = (review, {commit} = {}) => {
   return [
     '## The home page reviews the code',
     '',
-    `${plusses(review.plusses.length)}. ${counts.join(', ')}.`,
+    `${plural(plusses.length, 'plus', 'plusses')}. ${counts.join(', ')}.`,
     '',
-    doorTable(review),
+    doorTable({plusses, deltas}),
     '',
-    ...plussesTold(review.plusses, commit),
-    '### Deltas',
-    '',
-    deltasTold(deltas, commit).join('\n\n'),
-    ''
+    ...plussesTold(plusses, commit),
+    ...deltasTold(deltas, commit)
   ].join('\n');
 };
+
+export const leavesFeedback = ({plusses, deltas}) => plusses.length + deltas.length > 0;
 
 export const verdictOf = (deltas) => deltas.some(({severity}) => severity === 'violation') ? 1 : 0;
 
@@ -101,7 +101,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const commit = repository !== undefined && sha !== undefined ? {repository, sha} : undefined;
   const summary = summaryOf(review, {commit});
   process.stdout.write(summary);
-  if (review.plusses.length + review.deltas.length > 0) {
+  if (leavesFeedback(review)) {
     writeFileSync('review-comment.md', summary);
   }
   process.exitCode = verdictOf(review.deltas);

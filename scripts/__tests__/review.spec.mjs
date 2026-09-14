@@ -1,5 +1,9 @@
+import {readFileSync} from 'node:fs';
+import {dirname, join} from 'node:path';
+import {fileURLToPath} from 'node:url';
 import {promptFor} from '../review/prompt.mjs';
-import {doorTable, entryOf, plusOf, reviewIn, summaryOf, verdictOf} from '../review/report.mjs';
+import {deltaOf, doorTable, leavesFeedback, plusOf, reviewIn, summaryOf, verdictOf} from '../review/report.mjs';
+import {shapeOf} from '../review/agents.mjs';
 
 const placeOf = (text, needle) => {
   expect(text).toContain(needle);
@@ -164,15 +168,22 @@ describe('the review report', () => {
       .toContain('2 plusses. 1 violation, 1 concern, 3 notes.');
   });
 
-  test('plusses come before the deltas, and deltas are grouped by door, worst door and worst delta first', () => {
-    const summary = summaryOf(review([testPlus], [testNote, note, concern, violation, interaction, design]));
-    expect(placeOf(summary, '### Plusses')).toBeLessThan(placeOf(summary, '### Deltas'));
-    expect(placeOf(summary, '### Deltas')).toBeLessThan(placeOf(summary, '#### structure'));
+  test('deltas are grouped by door, worst door and worst delta first', () => {
+    const summary = summaryOf(review([], [testNote, note, concern, violation, interaction, design]));
     expect(placeOf(summary, '#### structure')).toBeLessThan(placeOf(summary, '#### presentation'));
     expect(placeOf(summary, '#### presentation')).toBeLessThan(placeOf(summary, '#### dynamic interaction'));
     expect(placeOf(summary, '#### dynamic interaction')).toBeLessThan(placeOf(summary, '#### design'));
     expect(placeOf(summary, '#### design')).toBeLessThan(placeOf(summary, '#### tests'));
     expect(placeOf(summary, 'a div wraps a list')).toBeLessThan(placeOf(summary, 'a section has no heading'));
+  });
+
+  test('plusses come before the deltas, each under its door, so the headings nest the same way on both sides', () => {
+    const summary = summaryOf(review([testPlus, plus], [design]));
+    expect(placeOf(summary, '### Plusses')).toBeLessThan(placeOf(summary, '#### structure'));
+    expect(placeOf(summary, '#### structure')).toBeLessThan(placeOf(summary, '#### tests'));
+    expect(placeOf(summary, '#### tests')).toBeLessThan(placeOf(summary, '### Deltas'));
+    expect(placeOf(summary, '### Deltas')).toBeLessThan(placeOf(summary, '#### design'));
+    expect(summary).not.toContain('### Plusses\n\n#####');
   });
 
   test('the doors are tallied in a table before the prose, plusses beside the severities', () => {
@@ -191,31 +202,48 @@ describe('the review report', () => {
   });
 
   test('a delta is a heading with its mark and place, then what happened, why it matters, the change, and the door\'s words', () => {
-    const entry = entryOf(concern);
+    const entry = deltaOf(concern);
     expect(entry).toContain('##### ▲ concern · `src/b.css:9`');
     expect(placeOf(entry, '**What happened:** a tag selector styles a button')).toBeLessThan(placeOf(entry, '**Why it matters:** every button on the site now wears it'));
     expect(placeOf(entry, '**Why it matters:**')).toBeLessThan(placeOf(entry, '**Change:** give the button a class that names it'));
     expect(entry).toContain('> Tag selectors are for resets only');
   });
 
-  test('a plus is a heading with its door and place, then what happened, why it works, and the door\'s words', () => {
+  test('a plus is a heading with its place, then what happened, why it works, and the door\'s words', () => {
     const entry = plusOf(plus);
-    expect(entry).toContain('##### + structure · `src/f.tsx:5`');
+    expect(entry).toContain('##### + `src/f.tsx:5`');
     expect(placeOf(entry, '**What happened:** the friends list is a fieldset with a legend')).toBeLessThan(placeOf(entry, '**Why it works:** the group names itself'));
     expect(entry).toContain('> The right tag hands most of that over for free');
   });
 
   test('the place links to the line at the reviewed commit when the commit is known', () => {
     const commit = {repository: 'RyanDur/ChosenPicachu', sha: 'abc123'};
-    expect(entryOf(violation, commit)).toContain('[src/a.tsx:3](https://github.com/RyanDur/ChosenPicachu/blob/abc123/src/a.tsx#L3)');
-    expect(plusOf(plus, commit)).toContain('[src/f.tsx:5](https://github.com/RyanDur/ChosenPicachu/blob/abc123/src/f.tsx#L5)');
+    const summary = summaryOf(review([plus], [violation]), {commit});
+    expect(summary).toContain('[src/a.tsx:3](https://github.com/RyanDur/ChosenPicachu/blob/abc123/src/a.tsx#L3)');
+    expect(summary).toContain('[src/f.tsx:5](https://github.com/RyanDur/ChosenPicachu/blob/abc123/src/f.tsx#L5)');
   });
 
   test('what the reviewer checked folds away under the entry', () => {
-    expect(entryOf({...note, checked: 'read the file whole'})).toContain('**Change:** name the section with a heading\n\n<details><summary>what was checked</summary>\n\nread the file whole\n\n</details>\n\n> Sections');
+    expect(deltaOf({...note, checked: 'read the file whole'})).toContain('**Change:** name the section with a heading\n\n<details><summary>what was checked</summary>\n\nread the file whole\n\n</details>\n\n> Sections');
     expect(plusOf({...plus, checked: 'read the legend'})).toContain('<details><summary>what was checked</summary>\n\nread the legend\n\n</details>');
-    expect(entryOf(note)).not.toContain('<details>');
+    expect(deltaOf(note)).not.toContain('<details>');
     expect(plusOf(plus)).not.toContain('<details>');
+  });
+
+  test('a review with plusses and no deltas still leaves its feedback on the commit, and an empty one leaves none', () => {
+    expect(leavesFeedback(review([plus], []))).toBe(true);
+    expect(leavesFeedback(review([], [note]))).toBe(true);
+    expect(leavesFeedback(review([], []))).toBe(false);
+  });
+
+  test('the schema the review answers in names every field the report tells, and the QAs are asked for that shape', () => {
+    const schema = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), '../review/feedback.schema.json'), 'utf8'));
+    expect(schema.properties.plusses.items.required).toEqual(expect.arrayContaining(['door', 'file', 'line', 'happened', 'why', 'principle']));
+    expect(Object.keys(schema.properties.plusses.items.properties)).toContain('checked');
+    expect(schema.properties.deltas.items.required).toEqual(expect.arrayContaining(['door', 'severity', 'file', 'line', 'happened', 'why', 'change', 'principle']));
+    expect(Object.keys(schema.properties.deltas.items.properties)).toContain('checked');
+    expect(shapeOf('plusses')).toBe('{door, file, line, happened, why, checked, principle}');
+    expect(shapeOf('deltas')).toBe('{door, severity, file, line, happened, why, change, checked, principle}');
   });
 
   test('only a violation fails the job', () => {

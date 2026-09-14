@@ -3,6 +3,8 @@ import {writeFileSync} from 'node:fs';
 
 const said = (text) => text.replace(/\s+/g, ' ').trim();
 
+const counted = (plusses, deltas) => `${plusses} ${plusses === 1 ? 'plus' : 'plusses'} and ${deltas} ${deltas === 1 ? 'delta' : 'deltas'}`;
+
 const step = ({name, input}) => {
   switch (name) {
     case 'Read': return `reads ${input.file_path}`;
@@ -10,7 +12,7 @@ const step = ({name, input}) => {
     case 'Glob': return `globs ${input.pattern}`;
     case 'Bash': return `runs ${input.command}`;
     case 'Agent': return `asks ${input.subagent_type}: ${said(input.description ?? '')}`;
-    case 'StructuredOutput': return `answers with ${input.plusses?.length ?? 0} plusses and ${input.deltas?.length ?? 0} deltas`;
+    case 'StructuredOutput': return `answers with ${counted(input.plusses?.length ?? 0, input.deltas?.length ?? 0)}`;
     default: return `${name} ${JSON.stringify(input).slice(0, 120)}`;
   }
 };
@@ -23,11 +25,9 @@ export const narration = (event) => {
       .join('\n');
   }
   if (event.type === 'result') {
-    const plusses = event.structured_output?.plusses?.length;
-    const deltas = event.structured_output?.deltas?.length;
     return event.is_error
       ? `the review did not finish: ${said(String(event.result))}`
-      : `done in ${event.num_turns} turns: ${plusses ?? 'no'} plusses and ${deltas ?? 'no'} deltas`;
+      : `done in ${event.num_turns} turns: ${counted(event.structured_output?.plusses?.length ?? 0, event.structured_output?.deltas?.length ?? 0)}`;
   }
   return '';
 };
