@@ -40,14 +40,14 @@ describe('viewing a piece', () => {
     render(<TestApp at={`${Paths.artGallery}${aicArtResponse.data.id}?tab=${Source.AIC}`}/>);
 
     expect(await screen.findByText(aicArtResponse.data.artist_display)).toBeInTheDocument();
-    await waitFor(() => expect(screen.queryByAltText('Load Error')).not.toBeInTheDocument());
+    await waitFor(() => expect(screen.queryByAltText('the museum refused to answer')).not.toBeInTheDocument());
   });
 
   test('shows nothing but an error and says the museum is having trouble', async () => {
     anyRequestRespondsWith(HTTPError.SERVER_ERROR, 500);
     render(<TestApp at={`${Paths.artGallery}1234?tab=${Source.AIC}`}/>);
 
-    expect(await screen.findByAltText('Load Error')).toBeInTheDocument();
+    expect(await screen.findByAltText('the museum refused to answer')).toBeInTheDocument();
     expect(screen.queryByRole('figure')).not.toBeInTheDocument();
     expect(screen.queryByRole('progressbar', {name: 'loading piece'})).not.toBeInTheDocument();
     expect(within(screen.getByRole('alert', {hidden: true}))
