@@ -36,6 +36,7 @@ jobs:
           npm ci
           npm run lint
           npm run lint:css
+          npm run lint:style
           npm run build
       - name: Test
         run: npm test
