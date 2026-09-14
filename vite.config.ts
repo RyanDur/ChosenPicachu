@@ -1,9 +1,9 @@
 import {readFileSync} from 'node:fs';
-import { defineConfig } from 'vitest/config';
-import { loadEnv } from 'vite';
-import type { Plugin } from 'vite';
-import { rolldown } from 'rolldown';
-import { fileURLToPath } from 'node:url';
+import {defineConfig} from 'vitest/config';
+import {loadEnv} from 'vite';
+import type {Plugin} from 'vite';
+import {rolldown} from 'rolldown';
+import {fileURLToPath} from 'node:url';
 
 const aliases = {
   '@env': fileURLToPath(new URL('./src/env.ts', import.meta.url)),
@@ -108,12 +108,12 @@ export default defineConfig(({mode}) => ({
   },
   plugins: [rawCss(), frameScript(), runtimeEnv(loadEnv(mode, process.cwd())), react(), svgr({
     // svgr options: https://react-svgr.com/docs/options/
-    svgrOptions: { exportType: 'default', ref: true, svgo: false, titleProp: true },
-    include: '**/*.svg',
+    svgrOptions: {exportType: 'default', ref: true, svgo: false, titleProp: true},
+    include: '**/*.svg'
   })],
   test: {
     globals: true,
     environment: 'jsdom',
-    setupFiles: ['./test-setup.ts'],
+    setupFiles: ['./test-setup.ts']
   }
 }));
