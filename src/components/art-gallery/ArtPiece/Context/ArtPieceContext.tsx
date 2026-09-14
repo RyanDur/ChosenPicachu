@@ -4,12 +4,12 @@ import {MuseumReply} from '@components/art-gallery/museums/reply';
 import {Context, PieceContext} from '@components/art-gallery/ArtPiece/Context/useArtPiece';
 
 const useArtPieceContext = (): PieceContext => {
-  const [piece, hold] = useState<MuseumReply<Art>>({reply: 'unasked'});
+  const [easel, hold] = useState<MuseumReply<Art>>({reply: 'unasked'});
   const asked = useCallback(() => hold({reply: 'asked'}), []);
   const answered = useCallback((found: Art) => hold({reply: 'answered', answer: found}), []);
   const refused = useCallback(() => hold({reply: 'refused'}), []);
-  const reset = useCallback(() => hold({reply: 'unasked'}), []);
-  return useMemo(() => ({piece, asked, answered, refused, reset}), [piece, asked, answered, refused, reset]);
+  const abandoned = useCallback(() => hold({reply: 'unasked'}), []);
+  return useMemo(() => ({easel, asked, answered, refused, abandoned}), [easel, asked, answered, refused, abandoned]);
 };
 
 export const ArtPieceContext: FC<PropsWithChildren> = ({children}) =>

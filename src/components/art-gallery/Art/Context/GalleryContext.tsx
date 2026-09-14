@@ -12,9 +12,9 @@ const useGalleryContext = (): GalleryContextState => {
     updateWall({reply: 'answered', answer: pieces});
   }, []);
   const refused = useCallback(() => updateWall({reply: 'refused'}), []);
-  const reset = useCallback(() => updateWall({reply: 'unasked'}), []);
-  return useMemo(() => ({wall, pagination, asked, answered, refused, reset}),
-    [wall, pagination, asked, answered, refused, reset]);
+  const abandoned = useCallback(() => updateWall({reply: 'unasked'}), []);
+  return useMemo(() => ({wall, pagination, asked, answered, refused, abandoned}),
+    [wall, pagination, asked, answered, refused, abandoned]);
 };
 
 export const GalleryContext: FC<PropsWithChildren> = ({children}) =>

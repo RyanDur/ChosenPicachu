@@ -9,7 +9,7 @@ export type GalleryContextState = {
   asked: Consumer<void>;
   answered: Consumer<AllArt>;
   refused: Consumer<void>;
-  reset: Consumer<void>;
+  abandoned: Consumer<void>;
 }
 
 export const Context = createContext<GalleryContextState>({
@@ -17,6 +17,6 @@ export const Context = createContext<GalleryContextState>({
   asked: () => void 0,
   answered: (art: AllArt) => void art,
   refused: () => void 0,
-  reset: () => void 0
+  abandoned: () => void 0
 });
 export const useGallery = () => useContext(Context);

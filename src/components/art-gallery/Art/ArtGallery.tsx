@@ -14,7 +14,7 @@ import noImageGallery from '../../../assets/icons/missing-wall.svg?url';
 import './Gallery.css';
 
 export const ArtGallery: FC = () => {
-  const {wall, asked, answered, refused, reset} = useGallery();
+  const {wall, asked, answered, refused, abandoned} = useGallery();
   const {raise} = useBanners();
   const {page, size, search, tab} =
     useSearchParamsObject({page: numberParam, size: numberParam, tab: sourceParam, search: schema.string}, {
@@ -23,7 +23,7 @@ export const ArtGallery: FC = () => {
     });
 
   useEffect(() => {
-    if (!has(page) || !has(size) || !has(tab)) return reset;
+    if (!has(page) || !has(size) || !has(tab)) return abandoned;
     const {cancel} = artResource.getAll({page, size, search, source: tab})
       .onPending(pending => pending && asked())
       .onSuccess(answered)
@@ -33,9 +33,9 @@ export const ArtGallery: FC = () => {
       });
     return () => {
       cancel();
-      reset();
+      abandoned();
     };
-  }, [page, search, tab, size, asked, answered, refused, reset, raise]);
+  }, [page, search, tab, size, asked, answered, refused, abandoned, raise]);
 
   return <>
     <ul id="art-gallery">

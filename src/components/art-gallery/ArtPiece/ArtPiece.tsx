@@ -12,13 +12,13 @@ import noImage from '../../../assets/icons/missing-art.svg?url';
 import './Piece.css';
 
 export const ArtPiece = () => {
-  const {piece, asked, answered, refused, reset} = useArtPiece();
+  const {easel, asked, answered, refused, abandoned} = useArtPiece();
   const {raise} = useBanners();
   const {tab} = useSearchParamsObject({tab: sourceParam});
   const {id} = useParams<{ id: string }>();
 
   useEffect(() => {
-    if (!id) return reset;
+    if (!id) return abandoned;
     const {cancel} = art.get({id, source: tab ?? Source.AIC})
       .onPending(pending => pending && asked())
       .onSuccess(answered)
@@ -28,16 +28,16 @@ export const ArtPiece = () => {
       });
     return () => {
       cancel();
-      reset();
+      abandoned();
     };
-  }, [id, tab, asked, answered, refused, reset, raise]);
+  }, [id, tab, asked, answered, refused, abandoned, raise]);
 
   return <>
-    {piece.reply === 'asked' && <Loading label="loading piece"/>}
-    {piece.reply === 'answered' && <figure className="art-work">
-        <Image piece={piece.answer} linkEnabled={false} className="piece hung"/>
-        <figcaption className="artist-display trim hairline-outline italic">{piece.answer.artistInfo}</figcaption>
+    {easel.reply === 'asked' && <Loading label="loading piece"/>}
+    {easel.reply === 'answered' && <figure className="art-work">
+        <Image piece={easel.answer} linkEnabled={false} className="piece hung"/>
+        <figcaption className="artist-display trim hairline-outline italic">{easel.answer.artistInfo}</figcaption>
     </figure>}
-    {piece.reply === 'refused' && <img className="stand-in" src={noImage} alt="the museum refused to answer"/>}
+    {easel.reply === 'refused' && <img className="stand-in" src={noImage} alt="the museum refused to answer"/>}
   </>;
 };
