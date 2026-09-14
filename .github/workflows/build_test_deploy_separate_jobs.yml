@@ -95,7 +95,7 @@ jobs:
         run: gh api "repos/${{ github.repository }}/commits/${{ github.sha }}/comments" -F body=@review-comment.md
 
   pages:
-    needs: [build_test, journeys]
+    needs: journeys
     runs-on: ubuntu-latest
     concurrency:
       group: github-pages
@@ -237,8 +237,8 @@ jobs:
           if-no-files-found: error
 
   lighthouse_scores:
-    needs: [build_test, lighthouse]
-    if: always() && needs.build_test.result == 'success'
+    needs: lighthouse
+    if: always() && contains(fromJSON('["success", "failure"]'), needs.lighthouse.result)
     runs-on: ubuntu-latest
     name: lighthouse scores
     steps:
