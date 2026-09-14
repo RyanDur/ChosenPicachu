@@ -37,7 +37,7 @@ describe('the friends list', () => {
 
   it('while a change is still on its way nothing is said', async () => {
     render(<FriendsList users={users} user={{...firstUser, friends: [secondUser.id]}} onChange={consumer}/>);
-    await userEvent.click(screen.getByRole('button', {name: fullName(secondUser)}));
+    await userEvent.click(screen.getByRole('button', {name: `remove ${fullName(secondUser)}`}));
 
     expect(screen.getByRole('status', {name: 'friends report'})).toBeEmptyDOMElement();
   });
@@ -78,20 +78,20 @@ describe('the friends list', () => {
     });
 
     test('clicking a friend removes them', async () => {
-      await userEvent.click(screen.getByRole('button', {name: fullName(thirdUser)}));
+      await userEvent.click(screen.getByRole('button', {name: `remove ${fullName(thirdUser)}`}));
 
       expect(consumer).toHaveBeenCalledWith([secondUser.id]);
     });
 
     test('pressing enter on a friend removes them', async () => {
-      screen.getByRole('button', {name: fullName(thirdUser)}).focus();
+      screen.getByRole('button', {name: `remove ${fullName(thirdUser)}`}).focus();
       await userEvent.keyboard('{enter}');
 
       expect(consumer).toHaveBeenCalledWith([secondUser.id]);
     });
 
     test('pressing space on a friend removes them', async () => {
-      screen.getByRole('button', {name: fullName(thirdUser)}).focus();
+      screen.getByRole('button', {name: `remove ${fullName(thirdUser)}`}).focus();
       await userEvent.keyboard(' ');
 
       expect(consumer).toHaveBeenCalledWith([secondUser.id]);
@@ -105,32 +105,32 @@ describe('the friends list', () => {
     test('the list says who was removed', async () => {
       render(<Befriending user={withTwoFriends}/>);
 
-      await userEvent.click(screen.getByRole('button', {name: fullName(thirdUser)}));
+      await userEvent.click(screen.getByRole('button', {name: `remove ${fullName(thirdUser)}`}));
 
-      expect(screen.queryByRole('button', {name: fullName(thirdUser)})).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', {name: `remove ${fullName(thirdUser)}`})).not.toBeInTheDocument();
       expect(screen.getByRole('status', {name: 'friends report'})).toHaveTextContent(`${fullName(thirdUser)} removed.`);
     });
 
     test("focus lands on the next friend's remove button", async () => {
       render(<Befriending user={withTwoFriends}/>);
 
-      await userEvent.click(screen.getByRole('button', {name: fullName(secondUser)}));
+      await userEvent.click(screen.getByRole('button', {name: `remove ${fullName(secondUser)}`}));
 
-      expect(screen.getByRole('button', {name: fullName(thirdUser)})).toHaveFocus();
+      expect(screen.getByRole('button', {name: `remove ${fullName(thirdUser)}`})).toHaveFocus();
     });
 
     test('focus lands on the friend before when the last one goes', async () => {
       render(<Befriending user={withTwoFriends}/>);
 
-      await userEvent.click(screen.getByRole('button', {name: fullName(thirdUser)}));
+      await userEvent.click(screen.getByRole('button', {name: `remove ${fullName(thirdUser)}`}));
 
-      expect(screen.getByRole('button', {name: fullName(secondUser)})).toHaveFocus();
+      expect(screen.getByRole('button', {name: `remove ${fullName(secondUser)}`})).toHaveFocus();
     });
 
     test('focus lands on Add a friend when the only friend goes', async () => {
       render(<Befriending user={{...firstUser, friends: [secondUser.id]}}/>);
 
-      await userEvent.click(screen.getByRole('button', {name: fullName(secondUser)}));
+      await userEvent.click(screen.getByRole('button', {name: `remove ${fullName(secondUser)}`}));
 
       expect(screen.getByRole('combobox', {name: 'Add a friend'})).toHaveFocus();
     });
@@ -139,7 +139,7 @@ describe('the friends list', () => {
       render(<Befriending user={{...firstUser, friends: [secondUser.id]}} among={[firstUser, secondUser]}/>);
       expect(screen.queryByRole('combobox', {name: 'Add a friend'})).not.toBeInTheDocument();
 
-      await userEvent.click(screen.getByRole('button', {name: fullName(secondUser)}));
+      await userEvent.click(screen.getByRole('button', {name: `remove ${fullName(secondUser)}`}));
 
       expect(screen.getByRole('combobox', {name: 'Add a friend'})).toHaveFocus();
     });

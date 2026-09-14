@@ -292,22 +292,61 @@ describe('the users page', () => {
     await waitFor(() => expect(names().filter(name => name === fullName(person))).toHaveLength(standing + 1));
   });
 
+  const befriend = async (row: HTMLElement, name: string): Promise<void> => {
+    await userEvent.selectOptions(within(row).getByRole('combobox', {name: 'Add a friend'}), name);
+    await within(row).findByRole('button', {name: `remove ${name}`});
+  };
+
   test("removing a friend takes them off the row and hands focus to the next friend's remove button", async () => {
+    const [mira, nils, osa] = [conciseUser('Mira'), conciseUser('Nils'), conciseUser('Osa')];
     render(<TestApp at={Paths.users}/>);
-    const served = await roster();
-    const [first, ...others] = served.filter(name => served.indexOf(name) === served.lastIndexOf(name));
-    const row = await rowOf(first);
-    const strangers = others.filter(name => within(row).queryByRole('button', {name}) === null);
-    const [second, third] = strangers;
-    await userEvent.selectOptions(within(row).getByRole('combobox', {name: 'Add a friend'}), second);
-    await within(row).findByRole('button', {name: second});
-    await userEvent.selectOptions(within(row).getByRole('combobox', {name: 'Add a friend'}), third);
-    await within(row).findByRole('button', {name: third});
+    await roster();
+    await addUser(mira);
+    await addUser(nils);
+    await addUser(osa);
+    const row = await rowOf(fullName(mira));
+    await befriend(row, fullName(nils));
+    await befriend(row, fullName(osa));
 
-    await userEvent.click(within(row).getByRole('button', {name: second}));
+    await userEvent.click(within(row).getByRole('button', {name: `remove ${fullName(nils)}`}));
 
-    await waitFor(() => expect(within(row).queryByRole('button', {name: second})).not.toBeInTheDocument());
-    expect(within(row).getByRole('button', {name: third})).toHaveFocus();
-    expect(within(row).getByRole('status', {name: 'friends report'})).toHaveTextContent(`${second} removed.`);
+    await waitFor(() => expect(within(row).queryByRole('button', {name: `remove ${fullName(nils)}`})).not.toBeInTheDocument());
+    expect(within(row).getByRole('button', {name: `remove ${fullName(osa)}`})).toHaveFocus();
+    expect(within(row).getByRole('status', {name: 'friends report'})).toHaveTextContent(`${fullName(nils)} removed.`);
+  });
+
+  test("removing the only friend from a person's row hands focus to that row's Add a friend", async () => {
+    const [pia, quin] = [conciseUser('Pia'), conciseUser('Quin')];
+    render(<TestApp at={Paths.users}/>);
+    await roster();
+    await addUser(pia);
+    await addUser(quin);
+    await befriend(await rowOf(fullName(pia)), fullName(quin));
+    const quinsRow = await rowOf(fullName(quin));
+    await within(quinsRow).findByRole('button', {name: `remove ${fullName(pia)}`});
+
+    await userEvent.click(within(quinsRow).getByRole('button', {name: `remove ${fullName(pia)}`}));
+
+    await waitFor(() => expect(within(quinsRow).queryByRole('button', {name: `remove ${fullName(pia)}`})).not.toBeInTheDocument());
+    expect(within(quinsRow).getByRole('combobox', {name: 'Add a friend'})).toHaveFocus();
+  });
+
+  test('focus is not pulled back to a settled removal when the roster renders again', async () => {
+    const [rae, sol, tam] = [conciseUser('Rae'), conciseUser('Sol'), conciseUser('Tam')];
+    render(<TestApp at={Paths.users}/>);
+    await roster();
+    await addUser(rae);
+    await addUser(sol);
+    await addUser(tam);
+    const raesRow = await rowOf(fullName(rae));
+    await befriend(raesRow, fullName(sol));
+    await userEvent.click(within(raesRow).getByRole('button', {name: `remove ${fullName(sol)}`}));
+    await waitFor(() => expect(within(raesRow).getByRole('combobox', {name: 'Add a friend'})).toHaveFocus());
+    await edit(fullName(tam));
+
+    await userEvent.click(within(screen.getByRole('form', {name: 'User Information'})).getByRole('button', {name: 'Update'}));
+
+    await view(fullName(tam));
+    expect(within(raesRow).getByRole('combobox', {name: 'Add a friend'})).not.toHaveFocus();
   });
 });

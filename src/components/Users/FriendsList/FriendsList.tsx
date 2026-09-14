@@ -1,8 +1,9 @@
 import {ChangeEvent, FC, useEffect, useState} from 'react';
-import {User} from '@components/Users/UserInfo/user';
+import {fullNameOf, User} from '@components/Users/UserInfo/user';
 import {classNames} from '@components/class-names';
 import {Consumer, has} from '@ryandur/sand';
-import {addFriendId, arrived, friendsReport, fullNameOf, Membership, placeAfterRemoval, removeButtonId} from './report';
+import {arrived, friendsReport, Membership} from './report';
+import {addFriendId, placeAfterAddition, placeAfterRemoval, removeButtonId} from './focus';
 import cancelIcon from '../../../assets/icons/cancel.svg?url';
 import './friends-list.css';
 
@@ -17,6 +18,11 @@ type Report =
   | {stage: 'asked'; of: Membership}
   | {stage: 'settled'; of: Membership};
 
+const placeAfter = (userId: string, friends: readonly User[], candidatesLeft: readonly User[], of: Membership): string =>
+  of.change === 'removed'
+    ? placeAfterRemoval(userId, friends, of.at)
+    : placeAfterAddition(userId, candidatesLeft, of.friend.id);
+
 export const FriendsList: FC<Props> = ({users, user, onChange}) => {
   const [report, tell] = useState<Report>({stage: 'quiet'});
   const friends = user.friends
@@ -27,11 +33,9 @@ export const FriendsList: FC<Props> = ({users, user, onChange}) => {
 
   useEffect(() => {
     if (report.stage !== 'asked' || !arrived(user.friends, report.of)) return;
-    if (report.of.change === 'removed') {
-      document.getElementById(placeAfterRemoval(user.id, friends, report.of.at))?.focus();
-    }
+    document.getElementById(placeAfter(user.id, friends, potentialFriends, report.of))?.focus();
     tell({stage: 'settled', of: report.of});
-  }, [report, user.id, user.friends, friends]);
+  }, [report, user.id, user.friends, friends, potentialFriends]);
 
   const said = report.stage === 'quiet' || !arrived(user.friends, report.of) ? '' : friendsReport(report.of);
 
@@ -50,12 +54,11 @@ export const FriendsList: FC<Props> = ({users, user, onChange}) => {
     <legend className="off-screen">friends of {fullNameOf(user)}</legend>
     <ul className="friends" aria-label="friends">{friends.map((friend, at) =>
       <li className="friend" key={friend.id}>
-        <label className="friend-title ellipsis"
-          htmlFor={removeButtonId(user.id, friend.id)}>{fullNameOf(friend)}</label>
+        <span className="friend-title ellipsis">{fullNameOf(friend)}</span>
         <button id={removeButtonId(user.id, friend.id)} className="remove" type="button"
           onClick={remove(friend, at)}>
           <img className="icon" src={cancelIcon} width="24" height="24"
-            alt="remove"/>
+            alt={`remove ${fullNameOf(friend)}`}/>
         </button>
       </li>
     )}</ul>

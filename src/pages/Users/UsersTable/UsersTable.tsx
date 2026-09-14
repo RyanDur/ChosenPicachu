@@ -7,6 +7,7 @@ import {useUsersDispatch, useUsersSelector} from '../Provider';
 import {friendsChanged, selectColumns, selectUsers, userRemoved} from '../store';
 import {seated, worksFromHome} from '../columns';
 import {columnMoved, rowMoved, sorted} from '@components/DragSortableTable/arrangement';
+import {fullNameOf} from '@components/Users/UserInfo/user';
 import '@components/DragSortableTable/sortable.css';
 
 export const UsersTable: FC = () => {
@@ -29,7 +30,7 @@ export const UsersTable: FC = () => {
     <Body className="body"
       onRowMoved={({row, to, standing}) => dispatch(rowMoved(row, to, standing))}>
       {users.map(user => {
-        const name = `${user.info.firstName} ${user.info.lastName}`;
+        const name = fullNameOf(user);
         return <Row key={user.id} row={user.id} className="row">
           <RowHeader column="full-name" row={user.id} className="cell row-header" label={name}/>
           <Cell column="home-city" row={user.id} className="cell">{user.homeAddress.city}</Cell>
