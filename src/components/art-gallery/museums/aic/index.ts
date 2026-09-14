@@ -38,7 +38,7 @@ export const aic = {
       pagination: {
         total: pagination.total,
         limit: pagination.limit,
-        totalPages: pagination.total_pages,
+        totalPages: pagination.total_pages
       },
       pieces: data.map(aicToPiece(800))
     })),

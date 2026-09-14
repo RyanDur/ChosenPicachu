@@ -403,7 +403,7 @@ describe('the demos page', () => {
 
     test('a refused feed tells the user the stream is unavailable', async () => {
       const feed = await listeningFeed(true);
-      
+
       render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
 
       await waitFor(() =>

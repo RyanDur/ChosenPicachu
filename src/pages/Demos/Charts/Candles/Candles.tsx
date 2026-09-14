@@ -31,44 +31,44 @@ export const Candles: FC<Props> = ({trades, id = 'candle', actions}) => {
     <header className="chart-header">
       {actions}
       <button type="button" className="menu-toggle rounded-corners period-toggle field caption"
-              popoverTarget={`${id}-period`}>
+        popoverTarget={`${id}-period`}>
         <span className="off-screen">candle period</span>{' '}{period}
       </button>
       <menu id={`${id}-period`} tabIndex={-1} popover="auto" className="menu card rounded-corners lifted"
-            aria-label="candle period by">
+        aria-label="candle period by">
         {Object.values(Period).map(option =>
           <li className="entry" key={option}>
             <button type="button" className="item sub-title"
-                    popoverTarget={`${id}-period`} popoverTargetAction="hide"
-                    aria-current={option === period ? 'true' : undefined}
-                    onClick={() => setPeriod(option)}>{option}</button>
+              popoverTarget={`${id}-period`} popoverTargetAction="hide"
+              aria-current={option === period ? 'true' : undefined}
+              onClick={() => setPeriod(option)}>{option}</button>
           </li>
         )}
       </menu>
     </header>
     <figure className="chart-stage">
       <Axes high={notEmpty(candles) ? Math.max(...candles.map(candle => candle.high)) : 0}
-            low={notEmpty(candles) ? Math.min(...candles.map(candle => candle.low)) : 0}
-            times={candles.map(candle => candle.openedAt)}
-            pattern={timePattern[period]}
-            tickEvery={tickEveryMs[period]}
-            headroomMs={2 * bucketMs[period]}>
+        low={notEmpty(candles) ? Math.min(...candles.map(candle => candle.low)) : 0}
+        times={candles.map(candle => candle.openedAt)}
+        pattern={timePattern[period]}
+        tickEvery={tickEveryMs[period]}
+        headroomMs={2 * bucketMs[period]}>
         <svg className="candlesticks" aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${CANDLE_HEIGHT}`}>
           {candles.map((candle, at) => <g key={candle.openedAt} className={bodies[at].direction}>
             <rect className="wall" x={bodies[at].x + DEPTH_X} y={bodies[at].bodyTop + DEPTH_Y}
-                  width={bodies[at].width} height={bodies[at].bodyHeight}/>
+              width={bodies[at].width} height={bodies[at].bodyHeight}/>
             <line className="wick" x1={bodies[at].center} y1={bodies[at].wickTop}
-                  x2={bodies[at].center} y2={bodies[at].wickBottom}/>
+              x2={bodies[at].center} y2={bodies[at].wickBottom}/>
             <rect className="body" x={bodies[at].x} y={bodies[at].bodyTop}
-                  width={bodies[at].width} height={bodies[at].bodyHeight}/>
+              width={bodies[at].width} height={bodies[at].bodyHeight}/>
           </g>)}
         </svg>
         <svg className="volumes" aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${VOLUME_HEIGHT}`}>
           {candles.map((candle, at) => <g key={candle.openedAt}>
             <rect className="volume-wall" x={bars[at].x + DEPTH_X} y={bars[at].top + DEPTH_Y}
-                  width={bars[at].width} height={bars[at].height}/>
+              width={bars[at].width} height={bars[at].height}/>
             <rect className="volume" x={bars[at].x} y={bars[at].top}
-                  width={bars[at].width} height={bars[at].height}/>
+              width={bars[at].width} height={bars[at].height}/>
           </g>)}
         </svg>
       </Axes>

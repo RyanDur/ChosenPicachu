@@ -55,7 +55,7 @@ export const AICSearchSchema = schema.object({
 
 export type AICPieceData = {
   data: AICArt;
-}
+};
 
 export type AICArtResponse = schema.Output<typeof AICArtSchema>;
 export type AICAllArtResponse = schema.Output<typeof AICAllArtSchema>;

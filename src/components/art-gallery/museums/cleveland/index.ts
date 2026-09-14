@@ -59,7 +59,7 @@ export const cleveland = {
         pagination: {
           total: info.total,
           limit: size,
-          totalPages: Math.ceil(info.total / size),
+          totalPages: Math.ceil(info.total / size)
         },
         pieces: data.map(toPiece)
       };

@@ -15,7 +15,7 @@ type AddressProps = {
   required?: boolean;
   disabled?: boolean;
   readOnly?: boolean;
-}
+};
 
 export const Address: FC<PropsWithChildren<AddressProps>> = (
   {
@@ -29,21 +29,21 @@ export const Address: FC<PropsWithChildren<AddressProps>> = (
     readOnly,
     value = {streetAddress: '', city: '', state: '', zip: ''}
   }) => <fieldset id={id} className={classNames('address', 'shrinkable', className)} disabled={disabled}
-                  aria-labelledby={`${id}-title`}>
+  aria-labelledby={`${id}-title`}>
   <legend className="address-title sub-title bold"><span id={`${id}-title`}>{title}</span>{children}</legend>
   <FancyInput inputId={`${id}-street`} className="street"
-              required={required} value={value.streetAddress} readOnly={readOnly}
-              onChange={event => onChange({...value, streetAddress: event.currentTarget.value})}>
+    required={required} value={value.streetAddress} readOnly={readOnly}
+    onChange={event => onChange({...value, streetAddress: event.currentTarget.value})}>
     Street
   </FancyInput>
   <FancyInput inputId={`${id}-street-2`} className="street-2"
-              value={value.streetAddressTwo} readOnly={readOnly}
-              onChange={event => onChange({...value, streetAddressTwo: event.currentTarget.value})}>
+    value={value.streetAddressTwo} readOnly={readOnly}
+    onChange={event => onChange({...value, streetAddressTwo: event.currentTarget.value})}>
     Street Line 2
   </FancyInput>
   <FancyInput inputId={`${id}-city`} className="city"
-              required={required} value={value.city} readOnly={readOnly}
-              onChange={event => onChange({...value, city: event.currentTarget.value})}>
+    required={required} value={value.city} readOnly={readOnly}
+    onChange={event => onChange({...value, city: event.currentTarget.value})}>
     City
   </FancyInput>
 
@@ -59,12 +59,12 @@ export const Address: FC<PropsWithChildren<AddressProps>> = (
   </FancySelect>
 
   <FancyInput className="zip"
-              inputId={`${id}-zip`}
-              pattern="^[0-9]{5}(?:-[0-9]{4})?$"
-              value={value.zip}
-              readOnly={readOnly}
-              required={required}
-              onChange={event => onChange({...value, zip: event.currentTarget.value})}>
+    inputId={`${id}-zip`}
+    pattern="^[0-9]{5}(?:-[0-9]{4})?$"
+    value={value.zip}
+    readOnly={readOnly}
+    required={required}
+    onChange={event => onChange({...value, zip: event.currentTarget.value})}>
     Postal / Zip code
   </FancyInput>
 </fieldset>;

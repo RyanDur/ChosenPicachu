@@ -58,7 +58,7 @@ export const person = (): HarvardPeople => ({
   displayname: faker.lorem.word()
 });
 
-const harvardToPieceResponse = (_: unknown, index: number): HarvardArtResponse & { primaryimageurl: string } => ({
+const harvardToPieceResponse = (_: unknown, index: number): HarvardArtResponse & {primaryimageurl: string} => ({
   id: index,
   title: index === 0 ? null : faker.lorem.sentence(),
   people: [person()],
@@ -98,7 +98,7 @@ export const fromVAMArt: AllArt = {
   pagination: {
     total: vamInfo.record_count,
     limit: vamInfo.page_size,
-    totalPages: vamInfo.pages,
+    totalPages: vamInfo.pages
   },
   pieces: vamSearchRecords.map(record => ({
     id: record.systemNumber,
@@ -134,7 +134,7 @@ export const fromAICArt: AllArt = {
   pagination: {
     total: aicArtResponse.pagination.total,
     limit: aicArtResponse.pagination.limit,
-    totalPages: aicArtResponse.pagination.total_pages,
+    totalPages: aicArtResponse.pagination.total_pages
   },
   pieces: aicArtResponse.data.map(piece => ({
     id: String(piece.id),
@@ -149,7 +149,7 @@ export const fromHarvardArt: AllArt = {
   pagination: {
     total: harvardArtResponse.info.totalrecords,
     limit: harvardArtResponse.info.totalrecordsperquery,
-    totalPages: harvardArtResponse.info.pages,
+    totalPages: harvardArtResponse.info.pages
   },
   pieces: harvardRecords.map(piece => ({
     id: String(piece.id),
@@ -159,7 +159,6 @@ export const fromHarvardArt: AllArt = {
     altText: piece.title || 'Untitled'
   }))
 };
-
 
 const clevelandRecords = [...Array(defaultRecordLimit)].map((_, index) => ({
   id: 1000 + index,

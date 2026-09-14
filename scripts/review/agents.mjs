@@ -5,7 +5,7 @@ import {fileURLToPath} from 'node:url';
 const values = readFileSync(join(dirname(fileURLToPath(import.meta.url)), 'values.md'), 'utf8');
 const schema = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), 'feedback.schema.json'), 'utf8'));
 
-export const shapeOf = (kind) => `{${Object.keys(schema.properties[kind].items.properties).join(', ')}}`;
+export const shapeOf = kind => `{${Object.keys(schema.properties[kind].items.properties).join(', ')}}`;
 
 export const doors = [
   {
@@ -44,7 +44,7 @@ export const halves = {
 
 export const reading = ['Read', 'Grep', 'Glob', 'Bash(git diff:*)', 'Bash(git log:*)'];
 
-const half = (name) => name === tests.name
+const half = name => name === tests.name
   ? `${halves.tests} ${halves.site} You review the tests. Read the code under test for context and for what no test pins; the only finding you make on the site is that a test is missing.`
   : `${halves.site} ${halves.tests} You review the site. The tests are the tests QA's: read a spec only for context and report nothing on it.`;
 
@@ -52,7 +52,7 @@ export const qaOf = ({name, file, asks}) => ({
   description: `Reviews code against the ${name} door of the home page: ${asks}.`,
   prompt: [
     values,
-    `## Your door`,
+    '## Your door',
     `You hold the ${name} door. Read ${file} first and whole; it is your rubric, in the author's words. Review only what that door asks about: ${asks}.`,
     `The lead tells you the scope. ${half(name)} Read every file in your half whole, and any other file it leans on when you need the context.`,
     `Answer in the feedback stance with one JSON object {plusses, deltas} and nothing else: each plus ${shapeOf('plusses')}, each delta ${shapeOf('deltas')}. Your door is the door of every plus and delta you make.`

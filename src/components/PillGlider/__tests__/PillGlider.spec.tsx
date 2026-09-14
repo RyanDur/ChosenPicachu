@@ -12,7 +12,7 @@ const styles = [
 describe('the pill glider', () => {
   test('offers every style as a radio in a named group, the chosen one checked', () => {
     render(<PillGlider label="drag style" name="drag-style" options={styles}
-                       chosen="eager" onChosen={vi.fn()}/>);
+      chosen="eager" onChosen={vi.fn()}/>);
 
     expect(screen.getByRole('group', {name: 'drag style'})).toBeVisible();
     for (const {display} of styles) {
@@ -24,7 +24,7 @@ describe('the pill glider', () => {
   test('choosing a pill says which was chosen', async () => {
     const onChosen = vi.fn();
     render(<PillGlider label="drag style" name="drag-style" options={styles}
-                       chosen="eager" onChosen={onChosen}/>);
+      chosen="eager" onChosen={onChosen}/>);
 
     await userEvent.click(screen.getByRole('radio', {name: 'Hide Lazy'}));
 

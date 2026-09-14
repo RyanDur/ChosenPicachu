@@ -23,13 +23,13 @@ export const Recipe: FC<Props> = ({track, onTrack}) => {
   const Chosen = pace === 'eager' ? EagerRecipe : LazyRecipe;
   return <section aria-label="build the drag sort yourself" className="build-steps">
     <Picks label="input track"
-           className="track-picks"
-           options={[
-             {display: 'By pointer', value: 'pointer'},
-             {display: 'By keyboard', value: 'keyboard'}
-           ]}
-           chosen={track}
-           onPick={onTrack}/>
+      className="track-picks"
+      options={[
+        {display: 'By pointer', value: 'pointer'},
+        {display: 'By keyboard', value: 'keyboard'}
+      ]}
+      chosen={track}
+      onPick={onTrack}/>
     <Stories><Chosen track={track} world={world} origin={origin} motion={motion}/></Stories>
   </section>;
 };

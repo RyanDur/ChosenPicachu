@@ -3,12 +3,12 @@ import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 const schema = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), 'feedback.schema.json'), 'utf8'));
-const casesOf = (kind) => schema.$defs[kind]['enum'];
+const casesOf = kind => schema.$defs[kind]['enum'];
 const doors = casesOf('door');
 const severities = casesOf('severity');
 const marks = {violation: '✖', concern: '▲', note: '○'};
 
-export const reviewIn = (answer) => {
+export const reviewIn = answer => {
   const {structured_output: structured} = JSON.parse(answer);
   if (structured === undefined || !Array.isArray(structured.plusses) || !Array.isArray(structured.deltas)) {
     throw new Error('the review answered without plusses and deltas; the structured output is missing');
@@ -20,9 +20,9 @@ const bySeverity = (a, b) => severities.indexOf(a.severity) - severities.indexOf
 
 const plural = (count, word, words = `${word}s`) => `${count} ${count === 1 ? word : words}`;
 
-const asText = (part) => part.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const asText = part => part.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-const told = (prose) => prose.split(/(`[^`]*`)/).map((part, index) => index % 2 === 1 ? part : asText(part)).join('');
+const told = prose => prose.split(/(`[^`]*`)/).map((part, index) => index % 2 === 1 ? part : asText(part)).join('');
 
 const placeOf = ({file, line}, commit) =>
   commit === undefined
@@ -105,7 +105,7 @@ export const summaryOf = ({plusses, deltas}, {commit} = {}) => {
 
 export const leavesFeedback = ({plusses, deltas}) => plusses.length + deltas.length > 0;
 
-export const verdictOf = (deltas) => deltas.some(({severity}) => severity === 'violation') ? 1 : 0;
+export const verdictOf = deltas => deltas.some(({severity}) => severity === 'violation') ? 1 : 0;
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   const review = reviewIn(readFileSync(process.stdin.fd, 'utf8'));

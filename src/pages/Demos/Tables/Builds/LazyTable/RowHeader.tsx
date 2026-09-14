@@ -65,22 +65,22 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
   };
 
   return <th {...th} scope="row" aria-label={label}
-             onAnimationEnd={() => dispatch(settled({axis: 'row', held: row}))}
-             className={classNames(className, (columnCarried || carried) && 'carried', has(settlingFrom) && 'settling', shovedClass(shoved))}
-             style={{
-               '--seat-x': pixels(seat?.x), '--seat-y': pixels(seat?.y),
-               '--drift-x': pixels(drift?.x), '--drift-y': pixels(drift?.y),
-               '--settle-x': pixels(settlingFrom?.seat.x), '--settle-y': pixels(settlingFrom?.seat.y),
-               '--settle-drift-x': pixels(settlingFrom?.drift.x), '--settle-drift-y': pixels(settlingFrom?.drift.y),
-               '--shoved-by': shoveDistance(shoved)
-             }}>
+    onAnimationEnd={() => dispatch(settled({axis: 'row', held: row}))}
+    className={classNames(className, (columnCarried || carried) && 'carried', has(settlingFrom) && 'settling', shovedClass(shoved))}
+    style={{
+      '--seat-x': pixels(seat?.x), '--seat-y': pixels(seat?.y),
+      '--drift-x': pixels(drift?.x), '--drift-y': pixels(drift?.y),
+      '--settle-x': pixels(settlingFrom?.seat.x), '--settle-y': pixels(settlingFrom?.seat.y),
+      '--settle-drift-x': pixels(settlingFrom?.drift.x), '--settle-drift-y': pixels(settlingFrom?.drift.y),
+      '--shoved-by': shoveDistance(shoved)
+    }}>
     <RowGrip position={position}
-             onPointerDown={rowLift(() => order, () => standing, lift)}
-             onPointerMove={has(drag) ? pointerTravel(moved(drag), release) : undefined}
-             onPointerUp={has(drag) ? release : undefined}
-             onPointerCancel={has(drag) ? release : undefined}
-             onLostPointerCapture={has(drag) ? pointerTravel(moved(drag), release) : undefined}
-             onKeyDown={rowArrows(row, () => standing, ({to, heights}) => walkedTo(to, heights))}/>
+      onPointerDown={rowLift(() => order, () => standing, lift)}
+      onPointerMove={has(drag) ? pointerTravel(moved(drag), release) : undefined}
+      onPointerUp={has(drag) ? release : undefined}
+      onPointerCancel={has(drag) ? release : undefined}
+      onLostPointerCapture={has(drag) ? pointerTravel(moved(drag), release) : undefined}
+      onKeyDown={rowArrows(row, () => standing, ({to, heights}) => walkedTo(to, heights))}/>
     {label}
     <MoveReport landed={landed}/>
   </th>;

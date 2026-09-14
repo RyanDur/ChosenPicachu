@@ -10,7 +10,7 @@ export type GalleryContextState = {
   answered: Consumer<AllArt>;
   refused: Consumer<void>;
   abandoned: Consumer<void>;
-}
+};
 
 export const Context = createContext<GalleryContextState>({
   wall: {reply: 'unasked'},

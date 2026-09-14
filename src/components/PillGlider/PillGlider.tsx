@@ -19,13 +19,13 @@ export const PillGlider = <T extends string>({label, name, options, chosen, onCh
     <legend className="off-screen">{label}</legend>
     {options.map(({display, value}) =>
       <label className="pill"
-             key={value}>
+        key={value}>
         {display}
         <input type="radio"
-               className="off-screen"
-               name={name}
-               value={value}
-               checked={chosen === value}
-               onChange={() => onChosen(value)}/>
+          className="off-screen"
+          name={name}
+          value={value}
+          checked={chosen === value}
+          onChange={() => onChosen(value)}/>
       </label>)}
   </fieldset>;

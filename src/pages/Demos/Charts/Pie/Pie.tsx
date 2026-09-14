@@ -33,15 +33,15 @@ export const Pie: FC<Props> = ({trades, actions}) => {
           const {opening, closing} = sweepGates(slice);
           const drop = dressed === 'wall' ? DEPTH : 0;
           return <g key={`${sides[at]}-${dressed}`} className={classNames('slice', sides[at])}
-                    style={{'--explode-x': `${dx}px`, '--explode-y': `${dy}px`}}>
+            style={{'--explode-x': `${dx}px`, '--explode-y': `${dy}px`}}>
             <g className={dressed} transform={`translate(${SIZE / 2} ${SIZE / 2 + drop})`}>
               <g className="spin" style={{'--turn': `${degrees(slice.from)}deg`}}>
                 <svg x={0} y={-RADIUS} width={RADIUS} height={2 * RADIUS}
-                     viewBox={`0 ${-RADIUS} ${RADIUS} ${2 * RADIUS}`}>
+                  viewBox={`0 ${-RADIUS} ${RADIUS} ${2 * RADIUS}`}>
                   <path className="half" d={HALF} style={{'--swing': `${opening}deg`}}/>
                 </svg>
                 <svg x={-RADIUS} y={-RADIUS} width={RADIUS} height={2 * RADIUS}
-                     viewBox={`${-RADIUS} ${-RADIUS} ${RADIUS} ${2 * RADIUS}`}>
+                  viewBox={`${-RADIUS} ${-RADIUS} ${RADIUS} ${2 * RADIUS}`}>
                   <path className="half" d={HALF} style={{'--swing': `${closing}deg`}}/>
                 </svg>
               </g>

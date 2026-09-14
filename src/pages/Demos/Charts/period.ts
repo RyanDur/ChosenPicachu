@@ -1,7 +1,7 @@
 export enum Period {
   hour = 'hour',
   day = 'day',
-  week = 'week',
+  week = 'week'
 }
 
 export const granularitySeconds: Record<Period, number> = {

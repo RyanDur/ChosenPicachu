@@ -95,7 +95,7 @@ test('only one fuller story stands open at a time', async ({page}) => {
 
 const markets = [
   {trend: 'rising', sign: /^\+/, ink: '--mint-ink', prices: [50000, 50100]},
-  {trend: 'falling', sign: /^-/, ink: '--internationl-orange-engineering', prices: [50100, 50000]},
+  {trend: 'falling', sign: /^-/, ink: '--internationl-orange-engineering', prices: [50100, 50000]}
 ];
 
 test('the feed dot glows live', async ({page}) => {

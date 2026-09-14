@@ -8,7 +8,7 @@ import {
   isValidElement,
   startTransition,
   useContext,
-  useState,
+  useState
 } from 'react';
 import {Outlet, Route, RouteObject, createMemoryRouter, createRoutesFromElements, useLocation} from 'react-router';
 import {App} from '../App';

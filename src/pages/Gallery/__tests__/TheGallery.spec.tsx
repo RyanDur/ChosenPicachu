@@ -32,12 +32,12 @@ const frameTitled = async (title: string): Promise<HTMLElement> => {
 };
 
 const pieceResponseFor = ({
-                            id,
-                            title,
-                            term_titles,
-                            artist_display,
-                            image_id
-                          }: AICAllArtResponse['data'][number]): AICArtResponse =>
+  id,
+  title,
+  term_titles,
+  artist_display,
+  image_id
+}: AICAllArtResponse['data'][number]): AICArtResponse =>
   ({data: {id, title, term_titles, artist_display, image_id}});
 
 const aicArtPieceResponse = pieceResponseFor(firstPiece);

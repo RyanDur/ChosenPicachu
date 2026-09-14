@@ -6,13 +6,13 @@ import {enterParam} from '@components/Banners/params';
 export const EntranceDial: FC<{name: string}> = ({name}) => {
   const {enter = 'above', updateSearchParams} = useSearchParamsObject({enter: enterParam});
   return <PillGlider label="entrance"
-                     name={name}
-                     options={[
-                       {display: 'Above', value: 'above'},
-                       {display: 'Below', value: 'below'},
-                       {display: 'Left', value: 'left'},
-                       {display: 'Right', value: 'right'}
-                     ]}
-                     chosen={enter}
-                     onChosen={next => updateSearchParams({enter: next})}/>;
+    name={name}
+    options={[
+      {display: 'Above', value: 'above'},
+      {display: 'Below', value: 'below'},
+      {display: 'Left', value: 'left'},
+      {display: 'Right', value: 'right'}
+    ]}
+    chosen={enter}
+    onChosen={next => updateSearchParams({enter: next})}/>;
 };

@@ -44,48 +44,48 @@ export type ControlsProps = {
 export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({copy, pace, origin, motion, onPace, onOrigin, onMotion, children}) => {
   const [startsOpen] = useState(roomy);
   return <details className="controls-fold" open={startsOpen} aria-label="settings">
-  <summary className="prompt">
-    settings
-    <code className="readout caption">{copy.readout(pace, origin, motion)}</code>
-  </summary>
-  <section aria-label={`${copy.kind} controls`} className="controls">
-    <article className="control">
-      <span className="axis caption uppercase">pace</span>
-      <PillGlider label="pace"
-                  name={`${copy.kind}-pace`}
-                  options={[
-                    {display: 'Eager', value: 'eager'},
-                    {display: 'Lazy', value: 'lazy'}
-                  ]}
-                  chosen={pace}
-                  onChosen={onPace}/>
-      <p className="reading paragraph">{copy.pace[pace]}</p>
-    </article>
-    <article className="control">
-      <span className="axis caption uppercase">origin</span>
-      <PillGlider label="origin"
-                  name={`${copy.kind}-origin`}
-                  options={[
-                    {display: 'Keep', value: 'keep'},
-                    {display: 'Hide', value: 'hide'}
-                  ]}
-                  chosen={origin}
-                  onChosen={onOrigin}/>
-      <p className="reading paragraph">{copy.origin[origin]}</p>
-    </article>
-    <article className="control">
-      <span className="axis caption uppercase">motion</span>
-      <PillGlider label="motion"
-                  name={`${copy.kind}-motion`}
-                  options={[
-                    {display: 'Animate', value: 'animated'},
-                    {display: 'Static', value: 'static'}
-                  ]}
-                  chosen={motion}
-                  onChosen={onMotion}/>
-      <p className="reading paragraph">{copy.motion[motion]}</p>
-    </article>
-    {children}
-  </section>
+    <summary className="prompt">
+      settings
+      <code className="readout caption">{copy.readout(pace, origin, motion)}</code>
+    </summary>
+    <section aria-label={`${copy.kind} controls`} className="controls">
+      <article className="control">
+        <span className="axis caption uppercase">pace</span>
+        <PillGlider label="pace"
+          name={`${copy.kind}-pace`}
+          options={[
+            {display: 'Eager', value: 'eager'},
+            {display: 'Lazy', value: 'lazy'}
+          ]}
+          chosen={pace}
+          onChosen={onPace}/>
+        <p className="reading paragraph">{copy.pace[pace]}</p>
+      </article>
+      <article className="control">
+        <span className="axis caption uppercase">origin</span>
+        <PillGlider label="origin"
+          name={`${copy.kind}-origin`}
+          options={[
+            {display: 'Keep', value: 'keep'},
+            {display: 'Hide', value: 'hide'}
+          ]}
+          chosen={origin}
+          onChosen={onOrigin}/>
+        <p className="reading paragraph">{copy.origin[origin]}</p>
+      </article>
+      <article className="control">
+        <span className="axis caption uppercase">motion</span>
+        <PillGlider label="motion"
+          name={`${copy.kind}-motion`}
+          options={[
+            {display: 'Animate', value: 'animated'},
+            {display: 'Static', value: 'static'}
+          ]}
+          chosen={motion}
+          onChosen={onMotion}/>
+        <p className="reading paragraph">{copy.motion[motion]}</p>
+      </article>
+      {children}
+    </section>
   </details>;
 };

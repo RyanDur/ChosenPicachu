@@ -7,8 +7,8 @@ export const DynamicInteraction: FC = () =>
       <blockquote>
         <p className="quote">
           With a scripting language like JS that could touch elements of the page, change
-        their properties, and respond to events, we envisioned a much livelier Web
-        consisting of pages that acted more like applications.
+          their properties, and respond to events, we envisioned a much livelier Web
+          consisting of pages that acted more like applications.
         </p>
       </blockquote>
       <figcaption className="attribution"><a className="signpost" href="https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html">Brendan Eich, in Computerworld’s A-Z of Programming Languages</a></figcaption>
@@ -46,7 +46,7 @@ export const DynamicInteraction: FC = () =>
       <p className="paragraph">Every gesture gets its keyboard twin: what a pointer can drag,
         arrows can move, or the feature is not done. WCAG states it as a floor: all
         functionality{' '}
-        <a className="signpost" href="https://www.w3.org/WAI/WCAG21/Understanding/keyboard.html">“operable through a keyboard interface”</a>. Changes
+      <a className="signpost" href="https://www.w3.org/WAI/WCAG21/Understanding/keyboard.html">“operable through a keyboard interface”</a>. Changes
         announce themselves, too. A sighted reader watches the order change; a listening
         reader hears it, because the page says what it did.</p>
       <p className="paragraph">The test of the organization is reading the state cold: if the

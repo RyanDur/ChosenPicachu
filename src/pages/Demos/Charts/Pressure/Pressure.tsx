@@ -30,21 +30,21 @@ export const Pressure: FC<Props> = ({trades, actions}) => {
     </header>
     <figure className="chart-stage">
       <Axes high={peak} low={-peak} label={bitcoin}
-            times={pressures.map(pressure => pressure.openedAt)}
-            pattern="HH:mm"
-            tickEvery={TICK_EVERY_MS}
-            headroomMs={2 * BUCKET_MS}>
+        times={pressures.map(pressure => pressure.openedAt)}
+        pattern="HH:mm"
+        tickEvery={TICK_EVERY_MS}
+        headroomMs={2 * BUCKET_MS}>
         <svg className="pressures" aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}>
           <line className="midline" x1={0} y1={CHART_HEIGHT / 2} x2={CHART_WIDTH} y2={CHART_HEIGHT / 2}/>
           {pressures.map((pressure, at) => <g key={pressure.openedAt}>
             <rect className="bought-wall" x={bars[at].x + DEPTH_X} y={bars[at].boughtTop + DEPTH_Y}
-                  width={bars[at].width} height={bars[at].boughtHeight}/>
+              width={bars[at].width} height={bars[at].boughtHeight}/>
             <rect className="sold-wall" x={bars[at].x + DEPTH_X} y={bars[at].soldTop + DEPTH_Y}
-                  width={bars[at].width} height={bars[at].soldHeight}/>
+              width={bars[at].width} height={bars[at].soldHeight}/>
             <rect className="bought" x={bars[at].x} y={bars[at].boughtTop}
-                  width={bars[at].width} height={bars[at].boughtHeight}/>
+              width={bars[at].width} height={bars[at].boughtHeight}/>
             <rect className="sold" x={bars[at].x} y={bars[at].soldTop}
-                  width={bars[at].width} height={bars[at].soldHeight}/>
+              width={bars[at].width} height={bars[at].soldHeight}/>
           </g>)}
         </svg>
       </Axes>

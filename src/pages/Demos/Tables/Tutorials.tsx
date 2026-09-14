@@ -42,13 +42,13 @@ export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack}) => {
     <header className="tutorials-header">
       <h2 className="tutorials-title">let’s build this feature</h2>
       <PillGlider label="world"
-                  name="table-world"
-                  options={[
-                    {display: 'React', value: 'react'},
-                    {display: 'Vanilla', value: 'vanilla'}
-                  ]}
-                  chosen={world}
-                  onChosen={next => updateSearchParams({world: next})}/>
+        name="table-world"
+        options={[
+          {display: 'React', value: 'react'},
+          {display: 'Vanilla', value: 'vanilla'}
+        ]}
+        chosen={world}
+        onChosen={next => updateSearchParams({world: next})}/>
     </header>
     <p className="paragraph">{worldCopy[world]}</p>
     <ol className="spine" aria-label="the stations">
@@ -72,19 +72,19 @@ export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack}) => {
         <h3 className="phase-title">Layer on functionality, in the order it was asked for</h3>
         <LayerMap/>
         <Picks label="tutorials"
-               className="tutorial-picks"
-               options={[
-                 {display: 'Drag sort', value: 'sort'},
-                 {display: 'Sort menu', value: 'menu'},
-                 {display: 'Drag resize', value: 'resize'}
-               ]}
-               chosen={shown}
-               onPick={onShow}/>
+          className="tutorial-picks"
+          options={[
+            {display: 'Drag sort', value: 'sort'},
+            {display: 'Sort menu', value: 'menu'},
+            {display: 'Drag resize', value: 'resize'}
+          ]}
+          chosen={shown}
+          onPick={onShow}/>
         {shown === 'sort' && <DialNote reads="table"/>}
         {shown === 'sort' && <TableControls pace={pace} origin={origin} motion={motion} world={world}
-                                            onPace={next => updateSearchParams({pace: next})}
-                                            onOrigin={next => updateSearchParams({origin: next})}
-                                            onMotion={next => updateSearchParams({motion: next})}/>}
+          onPace={next => updateSearchParams({pace: next})}
+          onOrigin={next => updateSearchParams({origin: next})}
+          onMotion={next => updateSearchParams({motion: next})}/>}
         {shown === 'sort' && <Recipe track={track} onTrack={onTrack}/>}
         {shown === 'menu' && <MenuRecipe/>}
         {shown === 'resize' && <ResizeRecipe/>}

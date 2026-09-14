@@ -96,7 +96,7 @@ describe('search', () => {
 
   it('a word asks the museum for suggestions once, and not again while it stands', async () => {
     const suggestions: string[] = [];
-    const count = ({request}: { request: Request }) => {
+    const count = ({request}: {request: Request}) => {
       if (request.url.includes('suggest_autocomplete_all')) suggestions.push(request.url);
     };
     server.events.on('request:start', count);
@@ -115,7 +115,7 @@ describe('search', () => {
 
   it("a late answer for an old word never lands over the new word's suggestions", async () => {
     const asked: string[] = [];
-    const noted = ({request}: { request: Request }) => {
+    const noted = ({request}: {request: Request}) => {
       const word = new URL(request.url).searchParams.get('query[term][title]');
       if (word !== null) asked.push(word);
     };

@@ -29,9 +29,9 @@ const scopes = {
 
 const count = ['one', 'two', 'three', 'four', 'five'];
 
-const listed = (names) => `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
+const listed = names => `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
 
-const dispatch = (asks) => asks.length === 1
+const dispatch = asks => asks.length === 1
   ? `Only ${asks[0]} has a half in this scope. Send it the scope, word for word, and ask for its door's plusses and deltas; the other QAs have nothing to review here.`
   : `${count[asks.length - 1]} QAs hold one door each: ${asks.join(', ')}. Send all ${count[asks.length - 1]} the scope, word for word, at the same time, and ask each for its door's plusses and deltas.`;
 

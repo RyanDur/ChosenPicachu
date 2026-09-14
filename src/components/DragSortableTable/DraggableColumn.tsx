@@ -56,26 +56,26 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
   };
 
   return <th {...th}
-             className={classNames(className, travels && 'grabbable', carried && 'carried', has(settlingFrom) && 'settling', shovedClass(shoved), has(width) && 'shared')}
-             scope="col"
-             aria-label={data.label}
-             aria-sort={sorted}
-             tabIndex={travels ? 0 : undefined}
-             onPointerDown={travels ? columnLift(column, () => order, () => standing, lift) : undefined}
-             onPointerMove={has(drag) ? pointerTravel(moved(drag), release) : undefined}
-             onPointerUp={has(drag) ? release : undefined}
-             onPointerCancel={has(drag) ? release : undefined}
-             onLostPointerCapture={has(drag) ? pointerTravel(moved(drag), release) : undefined}
-             onKeyDown={travels ? columnArrows(column, () => order, ({to, widths}) => walkedTo(to, widths)) : undefined}
-             onAnimationEnd={() => dispatch(settled({axis: 'column', held: column}))}
-             style={{
-               '--share': shareWidth(width),
-               '--seat-x': pixels(seat?.x), '--seat-y': pixels(seat?.y),
-               '--drift-x': pixels(drift?.x), '--drift-y': pixels(drift?.y),
-               '--settle-x': pixels(settlingFrom?.seat.x), '--settle-y': pixels(settlingFrom?.seat.y),
-               '--settle-drift-x': pixels(settlingFrom?.drift.x), '--settle-drift-y': pixels(settlingFrom?.drift.y),
-               '--shoved-by': shoveDistance(shoved)
-             }}>
+    className={classNames(className, travels && 'grabbable', carried && 'carried', has(settlingFrom) && 'settling', shovedClass(shoved), has(width) && 'shared')}
+    scope="col"
+    aria-label={data.label}
+    aria-sort={sorted}
+    tabIndex={travels ? 0 : undefined}
+    onPointerDown={travels ? columnLift(column, () => order, () => standing, lift) : undefined}
+    onPointerMove={has(drag) ? pointerTravel(moved(drag), release) : undefined}
+    onPointerUp={has(drag) ? release : undefined}
+    onPointerCancel={has(drag) ? release : undefined}
+    onLostPointerCapture={has(drag) ? pointerTravel(moved(drag), release) : undefined}
+    onKeyDown={travels ? columnArrows(column, () => order, ({to, widths}) => walkedTo(to, widths)) : undefined}
+    onAnimationEnd={() => dispatch(settled({axis: 'column', held: column}))}
+    style={{
+      '--share': shareWidth(width),
+      '--seat-x': pixels(seat?.x), '--seat-y': pixels(seat?.y),
+      '--drift-x': pixels(drift?.x), '--drift-y': pixels(drift?.y),
+      '--settle-x': pixels(settlingFrom?.seat.x), '--settle-y': pixels(settlingFrom?.seat.y),
+      '--settle-drift-x': pixels(settlingFrom?.drift.x), '--settle-drift-y': pixels(settlingFrom?.drift.y),
+      '--shoved-by': shoveDistance(shoved)
+    }}>
     {children}
     <MoveReport landed={landed}/>
   </th>;

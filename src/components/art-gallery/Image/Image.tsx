@@ -16,7 +16,7 @@ type ImageProps = {
   linkEnabled?: boolean;
   priority?: boolean;
   lazy?: boolean;
-}
+};
 
 export const Image: FC<ImageProps> = (
   {
@@ -30,38 +30,38 @@ export const Image: FC<ImageProps> = (
   const [errored, isError] = useState(false);
   const {tab} = useSearchParamsObject({tab: schema.string});
   const {gallery} = useContext(GalleryLinks);
-  const ConditionalLink: FC<PropsWithChildren & { enabled: boolean, area: string }> =
+  const ConditionalLink: FC<PropsWithChildren & {enabled: boolean; area: string}> =
     ({children, enabled, area}) => enabled ?
       <Link to={`${gallery}${piece.id}${toQueryString({tab: area})}`}
-            aria-label={piece.title}
-            className="scrim">{children}</Link> : <>{children}</>;
+        aria-label={piece.title}
+        className="scrim">{children}</Link> : <>{children}</>;
 
-    return errored ?
-        <img alt={`${piece.title} would not load`}
-             className="image stand-in"
-             src={noImage}/> : !piece.image ?
-        <img alt={`${piece.title} has nothing to show`}
-             className="image stand-in"
-             src={noImage}/> :
-        (<>
-            <ConditionalLink enabled={linkEnabled} area={tab ?? ''}>
-                <img className={classNames('image', className)}
-                     referrerPolicy="no-referrer"
-                     onError={() => {
-                         isComplete(true);
-                         isError(true);
-                     }}
-                     onLoad={() => {
-                         isComplete(true);
-                         isError(false);
-                     }}
-                     fetchPriority={priority ? 'high' : 'auto'}
-                     loading={lazy ? 'lazy' : undefined}
-                     srcSet={piece.srcSet}
-                     sizes="(max-width: 600px) 85vw, (max-width: 1100px) 45vw, 33vw"
-                     alt={piece.altText} title={piece.title}
-                     src={piece.image}/>
-            </ConditionalLink>
-            {completed || <Loading/>}
-        </>);
+  return errored ?
+    <img alt={`${piece.title} would not load`}
+      className="image stand-in"
+      src={noImage}/> : !piece.image ?
+      <img alt={`${piece.title} has nothing to show`}
+        className="image stand-in"
+        src={noImage}/> :
+      (<>
+        <ConditionalLink enabled={linkEnabled} area={tab ?? ''}>
+          <img className={classNames('image', className)}
+            referrerPolicy="no-referrer"
+            onError={() => {
+              isComplete(true);
+              isError(true);
+            }}
+            onLoad={() => {
+              isComplete(true);
+              isError(false);
+            }}
+            fetchPriority={priority ? 'high' : 'auto'}
+            loading={lazy ? 'lazy' : undefined}
+            srcSet={piece.srcSet}
+            sizes="(max-width: 600px) 85vw, (max-width: 1100px) 45vw, 33vw"
+            alt={piece.altText} title={piece.title}
+            src={piece.image}/>
+        </ConditionalLink>
+        {completed || <Loading/>}
+      </>);
 };

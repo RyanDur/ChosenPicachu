@@ -15,38 +15,38 @@ export enum FormActions {
 
 type Action<T> = {
   type: T;
-}
+};
 
 export type FirstNameEdited = Action<FormActions.FIRST_NAME_EDITED> & {
   firstName: string;
-}
+};
 export type LastNameEdited = Action<FormActions.LAST_NAME_EDITED> & {
   lastName: string;
-}
+};
 export type EmailEdited = Action<FormActions.EMAIL_EDITED> & {
   email: string;
-}
+};
 export type DateOfBirthEdited = Action<FormActions.DATE_OF_BIRTH_EDITED> & {
   dob?: Date;
-}
+};
 export type HomeAddressEdited = Action<FormActions.HOME_ADDRESS_EDITED> & {
   homeAddress: AddressInfo;
-}
+};
 export type WorkAddressEdited = Action<FormActions.WORK_ADDRESS_EDITED> & {
   workAddress: AddressInfo;
-}
+};
 export type DetailsEdited = Action<FormActions.DETAILS_EDITED> & {
   details: string;
-}
+};
 export type AvatarDrawn = Action<FormActions.AVATAR_DRAWN> & {
   avatar: string;
-}
+};
 export type SameAsHomeChosen = Action<FormActions.SAME_AS_HOME_CHOSEN> & {
   sameAsHome: boolean;
-}
+};
 export type FormReset = Action<FormActions.FORM_RESET> & {
   user: NewUser | User;
-}
+};
 
 export type FormAction =
   | FirstNameEdited

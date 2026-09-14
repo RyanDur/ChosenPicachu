@@ -47,7 +47,7 @@ export const vam = {
       pagination: {
         total: info.record_count,
         limit: info.page_size,
-        totalPages: info.pages,
+        totalPages: info.pages
       },
       pieces: records.map(vamRecordToArt)
     })),

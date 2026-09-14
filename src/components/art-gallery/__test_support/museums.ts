@@ -16,7 +16,7 @@ const paramsMatch = (request: Request, expected: Record<string, string>) => {
   return Object.entries(expected).every(([key, value]) => params.get(key) === value);
 };
 
-const holding = (): { held: Promise<void>, release: () => void } => {
+const holding = (): {held: Promise<void>; release: () => void} => {
   let release = (): void => undefined;
   const held = new Promise<void>(resolve => {
     release = resolve;
@@ -25,9 +25,9 @@ const holding = (): { held: Promise<void>, release: () => void } => {
 };
 
 type AllArt = {
-  limit: number,
-  page: number
-  search?: string,
+  limit: number;
+  page: number;
+  search?: string;
 };
 
 const allArtParams = (options: AllArt) => ({

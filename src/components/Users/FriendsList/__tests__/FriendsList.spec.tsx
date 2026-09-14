@@ -53,7 +53,7 @@ describe('the friends list', () => {
     };
     const userWithFriends = {...firstUser, friends: [secondUser.id]};
     render(<FriendsList users={[firstUser, renamedSecond, thirdUser]} user={userWithFriends}
-                        onChange={consumer}/>);
+      onChange={consumer}/>);
     expect(screen.getByRole('list', {name: 'friends'})).toHaveTextContent('Renamed Person');
   });
 
@@ -119,7 +119,7 @@ describe('the friends list', () => {
   it('should not allow to select a friend if no more friends are left', () => {
     const userWithFriends = {...firstUser, friends: [secondUser.id, thirdUser.id]};
     render(<FriendsList users={[firstUser, secondUser, thirdUser]} user={userWithFriends}
-                        onChange={consumer}/>);
+      onChange={consumer}/>);
 
     expect(screen.queryByRole('combobox', {name: 'Add a friend'})).not.toBeInTheDocument();
   });

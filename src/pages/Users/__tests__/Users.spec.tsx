@@ -21,7 +21,7 @@ import {
   worksFromHomeColumn
 } from '../__test_support';
 
-const conciseUser = (firstName: string): User & { work: AddressInfo } => {
+const conciseUser = (firstName: string): User & {work: AddressInfo} => {
   const homeAddress: AddressInfo = {
     streetAddress: '12 Elm St',
     city: 'Springfield',

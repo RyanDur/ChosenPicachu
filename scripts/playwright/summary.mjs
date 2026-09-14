@@ -1,6 +1,6 @@
 import {readFileSync} from 'node:fs';
 
-const saidBy = (results) => results.map(({error}) => error?.message ?? '').find(message => message !== '') ?? '';
+const saidBy = results => results.map(({error}) => error?.message ?? '').find(message => message !== '') ?? '';
 
 const outcomesOf = (spec, path) => (spec.tests ?? []).map(test => ({
   title: [...path, spec.title].join(' › '),
@@ -14,11 +14,11 @@ const outcomesUnder = (suite, path) => [
   ...(suite.suites ?? []).flatMap(describe => outcomesUnder(describe, [...path, describe.title]))
 ];
 
-export const outcomesIn = (report) => (report.suites ?? []).flatMap(file => outcomesUnder(file, []));
+export const outcomesIn = report => (report.suites ?? []).flatMap(file => outcomesUnder(file, []));
 
 const counted = (outcomes, status) => outcomes.filter(outcome => outcome.status === status).length;
 
-export const countTable = (outcomes) => {
+export const countTable = outcomes => {
   const browsers = [...new Set(outcomes.map(({browser}) => browser))];
   const rows = browsers.map(browser => {
     const own = outcomes.filter(outcome => outcome.browser === browser);
@@ -27,9 +27,9 @@ export const countTable = (outcomes) => {
   return ['| browser | passed | failed | flaky | skipped |', '| --- | ---: | ---: | ---: | ---: |', ...rows].join('\n');
 };
 
-const firstLine = (said) => said.split('\n').map(line => line.trim()).find(line => line !== '') ?? '';
+const firstLine = said => said.split('\n').map(line => line.trim()).find(line => line !== '') ?? '';
 
-export const failuresList = (outcomes) => {
+export const failuresList = outcomes => {
   const fell = outcomes.filter(({status}) => status === 'unexpected');
   if (fell.length === 0) {
     return '';

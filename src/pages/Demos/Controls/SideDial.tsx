@@ -6,12 +6,12 @@ import {sideParam} from '@components/Banners/params';
 export const SideDial: FC<{name: string}> = ({name}) => {
   const {side = 'top', updateSearchParams} = useSearchParamsObject({side: sideParam});
   return <PillGlider label="side"
-                     name={name}
-                     options={[
-                       {display: 'Top', value: 'top'},
-                       {display: 'Middle', value: 'middle'},
-                       {display: 'Bottom', value: 'bottom'}
-                     ]}
-                     chosen={side}
-                     onChosen={next => updateSearchParams({side: next})}/>;
+    name={name}
+    options={[
+      {display: 'Top', value: 'top'},
+      {display: 'Middle', value: 'middle'},
+      {display: 'Bottom', value: 'bottom'}
+    ]}
+    chosen={side}
+    onChosen={next => updateSearchParams({side: next})}/>;
 };

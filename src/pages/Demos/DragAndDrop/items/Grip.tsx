@@ -14,20 +14,20 @@ type Props = {
 
 export const Grip: FC<Props> = ({item, order, onArm, onArranged}) =>
   <button type="button"
-          className="grip"
-          aria-label={`grip for ${item}`}
-          onMouseDown={onArm}
-          onKeyDown={event => maybe(steps[event.key]).map(toward => {
-            event.preventDefault();
-            const lane = event.currentTarget.closest('li');
-            if (has(lane) && lane.getAnimations().length > 0) {
-              return;
-            }
-            const from = order.indexOf(item);
-            const to = Math.min(Math.max(from + toward, 0), order.length - 1);
-            if (to !== from) {
-              onArranged(array.moveToIndex(to, item, order), item, toward);
-            }
-          })}>
+    className="grip"
+    aria-label={`grip for ${item}`}
+    onMouseDown={onArm}
+    onKeyDown={event => maybe(steps[event.key]).map(toward => {
+      event.preventDefault();
+      const lane = event.currentTarget.closest('li');
+      if (has(lane) && lane.getAnimations().length > 0) {
+        return;
+      }
+      const from = order.indexOf(item);
+      const to = Math.min(Math.max(from + toward, 0), order.length - 1);
+      if (to !== from) {
+        onArranged(array.moveToIndex(to, item, order), item, toward);
+      }
+    })}>
     <Handle/>
   </button>;

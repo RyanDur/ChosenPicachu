@@ -38,8 +38,8 @@ export type Store<State, Action> = {
 
 export type Middleware<State, Action> =
   (api: Pick<Store<State, Action>, 'state' | 'dispatch'>) =>
-    (next: Store<State, Action>['dispatch']) =>
-      Store<State, Action>['dispatch'];
+  (next: Store<State, Action>['dispatch']) =>
+  Store<State, Action>['dispatch'];
 
 type Held<State, Action> = {
   readonly state: State;

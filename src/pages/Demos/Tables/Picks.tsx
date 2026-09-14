@@ -18,8 +18,8 @@ export const Picks = <T extends string>({label, className, options, chosen, onPi
   <nav className={classNames('picks', className)} aria-label={label}>
     {options.map(({display, value}) =>
       <button type="button"
-              key={value}
-              className="pick"
-              aria-pressed={chosen === value}
-              onClick={() => onPick(value)}>{display}</button>)}
+        key={value}
+        className="pick"
+        aria-pressed={chosen === value}
+        onClick={() => onPick(value)}>{display}</button>)}
   </nav>;

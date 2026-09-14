@@ -1,12 +1,12 @@
 import * as schema from 'schemawax';
 
 export enum DemoTopics {
-  accordions= 'accordions',
+  accordions = 'accordions',
   zIndex = 'z-index',
   dragAndDrop = 'dragAndDrop',
   charts = 'charts',
-  tables = 'tables',
+  tables = 'tables'
 }
 
 export const demoTopicParam: schema.Decoder<DemoTopics> = schema.literalUnion(...Object.values(DemoTopics));
-export type PropsWithClassName = { className?: string };
+export type PropsWithClassName = {className?: string};

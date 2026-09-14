@@ -28,8 +28,8 @@ export const TopLayerRecipe: FC = () => {
   const {side = 'top', align = 'center'} = useSearchParamsObject({side: sideParam, align: alignParam});
 
   return <Story param="news" id="top"
-         can="The user sees the news above everything"
-         soThat="no stacking context can bury the news">
+    can="The user sees the news above everything"
+    soThat="no stacking context can bury the news">
     <Tell>We could give the banner a huge z-index, but z-index only ranks siblings inside
       one stacking context, and any ancestor with a transform, a filter, or a z-index of
       its own starts a new one; your 9999 is local the moment that happens. So the panel
@@ -63,7 +63,7 @@ export const TopLayerRecipe: FC = () => {
         </Codes>
       </Step>
       <Step title="Stand at your station"
-            dial={<><SideDial name="station-side"/><AlignDial name="station-align"/></>}>
+        dial={<><SideDial name="station-side"/><AlignDial name="station-align"/></>}>
         <Words want="Nine stations, and no arithmetic: the platform already centers a popover.">
           <Says>The UA stylesheet gives every popover inset 0 and margin auto, which is
             centering; the placement vocabulary turns auto margins into gaps, and the

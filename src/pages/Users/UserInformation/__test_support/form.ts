@@ -27,7 +27,7 @@ export const fillOutUser = (info: Pick<NewUser, 'info'>) =>
     .then(() => paste(screen.getByLabelText('Email'), info.info.email))
     .then(() => swiftKeys.type(screen.getByLabelText('Date Of Birth'), format(info.info.dob!, 'yyyy-MM-dd')));
 
-export const fillOutForm = (info: Pick<NewUser, 'info' | 'homeAddress'> & { work: AddressInfo }) =>
+export const fillOutForm = (info: Pick<NewUser, 'info' | 'homeAddress'> & {work: AddressInfo}) =>
   fillOutUser(info)
     .then(() => fillOutAddress(info.homeAddress, 'home'))
     .then(() => fillOutAddress(info.work, 'work'));

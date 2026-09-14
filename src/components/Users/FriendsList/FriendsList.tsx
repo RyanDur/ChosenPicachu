@@ -8,8 +8,8 @@ import './friends-list.css';
 type Props = {
   users: readonly User[];
   user: User;
-  onChange: Consumer<string[]>
-}
+  onChange: Consumer<string[]>;
+};
 
 export const FriendsList: FC<Props> = ({users, user, onChange}) => {
   const [said, say] = useState('');
@@ -40,23 +40,23 @@ export const FriendsList: FC<Props> = ({users, user, onChange}) => {
     <ul className="friends" aria-label="friends">{friends.map(friend =>
       <li className="friend" key={friend.id}>
         <label className="friend-title ellipsis"
-               htmlFor={`remove-${friend.id}`}>{displayFullName(friend)}</label>
+          htmlFor={`remove-${friend.id}`}>{displayFullName(friend)}</label>
         <button id={`remove-${friend.id}`} className="remove" type="button"
-                onClick={remove(friend)}>
+          onClick={remove(friend)}>
           <img className="icon" src={cancelIcon} width="24" height="24"
-               alt="remove"/>
+            alt="remove"/>
         </button>
       </li>
     )}</ul>
     {has(potentialFriends) &&
         <select className="select-friend bare rounded-corners lifted pressable" value="" aria-label="Add a friend"
-                onChange={add}>{[
-          <option key="placeholder" value="" disabled hidden>Add a Friend</option>,
-          ...potentialFriends.map(potentialFriend =>
-            <option key={potentialFriend.id} value={potentialFriend.id}>{
-              displayFullName(potentialFriend)
-            }</option>)
-        ]}</select>}
+          onChange={add}>{[
+            <option key="placeholder" value="" disabled hidden>Add a Friend</option>,
+            ...potentialFriends.map(potentialFriend =>
+              <option key={potentialFriend.id} value={potentialFriend.id}>{
+                displayFullName(potentialFriend)
+              }</option>)
+          ]}</select>}
     <output className="off-screen" aria-label="friends report">{said}</output>
   </fieldset>;
 };

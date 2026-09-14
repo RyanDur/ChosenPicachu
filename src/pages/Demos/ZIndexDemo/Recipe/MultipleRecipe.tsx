@@ -53,8 +53,8 @@ export const MultipleRecipe: FC = () => {
   const {enter = 'above', stack = 'down'} = useSearchParamsObject({enter: enterParam, stack: stackParam});
 
   return <Story param="news" id="many"
-         can="The user can have multiple banners"
-         soThat="no message waits for another to leave">
+    can="The user can have multiple banners"
+    soThat="no message waits for another to leave">
     <Tell>News rarely arrives alone, so the banners stand in a pile. Every arrival is a
       small play in two acts: the pile opens a slot while the newcomer is still off
       screen, and only then does the newcomer fly in. Leaving runs the play

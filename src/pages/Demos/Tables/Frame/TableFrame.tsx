@@ -61,12 +61,12 @@ export const TableFrame: FC<Props> = ({pace, origin, motion, veiled = false, onS
 
   return has(document)
     ? <iframe className={classNames('table-frame', veiled && 'veiled')}
-              title="the living table, in vanilla"
-              style={has(height) ? {'--stage-block-size': `${height}px`} : undefined}
-              onLoad={event => {
-                setFrame(event.currentTarget);
-                measured(event.currentTarget, stood);
-              }}
-              srcDoc={document}/>
+      title="the living table, in vanilla"
+      style={has(height) ? {'--stage-block-size': `${height}px`} : undefined}
+      onLoad={event => {
+        setFrame(event.currentTarget);
+        measured(event.currentTarget, stood);
+      }}
+      srcDoc={document}/>
     : null;
 };

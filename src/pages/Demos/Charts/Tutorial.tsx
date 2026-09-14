@@ -33,8 +33,8 @@ const gap = plain(' ');
 
 const priceStory =
   <Story param="graph" id="price"
-         can="The trader can watch the price move, live"
-         soThat="the session reads at a glance">
+    can="The trader can watch the price move, live"
+    soThat="the session reads at a glance">
     <Tell>We could reach for a chart library, but the promise is one line and two axes; so
       the line is an SVG polyline whose points are arithmetic over the trades we already
       hold, and everything the card shows derives fresh on every render.</Tell>
@@ -143,8 +143,8 @@ const priceStory =
 
 const candlesStory =
   <Story param="graph" id="candles"
-         can="The trader can read the same trades as candles"
-         soThat="each window answers open, close, reach, and volume">
+    can="The trader can read the same trades as candles"
+    soThat="each window answers open, close, reach, and volume">
     <Tell>A line answers where the price went; a candle answers what each window did:
       where it opened and closed, how far it reached, and how much traded. The same
       buckets feed both cards; no new state exists, only new shapes.</Tell>
@@ -223,8 +223,8 @@ const candlesStory =
 
 const pressureStory =
   <Story param="graph" id="pressure"
-         can="The trader can see who is driving the move"
-         soThat="a push and a retreat stop looking alike">
+    can="The trader can see who is driving the move"
+    soThat="a push and a retreat stop looking alike">
     <Tell>We could infer the driver from the direction of the price, but a rise on
       heavy buying and a rise on sellers stepping away draw the same line; so the
       card reads each match’s side, a fact the stream already carries, and folds
@@ -289,8 +289,8 @@ const pressureStory =
 
 const pieStory =
   <Story param="graph" id="pie"
-         can="The trader can see who owns the session"
-         soThat="the whole pot reads in one circle">
+    can="The trader can see who owns the session"
+    soThat="the whole pot reads in one circle">
     <Tell>Pressure answers minute by minute; the pie answers the whole pot:
       everything traded since arrival, one slice per side. The same decoded
       stream feeds it, and like pressure it counts only the session it watched,
@@ -338,7 +338,7 @@ const pieStory =
             ...unit(pieSource, 'export const sweepGates')
           ]}/>
           <Snippet label="HTML" lines={[
-            ...span(pieComponent, "{['wall', 'face'].map(dressed", "}))}")
+            ...span(pieComponent, "{['wall', 'face'].map(dressed", '}))}')
           ]}/>
           <Snippet label="CSS" lines={[
             ...unit(pieCss, '.slice {')
@@ -362,8 +362,8 @@ const pieStory =
 
 const workspaceStory =
   <Story param="graph" id="workspace"
-         can="The trader can lay out the workspace"
-         soThat="the charts they watch sit where they put them">
+    can="The trader can lay out the workspace"
+    soThat="the charts they watch sit where they put them">
     <Tell>One chart is dealt on arrival, and the workspace is the URL: add, sort,
       remove, refresh, share, and the layout survives all of it, because the address
       is the state.</Tell>

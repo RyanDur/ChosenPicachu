@@ -12,7 +12,7 @@ const floorsFor = (url, {ci}) => {
   }));
 };
 
-const percent = (score) => `${Math.round(score * 100)}`;
+const percent = score => `${Math.round(score * 100)}`;
 
 const range = (runs, category) => {
   const scores = runs.map(({summary}) => summary[category]);
@@ -21,7 +21,7 @@ const range = (runs, category) => {
   return low === high ? percent(low) : `${percent(low)} to ${percent(high)}`;
 };
 
-const representativeOf = (runs) => runs.find(({isRepresentativeRun}) => isRepresentativeRun) ?? runs[0];
+const representativeOf = runs => runs.find(({isRepresentativeRun}) => isRepresentativeRun) ?? runs[0];
 
 export const scoreTable = (runs, floors) => {
   const representative = representativeOf(runs);
@@ -34,7 +34,7 @@ export const scoreTable = (runs, floors) => {
   return ['| category | score | across runs | floor | |', '| --- | ---: | ---: | ---: | --- |', ...rows].join('\n');
 };
 
-export const failuresList = (results) => {
+export const failuresList = results => {
   const failed = results.filter(({passed}) => !passed);
   if (failed.length === 0) {
     return '';
@@ -67,10 +67,10 @@ const rowOf = ({page, runs, rc}) => {
   return `| ${page} | ${categories.map(category => cell(summary[category], floors[category])).join(' | ')} |`;
 };
 
-export const pageTable = (pages) =>
+export const pageTable = pages =>
   ['| page | performance | accessibility | best-practices | seo |', '| --- | ---: | ---: | ---: | ---: |', ...pages.map(rowOf)].join('\n');
 
-export const summaryOf = (pages) => [
+export const summaryOf = pages => [
   '## lighthouse',
   '',
   'The representative run of each page counts. Open a page for the spread across runs and what fell short.',
@@ -83,9 +83,9 @@ export const summaryOf = (pages) => [
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   const [, , reportsDir] = process.argv;
-  const read = (file) => JSON.parse(readFileSync(file, 'utf8'));
+  const read = file => JSON.parse(readFileSync(file, 'utf8'));
   const rc = read('lighthouserc.json');
-  const reported = (page) => {
+  const reported = page => {
     const manifest = join(reportsDir, `lighthouse-${page}`, 'manifest.json');
     const assertions = join(reportsDir, `lighthouse-${page}`, 'assertion-results.json');
     return existsSync(manifest)

@@ -1,14 +1,14 @@
 import {Kind, highlight} from '../highlight';
 
 // language=TypeScript
-const columnAlias = `export type Column<C> = {readonly name: string; readonly width?: number; readonly data: C};`;
+const columnAlias = 'export type Column<C> = {readonly name: string; readonly width?: number; readonly data: C};';
 
 const kinds = (label: 'HTML' | 'CSS' | 'TS', line: string): Record<string, Kind> =>
   Object.fromEntries(highlight(label, line).filter(({kind}) => kind !== 'plain').map(({text, kind}) => [text, kind]));
 
 describe('the code voice', () => {
   it('reads a JSX line the way an editor does: tags, props and strings', () => {
-    const line = `    trades: <DraggableColumn key="trades" name="trades">trades<SortMenu column="trades"/></DraggableColumn>,`;
+    const line = '    trades: <DraggableColumn key="trades" name="trades">trades<SortMenu column="trades"/></DraggableColumn>,';
 
     const found = kinds('TS', line);
 
@@ -21,7 +21,7 @@ describe('the code voice', () => {
   });
 
   it('reads a TS line as keywords, types and calls', () => {
-    const line = `export const columns = useTableSelector(selectColumns<Measured, Measures>);`;
+    const line = 'export const columns = useTableSelector(selectColumns<Measured, Measures>);';
 
     const found = kinds('TS', line);
 
@@ -33,7 +33,7 @@ describe('the code voice', () => {
   });
 
   it('brackets stay plain', () => {
-    const found = kinds('TS', `export const columns = useTableSelector(selectColumns<Measured, Measures>);`);
+    const found = kinds('TS', 'export const columns = useTableSelector(selectColumns<Measured, Measures>);');
 
     expect(found['(']).toBeUndefined();
   });
@@ -51,14 +51,14 @@ describe('the code voice', () => {
   });
 
   it('a CSS line names its property and its call', () => {
-    const found = kinds('CSS', `  padding-inline-start: var(--base-x-1_25);`);
+    const found = kinds('CSS', '  padding-inline-start: var(--base-x-1_25);');
 
     expect(found['padding-inline-start']).toBe('attribute');
     expect(found.var).toBe('call');
   });
 
   it('an HTML line names its tag and attributes', () => {
-    const found = kinds('HTML', `<th scope="col" class="cell window header-cell" aria-label="window">window`);
+    const found = kinds('HTML', '<th scope="col" class="cell window header-cell" aria-label="window">window');
 
     expect(found.th).toBe('tag');
     expect(found.scope).toBe('attribute');

@@ -99,7 +99,7 @@ const actionsAreData =
         is what it was given, and what the hand does to it comes back as an event.</Says>
       <Codes>
         <Snippet label="TS" lines={[
-          ...span(arrangementSource, 'export type ArrangementAction', "readonly keys: readonly string[]}"), gap,
+          ...span(arrangementSource, 'export type ArrangementAction', 'readonly keys: readonly string[]}'), gap,
           ...unit(arrangementSource, 'export const columnMoved'), gap,
           ...unit(actionsSource, 'export const columnMovedBeside'),
           aside('// the record says what happened; the creator is named for the verb')
@@ -227,8 +227,8 @@ const whoSubscribes = (world: World): ReactNode =>
 
 export const storeStory = (world: World): ReactNode =>
   <Story param="living" id="store" steps={5}
-         can="The page is a store, and so is the table"
-         soThat="the charts and the tables read one stream, the page owns the order it shows, and both worlds write them one way">
+    can="The page is a store, and so is the table"
+    soThat="the charts and the tables read one stream, the page owns the order it shows, and both worlds write them one way">
     <Tell>We could let each chart and each table keep its own copy of the trades, but they would
       drift from each other and from the stream, and every listener would need to know which
       world it landed in; so the page is a store in the Redux shape, without Redux: one value

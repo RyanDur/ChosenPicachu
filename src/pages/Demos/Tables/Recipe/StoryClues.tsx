@@ -11,6 +11,6 @@ const clues: [string, string][] = [
 
 export const StoryClues: FC = () =>
   <Clues quote="I watch the market all day. I need the numbers to keep themselves current, and I need them arranged the way I think: what I am comparing side by side, what matters most on top. When I sort something, it should just happen."
-         by="a trader"
-         clues={clues}
-         verdict="Measures compared across a shared set of windows is tabular data, and a table is the element built for it: one dimension per axis, headers that name both, and a reading order assistive tech already understands. Everything after this point is layered onto that one choice."/>;
+    by="a trader"
+    clues={clues}
+    verdict="Measures compared across a shared set of windows is tabular data, and a table is the element built for it: one dimension per axis, headers that name both, and a reading order assistive tech already understands. Everything after this point is layered onto that one choice."/>;

@@ -21,14 +21,14 @@ export const Cell: FC<ComponentProps<'td'> & {column: string; row: string}> = ({
   const shove = columnShove ?? rowShove;
 
   return <td {...td}
-             className={classNames(className, (columnCarried || rowCarried) && 'carried', has(from) && 'settling', shovedClass(shove))}
-             style={{
-               '--seat-x': pixels(seat?.x), '--seat-y': pixels(seat?.y),
-               '--drift-x': pixels(drift?.x), '--drift-y': pixels(drift?.y),
-               '--settle-x': pixels(from?.seat.x), '--settle-y': pixels(from?.seat.y),
-               '--settle-drift-x': pixels(from?.drift.x), '--settle-drift-y': pixels(from?.drift.y),
-               '--shoved-by': shoveDistance(shove)
-             }}>
+    className={classNames(className, (columnCarried || rowCarried) && 'carried', has(from) && 'settling', shovedClass(shove))}
+    style={{
+      '--seat-x': pixels(seat?.x), '--seat-y': pixels(seat?.y),
+      '--drift-x': pixels(drift?.x), '--drift-y': pixels(drift?.y),
+      '--settle-x': pixels(from?.seat.x), '--settle-y': pixels(from?.seat.y),
+      '--settle-drift-x': pixels(from?.drift.x), '--settle-drift-y': pixels(from?.drift.y),
+      '--shoved-by': shoveDistance(shove)
+    }}>
     {children}
   </td>;
 };

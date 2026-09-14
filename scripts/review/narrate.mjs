@@ -1,7 +1,7 @@
 import {createInterface} from 'node:readline';
 import {writeFileSync} from 'node:fs';
 
-const said = (text) => text.replace(/\s+/g, ' ').trim();
+const said = text => text.replace(/\s+/g, ' ').trim();
 
 const counted = (plusses, deltas) => `${plusses} ${plusses === 1 ? 'plus' : 'plusses'} and ${deltas} ${deltas === 1 ? 'delta' : 'deltas'}`;
 
@@ -17,7 +17,7 @@ const step = ({name, input}) => {
   }
 };
 
-export const narration = (event) => {
+export const narration = event => {
   if (event.type === 'assistant') {
     return event.message.content
       .map(block => block.type === 'text' ? said(block.text) : block.type === 'tool_use' ? step(block) : '')
@@ -32,7 +32,7 @@ export const narration = (event) => {
   return '';
 };
 
-export const outcome = (result) => result === undefined || result.is_error ? 1 : 0;
+export const outcome = result => result === undefined || result.is_error ? 1 : 0;
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   let result;

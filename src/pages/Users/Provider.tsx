@@ -19,4 +19,3 @@ export const UsersProvider = ({store, children}: PropsWithChildren<{store: Users
 export const useUsersSelector = <Slice,>(select: (state: UsersState) => Slice): Slice => select(useContext(Users).state);
 
 export const useUsersDispatch = (): Dispatch<UsersAction> => useContext(Users).dispatch;
-

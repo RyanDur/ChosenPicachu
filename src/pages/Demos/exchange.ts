@@ -13,9 +13,9 @@ export type Exchange = {
 type Closer = () => void;
 
 export type FeedTrouble =
-  | { type: 'handshakeRefused' }
-  | { type: 'hungUp' }
-  | { type: 'historyRefused'; cause: HTTPError };
+  | {type: 'handshakeRefused'}
+  | {type: 'hungUp'}
+  | {type: 'historyRefused'; cause: HTTPError};
 
 const historyOf = (
   base: string,

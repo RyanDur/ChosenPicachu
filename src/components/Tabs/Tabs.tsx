@@ -8,14 +8,14 @@ import './Tabs.css';
 type Tab = {
   display: string;
   param: string;
-}
+};
 
 type Props = {
   defaultTab?: string;
   values: Tab[];
   label: string;
   id?: string;
-}
+};
 
 export const Tabs: FC<Props> = ({values, id, label, defaultTab}) => {
   const {pathname} = useLocation();
@@ -28,8 +28,8 @@ export const Tabs: FC<Props> = ({values, id, label, defaultTab}) => {
   return <nav aria-label={label} id={id} className="backdrop tabs">{values.map(({param, display}) =>
     <span className="field tab attentive" key={param}>
       <Link to={`${pathname}${createSearchParams({tab: param})}`}
-            aria-current={tab === param ? 'page' : undefined}
-            className="path">{display}</Link>
+        aria-current={tab === param ? 'page' : undefined}
+        className="path">{display}</Link>
     </span>
   )}</nav>;
 };

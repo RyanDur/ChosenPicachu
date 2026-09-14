@@ -22,7 +22,7 @@ export enum HTTPError {
 export enum SuccessStatusCode {
   OK = 200,
   CREATED = 201,
-  NO_CONTENT = 204,
+  NO_CONTENT = 204
 }
 
 export const isOk = (response: Response): boolean => response.status === HTTPStatus.OK;
@@ -32,7 +32,7 @@ export const isNoContent = (response: Response): boolean => response.status === 
 export enum FailStatusCode {
   FORBIDDEN = 403,
   NOT_FOUND = 404,
-  SERVER_ERROR = 500,
+  SERVER_ERROR = 500
 }
 
 export const matchFailStatusCode = matchOn(Object.values(FailStatusCode));

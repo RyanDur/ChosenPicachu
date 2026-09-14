@@ -21,8 +21,8 @@ import cssSource from '../EagerKeepAnimatedList/EagerKeepAnimatedList.css?raw';
 
 export const EagerKeepAnimatedRecipe: FC = () => <>
   <Story param="native" id="sort" steps={8}
-         can="The user can arrange the list by hand"
-         soThat="it reads in the order they mean">
+    can="The user can arrange the list by hand"
+    soThat="it reads in the order they mean">
     {platformCurrency}
     {promises('eager', 'keep', 'animated')}
     {neverOurs}

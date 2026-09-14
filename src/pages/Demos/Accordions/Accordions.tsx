@@ -4,7 +4,7 @@ import {PillGlider} from '@components/PillGlider';
 import {PropsWithClassName} from '../types';
 import './Accordions.css';
 
-type ContentProps = { content: { value: ReactNode, key: string }[] };
+type ContentProps = {content: {value: ReactNode; key: string}[]};
 export const InclusiveAccordion: FC<PropsWithClassName & ContentProps> = ({
   className,
   content
@@ -13,7 +13,7 @@ export const InclusiveAccordion: FC<PropsWithClassName & ContentProps> = ({
     <h2 className="title bold">Accordion using checkboxes</h2>
     <p>no Javascript needed to pull this off.</p>
   </header>
-  <ul className='accordion'>
+  <ul className="accordion">
     {content.map(({value, key}, id) =>
       <li key={key} className="fold">
         <input id={`fold-${id}-checkbox`} className="info-toggle off-screen" type="checkbox"/>
@@ -52,7 +52,7 @@ export const ExclusiveToggleAccordion: FC<PropsWithClassName & ContentProps> = (
   <header className="exclusive-checkbox-header">
     <h2 className="title bold">Exclusive accordion using details elements</h2>
   </header>
-  <ul className='new-accordion'>
+  <ul className="new-accordion">
     {content.map(({value, key}) =>
       <li key={key}>
         <details className="fold" name="exclusive-toggle-accordian">
@@ -74,13 +74,13 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
     <header className="exclusive-checkbox-header">
       <h2 className="title bold">Exclusive accordion using checkboxes</h2>
       <PillGlider label="animation style"
-                  name="checkbox-animate-or-static-tab"
-                  options={[{display: 'Animate', value: 'animated'}, {display: 'Static', value: 'static'}]}
-                  chosen={tab}
-                  onChosen={value => {
-                    updateChecked(undefined);
-                    updateTab(value);
-                  }}/>
+        name="checkbox-animate-or-static-tab"
+        options={[{display: 'Animate', value: 'animated'}, {display: 'Static', value: 'static'}]}
+        chosen={tab}
+        onChosen={value => {
+          updateChecked(undefined);
+          updateTab(value);
+        }}/>
     </header>
 
     <ul className={'new-accordion'}>
@@ -93,7 +93,7 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
                 {key === checked ? 'Close' : 'Open'}
                 <input
                   type="checkbox"
-                  name='exclusive-fold'
+                  name="exclusive-fold"
                   checked={key === checked}
                   onClick={() => checked === key && updateChecked(undefined)}
                   onChange={() => checked !== key && updateChecked(key)}
@@ -121,25 +121,25 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
   return <article className={classNames('exclusive-radio-toggle-accordion', 'toggle-accordion', className)}>
     <header className="exclusive-checkbox-header">
       <h2 className="title bold">Exclusive accordion using radio group</h2>
-      <article className='pill-tabs'>
-        <label className='pill-tab'>
+      <article className="pill-tabs">
+        <label className="pill-tab">
           Animate
           <input type="radio"
-                 className='off-screen'
-                 name="radio-animate-or-static-tab"
-                 checked={tab === 'animated'}
-                 value='animated'
-                 onChange={() => updateTab('animated')}/>
+            className="off-screen"
+            name="radio-animate-or-static-tab"
+            checked={tab === 'animated'}
+            value="animated"
+            onChange={() => updateTab('animated')}/>
         </label>
 
-        <label className='pill-tab'>
+        <label className="pill-tab">
           Static
           <input type="radio"
-                 className='off-screen'
-                 name="radio-animate-or-static-tab"
-                 checked={tab === 'static'}
-                 value='static'
-                 onChange={() => updateTab('static')}/>
+            className="off-screen"
+            name="radio-animate-or-static-tab"
+            checked={tab === 'static'}
+            value="static"
+            onChange={() => updateTab('static')}/>
         </label>
       </article>
     </header>
@@ -157,7 +157,7 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
                   name="exclusive-checkbox-toggle"
                   checked={key === checked}
                   value={key}
-                  onChange={(event) => updateChecked(event.currentTarget.value)}
+                  onChange={event => updateChecked(event.currentTarget.value)}
                   onClick={() => checked === key && updateChecked(undefined)}
                   className="off-screen"/>
               </label>

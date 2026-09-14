@@ -1,34 +1,34 @@
 import * as schema from 'schemawax';
 
 export enum Source {
-    AIC = 'aic',
-    HARVARD = 'harvard',
-    VAM = 'vam',
-    CLEVELAND = 'cleveland'
+  AIC = 'aic',
+  HARVARD = 'harvard',
+  VAM = 'vam',
+  CLEVELAND = 'cleveland'
 }
 
 export const sourceParam: schema.Decoder<Source> = schema.literalUnion(...Object.values(Source));
 
 export type SearchArt = {
-    search: string;
-    source: Source;
-}
+  search: string;
+  source: Source;
+};
 
 export type GetAllArt = {
-    search?: string;
-    page: number;
-    size?: number;
-    source: Source;
-}
+  search?: string;
+  page: number;
+  size?: number;
+  source: Source;
+};
 
-export type GetAllArtRequest = Omit<GetAllArt, 'source'>
+export type GetAllArtRequest = Omit<GetAllArt, 'source'>;
 
 export type GetArt = {
-    id: string;
-    source: Source;
-}
+  id: string;
+  source: Source;
+};
 
 export type Query = {
-    path?: (string | number)[];
-    params?: Record<string, unknown>
-}
+  path?: (string | number)[];
+  params?: Record<string, unknown>;
+};

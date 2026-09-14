@@ -9,7 +9,7 @@ export type PieceContext = {
   answered: Consumer<Art>;
   refused: Consumer<void>;
   abandoned: Consumer<void>;
-}
+};
 
 export const Context = createContext<PieceContext>({
   easel: {reply: 'unasked'},

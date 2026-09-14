@@ -52,7 +52,6 @@ describe('the travel vocabulary', () => {
     expect(happened).toEqual(['captured 7', 'moved', 'captured 7']);
   });
 
-
   const measuredTable = () => {
     const table = document.createElement('table');
     table.innerHTML = '<thead><tr><th class="cell window"></th><th class="cell trades"></th><th class="cell buys"></th><th class="cell change"></th></tr></thead><tbody><tr><td></td></tr><tr><td></td></tr></tbody>';

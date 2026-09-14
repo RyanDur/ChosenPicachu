@@ -4,14 +4,14 @@ export type AddressInfo = {
   city: string;
   state: string;
   zip: string;
-}
+};
 
 export type UserInfo = {
   firstName: string;
   lastName: string;
   email: string;
   dob?: Date;
-}
+};
 
 export type NewUser = {
   info: UserInfo;
@@ -20,11 +20,11 @@ export type NewUser = {
   avatar: string;
   work?: 'home' | AddressInfo;
   details?: string;
-}
+};
 
 export type User = {
   id: string;
-} & NewUser
+} & NewUser;
 
 export type UserEdit = Omit<User, 'friends'>;
 

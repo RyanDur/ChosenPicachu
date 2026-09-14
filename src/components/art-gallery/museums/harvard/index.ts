@@ -38,7 +38,7 @@ export const harvard = {
       pagination: {
         total: info.totalrecords,
         limit: info.totalrecordsperquery,
-        totalPages: info.pages,
+        totalPages: info.pages
       },
       pieces: records.map(harvardArtToArt)
     })),

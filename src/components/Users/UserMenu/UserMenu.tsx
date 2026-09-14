@@ -25,25 +25,25 @@ export const UserMenu: FC<Props> = ({user, name, onRemove}) => {
 
   return <>
     <button type="button" className="menu-toggle rounded-corners raisable"
-            popoverTarget={id}
-            aria-label={`Actions for ${name}`}/>
+      popoverTarget={id}
+      aria-label={`Actions for ${name}`}/>
     <menu id={id} tabIndex={-1} popover="auto" className="menu card rounded-corners lifted" aria-label={`Actions for ${name}, chosen`}>
       <li className="entry">
         <Link to={`${path}${createSearchParams({id: user.id, mode: 'view'})}`}
-              onClick={dismissed} className="item sub-title">View</Link>
+          onClick={dismissed} className="item sub-title">View</Link>
       </li>
       <li className="entry">
         <Link to={`${path}${createSearchParams({id: user.id, mode: 'edit'})}`}
-              onClick={dismissed} className="item sub-title">Edit</Link>
+          onClick={dismissed} className="item sub-title">Edit</Link>
       </li>
       <li className="entry">
         <button type="button" className="item sub-title"
-                popoverTarget={id} popoverTargetAction="hide"
-                onClick={onRemove}>Remove</button>
+          popoverTarget={id} popoverTargetAction="hide"
+          onClick={onRemove}>Remove</button>
       </li>
       <li className="entry">
         <Link to={`${path}${createSearchParams({id: user.id})}`}
-              onClick={dismissed} className="item sub-title">Clone</Link>
+          onClick={dismissed} className="item sub-title">Clone</Link>
       </li>
     </menu>
   </>;

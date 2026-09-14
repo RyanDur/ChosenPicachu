@@ -5,7 +5,7 @@ export type Pagination = {
   total: number;
   limit: number;
   totalPages: number;
-}
+};
 
 export type Art = {
   id: string;
@@ -14,12 +14,12 @@ export type Art = {
   srcSet?: string;
   altText: string;
   artistInfo: string;
-}
+};
 
 export type AllArt = {
   pagination: Pagination;
   pieces: Art[];
-}
+};
 
 export type SearchOptions = string[];
 export type AllArtResponse = AICAllArtResponse | HarvardAllArtResponse;

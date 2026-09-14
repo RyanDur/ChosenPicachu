@@ -16,7 +16,6 @@ describe('the keyboard vocabulary', () => {
     expect(nudgedRow(['session', 'this minute', 'this hour'], 'this hour', 1)).toEqual({from: 2, to: 2});
   });
 
-
   it('a column nudge moves the column one seat', () => {
     const order = ['window', 'trades', 'buys', 'change'];
 

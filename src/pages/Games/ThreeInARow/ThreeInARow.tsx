@@ -1,6 +1,6 @@
 import {FC} from 'react';
 
-export const ThreeInARow: FC = () => 
+export const ThreeInARow: FC = () =>
   <>
 
   </>

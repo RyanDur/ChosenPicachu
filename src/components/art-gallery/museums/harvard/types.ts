@@ -23,7 +23,7 @@ const HarvardArtOptionDecoder = schema.object({
 
 export const HarvardArtSchema = schema.object({
   required: {
-    id: schema.number,
+    id: schema.number
   },
   optional: {
     title: schema.nullable(schema.string),
@@ -48,6 +48,6 @@ export const HarvardSearchSchema = schema.object({
 
 export type HarvardPeople = schema.Output<typeof HarvardPeopleDecoder>;
 export type HarvardInfo = schema.Output<typeof HarvardInfoDecoder>;
-export type HarvardAllArtResponse = schema.Output<typeof HarvardAllArtSchema>
-export type HarvardArtResponse = schema.Output<typeof HarvardArtSchema>
+export type HarvardAllArtResponse = schema.Output<typeof HarvardAllArtSchema>;
+export type HarvardArtResponse = schema.Output<typeof HarvardArtSchema>;
 export type HarvardSearchResponse = schema.Output<typeof HarvardSearchSchema>;

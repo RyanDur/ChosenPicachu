@@ -63,39 +63,39 @@ export const ChartPage: FC = () => {
   const {kind} = useParams();
   const page = ({kind: dealt, name, reference, quote}: Feature, chart: ReactNode) => () =>
     <article aria-label={`${name} tutorial`} className="chart-page tutorials">
-    {chart}
-    <h2 className="tutorials-title">let’s build this feature</h2>
-    <p className="overview paragraph">
-      We are going to build the <a
-        className="signpost"
-        href={reference}
-        target="_blank"
-        rel="noreferrer">{name}</a> above. The card below tells it as a <a
-        className="signpost"
-        href="https://initialcapacity.io/insights/user-story"
-        target="_blank"
-        rel="noreferrer">user story</a>: open it and you get the plan and the steps that
-      build it, with the real code from this site, so what you read is what runs. The
-      links go to MDN
-      if you want more.
-    </p>
-    <figure className="feedback">
-      <blockquote className="quote paragraph italic">{quote}</blockquote>
-      <figcaption className="attribution">a trader</figcaption>
-    </figure>
-    <p className="overview paragraph">
-      If you want the exercise, stop here and build the story yourself first. The chart
-      above is our interpretation of that; the card below tells how we built it. Open it
-      to see the steps, or to compare them with yours.
-    </p>
-    <section aria-label={`build the ${name} yourself`} className="build-steps">
-      <ChartStories kind={dealt}/>
-    </section>
+      {chart}
+      <h2 className="tutorials-title">let’s build this feature</h2>
+      <p className="overview paragraph">
+        We are going to build the <a
+          className="signpost"
+          href={reference}
+          target="_blank"
+          rel="noreferrer">{name}</a> above. The card below tells it as a <a
+          className="signpost"
+          href="https://initialcapacity.io/insights/user-story"
+          target="_blank"
+          rel="noreferrer">user story</a>: open it and you get the plan and the steps that
+        build it, with the real code from this site, so what you read is what runs. The
+        links go to MDN
+        if you want more.
+      </p>
+      <figure className="feedback">
+        <blockquote className="quote paragraph italic">{quote}</blockquote>
+        <figcaption className="attribution">a trader</figcaption>
+      </figure>
+      <p className="overview paragraph">
+        If you want the exercise, stop here and build the story yourself first. The chart
+        above is our interpretation of that; the card below tells how we built it. Open it
+        to see the steps, or to compare them with yours.
+      </p>
+      <section aria-label={`build the ${name} yourself`} className="build-steps">
+        <ChartStories kind={dealt}/>
+      </section>
     </article>;
   return matchChartKind(isChartKind(kind) ? kind : undefined, {
-      price: page(features.price, <LivePrice/>),
-      candles: page(features.candles, <LiveCandles/>),
-      pressure: page(features.pressure, <LivePressure/>),
-      pie: page(features.pie, <LivePie/>)
-    }).orElse(<Navigate to={`${Paths.demos}?tab=${DemoTopics.charts}`} replace/>);
+    price: page(features.price, <LivePrice/>),
+    candles: page(features.candles, <LiveCandles/>),
+    pressure: page(features.pressure, <LivePressure/>),
+    pie: page(features.pie, <LivePie/>)
+  }).orElse(<Navigate to={`${Paths.demos}?tab=${DemoTopics.charts}`} replace/>);
 };

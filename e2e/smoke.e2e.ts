@@ -17,13 +17,13 @@ test('every door the gallery offers hangs art from its museum', async ({page}) =
 });
 
 test('the V&A wall hangs its art', async ({page}) => {
-  await page.goto(`gallery?page=1&size=8&tab=vam`);
+  await page.goto('gallery?page=1&size=8&tab=vam');
 
   await expect(firstPainting(page)).toBeVisible({timeout: 30_000});
 });
 
 test('a piece on the V&A wall opens into its own page', async ({page}) => {
-  await page.goto(`gallery?page=1&size=8&tab=vam`);
+  await page.goto('gallery?page=1&size=8&tab=vam');
   await expect(firstPainting(page)).toBeVisible({timeout: 30_000});
 
   await firstPainting(page).click();
@@ -50,13 +50,13 @@ test('a search typed into the box lands in the address and the wall stays hung',
 });
 
 test('a piece page names the artwork it shows', async ({page}) => {
-  await page.goto(`gallery/27992?tab=aic`);
+  await page.goto('gallery/27992?tab=aic');
 
   await expect(page.getByRole('banner')).toContainText('La Grande Jatte', {timeout: 30_000});
 });
 
 test('the users page opens with somewhere to add a person and the people already there', async ({page}) => {
-  await page.goto(`users`);
+  await page.goto('users');
 
   await expect(page.getByLabel('First Name')).toBeVisible({timeout: 15_000});
   await expect(page.getByRole('table')).toBeVisible();

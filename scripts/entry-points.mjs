@@ -1,4 +1,4 @@
-export const staticRoutesOf = (pathsSource) =>
+export const staticRoutesOf = pathsSource =>
   [...pathsSource.matchAll(/= '(\/[^':]+)'/g)].map(([, route]) => route);
 
 export const baseOf = shell => {

@@ -1,13 +1,13 @@
 import type {FrameLocator, Locator, Page} from '@playwright/test';
 
-export type Stage = {name: string, at: string, table: (page: Page) => Locator | FrameLocator};
+export type Stage = {name: string; at: string; table: (page: Page) => Locator | FrameLocator};
 
 export const stages: readonly Stage[] = [
   {name: 'react', at: '/ChosenPicachu/demos/?tab=tables&world=react', table: page => page.getByRole('region', {name: 'live aggregations'})},
   {name: 'vanilla', at: '/ChosenPicachu/demos/?tab=tables&world=vanilla', table: page => page.frameLocator('iframe[title="the living table, in vanilla"]')}
 ];
 
-type Box = {x: number, y: number, width: number, height: number};
+type Box = {x: number; y: number; width: number; height: number};
 
 const boxOf = async (locator: Locator): Promise<Box> => {
   const box = await locator.boundingBox();

@@ -47,8 +47,8 @@ export const ownedPixels = (world: World): ReactNode =>
     normal table; every visible change (the cursors, the hiding, every slide) is a CSS
     rule a class switches on; JavaScript only decides what the state is,
     and {world === 'react'
-      ? 'React affords nothing the DOM does not give you'
-      : 'no framework stands anywhere in the frame'}: the node moves
+    ? 'React affords nothing the DOM does not give you'
+    : 'no framework stands anywhere in the frame'}: the node moves
     are <Mdn path="Web/API/Node/insertBefore">insertBefore</Mdn>, the handlers are
     events, the state is a value. Each code block below is labeled with which of the
     three languages is doing the work.</Tell>;

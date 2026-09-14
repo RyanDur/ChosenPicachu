@@ -13,7 +13,7 @@ import {heldAICAllArtResponse, setupAICAllArtResponse, wallHangs} from '@compone
 describe('The gallery.', () => {
   test('loads the wall exactly once on mount', async () => {
     let hits = 0;
-    const count = ({request}: { request: Request }) => {
+    const count = ({request}: {request: Request}) => {
       if (request.url.startsWith(`${env.aicDomain}/search`)) hits++;
     };
     server.events.on('response:mocked', count);

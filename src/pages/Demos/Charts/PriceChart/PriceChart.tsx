@@ -54,45 +54,45 @@ export const PriceChart: FC<Props> = ({trades, id = 'price', actions}) => {
   const line = points.map(point => `${point.x},${point.y}`).join(' ');
   const trend = showing && trendOf(view);
   return <section aria-label="live trades"
-                  className={classNames('price-chart chart card rounded-corners lifted padded', trend)}>
+    className={classNames('price-chart chart card rounded-corners lifted padded', trend)}>
     <header className="chart-header">
       {actions}
       <button type="button" className="menu-toggle rounded-corners period-toggle field caption"
-              popoverTarget={`${id}-period`}>
+        popoverTarget={`${id}-period`}>
         <span className="off-screen">price period</span>{' '}{period}
       </button>
       <menu id={`${id}-period`} tabIndex={-1} popover="auto" className="menu card rounded-corners lifted"
-            aria-label="price period by">
+        aria-label="price period by">
         {Object.values(Period).map(option =>
           <li className="entry" key={option}>
             <button type="button" className="item sub-title"
-                    popoverTarget={`${id}-period`} popoverTargetAction="hide"
-                    aria-current={option === period ? 'true' : undefined}
-                    onClick={() => setPeriod(option)}>{option}</button>
+              popoverTarget={`${id}-period`} popoverTargetAction="hide"
+              aria-current={option === period ? 'true' : undefined}
+              onClick={() => setPeriod(option)}>{option}</button>
           </li>
         )}
       </menu>
     </header>
     <figure className="chart-stage">
       <Axes high={view.high} low={view.low} times={view.series.map(timed => timed.at)}
-            pattern={timePattern[period]} tickEvery={tickEveryMs[period]}
-            headroomMs={2 * bucketMs[period]}>
+        pattern={timePattern[period]} tickEvery={tickEveryMs[period]}
+        headroomMs={2 * bucketMs[period]}>
         <svg className="sparkline" aria-hidden="true"
-             viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
-             preserveAspectRatio="none">
+          viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
+          preserveAspectRatio="none">
           {notEmpty(points) && <line className="baseline"
-                                     x1={0} y1={points[0].y}
-                                     x2={CHART_WIDTH} y2={points[0].y}/>}
+            x1={0} y1={points[0].y}
+            x2={CHART_WIDTH} y2={points[0].y}/>}
           <polyline className="trend" points={line} fill="none" vectorEffect="non-scaling-stroke"/>
           {notEmpty(points) && <circle className="marker"
-                                       cx={points[points.length - 1].x}
-                                       cy={points[points.length - 1].y}
-                                       r={3}/>}
+            cx={points[points.length - 1].x}
+            cy={points[points.length - 1].y}
+            r={3}/>}
         </svg>
       </Axes>
       {showing && <p className="headline">
-          <data className="price" value={view.last}>{cents.format(view.last)}</data>
-          <data className="delta" value={view.last - view.first}>{deltaLabel(view.first, view.last)}</data>
+        <data className="price" value={view.last}>{cents.format(view.last)}</data>
+        <data className="delta" value={view.last - view.first}>{deltaLabel(view.first, view.last)}</data>
       </p>}
       {history.state === 'loading' && <Loading className="chart-loading"/>}
       <figcaption className="chart-caption caption">{captionFor(history, candles.length, period)}</figcaption>

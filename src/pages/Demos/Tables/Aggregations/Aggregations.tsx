@@ -36,11 +36,11 @@ export const Aggregations: FC<Props> = ({pace, origin, motion, world}) => {
   return <section aria-label="live aggregations" className="aggregations">
     {vanilla &&
       <TableFrame pace={pace} origin={origin} motion={motion}
-                  veiled={!stood} onStand={() => setStood(true)}/>}
+        veiled={!stood} onStand={() => setStood(true)}/>}
     {(!vanilla || !stood) && <Table className={classNames(origin, motion)} columns={columns} rows={rows}
-                                     onColumnMoved={({column, to}) => dispatch(columnMoved(column, to))}
-                                     onSorted={({column, direction}) => dispatch(sorted(column, direction))}
-                                     onRowMoved={({row, to, standing}) => dispatch(rowMoved(row, to, standing))}/>}
+      onColumnMoved={({column, to}) => dispatch(columnMoved(column, to))}
+      onSorted={({column, direction}) => dispatch(sorted(column, direction))}
+      onRowMoved={({row, to, standing}) => dispatch(rowMoved(row, to, standing))}/>}
     <details className="explainer">
       <summary className="prompt">what am I looking at?</summary>
       <p className="explanation">

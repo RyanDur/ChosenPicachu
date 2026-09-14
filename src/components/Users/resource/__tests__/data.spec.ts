@@ -14,20 +14,20 @@ describe('users data', () => {
   });
 
   const someone: NewUser = {
-      info: {
-        firstName: faker.lorem.word(),
-        lastName: faker.lorem.word(),
-        email: faker.internet.email()
-      },
-      avatar: faker.image.avatar(),
-      friends: [],
-      homeAddress: {
-        streetAddress: faker.location.streetAddress(),
-        city: faker.location.city(),
-        state: faker.location.state(),
-        zip: faker.location.zipCode()
-      }
-    };
+    info: {
+      firstName: faker.lorem.word(),
+      lastName: faker.lorem.word(),
+      email: faker.internet.email()
+    },
+    avatar: faker.image.avatar(),
+    friends: [],
+    homeAddress: {
+      streetAddress: faker.location.streetAddress(),
+      city: faker.location.city(),
+      state: faker.location.state(),
+      zip: faker.location.zipCode()
+    }
+  };
 
   test('an added user joins the list with an id of their own', async () => {
     const api: UsersAPI = usersApi(allUsers);
@@ -126,7 +126,7 @@ describe('users data', () => {
       expect(friendsOf(users, c.id)).toEqual([b.id]);
     });
 
- });
+  });
 
   describe('deleting a user', () => {
     it('removes the user', async () => {

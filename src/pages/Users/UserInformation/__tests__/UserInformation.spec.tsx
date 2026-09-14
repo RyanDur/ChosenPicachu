@@ -7,8 +7,7 @@ import userEvent from '@testing-library/user-event';
 import {addressGroup, fillOutForm} from '../__test_support';
 import {AddressInfo, NewUser} from '@components/Users/UserInfo/user';
 
-
-const added = (): { form: ReactNode; adds: () => readonly unknown[] } => {
+const added = (): {form: ReactNode; adds: () => readonly unknown[]} => {
   const heard: UsersAction[] = [];
   const hearing: UsersListener = (_previous, _current, _dispatch, action) => {
     heard.push(action);
@@ -27,7 +26,7 @@ const addButton = (): HTMLElement => screen.getByRole('button', {name: 'Add'});
 const sameAsHome = (): HTMLElement => screen.getByRole('checkbox', {name: 'Same as Home'});
 
 describe('a user form', () => {
-  const info: Pick<NewUser, 'info' | 'homeAddress'> & { work: AddressInfo; details: string } = {
+  const info: Pick<NewUser, 'info' | 'homeAddress'> & {work: AddressInfo; details: string} = {
     info: {
       firstName: 'Teruko',
       lastName: 'Okada',

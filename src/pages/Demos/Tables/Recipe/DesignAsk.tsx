@@ -24,5 +24,5 @@ const sketch = <>
 
 export const DesignAsk: FC = () =>
   <Design sketch={sketch}
-          answers="The design answers shape: which measures, which windows, how much precision, how dense."
-          unanswered={unanswered}/>;
+    answers="The design answers shape: which measures, which windows, how much precision, how dense."
+    unanswered={unanswered}/>;

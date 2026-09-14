@@ -38,33 +38,33 @@ export const ListTutorials: FC = () => {
     <ol className="spine" aria-label="the stations">
       <li className="station" id={stationId(1)}>
         <Clues quote="These priorities are mine, and the order is mine. When something belongs above something else, I want to pick it up and put it there, and see it stay where I dropped it."
-               by="a user"
-               clues={clues}
-               verdict="Items whose position is the meaning are a list, and an ordered list is the element built for it: entries a reader and a screen reader both walk, in exactly the order the markup says. Everything after this point is layered onto that one choice."/>
+          by="a user"
+          clues={clues}
+          verdict="Items whose position is the meaning are a list, and an ordered list is the element built for it: entries a reader and a screen reader both walk, in exactly the order the markup says. Everything after this point is layered onto that one choice."/>
       </li>
       <li className="station" id={stationId(2)}>
         <Design sketch={sketch}
-                answers="The design answers shape: how a card reads, where the hand grabs, how dense the stack."
-                unanswered={unanswered}/>
+          answers="The design answers shape: how a card reads, where the hand grabs, how dense the stack."
+          unanswered={unanswered}/>
       </li>
       <li className="station" id={stationId(3)}>
         <Slices who="user"
-                can="The user can keep the list in the order they mean"
-                soThat="so that what belongs above sits above"
-                slices="It slices thin: the same reorder, twice. Once by pointer, on the platform’s own drag-and-drop, and once by keyboard, moving the order directly. Both are cards in the last station, and each opens into its build."
-                sliced={[
-                  ['The user can arrange the list by hand', 4],
-                  ['The user can arrange the list from the keyboard', 4]
-                ]}/>
+          can="The user can keep the list in the order they mean"
+          soThat="so that what belongs above sits above"
+          slices="It slices thin: the same reorder, twice. Once by pointer, on the platform’s own drag-and-drop, and once by keyboard, moving the order directly. Both are cards in the last station, and each opens into its build."
+          sliced={[
+            ['The user can arrange the list by hand', 4],
+            ['The user can arrange the list from the keyboard', 4]
+          ]}/>
         <Exercise/>
       </li>
       <li className="station" id={stationId(4)}>
         <h3 className="phase-title">Layer on functionality, in the order it was asked for</h3>
         <DialNote reads="list"/>
         <ListControls pace={pace} origin={origin} motion={motion}
-                      onPace={next => updateSearchParams({pace: next})}
-                      onOrigin={next => updateSearchParams({origin: next})}
-                      onMotion={next => updateSearchParams({motion: next})}/>
+          onPace={next => updateSearchParams({pace: next})}
+          onOrigin={next => updateSearchParams({origin: next})}
+          onMotion={next => updateSearchParams({motion: next})}/>
         <NativeRecipe/>
       </li>
     </ol>

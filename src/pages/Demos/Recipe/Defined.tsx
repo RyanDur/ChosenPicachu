@@ -26,21 +26,21 @@ export const Defined: FC<PropsWithChildren<{term: string; definition: ReactNode}
   const [intent, setIntent] = useState<number>();
   return <>
     <button type="button"
-            className="term"
-            popoverTarget={id}
-            style={{'--term-anchor': anchor}}
-            onMouseEnter={() => setIntent(window.setTimeout(() => revealed(id), 120))}
-            onMouseLeave={() => {
-              window.clearTimeout(intent);
-              concealed(id);
-            }}
-            onFocus={() => revealed(id)}
-            onBlur={() => concealed(id)}>{children}</button>
+      className="term"
+      popoverTarget={id}
+      style={{'--term-anchor': anchor}}
+      onMouseEnter={() => setIntent(window.setTimeout(() => revealed(id), 120))}
+      onMouseLeave={() => {
+        window.clearTimeout(intent);
+        concealed(id);
+      }}
+      onFocus={() => revealed(id)}
+      onBlur={() => concealed(id)}>{children}</button>
     <span id={id}
-          role="definition"
-          aria-label={term}
-          popover="auto"
-          className="term-definition card rounded-corners lifted"
-          style={{'--term-anchor': anchor}}>{definition}</span>
+      role="definition"
+      aria-label={term}
+      popover="auto"
+      className="term-definition card rounded-corners lifted"
+      style={{'--term-anchor': anchor}}>{definition}</span>
   </>;
 };

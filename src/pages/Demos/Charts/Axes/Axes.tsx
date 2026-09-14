@@ -47,9 +47,9 @@ export const Axes: FC<Props> = ({
     <div className="chart-area">{children}</div>
     {populated && <p className="x-labels">{placed(times, chosenTicks(times, tickEvery), headroomMs).map(tick =>
       <time key={tick.at}
-            className="tick"
-            dateTime={new Date(tick.at).toISOString()}
-            style={{'--along': `${tick.along}%`}}>{format(tick.at, pattern)}</time>
+        className="tick"
+        dateTime={new Date(tick.at).toISOString()}
+        style={{'--along': `${tick.along}%`}}>{format(tick.at, pattern)}</time>
     )}</p>}
   </div>;
 };

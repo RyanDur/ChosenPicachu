@@ -11,11 +11,11 @@ export const Column: FC<ComponentProps<'th'> & {column: string}> = ({column, cla
   const width = useTableSelector(widthOfColumn(column));
 
   return <th {...th}
-             className={classNames(className, has(width) && 'shared')}
-             scope="col"
-             aria-label={data.label}
-             aria-sort={sorted}
-             style={{'--share': shareWidth(width)}}>
+    className={classNames(className, has(width) && 'shared')}
+    scope="col"
+    aria-label={data.label}
+    aria-sort={sorted}
+    style={{'--share': shareWidth(width)}}>
     {children}
   </th>;
 };

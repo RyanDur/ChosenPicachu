@@ -2,7 +2,7 @@ import {maybe} from '@ryandur/sand';
 import * as schema from 'schemawax';
 import {screen} from '@testing-library/react';
 
-export type Landing = {where: 'page' | 'main' | 'elsewhere', x: number, y: number};
+export type Landing = {where: 'page' | 'main' | 'elsewhere'; x: number; y: number};
 
 export const atTheTop = (where: Landing['where']): Landing => ({where, x: 0, y: 0});
 

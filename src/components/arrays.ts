@@ -41,10 +41,10 @@ const addToGrid = <T>(
   if (empty(currentRow)) {
     return insertAt(safeRow, [item], grid);
   }
-    const newGrid = removeFrom(grid, currentRow);
-    const newRow = insertAt(column, item, currentRow);
-    return insertAt(safeRow, newRow, newGrid);
-  
+  const newGrid = removeFrom(grid, currentRow);
+  const newRow = insertAt(column, item, currentRow);
+  return insertAt(safeRow, newRow, newGrid);
+
 };
 
 const moveToRowColumn = <T>(

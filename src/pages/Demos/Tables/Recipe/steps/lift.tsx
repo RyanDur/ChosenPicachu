@@ -22,18 +22,18 @@ export const liftOnce = (world: World, headerSource: string, buildSrc: string): 
           is <Term word="aloft">carried</Term>, a key that a table with no carry never
           has. One word in the code comes from a small library
           called <a className="signpost"
-            href="https://ryandur.github.io/sand/"
-            target="_blank"
-            rel="noreferrer">sand</a>: has, its null check, false for nothing and for
+          href="https://ryandur.github.io/sand/"
+          target="_blank"
+          rel="noreferrer">sand</a>: has, its null check, false for nothing and for
           empty.</Says>
         : <Says>The hand is CSS before anything happens, grab on hover, grabbing on press, and
           touch-action: none is why the pointer can drag on touch at all. On pointerdown,
           JavaScript takes the survey and the pointer, and one dispatch puts the drag in the
           store beside the columns and the seats, the one mark of what is carried. One word in the code
           comes from a small library called <a className="signpost"
-            href="https://ryandur.github.io/sand/"
-            target="_blank"
-            rel="noreferrer">sand</a>: has, its null check, false for nothing and for
+          href="https://ryandur.github.io/sand/"
+          target="_blank"
+          rel="noreferrer">sand</a>: has, its null check, false for nothing and for
           empty.</Says>}
       <Codes>
         {world === 'react'

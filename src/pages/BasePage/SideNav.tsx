@@ -16,13 +16,13 @@ export const SideNav: FC = () =>
       <AboutNav/>
       <Link id="navigate-users" className="path attentive field" to={Paths.users}>Users</Link>
       <Link id="navigate-form" className="path attentive field"
-            to={`${Paths.artGallery}${toQueryString({
-              page: 1,
-              size: defaultRecordLimit,
-              tab: Source.AIC
-            })}`}>Gallery</Link>
+        to={`${Paths.artGallery}${toQueryString({
+          page: 1,
+          size: defaultRecordLimit,
+          tab: Source.AIC
+        })}`}>Gallery</Link>
       <Link id="navigate-games" className="path attentive field" to={Paths.games}>Games</Link>
       <a id="navigate-repo" className="path attentive field" href={Paths.repo}
-         rel="noopener noreferrer" target="_blank">Repo</a>
+        rel="noopener noreferrer" target="_blank">Repo</a>
     </nav>
   </aside>;

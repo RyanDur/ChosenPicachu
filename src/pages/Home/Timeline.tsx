@@ -25,7 +25,7 @@ export const Timeline: FC = () =>
       </blockquote>
       <figcaption className="attribution">Tim Berners-Lee and Robert Cailliau,{' '}
         <a className="signpost" href="https://www.w3.org/History/19921103-hypertext/hypertext/WWW/Proposal.html">proposing
-        the WorldWideWeb, 1990</a></figcaption>
+          the WorldWideWeb, 1990</a></figcaption>
     </figure>
     <p className="lede paragraph">
       Someone needed something: researchers, scattered across institutes, losing each other’s

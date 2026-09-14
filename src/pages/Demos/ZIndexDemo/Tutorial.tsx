@@ -37,10 +37,10 @@ export const TopLayerTutorial: FC = () => {
       <figcaption className="attribution">a user</figcaption>
     </figure>
     <BannerControls side={side} align={align} enter={enter} stack={stack}
-                    onSide={next => updateSearchParams({side: next})}
-                    onAlign={next => updateSearchParams({align: next})}
-                    onEnter={next => updateSearchParams({enter: next})}
-                    onStack={next => updateSearchParams({stack: next})}/>
+      onSide={next => updateSearchParams({side: next})}
+      onAlign={next => updateSearchParams({align: next})}
+      onEnter={next => updateSearchParams({enter: next})}
+      onStack={next => updateSearchParams({stack: next})}/>
     <section aria-label="build the banners yourself" className="build-steps">
       <Stories>
         <TopLayerRecipe/>

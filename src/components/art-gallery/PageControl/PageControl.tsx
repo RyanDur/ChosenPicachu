@@ -32,18 +32,18 @@ export const PageControl = () => {
   return <form onSubmit={onSubmit} id="page-control" className="page-control backdrop">
     <label id="go-to-label" className="go-to-label control-label field" htmlFor="go-to">Page #{page}</label>
     <input type="number"
-           id="go-to"
-           min={firstPage}
-           max={lastPage}
-           className="go-to control borderless"
-           onChange={event => updatePageNumber(typed(event.currentTarget.value))}/>
+      id="go-to"
+      min={firstPage}
+      max={lastPage}
+      className="go-to control borderless"
+      onChange={event => updatePageNumber(typed(event.currentTarget.value))}/>
     <label id="per-page-label" className="per-page-label control-label field" htmlFor="per-page">{size} Per Page</label>
     <input type="number"
-           className="per-page control borderless"
-           min={1}
-           max={100}
-           id="per-page"
-           onChange={event => updatePageSize(typed(event.currentTarget.value))}/>
+      className="per-page control borderless"
+      min={1}
+      max={100}
+      id="per-page"
+      onChange={event => updatePageSize(typed(event.currentTarget.value))}/>
     <button type="submit" id="submit-page-number" className="submit-page control borderless field bold attentive">Go
     </button>
   </form>;

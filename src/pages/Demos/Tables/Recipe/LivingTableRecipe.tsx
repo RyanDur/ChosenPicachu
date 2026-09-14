@@ -53,8 +53,8 @@ const dealCodes: Record<World, ReactNode> = {
       ...unit(widthsSource, '.aggregations {')
     ]}/>
     <Snippet label="HTML" lines={[
-      ...span(headerSource, "return <th {...th}", 'scope="col"'), gap,
-      ...span(cellSource, "return <td {...td}", '</td>;')
+      ...span(headerSource, 'return <th {...th}', 'scope="col"'), gap,
+      ...span(cellSource, 'return <td {...td}', '</td>;')
     ]}/>
   </Codes>,
   vanilla: <Codes>
@@ -108,8 +108,8 @@ const refolds: Record<World, string> = {
 
 const stillStory = (world: World) =>
   <Story param="living" id="still" steps={1}
-         can="The trader can read the market in a table"
-         soThat="the shape is right before anything moves">
+    can="The trader can read the market in a table"
+    soThat="the shape is right before anything moves">
     {theImplementation(world, 'Aggregations', 'Frame/frame.main.ts')}
     <Tell>The shape comes from the design, in the element the story chose: a few measures
       across a few time windows, numbers on two axes; that is what a table is for. It stands
@@ -145,8 +145,8 @@ const stillStory = (world: World) =>
 
 const flowStory = (world: World) =>
   <Story param="living" id="flow" steps={3}
-         can="The trader can watch the market live, in windows"
-         soThat="the numbers stay current without a single refresh">
+    can="The trader can watch the market live, in windows"
+    soThat="the numbers stay current without a single refresh">
     <Tell>The still becomes a stream. The trader arrives mid-session, so the page starts with
       one plain fetch of the recent history. And the numbers have to keep themselves current:
       polling is always a little late and mostly wasted requests. The exchange offers a stream,

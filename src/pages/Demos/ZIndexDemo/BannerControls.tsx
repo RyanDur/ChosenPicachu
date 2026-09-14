@@ -51,55 +51,55 @@ export const BannerControls: FC<BannerControlsProps> = ({side, align, enter, sta
     <article className="control">
       <span className="axis caption uppercase">side</span>
       <PillGlider label="side"
-                  name="banner-side"
-                  options={[
-                    {display: 'Top', value: 'top'},
-                    {display: 'Middle', value: 'middle'},
-                    {display: 'Bottom', value: 'bottom'}
-                  ]}
-                  chosen={side}
-                  onChosen={onSide}/>
+        name="banner-side"
+        options={[
+          {display: 'Top', value: 'top'},
+          {display: 'Middle', value: 'middle'},
+          {display: 'Bottom', value: 'bottom'}
+        ]}
+        chosen={side}
+        onChosen={onSide}/>
       <p className="reading paragraph">{copy.side[side]}</p>
     </article>
     <article className="control">
       <span className="axis caption uppercase">align</span>
       <PillGlider label="align"
-                  name="banner-align"
-                  options={[
-                    {display: 'Left', value: 'left'},
-                    {display: 'Center', value: 'center'},
-                    {display: 'Right', value: 'right'}
-                  ]}
-                  chosen={align}
-                  onChosen={onAlign}/>
+        name="banner-align"
+        options={[
+          {display: 'Left', value: 'left'},
+          {display: 'Center', value: 'center'},
+          {display: 'Right', value: 'right'}
+        ]}
+        chosen={align}
+        onChosen={onAlign}/>
       <p className="reading paragraph">{copy.align[align]}</p>
     </article>
     <article className="control">
       <span className="axis caption uppercase">entrance</span>
       <PillGlider label="entrance"
-                  name="banner-entrance"
-                  options={[
-                    {display: 'Above', value: 'above'},
-                    {display: 'Below', value: 'below'},
-                    {display: 'Left', value: 'left'},
-                    {display: 'Right', value: 'right'}
-                  ]}
-                  chosen={enter}
-                  onChosen={onEnter}/>
+        name="banner-entrance"
+        options={[
+          {display: 'Above', value: 'above'},
+          {display: 'Below', value: 'below'},
+          {display: 'Left', value: 'left'},
+          {display: 'Right', value: 'right'}
+        ]}
+        chosen={enter}
+        onChosen={onEnter}/>
       <p className="reading paragraph">{copy.enter[enter]}</p>
     </article>
     <article className="control">
       <span className="axis caption uppercase">stack</span>
       <PillGlider label="stack"
-                  name="banner-stack"
-                  options={[
-                    {display: 'Down', value: 'down'},
-                    {display: 'Up', value: 'up'},
-                    {display: 'Left', value: 'left'},
-                    {display: 'Right', value: 'right'}
-                  ]}
-                  chosen={stack}
-                  onChosen={onStack}/>
+        name="banner-stack"
+        options={[
+          {display: 'Down', value: 'down'},
+          {display: 'Up', value: 'up'},
+          {display: 'Left', value: 'left'},
+          {display: 'Right', value: 'right'}
+        ]}
+        chosen={stack}
+        onChosen={onStack}/>
       <p className="reading paragraph">{copy.stack[stack]}</p>
     </article>
     <p className="readout caption">

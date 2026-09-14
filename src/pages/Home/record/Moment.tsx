@@ -1,6 +1,6 @@
 import {FC, PropsWithChildren, ReactNode} from 'react';
 
-export const Moment: FC<PropsWithChildren<{year: string, title: string, tells: ReactNode}>> = ({year, title, tells, children}) =>
+export const Moment: FC<PropsWithChildren<{year: string; title: string; tells: ReactNode}>> = ({year, title, tells, children}) =>
   <li className="moment">
     <time dateTime={year} className="year caption">{year}</time>
     <h3 className="beat-title">{title}</h3>

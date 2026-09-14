@@ -24,7 +24,7 @@ export type UsersAPI = {
   add: (user: NewUser) => Result.Async<User[], HTTPError>;
   update: (user: User) => Result.Async<User[], HTTPError>;
   delete: (user: User) => Result.Async<User[], HTTPError>;
-}
+};
 
 const randomNumberFromRange = (min: number, max = 6) => randNumber({min, max: min + max - 1});
 const generator = new AvatarGenerator();

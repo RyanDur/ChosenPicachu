@@ -60,8 +60,8 @@ const sortedDirectly = ({world, menuSrc, buildSrc}: Build) =>
 const rankStory = (build: Build) => {
   const {world, source, menuSrc, tableSrc, rowSrc, buildSrc} = build;
   return <Story param="menu" id="rank" steps={7}
-                can="The trader can sort the windows by any measure, or take the order back"
-                soThat="the table ranks itself, and the hand still outranks it">
+    can="The trader can sort the windows by any measure, or take the order back"
+    soThat="the table ranks itself, and the hand still outranks it">
     {theImplementation(world, 'Builds', 'Frame/table/menus.ts')}
     <Tell>We could build the popup from divs, but then we owe focus, dismissal, and
       stacking, and choosing starts to feel like fighting the menu instead of using it;
@@ -115,14 +115,14 @@ const rankStory = (build: Build) => {
         <Words want="The menu must land by its own button, not centered in the page, and nothing should measure to put it there.">
           <Says>A popover opened by its invoker is anchored to that invoker
             automatically, so <Mdn path="Web/CSS/CSS_anchor_positioning">anchor
-            positioning</Mdn> can place it:
+              positioning</Mdn> can place it:
             no <Mdn path="Web/CSS/anchor-name">anchor-name</Mdn>, no measurement, no
             JavaScript.</Says>
         </Words>
         <Reveal>
           <Says>Read the new syntax as a compass around the anchor. Picture your toggle as the
             middle cell of a three-by-three grid drawn over the page:
-            <Mdn path="Web/CSS/position-area"> position-area</Mdn> picks cells.
+          <Mdn path="Web/CSS/position-area"> position-area</Mdn> picks cells.
             block-end takes the row below the toggle; span-inline-start starts from the toggle’s
             own column and spreads toward the line’s start: under the toggle, hanging left, in
             this writing mode. <Mdn path="Web/CSS/position-try-fallbacks">position-try-fallbacks</Mdn>:
@@ -179,7 +179,7 @@ const rankStory = (build: Build) => {
                 ...unit(frameMenus, 'export const announce = ')
               ]}/>}
             <Snippet label="CSS" lines={[
-              ...unit(headerCss, ".sortable .header-cell > .menu-toggle::before {"), gap,
+              ...unit(headerCss, '.sortable .header-cell > .menu-toggle::before {'), gap,
               ...unit(headerCss, ".sortable [aria-sort='ascending'] > .menu-toggle::before {"), gap,
               ...unit(headerCss, ".sortable [aria-sort='descending'] > .menu-toggle::before {"),
               aside('/* the glyph is CSS reading the one attribute; no world writes it */')

@@ -47,7 +47,7 @@ const ledgerCodes: Record<World, ReactNode> = {
 
 const edgeMarkup: Record<World, ReactNode> = {
   react: <Snippet label="HTML" lines={[
-    ...span(buildSource, "return <th {...th}", '{children}')
+    ...span(buildSource, 'return <th {...th}', '{children}')
   ]}/>,
   vanilla: <Snippet label="HTML" lines={[
     ...span(tableSource, '<th scope="col" class="cell trades header-cell"', 'aria-label="sort trades"></button>'), gap,
@@ -144,8 +144,8 @@ const gestureCodes: Record<World, ReactNode> = {
 
 const widenStory = (world: World) =>
   <Story param="resize" id="widen" steps={6}
-         can="The trader can widen a column"
-         soThat="what they read most gets the room, and the table keeps its shape">
+    can="The trader can widen a column"
+    soThat="what they read most gets the room, and the table keeps its shape">
     {theImplementation(world, 'Builds', 'Frame/table/resize.ts')}
     <Tell>We could resize with absolute pixel widths, but one drag would break the
       table’s promise to fill its container; so widths are shares of a hundred, born by
@@ -192,7 +192,7 @@ const widenStory = (world: World) =>
             two numbers that must agree, so both live in the one header sheet and nowhere else.
             The column names itself with aria-label, since the title is bare text with no element
             to point at.</Says>
-            {edgeMarkup[world]}
+          {edgeMarkup[world]}
         </Reveal>
       </Step>
       <Step title="A handle that is a button">

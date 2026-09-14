@@ -15,7 +15,7 @@ export const ArtPiece = () => {
   const {easel, asked, answered, refused, abandoned} = useArtPiece();
   const {raise} = useBanners();
   const {tab} = useSearchParamsObject({tab: sourceParam});
-  const {id} = useParams<{ id: string }>();
+  const {id} = useParams<{id: string}>();
 
   useEffect(() => {
     if (!id) return abandoned;
@@ -35,8 +35,8 @@ export const ArtPiece = () => {
   return <>
     {easel.reply === 'asked' && <Loading label="loading piece"/>}
     {easel.reply === 'answered' && <figure className="art-work">
-        <Image piece={easel.answer} linkEnabled={false} className="piece hung"/>
-        <figcaption className="artist-display trim hairline-outline italic">{easel.answer.artistInfo}</figcaption>
+      <Image piece={easel.answer} linkEnabled={false} className="piece hung"/>
+      <figcaption className="artist-display trim hairline-outline italic">{easel.answer.artistInfo}</figcaption>
     </figure>}
     {easel.reply === 'refused' && <img className="stand-in" src={noImage} alt="the museum refused to answer"/>}
   </>;

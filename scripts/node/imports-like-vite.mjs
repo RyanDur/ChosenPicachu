@@ -3,9 +3,9 @@ import {existsSync, statSync} from 'node:fs';
 import {extname, join} from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
 
-const isDirectory = (path) => existsSync(path) && statSync(path).isDirectory();
+const isDirectory = path => existsSync(path) && statSync(path).isDirectory();
 
-const fileFor = (path) => {
+const fileFor = path => {
   if (isDirectory(path)) return join(path, 'index.ts');
   if (extname(path) === '' && existsSync(`${path}.ts`)) return `${path}.ts`;
   return path;

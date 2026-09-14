@@ -33,7 +33,6 @@ export const seated = (rows: readonly Measures[]): readonly Seated[] =>
     values: Object.fromEntries(measureNames.map(name => [name, row[name].value]))
   }));
 
-
 export const cells = (aggregate: WindowAggregate): Measures => ({
   window: {display: aggregate.window},
   trades: {display: String(aggregate.trades), value: aggregate.trades},

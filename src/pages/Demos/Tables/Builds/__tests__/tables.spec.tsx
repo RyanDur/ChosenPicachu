@@ -42,9 +42,9 @@ const Page: FC<{Table: Table; rows: readonly Measures[]; dials: string}> = ({Tab
   const standing = standingOf(arranged, valueOf).flatMap(key => rows.filter(row => windowOf(row) === key));
 
   return <Table className={dials} columns={columns} rows={standing}
-                onColumnMoved={({column, to}) => dispatch(columnMoved(column, to))}
-                onSorted={({column, direction}) => dispatch(sorted(column, direction))}
-                onRowMoved={({row, to, standing: shownStanding}) => dispatch(rowMoved(row, to, shownStanding))}/>;
+    onColumnMoved={({column, to}) => dispatch(columnMoved(column, to))}
+    onSorted={({column, direction}) => dispatch(sorted(column, direction))}
+    onRowMoved={({row, to, standing: shownStanding}) => dispatch(rowMoved(row, to, shownStanding))}/>;
 };
 
 const seated = (Table: Table, rows: readonly Measures[], dials = 'hide animated') => <Page Table={Table} rows={rows} dials={dials}/>;

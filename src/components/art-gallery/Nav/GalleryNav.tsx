@@ -8,13 +8,13 @@ import './GalleryNav.css';
 
 type Props = {
   id?: string;
-}
+};
 
 export const GalleryNav: FC<Props> = ({id}) => {
   const {pagination} = useGallery();
   const {
     page, size,
-    createSearchParams,
+    createSearchParams
   } = useSearchParamsObject({page: numberParam, size: numberParam}, {page: 1});
   const location = useLocation();
   const path = location.pathname;
@@ -34,14 +34,14 @@ export const GalleryNav: FC<Props> = ({id}) => {
 
   return <nav className="pagination backdrop" aria-label="pagination" id={id}>
     {hasPrevPage && <>
-        <Link to={`${path}${createSearchParams({page: firstPage})}`} onClick={gotoTopOfPage}
-              className="page first field attentive bold">
-            FIRST
-        </Link>
-        <Link to={`${path}${createSearchParams({page: prevPage})}`} onClick={gotoTopOfPage}
-              className="page prev field attentive bold">
-            PREV
-        </Link>
+      <Link to={`${path}${createSearchParams({page: firstPage})}`} onClick={gotoTopOfPage}
+        className="page first field attentive bold">
+        FIRST
+      </Link>
+      <Link to={`${path}${createSearchParams({page: prevPage})}`} onClick={gotoTopOfPage}
+        className="page prev field attentive bold">
+        PREV
+      </Link>
     </>}
     <output className="info field">
       <span>{firstRecord} - {lastRecord}</span>
@@ -49,14 +49,14 @@ export const GalleryNav: FC<Props> = ({id}) => {
       <span>{totalRecords || '—'}</span>
     </output>
     {hasNextPage && <>
-        <Link to={`${path}${createSearchParams({page: nextPage})}`} onClick={gotoTopOfPage}
-              className="page next field attentive bold">
-            NEXT
-        </Link>
-        <Link to={`${path}${createSearchParams({page: lastPage})}`} onClick={gotoTopOfPage}
-              className="page last field attentive bold">
-            LAST
-        </Link>
+      <Link to={`${path}${createSearchParams({page: nextPage})}`} onClick={gotoTopOfPage}
+        className="page next field attentive bold">
+        NEXT
+      </Link>
+      <Link to={`${path}${createSearchParams({page: lastPage})}`} onClick={gotoTopOfPage}
+        className="page last field attentive bold">
+        LAST
+      </Link>
     </>}
   </nav>;
 };

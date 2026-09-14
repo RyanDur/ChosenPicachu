@@ -48,33 +48,33 @@ export const Workspace: FC<Props> = ({product}) => {
       <output className={classNames('status', status)} aria-label="feed">{statusCopy[status]}</output>
       {absentKinds.length > 0 &&
           <>
-              <button type="button" className="menu-toggle rounded-corners add-chart button secondary"
-                      popoverTarget="add-chart"
-                      aria-label="Add a chart">+
-              </button>
-              <menu id="add-chart" tabIndex={-1} popover="auto" className="menu card rounded-corners lifted"
-                    aria-label="charts to add">
-                {absentKinds.map(kind =>
-                  <li className="entry" key={kind}>
-                    <button type="button" className="item sub-title"
-                            popoverTarget="add-chart" popoverTargetAction="hide"
-                            onClick={() => add(kind)}>{chartNames[kind]}</button>
-                  </li>)}
-              </menu>
+            <button type="button" className="menu-toggle rounded-corners add-chart button secondary"
+              popoverTarget="add-chart"
+              aria-label="Add a chart">+
+            </button>
+            <menu id="add-chart" tabIndex={-1} popover="auto" className="menu card rounded-corners lifted"
+              aria-label="charts to add">
+              {absentKinds.map(kind =>
+                <li className="entry" key={kind}>
+                  <button type="button" className="item sub-title"
+                    popoverTarget="add-chart" popoverTargetAction="hide"
+                    onClick={() => add(kind)}>{chartNames[kind]}</button>
+                </li>)}
+            </menu>
           </>}
     </header>
     <ul className="chart-list">{chartKinds.map((kind, at) => {
       const actions = plural ? <Dismissal onRemove={() => remove(at)}/> : undefined;
       return <li key={at}
-                 className={dress(at)}
-                 onAnimationEnd={settled}
-                 draggable={isArmed(at)}
-                 onDragStart={lift(at)}
-                 onDragOver={travel}
-                 onDrop={event => event.preventDefault()}
-                 onDragEnd={release}>
+        className={dress(at)}
+        onAnimationEnd={settled}
+        draggable={isArmed(at)}
+        onDragStart={lift(at)}
+        onDragOver={travel}
+        onDrop={event => event.preventDefault()}
+        onDragEnd={release}>
         <Link className="doorway" to={doorways[kind]}
-              aria-label={`chart ${at + 1}`} onKeyDown={keys(at)}/>
+          aria-label={`chart ${at + 1}`} onKeyDown={keys(at)}/>
         {plural && <Grip onArm={() => arm(at)}/>}
         {matchChartKind(kind, {
           price: () => <PriceChart id={`chart-${at}`} trades={trades} actions={actions}/>,

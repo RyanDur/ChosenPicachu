@@ -10,5 +10,5 @@ export enum Paths {
   pieChartTutorial = '/demos/charts/pie/',
   chartTutorial = '/demos/charts/:kind/',
   games = '/games/',
-  repo = 'https://github.com/RyanDur/ChosenPicachu',
+  repo = 'https://github.com/RyanDur/ChosenPicachu'
 }

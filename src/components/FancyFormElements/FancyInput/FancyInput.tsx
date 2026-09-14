@@ -16,8 +16,8 @@ type FancyTextInputProps = {
   value?: string | Date;
   readOnly?: boolean;
   disabled?: boolean;
-    pattern?: string;
-}
+  pattern?: string;
+};
 
 export const FancyInput: FC<PropsWithChildren<FancyTextInputProps>> = (
   {
@@ -33,7 +33,7 @@ export const FancyInput: FC<PropsWithChildren<FancyTextInputProps>> = (
     required = false,
     readOnly = false,
     disabled = false,
-        pattern,
+    pattern,
     value = ''
   }
 ) => <label id={id} className={classNames(
@@ -42,14 +42,14 @@ export const FancyInput: FC<PropsWithChildren<FancyTextInputProps>> = (
   value && 'not-empty',
   className
 )}>
-    <span id={labelId} className={classNames('fancy-title', 'ellipsis', 'bold', labelClass)}>{children}</span>
-    <input id={inputId}
-           className={classNames('fancy-text', inputClass)}
-           pattern={pattern}
-           readOnly={readOnly}
-           disabled={disabled}
-           required={required}
-           value={value instanceof Date ? format(value, 'yyyy-MM-dd') : value}
-           type={type}
-           onChange={onChange}/>
+  <span id={labelId} className={classNames('fancy-title', 'ellipsis', 'bold', labelClass)}>{children}</span>
+  <input id={inputId}
+    className={classNames('fancy-text', inputClass)}
+    pattern={pattern}
+    readOnly={readOnly}
+    disabled={disabled}
+    required={required}
+    value={value instanceof Date ? format(value, 'yyyy-MM-dd') : value}
+    type={type}
+    onChange={onChange}/>
 </label>;

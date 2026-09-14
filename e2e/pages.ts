@@ -11,7 +11,6 @@ export type SitePage = {
   readonly budgeted?: true;
 };
 
-
 export const pages: readonly SitePage[] = [
   {name: 'home', path: '', ready: 'navigation', budgeted: true},
   {name: 'demos', path: 'demos/?tab=accordions', ready: 'navigation', budgeted: true},
