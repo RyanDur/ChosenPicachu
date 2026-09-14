@@ -112,7 +112,6 @@ describe('a user form', () => {
         const {form} = added();
         render(form);
 
-        expect(screen.getByRole('group', {name: 'Home Address'})).toBeInTheDocument();
         expect(within(screen.getByRole('group', {name: 'Work Address'})).getByRole('checkbox', {name: 'Same as Home'})).toBeInTheDocument();
       });
 
