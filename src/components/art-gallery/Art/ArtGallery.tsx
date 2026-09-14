@@ -1,23 +1,21 @@
-import {FC, useEffect, useState} from 'react';
+import {FC, useEffect} from 'react';
 import {numberParam, useSearchParamsObject} from '@components/search-params';
 import * as schema from 'schemawax';
 import {Loading} from '@components/Loading';
 import {Image} from '@components/art-gallery/Image';
 import {useGallery} from '@components/art-gallery/Art/Context';
-import {empty, has, is} from '@ryandur/sand';
+import {empty, has} from '@ryandur/sand';
 import {useBanners} from '@components/Banners';
 import {troubleWith} from '@transport/trouble';
 import {sourceParam} from '@components/art-gallery/museums/source';
-import {MuseumReply} from '@components/art-gallery/museums/reply';
 import {art as artResource} from '@components/art-gallery/museums';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
 import noImageGallery from '../../../assets/icons/missing-wall.svg?url';
 import './Gallery.css';
 
 export const ArtGallery: FC = () => {
-  const {pieces, updateArt, reset} = useGallery();
+  const {wall, asked, answered, refused, reset} = useGallery();
   const {raise} = useBanners();
-  const [museum, setMuseum] = useState<MuseumReply>('unasked');
   const {page, size, search, tab} =
     useSearchParamsObject({page: numberParam, size: numberParam, tab: sourceParam, search: schema.string}, {
       size: defaultRecordLimit,
@@ -27,32 +25,32 @@ export const ArtGallery: FC = () => {
   useEffect(() => {
     if (!has(page) || !has(size) || !has(tab)) return reset;
     const {cancel} = artResource.getAll({page, size, search, source: tab})
-      .onPending(pending => pending && setMuseum('asked'))
-      .onSuccess(updateArt)
-      .onSuccess(() => setMuseum('answered'))
+      .onPending(pending => pending && asked())
+      .onSuccess(answered)
       .onFailure(error => {
-        setMuseum('refused');
+        refused();
         raise(troubleWith('the museum')(error));
       });
     return () => {
       cancel();
       reset();
     };
-  }, [page, search, tab, size, reset, updateArt, raise]);
+  }, [page, search, tab, size, asked, answered, refused, reset, raise]);
 
   return <>
     <ul id="art-gallery">
-      {pieces?.map((piece, index) => <li className="frame" key={piece.id}>
+      {wall.reply === 'answered' && wall.answer.map((piece, index) => <li className="frame" key={piece.id}>
         <figure>
           <div className="wall-slot">
             <Image className="piece hung" piece={piece} priority={index < 4} lazy={index >= 6}/>
           </div>
-          <figcaption className="trim placard hairline-outline italic">{piece.title}</figcaption>
+          <figcaption className="placard trim hairline-outline italic">{piece.title}</figcaption>
         </figure>
       </li>)}
     </ul>
-    {museum === 'asked' && <Loading label="loading gallery"/>}
-    {is(pieces) && empty(pieces) && <img className="stand-in" src={noImageGallery} alt="empty gallery"/>}
-    {museum === 'refused' && <img className="stand-in" src={noImageGallery} alt="the museum refused to answer"/>}
+    {wall.reply === 'asked' && <Loading label="loading gallery"/>}
+    {wall.reply === 'answered' && empty(wall.answer) &&
+        <img className="stand-in" src={noImageGallery} alt="empty gallery"/>}
+    {wall.reply === 'refused' && <img className="stand-in" src={noImageGallery} alt="the museum refused to answer"/>}
   </>;
 };

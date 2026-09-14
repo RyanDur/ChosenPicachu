@@ -160,7 +160,10 @@ describe('The gallery.', () => {
 
     aicAnswers();
 
-    expect(await screen.findByRole('link', {name: 'The Art Institute of Chicago', current: 'page'})).toBeInTheDocument();
+    expect(await screen.findByRole('link', {
+      name: 'The Art Institute of Chicago',
+      current: 'page'
+    })).toBeInTheDocument();
     expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('tab=aic');
   });
 
@@ -198,11 +201,16 @@ describe('The gallery.', () => {
     expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument();
   });
 
-  test('the count of works stays while the next page loads', async () => {
+  const wallHungWithTheNextPageHeld = async (): Promise<() => void> => {
     setupAICAllArtResponse(aicArtResponse);
     const nextPageArrives = heldAICAllArtResponse(aicArtResponse, {limit: defaultRecordLimit, page: 2});
     render(<TestApp at={Paths.artGallery}/>);
     await wallHangs();
+    return nextPageArrives;
+  };
+
+  test('the count of works stays while the next page loads', async () => {
+    const nextPageArrives = await wallHungWithTheNextPageHeld();
 
     await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
 
@@ -214,9 +222,25 @@ describe('The gallery.', () => {
     await waitFor(() => expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument());
   });
 
+  test('while the next page is on its way the wall shows the loading sign and no empty-gallery sign', async () => {
+    const nextPageArrives = await wallHungWithTheNextPageHeld();
+
+    await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
+
+    await screen.findByRole('progressbar', {name: 'loading gallery'});
+    expect(screen.queryByAltText('empty gallery')).not.toBeInTheDocument();
+
+    nextPageArrives();
+
+    await waitFor(() => expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument());
+  });
+
   test('on the last page the count ends at the total', async () => {
     const {total_pages: last, limit, total} = aicArtResponse.pagination;
-    setupAICAllArtResponse({...aicArtResponse, pagination: {...aicArtResponse.pagination, current_page: last}}, {limit, page: last});
+    setupAICAllArtResponse({...aicArtResponse, pagination: {...aicArtResponse.pagination, current_page: last}}, {
+      limit,
+      page: last
+    });
     render(<TestApp at={`${Paths.artGallery}?page=${last}`}/>);
     await wallHangs();
 
