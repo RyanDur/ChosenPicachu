@@ -95,19 +95,21 @@ const Draft: FC<{ currentUser?: User; mode: Mode }> = ({currentUser, mode}) => {
             onClick={() => dispatch(avatarGenerated(generateAvatar()))}>
       <img id="avatar" src={user.avatar} width="244" height="244" fetchPriority="high" alt="avatar"/>
     </button>
-    <output className="avatar-report off-screen"
+    <output className="off-screen"
             aria-label="avatar report">{avatarReport(draft)}</output>
 
-    <Address id="home-address" title="Home Address" className="home-address" value={user.homeAddress} readOnly={readOnly} required
+    <Address id="home-address" title="Home Address" className="home-address" value={user.homeAddress}
+             readOnly={readOnly} required
              onChange={address => dispatch(homeAddressEdited(address))}/>
 
-    <Address id="work-address" title="Work Address" className="work-address" value={draft.sameAsHome ? user.homeAddress : draft.typedWork} readOnly={readOnly}
+    <Address id="work-address" title="Work Address" className="work-address"
+             value={draft.sameAsHome ? user.homeAddress : draft.typedWork} readOnly={readOnly}
              disabled={draft.sameAsHome}
              onChange={address => dispatch(workAddressEdited(address))}>
-      {!readOnly && <label id="same-as-home-cell" className="same-as-home attentive">
-        <span id="same-as-home-title">Same as Home</span>
-        <input id="same-as-home" className="fancy-check" type="checkbox" checked={draft.sameAsHome}
-               onChange={event => dispatch(sameAsHomeChosen(event.currentTarget.checked))}/>
+      {!readOnly && <label className="same-as-home attentive">
+          <span>Same as Home</span>
+          <input id="same-as-home" className="fancy-check" type="checkbox" checked={draft.sameAsHome}
+                 onChange={event => dispatch(sameAsHomeChosen(event.currentTarget.checked))}/>
       </label>}
     </Address>
 

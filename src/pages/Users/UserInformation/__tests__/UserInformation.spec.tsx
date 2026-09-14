@@ -2,7 +2,7 @@ import {ReactNode} from 'react';
 import {UserInformation} from '../index';
 import {UsersProvider} from '../../Provider';
 import {UsersAction, UsersListener, usersStore} from '../../store';
-import {render, screen, waitFor} from '@testing-library/react';
+import {render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {addressGroup, fillOutForm} from '../__test_support';
 import {AddressInfo, NewUser} from '@components/Users/UserInfo/user';
@@ -108,6 +108,14 @@ describe('a user form', () => {
     });
 
     describe('work address', () => {
+      test('the work address group is named Work Address alone, with Same as Home inside it', () => {
+        const {form} = added();
+        render(form);
+
+        expect(screen.getByRole('group', {name: 'Home Address'})).toBeInTheDocument();
+        expect(within(screen.getByRole('group', {name: 'Work Address'})).getByRole('checkbox', {name: 'Same as Home'})).toBeInTheDocument();
+      });
+
       test('should allow the user to auto copy the home address', async () => {
         const {form, adds} = added();
         render(form);
