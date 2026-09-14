@@ -7,6 +7,7 @@ import {faker} from '@faker-js/faker';
 import {Paths} from '@pages/Paths';
 import {AICSearchResponse} from '@components/art-gallery/museums/aic/types';
 import {heldAICSuggestions} from '@components/art-gallery/__test_support';
+import {HTTPError} from '@transport/types';
 
 const suggesting = (word: string): AICSearchResponse => ({
   pagination: {total: 1, limit: 1, total_pages: 1},
@@ -34,6 +35,17 @@ describe('search', () => {
     await userEvent.type(screen.getByLabelText(/Search For/), searchWord);
 
     await waitFor(() => expect(screen.getByRole('listbox', {hidden: true})).toHaveTextContent(searchWord));
+  });
+
+  it("a museum that refuses the new word clears the old word's suggestions", async () => {
+    render(<TestApp at={`${Paths.artGallery}?tab=${Source.AIC}`}/>);
+    await userEvent.type(screen.getByLabelText(/Search For/), searchWord);
+    await waitFor(() => expect(screen.getByRole('listbox', {hidden: true})).toHaveTextContent(searchWord));
+    anyRequestRespondsWith(HTTPError.SERVER_ERROR, 500);
+
+    await userEvent.type(screen.getByLabelText(/Search For/), 'X');
+
+    await waitFor(() => expect(screen.getByRole('listbox', {hidden: true})).toBeEmptyDOMElement());
   });
 
   it('puts the searched word in the url', async () => {

@@ -33,7 +33,9 @@ export const Search: FC<Props> = ({id, className}) => {
     if (searchString === '' || !has(tab)) return () => undefined;
     let asked: Maybe<{cancel: () => void}> = nothing();
     const pause = setTimeout(() => {
-      asked = some(art.search({search: searchString.toLowerCase(), source: tab}).onSuccess(updateSearchOptions));
+      asked = some(art.search({search: searchString.toLowerCase(), source: tab})
+        .onSuccess(updateSearchOptions)
+        .onFailure(() => updateSearchOptions([])));
     }, suggestionPause);
     return () => {
       clearTimeout(pause);
