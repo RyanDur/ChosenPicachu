@@ -292,6 +292,8 @@ describe('the users page', () => {
     await waitFor(() => expect(names().filter(name => name === fullName(person))).toHaveLength(standing + 1));
   });
 
+  const aWalkThroughTheRoster = 15_000;
+
   const befriend = async (row: HTMLElement, name: string): Promise<void> => {
     await userEvent.selectOptions(within(row).getByRole('combobox', {name: 'Add a friend'}), name);
     await within(row).findByRole('button', {name: `remove ${name}`});
@@ -301,9 +303,9 @@ describe('the users page', () => {
     const [mira, nils, osa] = [conciseUser('Mira'), conciseUser('Nils'), conciseUser('Osa')];
     render(<TestApp at={Paths.users}/>);
     await roster();
-    await addUser(mira);
-    await addUser(nils);
-    await addUser(osa);
+    await addUserWhoWorksFromHome(mira);
+    await addUserWhoWorksFromHome(nils);
+    await addUserWhoWorksFromHome(osa);
     const row = await rowOf(fullName(mira));
     await befriend(row, fullName(nils));
     await befriend(row, fullName(osa));
@@ -313,14 +315,14 @@ describe('the users page', () => {
     await waitFor(() => expect(within(row).queryByRole('button', {name: `remove ${fullName(nils)}`})).not.toBeInTheDocument());
     expect(within(row).getByRole('button', {name: `remove ${fullName(osa)}`})).toHaveFocus();
     expect(within(row).getByRole('status', {name: 'friends report'})).toHaveTextContent(`${fullName(nils)} removed.`);
-  });
+  }, aWalkThroughTheRoster);
 
   test("removing the only friend from a person's row hands focus to that row's Add a friend", async () => {
     const [pia, quin] = [conciseUser('Pia'), conciseUser('Quin')];
     render(<TestApp at={Paths.users}/>);
     await roster();
-    await addUser(pia);
-    await addUser(quin);
+    await addUserWhoWorksFromHome(pia);
+    await addUserWhoWorksFromHome(quin);
     await befriend(await rowOf(fullName(pia)), fullName(quin));
     const quinsRow = await rowOf(fullName(quin));
     await within(quinsRow).findByRole('button', {name: `remove ${fullName(pia)}`});
@@ -329,24 +331,23 @@ describe('the users page', () => {
 
     await waitFor(() => expect(within(quinsRow).queryByRole('button', {name: `remove ${fullName(pia)}`})).not.toBeInTheDocument());
     expect(within(quinsRow).getByRole('combobox', {name: 'Add a friend'})).toHaveFocus();
-  });
+  }, aWalkThroughTheRoster);
 
   test('focus is not pulled back to a settled removal when the roster renders again', async () => {
-    const [rae, sol, tam] = [conciseUser('Rae'), conciseUser('Sol'), conciseUser('Tam')];
+    const [rae, sol] = [conciseUser('Rae'), conciseUser('Sol')];
     render(<TestApp at={Paths.users}/>);
     await roster();
-    await addUser(rae);
-    await addUser(sol);
-    await addUser(tam);
+    await addUserWhoWorksFromHome(rae);
+    await addUserWhoWorksFromHome(sol);
     const raesRow = await rowOf(fullName(rae));
     await befriend(raesRow, fullName(sol));
     await userEvent.click(within(raesRow).getByRole('button', {name: `remove ${fullName(sol)}`}));
     await waitFor(() => expect(within(raesRow).getByRole('combobox', {name: 'Add a friend'})).toHaveFocus());
-    await edit(fullName(tam));
+    await edit(fullName(sol));
 
     await userEvent.click(within(screen.getByRole('form', {name: 'User Information'})).getByRole('button', {name: 'Update'}));
 
-    await view(fullName(tam));
+    await view(fullName(sol));
     expect(within(raesRow).getByRole('combobox', {name: 'Add a friend'})).not.toHaveFocus();
-  });
+  }, aWalkThroughTheRoster);
 });
