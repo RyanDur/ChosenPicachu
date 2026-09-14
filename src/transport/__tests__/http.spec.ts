@@ -100,6 +100,14 @@ describe('http', () => {
 
       expect(actual).toEqual(failure(HTTPError.SERVER_ERROR).inspect());
     });
+
+    test(`${httpMethod} fails as unknown when the server answers with a status it has no name for`, async () => {
+      server.use(handlers[httpMethod](endpoint, () => new HttpResponse(null, {status: 400})));
+
+      const actual = (await method(endpoint, body).value).inspect();
+
+      expect(actual).toEqual(failure(HTTPError.UNKNOWN).inspect());
+    });
   });
 
   test.each`

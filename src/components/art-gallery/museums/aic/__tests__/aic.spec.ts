@@ -2,7 +2,6 @@ import {anyRequestRespondsWith} from '@test-support/server';
 import {aicArtResponse, fromAICArt, options} from '@test-support/fixtures';
 import {nanoid} from 'nanoid';
 import {AICPieceData, AICSearchResponse} from '@components/art-gallery/museums/aic/types';
-import {HTTPError} from '@transport/types';
 import {art} from '@components/art-gallery/museums';
 import {Art} from '@components/art-gallery/museums/art';
 import {Source} from '@components/art-gallery/museums/source';
@@ -69,16 +68,6 @@ describe('AIC as a source of art', () => {
 
       expect(actual).toEqual(fromAICArt);
     });
-
-    test('reports an unknown error when AIC refuses the request', async () => {
-      const consumer = vi.fn();
-      anyRequestRespondsWith('response', 400);
-
-      await art.getAll({page: 1, size: 12, source: Source.AIC})
-        .onFailure(consumer).orNull();
-
-      expect(consumer).toHaveBeenCalledWith(HTTPError.UNKNOWN);
-    });
   });
 
   describe('one piece', () => {
@@ -97,16 +86,6 @@ describe('AIC as a source of art', () => {
 
       expect(actual).toEqual({...aicPiece, image: undefined, srcSet: undefined});
     });
-
-    test('reports an unknown error when AIC will not give the piece', async () => {
-      const consumer = vi.fn();
-      anyRequestRespondsWith('some error', 400);
-
-      await art.get({id: String(aicPiece.id), source: Source.AIC})
-        .onFailure(consumer).orNull();
-
-      expect(consumer).toHaveBeenCalledWith(HTTPError.UNKNOWN);
-    });
   });
 
   describe('suggestions', () => {
@@ -118,15 +97,6 @@ describe('AIC as a source of art', () => {
       const actual = await art.search({search, source: Source.AIC}).orNull();
 
       expect(actual).toEqual(options);
-    });
-
-    test("reports a server error when AIC's suggestions fail", async () => {
-      const consumer = vi.fn();
-      anyRequestRespondsWith(HTTPError.SERVER_ERROR, 500);
-
-      await art.search({search, source: Source.AIC}).onFailure(consumer).orNull();
-
-      expect(consumer).toHaveBeenCalledWith(HTTPError.SERVER_ERROR);
     });
   });
 });

@@ -8,7 +8,6 @@ import {
   harvardPieceResponse,
   options
 } from '@test-support/fixtures';
-import {HTTPError} from '@transport/types';
 import {art} from '@components/art-gallery/museums';
 import {Source} from '@components/art-gallery/museums/source';
 import {faker} from '@faker-js/faker';
@@ -36,16 +35,6 @@ describe('Harvard as a source of art', () => {
       expect(actual).toEqual(fromHarvardArt);
       expect(asked[0]?.searchParams.get('q')).toContain('(rad)');
     });
-
-    test('reports an unknown error when Harvard refuses the request', async () => {
-      const consumer = vi.fn();
-      anyRequestRespondsWith(HTTPError.UNKNOWN, 400);
-
-      await art.getAll({page: 1, size: 12, source: Source.HARVARD})
-        .onFailure(consumer).orNull();
-
-      expect(consumer).toHaveBeenCalledWith(HTTPError.UNKNOWN);
-    });
   });
 
   describe('one piece', () => {
@@ -55,16 +44,6 @@ describe('Harvard as a source of art', () => {
       const actual = await art.get({id: harvardPiece.id, source: Source.HARVARD}).orNull();
 
       expect(actual).toEqual(harvardPiece);
-    });
-
-    test('reports an unknown error when Harvard will not give the piece', async () => {
-      const consumer = vi.fn();
-      anyRequestRespondsWith(HTTPError.UNKNOWN, 400);
-
-      await art.get({id: harvardPiece.id, source: Source.HARVARD})
-        .onFailure(consumer).orNull();
-
-      expect(consumer).toHaveBeenCalledWith(HTTPError.UNKNOWN);
     });
   });
 
@@ -77,15 +56,6 @@ describe('Harvard as a source of art', () => {
       const actual = await art.search({search, source: Source.HARVARD}).orNull();
 
       expect(actual).toEqual(options);
-    });
-
-    test("reports a server error when Harvard's suggestions fail", async () => {
-      const consumer = vi.fn();
-      anyRequestRespondsWith(HTTPError.SERVER_ERROR, 500);
-
-      await art.search({search, source: Source.HARVARD}).onFailure(consumer).orNull();
-
-      expect(consumer).toHaveBeenCalledWith(HTTPError.SERVER_ERROR);
     });
   });
 });
