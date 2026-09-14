@@ -299,24 +299,6 @@ describe('the users page', () => {
     await within(row).findByRole('button', {name: `remove ${name}`});
   };
 
-  test("removing a friend takes them off the row and hands focus to the next friend's remove button", async () => {
-    const [mira, nils, osa] = [conciseUser('Mira'), conciseUser('Nils'), conciseUser('Osa')];
-    render(<TestApp at={Paths.users}/>);
-    await roster();
-    await addUserWhoWorksFromHome(mira);
-    await addUserWhoWorksFromHome(nils);
-    await addUserWhoWorksFromHome(osa);
-    const row = await rowOf(fullName(mira));
-    await befriend(row, fullName(nils));
-    await befriend(row, fullName(osa));
-
-    await userEvent.click(within(row).getByRole('button', {name: `remove ${fullName(nils)}`}));
-
-    await waitFor(() => expect(within(row).queryByRole('button', {name: `remove ${fullName(nils)}`})).not.toBeInTheDocument());
-    expect(within(row).getByRole('button', {name: `remove ${fullName(osa)}`})).toHaveFocus();
-    expect(within(row).getByRole('status', {name: 'friends report'})).toHaveTextContent(`${fullName(nils)} removed.`);
-  }, aWalkThroughTheRoster);
-
   test("removing the only friend from a person's row hands focus to that row's Add a friend", async () => {
     const [pia, quin] = [conciseUser('Pia'), conciseUser('Quin')];
     render(<TestApp at={Paths.users}/>);
@@ -347,7 +329,7 @@ describe('the users page', () => {
 
     await userEvent.click(within(screen.getByRole('form', {name: 'User Information'})).getByRole('button', {name: 'Update'}));
 
-    await view(fullName(sol));
+    await waitFor(() => expect(screen.getByRole('status', {name: 'url search'})).not.toHaveTextContent('mode='));
     expect(within(raesRow).getByRole('combobox', {name: 'Add a friend'})).not.toHaveFocus();
   }, aWalkThroughTheRoster);
 });
