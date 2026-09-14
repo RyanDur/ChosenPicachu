@@ -21,7 +21,7 @@ import {
   worksFromHomeColumn
 } from '../__test_support';
 
-const conciseUser = (firstName: string): User & {work: AddressInfo} => {
+const conciseUser = (firstName: string): User & { work: AddressInfo } => {
   const homeAddress: AddressInfo = {
     streetAddress: '12 Elm St',
     city: 'Springfield',
@@ -216,7 +216,7 @@ describe('the users page', () => {
     });
   });
 
-  test('a user with a work address shows it when edited and keeps it after Update', async () => {
+  test('editing a user with a work address shows that address', async () => {
     const person = conciseUser('Ivo');
     render(<TestApp at={Paths.users}/>);
     await roster();
@@ -225,7 +225,17 @@ describe('the users page', () => {
     await edit(fullName(person));
 
     expect(addressGroup('work').getByLabelText('Street')).toHaveValue(person.work.streetAddress);
+  });
+
+  test('Update keeps the work address a user was added with', async () => {
+    const person = conciseUser('Ysolde');
+    render(<TestApp at={Paths.users}/>);
+    await roster();
+    await addUser(person);
+    await edit(fullName(person));
+
     await userEvent.click(within(screen.getByRole('form', {name: 'User Information'})).getByRole('button', {name: 'Update'}));
+
     await view(fullName(person));
     expect(addressGroup('work').getByLabelText('Street')).toHaveValue(person.work.streetAddress);
   });
