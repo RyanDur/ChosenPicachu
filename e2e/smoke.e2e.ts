@@ -32,7 +32,7 @@ test('a piece on the V&A wall opens into its own page', async ({page}) => {
   await gallery.firstPainting.click();
 
   await expect(page).toHaveURL(/gallery\/[A-Za-z]*\d+/);
-  await expect(gallery.wall).toHaveCount(1, {timeout: 30_000});
+  await expect(gallery.piece).toHaveCount(1, {timeout: 30_000});
 });
 
 test('a search still hangs art', async ({page}) => {

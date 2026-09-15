@@ -10,7 +10,8 @@ import {
   setupUserAddedResponse,
   setupUserRemovedResponse,
   setupUsersResponse,
-  setupUserUpdatedResponse
+  setupUserUpdatedResponse,
+  usersUnreachable
 } from '@components/Users/__test_support';
 import {userForm} from '../UserInformation/__test_support';
 import {usersTable} from '../__test_support';
@@ -18,6 +19,8 @@ import {userAt} from '../mode';
 
 describe('the users page', () => {
   test('a users backend that cannot be reached says so', async () => {
+    usersUnreachable();
+
     render(<TestApp at={Paths.users}/>);
 
     expect(await within(screen.getByRole('alert', {hidden: true})).findByText('the users could not be reached')).toBeInTheDocument();

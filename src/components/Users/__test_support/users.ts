@@ -12,6 +12,12 @@ const rosterAnswers = (people: readonly User[]) => http.get(usersDomain, () => H
 export const setupUsersResponse = (people: readonly User[]) =>
   server.use(rosterAnswers(people));
 
+export const usersUnreachable = () =>
+  server.use(
+    http.all(usersDomain, () => HttpResponse.error()),
+    http.all(`${usersDomain}/*`, () => HttpResponse.error())
+  );
+
 export const setupUserAddedResponse = (rosterAfter: readonly User[]): () => unknown => {
   let sent: unknown;
   server.use(http.post(usersDomain, async ({request}) => {
