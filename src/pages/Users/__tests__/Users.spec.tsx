@@ -17,6 +17,12 @@ import {usersTable} from '../__test_support';
 import {userAt} from '../mode';
 
 describe('the users page', () => {
+  test('a users backend that cannot be reached says so', async () => {
+    render(<TestApp at={Paths.users}/>);
+
+    expect(await within(screen.getByRole('alert', {hidden: true})).findByText('the users could not be reached')).toBeInTheDocument();
+  });
+
   describe('ranking the users', () => {
     it('sorting works-from-home ascending puts every No before every Yes', async () => {
       setupUsersResponse([aUser(), aUser({work: 'home'}), aUser(), aUser({work: 'home'})]);

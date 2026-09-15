@@ -1,5 +1,5 @@
 import {TestApp} from '@__test_support/TestApp';
-import {render, screen} from '@testing-library/react';
+import {render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {aicArtResponse} from '@components/art-gallery/__test_support/fixtures';
 import {Paths} from '@pages/Paths';
@@ -99,6 +99,13 @@ describe('Gallery Navigation', () => {
     render(<TestApp at={Paths.artGallery}/>);
 
     expect(screen.getByRole('navigation', {name: 'pagination'})).toHaveTextContent('of—');
+  });
+
+  test('a museum with nothing to show counts of 0, not a dash', async () => {
+    setupAICEveryPage({...aicArtResponse, data: [], pagination: {...aicArtResponse.pagination, total: 0, total_pages: 0}});
+    render(<TestApp at={Paths.artGallery}/>);
+
+    await waitFor(() => expect(screen.getByRole('navigation', {name: 'pagination'})).toHaveTextContent(/of0$/));
   });
 
   test('until the museum says where the end is, there is no way forward', async () => {
