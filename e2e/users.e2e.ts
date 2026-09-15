@@ -1,5 +1,6 @@
 import {expect, test} from '@playwright/test';
 import {Person, usersPage} from './__test_support';
+import {usersServerScript} from '../src/components/Users/resource/usersServer';
 
 const ada: Person = {
   firstName: 'Ada',
@@ -46,7 +47,7 @@ test.describe('when the browser allows no service workers', () => {
 });
 
 test('a users page reloaded past its worker is taken back by it', async ({page, browserName}) => {
-  test.skip(browserName !== 'chromium', 'only Chromium offers a reload that leaves the page uncontrolled while its worker stays active');
+  test.skip(browserName !== 'chromium', 'only Chromium offers a reload that leaves the page uncontrolled while its worker stays active, so Firefox and WebKit hold no pin for the reclaim');
   const users = usersPage(page);
   await page.goto('users');
   await expect(users.names.first()).toBeVisible({timeout: 30_000});
@@ -57,8 +58,8 @@ test('a users page reloaded past its worker is taken back by it', async ({page, 
 });
 
 test('the users page gives up on a worker script that never answers and says the users could not be reached', async ({page, browserName}) => {
-  test.skip(browserName !== 'webkit', 'only WebKit lets a route hold a worker script unanswered');
-  await page.route('**/users-server.js', () => new Promise(() => undefined));
+  test.skip(browserName !== 'webkit', 'only WebKit lets a route hold a worker script unanswered, so Chromium and Firefox hold no pin for the deadline on registration');
+  await page.route(`**/${usersServerScript}`, () => new Promise(() => undefined));
 
   await page.goto('users', {waitUntil: 'commit'});
 

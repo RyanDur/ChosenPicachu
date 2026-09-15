@@ -52,10 +52,13 @@ const gaveUp = (): Promise<never> => new Promise((_, reject) => {
 const served = (workers: ServiceWorkerContainer): Promise<unknown> => workers.register(usersServerUrl)
   .then(() => workers.controller ? undefined : claimed(workers));
 
+const servedInTime = (workers: ServiceWorkerContainer): Result.Async<unknown, HTTPError> => workers.controller
+  ? asyncSuccess(undefined)
+  : asyncResult<unknown, unknown>(Promise.race([served(workers), gaveUp()])).or(() => asyncFailure(HTTPError.NETWORK_ERROR));
+
 const whenServed = <T>(asked: () => Result.Async<T, HTTPError>): Result.Async<T, HTTPError> =>
   maybe(navigator.serviceWorker)
-    .map(workers => asyncResult<unknown, unknown>(Promise.race([served(workers), gaveUp()]))
-      .or(() => asyncFailure(HTTPError.NETWORK_ERROR)))
+    .map(servedInTime)
     .orElse(asyncSuccess(undefined))
     .mBind(asked);
 
