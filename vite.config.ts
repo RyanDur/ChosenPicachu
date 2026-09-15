@@ -4,6 +4,7 @@ import {loadEnv} from 'vite';
 import type {Plugin} from 'vite';
 import {rolldown} from 'rolldown';
 import {fileURLToPath} from 'node:url';
+import {usersServerScript} from './src/components/Users/resource/usersServer';
 
 const aliases = {
   '@env': fileURLToPath(new URL('./src/env.ts', import.meta.url)),
@@ -61,7 +62,7 @@ import svgr from 'vite-plugin-svgr';
 
 const usersServer = (): Plugin => {
   const worker = fileURLToPath(new URL('./backend/users/worker.ts', import.meta.url));
-  const script = 'users-server.js';
+  const script = usersServerScript;
   const built = async (): Promise<string> => {
     const bundle = await rolldown({input: worker, resolve: {alias: aliases}, logLevel: 'silent'});
     const {output} = await bundle.generate({format: 'iife'});

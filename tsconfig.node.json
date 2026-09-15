@@ -11,5 +11,6 @@
   },
   "include": [
     "e2e/**/*.ts",
-    "playwright.config.ts", "playwright.smoke.config.ts", "vite.config.ts"]
+    "playwright.config.ts", "playwright.smoke.config.ts", "vite.config.ts",
+    "src/components/Users/resource/usersServer.ts"]
 }

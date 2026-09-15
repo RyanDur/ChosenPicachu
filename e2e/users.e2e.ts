@@ -44,3 +44,15 @@ test.describe('when the browser allows no service workers', () => {
     await expect(page.getByRole('alert')).toContainText('the users could not be reached', {timeout: 30_000});
   });
 });
+
+test('a users page reloaded past its worker is taken back by it', async ({page, browserName}) => {
+  test.skip(browserName !== 'chromium', 'only Chromium offers a reload that leaves the page uncontrolled while its worker stays active');
+  const users = usersPage(page);
+  await page.goto('users');
+  await expect(users.names.first()).toBeVisible({timeout: 30_000});
+  const devtools = await page.context().newCDPSession(page);
+
+  await Promise.all([page.waitForEvent('load'), devtools.send('Page.reload', {ignoreCache: true})]);
+
+  await expect(users.names.first()).toBeVisible({timeout: 5_000});
+});

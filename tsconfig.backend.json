@@ -13,6 +13,7 @@
     "backend/users/core.ts",
     "backend/users/respond.ts",
     "src/components/Users/UserInfo/user.ts",
+    "src/components/Users/resource/usersServer.ts",
     "src/components/fibs"
   ],
   "exclude": []

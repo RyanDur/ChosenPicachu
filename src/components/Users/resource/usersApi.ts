@@ -5,6 +5,7 @@ import {http} from '@transport/http';
 import {validate} from '@transport/validate';
 import {HTTPError} from '@transport/types';
 import {NewUser, User} from '@components/Users/UserInfo/user';
+import {loadedUncontrolled, usersServerScript} from './usersServer';
 
 export type UsersAPI = {
   getAll: () => Result.Async<User[], HTTPError>;
@@ -36,24 +37,25 @@ const UserDecoder = schema.object({
 });
 
 const {usersDomain} = env;
-const usersServer = `${import.meta.env.BASE_URL}users-server.js`;
+const usersServer = `${import.meta.env.BASE_URL}${usersServerScript}`;
 const patience = 10_000;
 
 const claimed = (workers: ServiceWorkerContainer): Promise<unknown> => new Promise(resolve => {
   workers.addEventListener('controllerchange', resolve, {once: true});
-  void workers.ready.then(({active}) => active?.postMessage('loaded uncontrolled'));
+  void workers.ready.then(({active}) => active?.postMessage(loadedUncontrolled));
 });
 
 const gaveUp = (): Promise<never> => new Promise((_, reject) => {
-  setTimeout(() => reject(new Error('the users server never took control of the page')), patience);
+  setTimeout(reject, patience);
 });
 
 const served = (workers: ServiceWorkerContainer): Promise<unknown> => workers.register(usersServer)
-  .then(() => workers.controller ? undefined : Promise.race([claimed(workers), gaveUp()]));
+  .then(() => workers.controller ? undefined : claimed(workers));
 
 const whenServed = <T>(asked: () => Result.Async<T, HTTPError>): Result.Async<T, HTTPError> =>
   maybe(navigator.serviceWorker)
-    .map(workers => asyncResult<unknown, unknown>(served(workers)).or(() => asyncFailure(HTTPError.NETWORK_ERROR)))
+    .map(workers => asyncResult<unknown, unknown>(Promise.race([served(workers), gaveUp()]))
+      .or(() => asyncFailure(HTTPError.NETWORK_ERROR)))
     .orElse(asyncSuccess(undefined))
     .mBind(asked);
 

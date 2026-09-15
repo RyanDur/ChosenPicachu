@@ -1,5 +1,6 @@
 /// <reference lib="webworker" />
 import {not} from '@ryandur/sand';
+import {loadedUncontrolled} from '@components/Users/resource/usersServer';
 import {createRandomUsers, Roster} from './core';
 import {api, respond} from './respond';
 
@@ -39,7 +40,7 @@ const answered = async (request: Request, client: string): Promise<Response> => 
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', event => event.waitUntil(self.clients.claim()));
 self.addEventListener('message', event => {
-  if (event.data === 'loaded uncontrolled') event.waitUntil(self.clients.claim());
+  if (event.data === loadedUncontrolled) event.waitUntil(self.clients.claim());
 });
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
