@@ -6,7 +6,7 @@ export const toQueryString = (queryObj = {}): string =>
     .map(([key, value]) => `${key}=${String(value)}`).join('&')).map(query => `?${query}`).orElse('');
 
 export const toQueryObj = (queryString?: string, defaultObj = {}) =>
-  queryString ? queryString.replace('?', '')
+  has(queryString) ? queryString.replace('?', '')
     .split('&')
     .map(query => query.split('='))
     .map(([key, value]) => ({[key]: parse(value)}))

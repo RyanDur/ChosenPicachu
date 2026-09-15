@@ -1,5 +1,6 @@
 import {useParams} from 'react-router';
 import {useEffect} from 'react';
+import {maybe} from '@ryandur/sand';
 import {Loading} from '@components/Loading';
 import {useArtPiece} from '@components/art-gallery/ArtPiece/Context';
 import {Image} from '@components/art-gallery/Image';
@@ -17,20 +18,21 @@ export const ArtPiece = () => {
   const {tab} = useSearchParamsObject({tab: sourceParam});
   const {id} = useParams<{id: string}>();
 
-  useEffect(() => {
-    if (!id) return abandoned;
-    const {cancel} = art.get({id, source: tab ?? Source.AIC})
-      .onPending(pending => pending && asked())
-      .onSuccess(answered)
-      .onFailure(error => {
-        refused();
-        raise(troubleWith('the museum')(error));
-      });
-    return () => {
-      cancel();
-      abandoned();
-    };
-  }, [id, tab, asked, answered, refused, abandoned, raise]);
+  useEffect(() => maybe(id)
+    .map(chosen => {
+      const {cancel} = art.get({id: chosen, source: tab ?? Source.AIC})
+        .onPending(pending => pending && asked())
+        .onSuccess(answered)
+        .onFailure(error => {
+          refused();
+          raise(troubleWith('the museum')(error));
+        });
+      return () => {
+        cancel();
+        abandoned();
+      };
+    })
+    .orElse(abandoned), [id, tab, asked, answered, refused, abandoned, raise]);
 
   return <>
     {easel.reply === 'asked' && <Loading label="loading piece"/>}

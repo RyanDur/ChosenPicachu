@@ -180,9 +180,9 @@ const mount = (document: Document, table: HTMLTableElement, body: HTMLTableSecti
 
   const landed = (): void => {
     const {drag} = hand.state;
-    if (drag?.axis === 'column' && drag.landing !== undefined) {
+    if (drag?.axis === 'column' && has(drag.landing)) {
       columnBeside(drag.held, drag.landing);
-    } else if (drag?.axis === 'row' && drag.landing !== undefined) {
+    } else if (drag?.axis === 'row' && has(drag.landing)) {
       rowBeside(drag.held, drag.landing);
     }
   };

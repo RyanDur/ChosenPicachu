@@ -2,6 +2,7 @@ import {screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {AddressInfo, NewUser, User} from '@components/Users/UserInfo/user';
 import {format} from 'date-fns';
+import {has} from '@ryandur/sand';
 
 const swiftKeys = userEvent.setup({delay: null});
 
@@ -14,7 +15,7 @@ const paste = (field: HTMLElement, text: string): Promise<void> =>
   swiftKeys.click(field).then(() => swiftKeys.paste(text));
 
 const pasteIfGiven = (field: HTMLElement, text?: string): Promise<void> =>
-  text === undefined ? Promise.resolve() : paste(field, text);
+  has(text) ? paste(field, text) : Promise.resolve();
 
 const fillOutAddress = (given: AddressInfo, kind: string): Promise<void> =>
   paste(address(kind).getByLabelText('Street'), given.streetAddress)
@@ -63,7 +64,7 @@ export const userForm = {
     await fillOutPerson(user);
     await fillOutAddress(user.homeAddress, 'home');
     await swiftKeys.click(sameAsHome());
-    if (user.details !== undefined) await swiftKeys.type(screen.getByLabelText('Details'), user.details);
+    if (has(user.details)) await swiftKeys.type(screen.getByLabelText('Details'), user.details);
     await swiftKeys.click(await within(form()).findByRole('button', {name: 'Add'}));
   },
 

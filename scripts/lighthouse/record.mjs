@@ -2,6 +2,7 @@ import {chromium} from 'playwright';
 import {mkdirSync, writeFileSync} from 'node:fs';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {empty} from '@ryandur/sand';
 
 const site = 'https://ryandur.github.io/ChosenPicachu/';
 const fixtures = join(dirname(fileURLToPath(import.meta.url)), 'fixtures');
@@ -25,7 +26,7 @@ const page = await browser.newPage();
 page.on('response', async response => {
   const url = response.url();
   const prefix = Object.keys(localized).find(domain => url.startsWith(domain));
-  if (!prefix) return;
+  if (empty(prefix)) return;
   const key = url.replace(prefix, localized[prefix]);
   rest.set(key, {
     contentType: response.headers()['content-type'] ?? 'application/json',

@@ -1,11 +1,12 @@
 import {User} from '@components/Users/UserInfo/user';
+import {maybe} from '@ryandur/sand';
 import {createUser} from '../core';
 import {api, respond} from '../respond';
 
 const at = (path = ''): string => `http://localhost${api}${path}`;
 
 const asked = (method: string, path = '', body?: unknown): Request =>
-  new Request(at(path), {method, ...(body === undefined ? {} : {body: JSON.stringify(body)})});
+  new Request(at(path), {method, ...maybe(body).map(sent => ({body: JSON.stringify(sent)})).orElse({})});
 
 const friendsOf = (roster: readonly User[], id: string): readonly string[] =>
   roster.find(user => user.id === id)?.friends ?? [];

@@ -9,12 +9,13 @@ import aggregationsCss from '../Aggregations/Aggregations.css?raw';
 import scaffold from './frame.html?raw';
 import frameJs from './frame.main.ts?frame';
 import {startingTable} from './starting';
+import {empty} from '@ryandur/sand';
 
 const styleSheets = import.meta.glob<string>('../../../../styles/*.css', {query: '?raw', import: 'default', eager: true});
 
 const sheet = (name: string): {name: string; css: string} => {
   const css = styleSheets[`../../../../styles/${name}`];
-  if (css === undefined) {
+  if (empty(css)) {
     throw new Error(`no sheet named "${name}" in styles/`);
   }
   return {name, css};

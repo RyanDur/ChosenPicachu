@@ -7,6 +7,7 @@ import {
   HarvardSearchSchema
 } from '@components/art-gallery/museums/harvard/types';
 import {defaultRecordLimit, defaultSearchLimit} from '@components/art-gallery/limits';
+import {has, maybe} from '@ryandur/sand';
 import {env} from '@env';
 import {toQueryString} from '@transport/url';
 import {AllArt, Art, SearchOptions} from '@components/art-gallery/museums/art';
@@ -22,7 +23,7 @@ const baseQueryString = {
   fields: harvardFields, apikey: harvardAPIKey
 };
 const withImages = (search?: string) =>
-  [search && `(${search})`, 'imagepermissionlevel:0', '_exists_:primaryimageurl'].filter(Boolean).join(' AND ');
+  [has(search) && `(${search})`, 'imagepermissionlevel:0', '_exists_:primaryimageurl'].filter(Boolean).join(' AND ');
 
 const searched = ({page, search, size = defaultRecordLimit}: GetAllArtRequest) => http
   .get(`${harvardDomain}${toQueryString({
@@ -64,8 +65,8 @@ export const harvard = {
 
 const harvardArtToArt = (record: HarvardArtResponse): Art => ({
   id: String(record.id),
-  title: record.title || 'Untitled',
+  title: maybe(record.title).orElse('Untitled'),
   ...pictured(record.primaryimageurl),
-  artistInfo: record.people?.find(person => person.role === 'Artist')?.displayname || 'Unknown',
-  altText: record.title || 'Untitled'
+  artistInfo: maybe(record.people?.find(person => person.role === 'Artist')?.displayname).orElse('Unknown'),
+  altText: maybe(record.title).orElse('Untitled')
 });

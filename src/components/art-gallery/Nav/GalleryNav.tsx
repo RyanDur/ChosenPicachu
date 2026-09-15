@@ -46,7 +46,7 @@ export const GalleryNav: FC<Props> = ({id}) => {
     <output className="info field">
       <span>{firstRecord} - {lastRecord}</span>
       <span>of</span>
-      <span>{totalRecords || '—'}</span>
+      <span>{totalRecords ?? '—'}</span>
     </output>
     {hasNextPage && <>
       <Link to={`${path}${createSearchParams({page: nextPage})}`} onClick={gotoTopOfPage}

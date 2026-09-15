@@ -60,7 +60,7 @@ export const Search: FC<Props> = ({id, className}) => {
   return <search id={id} className={classNames('search', 'backdrop', className)}>
     <form className="search-form" onSubmit={submitted} onReset={reset}>
       <label id="query-label" className="query-label field ellipsis" htmlFor="query"><span
-        className="bold">Search For:</span> {decodeURI(search || '')}</label>
+        className="bold">Search For:</span> {decodeURI(search ?? '')}</label>
       <input type="search" autoComplete="off" list="search-options" id="query"
         className="query bare card"
         onInput={event => updateQuery(event.currentTarget.value)}/>

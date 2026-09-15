@@ -1,5 +1,6 @@
 import {nanoid} from 'nanoid';
 import {faker} from '@faker-js/faker';
+import {maybe} from '@ryandur/sand';
 import {AICAllArtResponse, AICArt, AICArtResponse, AICSearchResponse} from '@components/art-gallery/museums/aic/types';
 import {
   HarvardAllArtResponse,
@@ -55,7 +56,7 @@ export const fromAICPiece = ({data}: AICArtResponse): Art => ({
   title: data.title,
   image: `${env.aicPictures}/${data.image_id}/full/843,/0/default.jpg`,
   srcSet: [400, 800, 1200].map(width => `${env.aicPictures}/${data.image_id}/full/${width},/0/default.jpg ${width}w`).join(', '),
-  altText: data.thumbnail?.alt_text || '',
+  altText: data.thumbnail?.alt_text ?? '',
   artistInfo: data.artist_display
 });
 
@@ -94,10 +95,10 @@ export const harvardPieceResponse = harvardToPieceResponse(undefined, faker.numb
 
 export const harvardPiece: Art = {
   id: String(harvardPieceResponse.id),
-  title: harvardPieceResponse.title || 'Untitled',
+  title: maybe(harvardPieceResponse.title).orElse('Untitled'),
   image: harvardPieceResponse.primaryimageurl,
-  altText: harvardPieceResponse.title || 'Untitled',
-  artistInfo: harvardPieceResponse.people?.[0].displayname || ''
+  altText: maybe(harvardPieceResponse.title).orElse('Untitled'),
+  artistInfo: harvardPieceResponse.people?.[0].displayname ?? ''
 };
 
 const harvardRecords = [...Array(info.totalrecordsperquery)].map(harvardToPieceResponse);
@@ -178,10 +179,10 @@ export const fromHarvardArt: AllArt = {
   },
   pieces: harvardRecords.map(piece => ({
     id: String(piece.id),
-    title: piece.title || 'Untitled',
+    title: maybe(piece.title).orElse('Untitled'),
     image: piece.primaryimageurl,
-    artistInfo: piece.people?.[0].displayname || '',
-    altText: piece.title || 'Untitled'
+    artistInfo: piece.people?.[0].displayname ?? '',
+    altText: maybe(piece.title).orElse('Untitled')
   }))
 };
 

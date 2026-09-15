@@ -1,4 +1,5 @@
 import {Trade} from '../../Charts/coinbase';
+import {maybe} from '@ryandur/sand';
 
 export type Traded = {
   vwap: number;
@@ -51,8 +52,7 @@ const aggregate = (label: string, span: number, trades: readonly Trade[]): Windo
   };
 };
 
-export const windowedAggregates = (trades: readonly Trade[]): readonly WindowAggregate[] => {
-  const now = trades[trades.length - 1]?.tradedAt;
-  return windows.map(({label, span}) =>
-    aggregate(label, span, trades.filter(trade => now !== undefined && now - trade.tradedAt < span)));
-};
+export const windowedAggregates = (trades: readonly Trade[]): readonly WindowAggregate[] =>
+  windows.map(({label, span}) => aggregate(label, span, maybe(trades[trades.length - 1])
+    .map(({tradedAt: now}) => trades.filter(trade => now - trade.tradedAt < span))
+    .orElse([])));

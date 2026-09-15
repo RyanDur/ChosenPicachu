@@ -102,11 +102,7 @@ describe('the tables demo', () => {
 
     await feedIsSubscribed();
     const card = screen.getByRole('region', {name: 'live aggregations'});
-    const rowOf = (label: string) => {
-      const row = within(card).getByRole('row', {name: new RegExp(`^${label}`)});
-      if (!row) throw new Error(`no row for ${label}`);
-      return row;
-    };
+    const rowOf = (label: string) => within(card).getByRole('row', {name: new RegExp(`^${label}`)});
     const stage = within(card).getAllByRole('table')[0];
     stage.getBoundingClientRect = () => ({
       left: 0, right: 860, top: 0, bottom: 240, width: 860, height: 240, x: 0, y: 0, toJSON: () => ({})

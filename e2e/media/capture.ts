@@ -4,6 +4,7 @@ import {mkdir, readdir, rm} from 'node:fs/promises';
 import {homedir} from 'node:os';
 import {dirname, join} from 'node:path';
 import {promisify} from 'node:util';
+import {has} from '@ryandur/sand';
 
 const run = promisify(execFile);
 
@@ -11,19 +12,19 @@ const run = promisify(execFile);
 const ffmpegIn = async (cache: string): Promise<string | undefined> => {
   const entries = await readdir(cache, {withFileTypes: true}).catch(() => []);
   const home = entries.find(entry => entry.isDirectory() && entry.name.startsWith('ffmpeg-'));
-  if (home === undefined) {
-    return undefined;
+  if (home) {
+    const binaries = await readdir(join(cache, home.name));
+    const binary = binaries.find(name => name.startsWith('ffmpeg'));
+    return has(binary) ? join(cache, home.name, binary) : undefined;
   }
-  const binaries = await readdir(join(cache, home.name));
-  const binary = binaries.find(name => name.startsWith('ffmpeg'));
-  return binary === undefined ? undefined : join(cache, home.name, binary);
+  return undefined;
 };
 
 const ffmpegPath = async (): Promise<string> => {
   const caches = [join(homedir(), 'Library/Caches/ms-playwright'), join(homedir(), '.cache/ms-playwright')];
   for (const cache of caches) {
     const found = await ffmpegIn(cache);
-    if (found !== undefined) {
+    if (has(found)) {
       return found;
     }
   }
@@ -79,16 +80,14 @@ const keypressOverlay = () => {
   };
   let fade = 0;
   document.addEventListener('keydown', event => {
-    const name = names[event.key];
-    if (name === undefined) {
-      return;
+    if (event.key in names) {
+      chip.textContent = names[event.key];
+      chip.style.opacity = '1';
+      window.clearTimeout(fade);
+      fade = window.setTimeout(() => {
+        chip.style.opacity = '0';
+      }, 600);
     }
-    chip.textContent = name;
-    chip.style.opacity = '1';
-    window.clearTimeout(fade);
-    fade = window.setTimeout(() => {
-      chip.style.opacity = '0';
-    }, 600);
   }, true);
 };
 
@@ -227,9 +226,7 @@ export const headerOrder = (card: Locator): Promise<string[]> =>
 
 type Gait = {steps?: number; anchor?: number};
 
-export const slowDrag = async (page: Page, from: Box, toX: number, gait: Gait = {}): Promise<void> => {
-  const steps = gait.steps === undefined ? 30 : gait.steps;
-  const anchor = gait.anchor === undefined ? 0.5 : gait.anchor;
+export const slowDrag = async (page: Page, from: Box, toX: number, {steps = 30, anchor = 0.5}: Gait = {}): Promise<void> => {
   const start = {x: from.x + from.width * anchor, y: from.y + from.height / 2};
   for (let step = 1; step <= steps; step++) {
     await page.mouse.move(start.x + (toX - start.x) * (step / steps), start.y);

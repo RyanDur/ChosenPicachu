@@ -1,5 +1,6 @@
 import {existsSync, readFileSync} from 'node:fs';
 import {join} from 'node:path';
+import {empty, has, not} from '@ryandur/sand';
 import {audited} from './audited.mjs';
 
 const categories = ['performance', 'accessibility', 'best-practices', 'seo'];
@@ -28,14 +29,14 @@ export const scoreTable = (runs, floors) => {
   const rows = categories.map(category => {
     const score = representative.summary[category];
     const floor = floors[category];
-    const held = floor === undefined ? '' : score >= floor ? 'holds' : 'below the floor';
-    return `| ${category} | ${percent(score)} | ${range(runs, category)} | ${floor === undefined ? '' : percent(floor)} | ${held} |`;
+    const held = empty(floor) ? '' : score >= floor ? 'holds' : 'below the floor';
+    return `| ${category} | ${percent(score)} | ${range(runs, category)} | ${empty(floor) ? '' : percent(floor)} | ${held} |`;
   });
   return ['| category | score | across runs | floor | |', '| --- | ---: | ---: | ---: | --- |', ...rows].join('\n');
 };
 
 export const failuresList = results => {
-  const failed = results.filter(({passed}) => !passed);
+  const failed = results.filter(({passed}) => not(passed));
   if (failed.length === 0) {
     return '';
   }
@@ -56,10 +57,10 @@ export const foldOf = ({page, runs, rc, results = []}) => {
 };
 
 const cell = (score, floor) =>
-  floor !== undefined && score < floor ? `${percent(score)} (floor ${percent(floor)})` : percent(score);
+  has(floor) && score < floor ? `${percent(score)} (floor ${percent(floor)})` : percent(score);
 
 const rowOf = ({page, runs, rc}) => {
-  if (runs === undefined) {
+  if (empty(runs)) {
     return `| ${page} | the audit did not run |  |  |  |`;
   }
   const {summary} = representativeOf(runs);
@@ -77,7 +78,7 @@ export const summaryOf = pages => [
   '',
   pageTable(pages),
   '',
-  pages.filter(({runs}) => runs !== undefined).map(foldOf).join('\n\n'),
+  pages.filter(({runs}) => has(runs)).map(foldOf).join('\n\n'),
   ''
 ].join('\n');
 

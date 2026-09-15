@@ -94,17 +94,19 @@ describe('the frame table', () => {
   // the browser blurs a focused node when it is moved in the DOM; jsdom does not, so the suite supplies the loss
   const blurringMoves = (): (() => void) => {
     const untouched = Object.getOwnPropertyDescriptor(Node.prototype, 'insertBefore');
-    if (untouched === undefined) throw new Error('no insertBefore to blur');
-    Node.prototype.insertBefore = function <T extends Node>(this: Node, node: T, child: Node | null): T {
-      const focused = document.activeElement;
-      if (node instanceof HTMLElement && focused instanceof HTMLElement && node.contains(focused)) {
-        focused.blur();
-      }
-      return Reflect.apply(untouched.value as (this: Node, node: T, child: Node | null) => T, this, [node, child]);
-    };
-    return () => {
-      Object.defineProperty(Node.prototype, 'insertBefore', untouched);
-    };
+    if (untouched) {
+      Node.prototype.insertBefore = function <T extends Node>(this: Node, node: T, child: Node | null): T {
+        const focused = document.activeElement;
+        if (node instanceof HTMLElement && focused instanceof HTMLElement && node.contains(focused)) {
+          focused.blur();
+        }
+        return Reflect.apply(untouched.value, this, [node, child]);
+      };
+      return () => {
+        Object.defineProperty(Node.prototype, 'insertBefore', untouched);
+      };
+    }
+    throw new Error('no insertBefore to blur');
   };
 
   it('a column walks right to the end and left back home, keypress after keypress, keeping the focus the moves take', async () => {
@@ -184,10 +186,8 @@ describe('the frame table', () => {
     fireEvent.pointerDown(element, at);
   };
   const surface = (): HTMLElement => {
-    if (holder === undefined) {
-      throw new Error('nothing was lifted');
-    }
-    return holder;
+    if (holder) return holder;
+    throw new Error('nothing was lifted');
   };
   const carried = (): Element[] =>
     [...screen.getAllByRole('columnheader'), ...screen.getAllByRole('rowheader'), ...screen.getAllByRole('cell')]

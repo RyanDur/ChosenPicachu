@@ -104,6 +104,10 @@ describe('the review report', () => {
     expect(reviewIn(answer(review([plus], [note])))).toEqual({plusses: [plus], deltas: [note]});
   });
 
+  test('a review with neither plusses nor deltas is still read', () => {
+    expect(reviewIn(answer(review([], [])))).toEqual({plusses: [], deltas: []});
+  });
+
   test('an answer without structured plusses and deltas is refused', () => {
     expect(() => reviewIn(JSON.stringify({
       type: 'result',

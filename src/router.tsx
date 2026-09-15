@@ -38,10 +38,10 @@ export const Site: FC<{closed?: boolean}> = ({closed = false}) => {
       <main className={classNames('app-main', 'field', mainClassName)}>
         {closed ? <PageError/> : <Outlet/>}
       </main>
-      {AsideRegion !== undefined && <aside id="filter" className="filter field" aria-label="filters">
+      {AsideRegion && <aside id="filter" className="filter field" aria-label="filters">
         <AsideRegion/>
       </aside>}
-      {FooterRegion !== undefined && <footer id="app-footer" className="app-footer stick-to-bottom field">
+      {FooterRegion && <footer id="app-footer" className="app-footer stick-to-bottom field">
         <FooterRegion/>
       </footer>}
       <SideNav/>

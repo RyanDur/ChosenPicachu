@@ -1,6 +1,7 @@
 import {ColumnDrag, RowDrag} from '@components/DragSortableTable/table-state';
 import {columnUnder, rowUnder} from '@components/DragSortableTable/survey';
 import {Moving, lazyTravel} from '@components/DragSortableTable/travel';
+import {has} from '@ryandur/sand';
 
 export const travelledColumn = (order: readonly string[], moving: Moving) => (drag: ColumnDrag): string | undefined =>
   lazyTravel(columnUnder(order, drag.survey))(drag.held, moving, drag.landing);
@@ -9,13 +10,13 @@ export const travelledRow = (standing: readonly string[], moving: Moving) => (dr
   lazyTravel(rowUnder(standing, drag.survey))(drag.held, moving, drag.landing);
 
 export const releasedColumn = (drag: ColumnDrag, beside: (neighbour: string) => void): void => {
-  if (drag.landing !== undefined) {
+  if (has(drag.landing)) {
     beside(drag.landing);
   }
 };
 
 export const releasedRow = (drag: RowDrag, beside: (neighbour: string) => void): void => {
-  if (drag.landing !== undefined) {
+  if (has(drag.landing)) {
     beside(drag.landing);
   }
 };

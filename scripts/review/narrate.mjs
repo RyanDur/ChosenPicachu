@@ -1,5 +1,6 @@
 import {createInterface} from 'node:readline';
 import {writeFileSync} from 'node:fs';
+import {is, maybe} from '@ryandur/sand';
 
 const said = text => text.replace(/\s+/g, ' ').trim();
 
@@ -25,14 +26,14 @@ export const narration = event => {
       .join('\n');
   }
   if (event.type === 'result') {
-    return event.is_error
+    return is(event.is_error)
       ? `the review did not finish: ${said(String(event.result))}`
       : `done in ${event.num_turns} turns: ${counted(event.structured_output?.plusses?.length ?? 0, event.structured_output?.deltas?.length ?? 0)}`;
   }
   return '';
 };
 
-export const outcome = result => result === undefined || result.is_error ? 1 : 0;
+export const outcome = result => maybe(result).map(({is_error: failed}) => is(failed)).orElse(true) ? 1 : 0;
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   let result;

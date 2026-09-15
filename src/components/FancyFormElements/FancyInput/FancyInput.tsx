@@ -39,7 +39,7 @@ export const FancyInput: FC<PropsWithChildren<FancyTextInputProps>> = (
 ) => <label id={id} className={classNames(
   'fancy-input',
   'fancy',
-  value && 'not-empty',
+  value !== '' && 'not-empty',
   className
 )}>
   <span id={labelId} className={classNames('fancy-title', 'ellipsis', 'bold', labelClass)}>{children}</span>

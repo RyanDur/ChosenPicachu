@@ -1,6 +1,7 @@
 import {readFileSync} from 'node:fs';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {not} from '@ryandur/sand';
 import {design, doors, halves, qaNames, tests} from './agents.mjs';
 
 const values = readFileSync(join(dirname(fileURLToPath(import.meta.url)), 'values.md'), 'utf8');
@@ -37,7 +38,7 @@ const dispatch = asks => asks.length === 1
 
 export const promptFor = ({scope, before, after}) => {
   const chosen = scopes[scope];
-  if (chosen === undefined) {
+  if (not(Object.hasOwn(scopes, scope))) {
     throw new Error(`no review scope named "${scope}"; the scopes are ${listed(Object.keys(scopes))}`);
   }
   return [

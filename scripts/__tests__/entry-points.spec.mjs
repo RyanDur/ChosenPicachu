@@ -1,8 +1,14 @@
 import {readFileSync} from 'node:fs';
 import {baseOf, demosLinks, preloaded, staticRoutesOf} from '../entry-points.mjs';
 import {Paths} from '@pages/Paths';
+import {not} from '@ryandur/sand';
 
 const pathsSource = readFileSync('src/pages/Paths.ts', 'utf-8');
+
+/**
+ * @param {string} path
+ */
+const carriesNoParameter = path => path.startsWith('/') && path !== '/' && not(path.includes(':'));
 
 const manifest = {
   'index.html': {file: 'assets/index-abc.js', imports: ['shared.ts']},
@@ -64,7 +70,7 @@ describe('the entry points', () => {
 
 describe('the entry points the build writes', () => {
   test('are every path of the site that carries no parameter', () => {
-    const fixed = Object.values(Paths).filter(path => path.startsWith('/') && path !== '/' && !path.includes(':'));
+    const fixed = Object.values(Paths).filter(carriesNoParameter);
 
     expect(staticRoutesOf(pathsSource)).toEqual(fixed);
   });

@@ -1,4 +1,5 @@
 import {defineConfig} from '@playwright/test';
+import {has} from '@ryandur/sand';
 
 const smokeUrl = process.env.SMOKE_URL;
 
@@ -9,10 +10,10 @@ export default defineConfig({
   workers: 1,
   timeout: 120_000,
   use: {
-    baseURL: smokeUrl || 'https://ryandur.github.io/ChosenPicachu/',
+    baseURL: smokeUrl ?? 'https://ryandur.github.io/ChosenPicachu/',
     viewport: {width: 1000, height: 760}
   },
-  webServer: smokeUrl ? {
+  webServer: has(smokeUrl) ? {
     command: 'npm run preview',
     url: smokeUrl,
     reuseExistingServer: true

@@ -3,6 +3,7 @@ import {existsSync, readFileSync, statSync} from 'node:fs';
 import {dirname, extname, join, resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {gzipSync} from 'node:zlib';
+import {is} from '@ryandur/sand';
 import {WebSocketServer} from 'ws';
 
 const port = 4517;
@@ -25,7 +26,7 @@ const compressible = new Set(['.html', '.js', '.css', '.json', '.svg', '.txt', '
 const server = createServer((request, response) => {
   const send = (status, body, contentType, compress) => {
     const headers = {'content-type': contentType, 'cache-control': 'public, max-age=600'};
-    if (compress && request.headers['accept-encoding']?.includes('gzip')) {
+    if (is(compress) && (request.headers['accept-encoding'] ?? '').includes('gzip')) {
       body = gzipSync(body);
       headers['content-encoding'] = 'gzip';
     }
@@ -83,12 +84,10 @@ const server = createServer((request, response) => {
 const feed = new WebSocketServer({server, path: '/ws-feed'});
 feed.on('connection', socket => {
   let at = 0;
-  let replay;
-  socket.on('message', () => {
-    if (replay) return;
-    replay = setInterval(() => socket.send(frames[at++ % frames.length]), 80);
+  socket.once('message', () => {
+    const replay = setInterval(() => socket.send(frames[at++ % frames.length]), 80);
+    socket.on('close', () => clearInterval(replay));
   });
-  socket.on('close', () => clearInterval(replay));
 });
 
 server.listen(port, () => console.log(`stub ready on ${port}`));

@@ -1,4 +1,5 @@
 import {AddressInfo, NewUser, User} from '@components/Users/UserInfo/user';
+import {maybe} from '@ryandur/sand';
 import {FormAction, FormActions} from './actions';
 
 type Without<T, K extends keyof T> = T extends unknown ? Omit<T, K> : never;
@@ -13,7 +14,7 @@ export type Draft = {
 export const draftOf = ({work, ...user}: NewUser | User): Draft => ({
   user,
   sameAsHome: work === 'home',
-  ...(work === 'home' || work === undefined ? {} : {typedWork: work}),
+  ...(work === 'home' ? {} : maybe(work).map(typedWork => ({typedWork})).orElse({})),
   avatarsDrawn: 0
 });
 

@@ -1,4 +1,4 @@
-import {has} from '@ryandur/sand';
+import {has, maybe} from '@ryandur/sand';
 import {
   ClevelandAllArtResponse,
   ClevelandAllArtSchema,
@@ -30,7 +30,7 @@ const srcSetOf = (record: ClevelandRecord): string | undefined => {
 };
 
 const artistInfoOf = (record: ClevelandRecord): string =>
-  (record.creators ?? []).map(({description}) => description).filter(has).join(', ') || record.tombstone || 'Unknown';
+  (record.creators ?? []).map(({description}) => description).filter(has).join(', ') || maybe(record.tombstone).orElse('Unknown');
 
 const toPiece = (record: ClevelandRecord): Art => ({
   id: String(record.id),

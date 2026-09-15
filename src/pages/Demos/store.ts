@@ -78,7 +78,7 @@ export const selectRows = (state: DemosState): readonly Measures[] => {
   const byWindow = new Map(folded.map(row => [row.window.display, row]));
   return standingOf(state.arrangement, valueOf).flatMap(key => {
     const row = byWindow.get(key);
-    return row === undefined ? [] : [row];
+    return row ? [row] : [];
   });
 };
 

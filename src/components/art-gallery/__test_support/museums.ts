@@ -1,4 +1,5 @@
 import {http, HttpResponse} from 'msw';
+import {has} from '@ryandur/sand';
 import {server} from '@__test_support/server';
 import {AICAllArtResponse, AICArtResponse, AICSearchResponse} from '@components/art-gallery/museums/aic/types';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
@@ -35,7 +36,7 @@ const allArtParams = (options: AllArt) => ({
   fields: fields.join(),
   page: String(options.page),
   limit: String(options.limit),
-  ...(options.search ? {q: options.search} : {})
+  ...(has(options.search) ? {q: options.search} : {})
 });
 
 export const setupAICAllArtResponse = (response: AICAllArtResponse, options: AllArt = {

@@ -78,7 +78,7 @@ const usersServer = (): Plugin => {
     },
     configureServer(server) {
       server.middlewares.use(async (request, response, next) => {
-        if (request.url?.split('?')[0].endsWith(`/${script}`)) {
+        if ((request.url ?? '').split('?')[0].endsWith(`/${script}`)) {
           response.setHeader('content-type', 'text/javascript');
           response.end(await built());
           return;
@@ -117,7 +117,7 @@ const runtimeEnv = (env: Record<string, string>): Plugin => {
     },
     configureServer(server) {
       server.middlewares.use((request, response, next) => {
-        if (request.url?.split('?')[0].endsWith('/env.js')) {
+        if ((request.url ?? '').split('?')[0].endsWith('/env.js')) {
           response.setHeader('content-type', 'text/javascript');
           response.end(body);
           return;

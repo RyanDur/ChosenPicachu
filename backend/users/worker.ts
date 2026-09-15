@@ -16,7 +16,7 @@ const kept = async (roster: Roster): Promise<Roster> => {
 const remembered = async (): Promise<Roster> => {
   const cache = await caches.open(shelf);
   const held = await cache.match(key);
-  return held === undefined ? kept(createRandomUsers()) : held.json();
+  return held ? held.json() : kept(createRandomUsers());
 };
 
 const answered = async (request: Request): Promise<Response> => {

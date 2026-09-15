@@ -2,7 +2,7 @@ import {http as handle, HttpResponse} from 'msw';
 import {HTTPError, HTTPMethod, HTTPStatus} from '../types';
 import {http} from '../http';
 import {faker} from '@faker-js/faker';
-import {failure, Result} from '@ryandur/sand';
+import {failure, has, Result} from '@ryandur/sand';
 import {server} from '@__test_support/server';
 
 const testObject = {foo: faker.lorem.words()};
@@ -62,7 +62,7 @@ describe('http', () => {
     response: unknown;
   }) => {
     test('gives back the body the server answered with', async () => {
-      respondWith(httpMethod, code, response === undefined ? null : JSON.stringify(testObject));
+      respondWith(httpMethod, code, has(response) ? JSON.stringify(testObject) : null);
 
       const actual = await method(endpoint, body).orNull();
 

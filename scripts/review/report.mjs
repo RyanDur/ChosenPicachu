@@ -1,6 +1,7 @@
 import {readFileSync, writeFileSync} from 'node:fs';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {empty, has, maybe, not} from '@ryandur/sand';
 
 const schema = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), 'feedback.schema.json'), 'utf8'));
 const casesOf = kind => schema.$defs[kind]['enum'];
@@ -10,7 +11,7 @@ const marks = {violation: '✖', concern: '▲', note: '○'};
 
 export const reviewIn = answer => {
   const {structured_output: structured} = JSON.parse(answer);
-  if (structured === undefined || !Array.isArray(structured.plusses) || !Array.isArray(structured.deltas)) {
+  if (not(Array.isArray(structured?.plusses)) || not(Array.isArray(structured?.deltas))) {
     throw new Error('the review answered without plusses and deltas; the structured output is missing');
   }
   return {plusses: structured.plusses, deltas: structured.deltas};
@@ -24,13 +25,12 @@ const asText = part => part.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace
 
 const told = prose => prose.split(/(`[^`]*`)/).map((part, index) => index % 2 === 1 ? part : asText(part)).join('');
 
-const placeOf = ({file, line}, commit) =>
-  commit === undefined
-    ? `\`${file}:${line}\``
-    : `[\`${file}:${line}\`](https://github.com/${commit.repository}/blob/${commit.sha}/${file}#L${line})`;
+const placeOf = ({file, line}, commit) => maybe(commit)
+  .map(({repository, sha}) => `[\`${file}:${line}\`](https://github.com/${repository}/blob/${sha}/${file}#L${line})`)
+  .orElse(`\`${file}:${line}\``);
 
 const checkedFold = ({checked}) =>
-  checked === undefined || checked === '' ? [] : ['<details><summary>what was checked</summary>', '', told(checked), '', '</details>', ''];
+  empty(checked) ? [] : ['<details><summary>what was checked</summary>', '', told(checked), '', '</details>', ''];
 
 export const plusOf = (plus, commit) => [
   `##### + ${placeOf(plus, commit)}`,
@@ -105,12 +105,13 @@ export const summaryOf = ({plusses, deltas}, {commit} = {}) => {
 
 export const leavesFeedback = ({plusses, deltas}) => plusses.length + deltas.length > 0;
 
+/** @param {{severity: string}[]} deltas */
 export const verdictOf = deltas => deltas.some(({severity}) => severity === 'violation') ? 1 : 0;
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   const review = reviewIn(readFileSync(process.stdin.fd, 'utf8'));
   const {GITHUB_REPOSITORY: repository, GITHUB_SHA: sha} = process.env;
-  const commit = repository !== undefined && sha !== undefined ? {repository, sha} : undefined;
+  const commit = has(repository) && has(sha) ? {repository, sha} : undefined;
   const summary = summaryOf(review, {commit});
   process.stdout.write(summary);
   if (leavesFeedback(review)) {

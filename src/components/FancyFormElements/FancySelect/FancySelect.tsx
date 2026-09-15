@@ -27,8 +27,8 @@ export const FancySelect: FC<PropsWithChildren<FancySelectProps>> = (
     onChange,
     selectId,
     required,
-    disabled,
-    readOnly
+    disabled = false,
+    readOnly = false
   }
 ) => (readOnly || disabled) ? <FancyInput className={className} id={id} value={value} readOnly={readOnly} disabled={disabled} inputId={selectId}>{children}</FancyInput> :
   <label id={id} className={classNames('fancy-select', 'fancy', value && 'not-empty', className)}>

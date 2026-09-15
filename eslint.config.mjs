@@ -28,6 +28,13 @@ const shape = {
   '@stylistic/jsx-tag-spacing': ['error', {beforeSelfClosing: 'never', beforeClosing: 'never'}]
 };
 
+const presence = {
+  'no-restricted-syntax': ['error', {
+    selector: 'BinaryExpression:matches([left.type="Identifier"][left.name="undefined"], [right.type="Identifier"][right.name="undefined"])',
+    message: 'Say presence with truthiness, ?? or maybe, not a comparison to undefined.'
+  }]
+};
+
 export default [
   {
     ignores: ['dist/**', 'node_modules/**', 'coverage/**', 'playwright-report/**', 'test-results/**', '.lighthouseci/**']
@@ -41,7 +48,7 @@ export default [
       sourceType: 'module'
     },
     plugins: {'@stylistic': stylistic},
-    rules: shape
+    rules: {...shape, ...presence}
   },
   {
     files: ['**/*.tsx'],
@@ -55,6 +62,6 @@ export default [
       sourceType: 'module'
     },
     plugins: {'@stylistic': stylistic},
-    rules: shape
+    rules: {...shape, ...presence}
   }
 ];

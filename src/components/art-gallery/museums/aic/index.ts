@@ -76,5 +76,5 @@ const aicToPiece = (width: number) => (data: AICArt): Art => ({
   title: data.title,
   ...pictured(data.image_id, width),
   artistInfo: data.artist_display,
-  altText: data.thumbnail?.alt_text || data.term_titles.join(' ') || ''
+  altText: maybe(data.thumbnail?.alt_text).orElse(data.term_titles.join(' '))
 });

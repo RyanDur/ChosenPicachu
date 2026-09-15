@@ -1,5 +1,6 @@
 import {FC, PropsWithChildren, useContext, useState} from 'react';
 import {Link} from 'react-router';
+import {empty} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {Loading} from '@components/Loading';
 import {useSearchParamsObject} from '@components/search-params';
@@ -39,7 +40,7 @@ export const Image: FC<ImageProps> = (
   return errored ?
     <img alt={`${piece.title} would not load`}
       className="image stand-in"
-      src={noImage}/> : !piece.image ?
+      src={noImage}/> : empty(piece.image) ?
       <img alt={`${piece.title} has nothing to show`}
         className="image stand-in"
         src={noImage}/> :

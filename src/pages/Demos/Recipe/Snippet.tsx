@@ -15,7 +15,7 @@ type Props = {
 export const Snippet: FC<Props> = ({label, lines}) =>
   <pre className={classNames('snippet', 'code', 'rounded-corners')}>
     <span className="lang" aria-hidden="true">{label}</span>
-    <code>{lines.map(({text, dim}, at) =>
+    <code>{lines.map(({text, dim = false}, at) =>
       <span className={classNames('line', dim && 'comment')} key={at}>
         {dim
           ? text

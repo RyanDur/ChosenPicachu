@@ -719,17 +719,19 @@ describe('animated moves', () => {
   // the browser blurs a focused node when it is moved in the DOM; jsdom does not, so the suite supplies the loss
   const blurringMoves = (): (() => void) => {
     const untouched = Object.getOwnPropertyDescriptor(Node.prototype, 'insertBefore');
-    if (untouched === undefined) throw new Error('no insertBefore to blur');
-    Node.prototype.insertBefore = function <T extends Node>(this: Node, node: T, child: Node | null): T {
-      const focused = document.activeElement;
-      if (node instanceof HTMLElement && focused instanceof HTMLElement && node.contains(focused)) {
-        focused.blur();
-      }
-      return Reflect.apply(untouched.value as (this: Node, node: T, child: Node | null) => T, this, [node, child]);
-    };
-    return () => {
-      Object.defineProperty(Node.prototype, 'insertBefore', untouched);
-    };
+    if (untouched) {
+      Node.prototype.insertBefore = function <T extends Node>(this: Node, node: T, child: Node | null): T {
+        const focused = document.activeElement;
+        if (node instanceof HTMLElement && focused instanceof HTMLElement && node.contains(focused)) {
+          focused.blur();
+        }
+        return Reflect.apply(untouched.value, this, [node, child]);
+      };
+      return () => {
+        Object.defineProperty(Node.prototype, 'insertBefore', untouched);
+      };
+    }
+    throw new Error('no insertBefore to blur');
   };
   const spanned = (): void => {
     sourceTable().getBoundingClientRect = () => rect({left: 0, right: 700, width: 700, top: 0, bottom: 240, height: 240});
