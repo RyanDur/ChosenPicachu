@@ -75,40 +75,10 @@ describe('the users page', () => {
 
       await waitFor(() => expect(sent()).toMatchObject({work: 'home'}));
     });
-
-    it('editing a user who works from home finds Same as Home ticked', async () => {
-      const hana = aUser({work: 'home'});
-      setupUsersResponse([hana]);
-
-      render(<TestApp at={userAt(hana.id, 'edit')}/>);
-      await userForm.showing(hana);
-
-      expect(userForm.sameAsHome()).toBeChecked();
-    });
-
-    it('a user born on a day shows that day when viewed', async () => {
-      const born = aUser({dob: new Date(1984, 5, 2)});
-      setupUsersResponse([born]);
-
-      render(<TestApp at={userAt(born.id, 'view')}/>);
-      await userForm.showing(born);
-
-      expect(userForm.field('Date Of Birth')).toHaveDisplayValue('1984-06-02');
-    });
-
-    it('a user born on a day shows that day when edited', async () => {
-      const born = aUser({dob: new Date(1984, 5, 2)});
-      setupUsersResponse([born]);
-
-      render(<TestApp at={userAt(born.id, 'edit')}/>);
-      await userForm.showing(born);
-
-      expect(userForm.field('Date Of Birth')).toHaveDisplayValue('1984-06-02');
-    });
   });
 
   describe('viewing a user', () => {
-    const jo = aUser();
+    const jo = aUser({dob: new Date(1984, 5, 2)});
 
     beforeEach(async () => {
       setupUsersResponse([jo]);
@@ -118,6 +88,10 @@ describe('the users page', () => {
 
     test('viewing a user shows their details in the form', () => {
       expect(userForm.field('Last Name')).toHaveDisplayValue(jo.info.lastName);
+    });
+
+    test('a user born on a day shows that day', () => {
+      expect(userForm.field('Date Of Birth')).toHaveDisplayValue('1984-06-02');
     });
 
     test('the form cannot be typed into', () => {
@@ -147,7 +121,7 @@ describe('the users page', () => {
   });
 
   describe('editing a user', () => {
-    const kai = aUser();
+    const kai = aUser({work: 'home', dob: new Date(1984, 5, 2)});
 
     beforeEach(async () => {
       setupUsersResponse([kai]);
@@ -162,6 +136,14 @@ describe('the users page', () => {
 
     test('the date of birth is picked from a date field', () => {
       expect(userForm.field('Date Of Birth')).toHaveAttribute('type', 'date');
+    });
+
+    test('a user born on a day shows that day', () => {
+      expect(userForm.field('Date Of Birth')).toHaveDisplayValue('1984-06-02');
+    });
+
+    test('a user who works from home finds Same as Home ticked', () => {
+      expect(userForm.sameAsHome()).toBeChecked();
     });
 
     test('the state is chosen from a list', () => {

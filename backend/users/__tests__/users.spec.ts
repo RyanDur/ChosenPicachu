@@ -1,5 +1,5 @@
 import {User} from '@components/Users/UserInfo/user';
-import {maybe} from '@ryandur/sand';
+import {maybe, not} from '@ryandur/sand';
 import {createUser} from '../core';
 import {api, respond} from '../respond';
 
@@ -41,14 +41,19 @@ describe('the users backend', () => {
   });
 
   describe('given someone new', () => {
-    test('creates them with an id of their own and answers the roster they joined', async () => {
+    test('answers created, with the roster it now keeps', async () => {
       const {response, roster: next} = await respond(asked('POST', '', someone), roster);
 
-      const answered: User[] = await response.json();
       expect(response.status).toBe(201);
-      expect(answered).toHaveLength(roster.length + 1);
-      expect(answered[0].id).toEqual(expect.any(String));
+      expect(await response.json()).toEqual(JSON.parse(JSON.stringify(next)));
+    });
+
+    test('keeps who they are, under an id nobody else holds', async () => {
+      const {roster: next} = await respond(asked('POST', '', someone), roster);
+
+      const joined = next.find(({id}) => not(roster.some(known => known.id === id)));
       expect(next).toHaveLength(roster.length + 1);
+      expect(JSON.parse(JSON.stringify(joined))).toEqual({...JSON.parse(JSON.stringify(someone)), id: expect.any(String)});
     });
   });
 
