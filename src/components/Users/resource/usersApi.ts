@@ -37,7 +37,7 @@ const UserDecoder = schema.object({
 });
 
 const {usersDomain} = env;
-const usersServer = `${import.meta.env.BASE_URL}${usersServerScript}`;
+const usersServerUrl = `${import.meta.env.BASE_URL}${usersServerScript}`;
 const patience = 10_000;
 
 const claimed = (workers: ServiceWorkerContainer): Promise<unknown> => new Promise(resolve => {
@@ -49,7 +49,7 @@ const gaveUp = (): Promise<never> => new Promise((_, reject) => {
   setTimeout(reject, patience);
 });
 
-const served = (workers: ServiceWorkerContainer): Promise<unknown> => workers.register(usersServer)
+const served = (workers: ServiceWorkerContainer): Promise<unknown> => workers.register(usersServerUrl)
   .then(() => workers.controller ? undefined : claimed(workers));
 
 const whenServed = <T>(asked: () => Result.Async<T, HTTPError>): Result.Async<T, HTTPError> =>

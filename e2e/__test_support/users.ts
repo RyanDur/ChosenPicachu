@@ -32,6 +32,10 @@ export const usersPage = (page: Page) => {
     leaveAndComeBack: async (): Promise<void> => {
       await site.getByRole('link', {name: 'Home'}).click();
       await site.getByRole('link', {name: 'Users'}).click();
+    },
+    reloadPastItsWorker: async (): Promise<void> => {
+      const devtools = await page.context().newCDPSession(page);
+      await Promise.all([page.waitForEvent('load'), devtools.send('Page.reload', {ignoreCache: true})]);
     }
   };
 };

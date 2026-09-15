@@ -1,10 +1,12 @@
 import {readFileSync} from 'node:fs';
 import {defineConfig} from 'vitest/config';
-import {loadEnv} from 'vite';
 import type {Plugin} from 'vite';
+import {loadEnv} from 'vite';
 import {rolldown} from 'rolldown';
 import {fileURLToPath} from 'node:url';
 import {usersServerScript} from './src/components/Users/resource/usersServer';
+import react from '@vitejs/plugin-react';
+import svgr from 'vite-plugin-svgr';
 
 const aliases = {
   '@env': fileURLToPath(new URL('./src/env.ts', import.meta.url)),
@@ -57,10 +59,8 @@ const rawCss = (): Plugin => ({
     }
   }
 });
-import react from '@vitejs/plugin-react';
-import svgr from 'vite-plugin-svgr';
 
-const usersServer = (): Plugin => {
+const usersServerPlugin = (): Plugin => {
   const worker = fileURLToPath(new URL('./backend/users/worker.ts', import.meta.url));
   const script = usersServerScript;
   const built = async (): Promise<string> => {
@@ -134,7 +134,7 @@ export default defineConfig(({mode}) => ({
   build: {
     manifest: true
   },
-  plugins: [rawCss(), frameScript(), usersServer(), runtimeEnv(loadEnv(mode, process.cwd())), react(), svgr({
+  plugins: [rawCss(), frameScript(), usersServerPlugin(), runtimeEnv(loadEnv(mode, process.cwd())), react(), svgr({
     // svgr options: https://react-svgr.com/docs/options/
     svgrOptions: {exportType: 'default', ref: true, svgo: false, titleProp: true},
     include: '**/*.svg'

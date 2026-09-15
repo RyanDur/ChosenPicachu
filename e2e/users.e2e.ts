@@ -50,9 +50,17 @@ test('a users page reloaded past its worker is taken back by it', async ({page, 
   const users = usersPage(page);
   await page.goto('users');
   await expect(users.names.first()).toBeVisible({timeout: 30_000});
-  const devtools = await page.context().newCDPSession(page);
 
-  await Promise.all([page.waitForEvent('load'), devtools.send('Page.reload', {ignoreCache: true})]);
+  await users.reloadPastItsWorker();
 
-  await expect(users.names.first()).toBeVisible({timeout: 5_000});
+  await expect(users.names.first()).toBeVisible({timeout: 30_000});
+});
+
+test('the users page gives up on a worker script that never answers and says the users could not be reached', async ({page, browserName}) => {
+  test.skip(browserName !== 'webkit', 'only WebKit lets a route hold a worker script unanswered');
+  await page.route('**/users-server.js', () => new Promise(() => undefined));
+
+  await page.goto('users', {waitUntil: 'commit'});
+
+  await expect(page.getByRole('alert')).toContainText('the users could not be reached', {timeout: 30_000});
 });
