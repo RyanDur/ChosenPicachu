@@ -20,6 +20,7 @@ export const Snippet: FC<Props> = ({label, lines}) =>
         {dim
           ? text
           : highlight(label, text).map(({text: piece, kind}, part) =>
-            kind === 'plain' ? piece : <mark className={kind} key={part}>{piece}</mark>)}
+            kind === 'plain' ? piece : <span className={kind} key={part}>{piece}</span>)}
+        {'\n'}
       </span>)}</code>
   </pre>;

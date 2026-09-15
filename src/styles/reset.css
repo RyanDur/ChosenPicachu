@@ -32,11 +32,6 @@ time, mark, audio, video {
   vertical-align: baseline;
 }
 
-mark {
-  background: none;
-  color: inherit;
-}
-
 ol, ul, menu {
   list-style: none;
 }
