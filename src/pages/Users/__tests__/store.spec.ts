@@ -1,5 +1,6 @@
 import {users as someUsers} from '@test-support/fixtures';
-import {usersApi} from '@components/Users/resource/usersApi';
+import {users} from '@components/Users';
+import {usersServed} from '@test-support/server';
 import {syncing} from '../syncing';
 import {friendsChanged, opened, selectUsers, userRemoved, userUpdated, userWithId, usersArrived, usersStore} from '../store';
 import {rowMoved} from '@components/DragSortableTable/arrangement';
@@ -7,7 +8,8 @@ import {rowMoved} from '@components/DragSortableTable/arrangement';
 describe('the users store', () => {
   const [first, second] = someUsers;
   const openedStore = async () => {
-    const store = usersStore(syncing(usersApi(someUsers), () => undefined, () => undefined));
+    usersServed(someUsers);
+    const store = usersStore(syncing(users, () => undefined, () => undefined));
     store.dispatch(opened());
     await vi.waitFor(() => expect(store.state.users).toHaveLength(someUsers.length));
     return store;
@@ -33,8 +35,9 @@ describe('the users store', () => {
     expect(selectUsers(store.state).map(({id}) => id)).toEqual([ids[1], ids[2], first.id, ...ids.slice(3)]);
   });
 
-  it('opening fills the roster with everyone the api has', async () => {
-    const store = usersStore(syncing(usersApi(someUsers), () => undefined, () => undefined));
+  it('opening fills the roster with everyone the backend has', async () => {
+    usersServed(someUsers);
+    const store = usersStore(syncing(users, () => undefined, () => undefined));
 
     store.dispatch(opened());
 
@@ -107,7 +110,8 @@ describe('the users store', () => {
 
   it('an update says once when it is saved', async () => {
     const saved = vi.fn();
-    const store = usersStore(syncing(usersApi(someUsers), saved, () => undefined));
+    usersServed(someUsers);
+    const store = usersStore(syncing(users, saved, () => undefined));
     store.dispatch(opened());
     await vi.waitFor(() => expect(store.state.users).toHaveLength(someUsers.length));
 

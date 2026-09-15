@@ -15,7 +15,7 @@ import {
   ClevelandArtResponse,
   ClevelandSearchResponse
 } from '@components/art-gallery/museums/cleveland/types';
-import {createUser} from '@components/Users/resource/usersApi';
+import {createUser} from '@backend/users/core';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
 import {env} from '@env';
 

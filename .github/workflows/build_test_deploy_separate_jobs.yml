@@ -11,6 +11,7 @@ env:
   VITE_APP_AIC_PICTURES: https://www.artic.edu/iiif/2
   VITE_APP_VAM_PICTURES: https://framemark.vam.ac.uk/collections
   VITE_APP_CLEVELAND_API: https://openaccess-api.clevelandart.org/api/artworks
+  VITE_APP_USERS_API: /api/users
 
 jobs:
   build_test:

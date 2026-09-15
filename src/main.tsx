@@ -5,9 +5,15 @@ import {router} from './router';
 import {env} from '@env';
 import './index.css';
 
-ReactDom.createRoot(document.getElementById('root')!).render(
-  <App
-    router={createBrowserRouter([router], {basename: import.meta.env.BASE_URL})}
-    onError={error => console.error(error)}
-    env={env}/>
-);
+const served = (): Promise<void> =>
+  !('serviceWorker' in navigator) || navigator.serviceWorker.controller !== null
+    ? Promise.resolve()
+    : new Promise(resolve => navigator.serviceWorker.addEventListener('controllerchange', () => resolve(), {once: true}));
+
+void served()
+  .then(() => ReactDom.createRoot(document.getElementById('root')!).render(
+    <App
+      router={createBrowserRouter([router], {basename: import.meta.env.BASE_URL})}
+      onError={error => console.error(error)}
+      env={env}/>
+  ));

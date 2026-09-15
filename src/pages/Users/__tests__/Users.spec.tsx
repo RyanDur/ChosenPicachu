@@ -3,7 +3,8 @@ import {TestApp} from '@test-support/TestApp';
 import {render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {AddressInfo, User} from '@components/Users/UserInfo/user';
-import {createUser} from '@components/Users/resource/usersApi';
+import {createUser} from '@backend/users/core';
+import {usersServed} from '@test-support/server';
 import {addressGroup} from '../UserInformation/__test_support';
 import {
   addUser,
@@ -47,9 +48,12 @@ const conciseUser = (firstName: string): User & {work: AddressInfo} => {
   };
 };
 
+const homeWorker = (firstName: string): User => ({...conciseUser(firstName), work: 'home'});
+
 describe('the users page', () => {
   describe('ranking the users', () => {
     it('sorting works-from-home ascending puts every No before every Yes', async () => {
+      usersServed([conciseUser('Ana'), homeWorker('Ben'), conciseUser('Cy'), homeWorker('Di')]);
       render(<TestApp at={Paths.users}/>);
       await roster();
 
@@ -100,21 +104,21 @@ describe('the users page', () => {
     });
 
     it('editing a user who works from home finds Same as Home ticked', async () => {
-      const homeWorker = conciseUser('Hana');
+      const hana = homeWorker('Hana');
+      usersServed([hana]);
       render(<TestApp at={Paths.users}/>);
       await roster();
-      await addUserWhoWorksFromHome(homeWorker);
 
-      await edit(fullName(homeWorker));
+      await edit(fullName(hana));
 
       expect(screen.getByRole('checkbox', {name: 'Same as Home'})).toBeChecked();
     });
 
     it('a user born on a day shows that day when viewed', async () => {
       const born = conciseUser('Faye');
+      usersServed([born]);
       render(<TestApp at={Paths.users}/>);
       await roster();
-      await addUser(born);
 
       await view(fullName(born));
 
@@ -123,9 +127,9 @@ describe('the users page', () => {
 
     it('a user born on a day shows that day when edited', async () => {
       const born = conciseUser('Gabi');
+      usersServed([born]);
       render(<TestApp at={Paths.users}/>);
       await roster();
-      await addUser(born);
 
       await edit(fullName(born));
 
@@ -134,11 +138,13 @@ describe('the users page', () => {
   });
 
   describe('viewing a user', () => {
-    let chosen = '';
+    const jo = conciseUser('Jo');
+    const chosen = fullName(jo);
 
     beforeEach(async () => {
+      usersServed([jo]);
       render(<TestApp at={Paths.users}/>);
-      [chosen] = await roster();
+      await roster();
       await view(chosen);
     });
 
@@ -174,11 +180,13 @@ describe('the users page', () => {
   });
 
   describe('editing a user', () => {
-    let chosen = '';
+    const kai = conciseUser('Kai');
+    const chosen = fullName(kai);
 
     beforeEach(async () => {
+      usersServed([kai]);
       render(<TestApp at={Paths.users}/>);
-      [chosen] = await roster();
+      await roster();
       await edit(chosen);
     });
 
@@ -218,9 +226,9 @@ describe('the users page', () => {
 
   test('editing a user with a work address shows that address', async () => {
     const person = conciseUser('Ivo');
+    usersServed([person]);
     render(<TestApp at={Paths.users}/>);
     await roster();
-    await addUser(person);
 
     await edit(fullName(person));
 
@@ -229,9 +237,9 @@ describe('the users page', () => {
 
   test('Update keeps the work address a user was added with', async () => {
     const person = conciseUser('Ysolde');
+    usersServed([person]);
     render(<TestApp at={Paths.users}/>);
     await roster();
-    await addUser(person);
     await edit(fullName(person));
 
     await userEvent.click(within(screen.getByRole('form', {name: 'User Information'})).getByRole('button', {name: 'Update'}));
@@ -242,9 +250,9 @@ describe('the users page', () => {
 
   test('an updated user shows their new name in the roster', async () => {
     const person = conciseUser('Cleo');
+    usersServed([person]);
     render(<TestApp at={Paths.users}/>);
     await roster();
-    await addUser(person);
     await edit(fullName(person));
 
     await userEvent.type(within(screen.getByRole('form', {name: 'User Information'})).getByLabelText('Last Name'), ' Jr');
@@ -255,10 +263,9 @@ describe('the users page', () => {
 
   test('a removed user leaves the roster', async () => {
     const person = conciseUser('Dev');
+    usersServed([person]);
     render(<TestApp at={Paths.users}/>);
     await roster();
-    await addUser(person);
-    await rowOf(fullName(person));
 
     await remove(fullName(person));
 
@@ -267,9 +274,9 @@ describe('the users page', () => {
 
   test('removing the chosen user clears them from the address', async () => {
     const person = conciseUser('Dana');
+    usersServed([person]);
     render(<TestApp at={Paths.users}/>);
     await roster();
-    await addUser(person);
     await view(fullName(person));
     await waitFor(() => expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('id='));
 
@@ -280,19 +287,15 @@ describe('the users page', () => {
 
   test('a cloned user stands once more in the roster', async () => {
     const person = conciseUser('Eli');
+    usersServed([person]);
     render(<TestApp at={Paths.users}/>);
     await roster();
-    await addUser(person);
-    await rowOf(fullName(person));
-    const standing = names().filter(name => name === fullName(person)).length;
     await clone(fullName(person));
 
     await userEvent.click(within(screen.getByRole('form', {name: 'User Information'})).getByRole('button', {name: 'Add'}));
 
-    await waitFor(() => expect(names().filter(name => name === fullName(person))).toHaveLength(standing + 1));
+    await waitFor(() => expect(names().filter(name => name === fullName(person))).toHaveLength(2));
   });
-
-  const aWalkThroughTheRoster = 15_000;
 
   const befriend = async (row: HTMLElement, name: string): Promise<void> => {
     await userEvent.selectOptions(within(row).getByRole('combobox', {name: 'Add a friend'}), name);
@@ -301,10 +304,9 @@ describe('the users page', () => {
 
   test("removing the only friend from a person's row hands focus to that row's Add a friend", async () => {
     const [pia, quin] = [conciseUser('Pia'), conciseUser('Quin')];
+    usersServed([pia, quin]);
     render(<TestApp at={Paths.users}/>);
     await roster();
-    await addUserWhoWorksFromHome(pia);
-    await addUserWhoWorksFromHome(quin);
     await befriend(await rowOf(fullName(pia)), fullName(quin));
     const quinsRow = await rowOf(fullName(quin));
     await within(quinsRow).findByRole('button', {name: `remove ${fullName(pia)}`});
@@ -313,14 +315,13 @@ describe('the users page', () => {
 
     await waitFor(() => expect(within(quinsRow).queryByRole('button', {name: `remove ${fullName(pia)}`})).not.toBeInTheDocument());
     expect(within(quinsRow).getByRole('combobox', {name: 'Add a friend'})).toHaveFocus();
-  }, aWalkThroughTheRoster);
+  });
 
   test('focus is not pulled back to a settled removal when the roster renders again', async () => {
     const [rae, sol] = [conciseUser('Rae'), conciseUser('Sol')];
+    usersServed([rae, sol]);
     render(<TestApp at={Paths.users}/>);
     await roster();
-    await addUserWhoWorksFromHome(rae);
-    await addUserWhoWorksFromHome(sol);
     const raesRow = await rowOf(fullName(rae));
     await befriend(raesRow, fullName(sol));
     await userEvent.click(within(raesRow).getByRole('button', {name: `remove ${fullName(sol)}`}));
@@ -331,5 +332,5 @@ describe('the users page', () => {
 
     await waitFor(() => expect(screen.getByRole('status', {name: 'url search'})).not.toHaveTextContent('mode='));
     expect(within(raesRow).getByRole('combobox', {name: 'Add a friend'})).not.toHaveFocus();
-  }, aWalkThroughTheRoster);
+  });
 });

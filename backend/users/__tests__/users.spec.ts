@@ -3,11 +3,15 @@ import {NewUser, User} from '@components/Users/UserInfo/user';
 import {failure, Success} from '@ryandur/sand';
 import {HTTPError} from '@transport/types';
 import {faker} from '@faker-js/faker';
-import {createUser, usersApi, UsersAPI} from '../usersApi';
+import {createUser} from '@backend/users/core';
+import {users} from '@components/Users';
+import {UsersAPI} from '@components/Users/resource/usersApi';
+import {usersServed} from '@test-support/server';
 
-describe('users data', () => {
+describe('the users backend, through its client', () => {
   test('hands back every user it was given', async () => {
-    const api: UsersAPI = usersApi(allUsers);
+    usersServed(allUsers);
+    const api: UsersAPI = users;
     const data = await api.getAll().value;
 
     expect(data.orNull()).toEqual(allUsers);
@@ -30,7 +34,8 @@ describe('users data', () => {
   };
 
   test('an added user joins the list with an id of their own', async () => {
-    const api: UsersAPI = usersApi(allUsers);
+    usersServed(allUsers);
+    const api: UsersAPI = users;
 
     const usersSuccess = await api.add(someone).value as Success<User[], never>;
 
@@ -39,7 +44,8 @@ describe('users data', () => {
   });
 
   test('each add builds on the list the last one left', async () => {
-    const api: UsersAPI = usersApi(allUsers);
+    usersServed(allUsers);
+    const api: UsersAPI = users;
     await api.add(someone).value;
 
     const moreUsers = await api.add(createUser()).value as Success<User[], never>;
@@ -48,7 +54,8 @@ describe('users data', () => {
   });
 
   test('finds a user by their id', async () => {
-    const api: UsersAPI = usersApi(allUsers);
+    usersServed(allUsers);
+    const api: UsersAPI = users;
     const firstUser = allUsers[0];
     const lastUser = allUsers[allUsers.length - 1];
 
@@ -60,7 +67,8 @@ describe('users data', () => {
   });
 
   test('an id nobody has is not found', async () => {
-    const api: UsersAPI = usersApi(allUsers);
+    usersServed(allUsers);
+    const api: UsersAPI = users;
 
     const nobody = await api.get('nobody').value;
 
@@ -70,7 +78,8 @@ describe('users data', () => {
   describe('updating a user and friends', () => {
     const freshTrio = (): [UsersAPI, User, User, User] => {
       const [a, b, c] = [createUser(), createUser(), createUser()];
-      return [usersApi([a, b, c]), a, b, c];
+      usersServed([a, b, c]);
+      return [users, a, b, c];
     };
     const friendsOf = (users: User[], id?: string): string[] =>
       users.find(user => user.id === id)?.friends ?? [];
@@ -131,22 +140,24 @@ describe('users data', () => {
   describe('deleting a user', () => {
     it('removes the user', async () => {
       const [a, b, c] = [createUser(), createUser(), createUser()];
-      const api = usersApi([a, b, c]);
+      usersServed([a, b, c]);
+      const api = users;
 
-      const users = (await api.delete(b).value).orNull()!;
+      const roster = (await api.delete(b).value).orNull()!;
 
-      expect(users.map(user => user.id)).toEqual([a.id, c.id]);
+      expect(roster.map(user => user.id)).toEqual([a.id, c.id]);
     });
 
     it('removes the user from the other users friends lists', async () => {
       const [a, b, c] = [createUser(), createUser(), createUser()];
-      const api = usersApi([a, b, c]);
+      usersServed([a, b, c]);
+      const api = users;
 
-      const users = (await api.update({...a, friends: [c.id]})
+      const roster = (await api.update({...a, friends: [c.id]})
         .mBind(() => api.delete(a)).value).orNull()!;
 
-      expect(users.find(user => user.id === c.id)?.friends).toEqual([]);
-      expect(users.map(user => user.id)).toEqual([b.id, c.id]);
+      expect(roster.find(user => user.id === c.id)?.friends).toEqual([]);
+      expect(roster.map(user => user.id)).toEqual([b.id, c.id]);
     });
   });
 });

@@ -5,6 +5,7 @@
       "@pages/*": ["./src/pages/*"],
       "@components/*": ["./src/components/*"],
       "@transport/*": ["./src/transport/*"],
+      "@backend/*": ["./backend/*"],
       "@test-support": ["./src/test-support/index.tsx"],
       "@test-support/*": ["./src/test-support/*"]
     },
@@ -38,9 +39,13 @@
   },
   "include": [
     "src",
+    "backend",
     "@testing-library/jest-dom/vitest",
     "node_modules/vitest/globals.d.ts",
     "test-setup.ts"
   ],
-  "files": ["test-setup.ts"]
+  "files": ["test-setup.ts"],
+  "exclude": [
+    "backend/users/worker.ts"
+  ]
 }

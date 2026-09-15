@@ -8,7 +8,8 @@ window.__env = {
   harvardAPIKey: import.meta.env.VITE_APP_HARVARD_API_KEY,
   vamDomain: import.meta.env.VITE_APP_VAM_API,
   vamPictures: import.meta.env.VITE_APP_VAM_PICTURES,
-  clevelandDomain: import.meta.env.VITE_APP_CLEVELAND_API
+  clevelandDomain: import.meta.env.VITE_APP_CLEVELAND_API,
+  usersDomain: import.meta.env.VITE_APP_USERS_API
 };
 
 export {};

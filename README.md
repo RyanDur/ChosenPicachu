@@ -25,7 +25,12 @@ VITE_APP_API_AIC=https://api.artic.edu/api/v1/artworks
 VITE_APP_HARVARD_API=https://api.harvardartmuseums.org/object
 VITE_APP_HARVARD_API_KEY=<your key>
 VITE_APP_VAM_API=https://api.vam.ac.uk/v2
+VITE_APP_USERS_API=/api/users
 ```
+
+The users have no server of their own. A service worker shipped with the site answers that path
+from a roster it draws on every load, in dev and in prod alike, so the last line only says where
+the page should ask.
 
 Then the usual:
 

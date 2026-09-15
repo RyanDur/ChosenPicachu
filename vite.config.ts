@@ -10,6 +10,7 @@ const aliases = {
   '@pages': fileURLToPath(new URL('./src/pages', import.meta.url)),
   '@components': fileURLToPath(new URL('./src/components', import.meta.url)),
   '@transport': fileURLToPath(new URL('./src/transport', import.meta.url)),
+  '@backend': fileURLToPath(new URL('./backend', import.meta.url)),
   '@test-support': fileURLToPath(new URL('./src/test-support', import.meta.url))
 };
 
@@ -59,6 +60,39 @@ const rawCss = (): Plugin => ({
 import react from '@vitejs/plugin-react';
 import svgr from 'vite-plugin-svgr';
 
+const usersServer = (): Plugin => {
+  const worker = fileURLToPath(new URL('./backend/users/worker.ts', import.meta.url));
+  const script = 'users-server.js';
+  let base = '/';
+  const built = async (): Promise<string> => {
+    const bundle = await rolldown({input: worker, resolve: {alias: aliases}, logLevel: 'silent'});
+    const {output} = await bundle.generate({format: 'iife'});
+    return output[0].code;
+  };
+  return {
+    name: 'users-server',
+    configResolved(config) {
+      base = config.base;
+    },
+    transformIndexHtml() {
+      return [{tag: 'script', children: `navigator.serviceWorker.register('${base}${script}');`, injectTo: 'head'}];
+    },
+    configureServer(server) {
+      server.middlewares.use(async (request, response, next) => {
+        if (request.url?.split('?')[0].endsWith(`/${script}`)) {
+          response.setHeader('content-type', 'text/javascript');
+          response.end(await built());
+          return;
+        }
+        next();
+      });
+    },
+    async generateBundle() {
+      this.emitFile({type: 'asset', fileName: script, source: await built()});
+    }
+  };
+};
+
 const runtimeEnv = (env: Record<string, string>): Plugin => {
   const body = `window.__env = ${JSON.stringify({
     tradeFeed: env.VITE_APP_TRADE_FEED ?? '',
@@ -70,7 +104,8 @@ const runtimeEnv = (env: Record<string, string>): Plugin => {
     harvardAPIKey: env.VITE_APP_HARVARD_API_KEY ?? '',
     vamDomain: env.VITE_APP_VAM_API ?? '',
     vamPictures: env.VITE_APP_VAM_PICTURES ?? '',
-    clevelandDomain: env.VITE_APP_CLEVELAND_API ?? ''
+    clevelandDomain: env.VITE_APP_CLEVELAND_API ?? '',
+    usersDomain: env.VITE_APP_USERS_API ?? ''
   }, null, 2)};\n`;
   let base = '/';
   return {
@@ -106,7 +141,7 @@ export default defineConfig(({mode}) => ({
   build: {
     manifest: true
   },
-  plugins: [rawCss(), frameScript(), runtimeEnv(loadEnv(mode, process.cwd())), react(), svgr({
+  plugins: [rawCss(), frameScript(), usersServer(), runtimeEnv(loadEnv(mode, process.cwd())), react(), svgr({
     // svgr options: https://react-svgr.com/docs/options/
     svgrOptions: {exportType: 'default', ref: true, svgo: false, titleProp: true},
     include: '**/*.svg'

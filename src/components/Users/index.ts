@@ -1,4 +1,4 @@
-export {users} from './resource/users';
+export {users} from './resource/usersApi';
 export {FriendsList} from './FriendsList';
 export {UserMenu} from './UserMenu';
 export {age, formatAge, AgeIn} from './age';
