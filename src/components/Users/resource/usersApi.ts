@@ -1,5 +1,5 @@
 import * as schema from 'schemawax';
-import {asyncResult, asyncSuccess, maybe, Result} from '@ryandur/sand';
+import {asyncFailure, asyncResult, asyncSuccess, maybe, Result} from '@ryandur/sand';
 import {env} from '@env';
 import {http} from '@transport/http';
 import {validate} from '@transport/validate';
@@ -36,17 +36,24 @@ const UserDecoder = schema.object({
 });
 
 const {usersDomain} = env;
+const usersServer = `${import.meta.env.BASE_URL}users-server.js`;
+const patience = 10_000;
 
-const controlled = (workers: ServiceWorkerContainer): Promise<unknown> => workers.controller
-  ? Promise.resolve()
-  : new Promise(resolve => {
-    workers.addEventListener('controllerchange', resolve, {once: true});
-    workers.ready.then(({active}) => active?.postMessage('claim')).catch(() => undefined);
-  });
+const claimed = (workers: ServiceWorkerContainer): Promise<unknown> => new Promise(resolve => {
+  workers.addEventListener('controllerchange', resolve, {once: true});
+  void workers.ready.then(({active}) => active?.postMessage('loaded uncontrolled'));
+});
+
+const gaveUp = (): Promise<never> => new Promise((_, reject) => {
+  setTimeout(() => reject(new Error('the users server never took control of the page')), patience);
+});
+
+const served = (workers: ServiceWorkerContainer): Promise<unknown> => workers.register(usersServer)
+  .then(() => workers.controller ? undefined : Promise.race([claimed(workers), gaveUp()]));
 
 const whenServed = <T>(asked: () => Result.Async<T, HTTPError>): Result.Async<T, HTTPError> =>
   maybe(navigator.serviceWorker)
-    .map(workers => asyncResult<unknown, HTTPError>(controlled(workers)))
+    .map(workers => asyncResult<unknown, unknown>(served(workers)).or(() => asyncFailure(HTTPError.NETWORK_ERROR)))
     .orElse(asyncSuccess(undefined))
     .mBind(asked);
 

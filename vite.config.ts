@@ -62,7 +62,6 @@ import svgr from 'vite-plugin-svgr';
 const usersServer = (): Plugin => {
   const worker = fileURLToPath(new URL('./backend/users/worker.ts', import.meta.url));
   const script = 'users-server.js';
-  let base = '/';
   const built = async (): Promise<string> => {
     const bundle = await rolldown({input: worker, resolve: {alias: aliases}, logLevel: 'silent'});
     const {output} = await bundle.generate({format: 'iife'});
@@ -70,12 +69,6 @@ const usersServer = (): Plugin => {
   };
   return {
     name: 'users-server',
-    configResolved(config) {
-      base = config.base;
-    },
-    transformIndexHtml() {
-      return [{tag: 'script', children: `navigator.serviceWorker?.register('${base}${script}');`, injectTo: 'head'}];
-    },
     configureServer(server) {
       server.middlewares.use(async (request, response, next) => {
         if ((request.url ?? '').split('?')[0].endsWith(`/${script}`)) {

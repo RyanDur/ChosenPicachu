@@ -32,5 +32,15 @@ test('a refresh brings new people to the users page', async ({page}) => {
   await page.reload();
 
   await expect(users.names.first()).toBeVisible({timeout: 30_000});
-  expect(await users.names.allTextContents()).not.toEqual(before);
+  await expect(users.names).not.toHaveText(before);
+});
+
+test.describe('when the browser allows no service workers', () => {
+  test.use({serviceWorkers: 'block'});
+
+  test('the users page still says the users could not be reached', async ({page}) => {
+    await page.goto('users');
+
+    await expect(page.getByRole('alert')).toContainText('the users could not be reached', {timeout: 30_000});
+  });
 });
