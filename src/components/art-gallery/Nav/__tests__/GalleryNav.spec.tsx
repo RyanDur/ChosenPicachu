@@ -22,8 +22,9 @@ describe('Gallery Navigation', () => {
     setupAICEveryPage(aicArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
     await galleryWall.hangs();
+    const landings = scrolling.recordLandings();
 
-    const landings = await scrolling.landingsDuring(() => userEvent.click(screen.getByRole('link', {name: 'NEXT'})));
+    await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
 
     expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('page=2');
     expect(landings).toContainEqual(scrolling.atTheTop('page'));

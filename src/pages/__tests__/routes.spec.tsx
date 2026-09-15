@@ -1,5 +1,5 @@
 import {TestApp} from '@__test_support/TestApp';
-import {render, screen} from '@testing-library/react';
+import {render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {Paths} from '@pages/Paths';
 import {Route} from 'react-router';
@@ -73,20 +73,18 @@ describe('leaving a page', () => {
   test('a new page starts at the top', async () => {
     render(<TestApp at="/"/>);
     await site.pageTitled();
+    const landings = scrolling.recordLandings();
 
-    const landings = await scrolling.landingsDuring(async () => {
-      await userEvent.click(site.signpost(/Start where the demos start/));
-      await screen.findByRole('navigation', {name: 'demos'});
-    });
+    await userEvent.click(site.signpost(/Start where the demos start/));
 
-    expect(landings).toContainEqual(scrolling.atTheTop('main'));
+    await waitFor(() => expect(landings).toContainEqual(scrolling.atTheTop('main')));
   });
 
   test('arriving at a place on the page keeps that place', async () => {
-    const landings = await scrolling.landingsDuring(async () => {
-      render(<TestApp at="/#the-record"/>);
-      await site.pageTitled();
-    });
+    const landings = scrolling.recordLandings();
+
+    render(<TestApp at="/#the-record"/>);
+    await site.pageTitled();
 
     expect(landings).toEqual([]);
   });

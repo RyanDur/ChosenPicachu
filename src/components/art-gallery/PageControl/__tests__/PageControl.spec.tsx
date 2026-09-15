@@ -12,15 +12,12 @@ describe('The page controls', () => {
       setupAICEveryPage(aicArtResponse);
       render(<TestApp at={Paths.artGallery}/>);
       await galleryWall.hangs();
+      const landings = scrolling.recordLandings();
 
-      const landings = await scrolling.landingsDuring(async () => {
-        await userEvent.type(screen.getByLabelText(/Page #/), '3');
-        await userEvent.click(screen.getByRole('button', {name: 'Go'}));
+      await userEvent.type(screen.getByLabelText(/Page #/), '3');
+      await userEvent.click(screen.getByRole('button', {name: 'Go'}));
 
-        await waitFor(() =>
-          expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('page=3'));
-      });
-
+      await waitFor(() => expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('page=3'));
       expect(screen.getByLabelText(/Page #/)).not.toHaveValue(3);
       expect(landings).toContainEqual(scrolling.atTheTop('main'));
     });

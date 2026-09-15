@@ -58,7 +58,9 @@ describe('the image', () => {
     render(<TestApp at={`${Paths.artGallery}?page=3&tab=${Source.AIC}`}><Image piece={piece} linkEnabled={false}/></TestApp>);
 
     fireEvent.load(screen.getByAltText(piece.altText));
-    const landings = await scrolling.landingsDuring(() => userEvent.click(screen.getByAltText(piece.altText)));
+    const landings = scrolling.recordLandings();
+
+    await userEvent.click(screen.getByAltText(piece.altText));
 
     expect(screen.getByRole('status', {name: 'url path'})).toHaveTextContent(new RegExp(`^${Paths.artGallery}$`));
     expect(landings).toEqual([]);
