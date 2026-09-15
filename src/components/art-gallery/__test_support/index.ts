@@ -13,4 +13,4 @@ export {
   setupHarvardAllArtResponse,
   setupVAMAllArtResponse
 } from './museums';
-export {wallHangs} from './wall';
+export {galleryWall} from './wall';

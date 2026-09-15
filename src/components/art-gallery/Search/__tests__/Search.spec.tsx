@@ -5,28 +5,14 @@ import userEvent from '@testing-library/user-event';
 import {Source} from '@components/art-gallery/museums/source';
 import {faker} from '@faker-js/faker';
 import {Paths} from '@pages/Paths';
-import {AICSearchResponse} from '@components/art-gallery/museums/aic/types';
 import {heldAICSuggestions} from '@components/art-gallery/__test_support';
+import {aicSuggestionsOf} from '@components/art-gallery/__test_support/fixtures';
 import {HTTPError} from '@transport/types';
-
-const suggesting = (word: string): AICSearchResponse => ({
-  pagination: {total: 1, limit: 1, total_pages: 1},
-  data: [{suggest_autocomplete_all: [{}, {input: [word]}]}]
-});
 
 describe('search', () => {
   const searchWord = faker.lorem.word().toUpperCase();
-  const searchResponse: AICSearchResponse = {
-    pagination: {
-      total: 5,
-      limit: 2,
-      total_pages: 5
-    },
-    data: [{suggest_autocomplete_all: [{}, {input: [searchWord]}]}]
-  };
-
   beforeEach(() => {
-    anyRequestRespondsWith(JSON.stringify(searchResponse));
+    anyRequestRespondsWith(JSON.stringify(aicSuggestionsOf([searchWord])));
   });
 
   it('should give suggestions for completion', async () => {
@@ -132,8 +118,8 @@ describe('search', () => {
       if (word !== null) asked.push(word);
     };
     server.events.on('request:start', noted);
-    const monkArrives = heldAICSuggestions('mon', suggesting('MONK'));
-    const monetArrives = heldAICSuggestions('monet', suggesting('MONET'));
+    const monkArrives = heldAICSuggestions('mon', aicSuggestionsOf(['MONK']));
+    const monetArrives = heldAICSuggestions('monet', aicSuggestionsOf(['MONET']));
     try {
       render(<TestApp at={`${Paths.artGallery}?tab=aic`}/>);
 

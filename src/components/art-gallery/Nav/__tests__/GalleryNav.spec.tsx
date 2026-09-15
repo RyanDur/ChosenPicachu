@@ -1,10 +1,10 @@
 import {TestApp} from '@__test_support/TestApp';
 import {render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {aicArtResponse} from '@__test_support/fixtures';
+import {aicArtResponse} from '@components/art-gallery/__test_support/fixtures';
 import {Paths} from '@pages/Paths';
-import {atTheTop, landingsDuring} from '@__test_support/landings';
-import {heldAICAllArtResponse, setupAICAllArtResponse, setupAICEveryPage, wallHangs} from '@components/art-gallery/__test_support';
+import {scrolling} from '@components/__test_support/scrolling';
+import {heldAICAllArtResponse, setupAICAllArtResponse, setupAICEveryPage, galleryWall} from '@components/art-gallery/__test_support';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
 
 const {total_pages: lastPage, limit, total} = aicArtResponse.pagination;
@@ -13,7 +13,7 @@ describe('Gallery Navigation', () => {
   test('no page is asked for until someone asks', async () => {
     setupAICEveryPage(aicArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
-    await wallHangs();
+    await galleryWall.hangs();
 
     expect(screen.getByRole('status', {name: 'url search'})).not.toHaveTextContent('page');
   });
@@ -21,20 +21,20 @@ describe('Gallery Navigation', () => {
   test('the next page is a page on, and starts at the top', async () => {
     setupAICEveryPage(aicArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
-    await wallHangs();
+    await galleryWall.hangs();
 
-    const landings = await landingsDuring(() => userEvent.click(screen.getByRole('link', {name: 'NEXT'})));
+    const landings = await scrolling.landingsDuring(() => userEvent.click(screen.getByRole('link', {name: 'NEXT'})));
 
     expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('page=2');
-    expect(landings).toContainEqual(atTheTop('page'));
-    expect(landings).toContainEqual(atTheTop('main'));
+    expect(landings).toContainEqual(scrolling.atTheTop('page'));
+    expect(landings).toContainEqual(scrolling.atTheTop('main'));
     expect(landings.filter(({where}) => where === 'elsewhere')).toEqual([]);
   });
 
   test('there is no way back from the first page', async () => {
     setupAICEveryPage(aicArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
-    await wallHangs();
+    await galleryWall.hangs();
 
     expect(screen.queryByRole('link', {name: 'PREV'})).not.toBeInTheDocument();
     expect(screen.queryByRole('link', {name: 'FIRST'})).not.toBeInTheDocument();
@@ -43,7 +43,7 @@ describe('Gallery Navigation', () => {
   test('the last page offers only the way back', async () => {
     setupAICEveryPage(aicArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
-    await wallHangs();
+    await galleryWall.hangs();
 
     await userEvent.click(screen.getByRole('link', {name: 'LAST'}));
 
@@ -57,7 +57,7 @@ describe('Gallery Navigation', () => {
   test('the previous page is a page back', async () => {
     setupAICEveryPage(aicArtResponse);
     render(<TestApp at={`${Paths.artGallery}?page=${lastPage}`}/>);
-    await wallHangs();
+    await galleryWall.hangs();
 
     await userEvent.click(screen.getByRole('link', {name: 'PREV'}));
 
@@ -67,7 +67,7 @@ describe('Gallery Navigation', () => {
   test('the first page is one jump back from anywhere', async () => {
     setupAICEveryPage(aicArtResponse);
     render(<TestApp at={`${Paths.artGallery}?page=${lastPage}`}/>);
-    await wallHangs();
+    await galleryWall.hangs();
 
     await userEvent.click(screen.getByRole('link', {name: 'FIRST'}));
 
@@ -77,7 +77,7 @@ describe('Gallery Navigation', () => {
   test('a page change keeps the search that was made', async () => {
     setupAICEveryPage(aicArtResponse);
     render(<TestApp at={`${Paths.artGallery}?search=q`}/>);
-    await wallHangs();
+    await galleryWall.hangs();
 
     await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
 
@@ -88,7 +88,7 @@ describe('Gallery Navigation', () => {
   test('the pagination counts the works showing, of the total', async () => {
     setupAICEveryPage(aicArtResponse);
     render(<TestApp at={`${Paths.artGallery}?page=1&size=${limit}`}/>);
-    await wallHangs();
+    await galleryWall.hangs();
 
     expect(screen.getByRole('navigation', {name: 'pagination'})).toHaveTextContent(`${1} - ${limit}of${total}`);
   });
@@ -117,7 +117,7 @@ describe('Gallery Navigation', () => {
     setupAICAllArtResponse(aicArtResponse);
     heldAICAllArtResponse(aicArtResponse, {limit: defaultRecordLimit, page: 2});
     render(<TestApp at={Paths.artGallery}/>);
-    await wallHangs();
+    await galleryWall.hangs();
 
     await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
 
@@ -130,12 +130,12 @@ describe('Gallery Navigation', () => {
     setupAICAllArtResponse(aicArtResponse);
     const nextPageArrives = heldAICAllArtResponse(aicArtResponse, {limit: defaultRecordLimit, page: 2});
     render(<TestApp at={Paths.artGallery}/>);
-    await wallHangs();
+    await galleryWall.hangs();
     await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
 
     nextPageArrives();
 
-    await wallHangs();
+    await galleryWall.hangs();
     expect(screen.getByRole('link', {name: 'NEXT'})).toBeInTheDocument();
   });
 });

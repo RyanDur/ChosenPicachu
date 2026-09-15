@@ -5,10 +5,10 @@ import {env} from '@env';
 import {render, screen, waitFor, within} from '@testing-library/react';
 import {ArtGallery} from '@components/art-gallery';
 import {Source} from '@components/art-gallery/museums/source';
-import {aicArtResponse} from '@__test_support/fixtures';
+import {aicArtResponse} from '@components/art-gallery/__test_support/fixtures';
 import {test} from 'vitest';
 import {Paths} from '@pages/Paths';
-import {heldAICAllArtResponse, setupAICAllArtResponse, wallHangs} from '@components/art-gallery/__test_support';
+import {heldAICAllArtResponse, setupAICAllArtResponse, galleryWall} from '@components/art-gallery/__test_support';
 
 describe('The gallery.', () => {
   test('loads the wall exactly once on mount', async () => {
@@ -20,7 +20,7 @@ describe('The gallery.', () => {
     setupAICAllArtResponse(aicArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
 
-    await wallHangs();
+    await galleryWall.hangs();
     server.events.removeListener('response:mocked', count);
 
     expect(hits).toEqual(1);
@@ -30,7 +30,7 @@ describe('The gallery.', () => {
     setupAICAllArtResponse(aicArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
 
-    const figures = await wallHangs();
+    const figures = await galleryWall.hangs();
     const walls = figures.map(figure => within(figure).getByRole('img'));
     expect(walls.length).toBeGreaterThan(6);
     walls.slice(0, 6).forEach(img => expect(img).not.toHaveAttribute('loading', 'lazy'));

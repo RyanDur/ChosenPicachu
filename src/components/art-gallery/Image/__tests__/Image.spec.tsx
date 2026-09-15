@@ -2,20 +2,13 @@ import {TestApp} from '@__test_support/TestApp';
 import {fireEvent, render, screen} from '@testing-library/react';
 import {Image} from '@components/art-gallery/Image';
 import userEvent from '@testing-library/user-event';
-import {Art} from '@components/art-gallery/museums/art';
 import {Source} from '@components/art-gallery/museums/source';
-import {faker} from '@faker-js/faker';
 import {Paths} from '@pages/Paths';
-import {landingsDuring} from '@__test_support/landings';
+import {scrolling} from '@components/__test_support/scrolling';
+import {aPiece} from '@components/art-gallery/__test_support/fixtures';
 
 describe('the image', () => {
-  const piece: Art = {
-    id: faker.lorem.word(),
-    title: faker.lorem.words(),
-    image: faker.image.url(),
-    altText: faker.lorem.sentence(),
-    artistInfo: faker.lorem.sentence()
-  };
+  const piece = aPiece();
 
   test('shows a loading sign while the picture is on its way', () => {
     render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><Image piece={piece}/></TestApp>);
@@ -65,7 +58,7 @@ describe('the image', () => {
     render(<TestApp at={`${Paths.artGallery}?page=3&tab=${Source.AIC}`}><Image piece={piece} linkEnabled={false}/></TestApp>);
 
     fireEvent.load(screen.getByAltText(piece.altText));
-    const landings = await landingsDuring(() => userEvent.click(screen.getByAltText(piece.altText)));
+    const landings = await scrolling.landingsDuring(() => userEvent.click(screen.getByAltText(piece.altText)));
 
     expect(screen.getByRole('status', {name: 'url path'})).toHaveTextContent(new RegExp(`^${Paths.artGallery}$`));
     expect(landings).toEqual([]);

@@ -1,6 +1,6 @@
 import {nanoid} from 'nanoid';
 import {faker} from '@faker-js/faker';
-import {AICAllArtResponse, AICArt} from '@components/art-gallery/museums/aic/types';
+import {AICAllArtResponse, AICArt, AICArtResponse, AICSearchResponse} from '@components/art-gallery/museums/aic/types';
 import {
   HarvardAllArtResponse,
   HarvardArtResponse,
@@ -19,7 +19,6 @@ import {defaultRecordLimit} from '@components/art-gallery/limits';
 import {env} from '@env';
 
 const randomNumberFromRange = (min: number, max = 6) => faker.number.int({min, max: min + max - 1});
-export const words = (num = 6) => faker.lorem.words(randomNumberFromRange(1, num));
 
 export const pagination = {
   total: 997,
@@ -39,6 +38,39 @@ export const aicArtResponse: AICAllArtResponse = {
     term_titles: faker.lorem.words(randomNumberFromRange(1)).split(' ')
   }))
 };
+
+export const anAICPiece = (): AICArt => ({
+  id: faker.number.int({max: 999_999}),
+  title: faker.lorem.words(),
+  image_id: nanoid(),
+  term_titles: [faker.lorem.words()],
+  artist_display: faker.lorem.sentence(),
+  thumbnail: {alt_text: faker.lorem.sentence()}
+});
+
+export const anAICPieceResponse = (piece: AICArt = anAICPiece()): AICArtResponse => ({data: piece});
+
+export const fromAICPiece = ({data}: AICArtResponse): Art => ({
+  id: String(data.id),
+  title: data.title,
+  image: `${env.aicPictures}/${data.image_id}/full/843,/0/default.jpg`,
+  srcSet: [400, 800, 1200].map(width => `${env.aicPictures}/${data.image_id}/full/${width},/0/default.jpg ${width}w`).join(', '),
+  altText: data.thumbnail?.alt_text || '',
+  artistInfo: data.artist_display
+});
+
+export const aicSuggestionsOf = (words: readonly string[]): AICSearchResponse => ({
+  pagination: {total: words.length, limit: words.length, total_pages: 1},
+  data: words.map(word => ({suggest_autocomplete_all: [{input: [faker.lorem.word()]}, {input: [word]}]}))
+});
+
+export const aPiece = (): Art => ({
+  id: faker.lorem.word(),
+  title: faker.lorem.words(),
+  image: faker.image.url(),
+  altText: faker.lorem.sentence(),
+  artistInfo: faker.lorem.sentence()
+});
 
 export const info: HarvardInfo = {
   totalrecordsperquery: defaultRecordLimit,
@@ -192,3 +224,4 @@ export const fromClevelandToPiece: Art = {
   altText: clevelandPieceRecord.title
 };
 export const clevelandArtOptions: ClevelandSearchResponse = {data: options.map(title => ({title}))};
+export const aicArtOptions = aicSuggestionsOf(options);

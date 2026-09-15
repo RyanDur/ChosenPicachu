@@ -4,8 +4,6 @@ import {screen} from '@testing-library/react';
 
 export type Landing = {where: 'page' | 'main' | 'elsewhere'; x: number; y: number};
 
-export const atTheTop = (where: Landing['where']): Landing => ({where, x: 0, y: 0});
-
 const options = schema.object({required: {left: schema.number, top: schema.number}});
 
 const placeOf = ([first, second]: unknown[]): [number, number] | undefined =>
@@ -16,7 +14,7 @@ const placeOf = ([first, second]: unknown[]): [number, number] | undefined =>
 const whereIs = (scrolled: unknown): Landing['where'] =>
   scrolled === window ? 'page' : scrolled === screen.queryByRole('main') ? 'main' : 'elsewhere';
 
-export const landingsDuring = async (act: () => Promise<void>): Promise<Landing[]> => {
+const landingsDuring = async (act: () => Promise<void>): Promise<Landing[]> => {
   const landings: Landing[] = [];
   const record = function (this: unknown, ...args: unknown[]): void {
     maybe(placeOf(args)).map(([x, y]) => landings.push({where: whereIs(this), x, y}));
@@ -30,4 +28,9 @@ export const landingsDuring = async (act: () => Promise<void>): Promise<Landing[
     scrollers.mockRestore();
   }
   return landings;
+};
+
+export const scrolling = {
+  landingsDuring,
+  atTheTop: (where: Landing['where']): Landing => ({where, x: 0, y: 0})
 };

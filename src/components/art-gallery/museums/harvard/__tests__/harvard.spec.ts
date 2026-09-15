@@ -7,7 +7,7 @@ import {
   harvardPiece,
   harvardPieceResponse,
   options
-} from '@__test_support/fixtures';
+} from '@components/art-gallery/__test_support/fixtures';
 import {art} from '@components/art-gallery/museums';
 import {Source} from '@components/art-gallery/museums/source';
 import {faker} from '@faker-js/faker';

@@ -2,27 +2,18 @@ import {TestApp} from '@__test_support/TestApp';
 import {anyRequestRespondsWith} from '@__test_support/server';
 import {render, screen, waitFor, within} from '@testing-library/react';
 import {HTTPError} from '@transport/types';
-import {faker} from '@faker-js/faker';
 import {Paths} from '@pages/Paths';
 import {Source} from '@components/art-gallery/museums/source';
-import {AICArtResponse} from '@components/art-gallery/museums/aic/types';
 import {heldAICArtPieceResponse, setupAICArtPieceResponse} from '@components/art-gallery/__test_support';
+import {anAICPieceResponse} from '@components/art-gallery/__test_support/fixtures';
 
 describe('viewing a piece', () => {
-  const aicArtResponse: AICArtResponse = {
-    data: {
-      id: faker.number.int(),
-      title: faker.lorem.words(),
-      term_titles: [faker.lorem.sentence()],
-      artist_display: faker.lorem.paragraph(),
-      image_id: faker.lorem.word()
-    }
-  };
+  const pieceResponse = anAICPieceResponse();
 
   test('shows a loading sign and a placeholder title until the piece arrives', async () => {
-    const pieceArrives = heldAICArtPieceResponse(aicArtResponse, aicArtResponse.data.id);
+    const pieceArrives = heldAICArtPieceResponse(pieceResponse, pieceResponse.data.id);
 
-    render(<TestApp at={`${Paths.artGallery}${aicArtResponse.data.id}?tab=${Source.AIC}`}/>);
+    render(<TestApp at={`${Paths.artGallery}${pieceResponse.data.id}?tab=${Source.AIC}`}/>);
 
     expect(await screen.findByRole('progressbar', {name: 'loading piece'})).toBeInTheDocument();
     expect(screen.getByRole('heading', {level: 1})).toHaveTextContent('A piece');
@@ -30,16 +21,16 @@ describe('viewing a piece', () => {
     pieceArrives();
 
     await waitFor(() => expect(screen.queryByRole('progressbar', {name: 'loading piece'})).not.toBeInTheDocument());
-    expect(screen.getByText(aicArtResponse.data.artist_display)).toBeInTheDocument();
-    expect(screen.getByRole('heading', {level: 1})).toHaveTextContent(aicArtResponse.data.title);
+    expect(screen.getByText(pieceResponse.data.artist_display)).toBeInTheDocument();
+    expect(screen.getByRole('heading', {level: 1})).toHaveTextContent(pieceResponse.data.title);
   });
 
   test("shows the piece's title and artist once the museum answers", async () => {
-    setupAICArtPieceResponse(aicArtResponse, aicArtResponse.data.id);
+    setupAICArtPieceResponse(pieceResponse, pieceResponse.data.id);
 
-    render(<TestApp at={`${Paths.artGallery}${aicArtResponse.data.id}?tab=${Source.AIC}`}/>);
+    render(<TestApp at={`${Paths.artGallery}${pieceResponse.data.id}?tab=${Source.AIC}`}/>);
 
-    expect(await screen.findByText(aicArtResponse.data.artist_display)).toBeInTheDocument();
+    expect(await screen.findByText(pieceResponse.data.artist_display)).toBeInTheDocument();
     await waitFor(() => expect(screen.queryByAltText('the museum refused to answer')).not.toBeInTheDocument());
   });
 

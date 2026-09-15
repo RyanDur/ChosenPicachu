@@ -1,10 +1,14 @@
 import {TestApp} from '@__test_support/TestApp';
-import {aicArtResponse, clevelandArtResponse, harvardArtResponse, vamArtResponse} from '@__test_support/fixtures';
+import {
+  aicArtResponse,
+  anAICPieceResponse,
+  clevelandArtResponse,
+  harvardArtResponse,
+  vamArtResponse
+} from '@components/art-gallery/__test_support/fixtures';
 import {render, screen, waitFor, within} from '@testing-library/react';
-import {has} from '@ryandur/sand';
 import {Paths} from '@pages/Paths';
 import userEvent from '@testing-library/user-event';
-import {AICAllArtResponse, AICArtResponse} from '@components/art-gallery/museums/aic/types';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
 import {
   heldAICAllArtResponse,
@@ -18,36 +22,20 @@ import {
   setupClevelandAllArtResponse,
   setupHarvardAllArtResponse,
   setupVAMAllArtResponse,
-  wallHangs
+  galleryWall
 } from '@components/art-gallery/__test_support';
 
 const firstPiece = aicArtResponse.data[0];
 const secondPiece = aicArtResponse.data[1];
 
-const frameTitled = async (title: string): Promise<HTMLElement> => {
-  const frames = await wallHangs();
-  const frame = frames.find(figure => has(within(figure).queryByText(title)));
-  if (has(frame)) return frame;
-  throw new Error(`no frame titled ${title}`);
-};
-
-const pieceResponseFor = ({
-  id,
-  title,
-  term_titles,
-  artist_display,
-  image_id
-}: AICAllArtResponse['data'][number]): AICArtResponse =>
-  ({data: {id, title, term_titles, artist_display, image_id}});
-
-const aicArtPieceResponse = pieceResponseFor(firstPiece);
+const aicArtPieceResponse = anAICPieceResponse(firstPiece);
 
 describe('The gallery.', () => {
   test('the wall hangs a full page of works once the art has loaded', async () => {
     setupAICAllArtResponse(aicArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
 
-    expect(await wallHangs()).toHaveLength(defaultRecordLimit);
+    expect(await galleryWall.hangs()).toHaveLength(defaultRecordLimit);
     expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument();
     expect(screen.queryByAltText('the museum answered with nothing')).not.toBeInTheDocument();
   });
@@ -58,7 +46,7 @@ describe('The gallery.', () => {
       render(<TestApp at={Paths.artGallery}/>);
       setupAICArtPieceResponse(aicArtPieceResponse, firstPiece.id);
 
-      await userEvent.click(within(await frameTitled(firstPiece.title)).getByRole('img'));
+      await userEvent.click(within(await galleryWall.frameTitled(firstPiece.title)).getByRole('img'));
 
       expect(await screen.findByText(firstPiece.artist_display)).toBeInTheDocument();
       expect(screen.getByRole('figure')).toBeInTheDocument();
@@ -69,7 +57,7 @@ describe('The gallery.', () => {
       render(<TestApp at={Paths.artGallery}/>);
       setupAICArtPieceResponse(aicArtPieceResponse, firstPiece.id);
 
-      await userEvent.click(within(await frameTitled(firstPiece.title)).getByRole('img'));
+      await userEvent.click(within(await galleryWall.frameTitled(firstPiece.title)).getByRole('img'));
 
       const header = within(screen.getByRole('banner'));
       expect(await header.findByText(firstPiece.title)).toBeInTheDocument();
@@ -79,12 +67,12 @@ describe('The gallery.', () => {
       setupAICAllArtResponse(aicArtResponse);
       render(<TestApp at={Paths.artGallery}/>);
       setupAICArtPieceResponse(aicArtPieceResponse, firstPiece.id);
-      await userEvent.click(within(await frameTitled(firstPiece.title)).getByRole('img'));
+      await userEvent.click(within(await galleryWall.frameTitled(firstPiece.title)).getByRole('img'));
       await within(screen.getByRole('banner')).findByText(firstPiece.title);
-      const secondArrives = heldAICArtPieceResponse(pieceResponseFor(secondPiece), secondPiece.id);
+      const secondArrives = heldAICArtPieceResponse(anAICPieceResponse(secondPiece), secondPiece.id);
 
       await userEvent.click(screen.getByRole('link', {name: 'Gallery'}));
-      await userEvent.click(within(await frameTitled(secondPiece.title)).getByRole('img'));
+      await userEvent.click(within(await galleryWall.frameTitled(secondPiece.title)).getByRole('img'));
 
       expect(await screen.findByRole('progressbar', {name: 'loading piece'})).toBeInTheDocument();
       expect(screen.getByRole('heading', {level: 1})).toHaveTextContent('A piece');
@@ -227,7 +215,7 @@ describe('The gallery.', () => {
     setupAICAllArtResponse(aicArtResponse);
     const nextPageArrives = heldAICAllArtResponse(aicArtResponse, {limit: defaultRecordLimit, page: 2});
     render(<TestApp at={Paths.artGallery}/>);
-    await wallHangs();
+    await galleryWall.hangs();
     return nextPageArrives;
   };
 
@@ -261,7 +249,7 @@ describe('The gallery.', () => {
     const {total_pages: last, limit, total} = aicArtResponse.pagination;
     setupAICAllArtResponse(aicArtResponse, {limit, page: last});
     render(<TestApp at={`${Paths.artGallery}?page=${last}`}/>);
-    await wallHangs();
+    await galleryWall.hangs();
 
     expect(screen.getByRole('navigation', {name: 'pagination'})).toHaveTextContent(`${1 + limit * (last - 1)} - ${total}of${total}`);
   });
