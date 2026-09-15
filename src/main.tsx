@@ -3,17 +3,22 @@ import * as ReactDom from 'react-dom/client';
 import {App} from './App';
 import {router} from './router';
 import {env} from '@env';
+import {asyncResult, asyncSuccess, is, maybe, Result} from '@ryandur/sand';
 import './index.css';
 
-const served = (): Promise<void> =>
-  !('serviceWorker' in navigator) || navigator.serviceWorker.controller !== null
-    ? Promise.resolve()
-    : new Promise(resolve => navigator.serviceWorker.addEventListener('controllerchange', () => resolve(), {once: true}));
+const controlled = (workers: ServiceWorkerContainer): Promise<unknown> =>
+  maybe(workers.controller, is)
+    .map(controller => Promise.resolve(controller))
+    .orElse(new Promise(resolve => workers.addEventListener('controllerchange', resolve, {once: true})));
 
-void served()
-  .then(() => ReactDom.createRoot(document.getElementById('root')!).render(
-    <App
-      router={createBrowserRouter([router], {basename: import.meta.env.BASE_URL})}
-      onError={error => console.error(error)}
-      env={env}/>
-  ));
+const served = (): Result.Async<unknown, unknown> =>
+  maybe(navigator.serviceWorker, is)
+    .map(workers => asyncResult<unknown, unknown>(controlled(workers)))
+    .orElse(asyncSuccess(undefined));
+
+served().onSuccess(() => ReactDom.createRoot(document.getElementById('root')!).render(
+  <App
+    router={createBrowserRouter([router], {basename: import.meta.env.BASE_URL})}
+    onError={error => console.error(error)}
+    env={env}/>
+));
