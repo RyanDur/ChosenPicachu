@@ -36,7 +36,7 @@ describe('the review\'s QAs', () => {
   test('the tests QA is sent to the tests door and the test support', () => {
     const qas = agents();
     expect(qas['tests-qa'].prompt).toContain('scripts/review/tests.md');
-    expect(qas['tests-qa'].prompt).toContain('src/__test_support/');
+    expect(qas['tests-qa'].prompt).toContain('every __test_support/ directory');
   });
 
   test('the lead carries the values and splits the scope between the five QAs', () => {

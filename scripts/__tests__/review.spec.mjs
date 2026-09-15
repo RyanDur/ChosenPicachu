@@ -3,6 +3,7 @@ import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {promptFor} from '../review/prompt.mjs';
 import {deltaOf, doorTable, leavesFeedback, plusOf, reviewIn, summaryOf, verdictOf} from '../review/report.mjs';
+import {aDelta, aPlus, review} from '../review/__test_support/feedback.mjs';
 
 const placeOf = (text, needle) => {
   expect(text).toContain(needle);
@@ -13,17 +14,8 @@ const answer = review => JSON.stringify({type: 'result', structured_output: revi
 
 const feedbackSchema = () => JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), '../review/feedback.schema.json'), 'utf8'));
 
-const violation = {
-  door: 'structure',
-  severity: 'violation',
-  file: 'src/a.tsx',
-  line: 3,
-  happened: 'a div wraps a list',
-  why: 'with the styles off the list is a list no longer',
-  change: 'let the ul stand on its own',
-  principle: 'lists admit they are lists'
-};
-const concern = {
+const violation = aDelta({door: 'structure', severity: 'violation', file: 'src/a.tsx', line: 3, happened: 'a div wraps a list'});
+const concern = aDelta({
   door: 'presentation',
   severity: 'concern',
   file: 'src/b.css',
@@ -32,65 +24,25 @@ const concern = {
   why: 'every button on the site now wears it',
   change: 'give the button a class that names it',
   principle: 'Tag selectors are for resets only'
-};
-const note = {
+});
+const note = aDelta({
   door: 'structure',
-  severity: 'note',
-  file: 'src/c.tsx',
-  line: 1,
   happened: 'a section has no heading',
-  why: 'a reader walking the headings skips it',
   change: 'name the section with a heading',
   principle: 'Sections name themselves through their headings'
-};
-const testNote = {
-  door: 'tests',
-  severity: 'note',
-  file: 'src/__tests__/c.spec.tsx',
-  line: 4,
-  happened: 'a spec finds a button by class',
-  why: 'a rename of the class breaks a test about behaviour',
-  change: 'find the button by its role and name',
-  principle: 'It finds by role, label and text, like every test'
-};
-const interaction = {
-  door: 'dynamic interaction',
-  severity: 'note',
-  file: 'src/d.tsx',
-  line: 7,
-  happened: 'a handler is named for the act in progress',
-  why: 'the reader cannot tell the event from the command',
-  change: 'name it for what happened',
-  principle: 'Events are what happened, so they are named in the past tense'
-};
-const design = {
-  door: 'design',
-  severity: 'concern',
-  file: 'src/e.ts',
-  line: 2,
-  happened: 'two booleans stand where a union belongs',
-  why: 'the type lets them disagree',
-  change: 'one union of the cases',
-  principle: 'A state is a union of its cases'
-};
-const plus = {
+});
+const testNote = aDelta({door: 'tests', file: 'src/__tests__/c.spec.tsx', line: 4});
+const interaction = aDelta({door: 'dynamic interaction'});
+const design = aDelta({door: 'design', severity: 'concern'});
+const plus = aPlus({
   door: 'structure',
   file: 'src/f.tsx',
   line: 5,
   happened: 'the friends list is a fieldset with a legend',
   why: 'the group names itself and the platform hands the name to a reader',
   principle: 'The right tag hands most of that over for free'
-};
-const testPlus = {
-  door: 'tests',
-  file: 'src/__tests__/f.spec.tsx',
-  line: 8,
-  happened: 'the group is found by its exact name',
-  why: 'a name that absorbs a control fails the test',
-  principle: 'The name says what the reader will believe when it passes'
-};
-
-const review = (plusses, deltas) => ({plusses, deltas});
+});
+const testPlus = aPlus({door: 'tests'});
 
 describe('the review prompt', () => {
   test('a full review sends the reviewer to the doors on the home page and scopes them to the whole of src', () => {

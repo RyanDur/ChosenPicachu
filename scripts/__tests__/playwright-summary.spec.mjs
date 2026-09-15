@@ -1,6 +1,5 @@
 import {countTable, failuresList, outcomesIn, summaryOf} from '../playwright/summary.mjs';
-
-const outcome = (projectName, status, message) => ({projectName, status, results: [{status, error: message === undefined ? undefined : {message}}]});
+import {outcome} from '../playwright/__test_support/results.mjs';
 
 const report = {
   suites: [{

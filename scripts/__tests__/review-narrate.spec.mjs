@@ -1,6 +1,5 @@
 import {narration, outcome} from '../review/narrate.mjs';
-
-const assistant = (...content) => ({type: 'assistant', message: {content}});
+import {assistant} from '../review/__test_support/events.mjs';
 
 describe('the review narration', () => {
   test('the narration tells each thing the reviewer does, read, grep, glob, run, ask, answer, in one line', () => {
