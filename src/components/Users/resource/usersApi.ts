@@ -40,8 +40,8 @@ const {usersDomain} = env;
 const usersServerUrl = `${import.meta.env.BASE_URL}${usersServerScript}`;
 const patience = 10_000;
 
-const claimed = (workers: ServiceWorkerContainer): Promise<unknown> => new Promise(resolve => {
-  workers.addEventListener('controllerchange', resolve, {once: true});
+const claimed = (workers: ServiceWorkerContainer): Promise<void> => new Promise(resolve => {
+  workers.addEventListener('controllerchange', () => resolve(), {once: true});
   void workers.ready.then(({active}) => active?.postMessage(loadedUncontrolled));
 });
 
@@ -49,12 +49,12 @@ const gaveUp = (): Promise<never> => new Promise((_, reject) => {
   setTimeout(reject, patience);
 });
 
-const served = (workers: ServiceWorkerContainer): Promise<unknown> => workers.register(usersServerUrl)
+const served = (workers: ServiceWorkerContainer): Promise<void> => workers.register(usersServerUrl)
   .then(() => workers.controller ? undefined : claimed(workers));
 
-const servedInTime = (workers: ServiceWorkerContainer): Result.Async<unknown, HTTPError> => workers.controller
+const servedInTime = (workers: ServiceWorkerContainer): Result.Async<void, HTTPError> => workers.controller
   ? asyncSuccess(undefined)
-  : asyncResult<unknown, unknown>(Promise.race([served(workers), gaveUp()])).or(() => asyncFailure(HTTPError.NETWORK_ERROR));
+  : asyncResult(Promise.race([served(workers), gaveUp()])).or(() => asyncFailure(HTTPError.NETWORK_ERROR));
 
 const whenServed = <T>(asked: () => Result.Async<T, HTTPError>): Result.Async<T, HTTPError> =>
   maybe(navigator.serviceWorker)
