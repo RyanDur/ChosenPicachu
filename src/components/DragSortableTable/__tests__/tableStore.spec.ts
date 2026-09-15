@@ -1,10 +1,10 @@
 import {TableMiddleware, tableStore} from '../store';
+import {columnShares} from '../__test_support';
 import {measured} from '../actions';
 import {tableReducer} from '../reducer';
 import {resting, widthsOf} from '../table-state';
 import {arrangementOf, arrangementReducer, arrived, columnMoved, rowMoved, sorted, standingOf} from '../arrangement';
 
-const shares = (window: number, trades: number): Readonly<Record<string, number>> => ({window, trades, buys: 100 - window - trades});
 const widths = (state: typeof resting): readonly number[] => Object.values(widthsOf(state) ?? {});
 
 describe('the table store', () => {
@@ -13,14 +13,14 @@ describe('the table store', () => {
     const heard: (readonly number[])[] = [];
     store.subscribe(() => heard.push(widths(store.state)));
 
-    store.dispatch(measured(shares(40, 30)));
+    store.dispatch(measured(columnShares(40, 30)));
 
     expect(widths(store.state)).toEqual([40, 30, 30]);
     expect(heard).toEqual([[40, 30, 30]]);
   });
 
   test('the reducer applies its own actions', () => {
-    const measuredState = tableReducer(resting, measured(shares(40, 30)));
+    const measuredState = tableReducer(resting, measured(columnShares(40, 30)));
 
     expect(widths(measuredState)).toEqual([40, 30, 30]);
   });
@@ -36,9 +36,9 @@ describe('the table store', () => {
     let heard = 0;
     const leave = store.subscribe(() => heard++);
 
-    store.dispatch(measured(shares(40, 30)));
+    store.dispatch(measured(columnShares(40, 30)));
     leave();
-    store.dispatch(measured(shares(50, 20)));
+    store.dispatch(measured(columnShares(50, 20)));
 
     expect(heard).toBe(1);
   });
@@ -47,7 +47,7 @@ describe('the table store', () => {
     const store = tableStore();
 
     expect(store.state).toBe(store.state);
-    store.dispatch(measured(shares(40, 30)));
+    store.dispatch(measured(columnShares(40, 30)));
     expect(store.state).toBe(store.state);
   });
 
@@ -59,7 +59,7 @@ describe('the table store', () => {
     };
     const store = tableStore(watching);
 
-    store.dispatch(measured(shares(40, 30)));
+    store.dispatch(measured(columnShares(40, 30)));
 
     expect(seen).toEqual([[]]);
     expect(widths(store.state)).toEqual([40, 30, 30]);
@@ -86,12 +86,12 @@ describe('the table store', () => {
       passed.push('inner');
       next(action);
       if (passed.length === 2) {
-        api.dispatch(measured(shares(50, 20)));
+        api.dispatch(measured(columnShares(50, 20)));
       }
     };
     const store = tableStore(outer, inner);
 
-    store.dispatch(measured(shares(40, 30)));
+    store.dispatch(measured(columnShares(40, 30)));
 
     expect(passed).toEqual(['outer', 'inner', 'outer', 'inner']);
     expect(widths(store.state)).toEqual([50, 20, 30]);
@@ -103,11 +103,11 @@ describe('the table store', () => {
     store.subscribe((previous, current, dispatch) => {
       heard.push([widths(previous), widths(current())]);
       if (heard.length === 1) {
-        dispatch(measured(shares(50, 20)));
+        dispatch(measured(columnShares(50, 20)));
       }
     });
 
-    store.dispatch(measured(shares(40, 30)));
+    store.dispatch(measured(columnShares(40, 30)));
 
     expect(heard).toEqual([
       [[], [40, 30, 30]],
@@ -125,7 +125,7 @@ describe('the table store', () => {
     const store = tableStore(layer);
     store.subscribe(previous => order.push(`listener saw ${widths(previous).join()} become ${widths(store.state).join()}`));
 
-    store.dispatch(measured(shares(40, 30)));
+    store.dispatch(measured(columnShares(40, 30)));
 
     expect(order).toEqual(['middleware', 'listener saw  become 40,30,30', 'middleware after']);
   });

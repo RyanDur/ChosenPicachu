@@ -2,7 +2,7 @@ import {TestApp} from '@__test_support/TestApp';
 import {demosAt} from '@pages/Demos/__test_support';
 import {render, screen, waitFor, within} from '@testing-library/react';
 import {tradeHistoryAnswers, tradeHistoryUnreachable} from '@__test_support/server';
-import {texts} from '@components/DragSortableTable/__test_support';
+import {sortableTable} from '@components/DragSortableTable/__test_support';
 
 const NOW = 1700000000000;
 
@@ -21,9 +21,9 @@ describe('the windows hydrate from history', () => {
 
     const card = await screen.findByRole('region', {name: 'live aggregations'});
     const rowFor = (label: string) => within(card).getByRole('row', {name: new RegExp(`^${label}`)});
-    await waitFor(() => expect(texts(rowFor('this minute'))).toEqual(
+    await waitFor(() => expect(sortableTable.texts(rowFor('this minute'))).toEqual(
       ['this minute', '1', '1', '0', '0.01', '$50,004.00', '+$0.00']));
-    expect(texts(rowFor('this hour'))).toEqual(
+    expect(sortableTable.texts(rowFor('this hour'))).toEqual(
       ['this hour', '4', '3', '1', '0.41', '$50,001.93', '+$3.00']);
   });
 

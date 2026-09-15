@@ -2,6 +2,7 @@ import {FC, useReducer} from 'react';
 import {fireEvent, render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {Measured, Measures, measures, seated as projected} from '../../Aggregations/cells';
+import {measuresFor} from '../../Aggregations/__test_support';
 import {BodyEvents, HeaderEvents} from '@components/DragSortableTable/context';
 import {TableColumn} from '@components/DragSortableTable/table-state';
 import {arrangementOf, arrangementReducer, arrived, columnMoved, rowMoved, sorted, standingOf} from '@components/DragSortableTable/arrangement';
@@ -13,17 +14,7 @@ type Table = FC<HeaderEvents & BodyEvents & {className?: string; columns: readon
 
 const windows = ['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session'];
 
-const measured = (window: string, trades: number): Measures => ({
-  window: {display: window},
-  trades: {display: String(trades), value: trades},
-  buys: {display: '0', value: 0},
-  sells: {display: '0', value: 0},
-  volume: {display: '0.00', value: 0},
-  vwap: {display: '—'},
-  change: {display: '—'}
-});
-
-const startingRows = [3, 9, 5, 7, 1].map((trades, at) => measured(windows[at], trades));
+const startingRows = [3, 9, 5, 7, 1].map((trades, at) => measuresFor(windows[at], trades));
 
 const windowOf = (row: Measures): string => row.window.display;
 
@@ -541,7 +532,7 @@ describe('rows by hand', () => {
 });
 
 describe('sort criteria menus', () => {
-  const retraded = (thisMinute: number): Measures[] => [measured('this minute', thisMinute), ...startingRows.slice(1)];
+  const retraded = (thisMinute: number): Measures[] => [measuresFor('this minute', thisMinute), ...startingRows.slice(1)];
   const tradesHeader = (): HTMLElement => header('trades');
 
   test('a direction chosen from the column menu sorts the rows', async () => {

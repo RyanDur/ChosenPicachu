@@ -1,6 +1,6 @@
 import {has} from '@ryandur/sand';
 import {env} from '@env';
-import {Feed} from '@__test_support/feed';
+import {Feed} from '@pages/Demos/__test_support/feed';
 import type {Motion, Origin, Pace} from '../../../Controls';
 import {startingTable} from '../starting';
 import {boot} from '../boot';
@@ -12,9 +12,11 @@ type Stage = {
   readonly motion?: Motion;
 };
 
-export const standFrame = ({feed, pace = 'eager', origin = 'hide', motion = 'animated'}: Stage = {}): void => {
-  window.__env = {...env, tradeFeed: has(feed) ? feed.url : ''};
-  window.__frame = {pace, origin, motion};
-  document.body.innerHTML = startingTable({origin, motion});
-  boot(document);
+export const vanillaFrame = {
+  stand: ({feed, pace = 'eager', origin = 'hide', motion = 'animated'}: Stage = {}): void => {
+    window.__env = {...env, tradeFeed: has(feed) ? feed.url : ''};
+    window.__frame = {pace, origin, motion};
+    document.body.innerHTML = startingTable({origin, motion});
+    boot(document);
+  }
 };

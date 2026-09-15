@@ -1,11 +1,11 @@
 import {TestApp} from '@__test_support/TestApp';
 import {chartPageAt, demosAt} from '@pages/Demos/__test_support';
 import {render, screen, waitFor, within} from '@testing-library/react';
-import {broadcast, listeningFeed, nonTradeFrame, tradeFrame, tradeFrameWith} from '@__test_support/feed';
-import {feedIsSubscribed} from '@__test_support';
+import {broadcast, listeningFeed, nonTradeFrame, tradeFrame, tradeFrameWith} from '@pages/Demos/__test_support/feed';
+import {feedIsSubscribed} from '@pages/Demos/__test_support';
 import userEvent from '@testing-library/user-event';
-import {addChart, addMenu, doorway, dragChart, keys, releaseDrag, slot, walkThrough} from '@pages/Demos/Charts/__test_support';
-import {story} from '@pages/Demos/Recipe/__test_support';
+import {chartsDesk} from '@pages/Demos/Charts/__test_support';
+import {recipeFolds} from '@pages/Demos/Recipe/__test_support';
 import {format} from 'date-fns';
 import {tradeHistoryRefuses} from '@__test_support/server';
 
@@ -41,7 +41,7 @@ describe('a list of charts', () => {
     await feedIsSubscribed();
     await screen.findByRole('region', {name: 'live trades'});
 
-    await addChart('Candles');
+    await chartsDesk.addChart('Candles');
 
     const candles = await screen.findByRole('region', {name: 'candles'});
     const price = screen.getByRole('region', {name: 'live trades'});
@@ -79,12 +79,12 @@ describe('a list of charts', () => {
     await feedIsSubscribed();
     await screen.findByRole('region', {name: 'live trades'});
 
-    await keys('chart 1', 'ArrowDown');
+    await chartsDesk.keys('chart 1', 'ArrowDown');
 
     const candles = screen.getByRole('region', {name: 'candles'});
     expect(candles.compareDocumentPosition(screen.getByRole('region', {name: 'live trades'})))
       .toBe(Node.DOCUMENT_POSITION_FOLLOWING);
-    expect(doorway('chart 2')).toHaveFocus();
+    expect(chartsDesk.doorway('chart 2')).toHaveFocus();
   });
 
   test('the delete key removes a chart', async () => {
@@ -94,7 +94,7 @@ describe('a list of charts', () => {
     await feedIsSubscribed();
     await screen.findByRole('region', {name: 'live trades'});
 
-    await keys('chart 1', 'Delete');
+    await chartsDesk.keys('chart 1', 'Delete');
 
     expect(screen.queryByRole('region', {name: 'live trades'})).not.toBeInTheDocument();
   });
@@ -106,7 +106,7 @@ describe('a list of charts', () => {
     await feedIsSubscribed();
     await screen.findByRole('region', {name: 'candles'});
 
-    await keys('chart 1', 'Delete');
+    await chartsDesk.keys('chart 1', 'Delete');
 
     expect(screen.getByRole('region', {name: 'candles'})).toBeVisible();
   });
@@ -117,14 +117,14 @@ describe('a list of charts', () => {
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed();
     await screen.findByRole('region', {name: 'live trades'});
-    dragChart('chart 1', 'chart 2', 100);
+    chartsDesk.dragChart('chart 1', 'chart 2', 100);
 
-    expect(within(slot('chart 1')).getByRole('region', {name: 'candles'})).toBeVisible();
+    expect(within(chartsDesk.slot('chart 1')).getByRole('region', {name: 'candles'})).toBeVisible();
 
-    releaseDrag('chart 2');
+    chartsDesk.releaseDrag('chart 2');
 
-    expect(within(slot('chart 1')).getByRole('region', {name: 'candles'})).toBeVisible();
-    expect(within(slot('chart 2')).getByRole('region', {name: 'live trades'})).toBeVisible();
+    expect(within(chartsDesk.slot('chart 1')).getByRole('region', {name: 'candles'})).toBeVisible();
+    expect(within(chartsDesk.slot('chart 2')).getByRole('region', {name: 'live trades'})).toBeVisible();
   });
 
   test('the workspace tells its story', async () => {
@@ -137,7 +137,7 @@ describe('a list of charts', () => {
     expect(await screen.findByRole('heading', {name: 'let’s build this feature'})).toBeVisible();
     expect(screen.getByText(/the shape of the session/)).toBeVisible();
     const recipe = screen.getByRole('region', {name: 'build the charts yourself'});
-    expect(story(recipe, 'The trader can lay out the workspace')).toHaveAttribute('open');
+    expect(recipeFolds.story(recipe, 'The trader can lay out the workspace')).toHaveAttribute('open');
     expect(recipe).toHaveTextContent(/strays a third of the seat’s height/);
     expect(recipe).toHaveTextContent(/export const strayed/);
   });
@@ -149,7 +149,7 @@ describe('a list of charts', () => {
     await feedIsSubscribed();
     await screen.findByRole('region', {name: 'live trades'});
 
-    await userEvent.click(doorway('chart 1'));
+    await userEvent.click(chartsDesk.doorway('chart 1'));
 
     expect(await screen.findByRole('region', {name: 'build the price line yourself'})).toBeVisible();
   });
@@ -161,7 +161,7 @@ describe('a list of charts', () => {
     await feedIsSubscribed();
     await screen.findByRole('region', {name: 'candles'});
 
-    doorway('chart 1').focus();
+    chartsDesk.doorway('chart 1').focus();
     await userEvent.keyboard('{Enter}');
 
     expect(await screen.findByRole('region', {name: 'build the candles yourself'})).toBeVisible();
@@ -175,7 +175,7 @@ describe('a list of charts', () => {
     render(<TestApp at={demosAt('?tab=charts&charts=candles')} feed={feed}/>);
     await feedIsSubscribed();
     await screen.findByRole('region', {name: 'candles'});
-    const recipe = await walkThrough('chart 1', 'build the candles yourself');
+    const recipe = await chartsDesk.walkThrough('chart 1', 'build the candles yourself');
     await within(recipe).findByText(/read the same trades as candles/);
     expect(recipe).toHaveTextContent('className="candlesticks"');
     expect(recipe).toHaveTextContent('.up .body');
@@ -190,7 +190,7 @@ describe('a list of charts', () => {
     await feedIsSubscribed();
     await screen.findByRole('region', {name: 'live trades'});
 
-    await addChart('Pressure');
+    await chartsDesk.addChart('Pressure');
 
     expect(await screen.findByRole('region', {name: 'pressure'})).toBeVisible();
   });
@@ -202,7 +202,7 @@ describe('a list of charts', () => {
     await feedIsSubscribed();
     await screen.findByRole('region', {name: 'pressure'});
 
-    await userEvent.click(doorway('chart 1'));
+    await userEvent.click(chartsDesk.doorway('chart 1'));
 
     expect(await screen.findByRole('region', {name: 'build the pressure yourself'})).toBeVisible();
     expect(await screen.findByText(/who is driving/)).toBeVisible();
@@ -222,7 +222,7 @@ describe('a list of charts', () => {
     expect(screen.getByText(/build the story yourself first/)).toBeVisible();
     const recipe = screen.getByRole('region', {name: 'build the price line yourself'});
     await within(recipe).findByText(/watch the price move, live/);
-    expect(story(recipe, 'The trader can watch the price move, live')).toBeInTheDocument();
+    expect(recipeFolds.story(recipe, 'The trader can watch the price move, live')).toBeInTheDocument();
   });
 
   test('the price story teaches the whole journey, data to drawn chart', async () => {
@@ -250,7 +250,7 @@ describe('a list of charts', () => {
     render(<TestApp at={demosAt('?tab=charts&charts=candles')} feed={feed}/>);
     await feedIsSubscribed();
     await screen.findByRole('region', {name: 'candles'});
-    const recipe = await walkThrough('chart 1', 'build the candles yourself');
+    const recipe = await chartsDesk.walkThrough('chart 1', 'build the candles yourself');
     await within(recipe).findByText(/read the same trades as candles/);
     expect(recipe).toHaveTextContent('export const bucketTrades');
     expect(recipe).toHaveTextContent('export const mergeLive');
@@ -263,7 +263,7 @@ describe('a list of charts', () => {
     render(<TestApp at={demosAt('?tab=charts&charts=pressure')} feed={feed}/>);
     await feedIsSubscribed();
     await screen.findByRole('region', {name: 'pressure'});
-    const recipe = await walkThrough('chart 1', 'build the pressure yourself');
+    const recipe = await chartsDesk.walkThrough('chart 1', 'build the pressure yourself');
     expect(recipe).toHaveTextContent("side: schema.literalUnion('buy', 'sell')");
   });
 
@@ -284,7 +284,7 @@ describe('a list of charts', () => {
     await feedIsSubscribed();
     await screen.findByRole('region', {name: 'live trades'});
 
-    const menu = addMenu();
+    const menu = chartsDesk.addMenu();
     if (!menu) throw new Error('no add-a-chart menu on the desk');
     expect(within(menu).queryByRole('button', {name: 'Price line', hidden: true})).not.toBeInTheDocument();
     expect(within(menu).queryByRole('button', {name: 'Candles', hidden: true})).not.toBeInTheDocument();
@@ -298,10 +298,10 @@ describe('a list of charts', () => {
     await feedIsSubscribed();
     await screen.findByRole('region', {name: 'live trades'});
 
-    await addChart('Pie');
+    await chartsDesk.addChart('Pie');
 
     await screen.findByRole('region', {name: 'pie'});
-    expect(addMenu()).toBeNull();
+    expect(chartsDesk.addMenu()).toBeNull();
   });
 
   test('a doorway that leads nowhere returns the trader to the workspace', async () => {
@@ -320,7 +320,7 @@ describe('a list of charts', () => {
     render(<TestApp at={demosAt('?tab=charts&charts=pie,price')} feed={feed}/>);
     await feedIsSubscribed();
     await screen.findByRole('region', {name: 'pie'});
-    const recipe = await walkThrough('chart 1', 'build the pie yourself');
+    const recipe = await chartsDesk.walkThrough('chart 1', 'build the pie yourself');
     expect(recipe).toHaveTextContent('export const sideTotals');
     expect(recipe).toHaveTextContent('export const slices');
     expect(recipe).toHaveTextContent('export const sweepGates');

@@ -1,5 +1,5 @@
 import {WebSocketClientConnectionProtocol as Client} from '@mswjs/interceptors/WebSocket';
-import {FEED, feedLink, server} from './server';
+import {FEED, feedLink, server} from '@__test_support/server';
 
 type FrameParts = {
   price: string;

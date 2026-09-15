@@ -14,7 +14,7 @@ import {Outlet, Route, RouteObject, createMemoryRouter, createRoutesFromElements
 import {App} from '../App';
 import {router} from '../router';
 import {env} from '@env';
-import {Feed} from './feed';
+import {Feed} from '@pages/Demos/__test_support/feed';
 
 type Props = PropsWithChildren<{
   readonly at?: string;

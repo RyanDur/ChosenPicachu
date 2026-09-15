@@ -1,1 +1,1 @@
-export {standFrame} from './frame';
+export {vanillaFrame} from './frame';

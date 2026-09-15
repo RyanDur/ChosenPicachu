@@ -1,1 +1,2 @@
-export {texts} from './rows';
+export {sortableTable} from './rows';
+export {columnShares} from './shares';

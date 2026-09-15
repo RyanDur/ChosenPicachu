@@ -1,1 +1,1 @@
-export {opened, reveals, story} from './folds';
+export {recipeFolds} from './folds';

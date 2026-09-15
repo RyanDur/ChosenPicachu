@@ -2,9 +2,9 @@ import {TestApp} from '@__test_support/TestApp';
 import {demosAt} from '@pages/Demos/__test_support';
 import {createEvent, fireEvent, render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {listeningFeed} from '@__test_support/feed';
-import {feedIsSubscribed} from '@__test_support';
-import {story} from '@pages/Demos/Recipe/__test_support';
+import {listeningFeed} from '@pages/Demos/__test_support/feed';
+import {feedIsSubscribed} from '@pages/Demos/__test_support';
+import {recipeFolds} from '@pages/Demos/Recipe/__test_support';
 
 const seatOf = (item: string): HTMLElement => {
   const seat = screen.getAllByRole('listitem').find(candidate => within(candidate).queryByText(item) !== null);
@@ -43,8 +43,8 @@ describe('the sortable list demo', () => {
 
     await feedIsSubscribed();
     const recipe = await screen.findByRole('region', {name: 'build the native drag sort yourself'});
-    expect(story(recipe, 'The user can arrange the list by hand')).toHaveAttribute('open');
-    expect(story(recipe, 'The user can arrange the list from the keyboard')).not.toHaveAttribute('open');
+    expect(recipeFolds.story(recipe, 'The user can arrange the list by hand')).toHaveAttribute('open');
+    expect(recipeFolds.story(recipe, 'The user can arrange the list from the keyboard')).not.toHaveAttribute('open');
   });
 
   test('the list starts eager, hiding and animated, and says so', async () => {
@@ -179,8 +179,8 @@ describe('the sortable list demo', () => {
     expect(recipe).toBeVisible();
     expect(screen.getByRole('heading', {name: 'let’s build this feature'})).toBeVisible();
     expect(screen.getAllByText(/the order is mine/).length).toBeGreaterThan(0);
-    expect(story(recipe, 'The user can arrange the list by hand')).toBeInTheDocument();
-    expect(story(recipe, 'The user can arrange the list from the keyboard')).toBeInTheDocument();
+    expect(recipeFolds.story(recipe, 'The user can arrange the list by hand')).toBeInTheDocument();
+    expect(recipeFolds.story(recipe, 'The user can arrange the list from the keyboard')).toBeInTheDocument();
     expect(recipe).toHaveTextContent(/The list answers as you drag/);
   });
 
@@ -225,7 +225,7 @@ describe('the sortable list demo', () => {
 
     await userEvent.click(within(recipe).getByText(/The user can arrange the list by hand/));
 
-    expect(story(recipe, 'The user can arrange the list by hand')).toHaveAttribute('open');
+    expect(recipeFolds.story(recipe, 'The user can arrange the list by hand')).toHaveAttribute('open');
     expect(within(recipe).getByRole('link', {name: /Tables demo/}))
       .toHaveAttribute('href', expect.stringContaining('tab=tables'));
   });

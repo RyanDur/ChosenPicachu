@@ -2,7 +2,7 @@ import {render, within} from '@testing-library/react';
 import {windowedAggregates} from '@pages/Demos/Tables/Aggregations/fold';
 import {cells, measures} from '@pages/Demos/Tables/Aggregations/cells';
 import {EagerTable} from '../../Builds/EagerTable';
-import {standFrame} from '../__test_support';
+import {vanillaFrame} from '../__test_support';
 
 type CellShape = {
   tag: string;
@@ -33,7 +33,7 @@ describe('the two worlds deal the same table', () => {
     const react = shapeOf(document.body);
     unmount();
 
-    standFrame();
+    vanillaFrame.stand();
     const frame = shapeOf(document.body);
     document.body.innerHTML = '';
 

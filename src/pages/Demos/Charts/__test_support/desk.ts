@@ -1,9 +1,9 @@
 import {createEvent, fireEvent, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-export const addMenu = (): HTMLElement | null => screen.queryByLabelText('charts to add');
+const addMenu = (): HTMLElement | null => screen.queryByLabelText('charts to add');
 
-export const addChart = async (name: string): Promise<void> => {
+const addChart = async (name: string): Promise<void> => {
   const menu = addMenu();
   if (!menu) {
     throw new Error('no add-a-chart menu on the desk');
@@ -11,14 +11,14 @@ export const addChart = async (name: string): Promise<void> => {
   await userEvent.click(within(menu).getByRole('button', {name, hidden: true}));
 };
 
-export const doorway = (name: string): HTMLElement => screen.getByRole('link', {name});
+const doorway = (name: string): HTMLElement => screen.getByRole('link', {name});
 
-export const walkThrough = async (chart: string, recipe: string): Promise<HTMLElement> => {
+const walkThrough = async (chart: string, recipe: string): Promise<HTMLElement> => {
   await userEvent.click(doorway(chart));
   return screen.findByRole('region', {name: recipe});
 };
 
-export const slot = (name: string): HTMLElement => {
+const slot = (name: string): HTMLElement => {
   const seat = screen.getAllByRole('listitem').find(item => within(item).queryByRole('link', {name}) !== null);
   if (!seat) {
     throw new Error(`the ${name} doorway sits in no seat`);
@@ -26,12 +26,12 @@ export const slot = (name: string): HTMLElement => {
   return seat;
 };
 
-export const keys = async (slotName: string, key: string): Promise<void> => {
+const keys = async (slotName: string, key: string): Promise<void> => {
   doorway(slotName).focus();
   await userEvent.keyboard(`{${key}}`);
 };
 
-export const dragChart = (from: string, to: string, handAt: number): void => {
+const dragChart = (from: string, to: string, handAt: number): void => {
   fireEvent.mouseDown(within(slot(from)).getByRole('button', {name: 'move chart', hidden: true}));
   const start = createEvent.dragStart(slot(from));
   Object.defineProperty(start, 'clientY', {value: 0});
@@ -43,7 +43,9 @@ export const dragChart = (from: string, to: string, handAt: number): void => {
   fireEvent(slot(to), over);
 };
 
-export const releaseDrag = (at: string): void => {
+const releaseDrag = (at: string): void => {
   fireEvent.drop(slot(at));
   fireEvent.dragEnd(slot(at));
 };
+
+export const chartsDesk = {addMenu, addChart, doorway, walkThrough, slot, keys, dragChart, releaseDrag};

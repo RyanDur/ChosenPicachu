@@ -6,7 +6,7 @@ import 'vitest-location-mock';
 import {faker} from '@faker-js/faker';
 import {seed} from '@components/fibs';
 import {server} from '@__test_support/server';
-import {subscribed} from '@__test_support/feed';
+import {subscribed} from '@pages/Demos/__test_support/feed';
 
 faker.seed(1978);
 seed('the same draw every run');
