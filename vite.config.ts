@@ -74,7 +74,7 @@ const usersServer = (): Plugin => {
       base = config.base;
     },
     transformIndexHtml() {
-      return [{tag: 'script', children: `navigator.serviceWorker.register('${base}${script}');`, injectTo: 'head'}];
+      return [{tag: 'script', children: `navigator.serviceWorker?.register('${base}${script}');`, injectTo: 'head'}];
     },
     configureServer(server) {
       server.middlewares.use(async (request, response, next) => {

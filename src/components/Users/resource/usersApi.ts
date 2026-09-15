@@ -1,5 +1,5 @@
 import * as schema from 'schemawax';
-import {Result} from '@ryandur/sand';
+import {asyncResult, asyncSuccess, maybe, Result} from '@ryandur/sand';
 import {env} from '@env';
 import {http} from '@transport/http';
 import {validate} from '@transport/validate';
@@ -37,12 +37,26 @@ const UserDecoder = schema.object({
 
 const {usersDomain} = env;
 
-const getAll = (): Result.Async<User[], HTTPError> => http.get(usersDomain).mBind(validate(schema.array(UserDecoder)));
+const controlled = (workers: ServiceWorkerContainer): Promise<unknown> => workers.controller
+  ? Promise.resolve()
+  : new Promise(resolve => {
+    workers.addEventListener('controllerchange', resolve, {once: true});
+    workers.ready.then(({active}) => active?.postMessage('claim')).catch(() => undefined);
+  });
+
+const whenServed = <T>(asked: () => Result.Async<T, HTTPError>): Result.Async<T, HTTPError> =>
+  maybe(navigator.serviceWorker)
+    .map(workers => asyncResult<unknown, HTTPError>(controlled(workers)))
+    .orElse(asyncSuccess(undefined))
+    .mBind(asked);
+
+const getAll = (): Result.Async<User[], HTTPError> =>
+  whenServed(() => http.get(usersDomain)).mBind(validate(schema.array(UserDecoder)));
 
 export const users: UsersAPI = {
   getAll,
-  get: id => http.get(`${usersDomain}/${id}`).mBind(validate(UserDecoder)),
-  add: user => http.post(usersDomain, user).mBind(validate(schema.array(UserDecoder))),
-  update: user => http.put(`${usersDomain}/${user.id}`, user).mBind(getAll),
-  delete: user => http.delete(`${usersDomain}/${user.id}`).mBind(getAll)
+  get: id => whenServed(() => http.get(`${usersDomain}/${id}`)).mBind(validate(UserDecoder)),
+  add: user => whenServed(() => http.post(usersDomain, user)).mBind(validate(schema.array(UserDecoder))),
+  update: user => whenServed(() => http.put(`${usersDomain}/${user.id}`, user)).mBind(getAll),
+  delete: user => whenServed(() => http.delete(`${usersDomain}/${user.id}`)).mBind(getAll)
 };

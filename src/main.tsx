@@ -1,6 +1,6 @@
 import {createBrowserRouter} from 'react-router';
 import * as ReactDom from 'react-dom/client';
-import {asyncResult, maybe} from '@ryandur/sand';
+import {maybe} from '@ryandur/sand';
 import {App} from './App';
 import {router} from './router';
 import {env} from '@env';
@@ -14,8 +14,7 @@ const mounted = (root: Element): void => ReactDom.createRoot(root).render(
   />
 );
 
-asyncResult(navigator.serviceWorker.ready).onSuccess(() =>
-  maybe(document.getElementById('root'))
-    .toResult('nothing to mount the app on')
-    .onSuccess(mounted)
-    .onFailure(error => console.error(error)));
+maybe(document.getElementById('root'))
+  .toResult('nothing to mount the app on')
+  .onSuccess(mounted)
+  .onFailure(error => console.error(error));
