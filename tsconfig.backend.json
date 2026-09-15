@@ -11,6 +11,7 @@
   "include": [
     "backend/users/worker.ts",
     "backend/users/core.ts",
+    "backend/users/respond.ts",
     "src/components/Users/UserInfo/user.ts",
     "src/components/fibs"
   ],

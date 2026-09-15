@@ -4,7 +4,7 @@ import {UsersProvider} from '../../Provider';
 import {UsersAction, UsersListener, usersStore} from '../../store';
 import {render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {addressGroup, fillOutForm} from '../__test_support';
+import {userForm} from '../__test_support';
 import {AddressInfo, NewUser} from '@components/Users/UserInfo/user';
 
 const added = (): {form: ReactNode; adds: () => readonly unknown[]} => {
@@ -18,12 +18,6 @@ const added = (): {form: ReactNode; adds: () => readonly unknown[]} => {
     adds: () => heard.filter(action => action.type === 'userAdded').map(action => action.type === 'userAdded' ? action.user : undefined)
   };
 };
-
-const avatarShown = (): string => screen.getByAltText<HTMLImageElement>('avatar').src;
-
-const addButton = (): HTMLElement => screen.getByRole('button', {name: 'Add'});
-
-const sameAsHome = (): HTMLElement => screen.getByRole('checkbox', {name: 'Same as Home'});
 
 describe('a user form', () => {
   const info: Pick<NewUser, 'info' | 'homeAddress'> & {work: AddressInfo; details: string} = {
@@ -53,7 +47,7 @@ describe('a user form', () => {
   describe('filled out', () => {
     it('resetting empties a filled-out form', async () => {
       render(added().form);
-      await fillOutForm(info);
+      await userForm.fillOut(info);
       await userEvent.type(screen.getByLabelText('Details'), info.details);
 
       await userEvent.click(screen.getByRole('button', {name: 'Reset'}));
@@ -65,7 +59,7 @@ describe('a user form', () => {
       const {form, adds} = added();
       render(form);
 
-      await userEvent.click(addButton());
+      await userForm.add();
 
       expect(adds()).toEqual([]);
     });
@@ -76,10 +70,10 @@ describe('a user form', () => {
 
         render(form);
 
-        await fillOutForm(info);
+        await userForm.fillOut(info);
         await userEvent.type(screen.getByLabelText('Details'), info.details);
-        const avatar = avatarShown();
-        await userEvent.click(addButton());
+        const avatar = userForm.avatarShown();
+        await userForm.add();
 
         await waitFor(() => expect(adds()).toEqual([{...info, friends: [], avatar}]));
       });
@@ -87,9 +81,9 @@ describe('a user form', () => {
       it('the form empties once a user is added', async () => {
         const {form, adds} = added();
         render(form);
-        await fillOutForm(info);
+        await userForm.fillOut(info);
 
-        await userEvent.click(addButton());
+        await userForm.add();
 
         expect(screen.getByLabelText('First Name')).toHaveValue('');
         expect(adds()).toHaveLength(1);
@@ -97,12 +91,12 @@ describe('a user form', () => {
 
       it('the fresh form after adding wears a new avatar', async () => {
         render(added().form);
-        await fillOutForm(info);
-        const submitted = avatarShown();
+        await userForm.fillOut(info);
+        const submitted = userForm.avatarShown();
 
-        await userEvent.click(addButton());
+        await userForm.add();
 
-        expect(avatarShown()).not.toEqual(submitted);
+        expect(userForm.avatarShown()).not.toEqual(submitted);
       });
     });
 
@@ -118,11 +112,11 @@ describe('a user form', () => {
         const {form, adds} = added();
         render(form);
 
-        await fillOutForm(info);
+        await userForm.fillOut(info);
         await userEvent.type(screen.getByLabelText('Details'), info.details);
-        await userEvent.click(sameAsHome());
-        const avatar = avatarShown();
-        await userEvent.click(addButton());
+        await userForm.tickSameAsHome();
+        const avatar = userForm.avatarShown();
+        await userForm.add();
 
         expect(adds()).toEqual([{
           ...info,
@@ -135,40 +129,40 @@ describe('a user form', () => {
       test('ticking Same as Home shows the home address in the work fields, disabled', async () => {
         const {form} = added();
         render(form);
-        await fillOutForm(info);
+        await userForm.fillOut(info);
 
-        await userEvent.click(sameAsHome());
+        await userForm.tickSameAsHome();
 
-        expect(addressGroup('work').getByLabelText('Street')).toHaveValue(info.homeAddress.streetAddress);
-        expect(addressGroup('work').getByLabelText('City')).toHaveValue(info.homeAddress.city);
-        expect(addressGroup('work').getByLabelText('Postal / Zip code')).toHaveValue(info.homeAddress.zip);
-        expect(addressGroup('work').getByLabelText('Street')).toBeDisabled();
+        expect(userForm.address('work').getByLabelText('Street')).toHaveValue(info.homeAddress.streetAddress);
+        expect(userForm.address('work').getByLabelText('City')).toHaveValue(info.homeAddress.city);
+        expect(userForm.address('work').getByLabelText('Postal / Zip code')).toHaveValue(info.homeAddress.zip);
+        expect(userForm.address('work').getByLabelText('Street')).toBeDisabled();
       });
 
       test('unticking Same as Home gives back the work address that was typed', async () => {
         const {form} = added();
         render(form);
-        await fillOutForm(info);
-        await userEvent.click(sameAsHome());
+        await userForm.fillOut(info);
+        await userForm.tickSameAsHome();
 
-        await userEvent.click(sameAsHome());
+        await userForm.tickSameAsHome();
 
-        expect(addressGroup('work').getByLabelText('Street')).toHaveValue(info.work.streetAddress);
-        expect(addressGroup('work').getByLabelText('City')).toHaveValue(info.work.city);
-        expect(addressGroup('work').getByLabelText('Postal / Zip code')).toHaveValue(info.work.zip);
-        expect(addressGroup('work').getByLabelText('Street')).toBeEnabled();
+        expect(userForm.address('work').getByLabelText('Street')).toHaveValue(info.work.streetAddress);
+        expect(userForm.address('work').getByLabelText('City')).toHaveValue(info.work.city);
+        expect(userForm.address('work').getByLabelText('Postal / Zip code')).toHaveValue(info.work.zip);
+        expect(userForm.address('work').getByLabelText('Street')).toBeEnabled();
       });
 
       test('the fresh form after adding has the box unticked and the work address open', async () => {
         render(added().form);
-        await fillOutForm(info);
-        await userEvent.click(sameAsHome());
+        await userForm.fillOut(info);
+        await userForm.tickSameAsHome();
 
-        await userEvent.click(addButton());
+        await userForm.add();
 
-        expect(sameAsHome()).not.toBeChecked();
-        expect(addressGroup('work').getByLabelText('Street')).toBeEnabled();
-        expect(addressGroup('work').getByLabelText('Street')).toHaveValue('');
+        expect(userForm.sameAsHome()).not.toBeChecked();
+        expect(userForm.address('work').getByLabelText('Street')).toBeEnabled();
+        expect(userForm.address('work').getByLabelText('Street')).toHaveValue('');
       });
     });
   });
@@ -180,10 +174,10 @@ describe('a user form', () => {
       expect(screen.getByLabelText('First Name')).not.toBeValid();
       expect(screen.getByLabelText('Last Name')).not.toBeValid();
       expect(screen.getByLabelText('Date Of Birth')).not.toBeValid();
-      expect(addressGroup('home').getByLabelText('Street')).not.toBeValid();
-      expect(addressGroup('home').getByLabelText('City')).not.toBeValid();
-      expect(addressGroup('home').getByLabelText('State')).not.toBeValid();
-      expect(addressGroup('home').getByLabelText('Postal / Zip code')).not.toBeValid();
+      expect(userForm.address('home').getByLabelText('Street')).not.toBeValid();
+      expect(userForm.address('home').getByLabelText('City')).not.toBeValid();
+      expect(userForm.address('home').getByLabelText('State')).not.toBeValid();
+      expect(userForm.address('home').getByLabelText('Postal / Zip code')).not.toBeValid();
     });
 
     test('clearing the date of birth leaves it empty and wanting', async () => {
@@ -197,7 +191,7 @@ describe('a user form', () => {
     });
 
     describe('for a zip code', () => {
-      const homeZip = (): HTMLElement => addressGroup('home').getByLabelText('Postal / Zip code');
+      const homeZip = (): HTMLElement => userForm.address('home').getByLabelText('Postal / Zip code');
 
       test('a letter in the zip leaves it invalid', async () => {
         render(added().form);

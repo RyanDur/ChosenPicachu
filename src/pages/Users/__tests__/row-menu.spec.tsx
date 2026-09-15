@@ -1,9 +1,11 @@
 import {TestApp} from '@__test_support/TestApp';
 import {render, screen, waitFor, within} from '@testing-library/react';
 import {Paths} from '@pages/Paths';
+import {aUser, setupUsersResponse} from '@components/Users/__test_support';
 
 describe('the row menu is a popover anchored to its toggle', () => {
   const firstRow = async () => {
+    setupUsersResponse([aUser(), aUser()]);
     render(<TestApp at={Paths.users}/>);
     await waitFor(() => expect(screen.getAllByRole('row').length).toBeGreaterThan(1));
     return screen.getAllByRole('row')[1];

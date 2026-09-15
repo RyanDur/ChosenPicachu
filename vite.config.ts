@@ -10,7 +10,6 @@ const aliases = {
   '@pages': fileURLToPath(new URL('./src/pages', import.meta.url)),
   '@components': fileURLToPath(new URL('./src/components', import.meta.url)),
   '@transport': fileURLToPath(new URL('./src/transport', import.meta.url)),
-  '@backend': fileURLToPath(new URL('./backend', import.meta.url)),
   '@__test_support': fileURLToPath(new URL('./src/__test_support', import.meta.url))
 };
 

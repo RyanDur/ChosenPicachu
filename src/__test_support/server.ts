@@ -1,8 +1,6 @@
 import {setupServer} from 'msw/node';
 import {http, HttpResponse, ws} from 'msw';
 import {env} from '@env';
-import {User} from '@components/Users/UserInfo/user';
-import {usersHandlers} from '@backend/users/handlers';
 
 export const FEED = 'wss://feed.test';
 export const HISTORY = 'https://history.test';
@@ -16,11 +14,11 @@ export const server = setupServer(
   http.get(env.harvardDomain, () => HttpResponse.error()),
   http.get(`${env.vamDomain}/objects/search`, () => HttpResponse.error()),
   http.get(`${env.clevelandDomain}/`, () => HttpResponse.error()),
+  http.all(env.usersDomain, () => HttpResponse.error()),
+  http.all(`${env.usersDomain}/*`, () => HttpResponse.error()),
   http.get(`${env.aicPictures}/:image/info.json`, () => HttpResponse.json({})),
   http.get(`${env.vamPictures}/:image/info.json`, () => HttpResponse.json({}))
 );
-
-export const usersServed = (people: readonly User[]) => server.use(...usersHandlers(env.usersDomain, people));
 
 export const anyRequestRespondsWith = (body: string, status = 200) =>
   server.use(http.all('*', () => new HttpResponse(body, {status})));

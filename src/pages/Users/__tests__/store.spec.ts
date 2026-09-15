@@ -1,20 +1,24 @@
-import {users as someUsers} from '@__test_support/fixtures';
 import {users} from '@components/Users';
-import {usersServed} from '@__test_support/server';
+import {
+  setupUserAddedResponse,
+  setupUserRemovedResponse,
+  setupUsersResponse,
+  setupUserUpdatedResponse,
+  someUsers
+} from '@components/Users/__test_support';
 import {syncing} from '../syncing';
-import {friendsChanged, opened, selectUsers, userRemoved, userUpdated, userWithId, usersArrived, usersStore} from '../store';
+import {friendsChanged, opened, selectUsers, userAdded, userRemoved, userUpdated, userWithId, usersArrived, usersStore} from '../store';
 import {rowMoved} from '@components/DragSortableTable/arrangement';
 
 describe('the users store', () => {
   const [first, second] = someUsers;
   const openedStore = async () => {
-    usersServed(someUsers);
+    setupUsersResponse(someUsers);
     const store = usersStore(syncing(users, () => undefined, () => undefined));
     store.dispatch(opened());
     await vi.waitFor(() => expect(store.state.users).toHaveLength(someUsers.length));
     return store;
   };
-  const friendsOf = (store: ReturnType<typeof usersStore>) => (id: string) => userWithId(id)(store.state)?.friends;
 
   it('holds the roster as the backend answers it', () => {
     const store = usersStore();
@@ -36,13 +40,24 @@ describe('the users store', () => {
   });
 
   it('opening fills the roster with everyone the backend has', async () => {
-    usersServed(someUsers);
+    setupUsersResponse(someUsers);
     const store = usersStore(syncing(users, () => undefined, () => undefined));
 
     store.dispatch(opened());
 
     await vi.waitFor(() =>
       expect(store.state.users.map(({id}) => id)).toEqual(someUsers.map(({id}) => id)));
+  });
+
+  it('adding a user sends the backend who they are, and holds the roster it answers', async () => {
+    const store = await openedStore();
+    const {id: _id, ...newcomer} = someUsers[2];
+    const sent = setupUserAddedResponse([...someUsers, {...newcomer, id: 'newcomer'}]);
+
+    store.dispatch(userAdded(newcomer));
+
+    await vi.waitFor(() => expect(userWithId('newcomer')(store.state)).toBeDefined());
+    expect(sent()).toMatchObject({info: {firstName: newcomer.info.firstName}, homeAddress: newcomer.homeAddress});
   });
 
   it('a user is found by id in the roster', async () => {
@@ -53,67 +68,55 @@ describe('the users store', () => {
 
   it('a user found by id shows the friends the roster now has', async () => {
     const store = await openedStore();
+    setupUserUpdatedResponse(first.id, [{...first, friends: [second.id]}, ...someUsers.slice(1)]);
 
     store.dispatch(friendsChanged(first, [second.id]));
 
     await vi.waitFor(() => expect(userWithId(first.id)(store.state)?.friends).toEqual([second.id]));
+  });
+
+  it('a change of friends sends the backend the person with their new friends', async () => {
+    const store = await openedStore();
+    const sent = setupUserUpdatedResponse(first.id, someUsers);
+
+    store.dispatch(friendsChanged(first, [second.id]));
+
+    await vi.waitFor(() => expect(sent()).toMatchObject({id: first.id, friends: [second.id]}));
   });
 
   it('no id finds no user', () => {
     expect(userWithId(undefined)(usersStore().state)).toBeUndefined();
   });
 
-  it('a friendship is mutual, as the backend keeps it', async () => {
+  it('a removed user leaves the roster the backend answers', async () => {
     const store = await openedStore();
-
-    store.dispatch(friendsChanged(first, [second.id]));
-
-    await vi.waitFor(() => expect(friendsOf(store)(first.id)).toEqual([second.id]));
-    expect(friendsOf(store)(second.id)).toContain(first.id);
-  });
-
-  it('dropping a friendship clears both sides', async () => {
-    const store = await openedStore();
-    store.dispatch(friendsChanged(first, [second.id]));
-    await vi.waitFor(() => expect(friendsOf(store)(second.id)).toContain(first.id));
-
-    store.dispatch(friendsChanged(first, []));
-
-    await vi.waitFor(() => expect(friendsOf(store)(first.id)).toEqual([]));
-    expect(friendsOf(store)(second.id)).not.toContain(first.id);
-  });
-
-  it('a removed user leaves their friends\' lists', async () => {
-    const store = await openedStore();
-    store.dispatch(friendsChanged(second, [first.id]));
-    await vi.waitFor(() => expect(friendsOf(store)(first.id)).toContain(second.id));
+    setupUserRemovedResponse(second.id, someUsers.filter(user => user.id !== second.id));
 
     store.dispatch(userRemoved(second));
 
     await vi.waitFor(() => expect(userWithId(second.id)(store.state)).toBeUndefined());
-    expect(friendsOf(store)(first.id)).not.toContain(second.id);
   });
 
-  it('an update keeps the friends the table already changed', async () => {
-    const store = await openedStore();
-    store.dispatch(friendsChanged(first, [second.id]));
+  it('an update sends the backend the friends the roster already holds', async () => {
+    const befriended = {...first, friends: [second.id]};
+    setupUsersResponse([befriended, ...someUsers.slice(1)]);
+    const store = usersStore(syncing(users, () => undefined, () => undefined));
+    store.dispatch(opened());
     await vi.waitFor(() => expect(userWithId(first.id)(store.state)?.friends).toEqual([second.id]));
+    const sent = setupUserUpdatedResponse(first.id, [befriended, ...someUsers.slice(1)]);
 
     store.dispatch(userUpdated({...first, info: {...first.info, firstName: 'Renamed'}}));
 
-    await vi.waitFor(() => {
-      const renamed = userWithId(first.id)(store.state);
-      expect(renamed?.info.firstName).toBe('Renamed');
-      expect(renamed?.friends).toEqual([second.id]);
-    });
+    await vi.waitFor(() => expect(sent()).toMatchObject({info: {firstName: 'Renamed'}, friends: [second.id]}));
   });
 
   it('an update says once when it is saved', async () => {
     const saved = vi.fn();
-    usersServed(someUsers);
+    setupUsersResponse(someUsers);
     const store = usersStore(syncing(users, saved, () => undefined));
     store.dispatch(opened());
     await vi.waitFor(() => expect(store.state.users).toHaveLength(someUsers.length));
+    setupUserUpdatedResponse(first.id, [{...first, info: {...first.info, firstName: 'Renamed'}}, ...someUsers.slice(1)]);
 
     store.dispatch(userUpdated({...first, info: {...first.info, firstName: 'Renamed'}}));
 

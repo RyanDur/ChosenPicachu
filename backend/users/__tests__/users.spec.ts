@@ -1,163 +1,115 @@
-import {users as allUsers} from '@__test_support/fixtures';
-import {NewUser, User} from '@components/Users/UserInfo/user';
-import {failure, Success} from '@ryandur/sand';
-import {HTTPError} from '@transport/types';
-import {faker} from '@faker-js/faker';
-import {createUser} from '@backend/users/core';
-import {users} from '@components/Users';
-import {UsersAPI} from '@components/Users/resource/usersApi';
-import {usersServed} from '@__test_support/server';
+import {User} from '@components/Users/UserInfo/user';
+import {createUser} from '../core';
+import {api, respond} from '../respond';
 
-describe('the users backend, through its client', () => {
-  test('hands back every user it was given', async () => {
-    usersServed(allUsers);
-    const api: UsersAPI = users;
-    const data = await api.getAll().value;
+const at = (path = ''): string => `http://localhost${api}${path}`;
 
-    expect(data.orNull()).toEqual(allUsers);
-  });
+const asked = (method: string, path = '', body?: unknown): Request =>
+  new Request(at(path), {method, ...(body === undefined ? {} : {body: JSON.stringify(body)})});
 
-  const someone: NewUser = {
-    info: {
-      firstName: faker.lorem.word(),
-      lastName: faker.lorem.word(),
-      email: faker.internet.email()
-    },
-    avatar: faker.image.avatar(),
-    friends: [],
-    homeAddress: {
-      streetAddress: faker.location.streetAddress(),
-      city: faker.location.city(),
-      state: faker.location.state(),
-      zip: faker.location.zipCode()
-    }
-  };
+const friendsOf = (roster: readonly User[], id: string): readonly string[] =>
+  roster.find(user => user.id === id)?.friends ?? [];
 
-  test('an added user joins the list with an id of their own', async () => {
-    usersServed(allUsers);
-    const api: UsersAPI = users;
+describe('the users backend', () => {
+  const a = createUser();
+  const b = createUser(true);
+  const c = createUser();
+  const roster = [a, b, c];
 
-    const usersSuccess = await api.add(someone).value as Success<User[], never>;
+  const {id: _id, ...someone}: User = createUser();
 
-    expect(usersSuccess.orNull().length).toEqual(allUsers.length + 1);
-    expect(usersSuccess.orNull()[0].id).not.toBeUndefined();
-  });
+  describe('asked for the roster', () => {
+    test('answers everyone it holds', async () => {
+      const {response} = await respond(asked('GET'), roster);
 
-  test('each add builds on the list the last one left', async () => {
-    usersServed(allUsers);
-    const api: UsersAPI = users;
-    await api.add(someone).value;
-
-    const moreUsers = await api.add(createUser()).value as Success<User[], never>;
-
-    expect(moreUsers.orNull().length).toEqual(allUsers.length + 2);
-  });
-
-  test('finds a user by their id', async () => {
-    usersServed(allUsers);
-    const api: UsersAPI = users;
-    const firstUser = allUsers[0];
-    const lastUser = allUsers[allUsers.length - 1];
-
-    const user = await api.get(firstUser.id || '').value;
-    expect(user.orNull()).toEqual(firstUser);
-
-    const nextUser = await api.get(lastUser.id || '').value;
-    expect(nextUser.orNull()).toEqual(lastUser);
-  });
-
-  test('an id nobody has is not found', async () => {
-    usersServed(allUsers);
-    const api: UsersAPI = users;
-
-    const nobody = await api.get('nobody').value;
-
-    expect(nobody.inspect()).toEqual(failure(HTTPError.NOT_FOUND).inspect());
-  });
-
-  describe('updating a user and friends', () => {
-    const freshTrio = (): [UsersAPI, User, User, User] => {
-      const [a, b, c] = [createUser(), createUser(), createUser()];
-      usersServed([a, b, c]);
-      return [users, a, b, c];
-    };
-    const friendsOf = (users: User[], id?: string): string[] =>
-      users.find(user => user.id === id)?.friends ?? [];
-
-    it('adds the friendship on both sides', async () => {
-      const [api, a, b] = freshTrio();
-
-      const users = (await api.update({...a, friends: [b.id]}).value).orNull()!;
-
-      expect(friendsOf(users, a.id)).toEqual([b.id]);
-      expect(friendsOf(users, b.id)).toEqual([a.id]);
+      expect(response.status).toBe(200);
+      expect(await response.json()).toEqual(JSON.parse(JSON.stringify(roster)));
     });
 
-    it('removes the friendship on both sides', async () => {
-      const [api, a, b] = freshTrio();
+    test('answers one person by their id', async () => {
+      const {response} = await respond(asked('GET', `/${b.id}`), roster);
 
-      const users = (await api.update({...a, friends: [b.id]})
-        .mBind(() => api.update({...a, friends: []})).value).orNull()!;
-
-      expect(friendsOf(users, a.id)).toEqual([]);
-      expect(friendsOf(users, b.id)).toEqual([]);
+      expect(await response.json()).toEqual(JSON.parse(JSON.stringify(b)));
     });
 
-    it('never duplicates an existing friendship when another one forms', async () => {
-      const [api, a, b, c] = freshTrio();
+    test('an id nobody has is not found', async () => {
+      const {response} = await respond(asked('GET', '/nobody'), roster);
 
-      const users = (await api.update({...a, friends: [b.id]})
-        .mBind(latest => api.update({
-          ...latest.find(user => user.id === b.id)!,
-          friends: [...friendsOf(latest, b.id), c.id]
-        })).value).orNull()!;
-
-      expect(friendsOf(users, a.id)).toEqual([b.id]);
-      expect(friendsOf(users, b.id)).toEqual([a.id, c.id]);
-      expect(friendsOf(users, c.id)).toEqual([b.id]);
+      expect(response.status).toBe(404);
     });
-
-    it('leaves friendships the update did not touch intact', async () => {
-      const [api, a, b, c] = freshTrio();
-
-      const users = (await api.update({...a, friends: [b.id]})
-        .mBind(latest => api.update({
-          ...latest.find(user => user.id === b.id)!,
-          friends: [...friendsOf(latest, b.id), c.id]
-        }))
-        .mBind(latest => api.update({
-          ...latest.find(user => user.id === a.id)!,
-          friends: []
-        })).value).orNull()!;
-
-      expect(friendsOf(users, a.id)).toEqual([]);
-      expect(friendsOf(users, b.id)).toEqual([c.id]);
-      expect(friendsOf(users, c.id)).toEqual([b.id]);
-    });
-
   });
 
-  describe('deleting a user', () => {
-    it('removes the user', async () => {
-      const [a, b, c] = [createUser(), createUser(), createUser()];
-      usersServed([a, b, c]);
-      const api = users;
+  describe('given someone new', () => {
+    test('creates them with an id of their own and answers the roster they joined', async () => {
+      const {response, roster: next} = await respond(asked('POST', '', someone), roster);
 
-      const roster = (await api.delete(b).value).orNull()!;
+      const answered: User[] = await response.json();
+      expect(response.status).toBe(201);
+      expect(answered).toHaveLength(roster.length + 1);
+      expect(answered[0].id).toEqual(expect.any(String));
+      expect(next).toHaveLength(roster.length + 1);
+    });
+  });
 
-      expect(roster.map(user => user.id)).toEqual([a.id, c.id]);
+  describe('given a person to save', () => {
+    test('answers with no content', async () => {
+      const {response} = await respond(asked('PUT', `/${a.id}`, {...a, friends: [b.id]}), roster);
+
+      expect(response.status).toBe(204);
     });
 
-    it('removes the user from the other users friends lists', async () => {
-      const [a, b, c] = [createUser(), createUser(), createUser()];
-      usersServed([a, b, c]);
-      const api = users;
+    test('keeps a friendship on both sides', async () => {
+      const {roster: next} = await respond(asked('PUT', `/${a.id}`, {...a, friends: [b.id]}), roster);
 
-      const roster = (await api.update({...a, friends: [c.id]})
-        .mBind(() => api.delete(a)).value).orNull()!;
+      expect(friendsOf(next, a.id)).toEqual([b.id]);
+      expect(friendsOf(next, b.id)).toEqual([a.id]);
+    });
 
-      expect(roster.find(user => user.id === c.id)?.friends).toEqual([]);
-      expect(roster.map(user => user.id)).toEqual([b.id, c.id]);
+    test('drops a friendship on both sides', async () => {
+      const {roster: befriended} = await respond(asked('PUT', `/${a.id}`, {...a, friends: [b.id]}), roster);
+
+      const {roster: next} = await respond(asked('PUT', `/${a.id}`, {...a, friends: []}), befriended);
+
+      expect(friendsOf(next, a.id)).toEqual([]);
+      expect(friendsOf(next, b.id)).toEqual([]);
+    });
+
+    test('never doubles a friendship when another one forms', async () => {
+      const {roster: first} = await respond(asked('PUT', `/${a.id}`, {...a, friends: [b.id]}), roster);
+
+      const {roster: next} = await respond(asked('PUT', `/${b.id}`, {...b, friends: [a.id, c.id]}), first);
+
+      expect(friendsOf(next, a.id)).toEqual([b.id]);
+      expect(friendsOf(next, b.id)).toEqual([a.id, c.id]);
+      expect(friendsOf(next, c.id)).toEqual([b.id]);
+    });
+
+    test('leaves the friendships it did not touch alone', async () => {
+      const {roster: first} = await respond(asked('PUT', `/${a.id}`, {...a, friends: [b.id]}), roster);
+      const {roster: second} = await respond(asked('PUT', `/${b.id}`, {...b, friends: [a.id, c.id]}), first);
+
+      const {roster: next} = await respond(asked('PUT', `/${a.id}`, {...a, friends: []}), second);
+
+      expect(friendsOf(next, a.id)).toEqual([]);
+      expect(friendsOf(next, b.id)).toEqual([c.id]);
+      expect(friendsOf(next, c.id)).toEqual([b.id]);
+    });
+  });
+
+  describe('told to remove a person', () => {
+    test('answers with no content and holds everyone else', async () => {
+      const {response, roster: next} = await respond(asked('DELETE', `/${b.id}`), roster);
+
+      expect(response.status).toBe(204);
+      expect(next.map(user => user.id)).toEqual([a.id, c.id]);
+    });
+
+    test('takes them off everyone else\'s friends', async () => {
+      const {roster: befriended} = await respond(asked('PUT', `/${a.id}`, {...a, friends: [c.id]}), roster);
+
+      const {roster: next} = await respond(asked('DELETE', `/${a.id}`), befriended);
+
+      expect(friendsOf(next, c.id)).toEqual([]);
     });
   });
 });

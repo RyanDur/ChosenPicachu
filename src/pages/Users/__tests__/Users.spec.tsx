@@ -2,333 +2,282 @@ import {Paths} from '@pages/Paths';
 import {TestApp} from '@__test_support/TestApp';
 import {render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {AddressInfo, User} from '@components/Users/UserInfo/user';
-import {createUser} from '@backend/users/core';
-import {usersServed} from '@__test_support/server';
-import {addressGroup} from '../UserInformation/__test_support';
+import {createSearchParams} from 'react-router';
+import {fullNameOf} from '@components/Users/UserInfo/user';
 import {
-  addUser,
-  addUserWhoWorksFromHome,
-  clone,
-  edit,
-  fullName,
-  names,
-  remove,
-  roster,
-  rowOf,
-  sortWorksFromHome,
-  view,
-  worksFromHome,
-  worksFromHomeColumn
-} from '../__test_support';
-
-const conciseUser = (firstName: string): User & {work: AddressInfo} => {
-  const homeAddress: AddressInfo = {
-    streetAddress: '12 Elm St',
-    city: 'Springfield',
-    state: 'IL',
-    zip: '62704'
-  };
-  return {
-    ...createUser(),
-    info: {
-      firstName,
-      lastName: 'Tester',
-      email: `${firstName.toLowerCase()}@example.com`,
-      dob: new Date(1984, 5, 2)
-    },
-    homeAddress,
-    work: {
-      streetAddress: '9 Oak Ave',
-      city: 'Chatham',
-      state: 'IL',
-      zip: '62629'
-    },
-    details: 'short notes'
-  };
-};
-
-const homeWorker = (firstName: string): User => ({...conciseUser(firstName), work: 'home'});
+  anAddress,
+  aUser,
+  setupUserAddedResponse,
+  setupUserRemovedResponse,
+  setupUsersResponse,
+  setupUserUpdatedResponse
+} from '@components/Users/__test_support';
+import {userForm} from '../UserInformation/__test_support';
+import {usersTable} from '../__test_support';
+import {userAt} from '../mode';
 
 describe('the users page', () => {
   describe('ranking the users', () => {
     it('sorting works-from-home ascending puts every No before every Yes', async () => {
-      usersServed([conciseUser('Ana'), homeWorker('Ben'), conciseUser('Cy'), homeWorker('Di')]);
+      setupUsersResponse([aUser(), aUser({work: 'home'}), aUser(), aUser({work: 'home'})]);
       render(<TestApp at={Paths.users}/>);
-      await roster();
+      await usersTable.roster();
 
-      await sortWorksFromHome('ascending');
+      await usersTable.sortWorksFromHome('ascending');
 
-      expect(worksFromHomeColumn()).toContain('Yes');
-      expect(worksFromHomeColumn()).toContain('No');
-      expect(worksFromHomeColumn()).toEqual([...worksFromHomeColumn()].sort((left, right) => left.localeCompare(right)));
+      expect(usersTable.worksFromHomeColumn()).toContain('Yes');
+      expect(usersTable.worksFromHomeColumn()).toContain('No');
+      expect(usersTable.worksFromHomeColumn()).toEqual([...usersTable.worksFromHomeColumn()].sort((left, right) => left.localeCompare(right)));
     });
 
     it('every row can be lifted by its grip', async () => {
+      setupUsersResponse([aUser(), aUser(), aUser()]);
       render(<TestApp at={Paths.users}/>);
-      const people = await roster();
+      await usersTable.roster();
 
-      expect(screen.getAllByRole('button', {name: /move row/})).toHaveLength(people.length);
+      expect(usersTable.grips()).toHaveLength(3);
     });
 
     it('a column is resized from one handle', async () => {
+      setupUsersResponse([aUser()]);
       render(<TestApp at={Paths.users}/>);
-      await roster();
+      await usersTable.roster();
 
-      expect(screen.getAllByRole('button', {name: /resize home-city/})).toHaveLength(1);
+      expect(usersTable.resizeHandles('home-city')).toHaveLength(1);
     });
 
     it('a column offers a sort menu only where ranking means something', async () => {
+      setupUsersResponse([aUser()]);
       render(<TestApp at={Paths.users}/>);
-      await roster();
+      await usersTable.roster();
 
-      expect(screen.getByRole('button', {name: 'sort age'})).toBeVisible();
-      expect(screen.queryByRole('button', {name: 'sort full-name'})).toBeNull();
-      expect(screen.queryByRole('button', {name: 'sort home-city'})).toBeNull();
-      expect(screen.queryByRole('button', {name: 'sort friends'})).toBeNull();
+      expect(usersTable.sortMenu('age')).toBeVisible();
+      expect(usersTable.sortMenu('full-name')).toBeNull();
+      expect(usersTable.sortMenu('home-city')).toBeNull();
+      expect(usersTable.sortMenu('friends')).toBeNull();
     });
   });
 
   describe('adding a user', () => {
-    it('a new user joins the roster, saying whether they work from home', async () => {
-      const aUser = conciseUser('Aiko');
-      const anotherUser = conciseUser('Bram');
+    it('adding a user who works from home sends the backend home as their work', async () => {
+      const aiko = aUser({work: 'home'});
+      setupUsersResponse([aUser()]);
+      const sent = setupUserAddedResponse([]);
       render(<TestApp at={Paths.users}/>);
-      await roster();
 
-      await addUserWhoWorksFromHome(aUser);
-      await addUser(anotherUser);
+      await userForm.addWhoWorksFromHome(aiko);
 
-      expect(worksFromHome(await rowOf(fullName(aUser)))).toBe('Yes');
-      expect(worksFromHome(await rowOf(fullName(anotherUser)))).toBe('No');
+      await waitFor(() => expect(sent()).toMatchObject({work: 'home'}));
     });
 
     it('editing a user who works from home finds Same as Home ticked', async () => {
-      const hana = homeWorker('Hana');
-      usersServed([hana]);
-      render(<TestApp at={Paths.users}/>);
-      await roster();
+      const hana = aUser({work: 'home'});
+      setupUsersResponse([hana]);
 
-      await edit(fullName(hana));
+      render(<TestApp at={userAt(hana.id, 'edit')}/>);
+      await userForm.showing(hana);
 
-      expect(screen.getByRole('checkbox', {name: 'Same as Home'})).toBeChecked();
+      expect(userForm.sameAsHome()).toBeChecked();
     });
 
     it('a user born on a day shows that day when viewed', async () => {
-      const born = conciseUser('Faye');
-      usersServed([born]);
-      render(<TestApp at={Paths.users}/>);
-      await roster();
+      const born = aUser({dob: new Date(1984, 5, 2)});
+      setupUsersResponse([born]);
 
-      await view(fullName(born));
+      render(<TestApp at={userAt(born.id, 'view')}/>);
+      await userForm.showing(born);
 
-      expect(screen.getByLabelText('Date Of Birth')).toHaveDisplayValue('1984-06-02');
+      expect(userForm.field('Date Of Birth')).toHaveDisplayValue('1984-06-02');
     });
 
     it('a user born on a day shows that day when edited', async () => {
-      const born = conciseUser('Gabi');
-      usersServed([born]);
-      render(<TestApp at={Paths.users}/>);
-      await roster();
+      const born = aUser({dob: new Date(1984, 5, 2)});
+      setupUsersResponse([born]);
 
-      await edit(fullName(born));
+      render(<TestApp at={userAt(born.id, 'edit')}/>);
+      await userForm.showing(born);
 
-      expect(screen.getByLabelText('Date Of Birth')).toHaveDisplayValue('1984-06-02');
+      expect(userForm.field('Date Of Birth')).toHaveDisplayValue('1984-06-02');
     });
   });
 
   describe('viewing a user', () => {
-    const jo = conciseUser('Jo');
-    const chosen = fullName(jo);
+    const jo = aUser();
 
     beforeEach(async () => {
-      usersServed([jo]);
-      render(<TestApp at={Paths.users}/>);
-      await roster();
-      await view(chosen);
+      setupUsersResponse([jo]);
+      render(<TestApp at={userAt(jo.id, 'view')}/>);
+      await userForm.showing(jo);
     });
 
     test('viewing a user shows their details in the form', () => {
-      const [firstName] = chosen.split(' ');
-      expect(screen.getByLabelText('First Name')).toHaveDisplayValue(firstName);
+      expect(userForm.field('Last Name')).toHaveDisplayValue(jo.info.lastName);
     });
 
     test('the form cannot be typed into', () => {
-      expect(screen.getByLabelText('First Name')).toHaveAttribute('readonly');
+      expect(userForm.field('First Name')).toHaveAttribute('readonly');
     });
 
     test('the date of birth reads as text that cannot be changed', () => {
-      expect(screen.getByLabelText('Date Of Birth')).toHaveAttribute('type', 'text');
-      expect(screen.getByLabelText('Date Of Birth')).toHaveAttribute('readonly');
+      expect(userForm.field('Date Of Birth')).toHaveAttribute('type', 'text');
+      expect(userForm.field('Date Of Birth')).toHaveAttribute('readonly');
     });
 
     test('the state reads as a field that cannot be chosen', () => {
-      expect(addressGroup('home').getByRole('textbox', {name: 'State'})).toHaveAttribute('readonly');
+      expect(userForm.address('home').getByRole('textbox', {name: 'State'})).toHaveAttribute('readonly');
     });
 
     test('the avatar cannot be rerolled', () => {
-      expect(screen.getByRole('button', {name: 'Draw a new avatar'})).toBeDisabled();
+      expect(userForm.avatar()).toBeDisabled();
     });
 
     it('viewing a user offers a door to add another', () => {
-      expect(screen.getByRole('link', {name: 'Add New User'})).toBeInTheDocument();
+      expect(usersTable.addNewUser()).toBeInTheDocument();
     });
 
     it('viewing a user offers a door to edit them', () => {
-      expect(within(screen.getByRole('form', {name: 'User Information'})).getByRole('link', {name: 'Edit'})).toBeInTheDocument();
+      expect(userForm.editLink()).toBeInTheDocument();
     });
   });
 
   describe('editing a user', () => {
-    const kai = conciseUser('Kai');
-    const chosen = fullName(kai);
+    const kai = aUser();
 
     beforeEach(async () => {
-      usersServed([kai]);
-      render(<TestApp at={Paths.users}/>);
-      await roster();
-      await edit(chosen);
+      setupUsersResponse([kai]);
+      render(<TestApp at={userAt(kai.id, 'edit')}/>);
+      await userForm.showing(kai);
     });
 
     it('should populate the form', () => {
-      const [firstName, lastName] = chosen.split(' ');
-      const form = screen.getByRole('form', {name: 'User Information'});
-      expect(within(form).getByLabelText('First Name')).toHaveDisplayValue(firstName);
-      expect(within(form).getByLabelText('Last Name')).toHaveDisplayValue(lastName);
+      expect(userForm.field('First Name')).toHaveDisplayValue(kai.info.firstName);
+      expect(userForm.field('Last Name')).toHaveDisplayValue(kai.info.lastName);
     });
 
     test('the date of birth is picked from a date field', () => {
-      expect(screen.getByLabelText('Date Of Birth')).toHaveAttribute('type', 'date');
+      expect(userForm.field('Date Of Birth')).toHaveAttribute('type', 'date');
     });
 
     test('the state is chosen from a list', () => {
-      expect(addressGroup('home').getByRole('combobox', {name: 'State'})).toBeInTheDocument();
+      expect(userForm.address('home').getByRole('combobox', {name: 'State'})).toBeInTheDocument();
     });
 
     it('should be able to reset the form to the original information', async () => {
-      const [firstName] = chosen.split(' ');
-      const form = screen.getByRole('form', {name: 'User Information'});
-      await userEvent.type(within(form).getByLabelText('First Name'), ' with more text');
+      await userForm.typeInto('First Name', ' with more text');
 
-      expect(within(form).getByLabelText('First Name')).toHaveDisplayValue(`${firstName} with more text`);
+      expect(userForm.field('First Name')).toHaveDisplayValue(`${kai.info.firstName} with more text`);
 
-      await userEvent.click(within(form).getByRole('button', {name: 'Reset'}));
+      await userForm.reset();
 
-      expect(within(form).getByLabelText('First Name')).toHaveDisplayValue(firstName);
+      expect(userForm.field('First Name')).toHaveDisplayValue(kai.info.firstName);
     });
 
     it('cancelling an edit returns to viewing the user', async () => {
-      const form = screen.getByRole('form', {name: 'User Information'});
-      await userEvent.click(within(form).getByRole('link', {name: 'Cancel'}));
+      await userForm.cancel();
       expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('mode=view');
     });
   });
 
   test('editing a user with a work address shows that address', async () => {
-    const person = conciseUser('Ivo');
-    usersServed([person]);
-    render(<TestApp at={Paths.users}/>);
-    await roster();
+    const work = anAddress();
+    const person = aUser({work});
+    setupUsersResponse([person]);
 
-    await edit(fullName(person));
+    render(<TestApp at={userAt(person.id, 'edit')}/>);
+    await userForm.showing(person);
 
-    expect(addressGroup('work').getByLabelText('Street')).toHaveValue(person.work.streetAddress);
+    expect(userForm.address('work').getByLabelText('Street')).toHaveValue(work.streetAddress);
   });
 
-  test('Update keeps the work address a user was added with', async () => {
-    const person = conciseUser('Ysolde');
-    usersServed([person]);
-    render(<TestApp at={Paths.users}/>);
-    await roster();
-    await edit(fullName(person));
+  test('Update sends the backend the work address the user already had', async () => {
+    const work = anAddress();
+    const person = aUser({work});
+    setupUsersResponse([person]);
+    const sent = setupUserUpdatedResponse(person.id, [person]);
+    render(<TestApp at={userAt(person.id, 'edit')}/>);
+    await userForm.showing(person);
 
-    await userEvent.click(within(screen.getByRole('form', {name: 'User Information'})).getByRole('button', {name: 'Update'}));
+    await userForm.update();
 
-    await view(fullName(person));
-    expect(addressGroup('work').getByLabelText('Street')).toHaveValue(person.work.streetAddress);
+    await waitFor(() => expect(sent()).toMatchObject({work}));
   });
 
   test('an updated user shows their new name in the roster', async () => {
-    const person = conciseUser('Cleo');
-    usersServed([person]);
-    render(<TestApp at={Paths.users}/>);
-    await roster();
-    await edit(fullName(person));
+    const person = aUser();
+    setupUsersResponse([person]);
+    setupUserUpdatedResponse(person.id, [{...person, info: {...person.info, lastName: `${person.info.lastName} Jr`}}]);
+    render(<TestApp at={userAt(person.id, 'edit')}/>);
+    await userForm.showing(person);
 
-    await userEvent.type(within(screen.getByRole('form', {name: 'User Information'})).getByLabelText('Last Name'), ' Jr');
-    await userEvent.click(within(screen.getByRole('form', {name: 'User Information'})).getByRole('button', {name: 'Update'}));
+    await userForm.typeInto('Last Name', ' Jr');
+    await userForm.update();
 
-    expect(await rowOf(`${fullName(person)} Jr`)).toBeInTheDocument();
+    expect(await usersTable.rowOf(`${fullNameOf(person)} Jr`)).toBeInTheDocument();
   });
 
   test('a removed user leaves the roster', async () => {
-    const person = conciseUser('Dev');
-    usersServed([person]);
+    const person = aUser();
+    setupUsersResponse([person]);
+    setupUserRemovedResponse(person.id, []);
     render(<TestApp at={Paths.users}/>);
-    await roster();
 
-    await remove(fullName(person));
+    await usersTable.remove(fullNameOf(person));
 
-    await waitFor(() => expect(names()).not.toContain(fullName(person)));
+    await waitFor(() => expect(usersTable.names()).not.toContain(fullNameOf(person)));
   });
 
   test('removing the chosen user clears them from the address', async () => {
-    const person = conciseUser('Dana');
-    usersServed([person]);
-    render(<TestApp at={Paths.users}/>);
-    await roster();
-    await view(fullName(person));
-    await waitFor(() => expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('id='));
+    const person = aUser();
+    setupUsersResponse([person]);
+    setupUserRemovedResponse(person.id, []);
+    render(<TestApp at={userAt(person.id, 'view')}/>);
+    await userForm.showing(person);
 
-    await remove(fullName(person));
+    await usersTable.remove(fullNameOf(person));
 
     await waitFor(() => expect(screen.getByRole('status', {name: 'url search'})).not.toHaveTextContent('id='));
   });
 
   test('a cloned user stands once more in the roster', async () => {
-    const person = conciseUser('Eli');
-    usersServed([person]);
-    render(<TestApp at={Paths.users}/>);
-    await roster();
-    await clone(fullName(person));
+    const person = aUser();
+    setupUsersResponse([person]);
+    setupUserAddedResponse([{...person, id: 'the clone'}, person]);
+    render(<TestApp at={`${Paths.users}?${createSearchParams({id: person.id})}`}/>);
+    await userForm.showing(person);
 
-    await userEvent.click(within(screen.getByRole('form', {name: 'User Information'})).getByRole('button', {name: 'Add'}));
+    await userForm.add();
 
-    await waitFor(() => expect(names().filter(name => name === fullName(person))).toHaveLength(2));
+    await waitFor(() => expect(usersTable.names().filter(name => name === fullNameOf(person))).toHaveLength(2));
   });
 
-  const befriend = async (row: HTMLElement, name: string): Promise<void> => {
-    await userEvent.selectOptions(within(row).getByRole('combobox', {name: 'Add a friend'}), name);
-    await within(row).findByRole('button', {name: `remove ${name}`});
-  };
-
   test("removing the only friend from a person's row hands focus to that row's Add a friend", async () => {
-    const [pia, quin] = [conciseUser('Pia'), conciseUser('Quin')];
-    usersServed([pia, quin]);
+    const pia = aUser({id: 'pia', friends: ['quin']});
+    const quin = aUser({id: 'quin', friends: ['pia']});
+    setupUsersResponse([pia, quin]);
+    setupUserUpdatedResponse(quin.id, [{...pia, friends: []}, {...quin, friends: []}]);
     render(<TestApp at={Paths.users}/>);
-    await roster();
-    await befriend(await rowOf(fullName(pia)), fullName(quin));
-    const quinsRow = await rowOf(fullName(quin));
-    await within(quinsRow).findByRole('button', {name: `remove ${fullName(pia)}`});
+    const quinsRow = await usersTable.rowOf(fullNameOf(quin));
 
-    await userEvent.click(within(quinsRow).getByRole('button', {name: `remove ${fullName(pia)}`}));
+    await userEvent.click(within(quinsRow).getByRole('button', {name: `remove ${fullNameOf(pia)}`}));
 
-    await waitFor(() => expect(within(quinsRow).queryByRole('button', {name: `remove ${fullName(pia)}`})).not.toBeInTheDocument());
+    await waitFor(() => expect(within(quinsRow).queryByRole('button', {name: `remove ${fullNameOf(pia)}`})).not.toBeInTheDocument());
     expect(within(quinsRow).getByRole('combobox', {name: 'Add a friend'})).toHaveFocus();
   });
 
   test('focus is not pulled back to a settled removal when the roster renders again', async () => {
-    const [rae, sol] = [conciseUser('Rae'), conciseUser('Sol')];
-    usersServed([rae, sol]);
+    const rae = aUser({id: 'rae', friends: ['sol']});
+    const sol = aUser({id: 'sol', friends: ['rae']});
+    const unfriended = [{...rae, friends: []}, {...sol, friends: []}];
+    setupUsersResponse([rae, sol]);
+    setupUserUpdatedResponse(rae.id, unfriended);
+    setupUserUpdatedResponse(sol.id, unfriended);
     render(<TestApp at={Paths.users}/>);
-    await roster();
-    const raesRow = await rowOf(fullName(rae));
-    await befriend(raesRow, fullName(sol));
-    await userEvent.click(within(raesRow).getByRole('button', {name: `remove ${fullName(sol)}`}));
+    const raesRow = await usersTable.rowOf(fullNameOf(rae));
+    await userEvent.click(within(raesRow).getByRole('button', {name: `remove ${fullNameOf(sol)}`}));
     await waitFor(() => expect(within(raesRow).getByRole('combobox', {name: 'Add a friend'})).toHaveFocus());
-    await edit(fullName(sol));
+    await usersTable.edit(fullNameOf(sol));
 
-    await userEvent.click(within(screen.getByRole('form', {name: 'User Information'})).getByRole('button', {name: 'Update'}));
+    await userForm.update();
 
     await waitFor(() => expect(screen.getByRole('status', {name: 'url search'})).not.toHaveTextContent('mode='));
     expect(within(raesRow).getByRole('combobox', {name: 'Add a friend'})).not.toHaveFocus();

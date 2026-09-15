@@ -5,7 +5,6 @@
       "@pages/*": ["./src/pages/*"],
       "@components/*": ["./src/components/*"],
       "@transport/*": ["./src/transport/*"],
-      "@backend/*": ["./backend/*"],
       "@__test_support": ["./src/__test_support/index.tsx"],
       "@__test_support/*": ["./src/__test_support/*"]
     },

@@ -1,11 +1,13 @@
-import {screen, within} from '@testing-library/react';
+import {screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {AddressInfo, NewUser} from '@components/Users/UserInfo/user';
+import {AddressInfo, NewUser, User} from '@components/Users/UserInfo/user';
 import {format} from 'date-fns';
 
 const swiftKeys = userEvent.setup({delay: null});
 
-export const addressGroup = (kind: string) =>
+const form = (): HTMLElement => screen.getByRole('form', {name: 'User Information'});
+
+const address = (kind: string) =>
   within(screen.getByRole('group', {name: new RegExp(`^${kind} address$`, 'i')}));
 
 const paste = (field: HTMLElement, text: string): Promise<void> =>
@@ -14,20 +16,58 @@ const paste = (field: HTMLElement, text: string): Promise<void> =>
 const pasteIfGiven = (field: HTMLElement, text?: string): Promise<void> =>
   text === undefined ? Promise.resolve() : paste(field, text);
 
-export const fillOutAddress = (address: AddressInfo, kind: string) =>
-  paste(addressGroup(kind).getByLabelText('Street'), address.streetAddress)
-    .then(() => pasteIfGiven(addressGroup(kind).getByLabelText('Street Line 2'), address.streetAddressTwo))
-    .then(() => paste(addressGroup(kind).getByLabelText('City'), address.city))
-    .then(() => swiftKeys.selectOptions(addressGroup(kind).getByLabelText('State'), address.state))
-    .then(() => paste(addressGroup(kind).getByLabelText('Postal / Zip code'), address.zip));
+const fillOutAddress = (given: AddressInfo, kind: string): Promise<void> =>
+  paste(address(kind).getByLabelText('Street'), given.streetAddress)
+    .then(() => pasteIfGiven(address(kind).getByLabelText('Street Line 2'), given.streetAddressTwo))
+    .then(() => paste(address(kind).getByLabelText('City'), given.city))
+    .then(() => swiftKeys.selectOptions(address(kind).getByLabelText('State'), given.state))
+    .then(() => paste(address(kind).getByLabelText('Postal / Zip code'), given.zip));
 
-export const fillOutUser = (info: Pick<NewUser, 'info'>) =>
-  paste(screen.getByLabelText('First Name'), info.info.firstName)
-    .then(() => paste(screen.getByLabelText('Last Name'), info.info.lastName))
-    .then(() => paste(screen.getByLabelText('Email'), info.info.email))
-    .then(() => swiftKeys.type(screen.getByLabelText('Date Of Birth'), format(info.info.dob!, 'yyyy-MM-dd')));
+const fillOutPerson = ({info}: Pick<NewUser, 'info'>): Promise<void> =>
+  paste(screen.getByLabelText('First Name'), info.firstName)
+    .then(() => paste(screen.getByLabelText('Last Name'), info.lastName))
+    .then(() => paste(screen.getByLabelText('Email'), info.email))
+    .then(() => swiftKeys.type(screen.getByLabelText('Date Of Birth'), format(info.dob!, 'yyyy-MM-dd')));
 
-export const fillOutForm = (info: Pick<NewUser, 'info' | 'homeAddress'> & {work: AddressInfo}) =>
-  fillOutUser(info)
-    .then(() => fillOutAddress(info.homeAddress, 'home'))
-    .then(() => fillOutAddress(info.work, 'work'));
+const field = (label: string): HTMLElement => within(form()).getByLabelText(label);
+
+const sameAsHome = (): HTMLElement => screen.getByRole('checkbox', {name: 'Same as Home'});
+
+export const userForm = {
+  address,
+  field,
+  sameAsHome,
+
+  showing: (user: User): Promise<HTMLElement> => waitFor(() => within(form()).getByDisplayValue(user.info.firstName)),
+
+  avatar: (): HTMLElement => screen.getByRole('button', {name: 'Draw a new avatar'}),
+
+  avatarShown: (): string => screen.getByAltText<HTMLImageElement>('avatar').src,
+
+  editLink: (): HTMLElement => within(form()).getByRole('link', {name: 'Edit'}),
+
+  typeInto: (label: string, text: string): Promise<void> => userEvent.type(field(label), text),
+
+  tickSameAsHome: (): Promise<void> => userEvent.click(sameAsHome()),
+
+  reset: (): Promise<void> => userEvent.click(within(form()).getByRole('button', {name: 'Reset'})),
+
+  cancel: (): Promise<void> => userEvent.click(within(form()).getByRole('link', {name: 'Cancel'})),
+
+  fillOut: (user: Pick<NewUser, 'info' | 'homeAddress'> & {work: AddressInfo}): Promise<void> =>
+    fillOutPerson(user)
+      .then(() => fillOutAddress(user.homeAddress, 'home'))
+      .then(() => fillOutAddress(user.work, 'work')),
+
+  addWhoWorksFromHome: async (user: User): Promise<void> => {
+    await fillOutPerson(user);
+    await fillOutAddress(user.homeAddress, 'home');
+    await swiftKeys.click(sameAsHome());
+    if (user.details !== undefined) await swiftKeys.type(screen.getByLabelText('Details'), user.details);
+    await swiftKeys.click(await within(form()).findByRole('button', {name: 'Add'}));
+  },
+
+  add: (): Promise<void> => userEvent.click(within(form()).getByRole('button', {name: 'Add'})),
+
+  update: (): Promise<void> => swiftKeys.click(within(form()).getByRole('button', {name: 'Update'}))
+};

@@ -1,57 +1,50 @@
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {AddressInfo, User} from '@components/Users/UserInfo/user';
-import {fillOutAddress, fillOutUser} from '../UserInformation/__test_support';
 
-const swiftKeys = userEvent.setup({delay: null});
+const table = (): HTMLElement => screen.getByRole('table');
 
-export const fullName = ({info}: User): string => `${info.firstName} ${info.lastName}`;
+const rowOf = (name: string): Promise<HTMLElement> =>
+  within(table()).findByRole('row', {name: heard => heard.startsWith(name)});
 
-const usersTable = (): HTMLElement => screen.getByRole('table');
+const rows = (): HTMLElement[] =>
+  within(table()).getAllByRole('row').filter(row => within(row).queryByRole('rowheader') !== null);
 
-export const rowOf = (name: string): Promise<HTMLElement> =>
-  within(usersTable()).findByRole('row', {name: heard => heard.startsWith(name)});
+const names = (): string[] => rows().map(row => within(row).getByRole('rowheader').textContent ?? '');
 
-export const rows = (): HTMLElement[] =>
-  within(usersTable()).getAllByRole('row').filter(row => within(row).queryByRole('rowheader') !== null);
-
-export const names = (): string[] => rows().map(row => within(row).getByRole('rowheader').textContent ?? '');
-
-export const roster = async (): Promise<string[]> => {
-  await within(usersTable()).findAllByRole('rowheader');
-  return names();
-};
-
-export const worksFromHome = (row: HTMLElement): string =>
+const worksFromHome = (row: HTMLElement): string =>
   ['Yes', 'No'].find(answer => within(row).queryByRole('cell', {name: answer}) !== null) ?? '';
-
-export const worksFromHomeColumn = (): string[] => rows().map(worksFromHome);
-
-export const sortWorksFromHome = async (direction: string): Promise<void> => {
-  const menu = screen.getByLabelText('sort works-from-home by');
-  await userEvent.click(within(menu).getByRole('button', {name: direction, hidden: true}));
-};
 
 const actionOn = async (name: string, action: string, role: 'link' | 'button'): Promise<void> =>
   userEvent.click(within(await rowOf(name)).getByRole(role, {name: action, hidden: true}));
 
-export const view = (name: string): Promise<void> => actionOn(name, 'View', 'link');
-export const edit = (name: string): Promise<void> => actionOn(name, 'Edit', 'link');
-export const clone = (name: string): Promise<void> => actionOn(name, 'Clone', 'link');
-export const remove = (name: string): Promise<void> => actionOn(name, 'Remove', 'button');
+export const usersTable = {
+  rowOf,
+  rows,
+  names,
 
-const submitting = async (user: User, workAddress: () => Promise<void>): Promise<void> => {
-  await fillOutUser(user);
-  await fillOutAddress(user.homeAddress, 'home');
-  await workAddress();
-  if (user.details !== undefined) {
-    await swiftKeys.type(screen.getByLabelText('Details'), user.details);
-  }
-  await swiftKeys.click(await screen.findByRole('button', {name: 'Add'}));
+  roster: async (): Promise<string[]> => {
+    await within(table()).findAllByRole('rowheader');
+    return names();
+  },
+
+  worksFromHome,
+
+  grips: (): HTMLElement[] => within(table()).getAllByRole('button', {name: /move row/}),
+
+  resizeHandles: (column: string): HTMLElement[] =>
+    within(table()).getAllByRole('button', {name: new RegExp(`resize ${column}`)}),
+
+  sortMenu: (column: string): HTMLElement | null => within(table()).queryByRole('button', {name: `sort ${column}`}),
+
+  addNewUser: (): HTMLElement => screen.getByRole('link', {name: 'Add New User'}),
+
+  worksFromHomeColumn: (): string[] => rows().map(worksFromHome),
+
+  sortWorksFromHome: async (direction: string): Promise<void> => {
+    const menu = screen.getByLabelText('sort works-from-home by');
+    await userEvent.click(within(menu).getByRole('button', {name: direction, hidden: true}));
+  },
+
+  edit: (name: string): Promise<void> => actionOn(name, 'Edit', 'link'),
+  remove: (name: string): Promise<void> => actionOn(name, 'Remove', 'button')
 };
-
-export const addUser = (user: User & {work: AddressInfo}): Promise<void> =>
-  submitting(user, () => fillOutAddress(user.work, 'work'));
-
-export const addUserWhoWorksFromHome = (user: User): Promise<void> =>
-  submitting(user, () => swiftKeys.click(screen.getByRole('checkbox', {name: 'Same as Home'})));

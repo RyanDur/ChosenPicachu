@@ -15,18 +15,11 @@ import {
   ClevelandArtResponse,
   ClevelandSearchResponse
 } from '@components/art-gallery/museums/cleveland/types';
-import {createUser} from '@backend/users/core';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
 import {env} from '@env';
 
 const randomNumberFromRange = (min: number, max = 6) => faker.number.int({min, max: min + max - 1});
 export const words = (num = 6) => faker.lorem.words(randomNumberFromRange(1, num));
-
-export const users = [
-  createUser(),
-  createUser(true),
-  createUser()
-];
 
 export const pagination = {
   total: 997,

@@ -1,19 +1,17 @@
 import './src/__test_support/env';
 import * as matchers from '@testing-library/jest-dom/matchers';
 import '@testing-library/jest-dom/vitest';
-import {afterAll, afterEach, beforeAll, beforeEach, expect} from 'vitest';
+import {afterAll, afterEach, beforeAll, expect} from 'vitest';
 import 'vitest-location-mock';
 import {faker} from '@faker-js/faker';
 import {seed} from '@components/fibs';
-import {server, usersServed} from '@__test_support/server';
-import {createRandomUsers} from '@backend/users/core';
+import {server} from '@__test_support/server';
 import {subscribed} from '@__test_support/feed';
 
 faker.seed(1978);
 seed('the same draw every run');
 
 beforeAll(() => server.listen({onUnhandledRequest: 'error'}));
-beforeEach(() => usersServed(createRandomUsers()));
 afterEach(() => {
   server.resetHandlers();
   subscribed.clear();
