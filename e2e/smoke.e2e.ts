@@ -1,52 +1,57 @@
 import {expect, test} from '@playwright/test';
-import {doors, emptyWall, firstPainting, searchFor, wall} from './__test_support';
+import {galleryPage} from './__test_support';
 
 test('every door the gallery offers hangs art from its museum', async ({page}) => {
+  const gallery = galleryPage(page);
   await page.goto('gallery?page=1&size=8');
-  await expect(doors(page).first()).toBeVisible({timeout: 30_000});
+  await expect(gallery.doors.first()).toBeVisible({timeout: 30_000});
 
-  const offered = await doors(page).count();
+  const offered = await gallery.doors.count();
   expect(offered).toBeGreaterThan(0);
   for (let door = 0; door < offered; door += 1) {
-    await doors(page).nth(door).click();
+    await gallery.doors.nth(door).click();
 
-    await expect(wall(page)).toHaveCount(8, {timeout: 30_000});
-    await expect(emptyWall(page)).toHaveCount(0);
-    await expect(wall(page).first()).not.toBeEmpty();
+    await expect(gallery.wall).toHaveCount(8, {timeout: 30_000});
+    await expect(gallery.emptyWall).toHaveCount(0);
+    await expect(gallery.wall.first()).not.toBeEmpty();
   }
 });
 
 test('the V&A wall hangs its art', async ({page}) => {
+  const gallery = galleryPage(page);
   await page.goto('gallery?page=1&size=8&tab=vam');
 
-  await expect(firstPainting(page)).toBeVisible({timeout: 30_000});
+  await expect(gallery.firstPainting).toBeVisible({timeout: 30_000});
 });
 
 test('a piece on the V&A wall opens into its own page', async ({page}) => {
+  const gallery = galleryPage(page);
   await page.goto('gallery?page=1&size=8&tab=vam');
-  await expect(firstPainting(page)).toBeVisible({timeout: 30_000});
+  await expect(gallery.firstPainting).toBeVisible({timeout: 30_000});
 
-  await firstPainting(page).click();
+  await gallery.firstPainting.click();
 
   await expect(page).toHaveURL(/gallery\/[A-Za-z]*\d+/);
-  await expect(wall(page)).toBeVisible({timeout: 30_000});
+  await expect(gallery.wall).toBeVisible({timeout: 30_000});
 });
 
 test('a search still hangs art', async ({page}) => {
+  const gallery = galleryPage(page);
   await page.goto('gallery?page=1&size=8&search=monet');
 
-  await expect(wall(page)).toHaveCount(8, {timeout: 30_000});
-  await expect(emptyWall(page)).toHaveCount(0);
+  await expect(gallery.wall).toHaveCount(8, {timeout: 30_000});
+  await expect(gallery.emptyWall).toHaveCount(0);
 });
 
 test('a search typed into the box lands in the address and the wall stays hung', async ({page}) => {
+  const gallery = galleryPage(page);
   await page.goto('gallery?page=1&size=8');
-  await expect(wall(page)).toHaveCount(8, {timeout: 30_000});
+  await expect(gallery.wall).toHaveCount(8, {timeout: 30_000});
 
-  await searchFor(page, 'monet');
+  await gallery.searchFor('monet');
 
   await expect(page).toHaveURL(/search=monet/);
-  await expect(wall(page)).toHaveCount(8, {timeout: 30_000});
+  await expect(gallery.wall).toHaveCount(8, {timeout: 30_000});
 });
 
 test('a piece page names the artwork it shows', async ({page}) => {

@@ -2,18 +2,7 @@ import {expect, test} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import {HtmlValidate} from 'html-validate';
 import {pages} from './pages';
-import {
-  feedDot,
-  fullerStory,
-  inkNamed,
-  priceCardScope,
-  priceDelta,
-  pricePeriod,
-  pricePeriodToggle,
-  resolved,
-  scriptedMarket,
-  timelineStories
-} from './__test_support';
+import {chartsPage, homePage, looks, priceCardScope, scriptedMarket} from './__test_support';
 
 const validator = new HtmlValidate({
   extends: ['html-validate:recommended'],
@@ -58,37 +47,40 @@ for (const {name, path, ready, loaded} of pages) {
 }
 
 test('the period menu stays hidden until asked', async ({page}) => {
+  const charts = chartsPage(page);
   await scriptedMarket(page, [50000, 50100]);
   await page.goto('demos?tab=charts');
 
-  await expect(priceDelta(page)).toBeVisible({timeout: 30_000});
-  await expect(pricePeriodToggle(page)).toBeVisible();
-  await expect(pricePeriod(page, 'week')).toBeHidden();
+  await expect(charts.priceDelta).toBeVisible({timeout: 30_000});
+  await expect(charts.periodToggle).toBeVisible();
+  await expect(charts.period('week')).toBeHidden();
 
-  await pricePeriodToggle(page).click();
-  await expect(pricePeriod(page, 'week')).toBeVisible();
+  await charts.periodToggle.click();
+  await expect(charts.period('week')).toBeVisible();
 });
 
 test('the chosen period glows, and its neighbours do not', async ({page}) => {
+  const charts = chartsPage(page);
   await scriptedMarket(page, [50000, 50100]);
   await page.goto('demos?tab=charts');
 
-  await expect(priceDelta(page)).toBeVisible({timeout: 30_000});
-  await pricePeriodToggle(page).click();
+  await expect(charts.priceDelta).toBeVisible({timeout: 30_000});
+  await charts.periodToggle.click();
 
-  await expect(pricePeriod(page, 'hour')).toHaveCSS('box-shadow', await resolved(page, 'box-shadow', '--press-glow-soft'));
-  await expect(pricePeriod(page, 'week')).toHaveCSS('box-shadow', 'none');
+  await expect(charts.period('hour')).toHaveCSS('box-shadow', await looks(page).resolved('box-shadow', '--press-glow-soft'));
+  await expect(charts.period('week')).toHaveCSS('box-shadow', 'none');
 });
 
 test('only one fuller story stands open at a time', async ({page}) => {
+  const home = homePage(page);
   await page.goto('');
-  const stories = timelineStories(page);
+  const stories = home.timelineStories;
 
-  await fullerStory(stories.nth(0)).click();
+  await home.fullerStoryOf(stories.nth(0)).click();
   await expect(stories.nth(0)).toHaveAttribute('open', '');
   await expect(stories.nth(1)).not.toHaveAttribute('open', '');
 
-  await fullerStory(stories.nth(1)).click();
+  await home.fullerStoryOf(stories.nth(1)).click();
   await expect(stories.nth(1)).toHaveAttribute('open', '');
   await expect(stories.nth(0)).not.toHaveAttribute('open', '');
 });
@@ -99,20 +91,22 @@ const markets = [
 ];
 
 test('the feed dot glows live', async ({page}) => {
+  const charts = chartsPage(page);
   await scriptedMarket(page, [50000, 50100]);
   await page.goto('demos?tab=charts');
 
-  await expect(priceDelta(page)).toBeVisible({timeout: 30_000});
-  await expect.poll(() => feedDot(page)).toBe(await inkNamed(page, '--mint'));
+  await expect(charts.priceDelta).toBeVisible({timeout: 30_000});
+  await expect.poll(() => charts.feedDot()).toBe(await looks(page).ink('--mint'));
 });
 
 for (const {trend, sign, ink, prices} of markets) {
   test(`the ${trend} price card has no accessibility violations`, async ({page}) => {
+    const charts = chartsPage(page);
     await scriptedMarket(page, prices);
     await page.goto('demos?tab=charts');
 
-    await expect(priceDelta(page)).toBeVisible({timeout: 30_000});
-    await expect(priceDelta(page)).toHaveText(sign);
+    await expect(charts.priceDelta).toBeVisible({timeout: 30_000});
+    await expect(charts.priceDelta).toHaveText(sign);
 
     const results = await new AxeBuilder({page}).include(priceCardScope).withTags(['wcag2a', 'wcag2aa']).analyze();
 
@@ -125,11 +119,12 @@ for (const {trend, sign, ink, prices} of markets) {
   });
 
   test(`the ${trend} price card wears its ink`, async ({page}) => {
+    const charts = chartsPage(page);
     await scriptedMarket(page, prices);
     await page.goto('demos?tab=charts');
 
-    await expect(priceDelta(page)).toBeVisible({timeout: 30_000});
-    await expect(priceDelta(page)).toHaveText(sign);
-    await expect(priceDelta(page)).toHaveCSS('color', await inkNamed(page, ink));
+    await expect(charts.priceDelta).toBeVisible({timeout: 30_000});
+    await expect(charts.priceDelta).toHaveText(sign);
+    await expect(charts.priceDelta).toHaveCSS('color', await looks(page).ink(ink));
   });
 }

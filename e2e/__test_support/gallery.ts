@@ -1,14 +1,15 @@
-import type {Locator, Page} from '@playwright/test';
+import type {Page} from '@playwright/test';
 
-export const doors = (page: Page): Locator => page.getByRole('navigation', {name: 'museums'}).getByRole('link');
-
-export const wall = (page: Page): Locator => page.getByRole('figure');
-
-export const emptyWall = (page: Page): Locator => page.getByAltText('the museum answered with nothing');
-
-export const firstPainting = (page: Page): Locator => wall(page).first().getByRole('link').first();
-
-export const searchFor = async (page: Page, words: string): Promise<void> => {
-  await page.getByLabel(/Search For/).fill(words);
-  await page.getByRole('button', {name: 'submit search'}).click();
+export const galleryPage = (page: Page) => {
+  const wall = page.getByRole('figure');
+  return {
+    doors: page.getByRole('navigation', {name: 'museums'}).getByRole('link'),
+    wall,
+    emptyWall: page.getByAltText('the museum answered with nothing'),
+    firstPainting: wall.first().getByRole('link').first(),
+    searchFor: async (words: string): Promise<void> => {
+      await page.getByLabel(/Search For/).fill(words);
+      await page.getByRole('button', {name: 'submit search'}).click();
+    }
+  };
 };

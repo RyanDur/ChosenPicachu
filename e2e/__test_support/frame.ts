@@ -27,28 +27,28 @@ const dragTo = async (page: Page, from: Box, x: number, y: number): Promise<void
   await page.mouse.up();
 };
 
-export const columnOrder = (table: Locator | FrameLocator) => (): Promise<(string | null)[]> =>
-  table.getByRole('columnheader').evaluateAll(headers => headers.map(header => header.getAttribute('aria-label')));
-
-export const rowOrder = (table: Locator | FrameLocator) => (): Promise<string[]> =>
-  table.getByRole('rowheader').evaluateAll(cells =>
-    cells.map(cell => cell.getAttribute('aria-label') ?? (cell.textContent ?? '').trim()));
-
-export const columnHeader = (table: Locator | FrameLocator, name: string): Locator => table.getByRole('columnheader', {name});
-
-export const dragColumnPast = async (page: Page, table: Locator | FrameLocator, column: string, past: string): Promise<void> => {
-  const from = await boxOf(columnHeader(table, column));
-  const to = await boxOf(columnHeader(table, past));
-  await dragTo(page, from, to.x + to.width * 0.8, from.y + from.height / 2);
-};
-
-export const dragRowPast = async (page: Page, table: Locator | FrameLocator, row: number, past: RegExp): Promise<void> => {
-  const grip = await boxOf(table.getByRole('button', {name: `move row ${row}`}));
-  const target = await boxOf(table.getByRole('row', {name: past}));
-  await dragTo(page, grip, grip.x + grip.width / 2, target.y + target.height * 0.8);
-};
-
-export const sortBy = async (table: Locator | FrameLocator, column: string, direction: string): Promise<void> => {
-  await table.getByRole('button', {name: `sort ${column}`}).click();
-  await table.getByRole('button', {name: direction}).click();
+export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
+  const columnHeader = (name: string): Locator => table.getByRole('columnheader', {name});
+  return {
+    columnHeader,
+    columnOrder: (): Promise<(string | null)[]> =>
+      table.getByRole('columnheader').evaluateAll(headers => headers.map(header => header.getAttribute('aria-label'))),
+    rowOrder: (): Promise<string[]> =>
+      table.getByRole('rowheader').evaluateAll(cells =>
+        cells.map(cell => cell.getAttribute('aria-label') ?? (cell.textContent ?? '').trim())),
+    dragColumnPast: async (column: string, past: string): Promise<void> => {
+      const from = await boxOf(columnHeader(column));
+      const to = await boxOf(columnHeader(past));
+      await dragTo(page, from, to.x + to.width * 0.8, from.y + from.height / 2);
+    },
+    dragRowPast: async (row: number, past: RegExp): Promise<void> => {
+      const grip = await boxOf(table.getByRole('button', {name: `move row ${row}`}));
+      const target = await boxOf(table.getByRole('row', {name: past}));
+      await dragTo(page, grip, grip.x + grip.width / 2, target.y + target.height * 0.8);
+    },
+    sortBy: async (column: string, direction: string): Promise<void> => {
+      await table.getByRole('button', {name: `sort ${column}`}).click();
+      await table.getByRole('button', {name: direction}).click();
+    }
+  };
 };

@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import {wall} from './__test_support';
+import {galleryPage} from './__test_support';
 
 test('the header and nav keep their height while the gallery wall is still on its way', async ({page}) => {
   await page.setViewportSize({width: 412, height: 823});
@@ -23,7 +23,7 @@ test('the header and nav keep their height while the gallery wall is still on it
 
   hang();
 
-  await expect(wall(page).first()).toBeVisible({timeout: 30_000});
+  await expect(galleryPage(page).wall.first()).toBeVisible({timeout: 30_000});
   expect(await header.boundingBox()).toEqual(headerWhileLoading);
   expect(await nav.boundingBox()).toEqual(navWhileLoading);
 });

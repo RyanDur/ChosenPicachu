@@ -17,17 +17,17 @@ export const scriptedMarket = async (page: Page, prices: number[]): Promise<void
   });
 };
 
-export const priceCard = (page: Page): Locator => page.getByRole('region', {name: 'live trades'});
-
 export const priceCardScope = 'section[aria-label="live trades"]';
 
-export const priceDelta = (page: Page): Locator => priceCard(page).getByText(/^[+-]\$/);
-
-export const pricePeriodToggle = (page: Page): Locator => page.getByRole('button', {name: 'price period'});
-
-export const pricePeriodMenu = (page: Page): Locator => page.getByLabel('price period by');
-
-export const pricePeriod = (page: Page, period: string): Locator => pricePeriodMenu(page).getByRole('button', {name: period});
-
-export const feedDot = (page: Page): Promise<string> =>
-  page.getByRole('status', {name: 'feed'}).evaluate(feed => getComputedStyle(feed, '::before').backgroundColor);
+export const chartsPage = (page: Page) => {
+  const priceCard = page.getByRole('region', {name: 'live trades'});
+  const periodMenu = page.getByLabel('price period by');
+  return {
+    priceCard,
+    priceDelta: priceCard.getByText(/^[+-]\$/),
+    periodToggle: page.getByRole('button', {name: 'price period'}),
+    period: (name: string): Locator => periodMenu.getByRole('button', {name}),
+    feedDot: (): Promise<string> =>
+      page.getByRole('status', {name: 'feed'}).evaluate(feed => getComputedStyle(feed, '::before').backgroundColor)
+  };
+};

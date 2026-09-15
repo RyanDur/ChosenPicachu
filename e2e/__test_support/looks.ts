@@ -1,6 +1,6 @@
 import type {Page} from '@playwright/test';
 
-export const resolved = (page: Page, property: string, token: string): Promise<string> =>
+const resolved = (page: Page, property: string, token: string): Promise<string> =>
   page.evaluate(([property, name]) => {
     const swatch = document.createElement('span');
     swatch.style.setProperty(property, `var(${name})`);
@@ -17,4 +17,7 @@ export const resolved = (page: Page, property: string, token: string): Promise<s
     return value;
   }, [property, token]);
 
-export const inkNamed = (page: Page, token: string): Promise<string> => resolved(page, 'color', token);
+export const looks = (page: Page) => ({
+  resolved: (property: string, token: string): Promise<string> => resolved(page, property, token),
+  ink: (token: string): Promise<string> => resolved(page, 'color', token)
+});
