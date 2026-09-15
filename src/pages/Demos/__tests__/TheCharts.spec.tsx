@@ -1,13 +1,13 @@
-import {TestApp} from '@test-support/TestApp';
+import {TestApp} from '@__test_support/TestApp';
 import {chartPageAt, demosAt} from '@pages/Demos/__test_support';
 import {render, screen, waitFor, within} from '@testing-library/react';
-import {broadcast, listeningFeed, nonTradeFrame, tradeFrame, tradeFrameWith} from '@test-support/feed';
-import {feedIsSubscribed} from '@test-support';
+import {broadcast, listeningFeed, nonTradeFrame, tradeFrame, tradeFrameWith} from '@__test_support/feed';
+import {feedIsSubscribed} from '@__test_support';
 import userEvent from '@testing-library/user-event';
 import {addChart, addMenu, doorway, dragChart, keys, releaseDrag, slot, walkThrough} from '@pages/Demos/Charts/__test_support';
 import {story} from '@pages/Demos/Recipe/__test_support';
 import {format} from 'date-fns';
-import {tradeHistoryRefuses} from '@test-support/server';
+import {tradeHistoryRefuses} from '@__test_support/server';
 
 const feedIsLive = async (): Promise<void> => {
   await waitFor(() => expect(screen.getByRole('status', {name: 'feed'})).toHaveTextContent(/^live$/));

@@ -1,10 +1,10 @@
-import {TestApp} from '@test-support/TestApp';
+import {TestApp} from '@__test_support/TestApp';
 import {demosAt} from '@pages/Demos/__test_support';
 import {expect, test} from 'vitest';
 import userEvent from '@testing-library/user-event';
 import {render, screen, waitFor, within} from '@testing-library/react';
-import {broadcast, listeningFeed, tradeFrame} from '@test-support/feed';
-import {feedIsSubscribed} from '@test-support';
+import {broadcast, listeningFeed, tradeFrame} from '@__test_support/feed';
+import {feedIsSubscribed} from '@__test_support';
 
 describe('The Demos page', () => {
   test('the accordion labels survive a visit to the streaming charts', async () => {

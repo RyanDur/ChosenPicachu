@@ -1,4 +1,4 @@
-import {anyRequestRespondsWith, server} from '@test-support/server';
+import {anyRequestRespondsWith, server} from '@__test_support/server';
 import {http, HttpResponse} from 'msw';
 import {
   fromHarvardArt,
@@ -7,7 +7,7 @@ import {
   harvardPiece,
   harvardPieceResponse,
   options
-} from '@test-support/fixtures';
+} from '@__test_support/fixtures';
 import {art} from '@components/art-gallery/museums';
 import {Source} from '@components/art-gallery/museums/source';
 import {faker} from '@faker-js/faker';

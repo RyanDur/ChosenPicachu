@@ -1,5 +1,5 @@
-import {anyRequestRespondsWith} from '@test-support/server';
-import {aicArtResponse, fromAICArt, options} from '@test-support/fixtures';
+import {anyRequestRespondsWith} from '@__test_support/server';
+import {aicArtResponse, fromAICArt, options} from '@__test_support/fixtures';
 import {nanoid} from 'nanoid';
 import {AICPieceData, AICSearchResponse} from '@components/art-gallery/museums/aic/types';
 import {art} from '@components/art-gallery/museums';

@@ -1,5 +1,5 @@
-import {TestApp} from '@test-support/TestApp';
-import {aicArtResponse, clevelandArtResponse, harvardArtResponse, vamArtResponse} from '@test-support/fixtures';
+import {TestApp} from '@__test_support/TestApp';
+import {aicArtResponse, clevelandArtResponse, harvardArtResponse, vamArtResponse} from '@__test_support/fixtures';
 import {render, screen, waitFor, within} from '@testing-library/react';
 import {has} from '@ryandur/sand';
 import {Paths} from '@pages/Paths';

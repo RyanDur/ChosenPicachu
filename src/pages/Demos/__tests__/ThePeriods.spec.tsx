@@ -1,9 +1,9 @@
-import {TestApp} from '@test-support/TestApp';
+import {TestApp} from '@__test_support/TestApp';
 import {demosAt} from '@pages/Demos/__test_support';
 import {render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {delay, http, HttpResponse} from 'msw';
-import {HISTORY, server} from '@test-support/server';
+import {HISTORY, server} from '@__test_support/server';
 import {format} from 'date-fns';
 
 const HOUR_ALIGNED = 1699995600;

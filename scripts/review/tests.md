@@ -63,7 +63,7 @@ A smoke test asks one question after a deploy: is the thing we shipped alive whe
 Martin Fowler, Page Object: https://martinfowler.com/bliki/PageObject.html
 
 - A page object offers the services a page or component offers a person, in the domain's words, and hides how the markup is built. Its methods say what a person does, not what element they touch.
-- It lives in `__test_support` beside the page or component it speaks for, never in a shared grab bag. Test support for the app as a whole lives in `src/test-support`.
+- It lives in `__test_support` beside the page or component it speaks for, never in a shared grab bag. Test support for the app as a whole lives in `src/__test_support`.
 - It finds by role, label and text, like every test. It makes no assertions of its own; the spec says what is expected.
 - A helper repeated across specs is a page object waiting to be named.
 

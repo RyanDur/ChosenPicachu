@@ -1,6 +1,6 @@
 import {has} from '@ryandur/sand';
 import {env} from '@env';
-import {Feed} from '@test-support/feed';
+import {Feed} from '@__test_support/feed';
 import type {Motion, Origin, Pace} from '../../../Controls';
 import {startingTable} from '../starting';
 import {boot} from '../boot';

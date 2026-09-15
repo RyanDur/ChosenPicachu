@@ -1,8 +1,8 @@
 import {describe, expect, it, vi} from 'vitest';
 import {ws} from 'msw';
 import {WebSocketClientConnectionProtocol as Client} from '@mswjs/interceptors/WebSocket';
-import {server} from '@test-support/server';
-import {tradeFrame} from '@test-support/feed';
+import {server} from '@__test_support/server';
+import {tradeFrame} from '@__test_support/feed';
 import {exchange} from '../exchange';
 import {demosStore, feedReleased, feedRequested, selectFeedStatus, selectLiveTrades} from '../store';
 

@@ -1,4 +1,4 @@
-import {anyRequestRespondsWith} from '@test-support/server';
+import {anyRequestRespondsWith} from '@__test_support/server';
 import {
   clevelandArtOptions,
   clevelandArtResponse,
@@ -6,7 +6,7 @@ import {
   fromClevelandArt,
   fromClevelandToPiece,
   options
-} from '@test-support/fixtures';
+} from '@__test_support/fixtures';
 import {art} from '@components/art-gallery/museums';
 import {Source} from '@components/art-gallery/museums/source';
 import {faker} from '@faker-js/faker';

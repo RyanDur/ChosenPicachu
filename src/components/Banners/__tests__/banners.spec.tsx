@@ -1,7 +1,7 @@
 import {fireEvent, render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {FC} from 'react';
-import {TestApp} from '@test-support/TestApp';
+import {TestApp} from '@__test_support/TestApp';
 import {useBanners} from '@components/Banners/useBanners';
 
 const Trouble: FC<{message: string}> = ({message}) => {

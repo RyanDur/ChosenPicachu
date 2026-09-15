@@ -1,5 +1,5 @@
 import {http, HttpResponse} from 'msw';
-import {server} from '@test-support/server';
+import {server} from '@__test_support/server';
 import {AICAllArtResponse, AICArtResponse, AICSearchResponse} from '@components/art-gallery/museums/aic/types';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
 import {env} from '@env';

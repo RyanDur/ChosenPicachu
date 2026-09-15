@@ -1,4 +1,4 @@
-import {TestApp} from '@test-support/TestApp';
+import {TestApp} from '@__test_support/TestApp';
 import {fireEvent, render, screen} from '@testing-library/react';
 import {Image} from '@components/art-gallery/Image';
 import userEvent from '@testing-library/user-event';
@@ -6,7 +6,7 @@ import {Art} from '@components/art-gallery/museums/art';
 import {Source} from '@components/art-gallery/museums/source';
 import {faker} from '@faker-js/faker';
 import {Paths} from '@pages/Paths';
-import {landingsDuring} from '@test-support/landings';
+import {landingsDuring} from '@__test_support/landings';
 
 describe('the image', () => {
   const piece: Art = {

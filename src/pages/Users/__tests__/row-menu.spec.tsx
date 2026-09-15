@@ -1,4 +1,4 @@
-import {TestApp} from '@test-support/TestApp';
+import {TestApp} from '@__test_support/TestApp';
 import {render, screen, waitFor, within} from '@testing-library/react';
 import {Paths} from '@pages/Paths';
 

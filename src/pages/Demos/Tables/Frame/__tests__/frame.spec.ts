@@ -1,7 +1,7 @@
 import {fireEvent, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {broadcast, listeningFeed, tradeFrame} from '@test-support/feed';
-import {feedIsSubscribed} from '@test-support';
+import {broadcast, listeningFeed, tradeFrame} from '@__test_support/feed';
+import {feedIsSubscribed} from '@__test_support';
 import {standFrame} from '../__test_support';
 
 describe('the frame table', () => {

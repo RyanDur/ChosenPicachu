@@ -1,6 +1,6 @@
-import {users as someUsers} from '@test-support/fixtures';
+import {users as someUsers} from '@__test_support/fixtures';
 import {users} from '@components/Users';
-import {usersServed} from '@test-support/server';
+import {usersServed} from '@__test_support/server';
 import {syncing} from '../syncing';
 import {friendsChanged, opened, selectUsers, userRemoved, userUpdated, userWithId, usersArrived, usersStore} from '../store';
 import {rowMoved} from '@components/DragSortableTable/arrangement';

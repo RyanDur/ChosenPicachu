@@ -11,7 +11,7 @@ const aliases = {
   '@components': fileURLToPath(new URL('./src/components', import.meta.url)),
   '@transport': fileURLToPath(new URL('./src/transport', import.meta.url)),
   '@backend': fileURLToPath(new URL('./backend', import.meta.url)),
-  '@test-support': fileURLToPath(new URL('./src/test-support', import.meta.url))
+  '@__test_support': fileURLToPath(new URL('./src/__test_support', import.meta.url))
 };
 
 const frameScript = (): Plugin => ({

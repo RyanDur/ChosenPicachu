@@ -1,5 +1,5 @@
-import {TestApp} from '@test-support/TestApp';
-import {anyRequestRespondsWith, server} from '@test-support/server';
+import {TestApp} from '@__test_support/TestApp';
+import {anyRequestRespondsWith, server} from '@__test_support/server';
 import {render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {Source} from '@components/art-gallery/museums/source';

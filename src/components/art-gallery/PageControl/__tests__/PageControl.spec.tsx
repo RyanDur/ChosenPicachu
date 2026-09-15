@@ -1,9 +1,9 @@
-import {TestApp} from '@test-support/TestApp';
+import {TestApp} from '@__test_support/TestApp';
 import userEvent from '@testing-library/user-event';
 import {render, screen, waitFor} from '@testing-library/react';
-import {aicArtResponse} from '@test-support/fixtures';
+import {aicArtResponse} from '@__test_support/fixtures';
 import {Paths} from '@pages/Paths';
-import {atTheTop, landingsDuring} from '@test-support/landings';
+import {atTheTop, landingsDuring} from '@__test_support/landings';
 import {heldAICAllArtResponse, setupAICEveryPage, wallHangs} from '@components/art-gallery/__test_support';
 
 describe('The page controls', () => {

@@ -1,5 +1,5 @@
-import {TestApp} from '@test-support/TestApp';
-import {anyRequestRespondsWith} from '@test-support/server';
+import {TestApp} from '@__test_support/TestApp';
+import {anyRequestRespondsWith} from '@__test_support/server';
 import {render, screen, waitFor, within} from '@testing-library/react';
 import {HTTPError} from '@transport/types';
 import {faker} from '@faker-js/faker';

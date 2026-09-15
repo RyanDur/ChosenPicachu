@@ -1,4 +1,4 @@
-import {users as allUsers} from '@test-support/fixtures';
+import {users as allUsers} from '@__test_support/fixtures';
 import {NewUser, User} from '@components/Users/UserInfo/user';
 import {failure, Success} from '@ryandur/sand';
 import {HTTPError} from '@transport/types';
@@ -6,7 +6,7 @@ import {faker} from '@faker-js/faker';
 import {createUser} from '@backend/users/core';
 import {users} from '@components/Users';
 import {UsersAPI} from '@components/Users/resource/usersApi';
-import {usersServed} from '@test-support/server';
+import {usersServed} from '@__test_support/server';
 
 describe('the users backend, through its client', () => {
   test('hands back every user it was given', async () => {

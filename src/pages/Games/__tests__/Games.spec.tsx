@@ -1,5 +1,5 @@
 import {Paths} from '@pages/Paths';
-import {TestApp} from '@test-support/TestApp';
+import {TestApp} from '@__test_support/TestApp';
 import {render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 

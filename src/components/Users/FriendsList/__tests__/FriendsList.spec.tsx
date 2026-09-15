@@ -3,7 +3,7 @@ import {render, screen} from '@testing-library/react';
 import {FC, useState} from 'react';
 import {FriendsList} from '@components/Users/FriendsList';
 import {User} from '@components/Users/UserInfo/user';
-import {users} from '@test-support/fixtures';
+import {users} from '@__test_support/fixtures';
 
 const Befriending: FC<{user: User; among?: readonly User[]}> = ({user: first, among = users}) => {
   const [user, update] = useState(first);

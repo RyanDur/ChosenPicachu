@@ -1,9 +1,9 @@
-import {TestApp} from '@test-support/TestApp';
+import {TestApp} from '@__test_support/TestApp';
 import {demosAt} from '@pages/Demos/__test_support';
 import {fireEvent, render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {broadcast, listeningFeed, tradeFrame} from '@test-support/feed';
-import {feedIsSubscribed} from '@test-support';
+import {broadcast, listeningFeed, tradeFrame} from '@__test_support/feed';
+import {feedIsSubscribed} from '@__test_support';
 import {opened, reveals, story} from '@pages/Demos/Recipe/__test_support';
 import {chosenDials, tableControls} from '@pages/Demos/Tables/__test_support';
 import {texts} from '@components/DragSortableTable/__test_support';

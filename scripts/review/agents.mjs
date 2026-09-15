@@ -38,7 +38,7 @@ export const design = {
 };
 
 export const halves = {
-  tests: 'The tests are the spec files (*.spec.* and *.test.*), everything under e2e/, every __test_support/ directory and src/test-support/.',
+  tests: 'The tests are the spec files (*.spec.* and *.test.*), everything under e2e/, every __test_support/ directory and src/__test_support/.',
   site: 'The site is everything else in the scope: pages, components, sheets and all that ships.'
 };
 

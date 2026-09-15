@@ -1,4 +1,4 @@
-import {TestApp} from '@test-support/TestApp';
+import {TestApp} from '@__test_support/TestApp';
 import {FC} from 'react';
 import {render, screen} from '@testing-library/react';
 import * as schema from 'schemawax';

@@ -6,8 +6,8 @@
       "@components/*": ["./src/components/*"],
       "@transport/*": ["./src/transport/*"],
       "@backend/*": ["./backend/*"],
-      "@test-support": ["./src/test-support/index.tsx"],
-      "@test-support/*": ["./src/test-support/*"]
+      "@__test_support": ["./src/__test_support/index.tsx"],
+      "@__test_support/*": ["./src/__test_support/*"]
     },
     "composite": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",

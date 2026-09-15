@@ -1,7 +1,7 @@
-import {TestApp} from '@test-support/TestApp';
+import {TestApp} from '@__test_support/TestApp';
 import {demosAt} from '@pages/Demos/__test_support';
 import {render, screen, waitFor, within} from '@testing-library/react';
-import {tradeHistoryAnswers, tradeHistoryUnreachable} from '@test-support/server';
+import {tradeHistoryAnswers, tradeHistoryUnreachable} from '@__test_support/server';
 import {texts} from '@components/DragSortableTable/__test_support';
 
 const NOW = 1700000000000;

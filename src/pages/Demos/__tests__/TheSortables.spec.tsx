@@ -1,9 +1,9 @@
-import {TestApp} from '@test-support/TestApp';
+import {TestApp} from '@__test_support/TestApp';
 import {demosAt} from '@pages/Demos/__test_support';
 import {createEvent, fireEvent, render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {listeningFeed} from '@test-support/feed';
-import {feedIsSubscribed} from '@test-support';
+import {listeningFeed} from '@__test_support/feed';
+import {feedIsSubscribed} from '@__test_support';
 import {story} from '@pages/Demos/Recipe/__test_support';
 
 const seatOf = (item: string): HTMLElement => {
