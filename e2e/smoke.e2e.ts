@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import {galleryPage} from './__test_support';
+import {galleryPage, piecePage} from './__test_support';
 
 test('every door the gallery offers hangs art from its museum', async ({page}) => {
   const gallery = galleryPage(page);
@@ -32,7 +32,7 @@ test('a piece on the V&A wall opens into its own page', async ({page}) => {
   await gallery.firstPainting.click();
 
   await expect(page).toHaveURL(/gallery\/[A-Za-z]*\d+/);
-  await expect(gallery.piece).toHaveCount(1, {timeout: 30_000});
+  await expect(piecePage(page).piece).toHaveCount(1, {timeout: 30_000});
 });
 
 test('a search still hangs art', async ({page}) => {
