@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import {broadcast, listeningFeed, tradeFrame} from '@pages/Demos/__test_support/feed';
 import {feedIsSubscribed} from '@pages/Demos/__test_support';
 import {vanillaFrame} from '../__test_support';
+import {blurFocusOnMoves} from '../../__test_support';
 
 describe('the frame table', () => {
   const windowNames = (): string[] =>
@@ -91,26 +92,8 @@ describe('the frame table', () => {
     expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
   });
 
-  // the browser blurs a focused node when it is moved in the DOM; jsdom does not, so the suite supplies the loss
-  const blurringMoves = (): (() => void) => {
-    const untouched = Object.getOwnPropertyDescriptor(Node.prototype, 'insertBefore');
-    if (untouched) {
-      Node.prototype.insertBefore = function <T extends Node>(this: Node, node: T, child: Node | null): T {
-        const focused = document.activeElement;
-        if (node instanceof HTMLElement && focused instanceof HTMLElement && node.contains(focused)) {
-          focused.blur();
-        }
-        return Reflect.apply(untouched.value, this, [node, child]);
-      };
-      return () => {
-        Object.defineProperty(Node.prototype, 'insertBefore', untouched);
-      };
-    }
-    throw new Error('no insertBefore to blur');
-  };
-
   it('a column walks right to the end and left back home, keypress after keypress, keeping the focus the moves take', async () => {
-    const restore = blurringMoves();
+    blurFocusOnMoves();
     vanillaFrame.stand({pace: 'eager'});
 
     const trades = screen.getByRole('columnheader', {name: /trades/});
@@ -121,11 +104,10 @@ describe('the frame table', () => {
     await userEvent.keyboard('{ArrowLeft}{ArrowLeft}{ArrowLeft}{ArrowLeft}{ArrowLeft}');
     expect(columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
     expect(document.activeElement).toBe(trades);
-    restore();
   });
 
   it('a row walks to the bottom and back to the top, keypress after keypress, keeping the focus the moves take', async () => {
-    const restore = blurringMoves();
+    blurFocusOnMoves();
     vanillaFrame.stand({pace: 'eager'});
 
     const grip = within(screen.getByRole('row', {name: /this minute/})).getByRole('button', {name: /move row/});
@@ -136,7 +118,6 @@ describe('the frame table', () => {
     await userEvent.keyboard('{ArrowUp}{ArrowUp}{ArrowUp}{ArrowUp}{ArrowUp}');
     expect(windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
     expect(document.activeElement).toBe(grip);
-    restore();
   });
 
   it('the first seat is anchored', async () => {

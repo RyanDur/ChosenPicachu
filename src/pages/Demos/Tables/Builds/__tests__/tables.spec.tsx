@@ -8,6 +8,7 @@ import {TableColumn} from '@components/DragSortableTable/table-state';
 import {arrangementOf, arrangementReducer, arrived, columnMoved, rowMoved, sorted, standingOf} from '@components/DragSortableTable/arrangement';
 import {EagerTable} from '../EagerTable';
 import {LazyTable} from '../LazyTable';
+import {blurFocusOnMoves} from '../../__test_support';
 import {Column, DragSortableTable} from '@components/DragSortableTable';
 
 type Table = FC<HeaderEvents & BodyEvents & {className?: string; columns: readonly TableColumn<Measured>[]; rows: readonly Measures[]}>;
@@ -716,23 +717,6 @@ describe('resizable columns', () => {
 });
 
 describe('animated moves', () => {
-  // the browser blurs a focused node when it is moved in the DOM; jsdom does not, so the suite supplies the loss
-  const blurringMoves = (): (() => void) => {
-    const untouched = Object.getOwnPropertyDescriptor(Node.prototype, 'insertBefore');
-    if (untouched) {
-      Node.prototype.insertBefore = function <T extends Node>(this: Node, node: T, child: Node | null): T {
-        const focused = document.activeElement;
-        if (node instanceof HTMLElement && focused instanceof HTMLElement && node.contains(focused)) {
-          focused.blur();
-        }
-        return Reflect.apply(untouched.value, this, [node, child]);
-      };
-      return () => {
-        Object.defineProperty(Node.prototype, 'insertBefore', untouched);
-      };
-    }
-    throw new Error('no insertBefore to blur');
-  };
   const spanned = (): void => {
     sourceTable().getBoundingClientRect = () => rect({left: 0, right: 700, width: 700, top: 0, bottom: 240, height: 240});
     within(sourceTable()).getAllByRole('columnheader').forEach((head, at) => {
@@ -800,7 +784,7 @@ describe('animated moves', () => {
   });
 
   test('a column walks the whole way right and back left, keypress after keypress, with no animation ending between, keeping the focus the moves take', async () => {
-    const restore = blurringMoves();
+    blurFocusOnMoves();
     seat(EagerTable, 'keep animated');
     spanned();
 
@@ -825,11 +809,10 @@ describe('animated moves', () => {
     await userEvent.keyboard('{ArrowLeft}');
     expect(columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
     expect(document.activeElement).toBe(header('trades'));
-    restore();
   });
 
   test('a row walks to the bottom and back to the top, keypress after keypress, with no animation ending between, keeping the focus the moves take', async () => {
-    const restore = blurringMoves();
+    blurFocusOnMoves();
     seat(EagerTable, 'keep animated');
     spanned();
     settledRows();
@@ -857,7 +840,6 @@ describe('animated moves', () => {
     await userEvent.keyboard('{ArrowUp}');
     expect(windowNames()).toEqual(windows);
     expect(document.activeElement).toBe(grip('this minute'));
-    restore();
   });
 
   test('a keyboard nudge settles the walked row from across the row it passed', async () => {
