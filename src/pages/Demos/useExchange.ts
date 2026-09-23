@@ -13,6 +13,8 @@ const said = (trouble: FeedTrouble): string => {
       return 'the live feed hung up mid-stream';
     case 'historyRefused':
       return troubleWith('the trade history')(trouble.cause);
+    case 'candlesRefused':
+      return troubleWith('the candle history')(trouble.cause);
   }
 };
 

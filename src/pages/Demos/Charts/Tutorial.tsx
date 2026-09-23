@@ -72,6 +72,7 @@ const priceStory =
         <Codes>
           <Snippet label="TS" lines={[
             ...unit(historySource, 'export const periodCandles'), gap,
+            ...unit(demosSource, 'const candlesReducer'), gap,
             ...unit(candlesHook, 'export const usePeriodCandles'), gap,
             ...unit(shapesSource, 'export const mergeLive')
           ]}/>

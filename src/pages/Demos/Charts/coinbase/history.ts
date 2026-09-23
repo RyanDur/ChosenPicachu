@@ -4,6 +4,7 @@ import {http} from '@transport/http';
 import {validate} from '@transport/validate';
 import {HTTPError} from '@transport/types';
 import {Candle} from '../Candles/shapes';
+import {granularitySeconds, Period, periodSpanMs} from '../period';
 
 const HistoryRowsDecoder = schema.array(schema.array(schema.number));
 
@@ -18,6 +19,14 @@ const toCandle = (row: readonly number[]): Candle => ({
 
 const toCandles = (rows: readonly (readonly number[])[]): readonly Candle[] =>
   rows.filter(row => row.length === 6).map(toCandle).reverse();
+
+export const periodQuery = (period: Period): string => {
+  const now = new Date();
+  const start = new Date(now.getTime() - periodSpanMs[period]);
+  return `granularity=${granularitySeconds[period]}` +
+    `&start=${encodeURIComponent(start.toISOString())}` +
+    `&end=${encodeURIComponent(now.toISOString())}`;
+};
 
 export const periodCandles = (
   base: string,
