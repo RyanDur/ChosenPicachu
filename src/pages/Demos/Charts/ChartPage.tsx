@@ -10,7 +10,7 @@ import {Pressure} from './Pressure';
 import {Pie} from './Pie';
 import {useDesk} from './useDesk';
 import {ChartKind, isChartKind, matchChartKind} from './kinds';
-import {Depth} from '../Recipe';
+import {StoryDepth} from '../Recipe';
 import {ChartStories} from './Tutorial';
 import '../Recipe/Recipe.css';
 import '../Tutorials.css';
@@ -101,9 +101,9 @@ export const ChartPage: FC = () => {
         to see the steps, or to compare them with yours.
       </p>
       <section aria-label={`build the ${name} yourself`} className="build-steps">
-        <Depth.Provider value={4}>
+        <StoryDepth.Provider value={4}>
           <ChartStories kind={dealt}/>
-        </Depth.Provider>
+        </StoryDepth.Provider>
       </section>
     </article>;
   };

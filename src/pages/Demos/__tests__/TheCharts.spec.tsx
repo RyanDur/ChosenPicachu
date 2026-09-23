@@ -264,10 +264,10 @@ describe('a list of charts', () => {
     expect(await screen.findByRole('region', {name: 'pressure'})).toBeVisible();
   });
 
-  test('a chart tutorial names itself in the heading outline', async () => {
+  test("a chart tutorial's outline steps down from its own heading to its first step", async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={chartPageAt('price')} feed={feed}/>);
+    render(<TestApp at={`${chartPageAt('price')}?graph=price`} feed={feed}/>);
 
     expect(await screen.findByRole('heading', {name: 'price line tutorial', level: 2})).toBeInTheDocument();
     expect(screen.getByRole('heading', {name: 'let’s build this feature', level: 3})).toBeInTheDocument();
@@ -278,7 +278,7 @@ describe('a list of charts', () => {
   test('the workspace tutorial names its story and steps in the heading outline', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
+    render(<TestApp at={demosAt('?tab=charts&graph=workspace')} feed={feed}/>);
     await feedIsSubscribed();
 
     expect(await screen.findByRole('heading', {name: 'The trader can lay out the workspace', level: 3})).toBeInTheDocument();
