@@ -18,7 +18,7 @@ const NoHeader = () => null;
 const ClosedRoomHeader = () => <Header title="Closed room"/>;
 const NoRoomHeader = () => <Header title="No such room"/>;
 
-export const Site: FC<{closed?: boolean}> = ({closed = false}) => {
+const Site: FC<{closed?: boolean}> = ({closed = false}) => {
   const {pathname, hash} = useLocation();
   useEffect(() => {
     if (hash === '') {

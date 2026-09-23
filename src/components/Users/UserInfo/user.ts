@@ -28,6 +28,4 @@ export type User = {
 
 export type UserEdit = Omit<User, 'friends'>;
 
-export const isPersisted = (user: NewUser | User): user is User => 'id' in user;
-
 export const fullNameOf = ({info}: NewUser): string => `${info.firstName} ${info.lastName}`;

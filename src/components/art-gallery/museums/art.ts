@@ -1,6 +1,3 @@
-import {AICAllArtResponse, AICArtResponse} from '@components/art-gallery/museums/aic/types';
-import {HarvardAllArtResponse, HarvardArtResponse} from '@components/art-gallery/museums/harvard/types';
-
 export type Pagination = {
   total: number;
   limit: number;
@@ -22,5 +19,3 @@ export type AllArt = {
 };
 
 export type SearchOptions = string[];
-export type AllArtResponse = AICAllArtResponse | HarvardAllArtResponse;
-export type ArtResponse = AICArtResponse | HarvardArtResponse;

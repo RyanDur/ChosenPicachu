@@ -8,7 +8,7 @@ export type Flight = {
   width: number;
 };
 
-export const grounded: Flight = {x: 0, y: 0, width: 0};
+const grounded: Flight = {x: 0, y: 0, width: 0};
 
 export type Grab = {
   survey: Survey;

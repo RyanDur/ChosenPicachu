@@ -19,7 +19,7 @@ import {GetAllArtRequest} from '@components/art-gallery/museums/source';
 
 const {clevelandDomain} = env;
 
-export const clevelandFields = ['id', 'title', 'creators', 'tombstone', 'images'].join();
+const clevelandFields = ['id', 'title', 'creators', 'tombstone', 'images'].join();
 
 const sized = (image?: ClevelandImage | null): string | undefined =>
   has(image) && has(image.width) ? `${image.url} ${image.width}w` : undefined;

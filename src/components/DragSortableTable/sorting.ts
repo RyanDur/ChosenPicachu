@@ -4,7 +4,7 @@ export type Direction = 'ascending' | 'descending';
 
 export type Value = number | string;
 
-export type Choice = {
+type Choice = {
   display: string;
   direction?: Direction;
 };

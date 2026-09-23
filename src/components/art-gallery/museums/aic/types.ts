@@ -12,7 +12,7 @@ const AICPaginationResponseDecoder = schema.object({
     total_pages: schema.number
   }
 });
-export const AICPieceResponseDecoder = schema.object({
+const AICPieceResponseDecoder = schema.object({
   required: {
     id: schema.number,
     title: schema.string,

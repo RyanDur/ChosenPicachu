@@ -1,7 +1,7 @@
 import {has} from '@ryandur/sand';
 import {array} from '@components/arrays';
 
-export type Bounds = {
+type Bounds = {
   left: number;
   top: number;
   width: number;
@@ -132,7 +132,7 @@ export const nudgedRow = (seats: readonly string[], held: string, toward: number
 export const struckAway = <Seat>(held: Seat, struck: Seat | undefined): struck is Seat =>
   has(struck) && struck !== held;
 
-export type ColumnNudge = {from: number; to: number};
+type ColumnNudge = {from: number; to: number};
 
 export const columnNudge = (order: readonly string[]) =>
   (held: string, toward: number): ColumnNudge | undefined => {
@@ -140,7 +140,7 @@ export const columnNudge = (order: readonly string[]) =>
     return to === from ? undefined : {from, to};
   };
 
-export type RowNudge = {to: number; after: string[]};
+type RowNudge = {to: number; after: string[]};
 
 export const rowNudge = (seats: readonly string[]) =>
   (held: string, toward: number): RowNudge => {

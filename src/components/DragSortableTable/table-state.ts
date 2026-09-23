@@ -27,7 +27,7 @@ export type TableColumn<C> = {
 
 export type Seated = {
   readonly key: string;
-  readonly values: Readonly<Record<string, Value | undefined>>;
+  readonly values: Readonly<Partial<Record<string, Value>>>;
 };
 
 export type Sort = {
@@ -59,7 +59,7 @@ export type Settling = {
   readonly drift: Drift;
 };
 
-export type Resizing = {
+type Resizing = {
   readonly column: string;
   readonly from: Grip;
   readonly carried: number;

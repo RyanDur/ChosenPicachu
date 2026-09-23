@@ -1,5 +1,5 @@
 import {has} from '@ryandur/sand';
-export const SLIMMEST = 5;
+const SLIMMEST = 5;
 
 export type ColumnWidths = Readonly<Record<string, number>>;
 

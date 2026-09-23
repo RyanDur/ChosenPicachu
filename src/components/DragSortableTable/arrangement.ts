@@ -22,7 +22,7 @@ export const arrived = (keys: readonly string[]): ArrangementAction => ({type: '
 
 export const arrangementOf = (columns: readonly string[], rows: readonly string[] = []): Arrangement => ({columns, rows});
 
-export const seatingOf = (standing: readonly string[], arrival: readonly string[]): readonly string[] =>
+const seatingOf = (standing: readonly string[], arrival: readonly string[]): readonly string[] =>
   [...standing.filter(key => arrival.includes(key)), ...arrival.filter(key => !standing.includes(key))];
 
 export const movedTo = (list: readonly string[], item: string, to: number): readonly string[] =>
@@ -46,7 +46,7 @@ const arrangementActions: Record<ArrangementAction['type'], true> = {
   arrived: true
 };
 
-export const isArrangementAction = (action: {readonly type: string}): action is ArrangementAction => action.type in arrangementActions;
+const isArrangementAction = (action: {readonly type: string}): action is ArrangementAction => action.type in arrangementActions;
 
 const answering = (arrangement: Arrangement, action: ArrangementAction): Arrangement => {
   switch (action.type) {

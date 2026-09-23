@@ -19,7 +19,7 @@ export enum HTTPError {
   JSON_BODY_ERROR = 'JSON_BODY_ERROR'
 }
 
-export enum SuccessStatusCode {
+enum SuccessStatusCode {
   OK = 200,
   CREATED = 201,
   NO_CONTENT = 204

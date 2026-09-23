@@ -46,7 +46,7 @@ type Held<State, Action> = {
   readonly listeners: readonly Listener<State, Action>[];
 };
 
-export type Storing<State, Action> = {
+type Storing<State, Action> = {
   readonly slice: Slice<State, Action>;
   readonly middleware?: readonly Middleware<State, Action>[];
 };

@@ -1,6 +1,6 @@
 import {has, maybe, Maybe, not} from '@ryandur/sand';
 import {ColumnWidths, neighborOf} from '@components/Table/shares';
-import {TableColumn, ColumnDrag, ColumnShove, Drag, Labelled, Marks, RowDrag, RowShove, Settling, seatOffset, settlingAt} from './table-state';
+import {TableColumn, ColumnDrag, ColumnShove, Labelled, Marks, RowDrag, RowShove, Settling, seatOffset, settlingAt} from './table-state';
 import {TableView} from './context';
 import {anchored} from './survey';
 import {Drift} from './travel';
@@ -21,7 +21,7 @@ export const columnMarks = (name: string) => ({state}: TableView): Marks<ColumnS
 
 export const rowMarks = (key: string) => ({state}: TableView): Marks<RowShove> => state.rowMarks[key] ?? {};
 
-export const positionOfColumn = (name: string) => (view: TableView): number => selectOrder(view).indexOf(name);
+const positionOfColumn = (name: string) => (view: TableView): number => selectOrder(view).indexOf(name);
 
 export const positionOfRow = (key: string) => (view: TableView): number => selectStanding(view).indexOf(key);
 
@@ -32,8 +32,6 @@ export const columnTravels = (name: string) => (view: TableView): boolean =>
   not(anchored(positionOfColumn(name)(view), selectColumnCount(view)));
 
 export const neighbourOfColumn = (name: string) => (view: TableView): string => neighborOf(selectOrder(view), name);
-
-export const selectDrag = ({state}: TableView): Drag | undefined => state.drag;
 
 export const columnDrag = (name: string) => ({state}: TableView): ColumnDrag | undefined =>
   state.drag?.axis === 'column' && state.drag.held === name ? state.drag : undefined;
@@ -47,7 +45,7 @@ export const columnGripped = (name: string) => ({state}: TableView): boolean => 
 
 export const rowHeld = (key: string) => (view: TableView): boolean => has(rowDrag(key)(view));
 
-export const selectSeatOffset = (view: TableView): Drift | undefined =>
+const selectSeatOffset = (view: TableView): Drift | undefined =>
   seatOffset(view.state, selectOrder(view), selectStanding(view));
 
 export const seatOfColumn = (name: string) => (view: TableView): Drift | undefined =>

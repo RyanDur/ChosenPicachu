@@ -115,7 +115,3 @@ export const randSentence = (): string => {
 
 export const randParagraph = (): string =>
   Array.from({length: randNumber({min: 3, max: 6})}, randSentence).join(' ');
-
-export const randPhrase = (): string => rand(phrases);
-export const randCatchPhrase = (): string => rand(catchPhrases);
-export const randQuote = (): string => rand(quotes);

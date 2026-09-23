@@ -2,7 +2,7 @@ import {maybe} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {anchored, bounded, columnSteps, nudgedColumn, nudgedRow, rowHeights, rowSteps} from './survey';
 
-export type ArrowKey = {
+type ArrowKey = {
   key: string;
   preventDefault: () => void;
   currentTarget: EventTarget | null;

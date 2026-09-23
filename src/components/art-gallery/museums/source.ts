@@ -27,8 +27,3 @@ export type GetArt = {
   id: string;
   source: Source;
 };
-
-export type Query = {
-  path?: (string | number)[];
-  params?: Record<string, unknown>;
-};
