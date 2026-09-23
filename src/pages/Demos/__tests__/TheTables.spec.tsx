@@ -498,6 +498,20 @@ describe('the tables demo', () => {
     expect(recipeFolds.story(living, 'The page is a store, and so is the table')).not.toHaveAttribute('open');
   });
 
+  test('a story folds shut without folding the story beside it', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables&sort=column,row')} feed={feed}/>);
+    await feedIsSubscribed();
+    const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
+    expect(recipeFolds.story(recipe, 'The trader can sort by row')).toHaveAttribute('open');
+
+    const column = await recipeFolds.press(recipe, 'The trader can sort by column');
+
+    expect(column).not.toHaveAttribute('open');
+    expect(recipeFolds.story(recipe, 'The trader can sort by row')).toHaveAttribute('open');
+    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('sort=row');
+  });
+
   test('the dials travel in the url', async () => {
     const feed = await listeningFeed();
 
