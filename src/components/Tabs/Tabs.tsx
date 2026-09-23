@@ -21,8 +21,8 @@ export const Tabs: FC<Props> = ({values, id, label, defaultTab}) => {
   const {tab, createSearchParams} = useSearchParamsObject({tab: schema.string});
   const current = tab ?? defaultTab;
 
-  return <nav aria-label={label} id={id} className="backdrop tabs">{values.map(({param, display}) =>
-    <span className="field tab attentive" key={param}>
+  return <nav aria-label={label} id={id} className="tabs backdrop">{values.map(({param, display}) =>
+    <span className="tab field attentive" key={param}>
       <Link to={`${pathname}${createSearchParams({tab: param})}`}
         aria-current={current === param ? 'page' : undefined}
         className="path">{display}</Link>

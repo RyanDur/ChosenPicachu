@@ -23,39 +23,11 @@ body {
   font-family: Arial, sans-serif;
   color: var(--ink);
 }
-datalist {
-  display: revert;
-}
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
 
 input,
 select,
 textarea {
   font-size: var(--base-x-2);
-}
-
-body,
-p,
-blockquote,
-ul,
-li,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-figure {
-  margin: 0;
-  padding: 0;
-}
-
-ul {
-  list-style-type: none;
 }
 
 input {
@@ -79,4 +51,3 @@ a {
     outline: var(--hairline-x-2) solid var(--ring);
   }
 }
-
