@@ -1,4 +1,4 @@
-import {FC, useState, ReactNode} from 'react';
+import {FC, ReactNode} from 'react';
 import {notEmpty} from '@ryandur/sand';
 import {Trade} from '../coinbase';
 import {bucketTrades, candleShapes, mergeLive, volumeShapes} from './shapes';
@@ -19,10 +19,11 @@ type Props = {
   trades: readonly Trade[];
   id?: string;
   actions?: ReactNode;
+  period: Period;
+  onPeriod: (period: Period) => void;
 };
 
-export const Candles: FC<Props> = ({trades, id = 'candle', actions}) => {
-  const [period, setPeriod] = useState<Period>(Period.hour);
+export const Candles: FC<Props> = ({trades, id = 'candle', actions, period, onPeriod}) => {
   const history = usePeriodCandles(period);
   const candles = mergeLive(candlesOf(history), bucketTrades(trades, bucketMs[period]), periodCap[period]);
   const bodies = candleShapes(candles, CHART_WIDTH, CANDLE_HEIGHT, bucketMs[period]);
@@ -41,7 +42,7 @@ export const Candles: FC<Props> = ({trades, id = 'candle', actions}) => {
             <button type="button" className="item sub-title"
               popoverTarget={`${id}-period`} popoverTargetAction="hide"
               aria-current={option === period ? 'true' : undefined}
-              onClick={() => setPeriod(option)}>{option}</button>
+              onClick={() => onPeriod(option)}>{option}</button>
           </li>
         )}
       </menu>

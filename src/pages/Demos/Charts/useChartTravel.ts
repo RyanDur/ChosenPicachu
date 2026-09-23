@@ -80,11 +80,6 @@ export const useChartTravel = ({seats, onSeated, onRemoved}: Travel) => {
       const to = Math.min(Math.max(at + (event.key === 'ArrowDown' ? 1 : -1), 0), seats - 1);
       if (to !== at) {
         onSeated(at, to);
-        const slot = event.currentTarget.closest('.chart-list')?.querySelectorAll(':scope > .chart-slot').item(to);
-        const next = slot?.querySelector('.doorway');
-        if (next instanceof HTMLElement) {
-          next.focus();
-        }
       }
     }
     if ((event.key === 'Delete' || event.key === 'Backspace') && seats > 1) {

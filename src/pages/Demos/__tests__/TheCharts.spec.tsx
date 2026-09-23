@@ -8,6 +8,7 @@ import {chartsDesk} from '@pages/Demos/Charts/__test_support';
 import {recipeFolds} from '@pages/Demos/Recipe/__test_support';
 import {format} from 'date-fns';
 import {tradeHistoryRefuses} from '@__test_support/server';
+import {blurFocusOnMoves} from '@__test_support/focus';
 
 const feedIsLive = async (): Promise<void> => {
   await waitFor(() => expect(screen.getByRole('status', {name: 'feed'})).toHaveTextContent(/^live$/));
@@ -73,6 +74,7 @@ describe('a list of charts', () => {
   });
 
   test('a chart walked by keyboard takes the focus with it', async () => {
+    blurFocusOnMoves();
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
@@ -87,6 +89,33 @@ describe('a list of charts', () => {
     expect(chartsDesk.doorway('chart 2')).toHaveFocus();
   });
 
+  test('a chart keeps the period chosen for it when the charts are reordered', async () => {
+    const feed = await listeningFeed();
+
+    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
+    await feedIsSubscribed();
+    await screen.findByRole('region', {name: 'live trades'});
+    await userEvent.click(within(screen.getByLabelText('price period by')).getByRole('button', {name: 'day', hidden: true}));
+    await screen.findByRole('button', {name: 'price period day'});
+
+    await chartsDesk.keys('chart 1', 'ArrowDown');
+
+    expect(await screen.findByRole('button', {name: 'price period day'})).toBeInTheDocument();
+    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('charts=candles%2Cprice%3Aday');
+  });
+
+  test('a chart walked by keyboard says where it landed', async () => {
+    const feed = await listeningFeed();
+
+    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
+    await feedIsSubscribed();
+    await screen.findByRole('region', {name: 'live trades'});
+
+    await chartsDesk.keys('chart 1', 'ArrowDown');
+
+    expect(screen.getByRole('status', {name: 'desk report'})).toHaveTextContent('Price line moved to 2 of 2');
+  });
+
   test('the delete key removes a chart', async () => {
     const feed = await listeningFeed();
 
@@ -97,6 +126,7 @@ describe('a list of charts', () => {
     await chartsDesk.keys('chart 1', 'Delete');
 
     expect(screen.queryByRole('region', {name: 'live trades'})).not.toBeInTheDocument();
+    expect(screen.getByRole('status', {name: 'desk report'})).toHaveTextContent('Price line removed');
   });
 
   test('the delete key leaves the last chart standing', async () => {
@@ -302,6 +332,19 @@ describe('a list of charts', () => {
 
     await screen.findByRole('region', {name: 'pie'});
     expect(chartsDesk.addMenu()).toBeNull();
+  });
+
+  test('an added chart says so', async () => {
+    const feed = await listeningFeed();
+
+    render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
+    await feedIsSubscribed();
+    await screen.findByRole('region', {name: 'live trades'});
+
+    await chartsDesk.addChart('Pie');
+
+    await screen.findByRole('region', {name: 'pie'});
+    expect(screen.getByRole('status', {name: 'desk report'})).toHaveTextContent('Pie added');
   });
 
   test('a doorway that leads nowhere returns the trader to the workspace', async () => {

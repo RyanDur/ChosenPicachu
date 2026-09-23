@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, useState} from 'react';
 import {Link} from 'react-router';
 import {Paths} from '@pages/Paths';
 import {ChartKind, matchChartKind} from './kinds';
@@ -37,15 +37,28 @@ type Props = {
 export const Workspace: FC<Props> = ({product}) => {
   const trades = useDemosSelector(selectLiveTrades);
   const status = useDemosSelector(selectFeedStatus);
-  const {chartKinds, absentKinds, add, remove, reorder} = useDesk();
+  const {seats, absentKinds, add, remove, reorder, choosePeriod} = useDesk();
+  const [report, setReport] = useState('');
+  const nameAt = (at: number): string => chartNames[seats[at].kind];
   const {isArmed, arm, dress, lift, travel, release, keys, settled} =
-    useChartTravel({seats: chartKinds.length, onSeated: reorder, onRemoved: remove});
-  const plural = chartKinds.length > 1;
+    useChartTravel({
+      seats: seats.length,
+      onSeated: (from, to, options) => {
+        reorder(from, to, options);
+        setReport(`${nameAt(from)} moved to ${to + 1} of ${seats.length}`);
+      },
+      onRemoved: at => {
+        remove(at);
+        setReport(`${nameAt(at)} removed`);
+      }
+    });
+  const plural = seats.length > 1;
 
   return <>
     <header className="charts-heading">
       <h2 className="headline">{`Bitcoin, live — every ${product} trade on Coinbase`}</h2>
       <output className={classNames('status', status)} aria-label="feed">{statusCopy[status]}</output>
+      <output className="off-screen" aria-label="desk report">{report}</output>
       {absentKinds.length > 0 &&
           <>
             <button type="button" className="menu-toggle rounded-corners add-chart button secondary"
@@ -58,14 +71,17 @@ export const Workspace: FC<Props> = ({product}) => {
                 <li className="entry" key={kind}>
                   <button type="button" className="item sub-title"
                     popoverTarget="add-chart" popoverTargetAction="hide"
-                    onClick={() => add(kind)}>{chartNames[kind]}</button>
+                    onClick={() => {
+                      add(kind);
+                      setReport(`${chartNames[kind]} added`);
+                    }}>{chartNames[kind]}</button>
                 </li>)}
             </menu>
           </>}
     </header>
-    <ul className="chart-list">{chartKinds.map((kind, at) => {
+    <ul className="chart-list">{seats.map(({kind, period}, at) => {
       const actions = plural ? <Dismissal onRemove={() => remove(at)}/> : undefined;
-      return <li key={at}
+      return <li key={kind}
         className={dress(at)}
         onAnimationEnd={settled}
         draggable={isArmed(at)}
@@ -77,8 +93,10 @@ export const Workspace: FC<Props> = ({product}) => {
           aria-label={`chart ${at + 1}`} onKeyDown={keys(at)}/>
         {plural && <Grip onArm={() => arm(at)}/>}
         {matchChartKind(kind, {
-          price: () => <PriceChart id={`chart-${at}`} trades={trades} actions={actions}/>,
-          candles: () => <Candles id={`chart-${at}`} trades={trades} actions={actions}/>,
+          price: () => <PriceChart id={`chart-${at}`} trades={trades} actions={actions}
+            period={period} onPeriod={chosen => choosePeriod('price', chosen)}/>,
+          candles: () => <Candles id={`chart-${at}`} trades={trades} actions={actions}
+            period={period} onPeriod={chosen => choosePeriod('candles', chosen)}/>,
           pressure: () => <Pressure trades={trades} actions={actions}/>,
           pie: () => <Pie trades={trades} actions={actions}/>
         }).orNull()}

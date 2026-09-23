@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import {broadcast, listeningFeed, tradeFrame} from '@pages/Demos/__test_support/feed';
 import {feedIsSubscribed} from '@pages/Demos/__test_support';
 import {vanillaFrame} from '../__test_support';
-import {blurFocusOnMoves} from '../../__test_support';
+import {blurFocusOnMoves} from '@__test_support/focus';
 
 describe('the frame table', () => {
   const windowNames = (): string[] =>

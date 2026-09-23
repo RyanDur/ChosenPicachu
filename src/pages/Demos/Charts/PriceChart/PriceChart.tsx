@@ -1,4 +1,4 @@
-import {FC, useState, ReactNode} from 'react';
+import {FC, ReactNode} from 'react';
 import {has, notEmpty} from '@ryandur/sand';
 import {Loading} from '@components/Loading';
 import {classNames} from '@components/class-names';
@@ -38,10 +38,11 @@ const trendOf = ({first, last}: PriceView): 'rising' | 'falling' => last >= firs
 type Props = Pick<LiveTradesState, 'trades'> & {
   id?: string;
   actions?: ReactNode;
+  period: Period;
+  onPeriod: (period: Period) => void;
 };
 
-export const PriceChart: FC<Props> = ({trades, id = 'price', actions}) => {
-  const [period, setPeriod] = useState<Period>(Period.hour);
+export const PriceChart: FC<Props> = ({trades, id = 'price', actions, period, onPeriod}) => {
   const history = usePeriodCandles(period);
   const candles = mergeLive(candlesOf(history), bucketTrades(trades, bucketMs[period]), periodCap[period]);
   const showing = candles.length > 0;
@@ -68,7 +69,7 @@ export const PriceChart: FC<Props> = ({trades, id = 'price', actions}) => {
             <button type="button" className="item sub-title"
               popoverTarget={`${id}-period`} popoverTargetAction="hide"
               aria-current={option === period ? 'true' : undefined}
-              onClick={() => setPeriod(option)}>{option}</button>
+              onClick={() => onPeriod(option)}>{option}</button>
           </li>
         )}
       </menu>

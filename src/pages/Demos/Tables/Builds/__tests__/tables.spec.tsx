@@ -8,7 +8,7 @@ import {TableColumn} from '@components/DragSortableTable/table-state';
 import {arrangementOf, arrangementReducer, arrived, columnMoved, rowMoved, sorted, standingOf} from '@components/DragSortableTable/arrangement';
 import {EagerTable} from '../EagerTable';
 import {LazyTable} from '../LazyTable';
-import {blurFocusOnMoves} from '../../__test_support';
+import {blurFocusOnMoves} from '@__test_support/focus';
 import {Column, DragSortableTable} from '@components/DragSortableTable';
 
 type Table = FC<HeaderEvents & BodyEvents & {className?: string; columns: readonly TableColumn<Measured>[]; rows: readonly Measures[]}>;

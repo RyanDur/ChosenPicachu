@@ -8,6 +8,7 @@ import {PriceChart} from './PriceChart';
 import {Candles} from './Candles';
 import {Pressure} from './Pressure';
 import {Pie} from './Pie';
+import {useDesk} from './useDesk';
 import {ChartKind, isChartKind, matchChartKind} from './kinds';
 import {ChartStories} from './Tutorial';
 import '../Recipe/Recipe.css';
@@ -54,8 +55,16 @@ const features: Record<ChartKind, Feature> = {
   }
 };
 
-const LivePrice: FC = () => <PriceChart trades={useDemosSelector(selectLiveTrades)}/>;
-const LiveCandles: FC = () => <Candles trades={useDemosSelector(selectLiveTrades)}/>;
+const LivePrice: FC = () => {
+  const {periodOf, choosePeriod} = useDesk();
+  return <PriceChart trades={useDemosSelector(selectLiveTrades)}
+    period={periodOf('price')} onPeriod={period => choosePeriod('price', period)}/>;
+};
+const LiveCandles: FC = () => {
+  const {periodOf, choosePeriod} = useDesk();
+  return <Candles trades={useDemosSelector(selectLiveTrades)}
+    period={periodOf('candles')} onPeriod={period => choosePeriod('candles', period)}/>;
+};
 const LivePressure: FC = () => <Pressure trades={useDemosSelector(selectLiveTrades)}/>;
 const LivePie: FC = () => <Pie trades={useDemosSelector(selectLiveTrades)}/>;
 

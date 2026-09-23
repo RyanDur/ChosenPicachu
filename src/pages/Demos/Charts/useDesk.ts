@@ -1,17 +1,21 @@
 import * as schema from 'schemawax';
+import {maybe} from '@ryandur/sand';
 import {useSearchParamsObject} from '@components/search-params';
 import {ChartKind} from './kinds';
-import {absent, added, dealt, seated, without} from './desk';
+import {Period} from './period';
+import {absent, added, dealt, periodChosen, seated, without} from './desk';
 
 export const useDesk = () => {
   const {charts = 'price', updateSearchParams} = useSearchParamsObject({charts: schema.string});
-  const chartKinds = dealt(charts);
+  const seats = dealt(charts);
   return {
-    chartKinds,
-    absentKinds: absent(chartKinds),
-    add: (kind: ChartKind) => updateSearchParams({charts: added(kind, chartKinds)}),
-    remove: (at: number) => updateSearchParams({charts: without(at, chartKinds)}),
+    seats,
+    absentKinds: absent(seats),
+    periodOf: (kind: ChartKind): Period => maybe(seats.find(seat => seat.kind === kind)).map(({period}) => period).orElse(Period.hour),
+    choosePeriod: (kind: ChartKind, period: Period) => updateSearchParams({charts: periodChosen(kind, period, seats)}),
+    add: (kind: ChartKind) => updateSearchParams({charts: added(kind, seats)}),
+    remove: (at: number) => updateSearchParams({charts: without(at, seats)}),
     reorder: (from: number, to: number, options?: {replace?: boolean}) =>
-      updateSearchParams({charts: seated(from, to, chartKinds)}, options)
+      updateSearchParams({charts: seated(from, to, seats)}, options)
   };
 };
