@@ -101,6 +101,16 @@ test('an accordion card wears the card surface, not the silk of its folds', asyn
   await expect(card.getByRole('list')).toHaveCSS('background-color', await looks(page).resolved('background-color', '--silk'));
 });
 
+test('the z-index cards start in a stack and the button spreads them', async ({page}) => {
+  await page.goto('demos/?tab=z-index');
+  const layers = page.getByRole('region', {name: 'stacking with z-index'}).getByRole('listitem');
+  await expect(layers.first()).toHaveCSS('position', 'absolute');
+
+  await page.getByRole('button', {name: 'Expand'}).click();
+
+  await expect(layers.first()).toHaveCSS('position', 'relative');
+});
+
 const markets = [
   {trend: 'rising', sign: /^\+/, ink: '--mint-ink', prices: [50000, 50100]},
   {trend: 'falling', sign: /^-/, ink: '--internationl-orange-engineering', prices: [50100, 50000]}

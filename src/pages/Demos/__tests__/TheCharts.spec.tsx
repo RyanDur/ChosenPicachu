@@ -47,6 +47,16 @@ describe('a list of charts', () => {
     const candles = await screen.findByRole('region', {name: 'candles'});
     const price = screen.getByRole('region', {name: 'live trades'});
     expect(candles.compareDocumentPosition(price)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+  });
+
+  test('each chart card names itself in the heading outline', async () => {
+    const feed = await listeningFeed();
+
+    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
+    await feedIsSubscribed();
+
+    const candles = await screen.findByRole('region', {name: 'candles'});
+    const price = screen.getByRole('region', {name: 'live trades'});
     expect(within(candles).getByRole('heading', {name: 'candles'})).toBeInTheDocument();
     expect(within(price).getByRole('heading', {name: 'live trades'})).toBeInTheDocument();
   });
@@ -250,6 +260,14 @@ describe('a list of charts', () => {
     await chartsDesk.addChart('Pressure');
 
     expect(await screen.findByRole('region', {name: 'pressure'})).toBeVisible();
+  });
+
+  test('a chart tutorial names itself in the heading outline', async () => {
+    const feed = await listeningFeed();
+
+    render(<TestApp at={chartPageAt('price')} feed={feed}/>);
+
+    expect(await screen.findByRole('heading', {name: 'price line tutorial'})).toBeInTheDocument();
   });
 
   test('the pressure chart is a doorway to its tutorial', async () => {

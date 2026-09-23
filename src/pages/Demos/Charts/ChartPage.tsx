@@ -16,7 +16,6 @@ import '../Tutorials.css';
 import './ChartPage.css';
 
 type Feature = {
-  kind: ChartKind;
   name: string;
   reference: string;
   quote: string;
@@ -24,7 +23,6 @@ type Feature = {
 
 const features: Record<ChartKind, Feature> = {
   price: {
-    kind: 'price',
     name: 'price line',
     reference: 'https://en.wikipedia.org/wiki/Line_chart',
     quote: 'The ticker tells me now; it doesn’t tell me the way here. I want to glance up ' +
@@ -32,7 +30,6 @@ const features: Record<ChartKind, Feature> = {
       'a single digit.'
   },
   candles: {
-    kind: 'candles',
     name: 'candles',
     reference: 'https://en.wikipedia.org/wiki/Candlestick_chart',
     quote: 'The line smooths over the fight. A drift and a battle can draw the same shape, ' +
@@ -40,14 +37,12 @@ const features: Record<ChartKind, Feature> = {
       'reached, and how much conviction was underneath.'
   },
   pressure: {
-    kind: 'pressure',
     name: 'pressure',
     reference: 'https://en.wikipedia.org/wiki/Order_flow_trading',
     quote: 'I can see the price move; I can’t see who is pushing it. When it breaks out, I ' +
       'want to know whether buyers drove it there or the sellers just stepped away.'
   },
   pie: {
-    kind: 'pie',
     name: 'pie',
     reference: 'https://en.wikipedia.org/wiki/Pie_chart',
     quote: 'The bars tell me the battle, minute by minute. At the end I want the war: one ' +
@@ -70,11 +65,11 @@ const LivePie: FC = () => <Pie trades={useDemosSelector(selectLiveTrades)}/>;
 
 export const ChartPage: FC = () => {
   const {kind} = useParams();
-  const page = ({kind: dealt, name, reference, quote}: Feature, chart: ReactNode) => () =>
+  const page = (dealt: ChartKind, {name, reference, quote}: Feature, chart: ReactNode) => () =>
     <article aria-labelledby={`tutorial-${dealt}`} className="chart-page tutorials">
       <h2 id={`tutorial-${dealt}`} className="off-screen">{`${name} tutorial`}</h2>
       {chart}
-      <h2 className="tutorials-title">let’s build this feature</h2>
+      <h3 className="tutorials-title">let’s build this feature</h3>
       <p className="overview paragraph">
         We are going to build the <a
           className="signpost"
@@ -103,9 +98,9 @@ export const ChartPage: FC = () => {
       </section>
     </article>;
   return matchChartKind(isChartKind(kind) ? kind : undefined, {
-    price: page(features.price, <LivePrice/>),
-    candles: page(features.candles, <LiveCandles/>),
-    pressure: page(features.pressure, <LivePressure/>),
-    pie: page(features.pie, <LivePie/>)
+    price: page('price', features.price, <LivePrice/>),
+    candles: page('candles', features.candles, <LiveCandles/>),
+    pressure: page('pressure', features.pressure, <LivePressure/>),
+    pie: page('pie', features.pie, <LivePie/>)
   }).orElse(<Navigate to={`${Paths.demos}?tab=${DemoTopics.charts}`} replace/>);
 };

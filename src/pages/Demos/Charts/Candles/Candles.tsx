@@ -25,7 +25,8 @@ type Props = {
 };
 
 export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod}) => {
-  const id = given ?? `candles${useId()}`;
+  const generated = useId();
+  const id = given ?? `candles${generated}`;
   const history = usePeriodCandles(period);
   const candles = mergeLive(candlesOf(history), bucketTrades(trades, bucketMs[period]), periodCap[period]);
   const bodies = candleShapes(candles, CHART_WIDTH, CANDLE_HEIGHT, bucketMs[period]);

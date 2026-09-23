@@ -44,7 +44,8 @@ type Props = Pick<LiveTradesState, 'trades'> & {
 };
 
 export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPeriod}) => {
-  const id = given ?? `price${useId()}`;
+  const generated = useId();
+  const id = given ?? `price${generated}`;
   const history = usePeriodCandles(period);
   const candles = mergeLive(candlesOf(history), bucketTrades(trades, bucketMs[period]), periodCap[period]);
   const showing = candles.length > 0;
