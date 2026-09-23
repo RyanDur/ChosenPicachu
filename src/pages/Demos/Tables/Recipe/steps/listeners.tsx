@@ -19,7 +19,7 @@ export const listenersOnce = (world: World, buildSrc: string): ReactNode =>
         and never needed the discipline; the vanilla page attaches once and cannot live without
         it.</Says>
       <Says>Writing back is the same shape in reverse: every handler ends in a dispatch of an
-        action, columnMovedBeside, carrying, dropped, a record of what happened that one reducer
+        action, columnMovedBeside, lifted, dropped, a record of what happened that one reducer
         turns into the next state, and what changes the order goes up to the page as an event,
         onColumnMoved, onRowMoved, and comes back down as the next order. Ask, dispatch and subscribe together
         are the store, and it is one plain object that both worlds mount unchanged. What differs is

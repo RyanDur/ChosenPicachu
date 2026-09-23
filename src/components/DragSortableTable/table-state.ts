@@ -1,5 +1,5 @@
 import {has, maybe} from '@ryandur/sand';
-import {ColumnWidths, traded} from '@components/Table/shares';
+import {ColumnWidths, Grip, soughtTrade, traded} from '@components/Table/shares';
 import {Direction, Value} from './sorting';
 import {Drift, Moving, carried, still} from './travel';
 import {Flight, Grab} from './lift';
@@ -59,6 +59,12 @@ export type Settling = {
   readonly drift: Drift;
 };
 
+export type Resizing = {
+  readonly column: string;
+  readonly from: Grip;
+  readonly carried: number;
+};
+
 export type Marks<Shove> = {
   readonly settlingFrom?: Settling;
   readonly shoved?: Shove;
@@ -69,6 +75,7 @@ export type TableState = {
   readonly columnMarks: Readonly<Record<string, Marks<ColumnShove>>>;
   readonly rowMarks: Readonly<Record<string, Marks<RowShove>>>;
   readonly drag?: Drag;
+  readonly resizing?: Resizing;
 };
 
 export const resting: TableState = {columnMarks: {}, rowMarks: {}};
@@ -87,6 +94,19 @@ export const trade = (state: TableState, column: string, neighbour: string, delt
   maybe(state.widths)
     .map(previous => measure(state, traded(column, neighbour, delta)(previous)))
     .orElse(state);
+
+export const grip = (state: TableState, column: string, from: Grip): TableState =>
+  ({...state, resizing: {column, from, carried: 0}});
+
+export const dragHandle = (state: TableState, neighbour: string, clientX: number): TableState =>
+  maybe(state.resizing)
+    .map(resizing => {
+      const sought = soughtTrade(resizing.from, clientX, resizing.carried);
+      return {...trade(state, resizing.column, neighbour, sought.delta), resizing: {...resizing, carried: sought.carried}};
+    })
+    .orElse(state);
+
+export const ungrip = ({resizing: _resizing, ...state}: TableState): TableState => state;
 
 const unmarked = (state: TableState): TableState => ({...state, columnMarks: {}, rowMarks: {}});
 
@@ -119,11 +139,11 @@ export const pixels = (length?: number): string | undefined => has(length) ? `${
 const flying = (grab: Grab): Flying =>
   ({survey: grab.survey, box: grab.box, drift: still});
 
-export const lifted = (carry: Carry, grab: Grab): Drag =>
+export const dragOf = (carry: Carry, grab: Grab): Drag =>
   ({...carry, ...flying(grab)});
 
 export const lift = (state: TableState, carry: Carry, grab: Grab): TableState =>
-  ({...unmarked(state), drag: lifted(carry, grab)});
+  ({...unmarked(state), drag: dragOf(carry, grab)});
 
 export const drift = (state: TableState, moving: Moving): TableState =>
   has(state.drag) ? {...state, drag: {...state.drag, ...carried(state.drag.origin, moving)}} : state;

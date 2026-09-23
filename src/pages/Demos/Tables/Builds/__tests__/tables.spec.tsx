@@ -634,6 +634,21 @@ describe('resizable columns', () => {
     expect(header('trades').style.getPropertyValue('--share')).toBe('40%');
   });
 
+  test('a resize whose pointer is cancelled stops following the pointer', () => {
+    seat(EagerTable, 'keep static');
+    surveyed();
+    const handle = screen.getByRole('button', {name: 'resize window'});
+    fireEvent.pointerDown(handle, {clientX: 100, clientY: 20, pointerId: 1});
+    fireEvent.pointerMove(handle, {buttons: 1, clientX: 110, clientY: 20, pointerId: 1});
+    const shareAfterMoving = header('window').style.getPropertyValue('--share');
+
+    fireEvent.pointerCancel(handle, {pointerId: 1});
+    fireEvent.pointerMove(handle, {buttons: 0, clientX: 200, clientY: 20, pointerId: 1});
+
+    expect(header('window').style.getPropertyValue('--share')).toBe(shareAfterMoving);
+    expect(shareAfterMoving).not.toBe('50%');
+  });
+
   test('an arrow right moves the boundary and the total holds', async () => {
     seat(EagerTable, 'keep static');
     surveyed();

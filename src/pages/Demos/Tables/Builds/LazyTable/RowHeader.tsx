@@ -8,7 +8,7 @@ import {columnHeld, driftOfColumn, driftOfRow, positionOfRow, rowDrag, rowHeld, 
 import {Survey} from '@components/DragSortableTable/survey';
 import {RowGrip} from '@components/DragSortableTable/RowGrip';
 import {RowDrag, pixels, shoveDistance, shovedClass} from '@components/DragSortableTable/table-state';
-import {carrying, drifted, dropped, rowLandingAt, rowMovedBeside, rowWalkedTo, settled} from '@components/DragSortableTable/actions';
+import {lifted, drifted, dropped, rowLandingFound, rowMovedBeside, rowWalkedTo, settled} from '@components/DragSortableTable/actions';
 import {Moving, pointerTravel} from '@components/DragSortableTable/travel';
 import {movedTo} from '@components/DragSortableTable/arrangement';
 import {releasedRow, travelledRow} from './travel';
@@ -48,10 +48,10 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
     setLanded({axis: 'row', position: to, of: count});
   };
 
-  const lift = (grab: Grab): void => dispatch(carrying({axis: 'row', held: row}, grab));
+  const lift = (grab: Grab): void => dispatch(lifted({axis: 'row', held: row}, grab));
   const moved = (held: RowDrag) => (moving: Moving): void => {
     dispatch(drifted(moving));
-    dispatch(rowLandingAt(travelledRow(standing, moving)(held)));
+    dispatch(rowLandingFound(travelledRow(standing, moving)(held)));
   };
   const release = (): void => {
     if (has(drag)) {

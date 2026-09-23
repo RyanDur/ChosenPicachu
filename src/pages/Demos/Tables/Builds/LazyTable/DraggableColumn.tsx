@@ -8,7 +8,7 @@ import {useHeaderEvents, useTableDispatch, useTableSelector} from '@components/D
 import {columnDrag, columnHeld, columnMarks, columnNamed, unknownColumn, columnTravels, driftOfColumn, seatOfColumn, selectColumnCount, selectOrder, selectStanding, settlingOfColumnIn, widthOfColumn} from '@components/DragSortableTable/selectors';
 import {interior, Survey} from '@components/DragSortableTable/survey';
 import {ColumnDrag, pixels, shoveDistance, shovedClass} from '@components/DragSortableTable/table-state';
-import {carrying, columnLandingAt, columnMovedBeside, columnWalkedTo, drifted, dropped, settled} from '@components/DragSortableTable/actions';
+import {lifted, columnLandingFound, columnMovedBeside, columnWalkedTo, drifted, dropped, settled} from '@components/DragSortableTable/actions';
 import {Moving, pointerTravel} from '@components/DragSortableTable/travel';
 import {movedTo} from '@components/DragSortableTable/arrangement';
 import {releasedColumn, travelledColumn} from './travel';
@@ -46,10 +46,10 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
     setLanded({axis: 'column', name: column, position: to, of: count});
   };
 
-  const lift = (grab: Grab): void => dispatch(carrying({axis: 'column', held: column}, grab));
+  const lift = (grab: Grab): void => dispatch(lifted({axis: 'column', held: column}, grab));
   const moved = (held: ColumnDrag) => (moving: Moving): void => {
     dispatch(drifted(moving));
-    dispatch(columnLandingAt(travelledColumn(order, moving)(held)));
+    dispatch(columnLandingFound(travelledColumn(order, moving)(held)));
   };
   const release = (): void => {
     if (has(drag)) {

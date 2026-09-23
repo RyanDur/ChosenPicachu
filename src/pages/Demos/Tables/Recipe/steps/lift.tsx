@@ -40,14 +40,14 @@ export const liftOnce = (world: World, headerSource: string, buildSrc: string): 
           ? <Snippet label="TS" lines={[
             ...span(headerSource, 'onPointerDown={travels ? columnLift(column', 'onPointerDown={travels ? columnLift(column'), gap,
             ...unit(headerSource, 'const lift = '), gap,
-            ...unit(stateSource, 'export const lifted'), gap,
+            ...unit(stateSource, 'export const dragOf'), gap,
             ...unit(stateSource, 'export const lift = ')
           ]}/>
           : <Snippet label="TS" lines={[
             ...span(buildSrc, "th.addEventListener('pointerdown', columnLift",
               "th.addEventListener('pointerdown', columnLift"), gap,
             ...unit(buildSrc, '  const lift = '), gap,
-            ...unit(stateSource, 'export const lifted'), gap,
+            ...unit(stateSource, 'export const dragOf'), gap,
             ...unit(stateSource, 'export const lift = ')
           ]}/>}
         <Snippet label="TS" lines={[

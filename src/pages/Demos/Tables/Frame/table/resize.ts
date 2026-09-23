@@ -1,7 +1,7 @@
 import {has, maybe} from '@ryandur/sand';
-import {Grip, STEP_SHARE, grippedAt, measuredWidths, neighborOf, resizeLabel, soughtTrade} from '@components/Table/shares';
+import {STEP_SHARE, grippedAt, measuredWidths, neighborOf, resizeLabel} from '@components/Table/shares';
 import {columnSteps} from '@components/DragSortableTable/survey';
-import {MountedTable, columnOf, measured, tradedBy, widthsOf} from './table-state';
+import {MountedTable, columnOf, gripped, handleDragged, measured, released, tradedBy, widthsOf} from './table-state';
 
 const dressColumn = (table: HTMLTableElement, column: string, share: number): void => {
   maybe(table.querySelector(`th.${column}`)).map(header => {
@@ -24,8 +24,6 @@ export const dressWidths = ({table, store, order}: MountedTable): void => {
 
 const wireHandle = (mounted: MountedTable, column: string, handle: HTMLButtonElement): void => {
   const {table} = mounted;
-  let grip: Grip | undefined;
-  let carried = 0;
 
   const awaken = (): void => {
     const widths = widthsOf(mounted.store.state) ?? measuredWidths(mounted.order(), table);
@@ -36,23 +34,18 @@ const wireHandle = (mounted: MountedTable, column: string, handle: HTMLButtonEle
   handle.addEventListener('pointerdown', event => {
     event.stopPropagation();
     awaken();
-    grip = grippedAt(table.getBoundingClientRect().width, event.clientX);
-    carried = 0;
+    maybe(grippedAt(table.getBoundingClientRect().width, event.clientX)).map(grip => mounted.store.dispatch(gripped(column, grip)));
   });
   handle.addEventListener('pointermove', event => {
-    if (!has(grip)) {
+    if (mounted.store.state.resizing?.column !== column) {
       return;
     }
     handle.setPointerCapture(event.pointerId);
-    const trade = soughtTrade(grip, event.clientX, carried);
-    mounted.store.dispatch(tradedBy(column, neighborOf(mounted.order(), column), trade.delta));
+    mounted.store.dispatch(handleDragged(neighborOf(mounted.order(), column), event.clientX));
     reportShare(mounted, column);
-    carried = trade.carried;
   });
   ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(landing =>
-    handle.addEventListener(landing, () => {
-      grip = undefined;
-    }));
+    handle.addEventListener(landing, () => mounted.store.dispatch(released())));
   handle.addEventListener('keydown', event => {
     maybe(columnSteps[event.key]).map(toward => {
       event.preventDefault();

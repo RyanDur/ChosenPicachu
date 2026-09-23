@@ -1,4 +1,4 @@
-import {ColumnWidths} from '@components/Table/shares';
+import {ColumnWidths, Grip} from '@components/Table/shares';
 import {Carry, ColumnShove, RowShove, Settling} from './table-state';
 import {Moving} from './travel';
 import {Grab} from './lift';
@@ -7,10 +7,12 @@ export type TableAction =
   | {readonly type: 'measured'; readonly widths: ColumnWidths}
   | {readonly type: 'awoken'; readonly widths: ColumnWidths}
   | {readonly type: 'tradedBy'; readonly column: string; readonly neighbour: string; readonly delta: number}
-  | {readonly type: 'carrying'; readonly carry: Carry; readonly grab: Grab}
+  | {readonly type: 'gripped'; readonly column: string; readonly grip: Grip}
+  | {readonly type: 'handleDragged'; readonly neighbour: string; readonly clientX: number}
+  | {readonly type: 'lifted'; readonly carry: Carry; readonly grab: Grab}
   | {readonly type: 'drifted'; readonly moving: Moving}
-  | {readonly type: 'columnLandingAt'; readonly neighbour?: string}
-  | {readonly type: 'rowLandingAt'; readonly neighbour?: string}
+  | {readonly type: 'columnLandingFound'; readonly neighbour?: string}
+  | {readonly type: 'rowLandingFound'; readonly neighbour?: string}
   | {readonly type: 'released'}
   | {readonly type: 'dropped'; readonly carry: Carry; readonly from: Settling}
   | {readonly type: 'unsettled'; readonly target: Carry; readonly from: Settling}
@@ -30,10 +32,12 @@ const tableActions: Record<Action['type'], true> = {
   measured: true,
   awoken: true,
   tradedBy: true,
-  carrying: true,
+  gripped: true,
+  handleDragged: true,
+  lifted: true,
   drifted: true,
-  columnLandingAt: true,
-  rowLandingAt: true,
+  columnLandingFound: true,
+  rowLandingFound: true,
   released: true,
   dropped: true,
   unsettled: true,
@@ -51,10 +55,12 @@ export const isTableAction = (action: Foreign): action is TableAction => action.
 export const measured = (widths: ColumnWidths): Action => ({type: 'measured', widths});
 export const awoken = (widths: ColumnWidths): Action => ({type: 'awoken', widths});
 export const tradedBy = (column: string, neighbour: string, delta: number): Action => ({type: 'tradedBy', column, neighbour, delta});
-export const carrying = (carry: Carry, grab: Grab): Action => ({type: 'carrying', carry, grab});
+export const gripped = (column: string, grip: Grip): Action => ({type: 'gripped', column, grip});
+export const handleDragged = (neighbour: string, clientX: number): Action => ({type: 'handleDragged', neighbour, clientX});
+export const lifted = (carry: Carry, grab: Grab): Action => ({type: 'lifted', carry, grab});
 export const drifted = (moving: Moving): Action => ({type: 'drifted', moving: {clientX: moving.clientX, clientY: moving.clientY}});
-export const columnLandingAt = (neighbour?: string): Action => ({type: 'columnLandingAt', neighbour});
-export const rowLandingAt = (neighbour?: string): Action => ({type: 'rowLandingAt', neighbour});
+export const columnLandingFound = (neighbour?: string): Action => ({type: 'columnLandingFound', neighbour});
+export const rowLandingFound = (neighbour?: string): Action => ({type: 'rowLandingFound', neighbour});
 export const released = (): Action => ({type: 'released'});
 export const dropped = (carry: Carry, from: Settling): Action => ({type: 'dropped', carry, from});
 export const unsettled = (target: Carry, from: Settling): Action => ({type: 'unsettled', target, from});

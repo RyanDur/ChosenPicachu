@@ -1,12 +1,12 @@
 import {FC, FocusEvent, PointerEvent, useState} from 'react';
-import {Maybe, maybe, nothing} from '@ryandur/sand';
+import {maybe} from '@ryandur/sand';
 import './Table.css';
 import {Landed} from './report';
 import {MoveReport} from './MoveReport';
 import {useTableDispatch, useTableSelector} from './context';
-import {neighbourOfColumn, selectOrder, selectWidths, widthOfColumn} from './selectors';
-import {awoken, tradedBy} from './actions';
-import {Grip, grippedAt, measuredWidths, resizeArrows, resizeLabel, soughtTrade, traded} from '@components/Table/shares';
+import {columnGripped, neighbourOfColumn, selectOrder, selectWidths, widthOfColumn} from './selectors';
+import {awoken, gripped, handleDragged, released, tradedBy} from './actions';
+import {grippedAt, measuredWidths, resizeArrows, resizeLabel, traded} from '@components/Table/shares';
 
 export const ResizeHandle: FC<{column: string}> = ({column}) => {
   const dispatch = useTableDispatch();
@@ -15,16 +15,21 @@ export const ResizeHandle: FC<{column: string}> = ({column}) => {
   const neighbour = useTableSelector(neighbourOfColumn(column));
   const widths = useTableSelector(selectWidths);
   const width = useTableSelector(widthOfColumn(column));
-  const [grip, setGrip] = useState<Maybe<Grip>>(nothing());
-  const [carried, setCarried] = useState(0);
+  const held = useTableSelector(columnGripped(column));
+  const resized = (share: number): Landed => ({axis: 'share', name: column, share});
 
   const awaken = (table: HTMLTableElement): void =>
     dispatch(awoken(measuredWidths(order, table)));
   const trade = (delta: number): void => {
     dispatch(tradedBy(column, neighbour, delta));
-    maybe(widths).map(current =>
-      setLanded({axis: 'share', name: column, share: traded(column, neighbour, delta)(current)[column]}));
+    maybe(widths).map(current => setLanded(resized(traded(column, neighbour, delta)(current)[column])));
   };
+  const release = (): void => {
+    maybe(width).map(share => setLanded(resized(share)));
+    dispatch(released());
+  };
+  const followed = (event: PointerEvent<HTMLElement>): void =>
+    dispatch(handleDragged(neighbour, event.clientX));
 
   return <>
     <button type="button"
@@ -40,17 +45,13 @@ export const ResizeHandle: FC<{column: string}> = ({column}) => {
         event.currentTarget.setPointerCapture(event.pointerId);
         maybe(event.currentTarget.closest('table')).map(table => {
           awaken(table);
-          setGrip(maybe(grippedAt(table.getBoundingClientRect().width, event.clientX)));
-          setCarried(0);
+          maybe(grippedAt(table.getBoundingClientRect().width, event.clientX)).map(grip => dispatch(gripped(column, grip)));
         });
       }}
-      onPointerMove={(event: PointerEvent<HTMLElement>) =>
-        grip.map(held => {
-          const sought = soughtTrade(held, event.clientX, carried);
-          trade(sought.delta);
-          setCarried(sought.carried);
-        })}
-      onPointerUp={() => setGrip(nothing())}/>
-    <MoveReport landed={landed}/>
+      onPointerMove={held ? followed : undefined}
+      onPointerUp={held ? release : undefined}
+      onPointerCancel={held ? release : undefined}
+      onLostPointerCapture={held ? release : undefined}/>
+    <MoveReport landed={held ? maybe(width).map(resized).orElse(landed) : landed}/>
   </>;
 };

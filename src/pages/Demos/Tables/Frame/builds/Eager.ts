@@ -9,7 +9,7 @@ import {Seated} from '@components/DragSortableTable/table-state';
 import {store} from '@components/store';
 import {isMeasure, seated} from '@pages/Demos/Tables/Aggregations/cells';
 import {
-  Arrangement, Carry, Landed, MountedTable, TableState, arrangementOf, arrangementReducer, carrying, changed, columnMoved, columnOf, demosStore, drifted, feedRequested, moveReport, released, rowMoved, selectMeasures, settlingAt, settlingFromSeat, sorted, standingOf, tableStore
+  Arrangement, Carry, Landed, MountedTable, TableState, arrangementOf, arrangementReducer, lifted, changed, columnMoved, columnOf, demosStore, drifted, feedRequested, moveReport, released, rowMoved, selectMeasures, settlingAt, settlingFromSeat, sorted, standingOf, tableStore
 } from '../table/table-state';
 import {exchange} from '@pages/Demos/exchange';
 import {keepingFocus} from '../table/focus';
@@ -204,7 +204,7 @@ const mount = (document: Document, table: HTMLTableElement, body: HTMLTableSecti
 
   const lift = (carry: Carry, grab: Grab): void => {
     unmarked(mounted);
-    hand.dispatch(carrying(carry, grab));
+    hand.dispatch(lifted(carry, grab));
   };
 
   const wireCarry = (holder: HTMLElement): void => {

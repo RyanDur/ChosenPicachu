@@ -8,7 +8,7 @@ import {useHeaderEvents, useTableDispatch, useTableSelector} from './context';
 import {columnDrag, columnHeld, columnMarks, columnNamed, unknownColumn, columnTravels, driftOfColumn, seatOfColumn, selectColumnCount, selectOrder, selectStanding, settlingOfColumnIn, widthOfColumn} from './selectors';
 import {columnUnder, interior, Survey} from './survey';
 import {ColumnDrag, pixels, shoveDistance, shovedClass} from './table-state';
-import {carrying, columnMovedBeside, columnWalkedTo, drifted, dropped, settled} from './actions';
+import {lifted, columnMovedBeside, columnWalkedTo, drifted, dropped, settled} from './actions';
 import {Moving, eagerTravel, pointerTravel} from './travel';
 import {Grab, columnLift} from './lift';
 import {columnArrows} from './arrows';
@@ -44,7 +44,7 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
     setLanded({axis: 'column', name: column, position: to, of: count});
   };
 
-  const lift = (grab: Grab): void => dispatch(carrying({axis: 'column', held: column}, grab));
+  const lift = (grab: Grab): void => dispatch(lifted({axis: 'column', held: column}, grab));
   const moved = (held: ColumnDrag) => (moving: Moving): void => {
     dispatch(drifted(moving));
     eagerTravel(columnUnder(order, held.survey), column, neighbour => beside(neighbour, held.survey))(moving);

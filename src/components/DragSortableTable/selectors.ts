@@ -43,6 +43,8 @@ export const rowDrag = (key: string) => ({state}: TableView): RowDrag | undefine
 
 export const columnHeld = (name: string) => (view: TableView): boolean => has(columnDrag(name)(view));
 
+export const columnGripped = (name: string) => ({state}: TableView): boolean => state.resizing?.column === name;
+
 export const rowHeld = (key: string) => (view: TableView): boolean => has(rowDrag(key)(view));
 
 export const selectSeatOffset = (view: TableView): Drift | undefined =>

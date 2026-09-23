@@ -6,6 +6,7 @@ import {World, worldParam} from '../params';
 import {Term} from './Term';
 import sharesSource from '@components/Table/shares.ts?raw';
 import resizeSource from '@components/DragSortableTable/ResizeHandle.tsx?raw';
+import stateSource from '@components/DragSortableTable/table-state.ts?raw';
 import baseCss from '@components/DragSortableTable/Table.css?raw';
 import tableSource from '../Frame/table.html?raw';
 import buildSource from '@components/DragSortableTable/DraggableColumn.tsx?raw';
@@ -101,15 +102,17 @@ const captureSays: Record<World, ReactNode> = {
 const gripWords =
   <Snippet label="TS" lines={[
     ...unit(sharesSource, 'export const grippedAt'), gap,
-    ...unit(sharesSource, 'export const soughtTrade'),
-    aside('// both worlds seed the grip and fold the moves with the same words')
+    ...unit(sharesSource, 'export const soughtTrade'), gap,
+    ...unit(stateSource, 'export const grip ='), gap,
+    ...unit(stateSource, 'export const dragHandle'),
+    aside('// both worlds seed the grip and fold the moves in the same store')
   ]}/>;
 
 const captureCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="TS" lines={[
       ...unit(resizeSource, 'onPointerDown={(event'), gap,
-      ...unit(resizeSource, 'onPointerMove={(event')
+      ...unit(resizeSource, 'const followed')
     ]}/>
     {gripWords}
   </Codes>,

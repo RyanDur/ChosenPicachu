@@ -10,7 +10,7 @@ export type {DemosStore, DemosMiddleware as Middleware} from '@pages/Demos/store
 export type {Landed} from '@components/DragSortableTable/report';
 export type {Arrangement, ArrangementAction} from '@components/DragSortableTable/arrangement';
 export {columnOf, seatOffset, settlingAt, settlingFromSeat, widthsOf} from '@components/DragSortableTable/table-state';
-export {carrying, columnLandingAt, drifted, measured, released, rowLandingAt, tradedBy} from '@components/DragSortableTable/actions';
+export {lifted, columnLandingFound, drifted, gripped, handleDragged, measured, released, rowLandingFound, tradedBy} from '@components/DragSortableTable/actions';
 export {arrangementOf, arrangementReducer, columnMoved, rowMoved, sorted, standingOf} from '@components/DragSortableTable/arrangement';
 export {tableStore} from '@components/DragSortableTable/store';
 export {demosStore, feedRequested, selectMeasures} from '@pages/Demos/store';

@@ -8,7 +8,7 @@ import {columnHeld, driftOfColumn, driftOfRow, positionOfRow, rowDrag, rowHeld, 
 import {rowUnder, Survey} from './survey';
 import {RowGrip} from './RowGrip';
 import {RowDrag, pixels, shoveDistance, shovedClass} from './table-state';
-import {carrying, drifted, dropped, rowMovedBeside, rowWalkedTo, settled} from './actions';
+import {lifted, drifted, dropped, rowMovedBeside, rowWalkedTo, settled} from './actions';
 import {Moving, eagerTravel, pointerTravel} from './travel';
 import {Grab, rowLift} from './lift';
 import {rowArrows} from './arrows';
@@ -46,7 +46,7 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
     setLanded({axis: 'row', position: to, of: count});
   };
 
-  const lift = (grab: Grab): void => dispatch(carrying({axis: 'row', held: row}, grab));
+  const lift = (grab: Grab): void => dispatch(lifted({axis: 'row', held: row}, grab));
   const moved = (held: RowDrag) => (moving: Moving): void => {
     dispatch(drifted(moving));
     eagerTravel(rowUnder(standing, held.survey), row, neighbour => beside(neighbour, held.survey))(moving);

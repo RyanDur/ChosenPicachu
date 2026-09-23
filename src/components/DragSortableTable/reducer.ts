@@ -2,7 +2,7 @@ import {Reducer, combined} from '@components/store';
 import {Foreign, TableAction, isTableAction} from './actions';
 import {displacedBetween, interior, spanCrossed} from './survey';
 import {
-  TableState, awaken, drift, ground, landColumn, landRow, lift, measure, settle, settlingFromSeat, shoveColumns, shoveRows, trade, unsettle
+  TableState, awaken, dragHandle, drift, grip, ground, landColumn, landRow, lift, measure, settle, settlingFromSeat, shoveColumns, shoveRows, trade, ungrip, unsettle
 } from './table-state';
 
 export type TableReducer = Reducer<TableState, Foreign>;
@@ -44,12 +44,12 @@ const motion = (state: TableState, action: TableAction): TableState => {
 
 const dragging = (state: TableState, action: TableAction): TableState => {
   switch (action.type) {
-    case 'carrying': return lift(state, action.carry, action.grab);
+    case 'lifted': return lift(state, action.carry, action.grab);
     case 'drifted': return drift(state, action.moving);
-    case 'columnLandingAt': return landColumn(state, action.neighbour);
-    case 'rowLandingAt': return landRow(state, action.neighbour);
+    case 'columnLandingFound': return landColumn(state, action.neighbour);
+    case 'rowLandingFound': return landRow(state, action.neighbour);
     case 'released':
-    case 'dropped': return ground(state);
+    case 'dropped': return ungrip(ground(state));
     default: return state;
   }
 };
@@ -59,6 +59,8 @@ const widths = (state: TableState, action: TableAction): TableState => {
     case 'measured': return measure(state, action.widths);
     case 'awoken': return awaken(state, action.widths);
     case 'tradedBy': return trade(state, action.column, action.neighbour, action.delta);
+    case 'gripped': return grip(state, action.column, action.grip);
+    case 'handleDragged': return dragHandle(state, action.neighbour, action.clientX);
     default: return state;
   }
 };
