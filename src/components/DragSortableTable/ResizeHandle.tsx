@@ -4,30 +4,29 @@ import './Table.css';
 import {Landed} from './report';
 import {MoveReport} from './MoveReport';
 import {useTableDispatch, useTableSelector} from './context';
-import {columnGripped, neighbourOfColumn, resizeCarried, selectOrder, selectWidths, widthOfColumn} from './selectors';
+import {columnGripped, handleDragging, neighbourOfColumn, selectOrder, widthOfColumn} from './selectors';
 import {awoken, gripped, handleDragged, released, tradedBy} from './actions';
-import {grippedAt, measuredWidths, resizeArrows, resizeLabel, traded} from '@components/Table/shares';
+import {grippedAt, measuredWidths, resizeArrows, resizeLabel} from '@components/Table/shares';
 
 export const ResizeHandle: FC<{column: string}> = ({column}) => {
   const dispatch = useTableDispatch();
-  const [landed, setLanded] = useState<Landed>();
+  const [reported, setReported] = useState(false);
   const order = useTableSelector(selectOrder);
   const neighbour = useTableSelector(neighbourOfColumn(column));
-  const widths = useTableSelector(selectWidths);
   const width = useTableSelector(widthOfColumn(column));
   const held = useTableSelector(columnGripped(column));
-  const moved = useTableSelector(resizeCarried(column));
+  const dragging = useTableSelector(handleDragging(column));
   const resized = (share: number): Landed => ({axis: 'share', name: column, share});
 
   const awaken = (table: HTMLTableElement): void =>
     dispatch(awoken(measuredWidths(order, table)));
   const trade = (delta: number): void => {
     dispatch(tradedBy(column, neighbour, delta));
-    maybe(widths).map(current => setLanded(resized(traded(column, neighbour, delta)(current)[column])));
+    setReported(true);
   };
   const release = (): void => {
-    if (moved) {
-      maybe(width).map(share => setLanded(resized(share)));
+    if (dragging) {
+      setReported(true);
     }
     dispatch(released());
   };
@@ -55,6 +54,6 @@ export const ResizeHandle: FC<{column: string}> = ({column}) => {
       onPointerUp={held ? release : undefined}
       onPointerCancel={held ? release : undefined}
       onLostPointerCapture={held ? release : undefined}/>
-    <MoveReport landed={moved ? maybe(width).map(resized).orElse(landed) : landed}/>
+    <MoveReport landed={reported || dragging ? maybe(width).map(resized).orElse(undefined) : undefined}/>
   </>;
 };

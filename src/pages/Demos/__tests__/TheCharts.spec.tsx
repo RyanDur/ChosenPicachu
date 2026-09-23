@@ -60,6 +60,7 @@ describe('a list of charts', () => {
 
     expect(screen.queryByRole('region', {name: 'live trades'})).not.toBeInTheDocument();
     expect(await screen.findByRole('region', {name: 'candles'})).toBeVisible();
+    expect(screen.getByRole('status', {name: 'desk report'})).toHaveTextContent(/ removed$/);
   });
 
   test('the last chart can be neither removed nor moved', async () => {

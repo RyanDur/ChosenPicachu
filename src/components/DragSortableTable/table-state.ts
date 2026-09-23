@@ -59,11 +59,9 @@ export type Settling = {
   readonly drift: Drift;
 };
 
-type Resizing = {
-  readonly column: string;
-  readonly from: Grip;
-  readonly carried: number;
-};
+type Resizing =
+  | {readonly stage: 'gripped'; readonly column: string; readonly from: Grip}
+  | {readonly stage: 'dragging'; readonly column: string; readonly from: Grip; readonly carried: number};
 
 export type Marks<Shove> = {
   readonly settlingFrom?: Settling;
@@ -96,13 +94,14 @@ export const trade = (state: TableState, column: string, neighbour: string, delt
     .orElse(state);
 
 export const grip = (state: TableState, column: string, from: Grip): TableState =>
-  ({...state, resizing: {column, from, carried: 0}});
+  ({...state, resizing: {stage: 'gripped', column, from}});
 
 export const dragHandle = (state: TableState, neighbour: string, clientX: number): TableState =>
   maybe(state.resizing)
     .map(resizing => {
-      const sought = soughtTrade(resizing.from, clientX, resizing.carried);
-      return {...trade(state, resizing.column, neighbour, sought.delta), resizing: {...resizing, carried: sought.carried}};
+      const sought = soughtTrade(resizing.from, clientX, resizing.stage === 'dragging' ? resizing.carried : 0);
+      const dragging: Resizing = {stage: 'dragging', column: resizing.column, from: resizing.from, carried: sought.carried};
+      return {...trade(state, resizing.column, neighbour, sought.delta), resizing: dragging};
     })
     .orElse(state);
 

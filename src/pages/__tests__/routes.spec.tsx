@@ -75,7 +75,7 @@ describe('the skeleton', () => {
     await site.pageTitled();
 
     const nav = screen.getByRole('navigation', {name: 'site'});
-    expect(screen.queryByRole('complementary', {name: 'site rail'})).not.toBeInTheDocument();
+    expect(screen.queryByRole('complementary')).not.toBeInTheDocument();
     expect(nav.compareDocumentPosition(screen.getByRole('main'))).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
   });
 });

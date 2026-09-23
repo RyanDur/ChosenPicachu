@@ -1,5 +1,6 @@
 import {Trade} from '../Charts/coinbase';
-import {demosStore, historyArrived, selectLiveTrades, selectMeasures, tradeArrived} from '../store';
+import {Period} from '../Charts/period';
+import {candlesArrived, candlesAsked, demosStore, historyArrived, periodHistoryOf, selectLiveTrades, selectMeasures, tradeArrived} from '../store';
 
 const trade = (id: number, price: number): Trade =>
   ({id, price, tradedAt: 1700000000000 + id, size: 1, side: 'buy'});
@@ -31,5 +32,15 @@ describe('the demos store', () => {
 
     expect(selectLiveTrades(store.state)).toHaveLength(1500);
     expect(selectLiveTrades(store.state)[0].id).toBe(2);
+  });
+
+  it('asking again for a period that has arrived keeps its candles while the new ones are on their way', () => {
+    const store = demosStore();
+    const candle = {openedAt: 1700000000000, low: 1, high: 3, open: 2, close: 2.5, volume: 1};
+    store.dispatch(candlesArrived(Period.hour, [candle]));
+
+    store.dispatch(candlesAsked(Period.hour));
+
+    expect(periodHistoryOf(Period.hour)(store.state)).toEqual({state: 'arrived', candles: [candle]});
   });
 });

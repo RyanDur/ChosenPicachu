@@ -1,11 +1,15 @@
 import {describe, expect, it, vi} from 'vitest';
-import {http, HttpResponse, ws} from 'msw';
+import {delay, http, HttpResponse, ws} from 'msw';
 import {WebSocketClientConnectionProtocol as Client} from '@mswjs/interceptors/WebSocket';
 import {HISTORY, server} from '@__test_support/server';
 import {tradeFrame} from '@pages/Demos/__test_support/feed';
 import {exchange, FeedTrouble} from '../exchange';
 import {Period} from '../Charts/period';
-import {demosStore, feedReleased, feedRequested, historyAsked, periodHistoryOf, selectFeedStatus, selectLiveTrades} from '../store';
+import {candlesOf} from '../Charts/period-history';
+import {candlesAsked, demosStore, feedReleased, feedRequested, periodHistoryOf, selectFeedStatus, selectLiveTrades} from '../store';
+
+const candles = `${HISTORY}/products/BTC-USD/candles`;
+const settled = (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms));
 
 describe('the exchange as middleware', () => {
   const coinbase = ws.link('ws://exchange.test');
@@ -68,7 +72,7 @@ describe('the exchange as middleware', () => {
     const store = demosStore(exchange({tradeFeed: '', tradeHistory: HISTORY, tradeProduct: 'BTC-USD'}, () => undefined));
     expect(periodHistoryOf(Period.hour)(store.state)).toEqual({state: 'loading'});
 
-    store.dispatch(historyAsked(Period.hour));
+    store.dispatch(candlesAsked(Period.hour));
 
     await vi.waitFor(() => expect(periodHistoryOf(Period.hour)(store.state)).toEqual({
       state: 'arrived',
@@ -81,9 +85,52 @@ describe('the exchange as middleware', () => {
     const told: FeedTrouble[] = [];
     const store = demosStore(exchange({tradeFeed: '', tradeHistory: HISTORY, tradeProduct: 'BTC-USD'}, trouble => told.push(trouble)));
 
-    store.dispatch(historyAsked(Period.day));
+    store.dispatch(candlesAsked(Period.day));
 
     await vi.waitFor(() => expect(periodHistoryOf(Period.day)(store.state)).toEqual({state: 'unavailable'}));
     expect(told.map(({type}) => type)).toEqual(['candlesRefused']);
+  });
+
+  it('a period with no history to ask is unavailable, and no trouble is told', () => {
+    const told: FeedTrouble[] = [];
+    const store = demosStore(exchange({tradeFeed: '', tradeHistory: '', tradeProduct: 'BTC-USD'}, trouble => told.push(trouble)));
+
+    store.dispatch(candlesAsked(Period.hour));
+
+    expect(periodHistoryOf(Period.hour)(store.state)).toEqual({state: 'unavailable'});
+    expect(told).toEqual([]);
+  });
+
+  it('a candle ask in flight is dropped when the feed is released, and no trouble is told', async () => {
+    server.use(http.get(candles, async () => {
+      await delay(50);
+      return HttpResponse.json([], {status: 500});
+    }));
+    const told: FeedTrouble[] = [];
+    const store = demosStore(exchange({tradeFeed: '', tradeHistory: HISTORY, tradeProduct: 'BTC-USD'}, trouble => told.push(trouble)));
+    store.dispatch(candlesAsked(Period.hour));
+
+    store.dispatch(feedReleased());
+    await settled(150);
+
+    expect(periodHistoryOf(Period.hour)(store.state)).toEqual({state: 'loading'});
+    expect(told).toEqual([]);
+  });
+
+  it('asking the same period twice keeps only the later answer', async () => {
+    let asks = 0;
+    server.use(http.get(candles, async () => {
+      asks += 1;
+      const ask = asks;
+      await delay(ask === 1 ? 100 : 10);
+      return HttpResponse.json([[1700000000 + ask, 1, 3, 2, 2.5, 1]]);
+    }));
+    const store = demosStore(exchange({tradeFeed: '', tradeHistory: HISTORY, tradeProduct: 'BTC-USD'}, () => undefined));
+
+    store.dispatch(candlesAsked(Period.hour));
+    store.dispatch(candlesAsked(Period.hour));
+    await settled(200);
+
+    expect(candlesOf(periodHistoryOf(Period.hour)(store.state)).map(({openedAt}) => openedAt)).toEqual([1700000002000]);
   });
 });

@@ -556,10 +556,10 @@ describe('the tables demo', () => {
   });
 
   describe('the table worlds', () => {
-    const standFrame = async () => {
+    const standFrame = async (height = 487) => {
       const frame = await screen.findByTitle('the living table, in vanilla');
       Object.defineProperty(frame, 'contentDocument', {
-        value: {body: {getBoundingClientRect: () => ({height: 487})}}
+        value: {body: {getBoundingClientRect: () => ({height})}}
       });
       fireEvent.load(frame);
       return frame;
@@ -585,6 +585,17 @@ describe('the tables demo', () => {
       expect(frame).toHaveAttribute('srcdoc', expect.stringContaining('<table'));
       const card = screen.getByRole('region', {name: 'live aggregations'});
       expect(card).toContainElement(frame);
+      await waitFor(() => expect(within(card).queryByRole('table')).not.toBeInTheDocument());
+    });
+
+    test('the fallback table leaves as soon as the frame loads, even before it reports a height', async () => {
+      const feed = await listeningFeed();
+
+      render(<TestApp at={demosAt('?tab=tables&world=vanilla')} feed={feed}/>);
+      await feedIsSubscribed();
+
+      await standFrame(0);
+      const card = screen.getByRole('region', {name: 'live aggregations'});
       await waitFor(() => expect(within(card).queryByRole('table')).not.toBeInTheDocument());
     });
 

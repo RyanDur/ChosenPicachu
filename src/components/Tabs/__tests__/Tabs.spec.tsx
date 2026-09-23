@@ -1,5 +1,5 @@
 import {TestApp} from '@__test_support/TestApp';
-import {render, screen} from '@testing-library/react';
+import {render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {Tabs} from '../index';
 import {expect} from 'vitest';
@@ -15,6 +15,13 @@ describe('Tabs', () => {
 
     expect(screen.getByRole('link', {name: tab1.display, current: 'page'})).toBeInTheDocument();
     expect(screen.getByRole('status', {name: 'url search'})).not.toHaveTextContent('tab=');
+  });
+
+  it('the tab strip is a list, one item per tab', () => {
+    render(<TestApp at={path}><Tabs label="tabs under test" defaultTab={tab1.param} values={[tab1, tab2, tab3]}/></TestApp>);
+
+    const items = within(screen.getByRole('navigation', {name: 'tabs under test'})).getAllByRole('listitem');
+    expect(items.map(item => within(item).getByRole('link').textContent)).toEqual([tab1.display, tab2.display, tab3.display]);
   });
 
   it('a tab in the address wins over the default', () => {

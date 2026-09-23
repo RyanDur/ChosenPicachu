@@ -30,7 +30,7 @@ export type DemosAction =
   | {readonly type: 'feedFailed'}
   | {readonly type: 'tradeArrived'; readonly trade: Trade}
   | {readonly type: 'historyArrived'; readonly trades: readonly Trade[]}
-  | {readonly type: 'historyAsked'; readonly period: Period}
+  | {readonly type: 'candlesAsked'; readonly period: Period}
   | {readonly type: 'candlesArrived'; readonly period: Period; readonly candles: readonly Candle[]}
   | {readonly type: 'candlesRefused'; readonly period: Period};
 
@@ -43,7 +43,7 @@ export const feedOpened = (): DemosAction => ({type: 'feedOpened'});
 export const feedFailed = (): DemosAction => ({type: 'feedFailed'});
 export const tradeArrived = (trade: Trade): DemosAction => ({type: 'tradeArrived', trade});
 export const historyArrived = (trades: readonly Trade[]): DemosAction => ({type: 'historyArrived', trades});
-export const historyAsked = (period: Period): DemosAction => ({type: 'historyAsked', period});
+export const candlesAsked = (period: Period): DemosAction => ({type: 'candlesAsked', period});
 export const candlesArrived = (period: Period, candles: readonly Candle[]): DemosAction => ({type: 'candlesArrived', period, candles});
 export const candlesRefused = (period: Period): DemosAction => ({type: 'candlesRefused', period});
 
@@ -66,7 +66,7 @@ const tradesReducer = (trades: TradesState, action: DemosAction): TradesState =>
 
 const candlesReducer = (candles: CandlesState, action: DemosAction): CandlesState => {
   switch (action.type) {
-    case 'historyAsked': return {...candles, [action.period]: loading};
+    case 'candlesAsked': return candles[action.period]?.state === 'arrived' ? candles : {...candles, [action.period]: loading};
     case 'candlesArrived': return {...candles, [action.period]: {state: 'arrived', candles: action.candles}};
     case 'candlesRefused': return {...candles, [action.period]: unavailable};
     default: return candles;

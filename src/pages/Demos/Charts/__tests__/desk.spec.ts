@@ -27,6 +27,10 @@ describe('the desk', () => {
     expect(periodChosen('candles', Period.hour, dealt('price:day,candles:week'))).toBe('price:day,candles');
   });
 
+  test('a period chosen for a chart the desk does not hold seats that chart', () => {
+    expect(periodChosen('candles', Period.day, dealt('price'))).toBe('price,candles:day');
+  });
+
   test('a new chart lands under the hand', () => {
     expect(added('pie', dealt('price:day,candles'))).toBe('pie,price:day,candles');
   });

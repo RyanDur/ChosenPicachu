@@ -40,6 +40,10 @@ export const Workspace: FC<Props> = ({product}) => {
   const {seats, absentKinds, add, remove, reorder, choosePeriod} = useDesk();
   const [report, setReport] = useState('');
   const nameAt = (at: number): string => chartNames[seats[at].kind];
+  const removed = (at: number): void => {
+    remove(at);
+    setReport(`${nameAt(at)} removed`);
+  };
   const {isArmed, arm, dress, lift, travel, release, keys, settled} =
     useChartTravel({
       seats: seats.length,
@@ -47,10 +51,7 @@ export const Workspace: FC<Props> = ({product}) => {
         reorder(from, to, options);
         setReport(`${nameAt(from)} moved to ${to + 1} of ${seats.length}`);
       },
-      onRemoved: at => {
-        remove(at);
-        setReport(`${nameAt(at)} removed`);
-      }
+      onRemoved: removed
     });
   const plural = seats.length > 1;
 
@@ -80,7 +81,7 @@ export const Workspace: FC<Props> = ({product}) => {
           </>}
     </header>
     <ol className="chart-list" aria-label="charts">{seats.map(({kind, period}, at) => {
-      const actions = plural ? <Dismissal onRemove={() => remove(at)}/> : undefined;
+      const actions = plural ? <Dismissal onRemove={() => removed(at)}/> : undefined;
       return <li key={kind}
         className={dress(at)}
         onAnimationEnd={settled}
@@ -89,8 +90,9 @@ export const Workspace: FC<Props> = ({product}) => {
         onDragOver={travel}
         onDrop={event => event.preventDefault()}
         onDragEnd={release}>
-        <Link className="doorway" to={doorways[kind]}
-          aria-label={`${chartNames[kind]} tutorial`} onKeyDown={keys(at)}/>
+        <Link className="doorway" to={doorways[kind]} onKeyDown={keys(at)}>
+          <span className="off-screen">{`${chartNames[kind]} tutorial`}</span>
+        </Link>
         {plural && <Grip onArm={() => arm(at)}/>}
         {matchChartKind(kind, {
           price: () => <PriceChart id={`chart-${at}`} trades={trades} actions={actions}

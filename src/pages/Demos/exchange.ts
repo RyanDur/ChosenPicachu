@@ -32,6 +32,7 @@ const historyOf = (base: string, product: string, dispatch: Dispatch, onTrouble:
 
 const candlesFor = ({tradeHistory, tradeProduct}: Exchange, period: Period, dispatch: Dispatch, onTrouble: Trouble): Closer => {
   if (empty(tradeHistory)) {
+    dispatch(candlesRefused(period));
     return () => undefined;
   }
   const fetching = periodCandles(tradeHistory, tradeProduct, periodQuery(period))
@@ -69,6 +70,7 @@ export const exchange = (env: Exchange, onTrouble: Trouble): DemosMiddleware => 
   let closers: readonly Closer[] = [];
   const asked = new Map<Period, Closer>();
   return next => action => {
+    next(action);
     switch (action.type) {
       case 'feedRequested':
         closers = opened(env, api.dispatch, onTrouble);
@@ -78,13 +80,12 @@ export const exchange = (env: Exchange, onTrouble: Trouble): DemosMiddleware => 
         closers = [];
         asked.clear();
         break;
-      case 'historyAsked':
+      case 'candlesAsked':
         asked.get(action.period)?.();
         asked.set(action.period, candlesFor(env, action.period, api.dispatch, onTrouble));
         break;
       default:
         break;
     }
-    next(action);
   };
 };

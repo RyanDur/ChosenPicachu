@@ -54,7 +54,7 @@ export const DemosPage = () => {
       {({
         [DemoTopics.accordions]:
               <>
-                <h2 className="list-title">Different styles of Accordions.</h2>
+                <h2>Different styles of Accordions.</h2>
                 <ul className="accordions">
                   <li>
                     <InclusiveAccordion className="card rounded-corners lifted padded" content={accordionContents[0]}/>
@@ -74,7 +74,7 @@ export const DemosPage = () => {
                 </ul>
               </>,
         [DemoTopics.zIndex]: <>
-          <h2 className="list-title">Z-Index Demo.</h2>
+          <h2>Z-Index Demo.</h2>
           <NaturalZIndex className="card rounded-corners lifted padded"/>
           <TopLayer className="card rounded-corners lifted padded"/>
           <TopLayerTutorial/>

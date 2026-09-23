@@ -43,8 +43,8 @@ export const columnHeld = (name: string) => (view: TableView): boolean => has(co
 
 export const columnGripped = (name: string) => ({state}: TableView): boolean => state.resizing?.column === name;
 
-export const resizeCarried = (name: string) => ({state}: TableView): boolean =>
-  maybe(state.resizing).map(resizing => resizing.column === name && resizing.carried !== 0).orElse(false);
+export const handleDragging = (name: string) => ({state}: TableView): boolean =>
+  maybe(state.resizing).map(resizing => resizing.column === name && resizing.stage === 'dragging').orElse(false);
 
 export const rowHeld = (key: string) => (view: TableView): boolean => has(rowDrag(key)(view));
 
