@@ -1,6 +1,7 @@
 import {FC, MouseEvent, PropsWithChildren} from 'react';
 import {has} from '@ryandur/sand';
 import {useSearchParams} from 'react-router';
+import {useRanks} from './ranks';
 
 const openedIn = (params: URLSearchParams, param: string): Set<string> =>
   new Set((params.get(param) ?? '').split(',').filter(part => part !== ''));
@@ -15,6 +16,7 @@ type Props = PropsWithChildren<{
 
 export const Story: FC<Props> = ({param, id, can, soThat, steps, children}) => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const {story: Can} = useRanks();
   const toggled = (event: MouseEvent<HTMLElement>) => {
     event.preventDefault();
     setSearchParams(previous => {
@@ -37,7 +39,7 @@ export const Story: FC<Props> = ({param, id, can, soThat, steps, children}) => {
     <details className="arc" open={openedIn(searchParams, param).has(id)} aria-labelledby={`${param}-${id}-story`}>
       <summary className="opener" onClick={toggled}>
         <hgroup className="story card rounded-corners lifted">
-          <h3 className="can" id={`${param}-${id}-story`}>{can}</h3>
+          <Can className="can" id={`${param}-${id}-story`}>{can}</Can>
           <p className="so-that">so that {soThat}</p>
           {has(steps) && <p className="step-tally">{steps === 1 ? '1 step' : `${steps} steps`}</p>}
         </hgroup>

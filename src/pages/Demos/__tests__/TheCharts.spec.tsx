@@ -52,13 +52,15 @@ describe('a list of charts', () => {
   test('each chart card names itself in the heading outline', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
+    render(<TestApp at={demosAt('?tab=charts&charts=price,candles,pressure,pie')} feed={feed}/>);
     await feedIsSubscribed();
 
     const candles = await screen.findByRole('region', {name: 'candles'});
     const price = screen.getByRole('region', {name: 'live trades'});
     expect(within(candles).getByRole('heading', {name: 'candles'})).toBeInTheDocument();
     expect(within(price).getByRole('heading', {name: 'live trades'})).toBeInTheDocument();
+    expect(within(screen.getByRole('region', {name: 'pressure'})).getByRole('heading', {name: 'pressure'})).toBeInTheDocument();
+    expect(within(screen.getByRole('region', {name: 'pie'})).getByRole('heading', {name: 'pie'})).toBeInTheDocument();
   });
 
   test('the trader can remove a chart', async () => {
@@ -267,7 +269,7 @@ describe('a list of charts', () => {
 
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
 
-    expect(await screen.findByRole('heading', {name: 'price line tutorial'})).toBeInTheDocument();
+    expect(await screen.findByRole('heading', {name: 'price line tutorial', level: 2})).toBeInTheDocument();
   });
 
   test('the pressure chart is a doorway to its tutorial', async () => {
@@ -291,11 +293,12 @@ describe('a list of charts', () => {
     await screen.findByRole('region', {name: 'live trades'});
 
     const page = screen.getByRole('article', {name: 'price line tutorial'});
-    expect(within(page).getByRole('heading', {name: 'let’s build this feature'})).toBeVisible();
+    expect(within(page).getByRole('heading', {name: 'let’s build this feature', level: 3})).toBeVisible();
     expect(screen.getByText(/without reading a single digit/)).toBeVisible();
     expect(screen.getByText('a trader')).toBeVisible();
     expect(screen.getByText(/build the story yourself first/)).toBeVisible();
     const recipe = screen.getByRole('region', {name: 'build the price line yourself'});
+    expect(within(recipe).getAllByRole('heading', {level: 4}).length).toBeGreaterThan(0);
     await within(recipe).findByText(/watch the price move, live/);
     expect(recipeFolds.story(recipe, 'The trader can watch the price move, live')).toBeInTheDocument();
   });

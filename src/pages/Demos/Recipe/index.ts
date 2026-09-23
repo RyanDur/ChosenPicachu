@@ -4,6 +4,7 @@ export {useArrival} from './useArrival';
 export {stationId} from './station';
 export {Exercise} from './Exercise';
 export {Story} from './Story';
+export {Ranks} from './ranks';
 export {Tell} from './Tell';
 export {Steps} from './Steps';
 export {Step} from './Step';

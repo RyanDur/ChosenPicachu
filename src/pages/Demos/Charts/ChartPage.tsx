@@ -10,6 +10,7 @@ import {Pressure} from './Pressure';
 import {Pie} from './Pie';
 import {useDesk} from './useDesk';
 import {ChartKind, isChartKind, matchChartKind} from './kinds';
+import {Ranks} from '../Recipe';
 import {ChartStories} from './Tutorial';
 import '../Recipe/Recipe.css';
 import '../Tutorials.css';
@@ -20,6 +21,8 @@ type Feature = {
   reference: string;
   quote: string;
 };
+
+const underTheBuild: Ranks = {story: 'h4', step: 'h5'};
 
 const features: Record<ChartKind, Feature> = {
   price: {
@@ -65,8 +68,9 @@ const LivePie: FC = () => <Pie trades={useDemosSelector(selectLiveTrades)}/>;
 
 export const ChartPage: FC = () => {
   const {kind} = useParams();
-  const page = (dealt: ChartKind, {name, reference, quote}: Feature, chart: ReactNode) => () =>
-    <article aria-labelledby={`tutorial-${dealt}`} className="chart-page tutorials">
+  const page = (dealt: ChartKind, chart: ReactNode) => () => {
+    const {name, reference, quote} = features[dealt];
+    return <article aria-labelledby={`tutorial-${dealt}`} className="chart-page tutorials">
       <h2 id={`tutorial-${dealt}`} className="off-screen">{`${name} tutorial`}</h2>
       {chart}
       <h3 className="tutorials-title">let’s build this feature</h3>
@@ -94,13 +98,16 @@ export const ChartPage: FC = () => {
         to see the steps, or to compare them with yours.
       </p>
       <section aria-label={`build the ${name} yourself`} className="build-steps">
-        <ChartStories kind={dealt}/>
+        <Ranks.Provider value={underTheBuild}>
+          <ChartStories kind={dealt}/>
+        </Ranks.Provider>
       </section>
     </article>;
+  };
   return matchChartKind(isChartKind(kind) ? kind : undefined, {
-    price: page('price', features.price, <LivePrice/>),
-    candles: page('candles', features.candles, <LiveCandles/>),
-    pressure: page('pressure', features.pressure, <LivePressure/>),
-    pie: page('pie', features.pie, <LivePie/>)
+    price: page('price', <LivePrice/>),
+    candles: page('candles', <LiveCandles/>),
+    pressure: page('pressure', <LivePressure/>),
+    pie: page('pie', <LivePie/>)
   }).orElse(<Navigate to={`${Paths.demos}?tab=${DemoTopics.charts}`} replace/>);
 };
