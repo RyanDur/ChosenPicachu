@@ -1,10 +1,17 @@
 import {createContext, useContext} from 'react';
 
-export type Ranks = {
-  readonly story: 'h3' | 'h4';
+type StoryDepth = 3 | 4;
+
+type Ranks = {
+  readonly story: `h${StoryDepth}`;
   readonly step: 'h4' | 'h5';
 };
 
-export const Ranks = createContext<Ranks>({story: 'h3', step: 'h4'});
+const stepBelow: Record<StoryDepth, Ranks['step']> = {3: 'h4', 4: 'h5'};
 
-export const useRanks = (): Ranks => useContext(Ranks);
+export const Depth = createContext<StoryDepth>(3);
+
+export const useRanks = (): Ranks => {
+  const depth = useContext(Depth);
+  return {story: `h${depth}`, step: stepBelow[depth]};
+};

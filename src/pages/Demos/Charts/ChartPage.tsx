@@ -1,4 +1,4 @@
-import {FC, ReactNode} from 'react';
+import {FC} from 'react';
 import {Navigate, useParams} from 'react-router';
 import {Paths} from '@pages/Paths';
 import {DemoTopics} from '../types';
@@ -10,7 +10,7 @@ import {Pressure} from './Pressure';
 import {Pie} from './Pie';
 import {useDesk} from './useDesk';
 import {ChartKind, isChartKind, matchChartKind} from './kinds';
-import {Ranks} from '../Recipe';
+import {Depth} from '../Recipe';
 import {ChartStories} from './Tutorial';
 import '../Recipe/Recipe.css';
 import '../Tutorials.css';
@@ -20,37 +20,7 @@ type Feature = {
   name: string;
   reference: string;
   quote: string;
-};
-
-const underTheBuild: Ranks = {story: 'h4', step: 'h5'};
-
-const features: Record<ChartKind, Feature> = {
-  price: {
-    name: 'price line',
-    reference: 'https://en.wikipedia.org/wiki/Line_chart',
-    quote: 'The ticker tells me now; it doesn’t tell me the way here. I want to glance up ' +
-      'and know whether the market is climbing, stalling, or rolling over, without reading ' +
-      'a single digit.'
-  },
-  candles: {
-    name: 'candles',
-    reference: 'https://en.wikipedia.org/wiki/Candlestick_chart',
-    quote: 'The line smooths over the fight. A drift and a battle can draw the same shape, ' +
-      'so I want each window to answer for itself: where it opened and closed, how far it ' +
-      'reached, and how much conviction was underneath.'
-  },
-  pressure: {
-    name: 'pressure',
-    reference: 'https://en.wikipedia.org/wiki/Order_flow_trading',
-    quote: 'I can see the price move; I can’t see who is pushing it. When it breaks out, I ' +
-      'want to know whether buyers drove it there or the sellers just stepped away.'
-  },
-  pie: {
-    name: 'pie',
-    reference: 'https://en.wikipedia.org/wiki/Pie_chart',
-    quote: 'The bars tell me the battle, minute by minute. At the end I want the war: one ' +
-      'circle, who owned the session.'
-  }
+  chart: FC;
 };
 
 const LivePrice: FC = () => {
@@ -66,13 +36,46 @@ const LiveCandles: FC = () => {
 const LivePressure: FC = () => <Pressure trades={useDemosSelector(selectLiveTrades)}/>;
 const LivePie: FC = () => <Pie trades={useDemosSelector(selectLiveTrades)}/>;
 
+const features: Record<ChartKind, Feature> = {
+  price: {
+    name: 'price line',
+    reference: 'https://en.wikipedia.org/wiki/Line_chart',
+    chart: LivePrice,
+    quote: 'The ticker tells me now; it doesn’t tell me the way here. I want to glance up ' +
+      'and know whether the market is climbing, stalling, or rolling over, without reading ' +
+      'a single digit.'
+  },
+  candles: {
+    name: 'candles',
+    reference: 'https://en.wikipedia.org/wiki/Candlestick_chart',
+    chart: LiveCandles,
+    quote: 'The line smooths over the fight. A drift and a battle can draw the same shape, ' +
+      'so I want each window to answer for itself: where it opened and closed, how far it ' +
+      'reached, and how much conviction was underneath.'
+  },
+  pressure: {
+    name: 'pressure',
+    reference: 'https://en.wikipedia.org/wiki/Order_flow_trading',
+    chart: LivePressure,
+    quote: 'I can see the price move; I can’t see who is pushing it. When it breaks out, I ' +
+      'want to know whether buyers drove it there or the sellers just stepped away.'
+  },
+  pie: {
+    name: 'pie',
+    reference: 'https://en.wikipedia.org/wiki/Pie_chart',
+    chart: LivePie,
+    quote: 'The bars tell me the battle, minute by minute. At the end I want the war: one ' +
+      'circle, who owned the session.'
+  }
+};
+
 export const ChartPage: FC = () => {
   const {kind} = useParams();
-  const page = (dealt: ChartKind, chart: ReactNode) => () => {
-    const {name, reference, quote} = features[dealt];
+  const page = (dealt: ChartKind) => () => {
+    const {name, reference, quote, chart: Chart} = features[dealt];
     return <article aria-labelledby={`tutorial-${dealt}`} className="chart-page tutorials">
       <h2 id={`tutorial-${dealt}`} className="off-screen">{`${name} tutorial`}</h2>
-      {chart}
+      <Chart/>
       <h3 className="tutorials-title">let’s build this feature</h3>
       <p className="overview paragraph">
         We are going to build the <a
@@ -98,16 +101,16 @@ export const ChartPage: FC = () => {
         to see the steps, or to compare them with yours.
       </p>
       <section aria-label={`build the ${name} yourself`} className="build-steps">
-        <Ranks.Provider value={underTheBuild}>
+        <Depth.Provider value={4}>
           <ChartStories kind={dealt}/>
-        </Ranks.Provider>
+        </Depth.Provider>
       </section>
     </article>;
   };
   return matchChartKind(isChartKind(kind) ? kind : undefined, {
-    price: page('price', <LivePrice/>),
-    candles: page('candles', <LiveCandles/>),
-    pressure: page('pressure', <LivePressure/>),
-    pie: page('pie', <LivePie/>)
+    price: page('price'),
+    candles: page('candles'),
+    pressure: page('pressure'),
+    pie: page('pie')
   }).orElse(<Navigate to={`${Paths.demos}?tab=${DemoTopics.charts}`} replace/>);
 };

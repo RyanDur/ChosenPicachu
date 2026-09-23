@@ -270,6 +270,19 @@ describe('a list of charts', () => {
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
 
     expect(await screen.findByRole('heading', {name: 'price line tutorial', level: 2})).toBeInTheDocument();
+    expect(screen.getByRole('heading', {name: 'let’s build this feature', level: 3})).toBeInTheDocument();
+    expect(screen.getByRole('heading', {name: 'The trader can watch the price move, live', level: 4})).toBeInTheDocument();
+    expect(screen.getByRole('heading', {name: 'Open the stream', level: 5})).toBeInTheDocument();
+  });
+
+  test('the workspace tutorial names its story and steps in the heading outline', async () => {
+    const feed = await listeningFeed();
+
+    render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
+    await feedIsSubscribed();
+
+    expect(await screen.findByRole('heading', {name: 'The trader can lay out the workspace', level: 3})).toBeInTheDocument();
+    expect(screen.getByRole('heading', {name: 'Deal the workspace from the address', level: 4})).toBeInTheDocument();
   });
 
   test('the pressure chart is a doorway to its tutorial', async () => {
@@ -298,7 +311,6 @@ describe('a list of charts', () => {
     expect(screen.getByText('a trader')).toBeVisible();
     expect(screen.getByText(/build the story yourself first/)).toBeVisible();
     const recipe = screen.getByRole('region', {name: 'build the price line yourself'});
-    expect(within(recipe).getAllByRole('heading', {level: 4}).length).toBeGreaterThan(0);
     await within(recipe).findByText(/watch the price move, live/);
     expect(recipeFolds.story(recipe, 'The trader can watch the price move, live')).toBeInTheDocument();
   });
