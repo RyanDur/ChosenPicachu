@@ -2,7 +2,7 @@ import {readFileSync} from 'node:fs';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {promptFor} from '../review/prompt.mjs';
-import {deltaOf, doorTable, leavesFeedback, plusOf, reviewIn, summaryOf, verdictOf} from '../review/report.mjs';
+import {deltaOf, leavesFeedback, plusOf, reviewIn, summaryOf, verdictOf} from '../review/report.mjs';
 import {aDelta, aPlus, review} from '../review/__test_support/feedback.mjs';
 
 const placeOf = (text, needle) => {
@@ -82,8 +82,10 @@ describe('the review prompt', () => {
     expect(prompt).toContain('five QAs hold one door each: structure-qa, presentation-qa, dynamic-interaction-qa, design-qa, tests-qa');
   });
 
-  test('the review answers in the feedback stance: plusses and deltas, each with what happened and why', () => {
+  test('the review answers in the feedback stance: a summary, then plusses and deltas, each with what happened and why', () => {
     const prompt = promptFor({scope: 'changes', before: 'abc', after: 'def'});
+    expect(prompt).toContain('Open with a summary of the feedback');
+    expect(prompt).toContain('from what matters most to what matters least');
     expect(prompt).toContain('You take a feedback stance: plusses and deltas, each with its why.');
     expect(prompt).toContain('A **plus** is a choice in the code that holds a door up.');
     expect(prompt).toContain('A **delta** is a finding: something to change.');
@@ -101,11 +103,16 @@ describe('the review prompt', () => {
 
 describe('the review report', () => {
   test('reads the plusses and deltas the reviewer structured', () => {
-    expect(reviewIn(answer(review([plus], [note])))).toEqual({plusses: [plus], deltas: [note]});
+    expect(reviewIn(answer(review([plus], [note], 'one thing to change')))).toEqual({tldr: 'one thing to change', plusses: [plus], deltas: [note]});
   });
 
   test('a review with neither plusses nor deltas is still read', () => {
-    expect(reviewIn(answer(review([], [])))).toEqual({plusses: [], deltas: []});
+    expect(reviewIn(answer(review([], [], 'nothing to say')))).toEqual({tldr: 'nothing to say', plusses: [], deltas: []});
+  });
+
+  test('an answer without a summary is refused', () => {
+    expect(() => reviewIn(JSON.stringify({type: 'result', structured_output: {plusses: [], deltas: []}})))
+      .toThrow('structured output is missing');
   });
 
   test('an answer without structured plusses and deltas is refused', () => {
@@ -124,6 +131,16 @@ describe('the review report', () => {
     expect(summary).toContain('## The code holds up the home page');
     expect(summary).toContain('1 plus, no deltas.');
     expect(summary).toContain('the friends list is a fieldset with a legend');
+  });
+
+  test('the summary of the feedback is told first, before any entry opens', () => {
+    const summary = summaryOf(review([plus], [violation], 'The list markup holds; the div around it has to go first.'));
+    expect(placeOf(summary, 'The list markup holds; the div around it has to go first.')).toBeLessThan(placeOf(summary, '<details>'));
+    expect(summaryOf(review([plus], [], 'All of it holds.'))).toContain('All of it holds.');
+  });
+
+  test('the summary stays words on the page', () => {
+    expect(summaryOf(review([], [note], 'wrap it in <b>bold</b>'))).toContain('wrap it in &lt;b&gt;bold&lt;/b&gt;');
   });
 
   test('plusses and deltas are counted, deltas by severity', () => {
@@ -152,35 +169,23 @@ describe('the review report', () => {
     expect(placeOf(summary, '#### structure')).toBeLessThan(placeOf(summary, '#### tests'));
     expect(placeOf(summary, '#### tests')).toBeLessThan(placeOf(summary, '### Deltas'));
     expect(placeOf(summary, '### Deltas')).toBeLessThan(placeOf(summary, '#### design'));
-    expect(summary).not.toContain('### Plusses\n\n#####');
   });
 
-  test('the doors are tallied in a table before the prose, plusses beside the severities', () => {
-    const told = review([plus, testPlus], [testNote, note, concern, violation, interaction]);
-    const summary = summaryOf(told);
-    expect(placeOf(summary, '| structure | 1 | 1 | 0 | 1 |')).toBeLessThan(placeOf(summary, '### Plusses'));
-    expect(doorTable(told)).toContain('| door | plusses | violations | concerns | notes |');
-    expect(doorTable(told)).toContain('| presentation | 0 | 0 | 1 | 0 |');
-    expect(doorTable(told)).toContain('| tests | 1 | 0 | 0 | 1 |');
-  });
-
-  test('a door nobody said anything about gets no row', () => {
-    expect(doorTable(review([], [note]))).toContain('| structure | 0 | 0 | 0 | 1 |');
-    expect(doorTable(review([], [note]))).not.toContain('presentation');
-    expect(doorTable(review([testPlus], []))).toContain('| tests | 1 | 0 | 0 | 0 |');
-  });
-
-  test('a delta is a heading with its mark and place, then what happened, why it matters, the change, and the door\'s words', () => {
+  test('a delta folds away under its mark and place, and opens on where, what happened, why it matters, the change, and the door\'s words', () => {
     const entry = deltaOf(concern);
-    expect(entry).toContain('##### ▲ concern · `src/b.css:9`');
+    expect(entry).toMatch(/^<details><summary>▲ concern · src\/b\.css:9<\/summary>\n/);
+    expect(entry).toMatch(/\n<\/details>$/);
+    expect(placeOf(entry, '**Where:** `src/b.css:9`')).toBeLessThan(placeOf(entry, '**What happened:**'));
     expect(placeOf(entry, '**What happened:** a tag selector styles a button')).toBeLessThan(placeOf(entry, '**Why it matters:** every button on the site now wears it'));
     expect(placeOf(entry, '**Why it matters:**')).toBeLessThan(placeOf(entry, '**Change:** give the button a class that names it'));
     expect(entry).toContain('> Tag selectors are for resets only');
   });
 
-  test('a plus is a heading with its place, then what happened, why it works, and the door\'s words', () => {
+  test('a plus folds away under its place, and opens on where, what happened, why it works, and the door\'s words', () => {
     const entry = plusOf(plus);
-    expect(entry).toContain('##### + `src/f.tsx:5`');
+    expect(entry).toMatch(/^<details><summary>\+ src\/f\.tsx:5<\/summary>\n/);
+    expect(entry).toMatch(/\n<\/details>$/);
+    expect(placeOf(entry, '**Where:** `src/f.tsx:5`')).toBeLessThan(placeOf(entry, '**What happened:**'));
     expect(placeOf(entry, '**What happened:** the friends list is a fieldset with a legend')).toBeLessThan(placeOf(entry, '**Why it works:** the group names itself'));
     expect(entry).toContain('> The right tag hands most of that over for free');
   });
@@ -202,8 +207,12 @@ describe('the review report', () => {
       ...plus,
       checked: 'read the legend'
     })).toContain('<details><summary>what was checked</summary>\n\nread the legend\n\n</details>');
-    expect(deltaOf(note)).not.toContain('<details>');
-    expect(plusOf(plus)).not.toContain('<details>');
+    expect(deltaOf(note)).not.toContain('what was checked');
+    expect(plusOf(plus)).not.toContain('what was checked');
+  });
+
+  test('a place with a tag in its name stays words in the fold', () => {
+    expect(deltaOf({...note, file: 'src/<odd>.tsx'}).split('\n')[0]).toContain('src/&lt;odd&gt;.tsx:1');
   });
 
   test('a tag the reviewer writes in any field stays words on the page, and a code span keeps its angle brackets', () => {
@@ -234,10 +243,10 @@ describe('the review report', () => {
     })).toContain('reads `<ul>` whole &amp; &lt;b&gt;more&lt;/b&gt;');
   });
 
-  test('every severity the schema allows has a mark in its heading', () => {
+  test('every severity the schema allows has a mark in its fold', () => {
     feedbackSchema().$defs.severity['enum'].forEach(severity => {
-      const heading = deltaOf({...note, severity}).split('\n')[0];
-      expect(heading).toMatch(new RegExp(`^##### \\S ${severity} · `));
+      const fold = deltaOf({...note, severity}).split('\n')[0];
+      expect(fold).toMatch(new RegExp(`^<details><summary>\\S ${severity} · `));
     });
   });
 
@@ -249,6 +258,8 @@ describe('the review report', () => {
 
   test('the schema the review answers in names every field the report tells, and the doors and severities once', () => {
     const schema = feedbackSchema();
+    expect(schema.required).toEqual(['tldr', 'plusses', 'deltas']);
+    expect(schema.properties.tldr).toEqual({type: 'string'});
     expect(schema.properties.plusses.items.required).toEqual(expect.arrayContaining(['door', 'file', 'line', 'happened', 'why', 'principle']));
     expect(Object.keys(schema.properties.plusses.items.properties)).toContain('checked');
     expect(schema.properties.deltas.items.required).toEqual(expect.arrayContaining(['door', 'severity', 'file', 'line', 'happened', 'why', 'change', 'principle']));

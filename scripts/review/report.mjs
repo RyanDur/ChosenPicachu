@@ -11,10 +11,10 @@ const marks = {violation: '✖', concern: '▲', note: '○'};
 
 export const reviewIn = answer => {
   const {structured_output: structured} = JSON.parse(answer);
-  if (not(Array.isArray(structured?.plusses)) || not(Array.isArray(structured?.deltas))) {
-    throw new Error('the review answered without plusses and deltas; the structured output is missing');
+  if (not(typeof structured?.tldr === 'string') || not(Array.isArray(structured?.plusses)) || not(Array.isArray(structured?.deltas))) {
+    throw new Error('the review answered without a summary, plusses and deltas; the structured output is missing');
   }
-  return {plusses: structured.plusses, deltas: structured.deltas};
+  return {tldr: structured.tldr, plusses: structured.plusses, deltas: structured.deltas};
 };
 
 const bySeverity = (a, b) => severities.indexOf(a.severity) - severities.indexOf(b.severity);
@@ -32,8 +32,12 @@ const placeOf = ({file, line}, commit) => maybe(commit)
 const checkedFold = ({checked}) =>
   empty(checked) ? [] : ['<details><summary>what was checked</summary>', '', told(checked), '', '</details>', ''];
 
-export const plusOf = (plus, commit) => [
-  `##### + ${placeOf(plus, commit)}`,
+const lineOf = ({file, line}) => asText(`${file}:${line}`);
+
+const folded = (label, body) => [`<details><summary>${label}</summary>`, '', ...body, '', '</details>'].join('\n');
+
+export const plusOf = (plus, commit) => folded(`+ ${lineOf(plus)}`, [
+  `**Where:** ${placeOf(plus, commit)}`,
   '',
   `**What happened:** ${told(plus.happened)}`,
   '',
@@ -41,10 +45,10 @@ export const plusOf = (plus, commit) => [
   '',
   ...checkedFold(plus),
   `> ${told(plus.principle)}`
-].join('\n');
+]);
 
-export const deltaOf = (delta, commit) => [
-  `##### ${marks[delta.severity]} ${delta.severity} · ${placeOf(delta, commit)}`,
+export const deltaOf = (delta, commit) => folded(`${marks[delta.severity]} ${delta.severity} · ${lineOf(delta)}`, [
+  `**Where:** ${placeOf(delta, commit)}`,
   '',
   `**What happened:** ${told(delta.happened)}`,
   '',
@@ -54,7 +58,7 @@ export const deltaOf = (delta, commit) => [
   '',
   ...checkedFold(delta),
   `> ${told(delta.principle)}`
-].join('\n');
+]);
 
 const byDoor = (entries, tell) => doors
   .map(door => ({door, own: entries.filter(entry => entry.door === door)}))
@@ -62,30 +66,15 @@ const byDoor = (entries, tell) => doors
   .map(({door, own}) => [`#### ${door}`, ...own.map(tell)].join('\n\n'))
   .join('\n\n');
 
-export const doorTable = ({plusses, deltas}) => {
-  const rows = doors
-    .filter(door => [...plusses, ...deltas].some(entry => entry.door === door))
-    .map(door => {
-      const own = deltas.filter(delta => delta.door === door);
-      const counts = severities.map(severity => own.filter(delta => delta.severity === severity).length);
-      return `| ${door} | ${plusses.filter(plus => plus.door === door).length} | ${counts.join(' | ')} |`;
-    });
-  return [
-    `| door | plusses | ${severities.map(severity => `${severity}s`).join(' | ')} |`,
-    `| --- | ---: | ${severities.map(() => '---:').join(' | ')} |`,
-    ...rows
-  ].join('\n');
-};
-
 const plussesTold = (plusses, commit) =>
   plusses.length === 0 ? [] : ['### Plusses', '', byDoor(plusses, plus => plusOf(plus, commit)), ''];
 
 const deltasTold = (deltas, commit) =>
   ['### Deltas', '', byDoor([...deltas].sort(bySeverity), delta => deltaOf(delta, commit)), ''];
 
-export const summaryOf = ({plusses, deltas}, {commit} = {}) => {
+export const summaryOf = ({tldr, plusses, deltas}, {commit} = {}) => {
   if (deltas.length === 0) {
-    return ['## The code holds up the home page', '', `${plural(plusses.length, 'plus', 'plusses')}, no deltas.`, '', ...plussesTold(plusses, commit)].join('\n');
+    return ['## The code holds up the home page', '', told(tldr), '', `${plural(plusses.length, 'plus', 'plusses')}, no deltas.`, '', ...plussesTold(plusses, commit)].join('\n');
   }
   const counts = severities
     .map(severity => ({severity, count: deltas.filter(delta => delta.severity === severity).length}))
@@ -94,9 +83,9 @@ export const summaryOf = ({plusses, deltas}, {commit} = {}) => {
   return [
     '## The home page reviews the code',
     '',
-    `${plural(plusses.length, 'plus', 'plusses')}. ${counts.join(', ')}.`,
+    told(tldr),
     '',
-    doorTable({plusses, deltas}),
+    `${plural(plusses.length, 'plus', 'plusses')}. ${counts.join(', ')}.`,
     '',
     ...plussesTold(plusses, commit),
     ...deltasTold(deltas, commit)

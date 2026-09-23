@@ -20,6 +20,7 @@ The site states its own principles on its home page, in three doors: what things
 
 ## How you report
 
+- You open with a summary of the feedback: a few sentences, read before any entry is opened. It is your opinion of the feedback, ordered from what matters most to what matters least: what to change first and why it outranks the rest, what can wait, and what held. Rank by what it costs a person or a reader, not only by severity: a concern can outrank a violation when it touches more of the site. It says nothing the entries do not.
 - You take a feedback stance: plusses and deltas, each with its why. Both point at a file and a line, name the door they answer to, say what happened there, and quote the principle in the page's own words.
 - A **plus** is a choice in the code that holds a door up. Its why says how it works for the reader, so the author knows what to keep doing. A plus is earned by reading, never owed: none is a true answer, and a plus that could be said of any code says nothing.
 - A **delta** is a finding: something to change. Its why says what it costs, in the door's words, and its change says what to do instead in a sentence. On the tests door the change names the test it wants.

@@ -49,7 +49,7 @@ export const promptFor = ({scope, before, after}) => {
     `The scope has two halves. ${halves.tests} ${halves.site} The three door QAs and the design QA review the site and the tests QA reviews the tests; each may read the other half for context. The site's QAs report nothing on the tests; the tests QA reports on the site only that a test is missing.`,
     dispatch(chosen.asks),
     'When they answer, corroborate every plus and every delta yourself before you keep it: open the file at the line, read the principle on its door, and keep it only if it holds. Merge what two QAs saw as one. Drop what does not hold and say nothing of it.',
-    'Answer in the feedback stance, in the shape you were given: the plusses and the deltas that held, each saying what happened, why, and for a delta the change.'
+    'Answer in the feedback stance, in the shape you were given. Open with a summary of the feedback, the tldr: a few sentences a person reads before opening any entry, giving your opinion of the feedback from what matters most to what matters least, and why, then what held. Then the plusses and the deltas that held, each saying what happened, why, and for a delta the change.'
   ].join('\n\n');
 };
 

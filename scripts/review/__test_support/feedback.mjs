@@ -20,4 +20,4 @@ export const aPlus = (traits = {}) => ({
   ...traits
 });
 
-export const review = (plusses, deltas) => ({plusses, deltas});
+export const review = (plusses, deltas, tldr = 'the code mostly holds; change the one thing first') => ({tldr, plusses, deltas});

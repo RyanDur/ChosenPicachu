@@ -1,12 +1,13 @@
 {
   "type": "object",
   "additionalProperties": false,
-  "required": ["plusses", "deltas"],
+  "required": ["tldr", "plusses", "deltas"],
   "$defs": {
     "door": {"type": "string", "enum": ["structure", "presentation", "dynamic interaction", "design", "tests"]},
     "severity": {"type": "string", "enum": ["violation", "concern", "note"]}
   },
   "properties": {
+    "tldr": {"type": "string"},
     "plusses": {
       "type": "array",
       "items": {
