@@ -523,7 +523,7 @@ describe('the tables demo', () => {
     expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('sort=column%2Crow');
   });
 
-  test('a story card counts the steps its build lists', async () => {
+  test("a story card's tally matches the steps the recipe renders", async () => {
     const recipe = await dragSortRecipe();
 
     const column = await recipeFolds.press(recipe, 'The trader can sort by column');
