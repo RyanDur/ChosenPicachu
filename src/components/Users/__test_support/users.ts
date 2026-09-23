@@ -6,6 +6,7 @@ import {server} from '@__test_support/server';
 const {usersDomain} = env;
 
 const noContent = () => new HttpResponse(null, {status: 204});
+const troubled = () => HttpResponse.json({}, {status: 500});
 
 const rosterAnswers = (people: readonly User[]) => http.get(usersDomain, () => HttpResponse.json(people));
 
@@ -20,6 +21,10 @@ export const usersUnreachable = () =>
     http.all(usersDomain, () => HttpResponse.error()),
     http.all(`${usersDomain}/*`, () => HttpResponse.error())
   );
+
+export const userAddRefused = () => server.use(http.post(usersDomain, troubled));
+
+export const userRemovalRefused = (id: string) => server.use(http.delete(`${usersDomain}/${id}`, troubled));
 
 export const setupUserAddedResponse = (rosterAfter: readonly User[]): () => unknown => {
   let sent: unknown;

@@ -27,7 +27,7 @@ describe('the windows hydrate from history', () => {
       ['this hour', '4', '3', '1', '0.41', '$50,001.93', '+$3.00']);
   });
 
-  test('a history that cannot load leaves the windows quietly empty', async () => {
+  test('a history that cannot be reached leaves the windows empty, and the page says so', async () => {
     tradeHistoryUnreachable();
 
     render(<TestApp at={demosAt('?tab=tables')}/>);
@@ -36,5 +36,6 @@ describe('the windows hydrate from history', () => {
     expect(await within(card).findByText('session')).toBeVisible();
     const sessionRow = within(card).getByRole('row', {name: /^session/});
     expect(sessionRow).toHaveTextContent('0');
+    expect(await within(screen.getByRole('alert', {hidden: true})).findByText('the trade history could not be reached')).toBeInTheDocument();
   });
 });

@@ -12,6 +12,8 @@ import {
   setupUsersAnswering,
   setupUsersResponse,
   setupUserUpdatedResponse,
+  userAddRefused,
+  userRemovalRefused,
   usersUnreachable
 } from '@components/Users/__test_support';
 import {userForm} from '../UserInformation/__test_support';
@@ -113,6 +115,19 @@ describe('the users page', () => {
       await userForm.addWhoWorksFromHome(aiko);
 
       await waitFor(() => expect(sent()).toMatchObject({work: 'home'}));
+    });
+
+    it('a person the backend cannot take says so, and the roster stands', async () => {
+      const standing = aUser();
+      setupUsersResponse([standing]);
+      userAddRefused();
+      render(<TestApp at={Paths.users}/>);
+      await usersTable.roster();
+
+      await userForm.addWhoWorksFromHome(aUser({work: 'home'}));
+
+      expect(await within(screen.getByRole('alert', {hidden: true})).findByText('the users is having trouble')).toBeInTheDocument();
+      expect(usersTable.names()).toEqual([fullNameOf(standing)]);
     });
   });
 
@@ -251,6 +266,19 @@ describe('the users page', () => {
     await usersTable.remove(fullNameOf(person));
 
     await waitFor(() => expect(usersTable.names()).not.toContain(fullNameOf(person)));
+  });
+
+  test('a person the backend cannot remove stays in the roster, and the page says so', async () => {
+    const person = aUser();
+    setupUsersResponse([person]);
+    userRemovalRefused(person.id);
+    render(<TestApp at={Paths.users}/>);
+    await usersTable.roster();
+
+    await usersTable.remove(fullNameOf(person));
+
+    expect(await within(screen.getByRole('alert', {hidden: true})).findByText('the users is having trouble')).toBeInTheDocument();
+    expect(usersTable.names()).toContain(fullNameOf(person));
   });
 
   test('removing the chosen user clears them from the address', async () => {
