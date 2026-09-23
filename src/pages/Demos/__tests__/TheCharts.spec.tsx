@@ -245,7 +245,7 @@ describe('a list of charts', () => {
     await feedIsSubscribed();
     await screen.findByRole('region', {name: 'candles'});
     const recipe = await chartsDesk.walkThrough('Candles', 'build the candles yourself');
-    await within(recipe).findByText(/read the same trades as candles/);
+    await recipeFolds.open(recipe, 'The trader can read the same trades as candles');
     expect(recipe).toHaveTextContent('className="candlesticks"');
     expect(recipe).toHaveTextContent('.up .body');
     expect(recipe).toHaveTextContent('className="volumes"');
@@ -267,7 +267,7 @@ describe('a list of charts', () => {
   test("a chart tutorial's outline steps down from its own heading to its first step", async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={`${chartPageAt('price')}?graph=price`} feed={feed}/>);
+    render(<TestApp at={chartPageAt('price', '?graph=price')} feed={feed}/>);
 
     expect(await screen.findByRole('heading', {name: 'price line tutorial', level: 2})).toBeInTheDocument();
     expect(screen.getByRole('heading', {name: 'let’s build this feature', level: 3})).toBeInTheDocument();
@@ -318,12 +318,12 @@ describe('a list of charts', () => {
   test('the price story teaches the whole journey, data to drawn chart', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={chartPageAt('price')} feed={feed}/>);
+    render(<TestApp at={chartPageAt('price', '?graph=price')} feed={feed}/>);
     await feedIsSubscribed();
     await screen.findByRole('region', {name: 'live trades'});
 
     const recipe = screen.getByRole('region', {name: 'build the price line yourself'});
-    await within(recipe).findByText(/watch the price move, live/);
+    expect(recipeFolds.story(recipe, 'The trader can watch the price move, live')).toHaveAttribute('open');
     expect(recipe).toHaveTextContent('export const subscribeTo');
     expect(recipe).toHaveTextContent('export const decodeTrade');
     expect(recipe).toHaveTextContent('.mBind(toTrade);');
@@ -341,7 +341,7 @@ describe('a list of charts', () => {
     await feedIsSubscribed();
     await screen.findByRole('region', {name: 'candles'});
     const recipe = await chartsDesk.walkThrough('Candles', 'build the candles yourself');
-    await within(recipe).findByText(/read the same trades as candles/);
+    await recipeFolds.open(recipe, 'The trader can read the same trades as candles');
     expect(recipe).toHaveTextContent('export const bucketTrades');
     expect(recipe).toHaveTextContent('export const mergeLive');
     expect(recipe).toHaveTextContent('<Axes');
@@ -354,6 +354,7 @@ describe('a list of charts', () => {
     await feedIsSubscribed();
     await screen.findByRole('region', {name: 'pressure'});
     const recipe = await chartsDesk.walkThrough('Pressure', 'build the pressure yourself');
+    await recipeFolds.open(recipe, 'The trader can see who is driving the move');
     expect(recipe).toHaveTextContent("side: schema.literalUnion('buy', 'sell')");
   });
 
@@ -424,6 +425,7 @@ describe('a list of charts', () => {
     await feedIsSubscribed();
     await screen.findByRole('region', {name: 'pie'});
     const recipe = await chartsDesk.walkThrough('Pie', 'build the pie yourself');
+    await recipeFolds.open(recipe, 'The trader can see who owns the session');
     expect(recipe).toHaveTextContent('export const sideTotals');
     expect(recipe).toHaveTextContent('export const slices');
     expect(recipe).toHaveTextContent('export const sweepGates');
