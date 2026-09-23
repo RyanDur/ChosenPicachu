@@ -17,30 +17,38 @@ type Props = {
   world: World;
 };
 
-export const Aggregations: FC<Props> = ({pace, origin, motion, world}) => {
+type Dials = {
+  pace: Pace;
+  origin: Origin;
+  motion: Motion;
+};
+
+const LiveTable: FC<Dials> = ({pace, origin, motion}) => {
   const Table = pace === 'eager' ? EagerTable : LazyTable;
   const dispatch = useDemosDispatch();
   const columns = useDemosSelector(selectColumns);
   const rows = useDemosSelector(selectRows);
-  const vanilla = world === 'vanilla';
-  const [stood, setStood] = useState(false);
+  return <Table caption="Live aggregations by window" className={classNames(origin, motion)} columns={columns} rows={rows}
+    onColumnMoved={({column, to}) => dispatch(columnMoved(column, to))}
+    onSorted={({column, direction}) => dispatch(sorted(column, direction))}
+    onRowMoved={({row, to, standing}) => dispatch(rowMoved(row, to, standing))}/>;
+};
 
+const VanillaStage: FC<Dials> = dials => {
+  const [stage, setStage] = useState<'framing' | 'framed'>('framing');
+  return <>
+    <TableFrame {...dials} veiled={stage === 'framing'} onStand={() => setStage('framed')}/>
+    {stage === 'framing' && <LiveTable {...dials}/>}
+  </>;
+};
+
+export const Aggregations: FC<Props> = ({pace, origin, motion, world}) => {
   useEffect(warmed, []);
 
-  useEffect(() => {
-    if (!vanilla) {
-      setStood(false);
-    }
-  }, [vanilla]);
-
   return <section aria-label="live aggregations" className="aggregations">
-    {vanilla &&
-      <TableFrame pace={pace} origin={origin} motion={motion}
-        veiled={!stood} onStand={() => setStood(true)}/>}
-    {(!vanilla || !stood) && <Table caption="Live aggregations by window" className={classNames(origin, motion)} columns={columns} rows={rows}
-      onColumnMoved={({column, to}) => dispatch(columnMoved(column, to))}
-      onSorted={({column, direction}) => dispatch(sorted(column, direction))}
-      onRowMoved={({row, to, standing}) => dispatch(rowMoved(row, to, standing))}/>}
+    {world === 'vanilla'
+      ? <VanillaStage pace={pace} origin={origin} motion={motion}/>
+      : <LiveTable pace={pace} origin={origin} motion={motion}/>}
     <details className="explainer">
       <summary className="prompt">what am I looking at?</summary>
       <p className="explanation">
