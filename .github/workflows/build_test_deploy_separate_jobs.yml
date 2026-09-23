@@ -3,6 +3,11 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      review_from:
+        description: 'Review the changes since this commit, instead of since the last commit the reviewer answered'
+        required: false
 env:
   VITE_APP_API_AIC: ${{ vars.VITE_APP_API_AIC }}
   VITE_APP_HARVARD_API: ${{ vars.VITE_APP_HARVARD_API }}
@@ -61,7 +66,6 @@ jobs:
       CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
       REVIEW_SCOPE: ${{ vars.REVIEW_SCOPE || 'changes' }}
       REVIEW_MODEL: ${{ vars.REVIEW_MODEL || 'claude-fable-5-1' }}
-      REVIEW_BEFORE: ${{ github.event.before }}
       REVIEW_AFTER: ${{ github.sha }}
     steps:
       - uses: actions/checkout@v5
@@ -77,6 +81,13 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm ci
+      - name: Start where the last review left off
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REVIEW_WORKFLOW: build_test_deploy_separate_jobs.yml
+          REVIEW_ASKED_FROM: ${{ inputs.review_from }}
+          REVIEW_PUSHED_FROM: ${{ github.event.before }}
+        run: echo "REVIEW_BEFORE=$(node scripts/review/since.mjs)" >> "$GITHUB_ENV"
       - name: The home page reviews the code
         run: |
           set -o pipefail
