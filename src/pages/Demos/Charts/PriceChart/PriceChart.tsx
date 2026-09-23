@@ -1,4 +1,4 @@
-import {FC, ReactNode} from 'react';
+import {FC, ReactNode, useId} from 'react';
 import {has, notEmpty} from '@ryandur/sand';
 import {Loading} from '@components/Loading';
 import {classNames} from '@components/class-names';
@@ -43,7 +43,8 @@ type Props = Pick<LiveTradesState, 'trades'> & {
   onPeriod: (period: Period) => void;
 };
 
-export const PriceChart: FC<Props> = ({trades, id = 'price', actions, period, onPeriod}) => {
+export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPeriod}) => {
+  const id = given ?? `price${useId()}`;
   const history = usePeriodCandles(period);
   const candles = mergeLive(candlesOf(history), bucketTrades(trades, bucketMs[period]), periodCap[period]);
   const showing = candles.length > 0;

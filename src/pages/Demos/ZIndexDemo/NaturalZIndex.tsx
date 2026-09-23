@@ -8,7 +8,7 @@ export const NaturalZIndex: FC<PropsWithClassName> = ({className}) => {
   const [isCollapsed, updateCollapsed] = useState(true);
   const onClick = () => updateCollapsed(toggle(isCollapsed));
 
-  return <section id="z-index-demo" aria-labelledby="z-index-demo-heading" className={className}>
+  return <section aria-labelledby="z-index-demo-heading" className={classNames('natural-z-index', className)}>
     <h3 id="z-index-demo-heading" className="off-screen">stacking with z-index</h3>
     <button className="button primary" aria-expanded={!isCollapsed} aria-controls="z-index-layers"
       onClick={onClick}>{isCollapsed ? 'Expand' : 'Collapse'}</button>

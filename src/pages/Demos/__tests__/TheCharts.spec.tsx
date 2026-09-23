@@ -47,6 +47,8 @@ describe('a list of charts', () => {
     const candles = await screen.findByRole('region', {name: 'candles'});
     const price = screen.getByRole('region', {name: 'live trades'});
     expect(candles.compareDocumentPosition(price)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    expect(within(candles).getByRole('heading', {name: 'candles'})).toBeInTheDocument();
+    expect(within(price).getByRole('heading', {name: 'live trades'})).toBeInTheDocument();
   });
 
   test('the trader can remove a chart', async () => {

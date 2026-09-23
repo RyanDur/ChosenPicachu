@@ -71,7 +71,8 @@ const LivePie: FC = () => <Pie trades={useDemosSelector(selectLiveTrades)}/>;
 export const ChartPage: FC = () => {
   const {kind} = useParams();
   const page = ({kind: dealt, name, reference, quote}: Feature, chart: ReactNode) => () =>
-    <article aria-label={`${name} tutorial`} className="chart-page tutorials">
+    <article aria-labelledby={`tutorial-${dealt}`} className="chart-page tutorials">
+      <h2 id={`tutorial-${dealt}`} className="off-screen">{`${name} tutorial`}</h2>
       {chart}
       <h2 className="tutorials-title">let’s build this feature</h2>
       <p className="overview paragraph">

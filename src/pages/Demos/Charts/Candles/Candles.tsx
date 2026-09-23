@@ -1,4 +1,4 @@
-import {FC, ReactNode} from 'react';
+import {FC, ReactNode, useId} from 'react';
 import {notEmpty} from '@ryandur/sand';
 import {Trade} from '../coinbase';
 import {bucketTrades, candleShapes, mergeLive, volumeShapes} from './shapes';
@@ -24,7 +24,8 @@ type Props = {
   onPeriod: (period: Period) => void;
 };
 
-export const Candles: FC<Props> = ({trades, id = 'candle', actions, period, onPeriod}) => {
+export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod}) => {
+  const id = given ?? `candles${useId()}`;
   const history = usePeriodCandles(period);
   const candles = mergeLive(candlesOf(history), bucketTrades(trades, bucketMs[period]), periodCap[period]);
   const bodies = candleShapes(candles, CHART_WIDTH, CANDLE_HEIGHT, bucketMs[period]);

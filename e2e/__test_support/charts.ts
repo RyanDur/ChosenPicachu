@@ -17,13 +17,12 @@ export const scriptedMarket = async (page: Page, prices: number[]): Promise<void
   });
 };
 
-export const priceCardScope = 'section.price-chart';
-
 export const chartsPage = (page: Page) => {
   const priceCard = page.getByRole('region', {name: 'live trades'});
   const periodMenu = page.getByLabel('price period by');
   return {
     priceCard,
+    priceCardScope: async (): Promise<string> => `section[aria-labelledby="${await priceCard.getAttribute('aria-labelledby')}"]`,
     priceDelta: priceCard.getByText(/^[+-]\$/),
     periodToggle: page.getByRole('button', {name: 'price period'}),
     period: (name: string): Locator => periodMenu.getByRole('button', {name}),

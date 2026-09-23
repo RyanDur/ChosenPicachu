@@ -1,4 +1,4 @@
-#z-index-demo {
+.natural-z-index {
     display: flex;
     flex-direction: column;
     justify-content: center;

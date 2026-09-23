@@ -1,4 +1,4 @@
-export {chartsPage, priceCardScope, scriptedMarket} from './charts';
+export {chartsPage, scriptedMarket} from './charts';
 export {looks} from './looks';
 export {homePage} from './home';
 export {galleryPage} from './gallery';

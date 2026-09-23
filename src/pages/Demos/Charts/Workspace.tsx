@@ -109,9 +109,9 @@ export const Workspace: FC<Props> = ({product}) => {
         </Link>
         {plural && <Grip onArm={() => arm(at)}/>}
         {matchChartKind(kind, {
-          price: () => <PriceChart id={`chart-${at}`} trades={trades} actions={actions}
+          price: () => <PriceChart id={`chart-${kind}`} trades={trades} actions={actions}
             period={period} onPeriod={chosen => choosePeriod('price', chosen)}/>,
-          candles: () => <Candles id={`chart-${at}`} trades={trades} actions={actions}
+          candles: () => <Candles id={`chart-${kind}`} trades={trades} actions={actions}
             period={period} onPeriod={chosen => choosePeriod('candles', chosen)}/>,
           pressure: () => <Pressure trades={trades} actions={actions}/>,
           pie: () => <Pie trades={trades} actions={actions}/>
