@@ -109,8 +109,14 @@ describe('the exchange as middleware', () => {
 
   it('a candle ask in flight is dropped when the feed is released, and no trouble is told', async () => {
     const answer = gate();
+    const aborted = gate();
     let answered = false;
-    server.use(http.get(candles, async () => {
+    server.use(http.get(candles, async ({request}) => {
+      if (request.signal.aborted) {
+        aborted.open();
+      } else {
+        request.signal.addEventListener('abort', aborted.open);
+      }
       await answer.opened;
       answered = true;
       return HttpResponse.json([], {status: 500});
@@ -120,6 +126,7 @@ describe('the exchange as middleware', () => {
     store.dispatch(candlesAsked(Period.hour));
 
     store.dispatch(feedReleased());
+    await aborted.opened;
     answer.open();
     await vi.waitFor(() => expect(answered).toBe(true));
 

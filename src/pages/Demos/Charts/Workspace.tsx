@@ -8,6 +8,7 @@ import {classNames} from '@components/class-names';
 import {useDemosSelector} from '../Provider';
 import {selectFeedStatus, selectLiveTrades} from '../store';
 import {useDesk} from './useDesk';
+import {seatAfterRemoval} from './desk';
 import {useChartTravel} from './useChartTravel';
 import {Grip} from './Grip';
 import {Dismissal} from './Dismissal';
@@ -42,21 +43,21 @@ export const Workspace: FC<Props> = ({product}) => {
   const status = useDemosSelector(selectFeedStatus);
   const {seats, absentKinds, add, remove, reorder, choosePeriod} = useDesk();
   const [report, setReport] = useState('');
-  const [placing, setPlacing] = useState<{at: number; from: number}>();
+  const [removal, setRemoval] = useState<{at: number; stood: number}>();
   const nameAt = (at: number): string => chartNames[seats[at].kind];
   const removed = (at: number): void => {
     remove(at);
     setReport(`${nameAt(at)} removed`);
-    setPlacing({at, from: seats.length});
+    setRemoval({at, stood: seats.length});
   };
   useEffect(() => {
-    maybe(placing).map(({at, from}) => {
-      if (seats.length < from) {
-        maybe(seats[Math.min(at, seats.length - 1)]).map(seat => document.getElementById(doorwayId(seat.kind))?.focus());
-        setPlacing(undefined);
+    maybe(removal).map(({at, stood}) => {
+      if (seats.length < stood) {
+        seatAfterRemoval(at, seats).map(seat => document.getElementById(doorwayId(seat.kind))?.focus());
+        setRemoval(undefined);
       }
     });
-  }, [placing, seats]);
+  }, [removal, seats]);
   const {isArmed, arm, dress, lift, travel, release, keys, settled} =
     useChartTravel({
       seats: seats.length,

@@ -43,7 +43,7 @@ export const columnHeld = (name: string) => (view: TableView): boolean => has(co
 export const columnGripped = (name: string) => ({state}: TableView): boolean => state.resizing?.column === name;
 
 export const shareTradedAt = (name: string) => ({state}: TableView): number | undefined =>
-  maybe(state.lastTrade).map(last => last.column === name ? last.share : undefined).orElse(undefined);
+  state.lastTrade?.column === name ? state.widths?.[name] : undefined;
 
 export const rowHeld = (key: string) => (view: TableView): boolean => has(rowDrag(key)(view));
 

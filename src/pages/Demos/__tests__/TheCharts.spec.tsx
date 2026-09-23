@@ -128,7 +128,30 @@ describe('a list of charts', () => {
 
     expect(screen.queryByRole('region', {name: 'live trades'})).not.toBeInTheDocument();
     expect(screen.getByRole('status', {name: 'desk report'})).toHaveTextContent('Price line removed');
-    await waitFor(() => expect(screen.getByRole('link', {name: 'Candles tutorial'})).toHaveFocus());
+  });
+
+  test("the chart that takes the removed one's seat takes the focus", async () => {
+    const feed = await listeningFeed();
+
+    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
+    await feedIsSubscribed();
+    await screen.findByRole('region', {name: 'live trades'});
+
+    await chartsDesk.keys('Price line', 'Delete');
+
+    await waitFor(() => expect(chartsDesk.doorway('Candles')).toHaveFocus());
+  });
+
+  test('the chart that is now last takes the focus when the last chart is deleted', async () => {
+    const feed = await listeningFeed();
+
+    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
+    await feedIsSubscribed();
+    await screen.findByRole('region', {name: 'candles'});
+
+    await chartsDesk.keys('Candles', 'Delete');
+
+    await waitFor(() => expect(chartsDesk.doorway('Price line')).toHaveFocus());
   });
 
   test('the delete key leaves the last chart standing', async () => {

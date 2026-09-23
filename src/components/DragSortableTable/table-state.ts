@@ -63,6 +63,8 @@ type Resizing =
   | {readonly stage: 'gripped'; readonly column: string; readonly from: Grip}
   | {readonly stage: 'dragging'; readonly column: string; readonly from: Grip; readonly carried: number};
 
+type Trade = {readonly column: string};
+
 export type Marks<Shove> = {
   readonly settlingFrom?: Settling;
   readonly shoved?: Shove;
@@ -74,7 +76,7 @@ export type TableState = {
   readonly rowMarks: Readonly<Record<string, Marks<RowShove>>>;
   readonly drag?: Drag;
   readonly resizing?: Resizing;
-  readonly lastTrade?: {readonly column: string; readonly share: number};
+  readonly lastTrade?: Trade;
 };
 
 export const resting: TableState = {columnMarks: {}, rowMarks: {}};
@@ -91,10 +93,7 @@ export const widthsOf = ({widths}: TableState): ColumnWidths | undefined => widt
 
 export const trade = (state: TableState, column: string, neighbour: string, delta: number): TableState =>
   maybe(state.widths)
-    .map(previous => {
-      const widths = traded(column, neighbour, delta)(previous);
-      return {...measure(state, widths), lastTrade: {column, share: widths[column]}};
-    })
+    .map(previous => ({...measure(state, traded(column, neighbour, delta)(previous)), lastTrade: {column}}))
     .orElse(state);
 
 export const grip = (state: TableState, column: string, from: Grip): TableState =>
