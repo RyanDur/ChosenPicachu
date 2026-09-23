@@ -253,6 +253,21 @@ describe('a list of charts', () => {
     expect(recipe).toHaveTextContent('.volume');
   });
 
+  test('a story the trader opened folds shut when they press its summary again', async () => {
+    const feed = await listeningFeed();
+
+    render(<TestApp at={demosAt('?tab=charts&charts=candles')} feed={feed}/>);
+    await feedIsSubscribed();
+    await screen.findByRole('region', {name: 'candles'});
+    const recipe = await chartsDesk.walkThrough('Candles', 'build the candles yourself');
+    await recipeFolds.open(recipe, 'The trader can read the same trades as candles');
+
+    const story = await recipeFolds.open(recipe, 'The trader can read the same trades as candles');
+
+    expect(story).not.toHaveAttribute('open');
+    expect(screen.getByRole('status', {name: 'url search'})).not.toHaveTextContent('graph=candles');
+  });
+
   test('the trader can add the pressure chart', async () => {
     const feed = await listeningFeed();
 
