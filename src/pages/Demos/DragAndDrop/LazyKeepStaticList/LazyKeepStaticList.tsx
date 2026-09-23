@@ -23,25 +23,24 @@ export const LazyKeepStaticList: FC<Props> = ({list}) => {
   };
 
   return <>
-    <ul aria-label="sortable list"
+    <ol aria-label="sortable list"
       onDragOver={event => event.preventDefault()}
       onDrop={event => event.preventDefault()}
       onDragLeave={() => setLanding(nothing())}
       className="sortable-list">{
         order.map((item, index) =>
-          <li key={item}
-            className={'item'}>
-            <KeepItem item={item}
-              order={order}
-              onLifted={lifted => setAloft(maybe(lifted))}
-              onReleased={release}
-              onDragOver={() => setLanding(maybe(index))}
-              onArranged={(after, walker) => {
-                setOrder(after);
-                setMoved(maybe({item: walker, position: after.indexOf(walker), of: after.length}));
-              }}/>
-          </li>)
-      }</ul>
+          <KeepItem key={item}
+            className={'item'}
+            item={item}
+            order={order}
+            onLifted={lifted => setAloft(maybe(lifted))}
+            onReleased={release}
+            onDragOver={() => setLanding(maybe(index))}
+            onArranged={(after, walker) => {
+              setOrder(after);
+              setMoved(maybe({item: walker, position: after.indexOf(walker), of: after.length}));
+            }}/>)
+      }</ol>
     <MoveReport moved={moved}/>
   </>;
 };

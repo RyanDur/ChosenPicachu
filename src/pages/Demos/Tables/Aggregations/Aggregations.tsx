@@ -37,7 +37,7 @@ export const Aggregations: FC<Props> = ({pace, origin, motion, world}) => {
     {vanilla &&
       <TableFrame pace={pace} origin={origin} motion={motion}
         veiled={!stood} onStand={() => setStood(true)}/>}
-    {(!vanilla || !stood) && <Table className={classNames(origin, motion)} columns={columns} rows={rows}
+    {(!vanilla || !stood) && <Table caption="Live aggregations by window" className={classNames(origin, motion)} columns={columns} rows={rows}
       onColumnMoved={({column, to}) => dispatch(columnMoved(column, to))}
       onSorted={({column, direction}) => dispatch(sorted(column, direction))}
       onRowMoved={({row, to, standing}) => dispatch(rowMoved(row, to, standing))}/>}

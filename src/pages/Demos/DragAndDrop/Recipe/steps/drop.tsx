@@ -15,7 +15,7 @@ export const acceptTheDrop = (listSource: string) =>
     </Words>
     <Codes>
       <Snippet label="HTML" lines={[
-        ...span(listSource, '<ul aria-label="sortable list"', 'onDrop={event => event.preventDefault()}')
+        ...span(listSource, '<ol aria-label="sortable list"', 'onDrop={event => event.preventDefault()}')
       ]}/>
     </Codes>
   </Step>;

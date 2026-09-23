@@ -11,7 +11,7 @@ import {LazyTable} from '../LazyTable';
 import {blurFocusOnMoves} from '@__test_support/focus';
 import {Column, DragSortableTable} from '@components/DragSortableTable';
 
-type Table = FC<HeaderEvents & BodyEvents & {className?: string; columns: readonly TableColumn<Measured>[]; rows: readonly Measures[]}>;
+type Table = FC<HeaderEvents & BodyEvents & {caption: string; className?: string; columns: readonly TableColumn<Measured>[]; rows: readonly Measures[]}>;
 
 const windows = ['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session'];
 
@@ -33,7 +33,7 @@ const Page: FC<{Table: Table; rows: readonly Measures[]; dials: string}> = ({Tab
   }));
   const standing = standingOf(arranged, valueOf).flatMap(key => rows.filter(row => windowOf(row) === key));
 
-  return <Table className={dials} columns={columns} rows={standing}
+  return <Table caption="live aggregations" className={dials} columns={columns} rows={standing}
     onColumnMoved={({column, to}) => dispatch(columnMoved(column, to))}
     onSorted={({column, direction}) => dispatch(sorted(column, direction))}
     onRowMoved={({row, to, standing: shownStanding}) => dispatch(rowMoved(row, to, shownStanding))}/>;
@@ -45,7 +45,7 @@ const seat = (Table: Table, dials = 'hide animated', rows: readonly Measures[] =
 
 describe('a header the table does not know', () => {
   test('stands on its own and wears its own name', () => {
-    render(<DragSortableTable columns={[{name: 'window', data: {label: 'window'}}]} rows={[]}>
+    render(<DragSortableTable caption="a table" columns={[{name: 'window', data: {label: 'window'}}]} rows={[]}>
       <thead><tr><Column column="ghost" className="cell">a header</Column></tr></thead>
     </DragSortableTable>);
 

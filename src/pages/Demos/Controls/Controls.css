@@ -1,5 +1,7 @@
 .controls {
-  display: grid;
+  .dials {
+    display: grid;
+  }
 
   .control {
     display: flex;

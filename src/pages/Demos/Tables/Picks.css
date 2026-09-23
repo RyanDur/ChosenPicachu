@@ -3,22 +3,25 @@
 
   display: flex;
   gap: var(--base-x-4);
+  margin: 0;
+  padding: 0;
+  border: 0;
   border-bottom: var(--hairline) solid var(--charcoal-veil);
 
   .pick {
-    all: unset;
+    position: relative;
     cursor: pointer;
     padding-block: var(--base);
     font-size: var(--pick-size);
     color: var(--ink-muted);
     border-bottom: var(--hairline-x-3) solid transparent;
 
-    &:focus-visible {
+    &:has(:focus-visible) {
       outline: var(--hairline-x-2) solid var(--charcoal);
     }
   }
 
-  .pick[aria-pressed="true"] {
+  .pick:has(:checked) {
     color: var(--ink);
     border-bottom-color: var(--ink-muted);
   }

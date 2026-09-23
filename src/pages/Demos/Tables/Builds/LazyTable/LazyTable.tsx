@@ -11,12 +11,13 @@ import {RowHeader} from './RowHeader';
 import '@components/DragSortableTable/sortable.css';
 
 type Props = ComponentProps<'table'> & HeaderEvents & BodyEvents & {
+  caption: string;
   columns: readonly TableColumn<Measured>[];
   rows: readonly Measures[];
 };
 
-export const LazyTable: FC<Props> = ({columns, rows, onColumnMoved, onSorted, onRowMoved, className, ...table}) =>
-  <DragSortableTable {...table} className={classNames('fancy-table sortable apportioned', className)} columns={columns} rows={seated(rows)}>
+export const LazyTable: FC<Props> = ({caption, columns, rows, onColumnMoved, onSorted, onRowMoved, className, ...table}) =>
+  <DragSortableTable {...table} caption={caption} className={classNames('fancy-table sortable apportioned', className)} columns={columns} rows={seated(rows)}>
     <thead className="header">
       <Headers className="row" onColumnMoved={onColumnMoved} onSorted={onSorted}>
         <Column column="window" className="cell window header-cell">window<ResizeHandle column="window"/></Column>

@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, useId} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
 import {motionParam, originParam, paceParam} from '../Controls';
 import {World, worldParam} from './params';
@@ -38,9 +38,10 @@ export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack}) => {
   const {pace = 'eager', origin = 'hide', motion = 'animated', world = 'react', updateSearchParams} =
     useSearchParamsObject({pace: paceParam, origin: originParam, motion: motionParam, world: worldParam});
   useArrival();
-  return <section className="tutorials">
+  const titled = `tutorials${useId()}`;
+  return <section aria-labelledby={titled} className="tutorials">
     <header className="tutorials-header">
-      <h2 className="tutorials-title">let’s build this feature</h2>
+      <h2 id={titled} className="tutorials-title">let’s build this feature</h2>
       <PillGlider label="world"
         name="table-world"
         options={[

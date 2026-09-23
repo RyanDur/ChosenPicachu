@@ -20,6 +20,7 @@ export const Clues: FC<CluesProps> = ({quote, by, clues, verdict}) => <>
       <figcaption className="attribution">{by}</figcaption>
     </figure>
     <table className="tutorial-table">
+      <caption className="off-screen">the clues</caption>
       <thead>
         <tr>
           <th scope="col">the clue</th>

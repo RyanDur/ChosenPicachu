@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, useId} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
 import {alignParam, enterParam, sideParam, stackParam} from '@components/Banners/params';
 import {Stories} from '../Recipe';
@@ -11,8 +11,9 @@ export const TopLayerTutorial: FC = () => {
   const {side = 'top', align = 'center', enter = 'above', stack = 'down', updateSearchParams} =
     useSearchParamsObject({side: sideParam, align: alignParam, enter: enterParam, stack: stackParam});
 
-  return <section className="tutorials">
-    <h2 className="tutorials-title">let’s build this feature</h2>
+  const titled = `tutorials${useId()}`;
+  return <section aria-labelledby={titled} className="tutorials">
+    <h2 id={titled} className="tutorials-title">let’s build this feature</h2>
     <p className="overview paragraph">
       We are going to build this site’s banner: the panel that carries the news, whatever
       the news is. Elsewhere on this site it reports real trouble; on this page the button

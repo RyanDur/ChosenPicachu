@@ -29,7 +29,7 @@ const shapeOf = (root: HTMLElement): {headers: CellShape[]; rows: CellShape[][]}
 describe('the two worlds deal the same table', () => {
   it('the frame markup stands exactly as the react table renders', () => {
     const rows = windowedAggregates([]).map(cells);
-    const {unmount} = render(<EagerTable className="hide animated" columns={measures} rows={rows}/>);
+    const {unmount} = render(<EagerTable caption="live aggregations" className="hide animated" columns={measures} rows={rows}/>);
     const react = shapeOf(document.body);
     unmount();
 

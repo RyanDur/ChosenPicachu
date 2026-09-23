@@ -27,28 +27,27 @@ export const LazyHideAnimatedList: FC<Props> = ({list}) => {
   };
 
   return <>
-    <ul aria-label="sortable list"
+    <ol aria-label="sortable list"
       onDragOver={event => event.preventDefault()}
       onDrop={event => event.preventDefault()}
       onDragLeave={() => setLanding(nothing())}
       className="sortable-list">{
         order.map((item, index) =>
-          <li key={item}
+          <HideItem key={item}
             className={classNames('item', pushed[item] && 'pushed')}
             style={{...pushedStyle(pushed[item]), viewTransitionName: `sort-${item}`}}
-            onAnimationEnd={() => setPushed({})}>
-            <HideItem item={item}
-              order={order}
-              onLifted={lifted => setAloft(maybe(lifted))}
-              onReleased={release}
-              onDragOver={() => setLanding(maybe(index))}
-              onArranged={(after, walker, toward) => {
-                setPushed(walkedMarks(order, walker, toward));
-                setOrder(after);
-                setMoved(maybe({item: walker, position: after.indexOf(walker), of: after.length}));
-              }}/>
-          </li>)
-      }</ul>
+            onAnimationEnd={() => setPushed({})}
+            item={item}
+            order={order}
+            onLifted={lifted => setAloft(maybe(lifted))}
+            onReleased={release}
+            onDragOver={() => setLanding(maybe(index))}
+            onArranged={(after, walker, toward) => {
+              setPushed(walkedMarks(order, walker, toward));
+              setOrder(after);
+              setMoved(maybe({item: walker, position: after.indexOf(walker), of: after.length}));
+            }}/>)
+      }</ol>
     <MoveReport moved={moved}/>
   </>;
 };

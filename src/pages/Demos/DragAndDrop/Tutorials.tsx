@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, useId} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
 import {motionParam, originParam, paceParam} from '../Controls';
 import {Clues, Design, Slices} from '../Recipe/Arc';
@@ -33,8 +33,9 @@ export const ListTutorials: FC = () => {
   const {pace = 'eager', origin = 'hide', motion = 'animated', updateSearchParams} =
     useSearchParamsObject({pace: paceParam, origin: originParam, motion: motionParam});
   useArrival();
-  return <section className="tutorials">
-    <h2 className="tutorials-title">let’s build this feature</h2>
+  const titled = `tutorials${useId()}`;
+  return <section aria-labelledby={titled} className="tutorials">
+    <h2 id={titled} className="tutorials-title">let’s build this feature</h2>
     <ol className="spine" aria-label="the stations">
       <li className="station" id={stationId(1)}>
         <Clues quote="These priorities are mine, and the order is mine. When something belongs above something else, I want to pick it up and put it there, and see it stay where I dropped it."

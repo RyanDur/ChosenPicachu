@@ -392,7 +392,7 @@ describe('the tables demo', () => {
 
     await feedIsSubscribed();
     const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
-    await userEvent.click(within(recipe).getByRole('button', {name: 'By keyboard'}));
+    await userEvent.click(within(recipe).getByRole('radio', {name: 'By keyboard'}));
 
     expect(recipe).toHaveTextContent(/Give focus a place to land/);
     expect(recipe).toHaveTextContent(/Arrows speak direction/);
@@ -430,7 +430,7 @@ describe('the tables demo', () => {
     await feedIsSubscribed();
     const recipe = await screen.findByRole('region', {name: 'build the drag sort yourself'});
 
-    await userEvent.click(within(recipe).getByRole('button', {name: 'By pointer'}));
+    await userEvent.click(within(recipe).getByRole('radio', {name: 'By pointer'}));
 
     expect(recipe).toHaveTextContent(/Hold the pointer from the lift/);
   });
@@ -455,7 +455,7 @@ describe('the tables demo', () => {
     expect(await screen.findByRole('region', {name: 'build the drag sort yourself'})).toBeVisible();
     expect(screen.queryByRole('region', {name: 'build the drag resize yourself'})).toBeNull();
 
-    await userEvent.click(screen.getByRole('button', {name: 'Drag resize'}));
+    await userEvent.click(screen.getByRole('radio', {name: 'Drag resize'}));
 
     const resize = await screen.findByRole('region', {name: 'build the drag resize yourself'});
     expect(resize).toBeVisible();
@@ -476,10 +476,10 @@ describe('the tables demo', () => {
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed();
-    await userEvent.click(await screen.findByRole('button', {name: 'Drag resize'}));
+    await userEvent.click(await screen.findByRole('radio', {name: 'Drag resize'}));
     await screen.findByRole('region', {name: 'build the drag resize yourself'});
 
-    await userEvent.click(screen.getByRole('button', {name: 'Drag sort'}));
+    await userEvent.click(screen.getByRole('radio', {name: 'Drag sort'}));
 
     expect(await screen.findByRole('region', {name: 'build the drag sort yourself'})).toBeVisible();
   });
@@ -514,7 +514,7 @@ describe('the tables demo', () => {
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed();
-    await userEvent.click(screen.getByRole('button', {name: 'Sort menu'}));
+    await userEvent.click(screen.getByRole('radio', {name: 'Sort menu'}));
 
     const recipe = await screen.findByRole('region', {name: 'build the sort menu yourself'});
     expect(recipe).toBeVisible();
@@ -632,7 +632,7 @@ describe('the tables demo', () => {
       render(<TestApp at={demosAt(`?tab=tables&tut=sort&world=${world}`)} feed={feed}/>);
 
       expect(await screen.findByText('The trader can sort by column')).toBeInTheDocument();
-      await userEvent.click(screen.getByRole('button', {name: 'By keyboard'}));
+      await userEvent.click(screen.getByRole('radio', {name: 'By keyboard'}));
       expect(await screen.findByText('Give focus a place to land')).toBeInTheDocument();
     });
 

@@ -30,7 +30,7 @@ describe('The Demos page', () => {
 
     await waitFor(() => {
       const main = screen.getByRole('main');
-      expect(within(main).getByText('Different styles of Accordions.')).toBeInTheDocument();
+      expect(within(main).getByRole('heading', {name: 'Different styles of Accordions.'})).toBeInTheDocument();
     });
   });
 

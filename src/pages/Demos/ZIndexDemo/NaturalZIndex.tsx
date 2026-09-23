@@ -8,7 +8,7 @@ export const NaturalZIndex: FC<PropsWithClassName> = ({className}) => {
   const [isCollapsed, updateCollapsed] = useState(true);
   const onClick = () => updateCollapsed(toggle(isCollapsed));
 
-  return <article id="z-index-demo" className={className}>
+  return <section id="z-index-demo" aria-label="stacking with z-index" className={className}>
     <button className="button primary" aria-expanded={!isCollapsed} aria-controls="z-index-layers"
       onClick={onClick}>{isCollapsed ? 'Expand' : 'Collapse'}</button>
     <ol id="z-index-layers" className="demo-container">
@@ -16,5 +16,5 @@ export const NaturalZIndex: FC<PropsWithClassName> = ({className}) => {
       <li className={classNames('layer card rounded-corners floating', isCollapsed && 'closed')}>Second</li>
       <li className={classNames('layer card rounded-corners floating', isCollapsed && 'closed')}>Third</li>
     </ol>
-  </article>;
+  </section>;
 };

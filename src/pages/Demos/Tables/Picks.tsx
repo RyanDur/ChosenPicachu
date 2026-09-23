@@ -15,11 +15,16 @@ type Props<T extends string> = {
 };
 
 export const Picks = <T extends string>({label, className, options, chosen, onPick}: Props<T>) =>
-  <nav className={classNames('picks', className)} aria-label={label}>
+  <fieldset className={classNames('picks', className)}>
+    <legend className="off-screen">{label}</legend>
     {options.map(({display, value}) =>
-      <button type="button"
-        key={value}
-        className="pick"
-        aria-pressed={chosen === value}
-        onClick={() => onPick(value)}>{display}</button>)}
-  </nav>;
+      <label key={value} className="pick">
+        {display}
+        <input type="radio"
+          className="off-screen"
+          name={label}
+          value={value}
+          checked={chosen === value}
+          onChange={() => onPick(value)}/>
+      </label>)}
+  </fieldset>;

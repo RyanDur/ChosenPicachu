@@ -28,6 +28,15 @@ describe('the users page', () => {
   });
 
   describe('ranking the users', () => {
+    it('the roster is a named table in a named region', async () => {
+      setupUsersResponse([aUser()]);
+      render(<TestApp at={Paths.users}/>);
+      await usersTable.roster();
+
+      expect(screen.getByRole('table', {name: 'User candidates'})).toBeInTheDocument();
+      expect(screen.getByRole('region', {name: 'User Candidates'})).toBeInTheDocument();
+    });
+
     it('a person without a birthday shows no age', async () => {
       const ageless = aUser();
       setupUsersResponse([{...ageless, info: {...ageless.info, dob: undefined}}]);

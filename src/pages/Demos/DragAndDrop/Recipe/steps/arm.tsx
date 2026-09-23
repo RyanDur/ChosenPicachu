@@ -12,7 +12,7 @@ export const armTheDrag = (itemSource: string) =>
     </Words>
     <Codes>
       <Snippet label="HTML" lines={[
-        ...span(itemSource, '<article', 'draggable={dragging}>')
+        ...span(itemSource, '<li', 'draggable={dragging}>')
       ]}/>
     </Codes>
   </Step>;

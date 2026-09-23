@@ -32,6 +32,14 @@ const paragraphs = (count: number) =>
     value: Array.from({length: Math.floor(Math.random() * 6) + 1}, () => randParagraph()).join('\n\n')
   }));
 
+const topics = [
+  {display: 'Accordions', param: DemoTopics.accordions},
+  {display: 'Z-Index', param: DemoTopics.zIndex},
+  {display: 'Drag sort', param: DemoTopics.dragAndDrop},
+  {display: 'Charts', param: DemoTopics.charts},
+  {display: 'Tables', param: DemoTopics.tables}
+];
+
 export const DemosPage = () => {
   const {tab, pace = 'eager', origin = 'hide', motion = 'animated', tut = 'sort', track = 'pointer', world = 'react', updateSearchParams} =
     useSearchParamsObject(
@@ -41,39 +49,32 @@ export const DemosPage = () => {
   const {tradeProduct} = useEnv();
 
   return <>
-    <Tabs
-      label="demos"
-      defaultTab={DemoTopics.accordions}
-      values={[
-        {display: 'Accordions', param: DemoTopics.accordions},
-        {display: 'Z-Index', param: DemoTopics.zIndex},
-        {display: 'Drag sort', param: DemoTopics.dragAndDrop},
-        {display: 'Charts', param: DemoTopics.charts},
-        {display: 'Tables', param: DemoTopics.tables}
-      ]}/>
-    <section id="about" className="about">
+    <Tabs label="demos" defaultTab={DemoTopics.accordions} values={topics}/>
+    <section id="about" aria-label={topics.find(({param}) => param === tab)?.display} className="about">
       {({
         [DemoTopics.accordions]:
-              <ul className="accordions">
-                <li className="list-title">Different styles of Accordions.</li>
-                <li>
-                  <InclusiveAccordion className="card rounded-corners lifted padded" content={accordionContents[0]}/>
-                </li>
-                <li>
-                  <ExclusiveAccordion className="card rounded-corners lifted padded" content={accordionContents[1]}/>
-                </li>
-                <li className="exclusive">
-                  <ExclusiveToggleAccordion className="card rounded-corners lifted padded" content={accordionContents[2]}/>
-                </li>
-                <li>
-                  <ExclusiveCheckboxToggleAccordion className="card rounded-corners lifted padded" content={accordionContents[3]}/>
-                </li>
-                <li>
-                  <ExclusiveRadioToggleAccordion className="card rounded-corners lifted padded" content={accordionContents[4]}/>
-                </li>
-              </ul>,
+              <>
+                <h2 className="list-title">Different styles of Accordions.</h2>
+                <ul className="accordions">
+                  <li>
+                    <InclusiveAccordion className="card rounded-corners lifted padded" content={accordionContents[0]}/>
+                  </li>
+                  <li>
+                    <ExclusiveAccordion className="card rounded-corners lifted padded" content={accordionContents[1]}/>
+                  </li>
+                  <li className="exclusive">
+                    <ExclusiveToggleAccordion className="card rounded-corners lifted padded" content={accordionContents[2]}/>
+                  </li>
+                  <li>
+                    <ExclusiveCheckboxToggleAccordion className="card rounded-corners lifted padded" content={accordionContents[3]}/>
+                  </li>
+                  <li>
+                    <ExclusiveRadioToggleAccordion className="card rounded-corners lifted padded" content={accordionContents[4]}/>
+                  </li>
+                </ul>
+              </>,
         [DemoTopics.zIndex]: <>
-          <article>Z-Index Demo.</article>
+          <h2 className="list-title">Z-Index Demo.</h2>
           <NaturalZIndex className="card rounded-corners lifted padded"/>
           <TopLayer className="card rounded-corners lifted padded"/>
           <TopLayerTutorial/>

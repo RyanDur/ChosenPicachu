@@ -1,6 +1,6 @@
-import {DragEventHandler} from 'react';
+import {ComponentProps, DragEventHandler} from 'react';
 
-export type ItemProps = {
+export type ItemProps = Omit<ComponentProps<'li'>, 'onDragOver'> & {
   item: string;
   order: readonly string[];
   className?: string;

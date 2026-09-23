@@ -69,6 +69,17 @@ describe('page error boundaries', () => {
   });
 });
 
+describe('the skeleton', () => {
+  test('the site nav stands on its own and comes before the main content', async () => {
+    render(<TestApp at="/"/>);
+    await site.pageTitled();
+
+    const nav = screen.getByRole('navigation', {name: 'site'});
+    expect(screen.queryByRole('complementary', {name: 'site rail'})).not.toBeInTheDocument();
+    expect(nav.compareDocumentPosition(screen.getByRole('main'))).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+  });
+});
+
 describe('leaving a page', () => {
   test('a new page starts at the top', async () => {
     render(<TestApp at="/"/>);

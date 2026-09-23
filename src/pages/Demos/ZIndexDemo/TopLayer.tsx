@@ -10,10 +10,10 @@ const nextNews = decked(news);
 export const TopLayer: FC<PropsWithClassName> = ({className}) => {
   const {raise} = useBanners();
 
-  return <article className={classNames('top-layer', className)}>
+  return <section aria-label="the top layer" className={classNames('top-layer', className)}>
     <p className="pitch">The cards above fight for the front with z-index. The news does not fight at all.</p>
     <button className="button primary" onClick={() => raise(nextNews())}>
       raise a banner
     </button>
-  </article>;
+  </section>;
 };

@@ -6,17 +6,21 @@ import './Table.css';
 import './sortable.css';
 
 type Props<C extends Labelled> = ComponentProps<'table'> & {
+  caption: string;
   columns: readonly TableColumn<C>[];
   rows: readonly Seated[];
 };
 
-export const DragSortableTable = <C extends Labelled>({columns, rows, children, ...table}: Props<C>): ReactNode => {
+export const DragSortableTable = <C extends Labelled>({caption, columns, rows, children, ...table}: Props<C>): ReactNode => {
   const [store] = useState(() => tableStore());
   const state = useSyncExternalStore(store.subscribe, () => store.state);
 
   const context: TableContext = {state, columns, rows, dispatch: store.dispatch};
 
   return <Table.Provider value={context}>
-    <table {...table}>{children}</table>
+    <table {...table}>
+      <caption className="off-screen">{caption}</caption>
+      {children}
+    </table>
   </Table.Provider>;
 };

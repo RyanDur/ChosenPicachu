@@ -79,7 +79,7 @@ export const Workspace: FC<Props> = ({product}) => {
             </menu>
           </>}
     </header>
-    <ul className="chart-list">{seats.map(({kind, period}, at) => {
+    <ol className="chart-list" aria-label="charts">{seats.map(({kind, period}, at) => {
       const actions = plural ? <Dismissal onRemove={() => remove(at)}/> : undefined;
       return <li key={kind}
         className={dress(at)}
@@ -90,7 +90,7 @@ export const Workspace: FC<Props> = ({product}) => {
         onDrop={event => event.preventDefault()}
         onDragEnd={release}>
         <Link className="doorway" to={doorways[kind]}
-          aria-label={`chart ${at + 1}`} onKeyDown={keys(at)}/>
+          aria-label={`${chartNames[kind]} tutorial`} onKeyDown={keys(at)}/>
         {plural && <Grip onArm={() => arm(at)}/>}
         {matchChartKind(kind, {
           price: () => <PriceChart id={`chart-${at}`} trades={trades} actions={actions}
@@ -102,6 +102,6 @@ export const Workspace: FC<Props> = ({product}) => {
         }).orNull()}
       </li>;
     })}
-    </ul>
+    </ol>
   </>;
 };

@@ -15,6 +15,7 @@ export const LayerMap: FC = () =>
       too. Both axes, every layer, or the layer is not done.
     </p>
     <table className="tutorial-table layer-map">
+      <caption className="off-screen">the layers</caption>
       <thead>
         <tr>
           <th scope="col">the layer</th>

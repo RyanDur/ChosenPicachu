@@ -5,12 +5,12 @@ import {Grip} from './Grip';
 import '../Item.css';
 
 export const HideItem: FC<ItemProps> = (
-  {item, order, className, onLifted, onReleased, onDragOver, onArranged}
+  {item, order, className, onLifted, onReleased, onDragOver, onArranged, ...li}
 ) => {
   const [dragging, updateDragging] = useState(false);
   const [hide, updateHide] = useState(false);
 
-  return <article
+  return <li {...li}
     className={classNames('draggable', hide && 'hide', className)}
     onDragStart={event => {
       event.dataTransfer.effectAllowed = 'move';
@@ -30,6 +30,6 @@ export const HideItem: FC<ItemProps> = (
     }}
     draggable={dragging}>
     <Grip item={item} order={order} onArm={() => updateDragging(true)} onArranged={onArranged}/>
-    <article className="value">{item}</article>
-  </article>;
+    <span className="value">{item}</span>
+  </li>;
 };

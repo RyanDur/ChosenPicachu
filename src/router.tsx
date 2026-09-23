@@ -35,6 +35,7 @@ export const Site: FC<{closed?: boolean}> = ({closed = false}) => {
   return <BannerProvider>
     <Provider>
       <HeaderRegion/>
+      <SideNav/>
       <main className={classNames('app-main', 'field', mainClassName)}>
         {closed ? <PageError/> : <Outlet/>}
       </main>
@@ -44,7 +45,6 @@ export const Site: FC<{closed?: boolean}> = ({closed = false}) => {
       {FooterRegion && <footer id="app-footer" className="app-footer stick-to-bottom field">
         <FooterRegion/>
       </footer>}
-      <SideNav/>
     </Provider>
     <Banners/>
   </BannerProvider>;

@@ -17,12 +17,10 @@ import './UsersPage.css';
 const Rooms: FC<{id?: string; param?: string}> = ({id, param}) => {
   const open = openedOn(param, useUsersSelector(userWithId(id)));
   return <>
-    <section id="user-info" className="user-info users card rounded-corners lifted padded">
-      <UserInformation open={open}/>
-    </section>
+    <UserInformation open={open} className="user-info users card rounded-corners lifted padded"/>
 
-    <section id="user-candidates" className="user-candidates users card rounded-corners lifted padded">
-      <h2 className="roster-title title bold">User Candidates</h2>
+    <section id="user-candidates" aria-labelledby="roster-title" className="user-candidates users card rounded-corners lifted padded">
+      <h2 id="roster-title" className="roster-title title bold">User Candidates</h2>
       {open.mode === 'viewing' &&
           <Link to={Paths.users} id="add-new-user" className="add-new-user button primary">Add New User</Link>}
       <UsersTable/>

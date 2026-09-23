@@ -1,4 +1,4 @@
-import {FC, ReactNode} from 'react';
+import {FC, ReactNode, useId} from 'react';
 import {ChartKind} from './kinds';
 import {Codes, Mdn, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, plain} from '../Recipe';
 import {span, unit} from '../Recipe/carve';
@@ -450,9 +450,10 @@ const chartStories: Record<ChartKind, ReactNode> = {
 export const ChartStories: FC<{kind: ChartKind}> = ({kind}) =>
   <Stories>{chartStories[kind]}</Stories>;
 
-export const ChartsTutorial: FC = () =>
-  <section className="tutorials">
-    <h2 className="tutorials-title">let’s build this feature</h2>
+export const ChartsTutorial: FC = () => {
+  const titled = `tutorials${useId()}`;
+  return <section aria-labelledby={titled} className="tutorials">
+    <h2 id={titled} className="tutorials-title">let’s build this feature</h2>
     <p className="overview paragraph">
       We are going to build this site’s live charts, feature by feature. Here is how to use
       this page: every card below is a feature, told as a <a className="signpost"
@@ -480,3 +481,4 @@ export const ChartsTutorial: FC = () =>
       <Stories>{workspaceStory}</Stories>
     </section>
   </section>;
+};
