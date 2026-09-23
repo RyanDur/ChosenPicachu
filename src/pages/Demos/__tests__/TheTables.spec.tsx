@@ -528,8 +528,13 @@ describe('the tables demo', () => {
 
     const column = await recipeFolds.press(recipe, 'The trader can sort by column');
 
-    expect(column).toHaveTextContent(`${within(column).getAllByRole('listitem').length} steps`);
-    expect(recipeFolds.story(recipe, 'The trader can sort by row')).toHaveTextContent('1 step');
+    expect(column).toHaveTextContent(`${recipeFolds.steps(column).length} steps`);
+  });
+
+  test('a story card with one step says step, not steps', async () => {
+    const recipe = await dragSortRecipe();
+
+    expect(within(recipeFolds.story(recipe, 'The trader can sort by row')).getByText('1 step')).toBeVisible();
   });
 
   test('the dials travel in the url', async () => {
