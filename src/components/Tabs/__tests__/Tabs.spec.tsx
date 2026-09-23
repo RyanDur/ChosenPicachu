@@ -10,10 +10,18 @@ describe('Tabs', () => {
   const tab2 = {display: 'Tab 2', param: 'tab2'};
   const tab3 = {display: 'Tab 3', param: 'tab3'};
 
-  it('should start with the default', () => {
+  it('the default tab is current without being written into the address', () => {
     render(<TestApp at={path}><Tabs label="tabs under test" defaultTab={tab1.param} values={[tab1, tab2, tab3]}/></TestApp>);
 
-    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(tab1.param);
+    expect(screen.getByRole('link', {name: tab1.display, current: 'page'})).toBeInTheDocument();
+    expect(screen.getByRole('status', {name: 'url search'})).not.toHaveTextContent('tab=');
+  });
+
+  it('a tab in the address wins over the default', () => {
+    render(<TestApp at={`${path}?tab=${tab2.param}`}><Tabs label="tabs under test" defaultTab={tab1.param} values={[tab1, tab2, tab3]}/></TestApp>);
+
+    expect(screen.getByRole('link', {name: tab2.display, current: 'page'})).toBeInTheDocument();
+    expect(screen.getByRole('link', {name: tab1.display})).not.toHaveAttribute('aria-current');
   });
 
   it('should update the url', async () => {
