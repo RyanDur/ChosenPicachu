@@ -1,16 +1,18 @@
-import {AllArt, Art, Pagination} from '@components/art-gallery/museums/art';
-import {MuseumReply} from '@components/art-gallery/museums/reply';
-import {Consumer} from '@ryandur/sand';
+import {AllArt, Pagination} from '@components/art-gallery/museums/art';
+import {MuseumReply, standingOf} from '@components/art-gallery/museums/reply';
+import {Consumer, Maybe, maybe} from '@ryandur/sand';
 import {createContext, useContext} from 'react';
 
 export type GalleryContextState = {
-  wall: MuseumReply<Art[]>;
-  pagination?: Pagination;
+  wall: MuseumReply<AllArt>;
   asked: Consumer<void>;
   answered: Consumer<AllArt>;
   refused: Consumer<void>;
   abandoned: Consumer<void>;
 };
+
+export const paginationOf = (wall: MuseumReply<AllArt>): Maybe<Pagination> =>
+  maybe(standingOf(wall)).map(({pagination}) => pagination);
 
 export const Context = createContext<GalleryContextState>({
   wall: {reply: 'unasked'},

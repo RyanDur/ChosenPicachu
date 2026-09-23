@@ -2,8 +2,7 @@ import {Link, useLocation} from 'react-router';
 import {gotoTopOfPage} from '@components/scroll';
 import {FC} from 'react';
 import {numberParam, useSearchParamsObject} from '@components/search-params';
-import {useGallery} from '@components/art-gallery/Art/Context';
-import {defaultRecordLimit} from '@components/art-gallery/limits';
+import {paginationOf, useGallery} from '@components/art-gallery/Art/Context';
 import './GalleryNav.css';
 
 type Props = {
@@ -11,26 +10,27 @@ type Props = {
 };
 
 export const GalleryNav: FC<Props> = ({id}) => {
-  const {pagination} = useGallery();
+  const pagination = paginationOf(useGallery().wall);
   const {
-    page, size,
+    page,
     createSearchParams
-  } = useSearchParamsObject({page: numberParam, size: numberParam}, {page: 1});
+  } = useSearchParamsObject({page: numberParam}, {page: 1});
   const location = useLocation();
   const path = location.pathname;
   const firstPage = 1;
-  const currentPage = page ?? firstPage;
-  const lastPage = pagination?.totalPages ?? currentPage;
+  const currentPage = page;
+  const lastPage = pagination.map(({totalPages}) => totalPages).orElse(currentPage);
 
   const hasNextPage = currentPage < lastPage;
   const nextPage = hasNextPage ? currentPage + 1 : currentPage;
   const hasPrevPage = currentPage > firstPage;
   const prevPage = hasPrevPage ? currentPage - 1 : currentPage;
 
-  const totalRecords = pagination?.total;
-  const pageSize = pagination?.limit ?? size ?? defaultRecordLimit;
-  const firstRecord = 1 + pageSize * (currentPage - 1);
-  const lastRecord = currentPage === lastPage ? totalRecords : pageSize * currentPage;
+  const counted = pagination.map(({total, limit}) => ({
+    first: Math.min(1 + limit * (currentPage - 1), total),
+    last: Math.min(limit * currentPage, total),
+    total
+  }));
 
   return <nav className="pagination backdrop" aria-label="pagination" id={id}>
     {hasPrevPage && <>
@@ -43,11 +43,12 @@ export const GalleryNav: FC<Props> = ({id}) => {
         PREV
       </Link>
     </>}
-    <output className="info field">
-      <span>{firstRecord} - {lastRecord}</span>
-      <span>of</span>
-      <span>{totalRecords ?? '—'}</span>
-    </output>
+    {counted.map(({first, last, total}) =>
+      <output className="info field" key="count">
+        <span>{first} - {last}</span>
+        <span>of</span>
+        <span>{total}</span>
+      </output>).orNull()}
     {hasNextPage && <>
       <Link to={`${path}${createSearchParams({page: nextPage})}`} onClick={gotoTopOfPage}
         className="page next field attentive bold">

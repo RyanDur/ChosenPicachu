@@ -6,6 +6,7 @@ import {Paths} from '@pages/Paths';
 import {scrolling} from '@components/__test_support/scrolling';
 import {heldAICAllArtResponse, setupAICAllArtResponse, setupAICEveryPage, galleryWall} from '@components/art-gallery/__test_support';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
+import {anyRequestFailsToConnect} from '@__test_support/server';
 
 const {total_pages: lastPage, limit, total} = aicArtResponse.pagination;
 
@@ -94,18 +95,30 @@ describe('Gallery Navigation', () => {
     expect(screen.getByRole('navigation', {name: 'pagination'})).toHaveTextContent(`${1} - ${limit}of${total}`);
   });
 
-  test('before any page has arrived, the total is a dash', () => {
+  test('before any page has arrived, no count is said', () => {
     heldAICAllArtResponse(aicArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
 
-    expect(screen.getByRole('navigation', {name: 'pagination'})).toHaveTextContent('of—');
+    expect(screen.getByRole('navigation', {name: 'pagination'})).not.toHaveTextContent('of');
   });
 
-  test('a museum with nothing to show counts of 0, not a dash', async () => {
+  test('a museum with nothing to show counts 0 - 0 of 0', async () => {
     setupAICEveryPage({...aicArtResponse, data: [], pagination: {...aicArtResponse.pagination, total: 0, total_pages: 0}});
     render(<TestApp at={Paths.artGallery}/>);
 
-    await waitFor(() => expect(screen.getByRole('navigation', {name: 'pagination'})).toHaveTextContent(/of0$/));
+    await waitFor(() => expect(screen.getByRole('navigation', {name: 'pagination'})).toHaveTextContent(/^0 - 0of0$/));
+  });
+
+  test('a museum that refuses leaves no count from the museum before it', async () => {
+    setupAICEveryPage(aicArtResponse);
+    render(<TestApp at={`${Paths.artGallery}?page=1&size=${limit}`}/>);
+    await galleryWall.hangs();
+    anyRequestFailsToConnect();
+
+    await userEvent.click(screen.getByRole('link', {name: 'NEXT'}));
+
+    await screen.findByAltText('the museum refused to answer');
+    expect(screen.getByRole('navigation', {name: 'pagination'})).not.toHaveTextContent(`${total}`);
   });
 
   test('until the museum says where the end is, there is no way forward', async () => {

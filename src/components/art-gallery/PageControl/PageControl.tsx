@@ -1,7 +1,7 @@
 import {SubmitEvent, useState} from 'react';
 import {Maybe, nothing, some} from '@ryandur/sand';
 import {gotoTopOfPage} from '@components/scroll';
-import {useGallery} from '@components/art-gallery/Art/Context';
+import {paginationOf, useGallery} from '@components/art-gallery/Art/Context';
 import {numberParam, useSearchParamsObject} from '@components/search-params';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
 import './PageControl.css';
@@ -9,7 +9,7 @@ import './PageControl.css';
 const typed = (value: string): Maybe<number> => value === '' ? nothing() : some(+value);
 
 export const PageControl = () => {
-  const {pagination} = useGallery();
+  const pagination = paginationOf(useGallery().wall);
   const {page, size, updateSearchParams} = useSearchParamsObject({page: numberParam, size: numberParam}, {
     page: 1,
     size: defaultRecordLimit
@@ -18,7 +18,7 @@ export const PageControl = () => {
   const [pageSize, updatePageSize] = useState<Maybe<number>>(nothing());
 
   const firstPage = 1;
-  const lastPage = pagination?.totalPages;
+  const lastPage = pagination.map(({totalPages}) => totalPages).orElse(undefined);
 
   const onSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();

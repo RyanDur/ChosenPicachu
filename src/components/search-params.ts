@@ -20,16 +20,20 @@ const decodeParams = <T>(decoders: ParamDecoders<T>, raw: Record<string, unknown
   return decoded;
 };
 
-type SearchParamsObject<T extends {[key: string]: unknown}> = Partial<T> & {
+type Given<T, D> = Partial<T> & Required<Pick<T, keyof D & keyof T>>;
+
+type SearchParamsObject<T extends {[key: string]: unknown}, D> = Given<T, D> & {
   updateSearchParams: (params: Partial<T>, options?: {replace?: boolean}) => void;
   removeSearchParams: (...params: string[]) => void;
   createSearchParams: (params: Partial<T>) => string;
 };
-export const useSearchParamsObject = <T extends {[p: string]: string | number}>(
-  decoders: ParamDecoders<T>,
-  defaults?: Partial<NoInfer<T>>
-): SearchParamsObject<T> => {
+type Params = {[p: string]: string | number};
+
+export function useSearchParamsObject<T extends Params>(decoders: ParamDecoders<T>): SearchParamsObject<T, Record<never, never>>;
+export function useSearchParamsObject<T extends Params, D extends Partial<NoInfer<T>>>(decoders: ParamDecoders<T>, defaults: D): SearchParamsObject<T, D>;
+export function useSearchParamsObject<T extends Params>(decoders: ParamDecoders<T>, defaults: Partial<T> = {}): SearchParamsObject<T, Record<never, never>> {
   const [searchParams, setSearchParams] = useSearchParams();
+  const given: Partial<T> = {...defaults, ...decodeParams(decoders, Object.fromEntries(searchParams.entries()))};
 
   const createSearchParams = (params = {}): string =>
     toQueryString({...Object.fromEntries(searchParams.entries()), ...filterEmpty(params)});
@@ -42,10 +46,9 @@ export const useSearchParamsObject = <T extends {[p: string]: string | number}>(
     setSearchParams({...Object.fromEntries(searchParams.entries()), ...filterEmpty(params)}, options);
 
   return {
-    ...defaults,
-    ...decodeParams(decoders, Object.fromEntries(searchParams.entries())),
+    ...given,
     updateSearchParams,
     createSearchParams,
     removeSearchParams
   };
-};
+}

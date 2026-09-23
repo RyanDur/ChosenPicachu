@@ -4,7 +4,7 @@ import * as schema from 'schemawax';
 import {Loading} from '@components/Loading';
 import {Image} from '@components/art-gallery/Image';
 import {useGallery} from '@components/art-gallery/Art/Context';
-import {empty, has} from '@ryandur/sand';
+import {empty, maybe} from '@ryandur/sand';
 import {useBanners} from '@components/Banners';
 import {troubleWith} from '@transport/trouble';
 import {sourceParam} from '@components/art-gallery/museums/source';
@@ -22,24 +22,25 @@ export const ArtGallery: FC = () => {
       page: 1
     });
 
-  useEffect(() => {
-    if (!has(page) || !has(size) || !has(tab)) return abandoned;
-    const {cancel} = artResource.getAll({page, size, search, source: tab})
-      .onPending(pending => pending && asked())
-      .onSuccess(answered)
-      .onFailure(error => {
-        refused();
-        raise(troubleWith('the museum')(error));
-      });
-    return () => {
-      cancel();
-      abandoned();
-    };
-  }, [page, search, tab, size, asked, answered, refused, abandoned, raise]);
+  useEffect(() => maybe(tab)
+    .map(source => {
+      const {cancel} = artResource.getAll({page, size, search, source})
+        .onPending(pending => pending && asked())
+        .onSuccess(answered)
+        .onFailure(error => {
+          refused();
+          raise(troubleWith('the museum')(error));
+        });
+      return () => {
+        cancel();
+        abandoned();
+      };
+    })
+    .orElse(abandoned), [page, search, tab, size, asked, answered, refused, abandoned, raise]);
 
   return <>
     <ul id="art-gallery">
-      {wall.reply === 'answered' && wall.answer.map((piece, index) => <li className="frame" key={piece.id}>
+      {wall.reply === 'answered' && wall.answer.pieces.map((piece, index) => <li className="frame" key={piece.id}>
         <figure>
           <div className="wall-slot">
             <Image className="piece hung" piece={piece} priority={index < 4} lazy={index >= 6}/>
@@ -49,7 +50,7 @@ export const ArtGallery: FC = () => {
       </li>)}
     </ul>
     {wall.reply === 'asked' && <Loading label="loading gallery"/>}
-    {wall.reply === 'answered' && empty(wall.answer) &&
+    {wall.reply === 'answered' && empty(wall.answer.pieces) &&
         <img className="stand-in" src={noImageGallery} alt="the museum answered with nothing"/>}
     {wall.reply === 'refused' && <img className="stand-in" src={noImageGallery} alt="the museum refused to answer"/>}
   </>;

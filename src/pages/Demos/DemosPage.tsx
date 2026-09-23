@@ -104,7 +104,7 @@ export const DemosPage = () => {
           })()}
           <ListTutorials/>
         </>
-      })[tab ?? DemoTopics.accordions]}
+      })[tab]}
     </section>
   </>;
 };

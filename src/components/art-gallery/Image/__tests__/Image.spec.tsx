@@ -36,6 +36,21 @@ describe('the image', () => {
     expect(screen.getByRole('status', {name: 'url path'})).toHaveTextContent(`${Paths.artGallery}${piece.id}`);
   });
 
+  test('a piece keeps the focus it holds while its picture arrives', () => {
+    render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><Image piece={piece}/></TestApp>);
+    screen.getByRole('link', {name: piece.title}).focus();
+
+    fireEvent.load(screen.getByAltText(piece.altText));
+
+    expect(screen.getByRole('link', {name: piece.title})).toHaveFocus();
+  });
+
+  test('a piece links to itself without a museum when the address names none it knows', () => {
+    render(<TestApp at={`${Paths.artGallery}?page=3&tab=louvre`}><Image piece={piece}/></TestApp>);
+
+    expect(screen.getByRole('link', {name: piece.title})).toHaveAttribute('href', `${Paths.artGallery}${piece.id}`);
+  });
+
   test('shows a stand-in when the picture will not load', () => {
     render(<TestApp at={`${Paths.artGallery}?page=3&tab=aic`}><Image piece={piece}/></TestApp>);
 
