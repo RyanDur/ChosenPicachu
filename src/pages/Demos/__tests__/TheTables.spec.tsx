@@ -512,6 +512,17 @@ describe('the tables demo', () => {
     expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('sort=row');
   });
 
+  test('the address holds every story the trader opens', async () => {
+    const recipe = await dragSortRecipe();
+
+    const column = await recipeFolds.press(recipe, 'The trader can sort by column');
+    const row = await recipeFolds.press(recipe, 'The trader can sort by row');
+
+    expect(column).toHaveAttribute('open');
+    expect(row).toHaveAttribute('open');
+    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('sort=column%2Crow');
+  });
+
   test('the dials travel in the url', async () => {
     const feed = await listeningFeed();
 
