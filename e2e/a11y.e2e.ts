@@ -85,6 +85,22 @@ test('only one fuller story stands open at a time', async ({page}) => {
   await expect(stories.nth(0)).not.toHaveAttribute('open', '');
 });
 
+test('the rail and its list of paths wear different surfaces', async ({page}) => {
+  await page.goto('');
+  const rail = page.getByRole('navigation', {name: 'site'});
+
+  await expect(rail).toHaveCSS('background-color', await looks(page).resolved('background-color', '--field'));
+  await expect(rail.getByRole('list')).toHaveCSS('background-color', await looks(page).resolved('background-color', '--backdrop'));
+});
+
+test('an accordion card wears the card surface, not the silk of its folds', async ({page}) => {
+  await page.goto('demos/?tab=accordions');
+  const card = page.getByRole('article').filter({has: page.getByRole('heading', {name: 'Accordion using checkboxes', exact: true})});
+
+  await expect(card).toHaveCSS('background-color', await looks(page).resolved('background-color', '--card'));
+  await expect(card.getByRole('list')).toHaveCSS('background-color', await looks(page).resolved('background-color', '--silk'));
+});
+
 const markets = [
   {trend: 'rising', sign: /^\+/, ink: '--mint-ink', prices: [50000, 50100]},
   {trend: 'falling', sign: /^-/, ink: '--internationl-orange-engineering', prices: [50100, 50000]}

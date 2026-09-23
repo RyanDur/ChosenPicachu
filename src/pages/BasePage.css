@@ -43,15 +43,13 @@
     min-height: 0;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
 
     .app-navigation {
-      position: sticky;
-      top: -1px;
       width: 100%;
       display: flex;
       flex-direction: column;
       gap: var(--base);
+      background: var(--backdrop);
 
       .path {
         font-size: var(--base-x-4);
@@ -210,9 +208,7 @@
 
     .side-nav {
       width: 100%;
-      display: flex;
       flex-direction: row;
-      justify-content: unset;
       align-items: center;
 
       .app-navigation {
@@ -220,8 +216,7 @@
         justify-content: space-around;
         align-content: center;
         padding: 0;
-
-              background-color: var(--field);
+        background: var(--field);
 
         .path {
           font-size: var(--text-title);

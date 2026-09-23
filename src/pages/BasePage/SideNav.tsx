@@ -8,7 +8,7 @@ import {Source} from '@components/art-gallery/museums/source';
 
 export const SideNav: FC = () =>
   <nav id="side-nav" className="side-nav field" aria-label="site">
-    <ul id="app-navigation" className="app-navigation backdrop">
+    <ul id="app-navigation" className="app-navigation">
       <li><Link id="navigate-home" className="path attentive field" to={Paths.home}>Home</Link></li>
       <li><Link id="navigate-demos" className="path attentive field" to={Paths.demos}>Demos</Link></li>
       <li><Link id="navigate-users" className="path attentive field" to={Paths.users}>Users</Link></li>
