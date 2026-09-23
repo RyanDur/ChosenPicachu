@@ -95,10 +95,10 @@ export const columnsOf = (arrangement: Arrangement): readonly TableColumn<Measur
     sorted: arrangement.sort?.column === name ? arrangement.sort.direction : undefined
   }));
 
-export const rowsOf = (arrangement: Arrangement, folded: readonly Measures[]): readonly Measures[] => {
-  const shown = seated(folded);
+export const rowsOf = (arrangement: Arrangement, aggregates: readonly Measures[]): readonly Measures[] => {
+  const shown = seated(aggregates);
   const valueOf = (row: string, column: string) => shown.find(({key}) => key === row)?.values[column];
-  const byWindow = new Map(folded.map(row => [row.window.display, row]));
+  const byWindow = new Map(aggregates.map(row => [row.window.display, row]));
   return standingOf(arrangement, valueOf).flatMap(key => {
     const row = byWindow.get(key);
     return row ? [row] : [];

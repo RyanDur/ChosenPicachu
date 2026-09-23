@@ -1,5 +1,5 @@
 import {has, maybe, Maybe, not} from '@ryandur/sand';
-import {ColumnWidths, neighborOf} from '@components/Table/shares';
+import {neighborOf} from '@components/Table/shares';
 import {TableColumn, ColumnDrag, ColumnShove, Labelled, Marks, RowDrag, RowShove, Settling, seatOffset, settlingAt} from './table-state';
 import {TableView} from './context';
 import {anchored} from './survey';
@@ -7,7 +7,6 @@ import {Drift} from './travel';
 
 export const selectOrder = ({columns}: TableView): readonly string[] => columns.map(({name}) => name);
 export const selectStanding = ({rows}: TableView): readonly string[] => rows.map(({key}) => key);
-export const selectWidths = ({state}: TableView): ColumnWidths | undefined => state.widths;
 export const selectColumns = ({columns}: TableView): readonly TableColumn<Labelled>[] => columns;
 
 export const columnNamed = (name: string) => ({columns}: TableView): Maybe<TableColumn<Labelled>> =>
@@ -43,8 +42,8 @@ export const columnHeld = (name: string) => (view: TableView): boolean => has(co
 
 export const columnGripped = (name: string) => ({state}: TableView): boolean => state.resizing?.column === name;
 
-export const handleDragging = (name: string) => ({state}: TableView): boolean =>
-  maybe(state.resizing).map(resizing => resizing.column === name && resizing.stage === 'dragging').orElse(false);
+export const shareTradedAt = (name: string) => ({state}: TableView): number | undefined =>
+  maybe(state.lastTrade).map(last => last.column === name ? last.share : undefined).orElse(undefined);
 
 export const rowHeld = (key: string) => (view: TableView): boolean => has(rowDrag(key)(view));
 

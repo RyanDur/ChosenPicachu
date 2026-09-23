@@ -693,6 +693,30 @@ describe('resizable columns', () => {
     expect(header('trades').style.getPropertyValue('--share')).toBe('36%');
   });
 
+  test('a dragged handle says the share it landed on', () => {
+    seat(EagerTable, 'keep static');
+    surveyed();
+    const handle = screen.getByRole('button', {name: 'resize window'});
+
+    fireEvent.pointerDown(handle, {clientX: 300, pointerId: 1});
+    fireEvent.pointerMove(handle, {clientX: 340, pointerId: 1});
+    fireEvent.pointerUp(handle, {pointerId: 1});
+
+    expect(announced()).toEqual(['window resized to 54%']);
+  });
+
+  test('a trade at one handle leaves the other handles silent', async () => {
+    seat(EagerTable, 'keep static');
+    surveyed();
+    await userEvent.click(screen.getByRole('button', {name: 'resize window'}));
+    await userEvent.keyboard('{ArrowRight}');
+
+    await userEvent.click(screen.getByRole('button', {name: /^resize trades/}));
+    await userEvent.keyboard('{ArrowRight}');
+
+    expect(announced()).toEqual(['trades resized to 35%']);
+  });
+
   test('a resize says the new share', async () => {
     seat(EagerTable, 'keep static');
     surveyed();

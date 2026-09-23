@@ -1,14 +1,23 @@
 import {expect, test} from '@playwright/test';
 import {galleryPage, looks} from './__test_support';
 
-test('on a phone the rail and its list of paths wear the same field', async ({page}) => {
+test('on a phone the list of paths wears no surface of its own, and the rail shows through', async ({page}) => {
   await page.setViewportSize({width: 412, height: 823});
   await page.goto('');
   const rail = page.getByRole('navigation', {name: 'site'});
-  const field = await looks(page).resolved('background-color', '--field');
 
-  await expect(rail).toHaveCSS('background-color', field);
-  await expect(rail.getByRole('list')).toHaveCSS('background-color', field);
+  await expect(rail).toHaveCSS('background-color', await looks(page).resolved('background-color', '--field'));
+  await expect(rail.getByRole('list')).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+});
+
+test('on a landscape phone the tab strip keeps to the short bar', async ({page}) => {
+  await page.setViewportSize({width: 844, height: 390});
+  await page.goto('demos/?tab=accordions');
+  const strip = page.getByRole('navigation', {name: 'demos'}).getByRole('list');
+  await expect(strip).toBeVisible();
+
+  const box = await strip.boundingBox();
+  expect(box?.height).toBeLessThanOrEqual(44);
 });
 
 test('the header and nav keep their height while the gallery wall is still on its way', async ({page}) => {

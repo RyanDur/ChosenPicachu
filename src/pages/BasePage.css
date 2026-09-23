@@ -215,7 +215,7 @@
         justify-content: space-around;
         align-content: center;
         padding: 0;
-        background: var(--field);
+        background: none;
 
         .path {
           font-size: var(--text-title);

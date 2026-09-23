@@ -1,5 +1,6 @@
-import {FC, useState} from 'react';
+import {FC, useEffect, useState} from 'react';
 import {Link} from 'react-router';
+import {maybe} from '@ryandur/sand';
 import {Paths} from '@pages/Paths';
 import {ChartKind, matchChartKind} from './kinds';
 import {statusCopy} from './live-trades';
@@ -30,6 +31,8 @@ const doorways: Record<ChartKind, Paths> = {
   pie: Paths.pieChartTutorial
 };
 
+const doorwayId = (kind: ChartKind): string => `doorway-${kind}`;
+
 type Props = {
   product: string;
 };
@@ -39,11 +42,21 @@ export const Workspace: FC<Props> = ({product}) => {
   const status = useDemosSelector(selectFeedStatus);
   const {seats, absentKinds, add, remove, reorder, choosePeriod} = useDesk();
   const [report, setReport] = useState('');
+  const [placing, setPlacing] = useState<{at: number; from: number}>();
   const nameAt = (at: number): string => chartNames[seats[at].kind];
   const removed = (at: number): void => {
     remove(at);
     setReport(`${nameAt(at)} removed`);
+    setPlacing({at, from: seats.length});
   };
+  useEffect(() => {
+    maybe(placing).map(({at, from}) => {
+      if (seats.length < from) {
+        maybe(seats[Math.min(at, seats.length - 1)]).map(seat => document.getElementById(doorwayId(seat.kind))?.focus());
+        setPlacing(undefined);
+      }
+    });
+  }, [placing, seats]);
   const {isArmed, arm, dress, lift, travel, release, keys, settled} =
     useChartTravel({
       seats: seats.length,
@@ -90,7 +103,7 @@ export const Workspace: FC<Props> = ({product}) => {
         onDragOver={travel}
         onDrop={event => event.preventDefault()}
         onDragEnd={release}>
-        <Link className="doorway" to={doorways[kind]} onKeyDown={keys(at)}>
+        <Link id={doorwayId(kind)} className="doorway" to={doorways[kind]} onKeyDown={keys(at)}>
           <span className="off-screen">{`${chartNames[kind]} tutorial`}</span>
         </Link>
         {plural && <Grip onArm={() => arm(at)}/>}

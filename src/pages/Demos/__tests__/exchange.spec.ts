@@ -1,5 +1,5 @@
 import {describe, expect, it, vi} from 'vitest';
-import {delay, http, HttpResponse, ws} from 'msw';
+import {http, HttpResponse, ws} from 'msw';
 import {WebSocketClientConnectionProtocol as Client} from '@mswjs/interceptors/WebSocket';
 import {HISTORY, server} from '@__test_support/server';
 import {tradeFrame} from '@pages/Demos/__test_support/feed';
@@ -9,7 +9,13 @@ import {candlesOf} from '../Charts/period-history';
 import {candlesAsked, demosStore, feedReleased, feedRequested, periodHistoryOf, selectFeedStatus, selectLiveTrades} from '../store';
 
 const candles = `${HISTORY}/products/BTC-USD/candles`;
-const settled = (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms));
+const gate = (): {opened: Promise<void>; open: () => void} => {
+  let open = (): void => undefined;
+  const opened = new Promise<void>(resolve => {
+    open = resolve;
+  });
+  return {opened, open};
+};
 
 describe('the exchange as middleware', () => {
   const coinbase = ws.link('ws://exchange.test');
@@ -102,8 +108,11 @@ describe('the exchange as middleware', () => {
   });
 
   it('a candle ask in flight is dropped when the feed is released, and no trouble is told', async () => {
+    const answer = gate();
+    let answered = false;
     server.use(http.get(candles, async () => {
-      await delay(50);
+      await answer.opened;
+      answered = true;
       return HttpResponse.json([], {status: 500});
     }));
     const told: FeedTrouble[] = [];
@@ -111,25 +120,32 @@ describe('the exchange as middleware', () => {
     store.dispatch(candlesAsked(Period.hour));
 
     store.dispatch(feedReleased());
-    await settled(150);
+    answer.open();
+    await vi.waitFor(() => expect(answered).toBe(true));
 
     expect(periodHistoryOf(Period.hour)(store.state)).toEqual({state: 'loading'});
     expect(told).toEqual([]);
   });
 
   it('asking the same period twice keeps only the later answer', async () => {
+    const answers = [gate(), gate()];
+    const answered: number[] = [];
     let asks = 0;
     server.use(http.get(candles, async () => {
       asks += 1;
       const ask = asks;
-      await delay(ask === 1 ? 100 : 10);
+      await answers[ask - 1].opened;
+      answered.push(ask);
       return HttpResponse.json([[1700000000 + ask, 1, 3, 2, 2.5, 1]]);
     }));
     const store = demosStore(exchange({tradeFeed: '', tradeHistory: HISTORY, tradeProduct: 'BTC-USD'}, () => undefined));
 
     store.dispatch(candlesAsked(Period.hour));
     store.dispatch(candlesAsked(Period.hour));
-    await settled(200);
+    answers[1].open();
+    await vi.waitFor(() => expect(answered).toEqual([2]));
+    answers[0].open();
+    await vi.waitFor(() => expect(answered).toEqual([2, 1]));
 
     expect(candlesOf(periodHistoryOf(Period.hour)(store.state)).map(({openedAt}) => openedAt)).toEqual([1700000002000]);
   });

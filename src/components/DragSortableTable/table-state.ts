@@ -74,6 +74,7 @@ export type TableState = {
   readonly rowMarks: Readonly<Record<string, Marks<RowShove>>>;
   readonly drag?: Drag;
   readonly resizing?: Resizing;
+  readonly lastTrade?: {readonly column: string; readonly share: number};
 };
 
 export const resting: TableState = {columnMarks: {}, rowMarks: {}};
@@ -90,7 +91,10 @@ export const widthsOf = ({widths}: TableState): ColumnWidths | undefined => widt
 
 export const trade = (state: TableState, column: string, neighbour: string, delta: number): TableState =>
   maybe(state.widths)
-    .map(previous => measure(state, traded(column, neighbour, delta)(previous)))
+    .map(previous => {
+      const widths = traded(column, neighbour, delta)(previous);
+      return {...measure(state, widths), lastTrade: {column, share: widths[column]}};
+    })
     .orElse(state);
 
 export const grip = (state: TableState, column: string, from: Grip): TableState =>
