@@ -1,12 +1,13 @@
-import {SubmitEvent, useState} from 'react';
-import {Maybe, nothing, some} from '@ryandur/sand';
+import {SubmitEvent} from 'react';
+import {maybe} from '@ryandur/sand';
 import {gotoTopOfPage} from '@components/scroll';
 import {paginationOf, useGallery} from '@components/art-gallery/Art/Context';
 import {numberParam, useSearchParamsObject} from '@components/search-params';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
 import './PageControl.css';
 
-const typed = (value: string): Maybe<number> => value === '' ? nothing() : some(+value);
+const typed = (form: FormData, field: string): number | undefined =>
+  maybe(form.get(field)).map(String).map(value => value === '' ? undefined : Number(value)).orElse(undefined);
 
 export const PageControl = () => {
   const pagination = paginationOf(useGallery().wall);
@@ -14,19 +15,16 @@ export const PageControl = () => {
     page: 1,
     size: defaultRecordLimit
   });
-  const [pageNumber, updatePageNumber] = useState<Maybe<number>>(nothing());
-  const [pageSize, updatePageSize] = useState<Maybe<number>>(nothing());
 
   const firstPage = 1;
   const lastPage = pagination.map(({totalPages}) => totalPages).orElse(undefined);
 
   const onSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const typedIn = new FormData(event.currentTarget);
     gotoTopOfPage();
     event.currentTarget.reset();
-    updateSearchParams({page: pageNumber.orElse(page), size: pageSize.orElse(size)});
-    updatePageNumber(nothing());
-    updatePageSize(nothing());
+    updateSearchParams({page: typed(typedIn, 'page') ?? page, size: typed(typedIn, 'size') ?? size});
   };
 
   return <form onSubmit={onSubmit} id="page-control" className="page-control backdrop">
@@ -35,15 +33,15 @@ export const PageControl = () => {
       id="go-to"
       min={firstPage}
       max={lastPage}
-      className="go-to control borderless"
-      onChange={event => updatePageNumber(typed(event.currentTarget.value))}/>
+      name="page"
+      className="go-to control borderless"/>
     <label id="per-page-label" className="per-page-label control-label field" htmlFor="per-page">{size} Per Page</label>
     <input type="number"
       className="per-page control borderless"
       min={1}
       max={100}
       id="per-page"
-      onChange={event => updatePageSize(typed(event.currentTarget.value))}/>
+      name="size"/>
     <button type="submit" id="submit-page-number" className="submit-page control borderless field bold attentive">Go
     </button>
   </form>;
