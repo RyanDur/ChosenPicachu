@@ -1,11 +1,12 @@
 import {FC, useReducer} from 'react';
 import {fireEvent, render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {Measured, Measures, measures, seated as projected} from '../../Aggregations/cells';
+import {Measured, Measures, measures} from '../../Aggregations/cells';
 import {measuresFor} from '../../Aggregations/__test_support';
 import {BodyEvents, HeaderEvents} from '@components/DragSortableTable/context';
 import {TableColumn} from '@components/DragSortableTable/table-state';
-import {arrangementOf, arrangementReducer, arrived, columnMoved, rowMoved, sorted, standingOf} from '@components/DragSortableTable/arrangement';
+import {arrangementOf, arrangementReducer, arrived, columnMoved, rowMoved, sorted} from '@components/DragSortableTable/arrangement';
+import {columnsOf, rowsOf} from '@pages/Demos/store';
 import {EagerTable} from '../EagerTable';
 import {LazyTable} from '../LazyTable';
 import {blurFocusOnMoves} from '@__test_support/focus';
@@ -23,17 +24,9 @@ const Page: FC<{Table: Table; rows: readonly Measures[]; dials: string}> = ({Tab
   const [arrangement, dispatch] = useReducer(
     arrangementReducer,
     arrangementOf(measures.map(({name}) => name), rows.map(windowOf)));
-  const shown = projected(rows);
-  const valueOf = (row: string, column: string) => shown.find(({key}) => key === row)?.values[column];
   const arranged = arrangementReducer(arrangement, arrived(rows.map(windowOf)));
-  const columns = arranged.columns.map(name => ({
-    name,
-    data: {label: name},
-    sorted: arranged.sort?.column === name ? arranged.sort.direction : undefined
-  }));
-  const standing = standingOf(arranged, valueOf).flatMap(key => rows.filter(row => windowOf(row) === key));
 
-  return <Table caption="live aggregations" className={dials} columns={columns} rows={standing}
+  return <Table caption="live aggregations" className={dials} columns={columnsOf(arranged)} rows={rowsOf(arranged, rows)}
     onColumnMoved={({column, to}) => dispatch(columnMoved(column, to))}
     onSorted={({column, direction}) => dispatch(sorted(column, direction))}
     onRowMoved={({row, to, standing: shownStanding}) => dispatch(rowMoved(row, to, shownStanding))}/>;

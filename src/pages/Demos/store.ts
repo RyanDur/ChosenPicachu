@@ -88,23 +88,26 @@ export const selectMeasures = ({trades}: DemosState): readonly Measures[] => fol
 
 export const periodHistoryOf = (period: Period) => ({candles}: DemosState): PeriodHistory => candles[period] ?? loading;
 
-export const selectColumns = ({arrangement}: DemosState): readonly TableColumn<Measured>[] =>
+export const columnsOf = (arrangement: Arrangement): readonly TableColumn<Measured>[] =>
   arrangement.columns.map(name => ({
     name,
     data: {label: name},
     sorted: arrangement.sort?.column === name ? arrangement.sort.direction : undefined
   }));
 
-export const selectRows = (state: DemosState): readonly Measures[] => {
-  const folded = selectMeasures(state);
+export const rowsOf = (arrangement: Arrangement, folded: readonly Measures[]): readonly Measures[] => {
   const shown = seated(folded);
   const valueOf = (row: string, column: string) => shown.find(({key}) => key === row)?.values[column];
   const byWindow = new Map(folded.map(row => [row.window.display, row]));
-  return standingOf(state.arrangement, valueOf).flatMap(key => {
+  return standingOf(arrangement, valueOf).flatMap(key => {
     const row = byWindow.get(key);
     return row ? [row] : [];
   });
 };
+
+export const selectColumns = ({arrangement}: DemosState): readonly TableColumn<Measured>[] => columnsOf(arrangement);
+
+export const selectRows = (state: DemosState): readonly Measures[] => rowsOf(state.arrangement, selectMeasures(state));
 
 export const selectTrades = ({trades}: DemosState): readonly Trade[] => hydrated(trades.history, trades.trades);
 export const selectLiveTrades = ({trades}: DemosState): readonly Trade[] => trades.trades;
