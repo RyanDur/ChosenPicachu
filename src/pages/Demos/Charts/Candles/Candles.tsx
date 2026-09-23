@@ -29,7 +29,8 @@ export const Candles: FC<Props> = ({trades, id = 'candle', actions, period, onPe
   const candles = mergeLive(candlesOf(history), bucketTrades(trades, bucketMs[period]), periodCap[period]);
   const bodies = candleShapes(candles, CHART_WIDTH, CANDLE_HEIGHT, bucketMs[period]);
   const bars = volumeShapes(candles, CHART_WIDTH, VOLUME_HEIGHT, bucketMs[period]);
-  return <section aria-label="candles" className="candles chart card rounded-corners lifted padded">
+  return <section aria-labelledby={`${id}-heading`} className="candles chart card rounded-corners lifted padded">
+    <h3 id={`${id}-heading`} className="off-screen">candles</h3>
     <header className="chart-header">
       {actions}
       <button type="button" className="menu-toggle rounded-corners period-toggle field caption"

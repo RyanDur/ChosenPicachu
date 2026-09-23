@@ -55,8 +55,9 @@ export const PriceChart: FC<Props> = ({trades, id = 'price', actions, period, on
   const points = sparklinePoints(view.series, CHART_WIDTH, CHART_HEIGHT, 2 * bucketMs[period]);
   const line = points.map(point => `${point.x},${point.y}`).join(' ');
   const trend = showing && trendOf(view);
-  return <section aria-label="live trades"
+  return <section aria-labelledby={`${id}-heading`}
     className={classNames('price-chart chart card rounded-corners lifted padded', trend)}>
+    <h3 id={`${id}-heading`} className="off-screen">live trades</h3>
     <header className="chart-header">
       {actions}
       <button type="button" className="menu-toggle rounded-corners period-toggle field caption"

@@ -1,4 +1,4 @@
-import {FC, ReactNode} from 'react';
+import {FC, ReactNode, useId} from 'react';
 import {notEmpty} from '@ryandur/sand';
 import {Trade} from '../coinbase';
 import {bitcoin} from '../money';
@@ -21,10 +21,12 @@ type Props = {
 };
 
 export const Pressure: FC<Props> = ({trades, actions}) => {
+  const heading = `heading${useId()}`;
   const pressures = bucketPressure(trades, BUCKET_MS).slice(-WINDOW_CAP);
   const bars = pressureShapes(pressures, CHART_WIDTH, CHART_HEIGHT, BUCKET_MS);
   const peak = heaviestSide(pressures);
-  return <section aria-label="pressure" className="pressure chart card rounded-corners lifted padded">
+  return <section aria-labelledby={heading} className="pressure chart card rounded-corners lifted padded">
+    <h3 id={heading} className="off-screen">pressure</h3>
     <header className="chart-header">
       {actions}
     </header>

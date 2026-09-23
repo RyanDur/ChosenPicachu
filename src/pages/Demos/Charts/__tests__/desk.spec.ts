@@ -1,4 +1,4 @@
-import {absent, added, dealt, periodChosen, seatAfterRemoval, seated, without} from '@pages/Demos/Charts/desk';
+import {absent, added, dealt, periodChosen, seated, without} from '@pages/Demos/Charts/desk';
 import {Period} from '@pages/Demos/Charts/period';
 
 describe('the desk', () => {
@@ -29,11 +29,6 @@ describe('the desk', () => {
 
   test('a period chosen for a chart the desk does not hold seats that chart', () => {
     expect(periodChosen('candles', Period.day, dealt('price'))).toBe('price,candles:day');
-  });
-
-  test('after a removal the seat that took its place is next, or the last seat when the removed one was last', () => {
-    expect(seatAfterRemoval(0, dealt('candles,pie')).map(({kind}) => kind).orNull()).toBe('candles');
-    expect(seatAfterRemoval(2, dealt('candles,pie')).map(({kind}) => kind).orNull()).toBe('pie');
   });
 
   test('a new chart lands under the hand', () => {

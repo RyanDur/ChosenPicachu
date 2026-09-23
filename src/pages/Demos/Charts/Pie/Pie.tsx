@@ -1,4 +1,4 @@
-import {FC, ReactNode} from 'react';
+import {FC, ReactNode, useId} from 'react';
 import {classNames} from '@components/class-names';
 import {Trade} from '../coinbase';
 import {degrees, explodedBy, sideTotals, slices, sweepGates} from './shapes';
@@ -20,9 +20,11 @@ type Props = {
 };
 
 export const Pie: FC<Props> = ({trades, actions}) => {
+  const heading = `heading${useId()}`;
   const totals = sideTotals(trades);
   const cut = slices([totals.bought, totals.sold]);
-  return <section aria-label="pie" className="pie chart card rounded-corners lifted padded">
+  return <section aria-labelledby={heading} className="pie chart card rounded-corners lifted padded">
+    <h3 id={heading} className="off-screen">pie</h3>
     <header className="chart-header">
       {actions}
     </header>

@@ -15,7 +15,8 @@ test('on a landscape phone the tab strip keeps to the short bar', async ({page})
   await page.goto('demos/?tab=accordions');
   const strip = page.getByRole('navigation', {name: 'demos'}).getByRole('list');
 
-  await expect(strip).toHaveCSS('min-height', await looks(page).resolved('min-height', '--base-x-5_5'));
+  await expect(strip).toBeVisible();
+  await expect(strip).toHaveCSS('height', await looks(page).resolved('min-height', '--base-x-5_5'));
 });
 
 test('the header and nav keep their height while the gallery wall is still on its way', async ({page}) => {

@@ -17,7 +17,7 @@ export const scriptedMarket = async (page: Page, prices: number[]): Promise<void
   });
 };
 
-export const priceCardScope = 'section[aria-label="live trades"]';
+export const priceCardScope = 'section.price-chart';
 
 export const chartsPage = (page: Page) => {
   const priceCard = page.getByRole('region', {name: 'live trades'});
