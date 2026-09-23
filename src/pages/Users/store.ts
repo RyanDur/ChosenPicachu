@@ -1,6 +1,7 @@
 import {Listener, Store, sliced, store} from '@components/store';
+import {maybe, Maybe} from '@ryandur/sand';
 import {NewUser, User, UserEdit} from '@components/Users';
-import {Arrangement, ArrangementAction, arrangementOf, arrangementReducer, movedTo, seatingOf, standingOf} from '@components/DragSortableTable/arrangement';
+import {Arrangement, ArrangementAction, arrangementOf, arrangementReducer, arrived, standingOf} from '@components/DragSortableTable/arrangement';
 import {TableColumn} from '@components/DragSortableTable/table-state';
 import {Candidate, columns, seated} from './columns';
 
@@ -28,32 +29,30 @@ export const userUpdated = ({friends: _friends, ...edit}: User): UsersAction => 
 export const userRemoved = (user: User): UsersAction => ({type: 'userRemoved', user});
 export const friendsChanged = (user: User, friends: readonly string[]): UsersAction => ({type: 'friendsChanged', user, friends});
 
-export const userWithId = (id?: string) => ({users}: UsersState): User | undefined =>
-  users.find(user => user.id === id);
+export const userWithId = (id?: string) => ({users}: UsersState): Maybe<User> =>
+  maybe(users.find(user => user.id === id));
 
 const ids = (users: readonly User[]): readonly string[] => users.map(({id}) => id);
 
 const inOrder = (users: readonly User[], order: readonly string[]): readonly User[] =>
   order.flatMap(id => users.filter(user => user.id === id));
 
-const roster = (users: readonly User[], action: UsersAction): readonly User[] => {
-  switch (action.type) {
-    case 'usersArrived': return inOrder(action.users, seatingOf(ids(users), ids(action.users)));
-    case 'rowMoved': return inOrder(users, movedTo(action.standing, action.row, action.to));
-    default: return users;
-  }
-};
+const roster = (users: readonly User[], action: UsersAction): readonly User[] =>
+  action.type === 'usersArrived' ? action.users : users;
+
+const seating = (arrangement: Arrangement, action: UsersAction): Arrangement =>
+  arrangementReducer(arrangement, action.type === 'usersArrived' ? arrived(ids(action.users)) : action);
 
 export const usersSlice = sliced<UsersState, UsersAction>({
   users: {initial: [], reduce: roster},
-  arrangement: {initial: arrangementOf(columns.map(({name}) => name)), reduce: arrangementReducer}
+  arrangement: {initial: arrangementOf(columns.map(({name}) => name)), reduce: seating}
 });
 
 const valueOf = (users: readonly User[]) => (row: string, column: string) =>
   seated(users).find(({key}) => key === row)?.values[column];
 
 export const selectUsers = ({users, arrangement}: UsersState): readonly User[] =>
-  inOrder(users, standingOf({...arrangement, rows: ids(users)}, valueOf(users)));
+  inOrder(users, standingOf(arrangement, valueOf(users)));
 
 export const selectColumns = ({arrangement}: UsersState): readonly TableColumn<Candidate>[] =>
   arrangement.columns.map(name => ({

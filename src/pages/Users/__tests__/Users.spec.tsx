@@ -9,6 +9,7 @@ import {
   aUser,
   setupUserAddedResponse,
   setupUserRemovedResponse,
+  setupUsersAnswering,
   setupUsersResponse,
   setupUserUpdatedResponse,
   usersUnreachable
@@ -27,6 +28,22 @@ describe('the users page', () => {
   });
 
   describe('ranking the users', () => {
+    it('a person without a birthday shows no age', async () => {
+      const ageless = aUser();
+      setupUsersResponse([{...ageless, info: {...ageless.info, dob: undefined}}]);
+      render(<TestApp at={Paths.users}/>);
+
+      expect(await usersTable.rowOf(fullNameOf(ageless))).not.toHaveTextContent(/old/);
+    });
+
+    it('a birthday the backend cannot spell shows no age', async () => {
+      const person = aUser();
+      setupUsersAnswering([{...person, info: {...person.info, dob: 'yesterday'}}]);
+      render(<TestApp at={Paths.users}/>);
+
+      expect(await usersTable.rowOf(fullNameOf(person))).not.toHaveTextContent(/old/);
+    });
+
     it('sorting works-from-home ascending puts every No before every Yes', async () => {
       setupUsersResponse([aUser(), aUser({work: 'home'}), aUser(), aUser({work: 'home'})]);
       render(<TestApp at={Paths.users}/>);
@@ -68,6 +85,16 @@ describe('the users page', () => {
   });
 
   describe('adding a user', () => {
+    it('an edit address for someone not in the roster opens the form to add, not to update', async () => {
+      setupUsersResponse([aUser()]);
+
+      render(<TestApp at={userAt('nobody', 'edit')}/>);
+      await usersTable.roster();
+
+      expect(within(screen.getByRole('form', {name: 'User Information'})).getByRole('button', {name: 'Add'})).toBeVisible();
+      expect(screen.queryByRole('button', {name: 'Update'})).not.toBeInTheDocument();
+    });
+
     it('adding a user who works from home sends the backend home as their work', async () => {
       const aiko = aUser({work: 'home'});
       setupUsersResponse([aUser()]);

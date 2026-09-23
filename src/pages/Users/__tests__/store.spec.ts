@@ -56,14 +56,14 @@ describe('the users store', () => {
 
     store.dispatch(userAdded(newcomer));
 
-    await vi.waitFor(() => expect(userWithId('newcomer')(store.state)).toBeDefined());
+    await vi.waitFor(() => expect(userWithId('newcomer')(store.state).isNothing).toBe(false));
     expect(sent()).toMatchObject({info: {firstName: newcomer.info.firstName}, homeAddress: newcomer.homeAddress});
   });
 
   it('a user is found by id in the roster', async () => {
     const store = await openedStore();
 
-    expect(userWithId(first.id)(store.state)?.id).toBe(first.id);
+    expect(userWithId(first.id)(store.state).map(({id}) => id).orNull()).toBe(first.id);
   });
 
   it('a user found by id shows the friends the roster now has', async () => {
@@ -72,7 +72,7 @@ describe('the users store', () => {
 
     store.dispatch(friendsChanged(first, [second.id]));
 
-    await vi.waitFor(() => expect(userWithId(first.id)(store.state)?.friends).toEqual([second.id]));
+    await vi.waitFor(() => expect(userWithId(first.id)(store.state).map(({friends}) => friends).orNull()).toEqual([second.id]));
   });
 
   it('a change of friends sends the backend the person with their new friends', async () => {
@@ -85,7 +85,7 @@ describe('the users store', () => {
   });
 
   it('no id finds no user', () => {
-    expect(userWithId(undefined)(usersStore().state)).toBeUndefined();
+    expect(userWithId(undefined)(usersStore().state).isNothing).toBe(true);
   });
 
   it('a removed user leaves the roster the backend answers', async () => {
@@ -94,7 +94,7 @@ describe('the users store', () => {
 
     store.dispatch(userRemoved(second));
 
-    await vi.waitFor(() => expect(userWithId(second.id)(store.state)).toBeUndefined());
+    await vi.waitFor(() => expect(userWithId(second.id)(store.state).isNothing).toBe(true));
   });
 
   it('an update sends the backend the friends the roster already holds', async () => {
@@ -102,7 +102,7 @@ describe('the users store', () => {
     setupUsersResponse([befriended, ...someUsers.slice(1)]);
     const store = usersStore(syncing(users, () => undefined, () => undefined));
     store.dispatch(opened());
-    await vi.waitFor(() => expect(userWithId(first.id)(store.state)?.friends).toEqual([second.id]));
+    await vi.waitFor(() => expect(userWithId(first.id)(store.state).map(({friends}) => friends).orNull()).toEqual([second.id]));
     const sent = setupUserUpdatedResponse(first.id, [befriended, ...someUsers.slice(1)]);
 
     store.dispatch(userUpdated({...first, info: {...first.info, firstName: 'Renamed'}}));
@@ -120,7 +120,7 @@ describe('the users store', () => {
 
     store.dispatch(userUpdated({...first, info: {...first.info, firstName: 'Renamed'}}));
 
-    await vi.waitFor(() => expect(userWithId(first.id)(store.state)?.info.firstName).toBe('Renamed'));
+    await vi.waitFor(() => expect(userWithId(first.id)(store.state).map(({info}) => info.firstName).orNull()).toBe('Renamed'));
     expect(saved).toHaveBeenCalledTimes(1);
   });
 });

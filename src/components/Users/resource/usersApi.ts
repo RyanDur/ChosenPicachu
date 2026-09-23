@@ -1,4 +1,5 @@
 import * as schema from 'schemawax';
+import {isValid} from 'date-fns';
 import {asyncFailure, asyncResult, asyncSuccess, maybe, Result} from '@ryandur/sand';
 import {env} from '@env';
 import {http} from '@transport/http';
@@ -23,7 +24,7 @@ const AddressDecoder = schema.object({
 const InfoDecoder = schema.object({
   required: {firstName: schema.string, lastName: schema.string, email: schema.string},
   optional: {dob: schema.string.andThen(day => new Date(day))}
-});
+}).andThen(({dob, ...info}) => isValid(dob) ? {...info, dob} : info);
 
 const UserDecoder = schema.object({
   required: {

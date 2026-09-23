@@ -11,7 +11,7 @@ type Age = {
   unit: AgeIn;
 };
 
-export const age = (dob: Date = new Date()): Age => {
+export const age = (dob: Date): Age => {
   const today = Date.now();
   const years = differenceInYears(today, dob);
   if (years === 0) {

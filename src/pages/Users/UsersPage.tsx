@@ -7,18 +7,33 @@ import * as schema from 'schemawax';
 import {users as usersApi} from '@components/Users';
 import {Paths} from '@pages/Paths';
 import {UsersTable} from './UsersTable';
-import {UsersProvider} from './Provider';
+import {UsersProvider, useUsersSelector} from './Provider';
 import {syncing} from './syncing';
-import {opened, usersStore} from './store';
+import {opened, usersStore, userWithId} from './store';
 import {UserInformation} from './UserInformation';
-import {modeOf} from './mode';
+import {openedOn} from './mode';
 import './UsersPage.css';
+
+const Rooms: FC<{id?: string; param?: string}> = ({id, param}) => {
+  const open = openedOn(param, useUsersSelector(userWithId(id)));
+  return <>
+    <section id="user-info" className="user-info users card rounded-corners lifted padded">
+      <UserInformation open={open}/>
+    </section>
+
+    <section id="user-candidates" className="user-candidates users card rounded-corners lifted padded">
+      <h2 className="roster-title title bold">User Candidates</h2>
+      {open.mode === 'viewing' &&
+          <Link to={Paths.users} id="add-new-user" className="add-new-user button primary">Add New User</Link>}
+      <UsersTable/>
+    </section>
+  </>;
+};
 
 export const UsersPage: FC = () => {
   const navigate = useNavigate();
   const {raise} = useBanners();
   const {id, mode: param} = useSearchParamsObject({id: schema.string, mode: schema.string});
-  const mode = modeOf(param);
   const [store] = useState(() => usersStore(syncing(usersApi, () => navigate(Paths.users), error => raise(troubleWith('the users')(error)))));
 
   useEffect(() => {
@@ -26,15 +41,6 @@ export const UsersPage: FC = () => {
   }, [store]);
 
   return <UsersProvider store={store}>
-    <section id="user-info" className="user-info users card rounded-corners lifted padded">
-      <UserInformation id={id} mode={mode}/>
-    </section>
-
-    <section id="user-candidates" className="user-candidates users card rounded-corners lifted padded">
-      <h2 className="roster-title title bold">User Candidates</h2>
-      {mode === 'viewing' &&
-          <Link to={Paths.users} id="add-new-user" className="add-new-user button primary">Add New User</Link>}
-      <UsersTable/>
-    </section>
+    <Rooms id={id} param={param}/>
   </UsersProvider>;
 };

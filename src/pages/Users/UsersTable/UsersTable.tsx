@@ -1,4 +1,5 @@
 import {FC} from 'react';
+import {maybe} from '@ryandur/sand';
 import {ResizeHandle} from '@components/DragSortableTable/ResizeHandle';
 import {SortMenu} from '@components/DragSortableTable/SortMenu';
 import {age, formatAge, FriendsList, UserMenu} from '@components/Users';
@@ -34,7 +35,7 @@ export const UsersTable: FC = () => {
         return <Row key={user.id} row={user.id} className="row">
           <RowHeader column="full-name" row={user.id} className="cell row-header" label={name}/>
           <Cell column="home-city" row={user.id} className="cell">{user.homeAddress.city}</Cell>
-          <Cell column="age" row={user.id} className="cell">{formatAge(age(user.info.dob))}</Cell>
+          <Cell column="age" row={user.id} className="cell">{maybe(user.info.dob).map(age).map(formatAge).orElse('')}</Cell>
           <Cell column="friends" row={user.id} className="cell">
             <FriendsList user={user} users={users} onChange={friends => dispatch(friendsChanged(user, friends))}/>
           </Cell>

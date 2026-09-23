@@ -1,5 +1,5 @@
 import {FC, useReducer} from 'react';
-import {isPersisted, NewUser, User} from '@components/Users/UserInfo/user';
+import {NewUser, User} from '@components/Users/UserInfo/user';
 import {FancyInput} from '@components/FancyFormElements/FancyInput';
 import {classNames} from '@components/class-names';
 import {FancyTextarea} from '@components/FancyFormElements/FancyTextarea';
@@ -21,14 +21,10 @@ import {drawAvatar} from './avatars';
 import {Link} from 'react-router';
 import {FancyDateInput} from '@components/FancyFormElements/FancyDateInput';
 import {isValid, parse} from 'date-fns';
-import {Mode, userAt} from '../mode';
-import {useUsersDispatch, useUsersSelector} from '../Provider';
-import {userAdded, userUpdated, userWithId} from '../store';
+import {Opened, userAt} from '../mode';
+import {useUsersDispatch} from '../Provider';
+import {userAdded, userUpdated} from '../store';
 import './Form.css';
-
-type FormProps = {
-  mode?: Mode;
-};
 
 const newUser = (): NewUser => ({
   info: {firstName: '', lastName: '', email: ''},
@@ -37,19 +33,19 @@ const newUser = (): NewUser => ({
   avatar: drawAvatar()
 });
 
-export const UserInformation: FC<FormProps & {id?: string}> = ({id, mode = 'adding'}) => {
-  const currentUser = useUsersSelector(userWithId(id));
-  return <Draft key={currentUser?.id} currentUser={currentUser} mode={mode}/>;
-};
+const shown = (open: Opened): User | undefined => open.mode === 'adding' ? open.copying : open.user;
 
-const Draft: FC<{currentUser?: User; mode: Mode}> = ({currentUser, mode}) => {
+export const UserInformation: FC<{open?: Opened}> = ({open = {mode: 'adding'}}) =>
+  <Draft key={shown(open)?.id} open={open}/>;
+
+const Draft: FC<{open: Opened}> = ({open}) => {
   const users = useUsersDispatch();
-  const [draft, dispatch] = useReducer(formReducer, currentUser, opened => draftOf(opened ?? newUser()));
+  const [draft, dispatch] = useReducer(formReducer, shown(open), started => draftOf(started ?? newUser()));
   const user = userOf(draft);
-  const readOnly = mode === 'viewing';
-  const editing = mode === 'editing';
+  const readOnly = open.mode === 'viewing';
+  const editing = open.mode === 'editing';
 
-  const reset = () => dispatch(formReset(currentUser ?? newUser()));
+  const reset = () => dispatch(formReset(shown(open) ?? newUser()));
 
   return <form id="user-info-form"
     aria-labelledby="form-title"
@@ -57,7 +53,7 @@ const Draft: FC<{currentUser?: User; mode: Mode}> = ({currentUser, mode}) => {
     onSubmit={event => {
       event.preventDefault();
 
-      if (editing && isPersisted(user)) users(userUpdated(user));
+      if (open.mode === 'editing') users(userUpdated({...open.user, ...user}));
       else users(userAdded(user));
 
       reset();
@@ -118,11 +114,11 @@ const Draft: FC<{currentUser?: User; mode: Mode}> = ({currentUser, mode}) => {
 
     {!readOnly &&
         <button id="reset-form" type="reset" className="reset button secondary">Reset</button>}
-    {readOnly && isPersisted(user) && <Link id="reset-form" to={userAt(user.id, 'edit')}
+    {open.mode === 'viewing' && <Link id="reset-form" to={userAt(open.user.id, 'edit')}
       className="reset button secondary">Edit</Link>}
     {!editing && !readOnly &&
         <button id="submit" type="submit" className="submit button primary">Add</button>}
-    {editing && isPersisted(user) && <Link id="cancel" to={userAt(user.id, 'view')}
+    {open.mode === 'editing' && <Link id="cancel" to={userAt(open.user.id, 'view')}
       className="cancel button secondary" onClick={reset}>Cancel</Link>}
     {editing && <button id="submit" type="submit" className="submit button primary">Update</button>}
 

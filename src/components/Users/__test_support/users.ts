@@ -1,4 +1,4 @@
-import {http, HttpResponse} from 'msw';
+import {http, HttpResponse, JsonBodyType} from 'msw';
 import {env} from '@env';
 import {User} from '@components/Users/UserInfo/user';
 import {server} from '@__test_support/server';
@@ -11,6 +11,9 @@ const rosterAnswers = (people: readonly User[]) => http.get(usersDomain, () => H
 
 export const setupUsersResponse = (people: readonly User[]) =>
   server.use(rosterAnswers(people));
+
+export const setupUsersAnswering = (body: JsonBodyType) =>
+  server.use(http.get(usersDomain, () => HttpResponse.json(body)));
 
 export const usersUnreachable = () =>
   server.use(
