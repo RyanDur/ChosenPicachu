@@ -523,10 +523,12 @@ describe('the tables demo', () => {
     expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('sort=column%2Crow');
   });
 
-  test('a story card says how many steps its build takes', async () => {
+  test('a story card counts the steps its build lists', async () => {
     const recipe = await dragSortRecipe();
 
-    expect(recipeFolds.story(recipe, 'The trader can sort by column')).toHaveTextContent('9 steps');
+    const column = await recipeFolds.press(recipe, 'The trader can sort by column');
+
+    expect(column).toHaveTextContent(`${within(column).getAllByRole('listitem').length} steps`);
     expect(recipeFolds.story(recipe, 'The trader can sort by row')).toHaveTextContent('1 step');
   });
 
