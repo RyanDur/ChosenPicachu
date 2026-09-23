@@ -35,10 +35,10 @@ const newUser = (): NewUser => ({
 
 const shown = (open: Opened): User | undefined => open.mode === 'adding' ? open.copying : open.user;
 
-export const UserInformation: FC<{open?: Opened; className?: string}> = ({open = {mode: 'adding'}, className}) =>
-  <Draft key={shown(open)?.id} open={open} className={className}/>;
+export const UserInformation: FC<{open?: Opened}> = ({open = {mode: 'adding'}}) =>
+  <Draft key={shown(open)?.id} open={open}/>;
 
-const Draft: FC<{open: Opened; className?: string}> = ({open, className}) => {
+const Draft: FC<{open: Opened}> = ({open}) => {
   const users = useUsersDispatch();
   const [draft, dispatch] = useReducer(formReducer, shown(open), started => draftOf(started ?? newUser()));
   const user = userOf(draft);
@@ -49,7 +49,7 @@ const Draft: FC<{open: Opened; className?: string}> = ({open, className}) => {
 
   return <form id="user-info-form"
     aria-labelledby="form-title"
-    className={classNames('user-information', className, readOnly && 'read-only')}
+    className={classNames('user-information', readOnly && 'read-only')}
     onSubmit={event => {
       event.preventDefault();
 
