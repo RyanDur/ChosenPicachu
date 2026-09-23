@@ -42,7 +42,7 @@ type Props = {track: Track; world: World; origin: Origin; motion: Motion};
 
 export const LazyRecipe: FC<Props> = ({track, world, origin, motion}) => track === 'pointer'
   ? <>
-    <Story param="sort" id="column" steps={9}
+    <Story param="sort" id="column"
       can="The trader can sort by column"
       soThat="the measures they compare sit beside each other">
       {twoRoads}
@@ -63,7 +63,7 @@ export const LazyRecipe: FC<Props> = ({track, world, origin, motion}) => track =
         {motion === 'animated' ? animatedMotion(world, headerSource, cssSource, buildSrc) : staticMotion(world, cssSource)}
       </Steps>
     </Story>
-    <Story param="sort" id="row" steps={1}
+    <Story param="sort" id="row"
       can="The trader can sort by row"
       soThat="the windows they watch closest sit on top">
       {turnedVertical}
@@ -73,7 +73,7 @@ export const LazyRecipe: FC<Props> = ({track, world, origin, motion}) => track =
     </Story>
   </>
   : <>
-    <Story param="sort" id="column" steps={3}
+    <Story param="sort" id="column"
       can="The trader can sort by column"
       soThat="the measures they compare sit beside each other">
       {accessTrack}
@@ -85,7 +85,7 @@ export const LazyRecipe: FC<Props> = ({track, world, origin, motion}) => track =
         {motion === 'animated' ? walkSlides(world, headerSource, buildSrc) : cutKey(world, headerSource, buildSrc)}
       </Steps>
     </Story>
-    <Story param="sort" id="row" steps={1}
+    <Story param="sort" id="row"
       can="The trader can sort by row"
       soThat="the windows they watch closest sit on top">
       <Steps>

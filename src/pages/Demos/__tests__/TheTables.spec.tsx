@@ -528,7 +528,7 @@ describe('the tables demo', () => {
 
     const column = await recipeFolds.press(recipe, 'The trader can sort by column');
 
-    expect(column).toHaveTextContent(`${recipeFolds.steps(column).length} steps`);
+    expect(within(column).getByText(`${recipeFolds.steps(column).length} steps`)).toBeVisible();
   });
 
   test('a story card with one step says step, not steps', async () => {

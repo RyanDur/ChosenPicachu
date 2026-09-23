@@ -226,7 +226,7 @@ const whoSubscribes = (world: World): ReactNode =>
   </Step>;
 
 export const storeStory = (world: World): ReactNode =>
-  <Story param="living" id="store" steps={5}
+  <Story param="living" id="store"
     can="The page is a store, and so is the table"
     soThat="the charts and the tables read one stream, the page owns the order it shows, and both worlds write them one way">
     <Tell>We could let each chart and each table keep its own copy of the trades, but they would

@@ -59,7 +59,7 @@ const sortedDirectly = ({world, menuSrc, buildSrc}: Build) =>
 
 const rankStory = (build: Build) => {
   const {world, source, menuSrc, tableSrc, rowSrc, buildSrc} = build;
-  return <Story param="menu" id="rank" steps={7}
+  return <Story param="menu" id="rank"
     can="The trader can sort the windows by any measure, or take the order back"
     soThat="the table ranks itself, and the hand still outranks it">
     {theImplementation(world, 'Builds', 'Frame/table/menus.ts')}

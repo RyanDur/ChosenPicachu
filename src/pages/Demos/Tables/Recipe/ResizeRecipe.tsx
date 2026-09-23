@@ -146,7 +146,7 @@ const gestureCodes: Record<World, ReactNode> = {
 };
 
 const widenStory = (world: World) =>
-  <Story param="resize" id="widen" steps={6}
+  <Story param="resize" id="widen"
     can="The trader can widen a column"
     soThat="what they read most gets the room, and the table keeps its shape">
     {theImplementation(world, 'Builds', 'Frame/table/resize.ts')}

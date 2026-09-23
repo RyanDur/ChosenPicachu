@@ -107,7 +107,7 @@ const refolds: Record<World, string> = {
 };
 
 const stillStory = (world: World) =>
-  <Story param="living" id="still" steps={1}
+  <Story param="living" id="still"
     can="The trader can read the market in a table"
     soThat="the shape is right before anything moves">
     {theImplementation(world, 'Aggregations', 'Frame/frame.main.ts')}
@@ -144,7 +144,7 @@ const stillStory = (world: World) =>
   </Story>;
 
 const flowStory = (world: World) =>
-  <Story param="living" id="flow" steps={3}
+  <Story param="living" id="flow"
     can="The trader can watch the market live, in windows"
     soThat="the numbers stay current without a single refresh">
     <Tell>The still becomes a stream. The trader arrives mid-session, so the page starts with

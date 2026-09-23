@@ -19,7 +19,7 @@ import listSource from '../LazyKeepAnimatedList/LazyKeepAnimatedList.tsx?raw';
 import itemSource from '../items/KeepItem.tsx?raw';
 
 export const LazyKeepAnimatedRecipe: FC = () => <>
-  <Story param="native" id="sort" steps={8}
+  <Story param="native" id="sort"
     can="The user can arrange the list by hand"
     soThat="it reads in the order they mean">
     {platformCurrency}

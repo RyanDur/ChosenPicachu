@@ -20,7 +20,7 @@ import itemSource from '../items/HideItem.tsx?raw';
 import cssSource from '../LazyHideStaticList/LazyHideStaticList.css?raw';
 
 export const LazyHideStaticRecipe: FC = () => <>
-  <Story param="native" id="sort" steps={8}
+  <Story param="native" id="sort"
     can="The user can arrange the list by hand"
     soThat="it reads in the order they mean">
     {platformCurrency}
