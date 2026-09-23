@@ -1,13 +1,13 @@
 import {SubmitEvent} from 'react';
-import {maybe} from '@ryandur/sand';
+import {Maybe, maybe} from '@ryandur/sand';
 import {gotoTopOfPage} from '@components/scroll';
 import {paginationOf, useGallery} from '@components/art-gallery/Art/Context';
 import {numberParam, useSearchParamsObject} from '@components/search-params';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
 import './PageControl.css';
 
-const typed = (form: FormData, field: string): number | undefined =>
-  maybe(form.get(field)).map(String).map(value => value === '' ? undefined : Number(value)).orElse(undefined);
+const typed = (form: FormData, field: string): Maybe<number> =>
+  maybe(form.get(field)).mBind(value => maybe(numberParam.decode(value)));
 
 export const PageControl = () => {
   const pagination = paginationOf(useGallery().wall);
@@ -24,7 +24,7 @@ export const PageControl = () => {
     const typedIn = new FormData(event.currentTarget);
     gotoTopOfPage();
     event.currentTarget.reset();
-    updateSearchParams({page: typed(typedIn, 'page') ?? page, size: typed(typedIn, 'size') ?? size});
+    updateSearchParams({page: typed(typedIn, 'page').orElse(page), size: typed(typedIn, 'size').orElse(size)});
   };
 
   return <form onSubmit={onSubmit} id="page-control" className="page-control backdrop">

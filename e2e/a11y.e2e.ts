@@ -85,7 +85,7 @@ test('only one fuller story stands open at a time', async ({page}) => {
   await expect(stories.nth(0)).not.toHaveAttribute('open', '');
 });
 
-test('the rail and its list of paths wear different surfaces', async ({page}) => {
+test('on a wide screen the rail and its list of paths wear different surfaces', async ({page}) => {
   await page.goto('');
   const rail = page.getByRole('navigation', {name: 'site'});
 

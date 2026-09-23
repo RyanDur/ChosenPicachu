@@ -4,7 +4,7 @@ import './Table.css';
 import {Landed} from './report';
 import {MoveReport} from './MoveReport';
 import {useTableDispatch, useTableSelector} from './context';
-import {columnGripped, neighbourOfColumn, selectOrder, selectWidths, widthOfColumn} from './selectors';
+import {columnGripped, neighbourOfColumn, resizeCarried, selectOrder, selectWidths, widthOfColumn} from './selectors';
 import {awoken, gripped, handleDragged, released, tradedBy} from './actions';
 import {grippedAt, measuredWidths, resizeArrows, resizeLabel, traded} from '@components/Table/shares';
 
@@ -16,6 +16,7 @@ export const ResizeHandle: FC<{column: string}> = ({column}) => {
   const widths = useTableSelector(selectWidths);
   const width = useTableSelector(widthOfColumn(column));
   const held = useTableSelector(columnGripped(column));
+  const moved = useTableSelector(resizeCarried(column));
   const resized = (share: number): Landed => ({axis: 'share', name: column, share});
 
   const awaken = (table: HTMLTableElement): void =>
@@ -25,7 +26,9 @@ export const ResizeHandle: FC<{column: string}> = ({column}) => {
     maybe(widths).map(current => setLanded(resized(traded(column, neighbour, delta)(current)[column])));
   };
   const release = (): void => {
-    maybe(width).map(share => setLanded(resized(share)));
+    if (moved) {
+      maybe(width).map(share => setLanded(resized(share)));
+    }
     dispatch(released());
   };
   const followed = (event: PointerEvent<HTMLElement>): void =>
@@ -52,6 +55,6 @@ export const ResizeHandle: FC<{column: string}> = ({column}) => {
       onPointerUp={held ? release : undefined}
       onPointerCancel={held ? release : undefined}
       onLostPointerCapture={held ? release : undefined}/>
-    <MoveReport landed={held ? maybe(width).map(resized).orElse(landed) : landed}/>
+    <MoveReport landed={moved ? maybe(width).map(resized).orElse(landed) : landed}/>
   </>;
 };

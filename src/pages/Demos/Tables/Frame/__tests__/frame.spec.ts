@@ -306,6 +306,35 @@ describe('the frame table', () => {
     expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent('trades resized to 15%');
   });
 
+  it('a hand drags the vanilla handle and the neighbours trade share', () => {
+    vanillaFrame.stand();
+    stubbedRects();
+    const handle = screen.getByRole('button', {name: 'resize trades'});
+
+    fireEvent.pointerDown(handle, {clientX: 100, clientY: 20, pointerId: 1});
+    fireEvent.pointerMove(handle, {buttons: 1, clientX: 140, clientY: 20, pointerId: 1});
+    fireEvent.pointerUp(handle, {pointerId: 1});
+
+    expect(screen.getByRole('columnheader', {name: /trades/}).style.getPropertyValue('--share')).toBe('17.5%');
+    expect(screen.getByRole('columnheader', {name: /buys/}).style.getPropertyValue('--share')).toBe('7.5%');
+    expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent('trades resized to 18%');
+  });
+
+  it('a resize whose pointer is cancelled stops following the pointer', () => {
+    vanillaFrame.stand();
+    stubbedRects();
+    const handle = screen.getByRole('button', {name: 'resize trades'});
+    fireEvent.pointerDown(handle, {clientX: 100, clientY: 20, pointerId: 1});
+    fireEvent.pointerMove(handle, {buttons: 1, clientX: 108, clientY: 20, pointerId: 1});
+    const shareAfterMoving = screen.getByRole('columnheader', {name: /trades/}).style.getPropertyValue('--share');
+
+    fireEvent.pointerCancel(handle, {pointerId: 1});
+    fireEvent.pointerMove(handle, {buttons: 0, clientX: 200, clientY: 20, pointerId: 1});
+
+    expect(screen.getByRole('columnheader', {name: /trades/}).style.getPropertyValue('--share')).toBe(shareAfterMoving);
+    expect(shareAfterMoving).not.toBe('12.5%');
+  });
+
   it('the sort stands while trades land', async () => {
     const feed = await listeningFeed();
     vanillaFrame.stand({feed});

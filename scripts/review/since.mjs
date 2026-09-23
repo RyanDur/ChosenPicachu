@@ -1,4 +1,4 @@
-import {has, maybe} from '@ryandur/sand';
+import {empty, has} from '@ryandur/sand';
 
 const answered = new Set(['success', 'failure']);
 
@@ -20,6 +20,13 @@ export const reviewedBefore = async (runs, jobsOf, thisRun) => {
   return undefined;
 };
 
+/**
+ * Where the review starts: a commit asked for by hand, else the last answered review, else the push's own range.
+ * @param {{asked?: string, reviewed?: string, pushed?: string}} known
+ */
+export const startFor = ({asked, reviewed, pushed}) =>
+  [asked, reviewed, pushed].map(sha => (sha ?? '').trim()).find(sha => has(sha));
+
 const github = (token, path) => fetch(`https://api.github.com/${path}`, {
   headers: {Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json'}
 }).then(response => {
@@ -27,15 +34,27 @@ const github = (token, path) => fetch(`https://api.github.com/${path}`, {
   return response.json();
 });
 
+const lastAnswered = async ({token, repository, workflow, runId}) => {
+  try {
+    const {workflow_runs: runs} = await github(token, `repos/${repository}/actions/workflows/${workflow}/runs?branch=main&per_page=30`);
+    const jobsOf = id => github(token, `repos/${repository}/actions/runs/${id}/jobs`).then(({jobs}) => jobs);
+    return await reviewedBefore(runs, jobsOf, Number(runId));
+  } catch (trouble) {
+    process.stderr.write(`the last answered review could not be found: ${trouble instanceof Error ? trouble.message : String(trouble)}\n`);
+    return undefined;
+  }
+};
+
 if (import.meta.url === `file://${process.argv[1]}`) {
   const {GH_TOKEN, GITHUB_REPOSITORY, GITHUB_RUN_ID, REVIEW_WORKFLOW, REVIEW_ASKED_FROM, REVIEW_PUSHED_FROM} = process.env;
-  const asked = maybe(REVIEW_ASKED_FROM).map(from => from.trim()).orElse('');
-  if (has(asked)) {
-    process.stdout.write(asked);
-  } else {
-    const {workflow_runs: runs} = await github(GH_TOKEN, `repos/${GITHUB_REPOSITORY}/actions/workflows/${REVIEW_WORKFLOW}/runs?branch=main&per_page=30`);
-    const jobsOf = runId => github(GH_TOKEN, `repos/${GITHUB_REPOSITORY}/actions/runs/${runId}/jobs`).then(({jobs}) => jobs);
-    const since = await reviewedBefore(runs, jobsOf, Number(GITHUB_RUN_ID));
-    process.stdout.write(since ?? REVIEW_PUSHED_FROM ?? '');
+  const asked = (REVIEW_ASKED_FROM ?? '').trim();
+  const reviewed = has(asked)
+    ? undefined
+    : await lastAnswered({token: GH_TOKEN, repository: GITHUB_REPOSITORY, workflow: REVIEW_WORKFLOW, runId: GITHUB_RUN_ID});
+  const start = startFor({asked, reviewed, pushed: REVIEW_PUSHED_FROM});
+  if (empty(start)) {
+    process.stderr.write('nowhere to start the review from\n');
+    process.exit(1);
   }
+  process.stdout.write(start);
 }

@@ -49,7 +49,7 @@ const dragging = (state: TableState, action: TableAction): TableState => {
     case 'columnLandingFound': return landColumn(state, action.neighbour);
     case 'rowLandingFound': return landRow(state, action.neighbour);
     case 'released':
-    case 'dropped': return ungrip(ground(state));
+    case 'dropped': return ground(state);
     default: return state;
   }
 };
@@ -61,6 +61,7 @@ const widths = (state: TableState, action: TableAction): TableState => {
     case 'tradedBy': return trade(state, action.column, action.neighbour, action.delta);
     case 'gripped': return grip(state, action.column, action.grip);
     case 'handleDragged': return dragHandle(state, action.neighbour, action.clientX);
+    case 'released': return ungrip(state);
     default: return state;
   }
 };

@@ -33,10 +33,6 @@ export const TableFrame: FC<Props> = ({pace, origin, motion, veiled = false, onS
   const [document, setDocument] = useState<string>();
   const [frame, setFrame] = useState<HTMLIFrameElement>();
   const [height, setHeight] = useState<number>();
-  const stood = (grown: number): void => {
-    setHeight(grown);
-    onStand();
-  };
 
   useEffect(() => {
     let standing = true;
@@ -65,7 +61,8 @@ export const TableFrame: FC<Props> = ({pace, origin, motion, veiled = false, onS
       style={has(height) ? {'--stage-block-size': `${height}px`} : undefined}
       onLoad={event => {
         setFrame(event.currentTarget);
-        measured(event.currentTarget, stood);
+        measured(event.currentTarget, setHeight);
+        onStand();
       }}
       srcDoc={document}/>
     : null;

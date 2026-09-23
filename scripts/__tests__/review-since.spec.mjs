@@ -1,4 +1,4 @@
-import {reviewedBefore} from '../review/since.mjs';
+import {reviewedBefore, startFor} from '../review/since.mjs';
 
 const run = (id, head_sha) => ({id, head_sha});
 
@@ -30,5 +30,23 @@ describe('where the review starts', () => {
     const runs = [run(2, 'c2'), run(1, 'c1')];
 
     expect(await reviewedBefore(runs, jobsBy({1: [{name: 'build_test', conclusion: 'success'}]}), 2)).toBeUndefined();
+  });
+});
+
+describe('where the review starts, given what is known', () => {
+  test('a commit named by hand wins over the last answered run', () => {
+    expect(startFor({asked: 'c9', reviewed: 'c2', pushed: 'c1'})).toBe('c9');
+  });
+
+  test('an unset input falls through to the last answered run', () => {
+    expect(startFor({asked: ' ', reviewed: 'c2', pushed: 'c1'})).toBe('c2');
+  });
+
+  test("the push's own range stands in when no review ever answered", () => {
+    expect(startFor({reviewed: undefined, pushed: 'c1'})).toBe('c1');
+  });
+
+  test('has nowhere to start when nothing is known', () => {
+    expect(startFor({})).toBeUndefined();
   });
 });

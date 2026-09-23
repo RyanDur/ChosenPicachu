@@ -87,7 +87,9 @@ jobs:
           REVIEW_WORKFLOW: build_test_deploy_separate_jobs.yml
           REVIEW_ASKED_FROM: ${{ inputs.review_from }}
           REVIEW_PUSHED_FROM: ${{ github.event.before }}
-        run: echo "REVIEW_BEFORE=$(node scripts/review/since.mjs)" >> "$GITHUB_ENV"
+        run: |
+          REVIEW_BEFORE=$(node scripts/review/since.mjs)
+          echo "REVIEW_BEFORE=$REVIEW_BEFORE" >> "$GITHUB_ENV"
       - name: The home page reviews the code
         run: |
           set -o pipefail

@@ -1,4 +1,4 @@
-import {render, screen} from '@testing-library/react';
+import {render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {ExclusiveCheckboxToggleAccordion, ExclusiveRadioToggleAccordion} from '../Accordions';
 
@@ -10,30 +10,33 @@ const toggles = [
 ];
 
 describe.each(toggles)('the exclusive toggle accordion using $accordion', ({Accordion, control}) => {
-  const open = () => screen.getAllByRole(control, {name: 'Open'});
-  const close = () => screen.getAllByRole(control, {name: 'Close'});
+  const fold = (name: string): HTMLElement => {
+    const found = screen.getAllByRole('listitem').find(item => within(item).queryByRole('heading', {name}));
+    if (found) return found;
+    throw new Error(`no fold named ${name}`);
+  };
+  const controlOf = (name: string, reads: 'Open' | 'Close'): HTMLElement =>
+    within(fold(name)).getByRole(control, {name: reads});
 
   test('should open one fold at a time', async () => {
     render(<Accordion content={folds}/>);
-    expect(open()).toHaveLength(2);
 
-    await userEvent.click(open()[0]);
-    expect(close()).toHaveLength(1);
-    expect(close()[0]).toBeChecked();
+    await userEvent.click(controlOf('Alpha', 'Open'));
+    expect(controlOf('Alpha', 'Close')).toBeChecked();
+    expect(controlOf('Beta', 'Open')).not.toBeChecked();
 
-    await userEvent.click(open()[0]);
-    expect(close()).toHaveLength(1);
-    expect(open()).toHaveLength(1);
-    expect(open()[0]).not.toBeChecked();
+    await userEvent.click(controlOf('Beta', 'Open'));
+    expect(controlOf('Beta', 'Close')).toBeChecked();
+    expect(controlOf('Alpha', 'Open')).not.toBeChecked();
   });
 
   test('should close the open fold when its own control is pressed again', async () => {
     render(<Accordion content={folds}/>);
-    await userEvent.click(open()[1]);
+    await userEvent.click(controlOf('Beta', 'Open'));
 
-    await userEvent.click(close()[0]);
+    await userEvent.click(controlOf('Beta', 'Close'));
 
-    expect(screen.queryAllByRole(control, {name: 'Close'})).toHaveLength(0);
-    open().forEach(fold => expect(fold).not.toBeChecked());
+    expect(controlOf('Beta', 'Open')).not.toBeChecked();
+    expect(controlOf('Alpha', 'Open')).not.toBeChecked();
   });
 });

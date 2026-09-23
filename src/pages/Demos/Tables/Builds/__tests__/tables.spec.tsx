@@ -649,6 +649,18 @@ describe('resizable columns', () => {
     expect(shareAfterMoving).not.toBe('50%');
   });
 
+  test('pressing a handle without moving it reports nothing', () => {
+    seat(EagerTable, 'keep static');
+    surveyed();
+    const handle = screen.getByRole('button', {name: 'resize window'});
+
+    fireEvent.pointerDown(handle, {clientX: 100, clientY: 20, pointerId: 1});
+    expect(announced()).toEqual([]);
+
+    fireEvent.pointerUp(handle, {pointerId: 1});
+    expect(announced()).toEqual([]);
+  });
+
   test('an arrow right moves the boundary and the total holds', async () => {
     seat(EagerTable, 'keep static');
     surveyed();
