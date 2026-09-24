@@ -37,6 +37,9 @@ export const rowDrag = {
     const past = to < from ? 10 : 30;
     fireEvent.pointerMove(grip, {buttons: 1, clientX: 100, clientY: HEAD + to * ROW + past, pointerId: 1});
   },
+  carryOn: (grip: Element, at: number, by: number): void => {
+    fireEvent.pointerMove(grip, {buttons: 1, clientX: 100, clientY: HEAD + at * ROW + 30 + by, pointerId: 1});
+  },
   drop: (grip: Element): void => {
     fireEvent.pointerUp(grip, {pointerId: 1});
   }
