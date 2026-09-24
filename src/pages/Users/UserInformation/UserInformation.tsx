@@ -1,7 +1,7 @@
 import {FC, useReducer} from 'react';
+import {classNames} from '@components/class-names';
 import {NewUser, User} from '@components/Users/UserInfo/user';
 import {FancyInput} from '@components/FancyFormElements/FancyInput';
-import {classNames} from '@components/class-names';
 import {FancyTextarea} from '@components/FancyFormElements/FancyTextarea';
 import {
   avatarDrawn,
@@ -24,7 +24,7 @@ import {isValid, parse} from 'date-fns';
 import {Opened, userAt} from '../mode';
 import {useUsersDispatch} from '../Provider';
 import {userAdded, userUpdated} from '../store';
-import './Form.css';
+import './UserInformation.css';
 
 const newUser = (): NewUser => ({
   info: {firstName: '', lastName: '', email: ''},
@@ -35,10 +35,10 @@ const newUser = (): NewUser => ({
 
 const shown = (open: Opened): User | undefined => open.mode === 'adding' ? open.copying : open.user;
 
-export const UserInformation: FC<{open?: Opened}> = ({open = {mode: 'adding'}}) =>
-  <Draft key={shown(open)?.id} open={open}/>;
+export const UserInformation: FC<{open?: Opened; className?: string}> = ({open = {mode: 'adding'}, className}) =>
+  <Draft key={shown(open)?.id} open={open} className={className}/>;
 
-const Draft: FC<{open: Opened}> = ({open}) => {
+const Draft: FC<{open: Opened; className?: string}> = ({open, className}) => {
   const users = useUsersDispatch();
   const [draft, dispatch] = useReducer(formReducer, shown(open), started => draftOf(started ?? newUser()));
   const user = userOf(draft);
@@ -49,7 +49,7 @@ const Draft: FC<{open: Opened}> = ({open}) => {
 
   return <form id="user-info-form"
     aria-labelledby="form-title"
-    className={classNames('user-information', readOnly && 'read-only')}
+    className={classNames('user-information', className)}
     onSubmit={event => {
       event.preventDefault();
 
@@ -104,7 +104,7 @@ const Draft: FC<{open: Opened}> = ({open}) => {
       onChange={address => dispatch(workAddressEdited(address))}>
       {!readOnly && <label className="same-as-home attentive">
         <span>Same as Home</span>
-        <input id="same-as-home" className="fancy-check" type="checkbox" checked={draft.sameAsHome}
+        <input id="same-as-home" className="fancy-check raisable" type="checkbox" checked={draft.sameAsHome}
           onChange={event => dispatch(sameAsHomeChosen(event.currentTarget.checked))}/>
       </label>}
     </Address>

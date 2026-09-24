@@ -1,7 +1,5 @@
 .user-info {
   max-width: var(--base-x-172_5);
-  display: flex;
-  flex-direction: column;
 }
 
 .users {

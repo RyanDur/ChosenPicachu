@@ -12,6 +12,17 @@ const ada: Person = {
   zip: '10001'
 };
 
+test("a new person's required fields carry a mark, and a viewed person's carry none", async ({page}) => {
+  const users = usersPage(page);
+  await page.goto('users');
+  await expect(users.names.first()).toBeVisible({timeout: 30_000});
+
+  expect(await users.requiredMarkOn('First Name')).toBe('"*"');
+  await users.view((await users.names.first().textContent()) ?? '');
+
+  await expect.poll(() => users.requiredMarkOn('First Name')).toBe('none');
+});
+
 test('a person added on the users page still stands in the roster after leaving and coming back', async ({page}) => {
   const users = usersPage(page);
   await page.goto('users');

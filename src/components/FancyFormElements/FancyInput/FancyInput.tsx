@@ -1,7 +1,6 @@
 import {FC, ChangeEvent, PropsWithChildren} from 'react';
 import {classNames} from '@components/class-names';
 import {format} from 'date-fns';
-import '../fancy.css';
 
 type FancyTextInputProps = {
   inputId: string;
@@ -44,7 +43,7 @@ export const FancyInput: FC<PropsWithChildren<FancyTextInputProps>> = (
 )}>
   <span id={labelId} className={classNames('fancy-title', 'ellipsis', 'bold', labelClass)}>{children}</span>
   <input id={inputId}
-    className={classNames('fancy-text', inputClass)}
+    className={classNames('fancy-text', 'lifted', 'raisable', inputClass)}
     pattern={pattern}
     readOnly={readOnly}
     disabled={disabled}

@@ -17,9 +17,7 @@ import './UsersPage.css';
 const Rooms: FC<{id?: string; param?: string}> = ({id, param}) => {
   const open = openedOn(param, useUsersSelector(userWithId(id)));
   return <>
-    <div className="user-info users card rounded-corners lifted padded">
-      <UserInformation open={open}/>
-    </div>
+    <UserInformation open={open} className="user-info users card rounded-corners lifted padded"/>
 
     <section id="user-candidates" aria-labelledby="roster-title" className="user-candidates users card rounded-corners lifted padded">
       <h2 id="roster-title" className="roster-title title bold">User Candidates</h2>

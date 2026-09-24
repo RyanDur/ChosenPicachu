@@ -1,7 +1,6 @@
 import {classNames} from '@components/class-names';
 import {FC, ChangeEvent} from 'react';
 import {Consumer} from '@ryandur/sand';
-import '../fancy.css';
 
 type FancyTextareaProps = {
   onChange: Consumer<ChangeEvent<HTMLTextAreaElement>>;
@@ -22,7 +21,7 @@ export const FancyTextarea: FC<FancyTextareaProps> = (
     value && 'not-empty'
   )}>
     <span id="details-label" className="fancy-title bold">Details</span>
-    <textarea name="details" className="fancy-text" id="details"
+    <textarea name="details" className="fancy-text lifted raisable" id="details"
       value={value}
       readOnly={readOnly}
       onChange={onChange}/>
