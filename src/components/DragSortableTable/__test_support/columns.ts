@@ -8,7 +8,12 @@ export type ColumnInHand = {
 
 const HEADER_Y = 20;
 
-// presses the header where the spec says and hands back the drag, which keeps the pointer where it last moved
+const noColumnInHand = (): never => {
+  throw new Error('no column is in hand');
+};
+
+export const noColumn: ColumnInHand = {carriedTo: noColumnInHand, carriedOn: noColumnInHand, dropped: noColumnInHand};
+
 export const liftedColumn = (header: Element, x: number): ColumnInHand => {
   const pointer = {x, y: HEADER_Y};
   const moveTo = (next: {x: number; y: number}): void => {
