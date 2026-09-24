@@ -19,28 +19,36 @@ export const rowsLaidOut = (table: HTMLTableElement): void => {
   });
 };
 
-// a drag surveys the table too: its box and even column widths
-export const tableSurveyed = (table: HTMLTableElement): void => {
+// a row drag reads the table's box and the rows; the columns can stand wherever the spec put them
+export const rowsSurveyed = (table: HTMLTableElement): void => {
   const height = HEAD + (table.tBodies[0]?.rows.length ?? 0) * ROW;
   table.getBoundingClientRect = () => rect({left: 0, right: 700, width: 700, top: 0, bottom: height, height});
-  within(table).getAllByRole('columnheader').forEach(head => {
-    head.getBoundingClientRect = () => rect({width: 100});
-  });
   rowsLaidOut(table);
 };
 
-export const rowDrag = {
-  lift: (grip: Element, from: number): void => {
-    fireEvent.pointerDown(grip, {clientX: 100, clientY: HEAD + from * ROW + 10, pointerId: 1});
-  },
-  carryOver: (grip: Element, from: number, to: number): void => {
-    const past = to < from ? 10 : 30;
-    fireEvent.pointerMove(grip, {buttons: 1, clientX: 100, clientY: HEAD + to * ROW + past, pointerId: 1});
-  },
-  carryOn: (grip: Element, at: number, by: number): void => {
-    fireEvent.pointerMove(grip, {buttons: 1, clientX: 100, clientY: HEAD + at * ROW + 30 + by, pointerId: 1});
-  },
-  drop: (grip: Element): void => {
-    fireEvent.pointerUp(grip, {pointerId: 1});
-  }
+export type RowInHand = {
+  readonly carriedOver: (from: number, to: number) => void;
+  readonly carriedOn: (by: number) => void;
+  readonly dropped: () => void;
+};
+
+const noRowInHand = (): never => {
+  throw new Error('no row is in hand');
+};
+
+export const nothingInHand: RowInHand = {carriedOver: noRowInHand, carriedOn: noRowInHand, dropped: noRowInHand};
+
+// presses the grip in its row's lane and hands back the drag, which keeps the pointer where it last moved
+export const liftedRow = (grip: Element, at: number): RowInHand => {
+  let y = HEAD + at * ROW + 10;
+  const moveTo = (next: number): void => {
+    y = next;
+    fireEvent.pointerMove(grip, {buttons: 1, clientX: 100, clientY: y, pointerId: 1});
+  };
+  fireEvent.pointerDown(grip, {clientX: 100, clientY: y, pointerId: 1});
+  return {
+    carriedOver: (from, to) => moveTo(HEAD + to * ROW + (to < from ? 10 : 30)),
+    carriedOn: by => moveTo(y + by),
+    dropped: () => fireEvent.pointerUp(grip, {pointerId: 1})
+  };
 };

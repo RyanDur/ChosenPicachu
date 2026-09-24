@@ -11,7 +11,7 @@ import {EagerTable} from '../EagerTable';
 import {LazyTable} from '../LazyTable';
 import {blurFocusOnMoves} from '@__test_support/focus';
 import {Column, DragSortableTable} from '@components/DragSortableTable';
-import {rect, rowDrag, rowsLaidOut, tableSurveyed} from '@components/DragSortableTable/__test_support';
+import {RowInHand, liftedRow, nothingInHand, rect, rowsLaidOut, rowsSurveyed} from '@components/DragSortableTable/__test_support';
 
 type Table = FC<HeaderEvents & BodyEvents & {caption: string; className?: string; columns: readonly TableColumn<Measured>[]; rows: readonly Measures[]}>;
 
@@ -72,14 +72,16 @@ const rowOf = (window: string): HTMLTableRowElement => {
 };
 const cellsOf = (window: string): string[] => [...rowOf(window).cells].map(ownText);
 const grip = (window: string): HTMLElement => within(rowOf(window)).getByRole('button', {name: /move row/});
-let aloft = '';
+let heldRow = '';
+let inHand: RowInHand = nothingInHand;
 const liftRow = (window: string): void => {
-  aloft = window;
-  rowDrag.lift(grip(window), windowNames().indexOf(window));
+  heldRow = window;
+  rowsSurveyed(sourceTable());
+  inHand = liftedRow(grip(window), windowNames().indexOf(window));
 };
-const carryRowOver = (target: string): void => rowDrag.carryOver(grip(aloft), windowNames().indexOf(aloft), windowNames().indexOf(target));
-const carryRowOn = (by: number): void => rowDrag.carryOn(grip(aloft), windowNames().indexOf(aloft), by);
-const dropRow = (): void => rowDrag.drop(grip(aloft));
+const carryRowOver = (target: string): void => inHand.carriedOver(windowNames().indexOf(heldRow), windowNames().indexOf(target));
+const carryRowOn = (by: number): void => inHand.carriedOn(by);
+const dropRow = (): void => inHand.dropped();
 const announced = (): string[] => screen.getAllByRole('status', {name: 'move report'}).map(({textContent}) => textContent ?? '').filter(text => text !== '');
 const menuFor = (label: string): HTMLElement => screen.getByLabelText(`${label} by`);
 
@@ -333,19 +335,13 @@ describe('columns by hand', () => {
 });
 
 describe('rows by hand', () => {
-  const surface = (): HTMLElement => grip(aloft);
-  const lift = (window: string): void => {
-    tableSurveyed(sourceTable());
-    liftRow(window);
-  };
-  const carryOver = carryRowOver;
-  const drop = dropRow;
+  const surface = (): HTMLElement => grip(heldRow);
 
   test('an eager row follows the pointer as it crosses its neighbors', () => {
     seat(EagerTable, 'keep static');
 
-    lift('this minute');
-    carryOver('last 15 minutes');
+    liftRow('this minute');
+    carryRowOver('last 15 minutes');
 
     expect(windowNames()).toEqual(['last 5 minutes', 'last 15 minutes', 'this minute', 'this hour', 'session']);
   });
@@ -362,11 +358,11 @@ describe('rows by hand', () => {
   test('a retaken pointer lands on the grip that lifted the row, never on the header cell', () => {
     seat(EagerTable, 'keep static');
     const retaken: string[] = [];
-    lift('this minute');
+    liftRow('this minute');
     grip('this minute').setPointerCapture = () => retaken.push('grip');
     rowOf('this minute').cells[0].setPointerCapture = () => retaken.push('header cell');
 
-    carryOver('last 5 minutes');
+    carryRowOver('last 5 minutes');
     fireEvent.lostPointerCapture(rowOf('this minute').cells[0], {buttons: 0, clientX: 100, clientY: 70, pointerId: 1});
 
     expect(retaken).toEqual(['grip']);
@@ -374,13 +370,13 @@ describe('rows by hand', () => {
 
   test('a row that lost the pointer keeps crossing its neighbours', () => {
     seat(EagerTable, 'keep static');
-    lift('this minute');
+    liftRow('this minute');
     grip('this minute').setPointerCapture = () => undefined;
-    carryOver('last 5 minutes');
+    carryRowOver('last 5 minutes');
     fireEvent.lostPointerCapture(rowOf('this minute').cells[0], {buttons: 0, clientX: 100, clientY: 70, pointerId: 1});
     expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
 
-    carryOver('last 15 minutes');
+    carryRowOver('last 15 minutes');
 
     expect(windowNames()).toEqual(['last 5 minutes', 'last 15 minutes', 'this minute', 'this hour', 'session']);
   });
@@ -388,28 +384,28 @@ describe('rows by hand', () => {
   test('a lazy row waits for the drop', () => {
     seat(LazyTable, 'keep static');
 
-    lift('this minute');
-    carryOver('last 15 minutes');
+    liftRow('this minute');
+    carryRowOver('last 15 minutes');
     expect(windowNames()).toEqual(windows);
 
-    drop();
+    dropRow();
     expect(windowNames()).toEqual(['last 5 minutes', 'last 15 minutes', 'this minute', 'this hour', 'session']);
   });
 
   test('a hiding row is carried, every cell of it', () => {
     seat(EagerTable, 'hide static');
 
-    lift('last 5 minutes');
+    liftRow('last 5 minutes');
 
     [...rowOf('last 5 minutes').cells].forEach(cell => expect(cell.classList).toContain('carried'));
   });
 
   test('a dropped row lands as itself', () => {
     seat(EagerTable, 'hide static');
-    lift('last 5 minutes');
+    liftRow('last 5 minutes');
 
-    carryOver('this minute');
-    drop();
+    carryRowOver('this minute');
+    dropRow();
 
     expect(carried()).toEqual([]);
     expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
@@ -418,19 +414,19 @@ describe('rows by hand', () => {
   test('a row carried back without dropping comes home', () => {
     seat(EagerTable, 'keep static');
 
-    lift('this minute');
-    carryOver('last 5 minutes');
+    liftRow('this minute');
+    carryRowOver('last 5 minutes');
     expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
 
-    carryOver('last 5 minutes');
-    drop();
+    carryRowOver('last 5 minutes');
+    dropRow();
     expect(windowNames()).toEqual(windows);
   });
 
   test('the carried row wears its offset from home on every cell', () => {
     seat(EagerTable, 'hide static');
 
-    lift('last 5 minutes');
+    liftRow('last 5 minutes');
     fireEvent.pointerMove(surface(), {buttons: 1, clientX: 100, clientY: 90, pointerId: 1});
     fireEvent.pointerMove(surface(), {buttons: 1, clientX: 100, clientY: 105, pointerId: 1});
 
@@ -438,7 +434,7 @@ describe('rows by hand', () => {
       expect(cell).toHaveClass('carried');
       expect(cell).toHaveStyle({'--seat-y': '0px', '--drift-x': '0px', '--drift-y': '15px'});
     });
-    drop();
+    dropRow();
     expect(carried()).toEqual([]);
   });
 
@@ -496,9 +492,9 @@ describe('rows by hand', () => {
     const {rerender} = render(seated(EagerTable, [], 'keep static'));
     rerender(seated(EagerTable, startingRows, 'keep static'));
 
-    lift('this minute');
-    carryOver('last 15 minutes');
-    drop();
+    liftRow('this minute');
+    carryRowOver('last 15 minutes');
+    dropRow();
 
     expect(windowNames()).toEqual(['last 5 minutes', 'last 15 minutes', 'this minute', 'this hour', 'session']);
   });
@@ -525,9 +521,9 @@ describe('rows by hand', () => {
   test('a dropped row says where it landed', () => {
     seat(EagerTable, 'keep static');
 
-    lift('this minute');
-    carryOver('last 15 minutes');
-    drop();
+    liftRow('this minute');
+    carryRowOver('last 15 minutes');
+    dropRow();
 
     expect(announced()).toEqual(['this minute moved to 3 of 5']);
   });
@@ -1051,6 +1047,36 @@ describe('animated moves', () => {
     expect(header('volume').className).not.toMatch(/shoved/);
   });
 
+  test('on release the real column settles from where the pointer let go', () => {
+    seat(EagerTable, 'hide animated');
+    spanned();
+
+    fireEvent.pointerDown(header('trades'), {clientX: 150, clientY: 20, pointerId: 1});
+    fireEvent.pointerMove(surface(), {buttons: 1, clientX: 275, clientY: 20, pointerId: 1});
+    fireEvent.pointerMove(surface(), {buttons: 1, clientX: 283, clientY: 20, pointerId: 1});
+
+    fireEvent.pointerUp(surface(), {pointerId: 1});
+
+    columnCells('trades').forEach(cell => {
+      expect(cell).toHaveClass('settling');
+      expect(cell).toHaveStyle({'--settle-x': '-100px', '--settle-drift-x': '8px'});
+    });
+  });
+
+  test('a lazy column settles from where the pointer let go', () => {
+    seat(LazyTable, 'keep animated');
+    spanned();
+
+    fireEvent.pointerDown(header('trades'), {clientX: 150, clientY: 20, pointerId: 1});
+    fireEvent.pointerMove(surface(), {buttons: 1, clientX: 375, clientY: 20, pointerId: 1});
+    fireEvent.pointerMove(surface(), {buttons: 1, clientX: 383, clientY: 20, pointerId: 1});
+
+    fireEvent.pointerUp(surface(), {pointerId: 1});
+
+    expect(header('trades')).toHaveClass('settling');
+    expect(header('trades')).toHaveStyle({'--settle-x': '-200px', '--settle-drift-x': '8px'});
+  });
+
   test('a static release leaves the same marks as an animated one', () => {
     seat(EagerTable, 'keep static');
     spanned();
@@ -1106,6 +1132,22 @@ describe('animated moves', () => {
 
   test('a dropped row settles from where the pointer let go', () => {
     seat(EagerTable, 'keep animated');
+    spanned();
+    settledRows();
+    liftRow('this minute');
+    carryRowOver('last 5 minutes');
+    carryRowOn(8);
+
+    dropRow();
+
+    [...rowOf('this minute').cells].forEach(cell => {
+      expect(cell).toHaveClass('settling');
+      expect(cell).toHaveStyle({'--settle-x': '0px', '--settle-y': '-40px', '--settle-drift-x': '0px', '--settle-drift-y': '8px'});
+    });
+  });
+
+  test('a lazy row settles from where the pointer let go', () => {
+    seat(LazyTable, 'keep animated');
     spanned();
     settledRows();
     liftRow('this minute');

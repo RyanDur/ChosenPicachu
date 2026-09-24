@@ -1,5 +1,5 @@
 import {screen, within} from '@testing-library/react';
-import {rowDrag, tableSurveyed} from '@components/DragSortableTable/__test_support';
+import {liftedRow, rowsSurveyed} from '@components/DragSortableTable/__test_support';
 import userEvent from '@testing-library/user-event';
 
 const table = (): HTMLElement => screen.getByRole('table');
@@ -39,10 +39,10 @@ export const usersTable = {
   grip: async (name: string): Promise<HTMLElement> => within(await rowOf(name)).getByRole('button', {name: /move row/}),
   dragPast: async (name: string, past: string): Promise<void> => {
     const grip = within(await rowOf(name)).getByRole('button', {name: /move row/});
-    tableSurveyed(sortable());
-    rowDrag.lift(grip, names().indexOf(name));
-    rowDrag.carryOver(grip, names().indexOf(name), names().indexOf(past));
-    rowDrag.drop(grip);
+    rowsSurveyed(sortable());
+    const held = liftedRow(grip, names().indexOf(name));
+    held.carriedOver(names().indexOf(name), names().indexOf(past));
+    held.dropped();
   },
 
   resizeHandles: (column: string): HTMLElement[] =>
