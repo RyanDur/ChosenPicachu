@@ -84,6 +84,10 @@ h1, h2, h3, h4, h5, h6, p {
     scroll-behavior: auto !important;
   }
 
+  ::details-content {
+    transition-duration: 0.01ms !important;
+  }
+
   ::view-transition-group(*),
   ::view-transition-image-pair(*),
   ::view-transition-old(*),

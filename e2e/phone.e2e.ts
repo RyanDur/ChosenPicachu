@@ -19,6 +19,32 @@ test('on a landscape phone the tab strip keeps to the short bar', async ({page})
   await expect(strip).toHaveCSS('height', await looks(page).resolved('min-height', '--base-x-5_5'));
 });
 
+test('following a link on a phone lands at the top of the next page', async ({page}) => {
+  await page.setViewportSize({width: 412, height: 823});
+  await page.goto('');
+
+  await page.getByRole('link', {name: 'Start where the demos start'}).click();
+  await expect(page.getByRole('navigation', {name: 'demos'})).toBeVisible();
+
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+});
+
+test('going back on a phone lands where the reader left', async ({page}) => {
+  await page.setViewportSize({width: 412, height: 823});
+  await page.goto('');
+  const away = page.getByRole('link', {name: 'Start where the demos start'});
+  await away.scrollIntoViewIfNeeded();
+  const left = await page.evaluate(() => window.scrollY);
+  expect(left).toBeGreaterThan(0);
+
+  await away.click();
+  await expect(page.getByRole('navigation', {name: 'demos'})).toBeVisible();
+  await page.goBack();
+
+  await expect(page.getByRole('link', {name: 'Start where the demos start'})).toBeVisible();
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
+});
+
 test('the header and nav keep their height while the gallery wall is still on its way', async ({page}) => {
   await page.setViewportSize({width: 412, height: 823});
   let hang = (): void => undefined;
