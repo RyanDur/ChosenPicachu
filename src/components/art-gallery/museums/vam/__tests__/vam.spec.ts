@@ -7,6 +7,7 @@ import {
   vamArtResponse,
   vamPieceResponse
 } from '@components/art-gallery/__test_support/fixtures';
+import {setupVAMAllArtResponse} from '@components/art-gallery/__test_support';
 import {art} from '@components/art-gallery/museums';
 import {Source} from '@components/art-gallery/museums/source';
 import {faker} from '@faker-js/faker';
@@ -17,6 +18,14 @@ describe('VAM as a source of art', () => {
       anyRequestRespondsWith(JSON.stringify(vamArtResponse));
 
       const actual = await art.getAll({page: 1, size: 8, source: Source.VAM}).orNull();
+
+      expect(actual).toEqual(fromVAMArt);
+    });
+
+    test('asks VAM for the works matching a search term', async () => {
+      setupVAMAllArtResponse(vamArtResponse, {limit: 8, page: 1, search: 'rad'});
+
+      const actual = await art.getAll({page: 1, size: 8, search: 'rad', source: Source.VAM}).orNull();
 
       expect(actual).toEqual(fromVAMArt);
     });

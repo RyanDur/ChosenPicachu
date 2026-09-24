@@ -18,7 +18,7 @@ describe('The Demos page', () => {
     const demoTabs = await screen.findByRole('navigation', {name: 'demos'});
     await userEvent.click(within(demoTabs).getByText('Charts'));
     await waitFor(() => expect(screen.getByRole('status', {name: 'feed'})).toHaveTextContent(/^live$/));
-    await feedIsSubscribed();
+    await feedIsSubscribed(feed);
     broadcast(feed, [tradeFrame(50001)]);
     expect(await within(screen.getByRole('region', {name: 'live trades'})).findByText('$50,001.00')).toBeVisible();
     await userEvent.click(within(demoTabs).getByText('Accordions'));

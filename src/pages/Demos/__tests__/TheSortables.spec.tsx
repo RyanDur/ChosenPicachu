@@ -31,7 +31,7 @@ const draggedOver = (item: string, clientX: number) => {
 const nativeRecipe = async (): Promise<HTMLElement> => {
   const feed = await listeningFeed();
   render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
-  await feedIsSubscribed();
+  await feedIsSubscribed(feed);
   return await screen.findByRole('region', {name: 'build the native drag sort yourself'});
 };
 
@@ -41,7 +41,7 @@ describe('the sortable list demo', () => {
 
     render(<TestApp at={demosAt('?tab=dragAndDrop&native=sort')} feed={feed}/>);
 
-    await feedIsSubscribed();
+    await feedIsSubscribed(feed);
     const recipe = await screen.findByRole('region', {name: 'build the native drag sort yourself'});
     expect(recipeFolds.story(recipe, 'The user can arrange the list by hand')).toHaveAttribute('open');
     expect(recipeFolds.story(recipe, 'The user can arrange the list from the keyboard')).not.toHaveAttribute('open');
@@ -52,7 +52,7 @@ describe('the sortable list demo', () => {
 
     render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
 
-    await feedIsSubscribed();
+    await feedIsSubscribed(feed);
     expect(seats()).toEqual(['A', 'B', 'C']);
     const controls = screen.getByRole('region', {name: 'list controls'});
     expect(within(controls).getByRole('radio', {name: 'Eager'})).toBeChecked();
@@ -66,7 +66,7 @@ describe('the sortable list demo', () => {
 
     render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
 
-    await feedIsSubscribed();
+    await feedIsSubscribed(feed);
     lifted('A');
     draggedOver('C', 10);
 
@@ -76,7 +76,7 @@ describe('the sortable list demo', () => {
   const lazyListWithALifted = async (): Promise<void> => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
-    await feedIsSubscribed();
+    await feedIsSubscribed(feed);
     const controls = screen.getByRole('region', {name: 'list controls'});
     await userEvent.click(within(controls).getByRole('radio', {name: 'Lazy'}));
     lifted('A');
@@ -102,7 +102,7 @@ describe('the sortable list demo', () => {
 
     render(<TestApp at={demosAt('?tab=dragAndDrop&pace=lazy&origin=keep&motion=static')} feed={feed}/>);
 
-    await feedIsSubscribed();
+    await feedIsSubscribed(feed);
     const controls = screen.getByRole('region', {name: 'list controls'});
     expect(within(controls).getByRole('radio', {name: 'Lazy'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Keep'})).toBeChecked();
@@ -115,7 +115,7 @@ describe('the sortable list demo', () => {
 
     render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
 
-    await feedIsSubscribed();
+    await feedIsSubscribed(feed);
     const grip = screen.getByRole('button', {name: 'grip for A'});
     grip.focus();
     await userEvent.keyboard('{ArrowRight}');
@@ -132,7 +132,7 @@ describe('the sortable list demo', () => {
 
     render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
 
-    await feedIsSubscribed();
+    await feedIsSubscribed(feed);
     screen.getByRole('button', {name: 'grip for A'}).focus();
     await userEvent.keyboard('{ArrowRight}');
 
@@ -145,7 +145,7 @@ describe('the sortable list demo', () => {
 
     render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
 
-    await feedIsSubscribed();
+    await feedIsSubscribed(feed);
     const grip = screen.getByRole('button', {name: 'grip for A'});
     grip.focus();
     await userEvent.keyboard('{ArrowRight}');
@@ -158,7 +158,7 @@ describe('the sortable list demo', () => {
 
     render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
 
-    await feedIsSubscribed();
+    await feedIsSubscribed(feed);
     lifted('A');
     draggedOver('C', 10);
 

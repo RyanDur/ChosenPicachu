@@ -69,7 +69,7 @@ describe('the frame table', () => {
   it('trades fold into the windows', async () => {
     const feed = await listeningFeed();
     vanillaFrame.stand({feed});
-    await feedIsSubscribed();
+    await feedIsSubscribed(feed);
 
     broadcast(feed, [tradeFrame(100), tradeFrame(101, 1700000000000 - 120000)]);
 
@@ -154,7 +154,7 @@ describe('the frame table', () => {
   it('the fold finds its columns after they move', async () => {
     const feed = await listeningFeed();
     vanillaFrame.stand({feed});
-    await feedIsSubscribed();
+    await feedIsSubscribed(feed);
     screen.getByRole('columnheader', {name: /trades/}).focus();
     await userEvent.keyboard('{ArrowRight}');
 
@@ -376,7 +376,7 @@ describe('the frame table', () => {
   it('the sort stands while trades land', async () => {
     const feed = await listeningFeed();
     vanillaFrame.stand({feed});
-    await feedIsSubscribed();
+    await feedIsSubscribed(feed);
     await userEvent.click(sortMenu('trades').getByRole('button', {name: 'descending', hidden: true}));
 
     broadcast(feed, [tradeFrame(100), tradeFrame(101, 1700000000000 - 120000)]);

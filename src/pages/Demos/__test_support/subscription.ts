@@ -1,6 +1,6 @@
 import {waitFor} from '@testing-library/react';
-import {subscribed} from './feed';
+import {Feed} from './feed';
 
-export const feedIsSubscribed = async (): Promise<void> => {
-  await waitFor(() => expect(subscribed.size).toBeGreaterThan(0));
+export const feedIsSubscribed = async (feed: Feed): Promise<void> => {
+  await waitFor(() => expect(feed.clients.size).toBeGreaterThan(0));
 };

@@ -122,18 +122,20 @@ export const heldVAMPictures = (): () => void => {
   return release;
 };
 
-export const setupClevelandAllArtResponse = (response: ClevelandAllArtResponse, limit = defaultRecordLimit) =>
+export const setupClevelandAllArtResponse = (response: ClevelandAllArtResponse, {limit, page, search}: AllArt = {limit: defaultRecordLimit, page: 1}) =>
   server.use(http.get(`${clevelandDomain}/`, ({request}) =>
     paramsMatch(request, {
-      skip: '0',
+      skip: String((page - 1) * limit),
       limit: String(limit),
-      has_image: '1'
+      has_image: '1',
+      ...(has(search) ? {q: search} : {})
     }) ? HttpResponse.json(response) : undefined));
 
-export const setupVAMAllArtResponse = (response: VAMAllArtResponse, limit = defaultRecordLimit) =>
+export const setupVAMAllArtResponse = (response: VAMAllArtResponse, {limit, page, search}: AllArt = {limit: defaultRecordLimit, page: 1}) =>
   server.use(http.get(`${vamDomain}/objects/search`, ({request}) =>
     paramsMatch(request, {
-      page: '1',
+      page: String(page),
       page_size: String(limit),
-      images_exist: 'true'
+      images_exist: 'true',
+      ...(has(search) ? {q: search} : {})
     }) ? HttpResponse.json(response) : undefined));

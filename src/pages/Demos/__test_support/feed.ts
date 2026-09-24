@@ -33,8 +33,6 @@ export const nonTradeFrame = (price: number): string => JSON.stringify({
   time: new Date(1700000000000).toISOString()
 });
 
-export const subscribed = new Set<Client>();
-
 const subscribesMatches = (raw: unknown): boolean => {
   const frame: unknown = JSON.parse(String(raw));
   return typeof frame === 'object' && frame !== null &&
@@ -69,13 +67,11 @@ export const listeningFeed = (refusing = false): Promise<Feed> => {
     }
     client.addEventListener('message', event => {
       if (subscribesMatches(event.data)) {
-        subscribed.add(client);
         clients.add(client);
       }
     });
     client.addEventListener('close', () => {
       clients.delete(client);
-      subscribed.delete(client);
     });
   }));
   return Promise.resolve({url, clients, connections: () => connections});
@@ -85,7 +81,5 @@ export const urlOf = ({url}: Feed): string => url;
 
 export const broadcast = (feed: Feed, frames: string[]): void =>
   feed.clients.forEach(socket => {
-    if (subscribed.has(socket)) {
-      frames.forEach(frame => socket.send(frame));
-    }
+    frames.forEach(frame => socket.send(frame));
   });

@@ -9,6 +9,16 @@ import {heldAICSuggestions} from '@components/art-gallery/__test_support';
 import {aicSuggestionsOf} from '@components/art-gallery/__test_support/fixtures';
 import {HTTPError} from '@transport/types';
 
+const answered = (word: string): Promise<void> => new Promise(resolve => {
+  const heard = ({request}: {request: Request}): void => {
+    if (new URL(request.url).searchParams.get('query[term][title]') === word) {
+      server.events.removeListener('request:match', heard);
+      resolve();
+    }
+  };
+  server.events.on('request:match', heard);
+});
+
 describe('search', () => {
   const searchWord = faker.lorem.word().toUpperCase();
   beforeEach(() => {
@@ -129,9 +139,11 @@ describe('search', () => {
       await waitFor(() => expect(asked).toContain('monet'));
       monetArrives();
       await waitFor(() => expect(screen.getByRole('listbox', {hidden: true})).toHaveTextContent('MONET'));
+      const monkLanded = answered('mon');
       monkArrives();
+      await monkLanded;
 
-      await waitFor(() => expect(asked).toEqual(['mon', 'monet']));
+      expect(asked).toEqual(['mon', 'monet']);
       expect(screen.getByRole('listbox', {hidden: true})).toHaveTextContent('MONET');
       expect(screen.getByRole('listbox', {hidden: true})).not.toHaveTextContent('MONK');
     } finally {
