@@ -1,6 +1,5 @@
 import {ChangeEvent, FC, useEffect, useState} from 'react';
 import {fullNameOf, User} from '@components/Users/UserInfo/user';
-import {classNames} from '@components/class-names';
 import {Consumer, has} from '@ryandur/sand';
 import {arrived, friendsReport, Membership} from './report';
 import {addFriendId, placeAfterAddition, placeAfterRemoval, removeButtonId} from './focus';
@@ -50,7 +49,7 @@ export const FriendsList: FC<Props> = ({users, user, onChange}) => {
     onChange(user.friends.filter(id => id !== friend.id));
   };
 
-  return <fieldset className={classNames('friends-list', 'shrinkable', has(friends) && 'not-empty')}>
+  return <fieldset className="friends-list shrinkable">
     <legend className="off-screen">friends of {fullNameOf(user)}</legend>
     <ul className="friends" aria-label="friends">{friends.map((friend, at) =>
       <li className="friend" key={friend.id}>

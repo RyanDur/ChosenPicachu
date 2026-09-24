@@ -47,8 +47,10 @@
   /* Light: how the shadows and glows fall */
   --light-box-shadow: 0 1px 3px var(--faint-shadow),
   0 1px 2px rgb(from var(--black) r g b / 0.24);
-  --drop-shadow: 0 14px 28px rgb(from var(--black) r g b / 0.25),
-  0 10px 10px rgb(from var(--black) r g b / 0.22);
+  --shadow-far: 0 14px 28px;
+  --shadow-near: 0 10px 10px;
+  --drop-shadow: var(--shadow-far) rgb(from var(--black) r g b / 0.25),
+  var(--shadow-near) rgb(from var(--black) r g b / 0.22);
   --raised: 0 10px 14px var(--faint-shadow);
   --press-glow: inset 0 0 5px var(--void);
   --press-glow-soft: inset 0 0 5px var(--charcoal);

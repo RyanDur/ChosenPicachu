@@ -91,7 +91,7 @@ const Draft: FC<{open: Opened; className?: string}> = ({open, className}) => {
       className="avatar borderless rounded-corners accent raisable"
       disabled={readOnly}
       onClick={() => dispatch(avatarDrawn(drawAvatar()))}>
-      <img id="avatar" src={user.avatar} width="244" height="244" fetchPriority="high" alt="avatar"/>
+      <img id="avatar" className="portrait" src={user.avatar} width="244" height="244" fetchPriority="high" alt="avatar"/>
     </button>
     <output className="off-screen"
       aria-label="avatar report">{avatarReport(draft)}</output>

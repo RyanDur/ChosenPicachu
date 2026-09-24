@@ -37,7 +37,7 @@
     box-shadow: initial;
   }
 }
-.hung { filter: drop-shadow(0 14px 28px var(--shadow)) drop-shadow(0 10px 10px var(--dark-shadow)); }
+.hung { filter: drop-shadow(var(--shadow-far) var(--shadow)) drop-shadow(var(--shadow-near) var(--dark-shadow)); }
 .backdrop { background: var(--backdrop); }
 
 .pressable {

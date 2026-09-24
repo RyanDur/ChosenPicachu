@@ -49,7 +49,7 @@
 
   .control-label:has(+ .control:hover),
   .control-label:has(+ .control:focus) {
-    background-color: var(--mint);
+    background-color: var(--approach);
   }
 
   .go-to-label,

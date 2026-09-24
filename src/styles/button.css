@@ -44,7 +44,7 @@
     display: grid;
     place-items: center;
 
-    img {
+    .icon {
       block-size: var(--base-x-2_5);
     }
 

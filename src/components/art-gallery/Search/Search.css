@@ -30,7 +30,7 @@
 
   &:has(.query:hover) .query-label,
   &:has(.query:focus) .query-label {
-    background-color: var(--mint);
+    background-color: var(--approach);
   }
 }
 

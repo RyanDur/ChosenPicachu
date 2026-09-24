@@ -48,8 +48,6 @@
 
   .thesis {
     margin: 0;
-    font-size: var(--text-body);
-    line-height: 1.55;
     text-wrap: pretty;
   }
 
@@ -73,8 +71,6 @@
 
     .paragraph {
       margin: 0;
-      font-size: var(--text-body);
-      line-height: 1.55;
       text-wrap: pretty;
     }
   }
@@ -162,9 +158,7 @@
     justify-self: end;
     align-self: start;
     padding-inline-start: 0;
-    font-size: var(--text-caption);
     font-weight: bold;
-    color: var(--ink-muted);
   }
 
   .beat-title {

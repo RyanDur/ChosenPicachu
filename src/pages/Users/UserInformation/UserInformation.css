@@ -152,7 +152,7 @@
     padding: var(--base-x-1_25);
     width: var(--base-x-25);
 
-    img {
+    .portrait {
       height: auto;
       width: var(--base-x-19);
     }
