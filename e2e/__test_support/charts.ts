@@ -30,3 +30,8 @@ export const chartsPage = (page: Page) => {
       page.getByRole('status', {name: 'feed'}).evaluate(feed => getComputedStyle(feed, '::before').backgroundColor)
   };
 };
+
+export const markets = [
+  {trend: 'rising', sign: /^\+/, ink: '--mint-ink', prices: [50000, 50100]},
+  {trend: 'falling', sign: /^-/, ink: '--international-orange-engineering', prices: [50100, 50000]}
+];
