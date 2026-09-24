@@ -63,7 +63,7 @@
       border-radius: var(--radius-soft);
 
       &:user-invalid {
-        border: var(--hairline) solid var(--international-orange-engineering);
+        border: var(--hairline) solid var(--alarm-ink);
         box-shadow: var(--drop-shadow);
       }
 

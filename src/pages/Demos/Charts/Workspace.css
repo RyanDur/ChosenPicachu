@@ -46,7 +46,7 @@
     }
 
     &.failed::before {
-      background: var(--international-orange-engineering);
+      background: var(--alarm-ink);
     }
   }
 }
@@ -150,4 +150,3 @@
 .chart-slot:hover .remove-chart {
   opacity: 1;
 }
-

@@ -35,14 +35,15 @@ const github = (token, path) => fetch(`https://api.github.com/${path}`, {
  * The last commit the reviewer answered, or nothing when GitHub cannot be asked.
  * @param {(path: string) => Promise<any>} fetching
  * @param {{repository?: string, workflow?: string, runId?: string}} run
+ * @param {(trouble: string) => void} warn
  */
-export const lastAnswered = async (fetching, {repository, workflow, runId}) => {
+export const lastAnswered = async (fetching, {repository, workflow, runId}, warn) => {
   try {
     const {workflow_runs: runs} = await fetching(`repos/${repository}/actions/workflows/${workflow}/runs?branch=main&per_page=30`);
     const jobsOf = id => fetching(`repos/${repository}/actions/runs/${id}/jobs`).then(({jobs}) => jobs);
     return await reviewedBefore(runs, jobsOf, Number(runId));
   } catch (trouble) {
-    process.stderr.write(`the last answered review could not be found: ${trouble instanceof Error ? trouble.message : String(trouble)}\n`);
+    warn(`the last answered review could not be found: ${trouble instanceof Error ? trouble.message : String(trouble)}`);
     return undefined;
   }
 };
@@ -52,7 +53,11 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const asked = (REVIEW_ASKED_FROM ?? '').trim();
   const reviewed = has(asked)
     ? undefined
-    : await lastAnswered(path => github(GH_TOKEN, path), {repository: GITHUB_REPOSITORY, workflow: REVIEW_WORKFLOW, runId: GITHUB_RUN_ID});
+    : await lastAnswered(
+      path => github(GH_TOKEN, path),
+      {repository: GITHUB_REPOSITORY, workflow: REVIEW_WORKFLOW, runId: GITHUB_RUN_ID},
+      trouble => process.stderr.write(`${trouble}\n`)
+    );
   const start = startFor({asked, reviewed, pushed: REVIEW_PUSHED_FROM});
   if (empty(start)) {
     process.stderr.write('nowhere to start the review from\n');

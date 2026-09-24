@@ -53,8 +53,10 @@ describe('where the review starts, given what is known', () => {
 
 describe('asking GitHub for the last answered review', () => {
   test('a GitHub that cannot be asked leaves the review to the push\'s own range', async () => {
-    const reviewed = await lastAnswered(() => Promise.reject(new Error('502 from runs')), {repository: 'r', workflow: 'w', runId: '3'});
+    const warned = [];
+    const reviewed = await lastAnswered(() => Promise.reject(new Error('502 from runs')), {repository: 'r', workflow: 'w', runId: '3'}, trouble => warned.push(trouble));
 
     expect(startFor({reviewed, pushed: 'c1'})).toBe('c1');
+    expect(warned).toEqual(['the last answered review could not be found: 502 from runs']);
   });
 });
