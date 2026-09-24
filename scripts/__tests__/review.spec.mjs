@@ -122,6 +122,7 @@ describe('the review prompt', () => {
     expect(prompt).toContain('Every entry says what it stands on.');
     expect(prompt).toContain('Code is evidence of what it does, never of why it exists.');
     expect(prompt).toContain('A violation stands on what you read.');
+    expect(prompt).toContain('You read and never run, so a claim that only a run would settle says so');
     expect(prompt).toContain('A reason a commit message gives is a claim to check, not a conclusion to confirm.');
   });
 });
