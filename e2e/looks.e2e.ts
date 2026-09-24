@@ -107,15 +107,15 @@ for (const {trend, sign, prices} of markets) {
 
 test('banners stacked sideways settle to the height of their news', async ({page}) => {
   await page.goto('demos/?tab=z-index');
-  await page.getByText('Left', {exact: true}).nth(2).click();
+  const stack = page.getByRole('group', {name: 'stack'});
+  await stack.getByText('Left', {exact: true}).click();
+  await expect(stack.getByRole('radio', {name: 'Left'})).toBeChecked();
   await page.getByRole('button', {name: 'raise a banner'}).click();
   await page.getByRole('button', {name: 'raise a banner'}).click();
   const news = page.getByRole('alert').getByRole('paragraph');
   await expect(news).toHaveCount(2);
 
-  const settled = () => news.evaluateAll(paragraphs => paragraphs.every(paragraph =>
-    paragraph instanceof HTMLElement &&
-    Math.round(paragraph.getBoundingClientRect().height) === paragraph.scrollHeight + paragraph.offsetHeight - paragraph.clientHeight));
+  const settled = () => news.evaluateAll(paragraphs => paragraphs.every(paragraph => paragraph.clientHeight === paragraph.scrollHeight));
 
   await expect.poll(settled).toBe(true);
 });

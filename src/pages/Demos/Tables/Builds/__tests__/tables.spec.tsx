@@ -11,6 +11,7 @@ import {EagerTable} from '../EagerTable';
 import {LazyTable} from '../LazyTable';
 import {blurFocusOnMoves} from '@__test_support/focus';
 import {Column, DragSortableTable} from '@components/DragSortableTable';
+import {rect, rowDrag} from '@components/DragSortableTable/__test_support';
 
 type Table = FC<HeaderEvents & BodyEvents & {caption: string; className?: string; columns: readonly TableColumn<Measured>[]; rows: readonly Measures[]}>;
 
@@ -71,9 +72,6 @@ const rowOf = (window: string): HTMLTableRowElement => {
 };
 const cellsOf = (window: string): string[] => [...rowOf(window).cells].map(ownText);
 const grip = (window: string): HTMLElement => within(rowOf(window)).getByRole('button', {name: /move row/});
-const rect = (box: Partial<DOMRect>): DOMRect => ({
-  left: 0, right: 0, top: 0, bottom: 0, width: 0, height: 0, x: 0, y: 0, toJSON: () => ({}), ...box
-});
 const announced = (): string[] => screen.getAllByRole('status', {name: 'move report'}).map(({textContent}) => textContent ?? '').filter(text => text !== '');
 const menuFor = (label: string): HTMLElement => screen.getByLabelText(`${label} by`);
 
@@ -327,31 +325,17 @@ describe('columns by hand', () => {
 });
 
 describe('rows by hand', () => {
-  const surveyed = (): void => {
-    sourceTable().getBoundingClientRect = () => rect({left: 0, right: 700, width: 700, top: 0, bottom: 240, height: 240});
-    within(sourceTable()).getAllByRole('columnheader').forEach(head => {
-      head.getBoundingClientRect = () => rect({width: 100});
-    });
-    lanes().forEach((lane, at) => {
-      lane.getBoundingClientRect = () => rect({left: 0, right: 700, width: 700, top: 40 + at * 40, y: 40 + at * 40, bottom: 80 + at * 40, height: 40});
-    });
-  };
   let aloft = '';
-  const surface = (): Element => grip(aloft);
+  const surface = (): HTMLElement => grip(aloft);
   const lift = (window: string): void => {
     aloft = window;
-    surveyed();
-    fireEvent.pointerDown(grip(window), {clientX: 100, clientY: 50, pointerId: 1});
+    rowDrag.lift(grip(window), sourceTable());
   };
   const carryOver = (target: string): void => {
     const names = windowNames();
-    const at = names.indexOf(target);
-    const past = at < names.indexOf(aloft) ? 10 : 30;
-    fireEvent.pointerMove(surface(), {buttons: 1, clientX: 100, clientY: 40 + at * 40 + past, pointerId: 1});
+    rowDrag.carryOver(surface(), names.indexOf(aloft), names.indexOf(target));
   };
-  const drop = (): void => {
-    fireEvent.pointerUp(surface(), {pointerId: 1});
-  };
+  const drop = (): void => rowDrag.drop(surface());
 
   test('an eager row follows the pointer as it crosses its neighbors', () => {
     seat(EagerTable, 'keep static');

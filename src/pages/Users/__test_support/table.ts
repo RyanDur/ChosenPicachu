@@ -1,7 +1,13 @@
-import {screen, within, fireEvent} from '@testing-library/react';
+import {screen, within} from '@testing-library/react';
+import {rowDrag} from '@components/DragSortableTable/__test_support';
 import userEvent from '@testing-library/user-event';
 
 const table = (): HTMLElement => screen.getByRole('table');
+const sortable = (): HTMLTableElement => {
+  const found = table();
+  if (!(found instanceof HTMLTableElement)) throw new Error('the roster is not a table');
+  return found;
+};
 
 const rowOf = (name: string): Promise<HTMLElement> =>
   within(table()).findByRole('row', {name: heard => heard.startsWith(name)});
@@ -16,21 +22,6 @@ const worksFromHome = (row: HTMLElement): string =>
 
 const actionOn = async (name: string, action: string, role: 'link' | 'button'): Promise<void> =>
   userEvent.click(within(await rowOf(name)).getByRole(role, {name: action, hidden: true}));
-
-const rect = (box: Partial<DOMRect>): DOMRect => ({
-  left: 0, right: 0, top: 0, bottom: 0, width: 0, height: 0, x: 0, y: 0, toJSON: () => ({}), ...box
-});
-
-const surveyed = (): void => {
-  const height = 40 + rows().length * 40;
-  table().getBoundingClientRect = () => rect({left: 0, right: 700, width: 700, top: 0, bottom: height, height});
-  within(table()).getAllByRole('columnheader').forEach(head => {
-    head.getBoundingClientRect = () => rect({width: 100});
-  });
-  rows().forEach((lane, at) => {
-    lane.getBoundingClientRect = () => rect({left: 0, right: 700, width: 700, top: 40 + at * 40, y: 40 + at * 40, bottom: 80 + at * 40, height: 40});
-  });
-};
 
 export const usersTable = {
   rowOf,
@@ -47,12 +38,10 @@ export const usersTable = {
   grips: (): HTMLElement[] => within(table()).getAllByRole('button', {name: /move row/}),
   grip: async (name: string): Promise<HTMLElement> => within(await rowOf(name)).getByRole('button', {name: /move row/}),
   dropBelow: async (name: string, below: string): Promise<void> => {
-    surveyed();
     const grip = within(await rowOf(name)).getByRole('button', {name: /move row/});
-    const landing = names().indexOf(below);
-    fireEvent.pointerDown(grip, {clientX: 100, clientY: 50, pointerId: 1});
-    fireEvent.pointerMove(grip, {buttons: 1, clientX: 100, clientY: 40 + landing * 40 + 30, pointerId: 1});
-    fireEvent.pointerUp(grip, {pointerId: 1});
+    rowDrag.lift(grip, sortable());
+    rowDrag.carryOver(grip, names().indexOf(name), names().indexOf(below));
+    rowDrag.drop(grip);
   },
 
   resizeHandles: (column: string): HTMLElement[] =>
