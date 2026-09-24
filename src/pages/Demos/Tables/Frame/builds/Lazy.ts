@@ -1,15 +1,47 @@
 import {has, is, maybe} from '@ryandur/sand';
 import {unconfigured} from '@env';
 import {Direction} from '@components/DragSortableTable/sorting';
-import {anchored, columnUnder, displacedBetween, gripLabel, interior, rowUnder, spanCrossed} from '@components/DragSortableTable/survey';
-import {Moving, lazyTravel, pointerTravel} from '@components/DragSortableTable/travel';
-import {Grab, columnLift, rowLift} from '@components/DragSortableTable/lift';
+import {
+  anchored,
+  columnUnder,
+  displacedBetween,
+  gripLabel,
+  interior,
+  rowUnder,
+  spanCrossed
+} from '@components/DragSortableTable/survey';
+import {lazyTravel, Moving, pointerTravel} from '@components/DragSortableTable/travel';
+import {columnLift, Grab, rowLift} from '@components/DragSortableTable/lift';
 import {columnArrows, rowArrows} from '@components/DragSortableTable/arrows';
 import {Seated} from '@components/DragSortableTable/table-state';
 import {store} from '@components/store';
 import {isMeasure, seated} from '@pages/Demos/Tables/Aggregations/cells';
 import {
-  Arrangement, Carry, Landed, MountedTable, TableState, arrangementOf, arrangementReducer, lifted, changed, columnMoved, columnOf, columnLandingFound, demosStore, drifted, feedRequested, moveReport, released, rowLandingFound, rowMoved, selectMeasures, settlingAt, settlingFromSeat, sorted, standingOf, tableStore
+  Arrangement,
+  arrangementOf,
+  arrangementReducer,
+  Carry,
+  changed,
+  columnLandingFound,
+  columnMoved,
+  columnOf,
+  demosStore,
+  drifted,
+  feedRequested,
+  Landed,
+  lifted,
+  MountedTable,
+  moveReport,
+  released,
+  rowLandingFound,
+  rowMoved,
+  selectMeasures,
+  settlingAt,
+  settlingFromSeat,
+  sorted,
+  standingOf,
+  TableState,
+  tableStore
 } from '../table/table-state';
 import {exchange} from '@pages/Demos/exchange';
 import {keepingFocus} from '../table/focus';
@@ -228,7 +260,10 @@ const mount = (document: Document, table: HTMLTableElement, body: HTMLTableSecti
     ['pointerup', 'pointercancel'].forEach(ending => holder.addEventListener(ending, drop));
   };
 
-  const choose = (column: string) => (direction?: Direction): void => arrangement.dispatch(sorted(column, direction));
+  const choose = (column: string) => (direction?: Direction): void => {
+    arrangement.dispatch(sorted(column, direction));
+    report({axis: 'sort', name: column, direction});
+  };
 
   sortable.forEach(column => wireMenu(document, column, choose(column)));
   wireResize(mounted);

@@ -46,6 +46,16 @@ describe('the frame table', () => {
     expect(screen.getByRole('columnheader', {name: /buys/})).not.toHaveAttribute('aria-sort');
   });
 
+  it('choosing a sort says it', async () => {
+    vanillaFrame.stand();
+
+    await userEvent.click(sortMenu('buys').getByRole('button', {name: 'ascending', hidden: true}));
+    expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent('buys sorted ascending');
+
+    await userEvent.click(sortMenu('buys').getByRole('button', {name: 'reset', hidden: true}));
+    expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent('buys sort reset');
+  });
+
   it('a new sort releases the old column', async () => {
     vanillaFrame.stand();
 
@@ -293,7 +303,7 @@ describe('the frame table', () => {
 
     expect(screen.getByRole('columnheader', {name: /trades/})).toHaveAttribute('aria-sort', 'ascending');
     expect(windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
-    expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent(/^$/);
+    expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent('trades sorted ascending');
   });
 
   it('the keyboard trades shares between neighbours', async () => {
