@@ -74,10 +74,10 @@ export const columnMovedBeside = (name: string, neighbour: string, widths: Reado
   ({type: 'columnMovedBeside', name, neighbour, widths, order});
 export const columnWalkedTo = (name: string, to: number, widths: Readonly<Record<string, number>>, order: readonly string[]): Action =>
   ({type: 'columnWalkedTo', name, to, widths, order});
-type Named = {readonly row: string; readonly label: string};
+type LabelledRow = {readonly row: string; readonly label: string};
 
-export const rowMovedBeside = ({row, label}: Named, neighbour: string, heights: Readonly<Record<string, number>>, standing: readonly string[]): Action =>
+export const rowMovedBeside = ({row, label}: LabelledRow, neighbour: string, heights: Readonly<Record<string, number>>, standing: readonly string[]): Action =>
   ({type: 'rowMovedBeside', row, label, neighbour, heights, standing});
-export const rowWalkedTo = ({row, label}: Named, to: number, heights: Readonly<Record<string, number>>, standing: readonly string[]): Action =>
+export const rowWalkedTo = ({row, label}: LabelledRow, to: number, heights: Readonly<Record<string, number>>, standing: readonly string[]): Action =>
   ({type: 'rowWalkedTo', row, label, to, heights, standing});
 export const sortChosen = (column: string, direction?: Direction): Action => ({type: 'sortChosen', column, direction});

@@ -31,7 +31,7 @@ export const chartsPage = (page: Page) => {
   };
 };
 
-export const markets = [
-  {trend: 'rising', sign: /^\+/, ink: '--mint-ink', prices: [50000, 50100]},
-  {trend: 'falling', sign: /^-/, ink: '--international-orange-engineering', prices: [50100, 50000]}
+export const markets: readonly {trend: 'rising' | 'falling'; sign: RegExp; prices: number[]}[] = [
+  {trend: 'rising', sign: /^\+/, prices: [50000, 50100]},
+  {trend: 'falling', sign: /^-/, prices: [50100, 50000]}
 ];

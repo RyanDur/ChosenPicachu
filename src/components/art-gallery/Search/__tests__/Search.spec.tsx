@@ -111,7 +111,7 @@ describe('search', () => {
     }
   });
 
-  it("a late answer for an old word never lands over the new word's suggestions", async () => {
+  it("the page gives up on an old word's answer, so it cannot land over the new word's suggestions", async () => {
     const asked: string[] = [];
     const noted = ({request}: {request: Request}) => {
       const word = new URL(request.url).searchParams.get('query[term][title]');

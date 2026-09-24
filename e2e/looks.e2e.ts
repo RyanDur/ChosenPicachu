@@ -91,7 +91,9 @@ test('the feed dot glows live', async ({page}) => {
   await expect.poll(() => charts.feedDot()).toBe(await looks(page).ink('--mint'));
 });
 
-for (const {trend, sign, ink, prices} of markets) {
+const inks = {rising: '--mint-ink', falling: '--international-orange-engineering'};
+
+for (const {trend, sign, prices} of markets) {
   test(`the ${trend} price card wears its ink`, async ({page}) => {
     const charts = chartsPage(page);
     await scriptedMarket(page, prices);
@@ -99,6 +101,21 @@ for (const {trend, sign, ink, prices} of markets) {
 
     await expect(charts.priceDelta).toBeVisible({timeout: 30_000});
     await expect(charts.priceDelta).toHaveText(sign);
-    await expect(charts.priceDelta).toHaveCSS('color', await looks(page).ink(ink));
+    await expect(charts.priceDelta).toHaveCSS('color', await looks(page).ink(inks[trend]));
   });
 }
+
+test('banners stacked sideways settle to the height of their news', async ({page}) => {
+  await page.goto('demos/?tab=z-index');
+  await page.getByText('Left', {exact: true}).nth(2).click();
+  await page.getByRole('button', {name: 'raise a banner'}).click();
+  await page.getByRole('button', {name: 'raise a banner'}).click();
+  const news = page.getByRole('alert').getByRole('paragraph');
+  await expect(news).toHaveCount(2);
+
+  const settled = () => news.evaluateAll(paragraphs => paragraphs.every(paragraph =>
+    paragraph instanceof HTMLElement &&
+    Math.round(paragraph.getBoundingClientRect().height) === paragraph.scrollHeight + paragraph.offsetHeight - paragraph.clientHeight));
+
+  await expect.poll(settled).toBe(true);
+});
