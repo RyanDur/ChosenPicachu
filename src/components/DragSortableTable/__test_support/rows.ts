@@ -27,16 +27,17 @@ export const rowsSurveyed = (table: HTMLTableElement): void => {
 };
 
 export type RowInHand = {
+  readonly carryStarted: () => void;
   readonly carriedOver: (from: number, to: number) => void;
   readonly carriedOn: (by: number) => void;
   readonly dropped: () => void;
 };
 
-const noRowInHand = (): never => {
+const nobody = (): never => {
   throw new Error('no row is in hand');
 };
 
-export const nothingInHand: RowInHand = {carriedOver: noRowInHand, carriedOn: noRowInHand, dropped: noRowInHand};
+export const noRowInHand: RowInHand = {carryStarted: nobody, carriedOver: nobody, carriedOn: nobody, dropped: nobody};
 
 // presses the grip in its row's lane and hands back the drag, which keeps the pointer where it last moved
 export const liftedRow = (grip: Element, at: number): RowInHand => {
@@ -47,6 +48,8 @@ export const liftedRow = (grip: Element, at: number): RowInHand => {
   };
   fireEvent.pointerDown(grip, {clientX: 100, clientY: y, pointerId: 1});
   return {
+    // the drag takes its origin from the first move, not the press
+    carryStarted: () => moveTo(y),
     carriedOver: (from, to) => moveTo(HEAD + to * ROW + (to < from ? 10 : 30)),
     carriedOn: by => moveTo(y + by),
     dropped: () => fireEvent.pointerUp(grip, {pointerId: 1})

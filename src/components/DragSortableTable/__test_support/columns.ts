@@ -1,18 +1,20 @@
 import {fireEvent} from '@testing-library/react';
 
 export type ColumnInHand = {
+  readonly carryStarted: () => void;
   readonly carriedTo: (x: number) => void;
   readonly carriedOn: (by: {x?: number; y?: number}) => void;
+  readonly captureLostAt: (x: number) => void;
   readonly dropped: () => void;
 };
 
 const HEADER_Y = 20;
 
-const noColumnInHand = (): never => {
+const nobody = (): never => {
   throw new Error('no column is in hand');
 };
 
-export const noColumn: ColumnInHand = {carriedTo: noColumnInHand, carriedOn: noColumnInHand, dropped: noColumnInHand};
+export const noColumnInHand: ColumnInHand = {carryStarted: nobody, carriedTo: nobody, carriedOn: nobody, captureLostAt: nobody, dropped: nobody};
 
 export const liftedColumn = (header: Element, x: number): ColumnInHand => {
   const pointer = {x, y: HEADER_Y};
@@ -23,7 +25,10 @@ export const liftedColumn = (header: Element, x: number): ColumnInHand => {
   };
   fireEvent.pointerDown(header, {clientX: pointer.x, clientY: pointer.y, pointerId: 1});
   return {
+    // the drag takes its origin from the first move, not the press
+    carryStarted: () => moveTo(pointer),
     carriedTo: next => moveTo({x: next, y: pointer.y}),
+    captureLostAt: x => fireEvent.lostPointerCapture(header, {buttons: 1, clientX: x, clientY: pointer.y, pointerId: 1}),
     carriedOn: ({x = 0, y = 0}) => moveTo({x: pointer.x + x, y: pointer.y + y}),
     dropped: () => fireEvent.pointerUp(header, {pointerId: 1})
   };

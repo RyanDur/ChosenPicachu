@@ -11,7 +11,7 @@ import {EagerTable} from '../EagerTable';
 import {LazyTable} from '../LazyTable';
 import {blurFocusOnMoves} from '@__test_support/focus';
 import {Column, DragSortableTable} from '@components/DragSortableTable';
-import {ColumnInHand, RowInHand, liftedColumn, liftedRow, noColumn, nothingInHand, rect, rowsLaidOut, rowsSurveyed} from '@components/DragSortableTable/__test_support';
+import {ColumnInHand, RowInHand, liftedColumn, liftedRow, noColumnInHand, noRowInHand, rect, rowsLaidOut, rowsSurveyed} from '@components/DragSortableTable/__test_support';
 
 type Table = FC<HeaderEvents & BodyEvents & {caption: string; className?: string; columns: readonly TableColumn<Measured>[]; rows: readonly Measures[]}>;
 
@@ -73,15 +73,16 @@ const rowOf = (window: string): HTMLTableRowElement => {
 const cellsOf = (window: string): string[] => [...rowOf(window).cells].map(ownText);
 const grip = (window: string): HTMLElement => within(rowOf(window)).getByRole('button', {name: /move row/});
 let heldRow = '';
-let inHand: RowInHand = nothingInHand;
+let rowInHand: RowInHand = noRowInHand;
 const liftRow = (window: string): void => {
   heldRow = window;
   rowsSurveyed(sourceTable());
-  inHand = liftedRow(grip(window), windowNames().indexOf(window));
+  rowInHand = liftedRow(grip(window), windowNames().indexOf(window));
 };
-const carryRowOver = (target: string): void => inHand.carriedOver(windowNames().indexOf(heldRow), windowNames().indexOf(target));
-const carryRowOn = (by: number): void => inHand.carriedOn(by);
-const dropRow = (): void => inHand.dropped();
+const startCarryingRow = (): void => rowInHand.carryStarted();
+const carryRowOver = (target: string): void => rowInHand.carriedOver(windowNames().indexOf(heldRow), windowNames().indexOf(target));
+const carryRowOn = (by: number): void => rowInHand.carriedOn(by);
+const dropRow = (): void => rowInHand.dropped();
 let widths: Record<string, number> = {};
 const even = (): Record<string, number> => Object.fromEntries(measures.map(({name}) => [name, 100]));
 beforeEach(() => {
@@ -107,7 +108,7 @@ const edgeOf = (name: string): number => {
   return edge;
 };
 let heldColumn = '';
-let columnInHand: ColumnInHand = noColumn;
+let columnInHand: ColumnInHand = noColumnInHand;
 const liftColumn = (name: string): void => {
   heldColumn = name;
   columnsSurveyed();
@@ -118,13 +119,15 @@ const carryColumnOver = (target: string): void => {
   const order = columnOrder();
   carryColumnInto(target, order.indexOf(target) < order.indexOf(heldColumn) ? 0.25 : 0.75);
 };
+const startCarryingColumn = (): void => columnInHand.carryStarted();
 const carryColumnOn = (by: {x?: number; y?: number}): void => columnInHand.carriedOn(by);
+const loseColumnCaptureOver = (target: string): void => columnInHand.captureLostAt(edgeOf(target) + (widths[target] ?? 0) / 2);
 const dropColumn = (): void => columnInHand.dropped();
 afterEach(() => {
   heldRow = '';
-  inHand = nothingInHand;
+  rowInHand = noRowInHand;
   heldColumn = '';
-  columnInHand = noColumn;
+  columnInHand = noColumnInHand;
 });
 const announced = (): string[] => screen.getAllByRole('status', {name: 'move report'}).map(({textContent}) => textContent ?? '').filter(text => text !== '');
 const menuFor = (label: string): HTMLElement => screen.getByLabelText(`${label} by`);
@@ -177,7 +180,7 @@ describe('columns by hand', () => {
     seat(EagerTable, 'hide static');
 
     liftColumn('trades');
-    carryColumnOn({x: 0});
+    startCarryingColumn();
     carryColumnOn({x: 20, y: 15});
 
     [header('trades'), ...lanes().map(lane => lane.cells[1])].forEach(cell => {
@@ -190,7 +193,7 @@ describe('columns by hand', () => {
   test('a settle mid-drag moves home under the carried column', () => {
     seat(EagerTable, 'hide static');
     liftColumn('trades');
-    carryColumnOn({x: 0});
+    startCarryingColumn();
     carryColumnOn({x: 20, y: 15});
 
     carryColumnOver('buys');
@@ -210,7 +213,7 @@ describe('columns by hand', () => {
     surface().setPointerCapture = id => captured.push(id);
     carryColumnOver('buys');
 
-    fireEvent.lostPointerCapture(surface(), {buttons: 1, clientX: 350, clientY: 20, pointerId: 1});
+    loseColumnCaptureOver('sells');
 
     expect(surface()).toHaveClass('carried');
     expect(captured).toEqual([1, 1]);
@@ -224,7 +227,7 @@ describe('columns by hand', () => {
     carryColumnOver('buys');
     expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
 
-    fireEvent.lostPointerCapture(surface(), {buttons: 1, clientX: 350, clientY: 20, pointerId: 1});
+    loseColumnCaptureOver('sells');
     expect(columnOrder()).toEqual(['window', 'buys', 'sells', 'trades', 'volume', 'vwap', 'change']);
     carryColumnOver('volume');
 
@@ -257,14 +260,14 @@ describe('columns by hand', () => {
     expect(columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
   });
 
-  test('the switch waits for the inner half of the neighbor', () => {
+  test('the switch waits until the column is a quarter into an even neighbor', () => {
     seat(EagerTable, 'keep static');
 
     liftColumn('trades');
     carryColumnInto('buys', 0.2);
     expect(columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
 
-    carryColumnInto('buys', 0.6);
+    carryColumnInto('buys', 0.3);
     expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
     dropColumn();
   });
@@ -433,7 +436,7 @@ describe('rows by hand', () => {
     seat(EagerTable, 'hide static');
 
     liftRow('last 5 minutes');
-    carryRowOn(0);
+    startCarryingRow();
     carryRowOn(15);
 
     [...rowOf('last 5 minutes').cells].forEach(cell => {
@@ -826,14 +829,6 @@ describe('animated moves', () => {
       head.getBoundingClientRect = () => rect({x: at * 100, left: at * 100, width: 100, right: at * 100 + 100});
     });
   };
-  const surface = (): Element => {
-    const table = within(sourceTable());
-    const column = table.getAllByRole('columnheader').find(head => head.classList.contains('carried'));
-    const row = table.getAllByRole('rowheader').find(head => head.classList.contains('carried'));
-    if (column) return column;
-    if (row) return within(row).getByRole('button', {name: /move row/});
-    throw new Error('nothing is aloft');
-  };
   const settledRows = (): void => rowsLaidOut(sourceTable());
   const columnCells = (name: string): Element[] => [header(name), ...lanes().map(lane => lane.cells[columnOrder().indexOf(name)])];
 
@@ -974,7 +969,6 @@ describe('animated moves', () => {
 
   test('a strike shoves the neighbour by the carried width, toward the side it gave up', () => {
     seat(EagerTable, 'hide animated');
-    spanned();
 
     liftColumn('trades');
     carryColumnOver('buys');
@@ -989,7 +983,6 @@ describe('animated moves', () => {
 
   test('a strike back shoves the neighbour the other way', () => {
     seat(EagerTable, 'hide animated');
-    spanned();
     liftColumn('trades');
     carryColumnOver('buys');
 
@@ -1004,14 +997,13 @@ describe('animated moves', () => {
 
   test('on release the real column settles from where it was carried', () => {
     seat(EagerTable, 'hide animated');
-    spanned();
 
     liftColumn('trades');
     carryColumnOver('buys');
     expect(header('trades')).toHaveClass('carried');
     expect(header('trades')).toHaveStyle({'--seat-x': '-100px', '--drift-x': '0px'});
 
-    fireEvent.pointerUp(surface(), {pointerId: 1});
+    dropColumn();
     expect(carried()).toEqual([]);
     columnCells('trades').forEach(cell => {
       expect(cell).toHaveClass('settling');
@@ -1022,7 +1014,6 @@ describe('animated moves', () => {
 
   test('the next lift clears every settling and shoved mark', () => {
     seat(EagerTable, 'keep animated');
-    spanned();
 
     liftColumn('trades');
     carryColumnOver('buys');
@@ -1037,14 +1028,13 @@ describe('animated moves', () => {
 
   test('a lazy column settles on the slot it takes at the drop, shoving everything it passed', () => {
     seat(LazyTable, 'keep animated');
-    spanned();
 
     liftColumn('trades');
     carryColumnOver('sells');
     expect(columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
     expect(header('buys').className).not.toMatch(/shoved/);
 
-    fireEvent.pointerUp(surface(), {pointerId: 1});
+    dropColumn();
     expect(columnOrder()).toEqual(['window', 'buys', 'sells', 'trades', 'volume', 'vwap', 'change']);
     expect(header('trades')).toHaveClass('settling');
     expect(header('trades')).toHaveStyle({'--settle-x': '-200px', '--settle-drift-x': '0px'});
@@ -1055,7 +1045,6 @@ describe('animated moves', () => {
 
   test('on release the real column settles from where the pointer let go', () => {
     seat(EagerTable, 'hide animated');
-    spanned();
 
     liftColumn('trades');
     carryColumnOver('buys');
@@ -1071,7 +1060,6 @@ describe('animated moves', () => {
 
   test('on release the real column settles from the height the pointer let go at', () => {
     seat(EagerTable, 'hide animated');
-    spanned();
 
     liftColumn('trades');
     carryColumnOver('buys');
@@ -1087,7 +1075,6 @@ describe('animated moves', () => {
 
   test('a lazy column settles from where the pointer let go', () => {
     seat(LazyTable, 'keep animated');
-    spanned();
 
     liftColumn('trades');
     carryColumnOver('sells');
@@ -1101,7 +1088,6 @@ describe('animated moves', () => {
 
   test('a static release leaves the same marks as an animated one', () => {
     seat(EagerTable, 'keep static');
-    spanned();
 
     liftColumn('trades');
     carryColumnOver('buys');
