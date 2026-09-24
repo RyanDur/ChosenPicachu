@@ -27,9 +27,9 @@ export const Banners: FC = () => {
     const sideways = stack === 'left' || stack === 'right';
     const settler = new ResizeObserver(entries => entries.forEach(entry => {
       if (entry.target instanceof HTMLElement) {
-        entry.target.style.blockSize = '';
+        entry.target.style.removeProperty('--news-block-size');
         const borders = entry.target.offsetHeight - entry.target.clientHeight;
-        entry.target.style.blockSize = `${entry.target.scrollHeight + borders}px`;
+        entry.target.style.setProperty('--news-block-size', `${entry.target.scrollHeight + borders}px`);
       }
     }));
     maybe(document.getElementById('banners')).map(panel =>
@@ -37,7 +37,7 @@ export const Banners: FC = () => {
         if (sideways) {
           settler.observe(news);
         } else if (news instanceof HTMLElement) {
-          news.style.blockSize = '';
+          news.style.removeProperty('--news-block-size');
         }
       }));
     return () => settler.disconnect();

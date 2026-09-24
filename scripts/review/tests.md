@@ -56,7 +56,7 @@ Playwright, Best Practices: https://playwright.dev/docs/best-practices
 
 ## Smoke tests hold the deployed site to life
 
-A smoke test asks one question after a deploy: is the thing we shipped alive where we shipped it? It runs against the deployed site with nothing stubbed, because the real world is what it checks: a museum answers, a piece opens, a deep link is served. It is shallow and broad, and fewer than the journeys. A smoke test that goes red because a museum is down is signal, not flake; do not ask it to stub what it exists to touch. It lives in `e2e/smoke.e2e.ts` under its own config; everything else in `e2e/` is a journey and runs on the stub stage with the world recorded at its edge.
+A smoke test asks one question after a deploy: is the thing we shipped alive where we shipped it? It runs against the deployed site with nothing stubbed, because the real world is what it checks: a museum answers, a piece opens, a deep link is served. It is shallow and broad, and fewer than the journeys. A smoke test that goes red because a museum is down is signal, not flake; do not ask it to stub what it exists to touch. It lives in `e2e/smoke.e2e.ts` under its own config; everything else in `e2e/` is a journey and runs on the stub stage with the world recorded at its edge, except the capture scripts under `e2e/media/`, which record the site's pictures and videos. A capture script is not a journey: it may sleep to pace a recording and find by class to frame a shot, and this door does not hold it.
 
 ## Page objects hold Fowler
 

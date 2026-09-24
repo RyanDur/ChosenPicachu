@@ -88,6 +88,7 @@
   &.from-right .trouble { @starting-style { translate: 100dvw 0; } }
 
   .news {
+    block-size: var(--news-block-size, auto);
     min-block-size: 0;
     min-inline-size: 0;
     margin: 0;
