@@ -1074,8 +1074,8 @@ describe('animated moves', () => {
     spanned();
     settledRows();
 
-    rowDrag.lift(grip('this minute'), 0);
-    rowDrag.carryOver(surface(), 0, 1);
+    rowDrag.lift(grip('this minute'), windowNames().indexOf('this minute'));
+    rowDrag.carryOver(surface(), windowNames().indexOf('this minute'), windowNames().indexOf('last 5 minutes'));
 
     expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
     [...rowOf('last 5 minutes').cells].forEach(cell => {
@@ -1089,15 +1089,15 @@ describe('animated moves', () => {
     seat(EagerTable, 'keep animated');
     spanned();
     settledRows();
-    rowDrag.lift(grip('this minute'), 0);
-    rowDrag.carryOver(surface(), 0, 1);
+    rowDrag.lift(grip('this minute'), windowNames().indexOf('this minute'));
+    rowDrag.carryOver(surface(), windowNames().indexOf('this minute'), windowNames().indexOf('last 5 minutes'));
 
     rowDrag.drop(surface());
 
     expect(carried()).toEqual([]);
     [...rowOf('this minute').cells].forEach(cell => {
       expect(cell).toHaveClass('settling');
-      expect(cell).toHaveStyle({'--settle-x': '0px', '--settle-y': '-40px'});
+      expect(cell).toHaveStyle({'--settle-x': '0px', '--settle-y': '-40px', '--settle-drift-x': '0px', '--settle-drift-y': '0px'});
     });
   });
 });

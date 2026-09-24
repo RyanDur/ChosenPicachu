@@ -108,8 +108,8 @@ for (const {trend, sign, prices} of markets) {
 test('banners stacked sideways settle to the height of their news', async ({page}) => {
   const banners = bannersPage(page);
   await page.goto('demos/?tab=z-index');
-  await banners.stackedLeft();
-  await expect(banners.leftOf).toBeChecked();
+  await banners.stackToTheLeft();
+  await expect(banners.leftStack).toBeChecked();
   await banners.raise();
   await banners.raise();
   await expect(banners.news).toHaveCount(2);
