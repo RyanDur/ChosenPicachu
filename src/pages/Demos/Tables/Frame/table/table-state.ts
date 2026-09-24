@@ -22,7 +22,7 @@ export type MountedTable = {
   store: TableStore;
   order: () => readonly string[];
   standing: () => readonly string[];
-  report: (report: Report) => void;
+  report: (said: Report) => void;
   document: Document;
   table: HTMLTableElement;
   body: HTMLTableSectionElement;

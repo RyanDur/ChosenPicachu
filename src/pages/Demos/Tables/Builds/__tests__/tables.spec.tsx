@@ -289,6 +289,16 @@ describe('columns by hand', () => {
     expect(announced()).toEqual(['trades moved to column 3 of 7']);
   });
 
+  test('the lazy table says a column move', async () => {
+    seat(LazyTable, 'keep static');
+
+    header('trades').focus();
+    await userEvent.keyboard('{ArrowRight}');
+
+    expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
+    expect(announced()).toEqual(['trades moved to column 3 of 7']);
+  });
+
   test('a dropped column says where it landed', () => {
     seat(EagerTable, 'keep static');
 
@@ -480,7 +490,7 @@ describe('rows by hand', () => {
     grip('this minute').focus();
     await userEvent.keyboard('{ArrowDown}');
 
-    expect(announced()).toEqual(['row moved to 2 of 5']);
+    expect(announced()).toEqual(['this minute moved to 2 of 5']);
   });
 
   test('rows that arrive after the deal still walk and say the move on the animated table', async () => {
@@ -491,7 +501,7 @@ describe('rows by hand', () => {
     await userEvent.keyboard('{ArrowDown}');
 
     expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
-    expect(announced()).toEqual(['row moved to 2 of 5']);
+    expect(announced()).toEqual(['this minute moved to 2 of 5']);
   });
 
   test('rows that arrive after the deal still drag', () => {
@@ -511,7 +521,17 @@ describe('rows by hand', () => {
     grip('this minute').focus();
     await userEvent.keyboard('{ArrowDown}');
 
-    expect(announced()).toEqual(['row moved to 2 of 5']);
+    expect(announced()).toEqual(['this minute moved to 2 of 5']);
+  });
+
+  test('the lazy table says a row move', async () => {
+    seat(LazyTable, 'keep static');
+
+    grip('this minute').focus();
+    await userEvent.keyboard('{ArrowDown}');
+
+    expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
+    expect(announced()).toEqual(['this minute moved to 2 of 5']);
   });
 
   test('a dropped row says where it landed', () => {
@@ -521,7 +541,7 @@ describe('rows by hand', () => {
     carryOver('last 15 minutes');
     drop();
 
-    expect(announced()).toEqual(['row moved to 3 of 5']);
+    expect(announced()).toEqual(['this minute moved to 3 of 5']);
   });
 });
 
@@ -754,7 +774,7 @@ describe('resizable columns', () => {
     expect(announced()).toEqual(['window resized to 54%']);
   });
 
-  test('a trade at one handle leaves the other handles silent', async () => {
+  test('a second trade replaces what the page said about the first', async () => {
     seat(EagerTable, 'keep static');
     surveyed();
     await userEvent.click(screen.getByRole('button', {name: 'resize window'}));

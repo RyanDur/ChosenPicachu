@@ -42,7 +42,7 @@ test('going back on a phone lands where the reader left', async ({page}) => {
   await page.goBack();
 
   await expect(page.getByRole('link', {name: 'Start where the demos start'})).toBeVisible();
-  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(left);
 });
 
 test('the header and nav keep their height while the gallery wall is still on its way', async ({page}) => {

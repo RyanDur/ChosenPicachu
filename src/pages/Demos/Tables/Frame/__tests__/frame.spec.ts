@@ -233,7 +233,7 @@ describe('the frame table', () => {
     await userEvent.click(screen.getByRole('button', {name: 'move row 1'}));
     await userEvent.keyboard('{ArrowDown}');
 
-    expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent('row moved to 2 of 5');
+    expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent('this minute moved to 2 of 5');
   });
 
   it('a column walk says the move', async () => {

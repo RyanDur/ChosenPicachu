@@ -2,11 +2,11 @@ import {ComponentProps, FC} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {useBodyEvents, useTableDispatch, useTableSelector} from './context';
-import {columnHeld, driftOfColumn, driftOfRow, positionOfRow, rowDrag, rowHeld, rowMarks, seatOfColumn, seatOfRow, selectOrder, selectRowCount, selectStanding, settlingOfRowIn} from './selectors';
+import {columnHeld, driftOfColumn, driftOfRow, positionOfRow, rowDrag, rowHeld, rowMarks, seatOfColumn, seatOfRow, selectOrder, selectStanding, settlingOfRowIn} from './selectors';
 import {rowUnder, Survey} from './survey';
 import {RowGrip} from './RowGrip';
 import {RowDrag, pixels, shoveDistance, shovedClass} from './table-state';
-import {reported, lifted, drifted, dropped, rowMovedBeside, rowWalkedTo, settled} from './actions';
+import {lifted, drifted, dropped, rowMovedBeside, rowWalkedTo, settled} from './actions';
 import {Moving, eagerTravel, pointerTravel} from './travel';
 import {Grab, rowLift} from './lift';
 import {rowArrows} from './arrows';
@@ -21,7 +21,6 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
   const {settlingFrom, shoved} = useTableSelector(rowMarks(row));
   const standing = useTableSelector(selectStanding);
   const position = useTableSelector(positionOfRow(row));
-  const count = useTableSelector(selectRowCount);
   const drag = useTableSelector(rowDrag(row));
   const columnSeat = useTableSelector(seatOfColumn(column));
   const rowSeat = useTableSelector(seatOfRow(row));
@@ -31,16 +30,12 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
   const seat = columnSeat ?? rowSeat;
   const drift = columnDrift ?? rowDrift;
 
-  const nudged = (to: number, heights: Readonly<Record<string, number>>): void => dispatch(rowWalkedTo(row, to, heights, standing));
-  const arrived = (to: number): void => {
-    onRowMoved?.({row, to, standing});
-    dispatch(reported({about: 'row', position: to, of: count}));
-  };
+  const nudged = (to: number, heights: Readonly<Record<string, number>>): void => dispatch(rowWalkedTo({key: row, label}, to, heights, standing));
+  const arrived = (to: number): void => onRowMoved?.({row, to, standing});
   const beside = (neighbour: string, survey: Survey): void => {
     const to = standing.indexOf(neighbour);
-    dispatch(rowMovedBeside(row, neighbour, survey.rowHeights, standing));
+    dispatch(rowMovedBeside({key: row, label}, neighbour, survey.rowHeights, standing));
     onRowMoved?.({row, to, standing});
-    dispatch(reported({about: 'row', position: to, of: count}));
   };
 
   const lift = (grab: Grab): void => dispatch(lifted({axis: 'row', held: row}, grab));

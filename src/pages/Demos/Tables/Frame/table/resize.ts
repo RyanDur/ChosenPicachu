@@ -1,4 +1,4 @@
-import {has, maybe} from '@ryandur/sand';
+import {maybe} from '@ryandur/sand';
 import {STEP_SHARE, grippedAt, measuredWidths, neighborOf, resizeLabel} from '@components/Table/shares';
 import {columnSteps} from '@components/DragSortableTable/survey';
 import {MountedTable, columnOf, gripped, handleDragged, measured, released, tradedBy, widthsOf} from './table-state';
@@ -42,7 +42,7 @@ const wireHandle = (mounted: MountedTable, column: string, handle: HTMLButtonEle
     }
     handle.setPointerCapture(event.pointerId);
     mounted.store.dispatch(handleDragged(neighborOf(mounted.order(), column), event.clientX));
-    reportShare(mounted, column);
+    reportShare(mounted);
   });
   ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(landing =>
     handle.addEventListener(landing, () => mounted.store.dispatch(released())));
@@ -52,16 +52,13 @@ const wireHandle = (mounted: MountedTable, column: string, handle: HTMLButtonEle
       event.stopPropagation();
       awaken();
       mounted.store.dispatch(tradedBy(column, neighborOf(mounted.order(), column), toward * STEP_SHARE));
-      reportShare(mounted, column);
+      reportShare(mounted);
     });
   });
 };
 
-const reportShare = (mounted: MountedTable, column: string): void => {
-  const share = widthsOf(mounted.store.state)?.[column];
-  if (has(share)) {
-    mounted.report({about: 'share', name: column, share});
-  }
+const reportShare = (mounted: MountedTable): void => {
+  maybe(mounted.store.state.report).map(mounted.report);
 };
 
 export const wireResize = (mounted: MountedTable): void => {

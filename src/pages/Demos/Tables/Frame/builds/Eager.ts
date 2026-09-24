@@ -69,9 +69,9 @@ const mount = (document: Document, table: HTMLTableElement, body: HTMLTableSecti
   const columns = (): readonly string[] => arrangement.state.columns;
   const standing = (): readonly string[] => standingOf(arrangement.state, valueOf);
 
-  const report = (report: Report): void => {
+  const report = (said: Report): void => {
     const output = document.querySelector('output.move-report');
-    const text = moveReport(report);
+    const text = moveReport(said);
     if (output !== null && output.textContent !== text) {
       output.textContent = text;
     }
@@ -109,13 +109,13 @@ const mount = (document: Document, table: HTMLTableElement, body: HTMLTableSecti
   const rowTo = (row: string, to: number): void => {
     const before = standing();
     arrangement.dispatch(rowMoved(row, to, before));
-    report({about: 'row', position: to, of: before.length});
+    report({about: 'row', name: row, position: to, of: before.length});
   };
   const rowBeside = (row: string, neighbour: string): void => {
     const before = standing();
     const to = before.indexOf(neighbour);
     arrangement.dispatch(rowMoved(row, to, before));
-    report({about: 'row', position: to, of: before.length});
+    report({about: 'row', name: row, position: to, of: before.length});
     rowShoving(row, before, to, hand.state.drag?.survey.rowHeights ?? {});
   };
 

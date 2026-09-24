@@ -9,7 +9,8 @@ test('a reader who asks for less motion gets the settings fold without a slide',
   const fold = page.getByRole('group', {name: 'settings'}).first();
   await expect(fold).toBeVisible();
 
-  const durations = await fold.evaluate(details => getComputedStyle(details, '::details-content').transitionDuration);
+  const longest = () => fold.evaluate(details => getComputedStyle(details, '::details-content').transitionDuration)
+    .then(durations => Math.max(...durations.split(',').map(milliseconds)));
 
-  durations.split(',').forEach(duration => expect(milliseconds(duration)).toBeLessThanOrEqual(1));
+  await expect.poll(longest).toBeLessThanOrEqual(1);
 });

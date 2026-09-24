@@ -19,7 +19,8 @@ const motion = (state: TableState, action: TableAction): TableState => {
       const {order} = action;
       const from = order.indexOf(action.name);
       const to = action.type === 'columnWalkedTo' ? action.to : interior(order.indexOf(action.neighbour), order.length);
-      const shoved = shoveColumns(state, displacedBetween(order, from, to), {toward: to > from ? 'start' : 'end', by: action.widths[action.name] ?? 0});
+      const told = to === from ? state : {...state, report: {about: 'column' as const, name: action.name, position: to, of: order.length}};
+      const shoved = shoveColumns(told, displacedBetween(order, from, to), {toward: to > from ? 'start' : 'end', by: action.widths[action.name] ?? 0});
       if (action.type !== 'columnWalkedTo') {
         return shoved;
       }
@@ -31,7 +32,8 @@ const motion = (state: TableState, action: TableAction): TableState => {
       const {standing} = action;
       const from = standing.indexOf(action.row);
       const to = action.type === 'rowWalkedTo' ? action.to : standing.indexOf(action.neighbour);
-      const shoved = shoveRows(state, displacedBetween(standing, from, to), {toward: to > from ? 'up' : 'down', by: action.heights[action.row] ?? 0});
+      const told = to === from ? state : {...state, report: {about: 'row' as const, name: action.label, position: to, of: standing.length}};
+      const shoved = shoveRows(told, displacedBetween(standing, from, to), {toward: to > from ? 'up' : 'down', by: action.heights[action.row] ?? 0});
       if (action.type !== 'rowWalkedTo') {
         return shoved;
       }
@@ -59,7 +61,6 @@ const widths = (state: TableState, action: TableAction): TableState => {
     case 'measured': return measure(state, action.widths);
     case 'awoken': return awaken(state, action.widths);
     case 'tradedBy': return trade(state, action.column, action.neighbour, action.delta);
-    case 'reported': return {...state, report: action.report};
     case 'gripped': return grip(state, action.column, action.grip);
     case 'handleDragged': return dragHandle(state, action.neighbour, action.clientX);
     case 'released': return ungrip(state);
@@ -67,7 +68,10 @@ const widths = (state: TableState, action: TableAction): TableState => {
   }
 };
 
-const answering: (state: TableState, action: TableAction) => TableState = combined(motion, widths, dragging);
+const sorting = (state: TableState, action: TableAction): TableState =>
+  action.type === 'sortChosen' ? {...state, report: {about: 'sort', name: action.column, direction: action.direction}} : state;
+
+const answering: (state: TableState, action: TableAction) => TableState = combined(motion, widths, dragging, sorting);
 
 export const tableReducer = (state: TableState, action: Foreign): TableState =>
   isTableAction(action) ? answering(state, action) : state;

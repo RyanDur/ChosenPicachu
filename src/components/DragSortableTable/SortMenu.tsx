@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {choices} from './sorting';
 import {useHeaderEvents, useTableDispatch} from './context';
-import {reported} from './actions';
+import {sortChosen} from './actions';
 
 export const SortMenu: FC<{column: string}> = ({column}) => {
   const {onSorted} = useHeaderEvents();
@@ -20,7 +20,7 @@ export const SortMenu: FC<{column: string}> = ({column}) => {
             popoverTarget={`sort-${column}`} popoverTargetAction="hide"
             onClick={() => {
               onSorted?.({column, direction});
-              dispatch(reported({about: 'sort', name: column, direction}));
+              dispatch(sortChosen(column, direction));
             }}>{display}</button>
         </li>)}
     </menu>

@@ -43,7 +43,7 @@ export const columnHeld = (name: string) => (view: TableView): boolean => has(co
 
 export const columnGripped = (name: string) => ({state}: TableView): boolean => state.resizing?.column === name;
 
-export const selectReport = ({state}: TableView): Report | undefined => state.report;
+export const selectReport = ({state}: TableView): Maybe<Report> => maybe(state.report);
 
 export const rowHeld = (key: string) => (view: TableView): boolean => has(rowDrag(key)(view));
 

@@ -1,4 +1,4 @@
-import {Report} from './report';
+import {Direction} from './sorting';
 import {ColumnWidths, Grip} from '@components/Table/shares';
 import {Carry, ColumnShove, RowShove, Settling} from './table-state';
 import {Moving} from './travel';
@@ -22,9 +22,9 @@ export type TableAction =
   | {readonly type: 'shovedRows'; readonly keys: readonly string[]; readonly shove: RowShove}
   | {readonly type: 'columnMovedBeside'; readonly name: string; readonly neighbour: string; readonly widths: Readonly<Record<string, number>>; readonly order: readonly string[]}
   | {readonly type: 'columnWalkedTo'; readonly name: string; readonly to: number; readonly widths: Readonly<Record<string, number>>; readonly order: readonly string[]}
-  | {readonly type: 'rowMovedBeside'; readonly row: string; readonly neighbour: string; readonly heights: Readonly<Record<string, number>>; readonly standing: readonly string[]}
-  | {readonly type: 'rowWalkedTo'; readonly row: string; readonly to: number; readonly heights: Readonly<Record<string, number>>; readonly standing: readonly string[]}
-  | {readonly type: 'reported'; readonly report: Report};
+  | {readonly type: 'rowMovedBeside'; readonly row: string; readonly label: string; readonly neighbour: string; readonly heights: Readonly<Record<string, number>>; readonly standing: readonly string[]}
+  | {readonly type: 'rowWalkedTo'; readonly row: string; readonly label: string; readonly to: number; readonly heights: Readonly<Record<string, number>>; readonly standing: readonly string[]}
+  | {readonly type: 'sortChosen'; readonly column: string; readonly direction?: Direction};
 
 type Action = TableAction;
 
@@ -50,7 +50,7 @@ const tableActions: Record<Action['type'], true> = {
   columnWalkedTo: true,
   rowMovedBeside: true,
   rowWalkedTo: true,
-  reported: true
+  sortChosen: true
 };
 
 export const isTableAction = (action: Foreign): action is TableAction => action.type in tableActions;
@@ -74,8 +74,10 @@ export const columnMovedBeside = (name: string, neighbour: string, widths: Reado
   ({type: 'columnMovedBeside', name, neighbour, widths, order});
 export const columnWalkedTo = (name: string, to: number, widths: Readonly<Record<string, number>>, order: readonly string[]): Action =>
   ({type: 'columnWalkedTo', name, to, widths, order});
-export const rowMovedBeside = (row: string, neighbour: string, heights: Readonly<Record<string, number>>, standing: readonly string[]): Action =>
-  ({type: 'rowMovedBeside', row, neighbour, heights, standing});
-export const rowWalkedTo = (row: string, to: number, heights: Readonly<Record<string, number>>, standing: readonly string[]): Action =>
-  ({type: 'rowWalkedTo', row, to, heights, standing});
-export const reported = (report: Report): Action => ({type: 'reported', report});
+type Named = {readonly key: string; readonly label: string};
+
+export const rowMovedBeside = ({key: row, label}: Named, neighbour: string, heights: Readonly<Record<string, number>>, standing: readonly string[]): Action =>
+  ({type: 'rowMovedBeside', row, label, neighbour, heights, standing});
+export const rowWalkedTo = ({key: row, label}: Named, to: number, heights: Readonly<Record<string, number>>, standing: readonly string[]): Action =>
+  ({type: 'rowWalkedTo', row, label, to, heights, standing});
+export const sortChosen = (column: string, direction?: Direction): Action => ({type: 'sortChosen', column, direction});
