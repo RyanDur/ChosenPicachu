@@ -93,7 +93,7 @@ jobs:
       - name: The home page reviews the code
         run: |
           set -o pipefail
-          npx --yes @anthropic-ai/claude-code@2.1.270 --print "$(node scripts/review/prompt.mjs)" \
+          npx --yes @anthropic-ai/claude-code@2.1.281 --print "$(node scripts/review/prompt.mjs)" \
             --model "$REVIEW_MODEL" \
             --output-format stream-json --verbose \
             --json-schema "$(cat scripts/review/feedback.schema.json)" \
