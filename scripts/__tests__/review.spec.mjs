@@ -116,6 +116,14 @@ describe('the review prompt', () => {
   test('a delta the author recorded as not taken is answered by name, not raised again', () => {
     expect(promptFor({scope: 'full'})).toContain('answer that reason by name: accept it, or rebut it');
   });
+
+  test('every entry says whether it stands on what was read or on an inference, and code is never evidence of its own intent', () => {
+    const prompt = promptFor({scope: 'full'});
+    expect(prompt).toContain('Every entry says what it stands on.');
+    expect(prompt).toContain('Code is evidence of what it does, never of why it exists.');
+    expect(prompt).toContain('A violation stands on what you read.');
+    expect(prompt).toContain('A reason a commit message gives is a claim to check, not a conclusion to confirm.');
+  });
 });
 
 describe('the review report', () => {
@@ -288,6 +296,13 @@ describe('the review report', () => {
     });
   });
 
+  test('an inferred entry says so beside its place, and one that was read says nothing more', () => {
+    expect(deltaOf({...concern, evidence: 'inferred'})).toMatch(/^<details><summary>▲ concern · src\/b\.css:9 · inferred<\/summary>\n/);
+    expect(plusOf({...plus, evidence: 'inferred'})).toMatch(/^<details><summary>\+ src\/f\.tsx:5 · inferred<\/summary>\n/);
+    expect(deltaOf(concern)).toMatch(/^<details><summary>▲ concern · src\/b\.css:9<\/summary>\n/);
+    expect(plusOf(plus)).toMatch(/^<details><summary>\+ src\/f\.tsx:5<\/summary>\n/);
+  });
+
   test('a review with plusses and no deltas still leaves its feedback on the commit, and an empty one leaves none', () => {
     expect(leavesFeedback(review([plus], []))).toBe(true);
     expect(leavesFeedback(review([], [note]))).toBe(true);
@@ -300,15 +315,18 @@ describe('the review report', () => {
     expect(schema.properties.tldr.required).toEqual(['ranked', 'held']);
     expect(schema.properties.tldr.properties.ranked.items.required).toEqual(['file', 'line', 'cost', 'change']);
     expect(Object.keys(schema.properties.tldr.properties)).toContain('deferred');
-    expect(schema.properties.plusses.items.required).toEqual(expect.arrayContaining(['door', 'file', 'line', 'happened', 'why', 'principle']));
+    expect(schema.properties.plusses.items.required).toEqual(expect.arrayContaining(['door', 'file', 'line', 'happened', 'why', 'evidence', 'principle']));
     expect(Object.keys(schema.properties.plusses.items.properties)).toContain('checked');
-    expect(schema.properties.deltas.items.required).toEqual(expect.arrayContaining(['door', 'severity', 'file', 'line', 'happened', 'why', 'change', 'principle']));
+    expect(schema.properties.deltas.items.required).toEqual(expect.arrayContaining(['door', 'severity', 'file', 'line', 'happened', 'why', 'evidence', 'change', 'principle']));
     expect(Object.keys(schema.properties.deltas.items.properties)).toContain('checked');
     expect(schema.properties.plusses.items.properties.door).toEqual({$ref: '#/$defs/door'});
     expect(schema.properties.deltas.items.properties.door).toEqual({$ref: '#/$defs/door'});
     expect(schema.properties.deltas.items.properties.severity).toEqual({$ref: '#/$defs/severity'});
+    expect(schema.properties.plusses.items.properties.evidence).toEqual({$ref: '#/$defs/evidence'});
+    expect(schema.properties.deltas.items.properties.evidence).toEqual({$ref: '#/$defs/evidence'});
     expect(schema.$defs.door['enum']).toEqual(['structure', 'presentation', 'dynamic interaction', 'design', 'tests']);
     expect(schema.$defs.severity['enum']).toEqual(['violation', 'concern', 'note']);
+    expect(schema.$defs.evidence['enum']).toEqual(['read', 'inferred']);
   });
 
   test('only a violation fails the job', () => {

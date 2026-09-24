@@ -33,7 +33,7 @@ const placeOf = ({file, line}, commit) => maybe(commit)
 const checkedFold = ({checked}) =>
   empty(checked) ? [] : ['<details><summary>what was checked</summary>', '', told(checked), '', '</details>', ''];
 
-const lineOf = ({file, line}) => asText(`${file}:${line}`);
+const lineOf = ({file, line, evidence}) => asText(`${file}:${line}${evidence === 'inferred' ? ' · inferred' : ''}`);
 
 const folded = (label, body) => [`<details><summary>${label}</summary>`, '', ...body, '', '</details>'].join('\n');
 

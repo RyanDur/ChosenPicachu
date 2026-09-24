@@ -55,8 +55,8 @@ describe('the review\'s QAs', () => {
 
   test('every QA answers in the shape the schema asks for', () => {
     Object.values(agents()).forEach(qa => {
-      expect(qa.prompt).toContain('each plus {door, file, line, happened, why, checked, principle}');
-      expect(qa.prompt).toContain('each delta {door, severity, file, line, happened, why, change, checked, principle}');
+      expect(qa.prompt).toContain('each plus {door, file, line, happened, why, evidence, checked, principle}');
+      expect(qa.prompt).toContain('each delta {door, severity, file, line, happened, why, evidence, change, checked, principle}');
     });
   });
 });

@@ -5,6 +5,7 @@ export const aDelta = (traits = {}) => ({
   line: 1,
   happened: 'something in the code bends a door',
   why: 'it costs the reader',
+  evidence: 'read',
   change: 'change it',
   principle: 'the door says so',
   ...traits
@@ -16,6 +17,7 @@ export const aPlus = (traits = {}) => ({
   line: 1,
   happened: 'something in the code holds a door up',
   why: 'it works for the reader',
+  evidence: 'read',
   principle: 'the door says so',
   ...traits
 });

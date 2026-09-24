@@ -4,7 +4,8 @@
   "required": ["tldr", "plusses", "deltas"],
   "$defs": {
     "door": {"type": "string", "enum": ["structure", "presentation", "dynamic interaction", "design", "tests"]},
-    "severity": {"type": "string", "enum": ["violation", "concern", "note"]}
+    "severity": {"type": "string", "enum": ["violation", "concern", "note"]},
+    "evidence": {"type": "string", "enum": ["read", "inferred"]}
   },
   "properties": {
     "tldr": {
@@ -35,13 +36,14 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["door", "file", "line", "happened", "why", "principle"],
+        "required": ["door", "file", "line", "happened", "why", "evidence", "principle"],
         "properties": {
           "door": {"$ref": "#/$defs/door"},
           "file": {"type": "string"},
           "line": {"type": "integer", "minimum": 1},
           "happened": {"type": "string"},
           "why": {"type": "string"},
+          "evidence": {"$ref": "#/$defs/evidence"},
           "checked": {"type": "string"},
           "principle": {"type": "string"}
         }
@@ -52,7 +54,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["door", "severity", "file", "line", "happened", "why", "change", "principle"],
+        "required": ["door", "severity", "file", "line", "happened", "why", "evidence", "change", "principle"],
         "properties": {
           "door": {"$ref": "#/$defs/door"},
           "severity": {"$ref": "#/$defs/severity"},
@@ -60,6 +62,7 @@
           "line": {"type": "integer", "minimum": 1},
           "happened": {"type": "string"},
           "why": {"type": "string"},
+          "evidence": {"$ref": "#/$defs/evidence"},
           "change": {"type": "string"},
           "checked": {"type": "string"},
           "principle": {"type": "string"}
