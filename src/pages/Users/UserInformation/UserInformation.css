@@ -20,11 +20,7 @@
 
     &:has(:required) .fancy-title::after {
       content: '*';
-      color: var(--international-orange-engineering);
-    }
-
-    &:has(.fancy-text:read-only, .fancy-text:disabled) .fancy-title::after {
-      content: none;
+      color: var(--alarm-ink);
     }
 
     .fancy-title {
@@ -104,11 +100,15 @@
       calc(100% - 1.5rem) calc(1.6rem + 0.2rem), calc(100% - 3.5rem) 0.65rem;
     background-size: 0.5rem 0.5rem, 0.5rem 0.5rem, 0.1rem 2.5rem;
     background-repeat: no-repeat;
-  }
 
-  .fancy-check:focus {
-    outline: none;
-    font-size: var(--base-x-2);
+    &:hover,
+    &:focus {
+      box-shadow: var(--drop-shadow);
+    }
+
+    &:focus-visible {
+      outline: var(--hairline-x-2) solid var(--ring);
+    }
   }
 
   .form-title {

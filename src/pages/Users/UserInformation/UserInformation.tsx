@@ -21,6 +21,7 @@ import {drawAvatar} from './avatars';
 import {Link} from 'react-router';
 import {FancyDateInput} from '@components/FancyFormElements/FancyDateInput';
 import {isValid, parse} from 'date-fns';
+import {not} from '@ryandur/sand';
 import {Opened, userAt} from '../mode';
 import {useUsersDispatch} from '../Provider';
 import {userAdded, userUpdated} from '../store';
@@ -43,6 +44,7 @@ const Draft: FC<{open: Opened; className?: string}> = ({open, className}) => {
   const [draft, dispatch] = useReducer(formReducer, shown(open), started => draftOf(started ?? newUser()));
   const user = userOf(draft);
   const readOnly = open.mode === 'viewing';
+  const required = not(readOnly);
   const editing = open.mode === 'editing';
 
   const reset = () => dispatch(formReset(shown(open) ?? newUser()));
@@ -60,12 +62,12 @@ const Draft: FC<{open: Opened; className?: string}> = ({open, className}) => {
     }}
     onReset={() => reset()}>
     <h2 id="form-title" className="form-title title bold">User Information</h2>
-    <FancyInput id="first-name-cell" className="first-name" inputId="first-name" required
+    <FancyInput id="first-name-cell" className="first-name" inputId="first-name" required={required}
       value={user.info.firstName} readOnly={readOnly}
       onChange={event => dispatch(firstNameEdited(event.currentTarget.value))}>
       First Name
     </FancyInput>
-    <FancyInput id="last-name-cell" className="last-name" inputId="last-name" required
+    <FancyInput id="last-name-cell" className="last-name" inputId="last-name" required={required}
       value={user.info.lastName} readOnly={readOnly}
       onChange={event => dispatch(lastNameEdited(event.currentTarget.value))}>
       Last Name
@@ -76,7 +78,7 @@ const Draft: FC<{open: Opened; className?: string}> = ({open, className}) => {
       Email
     </FancyInput>
     <FancyDateInput id="dob-cell" className="dob" inputId="dob" value={user.info.dob}
-      readOnly={readOnly} required
+      readOnly={readOnly} required={required}
       onChange={event => {
         const born = parse(event.currentTarget.value, 'yyyy-MM-dd', new Date());
         dispatch(dateOfBirthEdited(isValid(born) ? born : undefined));
@@ -95,7 +97,7 @@ const Draft: FC<{open: Opened; className?: string}> = ({open, className}) => {
       aria-label="avatar report">{avatarReport(draft)}</output>
 
     <Address id="home-address" title="Home Address" className="home-address" value={user.homeAddress}
-      readOnly={readOnly} required
+      readOnly={readOnly} required={required}
       onChange={address => dispatch(homeAddressEdited(address))}/>
 
     <Address id="work-address" title="Work Address" className="work-address"

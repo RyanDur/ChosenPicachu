@@ -66,6 +66,10 @@ button {
   color: inherit;
 }
 
+button:disabled {
+  cursor: revert;
+}
+
 h1, h2, h3, h4, h5, h6, p {
   overflow-wrap: break-word;
 }
