@@ -99,6 +99,16 @@ describe('the review prompt', () => {
     expect(prompt).toContain('Nothing about how the review was made');
   });
 
+  test('the review carries the numbered writing rules: no em dashes, no metaphor nouns, no personified code, whole sentences', () => {
+    const prompt = promptFor({scope: 'full'});
+    expect(prompt).toContain('## How you write');
+    expect(prompt).toContain('13. **No em dashes.**');
+    expect(prompt).toContain('26. **No metaphor nouns.**');
+    expect(prompt).toContain('32. **No mannered prose.**');
+    expect(prompt).toContain('33. **Whole sentences.**');
+    expect(placeOf(prompt, '## How you write')).toBeLessThan(placeOf(prompt, '## Your part'));
+  });
+
   test('a violation carries a trace to what a person would see, or it is a concern', () => {
     expect(promptFor({scope: 'full'})).toContain('a delta whose trace you cannot make is a **concern**');
   });

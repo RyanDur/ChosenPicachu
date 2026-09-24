@@ -4,7 +4,10 @@ import {fileURLToPath} from 'node:url';
 import {not} from '@ryandur/sand';
 import {design, doors, halves, qaNames, tests} from './agents.mjs';
 
-const values = readFileSync(join(dirname(fileURLToPath(import.meta.url)), 'values.md'), 'utf8');
+const beside = file => readFileSync(join(dirname(fileURLToPath(import.meta.url)), file), 'utf8');
+
+const values = beside('values.md');
+const plain = beside('plain.md');
 
 const rubric = [...doors.map(({file}) => file), 'src/pages/Home/TeeUp.tsx', design.file, tests.file];
 
@@ -43,6 +46,7 @@ export const promptFor = ({scope, before, after}) => {
   }
   return [
     values,
+    plain,
     '## Your part',
     `You lead the review. Read the rubric first and whole, in the author's words: ${rubric.join(', ')}. Each door of the home page says what things are, how they show, or how they respond, then how the author organizes it, and ends with the test of the organization. The design door says how the code is shaped so that change stays cheap. The tests door says what a test is for.`,
     chosen.describe({before, after}),
