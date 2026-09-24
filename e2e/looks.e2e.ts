@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import {chartsPage, homePage, looks, markets, scriptedMarket} from './__test_support';
+import {bannersPage, chartsPage, homePage, looks, markets, scriptedMarket} from './__test_support';
 
 test('the period menu stays hidden until asked', async ({page}) => {
   const charts = chartsPage(page);
@@ -106,22 +106,13 @@ for (const {trend, sign, prices} of markets) {
 }
 
 test('banners stacked sideways settle to the height of their news', async ({page}) => {
+  const banners = bannersPage(page);
   await page.goto('demos/?tab=z-index');
-  const stack = page.getByRole('group', {name: 'stack'});
-  await stack.getByText('Left', {exact: true}).click();
-  await expect(stack.getByRole('radio', {name: 'Left'})).toBeChecked();
-  await page.getByRole('button', {name: 'raise a banner'}).click();
-  await page.getByRole('button', {name: 'raise a banner'}).click();
-  const news = page.getByRole('alert').getByRole('paragraph');
-  await expect(news).toHaveCount(2);
+  await banners.stackedLeft();
+  await expect(banners.leftOf).toBeChecked();
+  await banners.raise();
+  await banners.raise();
+  await expect(banners.news).toHaveCount(2);
 
-  const settled = () => news.evaluateAll(paragraphs => paragraphs.every(paragraph => {
-    const contents = document.createRange();
-    contents.selectNodeContents(paragraph);
-    const style = getComputedStyle(paragraph);
-    const chrome = parseFloat(style.paddingTop) + parseFloat(style.paddingBottom) + parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth);
-    return Math.abs(paragraph.getBoundingClientRect().height - (contents.getBoundingClientRect().height + chrome)) <= 1;
-  }));
-
-  await expect.poll(settled).toBe(true);
+  await expect.poll(banners.settled).toBe(true);
 });

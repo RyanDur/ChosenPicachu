@@ -11,7 +11,7 @@ import {EagerTable} from '../EagerTable';
 import {LazyTable} from '../LazyTable';
 import {blurFocusOnMoves} from '@__test_support/focus';
 import {Column, DragSortableTable} from '@components/DragSortableTable';
-import {rect, rowDrag, surveyedRows} from '@components/DragSortableTable/__test_support';
+import {rect, rowDrag, rowsLaidOut, tableSurveyed} from '@components/DragSortableTable/__test_support';
 
 type Table = FC<HeaderEvents & BodyEvents & {caption: string; className?: string; columns: readonly TableColumn<Measured>[]; rows: readonly Measures[]}>;
 
@@ -329,7 +329,8 @@ describe('rows by hand', () => {
   const surface = (): HTMLElement => grip(aloft);
   const lift = (window: string): void => {
     aloft = window;
-    rowDrag.lift(grip(window), sourceTable(), windowNames().indexOf(window));
+    tableSurveyed(sourceTable());
+    rowDrag.lift(grip(window), windowNames().indexOf(window));
   };
   const carryOver = (target: string): void => {
     const names = windowNames();
@@ -829,7 +830,7 @@ describe('animated moves', () => {
     throw new Error('nothing is aloft');
   };
   const columnCells = (name: string): Element[] => [header(name), ...lanes().map(lane => lane.cells[columnOrder().indexOf(name)])];
-  const settledRows = (): void => surveyedRows(sourceTable());
+  const settledRows = (): void => rowsLaidOut(sourceTable());
 
   test('a keyboard walk settles the walked column and shoves its neighbour', async () => {
     seat(EagerTable, 'keep animated');
@@ -1073,25 +1074,25 @@ describe('animated moves', () => {
     spanned();
     settledRows();
 
-    fireEvent.pointerDown(grip('this minute'), {clientX: 20, clientY: 60, pointerId: 1});
-    fireEvent.pointerMove(surface(), {buttons: 1, clientX: 20, clientY: 100, pointerId: 1});
+    rowDrag.lift(grip('this minute'), 0);
+    rowDrag.carryOver(surface(), 0, 1);
 
     expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
     [...rowOf('last 5 minutes').cells].forEach(cell => {
       expect(cell).toHaveClass('shoved-up');
       expect(cell).toHaveStyle({'--shoved-by': '40px'});
     });
-    fireEvent.pointerUp(surface(), {pointerId: 1});
+    rowDrag.drop(surface());
   });
 
   test('a dropped row settles every cell from the drop height', () => {
     seat(EagerTable, 'keep animated');
     spanned();
     settledRows();
-    fireEvent.pointerDown(grip('this minute'), {clientX: 20, clientY: 60, pointerId: 1});
-    fireEvent.pointerMove(surface(), {buttons: 1, clientX: 20, clientY: 100, pointerId: 1});
+    rowDrag.lift(grip('this minute'), 0);
+    rowDrag.carryOver(surface(), 0, 1);
 
-    fireEvent.pointerUp(surface(), {pointerId: 1});
+    rowDrag.drop(surface());
 
     expect(carried()).toEqual([]);
     [...rowOf('this minute').cells].forEach(cell => {

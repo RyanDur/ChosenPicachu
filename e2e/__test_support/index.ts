@@ -6,3 +6,4 @@ export {piecePage} from './piece';
 export {dragSortTable, stages, type Stage} from './frame';
 export {usersPage, type Person} from './users';
 export {violationsOf} from './axe';
+export {bannersPage} from './banners';

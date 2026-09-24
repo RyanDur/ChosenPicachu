@@ -1,2 +1,2 @@
-export {rect, rowDrag, sortableTable, surveyedRows} from './rows';
+export {rect, rowDrag, rowsLaidOut, sortableTable, tableSurveyed} from './rows';
 export {columnShares} from './shares';

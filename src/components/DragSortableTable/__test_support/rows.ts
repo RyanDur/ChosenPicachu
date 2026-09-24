@@ -12,29 +12,32 @@ export const rect = (box: Partial<DOMRect>): DOMRect => ({
 const HEAD = 40;
 const ROW = 40;
 
-// jsdom lays nothing out, so the table is measured as a 40px header over 40px rows
-export const surveyedRows = (table: HTMLTableElement): void => {
-  const lanes = [...(table.tBodies[0]?.rows ?? [])];
-  const height = HEAD + lanes.length * ROW;
-  table.getBoundingClientRect = () => rect({left: 0, right: 700, width: 700, top: 0, bottom: height, height});
-  within(table).getAllByRole('columnheader').forEach(head => {
-    head.getBoundingClientRect = () => rect({width: 100});
-  });
-  lanes.forEach((lane, at) => {
+// jsdom lays nothing out, so the rows are measured as 40px lanes under a 40px header
+export const rowsLaidOut = (table: HTMLTableElement): void => {
+  [...(table.tBodies[0]?.rows ?? [])].forEach((lane, at) => {
     lane.getBoundingClientRect = () => rect({left: 0, right: 700, width: 700, top: HEAD + at * ROW, y: HEAD + at * ROW, bottom: HEAD + (at + 1) * ROW, height: ROW});
   });
 };
 
+// a drag surveys the table too: its box and even column widths
+export const tableSurveyed = (table: HTMLTableElement): void => {
+  const height = HEAD + (table.tBodies[0]?.rows.length ?? 0) * ROW;
+  table.getBoundingClientRect = () => rect({left: 0, right: 700, width: 700, top: 0, bottom: height, height});
+  within(table).getAllByRole('columnheader').forEach(head => {
+    head.getBoundingClientRect = () => rect({width: 100});
+  });
+  rowsLaidOut(table);
+};
+
 export const rowDrag = {
-  lift: (grip: HTMLElement, table: HTMLTableElement, from: number): void => {
-    surveyedRows(table);
+  lift: (grip: Element, from: number): void => {
     fireEvent.pointerDown(grip, {clientX: 100, clientY: HEAD + from * ROW + 10, pointerId: 1});
   },
-  carryOver: (grip: HTMLElement, from: number, to: number): void => {
+  carryOver: (grip: Element, from: number, to: number): void => {
     const past = to < from ? 10 : 30;
     fireEvent.pointerMove(grip, {buttons: 1, clientX: 100, clientY: HEAD + to * ROW + past, pointerId: 1});
   },
-  drop: (grip: HTMLElement): void => {
+  drop: (grip: Element): void => {
     fireEvent.pointerUp(grip, {pointerId: 1});
   }
 };
