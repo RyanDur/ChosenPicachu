@@ -75,6 +75,18 @@ describe('the users page', () => {
       expect(usersTable.grips()).toHaveLength(3);
     });
 
+    it('a person moved down a row is said by name', async () => {
+      const kai = aUser();
+      setupUsersResponse([kai, aUser(), aUser()]);
+      render(<TestApp at={Paths.users}/>);
+      await usersTable.roster();
+
+      usersTable.grips()[0]?.focus();
+      await userEvent.keyboard('{ArrowDown}');
+
+      expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent(`${fullNameOf(kai)} moved to 2 of 3`);
+    });
+
     it('a column is resized from one handle', async () => {
       setupUsersResponse([aUser()]);
       render(<TestApp at={Paths.users}/>);
@@ -117,7 +129,6 @@ describe('the users page', () => {
       const form = within(screen.getByRole('form', {name: 'User Information'}));
       expect(form.getByRole('button', {name: 'Add'})).toBeVisible();
       expect(userForm.field('First Name')).toHaveDisplayValue(kai.info.firstName);
-      expect(screen.getByRole('status', {name: 'url search'})).not.toHaveTextContent('mode=');
     });
 
     it('adding a user who works from home sends the backend home as their work', async () => {

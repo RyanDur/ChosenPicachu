@@ -62,14 +62,24 @@ export const heldAICAllArtResponse = (response: AICAllArtResponse, options: AllA
 export const setupAICEveryPage = (response: AICAllArtResponse) =>
   server.use(http.get(`${aicDomain}/search`, () => HttpResponse.json(response)));
 
-export const heldAICSuggestions = (word: string, response: AICSearchResponse): () => void => {
+type HeldAnswer = {
+  arrives: () => void;
+  served: Promise<{aborted: boolean}>;
+};
+
+export const heldAICSuggestions = (word: string, response: AICSearchResponse): HeldAnswer => {
   const {held, release} = holding();
+  let serve = (_outcome: {aborted: boolean}): void => undefined;
+  const served = new Promise<{aborted: boolean}>(resolve => {
+    serve = resolve;
+  });
   server.use(http.get(`${aicDomain}/search`, async ({request}) => {
     if (!paramsMatch(request, {'query[term][title]': word, fields: 'suggest_autocomplete_all'})) return undefined;
     await held;
+    serve({aborted: request.signal.aborted});
     return HttpResponse.json(response);
   }));
-  return release;
+  return {arrives: release, served};
 };
 
 export const setupHarvardAllArtResponse = (response: HarvardAllArtResponse, limit = defaultRecordLimit) =>

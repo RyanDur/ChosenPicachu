@@ -30,11 +30,11 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
   const seat = columnSeat ?? rowSeat;
   const drift = columnDrift ?? rowDrift;
 
-  const nudged = (to: number, heights: Readonly<Record<string, number>>): void => dispatch(rowWalkedTo({key: row, label}, to, heights, standing));
+  const nudged = (to: number, heights: Readonly<Record<string, number>>): void => dispatch(rowWalkedTo({row, label}, to, heights, standing));
   const arrived = (to: number): void => onRowMoved?.({row, to, standing});
   const beside = (neighbour: string, survey: Survey): void => {
     const to = standing.indexOf(neighbour);
-    dispatch(rowMovedBeside({key: row, label}, neighbour, survey.rowHeights, standing));
+    dispatch(rowMovedBeside({row, label}, neighbour, survey.rowHeights, standing));
     onRowMoved?.({row, to, standing});
   };
 

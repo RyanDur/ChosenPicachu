@@ -9,16 +9,6 @@ import {heldAICSuggestions} from '@components/art-gallery/__test_support';
 import {aicSuggestionsOf} from '@components/art-gallery/__test_support/fixtures';
 import {HTTPError} from '@transport/types';
 
-const answered = (word: string): Promise<void> => new Promise(resolve => {
-  const heard = ({request}: {request: Request}): void => {
-    if (new URL(request.url).searchParams.get('query[term][title]') === word) {
-      server.events.removeListener('request:match', heard);
-      resolve();
-    }
-  };
-  server.events.on('request:match', heard);
-});
-
 describe('search', () => {
   const searchWord = faker.lorem.word().toUpperCase();
   beforeEach(() => {
@@ -128,8 +118,8 @@ describe('search', () => {
       if (word !== null) asked.push(word);
     };
     server.events.on('request:start', noted);
-    const monkArrives = heldAICSuggestions('mon', aicSuggestionsOf(['MONK']));
-    const monetArrives = heldAICSuggestions('monet', aicSuggestionsOf(['MONET']));
+    const monk = heldAICSuggestions('mon', aicSuggestionsOf(['MONK']));
+    const monet = heldAICSuggestions('monet', aicSuggestionsOf(['MONET']));
     try {
       render(<TestApp at={`${Paths.artGallery}?tab=aic`}/>);
 
@@ -137,12 +127,11 @@ describe('search', () => {
       await waitFor(() => expect(asked).toContain('mon'));
       await userEvent.type(screen.getByLabelText(/Search For/), 'et');
       await waitFor(() => expect(asked).toContain('monet'));
-      monetArrives();
+      monet.arrives();
       await waitFor(() => expect(screen.getByRole('listbox', {hidden: true})).toHaveTextContent('MONET'));
-      const monkLanded = answered('mon');
-      monkArrives();
-      await monkLanded;
+      monk.arrives();
 
+      expect(await monk.served).toEqual({aborted: true});
       expect(asked).toEqual(['mon', 'monet']);
       expect(screen.getByRole('listbox', {hidden: true})).toHaveTextContent('MONET');
       expect(screen.getByRole('listbox', {hidden: true})).not.toHaveTextContent('MONK');
