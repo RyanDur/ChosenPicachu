@@ -9,7 +9,7 @@ export const aHabit = (traits = {}) => ({
 
 export const aDelta = (traits = {}) => ({
   door: 'structure',
-  habit: 'a section is named by its heading',
+  habit: aHabit().title,
   severity: 'note',
   file: 'src/somewhere.tsx',
   line: 1,
@@ -23,7 +23,7 @@ export const aDelta = (traits = {}) => ({
 
 export const aPlus = (traits = {}) => ({
   door: 'structure',
-  habit: 'a section is named by its heading',
+  habit: aHabit().title,
   file: 'src/somewhere.tsx',
   line: 1,
   happened: 'something in the code holds a door up',

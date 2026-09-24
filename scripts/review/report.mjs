@@ -80,13 +80,13 @@ const gathered = (habit, {plusses, deltas}) => ({
 const habitTold = (habit, at, commit) => [
   `### ${at + 1}. ${told(habit.title)}`,
   '',
-  told(habit.rule),
+  `> ${told(habit.rule)}`,
   '',
   ...(empty(habit.meet) ? [] : [`**What a person meets.** ${told(habit.meet)}`, '']),
-  ...(habit.deltas.length === 0 ? [] : ['**Where.**', '', ...placesTold(habit.deltas, commit), '']),
+  ...(habit.deltas.length === 0 ? [] : ['#### Where', '', ...placesTold(habit.deltas, commit), '']),
   `**The fix, once.** ${told(habit.fix)}`,
   '',
-  ...(habit.plusses.length === 0 ? [] : ['**Keep doing.**', '', ...keepsTold(habit.plusses, commit), '']),
+  ...(habit.plusses.length === 0 ? [] : ['#### Keep doing', '', ...keepsTold(habit.plusses, commit), '']),
   ...entriesTold(habit.deltas, habit.plusses, commit)
 ];
 
@@ -102,8 +102,8 @@ const straysTold = ({deltas, plusses}, commit) =>
   deltas.length + plusses.length === 0 ? [] : [
     '### One more thing',
     '',
-    ...(deltas.length === 0 ? [] : ['**Where.**', '', ...placesTold(deltas, commit), '']),
-    ...(plusses.length === 0 ? [] : ['**Keep doing.**', '', ...keepsTold(plusses, commit), '']),
+    ...(deltas.length === 0 ? [] : ['#### Where', '', ...placesTold(deltas, commit), '']),
+    ...(plusses.length === 0 ? [] : ['#### Keep doing', '', ...keepsTold(plusses, commit), '']),
     ...entriesTold(deltas, plusses, commit)
   ];
 

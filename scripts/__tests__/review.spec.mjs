@@ -176,22 +176,29 @@ describe('the review report', () => {
     const summary = summaryOf(review([plus], [note, violation], [aHabit({meet: 'Walk the page by headings and the section is not there.'})]));
     const at = needle => placeOf(summary, needle);
     expect(at('### 1. a section is named by its heading')).toBeLessThan(at('The structure door: sections name themselves through their headings.'));
-    expect(at('The structure door:')).toBeLessThan(at('**What a person meets.** Walk the page by headings and the section is not there.'));
-    expect(at('**What a person meets.**')).toBeLessThan(at('**Where.**'));
+    expect(at('> The structure door:')).toBeLessThan(at('**What a person meets.** Walk the page by headings and the section is not there.'));
+    expect(at('**What a person meets.**')).toBeLessThan(at('#### Where'));
     expect(at('- ✖ `src/a.tsx:3`. a div wraps a list')).toBeLessThan(at('- ○ `src/somewhere.tsx:1`. a section has no heading'));
     expect(at('- ○ `src/somewhere.tsx:1`.')).toBeLessThan(at('**The fix, once.** Give each section a heading that names it.'));
-    expect(at('**The fix, once.**')).toBeLessThan(at('**Keep doing.**'));
-    expect(at('**Keep doing.**')).toBeLessThan(at('- + `src/f.tsx:5`. the friends list is a fieldset with a legend'));
+    expect(at('**The fix, once.**')).toBeLessThan(at('#### Keep doing'));
+    expect(at('#### Keep doing')).toBeLessThan(at('- + `src/f.tsx:5`. the friends list is a fieldset with a legend'));
     expect(at('- + `src/f.tsx:5`.')).toBeLessThan(at('<details><summary>✖ violation · structure · src/a.tsx:3</summary>'));
     expect(at('<details><summary>✖ violation')).toBeLessThan(at('<details><summary>○ note · structure · src/somewhere.tsx:1</summary>'));
     expect(at('<details><summary>○ note')).toBeLessThan(at('<details><summary>+ structure · src/f.tsx:5</summary>'));
   });
 
-  test('a habit with no person to meet and nothing to keep leaves those lines out', () => {
+  test('a habit with no person to meet and nothing to keep leaves those parts out', () => {
     const summary = summaryOf(review([], [note], [heading]));
     expect(summary).not.toContain('**What a person meets.**');
-    expect(summary).not.toContain('**Keep doing.**');
+    expect(summary).not.toContain('#### Keep doing');
+    expect(summary).toContain('#### Where');
     expect(summary).toContain('**The fix, once.**');
+  });
+
+  test('a habit with nothing to change and something to keep leaves the places out', () => {
+    const summary = summaryOf(review([plus], [], [heading]));
+    expect(summary).not.toContain('#### Where');
+    expect(summary).toContain('#### Keep doing');
   });
 
   test('an entry whose habit matches none stands under one more thing, after the habits', () => {

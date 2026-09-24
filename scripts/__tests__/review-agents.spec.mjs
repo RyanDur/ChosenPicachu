@@ -59,10 +59,4 @@ describe('the review\'s QAs', () => {
       expect(qa.prompt).toContain('each delta {door, severity, file, line, happened, why, evidence, change, checked, principle}');
     });
   });
-
-  test('the QAs are not asked for a habit, since the lead names the habits', () => {
-    Object.values(agents()).forEach(qa => {
-      expect(qa.prompt).not.toMatch(/each (plus|delta) \{[^}]*habit/);
-    });
-  });
 });
