@@ -11,10 +11,11 @@ const marks = {violation: '✖', concern: '▲', note: '○'};
 
 export const reviewIn = answer => {
   const {structured_output: structured} = JSON.parse(answer);
-  if (not(typeof structured?.tldr === 'string') || not(Array.isArray(structured?.plusses)) || not(Array.isArray(structured?.deltas))) {
+  const summary = structured?.tldr;
+  if (not(Array.isArray(summary?.ranked)) || not(typeof summary?.held === 'string') || not(Array.isArray(structured?.plusses)) || not(Array.isArray(structured?.deltas))) {
     throw new Error('the review answered without a summary, plusses and deltas; the structured output is missing');
   }
-  return {tldr: structured.tldr, plusses: structured.plusses, deltas: structured.deltas};
+  return {tldr: summary, plusses: structured.plusses, deltas: structured.deltas};
 };
 
 const bySeverity = (a, b) => severities.indexOf(a.severity) - severities.indexOf(b.severity);
@@ -72,9 +73,19 @@ const plussesTold = (plusses, commit) =>
 const deltasTold = (deltas, commit) =>
   ['### Deltas', '', byDoor([...deltas].sort(bySeverity), delta => deltaOf(delta, commit)), ''];
 
+const rankedTold = (ranked, commit) =>
+  ranked.map((entry, at) => `${at + 1}. ${placeOf(entry, commit)} — ${told(entry.cost)} ${told(entry.change)}`);
+
+const summaryTold = ({ranked, held, deferred}, commit) => [
+  ...(ranked.length === 0 ? [] : [rankedTold(ranked, commit).join('\n'), '']),
+  `**Held:** ${told(held)}`,
+  '',
+  ...(empty(deferred) ? [] : [`**Deferred:** ${told(deferred)}`, ''])
+];
+
 export const summaryOf = ({tldr, plusses, deltas}, {commit} = {}) => {
   if (deltas.length === 0) {
-    return ['## The code holds up the home page', '', told(tldr), '', `${plural(plusses.length, 'plus', 'plusses')}, no deltas.`, '', ...plussesTold(plusses, commit)].join('\n');
+    return ['## The code holds up the home page', '', ...summaryTold(tldr, commit), `${plural(plusses.length, 'plus', 'plusses')}, no deltas.`, '', ...plussesTold(plusses, commit)].join('\n');
   }
   const counts = severities
     .map(severity => ({severity, count: deltas.filter(delta => delta.severity === severity).length}))
@@ -83,8 +94,7 @@ export const summaryOf = ({tldr, plusses, deltas}, {commit} = {}) => {
   return [
     '## The home page reviews the code',
     '',
-    told(tldr),
-    '',
+    ...summaryTold(tldr, commit),
     `${plural(plusses.length, 'plus', 'plusses')}. ${counts.join(', ')}.`,
     '',
     ...plussesTold(plusses, commit),

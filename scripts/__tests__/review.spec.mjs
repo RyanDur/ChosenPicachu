@@ -3,7 +3,7 @@ import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {promptFor} from '../review/prompt.mjs';
 import {deltaOf, leavesFeedback, plusOf, reviewIn, summaryOf, verdictOf} from '../review/report.mjs';
-import {aDelta, aPlus, review} from '../review/__test_support/feedback.mjs';
+import {aDelta, aPlus, aSummary, review} from '../review/__test_support/feedback.mjs';
 
 const placeOf = (text, needle) => {
   expect(text).toContain(needle);
@@ -84,12 +84,19 @@ describe('the review prompt', () => {
 
   test('the review answers in the feedback stance: a summary, then plusses and deltas, each with what happened and why', () => {
     const prompt = promptFor({scope: 'changes', before: 'abc', after: 'def'});
-    expect(prompt).toContain('Open with a summary of the feedback');
-    expect(prompt).toContain('from what matters most to what matters least');
+    expect(prompt).toContain('the deltas ranked from what matters most to what matters least, one line each with the place, the cost and the change');
+    expect(prompt).toContain('then held, one line; then deferred, one line, only if something was');
     expect(prompt).toContain('You take a feedback stance: plusses and deltas, each with its why.');
     expect(prompt).toContain('A **plus** is a choice in the code that holds a door up.');
     expect(prompt).toContain('A **delta** is a finding: something to change.');
     expect(prompt).toContain('Answer in the feedback stance');
+  });
+
+  test('the review is asked to write plainly, naming things and never narrating itself', () => {
+    const prompt = promptFor({scope: 'full'});
+    expect(prompt).toContain('One idea per sentence, and a sentence stays under twenty words.');
+    expect(prompt).toContain('Name things by their names: the token, the test, the file, the class.');
+    expect(prompt).toContain('Nothing about how the review was made');
   });
 
   test('a violation carries a trace to what a person would see, or it is a concern', () => {
@@ -103,15 +110,18 @@ describe('the review prompt', () => {
 
 describe('the review report', () => {
   test('reads the plusses and deltas the reviewer structured', () => {
-    expect(reviewIn(answer(review([plus], [note], 'one thing to change')))).toEqual({tldr: 'one thing to change', plusses: [plus], deltas: [note]});
+    const summary = aSummary({ranked: [{file: 'src/a.tsx', line: 3, cost: 'a div wraps a list.', change: 'Drop the div.'}]});
+    expect(reviewIn(answer(review([plus], [note], summary)))).toEqual({tldr: summary, plusses: [plus], deltas: [note]});
   });
 
   test('a review with neither plusses nor deltas is still read', () => {
-    expect(reviewIn(answer(review([], [], 'nothing to say')))).toEqual({tldr: 'nothing to say', plusses: [], deltas: []});
+    expect(reviewIn(answer(review([], [], aSummary({held: 'nothing to say'}))))).toEqual({tldr: aSummary({held: 'nothing to say'}), plusses: [], deltas: []});
   });
 
   test('an answer without a summary is refused', () => {
     expect(() => reviewIn(JSON.stringify({type: 'result', structured_output: {plusses: [], deltas: []}})))
+      .toThrow('structured output is missing');
+    expect(() => reviewIn(JSON.stringify({type: 'result', structured_output: {tldr: 'prose', plusses: [], deltas: []}})))
       .toThrow('structured output is missing');
   });
 
@@ -127,20 +137,38 @@ describe('the review report', () => {
   });
 
   test('no deltas reads as the code holding up, with the plusses still told', () => {
-    const summary = summaryOf(review([plus], []));
+    const summary = summaryOf(review([plus], [], aSummary({held: 'All of it holds.'})));
     expect(summary).toContain('## The code holds up the home page');
+    expect(summary).toContain('**Held:** All of it holds.');
     expect(summary).toContain('1 plus, no deltas.');
     expect(summary).toContain('the friends list is a fieldset with a legend');
   });
 
-  test('the summary of the feedback is told first, before any entry opens', () => {
-    const summary = summaryOf(review([plus], [violation], 'The list markup holds; the div around it has to go first.'));
-    expect(placeOf(summary, 'The list markup holds; the div around it has to go first.')).toBeLessThan(placeOf(summary, '<details>'));
-    expect(summaryOf(review([plus], [], 'All of it holds.'))).toContain('All of it holds.');
+  test('the summary ranks the deltas one line each, place then cost then change, before any entry opens', () => {
+    const summary = summaryOf(review([plus], [violation, concern], aSummary({
+      ranked: [
+        {file: 'src/a.tsx', line: 3, cost: 'a reader is told of a list twice.', change: 'Drop the div.'},
+        {file: 'src/b.css', line: 9, cost: 'every button wears the rule.', change: 'Name the button.'}
+      ],
+      held: 'The list markup holds.'
+    })));
+    expect(placeOf(summary, '1. `src/a.tsx:3` — a reader is told of a list twice. Drop the div.'))
+      .toBeLessThan(placeOf(summary, '2. `src/b.css:9` — every button wears the rule. Name the button.'));
+    expect(placeOf(summary, '**Held:** The list markup holds.')).toBeLessThan(placeOf(summary, '<details>'));
+  });
+
+  test('a deferred line follows what held only when something was deferred', () => {
+    expect(summaryOf(review([], [note], aSummary({deferred: 'The accordions are the author\'s.'})))).toContain('**Deferred:** The accordions are the author\'s.');
+    expect(summaryOf(review([], [note]))).not.toContain('**Deferred:**');
+  });
+
+  test('a ranked place links to the line at the reviewed commit when the commit is known', () => {
+    const summary = summaryOf(review([], [violation], aSummary({ranked: [{file: 'src/a.tsx', line: 3, cost: 'a cost.', change: 'a change.'}]})), {commit: {repository: 'RyanDur/ChosenPicachu', sha: 'abc123'}});
+    expect(summary).toContain('1. [`src/a.tsx:3`](https://github.com/RyanDur/ChosenPicachu/blob/abc123/src/a.tsx#L3) — a cost. a change.');
   });
 
   test('the summary stays words on the page', () => {
-    expect(summaryOf(review([], [note], 'wrap it in <b>bold</b>'))).toContain('wrap it in &lt;b&gt;bold&lt;/b&gt;');
+    expect(summaryOf(review([], [note], aSummary({held: 'wrap it in <b>bold</b>'})))).toContain('wrap it in &lt;b&gt;bold&lt;/b&gt;');
   });
 
   test('plusses and deltas are counted, deltas by severity', () => {
@@ -259,7 +287,9 @@ describe('the review report', () => {
   test('the schema the review answers in names every field the report tells, and the doors and severities once', () => {
     const schema = feedbackSchema();
     expect(schema.required).toEqual(['tldr', 'plusses', 'deltas']);
-    expect(schema.properties.tldr).toEqual({type: 'string'});
+    expect(schema.properties.tldr.required).toEqual(['ranked', 'held']);
+    expect(schema.properties.tldr.properties.ranked.items.required).toEqual(['file', 'line', 'cost', 'change']);
+    expect(Object.keys(schema.properties.tldr.properties)).toContain('deferred');
     expect(schema.properties.plusses.items.required).toEqual(expect.arrayContaining(['door', 'file', 'line', 'happened', 'why', 'principle']));
     expect(Object.keys(schema.properties.plusses.items.properties)).toContain('checked');
     expect(schema.properties.deltas.items.required).toEqual(expect.arrayContaining(['door', 'severity', 'file', 'line', 'happened', 'why', 'change', 'principle']));

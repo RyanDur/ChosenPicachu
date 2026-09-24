@@ -7,7 +7,29 @@
     "severity": {"type": "string", "enum": ["violation", "concern", "note"]}
   },
   "properties": {
-    "tldr": {"type": "string"},
+    "tldr": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ranked", "held"],
+      "properties": {
+        "ranked": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["file", "line", "cost", "change"],
+            "properties": {
+              "file": {"type": "string"},
+              "line": {"type": "integer", "minimum": 1},
+              "cost": {"type": "string"},
+              "change": {"type": "string"}
+            }
+          }
+        },
+        "held": {"type": "string"},
+        "deferred": {"type": "string"}
+      }
+    },
     "plusses": {
       "type": "array",
       "items": {

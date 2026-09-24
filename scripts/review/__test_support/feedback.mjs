@@ -20,4 +20,10 @@ export const aPlus = (traits = {}) => ({
   ...traits
 });
 
-export const review = (plusses, deltas, tldr = 'the code mostly holds; change the one thing first') => ({tldr, plusses, deltas});
+export const aSummary = (traits = {}) => ({
+  ranked: [],
+  held: 'the rest of the change holds',
+  ...traits
+});
+
+export const review = (plusses, deltas, tldr = aSummary()) => ({tldr, plusses, deltas});
