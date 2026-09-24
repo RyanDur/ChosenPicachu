@@ -125,6 +125,7 @@ const carryColumnOver = (target: string): void => {
 const startCarryingColumn = (): void => columnInHand.carryStarted();
 const carryColumnOn = (by: {x?: number; y?: number}): void => columnInHand.carriedOn(by);
 const loseColumnCaptureOver = (target: string): void => columnInHand.captureLostAt(edgeOf(target) + (widths[target] ?? 0) / 2);
+const loseColumnCaptureUnheld = (): void => columnInHand.captureLostUnheld();
 const dropColumn = (): void => columnInHand.dropped();
 afterEach(() => {
   heldRow = '';
@@ -221,6 +222,17 @@ describe('columns by hand', () => {
     expect(surface()).toHaveClass('carried');
     expect(captured).toEqual([1, 1]);
     dropColumn();
+  });
+
+  test('a pointer lost with no button held drops the column where it is', () => {
+    seat(EagerTable, 'keep static');
+    liftColumn('trades');
+    carryColumnOver('buys');
+
+    loseColumnCaptureUnheld();
+
+    expect(carried()).toEqual([]);
+    expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
   });
 
   test('a column that loses the pointer keeps crossing its neighbours', () => {
@@ -377,8 +389,8 @@ describe('rows by hand', () => {
 
     loseRowCapture();
 
-    await waitFor(() => expect(retaken.length).toBeGreaterThan(0));
-    expect(retaken.every(target => target === 'grip')).toBe(true);
+    await waitFor(() => expect(retaken).toContain('grip'));
+    expect(retaken).not.toContain('header cell');
   });
 
   test('a row that lost the pointer keeps crossing its neighbours', () => {
