@@ -74,8 +74,10 @@ const mount = (document: Document, table: HTMLTableElement, body: HTMLTableSecti
   const rowTo = (row: string, to: number, heights: Readonly<Record<string, number>>): void => {
     const before = standing();
     const from = before.indexOf(row);
-    arrangement.dispatch(rowMoved(row, to, before));
-    report({axis: 'row', position: to, of: before.length});
+    if (to !== from) {
+      arrangement.dispatch(rowMoved(row, to, before));
+      report({axis: 'row', position: to, of: before.length});
+    }
     rowShoving(row, before, to, heights);
     settleRow(mounted, row, settlingFromSeat({x: 0, y: to > from ? -spanCrossed(before, heights, from, to) : spanCrossed(before, heights, from, to)}));
   };

@@ -30,13 +30,13 @@ export const columnArrows = (
 export const rowArrows = (
   held: string,
   standing: () => readonly string[],
-  arrange: (nudge: {to: number; after: string[]; heights: Readonly<Record<string, number>>}) => void
+  arrange: (nudge: {from: number; to: number; after: string[]; heights: Readonly<Record<string, number>>}) => void
 ) => (event: ArrowKey): void => {
   maybe(rowSteps[event.key]).map(toward => {
     event.preventDefault();
     const seats = standing();
-    const {to} = nudgedRow(seats, held, toward);
+    const {from, to} = nudgedRow(seats, held, toward);
     const table = event.currentTarget instanceof Element ? event.currentTarget.closest('table') : null;
-    arrange({to, after: array.moveToIndex(to, held, seats), heights: table === null ? {} : rowHeights(table, seats)});
+    arrange({from, to, after: array.moveToIndex(to, held, seats), heights: table === null ? {} : rowHeights(table, seats)});
   });
 };

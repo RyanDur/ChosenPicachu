@@ -103,16 +103,16 @@ describe('the travel vocabulary', () => {
     expect(arranged).toEqual([]);
   });
 
-  it('row arrows always arrange, so the rail nudge still bakes', () => {
-    const arranged: {to: number; after: string[]}[] = [];
+  it('row arrows always arrange, so the rail nudge still bakes, and say where the row came from', () => {
+    const arranged: {from: number; to: number; after: string[]}[] = [];
     const rows = ['this minute', 'this hour', 'session'];
 
-    rowArrows('this minute', () => rows, ({to, after}) => arranged.push({to, after}))(pressed('ArrowDown'));
-    rowArrows('session', () => rows, ({to, after}) => arranged.push({to, after}))(pressed('ArrowDown'));
+    rowArrows('this minute', () => rows, ({from, to, after}) => arranged.push({from, to, after}))(pressed('ArrowDown'));
+    rowArrows('session', () => rows, ({from, to, after}) => arranged.push({from, to, after}))(pressed('ArrowDown'));
 
     expect(arranged).toEqual([
-      {to: 1, after: ['this hour', 'this minute', 'session']},
-      {to: 2, after: ['this minute', 'this hour', 'session']}
+      {from: 0, to: 1, after: ['this hour', 'this minute', 'session']},
+      {from: 2, to: 2, after: ['this minute', 'this hour', 'session']}
     ]);
   });
 });

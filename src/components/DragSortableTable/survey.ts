@@ -140,12 +140,12 @@ export const columnNudge = (order: readonly string[]) =>
     return to === from ? undefined : {from, to};
   };
 
-type RowNudge = {to: number; after: string[]};
+type RowNudge = {from: number; to: number; after: string[]};
 
 export const rowNudge = (seats: readonly string[]) =>
   (held: string, toward: number): RowNudge => {
-    const {to} = nudgedRow(seats, held, toward);
-    return {to, after: array.moveToIndex(to, held, seats)};
+    const {from, to} = nudgedRow(seats, held, toward);
+    return {from, to, after: array.moveToIndex(to, held, seats)};
   };
 
 export const gripLabel = (position: number): string => `move row ${position + 1}`;

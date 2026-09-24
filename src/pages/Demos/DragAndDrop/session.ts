@@ -1,5 +1,5 @@
 import {DragEvent} from 'react';
-import {Maybe, has} from '@ryandur/sand';
+import {Maybe, has, nothing, some} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {glide} from '@components/glide';
 import {crossed} from './crossing';
@@ -31,7 +31,8 @@ export const moveReport = ({item, position, of}: Moved): string =>
   `${item} moved to ${position + 1} of ${of}`;
 
 export const landedMove = (aloft: Maybe<string>, landing: Maybe<number>, order: readonly string[]): Maybe<Moved> =>
-  aloft.and(landing).map(([item, position]) => ({item, position, of: order.length}));
+  aloft.and(landing).mBind(([item, position]) =>
+    position === order.indexOf(item) ? nothing() : some({item, position, of: order.length}));
 
 export const glided = (apply: (settled: string[]) => void) => (settled: string[]): void => {
   setTimeout(() => glide(true)(() => apply(settled)));
