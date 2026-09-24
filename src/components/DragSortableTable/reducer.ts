@@ -59,6 +59,7 @@ const widths = (state: TableState, action: TableAction): TableState => {
     case 'measured': return measure(state, action.widths);
     case 'awoken': return awaken(state, action.widths);
     case 'tradedBy': return trade(state, action.column, action.neighbour, action.delta);
+    case 'reported': return {...state, report: action.report};
     case 'gripped': return grip(state, action.column, action.grip);
     case 'handleDragged': return dragHandle(state, action.neighbour, action.clientX);
     case 'released': return ungrip(state);

@@ -1,6 +1,8 @@
 import {ComponentProps, ReactNode, useState, useSyncExternalStore} from 'react';
 import {Table, TableContext} from './context';
 import {tableStore} from './store';
+import {MoveReport} from './MoveReport';
+import {selectReport} from './selectors';
 import {TableColumn, Labelled, Seated} from './table-state';
 import './Table.css';
 import './sortable.css';
@@ -22,5 +24,6 @@ export const DragSortableTable = <C extends Labelled>({caption, columns, rows, c
       <caption className="off-screen">{caption}</caption>
       {children}
     </table>
+    <MoveReport report={selectReport(context)}/>
   </Table.Provider>;
 };

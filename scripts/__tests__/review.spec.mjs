@@ -1,4 +1,6 @@
-import {readFileSync} from 'node:fs';
+import {mkdtempSync, readFileSync} from 'node:fs';
+import {tmpdir} from 'node:os';
+import {spawnSync} from 'node:child_process';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {promptFor} from '../review/prompt.mjs';
@@ -208,6 +210,16 @@ describe('the review report', () => {
     expect(placeOf(summary, '### One more thing')).toBeLessThan(placeOf(summary, '#### Where\n\n- ○ `src/s.tsx:7`. a stray thing'));
     expect(placeOf(summary, '- ○ `src/s.tsx:7`.')).toBeLessThan(placeOf(summary, '#### Keep doing\n\n- + `src/k.tsx:8`. a stray keep'));
     expect(summaryOf(review([], [note], [heading]))).not.toContain('### One more thing');
+  });
+
+  test('the run says on stderr how many entries named a habit the review did not list', () => {
+    const stray = aDelta({habit: 'nothing of the sort'});
+    const script = join(dirname(fileURLToPath(import.meta.url)), '../review/report.mjs');
+    const run = spawnSync(process.execPath, [script], {input: answer(review([], [note, stray], [heading])), cwd: mkdtempSync(join(tmpdir(), 'review-')), encoding: 'utf8'});
+
+    expect(run.status).toBe(0);
+    expect(run.stderr).toBe('1 entry named a habit the review did not list\n');
+    expect(run.stdout).toContain('### One more thing');
   });
 
   test('the entries whose habit matches none are counted, so the run can say so', () => {

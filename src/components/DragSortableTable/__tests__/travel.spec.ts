@@ -104,11 +104,11 @@ describe('the travel vocabulary', () => {
   });
 
   it('row arrows always nudge, so the rail nudge still bakes, and say a move only when the seat changed', () => {
-    const nudged: {from: number; to: number; after: string[]}[] = [];
+    const nudged: {from: number; to: number}[] = [];
     const moved: number[] = [];
     const rows = ['this minute', 'this hour', 'session'];
     const arrows = (held: string) => rowArrows(held, () => rows, {
-      nudged: ({from, to, after}) => nudged.push({from, to, after}),
+      nudged: ({from, to}) => nudged.push({from, to}),
       moved: ({to}) => moved.push(to)
     });
 
@@ -116,8 +116,8 @@ describe('the travel vocabulary', () => {
     arrows('session')(pressed('ArrowDown'));
 
     expect(nudged).toEqual([
-      {from: 0, to: 1, after: ['this hour', 'this minute', 'session']},
-      {from: 2, to: 2, after: ['this minute', 'this hour', 'session']}
+      {from: 0, to: 1},
+      {from: 2, to: 2}
     ]);
     expect(moved).toEqual([1]);
   });

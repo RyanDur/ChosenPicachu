@@ -1,3 +1,4 @@
+import {Report} from './report';
 import {has, maybe, Maybe, not} from '@ryandur/sand';
 import {neighborOf} from '@components/Table/shares';
 import {TableColumn, ColumnDrag, ColumnShove, Labelled, Marks, RowDrag, RowShove, Settling, seatOffset, settlingAt} from './table-state';
@@ -42,8 +43,7 @@ export const columnHeld = (name: string) => (view: TableView): boolean => has(co
 
 export const columnGripped = (name: string) => ({state}: TableView): boolean => state.resizing?.column === name;
 
-export const shareTradedAt = (name: string) => ({state}: TableView): number | undefined =>
-  state.lastTrade?.column === name ? state.widths?.[name] : undefined;
+export const selectReport = ({state}: TableView): Report | undefined => state.report;
 
 export const rowHeld = (key: string) => (view: TableView): boolean => has(rowDrag(key)(view));
 

@@ -1,5 +1,4 @@
 import {maybe} from '@ryandur/sand';
-import {array} from '@components/arrays';
 import {anchored, bounded, columnSteps, nudgedColumn, nudgedRow, rowHeights, rowSteps} from './survey';
 
 type ArrowKey = {
@@ -27,7 +26,7 @@ export const columnArrows = (
   });
 };
 
-type RowNudge = {from: number; to: number; after: string[]; heights: Readonly<Record<string, number>>};
+type RowNudge = {from: number; to: number; heights: Readonly<Record<string, number>>};
 
 export const rowArrows = (
   held: string,
@@ -39,7 +38,7 @@ export const rowArrows = (
     const seats = standing();
     const {from, to} = nudgedRow(seats, held, toward);
     const table = event.currentTarget instanceof Element ? event.currentTarget.closest('table') : null;
-    const nudge = {from, to, after: array.moveToIndex(to, held, seats), heights: table === null ? {} : rowHeights(table, seats)};
+    const nudge = {from, to, heights: table === null ? {} : rowHeights(table, seats)};
     nudged(nudge);
     if (to !== from) {
       moved(nudge);

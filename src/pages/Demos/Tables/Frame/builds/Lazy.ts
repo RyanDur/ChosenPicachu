@@ -28,7 +28,7 @@ import {
   demosStore,
   drifted,
   feedRequested,
-  Landed,
+  Report,
   lifted,
   MountedTable,
   moveReport,
@@ -71,9 +71,9 @@ const mount = (document: Document, table: HTMLTableElement, body: HTMLTableSecti
   const columns = (): readonly string[] => arrangement.state.columns;
   const standing = (): readonly string[] => standingOf(arrangement.state, valueOf);
 
-  const report = (landed: Landed): void => {
+  const report = (report: Report): void => {
     const output = document.querySelector('output.move-report');
-    const text = moveReport(landed);
+    const text = moveReport(report);
     if (output !== null && output.textContent !== text) {
       output.textContent = text;
     }
@@ -85,7 +85,7 @@ const mount = (document: Document, table: HTMLTableElement, body: HTMLTableSecti
     const current = columns();
     const from = current.indexOf(name);
     arrangement.dispatch(columnMoved(name, to));
-    report({axis: 'column', name, position: to, of: current.length});
+    report({about: 'column', name, position: to, of: current.length});
     shoveColumns(mounted, displacedBetween(current, from, to), {toward: to > from ? 'start' : 'end', by: widths[name] ?? 0});
   };
   const columnTo = (name: string, to: number, widths: Readonly<Record<string, number>>): void => {
@@ -111,13 +111,13 @@ const mount = (document: Document, table: HTMLTableElement, body: HTMLTableSecti
   const rowTo = (row: string, to: number): void => {
     const before = standing();
     arrangement.dispatch(rowMoved(row, to, before));
-    report({axis: 'row', position: to, of: before.length});
+    report({about: 'row', position: to, of: before.length});
   };
   const rowBeside = (row: string, neighbour: string): void => {
     const before = standing();
     const to = before.indexOf(neighbour);
     arrangement.dispatch(rowMoved(row, to, before));
-    report({axis: 'row', position: to, of: before.length});
+    report({about: 'row', position: to, of: before.length});
     rowShoving(row, before, to, hand.state.drag?.survey.rowHeights ?? {});
   };
 
@@ -262,7 +262,7 @@ const mount = (document: Document, table: HTMLTableElement, body: HTMLTableSecti
 
   const choose = (column: string) => (direction?: Direction): void => {
     arrangement.dispatch(sorted(column, direction));
-    report({axis: 'sort', name: column, direction});
+    report({about: 'sort', name: column, direction});
   };
 
   sortable.forEach(column => wireMenu(document, column, choose(column)));

@@ -548,7 +548,7 @@ describe('sort criteria menus', () => {
     expect(windowNames()).toEqual(['session', 'last 15 minutes', 'this hour', 'last 5 minutes', 'this minute']);
   });
 
-  test('an arrow at the edge of a sorted table keeps the sort and says nothing', async () => {
+  test('an arrow at the edge of a sorted table keeps the sort and adds no report', async () => {
     seat(EagerTable, 'keep static');
     await userEvent.click(within(menuFor('sort trades')).getByRole('button', {name: 'descending', hidden: true}));
 
@@ -570,7 +570,22 @@ describe('sort criteria menus', () => {
     expect(announced()).toEqual(['trades sort reset']);
   });
 
-  test('an arrow at the edge of a sorted lazy table keeps the sort and says nothing more', async () => {
+  test('a sort on a second column replaces what the page said about the first', async () => {
+    seat(EagerTable, 'keep static');
+
+    await userEvent.click(within(menuFor('sort trades')).getByRole('button', {name: 'descending', hidden: true}));
+    await userEvent.click(within(menuFor('sort buys')).getByRole('button', {name: 'ascending', hidden: true}));
+
+    expect(announced()).toEqual(['buys sorted ascending']);
+  });
+
+  test('a table speaks through one move report', () => {
+    seat(EagerTable, 'keep static');
+
+    expect(screen.getAllByRole('status', {name: 'move report'})).toHaveLength(1);
+  });
+
+  test('an arrow at the edge of a sorted lazy table keeps the sort and adds no report', async () => {
     seat(LazyTable, 'keep static');
     await userEvent.click(within(menuFor('sort trades')).getByRole('button', {name: 'descending', hidden: true}));
 

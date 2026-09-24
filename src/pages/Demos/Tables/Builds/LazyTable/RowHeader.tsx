@@ -1,14 +1,12 @@
-import {ComponentProps, FC, useState} from 'react';
+import {ComponentProps, FC} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
-import {Landed} from '@components/DragSortableTable/report';
-import {MoveReport} from '@components/DragSortableTable/MoveReport';
 import {useBodyEvents, useTableDispatch, useTableSelector} from '@components/DragSortableTable/context';
 import {columnHeld, driftOfColumn, driftOfRow, positionOfRow, rowDrag, rowHeld, rowMarks, seatOfColumn, seatOfRow, selectOrder, selectRowCount, selectStanding, settlingOfRowIn} from '@components/DragSortableTable/selectors';
 import {Survey} from '@components/DragSortableTable/survey';
 import {RowGrip} from '@components/DragSortableTable/RowGrip';
 import {RowDrag, pixels, shoveDistance, shovedClass} from '@components/DragSortableTable/table-state';
-import {lifted, drifted, dropped, rowLandingFound, rowMovedBeside, rowWalkedTo, settled} from '@components/DragSortableTable/actions';
+import {reported, lifted, drifted, dropped, rowLandingFound, rowMovedBeside, rowWalkedTo, settled} from '@components/DragSortableTable/actions';
 import {Moving, pointerTravel} from '@components/DragSortableTable/travel';
 import {movedTo} from '@components/DragSortableTable/arrangement';
 import {releasedRow, travelledRow} from './travel';
@@ -32,20 +30,19 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
   const columnDrift = useTableSelector(driftOfColumn(column));
   const rowDrift = useTableSelector(driftOfRow(row));
   const view = useTableSelector(whole => whole);
-  const [landed, setLanded] = useState<Landed>();
   const seat = columnSeat ?? rowSeat;
   const drift = columnDrift ?? rowDrift;
 
-  const nudgedTo = (to: number, heights: Readonly<Record<string, number>>): void => dispatch(rowWalkedTo(row, to, heights, standing));
-  const walkedTo = (to: number): void => {
+  const nudged = (to: number, heights: Readonly<Record<string, number>>): void => dispatch(rowWalkedTo(row, to, heights, standing));
+  const arrived = (to: number): void => {
     onRowMoved?.({row, to, standing});
-    setLanded({axis: 'row', position: to, of: count});
+    dispatch(reported({about: 'row', position: to, of: count}));
   };
   const beside = (neighbour: string, survey: Survey): void => {
     const to = standing.indexOf(neighbour);
     dispatch(rowMovedBeside(row, neighbour, survey.rowHeights, standing));
     onRowMoved?.({row, to, standing});
-    setLanded({axis: 'row', position: to, of: count});
+    dispatch(reported({about: 'row', position: to, of: count}));
   };
 
   const lift = (grab: Grab): void => dispatch(lifted({axis: 'row', held: row}, grab));
@@ -80,8 +77,7 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
       onPointerUp={has(drag) ? release : undefined}
       onPointerCancel={has(drag) ? release : undefined}
       onLostPointerCapture={has(drag) ? pointerTravel(moved(drag), release) : undefined}
-      onKeyDown={rowArrows(row, () => standing, {nudged: ({to, heights}) => nudgedTo(to, heights), moved: ({to}) => walkedTo(to)})}/>
+      onKeyDown={rowArrows(row, () => standing, {nudged: ({to, heights}) => nudged(to, heights), moved: ({to}) => arrived(to)})}/>
     {label}
-    <MoveReport landed={landed}/>
   </th>;
 };

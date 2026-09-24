@@ -292,7 +292,7 @@ describe('the frame table', () => {
     expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
   });
 
-  it('a keyboard nudge at the rail keeps the sort and says nothing', async () => {
+  it('a keyboard nudge at the rail keeps the sort and adds no report', async () => {
     vanillaFrame.stand();
 
     await userEvent.click(sortMenu('trades').getByRole('button', {name: 'ascending', hidden: true}));
@@ -306,7 +306,7 @@ describe('the frame table', () => {
     expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent('trades sorted ascending');
   });
 
-  it('a keyboard nudge at the rail of the lazy build keeps the sort and says nothing', async () => {
+  it('a keyboard nudge at the rail of the lazy build keeps the sort and adds no report', async () => {
     vanillaFrame.stand({pace: 'lazy'});
 
     await userEvent.click(sortMenu('trades').getByRole('button', {name: 'ascending', hidden: true}));

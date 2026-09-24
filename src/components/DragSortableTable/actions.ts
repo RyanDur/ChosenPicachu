@@ -1,3 +1,4 @@
+import {Report} from './report';
 import {ColumnWidths, Grip} from '@components/Table/shares';
 import {Carry, ColumnShove, RowShove, Settling} from './table-state';
 import {Moving} from './travel';
@@ -22,7 +23,8 @@ export type TableAction =
   | {readonly type: 'columnMovedBeside'; readonly name: string; readonly neighbour: string; readonly widths: Readonly<Record<string, number>>; readonly order: readonly string[]}
   | {readonly type: 'columnWalkedTo'; readonly name: string; readonly to: number; readonly widths: Readonly<Record<string, number>>; readonly order: readonly string[]}
   | {readonly type: 'rowMovedBeside'; readonly row: string; readonly neighbour: string; readonly heights: Readonly<Record<string, number>>; readonly standing: readonly string[]}
-  | {readonly type: 'rowWalkedTo'; readonly row: string; readonly to: number; readonly heights: Readonly<Record<string, number>>; readonly standing: readonly string[]};
+  | {readonly type: 'rowWalkedTo'; readonly row: string; readonly to: number; readonly heights: Readonly<Record<string, number>>; readonly standing: readonly string[]}
+  | {readonly type: 'reported'; readonly report: Report};
 
 type Action = TableAction;
 
@@ -47,7 +49,8 @@ const tableActions: Record<Action['type'], true> = {
   columnMovedBeside: true,
   columnWalkedTo: true,
   rowMovedBeside: true,
-  rowWalkedTo: true
+  rowWalkedTo: true,
+  reported: true
 };
 
 export const isTableAction = (action: Foreign): action is TableAction => action.type in tableActions;
@@ -75,3 +78,4 @@ export const rowMovedBeside = (row: string, neighbour: string, heights: Readonly
   ({type: 'rowMovedBeside', row, neighbour, heights, standing});
 export const rowWalkedTo = (row: string, to: number, heights: Readonly<Record<string, number>>, standing: readonly string[]): Action =>
   ({type: 'rowWalkedTo', row, to, heights, standing});
+export const reported = (report: Report): Action => ({type: 'reported', report});

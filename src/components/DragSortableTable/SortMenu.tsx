@@ -1,12 +1,11 @@
-import {FC, useState} from 'react';
+import {FC} from 'react';
 import {choices} from './sorting';
-import {useHeaderEvents} from './context';
-import {Landed} from './report';
-import {MoveReport} from './MoveReport';
+import {useHeaderEvents, useTableDispatch} from './context';
+import {reported} from './actions';
 
 export const SortMenu: FC<{column: string}> = ({column}) => {
   const {onSorted} = useHeaderEvents();
-  const [said, setSaid] = useState<Landed>();
+  const dispatch = useTableDispatch();
 
   return <>
     <button type="button" tabIndex={0} className="menu-toggle rounded-corners"
@@ -21,10 +20,9 @@ export const SortMenu: FC<{column: string}> = ({column}) => {
             popoverTarget={`sort-${column}`} popoverTargetAction="hide"
             onClick={() => {
               onSorted?.({column, direction});
-              setSaid({axis: 'sort', name: column, direction});
+              dispatch(reported({about: 'sort', name: column, direction}));
             }}>{display}</button>
         </li>)}
     </menu>
-    <MoveReport landed={said}/>
   </>;
 };

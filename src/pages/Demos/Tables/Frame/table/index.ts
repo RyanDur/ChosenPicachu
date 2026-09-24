@@ -1,4 +1,4 @@
-export type {Carry, Drag, Landed, MountedTable, TableState} from './table-state';
+export type {Carry, Drag, MountedTable, Report, TableState} from './table-state';
 export {columnMoved, columnOf, measured, rowMoved, sorted, tradedBy} from './table-state';
 export {dressCarried} from './carry';
 export {keepingFocus} from './focus';

@@ -1,14 +1,12 @@
-import {ComponentProps, FC, useState} from 'react';
+import {ComponentProps, FC} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {shareWidth} from '@components/Table/shares';
-import {Landed} from './report';
-import {MoveReport} from './MoveReport';
 import {useHeaderEvents, useTableDispatch, useTableSelector} from './context';
 import {columnDrag, columnHeld, columnMarks, columnNamed, unknownColumn, columnTravels, driftOfColumn, seatOfColumn, selectColumnCount, selectOrder, selectStanding, settlingOfColumnIn, widthOfColumn} from './selectors';
 import {columnUnder, interior, Survey} from './survey';
 import {ColumnDrag, pixels, shoveDistance, shovedClass} from './table-state';
-import {lifted, columnMovedBeside, columnWalkedTo, drifted, dropped, settled} from './actions';
+import {reported, lifted, columnMovedBeside, columnWalkedTo, drifted, dropped, settled} from './actions';
 import {Moving, eagerTravel, pointerTravel} from './travel';
 import {Grab, columnLift} from './lift';
 import {columnArrows} from './arrows';
@@ -18,7 +16,6 @@ import './motion.css';
 export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({column, className, children, ...th}) => {
   const dispatch = useTableDispatch();
   const {onColumnMoved} = useHeaderEvents();
-  const [landed, setLanded] = useState<Landed>();
   const order = useTableSelector(selectOrder);
   const standing = useTableSelector(selectStanding);
   const {sorted, data} = useTableSelector(columnNamed(column)).orElse(unknownColumn(column));
@@ -35,13 +32,13 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
   const walkedTo = (to: number, widths: Readonly<Record<string, number>>): void => {
     dispatch(columnWalkedTo(column, to, widths, order));
     onColumnMoved?.({column, to});
-    setLanded({axis: 'column', name: column, position: to, of: count});
+    dispatch(reported({about: 'column', name: column, position: to, of: count}));
   };
   const beside = (neighbour: string, survey: Survey): void => {
     const to = interior(order.indexOf(neighbour), count);
     dispatch(columnMovedBeside(column, neighbour, survey.columnWidths, order));
     onColumnMoved?.({column, to});
-    setLanded({axis: 'column', name: column, position: to, of: count});
+    dispatch(reported({about: 'column', name: column, position: to, of: count}));
   };
 
   const lift = (grab: Grab): void => dispatch(lifted({axis: 'column', held: column}, grab));
@@ -77,6 +74,5 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
       '--shoved-by': shoveDistance(shoved)
     }}>
     {children}
-    <MoveReport landed={landed}/>
   </th>;
 };

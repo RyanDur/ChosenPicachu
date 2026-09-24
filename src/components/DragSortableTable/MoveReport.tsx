@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {maybe} from '@ryandur/sand';
-import {Landed, moveReport} from './report';
+import {Report, moveReport} from './report';
 
-export const MoveReport: FC<{landed?: Landed}> = ({landed}) =>
+export const MoveReport: FC<{report?: Report}> = ({report}) =>
   <output className="move-report off-screen"
-    aria-label="move report">{maybe(landed).map(moveReport).orElse('')}</output>;
+    aria-label="move report">{maybe(report).map(moveReport).orElse('')}</output>;

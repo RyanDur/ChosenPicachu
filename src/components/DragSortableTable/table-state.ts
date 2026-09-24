@@ -1,3 +1,4 @@
+import {Report} from './report';
 import {has, maybe} from '@ryandur/sand';
 import {ColumnWidths, Grip, soughtTrade, traded} from '@components/Table/shares';
 import {Direction, Value} from './sorting';
@@ -63,8 +64,6 @@ type Resizing =
   | {readonly stage: 'gripped'; readonly column: string; readonly from: Grip}
   | {readonly stage: 'dragging'; readonly column: string; readonly from: Grip; readonly carried: number};
 
-type Trade = {readonly column: string};
-
 export type Marks<Shove> = {
   readonly settlingFrom?: Settling;
   readonly shoved?: Shove;
@@ -76,7 +75,7 @@ export type TableState = {
   readonly rowMarks: Readonly<Record<string, Marks<RowShove>>>;
   readonly drag?: Drag;
   readonly resizing?: Resizing;
-  readonly lastTrade?: Trade;
+  readonly report?: Report;
 };
 
 export const resting: TableState = {columnMarks: {}, rowMarks: {}};
@@ -93,7 +92,10 @@ export const widthsOf = ({widths}: TableState): ColumnWidths | undefined => widt
 
 export const trade = (state: TableState, column: string, neighbour: string, delta: number): TableState =>
   maybe(state.widths)
-    .map(previous => ({...measure(state, traded(column, neighbour, delta)(previous)), lastTrade: {column}}))
+    .map(previous => measure(state, traded(column, neighbour, delta)(previous)))
+    .map(next => maybe(next.widths?.[column])
+      .map((share): TableState => ({...next, report: {about: 'share', name: column, share}}))
+      .orElse(next))
     .orElse(state);
 
 export const grip = (state: TableState, column: string, from: Grip): TableState =>

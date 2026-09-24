@@ -60,7 +60,7 @@ const wireHandle = (mounted: MountedTable, column: string, handle: HTMLButtonEle
 const reportShare = (mounted: MountedTable, column: string): void => {
   const share = widthsOf(mounted.store.state)?.[column];
   if (has(share)) {
-    mounted.report({axis: 'share', name: column, share});
+    mounted.report({about: 'share', name: column, share});
   }
 };
 
