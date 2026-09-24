@@ -1,7 +1,8 @@
 :root {
-  /* The palette: every color the site owns, named for what it is */
+  /* The base colors, each written once. The grey scale, light to dark */
   --white: rgb(255, 255, 255);
   --paper: rgb(244, 244, 244);
+  --disabled-gray: rgba(239, 239, 239, 0.3);
   --silver: rgb(204, 204, 204);
   --smoke: rgb(153, 153, 153);
   --gray: rgb(128, 128, 128);
@@ -9,43 +10,52 @@
   --void: rgb(14, 11, 22);
   --black: rgb(0, 0, 0);
 
+  /* The color wheel, red round to violet */
+  --internationl-orange-engineering: rgb(186, 45, 11);
   --silk: rgb(220, 208, 192);
+  --faded-leather: rgba(171, 152, 122, 0.2);
   --field-drab: rgb(106, 88, 55);
-
   --mint: rgb(180, 219, 192);
   --primary-blue: rgb(21, 101, 192);
+  --focus-blue: rgba(30, 118, 224, 0.68);
   --primary-dark-blue: rgb(13, 71, 161);
   --plum: rgb(85, 26, 139);
-  --internationl-orange-engineering: rgb(186, 45, 11);
 
-  /* Mixes: shades, tints and veils drawn from the palette */
-  --mint-ink: color-mix(in srgb, var(--mint) 45%, black);
-  --mint-shade: color-mix(in srgb, var(--mint) 85%, black);
-  --mint-dim: color-mix(in srgb, var(--mint) 75%, black);
-  --faded-mint: rgba(180, 219, 192, 0.5);
-  --internationl-orange-engineering-shade: color-mix(in srgb, var(--internationl-orange-engineering) 70%, black);
-  --faded-internationl-orange-engineering: rgba(186, 45, 11, 0.4);
-  --faded-leather: rgba(171, 152, 122, 0.2);
-  --focus-blue: rgba(30, 118, 224, 0.68);
-  --disabled-gray: rgba(239, 239, 239, 0.3);
-  --white-clear: rgba(255, 255, 255, 0);
-  --paper-veil: rgba(244, 244, 244, 0.7);
-  --charcoal-veil: rgba(55, 55, 55, 0.5);
+  /* The highlight palette, darcula-derived and brightened to clear contrast on its own paper, round the wheel */
+  --code-paper: rgb(43, 43, 43);
+  --code-keyword: rgb(217, 142, 76);
+  --code-call: rgb(255, 198, 109);
+  --code-tag: rgb(232, 191, 106);
+  --code-string: rgb(124, 166, 96);
+  --code-number: rgb(121, 168, 204);
+  --code-ink: rgb(169, 183, 198);
+  --code-attribute: rgb(187, 181, 226);
 
-  /* Light: shadows and glows */
-  --faint-shadow: rgba(0, 0, 0, 0.12);
-  --light-shadow: rgba(0, 0, 0, 0.16);
-  --shadow: rgba(0, 0, 0, 0.19);
-  --dark-shadow: rgba(0, 0, 0, 0.23);
-  --light-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12),
-  0 1px 2px rgba(0, 0, 0, 0.24);
-  --drop-shadow: 0 14px 28px rgba(0, 0, 0, 0.25),
-  0 10px 10px rgba(0, 0, 0, 0.22);
+  /* Drawn from the base colors: shades, veils and shadows */
+  --mint-ink: color-mix(in srgb, var(--mint) 45%, var(--black));
+  --mint-shade: color-mix(in srgb, var(--mint) 85%, var(--black));
+  --mint-dim: color-mix(in srgb, var(--mint) 75%, var(--black));
+  --internationl-orange-engineering-shade: color-mix(in srgb, var(--internationl-orange-engineering) 70%, var(--black));
+  --faded-mint: rgb(from var(--mint) r g b / 0.5);
+  --faded-internationl-orange-engineering: rgb(from var(--internationl-orange-engineering) r g b / 0.4);
+  --paper-veil: rgb(from var(--paper) r g b / 0.7);
+  --charcoal-veil: rgb(from var(--charcoal) r g b / 0.5);
+  --white-clear: rgb(from var(--white) r g b / 0);
+  --faint-shadow: rgb(from var(--black) r g b / 0.12);
+  --light-shadow: rgb(from var(--black) r g b / 0.16);
+  --shadow: rgb(from var(--black) r g b / 0.19);
+  --dark-shadow: rgb(from var(--black) r g b / 0.23);
+
+  /* Light: how the shadows and glows fall */
+  --light-box-shadow: 0 1px 3px var(--faint-shadow),
+  0 1px 2px rgb(from var(--black) r g b / 0.24);
+  --drop-shadow: 0 14px 28px rgb(from var(--black) r g b / 0.25),
+  0 10px 10px rgb(from var(--black) r g b / 0.22);
   --raised: 0 10px 14px var(--faint-shadow);
   --press-glow: inset 0 0 5px var(--void);
   --press-glow-soft: inset 0 0 5px var(--charcoal);
-  --alarm-glow: 0 2px 15px 15px rgb(186, 45, 11),
-  0 1px 2px rgba(255, 255, 255, 1);
+  --alarm-glow: 0 2px 15px 15px var(--internationl-orange-engineering),
+  0 1px 2px var(--white);
 
   /* The theme: what the page wears, in the words the sheets ask for */
   --backdrop: var(--void);
@@ -60,15 +70,7 @@
   --alarm-ink: var(--internationl-orange-engineering);
   --ring: var(--charcoal);
 
-  /* The code theme: darcula-derived, brightened to clear contrast on its own paper */
-  --code-paper: rgb(43, 43, 43);
-  --code-ink: rgb(169, 183, 198);
-  --code-keyword: rgb(217, 142, 76);
-  --code-string: rgb(124, 166, 96);
-  --code-number: rgb(121, 168, 204);
-  --code-comment: rgb(153, 153, 153);
-  --code-tag: rgb(232, 191, 106);
-  --code-attribute: rgb(187, 181, 226);
-  --code-type: rgb(232, 191, 106);
-  --code-call: rgb(255, 198, 109);
+  /* The code theme */
+  --code-comment: var(--smoke);
+  --code-type: var(--code-tag);
 }
