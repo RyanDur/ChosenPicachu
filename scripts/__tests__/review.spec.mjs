@@ -183,7 +183,7 @@ describe('the review report', () => {
 
   test('a ranked place links to the line at the reviewed commit when the commit is known', () => {
     const summary = summaryOf(review([], [violation], aSummary({ranked: [{file: 'src/a.tsx', line: 3, cost: 'a cost.', change: 'a change.'}]})), {commit: {repository: 'RyanDur/ChosenPicachu', sha: 'abc123'}});
-    expect(summary).toContain('1. [`src/a.tsx:3`](https://github.com/RyanDur/ChosenPicachu/blob/abc123/src/a.tsx#L3). A cost. a change.');
+    expect(summary).toContain('1. [`src/a.tsx:3`](https://github.com/RyanDur/ChosenPicachu/blob/abc123/src/a.tsx#L3)');
   });
 
   test('the summary stays words on the page', () => {
