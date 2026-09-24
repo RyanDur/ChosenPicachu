@@ -11,7 +11,7 @@ import {EagerTable} from '../EagerTable';
 import {LazyTable} from '../LazyTable';
 import {blurFocusOnMoves} from '@__test_support/focus';
 import {Column, DragSortableTable} from '@components/DragSortableTable';
-import {RowInHand, liftedRow, nothingInHand, rect, rowsLaidOut, rowsSurveyed} from '@components/DragSortableTable/__test_support';
+import {RowInHand, liftedColumn, liftedRow, nothingInHand, rect, rowsLaidOut, rowsSurveyed} from '@components/DragSortableTable/__test_support';
 
 type Table = FC<HeaderEvents & BodyEvents & {caption: string; className?: string; columns: readonly TableColumn<Measured>[]; rows: readonly Measures[]}>;
 
@@ -82,6 +82,10 @@ const liftRow = (window: string): void => {
 const carryRowOver = (target: string): void => inHand.carriedOver(windowNames().indexOf(heldRow), windowNames().indexOf(target));
 const carryRowOn = (by: number): void => inHand.carriedOn(by);
 const dropRow = (): void => inHand.dropped();
+afterEach(() => {
+  heldRow = '';
+  inHand = nothingInHand;
+});
 const announced = (): string[] => screen.getAllByRole('status', {name: 'move report'}).map(({textContent}) => textContent ?? '').filter(text => text !== '');
 const menuFor = (label: string): HTMLElement => screen.getByLabelText(`${label} by`);
 
@@ -828,8 +832,8 @@ describe('animated moves', () => {
     if (row) return within(row).getByRole('button', {name: /move row/});
     throw new Error('nothing is aloft');
   };
-  const columnCells = (name: string): Element[] => [header(name), ...lanes().map(lane => lane.cells[columnOrder().indexOf(name)])];
   const settledRows = (): void => rowsLaidOut(sourceTable());
+  const columnCells = (name: string): Element[] => [header(name), ...lanes().map(lane => lane.cells[columnOrder().indexOf(name)])];
 
   test('a keyboard walk settles the walked column and shoves its neighbour', async () => {
     seat(EagerTable, 'keep animated');
@@ -1051,11 +1055,11 @@ describe('animated moves', () => {
     seat(EagerTable, 'hide animated');
     spanned();
 
-    fireEvent.pointerDown(header('trades'), {clientX: 150, clientY: 20, pointerId: 1});
-    fireEvent.pointerMove(surface(), {buttons: 1, clientX: 275, clientY: 20, pointerId: 1});
-    fireEvent.pointerMove(surface(), {buttons: 1, clientX: 283, clientY: 20, pointerId: 1});
+    const held = liftedColumn(header('trades'), 150);
+    held.carriedTo(275);
+    held.carriedOn({x: 8});
 
-    fireEvent.pointerUp(surface(), {pointerId: 1});
+    held.dropped();
 
     columnCells('trades').forEach(cell => {
       expect(cell).toHaveClass('settling');
@@ -1063,15 +1067,31 @@ describe('animated moves', () => {
     });
   });
 
+  test('on release the real column settles from the height the pointer let go at', () => {
+    seat(EagerTable, 'hide animated');
+    spanned();
+
+    const held = liftedColumn(header('trades'), 150);
+    held.carriedTo(275);
+    held.carriedOn({y: 6});
+
+    held.dropped();
+
+    columnCells('trades').forEach(cell => {
+      expect(cell).toHaveClass('settling');
+      expect(cell).toHaveStyle({'--settle-x': '-100px', '--settle-drift-x': '0px', '--settle-drift-y': '6px'});
+    });
+  });
+
   test('a lazy column settles from where the pointer let go', () => {
     seat(LazyTable, 'keep animated');
     spanned();
 
-    fireEvent.pointerDown(header('trades'), {clientX: 150, clientY: 20, pointerId: 1});
-    fireEvent.pointerMove(surface(), {buttons: 1, clientX: 375, clientY: 20, pointerId: 1});
-    fireEvent.pointerMove(surface(), {buttons: 1, clientX: 383, clientY: 20, pointerId: 1});
+    const held = liftedColumn(header('trades'), 150);
+    held.carriedTo(375);
+    held.carriedOn({x: 8});
 
-    fireEvent.pointerUp(surface(), {pointerId: 1});
+    held.dropped();
 
     expect(header('trades')).toHaveClass('settling');
     expect(header('trades')).toHaveStyle({'--settle-x': '-200px', '--settle-drift-x': '8px'});
@@ -1101,7 +1121,6 @@ describe('animated moves', () => {
   test('a carried row shoves the row it passes up by its height', () => {
     seat(EagerTable, 'keep animated');
     spanned();
-    settledRows();
 
     liftRow('this minute');
     carryRowOver('last 5 minutes');
@@ -1117,7 +1136,6 @@ describe('animated moves', () => {
   test('a dropped row settles every cell from the drop height', () => {
     seat(EagerTable, 'keep animated');
     spanned();
-    settledRows();
     liftRow('this minute');
     carryRowOver('last 5 minutes');
 
@@ -1133,7 +1151,6 @@ describe('animated moves', () => {
   test('a dropped row settles from where the pointer let go', () => {
     seat(EagerTable, 'keep animated');
     spanned();
-    settledRows();
     liftRow('this minute');
     carryRowOver('last 5 minutes');
     carryRowOn(8);
@@ -1149,7 +1166,6 @@ describe('animated moves', () => {
   test('a lazy row settles from where the pointer let go', () => {
     seat(LazyTable, 'keep animated');
     spanned();
-    settledRows();
     liftRow('this minute');
     carryRowOver('last 5 minutes');
     carryRowOn(8);
