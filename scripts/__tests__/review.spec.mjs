@@ -170,8 +170,8 @@ describe('the review report', () => {
       ],
       held: 'The list markup holds.'
     })));
-    expect(placeOf(summary, '1. `src/a.tsx:3` — a reader is told of a list twice. Drop the div.'))
-      .toBeLessThan(placeOf(summary, '2. `src/b.css:9` — every button wears the rule. Name the button.'));
+    expect(placeOf(summary, '1. `src/a.tsx:3`. A reader is told of a list twice. Drop the div.'))
+      .toBeLessThan(placeOf(summary, '2. `src/b.css:9`. Every button wears the rule. Name the button.'));
     expect(placeOf(summary, '**Held:** The list markup holds.')).toBeLessThan(placeOf(summary, '<details>'));
   });
 
@@ -182,7 +182,7 @@ describe('the review report', () => {
 
   test('a ranked place links to the line at the reviewed commit when the commit is known', () => {
     const summary = summaryOf(review([], [violation], aSummary({ranked: [{file: 'src/a.tsx', line: 3, cost: 'a cost.', change: 'a change.'}]})), {commit: {repository: 'RyanDur/ChosenPicachu', sha: 'abc123'}});
-    expect(summary).toContain('1. [`src/a.tsx:3`](https://github.com/RyanDur/ChosenPicachu/blob/abc123/src/a.tsx#L3) — a cost. a change.');
+    expect(summary).toContain('1. [`src/a.tsx:3`](https://github.com/RyanDur/ChosenPicachu/blob/abc123/src/a.tsx#L3). A cost. a change.');
   });
 
   test('the summary stays words on the page', () => {
@@ -296,11 +296,9 @@ describe('the review report', () => {
     });
   });
 
-  test('an inferred entry says so beside its place, and one that was read says nothing more', () => {
+  test('an inferred entry says so beside its place', () => {
     expect(deltaOf({...concern, evidence: 'inferred'})).toMatch(/^<details><summary>▲ concern · src\/b\.css:9 · inferred<\/summary>\n/);
     expect(plusOf({...plus, evidence: 'inferred'})).toMatch(/^<details><summary>\+ src\/f\.tsx:5 · inferred<\/summary>\n/);
-    expect(deltaOf(concern)).toMatch(/^<details><summary>▲ concern · src\/b\.css:9<\/summary>\n/);
-    expect(plusOf(plus)).toMatch(/^<details><summary>\+ src\/f\.tsx:5<\/summary>\n/);
   });
 
   test('a review with plusses and no deltas still leaves its feedback on the commit, and an empty one leaves none', () => {

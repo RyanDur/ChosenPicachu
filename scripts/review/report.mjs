@@ -73,8 +73,10 @@ const plussesTold = (plusses, commit) =>
 const deltasTold = (deltas, commit) =>
   ['### Deltas', '', byDoor([...deltas].sort(bySeverity), delta => deltaOf(delta, commit)), ''];
 
+const sentence = prose => prose.charAt(0).toUpperCase() + prose.slice(1);
+
 const rankedTold = (ranked, commit) =>
-  ranked.map((entry, at) => `${at + 1}. ${placeOf(entry, commit)} — ${told(entry.cost)} ${told(entry.change)}`);
+  ranked.map((entry, at) => `${at + 1}. ${placeOf(entry, commit)}. ${told(sentence(entry.cost))} ${told(entry.change)}`);
 
 const summaryTold = ({ranked, held, deferred}, commit) => [
   ...(ranked.length === 0 ? [] : [rankedTold(ranked, commit).join('\n'), '']),
