@@ -46,5 +46,6 @@ export const usersTable = {
   },
 
   edit: (name: string): Promise<void> => actionOn(name, 'Edit', 'link'),
+  clone: (name: string): Promise<void> => actionOn(name, 'Clone', 'link'),
   remove: (name: string): Promise<void> => actionOn(name, 'Remove', 'button')
 };

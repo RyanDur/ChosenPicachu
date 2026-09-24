@@ -1,8 +1,8 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
 import {maybe} from '@ryandur/sand';
-import {copyingAt, userAt} from '@pages/Users/mode';
-import {User} from '../UserInfo/user';
+import {User} from '@components/Users/UserInfo/user';
+import {copyingAt, userAt} from '../../mode';
 
 type Props = {
   user: User;

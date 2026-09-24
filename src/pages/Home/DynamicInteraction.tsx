@@ -5,7 +5,7 @@ export const DynamicInteraction: FC = () =>
     <h2 className="door-title" id="dynamic-interaction">Dynamic Interaction</h2>
     <figure className="feedback">
       <blockquote>
-        <p className="quote">
+        <p className="quote paragraph italic">
           With a scripting language like JS that could touch elements of the page, change
           their properties, and respond to events, we envisioned a much livelier Web
           consisting of pages that acted more like applications.

@@ -1,4 +1,4 @@
-import {Dials} from '../../Controls';
+import type {Dials} from '../../Controls';
 import {wires} from './builds';
 
 declare global {

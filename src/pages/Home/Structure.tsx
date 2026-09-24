@@ -5,7 +5,7 @@ export const Structure: FC = () =>
     <h2 className="door-title" id="structure">Structure</h2>
     <figure className="feedback">
       <blockquote>
-        <p className="quote">
+        <p className="quote paragraph italic">
           It is not a programming language, but rather a language that identifies the meaning,
           purpose, and structure of text within a document.
         </p>

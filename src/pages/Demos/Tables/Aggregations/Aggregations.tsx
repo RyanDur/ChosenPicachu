@@ -2,7 +2,7 @@ import {FC, useEffect, useState} from 'react';
 import {classNames} from '@components/class-names';
 import {EagerTable} from '../Builds/EagerTable';
 import {LazyTable} from '../Builds/LazyTable';
-import {Dials, Motion, Origin, Pace} from '../../Controls';
+import {Dials} from '../../Controls';
 import {World} from '../params';
 import {TableFrame, warmed} from '../Frame/TableFrame';
 import {useDemosDispatch, useDemosSelector} from '../../Provider';
@@ -10,10 +10,7 @@ import {selectColumns, selectRows} from '../../store';
 import {columnMoved, rowMoved, sorted} from '@components/DragSortableTable/arrangement';
 import './Aggregations.css';
 
-type Props = {
-  pace: Pace;
-  origin: Origin;
-  motion: Motion;
+type Props = Dials & {
   world: World;
 };
 
@@ -36,13 +33,13 @@ const VanillaStage: FC<Dials> = dials => {
   </>;
 };
 
-export const Aggregations: FC<Props> = ({pace, origin, motion, world}) => {
+export const Aggregations: FC<Props> = ({world, ...dials}) => {
   useEffect(warmed, []);
 
   return <section aria-label="live aggregations" className="aggregations">
     {world === 'vanilla'
-      ? <VanillaStage pace={pace} origin={origin} motion={motion}/>
-      : <LiveTable pace={pace} origin={origin} motion={motion}/>}
+      ? <VanillaStage {...dials}/>
+      : <LiveTable {...dials}/>}
     <details className="explainer">
       <summary className="prompt">what am I looking at?</summary>
       <p className="explanation">

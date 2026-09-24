@@ -106,6 +106,20 @@ describe('the users page', () => {
       expect(screen.queryByRole('button', {name: 'Update'})).not.toBeInTheDocument();
     });
 
+    it('Clone opens the form to add a copy of the person', async () => {
+      const kai = aUser();
+      setupUsersResponse([kai]);
+      render(<TestApp at={Paths.users}/>);
+      await usersTable.roster();
+
+      await usersTable.clone(fullNameOf(kai));
+
+      const form = within(screen.getByRole('form', {name: 'User Information'}));
+      expect(form.getByRole('button', {name: 'Add'})).toBeVisible();
+      expect(userForm.field('First Name')).toHaveDisplayValue(kai.info.firstName);
+      expect(screen.getByRole('status', {name: 'url search'})).not.toHaveTextContent('mode=');
+    });
+
     it('adding a user who works from home sends the backend home as their work', async () => {
       const aiko = aUser({work: 'home'});
       setupUsersResponse([aUser()]);

@@ -22,9 +22,6 @@
     margin: 0;
     padding-inline-start: var(--base-x-2);
     border-inline-start: var(--hairline-x-3) solid var(--trim);
-    font-size: var(--text-title);
-    line-height: 1.25;
-    font-style: italic;
     text-wrap: pretty;
   }
 
@@ -41,8 +38,6 @@
 
   .lede {
     margin: 0;
-    font-size: var(--text-title);
-    line-height: 1.25;
     text-wrap: pretty;
   }
 
@@ -61,8 +56,6 @@
     .quote {
       padding-inline-start: var(--base-x-2);
       border-inline-start: var(--hairline-x-3) solid var(--trim);
-      font-size: var(--text-body);
-      line-height: 1.55;
     }
 
     .attribution {
@@ -80,11 +73,6 @@
     gap: var(--base-x-2_5);
     padding-block-start: var(--base-x-3);
     border-block-start: var(--hairline-x-3) solid var(--trim);
-  }
-
-  .coda {
-    font-size: var(--text-title);
-    line-height: 1.25;
   }
 
   .research-title {
@@ -237,10 +225,8 @@
     display: grid;
     gap: var(--base-x-1_5);
 
-    .paragraph {
+    .sub-title {
       margin: 0;
-      font-size: var(--text-title);
-      line-height: 1.25;
       text-wrap: pretty;
     }
   }

@@ -18,7 +18,7 @@ export const Timeline: FC = () =>
     <h2 className="record-title" id="the-record">How the web got its languages</h2>
     <figure className="feedback">
       <blockquote>
-        <p className="quote">
+        <p className="quote sub-title italic">
           HyperText is a way to link and access information of various kinds as a web of nodes
           in which the user can browse at will.
         </p>
@@ -27,7 +27,7 @@ export const Timeline: FC = () =>
         <a className="signpost" href="https://www.w3.org/History/19921103-hypertext/hypertext/WWW/Proposal.html">proposing
           the WorldWideWeb, 1990</a></figcaption>
     </figure>
-    <p className="lede paragraph">
+    <p className="lede sub-title">
       Someone needed something: researchers, scattered across institutes, losing each other’s
       documents. Everything on the web is layered onto that one need.
     </p>
@@ -46,7 +46,7 @@ export const Timeline: FC = () =>
       <Html5SaysIt/>
       <DocumentComesBack/>
     </ol>
-    <p className="coda paragraph">
+    <p className="coda sub-title">
       Read the titles again, top to bottom: it is one sentence said thirteen ways. Someone
       needs something, the community answers, and the platform learns the answer. That
       feedback loop built an ecosystem where elegant solutions keep coming from places no

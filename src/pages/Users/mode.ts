@@ -13,7 +13,7 @@ export type Mode = 'view' | 'edit';
 
 export const modeParam: schema.Decoder<Mode> = schema.literalUnion('view', 'edit');
 
-export const openedOn = (param: Mode | undefined, chosen: Maybe<User>): Opened => chosen
+export const openedOn = (chosen: Maybe<User>, param?: Mode): Opened => chosen
   .map((user): Opened => {
     switch (param) {
       case 'view': return {mode: 'viewing', user};

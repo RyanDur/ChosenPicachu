@@ -5,7 +5,7 @@ export const Presentation: FC = () =>
     <h2 className="door-title" id="presentation">Presentation</h2>
     <figure className="feedback">
       <blockquote>
-        <p className="quote">
+        <p className="quote paragraph italic">
           The separation of HTML from CSS makes it easier to maintain sites, share style
           sheets across pages, and tailor pages to different environments.
         </p>
