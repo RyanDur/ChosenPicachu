@@ -10,11 +10,11 @@ export type ColumnInHand = {
 
 const HEADER_Y = 20;
 
-const nobody = (): never => {
+const emptyHanded = (): never => {
   throw new Error('no column is in hand');
 };
 
-export const noColumnInHand: ColumnInHand = {carryStarted: nobody, carriedTo: nobody, carriedOn: nobody, captureLostAt: nobody, dropped: nobody};
+export const noColumnInHand: ColumnInHand = {carryStarted: emptyHanded, carriedTo: emptyHanded, carriedOn: emptyHanded, captureLostAt: emptyHanded, dropped: emptyHanded};
 
 export const liftedColumn = (header: Element, x: number): ColumnInHand => {
   const pointer = {x, y: HEADER_Y};

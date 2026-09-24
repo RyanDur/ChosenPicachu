@@ -82,6 +82,7 @@ const liftRow = (window: string): void => {
 const startCarryingRow = (): void => rowInHand.carryStarted();
 const carryRowOver = (target: string): void => rowInHand.carriedOver(windowNames().indexOf(heldRow), windowNames().indexOf(target));
 const carryRowOn = (by: number): void => rowInHand.carriedOn(by);
+const loseRowCapture = (): void => rowInHand.captureLost();
 const dropRow = (): void => rowInHand.dropped();
 let widths: Record<string, number> = {};
 const even = (): Record<string, number> => Object.fromEntries(measures.map(({name}) => [name, 100]));
@@ -368,11 +369,11 @@ describe('rows by hand', () => {
     seat(EagerTable, 'keep static');
     const retaken: string[] = [];
     liftRow('this minute');
+    carryRowOver('last 5 minutes');
     grip('this minute').setPointerCapture = () => retaken.push('grip');
     rowOf('this minute').cells[0].setPointerCapture = () => retaken.push('header cell');
 
-    carryRowOver('last 5 minutes');
-    fireEvent.lostPointerCapture(rowOf('this minute').cells[0], {buttons: 0, clientX: 100, clientY: 70, pointerId: 1});
+    loseRowCapture();
 
     expect(retaken).toEqual(['grip']);
   });
@@ -382,7 +383,7 @@ describe('rows by hand', () => {
     liftRow('this minute');
     grip('this minute').setPointerCapture = () => undefined;
     carryRowOver('last 5 minutes');
-    fireEvent.lostPointerCapture(rowOf('this minute').cells[0], {buttons: 0, clientX: 100, clientY: 70, pointerId: 1});
+    loseRowCapture();
     expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
 
     carryRowOver('last 15 minutes');
@@ -823,18 +824,12 @@ describe('resizable columns', () => {
 });
 
 describe('animated moves', () => {
-  const spanned = (): void => {
-    sourceTable().getBoundingClientRect = () => rect({left: 0, right: 700, width: 700, top: 0, bottom: 240, height: 240});
-    within(sourceTable()).getAllByRole('columnheader').forEach((head, at) => {
-      head.getBoundingClientRect = () => rect({x: at * 100, left: at * 100, width: 100, right: at * 100 + 100});
-    });
-  };
   const settledRows = (): void => rowsLaidOut(sourceTable());
   const columnCells = (name: string): Element[] => [header(name), ...lanes().map(lane => lane.cells[columnOrder().indexOf(name)])];
 
   test('a keyboard walk settles the walked column and shoves its neighbour', async () => {
     seat(EagerTable, 'keep animated');
-    spanned();
+    columnsSurveyed();
 
     header('trades').focus();
     await userEvent.keyboard('{ArrowRight}');
@@ -853,7 +848,7 @@ describe('animated moves', () => {
 
   test('the marks clear when the animation ends', async () => {
     seat(EagerTable, 'keep animated');
-    spanned();
+    columnsSurveyed();
     header('trades').focus();
     await userEvent.keyboard('{ArrowRight}');
 
@@ -866,7 +861,7 @@ describe('animated moves', () => {
 
   test('a second walk marks again', async () => {
     seat(EagerTable, 'keep animated');
-    spanned();
+    columnsSurveyed();
     header('trades').focus();
     await userEvent.keyboard('{ArrowRight}');
     fireEvent.animationEnd(header('trades'));
@@ -882,7 +877,7 @@ describe('animated moves', () => {
   test('a column walks the whole way right and back left, keypress after keypress, with no animation ending between, keeping the focus the moves take', async () => {
     blurFocusOnMoves();
     seat(EagerTable, 'keep animated');
-    spanned();
+    columnsSurveyed();
 
     header('trades').focus();
     await userEvent.keyboard('{ArrowRight}');
@@ -910,7 +905,7 @@ describe('animated moves', () => {
   test('a row walks to the bottom and back to the top, keypress after keypress, with no animation ending between, keeping the focus the moves take', async () => {
     blurFocusOnMoves();
     seat(EagerTable, 'keep animated');
-    spanned();
+    columnsSurveyed();
     settledRows();
 
     grip('this minute').focus();
@@ -940,7 +935,7 @@ describe('animated moves', () => {
 
   test('a keyboard nudge settles the walked row from across the row it passed', async () => {
     seat(EagerTable, 'keep animated');
-    spanned();
+    columnsSurveyed();
     settledRows();
 
     grip('this minute').focus();
@@ -955,7 +950,7 @@ describe('animated moves', () => {
 
   test('the row a keyboard nudge passed is shoved up by its height', async () => {
     seat(EagerTable, 'keep animated');
-    spanned();
+    columnsSurveyed();
     settledRows();
 
     grip('this minute').focus();
@@ -1108,7 +1103,6 @@ describe('animated moves', () => {
 
   test('a carried row shoves the row it passes up by its height', () => {
     seat(EagerTable, 'keep animated');
-    spanned();
 
     liftRow('this minute');
     carryRowOver('last 5 minutes');
@@ -1123,7 +1117,6 @@ describe('animated moves', () => {
 
   test('a dropped row settles every cell from the drop height', () => {
     seat(EagerTable, 'keep animated');
-    spanned();
     liftRow('this minute');
     carryRowOver('last 5 minutes');
 
@@ -1138,7 +1131,6 @@ describe('animated moves', () => {
 
   test('a dropped row settles from where the pointer let go', () => {
     seat(EagerTable, 'keep animated');
-    spanned();
     liftRow('this minute');
     carryRowOver('last 5 minutes');
     carryRowOn(8);
@@ -1153,7 +1145,6 @@ describe('animated moves', () => {
 
   test('a lazy row settles from where the pointer let go', () => {
     seat(LazyTable, 'keep animated');
-    spanned();
     liftRow('this minute');
     carryRowOver('last 5 minutes');
     carryRowOn(8);

@@ -30,18 +30,20 @@ export type RowInHand = {
   readonly carryStarted: () => void;
   readonly carriedOver: (from: number, to: number) => void;
   readonly carriedOn: (by: number) => void;
+  readonly captureLost: () => void;
   readonly dropped: () => void;
 };
 
-const nobody = (): never => {
+const emptyHanded = (): never => {
   throw new Error('no row is in hand');
 };
 
-export const noRowInHand: RowInHand = {carryStarted: nobody, carriedOver: nobody, carriedOn: nobody, dropped: nobody};
+export const noRowInHand: RowInHand = {carryStarted: emptyHanded, carriedOver: emptyHanded, carriedOn: emptyHanded, captureLost: emptyHanded, dropped: emptyHanded};
 
 // presses the grip in its row's lane and hands back the drag, which keeps the pointer where it last moved
 export const liftedRow = (grip: Element, at: number): RowInHand => {
   let y = HEAD + at * ROW + 10;
+  const laneOf = (from: number, to: number): number => HEAD + to * ROW + (to < from ? 10 : 30);
   const moveTo = (next: number): void => {
     y = next;
     fireEvent.pointerMove(grip, {buttons: 1, clientX: 100, clientY: y, pointerId: 1});
@@ -50,8 +52,9 @@ export const liftedRow = (grip: Element, at: number): RowInHand => {
   return {
     // the drag takes its origin from the first move, not the press
     carryStarted: () => moveTo(y),
-    carriedOver: (from, to) => moveTo(HEAD + to * ROW + (to < from ? 10 : 30)),
+    carriedOver: (from, to) => moveTo(laneOf(from, to)),
     carriedOn: by => moveTo(y + by),
+    captureLost: () => fireEvent.lostPointerCapture(grip, {buttons: 1, clientX: 100, clientY: y, pointerId: 1}),
     dropped: () => fireEvent.pointerUp(grip, {pointerId: 1})
   };
 };
