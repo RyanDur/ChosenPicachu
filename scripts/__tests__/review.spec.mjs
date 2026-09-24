@@ -3,7 +3,7 @@ import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {promptFor} from '../review/prompt.mjs';
 import {deltaOf, leavesFeedback, plusOf, reviewIn, summaryOf, verdictOf} from '../review/report.mjs';
-import {aDelta, aPlus, aSummary, review} from '../review/__test_support/feedback.mjs';
+import {aDelta, aHabit, aPlus, review} from '../review/__test_support/feedback.mjs';
 
 const placeOf = (text, needle) => {
   expect(text).toContain(needle);
@@ -33,7 +33,6 @@ const note = aDelta({
 });
 const testNote = aDelta({door: 'tests', file: 'src/__tests__/c.spec.tsx', line: 4});
 const interaction = aDelta({door: 'dynamic interaction'});
-const design = aDelta({door: 'design', severity: 'concern'});
 const plus = aPlus({
   door: 'structure',
   file: 'src/f.tsx',
@@ -82,10 +81,12 @@ describe('the review prompt', () => {
     expect(prompt).toContain('five QAs hold one door each: structure-qa, presentation-qa, dynamic-interaction-qa, design-qa, tests-qa');
   });
 
-  test('the review answers in the feedback stance: a summary, then plusses and deltas, each with what happened and why', () => {
+  test('the review answers in the feedback stance: habits first, then plusses and deltas, each with what happened and why', () => {
     const prompt = promptFor({scope: 'changes', before: 'abc', after: 'def'});
-    expect(prompt).toContain('the deltas ranked from what matters most to what matters least, one line each with the place, the cost and the change');
-    expect(prompt).toContain('then held, one line; then deferred, one line, only if something was');
+    expect(prompt).toContain('You report by habit. A habit is one rule from a door that two or more findings answer to');
+    expect(prompt).toContain('Habits a visitor meets come before habits only the next reader meets.');
+    expect(prompt).toContain('Give every plus and every delta that held the title of its habit, or leave the title unmatched when it fits none.');
+    expect(prompt).toContain('Say what you deferred in one line, only if something was.');
     expect(prompt).toContain('You take a feedback stance: plusses and deltas, each with its why.');
     expect(prompt).toContain('A **plus** is a choice in the code that holds a door up.');
     expect(prompt).toContain('A **delta** is a finding: something to change.');
@@ -122,105 +123,117 @@ describe('the review prompt', () => {
     expect(prompt).toContain('Every entry says what it stands on.');
     expect(prompt).toContain('Code is evidence of what it does, never of why it exists.');
     expect(prompt).toContain('A violation stands on what you read.');
-    expect(prompt).toContain('You read and never run, so a claim that only a run would settle says so');
     expect(prompt).toContain('A reason a commit message gives is a claim to check, not a conclusion to confirm.');
+  });
+
+  test('the reviewer says when a claim needs a run, and names the test or script that would settle it', () => {
+    expect(promptFor({scope: 'full'})).toContain('You read and never run, so a claim that only a run would settle says so, and the change names the test or the script that would settle it.');
   });
 });
 
 describe('the review report', () => {
-  test('reads the plusses and deltas the reviewer structured', () => {
-    const summary = aSummary({ranked: [{file: 'src/a.tsx', line: 3, cost: 'a div wraps a list.', change: 'Drop the div.'}]});
-    expect(reviewIn(answer(review([plus], [note], summary)))).toEqual({tldr: summary, plusses: [plus], deltas: [note]});
+  const heading = aHabit();
+  const naming = aHabit({title: 'a landmark is named for what it holds', rule: 'The structure door: every landmark gets a name and no two names collide.', fix: 'Name it for what it holds.'});
+  const named = traits => aDelta({habit: naming.title, ...traits});
+
+  test('reads the habits, plusses and deltas the reviewer structured', () => {
+    expect(reviewIn(answer(review([plus], [note], [heading])))).toEqual({habits: [heading], plusses: [plus], deltas: [note]});
+    expect(reviewIn(answer(review([plus], [note], [heading], 'the accordions are the author\'s')))).toEqual({habits: [heading], plusses: [plus], deltas: [note], deferred: 'the accordions are the author\'s'});
   });
 
   test('a review with neither plusses nor deltas is still read', () => {
-    expect(reviewIn(answer(review([], [], aSummary({held: 'nothing to say'}))))).toEqual({tldr: aSummary({held: 'nothing to say'}), plusses: [], deltas: []});
+    expect(reviewIn(answer(review([], [], [])))).toEqual({habits: [], plusses: [], deltas: []});
   });
 
-  test('an answer without a summary is refused', () => {
+  test('an answer without habits is refused', () => {
     expect(() => reviewIn(JSON.stringify({type: 'result', structured_output: {plusses: [], deltas: []}})))
       .toThrow('structured output is missing');
-    expect(() => reviewIn(JSON.stringify({type: 'result', structured_output: {tldr: 'prose', plusses: [], deltas: []}})))
+    expect(() => reviewIn(JSON.stringify({type: 'result', structured_output: {habits: 'prose', plusses: [], deltas: []}})))
       .toThrow('structured output is missing');
   });
 
   test('an answer without structured plusses and deltas is refused', () => {
-    expect(() => reviewIn(JSON.stringify({
-      type: 'result',
-      result: 'prose'
-    }))).toThrow('structured output is missing');
-    expect(() => reviewIn(JSON.stringify({
-      type: 'result',
-      structured_output: {findings: []}
-    }))).toThrow('structured output is missing');
+    expect(() => reviewIn(JSON.stringify({type: 'result', result: 'prose'}))).toThrow('structured output is missing');
+    expect(() => reviewIn(JSON.stringify({type: 'result', structured_output: {findings: []}}))).toThrow('structured output is missing');
   });
 
-  test('no deltas reads as the code holding up, with the plusses still told', () => {
-    const summary = summaryOf(review([plus], [], aSummary({held: 'All of it holds.'})));
+  test('no deltas reads as the code holding up, with the plusses still told under their habit', () => {
+    const summary = summaryOf(review([plus], [], [heading]));
     expect(summary).toContain('## The code holds up the home page');
-    expect(summary).toContain('**Held:** All of it holds.');
-    expect(summary).toContain('1 plus, no deltas.');
-    expect(summary).toContain('the friends list is a fieldset with a legend');
+    expect(summary).toContain('1 plus. No deltas. 1 habit.');
+    expect(summary).toContain('1. **a section is named by its heading.** 0 places, 1 to keep.');
+    expect(summary).toContain('- + `src/f.tsx:5`. the friends list is a fieldset with a legend');
   });
 
-  test('the summary ranks the deltas one line each, place then cost then change, before any entry opens', () => {
-    const summary = summaryOf(review([plus], [violation, concern], aSummary({
-      ranked: [
-        {file: 'src/a.tsx', line: 3, cost: 'a reader is told of a list twice.', change: 'Drop the div.'},
-        {file: 'src/b.css', line: 9, cost: 'every button wears the rule.', change: 'Name the button.'}
-      ],
-      held: 'The list markup holds.'
-    })));
-    expect(placeOf(summary, '1. `src/a.tsx:3`. A reader is told of a list twice. Drop the div.'))
-      .toBeLessThan(placeOf(summary, '2. `src/b.css:9`. Every button wears the rule. Name the button.'));
-    expect(placeOf(summary, '**Held:** The list markup holds.')).toBeLessThan(placeOf(summary, '<details>'));
+  test('the summary lists the habits in the order given, each with its places and what to keep', () => {
+    const summary = summaryOf(review([plus], [violation, note, named({file: 'src/n.tsx', line: 2})], [naming, heading]));
+    expect(placeOf(summary, '1. **a landmark is named for what it holds.** 1 place, 0 to keep.'))
+      .toBeLessThan(placeOf(summary, '2. **a section is named by its heading.** 2 places, 1 to keep.'));
+    expect(placeOf(summary, '2. **a section is named by its heading.**')).toBeLessThan(placeOf(summary, '### 1. a landmark is named for what it holds'));
   });
 
-  test('a deferred line follows what held only when something was deferred', () => {
-    expect(summaryOf(review([], [note], aSummary({deferred: 'The accordions are the author\'s.'})))).toContain('**Deferred:** The accordions are the author\'s.');
-    expect(summaryOf(review([], [note]))).not.toContain('**Deferred:**');
+  test('a habit opens on its rule, what a person meets, the places by severity, the fix once, what to keep, then the entries', () => {
+    const summary = summaryOf(review([plus], [note, violation], [aHabit({meet: 'Walk the page by headings and the section is not there.'})]));
+    const at = needle => placeOf(summary, needle);
+    expect(at('### 1. a section is named by its heading')).toBeLessThan(at('The structure door: sections name themselves through their headings.'));
+    expect(at('The structure door:')).toBeLessThan(at('**What a person meets.** Walk the page by headings and the section is not there.'));
+    expect(at('**What a person meets.**')).toBeLessThan(at('**Where.**'));
+    expect(at('- ✖ `src/a.tsx:3`. a div wraps a list')).toBeLessThan(at('- ○ `src/somewhere.tsx:1`. a section has no heading'));
+    expect(at('- ○ `src/somewhere.tsx:1`.')).toBeLessThan(at('**The fix, once.** Give each section a heading that names it.'));
+    expect(at('**The fix, once.**')).toBeLessThan(at('**Keep doing.**'));
+    expect(at('**Keep doing.**')).toBeLessThan(at('- + `src/f.tsx:5`. the friends list is a fieldset with a legend'));
+    expect(at('- + `src/f.tsx:5`.')).toBeLessThan(at('<details><summary>✖ violation · structure · src/a.tsx:3</summary>'));
+    expect(at('<details><summary>✖ violation')).toBeLessThan(at('<details><summary>○ note · structure · src/somewhere.tsx:1</summary>'));
+    expect(at('<details><summary>○ note')).toBeLessThan(at('<details><summary>+ structure · src/f.tsx:5</summary>'));
   });
 
-  test('a ranked place links to the line at the reviewed commit when the commit is known', () => {
-    const summary = summaryOf(review([], [violation], aSummary({ranked: [{file: 'src/a.tsx', line: 3, cost: 'a cost.', change: 'a change.'}]})), {commit: {repository: 'RyanDur/ChosenPicachu', sha: 'abc123'}});
-    expect(summary).toContain('1. [`src/a.tsx:3`](https://github.com/RyanDur/ChosenPicachu/blob/abc123/src/a.tsx#L3)');
+  test('a habit with no person to meet and nothing to keep leaves those lines out', () => {
+    const summary = summaryOf(review([], [note], [heading]));
+    expect(summary).not.toContain('**What a person meets.**');
+    expect(summary).not.toContain('**Keep doing.**');
+    expect(summary).toContain('**The fix, once.**');
+  });
+
+  test('an entry whose habit matches none stands under one more thing, after the habits', () => {
+    const stray = aDelta({habit: 'nothing of the sort', file: 'src/s.tsx', line: 7, happened: 'a stray thing'});
+    const summary = summaryOf(review([aPlus({habit: 'nothing of the sort', file: 'src/k.tsx', line: 8, happened: 'a stray keep'})], [note, stray], [heading]));
+    expect(placeOf(summary, '### 1. a section is named by its heading')).toBeLessThan(placeOf(summary, '### One more thing'));
+    expect(placeOf(summary, '### One more thing')).toBeLessThan(placeOf(summary, '- ○ `src/s.tsx:7`. a stray thing'));
+    expect(summary).toContain('- + `src/k.tsx:8`. a stray keep');
+    expect(summaryOf(review([], [note], [heading]))).not.toContain('### One more thing');
+  });
+
+  test('a deferred line follows the habit list only when something was deferred', () => {
+    const summary = summaryOf(review([], [note], [heading], 'The accordions are the author\'s.'));
+    expect(placeOf(summary, '1. **a section is named by its heading.**')).toBeLessThan(placeOf(summary, '**Deferred:** The accordions are the author\'s.'));
+    expect(placeOf(summary, '**Deferred:**')).toBeLessThan(placeOf(summary, '### 1.'));
+    expect(summaryOf(review([], [note], [heading]))).not.toContain('**Deferred:**');
+  });
+
+  test('a place under a habit links to the line at the reviewed commit when the commit is known', () => {
+    const summary = summaryOf(review([plus], [violation], [heading]), {commit: {repository: 'RyanDur/ChosenPicachu', sha: 'abc123'}});
+    expect(summary).toContain('- ✖ [`src/a.tsx:3`](https://github.com/RyanDur/ChosenPicachu/blob/abc123/src/a.tsx#L3). a div wraps a list');
+    expect(summary).toContain('- + [`src/f.tsx:5`](https://github.com/RyanDur/ChosenPicachu/blob/abc123/src/f.tsx#L5). the friends list is a fieldset with a legend');
   });
 
   test('the summary stays words on the page', () => {
-    expect(summaryOf(review([], [note], aSummary({held: 'wrap it in <b>bold</b>'})))).toContain('wrap it in &lt;b&gt;bold&lt;/b&gt;');
+    const summary = summaryOf(review([], [note], [aHabit({title: 'bold <b>words</b>', rule: 'a <i>rule</i>', fix: 'fix <u>it</u>', meet: 'meet <em>it</em>'})], 'defer <b>this</b>'));
+    ['bold &lt;b&gt;words&lt;/b&gt;', 'a &lt;i&gt;rule&lt;/i&gt;', 'fix &lt;u&gt;it&lt;/u&gt;', 'meet &lt;em&gt;it&lt;/em&gt;', 'defer &lt;b&gt;this&lt;/b&gt;']
+      .forEach(escaped => expect(summary).toContain(escaped));
   });
 
-  test('plusses and deltas are counted, deltas by severity', () => {
-    expect(summaryOf(review([plus, testPlus], [testNote, note, concern, violation, interaction])))
-      .toContain('2 plusses. 1 violation, 1 concern, 3 notes.');
+  test('plusses and deltas are counted, deltas by severity, and the habits counted after', () => {
+    expect(summaryOf(review([plus, testPlus], [testNote, note, concern, violation, interaction], [heading, naming])))
+      .toContain('2 plusses. 1 violation, 1 concern, 3 notes. 2 habits.');
   });
 
-  test('a review with no plusses says so and opens no Plusses section', () => {
-    const summary = summaryOf(review([], [note]));
-    expect(summary).toContain('0 plusses. 1 note.');
-    expect(summary).not.toContain('### Plusses');
+  test('a review with no plusses says so', () => {
+    expect(summaryOf(review([], [note], [heading]))).toContain('0 plusses. 1 note. 1 habit.');
   });
 
-  test('deltas are grouped by door, worst door and worst delta first', () => {
-    const summary = summaryOf(review([], [testNote, note, concern, violation, interaction, design]));
-    expect(placeOf(summary, '#### structure')).toBeLessThan(placeOf(summary, '#### presentation'));
-    expect(placeOf(summary, '#### presentation')).toBeLessThan(placeOf(summary, '#### dynamic interaction'));
-    expect(placeOf(summary, '#### dynamic interaction')).toBeLessThan(placeOf(summary, '#### design'));
-    expect(placeOf(summary, '#### design')).toBeLessThan(placeOf(summary, '#### tests'));
-    expect(placeOf(summary, 'a div wraps a list')).toBeLessThan(placeOf(summary, 'a section has no heading'));
-  });
-
-  test('plusses come before the deltas, each under its door, so the headings nest the same way on both sides', () => {
-    const summary = summaryOf(review([testPlus, plus], [design]));
-    expect(placeOf(summary, '### Plusses')).toBeLessThan(placeOf(summary, '#### structure'));
-    expect(placeOf(summary, '#### structure')).toBeLessThan(placeOf(summary, '#### tests'));
-    expect(placeOf(summary, '#### tests')).toBeLessThan(placeOf(summary, '### Deltas'));
-    expect(placeOf(summary, '### Deltas')).toBeLessThan(placeOf(summary, '#### design'));
-  });
-
-  test('a delta folds away under its mark and place, and opens on where, what happened, why it matters, the change, and the door\'s words', () => {
+  test('a delta folds away under its mark, door and place, and opens on where, what happened, why it matters, the change, and the door\'s words', () => {
     const entry = deltaOf(concern);
-    expect(entry).toMatch(/^<details><summary>▲ concern · src\/b\.css:9<\/summary>\n/);
+    expect(entry).toMatch(/^<details><summary>▲ concern · presentation · src\/b\.css:9<\/summary>\n/);
     expect(entry).toMatch(/\n<\/details>$/);
     expect(placeOf(entry, '**Where:** `src/b.css:9`')).toBeLessThan(placeOf(entry, '**What happened:**'));
     expect(placeOf(entry, '**What happened:** a tag selector styles a button')).toBeLessThan(placeOf(entry, '**Why it matters:** every button on the site now wears it'));
@@ -228,21 +241,20 @@ describe('the review report', () => {
     expect(entry).toContain('> Tag selectors are for resets only');
   });
 
-  test('a plus folds away under its place, and opens on where, what happened, why it works, and the door\'s words', () => {
+  test('a plus folds away under its door and place, and opens on where, what happened, why it works, and the door\'s words', () => {
     const entry = plusOf(plus);
-    expect(entry).toMatch(/^<details><summary>\+ src\/f\.tsx:5<\/summary>\n/);
+    expect(entry).toMatch(/^<details><summary>\+ structure · src\/f\.tsx:5<\/summary>\n/);
     expect(entry).toMatch(/\n<\/details>$/);
     expect(placeOf(entry, '**Where:** `src/f.tsx:5`')).toBeLessThan(placeOf(entry, '**What happened:**'));
     expect(placeOf(entry, '**What happened:** the friends list is a fieldset with a legend')).toBeLessThan(placeOf(entry, '**Why it works:** the group names itself'));
     expect(entry).toContain('> The right tag hands most of that over for free');
   });
 
-  test('the place links to the line at the reviewed commit when the commit is known', () => {
+  test('the fold links to the line at the reviewed commit when the commit is known', () => {
     const commit = {repository: 'RyanDur/ChosenPicachu', sha: 'abc123'};
-    const summary = summaryOf(review([plus], [violation, testNote]), {commit});
-    expect(summary).toContain('[`src/a.tsx:3`](https://github.com/RyanDur/ChosenPicachu/blob/abc123/src/a.tsx#L3)');
-    expect(summary).toContain('[`src/f.tsx:5`](https://github.com/RyanDur/ChosenPicachu/blob/abc123/src/f.tsx#L5)');
-    expect(summary).toContain('[`src/__tests__/c.spec.tsx:4`](https://github.com/RyanDur/ChosenPicachu/blob/abc123/src/__tests__/c.spec.tsx#L4)');
+    expect(deltaOf(violation, commit)).toContain('**Where:** [`src/a.tsx:3`](https://github.com/RyanDur/ChosenPicachu/blob/abc123/src/a.tsx#L3)');
+    expect(plusOf(plus, commit)).toContain('**Where:** [`src/f.tsx:5`](https://github.com/RyanDur/ChosenPicachu/blob/abc123/src/f.tsx#L5)');
+    expect(deltaOf(testNote, commit)).toContain('**Where:** [`src/__tests__/c.spec.tsx:4`](https://github.com/RyanDur/ChosenPicachu/blob/abc123/src/__tests__/c.spec.tsx#L4)');
   });
 
   test('what the reviewer checked folds away under the entry', () => {
@@ -298,8 +310,8 @@ describe('the review report', () => {
   });
 
   test('an inferred entry says so beside its place', () => {
-    expect(deltaOf({...concern, evidence: 'inferred'})).toMatch(/^<details><summary>▲ concern · src\/b\.css:9 · inferred<\/summary>\n/);
-    expect(plusOf({...plus, evidence: 'inferred'})).toMatch(/^<details><summary>\+ src\/f\.tsx:5 · inferred<\/summary>\n/);
+    expect(deltaOf({...concern, evidence: 'inferred'})).toMatch(/^<details><summary>▲ concern · presentation · src\/b\.css:9 · inferred<\/summary>\n/);
+    expect(plusOf({...plus, evidence: 'inferred'})).toMatch(/^<details><summary>\+ structure · src\/f\.tsx:5 · inferred<\/summary>\n/);
   });
 
   test('a review with plusses and no deltas still leaves its feedback on the commit, and an empty one leaves none', () => {
@@ -310,13 +322,13 @@ describe('the review report', () => {
 
   test('the schema the review answers in names every field the report tells, and the doors and severities once', () => {
     const schema = feedbackSchema();
-    expect(schema.required).toEqual(['tldr', 'plusses', 'deltas']);
-    expect(schema.properties.tldr.required).toEqual(['ranked', 'held']);
-    expect(schema.properties.tldr.properties.ranked.items.required).toEqual(['file', 'line', 'cost', 'change']);
-    expect(Object.keys(schema.properties.tldr.properties)).toContain('deferred');
-    expect(schema.properties.plusses.items.required).toEqual(expect.arrayContaining(['door', 'file', 'line', 'happened', 'why', 'evidence', 'principle']));
+    expect(schema.required).toEqual(['habits', 'plusses', 'deltas']);
+    expect(schema.properties.habits.items.required).toEqual(['title', 'rule', 'fix']);
+    expect(Object.keys(schema.properties.habits.items.properties)).toContain('meet');
+    expect(Object.keys(schema.properties)).toContain('deferred');
+    expect(schema.properties.plusses.items.required).toEqual(expect.arrayContaining(['door', 'habit', 'file', 'line', 'happened', 'why', 'evidence', 'principle']));
     expect(Object.keys(schema.properties.plusses.items.properties)).toContain('checked');
-    expect(schema.properties.deltas.items.required).toEqual(expect.arrayContaining(['door', 'severity', 'file', 'line', 'happened', 'why', 'evidence', 'change', 'principle']));
+    expect(schema.properties.deltas.items.required).toEqual(expect.arrayContaining(['door', 'habit', 'severity', 'file', 'line', 'happened', 'why', 'evidence', 'change', 'principle']));
     expect(Object.keys(schema.properties.deltas.items.properties)).toContain('checked');
     expect(schema.properties.plusses.items.properties.door).toEqual({$ref: '#/$defs/door'});
     expect(schema.properties.deltas.items.properties.door).toEqual({$ref: '#/$defs/door'});
@@ -331,5 +343,6 @@ describe('the review report', () => {
   test('only a violation fails the job', () => {
     expect(verdictOf([note, concern])).toBe(0);
     expect(verdictOf([note, violation])).toBe(1);
+    expect(verdictOf([])).toBe(0);
   });
 });

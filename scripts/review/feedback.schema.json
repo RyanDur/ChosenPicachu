@@ -1,44 +1,37 @@
 {
   "type": "object",
   "additionalProperties": false,
-  "required": ["tldr", "plusses", "deltas"],
+  "required": ["habits", "plusses", "deltas"],
   "$defs": {
     "door": {"type": "string", "enum": ["structure", "presentation", "dynamic interaction", "design", "tests"]},
     "severity": {"type": "string", "enum": ["violation", "concern", "note"]},
     "evidence": {"type": "string", "enum": ["read", "inferred"]}
   },
   "properties": {
-    "tldr": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["ranked", "held"],
-      "properties": {
-        "ranked": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": ["file", "line", "cost", "change"],
-            "properties": {
-              "file": {"type": "string"},
-              "line": {"type": "integer", "minimum": 1},
-              "cost": {"type": "string"},
-              "change": {"type": "string"}
-            }
-          }
-        },
-        "held": {"type": "string"},
-        "deferred": {"type": "string"}
+    "habits": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["title", "rule", "fix"],
+        "properties": {
+          "title": {"type": "string"},
+          "rule": {"type": "string"},
+          "meet": {"type": "string"},
+          "fix": {"type": "string"}
+        }
       }
     },
+    "deferred": {"type": "string"},
     "plusses": {
       "type": "array",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["door", "file", "line", "happened", "why", "evidence", "principle"],
+        "required": ["door", "habit", "file", "line", "happened", "why", "evidence", "principle"],
         "properties": {
           "door": {"$ref": "#/$defs/door"},
+          "habit": {"type": "string"},
           "file": {"type": "string"},
           "line": {"type": "integer", "minimum": 1},
           "happened": {"type": "string"},
@@ -54,9 +47,10 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["door", "severity", "file", "line", "happened", "why", "evidence", "change", "principle"],
+        "required": ["door", "habit", "severity", "file", "line", "happened", "why", "evidence", "change", "principle"],
         "properties": {
           "door": {"$ref": "#/$defs/door"},
+          "habit": {"type": "string"},
           "severity": {"$ref": "#/$defs/severity"},
           "file": {"type": "string"},
           "line": {"type": "integer", "minimum": 1},

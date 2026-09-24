@@ -1,5 +1,15 @@
+import {has} from '@ryandur/sand';
+
+export const aHabit = (traits = {}) => ({
+  title: 'a section is named by its heading',
+  rule: 'The structure door: sections name themselves through their headings.',
+  fix: 'Give each section a heading that names it.',
+  ...traits
+});
+
 export const aDelta = (traits = {}) => ({
   door: 'structure',
+  habit: 'a section is named by its heading',
   severity: 'note',
   file: 'src/somewhere.tsx',
   line: 1,
@@ -13,6 +23,7 @@ export const aDelta = (traits = {}) => ({
 
 export const aPlus = (traits = {}) => ({
   door: 'structure',
+  habit: 'a section is named by its heading',
   file: 'src/somewhere.tsx',
   line: 1,
   happened: 'something in the code holds a door up',
@@ -22,10 +33,5 @@ export const aPlus = (traits = {}) => ({
   ...traits
 });
 
-export const aSummary = (traits = {}) => ({
-  ranked: [],
-  held: 'the rest of the change holds',
-  ...traits
-});
-
-export const review = (plusses, deltas, tldr = aSummary()) => ({tldr, plusses, deltas});
+export const review = (plusses, deltas, habits = [aHabit()], deferred) =>
+  ({habits, plusses, deltas, ...(has(deferred) ? {deferred} : {})});

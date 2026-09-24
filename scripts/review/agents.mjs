@@ -1,11 +1,14 @@
 import {readFileSync} from 'node:fs';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {not} from '@ryandur/sand';
 
 const values = readFileSync(join(dirname(fileURLToPath(import.meta.url)), 'values.md'), 'utf8');
 const schema = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), 'feedback.schema.json'), 'utf8'));
 
-export const shapeOf = kind => `{${Object.keys(schema.properties[kind].items.properties).join(', ')}}`;
+const leadsOwn = ['habit'];
+
+export const shapeOf = kind => `{${Object.keys(schema.properties[kind].items.properties).filter(key => not(leadsOwn.includes(key))).join(', ')}}`;
 
 export const doors = [
   {

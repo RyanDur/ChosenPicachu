@@ -5,17 +5,16 @@ import {empty, has, maybe, not} from '@ryandur/sand';
 
 const schema = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), 'feedback.schema.json'), 'utf8'));
 const casesOf = kind => schema.$defs[kind]['enum'];
-const doors = casesOf('door');
 const severities = casesOf('severity');
 const marks = {violation: '✖', concern: '▲', note: '○'};
 
 export const reviewIn = answer => {
   const {structured_output: structured} = JSON.parse(answer);
-  const summary = structured?.tldr;
-  if (not(Array.isArray(summary?.ranked)) || not(typeof summary?.held === 'string') || not(Array.isArray(structured?.plusses)) || not(Array.isArray(structured?.deltas))) {
-    throw new Error('the review answered without a summary, plusses and deltas; the structured output is missing');
+  if (not(Array.isArray(structured?.habits)) || not(Array.isArray(structured?.plusses)) || not(Array.isArray(structured?.deltas))) {
+    throw new Error('the review answered without habits, plusses and deltas; the structured output is missing');
   }
-  return {tldr: summary, plusses: structured.plusses, deltas: structured.deltas};
+  const {habits, plusses, deltas, deferred} = structured;
+  return {habits, plusses, deltas, ...(has(deferred) ? {deferred} : {})};
 };
 
 const bySeverity = (a, b) => severities.indexOf(a.severity) - severities.indexOf(b.severity);
@@ -37,7 +36,7 @@ const lineOf = ({file, line, evidence}) => asText(`${file}:${line}${evidence ===
 
 const folded = (label, body) => [`<details><summary>${label}</summary>`, '', ...body, '', '</details>'].join('\n');
 
-export const plusOf = (plus, commit) => folded(`+ ${lineOf(plus)}`, [
+export const plusOf = (plus, commit) => folded(`+ ${plus.door} · ${lineOf(plus)}`, [
   `**Where:** ${placeOf(plus, commit)}`,
   '',
   `**What happened:** ${told(plus.happened)}`,
@@ -48,7 +47,7 @@ export const plusOf = (plus, commit) => folded(`+ ${lineOf(plus)}`, [
   `> ${told(plus.principle)}`
 ]);
 
-export const deltaOf = (delta, commit) => folded(`${marks[delta.severity]} ${delta.severity} · ${lineOf(delta)}`, [
+export const deltaOf = (delta, commit) => folded(`${marks[delta.severity]} ${delta.severity} · ${delta.door} · ${lineOf(delta)}`, [
   `**Where:** ${placeOf(delta, commit)}`,
   '',
   `**What happened:** ${told(delta.happened)}`,
@@ -61,47 +60,77 @@ export const deltaOf = (delta, commit) => folded(`${marks[delta.severity]} ${del
   `> ${told(delta.principle)}`
 ]);
 
-const byDoor = (entries, tell) => doors
-  .map(door => ({door, own: entries.filter(entry => entry.door === door)}))
-  .filter(({own}) => own.length > 0)
-  .map(({door, own}) => [`#### ${door}`, ...own.map(tell)].join('\n\n'))
-  .join('\n\n');
+const placesTold = (deltas, commit) =>
+  [...deltas].sort(bySeverity).map(delta => `- ${marks[delta.severity]} ${placeOf(delta, commit)}. ${told(delta.happened)}`);
 
-const plussesTold = (plusses, commit) =>
-  plusses.length === 0 ? [] : ['### Plusses', '', byDoor(plusses, plus => plusOf(plus, commit)), ''];
+const keepsTold = (plusses, commit) =>
+  plusses.map(plus => `- + ${placeOf(plus, commit)}. ${told(plus.happened)}`);
 
-const deltasTold = (deltas, commit) =>
-  ['### Deltas', '', byDoor([...deltas].sort(bySeverity), delta => deltaOf(delta, commit)), ''];
+const entriesTold = (deltas, plusses, commit) => [
+  ...[...deltas].sort(bySeverity).map(delta => deltaOf(delta, commit)),
+  ...plusses.map(plus => plusOf(plus, commit))
+].flatMap(entry => [entry, '']);
 
-const sentence = prose => prose.charAt(0).toUpperCase() + prose.slice(1);
+const gathered = (habit, {plusses, deltas}) => ({
+  ...habit,
+  deltas: deltas.filter(delta => delta.habit === habit.title),
+  plusses: plusses.filter(plus => plus.habit === habit.title)
+});
 
-const rankedTold = (ranked, commit) =>
-  ranked.map((entry, at) => `${at + 1}. ${placeOf(entry, commit)}. ${told(sentence(entry.cost))} ${told(entry.change)}`);
-
-const summaryTold = ({ranked, held, deferred}, commit) => [
-  ...(ranked.length === 0 ? [] : [rankedTold(ranked, commit).join('\n'), '']),
-  `**Held:** ${told(held)}`,
+const habitTold = (habit, at, commit) => [
+  `### ${at + 1}. ${told(habit.title)}`,
   '',
-  ...(empty(deferred) ? [] : [`**Deferred:** ${told(deferred)}`, ''])
+  told(habit.rule),
+  '',
+  ...(empty(habit.meet) ? [] : [`**What a person meets.** ${told(habit.meet)}`, '']),
+  ...(habit.deltas.length === 0 ? [] : ['**Where.**', '', ...placesTold(habit.deltas, commit), '']),
+  `**The fix, once.** ${told(habit.fix)}`,
+  '',
+  ...(habit.plusses.length === 0 ? [] : ['**Keep doing.**', '', ...keepsTold(habit.plusses, commit), '']),
+  ...entriesTold(habit.deltas, habit.plusses, commit)
 ];
 
-export const summaryOf = ({tldr, plusses, deltas}, {commit} = {}) => {
-  if (deltas.length === 0) {
-    return ['## The code holds up the home page', '', ...summaryTold(tldr, commit), `${plural(plusses.length, 'plus', 'plusses')}, no deltas.`, '', ...plussesTold(plusses, commit)].join('\n');
-  }
-  const counts = severities
+const strays = ({habits, plusses, deltas}) => {
+  const titles = new Set(habits.map(({title}) => title));
+  return {
+    deltas: deltas.filter(({habit}) => not(titles.has(habit))),
+    plusses: plusses.filter(({habit}) => not(titles.has(habit)))
+  };
+};
+
+const straysTold = ({deltas, plusses}, commit) =>
+  deltas.length + plusses.length === 0 ? [] : [
+    '### One more thing',
+    '',
+    ...(deltas.length === 0 ? [] : ['**Where.**', '', ...placesTold(deltas, commit), '']),
+    ...(plusses.length === 0 ? [] : ['**Keep doing.**', '', ...keepsTold(plusses, commit), '']),
+    ...entriesTold(deltas, plusses, commit)
+  ];
+
+const listed = (habits, review) => habits
+  .map(habit => gathered(habit, review))
+  .map(({title, deltas, plusses}, at) => `${at + 1}. **${told(title)}.** ${plural(deltas.length, 'place')}, ${plusses.length} to keep.`);
+
+const countsOf = ({plusses, deltas}) => {
+  const bySeverityCount = severities
     .map(severity => ({severity, count: deltas.filter(delta => delta.severity === severity).length}))
     .filter(({count}) => count > 0)
     .map(({severity, count}) => plural(count, severity));
+  return `${plural(plusses.length, 'plus', 'plusses')}. ${deltas.length === 0 ? 'No deltas' : bySeverityCount.join(', ')}.`;
+};
+
+export const summaryOf = (review, {commit} = {}) => {
+  const {habits, deltas, deferred} = review;
   return [
-    '## The home page reviews the code',
+    deltas.length === 0 ? '## The code holds up the home page' : '## The home page reviews the code',
     '',
-    ...summaryTold(tldr, commit),
-    `${plural(plusses.length, 'plus', 'plusses')}. ${counts.join(', ')}.`,
+    `${countsOf(review)} ${plural(habits.length, 'habit')}.`,
     '',
-    ...plussesTold(plusses, commit),
-    ...deltasTold(deltas, commit)
-  ].join('\n');
+    ...(habits.length === 0 ? [] : [...listed(habits, review), '']),
+    ...(empty(deferred) ? [] : [`**Deferred:** ${told(deferred)}`, '']),
+    ...habits.flatMap((habit, at) => [...habitTold(gathered(habit, review), at, commit), '']),
+    ...straysTold(strays(review), commit)
+  ].join('\n').trimEnd();
 };
 
 export const leavesFeedback = ({plusses, deltas}) => plusses.length + deltas.length > 0;

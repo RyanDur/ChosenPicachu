@@ -53,7 +53,7 @@ export const promptFor = ({scope, before, after}) => {
     `The scope has two halves. ${halves.tests} ${halves.site} The three door QAs and the design QA review the site and the tests QA reviews the tests; each may read the other half for context. The site's QAs report nothing on the tests; the tests QA reports on the site only that a test is missing.`,
     dispatch(chosen.asks),
     'When they answer, corroborate every plus and every delta yourself before you keep it: open the file at the line, read the principle on its door, and keep it only if it holds. Merge what two QAs saw as one. Drop what does not hold and say nothing of it.',
-    'Answer in the feedback stance, in the shape you were given. Open with the summary, the tldr: the deltas ranked from what matters most to what matters least, one line each with the place, the cost and the change; then held, one line; then deferred, one line, only if something was. Then the plusses and the deltas that held, each saying what happened, why, and for a delta the change, in plain sentences.'
+    'Answer in the feedback stance, in the shape you were given. Name the habits: each is one rule from a door that two or more findings answer to, with a title, the rule in the door\'s words, what a person meets when a person meets it, and the fix stated once. Put the habits a visitor meets first. Give every plus and every delta that held the title of its habit, or leave the title unmatched when it fits none. Say what you deferred in one line, only if something was. Each entry says what happened, why, and for a delta the change, in plain sentences.'
   ].join('\n\n');
 };
 
