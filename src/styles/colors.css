@@ -11,7 +11,7 @@
   --black: rgb(0, 0, 0);
 
   /* The color wheel, red round to violet */
-  --internationl-orange-engineering: rgb(186, 45, 11);
+  --international-orange-engineering: rgb(186, 45, 11);
   --silk: rgb(220, 208, 192);
   --faded-leather: rgba(171, 152, 122, 0.2);
   --field-drab: rgb(106, 88, 55);
@@ -35,9 +35,9 @@
   --mint-ink: color-mix(in srgb, var(--mint) 45%, var(--black));
   --mint-shade: color-mix(in srgb, var(--mint) 85%, var(--black));
   --mint-dim: color-mix(in srgb, var(--mint) 75%, var(--black));
-  --internationl-orange-engineering-shade: color-mix(in srgb, var(--internationl-orange-engineering) 70%, var(--black));
+  --international-orange-engineering-shade: color-mix(in srgb, var(--international-orange-engineering) 70%, var(--black));
   --faded-mint: rgb(from var(--mint) r g b / 0.5);
-  --faded-internationl-orange-engineering: rgb(from var(--internationl-orange-engineering) r g b / 0.4);
+  --faded-international-orange-engineering: rgb(from var(--international-orange-engineering) r g b / 0.4);
   --paper-veil: rgb(from var(--paper) r g b / 0.7);
   --charcoal-veil: rgb(from var(--charcoal) r g b / 0.5);
   --white-clear: rgb(from var(--white) r g b / 0);
@@ -54,7 +54,7 @@
   --raised: 0 10px 14px var(--faint-shadow);
   --press-glow: inset 0 0 5px var(--void);
   --press-glow-soft: inset 0 0 5px var(--charcoal);
-  --alarm-glow: 0 2px 15px 15px var(--internationl-orange-engineering),
+  --alarm-glow: 0 2px 15px 15px var(--international-orange-engineering),
   0 1px 2px var(--white);
 
   /* The theme: what the page wears, in the words the sheets ask for */
@@ -67,7 +67,7 @@
   --ink: var(--void);
   --ink-muted: var(--charcoal);
   --ink-inverse: var(--white);
-  --alarm-ink: var(--internationl-orange-engineering);
+  --alarm-ink: var(--international-orange-engineering);
   --ring: var(--charcoal);
 
   /* The code theme */

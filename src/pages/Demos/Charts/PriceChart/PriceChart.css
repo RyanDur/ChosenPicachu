@@ -45,11 +45,11 @@
 
   &.falling .chart-stage .sparkline {
     .trend {
-      stroke: var(--internationl-orange-engineering);
+      stroke: var(--international-orange-engineering);
     }
 
     .marker {
-      fill: var(--internationl-orange-engineering);
+      fill: var(--international-orange-engineering);
     }
   }
 
@@ -79,6 +79,6 @@
   }
 
   &.falling .headline .delta {
-    color: var(--internationl-orange-engineering);
+    color: var(--international-orange-engineering);
   }
 }

@@ -46,7 +46,7 @@
     }
 
     &.failed::before {
-      background: var(--internationl-orange-engineering);
+      background: var(--international-orange-engineering);
     }
   }
 }

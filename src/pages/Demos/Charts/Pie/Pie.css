@@ -34,11 +34,11 @@
     }
 
     .sold .face .half {
-      fill: var(--internationl-orange-engineering);
+      fill: var(--international-orange-engineering);
     }
 
     .sold .wall .half {
-      fill: var(--internationl-orange-engineering-shade);
+      fill: var(--international-orange-engineering-shade);
     }
   }
 
@@ -54,7 +54,7 @@
     }
 
     .sold {
-      color: var(--internationl-orange-engineering);
+      color: var(--international-orange-engineering);
     }
   }
 }

@@ -22,7 +22,7 @@
 
       &:focus-within,
       &:hover {
-        background-color: var(--faded-internationl-orange-engineering);
+        background-color: var(--faded-international-orange-engineering);
       }
 
       .remove {

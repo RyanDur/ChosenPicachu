@@ -178,7 +178,7 @@
 
     .info-toggle:hover ~ .info-label,
     .info-toggle:focus ~ .info-label {
-      background: var(--internationl-orange-engineering);
+      background: var(--international-orange-engineering);
     }
 
     &:not(.close) .info-toggle ~ .info-label::after {

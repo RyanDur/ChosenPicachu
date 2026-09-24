@@ -122,7 +122,7 @@ test('the z-index cards start in a stack and the button spreads them', async ({p
 
 const markets = [
   {trend: 'rising', sign: /^\+/, ink: '--mint-ink', prices: [50000, 50100]},
-  {trend: 'falling', sign: /^-/, ink: '--internationl-orange-engineering', prices: [50100, 50000]}
+  {trend: 'falling', sign: /^-/, ink: '--international-orange-engineering', prices: [50100, 50000]}
 ];
 
 test('the feed dot glows live', async ({page}) => {

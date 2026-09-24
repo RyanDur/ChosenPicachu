@@ -6,7 +6,7 @@
 
   &:has(:required) .fancy-title::after {
     content: '*';
-    color: var(--internationl-orange-engineering);
+    color: var(--international-orange-engineering);
   }
 
   .fancy-title {
@@ -55,7 +55,7 @@
     }
 
     &:user-invalid {
-      border: var(--hairline) solid var(--internationl-orange-engineering);
+      border: var(--hairline) solid var(--international-orange-engineering);
       box-shadow: var(--drop-shadow);
     }
 

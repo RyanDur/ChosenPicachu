@@ -28,11 +28,11 @@
     }
 
     .sold {
-      fill: var(--internationl-orange-engineering);
+      fill: var(--international-orange-engineering);
     }
 
     .sold-wall {
-      fill: var(--internationl-orange-engineering-shade);
+      fill: var(--international-orange-engineering-shade);
     }
   }
 }

@@ -27,11 +27,11 @@
     }
 
     .down .body {
-      fill: var(--internationl-orange-engineering);
+      fill: var(--international-orange-engineering);
     }
 
     .down .wall {
-      fill: var(--internationl-orange-engineering-shade);
+      fill: var(--international-orange-engineering-shade);
     }
   }
 
