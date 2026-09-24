@@ -2,7 +2,6 @@
   /* The base colors, each written once. The grey scale, light to dark */
   --white: rgb(255, 255, 255);
   --paper: rgb(244, 244, 244);
-  --disabled-gray: rgba(239, 239, 239, 0.3);
   --silver: rgb(204, 204, 204);
   --smoke: rgb(153, 153, 153);
   --gray: rgb(128, 128, 128);
@@ -42,7 +41,6 @@
   --charcoal-veil: rgb(from var(--charcoal) r g b / 0.5);
   --white-clear: rgb(from var(--white) r g b / 0);
   --faint-shadow: rgb(from var(--black) r g b / 0.12);
-  --light-shadow: rgb(from var(--black) r g b / 0.16);
   --shadow: rgb(from var(--black) r g b / 0.19);
   --dark-shadow: rgb(from var(--black) r g b / 0.23);
 
@@ -54,8 +52,6 @@
   --raised: 0 10px 14px var(--faint-shadow);
   --press-glow: inset 0 0 5px var(--void);
   --press-glow-soft: inset 0 0 5px var(--charcoal);
-  --alarm-glow: 0 2px 15px 15px var(--international-orange-engineering),
-  0 1px 2px var(--white);
 
   /* The theme: what the page wears, in the words the sheets ask for */
   --backdrop: var(--void);

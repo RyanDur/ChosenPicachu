@@ -120,6 +120,13 @@ test('the z-index cards start in a stack and the button spreads them', async ({p
   await expect.poll(spread).toBe(true);
 });
 
+test('the roster card is lifted off the page', async ({page}) => {
+  await page.goto('users');
+  const roster = page.getByRole('region', {name: 'User Candidates'});
+
+  await expect(roster).toHaveCSS('box-shadow', await looks(page).resolved('box-shadow', '--light-box-shadow'));
+});
+
 const markets = [
   {trend: 'rising', sign: /^\+/, ink: '--mint-ink', prices: [50000, 50100]},
   {trend: 'falling', sign: /^-/, ink: '--international-orange-engineering', prices: [50100, 50000]}
