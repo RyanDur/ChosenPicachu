@@ -26,9 +26,9 @@ export const surveyedRows = (table: HTMLTableElement): void => {
 };
 
 export const rowDrag = {
-  lift: (grip: HTMLElement, table: HTMLTableElement): void => {
+  lift: (grip: HTMLElement, table: HTMLTableElement, from: number): void => {
     surveyedRows(table);
-    fireEvent.pointerDown(grip, {clientX: 100, clientY: HEAD + 10, pointerId: 1});
+    fireEvent.pointerDown(grip, {clientX: 100, clientY: HEAD + from * ROW + 10, pointerId: 1});
   },
   carryOver: (grip: HTMLElement, from: number, to: number): void => {
     const past = to < from ? 10 : 30;

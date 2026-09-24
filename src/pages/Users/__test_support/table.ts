@@ -37,10 +37,10 @@ export const usersTable = {
 
   grips: (): HTMLElement[] => within(table()).getAllByRole('button', {name: /move row/}),
   grip: async (name: string): Promise<HTMLElement> => within(await rowOf(name)).getByRole('button', {name: /move row/}),
-  dropBelow: async (name: string, below: string): Promise<void> => {
+  dragPast: async (name: string, past: string): Promise<void> => {
     const grip = within(await rowOf(name)).getByRole('button', {name: /move row/});
-    rowDrag.lift(grip, sortable());
-    rowDrag.carryOver(grip, names().indexOf(name), names().indexOf(below));
+    rowDrag.lift(grip, sortable(), names().indexOf(name));
+    rowDrag.carryOver(grip, names().indexOf(name), names().indexOf(past));
     rowDrag.drop(grip);
   },
 

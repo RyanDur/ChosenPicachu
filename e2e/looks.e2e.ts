@@ -115,7 +115,13 @@ test('banners stacked sideways settle to the height of their news', async ({page
   const news = page.getByRole('alert').getByRole('paragraph');
   await expect(news).toHaveCount(2);
 
-  const settled = () => news.evaluateAll(paragraphs => paragraphs.every(paragraph => paragraph.clientHeight === paragraph.scrollHeight));
+  const settled = () => news.evaluateAll(paragraphs => paragraphs.every(paragraph => {
+    const contents = document.createRange();
+    contents.selectNodeContents(paragraph);
+    const style = getComputedStyle(paragraph);
+    const chrome = parseFloat(style.paddingTop) + parseFloat(style.paddingBottom) + parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth);
+    return Math.abs(paragraph.getBoundingClientRect().height - (contents.getBoundingClientRect().height + chrome)) <= 1;
+  }));
 
   await expect.poll(settled).toBe(true);
 });

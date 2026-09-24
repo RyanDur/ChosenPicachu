@@ -11,7 +11,7 @@ import {EagerTable} from '../EagerTable';
 import {LazyTable} from '../LazyTable';
 import {blurFocusOnMoves} from '@__test_support/focus';
 import {Column, DragSortableTable} from '@components/DragSortableTable';
-import {rect, rowDrag} from '@components/DragSortableTable/__test_support';
+import {rect, rowDrag, surveyedRows} from '@components/DragSortableTable/__test_support';
 
 type Table = FC<HeaderEvents & BodyEvents & {caption: string; className?: string; columns: readonly TableColumn<Measured>[]; rows: readonly Measures[]}>;
 
@@ -329,7 +329,7 @@ describe('rows by hand', () => {
   const surface = (): HTMLElement => grip(aloft);
   const lift = (window: string): void => {
     aloft = window;
-    rowDrag.lift(grip(window), sourceTable());
+    rowDrag.lift(grip(window), sourceTable(), windowNames().indexOf(window));
   };
   const carryOver = (target: string): void => {
     const names = windowNames();
@@ -829,9 +829,7 @@ describe('animated moves', () => {
     throw new Error('nothing is aloft');
   };
   const columnCells = (name: string): Element[] => [header(name), ...lanes().map(lane => lane.cells[columnOrder().indexOf(name)])];
-  const settledRows = (): void => lanes().forEach((lane, at) => {
-    lane.getBoundingClientRect = () => rect({left: 0, right: 700, width: 700, top: 40 + at * 40, y: 40 + at * 40, bottom: 80 + at * 40, height: 40});
-  });
+  const settledRows = (): void => surveyedRows(sourceTable());
 
   test('a keyboard walk settles the walked column and shoves its neighbour', async () => {
     seat(EagerTable, 'keep animated');
