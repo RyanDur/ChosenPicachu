@@ -34,12 +34,10 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
   const seat = columnSeat ?? rowSeat;
   const drift = columnDrift ?? rowDrift;
 
-  const walkedTo = (from: number, to: number, heights: Readonly<Record<string, number>>): void => {
-    dispatch(rowWalkedTo(row, to, heights, standing));
-    if (to !== from) {
-      onRowMoved?.({row, to, standing});
-      setLanded({axis: 'row', position: to, of: count});
-    }
+  const nudgedTo = (to: number, heights: Readonly<Record<string, number>>): void => dispatch(rowWalkedTo(row, to, heights, standing));
+  const walkedTo = (to: number): void => {
+    onRowMoved?.({row, to, standing});
+    setLanded({axis: 'row', position: to, of: count});
   };
   const beside = (neighbour: string, survey: Survey): void => {
     const to = standing.indexOf(neighbour);
@@ -75,7 +73,7 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
       onPointerUp={has(drag) ? release : undefined}
       onPointerCancel={has(drag) ? release : undefined}
       onLostPointerCapture={has(drag) ? pointerTravel(moved(drag), release) : undefined}
-      onKeyDown={rowArrows(row, () => standing, ({from, to, heights}) => walkedTo(from, to, heights))}/>
+      onKeyDown={rowArrows(row, () => standing, {nudged: ({to, heights}) => nudgedTo(to, heights), moved: ({to}) => walkedTo(to)})}/>
     {label}
     <MoveReport landed={landed}/>
   </th>;

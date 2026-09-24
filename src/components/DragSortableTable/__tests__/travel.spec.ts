@@ -77,7 +77,7 @@ describe('the travel vocabulary', () => {
     const grip = measuredTable().tBodies[0]?.rows[0]?.cells[0];
     const heights: Readonly<Record<string, number>>[] = [];
 
-    rowArrows('this minute', () => ['this minute', 'this hour'], nudge => heights.push(nudge.heights))({...pressed('ArrowDown'), currentTarget: grip ?? null});
+    rowArrows('this minute', () => ['this minute', 'this hour'], {nudged: nudge => heights.push(nudge.heights), moved: () => undefined})({...pressed('ArrowDown'), currentTarget: grip ?? null});
 
     expect(heights).toEqual([{'this minute': 40, 'this hour': 41}]);
   });
@@ -103,16 +103,22 @@ describe('the travel vocabulary', () => {
     expect(arranged).toEqual([]);
   });
 
-  it('row arrows always arrange, so the rail nudge still bakes, and say where the row came from', () => {
-    const arranged: {from: number; to: number; after: string[]}[] = [];
+  it('row arrows always nudge, so the rail nudge still bakes, and say a move only when the seat changed', () => {
+    const nudged: {from: number; to: number; after: string[]}[] = [];
+    const moved: number[] = [];
     const rows = ['this minute', 'this hour', 'session'];
+    const arrows = (held: string) => rowArrows(held, () => rows, {
+      nudged: ({from, to, after}) => nudged.push({from, to, after}),
+      moved: ({to}) => moved.push(to)
+    });
 
-    rowArrows('this minute', () => rows, ({from, to, after}) => arranged.push({from, to, after}))(pressed('ArrowDown'));
-    rowArrows('session', () => rows, ({from, to, after}) => arranged.push({from, to, after}))(pressed('ArrowDown'));
+    arrows('this minute')(pressed('ArrowDown'));
+    arrows('session')(pressed('ArrowDown'));
 
-    expect(arranged).toEqual([
+    expect(nudged).toEqual([
       {from: 0, to: 1, after: ['this hour', 'this minute', 'session']},
       {from: 2, to: 2, after: ['this minute', 'this hour', 'session']}
     ]);
+    expect(moved).toEqual([1]);
   });
 });

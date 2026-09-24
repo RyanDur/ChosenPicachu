@@ -60,16 +60,21 @@ export const deltaOf = (delta, commit) => folded(`${marks[delta.severity]} ${del
   `> ${told(delta.principle)}`
 ]);
 
-const placesTold = (deltas, commit) =>
-  [...deltas].sort(bySeverity).map(delta => `- ${marks[delta.severity]} ${placeOf(delta, commit)}. ${told(delta.happened)}`);
+const whereTold = (deltas, commit) => deltas.length === 0 ? [] : [
+  '#### Where',
+  '',
+  ...[...deltas].sort(bySeverity).map(delta => `- ${marks[delta.severity]} ${placeOf(delta, commit)}. ${told(delta.happened)}`),
+  '',
+  ...[...deltas].sort(bySeverity).flatMap(delta => [deltaOf(delta, commit), ''])
+];
 
-const keepsTold = (plusses, commit) =>
-  plusses.map(plus => `- + ${placeOf(plus, commit)}. ${told(plus.happened)}`);
-
-const entriesTold = (deltas, plusses, commit) => [
-  ...[...deltas].sort(bySeverity).map(delta => deltaOf(delta, commit)),
-  ...plusses.map(plus => plusOf(plus, commit))
-].flatMap(entry => [entry, '']);
+const keepTold = (plusses, commit) => plusses.length === 0 ? [] : [
+  '#### Keep doing',
+  '',
+  ...plusses.map(plus => `- + ${placeOf(plus, commit)}. ${told(plus.happened)}`),
+  '',
+  ...plusses.flatMap(plus => [plusOf(plus, commit), ''])
+];
 
 const gathered = (habit, {plusses, deltas}) => ({
   ...habit,
@@ -83,11 +88,10 @@ const habitTold = (habit, at, commit) => [
   `> ${told(habit.rule)}`,
   '',
   ...(empty(habit.meet) ? [] : [`**What a person meets.** ${told(habit.meet)}`, '']),
-  ...(habit.deltas.length === 0 ? [] : ['#### Where', '', ...placesTold(habit.deltas, commit), '']),
   `**The fix, once.** ${told(habit.fix)}`,
   '',
-  ...(habit.plusses.length === 0 ? [] : ['#### Keep doing', '', ...keepsTold(habit.plusses, commit), '']),
-  ...entriesTold(habit.deltas, habit.plusses, commit)
+  ...whereTold(habit.deltas, commit),
+  ...keepTold(habit.plusses, commit)
 ];
 
 const strays = ({habits, plusses, deltas}) => {
@@ -98,14 +102,13 @@ const strays = ({habits, plusses, deltas}) => {
   };
 };
 
+export const unplaced = review => {
+  const {deltas, plusses} = strays(review);
+  return deltas.length + plusses.length;
+};
+
 const straysTold = ({deltas, plusses}, commit) =>
-  deltas.length + plusses.length === 0 ? [] : [
-    '### One more thing',
-    '',
-    ...(deltas.length === 0 ? [] : ['#### Where', '', ...placesTold(deltas, commit), '']),
-    ...(plusses.length === 0 ? [] : ['#### Keep doing', '', ...keepsTold(plusses, commit), '']),
-    ...entriesTold(deltas, plusses, commit)
-  ];
+  deltas.length + plusses.length === 0 ? [] : ['### One more thing', '', ...whereTold(deltas, commit), ...keepTold(plusses, commit)];
 
 const listed = (habits, review) => habits
   .map(habit => gathered(habit, review))
@@ -144,6 +147,9 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const commit = has(repository) && has(sha) ? {repository, sha} : undefined;
   const summary = summaryOf(review, {commit});
   process.stdout.write(summary);
+  if (unplaced(review) > 0) {
+    process.stderr.write(`${plural(unplaced(review), 'entry', 'entries')} named a habit the review did not list\n`);
+  }
   if (leavesFeedback(review)) {
     writeFileSync('review-comment.md', summary);
   }

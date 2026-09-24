@@ -306,6 +306,20 @@ describe('the frame table', () => {
     expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent('trades sorted ascending');
   });
 
+  it('a keyboard nudge at the rail of the lazy build keeps the sort and says nothing', async () => {
+    vanillaFrame.stand({pace: 'lazy'});
+
+    await userEvent.click(sortMenu('trades').getByRole('button', {name: 'ascending', hidden: true}));
+    expect(screen.getByRole('columnheader', {name: /trades/})).toHaveAttribute('aria-sort', 'ascending');
+
+    screen.getByRole('button', {name: 'move row 1'}).focus();
+    await userEvent.keyboard('{ArrowUp}');
+
+    expect(screen.getByRole('columnheader', {name: /trades/})).toHaveAttribute('aria-sort', 'ascending');
+    expect(windowNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
+    expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent('trades sorted ascending');
+  });
+
   it('the keyboard trades shares between neighbours', async () => {
     vanillaFrame.stand();
     stubbedRects();

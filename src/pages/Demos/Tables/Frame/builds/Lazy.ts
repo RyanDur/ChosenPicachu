@@ -103,15 +103,15 @@ const mount = (document: Document, table: HTMLTableElement, body: HTMLTableSecti
     const from = before.indexOf(row);
     shoveRows(mounted, displacedBetween(before, from, to), {toward: to > from ? 'up' : 'down', by: heights[row] ?? 0});
   };
-  const rowTo = (row: string, to: number, heights: Readonly<Record<string, number>>): void => {
+  const rowNudged = (row: string, from: number, to: number, heights: Readonly<Record<string, number>>): void => {
     const before = standing();
-    const from = before.indexOf(row);
-    if (to !== from) {
-      arrangement.dispatch(rowMoved(row, to, before));
-      report({axis: 'row', position: to, of: before.length});
-    }
     rowShoving(row, before, to, heights);
     settleRow(mounted, row, settlingFromSeat({x: 0, y: to > from ? -spanCrossed(before, heights, from, to) : spanCrossed(before, heights, from, to)}));
+  };
+  const rowTo = (row: string, to: number): void => {
+    const before = standing();
+    arrangement.dispatch(rowMoved(row, to, before));
+    report({axis: 'row', position: to, of: before.length});
   };
   const rowBeside = (row: string, neighbour: string): void => {
     const before = standing();
@@ -281,7 +281,7 @@ const mount = (document: Document, table: HTMLTableElement, body: HTMLTableSecti
   const wireRowGrip = (held: string, grip: HTMLButtonElement): void => {
     grip.addEventListener('pointerdown', rowLift(columns, standing, grab => lift({axis: 'row', held}, grab)));
     wireCarry(grip);
-    grip.addEventListener('keydown', rowArrows(held, standing, ({to, heights}) => rowTo(held, to, heights)));
+    grip.addEventListener('keydown', rowArrows(held, standing, {nudged: ({from, to, heights}) => rowNudged(held, from, to, heights), moved: ({to}) => rowTo(held, to)}));
   };
 
   dressGrips();

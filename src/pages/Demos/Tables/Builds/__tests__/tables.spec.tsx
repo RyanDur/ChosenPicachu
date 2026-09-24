@@ -570,6 +570,18 @@ describe('sort criteria menus', () => {
     expect(announced()).toEqual(['trades sort reset']);
   });
 
+  test('an arrow at the edge of a sorted lazy table keeps the sort and says nothing more', async () => {
+    seat(LazyTable, 'keep static');
+    await userEvent.click(within(menuFor('sort trades')).getByRole('button', {name: 'descending', hidden: true}));
+
+    grip('last 5 minutes').focus();
+    await userEvent.keyboard('{ArrowUp}');
+
+    expect(tradesHeader()).toHaveAttribute('aria-sort', 'descending');
+    expect(windowNames()).toEqual(['last 5 minutes', 'this hour', 'last 15 minutes', 'this minute', 'session']);
+    expect(announced()).toEqual(['trades sorted descending']);
+  });
+
   test('reset restores the starting order', async () => {
     seat(EagerTable, 'keep static');
 

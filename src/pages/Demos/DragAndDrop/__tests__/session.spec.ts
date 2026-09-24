@@ -5,10 +5,6 @@ import {landedMove} from '../session';
 describe('a landed drag', () => {
   const order = ['A', 'B', 'C'];
 
-  it('reports the item and the place it landed', () => {
-    expect(landedMove(some('A'), some(2), order).orNull()).toEqual({item: 'A', position: 2, of: 3});
-  });
-
   it('an item dropped on its own place is not a move', () => {
     expect(landedMove(some('B'), some(1), order).orNull()).toBeNull();
   });

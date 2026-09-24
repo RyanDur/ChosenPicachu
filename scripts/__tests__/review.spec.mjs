@@ -2,7 +2,7 @@ import {readFileSync} from 'node:fs';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {promptFor} from '../review/prompt.mjs';
-import {deltaOf, leavesFeedback, plusOf, reviewIn, summaryOf, verdictOf} from '../review/report.mjs';
+import {deltaOf, leavesFeedback, plusOf, reviewIn, summaryOf, unplaced, verdictOf} from '../review/report.mjs';
 import {aDelta, aHabit, aPlus, review} from '../review/__test_support/feedback.mjs';
 
 const placeOf = (text, needle) => {
@@ -172,19 +172,19 @@ describe('the review report', () => {
     expect(placeOf(summary, '2. **a section is named by its heading.**')).toBeLessThan(placeOf(summary, '### 1. a landmark is named for what it holds'));
   });
 
-  test('a habit opens on its rule, what a person meets, the places by severity, the fix once, what to keep, then the entries', () => {
+  test('a habit opens on its rule, what a person meets and the fix once, then the places by severity with their entries under Where, then what to keep with its entries under Keep doing', () => {
     const summary = summaryOf(review([plus], [note, violation], [aHabit({meet: 'Walk the page by headings and the section is not there.'})]));
     const at = needle => placeOf(summary, needle);
-    expect(at('### 1. a section is named by its heading')).toBeLessThan(at('The structure door: sections name themselves through their headings.'));
+    expect(at('### 1. a section is named by its heading')).toBeLessThan(at('> The structure door: sections name themselves through their headings.'));
     expect(at('> The structure door:')).toBeLessThan(at('**What a person meets.** Walk the page by headings and the section is not there.'));
-    expect(at('**What a person meets.**')).toBeLessThan(at('#### Where'));
+    expect(at('**What a person meets.**')).toBeLessThan(at('**The fix, once.** Give each section a heading that names it.'));
+    expect(at('**The fix, once.**')).toBeLessThan(at('#### Where'));
     expect(at('- ✖ `src/a.tsx:3`. a div wraps a list')).toBeLessThan(at('- ○ `src/somewhere.tsx:1`. a section has no heading'));
-    expect(at('- ○ `src/somewhere.tsx:1`.')).toBeLessThan(at('**The fix, once.** Give each section a heading that names it.'));
-    expect(at('**The fix, once.**')).toBeLessThan(at('#### Keep doing'));
-    expect(at('#### Keep doing')).toBeLessThan(at('- + `src/f.tsx:5`. the friends list is a fieldset with a legend'));
-    expect(at('- + `src/f.tsx:5`.')).toBeLessThan(at('<details><summary>✖ violation · structure · src/a.tsx:3</summary>'));
+    expect(at('- ○ `src/somewhere.tsx:1`.')).toBeLessThan(at('<details><summary>✖ violation · structure · src/a.tsx:3</summary>'));
     expect(at('<details><summary>✖ violation')).toBeLessThan(at('<details><summary>○ note · structure · src/somewhere.tsx:1</summary>'));
-    expect(at('<details><summary>○ note')).toBeLessThan(at('<details><summary>+ structure · src/f.tsx:5</summary>'));
+    expect(at('<details><summary>○ note')).toBeLessThan(at('#### Keep doing'));
+    expect(at('#### Keep doing')).toBeLessThan(at('- + `src/f.tsx:5`. the friends list is a fieldset with a legend'));
+    expect(at('- + `src/f.tsx:5`.')).toBeLessThan(at('<details><summary>+ structure · src/f.tsx:5</summary>'));
   });
 
   test('a habit with no person to meet and nothing to keep leaves those parts out', () => {
@@ -205,9 +205,15 @@ describe('the review report', () => {
     const stray = aDelta({habit: 'nothing of the sort', file: 'src/s.tsx', line: 7, happened: 'a stray thing'});
     const summary = summaryOf(review([aPlus({habit: 'nothing of the sort', file: 'src/k.tsx', line: 8, happened: 'a stray keep'})], [note, stray], [heading]));
     expect(placeOf(summary, '### 1. a section is named by its heading')).toBeLessThan(placeOf(summary, '### One more thing'));
-    expect(placeOf(summary, '### One more thing')).toBeLessThan(placeOf(summary, '- ○ `src/s.tsx:7`. a stray thing'));
-    expect(summary).toContain('- + `src/k.tsx:8`. a stray keep');
+    expect(placeOf(summary, '### One more thing')).toBeLessThan(placeOf(summary, '#### Where\n\n- ○ `src/s.tsx:7`. a stray thing'));
+    expect(placeOf(summary, '- ○ `src/s.tsx:7`.')).toBeLessThan(placeOf(summary, '#### Keep doing\n\n- + `src/k.tsx:8`. a stray keep'));
     expect(summaryOf(review([], [note], [heading]))).not.toContain('### One more thing');
+  });
+
+  test('the entries whose habit matches none are counted, so the run can say so', () => {
+    const stray = aDelta({habit: 'nothing of the sort'});
+    expect(unplaced(review([aPlus({habit: 'nothing of the sort'})], [note, stray], [heading]))).toBe(2);
+    expect(unplaced(review([plus], [note], [heading]))).toBe(0);
   });
 
   test('a deferred line follows the habit list only when something was deferred', () => {

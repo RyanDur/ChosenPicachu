@@ -27,16 +27,22 @@ export const columnArrows = (
   });
 };
 
+type RowNudge = {from: number; to: number; after: string[]; heights: Readonly<Record<string, number>>};
+
 export const rowArrows = (
   held: string,
   standing: () => readonly string[],
-  arrange: (nudge: {from: number; to: number; after: string[]; heights: Readonly<Record<string, number>>}) => void
+  {nudged, moved}: {nudged: (nudge: RowNudge) => void; moved: (nudge: RowNudge) => void}
 ) => (event: ArrowKey): void => {
   maybe(rowSteps[event.key]).map(toward => {
     event.preventDefault();
     const seats = standing();
     const {from, to} = nudgedRow(seats, held, toward);
     const table = event.currentTarget instanceof Element ? event.currentTarget.closest('table') : null;
-    arrange({from, to, after: array.moveToIndex(to, held, seats), heights: table === null ? {} : rowHeights(table, seats)});
+    const nudge = {from, to, after: array.moveToIndex(to, held, seats), heights: table === null ? {} : rowHeights(table, seats)};
+    nudged(nudge);
+    if (to !== from) {
+      moved(nudge);
+    }
   });
 };
