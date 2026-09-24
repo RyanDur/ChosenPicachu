@@ -26,6 +26,6 @@ describe('a story card', () => {
       </Story>
     </Stories></TestApp>);
 
-    expect(within(card('The reader can read prose alone')).queryByText(/\d+ steps?/)).toBeNull();
+    expect(within(card('The reader can read prose alone')).queryByText(/\d+ steps?/)).not.toBeInTheDocument();
   });
 });

@@ -32,10 +32,13 @@ export type Copy = {
   motion: Record<Motion, string>;
 };
 
-export type ControlsProps = {
+export type Dials = {
   pace: Pace;
   origin: Origin;
   motion: Motion;
+};
+
+export type ControlsProps = Dials & {
   onPace: (pace: Pace) => void;
   onOrigin: (origin: Origin) => void;
   onMotion: (motion: Motion) => void;

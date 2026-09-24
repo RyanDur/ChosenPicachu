@@ -121,7 +121,7 @@ describe('the chart periods', () => {
     const candleCard = screen.getByRole('region', {name: 'candles'});
     expect(await within(candleCard).findByRole('progressbar')).toBeVisible();
     await waitFor(() => expect(drawnCandles()).toBe(5));
-    expect(within(candleCard).queryByRole('progressbar')).toBeNull();
+    expect(within(candleCard).queryByRole('progressbar')).not.toBeInTheDocument();
   });
 
   const slowHistory = () =>

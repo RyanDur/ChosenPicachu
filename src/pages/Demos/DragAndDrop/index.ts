@@ -6,4 +6,3 @@ export {LazyKeepStaticList} from './LazyKeepStaticList';
 export {LazyKeepAnimatedList} from './LazyKeepAnimatedList';
 export {LazyHideStaticList} from './LazyHideStaticList';
 export {LazyHideAnimatedList} from './LazyHideAnimatedList';
-export {ListControls} from './ListControls';

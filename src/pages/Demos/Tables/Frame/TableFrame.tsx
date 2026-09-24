@@ -3,13 +3,10 @@ import {has, maybe} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {useEnv} from '@components/Env';
 import {useBanners} from '@components/Banners';
-import {Motion, Origin, Pace} from '../../Controls';
+import {Dials} from '../../Controls';
 import './TableFrame.css';
 
-type Props = {
-  pace: Pace;
-  origin: Origin;
-  motion: Motion;
+type Props = Dials & {
   veiled?: boolean;
   onStand?: () => void;
 };

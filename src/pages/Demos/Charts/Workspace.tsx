@@ -1,5 +1,5 @@
 import {FC, useEffect, useState} from 'react';
-import {Link} from 'react-router';
+import {Link, generatePath} from 'react-router';
 import {maybe} from '@ryandur/sand';
 import {Paths} from '@pages/Paths';
 import {ChartKind, matchChartKind} from './kinds';
@@ -25,12 +25,7 @@ const chartNames: Record<ChartKind, string> = {
   pie: 'Pie'
 };
 
-const doorways: Record<ChartKind, Paths> = {
-  price: Paths.priceChartTutorial,
-  candles: Paths.candlesChartTutorial,
-  pressure: Paths.pressureChartTutorial,
-  pie: Paths.pieChartTutorial
-};
+const doorway = (kind: ChartKind): string => generatePath(Paths.chartTutorial, {kind});
 
 const doorwayId = (kind: ChartKind): string => `doorway-${kind}`;
 
@@ -104,7 +99,7 @@ export const Workspace: FC<Props> = ({product}) => {
         onDragOver={travel}
         onDrop={event => event.preventDefault()}
         onDragEnd={release}>
-        <Link id={doorwayId(kind)} className="doorway" to={doorways[kind]} onKeyDown={keys(at)}>
+        <Link id={doorwayId(kind)} className="doorway" to={doorway(kind)} onKeyDown={keys(at)}>
           <span className="off-screen">{`${chartNames[kind]} tutorial`}</span>
         </Link>
         {plural && <Grip onArm={() => arm(at)}/>}

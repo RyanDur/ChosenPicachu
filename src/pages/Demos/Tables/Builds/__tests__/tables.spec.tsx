@@ -302,10 +302,10 @@ describe('columns by hand', () => {
   test('a menu appears only where the column asks for one', () => {
     seat(EagerTable, 'keep static');
 
-    expect(screen.queryByRole('button', {name: 'sort window'})).toBeNull();
+    expect(screen.queryByRole('button', {name: 'sort window'})).not.toBeInTheDocument();
     expect(screen.getByRole('button', {name: 'sort trades'})).toBeVisible();
     expect(within(header('trades')).getByRole('button', {name: 'sort trades'})).toBeVisible();
-    expect(within(header('window')).queryByRole('button', {name: 'sort window'})).toBeNull();
+    expect(within(header('window')).queryByRole('button', {name: 'sort window'})).not.toBeInTheDocument();
   });
 
   test('every column offers a resize handle', () => {

@@ -4,7 +4,8 @@ import headerCss from '@components/DragSortableTable/Header.css?raw';
 import sortableCss from '@components/DragSortableTable/sortable.css?raw';
 import rowGripCss from '@components/DragSortableTable/RowGrip.css?raw';
 import motionCss from '@components/DragSortableTable/motion.css?raw';
-import type {Motion, Origin, Pace} from '../../Controls';
+import {Dials} from '../../Controls';
+import {Exchange} from '@pages/Demos/exchange';
 import aggregationsCss from '../Aggregations/Aggregations.css?raw';
 import scaffold from './frame.html?raw';
 import frameJs from './frame.main.ts?frame';
@@ -34,15 +35,7 @@ export const sheets = [
   {name: 'Aggregations.css', css: aggregationsCss}
 ];
 
-export type FrameConfig = {pace: Pace; origin: Origin; motion: Motion};
-
-export type FrameEnv = {
-  tradeFeed: string;
-  tradeHistory: string;
-  tradeProduct: string;
-};
-
-export const frameDocument = (env: FrameEnv, frame: FrameConfig): string => {
+export const frameDocument = (env: Exchange, frame: Dials): string => {
   const cascade = sheets.map(({css}) => css).join('\n');
   return scaffold
     .replace('/* the cascade */', () => cascade)

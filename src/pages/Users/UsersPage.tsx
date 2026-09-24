@@ -11,10 +11,10 @@ import {UsersProvider, useUsersSelector} from './Provider';
 import {syncing} from './syncing';
 import {opened, usersStore, userWithId} from './store';
 import {UserInformation} from './UserInformation';
-import {openedOn} from './mode';
+import {Mode, modeParam, openedOn} from './mode';
 import './UsersPage.css';
 
-const Rooms: FC<{id?: string; param?: string}> = ({id, param}) => {
+const Rooms: FC<{id?: string; param?: Mode}> = ({id, param}) => {
   const open = openedOn(param, useUsersSelector(userWithId(id)));
   return <>
     <UserInformation open={open} className="user-info users card rounded-corners lifted padded"/>
@@ -31,7 +31,7 @@ const Rooms: FC<{id?: string; param?: string}> = ({id, param}) => {
 export const UsersPage: FC = () => {
   const navigate = useNavigate();
   const {raise} = useBanners();
-  const {id, mode: param} = useSearchParamsObject({id: schema.string, mode: schema.string});
+  const {id, mode: param} = useSearchParamsObject({id: schema.string, mode: modeParam});
   const [store] = useState(() => usersStore(syncing(usersApi, () => navigate(Paths.users), error => raise(troubleWith('the users')(error)))));
 
   useEffect(() => {

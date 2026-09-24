@@ -2,7 +2,7 @@ import {FC, useEffect, useState} from 'react';
 import {classNames} from '@components/class-names';
 import {EagerTable} from '../Builds/EagerTable';
 import {LazyTable} from '../Builds/LazyTable';
-import {Motion, Origin, Pace} from '../../Controls';
+import {Dials, Motion, Origin, Pace} from '../../Controls';
 import {World} from '../params';
 import {TableFrame, warmed} from '../Frame/TableFrame';
 import {useDemosDispatch, useDemosSelector} from '../../Provider';
@@ -15,12 +15,6 @@ type Props = {
   origin: Origin;
   motion: Motion;
   world: World;
-};
-
-type Dials = {
-  pace: Pace;
-  origin: Origin;
-  motion: Motion;
 };
 
 const LiveTable: FC<Dials> = ({pace, origin, motion}) => {

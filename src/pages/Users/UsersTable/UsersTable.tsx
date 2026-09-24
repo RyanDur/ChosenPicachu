@@ -32,7 +32,7 @@ export const UsersTable: FC = () => {
       onRowMoved={({row, to, standing}) => dispatch(rowMoved(row, to, standing))}>
       {users.map(user => {
         const name = fullNameOf(user);
-        return <Row key={user.id} row={user.id} className="row">
+        return <Row key={user.id} className="row">
           <RowHeader column="full-name" row={user.id} className="cell row-header" label={name}/>
           <Cell column="home-city" row={user.id} className="cell">{user.homeAddress.city}</Cell>
           <Cell column="age" row={user.id} className="cell">{maybe(user.info.dob).map(age).map(formatAge).orElse('')}</Cell>

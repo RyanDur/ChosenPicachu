@@ -1,12 +1,3 @@
 export {ArtGallery} from './Art';
-export {GalleryContext} from './Art/Context';
 export {ArtPiece} from './ArtPiece';
-export {ArtPieceContext, useArtPiece} from './ArtPiece/Context';
-export {GalleryNav} from './Nav';
-export {PageControl} from './PageControl';
-export {Search} from './Search';
-export {Image} from './Image';
-export {Loading} from '@components/Loading';
-export {GalleryLinks} from './Links';
-export {art} from './museums';
 export {Source} from './museums/source';

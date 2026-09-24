@@ -32,7 +32,7 @@ export const LazyTable: FC<Props> = ({caption, columns, rows, onColumnMoved, onS
     <Body className="body" onRowMoved={onRowMoved}>
       {rows.map(row => {
         const window = row.window.display;
-        return <Row key={window} row={window} className="row">
+        return <Row key={window} className="row">
           <RowHeader column="window" row={window} className="cell row-header" label={window}/>
           <Cell column="trades" row={window} className="cell">{row.trades.display}</Cell>
           <Cell column="buys" row={window} className="cell">{row.buys.display}</Cell>

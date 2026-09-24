@@ -409,7 +409,7 @@ describe('a list of charts', () => {
     await chartsDesk.addChart('Pie');
 
     await screen.findByRole('region', {name: 'pie'});
-    expect(chartsDesk.addMenu()).toBeNull();
+    expect(chartsDesk.addMenu()).not.toBeInTheDocument();
   });
 
   test('an added chart says so', async () => {
@@ -640,6 +640,7 @@ describe('the demos page', () => {
       await feedIsLive();
       broadcast(feed, [tradeFrameWith({price: 'not a number', id: 900042}), tradeFrame(50001)]);
       expect(await within(priceCard()).findByText('$50,001.00')).toBeVisible();
+      expect(within(priceCard()).getByText('+$0.00')).toBeVisible();
     });
 
     test('leaving the page closes the socket', async () => {

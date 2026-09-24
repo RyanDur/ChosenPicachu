@@ -1,8 +1,7 @@
 import {FC} from 'react';
-import {Link, useLocation} from 'react-router';
-import * as schema from 'schemawax';
+import {Link} from 'react-router';
 import {maybe} from '@ryandur/sand';
-import {useSearchParamsObject} from '@components/search-params';
+import {copyingAt, userAt} from '@pages/Users/mode';
 import {User} from '../UserInfo/user';
 
 type Props = {
@@ -12,8 +11,6 @@ type Props = {
 };
 
 export const UserMenu: FC<Props> = ({user, name, onRemove}) => {
-  const {pathname: path} = useLocation();
-  const {createSearchParams} = useSearchParamsObject({id: schema.string, mode: schema.string});
   const id = `menu-${user.id}`;
   const dismissed = (): void => {
     maybe(document.getElementById(id)).map(menu => {
@@ -29,11 +26,11 @@ export const UserMenu: FC<Props> = ({user, name, onRemove}) => {
       aria-label={`Actions for ${name}`}/>
     <menu id={id} tabIndex={-1} popover="auto" className="menu card rounded-corners lifted" aria-label={`Actions for ${name}, chosen`}>
       <li className="entry">
-        <Link to={`${path}${createSearchParams({id: user.id, mode: 'view'})}`}
+        <Link to={userAt(user.id, 'view')}
           onClick={dismissed} className="item sub-title">View</Link>
       </li>
       <li className="entry">
-        <Link to={`${path}${createSearchParams({id: user.id, mode: 'edit'})}`}
+        <Link to={userAt(user.id, 'edit')}
           onClick={dismissed} className="item sub-title">Edit</Link>
       </li>
       <li className="entry">
@@ -42,7 +39,7 @@ export const UserMenu: FC<Props> = ({user, name, onRemove}) => {
           onClick={onRemove}>Remove</button>
       </li>
       <li className="entry">
-        <Link to={`${path}${createSearchParams({id: user.id})}`}
+        <Link to={copyingAt(user.id)}
           onClick={dismissed} className="item sub-title">Clone</Link>
       </li>
     </menu>

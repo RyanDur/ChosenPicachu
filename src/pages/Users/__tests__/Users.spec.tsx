@@ -89,9 +89,9 @@ describe('the users page', () => {
       await usersTable.roster();
 
       expect(usersTable.sortMenu('age')).toBeVisible();
-      expect(usersTable.sortMenu('full-name')).toBeNull();
-      expect(usersTable.sortMenu('home-city')).toBeNull();
-      expect(usersTable.sortMenu('friends')).toBeNull();
+      expect(usersTable.sortMenu('full-name')).not.toBeInTheDocument();
+      expect(usersTable.sortMenu('home-city')).not.toBeInTheDocument();
+      expect(usersTable.sortMenu('friends')).not.toBeInTheDocument();
     });
   });
 

@@ -4,7 +4,7 @@ export type Stage = {name: string; at: string; table: (page: Page) => Locator | 
 
 export const stages: readonly Stage[] = [
   {name: 'react', at: '/ChosenPicachu/demos/?tab=tables&world=react', table: page => page.getByRole('region', {name: 'live aggregations'})},
-  {name: 'vanilla', at: '/ChosenPicachu/demos/?tab=tables&world=vanilla', table: page => page.frameLocator('iframe[title="the living table, in vanilla"]')}
+  {name: 'vanilla', at: '/ChosenPicachu/demos/?tab=tables&world=vanilla', table: page => page.getByTitle('the living table, in vanilla').contentFrame()}
 ];
 
 type Box = {x: number; y: number; width: number; height: number};

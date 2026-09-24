@@ -404,7 +404,7 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/Turn the arrows vertical/);
     expect(recipeFolds.story(recipe, 'The trader can sort by row')).toBeInTheDocument();
     expect(recipe).not.toHaveTextContent(/Hold the pointer from the lift/);
-    expect(within(recipe).queryByRole('radio', {name: 'Lazy'})).toBeNull();
+    expect(within(recipe).queryByRole('radio', {name: 'Lazy'})).not.toBeInTheDocument();
   });
 
   test('the keyboard track answers the motion dial', async () => {
@@ -453,7 +453,7 @@ describe('the tables demo', () => {
 
     await feedIsSubscribed();
     expect(await screen.findByRole('region', {name: 'build the drag sort yourself'})).toBeVisible();
-    expect(screen.queryByRole('region', {name: 'build the drag resize yourself'})).toBeNull();
+    expect(screen.queryByRole('region', {name: 'build the drag resize yourself'})).not.toBeInTheDocument();
 
     await userEvent.click(screen.getByRole('radio', {name: 'Drag resize'}));
 
@@ -465,8 +465,8 @@ describe('the tables demo', () => {
     expect(recipeFolds.story(resize, 'The trader can widen a column')).toBeInTheDocument();
     expect(within(resize).getByRole('link', {name: 'captures its pointer'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/Element/setPointerCapture'));
-    expect(screen.queryByRole('region', {name: 'build the drag sort yourself'})).toBeNull();
-    expect(screen.queryByRole('region', {name: 'table controls'})).toBeNull();
+    expect(screen.queryByRole('region', {name: 'build the drag sort yourself'})).not.toBeInTheDocument();
+    expect(screen.queryByRole('region', {name: 'table controls'})).not.toBeInTheDocument();
     expect(screen.getByRole('region', {name: 'the living table'})).toBeVisible();
   });
 
@@ -566,8 +566,8 @@ describe('the tables demo', () => {
     expect(within(recipe).getByRole('link', {name: 'position-area'}))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/CSS/position-area'));
     expect(recipeFolds.story(recipe, 'The trader can sort the windows by any measure, or take the order back')).toBeInTheDocument();
-    expect(screen.queryByRole('region', {name: 'build the drag sort yourself'})).toBeNull();
-    expect(screen.queryByRole('region', {name: 'table controls'})).toBeNull();
+    expect(screen.queryByRole('region', {name: 'build the drag sort yourself'})).not.toBeInTheDocument();
+    expect(screen.queryByRole('region', {name: 'table controls'})).not.toBeInTheDocument();
     expect(screen.getByRole('region', {name: 'the living table'})).toBeVisible();
 
     expect(recipe).toHaveTextContent(/Sort directly/);
@@ -581,7 +581,7 @@ describe('the tables demo', () => {
 
     await feedIsSubscribed();
     expect(await screen.findByRole('region', {name: 'build the drag resize yourself'})).toBeVisible();
-    expect(screen.queryByRole('region', {name: 'build the drag sort yourself'})).toBeNull();
+    expect(screen.queryByRole('region', {name: 'build the drag sort yourself'})).not.toBeInTheDocument();
   });
 
   test('every column is resizable', async () => {
