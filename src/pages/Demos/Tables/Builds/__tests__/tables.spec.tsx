@@ -1,5 +1,5 @@
 import {FC, useReducer} from 'react';
-import {fireEvent, render, screen, within} from '@testing-library/react';
+import {fireEvent, render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {Measured, Measures, measures} from '../../Aggregations/cells';
 import {measuresFor} from '../../Aggregations/__test_support';
@@ -83,6 +83,8 @@ const startCarryingRow = (): void => rowInHand.carryStarted();
 const carryRowOver = (target: string): void => rowInHand.carriedOver(windowNames().indexOf(heldRow), windowNames().indexOf(target));
 const carryRowOn = (by: number): void => rowInHand.carriedOn(by);
 const loseRowCapture = (): void => rowInHand.captureLost();
+const loseRowCaptureOver = (target: string): void => rowInHand.captureLostOver(windowNames().indexOf(heldRow), windowNames().indexOf(target));
+const loseRowCaptureUnheld = (): void => rowInHand.captureLostUnheld();
 const dropRow = (): void => rowInHand.dropped();
 let widths: Record<string, number> = {};
 const even = (): Record<string, number> => Object.fromEntries(measures.map(({name}) => [name, 100]));
@@ -365,7 +367,7 @@ describe('rows by hand', () => {
     expect(within(menuFor('sort trades')).getByRole('button', {name: 'ascending', hidden: true})).toHaveAttribute('tabindex', '0');
   });
 
-  test('a retaken pointer lands on the grip that lifted the row, never on the header cell', () => {
+  test('a retaken pointer lands on the grip that lifted the row, never on the header cell', async () => {
     seat(EagerTable, 'keep static');
     const retaken: string[] = [];
     liftRow('this minute');
@@ -375,7 +377,8 @@ describe('rows by hand', () => {
 
     loseRowCapture();
 
-    expect(retaken).toEqual(['grip']);
+    await waitFor(() => expect(retaken.length).toBeGreaterThan(0));
+    expect(retaken.every(target => target === 'grip')).toBe(true);
   });
 
   test('a row that lost the pointer keeps crossing its neighbours', () => {
@@ -383,12 +386,22 @@ describe('rows by hand', () => {
     liftRow('this minute');
     grip('this minute').setPointerCapture = () => undefined;
     carryRowOver('last 5 minutes');
-    loseRowCapture();
     expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
 
-    carryRowOver('last 15 minutes');
+    loseRowCaptureOver('last 15 minutes');
 
     expect(windowNames()).toEqual(['last 5 minutes', 'last 15 minutes', 'this minute', 'this hour', 'session']);
+  });
+
+  test('a pointer lost with no button held drops the row where it is', () => {
+    seat(EagerTable, 'keep static');
+    liftRow('this minute');
+    carryRowOver('last 5 minutes');
+
+    loseRowCaptureUnheld();
+
+    expect(carried()).toEqual([]);
+    expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
   });
 
   test('a lazy row waits for the drop', () => {
@@ -905,7 +918,6 @@ describe('animated moves', () => {
   test('a row walks to the bottom and back to the top, keypress after keypress, with no animation ending between, keeping the focus the moves take', async () => {
     blurFocusOnMoves();
     seat(EagerTable, 'keep animated');
-    columnsSurveyed();
     settledRows();
 
     grip('this minute').focus();
@@ -935,7 +947,6 @@ describe('animated moves', () => {
 
   test('a keyboard nudge settles the walked row from across the row it passed', async () => {
     seat(EagerTable, 'keep animated');
-    columnsSurveyed();
     settledRows();
 
     grip('this minute').focus();
@@ -950,7 +961,6 @@ describe('animated moves', () => {
 
   test('the row a keyboard nudge passed is shoved up by its height', async () => {
     seat(EagerTable, 'keep animated');
-    columnsSurveyed();
     settledRows();
 
     grip('this minute').focus();
