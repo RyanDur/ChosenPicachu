@@ -42,6 +42,9 @@
   .sortable .header-cell > .menu-toggle {
     min-width: var(--finger-reach);
     min-height: var(--finger-reach);
+    top: auto;
+    bottom: 0;
+    translate: none;
   }
 
   /* the resize handle wears a wider hit pad here and would cover the toggle; the toggle sits clear of it */
