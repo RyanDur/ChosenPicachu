@@ -69,7 +69,7 @@
   }
 }
 
-@media (max-width: 1000px) {
+@media (width <= 1000px) {
   .page-control {
     grid-template-rows: repeat(2, var(--base-x-8));
     grid-template-columns: 1fr 1fr;

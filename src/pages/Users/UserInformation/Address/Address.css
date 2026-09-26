@@ -35,7 +35,7 @@
   grid-area: zip;
 }
 
-@media only screen and (max-width: 832px) {
+@media (width <= 832px) {
   .address {
     display: grid;
     column-gap: var(--base-x-2);

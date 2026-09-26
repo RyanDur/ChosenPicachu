@@ -223,7 +223,7 @@
   }
 }
 
-@media (max-width: 600px) {
+@media (width <= 600px) {
   .home {
     grid-template-columns: 1fr;
   }

@@ -210,7 +210,7 @@
   }
 }
 
-@media (max-width: 1547px) {
+@media (width <= 1547px) {
   .user-information {
     grid-template-columns: repeat(3, 1fr);
     grid-template-areas:
@@ -225,7 +225,7 @@
   }
 }
 
-@media (max-width: 1000px) {
+@media (width <= 1000px) {
   .user-information {
     grid-template-columns: 1fr;
     grid-template-areas:

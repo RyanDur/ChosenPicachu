@@ -58,7 +58,7 @@
     gap: var(--base);
   }
 
-  @media (min-width: 900px) {
+  @media (width >= 900px) {
     .step-body {
       flex-direction: row;
       flex-wrap: wrap;
@@ -140,7 +140,7 @@
     text-wrap: pretty;
   }
 
-  @media (max-width: 600px) {
+  @media (width <= 600px) {
     .step {
       grid-template-columns: var(--base-x-2_5) minmax(0, 1fr);
       gap: var(--base);

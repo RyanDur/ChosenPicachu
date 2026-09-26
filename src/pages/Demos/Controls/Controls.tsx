@@ -5,8 +5,8 @@ import {PillGlider} from '@components/PillGlider';
 import './Controls.css';
 
 const roomy = (): boolean => {
-  const phone = getComputedStyle(document.documentElement).getPropertyValue('--phone').trim();
-  return phone === '' || !window.matchMedia(`(max-width: ${phone}), (max-height: ${phone})`).matches;
+  const line = getComputedStyle(document.documentElement).getPropertyValue('--search-under-the-title').trim();
+  return line === '' || !window.matchMedia(`(width <= ${line}), (height <= ${line})`).matches;
 };
 
 export type Pace = 'eager' | 'lazy';

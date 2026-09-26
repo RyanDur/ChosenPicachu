@@ -57,8 +57,8 @@
   /* prose — a line length stated in characters */
   --measure: 75ch;
 
-  /* media — documentation only: var() cannot appear inside @media */
-  --tablet: 1547px;
-  --mobile: 1000px;
-  --phone: 600px;
+  /* media, documentation only: var() cannot appear inside @media */
+  --no-gutters: 1547px;
+  --nav-in-a-row: 1000px;
+  --search-under-the-title: 600px;
 }

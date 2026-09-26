@@ -158,7 +158,7 @@ describe('the tables demo', () => {
 
   test('a phone viewport starts the controls closed', async () => {
     const feed = await listeningFeed();
-    document.documentElement.style.setProperty('--phone', '600px');
+    document.documentElement.style.setProperty('--search-under-the-title', '600px');
     const wideMedia = window.matchMedia;
     window.matchMedia = (query: string) =>
       ({matches: query.includes('600px'), media: query} as MediaQueryList);
@@ -170,7 +170,7 @@ describe('the tables demo', () => {
       expect(screen.getByRole('region', {name: 'table controls'})).not.toBeVisible();
     } finally {
       window.matchMedia = wideMedia;
-      document.documentElement.style.removeProperty('--phone');
+      document.documentElement.style.removeProperty('--search-under-the-title');
     }
   });
 

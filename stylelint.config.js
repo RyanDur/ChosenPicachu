@@ -14,6 +14,7 @@ export default {
       ['/(^|[\\s>+~,])(applet|acronym|big|blink|center|font|marquee|strike|tt)(?![\\w-])/'],
       {message: 'obsolete element — this is a strict html5 site'}
     ],
+    'media-feature-range-notation': 'context',
     'property-no-vendor-prefix': true,
     'value-no-vendor-prefix': true,
     'csstools/value-no-unknown-custom-properties': [true, {

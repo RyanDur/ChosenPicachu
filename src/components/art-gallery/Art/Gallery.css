@@ -59,7 +59,7 @@
   }
 }
 
-@media (max-width: 1547px) {
+@media (width <= 1547px) {
   #art-gallery {
     grid-template-columns: repeat(2, 1fr);
     grid-template-areas:
@@ -70,7 +70,7 @@
   }
 }
 
-@media (max-width: 1000px) {
+@media (width <= 1000px) {
   #art-gallery {
     grid-template-columns: 1fr;
     grid-template-areas:

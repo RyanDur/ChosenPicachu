@@ -38,7 +38,7 @@
   display: contents;
 }
 
-@media (max-width: 1000px) {
+@media (width <= 1000px) {
   .search {
     column-gap: unset;
     grid-template-columns: 1fr 1fr;
@@ -54,7 +54,7 @@
   }
 }
 
-@media (max-width: 600px) {
+@media (width <= 600px) {
   .search {
     grid-template-rows: auto var(--base-x-5) var(--base-x-5);
   }
