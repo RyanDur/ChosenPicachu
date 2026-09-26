@@ -19,6 +19,7 @@ export const Grip: FC<Props> = ({item, order, onPressed, onLetGo, onArranged}) =
     aria-label={`grip for ${item}`}
     onPointerDown={onPressed}
     onPointerUp={onLetGo}
+    onPointerCancel={onLetGo}
     onKeyDown={event => maybe(steps[event.key]).map(toward => {
       event.preventDefault();
       const lane = event.currentTarget.closest('li');

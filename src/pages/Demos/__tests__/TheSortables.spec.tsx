@@ -48,6 +48,37 @@ describe('the sortable list demo', () => {
     expect(first).toHaveAttribute('draggable', 'true');
   });
 
+  test('a finger pressed and taken over by the browser leaves its item at rest', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const first = within(screen.getByRole('list', {name: 'sortable list'})).getAllByRole('listitem')[0];
+
+    await userEvent.pointer({keys: '[TouchA>]', target: screen.getByLabelText('grip for A')});
+    fireEvent.pointerCancel(screen.getByLabelText('grip for A'), {pointerType: 'touch'});
+
+    expect(first).toHaveAttribute('draggable', 'false');
+  });
+
+  test('a finger pressed and lifted without a drag leaves a kept item at rest', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=dragAndDrop&origin=keep')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const first = within(screen.getByRole('list', {name: 'sortable list'})).getAllByRole('listitem')[0];
+
+    await userEvent.pointer({keys: '[TouchA]', target: screen.getByLabelText('grip for A')});
+
+    expect(first).toHaveAttribute('draggable', 'false');
+  });
+
+  test("the list controls sit one level under their station's heading", async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect(await screen.findByRole('heading', {name: 'list controls', level: 4})).toBeInTheDocument();
+  });
+
   test('a finger pressed and lifted without a drag leaves its item at rest', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);

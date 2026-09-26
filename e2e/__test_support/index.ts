@@ -11,4 +11,4 @@ export {siteFrame} from './site';
 export {tablesDemo} from './tables';
 export {fingerTap, fingertipMiss} from './finger';
 export {sortableList} from './lists';
-export {headingsBrokenMidWord} from './headings';
+export {headingsTakingMoreLinesThanWords} from './headings';

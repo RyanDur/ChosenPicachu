@@ -27,6 +27,7 @@ export const usersPage = (page: Page) => {
   };
   const firstRowActions = page.getByRole('button', {name: /^Actions for /}).first();
   return {
+    roster,
     names,
     firstRowActions,
     actionsOf: async (toggle = firstRowActions) => page.getByLabel(`${await toggle.getAttribute('aria-label')}, chosen`),

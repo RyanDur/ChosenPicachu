@@ -1,6 +1,6 @@
 import {TestApp} from '@__test_support/TestApp';
 import {chartPageAt, demosAt, Feed} from '@pages/Demos/__test_support';
-import {render, screen, waitFor, within} from '@testing-library/react';
+import {fireEvent, render, screen, waitFor, within} from '@testing-library/react';
 import {broadcast, listeningFeed, nonTradeFrame, tradeFrame, tradeFrameWith} from '@pages/Demos/__test_support/feed';
 import {feedIsSubscribed} from '@pages/Demos/__test_support';
 import userEvent from '@testing-library/user-event';
@@ -195,13 +195,26 @@ describe('a list of charts', () => {
     expect(chartsDesk.slot('Price line')).not.toHaveAttribute('draggable', 'true');
   });
 
+  test("a finger pressed on a chart's grip and taken over by the browser leaves the chart at rest", async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    await screen.findByRole('region', {name: 'live trades'});
+    const grip = within(chartsDesk.slot('Price line')).getByRole('button', {name: 'move chart', hidden: true});
+
+    await userEvent.pointer({keys: '[TouchA>]', target: grip});
+    fireEvent.pointerCancel(grip, {pointerType: 'touch'});
+
+    expect(chartsDesk.slot('Price line')).not.toHaveAttribute('draggable', 'true');
+  });
+
   test('the trader can drag a chart to a new seat', async () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await screen.findByRole('region', {name: 'live trades'});
-    chartsDesk.dragChart('Price line', 'Candles', 100);
+    await chartsDesk.dragChart('Price line', 'Candles', 100);
 
     expect(within(chartsDesk.seat(1)).getByRole('region', {name: 'candles'})).toBeVisible();
 

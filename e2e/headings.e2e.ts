@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import {headingsBrokenMidWord, iPadUpright, iPhone, phoneSideways, stages} from './__test_support';
+import {headingsTakingMoreLinesThanWords, iPadUpright, iPhone, phoneSideways, stages, usersPage} from './__test_support';
 
 for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a phone held sideways', device: phoneSideways}]) {
   test.describe(reader, () => {
@@ -7,10 +7,10 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
 
     test('reads every roster heading as a word', async ({page}) => {
       await page.goto('users');
-      const roster = page.getByRole('region', {name: 'User Candidates'});
+      const {roster} = usersPage(page);
       await expect(roster.getByRole('columnheader').first()).toBeVisible({timeout: 30_000});
 
-      await expect.poll(() => headingsBrokenMidWord(roster)).toEqual([]);
+      await expect.poll(() => headingsTakingMoreLinesThanWords(roster)).toEqual([]);
     });
   });
 }
@@ -25,7 +25,7 @@ for (const stage of stages) {
         const table = stage.table(page);
         await expect(table.getByRole('columnheader', {name: 'trades'})).toBeVisible({timeout: 30_000});
 
-        await expect.poll(() => headingsBrokenMidWord(table)).toEqual([]);
+        await expect.poll(() => headingsTakingMoreLinesThanWords(table)).toEqual([]);
       });
     });
   }

@@ -1,6 +1,6 @@
 import type {FrameLocator, Locator, Page} from '@playwright/test';
 
-export const headingsBrokenMidWord = (scope: Page | Locator | FrameLocator): Promise<string[]> =>
+export const headingsTakingMoreLinesThanWords = (scope: Page | Locator | FrameLocator): Promise<string[]> =>
   scope.getByRole('columnheader').evaluateAll(headers => headers.flatMap(header => {
     const walker = document.createTreeWalker(header, NodeFilter.SHOW_TEXT);
     const lineTops = new Set<number>();

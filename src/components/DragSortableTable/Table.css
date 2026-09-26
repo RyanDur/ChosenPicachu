@@ -47,6 +47,18 @@
     &:has(> .menu-toggle) {
       padding-inline-end: var(--base-x-5_5);
     }
+
+    /* on touch the word keeps the cell's whole width, and the sort toggle and the resize handle share a finger-high row beneath it */
+    @media (pointer: coarse) {
+      &,
+      &:has(> .resize-handle),
+      &:has(> .menu-toggle) {
+        height: auto;
+        vertical-align: top;
+        padding-block: var(--base) var(--finger-reach);
+        padding-inline-end: var(--base);
+      }
+    }
   }
 
   .header .header-cell {
@@ -101,17 +113,7 @@
 }
 
 
-/* on touch the word keeps the cell's whole width, and the sort toggle and the resize handle share a finger-high row beneath it */
 @media (pointer: coarse) {
-  .fancy-table .header-cell,
-  .fancy-table .header-cell:has(> .resize-handle),
-  .fancy-table .header-cell:has(> .menu-toggle) {
-    height: auto;
-    vertical-align: top;
-    padding-block: var(--base) var(--finger-reach);
-    padding-inline-end: var(--base);
-  }
-
   .resize-handle {
     inset-block-start: auto;
     block-size: var(--finger-reach);

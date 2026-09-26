@@ -18,8 +18,12 @@ const queriedLines = (css: string): number[] =>
     .map(([, after, before]) => pixels(after ?? before));
 
 describe('the lines the sheets break at', () => {
+  test("reads a rem line at the root's 10px", () => {
+    expect(queriedLines('@container (width <= 45.6rem) {}')).toEqual([456]);
+  });
+
   test('are read in every range form a query can take', () => {
-    expect(queriedLines('@media (width <= 600px), (height < 500px), (700px <= width), (800px > height), (width <= 45.6rem) {}')).toEqual([600, 500, 700, 800, 456]);
+    expect(queriedLines('@media (width <= 600px), (height < 500px), (700px <= width), (800px > height) {}')).toEqual([600, 500, 700, 800]);
   });
 
   test('are the named ones in spacing.css, or a line the sheet owns', () => {

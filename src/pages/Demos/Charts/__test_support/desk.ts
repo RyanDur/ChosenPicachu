@@ -33,8 +33,8 @@ const keys = async (chart: string, key: string): Promise<void> => {
   await userEvent.keyboard(`{${key}}`);
 };
 
-const dragChart = (from: string, to: string, handAt: number): void => {
-  fireEvent.pointerDown(within(slot(from)).getByRole('button', {name: 'move chart', hidden: true}), {pointerType: 'touch'});
+const dragChart = async (from: string, to: string, handAt: number): Promise<void> => {
+  await userEvent.pointer({keys: '[TouchA>]', target: within(slot(from)).getByRole('button', {name: 'move chart', hidden: true})});
   const start = createEvent.dragStart(slot(from));
   Object.defineProperty(start, 'clientY', {value: 0});
   Object.defineProperty(start, 'dataTransfer', {value: {effectAllowed: '', dropEffect: ''}});
