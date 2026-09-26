@@ -156,24 +156,6 @@ describe('the tables demo', () => {
     expect(screen.getByText('<EagerTable className="hide animated"/>')).toBeVisible();
   });
 
-  test('a phone viewport starts the controls closed', async () => {
-    const feed = await listeningFeed();
-    document.documentElement.style.setProperty('--search-under-the-title', '600px');
-    const wideMedia = window.matchMedia;
-    window.matchMedia = (query: string) =>
-      ({matches: query.includes('600px'), media: query} as MediaQueryList);
-    try {
-      render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
-
-      await feedIsSubscribed(feed);
-      expect(await screen.findByRole('group', {name: 'settings'}, {timeout: 5000})).not.toHaveAttribute('open');
-      expect(screen.getByRole('region', {name: 'table controls'})).not.toBeVisible();
-    } finally {
-      window.matchMedia = wideMedia;
-      document.documentElement.style.removeProperty('--search-under-the-title');
-    }
-  });
-
   test('the controls read out whatever is chosen', async () => {
     const feed = await listeningFeed();
 

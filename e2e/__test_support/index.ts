@@ -7,3 +7,4 @@ export {usersPage, type Person} from './users';
 export {violationsOf} from './axe';
 export {phone, phoneSideways, iPhone, iPadSplitView, iPadUpright, iPadSideways, iPad13Upright, iPad11Upright, desktop} from './devices';
 export {documentScrollY, paneScrollTop} from './scrolling';
+export {siteFrame} from './site';

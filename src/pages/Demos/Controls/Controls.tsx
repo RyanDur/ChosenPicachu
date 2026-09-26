@@ -5,7 +5,7 @@ import {PillGlider} from '@components/PillGlider';
 import './Controls.css';
 
 const roomy = (): boolean => {
-  const line = getComputedStyle(document.documentElement).getPropertyValue('--search-under-the-title').trim();
+  const line = getComputedStyle(document.documentElement).getPropertyValue('--room-to-stand-open').trim();
   return line === '' || !window.matchMedia(`(width <= ${line}), (height <= ${line})`).matches;
 };
 
