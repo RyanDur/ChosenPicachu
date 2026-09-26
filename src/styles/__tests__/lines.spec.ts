@@ -7,8 +7,7 @@ const namedLines = (): number[] =>
     .map(([, px]) => Number(px));
 
 const ownLines: Record<string, number[]> = {
-  '/src/pages/Users/UserInformation/Address/Address.css': [456],
-  '/src/pages/Demos/Recipe/Recipe.css': [900]
+  '/src/pages/Users/UserInformation/Address/Address.css': [456]
 };
 
 const pixels = (length: string): number => length.endsWith('rem') ? Math.round(parseFloat(length) * 10) : parseFloat(length);

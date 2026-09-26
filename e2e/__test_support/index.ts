@@ -12,3 +12,4 @@ export {tablesDemo} from './tables';
 export {fingerTap, fingertipMiss} from './finger';
 export {sortableList} from './lists';
 export {headingsTakingMoreLinesThanWords} from './headings';
+export {codedStepLayouts} from './recipes';

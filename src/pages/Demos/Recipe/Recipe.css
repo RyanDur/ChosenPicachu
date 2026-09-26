@@ -38,40 +38,27 @@
     }
   }
 
+  /* the step decides from its own width: prose beside code only when each gets what it asks for, and a line of prose under 45 characters reads as a list */
   .step-body {
     display: flex;
-    flex-direction: column;
-    align-items: stretch;
+    flex-wrap: wrap;
+    align-items: start;
     gap: var(--base-x-2) var(--base-x-3);
     min-width: 0;
   }
 
   .step-words {
+    flex: 1 1 45ch;
     min-width: 0;
     display: grid;
     gap: var(--base);
   }
 
   .step-code {
+    flex: 1 1 52ch;
     min-width: 0;
     display: grid;
     gap: var(--base);
-  }
-
-  @media (width >= 900px) {
-    .step-body {
-      flex-direction: row;
-      flex-wrap: wrap;
-      align-items: start;
-    }
-
-    .step-words {
-      flex: 1 1 34ch;
-    }
-
-    .step-code {
-      flex: 1 1 52ch;
-    }
   }
 
   .step-heading {
