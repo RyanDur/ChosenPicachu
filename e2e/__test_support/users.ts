@@ -15,8 +15,17 @@ export const usersPage = (page: Page) => {
   const home = form.getByRole('group', {name: /^home address$/i});
   const site = page.getByRole('navigation', {name: 'site'});
   const names = page.getByRole('table').getByRole('rowheader');
+  const roster = page.getByRole('region', {name: 'User Candidates'});
+  const columns = roster.getByRole('columnheader');
   return {
     names,
+    columns,
+    swipeRoster: async (): Promise<void> => {
+      await roster.hover();
+      await page.mouse.wheel(3000, 0);
+    },
+    rosterAtItsEnd: (): Promise<boolean> =>
+      roster.evaluate(section => section.scrollLeft >= section.scrollWidth - section.clientWidth - 1),
     rowOf: ({firstName, lastName}: Person) => page.getByRole('rowheader', {name: `${firstName} ${lastName}`}),
     viewFirst: async (): Promise<void> => {
       await page.getByRole('button', {name: /^Actions for /}).first().click();

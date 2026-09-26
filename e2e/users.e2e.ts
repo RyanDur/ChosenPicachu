@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import {Person, usersPage} from './__test_support';
+import {iPadSplitView, iPhone, Person, usersPage} from './__test_support';
 import {usersServerScript} from '../src/components/Users/resource/usersServer';
 
 const ada: Person = {
@@ -46,6 +46,34 @@ test('a refresh brings new people to the users page', async ({page}) => {
   await expect(users.names.first()).toBeVisible({timeout: 30_000});
   await expect(users.names).not.toHaveText(before);
 });
+
+const handhelds = [
+  {reader: 'an iPhone', device: iPhone},
+  {reader: 'a narrow iPad window', device: iPadSplitView}
+];
+
+for (const {reader, device} of handhelds) {
+  test.describe(reader, () => {
+    test.use(device);
+
+    test('swiping the roster past its last column keeps the reader on the users page with every column in reach', async ({page}) => {
+      const users = usersPage(page);
+      await page.goto('users');
+      await expect(users.names.first()).toBeVisible({timeout: 30_000});
+      const here = page.url();
+
+      await users.swipeRoster();
+      await expect.poll(users.rosterAtItsEnd).toBe(true);
+      await users.swipeRoster();
+
+      for (const column of await users.columns.all()) {
+        await column.scrollIntoViewIfNeeded();
+        await expect(column).toBeVisible();
+      }
+      expect(page.url()).toBe(here);
+    });
+  });
+}
 
 test.describe('when the browser allows no service workers', () => {
   test.use({serviceWorkers: 'block'});

@@ -19,6 +19,7 @@
     'title button'
     'table table';
   overflow: auto;
+  overscroll-behavior-x: contain;
 
   .roster-title {
     position: sticky;
