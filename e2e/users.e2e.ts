@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import {iPadSplitView, iPhone, Person, usersPage} from './__test_support';
+import {desktop, iPad11Upright, iPadSplitView, iPadUpright, iPhone, Person, usersPage} from './__test_support';
 import {usersServerScript} from '../src/components/Users/resource/usersServer';
 
 const ada: Person = {
@@ -97,3 +97,25 @@ test('the users page gives up on a worker script that never answers and says the
 
   await expect(page.getByRole('alert')).toContainText('the users could not be reached', {timeout: 30_000});
 });
+
+const sameRow = [0, 0, 0];
+const ownRows = [0, 1, 2];
+
+for (const {reader, device, rows} of [
+  {reader: 'an iPad Air held upright', device: iPadUpright, rows: sameRow},
+  {reader: 'an iPad Pro 11 held upright', device: iPad11Upright, rows: sameRow},
+  {reader: 'a phone', device: iPhone, rows: ownRows},
+  {reader: 'a desktop', device: desktop, rows: sameRow}
+]) {
+  test.describe(reader, () => {
+    test.use(device);
+
+    test(`meets city, state and zip ${rows === sameRow ? 'on one row' : 'one to a row'}`, async ({page}) => {
+      const users = usersPage(page);
+      await page.goto('users');
+      await expect(users.names.first()).toBeVisible({timeout: 30_000});
+
+      await expect.poll(users.rowsOfTheHomeAddress).toEqual(rows);
+    });
+  });
+}

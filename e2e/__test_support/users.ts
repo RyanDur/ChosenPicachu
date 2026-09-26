@@ -17,8 +17,17 @@ export const usersPage = (page: Page) => {
   const names = page.getByRole('table').getByRole('rowheader');
   const roster = page.getByRole('region', {name: 'User Candidates'});
   const columns = roster.getByRole('columnheader');
+  const rowsOfTheHomeAddress = async (): Promise<number[]> => {
+    const middles = await Promise.all([home.getByLabel('City', {exact: true}), home.getByLabel(/^State/), home.getByLabel('Postal / Zip code')]
+      .map(async field => {
+        const box = await field.boundingBox();
+        return box === null ? -1 : box.y + box.height / 2;
+      }));
+    return middles.map(middle => new Set(middles.filter(other => other < middle - 20).map(Math.round)).size);
+  };
   return {
     names,
+    rowsOfTheHomeAddress,
     columns,
     scrollRosterSideways: async (): Promise<void> => {
       await roster.hover();

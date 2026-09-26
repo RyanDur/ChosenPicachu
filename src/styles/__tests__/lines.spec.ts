@@ -7,7 +7,7 @@ const namedLines = (): number[] =>
     .map(([, px]) => Number(px));
 
 const ownLines: Record<string, number[]> = {
-  '/src/pages/Users/UserInformation/Address/Address.css': [832],
+  '/src/pages/Users/UserInformation/Address/Address.css': [456],
   '/src/pages/Demos/Recipe/Recipe.css': [900]
 };
 
