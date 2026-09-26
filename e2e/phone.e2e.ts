@@ -1,11 +1,11 @@
 import {expect, test} from '@playwright/test';
-import {documentScrollY, galleryPage, phone} from './__test_support';
+import {documentScrollY, galleryPage, homePage, phone} from './__test_support';
 
 test.use(phone);
 
 test('following a link lands at the top of the next page', async ({page}) => {
   await page.goto('');
-  const away = page.getByRole('link', {name: 'Start where the demos start'});
+  const away = homePage(page).linkToTheDemos;
   await away.scrollIntoViewIfNeeded();
   expect(await documentScrollY(page)).toBeGreaterThan(0);
 

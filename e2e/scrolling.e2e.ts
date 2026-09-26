@@ -1,5 +1,5 @@
 import {Page, expect, test} from '@playwright/test';
-import {desktop, documentScrollY, iPadSideways, iPadUpright, paneScrollTop, phone} from './__test_support';
+import {desktop, documentScrollY, homePage, iPadSideways, iPadUpright, paneScrollTop, phone} from './__test_support';
 
 const scrolled = async (page: Page): Promise<{document: number; pane: number}> =>
   ({document: await documentScrollY(page), pane: await paneScrollTop(page)});
@@ -26,7 +26,7 @@ for (const {reader, device} of handheld) {
 
     test('the home page scrolls like a page', async ({page}) => {
       await page.goto('');
-      await page.getByRole('link', {name: 'Start where the demos start'}).scrollIntoViewIfNeeded();
+      await homePage(page).linkToTheDemos.scrollIntoViewIfNeeded();
 
       await documentScrolled(page);
     });
@@ -40,7 +40,7 @@ for (const {reader, device} of handheld) {
 
     test('going back lands where the reader left', async ({page}) => {
       await page.goto('');
-      const away = page.getByRole('link', {name: 'Start where the demos start'});
+      const away = homePage(page).linkToTheDemos;
       await away.scrollIntoViewIfNeeded();
       const left = await documentScrollY(page);
       expect(left).toBeGreaterThan(0);
@@ -49,7 +49,7 @@ for (const {reader, device} of handheld) {
       await expect(page.getByRole('navigation', {name: 'demos'})).toBeVisible();
       await page.goBack();
 
-      await expect(page.getByRole('link', {name: 'Start where the demos start'})).toBeVisible();
+      await expect(homePage(page).linkToTheDemos).toBeVisible();
       await expect.poll(() => documentScrollY(page)).toBe(left);
     });
   });
@@ -60,7 +60,7 @@ test.describe('an iPad-sized window with a mouse', () => {
 
   test('keeps the page in its frame', async ({page}) => {
     await page.goto('');
-    await page.getByRole('link', {name: 'Start where the demos start'}).scrollIntoViewIfNeeded();
+    await homePage(page).linkToTheDemos.scrollIntoViewIfNeeded();
 
     await paneScrolled(page);
   });
@@ -71,7 +71,7 @@ test.describe('a desktop', () => {
 
   test('keeps the page in its frame', async ({page}) => {
     await page.goto('');
-    await page.getByRole('link', {name: 'Start where the demos start'}).scrollIntoViewIfNeeded();
+    await homePage(page).linkToTheDemos.scrollIntoViewIfNeeded();
 
     await paneScrolled(page);
   });
