@@ -36,7 +36,7 @@ for (const {reader, device} of handhelds) {
       await page.goto('gallery/?tab=vam');
       await expect(gallery.wall.first()).toBeVisible();
 
-      await expect(gallery.pageControls).toHaveCount(0);
+      await expect(gallery.filters).toHaveCount(0);
     });
 
     test('shows a work of art on the first screen', async ({page}) => {
@@ -134,7 +134,7 @@ for (const {reader, device} of [
       await expect(gallery.wall.first()).toBeVisible();
 
       await expect(page.getByRole('banner').getByLabel(/Search For/)).toBeVisible();
-      await expect(gallery.pageControls.getByLabel(/^Page #/)).toBeVisible();
+      await expect(gallery.filters.getByLabel(/^Page #/)).toBeVisible();
       await expect(gallery.settings).toHaveCount(0);
     });
   });
@@ -161,7 +161,7 @@ test.describe('a keyboard reader on a desktop', () => {
     const gallery = galleryPage(page);
     await page.goto('gallery/?tab=vam');
     await expect(gallery.wall.first()).toBeVisible();
-    await gallery.pageControls.getByRole('button', {name: 'Go'}).focus();
+    await gallery.filters.getByRole('button', {name: 'Go'}).focus();
 
     await page.keyboard.press(browserName === 'webkit' ? 'Alt+Tab' : 'Tab');
 

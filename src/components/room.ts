@@ -17,6 +17,6 @@ const subscribe = (changed: () => void): (() => void) => {
   };
 };
 
-const roomToStandOpen = (): boolean => noRoom().map(list => !list.matches).orElse(true);
+export const roomToStandOpen = (): boolean => noRoom().map(list => !list.matches).orElse(true);
 
 export const useRoomToStandOpen = (): boolean => useSyncExternalStore(subscribe, roomToStandOpen);

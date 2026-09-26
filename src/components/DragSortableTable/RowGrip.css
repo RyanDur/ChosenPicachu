@@ -14,7 +14,7 @@
 
 @media (pointer: coarse) {
   .sortable .grip {
-    min-width: var(--base-x-5_5);
-    min-height: var(--base-x-5_5);
+    min-width: var(--finger-reach);
+    min-height: var(--finger-reach);
   }
 }

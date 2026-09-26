@@ -162,7 +162,7 @@ describe('the tables demo', () => {
     render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
-    expect(await screen.findByRole('group', {name: 'settings'})).toHaveTextContent(/settings \S/);
+    expect(await screen.findByRole('group', {name: 'settings'})).toHaveTextContent(/^settings \S/);
   });
 
   test('the controls read out whatever is chosen', async () => {

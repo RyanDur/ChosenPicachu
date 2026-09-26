@@ -18,7 +18,7 @@ export const galleryPage = (page: Page) => {
         .evaluate(fold => Promise.all(fold.getAnimations({subtree: true}).map(motion => motion.finished)));
     },
     nextPage: page.getByRole('navigation', {name: 'pagination'}).getByRole('link', {name: 'NEXT'}),
-    pageControls: page.getByRole('complementary', {name: 'filters'}),
+    filters: page.getByRole('complementary', {name: 'filters'}),
     searchLabelReadsInFull: (): Promise<boolean> => searchField.evaluate(field => {
       const label = field instanceof HTMLInputElement && field.labels !== null ? field.labels.item(0) : null;
       if (label === null) return false;
