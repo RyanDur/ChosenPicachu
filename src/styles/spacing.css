@@ -62,5 +62,7 @@
   /* the widest exhibit, the tables demo's 860px table, fits beside the rail only from 1224px. No lower line holds it, so this is the round number that names no device. */
   --nav-in-a-row: 1100px;
   --search-under-the-title: 600px;
+
+  /* read by script: the folds start closed on a window narrower or shorter than this */
   --room-to-stand-open: 600px;
 }

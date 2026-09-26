@@ -1,13 +1,10 @@
-import {FC, PropsWithChildren, useState} from 'react';
+import {FC, PropsWithChildren} from 'react';
 import * as schema from 'schemawax';
 import {DragStyle} from '@components/DragSortableTable';
 import {PillGlider} from '@components/PillGlider';
+import {Fold} from '@components/Fold';
+import {useRoomToStandOpen} from '@components/room';
 import './Controls.css';
-
-const roomy = (): boolean => {
-  const line = getComputedStyle(document.documentElement).getPropertyValue('--room-to-stand-open').trim();
-  return line === '' || !window.matchMedia(`(width <= ${line}), (height <= ${line})`).matches;
-};
 
 export type Pace = 'eager' | 'lazy';
 export type Origin = 'keep' | 'hide';
@@ -45,12 +42,9 @@ export type ControlsProps = Dials & {
 };
 
 export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({copy, pace, origin, motion, onPace, onOrigin, onMotion, children}) => {
-  const [startsOpen] = useState(roomy);
-  return <details className="controls-fold" open={startsOpen} aria-label="settings">
-    <summary className="prompt">
-      settings
-      <code className="readout caption">{copy.readout(pace, origin, motion)}</code>
-    </summary>
+  const startsOpen = useRoomToStandOpen();
+  return <Fold label="settings" open={startsOpen}
+    prompt={<>settings<code className="readout caption">{copy.readout(pace, origin, motion)}</code></>}>
     <section aria-label={`${copy.kind} controls`} className="controls">
       <ul className="dials">
         <li className="control">
@@ -92,5 +86,5 @@ export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({c
       </ul>
       {children}
     </section>
-  </details>;
+  </Fold>;
 };

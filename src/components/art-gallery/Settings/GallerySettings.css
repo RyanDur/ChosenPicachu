@@ -1,0 +1,28 @@
+.settings-fold {
+  min-width: 0;
+
+  > .prompt {
+    min-width: 0;
+  }
+
+  .readout {
+    display: flex;
+    gap: var(--base);
+    min-width: 0;
+    margin-inline-start: 0;
+  }
+
+  .page {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  > .search,
+  > .page-control {
+    margin-block-start: var(--base);
+  }
+
+  > .page-control {
+    position: static;
+  }
+}

@@ -6,15 +6,9 @@ import {useSearchParamsObject} from '@components/search-params';
 import {ArtGallery, Source} from '@components/art-gallery';
 import {art} from '@components/art-gallery/museums';
 import {sourceParam} from '@components/art-gallery/museums/source';
+import {museums} from '@components/art-gallery/museums/museums';
 import {HTTPError} from '@transport/types';
 import missingWall from '../../assets/icons/missing-wall.svg?url';
-
-const museums = [
-  {display: 'The Art Institute of Chicago', param: Source.AIC},
-  {display: 'Harvard Art Museums', param: Source.HARVARD},
-  {display: 'The Victoria and Albert Museum', param: Source.VAM},
-  {display: 'The Cleveland Museum of Art', param: Source.CLEVELAND}
-];
 
 type Answers = Partial<Record<Source, boolean>>;
 

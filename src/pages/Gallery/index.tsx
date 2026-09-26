@@ -11,7 +11,7 @@ import {GalleryPaths} from './GalleryRouter/GalleryPaths';
 import {ArtGalleryPage} from './ArtGalleryPage';
 import {ArtGalleryPiecePage} from './ArtGalleryPiecePage';
 import {Search} from '@components/art-gallery/Search';
-import {PageControl} from '@components/art-gallery/PageControl';
+import {GalleryAside, GallerySettings} from '@components/art-gallery/Settings';
 import {GalleryNav} from '@components/art-gallery/Nav';
 
 const GalleryProviders: FC<PropsWithChildren> = ({children}) =>
@@ -23,7 +23,7 @@ const GalleryProviders: FC<PropsWithChildren> = ({children}) =>
 
 const GalleryHeader = () =>
   <Header title="Gallery">
-    <Search id="gallery-search" className="gallery-search"/>
+    <GallerySettings/>
   </Header>;
 
 const PieceHeader = () => {
@@ -40,7 +40,7 @@ const GalleryHome = {
   handle: {
     header: GalleryHeader,
     provider: GalleryProviders,
-    aside: PageControl,
+    aside: GalleryAside,
     footer: GalleryFooter,
     mainClassName: 'in-view'
   },

@@ -11,10 +11,15 @@ const ownLines: Record<string, number[]> = {
   '/src/pages/Demos/Recipe/Recipe.css': [900]
 };
 
-const queriedLines = (css: string): number[] =>
-  [...css.matchAll(/\((?:width|height) [<>]= (\d+)px\)/g)].map(([, px]) => Number(px));
+export const queriedLines = (css: string): number[] =>
+  [...css.matchAll(/\((?:width|height) [<>]=? (\d+)px\)|\((\d+)px [<>]=? (?:width|height)\)/g)]
+    .map(([, after, before]) => Number(after ?? before));
 
 describe('the lines the sheets break at', () => {
+  test('are read in every range form a query can take', () => {
+    expect(queriedLines('@media (width <= 600px), (height < 500px), (700px <= width), (800px > height) {}')).toEqual([600, 500, 700, 800]);
+  });
+
   test('are the named ones in spacing.css, or a line the sheet owns', () => {
     const named = namedLines();
     const strays = Object.entries(sheets).flatMap(([path, css]) =>

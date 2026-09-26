@@ -36,12 +36,12 @@ const Site: FC<{closed?: boolean}> = ({closed = false}) => {
     <Provider>
       <HeaderRegion/>
       <SideNav/>
-      <main className={classNames('app-main', 'field', mainClassName)}>
-        {closed ? <PageError/> : <Outlet/>}
-      </main>
       {AsideRegion && <aside id="filter" className="filter field" aria-label="filters">
         <AsideRegion/>
       </aside>}
+      <main className={classNames('app-main', 'field', mainClassName)}>
+        {closed ? <PageError/> : <Outlet/>}
+      </main>
       {FooterRegion && <footer id="app-footer" className="app-footer stick-to-bottom field">
         <FooterRegion/>
       </footer>}

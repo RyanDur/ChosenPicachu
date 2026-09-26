@@ -7,6 +7,10 @@ export const galleryPage = (page: Page) => {
     doors: page.getByRole('navigation', {name: 'museums'}).getByRole('link'),
     wall,
     searchField,
+    pageNumber: page.getByLabel(/^Page #/),
+    pageSize: page.getByLabel(/Per Page$/),
+    settings: page.getByRole('group', {name: 'gallery settings'}),
+    openSettings: (): Promise<void> => page.getByRole('group', {name: 'gallery settings'}).getByText(/page 1/).click(),
     searchLabelReadsInFull: (): Promise<boolean> => searchField.evaluate(field => {
       const label = field instanceof HTMLInputElement && field.labels !== null ? field.labels.item(0) : null;
       if (label === null) return false;
