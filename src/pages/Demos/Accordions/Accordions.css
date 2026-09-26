@@ -6,9 +6,9 @@
       padding: var(--base-x-2);
       align-items: center;
       list-style: none;
-      color: var(--paper);
-      background: var(--charcoal);
-      border: var(--hairline) solid var(--paper);
+      color: var(--field);
+      background: var(--field-inverse);
+      border: var(--hairline) solid var(--field);
     }
 
     .info {
@@ -63,36 +63,36 @@
     .info-header {
       display: grid;
       grid-template-columns: 1fr min-content;
-      background: var(--charcoal);
-      border: var(--hairline) solid var(--paper);
+      background: var(--field-inverse);
+      border: var(--hairline) solid var(--field);
       padding: var(--base);
       align-items: center;
-      color: var(--paper);
+      color: var(--field);
     }
 
     .info-label {
       width: fit-content;
       padding: var(--base);
-      border: var(--hairline) solid var(--paper);
+      border: var(--hairline) solid var(--field);
       display: flex;
       align-items: center;
-      color: var(--paper);
+      color: var(--field);
 
       &:hover {
-        background: var(--paper);
-        outline: var(--hairline) solid var(--charcoal);
+        background: var(--field);
+        outline: var(--hairline) solid var(--ring);
         outline-offset: calc(var(--hairline-x-3) * -1);
-        color: var(--charcoal);
+        color: var(--field-inverse);
       }
 
       &:active {
-        background: var(--charcoal);
-        color: var(--paper);
+        background: var(--field-inverse);
+        color: var(--field);
       }
 
       &:active,
       &:has(input:focus-visible) {
-        outline: var(--hairline) solid var(--paper);
+        outline: var(--hairline) solid var(--field);
         outline-offset: calc(var(--hairline-x-3) * -1);
       }
     }
@@ -108,7 +108,7 @@
 }
 
 .accordion {
-  background: var(--silk);
+  background: var(--trim);
   position: relative;
 
   &:last-child {
@@ -124,7 +124,7 @@
     &.close {
       width: 100%;
       height: var(--base-x-5);
-      background: var(--charcoal);
+      background: var(--field-inverse);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -135,7 +135,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        color: var(--paper);
+        color: var(--field);
       }
     }
 
@@ -145,16 +145,16 @@
       padding: 0 var(--base-x-4);
       justify-content: space-between;
       align-items: center;
-      color: var(--paper);
-      background: var(--charcoal);
+      color: var(--field);
+      background: var(--field-inverse);
 
       &::after {
         content: "";
         position: relative;
         width: var(--base);
         height: var(--base);
-        border-right: var(--hairline-x-2) solid var(--paper);
-        border-top: var(--hairline-x-2) solid var(--paper);
+        border-right: var(--hairline-x-2) solid var(--field);
+        border-top: var(--hairline-x-2) solid var(--field);
         transform: rotate(45deg);
         margin-right: var(--base);
         padding: var(--base-x-0_25);
@@ -172,17 +172,34 @@
       transform: translate(0, 0);
       margin-top: var(--base-x-4);
       z-index: 2;
-      transition: all 500ms ease;
+      transition: max-height 500ms ease, opacity 500ms ease, transform 500ms ease, margin-top 500ms ease, padding-bottom 500ms ease;
       padding: 0 var(--base-x-4) var(--base-x-4);
     }
 
-    .info-toggle:hover ~ .info-label,
-    .info-toggle:focus ~ .info-label {
-      background: var(--international-orange-engineering);
+    @media (hover: hover) {
+      .info-toggle:hover ~ .info-label {
+        background: var(--approach);
+        color: var(--ink);
+
+        &::after {
+          border-color: var(--ink);
+        }
+      }
+    }
+
+    .info-toggle:focus-visible ~ .info-label {
+      background: var(--approach);
+      color: var(--ink);
+      outline: var(--hairline-x-2) solid var(--ring);
+      outline-offset: calc(var(--hairline-x-2) * -1);
+
+      &::after {
+        border-color: var(--ink);
+      }
     }
 
     &:not(.close) .info-toggle ~ .info-label::after {
-      transition: all 500ms ease;
+      transition: transform 500ms ease;
     }
 
     .info-toggle:checked ~ .info-label::after {
@@ -195,7 +212,7 @@
       opacity: 0;
       padding-bottom: 0;
       transform: translate(0, 50%);
-      transition: all 250ms ease;
+      transition: max-height 250ms ease, opacity 250ms ease, transform 250ms ease, margin-top 250ms ease, padding-bottom 250ms ease;
     }
   }
 }

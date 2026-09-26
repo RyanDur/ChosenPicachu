@@ -58,6 +58,7 @@
   /* The theme: what the page wears, in the words the sheets ask for */
   --backdrop: var(--void);
   --field: var(--paper);
+  --field-inverse: var(--charcoal);
   --card: var(--white);
   --trim: var(--silk);
   --accent: var(--faded-leather);
