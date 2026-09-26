@@ -18,5 +18,5 @@ export const Games = {
   errorElement: <PageError/>,
   handle: {header: GamesHeader},
   element: <Outlet/>,
-  children: [{index: true, handle: {header: GamesHeader, mainClassName: 'in-view'}, element: <GamesPage/>}, ColorGame]
+  children: [{index: true, handle: {mainClassName: 'in-view'}, element: <GamesPage/>}, ColorGame]
 };

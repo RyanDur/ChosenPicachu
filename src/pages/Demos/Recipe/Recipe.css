@@ -38,7 +38,7 @@
     }
   }
 
-  /* the step decides from its own width: prose beside code only when each gets what it asks for, and a line of prose under 45 characters reads as a list */
+  /* a line of prose under the measure's floor reads as a list, so prose sits beside code only where it keeps that floor */
   .step-body {
     display: flex;
     flex-wrap: wrap;
@@ -48,7 +48,7 @@
   }
 
   .step-words {
-    flex: 1 1 45ch;
+    flex: 1 1 var(--measure-floor);
     min-width: 0;
     display: grid;
     gap: var(--base);

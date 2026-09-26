@@ -56,6 +56,7 @@
 
   /* prose — a line length stated in characters */
   --measure: 75ch;
+  --measure-floor: 45ch;
 
   /* a finger's reach: how wide and tall a touch target stands */
   --finger-reach: var(--base-x-5_5);

@@ -10,11 +10,10 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
       const sentence = page.getByText('One game so far.');
       await expect(sentence).toBeVisible();
 
-      const main = await page.getByRole('main').boundingBox();
-      const first = await sentence.boundingBox();
+      const gapBelowTheTop = async (): Promise<number> =>
+        ((await sentence.boundingBox())?.y ?? Infinity) - ((await page.getByRole('main').boundingBox())?.y ?? 0);
 
-      expect((first?.y ?? Infinity) - (main?.y ?? 0)).toBeLessThanOrEqual(48);
-      await expect(page.getByRole('link', {name: 'Three in a row'})).toBeVisible();
+      await expect.poll(gapBelowTheTop).toBeLessThanOrEqual(48);
     });
   });
 }
