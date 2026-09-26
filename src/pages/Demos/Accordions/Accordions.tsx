@@ -121,27 +121,11 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
   return <article className={classNames('exclusive-radio-toggle-accordion', 'toggle-accordion', className)}>
     <header className="exclusive-checkbox-header">
       <h2 className="title bold">Exclusive accordion using radio group</h2>
-      <article className="pill-tabs">
-        <label className="pill-tab">
-          Animate
-          <input type="radio"
-            className="off-screen"
-            name="radio-animate-or-static-tab"
-            checked={tab === 'animated'}
-            value="animated"
-            onChange={() => updateTab('animated')}/>
-        </label>
-
-        <label className="pill-tab">
-          Static
-          <input type="radio"
-            className="off-screen"
-            name="radio-animate-or-static-tab"
-            checked={tab === 'static'}
-            value="static"
-            onChange={() => updateTab('static')}/>
-        </label>
-      </article>
+      <PillGlider label="animation style"
+        name="radio-animate-or-static-tab"
+        options={[{display: 'Animate', value: 'animated'}, {display: 'Static', value: 'static'}]}
+        chosen={tab}
+        onChosen={updateTab}/>
     </header>
 
     <ul className={'new-accordion'}>

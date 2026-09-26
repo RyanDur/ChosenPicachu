@@ -1,3 +1,4 @@
+import {Explainer} from '@components/Explainer';
 import {FC, ReactNode, useId} from 'react';
 import {has, notEmpty} from '@ryandur/sand';
 import {Loading} from '@components/Loading';
@@ -102,17 +103,14 @@ export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPer
       {history.state === 'loading' && <Loading className="chart-loading"/>}
       <figcaption className="chart-caption caption">{captionFor(history, candles.length, period)}</figcaption>
     </figure>
-    <details className="explainer">
-      <summary className="prompt reachable">what am I looking at?</summary>
-      <p className="explanation">
-        This measures the price of one bitcoin in US dollars, live. The line is
-        the closing price of each bucket in the window, seeded from Coinbase&apos;s
-        history, with new trades folding into the newest bucket as they happen.
-        The dotted line marks the first price in the window and the color shows
-        the trend against it. High and low mark the window&apos;s range; the
-        headline is the latest price paid and how far it has moved. The period
-        menu resizes the window — every size stays live.
-      </p>
-    </details>
+    <Explainer>
+      This measures the price of one bitcoin in US dollars, live. The line is
+      the closing price of each bucket in the window, seeded from Coinbase&apos;s
+      history, with new trades folding into the newest bucket as they happen.
+      The dotted line marks the first price in the window and the color shows
+      the trend against it. High and low mark the window&apos;s range; the
+      headline is the latest price paid and how far it has moved. The period
+      menu resizes the window — every size stays live.
+    </Explainer>
   </section>;
 };

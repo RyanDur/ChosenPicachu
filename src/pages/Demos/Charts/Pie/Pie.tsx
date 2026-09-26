@@ -1,3 +1,4 @@
+import {Explainer} from '@components/Explainer';
 import {FC, ReactNode, useId} from 'react';
 import {classNames} from '@components/class-names';
 import {Trade} from '../coinbase';
@@ -63,14 +64,11 @@ export const Pie: FC<Props> = ({trades, actions}) => {
           : 'waiting for the first trade'}
       </figcaption>
     </figure>
-    <details className="explainer">
-      <summary className="prompt reachable">what am I looking at?</summary>
-      <p className="explanation">
-        The whole pot, one circle: everything traded since you arrived, split by who
-        started it. The green slice is the size the buyers took; the orange slice is the
-        size the sellers gave. History does not say who started each trade, so the pie
-        grows from nothing and counts only the session it watched.
-      </p>
-    </details>
+    <Explainer>
+      The whole pot, one circle: everything traded since you arrived, split by who
+      started it. The green slice is the size the buyers took; the orange slice is the
+      size the sellers gave. History does not say who started each trade, so the pie
+      grows from nothing and counts only the session it watched.
+    </Explainer>
   </section>;
 };

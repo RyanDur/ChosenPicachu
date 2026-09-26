@@ -46,53 +46,6 @@
   isolation: isolate;
 }
 
-.pill-tabs {
-  --chosen-color: var(--charcoal);
-  --not-chosen-color: var(--field);
-
-  display: flex;
-  border-radius: var(--radius);
-  width: fit-content;
-
-  .pill-tab {
-    align-content: center;
-    text-align: center;
-    height: var(--base-x-5);
-    width: var(--base-x-10);
-    border: var(--hairline) solid var(--chosen-color);
-    color: var(--chosen-color);
-    background: var(--not-chosen-color);
-    transition: font-size 0.2s;
-
-    &:first-child {
-      border-radius: var(--radius) 0 0 var(--radius);
-    }
-
-    &:last-child {
-      border-radius: 0 var(--radius) var(--radius) 0;
-    }
-
-    &:hover {
-      background: var(--chosen-color);
-      color: var(--not-chosen-color);
-    }
-
-    &:has(:checked) {
-      outline: var(--hairline) solid var(--chosen-color);
-      outline-offset: calc(var(--hairline-x-4) * -1);
-    }
-
-    &:focus-within:has(:checked),
-    &:hover:has(:checked) {
-      outline: var(--hairline) solid var(--not-chosen-color);
-      background: var(--chosen-color);
-      color: var(--not-chosen-color);
-      outline-offset: calc(var(--hairline-x-4) * -1);
-    }
-
-  }
-}
-
 @media (width <= 1100px) {
   .tabs {
     .tab {

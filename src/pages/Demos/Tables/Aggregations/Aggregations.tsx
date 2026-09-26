@@ -1,3 +1,4 @@
+import {Explainer} from '@components/Explainer';
 import {FC, useEffect, useState} from 'react';
 import {classNames} from '@components/class-names';
 import {EagerTable} from '../Builds/EagerTable';
@@ -40,15 +41,12 @@ export const Aggregations: FC<Props> = ({world, ...dials}) => {
     {world === 'vanilla'
       ? <VanillaStage {...dials}/>
       : <LiveTable {...dials}/>}
-    <details className="explainer">
-      <summary className="prompt reachable">what am I looking at?</summary>
-      <p className="explanation">
-        The stream folded into fixed windows, one column per measure: how many
-        trades arrived, the split of buys and sells, the bitcoin traded, the
-        volume-weighted average price paid, and how far the price moved. Every
-        window is measured from the newest trade, and every cell updates as
-        trades land: the grid never grows, it only breathes.
-      </p>
-    </details>
+    <Explainer>
+      The stream folded into fixed windows, one column per measure: how many
+      trades arrived, the split of buys and sells, the bitcoin traded, the
+      volume-weighted average price paid, and how far the price moved. Every
+      window is measured from the newest trade, and every cell updates as
+      trades land: the grid never grows, it only breathes.
+    </Explainer>
   </section>;
 };

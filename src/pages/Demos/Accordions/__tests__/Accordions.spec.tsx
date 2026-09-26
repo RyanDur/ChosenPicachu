@@ -30,6 +30,17 @@ describe.each(toggles)('the exclusive toggle accordion using $accordion', ({Acco
     expect(controlOf('Alpha', 'Open')).not.toBeChecked();
   });
 
+  test('offers Animate and Static as its animation style, chosen with the keyboard', async () => {
+    render(<Accordion content={folds}/>);
+    const style = screen.getByRole('group', {name: 'animation style'});
+    expect(within(style).getByRole('radio', {name: 'Animate'})).toBeChecked();
+
+    within(style).getByRole('radio', {name: 'Animate'}).focus();
+    await userEvent.keyboard('{ArrowRight}');
+
+    expect(within(style).getByRole('radio', {name: 'Static'})).toBeChecked();
+  });
+
   test('should close the open fold when its own control is pressed again', async () => {
     render(<Accordion content={folds}/>);
     await userEvent.click(controlOf('Beta', 'Open'));
