@@ -156,6 +156,15 @@ describe('the tables demo', () => {
     expect(screen.getByText('<EagerTable className="hide animated"/>')).toBeVisible();
   });
 
+  test("the controls' prompt reads settings apart from its readout", async () => {
+    const feed = await listeningFeed();
+
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+
+    await feedIsSubscribed(feed);
+    expect(await screen.findByRole('group', {name: 'settings'})).toHaveTextContent(/settings \S/);
+  });
+
   test('the controls read out whatever is chosen', async () => {
     const feed = await listeningFeed();
 

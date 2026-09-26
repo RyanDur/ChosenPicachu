@@ -15,6 +15,12 @@ describe('search', () => {
     anyRequestRespondsWith(JSON.stringify(aicSuggestionsOf([searchWord])));
   });
 
+  it('the label reads the word searched for, 100% and all', async () => {
+    render(<TestApp at={`${Paths.artGallery}?tab=${Source.AIC}&search=100%25`}/>);
+
+    expect(await screen.findByRole('combobox', {name: 'Search For: 100%'})).toBeInTheDocument();
+  });
+
   it('should give suggestions for completion', async () => {
     render(<TestApp at={`${Paths.artGallery}?tab=${Source.AIC}`}/>);
 

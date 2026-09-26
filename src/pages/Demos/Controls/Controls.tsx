@@ -1,8 +1,8 @@
-import {FC, PropsWithChildren} from 'react';
+import {FC, PropsWithChildren, useState} from 'react';
 import * as schema from 'schemawax';
 import {DragStyle} from '@components/DragSortableTable';
 import {PillGlider} from '@components/PillGlider';
-import {Fold} from '@components/Fold';
+import {Disclosure} from '@components/Disclosure';
 import {useRoomToStandOpen} from '@components/room';
 import './Controls.css';
 
@@ -42,9 +42,10 @@ export type ControlsProps = Dials & {
 };
 
 export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({copy, pace, origin, motion, onPace, onOrigin, onMotion, children}) => {
-  const startsOpen = useRoomToStandOpen();
-  return <Fold label="settings" open={startsOpen}
-    prompt={<>settings{' '}<code className="readout settings-readout caption">{copy.readout(pace, origin, motion)}</code></>}>
+  const room = useRoomToStandOpen();
+  const [startsOpen] = useState(room);
+  return <Disclosure label="settings" className="demo-settings" open={startsOpen}
+    prompt={<>settings{' '}<code className="readout caption">{copy.readout(pace, origin, motion)}</code></>}>
     <section aria-label={`${copy.kind} controls`} className="controls">
       <ul className="dials">
         <li className="control">
@@ -86,5 +87,5 @@ export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({c
       </ul>
       {children}
     </section>
-  </Fold>;
+  </Disclosure>;
 };

@@ -1,6 +1,6 @@
 import {FC, PropsWithChildren, ReactNode} from 'react';
 import {classNames} from '@components/class-names';
-import './Fold.css';
+import './Disclosure.css';
 
 type Props = {
   label: string;
@@ -9,7 +9,7 @@ type Props = {
   className?: string;
 };
 
-export const Fold: FC<PropsWithChildren<Props>> = ({label, prompt, open, className, children}) =>
+export const Disclosure: FC<PropsWithChildren<Props>> = ({label, prompt, open, className, children}) =>
   <details className={classNames('disclosure', className)} open={open} aria-label={label}>
     <summary className="prompt">{prompt}</summary>
     {children}

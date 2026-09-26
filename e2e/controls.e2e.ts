@@ -23,4 +23,14 @@ test.describe('a desktop', () => {
 
     await expect(tablesDemo(page).controls).toBeVisible();
   });
+
+  test('the settings a reader left open stay open when the window is made narrow', async ({page}) => {
+    const tables = tablesDemo(page);
+    await page.goto('demos/?tab=tables');
+    await expect(tables.controls).toBeVisible();
+
+    await page.setViewportSize(phone.viewport);
+
+    await expect(tables.controls).toBeVisible();
+  });
 });

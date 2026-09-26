@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import * as schema from 'schemawax';
 import {has, maybe} from '@ryandur/sand';
-import {Fold} from '@components/Fold';
+import {Disclosure} from '@components/Disclosure';
 import {useRoomToStandOpen} from '@components/room';
 import {numberParam, useSearchParamsObject} from '@components/search-params';
 import {Search} from '@components/art-gallery/Search';
@@ -23,10 +23,10 @@ const Readout: FC = () => {
 export const GallerySettings: FC = () => {
   const room = useRoomToStandOpen();
   if (room) return <Search id="gallery-search" className="header-settings"/>;
-  return <Fold label="gallery settings" className="header-settings settings-fold" prompt={<Readout/>}>
+  return <Disclosure label="gallery settings" className="header-settings settings-fold" prompt={<Readout/>}>
     <Search id="gallery-search"/>
     <PageControl/>
-  </Fold>;
+  </Disclosure>;
 };
 
 export const GalleryAside: FC = () => {

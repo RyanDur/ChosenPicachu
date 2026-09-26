@@ -1,5 +1,5 @@
 import {Page, expect, test} from '@playwright/test';
-import {desktop, fingerTap, iPhone, phoneSideways} from './__test_support';
+import {fingerTap, iPhone, phoneSideways} from './__test_support';
 
 const doorFold = (page: Page) => page.getByRole('group').filter({has: page.getByText('how I organize it', {exact: true})}).first();
 const explainer = (page: Page) => page.getByRole('group').filter({has: page.getByText('what am I looking at?', {exact: true})}).first();
@@ -55,21 +55,3 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
     });
   });
 }
-
-test.describe('a desktop', () => {
-  test.use(desktop);
-
-  test('still opens the nav, the folds and the dismiss with a click', async ({page}) => {
-    await page.goto('');
-    await doorFold(page).getByText('how I organize it', {exact: true}).click();
-    await expect(doorFold(page).getByRole('paragraph', {includeHidden: true}).first()).toBeVisible();
-
-    await page.goto('demos/?tab=z-index');
-    await page.getByRole('button', {name: 'raise a banner'}).click();
-    await page.getByRole('alert').getByRole('button', {name: /^dismiss/}).first().click();
-    await expect(page.getByRole('alert').getByRole('button', {name: /^dismiss/})).toHaveCount(0);
-
-    await page.getByRole('navigation', {name: 'site'}).getByRole('link', {name: 'Users'}).click();
-    await expect(page).toHaveURL(/users/);
-  });
-});

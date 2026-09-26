@@ -60,12 +60,12 @@
   /* a finger's reach: how wide and tall a touch target stands */
   --finger-reach: var(--base-x-5_5);
 
-  /* media, documentation only: var() cannot appear inside @media */
+  /* media lines. var() cannot appear inside @media, so the sheets write these numbers by hand and lines.spec.ts holds them to these. */
   --no-gutters: 1547px;
   /* the widest exhibit, the tables demo's 860px table, fits beside the rail only from 1224px. No lower line holds it, so this is the round number that names no device. */
   --nav-in-a-row: 1100px;
   --search-under-the-title: 600px;
 
-  /* read by script: the folds start closed on a window narrower or shorter than this */
+  /* read by script, with --nav-in-a-row: a fold starts closed on a window 600px wide or less, or 600px tall or less where the nav is in a row */
   --room-to-stand-open: 600px;
 }

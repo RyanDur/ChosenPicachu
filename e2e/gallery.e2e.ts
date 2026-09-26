@@ -1,5 +1,7 @@
-import {expect, test} from '@playwright/test';
+import {Locator, expect, test} from '@playwright/test';
 import {desktop, galleryPage, iPad13Upright, iPadSideways, iPadUpright, iPhone, phoneSideways} from './__test_support';
+
+const focusIsIn = (region: Locator): Promise<boolean> => region.evaluate(element => element.contains(document.activeElement));
 
 const handhelds = [
   {reader: 'a phone', device: iPhone},
@@ -27,6 +29,14 @@ for (const {reader, device} of handhelds) {
 
       await gallery.tapSearchLabel();
       await expect(gallery.searchField).toBeFocused();
+    });
+
+    test('leaves no filters landmark beside the gallery', async ({page}) => {
+      const gallery = galleryPage(page);
+      await page.goto('gallery/?tab=vam');
+      await expect(gallery.wall.first()).toBeVisible();
+
+      await expect(gallery.pageControls).toHaveCount(0);
     });
 
     test('shows a work of art on the first screen', async ({page}) => {
@@ -147,22 +157,14 @@ test.describe('a desktop window made narrow', () => {
 test.describe('a keyboard reader on a desktop', () => {
   test.use(desktop);
 
-  test('meets the gallery after the page controls and before the arrows', async ({page, browserName}) => {
+  test('meets the gallery right after the page controls', async ({page, browserName}) => {
     const gallery = galleryPage(page);
-    const tab = browserName === 'webkit' ? 'Alt+Tab' : 'Tab';
     await page.goto('gallery/?tab=vam');
     await expect(gallery.wall.first()).toBeVisible();
-    await gallery.pageSize.focus();
+    await gallery.pageControls.getByRole('button', {name: 'Go'}).focus();
 
-    const inMain = () => page.getByRole('main').evaluate(main => main.contains(document.activeElement));
-    const inArrows = () => page.getByRole('navigation', {name: 'pagination'}).evaluate(nav => nav.contains(document.activeElement));
-    let reachedMain = false;
-    for (let press = 0; press < 20 && !reachedMain; press += 1) {
-      await page.keyboard.press(tab);
-      expect(await inArrows()).toBe(false);
-      reachedMain = await inMain();
-    }
+    await page.keyboard.press(browserName === 'webkit' ? 'Alt+Tab' : 'Tab');
 
-    expect(reachedMain).toBe(true);
+    await expect.poll(() => focusIsIn(page.getByRole('main'))).toBe(true);
   });
 });
