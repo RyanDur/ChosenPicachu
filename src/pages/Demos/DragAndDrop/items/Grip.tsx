@@ -8,15 +8,17 @@ const steps: Record<string, 1 | -1> = {ArrowRight: 1, ArrowLeft: -1};
 type Props = {
   item: string;
   order: readonly string[];
-  onArm: () => void;
+  onPressed: () => void;
+  onLetGo: () => void;
   onArranged: (after: string[], walker: string, toward: 1 | -1) => void;
 };
 
-export const Grip: FC<Props> = ({item, order, onArm, onArranged}) =>
+export const Grip: FC<Props> = ({item, order, onPressed, onLetGo, onArranged}) =>
   <button type="button"
     className="grip reachable"
     aria-label={`grip for ${item}`}
-    onPointerDown={onArm}
+    onPointerDown={onPressed}
+    onPointerUp={onLetGo}
     onKeyDown={event => maybe(steps[event.key]).map(toward => {
       event.preventDefault();
       const lane = event.currentTarget.closest('li');

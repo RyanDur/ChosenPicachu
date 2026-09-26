@@ -180,6 +180,21 @@ describe('a list of charts', () => {
     expect(screen.getByRole('region', {name: 'candles'})).toBeVisible();
   });
 
+  test("a finger pressed on a chart's grip readies the chart to be moved, and lifted leaves it at rest", async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    await screen.findByRole('region', {name: 'live trades'});
+    const finger = userEvent.setup();
+    const grip = within(chartsDesk.slot('Price line')).getByRole('button', {name: 'move chart', hidden: true});
+
+    await finger.pointer({keys: '[TouchA>]', target: grip});
+    expect(chartsDesk.slot('Price line')).toHaveAttribute('draggable', 'true');
+
+    await finger.pointer({keys: '[/TouchA]', target: grip});
+    expect(chartsDesk.slot('Price line')).not.toHaveAttribute('draggable', 'true');
+  });
+
   test('the trader can drag a chart to a new seat', async () => {
     const feed = await listeningFeed();
 

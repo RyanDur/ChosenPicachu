@@ -2,11 +2,13 @@ import {FC} from 'react';
 import Handle from '@components/grip.svg';
 
 type Props = {
-  onArm: () => void;
+  onPressed: () => void;
+  onLetGo: () => void;
 };
 
-export const Grip: FC<Props> = ({onArm}) =>
+export const Grip: FC<Props> = ({onPressed, onLetGo}) =>
   <button type="button" className="chart-grip" aria-label="move chart" tabIndex={-1}
-    onPointerDown={onArm}>
+    onPointerDown={onPressed}
+    onPointerUp={onLetGo}>
     <Handle/>
   </button>;

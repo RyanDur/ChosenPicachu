@@ -39,8 +39,8 @@
   grid-area: zip;
 }
 
-/* city and zip share what the state and two gaps leave; below this each would be under 160px, too narrow for a city's name */
-@container (width <= 456px) {
+/* city and zip share what the state and two gaps leave; below this each would be under 16rem, too narrow for a city's name */
+@container (width <= 45.6rem) {
   .address-fields {
     grid-template-areas:
       "street_address street_address street_address"

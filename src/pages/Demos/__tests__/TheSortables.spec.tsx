@@ -16,8 +16,8 @@ const seats = (): string[] =>
   within(screen.getByRole('list', {name: 'sortable list'}))
     .getAllByRole('listitem').map(({textContent}) => textContent ?? '');
 
-const lifted = (item: string) => {
-  fireEvent.pointerDown(screen.getByLabelText(`grip for ${item}`), {pointerType: 'touch'});
+const lifted = async (item: string) => {
+  await userEvent.pointer({keys: '[TouchA>]', target: screen.getByLabelText(`grip for ${item}`)});
   fireEvent.dragStart(screen.getByText(item), {dataTransfer: {effectAllowed: ''}});
 };
 
@@ -43,9 +43,20 @@ describe('the sortable list demo', () => {
     const first = within(screen.getByRole('list', {name: 'sortable list'})).getAllByRole('listitem')[0];
     expect(first).toHaveAttribute('draggable', 'false');
 
-    fireEvent.pointerDown(screen.getByLabelText('grip for A'), {pointerType: 'touch'});
+    await userEvent.pointer({keys: '[TouchA>]', target: screen.getByLabelText('grip for A')});
 
     expect(first).toHaveAttribute('draggable', 'true');
+  });
+
+  test('a finger pressed and lifted without a drag leaves its item at rest', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const first = within(screen.getByRole('list', {name: 'sortable list'})).getAllByRole('listitem')[0];
+
+    await userEvent.pointer({keys: '[TouchA]', target: screen.getByLabelText('grip for A')});
+
+    expect(first).toHaveAttribute('draggable', 'false');
   });
 
   test('the open cards travel in the url', async () => {
@@ -79,7 +90,7 @@ describe('the sortable list demo', () => {
     render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
-    lifted('A');
+    await lifted('A');
     draggedOver('C', 10);
 
     expect(seats()).toEqual(['B', 'C', 'A']);
@@ -91,7 +102,7 @@ describe('the sortable list demo', () => {
     await feedIsSubscribed(feed);
     const controls = screen.getByRole('region', {name: 'list controls'});
     await userEvent.click(within(controls).getByRole('radio', {name: 'Lazy'}));
-    lifted('A');
+    await lifted('A');
     draggedOver('C', 10);
   };
 
@@ -171,7 +182,7 @@ describe('the sortable list demo', () => {
     render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
 
     await feedIsSubscribed(feed);
-    lifted('A');
+    await lifted('A');
     draggedOver('C', 10);
 
     expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent('A moved to 3 of 3');

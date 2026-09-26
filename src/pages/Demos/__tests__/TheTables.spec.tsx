@@ -156,6 +156,22 @@ describe('the tables demo', () => {
     expect(screen.getByText('<EagerTable className="hide animated"/>')).toBeVisible();
   });
 
+  test('the settings a reader closed stay closed while the stream fills the cells', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const card = screen.getByRole('region', {name: 'live aggregations'});
+    const controls = await tableControls.region();
+    expect(controls).toBeVisible();
+    await userEvent.click(within(screen.getByRole('group', {name: 'settings'})).getByText('settings'));
+    expect(controls).not.toBeVisible();
+
+    broadcast(feed, fourTrades);
+    await waitFor(() => expect(within(card).getByRole('row', {name: /^this minute/})).toHaveTextContent('$50,004.00'));
+
+    expect(controls).not.toBeVisible();
+  });
+
   test("the controls' prompt reads settings apart from its readout", async () => {
     const feed = await listeningFeed();
 

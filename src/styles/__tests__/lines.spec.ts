@@ -11,13 +11,15 @@ const ownLines: Record<string, number[]> = {
   '/src/pages/Demos/Recipe/Recipe.css': [900]
 };
 
+const pixels = (length: string): number => length.endsWith('rem') ? Math.round(parseFloat(length) * 10) : parseFloat(length);
+
 const queriedLines = (css: string): number[] =>
-  [...css.matchAll(/\((?:width|height) [<>]=? (\d+)px\)|\((\d+)px [<>]=? (?:width|height)\)/g)]
-    .map(([, after, before]) => Number(after ?? before));
+  [...css.matchAll(/\((?:width|height) [<>]=? ([\d.]+(?:px|rem))\)|\(([\d.]+(?:px|rem)) [<>]=? (?:width|height)\)/g)]
+    .map(([, after, before]) => pixels(after ?? before));
 
 describe('the lines the sheets break at', () => {
   test('are read in every range form a query can take', () => {
-    expect(queriedLines('@media (width <= 600px), (height < 500px), (700px <= width), (800px > height) {}')).toEqual([600, 500, 700, 800]);
+    expect(queriedLines('@media (width <= 600px), (height < 500px), (700px <= width), (800px > height), (width <= 45.6rem) {}')).toEqual([600, 500, 700, 800, 456]);
   });
 
   test('are the named ones in spacing.css, or a line the sheet owns', () => {

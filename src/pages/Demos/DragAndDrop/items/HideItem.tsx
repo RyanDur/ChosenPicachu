@@ -29,7 +29,7 @@ export const HideItem: FC<ItemProps> = (
       updateDragging(false);
     }}
     draggable={dragging}>
-    <Grip item={item} order={order} onArm={() => updateDragging(true)} onArranged={onArranged}/>
+    <Grip item={item} order={order} onPressed={() => updateDragging(true)} onLetGo={() => updateDragging(false)} onArranged={onArranged}/>
     <span className="value">{item}</span>
   </li>;
 };

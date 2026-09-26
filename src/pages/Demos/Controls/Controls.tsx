@@ -22,7 +22,7 @@ const styles: Record<Origin, Record<Pace, DragStyle>> = {
 export const styled = (pace: Pace, origin: Origin): DragStyle => styles[origin][pace];
 
 export type Copy = {
-  kind: string;
+  kind: 'list' | 'table';
   readout: (pace: Pace, origin: Origin, motion: Motion) => string;
   pace: Record<Pace, string>;
   origin: Record<Origin, string>;
@@ -46,7 +46,7 @@ export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({c
   return <Disclosure label="settings" className="demo-settings" startsOpen={roomToStandOpen}
     prompt={<>settings{' '}<code className="readout caption">{copy.readout(pace, origin, motion)}</code></>}>
     <section aria-labelledby={heading} className="controls">
-      <h3 id={heading} className="off-screen">{copy.kind} controls</h3>
+      <h4 id={heading} className="off-screen">{copy.kind} controls</h4>
       <ul className="dials">
         <li className="control">
           <span className="axis caption uppercase">pace</span>

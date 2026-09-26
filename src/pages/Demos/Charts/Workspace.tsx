@@ -53,7 +53,7 @@ export const Workspace: FC<Props> = ({product}) => {
       }
     });
   }, [removal, seats]);
-  const {isArmed, arm, dress, lift, travel, release, keys, settled} =
+  const {isArmed, arm, disarm, dress, lift, travel, release, keys, settled} =
     useChartTravel({
       seats: seats.length,
       onSeated: (from, to, options) => {
@@ -102,7 +102,7 @@ export const Workspace: FC<Props> = ({product}) => {
         <Link id={doorwayId(kind)} className="doorway" to={doorway(kind)} onKeyDown={keys(at)}>
           <span className="off-screen">{`${chartNames[kind]} tutorial`}</span>
         </Link>
-        {plural && <Grip onArm={() => arm(at)}/>}
+        {plural && <Grip onPressed={() => arm(at)} onLetGo={disarm}/>}
         {matchChartKind(kind, {
           price: () => <PriceChart id={`chart-${kind}`} trades={trades} actions={actions}
             period={period} onPeriod={chosen => choosePeriod('price', chosen)}/>,
