@@ -41,7 +41,7 @@ export const Aggregations: FC<Props> = ({world, ...dials}) => {
       ? <VanillaStage {...dials}/>
       : <LiveTable {...dials}/>}
     <details className="explainer">
-      <summary className="prompt">what am I looking at?</summary>
+      <summary className="prompt reachable">what am I looking at?</summary>
       <p className="explanation">
         The stream folded into fixed windows, one column per measure: how many
         trades arrived, the split of buys and sells, the bitcoin traded, the

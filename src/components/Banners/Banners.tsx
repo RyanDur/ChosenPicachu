@@ -63,7 +63,7 @@ export const Banners: FC = () => {
           className={classNames('trouble', leaving.includes(banner.id) && 'leaving')}>
           <p className="news field rounded-corners floating hairline-outline alarm-ink">
             {banner.message}
-            <button type="button" className="dismiss" aria-label={`dismiss ${banner.message}`}
+            <button type="button" className="dismiss reachable" aria-label={`dismiss ${banner.message}`}
               onClick={() => dismissed(banner.id)}>×</button>
           </p>
         </li>)}

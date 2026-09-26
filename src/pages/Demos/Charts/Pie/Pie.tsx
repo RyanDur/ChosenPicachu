@@ -64,7 +64,7 @@ export const Pie: FC<Props> = ({trades, actions}) => {
       </figcaption>
     </figure>
     <details className="explainer">
-      <summary className="prompt">what am I looking at?</summary>
+      <summary className="prompt reachable">what am I looking at?</summary>
       <p className="explanation">
         The whole pot, one circle: everything traded since you arrived, split by who
         started it. The green slice is the size the buyers took; the orange slice is the

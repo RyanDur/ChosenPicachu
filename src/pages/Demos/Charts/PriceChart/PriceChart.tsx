@@ -103,7 +103,7 @@ export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPer
       <figcaption className="chart-caption caption">{captionFor(history, candles.length, period)}</figcaption>
     </figure>
     <details className="explainer">
-      <summary className="prompt">what am I looking at?</summary>
+      <summary className="prompt reachable">what am I looking at?</summary>
       <p className="explanation">
         This measures the price of one bitcoin in US dollars, live. The line is
         the closing price of each bucket in the window, seeded from Coinbase&apos;s

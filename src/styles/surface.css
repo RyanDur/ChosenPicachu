@@ -14,6 +14,14 @@
 .shrinkable { min-inline-size: 0; }
 .contained { overscroll-behavior-x: contain; }
 
+@media (pointer: coarse) {
+  .reachable {
+    min-block-size: var(--base-x-5_5);
+    min-inline-size: var(--base-x-5_5);
+    align-content: center;
+  }
+}
+
 .attentive {
   &:hover,
   &:focus,

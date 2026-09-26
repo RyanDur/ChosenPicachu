@@ -18,7 +18,7 @@ export const DynamicInteraction: FC = () =>
       page follows from both.
     </p>
     <details className="door-fold">
-      <summary className="prompt">how I organize it</summary>
+      <summary className="prompt reachable">how I organize it</summary>
       <p className="paragraph">Behavior splits in two: what is true, and what happened. State
         is what is true: the order the rows stand in, the choice the reader has made, the
         thing held mid-drag. It holds only what cannot be derived; anything the page can
