@@ -20,12 +20,17 @@ export const usersPage = (page: Page) => {
   return {
     names,
     columns,
-    swipeRoster: async (): Promise<void> => {
+    scrollRosterSideways: async (): Promise<void> => {
       await roster.hover();
       await page.mouse.wheel(3000, 0);
     },
     rosterAtItsEnd: (): Promise<boolean> =>
       roster.evaluate(section => section.scrollLeft >= section.scrollWidth - section.clientWidth - 1),
+    lastColumnWithinTheRoster: async (): Promise<boolean> => {
+      const column = await columns.last().boundingBox();
+      const frame = await roster.boundingBox();
+      return column !== null && frame !== null && column.x >= frame.x && column.x + column.width <= frame.x + frame.width + 1;
+    },
     rowOf: ({firstName, lastName}: Person) => page.getByRole('rowheader', {name: `${firstName} ${lastName}`}),
     viewFirst: async (): Promise<void> => {
       await page.getByRole('button', {name: /^Actions for /}).first().click();
