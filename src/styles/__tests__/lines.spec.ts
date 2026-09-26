@@ -18,7 +18,7 @@ const queriedLines = (css: string): number[] =>
     .map(([, after, before]) => pixels(after ?? before));
 
 describe('the lines the sheets break at', () => {
-  test("reads a rem line at the root's 10px", () => {
+  test("are read in rem at the root's 10px", () => {
     expect(queriedLines('@container (width <= 45.6rem) {}')).toEqual([456]);
   });
 

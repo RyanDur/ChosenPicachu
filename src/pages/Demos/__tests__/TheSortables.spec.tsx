@@ -17,7 +17,7 @@ const seats = (): string[] =>
     .getAllByRole('listitem').map(({textContent}) => textContent ?? '');
 
 const lifted = async (item: string) => {
-  await userEvent.pointer({keys: '[TouchA>]', target: screen.getByLabelText(`grip for ${item}`)});
+  await userEvent.pointer({keys: '[TouchA>]', target: screen.getByRole('button', {name: `grip for ${item}`})});
   fireEvent.dragStart(screen.getByText(item), {dataTransfer: {effectAllowed: ''}});
 };
 
@@ -43,7 +43,7 @@ describe('the sortable list demo', () => {
     const first = within(screen.getByRole('list', {name: 'sortable list'})).getAllByRole('listitem')[0];
     expect(first).toHaveAttribute('draggable', 'false');
 
-    await userEvent.pointer({keys: '[TouchA>]', target: screen.getByLabelText('grip for A')});
+    await userEvent.pointer({keys: '[TouchA>]', target: screen.getByRole('button', {name: 'grip for A'})});
 
     expect(first).toHaveAttribute('draggable', 'true');
   });
@@ -54,8 +54,8 @@ describe('the sortable list demo', () => {
     await feedIsSubscribed(feed);
     const first = within(screen.getByRole('list', {name: 'sortable list'})).getAllByRole('listitem')[0];
 
-    await userEvent.pointer({keys: '[TouchA>]', target: screen.getByLabelText('grip for A')});
-    fireEvent.pointerCancel(screen.getByLabelText('grip for A'), {pointerType: 'touch'});
+    await userEvent.pointer({keys: '[TouchA>]', target: screen.getByRole('button', {name: 'grip for A'})});
+    fireEvent.pointerCancel(screen.getByRole('button', {name: 'grip for A'}), {pointerType: 'touch'});
 
     expect(first).toHaveAttribute('draggable', 'false');
   });
@@ -66,12 +66,12 @@ describe('the sortable list demo', () => {
     await feedIsSubscribed(feed);
     const first = within(screen.getByRole('list', {name: 'sortable list'})).getAllByRole('listitem')[0];
 
-    await userEvent.pointer({keys: '[TouchA]', target: screen.getByLabelText('grip for A')});
+    await userEvent.pointer({keys: '[TouchA]', target: screen.getByRole('button', {name: 'grip for A'})});
 
     expect(first).toHaveAttribute('draggable', 'false');
   });
 
-  test("the list controls sit one level under their station's heading", async () => {
+  test('the list controls are headed at level four', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
     await feedIsSubscribed(feed);
@@ -85,7 +85,7 @@ describe('the sortable list demo', () => {
     await feedIsSubscribed(feed);
     const first = within(screen.getByRole('list', {name: 'sortable list'})).getAllByRole('listitem')[0];
 
-    await userEvent.pointer({keys: '[TouchA]', target: screen.getByLabelText('grip for A')});
+    await userEvent.pointer({keys: '[TouchA]', target: screen.getByRole('button', {name: 'grip for A'})});
 
     expect(first).toHaveAttribute('draggable', 'false');
   });
@@ -113,6 +113,18 @@ describe('the sortable list demo', () => {
     expect(within(controls).getByRole('radio', {name: 'Hide'})).toBeChecked();
     expect(within(controls).getByRole('radio', {name: 'Animate'})).toBeChecked();
     expect(screen.getByText('<EagerHideAnimatedList/>')).toBeVisible();
+  });
+
+  test('a drag the browser takes over from the grip still lands', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    await lifted('A');
+    fireEvent.pointerCancel(screen.getByRole('button', {name: 'grip for A'}), {pointerType: 'touch'});
+    draggedOver('C', 10);
+
+    expect(seats()).toEqual(['B', 'C', 'A']);
   });
 
   test('an eager drag commits on the crossing', async () => {
