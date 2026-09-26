@@ -36,9 +36,7 @@ const Site: FC<{closed?: boolean}> = ({closed = false}) => {
     <Provider>
       <HeaderRegion/>
       <SideNav/>
-      {AsideRegion && <aside id="filter" className="filter field" aria-label="filters">
-        <AsideRegion/>
-      </aside>}
+      {AsideRegion && <AsideRegion/>}
       <main className={classNames('app-main', 'field', mainClassName)}>
         {closed ? <PageError/> : <Outlet/>}
       </main>

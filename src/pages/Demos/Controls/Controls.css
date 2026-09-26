@@ -1,3 +1,7 @@
+.settings-readout {
+  margin-inline-start: auto;
+}
+
 .controls {
   .dials {
     display: grid;

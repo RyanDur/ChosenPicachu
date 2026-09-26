@@ -1,4 +1,4 @@
-.fold {
+.disclosure {
   width: 100%;
 
   > .prompt {
@@ -15,10 +15,6 @@
       content: '▸';
       transition: rotate 0.2s;
     }
-
-    .readout {
-      margin-inline-start: auto;
-    }
   }
 
   &[open] > .prompt::before {
@@ -26,7 +22,7 @@
   }
 }
 
-.fold::details-content {
+.disclosure::details-content {
   block-size: 0;
   overflow: hidden;
   transition:
@@ -34,6 +30,6 @@
     content-visibility 0.25s allow-discrete;
 }
 
-.fold[open]::details-content {
+.disclosure[open]::details-content {
   block-size: auto;
 }

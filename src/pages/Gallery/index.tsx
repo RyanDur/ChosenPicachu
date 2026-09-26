@@ -29,7 +29,7 @@ const GalleryHeader = () =>
 const PieceHeader = () => {
   const {easel} = useArtPiece();
   return <Header title={easel.reply === 'answered' ? easel.answer.title : 'A piece'}>
-    <Search id="gallery-search" className="gallery-search"/>
+    <Search id="gallery-search" className="header-settings"/>
   </Header>;
 };
 

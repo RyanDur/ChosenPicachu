@@ -14,14 +14,16 @@ import './GallerySettings.css';
 const Readout: FC = () => {
   const {search, tab, page} = useSearchParamsObject({search: schema.string, tab: sourceParam, page: numberParam}, {page: 1});
   const pages = paginationOf(useGallery().wall).map(({totalPages}) => ` of ${totalPages}`).orElse('');
-  const where = has(search) ? decodeURI(search) : maybe(tab).map(museumNamed).orElse('the gallery');
-  return <span className="readout"><span className="where bold ellipsis">{where}</span><span className="page">page {page}{pages}</span></span>;
+  const where = has(search) ? search : maybe(tab).map(museumNamed).orElse('the gallery');
+  return <span className="readout">
+    <span className="where bold ellipsis">{where}</span><span className="page">, page {page}{pages}</span>
+  </span>;
 };
 
 export const GallerySettings: FC = () => {
   const room = useRoomToStandOpen();
-  if (room) return <Search id="gallery-search" className="gallery-search"/>;
-  return <Fold label="gallery settings" className="gallery-search settings-fold" prompt={<Readout/>}>
+  if (room) return <Search id="gallery-search" className="header-settings"/>;
+  return <Fold label="gallery settings" className="header-settings settings-fold" prompt={<Readout/>}>
     <Search id="gallery-search"/>
     <PageControl/>
   </Fold>;
@@ -29,5 +31,7 @@ export const GallerySettings: FC = () => {
 
 export const GalleryAside: FC = () => {
   const room = useRoomToStandOpen();
-  return room ? <PageControl/> : null;
+  return room && <aside id="filter" className="filter field" aria-label="filters">
+    <PageControl/>
+  </aside>;
 };

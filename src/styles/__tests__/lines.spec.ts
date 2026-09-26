@@ -11,7 +11,7 @@ const ownLines: Record<string, number[]> = {
   '/src/pages/Demos/Recipe/Recipe.css': [900]
 };
 
-export const queriedLines = (css: string): number[] =>
+const queriedLines = (css: string): number[] =>
   [...css.matchAll(/\((?:width|height) [<>]=? (\d+)px\)|\((\d+)px [<>]=? (?:width|height)\)/g)]
     .map(([, after, before]) => Number(after ?? before));
 

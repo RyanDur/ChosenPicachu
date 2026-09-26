@@ -1,12 +1,13 @@
-import {maybe} from '@ryandur/sand';
 import {Source} from './source';
 
-export const museums: readonly {display: string; param: Source}[] = [
-  {display: 'The Art Institute of Chicago', param: Source.AIC},
-  {display: 'Harvard Art Museums', param: Source.HARVARD},
-  {display: 'The Victoria and Albert Museum', param: Source.VAM},
-  {display: 'The Cleveland Museum of Art', param: Source.CLEVELAND}
-];
+const names: Record<Source, string> = {
+  [Source.AIC]: 'The Art Institute of Chicago',
+  [Source.HARVARD]: 'Harvard Art Museums',
+  [Source.VAM]: 'The Victoria and Albert Museum',
+  [Source.CLEVELAND]: 'The Cleveland Museum of Art'
+};
 
-export const museumNamed = (source: Source): string =>
-  maybe(museums.find(({param}) => param === source)).map(({display}) => display).orElse('');
+export const museums: readonly {display: string; param: Source}[] =
+  Object.values(Source).map(param => ({display: names[param], param}));
+
+export const museumNamed = (source: Source): string => names[source];

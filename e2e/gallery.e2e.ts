@@ -1,14 +1,18 @@
 import {expect, test} from '@playwright/test';
 import {desktop, galleryPage, iPad13Upright, iPadSideways, iPadUpright, iPhone, phoneSideways} from './__test_support';
 
-for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a phone held sideways', device: phoneSideways}]) {
+const handhelds = [
+  {reader: 'a phone', device: iPhone},
+  {reader: 'a phone held sideways', device: phoneSideways}
+];
+
+for (const {reader, device} of handhelds) {
   test.describe(reader, () => {
     test.use(device);
 
     test('reads the search label in full once the settings are open', async ({page}) => {
       const gallery = galleryPage(page);
       await page.goto('gallery/?tab=vam');
-      await expect(gallery.settings).toBeVisible();
       await gallery.openSettings();
       await expect(gallery.searchField).toBeVisible();
 
@@ -24,8 +28,64 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
       await gallery.tapSearchLabel();
       await expect(gallery.searchField).toBeFocused();
     });
+
+    test('shows a work of art on the first screen', async ({page}) => {
+      const gallery = galleryPage(page);
+      await page.goto('gallery/?tab=vam');
+
+      await expect(gallery.wall.first()).toBeInViewport({ratio: 0.5});
+    });
+
+    test('has the search, the page number and the page size within one tap of the first screen', async ({page}) => {
+      const gallery = galleryPage(page);
+      await page.goto('gallery/?tab=vam');
+      await expect(gallery.wall.first()).toBeVisible();
+
+      await expect(gallery.settings).toBeInViewport();
+      await gallery.openSettings();
+
+      await expect(gallery.searchField).toBeVisible();
+      await expect(gallery.pageNumber).toBeVisible();
+      await expect(gallery.pageSize).toBeVisible();
+    });
+
+    test('reads the museum and the page on the settings fold', async ({page}) => {
+      const gallery = galleryPage(page);
+      await page.goto('gallery/?tab=vam');
+
+      await expect(gallery.settings).toContainText(/The Victoria and Albert Museum, page 1 of \d+/);
+    });
+
+    test('reads the search word on the settings fold once there is one', async ({page}) => {
+      const gallery = galleryPage(page);
+      await page.goto('gallery/?tab=vam&search=100%25');
+
+      await expect(gallery.settings).toContainText('100%, page 1');
+    });
+
+    test('reads the next page on the settings fold after the arrow moves on', async ({page}) => {
+      const gallery = galleryPage(page);
+      await page.goto('gallery/?tab=vam');
+      await expect(gallery.wall.first()).toBeVisible();
+
+      await gallery.nextPage.tap();
+
+      await expect(gallery.settings).toContainText(/, page 2(?!\d)/);
+    });
   });
 }
+
+test.describe('a phone', () => {
+  test.use(iPhone);
+
+  test('has the first work of art begin within the top third of the screen', async ({page}) => {
+    const gallery = galleryPage(page);
+    await page.goto('gallery/?tab=vam');
+
+    await expect.poll(async () => (await gallery.wall.first().boundingBox())?.y ?? Infinity)
+      .toBeLessThanOrEqual(iPhone.viewport.height / 3);
+  });
+});
 
 for (const {reader, device} of [{reader: 'an iPad held upright', device: iPadUpright}, {reader: 'a 13-inch iPad held upright', device: iPad13Upright}]) {
   test.describe(reader, () => {
@@ -50,76 +110,59 @@ for (const {reader, device} of [{reader: 'an iPad held upright', device: iPadUpr
   });
 }
 
-const handhelds = [
-  {reader: 'a phone', device: iPhone},
-  {reader: 'a phone held sideways', device: phoneSideways}
-];
-
-for (const {reader, device} of handhelds) {
+for (const {reader, device} of [
+  {reader: 'an iPad held sideways', device: iPadSideways},
+  {reader: 'a desktop', device: desktop},
+  {reader: 'a short desktop window', device: {viewport: {width: 1300, height: 580}}}
+]) {
   test.describe(reader, () => {
     test.use(device);
 
-    test('shows a work of art on the first screen', async ({page}) => {
-      const gallery = galleryPage(page);
-      await page.goto('gallery/?tab=vam');
-
-      await expect(gallery.wall.first()).toBeInViewport({ratio: 0.5});
-    });
-
-    test('has the search, the page number and the page size within one tap of the first screen', async ({page}) => {
+    test('shows the search and the page controls with no fold', async ({page}) => {
       const gallery = galleryPage(page);
       await page.goto('gallery/?tab=vam');
       await expect(gallery.wall.first()).toBeVisible();
 
-      await expect(gallery.settings).toBeInViewport();
-      await gallery.openSettings();
-
-      await expect(gallery.searchField).toBeVisible();
-      await expect(gallery.pageNumber).toBeVisible();
-      await expect(gallery.pageSize).toBeVisible();
-    });
-
-    test('reads the museum and the page on the settings fold, and the search word once there is one', async ({page}) => {
-      const gallery = galleryPage(page);
-      await page.goto('gallery/?tab=vam');
-      await expect(gallery.wall.first()).toBeVisible();
-      await expect(gallery.settings).toContainText('The Victoria and Albert Museum');
-      await expect(gallery.settings).toContainText('page 1 of');
-
-      await page.goto('gallery/?tab=vam&search=flowers');
-
-      await expect(gallery.settings).toContainText('flowers');
-      await expect(gallery.settings).toContainText('page 1');
-    });
-  });
-}
-
-test.describe('a phone', () => {
-  test.use(iPhone);
-
-  test('has the first work of art begin within the top third of the screen', async ({page}) => {
-    const gallery = galleryPage(page);
-    await page.goto('gallery/?tab=vam');
-    await expect(gallery.wall.first()).toBeVisible();
-
-    const art = await gallery.wall.first().boundingBox();
-    expect(art).not.toBeNull();
-    expect(art === null ? Infinity : art.y).toBeLessThanOrEqual(iPhone.viewport.height / 3);
-  });
-});
-
-for (const {reader, device} of [{reader: 'an iPad held sideways', device: iPadSideways}, {reader: 'a desktop', device: desktop}]) {
-  test.describe(reader, () => {
-    test.use(device);
-
-    test('keeps the search band and the page controls where they were', async ({page}) => {
-      const gallery = galleryPage(page);
-      await page.goto('gallery/?tab=vam');
-      await expect(gallery.wall.first()).toBeVisible();
-
-      await expect(gallery.searchField).toBeVisible();
-      await expect(gallery.pageNumber).toBeVisible();
+      await expect(page.getByRole('banner').getByLabel(/Search For/)).toBeVisible();
+      await expect(gallery.pageControls.getByLabel(/^Page #/)).toBeVisible();
       await expect(gallery.settings).toHaveCount(0);
     });
   });
 }
+
+test.describe('a desktop window made narrow', () => {
+  test.use(desktop);
+
+  test('folds the settings once it is a phone\'s width', async ({page}) => {
+    const gallery = galleryPage(page);
+    await page.goto('gallery/?tab=vam');
+    await expect(gallery.settings).toHaveCount(0);
+
+    await page.setViewportSize(iPhone.viewport);
+
+    await expect(gallery.settings).toBeVisible();
+  });
+});
+
+test.describe('a keyboard reader on a desktop', () => {
+  test.use(desktop);
+
+  test('meets the gallery after the page controls and before the arrows', async ({page, browserName}) => {
+    const gallery = galleryPage(page);
+    const tab = browserName === 'webkit' ? 'Alt+Tab' : 'Tab';
+    await page.goto('gallery/?tab=vam');
+    await expect(gallery.wall.first()).toBeVisible();
+    await gallery.pageSize.focus();
+
+    const inMain = () => page.getByRole('main').evaluate(main => main.contains(document.activeElement));
+    const inArrows = () => page.getByRole('navigation', {name: 'pagination'}).evaluate(nav => nav.contains(document.activeElement));
+    let reachedMain = false;
+    for (let press = 0; press < 20 && !reachedMain; press += 1) {
+      await page.keyboard.press(tab);
+      expect(await inArrows()).toBe(false);
+      reachedMain = await inMain();
+    }
+
+    expect(reachedMain).toBe(true);
+  });
+});

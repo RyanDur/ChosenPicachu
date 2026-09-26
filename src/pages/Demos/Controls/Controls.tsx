@@ -44,7 +44,7 @@ export type ControlsProps = Dials & {
 export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({copy, pace, origin, motion, onPace, onOrigin, onMotion, children}) => {
   const startsOpen = useRoomToStandOpen();
   return <Fold label="settings" open={startsOpen}
-    prompt={<>settings<code className="readout caption">{copy.readout(pace, origin, motion)}</code></>}>
+    prompt={<>settings{' '}<code className="readout settings-readout caption">{copy.readout(pace, origin, motion)}</code></>}>
     <section aria-label={`${copy.kind} controls`} className="controls">
       <ul className="dials">
         <li className="control">

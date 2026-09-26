@@ -31,7 +31,7 @@
       font-weight: bold;
     }
 
-    .gallery-search {
+    .header-settings {
       grid-area: search;
       justify-self: flex-end;
     }
@@ -88,10 +88,6 @@
     display: flex;
     align-items: flex-end;
     width: var(--base-x-16_5);
-
-    &:empty {
-      display: none;
-    }
   }
 
   .app-footer {
@@ -176,7 +172,7 @@
       grid-auto-rows: minmax(var(--base-x-10), auto);
       grid-template-areas: 'title search';
 
-      .gallery-search {
+      .header-settings {
         width: 100%;
         height: inherit;
       }
