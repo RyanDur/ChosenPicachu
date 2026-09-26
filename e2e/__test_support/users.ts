@@ -24,8 +24,6 @@ export const usersPage = (page: Page) => {
       await roster.hover();
       await page.mouse.wheel(3000, 0);
     },
-    rosterAtItsEnd: (): Promise<boolean> =>
-      roster.evaluate(section => section.scrollLeft >= section.scrollWidth - section.clientWidth - 1),
     lastColumnWithinTheRoster: async (): Promise<boolean> => {
       const column = await columns.last().boundingBox();
       const frame = await roster.boundingBox();

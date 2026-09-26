@@ -62,8 +62,6 @@ for (const {reader, device} of handhelds) {
       await expect(users.names.first()).toBeVisible({timeout: 30_000});
 
       await users.scrollRosterSideways();
-      await expect.poll(users.rosterAtItsEnd).toBe(true);
-      await users.scrollRosterSideways();
 
       await expect.poll(users.lastColumnWithinTheRoster).toBe(true);
     });

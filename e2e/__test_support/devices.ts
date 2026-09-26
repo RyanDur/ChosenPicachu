@@ -4,3 +4,5 @@ export const iPadSplitView = {viewport: {width: 507, height: 1180}, hasTouch: tr
 export const iPadUpright = {viewport: {width: 820, height: 1180}, hasTouch: true};
 export const iPadSideways = {viewport: {width: 1180, height: 820}, hasTouch: true};
 export const desktop = {viewport: {width: 1440, height: 900}};
+export const iPad13Upright = {viewport: {width: 1024, height: 1366}, hasTouch: true};
+export const iPad11Upright = {viewport: {width: 834, height: 1194}, hasTouch: true};

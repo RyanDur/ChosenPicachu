@@ -59,6 +59,7 @@
 
   /* media, documentation only: var() cannot appear inside @media */
   --no-gutters: 1547px;
-  --nav-in-a-row: 1000px;
+  /* checked against the widest exhibit, the tables demo's seven-column table at 860px, which fits beside the rail and its 80px of padding only from 1224px wide; no line below that holds it, so this one names no device and keeps the 1180-wide case the card names */
+  --nav-in-a-row: 1100px;
   --search-under-the-title: 600px;
 }
