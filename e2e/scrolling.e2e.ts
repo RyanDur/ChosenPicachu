@@ -1,12 +1,12 @@
 import {Page, expect, test} from '@playwright/test';
 import {desktop, iPadSideways, iPadUpright, phone} from './__test_support';
 
-const scrolled = (page: Page): Promise<{document: number; pane: number}> => page.evaluate(() => {
-  const main = document.querySelector('main');
-  return {document: window.scrollY, pane: main instanceof HTMLElement ? main.scrollTop : 0};
-});
-
 const documentScrollY = (page: Page): Promise<number> => page.evaluate(() => window.scrollY);
+
+const paneScrollTop = (page: Page): Promise<number> => page.getByRole('main').evaluate(main => main.scrollTop);
+
+const scrolled = async (page: Page): Promise<{document: number; pane: number}> =>
+  ({document: await documentScrollY(page), pane: await paneScrollTop(page)});
 
 const documentScrolled = async (page: Page): Promise<void> => {
   await expect.poll(() => scrolled(page).then(({document}) => document)).toBeGreaterThan(0);
@@ -40,15 +40,6 @@ for (const {reader, device} of handheld) {
       await page.getByRole('heading').last().scrollIntoViewIfNeeded();
 
       await documentScrolled(page);
-    });
-
-    test('following a link lands at the top of the next page', async ({page}) => {
-      await page.goto('');
-
-      await page.getByRole('link', {name: 'Start where the demos start'}).click();
-      await expect(page.getByRole('navigation', {name: 'demos'})).toBeVisible();
-
-      await expect.poll(() => documentScrollY(page)).toBe(0);
     });
 
     test('going back lands where the reader left', async ({page}) => {

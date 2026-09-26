@@ -1,5 +1,8 @@
-import type {Page} from '@playwright/test';
+import type {Locator, Page} from '@playwright/test';
 
 export const homePage = (page: Page) => ({
-  recipeStory: page.getByRole('region', {name: /yourself$/}).getByRole('group').first()
+  timelineStories: page.getByRole('list', {name: 'the timeline'}).getByRole('group'),
+  recipeStory: page.getByRole('region', {name: /yourself$/}).getByRole('group').first(),
+  fullerStoryOf: (story: Locator): Locator => story.getByText('the fuller story'),
+  storyTold: (story: Locator): Locator => story.getByRole('paragraph').first()
 });

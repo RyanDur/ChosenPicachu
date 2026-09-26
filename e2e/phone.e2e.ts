@@ -1,8 +1,18 @@
 import {expect, test} from '@playwright/test';
-import {galleryPage} from './__test_support';
+import {galleryPage, phone} from './__test_support';
+
+test.use(phone);
+
+test('following a link lands at the top of the next page', async ({page}) => {
+  await page.goto('');
+
+  await page.getByRole('link', {name: 'Start where the demos start'}).click();
+  await expect(page.getByRole('navigation', {name: 'demos'})).toBeVisible();
+
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+});
 
 test('the header and nav keep their height while the gallery wall is still on its way', async ({page}) => {
-  await page.setViewportSize({width: 412, height: 823});
   let hang = (): void => undefined;
   const held = new Promise<void>(resolve => {
     hang = resolve;
