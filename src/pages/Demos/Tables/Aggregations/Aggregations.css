@@ -1,7 +1,6 @@
 .aggregations {
   position: relative;
   overflow-x: auto;
-  overscroll-behavior-x: contain;
 
   .fancy-table {
     table-layout: fixed;

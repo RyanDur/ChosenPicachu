@@ -36,7 +36,7 @@ const VanillaStage: FC<Dials> = dials => {
 export const Aggregations: FC<Props> = ({world, ...dials}) => {
   useEffect(warmed, []);
 
-  return <section aria-label="live aggregations" className="aggregations">
+  return <section aria-label="live aggregations" className="aggregations contained">
     {world === 'vanilla'
       ? <VanillaStage {...dials}/>
       : <LiveTable {...dials}/>}

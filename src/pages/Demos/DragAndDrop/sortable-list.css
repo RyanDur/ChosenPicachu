@@ -10,6 +10,5 @@
 
     @media (width <= 600px) {
         overflow-x: auto;
-        overscroll-behavior-x: contain;
     }
 }

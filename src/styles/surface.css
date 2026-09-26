@@ -12,6 +12,7 @@
 .bare { appearance: none; }
 .borderless { border: none; }
 .shrinkable { min-inline-size: 0; }
+.contained { overscroll-behavior-x: contain; }
 
 .attentive {
   &:hover,

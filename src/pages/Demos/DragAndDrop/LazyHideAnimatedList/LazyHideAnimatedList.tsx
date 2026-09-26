@@ -31,7 +31,7 @@ export const LazyHideAnimatedList: FC<Props> = ({list}) => {
       onDragOver={event => event.preventDefault()}
       onDrop={event => event.preventDefault()}
       onDragLeave={() => setLanding(nothing())}
-      className="sortable-list">{
+      className="sortable-list contained">{
         order.map((item, index) =>
           <HideItem key={item}
             className={classNames('item', pushed[item] && 'pushed')}

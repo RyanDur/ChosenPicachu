@@ -14,7 +14,7 @@ export const LayerMap: FC = () =>
       machine has a mouse and a keyboard, so every arrangement a hand can make, a key can make
       too. Both axes, every layer, or the layer is not done.
     </p>
-    <table className="tutorial-table layer-map">
+    <table className="tutorial-table layer-map contained">
       <caption className="off-screen">the layers</caption>
       <thead>
         <tr>

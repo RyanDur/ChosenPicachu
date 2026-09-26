@@ -19,7 +19,7 @@ export const Clues: FC<CluesProps> = ({quote, by, clues, verdict}) => <>
       <blockquote className="quote paragraph italic">{quote}</blockquote>
       <figcaption className="attribution">{by}</figcaption>
     </figure>
-    <table className="tutorial-table">
+    <table className="tutorial-table contained">
       <caption className="off-screen">the clues</caption>
       <thead>
         <tr>

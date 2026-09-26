@@ -4,6 +4,7 @@ import {fileURLToPath} from 'node:url';
 const root = dirname(fileURLToPath(import.meta.url));
 
 export default {
+  overrides: [{files: ['src/styles/surface.css'], rules: {'property-disallowed-list': null}}],
   extends: ['stylelint-config-recommended'],
   plugins: [
     'stylelint-declaration-strict-value',
@@ -15,6 +16,10 @@ export default {
       {message: 'obsolete element — this is a strict html5 site'}
     ],
     'media-feature-range-notation': 'context',
+    'property-disallowed-list': [
+      ['/^overscroll-behavior/'],
+      {message: 'a scroller that keeps the swipe wears contained; the declaration lives in the vocabulary'}
+    ],
     'property-no-vendor-prefix': true,
     'value-no-vendor-prefix': true,
     'csstools/value-no-unknown-custom-properties': [true, {

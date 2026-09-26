@@ -4,7 +4,6 @@
   z-index: 1;
   width: 100%;
   overflow-x: auto;
-  overscroll-behavior-x: contain;
 
   .tab-list {
     display: flex;
