@@ -14,7 +14,7 @@ type Props = {
 
 export const Grip: FC<Props> = ({item, order, onArm, onArranged}) =>
   <button type="button"
-    className="grip"
+    className="grip reachable"
     aria-label={`grip for ${item}`}
     onMouseDown={onArm}
     onKeyDown={event => maybe(steps[event.key]).map(toward => {

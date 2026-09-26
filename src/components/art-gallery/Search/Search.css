@@ -42,7 +42,7 @@
   .search {
     column-gap: unset;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto var(--base-x-5) var(--base-x-5);
+    grid-template-rows: auto var(--base-x-5) minmax(var(--base-x-5), auto);
     grid-template-areas:
       'query-label query-label'
       'query query'
