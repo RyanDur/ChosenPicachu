@@ -57,6 +57,9 @@
   /* prose — a line length stated in characters */
   --measure: 75ch;
 
+  /* a finger's reach: how wide and tall a touch target stands */
+  --finger-reach: var(--base-x-5_5);
+
   /* media, documentation only: var() cannot appear inside @media */
   --no-gutters: 1547px;
   /* the widest exhibit, the tables demo's 860px table, fits beside the rail only from 1224px. No lower line holds it, so this is the round number that names no device. */

@@ -102,15 +102,19 @@
 
 
 @media (pointer: coarse) {
+  .fancy-table .header-cell {
+    height: var(--finger-reach);
+  }
+
   .resize-handle {
-    padding-inline: var(--base-x-2);
+    padding-inline: calc((var(--finger-reach) - var(--base)) / 2);
   }
 
   .fancy-table .header-cell:has(> .menu-toggle) {
-    padding-inline-end: calc(var(--base-x-5_5) + var(--base-x-1_5));
+    padding-inline-end: calc(var(--finger-reach) + var(--base-x-1_5));
   }
 
   .fancy-table .header-cell:has(> .menu-toggle):has(> .resize-handle) {
-    padding-inline-end: calc(var(--base-x-5) + var(--base-x-5_5));
+    padding-inline-end: calc(var(--finger-reach) + var(--finger-reach));
   }
 }

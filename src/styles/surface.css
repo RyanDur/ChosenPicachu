@@ -16,8 +16,8 @@
 
 @media (pointer: coarse) {
   .reachable {
-    min-block-size: var(--base-x-5_5);
-    min-inline-size: var(--base-x-5_5);
+    min-block-size: var(--finger-reach);
+    min-inline-size: var(--finger-reach);
     align-content: center;
   }
 }
