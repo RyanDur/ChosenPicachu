@@ -46,7 +46,7 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
   };
   const release = (): void => {
     if (has(drag) && has(settling)) {
-      dispatch(dropped({axis: 'column', held: column}, settling));
+      dispatch(dropped({axis: 'column', held: column}, settling, {name: column, order}));
     }
   };
 

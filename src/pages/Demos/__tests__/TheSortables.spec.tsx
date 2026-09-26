@@ -115,7 +115,7 @@ describe('the sortable list demo', () => {
     expect(screen.getByText('<EagerHideAnimatedList/>')).toBeVisible();
   });
 
-  test('a drag the browser takes over from the grip still lands', async () => {
+  test('letting go of the grip does not end a drag under way', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
     await feedIsSubscribed(feed);

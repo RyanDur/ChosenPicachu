@@ -342,6 +342,44 @@ describe('columns by hand', () => {
     expect(announced()).toEqual(['trades moved to column 3 of 7']);
   });
 
+  test('a column carried past three neighbours says nothing until it lands, then says where once', () => {
+    seat(EagerTable, 'keep static');
+
+    liftColumn('trades');
+    carryColumnOver('buys');
+    carryColumnOver('sells');
+    carryColumnOver('volume');
+    expect(announced()).toEqual([]);
+
+    dropColumn();
+
+    expect(columnOrder()).toEqual(['window', 'buys', 'sells', 'volume', 'trades', 'vwap', 'change']);
+    expect(announced()).toEqual(['trades moved to column 5 of 7']);
+  });
+
+  test('a column carried away and back to its own seat says nothing', () => {
+    seat(EagerTable, 'keep static');
+
+    liftColumn('trades');
+    carryColumnOver('buys');
+    carryColumnOver('buys');
+    dropColumn();
+
+    expect(columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
+    expect(announced()).toEqual([]);
+  });
+
+  test('the lazy table says a dropped column once, where it landed', () => {
+    seat(LazyTable, 'keep static');
+
+    liftColumn('trades');
+    carryColumnOver('buys');
+    carryColumnOver('sells');
+    dropColumn();
+
+    expect(announced()).toEqual(['trades moved to column 4 of 7']);
+  });
+
   test('a menu appears only where the column asks for one', () => {
     seat(EagerTable, 'keep static');
 
@@ -558,6 +596,19 @@ describe('rows by hand', () => {
 
     liftRow('this minute');
     carryRowOver('last 15 minutes');
+    dropRow();
+
+    expect(announced()).toEqual(['this minute moved to 3 of 5']);
+  });
+
+  test('a row carried past two neighbours says nothing until it lands, then says where once', () => {
+    seat(EagerTable, 'keep static');
+
+    liftRow('this minute');
+    carryRowOver('last 5 minutes');
+    carryRowOver('last 15 minutes');
+    expect(announced()).toEqual([]);
+
     dropRow();
 
     expect(announced()).toEqual(['this minute moved to 3 of 5']);

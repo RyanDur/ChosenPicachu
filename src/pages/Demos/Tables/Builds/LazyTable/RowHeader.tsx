@@ -51,7 +51,7 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
       const settling = settlingOfRowIn(row, movedTo(standing, row, to))(view);
       releasedRow(drag, neighbour => beside(neighbour, drag.survey));
       if (has(settling)) {
-        dispatch(dropped({axis: 'row', held: row}, settling));
+        dispatch(dropped({axis: 'row', held: row}, settling, {name: label, order: movedTo(standing, row, to)}));
       }
     }
   };

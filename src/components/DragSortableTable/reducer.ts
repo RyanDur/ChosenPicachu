@@ -1,15 +1,23 @@
+import {maybe} from '@ryandur/sand';
 import {Reducer, combined} from '@components/store';
 import {Foreign, TableAction, isTableAction} from './actions';
+import {Landing, landingReport} from './report';
 import {displacedBetween, interior, spanCrossed} from './survey';
 import {
-  TableState, awaken, dragHandle, drift, grip, ground, landColumn, landRow, lift, measure, settle, settlingFromSeat, shoveColumns, shoveRows, trade, ungrip, unsettle
+  Carry, TableState, awaken, orderAtLift, dragHandle, drift, grip, ground, landColumn, landRow, lift, measure, settle, settlingFromSeat, shoveColumns, shoveRows, trade, ungrip, unsettle
 } from './table-state';
 
 export type TableReducer = Reducer<TableState, Foreign>;
 
+const landed = (state: TableState, carry: Carry, landing: Landing): TableState =>
+  maybe(state.drag)
+    .mBind(drag => landingReport(carry.axis, orderAtLift(drag), carry.held, landing))
+    .map(report => ({...state, report}))
+    .orElse(state);
+
 const motion = (state: TableState, action: TableAction): TableState => {
   switch (action.type) {
-    case 'dropped': return unsettle(state, action.carry, action.from);
+    case 'dropped': return unsettle(landed(state, action.carry, action.landing), action.carry, action.from);
     case 'unsettled': return unsettle(state, action.target, action.from);
     case 'settled': return settle(state, action.target);
     case 'shovedColumns': return shoveColumns(state, action.names, action.shove);
@@ -19,7 +27,7 @@ const motion = (state: TableState, action: TableAction): TableState => {
       const {order} = action;
       const from = order.indexOf(action.name);
       const to = action.type === 'columnWalkedTo' ? action.to : interior(order.indexOf(action.neighbour), order.length);
-      const told = to === from ? state : {...state, report: {about: 'column' as const, name: action.name, position: to, of: order.length}};
+      const told = action.type !== 'columnWalkedTo' || to === from ? state : {...state, report: {about: 'column' as const, name: action.name, position: to, of: order.length}};
       const shoved = shoveColumns(told, displacedBetween(order, from, to), {toward: to > from ? 'start' : 'end', by: action.widths[action.name] ?? 0});
       if (action.type !== 'columnWalkedTo') {
         return shoved;
@@ -32,7 +40,7 @@ const motion = (state: TableState, action: TableAction): TableState => {
       const {standing} = action;
       const from = standing.indexOf(action.row);
       const to = action.type === 'rowWalkedTo' ? action.to : standing.indexOf(action.neighbour);
-      const told = to === from ? state : {...state, report: {about: 'row' as const, name: action.label, position: to, of: standing.length}};
+      const told = action.type !== 'rowWalkedTo' || to === from ? state : {...state, report: {about: 'row' as const, name: action.label, position: to, of: standing.length}};
       const shoved = shoveRows(told, displacedBetween(standing, from, to), {toward: to > from ? 'up' : 'down', by: action.heights[action.row] ?? 0});
       if (action.type !== 'rowWalkedTo') {
         return shoved;

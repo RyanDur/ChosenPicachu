@@ -56,6 +56,15 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
       const target = await boxOf(table.getByRole('row', {name: past}));
       await dragTo(page, grip, grip.x + grip.width / 2, target.y + target.height * 0.8);
     },
+    listenToTheMoveReport: (): Promise<void> => table.getByRole('status', {name: 'move report'}).evaluate(report => {
+      const said: string[] = [];
+      new MutationObserver(() => said.push(report.textContent ?? '')).observe(report, {childList: true, characterData: true, subtree: true});
+      Reflect.set(globalThis, 'moveReportSaid', said);
+    }),
+    whatTheMoveReportSaid: (): Promise<unknown[]> => table.getByRole('status', {name: 'move report'}).evaluate(() => {
+      const said: unknown = Reflect.get(globalThis, 'moveReportSaid');
+      return Array.isArray(said) ? said.filter(text => text !== '') : [];
+    }),
     sortBy: async (column: string, direction: string): Promise<void> => {
       await table.getByRole('button', {name: `sort ${column}`}).click();
       await table.getByRole('button', {name: direction}).click();

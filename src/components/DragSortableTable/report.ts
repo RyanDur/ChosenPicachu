@@ -1,4 +1,4 @@
-import {has} from '@ryandur/sand';
+import {Maybe, has, nothing, some} from '@ryandur/sand';
 import {Direction} from './sorting';
 
 export type Report =
@@ -18,4 +18,18 @@ export const moveReport = (report: Report): string => {
     case 'sort':
       return has(report.direction) ? `${report.name} sorted ${report.direction}` : `${report.name} sort reset`;
   }
+};
+
+export type Landing = {readonly name: string; readonly order: readonly string[]};
+
+export const landingReport = (axis: 'column' | 'row', orderAtLift: readonly string[], held: string, {name, order}: Landing): Maybe<Report> => {
+  const from = orderAtLift.indexOf(held);
+  const to = order.indexOf(held);
+  if (to === from || to < 0) {
+    return nothing();
+  }
+  const report: Report = axis === 'column'
+    ? {about: 'column', name, position: to, of: order.length}
+    : {about: 'row', name, position: to, of: order.length};
+  return some(report);
 };

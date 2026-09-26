@@ -45,7 +45,7 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
   };
   const release = (): void => {
     if (has(drag) && has(settling)) {
-      dispatch(dropped({axis: 'row', held: row}, settling));
+      dispatch(dropped({axis: 'row', held: row}, settling, {name: label, order: standing}));
     }
   };
 

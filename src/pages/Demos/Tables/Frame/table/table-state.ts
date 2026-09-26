@@ -9,12 +9,12 @@ export type {TableAction} from '@components/DragSortableTable/actions';
 export type {DemosStore, DemosMiddleware as Middleware} from '@pages/Demos/store';
 export type {Report} from '@components/DragSortableTable/report';
 export type {Arrangement, ArrangementAction} from '@components/DragSortableTable/arrangement';
-export {columnOf, seatOffset, settlingAt, settlingFromSeat, widthsOf} from '@components/DragSortableTable/table-state';
+export {columnOf, orderAtLift, seatOffset, settlingAt, settlingFromSeat, widthsOf} from '@components/DragSortableTable/table-state';
 export {lifted, columnLandingFound, drifted, gripped, handleDragged, measured, released, rowLandingFound, tradedBy} from '@components/DragSortableTable/actions';
 export {arrangementOf, arrangementReducer, columnMoved, rowMoved, sorted, standingOf} from '@components/DragSortableTable/arrangement';
 export {tableStore} from '@components/DragSortableTable/store';
 export {demosStore, feedRequested, selectMeasures} from '@pages/Demos/store';
-export {moveReport} from '@components/DragSortableTable/report';
+export {landingReport, moveReport} from '@components/DragSortableTable/report';
 
 export type ArrangementStore = Store<Arrangement, ArrangementAction>;
 

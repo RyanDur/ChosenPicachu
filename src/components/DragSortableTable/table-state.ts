@@ -158,6 +158,9 @@ export const landColumn = (state: TableState, landing?: string): TableState =>
 export const landRow = (state: TableState, landing?: string): TableState =>
   state.drag?.axis === 'row' ? {...state, drag: {...state.drag, landing}} : state;
 
+export const orderAtLift = (drag: Drag): readonly string[] =>
+  Object.keys(drag.axis === 'column' ? drag.survey.columnWidths : drag.survey.rowHeights);
+
 export const ground = ({drag: _drag, ...state}: TableState): TableState => state;
 
 export const seatOffset = (state: TableState, order: readonly string[], standing: readonly string[]): Drift | undefined => {

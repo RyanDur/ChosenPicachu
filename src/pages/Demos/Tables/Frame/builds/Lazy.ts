@@ -28,10 +28,12 @@ import {
   demosStore,
   drifted,
   feedRequested,
+  landingReport,
   Report,
   lifted,
   MountedTable,
   moveReport,
+  orderAtLift,
   released,
   rowLandingFound,
   rowMoved,
@@ -85,7 +87,6 @@ const mount = (document: Document, table: HTMLTableElement, body: HTMLTableSecti
     const current = columns();
     const from = current.indexOf(name);
     arrangement.dispatch(columnMoved(name, to));
-    report({about: 'column', name, position: to, of: current.length});
     shoveColumns(mounted, displacedBetween(current, from, to), {toward: to > from ? 'start' : 'end', by: widths[name] ?? 0});
   };
   const columnTo = (name: string, to: number, widths: Readonly<Record<string, number>>): void => {
@@ -93,6 +94,7 @@ const mount = (document: Document, table: HTMLTableElement, body: HTMLTableSecti
     const from = current.indexOf(name);
     const over = spanCrossed(current, widths, from, to);
     columnShoving(name, to, widths);
+    report({about: 'column', name, position: to, of: current.length});
     settleColumn(mounted, name, settlingFromSeat({x: to > from ? -over : over, y: 0}));
   };
   const columnBeside = (name: string, neighbour: string): void => {
@@ -117,7 +119,6 @@ const mount = (document: Document, table: HTMLTableElement, body: HTMLTableSecti
     const before = standing();
     const to = before.indexOf(neighbour);
     arrangement.dispatch(rowMoved(row, to, before));
-    report({about: 'row', name: row, position: to, of: before.length});
     rowShoving(row, before, to, hand.state.drag?.survey.rowHeights ?? {});
   };
 
@@ -227,6 +228,7 @@ const mount = (document: Document, table: HTMLTableElement, body: HTMLTableSecti
       return;
     }
     landed();
+    landingReport(drag.axis, orderAtLift(drag), drag.held, {name: drag.held, order: drag.axis === 'column' ? columns() : standing()}).map(report);
     const from = settlingAt(hand.state, columns(), standing());
     hand.dispatch(released());
     if (drag.axis === 'column') {

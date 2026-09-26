@@ -19,6 +19,20 @@ for (const {name, at, table} of stages) {
   });
 }
 
+for (const {name, at, table} of stages) {
+  test(`a column dragged past two neighbours is reported once, where it lands, in ${name}`, async ({page}) => {
+    await page.goto(at);
+    const trades = dragSortTable(page, table(page));
+    await expect(trades.columnHeader('trades')).toBeVisible();
+    await trades.listenToTheMoveReport();
+
+    await trades.dragColumnPast('trades', 'sells');
+    await expect.poll(() => trades.columnOrder()).toEqual(['window', 'buys', 'sells', 'trades', 'volume', 'vwap', 'change']);
+
+    await expect.poll(() => trades.whatTheMoveReportSaid()).toEqual(['trades moved to column 4 of 7']);
+  });
+}
+
 test('a menu choice sorts, and never lifts the column', async ({page}) => {
   const vanilla = stages[1];
   await page.goto(vanilla.at);

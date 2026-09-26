@@ -52,7 +52,7 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
       const settling = settlingOfColumnIn(column, movedTo(order, column, to))(view);
       releasedColumn(drag, neighbour => beside(neighbour, drag.survey));
       if (has(settling)) {
-        dispatch(dropped({axis: 'column', held: column}, settling));
+        dispatch(dropped({axis: 'column', held: column}, settling, {name: column, order: movedTo(order, column, to)}));
       }
     }
   };
