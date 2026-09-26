@@ -42,7 +42,7 @@
   .search {
     column-gap: unset;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 20% 1fr 30%;
+    grid-template-rows: auto var(--base-x-5) var(--base-x-5);
     grid-template-areas:
       'query-label query-label'
       'query query'
@@ -51,11 +51,5 @@
     .submit-query {
       margin-left: var(--base);
     }
-  }
-}
-
-@media (width <= 600px) {
-  .search {
-    grid-template-rows: auto var(--base-x-5) var(--base-x-5);
   }
 }

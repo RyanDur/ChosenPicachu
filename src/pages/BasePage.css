@@ -154,7 +154,7 @@
   #root {
     grid-template-columns: 1fr;
     grid-template-rows:
-      var(--base-x-10)
+      minmax(var(--base-x-10), auto)
       var(--base-x-6)
       auto
       1fr
@@ -169,7 +169,7 @@
     .app-header {
       padding: 0 var(--base-x-2_5);
       grid-template-columns: 1fr 1fr;
-      grid-auto-rows: var(--base-x-10);
+      grid-auto-rows: minmax(var(--base-x-10), auto);
       grid-template-areas: 'title search';
 
       .gallery-search {
@@ -229,7 +229,7 @@
 
   #root:not(:has(.app-footer)) {
     grid-template-rows:
-      var(--base-x-10)
+      minmax(var(--base-x-10), auto)
       var(--base-x-6)
       auto
       1fr;

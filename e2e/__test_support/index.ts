@@ -5,5 +5,5 @@ export {piecePage} from './piece';
 export {dragSortTable, stages, type Stage} from './frame';
 export {usersPage, type Person} from './users';
 export {violationsOf} from './axe';
-export {phone, iPhone, iPadSplitView, iPadUpright, iPadSideways, iPad13Upright, iPad11Upright, desktop} from './devices';
+export {phone, phoneSideways, iPhone, iPadSplitView, iPadUpright, iPadSideways, iPad13Upright, iPad11Upright, desktop} from './devices';
 export {documentScrollY, paneScrollTop} from './scrolling';
