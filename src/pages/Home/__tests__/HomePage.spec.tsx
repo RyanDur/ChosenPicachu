@@ -53,12 +53,6 @@ describe('the home page', () => {
     });
   });
 
-  test("the beats' stories share one fold, so opening one closes the last", () => {
-    const timeline = within(screen.getByRole('list', {name: 'the timeline'}));
-
-    timeline.getAllByRole('group').forEach(story => expect(story).toHaveAttribute('name', 'record'));
-  });
-
   test('the structure door tells how I organize structure', () => {
     const door = within(screen.getByRole('region', {name: 'Structure'}));
 

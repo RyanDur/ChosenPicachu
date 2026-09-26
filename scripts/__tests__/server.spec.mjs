@@ -15,13 +15,13 @@ const stageUp = () => new Promise((resolve, reject) => {
   });
 });
 
-const until = (life, check, timeout = 5000) => new Promise((resolve, reject) => {
+const until = (life, awaited, check) => new Promise((resolve, reject) => {
   const started = Date.now();
   const look = () => {
     const gone = life.gone ?? '';
     if (gone !== '') return reject(new Error(gone));
     if (check() === true) return resolve();
-    if (Date.now() - started > timeout) return reject(new Error('gave up waiting'));
+    if (Date.now() - started > 2000) return reject(new Error(`gave up waiting for ${awaited}`));
     setTimeout(look, 20);
   };
   look();
@@ -67,10 +67,10 @@ describe('the stub stage', () => {
     try {
       const client = await feedClient(port);
       client.write(handshake);
-      await until(life, () => client.heard().includes('101 Switching Protocols'));
+      await until(life, 'the handshake to be accepted', () => client.heard().includes('101 Switching Protocols'));
       client.write(maskedText('subscribe'));
       client.write(unreadableFrame);
-      await until(life, () => life.complaints.join('').includes('a feed client sent what the stage cannot read'));
+      await until(life, 'the stage to complain about the frame', () => life.complaints.join('').includes('a feed client sent what the stage cannot read'));
       client.hangUp();
 
       const answer = await answerTo(port, 'GET /ChosenPicachu/env.js HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n');

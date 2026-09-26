@@ -1,9 +1,5 @@
 import {Page, expect, test} from '@playwright/test';
-import {desktop, iPadSideways, iPadUpright, phone} from './__test_support';
-
-const documentScrollY = (page: Page): Promise<number> => page.evaluate(() => window.scrollY);
-
-const paneScrollTop = (page: Page): Promise<number> => page.getByRole('main').evaluate(main => main.scrollTop);
+import {desktop, documentScrollY, iPadSideways, iPadUpright, paneScrollTop, phone} from './__test_support';
 
 const scrolled = async (page: Page): Promise<{document: number; pane: number}> =>
   ({document: await documentScrollY(page), pane: await paneScrollTop(page)});
