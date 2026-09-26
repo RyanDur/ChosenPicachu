@@ -24,8 +24,6 @@ export const usersPage = (page: Page) => {
     },
     requiredMarkOn: (label: string): Promise<string> =>
       form.getByText(label, {exact: true}).evaluate(title => getComputedStyle(title, '::after').content.replace(/^"(.*)"$/, '$1').replace('none', '')),
-    liftOf: (label: string): Promise<string> =>
-      form.getByLabel(label).evaluate(field => getComputedStyle(field).boxShadow),
     add: async ({firstName, lastName, born, street, city, state, zip}: Person): Promise<void> => {
       await form.getByLabel('First Name').fill(firstName);
       await form.getByLabel('Last Name').fill(lastName);

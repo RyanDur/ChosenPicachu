@@ -245,10 +245,24 @@
   }
 }
 
-@media (max-width: 600px), (max-width: 1000px) and (max-height: 600px) {
+@media (max-width: 600px), (max-width: 1000px) and (max-height: 600px), (pointer: coarse) {
   #root {
     height: auto;
     min-height: 100dvh;
+
+    .app-main {
+      overflow: visible;
+      height: auto;
+    }
+
+    .side-nav {
+      overflow: visible;
+    }
+  }
+}
+
+@media (max-width: 600px), (max-width: 1000px) and (max-height: 600px) {
+  #root {
     grid-template-rows: auto auto auto 1fr auto;
 
     .app-header {
@@ -258,8 +272,6 @@
     }
 
     .app-main {
-      overflow: visible;
-      height: auto;
       min-width: 0;
 
       > * {
@@ -268,8 +280,6 @@
     }
 
     .side-nav {
-      overflow: visible;
-
       .app-navigation {
         flex-wrap: wrap;
       }

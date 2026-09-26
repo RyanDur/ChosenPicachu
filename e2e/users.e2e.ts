@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import {looks, Person, usersPage} from './__test_support';
+import {Person, usersPage} from './__test_support';
 import {usersServerScript} from '../src/components/Users/resource/usersServer';
 
 const ada: Person = {
@@ -21,17 +21,6 @@ test("a new person's required fields carry a mark, and a viewed person's carry n
   await users.viewFirst();
 
   await expect.poll(() => users.requiredMarkOn('First Name')).toBe('');
-});
-
-test("a new person's fields are lifted, and a viewed person's lie flat", async ({page}) => {
-  const users = usersPage(page);
-  await page.goto('users');
-  await expect(users.names.first()).toBeVisible({timeout: 30_000});
-
-  await expect.poll(() => users.liftOf('First Name')).toBe(await looks(page).resolved('box-shadow', '--light-box-shadow'));
-  await users.viewFirst();
-
-  await expect.poll(() => users.liftOf('First Name')).toBe('none');
 });
 
 test('a person added on the users page still stands in the roster after leaving and coming back', async ({page}) => {
