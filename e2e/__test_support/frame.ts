@@ -31,6 +31,8 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
   const columnHeader = (name: string): Locator => table.getByRole('columnheader', {name});
   return {
     columnHeader,
+    sortToggle: (name: string): Locator => table.getByRole('button', {name: `sort ${name}`}),
+    sortMenu: (name: string): Locator => table.getByLabel(`sort ${name} by`),
     columnWidth: async (name: string): Promise<number> => (await boxOf(columnHeader(name))).width,
     pressBesideEdgeAndDrag: async (name: string, {besideBy, by}: {besideBy: number; by: number}): Promise<void> => {
       const handle = table.getByRole('button', {name: new RegExp(`^resize ${name}`)});

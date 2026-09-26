@@ -25,8 +25,11 @@ export const usersPage = (page: Page) => {
       }));
     return middles.map(middle => new Set(middles.filter(other => other < middle - 20).map(Math.round)).size);
   };
+  const firstRowActions = page.getByRole('button', {name: /^Actions for /}).first();
   return {
     names,
+    firstRowActions,
+    actionsOf: async (toggle = firstRowActions) => page.getByLabel(`${await toggle.getAttribute('aria-label')}, chosen`),
     rowsOfTheHomeAddress,
     columns,
     scrollRosterSideways: async (): Promise<void> => {
@@ -40,7 +43,7 @@ export const usersPage = (page: Page) => {
     },
     rowOf: ({firstName, lastName}: Person) => page.getByRole('rowheader', {name: `${firstName} ${lastName}`}),
     viewFirst: async (): Promise<void> => {
-      await page.getByRole('button', {name: /^Actions for /}).first().click();
+      await firstRowActions.click();
       await page.getByRole('link', {name: 'View'}).click();
     },
     requiredMarkOn: (label: string): Promise<string> =>

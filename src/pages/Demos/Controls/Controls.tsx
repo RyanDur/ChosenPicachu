@@ -41,10 +41,12 @@ export type ControlsProps = Dials & {
   onMotion: (motion: Motion) => void;
 };
 
-export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({copy, pace, origin, motion, onPace, onOrigin, onMotion, children}) =>
-  <Disclosure label="settings" className="demo-settings" startsOpen={roomToStandOpen()}
+export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({copy, pace, origin, motion, onPace, onOrigin, onMotion, children}) => {
+  const heading = `${copy.kind}-controls-heading`;
+  return <Disclosure label="settings" className="demo-settings" startsOpen={roomToStandOpen}
     prompt={<>settings{' '}<code className="readout caption">{copy.readout(pace, origin, motion)}</code></>}>
-    <section aria-label={`${copy.kind} controls`} className="controls">
+    <section aria-labelledby={heading} className="controls">
+      <h3 id={heading} className="off-screen">{copy.kind} controls</h3>
       <ul className="dials">
         <li className="control">
           <span className="axis caption uppercase">pace</span>
@@ -86,3 +88,4 @@ export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({c
       {children}
     </section>
   </Disclosure>;
+};

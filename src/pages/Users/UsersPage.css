@@ -73,6 +73,12 @@
   .cell.works-from-home { width: 22%; }
 }
 
+@media (pointer: coarse) {
+  .user-candidates .last-column {
+    padding-inline-end: calc(var(--finger-reach) + var(--base));
+  }
+}
+
 @media (width <= 600px) {
   .user-info {
     width: 100%;

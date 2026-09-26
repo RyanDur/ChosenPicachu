@@ -5,7 +5,7 @@ import './Disclosure.css';
 type Props = {
   label: string;
   prompt: ReactNode;
-  startsOpen?: boolean;
+  startsOpen?: boolean | (() => boolean);
   className?: string;
 };
 

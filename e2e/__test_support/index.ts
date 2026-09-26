@@ -9,4 +9,5 @@ export {phone, phoneSideways, iPhone, iPadSplitView, iPadUpright, iPadSideways, 
 export {documentScrollY, paneScrollTop} from './scrolling';
 export {siteFrame} from './site';
 export {tablesDemo} from './tables';
-export {fingerTap} from './finger';
+export {fingerTap, fingertipMiss} from './finger';
+export {sortableList} from './lists';

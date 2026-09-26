@@ -10,13 +10,14 @@ export const galleryPage = (page: Page) => {
     pageNumber: page.getByLabel(/^Page #/),
     pageSize: page.getByLabel(/Per Page$/),
     settings: page.getByRole('group', {name: 'gallery settings'}),
-    openSettings: (): Promise<void> => page.getByRole('group', {name: 'gallery settings'}).getByText(/page \d+/).click(),
-    showSettings: async (): Promise<void> => {
+    openSettings: async (): Promise<void> => {
       if (await searchField.isHidden()) await page.getByRole('group', {name: 'gallery settings'}).getByText(/page \d+/).click();
       await searchField.waitFor();
       await page.getByRole('group', {name: 'gallery settings'})
         .evaluate(fold => Promise.all(fold.getAnimations({subtree: true}).map(motion => motion.finished)));
     },
+    submitSearch: page.getByRole('button', {name: 'submit search'}),
+    resetSearch: page.getByRole('button', {name: 'reset search'}),
     nextPage: page.getByRole('navigation', {name: 'pagination'}).getByRole('link', {name: 'NEXT'}),
     filters: page.getByRole('complementary', {name: 'filters'}),
     searchLabelReadsInFull: (): Promise<boolean> => searchField.evaluate(field => {

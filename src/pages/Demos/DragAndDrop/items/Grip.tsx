@@ -16,7 +16,7 @@ export const Grip: FC<Props> = ({item, order, onArm, onArranged}) =>
   <button type="button"
     className="grip reachable"
     aria-label={`grip for ${item}`}
-    onMouseDown={onArm}
+    onPointerDown={onArm}
     onKeyDown={event => maybe(steps[event.key]).map(toward => {
       event.preventDefault();
       const lane = event.currentTarget.closest('li');

@@ -47,7 +47,8 @@ export type BannerControlsProps = {
 };
 
 export const BannerControls: FC<BannerControlsProps> = ({side, align, enter, stack, onSide, onAlign, onEnter, onStack}) =>
-  <section aria-label="banner controls" className="controls">
+  <section aria-labelledby="banner-controls-heading" className="controls">
+    <h3 id="banner-controls-heading" className="off-screen">banner controls</h3>
     <ul className="dials">
       <li className="control">
         <span className="axis caption uppercase">side</span>

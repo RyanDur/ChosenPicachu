@@ -17,7 +17,7 @@ const seats = (): string[] =>
     .getAllByRole('listitem').map(({textContent}) => textContent ?? '');
 
 const lifted = (item: string) => {
-  fireEvent.mouseDown(screen.getByLabelText(`grip for ${item}`));
+  fireEvent.pointerDown(screen.getByLabelText(`grip for ${item}`), {pointerType: 'touch'});
   fireEvent.dragStart(screen.getByText(item), {dataTransfer: {effectAllowed: ''}});
 };
 
@@ -36,6 +36,18 @@ const nativeRecipe = async (): Promise<HTMLElement> => {
 };
 
 describe('the sortable list demo', () => {
+  test('a finger pressed on a grip readies its item to be dragged', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=dragAndDrop')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    const first = within(screen.getByRole('list', {name: 'sortable list'})).getAllByRole('listitem')[0];
+    expect(first).toHaveAttribute('draggable', 'false');
+
+    fireEvent.pointerDown(screen.getByLabelText('grip for A'), {pointerType: 'touch'});
+
+    expect(first).toHaveAttribute('draggable', 'true');
+  });
+
   test('the open cards travel in the url', async () => {
     const feed = await listeningFeed();
 
