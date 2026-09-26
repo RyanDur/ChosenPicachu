@@ -6,7 +6,7 @@ import {gzipSync} from 'node:zlib';
 import {is} from '@ryandur/sand';
 import {WebSocketServer} from 'ws';
 
-const port = 4517;
+const port = Number(process.env.STAGE_PORT ?? 4517);
 const here = dirname(fileURLToPath(import.meta.url));
 const dist = resolve(here, '../../dist');
 const fixtures = join(here, 'fixtures');
@@ -38,7 +38,7 @@ const server = createServer((request, response) => {
 
   if (url.split('?')[0].endsWith('/env.js')) {
     return send(200, `window.__env = ${JSON.stringify({
-      tradeFeed: `ws://localhost:${port}/ws-feed`,
+      tradeFeed: `ws://localhost:${server.address().port}/ws-feed`,
       tradeProduct: 'BTC-USD',
       tradeHistory: '/trade-history',
       aicDomain: '/aic',
@@ -84,10 +84,11 @@ const server = createServer((request, response) => {
 const feed = new WebSocketServer({server, path: '/ws-feed'});
 feed.on('connection', socket => {
   let at = 0;
+  socket.on('error', error => console.error(`a feed client sent what the stage cannot read: ${error.message}`));
   socket.once('message', () => {
     const replay = setInterval(() => socket.send(frames[at++ % frames.length]), 80);
     socket.on('close', () => clearInterval(replay));
   });
 });
 
-server.listen(port, () => console.log(`stub ready on ${port}`));
+server.listen(port, () => console.log(`stub ready on ${server.address().port}`));
