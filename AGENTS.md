@@ -13,9 +13,26 @@ A React and TypeScript site whose home page states its own principles in three d
 
 - Unit and component specs: `npx vitest run`. Journeys: `npx playwright test`, against the stub stage, `scripts/lighthouse/server.mjs` on port 4517, which Playwright starts or reuses.
 - The hooks run the gates. Pre-commit runs `oxlint`, `stylelint`, `eslint`, `tsc -b` and vitest; pre-push builds and walks every journey. Run any check by hand when you need it; the hooks make sure it runs.
+- Tests pin behaviour, what a reader does or meets, not looks or CSS values. Looks are checked by screenshot before a commit. A sentence a card promises has a test.
 - Tests find what a reader finds: by role, label and text, never by class. Page objects live in the owner's `__test_support`.
 - A test that passes only on retry or alone is a defect. Before blaming a test, check the machine: `pmset -g adapter` should show the full charger, and a killed Playwright run can leave its stage server on 4517 for later runs to reuse.
 - While someone else verifies from this checkout, leave its `dist/` alone: build with `--outDir` somewhere else.
+
+## The site's look
+
+- The site teaches by example. The frame is neutral and plain; the exhibits are polished. The home page is Ryan's philosophy of writing frontend code; the demos grow in complexity, accordions first.
+- Anything the frame owns (rail, header, footer, dialogs, controls) is dressed from the frame's own words: `backdrop` ground, `field` bars parted by the `--base` gap, `bare card` inputs under a bold `field` label bar, `path attentive field reachable` for a bar with a word, `icon-button borderless field attentive reachable` for an icon, `hairline-outline` for a secondary, `alarm-ink` for a refusal. The gap is the only empty space a reader sees; parts fill their cells edge to edge. The frame never wears `card`, `rounded-corners`, `lifted`, bordered inputs or filled buttons; those belong to the exhibits.
+- A primary button is the site's inverted bar, `--field-inverse` with the `--field` word, and every state is drawn: approach on hover and focus, the `--ring` on focus-visible, `--press-glow` on active, `--smoke` or `--ink-muted` when disabled, with no hover.
+- Markup is form and HTML5 elements only: `dialog`, `form`, `fieldset` with an off-screen `legend`, `label`, `textarea`, `input`, `output`, `button`, `hgroup`, `section` with a heading. A `footer` inside a dialog is a second landmark; an unnamed `section` owes a heading; a group of controls is a `fieldset`.
+- Forms keep their niceties: Enter submits, Shift+Enter makes a new line in a textarea, an empty field is refused in the platform's own words, the phone keyboard's key reads "send", and the contact field offers the reader's email.
+- A modal fits the view and never scrolls. On a phone it fills the view, laid out for upright and sideways, and the field is the part that grows. The reset leaves the browser's dialog positioning and backdrop alone and zeroes only its padding and border.
+- Text flows: explanatory prose has no line-length clamp, and each run takes the room its row gives it, as the recipe steps do. Look at the other demos before writing a layout rule.
+- Touch targets are 44px, gated on `pointer: coarse`, never on width. Check both orientations.
+- The site's bold is 600 everywhere, and the frame's sheets declare no font.
+- The platform first: `details` and `popover` before script, and script as the enhancement, so a failure leaves a working page (a button with an invoker command keeps a click fallback).
+- Every fold moves by transition, never animation. Reduced motion is honoured once, in the reset, and then every fold opens at once.
+- Every gesture has a keyboard twin, in the order the eye reads: one order for the eye and the screen reader.
+- Diagrams grow to their desktop size and no further, sit centred in a wider column, shrink to a phone's column with their words held at caption size, and draw with non-scaling hairlines.
 
 ## Code style
 
@@ -26,8 +43,10 @@ A React and TypeScript site whose home page states its own principles in three d
 
 ## Commits and pushes
 
-- Only reader value becomes a story on the board; tooling is done directly.
-- One commit per fix. A card's batch goes out in one push, after the designer accepts it.
+- Only reader value becomes a story on the board; tooling is done directly. The designer drafts cards, and a card is promoted when agreed. A Done card is never reopened: a change of direction is a new card.
+- The dev works on local main so Ryan can watch, uses a worktree only to push a slice ahead, and says "ready" with a clean tree. The designer verifies on main, builds into the checkout's `dist/` and holds it until the verdict. Nobody runs journeys while a push is in flight.
+- One commit per fix. A card's batch goes out in one push, after the designer accepts it. Review findings, violations included, are answered in one batch per card.
+- A card is Done when it is in production, every pipeline job is green including the review, and every review finding is fixed or argued in a commit message until the reviewer agrees.
 - A commit quotes the review finding it answers, and a decline gives its reason in the commit: the pipeline's reviewer reads the log.
 - Linear history: no merge commits.
 
