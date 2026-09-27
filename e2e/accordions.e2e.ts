@@ -1,4 +1,5 @@
 import {Locator, Page, expect, test} from '@playwright/test';
+import {codedStepLayouts, desktop} from './__test_support';
 
 const folds = (page: Page): Locator =>
   page.getByRole('article').filter({has: page.getByRole('heading', {name: 'Exclusive accordion using details elements'})}).getByRole('group');
@@ -60,3 +61,19 @@ test('opening a second details fold closes the first, from the keyboard too', as
   await expect(storyOf(second)).toBeVisible();
   await expect(storyOf(first)).toBeHidden();
 });
+
+for (const {reader, device, layout} of [
+  {reader: 'a phone held upright', device: {viewport: {width: 390, height: 844}, hasTouch: true}, layout: 'code below prose'},
+  {reader: 'a desktop', device: desktop, layout: 'code beside prose'}
+] as const) {
+  test.describe(reader, () => {
+    test.use(device);
+
+    test(`reads the accordions explanation with the ${layout} in every run`, async ({page}) => {
+      await page.goto('demos/?tab=accordions');
+      await expect(page.getByRole('code').first()).toBeVisible();
+
+      await expect.poll(async () => [...new Set(await codedStepLayouts(page))]).toEqual([layout]);
+    });
+  });
+}

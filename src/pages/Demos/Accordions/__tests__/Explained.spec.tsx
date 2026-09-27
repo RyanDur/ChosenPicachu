@@ -25,3 +25,34 @@ describe('the accordions tab', () => {
     expect(within(explained).getAllByRole('heading', {level: 4}).map(build => build.textContent)).toEqual(builds);
   });
 });
+
+describe('the accordions explanation', () => {
+  const codeIn = async (part: string): Promise<string[]> => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    const explained = await screen.findByRole('region', {name: part});
+    return within(explained).getAllByRole('code').map(code => code.textContent ?? '');
+  };
+
+  test.each([
+    [parts[0], /Neither build has any script/],
+    [parts[1], /There is no script here either/]
+  ])('should say under "%s" that its builds have no script', async (part, says) => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const explained = await screen.findByRole('region', {name: part});
+
+    expect(within(explained).getByText(says)).toBeInTheDocument();
+  });
+
+  test('should show the one attribute that keeps one details open, as the build writes it', async () => {
+    expect((await codeIn(parts[1])).join('\n')).toContain('name="exclusive-toggle-accordion"');
+  });
+
+  test('should show the state, the grid rows and :has that let the React builds slide', async () => {
+    const code = (await codeIn(parts[2])).join('\n');
+
+    expect(code).toContain('useState');
+    expect(code).toContain('grid-template-rows: min-content 0fr');
+    expect(code).toContain('&:has(:checked)');
+  });
+});
