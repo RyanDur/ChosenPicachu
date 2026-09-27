@@ -47,15 +47,8 @@ const fieldFirst = (event: SyntheticEvent<HTMLDialogElement>) => {
   }
 };
 
-const said = (sending: Sending): string => {
-  switch (sending.state) {
-    case 'sending':
-      return 'Sending the note to GitHub.';
-    case 'refused':
-      return `${troubleWith('GitHub')(sending.why)}. Your words are still here.`;
-  }
-  return '';
-};
+const said = (sending: Exclude<Sending, {state: 'writing'}>): string =>
+  sending.state === 'sending' ? 'Sending the note to GitHub.' : `${troubleWith('GitHub')(sending.why)}. Your words are still here.`;
 
 export const Feedback: FC = () => {
   const {feedbackToken} = useEnv();
@@ -102,7 +95,7 @@ export const Feedback: FC = () => {
   return <>
     <p className="feedback-item field">
       <button type="button" className="feedback-open path rail-aside bold attentive field reachable" commandfor="feedback" command="show-modal" onClick={opening}>Feedback</button>
-      <output className="feedback-sent caption">{has(draft.sentTo) && <>Sent. <a className="signpost" href={draft.sentTo}>Read it on GitHub</a></>}</output>
+      {has(draft.sentTo) && <output className="feedback-sent caption">Sent. <a className="signpost" href={draft.sentTo}>Read it on GitHub</a></output>}
     </p>
     <dialog id="feedback" className="feedback-dialog backdrop" closedby="any" aria-labelledby="feedback-title" onClick={closesOnTheVeil} onToggle={fieldFirst}>
       <form className="feedback-form" onSubmit={send}>
@@ -121,8 +114,9 @@ export const Feedback: FC = () => {
           <input className="feedback-reach bare card borderless paragraph" type="text" name="reach" autoComplete="email" enterKeyHint="send" value={draft.reach}
             onChange={event => dispatch(reachEdited(event.currentTarget.value))}/>
         </label>
-        <output className={classNames('feedback-status', 'field', 'paragraph', draft.sending.state === 'refused' && 'alarm-ink')}>{said(draft.sending)}</output>
         <section className="feedback-actions field">
+          {draft.sending.state !== 'writing' &&
+            <output className={classNames('feedback-status', 'paragraph', draft.sending.state === 'refused' && 'alarm-ink')}>{said(draft.sending)}</output>}
           <button type="button" className="feedback-cancel path sub-title bold attentive field reachable" commandfor="feedback" command="close" onClick={commandWithoutInvokers}>Cancel</button>
           <button type="submit" className="feedback-send path sub-title bold borderless reachable" disabled={draft.sending.state === 'sending'}>Send</button>
         </section>
