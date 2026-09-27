@@ -27,8 +27,9 @@ export const github = async (page: Page, {thread, refuse}: GitHub = {}): Promise
 
 export const feedbackOn = (page: Page) => {
   const dialog = page.getByRole('dialog', {name: 'Feedback'});
+  const open = page.getByRole('button', {name: 'Feedback', exact: true});
   return {
-    open: page.getByRole('navigation', {name: 'site'}).getByRole('button', {name: 'Feedback'}),
+    open,
     dialog,
     words: dialog.getByRole('textbox', {name: 'What did you find?'}),
     reach: dialog.getByRole('textbox', {name: 'A way to reach you, if you like'}),
@@ -36,6 +37,6 @@ export const feedbackOn = (page: Page) => {
     cancel: dialog.getByRole('button', {name: 'Cancel'}),
     close: dialog.getByRole('button', {name: 'Close'}),
     thread: dialog.getByRole('link', {name: 'this page’s thread on GitHub'}),
-    sent: page.getByRole('navigation', {name: 'site'}).getByRole('status')
+    sent: page.getByRole('paragraph').filter({has: open}).getByRole('status')
   };
 };

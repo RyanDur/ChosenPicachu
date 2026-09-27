@@ -76,9 +76,11 @@ export const Feedback: FC = () => {
       .catch((refusal: unknown) => setSending({state: 'refused', why: refusal instanceof Error ? refusal.message : 'GitHub did not answer'}));
   };
 
-  return <li className="feedback-item">
-    <button type="button" className="path attentive field reachable" commandfor="feedback" command="show-modal" onClick={opening}>Feedback</button>
-    {has(sentTo) && <output className="feedback-sent caption">Sent. <a className="signpost" href={sentTo}>Read it on GitHub</a></output>}
+  return <>
+    <p className="feedback-item field">
+      <button type="button" className="feedback-open path attentive field reachable" commandfor="feedback" command="show-modal" onClick={opening}>Feedback</button>
+      {has(sentTo) && <output className="feedback-sent caption">Sent. <a className="signpost" href={sentTo}>Read it on GitHub</a></output>}
+    </p>
     <dialog id="feedback" className="feedback card rounded-corners" closedby="any" aria-labelledby="feedback-title" onClick={closesOnTheVeil} onToggle={fieldFirst}>
       <form className="feedback-form" onSubmit={send}>
         <hgroup className="feedback-heading">
@@ -98,5 +100,5 @@ export const Feedback: FC = () => {
         <button type="button" className="feedback-cancel reachable" commandfor="feedback" command="close">Cancel</button>
       </form>
     </dialog>
-  </li>;
+  </>;
 };
