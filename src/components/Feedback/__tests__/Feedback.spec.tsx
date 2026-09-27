@@ -19,17 +19,15 @@ describe('Feedback in a browser without invoker commands', () => {
     expect(screen.getByRole('dialog', {name: 'Feedback'})).toBeVisible();
   });
 
-  for (const way of ['Cancel', 'Close']) {
-    test(`should close the dialog from ${way}`, async () => {
-      render(<TestApp at="/"/>);
-      await site.pageTitled();
-      await userEvent.click(screen.getByRole('button', {name: 'Feedback'}));
+  test('should close the dialog from Cancel', async () => {
+    render(<TestApp at="/"/>);
+    await site.pageTitled();
+    await userEvent.click(screen.getByRole('button', {name: 'Feedback'}));
 
-      await userEvent.click(within(screen.getByRole('dialog', {name: 'Feedback'})).getByRole('button', {name: way}));
+    await userEvent.click(within(screen.getByRole('dialog', {name: 'Feedback'})).getByRole('button', {name: 'Cancel'}));
 
-      expect(screen.queryByRole('dialog', {name: 'Feedback'})).not.toBeInTheDocument();
-    });
-  }
+    expect(screen.queryByRole('dialog', {name: 'Feedback'})).not.toBeInTheDocument();
+  });
 });
 
 describe('Feedback without a token', () => {

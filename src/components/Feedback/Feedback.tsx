@@ -9,7 +9,6 @@ import {noteRefused, noteSending, noteSent, opened, reachEdited, threadFound, th
 import {draftAt, feedbackReducer, Sending} from './reducer';
 import {classNames} from '@components/class-names';
 import './Feedback.css';
-import cancelIcon from '../../assets/icons/cancel.svg?url';
 
 const invokersMissing = not('command' in HTMLButtonElement.prototype);
 const lightDismissMissing = not('closedBy' in HTMLDialogElement.prototype);
@@ -112,9 +111,6 @@ export const Feedback: FC = () => {
           <p className="caption">It goes to <a className="signpost" href={draft.thread}>this page’s thread on GitHub</a>, where you can read what others said.</p>
           <p className="paragraph">About: {pageName}</p>
         </hgroup>
-        <button type="button" className="feedback-close button icon-button field attentive reachable" commandfor="feedback" command="close" aria-label="Close" onClick={commandWithoutInvokers}>
-          <img className="icon" src={cancelIcon} width="24" height="24" alt=""/>
-        </button>
         <label className="feedback-field">
           <span className="feedback-label field bold">What did you find?</span>
           <textarea className="feedback-words bare card borderless paragraph" name="words" required enterKeyHint="send" value={draft.words}
@@ -126,8 +122,10 @@ export const Feedback: FC = () => {
             onChange={event => dispatch(reachEdited(event.currentTarget.value))}/>
         </label>
         <output className={classNames('feedback-status', 'field', 'paragraph', draft.sending.state === 'refused' && 'alarm-ink')}>{said(draft.sending)}</output>
-        <button type="button" className="feedback-cancel path sub-title bold attentive field reachable" commandfor="feedback" command="close" onClick={commandWithoutInvokers}>Cancel</button>
-        <button type="submit" className="feedback-send path sub-title bold borderless reachable" disabled={draft.sending.state === 'sending'}>Send</button>
+        <section className="feedback-actions field">
+          <button type="button" className="feedback-cancel path sub-title bold attentive field reachable" commandfor="feedback" command="close" onClick={commandWithoutInvokers}>Cancel</button>
+          <button type="submit" className="feedback-send path sub-title bold borderless reachable" disabled={draft.sending.state === 'sending'}>Send</button>
+        </section>
       </form>
     </dialog>
   </>;

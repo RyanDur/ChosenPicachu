@@ -36,7 +36,6 @@ export const feedbackOn = (page: Page) => {
     reach: dialog.getByRole('textbox', {name: 'A way to reach you, if you like'}),
     send: dialog.getByRole('button', {name: 'Send'}),
     cancel: dialog.getByRole('button', {name: 'Cancel'}),
-    close: dialog.getByRole('button', {name: 'Close'}),
     thread: dialog.getByRole('link', {name: 'this page’s thread on GitHub'}),
     sent: page.getByRole('paragraph').filter({has: open}).getByRole('status')
   };

@@ -23,7 +23,6 @@ for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader:
 
 for (const {way, closing} of [
   {way: 'Escape', closing: async (page: import('@playwright/test').Page) => page.keyboard.press('Escape')},
-  {way: 'the ×', closing: async (page: import('@playwright/test').Page) => feedbackOn(page).close.click()},
   {way: 'Cancel', closing: async (page: import('@playwright/test').Page) => feedbackOn(page).cancel.click()},
   {way: 'a click on the veil', closing: async (page: import('@playwright/test').Page) => page.mouse.click(5, 5)}
 ]) {

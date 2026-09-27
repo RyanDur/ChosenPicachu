@@ -35,13 +35,13 @@
 
 .feedback-form {
   display: grid;
-  grid-template-columns: 1fr 1fr auto;
+  grid-template-columns: 1fr 1fr;
   grid-template-areas:
-    "heading heading close"
-    "words words words"
-    "reach reach reach"
-    "status status status"
-    "cancel send send";
+    "heading heading"
+    "words   words"
+    "reach   reach"
+    "status  status"
+    "actions actions";
   gap: var(--base);
 }
 
@@ -100,7 +100,6 @@
 }
 
 .feedback-send {
-  grid-area: send;
   color: var(--ink-inverse);
   background: var(--backdrop);
 
@@ -122,8 +121,16 @@
   }
 }
 
-.feedback-cancel,
-.feedback-close {
+.feedback-actions {
+  grid-area: actions;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-content: end;
+  gap: var(--base);
+  padding: var(--base);
+}
+
+.feedback-cancel {
   color: var(--ink);
   border: var(--base) solid var(--backdrop);
 
@@ -137,16 +144,6 @@
     background: var(--field);
     cursor: default;
   }
-}
-
-.feedback-cancel {
-  grid-area: cancel;
-}
-
-.feedback-close {
-  grid-area: close;
-  padding: var(--base);
-  cursor: pointer;
 }
 
 @media (width <= 600px), (height <= 500px) {
@@ -179,18 +176,12 @@
 
 @media (height <= 500px) {
   .feedback-form {
-    grid-template-columns: 1fr 1fr auto;
-    grid-template-rows: auto auto auto auto 1fr;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto 1fr;
     grid-template-areas:
-      "heading heading close"
-      "words   reach   reach"
-      "words   status status"
-      "words   cancel  cancel"
-      "words   send    send";
-  }
-
-  .feedback-send,
-  .feedback-cancel {
-    justify-self: stretch;
+      "heading heading"
+      "words   reach"
+      "words   status"
+      "words   actions";
   }
 }
