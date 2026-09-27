@@ -1,38 +1,36 @@
-import {Locator, Page, expect, test} from '@playwright/test';
+import {expect, test} from '@playwright/test';
 import {accordionsTab, builds, codedStepLayouts, desktop, firstHeightAfter, heightByTheNextFrame, heightOnceSettled, iPhone, misplacedPictures, textOf} from './__test_support';
-
-const detailsParts = (page: Page): Locator => accordionsTab(page).partsOf('the details build');
 
 test('a details fold slides open where the browser can animate it', async ({page, browserName}) => {
   test.skip(browserName !== 'chromium', 'only chromium animates a details element to its natural height');
   await page.goto('demos/?tab=accordions');
-  const fold = detailsParts(page).first();
+  const part = accordionsTab(page).firstPartOf('the details build');
 
-  await accordionsTab(page).open(fold);
-  const midway = await heightByTheNextFrame(fold);
+  await part.open();
+  const midway = await heightByTheNextFrame(part.fold);
 
-  expect(midway).toBeLessThan(await heightOnceSettled(fold));
+  expect(midway).toBeLessThan(await heightOnceSettled(part.fold));
 });
 
 test('a details fold opens at once, fully, where the browser cannot animate it', async ({page, browserName}) => {
   test.skip(browserName === 'chromium', 'chromium animates it');
   await page.goto('demos/?tab=accordions');
-  const fold = detailsParts(page).first();
+  const part = accordionsTab(page).firstPartOf('the details build');
 
-  await accordionsTab(page).open(fold);
-  const midway = await heightByTheNextFrame(fold);
+  await part.open();
+  const midway = await heightByTheNextFrame(part.fold);
 
-  expect(midway).toBe(await heightOnceSettled(fold));
-  await expect(textOf(fold)).toBeVisible();
+  expect(midway).toBe(await heightOnceSettled(part.fold));
+  await expect(textOf(part)).toBeVisible();
 });
 
 test('opening a second details fold closes the first, from the keyboard too', async ({page}) => {
   await page.goto('demos/?tab=accordions');
-  const [first, second] = [detailsParts(page).nth(0), detailsParts(page).nth(1)];
-  await accordionsTab(page).open(first);
+  const [first, second] = [accordionsTab(page).partOf('the details build', 0), accordionsTab(page).partOf('the details build', 1)];
+  await first.open();
   await expect(textOf(first)).toBeVisible();
 
-  await accordionsTab(page).openByKeyboard(second);
+  await second.openByKeyboard();
 
   await expect(textOf(second)).toBeVisible();
   await expect(textOf(first)).toBeHidden();
@@ -75,11 +73,11 @@ for (const build of builds) {
 for (const build of ['the React checkbox build', 'the React radio build'] as const) {
   test(`a closed fold in ${build} shows only its bar`, async ({page}) => {
     await page.goto('demos/?tab=accordions');
-    const parts = accordionsTab(page).partsOf(build);
-    await expect(parts.first()).toBeVisible();
+    await expect(accordionsTab(page).firstPartOf(build).fold).toBeVisible();
+    const parts = await accordionsTab(page).partsOf(build);
 
-    for (const part of await parts.all()) {
-      await part.scrollIntoViewIfNeeded();
+    for (const part of parts) {
+      await part.fold.scrollIntoViewIfNeeded();
       await expect(textOf(part)).toBeAttached();
       await expect(textOf(part)).not.toBeInViewport();
     }
@@ -93,6 +91,17 @@ test.describe('a desktop', () => {
     await page.goto('demos/?tab=accordions');
     await expect(page.getByRole('figure').first()).toBeVisible();
 
-    await expect.poll(async () => [...new Set(await misplacedPictures(page))]).toEqual([]);
+    await expect.poll(() => misplacedPictures(page)).toEqual([]);
   });
+});
+
+test('a React part opens through the accordions page, its text in view', async ({page}) => {
+  await page.goto('demos/?tab=accordions');
+  const part = accordionsTab(page).firstPartOf('the React checkbox build');
+
+  await part.open();
+
+  await expect.poll(part.isOpen).toBe(true);
+  await textOf(part).scrollIntoViewIfNeeded();
+  await expect(textOf(part)).toBeInViewport();
 });
