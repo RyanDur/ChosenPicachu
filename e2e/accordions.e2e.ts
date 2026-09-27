@@ -82,6 +82,16 @@ for (const build of ['the React checkbox build', 'the React radio build'] as con
       await expect(textOf(part)).not.toBeInViewport();
     }
   });
+  test(`an open fold in ${build} shows its text`, async ({page}) => {
+    await page.goto('demos/?tab=accordions');
+    const part = accordionsTab(page).firstPartOf(build);
+
+    await part.open();
+
+    await expect.poll(part.isOpen).toBe(true);
+    await textOf(part).scrollIntoViewIfNeeded();
+    await expect(textOf(part)).toBeInViewport();
+  });
 }
 
 test.describe('a desktop', () => {
@@ -95,13 +105,14 @@ test.describe('a desktop', () => {
   });
 });
 
-test('a React part opens through the accordions page, its text in view', async ({page}) => {
-  await page.goto('demos/?tab=accordions');
-  const part = accordionsTab(page).firstPartOf('the React checkbox build');
+for (const build of builds) {
+  test(`a keyboard reader opens the first fold of ${build}`, async ({page}) => {
+    await page.goto('demos/?tab=accordions');
+    const part = accordionsTab(page).firstPartOf(build);
+    await expect(part.fold).toBeVisible();
 
-  await part.open();
+    await part.openByKeyboard();
 
-  await expect.poll(part.isOpen).toBe(true);
-  await textOf(part).scrollIntoViewIfNeeded();
-  await expect(textOf(part)).toBeInViewport();
-});
+    await expect.poll(part.isOpen).toBe(true);
+  });
+}

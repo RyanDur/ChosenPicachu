@@ -21,57 +21,57 @@ export type Part = {
 
 const wordOn = (fold: Locator): Locator => fold.getByText(/^\w+$/).first();
 
-const pressed = async (page: Page, control: Locator, key: string): Promise<void> => {
+const focusAndPress = async (page: Page, control: Locator, key: string): Promise<void> => {
   await control.focus();
   await page.keyboard.press(key);
 };
 
-const kinds: Record<Build, (page: Page, fold: Locator) => Part> = {
+const partIn: Record<Build, (page: Page, fold: Locator) => Part> = {
   'the checkbox build': (page, fold) => ({
     fold,
     open: () => wordOn(fold).click(),
-    openByKeyboard: () => pressed(page, fold.getByRole('checkbox'), 'Space'),
+    openByKeyboard: () => focusAndPress(page, fold.getByRole('checkbox'), 'Space'),
     isOpen: () => fold.getByRole('checkbox').isChecked()
   }),
   'the radio build': (page, fold) => ({
     fold,
     open: () => wordOn(fold).click(),
-    openByKeyboard: () => pressed(page, fold.getByRole('radio'), 'Space'),
+    openByKeyboard: () => focusAndPress(page, page.getByRole('radio', {name: 'Close', exact: true}), 'ArrowDown'),
     isOpen: () => fold.getByRole('radio').isChecked()
   }),
   'the details build': (page, fold) => ({
     fold,
     open: () => wordOn(fold).click(),
-    openByKeyboard: () => pressed(page, wordOn(fold), 'Enter'),
+    openByKeyboard: () => focusAndPress(page, wordOn(fold), 'Enter'),
     isOpen: () => fold.evaluate(details => details.hasAttribute('open'))
   }),
   'the React checkbox build': (page, fold) => ({
     fold,
     open: () => fold.getByText('Open', {exact: true}).click(),
-    openByKeyboard: () => pressed(page, fold.getByRole('checkbox'), 'Space'),
+    openByKeyboard: () => focusAndPress(page, fold.getByRole('checkbox'), 'Space'),
     isOpen: () => fold.getByRole('checkbox').isChecked()
   }),
   'the React radio build': (page, fold) => ({
     fold,
     open: () => fold.getByText('Open', {exact: true}).click(),
-    openByKeyboard: () => pressed(page, fold.getByRole('radio'), 'Space'),
+    openByKeyboard: () => focusAndPress(page, fold.getByRole('radio'), 'Space'),
     isOpen: () => fold.getByRole('radio').isChecked()
   })
 };
 
-const partsAfterTheCloseBar = (build: Build): number => build === 'the radio build' ? 1 : 0;
+const closeBarsBeforeTheParts = (build: Build): number => build === 'the radio build' ? 1 : 0;
 
 export const accordionsTab = (page: Page) => {
   const folds = (build: Build): Locator => {
     const built = page.getByRole('article').filter({has: page.getByRole('heading', {name: headings[build], exact: true})}).first();
     return build === 'the details build' ? built.getByRole('group') : built.getByRole('listitem');
   };
-  const partOf = (build: Build, index: number): Part => kinds[build](page, folds(build).nth(index + partsAfterTheCloseBar(build)));
+  const partOf = (build: Build, index: number): Part => partIn[build](page, folds(build).nth(index + closeBarsBeforeTheParts(build)));
   return {
     partOf,
     firstPartOf: (build: Build): Part => partOf(build, 0),
     partsOf: async (build: Build): Promise<Part[]> =>
-      (await folds(build).all()).slice(partsAfterTheCloseBar(build)).map(fold => kinds[build](page, fold))
+      (await folds(build).all()).slice(closeBarsBeforeTheParts(build)).map(fold => partIn[build](page, fold))
   };
 };
 
