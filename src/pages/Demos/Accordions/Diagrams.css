@@ -11,7 +11,7 @@
     stroke-width: var(--hairline);
   }
 
-  .hidden {
+  .off-screen {
     fill: none;
     stroke: var(--charcoal);
     stroke-width: var(--hairline);
@@ -55,11 +55,9 @@
 
 .promises {
   border-collapse: collapse;
-  color: var(--ink);
 
   .promises-title {
     text-align: start;
-    font-weight: 600;
   }
 
   .promise {

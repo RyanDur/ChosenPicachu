@@ -17,3 +17,4 @@ export {Codes} from './Codes';
 export {Snippet} from './Snippet';
 export {aside, plain} from './lines';
 export {Mdn} from './Mdn';
+export {Figure} from './Figure';

@@ -29,12 +29,7 @@
   }
 
   .label {
-    fill: var(--void);
+    fill: var(--ink);
     font-size: var(--base-x-1_5);
-  }
-
-  .caption {
-    font-size: var(--text-caption);
-    color: var(--ink-muted);
   }
 }
