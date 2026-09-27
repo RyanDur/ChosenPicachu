@@ -12,6 +12,8 @@ export const codedStepLayouts = async (page: Page): Promise<StepLayout[]> => {
   return layouts.flat();
 };
 
+const pictureName = (snapshot: string): string => `"${(/"([^"]*)"/.exec(snapshot)?.[1] ?? 'an unnamed picture').slice(0, 40)}"`;
+
 export const misplacedPictures = async (page: Page): Promise<string[]> => {
   const runs = page.getByRole('listitem').filter({has: page.getByRole('code'), hasNot: page.getByRole('article')})
     .filter({has: page.getByRole('figure').or(page.getByRole('table'))});
@@ -23,13 +25,13 @@ export const misplacedPictures = async (page: Page): Promise<string[]> => {
     ]);
     const pictures = await run.getByRole('figure').or(run.getByRole('table')).all();
     return Promise.all(pictures.map(async picture => {
-      const drawn = await picture.boundingBox();
+      const [drawn, drawing] = await Promise.all([picture.boundingBox(), picture.ariaSnapshot().then(pictureName)]);
       if (words === null || drawn === null || code === null) {
         return [`${name}: a box is missing`];
       }
       return [
-        ...(drawn.y < words.y + words.height ? [`${name}: over its prose`] : []),
-        ...(drawn.x + drawn.width > code.x ? [`${name}: into its code`] : [])
+        ...(drawn.y < words.y + words.height ? [`${name}: ${drawing} over its prose`] : []),
+        ...(drawn.x + drawn.width > code.x ? [`${name}: ${drawing} into its code`] : [])
       ];
     })).then(placed => placed.flat());
   }));
