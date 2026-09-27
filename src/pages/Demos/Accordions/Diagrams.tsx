@@ -191,7 +191,7 @@ export const PaddingInsideTheClip: FC = () =>
 
 export const RidesTheEdge: FC = () =>
   <Diagram title="The text rides the row’s edge" height={170}
-    says="The row grows while the text moves down by its own height, both linear, so the text’s bottom edge stays on the row’s growing edge.">
+    says="The row grows with the text set at its bottom, so the text’s bottom edge stays on the row’s growing edge.">
     {[{open: 0, stage: 'start'}, {open: 0.5, stage: 'halfway'}, {open: 1, stage: 'open'}].map(({open, stage}, at) => {
       const x = 12 + at * 104;
       const edge = 88 + open * 50;

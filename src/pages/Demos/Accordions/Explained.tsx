@@ -276,16 +276,14 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
         <PaddingInsideTheClip/>
       </li>
       <li className="run">
-        <p className="paragraph">The radio build’s text slides down from under its bar. Its
-          paragraph grows from 0fr to 1fr as the checkbox build’s does, and one more span,
-          between the item and the text, moves from translateY(-100%) to 0 over the same 300
-          milliseconds. The slide needs a span of its own because -100% is measured against the
-          span’s own height, and the item is only as tall as the row. The row and the text share
-          one duration and one easing,
-          so at every frame they have covered the same share of the way, and the text’s bottom
-          edge stays on the row’s edge. Linear keeps that edge moving at one even speed, like a
-          drawer. It answers no limit. It is there to show what grid and a transform do
-          together.</p>
+        <p className="paragraph">The radio build’s text slides down from under its bar, like a
+          drawer. Its paragraph grows from 0fr to 1fr, as the checkbox build’s does. Between the
+          two, the row is shorter than the paragraph around it, so align-content: end sets the row
+          at the paragraph’s bottom. Align-self: end sets the item at the row’s bottom, as tall as
+          its text. So the text’s bottom edge stays on the fold’s edge at every frame, and the
+          paragraph’s overflow hides the text above the fold. One transition moves it all, so no
+          part can fall behind another. It answers no limit. It is there to show what grid
+          alignment does on its own.</p>
         <Snippet label="CSS" lines={unit(accordionsCss, '&.animated.drawer {')}/>
         <RidesTheEdge/>
       </li>

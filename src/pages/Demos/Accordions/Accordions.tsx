@@ -143,7 +143,7 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
               </label>
             </header>
 
-            <p className="fold-clip"><span className="fold-clip-item"><span className="fold-slide"><span className="fold-text">{value}</span></span></span></p>
+            <p className="fold-clip"><span className="fold-clip-item"><span className="fold-text">{value}</span></span></p>
           </article>
         </li>)}
     </ul>
