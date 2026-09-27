@@ -16,6 +16,7 @@ export type Part = {
   fold: Locator;
   showsText: () => Promise<boolean>;
   open: () => Promise<void>;
+  close: () => Promise<void>;
   openByKeyboard: () => Promise<void>;
   isOpen: () => Promise<boolean>;
 };
@@ -46,34 +47,41 @@ const textShownIn = (fold: Locator) => async (): Promise<boolean> => {
   }));
 };
 
+const closeBar = (fold: Locator) => () => fold.getByText('Close', {exact: true}).click();
+
 const partIn: Record<Build, (where: Where) => Omit<Part, 'showsText'>> = {
   'the checkbox build': ({page, fold}) => ({
     fold,
     open: () => wordOn(fold).click(),
+    close: () => wordOn(fold).click(),
     openByKeyboard: () => focusAndPress(page, fold.getByRole('checkbox'), 'Space'),
     isOpen: () => fold.getByRole('checkbox').isChecked()
   }),
   'the radio build': ({page, fold, article, index}) => ({
     fold,
     open: () => wordOn(fold).click(),
+    close: () => article.getByText('Close', {exact: true}).first().click(),
     openByKeyboard: () => focusAndPress(page, article.getByRole('radio', {name: 'Close', exact: true}), 'ArrowDown', index + 1),
     isOpen: () => fold.getByRole('radio').isChecked()
   }),
   'the details build': ({page, fold}) => ({
     fold,
     open: () => wordOn(fold).click(),
+    close: () => wordOn(fold).click(),
     openByKeyboard: () => focusAndPress(page, wordOn(fold), 'Enter'),
     isOpen: () => fold.evaluate(details => details.hasAttribute('open'))
   }),
   'the React checkbox build': ({page, fold}) => ({
     fold,
     open: () => fold.getByText('Open', {exact: true}).click(),
+    close: closeBar(fold),
     openByKeyboard: () => focusAndPress(page, fold.getByRole('checkbox'), 'Space'),
     isOpen: () => fold.getByRole('checkbox').isChecked()
   }),
   'the React radio build': ({page, fold, article, index}) => ({
     fold,
     open: () => fold.getByText('Open', {exact: true}).click(),
+    close: closeBar(fold),
     openByKeyboard: () => index === 0
       ? focusAndPress(page, fold.getByRole('radio'), 'Space')
       : focusAndPress(page, article.getByRole('radio', {name: /^(Open|Close) /}).first(), 'ArrowDown', index),

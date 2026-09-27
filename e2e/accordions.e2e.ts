@@ -48,7 +48,7 @@ for (const build of ['the React checkbox build', 'the React radio build'] as con
     await heightOnceSettled(part.fold);
     const moving = framesWhileMoving(part.fold);
 
-    await part.fold.getByText('Close', {exact: true}).click();
+    await part.close();
     const frames = await moving;
 
     expect(frames[0].height).toBeGreaterThan(frames.at(-1)?.height ?? 0);
