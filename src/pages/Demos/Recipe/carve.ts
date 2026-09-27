@@ -18,6 +18,9 @@ const closesTheUnit = (source: string, at: number, closer: string): boolean => {
   if (ahead[0] === '.') {
     return closer !== ')';
   }
+  if (ahead[0] === ':') {
+    return /^:\S/.test(source.slice(at + 1).trimStart());
+  }
   return !'=:{>~+'.includes(ahead[0]);
 };
 

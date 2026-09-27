@@ -164,6 +164,18 @@ describe('carving examples out of the source they teach', () => {
     ]);
   });
 
+  test('a css block ends at its brace, even when the next selector starts with a colon', () => {
+    const sheet = '@media (hover: hover) {\n    .bar {\n        color: red;\n    }\n}\n\n:root {\n    gap: 0;\n}\n';
+
+    expect(unit(sheet, '@media (hover: hover) {').map(({text}) => text)).toEqual([
+      '@media (hover: hover) {',
+      '    .bar {',
+      '        color: red;',
+      '    }',
+      '}'
+    ]);
+  });
+
   test('a span runs inclusively between two anchors', () => {
     expect(span(source, 'onPointerMove', 'onPointerUp').map(({text}) => text)).toEqual([
       'onPointerMove: travel,',
