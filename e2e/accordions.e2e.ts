@@ -27,18 +27,20 @@ test('a fold in the React checkbox build slides open', async ({page}) => {
 
 const roundingBetweenLayoutAndTransform = 3;
 
-test('a fold in the React radio build slides open with its text’s bottom on the row’s edge', async ({page}) => {
-  await page.goto('demos/?tab=accordions');
-  const part = accordionsTab(page).firstPartOf('the React radio build');
-  await expect(part.fold).toBeVisible();
-  const moving = framesWhileMoving(part.fold, 12);
+for (const build of ['the React checkbox build', 'the React radio build'] as const) {
+  test(`a fold in ${build} slides open with its text shown down to the fold’s edge`, async ({page}) => {
+    await page.goto('demos/?tab=accordions');
+    const part = accordionsTab(page).firstPartOf(build);
+    await expect(part.fold).toBeVisible();
+    const moving = framesWhileMoving(textOf(part));
 
-  await part.open();
-  const frames = await moving;
+    await part.open();
+    const frames = await moving;
 
-  expect(frames.at(-1)?.height ?? 0).toBeGreaterThan(frames[0]?.height ?? 0);
-  expect(frames.filter(frame => frame.height > frames[0].height).every(frame => frame.textBottomGap <= roundingBetweenLayoutAndTransform)).toBe(true);
-});
+    expect(frames.length).toBeGreaterThan(1);
+    expect(frames.map(frame => frame.textBottomGap).filter(gap => gap > roundingBetweenLayoutAndTransform)).toEqual([]);
+  });
+}
 
 test('a details fold opens at once, fully, where the browser cannot animate it', async ({page, browserName}) => {
   test.skip(browserName === 'chromium', 'chromium animates it');

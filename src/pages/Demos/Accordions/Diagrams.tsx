@@ -181,12 +181,13 @@ export const RowToItsContent: FC = () =>
 
 export const PaddingInsideTheClip: FC = () =>
   <Diagram title="The padding inside the clip" height={150}
-    says="The padding sits on a span inside the paragraph that clips, so a closed row reaches 0 and no strip of text shows under the bar.">
-    <Box x={10} y={10} width={300} height={120} kind="clip"/>
-    <Words x={20} y={28} anchor="start">p, the row’s item: min-height 0, clips</Words>
-    <Box x={26} y={40} width={268} height={78} kind="native"/>
-    <Words x={36} y={58} anchor="start">span, its padding</Words>
-    <Part x={42} y={66} width={236} height={40} kind="clipped" name="the text"/>
+    says="The padding sits inside a span that clips, inside the paragraph that is the row’s item, so a closed row reaches 0 and no strip of text shows under the bar.">
+    <Box x={10} y={10} width={300} height={130} kind="piece"/>
+    <Words x={20} y={26} anchor="start">p, the row’s item: min-height 0</Words>
+    <Box x={24} y={36} width={272} height={94} kind="clip"/>
+    <Words x={34} y={52} anchor="start">span, 0fr, clips</Words>
+    <Box x={38} y={62} width={244} height={58} kind="native"/>
+    <Part x={52} y={74} width={216} height={34} kind="clipped" name="span, the text inside its padding"/>
   </Diagram>;
 
 export const RidesTheEdge: FC = () =>

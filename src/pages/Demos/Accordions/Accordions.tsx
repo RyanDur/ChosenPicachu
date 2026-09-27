@@ -100,7 +100,7 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
               </label>
             </header>
 
-            <p className="info"><span className="info-text">{value}</span></p>
+            <p className="info-animated"><span className="info-animated-wrapper"><span className="info">{value}</span></span></p>
           </article>
         </li>)}
     </ul>
@@ -143,7 +143,7 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
               </label>
             </header>
 
-            <p className="info"><span className="info-text">{value}</span></p>
+            <p className="info-animated-wrapper"><span className="info-animated"><span className="info-transform-wrapper"><span className="info">{value}</span></span></span></p>
           </article>
         </li>)}
     </ul>
