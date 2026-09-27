@@ -1,7 +1,8 @@
 import {Line} from './Snippet';
 
-const openers: Record<string, string> = {'{': '}', '(': ')', '[': ']'};
-const closers = new Set(Object.values(openers));
+type Closer = '}' | ')' | ']';
+
+const openers: Record<string, Closer> = {'{': '}', '(': ')', '[': ']'};
 
 const dedented = (lines: string[]): Line[] => {
   const margin = Math.min(...lines
@@ -10,7 +11,7 @@ const dedented = (lines: string[]): Line[] => {
   return lines.map(line => ({text: line.slice(margin)}));
 };
 
-const closesTheUnit = (source: string, at: number, closer: string): boolean => {
+const closesTheUnit = (source: string, at: number, closer: Closer): boolean => {
   const ahead = source.slice(at + 1).match(/\S/);
   if (!ahead) {
     return true;
@@ -19,7 +20,7 @@ const closesTheUnit = (source: string, at: number, closer: string): boolean => {
     return closer !== ')';
   }
   if (ahead[0] === ':') {
-    return /^:\S/.test(source.slice(at + 1).trimStart());
+    return closer === '}' && /^:\S/.test(source.slice(at + 1).trimStart());
   }
   return !'=:{>~+'.includes(ahead[0]);
 };
@@ -30,7 +31,7 @@ export const unit = (source: string, anchor: string): Line[] => {
     throw new Error(`no unit anchored at "${anchor}"`);
   }
   const start = source.lastIndexOf('\n', found) + 1;
-  const pending: string[] = [];
+  const pending: Closer[] = [];
   let at = found;
   while (at < source.length) {
     const glyph = source[at];
@@ -39,9 +40,10 @@ export const unit = (source: string, anchor: string): Line[] => {
     }
     if (glyph in openers) {
       pending.push(openers[glyph]);
-    } else if (closers.has(glyph) && glyph === pending[pending.length - 1]) {
+    } else if (glyph === pending[pending.length - 1]) {
+      const closer = pending[pending.length - 1];
       pending.pop();
-      if (pending.length === 0 && glyph !== ']' && closesTheUnit(source, at, glyph)) {
+      if (pending.length === 0 && closer !== ']' && closesTheUnit(source, at, closer)) {
         break;
       }
     }

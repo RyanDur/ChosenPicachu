@@ -174,6 +174,16 @@ describe('carving examples out of the source they teach', () => {
     ]);
   });
 
+  test('a css selector carries on past a pseudo-class paren into a pseudo-element', () => {
+    const sheet = '.next:not(:has(.prev))::before {\n    content: "";\n}\n';
+
+    expect(unit(sheet, '.next:not(:has(.prev))::before {').map(({text}) => text)).toEqual([
+      '.next:not(:has(.prev))::before {',
+      '    content: "";',
+      '}'
+    ]);
+  });
+
   test('a css block ends at its brace, even when the next selector starts with a colon', () => {
     const sheet = '@media (hover: hover) {\n    .bar {\n        color: red;\n    }\n}\n\n:root {\n    gap: 0;\n}\n';
 
