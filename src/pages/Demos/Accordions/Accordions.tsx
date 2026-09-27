@@ -58,7 +58,7 @@ export const ExclusiveToggleAccordion: FC<PropsWithClassName & ContentProps> = (
   <ul className="new-accordion">
     {content.map(({value, key}) =>
       <li key={key}>
-        <details className="fold" name="exclusive-toggle-accordian">
+        <details className="fold" name="exclusive-toggle-accordion">
           <summary className="info-label">{key}</summary>
           <p className="info">{value}</p>
         </details>
@@ -96,7 +96,6 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
                 {toggleWord(key === checked)}
                 <input
                   type="checkbox"
-                  name="exclusive-fold"
                   aria-label={`${toggleWord(key === checked)} ${key}`}
                   checked={key === checked}
                   onChange={() => updateChecked(open => open === key ? undefined : key)}
