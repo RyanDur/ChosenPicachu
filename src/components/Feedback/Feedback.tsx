@@ -90,6 +90,9 @@ export const Feedback: FC = () => {
 
   const send = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (draft.sending.state === 'sending') {
+      return;
+    }
     const {openings, page, words, reach} = draft;
     dispatch(noteSending());
     sent(feedbackToken, {page: {...page, name: pageName}, words, from: window.location.href, ...(empty(reach) ? {} : {reach})})

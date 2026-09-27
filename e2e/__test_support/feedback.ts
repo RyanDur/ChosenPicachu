@@ -2,11 +2,11 @@ import type {Page, Route} from '@playwright/test';
 import {maybe} from '@ryandur/sand';
 
 type Thread = {url: string; title: string};
-type GitHub = {thread?: Thread; refuse?: string};
+type GitHub = {thread?: Thread; refuse?: string; answersAfter?: Promise<void>};
 
 export type Posted = {query: string; variables: Record<string, string>};
 
-export const github = async (page: Page, {thread, refuse}: GitHub = {}): Promise<Posted[]> => {
+export const github = async (page: Page, {thread, refuse, answersAfter}: GitHub = {}): Promise<Posted[]> => {
   const posted: Posted[] = [];
   await page.route('https://api.github.com/graphql', async (route: Route) => {
     const asked: unknown = route.request().postDataJSON();
@@ -18,6 +18,7 @@ export const github = async (page: Page, {thread, refuse}: GitHub = {}): Promise
       return;
     }
     posted.push(question);
+    await answersAfter;
     await route.fulfill(maybe(refuse)
       .map(message => ({status: 401, json: {message}}))
       .orElse({json: {data: {createDiscussion: {discussion: {id: 'D_9', url: 'https://github.com/RyanDur/ChosenPicachu/discussions/9'}}, addDiscussionComment: {comment: {url: 'x'}}}}}));

@@ -55,7 +55,6 @@ test('a click inside the dialog’s edge keeps Feedback open', async ({page}) =>
 });
 
 test('Tab never lands on the page behind the open dialog', async ({page, browserName}) => {
-  test.skip(browserName === 'webkit', 'WebKit tabs only to explicit stops, so a plain Tab skips the buttons');
   await github(page);
   const feedback = feedbackOn(page);
   await page.goto('demos/?tab=accordions');
@@ -64,12 +63,12 @@ test('Tab never lands on the page behind the open dialog', async ({page, browser
   await expect(feedback.words).toBeFocused();
 
   for (let step = 0; step < 8; step += 1) {
-    await page.keyboard.press('Tab');
+    await page.keyboard.press(browserName === 'webkit' ? 'Alt+Tab' : 'Tab');
     expect(await feedback.dialog.evaluate(dialog => dialog.contains(document.activeElement) || document.activeElement === document.body)).toBe(true);
   }
 });
 
-test('Shift and Enter makes a new line, and an empty send is refused by the platform', async ({page}) => {
+test('an empty note is refused by the platform', async ({page}) => {
   const posted = await github(page);
   const feedback = feedbackOn(page);
   await page.goto('demos/?tab=accordions');
@@ -77,8 +76,17 @@ test('Shift and Enter makes a new line, and an empty send is refused by the plat
   await expect(feedback.words).toBeFocused();
 
   await page.keyboard.press('Enter');
+
   await expect(feedback.dialog).toBeVisible();
   expect(await feedback.words.evaluate(field => field.matches(':invalid'))).toBe(true);
+  expect(posted).toHaveLength(0);
+});
+
+test('Shift and Enter makes a new line in the note', async ({page}) => {
+  const posted = await github(page);
+  const feedback = feedbackOn(page);
+  await page.goto('demos/?tab=accordions');
+  await feedback.open.click();
 
   await feedback.words.pressSequentially('one');
   await page.keyboard.press('Shift+Enter');
@@ -86,6 +94,24 @@ test('Shift and Enter makes a new line, and an empty send is refused by the plat
 
   await expect(feedback.words).toHaveValue('one\ntwo');
   expect(posted).toHaveLength(0);
+});
+
+test('a note is sent once however often it is sent before GitHub answers', async ({page}) => {
+  let answer = () => undefined as void;
+  const posted = await github(page, {answersAfter: new Promise(resolve => {
+    answer = resolve;
+  })});
+  const feedback = feedbackOn(page);
+  await page.goto('demos/?tab=accordions');
+  await feedback.open.click();
+  await feedback.words.pressSequentially('The sort menu hides behind the header.');
+
+  await feedback.words.press('Enter');
+  await feedback.words.press('Enter');
+  answer();
+
+  await expect(feedback.dialog).toBeHidden();
+  expect(posted).toHaveLength(1);
 });
 
 for (const field of ['words', 'reach'] as const) {
