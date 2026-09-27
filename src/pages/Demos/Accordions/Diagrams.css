@@ -1,12 +1,13 @@
 .diagram {
   --drawn-width: 320px;
+  --widest-drawing: 480px;
 
   container-type: inline-size;
 
   .recipe-drawing {
     --drawing-column: 100cqi;
 
-    max-inline-size: var(--drawn-width);
+    max-inline-size: var(--widest-drawing);
   }
 
   .piece,

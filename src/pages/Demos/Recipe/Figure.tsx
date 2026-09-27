@@ -6,6 +6,6 @@ type Props = PropsWithChildren<{viewBox: string; caption: ReactNode; className?:
 
 export const Figure: FC<Props> = ({viewBox, caption, className, children}) =>
   <figure className={classNames('recipe-figure', className)}>
-    <svg className="recipe-drawing" viewBox={viewBox} aria-hidden="true">{children}</svg>
+    <svg className="recipe-drawing center" viewBox={viewBox} aria-hidden="true">{children}</svg>
     <figcaption className="caption">{caption}</figcaption>
   </figure>;
