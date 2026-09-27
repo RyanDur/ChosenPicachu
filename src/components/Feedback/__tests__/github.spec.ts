@@ -1,5 +1,7 @@
 import {http, HttpResponse, JsonBodyType} from 'msw';
+import {failure} from '@ryandur/sand';
 import {server} from '@__test_support/server';
+import {HTTPError} from '@transport/types';
 import {sent} from '../github';
 
 type Asked = {query: string; variables: Record<string, string>};
@@ -30,7 +32,7 @@ describe('sending a note to GitHub', () => {
       ? {data: {search: {nodes: []}}}
       : {data: {createDiscussion: {discussion: {id: 'D_1', url: 'https://github.test/discussions/1'}}}});
 
-    const where = await sent('token', note);
+    const where = await sent('token', note).orNull();
 
     expect(where).toBe('https://github.test/discussions/1');
     expect(asked[1].variables.categoryId).toBe('DIC_kwDOFnONa84DGhfO');
@@ -44,7 +46,7 @@ describe('sending a note to GitHub', () => {
       ? {data: {search: {nodes: [{id: 'D_7', url: 'https://github.test/discussions/7', title: 'Feedback: Demos Tables (/demos/?tab=tables)'}]}}}
       : {data: {addDiscussionComment: {comment: {url: 'https://github.test/discussions/7#c'}}}});
 
-    const where = await sent('token', {...note, reach: ''});
+    const where = await sent('token', {page: note.page, words: note.words, from: note.from}).orNull();
 
     expect(where).toBe('https://github.test/discussions/7');
     expect(asked[1].variables.discussionId).toBe('D_7');
@@ -56,14 +58,34 @@ describe('sending a note to GitHub', () => {
       ? {data: {search: {nodes: [{id: 'D_2', url: 'https://github.test/discussions/2', title: 'Feedback: Demos (/demos/?tab=tables-old)'}]}}}
       : {data: {createDiscussion: {discussion: {id: 'D_3', url: 'https://github.test/discussions/3'}}}});
 
-    await sent('token', note);
+    await sent('token', note).value;
 
     expect(asked[1].query).toContain('createDiscussion');
   });
 
-  test('should say what GitHub said when it refuses', async () => {
+  test('should fail as forbidden when GitHub does not know the token', async () => {
     github(() => ({message: 'Bad credentials'}), 401);
 
-    await expect(sent('token', note)).rejects.toThrow('Bad credentials');
+    const refused = (await sent('token', note).value).inspect();
+
+    expect(refused).toEqual(failure(HTTPError.FORBIDDEN).inspect());
+  });
+
+  test('should fail as forbidden when GitHub answers with errors', async () => {
+    github(() => ({data: null, errors: [{message: 'Could not resolve to a node'}]}));
+
+    const refused = (await sent('token', note).value).inspect();
+
+    expect(refused).toEqual(failure(HTTPError.FORBIDDEN).inspect());
+  });
+
+  test('should fail as unreadable when GitHub opens a thread without saying where', async () => {
+    github(({query}) => query.includes('search')
+      ? {data: {search: {nodes: []}}}
+      : {data: {createDiscussion: {discussion: {id: 'D_1'}}}});
+
+    const refused = (await sent('token', note).value).inspect();
+
+    expect(refused).toEqual(failure(HTTPError.CANNOT_DECODE).inspect());
   });
 });

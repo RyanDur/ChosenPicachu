@@ -116,7 +116,7 @@ test('a note GitHub refuses stays in the open dialog, and it says so', async ({p
 
   await feedback.send.click();
 
-  await expect(feedback.dialog.getByRole('status')).toContainText('Bad credentials');
+  await expect(feedback.dialog.getByRole('status')).toHaveText('GitHub turned the request away. Your words are still here.');
   await expect(feedback.dialog).toBeVisible();
   await expect(feedback.words).toHaveValue('A step does not build.');
 });

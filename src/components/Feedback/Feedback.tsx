@@ -1,12 +1,14 @@
 import {FC, KeyboardEvent, MouseEvent, SubmitEvent, SyntheticEvent, useState} from 'react';
 import {useLocation, useSearchParams} from 'react-router';
-import {has, maybe, not} from '@ryandur/sand';
+import {empty, has, maybe, not} from '@ryandur/sand';
 import {useEnv} from '@components/Env';
+import {troubleWith} from '@transport/trouble';
+import {HTTPError} from '@transport/types';
 import {Page, discussions, sent, threadFor} from './github';
 import './Feedback.css';
 import cancelIcon from '../../assets/icons/cancel.svg?url';
 
-type Sending = {state: 'writing'} | {state: 'sending'} | {state: 'refused'; why: string};
+type Sending = {state: 'writing'} | {state: 'sending'} | {state: 'refused'; why: HTTPError};
 
 const invokersMissing = not('command' in HTMLButtonElement.prototype);
 const lightDismissMissing = not('closedBy' in HTMLDialogElement.prototype);
@@ -71,9 +73,9 @@ export const Feedback: FC = () => {
     setSentTo(undefined);
     setSending({state: 'writing'});
     setThread(discussions);
-    void threadFor(feedbackToken, here)
-      .then(found => found.map(({url}) => setThread(url)))
-      .catch(() => undefined);
+    threadFor(feedbackToken, here)
+      .onSuccess(found => found.map(({url}) => setThread(url)))
+      .onFailure(() => setThread(discussions));
   };
 
   const send = (event: SubmitEvent<HTMLFormElement>) => {
@@ -85,14 +87,15 @@ export const Feedback: FC = () => {
       return typeof value === 'string' ? value : '';
     };
     setSending({state: 'sending'});
-    sent(feedbackToken, {page, words: typed('words'), reach: typed('reach'), from: window.location.href})
-      .then(url => {
+    const reach = typed('reach');
+    sent(feedbackToken, {page, words: typed('words'), from: window.location.href, ...(empty(reach) ? {} : {reach})})
+      .onSuccess(url => {
         setSentTo(url);
         setSending({state: 'writing'});
         form.reset();
         maybe(form.closest('dialog')).map(dialog => dialog.close());
       })
-      .catch((refusal: unknown) => setSending({state: 'refused', why: refusal instanceof Error ? refusal.message : 'GitHub did not answer'}));
+      .onFailure(why => setSending({state: 'refused', why}));
   };
 
   return <>
@@ -118,7 +121,7 @@ export const Feedback: FC = () => {
           <span className="feedback-label field bold">A way to reach you, if you like</span>
           <input className="feedback-reach bare card borderless paragraph" type="text" name="reach" autoComplete="email" enterKeyHint="send"/>
         </label>
-        {sending.state === 'refused' && <output className="feedback-refused field alarm-ink paragraph">GitHub did not take the note: {sending.why}. Your words are still here.</output>}
+        {sending.state === 'refused' && <output className="feedback-refused field alarm-ink paragraph">{troubleWith('GitHub')(sending.why)}. Your words are still here.</output>}
         <button type="submit" className="feedback-send path attentive field borderless bold reachable" disabled={sending.state === 'sending'}>Send</button>
         <button type="button" className="feedback-cancel path attentive field borderless bold reachable" commandfor="feedback" command="close" onClick={commandWithoutInvokers}>Cancel</button>
       </form>
