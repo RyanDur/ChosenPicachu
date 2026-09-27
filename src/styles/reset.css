@@ -9,8 +9,9 @@
 }
 
 /* Elements with load-bearing UA styles stay untouched on purpose:
-   dialog (auto-centering), template and datalist (hidden by default),
-   progress and meter (native widgets), [popover] hiding on any element. */
+   dialog's margin and placement (auto-centering), template and datalist
+   (hidden by default), progress and meter (native widgets), [popover]
+   hiding on any element. */
 html, body, main, div, span, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, address, cite, code, data,
@@ -34,6 +35,11 @@ time, mark, audio, video {
 
 ol, ul, menu {
   list-style: none;
+}
+
+dialog {
+  padding: 0;
+  border: 0;
 }
 
 blockquote, q {
