@@ -21,7 +21,7 @@ env:
 
 jobs:
   build_test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     outputs:
       budgeted: ${{ steps.budgeted.outputs.matrix }}
     steps:
@@ -60,7 +60,7 @@ jobs:
 
   review:
     needs: build_test
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     permissions:
       contents: write
     env:
@@ -112,7 +112,7 @@ jobs:
 
   pages:
     needs: journeys
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     concurrency:
       group: github-pages
       cancel-in-progress: false
@@ -138,7 +138,7 @@ jobs:
 
   journeys:
     needs: build_test
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v5
       - name: Set up Node.js
@@ -178,7 +178,7 @@ jobs:
 
   smoke:
     needs: pages
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v5
       - name: Set up Node.js
@@ -213,7 +213,7 @@ jobs:
 
   lighthouse:
     needs: build_test
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     strategy:
       fail-fast: false
       matrix:
@@ -255,7 +255,7 @@ jobs:
   lighthouse_scores:
     needs: lighthouse
     if: always() && contains(fromJSON('["success", "failure"]'), needs.lighthouse.result)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     name: lighthouse scores
     steps:
       - uses: actions/checkout@v5
