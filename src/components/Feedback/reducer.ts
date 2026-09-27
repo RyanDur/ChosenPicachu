@@ -2,7 +2,7 @@ import {HTTPError} from '@transport/types';
 import {FeedbackAction, FeedbackActions} from './actions';
 import {discussions} from './github';
 
-export type Sending = {state: 'writing'} | {state: 'sending'; words: string; reach: string} | {state: 'sent'; to: string} | {state: 'refused'; why: HTTPError};
+export type Sending = {state: 'writing'} | {state: 'sending'; words: string; reach: string} | {state: 'sent'} | {state: 'refused'; why: HTTPError};
 
 export type Draft = {
   key: string;
@@ -41,7 +41,7 @@ export const feedbackReducer = (draft: Draft, action: FeedbackAction): Draft => 
     case FeedbackActions.NOTE_SENT:
       return onScreen(draft, action.openings)
         ? {...draft, sentTo: action.url, words: '', reach: '', sending: {state: 'writing'}, sentOnScreen: draft.sentOnScreen + 1}
-        : {...draft, ...unsentWords(draft), sentTo: action.url, sending: {state: 'sent', to: action.url}};
+        : {...draft, ...unsentWords(draft), sentTo: action.url, sending: {state: 'sent'}};
     case FeedbackActions.NOTE_REFUSED:
       return {...draft, sending: {state: 'refused', why: action.why}};
   }

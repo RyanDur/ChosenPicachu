@@ -139,7 +139,23 @@ describe('Feedback while a note is on its way', () => {
     expect(await dialog.findByRole('link', {name: 'Read it on GitHub'})).toBeInTheDocument();
     expect(dialog.getByRole('textbox', {name: 'What did you find?'})).toHaveValue('');
     await userEvent.type(dialog.getByRole('textbox', {name: 'What did you find?'}), '{Enter}');
-    expect(github.notes).toHaveLength(1);
+    expect(dialog.getByRole('textbox', {name: 'What did you find?'})).toBeInvalid();
+    expect(dialog.getByRole('status')).toHaveTextContent(/^Sent\./);
+  });
+
+  test('should clear the way to reach the reader with the sent note when GitHub answers after Feedback is reopened', async () => {
+    const github = githubHoldingItsAnswer();
+    const words = await opened();
+    await userEvent.type(screen.getByRole('textbox', {name: 'A way to reach you, if you like'}), 'reader@example.test');
+    await userEvent.type(words, 'The sort menu hides.{Enter}');
+    await userEvent.click(screen.getByRole('button', {name: 'Cancel'}));
+    await userEvent.click(screen.getByRole('button', {name: 'Feedback'}));
+
+    github.answers();
+
+    const dialog = within(screen.getByRole('dialog', {name: 'Feedback'}));
+    expect(await dialog.findByRole('link', {name: 'Read it on GitHub'})).toBeInTheDocument();
+    expect(dialog.getByRole('textbox', {name: 'A way to reach you, if you like'})).toHaveValue('');
   });
 
   test('should make a new line on Shift and Enter, and send nothing', async () => {

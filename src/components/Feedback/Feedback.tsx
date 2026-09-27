@@ -15,7 +15,7 @@ import {
   threadUnknown,
   wordsEdited
 } from './actions';
-import {draftAt, feedbackReducer, Sending} from './reducer';
+import {Draft, draftAt, feedbackReducer} from './reducer';
 import {classNames} from '@components/class-names';
 import './Feedback.css';
 
@@ -56,12 +56,12 @@ const fieldFirst = (event: SyntheticEvent<HTMLDialogElement>) => {
   }
 };
 
-const said = (sending: Sending): ReactNode => {
+const said = ({sending, sentTo}: Draft): ReactNode => {
   switch (sending.state) {
     case 'sending':
       return 'Sending the note to GitHub.';
     case 'sent':
-      return <>Sent. <a className="signpost" href={sending.to}>Read it on GitHub</a></>;
+      return <>Sent. <a className="signpost" href={sentTo}>Read it on GitHub</a></>;
     case 'refused':
       return `${troubleWith('GitHub')(sending.why)}. Your words are still here.`;
   }
@@ -134,7 +134,7 @@ export const Feedback: FC = () => {
         </label>
         <fieldset className="feedback-actions field">
           <legend className="feedback-actions-name off-screen">Send or cancel</legend>
-          <output className={classNames('feedback-status', 'paragraph', draft.sending.state === 'refused' && 'alarm-ink')}>{said(draft.sending)}</output>
+          <output className={classNames('feedback-status', 'paragraph', draft.sending.state === 'refused' && 'alarm-ink')}>{said(draft)}</output>
           <button type="button" className="feedback-cancel path sub-title bold attentive field hairline-outline reachable" commandfor="feedback" command="close" onClick={commandWithoutInvokers}>Cancel</button>
           <button type="submit" className="feedback-send path sub-title bold attentive borderless reachable" disabled={draft.sending.state === 'sending'}>Send</button>
         </fieldset>
