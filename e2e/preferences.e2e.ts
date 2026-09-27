@@ -1,13 +1,5 @@
-import {Locator, expect, test} from '@playwright/test';
-import {phone, tablesDemo} from './__test_support';
-
-const heightByTheNextFrame = (fold: Locator): Promise<number> => fold.evaluate(details =>
-  new Promise<number>(resolve => requestAnimationFrame(() => resolve(details.getBoundingClientRect().height))));
-
-const heightOnceSettled = async (fold: Locator): Promise<number> => {
-  await fold.evaluate(details => Promise.all(details.getAnimations({subtree: true}).map(animation => animation.finished)));
-  return heightByTheNextFrame(fold);
-};
+import {expect, test} from '@playwright/test';
+import {heightByTheNextFrame, heightOnceSettled, phone, tablesDemo} from './__test_support';
 
 test.use(phone);
 

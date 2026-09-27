@@ -2,10 +2,10 @@ import {render, screen, within} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {demosAt} from '@pages/Demos/__test_support';
 
-const parts = ['How we used to build a fold', 'What the platform gives now', 'The two together'];
+const parts = ['How we used to build a fold', 'What the platform gives now', 'The two together', 'How every fold moves'];
 
 describe('the accordions tab', () => {
-  test('should tell the old way, then the platform, then the two together', async () => {
+  test('should tell the old way, then the platform, then the two together, then how every fold moves', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
     const tab = await screen.findByRole('region', {name: 'Accordions'});
@@ -36,6 +36,19 @@ describe('the accordions explanation', () => {
     const explained = await screen.findByRole('region', {name: part});
 
     expect(within(explained).getByText(says)).toBeInTheDocument();
+  });
+});
+
+describe('how every fold moves', () => {
+  test('should show the one block that opens every fold at once for a reader who asks for less motion', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const explained = await screen.findByRole('region', {name: parts[3]});
+    const shown = within(explained).getAllByRole('code').map(code => code.textContent ?? '').join('\n');
+
+    expect(shown).toContain('@media (prefers-reduced-motion: reduce)');
+    expect(shown).toContain('::details-content');
+    expect(shown).not.toContain(':root');
   });
 });
 

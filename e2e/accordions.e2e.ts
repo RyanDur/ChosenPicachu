@@ -1,19 +1,11 @@
 import {Locator, Page, expect, test} from '@playwright/test';
-import {codedStepLayouts, desktop, iPhone} from './__test_support';
+import {accordionsTab, builds, codedStepLayouts, desktop, heightByTheNextFrame, heightOnceSettled, iPhone} from './__test_support';
 
 const folds = (page: Page): Locator =>
   page.getByRole('article').filter({has: page.getByRole('heading', {name: 'Exclusive accordion using details elements'})}).getByRole('group');
 
 const summaryOf = (fold: Locator): Locator => fold.getByText(/^\w+$/).first();
 const storyOf = (fold: Locator): Locator => fold.getByRole('paragraph', {includeHidden: true});
-
-const heightByTheNextFrame = (fold: Locator): Promise<number> => fold.evaluate(details =>
-  new Promise<number>(resolve => requestAnimationFrame(() => resolve(details.getBoundingClientRect().height))));
-
-const heightOnceSettled = async (fold: Locator): Promise<number> => {
-  await fold.evaluate(details => Promise.all(details.getAnimations({subtree: true}).map(motion => motion.finished)));
-  return heightByTheNextFrame(fold);
-};
 
 test('a details fold slides open where the browser can animate it', async ({page, browserName}) => {
   test.skip(browserName !== 'chromium', 'only chromium animates a details element to its natural height');
@@ -67,27 +59,20 @@ for (const {reader, device, layout} of [
   });
 }
 
-const buildNamed = (page: Page, name: string): Locator =>
-  page.getByRole('article').filter({has: page.getByRole('heading', {name, exact: true})}).first();
-
-for (const {build, fold, press, opened} of [
-  {build: 'Accordion using checkboxes', fold: 0, press: (part: Locator) => part.getByText(/^\w+$/).first(), opened: (part: Locator) => expect(part.getByRole('checkbox')).toBeChecked()},
-  {build: 'Accordion using a radio group', fold: 1, press: (part: Locator) => part.getByText(/^\w+$/).first(), opened: (part: Locator) => expect(part.getByRole('radio')).toBeChecked()},
-  {build: 'Exclusive accordion using details elements', fold: 0, press: (part: Locator) => summaryOf(part), opened: (part: Locator) => expect(part).toHaveJSProperty('open', true)},
-  {build: 'Exclusive accordion using checkboxes', fold: 0, press: (part: Locator) => part.getByText('Open', {exact: true}), opened: (part: Locator) => expect(part.getByRole('checkbox')).toBeChecked()},
-  {build: 'Exclusive accordion using radio group', fold: 0, press: (part: Locator) => part.getByText('Open', {exact: true}), opened: (part: Locator) => expect(part.getByRole('radio')).toBeChecked()}
-]) {
-  test(`a reader who asks for less motion gets the ${build.toLowerCase()} open at once`, async ({page}) => {
+for (const build of builds) {
+  test(`a reader who asks for less motion gets ${build} open at once`, async ({page}) => {
     await page.emulateMedia({reducedMotion: 'reduce'});
     await page.goto('demos/?tab=accordions');
-    const part = buildNamed(page, build).getByRole(build.includes('details') ? 'group' : 'listitem').nth(fold);
+    const part = accordionsTab(page).firstPartOf(build);
+    await expect(part.fold).toBeVisible();
+    const closed = await heightByTheNextFrame(part.fold);
 
-    await press(part).click();
-    await opened(part);
-    const midway = await heightByTheNextFrame(part);
+    await part.open();
+    await expect.poll(part.isOpen).toBe(true);
+    const midway = await heightByTheNextFrame(part.fold);
 
-    expect(midway).toBe(await heightOnceSettled(part));
-    expect(midway).toBeGreaterThan(80);
+    expect(midway).toBeGreaterThan(closed);
+    expect(midway).toBe(await heightOnceSettled(part.fold));
   });
 }
 

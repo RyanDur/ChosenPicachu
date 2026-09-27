@@ -110,15 +110,6 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
         <FocusOnTheBar/>
       </li>
       <li className="run">
-        <p className="paragraph">Every fold on this tab moves by transition, never by animation.
-          A <Mdn path="Web/CSS/CSS_transitions">transition</Mdn> moves a property from its old
-          value to its new one when the value changes, and if the value changes back midway, it
-          turns around from wherever it is. An <Mdn path="Web/CSS/CSS_animations">animation</Mdn> plays
-          keyframes on its own clock, whatever the state does. A fold moves because the reader
-          pressed it, and a reader may press again before it lands, so every build here uses transitions, and a reader who asks their system for less
-          motion gets none of it, which the last run explains.</p>
-      </li>
-      <li className="run">
         <p className="paragraph">Natively, the platform can now animate a details to its
           content’s height, as the next part shows. Before, height could not animate to auto, so
           max-height stands in. Open, the text’s max-height is 80rem, a guess taller than any
@@ -303,15 +294,30 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
           ...span(accordionsSource, "classNames('exclusive-fold', tab === 'animated'", "classNames('exclusive-fold', tab === 'animated'")
         ]}/>
       </li>
+    </ol>
+  </section>
+  <section aria-labelledby="motion-heading" className="accordion-part">
+    <h3 id="motion-heading" className="title bold">How every fold moves</h3>
+    <ol className={runs}>
+      <li className="run">
+        <p className="paragraph">Every fold on this tab moves by transition, never by animation.
+          A <Mdn path="Web/CSS/CSS_transitions">transition</Mdn> moves a property from its old
+          value to its new one when the value changes, and if the value changes back midway, it
+          turns around from wherever it is. An <Mdn path="Web/CSS/CSS_animations">animation</Mdn> plays
+          keyframes on its own clock, whatever the state does. A fold moves because the reader
+          pressed it, and a reader may press again before it lands, so every build here uses transitions, and a reader who asks their system for less
+          motion gets none of it, which the next run explains.</p>
+      </li>
       <li className="run">
         <p className="paragraph">A reader who asks their system
           for <Mdn path="Web/CSS/@media/prefers-reduced-motion">less motion</Mdn> gets every fold
-          on this tab open at once. One rule in the reset cuts every transition and animation on
-          the site to 0.01 milliseconds, and plays each animation once. The universal selector
-          reaches every element and its before and after, but not the part a details hides, so
-          ::details-content is named on its own. Smooth scrolling becomes a jump, and view
-          transitions play nothing. It is not zero because a transition that never runs never
-          ends, and some script waits for a transition to end.</p>
+          on this tab open at once. The reset’s reduced-motion block holds three rules. The first
+          reaches every element and its before and after: it cuts each transition and animation
+          to 0.01 milliseconds, plays each animation once, and turns smooth scrolling into a
+          jump. The second names ::details-content, the part a details hides, which the universal
+          selector cannot reach. The third lets view transitions play nothing. The duration is
+          not zero because a transition that never runs never ends, and some script waits for a
+          transition to end.</p>
         <Snippet label="CSS" lines={unit(resetCss, '@media (prefers-reduced-motion: reduce) {')}/>
       </li>
     </ol>
