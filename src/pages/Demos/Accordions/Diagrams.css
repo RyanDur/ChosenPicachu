@@ -1,4 +1,5 @@
 .diagram {
+  /* px on purpose: the viewBox width Diagram draws in, so drawn-caption can undo the drawing's scale */
   --drawn-width: 320px;
   --widest-drawing: 480px;
 
@@ -9,20 +10,6 @@
 
     max-inline-size: var(--widest-drawing);
   }
-
-  .piece,
-  .native,
-  .off-screen,
-  .clipped,
-  .clip,
-  .arrow,
-  .chevron,
-  .ring,
-  .guess,
-  .edge,
-  .floor {
-    vector-effect: non-scaling-stroke;
-  }
 }
 
 .recipe-figure {
@@ -30,12 +17,14 @@
     fill: var(--paper);
     stroke: var(--charcoal);
     stroke-width: var(--hairline);
+    vector-effect: non-scaling-stroke;
   }
 
   .native {
     fill: var(--faded-mint);
     stroke: var(--charcoal);
     stroke-width: var(--hairline);
+    vector-effect: non-scaling-stroke;
   }
 
   .off-screen,
@@ -43,6 +32,7 @@
     fill: none;
     stroke: var(--charcoal);
     stroke-width: var(--hairline);
+    vector-effect: non-scaling-stroke;
     stroke-dasharray: 4 3;
   }
 
@@ -50,6 +40,7 @@
     fill: none;
     stroke: var(--charcoal);
     stroke-width: var(--hairline-x-2);
+    vector-effect: non-scaling-stroke;
   }
 
   .arrow,
@@ -57,6 +48,7 @@
     fill: none;
     stroke: var(--charcoal);
     stroke-width: var(--hairline-x-2);
+    vector-effect: non-scaling-stroke;
   }
 
   .arrow-head,
@@ -68,16 +60,19 @@
     fill: var(--approach);
     stroke: var(--ring);
     stroke-width: var(--hairline-x-2);
+    vector-effect: non-scaling-stroke;
   }
 
   .guess,
   .edge {
     stroke: var(--charcoal);
+    vector-effect: non-scaling-stroke;
     stroke-dasharray: 4 3;
   }
 
   .floor {
     stroke: var(--charcoal);
+    vector-effect: non-scaling-stroke;
   }
 }
 

@@ -3,7 +3,7 @@
   display: grid;
   gap: var(--base);
 
-  svg {
+  .recipe-drawing {
     width: 100%;
     height: auto;
     fill: var(--ink);
