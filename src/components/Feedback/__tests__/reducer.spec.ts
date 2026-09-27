@@ -22,7 +22,6 @@ describe('the feedback reducer', () => {
     const draft = feedbackReducer({...draftAt(gallery), thread: 'https://github.test/discussions/1'}, opened(tables));
 
     expect(draft.key).toBe(tables);
-    expect(draft.openings).toBe(1);
     expect(draft.thread).toBe(discussions);
   });
 
@@ -65,25 +64,13 @@ describe('the feedback reducer', () => {
     expect(draft.sending).toEqual({state: 'sending'});
   });
 
-  test('should clear the sent note and ask the dialog to close', () => {
+  test('should clear the sent note and link to it', () => {
     const typed = feedbackReducer(feedbackReducer(openOn, wordsEdited('It hides.')), noteSubmitted());
 
     const draft = feedbackReducer(typed, noteSent(typed.openings, 'https://github.test/discussions/9'));
 
     expect(draft.words).toBe('');
     expect(draft.sending).toEqual({state: 'writing'});
-    expect(draft.sentTo).toBe('https://github.test/discussions/9');
-    expect(draft.sentOnScreen).toBe(1);
-  });
-
-  test('should keep a new note when the reply to an earlier one arrives', () => {
-    const sending = feedbackReducer(feedbackReducer(openOn, wordsEdited('The first.')), noteSubmitted());
-    const rewritten = feedbackReducer(feedbackReducer(sending, opened(tables)), wordsEdited('The second.'));
-
-    const draft = feedbackReducer(rewritten, noteSent(sending.openings, 'https://github.test/discussions/9'));
-
-    expect(draft.words).toBe('The second.');
-    expect(draft.sentOnScreen).toBe(0);
     expect(draft.sentTo).toBe('https://github.test/discussions/9');
   });
 

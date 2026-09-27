@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 import {http, HttpResponse} from 'msw';
 import {server} from '@__test_support/server';
 import {site} from '@pages/__test_support';
+import {githubHoldingItsAnswer} from '../__test_support/github';
 
 describe('Feedback in a browser without invoker commands', () => {
   beforeEach(() => {
@@ -40,60 +41,84 @@ describe('Feedback without a token', () => {
 });
 
 describe('Feedback while a note is on its way', () => {
-  test('should send a note once when Feedback is cancelled and reopened before GitHub answers', async () => {
-    let release: () => void = () => undefined;
-    const held = new Promise<void>(resolve => {
-      release = () => resolve();
-    });
-    let notes = 0;
-    server.use(http.post('https://api.github.com/graphql', async ({request}) => {
-      if ((await request.text()).includes('search')) {
-        return HttpResponse.json({data: {search: {nodes: []}}});
-      }
-      notes += 1;
-      await held;
-      return HttpResponse.json({data: {createDiscussion: {discussion: {id: 'D_9', url: 'https://github.test/discussions/9'}}}});
-    }));
+  const opened = async () => {
     render(<TestApp at="/"/>);
     await site.pageTitled();
     await userEvent.click(screen.getByRole('button', {name: 'Feedback'}));
-    await userEvent.type(screen.getByRole('textbox', {name: 'What did you find?'}), 'The sort menu hides.{Enter}');
+    return screen.getByRole('textbox', {name: 'What did you find?'});
+  };
+
+  test('should say the note is on its way and hold Send until GitHub answers', async () => {
+    const github = githubHoldingItsAnswer();
+    const words = await opened();
+
+    await userEvent.type(words, 'The sort menu hides.{Enter}');
+
+    expect(within(screen.getByRole('dialog', {name: 'Feedback'})).getByRole('status')).toHaveTextContent('Sending the note to GitHub.');
+    expect(screen.getByRole('button', {name: 'Send'})).toBeDisabled();
+    github.answers();
+    expect(await screen.findByRole('link', {name: 'Read it on GitHub'})).toBeInTheDocument();
+  });
+
+  test('should send a note once however often Enter is pressed before GitHub answers', async () => {
+    const github = githubHoldingItsAnswer();
+    const words = await opened();
+
+    await userEvent.type(words, 'The sort menu hides.{Enter}{Enter}');
+    github.answers();
+
+    expect(await screen.findByRole('link', {name: 'Read it on GitHub'})).toBeInTheDocument();
+    expect(github.notes).toHaveLength(1);
+  });
+
+  test('should send a note once when Feedback is cancelled and reopened before GitHub answers', async () => {
+    const github = githubHoldingItsAnswer();
+    const words = await opened();
+    await userEvent.type(words, 'The sort menu hides.{Enter}');
     await userEvent.click(screen.getByRole('button', {name: 'Cancel'}));
     await userEvent.click(screen.getByRole('button', {name: 'Feedback'}));
 
     await userEvent.type(screen.getByRole('textbox', {name: 'What did you find?'}), '{Enter}');
-    release();
+    github.answers();
 
     expect(await screen.findByRole('link', {name: 'Read it on GitHub'})).toBeInTheDocument();
-    expect(notes).toBe(1);
+    expect(github.notes).toHaveLength(1);
   });
 
   test('should keep a new note when the reply to an earlier one arrives', async () => {
-    let release: () => void = () => undefined;
-    const held = new Promise<void>(resolve => {
-      release = () => resolve();
-    });
-    server.use(http.post('https://api.github.com/graphql', async ({request}) => {
-      if ((await request.text()).includes('search')) {
-        return HttpResponse.json({data: {search: {nodes: []}}});
-      }
-      await held;
-      return HttpResponse.json({data: {createDiscussion: {discussion: {id: 'D_9', url: 'https://github.test/discussions/9'}}}});
-    }));
-    render(<TestApp at="/"/>);
-    await site.pageTitled();
-    await userEvent.click(screen.getByRole('button', {name: 'Feedback'}));
-    await userEvent.type(screen.getByRole('textbox', {name: 'What did you find?'}), 'The first.');
-    await userEvent.click(screen.getByRole('button', {name: 'Send'}));
+    const github = githubHoldingItsAnswer();
+    const words = await opened();
+    await userEvent.type(words, 'The first.{Enter}');
     await userEvent.click(screen.getByRole('button', {name: 'Cancel'}));
     await userEvent.click(screen.getByRole('button', {name: 'Feedback'}));
     await userEvent.clear(screen.getByRole('textbox', {name: 'What did you find?'}));
     await userEvent.type(screen.getByRole('textbox', {name: 'What did you find?'}), 'The second.');
 
-    release();
+    github.answers();
 
-    expect(await screen.findByText('Read it on GitHub')).toBeInTheDocument();
+    expect(await screen.findByRole('link', {name: 'Read it on GitHub'})).toBeInTheDocument();
     expect(screen.getByRole('textbox', {name: 'What did you find?'})).toHaveValue('The second.');
     expect(screen.getByRole('dialog', {name: 'Feedback'})).toBeVisible();
+  });
+
+  test('should make a new line on Shift and Enter, and send nothing', async () => {
+    const github = githubHoldingItsAnswer();
+    const words = await opened();
+
+    await userEvent.type(words, 'one{Shift>}{Enter}{/Shift}two');
+
+    expect(words).toHaveValue('one\ntwo');
+    expect(github.notes).toHaveLength(0);
+  });
+});
+
+describe('Feedback about the page', () => {
+  test('should name the page in the About line once its header names it', async () => {
+    githubHoldingItsAnswer();
+    render(<TestApp at="/demos/?tab=tables"/>);
+
+    await userEvent.click(await screen.findByRole('button', {name: 'Feedback'}));
+
+    expect(await within(screen.getByRole('dialog', {name: 'Feedback'})).findByText('About: Demos Tables')).toBeInTheDocument();
   });
 });

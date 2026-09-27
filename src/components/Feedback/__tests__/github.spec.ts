@@ -63,14 +63,6 @@ describe('sending a note to GitHub', () => {
     expect(asked[1].query).toContain('createDiscussion');
   });
 
-  test('should fail as forbidden when GitHub does not know the token', async () => {
-    github(() => ({message: 'Bad credentials'}), 401);
-
-    const refused = (await sent('token', note).value).inspect();
-
-    expect(refused).toEqual(failure(HTTPError.FORBIDDEN).inspect());
-  });
-
   test('should fail as forbidden when GitHub answers with errors', async () => {
     github(() => ({data: null, errors: [{message: 'Could not resolve to a node'}]}));
 

@@ -81,38 +81,6 @@ test('an empty note is refused by the platform', async ({page}) => {
   expect(posted).toHaveLength(0);
 });
 
-test('Shift and Enter makes a new line in the note', async ({page}) => {
-  const posted = await github(page);
-  const feedback = feedbackOn(page);
-  await page.goto('demos/?tab=accordions');
-  await feedback.open.click();
-
-  await feedback.words.pressSequentially('one');
-  await page.keyboard.press('Shift+Enter');
-  await feedback.words.pressSequentially('two');
-
-  await expect(feedback.words).toHaveValue('one\ntwo');
-  expect(posted).toHaveLength(0);
-});
-
-test('a note is sent once however often it is sent before GitHub answers', async ({page}) => {
-  let answer = () => undefined as void;
-  const posted = await github(page, {answersAfter: new Promise(resolve => {
-    answer = resolve;
-  })});
-  const feedback = feedbackOn(page);
-  await page.goto('demos/?tab=accordions');
-  await feedback.open.click();
-  await feedback.words.pressSequentially('The sort menu hides behind the header.');
-
-  await feedback.words.press('Enter');
-  await feedback.words.press('Enter');
-  answer();
-
-  await expect(feedback.dialog).toBeHidden();
-  expect(posted).toHaveLength(1);
-});
-
 for (const field of ['words', 'reach'] as const) {
   test(`Enter in the ${field === 'words' ? 'note' : 'reach'} field sends, and the dialog closes onto Sent`, async ({page}) => {
     const posted = await github(page);
