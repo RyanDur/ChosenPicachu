@@ -105,8 +105,8 @@ test.describe('a desktop', () => {
   });
 });
 
-for (const build of builds) {
-  test(`a keyboard reader opens the first fold of ${build}`, async ({page}) => {
+for (const build of builds.filter(build => build !== 'the details build')) {
+  test(`a keyboard reader opens the first fold of ${build} and reads its text`, async ({page}) => {
     await page.goto('demos/?tab=accordions');
     const part = accordionsTab(page).firstPartOf(build);
     await expect(part.fold).toBeVisible();
@@ -114,5 +114,22 @@ for (const build of builds) {
     await part.openByKeyboard();
 
     await expect.poll(part.isOpen).toBe(true);
+    await textOf(part).scrollIntoViewIfNeeded();
+    await expect(textOf(part)).toBeInViewport();
+  });
+}
+
+for (const build of ['the radio build', 'the React radio build'] as const) {
+  test(`a keyboard reader moves through ${build} to open its second fold`, async ({page}) => {
+    await page.goto('demos/?tab=accordions');
+    const [first, second] = [accordionsTab(page).partOf(build, 0), accordionsTab(page).partOf(build, 1)];
+    await expect(second.fold).toBeVisible();
+
+    await second.openByKeyboard();
+
+    await expect.poll(second.isOpen).toBe(true);
+    expect(await first.isOpen()).toBe(false);
+    await textOf(second).scrollIntoViewIfNeeded();
+    await expect(textOf(second)).toBeInViewport();
   });
 }

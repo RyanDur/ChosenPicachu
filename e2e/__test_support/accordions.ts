@@ -21,40 +21,46 @@ export type Part = {
 
 const wordOn = (fold: Locator): Locator => fold.getByText(/^\w+$/).first();
 
-const focusAndPress = async (page: Page, control: Locator, key: string): Promise<void> => {
+const focusAndPress = async (page: Page, control: Locator, key: string, times = 1): Promise<void> => {
   await control.focus();
-  await page.keyboard.press(key);
+  for (let press = 0; press < times; press += 1) {
+    await page.keyboard.press(key);
+  }
 };
 
-const partIn: Record<Build, (page: Page, fold: Locator) => Part> = {
-  'the checkbox build': (page, fold) => ({
+type Where = {page: Page; fold: Locator; build: Locator; index: number};
+
+const partIn: Record<Build, (where: Where) => Part> = {
+  'the checkbox build': ({page, fold}) => ({
     fold,
     open: () => wordOn(fold).click(),
     openByKeyboard: () => focusAndPress(page, fold.getByRole('checkbox'), 'Space'),
     isOpen: () => fold.getByRole('checkbox').isChecked()
   }),
-  'the radio build': (page, fold) => ({
+  'the radio build': ({page, fold, build, index}) => ({
     fold,
     open: () => wordOn(fold).click(),
-    openByKeyboard: () => focusAndPress(page, page.getByRole('radio', {name: 'Close', exact: true}), 'ArrowDown'),
+    openByKeyboard: () => focusAndPress(page, build.getByRole('radio', {name: 'Close', exact: true}), 'ArrowDown', index + 1),
     isOpen: () => fold.getByRole('radio').isChecked()
   }),
-  'the details build': (page, fold) => ({
+  'the details build': ({page, fold}) => ({
     fold,
     open: () => wordOn(fold).click(),
     openByKeyboard: () => focusAndPress(page, wordOn(fold), 'Enter'),
     isOpen: () => fold.evaluate(details => details.hasAttribute('open'))
   }),
-  'the React checkbox build': (page, fold) => ({
+  'the React checkbox build': ({page, fold}) => ({
     fold,
     open: () => fold.getByText('Open', {exact: true}).click(),
     openByKeyboard: () => focusAndPress(page, fold.getByRole('checkbox'), 'Space'),
     isOpen: () => fold.getByRole('checkbox').isChecked()
   }),
-  'the React radio build': (page, fold) => ({
+  'the React radio build': ({page, fold, build, index}) => ({
     fold,
     open: () => fold.getByText('Open', {exact: true}).click(),
-    openByKeyboard: () => focusAndPress(page, fold.getByRole('radio'), 'Space'),
+    openByKeyboard: () => index === 0
+      ? focusAndPress(page, fold.getByRole('radio'), 'Space')
+      : focusAndPress(page, build.getByRole('radio', {name: /^Open /}).first(), 'ArrowDown', index),
     isOpen: () => fold.getByRole('radio').isChecked()
   })
 };
@@ -62,16 +68,17 @@ const partIn: Record<Build, (page: Page, fold: Locator) => Part> = {
 const closeBarsBeforeTheParts = (build: Build): number => build === 'the radio build' ? 1 : 0;
 
 export const accordionsTab = (page: Page) => {
-  const folds = (build: Build): Locator => {
-    const built = page.getByRole('article').filter({has: page.getByRole('heading', {name: headings[build], exact: true})}).first();
-    return build === 'the details build' ? built.getByRole('group') : built.getByRole('listitem');
-  };
-  const partOf = (build: Build, index: number): Part => partIn[build](page, folds(build).nth(index + closeBarsBeforeTheParts(build)));
+  const built = (build: Build): Locator =>
+    page.getByRole('article').filter({has: page.getByRole('heading', {name: headings[build], exact: true})}).first();
+  const folds = (build: Build): Locator =>
+    build === 'the details build' ? built(build).getByRole('group') : built(build).getByRole('listitem');
+  const partOf = (build: Build, index: number): Part =>
+    partIn[build]({page, fold: folds(build).nth(index + closeBarsBeforeTheParts(build)), build: built(build), index});
   return {
     partOf,
     firstPartOf: (build: Build): Part => partOf(build, 0),
     partsOf: async (build: Build): Promise<Part[]> =>
-      (await folds(build).all()).slice(closeBarsBeforeTheParts(build)).map(fold => partIn[build](page, fold))
+      (await folds(build).all()).slice(closeBarsBeforeTheParts(build)).map((_fold, index) => partOf(build, index))
   };
 };
 
