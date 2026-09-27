@@ -56,8 +56,15 @@ const fieldFirst = (event: SyntheticEvent<HTMLDialogElement>) => {
   }
 };
 
-const said = (sending: Exclude<Sending, {state: 'writing'}>): string =>
-  sending.state === 'sending' ? 'Sending the note to GitHub.' : `${troubleWith('GitHub')(sending.why)}. Your words are still here.`;
+const said = (sending: Sending): string => {
+  switch (sending.state) {
+    case 'sending':
+      return 'Sending the note to GitHub.';
+    case 'refused':
+      return `${troubleWith('GitHub')(sending.why)}. Your words are still here.`;
+  }
+  return '';
+};
 
 export const Feedback: FC = () => {
   const {feedbackToken} = useEnv();
@@ -104,7 +111,7 @@ export const Feedback: FC = () => {
   return <>
     <p className="feedback-item field">
       <button type="button" className="feedback-open path rail-aside bold attentive field reachable" commandfor="feedback" command="show-modal" onClick={opening}>Feedback</button>
-      {has(draft.sentTo) && <output className="feedback-sent caption">Sent. <a className="signpost" href={draft.sentTo}>Read it on GitHub</a></output>}
+      <output className="feedback-sent caption">{has(draft.sentTo) && <>Sent. <a className="signpost" href={draft.sentTo}>Read it on GitHub</a></>}</output>
     </p>
     <dialog id="feedback" className="feedback-dialog backdrop" closedby="any" aria-labelledby="feedback-title" onClick={closesOnTheVeil} onToggle={fieldFirst}>
       <form className="feedback-form" onSubmit={send}>
@@ -125,8 +132,7 @@ export const Feedback: FC = () => {
         </label>
         <fieldset className="feedback-actions field">
           <legend className="feedback-actions-name off-screen">Send or cancel</legend>
-          {draft.sending.state !== 'writing' &&
-            <output className={classNames('feedback-status', 'paragraph', draft.sending.state === 'refused' && 'alarm-ink')}>{said(draft.sending)}</output>}
+          <output className={classNames('feedback-status', 'paragraph', draft.sending.state === 'refused' && 'alarm-ink')}>{said(draft.sending)}</output>
           <button type="button" className="feedback-cancel path sub-title bold attentive field hairline-outline reachable" commandfor="feedback" command="close" onClick={commandWithoutInvokers}>Cancel</button>
           <button type="submit" className="feedback-send path sub-title bold attentive borderless reachable" disabled={draft.sending.state === 'sending'}>Send</button>
         </fieldset>

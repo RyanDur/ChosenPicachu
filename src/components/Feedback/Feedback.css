@@ -13,6 +13,10 @@
 
 .feedback-sent {
   text-align: center;
+
+  &:empty {
+    position: absolute;
+  }
 }
 
 @media (width <= 1100px) {
@@ -94,6 +98,10 @@
 
 .feedback-status {
   grid-column: 1 / -1;
+
+  &:empty {
+    position: absolute;
+  }
 }
 
 .feedback-send,
