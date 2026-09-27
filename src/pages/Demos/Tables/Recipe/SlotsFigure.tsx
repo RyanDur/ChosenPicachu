@@ -3,7 +3,7 @@ import {Figure} from '../../Recipe';
 import './SlotsFigure.css';
 
 export const SlotsFigure: FC = () =>
-  <Figure viewBox="0 0 480 130" caption={<>
+  <Figure className="slots" viewBox="0 0 480 130" caption={<>
     Pointer x walks cumulative slot widths across the survey. The outer quarter of a
     neighbor is a dead zone; only its inner half accepts the switch.
   </>}>

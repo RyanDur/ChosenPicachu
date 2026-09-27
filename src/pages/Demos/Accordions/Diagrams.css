@@ -10,9 +10,7 @@
 
     max-inline-size: var(--widest-drawing);
   }
-}
 
-.recipe-figure {
   .piece {
     fill: var(--paper);
     stroke: var(--charcoal);
