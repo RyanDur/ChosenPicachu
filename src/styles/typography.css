@@ -29,6 +29,21 @@
   opacity: 0.8;
 }
 
+/* drawn caption — a caption's words inside a drawing that scales to its column,
+   held at the caption's size however far the drawing shrinks below --drawn-width.
+   The column is a registered length so every engine computes it to pixels
+   before dividing; unset, it is wider than any drawing and the words are
+   plain caption size */
+@property --drawing-column {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 9999px;
+}
+
+.drawn-caption {
+  font-size: calc(var(--text-caption) / min(1, tan(atan2(var(--drawing-column), var(--drawn-width, 1px)))));
+}
+
 /* page title — the frame's heading for the page, sized by the frame's tier */
 .page-title {
   font-size: var(--base-x-4);

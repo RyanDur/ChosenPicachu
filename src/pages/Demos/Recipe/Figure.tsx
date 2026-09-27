@@ -1,10 +1,11 @@
 import {FC, PropsWithChildren, ReactNode} from 'react';
 import './RecipeFigure.css';
+import {classNames} from '@components/class-names';
 
-type Props = PropsWithChildren<{viewBox: string; caption: ReactNode}>;
+type Props = PropsWithChildren<{viewBox: string; caption: ReactNode; className?: string}>;
 
-export const Figure: FC<Props> = ({viewBox, caption, children}) =>
-  <figure className="recipe-figure">
-    <svg viewBox={viewBox} aria-hidden="true">{children}</svg>
+export const Figure: FC<Props> = ({viewBox, caption, className, children}) =>
+  <figure className={classNames('recipe-figure', className)}>
+    <svg className="recipe-drawing" viewBox={viewBox} aria-hidden="true">{children}</svg>
     <figcaption className="caption">{caption}</figcaption>
   </figure>;

@@ -1,3 +1,29 @@
+.diagram {
+  --drawn-width: 320px;
+
+  container-type: inline-size;
+
+  .recipe-drawing {
+    --drawing-column: 100cqi;
+
+    max-inline-size: var(--drawn-width);
+  }
+
+  .piece,
+  .native,
+  .off-screen,
+  .clipped,
+  .clip,
+  .arrow,
+  .chevron,
+  .ring,
+  .guess,
+  .edge,
+  .floor {
+    vector-effect: non-scaling-stroke;
+  }
+}
+
 .recipe-figure {
   .piece {
     fill: var(--paper);

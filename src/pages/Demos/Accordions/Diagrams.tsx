@@ -7,18 +7,18 @@ type At = {x: number; y: number};
 type Sized = At & {width: number; height: number};
 
 const Diagram: FC<PropsWithChildren<{title: string; says: string; height: number}>> = ({title, says, height, children}) =>
-  <Figure viewBox={`0 0 320 ${height}`} caption={<><strong>{title}.</strong> {says}</>}>{children}</Figure>;
+  <Figure className="diagram" viewBox={`0 0 320 ${height}`} caption={<><strong>{title}.</strong> {says}</>}>{children}</Figure>;
 
 const Box: FC<Sized & {kind: Kind}> = ({x, y, width, height, kind}) =>
   <rect className={kind} x={x} y={y} width={width} height={height}/>;
 
 const Part: FC<Sized & {kind: Kind; name: string}> = ({name, ...box}) => <>
   <Box {...box}/>
-  <text className="label" x={box.x + box.width / 2} y={box.y + box.height / 2 + 4} textAnchor="middle">{name}</text>
+  <text className="drawn-caption" x={box.x + box.width / 2} y={box.y + box.height / 2 + 4} textAnchor="middle">{name}</text>
 </>;
 
 const Words: FC<At & {children: string; anchor?: 'start' | 'middle' | 'end'}> = ({x, y, anchor = 'middle', children}) =>
-  <text className="label" x={x} y={y} textAnchor={anchor}>{children}</text>;
+  <text className="drawn-caption" x={x} y={y} textAnchor={anchor}>{children}</text>;
 
 const head = (from: At, to: At): string => {
   const angle = Math.atan2(to.y - from.y, to.x - from.x);
