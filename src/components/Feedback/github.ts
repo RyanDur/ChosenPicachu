@@ -2,7 +2,7 @@ import {Maybe, maybe} from '@ryandur/sand';
 
 const endpoint = 'https://api.github.com/graphql';
 const repositoryId = 'MDEwOlJlcG9zaXRvcnkzNzY2NzE1OTU=';
-const generalCategoryId = 'DIC_kwDOFnONa84DGeGj';
+const feedbackCategoryId = 'DIC_kwDOFnONa84DGhfO';
 
 export const discussions = 'https://github.com/RyanDur/ChosenPicachu/discussions';
 
@@ -64,6 +64,6 @@ export const sent = async (token: string, note: Note): Promise<string> =>
       return thread.url;
     },
     async () => {
-      const opened = await asked(token, opening, {repositoryId, categoryId: generalCategoryId, title: titleOf(note.page), body: bodyOf(note)});
+      const opened = await asked(token, opening, {repositoryId, categoryId: feedbackCategoryId, title: titleOf(note.page), body: bodyOf(note)});
       return text(field(opened, 'createDiscussion', 'discussion', 'url'));
     });

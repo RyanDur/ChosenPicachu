@@ -25,7 +25,7 @@ const note = {
 };
 
 describe('sending a note to GitHub', () => {
-  test('should open the page’s thread with the first note, titled by the page’s name and key', async () => {
+  test('should open the page’s thread in the Feedback category with the first note, titled by the page’s name and key', async () => {
     const asked = github(({query}) => query.includes('search')
       ? {data: {search: {nodes: []}}}
       : {data: {createDiscussion: {discussion: {id: 'D_1', url: 'https://github.test/discussions/1'}}}});
@@ -33,6 +33,7 @@ describe('sending a note to GitHub', () => {
     const where = await sent('token', note);
 
     expect(where).toBe('https://github.test/discussions/1');
+    expect(asked[1].variables.categoryId).toBe('DIC_kwDOFnONa84DGhfO');
     expect(asked[1].variables.title).toBe('Feedback: Demos Tables (/demos/?tab=tables)');
     expect(asked[1].variables.body).toContain('The sort menu hides behind the header.');
     expect(asked[1].variables.body).toContain('reader@example.test');
