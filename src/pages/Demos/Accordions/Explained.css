@@ -4,12 +4,13 @@
 }
 
 .accordions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-wrap: wrap;
   gap: var(--base-x-5);
 
-  @media (width <= 600px) {
-    grid-template-columns: 1fr;
+  .build {
+    flex: 1 1 0;
+    min-inline-size: min-content;
   }
 }
 

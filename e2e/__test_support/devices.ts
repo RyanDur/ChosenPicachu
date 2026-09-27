@@ -8,3 +8,5 @@ export const desktop = {viewport: {width: 1440, height: 900}};
 export const iPad13Sideways = {viewport: {width: 1366, height: 1024}, hasTouch: true};
 export const iPad13Upright = {viewport: {width: 1024, height: 1366}, hasTouch: true};
 export const iPad11Upright = {viewport: {width: 834, height: 1194}, hasTouch: true};
+export const splitViewWide = {viewport: {width: 700, height: 1000}, hasTouch: true};
+export const justPastAPhone = {viewport: {width: 601, height: 1000}, hasTouch: true};

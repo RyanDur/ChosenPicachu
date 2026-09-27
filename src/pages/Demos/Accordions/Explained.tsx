@@ -32,8 +32,8 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
   <section aria-labelledby="old-way-heading" className="accordion-part">
     <h3 id="old-way-heading" className="title bold">How we used to build a fold</h3>
     <ul className="accordions">
-      <li><InclusiveAccordion className={exhibit} content={contents.checkbox}/></li>
-      <li><ExclusiveAccordion className={exhibit} content={contents.radio}/></li>
+      <li className="build"><InclusiveAccordion className={exhibit} content={contents.checkbox}/></li>
+      <li className="build"><ExclusiveAccordion className={exhibit} content={contents.radio}/></li>
     </ul>
     <ol className={runs}>
       <li className="run">
@@ -224,8 +224,8 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
   <section aria-labelledby="together-heading" className="accordion-part">
     <h3 id="together-heading" className="title bold">The two together</h3>
     <ul className="accordions">
-      <li><ExclusiveCheckboxToggleAccordion className={exhibit} content={contents.checkboxWithState}/></li>
-      <li><ExclusiveRadioToggleAccordion className={exhibit} content={contents.radioWithState}/></li>
+      <li className="build"><ExclusiveCheckboxToggleAccordion className={exhibit} content={contents.checkboxWithState}/></li>
+      <li className="build"><ExclusiveRadioToggleAccordion className={exhibit} content={contents.radioWithState}/></li>
     </ul>
     <ol className={runs}>
       <li className="run">
