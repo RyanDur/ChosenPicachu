@@ -22,7 +22,7 @@ export type WordsEdited = Action<FeedbackActions.WORDS_EDITED> & {words: string}
 export type ReachEdited = Action<FeedbackActions.REACH_EDITED> & {reach: string};
 export type NoteSubmitted = Action<FeedbackActions.NOTE_SUBMITTED>;
 export type NoteSent = Action<FeedbackActions.NOTE_SENT> & {openings: number; url: string};
-export type NoteRefused = Action<FeedbackActions.NOTE_REFUSED> & {openings: number; why: HTTPError};
+export type NoteRefused = Action<FeedbackActions.NOTE_REFUSED> & {why: HTTPError};
 
 export type FeedbackAction =
   | Opened
@@ -41,4 +41,4 @@ export const wordsEdited = (words: string): WordsEdited => ({type: FeedbackActio
 export const reachEdited = (reach: string): ReachEdited => ({type: FeedbackActions.REACH_EDITED, reach});
 export const noteSubmitted = (): NoteSubmitted => ({type: FeedbackActions.NOTE_SUBMITTED});
 export const noteSent = (openings: number, url: string): NoteSent => ({type: FeedbackActions.NOTE_SENT, openings, url});
-export const noteRefused = (openings: number, why: HTTPError): NoteRefused => ({type: FeedbackActions.NOTE_REFUSED, openings, why});
+export const noteRefused = (why: HTTPError): NoteRefused => ({type: FeedbackActions.NOTE_REFUSED, why});

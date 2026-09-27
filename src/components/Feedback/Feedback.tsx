@@ -107,7 +107,7 @@ export const Feedback: FC = () => {
     dispatch(noteSubmitted());
     sent(feedbackToken, {page: {key: draft.key, name: pageName}, words, from: window.location.href, ...(empty(reach) ? {} : {reach})})
       .onSuccess(url => dispatch(noteSent(openings, url)))
-      .onFailure(why => dispatch(noteRefused(openings, why)));
+      .onFailure(why => dispatch(noteRefused(why)));
   };
 
   return <>

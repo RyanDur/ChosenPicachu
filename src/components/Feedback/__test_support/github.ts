@@ -1,6 +1,9 @@
 import {http, HttpResponse} from 'msw';
 import {server} from '@__test_support/server';
 
+export const githubFindingNoThread = () =>
+  server.use(http.post('https://api.github.com/graphql', () => HttpResponse.json({data: {search: {nodes: []}}})));
+
 export const githubHoldingItsAnswer = () => {
   let answer: () => void = () => undefined;
   const held = new Promise<void>(resolve => {

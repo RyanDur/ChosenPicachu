@@ -58,12 +58,6 @@ describe('the feedback reducer', () => {
     expect(draft.reach).toBe('reader@example.test');
   });
 
-  test('should mark the note as on its way', () => {
-    const draft = feedbackReducer(openOn, noteSubmitted());
-
-    expect(draft.sending).toEqual({state: 'sending'});
-  });
-
   test('should clear the sent note and link to it', () => {
     const typed = feedbackReducer(feedbackReducer(openOn, wordsEdited('It hides.')), noteSubmitted());
 
@@ -77,24 +71,16 @@ describe('the feedback reducer', () => {
   test('should say why GitHub refused the note on screen', () => {
     const sending = feedbackReducer(openOn, noteSubmitted());
 
-    const draft = feedbackReducer(sending, noteRefused(sending.openings, HTTPError.FORBIDDEN));
+    const draft = feedbackReducer(sending, noteRefused(HTTPError.FORBIDDEN));
 
     expect(draft.sending).toEqual({state: 'refused', why: HTTPError.FORBIDDEN});
-  });
-
-  test('should hold a note on its way as sending when the dialog is reopened', () => {
-    const sending = feedbackReducer(openOn, noteSubmitted());
-
-    const draft = feedbackReducer(sending, opened(tables));
-
-    expect(draft.sending).toEqual({state: 'sending'});
   });
 
   test('should say why GitHub refused a note even after the dialog was reopened', () => {
     const sending = feedbackReducer(openOn, noteSubmitted());
     const reopened = feedbackReducer(sending, opened(tables));
 
-    const draft = feedbackReducer(reopened, noteRefused(sending.openings, HTTPError.FORBIDDEN));
+    const draft = feedbackReducer(reopened, noteRefused(HTTPError.FORBIDDEN));
 
     expect(draft.sending).toEqual({state: 'refused', why: HTTPError.FORBIDDEN});
   });

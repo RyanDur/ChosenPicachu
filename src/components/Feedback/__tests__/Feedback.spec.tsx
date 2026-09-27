@@ -1,14 +1,12 @@
 import {TestApp} from '@__test_support/TestApp';
 import {render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {http, HttpResponse} from 'msw';
-import {server} from '@__test_support/server';
 import {site} from '@pages/__test_support';
-import {githubHoldingItsAnswer} from '../__test_support/github';
+import {githubFindingNoThread, githubHoldingItsAnswer} from '../__test_support/github';
 
 describe('Feedback in a browser without invoker commands', () => {
   beforeEach(() => {
-    server.use(http.post('https://api.github.com/graphql', () => HttpResponse.json({data: {search: {nodes: []}}})));
+    githubFindingNoThread();
   });
 
   test('should open the dialog from the Feedback button', async () => {
@@ -141,7 +139,7 @@ describe('Feedback while a note is on its way', () => {
 
 describe('Feedback about the page', () => {
   test('should name the page in the About line once its header names it', async () => {
-    githubHoldingItsAnswer();
+    githubFindingNoThread();
     render(<TestApp at="/demos/?tab=tables"/>);
 
     await userEvent.click(await screen.findByRole('button', {name: 'Feedback'}));
