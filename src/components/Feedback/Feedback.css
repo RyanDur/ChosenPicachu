@@ -124,7 +124,9 @@
     color: var(--ink);
   }
 
-  &:disabled {
+  &:disabled,
+  &:disabled:hover,
+  &:disabled:focus {
     color: var(--field);
     background: var(--smoke);
     cursor: default;
