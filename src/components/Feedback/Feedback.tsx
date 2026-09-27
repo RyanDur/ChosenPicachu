@@ -1,11 +1,25 @@
-import {FC, FormEvent, KeyboardEvent, MouseEvent, SyntheticEvent, useState} from 'react';
+import {FC, KeyboardEvent, MouseEvent, SubmitEvent, SyntheticEvent, useState} from 'react';
 import {useLocation, useSearchParams} from 'react-router';
-import {has, maybe} from '@ryandur/sand';
+import {has, maybe, not} from '@ryandur/sand';
 import {useEnv} from '@components/Env';
 import {Page, discussions, sent, threadFor} from './github';
 import './Feedback.css';
 
 type Sending = {state: 'writing'} | {state: 'sending'} | {state: 'refused'; why: string};
+
+const invokersMissing = not('command' in HTMLButtonElement.prototype);
+
+const commandWithoutInvokers = (event: MouseEvent<HTMLButtonElement>) => {
+  const button = event.currentTarget;
+  const dialog = document.getElementById(button.getAttribute('commandfor') ?? '');
+  if (invokersMissing && dialog instanceof HTMLDialogElement) {
+    if (button.getAttribute('command') === 'show-modal') {
+      dialog.showModal();
+    } else {
+      dialog.close();
+    }
+  }
+};
 
 const sendsOnEnter = (event: KeyboardEvent<HTMLTextAreaElement>) => {
   if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) {
@@ -47,6 +61,7 @@ export const Feedback: FC = () => {
 
   const opening = (event: MouseEvent<HTMLButtonElement>) => {
     event.currentTarget.focus();
+    commandWithoutInvokers(event);
     const here = {key, name: pageName()};
     setPage(here);
     setSentTo(undefined);
@@ -57,7 +72,7 @@ export const Feedback: FC = () => {
       .catch(() => undefined);
   };
 
-  const send = (event: FormEvent<HTMLFormElement>) => {
+  const send = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
     const written = new FormData(form);
@@ -88,7 +103,7 @@ export const Feedback: FC = () => {
           <p className="caption">It goes to <a className="signpost" href={thread}>this page’s thread on GitHub</a>, where you can read what others said.</p>
           <p className="paragraph">About: {page.name}</p>
         </hgroup>
-        <button type="button" className="feedback-close reachable" commandfor="feedback" command="close" aria-label="Close">×</button>
+        <button type="button" className="feedback-close reachable" commandfor="feedback" command="close" aria-label="Close" onClick={commandWithoutInvokers}>×</button>
         <label className="feedback-field caption">What did you find?
           <textarea className="feedback-words paragraph" name="words" required enterKeyHint="send" onKeyDown={sendsOnEnter}/>
         </label>
@@ -97,7 +112,7 @@ export const Feedback: FC = () => {
         </label>
         {sending.state === 'refused' && <output className="feedback-refused caption">GitHub did not take the note: {sending.why}. Your words are still here.</output>}
         <button type="submit" className="feedback-send reachable" disabled={sending.state === 'sending'}>Send</button>
-        <button type="button" className="feedback-cancel reachable" commandfor="feedback" command="close">Cancel</button>
+        <button type="button" className="feedback-cancel reachable" commandfor="feedback" command="close" onClick={commandWithoutInvokers}>Cancel</button>
       </form>
     </dialog>
   </>;

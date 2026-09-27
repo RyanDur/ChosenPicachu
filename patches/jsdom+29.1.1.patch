@@ -1,3 +1,60 @@
+diff --git a/node_modules/jsdom/lib/generated/idl/HTMLDialogElement.js b/node_modules/jsdom/lib/generated/idl/HTMLDialogElement.js
+index e54f043..991605e 100644
+--- a/node_modules/jsdom/lib/generated/idl/HTMLDialogElement.js
++++ b/node_modules/jsdom/lib/generated/idl/HTMLDialogElement.js
+@@ -100,6 +100,42 @@ exports.install = (globalObject, globalNames) => {
+       return HTMLConstructor_jsdom_living_helpers_html_constructor(globalObject, interfaceName, new.target);
+     }
+ 
++    show() {
++      const esValue = this !== null && this !== undefined ? this : globalObject;
++
++      if (!exports.is(esValue)) {
++        throw new globalObject.TypeError(
++          "'show' called on an object that is not a valid instance of HTMLDialogElement."
++        );
++      }
++
++      return esValue[implSymbol].show();
++    }
++
++    showModal() {
++      const esValue = this !== null && this !== undefined ? this : globalObject;
++
++      if (!exports.is(esValue)) {
++        throw new globalObject.TypeError(
++          "'showModal' called on an object that is not a valid instance of HTMLDialogElement."
++        );
++      }
++
++      return esValue[implSymbol].showModal();
++    }
++
++    close() {
++      const esValue = this !== null && this !== undefined ? this : globalObject;
++
++      if (!exports.is(esValue)) {
++        throw new globalObject.TypeError(
++          "'close' called on an object that is not a valid instance of HTMLDialogElement."
++        );
++      }
++
++      return esValue[implSymbol].close();
++    }
++
+     get open() {
+       const esValue = this !== null && this !== undefined ? this : globalObject;
+ 
+@@ -144,6 +180,9 @@ exports.install = (globalObject, globalNames) => {
+     }
+   }
+   Object.defineProperties(HTMLDialogElement.prototype, {
++    show: { enumerable: true },
++    showModal: { enumerable: true },
++    close: { enumerable: true },
+     open: { enumerable: true },
+     [Symbol.toStringTag]: { value: "HTMLDialogElement", configurable: true }
+   });
 diff --git a/node_modules/jsdom/lib/jsdom/living/helpers/create-element.js b/node_modules/jsdom/lib/jsdom/living/helpers/create-element.js
 index eef3a9a..0840168 100644
 --- a/node_modules/jsdom/lib/jsdom/living/helpers/create-element.js
@@ -11,3 +68,35 @@ index eef3a9a..0840168 100644
      ],
      HTMLAnchorElement: ["a"],
      HTMLAreaElement: ["area"],
+diff --git a/node_modules/jsdom/lib/jsdom/living/nodes/HTMLDialogElement-impl.js b/node_modules/jsdom/lib/jsdom/living/nodes/HTMLDialogElement-impl.js
+index d020e3c..a1b38fa 100644
+--- a/node_modules/jsdom/lib/jsdom/living/nodes/HTMLDialogElement-impl.js
++++ b/node_modules/jsdom/lib/jsdom/living/nodes/HTMLDialogElement-impl.js
+@@ -1,8 +1,26 @@
+ "use strict";
+ 
++const { fireAnEvent } = require("../helpers/events");
++
+ const HTMLElementImpl = require("./HTMLElement-impl").implementation;
+ 
+-class HTMLDialogElementImpl extends HTMLElementImpl { }
++class HTMLDialogElementImpl extends HTMLElementImpl {
++  show() {
++    this._reflectSetTheContentAttribute("open", "");
++  }
++
++  showModal() {
++    this._reflectSetTheContentAttribute("open", "");
++  }
++
++  close() {
++    if (this._reflectGetTheContentAttribute("open") === null) {
++      return;
++    }
++    this._reflectDeleteTheContentAttribute("open");
++    fireAnEvent("close", this);
++  }
++}
+ 
+ module.exports = {
+   implementation: HTMLDialogElementImpl
