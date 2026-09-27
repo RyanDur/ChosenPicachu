@@ -32,12 +32,26 @@ for (const build of ['the React checkbox build', 'the React radio build'] as con
     await page.goto('demos/?tab=accordions');
     const part = accordionsTab(page).firstPartOf(build);
     await expect(part.fold).toBeVisible();
-    const moving = framesWhileMoving(textOf(part));
+    const moving = framesWhileMoving(part.fold);
 
     await part.open();
     const frames = await moving;
 
-    expect(frames.length).toBeGreaterThan(1);
+    expect(frames[0].height).toBeLessThan(frames.at(-1)?.height ?? 0);
+    expect(frames.map(frame => frame.textBottomGap).filter(gap => gap > roundingBetweenLayoutAndTransform)).toEqual([]);
+  });
+
+  test(`a fold in ${build} slides closed with its text shown down to the fold’s edge`, async ({page}) => {
+    await page.goto('demos/?tab=accordions');
+    const part = accordionsTab(page).firstPartOf(build);
+    await part.open();
+    await heightOnceSettled(part.fold);
+    const moving = framesWhileMoving(part.fold);
+
+    await part.fold.getByText('Close', {exact: true}).click();
+    const frames = await moving;
+
+    expect(frames[0].height).toBeGreaterThan(frames.at(-1)?.height ?? 0);
     expect(frames.map(frame => frame.textBottomGap).filter(gap => gap > roundingBetweenLayoutAndTransform)).toEqual([]);
   });
 }
