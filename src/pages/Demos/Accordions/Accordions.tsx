@@ -4,7 +4,8 @@ import {PillGlider} from '@components/PillGlider';
 import {PropsWithClassName} from '../types';
 import './Accordions.css';
 
-type ContentProps = {content: {value: ReactNode; key: string}[]};
+export type Fold = {value: ReactNode; key: string};
+type ContentProps = {content: Fold[]};
 export const InclusiveAccordion: FC<PropsWithClassName & ContentProps> = ({
   className,
   content
@@ -95,17 +96,16 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
                   type="checkbox"
                   name="exclusive-fold"
                   checked={key === checked}
-                  onClick={() => checked === key && updateChecked(undefined)}
-                  onChange={() => checked !== key && updateChecked(key)}
+                  onChange={() => updateChecked(open => open === key ? undefined : key)}
                   className="off-screen"/>
               </label>
             </header>
 
-            <article className="info-animated">
-              <article className="info-animated-wrapper">
-                <article className="info">{value}</article>
-              </article>
-            </article>
+            <div className="info-animated">
+              <div className="info-animated-wrapper">
+                <p className="info">{value}</p>
+              </div>
+            </div>
           </article>
         </li>)}
     </ul>
@@ -147,13 +147,13 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
               </label>
             </header>
 
-            <article className="info-animated-wrapper">
-              <article className="info-animated">
-                <article className="info-transform-wrapper">
-                  <article className="info">{value}</article>
-                </article>
-              </article>
-            </article>
+            <div className="info-animated-wrapper">
+              <div className="info-animated">
+                <div className="info-transform-wrapper">
+                  <p className="info">{value}</p>
+                </div>
+              </div>
+            </div>
           </article>
         </li>)}
     </ul>

@@ -14,7 +14,7 @@ import {Tutorials} from './Tables/Tutorials';
 import {ListTutorials} from './DragAndDrop/Tutorials';
 import {ChartsTutorial} from './Charts/Tutorial';
 import {TopLayerTutorial} from './ZIndexDemo/Tutorial';
-import {AccordionsExplained} from './Accordions/Explained';
+import {AccordionsExplained} from './Accordions';
 import {motionParam, originParam, paceParam} from './Controls';
 import {Aggregations, trackParam, tutorialParam, worldParam} from './Tables';
 import {Workspace} from './Charts/Workspace';
@@ -39,7 +39,13 @@ export const DemosPage = () => {
     useSearchParamsObject(
       {tab: demoTopicParam, pace: paceParam, origin: originParam, motion: motionParam, tut: tutorialParam, track: trackParam, world: worldParam},
       {tab: DemoTopics.accordions});
-  const [accordionContents] = useState(() => Array.from({length: 5}, () => paragraphs(5)));
+  const [accordionContents] = useState(() => ({
+    checkbox: paragraphs(5),
+    radio: paragraphs(5),
+    details: paragraphs(5),
+    checkboxWithState: paragraphs(5),
+    radioWithState: paragraphs(5)
+  }));
   const {tradeProduct} = useEnv();
 
   return <>

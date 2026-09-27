@@ -1,22 +1,30 @@
-import {FC, ReactNode} from 'react';
+import {FC} from 'react';
 import {
   ExclusiveAccordion,
   ExclusiveCheckboxToggleAccordion,
   ExclusiveRadioToggleAccordion,
   ExclusiveToggleAccordion,
+  Fold,
   InclusiveAccordion
 } from './Accordions';
 import {Mdn} from '../Recipe';
+import './Explained.css';
 
-type Contents = {value: ReactNode; key: string}[][];
+export type Contents = {
+  checkbox: Fold[];
+  radio: Fold[];
+  details: Fold[];
+  checkboxWithState: Fold[];
+  radioWithState: Fold[];
+};
 const exhibit = 'card rounded-corners lifted padded';
 
 export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
   <section aria-labelledby="old-way-heading" className="accordion-part">
     <h3 id="old-way-heading" className="title bold">How we used to build a fold</h3>
     <ul className="accordions">
-      <li><InclusiveAccordion className={exhibit} content={contents[0]}/></li>
-      <li><ExclusiveAccordion className={exhibit} content={contents[1]}/></li>
+      <li><InclusiveAccordion className={exhibit} content={contents.checkbox}/></li>
+      <li><ExclusiveAccordion className={exhibit} content={contents.radio}/></li>
     </ul>
     <p className="paragraph">A heading that shows or hides the part beneath it is a disclosure,
       and for years no element for one worked in every browser. So you borrowed.
@@ -33,9 +41,7 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
   </section>
   <section aria-labelledby="platform-way-heading" className="accordion-part">
     <h3 id="platform-way-heading" className="title bold">What the platform gives now</h3>
-    <ul className="accordions">
-      <li className="exclusive"><ExclusiveToggleAccordion className={exhibit} content={contents[2]}/></li>
-    </ul>
+    <ExclusiveToggleAccordion className={exhibit} content={contents.details}/>
     <p className="paragraph"><Mdn path="Web/HTML/Element/details">details</Mdn> holds a
       disclosure. With summary, it is a heading that opens and closes, announced as a
       disclosure, and it works from the keyboard with nothing added. Give every details the
@@ -48,8 +54,8 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
   <section aria-labelledby="together-heading" className="accordion-part">
     <h3 id="together-heading" className="title bold">The two together</h3>
     <ul className="accordions">
-      <li><ExclusiveCheckboxToggleAccordion className={exhibit} content={contents[3]}/></li>
-      <li><ExclusiveRadioToggleAccordion className={exhibit} content={contents[4]}/></li>
+      <li><ExclusiveCheckboxToggleAccordion className={exhibit} content={contents.checkboxWithState}/></li>
+      <li><ExclusiveRadioToggleAccordion className={exhibit} content={contents.radioWithState}/></li>
     </ul>
     <p className="paragraph">When a fold must do more than open and close, you build on what
       each element was made for. These two builds keep a checkbox and a radio for what they

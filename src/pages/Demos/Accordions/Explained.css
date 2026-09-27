@@ -1,0 +1,19 @@
+.accordion-part {
+  display: grid;
+  gap: var(--base-x-3);
+
+  .paragraph {
+    max-inline-size: var(--measure);
+    text-wrap: pretty;
+  }
+}
+
+.accordions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--base-x-5);
+
+  @media (width <= 600px) {
+    grid-template-columns: 1fr;
+  }
+}
