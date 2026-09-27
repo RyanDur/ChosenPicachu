@@ -128,8 +128,9 @@ for (const build of ['the radio build', 'the React radio build'] as const) {
     await second.openByKeyboard();
 
     await expect.poll(second.isOpen).toBe(true);
-    expect(await first.isOpen()).toBe(false);
     await textOf(second).scrollIntoViewIfNeeded();
     await expect(textOf(second)).toBeInViewport();
+    await first.fold.scrollIntoViewIfNeeded();
+    await (first.closedText === 'collapsed' ? expect(textOf(first)).toBeHidden() : expect(textOf(first)).not.toBeInViewport());
   });
 }
