@@ -9,6 +9,7 @@ import cancelIcon from '../../assets/icons/cancel.svg?url';
 type Sending = {state: 'writing'} | {state: 'sending'} | {state: 'refused'; why: string};
 
 const invokersMissing = not('command' in HTMLButtonElement.prototype);
+const lightDismissMissing = not('closedBy' in HTMLDialogElement.prototype);
 
 const commandWithoutInvokers = (event: MouseEvent<HTMLButtonElement>) => {
   const button = event.currentTarget;
@@ -30,7 +31,9 @@ const sendsOnEnter = (event: KeyboardEvent<HTMLTextAreaElement>) => {
 };
 
 const closesOnTheVeil = (event: MouseEvent<HTMLDialogElement>) => {
-  if (event.target === event.currentTarget) {
+  const box = event.currentTarget.getBoundingClientRect();
+  const onTheVeil = event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom;
+  if (lightDismissMissing && event.target === event.currentTarget && onTheVeil) {
     event.currentTarget.close();
   }
 };

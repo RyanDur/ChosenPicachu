@@ -41,6 +41,19 @@ for (const {way, closing} of [
   });
 }
 
+test('a click inside the dialog’s edge keeps Feedback open', async ({page}) => {
+  await github(page);
+  const feedback = feedbackOn(page);
+  await page.goto('demos/?tab=accordions');
+  await feedback.open.click();
+  const edge = await feedback.dialog.boundingBox();
+  expect(edge).not.toBeNull();
+
+  await page.mouse.click((edge?.x ?? 0) + 2, (edge?.y ?? 0) + (edge?.height ?? 0) / 2);
+
+  await expect(feedback.dialog).toBeVisible();
+});
+
 test('Tab never lands on the page behind the open dialog', async ({page, browserName}) => {
   test.skip(browserName === 'webkit', 'WebKit tabs only to explicit stops, so a plain Tab skips the buttons');
   await github(page);
