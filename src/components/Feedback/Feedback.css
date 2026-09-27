@@ -130,7 +130,6 @@
 
 .feedback-cancel {
   color: var(--ink);
-  border: var(--base) solid var(--backdrop);
 
   &:focus-visible {
     outline: var(--hairline-x-2) solid var(--ring);

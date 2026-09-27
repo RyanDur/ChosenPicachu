@@ -117,7 +117,7 @@ export const Feedback: FC = () => {
         <section className="feedback-actions field">
           {draft.sending.state !== 'writing' &&
             <output className={classNames('feedback-status', 'paragraph', draft.sending.state === 'refused' && 'alarm-ink')}>{said(draft.sending)}</output>}
-          <button type="button" className="feedback-cancel path sub-title bold attentive field reachable" commandfor="feedback" command="close" onClick={commandWithoutInvokers}>Cancel</button>
+          <button type="button" className="feedback-cancel path sub-title bold attentive field hairline-outline reachable" commandfor="feedback" command="close" onClick={commandWithoutInvokers}>Cancel</button>
           <button type="submit" className="feedback-send path sub-title bold borderless reachable" disabled={draft.sending.state === 'sending'}>Send</button>
         </section>
       </form>
