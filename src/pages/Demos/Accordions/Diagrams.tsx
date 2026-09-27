@@ -2,7 +2,7 @@ import {FC, PropsWithChildren} from 'react';
 import {Figure} from '../Recipe';
 import './Diagrams.css';
 
-type Kind = 'piece' | 'native' | 'off-screen' | 'clip';
+type Kind = 'piece' | 'native' | 'off-screen' | 'clipped' | 'clip';
 type At = {x: number; y: number};
 type Sized = At & {width: number; height: number};
 
@@ -105,7 +105,7 @@ export const TheGuess: FC = () =>
     <Box x={50} y={110} width={80} height={20} kind="native"/>
     <Words x={90} y={146}>short text</Words>
     <Box x={190} y={34} width={80} height={96} kind="native"/>
-    <Box x={190} y={10} width={80} height={24} kind="off-screen"/>
+    <Box x={190} y={10} width={80} height={24} kind="clipped"/>
     <Words x={230} y={146}>tall text, cut off</Words>
   </Diagram>;
 
@@ -187,7 +187,7 @@ export const PaddingInsideTheClip: FC = () =>
     <Box x={24} y={36} width={272} height={94} kind="clip"/>
     <Words x={34} y={52} anchor="start">wrapper, 0fr, clips</Words>
     <Box x={38} y={62} width={244} height={58} kind="native"/>
-    <Part x={52} y={74} width={216} height={34} kind="off-screen" name="text, inside its padding"/>
+    <Part x={52} y={74} width={216} height={34} kind="clipped" name="text, inside its padding"/>
   </Diagram>;
 
 export const RidesTheEdge: FC = () =>
@@ -197,7 +197,7 @@ export const RidesTheEdge: FC = () =>
       const x = 12 + at * 104;
       const edge = 88 + open * 50;
       return <g key={open}>
-        <Box x={x} y={edge - 50} width={88} height={50} kind="off-screen"/>
+        <Box x={x} y={edge - 50} width={88} height={50} kind="clipped"/>
         <Box x={x} y={88} width={88} height={edge - 88} kind="native"/>
         <Part x={x} y={62} width={88} height={26} kind="piece" name="bar"/>
         <line className="edge" x1={x - 6} y1={edge} x2={x + 94} y2={edge}/>

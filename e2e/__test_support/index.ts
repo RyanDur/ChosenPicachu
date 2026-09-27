@@ -13,5 +13,5 @@ export {fingerTap, fingertipMiss} from './finger';
 export {sortableList} from './lists';
 export {headingsTakingMoreLinesThanWords} from './headings';
 export {codedStepLayouts} from './recipes';
-export {heightByTheNextFrame, heightOnceSettled} from './motion';
+export {firstHeightAfter, heightByTheNextFrame, heightOnceSettled} from './motion';
 export {accordionsTab, builds, type Build} from './accordions';

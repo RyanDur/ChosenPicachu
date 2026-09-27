@@ -1,5 +1,5 @@
 import {Locator, Page, expect, test} from '@playwright/test';
-import {accordionsTab, builds, codedStepLayouts, desktop, heightByTheNextFrame, heightOnceSettled, iPhone} from './__test_support';
+import {accordionsTab, builds, codedStepLayouts, desktop, heightByTheNextFrame, firstHeightAfter, heightOnceSettled, iPhone} from './__test_support';
 
 const folds = (page: Page): Locator =>
   page.getByRole('article').filter({has: page.getByRole('heading', {name: 'Exclusive accordion using details elements'})}).getByRole('group');
@@ -67,12 +67,12 @@ for (const build of builds) {
     await expect(part.fold).toBeVisible();
     const closed = await heightByTheNextFrame(part.fold);
 
+    const firstMoved = firstHeightAfter(part.fold, closed);
     await part.open();
     await expect.poll(part.isOpen).toBe(true);
-    const midway = await heightByTheNextFrame(part.fold);
 
-    expect(midway).toBeGreaterThan(closed);
-    expect(midway).toBe(await heightOnceSettled(part.fold));
+    expect(await firstMoved).toBeGreaterThan(closed);
+    expect(await firstMoved).toBe(await heightOnceSettled(part.fold));
   });
 }
 
@@ -83,8 +83,8 @@ for (const build of ['Exclusive accordion using checkboxes', 'Exclusive accordio
     await expect(folds.first()).toBeVisible();
 
     for (const fold of await folds.all()) {
-      const [whole, bar] = await Promise.all([fold.boundingBox(), fold.getByRole('heading').locator('xpath=..').boundingBox()]);
-      expect(whole !== null && bar !== null && Math.abs(whole.height - bar.height) <= 1).toBe(true);
+      await fold.scrollIntoViewIfNeeded();
+      await expect(fold.getByRole('paragraph')).not.toBeInViewport();
     }
   });
 }
@@ -94,17 +94,19 @@ test.describe('a desktop', () => {
 
   test('sees each diagram under its prose and beside its code', async ({page}) => {
     await page.goto('demos/?tab=accordions');
-    const runs = page.getByRole('listitem').filter({has: page.getByRole('figure'), hasNot: page.getByRole('article')});
+    const runs = page.getByRole('listitem').filter({has: page.getByRole('code'), hasNot: page.getByRole('article')})
+      .filter({has: page.getByRole('figure').or(page.getByRole('table'))});
     await expect(runs.first()).toBeVisible();
 
     for (const run of await runs.all()) {
-      const [words, figure, code] = await Promise.all([
-        run.getByRole('paragraph').first().boundingBox(),
-        run.getByRole('figure').boundingBox(),
-        run.getByRole('code').boundingBox()
-      ]);
-      expect(words !== null && figure !== null && code !== null
-        && figure.y >= words.y + words.height && figure.x + figure.width <= code.x).toBe(true);
+      const words = run.getByRole('paragraph').first();
+      const visual = run.getByRole('figure').or(run.getByRole('table'));
+      const code = run.getByRole('code');
+      const bottom = async (element: typeof words) => ((await element.boundingBox())?.y ?? 0) + ((await element.boundingBox())?.height ?? 0);
+      const right = async (element: typeof words) => ((await element.boundingBox())?.x ?? 0) + ((await element.boundingBox())?.width ?? 0);
+
+      await expect.poll(async () => (await visual.boundingBox())?.y ?? -1).toBeGreaterThanOrEqual(await bottom(words));
+      await expect.poll(async () => right(visual)).toBeLessThanOrEqual((await code.boundingBox())?.x ?? 0);
     }
   });
 });

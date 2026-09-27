@@ -11,7 +11,8 @@
     stroke-width: var(--hairline);
   }
 
-  .off-screen {
+  .off-screen,
+  .clipped {
     fill: none;
     stroke: var(--charcoal);
     stroke-width: var(--hairline);

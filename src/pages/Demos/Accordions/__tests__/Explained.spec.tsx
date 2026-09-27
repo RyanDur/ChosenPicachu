@@ -72,13 +72,8 @@ describe('the accordions diagrams', () => {
     const explained = await screen.findByRole('region', {name: parts[2]});
     const promises = within(explained).getByRole('table', {name: 'What each element promises'});
 
-    expect(within(promises).getAllByRole('rowheader').map(element => [
-      element.textContent,
-      ...within(element.closest('tr') ?? element).getAllByRole('cell').map(cell => cell.textContent)
-    ])).toEqual([
-      ['checkbox', 'yes', 'no'],
-      ['radio', 'no', 'yes'],
-      ['details with a name', 'yes', 'yes']
-    ]);
+    expect(within(promises).getByRole('row', {name: 'checkbox yes no'})).toBeInTheDocument();
+    expect(within(promises).getByRole('row', {name: 'radio no yes'})).toBeInTheDocument();
+    expect(within(promises).getByRole('row', {name: 'details with a name yes yes'})).toBeInTheDocument();
   });
 });

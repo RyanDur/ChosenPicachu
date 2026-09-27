@@ -1,5 +1,6 @@
 import {FC} from 'react';
 import {Figure} from '../../Recipe';
+import './SlotsFigure.css';
 
 export const SlotsFigure: FC = () =>
   <Figure viewBox="0 0 480 130" caption={<>
