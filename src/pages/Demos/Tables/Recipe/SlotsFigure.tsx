@@ -1,4 +1,5 @@
 import {FC} from 'react';
+import '../../Recipe/RecipeFigure.css';
 
 export const SlotsFigure: FC = () =>
   <figure className="recipe-figure">
