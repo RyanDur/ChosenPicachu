@@ -1,6 +1,5 @@
-import {readFileSync} from 'node:fs';
 import {agents, qaNames, reading, reviewers, reviewersIn} from '../review/agents.mjs';
-import {promptFor} from '../review/prompt.mjs';
+import {dispatch, promptFor} from '../review/prompt.mjs';
 
 const two = `# Agents
 
@@ -35,11 +34,23 @@ describe('the reviewers AGENTS.md names', () => {
     expect(reviewersIn(one).map(({name}) => name)).toEqual(['structure']);
   });
 
-  test('should run exactly the reviewers the repo\'s AGENTS.md names', () => {
-    const named = reviewersIn(readFileSync('AGENTS.md', 'utf8')).map(({name}) => `${name}-qa`);
-
-    expect(Object.keys(agents())).toEqual(named);
+  test('should refuse an AGENTS.md that names no reviewers', () => {
+    expect(() => reviewersIn('# Agents')).toThrow('AGENTS.md names no reviewers');
   });
+
+  test('should name the line a reviewer is missing', () => {
+    const unscoped = two.replace('- scopes: full, changes\n', '');
+
+    expect(() => reviewersIn(unscoped)).toThrow('the structure reviewer in AGENTS.md has no scopes line');
+  });
+
+  test('should send every reviewer in a scope the scope, however many there are', () => {
+    const six = ['a-qa', 'b-qa', 'c-qa', 'd-qa', 'e-qa', 'f-qa'];
+
+    expect(dispatch(six)).toContain('a-qa, b-qa, c-qa, d-qa, e-qa and f-qa');
+    expect(dispatch(six)).not.toContain('undefined');
+  });
+
 });
 
 describe('the review\'s QAs', () => {

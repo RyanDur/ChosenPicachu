@@ -80,7 +80,7 @@ describe('the review prompt', () => {
 
   test('a review of the changes sends all five QAs', () => {
     const prompt = promptFor({scope: 'changes', before: 'abc', after: 'def'});
-    expect(prompt).toContain('five QAs hold one door each: structure-qa, presentation-qa, dynamic-interaction-qa, design-qa, tests-qa');
+    expect(prompt).toContain('The QAs hold one door each: structure-qa, presentation-qa, dynamic-interaction-qa, design-qa and tests-qa.');
   });
 
   test('the review answers in the feedback stance: habits first, then plusses and deltas, each with what happened and why', () => {

@@ -1,7 +1,7 @@
 import {readFileSync} from 'node:fs';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {not} from '@ryandur/sand';
+import {maybe, not} from '@ryandur/sand';
 
 const values = readFileSync(join(dirname(fileURLToPath(import.meta.url)), 'values.md'), 'utf8');
 const schema = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), 'feedback.schema.json'), 'utf8'));
@@ -19,10 +19,15 @@ export const reviewersIn = markdown => {
     throw new Error('AGENTS.md names no reviewers: it has no "## Reviewers" section');
   }
   return markdown.slice(listed).split('\n### ').slice(1).map(section => {
-    const [name, ...lines] = section.split('\n');
-    const field = key => (lines.find(line => line.startsWith(`- ${key}: `)) ?? '').slice(`- ${key}: `.length);
+    const [heading, ...lines] = section.split('\n');
+    const name = heading.trim();
+    const field = key => maybe(lines.find(line => line.startsWith(`- ${key}: `))).either(
+      line => line.slice(`- ${key}: `.length),
+      () => {
+        throw new Error(`the ${name} reviewer in AGENTS.md has no ${key} line`);
+      });
     return {
-      name: name.trim(),
+      name,
       file: field('rubric').replaceAll('`', ''),
       reviews: field('reviews').replace(/^the /, ''),
       scopes: field('scopes').split(',').map(scope => scope.trim()),
