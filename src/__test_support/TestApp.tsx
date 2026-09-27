@@ -13,12 +13,13 @@ import {
 import {Outlet, Route, RouteObject, createMemoryRouter, createRoutesFromElements, useLocation} from 'react-router';
 import {App} from '../App';
 import {router} from '../router';
-import {env} from '@env';
+import {Env, env} from '@env';
 import {Feed} from '@pages/Demos/__test_support/feed';
 
 type Props = PropsWithChildren<{
   readonly at?: string;
   readonly feed?: Feed;
+  readonly env?: Partial<Env>;
 }>;
 
 const Reported = createContext<readonly string[]>([]);
@@ -52,7 +53,7 @@ const routesAt = (at: string, children: ReactNode): RouteObject[] =>
       .map(({path, errorElement, handle}): RouteObject[] => [{path, errorElement, handle, element: children}])
       .orElse([{path: pathOf(at), element: children}]);
 
-export const TestApp: FC<Props> = ({at = '/', feed, children}) => {
+export const TestApp: FC<Props> = ({at = '/', feed, env: overrides, children}) => {
   const [memory] = useState(() => createMemoryRouter([{
     id: 'probes',
     element: <Probes/>,
@@ -68,6 +69,6 @@ export const TestApp: FC<Props> = ({at = '/', feed, children}) => {
     startTransition(() => setReported(errors => [...errors, described(error)]));
 
   return <Reported.Provider value={reported}>
-    <App router={memory} onError={report} env={has(feed) ? {...env, tradeFeed: feed.url} : env}/>
+    <App router={memory} onError={report} env={{...env, ...(has(feed) ? {tradeFeed: feed.url} : {}), ...overrides}}/>
   </Reported.Provider>;
 };

@@ -32,6 +32,15 @@ describe('Feedback in a browser without invoker commands', () => {
   }
 });
 
+describe('Feedback without a token', () => {
+  test('should offer no Feedback button when the site has no token', async () => {
+    render(<TestApp at="/" env={{feedbackToken: ''}}/>);
+    await site.pageTitled();
+
+    expect(screen.queryByRole('button', {name: 'Feedback'})).not.toBeInTheDocument();
+  });
+});
+
 describe('Feedback while a note is on its way', () => {
   test('should keep a new note when the reply to an earlier one arrives', async () => {
     let release: () => void = () => undefined;
