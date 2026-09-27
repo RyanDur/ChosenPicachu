@@ -28,9 +28,9 @@ export const http = {
 const bodyResult = (resp: Response) => asyncResult(resp.json()).or(() => asyncFailure(HTTPError.JSON_BODY_ERROR));
 const emptySuccess = () => asyncSuccess<undefined, HTTPError>(undefined);
 
-type Sending = {body?: unknown; cache?: RequestCache; headers?: Record<string, string>};
+type RequestOptions = {body?: unknown; cache?: RequestCache; headers?: Record<string, string>};
 
-const request = (uri: PATH, method: HTTPMethod, {body, cache, headers}: Sending = {}) =>
+const request = (uri: PATH, method: HTTPMethod, {body, cache, headers}: RequestOptions = {}) =>
   requesting(uri, {method, mode: 'cors', body, cache, headers}, () => HTTPError.NETWORK_ERROR);
 
 const fail = (response: Response) => matchFailStatusCode(response.status, {
