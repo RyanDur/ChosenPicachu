@@ -262,22 +262,21 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
         <RowToItsContent/>
       </li>
       <li className="run">
-        <p className="paragraph">A row closes only as far as its item can. The row’s item has no
-          minimum height, so the row can reach 0. The text’s padding sits further in, inside a
-          wrapper whose own row is 0fr and clips, so the padding cannot hold the row open. Take
-          the wrappers out and a strip of text shows under every closed bar.</p>
+        <p className="paragraph">A row closes only as far as its item can. The row’s item is
+          the paragraph itself, with no minimum height and no padding, so the row can reach 0,
+          and its overflow hidden clips the text. The padding sits on a span inside it, where it
+          cannot hold the row open. Put the padding on the paragraph and a strip of text shows
+          under every closed bar.</p>
         <Snippet label="CSS" lines={[
-          ...unit(accordionsCss, '.info-animated-wrapper {\n      overflow: hidden;'), gap,
-          ...unit(accordionsCss, '.info-animated {'), gap,
-          ...unit(accordionsCss, '.info {\n      padding: var(--base-x-2);\n    }\n  }\n}')
+          ...unit(accordionsCss, '.info {\n      min-height: 0;'), gap,
+          ...unit(accordionsCss, '.info-text {\n      display: block;')
         ]}/>
         <PaddingInsideTheClip/>
       </li>
       <li className="run">
         <p className="paragraph">The radio build’s text slides down from under its bar. Its
-          fold keeps one explicit row, for the bar, so the wrapper sits in a row of its own
-          content’s height. The wrapper grows from 0fr to 1fr, and the element inside moves from translateY(-100%) to 0
-          over the same 300 milliseconds. The row and the text share one duration and one easing,
+          row grows from 0fr to 1fr like the checkbox build’s, and the span inside the paragraph
+          moves from translateY(-100%) to 0 over the same 300 milliseconds. The row and the text share one duration and one easing,
           so at every frame they have covered the same share of the way, and the text’s bottom
           edge stays on the row’s edge. Linear keeps that edge moving at one even speed, like a
           drawer. It answers no limit. It is there to show what grid and a transform do
