@@ -9,12 +9,20 @@
   .chart-header .period-toggle {
     margin-left: auto;
     width: auto;
-    height: auto;
+    height: var(--base-x-3);
     border: none;
     padding: var(--base-x-0_25) var(--base);
 
     &::after {
       content: ' ▾';
+    }
+
+    &:hover {
+      background: var(--approach);
+    }
+
+    &:focus-visible {
+      outline: var(--hairline-x-2) solid var(--ring);
     }
   }
 
