@@ -1,5 +1,17 @@
 .new-accordion {
   .fold {
+    &::details-content {
+      block-size: 0;
+      overflow: hidden;
+      transition:
+        block-size .3s ease-in-out,
+        content-visibility .3s allow-discrete;
+    }
+
+    &[open]::details-content {
+      block-size: auto;
+    }
+
     .info-label {
       display: flex;
       height: 100%;
