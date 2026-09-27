@@ -94,6 +94,11 @@
 .feedback-cancel {
   padding: var(--base) var(--base-x-2);
   cursor: pointer;
+
+  &:focus-visible {
+    outline: var(--hairline-x-2) solid var(--ring);
+    outline-offset: calc(var(--hairline-x-2) * -1);
+  }
 }
 
 .feedback-send {
@@ -103,22 +108,11 @@
   &:hover,
   &:focus {
     color: var(--ink);
-    background: var(--approach);
-  }
-
-  &:focus-visible {
-    outline: var(--hairline-x-2) solid var(--ring);
-    outline-offset: calc(var(--hairline-x-2) * -1);
-  }
-
-  &:active {
-    box-shadow: var(--press-glow);
   }
 
   &:disabled {
     color: var(--field);
     background: var(--smoke);
-    outline: none;
     cursor: default;
   }
 }
@@ -134,17 +128,6 @@
 
 .feedback-cancel {
   color: var(--ink);
-
-  &:focus-visible {
-    outline: var(--hairline-x-2) solid var(--ring);
-    outline-offset: calc(var(--hairline-x-2) * -1);
-  }
-
-  &:disabled {
-    color: var(--ink-muted);
-    background: var(--field);
-    cursor: default;
-  }
 }
 
 @media (width <= 600px), (height <= 500px) {
@@ -176,7 +159,6 @@
 
 @media (height <= 500px) {
   .feedback-form {
-    grid-template-columns: 1fr 1fr;
     grid-template-rows: auto auto 1fr;
     grid-template-areas:
       "heading heading"
