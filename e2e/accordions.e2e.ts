@@ -77,9 +77,8 @@ for (const build of ['the React checkbox build', 'the React radio build'] as con
     const parts = await accordionsTab(page).partsOf(build);
 
     for (const part of parts) {
-      await part.fold.scrollIntoViewIfNeeded();
       await expect(textOf(part)).toBeAttached();
-      await expect(textOf(part)).not.toBeInViewport();
+      await expect.poll(part.showsText).toBe(false);
     }
   });
   test(`an open fold in ${build} shows its text`, async ({page}) => {
@@ -89,8 +88,7 @@ for (const build of ['the React checkbox build', 'the React radio build'] as con
     await part.open();
 
     await expect.poll(part.isOpen).toBe(true);
-    await textOf(part).scrollIntoViewIfNeeded();
-    await expect(textOf(part)).toBeInViewport();
+    await expect.poll(part.showsText).toBe(true);
   });
 }
 
@@ -114,8 +112,7 @@ for (const build of builds.filter(build => build !== 'the details build')) {
     await part.openByKeyboard();
 
     await expect.poll(part.isOpen).toBe(true);
-    await textOf(part).scrollIntoViewIfNeeded();
-    await expect(textOf(part)).toBeInViewport();
+    await expect.poll(part.showsText).toBe(true);
   });
 }
 
