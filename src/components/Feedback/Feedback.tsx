@@ -110,9 +110,9 @@ export const Feedback: FC = () => {
       <form className="feedback-form" onSubmit={send}>
         <hgroup className="feedback-heading field">
           <h2 id="feedback-title" className="sub-title bold">Feedback</h2>
-          <p className="caption">It goes to <a className="signpost" href={draft.thread}>this page’s thread on GitHub</a>, where you can read what others said.</p>
           <p className="paragraph">About: {pageName}</p>
         </hgroup>
+        <p className="feedback-thread field paragraph">It goes to <a className="signpost" href={draft.thread}>this page’s thread on GitHub</a>, where you can read what others said.</p>
         <label className="feedback-field">
           <span className="feedback-label field bold">What did you find?</span>
           <textarea className="feedback-words bare card borderless paragraph" name="words" required enterKeyHint="send" value={draft.words}
