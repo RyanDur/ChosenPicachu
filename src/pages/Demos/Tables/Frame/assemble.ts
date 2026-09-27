@@ -1,4 +1,3 @@
-import indexCss from '../../../../index.css?raw';
 import tableCss from '@components/DragSortableTable/Table.css?raw';
 import headerCss from '@components/DragSortableTable/Header.css?raw';
 import sortableCss from '@components/DragSortableTable/sortable.css?raw';
@@ -10,23 +9,10 @@ import aggregationsCss from '../Aggregations/Aggregations.css?raw';
 import scaffold from './frame.html?raw';
 import frameJs from './frame.main.ts?frame';
 import {startingTable} from './starting';
-import {not} from '@ryandur/sand';
+import {Sheet, siteSheets} from '../../Stage/cascade';
 
-const styleSheets = import.meta.glob<string>('../../../../styles/*.css', {query: '?raw', import: 'default', eager: true});
-
-const sheet = (name: string): {name: string; css: string} => {
-  const path = `../../../../styles/${name}`;
-  if (not(path in styleSheets)) {
-    throw new Error(`no sheet named "${name}" in styles/`);
-  }
-  return {name, css: styleSheets[path]};
-};
-
-const manifest = [...indexCss.matchAll(/@import "styles\/(.+?)";/g)].map(([, name]) => name);
-
-export const sheets = [
-  ...manifest.map(sheet),
-  {name: 'index.css', css: indexCss.replace(/@import "styles\/.+?";\n?/g, '')},
+export const sheets: Sheet[] = [
+  ...siteSheets,
   {name: 'Table.css', css: tableCss},
   {name: 'Header.css', css: headerCss},
   {name: 'sortable.css', css: sortableCss},
