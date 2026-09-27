@@ -126,6 +126,22 @@ describe('Feedback while a note is on its way', () => {
     expect(status).toHaveTextContent(/^Sent\./);
   });
 
+  test('should clear the sent note from the field when GitHub answers after Feedback is reopened', async () => {
+    const github = githubHoldingItsAnswer();
+    const words = await opened();
+    await userEvent.type(words, 'The sort menu hides.{Enter}');
+    await userEvent.click(screen.getByRole('button', {name: 'Cancel'}));
+    await userEvent.click(screen.getByRole('button', {name: 'Feedback'}));
+
+    github.answers();
+
+    const dialog = within(screen.getByRole('dialog', {name: 'Feedback'}));
+    expect(await dialog.findByRole('link', {name: 'Read it on GitHub'})).toBeInTheDocument();
+    expect(dialog.getByRole('textbox', {name: 'What did you find?'})).toHaveValue('');
+    await userEvent.type(dialog.getByRole('textbox', {name: 'What did you find?'}), '{Enter}');
+    expect(github.notes).toHaveLength(1);
+  });
+
   test('should make a new line on Shift and Enter, and send nothing', async () => {
     const github = githubHoldingItsAnswer();
     const words = await opened();

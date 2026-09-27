@@ -2,7 +2,7 @@ import {HTTPError} from '@transport/types';
 import {FeedbackAction, FeedbackActions} from './actions';
 import {discussions} from './github';
 
-export type Sending = {state: 'writing'} | {state: 'sending'} | {state: 'sent'; to: string} | {state: 'refused'; why: HTTPError};
+export type Sending = {state: 'writing'} | {state: 'sending'; words: string; reach: string} | {state: 'sent'; to: string} | {state: 'refused'; why: HTTPError};
 
 export type Draft = {
   key: string;
@@ -20,6 +20,8 @@ export const draftAt = (key: string): Draft =>
 
 const aboutPage = (draft: Draft, key: string): boolean => draft.key === key;
 const onScreen = (draft: Draft, openings: number): boolean => draft.openings === openings;
+const unsentWords = ({sending, words, reach}: Draft): Pick<Draft, 'words' | 'reach'> =>
+  sending.state === 'sending' && sending.words === words && sending.reach === reach ? {words: '', reach: ''} : {words, reach};
 const stillSending = ({sending}: Draft): Sending => sending.state === 'sending' ? sending : {state: 'writing'};
 
 export const feedbackReducer = (draft: Draft, action: FeedbackAction): Draft => {
@@ -35,11 +37,11 @@ export const feedbackReducer = (draft: Draft, action: FeedbackAction): Draft => 
     case FeedbackActions.REACH_EDITED:
       return {...draft, reach: action.reach};
     case FeedbackActions.NOTE_SUBMITTED:
-      return {...draft, sending: {state: 'sending'}};
+      return {...draft, sending: {state: 'sending', words: draft.words, reach: draft.reach}};
     case FeedbackActions.NOTE_SENT:
       return onScreen(draft, action.openings)
         ? {...draft, sentTo: action.url, words: '', reach: '', sending: {state: 'writing'}, sentOnScreen: draft.sentOnScreen + 1}
-        : {...draft, sentTo: action.url, sending: {state: 'sent', to: action.url}};
+        : {...draft, ...unsentWords(draft), sentTo: action.url, sending: {state: 'sent', to: action.url}};
     case FeedbackActions.NOTE_REFUSED:
       return {...draft, sending: {state: 'refused', why: action.why}};
   }
