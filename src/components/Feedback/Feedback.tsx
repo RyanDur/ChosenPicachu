@@ -4,6 +4,7 @@ import {has, maybe, not} from '@ryandur/sand';
 import {useEnv} from '@components/Env';
 import {Page, discussions, sent, threadFor} from './github';
 import './Feedback.css';
+import cancelIcon from '../../assets/icons/cancel.svg?url';
 
 type Sending = {state: 'writing'} | {state: 'sending'} | {state: 'refused'; why: string};
 
@@ -96,23 +97,27 @@ export const Feedback: FC = () => {
       <button type="button" className="feedback-open path attentive field reachable" commandfor="feedback" command="show-modal" onClick={opening}>Feedback</button>
       {has(sentTo) && <output className="feedback-sent caption">Sent. <a className="signpost" href={sentTo}>Read it on GitHub</a></output>}
     </p>
-    <dialog id="feedback" className="feedback card rounded-corners" closedby="any" aria-labelledby="feedback-title" onClick={closesOnTheVeil} onToggle={fieldFirst}>
+    <dialog id="feedback" className="feedback backdrop" closedby="any" aria-labelledby="feedback-title" onClick={closesOnTheVeil} onToggle={fieldFirst}>
       <form className="feedback-form" onSubmit={send}>
-        <hgroup className="feedback-heading">
+        <hgroup className="feedback-heading field">
           <h2 id="feedback-title" className="sub-title bold">Feedback</h2>
           <p className="caption">It goes to <a className="signpost" href={thread}>this page’s thread on GitHub</a>, where you can read what others said.</p>
           <p className="paragraph">About: {page.name}</p>
         </hgroup>
-        <button type="button" className="feedback-close reachable" commandfor="feedback" command="close" aria-label="Close" onClick={commandWithoutInvokers}>×</button>
-        <label className="feedback-field caption">What did you find?
-          <textarea className="feedback-words paragraph" name="words" required enterKeyHint="send" onKeyDown={sendsOnEnter}/>
+        <button type="button" className="feedback-close button icon-button borderless field attentive reachable" commandfor="feedback" command="close" aria-label="Close" onClick={commandWithoutInvokers}>
+          <img className="icon" src={cancelIcon} width="24" height="24" alt=""/>
+        </button>
+        <label className="feedback-field">
+          <span className="feedback-label field bold">What did you find?</span>
+          <textarea className="feedback-words bare card borderless paragraph" name="words" required enterKeyHint="send" onKeyDown={sendsOnEnter}/>
         </label>
-        <label className="feedback-field caption">A way to reach you, if you like
-          <input className="feedback-reach paragraph" type="text" name="reach" autoComplete="email" enterKeyHint="send"/>
+        <label className="feedback-field">
+          <span className="feedback-label field bold">A way to reach you, if you like</span>
+          <input className="feedback-reach bare card borderless paragraph" type="text" name="reach" autoComplete="email" enterKeyHint="send"/>
         </label>
-        {sending.state === 'refused' && <output className="feedback-refused caption">GitHub did not take the note: {sending.why}. Your words are still here.</output>}
-        <button type="submit" className="feedback-send reachable" disabled={sending.state === 'sending'}>Send</button>
-        <button type="button" className="feedback-cancel reachable" commandfor="feedback" command="close" onClick={commandWithoutInvokers}>Cancel</button>
+        {sending.state === 'refused' && <output className="feedback-refused field alarm-ink paragraph">GitHub did not take the note: {sending.why}. Your words are still here.</output>}
+        <button type="submit" className="feedback-send path attentive field borderless bold reachable" disabled={sending.state === 'sending'}>Send</button>
+        <button type="button" className="feedback-cancel path attentive field borderless bold reachable" commandfor="feedback" command="close" onClick={commandWithoutInvokers}>Cancel</button>
       </form>
     </dialog>
   </>;

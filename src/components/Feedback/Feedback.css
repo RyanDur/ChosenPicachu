@@ -27,7 +27,7 @@
 .feedback {
   inline-size: 100%;
   max-inline-size: 60ch;
-  padding: var(--base-x-3);
+  padding: var(--base);
   border: none;
   color: var(--ink);
 
@@ -45,20 +45,27 @@
     "reach reach reach"
     "refused refused refused"
     ". send cancel";
-  align-items: start;
-  gap: var(--base-x-2);
+  gap: var(--base);
 }
 
 .feedback-heading {
   grid-area: heading;
   display: grid;
   gap: var(--base);
+  padding: var(--base-x-2);
 }
 
 .feedback-field {
   display: grid;
-  gap: var(--base-x-0_5);
   color: var(--ink);
+}
+
+.feedback-label {
+  padding: var(--base) var(--base-x-2);
+}
+
+.feedback-field:has(.feedback-words:hover, .feedback-words:focus, .feedback-reach:hover, .feedback-reach:focus) .feedback-label {
+  background-color: var(--approach);
 }
 
 .feedback-field:has(.feedback-words) {
@@ -71,11 +78,8 @@
 
 .feedback-words,
 .feedback-reach {
-  padding: var(--base) var(--base-x-1_5);
-  border: var(--hairline) solid var(--charcoal);
-  border-radius: var(--radius);
+  padding: var(--base) var(--base-x-2);
   color: var(--ink);
-  background: var(--field);
 }
 
 .feedback-words {
@@ -85,37 +89,28 @@
 
 .feedback-refused {
   grid-area: refused;
-  color: var(--alarm-ink);
+  padding: var(--base) var(--base-x-2);
 }
 
 .feedback-send,
 .feedback-cancel {
-  padding-inline: var(--base-x-2);
-  border: var(--hairline) solid var(--charcoal);
-  border-radius: var(--radius);
-  font-size: var(--text-body);
+  padding: var(--base) var(--base-x-2);
+  font-size: var(--text-title);
+  color: var(--ink);
   cursor: pointer;
 }
 
 .feedback-send {
   grid-area: send;
-  color: var(--ink-inverse);
-  background: var(--charcoal);
 }
 
 .feedback-cancel {
   grid-area: cancel;
-  color: var(--ink);
-  background: none;
 }
 
 .feedback-close {
   grid-area: close;
-  justify-self: end;
-  border: none;
-  background: none;
-  color: var(--ink);
-  font-size: var(--text-title);
+  padding: var(--base);
   cursor: pointer;
 }
 
@@ -127,8 +122,7 @@
     max-inline-size: none;
     max-block-size: none;
     margin: 0;
-    padding: var(--base-x-2);
-    border-radius: 0;
+    padding: var(--base);
   }
 
   .feedback-form {
@@ -150,14 +144,14 @@
 
 @media (height <= 500px) {
   .feedback-form {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr auto;
     grid-template-rows: auto auto 1fr auto auto;
     grid-template-areas:
-      "heading close"
-      "words reach"
-      "words refused"
-      "words send"
-      "words cancel";
+      "heading heading close"
+      "words   reach   reach"
+      "words   refused refused"
+      "words   send    send"
+      "words   cancel  cancel";
   }
 
   .feedback-send,
