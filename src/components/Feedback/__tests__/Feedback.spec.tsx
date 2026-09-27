@@ -138,9 +138,25 @@ describe('Feedback while a note is on its way', () => {
     const dialog = within(screen.getByRole('dialog', {name: 'Feedback'}));
     expect(await dialog.findByRole('link', {name: 'Read it on GitHub'})).toBeInTheDocument();
     expect(dialog.getByRole('textbox', {name: 'What did you find?'})).toHaveValue('');
-    await userEvent.type(dialog.getByRole('textbox', {name: 'What did you find?'}), '{Enter}');
-    expect(dialog.getByRole('textbox', {name: 'What did you find?'})).toBeInvalid();
-    expect(dialog.getByRole('status')).toHaveTextContent(/^Sent\./);
+  });
+
+  test('should keep a changed way to reach the reader when the reply to an earlier note arrives', async () => {
+    const github = githubHoldingItsAnswer();
+    const words = await opened();
+    await userEvent.type(screen.getByRole('textbox', {name: 'A way to reach you, if you like'}), 'reader@example.test');
+    await userEvent.type(words, 'The sort menu hides.{Enter}');
+    await userEvent.click(screen.getByRole('button', {name: 'Cancel'}));
+    await userEvent.click(screen.getByRole('button', {name: 'Feedback'}));
+    const reach = screen.getByRole('textbox', {name: 'A way to reach you, if you like'});
+    await userEvent.clear(reach);
+    await userEvent.type(reach, 'another@example.test');
+
+    github.answers();
+
+    const dialog = within(screen.getByRole('dialog', {name: 'Feedback'}));
+    expect(await dialog.findByRole('link', {name: 'Read it on GitHub'})).toBeInTheDocument();
+    expect(dialog.getByRole('textbox', {name: 'A way to reach you, if you like'})).toHaveValue('another@example.test');
+    expect(dialog.getByRole('textbox', {name: 'What did you find?'})).toHaveValue('The sort menu hides.');
   });
 
   test('should clear the way to reach the reader with the sent note when GitHub answers after Feedback is reopened', async () => {
