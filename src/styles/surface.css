@@ -22,7 +22,7 @@
   }
 }
 
-.attentive {
+.attentive:where(:not(:disabled)) {
   &:hover,
   &:focus,
   &:focus-within {
