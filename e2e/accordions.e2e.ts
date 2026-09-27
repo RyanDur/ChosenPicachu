@@ -103,3 +103,23 @@ for (const build of ['Exclusive accordion using checkboxes', 'Exclusive accordio
     }
   });
 }
+
+test.describe('a desktop', () => {
+  test.use(desktop);
+
+  test('sees each diagram under its prose and beside its code', async ({page}) => {
+    await page.goto('demos/?tab=accordions');
+    const runs = page.getByRole('listitem').filter({has: page.getByRole('figure'), hasNot: page.getByRole('article')});
+    await expect(runs.first()).toBeVisible();
+
+    for (const run of await runs.all()) {
+      const [words, figure, code] = await Promise.all([
+        run.getByRole('paragraph').first().boundingBox(),
+        run.getByRole('figure').boundingBox(),
+        run.getByRole('code').boundingBox()
+      ]);
+      expect(words !== null && figure !== null && code !== null
+        && figure.y >= words.y + words.height && figure.x + figure.width <= code.x).toBe(true);
+    }
+  });
+});

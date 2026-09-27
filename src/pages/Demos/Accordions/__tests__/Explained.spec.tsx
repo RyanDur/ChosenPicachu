@@ -44,20 +44,28 @@ describe('the accordions diagrams', () => {
     [parts[0], ['One job, two ways', 'Off screen, not gone', 'The sheet reads the box', 'Two borders, turned', 'Focus on the box, drawn on the bar', 'The guess', 'One name, one choice']],
     [parts[1], ['Three pieces become two', 'Sized to the text, no guess']],
     [parts[2], ['A row that grows to its content', 'The padding inside the clip', 'The text rides the row’s edge']]
-  ])('should draw under "%s" each mechanism, named by its title and one sentence', async (part, titles) => {
+  ])('should draw under "%s" each mechanism in order, named by its title and one sentence', async (part, titles) => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
     const explained = await screen.findByRole('region', {name: part});
 
-    titles.forEach(title => expect(within(explained).getByRole('figure', {name: new RegExp(`^${title}\\. \\S.*\\.$`)})).toBeInTheDocument());
+    expect(titles.map(title => within(explained).getByRole('figure', {name: new RegExp(`^${title}\\. \\S.*\\.$`)})))
+      .toEqual(within(explained).getAllByRole('figure'));
   });
 
-  test('should set out what each element promises as a table', async () => {
+  test('should set out what each element promises, row by row, as a table', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
     const explained = await screen.findByRole('region', {name: parts[2]});
     const promises = within(explained).getByRole('table', {name: 'What each element promises'});
 
-    expect(within(promises).getAllByRole('rowheader').map(row => row.textContent)).toEqual(['checkbox', 'radio', 'details with a name']);
+    expect(within(promises).getAllByRole('rowheader').map(element => [
+      element.textContent,
+      ...within(element.closest('tr') ?? element).getAllByRole('cell').map(cell => cell.textContent)
+    ])).toEqual([
+      ['checkbox', 'yes', 'no'],
+      ['radio', 'no', 'yes'],
+      ['details with a name', 'yes', 'yes']
+    ]);
   });
 });
