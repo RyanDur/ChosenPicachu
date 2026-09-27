@@ -21,19 +21,21 @@
 }
 
 .run {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, max(45ch, 34%)), 1fr));
   align-items: start;
   gap: var(--base-x-2) var(--base-x-3);
 
   .paragraph {
-    flex: 1 1 var(--measure-floor);
     margin: 0;
     text-wrap: pretty;
   }
 
-  .snippet {
-    flex: 1 1 52ch;
-    min-width: 0;
+  .paragraph:only-child {
+    grid-column: 1 / -1;
+  }
+
+  &:has(.recipe-figure, .promises) .snippet {
+    grid-row: span 2;
   }
 }

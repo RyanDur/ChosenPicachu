@@ -13,6 +13,7 @@ import accordionsSource from './Accordions.tsx?raw';
 import accordionsCss from './Accordions.css?raw';
 import placementCss from '../../../styles/placement.css?raw';
 import resetCss from '../../../styles/reset.css?raw';
+import {FocusOnTheBar, OffScreenNotGone, OneJobTwoWays, OneNameOneChoice, PaddingInsideTheClip, RidesTheEdge, RowToItsContent, SizedToTheText, TheGuess, TheSheetReadsTheBox, ThreeBecomeTwo, TwoBordersTurned, WhatEachPromises} from './Diagrams';
 import './Explained.css';
 
 export type Contents = {
@@ -49,6 +50,7 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
           pressing anywhere on the bar presses the box. The id carries the part’s place in the
           list, so no two boxes share one.</p>
         <Snippet label="TS" lines={span(accordionsSource, '<li key={key} className="fold">', '</li>')}/>
+        <OneJobTwoWays/>
       </li>
       <li className="run">
         <p className="paragraph">Natively, summary is both the bar and the control, so there is
@@ -59,6 +61,7 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
           tab order, and a keyboard could no longer open the part. Off screen, the box still
           takes focus, still answers the space bar, and is still named by its label.</p>
         <Snippet label="CSS" lines={unit(placementCss, '.off-screen {')}/>
+        <OffScreenNotGone/>
       </li>
       <li className="run">
         <p className="paragraph">Natively, details shows its content when it is open, and the
@@ -69,6 +72,7 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
           sheet can only look forward from the box. While the box is not checked, this rule
           collapses the text. No script watches the box; the sheet asks it.</p>
         <Snippet label="CSS" lines={unit(accordionsCss, '.info-toggle:not(:checked) ~ .info {')}/>
+        <TheSheetReadsTheBox/>
       </li>
       <li className="run">
         <p className="paragraph">Natively, summary draws its own marker and turns it when the
@@ -85,6 +89,7 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
           ...unit(accordionsCss, '&:not(.close) .info-toggle ~ .info-label::after {'), gap,
           ...unit(accordionsCss, '.info-toggle:checked ~ .info-label::after {')
         ]}/>
+        <TwoBordersTurned/>
       </li>
       <li className="run">
         <p className="paragraph">Natively, summary takes focus and hover itself. In the trick, the
@@ -98,6 +103,7 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
           ...unit(accordionsCss, '@media (hover: hover) {'), gap,
           ...unit(accordionsCss, '.info-toggle:focus-visible ~ .info-label {')
         ]}/>
+        <FocusOnTheBar/>
       </li>
       <li className="run">
         <p className="paragraph">Natively, the platform can now animate a details to its
@@ -109,6 +115,7 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
           the guess is cut off. Opacity and a half-height drop ride along, so the text fades as
           it lands: 500 milliseconds opening, 250 closing.</p>
         <Snippet label="CSS" lines={unit(accordionsCss, '.info {\n      overflow: hidden;\n      max-height')}/>
+        <TheGuess/>
       </li>
       <li className="run">
         <p className="paragraph">Natively, details elements that share a name keep one open.
@@ -118,6 +125,7 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
           closes it. The arrow keys move the choice within a group, so a keyboard opens each part
           it passes.</p>
         <Snippet label="TS" lines={span(accordionsSource, '<li className="fold" key={key}>', '</li>')}/>
+        <OneNameOneChoice/>
       </li>
       <li className="run">
         <p className="paragraph">Natively, pressing an open summary closes it. A chosen radio
@@ -149,6 +157,7 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
           the announcement come with it. No id, no for, no hidden box, and no sibling
           selector.</p>
         <Snippet label="TS" lines={span(accordionsSource, '<details className="fold"', '</details>')}/>
+        <ThreeBecomeTwo/>
       </li>
       <li className="run">
         <p className="paragraph">This is what the radio group was for. Give every details the
@@ -177,6 +186,7 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
           ...unit(accordionsCss, '&[open]::details-content {'), gap,
           ...unit(resetCss, ':root {\n  interpolate-size')
         ]}/>
+        <SizedToTheText/>
       </li>
       <li className="run">
         <p className="paragraph">There is no script here either.</p>
@@ -202,6 +212,7 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
           ...unit(accordionsSource, 'const [checked, updateChecked]'), gap,
           ...span(accordionsSource, 'type="checkbox"\n                  aria-label', 'className="off-screen"/>')
         ]}/>
+        <WhatEachPromises/>
       </li>
       <li className="run">
         <p className="paragraph">The radio build takes its one at a time from the group, and
@@ -230,6 +241,7 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
           ...unit(accordionsCss, '&:has(:checked) {'), gap,
           ...unit(accordionsCss, '&.animated.reveal {')
         ]}/>
+        <RowToItsContent/>
       </li>
       <li className="run">
         <p className="paragraph">A row closes only as far as its item can. The row’s item has no
@@ -241,6 +253,7 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
           ...unit(accordionsCss, '.info-animated {'), gap,
           ...unit(accordionsCss, '.info {\n      padding: var(--base-x-2);\n    }\n  }\n}')
         ]}/>
+        <PaddingInsideTheClip/>
       </li>
       <li className="run">
         <p className="paragraph">The radio build’s text slides down from under its bar. Its
@@ -250,6 +263,7 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
           row’s. It answers no limit. It is there to show what grid and a transform do
           together.</p>
         <Snippet label="CSS" lines={unit(accordionsCss, '&.animated.drawer {')}/>
+        <RidesTheEdge/>
       </li>
       <li className="run">
         <p className="paragraph">The Animate and Static choice only adds or removes a class. The

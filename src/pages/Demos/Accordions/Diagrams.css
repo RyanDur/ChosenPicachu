@@ -1,0 +1,70 @@
+.recipe-figure {
+  .piece {
+    fill: var(--paper);
+    stroke: var(--charcoal);
+    stroke-width: var(--hairline);
+  }
+
+  .native {
+    fill: var(--faded-mint);
+    stroke: var(--charcoal);
+    stroke-width: var(--hairline);
+  }
+
+  .hidden {
+    fill: none;
+    stroke: var(--charcoal);
+    stroke-width: var(--hairline);
+    stroke-dasharray: 4 3;
+  }
+
+  .clip {
+    fill: none;
+    stroke: var(--charcoal);
+    stroke-width: var(--hairline-x-2);
+  }
+
+  .arrow,
+  .chevron {
+    fill: none;
+    stroke: var(--charcoal);
+    stroke-width: var(--hairline-x-2);
+  }
+
+  .arrow-head,
+  .chosen {
+    fill: var(--charcoal);
+  }
+
+  .ring {
+    fill: var(--approach);
+    stroke: var(--ring);
+    stroke-width: var(--hairline-x-2);
+  }
+
+  .guess,
+  .edge {
+    stroke: var(--charcoal);
+    stroke-dasharray: 4 3;
+  }
+
+  .floor {
+    stroke: var(--charcoal);
+  }
+}
+
+.promises {
+  border-collapse: collapse;
+  color: var(--ink);
+
+  .promises-title {
+    text-align: start;
+    font-weight: 600;
+  }
+
+  .promise {
+    padding: var(--base-x-0_5) var(--base);
+    border-block-end: var(--hairline) solid var(--charcoal);
+    text-align: start;
+  }
+}
