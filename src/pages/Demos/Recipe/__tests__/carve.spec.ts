@@ -164,6 +164,16 @@ describe('carving examples out of the source they teach', () => {
     ]);
   });
 
+  test('a css selector carries on past a pseudo-class paren into a next-sibling combinator', () => {
+    const sheet = '.toggle:not(:checked) + .text {\n    height: 0;\n}\n';
+
+    expect(unit(sheet, '.toggle:not(:checked) + .text {').map(({text}) => text)).toEqual([
+      '.toggle:not(:checked) + .text {',
+      '    height: 0;',
+      '}'
+    ]);
+  });
+
   test('a css block ends at its brace, even when the next selector starts with a colon', () => {
     const sheet = '@media (hover: hover) {\n    .bar {\n        color: red;\n    }\n}\n\n:root {\n    gap: 0;\n}\n';
 

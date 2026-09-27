@@ -14,8 +14,6 @@
 }
 
 .runs {
-  margin: 0;
-  list-style: none;
   display: grid;
   gap: var(--base-x-4);
 }
@@ -27,7 +25,6 @@
   gap: var(--base-x-2) var(--base-x-3);
 
   .paragraph {
-    margin: 0;
     text-wrap: pretty;
   }
 

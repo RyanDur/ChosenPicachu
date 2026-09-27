@@ -1,5 +1,5 @@
 import {Locator, Page, expect, test} from '@playwright/test';
-import {codedStepLayouts, desktop} from './__test_support';
+import {codedStepLayouts, desktop, iPhone} from './__test_support';
 
 const folds = (page: Page): Locator =>
   page.getByRole('article').filter({has: page.getByRole('heading', {name: 'Exclusive accordion using details elements'})}).getByRole('group');
@@ -52,13 +52,13 @@ test('opening a second details fold closes the first, from the keyboard too', as
 });
 
 for (const {reader, device, layout} of [
-  {reader: 'a phone held upright', device: {viewport: {width: 390, height: 844}, hasTouch: true}, layout: 'code below prose'},
+  {reader: 'a phone held upright', device: iPhone, layout: 'code below prose'},
   {reader: 'a desktop', device: desktop, layout: 'code beside prose'}
 ] as const) {
   test.describe(reader, () => {
     test.use(device);
 
-    test(`reads the accordions explanation with the ${layout} in every run`, async ({page}) => {
+    test(`reads the accordions explanation with the ${layout} on every step`, async ({page}) => {
       await page.goto('demos/?tab=accordions');
       await expect(page.getByRole('code').first()).toBeVisible();
 
@@ -88,5 +88,18 @@ for (const {build, fold, press, opened} of [
 
     expect(midway).toBe(await heightOnceSettled(part));
     expect(midway).toBeGreaterThan(80);
+  });
+}
+
+for (const build of ['Exclusive accordion using checkboxes', 'Exclusive accordion using radio group']) {
+  test(`a closed fold in the ${build.toLowerCase()} shows only its bar`, async ({page}) => {
+    await page.goto('demos/?tab=accordions');
+    const folds = page.getByRole('article').filter({has: page.getByRole('heading', {name: build, exact: true})}).first().getByRole('listitem');
+    await expect(folds.first()).toBeVisible();
+
+    for (const fold of await folds.all()) {
+      const [whole, bar] = await Promise.all([fold.boundingBox(), fold.getByRole('heading').locator('xpath=..').boundingBox()]);
+      expect(whole !== null && bar !== null && Math.abs(whole.height - bar.height) <= 1).toBe(true);
+    }
   });
 }
