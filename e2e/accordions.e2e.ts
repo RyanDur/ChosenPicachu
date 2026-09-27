@@ -120,17 +120,16 @@ for (const build of builds.filter(build => build !== 'the details build')) {
 }
 
 for (const build of ['the radio build', 'the React radio build'] as const) {
-  test(`a keyboard reader moves through ${build} to open its second fold`, async ({page}) => {
+  test(`a keyboard reader moves through ${build} from its first fold to its second`, async ({page}) => {
     await page.goto('demos/?tab=accordions');
     const [first, second] = [accordionsTab(page).partOf(build, 0), accordionsTab(page).partOf(build, 1)];
     await expect(second.fold).toBeVisible();
+    await first.openByKeyboard();
+    await expect.poll(first.showsText).toBe(true);
 
     await second.openByKeyboard();
 
-    await expect.poll(second.isOpen).toBe(true);
-    await textOf(second).scrollIntoViewIfNeeded();
-    await expect(textOf(second)).toBeInViewport();
-    await first.fold.scrollIntoViewIfNeeded();
-    await (first.closedText === 'collapsed' ? expect(textOf(first)).toBeHidden() : expect(textOf(first)).not.toBeInViewport());
+    await expect.poll(second.showsText).toBe(true);
+    await expect.poll(first.showsText).toBe(false);
   });
 }
