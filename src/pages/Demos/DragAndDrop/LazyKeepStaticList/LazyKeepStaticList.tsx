@@ -27,7 +27,7 @@ export const LazyKeepStaticList: FC<Props> = ({list}) => {
       onDragOver={event => event.preventDefault()}
       onDrop={event => event.preventDefault()}
       onDragLeave={() => setLanding(nothing())}
-      className="sortable-list contained">{
+      className="sortable-list card rounded-corners lifted padded contained">{
         order.map((item, index) =>
           <KeepItem key={item}
             className={'item'}

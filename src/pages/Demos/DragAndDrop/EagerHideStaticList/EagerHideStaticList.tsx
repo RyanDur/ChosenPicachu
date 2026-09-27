@@ -20,7 +20,7 @@ export const EagerHideStaticList: FC<Props> = ({list}) => {
     <ol aria-label="sortable list"
       onDragOver={event => event.preventDefault()}
       onDrop={event => event.preventDefault()}
-      className="sortable-list contained">{
+      className="sortable-list card rounded-corners lifted padded contained">{
         order.map((item, index) =>
           <HideItem key={item}
             className={'item'}

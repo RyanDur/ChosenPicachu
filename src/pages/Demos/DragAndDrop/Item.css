@@ -2,8 +2,8 @@
     padding: var(--base-x-4);
     padding-top: var(--base);
     border-radius: var(--radius-soft);
-    background: var(--paper);
-    border: var(--hairline) solid var(--black);
+    background: var(--field);
+    border: var(--hairline) solid var(--ink);
     opacity: 1;
     transition: opacity 50ms;
     display: flex;
