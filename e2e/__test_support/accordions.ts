@@ -14,7 +14,7 @@ const headings: Record<Build, string> = {
 
 type Part = {fold: Locator; open: () => Promise<void>; isOpen: () => Promise<boolean>};
 
-export const wordOn = (part: Locator): Locator => part.getByText(/^\w+$/).first();
+const wordOn = (part: Locator): Locator => part.getByText(/^\w+$/).first();
 
 export const textOf = (part: Locator): Locator => part.getByRole('paragraph', {includeHidden: true});
 
@@ -46,6 +46,11 @@ export const accordionsTab = (page: Page) => {
     page.getByRole('article').filter({has: page.getByRole('heading', {name: headings[build], exact: true})}).first();
   return {
     partsOf: (build: Build): Locator => build === 'the details build' ? built(build).getByRole('group') : built(build).getByRole('listitem'),
+    open: (part: Locator): Promise<void> => wordOn(part).click(),
+    openByKeyboard: async (part: Locator): Promise<void> => {
+      await wordOn(part).focus();
+      await page.keyboard.press('Enter');
+    },
     firstPartOf: (build: Build): Part => firstParts[build](built(build))
   };
 };

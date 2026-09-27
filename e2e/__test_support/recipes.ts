@@ -12,20 +12,24 @@ export const codedStepLayouts = async (page: Page): Promise<StepLayout[]> => {
   return layouts.flat();
 };
 
-export type Placement = 'under its prose, beside its code' | 'misplaced';
-
-export const pictureInRunPlacements = async (page: Page): Promise<Placement[]> => {
+export const misplacedPictures = async (page: Page): Promise<string[]> => {
   const runs = page.getByRole('listitem').filter({has: page.getByRole('code'), hasNot: page.getByRole('article')})
     .filter({has: page.getByRole('figure').or(page.getByRole('table'))});
-  return Promise.all((await runs.all()).map(async run => {
-    const [words, picture, code] = await Promise.all([
+  const misplaced = await Promise.all((await runs.all()).map(async run => {
+    const picture = run.getByRole('figure').or(run.getByRole('table'));
+    const [words, drawn, code, name] = await Promise.all([
       run.getByRole('paragraph').first().boundingBox(),
-      run.getByRole('figure').or(run.getByRole('table')).boundingBox(),
-      run.getByRole('code').boundingBox()
+      picture.boundingBox(),
+      run.getByRole('code').boundingBox(),
+      run.getByRole('paragraph').first().textContent().then(prose => `the run on "${(prose ?? '').trim().slice(0, 40)}"`)
     ]);
-    if (words === null || picture === null || code === null) {
-      throw new Error('a run with a picture has no box for its prose, its picture or its code');
+    if (words === null || drawn === null || code === null) {
+      return [`${name}: a box is missing`];
     }
-    return picture.y >= words.y + words.height && picture.x + picture.width <= code.x ? 'under its prose, beside its code' : 'misplaced';
+    return [
+      ...(drawn.y < words.y + words.height ? [`${name}: over its prose`] : []),
+      ...(drawn.x + drawn.width > code.x ? [`${name}: into its code`] : [])
+    ];
   }));
+  return runs.count().then(count => count === 0 ? ['no run has a picture'] : misplaced.flat());
 };

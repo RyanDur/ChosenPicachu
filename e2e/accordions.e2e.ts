@@ -1,5 +1,5 @@
 import {Locator, Page, expect, test} from '@playwright/test';
-import {accordionsTab, builds, codedStepLayouts, desktop, firstHeightAfter, heightByTheNextFrame, heightOnceSettled, iPhone, pictureInRunPlacements, textOf, wordOn} from './__test_support';
+import {accordionsTab, builds, codedStepLayouts, desktop, firstHeightAfter, heightByTheNextFrame, heightOnceSettled, iPhone, misplacedPictures, textOf} from './__test_support';
 
 const detailsParts = (page: Page): Locator => accordionsTab(page).partsOf('the details build');
 
@@ -8,7 +8,7 @@ test('a details fold slides open where the browser can animate it', async ({page
   await page.goto('demos/?tab=accordions');
   const fold = detailsParts(page).first();
 
-  await wordOn(fold).click();
+  await accordionsTab(page).open(fold);
   const midway = await heightByTheNextFrame(fold);
 
   expect(midway).toBeLessThan(await heightOnceSettled(fold));
@@ -19,7 +19,7 @@ test('a details fold opens at once, fully, where the browser cannot animate it',
   await page.goto('demos/?tab=accordions');
   const fold = detailsParts(page).first();
 
-  await wordOn(fold).click();
+  await accordionsTab(page).open(fold);
   const midway = await heightByTheNextFrame(fold);
 
   expect(midway).toBe(await heightOnceSettled(fold));
@@ -29,11 +29,10 @@ test('a details fold opens at once, fully, where the browser cannot animate it',
 test('opening a second details fold closes the first, from the keyboard too', async ({page}) => {
   await page.goto('demos/?tab=accordions');
   const [first, second] = [detailsParts(page).nth(0), detailsParts(page).nth(1)];
-  await wordOn(first).click();
+  await accordionsTab(page).open(first);
   await expect(textOf(first)).toBeVisible();
 
-  await wordOn(second).focus();
-  await page.keyboard.press('Enter');
+  await accordionsTab(page).openByKeyboard(second);
 
   await expect(textOf(second)).toBeVisible();
   await expect(textOf(first)).toBeHidden();
@@ -94,6 +93,6 @@ test.describe('a desktop', () => {
     await page.goto('demos/?tab=accordions');
     await expect(page.getByRole('figure').first()).toBeVisible();
 
-    await expect.poll(async () => [...new Set(await pictureInRunPlacements(page))]).toEqual(['under its prose, beside its code']);
+    await expect.poll(async () => [...new Set(await misplacedPictures(page))]).toEqual([]);
   });
 });
