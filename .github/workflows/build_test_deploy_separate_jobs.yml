@@ -17,6 +17,7 @@ env:
   VITE_APP_VAM_PICTURES: https://framemark.vam.ac.uk/collections
   VITE_APP_CLEVELAND_API: https://openaccess-api.clevelandart.org/api/artworks
   VITE_APP_USERS_API: /api/users
+  VITE_APP_FEEDBACK_TOKEN: ${{ secrets.CHOSEN_PICACHU_FEEDBACK }}
 
 jobs:
   build_test:

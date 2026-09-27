@@ -98,7 +98,8 @@ const runtimeEnv = (env: Record<string, string>): Plugin => {
     vamDomain: env.VITE_APP_VAM_API ?? '',
     vamPictures: env.VITE_APP_VAM_PICTURES ?? '',
     clevelandDomain: env.VITE_APP_CLEVELAND_API ?? '',
-    usersDomain: env.VITE_APP_USERS_API ?? ''
+    usersDomain: env.VITE_APP_USERS_API ?? '',
+    feedbackToken: env.VITE_APP_FEEDBACK_TOKEN ?? ''
   }, null, 2)};\n`;
   let base = '/';
   return {

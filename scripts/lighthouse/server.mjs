@@ -48,7 +48,8 @@ const server = createServer((request, response) => {
       vamDomain: '/vam',
       vamPictures: '/vam-image',
       clevelandDomain: '/cleveland',
-      usersDomain: '/api/users'
+      usersDomain: '/api/users',
+      feedbackToken: 'recorded'
     })};`, 'text/javascript', true);
   }
 

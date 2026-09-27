@@ -9,7 +9,8 @@ window.__env = {
   vamDomain: import.meta.env.VITE_APP_VAM_API,
   vamPictures: import.meta.env.VITE_APP_VAM_PICTURES,
   clevelandDomain: import.meta.env.VITE_APP_CLEVELAND_API,
-  usersDomain: import.meta.env.VITE_APP_USERS_API
+  usersDomain: import.meta.env.VITE_APP_USERS_API,
+  feedbackToken: import.meta.env.VITE_APP_FEEDBACK_TOKEN
 };
 
 export {};

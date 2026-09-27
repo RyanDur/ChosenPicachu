@@ -3,7 +3,7 @@
   width: 100%;
   display: grid;
   gap: var(--base);
-  grid-template-columns: repeat(2, var(--base-x-16_5)) 1fr repeat(2, var(--base-x-16_5));
+  grid-template-columns: max-content var(--base-x-16_5) 1fr repeat(2, var(--base-x-16_5));
   grid-template-rows:
     var(--base-x-12)
     1fr
@@ -112,7 +112,7 @@
 
 @media (width <= 1547px) {
   #root {
-    grid-template-columns: var(--base-x-16_75) 1fr var(--base-x-16_75);
+    grid-template-columns: max-content 1fr var(--base-x-16_75);
     grid-template-areas:
       'nav header filter'
       'nav main filter'

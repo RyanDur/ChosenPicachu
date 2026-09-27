@@ -5,6 +5,7 @@ import {Paths} from '@pages/Paths';
 import {toQueryString} from '@transport/url';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
 import {Source} from '@components/art-gallery/museums/source';
+import {Feedback} from '@components/Feedback';
 
 export const SideNav: FC = () =>
   <nav id="side-nav" className="side-nav field" aria-label="site">
@@ -21,5 +22,6 @@ export const SideNav: FC = () =>
       <li><Link id="navigate-games" className="path attentive field reachable" to={Paths.games}>Games</Link></li>
       <li><a id="navigate-repo" className="path attentive field reachable" href={Paths.repo}
         rel="noopener noreferrer" target="_blank">Repo</a></li>
+      <Feedback/>
     </ul>
   </nav>;
