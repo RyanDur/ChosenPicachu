@@ -13,7 +13,7 @@
     fill: var(--faded-mint);
   }
 
-  .center {
+  .midline {
     stroke: var(--charcoal);
     stroke-dasharray: 4 3;
   }

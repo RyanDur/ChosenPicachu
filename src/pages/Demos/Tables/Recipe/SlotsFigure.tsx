@@ -14,7 +14,7 @@ export const SlotsFigure: FC = () =>
     <rect className="dead" x="230" y="20" width="30" height="70"/>
     <rect className="inner" x="260" y="20" width="60" height="70"/>
     <rect className="dead" x="320" y="20" width="30" height="70"/>
-    <line className="center" x1="290" y1="14" x2="290" y2="96"/>
+    <line className="midline" x1="290" y1="14" x2="290" y2="96"/>
     <text className="label" x="290" y="110" textAnchor="middle">inner half switches</text>
     <text className="label" x="245" y="12" textAnchor="middle">dead</text>
     <text className="label" x="335" y="12" textAnchor="middle">dead</text>
