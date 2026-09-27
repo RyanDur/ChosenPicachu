@@ -138,7 +138,7 @@ jobs:
 
   journeys:
     needs: build_test
-    runs-on: ubuntu-26.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v5
       - name: Set up Node.js
@@ -178,7 +178,7 @@ jobs:
 
   smoke:
     needs: pages
-    runs-on: ubuntu-26.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v5
       - name: Set up Node.js
