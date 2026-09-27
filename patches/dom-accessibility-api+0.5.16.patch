@@ -1,0 +1,68 @@
+diff --git a/node_modules/dom-accessibility-api/dist/accessible-name-and-description.js b/node_modules/dom-accessibility-api/dist/accessible-name-and-description.js
+index 585aa65..56cf0db 100644
+--- a/node_modules/dom-accessibility-api/dist/accessible-name-and-description.js
++++ b/node_modules/dom-accessibility-api/dist/accessible-name-and-description.js
+@@ -90,7 +90,7 @@ function isMarkedPresentational(node) {
+  * - https://w3c.github.io/html-aam/#table-element
+  */
+ function isNativeHostLanguageTextAlternativeElement(node) {
+-  return (0, _util.isHTMLTableCaptionElement)(node);
++  return (0, _util.isHTMLTableCaptionElement)(node) || (0, _util.isElement)(node) && (0, _util.getLocalName)(node) === "figcaption";
+ }
+ 
+ /**
+@@ -315,6 +315,20 @@ function computeTextAlternative(root) {
+           });
+         }
+       }
++    } else if ((0, _util.getLocalName)(node) === "figure") {
++      // https://w3c.github.io/html-aam/#figure-and-figcaption-elements
++      consultedNodes.add(node);
++      var figureChildren = (0, _array.default)(node.childNodes);
++      for (var f = 0; f < figureChildren.length; f += 1) {
++        var figureChild = figureChildren[f];
++        if ((0, _util.getLocalName)(figureChild) === "figcaption") {
++          return computeTextAlternative(figureChild, {
++            isEmbeddedInLabel: false,
++            isReferenced: false,
++            recursion: false
++          });
++        }
++      }
+     } else if ((0, _util.isSVGSVGElement)(node)) {
+       // https://www.w3.org/TR/svg-aam-1.0/
+       consultedNodes.add(node);
+diff --git a/node_modules/dom-accessibility-api/dist/accessible-name-and-description.mjs b/node_modules/dom-accessibility-api/dist/accessible-name-and-description.mjs
+index 8f905f1..065fcbc 100644
+--- a/node_modules/dom-accessibility-api/dist/accessible-name-and-description.mjs
++++ b/node_modules/dom-accessibility-api/dist/accessible-name-and-description.mjs
+@@ -89,7 +89,7 @@ function isMarkedPresentational(node) {
+  * - https://w3c.github.io/html-aam/#table-element
+  */
+ function isNativeHostLanguageTextAlternativeElement(node) {
+-  return isHTMLTableCaptionElement(node);
++  return isHTMLTableCaptionElement(node) || isElement(node) && getLocalName(node) === "figcaption";
+ }
+ 
+ /**
+@@ -314,6 +314,20 @@ export function computeTextAlternative(root) {
+           });
+         }
+       }
++    } else if (getLocalName(node) === "figure") {
++      // https://w3c.github.io/html-aam/#figure-and-figcaption-elements
++      consultedNodes.add(node);
++      var figureChildren = ArrayFrom(node.childNodes);
++      for (var f = 0; f < figureChildren.length; f += 1) {
++        var figureChild = figureChildren[f];
++        if (getLocalName(figureChild) === "figcaption") {
++          return computeTextAlternative(figureChild, {
++            isEmbeddedInLabel: false,
++            isReferenced: false,
++            recursion: false
++          });
++        }
++      }
+     } else if (isSVGSVGElement(node)) {
+       // https://www.w3.org/TR/svg-aam-1.0/
+       consultedNodes.add(node);
