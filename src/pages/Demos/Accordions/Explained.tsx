@@ -245,42 +245,43 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
       </li>
       <li className="run">
         <p className="paragraph">Natively, ::details-content animates to auto. Here, a grid row
-          does it in every browser today. The fold is a grid of two rows: the bar at its
-          min-content height, and the text in a row of 0fr. When the fold holds a checked
+          does it in every browser today. Under the bar, the fold’s paragraph is a grid of one
+          row, 0fr while the fold is closed. When the fold holds a checked
           input, <Mdn path="Web/CSS/:has">:has(:checked)</Mdn> makes that row 1fr, and 1fr is
           exactly the height the content needs. A row in fr is a number, so 0fr to 1fr is a
           number growing, which a transition can move. Grid-template-rows moves between the two
           over 300 milliseconds with ease-in-out, so the fold starts gently and settles, and the
-          fold’s overflow hidden clips whatever its rows do not hold. The browser lays out the
+          paragraph’s overflow hidden clips whatever its row does not hold. The browser lays out the
           page on every frame, as it does for max-height, but the row always ends at the
           content’s own height, so there is no guess to wait on.</p>
         <Snippet label="CSS" lines={[
-          ...span(accordionsCss, '  .exclusive-fold {', 'grid-template-rows: min-content 0fr;'), gap,
-          ...unit(accordionsCss, '&:has(:checked) {'), gap,
-          ...unit(accordionsCss, '&.animated.reveal {')
+          ...unit(accordionsCss, '.fold-clip {'), gap,
+          ...unit(accordionsCss, '&:has(:checked) .fold-clip {'), gap,
+          ...unit(accordionsCss, '&.animated.reveal .fold-clip {')
         ]}/>
         <RowToItsContent/>
       </li>
       <li className="run">
-        <p className="paragraph">A row closes only as far as its item can. The row’s item is
-          the paragraph, with no minimum height, so the row can reach 0. Inside it, a span is a
-          grid of its own, 0fr while the fold is closed and 1fr while it is open, and it clips.
-          The text’s padding sits on a span inside that one, where it cannot hold the row open,
-          and the paragraph keeps its whole text while the row grows. A paragraph may hold spans,
-          so the wrappers need no other element. Take them out and the text either shows a strip
-          under every closed bar or leaves a blank band while it slides.</p>
+        <p className="paragraph">A row closes only as far as its item can. The paragraph’s
+          item is a span with no minimum height, so the row can reach 0. The text’s padding sits
+          on a span inside that one, where it cannot hold the row open. A paragraph may hold
+          spans, so the text needs no other element. Put the padding on the item and a strip of
+          text shows under every closed bar. Let the fold’s own row move and the paragraph clip
+          inside it, and the clip falls behind the row while it moves, leaving a blank band under
+          the text.</p>
         <Snippet label="CSS" lines={[
-          ...unit(accordionsCss, '.info-animated-wrapper {\n      overflow: hidden;'), gap,
-          ...unit(accordionsCss, '.info-animated {\n      display: block;'), gap,
-          ...unit(accordionsCss, '.info {\n      display: block;\n      padding: var(--base-x-2);')
+          ...unit(accordionsCss, '.fold-clip-item {'), gap,
+          ...unit(accordionsCss, '.fold-text {\n      display: block;')
         ]}/>
         <PaddingInsideTheClip/>
       </li>
       <li className="run">
         <p className="paragraph">The radio build’s text slides down from under its bar. Its
-          fold keeps one explicit row, for the bar, so the paragraph sits in a row of its own
-          content’s height. The paragraph grows from 0fr to 1fr, and a span inside it moves from
-          translateY(-100%) to 0 over the same 300 milliseconds. The row and the text share one duration and one easing,
+          paragraph grows from 0fr to 1fr as the checkbox build’s does, and one more span,
+          between the item and the text, moves from translateY(-100%) to 0 over the same 300
+          milliseconds. The slide needs a span of its own because -100% is measured against the
+          span’s own height, and the item is only as tall as the row. The row and the text share
+          one duration and one easing,
           so at every frame they have covered the same share of the way, and the text’s bottom
           edge stays on the row’s edge. Linear keeps that edge moving at one even speed, like a
           drawer. It answers no limit. It is there to show what grid and a transform do
