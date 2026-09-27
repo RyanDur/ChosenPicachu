@@ -1,6 +1,7 @@
 import {FC} from 'react';
 import {classNames} from '@components/class-names';
 import {highlight} from './highlight';
+import './Snippet.css';
 
 export type Line = {
   text: string;
