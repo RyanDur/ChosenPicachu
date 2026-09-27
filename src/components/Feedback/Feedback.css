@@ -1,13 +1,12 @@
 .feedback-item {
   display: grid;
+  align-content: center;
   gap: var(--base-x-0_5);
 
   > .feedback-open {
     inline-size: 100%;
     padding: var(--base-x-2);
     border: none;
-    font-size: var(--text-headline);
-    font-weight: bold;
     cursor: pointer;
   }
 }
@@ -20,7 +19,6 @@
   .feedback-item > .feedback-open {
     inline-size: auto;
     padding: var(--base-x-0_5) var(--base);
-    font-size: var(--text-body);
   }
 }
 
@@ -98,7 +96,6 @@
 .feedback-send,
 .feedback-cancel {
   padding: var(--base) var(--base-x-2);
-  font-size: var(--text-title);
   color: var(--ink);
   cursor: pointer;
 }

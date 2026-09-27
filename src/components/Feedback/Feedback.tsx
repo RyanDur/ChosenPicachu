@@ -99,7 +99,7 @@ export const Feedback: FC = () => {
 
   return <>
     <p className="feedback-item field">
-      <button type="button" className="feedback-open path attentive field reachable" commandfor="feedback" command="show-modal" onClick={opening}>Feedback</button>
+      <button type="button" className="feedback-open path rail-aside bold attentive field reachable" commandfor="feedback" command="show-modal" onClick={opening}>Feedback</button>
       <output className="feedback-sent caption">{has(draft.sentTo) && <>Sent. <a className="signpost" href={draft.sentTo}>Read it on GitHub</a></>}</output>
     </p>
     <dialog id="feedback" className="feedback-dialog backdrop" closedby="any" aria-labelledby="feedback-title" onClick={closesOnTheVeil} onToggle={fieldFirst}>
@@ -123,8 +123,8 @@ export const Feedback: FC = () => {
             onChange={event => dispatch(reachEdited(event.currentTarget.value))}/>
         </label>
         <output className={classNames('feedback-status', 'field', 'paragraph', draft.sending.state === 'refused' && 'alarm-ink')}>{said(draft.sending)}</output>
-        <button type="submit" className="feedback-send path attentive field borderless bold reachable" disabled={draft.sending.state === 'sending'}>Send</button>
-        <button type="button" className="feedback-cancel path attentive field borderless bold reachable" commandfor="feedback" command="close" onClick={commandWithoutInvokers}>Cancel</button>
+        <button type="submit" className="feedback-send path sub-title bold attentive field borderless reachable" disabled={draft.sending.state === 'sending'}>Send</button>
+        <button type="button" className="feedback-cancel path sub-title bold attentive field borderless reachable" commandfor="feedback" command="close" onClick={commandWithoutInvokers}>Cancel</button>
       </form>
     </dialog>
   </>;

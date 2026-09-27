@@ -29,6 +29,32 @@
   opacity: 0.8;
 }
 
+/* rail — the frame's words, sized by the frame's tier: a path's word, and
+   the word of what stands apart from the paths */
+.rail-path {
+  font-size: var(--base-x-4);
+}
+
+.rail-aside {
+  font-size: var(--text-headline);
+}
+
+@media (width <= 1100px) {
+  .rail-path {
+    font-size: var(--text-title);
+  }
+
+  .rail-aside {
+    font-size: var(--text-body);
+  }
+}
+
+@media (width <= 600px), (width <= 1100px) and (height <= 600px) {
+  .rail-path {
+    font-size: var(--text-body);
+  }
+}
+
 /* modifiers — compose on the voice */
 .bold {
   font-weight: 600;
