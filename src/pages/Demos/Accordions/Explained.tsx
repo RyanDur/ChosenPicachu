@@ -37,8 +37,8 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
     </ul>
     <ol className={runs}>
       <li className="run">
-        <p className="paragraph">Each of these builds is a disclosure: a bar you press to show the text under it,
-          and press again to hide it. Neither build has any script. Everything below is HTML and CSS:
+        <p className="paragraph">Each of these builds is a disclosure: a bar you press to show the text under it.
+          Neither build has any script. Everything below is HTML and CSS:
           what the elements hold, and what the stylesheet can read.</p>
       </li>
       <li className="run">
@@ -54,10 +54,11 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
       <li className="run">
         <p className="paragraph">You want the reader to see a bar, not a checkbox, so you hide the checkbox.
           Position absolute takes it out of the page’s flow, so it leaves no gap. A vw is a
-          hundredth of the screen’s width, so a right offset of 1000vw puts the checkbox ten
-          screen widths to the left, far off the page. Display none would hide it too, but it
+          hundredth of the window’s width, so a right offset of 1000vw puts the checkbox ten
+          window widths to the left, far off the page. Display none would hide it too, but it
           would also take the checkbox out of the tab order, and a keyboard could no longer open
-          the part. Off screen, the checkbox still takes focus, still answers the space bar, and
+          the part. Focus is the element the keyboard will act on. Off screen, the checkbox still
+          takes focus, still answers the space bar, and
           is still named by its label.</p>
         <Snippet label="CSS" lines={unit(placementCss, '.off-screen {')}/>
         <OffScreenNotGone/>
@@ -100,8 +101,7 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
         <TwoBordersTurned/>
       </li>
       <li className="run">
-        <p className="paragraph">A keyboard user needs to see which bar they are on. Focus is the element the
-          keyboard will act on. Here the checkbox has the focus, but the label is what the reader
+        <p className="paragraph">A keyboard user needs to see which bar they are on. Here the checkbox has the focus, but the label is what the reader
           sees, so the stylesheet carries one to the other. The :focus-visible pseudo-class picks
           the checkbox while it has keyboard focus, and :focus-visible ~ .info-label gives the
           bar the approach colour and a ring inside its edge. The browser treats hovering a label
@@ -260,9 +260,9 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
       <li className="run">
         <p className="paragraph">Details slides to its content’s height with ::details-content, but only in
           Chromium. A grid row does the same in every browser today. Under the bar, the fold’s
-          paragraph is a grid with one row. The fr is a grid unit for a share of the space: in a
-          grid sized to its content, a row of 1fr is exactly as tall as its content needs, and a
-          row of 0fr has no height. The row is 0fr while the fold is closed.
+          paragraph is a grid with one row. The fr is a grid unit for a share of the space. In a
+          grid sized to its content, a row of 1fr is exactly as tall as its content needs. A row
+          of 0fr has no height. The row is 0fr while the fold is closed.
           The <Mdn path="Web/CSS/:has">:has()</Mdn> pseudo-class picks an element by what it
           contains, so :has(:checked) makes that row 1fr when the fold holds a checked input. A
           row in fr is a number, so 0fr to 1fr is a number growing, which a transition can move.
@@ -331,7 +331,7 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
           for <Mdn path="Web/CSS/@media/prefers-reduced-motion">less motion</Mdn> gets every fold on
           this tab open at once. The reset, the stylesheet that sets every element’s defaults, has
           a reduced-motion block with three rules. The first uses the universal selector, *, which
-          picks every element, and reaches their before and after too: it cuts each transition and
+          picks every element and reaches their before and after too. It cuts each transition and
           animation to 0.01 milliseconds, plays each animation once, and turns smooth scrolling
           into a jump. The second names ::details-content, the part a details hides, which the
           universal selector cannot reach. The third lets view transitions, the browser’s moves
