@@ -1,7 +1,7 @@
 .diagram {
   /* px on purpose: the viewBox width Diagram draws in, so drawn-caption can undo the drawing's scale */
   --drawn-width: 320px;
-  --widest-drawing: 480px;
+  --widest-drawing: var(--base-x-60);
 
   container-type: inline-size;
 
