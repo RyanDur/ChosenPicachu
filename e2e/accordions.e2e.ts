@@ -21,19 +21,19 @@ test('a details fold opens at once, fully, where the browser cannot animate it',
   const midway = await heightByTheNextFrame(part.fold);
 
   expect(midway).toBe(await heightOnceSettled(part.fold));
-  await expect(textOf(part)).toBeVisible();
+  await expect.poll(part.showsText).toBe(true);
 });
 
 test('opening a second details fold closes the first, from the keyboard too', async ({page}) => {
   await page.goto('demos/?tab=accordions');
   const [first, second] = [accordionsTab(page).partOf('the details build', 0), accordionsTab(page).partOf('the details build', 1)];
   await first.open();
-  await expect(textOf(first)).toBeVisible();
+  await expect.poll(first.showsText).toBe(true);
 
   await second.openByKeyboard();
 
-  await expect(textOf(second)).toBeVisible();
-  await expect(textOf(first)).toBeHidden();
+  await expect.poll(second.showsText).toBe(true);
+  await expect.poll(first.showsText).toBe(false);
 });
 
 for (const {reader, device, layout} of [
