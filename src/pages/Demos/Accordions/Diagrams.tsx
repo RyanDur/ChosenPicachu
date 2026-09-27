@@ -76,7 +76,7 @@ export const TheSheetReadsTheBox: FC = () =>
 
 export const TwoBordersTurned: FC = () =>
   <Diagram title="Two borders, turned" height={100}
-    says="An empty box with only its top and right borders points right at 45 degrees and down at 135, the marker summary draws for itself.">
+    says="An empty box with only its top and right borders points right at 45 degrees and down at 135.">
     <Chevron x={90} y={44} turn={45}/>
     <Words x={90} y={88}>closed, 45°</Words>
     <Chevron x={230} y={40} turn={135}/>

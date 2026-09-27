@@ -54,8 +54,8 @@ describe('how every fold moves', () => {
 
 describe('the accordions diagrams', () => {
   test.each([
-    [parts[0], ['One job, two ways', 'Off screen, not gone', 'The sheet reads the box', 'Two borders, turned', 'Focus on the box, drawn on the bar', 'The guess', 'One name, one choice']],
-    [parts[1], ['Three pieces become two', 'Sized to the text, no guess']],
+    [parts[0], ['Off screen, not gone', 'The sheet reads the box', 'Two borders, turned', 'Focus on the box, drawn on the bar', 'The guess', 'One name, one choice']],
+    [parts[1], ['One job, two ways', 'Three pieces become two', 'Sized to the text, no guess']],
     [parts[2], ['A row that grows to its content', 'The padding inside the clip', 'The text rides the row’s edge']]
   ])('should draw under "%s" each mechanism in order, named by its title and one sentence', async (part, titles) => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
