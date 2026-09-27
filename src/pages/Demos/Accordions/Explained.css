@@ -3,7 +3,6 @@
   gap: var(--base-x-3);
 
   .paragraph {
-    max-inline-size: var(--measure);
     text-wrap: pretty;
   }
 }
