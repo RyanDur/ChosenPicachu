@@ -25,7 +25,7 @@
     vector-effect: non-scaling-stroke;
   }
 
-  .off-screen,
+  .unseen,
   .clipped {
     fill: none;
     stroke: var(--charcoal);

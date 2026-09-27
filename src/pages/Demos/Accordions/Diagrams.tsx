@@ -2,7 +2,7 @@ import {FC, PropsWithChildren} from 'react';
 import {Figure} from '../Recipe';
 import './Diagrams.css';
 
-type Kind = 'piece' | 'native' | 'off-screen' | 'clipped' | 'clip';
+type Kind = 'piece' | 'native' | 'unseen' | 'clipped' | 'clip';
 type At = {x: number; y: number};
 type Sized = At & {width: number; height: number};
 
@@ -57,7 +57,7 @@ export const OffScreenNotGone: FC = () =>
     <Box x={110} y={20} width={200} height={70} kind="piece"/>
     <Words x={210} y={36}>the viewport</Words>
     <Part x={125} y={48} width={170} height={26} kind="native" name="label, the bar"/>
-    <Part x={14} y={48} width={40} height={26} kind="off-screen" name="input"/>
+    <Part x={14} y={48} width={40} height={26} kind="unseen" name="input"/>
     <Words x={34} y={40}>Tab</Words>
     <Arrow through={[{x: 310, y: 104}, {x: 54, y: 104}]}/>
     <Words x={182} y={116}>right: 1000vw</Words>
@@ -67,7 +67,7 @@ export const TheSheetReadsTheBox: FC = () =>
   <Diagram title="The sheet reads the box" height={110}
     says="The rule matches an unchecked box, then reaches forward to the text after it and collapses it. Nothing before the box can be reached.">
     <Words x={160} y={18}>.info-toggle:not(:checked) ~ .info</Words>
-    <Part x={16} y={34} width={70} height={26} kind="off-screen" name="input"/>
+    <Part x={16} y={34} width={70} height={26} kind="unseen" name="input"/>
     <Part x={125} y={34} width={70} height={26} kind="piece" name="label"/>
     <Part x={234} y={34} width={70} height={26} kind="native" name="p"/>
     <Arrow through={[{x: 51, y: 60}, {x: 51, y: 84}, {x: 269, y: 84}, {x: 269, y: 62}]}/>
@@ -90,7 +90,7 @@ export const FocusOnTheBar: FC = () =>
     <Words x={210} y={36}>the viewport</Words>
     <rect className="ring" x={125} y={48} width={170} height={26}/>
     <Words x={210} y={65}>label, lit and ringed</Words>
-    <rect className="ring off-screen" x={14} y={48} width={40} height={26}/>
+    <rect className="ring unseen" x={14} y={48} width={40} height={26}/>
     <Words x={34} y={65}>focus</Words>
     <Arrow through={[{x: 54, y: 61}, {x: 123, y: 61}]}/>
     <Words x={88} y={104}>:focus-visible ~</Words>
@@ -125,7 +125,7 @@ export const OneNameOneChoice: FC = () =>
 export const ThreeBecomeTwo: FC = () =>
   <Diagram title="Three pieces become two" height={130}
     says="Summary is the bar and the control at once, so the box and its label fold into it, and the text becomes the details’ content.">
-    <Part x={10} y={20} width={50} height={26} kind="off-screen" name="input"/>
+    <Part x={10} y={20} width={50} height={26} kind="unseen" name="input"/>
     <Part x={66} y={20} width={64} height={26} kind="piece" name="label"/>
     <Part x={10} y={54} width={120} height={46} kind="piece" name="p"/>
     <Arrow through={[{x: 140, y: 60}, {x: 176, y: 60}]}/>
