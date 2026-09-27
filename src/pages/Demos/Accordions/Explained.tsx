@@ -58,14 +58,16 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
       <li><ExclusiveCheckboxToggleAccordion className={exhibit} content={contents.checkboxWithState}/></li>
       <li><ExclusiveRadioToggleAccordion className={exhibit} content={contents.radioWithState}/></li>
     </ul>
-    <p className={classNames('paragraph', exhibit)}>When a fold must do more than open and close, you build on what
-      each element was made for. These two builds keep a checkbox and a radio for what they
-      hold, and add a little state so a second press closes the open part, which neither trick
-      could do alone. The slide comes from a grid row that animates from 0fr to 1fr, and the
-      row’s content decides how tall 1fr is, so there is no guess. The second build adds a
-      flourish, not a limit answered: its text slides down under its bar with a transform. The
-      cost is that the fold is a React component, not the platform’s disclosure, and closing
-      needs state the platform gives for free. Reach for this when a fold must slide in every
-      browser today, or must do what details does not; reach for details when it does.</p>
+    <p className={classNames('paragraph', exhibit)}>When a fold must do more than open and
+      close, you build on what each element was made for. These two builds keep a checkbox and
+      a radio for what they hold, and add a little state for what each cannot promise alone:
+      the checkbox build’s state keeps one part open at a time, which boxes on their own do
+      not; the radio build’s state lets a second press close, which a chosen radio on its own
+      cannot. The slide comes from a grid row that animates from 0fr to 1fr, and the row’s
+      content decides how tall 1fr is, so there is no guess. The second build adds a flourish,
+      not a limit answered: its text slides down under its bar with a transform. The cost is
+      that the fold is a React component, not the platform’s disclosure, and closing needs
+      state the platform gives for free. Reach for this when a fold must slide in every browser
+      today, or must do what details does not; reach for details when it does.</p>
   </section>
 </>;
