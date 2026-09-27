@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import {accordionsTab, builds, codedStepLayouts, desktop, firstHeightAfter, heightByTheNextFrame, heightOnceSettled, iPhone, misplacedPictures, textOf} from './__test_support';
+import {accordionsTab, builds, codedStepLayouts, desktop, firstHeightAfter, framesWhileMoving, heightByTheNextFrame, heightOnceSettled, iPhone, misplacedPictures, textOf} from './__test_support';
 
 test('a details fold slides open where the browser can animate it', async ({page, browserName}) => {
   test.skip(browserName !== 'chromium', 'only chromium animates a details element to its natural height');
@@ -10,6 +10,34 @@ test('a details fold slides open where the browser can animate it', async ({page
   const midway = await heightByTheNextFrame(part.fold);
 
   expect(midway).toBeLessThan(await heightOnceSettled(part.fold));
+});
+
+test('a fold in the React checkbox build slides open', async ({page}) => {
+  await page.goto('demos/?tab=accordions');
+  const part = accordionsTab(page).firstPartOf('the React checkbox build');
+  await expect(part.fold).toBeVisible();
+  const closed = await heightByTheNextFrame(part.fold);
+  const firstMoved = firstHeightAfter(part.fold, closed);
+
+  await part.open();
+
+  expect(await firstMoved).toBeGreaterThan(closed);
+  expect(await firstMoved).toBeLessThan(await heightOnceSettled(part.fold));
+});
+
+const roundingBetweenLayoutAndTransform = 3;
+
+test('a fold in the React radio build slides open with its text’s bottom on the row’s edge', async ({page}) => {
+  await page.goto('demos/?tab=accordions');
+  const part = accordionsTab(page).firstPartOf('the React radio build');
+  await expect(part.fold).toBeVisible();
+  const moving = framesWhileMoving(part.fold, 12);
+
+  await part.open();
+  const frames = await moving;
+
+  expect(frames.at(-1)?.height ?? 0).toBeGreaterThan(frames[0]?.height ?? 0);
+  expect(frames.filter(frame => frame.height > frames[0].height).every(frame => frame.textBottomGap <= roundingBetweenLayoutAndTransform)).toBe(true);
 });
 
 test('a details fold opens at once, fully, where the browser cannot animate it', async ({page, browserName}) => {

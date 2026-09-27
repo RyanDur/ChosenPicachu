@@ -21,3 +21,21 @@ export const firstHeightAfter = (fold: Locator, closed: number): Promise<number>
     };
     requestAnimationFrame(sample);
   }), closed);
+
+export type Frame = {height: number; textBottomGap: number};
+
+export const framesWhileMoving = (fold: Locator, count: number): Promise<Frame[]> => fold.evaluate((element, frames) =>
+  new Promise<Frame[]>(resolve => {
+    const text = element.querySelector('p')?.firstElementChild ?? element;
+    const sampled: Frame[] = [];
+    const sample = () => {
+      const box = element.getBoundingClientRect();
+      sampled.push({height: box.height, textBottomGap: Math.abs(box.bottom - text.getBoundingClientRect().bottom)});
+      if (sampled.length < frames) {
+        requestAnimationFrame(sample);
+      } else {
+        resolve(sampled);
+      }
+    };
+    requestAnimationFrame(sample);
+  }), count);

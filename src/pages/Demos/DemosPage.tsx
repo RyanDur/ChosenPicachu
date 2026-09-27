@@ -23,7 +23,7 @@ import {useEnv} from '@components/Env';
 const paragraphs = (count: number) =>
   [...new Set(Array.from({length: count * 3}, () => randWord()))].slice(0, count).map(key => ({
     key,
-    value: Array.from({length: Math.floor(Math.random() * 6) + 1}, () => randParagraph()).join('\n\n')
+    value: Array.from({length: Math.floor(Math.random() * 6) + 1}, () => randParagraph()).join(' ')
   }));
 
 const topics = [
