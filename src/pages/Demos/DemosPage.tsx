@@ -5,13 +5,6 @@ import './DemosPage.css';
 import './Tutorials.css';
 import {Tabs} from '@components/Tabs';
 import {
-  ExclusiveAccordion,
-  ExclusiveToggleAccordion,
-  ExclusiveCheckboxToggleAccordion,
-  InclusiveAccordion,
-  ExclusiveRadioToggleAccordion
-} from './Accordions';
-import {
   EagerHideAnimatedList, EagerHideStaticList, EagerKeepAnimatedList, EagerKeepStaticList,
   LazyHideAnimatedList, LazyHideStaticList, LazyKeepAnimatedList, LazyKeepStaticList
 } from './DragAndDrop';
@@ -21,7 +14,7 @@ import {Tutorials} from './Tables/Tutorials';
 import {ListTutorials} from './DragAndDrop/Tutorials';
 import {ChartsTutorial} from './Charts/Tutorial';
 import {TopLayerTutorial} from './ZIndexDemo/Tutorial';
-import {AccordionTutorial} from './Accordions/Tutorial';
+import {AccordionsExplained} from './Accordions/Explained';
 import {motionParam, originParam, paceParam} from './Controls';
 import {Aggregations, trackParam, tutorialParam, worldParam} from './Tables';
 import {Workspace} from './Charts/Workspace';
@@ -56,24 +49,7 @@ export const DemosPage = () => {
         [DemoTopics.accordions]:
               <>
                 <h2 className="title bold">Different styles of Accordions.</h2>
-                <ul className="accordions">
-                  <li>
-                    <InclusiveAccordion className="card rounded-corners lifted padded" content={accordionContents[0]}/>
-                  </li>
-                  <li>
-                    <ExclusiveAccordion className="card rounded-corners lifted padded" content={accordionContents[1]}/>
-                  </li>
-                  <li className="exclusive">
-                    <ExclusiveToggleAccordion className="card rounded-corners lifted padded" content={accordionContents[2]}/>
-                  </li>
-                  <li>
-                    <ExclusiveCheckboxToggleAccordion className="card rounded-corners lifted padded" content={accordionContents[3]}/>
-                  </li>
-                  <li>
-                    <ExclusiveRadioToggleAccordion className="card rounded-corners lifted padded" content={accordionContents[4]}/>
-                  </li>
-                </ul>
-                <AccordionTutorial/>
+                <AccordionsExplained contents={accordionContents}/>
               </>,
         [DemoTopics.zIndex]: <>
           <h2 className="title bold">Z-Index Demo.</h2>

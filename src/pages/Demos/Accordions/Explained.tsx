@@ -1,0 +1,63 @@
+import {FC, ReactNode} from 'react';
+import {
+  ExclusiveAccordion,
+  ExclusiveCheckboxToggleAccordion,
+  ExclusiveRadioToggleAccordion,
+  ExclusiveToggleAccordion,
+  InclusiveAccordion
+} from './Accordions';
+import {Mdn} from '../Recipe';
+
+type Contents = {value: ReactNode; key: string}[][];
+const exhibit = 'card rounded-corners lifted padded';
+
+export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
+  <section aria-labelledby="old-way-heading" className="accordion-part">
+    <h3 id="old-way-heading" className="title bold">How we used to build a fold</h3>
+    <ul className="accordions">
+      <li><InclusiveAccordion className={exhibit} content={contents[0]}/></li>
+      <li><ExclusiveAccordion className={exhibit} content={contents[1]}/></li>
+    </ul>
+    <p className="paragraph">A heading that shows or hides the part beneath it is a disclosure,
+      and for years no element for one worked in every browser. So you borrowed.
+      A <Mdn path="Web/HTML/Element/input/checkbox">checkbox</Mdn> holds a yes: hide the box,
+      style its label as the bar, and let :checked show the text beneath it. It works before any
+      script arrives, but every box is its own, so it cannot close the others.
+      A <Mdn path="Web/HTML/Element/input/radio">radio</Mdn> holds one of several: give every
+      part the same name, and opening one closes the last. But a chosen radio stays chosen, so
+      the build adds a Close radio to give the reader a way out. And each bar is announced as
+      what the markup says it is, a radio, one of six, not a disclosure. Both slide with a
+      guess. Height did not animate to auto, so max-height stands in, set taller than any
+      text should be, and text taller than the guess is cut off.</p>
+  </section>
+  <section aria-labelledby="platform-way-heading" className="accordion-part">
+    <h3 id="platform-way-heading" className="title bold">What the platform gives now</h3>
+    <ul className="accordions">
+      <li className="exclusive"><ExclusiveToggleAccordion className={exhibit} content={contents[2]}/></li>
+    </ul>
+    <p className="paragraph"><Mdn path="Web/HTML/Element/details">details</Mdn> holds a
+      disclosure. With summary, it is a heading that opens and closes, announced as a
+      disclosure, and it works from the keyboard with nothing added. Give every details the
+      same name and the browser keeps one open, which is the radio’s promise without the
+      radio. The slide needs no guess either. <Mdn path="Web/CSS/::details-content">::details-content</Mdn> is
+      the part a closed details hides, and <Mdn path="Web/CSS/interpolate-size">interpolate-size</Mdn> lets
+      a page animate it to auto. A browser that cannot animate it opens the fold at once, and
+      the fold still works.</p>
+  </section>
+  <section aria-labelledby="together-heading" className="accordion-part">
+    <h3 id="together-heading" className="title bold">The two together</h3>
+    <ul className="accordions">
+      <li><ExclusiveCheckboxToggleAccordion className={exhibit} content={contents[3]}/></li>
+      <li><ExclusiveRadioToggleAccordion className={exhibit} content={contents[4]}/></li>
+    </ul>
+    <p className="paragraph">When a fold must do more than open and close, you build on what
+      each element was made for. These two builds keep a checkbox and a radio for what they
+      hold, and add a little state so a second press closes the open part, which neither trick
+      could do alone. The slide comes from a grid row that animates from 0fr to 1fr, and the
+      row’s content decides how tall 1fr is, so there is no guess. The second build adds a
+      flourish, not a limit answered: its text slides down under its bar with a transform. The
+      cost is that the fold is a React component, not the platform’s disclosure, and closing
+      needs state the platform gives for free. Reach for this when a fold must slide in every
+      browser today, or must do what details does not; reach for details when it does.</p>
+  </section>
+</>;

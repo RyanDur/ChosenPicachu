@@ -11,6 +11,16 @@
     gap: var(--base-x-6);
     padding: var(--base-x-5);
 
+    .accordion-part {
+        display: grid;
+        gap: var(--base-x-3);
+
+        .paragraph {
+            max-inline-size: var(--measure);
+            text-wrap: pretty;
+        }
+    }
+
     .accordions {
         display: grid;
         grid-template-columns: 1fr 1fr;
