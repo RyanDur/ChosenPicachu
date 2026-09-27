@@ -20,14 +20,15 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
     </ul>
     <p className="paragraph">A heading that shows or hides the part beneath it is a disclosure,
       and for years no element for one worked in every browser. So you borrowed.
-      A <Mdn path="Web/HTML/Element/input/checkbox">checkbox</Mdn> holds a yes: hide the box,
-      style its label as the bar, and let :checked show the text beneath it. It works before any
-      script arrives, but every box is its own, so it cannot close the others.
-      A <Mdn path="Web/HTML/Element/input/radio">radio</Mdn> holds one of several: give every
-      part the same name, and opening one closes the last. But a chosen radio stays chosen, so
-      the build adds a Close radio to give the reader a way out. And each bar is announced as
-      what the markup says it is, a radio, one of six, not a disclosure. Both slide with a
-      guess. Height did not animate to auto, so max-height stands in, set taller than any
+      A <Mdn path="Web/HTML/Element/input/checkbox">checkbox</Mdn> holds a yes: move the box off
+      screen, where the keyboard still reaches it, style its label as the bar, and let :checked
+      show the text beneath it. It works before any script arrives, but every box is its own, so
+      it cannot close the others. A <Mdn path="Web/HTML/Element/input/radio">radio</Mdn> holds
+      one of several: give every part the same name, and opening one closes the last. The arrow
+      keys move the choice, so a keyboard opens each part it passes. But a chosen radio stays
+      chosen, so the build adds a Close radio to give the reader a way out. And each bar is
+      announced as what the markup says it is, a radio, one of six, not a disclosure. Both slide
+      with a guess. Height did not animate to auto, so max-height stands in, set taller than any
       text should be, and text taller than the guess is cut off.</p>
   </section>
   <section aria-labelledby="platform-way-heading" className="accordion-part">
