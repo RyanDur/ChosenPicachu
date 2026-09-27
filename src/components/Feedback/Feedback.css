@@ -24,7 +24,7 @@
   }
 }
 
-.feedback {
+.feedback-dialog {
   inline-size: 100%;
   max-inline-size: 60ch;
   padding: var(--base);
@@ -115,7 +115,7 @@
 }
 
 @media (width <= 600px), (height <= 500px) {
-  .feedback {
+  .feedback-dialog {
     inset: 0;
     inline-size: 100%;
     block-size: 100dvh;

@@ -97,7 +97,7 @@ export const Feedback: FC = () => {
       <button type="button" className="feedback-open path attentive field reachable" commandfor="feedback" command="show-modal" onClick={opening}>Feedback</button>
       {has(sentTo) && <output className="feedback-sent caption">Sent. <a className="signpost" href={sentTo}>Read it on GitHub</a></output>}
     </p>
-    <dialog id="feedback" className="feedback backdrop" closedby="any" aria-labelledby="feedback-title" onClick={closesOnTheVeil} onToggle={fieldFirst}>
+    <dialog id="feedback" className="feedback-dialog backdrop" closedby="any" aria-labelledby="feedback-title" onClick={closesOnTheVeil} onToggle={fieldFirst}>
       <form className="feedback-form" onSubmit={send}>
         <hgroup className="feedback-heading field">
           <h2 id="feedback-title" className="sub-title bold">Feedback</h2>
