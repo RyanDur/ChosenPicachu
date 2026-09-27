@@ -10,13 +10,8 @@ const toggles = [
 ];
 
 describe.each(toggles)('the exclusive toggle accordion using $accordion', ({Accordion, control}) => {
-  const fold = (name: string): HTMLElement => {
-    const found = screen.getAllByRole('listitem').find(item => within(item).queryByRole('heading', {name}));
-    if (found) return found;
-    throw new Error(`no fold named ${name}`);
-  };
   const controlOf = (name: string, reads: 'Open' | 'Close'): HTMLElement =>
-    within(fold(name)).getByRole(control, {name: reads});
+    screen.getByRole(control, {name: `${reads} ${name}`});
 
   test('should open one fold at a time', async () => {
     render(<Accordion content={folds}/>);

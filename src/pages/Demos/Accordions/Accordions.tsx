@@ -4,6 +4,8 @@ import {PillGlider} from '@components/PillGlider';
 import {PropsWithClassName} from '../types';
 import './Accordions.css';
 
+const toggleWord = (open: boolean) => open ? 'Close' : 'Open';
+
 export type Fold = {value: ReactNode; key: string};
 type ContentProps = {content: Fold[]};
 export const InclusiveAccordion: FC<PropsWithClassName & ContentProps> = ({
@@ -91,10 +93,11 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
             <header className="info-header">
               <h5 className="sub-title bold">{key}</h5>
               <label className="info-label">
-                {key === checked ? 'Close' : 'Open'}
+                {toggleWord(key === checked)}
                 <input
                   type="checkbox"
                   name="exclusive-fold"
+                  aria-label={`${toggleWord(key === checked)} ${key}`}
                   checked={key === checked}
                   onChange={() => updateChecked(open => open === key ? undefined : key)}
                   className="off-screen"/>
@@ -135,10 +138,11 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
             <header className="info-header">
               <h5 className="sub-title bold">{key}</h5>
               <label className="info-label">
-                {key === checked ? 'Close' : 'Open'}
+                {toggleWord(key === checked)}
                 <input
                   type="radio"
                   name="exclusive-checkbox-toggle"
+                  aria-label={`${toggleWord(key === checked)} ${key}`}
                   checked={key === checked}
                   value={key}
                   onChange={event => updateChecked(event.currentTarget.value)}
