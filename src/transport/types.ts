@@ -30,6 +30,7 @@ export const isCreated = (response: Response): boolean => response.status === HT
 export const isNoContent = (response: Response): boolean => response.status === HTTPStatus.NO_CONTENT;
 
 export enum FailStatusCode {
+  UNAUTHORIZED = 401,
   FORBIDDEN = 403,
   NOT_FOUND = 404,
   SERVER_ERROR = 500
@@ -41,6 +42,7 @@ export enum HTTPStatus {
   OK = SuccessStatusCode.OK,
   CREATED = SuccessStatusCode.CREATED,
   NO_CONTENT = SuccessStatusCode.NO_CONTENT,
+  UNAUTHORIZED = FailStatusCode.UNAUTHORIZED,
   FORBIDDEN = FailStatusCode.FORBIDDEN,
   NOT_FOUND = FailStatusCode.NOT_FOUND,
   SERVER_ERROR = FailStatusCode.SERVER_ERROR

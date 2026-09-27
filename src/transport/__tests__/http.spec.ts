@@ -34,6 +34,18 @@ describe('http', () => {
     expect(asked).toBe('default');
   });
 
+  test('a post carries the headers it is given', async () => {
+    let asked: string | null = null;
+    server.use(handle.post(endpoint, ({request}) => {
+      asked = request.headers.get('authorization');
+      return HttpResponse.json(testObject, {status: 200});
+    }));
+
+    await http.post(endpoint, testObject, {headers: {authorization: 'bearer token'}}).value;
+
+    expect(asked).toBe('bearer token');
+  });
+
   const handlers = {
     [HTTPMethod.GET]: handle.get,
     [HTTPMethod.POST]: handle.post,
@@ -50,6 +62,7 @@ describe('http', () => {
   describe.each`
     method         | httpMethod           | body          | code                     | response
     ${http.get}    | ${HTTPMethod.GET}    | ${undefined}  | ${HTTPStatus.OK}         | ${testObject}
+    ${http.post}   | ${HTTPMethod.POST}   | ${testObject} | ${HTTPStatus.OK}         | ${testObject}
     ${http.post}   | ${HTTPMethod.POST}   | ${testObject} | ${HTTPStatus.CREATED}    | ${testObject}
     ${http.put}    | ${HTTPMethod.PUT}    | ${testObject} | ${HTTPStatus.NO_CONTENT} | ${undefined}
     ${http.put}    | ${HTTPMethod.PUT}    | ${testObject} | ${HTTPStatus.CREATED}    | ${testObject}
@@ -83,6 +96,14 @@ describe('http', () => {
   }) => {
     test('fails as forbidden when the server refuses', async () => {
       respondWith(httpMethod, HTTPStatus.FORBIDDEN, JSON.stringify(testObject));
+
+      const actual = (await method(endpoint, body).value).inspect();
+
+      expect(actual).toEqual(failure(HTTPError.FORBIDDEN).inspect());
+    });
+
+    test('fails as forbidden when the server does not know who asked', async () => {
+      respondWith(httpMethod, HTTPStatus.UNAUTHORIZED, JSON.stringify(testObject));
 
       const actual = (await method(endpoint, body).value).inspect();
 
