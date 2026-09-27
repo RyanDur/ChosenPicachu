@@ -154,6 +154,16 @@ describe('carving examples out of the source they teach', () => {
     ]);
   });
 
+  test('a css selector carries on past a pseudo-class paren into its combinator', () => {
+    const sheet = '.toggle:not(:checked) ~ .text {\n    height: 0;\n}\n';
+
+    expect(unit(sheet, '.toggle:not(:checked) ~ .text {').map(({text}) => text)).toEqual([
+      '.toggle:not(:checked) ~ .text {',
+      '    height: 0;',
+      '}'
+    ]);
+  });
+
   test('a span runs inclusively between two anchors', () => {
     expect(span(source, 'onPointerMove', 'onPointerUp').map(({text}) => text)).toEqual([
       'onPointerMove: travel,',
