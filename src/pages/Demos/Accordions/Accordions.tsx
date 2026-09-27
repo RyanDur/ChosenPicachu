@@ -80,10 +80,7 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
         name="checkbox-animate-or-static-tab"
         options={[{display: 'Animate', value: 'animated'}, {display: 'Static', value: 'static'}]}
         chosen={tab}
-        onChosen={value => {
-          updateChecked(undefined);
-          updateTab(value);
-        }}/>
+        onChosen={updateTab}/>
     </header>
 
     <ul className={'new-accordion'}>
@@ -105,7 +102,7 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
 
             <article className="info-animated">
               <article className="info-animated-wrapper">
-                <article className="info">{value}</article>
+                <p className="info">{value}</p>
               </article>
             </article>
           </article>
@@ -153,7 +150,7 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
             <article className="info-animated-wrapper">
               <article className="info-animated">
                 <article className="info-transform-wrapper">
-                  <article className="info">{value}</article>
+                  <p className="info">{value}</p>
                 </article>
               </article>
             </article>

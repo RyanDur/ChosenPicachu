@@ -158,7 +158,6 @@
         border-top: var(--hairline-x-2) solid var(--field);
         transform: rotate(45deg);
         margin-right: var(--base);
-        padding: var(--base-x-0_25);
       }
     }
 

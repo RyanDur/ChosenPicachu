@@ -86,7 +86,7 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
           page again. That makes a turn cheap, where max-height makes the browser lay out the
           page on every frame. The
           bar has a set height and side padding, so every bar is the same size whatever its word,
-          and its colours are the page’s, inverted. The chevron’s padding sizes the box its
+          and its colours are the page’s, inverted. The chevron’s width and height size the box its
           borders outline, and its right margin keeps the corner off the bar’s edge.</p>
         <Snippet label="CSS" lines={[
           ...unit(accordionsCss, '&:not(.close) .info-label {'), gap,

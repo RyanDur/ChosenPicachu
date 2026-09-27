@@ -45,4 +45,13 @@ describe.each(toggles)('the exclusive toggle accordion using $accordion', ({Acco
     expect(controlOf('Beta', 'Open')).not.toBeChecked();
     expect(controlOf('Alpha', 'Open')).not.toBeChecked();
   });
+
+  test('should keep the open fold open when the reader changes how folds move', async () => {
+    render(<Accordion content={folds}/>);
+    await userEvent.click(controlOf('Beta', 'Open'));
+
+    await userEvent.click(within(screen.getByRole('group', {name: 'animation style'})).getByRole('radio', {name: 'Static'}));
+
+    expect(controlOf('Beta', 'Close')).toBeChecked();
+  });
 });
