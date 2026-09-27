@@ -1,14 +1,14 @@
-import {FC, KeyboardEvent, MouseEvent, SubmitEvent, SyntheticEvent, useState} from 'react';
+import {FC, KeyboardEvent, MouseEvent, SubmitEvent, SyntheticEvent, useEffect, useReducer} from 'react';
 import {useLocation, useSearchParams} from 'react-router';
 import {empty, has, maybe, not} from '@ryandur/sand';
 import {useEnv} from '@components/Env';
 import {troubleWith} from '@transport/trouble';
-import {HTTPError} from '@transport/types';
-import {Page, discussions, sent, threadFor} from './github';
+import {sent, threadFor} from './github';
+import {noteRefused, noteSending, noteSent, opened, reachEdited, threadFound, threadUnknown, wordsEdited} from './actions';
+import {draftAt, feedbackReducer, Sending} from './reducer';
+import {classNames} from '@components/class-names';
 import './Feedback.css';
 import cancelIcon from '../../assets/icons/cancel.svg?url';
-
-type Sending = {state: 'writing'} | {state: 'sending'} | {state: 'refused'; why: HTTPError};
 
 const invokersMissing = not('command' in HTMLButtonElement.prototype);
 const lightDismissMissing = not('closedBy' in HTMLDialogElement.prototype);
@@ -50,14 +50,28 @@ const fieldFirst = (event: SyntheticEvent<HTMLDialogElement>) => {
 const pageName = (): string =>
   maybe(document.querySelector<HTMLElement>('#app-header .app-title')).map(title => title.innerText).orElse('this page');
 
+const said = (sending: Sending): string => {
+  switch (sending.state) {
+    case 'sending':
+      return 'Sending the note to GitHub.';
+    case 'refused':
+      return `${troubleWith('GitHub')(sending.why)}. Your words are still here.`;
+  }
+  return '';
+};
+
 export const Feedback: FC = () => {
   const {feedbackToken} = useEnv();
   const {pathname} = useLocation();
   const [params] = useSearchParams();
-  const [page, setPage] = useState<Page>({key: pathname, name: 'this page'});
-  const [thread, setThread] = useState(discussions);
-  const [sending, setSending] = useState<Sending>({state: 'writing'});
-  const [sentTo, setSentTo] = useState<string>();
+  const [draft, dispatch] = useReducer(feedbackReducer, {key: pathname, name: 'this page'}, draftAt);
+
+  useEffect(() => {
+    const dialog = document.getElementById('feedback');
+    if (draft.sentOnScreen > 0 && dialog instanceof HTMLDialogElement) {
+      dialog.close();
+    }
+  }, [draft.sentOnScreen]);
 
   if (!has(feedbackToken)) {
     return null;
@@ -69,60 +83,48 @@ export const Feedback: FC = () => {
     event.currentTarget.focus();
     commandWithoutInvokers(event);
     const here = {key, name: pageName()};
-    setPage(here);
-    setSentTo(undefined);
-    setSending({state: 'writing'});
-    setThread(discussions);
+    dispatch(opened(here));
     threadFor(feedbackToken, here)
-      .onSuccess(found => found.map(({url}) => setThread(url)))
-      .onFailure(() => setThread(discussions));
+      .onSuccess(found => dispatch(found.either(({url}) => threadFound(here.key, url), () => threadUnknown(here.key))))
+      .onFailure(() => dispatch(threadUnknown(here.key)));
   };
 
   const send = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const form = event.currentTarget;
-    const written = new FormData(form);
-    const typed = (name: string): string => {
-      const value = written.get(name);
-      return typeof value === 'string' ? value : '';
-    };
-    setSending({state: 'sending'});
-    const reach = typed('reach');
-    sent(feedbackToken, {page, words: typed('words'), from: window.location.href, ...(empty(reach) ? {} : {reach})})
-      .onSuccess(url => {
-        setSentTo(url);
-        setSending({state: 'writing'});
-        form.reset();
-        maybe(form.closest('dialog')).map(dialog => dialog.close());
-      })
-      .onFailure(why => setSending({state: 'refused', why}));
+    const {openings, page, words, reach} = draft;
+    dispatch(noteSending());
+    sent(feedbackToken, {page, words, from: window.location.href, ...(empty(reach) ? {} : {reach})})
+      .onSuccess(url => dispatch(noteSent(openings, url)))
+      .onFailure(why => dispatch(noteRefused(openings, why)));
   };
 
   return <>
     <p className="feedback-item field">
       <button type="button" className="feedback-open path attentive field reachable" commandfor="feedback" command="show-modal" onClick={opening}>Feedback</button>
-      {has(sentTo) && <output className="feedback-sent caption">Sent. <a className="signpost" href={sentTo}>Read it on GitHub</a></output>}
+      <output className="feedback-sent caption">{has(draft.sentTo) && <>Sent. <a className="signpost" href={draft.sentTo}>Read it on GitHub</a></>}</output>
     </p>
     <dialog id="feedback" className="feedback-dialog backdrop" closedby="any" aria-labelledby="feedback-title" onClick={closesOnTheVeil} onToggle={fieldFirst}>
       <form className="feedback-form" onSubmit={send}>
         <hgroup className="feedback-heading field">
           <h2 id="feedback-title" className="sub-title bold">Feedback</h2>
-          <p className="caption">It goes to <a className="signpost" href={thread}>this page’s thread on GitHub</a>, where you can read what others said.</p>
-          <p className="paragraph">About: {page.name}</p>
+          <p className="caption">It goes to <a className="signpost" href={draft.thread}>this page’s thread on GitHub</a>, where you can read what others said.</p>
+          <p className="paragraph">About: {draft.page.name}</p>
         </hgroup>
         <button type="button" className="feedback-close button icon-button borderless field attentive reachable" commandfor="feedback" command="close" aria-label="Close" onClick={commandWithoutInvokers}>
           <img className="icon" src={cancelIcon} width="24" height="24" alt=""/>
         </button>
         <label className="feedback-field">
           <span className="feedback-label field bold">What did you find?</span>
-          <textarea className="feedback-words bare card borderless paragraph" name="words" required enterKeyHint="send" onKeyDown={sendsOnEnter}/>
+          <textarea className="feedback-words bare card borderless paragraph" name="words" required enterKeyHint="send" value={draft.words}
+            onChange={event => dispatch(wordsEdited(event.currentTarget.value))} onKeyDown={sendsOnEnter}/>
         </label>
         <label className="feedback-field">
           <span className="feedback-label field bold">A way to reach you, if you like</span>
-          <input className="feedback-reach bare card borderless paragraph" type="text" name="reach" autoComplete="email" enterKeyHint="send"/>
+          <input className="feedback-reach bare card borderless paragraph" type="text" name="reach" autoComplete="email" enterKeyHint="send" value={draft.reach}
+            onChange={event => dispatch(reachEdited(event.currentTarget.value))}/>
         </label>
-        {sending.state === 'refused' && <output className="feedback-refused field alarm-ink paragraph">{troubleWith('GitHub')(sending.why)}. Your words are still here.</output>}
-        <button type="submit" className="feedback-send path attentive field borderless bold reachable" disabled={sending.state === 'sending'}>Send</button>
+        <output className={classNames('feedback-status', 'field', 'paragraph', draft.sending.state === 'refused' && 'alarm-ink')}>{said(draft.sending)}</output>
+        <button type="submit" className="feedback-send path attentive field borderless bold reachable" disabled={draft.sending.state === 'sending'}>Send</button>
         <button type="button" className="feedback-cancel path attentive field borderless bold reachable" commandfor="feedback" command="close" onClick={commandWithoutInvokers}>Cancel</button>
       </form>
     </dialog>

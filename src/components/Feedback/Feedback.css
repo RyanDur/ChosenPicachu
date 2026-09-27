@@ -43,7 +43,7 @@
     "heading heading close"
     "words words words"
     "reach reach reach"
-    "refused refused refused"
+    "status status status"
     ". send cancel";
   gap: var(--base);
 }
@@ -87,9 +87,13 @@
   resize: vertical;
 }
 
-.feedback-refused {
-  grid-area: refused;
+.feedback-status {
+  grid-area: status;
   padding: var(--base) var(--base-x-2);
+
+  &:empty {
+    padding: 0;
+  }
 }
 
 .feedback-send,
@@ -149,7 +153,7 @@
     grid-template-areas:
       "heading heading close"
       "words   reach   reach"
-      "words   refused refused"
+      "words   status status"
       "words   send    send"
       "words   cancel  cancel";
   }

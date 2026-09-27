@@ -31,3 +31,34 @@ describe('Feedback in a browser without invoker commands', () => {
     });
   }
 });
+
+describe('Feedback while a note is on its way', () => {
+  test('should keep a new note when the reply to an earlier one arrives', async () => {
+    let release: () => void = () => undefined;
+    const held = new Promise<void>(resolve => {
+      release = () => resolve();
+    });
+    server.use(http.post('https://api.github.com/graphql', async ({request}) => {
+      if ((await request.text()).includes('search')) {
+        return HttpResponse.json({data: {search: {nodes: []}}});
+      }
+      await held;
+      return HttpResponse.json({data: {createDiscussion: {discussion: {id: 'D_9', url: 'https://github.test/discussions/9'}}}});
+    }));
+    render(<TestApp at="/"/>);
+    await site.pageTitled();
+    await userEvent.click(screen.getByRole('button', {name: 'Feedback'}));
+    await userEvent.type(screen.getByRole('textbox', {name: 'What did you find?'}), 'The first.');
+    await userEvent.click(screen.getByRole('button', {name: 'Send'}));
+    await userEvent.click(screen.getByRole('button', {name: 'Cancel'}));
+    await userEvent.click(screen.getByRole('button', {name: 'Feedback'}));
+    await userEvent.clear(screen.getByRole('textbox', {name: 'What did you find?'}));
+    await userEvent.type(screen.getByRole('textbox', {name: 'What did you find?'}), 'The second.');
+
+    release();
+
+    expect(await screen.findByText('Read it on GitHub')).toBeInTheDocument();
+    expect(screen.getByRole('textbox', {name: 'What did you find?'})).toHaveValue('The second.');
+    expect(screen.getByRole('dialog', {name: 'Feedback'})).toBeVisible();
+  });
+});
