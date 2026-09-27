@@ -1,4 +1,4 @@
-import {FC, KeyboardEvent, MouseEvent, SubmitEvent, SyntheticEvent, useEffect, useReducer} from 'react';
+import {FC, KeyboardEvent, MouseEvent, ReactNode, SubmitEvent, SyntheticEvent, useEffect, useReducer} from 'react';
 import {useLocation, useSearchParams} from 'react-router';
 import {empty, has, maybe, not} from '@ryandur/sand';
 import {useEnv} from '@components/Env';
@@ -56,10 +56,12 @@ const fieldFirst = (event: SyntheticEvent<HTMLDialogElement>) => {
   }
 };
 
-const said = (sending: Sending): string => {
+const said = (sending: Sending): ReactNode => {
   switch (sending.state) {
     case 'sending':
       return 'Sending the note to GitHub.';
+    case 'sent':
+      return <>Sent. <a className="signpost" href={sending.to}>Read it on GitHub</a></>;
     case 'refused':
       return `${troubleWith('GitHub')(sending.why)}. Your words are still here.`;
   }

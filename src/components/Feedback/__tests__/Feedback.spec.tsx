@@ -1,5 +1,5 @@
 import {TestApp} from '@__test_support/TestApp';
-import {render, screen, within} from '@testing-library/react';
+import {render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {http, HttpResponse} from 'msw';
 import {server} from '@__test_support/server';
@@ -81,7 +81,7 @@ describe('Feedback while a note is on its way', () => {
     await userEvent.type(screen.getByRole('textbox', {name: 'What did you find?'}), '{Enter}');
     github.answers();
 
-    expect(await screen.findByRole('link', {name: 'Read it on GitHub'})).toBeInTheDocument();
+    expect(await within(screen.getByRole('dialog', {name: 'Feedback'})).findByRole('link', {name: 'Read it on GitHub'})).toBeInTheDocument();
     expect(github.notes).toHaveLength(1);
   });
 
@@ -96,9 +96,36 @@ describe('Feedback while a note is on its way', () => {
 
     github.answers();
 
-    expect(await screen.findByRole('link', {name: 'Read it on GitHub'})).toBeInTheDocument();
+    expect(await within(screen.getByRole('dialog', {name: 'Feedback'})).findByRole('link', {name: 'Read it on GitHub'})).toBeInTheDocument();
     expect(screen.getByRole('textbox', {name: 'What did you find?'})).toHaveValue('The second.');
     expect(screen.getByRole('dialog', {name: 'Feedback'})).toBeVisible();
+  });
+
+  test('should free Send when the reply to a note sent before a reopening arrives', async () => {
+    const github = githubHoldingItsAnswer();
+    const words = await opened();
+    await userEvent.type(words, 'The sort menu hides.{Enter}');
+    await userEvent.click(screen.getByRole('button', {name: 'Cancel'}));
+    await userEvent.click(screen.getByRole('button', {name: 'Feedback'}));
+
+    github.answers();
+
+    const dialog = within(screen.getByRole('dialog', {name: 'Feedback'}));
+    await waitFor(() => expect(dialog.getByRole('button', {name: 'Send'})).toBeEnabled());
+  });
+
+  test('should say in the dialog that the note was sent when GitHub answers after Feedback is reopened', async () => {
+    const github = githubHoldingItsAnswer();
+    const words = await opened();
+    await userEvent.type(words, 'The sort menu hides.{Enter}');
+    await userEvent.click(screen.getByRole('button', {name: 'Cancel'}));
+    await userEvent.click(screen.getByRole('button', {name: 'Feedback'}));
+
+    github.answers();
+
+    const status = within(screen.getByRole('dialog', {name: 'Feedback'})).getByRole('status');
+    expect(await within(status).findByRole('link', {name: 'Read it on GitHub'})).toHaveAttribute('href', 'https://github.test/discussions/9');
+    expect(status).toHaveTextContent(/^Sent\./);
   });
 
   test('should make a new line on Shift and Enter, and send nothing', async () => {
