@@ -17,6 +17,21 @@ export const scriptedMarket = async (page: Page, prices: number[]): Promise<void
   });
 };
 
+export const heldMarket = async (page: Page, prices: number[]): Promise<{arrive: () => void}> => {
+  const {promise: arrived, resolve: arrive} = Promise.withResolvers<void>();
+  await page.route(/\/products\/.*\/candles/, async route => {
+    await arrived;
+    await route.fulfill({json: [], headers: {'access-control-allow-origin': '*'}});
+  });
+  await page.routeWebSocket(/ws-feed/, socket => {
+    socket.onMessage(async () => {
+      await arrived;
+      prices.forEach((price, id) => socket.send(tradeFrame(id, price)));
+    });
+  });
+  return {arrive};
+};
+
 export const chartsPage = (page: Page) => {
   const priceCard = page.getByRole('region', {name: 'live trades'});
   const periodMenu = page.getByLabel('price period by');

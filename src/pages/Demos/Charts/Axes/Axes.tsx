@@ -39,17 +39,17 @@ export const Axes: FC<Props> = ({
 }) => {
   const populated = times.length > 0;
   return <div className="axes">
-    {populated && <p className="y-labels caption">
+    <p className="y-labels caption">{populated && <>
       <data value={high}>{label(high)}</data>
       <data value={(high + low) / 2}>{label((high + low) / 2)}</data>
       <data value={low}>{label(low)}</data>
-    </p>}
+    </>}</p>
     <div className="chart-area">{children}</div>
-    {populated && <p className="x-labels caption">{placed(times, chosenTicks(times, tickEvery), headroomMs).map(tick =>
+    <p className="x-labels caption">{populated && placed(times, chosenTicks(times, tickEvery), headroomMs).map(tick =>
       <time key={tick.at}
         className="tick"
         dateTime={new Date(tick.at).toISOString()}
         style={{'--along': `${tick.along}%`}}>{format(tick.at, pattern)}</time>
-    )}</p>}
+    )}</p>
   </div>;
 };

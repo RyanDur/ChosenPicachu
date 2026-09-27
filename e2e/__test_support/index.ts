@@ -1,4 +1,4 @@
-export {chartsPage, markets, scriptedMarket} from './charts';
+export {chartsPage, heldMarket, markets, scriptedMarket} from './charts';
 export {homePage} from './home';
 export {galleryPage} from './gallery';
 export {piecePage} from './piece';

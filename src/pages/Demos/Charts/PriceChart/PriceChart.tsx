@@ -96,10 +96,10 @@ export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPer
             r={3}/>}
         </svg>
       </Axes>
-      {showing && <p className="headline">
+      <p className="headline">{showing && <>
         <data className="price" value={view.last}>{cents.format(view.last)}</data>
         <data className="delta" value={view.last - view.first}>{deltaLabel(view.first, view.last)}</data>
-      </p>}
+      </>}</p>
       {history.state === 'loading' && <Loading className="chart-loading"/>}
       <figcaption className="chart-caption caption">{captionFor(history, candles.length, period)}</figcaption>
     </figure>
