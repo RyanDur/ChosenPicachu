@@ -5,7 +5,16 @@ import {useEnv} from '@components/Env';
 import {usePageName} from '@components/PageName';
 import {troubleWith} from '@transport/trouble';
 import {sent, threadFor} from './github';
-import {noteRefused, noteSending, noteSent, opened, reachEdited, threadFound, threadUnknown, wordsEdited} from './actions';
+import {
+  noteRefused,
+  noteSent,
+  noteSubmitted,
+  opened,
+  reachEdited,
+  threadFound,
+  threadUnknown,
+  wordsEdited
+} from './actions';
 import {draftAt, feedbackReducer, Sending} from './reducer';
 import {classNames} from '@components/class-names';
 import './Feedback.css';
@@ -55,7 +64,7 @@ export const Feedback: FC = () => {
   const {pathname} = useLocation();
   const [params] = useSearchParams();
   const pageName = usePageName();
-  const [draft, dispatch] = useReducer(feedbackReducer, {key: pathname, name: 'this page'}, draftAt);
+  const [draft, dispatch] = useReducer(feedbackReducer, pathname, draftAt);
 
   useEffect(() => {
     const dialog = document.getElementById('feedback');
@@ -74,7 +83,7 @@ export const Feedback: FC = () => {
     event.currentTarget.focus();
     commandWithoutInvokers(event);
     const here = {key, name: pageName};
-    dispatch(opened(here));
+    dispatch(opened(key));
     threadFor(feedbackToken, here)
       .onSuccess(found => dispatch(found.either(({url}) => threadFound(here.key, url), () => threadUnknown(here.key))))
       .onFailure(() => dispatch(threadUnknown(here.key)));
@@ -85,9 +94,9 @@ export const Feedback: FC = () => {
     if (draft.sending.state === 'sending') {
       return;
     }
-    const {openings, page, words, reach} = draft;
-    dispatch(noteSending());
-    sent(feedbackToken, {page: {...page, name: pageName}, words, from: window.location.href, ...(empty(reach) ? {} : {reach})})
+    const {openings, words, reach} = draft;
+    dispatch(noteSubmitted());
+    sent(feedbackToken, {page: {key: draft.key, name: pageName}, words, from: window.location.href, ...(empty(reach) ? {} : {reach})})
       .onSuccess(url => dispatch(noteSent(openings, url)))
       .onFailure(why => dispatch(noteRefused(openings, why)));
   };
