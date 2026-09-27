@@ -29,6 +29,11 @@
   opacity: 0.8;
 }
 
+/* page title — the frame's heading for the page, sized by the frame's tier */
+.page-title {
+  font-size: var(--base-x-4);
+}
+
 /* rail — the frame's words, sized by the frame's tier: a path's word, and
    the word of what stands apart from the paths */
 .rail-path {
@@ -50,6 +55,10 @@
 }
 
 @media (width <= 600px), (width <= 1100px) and (height <= 600px) {
+  .page-title {
+    font-size: var(--base-x-2_5);
+  }
+
   .rail-path {
     font-size: var(--text-body);
   }
