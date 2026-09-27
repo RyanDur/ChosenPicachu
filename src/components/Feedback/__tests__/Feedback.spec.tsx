@@ -40,6 +40,34 @@ describe('Feedback without a token', () => {
 });
 
 describe('Feedback while a note is on its way', () => {
+  test('should send a note once when Feedback is cancelled and reopened before GitHub answers', async () => {
+    let release: () => void = () => undefined;
+    const held = new Promise<void>(resolve => {
+      release = () => resolve();
+    });
+    let notes = 0;
+    server.use(http.post('https://api.github.com/graphql', async ({request}) => {
+      if ((await request.text()).includes('search')) {
+        return HttpResponse.json({data: {search: {nodes: []}}});
+      }
+      notes += 1;
+      await held;
+      return HttpResponse.json({data: {createDiscussion: {discussion: {id: 'D_9', url: 'https://github.test/discussions/9'}}}});
+    }));
+    render(<TestApp at="/"/>);
+    await site.pageTitled();
+    await userEvent.click(screen.getByRole('button', {name: 'Feedback'}));
+    await userEvent.type(screen.getByRole('textbox', {name: 'What did you find?'}), 'The sort menu hides.{Enter}');
+    await userEvent.click(screen.getByRole('button', {name: 'Cancel'}));
+    await userEvent.click(screen.getByRole('button', {name: 'Feedback'}));
+
+    await userEvent.type(screen.getByRole('textbox', {name: 'What did you find?'}), '{Enter}');
+    release();
+
+    expect(await screen.findByRole('link', {name: 'Read it on GitHub'})).toBeInTheDocument();
+    expect(notes).toBe(1);
+  });
+
   test('should keep a new note when the reply to an earlier one arrives', async () => {
     let release: () => void = () => undefined;
     const held = new Promise<void>(resolve => {

@@ -86,12 +86,20 @@ describe('the feedback reducer', () => {
     expect(draft.sending).toEqual({state: 'refused', why: HTTPError.FORBIDDEN});
   });
 
-  test('should not blame a new note for a refusal of an earlier one', () => {
+  test('should hold a note on its way as sending when the dialog is reopened', () => {
+    const sending = feedbackReducer(openOn, noteSending());
+
+    const draft = feedbackReducer(sending, opened(tables));
+
+    expect(draft.sending).toEqual({state: 'sending'});
+  });
+
+  test('should say why GitHub refused a note even after the dialog was reopened', () => {
     const sending = feedbackReducer(openOn, noteSending());
     const reopened = feedbackReducer(sending, opened(tables));
 
     const draft = feedbackReducer(reopened, noteRefused(sending.openings, HTTPError.FORBIDDEN));
 
-    expect(draft.sending).toEqual({state: 'writing'});
+    expect(draft.sending).toEqual({state: 'refused', why: HTTPError.FORBIDDEN});
   });
 });

@@ -20,11 +20,12 @@ export const draftAt = (page: Page): Draft =>
 
 const aboutPage = (draft: Draft, key: string): boolean => draft.page.key === key;
 const onScreen = (draft: Draft, openings: number): boolean => draft.openings === openings;
+const stillSending = ({sending}: Draft): Sending => sending.state === 'sending' ? sending : {state: 'writing'};
 
 export const feedbackReducer = (draft: Draft, action: FeedbackAction): Draft => {
   switch (action.type) {
     case FeedbackActions.OPENED:
-      return {...draft, page: action.page, openings: draft.openings + 1, thread: discussions, sending: {state: 'writing'}, sentTo: undefined};
+      return {...draft, page: action.page, openings: draft.openings + 1, thread: discussions, sending: stillSending(draft), sentTo: undefined};
     case FeedbackActions.THREAD_FOUND:
       return aboutPage(draft, action.key) ? {...draft, thread: action.url} : draft;
     case FeedbackActions.THREAD_UNKNOWN:
@@ -38,9 +39,9 @@ export const feedbackReducer = (draft: Draft, action: FeedbackAction): Draft => 
     case FeedbackActions.NOTE_SENT:
       return onScreen(draft, action.openings)
         ? {...draft, sentTo: action.url, words: '', reach: '', sending: {state: 'writing'}, sentOnScreen: draft.sentOnScreen + 1}
-        : {...draft, sentTo: action.url};
+        : {...draft, sentTo: action.url, sending: {state: 'writing'}};
     case FeedbackActions.NOTE_REFUSED:
-      return onScreen(draft, action.openings) ? {...draft, sending: {state: 'refused', why: action.why}} : draft;
+      return {...draft, sending: {state: 'refused', why: action.why}};
   }
   return draft;
 };
