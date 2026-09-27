@@ -21,6 +21,7 @@ import {Tutorials} from './Tables/Tutorials';
 import {ListTutorials} from './DragAndDrop/Tutorials';
 import {ChartsTutorial} from './Charts/Tutorial';
 import {TopLayerTutorial} from './ZIndexDemo/Tutorial';
+import {AccordionTutorial} from './Accordions/Tutorial';
 import {motionParam, originParam, paceParam} from './Controls';
 import {Aggregations, trackParam, tutorialParam, worldParam} from './Tables';
 import {Workspace} from './Charts/Workspace';
@@ -72,6 +73,7 @@ export const DemosPage = () => {
                     <ExclusiveRadioToggleAccordion className="card rounded-corners lifted padded" content={accordionContents[4]}/>
                   </li>
                 </ul>
+                <AccordionTutorial/>
               </>,
         [DemoTopics.zIndex]: <>
           <h2 className="title bold">Z-Index Demo.</h2>
