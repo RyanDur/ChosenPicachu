@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import {desktop, feedbackOn, github, iPadUpright, iPhone, phoneSideways} from './__test_support';
+import {desktop, feedbackOn, github, iPadUpright, iPhone, phoneSideways, siteFrame} from './__test_support';
 
 for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader: 'a phone held upright', device: iPhone}] as const) {
   test.describe(reader, () => {
@@ -93,6 +93,7 @@ for (const field of ['words', 'reach'] as const) {
     const posted = await github(page);
     const feedback = feedbackOn(page);
     await page.goto('demos/?tab=tables');
+    await expect(siteFrame(page).title).toHaveText('Demos Tables');
     await feedback.open.click();
     await feedback.words.pressSequentially('The sort menu hides behind the header.');
     await feedback.reach.pressSequentially('reader@example.test');

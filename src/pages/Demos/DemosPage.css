@@ -1,9 +1,3 @@
-.app-header {
-    .app-title {
-        text-transform: capitalize;
-    }
-}
-
 .about {
     width: 100%;
     display: flex;

@@ -6,6 +6,7 @@ export const siteFrame = (page: Page) => {
   return {
     nav,
     main,
+    title: page.getByRole('heading', {level: 1}),
     railBesideThePage: async (): Promise<boolean> => {
       const rail = await nav.boundingBox();
       const pane = await main.boundingBox();

@@ -3,6 +3,8 @@ import {BannerProvider, Banners} from '@components/Banners';
 import {Outlet, useLocation, useMatches} from 'react-router';
 import {FC, Fragment, useEffect} from 'react';
 import {SideNav} from '@pages/BasePage/SideNav';
+import {Feedback} from '@components/Feedback';
+import {PageNameProvider} from '@components/PageName';
 import {isRegions, Regions} from '@pages/regions';
 import {gotoTopOfPage} from '@components/scroll';
 import {Paths} from '@pages/Paths';
@@ -32,10 +34,11 @@ const Site: FC<{closed?: boolean}> = ({closed = false}) => {
   const {header: HeaderRegion, aside: AsideRegion, footer: FooterRegion, provider: Provider = Fragment, mainClassName} =
     closed ? {...regions, header: ClosedRoomHeader} : regions;
 
-  return <BannerProvider>
+  return <BannerProvider><PageNameProvider>
     <Provider>
       <HeaderRegion/>
       <SideNav/>
+      <Feedback/>
       {AsideRegion && <AsideRegion/>}
       <main className={classNames('app-main', 'field', mainClassName)}>
         {closed ? <PageError/> : <Outlet/>}
@@ -45,7 +48,7 @@ const Site: FC<{closed?: boolean}> = ({closed = false}) => {
       </footer>}
     </Provider>
     <Banners/>
-  </BannerProvider>;
+  </PageNameProvider></BannerProvider>;
 };
 
 export const router = {

@@ -1,12 +1,11 @@
 import {FC} from 'react';
 import {Controls, ControlsProps, Copy} from '../Controls';
-
-const cap = (word: string): string => word.charAt(0).toUpperCase() + word.slice(1);
+import {capitalized} from '../capitalized';
 
 const copy: Copy = {
   kind: 'list',
   readout: (pace, origin, motion) =>
-    `<${cap(pace)}${cap(origin)}${cap(motion)}List/>`,
+    `<${capitalized(pace)}${capitalized(origin)}${capitalized(motion)}List/>`,
   pace: {
     eager: 'Items swap the moment the drag crosses them, so the order is already settled when you let go.',
     lazy: 'The list holds its shape while you drag and commits the new order when the drag ends.'

@@ -5,10 +5,11 @@ import {DemoTopics, demoTopicParam} from './types';
 import {DemosPage} from './DemosPage';
 import {Trading} from './Trading';
 import {ChartPage} from './Charts/ChartPage';
+import {capitalized} from './capitalized';
 
 const DemosHeader = () => {
   const {tab} = useSearchParamsObject({tab: demoTopicParam}, {tab: DemoTopics.accordions});
-  return <Header title={`Demos ${tab}`}/>;
+  return <Header title={`Demos ${capitalized(tab)}`}/>;
 };
 
 export const TradingFloor = {
@@ -24,6 +25,6 @@ export const Demos = {
 
 export const ChartTutorial = {
   errorElement: <PageError/>,
-  handle: {header: () => <Header title="Demos charts"/>, mainClassName: 'in-view'},
+  handle: {header: () => <Header title="Demos Charts"/>, mainClassName: 'in-view'},
   element: <ChartPage/>
 };

@@ -2,6 +2,7 @@ import {FC, KeyboardEvent, MouseEvent, SubmitEvent, SyntheticEvent, useEffect, u
 import {useLocation, useSearchParams} from 'react-router';
 import {empty, has, maybe, not} from '@ryandur/sand';
 import {useEnv} from '@components/Env';
+import {usePageName} from '@components/PageName';
 import {troubleWith} from '@transport/trouble';
 import {sent, threadFor} from './github';
 import {noteRefused, noteSending, noteSent, opened, reachEdited, threadFound, threadUnknown, wordsEdited} from './actions';
@@ -47,9 +48,6 @@ const fieldFirst = (event: SyntheticEvent<HTMLDialogElement>) => {
   }
 };
 
-const pageName = (): string =>
-  maybe(document.querySelector<HTMLElement>('#app-header .app-title')).map(title => title.innerText).orElse('this page');
-
 const said = (sending: Sending): string => {
   switch (sending.state) {
     case 'sending':
@@ -64,6 +62,7 @@ export const Feedback: FC = () => {
   const {feedbackToken} = useEnv();
   const {pathname} = useLocation();
   const [params] = useSearchParams();
+  const pageName = usePageName();
   const [draft, dispatch] = useReducer(feedbackReducer, {key: pathname, name: 'this page'}, draftAt);
 
   useEffect(() => {
@@ -82,7 +81,7 @@ export const Feedback: FC = () => {
   const opening = (event: MouseEvent<HTMLButtonElement>) => {
     event.currentTarget.focus();
     commandWithoutInvokers(event);
-    const here = {key, name: pageName()};
+    const here = {key, name: pageName};
     dispatch(opened(here));
     threadFor(feedbackToken, here)
       .onSuccess(found => dispatch(found.either(({url}) => threadFound(here.key, url), () => threadUnknown(here.key))))
@@ -93,7 +92,7 @@ export const Feedback: FC = () => {
     event.preventDefault();
     const {openings, page, words, reach} = draft;
     dispatch(noteSending());
-    sent(feedbackToken, {page, words, from: window.location.href, ...(empty(reach) ? {} : {reach})})
+    sent(feedbackToken, {page: {...page, name: pageName}, words, from: window.location.href, ...(empty(reach) ? {} : {reach})})
       .onSuccess(url => dispatch(noteSent(openings, url)))
       .onFailure(why => dispatch(noteRefused(openings, why)));
   };
@@ -108,7 +107,7 @@ export const Feedback: FC = () => {
         <hgroup className="feedback-heading field">
           <h2 id="feedback-title" className="sub-title bold">Feedback</h2>
           <p className="caption">It goes to <a className="signpost" href={draft.thread}>this page’s thread on GitHub</a>, where you can read what others said.</p>
-          <p className="paragraph">About: {draft.page.name}</p>
+          <p className="paragraph">About: {pageName}</p>
         </hgroup>
         <button type="button" className="feedback-close button icon-button borderless field attentive reachable" commandfor="feedback" command="close" aria-label="Close" onClick={commandWithoutInvokers}>
           <img className="icon" src={cancelIcon} width="24" height="24" alt=""/>
