@@ -80,7 +80,11 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
           one end and the chevron at the other, both centred on the bar’s height. The chevron is
           an empty box drawn after the label’s words, with only its top and right borders, turned
           45 degrees so the corner points right. When the box is checked, the same ~ reaches the
-          label, and the corner turns to 135 degrees and points down, over 500 milliseconds. The
+          label, and the corner turns to 135 degrees and points down. Its transition sits on every
+          bar and not on a state, so opening and closing both turn it over 500 milliseconds with
+          ease. A transform moves pixels the browser has already painted, without laying out the
+          page again. That makes a turn cheap, where max-height makes the browser lay out the
+          page on every frame. The
           bar has a set height and side padding, so every bar is the same size whatever its word,
           and its colours are the page’s, inverted. The chevron’s padding sizes the box its
           borders outline, and its right margin keeps the corner off the bar’s edge.</p>
@@ -106,15 +110,32 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
         <FocusOnTheBar/>
       </li>
       <li className="run">
+        <p className="paragraph">Every fold on this tab moves by transition, never by animation.
+          A <Mdn path="Web/CSS/CSS_transitions">transition</Mdn> moves a property from its old
+          value to its new one when the value changes, and if the value changes back midway, it
+          turns around from wherever it is. An <Mdn path="Web/CSS/CSS_animations">animation</Mdn> plays
+          keyframes on its own clock, whatever the state does. A fold moves because the reader
+          pressed it, and a reader may press again before it lands, so every build here uses transitions, and a reader who asks their system for less
+          motion gets none of it, which the last run explains.</p>
+      </li>
+      <li className="run">
         <p className="paragraph">Natively, the platform can now animate a details to its
           content’s height, as the next part shows. Before, height could not animate to auto, so
           max-height stands in. Open, the text’s max-height is 80rem, a guess taller than any
           part should be. Closed, it is 0, with its padding and top margin gone, and overflow
-          hidden clips what the guess lets through. The slide runs at the guess’s pace and not
-          the text’s, so a short part opens in a blink and closes after a pause. Text taller than
-          the guess is cut off. Opacity and a half-height drop ride along, so the text fades as
-          it lands: 500 milliseconds opening, 250 closing.</p>
-        <Snippet label="CSS" lines={unit(accordionsCss, '.info {\n      overflow: hidden;\n      max-height')}/>
+          hidden clips what the guess lets through. Text taller than the guess is cut off. The
+          transition that runs is the one on the state being entered. The open rule carries 500
+          milliseconds, so opening takes 500, and the closed rule carries 250, so closing takes
+          250. Both use ease, which starts quickly and slows to a stop. Max-height travels the full 80rem either way. While it is above the text’s height,
+          nothing visible changes, and the clip only bites once it drops below.
+          So a short part is fully open within the first few frames, and on closing it stays
+          whole until the last few. That is the blink and the pause. Opacity, the half-height
+          drop, the top margin and the bottom padding all ride the same transition, so the text
+          fades in as it rises into place and its spacing opens with it.</p>
+        <Snippet label="CSS" lines={[
+          ...unit(accordionsCss, '.info {\n      overflow: hidden;\n      max-height'), gap,
+          ...unit(accordionsCss, '.info-toggle:not(:checked) ~ .info {')
+        ]}/>
         <TheGuess/>
       </li>
       <li className="run">
@@ -177,10 +198,13 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
           for. <Mdn path="Web/CSS/::details-content">::details-content</Mdn> is the part a closed
           details hides, and the sheet can size it. Closed, its block size is 0. Open, it is
           auto, and <Mdn path="Web/CSS/interpolate-size">interpolate-size</Mdn> in the reset lets
-          auto animate, over 300 milliseconds. Overflow hidden clips the text while the size
-          moves. Content-visibility moves with allow-discrete, so the text stays on the
-          page until the slide ends. A browser without these opens the fold at once, and the fold
-          still works.</p>
+          auto animate. Block size can only transition to auto because interpolate-size allows
+          keywords. The slide takes 300 milliseconds with ease-in-out, which starts slowly,
+          speeds up, and settles, and overflow hidden clips the text while the size moves.
+          Content-visibility is discrete, with no values in between, so allow-discrete lets it
+          flip at the end of a close and at the start of an open. That keeps the text visible for
+          the whole slide. Today only Chromium does both, and other browsers open the fold at
+          once, and the fold still works.</p>
         <Snippet label="CSS" lines={[
           ...unit(accordionsCss, '&::details-content {'), gap,
           ...unit(accordionsCss, '&[open]::details-content {'), gap,
@@ -233,9 +257,12 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
           does it in every browser today. The fold is a grid of two rows: the bar at its
           min-content height, and the text in a row of 0fr. When the fold holds a checked
           input, <Mdn path="Web/CSS/:has">:has(:checked)</Mdn> makes that row 1fr, and 1fr is
-          exactly the height the content needs. Grid-template-rows animates between the two over
-          300 milliseconds, and the fold’s overflow hidden clips whatever its rows do not
-          hold.</p>
+          exactly the height the content needs. A row in fr is a number, so 0fr to 1fr is a
+          number growing, which a transition can move. Grid-template-rows moves between the two
+          over 300 milliseconds with ease-in-out, so the fold starts gently and settles, and the
+          fold’s overflow hidden clips whatever its rows do not hold. The browser lays out the
+          page on every frame, as it does for max-height, but the row always ends at the
+          content’s own height, so there is no guess to wait on.</p>
         <Snippet label="CSS" lines={[
           ...span(accordionsCss, '  .exclusive-fold {', 'grid-template-rows: min-content 0fr;'), gap,
           ...unit(accordionsCss, '&:has(:checked) {'), gap,
@@ -259,19 +286,33 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
         <p className="paragraph">The radio build’s text slides down from under its bar. Its
           fold keeps one explicit row, for the bar, so the wrapper sits in a row of its own
           content’s height. The wrapper grows from 0fr to 1fr, and the element inside moves from translateY(-100%) to 0
-          over the same 300 milliseconds, both linear, so the text’s bottom edge travels with the
-          row’s. It answers no limit. It is there to show what grid and a transform do
+          over the same 300 milliseconds. The row and the text share one duration and one easing,
+          so at every frame they have covered the same share of the way, and the text’s bottom
+          edge stays on the row’s edge. Linear keeps that edge moving at one even speed, like a
+          drawer. It answers no limit. It is there to show what grid and a transform do
           together.</p>
         <Snippet label="CSS" lines={unit(accordionsCss, '&.animated.drawer {')}/>
         <RidesTheEdge/>
       </li>
       <li className="run">
         <p className="paragraph">The Animate and Static choice only adds or removes a class. The
-          sheet decides what moves.</p>
+          sheet decides what moves: Static takes away the class that carries the transition, so
+          the row changes in a single frame.</p>
         <Snippet label="TS" lines={[
           ...span(accordionsSource, "classNames('exclusive-fold', tab, 'reveal')", "classNames('exclusive-fold', tab, 'reveal')"), gap,
           ...span(accordionsSource, "classNames('exclusive-fold', tab === 'animated'", "classNames('exclusive-fold', tab === 'animated'")
         ]}/>
+      </li>
+      <li className="run">
+        <p className="paragraph">A reader who asks their system
+          for <Mdn path="Web/CSS/@media/prefers-reduced-motion">less motion</Mdn> gets every fold
+          on this tab open at once. One rule in the reset cuts every transition and animation on
+          the site to 0.01 milliseconds, and plays each animation once. The universal selector
+          reaches every element and its before and after, but not the part a details hides, so
+          ::details-content is named on its own. Smooth scrolling becomes a jump, and view
+          transitions play nothing. It is not zero because a transition that never runs never
+          ends, and some script waits for a transition to end.</p>
+        <Snippet label="CSS" lines={unit(resetCss, '@media (prefers-reduced-motion: reduce) {')}/>
       </li>
     </ol>
   </section>
