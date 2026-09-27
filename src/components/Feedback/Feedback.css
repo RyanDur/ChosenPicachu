@@ -18,7 +18,7 @@
 @media (width <= 1100px) {
   .feedback-item > .feedback-open {
     inline-size: auto;
-    padding: var(--base-x-0_5) var(--base);
+    padding: var(--base-x-0_5) 0;
   }
 }
 
