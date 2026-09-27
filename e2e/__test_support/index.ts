@@ -12,6 +12,6 @@ export {tablesDemo} from './tables';
 export {fingerTap, fingertipMiss} from './finger';
 export {sortableList} from './lists';
 export {headingsTakingMoreLinesThanWords} from './headings';
-export {codedStepLayouts} from './recipes';
+export {codedStepLayouts, pictureInRunPlacements} from './recipes';
 export {firstHeightAfter, heightByTheNextFrame, heightOnceSettled} from './motion';
-export {accordionsTab, builds, type Build} from './accordions';
+export {accordionsTab, builds, textOf, wordOn, type Build} from './accordions';

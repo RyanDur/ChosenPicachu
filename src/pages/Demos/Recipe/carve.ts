@@ -11,7 +11,7 @@ const dedented = (lines: string[]): Line[] => {
   return lines.map(line => ({text: line.slice(margin)}));
 };
 
-const closesTheUnit = (source: string, at: number, closer: Closer): boolean => {
+const closesTheUnit = (source: string, at: number, closer: Exclude<Closer, ']'>): boolean => {
   const ahead = source.slice(at + 1).match(/\S/);
   if (!ahead) {
     return true;

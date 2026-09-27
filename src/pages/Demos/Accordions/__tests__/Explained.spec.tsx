@@ -48,7 +48,7 @@ describe('how every fold moves', () => {
 
     expect(shown).toContain('@media (prefers-reduced-motion: reduce)');
     expect(shown).toContain('::details-content');
-    expect(shown).not.toContain(':root');
+    expect(shown).toContain('::view-transition-group(*)');
   });
 });
 
