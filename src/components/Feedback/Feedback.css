@@ -82,6 +82,10 @@
   resize: vertical;
 }
 
+.feedback-actions-name {
+  inset-block-start: 0;
+}
+
 .feedback-status {
   grid-column: 1 / -1;
 }

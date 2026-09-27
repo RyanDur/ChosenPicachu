@@ -115,6 +115,7 @@ export const Feedback: FC = () => {
             onChange={event => dispatch(reachEdited(event.currentTarget.value))}/>
         </label>
         <fieldset className="feedback-actions field">
+          <legend className="feedback-actions-name off-screen">Send or cancel</legend>
           {draft.sending.state !== 'writing' &&
             <output className={classNames('feedback-status', 'paragraph', draft.sending.state === 'refused' && 'alarm-ink')}>{said(draft.sending)}</output>}
           <button type="button" className="feedback-cancel path sub-title bold attentive field hairline-outline reachable" commandfor="feedback" command="close" onClick={commandWithoutInvokers}>Cancel</button>
