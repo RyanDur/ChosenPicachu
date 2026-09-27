@@ -2,38 +2,40 @@ import {readFileSync} from 'node:fs';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {not} from '@ryandur/sand';
-import {design, doors, halves, qaNames, tests} from './agents.mjs';
+import {halves, reviewers} from './agents.mjs';
 
 const beside = file => readFileSync(join(dirname(fileURLToPath(import.meta.url)), file), 'utf8');
 
 const values = beside('values.md');
 const plain = beside('plain.md');
 
-const rubric = [...doors.map(({file}) => file), 'src/pages/Home/TeeUp.tsx', design.file, tests.file];
+const rubric = [...reviewers.map(({file}) => file), 'src/pages/Home/TeeUp.tsx'];
+
+const qasIn = scope => reviewers.filter(({scopes}) => scopes.includes(scope)).map(({name}) => `${name}-qa`);
 
 const scopes = {
   full: {
     describe: () => 'The scope is the whole of src/ and e2e/: every page, component, sheet and spec.',
-    asks: qaNames
+    asks: qasIn('full')
   },
   changes: {
     describe: ({before, after}) =>
       `The scope is what this push changed: \`git diff ${before} ${after}\` is the change, each touched file is read whole, and any other file the change leans on may be read for context. \`git log ${before}..${after}\` says what each commit answers: a commit may quote an earlier finding and say how the change answers it.`,
-    asks: qaNames
+    asks: qasIn('changes')
   },
   tests: {
     describe: () => 'The scope is every test in the app: the whole tests half, read whole, with the code under test read for context.',
-    asks: [`${tests.name}-qa`]
+    asks: qasIn('tests')
   },
   design: {
     describe: () => 'The scope is the whole site half, read whole: every page, component, sheet and script that ships, with the tests read only for context.',
-    asks: [`${design.name}-qa`]
+    asks: qasIn('design')
   }
 };
 
 const count = ['one', 'two', 'three', 'four', 'five'];
 
-const listed = names => `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
+const listed = names => names.length === 1 ? names[0] : `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
 
 const dispatch = asks => asks.length === 1
   ? `Only ${asks[0]} has a half in this scope. Send it the scope, word for word, and ask for its door's plusses and deltas; the other QAs have nothing to review here.`
@@ -50,7 +52,7 @@ export const promptFor = ({scope, before, after}) => {
     '## Your part',
     `You lead the review. Read the rubric first and whole, in the author's words: ${rubric.join(', ')}. Each door of the home page says what things are, how they show, or how they respond, then how the author organizes it, and ends with the test of the organization. The design door says how the code is shaped so that change stays cheap. The tests door says what a test is for.`,
     chosen.describe({before, after}),
-    `The scope has two halves. ${halves.tests} ${halves.site} The three door QAs and the design QA review the site and the tests QA reviews the tests; each may read the other half for context. The site's QAs report nothing on the tests; the tests QA reports on the site only that a test is missing.`,
+    `The scope has two halves. ${halves.tests} ${halves.site} The site's QAs review the site and the tests QA reviews the tests; each may read the other half for context. The site's QAs report nothing on the tests; the tests QA reports on the site only that a test is missing.`,
     dispatch(chosen.asks),
     'When they answer, corroborate every plus and every delta yourself before you keep it: open the file at the line, read the principle on its door, and keep it only if it holds. Merge what two QAs saw as one. Drop what does not hold and say nothing of it.',
     'Answer in the feedback stance, in the shape you were given. Name the habits: each is one rule from a door that two or more findings answer to, with a title, the rule in the door\'s words, what a person meets when a person meets it, and the fix stated once. Put the habits a visitor meets first. Give every plus and every delta that held the title of its habit, or leave the title unmatched when it fits none. Say what you deferred in one line, only if something was. Each entry says what happened, why, and for a delta the change, in plain sentences.'

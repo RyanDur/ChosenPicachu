@@ -1,5 +1,46 @@
-import {agents, design, doors, qaNames, reading, tests} from '../review/agents.mjs';
+import {readFileSync} from 'node:fs';
+import {agents, qaNames, reading, reviewers, reviewersIn} from '../review/agents.mjs';
 import {promptFor} from '../review/prompt.mjs';
+
+const two = `# Agents
+
+Anything before the reviewers is prose for people.
+
+## Reviewers
+
+### structure
+- rubric: \`src/pages/Home/Structure.tsx\`
+- reviews: the site
+- scopes: full, changes
+- asks: what things are
+
+### tests
+- rubric: \`scripts/review/tests.md\`
+- reviews: the tests
+- scopes: full, changes, tests
+- asks: what a test is for
+`;
+
+describe('the reviewers AGENTS.md names', () => {
+  test('should read each reviewer\'s name, rubric, half, scopes and question', () => {
+    expect(reviewersIn(two)).toEqual([
+      {name: 'structure', file: 'src/pages/Home/Structure.tsx', reviews: 'site', scopes: ['full', 'changes'], asks: 'what things are'},
+      {name: 'tests', file: 'scripts/review/tests.md', reviews: 'tests', scopes: ['full', 'changes', 'tests'], asks: 'what a test is for'}
+    ]);
+  });
+
+  test('should drop a reviewer that AGENTS.md no longer names', () => {
+    const one = two.slice(0, two.indexOf('### tests'));
+
+    expect(reviewersIn(one).map(({name}) => name)).toEqual(['structure']);
+  });
+
+  test('should run exactly the reviewers the repo\'s AGENTS.md names', () => {
+    const named = reviewersIn(readFileSync('AGENTS.md', 'utf8')).map(({name}) => `${name}-qa`);
+
+    expect(Object.keys(agents())).toEqual(named);
+  });
+});
 
 describe('the review\'s QAs', () => {
   test('every door gets its own QA that runs on opus and can only read', () => {
@@ -14,7 +55,7 @@ describe('the review\'s QAs', () => {
 
   test('each QA carries the values and its own door', () => {
     const qas = agents();
-    [...doors, design, tests].forEach(({name, file}) => {
+    reviewers.forEach(({name, file}) => {
       const qa = qas[`${name}-qa`];
       expect(qa.prompt).toContain('# What every reviewer here holds');
       expect(qa.prompt).toContain(`You hold the ${name} door. Read ${file} first`);
@@ -25,7 +66,7 @@ describe('the review\'s QAs', () => {
 
   test('the door QAs review the site and leave the tests to the tests QA', () => {
     const qas = agents();
-    [...doors, design].forEach(({name}) => {
+    reviewers.filter(({reviews}) => reviews === 'site').forEach(({name}) => {
       expect(qas[`${name}-qa`].prompt).toContain('You review the site.');
       expect(qas[`${name}-qa`].prompt).toContain('report nothing on it');
     });
