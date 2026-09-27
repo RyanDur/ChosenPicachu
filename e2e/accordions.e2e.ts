@@ -1,5 +1,17 @@
 import {expect, test} from '@playwright/test';
-import {accordionsTab, builds, codedStepLayouts, desktop, firstHeightAfter, framesWhileMoving, heightByTheNextFrame, heightOnceSettled, iPhone, misplacedPictures, textOf} from './__test_support';
+import {
+  accordionsTab,
+  builds,
+  codedStepLayouts,
+  desktop,
+  firstHeightAfter,
+  framesWhileMoving,
+  heightByTheNextFrame,
+  heightOnceSettled,
+  iPhone,
+  misplacedPictures,
+  textOf
+} from './__test_support';
 
 test('a details fold slides open where the browser can animate it', async ({page, browserName}) => {
   test.skip(browserName !== 'chromium', 'only chromium animates a details element to its natural height');
@@ -25,7 +37,7 @@ test('a fold in the React checkbox build slides open', async ({page}) => {
   expect(await firstMoved).toBeLessThan(await heightOnceSettled(part.fold));
 });
 
-const roundingBetweenLayoutAndTransform = 3;
+const layoutRounding = 1;
 
 for (const build of ['the React checkbox build', 'the React radio build'] as const) {
   test(`a fold in ${build} slides open with its text shown down to the fold’s edge`, async ({page}) => {
@@ -38,7 +50,7 @@ for (const build of ['the React checkbox build', 'the React radio build'] as con
     const frames = await moving;
 
     expect(frames[0].height).toBeLessThan(frames.at(-1)?.height ?? 0);
-    expect(frames.map(frame => frame.textBottomGap).filter(gap => gap > roundingBetweenLayoutAndTransform)).toEqual([]);
+    expect(frames.map(frame => frame.textBottomGap).filter(gap => gap > layoutRounding)).toEqual([]);
   });
 
   test(`a fold in ${build} slides closed with its text shown down to the fold’s edge`, async ({page}) => {
@@ -52,7 +64,7 @@ for (const build of ['the React checkbox build', 'the React radio build'] as con
     const frames = await moving;
 
     expect(frames[0].height).toBeGreaterThan(frames.at(-1)?.height ?? 0);
-    expect(frames.map(frame => frame.textBottomGap).filter(gap => gap > roundingBetweenLayoutAndTransform)).toEqual([]);
+    expect(frames.map(frame => frame.textBottomGap).filter(gap => gap > layoutRounding)).toEqual([]);
   });
 }
 
