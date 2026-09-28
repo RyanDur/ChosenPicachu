@@ -24,9 +24,9 @@ test('a details fold slides open where the browser can animate it', async ({page
   expect(midway).toBeLessThan(await heightOnceSettled(part.fold));
 });
 
-test('a fold in the React checkbox build slides open', async ({page}) => {
+test('a fold in the grid checkbox build slides open', async ({page}) => {
   await page.goto('demos/?tab=accordions');
-  const part = accordionsTab(page).firstPartOf('the React checkbox build');
+  const part = accordionsTab(page).firstPartOf('the grid checkbox build');
   await expect(part.fold).toBeVisible();
   const closed = await heightByTheNextFrame(part.fold);
   const firstMoved = firstHeightAfter(part.fold, closed);
@@ -39,7 +39,7 @@ test('a fold in the React checkbox build slides open', async ({page}) => {
 
 const layoutRounding = 1;
 
-for (const build of ['the React inclusive build', 'the React checkbox build', 'the React radio build'] as const) {
+for (const build of ['the grid checkbox build', 'the grid radio build'] as const) {
   test(`a fold in ${build} slides open with its text shown down to the fold’s edge`, async ({page}) => {
     await page.goto('demos/?tab=accordions');
     const part = accordionsTab(page).firstPartOf(build);
@@ -128,7 +128,7 @@ for (const build of builds) {
   });
 }
 
-for (const build of ['the React inclusive build', 'the React checkbox build', 'the React radio build'] as const) {
+for (const build of ['the grid checkbox build', 'the grid radio build'] as const) {
   test(`a closed fold in ${build} shows only its bar`, async ({page}) => {
     await page.goto('demos/?tab=accordions');
     await expect(accordionsTab(page).firstPartOf(build).fold).toBeVisible();
@@ -174,7 +174,7 @@ for (const build of builds.filter(build => build !== 'the details build')) {
   });
 }
 
-for (const build of ['the checkbox build', 'the inclusive details build', 'the React inclusive build'] as const) {
+for (const build of ['the checkbox build', 'the inclusive details build', 'the grid checkbox build'] as const) {
   test(`a reader opens two parts of ${build} and both stay open`, async ({page}) => {
     await page.goto('demos/?tab=accordions');
     const [first, second] = [accordionsTab(page).partOf(build, 0), accordionsTab(page).partOf(build, 1)];
@@ -188,7 +188,7 @@ for (const build of ['the checkbox build', 'the inclusive details build', 'the R
   });
 }
 
-for (const build of ['the radio build', 'the React radio build'] as const) {
+for (const build of ['the radio build', 'the grid radio build'] as const) {
   test(`a keyboard reader moves through ${build} from its first fold to its second`, async ({page}) => {
     await page.goto('demos/?tab=accordions');
     const [first, second] = [accordionsTab(page).partOf(build, 0), accordionsTab(page).partOf(build, 1)];
@@ -200,5 +200,46 @@ for (const build of ['the radio build', 'the React radio build'] as const) {
 
     await expect.poll(second.showsText).toBe(true);
     await expect.poll(first.showsText).toBe(false);
+  });
+}
+
+test('the space bar closes the open part of the grid radio build', async ({page}) => {
+  await page.goto('demos/?tab=accordions');
+  const part = accordionsTab(page).firstPartOf('the grid radio build');
+  await part.openByKeyboard();
+  await expect.poll(part.isOpen).toBe(true);
+
+  await page.keyboard.press('Space');
+
+  await expect.poll(part.isOpen).toBe(false);
+});
+
+test('a second press on the bar of the open part of the grid radio build closes it', async ({page}) => {
+  await page.goto('demos/?tab=accordions');
+  const part = accordionsTab(page).firstPartOf('the grid radio build');
+  await part.open();
+  await expect.poll(part.isOpen).toBe(true);
+
+  await part.close();
+
+  await expect.poll(part.isOpen).toBe(false);
+});
+
+for (const {build, control} of [
+  {build: 'the grid checkbox build', control: 'checkbox'},
+  {build: 'the grid radio build', control: 'radio'}
+] as const) {
+  test(`the bar of ${build} says what a press will do, and its control is named the same`, async ({page}) => {
+    await page.goto('demos/?tab=accordions');
+    const part = accordionsTab(page).firstPartOf(build);
+    const name = await part.fold.getByRole('heading').textContent() ?? '';
+    await expect(part.fold.getByRole(control, {name: `Open ${name}`})).toBeAttached();
+    await expect(part.fold.getByText('Open', {exact: true})).toBeVisible();
+
+    await part.open();
+
+    await expect(part.fold.getByRole(control, {name: `Close ${name}`})).toBeChecked();
+    await expect(part.fold.getByText('Close', {exact: true})).toBeVisible();
+    await expect(part.fold.getByText('Open', {exact: true})).toBeHidden();
   });
 }

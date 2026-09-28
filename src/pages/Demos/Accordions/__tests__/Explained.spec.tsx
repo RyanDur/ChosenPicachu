@@ -19,7 +19,7 @@ describe('the accordions tab', () => {
   test.each([
     [parts[0], ['Accordion using checkboxes', 'Accordion using a radio group']],
     [parts[1], ['Inclusive accordion using details elements', 'Exclusive accordion using details elements']],
-    [parts[2], ['Inclusive accordion using checkboxes', 'Exclusive accordion using checkboxes', 'Exclusive accordion using radio group']]
+    [parts[2], ['Inclusive accordion using checkboxes', 'Exclusive accordion using radio group']]
   ])('should show under "%s" the builds it is about', async (part, builds) => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
@@ -55,15 +55,15 @@ describe('what the platform gives now', () => {
 });
 
 describe('the two together', () => {
-  test('should tell the inclusive build first, then the exclusive builds, each beside its own update', async () => {
+  test('should tell the checkbox build first, then the radio build beside the script that lets it close', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
     const explained = await screen.findByRole('region', {name: parts[2]});
 
-    expect(within(explained).getAllByText(/^The (inclusive build lets|two exclusive builds keep)/).map(run => run.textContent?.slice(0, 16)))
-      .toEqual(['The inclusive bu', 'The two exclusiv']);
-    expect(codeBeside(explained, /The inclusive build lets/)).toHaveTextContent('const toggledIn');
-    expect(codeBeside(explained, /The two exclusive builds keep/)).toHaveTextContent('const toggledAlone');
+    expect(within(explained).getAllByText(/^The (inclusive|exclusive) build is/).map(run => /^The \w+ build/.exec(run.textContent ?? '')?.[0]))
+      .toEqual(['The inclusive build', 'The exclusive build']);
+    expect(codeBeside(explained, /The inclusive build is a checkbox build again/)).toHaveTextContent('type="checkbox"');
+    expect(codeBeside(explained, /The exclusive build is a radio group/)).toHaveTextContent('const pressedIn');
   });
 });
 

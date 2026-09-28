@@ -1,18 +1,33 @@
-import {FC, ReactNode, useState} from 'react';
+import {FC, KeyboardEvent, MouseEvent, ReactNode} from 'react';
 import {classNames} from '@components/class-names';
 import {PillGlider} from '@components/PillGlider';
-import {Motion} from '../Controls';
 import {PropsWithClassName} from '../types';
 import './Accordions.css';
 
-const toggleWord = (open: boolean) => open ? 'Close' : 'Open';
+const motions = [{display: 'Animate', value: 'animated'}, {display: 'Static', value: 'static'}] as const;
 
-const toggledAlone = (key: string) => (open?: string) => open === key ? undefined : key;
+const pressedIn = (list: HTMLUListElement, radio: HTMLInputElement): void => {
+  if (list.dataset.open === radio.value) {
+    radio.checked = false;
+    delete list.dataset.open;
+  } else {
+    list.dataset.open = radio.value;
+  }
+};
 
-const closedIfOpen = (key: string) => (open?: string) => open === key ? undefined : open;
+const aRadioClicked = ({currentTarget: list, target}: MouseEvent<HTMLUListElement>): void => {
+  if (target instanceof HTMLInputElement) {
+    pressedIn(list, target);
+  }
+};
 
-const toggledIn = (key: string) => (opened: readonly string[]) =>
-  opened.includes(key) ? opened.filter(part => part !== key) : [...opened, key];
+const spaceOnTheOpenRadio = (event: KeyboardEvent<HTMLUListElement>): void => {
+  const {currentTarget: list, target, key} = event;
+  if (key === ' ' && target instanceof HTMLInputElement && target.checked) {
+    event.preventDefault();
+    pressedIn(list, target);
+  }
+};
 
 export type Fold = {value: ReactNode; key: string};
 type ContentProps = {content: Fold[]};
@@ -92,128 +107,60 @@ export const ExclusiveToggleAccordion: FC<PropsWithClassName & ContentProps> = (
   </ul>
 </article>;
 
-export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentProps> = ({
+export const InclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentProps> = ({
   className,
   content
-}) => {
-  const [checked, updateChecked] = useState<string>();
-  const [motion, updateMotion] = useState<Motion>('animated');
+}) => <article className={classNames('inclusive-checkbox-toggle-accordion', 'toggle-accordion', className)}>
+  <header className="build-header">
+    <h4 className="sub-title bold">Inclusive accordion using checkboxes</h4>
+    <PillGlider label="animation style" name="inclusive-checkbox-motion" options={motions} defaultChosen="animated"/>
+  </header>
 
-  return <article className={classNames('exclusive-checkbox-toggle-accordion', 'toggle-accordion', className)}>
-    <header className="react-header">
-      <h4 className="sub-title bold">Exclusive accordion using checkboxes</h4>
-      <PillGlider label="animation style"
-        name="checkbox-animate-or-static-tab"
-        options={[{display: 'Animate', value: 'animated'}, {display: 'Static', value: 'static'}]}
-        chosen={motion}
-        onChosen={updateMotion}/>
-    </header>
+  <ul className="new-accordion">
+    {content.map(({value, key}) =>
+      <li key={key}>
+        <article className="grid-fold reveal">
+          <header className="info-header">
+            <h5 className="sub-title bold">{key}</h5>
+            <label className="info-label">
+              <span className="open-word">Open</span>
+              <span className="close-word">Close</span>
+              <span className="off-screen"> {key}</span>
+              <input type="checkbox" className="off-screen"/>
+            </label>
+          </header>
 
-    <ul className={'new-accordion'}>
-      {content.map(({value, key}) =>
-        <li key={key}>
-          <article className={classNames('react-fold', motion, 'reveal')}>
-            <header className="info-header">
-              <h5 className="sub-title bold">{key}</h5>
-              <label className="info-label">
-                {toggleWord(key === checked)}
-                <input
-                  type="checkbox"
-                  aria-label={`${toggleWord(key === checked)} ${key}`}
-                  checked={key === checked}
-                  onChange={() => updateChecked(toggledAlone(key))}
-                  className="off-screen"/>
-              </label>
-            </header>
-
-            <p className="fold-clip"><span className="fold-clip-item"><span className="fold-text">{value}</span></span></p>
-          </article>
-        </li>)}
-    </ul>
-  </article>;
-};
+          <p className="fold-clip"><span className="fold-clip-item"><span className="fold-text">{value}</span></span></p>
+        </article>
+      </li>)}
+  </ul>
+</article>;
 
 export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps> = ({
   className,
   content
-}) => {
-  const [checked, updateChecked] = useState<string>();
-  const [motion, updateMotion] = useState<Motion>('animated');
-  return <article className={classNames('exclusive-radio-toggle-accordion', 'toggle-accordion', className)}>
-    <header className="react-header">
-      <h4 className="sub-title bold">Exclusive accordion using radio group</h4>
-      <PillGlider label="animation style"
-        name="radio-animate-or-static-tab"
-        options={[{display: 'Animate', value: 'animated'}, {display: 'Static', value: 'static'}]}
-        chosen={motion}
-        onChosen={updateMotion}/>
-    </header>
+}) => <article className={classNames('exclusive-radio-toggle-accordion', 'toggle-accordion', className)}>
+  <header className="build-header">
+    <h4 className="sub-title bold">Exclusive accordion using radio group</h4>
+    <PillGlider label="animation style" name="exclusive-radio-motion" options={motions} defaultChosen="animated"/>
+  </header>
 
-    <ul className={'new-accordion'}>
-      {content.map(({value, key}) =>
-        <li key={key}>
-          <article className={classNames('react-fold', motion === 'animated' && 'animated drawer')}>
-            <header className="info-header">
-              <h5 className="sub-title bold">{key}</h5>
-              <label className="info-label">
-                {toggleWord(key === checked)}
-                <input
-                  type="radio"
-                  name="exclusive-checkbox-toggle"
-                  aria-label={`${toggleWord(key === checked)} ${key}`}
-                  checked={key === checked}
-                  value={key}
-                  onChange={event => updateChecked(event.currentTarget.value)}
-                  onClick={() => updateChecked(closedIfOpen(key))}
-                  className="off-screen"/>
-              </label>
-            </header>
+  <ul className="new-accordion" onClick={aRadioClicked} onKeyDown={spaceOnTheOpenRadio}>
+    {content.map(({value, key}) =>
+      <li key={key}>
+        <article className="grid-fold drawer">
+          <header className="info-header">
+            <h5 className="sub-title bold">{key}</h5>
+            <label className="info-label">
+              <span className="open-word">Open</span>
+              <span className="close-word">Close</span>
+              <span className="off-screen"> {key}</span>
+              <input type="radio" name="exclusive-radio-toggle" value={key} className="off-screen"/>
+            </label>
+          </header>
 
-            <p className="fold-clip"><span className="fold-clip-item"><span className="fold-text">{value}</span></span></p>
-          </article>
-        </li>)}
-    </ul>
-  </article>;
-};
-
-export const InclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentProps> = ({
-  className,
-  content
-}) => {
-  const [opened, updateOpened] = useState<readonly string[]>([]);
-  const [motion, updateMotion] = useState<Motion>('animated');
-  const isOpen = (key: string) => opened.includes(key);
-
-  return <article className={classNames('inclusive-checkbox-toggle-accordion', 'toggle-accordion', className)}>
-    <header className="react-header">
-      <h4 className="sub-title bold">Inclusive accordion using checkboxes</h4>
-      <PillGlider label="animation style"
-        name="inclusive-checkbox-animate-or-static-tab"
-        options={[{display: 'Animate', value: 'animated'}, {display: 'Static', value: 'static'}]}
-        chosen={motion}
-        onChosen={updateMotion}/>
-    </header>
-
-    <ul className={'new-accordion'}>
-      {content.map(({value, key}) =>
-        <li key={key}>
-          <article className={classNames('react-fold', motion, 'reveal')}>
-            <header className="info-header">
-              <h5 className="sub-title bold">{key}</h5>
-              <label className="info-label">
-                {toggleWord(isOpen(key))}
-                <input
-                  type="checkbox"
-                  aria-label={`${toggleWord(isOpen(key))} ${key}`}
-                  checked={isOpen(key)}
-                  onChange={() => updateOpened(toggledIn(key))}
-                  className="off-screen"/>
-              </label>
-            </header>
-
-            <p className="fold-clip"><span className="fold-clip-item"><span className="fold-text">{value}</span></span></p>
-          </article>
-        </li>)}
-    </ul>
-  </article>;
-};
+          <p className="fold-clip"><span className="fold-clip-item"><span className="fold-text">{value}</span></span></p>
+        </article>
+      </li>)}
+  </ul>
+</article>;

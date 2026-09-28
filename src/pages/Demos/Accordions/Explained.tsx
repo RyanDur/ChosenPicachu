@@ -1,7 +1,6 @@
 import {FC} from 'react';
 import {
   ExclusiveAccordion,
-  ExclusiveCheckboxToggleAccordion,
   ExclusiveRadioToggleAccordion,
   ExclusiveToggleAccordion,
   Fold,
@@ -37,9 +36,8 @@ export type Contents = {
   radio: Fold[];
   inclusiveDetails: Fold[];
   exclusiveDetails: Fold[];
-  inclusiveCheckboxWithState: Fold[];
-  checkboxWithState: Fold[];
-  radioWithState: Fold[];
+  inclusiveCheckboxes: Fold[];
+  exclusiveRadios: Fold[];
 };
 
 const exhibit = 'card rounded-corners lifted padded';
@@ -247,54 +245,52 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
   <section aria-labelledby="together-heading" className="accordion-part">
     <h3 id="together-heading" className="title bold">The two together</h3>
     <ul className="accordions">
-      <li className="build"><InclusiveCheckboxToggleAccordion className={exhibit} content={contents.inclusiveCheckboxWithState}/></li>
-      <li className="build"><ExclusiveCheckboxToggleAccordion className={exhibit} content={contents.checkboxWithState}/></li>
-      <li className="build"><ExclusiveRadioToggleAccordion className={exhibit} content={contents.radioWithState}/></li>
+      <li className="build"><InclusiveCheckboxToggleAccordion className={exhibit} content={contents.inclusiveCheckboxes}/></li>
+      <li className="build"><ExclusiveRadioToggleAccordion className={exhibit} content={contents.exclusiveRadios}/></li>
     </ul>
     <ol className={runs}>
       <li className="run">
-        <p className="paragraph">The inclusive build lets every part open on its own, as a checkbox already
-          does. It holds a list of the open parts in state, so each bar can say Open or Close. A
-          change adds the part pressed to the list, or takes it out if it was there.</p>
-        <Snippet label="TS" lines={[
-          ...unit(accordionsSource, 'const [opened, updateOpened]'), gap,
-          ...unit(accordionsSource, 'const isOpen = '), gap,
-          ...unit(accordionsSource, 'const toggledIn'), gap,
-          ...span(accordionsSource, 'onChange={() => updateOpened', 'onChange={() => updateOpened')
+        <p className="paragraph">The inclusive build is a checkbox build again, with no script. Each bar is a
+          label holding the part’s words and its checkbox, and the checkbox remembers whether the
+          part is open, as it did in part one. What is new is the way the text opens, below.</p>
+        <Snippet label="TS" lines={span(accordionsSource, '<label className="info-label">\n              <span className="open-word">', '<input type="checkbox" className="off-screen"/>')}/>
+      </li>
+      <li className="run">
+        <p className="paragraph">The bar says Open or Close. Both words sit in the label, and the stylesheet
+          shows one: Close while the fold holds a checked input, Open while it does not. A word
+          hidden with display none is not read either, so a screen reader hears the word on
+          screen and then the part’s name, which sits off screen, such as “Open basalt”. Someone
+          using voice control can say the word they see.</p>
+        <Snippet label="CSS" lines={[
+          ...unit(accordionsCss, '.close-word,'), gap,
+          ...unit(accordionsCss, '&:has(:checked) .close-word {')
         ]}/>
       </li>
       <li className="run">
-        <p className="paragraph">The two exclusive builds keep only one part open, and a second press on the
-          open part closes it. Details does both with a shared name. A checkbox can close itself but cannot
-          keep the others shut; a radio keeps the others shut but cannot close itself. So each
-          build keeps its element for what it gives, and holds the rest in React state: a value
-          the component remembers, here which part is open. When a checkbox changes, the
-          checkbox build opens the part pressed, or clears it if it was already open. A checkbox
-          is checked only when its part is the one held in state, so the state and the checkbox
-          always agree.</p>
+        <p className="paragraph">The exclusive build is a radio group. Radios that share a name keep one part
+          open on their own, which checkboxes cannot do without script. What a radio cannot do is
+          close itself: pressed again, it stays checked. So the list adds that, with a little
+          script, and the radios stay plain. A press on a radio bubbles up to the list, which
+          remembers which radio is open. A press on that radio unchecks it and forgets it, and a
+          press on any other remembers the new one. The arrow keys move the choice and press as
+          they go, so each move is remembered too.</p>
         <Snippet label="TS" lines={[
-          ...unit(accordionsSource, 'const [checked, updateChecked]'), gap,
-          ...unit(accordionsSource, 'const toggledAlone'), gap,
-          ...span(accordionsSource, 'type="checkbox"\n                  aria-label', 'className="off-screen"/>')
+          ...unit(accordionsSource, 'const pressedIn'), gap,
+          ...unit(accordionsSource, 'const aRadioClicked'), gap,
+          ...span(accordionsSource, '<ul className="new-accordion" onClick', '<ul className="new-accordion" onClick')
         ]}/>
         <WhatEachPromises/>
       </li>
       <li className="run">
-        <p className="paragraph">The radio build takes one part at a time from its group, and adds the close:
-          a click on the radio already chosen clears the part, which a radio on its own will not
-          do. The shared name makes the radios one group, so the arrow keys move between them.
-          Each radio’s value is its part’s key, which the change handler reads.</p>
-        <Snippet label="TS" lines={[
-          ...unit(accordionsSource, 'const closedIfOpen'), gap,
-          ...span(accordionsSource, 'type="radio"\n                  name="exclusive-checkbox-toggle"', 'className="off-screen"/>')
-        ]}/>
+        <p className="paragraph">The space bar is the keyboard’s press, but on a checked radio most browsers do
+          nothing with it, so no press reaches the list. So the list listens for the space bar
+          too, and closes the part when the key lands on the open radio.</p>
+        <Snippet label="TS" lines={unit(accordionsSource, 'const spaceOnTheOpenRadio')}/>
       </li>
       <li className="run">
-        <p className="paragraph">A screen reader announces summary’s state for you, but not a checkbox’s part.
-          Here the bar’s word is Open or Close, and each input is named by that word and its
-          part, such as “Open basalt”. A listener hears which part a press opens, and someone
-          using voice control can say the word they see.</p>
-        <Snippet label="TS" lines={unit(accordionsSource, 'const toggleWord')}/>
+        <p className="paragraph">The checkbox build has no script to lose. Without the list’s script, the radio
+          build still works as a radio group: it keeps one part open. Only the second press that
+          closes a part is lost.</p>
       </li>
       <li className="run">
         <p className="paragraph">Details slides to its content’s height with ::details-content, but only in
@@ -312,7 +308,7 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
         <Snippet label="CSS" lines={[
           ...unit(accordionsCss, '.fold-clip {'), gap,
           ...unit(accordionsCss, '&:has(:checked) .fold-clip {'), gap,
-          ...unit(accordionsCss, '&.animated.reveal .fold-clip {')
+          ...unit(accordionsCss, "&:has(.pill-glider [value='animated']:checked) .grid-fold .fold-clip {")
         ]}/>
         <RowToItsContent/>
       </li>
@@ -338,17 +334,14 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
           paragraph’s overflow hides the text above the fold. One transition moves it all, so no
           part can fall behind another. It answers no limit. It is there to show what grid
           alignment does on its own.</p>
-        <Snippet label="CSS" lines={unit(accordionsCss, '&.animated.drawer {')}/>
+        <Snippet label="CSS" lines={unit(accordionsCss, '&.drawer {')}/>
         <RidesTheEdge/>
       </li>
       <li className="run">
-        <p className="paragraph">The Animate and Static choice only adds or removes a class. The stylesheet
-          decides what moves: Static removes the class that holds the transition, so the row
-          changes in a single frame.</p>
-        <Snippet label="TS" lines={[
-          ...span(accordionsSource, "classNames('react-fold', motion, 'reveal')", "classNames('react-fold', motion, 'reveal')"), gap,
-          ...span(accordionsSource, "classNames('react-fold', motion === 'animated'", "classNames('react-fold', motion === 'animated'")
-        ]}/>
+        <p className="paragraph">Animate and Static are two radios in each build’s header. The stylesheet reads
+          which one is checked. While Animate is, the fold’s row moves on its transition. Static
+          leaves that rule unmatched, so the row changes in a single frame.</p>
+        <Snippet label="TS" lines={span(accordionsSource, '<PillGlider label="animation style" name="inclusive-checkbox-motion"', 'defaultChosen="animated"/>')}/>
       </li>
     </ol>
   </section>

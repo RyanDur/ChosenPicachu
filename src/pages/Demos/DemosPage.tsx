@@ -44,9 +44,8 @@ export const DemosPage = () => {
     radio: paragraphs(5),
     inclusiveDetails: paragraphs(5),
     exclusiveDetails: paragraphs(5),
-    inclusiveCheckboxWithState: paragraphs(5),
-    checkboxWithState: paragraphs(5),
-    radioWithState: paragraphs(5)
+    inclusiveCheckboxes: paragraphs(5),
+    exclusiveRadios: paragraphs(5)
   }));
   const {tradeProduct} = useEnv();
 

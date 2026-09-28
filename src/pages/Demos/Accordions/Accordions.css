@@ -27,7 +27,7 @@
     }
   }
 
-  .react-fold {
+  .grid-fold {
     overflow: hidden;
     display: grid;
     grid-template-rows: min-content;
@@ -52,19 +52,23 @@
       grid-template-rows: 1fr;
     }
 
-    &.animated.reveal .fold-clip {
-      transition: grid-template-rows .3s ease-in-out;
-    }
-
-    &.animated.drawer {
+    &.drawer {
       .fold-clip {
         align-content: end;
-        transition: grid-template-rows .3s ease-in-out;
       }
 
       .fold-clip-item {
         align-self: end;
       }
+    }
+
+    .close-word,
+    &:has(:checked) .open-word {
+      display: none;
+    }
+
+    &:has(:checked) .close-word {
+      display: inline;
     }
 
     .info-header {
@@ -213,7 +217,11 @@
   flex-direction: column;
   gap: var(--base-x-1_25);
 
-  .react-header {
+  &:has(.pill-glider [value='animated']:checked) .grid-fold .fold-clip {
+    transition: grid-template-rows .3s ease-in-out;
+  }
+
+  .build-header {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;

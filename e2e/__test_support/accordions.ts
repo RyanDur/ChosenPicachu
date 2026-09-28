@@ -1,17 +1,16 @@
 import type {Locator, Page} from '@playwright/test';
 
-export type Build = 'the checkbox build' | 'the radio build' | 'the inclusive details build' | 'the details build' | 'the React inclusive build' | 'the React checkbox build' | 'the React radio build';
+export type Build = 'the checkbox build' | 'the radio build' | 'the inclusive details build' | 'the details build' | 'the grid checkbox build' | 'the grid radio build';
 
-export const builds: Build[] = ['the checkbox build', 'the radio build', 'the inclusive details build', 'the details build', 'the React inclusive build', 'the React checkbox build', 'the React radio build'];
+export const builds: Build[] = ['the checkbox build', 'the radio build', 'the inclusive details build', 'the details build', 'the grid checkbox build', 'the grid radio build'];
 
 const headings: Record<Build, string> = {
   'the checkbox build': 'Accordion using checkboxes',
   'the radio build': 'Accordion using a radio group',
   'the inclusive details build': 'Inclusive accordion using details elements',
   'the details build': 'Exclusive accordion using details elements',
-  'the React inclusive build': 'Inclusive accordion using checkboxes',
-  'the React checkbox build': 'Exclusive accordion using checkboxes',
-  'the React radio build': 'Exclusive accordion using radio group'
+  'the grid checkbox build': 'Inclusive accordion using checkboxes',
+  'the grid radio build': 'Exclusive accordion using radio group'
 };
 
 export type Part = {
@@ -59,7 +58,7 @@ const detailsPart = (page: Page, fold: Locator): Omit<Part, 'showsText'> => ({
 
 const closeBar = (fold: Locator) => () => fold.getByText('Close', {exact: true}).click();
 
-const reactCheckboxPart = (page: Page, fold: Locator): Omit<Part, 'showsText'> => ({
+const gridCheckboxPart = (page: Page, fold: Locator): Omit<Part, 'showsText'> => ({
   fold,
   open: () => fold.getByText('Open', {exact: true}).click(),
   close: closeBar(fold),
@@ -84,9 +83,8 @@ const partIn: Record<Build, (where: Where) => Omit<Part, 'showsText'>> = {
   }),
   'the inclusive details build': ({page, fold}) => detailsPart(page, fold),
   'the details build': ({page, fold}) => detailsPart(page, fold),
-  'the React inclusive build': ({page, fold}) => reactCheckboxPart(page, fold),
-  'the React checkbox build': ({page, fold}) => reactCheckboxPart(page, fold),
-  'the React radio build': ({page, fold, article, index}) => ({
+  'the grid checkbox build': ({page, fold}) => gridCheckboxPart(page, fold),
+  'the grid radio build': ({page, fold, article, index}) => ({
     fold,
     open: () => fold.getByText('Open', {exact: true}).click(),
     close: closeBar(fold),
