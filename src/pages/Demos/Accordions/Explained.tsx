@@ -30,7 +30,7 @@ import {
   TwoBordersTurned,
   WhatEachPromises
 } from './Diagrams';
-import {FoldType} from './fold-type';
+import {FoldInput, FoldType} from './fold-type';
 import './Explained.css';
 
 export type Contents = {
@@ -45,20 +45,18 @@ export type Contents = {
 const exhibit = 'card rounded-corners lifted padded';
 const gap = plain(' ');
 const runs = 'runs card rounded-corners lifted padded';
-const inputOf: Record<FoldType, 'checkbox' | 'radio'> = {inclusive: 'checkbox', exclusive: 'radio'};
+const inputOf: Record<FoldType, FoldInput> = {inclusive: 'checkbox', exclusive: 'radio'};
 const foldTypes = [{display: 'Inclusive', value: 'inclusive'}, {display: 'Exclusive', value: 'exclusive'}] as const;
 
-export const AccordionsExplained: FC<{contents: Contents; type: FoldType; onType: (type: FoldType) => void}> = ({contents, type, onType}) => {
+export const AccordionsExplained: FC<{contents: Contents; type: FoldType; onTypeChosen: (type: FoldType) => void}> = ({contents, type, onTypeChosen}) => {
   const input = inputOf[type];
   return <>
-    <PillGlider label="fold type" name="fold-type" options={foldTypes} chosen={type} onChosen={onType}/>
+    <PillGlider label="fold type" name="fold-type" options={foldTypes} chosen={type} onChosen={onTypeChosen}/>
     <section aria-labelledby="old-way-heading" className="accordion-part">
       <h3 id="old-way-heading" className="title bold">How we used to build a fold</h3>
-      <ul className="accordions">
-        {type === 'inclusive'
-          ? <li className="build"><InclusiveAccordion className={exhibit} content={contents.checkbox}/></li>
-          : <li className="build"><ExclusiveAccordion className={exhibit} content={contents.radio}/></li>}
-      </ul>
+      {type === 'inclusive'
+        ? <InclusiveAccordion className={exhibit} content={contents.checkbox}/>
+        : <ExclusiveAccordion className={exhibit} content={contents.radio}/>}
       <ol className={runs}>
         <li className="run">
           <p className="paragraph">This build is a disclosure: a bar you press to show the text under it. It has
@@ -196,11 +194,9 @@ export const AccordionsExplained: FC<{contents: Contents; type: FoldType; onType
     </section>
     <section aria-labelledby="platform-way-heading" className="accordion-part">
       <h3 id="platform-way-heading" className="title bold">What the platform gives now</h3>
-      <ul className="accordions">
-        {type === 'inclusive'
-          ? <li className="build"><InclusiveToggleAccordion className={exhibit} content={contents.inclusiveDetails}/></li>
-          : <li className="build"><ExclusiveToggleAccordion className={exhibit} content={contents.exclusiveDetails}/></li>}
-      </ul>
+      {type === 'inclusive'
+        ? <InclusiveToggleAccordion className={exhibit} content={contents.inclusiveDetails}/>
+        : <ExclusiveToggleAccordion className={exhibit} content={contents.exclusiveDetails}/>}
       <ol className={runs}>
         <li className="run">
           <p className="paragraph">HTML now has a disclosure of its own:
@@ -259,11 +255,9 @@ export const AccordionsExplained: FC<{contents: Contents; type: FoldType; onType
     </section>
     <section aria-labelledby="together-heading" className="accordion-part">
       <h3 id="together-heading" className="title bold">The two together</h3>
-      <ul className="accordions">
-        {type === 'inclusive'
-          ? <li className="build"><InclusiveCheckboxToggleAccordion className={exhibit} content={contents.inclusiveCheckboxes}/></li>
-          : <li className="build"><ExclusiveRadioToggleAccordion className={exhibit} content={contents.exclusiveRadios}/></li>}
-      </ul>
+      {type === 'inclusive'
+        ? <InclusiveCheckboxToggleAccordion className={exhibit} content={contents.inclusiveCheckboxes}/>
+        : <ExclusiveRadioToggleAccordion className={exhibit} content={contents.exclusiveRadios}/>}
       <ol className={runs}>
         {type === 'inclusive' && <li className="run">
           <p className="paragraph">The inclusive build is a checkbox build again, with no script. Each bar is a

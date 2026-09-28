@@ -3,17 +3,6 @@
   gap: var(--base-x-3);
 }
 
-.accordions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--base-x-5);
-
-  .build {
-    flex: 1 1 var(--base-x-30);
-    min-inline-size: min-content;
-  }
-}
-
 .runs {
   display: grid;
   gap: var(--base-x-4);

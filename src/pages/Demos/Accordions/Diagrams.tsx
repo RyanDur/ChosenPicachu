@@ -1,5 +1,6 @@
 import {FC, PropsWithChildren} from 'react';
 import {Figure} from '../Recipe';
+import {FoldInput} from './fold-type';
 import './Diagrams.css';
 
 type Kind = 'piece' | 'native' | 'unseen' | 'clipped' | 'clip' | 'ring' | 'unseen-ring';
@@ -34,7 +35,7 @@ const Arrow: FC<{through: [At, At, ...At[]]}> = ({through}) => <>
 const Chevron: FC<At & {turn: number}> = ({x, y, turn}) =>
   <polyline className="chevron" points="-10,-10 10,-10 10,10" transform={`translate(${x} ${y}) rotate(${turn})`}/>;
 
-export const OneJobTwoWays: FC<{input: 'checkbox' | 'radio'}> = ({input}) =>
+export const OneJobTwoWays: FC<{input: FoldInput}> = ({input}) =>
   <Diagram title="One job, two ways" height={150}
     says={`Details holds its summary and its content, where the trick needs a ${input}, a label that presses it through for, and the text, in that order.`}>
     <Words x={80} y={14}>natively</Words>
