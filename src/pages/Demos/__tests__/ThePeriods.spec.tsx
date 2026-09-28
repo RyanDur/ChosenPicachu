@@ -158,6 +158,16 @@ describe('the chart periods', () => {
     await waitFor(() => expect(drawnPoints()).toBe(5));
   });
 
+  test('while history loads the candles draw no scale', async () => {
+    slowHistory();
+    render(<TestApp at={demosAt('?tab=charts&charts=price,candles')}/>);
+    const candlesCard = await screen.findByRole('region', {name: 'candles'});
+
+    await within(candlesCard).findByText('loading history');
+
+    expect(within(candlesCard).queryByText(/^\$/)).not.toBeInTheDocument();
+  });
+
   test('with history in hand and no trade yet, the captions wait', async () => {
     render(<TestApp at={demosAt('?tab=charts&charts=price,candles')}/>);
     const candleCard = await screen.findByRole('region', {name: 'candles'});

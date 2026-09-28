@@ -62,4 +62,10 @@ describe('pressure', () => {
     expect(card).not.toHaveTextContent('window');
     expect(card).toHaveTextContent('waiting for the first trade');
   });
+
+  test('an empty stream draws no scale beside the empty chart', () => {
+    render(<Pressure trades={[]}/>);
+
+    expect(screen.getByRole('region', {name: 'pressure'})).not.toHaveTextContent('BTC');
+  });
 });
