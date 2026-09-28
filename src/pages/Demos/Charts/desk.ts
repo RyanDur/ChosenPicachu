@@ -1,4 +1,4 @@
-import {has, Maybe, maybe} from '@ryandur/sand';
+import {has, Maybe, maybe, nothing, some} from '@ryandur/sand';
 import {allChartKinds, ChartKind, isChartKind} from './kinds';
 import {Period} from './period';
 
@@ -6,9 +6,9 @@ export type Seat = {readonly kind: ChartKind; readonly period: Period};
 
 const isPeriod = (period: string): period is Period => Object.values(Period).some(offered => offered === period);
 
-const seatOf = (entry: string): Seat | undefined => {
+const seatOf = (entry: string): Maybe<Seat> => {
   const [kind, period] = entry.split(':');
-  return isChartKind(kind) ? {kind, period: has(period) && isPeriod(period) ? period : Period.hour} : undefined;
+  return isChartKind(kind) ? some({kind, period: has(period) && isPeriod(period) ? period : Period.hour}) : nothing();
 };
 
 const written = ({kind, period}: Seat): string => period === Period.hour ? kind : `${kind}:${period}`;
@@ -16,7 +16,7 @@ const written = ({kind, period}: Seat): string => period === Period.hour ? kind 
 const desk = (seats: readonly Seat[]): string => seats.map(written).join(',');
 
 export const dealt = (charts: string): readonly Seat[] => {
-  const seats = charts.split(',').map(seatOf).filter(has)
+  const seats = charts.split(',').flatMap(entry => seatOf(entry).either(seat => [seat], () => []))
     .filter((seat, at, all) => all.findIndex(other => other.kind === seat.kind) === at);
   return seats.length > 0 ? seats : [{kind: 'price', period: Period.hour}];
 };

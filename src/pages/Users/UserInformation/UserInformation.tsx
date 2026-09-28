@@ -21,7 +21,7 @@ import {drawAvatar} from './avatars';
 import {Link} from 'react-router';
 import {FancyDateInput} from '@components/FancyFormElements/FancyDateInput';
 import {isValid, parse} from 'date-fns';
-import {not} from '@ryandur/sand';
+import {Maybe, maybe, not, some} from '@ryandur/sand';
 import {Opened, userAt} from '../mode';
 import {useUsersDispatch} from '../Provider';
 import {userAdded, userUpdated} from '../store';
@@ -34,20 +34,20 @@ const newUser = (): NewUser => ({
   avatar: drawAvatar()
 });
 
-const shown = (open: Opened): User | undefined => open.mode === 'adding' ? open.copying : open.user;
+const shown = (open: Opened): Maybe<User> => open.mode === 'adding' ? maybe(open.copying) : some(open.user);
 
 export const UserInformation: FC<{open?: Opened; className?: string}> = ({open = {mode: 'adding'}, className}) =>
-  <Draft key={shown(open)?.id} open={open} className={className}/>;
+  <Draft key={shown(open).map(({id}) => id).orNull()} open={open} className={className}/>;
 
 const Draft: FC<{open: Opened; className?: string}> = ({open, className}) => {
   const users = useUsersDispatch();
-  const [draft, dispatch] = useReducer(formReducer, shown(open), started => draftOf(started ?? newUser()));
+  const [draft, dispatch] = useReducer(formReducer, shown(open), started => draftOf(started.either(user => user, newUser)));
   const user = userOf(draft);
   const readOnly = open.mode === 'viewing';
   const required = not(readOnly);
   const editing = open.mode === 'editing';
 
-  const reset = () => dispatch(formReset(shown(open) ?? newUser()));
+  const reset = () => dispatch(formReset(shown(open).either(user => user, newUser)));
 
   return <form id="user-info-form"
     aria-labelledby="form-title"

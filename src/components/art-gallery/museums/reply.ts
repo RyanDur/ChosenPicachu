@@ -1,13 +1,15 @@
+import {Maybe, nothing, some} from '@ryandur/sand';
+
 export type MuseumReply<Answer> =
-  | {reply: 'unasked'; standing?: Answer}
-  | {reply: 'asked'; standing?: Answer}
+  | {reply: 'unasked'; standing: Maybe<Answer>}
+  | {reply: 'asked'; standing: Maybe<Answer>}
   | {reply: 'answered'; answer: Answer}
   | {reply: 'refused'};
 
-export const standingOf = <Answer>(reply: MuseumReply<Answer>): Answer | undefined => {
+export const standingOf = <Answer>(reply: MuseumReply<Answer>): Maybe<Answer> => {
   switch (reply.reply) {
-    case 'answered': return reply.answer;
-    case 'refused': return undefined;
+    case 'answered': return some(reply.answer);
+    case 'refused': return nothing();
     default: return reply.standing;
   }
 };

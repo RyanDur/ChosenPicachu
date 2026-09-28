@@ -1,6 +1,6 @@
 import {FC, useEffect, useState} from 'react';
 import {Link, generatePath} from 'react-router';
-import {maybe} from '@ryandur/sand';
+import {Maybe, nothing, some} from '@ryandur/sand';
 import {Paths} from '@pages/Paths';
 import {ChartKind, matchChartKind} from './kinds';
 import {statusCopy} from './live-trades';
@@ -38,18 +38,18 @@ export const Workspace: FC<Props> = ({product}) => {
   const status = useDemosSelector(selectFeedStatus);
   const {seats, absentKinds, add, remove, reorder, choosePeriod} = useDesk();
   const [report, setReport] = useState('');
-  const [removal, setRemoval] = useState<{at: number; stood: number}>();
+  const [removal, setRemoval] = useState<Maybe<{at: number; stood: number}>>(nothing());
   const nameAt = (at: number): string => chartNames[seats[at].kind];
   const removed = (at: number): void => {
     remove(at);
     setReport(`${nameAt(at)} removed`);
-    setRemoval({at, stood: seats.length});
+    setRemoval(some({at, stood: seats.length}));
   };
   useEffect(() => {
-    maybe(removal).map(({at, stood}) => {
+    removal.map(({at, stood}) => {
       if (seats.length < stood) {
         seatAfterRemoval(at, seats).map(seat => document.getElementById(doorwayId(seat.kind))?.focus());
-        setRemoval(undefined);
+        setRemoval(nothing());
       }
     });
   }, [removal, seats]);

@@ -1,6 +1,6 @@
 import {Art} from '@components/art-gallery/museums/art';
 import {MuseumReply} from '@components/art-gallery/museums/reply';
-import {Consumer} from '@ryandur/sand';
+import {Consumer, nothing} from '@ryandur/sand';
 import {createContext, useContext} from 'react';
 
 export type PieceContext = {
@@ -12,7 +12,7 @@ export type PieceContext = {
 };
 
 export const Context = createContext<PieceContext>({
-  easel: {reply: 'unasked'},
+  easel: {reply: 'unasked', standing: nothing()},
   asked: () => void 0,
   answered: (piece: Art) => void piece,
   refused: () => void 0,
