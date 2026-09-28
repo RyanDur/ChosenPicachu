@@ -7,6 +7,11 @@ import './Accordions.css';
 
 const toggleWord = (open: boolean) => open ? 'Close' : 'Open';
 
+const openedAlone = (key: string) => (open?: string) => open === key ? undefined : key;
+
+const toggledIn = (key: string) => (opened: readonly string[]) =>
+  opened.includes(key) ? opened.filter(part => part !== key) : [...opened, key];
+
 export type Fold = {value: ReactNode; key: string};
 type ContentProps = {content: Fold[]};
 export const InclusiveAccordion: FC<PropsWithClassName & ContentProps> = ({
@@ -114,7 +119,7 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
                   type="checkbox"
                   aria-label={`${toggleWord(key === checked)} ${key}`}
                   checked={key === checked}
-                  onChange={() => updateChecked(open => open === key ? undefined : key)}
+                  onChange={() => updateChecked(openedAlone(key))}
                   className="off-screen"/>
               </label>
             </header>
@@ -199,7 +204,7 @@ export const InclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
                   type="checkbox"
                   aria-label={`${toggleWord(isOpen(key))} ${key}`}
                   checked={isOpen(key)}
-                  onChange={() => updateOpened(open => open.includes(key) ? open.filter(part => part !== key) : [...open, key])}
+                  onChange={() => updateOpened(toggledIn(key))}
                   className="off-screen"/>
               </label>
             </header>

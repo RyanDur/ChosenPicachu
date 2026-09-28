@@ -263,6 +263,7 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
           always agree.</p>
         <Snippet label="TS" lines={[
           ...unit(accordionsSource, 'const [checked, updateChecked]'), gap,
+          ...unit(accordionsSource, 'const openedAlone'), gap,
           ...span(accordionsSource, 'type="checkbox"\n                  aria-label', 'className="off-screen"/>')
         ]}/>
         <WhatEachPromises/>
@@ -274,6 +275,7 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
         <Snippet label="TS" lines={[
           ...unit(accordionsSource, 'const [opened, updateOpened]'), gap,
           ...unit(accordionsSource, 'const isOpen = '), gap,
+          ...unit(accordionsSource, 'const toggledIn'), gap,
           ...span(accordionsSource, 'onChange={() => updateOpened', 'onChange={() => updateOpened')
         ]}/>
       </li>
