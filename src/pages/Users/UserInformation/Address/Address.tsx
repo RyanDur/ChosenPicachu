@@ -9,7 +9,7 @@ import './Address.css';
 type AddressProps = {
   title: string;
   className?: string;
-  onChange: (address: AddressInfo) => void;
+  onEdited: (address: AddressInfo) => void;
   id: string;
   value?: AddressInfo;
   required?: boolean;
@@ -22,7 +22,7 @@ export const Address: FC<PropsWithChildren<AddressProps>> = (
     title,
     children,
     className,
-    onChange,
+    onEdited,
     id,
     required,
     disabled,
@@ -34,17 +34,17 @@ export const Address: FC<PropsWithChildren<AddressProps>> = (
   <div className="address-fields">
     <FancyInput inputId={`${id}-street`} className="street"
       required={required} value={value.streetAddress} readOnly={readOnly}
-      onChange={event => onChange({...value, streetAddress: event.currentTarget.value})}>
+      onChange={event => onEdited({...value, streetAddress: event.currentTarget.value})}>
       Street
     </FancyInput>
     <FancyInput inputId={`${id}-street-2`} className="street-2"
       value={value.streetAddressTwo} readOnly={readOnly}
-      onChange={event => onChange({...value, streetAddressTwo: event.currentTarget.value})}>
+      onChange={event => onEdited({...value, streetAddressTwo: event.currentTarget.value})}>
       Street Line 2
     </FancyInput>
     <FancyInput inputId={`${id}-city`} className="city"
       required={required} value={value.city} readOnly={readOnly}
-      onChange={event => onChange({...value, city: event.currentTarget.value})}>
+      onChange={event => onEdited({...value, city: event.currentTarget.value})}>
       City
     </FancyInput>
 
@@ -55,7 +55,7 @@ export const Address: FC<PropsWithChildren<AddressProps>> = (
       readOnly={readOnly}
       value={value.state}
       optionValues={new Set(stateAbbreviations)}
-      onChange={event => onChange({...value, state: event.currentTarget.value})}>
+      onChange={event => onEdited({...value, state: event.currentTarget.value})}>
       State
     </FancySelect>
 
@@ -65,7 +65,7 @@ export const Address: FC<PropsWithChildren<AddressProps>> = (
       value={value.zip}
       readOnly={readOnly}
       required={required}
-      onChange={event => onChange({...value, zip: event.currentTarget.value})}>
+      onChange={event => onEdited({...value, zip: event.currentTarget.value})}>
       Postal / Zip code
     </FancyInput>
   </div>

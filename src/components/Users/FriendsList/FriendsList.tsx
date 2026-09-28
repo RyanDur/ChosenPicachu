@@ -9,7 +9,7 @@ import './friends-list.css';
 type Props = {
   users: readonly User[];
   user: User;
-  onChange: Consumer<string[]>;
+  onFriendsChanged: Consumer<string[]>;
 };
 
 type Report =
@@ -22,7 +22,7 @@ const placeAfter = (userId: string, friends: readonly User[], candidatesLeft: re
     ? placeAfterRemoval(userId, friends, of.at)
     : placeAfterAddition(userId, candidatesLeft, of.friend.id);
 
-export const FriendsList: FC<Props> = ({users, user, onChange}) => {
+export const FriendsList: FC<Props> = ({users, user, onFriendsChanged}) => {
   const [report, tell] = useState<Report>({stage: 'quiet'});
   const friends = user.friends
     .flatMap(friendId => users.filter(({id}) => id === friendId));
@@ -41,12 +41,12 @@ export const FriendsList: FC<Props> = ({users, user, onChange}) => {
   const add = (event: ChangeEvent<HTMLSelectElement>) => {
     const chosen = users.find(({id}) => id === event.currentTarget.value);
     if (has(chosen)) tell({stage: 'asked', of: {change: 'added', friend: chosen}});
-    onChange([...user.friends, event.currentTarget.value]);
+    onFriendsChanged([...user.friends, event.currentTarget.value]);
   };
 
   const remove = (friend: User, at: number) => () => {
     tell({stage: 'asked', of: {change: 'removed', friend, at}});
-    onChange(user.friends.filter(id => id !== friend.id));
+    onFriendsChanged(user.friends.filter(id => id !== friend.id));
   };
 
   return <fieldset className="friends-list shrinkable">
