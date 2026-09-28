@@ -27,4 +27,20 @@ test.describe('a phone', () => {
     await expect(chartsPage(page).priceDelta).toBeVisible();
     expect(await fold.boundingBox()).toEqual(before);
   });
+
+  test('the pressure chart holds still while its trades arrive', async ({page}) => {
+    const market = await heldMarket(page, [50000, 50100]);
+    await page.goto('demos?tab=charts');
+    await page.getByRole('button', {name: 'Add a chart'}).click();
+    await page.getByLabel('charts to add').getByRole('button', {name: 'Pressure'}).click();
+    const pressure = page.getByRole('region', {name: 'pressure'});
+    const fold = pressure.getByText('what am I looking at?', {exact: true});
+    await expect(fold).toBeVisible();
+    const before = await fold.boundingBox();
+
+    market.arrive();
+
+    await expect(pressure.getByText('waiting for the first trade')).toBeHidden();
+    expect(await fold.boundingBox()).toEqual(before);
+  });
 });
