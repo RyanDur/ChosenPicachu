@@ -95,7 +95,7 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
   content
 }) => {
   const [checked, updateChecked] = useState<string>();
-  const [tab, updateTab] = useState<Motion>('animated');
+  const [motion, updateMotion] = useState<Motion>('animated');
 
   return <article className={classNames('exclusive-checkbox-toggle-accordion', 'toggle-accordion', className)}>
     <header className="react-header">
@@ -103,14 +103,14 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
       <PillGlider label="animation style"
         name="checkbox-animate-or-static-tab"
         options={[{display: 'Animate', value: 'animated'}, {display: 'Static', value: 'static'}]}
-        chosen={tab}
-        onChosen={updateTab}/>
+        chosen={motion}
+        onChosen={updateMotion}/>
     </header>
 
     <ul className={'new-accordion'}>
       {content.map(({value, key}) =>
         <li key={key}>
-          <article className={classNames('react-fold', tab, 'reveal')}>
+          <article className={classNames('react-fold', motion, 'reveal')}>
             <header className="info-header">
               <h5 className="sub-title bold">{key}</h5>
               <label className="info-label">
@@ -136,21 +136,21 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
   content
 }) => {
   const [checked, updateChecked] = useState<string>();
-  const [tab, updateTab] = useState<Motion>('animated');
+  const [motion, updateMotion] = useState<Motion>('animated');
   return <article className={classNames('exclusive-radio-toggle-accordion', 'toggle-accordion', className)}>
     <header className="react-header">
       <h4 className="sub-title bold">Exclusive accordion using radio group</h4>
       <PillGlider label="animation style"
         name="radio-animate-or-static-tab"
         options={[{display: 'Animate', value: 'animated'}, {display: 'Static', value: 'static'}]}
-        chosen={tab}
-        onChosen={updateTab}/>
+        chosen={motion}
+        onChosen={updateMotion}/>
     </header>
 
     <ul className={'new-accordion'}>
       {content.map(({value, key}) =>
         <li key={key}>
-          <article className={classNames('react-fold', tab === 'animated' && 'animated drawer')}>
+          <article className={classNames('react-fold', motion === 'animated' && 'animated drawer')}>
             <header className="info-header">
               <h5 className="sub-title bold">{key}</h5>
               <label className="info-label">
@@ -179,7 +179,7 @@ export const InclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
   content
 }) => {
   const [opened, updateOpened] = useState<readonly string[]>([]);
-  const [tab, updateTab] = useState<Motion>('animated');
+  const [motion, updateMotion] = useState<Motion>('animated');
   const isOpen = (key: string) => opened.includes(key);
 
   return <article className={classNames('inclusive-checkbox-toggle-accordion', 'toggle-accordion', className)}>
@@ -188,14 +188,14 @@ export const InclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
       <PillGlider label="animation style"
         name="inclusive-checkbox-animate-or-static-tab"
         options={[{display: 'Animate', value: 'animated'}, {display: 'Static', value: 'static'}]}
-        chosen={tab}
-        onChosen={updateTab}/>
+        chosen={motion}
+        onChosen={updateMotion}/>
     </header>
 
     <ul className={'new-accordion'}>
       {content.map(({value, key}) =>
         <li key={key}>
-          <article className={classNames('react-fold', tab, 'reveal')}>
+          <article className={classNames('react-fold', motion, 'reveal')}>
             <header className="info-header">
               <h5 className="sub-title bold">{key}</h5>
               <label className="info-label">

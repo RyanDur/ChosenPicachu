@@ -343,8 +343,8 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
           decides what moves: Static removes the class that holds the transition, so the row
           changes in a single frame.</p>
         <Snippet label="TS" lines={[
-          ...span(accordionsSource, "classNames('react-fold', tab, 'reveal')", "classNames('react-fold', tab, 'reveal')"), gap,
-          ...span(accordionsSource, "classNames('react-fold', tab === 'animated'", "classNames('react-fold', tab === 'animated'")
+          ...span(accordionsSource, "classNames('react-fold', motion, 'reveal')", "classNames('react-fold', motion, 'reveal')"), gap,
+          ...span(accordionsSource, "classNames('react-fold', motion === 'animated'", "classNames('react-fold', motion === 'animated'")
         ]}/>
       </li>
     </ol>
