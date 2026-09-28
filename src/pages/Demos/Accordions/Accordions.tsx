@@ -1,4 +1,5 @@
 import {FC, KeyboardEvent, MouseEvent, ReactNode} from 'react';
+import {maybe} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {PillGlider} from '@components/PillGlider';
 import {PropsWithClassName} from '../types';
@@ -6,26 +7,29 @@ import './Accordions.css';
 
 const motions = [{display: 'Animate', value: 'animated'}, {display: 'Static', value: 'static'}] as const;
 
-const pressedIn = (list: HTMLUListElement, radio: HTMLInputElement): void => {
-  if (list.dataset.open === radio.value) {
-    radio.checked = false;
-    delete list.dataset.open;
-  } else {
-    list.dataset.open = radio.value;
-  }
-};
+const openAfter = (pressed: string, open?: string) => open === pressed ? undefined : pressed;
 
-const aRadioClicked = ({currentTarget: list, target}: MouseEvent<HTMLUListElement>): void => {
+const radioPressed = (list: HTMLUListElement, radio: HTMLInputElement): void =>
+  maybe(openAfter(radio.value, list.dataset.open)).either(
+    next => {
+      list.dataset.open = next;
+    },
+    () => {
+      radio.checked = false;
+      delete list.dataset.open;
+    });
+
+const radioClicked = ({currentTarget: list, target}: MouseEvent<HTMLUListElement>): void => {
   if (target instanceof HTMLInputElement) {
-    pressedIn(list, target);
+    radioPressed(list, target);
   }
 };
 
-const spaceOnTheOpenRadio = (event: KeyboardEvent<HTMLUListElement>): void => {
+const spacePressed = (event: KeyboardEvent<HTMLUListElement>): void => {
   const {currentTarget: list, target, key} = event;
   if (key === ' ' && target instanceof HTMLInputElement && target.checked) {
     event.preventDefault();
-    pressedIn(list, target);
+    radioPressed(list, target);
   }
 };
 
@@ -116,24 +120,25 @@ export const InclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
     <PillGlider label="animation style" name="inclusive-checkbox-motion" options={motions} defaultChosen="animated"/>
   </header>
 
-  <ul className="new-accordion">
-    {content.map(({value, key}) =>
-      <li key={key}>
-        <article className="grid-fold reveal">
-          <header className="info-header">
-            <h5 className="sub-title bold">{key}</h5>
-            <label className="info-label">
-              <span className="open-word">Open</span>
-              <span className="close-word">Close</span>
-              <span className="off-screen"> {key}</span>
-              <input type="checkbox" className="off-screen"/>
-            </label>
-          </header>
+  <fieldset>
+    <legend className="off-screen">parts</legend>
+    <ul className="new-accordion">
+      {content.map(({value, key}) =>
+        <li key={key}>
+          <article className="grid-fold">
+            <header className="info-header">
+              <h5 className="sub-title bold">{key}</h5>
+              <label className="info-label">
+                <span className="off-screen">{key}</span>
+                <input type="checkbox" className="off-screen"/>
+              </label>
+            </header>
 
-          <p className="fold-clip"><span className="fold-clip-item"><span className="fold-text">{value}</span></span></p>
-        </article>
-      </li>)}
-  </ul>
+            <p className="fold-clip"><span className="fold-clip-item"><span className="fold-text">{value}</span></span></p>
+          </article>
+        </li>)}
+    </ul>
+  </fieldset>
 </article>;
 
 export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps> = ({
@@ -145,22 +150,23 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
     <PillGlider label="animation style" name="exclusive-radio-motion" options={motions} defaultChosen="animated"/>
   </header>
 
-  <ul className="new-accordion" onClick={aRadioClicked} onKeyDown={spaceOnTheOpenRadio}>
-    {content.map(({value, key}) =>
-      <li key={key}>
-        <article className="grid-fold drawer">
-          <header className="info-header">
-            <h5 className="sub-title bold">{key}</h5>
-            <label className="info-label">
-              <span className="open-word">Open</span>
-              <span className="close-word">Close</span>
-              <span className="off-screen"> {key}</span>
-              <input type="radio" name="exclusive-radio-toggle" value={key} className="off-screen"/>
-            </label>
-          </header>
+  <fieldset>
+    <legend className="off-screen">parts</legend>
+    <ul className="new-accordion" onClick={radioClicked} onKeyDown={spacePressed}>
+      {content.map(({value, key}) =>
+        <li key={key}>
+          <article className="grid-fold drawer">
+            <header className="info-header">
+              <h5 className="sub-title bold">{key}</h5>
+              <label className="info-label">
+                <span className="off-screen">{key}</span>
+                <input type="radio" name="exclusive-radio-toggle" value={key} className="off-screen"/>
+              </label>
+            </header>
 
-          <p className="fold-clip"><span className="fold-clip-item"><span className="fold-text">{value}</span></span></p>
-        </article>
-      </li>)}
-  </ul>
+            <p className="fold-clip"><span className="fold-clip-item"><span className="fold-text">{value}</span></span></p>
+          </article>
+        </li>)}
+    </ul>
+  </fieldset>
 </article>;

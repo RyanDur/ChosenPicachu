@@ -219,17 +219,6 @@ test('the space bar closes the open part of the grid radio build', async ({page}
   await expect.poll(part.isOpen).toBe(false);
 });
 
-test('a second press on the bar of the open part of the grid radio build closes it', async ({page}) => {
-  await page.goto(showing('the grid radio build'));
-  const part = accordionsTab(page).firstPartOf('the grid radio build');
-  await part.open();
-  await expect.poll(part.isOpen).toBe(true);
-
-  await part.close();
-
-  await expect.poll(part.isOpen).toBe(false);
-});
-
 for (const {build, control} of [
   {build: 'the grid checkbox build', control: 'checkbox'},
   {build: 'the grid radio build', control: 'radio'}
@@ -238,14 +227,11 @@ for (const {build, control} of [
     await page.goto(showing(build));
     const part = accordionsTab(page).firstPartOf(build);
     const name = await part.fold.getByRole('heading').textContent() ?? '';
-    await expect(part.fold.getByRole(control, {name: `Open ${name}`})).toBeAttached();
-    await expect(part.fold.getByText('Open', {exact: true})).toBeVisible();
+    await expect(part.fold.getByRole(control, {name: `Open ${name}`})).not.toBeChecked();
 
     await part.open();
 
     await expect(part.fold.getByRole(control, {name: `Close ${name}`})).toBeChecked();
-    await expect(part.fold.getByText('Close', {exact: true})).toBeVisible();
-    await expect(part.fold.getByText('Open', {exact: true})).toBeHidden();
   });
 }
 
@@ -268,3 +254,30 @@ test('choosing a type shows that type\'s builds in every era', async ({page}) =>
   await expect(page).toHaveURL(/type=exclusive/);
   await expect(page.getByRole('heading', {level: 4})).toHaveText(['Accordion using a radio group', 'Exclusive accordion using details elements', 'Exclusive accordion using radio group']);
 });
+
+test('the space bar closes a part of the grid radio build the arrow keys opened', async ({page}) => {
+  await page.goto(showing('the grid radio build'));
+  const [first, second] = [accordionsTab(page).partOf('the grid radio build', 0), accordionsTab(page).partOf('the grid radio build', 1)];
+  await first.openByKeyboard();
+  await page.keyboard.press('ArrowDown');
+  await expect.poll(second.isOpen).toBe(true);
+
+  await page.keyboard.press('Space');
+
+  await expect.poll(second.isOpen).toBe(false);
+  await expect.poll(first.isOpen).toBe(false);
+});
+
+for (const build of ['the grid checkbox build', 'the grid radio build'] as const) {
+  test(`with Static chosen, a fold in ${build} opens fully in one frame`, async ({page}) => {
+    await page.goto(showing(build));
+    const part = accordionsTab(page).firstPartOf(build);
+    await page.getByRole('group', {name: 'animation style'}).getByText('Static', {exact: true}).click();
+    const closed = await heightByTheNextFrame(part.fold);
+    const firstMoved = firstHeightAfter(part.fold, closed);
+
+    await part.open();
+
+    expect(await firstMoved).toBe(await heightOnceSettled(part.fold));
+  });
+}

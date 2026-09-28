@@ -62,13 +62,12 @@
       }
     }
 
-    .close-word,
-    &:has(:checked) .open-word {
-      display: none;
+    .info-label::before {
+      content: 'Open';
     }
 
-    &:has(:checked) .close-word {
-      display: inline;
+    &:has(:checked) .info-label::before {
+      content: 'Close';
     }
 
     .info-header {

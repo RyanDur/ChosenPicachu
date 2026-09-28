@@ -102,7 +102,7 @@ describe('the two together', () => {
 
     const explained = await screen.findByRole('region', {name: parts[2]});
 
-    expect(codeBeside(explained, /The exclusive build is a radio group/)).toHaveTextContent('const pressedIn');
+    expect(codeBeside(explained, /The exclusive build is a radio group/)).toHaveTextContent('const openAfter');
   });
 });
 

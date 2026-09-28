@@ -269,17 +269,17 @@ export const AccordionsExplained: FC<{contents: Contents; type: FoldType; onType
           <p className="paragraph">The inclusive build is a checkbox build again, with no script. Each bar is a
             label holding the part’s words and its checkbox, and the checkbox remembers whether the
             part is open, as it did in part one. What is new is the way the text opens, below.</p>
-          <Snippet label="TS" lines={span(accordionsSource, '<label className="info-label">\n              <span className="open-word">', '<input type="checkbox" className="off-screen"/>')}/>
+          <Snippet label="TS" lines={span(accordionsSource, '<fieldset>\n    <legend className="off-screen">parts</legend>\n    <ul className="new-accordion">', '<input type="checkbox" className="off-screen"/>')}/>
         </li>}
         <li className="run">
-          <p className="paragraph">The bar says Open or Close. Both words sit in the label, and the stylesheet
-            shows one: Close while the fold holds a checked input, Open while it does not. A word
-            hidden with display none is not read either, so a screen reader hears the word on
-            screen and then the part’s name, which sits off screen, such as “Open basalt”. Someone
-            using voice control can say the word they see.</p>
+          <p className="paragraph">The bar says Open or Close. The label holds only the part’s name, off screen,
+            and the stylesheet writes the word before it: Close while the fold holds a checked
+            input, Open while it does not. A screen reader reads the written word with the name,
+            such as “Open basalt”, and someone using voice control can say the word they see. With
+            the styles off, the bar says only its part.</p>
           <Snippet label="CSS" lines={[
-            ...unit(accordionsCss, '.close-word,'), gap,
-            ...unit(accordionsCss, '&:has(:checked) .close-word {')
+            ...unit(accordionsCss, '.info-label::before {'), gap,
+            ...unit(accordionsCss, '&:has(:checked) .info-label::before {')
           ]}/>
         </li>
         {type === 'exclusive' && <li className="run">
@@ -291,8 +291,9 @@ export const AccordionsExplained: FC<{contents: Contents; type: FoldType; onType
             press on any other remembers the new one. The arrow keys move the choice and press as
             they go, so each move is remembered too.</p>
           <Snippet label="TS" lines={[
-            ...unit(accordionsSource, 'const pressedIn'), gap,
-            ...unit(accordionsSource, 'const aRadioClicked'), gap,
+            ...unit(accordionsSource, 'const openAfter'), gap,
+            ...unit(accordionsSource, 'const radioPressed'), gap,
+            ...unit(accordionsSource, 'const radioClicked'), gap,
             ...span(accordionsSource, '<ul className="new-accordion" onClick', '<ul className="new-accordion" onClick')
           ]}/>
           <WhatEachPromises/>
@@ -301,7 +302,7 @@ export const AccordionsExplained: FC<{contents: Contents; type: FoldType; onType
           <p className="paragraph">The space bar is the keyboard’s press, but on a checked radio most browsers do
             nothing with it, so no press reaches the list. So the list listens for the space bar
             too, and closes the part when the key lands on the open radio.</p>
-          <Snippet label="TS" lines={unit(accordionsSource, 'const spaceOnTheOpenRadio')}/>
+          <Snippet label="TS" lines={unit(accordionsSource, 'const spacePressed')}/>
         </li>}
         <li className="run">
           {type === 'inclusive'
