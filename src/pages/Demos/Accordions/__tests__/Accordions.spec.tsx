@@ -83,23 +83,21 @@ describe('the exclusive toggle accordion using a radio group', () => {
 });
 
 describe.each([
-  {accordion: 'the inclusive toggle accordion using checkboxes', Accordion: InclusiveCheckboxToggleAccordion, control: 'checkbox' as const},
-  {accordion: 'the exclusive toggle accordion using a radio group', Accordion: ExclusiveRadioToggleAccordion, control: 'radio' as const}
-])('$accordion', ({Accordion, control}) => {
-  test('should hold its parts\' controls in one group named parts', () => {
-    render(<Accordion content={folds} motion="reveal"/>);
-
-    expect(within(screen.getByRole('group', {name: 'parts'})).getAllByRole(control)).toHaveLength(folds.length);
-  });
-});
-
-describe.each([
   {accordion: 'the accordion using checkboxes', Accordion: InclusiveAccordion, control: 'checkbox' as const, controls: folds.length},
-  {accordion: 'the accordion using a radio group', Accordion: ExclusiveAccordion, control: 'radio' as const, controls: folds.length + 1}
+  {accordion: 'the accordion using a radio group', Accordion: ExclusiveAccordion, control: 'radio' as const, controls: folds.length + 1},
+  {accordion: 'the inclusive toggle accordion using checkboxes', Accordion: InclusiveCheckboxToggleAccordion, control: 'checkbox' as const, controls: folds.length},
+  {accordion: 'the exclusive toggle accordion using a radio group', Accordion: ExclusiveRadioToggleAccordion, control: 'radio' as const, controls: folds.length}
 ])('$accordion', ({Accordion, control, controls}) => {
   test('should hold its controls in one group named parts', () => {
     render(<Accordion content={folds} motion="reveal"/>);
 
     expect(within(screen.getByRole('group', {name: 'parts'})).getAllByRole(control)).toHaveLength(controls);
+  });
+
+  test('should make each part an item of its list, with no article of its own', () => {
+    render(<Accordion content={folds} motion="reveal"/>);
+
+    expect(screen.getAllByRole('article')).toHaveLength(1);
+    expect(within(screen.getByRole('group', {name: 'parts'})).getAllByRole('listitem')).toHaveLength(controls);
   });
 });
