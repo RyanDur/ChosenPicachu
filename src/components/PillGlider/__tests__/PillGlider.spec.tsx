@@ -30,4 +30,14 @@ describe('the pill glider', () => {
 
     expect(onChosen).toHaveBeenCalledWith('hide-lazy');
   });
+
+  test('should keep its own choice when it is given only where to start', async () => {
+    render(<PillGlider label="drag style" name="drag-style" options={styles} defaultChosen="eager"/>);
+    expect(screen.getByRole('radio', {name: 'Eager'})).toBeChecked();
+
+    await userEvent.click(screen.getByRole('radio', {name: 'Lazy'}));
+
+    expect(screen.getByRole('radio', {name: 'Lazy'})).toBeChecked();
+    expect(screen.getByRole('radio', {name: 'Eager'})).not.toBeChecked();
+  });
 });
