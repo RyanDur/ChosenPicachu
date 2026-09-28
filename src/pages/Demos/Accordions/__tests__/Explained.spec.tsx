@@ -164,19 +164,54 @@ describe('the fold motion', () => {
     expect(codeBeside(platform, /This replaces the max-height guess/)).not.toHaveTextContent('.drawer &::details-content');
   });
 
+  const partThreeSays = {
+    reveal: /Reveal moves the row on a transition/,
+    drawer: /Drawer moves the row on the same transition/,
+    static: /Static matches neither class/
+  };
+
   test.each([
-    {style: 'reveal', says: /Reveal moves the row on a transition/, drawn: ['A row that grows to its content', 'The padding inside the clip']},
-    {style: 'drawer', says: /Drawer moves the row on the same transition/, drawn: ['A row that grows to its content', 'The padding inside the clip', 'The text rides the row’s edge']},
-    {style: 'static', says: /Static matches neither class/, drawn: ['A row that grows to its content', 'The padding inside the clip']}
-  ])('should tell, with $style chosen, only what that motion does', async ({style, says, drawn}) => {
+    {style: 'reveal', others: ['drawer', 'static'], drawn: ['A row that grows to its content', 'The padding inside the clip']},
+    {style: 'drawer', others: ['reveal', 'static'], drawn: ['A row that grows to its content', 'The padding inside the clip', 'The text rides the row’s edge']},
+    {style: 'static', others: ['reveal', 'drawer'], drawn: ['A row that grows to its content', 'The padding inside the clip']}
+  ] as const)('should tell, with $style chosen, only what that motion does under part three', async ({style, others, drawn}) => {
     render(<TestApp at={demosAt(`?tab=accordions&style=${style}`)}/>);
 
     const together = await screen.findByRole('region', {name: parts[2]});
 
-    expect(within(together).getByText(says)).toBeInTheDocument();
+    expect(within(together).getByText(partThreeSays[style])).toBeInTheDocument();
+    for (const other of others) {
+      expect(within(together).queryByText(partThreeSays[other])).not.toBeInTheDocument();
+    }
     expect(drawn.map(title => within(together).getByRole('figure', {name: new RegExp(`^${title}\\.`)})))
       .toEqual(within(together).getAllByRole('figure'));
-    expect(within(together).queryByText(/With the drawer, the text slides down/) !== null).toBe(style === 'drawer');
+  });
+
+  test('should tell the drawer run under the drawer', async () => {
+    render(<TestApp at={demosAt('?tab=accordions&style=drawer')}/>);
+
+    const together = await screen.findByRole('region', {name: parts[2]});
+
+    expect(within(together).getByText(/With the drawer, the text slides down/)).toBeInTheDocument();
+  });
+
+  test.each(['reveal', 'static'])('should tell no drawer run under %s', async style => {
+    render(<TestApp at={demosAt(`?tab=accordions&style=${style}`)}/>);
+
+    const together = await screen.findByRole('region', {name: parts[2]});
+
+    expect(within(together).queryByText(/With the drawer, the text slides down/)).not.toBeInTheDocument();
+  });
+
+  test('should keep an open fold open when the reader chooses another motion', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    const together = await screen.findByRole('region', {name: parts[2]});
+    const first = within(together).getAllByRole('checkbox')[0];
+    await userEvent.click(first);
+
+    await userEvent.click(within(screen.getByRole('group', {name: 'fold motion'})).getByRole('radio', {name: 'Drawer'}));
+
+    expect(first).toBeChecked();
   });
 });
 
@@ -198,9 +233,7 @@ describe('the accordions diagrams', () => {
     ['inclusive', parts[0], ['Off screen, not gone', 'The sheet reads the box', 'Two borders, turned', 'Focus on the box, drawn on the bar', 'The guess']],
     ['exclusive', parts[0], ['Off screen, not gone', 'The sheet reads the box', 'Two borders, turned', 'Focus on the box, drawn on the bar', 'The guess', 'One name, one choice']],
     ['inclusive', parts[1], ['One job, two ways', 'Three pieces become two', 'Sized to the text, no guess']],
-    ['exclusive', parts[1], ['One job, two ways', 'Three pieces become two', 'Sized to the text, no guess']],
-    ['inclusive', parts[2], ['A row that grows to its content', 'The padding inside the clip']],
-    ['exclusive', parts[2], ['A row that grows to its content', 'The padding inside the clip']]
+    ['exclusive', parts[1], ['One job, two ways', 'Three pieces become two', 'Sized to the text, no guess']]
   ])('should draw, with %s chosen, under "%s" each mechanism in order, named by its title and one sentence', async (type, part, titles) => {
     render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
 
