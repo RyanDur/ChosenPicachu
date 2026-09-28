@@ -347,7 +347,7 @@ describe('the users page', () => {
     const pia = aUser({id: 'pia', friends: ['quin']});
     const quin = aUser({id: 'quin', friends: ['pia']});
     setupUsersResponse([pia, quin]);
-    setupUserUpdatedResponse(quin.id, [{...pia, friends: []}, {...quin, friends: []}]);
+    const sent = setupUserUpdatedResponse(quin.id, [{...pia, friends: []}, {...quin, friends: []}]);
     render(<TestApp at={Paths.users}/>);
     const quinsRow = await usersTable.rowOf(fullNameOf(quin));
 
@@ -355,6 +355,20 @@ describe('the users page', () => {
 
     await waitFor(() => expect(within(quinsRow).queryByRole('button', {name: `remove ${fullNameOf(pia)}`})).not.toBeInTheDocument());
     expect(within(quinsRow).getByRole('combobox', {name: 'Add a friend'})).toHaveFocus();
+    expect(sent()).toMatchObject({id: quin.id, friends: []});
+  });
+
+  test("choosing a friend in a person's row sends the backend that person with the friend added", async () => {
+    const tam = aUser({id: 'tam', friends: []});
+    const uma = aUser({id: 'uma', friends: []});
+    setupUsersResponse([tam, uma]);
+    const sent = setupUserUpdatedResponse(tam.id, [{...tam, friends: [uma.id]}, uma]);
+    render(<TestApp at={Paths.users}/>);
+    const tamsRow = await usersTable.rowOf(fullNameOf(tam));
+
+    await userEvent.selectOptions(within(tamsRow).getByRole('combobox', {name: 'Add a friend'}), [fullNameOf(uma)]);
+
+    await waitFor(() => expect(sent()).toMatchObject({id: tam.id, friends: [uma.id]}));
   });
 
   test('focus is not pulled back to a settled removal when the roster renders again', async () => {
