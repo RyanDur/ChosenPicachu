@@ -198,9 +198,9 @@ describe('the fold motion', () => {
   };
 
   test.each([
-    {style: 'reveal', others: ['drawer', 'static'], carves: ['.info { overflow: hidden; max-height: var(--base-x-100);', '.info-toggle:not(:checked) ~ .info { margin-top: 0; max-height: 0;', '.reveal & .info {', '.reveal & .info-toggle:not(:checked) ~ .info {'], omits: ['.drawer & .info']},
-    {style: 'drawer', others: ['reveal', 'static'], carves: ['.info { overflow: hidden; max-height: var(--base-x-100);', '.info-toggle:not(:checked) ~ .info { margin-top: 0; max-height: 0;', '.drawer & .info {', '.drawer & .info-toggle:not(:checked) ~ .info {'], omits: ['.reveal & .info']},
-    {style: 'static', others: ['reveal', 'drawer'], carves: ['.info { overflow: hidden; max-height: var(--base-x-100);', '.info-toggle:not(:checked) ~ .info { margin-top: 0; max-height: 0;'], omits: ['.reveal & .info', '.drawer & .info']}
+    {style: 'reveal', others: ['drawer', 'static'], carves: ['.info { overflow: hidden;', '.info-toggle:not(:checked) ~ .info { margin-top: 0; max-height: 0;', '.reveal & .info {', '.reveal & .info-toggle:not(:checked) ~ .info {'], omits: ['.drawer & .info']},
+    {style: 'drawer', others: ['reveal', 'static'], carves: ['.info { overflow: hidden;', '.info-toggle:not(:checked) ~ .info { margin-top: 0; max-height: 0;', '.drawer & .info {', '.drawer & .info-toggle:not(:checked) ~ .info {'], omits: ['.reveal & .info']},
+    {style: 'static', others: ['reveal', 'drawer'], carves: ['.info { overflow: hidden;', '.info-toggle:not(:checked) ~ .info { margin-top: 0; max-height: 0;'], omits: ['.reveal & .info', '.drawer & .info']}
   ] as const)('should tell, with $style chosen, only what that motion does under part one', async ({style, others, carves, omits}) => {
     render(<TestApp at={demosAt(`?tab=accordions&style=${style}`)}/>);
 
