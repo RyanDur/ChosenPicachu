@@ -277,13 +277,14 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, st
           <Snippet label="TS" lines={span(accordionsSource, '<fieldset>\n    <legend className="off-screen">parts</legend>\n    <ul className="new-accordion">', '<input type="checkbox" className="off-screen"/>')}/>
         </li>}
         <li className="run">
-          <p className="paragraph">The bar says Open or Close. The label holds only the part’s name, off screen,
-            and the stylesheet writes the word before it: Close while the fold holds a checked
-            input, Open while it does not. A screen reader reads the written word with the name,
-            such as “Open basalt”, and someone using voice control can say the word they see. With
-            the styles off, the bar says only its part.</p>
+          <p className="paragraph">The bar is named by its part. The label holds the part’s name, and that
+            name is what the {input} is called. Its checked state is the part’s state, so a listener
+            hears the part and whether it is open, such as “basalt, {input}, checked”. The
+            stylesheet writes Open or Close at the bar’s end, for the eye, to say what a press will
+            do. It marks the word as decoration with an empty alternative, so the word is not read.
+            Someone using voice control says the part’s name.</p>
           <Snippet label="CSS" lines={[
-            ...unit(accordionsCss, '.info-label::before {'), gap,
+            ...unit(accordionsCss, '&::before {\n        order: 1;'), gap,
             ...unit(accordionsCss, '&:has(:checked) .info-label::before {')
           ]}/>
         </li>

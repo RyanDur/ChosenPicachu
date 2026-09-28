@@ -56,13 +56,10 @@ const detailsPart = (page: Page, fold: Locator): Omit<Part, 'showsText'> => ({
   isOpen: () => fold.evaluate(details => details.hasAttribute('open'))
 });
 
-const pressTheBar = (fold: Locator, control: 'checkbox' | 'radio', word: 'Open' | 'Close') => () =>
-  fold.getByRole(control, {name: new RegExp(`^${word} `)}).locator('..').click();
-
 const gridCheckboxPart = (page: Page, fold: Locator): Omit<Part, 'showsText'> => ({
   fold,
-  open: pressTheBar(fold, 'checkbox', 'Open'),
-  close: pressTheBar(fold, 'checkbox', 'Close'),
+  open: () => wordOn(fold).click(),
+  close: () => wordOn(fold).click(),
   openByKeyboard: () => focusAndPress(page, fold.getByRole('checkbox'), 'Space'),
   isOpen: () => fold.getByRole('checkbox').isChecked()
 });
@@ -87,11 +84,11 @@ const partIn: Record<Build, (where: Where) => Omit<Part, 'showsText'>> = {
   'the grid checkbox build': ({page, fold}) => gridCheckboxPart(page, fold),
   'the grid radio build': ({page, fold, article, index}) => ({
     fold,
-    open: pressTheBar(fold, 'radio', 'Open'),
-    close: pressTheBar(fold, 'radio', 'Close'),
+    open: () => wordOn(fold).click(),
+    close: () => wordOn(fold).click(),
     openByKeyboard: () => index === 0
       ? focusAndPress(page, fold.getByRole('radio'), 'Space')
-      : focusAndPress(page, article.getByRole('radio', {name: /^(Open|Close) /}).first(), 'ArrowDown', index),
+      : focusAndPress(page, article.getByRole('radio').first(), 'ArrowDown', index),
     isOpen: () => fold.getByRole('radio').isChecked()
   })
 };

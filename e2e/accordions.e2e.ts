@@ -81,6 +81,7 @@ test('a details fold opens at once, fully, where the browser cannot animate it',
 
   await part.open();
 
+  expect(await firstMoved).toBeGreaterThan(closed);
   expect(await firstMoved).toBe(await heightOnceSettled(part.fold));
   await expect.poll(part.showsText).toBe(true);
 });
@@ -225,15 +226,15 @@ for (const {build, control} of [
   {build: 'the grid checkbox build', control: 'checkbox'},
   {build: 'the grid radio build', control: 'radio'}
 ] as const) {
-  test(`the bar of ${build} says what a press will do, and its control is named the same`, async ({page}) => {
+  test(`the control of ${build} is named by its part, and checked while the part is open`, async ({page}) => {
     await page.goto(showing(build));
     const part = accordionsTab(page).firstPartOf(build);
-    const name = await part.fold.getByRole('heading').textContent() ?? '';
-    await expect(part.fold.getByRole(control, {name: `Open ${name}`})).not.toBeChecked();
+    const name = await part.fold.getByText(/^\w+$/).first().textContent() ?? '';
+    await expect(part.fold.getByRole(control, {name, exact: true})).not.toBeChecked();
 
     await part.open();
 
-    await expect(part.fold.getByRole(control, {name: `Close ${name}`})).toBeChecked();
+    await expect(part.fold.getByRole(control, {name, exact: true})).toBeChecked();
   });
 }
 
@@ -270,6 +271,7 @@ for (const build of ['the grid checkbox build', 'the grid radio build'] as const
 
     await part.open();
 
+    expect(await firstMoved).toBeGreaterThan(closed);
     expect(await firstMoved).toBe(await heightOnceSettled(part.fold));
   });
 }
@@ -284,6 +286,7 @@ for (const build of ['the grid checkbox build', 'the grid radio build'] as const
 
     await part.open();
 
+    expect(await firstMoved).toBeGreaterThan(closed);
     expect(await firstMoved).toBe(await heightOnceSettled(part.fold));
   });
 }

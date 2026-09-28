@@ -52,51 +52,48 @@
       grid-template-rows: 1fr;
     }
 
-    .info-label::before {
-      content: 'Open';
-    }
-
-    &:has(:checked) .info-label::before {
-      content: 'Close';
-    }
-
     .info-header {
-      display: grid;
-      grid-template-columns: 1fr min-content;
       background: var(--field-inverse);
       border: var(--hairline) solid var(--field);
       padding: var(--base);
-      align-items: center;
       color: var(--field);
     }
 
     .info-label {
-      width: fit-content;
-      padding: var(--base);
-      border: var(--hairline) solid var(--field);
       display: flex;
+      justify-content: space-between;
       align-items: center;
       color: var(--field);
 
-      &:hover {
+      &::before {
+        order: 1;
+        content: 'Open' / '';
+        padding: var(--base);
+        border: var(--hairline) solid var(--field);
+      }
+
+      &:hover::before {
         background: var(--field);
         outline: var(--hairline) solid var(--ring);
         outline-offset: calc(var(--hairline-x-3) * -1);
         color: var(--field-inverse);
       }
 
-      &:active {
+      &:active::before {
         background: var(--field-inverse);
         color: var(--field);
       }
 
-      &:active,
-      &:has(input:focus-visible) {
+      &:active::before,
+      &:has(input:focus-visible)::before {
         outline: var(--hairline) solid var(--field);
         outline-offset: calc(var(--hairline-x-3) * -1);
       }
     }
 
+    &:has(:checked) .info-label::before {
+      content: 'Close' / '';
+    }
   }
 }
 

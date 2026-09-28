@@ -1,14 +1,14 @@
 import {FC, KeyboardEvent, MouseEvent, ReactNode} from 'react';
-import {maybe} from '@ryandur/sand';
+import {Maybe, nothing, some} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {PropsWithClassName} from '../types';
 import {FoldMotion} from './fold-motion';
 import './Accordions.css';
 
-const openAfter = (pressed: string, open?: string) => open === pressed ? undefined : pressed;
+const openAfter = (pressed: string, open?: string): Maybe<string> => open === pressed ? nothing() : some(pressed);
 
 const radioPressed = (list: HTMLUListElement, radio: HTMLInputElement): void =>
-  maybe(openAfter(radio.value, list.dataset.open)).either(
+  openAfter(radio.value, list.dataset.open).either(
     next => {
       list.dataset.open = next;
     },
@@ -41,14 +41,17 @@ export const InclusiveAccordion: FC<PropsWithClassName & ContentProps> = ({
     <h4 className="sub-title bold">Accordion using checkboxes</h4>
     <p>no Javascript needed to pull this off.</p>
   </header>
-  <ul className="accordion">
-    {content.map(({value, key}, id) =>
-      <li key={key} className="fold">
-        <input id={`fold-${id}-checkbox`} className="info-toggle off-screen" type="checkbox"/>
-        <label className="info-label" htmlFor={`fold-${id}-checkbox`}>{key}</label>
-        <p className="info">{value}</p>
-      </li>)}
-  </ul>
+  <fieldset>
+    <legend className="off-screen">parts</legend>
+    <ul className="accordion">
+      {content.map(({value, key}, id) =>
+        <li key={key} className="fold">
+          <input id={`fold-${id}-checkbox`} className="info-toggle off-screen" type="checkbox"/>
+          <label className="info-label" htmlFor={`fold-${id}-checkbox`}>{key}</label>
+          <p className="info">{value}</p>
+        </li>)}
+    </ul>
+  </fieldset>
 </article>;
 
 export const ExclusiveAccordion: FC<PropsWithClassName & ContentProps> = ({
@@ -59,18 +62,21 @@ export const ExclusiveAccordion: FC<PropsWithClassName & ContentProps> = ({
     <h4 className="sub-title bold">Accordion using a radio group</h4>
     <p>no Javascript needed to pull this off.</p>
   </header>
-  <ul className="accordion">
-    <li className="fold close">
-      <input id="close-radio" defaultChecked={true} className="info-toggle off-screen" type="radio" name="group"/>
-      <label className="info-label" htmlFor="close-radio">Close</label>
-    </li>
-    {content.map(({value, key}, id) =>
-      <li className="fold" key={key}>
-        <input id={`fold-${id}-radio`} className="info-toggle off-screen" type="radio" name="group"/>
-        <label className="info-label" htmlFor={`fold-${id}-radio`}>{key}</label>
-        <p className="info">{value}</p>
-      </li>)}
-  </ul>
+  <fieldset>
+    <legend className="off-screen">parts</legend>
+    <ul className="accordion">
+      <li className="fold close">
+        <input id="close-radio" defaultChecked={true} className="info-toggle off-screen" type="radio" name="group"/>
+        <label className="info-label" htmlFor="close-radio">Close</label>
+      </li>
+      {content.map(({value, key}, id) =>
+        <li className="fold" key={key}>
+          <input id={`fold-${id}-radio`} className="info-toggle off-screen" type="radio" name="group"/>
+          <label className="info-label" htmlFor={`fold-${id}-radio`}>{key}</label>
+          <p className="info">{value}</p>
+        </li>)}
+    </ul>
+  </fieldset>
 </article>;
 
 export const InclusiveToggleAccordion: FC<PropsWithClassName & ContentProps> = ({
@@ -125,9 +131,8 @@ export const InclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
         <li key={key}>
           <article className="grid-fold">
             <header className="info-header">
-              <h5 className="sub-title bold">{key}</h5>
               <label className="info-label">
-                <span className="off-screen">{key}</span>
+                <span className="sub-title bold">{key}</span>
                 <input type="checkbox" className="off-screen"/>
               </label>
             </header>
@@ -155,9 +160,8 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
         <li key={key}>
           <article className="grid-fold">
             <header className="info-header">
-              <h5 className="sub-title bold">{key}</h5>
               <label className="info-label">
-                <span className="off-screen">{key}</span>
+                <span className="sub-title bold">{key}</span>
                 <input type="radio" name="exclusive-radio-toggle" value={key} className="off-screen"/>
               </label>
             </header>
