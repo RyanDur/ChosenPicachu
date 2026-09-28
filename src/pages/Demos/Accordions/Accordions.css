@@ -27,7 +27,7 @@
     }
   }
 
-  .exclusive-fold {
+  .react-fold {
     overflow: hidden;
     display: grid;
     grid-template-rows: min-content;
@@ -213,7 +213,7 @@
   flex-direction: column;
   gap: var(--base-x-1_25);
 
-  .exclusive-checkbox-header {
+  .react-header {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;

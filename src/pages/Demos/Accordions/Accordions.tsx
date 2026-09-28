@@ -92,7 +92,7 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
   const [tab, updateTab] = useState<'animated' | 'static'>('animated');
 
   return <article className={classNames('exclusive-checkbox-toggle-accordion', 'toggle-accordion', className)}>
-    <header className="exclusive-checkbox-header">
+    <header className="react-header">
       <h4 className="sub-title bold">Exclusive accordion using checkboxes</h4>
       <PillGlider label="animation style"
         name="checkbox-animate-or-static-tab"
@@ -104,7 +104,7 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
     <ul className={'new-accordion'}>
       {content.map(({value, key}) =>
         <li key={key}>
-          <article className={classNames('exclusive-fold', tab, 'reveal')}>
+          <article className={classNames('react-fold', tab, 'reveal')}>
             <header className="info-header">
               <h5 className="sub-title bold">{key}</h5>
               <label className="info-label">
@@ -132,7 +132,7 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
   const [checked, updateChecked] = useState<string>();
   const [tab, updateTab] = useState<'animated' | 'static'>('animated');
   return <article className={classNames('exclusive-radio-toggle-accordion', 'toggle-accordion', className)}>
-    <header className="exclusive-checkbox-header">
+    <header className="react-header">
       <h4 className="sub-title bold">Exclusive accordion using radio group</h4>
       <PillGlider label="animation style"
         name="radio-animate-or-static-tab"
@@ -144,7 +144,7 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
     <ul className={'new-accordion'}>
       {content.map(({value, key}) =>
         <li key={key}>
-          <article className={classNames('exclusive-fold', tab === 'animated' && 'animated drawer')}>
+          <article className={classNames('react-fold', tab === 'animated' && 'animated drawer')}>
             <header className="info-header">
               <h5 className="sub-title bold">{key}</h5>
               <label className="info-label">
@@ -177,7 +177,7 @@ export const InclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
   const isOpen = (key: string) => opened.includes(key);
 
   return <article className={classNames('inclusive-checkbox-toggle-accordion', 'toggle-accordion', className)}>
-    <header className="exclusive-checkbox-header">
+    <header className="react-header">
       <h4 className="sub-title bold">Inclusive accordion using checkboxes</h4>
       <PillGlider label="animation style"
         name="inclusive-checkbox-animate-or-static-tab"
@@ -189,7 +189,7 @@ export const InclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
     <ul className={'new-accordion'}>
       {content.map(({value, key}) =>
         <li key={key}>
-          <article className={classNames('exclusive-fold', tab, 'reveal')}>
+          <article className={classNames('react-fold', tab, 'reveal')}>
             <header className="info-header">
               <h5 className="sub-title bold">{key}</h5>
               <label className="info-label">
