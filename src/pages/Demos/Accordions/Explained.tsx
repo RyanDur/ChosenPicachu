@@ -261,7 +261,7 @@ export const AccordionsExplained: FC<{contents: Contents; type: FoldType; onType
       <ol className={runs}>
         {type === 'inclusive' && <li className="run">
           <p className="paragraph">The inclusive build is a checkbox build again, with no script. Each bar is a
-            label holding the part’s words and its checkbox, and the checkbox remembers whether the
+            label holding the part’s name and its checkbox, and the checkbox remembers whether the
             part is open, as it did in part one. What is new is the way the text opens, below.</p>
           <Snippet label="TS" lines={span(accordionsSource, '<fieldset>\n    <legend className="off-screen">parts</legend>\n    <ul className="new-accordion">', '<input type="checkbox" className="off-screen"/>')}/>
         </li>}
