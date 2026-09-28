@@ -62,18 +62,14 @@
       grid-template-rows: 1fr;
     }
 
-    .info-header {
-      background: var(--field-inverse);
-      border: var(--hairline) solid var(--field);
-      padding: var(--base);
-      color: var(--field);
-    }
-
     .info-label {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: var(--base);
       color: var(--field);
+      background: var(--field-inverse);
+      border: var(--hairline) solid var(--field);
 
       &::before {
         order: 1;

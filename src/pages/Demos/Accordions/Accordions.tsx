@@ -132,17 +132,12 @@ export const InclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
     <legend className="off-screen">parts</legend>
     <ul className="new-accordion">
       {content.map(({value, key}) =>
-        <li key={key}>
-          <article className="grid-fold">
-            <header className="info-header">
-              <label className="info-label">
-                <span className="sub-title bold">{key}</span>
-                <input type="checkbox" className="off-screen"/>
-              </label>
-            </header>
-
-            <p className="fold-clip"><span className="fold-clip-item"><span className="fold-text">{value}</span></span></p>
-          </article>
+        <li key={key} className="grid-fold">
+          <label className="info-label">
+            <span className="sub-title bold">{key}</span>
+            <input type="checkbox" className="off-screen"/>
+          </label>
+          <p className="fold-clip"><span className="fold-clip-item"><span className="fold-text">{value}</span></span></p>
         </li>)}
     </ul>
   </fieldset>
@@ -161,17 +156,12 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
     <legend className="off-screen">parts</legend>
     <ul className="new-accordion" onClick={radioClicked} onKeyDown={spacePressed}>
       {content.map(({value, key}) =>
-        <li key={key}>
-          <article className="grid-fold">
-            <header className="info-header">
-              <label className="info-label">
-                <span className="sub-title bold">{key}</span>
-                <input type="radio" name="exclusive-radio-toggle" value={key} className="off-screen"/>
-              </label>
-            </header>
-
-            <p className="fold-clip"><span className="fold-clip-item"><span className="fold-text">{value}</span></span></p>
-          </article>
+        <li key={key} className="grid-fold">
+          <label className="info-label">
+            <span className="sub-title bold">{key}</span>
+            <input type="radio" name="exclusive-radio-toggle" value={key} className="off-screen"/>
+          </label>
+          <p className="fold-clip"><span className="fold-clip-item"><span className="fold-text">{value}</span></span></p>
         </li>)}
     </ul>
   </fieldset>
