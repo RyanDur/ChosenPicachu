@@ -26,6 +26,8 @@ export const userAddRefused = () => server.use(http.post(usersDomain, troubled))
 
 export const userRemovalRefused = (id: string) => server.use(http.delete(`${usersDomain}/${id}`, troubled));
 
+export const userUpdateRefused = (id: string) => server.use(http.put(`${usersDomain}/${id}`, troubled));
+
 export const setupUserAddedResponse = (rosterAfter: readonly User[]): () => unknown => {
   let sent: unknown;
   server.use(http.post(usersDomain, async ({request}) => {

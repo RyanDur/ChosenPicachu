@@ -14,6 +14,7 @@ import {
   setupUserUpdatedResponse,
   userAddRefused,
   userRemovalRefused,
+  userUpdateRefused,
   usersUnreachable
 } from '@components/Users/__test_support';
 import {userForm} from '../UserInformation/__test_support';
@@ -347,7 +348,7 @@ describe('the users page', () => {
     const pia = aUser({id: 'pia', friends: ['quin']});
     const quin = aUser({id: 'quin', friends: ['pia']});
     setupUsersResponse([pia, quin]);
-    const sent = setupUserUpdatedResponse(quin.id, [{...pia, friends: []}, {...quin, friends: []}]);
+    setupUserUpdatedResponse(quin.id, [{...pia, friends: []}, {...quin, friends: []}]);
     render(<TestApp at={Paths.users}/>);
     const quinsRow = await usersTable.rowOf(fullNameOf(quin));
 
@@ -355,7 +356,33 @@ describe('the users page', () => {
 
     await waitFor(() => expect(within(quinsRow).queryByRole('button', {name: `remove ${fullNameOf(pia)}`})).not.toBeInTheDocument());
     expect(within(quinsRow).getByRole('combobox', {name: 'Add a friend'})).toHaveFocus();
-    expect(sent()).toMatchObject({id: quin.id, friends: []});
+  });
+
+  test("removing a friend in a person's row sends the backend that person without the friend", async () => {
+    const vic = aUser({id: 'vic', friends: ['wen']});
+    const wen = aUser({id: 'wen', friends: []});
+    setupUsersResponse([vic, wen]);
+    const sent = setupUserUpdatedResponse(vic.id, [{...vic, friends: []}, wen]);
+    render(<TestApp at={Paths.users}/>);
+    const vicsRow = await usersTable.rowOf(fullNameOf(vic));
+
+    await userEvent.click(within(vicsRow).getByRole('button', {name: `remove ${fullNameOf(wen)}`}));
+
+    await waitFor(() => expect(sent()).toMatchObject({id: vic.id, friends: []}));
+  });
+
+  test('a friend the backend refuses to add is reported, and the row keeps the friends it had', async () => {
+    const xia = aUser({id: 'xia', friends: []});
+    const yul = aUser({id: 'yul', friends: []});
+    setupUsersResponse([xia, yul]);
+    userUpdateRefused(xia.id);
+    render(<TestApp at={Paths.users}/>);
+    const xiasRow = await usersTable.rowOf(fullNameOf(xia));
+
+    await userEvent.selectOptions(within(xiasRow).getByRole('combobox', {name: 'Add a friend'}), [fullNameOf(yul)]);
+
+    expect(await within(screen.getByRole('alert', {hidden: true})).findByText('the users is having trouble')).toBeInTheDocument();
+    expect(within(xiasRow).queryByRole('button', {name: `remove ${fullNameOf(yul)}`})).not.toBeInTheDocument();
   });
 
   test("choosing a friend in a person's row sends the backend that person with the friend added", async () => {

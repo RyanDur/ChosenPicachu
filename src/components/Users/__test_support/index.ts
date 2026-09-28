@@ -7,5 +7,6 @@ export {
   setupUserUpdatedResponse,
   userAddRefused,
   userRemovalRefused,
+  userUpdateRefused,
   usersUnreachable
 } from './users';
