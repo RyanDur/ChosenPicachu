@@ -35,16 +35,15 @@ const dragTo = async (page: Page, from: Box, x: number, y: number): Promise<void
   await page.mouse.up();
 };
 
-const holdTheSettleAtItsStart = (anywhere: Locator): Promise<void> => anywhere.evaluate(element => {
-  const table = element.ownerDocument;
-  table.addEventListener('animationstart', event => {
-    if (event.animationName.startsWith('settle')) {
-      table.getAnimations().forEach(animation => {
+const holdTheSettleAtItsStart = (held: Locator): Promise<void> => held.evaluate(element => {
+  element.addEventListener('animationstart', ({target}) => {
+    if (target === element) {
+      element.getAnimations({subtree: false}).forEach(animation => {
         animation.pause();
         animation.currentTime = 0;
       });
     }
-  }, {capture: true});
+  });
 });
 
 const settling = (locator: Locator): Promise<boolean> =>
@@ -74,6 +73,7 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
     columnHeader,
     centreOfColumn: async (name: string): Promise<Point> => centreOf(await boxOf(columnHeader(name))),
     centreOfRow: async (name: RegExp): Promise<Point> => centreOf(await boxOf(table.getByRole('row', {name}))),
+    centreOfRowHeader: async (name: RegExp): Promise<Point> => centreOf(await boxOf(rowHeader(name))),
     centreOfRowGrip: async (row: number): Promise<Point> => centreOf(await boxOf(rowGrip(row))),
     dropColumnAt: (name: string, letGo: Point): Promise<Point> =>
       dropAt(page, {pressed: columnHeader(name), held: columnHeader(name)}, letGo),

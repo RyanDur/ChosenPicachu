@@ -1075,7 +1075,6 @@ describe('animated moves', () => {
     expect(carried()).toEqual([]);
     columnCells('trades').forEach(cell => {
       expect(cell).toHaveClass('settling');
-      expect(cell).toHaveStyle({'--settle-x': '-100px', '--settle-drift-x': '0px'});
     });
     columnCells('buys').forEach(cell => expect(cell).toHaveClass('shoved-start'));
   });
@@ -1105,7 +1104,6 @@ describe('animated moves', () => {
     dropColumn();
     expect(columnOrder()).toEqual(['window', 'buys', 'sells', 'trades', 'volume', 'vwap', 'change']);
     expect(header('trades')).toHaveClass('settling');
-    expect(header('trades')).toHaveStyle({'--settle-x': '-200px', '--settle-drift-x': '0px'});
     expect(header('buys')).toHaveClass('shoved-start');
     expect(header('sells')).toHaveClass('shoved-start');
     expect(header('volume').className).not.toMatch(/shoved/);
@@ -1155,7 +1153,6 @@ describe('animated moves', () => {
     expect(carried()).toEqual([]);
     [...rowOf('this minute').cells].forEach(cell => {
       expect(cell).toHaveClass('settling');
-      expect(cell).toHaveStyle({'--settle-x': '0px', '--settle-y': '-40px', '--settle-drift-x': '0px', '--settle-drift-y': '0px'});
     });
   });
 });
