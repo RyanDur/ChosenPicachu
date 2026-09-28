@@ -167,3 +167,45 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
     </ul>
   </article>;
 };
+
+export const InclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentProps> = ({
+  className,
+  content
+}) => {
+  const [opened, updateOpened] = useState<readonly string[]>([]);
+  const [tab, updateTab] = useState<'animated' | 'static'>('animated');
+  const isOpen = (key: string) => opened.includes(key);
+
+  return <article className={classNames('inclusive-checkbox-toggle-accordion', 'toggle-accordion', className)}>
+    <header className="exclusive-checkbox-header">
+      <h4 className="sub-title bold">Inclusive accordion using checkboxes</h4>
+      <PillGlider label="animation style"
+        name="inclusive-checkbox-animate-or-static-tab"
+        options={[{display: 'Animate', value: 'animated'}, {display: 'Static', value: 'static'}]}
+        chosen={tab}
+        onChosen={updateTab}/>
+    </header>
+
+    <ul className={'new-accordion'}>
+      {content.map(({value, key}) =>
+        <li key={key}>
+          <article className={classNames('exclusive-fold', tab, 'reveal')}>
+            <header className="info-header">
+              <h5 className="sub-title bold">{key}</h5>
+              <label className="info-label">
+                {toggleWord(isOpen(key))}
+                <input
+                  type="checkbox"
+                  aria-label={`${toggleWord(isOpen(key))} ${key}`}
+                  checked={isOpen(key)}
+                  onChange={() => updateOpened(open => open.includes(key) ? open.filter(part => part !== key) : [...open, key])}
+                  className="off-screen"/>
+              </label>
+            </header>
+
+            <p className="fold-clip"><span className="fold-clip-item"><span className="fold-text">{value}</span></span></p>
+          </article>
+        </li>)}
+    </ul>
+  </article>;
+};

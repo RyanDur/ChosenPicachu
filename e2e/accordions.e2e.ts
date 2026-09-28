@@ -39,7 +39,7 @@ test('a fold in the React checkbox build slides open', async ({page}) => {
 
 const layoutRounding = 1;
 
-for (const build of ['the React checkbox build', 'the React radio build'] as const) {
+for (const build of ['the React inclusive build', 'the React checkbox build', 'the React radio build'] as const) {
   test(`a fold in ${build} slides open with its text shown down to the fold’s edge`, async ({page}) => {
     await page.goto('demos/?tab=accordions');
     const part = accordionsTab(page).firstPartOf(build);
@@ -126,7 +126,7 @@ for (const build of builds) {
   });
 }
 
-for (const build of ['the React checkbox build', 'the React radio build'] as const) {
+for (const build of ['the React inclusive build', 'the React checkbox build', 'the React radio build'] as const) {
   test(`a closed fold in ${build} shows only its bar`, async ({page}) => {
     await page.goto('demos/?tab=accordions');
     await expect(accordionsTab(page).firstPartOf(build).fold).toBeVisible();
@@ -172,7 +172,7 @@ for (const build of builds.filter(build => build !== 'the details build')) {
   });
 }
 
-for (const build of ['the checkbox build', 'the inclusive details build'] as const) {
+for (const build of ['the checkbox build', 'the inclusive details build', 'the React inclusive build'] as const) {
   test(`a reader opens two parts of ${build} and both stay open`, async ({page}) => {
     await page.goto('demos/?tab=accordions');
     const [first, second] = [accordionsTab(page).partOf(build, 0), accordionsTab(page).partOf(build, 1)];

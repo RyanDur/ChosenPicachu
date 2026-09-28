@@ -6,6 +6,7 @@ import {
   ExclusiveToggleAccordion,
   Fold,
   InclusiveAccordion,
+  InclusiveCheckboxToggleAccordion,
   InclusiveToggleAccordion
 } from './Accordions';
 import {Mdn, Snippet, plain} from '../Recipe';
@@ -22,6 +23,7 @@ export type Contents = {
   radio: Fold[];
   inclusiveDetails: Fold[];
   details: Fold[];
+  inclusiveCheckboxWithState: Fold[];
   checkboxWithState: Fold[];
   radioWithState: Fold[];
 };
@@ -231,13 +233,14 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
   <section aria-labelledby="together-heading" className="accordion-part">
     <h3 id="together-heading" className="title bold">The two together</h3>
     <ul className="accordions">
+      <li className="build"><InclusiveCheckboxToggleAccordion className={exhibit} content={contents.inclusiveCheckboxWithState}/></li>
       <li className="build"><ExclusiveCheckboxToggleAccordion className={exhibit} content={contents.checkboxWithState}/></li>
       <li className="build"><ExclusiveRadioToggleAccordion className={exhibit} content={contents.radioWithState}/></li>
     </ul>
     <ol className={runs}>
       <li className="run">
-        <p className="paragraph">These two builds keep only one part open, and a second press on the open part
-          closes it. Details does both with a shared name. A checkbox can close itself but cannot
+        <p className="paragraph">The two exclusive builds keep only one part open, and a second press on the
+          open part closes it. Details does both with a shared name. A checkbox can close itself but cannot
           keep the others shut; a radio keeps the others shut but cannot close itself. So each
           build keeps its element for what it gives, and holds the rest in React state: a value
           the component remembers, here which part is open. When a checkbox changes, the
@@ -249,6 +252,16 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
           ...span(accordionsSource, 'type="checkbox"\n                  aria-label', 'className="off-screen"/>')
         ]}/>
         <WhatEachPromises/>
+      </li>
+      <li className="run">
+        <p className="paragraph">The inclusive build lets every part open on its own, as a checkbox already
+          does. It holds a list of the open parts in state, so each bar can say Open or Close. A
+          change adds the part pressed to the list, or takes it out if it was there.</p>
+        <Snippet label="TS" lines={[
+          ...unit(accordionsSource, 'const [opened, updateOpened]'), gap,
+          ...unit(accordionsSource, 'const isOpen = '), gap,
+          ...span(accordionsSource, 'onChange={() => updateOpened', 'onChange={() => updateOpened')
+        ]}/>
       </li>
       <li className="run">
         <p className="paragraph">The radio build takes one part at a time from its group, and adds the close:
