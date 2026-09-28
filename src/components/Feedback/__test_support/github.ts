@@ -23,6 +23,13 @@ export const githubHoldingItsAnswer = () => {
 };
 
 export const githubLosingThePageThread = () =>
-  server.use(http.post('https://api.github.com/graphql', async ({request}) => (await request.text()).includes('search')
-    ? HttpResponse.json({data: {search: {nodes: [{id: 'D_7', url: 'https://github.test/discussions/7', title: 'Feedback: Home (/)'}]}}})
-    : HttpResponse.json({data: null, errors: [{type: 'NOT_FOUND', message: 'Could not resolve to a node with the global id of \'D_7\''}]})));
+  server.use(http.post('https://api.github.com/graphql', async ({request}) => {
+    const asked = await request.text();
+    if (asked.includes('search')) {
+      return HttpResponse.json({data: {search: {nodes: [{id: 'D_7', url: 'https://github.test/discussions/7', title: 'Feedback: Home (/)'}]}}});
+    }
+    if (asked.includes('addDiscussionComment')) {
+      return HttpResponse.json({data: null, errors: [{type: 'NOT_FOUND', message: 'Could not resolve to a node with the global id of \'D_7\''}]});
+    }
+    return HttpResponse.json({data: {createDiscussion: {discussion: {id: 'D_8', url: 'https://github.test/discussions/8'}}}});
+  }));
