@@ -1,5 +1,4 @@
 import {ReactNode} from 'react';
-import {maybe} from '@ryandur/sand';
 import './PillGlider.css';
 
 type Option<T extends string> = {
@@ -7,22 +6,15 @@ type Option<T extends string> = {
   value: T;
 };
 
-type Chosen<T extends string> =
-  | {chosen: T; onChosen: (value: T) => void; defaultChosen?: never}
-  | {defaultChosen: T; chosen?: never; onChosen?: never};
-
-type Props<T extends string> = Chosen<T> & {
+type Props<T extends string> = {
   label: string;
   name: string;
   options: readonly Option<T>[];
+  chosen: T;
+  onChosen: (value: T) => void;
 };
 
-const checkedFor = <T extends string>({chosen, onChosen, defaultChosen}: Chosen<T>, value: T) =>
-  maybe(onChosen).either(
-    chose => ({checked: chosen === value, onChange: () => chose(value)}),
-    () => ({defaultChecked: defaultChosen === value}));
-
-export const PillGlider = <T extends string>({label, name, options, ...choice}: Props<T>) =>
+export const PillGlider = <T extends string>({label, name, options, chosen, onChosen}: Props<T>) =>
   <fieldset className="pill-glider">
     <legend className="off-screen">{label}</legend>
     {options.map(({display, value}) =>
@@ -33,6 +25,7 @@ export const PillGlider = <T extends string>({label, name, options, ...choice}: 
           className="off-screen"
           name={name}
           value={value}
-          {...checkedFor(choice, value)}/>
+          checked={chosen === value}
+          onChange={() => onChosen(value)}/>
       </label>)}
   </fieldset>;
