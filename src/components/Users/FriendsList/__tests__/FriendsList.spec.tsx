@@ -2,14 +2,14 @@ import userEvent from '@testing-library/user-event';
 import {render, screen} from '@testing-library/react';
 import {FC, useState} from 'react';
 import {FriendsList} from '@components/Users/FriendsList';
-import {fullNameOf, User} from '@components/Users/UserInfo/user';
+import {befriended, fullNameOf, unfriended, User} from '@components/Users/UserInfo/user';
 import {someUsers} from '@components/Users/__test_support';
 
 const Befriending: FC<{user: User; among?: readonly User[]}> = ({user: first, among = someUsers}) => {
   const [user, update] = useState(first);
   return <FriendsList users={among} user={user}
-    onFriendAdded={friend => update({...user, friends: [...user.friends, friend]})}
-    onFriendRemoved={friend => update({...user, friends: user.friends.filter(id => id !== friend)})}/>;
+    onFriendAdded={friend => update(befriended(user, friend))}
+    onFriendRemoved={friend => update(unfriended(user, friend))}/>;
 };
 
 describe('the friends list', () => {
