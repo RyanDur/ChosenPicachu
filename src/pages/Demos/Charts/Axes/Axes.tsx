@@ -1,13 +1,18 @@
 import {FC, PropsWithChildren} from 'react';
-import {has} from '@ryandur/sand';
+import {has, Maybe, maybe} from '@ryandur/sand';
 import {format} from 'date-fns';
 import {dollars} from '../money';
 import './Axes.css';
 
+export type Range = {high: number; low: number; times: readonly [number, ...number[]]};
+
+export const rangeOf = (times: readonly number[], high: number, low: number): Maybe<Range> => {
+  const [first, ...rest] = times;
+  return maybe(first).map(at => ({high, low, times: [at, ...rest]}));
+};
+
 type Props = PropsWithChildren<{
-  high: number;
-  low: number;
-  times: readonly number[];
+  range: Maybe<Range>;
   pattern: string;
   tickEvery?: number;
   headroomMs?: number;
@@ -34,22 +39,19 @@ const placed = (
 };
 
 export const Axes: FC<Props> = ({
-  high, low, times, pattern, tickEvery, headroomMs = 0,
+  range, pattern, tickEvery, headroomMs = 0,
   label = value => dollars.format(value), children
-}) => {
-  const populated = times.length > 0;
-  return <div className="axes">
-    <p className="y-labels caption">{populated && <>
-      <data value={high}>{label(high)}</data>
-      <data value={(high + low) / 2}>{label((high + low) / 2)}</data>
-      <data value={low}>{label(low)}</data>
-    </>}</p>
-    <div className="chart-area">{children}</div>
-    <p className="x-labels caption">{populated && placed(times, chosenTicks(times, tickEvery), headroomMs).map(tick =>
-      <time key={tick.at}
-        className="tick"
-        dateTime={new Date(tick.at).toISOString()}
-        style={{'--along': `${tick.along}%`}}>{format(tick.at, pattern)}</time>
-    )}</p>
-  </div>;
-};
+}) => <div className="axes">
+  <p className="y-labels caption">{range.map(({high, low}) => <>
+    <data value={high}>{label(high)}</data>
+    <data value={(high + low) / 2}>{label((high + low) / 2)}</data>
+    <data value={low}>{label(low)}</data>
+  </>).orNull()}</p>
+  <div className="chart-area">{children}</div>
+  <p className="x-labels caption">{range.map(({times}) => placed(times, chosenTicks(times, tickEvery), headroomMs).map(tick =>
+    <time key={tick.at}
+      className="tick"
+      dateTime={new Date(tick.at).toISOString()}
+      style={{'--along': `${tick.along}%`}}>{format(tick.at, pattern)}</time>
+  )).orNull()}</p>
+</div>;

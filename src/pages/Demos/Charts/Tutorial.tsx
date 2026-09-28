@@ -215,7 +215,8 @@ const candlesStory =
         </Words>
         <Codes>
           <Snippet label="HTML" lines={[
-            ...span(candlesSource, '<Axes high', 'headroomMs={2 * bucketMs[period]}>')
+            ...span(candlesSource, 'const range = rangeOf(', '  );'), gap,
+            ...span(candlesSource, '<Axes range', 'headroomMs={2 * bucketMs[period]}>')
           ]}/>
         </Codes>
       </Step>

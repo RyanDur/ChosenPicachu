@@ -2,7 +2,7 @@ import {FC, ReactNode, useId} from 'react';
 import {notEmpty} from '@ryandur/sand';
 import {Trade} from '../coinbase';
 import {bitcoin} from '../money';
-import {Axes} from '../Axes';
+import {Axes, rangeOf} from '../Axes';
 import {bucketPressure, heaviestSide, pressureShapes} from './shapes';
 import '../chart-card.css';
 import './Pressure.css';
@@ -31,8 +31,7 @@ export const Pressure: FC<Props> = ({trades, actions}) => {
       {actions}
     </header>
     <figure className="chart-stage">
-      <Axes high={peak} low={-peak} label={bitcoin}
-        times={pressures.map(pressure => pressure.openedAt)}
+      <Axes range={rangeOf(pressures.map(pressure => pressure.openedAt), peak, -peak)} label={bitcoin}
         pattern="HH:mm"
         tickEvery={TICK_EVERY_MS}
         headroomMs={2 * BUCKET_MS}>

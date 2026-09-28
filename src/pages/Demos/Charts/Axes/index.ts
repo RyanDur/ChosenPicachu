@@ -1,1 +1,1 @@
-export {Axes} from './Axes';
+export {Axes, rangeOf} from './Axes';

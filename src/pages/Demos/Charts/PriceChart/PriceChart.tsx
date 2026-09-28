@@ -9,7 +9,7 @@ import {candlesOf, captionFor} from '../period-history';
 import {usePeriodCandles} from '../usePeriodCandles';
 import {bucketMs, Period, periodCap, tickEveryMs, timePattern} from '../period';
 import {sparklinePoints, TimedPrice} from '../sparkline';
-import {Axes} from '../Axes';
+import {Axes, rangeOf} from '../Axes';
 import {bucketTrades, Candle, mergeLive} from '../Candles/shapes';
 import '../chart-card.css';
 import './PriceChart.css';
@@ -80,7 +80,7 @@ export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPer
       </menu>
     </header>
     <figure className="chart-stage">
-      <Axes high={view.high} low={view.low} times={view.series.map(timed => timed.at)}
+      <Axes range={rangeOf(view.series.map(timed => timed.at), view.high, view.low)}
         pattern={timePattern[period]} tickEvery={tickEveryMs[period]}
         headroomMs={2 * bucketMs[period]}>
         <svg className="sparkline" aria-hidden="true"

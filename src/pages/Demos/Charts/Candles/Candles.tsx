@@ -1,12 +1,11 @@
 import {FC, ReactNode, useId} from 'react';
-import {notEmpty} from '@ryandur/sand';
 import {Trade} from '../coinbase';
 import {bucketTrades, candleShapes, mergeLive, volumeShapes} from './shapes';
 import {candlesOf, captionFor} from '../period-history';
 import {usePeriodCandles} from '../usePeriodCandles';
 import {Loading} from '@components/Loading';
 import {bucketMs, Period, periodCap, tickEveryMs, timePattern} from '../period';
-import {Axes} from '../Axes';
+import {Axes, rangeOf} from '../Axes';
 import '../chart-card.css';
 import './Candles.css';
 
@@ -31,6 +30,11 @@ export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod
   const candles = mergeLive(candlesOf(history), bucketTrades(trades, bucketMs[period]), periodCap[period]);
   const bodies = candleShapes(candles, CHART_WIDTH, CANDLE_HEIGHT, bucketMs[period]);
   const bars = volumeShapes(candles, CHART_WIDTH, VOLUME_HEIGHT, bucketMs[period]);
+  const range = rangeOf(
+    candles.map(candle => candle.openedAt),
+    Math.max(...candles.map(candle => candle.high)),
+    Math.min(...candles.map(candle => candle.low))
+  );
   return <section aria-labelledby={`${id}-heading`} className="candles chart card rounded-corners lifted padded">
     <h3 id={`${id}-heading`} className="off-screen">candles</h3>
     <header className="chart-header">
@@ -52,9 +56,7 @@ export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod
       </menu>
     </header>
     <figure className="chart-stage">
-      <Axes high={notEmpty(candles) ? Math.max(...candles.map(candle => candle.high)) : 0}
-        low={notEmpty(candles) ? Math.min(...candles.map(candle => candle.low)) : 0}
-        times={candles.map(candle => candle.openedAt)}
+      <Axes range={range}
         pattern={timePattern[period]}
         tickEvery={tickEveryMs[period]}
         headroomMs={2 * bucketMs[period]}>
