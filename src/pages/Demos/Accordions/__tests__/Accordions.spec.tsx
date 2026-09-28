@@ -1,4 +1,4 @@
-import {fireEvent, render, screen} from '@testing-library/react';
+import {render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {ExclusiveRadioToggleAccordion, InclusiveCheckboxToggleAccordion} from '../Accordions';
 
@@ -76,8 +76,19 @@ describe('the exclusive toggle accordion using a radio group', () => {
     render(<ExclusiveRadioToggleAccordion content={folds} motion="reveal"/>);
     await userEvent.click(controlOf('radio', 'Alpha'));
 
-    fireEvent.keyDown(controlOf('radio', 'Alpha'), {key: ' '});
+    await userEvent.keyboard('[Space>]');
 
     expect(controlOf('radio', 'Alpha')).not.toBeChecked();
+  });
+});
+
+describe.each([
+  {accordion: 'the inclusive toggle accordion using checkboxes', Accordion: InclusiveCheckboxToggleAccordion, control: 'checkbox' as const},
+  {accordion: 'the exclusive toggle accordion using a radio group', Accordion: ExclusiveRadioToggleAccordion, control: 'radio' as const}
+])('$accordion', ({Accordion, control}) => {
+  test('should hold its parts\' controls in one group named parts', () => {
+    render(<Accordion content={folds} motion="reveal"/>);
+
+    expect(within(screen.getByRole('group', {name: 'parts'})).getAllByRole(control)).toHaveLength(folds.length);
   });
 });
