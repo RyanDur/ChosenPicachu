@@ -1,7 +1,7 @@
 import {FC, useId} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
 import {motionParam, originParam, paceParam} from '../Controls';
-import {World, worldParam} from './params';
+import {Tutorial, World, worldParam} from './params';
 import {PillGlider} from '@components/PillGlider';
 import {TableControls} from './TableControls';
 import {Picks} from './Picks';
@@ -16,8 +16,6 @@ import {MenuRecipe} from './Recipe/MenuRecipe';
 import {ResizeRecipe} from './Recipe/ResizeRecipe';
 import '../Tutorials.css';
 
-import {Tutorial} from './params';
-
 export type {Tutorial} from './params';
 
 export {tutorialParam} from './params';
@@ -29,12 +27,12 @@ const worldCopy: Record<World, string> = {
 
 type Props = {
   shown: Tutorial;
-  onShow: (tutorial: Tutorial) => void;
+  onShown: (tutorial: Tutorial) => void;
   track: Track;
-  onTrack: (track: Track) => void;
+  onTrackChosen: (track: Track) => void;
 };
 
-export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack}) => {
+export const Tutorials: FC<Props> = ({shown, onShown, track, onTrackChosen}) => {
   const {pace = 'eager', origin = 'hide', motion = 'animated', world = 'react', updateSearchParams} =
     useSearchParamsObject({pace: paceParam, origin: originParam, motion: motionParam, world: worldParam});
   useArrival();
@@ -80,13 +78,13 @@ export const Tutorials: FC<Props> = ({shown, onShow, track, onTrack}) => {
             {display: 'Drag resize', value: 'resize'}
           ]}
           chosen={shown}
-          onPick={onShow}/>
+          onPicked={onShown}/>
         {shown === 'sort' && <DialNote reads="table"/>}
         {shown === 'sort' && <TableControls pace={pace} origin={origin} motion={motion} world={world}
-          onPace={next => updateSearchParams({pace: next})}
-          onOrigin={next => updateSearchParams({origin: next})}
-          onMotion={next => updateSearchParams({motion: next})}/>}
-        {shown === 'sort' && <Recipe track={track} onTrack={onTrack}/>}
+          onPaceChosen={next => updateSearchParams({pace: next})}
+          onOriginChosen={next => updateSearchParams({origin: next})}
+          onMotionChosen={next => updateSearchParams({motion: next})}/>}
+        {shown === 'sort' && <Recipe track={track} onTrackChosen={onTrackChosen}/>}
         {shown === 'menu' && <MenuRecipe/>}
         {shown === 'resize' && <ResizeRecipe/>}
       </li>

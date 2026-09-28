@@ -5,10 +5,16 @@ import './DemosPage.css';
 import './Tutorials.css';
 import {Tabs} from '@components/Tabs';
 import {
-  EagerHideAnimatedList, EagerHideStaticList, EagerKeepAnimatedList, EagerKeepStaticList,
-  LazyHideAnimatedList, LazyHideStaticList, LazyKeepAnimatedList, LazyKeepStaticList
+  EagerHideAnimatedList,
+  EagerHideStaticList,
+  EagerKeepAnimatedList,
+  EagerKeepStaticList,
+  LazyHideAnimatedList,
+  LazyHideStaticList,
+  LazyKeepAnimatedList,
+  LazyKeepStaticList
 } from './DragAndDrop';
-import {DemoTopics, demoTopicParam} from './types';
+import {demoTopicParam, DemoTopics} from './types';
 import {NaturalZIndex, TopLayer} from './ZIndexDemo';
 import {Tutorials} from './Tables/Tutorials';
 import {ListTutorials} from './DragAndDrop/Tutorials';
@@ -71,8 +77,8 @@ export const DemosPage = () => {
         </>,
         [DemoTopics.tables]: <>
           <Aggregations pace={pace} origin={origin} motion={motion} world={world}/>
-          <Tutorials shown={tut} onShow={next => updateSearchParams({tut: next})}
-            track={track} onTrack={next => updateSearchParams({track: next})}/>
+          <Tutorials shown={tut} onShown={next => updateSearchParams({tut: next})}
+            track={track} onTrackChosen={next => updateSearchParams({track: next})}/>
         </>,
         [DemoTopics.dragAndDrop]: <>
           {(() => {

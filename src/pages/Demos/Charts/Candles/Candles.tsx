@@ -20,10 +20,10 @@ type Props = {
   id?: string;
   actions?: ReactNode;
   period: Period;
-  onPeriod: (period: Period) => void;
+  onPeriodChosen: (period: Period) => void;
 };
 
-export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod}) => {
+export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriodChosen}) => {
   const generated = useId();
   const id = given ?? `candles${generated}`;
   const history = usePeriodCandles(period);
@@ -50,7 +50,7 @@ export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod
             <button type="button" className="item sub-title"
               popoverTarget={`${id}-period`} popoverTargetAction="hide"
               aria-current={option === period ? 'true' : undefined}
-              onClick={() => onPeriod(option)}>{option}</button>
+              onClick={() => onPeriodChosen(option)}>{option}</button>
           </li>
         )}
       </menu>

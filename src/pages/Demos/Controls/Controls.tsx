@@ -36,12 +36,12 @@ export type Dials = {
 };
 
 export type ControlsProps = Dials & {
-  onPace: (pace: Pace) => void;
-  onOrigin: (origin: Origin) => void;
-  onMotion: (motion: Motion) => void;
+  onPaceChosen: (pace: Pace) => void;
+  onOriginChosen: (origin: Origin) => void;
+  onMotionChosen: (motion: Motion) => void;
 };
 
-export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({copy, pace, origin, motion, onPace, onOrigin, onMotion, children}) => {
+export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({copy, pace, origin, motion, onPaceChosen, onOriginChosen, onMotionChosen, children}) => {
   const heading = `${copy.kind}-controls-heading`;
   return <Disclosure label="settings" className="demo-settings" startsOpen={roomToStandOpen}
     prompt={<>settings{' '}<code className="readout caption">{copy.readout(pace, origin, motion)}</code></>}>
@@ -57,7 +57,7 @@ export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({c
               {display: 'Lazy', value: 'lazy'}
             ]}
             chosen={pace}
-            onChosen={onPace}/>
+            onChosen={onPaceChosen}/>
           <p className="reading paragraph">{copy.pace[pace]}</p>
         </li>
         <li className="control">
@@ -69,7 +69,7 @@ export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({c
               {display: 'Hide', value: 'hide'}
             ]}
             chosen={origin}
-            onChosen={onOrigin}/>
+            onChosen={onOriginChosen}/>
           <p className="reading paragraph">{copy.origin[origin]}</p>
         </li>
         <li className="control">
@@ -81,7 +81,7 @@ export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({c
               {display: 'Static', value: 'static'}
             ]}
             chosen={motion}
-            onChosen={onMotion}/>
+            onChosen={onMotionChosen}/>
           <p className="reading paragraph">{copy.motion[motion]}</p>
         </li>
       </ul>

@@ -7,10 +7,10 @@ import {copyingAt, userAt} from '../../mode';
 type Props = {
   user: User;
   name: string;
-  onRemove: () => void;
+  onRemoved: () => void;
 };
 
-export const UserMenu: FC<Props> = ({user, name, onRemove}) => {
+export const UserMenu: FC<Props> = ({user, name, onRemoved}) => {
   const id = `menu-${user.id}`;
   const dismissed = (): void => {
     maybe(document.getElementById(id)).map(menu => {
@@ -36,7 +36,7 @@ export const UserMenu: FC<Props> = ({user, name, onRemove}) => {
       <li className="entry">
         <button type="button" className="item sub-title"
           popoverTarget={id} popoverTargetAction="hide"
-          onClick={onRemove}>Remove</button>
+          onClick={onRemoved}>Remove</button>
       </li>
       <li className="entry">
         <Link to={copyingAt(user.id)}

@@ -3,13 +3,13 @@ import Handle from '@components/grip.svg';
 
 type Props = {
   onPressed: () => void;
-  onLetGo: () => void;
+  onReleased: () => void;
 };
 
-export const Grip: FC<Props> = ({onPressed, onLetGo}) =>
+export const Grip: FC<Props> = ({onPressed, onReleased}) =>
   <button type="button" className="chart-grip" aria-label="move chart" tabIndex={-1}
     onPointerDown={onPressed}
-    onPointerUp={onLetGo}
-    onPointerCancel={onLetGo}>
+    onPointerUp={onReleased}
+    onPointerCancel={onReleased}>
     <Handle/>
   </button>;

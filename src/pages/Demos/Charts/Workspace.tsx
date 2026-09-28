@@ -1,5 +1,5 @@
 import {FC, useEffect, useState} from 'react';
-import {Link, generatePath} from 'react-router';
+import {generatePath, Link} from 'react-router';
 import {Maybe, nothing, some} from '@ryandur/sand';
 import {Paths} from '@pages/Paths';
 import {ChartKind, matchChartKind} from './kinds';
@@ -90,7 +90,7 @@ export const Workspace: FC<Props> = ({product}) => {
           </>}
     </header>
     <ol className="chart-list" aria-label="charts">{seats.map(({kind, period}, at) => {
-      const actions = plural ? <Dismissal onRemove={() => removed(at)}/> : undefined;
+      const actions = plural ? <Dismissal onRemoved={() => removed(at)}/> : undefined;
       return <li key={kind}
         className={dress(at)}
         onAnimationEnd={settled}
@@ -102,12 +102,12 @@ export const Workspace: FC<Props> = ({product}) => {
         <Link id={doorwayId(kind)} className="doorway" to={doorway(kind)} onKeyDown={keys(at)}>
           <span className="off-screen">{`${chartNames[kind]} tutorial`}</span>
         </Link>
-        {plural && <Grip onPressed={() => arm(at)} onLetGo={disarm}/>}
+        {plural && <Grip onPressed={() => arm(at)} onReleased={disarm}/>}
         {matchChartKind(kind, {
           price: () => <PriceChart id={`chart-${kind}`} trades={trades} actions={actions}
-            period={period} onPeriod={chosen => choosePeriod('price', chosen)}/>,
+            period={period} onPeriodChosen={chosen => choosePeriod('price', chosen)}/>,
           candles: () => <Candles id={`chart-${kind}`} trades={trades} actions={actions}
-            period={period} onPeriod={chosen => choosePeriod('candles', chosen)}/>,
+            period={period} onPeriodChosen={chosen => choosePeriod('candles', chosen)}/>,
           pressure: () => <Pressure trades={trades} actions={actions}/>,
           pie: () => <Pie trades={trades} actions={actions}/>
         }).orNull()}

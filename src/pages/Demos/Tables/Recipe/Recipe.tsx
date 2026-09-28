@@ -14,10 +14,10 @@ export {trackParam} from './steps';
 
 type Props = {
   track: Track;
-  onTrack: (track: Track) => void;
+  onTrackChosen: (track: Track) => void;
 };
 
-export const Recipe: FC<Props> = ({track, onTrack}) => {
+export const Recipe: FC<Props> = ({track, onTrackChosen}) => {
   const {pace = 'eager', origin = 'hide', motion = 'animated', world = 'react'} =
     useSearchParamsObject({pace: paceParam, origin: originParam, motion: motionParam, world: worldParam});
   const Chosen = pace === 'eager' ? EagerRecipe : LazyRecipe;
@@ -29,7 +29,7 @@ export const Recipe: FC<Props> = ({track, onTrack}) => {
         {display: 'By keyboard', value: 'keyboard'}
       ]}
       chosen={track}
-      onPick={onTrack}/>
+      onPicked={onTrackChosen}/>
     <Stories><Chosen track={track} world={world} origin={origin} motion={motion}/></Stories>
   </section>;
 };

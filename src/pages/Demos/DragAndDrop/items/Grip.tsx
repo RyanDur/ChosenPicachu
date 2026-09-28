@@ -9,17 +9,17 @@ type Props = {
   item: string;
   order: readonly string[];
   onPressed: () => void;
-  onLetGo: () => void;
+  onReleased: () => void;
   onArranged: (after: string[], walker: string, toward: 1 | -1) => void;
 };
 
-export const Grip: FC<Props> = ({item, order, onPressed, onLetGo, onArranged}) =>
+export const Grip: FC<Props> = ({item, order, onPressed, onReleased, onArranged}) =>
   <button type="button"
     className="grip reachable"
     aria-label={`grip for ${item}`}
     onPointerDown={onPressed}
-    onPointerUp={onLetGo}
-    onPointerCancel={onLetGo}
+    onPointerUp={onReleased}
+    onPointerCancel={onReleased}
     onKeyDown={event => maybe(steps[event.key]).map(toward => {
       event.preventDefault();
       const lane = event.currentTarget.closest('li');

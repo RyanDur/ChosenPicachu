@@ -11,10 +11,10 @@ type Props<T extends string> = {
   className?: string;
   options: readonly Option<T>[];
   chosen: T;
-  onPick: (value: T) => void;
+  onPicked: (value: T) => void;
 };
 
-export const Picks = <T extends string>({label, className, options, chosen, onPick}: Props<T>) =>
+export const Picks = <T extends string>({label, className, options, chosen, onPicked}: Props<T>) =>
   <fieldset className={classNames('picks', className)}>
     <legend className="off-screen">{label}</legend>
     {options.map(({display, value}) =>
@@ -25,6 +25,6 @@ export const Picks = <T extends string>({label, className, options, chosen, onPi
           name={label}
           value={value}
           checked={chosen === value}
-          onChange={() => onPick(value)}/>
+          onChange={() => onPicked(value)}/>
       </label>)}
   </fieldset>;

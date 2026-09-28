@@ -43,10 +43,10 @@ type Props = Pick<LiveTradesState, 'trades'> & {
   id?: string;
   actions?: ReactNode;
   period: Period;
-  onPeriod: (period: Period) => void;
+  onPeriodChosen: (period: Period) => void;
 };
 
-export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPeriod}) => {
+export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPeriodChosen}) => {
   const generated = useId();
   const id = given ?? `price${generated}`;
   const history = usePeriodCandles(period);
@@ -71,7 +71,7 @@ export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPer
             <button type="button" className="item sub-title"
               popoverTarget={`${id}-period`} popoverTargetAction="hide"
               aria-current={option === period ? 'true' : undefined}
-              onClick={() => onPeriod(option)}>{option}</button>
+              onClick={() => onPeriodChosen(option)}>{option}</button>
           </li>
         )}
       </menu>

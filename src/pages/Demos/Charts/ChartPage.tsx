@@ -26,12 +26,12 @@ type Feature = {
 const LivePrice: FC = () => {
   const {periodOf, choosePeriod} = useDesk();
   return <PriceChart trades={useDemosSelector(selectLiveTrades)}
-    period={periodOf('price')} onPeriod={period => choosePeriod('price', period)}/>;
+    period={periodOf('price')} onPeriodChosen={period => choosePeriod('price', period)}/>;
 };
 const LiveCandles: FC = () => {
   const {periodOf, choosePeriod} = useDesk();
   return <Candles trades={useDemosSelector(selectLiveTrades)}
-    period={periodOf('candles')} onPeriod={period => choosePeriod('candles', period)}/>;
+    period={periodOf('candles')} onPeriodChosen={period => choosePeriod('candles', period)}/>;
 };
 const LivePressure: FC = () => <Pressure trades={useDemosSelector(selectLiveTrades)}/>;
 const LivePie: FC = () => <Pie trades={useDemosSelector(selectLiveTrades)}/>;

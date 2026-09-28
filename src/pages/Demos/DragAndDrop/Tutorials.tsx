@@ -63,9 +63,9 @@ export const ListTutorials: FC = () => {
         <h3 className="phase-title">Layer on functionality, in the order it was asked for</h3>
         <DialNote reads="list"/>
         <ListControls pace={pace} origin={origin} motion={motion}
-          onPace={next => updateSearchParams({pace: next})}
-          onOrigin={next => updateSearchParams({origin: next})}
-          onMotion={next => updateSearchParams({motion: next})}/>
+          onPaceChosen={next => updateSearchParams({pace: next})}
+          onOriginChosen={next => updateSearchParams({origin: next})}
+          onMotionChosen={next => updateSearchParams({motion: next})}/>
         <NativeRecipe/>
       </li>
     </ol>

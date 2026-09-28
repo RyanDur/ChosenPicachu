@@ -8,7 +8,7 @@ import './TableFrame.css';
 
 type Props = Dials & {
   veiled?: boolean;
-  onStand?: () => void;
+  onStood?: () => void;
 };
 
 export const warmed = (): void => {
@@ -24,7 +24,7 @@ const measured = (frame: HTMLIFrameElement, grown: (height: number) => void): vo
   });
 };
 
-export const TableFrame: FC<Props> = ({pace, origin, motion, veiled = false, onStand = () => undefined}) => {
+export const TableFrame: FC<Props> = ({pace, origin, motion, veiled = false, onStood = () => undefined}) => {
   const {tradeFeed, tradeHistory, tradeProduct} = useEnv();
   const {raise} = useBanners();
   const [document, setDocument] = useState<string>();
@@ -59,7 +59,7 @@ export const TableFrame: FC<Props> = ({pace, origin, motion, veiled = false, onS
       onLoad={event => {
         setFrame(event.currentTarget);
         measured(event.currentTarget, setHeight);
-        onStand();
+        onStood();
       }}
       srcDoc={document}/>
     : null;

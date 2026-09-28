@@ -4,7 +4,16 @@ import {ResizeHandle} from '@components/DragSortableTable/ResizeHandle';
 import {SortMenu} from '@components/DragSortableTable/SortMenu';
 import {age, formatAge, FriendsList} from '@components/Users';
 import {UserMenu} from './UserMenu';
-import {Body, Cell, Column, DraggableColumn, DragSortableTable, Headers, Row, RowHeader} from '@components/DragSortableTable';
+import {
+  Body,
+  Cell,
+  Column,
+  DraggableColumn,
+  DragSortableTable,
+  Headers,
+  Row,
+  RowHeader
+} from '@components/DragSortableTable';
 import {useUsersDispatch, useUsersSelector} from '../Provider';
 import {friendsChanged, selectColumns, selectUsers, userRemoved} from '../store';
 import {seated, worksFromHome} from '../columns';
@@ -42,7 +51,7 @@ export const UsersTable: FC = () => {
           </Cell>
           <Cell column="works-from-home" row={user.id} className="cell last-column">
             {worksFromHome(user)}
-            <UserMenu user={user} name={name} onRemove={() => dispatch(userRemoved(user))}/>
+            <UserMenu user={user} name={name} onRemoved={() => dispatch(userRemoved(user))}/>
           </Cell>
         </Row>;
       })}

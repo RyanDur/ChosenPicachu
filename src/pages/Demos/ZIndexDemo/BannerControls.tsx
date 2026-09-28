@@ -40,13 +40,13 @@ export type BannerControlsProps = {
   align: Align;
   enter: Entrance;
   stack: Stack;
-  onSide: (side: Side) => void;
-  onAlign: (align: Align) => void;
-  onEnter: (enter: Entrance) => void;
-  onStack: (stack: Stack) => void;
+  onSideChosen: (side: Side) => void;
+  onAlignChosen: (align: Align) => void;
+  onEnterChosen: (enter: Entrance) => void;
+  onStackChosen: (stack: Stack) => void;
 };
 
-export const BannerControls: FC<BannerControlsProps> = ({side, align, enter, stack, onSide, onAlign, onEnter, onStack}) =>
+export const BannerControls: FC<BannerControlsProps> = ({side, align, enter, stack, onSideChosen, onAlignChosen, onEnterChosen, onStackChosen}) =>
   <section aria-labelledby="banner-controls-heading" className="controls">
     <h3 id="banner-controls-heading" className="off-screen">banner controls</h3>
     <ul className="dials">
@@ -60,7 +60,7 @@ export const BannerControls: FC<BannerControlsProps> = ({side, align, enter, sta
             {display: 'Bottom', value: 'bottom'}
           ]}
           chosen={side}
-          onChosen={onSide}/>
+          onChosen={onSideChosen}/>
         <p className="reading paragraph">{copy.side[side]}</p>
       </li>
       <li className="control">
@@ -73,7 +73,7 @@ export const BannerControls: FC<BannerControlsProps> = ({side, align, enter, sta
             {display: 'Right', value: 'right'}
           ]}
           chosen={align}
-          onChosen={onAlign}/>
+          onChosen={onAlignChosen}/>
         <p className="reading paragraph">{copy.align[align]}</p>
       </li>
       <li className="control">
@@ -87,7 +87,7 @@ export const BannerControls: FC<BannerControlsProps> = ({side, align, enter, sta
             {display: 'Right', value: 'right'}
           ]}
           chosen={enter}
-          onChosen={onEnter}/>
+          onChosen={onEnterChosen}/>
         <p className="reading paragraph">{copy.enter[enter]}</p>
       </li>
       <li className="control">
@@ -101,7 +101,7 @@ export const BannerControls: FC<BannerControlsProps> = ({side, align, enter, sta
             {display: 'Right', value: 'right'}
           ]}
           chosen={stack}
-          onChosen={onStack}/>
+          onChosen={onStackChosen}/>
         <p className="reading paragraph">{copy.stack[stack]}</p>
       </li>
     </ul>
