@@ -274,7 +274,7 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
           always agree.</p>
         <Snippet label="TS" lines={[
           ...unit(accordionsSource, 'const [checked, updateChecked]'), gap,
-          ...unit(accordionsSource, 'const openedAlone'), gap,
+          ...unit(accordionsSource, 'const toggledAlone'), gap,
           ...span(accordionsSource, 'type="checkbox"\n                  aria-label', 'className="off-screen"/>')
         ]}/>
         <WhatEachPromises/>

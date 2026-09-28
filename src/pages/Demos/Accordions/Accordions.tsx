@@ -7,7 +7,7 @@ import './Accordions.css';
 
 const toggleWord = (open: boolean) => open ? 'Close' : 'Open';
 
-const openedAlone = (key: string) => (open?: string) => open === key ? undefined : key;
+const toggledAlone = (key: string) => (open?: string) => open === key ? undefined : key;
 
 const toggledIn = (key: string) => (opened: readonly string[]) =>
   opened.includes(key) ? opened.filter(part => part !== key) : [...opened, key];
@@ -119,7 +119,7 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
                   type="checkbox"
                   aria-label={`${toggleWord(key === checked)} ${key}`}
                   checked={key === checked}
-                  onChange={() => updateChecked(openedAlone(key))}
+                  onChange={() => updateChecked(toggledAlone(key))}
                   className="off-screen"/>
               </label>
             </header>
