@@ -1,6 +1,7 @@
 import {FC, ReactNode, useState} from 'react';
 import {classNames} from '@components/class-names';
 import {PillGlider} from '@components/PillGlider';
+import {Motion} from '../Controls';
 import {PropsWithClassName} from '../types';
 import './Accordions.css';
 
@@ -89,7 +90,7 @@ export const ExclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
   content
 }) => {
   const [checked, updateChecked] = useState<string>();
-  const [tab, updateTab] = useState<'animated' | 'static'>('animated');
+  const [tab, updateTab] = useState<Motion>('animated');
 
   return <article className={classNames('exclusive-checkbox-toggle-accordion', 'toggle-accordion', className)}>
     <header className="react-header">
@@ -130,7 +131,7 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
   content
 }) => {
   const [checked, updateChecked] = useState<string>();
-  const [tab, updateTab] = useState<'animated' | 'static'>('animated');
+  const [tab, updateTab] = useState<Motion>('animated');
   return <article className={classNames('exclusive-radio-toggle-accordion', 'toggle-accordion', className)}>
     <header className="react-header">
       <h4 className="sub-title bold">Exclusive accordion using radio group</h4>
@@ -173,7 +174,7 @@ export const InclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
   content
 }) => {
   const [opened, updateOpened] = useState<readonly string[]>([]);
-  const [tab, updateTab] = useState<'animated' | 'static'>('animated');
+  const [tab, updateTab] = useState<Motion>('animated');
   const isOpen = (key: string) => opened.includes(key);
 
   return <article className={classNames('inclusive-checkbox-toggle-accordion', 'toggle-accordion', className)}>
