@@ -122,7 +122,7 @@ export const InclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
   content,
   motion
 }) => <article className={classNames('inclusive-checkbox-toggle-accordion', 'toggle-accordion', motion, className)}>
-  <header className="build-header">
+  <header>
     <h4 className="sub-title bold">Inclusive accordion using checkboxes</h4>
   </header>
 
@@ -151,7 +151,7 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
   content,
   motion
 }) => <article className={classNames('exclusive-radio-toggle-accordion', 'toggle-accordion', motion, className)}>
-  <header className="build-header">
+  <header>
     <h4 className="sub-title bold">Exclusive accordion using radio group</h4>
   </header>
 
