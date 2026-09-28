@@ -49,9 +49,9 @@ const holdTheSettleAtItsStart = (held: Locator): Promise<void> => held.evaluate(
 const settling = (locator: Locator): Promise<boolean> =>
   locator.evaluate(element => element.getAnimations({subtree: false}).some(({playState}) => playState === 'paused'));
 
-const dropAt = async (page: Page, {pressed, held}: {pressed: Locator; held: Locator}, letGo: Point): Promise<Point> => {
+const dropAt = async (page: Page, {pressed, held, watched = held}: {pressed: Locator; held: Locator; watched?: Locator}, letGo: Point): Promise<Point> => {
+  await holdTheSettleAtItsStart(watched);
   await carry(page, await boxOf(pressed), letGo);
-  await holdTheSettleAtItsStart(held);
   const carriedTo = centreOf(await boxOf(held));
   await page.mouse.up();
   return carriedTo;
@@ -63,12 +63,12 @@ const walk = async (page: Page, {focused, held}: {focused: Locator; held: Locato
   await page.keyboard.press(key);
 };
 
-const distanceFrom = (held: Locator, carriedTo: Point) => async (): Promise<number> => {
+const distanceFrom = (held: Locator, start: Point) => async (): Promise<number> => {
   if (!await settling(held)) {
     return Infinity;
   }
   const {x, y} = centreOf(await boxOf(held));
-  return Math.hypot(x - carriedTo.x, y - carriedTo.y);
+  return Math.hypot(x - start.x, y - start.y);
 };
 
 export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
@@ -81,16 +81,16 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
     centreOfRow: async (name: RegExp): Promise<Point> => centreOf(await boxOf(table.getByRole('row', {name}))),
     centreOfRowHeader: async (name: RegExp): Promise<Point> => centreOf(await boxOf(rowHeader(name))),
     centreOfRowGrip: async (row: number): Promise<Point> => centreOf(await boxOf(rowGrip(row))),
-    dropColumnAt: (name: string, letGo: Point): Promise<Point> =>
-      dropAt(page, {pressed: columnHeader(name), held: columnHeader(name)}, letGo),
-    dropRowAt: ({row, name}: {row: number; name: RegExp}, letGo: Point): Promise<Point> =>
-      dropAt(page, {pressed: rowGrip(row), held: rowHeader(name)}, letGo),
-    walkColumn: (name: string, key: string): Promise<void> =>
-      walk(page, {focused: columnHeader(name), held: columnHeader(name)}, key),
-    walkRow: ({row, name}: {row: number; name: RegExp}, key: string): Promise<void> =>
-      walk(page, {focused: rowGrip(row), held: rowHeader(name)}, key),
-    columnSettlesFrom: (name: string, carriedTo: Point) => distanceFrom(columnHeader(name), carriedTo),
-    rowSettlesFrom: (name: RegExp, carriedTo: Point) => distanceFrom(rowHeader(name), carriedTo),
+    dropColumnAt: (name: string, letGo: Point, {watching = name}: {watching?: string} = {}): Promise<Point> =>
+      dropAt(page, {pressed: columnHeader(name), held: columnHeader(name), watched: columnHeader(watching)}, letGo),
+    dropRowAt: ({row, name}: {row: number; name: RegExp}, letGo: Point, {watching = name}: {watching?: RegExp} = {}): Promise<Point> =>
+      dropAt(page, {pressed: rowGrip(row), held: rowHeader(name), watched: rowHeader(watching)}, letGo),
+    walkColumn: (name: string, key: string, {watching = name}: {watching?: string} = {}): Promise<void> =>
+      walk(page, {focused: columnHeader(name), held: columnHeader(watching)}, key),
+    walkRow: ({row, name}: {row: number; name: RegExp}, key: string, {watching = name}: {watching?: RegExp} = {}): Promise<void> =>
+      walk(page, {focused: rowGrip(row), held: rowHeader(watching)}, key),
+    columnMovesFrom: (name: string, start: Point) => distanceFrom(columnHeader(name), start),
+    rowMovesFrom: (name: RegExp, start: Point) => distanceFrom(rowHeader(name), start),
     sortToggle: (name: string): Locator => table.getByRole('button', {name: `sort ${name}`}),
     sortMenu: (name: string): Locator => table.getByLabel(`sort ${name} by`),
     columnWidth: async (name: string): Promise<number> => (await boxOf(columnHeader(name))).width,

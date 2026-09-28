@@ -917,7 +917,6 @@ describe('animated moves', () => {
     });
     columnCells('buys').forEach(cell => {
       expect(cell).toHaveClass('shoved-start');
-      expect(cell).toHaveStyle({'--shoved-by': '100px'});
     });
   });
 
@@ -1018,7 +1017,7 @@ describe('animated moves', () => {
     });
   });
 
-  test('the row a keyboard nudge passed is shoved up by its height', async () => {
+  test('the row a keyboard nudge passed is shoved up', async () => {
     seat(EagerTable, 'keep animated');
     settledRows();
 
@@ -1027,11 +1026,10 @@ describe('animated moves', () => {
 
     [...rowOf('last 5 minutes').cells].forEach(cell => {
       expect(cell).toHaveClass('shoved-up');
-      expect(cell).toHaveStyle({'--shoved-by': '40px'});
     });
   });
 
-  test('a strike shoves the neighbour by the carried width, toward the side it gave up', () => {
+  test('a strike shoves the neighbour toward the side it gave up', () => {
     seat(EagerTable, 'hide animated');
 
     liftColumn('trades');
@@ -1041,7 +1039,6 @@ describe('animated moves', () => {
     expect(header('trades')).not.toHaveClass('settling');
     columnCells('buys').forEach(cell => {
       expect(cell).toHaveClass('shoved-start');
-      expect(cell).toHaveStyle({'--shoved-by': '100px'});
     });
   });
 
@@ -1124,7 +1121,7 @@ describe('animated moves', () => {
     expect(sourceTable()).not.toHaveClass('animated');
   });
 
-  test('a carried row shoves the row it passes up by its height', () => {
+  test('a carried row shoves the row it passes up', () => {
     seat(EagerTable, 'keep animated');
 
     liftRow('this minute');
@@ -1133,7 +1130,6 @@ describe('animated moves', () => {
     expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
     [...rowOf('last 5 minutes').cells].forEach(cell => {
       expect(cell).toHaveClass('shoved-up');
-      expect(cell).toHaveStyle({'--shoved-by': '40px'});
     });
     dropRow();
   });
