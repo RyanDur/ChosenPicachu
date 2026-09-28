@@ -36,7 +36,7 @@ export type Contents = {
   checkbox: Fold[];
   radio: Fold[];
   inclusiveDetails: Fold[];
-  details: Fold[];
+  exclusiveDetails: Fold[];
   inclusiveCheckboxWithState: Fold[];
   checkboxWithState: Fold[];
   radioWithState: Fold[];
@@ -186,7 +186,7 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
     <h3 id="platform-way-heading" className="title bold">What the platform gives now</h3>
     <ul className="accordions">
       <li className="build"><InclusiveToggleAccordion className={exhibit} content={contents.inclusiveDetails}/></li>
-      <li className="build"><ExclusiveToggleAccordion className={exhibit} content={contents.details}/></li>
+      <li className="build"><ExclusiveToggleAccordion className={exhibit} content={contents.exclusiveDetails}/></li>
     </ul>
     <ol className={runs}>
       <li className="run">
