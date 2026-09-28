@@ -251,19 +251,19 @@ for (const {build, control} of [
 
 test('a link to the exclusive type opens the tab on it, and it stays after a reload', async ({page}) => {
   await page.goto('demos/?tab=accordions&type=exclusive');
-  const types = page.getByRole('navigation', {name: 'fold type'});
-  await expect(types.getByRole('link', {name: 'Exclusive'})).toHaveAttribute('aria-current', 'page');
+  const exclusive = page.getByRole('group', {name: 'fold type'}).getByRole('radio', {name: 'Exclusive'});
+  await expect(exclusive).toBeChecked();
 
   await page.reload();
 
-  await expect(types.getByRole('link', {name: 'Exclusive'})).toHaveAttribute('aria-current', 'page');
+  await expect(exclusive).toBeChecked();
   await expect(page.getByRole('heading', {name: 'Accordion using a radio group'})).toBeVisible();
 });
 
 test('choosing a type shows that type\'s builds in every era', async ({page}) => {
   await page.goto('demos/?tab=accordions');
 
-  await page.getByRole('navigation', {name: 'fold type'}).getByRole('link', {name: 'Exclusive'}).click();
+  await page.getByRole('group', {name: 'fold type'}).getByText('Exclusive', {exact: true}).click();
 
   await expect(page).toHaveURL(/type=exclusive/);
   await expect(page.getByRole('heading', {level: 4})).toHaveText(['Accordion using a radio group', 'Exclusive accordion using details elements', 'Exclusive accordion using radio group']);

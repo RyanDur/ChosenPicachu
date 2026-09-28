@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Tabs} from '@components/Tabs';
+import {PillGlider} from '@components/PillGlider';
 import {
   ExclusiveAccordion,
   ExclusiveRadioToggleAccordion,
@@ -46,12 +46,12 @@ const exhibit = 'card rounded-corners lifted padded';
 const gap = plain(' ');
 const runs = 'runs card rounded-corners lifted padded';
 const inputOf: Record<FoldType, 'checkbox' | 'radio'> = {inclusive: 'checkbox', exclusive: 'radio'};
-const foldTypes = [{display: 'Inclusive', param: 'inclusive'}, {display: 'Exclusive', param: 'exclusive'}];
+const foldTypes = [{display: 'Inclusive', value: 'inclusive'}, {display: 'Exclusive', value: 'exclusive'}] as const;
 
-export const AccordionsExplained: FC<{contents: Contents; type: FoldType}> = ({contents, type}) => {
+export const AccordionsExplained: FC<{contents: Contents; type: FoldType; onType: (type: FoldType) => void}> = ({contents, type, onType}) => {
   const input = inputOf[type];
   return <>
-    <Tabs label="fold type" param="type" defaultTab="inclusive" values={foldTypes}/>
+    <PillGlider label="fold type" name="fold-type" options={foldTypes} chosen={type} onChosen={onType}/>
     <section aria-labelledby="old-way-heading" className="accordion-part">
       <h3 id="old-way-heading" className="title bold">How we used to build a fold</h3>
       <ul className="accordions">

@@ -56,7 +56,7 @@ export const DemosPage = () => {
         [DemoTopics.accordions]:
               <>
                 <h2 className="title bold">Different styles of Accordions.</h2>
-                <AccordionsExplained contents={accordionContents} type={type}/>
+                <AccordionsExplained contents={accordionContents} type={type} onType={next => updateSearchParams({type: next})}/>
               </>,
         [DemoTopics.zIndex]: <>
           <h2 className="title bold">Z-Index Demo.</h2>

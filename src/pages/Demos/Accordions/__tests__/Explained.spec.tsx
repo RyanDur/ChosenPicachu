@@ -1,4 +1,5 @@
 import {render, screen, within} from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import {TestApp} from '@__test_support/TestApp';
 import {demosAt} from '@pages/Demos/__test_support';
 
@@ -18,13 +19,15 @@ describe('the accordions tab', () => {
     expect(within(tab).getAllByRole('heading', {level: 3}).map(part => part.textContent)).toEqual(parts);
   });
 
-  test('should open on the inclusive type, and offer both types in the address', async () => {
+  test('should open on the inclusive type, and write the type chosen into the address', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
+    const types = await screen.findByRole('group', {name: 'fold type'});
+    expect(within(types).getByRole('radio', {name: 'Inclusive'})).toBeChecked();
 
-    const types = await screen.findByRole('navigation', {name: 'fold type'});
+    await userEvent.click(within(types).getByRole('radio', {name: 'Exclusive'}));
 
-    expect(within(types).getByRole('link', {name: 'Inclusive', current: 'page'})).toBeInTheDocument();
-    expect(within(types).getByRole('link', {name: 'Exclusive'})).toHaveAttribute('href', expect.stringContaining('type=exclusive'));
+    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('type=exclusive');
+    expect(within(types).getByRole('radio', {name: 'Exclusive'})).toBeChecked();
   });
 
   test.each([
