@@ -198,9 +198,9 @@ describe('the fold motion', () => {
   };
 
   test.each([
-    {style: 'reveal', others: ['drawer', 'static'], carves: ['.info-toggle:not(:checked) ~ .info', '.reveal & .info'], omits: ['.drawer & .info']},
-    {style: 'drawer', others: ['reveal', 'static'], carves: ['.info-toggle:not(:checked) ~ .info', '.drawer & .info'], omits: ['.reveal & .info']},
-    {style: 'static', others: ['reveal', 'drawer'], carves: ['.info-toggle:not(:checked) ~ .info'], omits: ['.reveal & .info', '.drawer & .info']}
+    {style: 'reveal', others: ['drawer', 'static'], carves: ['.info-toggle:not(:checked) ~ .info { margin-top: 0; max-height: 0;', '.reveal & .info'], omits: ['.drawer & .info']},
+    {style: 'drawer', others: ['reveal', 'static'], carves: ['.info-toggle:not(:checked) ~ .info { margin-top: 0; max-height: 0;', '.drawer & .info'], omits: ['.reveal & .info']},
+    {style: 'static', others: ['reveal', 'drawer'], carves: ['.info-toggle:not(:checked) ~ .info { margin-top: 0; max-height: 0;'], omits: ['.reveal & .info', '.drawer & .info']}
   ] as const)('should tell, with $style chosen, only what that motion does under part one', async ({style, others, carves, omits}) => {
     render(<TestApp at={demosAt(`?tab=accordions&style=${style}`)}/>);
 
