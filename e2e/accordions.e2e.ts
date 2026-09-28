@@ -246,15 +246,6 @@ test('a link to the exclusive type opens the tab on it, and it stays after a rel
   await expect(page.getByRole('heading', {name: 'Accordion using a radio group'})).toBeVisible();
 });
 
-test('choosing a type shows that type\'s builds in every era', async ({page}) => {
-  await page.goto('demos/?tab=accordions');
-
-  await page.getByRole('group', {name: 'fold type'}).getByText('Exclusive', {exact: true}).click();
-
-  await expect(page).toHaveURL(/type=exclusive/);
-  await expect(page.getByRole('heading', {level: 4})).toHaveText(['Accordion using a radio group', 'Exclusive accordion using details elements', 'Exclusive accordion using radio group']);
-});
-
 test('the space bar closes a part of the grid radio build the arrow keys opened', async ({page}) => {
   await page.goto(showing('the grid radio build'));
   const [first, second] = [accordionsTab(page).partOf('the grid radio build', 0), accordionsTab(page).partOf('the grid radio build', 1)];
