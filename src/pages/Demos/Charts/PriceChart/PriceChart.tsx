@@ -1,8 +1,9 @@
 import {Explainer} from '@components/Explainer';
 import {FC, ReactNode, useId} from 'react';
-import {has, notEmpty} from '@ryandur/sand';
+import {Maybe, maybe, notEmpty} from '@ryandur/sand';
 import {Loading} from '@components/Loading';
 import {classNames} from '@components/class-names';
+import {Trade} from '../coinbase';
 import {LiveTradesState} from '../live-trades';
 import {cents, deltaLabel} from '../money';
 import {candlesOf, captionFor} from '../period-history';
@@ -25,15 +26,16 @@ type PriceView = {
   last: number;
 };
 
-const emptyView: PriceView = {series: [], high: 0, low: 0, first: 0, last: 0};
-
-const candlesView = (candles: readonly Candle[]): PriceView => ({
-  series: candles.map(candle => ({at: candle.openedAt, price: candle.close})),
-  high: Math.max(...candles.map(candle => candle.high)),
-  low: Math.min(...candles.map(candle => candle.low)),
-  first: candles[0]?.open ?? 0,
-  last: candles[candles.length - 1]?.close ?? 0
-});
+const viewOf = (candles: readonly Candle[], lastTrade?: Pick<Trade, 'price'>): Maybe<PriceView> => {
+  const [opening] = candles;
+  return maybe(opening).map(({open}) => ({
+    series: candles.map(candle => ({at: candle.openedAt, price: candle.close})),
+    high: Math.max(...candles.map(candle => candle.high)),
+    low: Math.min(...candles.map(candle => candle.low)),
+    first: open,
+    last: maybe(lastTrade).map(({price}) => price).orElse(candles[candles.length - 1].close)
+  }));
+};
 
 const trendOf = ({first, last}: PriceView): 'rising' | 'falling' => last >= first ? 'rising' : 'falling';
 
@@ -49,15 +51,10 @@ export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPer
   const id = given ?? `price${generated}`;
   const history = usePeriodCandles(period);
   const candles = mergeLive(candlesOf(history), bucketTrades(trades, bucketMs[period]), periodCap[period]);
-  const showing = candles.length > 0;
-  const windowed = candlesView(candles);
-  const lastTrade = trades[trades.length - 1];
-  const view = showing
-    ? {...windowed, last: has(lastTrade) ? lastTrade.price : windowed.last}
-    : emptyView;
-  const points = sparklinePoints(view.series, CHART_WIDTH, CHART_HEIGHT, 2 * bucketMs[period]);
+  const view = viewOf(candles, trades[trades.length - 1]);
+  const points = sparklinePoints(view.map(({series}) => series).orElse([]), CHART_WIDTH, CHART_HEIGHT, 2 * bucketMs[period]);
   const line = points.map(point => `${point.x},${point.y}`).join(' ');
-  const trend = showing && trendOf(view);
+  const trend = view.map(trendOf).orElse(undefined);
   return <section aria-labelledby={`${id}-heading`}
     className={classNames('price-chart chart card rounded-corners lifted padded', trend)}>
     <h3 id={`${id}-heading`} className="off-screen">live trades</h3>
@@ -80,7 +77,7 @@ export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPer
       </menu>
     </header>
     <figure className="chart-stage">
-      <Axes range={rangeOf(view.series.map(timed => timed.at), view.high, view.low)}
+      <Axes range={view.mBind(({series, high, low}) => rangeOf(series.map(timed => timed.at), high, low))}
         pattern={timePattern[period]} tickEvery={tickEveryMs[period]}
         headroomMs={2 * bucketMs[period]}>
         <svg className="sparkline" aria-hidden="true"
@@ -96,10 +93,10 @@ export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPer
             r={3}/>}
         </svg>
       </Axes>
-      <p className="headline">{showing && <>
-        <data className="price" value={view.last}>{cents.format(view.last)}</data>
-        <data className="delta" value={view.last - view.first}>{deltaLabel(view.first, view.last)}</data>
-      </>}</p>
+      <p className="headline">{view.map(({first, last}) => <>
+        <data className="price" value={last}>{cents.format(last)}</data>
+        <data className="delta" value={last - first}>{deltaLabel(first, last)}</data>
+      </>).orNull()}</p>
       {history.state === 'loading' && <Loading className="chart-loading"/>}
       <figcaption className="chart-caption caption">{captionFor(history, candles.length, period)}</figcaption>
     </figure>
