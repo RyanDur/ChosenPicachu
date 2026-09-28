@@ -66,18 +66,11 @@ for (const build of ['the inclusive details build', 'the details build'] as cons
     expect([...opened, ...closed].map(frame => frame.textBottomGap).filter(gap => gap > layoutRounding)).toEqual([]);
   });
 
-  test(`with Static chosen, a fold in ${build} opens fully in one frame`, async ({page}) => {
-    await page.goto(showing(build, 'static'));
-    const part = accordionsTab(page).firstPartOf(build);
-    const closedHeight = await heightByTheNextFrame(part.fold);
-    const firstMoved = firstHeightAfter(part.fold, closedHeight);
-
-    await part.open();
-
-    expect(await firstMoved).toBeGreaterThan(closedHeight);
-    expect(await firstMoved).toBe(await heightOnceSettled(part.fold));
-  });
 }
+
+const heightMoved = {open: 1, closed: -1};
+
+const heightWent = (frames: Frame[]): number => Math.sign((frames.at(-1)?.height ?? 0) - (frames.at(0)?.height ?? 0));
 
 const slidDown = (frames: Frame[]): number[] => frames.map(frame => frame.textAboveTheClip).filter(above => above > layoutRounding);
 
@@ -87,6 +80,7 @@ for (const build of ['the checkbox build', 'the radio build', 'the grid checkbox
       await page.goto(showing(build, 'reveal'));
       const frames = await framesSliding[direction](accordionsTab(page).firstPartOf(build));
 
+      expect(heightWent(frames)).toBe(heightMoved[direction]);
       expect(frames.map(frame => frame.textBottomGap).filter(gap => gap > layoutRounding)).toEqual([]);
       expect(slidDown(frames)).toEqual([]);
     });
@@ -95,6 +89,7 @@ for (const build of ['the checkbox build', 'the radio build', 'the grid checkbox
       await page.goto(showing(build, 'drawer'));
       const frames = await framesSliding[direction](accordionsTab(page).firstPartOf(build));
 
+      expect(heightWent(frames)).toBe(heightMoved[direction]);
       expect(frames.map(frame => frame.textBottomGap).filter(gap => gap > layoutRounding)).toEqual([]);
       expect(slidDown(frames)).not.toEqual([]);
     });
@@ -292,20 +287,6 @@ test('the space bar closes a part of the grid radio build the arrow keys opened'
   await expect.poll(first.isOpen).toBe(false);
 });
 
-for (const build of ['the grid checkbox build', 'the grid radio build'] as const) {
-  test(`with Static chosen, a fold in ${build} opens fully in one frame`, async ({page}) => {
-    await page.goto(showing(build, 'static'));
-    const part = accordionsTab(page).firstPartOf(build);
-    const closed = await heightByTheNextFrame(part.fold);
-    const firstMoved = firstHeightAfter(part.fold, closed);
-
-    await part.open();
-
-    expect(await firstMoved).toBeGreaterThan(closed);
-    expect(await firstMoved).toBe(await heightOnceSettled(part.fold));
-  });
-}
-
 for (const build of ['the checkbox build', 'the radio build', 'the inclusive details build', 'the details build', 'the grid checkbox build', 'the grid radio build'] as const) {
   test(`a reader who asks for less motion gets ${build} open at once under the drawer`, async ({page}) => {
     await page.emulateMedia({reducedMotion: 'reduce'});
@@ -321,7 +302,7 @@ for (const build of ['the checkbox build', 'the radio build', 'the inclusive det
   });
 }
 
-for (const build of ['the checkbox build', 'the radio build'] as const) {
+for (const build of builds) {
   test(`with Static chosen, a fold in ${build} opens fully in one frame`, async ({page}) => {
     await page.goto(showing(build, 'static'));
     const part = accordionsTab(page).firstPartOf(build);
