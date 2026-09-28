@@ -2,7 +2,7 @@ import {TestApp} from '@__test_support/TestApp';
 import {render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {site} from '@pages/__test_support';
-import {githubFindingNoThread, githubHoldingItsAnswer} from '../__test_support/github';
+import {githubFindingNoThread, githubHoldingItsAnswer, githubLosingThePageThread} from '../__test_support/github';
 
 describe('Feedback in a browser without invoker commands', () => {
   beforeEach(() => {
@@ -193,5 +193,19 @@ describe('Feedback about the page', () => {
     await userEvent.click(await screen.findByRole('button', {name: 'Feedback'}));
 
     expect(await within(screen.getByRole('dialog', {name: 'Feedback'})).findByText('About: Demos Tables')).toBeInTheDocument();
+  });
+});
+
+describe('Feedback when GitHub refuses', () => {
+  test('should say GitHub has nothing at that address when the page’s thread is gone, and keep the words', async () => {
+    githubLosingThePageThread();
+    render(<TestApp at="/"/>);
+    await site.pageTitled();
+    await userEvent.click(screen.getByRole('button', {name: 'Feedback'}));
+
+    await userEvent.type(screen.getByRole('textbox', {name: 'What did you find?'}), 'The sort menu hides.{Enter}');
+
+    expect(await within(screen.getByRole('dialog', {name: 'Feedback'})).findByText('GitHub has nothing at that address. Your words are still here.')).toBeInTheDocument();
+    expect(screen.getByRole('textbox', {name: 'What did you find?'})).toHaveValue('The sort menu hides.');
   });
 });
