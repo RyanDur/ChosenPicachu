@@ -14,5 +14,5 @@ export {fingerTap, fingertipMiss} from './finger';
 export {sortableList} from './lists';
 export {headingsTakingMoreLinesThanWords} from './headings';
 export {codedStepLayouts, misplacedPictures} from './recipes';
-export {firstHeightAfter, framesWhileMoving, heightByTheNextFrame, heightOnceSettled} from './motion';
-export {accordionsTab, builds, textOf, type Build, showing} from './accordions';
+export {firstHeightAfter, framesWhileMoving, heightByTheNextFrame, heightOnceSettled, type Frame} from './motion';
+export {accordionsTab, builds, textOf, type Build, showing, type Part} from './accordions';

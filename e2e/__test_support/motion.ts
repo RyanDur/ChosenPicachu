@@ -22,7 +22,7 @@ export const firstHeightAfter = (fold: Locator, closed: number): Promise<number>
     requestAnimationFrame(sample);
   }), closed);
 
-export type Frame = {height: number; textBottomGap: number};
+export type Frame = {height: number; textBottomGap: number; textAboveTheClip: number};
 
 export const framesWhileMoving = (fold: Locator): Promise<Frame[]> => fold.evaluate(element =>
   new Promise<Frame[]>((resolve, reject) => {
@@ -41,6 +41,7 @@ export const framesWhileMoving = (fold: Locator): Promise<Frame[]> => fold.evalu
     }
     const clips = [...between, element].filter(box => getComputedStyle(box).overflowY !== 'visible');
     const shownTextBottom = () => Math.min(...[innermost, ...clips].map(box => box.getBoundingClientRect().bottom));
+    const textAboveTheClip = () => Math.max(...[innermost, ...clips].map(box => box.getBoundingClientRect().top)) - innermost.getBoundingClientRect().top;
     const before = element.getBoundingClientRect().height;
     const deadline = performance.now() + 5000;
     const sampled: Frame[] = [];
@@ -48,7 +49,7 @@ export const framesWhileMoving = (fold: Locator): Promise<Frame[]> => fold.evalu
     const sample = () => {
       const box = element.getBoundingClientRect();
       if (box.height !== before || sampled.length > 0) {
-        sampled.push({height: box.height, textBottomGap: Math.abs(box.bottom - shownTextBottom())});
+        sampled.push({height: box.height, textBottomGap: Math.abs(box.bottom - shownTextBottom()), textAboveTheClip: textAboveTheClip()});
       }
       const settled = sampled.length > 1 && !moving();
       if (settled || performance.now() > deadline) {

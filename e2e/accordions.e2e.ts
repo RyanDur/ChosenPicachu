@@ -11,10 +11,29 @@ import {
   iPhone,
   misplacedPictures,
   showing,
-  textOf
+  textOf,
+  type Frame,
+  type Part
 } from './__test_support';
 
 const layoutRounding = 1;
+
+const framesOpening = async (part: Part): Promise<Frame[]> => {
+  await expect(part.fold).toBeVisible();
+  const moving = framesWhileMoving(part.fold);
+  await part.open();
+  return moving;
+};
+
+const framesClosing = async (part: Part): Promise<Frame[]> => {
+  await part.open();
+  await heightOnceSettled(part.fold);
+  const moving = framesWhileMoving(part.fold);
+  await part.close();
+  return moving;
+};
+
+const framesSliding = {open: framesOpening, closed: framesClosing};
 
 for (const build of ['the inclusive details build', 'the details build'] as const) {
   for (const style of ['reveal', 'drawer'] as const) {
@@ -59,46 +78,24 @@ for (const build of ['the inclusive details build', 'the details build'] as cons
   });
 }
 
-test('a fold in the grid checkbox build slides open', async ({page}) => {
-  await page.goto(showing('the grid checkbox build'));
-  const part = accordionsTab(page).firstPartOf('the grid checkbox build');
-  await expect(part.fold).toBeVisible();
-  const closed = await heightByTheNextFrame(part.fold);
-  const firstMoved = firstHeightAfter(part.fold, closed);
-
-  await part.open();
-
-  expect(await firstMoved).toBeGreaterThan(closed);
-  expect(await firstMoved).toBeLessThan(await heightOnceSettled(part.fold));
-});
+const slidDown = (frames: Frame[]): number[] => frames.map(frame => frame.textAboveTheClip).filter(above => above > layoutRounding);
 
 for (const build of ['the grid checkbox build', 'the grid radio build'] as const) {
-  for (const style of ['reveal', 'drawer'] as const) {
-    test(`a fold in ${build} slides open by the ${style} with its text shown down to the fold’s edge`, async ({page}) => {
-      await page.goto(showing(build, style));
-      const part = accordionsTab(page).firstPartOf(build);
-      await expect(part.fold).toBeVisible();
-      const moving = framesWhileMoving(part.fold);
+  for (const direction of ['open', 'closed'] as const) {
+    test(`a fold in ${build} slides ${direction} by the reveal, its text's top on the bar and its bottom on the fold's edge`, async ({page}) => {
+      await page.goto(showing(build, 'reveal'));
+      const frames = await framesSliding[direction](accordionsTab(page).firstPartOf(build));
 
-      await part.open();
-      const frames = await moving;
-
-      expect(frames[0].height).toBeLessThan(frames.at(-1)?.height ?? 0);
       expect(frames.map(frame => frame.textBottomGap).filter(gap => gap > layoutRounding)).toEqual([]);
+      expect(slidDown(frames)).toEqual([]);
     });
 
-    test(`a fold in ${build} slides closed by the ${style} with its text shown down to the fold’s edge`, async ({page}) => {
-      await page.goto(showing(build, style));
-      const part = accordionsTab(page).firstPartOf(build);
-      await part.open();
-      await heightOnceSettled(part.fold);
-      const moving = framesWhileMoving(part.fold);
+    test(`a fold in ${build} slides ${direction} by the drawer, its text coming from under the bar with its bottom on the fold's edge`, async ({page}) => {
+      await page.goto(showing(build, 'drawer'));
+      const frames = await framesSliding[direction](accordionsTab(page).firstPartOf(build));
 
-      await part.close();
-      const frames = await moving;
-
-      expect(frames[0].height).toBeGreaterThan(frames.at(-1)?.height ?? 0);
       expect(frames.map(frame => frame.textBottomGap).filter(gap => gap > layoutRounding)).toEqual([]);
+      expect(slidDown(frames)).not.toEqual([]);
     });
   }
 }
