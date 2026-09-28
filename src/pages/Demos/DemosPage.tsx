@@ -35,7 +35,7 @@ const topics = [
 ];
 
 export const DemosPage = () => {
-  const {tab, pace = 'eager', origin = 'hide', motion = 'animated', tut = 'sort', track = 'pointer', world = 'react', type = 'inclusive', style = 'reveal', updateSearchParams} =
+  const {tab, pace = 'eager', origin = 'hide', motion = 'animated', tut = 'sort', track = 'pointer', world = 'react', type = 'inclusive', style: foldMotion = 'reveal', updateSearchParams} =
     useSearchParamsObject(
       {tab: demoTopicParam, pace: paceParam, origin: originParam, motion: motionParam, tut: tutorialParam, track: trackParam, world: worldParam, type: foldTypeParam, style: foldMotionParam},
       {tab: DemoTopics.accordions});
@@ -57,7 +57,7 @@ export const DemosPage = () => {
               <>
                 <h2 className="title bold">Different styles of Accordions.</h2>
                 <AccordionsExplained contents={accordionContents} type={type} onTypeChosen={next => updateSearchParams({type: next})}
-                  style={style} onStyleChosen={next => updateSearchParams({style: next})}/>
+                  motion={foldMotion} onMotionChosen={next => updateSearchParams({style: next})}/>
               </>,
         [DemoTopics.zIndex]: <>
           <h2 className="title bold">Z-Index Demo.</h2>
