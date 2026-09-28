@@ -72,11 +72,13 @@ test('a details fold opens at once, fully, where the browser cannot animate it',
   test.skip(browserName === 'chromium', 'chromium animates it');
   await page.goto('demos/?tab=accordions');
   const part = accordionsTab(page).firstPartOf('the details build');
+  await expect(part.fold).toBeVisible();
+  const closed = await heightByTheNextFrame(part.fold);
+  const firstMoved = firstHeightAfter(part.fold, closed);
 
   await part.open();
-  const midway = await heightByTheNextFrame(part.fold);
 
-  expect(midway).toBe(await heightOnceSettled(part.fold));
+  expect(await firstMoved).toBe(await heightOnceSettled(part.fold));
   await expect.poll(part.showsText).toBe(true);
 });
 
