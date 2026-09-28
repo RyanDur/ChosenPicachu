@@ -1111,49 +1111,6 @@ describe('animated moves', () => {
     expect(header('volume').className).not.toMatch(/shoved/);
   });
 
-  test('on release the real column settles from where the pointer let go', () => {
-    seat(EagerTable, 'hide animated');
-
-    liftColumn('trades');
-    carryColumnOver('buys');
-    carryColumnOn({x: 8});
-
-    dropColumn();
-
-    columnCells('trades').forEach(cell => {
-      expect(cell).toHaveClass('settling');
-      expect(cell).toHaveStyle({'--settle-x': '-100px', '--settle-drift-x': '8px'});
-    });
-  });
-
-  test('on release the real column settles from the height the pointer let go at', () => {
-    seat(EagerTable, 'hide animated');
-
-    liftColumn('trades');
-    carryColumnOver('buys');
-    carryColumnOn({y: 6});
-
-    dropColumn();
-
-    columnCells('trades').forEach(cell => {
-      expect(cell).toHaveClass('settling');
-      expect(cell).toHaveStyle({'--settle-x': '-100px', '--settle-drift-x': '0px', '--settle-drift-y': '6px'});
-    });
-  });
-
-  test('a lazy column settles from where the pointer let go', () => {
-    seat(LazyTable, 'keep animated');
-
-    liftColumn('trades');
-    carryColumnOver('sells');
-    carryColumnOn({x: 8});
-
-    dropColumn();
-
-    expect(header('trades')).toHaveClass('settling');
-    expect(header('trades')).toHaveStyle({'--settle-x': '-200px', '--settle-drift-x': '8px'});
-  });
-
   test('a static release leaves the same marks as an animated one', () => {
     seat(EagerTable, 'keep static');
 
@@ -1199,34 +1156,6 @@ describe('animated moves', () => {
     [...rowOf('this minute').cells].forEach(cell => {
       expect(cell).toHaveClass('settling');
       expect(cell).toHaveStyle({'--settle-x': '0px', '--settle-y': '-40px', '--settle-drift-x': '0px', '--settle-drift-y': '0px'});
-    });
-  });
-
-  test('a dropped row settles from where the pointer let go', () => {
-    seat(EagerTable, 'keep animated');
-    liftRow('this minute');
-    carryRowOver('last 5 minutes');
-    carryRowOn(8);
-
-    dropRow();
-
-    [...rowOf('this minute').cells].forEach(cell => {
-      expect(cell).toHaveClass('settling');
-      expect(cell).toHaveStyle({'--settle-x': '0px', '--settle-y': '-40px', '--settle-drift-x': '0px', '--settle-drift-y': '8px'});
-    });
-  });
-
-  test('a lazy row settles from where the pointer let go', () => {
-    seat(LazyTable, 'keep animated');
-    liftRow('this minute');
-    carryRowOver('last 5 minutes');
-    carryRowOn(8);
-
-    dropRow();
-
-    [...rowOf('this minute').cells].forEach(cell => {
-      expect(cell).toHaveClass('settling');
-      expect(cell).toHaveStyle({'--settle-x': '0px', '--settle-y': '-40px', '--settle-drift-x': '0px', '--settle-drift-y': '8px'});
     });
   });
 });

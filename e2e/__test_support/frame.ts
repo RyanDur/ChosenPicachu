@@ -17,20 +17,70 @@ const boxOf = async (locator: Locator): Promise<Box> => {
   return box;
 };
 
-const dragTo = async (page: Page, from: Box, x: number, y: number): Promise<void> => {
-  const start = {x: from.x + from.width / 2, y: from.y + from.height / 2};
+type Point = {x: number; y: number};
+
+const centreOf = ({x, y, width, height}: Box): Point => ({x: x + width / 2, y: y + height / 2});
+
+const carry = async (page: Page, from: Box, to: Point): Promise<void> => {
+  const start = centreOf(from);
   await page.mouse.move(start.x, start.y);
   await page.mouse.down();
   for (let step = 1; step <= 16; step++) {
-    await page.mouse.move(start.x + (x - start.x) * (step / 16), start.y + (y - start.y) * (step / 16));
+    await page.mouse.move(start.x + (to.x - start.x) * (step / 16), start.y + (to.y - start.y) * (step / 16));
   }
+};
+
+const dragTo = async (page: Page, from: Box, x: number, y: number): Promise<void> => {
+  await carry(page, from, {x, y});
   await page.mouse.up();
+};
+
+const holdTheSettleAtItsStart = (anywhere: Locator): Promise<void> => anywhere.evaluate(element => {
+  const table = element.ownerDocument;
+  table.addEventListener('animationstart', event => {
+    if (event.animationName.startsWith('settle')) {
+      table.getAnimations().forEach(animation => {
+        animation.pause();
+        animation.currentTime = 0;
+      });
+    }
+  }, {capture: true});
+});
+
+const settling = (locator: Locator): Promise<boolean> =>
+  locator.evaluate(element => element.getAnimations({subtree: false}).some(({playState}) => playState === 'paused'));
+
+const dropAt = async (page: Page, {pressed, held}: {pressed: Locator; held: Locator}, letGo: Point): Promise<Point> => {
+  await carry(page, await boxOf(pressed), letGo);
+  await holdTheSettleAtItsStart(held);
+  const carriedTo = centreOf(await boxOf(held));
+  await page.mouse.up();
+  return carriedTo;
+};
+
+const distanceFrom = (held: Locator, carriedTo: Point) => async (): Promise<number> => {
+  if (!await settling(held)) {
+    return Infinity;
+  }
+  const {x, y} = centreOf(await boxOf(held));
+  return Math.hypot(x - carriedTo.x, y - carriedTo.y);
 };
 
 export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
   const columnHeader = (name: string): Locator => table.getByRole('columnheader', {name});
+  const rowGrip = (row: number): Locator => table.getByRole('button', {name: `move row ${row}`});
+  const rowHeader = (name: RegExp): Locator => table.getByRole('rowheader', {name});
   return {
     columnHeader,
+    centreOfColumn: async (name: string): Promise<Point> => centreOf(await boxOf(columnHeader(name))),
+    centreOfRow: async (name: RegExp): Promise<Point> => centreOf(await boxOf(table.getByRole('row', {name}))),
+    centreOfRowGrip: async (row: number): Promise<Point> => centreOf(await boxOf(rowGrip(row))),
+    dropColumnAt: (name: string, letGo: Point): Promise<Point> =>
+      dropAt(page, {pressed: columnHeader(name), held: columnHeader(name)}, letGo),
+    dropRowAt: ({row, name}: {row: number; name: RegExp}, letGo: Point): Promise<Point> =>
+      dropAt(page, {pressed: rowGrip(row), held: rowHeader(name)}, letGo),
+    columnSettlesFrom: (name: string, carriedTo: Point) => distanceFrom(columnHeader(name), carriedTo),
+    rowSettlesFrom: (name: RegExp, carriedTo: Point) => distanceFrom(rowHeader(name), carriedTo),
     sortToggle: (name: string): Locator => table.getByRole('button', {name: `sort ${name}`}),
     sortMenu: (name: string): Locator => table.getByLabel(`sort ${name} by`),
     columnWidth: async (name: string): Promise<number> => (await boxOf(columnHeader(name))).width,

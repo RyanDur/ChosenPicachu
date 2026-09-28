@@ -33,6 +33,35 @@ for (const {name, at, table} of stages) {
   });
 }
 
+for (const {name, at, table} of stages) {
+  for (const pace of ['eager', 'lazy']) {
+    test(`a column let go past its crossing settles from where it was carried, ${pace}, in ${name}`, async ({page}) => {
+      await page.goto(`${at}&pace=${pace}&origin=hide&motion=animated`);
+      const trades = dragSortTable(page, table(page));
+      await expect(trades.columnHeader('trades')).toBeVisible();
+      const buys = await trades.centreOfColumn('buys');
+      const letGo = {x: buys.x + 8, y: buys.y + 6};
+
+      const carriedTo = await trades.dropColumnAt('trades', letGo);
+
+      await expect.poll(trades.columnSettlesFrom('trades', carriedTo)).toBeLessThanOrEqual(1);
+    });
+
+    test(`a row let go past its crossing settles from where it was carried, ${pace}, in ${name}`, async ({page}) => {
+      await page.goto(`${at}&pace=${pace}&origin=hide&motion=animated`);
+      const trades = dragSortTable(page, table(page));
+      await expect(trades.columnHeader('trades')).toBeVisible();
+      const grip = await trades.centreOfRowGrip(1);
+      const passed = await trades.centreOfRow(/last 5 minutes/);
+      const letGo = {x: grip.x, y: passed.y + 8};
+
+      const carriedTo = await trades.dropRowAt({row: 1, name: /this minute/}, letGo);
+
+      await expect.poll(trades.rowSettlesFrom(/this minute/, carriedTo)).toBeLessThanOrEqual(1);
+    });
+  }
+}
+
 test('a menu choice sorts, and never lifts the column', async ({page}) => {
   const vanilla = stages[1];
   await page.goto(vanilla.at);
