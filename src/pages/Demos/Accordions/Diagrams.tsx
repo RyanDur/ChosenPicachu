@@ -34,9 +34,9 @@ const Arrow: FC<{through: [At, At, ...At[]]}> = ({through}) => <>
 const Chevron: FC<At & {turn: number}> = ({x, y, turn}) =>
   <polyline className="chevron" points="-10,-10 10,-10 10,10" transform={`translate(${x} ${y}) rotate(${turn})`}/>;
 
-export const OneJobTwoWays: FC = () =>
+export const OneJobTwoWays: FC<{input: 'checkbox' | 'radio'}> = ({input}) =>
   <Diagram title="One job, two ways" height={150}
-    says="Details holds its summary and its content, where the trick needs a checkbox, a label that presses it through for, and the text, in that order.">
+    says={`Details holds its summary and its content, where the trick needs a ${input}, a label that presses it through for, and the text, in that order.`}>
     <Words x={80} y={14}>natively</Words>
     <Box x={10} y={22} width={140} height={116} kind="native"/>
     <Words x={80} y={38}>details</Words>

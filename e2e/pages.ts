@@ -14,6 +14,7 @@ export type SitePage = {
 export const pages: readonly SitePage[] = [
   {name: 'home', path: '', ready: 'navigation', budgeted: true},
   {name: 'demos', path: 'demos/?tab=accordions', ready: 'navigation', budgeted: true},
+  {name: 'demos, exclusive folds', path: 'demos/?tab=accordions&type=exclusive', ready: 'navigation'},
   {name: 'charts', path: 'demos/?tab=charts', ready: 'navigation', loaded: page => chartsPage(page).priceDelta},
   {
     name: 'tables',

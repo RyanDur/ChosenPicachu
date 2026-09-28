@@ -15,4 +15,4 @@ export {sortableList} from './lists';
 export {headingsTakingMoreLinesThanWords} from './headings';
 export {codedStepLayouts, misplacedPictures} from './recipes';
 export {firstHeightAfter, framesWhileMoving, heightByTheNextFrame, heightOnceSettled} from './motion';
-export {accordionsTab, builds, textOf, type Build} from './accordions';
+export {accordionsTab, builds, textOf, type Build, showing} from './accordions';

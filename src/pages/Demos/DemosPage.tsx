@@ -14,7 +14,7 @@ import {Tutorials} from './Tables/Tutorials';
 import {ListTutorials} from './DragAndDrop/Tutorials';
 import {ChartsTutorial} from './Charts/Tutorial';
 import {TopLayerTutorial} from './ZIndexDemo/Tutorial';
-import {AccordionsExplained} from './Accordions';
+import {AccordionsExplained, foldTypeParam} from './Accordions';
 import {motionParam, originParam, paceParam} from './Controls';
 import {Aggregations, trackParam, tutorialParam, worldParam} from './Tables';
 import {Workspace} from './Charts/Workspace';
@@ -35,9 +35,9 @@ const topics = [
 ];
 
 export const DemosPage = () => {
-  const {tab, pace = 'eager', origin = 'hide', motion = 'animated', tut = 'sort', track = 'pointer', world = 'react', updateSearchParams} =
+  const {tab, pace = 'eager', origin = 'hide', motion = 'animated', tut = 'sort', track = 'pointer', world = 'react', type = 'inclusive', updateSearchParams} =
     useSearchParamsObject(
-      {tab: demoTopicParam, pace: paceParam, origin: originParam, motion: motionParam, tut: tutorialParam, track: trackParam, world: worldParam},
+      {tab: demoTopicParam, pace: paceParam, origin: originParam, motion: motionParam, tut: tutorialParam, track: trackParam, world: worldParam, type: foldTypeParam},
       {tab: DemoTopics.accordions});
   const [accordionContents] = useState(() => ({
     checkbox: paragraphs(5),
@@ -56,7 +56,7 @@ export const DemosPage = () => {
         [DemoTopics.accordions]:
               <>
                 <h2 className="title bold">Different styles of Accordions.</h2>
-                <AccordionsExplained contents={accordionContents}/>
+                <AccordionsExplained contents={accordionContents} type={type}/>
               </>,
         [DemoTopics.zIndex]: <>
           <h2 className="title bold">Z-Index Demo.</h2>

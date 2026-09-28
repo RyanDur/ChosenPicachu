@@ -95,6 +95,11 @@ const partIn: Record<Build, (where: Where) => Omit<Part, 'showsText'>> = {
   })
 };
 
+const exclusiveBuilds: Build[] = ['the radio build', 'the details build', 'the grid radio build'];
+
+export const showing = (build: Build): string =>
+  `demos/?tab=accordions&type=${exclusiveBuilds.includes(build) ? 'exclusive' : 'inclusive'}`;
+
 const detailsBuilds: Build[] = ['the inclusive details build', 'the details build'];
 
 const closeBarsBeforeTheParts = (build: Build): number => build === 'the radio build' ? 1 : 0;
