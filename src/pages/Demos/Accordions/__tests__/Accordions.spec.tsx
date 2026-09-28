@@ -1,11 +1,11 @@
 import {render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {ExclusiveRadioToggleAccordion, InclusiveCheckboxToggleAccordion} from '../Accordions';
+import {ExclusiveAccordion, ExclusiveRadioToggleAccordion, InclusiveAccordion, InclusiveCheckboxToggleAccordion} from '../Accordions';
 
 const folds = [{key: 'Alpha', value: 'the first fold'}, {key: 'Beta', value: 'the second fold'}];
 
 const controlOf = (control: 'checkbox' | 'radio', part: string): HTMLElement =>
-  screen.getByRole(control, {name: new RegExp(`${part}$`)});
+  screen.getByRole(control, {name: part});
 
 describe('the inclusive toggle accordion using checkboxes', () => {
   test('should keep every fold it opens open', async () => {
@@ -90,5 +90,16 @@ describe.each([
     render(<Accordion content={folds} motion="reveal"/>);
 
     expect(within(screen.getByRole('group', {name: 'parts'})).getAllByRole(control)).toHaveLength(folds.length);
+  });
+});
+
+describe.each([
+  {accordion: 'the accordion using checkboxes', Accordion: InclusiveAccordion, control: 'checkbox' as const, controls: folds.length},
+  {accordion: 'the accordion using a radio group', Accordion: ExclusiveAccordion, control: 'radio' as const, controls: folds.length + 1}
+])('$accordion', ({Accordion, control, controls}) => {
+  test('should hold its controls in one group named parts', () => {
+    render(<Accordion content={folds} motion="reveal"/>);
+
+    expect(within(screen.getByRole('group', {name: 'parts'})).getAllByRole(control)).toHaveLength(controls);
   });
 });

@@ -10,6 +10,7 @@ import {
   heightOnceSettled,
   iPhone,
   misplacedPictures,
+  nameOn,
   showing,
   textOf,
   type Frame,
@@ -258,7 +259,7 @@ for (const {build, control} of [
   test(`the control of ${build} is named by its part, and checked while the part is open`, async ({page}) => {
     await page.goto(showing(build));
     const part = accordionsTab(page).firstPartOf(build);
-    const name = await part.fold.getByText(/^\w+$/).first().textContent() ?? '';
+    const name = await nameOn(part.fold).textContent() ?? '';
     await expect(part.fold.getByRole(control, {name, exact: true})).not.toBeChecked();
 
     await part.open();
