@@ -28,7 +28,7 @@
       position: absolute;
       margin-left: var(--base-x-2_25);
       padding: 0 var(--base-x-0_25);
-      top: 1rem;
+      top: var(--base-x-1_25);
       max-width: 80%;
       opacity: 0.6;
       z-index: 1;
@@ -46,7 +46,7 @@
     &:focus-within .fancy-title,
     &:has(.fancy-text:read-only) .fancy-title {
       opacity: 1;
-      top: -1rem;
+      top: calc(-1 * var(--base-x-1_25));
     }
 
     .fancy-text {
