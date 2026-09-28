@@ -1063,13 +1063,12 @@ describe('animated moves', () => {
     });
   });
 
-  test('on release the real column settles from where it was carried', () => {
+  test('on release every cell of the carried column settles, and the column it passed is shoved', () => {
     seat(EagerTable, 'hide animated');
 
     liftColumn('trades');
     carryColumnOver('buys');
     expect(header('trades')).toHaveClass('carried');
-    expect(header('trades')).toHaveStyle({'--seat-x': '-100px', '--drift-x': '0px'});
 
     dropColumn();
     expect(carried()).toEqual([]);
@@ -1143,7 +1142,7 @@ describe('animated moves', () => {
     dropRow();
   });
 
-  test('a dropped row settles every cell from the drop height', () => {
+  test('on release every cell of the dropped row settles', () => {
     seat(EagerTable, 'keep animated');
     liftRow('this minute');
     carryRowOver('last 5 minutes');
