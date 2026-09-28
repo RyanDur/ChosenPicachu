@@ -39,7 +39,11 @@ const github = (token, path) => fetch(`https://api.github.com/${path}`, {
  */
 export const lastAnswered = async (fetching, {repository, workflow, runId}, warn) => {
   try {
+    /** @type {{workflow_runs: {id: number, head_sha: string}[]}} */
     const {workflow_runs: runs} = await fetching(`repos/${repository}/actions/workflows/${workflow}/runs?branch=main&per_page=30`);
+    if (!runs.some(({id}) => id === Number(runId))) {
+      throw new Error(`the runs GitHub listed do not include run ${runId}`);
+    }
     const jobsOf = id => fetching(`repos/${repository}/actions/runs/${id}/jobs`).then(({jobs}) => jobs);
     return await reviewedBefore(runs, jobsOf, Number(runId));
   } catch (trouble) {
@@ -63,5 +67,6 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     process.stderr.write('nowhere to start the review from\n');
     process.exit(1);
   }
+  process.stderr.write(`the review starts at ${start}\n`);
   process.stdout.write(start);
 }

@@ -65,4 +65,17 @@ describe('asking GitHub for the last answered review', () => {
 
     expect(warned).toEqual(['the last answered review could not be found: 502 from runs']);
   });
+
+  test('a list of runs that does not hold the asking run is stale, and the review keeps to the push\'s own range', async () => {
+    const warned = [];
+    /** @param {string} path */
+    const stale = path => Promise.resolve(path.includes('/jobs')
+      ? {jobs: [{name: 'review', conclusion: 'success'}]}
+      : {workflow_runs: [run(2, 'c2'), run(1, 'c1')]});
+
+    const reviewed = await lastAnswered(stale, {repository: 'r', workflow: 'w', runId: '3'}, trouble => warned.push(trouble));
+
+    expect(startFor({reviewed, pushed: 'c0'})).toBe('c0');
+    expect(warned).toEqual(['the last answered review could not be found: the runs GitHub listed do not include run 3']);
+  });
 });
