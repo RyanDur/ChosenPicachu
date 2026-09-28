@@ -52,7 +52,7 @@ export const InclusiveToggleAccordion: FC<PropsWithClassName & ContentProps> = (
   className,
   content
 }) => <article className={classNames('inclusive-toggle-accordion', className)}>
-  <header className="exclusive-checkbox-header">
+  <header>
     <h4 className="sub-title bold">Inclusive accordion using details elements</h4>
   </header>
   <ul className="new-accordion">
@@ -70,7 +70,7 @@ export const ExclusiveToggleAccordion: FC<PropsWithClassName & ContentProps> = (
   className,
   content
 }) => <article className={classNames('exclusive-toggle-accordion', className)}>
-  <header className="exclusive-checkbox-header">
+  <header>
     <h4 className="sub-title bold">Exclusive accordion using details elements</h4>
   </header>
   <ul className="new-accordion">
