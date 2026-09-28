@@ -9,6 +9,8 @@ const toggleWord = (open: boolean) => open ? 'Close' : 'Open';
 
 const toggledAlone = (key: string) => (open?: string) => open === key ? undefined : key;
 
+const closedIfOpen = (key: string) => (open?: string) => open === key ? undefined : open;
+
 const toggledIn = (key: string) => (opened: readonly string[]) =>
   opened.includes(key) ? opened.filter(part => part !== key) : [...opened, key];
 
@@ -162,7 +164,7 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
                   checked={key === checked}
                   value={key}
                   onChange={event => updateChecked(event.currentTarget.value)}
-                  onClick={() => checked === key && updateChecked(undefined)}
+                  onClick={() => updateChecked(closedIfOpen(key))}
                   className="off-screen"/>
               </label>
             </header>

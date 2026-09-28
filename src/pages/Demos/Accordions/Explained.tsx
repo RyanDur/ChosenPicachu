@@ -284,7 +284,10 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
           a click on the radio already chosen clears the part, which a radio on its own will not
           do. The shared name makes the radios one group, so the arrow keys move between them.
           Each radio’s value is its part’s key, which the change handler reads.</p>
-        <Snippet label="TS" lines={span(accordionsSource, 'type="radio"\n                  name="exclusive-checkbox-toggle"', 'className="off-screen"/>')}/>
+        <Snippet label="TS" lines={[
+          ...unit(accordionsSource, 'const closedIfOpen'), gap,
+          ...span(accordionsSource, 'type="radio"\n                  name="exclusive-checkbox-toggle"', 'className="off-screen"/>')
+        ]}/>
       </li>
       <li className="run">
         <p className="paragraph">A screen reader announces summary’s state for you, but not a checkbox’s part.
