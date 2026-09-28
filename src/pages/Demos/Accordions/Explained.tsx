@@ -9,13 +9,27 @@ import {
   InclusiveCheckboxToggleAccordion,
   InclusiveToggleAccordion
 } from './Accordions';
-import {Mdn, Snippet, plain} from '../Recipe';
+import {Mdn, plain, Snippet} from '../Recipe';
 import {span, unit} from '../Recipe/carve';
 import accordionsSource from './Accordions.tsx?raw';
 import accordionsCss from './Accordions.css?raw';
 import placementCss from '../../../styles/placement.css?raw';
 import resetCss from '../../../styles/reset.css?raw';
-import {FocusOnTheBar, OffScreenNotGone, OneJobTwoWays, OneNameOneChoice, PaddingInsideTheClip, RidesTheEdge, RowToItsContent, SizedToTheText, TheGuess, TheSheetReadsTheBox, ThreeBecomeTwo, TwoBordersTurned, WhatEachPromises} from './Diagrams';
+import {
+  FocusOnTheBar,
+  OffScreenNotGone,
+  OneJobTwoWays,
+  OneNameOneChoice,
+  PaddingInsideTheClip,
+  RidesTheEdge,
+  RowToItsContent,
+  SizedToTheText,
+  TheGuess,
+  TheSheetReadsTheBox,
+  ThreeBecomeTwo,
+  TwoBordersTurned,
+  WhatEachPromises
+} from './Diagrams';
 import './Explained.css';
 
 export type Contents = {
@@ -186,7 +200,7 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
           reader announces the bar as a disclosure, collapsed or expanded. With nothing more,
           each part opens and closes on its own, as the checkbox build’s parts do. That is the
           inclusive build.</p>
-        <Snippet label="TS" lines={span(accordionsSource, '<details className="fold"', '</details>')}/>
+        <Snippet label="TS" lines={span(accordionsSource, '<details className="fold">', '</details>')}/>
         <OneJobTwoWays/>
         <ThreeBecomeTwo/>
       </li>

@@ -39,6 +39,19 @@ describe('the accordions explanation', () => {
   });
 });
 
+describe('what the platform gives now', () => {
+  test('should show the plain details beside the run on the inclusive build, and the named details beside the run on the shared name', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const explained = await screen.findByRole('region', {name: parts[1]});
+    const codes = within(explained).getAllByRole('code');
+
+    expect(codes[0]).toHaveTextContent('<details className="fold">');
+    expect(codes[0]).not.toHaveTextContent('name=');
+    expect(codes[1]).toHaveTextContent('<details className="fold" name="exclusive-toggle-accordion">');
+  });
+});
+
 describe('how every fold moves', () => {
   test('should show the one block that opens every fold at once for a reader who asks for less motion', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
