@@ -1,4 +1,5 @@
 import {ReactNode} from 'react';
+import {maybe} from '@ryandur/sand';
 import './PillGlider.css';
 
 type Option<T extends string> = {
@@ -6,7 +7,9 @@ type Option<T extends string> = {
   value: T;
 };
 
-type Chosen<T extends string> = {chosen: T; onChosen: (value: T) => void} | {defaultChosen: T};
+type Chosen<T extends string> =
+  | {chosen: T; onChosen: (value: T) => void; defaultChosen?: never}
+  | {defaultChosen: T; chosen?: never; onChosen?: never};
 
 type Props<T extends string> = Chosen<T> & {
   label: string;
@@ -14,10 +17,10 @@ type Props<T extends string> = Chosen<T> & {
   options: readonly Option<T>[];
 };
 
-const checkedFor = <T extends string>(choice: Chosen<T>, value: T) =>
-  'chosen' in choice
-    ? {checked: choice.chosen === value, onChange: () => choice.onChosen(value)}
-    : {defaultChecked: choice.defaultChosen === value};
+const checkedFor = <T extends string>({chosen, onChosen, defaultChosen}: Chosen<T>, value: T) =>
+  maybe(onChosen).either(
+    chose => ({checked: chosen === value, onChange: () => chose(value)}),
+    () => ({defaultChecked: defaultChosen === value}));
 
 export const PillGlider = <T extends string>({label, name, options, ...choice}: Props<T>) =>
   <fieldset className="pill-glider">
