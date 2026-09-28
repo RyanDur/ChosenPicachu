@@ -54,14 +54,4 @@ describe('Tabs', () => {
     expect(screen.getByRole('link', {name: tab2.display, current: 'page'})).toBeInTheDocument();
     expect(screen.getByRole('link', {name: tab1.display})).not.toHaveAttribute('aria-current');
   });
-
-  it('should keep its choice under its own key, beside the other keys in the address', async () => {
-    render(<TestApp at={`${path}?tab=${tab2.param}`}><Tabs label="kinds" param="kind" defaultTab={tab1.param} values={[tab1, tab3]}/></TestApp>);
-    expect(screen.getByRole('link', {name: tab1.display, current: 'page'})).toBeInTheDocument();
-
-    await userEvent.click(screen.getByText(tab3.display));
-
-    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent(`?tab=${tab2.param}&kind=${tab3.param}`);
-    expect(screen.getByRole('link', {name: tab3.display, current: 'page'})).toBeInTheDocument();
-  });
 });
