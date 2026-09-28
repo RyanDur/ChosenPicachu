@@ -2,6 +2,9 @@ import {render, screen, within} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {demosAt} from '@pages/Demos/__test_support';
 
+const codeBeside = (part: HTMLElement, words: RegExp): HTMLElement =>
+  within(within(part).getAllByRole('listitem').filter(run => within(run).queryByText(words) !== null)[0]).getByRole('code');
+
 const parts = ['How we used to build a fold', 'What the platform gives now', 'The two together', 'How every fold moves'];
 
 describe('the accordions tab', () => {
@@ -44,12 +47,23 @@ describe('what the platform gives now', () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
     const explained = await screen.findByRole('region', {name: parts[1]});
-    const codeBeside = (words: RegExp): HTMLElement =>
-      within(within(explained).getAllByRole('listitem').filter(run => within(run).queryByText(words) !== null)[0]).getByRole('code');
 
-    expect(codeBeside(/That is the inclusive build/)).toHaveTextContent('<details className="fold">');
-    expect(codeBeside(/That is the inclusive build/)).not.toHaveTextContent('name=');
-    expect(codeBeside(/This replaces the radio group/)).toHaveTextContent('<details className="fold" name="exclusive-toggle-accordion">');
+    expect(codeBeside(explained, /That is the inclusive build/)).toHaveTextContent('<details className="fold">');
+    expect(codeBeside(explained, /That is the inclusive build/)).not.toHaveTextContent('name=');
+    expect(codeBeside(explained, /This replaces the radio group/)).toHaveTextContent('<details className="fold" name="exclusive-toggle-accordion">');
+  });
+});
+
+describe('the two together', () => {
+  test('should tell the inclusive build first, then the exclusive builds, each beside its own update', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const explained = await screen.findByRole('region', {name: parts[2]});
+
+    expect(within(explained).getAllByText(/^The (inclusive build lets|two exclusive builds keep)/).map(run => run.textContent?.slice(0, 16)))
+      .toEqual(['The inclusive bu', 'The two exclusiv']);
+    expect(codeBeside(explained, /The inclusive build lets/)).toHaveTextContent('const toggledIn');
+    expect(codeBeside(explained, /The two exclusive builds keep/)).toHaveTextContent('const toggledAlone');
   });
 });
 
