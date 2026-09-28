@@ -83,11 +83,11 @@ describe('the exclusive toggle accordion using a radio group', () => {
 });
 
 describe.each([
-  {accordion: 'the accordion using checkboxes', Accordion: InclusiveAccordion, control: 'checkbox' as const, controls: folds.length},
-  {accordion: 'the accordion using a radio group', Accordion: ExclusiveAccordion, control: 'radio' as const, controls: folds.length + 1},
-  {accordion: 'the inclusive toggle accordion using checkboxes', Accordion: InclusiveCheckboxToggleAccordion, control: 'checkbox' as const, controls: folds.length},
-  {accordion: 'the exclusive toggle accordion using a radio group', Accordion: ExclusiveRadioToggleAccordion, control: 'radio' as const, controls: folds.length}
-])('$accordion', ({Accordion, control, controls}) => {
+  {accordion: 'the accordion using checkboxes', Accordion: InclusiveAccordion, control: 'checkbox' as const, controls: folds.length, items: folds.length},
+  {accordion: 'the accordion using a radio group', Accordion: ExclusiveAccordion, control: 'radio' as const, controls: folds.length + 1, items: folds.length + 1},
+  {accordion: 'the inclusive toggle accordion using checkboxes', Accordion: InclusiveCheckboxToggleAccordion, control: 'checkbox' as const, controls: folds.length, items: folds.length},
+  {accordion: 'the exclusive toggle accordion using a radio group', Accordion: ExclusiveRadioToggleAccordion, control: 'radio' as const, controls: folds.length, items: folds.length}
+])('$accordion', ({Accordion, control, controls, items}) => {
   test('should hold its controls in one group named parts', () => {
     render(<Accordion content={folds} motion="reveal"/>);
 
@@ -98,6 +98,6 @@ describe.each([
     render(<Accordion content={folds} motion="reveal"/>);
 
     expect(screen.getAllByRole('article')).toHaveLength(1);
-    expect(within(screen.getByRole('group', {name: 'parts'})).getAllByRole('listitem')).toHaveLength(controls);
+    expect(within(screen.getByRole('group', {name: 'parts'})).getAllByRole('listitem')).toHaveLength(items);
   });
 });
