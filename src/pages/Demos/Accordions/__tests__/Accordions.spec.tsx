@@ -1,4 +1,4 @@
-import {render, screen, within} from '@testing-library/react';
+import {fireEvent, render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {ExclusiveRadioToggleAccordion, InclusiveCheckboxToggleAccordion} from '../Accordions';
 
@@ -72,11 +72,11 @@ describe('the exclusive toggle accordion using a radio group', () => {
     expect(controlOf('radio', 'Beta')).not.toBeChecked();
   });
 
-  test('should close the open fold when the space bar presses its radio', async () => {
+  test('should close the open fold when the space bar goes down on its radio, with no click after', async () => {
     render(<ExclusiveRadioToggleAccordion content={folds}/>);
     await userEvent.click(controlOf('radio', 'Alpha'));
 
-    await userEvent.keyboard(' ');
+    fireEvent.keyDown(controlOf('radio', 'Alpha'), {key: ' '});
 
     expect(controlOf('radio', 'Alpha')).not.toBeChecked();
   });
