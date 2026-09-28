@@ -33,10 +33,11 @@ const spacePressed = (event: KeyboardEvent<HTMLUListElement>): void => {
 
 export type Fold = {value: ReactNode; key: string};
 type ContentProps = {content: Fold[]};
-export const InclusiveAccordion: FC<PropsWithClassName & ContentProps> = ({
+export const InclusiveAccordion: FC<PropsWithClassName & ContentProps & {motion: FoldMotion}> = ({
   className,
-  content
-}) => <article className={classNames('inclusive-accordion', className)}>
+  content,
+  motion
+}) => <article className={classNames('inclusive-accordion', motion, className)}>
   <header>
     <h4 className="sub-title bold">Accordion using checkboxes</h4>
     <p>no Javascript needed to pull this off.</p>
@@ -54,10 +55,11 @@ export const InclusiveAccordion: FC<PropsWithClassName & ContentProps> = ({
   </fieldset>
 </article>;
 
-export const ExclusiveAccordion: FC<PropsWithClassName & ContentProps> = ({
+export const ExclusiveAccordion: FC<PropsWithClassName & ContentProps & {motion: FoldMotion}> = ({
   className,
-  content
-}) => <article className={classNames('exclusive-accordion', className)}>
+  content,
+  motion
+}) => <article className={classNames('exclusive-accordion', motion, className)}>
   <header>
     <h4 className="sub-title bold">Accordion using a radio group</h4>
     <p>no Javascript needed to pull this off.</p>

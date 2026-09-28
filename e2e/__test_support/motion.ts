@@ -41,7 +41,9 @@ export const framesWhileMoving = (fold: Locator): Promise<Frame[]> => fold.evalu
     }
     const clips = [...between, element].filter(box => getComputedStyle(box).overflowY !== 'visible');
     const shownTextBottom = () => Math.min(...[innermost, ...clips].map(box => box.getBoundingClientRect().bottom));
-    const textAboveTheClip = () => Math.max(...[innermost, ...clips].map(box => box.getBoundingClientRect().top)) - innermost.getBoundingClientRect().top;
+    const text = document.createRange();
+    text.selectNodeContents(innermost);
+    const textAboveTheClip = () => Math.max(...[innermost, ...clips].map(box => box.getBoundingClientRect().top)) - text.getBoundingClientRect().top;
     const before = element.getBoundingClientRect().height;
     const deadline = performance.now() + 5000;
     const sampled: Frame[] = [];

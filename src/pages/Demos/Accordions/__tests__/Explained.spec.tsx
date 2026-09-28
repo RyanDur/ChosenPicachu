@@ -124,10 +124,13 @@ describe('the two together', () => {
 });
 
 describe('the fold motion', () => {
-  test('should sit at the top of part two, open on the reveal, and write the motion chosen into the address', async () => {
+  test('should sit at the top of the tab beside the fold type, open on the reveal, and write the motion chosen into the address', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
-    const platform = await screen.findByRole('region', {name: parts[1]});
-    const motions = within(platform).getByRole('group', {name: 'fold motion'});
+    const tab = await screen.findByRole('region', {name: 'Accordions'});
+    const motions = within(tab).getByRole('group', {name: 'fold motion'});
+    for (const part of parts) {
+      expect(within(screen.getByRole('region', {name: part})).queryByRole('group', {name: 'fold motion'})).not.toBeInTheDocument();
+    }
     expect(within(motions).getByRole('radio', {name: 'Reveal'})).toBeChecked();
 
     await userEvent.click(within(motions).getByRole('radio', {name: 'Drawer'}));
@@ -162,6 +165,36 @@ describe('the fold motion', () => {
     const platform = await screen.findByRole('region', {name: parts[1]});
 
     expect(codeBeside(platform, /This replaces the max-height guess/)).not.toHaveTextContent('.drawer &::details-content');
+  });
+
+  const partOneSays = {
+    reveal: /With reveal, the transition that runs is the one on the state being entered/,
+    drawer: /With the drawer, max-height moves on the same timings/,
+    static: /With static, nothing moves/
+  };
+
+  test.each([
+    {style: 'reveal', others: ['drawer', 'static'], carves: '.reveal & .info'},
+    {style: 'drawer', others: ['reveal', 'static'], carves: '.drawer & .info'},
+    {style: 'static', others: ['reveal', 'drawer'], carves: '.info-toggle:not(:checked) ~ .info'}
+  ] as const)('should tell, with $style chosen, only what that motion does under part one', async ({style, others, carves}) => {
+    render(<TestApp at={demosAt(`?tab=accordions&style=${style}`)}/>);
+
+    const oldWay = await screen.findByRole('region', {name: parts[0]});
+
+    expect(within(oldWay).getByText(partOneSays[style])).toBeInTheDocument();
+    for (const other of others) {
+      expect(within(oldWay).queryByText(partOneSays[other])).not.toBeInTheDocument();
+    }
+    expect(codeBeside(oldWay, partOneSays[style])).toHaveTextContent(carves);
+  });
+
+  test('should turn the arrow at once under static, and say so', async () => {
+    render(<TestApp at={demosAt('?tab=accordions&style=static')}/>);
+
+    const oldWay = await screen.findByRole('region', {name: parts[0]});
+
+    expect(within(oldWay).getByText(/With static there is none, so the corner turns in a single frame/)).toBeInTheDocument();
   });
 
   const partThreeSays = {

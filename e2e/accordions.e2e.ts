@@ -80,7 +80,7 @@ for (const build of ['the inclusive details build', 'the details build'] as cons
 
 const slidDown = (frames: Frame[]): number[] => frames.map(frame => frame.textAboveTheClip).filter(above => above > layoutRounding);
 
-for (const build of ['the grid checkbox build', 'the grid radio build'] as const) {
+for (const build of ['the checkbox build', 'the radio build', 'the grid checkbox build', 'the grid radio build'] as const) {
   for (const direction of ['open', 'closed'] as const) {
     test(`a fold in ${build} slides ${direction} by the reveal, its text's top on the bar and its bottom on the fold's edge`, async ({page}) => {
       await page.goto(showing(build, 'reveal'));
@@ -305,7 +305,7 @@ for (const build of ['the grid checkbox build', 'the grid radio build'] as const
   });
 }
 
-for (const build of ['the inclusive details build', 'the details build', 'the grid checkbox build', 'the grid radio build'] as const) {
+for (const build of ['the checkbox build', 'the radio build', 'the inclusive details build', 'the details build', 'the grid checkbox build', 'the grid radio build'] as const) {
   test(`a reader who asks for less motion gets ${build} open at once under the drawer`, async ({page}) => {
     await page.emulateMedia({reducedMotion: 'reduce'});
     await page.goto(showing(build, 'drawer'));
@@ -316,6 +316,20 @@ for (const build of ['the inclusive details build', 'the details build', 'the gr
     await part.open();
 
     expect(await firstMoved).toBeGreaterThan(closed);
+    expect(await firstMoved).toBe(await heightOnceSettled(part.fold));
+  });
+}
+
+for (const build of ['the checkbox build', 'the radio build'] as const) {
+  test(`with Static chosen, a fold in ${build} opens fully in one frame`, async ({page}) => {
+    await page.goto(showing(build, 'static'));
+    const part = accordionsTab(page).firstPartOf(build);
+    const closedHeight = await heightByTheNextFrame(part.fold);
+    const firstMoved = firstHeightAfter(part.fold, closedHeight);
+
+    await part.open();
+
+    expect(await firstMoved).toBeGreaterThan(closedHeight);
     expect(await firstMoved).toBe(await heightOnceSettled(part.fold));
   });
 }

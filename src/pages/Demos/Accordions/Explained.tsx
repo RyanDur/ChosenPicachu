@@ -62,11 +62,12 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
   const input = inputOf[type];
   return <>
     <PillGlider label="fold type" name="fold-type" options={foldTypes} chosen={type} onChosen={onTypeChosen}/>
+    <PillGlider label="fold motion" name="fold-motion" options={foldMotions} chosen={motion} onChosen={onMotionChosen}/>
     <section aria-labelledby="old-way-heading" className="accordion-part">
       <h3 id="old-way-heading" className="title bold">How we used to build a fold</h3>
       {type === 'inclusive'
-        ? <InclusiveAccordion className={exhibit} content={contents.checkbox}/>
-        : <ExclusiveAccordion className={exhibit} content={contents.radio}/>}
+        ? <InclusiveAccordion className={exhibit} content={contents.checkbox} motion={motion}/>
+        : <ExclusiveAccordion className={exhibit} content={contents.radio} motion={motion}/>}
       <ol className={runs}>
         <li className="run">
           <p className="paragraph">This build is a disclosure: a bar you press to show the text under it. It has
@@ -128,17 +129,19 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             borders, turned 45 degrees so the corner points right. When the {input} is checked, the
             ~ combinator picks the label after it, and the corner turns to 135 degrees and points
             down. A transition moves a property from its old value to its new one over a set time,
-            whenever the value changes. This one sits on every bar, not on one state, so opening and
-            closing both turn the arrow over 500 milliseconds with ease. A transform, such as this
-            turn, moves pixels the browser has already painted, without laying out the page again,
+            whenever the value changes.
+          {motion === 'static'
+            ? ' With static there is none, so the corner turns in a single frame.'
+            : ' With reveal and the drawer, one sits on every bar, not on one state, so opening and closing both turn the arrow over 500 milliseconds with ease.'}
+          {' '}A transform, such as this turn, moves pixels the browser has already painted, without laying out the page again,
             so a turn is cheap. The bar has a set height and side padding, so every bar is the same
             size whatever its word, and its colours are the page’s, inverted. The arrow’s width and
             height size the box its borders outline, and its right margin keeps the corner off the
             bar’s edge.</p>
           <Snippet label="CSS" lines={[
             ...unit(accordionsCss, '&:not(.close) .info-label {'), gap,
-            ...unit(accordionsCss, '&:not(.close) .info-toggle ~ .info-label::after {'), gap,
-            ...unit(accordionsCss, '.info-toggle:checked ~ .info-label::after {')
+            ...unit(accordionsCss, '.info-toggle:checked ~ .info-label::after {'), gap,
+            ...unit(accordionsCss, ':is(.reveal, .drawer) &:not(.close) .info-toggle ~ .info-label::after {')
           ]}/>
           <TwoBordersTurned/>
         </li>
@@ -162,19 +165,20 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             height to auto, the height the content needs, so max-height stands in: a height the text
             may grow to but not past. Open, the text’s max-height is 80rem, a guess taller than any
             part should be. Closed, it is 0, with its padding and top margin gone, and overflow
-            hidden hides whatever does not fit. Text taller than the guess is cut off. The
-            transition that runs is the one on the state being entered. The open rule has 500
-            milliseconds, so opening takes 500; the closed rule has 250, so closing takes 250. Both
-            use ease, which starts quickly and slows to a stop. Max-height travels the full 80rem
-            either way. While it is above the text’s height, nothing visible changes, and the text
-            only starts to hide once max-height drops below it. So a short part is fully open
-            within the first few frames, and on closing it stays whole until the last few. That is
-            the blink and the pause. Opacity, the half-height drop, the top margin and the bottom
-            padding all move on the same transition, so the text fades in as it rises into place,
-            and its spacing opens with it.</p>
+            hidden hides whatever does not fit. Text taller than the guess is cut off.
+          {{
+            reveal: ' With reveal, the transition that runs is the one on the state being entered. The open rule has 500 milliseconds, so opening takes 500; the closed rule has 250, so closing takes 250. Both use ease, which starts quickly and slows to a stop. Max-height travels the full 80rem either way. While it is above the text’s height, nothing visible changes, and the text only starts to hide once max-height drops below it. So a short part is fully open within the first few frames, and on closing it stays whole until the last few. That is the blink and the pause. Opacity, the half-height drop, the top margin and the bottom padding all move on the same transition, so the text fades in as it rises into place, and its spacing opens with it.',
+            drawer: ' With the drawer, max-height moves on the same timings, 500 milliseconds to open and 250 to close, and the paragraph lays its text out as a column set at its end. So the text’s bottom stays on the fold’s edge, and the text slides down from under the bar. The guess still shows: max-height travels the full 80rem, so a short part is fully open within the first few frames, and on closing it stays whole until the last few. The text does not fade or drop; only its spacing moves with it.',
+            static: ' With static, nothing moves: the text is at its full height or at 0, in a single frame.'
+          }[motion]}</p>
           <Snippet label="CSS" lines={[
             ...unit(accordionsCss, '.info {\n      overflow: hidden;\n      max-height'), gap,
-            ...unit(accordionsCss, '.info-toggle:not(:checked) ~ .info {')
+            ...unit(accordionsCss, '.info-toggle:not(:checked) ~ .info {'), gap,
+            ...{
+              reveal: [...unit(accordionsCss, '.reveal & .info {'), gap, ...unit(accordionsCss, '.reveal & .info-toggle:not(:checked) ~ .info {')],
+              drawer: [...unit(accordionsCss, '.drawer & .info {'), gap, ...unit(accordionsCss, '.drawer & .info-toggle:not(:checked) ~ .info {')],
+              static: []
+            }[motion]
           ]}/>
           <TheGuess/>
         </li>
@@ -204,7 +208,6 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
     </section>
     <section aria-labelledby="platform-way-heading" className="accordion-part">
       <h3 id="platform-way-heading" className="title bold">What the platform gives now</h3>
-      <PillGlider label="fold motion" name="fold-motion" options={foldMotions} chosen={motion} onChosen={onMotionChosen}/>
       {type === 'inclusive'
         ? <InclusiveToggleAccordion className={exhibit} content={contents.inclusiveDetails} motion={motion}/>
         : <ExclusiveToggleAccordion className={exhibit} content={contents.exclusiveDetails} motion={motion}/>}
