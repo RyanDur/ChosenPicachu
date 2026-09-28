@@ -201,6 +201,7 @@
 
 .inclusive-accordion,
 .exclusive-accordion,
+.inclusive-toggle-accordion,
 .exclusive-toggle-accordion {
   display: flex;
   flex-direction: column;

@@ -9,7 +9,7 @@
   gap: var(--base-x-5);
 
   .build {
-    flex: 1 1 0;
+    flex: 1 1 var(--base-x-30);
     min-inline-size: min-content;
   }
 }

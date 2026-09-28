@@ -15,7 +15,7 @@ describe('the accordions tab', () => {
 
   test.each([
     [parts[0], ['Accordion using checkboxes', 'Accordion using a radio group']],
-    [parts[1], ['Exclusive accordion using details elements']],
+    [parts[1], ['Inclusive accordion using details elements', 'Exclusive accordion using details elements']],
     [parts[2], ['Exclusive accordion using checkboxes', 'Exclusive accordion using radio group']]
   ])('should show under "%s" the builds it is about', async (part, builds) => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);

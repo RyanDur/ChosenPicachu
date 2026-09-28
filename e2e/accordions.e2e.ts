@@ -110,7 +110,7 @@ for (const {reader, device, layout} of [
 
 for (const build of builds) {
   test(`a reader who asks for less motion gets ${build} open at once`, async ({page, browserName}) => {
-    test.skip(build === 'the details build' && browserName !== 'chromium', 'only chromium animates a details element to its natural height');
+    test.skip(build.includes('details') && browserName !== 'chromium', 'only chromium animates a details element to its natural height');
     await page.emulateMedia({reducedMotion: 'reduce'});
     await page.goto('demos/?tab=accordions');
     const part = accordionsTab(page).firstPartOf(build);
@@ -169,6 +169,20 @@ for (const build of builds.filter(build => build !== 'the details build')) {
 
     await expect.poll(part.isOpen).toBe(true);
     await expect.poll(part.showsText).toBe(true);
+  });
+}
+
+for (const build of ['the checkbox build', 'the inclusive details build'] as const) {
+  test(`a reader opens two parts of ${build} and both stay open`, async ({page}) => {
+    await page.goto('demos/?tab=accordions');
+    const [first, second] = [accordionsTab(page).partOf(build, 0), accordionsTab(page).partOf(build, 1)];
+    await first.open();
+    await expect.poll(first.showsText).toBe(true);
+
+    await second.open();
+
+    await expect.poll(second.showsText).toBe(true);
+    await expect.poll(first.showsText).toBe(true);
   });
 }
 

@@ -1,12 +1,13 @@
 import type {Locator, Page} from '@playwright/test';
 
-export type Build = 'the checkbox build' | 'the radio build' | 'the details build' | 'the React checkbox build' | 'the React radio build';
+export type Build = 'the checkbox build' | 'the radio build' | 'the inclusive details build' | 'the details build' | 'the React checkbox build' | 'the React radio build';
 
-export const builds: Build[] = ['the checkbox build', 'the radio build', 'the details build', 'the React checkbox build', 'the React radio build'];
+export const builds: Build[] = ['the checkbox build', 'the radio build', 'the inclusive details build', 'the details build', 'the React checkbox build', 'the React radio build'];
 
 const headings: Record<Build, string> = {
   'the checkbox build': 'Accordion using checkboxes',
   'the radio build': 'Accordion using a radio group',
+  'the inclusive details build': 'Inclusive accordion using details elements',
   'the details build': 'Exclusive accordion using details elements',
   'the React checkbox build': 'Exclusive accordion using checkboxes',
   'the React radio build': 'Exclusive accordion using radio group'
@@ -47,6 +48,14 @@ const textShownIn = (fold: Locator) => async (): Promise<boolean> => {
   }));
 };
 
+const detailsPart = (page: Page, fold: Locator): Omit<Part, 'showsText'> => ({
+  fold,
+  open: () => wordOn(fold).click(),
+  close: () => wordOn(fold).click(),
+  openByKeyboard: () => focusAndPress(page, wordOn(fold), 'Enter'),
+  isOpen: () => fold.evaluate(details => details.hasAttribute('open'))
+});
+
 const closeBar = (fold: Locator) => () => fold.getByText('Close', {exact: true}).click();
 
 const partIn: Record<Build, (where: Where) => Omit<Part, 'showsText'>> = {
@@ -64,13 +73,8 @@ const partIn: Record<Build, (where: Where) => Omit<Part, 'showsText'>> = {
     openByKeyboard: () => focusAndPress(page, article.getByRole('radio', {name: 'Close', exact: true}), 'ArrowDown', index + 1),
     isOpen: () => fold.getByRole('radio').isChecked()
   }),
-  'the details build': ({page, fold}) => ({
-    fold,
-    open: () => wordOn(fold).click(),
-    close: () => wordOn(fold).click(),
-    openByKeyboard: () => focusAndPress(page, wordOn(fold), 'Enter'),
-    isOpen: () => fold.evaluate(details => details.hasAttribute('open'))
-  }),
+  'the inclusive details build': ({page, fold}) => detailsPart(page, fold),
+  'the details build': ({page, fold}) => detailsPart(page, fold),
   'the React checkbox build': ({page, fold}) => ({
     fold,
     open: () => fold.getByText('Open', {exact: true}).click(),
@@ -89,13 +93,15 @@ const partIn: Record<Build, (where: Where) => Omit<Part, 'showsText'>> = {
   })
 };
 
+const detailsBuilds: Build[] = ['the inclusive details build', 'the details build'];
+
 const closeBarsBeforeTheParts = (build: Build): number => build === 'the radio build' ? 1 : 0;
 
 export const accordionsTab = (page: Page) => {
   const built = (build: Build): Locator =>
     page.getByRole('article').filter({has: page.getByRole('heading', {name: headings[build], exact: true})}).first();
   const folds = (build: Build): Locator =>
-    build === 'the details build' ? built(build).getByRole('group') : built(build).getByRole('listitem');
+    detailsBuilds.includes(build) ? built(build).getByRole('group') : built(build).getByRole('listitem');
   const partOf = (build: Build, index: number): Part => {
     const fold = folds(build).nth(index + closeBarsBeforeTheParts(build));
     return {...partIn[build]({page, fold, article: built(build), index}), showsText: textShownIn(fold)};

@@ -5,7 +5,8 @@ import {
   ExclusiveRadioToggleAccordion,
   ExclusiveToggleAccordion,
   Fold,
-  InclusiveAccordion
+  InclusiveAccordion,
+  InclusiveToggleAccordion
 } from './Accordions';
 import {Mdn, Snippet, plain} from '../Recipe';
 import {span, unit} from '../Recipe/carve';
@@ -19,6 +20,7 @@ import './Explained.css';
 export type Contents = {
   checkbox: Fold[];
   radio: Fold[];
+  inclusiveDetails: Fold[];
   details: Fold[];
   checkboxWithState: Fold[];
   radioWithState: Fold[];
@@ -166,7 +168,10 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
   </section>
   <section aria-labelledby="platform-way-heading" className="accordion-part">
     <h3 id="platform-way-heading" className="title bold">What the platform gives now</h3>
-    <ExclusiveToggleAccordion className={exhibit} content={contents.details}/>
+    <ul className="accordions">
+      <li className="build"><InclusiveToggleAccordion className={exhibit} content={contents.inclusiveDetails}/></li>
+      <li className="build"><ExclusiveToggleAccordion className={exhibit} content={contents.details}/></li>
+    </ul>
     <ol className={runs}>
       <li className="run">
         <p className="paragraph">HTML now has a disclosure of its own:
@@ -176,7 +181,9 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
           piece in its place. Summary is the bar and the control at once, so there is no label,
           no for and no id. Details remembers whether it is open, so there is no checkbox to
           hide and no sibling selector to read it. The keyboard comes with it, and a screen
-          reader announces the bar as a disclosure, collapsed or expanded.</p>
+          reader announces the bar as a disclosure, collapsed or expanded. With nothing more,
+          each part opens and closes on its own, as the checkbox build’s parts do. That is the
+          inclusive build.</p>
         <Snippet label="TS" lines={span(accordionsSource, '<details className="fold"', '</details>')}/>
         <OneJobTwoWays/>
         <ThreeBecomeTwo/>
