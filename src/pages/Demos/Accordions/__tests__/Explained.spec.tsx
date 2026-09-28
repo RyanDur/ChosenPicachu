@@ -44,11 +44,12 @@ describe('what the platform gives now', () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
     const explained = await screen.findByRole('region', {name: parts[1]});
-    const codes = within(explained).getAllByRole('code');
+    const codeBeside = (words: RegExp): HTMLElement =>
+      within(within(explained).getAllByRole('listitem').filter(run => within(run).queryByText(words) !== null)[0]).getByRole('code');
 
-    expect(codes[0]).toHaveTextContent('<details className="fold">');
-    expect(codes[0]).not.toHaveTextContent('name=');
-    expect(codes[1]).toHaveTextContent('<details className="fold" name="exclusive-toggle-accordion">');
+    expect(codeBeside(/That is the inclusive build/)).toHaveTextContent('<details className="fold">');
+    expect(codeBeside(/That is the inclusive build/)).not.toHaveTextContent('name=');
+    expect(codeBeside(/This replaces the radio group/)).toHaveTextContent('<details className="fold" name="exclusive-toggle-accordion">');
   });
 });
 
