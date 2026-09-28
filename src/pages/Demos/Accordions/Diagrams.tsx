@@ -2,7 +2,7 @@ import {FC, PropsWithChildren} from 'react';
 import {Figure} from '../Recipe';
 import './Diagrams.css';
 
-type Kind = 'piece' | 'native' | 'unseen' | 'clipped' | 'clip';
+type Kind = 'piece' | 'native' | 'unseen' | 'clipped' | 'clip' | 'ring' | 'unseen-ring';
 type At = {x: number; y: number};
 type Sized = At & {width: number; height: number};
 
@@ -88,9 +88,9 @@ export const FocusOnTheBar: FC = () =>
     says="The box off screen holds the keyboard’s focus, and the sheet carries it forward to the bar the reader sees.">
     <Box x={110} y={20} width={200} height={70} kind="piece"/>
     <Words x={210} y={36}>the viewport</Words>
-    <rect className="ring" x={125} y={48} width={170} height={26}/>
+    <Box x={125} y={48} width={170} height={26} kind="ring"/>
     <Words x={210} y={65}>label, lit and ringed</Words>
-    <rect className="ring unseen" x={14} y={48} width={40} height={26}/>
+    <Box x={14} y={48} width={40} height={26} kind="unseen-ring"/>
     <Words x={34} y={65}>focus</Words>
     <Arrow through={[{x: 54, y: 61}, {x: 123, y: 61}]}/>
     <Words x={88} y={104}>:focus-visible ~</Words>

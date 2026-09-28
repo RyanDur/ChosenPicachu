@@ -54,11 +54,16 @@
     fill: var(--charcoal);
   }
 
-  .ring {
+  .ring,
+  .unseen-ring {
     fill: var(--approach);
     stroke: var(--ring);
     stroke-width: var(--hairline-x-2);
     vector-effect: non-scaling-stroke;
+  }
+
+  .unseen-ring {
+    stroke-dasharray: 4 3;
   }
 
   .guess,
