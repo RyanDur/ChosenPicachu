@@ -1,6 +1,7 @@
 import {UsersAPI} from '@components/Users/resource/usersApi';
 import {HTTPError} from '@transport/types';
-import {befriended, unfriended, UsersListener, userWithId, usersArrived} from './store';
+import {befriended, unfriended} from '@components/Users/UserInfo/user';
+import {UsersListener, userWithId, usersArrived} from './store';
 
 export const syncing = (users: UsersAPI, saved: () => void, refused: (error: HTTPError) => void): UsersListener => (_previous, current, dispatch, action) => {
   switch (action.type) {

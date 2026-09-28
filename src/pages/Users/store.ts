@@ -31,9 +31,6 @@ export const userRemoved = (user: User): UsersAction => ({type: 'userRemoved', u
 export const friendAdded = (user: User, friend: string): UsersAction => ({type: 'friendAdded', user, friend});
 export const friendRemoved = (user: User, friend: string): UsersAction => ({type: 'friendRemoved', user, friend});
 
-export const befriended = (user: User, friend: string): User => ({...user, friends: [...user.friends, friend]});
-export const unfriended = (user: User, friend: string): User => ({...user, friends: user.friends.filter(id => id !== friend)});
-
 export const userWithId = (id?: string) => ({users}: UsersState): Maybe<User> =>
   maybe(users.find(user => user.id === id));
 
