@@ -128,6 +128,7 @@ describe('the fold motion', () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
     const tab = await screen.findByRole('region', {name: 'Accordions'});
     const motions = within(tab).getByRole('group', {name: 'fold motion'});
+    expect(within(tab).getAllByRole('group').slice(0, 2)).toEqual([within(tab).getByRole('group', {name: 'fold type'}), motions]);
     for (const part of parts) {
       expect(within(screen.getByRole('region', {name: part})).queryByRole('group', {name: 'fold motion'})).not.toBeInTheDocument();
     }
@@ -139,16 +140,25 @@ describe('the fold motion', () => {
     expect(within(motions).getByRole('radio', {name: 'Drawer'})).toBeChecked();
   });
 
+  const partTwoSays = {
+    reveal: /With reveal, the size moves over 300 milliseconds/,
+    drawer: /With the drawer, the size moves on the same 300 milliseconds/,
+    static: /With static, the part a details hides has no transition/
+  };
+
   test.each([
-    {style: 'reveal', says: /With reveal, the size moves over 300 milliseconds/},
-    {style: 'drawer', says: /With the drawer, the size moves on the same 300 milliseconds/},
-    {style: 'static', says: /With static, the part a details hides has no transition/}
-  ])('should tell, with $style chosen, what the details builds do under that motion', async ({style, says}) => {
+    {style: 'reveal', others: ['drawer', 'static']},
+    {style: 'drawer', others: ['reveal', 'static']},
+    {style: 'static', others: ['reveal', 'drawer']}
+  ] as const)('should tell, with $style chosen, only what the details builds do under that motion', async ({style, others}) => {
     render(<TestApp at={demosAt(`?tab=accordions&style=${style}`)}/>);
 
     const platform = await screen.findByRole('region', {name: parts[1]});
 
-    expect(within(platform).getByText(says)).toBeInTheDocument();
+    expect(within(platform).getByText(partTwoSays[style])).toBeInTheDocument();
+    for (const other of others) {
+      expect(within(platform).queryByText(partTwoSays[other])).not.toBeInTheDocument();
+    }
   });
 
   test('should carve the details drawer rule beside the details run under the drawer', async () => {
@@ -174,10 +184,10 @@ describe('the fold motion', () => {
   };
 
   test.each([
-    {style: 'reveal', others: ['drawer', 'static'], carves: '.reveal & .info'},
-    {style: 'drawer', others: ['reveal', 'static'], carves: '.drawer & .info'},
-    {style: 'static', others: ['reveal', 'drawer'], carves: '.info-toggle:not(:checked) ~ .info'}
-  ] as const)('should tell, with $style chosen, only what that motion does under part one', async ({style, others, carves}) => {
+    {style: 'reveal', others: ['drawer', 'static'], carves: ['.reveal & .info'], omits: ['.drawer & .info']},
+    {style: 'drawer', others: ['reveal', 'static'], carves: ['.drawer & .info'], omits: ['.reveal & .info']},
+    {style: 'static', others: ['reveal', 'drawer'], carves: [], omits: ['.reveal & .info', '.drawer & .info']}
+  ] as const)('should tell, with $style chosen, only what that motion does under part one', async ({style, others, carves, omits}) => {
     render(<TestApp at={demosAt(`?tab=accordions&style=${style}`)}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
@@ -186,15 +196,25 @@ describe('the fold motion', () => {
     for (const other of others) {
       expect(within(oldWay).queryByText(partOneSays[other])).not.toBeInTheDocument();
     }
-    expect(codeBeside(oldWay, partOneSays[style])).toHaveTextContent(carves);
+    for (const rule of carves) {
+      expect(codeBeside(oldWay, partOneSays[style])).toHaveTextContent(rule);
+    }
+    for (const rule of omits) {
+      expect(codeBeside(oldWay, partOneSays[style])).not.toHaveTextContent(rule);
+    }
   });
 
-  test('should turn the arrow at once under static, and say so', async () => {
-    render(<TestApp at={demosAt('?tab=accordions&style=static')}/>);
+  test.each([
+    {style: 'reveal', says: /With reveal and the drawer, one sits on every bar/, not: /With static there is none/},
+    {style: 'drawer', says: /With reveal and the drawer, one sits on every bar/, not: /With static there is none/},
+    {style: 'static', says: /With static there is none, so the corner turns in a single frame/, not: /With reveal and the drawer, one sits on every bar/}
+  ])('should tell, with $style chosen, how the arrow turns', async ({style, says, not}) => {
+    render(<TestApp at={demosAt(`?tab=accordions&style=${style}`)}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(within(oldWay).getByText(/With static there is none, so the corner turns in a single frame/)).toBeInTheDocument();
+    expect(within(oldWay).getByText(says)).toBeInTheDocument();
+    expect(within(oldWay).queryByText(not)).not.toBeInTheDocument();
   });
 
   const partThreeSays = {
