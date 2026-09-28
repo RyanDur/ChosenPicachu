@@ -15,14 +15,19 @@ export type Note = {page: Page; words: string; reach?: string; from: string};
 
 type Thread = {id: string; url: string};
 
-const refusal = schema.object({required: {errors: schema.array(schema.unknown)}});
+const refusal = schema.object({
+  required: {errors: schema.array(schema.object({optional: {type: schema.string}}))}
+});
+
+const failureIn = ({errors}: schema.Output<typeof refusal>): HTTPError =>
+  errors.some(({type}) => type === 'NOT_FOUND') ? HTTPError.NOT_FOUND : HTTPError.FORBIDDEN;
 
 const answered = <T>(data: schema.Decoder<T>) => schema.object({required: {data}});
 
 const asked = <T>(token: string, query: string, variables: Record<string, string>, data: schema.Decoder<T>): Result.Async<T, HTTPError> =>
   http.post<unknown>(endpoint, {query, variables}, {headers: {authorization: `bearer ${token}`}})
     .mBind(reply => maybe(refusal.decode(reply))
-      .map(() => asyncFailure<HTTPError, T>(HTTPError.FORBIDDEN))
+      .map(refused => asyncFailure<HTTPError, T>(failureIn(refused)))
       .orElse(validate(answered(data))(reply).map(answer => answer.data)));
 
 export const titleOf = ({key, name}: Page): string => `Feedback: ${name} (${key})`;

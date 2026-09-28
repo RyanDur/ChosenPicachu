@@ -64,11 +64,21 @@ describe('sending a note to GitHub', () => {
   });
 
   test('should fail as forbidden when GitHub answers with errors', async () => {
-    github(() => ({data: null, errors: [{message: 'Could not resolve to a node'}]}));
+    github(() => ({data: null, errors: [{type: 'FORBIDDEN', message: 'Resource not accessible by integration'}]}));
 
     const refused = (await sent('token', note).value).inspect();
 
     expect(refused).toEqual(failure(HTTPError.FORBIDDEN).inspect());
+  });
+
+  test('should fail as not found when GitHub answers NOT_FOUND', async () => {
+    github(({query}) => query.includes('search')
+      ? {data: {search: {nodes: [{id: 'D_7', url: 'https://github.test/discussions/7', title: 'Feedback: Demos Tables (/demos/?tab=tables)'}]}}}
+      : {data: null, errors: [{type: 'NOT_FOUND', message: 'Could not resolve to a node with the global id of \'D_7\''}]});
+
+    const refused = (await sent('token', note).value).inspect();
+
+    expect(refused).toEqual(failure(HTTPError.NOT_FOUND).inspect());
   });
 
   test('should fail as unreadable when GitHub opens a thread without saying where', async () => {
