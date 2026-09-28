@@ -24,10 +24,14 @@ export const syncing = (users: UsersAPI, saved: () => void, refused: (error: HTT
         .onFailure(refused);
       return;
     case 'friendAdded':
-      users.update(befriended(action.user, action.friend)).onSuccess(arrived => dispatch(usersArrived(arrived))).onFailure(refused);
+      userWithId(action.user)(current()).map(known => users.update(befriended(known, action.friend))
+        .onSuccess(arrived => dispatch(usersArrived(arrived)))
+        .onFailure(refused));
       return;
     case 'friendRemoved':
-      users.update(unfriended(action.user, action.friend)).onSuccess(arrived => dispatch(usersArrived(arrived))).onFailure(refused);
+      userWithId(action.user)(current()).map(known => users.update(unfriended(known, action.friend))
+        .onSuccess(arrived => dispatch(usersArrived(arrived)))
+        .onFailure(refused));
       return;
     default:
       return;

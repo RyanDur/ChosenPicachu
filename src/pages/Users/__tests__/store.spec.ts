@@ -9,14 +9,15 @@ import {
 import {syncing} from '../syncing';
 import {friendAdded, friendRemoved, opened, selectUsers, userAdded, userRemoved, userUpdated, userWithId, usersArrived, usersStore} from '../store';
 import {rowMoved} from '@components/DragSortableTable/arrangement';
+import {User} from '@components/Users/UserInfo/user';
 
 describe('the users store', () => {
   const [first, second, third] = someUsers;
-  const openedStore = async () => {
-    setupUsersResponse(someUsers);
+  const openedStore = async (roster: readonly User[] = someUsers) => {
+    setupUsersResponse([...roster]);
     const store = usersStore(syncing(users, () => undefined, () => undefined));
     store.dispatch(opened());
-    await vi.waitFor(() => expect(store.state.users).toHaveLength(someUsers.length));
+    await vi.waitFor(() => expect(store.state.users).toHaveLength(roster.length));
     return store;
   };
 
@@ -70,25 +71,25 @@ describe('the users store', () => {
     const store = await openedStore();
     setupUserUpdatedResponse(first.id, [{...first, friends: [second.id]}, ...someUsers.slice(1)]);
 
-    store.dispatch(friendAdded(first, second.id));
+    store.dispatch(friendAdded(first.id, second.id));
 
     await vi.waitFor(() => expect(userWithId(first.id)(store.state).map(({friends}) => friends).orNull()).toEqual([second.id]));
   });
 
-  it('an added friend sends the backend the person with the friend after the ones they had', async () => {
-    const store = await openedStore();
+  it('an added friend sends the backend the person as the roster has them, with the friend after the ones they had', async () => {
+    const store = await openedStore([{...first, friends: [third.id]}, second, third]);
     const sent = setupUserUpdatedResponse(first.id, someUsers);
 
-    store.dispatch(friendAdded({...first, friends: [third.id]}, second.id));
+    store.dispatch(friendAdded(first.id, second.id));
 
     await vi.waitFor(() => expect(sent()).toMatchObject({id: first.id, friends: [third.id, second.id]}));
   });
 
-  it('a removed friend sends the backend the person without that friend', async () => {
-    const store = await openedStore();
+  it('a removed friend sends the backend the person as the roster has them, without that friend', async () => {
+    const store = await openedStore([{...first, friends: [second.id, third.id]}, second, third]);
     const sent = setupUserUpdatedResponse(first.id, someUsers);
 
-    store.dispatch(friendRemoved({...first, friends: [second.id, third.id]}, second.id));
+    store.dispatch(friendRemoved(first.id, second.id));
 
     await vi.waitFor(() => expect(sent()).toMatchObject({id: first.id, friends: [third.id]}));
   });

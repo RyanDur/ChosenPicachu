@@ -48,8 +48,8 @@ export const UsersTable: FC = () => {
           <Cell column="age" row={user.id} className="cell">{maybe(user.info.dob).map(age).map(formatAge).orElse('')}</Cell>
           <Cell column="friends" row={user.id} className="cell">
             <FriendsList user={user} users={users}
-              onFriendAdded={friend => dispatch(friendAdded(user, friend))}
-              onFriendRemoved={friend => dispatch(friendRemoved(user, friend))}/>
+              onFriendAdded={friend => dispatch(friendAdded(user.id, friend))}
+              onFriendRemoved={friend => dispatch(friendRemoved(user.id, friend))}/>
           </Cell>
           <Cell column="works-from-home" row={user.id} className="cell last-column">
             {worksFromHome(user)}
