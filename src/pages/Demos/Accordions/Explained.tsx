@@ -253,6 +253,17 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
     </ul>
     <ol className={runs}>
       <li className="run">
+        <p className="paragraph">The inclusive build lets every part open on its own, as a checkbox already
+          does. It holds a list of the open parts in state, so each bar can say Open or Close. A
+          change adds the part pressed to the list, or takes it out if it was there.</p>
+        <Snippet label="TS" lines={[
+          ...unit(accordionsSource, 'const [opened, updateOpened]'), gap,
+          ...unit(accordionsSource, 'const isOpen = '), gap,
+          ...unit(accordionsSource, 'const toggledIn'), gap,
+          ...span(accordionsSource, 'onChange={() => updateOpened', 'onChange={() => updateOpened')
+        ]}/>
+      </li>
+      <li className="run">
         <p className="paragraph">The two exclusive builds keep only one part open, and a second press on the
           open part closes it. Details does both with a shared name. A checkbox can close itself but cannot
           keep the others shut; a radio keeps the others shut but cannot close itself. So each
@@ -267,17 +278,6 @@ export const AccordionsExplained: FC<{contents: Contents}> = ({contents}) => <>
           ...span(accordionsSource, 'type="checkbox"\n                  aria-label', 'className="off-screen"/>')
         ]}/>
         <WhatEachPromises/>
-      </li>
-      <li className="run">
-        <p className="paragraph">The inclusive build lets every part open on its own, as a checkbox already
-          does. It holds a list of the open parts in state, so each bar can say Open or Close. A
-          change adds the part pressed to the list, or takes it out if it was there.</p>
-        <Snippet label="TS" lines={[
-          ...unit(accordionsSource, 'const [opened, updateOpened]'), gap,
-          ...unit(accordionsSource, 'const isOpen = '), gap,
-          ...unit(accordionsSource, 'const toggledIn'), gap,
-          ...span(accordionsSource, 'onChange={() => updateOpened', 'onChange={() => updateOpened')
-        ]}/>
       </li>
       <li className="run">
         <p className="paragraph">The radio build takes one part at a time from its group, and adds the close:
