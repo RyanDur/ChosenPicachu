@@ -4,7 +4,7 @@ import {format} from 'date-fns';
 
 type FancyTextInputProps = {
   inputId: string;
-  type?: string;
+  type?: 'text' | 'email' | 'date';
   id?: string;
   required?: boolean;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
