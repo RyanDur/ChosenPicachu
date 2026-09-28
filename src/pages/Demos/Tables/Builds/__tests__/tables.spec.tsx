@@ -914,7 +914,6 @@ describe('animated moves', () => {
     expect(carried()).toEqual([]);
     columnCells('trades').forEach(cell => {
       expect(cell).toHaveClass('settling');
-      expect(cell).toHaveStyle({'--settle-x': '-100px', '--settle-y': '0px'});
     });
     columnCells('buys').forEach(cell => {
       expect(cell).toHaveClass('shoved-start');
@@ -967,7 +966,6 @@ describe('animated moves', () => {
     await userEvent.keyboard('{ArrowLeft}');
     expect(columnOrder()).toEqual(['window', 'buys', 'sells', 'volume', 'trades', 'vwap', 'change']);
     expect(header('trades')).toHaveClass('settling');
-    expect(header('trades')).toHaveStyle({'--settle-x': '100px', '--settle-y': '0px'});
     expect(header('vwap')).toHaveClass('shoved-end');
     await userEvent.keyboard('{ArrowLeft}');
     await userEvent.keyboard('{ArrowLeft}');
@@ -996,7 +994,6 @@ describe('animated moves', () => {
     expect(windowNames()).toEqual(['last 5 minutes', 'last 15 minutes', 'this hour', 'this minute', 'session']);
     [...rowOf('this minute').cells].forEach(cell => {
       expect(cell).toHaveClass('settling');
-      expect(cell).toHaveStyle({'--settle-x': '0px', '--settle-y': '40px'});
     });
     [...rowOf('session').cells].forEach(cell => expect(cell).toHaveClass('shoved-down'));
     await userEvent.keyboard('{ArrowUp}');
@@ -1008,7 +1005,7 @@ describe('animated moves', () => {
     expect(document.activeElement).toBe(grip('this minute'));
   });
 
-  test('a keyboard nudge settles the walked row from across the row it passed', async () => {
+  test('a keyboard nudge settles every cell of the walked row', async () => {
     seat(EagerTable, 'keep animated');
     settledRows();
 
@@ -1018,7 +1015,6 @@ describe('animated moves', () => {
     expect(windowNames()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
     [...rowOf('this minute').cells].forEach(cell => {
       expect(cell).toHaveClass('settling');
-      expect(cell).toHaveStyle({'--settle-x': '0px', '--settle-y': '-40px'});
     });
   });
 

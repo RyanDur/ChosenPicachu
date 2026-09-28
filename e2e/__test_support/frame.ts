@@ -57,6 +57,12 @@ const dropAt = async (page: Page, {pressed, held}: {pressed: Locator; held: Loca
   return carriedTo;
 };
 
+const walk = async (page: Page, {focused, held}: {focused: Locator; held: Locator}, key: string): Promise<void> => {
+  await focused.focus();
+  await holdTheSettleAtItsStart(held);
+  await page.keyboard.press(key);
+};
+
 const distanceFrom = (held: Locator, carriedTo: Point) => async (): Promise<number> => {
   if (!await settling(held)) {
     return Infinity;
@@ -79,6 +85,10 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
       dropAt(page, {pressed: columnHeader(name), held: columnHeader(name)}, letGo),
     dropRowAt: ({row, name}: {row: number; name: RegExp}, letGo: Point): Promise<Point> =>
       dropAt(page, {pressed: rowGrip(row), held: rowHeader(name)}, letGo),
+    walkColumn: (name: string, key: string): Promise<void> =>
+      walk(page, {focused: columnHeader(name), held: columnHeader(name)}, key),
+    walkRow: ({row, name}: {row: number; name: RegExp}, key: string): Promise<void> =>
+      walk(page, {focused: rowGrip(row), held: rowHeader(name)}, key),
     columnSettlesFrom: (name: string, carriedTo: Point) => distanceFrom(columnHeader(name), carriedTo),
     rowSettlesFrom: (name: RegExp, carriedTo: Point) => distanceFrom(rowHeader(name), carriedTo),
     sortToggle: (name: string): Locator => table.getByRole('button', {name: `sort ${name}`}),

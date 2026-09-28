@@ -72,6 +72,28 @@ for (const {name, at, table} of stages) {
       await expect.poll(trades.rowSettlesFrom(/this minute/, seatItLeft)).toBeLessThanOrEqual(1);
     });
 
+    test(`a column walked one seat by the arrow key settles from the seat it left, ${pace}, in ${name}`, async ({page}) => {
+      await page.goto(`${at}&pace=${pace}`);
+      const trades = dragSortTable(page, table(page));
+      await expect(trades.columnHeader('trades')).toBeVisible();
+      const seatItLeft = await trades.centreOfColumn('trades');
+
+      await trades.walkColumn('trades', 'ArrowRight');
+
+      await expect.poll(trades.columnSettlesFrom('trades', seatItLeft)).toBeLessThanOrEqual(1);
+    });
+
+    test(`a row walked one seat by the arrow key settles from the seat it left, ${pace}, in ${name}`, async ({page}) => {
+      await page.goto(`${at}&pace=${pace}`);
+      const trades = dragSortTable(page, table(page));
+      await expect(trades.columnHeader('trades')).toBeVisible();
+      const seatItLeft = await trades.centreOfRowHeader(/this minute/);
+
+      await trades.walkRow({row: 1, name: /this minute/}, 'ArrowDown');
+
+      await expect.poll(trades.rowSettlesFrom(/this minute/, seatItLeft)).toBeLessThanOrEqual(1);
+    });
+
     test(`a row let go past its crossing settles from where it was carried, ${pace}, in ${name}`, async ({page}) => {
       await page.goto(`${at}&pace=${pace}&origin=hide&motion=animated`);
       const trades = dragSortTable(page, table(page));
