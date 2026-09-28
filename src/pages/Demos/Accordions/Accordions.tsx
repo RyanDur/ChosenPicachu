@@ -79,10 +79,11 @@ export const ExclusiveAccordion: FC<PropsWithClassName & ContentProps> = ({
   </fieldset>
 </article>;
 
-export const InclusiveToggleAccordion: FC<PropsWithClassName & ContentProps> = ({
+export const InclusiveToggleAccordion: FC<PropsWithClassName & ContentProps & {motion: FoldMotion}> = ({
   className,
-  content
-}) => <article className={classNames('inclusive-toggle-accordion', className)}>
+  content,
+  motion
+}) => <article className={classNames('inclusive-toggle-accordion', motion, className)}>
   <header>
     <h4 className="sub-title bold">Inclusive accordion using details elements</h4>
   </header>
@@ -97,10 +98,11 @@ export const InclusiveToggleAccordion: FC<PropsWithClassName & ContentProps> = (
   </ul>
 </article>;
 
-export const ExclusiveToggleAccordion: FC<PropsWithClassName & ContentProps> = ({
+export const ExclusiveToggleAccordion: FC<PropsWithClassName & ContentProps & {motion: FoldMotion}> = ({
   className,
-  content
-}) => <article className={classNames('exclusive-toggle-accordion', className)}>
+  content,
+  motion
+}) => <article className={classNames('exclusive-toggle-accordion', motion, className)}>
   <header>
     <h4 className="sub-title bold">Exclusive accordion using details elements</h4>
   </header>

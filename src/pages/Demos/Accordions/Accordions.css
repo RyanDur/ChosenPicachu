@@ -3,13 +3,22 @@
     &::details-content {
       block-size: 0;
       overflow: hidden;
+    }
+
+    &[open]::details-content {
+      block-size: auto;
+    }
+
+    :is(.reveal, .drawer) &::details-content {
       transition:
         block-size .3s ease-in-out,
         content-visibility .3s allow-discrete;
     }
 
-    &[open]::details-content {
-      block-size: auto;
+    .drawer &::details-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
     }
 
     .info-label {
@@ -23,6 +32,7 @@
     }
 
     .info {
+      flex-shrink: 0;
       padding: var(--base-x-2);
     }
   }

@@ -124,16 +124,44 @@ describe('the two together', () => {
 });
 
 describe('the fold motion', () => {
-  test('should open part three on the reveal, and write the motion chosen into the address', async () => {
+  test('should sit at the top of part two, open on the reveal, and write the motion chosen into the address', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
-    const together = await screen.findByRole('region', {name: parts[2]});
-    const motions = within(together).getByRole('group', {name: 'fold motion'});
+    const platform = await screen.findByRole('region', {name: parts[1]});
+    const motions = within(platform).getByRole('group', {name: 'fold motion'});
     expect(within(motions).getByRole('radio', {name: 'Reveal'})).toBeChecked();
 
     await userEvent.click(within(motions).getByRole('radio', {name: 'Drawer'}));
 
     expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('style=drawer');
     expect(within(motions).getByRole('radio', {name: 'Drawer'})).toBeChecked();
+  });
+
+  test.each([
+    {style: 'reveal', says: /With reveal, the size moves over 300 milliseconds/},
+    {style: 'drawer', says: /With the drawer, the size moves on the same 300 milliseconds/},
+    {style: 'static', says: /With static, the part a details hides has no transition/}
+  ])('should tell, with $style chosen, what the details builds do under that motion', async ({style, says}) => {
+    render(<TestApp at={demosAt(`?tab=accordions&style=${style}`)}/>);
+
+    const platform = await screen.findByRole('region', {name: parts[1]});
+
+    expect(within(platform).getByText(says)).toBeInTheDocument();
+  });
+
+  test('should carve the details drawer rule beside the details run under the drawer', async () => {
+    render(<TestApp at={demosAt('?tab=accordions&style=drawer')}/>);
+
+    const platform = await screen.findByRole('region', {name: parts[1]});
+
+    expect(codeBeside(platform, /This replaces the max-height guess/)).toHaveTextContent('.drawer &::details-content');
+  });
+
+  test.each(['reveal', 'static'])('should carve no details drawer rule under %s', async style => {
+    render(<TestApp at={demosAt(`?tab=accordions&style=${style}`)}/>);
+
+    const platform = await screen.findByRole('region', {name: parts[1]});
+
+    expect(codeBeside(platform, /This replaces the max-height guess/)).not.toHaveTextContent('.drawer &::details-content');
   });
 
   test.each([

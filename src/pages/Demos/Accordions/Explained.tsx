@@ -204,9 +204,10 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, st
     </section>
     <section aria-labelledby="platform-way-heading" className="accordion-part">
       <h3 id="platform-way-heading" className="title bold">What the platform gives now</h3>
+      <PillGlider label="fold motion" name="fold-motion" options={foldMotions} chosen={style} onChosen={onStyleChosen}/>
       {type === 'inclusive'
-        ? <InclusiveToggleAccordion className={exhibit} content={contents.inclusiveDetails}/>
-        : <ExclusiveToggleAccordion className={exhibit} content={contents.exclusiveDetails}/>}
+        ? <InclusiveToggleAccordion className={exhibit} content={contents.inclusiveDetails} motion={style}/>
+        : <ExclusiveToggleAccordion className={exhibit} content={contents.exclusiveDetails} motion={style}/>}
       <ol className={runs}>
         <li className="run">
           <p className="paragraph">HTML now has a disclosure of its own:
@@ -245,15 +246,18 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, st
             details hides. Closed, its block size, its height, is 0. Open, it is auto. Auto is a
             keyword, not a number, and a transition cannot move to a keyword on its
             own. <Mdn path="Web/CSS/interpolate-size">interpolate-size</Mdn> in the reset lets a size
-            move to and from keywords like auto. The slide takes 300 milliseconds with ease-in-out,
-            which starts slowly, speeds up, and settles, and overflow hidden hides the text the size
-            does not hold yet. Content-visibility, which hides the closed content, has no values
-            between on and off, so allow-discrete lets it switch at the end of a close and at the
-            start of an open. That keeps the text visible for the whole slide. Today only Chromium
-            does both; other browsers open the fold at once, and it still works.</p>
+            move to and from keywords like auto, and overflow hidden hides the text the size does not
+            hold yet.
+          {{
+            reveal: ' With reveal, the size moves over 300 milliseconds with ease-in-out, which starts slowly, speeds up, and settles, and the text shows from its top down. Content-visibility, which hides the closed content, has no values between on and off, so allow-discrete lets it switch at the end of a close and at the start of an open. That keeps the text visible for the whole slide. Today only Chromium moves the size; Firefox and WebKit open the fold at once, and it still works.',
+            drawer: ' With the drawer, the size moves on the same 300 milliseconds, and the part a details hides lays its text out as a column set at its end. The text is set not to shrink, so what the size does not hold yet is the text’s top, and its bottom stays on the fold’s edge as it slides down from under the bar. Allow-discrete keeps the text visible for the whole slide. Today only Chromium moves the size; Firefox and WebKit open the fold at once, and it still works.',
+            static: ' With static, the part a details hides has no transition, so the fold opens in a single frame, in every browser.'
+          }[style]}</p>
           <Snippet label="CSS" lines={[
             ...unit(accordionsCss, '&::details-content {'), gap,
             ...unit(accordionsCss, '&[open]::details-content {'), gap,
+            ...unit(accordionsCss, ':is(.reveal, .drawer) &::details-content {'), gap,
+            ...(style === 'drawer' ? [...unit(accordionsCss, '.drawer &::details-content {'), gap, ...unit(accordionsCss, '.info {\n      flex-shrink: 0;'), gap] : []),
             ...unit(resetCss, ':root {\n  interpolate-size')
           ]}/>
           <SizedToTheText/>
@@ -265,7 +269,6 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, st
     </section>
     <section aria-labelledby="together-heading" className="accordion-part">
       <h3 id="together-heading" className="title bold">The two together</h3>
-      <PillGlider label="fold motion" name="fold-motion" options={foldMotions} chosen={style} onChosen={onStyleChosen}/>
       {type === 'inclusive'
         ? <InclusiveCheckboxToggleAccordion className={exhibit} content={contents.inclusiveCheckboxes} motion={style}/>
         : <ExclusiveRadioToggleAccordion className={exhibit} content={contents.exclusiveRadios} motion={style}/>}

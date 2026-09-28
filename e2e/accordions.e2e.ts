@@ -14,16 +14,50 @@ import {
   textOf
 } from './__test_support';
 
-test('a details fold slides open where the browser can animate it', async ({page, browserName}) => {
-  test.skip(browserName !== 'chromium', 'only chromium animates a details element to its natural height');
-  await page.goto(showing('the details build'));
-  const part = accordionsTab(page).firstPartOf('the details build');
+const layoutRounding = 1;
 
-  await part.open();
-  const midway = await heightByTheNextFrame(part.fold);
+for (const build of ['the inclusive details build', 'the details build'] as const) {
+  for (const style of ['reveal', 'drawer'] as const) {
+    test(`a fold in ${build} slides open by the ${style} where the browser can animate it`, async ({page, browserName}) => {
+      test.skip(browserName !== 'chromium', 'only chromium animates a details element to its natural height');
+      await page.goto(showing(build, style));
+      const part = accordionsTab(page).firstPartOf(build);
 
-  expect(midway).toBeLessThan(await heightOnceSettled(part.fold));
-});
+      await part.open();
+      const midway = await heightByTheNextFrame(part.fold);
+
+      expect(midway).toBeLessThan(await heightOnceSettled(part.fold));
+    });
+  }
+
+  test(`a fold in ${build} slides open and closed by the drawer with its text down to the fold’s edge`, async ({page, browserName}) => {
+    test.skip(browserName !== 'chromium', 'only chromium animates a details element to its natural height');
+    await page.goto(showing(build, 'drawer'));
+    const part = accordionsTab(page).firstPartOf(build);
+    const opening = framesWhileMoving(part.fold);
+    await part.open();
+    const opened = await opening;
+    await heightOnceSettled(part.fold);
+    const closing = framesWhileMoving(part.fold);
+
+    await part.close();
+    const closed = await closing;
+
+    expect([...opened, ...closed].map(frame => frame.textBottomGap).filter(gap => gap > layoutRounding)).toEqual([]);
+  });
+
+  test(`with Static chosen, a fold in ${build} opens fully in one frame`, async ({page}) => {
+    await page.goto(showing(build, 'static'));
+    const part = accordionsTab(page).firstPartOf(build);
+    const closedHeight = await heightByTheNextFrame(part.fold);
+    const firstMoved = firstHeightAfter(part.fold, closedHeight);
+
+    await part.open();
+
+    expect(await firstMoved).toBeGreaterThan(closedHeight);
+    expect(await firstMoved).toBe(await heightOnceSettled(part.fold));
+  });
+}
 
 test('a fold in the grid checkbox build slides open', async ({page}) => {
   await page.goto(showing('the grid checkbox build'));
@@ -37,8 +71,6 @@ test('a fold in the grid checkbox build slides open', async ({page}) => {
   expect(await firstMoved).toBeGreaterThan(closed);
   expect(await firstMoved).toBeLessThan(await heightOnceSettled(part.fold));
 });
-
-const layoutRounding = 1;
 
 for (const build of ['the grid checkbox build', 'the grid radio build'] as const) {
   for (const style of ['reveal', 'drawer'] as const) {
@@ -276,7 +308,7 @@ for (const build of ['the grid checkbox build', 'the grid radio build'] as const
   });
 }
 
-for (const build of ['the grid checkbox build', 'the grid radio build'] as const) {
+for (const build of ['the inclusive details build', 'the details build', 'the grid checkbox build', 'the grid radio build'] as const) {
   test(`a reader who asks for less motion gets ${build} open at once under the drawer`, async ({page}) => {
     await page.emulateMedia({reducedMotion: 'reduce'});
     await page.goto(showing(build, 'drawer'));
