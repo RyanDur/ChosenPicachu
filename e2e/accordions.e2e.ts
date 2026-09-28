@@ -68,9 +68,10 @@ for (const build of ['the inclusive details build', 'the details build'] as cons
 
 }
 
-const heightMoved = {open: 1, closed: -1};
-
-const heightWent = (frames: Frame[]): number => Math.sign((frames.at(-1)?.height ?? 0) - (frames.at(0)?.height ?? 0));
+const heightMoved = {
+  open: (frames: Frame[]): void => expect(frames.at(-1)?.height).toBeGreaterThan(frames.at(0)?.height ?? 0),
+  closed: (frames: Frame[]): void => expect(frames.at(-1)?.height).toBeLessThan(frames.at(0)?.height ?? 0)
+};
 
 const slidDown = (frames: Frame[]): number[] => frames.map(frame => frame.textAboveTheClip).filter(above => above > layoutRounding);
 
@@ -80,7 +81,7 @@ for (const build of ['the checkbox build', 'the radio build', 'the grid checkbox
       await page.goto(showing(build, 'reveal'));
       const frames = await framesSliding[direction](accordionsTab(page).firstPartOf(build));
 
-      expect(heightWent(frames)).toBe(heightMoved[direction]);
+      heightMoved[direction](frames);
       expect(frames.map(frame => frame.textBottomGap).filter(gap => gap > layoutRounding)).toEqual([]);
       expect(slidDown(frames)).toEqual([]);
     });
@@ -89,7 +90,7 @@ for (const build of ['the checkbox build', 'the radio build', 'the grid checkbox
       await page.goto(showing(build, 'drawer'));
       const frames = await framesSliding[direction](accordionsTab(page).firstPartOf(build));
 
-      expect(heightWent(frames)).toBe(heightMoved[direction]);
+      heightMoved[direction](frames);
       expect(frames.map(frame => frame.textBottomGap).filter(gap => gap > layoutRounding)).toEqual([]);
       expect(slidDown(frames)).not.toEqual([]);
     });

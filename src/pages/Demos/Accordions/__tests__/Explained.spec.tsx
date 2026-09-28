@@ -124,15 +124,29 @@ describe('the two together', () => {
 });
 
 describe('the fold motion', () => {
-  test('should sit at the top of the tab beside the fold type, open on the reveal, and write the motion chosen into the address', async () => {
+  test('should sit at the top of the tab, right after the fold type, and in no part', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
+
     const tab = await screen.findByRole('region', {name: 'Accordions'});
-    const motions = within(tab).getByRole('group', {name: 'fold motion'});
-    expect(within(tab).getAllByRole('group').slice(0, 2)).toEqual([within(tab).getByRole('group', {name: 'fold type'}), motions]);
+
+    expect(within(tab).getAllByRole('group').slice(0, 2))
+      .toEqual([within(tab).getByRole('group', {name: 'fold type'}), within(tab).getByRole('group', {name: 'fold motion'})]);
     for (const part of parts) {
       expect(within(screen.getByRole('region', {name: part})).queryByRole('group', {name: 'fold motion'})).not.toBeInTheDocument();
     }
+  });
+
+  test('should open on the reveal', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const motions = await screen.findByRole('group', {name: 'fold motion'});
+
     expect(within(motions).getByRole('radio', {name: 'Reveal'})).toBeChecked();
+  });
+
+  test('should write the motion chosen into the address', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    const motions = await screen.findByRole('group', {name: 'fold motion'});
 
     await userEvent.click(within(motions).getByRole('radio', {name: 'Drawer'}));
 
@@ -184,9 +198,9 @@ describe('the fold motion', () => {
   };
 
   test.each([
-    {style: 'reveal', others: ['drawer', 'static'], carves: ['.reveal & .info'], omits: ['.drawer & .info']},
-    {style: 'drawer', others: ['reveal', 'static'], carves: ['.drawer & .info'], omits: ['.reveal & .info']},
-    {style: 'static', others: ['reveal', 'drawer'], carves: [], omits: ['.reveal & .info', '.drawer & .info']}
+    {style: 'reveal', others: ['drawer', 'static'], carves: ['.info-toggle:not(:checked) ~ .info', '.reveal & .info'], omits: ['.drawer & .info']},
+    {style: 'drawer', others: ['reveal', 'static'], carves: ['.info-toggle:not(:checked) ~ .info', '.drawer & .info'], omits: ['.reveal & .info']},
+    {style: 'static', others: ['reveal', 'drawer'], carves: ['.info-toggle:not(:checked) ~ .info'], omits: ['.reveal & .info', '.drawer & .info']}
   ] as const)('should tell, with $style chosen, only what that motion does under part one', async ({style, others, carves, omits}) => {
     render(<TestApp at={demosAt(`?tab=accordions&style=${style}`)}/>);
 
