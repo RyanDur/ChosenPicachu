@@ -42,9 +42,10 @@
         linear-gradient(var(--white-clear), var(--white-clear));
     }
 
-    &.not-empty .fancy-title,
     &:focus-within .fancy-title,
-    &:has(.fancy-text:read-only) .fancy-title {
+    &:has(.fancy-text:read-only) .fancy-title,
+    &:has(.fancy-text[type='date']:valid) .fancy-title,
+    &:has(.fancy-text[placeholder]:not([type='date'], :placeholder-shown)) .fancy-title {
       opacity: 1;
       top: calc(-1 * var(--base-x-1_25));
     }
