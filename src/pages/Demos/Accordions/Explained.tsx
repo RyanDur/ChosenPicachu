@@ -31,6 +31,7 @@ import {
   WhatEachPromises
 } from './Diagrams';
 import {FoldInput, FoldType} from './fold-type';
+import {FoldMotion} from './fold-motion';
 import './Explained.css';
 
 export type Contents = {
@@ -47,8 +48,17 @@ const gap = plain(' ');
 const runs = 'runs card rounded-corners lifted padded';
 const inputOf: Record<FoldType, FoldInput> = {inclusive: 'checkbox', exclusive: 'radio'};
 const foldTypes = [{display: 'Inclusive', value: 'inclusive'}, {display: 'Exclusive', value: 'exclusive'}] as const;
+const foldMotions = [{display: 'Reveal', value: 'reveal'}, {display: 'Drawer', value: 'drawer'}, {display: 'Static', value: 'static'}] as const;
 
-export const AccordionsExplained: FC<{contents: Contents; type: FoldType; onTypeChosen: (type: FoldType) => void}> = ({contents, type, onTypeChosen}) => {
+type Props = {
+  contents: Contents;
+  type: FoldType;
+  onTypeChosen: (type: FoldType) => void;
+  style: FoldMotion;
+  onStyleChosen: (style: FoldMotion) => void;
+};
+
+export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, style, onStyleChosen}) => {
   const input = inputOf[type];
   return <>
     <PillGlider label="fold type" name="fold-type" options={foldTypes} chosen={type} onChosen={onTypeChosen}/>
@@ -255,9 +265,10 @@ export const AccordionsExplained: FC<{contents: Contents; type: FoldType; onType
     </section>
     <section aria-labelledby="together-heading" className="accordion-part">
       <h3 id="together-heading" className="title bold">The two together</h3>
+      <PillGlider label="fold motion" name="fold-motion" options={foldMotions} chosen={style} onChosen={onStyleChosen}/>
       {type === 'inclusive'
-        ? <InclusiveCheckboxToggleAccordion className={exhibit} content={contents.inclusiveCheckboxes}/>
-        : <ExclusiveRadioToggleAccordion className={exhibit} content={contents.exclusiveRadios}/>}
+        ? <InclusiveCheckboxToggleAccordion className={exhibit} content={contents.inclusiveCheckboxes} motion={style}/>
+        : <ExclusiveRadioToggleAccordion className={exhibit} content={contents.exclusiveRadios} motion={style}/>}
       <ol className={runs}>
         {type === 'inclusive' && <li className="run">
           <p className="paragraph">The inclusive build is a checkbox build again, with no script. Each bar is a
@@ -313,14 +324,11 @@ export const AccordionsExplained: FC<{contents: Contents; type: FoldType; onType
             The <Mdn path="Web/CSS/:has">:has()</Mdn> pseudo-class picks an element by what it
             contains, so :has(:checked) makes that row 1fr when the fold holds a checked input. A
             row in fr is a number, so 0fr to 1fr is a number growing, which a transition can move.
-            Grid-template-rows moves between the two over 300 milliseconds with ease-in-out, so the
-            fold starts gently and settles. The paragraph’s overflow hidden hides whatever its row
-            does not hold. The row always ends at the content’s own height, so there is no guess to
+            The paragraph’s overflow hidden hides whatever its row does not hold. The row always ends at the content’s own height, so there is no guess to
             wait on.</p>
           <Snippet label="CSS" lines={[
             ...unit(accordionsCss, '.fold-clip {'), gap,
-            ...unit(accordionsCss, '&:has(:checked) .fold-clip {'), gap,
-            ...unit(accordionsCss, "&:has(.pill-glider [value='animated']:checked) .grid-fold .fold-clip {")
+            ...unit(accordionsCss, '&:has(:checked) .fold-clip {')
           ]}/>
           <RowToItsContent/>
         </li>
@@ -337,26 +345,27 @@ export const AccordionsExplained: FC<{contents: Contents; type: FoldType; onType
           ]}/>
           <PaddingInsideTheClip/>
         </li>
-        {type === 'exclusive' && <li className="run">
-          <p className="paragraph">The radio build’s text slides down from under its bar, like a
-            drawer. Its paragraph grows from 0fr to 1fr, as above. Between the
-            two, the row is shorter than the paragraph around it, so align-content: end sets the row
-            at the paragraph’s bottom. Align-self: end sets the item at the row’s bottom, as tall as
-            its text. So the text’s bottom edge stays on the fold’s edge at every frame, and the
-            paragraph’s overflow hides the text above the fold. One transition moves it all, so no
-            part can fall behind another. It answers no limit. It is there to show what grid
-            alignment does on its own.</p>
-          <Snippet label="CSS" lines={unit(accordionsCss, '&.drawer {')}/>
+        <li className="run">
+          <p className="paragraph">The fold motion above chooses how the folds here move, and each build wears
+            the choice as a class.
+          {{
+            reveal: ' Reveal moves the row on a transition, 300 milliseconds of ease-in-out, which starts gently and settles. The text shows from its top down as the row grows.',
+            drawer: ' Drawer moves the row on the same transition, 300 milliseconds of ease-in-out, and sets the text at the row’s bottom, as the next run explains.',
+            static: ' Static matches neither class in the rule for the transition, so the build has none, and the row changes in a single frame.'
+          }[style]}</p>
+          <Snippet label="CSS" lines={unit(accordionsCss, '&:is(.reveal, .drawer) .grid-fold .fold-clip {')}/>
+        </li>
+        {style === 'drawer' && <li className="run">
+          <p className="paragraph">With the drawer, the text slides down from under its bar. Its paragraph grows
+            from 0fr to 1fr, as above. Between the two, the row is shorter than the paragraph
+            around it, so align-content: end sets the row at the paragraph’s bottom. Align-self: end
+            sets the item at the row’s bottom, as tall as its text. So the text’s bottom edge stays
+            on the fold’s edge at every frame, and the paragraph’s overflow hides the text above the
+            fold. One transition moves it all, so no part can fall behind another. It answers no
+            limit. It is there to show what grid alignment does on its own.</p>
+          <Snippet label="CSS" lines={unit(accordionsCss, '&.drawer .grid-fold {')}/>
           <RidesTheEdge/>
         </li>}
-        <li className="run">
-          <p className="paragraph">Animate and Static are two radios in the build’s header. The stylesheet reads
-            which one is checked. While Animate is, the fold’s row moves on its transition. Static
-            leaves that rule unmatched, so the row changes in a single frame.</p>
-          <Snippet label="TS" lines={type === 'inclusive'
-            ? span(accordionsSource, '<PillGlider label="animation style" name="inclusive-checkbox-motion"', 'defaultChosen="animated"/>')
-            : span(accordionsSource, '<PillGlider label="animation style" name="exclusive-radio-motion"', 'defaultChosen="animated"/>')}/>
-        </li>
       </ol>
     </section>
     <section aria-labelledby="motion-heading" className="accordion-part">

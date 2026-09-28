@@ -52,16 +52,6 @@
       grid-template-rows: 1fr;
     }
 
-    &.drawer {
-      .fold-clip {
-        align-content: end;
-      }
-
-      .fold-clip-item {
-        align-self: end;
-      }
-    }
-
     .info-label::before {
       content: 'Open';
     }
@@ -216,8 +206,18 @@
   flex-direction: column;
   gap: var(--base-x-1_25);
 
-  &:has(.pill-glider [value='animated']:checked) .grid-fold .fold-clip {
+  &:is(.reveal, .drawer) .grid-fold .fold-clip {
     transition: grid-template-rows .3s ease-in-out;
+  }
+
+  &.drawer .grid-fold {
+    .fold-clip {
+      align-content: end;
+    }
+
+    .fold-clip-item {
+      align-self: end;
+    }
   }
 
   .build-header {

@@ -1,4 +1,4 @@
-import {fireEvent, render, screen, within} from '@testing-library/react';
+import {fireEvent, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {ExclusiveRadioToggleAccordion, InclusiveCheckboxToggleAccordion} from '../Accordions';
 
@@ -9,7 +9,7 @@ const controlOf = (control: 'checkbox' | 'radio', part: string): HTMLElement =>
 
 describe('the inclusive toggle accordion using checkboxes', () => {
   test('should keep every fold it opens open', async () => {
-    render(<InclusiveCheckboxToggleAccordion content={folds}/>);
+    render(<InclusiveCheckboxToggleAccordion content={folds} motion="reveal"/>);
 
     await userEvent.click(controlOf('checkbox', 'Alpha'));
     await userEvent.click(controlOf('checkbox', 'Beta'));
@@ -19,7 +19,7 @@ describe('the inclusive toggle accordion using checkboxes', () => {
   });
 
   test('should close only the fold whose control is pressed again', async () => {
-    render(<InclusiveCheckboxToggleAccordion content={folds}/>);
+    render(<InclusiveCheckboxToggleAccordion content={folds} motion="reveal"/>);
     await userEvent.click(controlOf('checkbox', 'Alpha'));
     await userEvent.click(controlOf('checkbox', 'Beta'));
 
@@ -32,7 +32,7 @@ describe('the inclusive toggle accordion using checkboxes', () => {
 
 describe('the exclusive toggle accordion using a radio group', () => {
   test('should open one fold at a time', async () => {
-    render(<ExclusiveRadioToggleAccordion content={folds}/>);
+    render(<ExclusiveRadioToggleAccordion content={folds} motion="reveal"/>);
 
     await userEvent.click(controlOf('radio', 'Alpha'));
     await userEvent.click(controlOf('radio', 'Beta'));
@@ -42,7 +42,7 @@ describe('the exclusive toggle accordion using a radio group', () => {
   });
 
   test('should close the open fold when its radio is pressed again', async () => {
-    render(<ExclusiveRadioToggleAccordion content={folds}/>);
+    render(<ExclusiveRadioToggleAccordion content={folds} motion="reveal"/>);
     await userEvent.click(controlOf('radio', 'Beta'));
 
     await userEvent.click(controlOf('radio', 'Beta'));
@@ -52,7 +52,7 @@ describe('the exclusive toggle accordion using a radio group', () => {
   });
 
   test('should open a fold again after its radio closed it', async () => {
-    render(<ExclusiveRadioToggleAccordion content={folds}/>);
+    render(<ExclusiveRadioToggleAccordion content={folds} motion="reveal"/>);
     await userEvent.click(controlOf('radio', 'Beta'));
     await userEvent.click(controlOf('radio', 'Beta'));
 
@@ -62,7 +62,7 @@ describe('the exclusive toggle accordion using a radio group', () => {
   });
 
   test('should open a fold again after another fold opened in its place', async () => {
-    render(<ExclusiveRadioToggleAccordion content={folds}/>);
+    render(<ExclusiveRadioToggleAccordion content={folds} motion="reveal"/>);
     await userEvent.click(controlOf('radio', 'Alpha'));
     await userEvent.click(controlOf('radio', 'Beta'));
 
@@ -73,36 +73,11 @@ describe('the exclusive toggle accordion using a radio group', () => {
   });
 
   test('should close the open fold when the space bar goes down on its radio, with no click after', async () => {
-    render(<ExclusiveRadioToggleAccordion content={folds}/>);
+    render(<ExclusiveRadioToggleAccordion content={folds} motion="reveal"/>);
     await userEvent.click(controlOf('radio', 'Alpha'));
 
     fireEvent.keyDown(controlOf('radio', 'Alpha'), {key: ' '});
 
     expect(controlOf('radio', 'Alpha')).not.toBeChecked();
-  });
-});
-
-describe.each([
-  {accordion: 'the inclusive toggle accordion using checkboxes', Accordion: InclusiveCheckboxToggleAccordion, control: 'checkbox' as const},
-  {accordion: 'the exclusive toggle accordion using a radio group', Accordion: ExclusiveRadioToggleAccordion, control: 'radio' as const}
-])('$accordion', ({Accordion, control}) => {
-  test('should offer Animate and Static as its animation style, chosen with the keyboard', async () => {
-    render(<Accordion content={folds}/>);
-    const style = screen.getByRole('group', {name: 'animation style'});
-    expect(within(style).getByRole('radio', {name: 'Animate'})).toBeChecked();
-
-    within(style).getByRole('radio', {name: 'Animate'}).focus();
-    await userEvent.keyboard('{ArrowRight}');
-
-    expect(within(style).getByRole('radio', {name: 'Static'})).toBeChecked();
-  });
-
-  test('should keep the open fold open when the reader changes how folds move', async () => {
-    render(<Accordion content={folds}/>);
-    await userEvent.click(controlOf(control, 'Beta'));
-
-    await userEvent.click(within(screen.getByRole('group', {name: 'animation style'})).getByRole('radio', {name: 'Static'}));
-
-    expect(controlOf(control, 'Beta')).toBeChecked();
   });
 });

@@ -1,11 +1,9 @@
 import {FC, KeyboardEvent, MouseEvent, ReactNode} from 'react';
 import {maybe} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
-import {PillGlider} from '@components/PillGlider';
 import {PropsWithClassName} from '../types';
+import {FoldMotion} from './fold-motion';
 import './Accordions.css';
-
-const motions = [{display: 'Animate', value: 'animated'}, {display: 'Static', value: 'static'}] as const;
 
 const openAfter = (pressed: string, open?: string) => open === pressed ? undefined : pressed;
 
@@ -111,13 +109,13 @@ export const ExclusiveToggleAccordion: FC<PropsWithClassName & ContentProps> = (
   </ul>
 </article>;
 
-export const InclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentProps> = ({
+export const InclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentProps & {motion: FoldMotion}> = ({
   className,
-  content
-}) => <article className={classNames('inclusive-checkbox-toggle-accordion', 'toggle-accordion', className)}>
+  content,
+  motion
+}) => <article className={classNames('inclusive-checkbox-toggle-accordion', 'toggle-accordion', motion, className)}>
   <header className="build-header">
     <h4 className="sub-title bold">Inclusive accordion using checkboxes</h4>
-    <PillGlider label="animation style" name="inclusive-checkbox-motion" options={motions} defaultChosen="animated"/>
   </header>
 
   <fieldset>
@@ -141,13 +139,13 @@ export const InclusiveCheckboxToggleAccordion: FC<PropsWithClassName & ContentPr
   </fieldset>
 </article>;
 
-export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps> = ({
+export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps & {motion: FoldMotion}> = ({
   className,
-  content
-}) => <article className={classNames('exclusive-radio-toggle-accordion', 'toggle-accordion', className)}>
+  content,
+  motion
+}) => <article className={classNames('exclusive-radio-toggle-accordion', 'toggle-accordion', motion, className)}>
   <header className="build-header">
     <h4 className="sub-title bold">Exclusive accordion using radio group</h4>
-    <PillGlider label="animation style" name="exclusive-radio-motion" options={motions} defaultChosen="animated"/>
   </header>
 
   <fieldset>
@@ -155,7 +153,7 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
     <ul className="new-accordion" onClick={radioClicked} onKeyDown={spacePressed}>
       {content.map(({value, key}) =>
         <li key={key}>
-          <article className="grid-fold drawer">
+          <article className="grid-fold">
             <header className="info-header">
               <h5 className="sub-title bold">{key}</h5>
               <label className="info-label">

@@ -41,32 +41,34 @@ test('a fold in the grid checkbox build slides open', async ({page}) => {
 const layoutRounding = 1;
 
 for (const build of ['the grid checkbox build', 'the grid radio build'] as const) {
-  test(`a fold in ${build} slides open with its text shown down to the fold’s edge`, async ({page}) => {
-    await page.goto(showing(build));
-    const part = accordionsTab(page).firstPartOf(build);
-    await expect(part.fold).toBeVisible();
-    const moving = framesWhileMoving(part.fold);
+  for (const style of ['reveal', 'drawer'] as const) {
+    test(`a fold in ${build} slides open by the ${style} with its text shown down to the fold’s edge`, async ({page}) => {
+      await page.goto(showing(build, style));
+      const part = accordionsTab(page).firstPartOf(build);
+      await expect(part.fold).toBeVisible();
+      const moving = framesWhileMoving(part.fold);
 
-    await part.open();
-    const frames = await moving;
+      await part.open();
+      const frames = await moving;
 
-    expect(frames[0].height).toBeLessThan(frames.at(-1)?.height ?? 0);
-    expect(frames.map(frame => frame.textBottomGap).filter(gap => gap > layoutRounding)).toEqual([]);
-  });
+      expect(frames[0].height).toBeLessThan(frames.at(-1)?.height ?? 0);
+      expect(frames.map(frame => frame.textBottomGap).filter(gap => gap > layoutRounding)).toEqual([]);
+    });
 
-  test(`a fold in ${build} slides closed with its text shown down to the fold’s edge`, async ({page}) => {
-    await page.goto(showing(build));
-    const part = accordionsTab(page).firstPartOf(build);
-    await part.open();
-    await heightOnceSettled(part.fold);
-    const moving = framesWhileMoving(part.fold);
+    test(`a fold in ${build} slides closed by the ${style} with its text shown down to the fold’s edge`, async ({page}) => {
+      await page.goto(showing(build, style));
+      const part = accordionsTab(page).firstPartOf(build);
+      await part.open();
+      await heightOnceSettled(part.fold);
+      const moving = framesWhileMoving(part.fold);
 
-    await part.close();
-    const frames = await moving;
+      await part.close();
+      const frames = await moving;
 
-    expect(frames[0].height).toBeGreaterThan(frames.at(-1)?.height ?? 0);
-    expect(frames.map(frame => frame.textBottomGap).filter(gap => gap > layoutRounding)).toEqual([]);
-  });
+      expect(frames[0].height).toBeGreaterThan(frames.at(-1)?.height ?? 0);
+      expect(frames.map(frame => frame.textBottomGap).filter(gap => gap > layoutRounding)).toEqual([]);
+    });
+  }
 }
 
 test('a details fold opens at once, fully, where the browser cannot animate it', async ({page, browserName}) => {
@@ -261,9 +263,22 @@ test('the space bar closes a part of the grid radio build the arrow keys opened'
 
 for (const build of ['the grid checkbox build', 'the grid radio build'] as const) {
   test(`with Static chosen, a fold in ${build} opens fully in one frame`, async ({page}) => {
-    await page.goto(showing(build));
+    await page.goto(showing(build, 'static'));
     const part = accordionsTab(page).firstPartOf(build);
-    await page.getByRole('group', {name: 'animation style'}).getByText('Static', {exact: true}).click();
+    const closed = await heightByTheNextFrame(part.fold);
+    const firstMoved = firstHeightAfter(part.fold, closed);
+
+    await part.open();
+
+    expect(await firstMoved).toBe(await heightOnceSettled(part.fold));
+  });
+}
+
+for (const build of ['the grid checkbox build', 'the grid radio build'] as const) {
+  test(`a reader who asks for less motion gets ${build} open at once under the drawer`, async ({page}) => {
+    await page.emulateMedia({reducedMotion: 'reduce'});
+    await page.goto(showing(build, 'drawer'));
+    const part = accordionsTab(page).firstPartOf(build);
     const closed = await heightByTheNextFrame(part.fold);
     const firstMoved = firstHeightAfter(part.fold, closed);
 

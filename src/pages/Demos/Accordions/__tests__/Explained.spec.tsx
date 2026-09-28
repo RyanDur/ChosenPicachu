@@ -77,20 +77,18 @@ describe('the accordions explanation', () => {
 
 describe('the words and the code chosen by type', () => {
   test.each([
-    {type: 'inclusive', input: 'checkbox', announced: /a checkbox, checked or not checked\./, carvedInput: 'type="checkbox"', carvedMotion: 'name="inclusive-checkbox-motion"'},
-    {type: 'exclusive', input: 'radio', announced: /a radio, one of six\./, carvedInput: 'type="radio" name="group"', carvedMotion: 'name="exclusive-radio-motion"'}
-  ])('should, with $type chosen, name the $input in the runs and show its build\'s code', async ({type, input, announced, carvedInput, carvedMotion}) => {
+    {type: 'inclusive', input: 'checkbox', announced: /a checkbox, checked or not checked\./, carvedInput: 'type="checkbox"'},
+    {type: 'exclusive', input: 'radio', announced: /a radio, one of six\./, carvedInput: 'type="radio" name="group"'}
+  ])('should, with $type chosen, name the $input in the runs and show its build\'s list item', async ({type, input, announced, carvedInput}) => {
     render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
     const platform = screen.getByRole('region', {name: parts[1]});
-    const together = screen.getByRole('region', {name: parts[2]});
 
     expect(within(oldWay).getByText(new RegExp(`so you hide the ${input}\\.`))).toBeInTheDocument();
     expect(oldWay).toHaveTextContent(announced);
     expect(codeBeside(oldWay, /To open and close a part/)).toHaveTextContent(carvedInput);
     expect(within(platform).getByRole('figure', {name: new RegExp(`needs a ${input},`)})).toBeInTheDocument();
-    expect(codeBeside(together, /Animate and Static are two radios/)).toHaveTextContent(carvedMotion);
   });
 });
 
@@ -125,6 +123,35 @@ describe('the two together', () => {
   });
 });
 
+describe('the fold motion', () => {
+  test('should open part three on the reveal, and write the motion chosen into the address', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+    const together = await screen.findByRole('region', {name: parts[2]});
+    const motions = within(together).getByRole('group', {name: 'fold motion'});
+    expect(within(motions).getByRole('radio', {name: 'Reveal'})).toBeChecked();
+
+    await userEvent.click(within(motions).getByRole('radio', {name: 'Drawer'}));
+
+    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('style=drawer');
+    expect(within(motions).getByRole('radio', {name: 'Drawer'})).toBeChecked();
+  });
+
+  test.each([
+    {style: 'reveal', says: /Reveal moves the row on a transition/, drawn: ['A row that grows to its content', 'The padding inside the clip']},
+    {style: 'drawer', says: /Drawer moves the row on the same transition/, drawn: ['A row that grows to its content', 'The padding inside the clip', 'The text rides the row’s edge']},
+    {style: 'static', says: /Static matches neither class/, drawn: ['A row that grows to its content', 'The padding inside the clip']}
+  ])('should tell, with $style chosen, only what that motion does', async ({style, says, drawn}) => {
+    render(<TestApp at={demosAt(`?tab=accordions&style=${style}`)}/>);
+
+    const together = await screen.findByRole('region', {name: parts[2]});
+
+    expect(within(together).getByText(says)).toBeInTheDocument();
+    expect(drawn.map(title => within(together).getByRole('figure', {name: new RegExp(`^${title}\\.`)})))
+      .toEqual(within(together).getAllByRole('figure'));
+    expect(within(together).queryByText(/With the drawer, the text slides down/) !== null).toBe(style === 'drawer');
+  });
+});
+
 describe('how every fold moves', () => {
   test('should show the one block that opens every fold at once for a reader who asks for less motion', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
@@ -145,7 +172,7 @@ describe('the accordions diagrams', () => {
     ['inclusive', parts[1], ['One job, two ways', 'Three pieces become two', 'Sized to the text, no guess']],
     ['exclusive', parts[1], ['One job, two ways', 'Three pieces become two', 'Sized to the text, no guess']],
     ['inclusive', parts[2], ['A row that grows to its content', 'The padding inside the clip']],
-    ['exclusive', parts[2], ['A row that grows to its content', 'The padding inside the clip', 'The text rides the row’s edge']]
+    ['exclusive', parts[2], ['A row that grows to its content', 'The padding inside the clip']]
   ])('should draw, with %s chosen, under "%s" each mechanism in order, named by its title and one sentence', async (type, part, titles) => {
     render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
 
