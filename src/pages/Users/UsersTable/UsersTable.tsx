@@ -15,7 +15,7 @@ import {
   RowHeader
 } from '@components/DragSortableTable';
 import {useUsersDispatch, useUsersSelector} from '../Provider';
-import {friendsChanged, selectColumns, selectUsers, userRemoved} from '../store';
+import {friendAdded, friendRemoved, selectColumns, selectUsers, userRemoved} from '../store';
 import {seated, worksFromHome} from '../columns';
 import {columnMoved, rowMoved, sorted} from '@components/DragSortableTable/arrangement';
 import {fullNameOf} from '@components/Users/UserInfo/user';
@@ -47,7 +47,9 @@ export const UsersTable: FC = () => {
           <Cell column="home-city" row={user.id} className="cell">{user.homeAddress.city}</Cell>
           <Cell column="age" row={user.id} className="cell">{maybe(user.info.dob).map(age).map(formatAge).orElse('')}</Cell>
           <Cell column="friends" row={user.id} className="cell">
-            <FriendsList user={user} users={users} onFriendsChanged={friends => dispatch(friendsChanged(user, friends))}/>
+            <FriendsList user={user} users={users}
+              onFriendAdded={friend => dispatch(friendAdded(user, friend))}
+              onFriendRemoved={friend => dispatch(friendRemoved(user, friend))}/>
           </Cell>
           <Cell column="works-from-home" row={user.id} className="cell last-column">
             {worksFromHome(user)}

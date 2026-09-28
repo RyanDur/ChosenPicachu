@@ -1,6 +1,6 @@
 import {UsersAPI} from '@components/Users/resource/usersApi';
 import {HTTPError} from '@transport/types';
-import {UsersListener, userWithId, usersArrived} from './store';
+import {befriended, unfriended, UsersListener, userWithId, usersArrived} from './store';
 
 export const syncing = (users: UsersAPI, saved: () => void, refused: (error: HTTPError) => void): UsersListener => (_previous, current, dispatch, action) => {
   switch (action.type) {
@@ -22,8 +22,11 @@ export const syncing = (users: UsersAPI, saved: () => void, refused: (error: HTT
         .onSuccess(saved)
         .onFailure(refused);
       return;
-    case 'friendsChanged':
-      users.update({...action.user, friends: [...action.friends]}).onSuccess(arrived => dispatch(usersArrived(arrived))).onFailure(refused);
+    case 'friendAdded':
+      users.update(befriended(action.user, action.friend)).onSuccess(arrived => dispatch(usersArrived(arrived))).onFailure(refused);
+      return;
+    case 'friendRemoved':
+      users.update(unfriended(action.user, action.friend)).onSuccess(arrived => dispatch(usersArrived(arrived))).onFailure(refused);
       return;
     default:
       return;

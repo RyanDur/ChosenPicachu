@@ -7,11 +7,11 @@ import {
   someUsers
 } from '@components/Users/__test_support';
 import {syncing} from '../syncing';
-import {friendsChanged, opened, selectUsers, userAdded, userRemoved, userUpdated, userWithId, usersArrived, usersStore} from '../store';
+import {friendAdded, friendRemoved, opened, selectUsers, userAdded, userRemoved, userUpdated, userWithId, usersArrived, usersStore} from '../store';
 import {rowMoved} from '@components/DragSortableTable/arrangement';
 
 describe('the users store', () => {
-  const [first, second] = someUsers;
+  const [first, second, third] = someUsers;
   const openedStore = async () => {
     setupUsersResponse(someUsers);
     const store = usersStore(syncing(users, () => undefined, () => undefined));
@@ -70,18 +70,27 @@ describe('the users store', () => {
     const store = await openedStore();
     setupUserUpdatedResponse(first.id, [{...first, friends: [second.id]}, ...someUsers.slice(1)]);
 
-    store.dispatch(friendsChanged(first, [second.id]));
+    store.dispatch(friendAdded(first, second.id));
 
     await vi.waitFor(() => expect(userWithId(first.id)(store.state).map(({friends}) => friends).orNull()).toEqual([second.id]));
   });
 
-  it('a change of friends sends the backend the person with their new friends', async () => {
+  it('an added friend sends the backend the person with the friend after the ones they had', async () => {
     const store = await openedStore();
     const sent = setupUserUpdatedResponse(first.id, someUsers);
 
-    store.dispatch(friendsChanged(first, [second.id]));
+    store.dispatch(friendAdded({...first, friends: [third.id]}, second.id));
 
-    await vi.waitFor(() => expect(sent()).toMatchObject({id: first.id, friends: [second.id]}));
+    await vi.waitFor(() => expect(sent()).toMatchObject({id: first.id, friends: [third.id, second.id]}));
+  });
+
+  it('a removed friend sends the backend the person without that friend', async () => {
+    const store = await openedStore();
+    const sent = setupUserUpdatedResponse(first.id, someUsers);
+
+    store.dispatch(friendRemoved({...first, friends: [second.id, third.id]}, second.id));
+
+    await vi.waitFor(() => expect(sent()).toMatchObject({id: first.id, friends: [third.id]}));
   });
 
   it('no id finds no user', () => {

@@ -7,7 +7,9 @@ import {someUsers} from '@components/Users/__test_support';
 
 const Befriending: FC<{user: User; among?: readonly User[]}> = ({user: first, among = someUsers}) => {
   const [user, update] = useState(first);
-  return <FriendsList users={among} user={user} onFriendsChanged={friends => update({...user, friends})}/>;
+  return <FriendsList users={among} user={user}
+    onFriendAdded={friend => update({...user, friends: [...user.friends, friend]})}
+    onFriendRemoved={friend => update({...user, friends: user.friends.filter(id => id !== friend)})}/>;
 };
 
 describe('the friends list', () => {
@@ -21,10 +23,10 @@ describe('the friends list', () => {
   });
 
   it('should be able to add friends', async () => {
-    render(<FriendsList users={someUsers} user={firstUser} onFriendsChanged={consumer}/>);
+    render(<FriendsList users={someUsers} user={firstUser} onFriendAdded={consumer} onFriendRemoved={consumer}/>);
     await userEvent.selectOptions(screen.getByRole('combobox', {name: 'Add a friend'}), [fullNameOf(secondUser)]);
 
-    expect(consumer).toHaveBeenCalledWith([secondUser.id]);
+    expect(consumer).toHaveBeenCalledWith(secondUser.id);
   });
 
   it('adding a friend says who was added once they are on the list', async () => {
@@ -35,26 +37,26 @@ describe('the friends list', () => {
   });
 
   it('while a change is still on its way nothing is said', async () => {
-    render(<FriendsList users={someUsers} user={{...firstUser, friends: [secondUser.id]}} onFriendsChanged={consumer}/>);
+    render(<FriendsList users={someUsers} user={{...firstUser, friends: [secondUser.id]}} onFriendAdded={consumer} onFriendRemoved={consumer}/>);
     await userEvent.click(screen.getByRole('button', {name: `remove ${fullNameOf(secondUser)}`}));
 
     expect(screen.getByRole('status', {name: 'friends report'})).toBeEmptyDOMElement();
   });
 
   it('the friends of a user are a group that says whose friends they are', () => {
-    render(<FriendsList users={someUsers} user={firstUser} onFriendsChanged={consumer}/>);
+    render(<FriendsList users={someUsers} user={firstUser} onFriendAdded={consumer} onFriendRemoved={consumer}/>);
 
     expect(screen.getByRole('group', {name: `friends of ${fullNameOf(firstUser)}`})).toBeInTheDocument();
   });
 
   it('should not allow you to pick yourself', () => {
-    render(<FriendsList users={someUsers} user={firstUser} onFriendsChanged={consumer}/>);
+    render(<FriendsList users={someUsers} user={firstUser} onFriendAdded={consumer} onFriendRemoved={consumer}/>);
     expect(screen.getByRole('combobox', {name: 'Add a friend'})).not.toHaveTextContent(fullNameOf(firstUser));
   });
 
   it('should display the friends the user already has', () => {
     const userWithFriends = {...firstUser, friends: [secondUser.id, thirdUser.id]};
-    render(<FriendsList users={someUsers} user={userWithFriends} onFriendsChanged={consumer}/>);
+    render(<FriendsList users={someUsers} user={userWithFriends} onFriendAdded={consumer} onFriendRemoved={consumer}/>);
     expect(screen.getByRole('list', {name: 'friends'})).toHaveTextContent(fullNameOf(thirdUser));
     expect(screen.getByRole('list', {name: 'friends'})).toHaveTextContent(fullNameOf(secondUser));
   });
@@ -66,34 +68,34 @@ describe('the friends list', () => {
     };
     const userWithFriends = {...firstUser, friends: [secondUser.id]};
     render(<FriendsList users={[firstUser, renamedSecond, thirdUser]} user={userWithFriends}
-      onFriendsChanged={consumer}/>);
+      onFriendAdded={consumer} onFriendRemoved={consumer}/>);
     expect(screen.getByRole('list', {name: 'friends'})).toHaveTextContent('Renamed Person');
   });
 
   describe('removing a friend from the list', () => {
     beforeEach(() => {
       const userWithFriends = {...firstUser, friends: [secondUser.id, thirdUser.id]};
-      render(<FriendsList users={someUsers} user={userWithFriends} onFriendsChanged={consumer}/>);
+      render(<FriendsList users={someUsers} user={userWithFriends} onFriendAdded={consumer} onFriendRemoved={consumer}/>);
     });
 
     test('clicking a friend removes them', async () => {
       await userEvent.click(screen.getByRole('button', {name: `remove ${fullNameOf(thirdUser)}`}));
 
-      expect(consumer).toHaveBeenCalledWith([secondUser.id]);
+      expect(consumer).toHaveBeenCalledWith(thirdUser.id);
     });
 
     test('pressing enter on a friend removes them', async () => {
       screen.getByRole('button', {name: `remove ${fullNameOf(thirdUser)}`}).focus();
       await userEvent.keyboard('{enter}');
 
-      expect(consumer).toHaveBeenCalledWith([secondUser.id]);
+      expect(consumer).toHaveBeenCalledWith(thirdUser.id);
     });
 
     test('pressing space on a friend removes them', async () => {
       screen.getByRole('button', {name: `remove ${fullNameOf(thirdUser)}`}).focus();
       await userEvent.keyboard(' ');
 
-      expect(consumer).toHaveBeenCalledWith([secondUser.id]);
+      expect(consumer).toHaveBeenCalledWith(thirdUser.id);
     });
 
   });
@@ -146,14 +148,14 @@ describe('the friends list', () => {
 
   it('should not allow a user to select something twice', () => {
     const userWithFriends = {...firstUser, friends: [secondUser.id]};
-    render(<FriendsList users={someUsers} user={userWithFriends} onFriendsChanged={consumer}/>);
+    render(<FriendsList users={someUsers} user={userWithFriends} onFriendAdded={consumer} onFriendRemoved={consumer}/>);
     expect(screen.getByRole('combobox', {name: 'Add a friend'})).not.toHaveTextContent(fullNameOf(secondUser));
   });
 
   it('should not allow to select a friend if no more friends are left', () => {
     const userWithFriends = {...firstUser, friends: [secondUser.id, thirdUser.id]};
     render(<FriendsList users={[firstUser, secondUser, thirdUser]} user={userWithFriends}
-      onFriendsChanged={consumer}/>);
+      onFriendAdded={consumer} onFriendRemoved={consumer}/>);
 
     expect(screen.queryByRole('combobox', {name: 'Add a friend'})).not.toBeInTheDocument();
   });
