@@ -44,7 +44,7 @@ export const FancyInput: FC<PropsWithChildren<FancyTextInputProps>> = (
   <input id={inputId}
     className={classNames('fancy-text', 'lifted', 'raisable', inputClass)}
     pattern={pattern}
-    placeholder=" "
+    placeholder={type === 'date' ? undefined : ' '}
     readOnly={readOnly}
     disabled={disabled}
     required={required}
