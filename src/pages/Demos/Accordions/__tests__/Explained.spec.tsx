@@ -75,6 +75,25 @@ describe('the accordions explanation', () => {
   });
 });
 
+describe('the words and the code chosen by type', () => {
+  test.each([
+    {type: 'inclusive', input: 'checkbox', announced: /a checkbox, checked or not checked\./, carvedInput: 'type="checkbox"', carvedMotion: 'name="inclusive-checkbox-motion"'},
+    {type: 'exclusive', input: 'radio', announced: /a radio, one of six\./, carvedInput: 'type="radio" name="group"', carvedMotion: 'name="exclusive-radio-motion"'}
+  ])('should, with $type chosen, name the $input in the runs and show its build\'s code', async ({type, input, announced, carvedInput, carvedMotion}) => {
+    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
+
+    const oldWay = await screen.findByRole('region', {name: parts[0]});
+    const platform = screen.getByRole('region', {name: parts[1]});
+    const together = screen.getByRole('region', {name: parts[2]});
+
+    expect(within(oldWay).getByText(new RegExp(`so you hide the ${input}\\.`))).toBeInTheDocument();
+    expect(oldWay).toHaveTextContent(announced);
+    expect(codeBeside(oldWay, /To open and close a part/)).toHaveTextContent(carvedInput);
+    expect(within(platform).getByRole('figure', {name: new RegExp(`needs a ${input},`)})).toBeInTheDocument();
+    expect(codeBeside(together, /Animate and Static are two radios/)).toHaveTextContent(carvedMotion);
+  });
+});
+
 describe('what the platform gives now', () => {
   test.each([
     ['inclusive', '<details className="fold">'],
