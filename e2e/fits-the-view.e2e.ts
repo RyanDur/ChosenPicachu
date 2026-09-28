@@ -1,10 +1,23 @@
 import {Page, expect, test} from '@playwright/test';
 import {iPad11Upright, iPadUpright, justPastAPhone, siteFrame, splitViewWide} from './__test_support';
 
+const demos = ['Accordions', 'Z-Index', 'Drag sort', 'Charts', 'Tables'];
+
 const scrolledSideways = async (page: Page): Promise<number> => page.evaluate(() => {
   window.scrollBy(300, 0);
   return window.scrollX;
 });
+
+const opensAndFits = async (page: Page, demo: string): Promise<void> => {
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.getByRole('navigation', {name: 'demos'}).getByRole('link', {name: demo}).click();
+  await expect(page.getByRole('region', {name: demo, exact: true}).first()).toBeVisible();
+  await expect(siteFrame(page).nav.getByRole('link').last()).toBeInViewport();
+
+  await page.getByRole('heading').last().scrollIntoViewIfNeeded();
+
+  expect(await scrolledSideways(page)).toBe(0);
+};
 
 for (const {reader, device} of [
   {reader: 'an iPad held upright', device: iPadUpright},
@@ -15,24 +28,23 @@ for (const {reader, device} of [
   test.describe(reader, () => {
     test.use(device);
 
-    for (const tab of ['accordions', 'z-index', 'dragAndDrop', 'charts', 'tables']) {
-      test(`the ${tab} demo fits the view, with the site's last link inside it`, async ({page}) => {
-        await page.goto(`demos/?tab=${tab}`);
-        await expect(siteFrame(page).nav.getByRole('link').last()).toBeInViewport();
+    test('opens each demos tab in turn, and none runs past the view', async ({page}) => {
+      await page.goto('demos/');
 
-        await page.getByRole('heading').last().scrollIntoViewIfNeeded();
+      for (const demo of demos) {
+        await test.step(demo, () => opensAndFits(page, demo));
+      }
+    });
 
-        expect(await scrolledSideways(page)).toBe(0);
-      });
-    }
-
-    test('the wide table is reached whole by a swipe inside its own card', async ({page}) => {
+    test('scrolls the wide table inside its own card to its last column', async ({page}) => {
       await page.goto('demos/?tab=tables');
-      const lastColumn = page.getByRole('table', {name: 'Live aggregations by window'}).getByRole('columnheader').last();
+      const table = page.getByRole('table', {name: 'Live aggregations by window'});
+      const lastColumn = table.getByRole('columnheader').last();
+      await table.hover();
 
-      await lastColumn.scrollIntoViewIfNeeded();
+      await page.mouse.wheel(2000, 0);
 
-      await expect(lastColumn).toBeInViewport();
+      await expect(lastColumn).toBeInViewport({ratio: 1});
       expect(await page.evaluate(() => window.scrollX)).toBe(0);
     });
   });
