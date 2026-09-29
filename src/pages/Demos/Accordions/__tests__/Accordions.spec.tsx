@@ -101,3 +101,15 @@ describe.each([
     expect(within(screen.getByRole('group', {name: 'parts'})).getAllByRole('listitem')).toHaveLength(items);
   });
 });
+
+describe('the builds we used to make', () => {
+  test.each([
+    {build: 'checkbox', Build: InclusiveAccordion},
+    {build: 'radio', Build: ExclusiveAccordion}
+  ])('should name each part’s text by its bar in the $build build', ({Build}) => {
+    render(<Build content={folds} motion="reveal"/>);
+
+    expect(within(screen.getByRole('region', {name: 'Alpha'})).getByText('the first fold')).toBeInTheDocument();
+    expect(within(screen.getByRole('region', {name: 'Beta'})).getByText('the second fold')).toBeInTheDocument();
+  });
+});

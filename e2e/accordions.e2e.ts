@@ -373,3 +373,20 @@ for (const build of builds) {
     expect(await firstMoved).toBe(await heightOnceSettled(part.fold));
   });
 }
+
+test('a keyboard reader tabs from an open part\'s bar into its text and past a closed part', async ({page, browserName}) => {
+  const tabKey = browserName === 'webkit' ? 'Alt+Tab' : 'Tab';
+  await page.goto(showing('the checkbox build'));
+  const tab = accordionsTab(page);
+  const [open, closed, next] = [tab.partOf('the checkbox build', 0), tab.partOf('the checkbox build', 1), tab.partOf('the checkbox build', 2)];
+  const openName = await nameOn(open.fold).textContent() ?? '';
+  await open.openByKeyboard();
+  await heightOnceSettled(open.fold);
+
+  await page.keyboard.press(tabKey);
+  await expect(open.fold.getByRole('region', {name: openName, exact: true})).toBeFocused();
+  await page.keyboard.press(tabKey);
+  await expect(closed.fold.getByRole('checkbox')).toBeFocused();
+  await page.keyboard.press(tabKey);
+  await expect(next.fold.getByRole('checkbox')).toBeFocused();
+});
