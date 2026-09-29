@@ -62,3 +62,34 @@ export const framesWhileMoving = (fold: Locator): Promise<Frame[]> => fold.evalu
     };
     requestAnimationFrame(sample);
   }));
+
+export type Moment = {at: number; height: number};
+
+export const motionOf = (fold: Locator): Promise<Moment[]> => fold.evaluate(element =>
+  new Promise<Moment[]>(resolve => {
+    const steps = 60;
+    const deadline = performance.now() + 2000;
+    const walk = (): void => {
+      const motions = element.getAnimations({subtree: true});
+      if (motions.length === 0) {
+        if (performance.now() > deadline) {
+          resolve([]);
+        } else {
+          requestAnimationFrame(walk);
+        }
+        return;
+      }
+      motions.forEach(motion => motion.pause());
+      const end = Math.max(...motions.map(motion => Number(motion.effect?.getComputedTiming().endTime ?? 0)));
+      const moments = Array.from({length: steps + 1}, (_, step) => {
+        const at = end * step / steps;
+        motions.forEach(motion => {
+          motion.currentTime = at;
+        });
+        return {at, height: element.getBoundingClientRect().height};
+      });
+      motions.forEach(motion => motion.finish());
+      resolve(moments);
+    };
+    walk();
+  }));

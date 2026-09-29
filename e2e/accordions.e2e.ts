@@ -10,10 +10,12 @@ import {
   heightOnceSettled,
   iPhone,
   misplacedPictures,
+  motionOf,
   nameOn,
   showing,
   textOf,
   type Frame,
+  type Moment,
   type Part
 } from './__test_support';
 
@@ -69,8 +71,8 @@ for (const build of ['the inclusive details build', 'the details build'] as cons
 }
 
 const heightMoved = {
-  open: (frames: Frame[]): void => expect(frames.at(-1)?.height).toBeGreaterThan(frames.at(0)?.height ?? 0),
-  closed: (frames: Frame[]): void => expect(frames.at(-1)?.height).toBeLessThan(frames.at(0)?.height ?? 0)
+  open: (frames: Pick<Frame, 'height'>[]): void => expect(frames.at(-1)?.height).toBeGreaterThan(frames.at(0)?.height ?? 0),
+  closed: (frames: Pick<Frame, 'height'>[]): void => expect(frames.at(-1)?.height).toBeLessThan(frames.at(0)?.height ?? 0)
 };
 
 const slidDown = (frames: Frame[]): number[] => frames.map(frame => frame.textAboveTheClip).filter(above => above > layoutRounding);
@@ -97,7 +99,7 @@ for (const build of ['the checkbox build', 'the radio build', 'the grid checkbox
   }
 }
 
-const shareOfTheTimeForEachQuarter = (frames: Frame[]): number[] => {
+const shareOfTheTimeForEachQuarter = (frames: Moment[]): number[] => {
   const from = frames.at(0);
   const to = frames.at(-1);
   if (!from || !to) {
@@ -112,8 +114,24 @@ const shareOfTheTimeForEachQuarter = (frames: Frame[]): number[] => {
   return marks.slice(1).map((mark, at) => Math.round((mark - marks[at]) / duration * 100) / 100);
 };
 
-const unevenQuarters = (frames: Frame[]): number[] =>
+const unevenQuarters = (frames: Moment[]): number[] =>
   shareOfTheTimeForEachQuarter(frames).filter(share => !(share >= 1 / 10 && share <= 1 / 2));
+
+const motionSliding = {
+  open: async (part: Part): Promise<Moment[]> => {
+    await expect(part.fold).toBeVisible();
+    const moving = motionOf(part.fold);
+    await part.open();
+    return moving;
+  },
+  closed: async (part: Part): Promise<Moment[]> => {
+    await part.open();
+    await heightOnceSettled(part.fold);
+    const moving = motionOf(part.fold);
+    await part.close();
+    return moving;
+  }
+};
 
 const putAway = async (part: Part): Promise<void> => {
   await heightOnceSettled(part.fold);
@@ -139,9 +157,9 @@ for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: 
             await page.goto(showing(build, style));
             await expect(accordionsTab(page).firstPartOf(build).fold).toBeVisible();
             const parts = await byTextLength(await accordionsTab(page).partsOf(build));
-            const longest = await framesSliding[direction](parts[0]);
+            const longest = await motionSliding[direction](parts[0]);
             await putAway(parts[0]);
-            const shortest = await framesSliding[direction](parts.at(-1) ?? parts[0]);
+            const shortest = await motionSliding[direction](parts.at(-1) ?? parts[0]);
 
             for (const frames of [longest, shortest]) {
               heightMoved[direction](frames);
