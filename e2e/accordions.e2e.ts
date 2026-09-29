@@ -408,3 +408,21 @@ test('a keyboard reader tabs from an open part\'s bar into its text and past a c
   await page.keyboard.press(tabKey);
   await expect(next.fold.getByRole('checkbox')).toBeFocused();
 });
+
+test('a keyboard reader tabs from an open radio part into its text and past the closed parts\' text', async ({page, browserName}) => {
+  const tabKey = browserName === 'webkit' ? 'Alt+Tab' : 'Tab';
+  await page.goto(showing('the radio build'));
+  const open = accordionsTab(page).partOf('the radio build', 0);
+  const openName = await nameOn(open.fold).textContent() ?? '';
+  await open.openByKeyboard();
+  await heightOnceSettled(open.fold);
+
+  await page.keyboard.press(tabKey);
+  await expect(open.fold.getByRole('region', {name: openName, exact: true})).toBeFocused();
+  await page.keyboard.press(tabKey);
+
+  await expect(open.fold.getByRole('region')).not.toBeFocused();
+  for (const closed of (await accordionsTab(page).partsOf('the radio build')).slice(1)) {
+    await expect(closed.fold.getByRole('region', {includeHidden: true})).not.toBeFocused();
+  }
+});
