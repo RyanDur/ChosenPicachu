@@ -173,24 +173,15 @@ test.describe('a phone, while another museum has not answered', () => {
   test.use(iPhone);
 
   test('shows one loading bar from the first until the wall\'s first piece, then none', async ({page}) => {
-    await page.route('**/2d484387-2509-5e8e-2c43-22f9981972eb/info.json', () => new Promise<void>(() => undefined));
-    await page.addInitScript(() => {
-      const counts: number[] = [];
-      Reflect.set(globalThis, 'loadingBarsPerFrame', counts);
-      const count = (): void => {
-        counts.push(document.querySelectorAll('progress[aria-label="loading gallery"]').length);
-        if (document.querySelector('figure') === null) {
-          requestAnimationFrame(count);
-        }
-      };
-      requestAnimationFrame(count);
-    });
+    const gallery = galleryPage(page);
+    await gallery.holdTheArtInstitute();
+    await gallery.countTheLoadingBarsUntilTheFirstPiece();
 
     await page.goto('gallery?tab=vam');
-    await expect(galleryPage(page).wall.first()).toBeVisible();
+    await expect(gallery.wall.first()).toBeVisible();
 
-    const counts: unknown = await page.evaluate(() => Reflect.get(globalThis, 'loadingBarsPerFrame'));
-    const perFrame = Array.isArray(counts) ? counts.map(Number) : [];
+    const perFrame = await gallery.loadingBarsPerFrame();
+    expect(perFrame).toContain(1);
     expect(perFrame.slice(perFrame.indexOf(1), -1).filter(bars => bars !== 1)).toEqual([]);
     await expect(page.getByRole('progressbar', {name: 'loading gallery'})).toHaveCount(0);
   });
