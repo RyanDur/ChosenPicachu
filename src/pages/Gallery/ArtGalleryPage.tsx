@@ -14,6 +14,17 @@ type Answers = Partial<Record<Source, boolean>>;
 
 const openIn = (answers: Answers) => museums.filter(({param}) => answers[param] === true);
 
+const settledIn = (answers: Answers): boolean => museums.every(({param}) => has(answers[param]));
+
+type Shown = 'wall' | 'noMuseumOpen' | 'loading';
+
+const shownFor = (answers: Answers, tab?: Source): Shown => {
+  const open = openIn(answers);
+  if (open.some(({param}) => param === tab)) return 'wall';
+  if (settledIn(answers) && empty(open)) return 'noMuseumOpen';
+  return 'loading';
+};
+
 const answered = (museum: Source, tell: Dispatch<SetStateAction<Answers>>) => (answer: Result<boolean, HTTPError>): void =>
   tell(known => ({...known, [museum]: answer.orElse(false)}));
 
@@ -27,8 +38,9 @@ export const ArtGalleryPage: FC = () => {
   }, []);
 
   const open = openIn(answers);
-  const settled = museums.every(({param}) => has(answers[param]));
-  const showing = open.some(({param}) => param === tab);
+  const settled = settledIn(answers);
+  const shown = shownFor(answers, tab);
+  const showing = shown === 'wall';
   const first = open[0]?.param;
 
   useEffect(() => {
@@ -37,8 +49,10 @@ export const ArtGalleryPage: FC = () => {
 
   return <>
     {notEmpty(open) && <Tabs label="museums" values={open}/>}
-    {showing && <ArtGallery/>}
-    {settled && empty(open) && <img className="stand-in" src={missingWall} alt="no museum is open"/>}
-    {showing || (settled && empty(open)) || <Loading label="loading gallery"/>}
+    {{
+      wall: <ArtGallery/>,
+      noMuseumOpen: <img className="stand-in" src={missingWall} alt="no museum is open"/>,
+      loading: <Loading label="loading gallery"/>
+    }[shown]}
   </>;
 };
