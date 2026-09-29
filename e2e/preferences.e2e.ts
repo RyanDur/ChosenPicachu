@@ -11,8 +11,9 @@ test('a reader who asks for less motion gets the settings fold open at once', as
   await expect(tables.controls).toBeHidden();
 
   const closed = await heightByTheNextFrame(tables.settingsFold);
+  const opening = firstHeightAfter(tables.settingsFold, closed);
   await tables.pressSettings();
-  const opened = await firstHeightAfter(tables.settingsFold, closed);
+  const opened = await opening;
 
   await expect(tables.controls).toBeVisible();
   expect(await heightOnceSettled(tables.settingsFold)).toBe(opened);
