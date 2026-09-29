@@ -32,7 +32,7 @@ export const FancySelect: FC<PropsWithChildren<FancySelectProps>> = (
   <label id={id} className={classNames('fancy-select', 'fancy', className)}>
     <span className={classNames('fancy-title', 'bold')}>{children}</span>
     <select id={selectId}
-      className={'fancy-select-box fancy-text'}
+      className={classNames('fancy-select-box', 'fancy-text', 'bare', 'lifted', 'raisable')}
       {...(value ? {value} : {defaultValue: ''})}
       required={required}
       disabled={disabled || readOnly}

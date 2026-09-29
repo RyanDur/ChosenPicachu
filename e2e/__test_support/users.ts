@@ -26,12 +26,19 @@ export const usersPage = (page: Page) => {
     return middles.map(middle => new Set(middles.filter(other => other < middle - 20).map(Math.round)).size);
   };
   const firstRowActions = page.getByRole('button', {name: /^Actions for /}).first();
+  const homeState = home.getByLabel(/^State/);
   return {
     roster,
     names,
     firstRowActions,
     actionsOf: async (toggle = firstRowActions) => page.getByLabel(`${await toggle.getAttribute('aria-label')}, chosen`),
     rowsOfTheHomeAddress,
+    homeState,
+    tapTheHomeStateAt: async (end: 'start' | 'end'): Promise<void> => {
+      const box = await homeState.boundingBox();
+      if (box === null) throw new Error('the home address has no State choice');
+      await page.touchscreen.tap(end === 'start' ? box.x + 4 : box.x + box.width - 4, box.y + box.height / 2);
+    },
     columns,
     scrollRosterSideways: async (): Promise<void> => {
       await roster.hover();

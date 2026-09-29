@@ -88,13 +88,7 @@
   }
 
   .fancy-select .fancy-select-box {
-    all: unset;
-    height: 100%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    box-sizing: border-box;
-    background-color: var(--card);
+    background-color: var(--white);
     background-image: linear-gradient(45deg, transparent 50%, var(--gray) 50%),
       linear-gradient(135deg, var(--gray) 50%, transparent 50%),
       linear-gradient(to right, var(--silver), var(--silver));
@@ -102,15 +96,6 @@
       calc(100% - 1.5rem) calc(1.6rem + 0.2rem), calc(100% - 3.5rem) 0.65rem;
     background-size: 0.5rem 0.5rem, 0.5rem 0.5rem, 0.1rem 2.5rem;
     background-repeat: no-repeat;
-
-    &:hover,
-    &:focus {
-      box-shadow: var(--drop-shadow);
-    }
-
-    &:focus-visible {
-      outline: var(--hairline-x-2) solid var(--ring);
-    }
   }
 
   .form-title {

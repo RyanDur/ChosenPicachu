@@ -65,6 +65,18 @@ for (const {reader, device} of handhelds) {
 
       await expect.poll(users.lastColumnWithinTheRoster).toBe(true);
     });
+
+    for (const end of ['start', 'end'] as const) {
+      test(`a finger at the ${end} of the State choice's box lands on the State choice`, async ({page}) => {
+        const users = usersPage(page);
+        await page.goto('users');
+        await expect(users.homeState).toBeVisible();
+
+        await users.tapTheHomeStateAt(end);
+
+        await expect(users.homeState).toBeFocused();
+      });
+    }
   });
 }
 
