@@ -70,14 +70,10 @@ for (const {reader, device, statusLine} of [
 
     test(`the feed's status sits ${statusLine}`, async ({page}) => {
       await scriptedMarket(page, [50000, 50100]);
-      const status = page.getByRole('status', {name: 'feed'});
-      const title = page.getByRole('heading', {level: 2, name: /^Bitcoin, live/});
       await page.goto('demos/?tab=charts');
-      await expect(status).toHaveText('live');
+      await expect(page.getByRole('status', {name: 'feed'})).toHaveText('live');
 
-      const [statusBox, titleBox] = await Promise.all([status.boundingBox(), title.boundingBox()]);
-
-      expect((statusBox?.y ?? 0) >= (titleBox?.y ?? 0) + (titleBox?.height ?? 0) ? 'under the title' : 'beside the title').toBe(statusLine);
+      expect(await chartsPage(page).whereTheFeedStatusSits()).toBe(statusLine);
     });
   });
 }
