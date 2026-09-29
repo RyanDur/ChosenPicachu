@@ -97,6 +97,61 @@ for (const build of ['the checkbox build', 'the radio build', 'the grid checkbox
   }
 }
 
+const shareOfTheTimeForEachQuarter = (frames: Frame[]): number[] => {
+  const from = frames.at(0);
+  const to = frames.at(-1);
+  if (!from || !to) {
+    return [];
+  }
+  const settled = frames.find(({height}) => height === to.height) ?? to;
+  const duration = settled.at - from.at;
+  const travel = to.height - from.height;
+  const reached = (share: number): number =>
+    (frames.find(({height}) => (height - from.height) / travel >= share) ?? settled).at - from.at;
+  const marks = [0, reached(0.25), reached(0.5), reached(0.75), duration];
+  return marks.slice(1).map((mark, at) => Math.round((mark - marks[at]) / duration * 100) / 100);
+};
+
+const unevenQuarters = (frames: Frame[]): number[] =>
+  shareOfTheTimeForEachQuarter(frames).filter(share => share < 1 / 10 || share > 1 / 2);
+
+const putAway = async (part: Part): Promise<void> => {
+  await heightOnceSettled(part.fold);
+  if (await part.isOpen()) {
+    await part.close();
+    await heightOnceSettled(part.fold);
+  }
+};
+
+const byTextLength = async (parts: Part[]): Promise<Part[]> => {
+  const lengths = await Promise.all(parts.map(async part => (await textOf(part).textContent() ?? '').length));
+  return parts.map((part, at) => ({part, length: lengths[at]})).sort((one, other) => other.length - one.length).map(({part}) => part);
+};
+
+for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: desktop}]) {
+  test.describe(`at ${size} wide`, () => {
+    test.use(device);
+
+    for (const build of ['the checkbox build', 'the radio build'] as const) {
+      for (const style of ['reveal', 'drawer'] as const) {
+        for (const direction of ['open', 'closed'] as const) {
+          test(`the longest and shortest parts of ${build} slide ${direction} by the ${style} in one even motion`, async ({page}) => {
+            await page.goto(showing(build, style));
+            await expect(accordionsTab(page).firstPartOf(build).fold).toBeVisible();
+            const parts = await byTextLength(await accordionsTab(page).partsOf(build));
+            const longest = await framesSliding[direction](parts[0]);
+            await putAway(parts[0]);
+            const shortest = await framesSliding[direction](parts.at(-1) ?? parts[0]);
+
+            expect(unevenQuarters(longest)).toEqual([]);
+            expect(unevenQuarters(shortest)).toEqual([]);
+          });
+        }
+      }
+    }
+  });
+}
+
 test('a details fold opens at once, fully, where the browser cannot animate it', async ({page, browserName}) => {
   test.skip(browserName === 'chromium', 'chromium animates it');
   await page.goto(showing('the details build'));

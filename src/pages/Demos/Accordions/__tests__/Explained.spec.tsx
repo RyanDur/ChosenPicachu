@@ -180,7 +180,7 @@ describe('the fold motion', () => {
 
     const platform = await screen.findByRole('region', {name: parts[1]});
 
-    expect(codeBeside(platform, /This replaces the max-height guess/)).toHaveTextContent('.drawer &::details-content');
+    expect(codeBeside(platform, /This replaces the known height/)).toHaveTextContent('.drawer &::details-content');
   });
 
   test.each(['reveal', 'static'])('should carve no details drawer rule under %s', async style => {
@@ -188,19 +188,21 @@ describe('the fold motion', () => {
 
     const platform = await screen.findByRole('region', {name: parts[1]});
 
-    expect(codeBeside(platform, /This replaces the max-height guess/)).not.toHaveTextContent('.drawer &::details-content');
+    expect(codeBeside(platform, /This replaces the known height/)).not.toHaveTextContent('.drawer &::details-content');
   });
 
+  const knownHeight = ['.info, .info-text { height: 10lh;', '.info { overflow: hidden;', '.info-text { overflow-y: auto;', '.info-paragraph { box-sizing', '.info-toggle:not(:checked) ~ .info { height: 0;'];
+
   const partOneSays = {
-    reveal: /With reveal, the transition that runs is the one on the state being entered/,
-    drawer: /With the drawer, max-height moves on the same timings/,
+    reveal: /With reveal, the panel’s height moves over 300 milliseconds/,
+    drawer: /With the drawer, the height and visibility move on the same 300 milliseconds/,
     static: /With static, nothing moves/
   };
 
   test.each([
-    {style: 'reveal', others: ['drawer', 'static'], carves: ['.info { overflow: hidden;', '.info-toggle:not(:checked) ~ .info { margin-top: 0; max-height: 0;', '.reveal & .info {', '.reveal & .info-toggle:not(:checked) ~ .info {'], omits: ['.drawer & .info']},
-    {style: 'drawer', others: ['reveal', 'static'], carves: ['.info { overflow: hidden;', '.info-toggle:not(:checked) ~ .info { margin-top: 0; max-height: 0;', '.drawer & .info {', '.drawer & .info-toggle:not(:checked) ~ .info {'], omits: ['.reveal & .info']},
-    {style: 'static', others: ['reveal', 'drawer'], carves: ['.info { overflow: hidden;', '.info-toggle:not(:checked) ~ .info { margin-top: 0; max-height: 0;'], omits: ['.reveal & .info', '.drawer & .info']}
+    {style: 'reveal', others: ['drawer', 'static'], carves: [...knownHeight, ':is(.reveal, .drawer) & .info { transition: height'], omits: ['.drawer & .info']},
+    {style: 'drawer', others: ['reveal', 'static'], carves: [...knownHeight, ':is(.reveal, .drawer) & .info { transition: height', '.drawer & .info { display: flex;', '.drawer & .info-text { flex-shrink: 0;'], omits: []},
+    {style: 'static', others: ['reveal', 'drawer'], carves: knownHeight, omits: [':is(.reveal, .drawer) & .info', '.drawer & .info']}
   ] as const)('should tell, with $style chosen, only what that motion does under part one', async ({style, others, carves, omits}) => {
     render(<TestApp at={demosAt(`?tab=accordions&style=${style}`)}/>);
 
@@ -297,10 +299,10 @@ describe('how every fold moves', () => {
 
 describe('the accordions diagrams', () => {
   test.each([
-    ['inclusive', parts[0], ['Off screen, not gone', 'The sheet reads the box', 'Two borders, turned', 'Focus on the box, drawn on the bar', 'The guess']],
-    ['exclusive', parts[0], ['Off screen, not gone', 'The sheet reads the box', 'Two borders, turned', 'Focus on the box, drawn on the bar', 'The guess', 'One name, one choice']],
-    ['inclusive', parts[1], ['One job, two ways', 'Three pieces become two', 'Sized to the text, no guess']],
-    ['exclusive', parts[1], ['One job, two ways', 'Three pieces become two', 'Sized to the text, no guess']]
+    ['inclusive', parts[0], ['Off screen, not gone', 'The sheet reads the box', 'Two borders, turned', 'Focus on the box, drawn on the bar', 'The known height']],
+    ['exclusive', parts[0], ['Off screen, not gone', 'The sheet reads the box', 'Two borders, turned', 'Focus on the box, drawn on the bar', 'The known height', 'One name, one choice']],
+    ['inclusive', parts[1], ['One job, two ways', 'Three pieces become two', 'Sized to the text']],
+    ['exclusive', parts[1], ['One job, two ways', 'Three pieces become two', 'Sized to the text']]
   ])('should draw, with %s chosen, under "%s" each mechanism in order, named by its title and one sentence', async (type, part, titles) => {
     render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
 

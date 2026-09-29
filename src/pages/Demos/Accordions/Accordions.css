@@ -146,22 +146,37 @@
       }
     }
 
-    .info {
-      overflow: hidden;
-      max-height: var(--base-x-100);
-      margin-top: var(--base-x-4);
-      padding: 0 var(--base-x-4) var(--base-x-4);
+    .info,
+    .info-text {
+      height: 10lh;
     }
 
-    .reveal & .info {
-      transition: max-height 500ms ease, opacity 500ms ease, transform 500ms ease, margin-top 500ms ease, padding-bottom 500ms ease;
+    .info {
+      overflow: hidden;
+    }
+
+    .info-text {
+      overflow-y: auto;
+    }
+
+    .info-paragraph {
+      box-sizing: border-box;
+      min-height: 100%;
+      padding: var(--base-x-4);
+    }
+
+    :is(.reveal, .drawer) & .info {
+      transition: height .3s ease-in-out, visibility .3s;
     }
 
     .drawer & .info {
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      transition: max-height 500ms ease, margin-top 500ms ease, padding-bottom 500ms ease;
+    }
+
+    .drawer & .info-text {
+      flex-shrink: 0;
     }
 
     @media (hover: hover) {
@@ -195,19 +210,8 @@
     }
 
     .info-toggle:not(:checked) ~ .info {
-      margin-top: 0;
-      max-height: 0;
-      padding-bottom: 0;
-    }
-
-    .reveal & .info-toggle:not(:checked) ~ .info {
-      opacity: 0;
-      transform: translate(0, 50%);
-      transition: max-height 250ms ease, opacity 250ms ease, transform 250ms ease, margin-top 250ms ease, padding-bottom 250ms ease;
-    }
-
-    .drawer & .info-toggle:not(:checked) ~ .info {
-      transition: max-height 250ms ease, margin-top 250ms ease, padding-bottom 250ms ease;
+      height: 0;
+      visibility: hidden;
     }
   }
 }

@@ -97,17 +97,17 @@ export const FocusOnTheBar: FC = () =>
     <Words x={88} y={104}>:focus-visible ~</Words>
   </Diagram>;
 
-export const TheGuess: FC = () =>
-  <Diagram title="The guess" height={150}
-    says="Max-height runs to 80rem whatever the text needs, so a short part appears in a blink and vanishes after a pause, and a tall one is cut off.">
-    <line className="guess" x1={10} y1={34} x2={310} y2={34}/>
-    <Words x={90} y={26}>max-height: 80rem</Words>
-    <line className="floor" x1={10} y1={130} x2={310} y2={130}/>
-    <Box x={50} y={110} width={80} height={20} kind="native"/>
-    <Words x={90} y={146}>short text</Words>
-    <Box x={190} y={34} width={80} height={96} kind="native"/>
-    <Box x={190} y={10} width={80} height={24} kind="clipped"/>
-    <Words x={230} y={146}>tall text, cut off</Words>
+export const TheKnownHeight: FC = () =>
+  <Diagram title="The known height" height={150}
+    says="Every panel opens to the same ten lines, so a short part leaves room under its text and a tall one scrolls inside its panel.">
+    <Words x={160} y={18}>height: 10lh</Words>
+    <Box x={40} y={30} width={100} height={96} kind="clip"/>
+    <Box x={50} y={40} width={80} height={24} kind="native"/>
+    <Words x={90} y={146}>short text, room below</Words>
+    <Box x={180} y={30} width={100} height={96} kind="clip"/>
+    <Box x={190} y={40} width={80} height={86} kind="native"/>
+    <Box x={190} y={126} width={80} height={10} kind="clipped"/>
+    <Words x={230} y={146}>tall text, scrolls</Words>
   </Diagram>;
 
 export const OneNameOneChoice: FC = () =>
@@ -137,7 +137,7 @@ export const ThreeBecomeTwo: FC = () =>
   </Diagram>;
 
 export const SizedToTheText: FC = () =>
-  <Diagram title="Sized to the text, no guess" height={130}
+  <Diagram title="Sized to the text" height={130}
     says="Closed, the part a details hides has no height, and open, it takes exactly its text’s height.">
     <Part x={20} y={20} width={120} height={26} kind="piece" name="summary"/>
     <line className="guess" x1={20} y1={50} x2={140} y2={50}/>

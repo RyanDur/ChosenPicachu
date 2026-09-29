@@ -24,7 +24,7 @@ import {
   RidesTheEdge,
   RowToItsContent,
   SizedToTheText,
-  TheGuess,
+  TheKnownHeight,
   TheSheetReadsTheBox,
   ThreeBecomeTwo,
   TwoBordersTurned,
@@ -162,25 +162,41 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         </li>
         <li className="run">
           <p className="paragraph">The text should slide open, not appear at once. A transition cannot move a
-            height to auto, the height the content needs, so max-height stands in: a height the text
-            may grow to but not past. Open, the text’s max-height is 80rem, a guess taller than any
-            part should be. Closed, it is 0, with its padding and top margin gone, and overflow
-            hidden hides whatever does not fit. Text taller than the guess is cut off.
+            height to auto, the height the content needs. Before grid, the way to a smooth slide was a
+            height you knew. Each part’s panel is ten lines tall. The lh unit is the height of one line,
+            so the panel grows with the text size. Closed, the panel’s height is 0, and overflow
+            hidden hides the text. Inside it, a section of the same height holds the paragraph and
+            scrolls what does not fit. The paragraph is at least as tall as the section and pads
+            its text with the page’s spacing on every side, so a tall part’s last visible line is
+            cut at the panel’s foot, a sign there is more to scroll.
+            The section’s tabindex of 0 puts it in the tab order, so a keyboard can reach it and
+            scroll it, and aria-labelledby names it by its bar, so a screen reader says which part
+            it is reading. Closed, visibility hidden takes the text out of the tab order and out of
+            what a screen reader reads. Every part travels the same distance, so a short part moves
+            like a tall one. The cost is that a short part leaves room under its text, and a tall
+            one makes you scroll.
           {{
-            reveal: ' With reveal, the transition that runs is the one on the state being entered. The open rule has 500 milliseconds, so opening takes 500; the closed rule has 250, so closing takes 250. Both use ease, which starts quickly and slows to a stop. Max-height travels the full 80rem either way. While it is above the text’s height, nothing visible changes, and the text only starts to hide once max-height drops below it. So a short part is fully open within the first few frames, and on closing it stays whole until the last few. That is the blink and the pause. Opacity, the half-height drop, the top margin and the bottom padding all move on the same transition, so the text fades in as it rises into place, and its spacing opens with it.',
-            drawer: ' With the drawer, max-height moves on the same timings, 500 milliseconds to open and 250 to close, and the paragraph lays its text out as a column set at its end. So the text’s bottom stays on the fold’s edge, and the text slides down from under the bar. The guess still shows: max-height travels the full 80rem, so a short part is fully open within the first few frames, and on closing it stays whole until the last few. The text does not fade or drop; only its spacing moves with it.',
-            static: ' With static, nothing moves: the text is at its full height or at 0, in a single frame.'
+            reveal: ' With reveal, the panel’s height moves over 300 milliseconds with ease-in-out, which starts slowly, speeds up and slows to a stop, opening and closing. Visibility moves on the same 300 milliseconds and changes at the visible end, so a closing panel keeps its text until it is shut. The section sits at the panel’s top, so the text is uncovered from its first line down.',
+            drawer: ' With the drawer, the height and visibility move on the same 300 milliseconds, and the panel lays the section out as a column set at its end. So the section’s bottom stays on the fold’s edge, and the text slides down from under the bar.',
+            static: ' With static, nothing moves: the panel is at its full height or at 0, in a single frame.'
           }[motion]}</p>
           <Snippet label="CSS" lines={[
-            ...unit(accordionsCss, '.info {\n      overflow: hidden;\n      max-height'), gap,
+            ...unit(accordionsCss, '.info,\n    .info-text {'), gap,
+            ...unit(accordionsCss, '.info {\n      overflow: hidden;'), gap,
+            ...unit(accordionsCss, '.info-text {\n      overflow-y'), gap,
+            ...unit(accordionsCss, '.info-paragraph {'), gap,
             ...unit(accordionsCss, '.info-toggle:not(:checked) ~ .info {'), gap,
             ...{
-              reveal: [...unit(accordionsCss, '.reveal & .info {'), gap, ...unit(accordionsCss, '.reveal & .info-toggle:not(:checked) ~ .info {')],
-              drawer: [...unit(accordionsCss, '.drawer & .info {'), gap, ...unit(accordionsCss, '.drawer & .info-toggle:not(:checked) ~ .info {')],
+              reveal: unit(accordionsCss, '& .info {\n      transition: height'),
+              drawer: [
+                ...unit(accordionsCss, '& .info {\n      transition: height'), gap,
+                ...unit(accordionsCss, '.drawer & .info {'), gap,
+                ...unit(accordionsCss, '.drawer & .info-text {')
+              ],
               static: []
             }[motion]
           ]}/>
-          <TheGuess/>
+          <TheKnownHeight/>
         </li>
         {type === 'exclusive' && <li className="run">
           <p className="paragraph">Every radio in the build has the name group, so checking a part unchecks the
@@ -243,7 +259,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
           <Snippet label="CSS" lines={unit(accordionsCss, '.info-label {\n      display: flex;\n      padding')}/>
         </li>
         <li className="run">
-          <p className="paragraph">This replaces the max-height guess. A pseudo-element is a part of an element
+          <p className="paragraph">This replaces the known height. A pseudo-element is a part of an element
             that CSS can style as if it were an element of its
             own. <Mdn path="Web/CSS/::details-content">::details-content</Mdn> is the part a closed
             details hides. Closed, its block size, its height, is 0. Open, it is auto. Auto is a
@@ -331,8 +347,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             The <Mdn path="Web/CSS/:has">:has()</Mdn> pseudo-class picks an element by what it
             contains, so :has(:checked) makes that row 1fr when the fold holds a checked input. A
             row in fr is a number, so 0fr to 1fr is a number growing, which a transition can move.
-            The paragraph’s overflow hidden hides whatever its row does not hold. The row always ends at the content’s own height, so there is no guess to
-            wait on.</p>
+            The paragraph’s overflow hidden hides whatever its row does not hold. The row always ends at the content’s own height, so no part needs a known height, and
+            no text has to scroll.</p>
           <Snippet label="CSS" lines={[
             ...unit(accordionsCss, '.fold-clip {'), gap,
             ...unit(accordionsCss, '&:has(:checked) .fold-clip {')

@@ -48,8 +48,12 @@ export const InclusiveAccordion: FC<PropsWithClassName & ContentProps & {motion:
       {content.map(({value, key}, id) =>
         <li key={key} className="fold">
           <input id={`fold-${id}-checkbox`} className="info-toggle off-screen" type="checkbox"/>
-          <label className="info-label" htmlFor={`fold-${id}-checkbox`}>{key}</label>
-          <p className="info">{value}</p>
+          <label id={`fold-${id}-checkbox-label`} className="info-label" htmlFor={`fold-${id}-checkbox`}>{key}</label>
+          <div className="info">
+            <section className="info-text" tabIndex={0} aria-labelledby={`fold-${id}-checkbox-label`}>
+              <p className="info-paragraph">{value}</p>
+            </section>
+          </div>
         </li>)}
     </ul>
   </fieldset>
@@ -74,8 +78,12 @@ export const ExclusiveAccordion: FC<PropsWithClassName & ContentProps & {motion:
       {content.map(({value, key}, id) =>
         <li className="fold" key={key}>
           <input id={`fold-${id}-radio`} className="info-toggle off-screen" type="radio" name="group"/>
-          <label className="info-label" htmlFor={`fold-${id}-radio`}>{key}</label>
-          <p className="info">{value}</p>
+          <label id={`fold-${id}-radio-label`} className="info-label" htmlFor={`fold-${id}-radio`}>{key}</label>
+          <div className="info">
+            <section className="info-text" tabIndex={0} aria-labelledby={`fold-${id}-radio-label`}>
+              <p className="info-paragraph">{value}</p>
+            </section>
+          </div>
         </li>)}
     </ul>
   </fieldset>
