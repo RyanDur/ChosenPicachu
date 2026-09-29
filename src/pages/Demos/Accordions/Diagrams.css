@@ -66,16 +66,10 @@
     stroke-dasharray: 4 3;
   }
 
-  .guess,
   .edge {
     stroke: var(--charcoal);
     vector-effect: non-scaling-stroke;
     stroke-dasharray: 4 3;
-  }
-
-  .floor {
-    stroke: var(--charcoal);
-    vector-effect: non-scaling-stroke;
   }
 }
 

@@ -140,7 +140,7 @@ export const SizedToTheText: FC = () =>
   <Diagram title="Sized to the text" height={130}
     says="Closed, the part a details hides has no height, and open, it takes exactly its text’s height.">
     <Part x={20} y={20} width={120} height={26} kind="piece" name="summary"/>
-    <line className="guess" x1={20} y1={50} x2={140} y2={50}/>
+    <line className="edge" x1={20} y1={50} x2={140} y2={50}/>
     <Words x={80} y={66}>block-size: 0</Words>
     <Words x={80} y={124}>closed</Words>
     <Part x={180} y={20} width={120} height={26} kind="piece" name="summary"/>
@@ -172,7 +172,7 @@ export const RowToItsContent: FC = () =>
   <Diagram title="A row that grows to its content" height={130}
     says="The text’s row is 0fr while the fold is closed and 1fr while it is open, and 1fr is the height its content asks for.">
     <Part x={20} y={20} width={120} height={26} kind="piece" name="bar"/>
-    <line className="guess" x1={20} y1={50} x2={140} y2={50}/>
+    <line className="edge" x1={20} y1={50} x2={140} y2={50}/>
     <Words x={80} y={66}>0fr</Words>
     <Words x={80} y={124}>closed</Words>
     <Part x={180} y={20} width={120} height={26} kind="piece" name="bar"/>
