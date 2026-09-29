@@ -39,6 +39,6 @@ export const ArtGalleryPage: FC = () => {
     {notEmpty(open) && <Tabs label="museums" values={open}/>}
     {showing && <ArtGallery/>}
     {settled && empty(open) && <img className="stand-in" src={missingWall} alt="no museum is open"/>}
-    {settled || <Loading label="loading gallery"/>}
+    {showing || (settled && empty(open)) || <Loading label="loading gallery"/>}
   </>;
 };

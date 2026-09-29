@@ -14,7 +14,9 @@ import {
   heldAICAllArtResponse,
   heldAICArtPieceResponse,
   heldAICPictures,
+  heldVAMAllArtResponse,
   heldVAMPictures,
+  harvardNeverAnswers,
   refuseAICPictures,
   refuseVAMPictures,
   setupAICAllArtResponse,
@@ -186,6 +188,39 @@ describe('The gallery.', () => {
 
     expect(screen.getByRole('progressbar', {name: 'loading gallery'})).toBeInTheDocument();
     expect(screen.queryByRole('navigation', {name: 'museums'})).not.toBeInTheDocument();
+  });
+
+  test.each([
+    {from: 'a museum', at: '?tab=aic', page: 1},
+    {from: 'a link to a museum\u2019s page 2', at: '?tab=aic&page=2', page: 2}
+  ])('opened on $from while another museum is still asked, the wall is the one thing loading, and stays the only one', async ({at, page}) => {
+    const wallArrives = heldAICAllArtResponse(aicArtResponse, {limit: defaultRecordLimit, page});
+    const vamAnswers = heldVAMPictures();
+    render(<TestApp at={`${Paths.artGallery}${at}`}/>);
+
+    await screen.findByRole('navigation', {name: 'museums'});
+
+    expect(screen.getAllByRole('progressbar', {name: 'loading gallery'})).toHaveLength(1);
+    wallArrives();
+    await galleryWall.hangs();
+    expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument();
+    vamAnswers();
+    await screen.findByRole('link', {name: 'The Victoria and Albert Museum'});
+    expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument();
+  });
+
+  test('switching museums while another is still asked keeps one thing loading until the new wall is hung', async () => {
+    setupAICAllArtResponse(aicArtResponse);
+    const vamWallArrives = heldVAMAllArtResponse(vamArtResponse);
+    harvardNeverAnswers();
+    render(<TestApp at={`${Paths.artGallery}?tab=aic`}/>);
+    await galleryWall.hangs();
+
+    await userEvent.click(screen.getByRole('link', {name: 'The Victoria and Albert Museum'}));
+
+    expect(screen.getAllByRole('progressbar', {name: 'loading gallery'})).toHaveLength(1);
+    vamWallArrives();
+    await waitFor(() => expect(screen.queryByRole('progressbar', {name: 'loading gallery'})).not.toBeInTheDocument());
   });
 
   test('the doors appear once the museums answer', async () => {

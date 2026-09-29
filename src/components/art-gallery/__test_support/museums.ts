@@ -149,3 +149,16 @@ export const setupVAMAllArtResponse = (response: VAMAllArtResponse, {limit, page
       images_exist: 'true',
       ...(has(search) ? {q: search} : {})
     }) ? HttpResponse.json(response) : undefined));
+
+export const heldVAMAllArtResponse = (response: VAMAllArtResponse, {limit, page}: AllArt = {limit: defaultRecordLimit, page: 1}): () => void => {
+  const {held, release} = holding();
+  server.use(http.get(`${vamDomain}/objects/search`, async ({request}) => {
+    if (!paramsMatch(request, {page: String(page), page_size: String(limit), images_exist: 'true'})) return undefined;
+    await held;
+    return HttpResponse.json(response);
+  }));
+  return release;
+};
+
+export const harvardNeverAnswers = () =>
+  server.use(http.get(harvardDomain, () => new Promise<never>(() => undefined)));

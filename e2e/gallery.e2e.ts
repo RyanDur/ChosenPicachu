@@ -168,3 +168,30 @@ test.describe('a keyboard reader on a desktop', () => {
     await expect.poll(() => focusIsIn(page.getByRole('main'))).toBe(true);
   });
 });
+
+test.describe('a phone, while another museum has not answered', () => {
+  test.use(iPhone);
+
+  test('shows one loading bar from the first until the wall\'s first piece, then none', async ({page}) => {
+    await page.route('**/2d484387-2509-5e8e-2c43-22f9981972eb/info.json', () => new Promise<void>(() => undefined));
+    await page.addInitScript(() => {
+      const counts: number[] = [];
+      Reflect.set(globalThis, 'loadingBarsPerFrame', counts);
+      const count = (): void => {
+        counts.push(document.querySelectorAll('progress[aria-label="loading gallery"]').length);
+        if (document.querySelector('figure') === null) {
+          requestAnimationFrame(count);
+        }
+      };
+      requestAnimationFrame(count);
+    });
+
+    await page.goto('gallery?tab=vam');
+    await expect(galleryPage(page).wall.first()).toBeVisible();
+
+    const counts: unknown = await page.evaluate(() => Reflect.get(globalThis, 'loadingBarsPerFrame'));
+    const perFrame = Array.isArray(counts) ? counts.map(Number) : [];
+    expect(perFrame.slice(perFrame.indexOf(1), -1).filter(bars => bars !== 1)).toEqual([]);
+    await expect(page.getByRole('progressbar', {name: 'loading gallery'})).toHaveCount(0);
+  });
+});
