@@ -550,16 +550,6 @@ describe('the frame table', () => {
       shoved.forEach(cell => expect(cell).toHaveClass('shoved-start'));
     });
 
-    it('on release every cell of the dropped column settles', () => {
-      const {trades} = tradesCarriedPastBuys();
-
-      fireEvent.pointerUp(surface(), {pointerId: 1});
-
-      expect(carried()).toEqual([]);
-      const settling = [trades, ...screen.getAllByRole('row').slice(1).map(lane => lane.children[2])];
-      settling.forEach(cell => expect(cell).toHaveClass('settling'));
-    });
-
     it('the next lift clears the marks', () => {
       const {trades, buys} = tradesCarriedPastBuys();
       fireEvent.pointerUp(surface(), {pointerId: 1});
@@ -570,13 +560,14 @@ describe('the frame table', () => {
       expect(buys).not.toHaveClass('shoved-start');
     });
 
-    it('every release marks what settles', () => {
+    it('every release marks each cell of the dropped column to settle and keeps the column order', () => {
       const {trades} = tradesCarriedPastBuys();
 
       fireEvent.pointerUp(surface(), {pointerId: 1});
 
       expect(carried()).toEqual([]);
-      expect(trades).toHaveClass('settling');
+      const settling = [trades, ...screen.getAllByRole('row').slice(1).map(lane => lane.children[2])];
+      settling.forEach(cell => expect(cell).toHaveClass('settling'));
       expect(columnOrder()).toEqual(['window', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
     });
   });
