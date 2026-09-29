@@ -32,6 +32,17 @@ export const heldMarket = async (page: Page, prices: number[]): Promise<{arrive:
   return {arrive};
 };
 
+export const feedStillConnecting = async (page: Page, prices: number[]): Promise<{opens: () => void}> => {
+  const {promise: opened, resolve: opens} = Promise.withResolvers<void>();
+  await page.route(/\/products\/.*\/candles/, route =>
+    route.fulfill({json: [], headers: {'access-control-allow-origin': '*'}}));
+  await page.routeWebSocket(/ws-feed/, async socket => {
+    await opened;
+    socket.onMessage(() => prices.forEach((price, id) => socket.send(tradeFrame(id, price))));
+  });
+  return {opens};
+};
+
 export const chartsPage = (page: Page) => {
   const priceCard = page.getByRole('region', {name: 'live trades'});
   const periodMenu = page.getByLabel('price period by');

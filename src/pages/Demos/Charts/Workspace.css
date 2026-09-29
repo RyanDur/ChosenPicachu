@@ -4,27 +4,24 @@
 }
 
 .charts-heading {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  grid-template-areas: "headline status plus";
+  container: charts-heading / inline-size;
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--base-x-3);
   margin: 0 0 var(--base-x-2);
 
-  .add-chart {
-    grid-area: plus;
-  }
-
   .headline {
-    grid-area: headline;
     font-size: var(--text-headline);
     font-weight: bold;
     color: var(--ink);
   }
 
+  .add-chart {
+    margin-inline-start: auto;
+  }
+
   .status {
-    grid-area: status;
-    justify-self: start;
     display: inline-flex;
     align-items: center;
     gap: var(--base-x-0_75);
@@ -47,6 +44,21 @@
 
     &.failed::before {
       background: var(--alarm-ink);
+    }
+  }
+
+  @container charts-heading (width < 87rem) {
+    .headline {
+      flex: 1 1 0;
+    }
+
+    .add-chart {
+      order: 1;
+    }
+
+    .status {
+      order: 2;
+      flex-basis: 100%;
     }
   }
 }

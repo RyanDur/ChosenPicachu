@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import {chartsPage, heldMarket, iPhone} from './__test_support';
+import {chartsPage, feedStillConnecting, heldMarket, iPad13Upright, iPadUpright, iPhone, scriptedMarket} from './__test_support';
 
 test('the price period menu stays hidden until the reader asks for it', async ({page}) => {
   const charts = chartsPage(page);
@@ -44,3 +44,40 @@ test.describe('a phone', () => {
     expect(await fold.boundingBox()).toEqual(before);
   });
 });
+
+for (const {reader, device, statusLine} of [
+  {reader: 'an iPad held upright', device: iPadUpright, statusLine: 'under the title'},
+  {reader: 'a phone', device: iPhone, statusLine: 'under the title'},
+  {reader: 'a large iPad held upright', device: iPad13Upright, statusLine: 'beside the title'}
+] as const) {
+  test.describe(reader, () => {
+    test.use(device);
+
+    test('the price period toggle holds still while the feed connects and once it is live', async ({page}) => {
+      const feed = await feedStillConnecting(page, [50000, 50100]);
+      const charts = chartsPage(page);
+      const status = page.getByRole('status', {name: 'feed'});
+      await page.goto('demos/?tab=charts');
+      await expect(status).toHaveText('connecting to the live feed…');
+      await expect(charts.periodToggle).toBeVisible();
+      const whileConnecting = await charts.periodToggle.boundingBox();
+
+      feed.opens();
+
+      await expect(status).toHaveText('live');
+      expect(await charts.periodToggle.boundingBox()).toEqual(whileConnecting);
+    });
+
+    test(`the feed's status sits ${statusLine}`, async ({page}) => {
+      await scriptedMarket(page, [50000, 50100]);
+      const status = page.getByRole('status', {name: 'feed'});
+      const title = page.getByRole('heading', {level: 2, name: /^Bitcoin, live/});
+      await page.goto('demos/?tab=charts');
+      await expect(status).toHaveText('live');
+
+      const [statusBox, titleBox] = await Promise.all([status.boundingBox(), title.boundingBox()]);
+
+      expect((statusBox?.y ?? 0) >= (titleBox?.y ?? 0) + (titleBox?.height ?? 0) ? 'under the title' : 'beside the title').toBe(statusLine);
+    });
+  });
+}
