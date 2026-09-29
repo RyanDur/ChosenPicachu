@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import {dragSortTable, stages} from './__test_support';
+import {dragSortTable, iPadUpright, stages} from './__test_support';
 
 for (const {name, at, table} of stages) {
   test(`a trader drags a column and a row into new seats without the page erring, in ${name}`, async ({page}) => {
@@ -153,6 +153,54 @@ for (const {name, at, table} of stages) {
     });
   }
 }
+
+for (const {name, at, table} of stages) {
+  for (const pace of ['eager', 'lazy']) {
+    test(`a carried column stays under the pointer from the press, in one move or many, right or left, ${pace}, in ${name}`, async ({page}) => {
+      await page.goto(`${at}&pace=${pace}`);
+      const trades = dragSortTable(page, table(page));
+      await expect(trades.columnHeader('trades')).toBeVisible();
+      const trails: string[] = [];
+
+      expect(await trades.howFarTheLiftJumps('trades')).toBeLessThanOrEqual(1);
+      for (const by of [120, -120]) {
+        for (const steps of [1, 20, 60]) {
+          const trail = await trades.howFarTheCarryTrails('trades', {by, steps});
+          if (trail > 1) {
+            trails.push(`${by}px in ${steps}: ${trail.toFixed(1)}px`);
+          }
+        }
+      }
+
+      expect(trails).toEqual([]);
+    });
+  }
+}
+
+test.describe('an iPad held upright', () => {
+  test.use(iPadUpright);
+
+  for (const {name, at, table} of stages) {
+    test(`a column carried by a finger stays under it from the press, in ${name}`, async ({page, browserName}) => {
+      test.skip(browserName !== 'chromium', 'only Chromium\'s DevTools protocol moves a finger through a drag');
+      await page.goto(at);
+      const trades = dragSortTable(page, table(page));
+      await expect(trades.columnHeader('trades')).toBeVisible();
+      const trails: string[] = [];
+
+      for (const by of [120, -120]) {
+        for (const steps of [1, 20]) {
+          const trail = await trades.howFarAFingersCarryTrails('trades', {by, steps});
+          if (trail > 1) {
+            trails.push(`${by}px in ${steps}: ${trail.toFixed(1)}px`);
+          }
+        }
+      }
+
+      expect(trails).toEqual([]);
+    });
+  }
+});
 
 test('a menu choice sorts, and never lifts the column', async ({page}) => {
   const vanilla = stages[1];

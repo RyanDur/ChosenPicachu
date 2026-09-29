@@ -26,7 +26,6 @@ export const liftedColumn = (header: Element, x: number): ColumnInHand => {
   };
   fireEvent.pointerDown(header, {clientX: pointer.x, clientY: pointer.y, pointerId: 1});
   return {
-    // the drag takes its origin from the first move, not the press
     carryStarted: () => moveTo(pointer),
     carriedTo: next => moveTo({x: next, y: pointer.y}),
     captureLostAt: x => fireEvent.lostPointerCapture(header, {buttons: 1, clientX: x, clientY: pointer.y, pointerId: 1}),

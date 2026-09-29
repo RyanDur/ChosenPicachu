@@ -20,11 +20,8 @@ describe('the travel vocabulary', () => {
     expect(settled).toEqual(['buys']);
   });
 
-  it('seeds the origin on the first move, and drifts from it after', () => {
-    const first = carried(undefined, {clientX: 100, clientY: 50});
-    expect(first).toEqual({origin: {x: 100, y: 50}, drift: {x: 0, y: 0}});
-
-    expect(carried(first.origin, {clientX: 130, clientY: 45}))
+  it('drifts from where the pointer pressed, from the first move on', () => {
+    expect(carried({x: 100, y: 50}, {clientX: 130, clientY: 45}))
       .toEqual({origin: {x: 100, y: 50}, drift: {x: 30, y: -5}});
   });
 

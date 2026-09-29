@@ -57,6 +57,12 @@ const dropAt = async (page: Page, {pressed, held, watched = held}: {pressed: Loc
   return carriedTo;
 };
 
+// Chrome moves a touch onto a control within a fingertip of it, so a finger pressed low on the header lands on its sort toggle
+const fingerClearOfTheToggle = 10;
+
+const heldStill = (held: Locator): Promise<unknown> =>
+  held.evaluate(element => Promise.all(element.getAnimations({subtree: false}).map(motion => motion.finished)));
+
 const walk = async (page: Page, {focused, held}: {focused: Locator; held: Locator}, key: string): Promise<void> => {
   await focused.focus();
   await holdTheSettleAtItsStart(held);
@@ -81,6 +87,45 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
     centreOfRow: async (name: RegExp): Promise<Point> => centreOf(await boxOf(table.getByRole('row', {name}))),
     centreOfRowHeader: async (name: RegExp): Promise<Point> => centreOf(await boxOf(rowHeader(name))),
     centreOfRowGrip: async (row: number): Promise<Point> => centreOf(await boxOf(rowGrip(row))),
+    howFarTheLiftJumps: async (name: string): Promise<number> => {
+      const before = centreOf(await boxOf(columnHeader(name)));
+      await page.mouse.move(before.x, before.y);
+      await page.mouse.down();
+      await columnHeader(name).evaluate(() => new Promise(requestAnimationFrame));
+      const lifted = centreOf(await boxOf(columnHeader(name)));
+      await page.mouse.up();
+      await heldStill(columnHeader(name));
+      return Math.hypot(lifted.x - before.x, lifted.y - before.y);
+    },
+    howFarTheCarryTrails: async (name: string, {by, steps}: {by: number; steps: number}): Promise<number> => {
+      const pressed = centreOf(await boxOf(columnHeader(name)));
+      await page.mouse.move(pressed.x, pressed.y);
+      await page.mouse.down();
+      for (let step = 1; step <= steps; step++) {
+        await page.mouse.move(pressed.x + by * step / steps, pressed.y);
+      }
+      const carried = centreOf(await boxOf(columnHeader(name)));
+      await page.mouse.up();
+      await heldStill(columnHeader(name));
+      return Math.abs(carried.x - (pressed.x + by));
+    },
+    howFarAFingersCarryTrails: async (name: string, {by, steps}: {by: number; steps: number}): Promise<number> => {
+      const devtools = await page.context().newCDPSession(page);
+      const before = centreOf(await boxOf(columnHeader(name)));
+      const {x, y, width} = await boxOf(columnHeader(name));
+      const pressed = {x: x + width / 2, y: y + fingerClearOfTheToggle};
+      const touch = (type: 'touchStart' | 'touchMove' | 'touchEnd', x: number): Promise<unknown> =>
+        devtools.send('Input.dispatchTouchEvent', {type, touchPoints: type === 'touchEnd' ? [] : [{x, y: pressed.y}]});
+      await touch('touchStart', pressed.x);
+      for (let step = 1; step <= steps; step++) {
+        await touch('touchMove', pressed.x + by * step / steps);
+      }
+      await columnHeader(name).evaluate(() => new Promise(requestAnimationFrame));
+      const carried = centreOf(await boxOf(columnHeader(name)));
+      await touch('touchEnd', pressed.x + by);
+      await heldStill(columnHeader(name));
+      return Math.abs(carried.x - before.x - by);
+    },
     dropColumnAt: (name: string, letGo: Point, {watching = name}: {watching?: string} = {}): Promise<Point> =>
       dropAt(page, {pressed: columnHeader(name), held: columnHeader(name), watched: columnHeader(watching)}, letGo),
     dropRowAt: ({row, name}: {row: number; name: RegExp}, letGo: Point, {watching = name}: {watching?: RegExp} = {}): Promise<Point> =>

@@ -190,6 +190,7 @@ const mount = (document: Document, table: HTMLTableElement, body: HTMLTableSecti
       dressWidths(mounted);
     }
     reseatRows();
+    dressCarried(mounted, hand.state);
     if (previous.sort !== next.sort) {
       next.columns.forEach(name => announce(document, name, next.sort?.column === name ? next.sort.direction : undefined));
     }

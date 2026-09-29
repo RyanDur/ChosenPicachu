@@ -43,7 +43,7 @@ export type Carry =
 type Flying = {
   readonly survey: Survey;
   readonly box: Flight;
-  readonly origin?: Drift;
+  readonly origin: Drift;
   readonly drift: Drift;
 };
 
@@ -141,7 +141,7 @@ export const shoveRows = (state: TableState, keys: readonly string[], shove: Row
 export const pixels = (length?: number): string | undefined => has(length) ? `${length}px` : undefined;
 
 const flying = (grab: Grab): Flying =>
-  ({survey: grab.survey, box: grab.box, drift: still});
+  ({survey: grab.survey, box: grab.box, origin: grab.at, drift: still});
 
 export const dragOf = (carry: Carry, grab: Grab): Drag =>
   ({...carry, ...flying(grab)});

@@ -52,7 +52,6 @@ export const liftedRow = (grip: Element, at: number): RowInHand => {
   };
   fireEvent.pointerDown(grip, {clientX: 100, clientY: y, pointerId: 1});
   return {
-    // the drag takes its origin from the first move, not the press
     carryStarted: () => moveTo(y),
     carriedOver: (from, to) => moveTo(laneOf(from, to)),
     carriedOn: by => moveTo(y + by),
