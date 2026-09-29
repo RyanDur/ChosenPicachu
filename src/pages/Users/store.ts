@@ -17,8 +17,8 @@ export type UsersAction =
   | {readonly type: 'userAdded'; readonly user: NewUser}
   | {readonly type: 'userUpdated'; readonly edit: UserEdit}
   | {readonly type: 'userRemoved'; readonly user: User}
-  | {readonly type: 'friendAdded'; readonly userId: string; readonly friend: string}
-  | {readonly type: 'friendRemoved'; readonly userId: string; readonly friend: string};
+  | {readonly type: 'friendAdded'; readonly userId: string; readonly friendId: string}
+  | {readonly type: 'friendRemoved'; readonly userId: string; readonly friendId: string};
 
 export type UsersStore = Store<UsersState, UsersAction>;
 export type UsersListener = Listener<UsersState, UsersAction>;
@@ -28,8 +28,8 @@ export const usersArrived = (users: readonly User[]): UsersAction => ({type: 'us
 export const userAdded = (user: NewUser): UsersAction => ({type: 'userAdded', user});
 export const userUpdated = ({friends: _friends, ...edit}: User): UsersAction => ({type: 'userUpdated', edit});
 export const userRemoved = (user: User): UsersAction => ({type: 'userRemoved', user});
-export const friendAdded = (userId: string, friend: string): UsersAction => ({type: 'friendAdded', userId, friend});
-export const friendRemoved = (userId: string, friend: string): UsersAction => ({type: 'friendRemoved', userId, friend});
+export const friendAdded = (userId: string, friendId: string): UsersAction => ({type: 'friendAdded', userId, friendId});
+export const friendRemoved = (userId: string, friendId: string): UsersAction => ({type: 'friendRemoved', userId, friendId});
 
 export const userWithId = (id?: string) => ({users}: UsersState): Maybe<User> =>
   maybe(users.find(user => user.id === id));
