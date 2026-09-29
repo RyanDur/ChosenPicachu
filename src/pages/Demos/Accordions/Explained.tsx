@@ -164,7 +164,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
           <p className="paragraph">The text should slide open, not appear at once. A transition cannot move a
             height to auto, the height the content needs. Before grid, the way to a smooth slide was a
             height you knew. Each part’s panel is ten lines tall. The lh unit is the height of one line,
-            so the panel grows with the text size. Closed, the panel’s height is 0, and overflow
+            so the panel grows with the text size. It is the one size in the sheet off the page’s
+            spacing scale, because it is counted in the text’s own lines. Closed, the panel’s height is 0, and overflow
             hidden hides the text. Inside it, a section of the same height holds the paragraph and
             scrolls what does not fit. The paragraph is at least as tall as the section and pads
             its text with the page’s spacing on every side, so a tall part’s last visible line is
