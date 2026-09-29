@@ -157,6 +157,11 @@
 
     .info-text {
       overflow-y: auto;
+
+      &:focus-visible {
+        outline: var(--hairline-x-2) solid var(--ring);
+        outline-offset: calc(var(--hairline-x-2) * -1);
+      }
     }
 
     .info-paragraph {
