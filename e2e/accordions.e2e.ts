@@ -113,7 +113,7 @@ const shareOfTheTimeForEachQuarter = (frames: Frame[]): number[] => {
 };
 
 const unevenQuarters = (frames: Frame[]): number[] =>
-  shareOfTheTimeForEachQuarter(frames).filter(share => share < 1 / 10 || share > 1 / 2);
+  shareOfTheTimeForEachQuarter(frames).filter(share => !(share >= 1 / 10 && share <= 1 / 2));
 
 const putAway = async (part: Part): Promise<void> => {
   await heightOnceSettled(part.fold);
@@ -143,8 +143,10 @@ for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: 
             await putAway(parts[0]);
             const shortest = await framesSliding[direction](parts.at(-1) ?? parts[0]);
 
-            expect(unevenQuarters(longest)).toEqual([]);
-            expect(unevenQuarters(shortest)).toEqual([]);
+            for (const frames of [longest, shortest]) {
+              heightMoved[direction](frames);
+              expect(unevenQuarters(frames)).toEqual([]);
+            }
           });
         }
       }
