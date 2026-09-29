@@ -8,6 +8,7 @@ import {empty, maybe} from '@ryandur/sand';
 import {useBanners} from '@components/Banners';
 import {troubleWith} from '@transport/trouble';
 import {sourceParam} from '@components/art-gallery/museums/source';
+import {awaited} from '@components/art-gallery/museums/reply';
 import {art as artResource} from '@components/art-gallery/museums';
 import {defaultRecordLimit} from '@components/art-gallery/limits';
 import noImageGallery from '../../../assets/icons/missing-wall.svg?url';
@@ -49,7 +50,7 @@ export const ArtGallery: FC = () => {
         </figure>
       </li>)}
     </ul>
-    {(wall.reply === 'unasked' || wall.reply === 'asked') && <Loading label="loading gallery"/>}
+    {awaited(wall) && <Loading label="loading gallery"/>}
     {wall.reply === 'answered' && empty(wall.answer.pieces) &&
         <img className="stand-in" src={noImageGallery} alt="the museum answered with nothing"/>}
     {wall.reply === 'refused' && <img className="stand-in" src={noImageGallery} alt="the museum refused to answer"/>}

@@ -13,3 +13,5 @@ export const standingOf = <Answer>(reply: MuseumReply<Answer>): Maybe<Answer> =>
     default: return reply.standing;
   }
 };
+
+export const awaited = <Answer>({reply}: MuseumReply<Answer>): boolean => reply === 'unasked' || reply === 'asked';

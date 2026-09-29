@@ -4,6 +4,7 @@ import {maybe} from '@ryandur/sand';
 import {Loading} from '@components/Loading';
 import {useArtPiece} from '@components/art-gallery/ArtPiece/Context';
 import {Image} from '@components/art-gallery/Image';
+import {awaited} from '@components/art-gallery/museums/reply';
 import {useSearchParamsObject} from '@components/search-params';
 import {Source, sourceParam} from '@components/art-gallery/museums/source';
 import {useBanners} from '@components/Banners';
@@ -35,7 +36,7 @@ export const ArtPiece = () => {
     .orElse(abandoned), [id, tab, asked, answered, refused, abandoned, raise]);
 
   return <>
-    {easel.reply === 'asked' && <Loading label="loading piece"/>}
+    {awaited(easel) && <Loading label="loading piece"/>}
     {easel.reply === 'answered' && <figure className="art-work">
       <Image piece={easel.answer} linkEnabled={false} className="piece hung"/>
       <figcaption className="artist-display trim hairline-outline italic">{easel.answer.artistInfo}</figcaption>
