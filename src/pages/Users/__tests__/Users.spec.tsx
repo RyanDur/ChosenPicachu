@@ -371,6 +371,20 @@ describe('the users page', () => {
     await waitFor(() => expect(sent()).toMatchObject({id: vic.id, friends: []}));
   });
 
+  test('a friend the backend refuses to remove is reported, and the row keeps the friend', async () => {
+    const zed = aUser({id: 'zed', friends: ['amo']});
+    const amo = aUser({id: 'amo', friends: []});
+    setupUsersResponse([zed, amo]);
+    userUpdateRefused(zed.id);
+    render(<TestApp at={Paths.users}/>);
+    const zedsRow = await usersTable.rowOf(fullNameOf(zed));
+
+    await userEvent.click(within(zedsRow).getByRole('button', {name: `remove ${fullNameOf(amo)}`}));
+
+    expect(await within(screen.getByRole('alert', {hidden: true})).findByText('the users is having trouble')).toBeInTheDocument();
+    expect(within(zedsRow).getByRole('button', {name: `remove ${fullNameOf(amo)}`})).toBeInTheDocument();
+  });
+
   test('a friend the backend refuses to add is reported, and the row keeps the friends it had', async () => {
     const xia = aUser({id: 'xia', friends: []});
     const yul = aUser({id: 'yul', friends: []});
