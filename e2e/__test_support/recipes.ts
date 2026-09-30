@@ -1,4 +1,4 @@
-import type {Locator, Page} from '@playwright/test';
+import type {Page} from '@playwright/test';
 
 export type StepLayout = 'code below prose' | 'code beside prose';
 
@@ -36,20 +36,4 @@ export const misplacedPictures = async (page: Page): Promise<string[]> => {
     })).then(placed => placed.flat());
   }));
   return runs.count().then(count => count === 0 ? ['no run has a picture'] : misplaced.flat());
-};
-
-export const misplacedRevealedPictures = async (reveal: Locator): Promise<string[]> => {
-  const [words, code] = await Promise.all([reveal.getByRole('paragraph').first().boundingBox(), reveal.getByRole('code').first().boundingBox()]);
-  const pictures = await reveal.getByRole('figure').all();
-  const misplaced = await Promise.all(pictures.map(async picture => {
-    const [drawn, drawing] = await Promise.all([picture.boundingBox(), picture.ariaSnapshot().then(pictureName)]);
-    if (words === null || drawn === null || code === null) {
-      return [`${drawing}: a box is missing`];
-    }
-    return [
-      ...(drawn.y < words.y + words.height ? [`${drawing} over its prose`] : []),
-      ...(drawn.y + drawn.height > code.y ? [`${drawing} over its code`] : [])
-    ];
-  }));
-  return pictures.length === 0 ? ['no picture was revealed'] : misplaced.flat();
 };

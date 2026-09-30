@@ -13,6 +13,6 @@ export {tablesDemo} from './tables';
 export {fingerTap, fingertipMiss} from './finger';
 export {sortableList} from './lists';
 export {headingsTakingMoreLinesThanWords} from './headings';
-export {codedStepLayouts, misplacedPictures, misplacedRevealedPictures} from './recipes';
+export {codedStepLayouts, misplacedPictures} from './recipes';
 export {firstHeightAfter, framesWhileMoving, heightByTheNextFrame, heightOnceSettled, motionOf, type Frame, type Moment} from './motion';
 export {accordionsTab, builds, textOf, type Build, showing, type Part, nameOn} from './accordions';

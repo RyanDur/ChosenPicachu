@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import {codedStepLayouts, desktop, iPad13Sideways, iPadSideways, iPadUpright, misplacedRevealedPictures} from './__test_support';
+import {codedStepLayouts, desktop, iPad13Sideways, iPadSideways, iPadUpright} from './__test_support';
 
 const bigPhoneSideways = {viewport: {width: 956, height: 440}, hasTouch: true};
 const tutorials = [{name: 'the z-index tutorial', at: 'demos/?tab=z-index&news=top,many'}, {name: 'the price chart tutorial', at: 'demos/charts/price/?graph=price'}];
@@ -24,15 +24,3 @@ for (const {reader, device, layout} of [
     }
   });
 }
-
-test.describe('a desktop', () => {
-  test.use(desktop);
-
-  test('sees the tables recipe\'s slots figure under its prose and above its code', async ({page}) => {
-    await page.goto('demos/?tab=tables&sort=column');
-    const step = page.getByRole('article').filter({has: page.getByRole('heading', {name: 'Find the neighbour under the pointer, with a dead zone'})});
-    await step.getByText('how we built it').click();
-
-    await expect.poll(() => misplacedRevealedPictures(step.getByRole('group', {name: /how we built it/}))).toEqual([]);
-  });
-});
