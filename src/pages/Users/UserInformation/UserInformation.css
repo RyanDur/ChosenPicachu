@@ -88,13 +88,19 @@
   }
 
   .fancy-select .fancy-select-box {
+    --arrow-half: calc(var(--base-x-0_5) + var(--hairline));
+    --arrow-from-end: var(--base-x-2_5);
+    --arrow-drop: var(--base-x-2_25);
+
     background-color: var(--white);
     background-image: linear-gradient(45deg, transparent 50%, var(--gray) 50%),
       linear-gradient(135deg, var(--gray) 50%, transparent 50%),
       linear-gradient(to right, var(--silver), var(--silver));
-    background-position: calc(100% - 2rem) calc(1.6rem + 0.2rem),
-      calc(100% - 1.5rem) calc(1.6rem + 0.2rem), calc(100% - 3.5rem) 0.65rem;
-    background-size: 0.5rem 0.5rem, 0.5rem 0.5rem, 0.1rem 2.5rem;
+    background-position: calc(100% - var(--arrow-from-end)) var(--arrow-drop),
+      calc(100% - var(--arrow-from-end) + var(--arrow-half)) var(--arrow-drop),
+      calc(100% - var(--arrow-from-end) - 3 * var(--arrow-half)) var(--base-x-0_75);
+    background-size: var(--arrow-half) var(--arrow-half), var(--arrow-half) var(--arrow-half),
+      var(--hairline) calc(var(--base-x-3) + var(--hairline));
     background-repeat: no-repeat;
   }
 
