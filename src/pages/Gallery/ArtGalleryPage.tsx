@@ -16,13 +16,13 @@ const openIn = (answers: Answers) => museums.filter(({param}) => answers[param] 
 
 const settledIn = (answers: Answers): boolean => museums.every(({param}) => has(answers[param]));
 
-type Shown = 'wall' | 'noMuseumOpen' | 'loading';
+type Shown = 'wall' | 'noMuseumOpen' | 'movingToAnOpenMuseum' | 'loading';
 
 const shownFor = (answers: Answers, tab?: Source): Shown => {
   const open = openIn(answers);
   if (open.some(({param}) => param === tab)) return 'wall';
-  if (settledIn(answers) && empty(open)) return 'noMuseumOpen';
-  return 'loading';
+  if (!settledIn(answers)) return 'loading';
+  return empty(open) ? 'noMuseumOpen' : 'movingToAnOpenMuseum';
 };
 
 const answered = (museum: Source, tell: Dispatch<SetStateAction<Answers>>) => (answer: Result<boolean, HTTPError>): void =>
@@ -38,20 +38,19 @@ export const ArtGalleryPage: FC = () => {
   }, []);
 
   const open = openIn(answers);
-  const settled = settledIn(answers);
   const shown = shownFor(answers, tab);
-  const showing = shown === 'wall';
   const first = open[0]?.param;
 
   useEffect(() => {
-    if (settled && has(first) && !showing) updateSearchParams({tab: first}, {replace: true});
-  }, [settled, first, showing, updateSearchParams]);
+    if (shown === 'movingToAnOpenMuseum' && has(first)) updateSearchParams({tab: first}, {replace: true});
+  }, [shown, first, updateSearchParams]);
 
   return <>
     {notEmpty(open) && <Tabs label="museums" values={open}/>}
     {{
       wall: <ArtGallery/>,
       noMuseumOpen: <img className="stand-in" src={missingWall} alt="no museum is open"/>,
+      movingToAnOpenMuseum: <Loading label="loading gallery"/>,
       loading: <Loading label="loading gallery"/>
     }[shown]}
   </>;
