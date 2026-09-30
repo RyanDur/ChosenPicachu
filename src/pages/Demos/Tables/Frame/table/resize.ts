@@ -1,8 +1,8 @@
-import {maybe} from '@ryandur/sand';
+import {maybe, not} from '@ryandur/sand';
 import {STEP_SHARE, grippedAt, measuredWidths, neighborOf, resizeLabel} from '@components/Table/shares';
 import {columnSteps} from '@components/DragSortableTable/survey';
 import {TableAction} from '@components/DragSortableTable/actions';
-import {MountedTable, arrowLifted, columnOf, gripped, handleDragged, handleLeft, measured, namedShare, released, tradedBy, widthsOf} from './table-state';
+import {MountedTable, arrowLifted, columnOf, gripped, handleDragged, handleLeft, measured, namedShare, pointerHolds, released, tradedBy, widthsOf} from './table-state';
 
 const dressColumn = (table: HTMLTableElement, column: string, share: number, named: number): void => {
   maybe(table.querySelector(`th.${column}`)).map(header => {
@@ -38,12 +38,11 @@ const wireHandle = (mounted: MountedTable, column: string, handle: HTMLButtonEle
     maybe(grippedAt(table.getBoundingClientRect().width, event.clientX)).map(grip => saidAfter(mounted, gripped(column, grip)));
   });
   handle.addEventListener('pointermove', event => {
-    const {sizing} = mounted.store.state;
-    if (sizing?.column !== column || sizing.stage === 'keyed') {
+    if (not(pointerHolds(mounted.store.state, column))) {
       return;
     }
     handle.setPointerCapture(event.pointerId);
-    mounted.store.dispatch(handleDragged(neighborOf(mounted.order(), column), event.clientX));
+    mounted.store.dispatch(handleDragged(column, neighborOf(mounted.order(), column), event.clientX));
   });
   ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(landing =>
     handle.addEventListener(landing, () => saidAfter(mounted, released())));

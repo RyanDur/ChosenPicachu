@@ -1,6 +1,6 @@
 import {TableMiddleware, tableStore} from '../store';
 import {columnShares} from '../__test_support';
-import {arrowLifted, measured, tradedBy} from '../actions';
+import {arrowLifted, gripped, handleDragged, measured, tradedBy} from '../actions';
 import {tableReducer} from '../reducer';
 import {resting, widthsOf} from '../table-state';
 import {arrangementOf, arrangementReducer, arrived, columnMoved, rowMoved, sorted, standingOf} from '../arrangement';
@@ -197,5 +197,52 @@ describe('a sizing', () => {
       arrowLifted('window'));
 
     expect(ended.report).toEqual({about: 'share', name: 'window', share: 14.999544950163525});
+  });
+
+  test('an arrow on another handle ends a keyboard resize and says its new share', () => {
+    const ended = after(
+      measured({window: 13, trades: 40, buys: 47}),
+      tradedBy('window', 'trades', 2),
+      tradedBy('trades', 'buys', 1));
+
+    expect(ended.report).toEqual({about: 'share', name: 'window', share: 15});
+  });
+
+  test('a press on another handle ends a keyboard resize and says its new share', () => {
+    const ended = after(
+      measured({window: 13, trades: 40, buys: 47}),
+      tradedBy('window', 'trades', 2),
+      gripped('trades', {fromX: 100, pxPerShare: 10}));
+
+    expect(ended.report).toEqual({about: 'share', name: 'window', share: 15});
+  });
+
+  test('a lifted arrow leaves a pointer drag of the same column under way', () => {
+    const dragged = after(
+      measured({window: 13, trades: 40, buys: 47}),
+      gripped('window', {fromX: 100, pxPerShare: 10}),
+      tradedBy('window', 'trades', 1),
+      arrowLifted('window'),
+      handleDragged('window', 'trades', 120));
+
+    expect(widthsOf(dragged)?.window).toBe(16);
+  });
+
+  test('a pointer moving while an arrow holds the resize trades nothing', () => {
+    const keyed = after(
+      measured({window: 13, trades: 40, buys: 47}),
+      tradedBy('window', 'trades', 1),
+      handleDragged('window', 'trades', 200));
+
+    expect(widthsOf(keyed)?.window).toBe(14);
+  });
+
+  test('a pointer move on a handle that holds no grip trades nothing', () => {
+    const elsewhere = after(
+      measured({window: 13, trades: 40, buys: 47}),
+      gripped('window', {fromX: 100, pxPerShare: 10}),
+      handleDragged('trades', 'buys', 120));
+
+    expect(widthsOf(elsewhere)).toEqual({window: 13, trades: 40, buys: 47});
   });
 });

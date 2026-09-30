@@ -65,6 +65,8 @@ type Sizing =
   | {readonly stage: 'gripped'; readonly column: string; readonly from: number; readonly grip: Grip}
   | {readonly stage: 'dragging'; readonly column: string; readonly from: number; readonly grip: Grip; readonly carried: number};
 
+type PointerSizing = Exclude<Sizing, {stage: 'keyed'}>;
+
 export type Marks<Shove> = {
   readonly settlingFrom?: Settling;
   readonly shoved?: Shove;
@@ -122,17 +124,28 @@ export const grip = (state: TableState, column: string, at: Grip): TableState =>
     .orElse(ours);
 };
 
-export const dragHandle = (state: TableState, neighbour: string, clientX: number): TableState => {
-  const {sizing} = state;
-  if (sizing?.stage !== 'gripped' && sizing?.stage !== 'dragging') {
-    return state;
-  }
-  const sought = soughtTrade(sizing.grip, clientX, sizing.stage === 'dragging' ? sizing.carried : 0);
-  return {...trade(state, sizing.column, neighbour, sought.delta), sizing: {...sizing, stage: 'dragging', carried: sought.carried}};
-};
+const pointerSizing = (sizing?: Sizing): PointerSizing | undefined =>
+  sizing?.stage === 'keyed' ? undefined : sizing;
+
+const gripOf = (state: TableState, column: string): PointerSizing | undefined =>
+  state.sizing?.column === column ? pointerSizing(state.sizing) : undefined;
+
+export const pointerHolds = (state: TableState, column: string): boolean =>
+  maybe(gripOf(state, column)).map(() => true).orElse(false);
+
+export const dragHandle = (state: TableState, column: string, neighbour: string, clientX: number): TableState =>
+  maybe(gripOf(state, column))
+    .map((sizing): TableState => {
+      const sought = soughtTrade(sizing.grip, clientX, sizing.stage === 'dragging' ? sizing.carried : 0);
+      return {...trade(state, column, neighbour, sought.delta), sizing: {...sizing, stage: 'dragging', carried: sought.carried}};
+    })
+    .orElse(state);
 
 export const ungrip = (state: TableState): TableState =>
-  state.sizing?.stage === 'gripped' || state.sizing?.stage === 'dragging' ? endSizing(state) : state;
+  maybe(pointerSizing(state.sizing)).map(() => endSizing(state)).orElse(state);
+
+export const endKeyedSizingOf = (state: TableState, column: string): TableState =>
+  state.sizing?.column === column && state.sizing.stage === 'keyed' ? endSizing(state) : state;
 
 export const endSizingOf = (state: TableState, column: string): TableState =>
   state.sizing?.column === column ? endSizing(state) : state;

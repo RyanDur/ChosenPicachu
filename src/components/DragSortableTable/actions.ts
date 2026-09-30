@@ -11,7 +11,7 @@ export type TableAction =
   | {readonly type: 'awoken'; readonly widths: ColumnWidths}
   | {readonly type: 'tradedBy'; readonly column: string; readonly neighbour: string; readonly delta: number}
   | {readonly type: 'gripped'; readonly column: string; readonly grip: Grip}
-  | {readonly type: 'handleDragged'; readonly neighbour: string; readonly clientX: number}
+  | {readonly type: 'handleDragged'; readonly column: string; readonly neighbour: string; readonly clientX: number}
   | {readonly type: 'lifted'; readonly carry: Carry; readonly grab: Grab}
   | {readonly type: 'drifted'; readonly moving: Moving}
   | {readonly type: 'columnLandingFound'; readonly neighbour?: string}
@@ -65,7 +65,7 @@ export const measured = (widths: ColumnWidths): Action => ({type: 'measured', wi
 export const awoken = (widths: ColumnWidths): Action => ({type: 'awoken', widths});
 export const tradedBy = (column: string, neighbour: string, delta: number): Action => ({type: 'tradedBy', column, neighbour, delta});
 export const gripped = (column: string, grip: Grip): Action => ({type: 'gripped', column, grip});
-export const handleDragged = (neighbour: string, clientX: number): Action => ({type: 'handleDragged', neighbour, clientX});
+export const handleDragged = (column: string, neighbour: string, clientX: number): Action => ({type: 'handleDragged', column, neighbour, clientX});
 export const lifted = (carry: Carry, grab: Grab): Action => ({type: 'lifted', carry, grab});
 export const drifted = (moving: Moving): Action => ({type: 'drifted', moving: {clientX: moving.clientX, clientY: moving.clientY}});
 export const columnLandingFound = (neighbour?: string): Action => ({type: 'columnLandingFound', neighbour});

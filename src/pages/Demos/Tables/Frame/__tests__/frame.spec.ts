@@ -5,6 +5,8 @@ import {feedIsSubscribed} from '@pages/Demos/__test_support';
 import {vanillaFrame} from '../__test_support';
 import {blurFocusOnMoves} from '@__test_support/focus';
 
+const mutationsDelivered = (): Promise<void> => new Promise(resolve => queueMicrotask(resolve));
+
 describe('the frame table', () => {
   const windowNames = (): string[] =>
     screen.getAllByRole('rowheader').map(header => (header.textContent ?? '').trim());
@@ -410,7 +412,7 @@ describe('the frame table', () => {
       .observe(screen.getByRole('status', {name: 'move report'}), {childList: true, characterData: true, subtree: true});
 
     handle.blur();
-    await new Promise<void>(resolve => queueMicrotask(resolve));
+    await mutationsDelivered();
 
     expect(said).toEqual([]);
   });

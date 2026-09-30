@@ -1,7 +1,7 @@
 import {Report} from './report';
 import {has, maybe, Maybe, not} from '@ryandur/sand';
 import {neighborOf} from '@components/Table/shares';
-import {TableColumn, ColumnDrag, ColumnShove, Labelled, Marks, RowDrag, RowShove, Settling, namedShare, seatOffset, settlingAt} from './table-state';
+import {TableColumn, ColumnDrag, ColumnShove, Labelled, Marks, RowDrag, RowShove, Settling, namedShare, pointerHolds, seatOffset, settlingAt} from './table-state';
 import {TableView} from './context';
 import {anchored} from './survey';
 import {Drift} from './travel';
@@ -43,8 +43,7 @@ export const rowDrag = (key: string) => ({state}: TableView): RowDrag | undefine
 
 export const columnHeld = (name: string) => (view: TableView): boolean => has(columnDrag(name)(view));
 
-export const columnGripped = (name: string) => ({state}: TableView): boolean =>
-  state.sizing?.column === name && state.sizing.stage !== 'keyed';
+export const columnGripped = (name: string) => ({state}: TableView): boolean => pointerHolds(state, name);
 
 export const selectReport = ({state}: TableView): Maybe<Report> => maybe(state.report);
 

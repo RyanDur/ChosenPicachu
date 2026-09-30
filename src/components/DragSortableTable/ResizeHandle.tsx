@@ -18,7 +18,7 @@ export const ResizeHandle: FC<{column: string}> = ({column}) => {
   const trade = (delta: number): void => dispatch(tradedBy(column, neighbour, delta));
   const release = (): void => dispatch(released());
   const followed = (event: PointerEvent<HTMLElement>): void =>
-    dispatch(handleDragged(neighbour, event.clientX));
+    dispatch(handleDragged(column, neighbour, event.clientX));
 
   return <button type="button"
     tabIndex={0}
