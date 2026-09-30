@@ -21,7 +21,7 @@ export const galleryPage = (page: Page) => {
     submitSearch: page.getByRole('button', {name: 'submit search'}),
     resetSearch: page.getByRole('button', {name: 'reset search'}),
     nextPage: page.getByRole('navigation', {name: 'pagination'}).getByRole('link', {name: 'NEXT'}),
-    filters: page.getByRole('complementary', {name: 'filters'}),
+    settingsPanel: page.getByRole('complementary', {name: 'gallery settings'}),
     searchLabelReadsInFull: (): Promise<boolean> => searchField.evaluate(field => {
       const label = field instanceof HTMLInputElement && field.labels !== null ? field.labels.item(0) : null;
       if (label === null) return false;

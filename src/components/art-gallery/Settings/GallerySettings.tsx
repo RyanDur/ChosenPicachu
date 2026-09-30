@@ -31,7 +31,7 @@ export const GallerySettings: FC = () => {
 
 export const GalleryAside: FC = () => {
   const room = useRoomToStandOpen();
-  return room && <aside id="filter" className="filter field" aria-label="filters">
+  return room && <aside id="filter" className="filter field" aria-label="gallery settings">
     <PageControl/>
   </aside>;
 };
