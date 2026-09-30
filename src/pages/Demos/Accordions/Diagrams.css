@@ -3,14 +3,6 @@
   --drawn-width: 320px;
   --widest-drawing: var(--base-x-60);
 
-  container-type: inline-size;
-
-  .recipe-drawing {
-    --drawing-column: 100cqi;
-
-    max-inline-size: var(--widest-drawing);
-  }
-
   .piece {
     fill: var(--paper);
     stroke: var(--charcoal);

@@ -1,8 +1,13 @@
 .slots {
+  /* px on purpose: the viewBox width SlotsFigure draws in, so drawn-caption can undo the drawing's scale */
+  --drawn-width: 480px;
+  --widest-drawing: var(--base-x-60);
+
   .slot {
     fill: var(--paper);
     stroke: var(--charcoal);
     stroke-width: var(--hairline);
+    vector-effect: non-scaling-stroke;
   }
 
   .dead {
@@ -15,6 +20,8 @@
 
   .midline {
     stroke: var(--charcoal);
+    stroke-width: var(--hairline);
+    vector-effect: non-scaling-stroke;
     stroke-dasharray: 4 3;
   }
 }

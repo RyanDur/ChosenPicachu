@@ -2,14 +2,14 @@
   margin: 0;
   display: grid;
   gap: var(--base);
+  container-type: inline-size;
 
   .recipe-drawing {
+    --drawing-column: 100cqi;
+
     width: 100%;
     height: auto;
+    max-inline-size: var(--widest-drawing, none);
     fill: var(--ink);
-  }
-
-  .label {
-    font-size: var(--base-x-1_5);
   }
 }
