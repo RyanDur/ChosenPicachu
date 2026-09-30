@@ -255,7 +255,7 @@
   display: contents;
 }
 
-@media (601px <= width <= 1100px) and (height > 600px) {
+@media (601px <= width <= 1100px) {
   #root .rail:has(.feedback-item) {
     grid-area: nav / nav / feedback / feedback;
     display: grid;
@@ -269,6 +269,10 @@
       grid-template-columns: subgrid;
       justify-items: center;
       align-items: center;
+
+      .path:first-child {
+        justify-content: start;
+      }
     }
 
     .feedback-item {

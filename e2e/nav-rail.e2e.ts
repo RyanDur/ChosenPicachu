@@ -1,5 +1,5 @@
 import {Browser, expect, test} from '@playwright/test';
-import {desktop, homePage, iPad11Upright, iPad13Upright, iPadSideways, iPadUpright, justPastAPhone, siteFrame, widestNavInARow} from './__test_support';
+import {desktop, homePage, iPad11Upright, iPad13Upright, iPadSideways, iPadUpright, justPastAPhone, phoneSideways, siteFrame, wideAndShort, widestNavInARow} from './__test_support';
 
 const openerHeightOn = async (browser: Browser, device: {viewport: {width: number; height: number}; hasTouch: boolean}): Promise<number> => {
   const context = await browser.newContext(device);
@@ -48,8 +48,8 @@ for (const {reader, device} of [{reader: 'an iPad held sideways', device: iPadSi
 // Firefox lays out in sixtieths of a pixel, so two rooms equal by construction can read a hair apart
 const aHundredthOfAPixel = 0.01;
 
-for (const device of [justPastAPhone, iPadUpright, iPad13Upright, widestNavInARow]) {
-  test.describe(`a tablet ${device.viewport.width} wide`, () => {
+for (const device of [justPastAPhone, iPadUpright, iPad13Upright, widestNavInARow, phoneSideways, wideAndShort]) {
+  test.describe(`a touch window ${device.viewport.width}×${device.viewport.height}`, () => {
     test.use(device);
 
     test('gives Feedback no less room from the right edge than Home has from the left', async ({page}) => {
