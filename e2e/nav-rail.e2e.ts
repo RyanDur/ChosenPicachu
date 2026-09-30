@@ -1,5 +1,5 @@
 import {Browser, expect, test} from '@playwright/test';
-import {desktop, homePage, iPad11Upright, iPad13Upright, iPadSideways, siteFrame} from './__test_support';
+import {desktop, homePage, iPad11Upright, iPad13Upright, iPadSideways, iPadUpright, justPastAPhone, siteFrame, widestNavInARow} from './__test_support';
 
 const openerHeightOn = async (browser: Browser, device: {viewport: {width: number; height: number}; hasTouch: boolean}): Promise<number> => {
   const context = await browser.newContext(device);
@@ -41,6 +41,23 @@ for (const {reader, device} of [{reader: 'an iPad held sideways', device: iPadSi
       await page.goto('');
 
       await expect.poll(site.railBesideThePage).toBe(true);
+    });
+  });
+}
+
+// Firefox lays out in sixtieths of a pixel, so two rooms equal by construction can read a hair apart
+const aHundredthOfAPixel = 0.01;
+
+for (const device of [justPastAPhone, iPadUpright, iPad13Upright, widestNavInARow]) {
+  test.describe(`a tablet ${device.viewport.width} wide`, () => {
+    test.use(device);
+
+    test('gives Feedback no less room from the right edge than Home has from the left', async ({page}) => {
+      const site = siteFrame(page);
+      await page.goto('');
+      await expect(site.nav).toBeVisible();
+
+      expect(await site.roomAfterFeedback()).toBeGreaterThanOrEqual(await site.roomBeforeHome() - aHundredthOfAPixel);
     });
   });
 }

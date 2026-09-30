@@ -37,8 +37,10 @@ const Site: FC<{closed?: boolean}> = ({closed = false}) => {
   return <BannerProvider><PageNameProvider>
     <Provider>
       <HeaderRegion/>
-      <SideNav/>
-      <Feedback/>
+      <div className="rail">
+        <SideNav/>
+        <Feedback/>
+      </div>
       {AsideRegion && <AsideRegion/>}
       <main className={classNames('app-main', 'field', mainClassName)}>
         {closed ? <PageError/> : <Outlet/>}

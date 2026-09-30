@@ -10,3 +10,4 @@ export const iPad13Upright = {viewport: {width: 1024, height: 1366}, hasTouch: t
 export const iPad11Upright = {viewport: {width: 834, height: 1194}, hasTouch: true};
 export const splitViewWide = {viewport: {width: 700, height: 1000}, hasTouch: true};
 export const justPastAPhone = {viewport: {width: 601, height: 1000}, hasTouch: true};
+export const widestNavInARow = {viewport: {width: 1100, height: 900}, hasTouch: true};
