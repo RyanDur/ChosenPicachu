@@ -159,6 +159,18 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
       const from = {...edge, x: edge.x - besideBy};
       await dragTo(page, from, from.x + from.width / 2 + by, from.y + from.height / 2);
     },
+    dragEdge: async (name: string, {by, moves}: {by: number; moves: number}): Promise<void> => {
+      const handle = table.getByRole('button', {name: new RegExp(`^resize ${name}`)});
+      await handle.scrollIntoViewIfNeeded();
+      const edge = await boxOf(handle);
+      const middle = {x: edge.x + edge.width / 2, y: edge.y + edge.height / 2};
+      await page.mouse.move(middle.x, middle.y);
+      await page.mouse.down();
+      await page.mouse.move(middle.x + by, middle.y, {steps: moves});
+      await page.mouse.up();
+    },
+    resizeName: (name: string): Promise<string | null> =>
+      table.getByRole('button', {name: new RegExp(`^resize ${name}`)}).getAttribute('aria-label'),
     columnOrder: (): Promise<(string | null)[]> =>
       table.getByRole('columnheader').evaluateAll(headers => headers.map(header => header.getAttribute('aria-label'))),
     rowOrder: (): Promise<string[]> =>

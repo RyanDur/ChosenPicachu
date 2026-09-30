@@ -95,10 +95,10 @@ const captureSays: Record<World, ReactNode> = {
     handle <Mdn path="Web/API/Element/setPointerCapture">captures its pointer</Mdn> and measures
     the table once: pixels per share. Each move converts the drag into shares and trades only
     the increment since the last one, so a clamped trade never accumulates error.</Says>,
-  vanilla: <Says>A press wakes the ledger and measures the table once: pixels per share. The
-    first move <Mdn path="Web/API/Element/setPointerCapture">captures the pointer</Mdn>, and
-    each move converts the drag into shares and trades only the increment since the last one,
-    so a clamped trade never accumulates error.</Says>
+  vanilla: <Says>A press wakes the ledger, <Mdn path="Web/API/Element/setPointerCapture">captures
+    the pointer</Mdn> and measures the table once: pixels per share. Each move converts the drag
+    into shares and trades only the increment since the last one, so a clamped trade never
+    accumulates error.</Says>
 };
 
 const gripWords =

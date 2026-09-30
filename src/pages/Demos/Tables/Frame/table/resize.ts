@@ -36,12 +36,12 @@ const wireHandle = (mounted: MountedTable, column: string, handle: HTMLButtonEle
     event.stopPropagation();
     awaken();
     maybe(grippedAt(table.getBoundingClientRect().width, event.clientX)).map(grip => saidAfter(mounted, gripped(column, grip)));
+    handle.setPointerCapture(event.pointerId);
   });
   handle.addEventListener('pointermove', event => {
     if (not(pointerHolds(mounted.store.state, column))) {
       return;
     }
-    handle.setPointerCapture(event.pointerId);
     mounted.store.dispatch(handleDragged(column, neighborOf(mounted.order(), column), event.clientX));
   });
   ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(landing =>
