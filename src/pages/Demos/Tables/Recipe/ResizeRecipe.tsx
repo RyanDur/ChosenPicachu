@@ -70,9 +70,11 @@ const handleMarkup: Record<World, ReactNode> = {
   ]}/>
 };
 
+const labelHoldsItsShare = ' While a drag or a held arrow key is under way the label keeps the share it began with and takes the new one when the move ends, so the name under focus does not change at every step.';
+
 const handleSays: Record<World, ReactNode> = {
   react: <Says>The handle is focusable by birth, announcing itself by name, and once the ledger
-    exists its label speaks the <Term word="share">share</Term> too. It pins itself to the
+    exists its label speaks the <Term word="share">share</Term> too.{labelHoldsItsShare} It pins itself to the
     header’s end edge, stretched to the cell’s height, and the button carries no width of its
     own: it is a grid container whose only item is the 8px line its ::after paints, so the
     painted line is the hit area. The col-resize <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
@@ -80,7 +82,7 @@ const handleSays: Record<World, ReactNode> = {
     on a touchscreen.</Says>,
   vanilla: <Says>The handle is focusable by birth, announcing the name the markup gives it, and
     once the ledger exists dressColumn rewrites that label to speak
-    the <Term word="share">share</Term> too. It pins itself to the header’s end edge, stretched
+    the <Term word="share">share</Term> too.{labelHoldsItsShare} It pins itself to the header’s end edge, stretched
     to the cell’s height, and the button carries no width of its own: it is a grid container
     whose only item is the 8px line its ::after paints, so the painted line is the hit area. The
     col-resize <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
