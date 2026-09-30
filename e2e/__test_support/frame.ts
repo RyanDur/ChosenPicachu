@@ -171,11 +171,6 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
       await page.mouse.move(middle.x + by, middle.y, {steps: moves});
       await page.mouse.up();
     },
-    passOverEdge: async (name: string, by: number): Promise<void> => {
-      const middle = await centreOfHandle(name);
-      await page.mouse.move(middle.x, middle.y);
-      await page.mouse.move(middle.x + by, middle.y, {steps: 5});
-    },
     resizeHandle,
     columnOrder: (): Promise<(string | null)[]> =>
       table.getByRole('columnheader').evaluateAll(headers => headers.map(header => header.getAttribute('aria-label'))),
