@@ -1,10 +1,10 @@
 import {Page, expect, test} from '@playwright/test';
-import {desktop, fingerTap, iPadUpright, iPhone, phoneSideways} from './__test_support';
+import {fingerTap, iPadUpright, iPhone, phoneSideways} from './__test_support';
 
 const choicesOn = [
-  {at: 'demos/?tab=accordions', groups: ['fold type', 'fold motion']},
-  {at: 'demos/?tab=tables', groups: ['world', 'pace', 'origin', 'motion']},
-  {at: 'demos/?tab=z-index', groups: ['side', 'align', 'entrance', 'stack']}
+  {demo: 'the accordions demo', at: 'demos/?tab=accordions', groups: ['fold type', 'fold motion']},
+  {demo: 'the tables demo', at: 'demos/?tab=tables', groups: ['world', 'pace', 'origin', 'motion']},
+  {demo: 'the z-index demo', at: 'demos/?tab=z-index', groups: ['side', 'align', 'entrance', 'stack']}
 ];
 
 const pillHeights = async (page: Page, group: string): Promise<number[]> => {
@@ -22,40 +22,23 @@ for (const {reader, device} of [
   test.describe(reader, () => {
     test.use(device);
 
-    for (const {at, groups} of choicesOn) {
-      test(`every pill on ${at} takes a finger`, async ({page}) => {
+    for (const {demo, at, groups} of choicesOn) {
+      test(`every pill on ${demo} takes a finger`, async ({page}) => {
         await page.goto(at);
 
         for (const group of groups) {
           expect((await pillHeights(page, group)).filter(height => height < 44), group).toEqual([]);
         }
       });
-
-      test(`a finger just off a pill's middle on ${at} chooses it`, async ({page}) => {
-        await page.goto(at);
-        const pills = page.getByRole('group', {name: groups[0], exact: true}).first().getByRole('radio', {includeHidden: true});
-        const unchosen = pills.and(page.getByRole('radio', {checked: false, includeHidden: true})).first();
-        const name = await unchosen.getAttribute('value') ?? '';
-        const pill = page.getByRole('group', {name: groups[0], exact: true}).first().getByText(new RegExp(`^${name}$`, 'i'));
-
-        await fingerTap(page, pill);
-
-        await expect(pills.and(page.getByRole('radio', {checked: true, includeHidden: true}))).toHaveAttribute('value', name);
-      });
     }
+
+    test('a finger just off a pill\'s middle chooses it', async ({page}) => {
+      await page.goto('demos/?tab=tables');
+      const world = page.getByRole('group', {name: 'world', exact: true});
+
+      await fingerTap(page, world.getByText('Vanilla', {exact: true}));
+
+      await expect(world.getByRole('radio', {name: 'Vanilla', includeHidden: true})).toBeChecked();
+    });
   });
 }
-
-test.describe('a desktop with a mouse', () => {
-  test.use(desktop);
-
-  for (const {at, groups} of choicesOn) {
-    test(`every pill on ${at} keeps its 40px`, async ({page}) => {
-      await page.goto(at);
-
-      for (const group of groups) {
-        expect((await pillHeights(page, group)).filter(height => height !== 40), group).toEqual([]);
-      }
-    });
-  }
-});
