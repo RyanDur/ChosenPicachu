@@ -369,7 +369,50 @@ describe('the frame table', () => {
 
     expect(screen.getByRole('columnheader', {name: /trades/}).style.getPropertyValue('--share')).toBe('17.5%');
     expect(screen.getByRole('columnheader', {name: /buys/}).style.getPropertyValue('--share')).toBe('7.5%');
-    expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent('trades resized to 18%');
+  });
+
+  it('a vanilla keyboard move ends when the handle loses focus', async () => {
+    const keys = userEvent.setup();
+    vanillaFrame.stand();
+    stubbedRects();
+    screen.getByRole('button', {name: 'resize trades'}).focus();
+
+    await keys.keyboard('{ArrowRight>}');
+    expect(screen.getByRole('status', {name: 'move report'})).toBeEmptyDOMElement();
+    await keys.tab();
+
+    expect(screen.getByRole('status', {name: 'move report'})).toHaveTextContent('trades resized to 15%');
+  });
+
+  it('a dragged vanilla handle keeps the name it had until it is let go', () => {
+    vanillaFrame.stand();
+    stubbedRects();
+    const handle = screen.getByRole('button', {name: 'resize trades'});
+    fireEvent.pointerDown(handle, {clientX: 100, clientY: 20, pointerId: 1});
+
+    fireEvent.pointerMove(handle, {buttons: 1, clientX: 140, clientY: 20, pointerId: 1});
+    expect(handle).toHaveAccessibleName('resize trades, 13%');
+    fireEvent.pointerUp(handle, {pointerId: 1});
+
+    expect(handle).toHaveAccessibleName('resize trades, 18%');
+  });
+
+  it('a vanilla handle that loses focus after a drag says nothing twice', async () => {
+    vanillaFrame.stand();
+    stubbedRects();
+    const handle = screen.getByRole('button', {name: 'resize trades'});
+    handle.focus();
+    fireEvent.pointerDown(handle, {clientX: 100, clientY: 20, pointerId: 1});
+    fireEvent.pointerMove(handle, {buttons: 1, clientX: 140, clientY: 20, pointerId: 1});
+    fireEvent.pointerUp(handle, {pointerId: 1});
+    const said: string[] = [];
+    new MutationObserver(() => said.push(screen.getByRole('status', {name: 'move report'}).textContent ?? ''))
+      .observe(screen.getByRole('status', {name: 'move report'}), {childList: true, characterData: true, subtree: true});
+
+    handle.blur();
+    await new Promise<void>(resolve => queueMicrotask(resolve));
+
+    expect(said).toEqual([]);
   });
 
   it('a resize whose pointer is cancelled stops following the pointer', () => {
