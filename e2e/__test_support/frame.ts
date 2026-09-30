@@ -60,6 +60,21 @@ const dropAt = async (page: Page, {pressed, held, watched = held}: {pressed: Loc
 // Chrome moves a touch onto a control within a fingertip of it, so a finger pressed low on the header lands on its sort toggle
 const fingerClearOfTheToggle = 10;
 
+const nextFrame = (locator: Locator): Promise<unknown> => locator.evaluate(() => new Promise(requestAnimationFrame));
+
+const whereItRests = async (locator: Locator): Promise<Point> => {
+  let last = centreOf(await boxOf(locator));
+  for (let frame = 0; frame < 30; frame++) {
+    await nextFrame(locator);
+    const now = centreOf(await boxOf(locator));
+    if (now.x === last.x && now.y === last.y) {
+      return now;
+    }
+    last = now;
+  }
+  return last;
+};
+
 const heldStill = (held: Locator): Promise<unknown> =>
   held.evaluate(element => Promise.all(element.getAnimations({subtree: false}).map(motion => motion.finished)));
 
@@ -91,8 +106,7 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
       const before = centreOf(await boxOf(columnHeader(name)));
       await page.mouse.move(before.x, before.y);
       await page.mouse.down();
-      await columnHeader(name).evaluate(() => new Promise(requestAnimationFrame));
-      const lifted = centreOf(await boxOf(columnHeader(name)));
+      const lifted = await whereItRests(columnHeader(name));
       await page.mouse.up();
       await heldStill(columnHeader(name));
       return Math.hypot(lifted.x - before.x, lifted.y - before.y);
@@ -104,7 +118,7 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
       for (let step = 1; step <= steps; step++) {
         await page.mouse.move(pressed.x + by * step / steps, pressed.y);
       }
-      const carried = centreOf(await boxOf(columnHeader(name)));
+      const carried = await whereItRests(columnHeader(name));
       await page.mouse.up();
       await heldStill(columnHeader(name));
       return Math.abs(carried.x - (pressed.x + by));
@@ -120,8 +134,7 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
       for (let step = 1; step <= steps; step++) {
         await touch('touchMove', pressed.x + by * step / steps);
       }
-      await columnHeader(name).evaluate(() => new Promise(requestAnimationFrame));
-      const carried = centreOf(await boxOf(columnHeader(name)));
+      const carried = await whereItRests(columnHeader(name));
       await touch('touchEnd', pressed.x + by);
       await heldStill(columnHeader(name));
       return Math.abs(carried.x - before.x - by);
