@@ -1,7 +1,7 @@
 import {Report} from './report';
 import {has, maybe, Maybe, not} from '@ryandur/sand';
 import {neighborOf} from '@components/Table/shares';
-import {TableColumn, ColumnDrag, ColumnShove, Labelled, Marks, RowDrag, RowShove, Settling, seatOffset, settlingAt} from './table-state';
+import {TableColumn, ColumnDrag, ColumnShove, Labelled, Marks, RowDrag, RowShove, Settling, namedShare, seatOffset, settlingAt} from './table-state';
 import {TableView} from './context';
 import {anchored} from './survey';
 import {Drift} from './travel';
@@ -17,8 +17,7 @@ export const unknownColumn = (name: string): TableColumn<Labelled> => ({name, da
 
 export const widthOfColumn = (name: string) => ({state}: TableView): number | undefined => state.widths?.[name];
 
-export const namedShareOfColumn = (name: string) => ({state}: TableView): number | undefined =>
-  state.sizing?.column === name ? state.sizing.from : state.widths?.[name];
+export const namedShareOfColumn = (name: string) => ({state}: TableView): number | undefined => namedShare(state, name);
 
 export const columnMarks = (name: string) => ({state}: TableView): Marks<ColumnShove> => state.columnMarks[name] ?? {};
 
@@ -44,7 +43,8 @@ export const rowDrag = (key: string) => ({state}: TableView): RowDrag | undefine
 
 export const columnHeld = (name: string) => (view: TableView): boolean => has(columnDrag(name)(view));
 
-export const columnGripped = (name: string) => ({state}: TableView): boolean => state.resizing?.column === name;
+export const columnGripped = (name: string) => ({state}: TableView): boolean =>
+  state.sizing?.column === name && state.sizing.stage !== 'keyed';
 
 export const selectReport = ({state}: TableView): Maybe<Report> => maybe(state.report);
 

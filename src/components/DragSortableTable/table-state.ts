@@ -1,6 +1,6 @@
 import {Report} from './report';
 import {has, maybe} from '@ryandur/sand';
-import {ColumnWidths, Grip, soughtTrade, traded} from '@components/Table/shares';
+import {ColumnWidths, Grip, soughtTrade, traded, wholePercent} from '@components/Table/shares';
 import {Direction, Value} from './sorting';
 import {Drift, Moving, drifted, still} from './travel';
 import {Flight, Grab} from './lift';
@@ -60,11 +60,10 @@ export type Settling = {
   readonly drift: Drift;
 };
 
-type Resizing =
-  | {readonly stage: 'gripped'; readonly column: string; readonly from: Grip}
-  | {readonly stage: 'dragging'; readonly column: string; readonly from: Grip; readonly carried: number};
-
-type Sizing = {readonly column: string; readonly from: number};
+type Sizing =
+  | {readonly stage: 'keyed'; readonly column: string; readonly from: number}
+  | {readonly stage: 'gripped'; readonly column: string; readonly from: number; readonly grip: Grip}
+  | {readonly stage: 'dragging'; readonly column: string; readonly from: number; readonly grip: Grip; readonly carried: number};
 
 export type Marks<Shove> = {
   readonly settlingFrom?: Settling;
@@ -76,7 +75,6 @@ export type TableState = {
   readonly columnMarks: Readonly<Record<string, Marks<ColumnShove>>>;
   readonly rowMarks: Readonly<Record<string, Marks<RowShove>>>;
   readonly drag?: Drag;
-  readonly resizing?: Resizing;
   readonly sizing?: Sizing;
   readonly report?: Report;
 };
@@ -98,31 +96,48 @@ const trade = (state: TableState, column: string, neighbour: string, delta: numb
     .map(previous => measure(state, traded(column, neighbour, delta)(previous)))
     .orElse(state);
 
-const beginSizing = (state: TableState, column: string): TableState =>
-  has(state.sizing) ? state : maybe(state.widths?.[column]).map((from): TableState => ({...state, sizing: {column, from}})).orElse(state);
-
-export const tradeBy = (state: TableState, column: string, neighbour: string, delta: number): TableState =>
-  trade(beginSizing(state, column), column, neighbour, delta);
-
-export const endSizing = ({sizing, ...state}: TableState): TableState =>
+const endSizing = ({sizing, ...state}: TableState): TableState =>
   maybe(sizing)
     .mBind(({column, from}) => maybe(state.widths?.[column])
-      .map((share): TableState => Math.round(share) === Math.round(from) ? state : {...state, report: {about: 'share', name: column, share}}))
+      .map((share): TableState => wholePercent(share) === wholePercent(from) ? state : {...state, report: {about: 'share', name: column, share}}))
     .orElse(state);
 
-export const grip = (state: TableState, column: string, from: Grip): TableState =>
-  ({...beginSizing(state, column), resizing: {stage: 'gripped', column, from}});
+const sizingOf = (state: TableState, column: string): TableState =>
+  state.sizing?.column === column ? state : endSizing(state);
 
-export const dragHandle = (state: TableState, neighbour: string, clientX: number): TableState =>
-  maybe(state.resizing)
-    .map(resizing => {
-      const sought = soughtTrade(resizing.from, clientX, resizing.stage === 'dragging' ? resizing.carried : 0);
-      const dragging: Resizing = {stage: 'dragging', column: resizing.column, from: resizing.from, carried: sought.carried};
-      return {...trade(state, resizing.column, neighbour, sought.delta), resizing: dragging};
-    })
-    .orElse(state);
+const startedAt = (state: TableState, column: string): number | undefined =>
+  state.sizing?.column === column ? state.sizing.from : state.widths?.[column];
 
-export const ungrip = ({resizing: _resizing, ...state}: TableState): TableState => endSizing(state);
+export const tradeBy = (state: TableState, column: string, neighbour: string, delta: number): TableState => {
+  const ours = sizingOf(state, column);
+  return maybe(startedAt(ours, column))
+    .map((from): TableState => trade({...ours, sizing: ours.sizing ?? {stage: 'keyed', column, from}}, column, neighbour, delta))
+    .orElse(ours);
+};
+
+export const grip = (state: TableState, column: string, at: Grip): TableState => {
+  const ours = sizingOf(state, column);
+  return maybe(startedAt(ours, column))
+    .map((from): TableState => ({...ours, sizing: {stage: 'gripped', column, from, grip: at}}))
+    .orElse(ours);
+};
+
+export const dragHandle = (state: TableState, neighbour: string, clientX: number): TableState => {
+  const {sizing} = state;
+  if (sizing?.stage !== 'gripped' && sizing?.stage !== 'dragging') {
+    return state;
+  }
+  const sought = soughtTrade(sizing.grip, clientX, sizing.stage === 'dragging' ? sizing.carried : 0);
+  return {...trade(state, sizing.column, neighbour, sought.delta), sizing: {...sizing, stage: 'dragging', carried: sought.carried}};
+};
+
+export const ungrip = (state: TableState): TableState =>
+  state.sizing?.stage === 'gripped' || state.sizing?.stage === 'dragging' ? endSizing(state) : state;
+
+export const endSizingOf = (state: TableState, column: string): TableState =>
+  state.sizing?.column === column ? endSizing(state) : state;
+
+export const namedShare = (state: TableState, column: string): number | undefined => startedAt(state, column);
 
 const unmarked = (state: TableState): TableState => ({...state, columnMarks: {}, rowMarks: {}});
 

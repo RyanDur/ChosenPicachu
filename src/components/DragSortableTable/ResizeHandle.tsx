@@ -3,7 +3,7 @@ import {maybe} from '@ryandur/sand';
 import './Table.css';
 import {useTableDispatch, useTableSelector} from './context';
 import {columnGripped, namedShareOfColumn, neighbourOfColumn, selectOrder} from './selectors';
-import {awoken, gripped, handleDragged, released, sizingEnded, tradedBy} from './actions';
+import {arrowLifted, awoken, gripped, handleDragged, handleLeft, released, tradedBy} from './actions';
 import {grippedAt, measuredWidths, resizeArrowLifted, resizeArrows, resizeLabel} from '@components/Table/shares';
 
 export const ResizeHandle: FC<{column: string}> = ({column}) => {
@@ -27,8 +27,8 @@ export const ResizeHandle: FC<{column: string}> = ({column}) => {
     onFocus={(event: FocusEvent<HTMLElement>) =>
       maybe(event.currentTarget.closest('table')).map(awaken)}
     onKeyDown={resizeArrows(trade)}
-    onKeyUp={resizeArrowLifted(() => dispatch(sizingEnded()))}
-    onBlur={() => dispatch(sizingEnded())}
+    onKeyUp={resizeArrowLifted(() => dispatch(arrowLifted(column)))}
+    onBlur={() => dispatch(handleLeft(column))}
     onMouseDown={event => event.stopPropagation()}
     onPointerDown={(event: PointerEvent<HTMLElement>) => {
       event.stopPropagation();

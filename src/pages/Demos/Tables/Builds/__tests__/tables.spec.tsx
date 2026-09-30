@@ -827,18 +827,6 @@ describe('resizable columns', () => {
     expect(header('trades').style.getPropertyValue('--share')).toBe('36%');
   });
 
-  test('a dragged handle says the share it landed on', () => {
-    seat(EagerTable, 'keep static');
-    surveyed();
-    const handle = screen.getByRole('button', {name: 'resize window'});
-
-    fireEvent.pointerDown(handle, {clientX: 300, pointerId: 1});
-    fireEvent.pointerMove(handle, {clientX: 340, pointerId: 1});
-    fireEvent.pointerUp(handle, {pointerId: 1});
-
-    expect(announced()).toEqual(['window resized to 54%']);
-  });
-
   test('a handle dragged through several shares says nothing on the way and only the share it landed on', () => {
     seat(EagerTable, 'keep static');
     surveyed();
@@ -871,10 +859,9 @@ describe('resizable columns', () => {
     surveyed();
     const handle = screen.getByRole('button', {name: /^resize window/});
     fireEvent.pointerDown(handle, {clientX: 300, pointerId: 1});
-    const named = handle.getAttribute('aria-label');
 
     fireEvent.pointerMove(handle, {clientX: 340, pointerId: 1});
-    expect(handle).toHaveAccessibleName(named ?? '');
+    expect(handle).toHaveAccessibleName('resize window, 50%');
     fireEvent.pointerUp(handle, {pointerId: 1});
 
     expect(handle).toHaveAccessibleName('resize window, 54%');
@@ -904,6 +891,24 @@ describe('resizable columns', () => {
     await keys.tab();
 
     expect(announced()).toEqual(['window resized to 52%']);
+  });
+
+  test('a handle pressed while another holds focus says its own share once, when it is let go', async () => {
+    const hands = userEvent.setup();
+    seat(EagerTable, 'keep static');
+    surveyed();
+    await hands.click(screen.getByRole('button', {name: /^resize window/}));
+    const trades = screen.getByRole('button', {name: /^resize trades/});
+
+    await hands.pointer([
+      {keys: '[MouseLeft>]', target: trades, coords: {clientX: 500}},
+      {target: trades, coords: {clientX: 520}},
+      {target: trades, coords: {clientX: 540}}
+    ]);
+    expect(announced()).toEqual([]);
+    await hands.pointer({keys: '[/MouseLeft]', target: trades, coords: {clientX: 540}});
+
+    expect(announced()).toEqual(['trades resized to 37%']);
   });
 
   test('a second trade replaces what the page said about the first', async () => {

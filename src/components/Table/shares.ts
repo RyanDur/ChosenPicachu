@@ -32,8 +32,10 @@ export const sought = ({fromX, pxPerShare}: Grip, clientX: number): number => (c
 export const shareWidth = (share?: number): string | undefined =>
   has(share) ? `${share}%` : undefined;
 
+export const wholePercent = (share: number): number => Math.round(share);
+
 export const resizeLabel = (column: string, share?: number): string =>
-  has(share) ? `resize ${column}, ${Math.round(share)}%` : `resize ${column}`;
+  has(share) ? `resize ${column}, ${wholePercent(share)}%` : `resize ${column}`;
 
 export const grippedAt = (width: number, clientX: number): Grip | undefined => {
   const pxPerShare = width / 100;

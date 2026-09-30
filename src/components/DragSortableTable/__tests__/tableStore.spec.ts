@@ -1,6 +1,6 @@
 import {TableMiddleware, tableStore} from '../store';
 import {columnShares} from '../__test_support';
-import {measured, sizingEnded, tradedBy} from '../actions';
+import {arrowLifted, measured, tradedBy} from '../actions';
 import {tableReducer} from '../reducer';
 import {resting, widthsOf} from '../table-state';
 import {arrangementOf, arrangementReducer, arrived, columnMoved, rowMoved, sorted, standingOf} from '../arrangement';
@@ -185,7 +185,7 @@ describe('a sizing', () => {
       measured({window: 12.999544950163525, trades: 40, buys: 47.000455049836475}),
       tradedBy('window', 'trades', 1),
       tradedBy('window', 'trades', -1.000012166),
-      sizingEnded());
+      arrowLifted('window'));
 
     expect(ended.report).toBeUndefined();
   });
@@ -194,7 +194,7 @@ describe('a sizing', () => {
     const ended = after(
       measured({window: 12.999544950163525, trades: 40, buys: 47.000455049836475}),
       tradedBy('window', 'trades', 2),
-      sizingEnded());
+      arrowLifted('window'));
 
     expect(ended.report).toEqual({about: 'share', name: 'window', share: 14.999544950163525});
   });
