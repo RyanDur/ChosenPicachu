@@ -68,7 +68,7 @@ for (const stage of stages) {
       await expect(flicked.resizeHandle('trades')).toHaveAccessibleName(slowName);
     });
 
-    test('a flicked handle lets go: its name takes the new share, and the next press starts a new resize', async ({page}) => {
+    test('after a flick, the next press on the same handle starts a new resize', async ({page}) => {
       const table = await standing(page, stage);
       const startingName = await measuredName(table.resizeHandle('trades'));
       await table.dragEdge('trades', {by: 120, moves: 1});
