@@ -1,5 +1,5 @@
 import {Dispatch, FC, SetStateAction, useEffect, useState} from 'react';
-import {Result, empty, has, notEmpty} from '@ryandur/sand';
+import {Result, has, maybe, notEmpty} from '@ryandur/sand';
 import {Tabs} from '@components/Tabs';
 import {Loading} from '@components/Loading';
 import {useSearchParamsObject} from '@components/search-params';
@@ -16,13 +16,19 @@ const openIn = (answers: Answers) => museums.filter(({param}) => answers[param] 
 
 const settledIn = (answers: Answers): boolean => museums.every(({param}) => has(answers[param]));
 
-type Shown = 'wall' | 'noMuseumOpen' | 'movingToAnOpenMuseum' | 'loading';
+type Shown =
+  | {readonly shown: 'wall'}
+  | {readonly shown: 'noMuseumOpen'}
+  | {readonly shown: 'movingToAnOpenMuseum'; readonly museum: Source}
+  | {readonly shown: 'loading'};
 
 const shownFor = (answers: Answers, tab?: Source): Shown => {
   const open = openIn(answers);
-  if (open.some(({param}) => param === tab)) return 'wall';
-  if (!settledIn(answers)) return 'loading';
-  return empty(open) ? 'noMuseumOpen' : 'movingToAnOpenMuseum';
+  if (open.some(({param}) => param === tab)) return {shown: 'wall'};
+  if (!settledIn(answers)) return {shown: 'loading'};
+  return maybe(open[0])
+    .map(({param}): Shown => ({shown: 'movingToAnOpenMuseum', museum: param}))
+    .orElse<Shown>({shown: 'noMuseumOpen'});
 };
 
 const answered = (museum: Source, tell: Dispatch<SetStateAction<Answers>>) => (answer: Result<boolean, HTTPError>): void =>
@@ -39,11 +45,11 @@ export const ArtGalleryPage: FC = () => {
 
   const open = openIn(answers);
   const shown = shownFor(answers, tab);
-  const first = open[0]?.param;
+  const movingTo = shown.shown === 'movingToAnOpenMuseum' ? shown.museum : undefined;
 
   useEffect(() => {
-    if (shown === 'movingToAnOpenMuseum' && has(first)) updateSearchParams({tab: first}, {replace: true});
-  }, [shown, first, updateSearchParams]);
+    if (has(movingTo)) updateSearchParams({tab: movingTo}, {replace: true});
+  }, [movingTo, updateSearchParams]);
 
   return <>
     {notEmpty(open) && <Tabs label="museums" values={open}/>}
@@ -52,6 +58,6 @@ export const ArtGalleryPage: FC = () => {
       noMuseumOpen: <img className="stand-in" src={missingWall} alt="no museum is open"/>,
       movingToAnOpenMuseum: <Loading label="loading gallery"/>,
       loading: <Loading label="loading gallery"/>
-    }[shown]}
+    }[shown.shown]}
   </>;
 };
