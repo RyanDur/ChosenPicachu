@@ -24,3 +24,26 @@ for (const {reader, device, layout} of [
     }
   });
 }
+
+test.describe('a desktop', () => {
+  test.use(desktop);
+
+  test('sees the tables recipe\'s slots drawing centred under its prose and above its code', async ({page}) => {
+    await page.goto('demos/?tab=tables&sort=column');
+    const step = page.getByRole('article').filter({has: page.getByRole('heading', {name: 'Find the neighbour under the pointer, with a dead zone'})});
+    await step.getByText('how we built it').click();
+    const drawing = step.getByRole('figure').getByRole('img', {includeHidden: true});
+    await expect(drawing).toBeVisible();
+
+    const [drawn, prose, code] = await Promise.all([
+      drawing.boundingBox(),
+      step.getByRole('paragraph').filter({hasText: 'This step is JavaScript alone'}).boundingBox(),
+      step.getByRole('code').first().boundingBox()
+    ]);
+
+    const centreOf = (box: typeof drawn): number => (box?.x ?? Infinity) + (box?.width ?? 0) / 2;
+    expect(drawn?.y).toBeGreaterThanOrEqual((prose?.y ?? Infinity) + (prose?.height ?? 0));
+    expect((drawn?.y ?? Infinity) + (drawn?.height ?? 0)).toBeLessThanOrEqual(code?.y ?? -Infinity);
+    expect(centreOf(drawn)).toBeCloseTo(centreOf(prose), 0);
+  });
+});
