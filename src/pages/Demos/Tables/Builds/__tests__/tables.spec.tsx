@@ -889,7 +889,7 @@ describe('resizable columns', () => {
     const keys = userEvent.setup();
     seat(EagerTable, 'keep static');
     surveyed();
-    screen.getByRole('button', {name: /^resize window/}).focus();
+    await keys.click(screen.getByRole('button', {name: /^resize window/}));
 
     await keys.keyboard('{ArrowRight>3}');
     expect(announced()).toEqual([]);
@@ -902,7 +902,7 @@ describe('resizable columns', () => {
     const keys = userEvent.setup();
     seat(EagerTable, 'keep static');
     surveyed();
-    screen.getByRole('button', {name: /^resize window/}).focus();
+    await keys.click(screen.getByRole('button', {name: /^resize window/}));
 
     await keys.keyboard('{ArrowRight>}');
     expect(announced()).toEqual([]);
