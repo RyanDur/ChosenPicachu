@@ -844,6 +844,73 @@ describe('resizable columns', () => {
     expect(announced()).toEqual(['window resized to 54%']);
   });
 
+  test('a handle dragged through several shares says nothing on the way and only the share it landed on', () => {
+    seat(EagerTable, 'keep static');
+    surveyed();
+    const handle = screen.getByRole('button', {name: 'resize window'});
+    fireEvent.pointerDown(handle, {clientX: 300, pointerId: 1});
+
+    fireEvent.pointerMove(handle, {clientX: 320, pointerId: 1});
+    fireEvent.pointerMove(handle, {clientX: 340, pointerId: 1});
+    expect(announced()).toEqual([]);
+    fireEvent.pointerUp(handle, {pointerId: 1});
+
+    expect(announced()).toEqual(['window resized to 54%']);
+  });
+
+  test('a handle dragged away and back to where it began says nothing', () => {
+    seat(EagerTable, 'keep static');
+    surveyed();
+    const handle = screen.getByRole('button', {name: 'resize window'});
+    fireEvent.pointerDown(handle, {clientX: 300, pointerId: 1});
+
+    fireEvent.pointerMove(handle, {clientX: 340, pointerId: 1});
+    fireEvent.pointerMove(handle, {clientX: 300, pointerId: 1});
+    fireEvent.pointerUp(handle, {pointerId: 1});
+
+    expect(announced()).toEqual([]);
+  });
+
+  test('a dragged handle keeps the name it had until it is let go', () => {
+    seat(EagerTable, 'keep static');
+    surveyed();
+    const handle = screen.getByRole('button', {name: /^resize window/});
+    fireEvent.pointerDown(handle, {clientX: 300, pointerId: 1});
+    const named = handle.getAttribute('aria-label');
+
+    fireEvent.pointerMove(handle, {clientX: 340, pointerId: 1});
+    expect(handle).toHaveAccessibleName(named ?? '');
+    fireEvent.pointerUp(handle, {pointerId: 1});
+
+    expect(handle).toHaveAccessibleName('resize window, 54%');
+  });
+
+  test('an arrow key held through its repeats says the share once, when it is let go', async () => {
+    const keys = userEvent.setup();
+    seat(EagerTable, 'keep static');
+    surveyed();
+    screen.getByRole('button', {name: /^resize window/}).focus();
+
+    await keys.keyboard('{ArrowRight>3}');
+    expect(announced()).toEqual([]);
+    await keys.keyboard('{/ArrowRight}');
+
+    expect(announced()).toEqual(['window resized to 56%']);
+  });
+
+  test('a keyboard move ends when the handle loses focus', async () => {
+    const keys = userEvent.setup();
+    seat(EagerTable, 'keep static');
+    surveyed();
+    screen.getByRole('button', {name: /^resize window/}).focus();
+
+    await keys.keyboard('{ArrowRight>}');
+    expect(announced()).toEqual([]);
+    await keys.tab();
+
+    expect(announced()).toEqual(['window resized to 52%']);
+  });
+
   test('a second trade replaces what the page said about the first', async () => {
     seat(EagerTable, 'keep static');
     surveyed();

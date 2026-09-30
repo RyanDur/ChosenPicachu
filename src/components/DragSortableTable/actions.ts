@@ -17,6 +17,7 @@ export type TableAction =
   | {readonly type: 'columnLandingFound'; readonly neighbour?: string}
   | {readonly type: 'rowLandingFound'; readonly neighbour?: string}
   | {readonly type: 'released'}
+  | {readonly type: 'sizingEnded'}
   | {readonly type: 'dropped'; readonly carry: Carry; readonly from: Settling; readonly landing: Landing}
   | {readonly type: 'unsettled'; readonly target: Carry; readonly from: Settling}
   | {readonly type: 'settled'; readonly target: Carry}
@@ -43,6 +44,7 @@ const tableActions: Record<Action['type'], true> = {
   columnLandingFound: true,
   rowLandingFound: true,
   released: true,
+  sizingEnded: true,
   dropped: true,
   unsettled: true,
   settled: true,
@@ -67,6 +69,7 @@ export const drifted = (moving: Moving): Action => ({type: 'drifted', moving: {c
 export const columnLandingFound = (neighbour?: string): Action => ({type: 'columnLandingFound', neighbour});
 export const rowLandingFound = (neighbour?: string): Action => ({type: 'rowLandingFound', neighbour});
 export const released = (): Action => ({type: 'released'});
+export const sizingEnded = (): Action => ({type: 'sizingEnded'});
 export const dropped = (carry: Carry, from: Settling, landing: Landing): Action => ({type: 'dropped', carry, from, landing});
 export const unsettled = (target: Carry, from: Settling): Action => ({type: 'unsettled', target, from});
 export const settled = (target: Carry): Action => ({type: 'settled', target});

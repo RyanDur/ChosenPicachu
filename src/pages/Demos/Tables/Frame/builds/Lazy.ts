@@ -198,7 +198,7 @@ const mount = (document: Document, table: HTMLTableElement, body: HTMLTableSecti
   };
 
   const dress = (previous: TableState, next: TableState): void => {
-    if (previous.widths !== next.widths) {
+    if (previous.widths !== next.widths || previous.sizing !== next.sizing) {
       dressWidths(mounted);
     }
     if (previous.drag !== next.drag) {

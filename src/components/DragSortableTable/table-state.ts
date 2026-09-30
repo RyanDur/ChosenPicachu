@@ -64,6 +64,8 @@ type Resizing =
   | {readonly stage: 'gripped'; readonly column: string; readonly from: Grip}
   | {readonly stage: 'dragging'; readonly column: string; readonly from: Grip; readonly carried: number};
 
+type Sizing = {readonly column: string; readonly from: number};
+
 export type Marks<Shove> = {
   readonly settlingFrom?: Settling;
   readonly shoved?: Shove;
@@ -75,6 +77,7 @@ export type TableState = {
   readonly rowMarks: Readonly<Record<string, Marks<RowShove>>>;
   readonly drag?: Drag;
   readonly resizing?: Resizing;
+  readonly sizing?: Sizing;
   readonly report?: Report;
 };
 
@@ -90,16 +93,25 @@ export const awaken = (state: TableState, widths: ColumnWidths): TableState =>
 
 export const widthsOf = ({widths}: TableState): ColumnWidths | undefined => widths;
 
-export const trade = (state: TableState, column: string, neighbour: string, delta: number): TableState =>
+const trade = (state: TableState, column: string, neighbour: string, delta: number): TableState =>
   maybe(state.widths)
     .map(previous => measure(state, traded(column, neighbour, delta)(previous)))
-    .map(next => maybe(next.widths?.[column])
-      .map((share): TableState => ({...next, report: {about: 'share', name: column, share}}))
-      .orElse(next))
+    .orElse(state);
+
+const beginSizing = (state: TableState, column: string): TableState =>
+  has(state.sizing) ? state : maybe(state.widths?.[column]).map((from): TableState => ({...state, sizing: {column, from}})).orElse(state);
+
+export const tradeBy = (state: TableState, column: string, neighbour: string, delta: number): TableState =>
+  trade(beginSizing(state, column), column, neighbour, delta);
+
+export const endSizing = ({sizing, ...state}: TableState): TableState =>
+  maybe(sizing)
+    .mBind(({column, from}) => maybe(state.widths?.[column])
+      .map((share): TableState => share === from ? state : {...state, report: {about: 'share', name: column, share}}))
     .orElse(state);
 
 export const grip = (state: TableState, column: string, from: Grip): TableState =>
-  ({...state, resizing: {stage: 'gripped', column, from}});
+  ({...beginSizing(state, column), resizing: {stage: 'gripped', column, from}});
 
 export const dragHandle = (state: TableState, neighbour: string, clientX: number): TableState =>
   maybe(state.resizing)
@@ -110,7 +122,7 @@ export const dragHandle = (state: TableState, neighbour: string, clientX: number
     })
     .orElse(state);
 
-export const ungrip = ({resizing: _resizing, ...state}: TableState): TableState => state;
+export const ungrip = ({resizing: _resizing, ...state}: TableState): TableState => endSizing(state);
 
 const unmarked = (state: TableState): TableState => ({...state, columnMarks: {}, rowMarks: {}});
 

@@ -17,6 +17,9 @@ export const unknownColumn = (name: string): TableColumn<Labelled> => ({name, da
 
 export const widthOfColumn = (name: string) => ({state}: TableView): number | undefined => state.widths?.[name];
 
+export const namedShareOfColumn = (name: string) => ({state}: TableView): number | undefined =>
+  state.sizing?.column === name ? state.sizing.from : state.widths?.[name];
+
 export const columnMarks = (name: string) => ({state}: TableView): Marks<ColumnShove> => state.columnMarks[name] ?? {};
 
 export const rowMarks = (key: string) => ({state}: TableView): Marks<RowShove> => state.rowMarks[key] ?? {};

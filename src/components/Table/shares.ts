@@ -56,3 +56,10 @@ export const resizeArrows = (trade: (delta: number) => void) =>
       trade(delta);
     }
   };
+
+export const resizeArrowLifted = (ended: () => void) =>
+  ({key}: {key: string}): void => {
+    if (has(arrowTrades[key])) {
+      ended();
+    }
+  };

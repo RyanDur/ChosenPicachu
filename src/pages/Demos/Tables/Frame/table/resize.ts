@@ -1,9 +1,10 @@
 import {maybe} from '@ryandur/sand';
 import {STEP_SHARE, grippedAt, measuredWidths, neighborOf, resizeLabel} from '@components/Table/shares';
 import {columnSteps} from '@components/DragSortableTable/survey';
-import {MountedTable, columnOf, gripped, handleDragged, measured, released, tradedBy, widthsOf} from './table-state';
+import {TableAction} from '@components/DragSortableTable/actions';
+import {MountedTable, columnOf, gripped, handleDragged, measured, released, sizingEnded, tradedBy, widthsOf} from './table-state';
 
-const dressColumn = (table: HTMLTableElement, column: string, share: number): void => {
+const dressColumn = (table: HTMLTableElement, column: string, share: number, named: number): void => {
   maybe(table.querySelector(`th.${column}`)).map(header => {
     if (!(header instanceof HTMLTableCellElement)) {
       return;
@@ -11,14 +12,15 @@ const dressColumn = (table: HTMLTableElement, column: string, share: number): vo
     header.classList.add('shared');
     header.style.setProperty('--share', `${share}%`);
     maybe(header.querySelector('.resize-handle')).map(handle =>
-      handle.setAttribute('aria-label', resizeLabel(column, share)));
+      handle.setAttribute('aria-label', resizeLabel(column, named)));
   });
 };
 
 export const dressWidths = ({table, store, order}: MountedTable): void => {
   maybe(widthsOf(store.state)).map(widths => {
     table.classList.add('apportioned');
-    order().forEach(column => dressColumn(table, column, widths[column]));
+    const {sizing} = store.state;
+    order().forEach(column => dressColumn(table, column, widths[column], sizing?.column === column ? sizing.from : widths[column]));
   });
 };
 
@@ -42,23 +44,27 @@ const wireHandle = (mounted: MountedTable, column: string, handle: HTMLButtonEle
     }
     handle.setPointerCapture(event.pointerId);
     mounted.store.dispatch(handleDragged(neighborOf(mounted.order(), column), event.clientX));
-    reportShare(mounted);
   });
   ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(landing =>
-    handle.addEventListener(landing, () => mounted.store.dispatch(released())));
+    handle.addEventListener(landing, () => endedAndReported(mounted, released())));
+  handle.addEventListener('keyup', event => {
+    maybe(columnSteps[event.key]).map(() => endedAndReported(mounted, sizingEnded()));
+  });
+  handle.addEventListener('blur', () => endedAndReported(mounted, sizingEnded()));
   handle.addEventListener('keydown', event => {
     maybe(columnSteps[event.key]).map(toward => {
       event.preventDefault();
       event.stopPropagation();
       awaken();
       mounted.store.dispatch(tradedBy(column, neighborOf(mounted.order(), column), toward * STEP_SHARE));
-      reportShare(mounted);
     });
   });
 };
 
-const reportShare = (mounted: MountedTable): void => {
-  maybe(mounted.store.state.report).map(mounted.report);
+const endedAndReported = (mounted: MountedTable, ended: TableAction): void => {
+  const said = mounted.store.state.report;
+  mounted.store.dispatch(ended);
+  maybe(mounted.store.state.report).map(report => report === said ? undefined : mounted.report(report));
 };
 
 export const wireResize = (mounted: MountedTable): void => {

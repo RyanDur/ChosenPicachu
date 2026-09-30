@@ -2,15 +2,15 @@ import {FC, FocusEvent, PointerEvent} from 'react';
 import {maybe} from '@ryandur/sand';
 import './Table.css';
 import {useTableDispatch, useTableSelector} from './context';
-import {columnGripped, neighbourOfColumn, selectOrder, widthOfColumn} from './selectors';
-import {awoken, gripped, handleDragged, released, tradedBy} from './actions';
-import {grippedAt, measuredWidths, resizeArrows, resizeLabel} from '@components/Table/shares';
+import {columnGripped, namedShareOfColumn, neighbourOfColumn, selectOrder} from './selectors';
+import {awoken, gripped, handleDragged, released, sizingEnded, tradedBy} from './actions';
+import {grippedAt, measuredWidths, resizeArrowLifted, resizeArrows, resizeLabel} from '@components/Table/shares';
 
 export const ResizeHandle: FC<{column: string}> = ({column}) => {
   const dispatch = useTableDispatch();
   const order = useTableSelector(selectOrder);
   const neighbour = useTableSelector(neighbourOfColumn(column));
-  const width = useTableSelector(widthOfColumn(column));
+  const namedShare = useTableSelector(namedShareOfColumn(column));
   const held = useTableSelector(columnGripped(column));
 
   const awaken = (table: HTMLTableElement): void =>
@@ -23,10 +23,12 @@ export const ResizeHandle: FC<{column: string}> = ({column}) => {
   return <button type="button"
     tabIndex={0}
     className="resize-handle"
-    aria-label={resizeLabel(column, width)}
+    aria-label={resizeLabel(column, namedShare)}
     onFocus={(event: FocusEvent<HTMLElement>) =>
       maybe(event.currentTarget.closest('table')).map(awaken)}
     onKeyDown={resizeArrows(trade)}
+    onKeyUp={resizeArrowLifted(() => dispatch(sizingEnded()))}
+    onBlur={() => dispatch(sizingEnded())}
     onMouseDown={event => event.stopPropagation()}
     onPointerDown={(event: PointerEvent<HTMLElement>) => {
       event.stopPropagation();

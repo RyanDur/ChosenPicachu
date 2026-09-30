@@ -63,7 +63,7 @@ const spokenLabel =
 
 const handleMarkup: Record<World, ReactNode> = {
   react: <Snippet label="HTML" lines={[
-    ...span(resizeSource, '<button type="button"', 'aria-label={resizeLabel(column, width)}')
+    ...span(resizeSource, '<button type="button"', 'aria-label={resizeLabel(column, namedShare)}')
   ]}/>,
   vanilla: <Snippet label="HTML" lines={[
     ...span(tableSource, '<button type="button" tabindex="0" class="resize-handle"', 'aria-label="resize window"></button>')
