@@ -3,7 +3,7 @@ import {maybe} from '@ryandur/sand';
 import './Table.css';
 import {useTableDispatch, useTableSelector} from './context';
 import {columnGripped, namedShareOfColumn, neighbourOfColumn, selectOrder} from './selectors';
-import {arrowLifted, awoken, gripped, handleDragged, handleLeft, released, tradedBy} from './actions';
+import {arrowLifted, awoken, gripped, handleDragged, handleLeft, handleReleased, tradedBy} from './actions';
 import {grippedAt, measuredWidths, resizeArrowLifted, resizeArrows, resizeLabel} from '@components/Table/shares';
 
 export const ResizeHandle: FC<{column: string}> = ({column}) => {
@@ -16,7 +16,7 @@ export const ResizeHandle: FC<{column: string}> = ({column}) => {
   const awaken = (table: HTMLTableElement): void =>
     dispatch(awoken(measuredWidths(order, table)));
   const trade = (delta: number): void => dispatch(tradedBy(column, neighbour, delta));
-  const release = (): void => dispatch(released());
+  const release = (): void => dispatch(handleReleased(column));
   const followed = (event: PointerEvent<HTMLElement>): void =>
     dispatch(handleDragged(column, neighbour, event.clientX));
 

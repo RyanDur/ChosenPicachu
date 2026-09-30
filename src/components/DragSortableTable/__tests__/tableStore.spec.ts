@@ -1,6 +1,6 @@
 import {TableMiddleware, tableStore} from '../store';
 import {columnShares} from '../__test_support';
-import {arrowLifted, gripped, handleDragged, measured, tradedBy} from '../actions';
+import {arrowLifted, gripped, handleDragged, handleReleased, measured, tradedBy} from '../actions';
 import {tableReducer} from '../reducer';
 import {resting, widthsOf} from '../table-state';
 import {arrangementOf, arrangementReducer, arrived, columnMoved, rowMoved, sorted, standingOf} from '../arrangement';
@@ -244,5 +244,27 @@ describe('a sizing', () => {
       handleDragged('trades', 'buys', 120));
 
     expect(widthsOf(elsewhere)).toEqual({window: 13, trades: 40, buys: 47});
+  });
+
+  test('a release on another handle leaves the grip under way', () => {
+    const dragged = after(
+      measured({window: 13, trades: 40, buys: 47}),
+      gripped('window', {fromX: 100, pxPerShare: 10}),
+      handleReleased('trades'),
+      handleDragged('window', 'trades', 120));
+
+    expect(widthsOf(dragged)?.window).toBe(15);
+  });
+
+  test('a release on the gripped handle ends the grip and says its new share', () => {
+    const released = after(
+      measured({window: 13, trades: 40, buys: 47}),
+      gripped('window', {fromX: 100, pxPerShare: 10}),
+      handleDragged('window', 'trades', 120),
+      handleReleased('window'),
+      handleDragged('window', 'trades', 200));
+
+    expect(widthsOf(released)?.window).toBe(15);
+    expect(released.report).toEqual({about: 'share', name: 'window', share: 15});
   });
 });

@@ -141,8 +141,8 @@ export const dragHandle = (state: TableState, column: string, neighbour: string,
     })
     .orElse(state);
 
-export const ungrip = (state: TableState): TableState =>
-  maybe(pointerSizing(state.sizing)).map(() => endSizing(state)).orElse(state);
+export const ungripOf = (state: TableState, column: string): TableState =>
+  maybe(gripOf(state, column)).map(() => endSizing(state)).orElse(state);
 
 export const endKeyedSizingOf = (state: TableState, column: string): TableState =>
   state.sizing?.column === column && state.sizing.stage === 'keyed' ? endSizing(state) : state;
