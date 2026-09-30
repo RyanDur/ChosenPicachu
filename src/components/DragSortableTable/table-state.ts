@@ -107,7 +107,7 @@ export const tradeBy = (state: TableState, column: string, neighbour: string, de
 export const endSizing = ({sizing, ...state}: TableState): TableState =>
   maybe(sizing)
     .mBind(({column, from}) => maybe(state.widths?.[column])
-      .map((share): TableState => share === from ? state : {...state, report: {about: 'share', name: column, share}}))
+      .map((share): TableState => Math.round(share) === Math.round(from) ? state : {...state, report: {about: 'share', name: column, share}}))
     .orElse(state);
 
 export const grip = (state: TableState, column: string, from: Grip): TableState =>

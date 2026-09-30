@@ -1,6 +1,6 @@
 import {TableMiddleware, tableStore} from '../store';
 import {columnShares} from '../__test_support';
-import {measured} from '../actions';
+import {measured, sizingEnded, tradedBy} from '../actions';
 import {tableReducer} from '../reducer';
 import {resting, widthsOf} from '../table-state';
 import {arrangementOf, arrangementReducer, arrived, columnMoved, rowMoved, sorted, standingOf} from '../arrangement';
@@ -174,5 +174,28 @@ describe('the arrangement', () => {
 
   test('a foreign action leaves the arrangement as it was', () => {
     expect(arrangementReducer(arranged, {type: 'tradeArrived'})).toBe(arranged);
+  });
+});
+
+describe('a sizing', () => {
+  const after = (...actions: Parameters<typeof tableReducer>[1][]) => actions.reduce(tableReducer, resting);
+
+  test('says nothing when it ends on the whole percent it began at, however far the fractions drifted', () => {
+    const ended = after(
+      measured({window: 12.999544950163525, trades: 40, buys: 47.000455049836475}),
+      tradedBy('window', 'trades', 1),
+      tradedBy('window', 'trades', -1.000012166),
+      sizingEnded());
+
+    expect(ended.report).toBeUndefined();
+  });
+
+  test('says the new share when it ends on another whole percent', () => {
+    const ended = after(
+      measured({window: 12.999544950163525, trades: 40, buys: 47.000455049836475}),
+      tradedBy('window', 'trades', 2),
+      sizingEnded());
+
+    expect(ended.report).toEqual({about: 'share', name: 'window', share: 14.999544950163525});
   });
 });
