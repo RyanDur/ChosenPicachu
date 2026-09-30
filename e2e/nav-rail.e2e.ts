@@ -57,7 +57,7 @@ for (const device of [justPastAPhone, iPadUpright, iPad13Upright, widestNavInARo
       await page.goto('');
       await expect(site.nav).toBeVisible();
 
-      expect(await site.roomAfterFeedback()).toBeGreaterThanOrEqual(await site.roomBeforeHome() - aHundredthOfAPixel);
+      await expect.poll(async () => await site.roomAfterFeedback() - await site.roomBeforeHome()).toBeGreaterThanOrEqual(-aHundredthOfAPixel);
     });
   });
 }

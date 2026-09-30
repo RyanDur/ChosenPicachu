@@ -257,13 +257,16 @@
 
 @media (601px <= width <= 1100px) {
   #root .rail:has(.feedback-item) {
+    --six-paths-and-feedback: 7;
+
     grid-area: nav / nav / feedback / feedback;
     display: grid;
-    grid-template-columns: repeat(7, auto);
+    grid-template-columns: repeat(var(--six-paths-and-feedback), auto);
     column-gap: var(--base);
 
     .side-nav {
-      grid-area: 1 / 1 / 2 / 7;
+      grid-row: 1;
+      grid-column: 1 / -2;
       width: auto;
       display: grid;
       grid-template-columns: subgrid;
@@ -276,7 +279,8 @@
     }
 
     .feedback-item {
-      grid-area: 1 / 7;
+      grid-row: 1;
+      grid-column: -2 / -1;
     }
   }
 }
