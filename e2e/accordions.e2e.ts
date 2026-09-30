@@ -421,8 +421,5 @@ test('a keyboard reader tabs from an open radio part into its text and past the 
   await expect(open.fold.getByRole('region', {name: openName, exact: true})).toBeFocused();
   await page.keyboard.press(tabKey);
 
-  await expect(open.fold.getByRole('region')).not.toBeFocused();
-  for (const closed of (await accordionsTab(page).partsOf('the radio build')).slice(1)) {
-    await expect(closed.fold.getByRole('region', {includeHidden: true})).not.toBeFocused();
-  }
+  await expect.poll(() => accordionsTab(page).holdsFocus('the radio build')).toBe(false);
 });

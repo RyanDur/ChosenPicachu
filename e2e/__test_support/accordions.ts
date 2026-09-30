@@ -113,6 +113,7 @@ export const accordionsTab = (page: Page) => {
   };
   return {
     partOf,
+    holdsFocus: (build: Build): Promise<boolean> => built(build).evaluate(article => article.contains(document.activeElement)),
     firstPartOf: (build: Build): Part => partOf(build, 0),
     partsOf: async (build: Build): Promise<Part[]> =>
       (await folds(build).all()).slice(closeBarsBeforeTheParts(build)).map((_fold, index) => partOf(build, index))
