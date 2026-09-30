@@ -1,12 +1,22 @@
-import {Page, expect, test} from '@playwright/test';
+import {Locator, Page, expect, test} from '@playwright/test';
 import {Stage, desktop, dragSortTable, fingertipMiss, iPadUpright, iPhone, stages} from './__test_support';
 
-const tradesShareAfterDragging = async (page: Page, stage: Stage, moves: number): Promise<string | null> => {
+const standing = async (page: Page, stage: Stage) => {
   await page.goto(stage.at);
   const table = dragSortTable(page, stage.table(page));
   await expect(table.columnHeader('trades')).toBeVisible({timeout: 30_000});
-  await table.dragEdge('trades', {by: 120, moves});
-  return table.resizeName('trades');
+  return table;
+};
+
+const nameOnceMoved = async (handle: Locator, from: string): Promise<string> => {
+  await expect(handle).not.toHaveAccessibleName(from);
+  return await handle.getAttribute('aria-label') ?? '';
+};
+
+const measuredName = async (handle: Locator): Promise<string> => {
+  await handle.focus();
+  await expect(handle).toHaveAccessibleName(/, \d+%$/);
+  return await handle.getAttribute('aria-label') ?? '';
 };
 
 for (const stage of stages) {
@@ -43,22 +53,29 @@ for (const stage of stages) {
     test.use(desktop);
 
     test('a flick that leaves the edge in one move widens a column as far as a slow drag does', async ({page, browser, baseURL}) => {
-      const slow = await browser.newPage({...desktop, baseURL});
+      const slow = await standing(await browser.newPage({...desktop, baseURL}), stage);
+      const flicked = await standing(page, stage);
+      const startingName = await measuredName(slow.resizeHandle('trades'));
+      await slow.dragEdge('trades', {by: 120, moves: 20});
+      const slowName = await nameOnceMoved(slow.resizeHandle('trades'), startingName);
 
-      const flicked = await tradesShareAfterDragging(page, stage, 1);
+      await flicked.dragEdge('trades', {by: 120, moves: 1});
 
-      expect(flicked).toBe(await tradesShareAfterDragging(slow, stage, 20));
-      expect(flicked).not.toBe('resize trades, 13%');
-      await slow.close();
+      await expect(flicked.resizeHandle('trades')).toHaveAccessibleName(slowName);
     });
 
-    test('a flicked handle lets go, so the next press starts a new resize', async ({page}) => {
-      const flicked = await tradesShareAfterDragging(page, stage, 1);
-      const table = dragSortTable(page, stage.table(page));
+    test('a flicked handle lets go, so a pointer passing over it moves nothing and the next press starts a new resize', async ({page}) => {
+      const table = await standing(page, stage);
+      const startingName = await measuredName(table.resizeHandle('trades'));
+      await table.dragEdge('trades', {by: 120, moves: 1});
+      const flickedName = await nameOnceMoved(table.resizeHandle('trades'), startingName);
+      const flickedWidth = await table.columnWidth('trades');
 
+      await table.passOverEdge('trades', -40);
+      expect(await table.columnWidth('trades')).toBe(flickedWidth);
       await table.dragEdge('trades', {by: -40, moves: 5});
 
-      expect(await table.resizeName('trades')).not.toBe(flicked);
+      await expect(table.resizeHandle('trades')).not.toHaveAccessibleName(flickedName);
     });
   });
 }

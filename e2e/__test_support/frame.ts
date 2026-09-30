@@ -96,6 +96,11 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
   const columnHeader = (name: string): Locator => table.getByRole('columnheader', {name});
   const rowGrip = (row: number): Locator => table.getByRole('button', {name: `move row ${row}`});
   const rowHeader = (name: RegExp): Locator => table.getByRole('rowheader', {name});
+  const resizeHandle = (name: string): Locator => table.getByRole('button', {name: new RegExp(`^resize ${name}`)});
+  const centreOfHandle = async (name: string): Promise<Point> => {
+    await resizeHandle(name).scrollIntoViewIfNeeded();
+    return centreOf(await boxOf(resizeHandle(name)));
+  };
   return {
     columnHeader,
     centreOfColumn: async (name: string): Promise<Point> => centreOf(await boxOf(columnHeader(name))),
@@ -153,24 +158,25 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
     sortMenu: (name: string): Locator => table.getByLabel(`sort ${name} by`),
     columnWidth: async (name: string): Promise<number> => (await boxOf(columnHeader(name))).width,
     pressBesideEdgeAndDrag: async (name: string, {besideBy, by}: {besideBy: number; by: number}): Promise<void> => {
-      const handle = table.getByRole('button', {name: new RegExp(`^resize ${name}`)});
+      const handle = resizeHandle(name);
       await handle.scrollIntoViewIfNeeded();
       const edge = await boxOf(handle);
       const from = {...edge, x: edge.x - besideBy};
       await dragTo(page, from, from.x + from.width / 2 + by, from.y + from.height / 2);
     },
     dragEdge: async (name: string, {by, moves}: {by: number; moves: number}): Promise<void> => {
-      const handle = table.getByRole('button', {name: new RegExp(`^resize ${name}`)});
-      await handle.scrollIntoViewIfNeeded();
-      const edge = await boxOf(handle);
-      const middle = {x: edge.x + edge.width / 2, y: edge.y + edge.height / 2};
+      const middle = await centreOfHandle(name);
       await page.mouse.move(middle.x, middle.y);
       await page.mouse.down();
       await page.mouse.move(middle.x + by, middle.y, {steps: moves});
       await page.mouse.up();
     },
-    resizeName: (name: string): Promise<string | null> =>
-      table.getByRole('button', {name: new RegExp(`^resize ${name}`)}).getAttribute('aria-label'),
+    passOverEdge: async (name: string, by: number): Promise<void> => {
+      const middle = await centreOfHandle(name);
+      await page.mouse.move(middle.x, middle.y);
+      await page.mouse.move(middle.x + by, middle.y, {steps: 5});
+    },
+    resizeHandle,
     columnOrder: (): Promise<(string | null)[]> =>
       table.getByRole('columnheader').evaluateAll(headers => headers.map(header => header.getAttribute('aria-label'))),
     rowOrder: (): Promise<string[]> =>
