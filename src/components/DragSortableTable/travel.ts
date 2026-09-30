@@ -38,9 +38,6 @@ export const lazyTravel = <Seat>(under: (x: number, y: number, held: Seat) => Se
     return struckAway(held, struck) ? struck : undefined;
   };
 
-export const carried = (origin: Drift, moving: Moving): {origin: Drift; drift: Drift} =>
-  ({origin, drift: drifted(moving, origin)});
-
 type MoveEvent = {
   buttons: number;
   pointerId: number;

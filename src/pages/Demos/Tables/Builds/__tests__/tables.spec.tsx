@@ -79,7 +79,6 @@ const liftRow = (window: string): void => {
   rowsSurveyed(sourceTable());
   rowInHand = liftedRow(grip(window), windowNames().indexOf(window));
 };
-const startCarryingRow = (): void => rowInHand.carryStarted();
 const carryRowOver = (target: string): void => rowInHand.carriedOver(windowNames().indexOf(heldRow), windowNames().indexOf(target));
 const carryRowOn = (by: number): void => rowInHand.carriedOn(by);
 const loseRowCapture = (): void => rowInHand.captureLost();
@@ -122,7 +121,6 @@ const carryColumnOver = (target: string): void => {
   const order = columnOrder();
   carryColumnInto(target, order.indexOf(target) < order.indexOf(heldColumn) ? 0.25 : 0.75);
 };
-const startCarryingColumn = (): void => columnInHand.carryStarted();
 const carryColumnOn = (by: {x?: number; y?: number}): void => columnInHand.carriedOn(by);
 const loseColumnCaptureOver = (target: string): void => columnInHand.captureLostAt(edgeOf(target) + (widths[target] ?? 0) / 2);
 const loseColumnCaptureUnheld = (): void => columnInHand.captureLostUnheld();
@@ -184,7 +182,6 @@ describe('columns by hand', () => {
     seat(EagerTable, 'hide static');
 
     liftColumn('trades');
-    startCarryingColumn();
     carryColumnOn({x: 20, y: 15});
 
     [header('trades'), ...lanes().map(lane => lane.cells[1])].forEach(cell => {
@@ -197,7 +194,6 @@ describe('columns by hand', () => {
   test('a settle mid-drag moves home under the carried column', () => {
     seat(EagerTable, 'hide static');
     liftColumn('trades');
-    startCarryingColumn();
     carryColumnOn({x: 20, y: 15});
 
     carryColumnOver('buys');
@@ -500,7 +496,6 @@ describe('rows by hand', () => {
     seat(EagerTable, 'hide static');
 
     liftRow('last 5 minutes');
-    startCarryingRow();
     carryRowOn(15);
 
     [...rowOf('last 5 minutes').cells].forEach(cell => {

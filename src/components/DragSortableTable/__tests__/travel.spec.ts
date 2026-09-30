@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest';
-import {carried, drifted, eagerTravel, pointerTravel} from '../travel';
+import {drifted, eagerTravel, pointerTravel} from '../travel';
 import {columnArrows, rowArrows} from '../arrows';
 
 const pressed = (key: string) => ({key, preventDefault: (): void => undefined, currentTarget: null});
@@ -18,11 +18,6 @@ describe('the travel vocabulary', () => {
     eagerTravel(under, 'trades', struck => settled.push(struck))({clientX: 10, clientY: 10});
 
     expect(settled).toEqual(['buys']);
-  });
-
-  it('drifts from where the pointer pressed, from the first move on', () => {
-    expect(carried({x: 100, y: 50}, {clientX: 130, clientY: 45}))
-      .toEqual({origin: {x: 100, y: 50}, drift: {x: 30, y: -5}});
   });
 
   it('a move with no buttons is the drop', async () => {

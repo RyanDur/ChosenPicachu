@@ -2,7 +2,7 @@ import {Report} from './report';
 import {has, maybe} from '@ryandur/sand';
 import {ColumnWidths, Grip, soughtTrade, traded} from '@components/Table/shares';
 import {Direction, Value} from './sorting';
-import {Drift, Moving, carried, still} from './travel';
+import {Drift, Moving, drifted, still} from './travel';
 import {Flight, Grab} from './lift';
 import {Survey, columnLeft, rowTop} from './survey';
 
@@ -162,7 +162,7 @@ export const lift = (state: TableState, carry: Carry, grab: Grab): TableState =>
   ({...unmarked(state), drag: dragOf(carry, grab)});
 
 export const drift = (state: TableState, moving: Moving): TableState =>
-  has(state.drag) ? {...state, drag: {...state.drag, ...carried(state.drag.origin, moving)}} : state;
+  has(state.drag) ? {...state, drag: {...state.drag, drift: drifted(moving, state.drag.origin)}} : state;
 
 export const landColumn = (state: TableState, landing?: string): TableState =>
   state.drag?.axis === 'column' ? {...state, drag: {...state.drag, landing}} : state;

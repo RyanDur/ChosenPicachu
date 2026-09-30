@@ -1,7 +1,6 @@
 import {fireEvent} from '@testing-library/react';
 
 export type ColumnInHand = {
-  readonly carryStarted: () => void;
   readonly carriedTo: (x: number) => void;
   readonly carriedOn: (by: {x?: number; y?: number}) => void;
   readonly captureLostAt: (x: number) => void;
@@ -15,7 +14,7 @@ const emptyHanded = (): never => {
   throw new Error('no column is in hand');
 };
 
-export const noColumnInHand: ColumnInHand = {carryStarted: emptyHanded, carriedTo: emptyHanded, carriedOn: emptyHanded, captureLostAt: emptyHanded, captureLostUnheld: emptyHanded, dropped: emptyHanded};
+export const noColumnInHand: ColumnInHand = {carriedTo: emptyHanded, carriedOn: emptyHanded, captureLostAt: emptyHanded, captureLostUnheld: emptyHanded, dropped: emptyHanded};
 
 export const liftedColumn = (header: Element, x: number): ColumnInHand => {
   const pointer = {x, y: HEADER_Y};
@@ -26,7 +25,6 @@ export const liftedColumn = (header: Element, x: number): ColumnInHand => {
   };
   fireEvent.pointerDown(header, {clientX: pointer.x, clientY: pointer.y, pointerId: 1});
   return {
-    carryStarted: () => moveTo(pointer),
     carriedTo: next => moveTo({x: next, y: pointer.y}),
     captureLostAt: x => fireEvent.lostPointerCapture(header, {buttons: 1, clientX: x, clientY: pointer.y, pointerId: 1}),
     captureLostUnheld: () => fireEvent.lostPointerCapture(header, {buttons: 0, clientX: pointer.x, clientY: pointer.y, pointerId: 1}),
