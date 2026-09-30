@@ -23,10 +23,15 @@
 }
 
 .attentive:where(:not(:disabled)) {
-  &:hover,
-  &:focus,
-  &:focus-within {
+  &:focus-visible,
+  &:has(:focus-visible) {
     background-color: var(--approach);
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      background-color: var(--approach);
+    }
   }
 
   &:active {

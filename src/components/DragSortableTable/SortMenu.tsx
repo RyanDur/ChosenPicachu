@@ -8,7 +8,7 @@ export const SortMenu: FC<{column: string}> = ({column}) => {
   const dispatch = useTableDispatch();
 
   return <>
-    <button type="button" tabIndex={0} className="menu-toggle rounded-corners"
+    <button type="button" tabIndex={0} className="menu-toggle rounded-corners attentive"
       popoverTarget={`sort-${column}`}
       onPointerDown={event => event.stopPropagation()}
       aria-label={`sort ${column}`}/>

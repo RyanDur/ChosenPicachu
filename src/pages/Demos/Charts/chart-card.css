@@ -17,10 +17,6 @@
       content: ' ▾';
     }
 
-    &:hover {
-      background: var(--approach);
-    }
-
     &:focus-visible {
       outline: var(--hairline-x-2) solid var(--ring);
     }

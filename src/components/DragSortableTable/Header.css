@@ -6,6 +6,10 @@
   }
 }
 
+:where(.sortable .header-cell) > .menu-toggle {
+  background: none;
+}
+
 .sortable .header-cell > .menu-toggle {
   position: absolute;
   inset-inline-end: var(--base-x-1_5);
@@ -16,14 +20,9 @@
   display: inline-grid;
   place-items: center;
   border: none;
-  background: none;
   padding: 0;
   cursor: pointer;
   color: var(--ink-muted);
-
-  &:hover {
-    background: var(--approach);
-  }
 
   &:focus-visible {
     outline: var(--hairline-x-2) solid var(--ring);
