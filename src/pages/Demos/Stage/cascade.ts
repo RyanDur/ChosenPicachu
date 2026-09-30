@@ -1,9 +1,9 @@
-import indexCss from '../../../index.css?raw';
+import indexCss from '../../../index.css?frame';
 import {not} from '@ryandur/sand';
 
 export type Sheet = {name: string; css: string};
 
-const styleSheets = import.meta.glob<string>('../../../styles/*.css', {query: '?raw', import: 'default', eager: true});
+const styleSheets = import.meta.glob<string>('../../../styles/*.css', {query: '?frame', import: 'default', eager: true});
 
 const sheet = (name: string): Sheet => {
   const path = `../../../styles/${name}`;

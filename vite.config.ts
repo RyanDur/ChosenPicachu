@@ -5,6 +5,8 @@ import {loadEnv} from 'vite';
 import {rolldown} from 'rolldown';
 import {fileURLToPath} from 'node:url';
 import {usersServerScript} from './src/components/Users/resource/usersServer';
+import {browserslistToTargets, transform} from 'lightningcss';
+import browserslist from 'browserslist';
 import react from '@vitejs/plugin-react';
 import svgr from 'vite-plugin-svgr';
 
@@ -56,6 +58,27 @@ const rawCss = (): Plugin => ({
       const path = id.slice('\0rawcss'.length, -'.js'.length);
       this.addWatchFile(path);
       return `export default ${JSON.stringify(readFileSync(path, 'utf8'))};`;
+    }
+  }
+});
+
+const frameCss = (): Plugin => ({
+  name: 'frame-css',
+  enforce: 'pre',
+  async resolveId(source, importer) {
+    if (source.endsWith('.css?frame')) {
+      const resolved = await this.resolve(source.slice(0, -'?frame'.length), importer, {skipSelf: true});
+      if (resolved !== null) {
+        return '\0framecss' + resolved.id + '.js';
+      }
+    }
+  },
+  load(id) {
+    if (id.startsWith('\0framecss')) {
+      const path = id.slice('\0framecss'.length, -'.js'.length);
+      this.addWatchFile(path);
+      const {code} = transform({filename: path, code: readFileSync(path), targets: browserslistToTargets(browserslist())});
+      return `export default ${JSON.stringify(code.toString())};`;
     }
   }
 });
@@ -135,7 +158,7 @@ export default defineConfig(({mode}) => ({
   build: {
     manifest: true
   },
-  plugins: [rawCss(), frameScript(), usersServerPlugin(), runtimeEnv(loadEnv(mode, process.cwd())), react(), svgr({
+  plugins: [rawCss(), frameCss(), frameScript(), usersServerPlugin(), runtimeEnv(loadEnv(mode, process.cwd())), react(), svgr({
     // svgr options: https://react-svgr.com/docs/options/
     svgrOptions: {exportType: 'default', ref: true, svgo: false, titleProp: true},
     include: '**/*.svg'

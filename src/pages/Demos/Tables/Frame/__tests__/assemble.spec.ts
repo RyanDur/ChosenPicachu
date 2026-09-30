@@ -16,6 +16,11 @@ describe('the frame assembly', () => {
     expect(everything.match(/\.off-screen\s*\{/g)).toHaveLength(1);
   });
 
+  it('the frame\'s sheets carry the prefixes the site\'s browsers need, as the site\'s own do', () => {
+    const everything = sheets.map(({css}) => css).join('\n');
+    expect(everything).toContain('-webkit-user-select: none');
+  });
+
   it('no import survives into the frame', () => {
     const everything = sheets.map(({css}) => css).join('\n');
     expect(everything.match(/@import/g)).toBeNull();
