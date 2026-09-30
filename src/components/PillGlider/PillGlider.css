@@ -23,7 +23,7 @@
       position-anchor: --chosen;
       left: anchor(left);
       width: anchor-size(width);
-      height: var(--base-x-5);
+      height: anchor-size(height);
       border-radius: var(--radius);
       background: var(--black);
       pointer-events: none;
