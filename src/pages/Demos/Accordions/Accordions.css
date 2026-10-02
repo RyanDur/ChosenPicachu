@@ -157,6 +157,14 @@
 
     .info-text {
       overflow-y: auto;
+      background-color: var(--trim);
+      background-image:
+        linear-gradient(transparent, var(--trim) var(--base-x-2)),
+        radial-gradient(farthest-side at 50% 100%, var(--shadow), transparent);
+      background-position: bottom;
+      background-size: 100% var(--base-x-3), 100% var(--base-x-1_5);
+      background-repeat: no-repeat;
+      background-attachment: local, scroll;
 
       &:focus-visible {
         outline: var(--hairline-x-2) solid var(--ring);
