@@ -15,10 +15,10 @@ test('the z-index cards start in a stack, the button spreads them, and pressing 
   };
   await expect.poll(stacked).toBe(true);
 
-  await page.getByRole('button', {name: 'Expand'}).click();
+  await stackingPile(page).expand();
   await expect.poll(spread).toBe(true);
 
-  await page.getByRole('button', {name: 'Collapse'}).click();
+  await stackingPile(page).collapse();
   await expect.poll(stacked).toBe(true);
 });
 
