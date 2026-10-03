@@ -59,3 +59,49 @@
     }
 
 }
+
+.trapped-menu {
+    display: grid;
+    gap: var(--base-x-1_25);
+
+    .old-way-cards {
+        display: grid;
+        gap: var(--base-x-2_5);
+    }
+
+    .old-way-card {
+        position: relative;
+        display: grid;
+        gap: var(--base);
+        justify-items: start;
+        padding: var(--base-x-1_25);
+    }
+
+    .forms-context {
+        z-index: 1;
+    }
+
+    .sort-choices {
+        position: absolute;
+        z-index: 9999;
+        inset-block-start: calc(100% - var(--base-x-1_25));
+        inset-inline-start: var(--base-x-1_25);
+        min-width: var(--base-x-20);
+    }
+
+    .sort-choice {
+        display: block;
+        inline-size: 100%;
+        padding: var(--base) var(--base-x-2);
+        border: 0;
+        background: none;
+        color: inherit;
+        font: inherit;
+        text-align: start;
+        cursor: pointer;
+
+        &:focus-visible {
+            outline: var(--hairline-x-2) solid var(--ring);
+        }
+    }
+}

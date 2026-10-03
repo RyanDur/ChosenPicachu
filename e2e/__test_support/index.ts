@@ -17,3 +17,4 @@ export {codedStepLayouts, misplacedPictures} from './recipes';
 export {firstHeightAfter, framesWhileMoving, heightByTheNextFrame, heightOnceSettled, motionOf, type Frame, type Moment} from './motion';
 export {accordionsTab, builds, measuredBuilds, textOf, type Build, showing, type Part, nameOn} from './accordions';
 export {stackingPile, type Card} from './stacking';
+export {trappedMenu, type SortChoice} from './trap';

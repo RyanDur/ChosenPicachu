@@ -15,7 +15,7 @@ import {
   LazyKeepStaticList
 } from './DragAndDrop';
 import {demoTopicParam, DemoTopics} from './types';
-import {raisedParam, StackingExplained, TopLayer} from './ZIndexDemo';
+import {cardOneParam, MenuExplained, raisedParam, StackingExplained, TopLayer} from './ZIndexDemo';
 import {Tutorials} from './Tables/Tutorials';
 import {ListTutorials} from './DragAndDrop/Tutorials';
 import {ChartsTutorial} from './Charts/Tutorial';
@@ -41,9 +41,9 @@ const topics = [
 ];
 
 export const DemosPage = () => {
-  const {tab, pace = 'eager', origin = 'hide', motion = 'animated', tut = 'sort', track = 'pointer', world = 'react', type = 'inclusive', style: foldMotion = 'reveal', raised = 'none', updateSearchParams} =
+  const {tab, pace = 'eager', origin = 'hide', motion = 'animated', tut = 'sort', track = 'pointer', world = 'react', type = 'inclusive', style: foldMotion = 'reveal', raised = 'none', 'card-one': cardOne = 'contained', updateSearchParams} =
     useSearchParamsObject(
-      {tab: demoTopicParam, pace: paceParam, origin: originParam, motion: motionParam, tut: tutorialParam, track: trackParam, world: worldParam, type: foldTypeParam, style: foldMotionParam, raised: raisedParam},
+      {tab: demoTopicParam, pace: paceParam, origin: originParam, motion: motionParam, tut: tutorialParam, track: trackParam, world: worldParam, type: foldTypeParam, style: foldMotionParam, raised: raisedParam, 'card-one': cardOneParam},
       {tab: DemoTopics.accordions});
   const [accordionContents] = useState(() => ({
     measuredCheckbox: paragraphs(5),
@@ -70,6 +70,7 @@ export const DemosPage = () => {
         [DemoTopics.zIndex]: <>
           <h2 className="title bold">Z-Index Demo.</h2>
           <StackingExplained raised={raised} onRaised={next => updateSearchParams({raised: next})}/>
+          <MenuExplained cardOne={cardOne} onCardOne={next => updateSearchParams({'card-one': next})}/>
           <TopLayer className="card rounded-corners lifted padded"/>
           <TopLayerTutorial/>
         </>,
