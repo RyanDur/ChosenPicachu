@@ -10,8 +10,9 @@ export const trappedMenu = (page: Page) => {
     sortBy,
     choice,
     contextChoice: trap.getByRole('checkbox', {name: 'Card one has z-index: 1'}),
-    contextWords: trap.getByText('Card one has z-index: 1'),
-    caption: trap.getByText(/Open Sort by, then change the checkbox/),
+    contextWords: trap.getByText('Card one has z-index: 1', {exact: true}),
+    caption: trap.getByText(/A list with z-index: 9999 opens under a card with z-index: 1/),
+    said: trap.getByRole('status', {name: 'where the list opened'}),
     open: (): Promise<void> => sortBy.click(),
     openByKeyboard: async (): Promise<void> => {
       await sortBy.focus();
@@ -25,7 +26,7 @@ export const trappedMenu = (page: Page) => {
         return 'the choice';
       }
       return cardTwo?.contains(topmost) ?? false ? 'card two' : 'something else';
-    }, await trap.getByRole('listitem').filter({hasText: /^Card two\./}).elementHandle())
+    }, await trap.getByRole('listitem').filter({hasText: /^Card two has z-index/}).elementHandle())
   };
 };
 
@@ -40,7 +41,7 @@ export const topLayerMenu = (page: Page) => {
     choice,
     open: (): Promise<void> => sortBy.click(),
     overlapsCardTwo: async (): Promise<boolean> => {
-      const [list, cardTwo] = await Promise.all([menu.boundingBox(), trap.getByRole('listitem').filter({hasText: /^Card two\./}).boundingBox()]);
+      const [list, cardTwo] = await Promise.all([menu.boundingBox(), trap.getByRole('listitem').filter({hasText: /^Card two has z-index/}).boundingBox()]);
       return list !== null && cardTwo !== null &&
         list.y < cardTwo.y + cardTwo.height && cardTwo.y < list.y + list.height &&
         list.x < cardTwo.x + cardTwo.width && cardTwo.x < list.x + list.width;

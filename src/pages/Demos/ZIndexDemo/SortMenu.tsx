@@ -23,7 +23,7 @@ const choiceAt = (list: string, at: number): Maybe<HTMLElement> => elementWithId
 const within = (target: EventTarget | null, id: string): boolean => target instanceof Node &&
   elementWithId(id).map(part => part.contains(target)).orElse(false);
 
-export const SortMenu: FC = () => {
+export const SortMenu: FC<{onOpened: () => void}> = ({onOpened}) => {
   const [open, updateOpen] = useState(false);
   const [chosen, updateChosen] = useState<Maybe<SortChoice>>(nothing());
   const button = useId();
@@ -35,6 +35,10 @@ export const SortMenu: FC = () => {
     }
   }, [open, list]);
 
+  const opens = (): void => {
+    updateOpen(true);
+    onOpened();
+  };
   const closeToButton = (): void => {
     updateOpen(false);
     elementWithId(button).map(focusOn);
@@ -42,7 +46,7 @@ export const SortMenu: FC = () => {
   const onButtonKey = (event: KeyboardEvent<HTMLButtonElement>): void => {
     if (event.key === 'ArrowDown') {
       event.preventDefault();
-      updateOpen(true);
+      opens();
     }
   };
   const onChoiceKey = (at: number) => (event: KeyboardEvent<HTMLButtonElement>): void => {
@@ -63,7 +67,7 @@ export const SortMenu: FC = () => {
 
   return <>
     <button id={button} type="button" className="button primary reachable" aria-haspopup="menu" aria-expanded={open} aria-controls={list}
-      onMouseDown={event => event.preventDefault()} onClick={() => open ? closeToButton() : updateOpen(true)} onKeyDown={onButtonKey}>{chosen.map(choice => `Sort by: ${choice}`).orElse('Sort by')}</button>
+      onMouseDown={event => event.preventDefault()} onClick={() => open ? closeToButton() : opens()} onKeyDown={onButtonKey}>{chosen.map(choice => `Sort by: ${choice}`).orElse('Sort by')}</button>
     {open && <ul id={list} role="menu" aria-labelledby={button} className="sort-choices card rounded-corners floating" onBlur={onListBlur}>
       {sortChoices.map((choice, at) =>
         <li key={choice} role="none">

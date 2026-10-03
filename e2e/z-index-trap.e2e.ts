@@ -16,14 +16,15 @@ for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: 
     });
 
     for (const state of ['contained', 'free']) {
-      test(`the open menu ends above the caption, with card one ${state}`, async ({page}) => {
+      test(`the open menu ends above the sentence that says where it opened, with card one ${state}`, async ({page}) => {
         await page.goto(`demos/?tab=z-index&card-one=${state}`);
         const menu = trappedMenu(page);
 
         await menu.open();
 
-        const [list, caption] = await Promise.all([page.getByRole('menu').boundingBox(), menu.caption.boundingBox()]);
-        expect((list?.y ?? Infinity) + (list?.height ?? 0)).toBeLessThanOrEqual(caption?.y ?? 0);
+        await expect(menu.said).not.toBeEmpty();
+        const [list, said] = await Promise.all([page.getByRole('menu').boundingBox(), menu.said.boundingBox()]);
+        expect((list?.y ?? Infinity) + (list?.height ?? 0)).toBeLessThanOrEqual(said?.y ?? 0);
       });
     }
 

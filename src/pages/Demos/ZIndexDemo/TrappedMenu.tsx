@@ -1,12 +1,14 @@
-import {FC, useState} from 'react';
+import {FC, useEffect, useId, useState} from 'react';
+import {Maybe, maybe, nothing, some} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {SortMenu} from './SortMenu';
 import {TopLayerMenu} from './TopLayerMenu';
 import {CardOne} from './card-one';
 
-const says: Record<CardOne, string> = {
-  contained: 'Card one forms a stacking context. Its menu opens under card two.',
-  free: 'Card one forms no stacking context. Its menu opens over card two.'
+const opened: Record<CardOne | 'top layer', string> = {
+  contained: 'The list opened under card two. Its 9999 counts only inside card one.',
+  free: 'The list opened over card two. Card one has no z-index now, so the 9999 is compared with card two’s 1.',
+  'top layer': 'The list opened in the top layer, over both cards. No z-index is compared there.'
 };
 
 type Props = {
@@ -15,30 +17,44 @@ type Props = {
 };
 
 export const TrappedMenu: FC<Props> = ({cardOne, onCardOneChosen}) => {
-  const [changed, updateChanged] = useState(false);
+  const [said, updateSaid] = useState<Maybe<string>>(nothing());
+  const trap = useId();
 
-  return <figure className="trapped-menu card rounded-corners lifted padded">
-    <label className="context-choice reachable">
-      <input type="checkbox" checked={cardOne === 'contained'} onChange={({currentTarget}) => {
-        updateChanged(true);
-        onCardOneChosen(currentTarget.checked ? 'contained' : 'free');
-      }}/>
-      Card one has z-index: 1
-    </label>
-    <output aria-label="what card one does" className="paragraph">{changed && says[cardOne]}</output>
+  useEffect(() => {
+    const topLayerOpened = ({target}: Event): void => {
+      if (target instanceof HTMLElement && target.matches(':popover-open')) {
+        updateSaid(some(opened['top layer']));
+      }
+    };
+    const figure = maybe(document.getElementById(trap));
+    figure.map(element => element.addEventListener('toggle', topLayerOpened, true));
+    return () => {
+      figure.map(element => element.removeEventListener('toggle', topLayerOpened, true));
+    };
+  }, [trap]);
+
+  return <figure id={trap} className="trapped-menu card rounded-corners lifted padded">
+    <ol className="trap-steps">
+      <li className="paragraph">Press Sort by, built the old way, and look where its list opens.</li>
+      <li className="paragraph">Uncheck “Card one has z-index: 1”, and press Sort by again.</li>
+      <li className="paragraph">Press Sort by, in the top layer, with the box checked or not.</li>
+    </ol>
     <ol className="old-way-cards">
       <li className={classNames('old-way-card card rounded-corners floating', cardOne === 'contained' && 'forms-context')}>
-        <p className="paragraph"><code>.old-way-card {'{'} position: relative {'}'}</code><br/>
-          {cardOne === 'contained' && <><code>.forms-context {'{'} z-index: 1 {'}'}</code><br/></>}
-          <code>.sort-choices {'{'} position: absolute; z-index: 9999 {'}'}</code><br/>
-          <code>.menu {'{'} position-area: block-end span-inline-start {'}'}</code></p>
-        <SortMenu/>
+        <label className="context-choice reachable">
+          <input type="checkbox" checked={cardOne === 'contained'}
+            onChange={({currentTarget}) => onCardOneChosen(currentTarget.checked ? 'contained' : 'free')}/>
+          Card one has z-index: 1
+        </label>
+        <p className="paragraph">Its list has z-index: 9999.</p>
+        <SortMenu onOpened={() => updateSaid(some(opened[cardOne]))}/>
         <TopLayerMenu/>
       </li>
       <li className="old-way-card card rounded-corners floating forms-context">
-        <p className="paragraph">Card two. <code>.forms-context {'{'} z-index: 1 {'}'}</code></p>
+        <p className="paragraph">Card two has z-index: 1, and comes later in the code.</p>
       </li>
     </ol>
-    <figcaption className="caption"><strong>The trap.</strong> Open Sort by, then change the checkbox and open Sort by again. Open Sort by, in the top layer, either way.</figcaption>
+    <output aria-label="where the list opened" className="paragraph">{said.orElse('')}</output>
+    <figcaption className="caption"><strong>The trap.</strong> A list with z-index: 9999 opens under a card with z-index: 1.</figcaption>
   </figure>;
 };

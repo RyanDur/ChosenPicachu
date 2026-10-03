@@ -4,8 +4,8 @@ import {TestApp} from '@__test_support/TestApp';
 import {demosAt} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
 
-const contained = 'Card one forms a stacking context. Its menu opens under card two.';
-const free = 'Card one forms no stacking context. Its menu opens over card two.';
+const under = 'The list opened under card two. Its 9999 counts only inside card one.';
+const over = 'The list opened over card two. Card one has no z-index now, so the 9999 is compared with card two’s 1.';
 
 describe('the menu built the old way', () => {
   test('should open from a press, with its first choice in focus', async () => {
@@ -77,42 +77,70 @@ describe('the menu built the old way', () => {
 });
 
 describe('the card that traps the menu', () => {
-  test('should form a stacking context at first, and say nothing until the checkbox changes', async () => {
+  test('should give its steps before any control', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
+    const trap = await screen.findByRole('figure', {name: /^The trap\./});
 
-    expect(await screen.findByRole('checkbox', {name: 'Card one has z-index: 1'})).toBeChecked();
-    expect(screen.getByRole('status', {name: 'what card one does'})).toBeEmptyDOMElement();
+    const [steps] = within(trap).getAllByRole('list');
+
+    expect(within(steps).getAllByRole('listitem').map(step => step.textContent)).toEqual([
+      'Press Sort by, built the old way, and look where its list opens.',
+      'Uncheck “Card one has z-index: 1”, and press Sort by again.',
+      'Press Sort by, in the top layer, with the box checked or not.'
+    ]);
+    expect(within(steps).queryByRole('button')).not.toBeInTheDocument();
+    expect(within(steps).queryByRole('checkbox')).not.toBeInTheDocument();
   });
 
-  test('should say the card traps the menu again when checked again', async () => {
+  test('should keep the checkbox in card one, and tell each card’s z-index in a sentence', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    const trap = await screen.findByRole('figure', {name: /^The trap\./});
+
+    const cardOne = within(trap).getAllByRole('listitem').find(card => within(card).queryByRole('checkbox', {name: 'Card one has z-index: 1'}) !== null);
+
+    expect(cardOne).toHaveTextContent('Its list has z-index: 9999.');
+    expect(within(trap).getByText('Card two has z-index: 1, and comes later in the code.')).toBeInTheDocument();
+  });
+
+  test('should say nothing before the first press, and nothing when the checkbox changes', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
     const contextChoice = await screen.findByRole('checkbox', {name: 'Card one has z-index: 1'});
+    expect(contextChoice).toBeChecked();
+    expect(screen.getByRole('status', {name: 'where the list opened'})).toBeEmptyDOMElement();
 
     await userEvent.click(contextChoice);
-    await userEvent.click(contextChoice);
 
-    expect(screen.getByRole('status', {name: 'what card one does'})).toHaveTextContent(contained);
+    expect(screen.getByRole('status', {name: 'where the list opened'})).toBeEmptyDOMElement();
   });
 
-  test('should free the menu when unchecked, say so, and write it into the address', async () => {
+  test('should say the list opened under card two when card one has its z-index', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
 
+    await userEvent.click(await screen.findByRole('button', {name: 'Sort by'}));
+
+    expect(screen.getByRole('status', {name: 'where the list opened'})).toHaveTextContent(under);
+  });
+
+  test('should say the list opened over card two once the box is unchecked, and write it into the address', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
     await userEvent.click(await screen.findByRole('checkbox', {name: 'Card one has z-index: 1'}));
 
-    expect(screen.getByRole('status', {name: 'what card one does'})).toHaveTextContent(free);
+    await userEvent.click(screen.getByRole('button', {name: 'Sort by'}));
+
+    expect(screen.getByRole('status', {name: 'where the list opened'})).toHaveTextContent(over);
     expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('card-one=free');
   });
 
-  test('card one should show its z-index: 1 rule only while the checkbox is checked', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
-    const trap = await screen.findByRole('figure', {name: /^The trap\./});
-    const cardOne = (): HTMLElement => within(trap).getAllByRole('listitem')
-      .filter(card => within(card).queryByRole('button', {name: 'Sort by'}) !== null)[0];
-    expect(within(cardOne()).getByText('.forms-context { z-index: 1 }')).toBeInTheDocument();
+  test('should say the list opened under card two again once the box is checked again', async () => {
+    render(<TestApp at={demosAt('?tab=z-index&card-one=free')}/>);
+    const contextChoice = await screen.findByRole('checkbox', {name: 'Card one has z-index: 1'});
+    await userEvent.click(screen.getByRole('button', {name: 'Sort by'}));
+    await userEvent.keyboard('{Escape}');
 
-    await userEvent.click(screen.getByRole('checkbox', {name: 'Card one has z-index: 1'}));
+    await userEvent.click(contextChoice);
+    await userEvent.click(screen.getByRole('button', {name: 'Sort by'}));
 
-    expect(within(cardOne()).queryByText('.forms-context { z-index: 1 }')).not.toBeInTheDocument();
+    expect(screen.getByRole('status', {name: 'where the list opened'})).toHaveTextContent(under);
   });
 
   test('should open freed when the address says so', async () => {
