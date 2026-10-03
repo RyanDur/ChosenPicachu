@@ -18,7 +18,6 @@
     font-weight: bold;
     white-space: nowrap;
     text-transform: uppercase;
-    height: var(--base-x-5);
     padding: 0 var(--base-x-4);
     border-radius: var(--base-x-5);
     box-shadow: 0 0 var(--base-x-0_5) var(--smoke);
@@ -52,4 +51,8 @@
       box-shadow: var(--press-glow);
     }
   }
+}
+
+:where(.button.primary, .button.secondary) {
+  min-block-size: var(--base-x-5);
 }

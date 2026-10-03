@@ -78,7 +78,6 @@
 
         .button {
             max-inline-size: 100%;
-            block-size: auto;
             padding-block: var(--base-x-0_5);
             white-space: normal;
         }
@@ -117,8 +116,4 @@
     .dismiss {
         margin-inline-start: auto;
     }
-}
-
-:where(.trapped-menu, .banner-trap) :where(.old-way-card .button) {
-    min-block-size: var(--base-x-5);
 }

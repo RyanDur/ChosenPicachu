@@ -2,6 +2,7 @@ import {FC, useId, useState} from 'react';
 import {maybe} from '@ryandur/sand';
 import {decked, news} from '@components/fibs';
 import {useBanners} from '@components/Banners';
+import './ZIndexDemo.css';
 
 const nextNews = decked(news);
 
@@ -26,7 +27,7 @@ export const BannerTrap: FC = () => {
         </button>
         {raised && <p role="alert" className="old-banner field rounded-corners floating hairline-outline alarm-ink">
           An old banner. <code>.old-banner {'{'} position: fixed; z-index: 9999 {'}'}</code>
-          <button type="button" tabIndex={0} className="dismiss reachable" aria-label="dismiss the old banner" onClick={dismissed}>×</button>
+          <button type="button" tabIndex={0} className="dismiss borderless attentive reachable" aria-label="dismiss the old banner" onClick={dismissed}>×</button>
         </p>}
       </li>
       <li className="old-way-card card rounded-corners floating forms-context">
