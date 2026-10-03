@@ -1,4 +1,5 @@
 import {within} from '@testing-library/react';
+import {computeAccessibleName} from 'dom-accessibility-api';
 
 const runWith = (part: HTMLElement, holds: (run: HTMLElement) => boolean, what: string): HTMLElement => {
   const run = within(part).getAllByRole('listitem').find(holds);
@@ -21,9 +22,5 @@ export const explanation = {
   codeBeside: (part: HTMLElement, words: RegExp): HTMLElement => within(runTelling(part, words)).getByRole('code'),
   everyCodeBeside: (part: HTMLElement, words: RegExp): string[] => everyCodeIn(runTelling(part, words)),
   everyCodeBesideDrawing: (part: HTMLElement, drawing: RegExp): string[] => everyCodeIn(runDrawing(part, drawing)),
-  captionsIn: (part: HTMLElement): string[] => {
-    const captions: string[] = [];
-    within(part).getAllByRole('figure', {name: caption => captions.push(caption) > 0});
-    return captions;
-  }
+  captionsIn: (part: HTMLElement): string[] => within(part).getAllByRole('figure').map(figure => computeAccessibleName(figure))
 };

@@ -66,3 +66,15 @@ index 8f905f1..065fcbc 100644
      } else if (isSVGSVGElement(node)) {
        // https://www.w3.org/TR/svg-aam-1.0/
        consultedNodes.add(node);
+diff --git a/node_modules/dom-accessibility-api/package.json b/node_modules/dom-accessibility-api/package.json
+index a113921..8e586ea 100644
+--- a/node_modules/dom-accessibility-api/package.json
++++ b/node_modules/dom-accessibility-api/package.json
+@@ -6,6 +6,7 @@
+ 	"module": "dist/index.mjs",
+ 	"type": "commonjs",
+ 	"exports": {
++		"types": "./dist/index.d.ts",
+ 		"import": "./dist/index.mjs",
+ 		"require": "./dist/index.js"
+ 	},
