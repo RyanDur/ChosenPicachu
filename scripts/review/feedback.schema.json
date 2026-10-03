@@ -1,23 +1,26 @@
 {
   "type": "object",
   "additionalProperties": false,
-  "required": ["habits", "plusses", "deltas"],
+  "required": ["overview", "nextSteps", "habits", "plusses", "deltas"],
   "$defs": {
-    "door": {"type": "string", "enum": ["structure", "presentation", "dynamic interaction", "design", "tests"]},
+    "door": {"type": "string", "enum": ["structure", "presentation", "dynamic interaction", "design", "tests", "tutorials"]},
     "severity": {"type": "string", "enum": ["violation", "concern", "note"]},
     "evidence": {"type": "string", "enum": ["read", "inferred"]}
   },
   "properties": {
+    "overview": {"type": "string"},
+    "nextSteps": {"type": "array", "items": {"type": "string"}},
     "habits": {
       "type": "array",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["title", "rule", "fix"],
+        "required": ["title", "rule", "problem", "why", "fix"],
         "properties": {
           "title": {"type": "string"},
           "rule": {"type": "string"},
-          "meet": {"type": "string"},
+          "problem": {"type": "string"},
+          "why": {"type": "string"},
           "fix": {"type": "string"}
         }
       }

@@ -103,7 +103,9 @@ jobs:
             --max-turns 80 \
             --no-session-persistence | node scripts/review/narrate.mjs
       - name: Report
-        run: node scripts/review/report.mjs < review.json >> "$GITHUB_STEP_SUMMARY"
+        run: |
+          REVIEW_SUBJECT="$(git log -1 --format=%s "$GITHUB_SHA")" \
+            node scripts/review/report.mjs < review.json >> "$GITHUB_STEP_SUMMARY"
       - name: Leave the feedback on the commit
         if: always() && hashFiles('review-comment.md') != ''
         env:

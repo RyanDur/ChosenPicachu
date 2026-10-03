@@ -56,7 +56,7 @@ describe('the reviewers AGENTS.md names', () => {
 describe('the review\'s QAs', () => {
   test('every door gets its own QA that runs on opus and can only read', () => {
     const qas = agents();
-    expect(Object.keys(qas)).toEqual(['structure-qa', 'presentation-qa', 'dynamic-interaction-qa', 'design-qa', 'tests-qa']);
+    expect(Object.keys(qas)).toEqual(['structure-qa', 'presentation-qa', 'dynamic-interaction-qa', 'design-qa', 'tests-qa', 'tutorials-qa']);
     Object.values(qas).forEach(qa => {
       expect(qa.model).toBe('opus');
       expect(qa.tools).toEqual(reading);
@@ -91,7 +91,14 @@ describe('the review\'s QAs', () => {
     expect(qas['tests-qa'].prompt).toContain('every __test_support/ directory');
   });
 
-  test('the lead carries the values and splits the scope between the five QAs', () => {
+  test('the tutorials QA is sent to the tutorials door and reviews the site', () => {
+    const qa = agents()['tutorials-qa'];
+    expect(qa.prompt).toContain('You hold the tutorials door. Read scripts/review/tutorials.md first');
+    expect(qa.prompt).toContain('what a tutorial on the demos tab owes its reader');
+    expect(qa.prompt).toContain('You review the site.');
+  });
+
+  test('the lead carries the values and splits the scope between the six QAs', () => {
     const lead = promptFor({scope: 'changes', before: 'abc', after: 'def'});
     expect(lead).toContain('# What every reviewer here holds');
     expect(lead).toContain('scripts/review/tests.md');

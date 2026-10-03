@@ -111,3 +111,9 @@ Each reviewer reads its rubric first and whole, reviews one half of the scope, t
 - reviews: the tests
 - scopes: full, changes, tests
 - asks: what a test is for: readable, worth having, pinning behaviour and not implementation, at the right level, against the real thing, and whether a test is missing; Beck's properties for unit tests, Dodds' practice for component specs, Fowler's journeys and Playwright's practices for e2e, Fowler's page objects beside their owner
+
+### tutorials
+- rubric: `scripts/review/tutorials.md`
+- reviews: the site
+- scopes: full, changes
+- asks: what a tutorial on the demos tab owes its reader: claims that are true, terms defined where they first appear, headings that lead with the answer, an example to press for every idea, a tab that opens with why, the mechanism said in plain words, one idea in each run

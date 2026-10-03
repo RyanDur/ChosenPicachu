@@ -78,9 +78,9 @@ describe('the review prompt', () => {
     expect(prompt).not.toContain('structure-qa');
   });
 
-  test('a review of the changes sends all five QAs', () => {
+  test('a review of the changes sends all six QAs', () => {
     const prompt = promptFor({scope: 'changes', before: 'abc', after: 'def'});
-    expect(prompt).toContain('The QAs hold one door each: structure-qa, presentation-qa, dynamic-interaction-qa, design-qa and tests-qa.');
+    expect(prompt).toContain('The QAs hold one door each: structure-qa, presentation-qa, dynamic-interaction-qa, design-qa, tests-qa and tutorials-qa.');
   });
 
   test('the review answers in the feedback stance: habits first, then plusses and deltas, each with what happened and why', () => {
@@ -93,6 +93,21 @@ describe('the review prompt', () => {
     expect(prompt).toContain('A **plus** is a choice in the code that holds a door up.');
     expect(prompt).toContain('A **delta** is a finding: something to change.');
     expect(prompt).toContain('Answer in the feedback stance');
+  });
+
+  test('the lead opens for the owner of the site: an overview that says whether to ship, then the next steps, then each habit as its problem, why it matters and the fix', () => {
+    const prompt = promptFor({scope: 'changes', before: 'abc', after: 'def'});
+    expect(prompt).toContain('The lead writes for the person who owns the site and did not write the push.');
+    expect(prompt).toContain('The overview comes first. It says what the push did, what the review found, and whether the push is fine to ship');
+    expect(prompt).toContain('Each is one thing to do, in the order to do it, naming the file and what changes there.');
+    expect(prompt).toContain('Its why says what the problem costs that person, which the problem alone does not say.');
+    expect(prompt).toContain('Open with the overview');
+  });
+
+  test('the lead reads the tutorials door with the others', () => {
+    const prompt = promptFor({scope: 'full'});
+    expect(prompt).toContain('scripts/review/tutorials.md');
+    expect(prompt).toContain('The tutorials door says what a tutorial on the demos tab owes its reader.');
   });
 
   test('the review is asked to write plainly, naming things and never narrating itself', () => {
@@ -138,13 +153,23 @@ describe('the review report', () => {
   const naming = aHabit({title: 'a landmark is named for what it holds', rule: 'The structure door: every landmark gets a name and no two names collide.', fix: 'Name it for what it holds.'});
   const named = traits => aDelta({habit: naming.title, ...traits});
 
-  test('reads the habits, plusses and deltas the reviewer structured', () => {
-    expect(reviewIn(answer(review([plus], [note], [heading])))).toEqual({habits: [heading], plusses: [plus], deltas: [note]});
-    expect(reviewIn(answer(review([plus], [note], [heading], 'the accordions are the author\'s')))).toEqual({habits: [heading], plusses: [plus], deltas: [note], deferred: 'the accordions are the author\'s'});
+  test('reads the overview, next steps, habits, plusses and deltas the reviewer structured', () => {
+    const told = {...review([plus], [note], [heading]), overview: 'The push adds a list of friends.', nextSteps: ['Name the section in src/somewhere.tsx.']};
+    expect(reviewIn(answer(told))).toEqual(told);
+    const deferring = review([plus], [note], [heading], 'the accordions are the author\'s');
+    expect(reviewIn(answer(deferring))).toEqual(deferring);
+    expect(deferring.deferred).toBe('the accordions are the author\'s');
   });
 
   test('a review with neither plusses nor deltas is still read', () => {
-    expect(reviewIn(answer(review([], [], [])))).toEqual({habits: [], plusses: [], deltas: []});
+    expect(reviewIn(answer(review([], [], [])))).toEqual(review([], [], []));
+  });
+
+  test('an answer without an overview or without next steps is refused', () => {
+    const {overview: _overview, ...unopened} = review([], [], []);
+    const {nextSteps: _nextSteps, ...unstepped} = review([], [], []);
+    expect(() => reviewIn(answer(unopened))).toThrow('structured output is missing');
+    expect(() => reviewIn(answer(unstepped))).toThrow('structured output is missing');
   });
 
   test('an answer without habits is refused', () => {
@@ -159,56 +184,91 @@ describe('the review report', () => {
     expect(() => reviewIn(JSON.stringify({type: 'result', structured_output: {findings: []}}))).toThrow('structured output is missing');
   });
 
-  test('no deltas reads as the code holding up, with the plusses still told under their habit', () => {
-    const summary = summaryOf(review([plus], [], [heading]));
-    expect(summary).toContain('## The code holds up the home page');
-    expect(summary).toContain('1 plus. No deltas. 1 habit.');
-    expect(summary).toContain('1. **a section is named by its heading.** 0 places, 1 to keep.');
-    expect(summary).toContain('- + `src/f.tsx:5`. the friends list is a fieldset with a legend');
+  test('the heading names the push and says whether it ships', () => {
+    const headingOf = (deltas, subject) => summaryOf(review([], deltas, [heading]), {subject}).split('\n')[0];
+    expect(headingOf([], 'Name the friends list')).toBe('## “Name the friends list” is fine to ship, with nothing to change');
+    expect(headingOf([note, concern], 'Name the friends list')).toBe('## “Name the friends list” is fine to ship, with 2 things to look at');
+    expect(headingOf([note], 'Name the friends list')).toBe('## “Name the friends list” is fine to ship, with 1 thing to look at');
+    expect(headingOf([note, violation], 'Name the friends list')).toBe('## “Name the friends list” has 1 violation to fix before it ships');
+    expect(headingOf([note])).toBe('## This push is fine to ship, with 1 thing to look at');
   });
 
-  test('the summary lists the habits in the order given, each with its places and what to keep', () => {
+  test('the summary opens on the overview, then the next steps in order, then what the review found', () => {
+    const summary = summaryOf({
+      ...review([plus], [violation, note], [heading]),
+      overview: 'The push adds a list of friends. One list is wrapped in a div, so it does not ship yet.',
+      nextSteps: ['In src/a.tsx, make the wrapper a list.', 'In src/somewhere.tsx, give the section a heading.']
+    });
+    const at = needle => placeOf(summary, needle);
+    expect(at('## This push has 1 violation to fix before it ships')).toBeLessThan(at('The push adds a list of friends. One list is wrapped in a div, so it does not ship yet.'));
+    expect(at('One list is wrapped in a div')).toBeLessThan(at('### Next steps'));
+    expect(at('### Next steps')).toBeLessThan(at('1. In src/a.tsx, make the wrapper a list.'));
+    expect(at('1. In src/a.tsx, make the wrapper a list.')).toBeLessThan(at('2. In src/somewhere.tsx, give the section a heading.'));
+    expect(at('2. In src/somewhere.tsx,')).toBeLessThan(at('### What the review found'));
+    expect(at('### What the review found')).toBeLessThan(at('1 plus. 1 violation, 1 note. 1 habit.'));
+    expect(at('1 plus. 1 violation, 1 note. 1 habit.')).toBeLessThan(at('### 1. a section is named by its heading'));
+  });
+
+  test('a review with no next steps says there is nothing to do', () => {
+    expect(summaryOf(review([plus], [], [heading]))).toContain('### Next steps\n\nNothing to do.\n');
+  });
+
+  test('no deltas reads as fine to ship, with the plusses still told under their habit', () => {
+    const summary = summaryOf(review([plus], [], [heading]));
+    expect(summary).toContain('## This push is fine to ship, with nothing to change');
+    expect(summary).toContain('1 plus. No deltas. 1 habit.');
+    expect(summary).not.toContain('1. **a section is named by its heading.**');
+    expect(summary).toContain('- `src/f.tsx:5`. the friends list is a fieldset with a legend');
+  });
+
+  test('two or more habits are listed in the order given, each with its places and what to keep, and one habit needs no list', () => {
     const summary = summaryOf(review([plus], [violation, note, named({file: 'src/n.tsx', line: 2})], [naming, heading]));
     expect(placeOf(summary, '1. **a landmark is named for what it holds.** 1 place, 0 to keep.'))
       .toBeLessThan(placeOf(summary, '2. **a section is named by its heading.** 2 places, 1 to keep.'));
     expect(placeOf(summary, '2. **a section is named by its heading.**')).toBeLessThan(placeOf(summary, '### 1. a landmark is named for what it holds'));
   });
 
-  test('a habit opens on its rule, what a person meets and the fix once, then the places by severity with their entries under Where, then what to keep with its entries under Keep doing', () => {
-    const summary = summaryOf(review([plus], [note, violation], [aHabit({meet: 'Walk the page by headings and the section is not there.'})]));
+  test('a habit tells its problem, where by severity in words, why it matters and the next step, then the door\'s rule, the entries, and what to keep', () => {
+    const summary = summaryOf(review([plus], [note, violation], [heading]));
     const at = needle => placeOf(summary, needle);
-    expect(at('### 1. a section is named by its heading')).toBeLessThan(at('> The structure door: sections name themselves through their headings.'));
-    expect(at('> The structure door:')).toBeLessThan(at('**What a person meets.** Walk the page by headings and the section is not there.'));
-    expect(at('**What a person meets.**')).toBeLessThan(at('**The fix, once.** Give each section a heading that names it.'));
-    expect(at('**The fix, once.**')).toBeLessThan(at('#### Where'));
-    expect(at('- ✖ `src/a.tsx:3`. a div wraps a list')).toBeLessThan(at('- ○ `src/somewhere.tsx:1`. a section has no heading'));
-    expect(at('- ○ `src/somewhere.tsx:1`.')).toBeLessThan(at('<details><summary>✖ violation · structure · src/a.tsx:3</summary>'));
-    expect(at('<details><summary>✖ violation')).toBeLessThan(at('<details><summary>○ note · structure · src/somewhere.tsx:1</summary>'));
-    expect(at('<details><summary>○ note')).toBeLessThan(at('#### Keep doing'));
-    expect(at('#### Keep doing')).toBeLessThan(at('- + `src/f.tsx:5`. the friends list is a fieldset with a legend'));
-    expect(at('- + `src/f.tsx:5`.')).toBeLessThan(at('<details><summary>+ structure · src/f.tsx:5</summary>'));
+    expect(at('### 1. a section is named by its heading')).toBeLessThan(at('**Problem.** A reader who walks the page by headings never finds the section.'));
+    expect(at('**Problem.**')).toBeLessThan(at('**Where.**'));
+    expect(at('**Where.**')).toBeLessThan(at('- **Violation.** `src/a.tsx:3`. a div wraps a list'));
+    expect(at('- **Violation.** `src/a.tsx:3`.')).toBeLessThan(at('- **Note.** `src/somewhere.tsx:1`. a section has no heading'));
+    expect(at('- **Note.** `src/somewhere.tsx:1`.')).toBeLessThan(at('**Why it matters.** The section is skipped by anyone who does not read from the top.'));
+    expect(at('**Why it matters.**')).toBeLessThan(at('**Next step.** Give each section a heading that names it.'));
+    expect(at('**Next step.**')).toBeLessThan(at('> The structure door: sections name themselves through their headings.'));
+    expect(at('> The structure door:')).toBeLessThan(at('<details><summary>violation · structure · src/a.tsx:3</summary>'));
+    expect(at('<details><summary>violation')).toBeLessThan(at('<details><summary>note · structure · src/somewhere.tsx:1</summary>'));
+    expect(at('<details><summary>note')).toBeLessThan(at('**Keep doing.**'));
+    expect(at('**Keep doing.**')).toBeLessThan(at('- `src/f.tsx:5`. the friends list is a fieldset with a legend'));
+    expect(at('- `src/f.tsx:5`.')).toBeLessThan(at('<details><summary>keep · structure · src/f.tsx:5</summary>'));
   });
 
-  test('a habit with no person to meet and nothing to keep leaves those parts out', () => {
+  test('a severity is told in words, never by a mark', () => {
+    const summary = summaryOf(review([plus], [note, concern, violation], [heading]));
+    ['✖', '▲', '○'].forEach(mark => expect(summary).not.toContain(mark));
+  });
+
+  test('a habit with nothing to keep leaves that part out', () => {
     const summary = summaryOf(review([], [note], [heading]));
-    expect(summary).not.toContain('**What a person meets.**');
-    expect(summary).not.toContain('#### Keep doing');
-    expect(summary).toContain('#### Where');
-    expect(summary).toContain('**The fix, once.**');
+    expect(summary).not.toContain('**Keep doing.**');
+    expect(summary).toContain('**Where.**');
+    expect(summary).toContain('**Next step.**');
   });
 
   test('a habit with nothing to change and something to keep leaves the places out', () => {
     const summary = summaryOf(review([plus], [], [heading]));
-    expect(summary).not.toContain('#### Where');
-    expect(summary).toContain('#### Keep doing');
+    expect(summary).not.toContain('**Where.**');
+    expect(summary).toContain('**Keep doing.**');
   });
 
   test('an entry whose habit matches none stands under one more thing, after the habits', () => {
     const stray = aDelta({habit: 'nothing of the sort', file: 'src/s.tsx', line: 7, happened: 'a stray thing'});
     const summary = summaryOf(review([aPlus({habit: 'nothing of the sort', file: 'src/k.tsx', line: 8, happened: 'a stray keep'})], [note, stray], [heading]));
     expect(placeOf(summary, '### 1. a section is named by its heading')).toBeLessThan(placeOf(summary, '### One more thing'));
-    expect(placeOf(summary, '### One more thing')).toBeLessThan(placeOf(summary, '#### Where\n\n- ○ `src/s.tsx:7`. a stray thing'));
-    expect(placeOf(summary, '- ○ `src/s.tsx:7`.')).toBeLessThan(placeOf(summary, '#### Keep doing\n\n- + `src/k.tsx:8`. a stray keep'));
+    expect(placeOf(summary, '### One more thing')).toBeLessThan(placeOf(summary, '**Where.**\n\n- **Note.** `src/s.tsx:7`. a stray thing'));
+    expect(placeOf(summary, '- **Note.** `src/s.tsx:7`.')).toBeLessThan(placeOf(summary, '**Keep doing.**\n\n- `src/k.tsx:8`. a stray keep'));
     expect(summaryOf(review([], [note], [heading]))).not.toContain('### One more thing');
   });
 
@@ -228,22 +288,26 @@ describe('the review report', () => {
     expect(unplaced(review([plus], [note], [heading]))).toBe(0);
   });
 
-  test('a deferred line follows the habit list only when something was deferred', () => {
+  test('a deferred line follows the counts only when something was deferred', () => {
     const summary = summaryOf(review([], [note], [heading], 'The accordions are the author\'s.'));
-    expect(placeOf(summary, '1. **a section is named by its heading.**')).toBeLessThan(placeOf(summary, '**Deferred:** The accordions are the author\'s.'));
+    expect(placeOf(summary, '0 plusses. 1 note. 1 habit.')).toBeLessThan(placeOf(summary, '**Deferred:** The accordions are the author\'s.'));
     expect(placeOf(summary, '**Deferred:**')).toBeLessThan(placeOf(summary, '### 1.'));
     expect(summaryOf(review([], [note], [heading]))).not.toContain('**Deferred:**');
   });
 
   test('a place under a habit links to the line at the reviewed commit when the commit is known', () => {
     const summary = summaryOf(review([plus], [violation], [heading]), {commit: {repository: 'RyanDur/ChosenPicachu', sha: 'abc123'}});
-    expect(summary).toContain('- ✖ [`src/a.tsx:3`](https://github.com/RyanDur/ChosenPicachu/blob/abc123/src/a.tsx#L3). a div wraps a list');
-    expect(summary).toContain('- + [`src/f.tsx:5`](https://github.com/RyanDur/ChosenPicachu/blob/abc123/src/f.tsx#L5). the friends list is a fieldset with a legend');
+    expect(summary).toContain('- **Violation.** [`src/a.tsx:3`](https://github.com/RyanDur/ChosenPicachu/blob/abc123/src/a.tsx#L3). a div wraps a list');
+    expect(summary).toContain('- [`src/f.tsx:5`](https://github.com/RyanDur/ChosenPicachu/blob/abc123/src/f.tsx#L5). the friends list is a fieldset with a legend');
   });
 
   test('the summary stays words on the page', () => {
-    const summary = summaryOf(review([], [note], [aHabit({title: 'bold <b>words</b>', rule: 'a <i>rule</i>', fix: 'fix <u>it</u>', meet: 'meet <em>it</em>'})], 'defer <b>this</b>'));
-    ['bold &lt;b&gt;words&lt;/b&gt;', 'a &lt;i&gt;rule&lt;/i&gt;', 'fix &lt;u&gt;it&lt;/u&gt;', 'meet &lt;em&gt;it&lt;/em&gt;', 'defer &lt;b&gt;this&lt;/b&gt;']
+    const summary = summaryOf({
+      ...review([], [note], [aHabit({title: 'bold <b>words</b>', rule: 'a <i>rule</i>', fix: 'fix <u>it</u>', problem: 'meet <em>it</em>', why: 'costs <s>this</s>'})], 'defer <b>this</b>'),
+      overview: 'an <h1>overview</h1>',
+      nextSteps: ['a <a>step</a>']
+    }, {subject: 'a <p>subject</p>'});
+    ['bold &lt;b&gt;words&lt;/b&gt;', 'a &lt;i&gt;rule&lt;/i&gt;', 'fix &lt;u&gt;it&lt;/u&gt;', 'meet &lt;em&gt;it&lt;/em&gt;', 'costs &lt;s&gt;this&lt;/s&gt;', 'defer &lt;b&gt;this&lt;/b&gt;', 'an &lt;h1&gt;overview&lt;/h1&gt;', 'a &lt;a&gt;step&lt;/a&gt;', 'a &lt;p&gt;subject&lt;/p&gt;']
       .forEach(escaped => expect(summary).toContain(escaped));
   });
 
@@ -256,9 +320,9 @@ describe('the review report', () => {
     expect(summaryOf(review([], [note], [heading]))).toContain('0 plusses. 1 note. 1 habit.');
   });
 
-  test('a delta folds away under its mark, door and place, and opens on where, what happened, why it matters, the change, and the door\'s words', () => {
+  test('a delta folds away under its severity, door and place, and opens on where, what happened, why it matters, the change, and the door\'s words', () => {
     const entry = deltaOf(concern);
-    expect(entry).toMatch(/^<details><summary>▲ concern · presentation · src\/b\.css:9<\/summary>\n/);
+    expect(entry).toMatch(/^<details><summary>concern · presentation · src\/b\.css:9<\/summary>\n/);
     expect(entry).toMatch(/\n<\/details>$/);
     expect(placeOf(entry, '**Where:** `src/b.css:9`')).toBeLessThan(placeOf(entry, '**What happened:**'));
     expect(placeOf(entry, '**What happened:** a tag selector styles a button')).toBeLessThan(placeOf(entry, '**Why it matters:** every button on the site now wears it'));
@@ -266,9 +330,9 @@ describe('the review report', () => {
     expect(entry).toContain('> Tag selectors are for resets only');
   });
 
-  test('a plus folds away under its door and place, and opens on where, what happened, why it works, and the door\'s words', () => {
+  test('a plus folds away under keep, its door and place, and opens on where, what happened, why it works, and the door\'s words', () => {
     const entry = plusOf(plus);
-    expect(entry).toMatch(/^<details><summary>\+ structure · src\/f\.tsx:5<\/summary>\n/);
+    expect(entry).toMatch(/^<details><summary>keep · structure · src\/f\.tsx:5<\/summary>\n/);
     expect(entry).toMatch(/\n<\/details>$/);
     expect(placeOf(entry, '**Where:** `src/f.tsx:5`')).toBeLessThan(placeOf(entry, '**What happened:**'));
     expect(placeOf(entry, '**What happened:** the friends list is a fieldset with a legend')).toBeLessThan(placeOf(entry, '**Why it works:** the group names itself'));
@@ -327,16 +391,16 @@ describe('the review report', () => {
     })).toContain('reads `<ul>` whole &amp; &lt;b&gt;more&lt;/b&gt;');
   });
 
-  test('every severity the schema allows has a mark in its fold', () => {
+  test('every severity the schema allows names itself at the head of its fold', () => {
     feedbackSchema().$defs.severity['enum'].forEach(severity => {
       const fold = deltaOf({...note, severity}).split('\n')[0];
-      expect(fold).toMatch(new RegExp(`^<details><summary>\\S ${severity} · `));
+      expect(fold).toMatch(new RegExp(`^<details><summary>${severity} · `));
     });
   });
 
   test('an inferred entry says so beside its place', () => {
-    expect(deltaOf({...concern, evidence: 'inferred'})).toMatch(/^<details><summary>▲ concern · presentation · src\/b\.css:9 · inferred<\/summary>\n/);
-    expect(plusOf({...plus, evidence: 'inferred'})).toMatch(/^<details><summary>\+ structure · src\/f\.tsx:5 · inferred<\/summary>\n/);
+    expect(deltaOf({...concern, evidence: 'inferred'})).toMatch(/^<details><summary>concern · presentation · src\/b\.css:9 · inferred<\/summary>\n/);
+    expect(plusOf({...plus, evidence: 'inferred'})).toMatch(/^<details><summary>keep · structure · src\/f\.tsx:5 · inferred<\/summary>\n/);
   });
 
   test('a review with plusses and no deltas still leaves its feedback on the commit, and an empty one leaves none', () => {
@@ -347,9 +411,10 @@ describe('the review report', () => {
 
   test('the schema the review answers in names every field the report tells, and the doors and severities once', () => {
     const schema = feedbackSchema();
-    expect(schema.required).toEqual(['habits', 'plusses', 'deltas']);
-    expect(schema.properties.habits.items.required).toEqual(['title', 'rule', 'fix']);
-    expect(Object.keys(schema.properties.habits.items.properties)).toContain('meet');
+    expect(schema.required).toEqual(['overview', 'nextSteps', 'habits', 'plusses', 'deltas']);
+    expect(schema.properties.overview).toEqual({type: 'string'});
+    expect(schema.properties.nextSteps).toEqual({type: 'array', items: {type: 'string'}});
+    expect(schema.properties.habits.items.required).toEqual(['title', 'rule', 'problem', 'why', 'fix']);
     expect(Object.keys(schema.properties)).toContain('deferred');
     expect(schema.properties.plusses.items.required).toEqual(expect.arrayContaining(['door', 'habit', 'file', 'line', 'happened', 'why', 'evidence', 'principle']));
     expect(Object.keys(schema.properties.plusses.items.properties)).toContain('checked');
@@ -360,7 +425,7 @@ describe('the review report', () => {
     expect(schema.properties.deltas.items.properties.severity).toEqual({$ref: '#/$defs/severity'});
     expect(schema.properties.plusses.items.properties.evidence).toEqual({$ref: '#/$defs/evidence'});
     expect(schema.properties.deltas.items.properties.evidence).toEqual({$ref: '#/$defs/evidence'});
-    expect(schema.$defs.door['enum']).toEqual(['structure', 'presentation', 'dynamic interaction', 'design', 'tests']);
+    expect(schema.$defs.door['enum']).toEqual(['structure', 'presentation', 'dynamic interaction', 'design', 'tests', 'tutorials']);
     expect(schema.$defs.severity['enum']).toEqual(['violation', 'concern', 'note']);
     expect(schema.$defs.evidence['enum']).toEqual(['read', 'inferred']);
   });
