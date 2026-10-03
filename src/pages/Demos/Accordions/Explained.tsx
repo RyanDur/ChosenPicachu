@@ -109,8 +109,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             stale: narrow the window, the text wraps onto more lines, and a fixed height cuts it off.</p>
           <Snippet label="TS" lines={[
             ...unit(measuredSource, 'const opened'), gap,
-            ...unit(measuredSource, 'const letsGo'), gap,
-            ...unit(measuredSource, 'const settled')
+            ...unit(measuredSource, 'const settled'), gap,
+            ...unit(measuredSource, 'const letsGo')
           ]}/>
         </li>
         <li className="run">
