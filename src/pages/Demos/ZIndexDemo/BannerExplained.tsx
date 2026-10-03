@@ -1,11 +1,10 @@
 import {FC} from 'react';
-import {Link} from 'react-router';
+import {Link, useSearchParams} from 'react-router';
 import {plain, Snippet} from '../Recipe';
 import {span, unit} from '../Recipe/carve';
 import {BannerTrap} from './BannerTrap';
-import {Paths} from '@pages/Paths';
-import {DemoTopics} from '../types';
 import {storyAnchor} from '../Recipe/story-anchor';
+import {storyOpenedIn} from '../Recipe/Story';
 import {topLayerStory} from './Recipe/TopLayerRecipe';
 import zIndexCss from './ZIndexDemo.css?raw';
 import bannersSource from '@components/Banners/Banners.tsx?raw';
@@ -13,8 +12,10 @@ import '../Recipe/Runs.css';
 
 const gap = plain(' ');
 
-export const BannerExplained: FC = () =>
-  <section aria-labelledby="fixed-banner-loses-heading" className="stacking-part">
+export const BannerExplained: FC = () => {
+  const [searchParams] = useSearchParams();
+
+  return <section aria-labelledby="fixed-banner-loses-heading" className="stacking-part">
     <h3 id="fixed-banner-loses-heading" className="title bold">Why a fixed banner still loses</h3>
     <BannerTrap/>
     <ol className="runs card rounded-corners lifted padded">
@@ -37,9 +38,10 @@ export const BannerExplained: FC = () =>
       </li>
       <li className="run">
         <p className="paragraph">To build this banner yourself, <Link className="signpost"
-          to={`${Paths.demos}?tab=${DemoTopics.zIndex}&${topLayerStory.param}=${topLayerStory.id}#${storyAnchor(topLayerStory)}`}>the
+          to={{search: `?${storyOpenedIn(searchParams, topLayerStory)}`, hash: storyAnchor(topLayerStory)}}>the
           tutorial below</Link> opens at
           the step that does it: making the banner a popover, so it is shown in the top layer.</p>
       </li>
     </ol>
   </section>;
+};

@@ -27,7 +27,9 @@ describe('the old banner', () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
     (await screen.findByRole('button', {name: 'Raise the old banner'})).focus();
     await userEvent.keyboard('{Enter}');
-    screen.getByRole('button', {name: 'dismiss the old banner'}).focus();
+    await userEvent.tab();
+    await userEvent.tab();
+    expect(screen.getByRole('button', {name: 'dismiss the old banner'})).toHaveFocus();
 
     await userEvent.keyboard('{Enter}');
 
@@ -54,12 +56,13 @@ describe('why a fixed banner still loses', () => {
     expect(explanation.everyCodeBeside(part, /It is the site’s own banner/).join()).toMatch(/popover="manual"[^]*role="alert"/);
   });
 
-  test('should open the banner tutorial at the step that makes it a popover', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
+  test('should open the banner tutorial at the step that makes it a popover, keeping the reader’s choices', async () => {
+    render(<TestApp at={demosAt('?tab=z-index&raised=second')}/>);
     const part = await screen.findByRole('region', {name: 'Why a fixed banner still loses'});
 
     await userEvent.click(within(part).getByRole('link', {name: 'the tutorial below'}));
 
     expect(screen.getByText('Claim the top layer')).toBeVisible();
+    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('raised=second');
   });
 });

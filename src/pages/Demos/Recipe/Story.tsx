@@ -1,11 +1,17 @@
 import {Children, FC, MouseEvent, PropsWithChildren, ReactNode, isValidElement} from 'react';
-import {storyAnchor} from './story-anchor';
+import {StoryKey, storyAnchor} from './story-anchor';
 import {useSearchParams} from 'react-router';
 import {useRanks} from './ranks';
 import {Step} from './Step';
 
 const openedIn = (params: URLSearchParams, param: string): Set<string> =>
   new Set((params.get(param) ?? '').split(',').filter(part => part !== ''));
+
+export const storyOpenedIn = (params: URLSearchParams, {param, id}: StoryKey): URLSearchParams => {
+  const next = new URLSearchParams(params);
+  next.set(param, [...openedIn(params, param).add(id)].join(','));
+  return next;
+};
 
 const stepsIn = (children: ReactNode): number =>
   Children.toArray(children).reduce<number>((count, child) => {

@@ -1,3 +1,7 @@
+:root {
+  --tab-bar-reach: var(--base-x-10);
+}
+
 .tabs {
   position: sticky;
   top: 0;
@@ -8,7 +12,7 @@
   .tab-list {
     display: flex;
     justify-content: flex-start;
-    min-height: var(--base-x-10);
+    min-height: var(--tab-bar-reach);
   }
 
   .tab {
@@ -59,17 +63,17 @@
 }
 
 @media (width <= 1100px) and (height <= 600px) {
-  .tabs {
-    .tab-list {
-      min-height: var(--base-x-5_5);
-    }
+  :root {
+    --tab-bar-reach: var(--base-x-5_5);
+  }
 
+  .tabs {
     .tab {
       font-size: var(--text-title);
     }
   }
 }
 
-:is(html, main):has(.tabs) {
-  scroll-padding-block-start: calc(var(--base-x-10) + var(--base-x-2));
+:is(:root, .app-main):has(.tabs) {
+  scroll-padding-block-start: calc(var(--tab-bar-reach) + var(--base-x-2));
 }
