@@ -123,11 +123,11 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
           ]}/>
         </li>
         <li className="run">
-          <p className="paragraph">A radio that loses its check gets no event at all, so the script asks the whole
-            list which parts are open. This page lets its other folds move to auto, and this build turns that
-            off with <Mdn path="Web/CSS/interpolate-size">interpolate-size</Mdn>, because the trick was for
-            browsers that could only move between numbers.</p>
-          <Snippet label="TS" lines={unit(measuredSource, 'export const foldMeasured')}/>
+          <p className="paragraph">{type === 'exclusive' && <>A radio that loses its check gets no event at all, so
+            the script asks the whole list which parts are open. </>}This page lets its other folds move to auto,
+            and this build turns that off with <Mdn path="Web/CSS/interpolate-size">interpolate-size</Mdn>, because
+            the trick was for browsers that could only move between numbers.</p>
+          {type === 'exclusive' && <Snippet label="TS" lines={unit(measuredSource, 'export const foldMeasured')}/>}
           <Snippet label="CSS" lines={unit(accordionsCss, '.info-measured {')}/>
         </li>
         <li className="run">

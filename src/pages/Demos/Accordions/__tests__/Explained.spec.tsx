@@ -8,7 +8,7 @@ const codeBeside = (part: HTMLElement, words: RegExp): HTMLElement =>
 
 const parts = ['How we used to build a fold', 'What the platform gives now', 'The two together', 'How every fold moves'];
 
-const exclusiveOnly = [/Close radio/, /share a name|same name|shared name/, /one part open|one open at a time/];
+const exclusiveOnly = [/Close radio/, /share a name|same name|shared name/, /one part open|one open at a time/, /A radio that loses its check/];
 
 describe('the accordions tab', () => {
   test('should tell the old way, then the platform, then the two together, then how every fold moves', async () => {
