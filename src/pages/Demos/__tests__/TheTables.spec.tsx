@@ -361,17 +361,15 @@ describe('the tables demo', () => {
     Element.prototype.scrollIntoView = function (this: Element) {
       brought.push(this.id);
     };
-    location.hash = '#station-5';
     const feed = await listeningFeed();
     try {
-      render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+      render(<TestApp at={`${demosAt('?tab=tables')}#station-5`} feed={feed}/>);
       await feedIsSubscribed(feed);
 
       await screen.findByRole('heading', {name: 'Slice the design into stories'});
       expect(brought).toContain('station-5');
     } finally {
       Element.prototype.scrollIntoView = () => undefined;
-      location.hash = '';
     }
   });
 

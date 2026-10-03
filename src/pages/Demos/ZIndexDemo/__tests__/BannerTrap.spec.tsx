@@ -20,14 +20,16 @@ describe('the old banner', () => {
 
     await userEvent.click(await screen.findByRole('button', {name: 'Raise the old banner'}));
 
-    expect(screen.getAllByRole('alert').some(alert => oldBanner.test(alert.textContent))).toBe(true);
+    expect(screen.getByText(oldBanner)).toHaveRole('alert');
   });
 
-  test('should leave when dismissed, and give focus back to the button that raised it', async () => {
+  test('should leave when dismissed by keyboard, and give focus back to the button that raised it', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
-    await userEvent.click(await screen.findByRole('button', {name: 'Raise the old banner'}));
+    (await screen.findByRole('button', {name: 'Raise the old banner'})).focus();
+    await userEvent.keyboard('{Enter}');
+    screen.getByRole('button', {name: 'dismiss the old banner'}).focus();
 
-    await userEvent.click(screen.getByRole('button', {name: 'dismiss the old banner'}));
+    await userEvent.keyboard('{Enter}');
 
     expect(screen.queryByText(oldBanner)).not.toBeInTheDocument();
     expect(screen.getByRole('button', {name: 'Raise the old banner'})).toHaveFocus();
@@ -58,6 +60,6 @@ describe('why a fixed banner still loses', () => {
 
     await userEvent.click(within(part).getByRole('link', {name: 'the tutorial below'}));
 
-    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('news=top');
+    expect(screen.getByText('Claim the top layer')).toBeVisible();
   });
 });

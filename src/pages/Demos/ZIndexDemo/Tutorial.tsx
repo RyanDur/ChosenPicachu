@@ -1,7 +1,7 @@
 import {FC, useId} from 'react';
 import {useSearchParamsObject} from '@components/search-params';
 import {alignParam, enterParam, sideParam, stackParam} from '@components/Banners/params';
-import {Stories} from '../Recipe';
+import {Stories, useArrival} from '../Recipe';
 import {BannerControls} from './BannerControls';
 import {TopLayerRecipe} from './Recipe/TopLayerRecipe';
 import {MultipleRecipe} from './Recipe/MultipleRecipe';
@@ -10,6 +10,7 @@ import '../Recipe/Recipe.css';
 export const TopLayerTutorial: FC = () => {
   const {side = 'top', align = 'center', enter = 'above', stack = 'down', updateSearchParams} =
     useSearchParamsObject({side: sideParam, align: alignParam, enter: enterParam, stack: stackParam});
+  useArrival();
 
   const titled = `tutorials${useId()}`;
   return <section aria-labelledby={titled} className="tutorials">

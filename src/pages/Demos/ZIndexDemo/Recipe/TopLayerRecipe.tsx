@@ -24,10 +24,12 @@ const alignFact: Record<Align, string> = {
   right: 'right turns the second inline auto into a gap, and the panel holds right.'
 };
 
+export const topLayerStory = {param: 'news', id: 'top'} as const;
+
 export const TopLayerRecipe: FC = () => {
   const {side = 'top', align = 'center'} = useSearchParamsObject({side: sideParam, align: alignParam});
 
-  return <Story param="news" id="top"
+  return <Story {...topLayerStory}
     can="The user sees the news above everything"
     soThat="no stacking context can bury the news">
     <Tell>We could give the banner a huge z-index, but z-index only ranks siblings inside

@@ -5,8 +5,10 @@ import {span, unit} from '../Recipe/carve';
 import {BannerTrap} from './BannerTrap';
 import {Paths} from '@pages/Paths';
 import {DemoTopics} from '../types';
+import {storyAnchor} from '../Recipe/story-anchor';
+import {topLayerStory} from './Recipe/TopLayerRecipe';
 import zIndexCss from './ZIndexDemo.css?raw';
-import bannersSource from '../../../components/Banners/Banners.tsx?raw';
+import bannersSource from '@components/Banners/Banners.tsx?raw';
 import '../Recipe/Runs.css';
 
 const gap = plain(' ');
@@ -35,8 +37,8 @@ export const BannerExplained: FC = () =>
       </li>
       <li className="run">
         <p className="paragraph">To build this banner yourself, <Link className="signpost"
-          to={`${Paths.demos}?tab=${DemoTopics.zIndex}&news=top`}
-          onClick={() => document.getElementById('news-top-story')?.scrollIntoView()}>the tutorial below</Link> opens at
+          to={`${Paths.demos}?tab=${DemoTopics.zIndex}&${topLayerStory.param}=${topLayerStory.id}#${storyAnchor(topLayerStory)}`}>the
+          tutorial below</Link> opens at
           the step that does it: making the banner a popover, so it is shown in the top layer.</p>
       </li>
     </ol>

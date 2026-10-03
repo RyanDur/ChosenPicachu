@@ -1,4 +1,5 @@
 import {Children, FC, MouseEvent, PropsWithChildren, ReactNode, isValidElement} from 'react';
+import {storyAnchor} from './story-anchor';
 import {useSearchParams} from 'react-router';
 import {useRanks} from './ranks';
 import {Step} from './Step';
@@ -42,10 +43,10 @@ export const Story: FC<Props> = ({param, id, can, soThat, children}) => {
     }, {replace: true});
   };
   return <li>
-    <details className="arc" open={openedIn(searchParams, param).has(id)} aria-labelledby={`${param}-${id}-story`}>
+    <details className="arc" open={openedIn(searchParams, param).has(id)} aria-labelledby={storyAnchor({param, id})}>
       <summary className="opener" onClick={toggled}>
         <hgroup className="story card rounded-corners lifted">
-          <Can className="can" id={`${param}-${id}-story`}>{can}</Can>
+          <Can className="can" id={storyAnchor({param, id})}>{can}</Can>
           <p className="so-that">so that {soThat}</p>
           {steps > 0 && <p className="step-tally">{steps === 1 ? '1 step' : `${steps} steps`}</p>}
         </hgroup>

@@ -16,11 +16,13 @@ const openZIndexTab = async () => {
 };
 
 describe('the top layer', () => {
-  test('the z-index demos name themselves in the heading outline', async () => {
+  test('the z-index tab opens on its four parts, in order, in the heading outline', async () => {
     await openZIndexTab();
 
-    expect(await screen.findByRole('heading', {name: 'Why Third is on top'})).toBeInTheDocument();
-    expect(screen.getByRole('heading', {name: 'Why a fixed banner still loses'})).toBeInTheDocument();
+    const tab = await screen.findByRole('region', {name: 'Z-Index'});
+
+    expect(within(tab).getAllByRole('heading', {level: 3}).map(heading => heading.textContent).slice(0, 4))
+      .toEqual(['Why Third is on top', 'Why 9999 still loses', 'Why the popover wins', 'Why a fixed banner still loses']);
   });
 
   test('the user raises a banner from the demo', async () => {
