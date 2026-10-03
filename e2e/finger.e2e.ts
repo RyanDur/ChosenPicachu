@@ -81,7 +81,7 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
 
     test('closes a banner with a finger that lands just off its dismiss', async ({page}) => {
       await page.goto('demos/?tab=z-index');
-      await page.getByRole('button', {name: 'Raise a banner, in the top layer'}).tap();
+      await bannerTrap(page).raiseNew.tap();
       const dismiss = page.getByRole('alert').getByRole('button', {name: /^dismiss/}).first();
       await expect(dismiss).toBeVisible();
 

@@ -30,16 +30,11 @@ for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: 
   });
 }
 
-test('the old banner is raised, read and dismissed by keyboard, and focus goes back to its button', async ({page}) => {
+test('the tutorial below brings the step that makes the banner a popover into view', async ({page}) => {
   await page.goto('demos/?tab=z-index');
-  const banners = bannerTrap(page);
-  await banners.raiseOld.focus();
+  const part = page.getByRole('region', {name: 'Why a fixed banner still loses'});
 
-  await page.keyboard.press('Enter');
-  await expect(banners.oldBanner).toBeVisible();
-  await banners.dismissOld.focus();
-  await page.keyboard.press('Enter');
+  await part.getByRole('link', {name: 'the tutorial below'}).click();
 
-  await expect(banners.oldBanner).toHaveCount(0);
-  await expect(banners.raiseOld).toBeFocused();
+  await expect(page.getByText('Claim the top layer')).toBeInViewport();
 });
