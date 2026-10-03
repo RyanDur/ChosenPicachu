@@ -102,7 +102,7 @@ describe('what the platform gives now', () => {
 
     const explained = await screen.findByRole('region', {name: parts[1]});
 
-    expect(explanation.codeBeside(explained, /HTML now has a disclosure of its own/)).toHaveTextContent(carved);
+    expect(explanation.codeBeside(explained, /This build uses details and summary/)).toHaveTextContent(carved);
   });
 });
 

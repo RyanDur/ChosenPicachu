@@ -74,25 +74,28 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
     <header className="tab-introduction">
       <p className="paragraph">An accordion is a list of parts. Each part has a bar you press to show or hide the text
         under it. This page calls one part a fold.</p>
-      <p className="paragraph">Showing and hiding is easy. The motion is hard. A fold should slide open to the height of
-        its own text, at an even pace. For years the only way was to guess a height in advance, and a wrong guess makes
-        the motion uneven.</p>
+      <p className="paragraph">Showing and hiding is easy. The motion is hard. A fold should slide open to the height
+        of its own text, at an even pace. For years, CSS could move a height to a number but not to the height the text
+        needs. So the older ways each worked around it: guess a height, measure it with script, or set one in advance.
+        Each has a cost, and a guess is the one that makes the motion uneven.</p>
       <p className="paragraph">A web page is written in three languages. HTML says what is on the page, CSS says how it
         looks and moves, and script says what happens when you act. This page starts with HTML alone, and brings in CSS
         and then script only where they are needed.</p>
       <p className="paragraph">By the end you can build an accordion in HTML alone, make it slide with CSS, keep one fold
-        open at a time, and say why the older ways moved unevenly. The first accordion below is HTML alone.</p>
+        open at a time, and say what each older way costs. The first accordion below is HTML alone.</p>
     </header>
     <section aria-labelledby="html-alone-heading" className="accordion-part">
       <h3 id="html-alone-heading" className="title bold">An accordion in HTML alone</h3>
       <ol className={runs}>
-        <li className="run html-alone">
+        <li className="run">
           <HtmlAloneAccordion/>
           <Snippet label="HTML" lines={span(htmlAloneSource, '<ul>', '</ul>')}/>
         </li>
         <li className="run">
-          <p className="paragraph">A details element holds a summary and the content it hides. The summary is the bar.
-            Press it and the browser shows the rest. Press it again and the browser hides it.</p>
+          <p className="paragraph">An HTML page is made of elements. Each is a pair of tags, such as {'<details>'} and
+            {' </details>'}, around what it holds. A <Mdn path="Web/HTML/Element/details">details</Mdn> element holds
+            a <Mdn path="Web/HTML/Element/summary">summary</Mdn> and the content it hides. The summary is the bar. Press
+            it and the browser shows the rest. Press it again and the browser hides it.</p>
         </li>
         <li className="run">
           <p className="paragraph">The browser also remembers whether each fold is open, and says so to a screen reader,
@@ -357,10 +360,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         : <ExclusiveToggleAccordion className={exhibit} content={contents.exclusiveDetails} motion={motion}/>}
       <ol className={runs}>
         <li className="run">
-          <p className="paragraph">HTML now has a disclosure of its own:
-            the <Mdn path="Web/HTML/Element/details">details</Mdn> element. Its first child,
-            a <Mdn path="Web/HTML/Element/summary">summary</Mdn>, is the bar, and everything after it
-            is the text the bar shows and hides. Each piece of the {input} build has a native
+          <p className="paragraph">This build uses details and summary, the two elements from the first accordion. Each
+            piece of the {input} build has a native
             piece in its place. Summary is the bar and the control at once, so there is no label,
             no for and no id. Details remembers whether it is open, so there is no {input} to
             hide and no sibling selector to read it. The keyboard comes with it, and a screen
