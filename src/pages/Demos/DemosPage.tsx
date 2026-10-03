@@ -63,7 +63,7 @@ export const DemosPage = () => {
       {({
         [DemoTopics.accordions]:
               <>
-                <h2 className="title bold">Different styles of Accordions.</h2>
+                <h2 className="title bold">Accordions</h2>
                 <AccordionsExplained contents={accordionContents} type={type} onTypeChosen={next => updateSearchParams({type: next})}
                   motion={foldMotion} onMotionChosen={next => updateSearchParams({style: next})}/>
               </>,

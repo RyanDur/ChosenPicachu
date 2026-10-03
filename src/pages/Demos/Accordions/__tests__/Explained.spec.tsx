@@ -4,17 +4,19 @@ import {TestApp} from '@__test_support/TestApp';
 import {demosAt} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
 
+const htmlAlone = 'An accordion in HTML alone';
+
 const parts = ['How we used to build a fold', 'What the platform gives now', 'The two together', 'How every fold moves'];
 
 const exclusiveOnly = [/Close radio/, /share a name|same name|shared name/, /one part open|one open at a time/, /A radio that loses its check/, /export const foldMeasured/];
 
 describe('the accordions tab', () => {
-  test('should tell the old way, then the platform, then the two together, then how every fold moves', async () => {
+  test('should start with HTML alone, then tell the old way, the platform, the two together, and how every fold moves', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
     const tab = await screen.findByRole('region', {name: 'Accordions'});
 
-    expect(within(tab).getAllByRole('heading', {level: 3}).map(part => part.textContent)).toEqual(parts);
+    expect(within(tab).getAllByRole('heading', {level: 3}).map(part => part.textContent)).toEqual([htmlAlone, ...parts]);
   });
 
   test('should open on the inclusive type, and write the type chosen into the address', async () => {
@@ -149,13 +151,16 @@ describe('the measured build', () => {
 });
 
 describe('the fold motion', () => {
-  test('should sit at the top of the tab, right after the fold type, and in no part', async () => {
+  test('should sit after the accordion in HTML alone, right after the fold type, before the old way, and in no part', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
     const tab = await screen.findByRole('region', {name: 'Accordions'});
+    const [start, oldWay] = [within(tab).getByRole('region', {name: htmlAlone}), within(tab).getByRole('region', {name: parts[0]})];
+    const [foldType, foldMotion] = [within(tab).getByRole('group', {name: 'fold type'}), within(tab).getByRole('group', {name: 'fold motion'})];
 
-    expect(within(tab).getAllByRole('group').slice(0, 2))
-      .toEqual([within(tab).getByRole('group', {name: 'fold type'}), within(tab).getByRole('group', {name: 'fold motion'})]);
+    expect(start.compareDocumentPosition(foldType)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    expect(foldType.compareDocumentPosition(foldMotion)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    expect(foldMotion.compareDocumentPosition(oldWay)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
     for (const part of parts) {
       expect(within(screen.getByRole('region', {name: part})).queryByRole('group', {name: 'fold motion'})).not.toBeInTheDocument();
     }
@@ -401,5 +406,29 @@ describe('what the newer builds end', () => {
       .filter(sentence => sentence.length > 0);
 
     expect(sentences.filter((sentence, at) => sentences.indexOf(sentence) !== at)).toEqual([]);
+  });
+});
+
+describe('the accordion in HTML alone', () => {
+  test('should come after the introduction, as the first accordion on the tab', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const tab = await screen.findByRole('region', {name: 'Accordions'});
+    const introduction = within(tab).getByText(/^An accordion is a list of parts/);
+
+    expect(introduction.compareDocumentPosition(within(tab).getAllByRole('group')[0])).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    const folds = within(within(tab).getByRole('region', {name: htmlAlone})).getAllByRole('group');
+    expect(folds).toHaveLength(3);
+    ['basalt', 'cinder', 'meadow'].forEach((name, at) => expect(within(folds[at]).getByText(name)).toBeInTheDocument());
+  });
+
+  test('should show its whole markup beside it, with no class and no script', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const part = await screen.findByRole('region', {name: htmlAlone});
+    const code = explanation.everyCodeBeside(part, /A details element holds a summary/).join();
+
+    expect(code).toMatch(/<ul>[^]*<details>[^]*<summary>basalt<\/summary>[^]*<summary>meadow<\/summary>[^]*<\/ul>/);
+    expect(code).not.toMatch(/className|on[A-Z]\w*=/);
   });
 });
