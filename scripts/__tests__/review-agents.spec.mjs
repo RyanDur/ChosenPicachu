@@ -91,11 +91,11 @@ describe('the review\'s QAs', () => {
     expect(qas['tests-qa'].prompt).toContain('every __test_support/ directory');
   });
 
-  test('the tutorials QA is sent to the tutorials door and reviews the site', () => {
-    const qa = agents()['tutorials-qa'];
-    expect(qa.prompt).toContain('You hold the tutorials door. Read scripts/review/tutorials.md first');
-    expect(qa.prompt).toContain('what a tutorial on the demos tab owes its reader');
-    expect(qa.prompt).toContain('You review the site.');
+  test('each QA is asked its own reviewer\'s question', () => {
+    const qas = agents();
+    reviewers.forEach(({name, asks}) => {
+      expect(qas[`${name}-qa`].prompt).toContain(`Review only what that door asks about: ${asks}.`);
+    });
   });
 
   test('the lead carries the values and splits the scope between the six QAs', () => {

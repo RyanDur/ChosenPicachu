@@ -206,7 +206,7 @@ describe('the review report', () => {
     expect(at('1. In src/a.tsx, make the wrapper a list.')).toBeLessThan(at('2. In src/somewhere.tsx, give the section a heading.'));
     expect(at('2. In src/somewhere.tsx,')).toBeLessThan(at('### What the review found'));
     expect(at('### What the review found')).toBeLessThan(at('1 plus. 1 violation, 1 note. 1 habit.'));
-    expect(at('1 plus. 1 violation, 1 note. 1 habit.')).toBeLessThan(at('### 1. a section is named by its heading'));
+    expect(at('1 plus. 1 violation, 1 note. 1 habit.')).toBeLessThan(at('#### 1. a section is named by its heading'));
   });
 
   test('a review with no next steps says there is nothing to do', () => {
@@ -217,21 +217,24 @@ describe('the review report', () => {
     const summary = summaryOf(review([plus], [], [heading]));
     expect(summary).toContain('## This push is fine to ship, with nothing to change');
     expect(summary).toContain('1 plus. No deltas. 1 habit.');
-    expect(summary).not.toContain('1. **a section is named by its heading.**');
     expect(summary).toContain('- `src/f.tsx:5`. the friends list is a fieldset with a legend');
   });
 
-  test('two or more habits are listed in the order given, each with its places and what to keep, and one habit needs no list', () => {
+  test('a single habit is not listed above its own section', () => {
+    expect(summaryOf(review([plus], [note], [heading]))).not.toContain('1. **a section is named by its heading.**');
+  });
+
+  test('two or more habits are listed in the order given, each with its places and what to keep', () => {
     const summary = summaryOf(review([plus], [violation, note, named({file: 'src/n.tsx', line: 2})], [naming, heading]));
     expect(placeOf(summary, '1. **a landmark is named for what it holds.** 1 place, 0 to keep.'))
       .toBeLessThan(placeOf(summary, '2. **a section is named by its heading.** 2 places, 1 to keep.'));
-    expect(placeOf(summary, '2. **a section is named by its heading.**')).toBeLessThan(placeOf(summary, '### 1. a landmark is named for what it holds'));
+    expect(placeOf(summary, '2. **a section is named by its heading.**')).toBeLessThan(placeOf(summary, '#### 1. a landmark is named for what it holds'));
   });
 
   test('a habit tells its problem, where by severity in words, why it matters and the next step, then the door\'s rule, the entries, and what to keep', () => {
     const summary = summaryOf(review([plus], [note, violation], [heading]));
     const at = needle => placeOf(summary, needle);
-    expect(at('### 1. a section is named by its heading')).toBeLessThan(at('**Problem.** A reader who walks the page by headings never finds the section.'));
+    expect(at('#### 1. a section is named by its heading')).toBeLessThan(at('**Problem.** A reader who walks the page by headings never finds the section.'));
     expect(at('**Problem.**')).toBeLessThan(at('**Where.**'));
     expect(at('**Where.**')).toBeLessThan(at('- **Violation.** `src/a.tsx:3`. a div wraps a list'));
     expect(at('- **Violation.** `src/a.tsx:3`.')).toBeLessThan(at('- **Note.** `src/somewhere.tsx:1`. a section has no heading'));
@@ -266,10 +269,10 @@ describe('the review report', () => {
   test('an entry whose habit matches none stands under one more thing, after the habits', () => {
     const stray = aDelta({habit: 'nothing of the sort', file: 'src/s.tsx', line: 7, happened: 'a stray thing'});
     const summary = summaryOf(review([aPlus({habit: 'nothing of the sort', file: 'src/k.tsx', line: 8, happened: 'a stray keep'})], [note, stray], [heading]));
-    expect(placeOf(summary, '### 1. a section is named by its heading')).toBeLessThan(placeOf(summary, '### One more thing'));
-    expect(placeOf(summary, '### One more thing')).toBeLessThan(placeOf(summary, '**Where.**\n\n- **Note.** `src/s.tsx:7`. a stray thing'));
+    expect(placeOf(summary, '#### 1. a section is named by its heading')).toBeLessThan(placeOf(summary, '#### One more thing'));
+    expect(placeOf(summary, '#### One more thing')).toBeLessThan(placeOf(summary, '**Where.**\n\n- **Note.** `src/s.tsx:7`. a stray thing'));
     expect(placeOf(summary, '- **Note.** `src/s.tsx:7`.')).toBeLessThan(placeOf(summary, '**Keep doing.**\n\n- `src/k.tsx:8`. a stray keep'));
-    expect(summaryOf(review([], [note], [heading]))).not.toContain('### One more thing');
+    expect(summaryOf(review([], [note], [heading]))).not.toContain('#### One more thing');
   });
 
   test('the run says on stderr how many entries named a habit the review did not list', () => {
@@ -279,7 +282,19 @@ describe('the review report', () => {
 
     expect(run.status).toBe(0);
     expect(run.stderr).toBe('1 entry named a habit the review did not list\n');
-    expect(run.stdout).toContain('### One more thing');
+    expect(run.stdout).toContain('#### One more thing');
+  });
+
+  test('the run heads the summary with the subject it is given', () => {
+    const script = join(dirname(fileURLToPath(import.meta.url)), '../review/report.mjs');
+    const run = spawnSync(process.execPath, [script], {
+      input: answer(review([], [note], [heading])),
+      cwd: mkdtempSync(join(tmpdir(), 'review-')),
+      env: {...process.env, REVIEW_SUBJECT: 'Name the friends list'},
+      encoding: 'utf8'
+    });
+
+    expect(run.stdout.split('\n')[0]).toBe('## “Name the friends list” is fine to ship, with 1 thing to look at');
   });
 
   test('the entries whose habit matches none are counted, so the run can say so', () => {
@@ -291,7 +306,7 @@ describe('the review report', () => {
   test('a deferred line follows the counts only when something was deferred', () => {
     const summary = summaryOf(review([], [note], [heading], 'The accordions are the author\'s.'));
     expect(placeOf(summary, '0 plusses. 1 note. 1 habit.')).toBeLessThan(placeOf(summary, '**Deferred:** The accordions are the author\'s.'));
-    expect(placeOf(summary, '**Deferred:**')).toBeLessThan(placeOf(summary, '### 1.'));
+    expect(placeOf(summary, '**Deferred:**')).toBeLessThan(placeOf(summary, '#### 1.'));
     expect(summaryOf(review([], [note], [heading]))).not.toContain('**Deferred:**');
   });
 

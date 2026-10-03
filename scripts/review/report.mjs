@@ -86,7 +86,7 @@ const gathered = (habit, {plusses, deltas}) => ({
 });
 
 const habitTold = (habit, at, commit) => [
-  `### ${at + 1}. ${told(habit.title)}`,
+  `#### ${at + 1}. ${told(habit.title)}`,
   '',
   `**Problem.** ${told(habit.problem)}`,
   '',
@@ -115,7 +115,7 @@ export const unplaced = review => {
 };
 
 const straysTold = ({deltas, plusses}, commit) =>
-  deltas.length + plusses.length === 0 ? [] : ['### One more thing', '', ...places(deltas, commit), ...entries(deltas, commit), ...keepTold(plusses, commit)];
+  deltas.length + plusses.length === 0 ? [] : ['#### One more thing', '', ...places(deltas, commit), ...entries(deltas, commit), ...keepTold(plusses, commit)];
 
 const listed = (habits, review) => habits
   .map(habit => gathered(habit, review))
