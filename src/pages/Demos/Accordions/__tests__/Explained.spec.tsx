@@ -398,7 +398,7 @@ describe('what the newer builds end', () => {
       .toHaveTextContent(/nothing is guessed, nothing is measured by script, nothing is fixed, and no text has to scroll/);
   });
 
-  test.each(everyTypeAndMotion)('should say no sentence twice, with $type and $style chosen', async ({type, style}) => {
+  test.each(everyTypeAndMotion)('should say no sentence twice in the runs’ paragraphs, with $type and $style chosen', async ({type, style}) => {
     render(<TestApp at={demosAt(`?tab=accordions&type=${type}&style=${style}`)}/>);
 
     const tab = await screen.findByRole('region', {name: 'Accordions'});
