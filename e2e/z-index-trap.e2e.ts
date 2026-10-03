@@ -75,6 +75,7 @@ test('pressing Sort by again closes its menu', async ({page}) => {
   await menu.open();
 
   await expect(page.getByRole('menu')).toHaveCount(0);
+  await expect(menu.sortBy).toBeFocused();
 });
 
 test('Shift+Tab from a choice closes the menu, wherever focus lands', async ({page}) => {

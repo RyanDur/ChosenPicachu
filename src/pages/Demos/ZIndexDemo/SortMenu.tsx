@@ -33,18 +33,10 @@ export const SortMenu: FC = () => {
   const list = useId();
 
   useEffect(() => {
-    if (!open) {
-      return;
+    if (open) {
+      choiceAt(list, 0).map(focusOn);
     }
-    choiceAt(list, 0).map(focusOn);
-    const pressedOutside = ({target}: PointerEvent): void => {
-      if (!within(target, list, button)) {
-        updateOpen(false);
-      }
-    };
-    document.addEventListener('pointerdown', pressedOutside);
-    return () => document.removeEventListener('pointerdown', pressedOutside);
-  }, [open, list, button]);
+  }, [open, list]);
 
   const closeToButton = (): void => {
     updateOpen(false);
@@ -74,7 +66,7 @@ export const SortMenu: FC = () => {
 
   return <>
     <button id={button} type="button" className="button primary reachable" aria-haspopup="menu" aria-expanded={open} aria-controls={list}
-      onMouseDown={event => event.preventDefault()} onClick={() => updateOpen(!open)} onKeyDown={onButtonKey}>{chosen.map(choice => `Sort by: ${choice}`).orElse('Sort by')}</button>
+      onMouseDown={event => event.preventDefault()} onClick={() => open ? closeToButton() : updateOpen(true)} onKeyDown={onButtonKey}>{chosen.map(choice => `Sort by: ${choice}`).orElse('Sort by')}</button>
     {open && <ul id={list} role="menu" aria-labelledby={button} className="sort-choices card rounded-corners floating" onBlur={onListBlur}>
       {choices.map((choice, at) =>
         <li key={choice} role="none">
