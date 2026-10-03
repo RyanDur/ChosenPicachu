@@ -31,10 +31,10 @@ describe('the accordions tab', () => {
   });
 
   test.each([
-    ['inclusive', parts[0], ['The max-height guess', 'Accordion using checkboxes']],
+    ['inclusive', parts[0], ['Accordion using checkboxes']],
     ['inclusive', parts[1], ['Inclusive accordion using details elements']],
     ['inclusive', parts[2], ['Inclusive accordion using checkboxes']],
-    ['exclusive', parts[0], ['The max-height guess', 'Accordion using a radio group']],
+    ['exclusive', parts[0], ['Accordion using a radio group']],
     ['exclusive', parts[1], ['Exclusive accordion using details elements']],
     ['exclusive', parts[2], ['Exclusive accordion using radio group']]
   ])('should show, with %s chosen, under "%s" the build of that type', async (type, part, builds) => {
@@ -42,7 +42,7 @@ describe('the accordions tab', () => {
 
     const explained = await screen.findByRole('region', {name: part});
 
-    expect(within(explained).getAllByRole('heading', {level: 4}).map(build => build.textContent)).toEqual(builds);
+    expect(within(explained).getAllByRole('article').map(build => within(build).getByRole('heading', {level: 4}).textContent)).toEqual(builds);
   });
 });
 

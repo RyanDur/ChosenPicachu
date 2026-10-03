@@ -25,7 +25,7 @@ import {
   RowToItsContent,
   SizedToTheText,
   TheKnownHeight,
-  TheMaxHeightGuess,
+  OneGuessTwoParts,
   TheSheetReadsTheBox,
   ThreeBecomeTwo,
   TwoBordersTurned,
@@ -89,7 +89,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
           plain('  max-height: 1000px;'),
           plain('}')
         ]}/>
-        <TheMaxHeightGuess/>
+        <OneGuessTwoParts/>
       </section>
       {type === 'inclusive'
         ? <InclusiveAccordion className={exhibit} content={contents.checkbox} motion={motion}/>

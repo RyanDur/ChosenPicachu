@@ -97,7 +97,7 @@ export const FocusOnTheBar: FC = () =>
     <Words x={88} y={104}>:focus-visible ~</Words>
   </Diagram>;
 
-export const TheMaxHeightGuess: FC = () =>
+export const OneGuessTwoParts: FC = () =>
   <Diagram title="One guess, two parts" height={170}
     says="Both parts stop at their own text, but the motion crosses the whole guess, so the short part is open almost at once and shuts only after a wait.">
     <Words x={160} y={18}>max-height: the guess</Words>
