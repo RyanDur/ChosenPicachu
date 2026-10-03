@@ -354,7 +354,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
           <Snippet label="CSS" lines={unit(accordionsCss, '.info-label {\n      display: flex;\n      padding')}/>
         </li>
         <li className="run">
-          <p className="paragraph">This replaces the known height. A pseudo-element is a part of an element
+          <p className="paragraph">This replaces the three old ways: the max-height guess, the height measured
+            by script, and the known height. A pseudo-element is a part of an element
             that CSS can style as if it were an element of its
             own. <Mdn path="Web/CSS/::details-content">::details-content</Mdn> is the part a closed
             details hides. Closed, its block size, its height, is 0. Open, it is auto. Auto is a
@@ -442,9 +443,9 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             The <Mdn path="Web/CSS/:has">:has()</Mdn> pseudo-class picks an element by what it
             contains, so :has(:checked) makes that row 1fr when the fold holds a checked input. A
             row in fr is a number, so 0fr to 1fr is a number growing, which a transition can move.
-            The paragraph’s overflow hidden hides whatever its row does not hold. The row always ends at the content’s own height, so no part needs a known height, and
-            no text has to scroll. It needs no guess and no known height, and it moves the same way in every
-            browser.</p>
+            The paragraph’s overflow hidden hides whatever its row does not hold. The row always ends at the
+            content’s own height, so nothing is guessed, nothing is measured by script, nothing is fixed, and no
+            text has to scroll.</p>
           <Snippet label="CSS" lines={[
             ...unit(accordionsCss, '.fold-clip {'), gap,
             ...unit(accordionsCss, '&:has(:checked) .fold-clip {')

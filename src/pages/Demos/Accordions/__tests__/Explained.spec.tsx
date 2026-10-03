@@ -212,7 +212,7 @@ describe('the fold motion', () => {
 
     const platform = await screen.findByRole('region', {name: parts[1]});
 
-    expect(codeBeside(platform, /This replaces the known height/)).toHaveTextContent('.drawer &::details-content');
+    expect(codeBeside(platform, /This replaces the three old ways/)).toHaveTextContent('.drawer &::details-content');
   });
 
   test.each(['reveal', 'static'])('should carve no details drawer rule under %s', async style => {
@@ -220,7 +220,7 @@ describe('the fold motion', () => {
 
     const platform = await screen.findByRole('region', {name: parts[1]});
 
-    expect(codeBeside(platform, /This replaces the known height/)).not.toHaveTextContent('.drawer &::details-content');
+    expect(codeBeside(platform, /This replaces the three old ways/)).not.toHaveTextContent('.drawer &::details-content');
   });
 
   const knownHeight = ['.info, .info-text { height: 10lh;', '.info { overflow: hidden;', '.info-text { overflow-y: auto;', '.info-paragraph { box-sizing', '.info-toggle:not(:checked) ~ .info { height: 0;'];
@@ -375,5 +375,38 @@ describe('the max-height guess', () => {
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
     expect(within(oldWay).getAllByRole('heading', {level: 4}).map(heading => heading.textContent)).toEqual(['The max-height guess', measured, known]);
+  });
+});
+
+const everyTypeAndMotion = ['inclusive', 'exclusive'].flatMap(type => ['reveal', 'drawer', 'static'].map(style => ({type, style})));
+
+describe('what the newer builds end', () => {
+  test.each(everyTypeAndMotion)('should name, with $type and $style chosen, the three old ways the details builds replace', async ({type, style}) => {
+    render(<TestApp at={demosAt(`?tab=accordions&type=${type}&style=${style}`)}/>);
+
+    const platform = await screen.findByRole('region', {name: parts[1]});
+
+    expect(runTelling(platform, /This replaces the three old ways/)).toHaveTextContent(/the max-height guess, the height measured by script, and the known height/);
+  });
+
+  test('should say the grid row guesses, measures and fixes nothing, and scrolls no text', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const together = await screen.findByRole('region', {name: parts[2]});
+
+    expect(runTelling(together, /The row always ends at the content’s own height/))
+      .toHaveTextContent(/nothing is guessed, nothing is measured by script, nothing is fixed, and no text has to scroll/);
+  });
+
+  test.each(everyTypeAndMotion)('should say no sentence twice, with $type and $style chosen', async ({type, style}) => {
+    render(<TestApp at={demosAt(`?tab=accordions&type=${type}&style=${style}`)}/>);
+
+    const tab = await screen.findByRole('region', {name: 'Accordions'});
+    const sentences = within(tab).getAllByRole('paragraph')
+      .flatMap(paragraph => (paragraph.textContent ?? '').split(/(?<=[.!?])\s+/))
+      .map(sentence => sentence.trim())
+      .filter(sentence => sentence.length > 0);
+
+    expect(sentences.filter((sentence, at) => sentences.indexOf(sentence) !== at)).toEqual([]);
   });
 });
