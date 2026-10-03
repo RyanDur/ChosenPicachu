@@ -23,8 +23,8 @@ const choiceAt = (list: string, at: number): Maybe<HTMLElement> => elementWithId
   return choice instanceof HTMLElement ? some(choice) : nothing();
 });
 
-const within = (target: EventTarget | null, ...ids: string[]): boolean => target instanceof Node &&
-  ids.some(id => elementWithId(id).map(part => part.contains(target)).orElse(false));
+const within = (target: EventTarget | null, id: string): boolean => target instanceof Node &&
+  elementWithId(id).map(part => part.contains(target)).orElse(false);
 
 export const SortMenu: FC = () => {
   const [open, updateOpen] = useState(false);

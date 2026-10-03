@@ -72,7 +72,7 @@ test('pressing Sort by again closes its menu', async ({page}) => {
   await menu.open();
   await expect(page.getByRole('menu')).toBeVisible();
 
-  await menu.open();
+  await menu.sortBy.click();
 
   await expect(page.getByRole('menu')).toHaveCount(0);
   await expect(menu.sortBy).toBeFocused();
