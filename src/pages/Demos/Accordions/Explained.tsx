@@ -94,7 +94,10 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         <li className="run">
           <p className="paragraph">An HTML page is made of elements. Most are a pair of tags, such
             as <code>{'<details>'}</code> and <code>{'</details>'}</code>, around what they hold. A few, such
-            as <code>{'<input>'}</code>, are a single tag and hold nothing. A <Mdn path="Web/HTML/Element/details">details</Mdn> element holds
+            as <code>{'<input>'}</code>, are a single tag and hold nothing.</p>
+        </li>
+        <li className="run">
+          <p className="paragraph">A <Mdn path="Web/HTML/Element/details">details</Mdn> element holds
             a <Mdn path="Web/HTML/Element/summary">summary</Mdn> and the content it hides. The summary is the bar. Press
             it and the browser shows the rest. Press it again and the browser hides it.</p>
         </li>
@@ -277,10 +280,10 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         <li className="run">
           <p className="paragraph">A keyboard user needs to see which bar they are on. Here the {input} has the focus, but the label is what the reader
             sees, so the stylesheet carries one to the other. The :focus-visible pseudo-class picks
-            the {input} while it has keyboard focus, and :focus-visible ~ .info-label gives the
+            the {input} while it has keyboard focus, and <code>:focus-visible ~ .info-label</code> gives the
             bar the approach colour and a ring inside its edge. The browser treats hovering a label
             as hovering its {input}, so :hover on the {input} lights the bar too. That rule sits
-            inside a media query, (hover: hover), which applies its rules only on a device whose
+            inside a media query, <code>(hover: hover)</code>, which applies its rules only on a device whose
             pointer can hover, so a tap on a phone does not leave the bar lit. In both, the arrow’s
             borders take the ink colour with the words.</p>
           <Snippet label="CSS" lines={[
@@ -476,7 +479,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             grid sized to its content, a row of 1fr is exactly as tall as its content needs. A row
             of 0fr has no height. The row is 0fr while the fold is closed.
             The <Mdn path="Web/CSS/:has">:has()</Mdn> pseudo-class picks an element by what it
-            contains, so :has(:checked) makes that row 1fr when the fold holds a checked input. A
+            contains, so <code>:has(:checked)</code> makes that row 1fr when the fold holds a checked input. A
             row in fr is a number, so 0fr to 1fr is a number growing, which a transition can move.
             The paragraph’s overflow hidden hides whatever its row does not hold. The row always ends at the
             content’s own height, so nothing is guessed, nothing is measured by script, nothing is fixed, and no
@@ -513,7 +516,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         {motion === 'drawer' && <li className="run">
           <p className="paragraph">With the drawer, the text slides down from under its bar. Its paragraph grows
             from 0fr to 1fr, as above. Between the two, the row is shorter than the paragraph
-            around it, so align-content: end sets the row at the paragraph’s bottom. Align-self: end
+            around it, so <code>align-content: end</code> sets the row at the paragraph’s bottom. Align-self: end
             sets the item at the row’s bottom, as tall as its text. So the text’s bottom edge stays
             on the fold’s edge at every frame, and the paragraph’s overflow hides the text above the
             fold. One transition moves it all, so no part can fall behind another. It answers no

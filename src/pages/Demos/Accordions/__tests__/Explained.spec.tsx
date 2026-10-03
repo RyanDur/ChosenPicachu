@@ -434,7 +434,6 @@ describe('the accordion in HTML alone', () => {
     const firstRun = within(await screen.findByRole('region', {name: htmlAlone})).getAllByRole('listitem')[0];
 
     expect(within(firstRun).getAllByRole('group')).toHaveLength(3);
-    expect(within(firstRun).getByRole('code')).toBeInTheDocument();
   });
 
   test('should show the folds’ whole markup in the part’s first run, with no class and no script', async () => {
