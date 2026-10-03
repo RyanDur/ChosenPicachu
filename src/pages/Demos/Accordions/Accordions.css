@@ -192,6 +192,25 @@
       flex-shrink: 0;
     }
 
+    .info-measured {
+      overflow: hidden;
+      interpolate-size: numeric-only;
+    }
+
+    :is(.reveal, .drawer) & .info-measured {
+      transition: height .3s ease-in-out, visibility .3s;
+    }
+
+    .drawer & .info-measured {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+
+      .info-paragraph {
+        flex-shrink: 0;
+      }
+    }
+
     @media (hover: hover) {
       .info-toggle:hover ~ .info-label {
         background: var(--approach);
@@ -223,6 +242,11 @@
     }
 
     .info-toggle:not(:checked) ~ .info {
+      height: 0;
+      visibility: hidden;
+    }
+
+    .info-toggle:not(:checked) ~ .info-measured {
       height: 0;
       visibility: hidden;
     }

@@ -2,17 +2,20 @@ import {FC} from 'react';
 import {PillGlider} from '@components/PillGlider';
 import {
   ExclusiveAccordion,
+  ExclusiveMeasuredAccordion,
   ExclusiveRadioToggleAccordion,
   ExclusiveToggleAccordion,
   Fold,
   InclusiveAccordion,
   InclusiveCheckboxToggleAccordion,
+  InclusiveMeasuredAccordion,
   InclusiveToggleAccordion
 } from './Accordions';
 import {Mdn, plain, Snippet} from '../Recipe';
 import {span, unit} from '../Recipe/carve';
 import accordionsSource from './Accordions.tsx?raw';
 import accordionsCss from './Accordions.css?raw';
+import measuredSource from './measured.ts?raw';
 import placementCss from '../../../styles/placement.css?raw';
 import resetCss from '../../../styles/reset.css?raw';
 import {
@@ -36,6 +39,8 @@ import {FoldMotion} from './fold-motion';
 import './Explained.css';
 
 export type Contents = {
+  measuredCheckbox: Fold[];
+  measuredRadio: Fold[];
   checkbox: Fold[];
   radio: Fold[];
   inclusiveDetails: Fold[];
@@ -91,6 +96,50 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         ]}/>
         <OneGuessTwoParts/>
       </section>
+      {type === 'inclusive'
+        ? <InclusiveMeasuredAccordion className={exhibit} content={contents.measuredCheckbox} motion={motion}/>
+        : <ExclusiveMeasuredAccordion className={exhibit} content={contents.measuredRadio} motion={motion}/>}
+      <ol className={runs}>
+        <li className="run">
+          <p className="paragraph">Most of us reached next for script. A transition can move a height to a number,
+            so the script supplies the number: when a part opens, it measures the text’s real height and gives
+            the panel that height, and the stylesheet’s transition moves the panel from 0 to it. Every part
+            moves the same way, short or tall, because the target is the text’s own height. When the motion
+            ends, the script takes the number away, and the panel is auto again. A number left in place goes
+            stale: narrow the window, the text wraps onto more lines, and a fixed height cuts it off.</p>
+          <Snippet label="TS" lines={[
+            ...unit(measuredSource, 'const opened'), gap,
+            ...unit(measuredSource, 'const landsOnAuto')
+          ]}/>
+        </li>
+        <li className="run">
+          <p className="paragraph">Closing runs the other way: the script sets the open height as a number, then
+            lets the stylesheet’s 0 take over. Firefox and Safari have already applied a pressed box’s new style
+            when the change event fires, so the script first pins where the motion starts, with the height’s
+            transition switched off for that moment, then sets where it ends.</p>
+          <Snippet label="TS" lines={[
+            ...unit(measuredSource, 'const startsAt'), gap,
+            ...unit(measuredSource, 'const closed')
+          ]}/>
+        </li>
+        <li className="run">
+          <p className="paragraph">A radio that loses its check gets no event at all, so the script asks the whole
+            list which parts are open. This page lets its other folds move to auto, and this build turns that
+            off with <Mdn path="Web/CSS/interpolate-size">interpolate-size</Mdn>, because the trick was for
+            browsers that could only move between numbers.</p>
+          <Snippet label="TS" lines={unit(measuredSource, 'export const foldMeasured')}/>
+          <Snippet label="CSS" lines={unit(accordionsCss, '.info-measured {')}/>
+        </li>
+        <li className="run">
+          <p className="paragraph">The cost was script. The motion needs it, but whether a part is open does not:
+            the checkbox and the stylesheet own that, so if the script fails, a part still opens and closes, at
+            once.</p>
+          <Snippet label="CSS" lines={[
+            ...unit(accordionsCss, ':is(.reveal, .drawer) & .info-measured {'), gap,
+            ...unit(accordionsCss, '.info-toggle:not(:checked) ~ .info-measured {')
+          ]}/>
+        </li>
+      </ol>
       {type === 'inclusive'
         ? <InclusiveAccordion className={exhibit} content={contents.checkbox} motion={motion}/>
         : <ExclusiveAccordion className={exhibit} content={contents.radio} motion={motion}/>}
@@ -188,8 +237,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         </li>
         <li className="run">
           <p className="paragraph">The text should slide open, not appear at once. A transition cannot move a
-            height to auto, the height the content needs. Before grid, the way past the guess’s rush and
-            wait was a height you knew. Each part’s panel is ten lines tall. The lh unit is the height of one line,
+            height to auto, the height the content needs. Before grid, the way to move evenly with no
+            script was a height you knew. Each part’s panel is ten lines tall. The lh unit is the height of one line,
             so the panel grows with the text size. It is the one size in the sheet off the page’s
             spacing scale, because it is counted in the text’s own lines. Closed, the panel’s height is 0, and overflow
             hidden hides the text. Inside it, a section of the same height holds the paragraph and

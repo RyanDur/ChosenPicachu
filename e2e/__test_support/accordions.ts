@@ -1,12 +1,16 @@
 import type {Locator, Page} from '@playwright/test';
 
-export type Build = 'the checkbox build' | 'the radio build' | 'the inclusive details build' | 'the details build' | 'the grid checkbox build' | 'the grid radio build';
+export type Build = 'the measured checkbox build' | 'the measured radio build' | 'the checkbox build' | 'the radio build' | 'the inclusive details build' | 'the details build' | 'the grid checkbox build' | 'the grid radio build';
 
 export const builds: Build[] = ['the checkbox build', 'the radio build', 'the inclusive details build', 'the details build', 'the grid checkbox build', 'the grid radio build'];
 
+export const measuredBuilds: Build[] = ['the measured checkbox build', 'the measured radio build'];
+
 const headings: Record<Build, string> = {
-  'the checkbox build': 'Accordion using checkboxes',
-  'the radio build': 'Accordion using a radio group',
+  'the measured checkbox build': 'Accordion using checkboxes and a measured height',
+  'the measured radio build': 'Accordion using a radio group and a measured height',
+  'the checkbox build': 'Accordion using checkboxes and a known height',
+  'the radio build': 'Accordion using a radio group and a known height',
   'the inclusive details build': 'Inclusive accordion using details elements',
   'the details build': 'Exclusive accordion using details elements',
   'the grid checkbox build': 'Inclusive accordion using checkboxes',
@@ -56,7 +60,7 @@ const detailsPart = (page: Page, fold: Locator): Omit<Part, 'showsText'> => ({
   isOpen: () => fold.evaluate(details => details.hasAttribute('open'))
 });
 
-const gridCheckboxPart = (page: Page, fold: Locator): Omit<Part, 'showsText'> => ({
+const checkboxPart = (page: Page, fold: Locator): Omit<Part, 'showsText'> => ({
   fold,
   open: () => nameOn(fold).click(),
   close: () => nameOn(fold).click(),
@@ -64,24 +68,22 @@ const gridCheckboxPart = (page: Page, fold: Locator): Omit<Part, 'showsText'> =>
   isOpen: () => fold.getByRole('checkbox').isChecked()
 });
 
+const radioPart = ({page, fold, article, index}: Where): Omit<Part, 'showsText'> => ({
+  fold,
+  open: () => nameOn(fold).click(),
+  close: () => article.getByText('Close', {exact: true}).first().click(),
+  openByKeyboard: () => focusAndPress(page, article.getByRole('radio', {name: 'Close', exact: true}), 'ArrowDown', index + 1),
+  isOpen: () => fold.getByRole('radio').isChecked()
+});
+
 const partIn: Record<Build, (where: Where) => Omit<Part, 'showsText'>> = {
-  'the checkbox build': ({page, fold}) => ({
-    fold,
-    open: () => nameOn(fold).click(),
-    close: () => nameOn(fold).click(),
-    openByKeyboard: () => focusAndPress(page, fold.getByRole('checkbox'), 'Space'),
-    isOpen: () => fold.getByRole('checkbox').isChecked()
-  }),
-  'the radio build': ({page, fold, article, index}) => ({
-    fold,
-    open: () => nameOn(fold).click(),
-    close: () => article.getByText('Close', {exact: true}).first().click(),
-    openByKeyboard: () => focusAndPress(page, article.getByRole('radio', {name: 'Close', exact: true}), 'ArrowDown', index + 1),
-    isOpen: () => fold.getByRole('radio').isChecked()
-  }),
+  'the measured checkbox build': ({page, fold}) => checkboxPart(page, fold),
+  'the measured radio build': where => radioPart(where),
+  'the checkbox build': ({page, fold}) => checkboxPart(page, fold),
+  'the radio build': where => radioPart(where),
   'the inclusive details build': ({page, fold}) => detailsPart(page, fold),
   'the details build': ({page, fold}) => detailsPart(page, fold),
-  'the grid checkbox build': ({page, fold}) => gridCheckboxPart(page, fold),
+  'the grid checkbox build': ({page, fold}) => checkboxPart(page, fold),
   'the grid radio build': ({page, fold, article, index}) => ({
     fold,
     open: () => nameOn(fold).click(),
@@ -93,14 +95,14 @@ const partIn: Record<Build, (where: Where) => Omit<Part, 'showsText'>> = {
   })
 };
 
-const exclusiveBuilds: Build[] = ['the radio build', 'the details build', 'the grid radio build'];
+const exclusiveBuilds: Build[] = ['the measured radio build', 'the radio build', 'the details build', 'the grid radio build'];
 
 export const showing = (build: Build, style: 'reveal' | 'drawer' | 'static' = 'reveal'): string =>
   `demos/?tab=accordions&type=${exclusiveBuilds.includes(build) ? 'exclusive' : 'inclusive'}&style=${style}`;
 
 const detailsBuilds: Build[] = ['the inclusive details build', 'the details build'];
 
-const closeBarsBeforeTheParts = (build: Build): number => build === 'the radio build' ? 1 : 0;
+const closeBarsBeforeTheParts = (build: Build): number => build === 'the radio build' || build === 'the measured radio build' ? 1 : 0;
 
 export const accordionsTab = (page: Page) => {
   const built = (build: Build): Locator =>

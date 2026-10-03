@@ -46,6 +46,8 @@ export const DemosPage = () => {
       {tab: demoTopicParam, pace: paceParam, origin: originParam, motion: motionParam, tut: tutorialParam, track: trackParam, world: worldParam, type: foldTypeParam, style: foldMotionParam},
       {tab: DemoTopics.accordions});
   const [accordionContents] = useState(() => ({
+    measuredCheckbox: paragraphs(5),
+    measuredRadio: paragraphs(5),
     checkbox: paragraphs(5),
     radio: paragraphs(5),
     inclusiveDetails: paragraphs(5),

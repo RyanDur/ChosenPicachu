@@ -1,4 +1,4 @@
-import {expect, test} from '@playwright/test';
+import {expect} from '@playwright/test';
 import {
   accordionsTab,
   builds,
@@ -10,16 +10,13 @@ import {
   heightOnceSettled,
   iPhone,
   misplacedPictures,
-  motionOf,
   nameOn,
   showing,
   textOf,
   type Frame,
-  type Moment,
   type Part
 } from './__test_support';
-
-const layoutRounding = 1;
+import {evenMotionJourneys, everyBuildJourneys, heightMoved, layoutRounding, test} from './__test_support/fold-journeys';
 
 const framesOpening = async (part: Part): Promise<Frame[]> => {
   await expect(part.fold).toBeVisible();
@@ -70,11 +67,6 @@ for (const build of ['the inclusive details build', 'the details build'] as cons
 
 }
 
-const heightMoved = {
-  open: (frames: Pick<Frame, 'height'>[]): void => expect(frames.at(-1)?.height).toBeGreaterThan(frames.at(0)?.height ?? 0),
-  closed: (frames: Pick<Frame, 'height'>[]): void => expect(frames.at(-1)?.height).toBeLessThan(frames.at(0)?.height ?? 0)
-};
-
 const slidDown = (frames: Frame[]): number[] => frames.map(frame => frame.textAboveTheClip).filter(above => above > layoutRounding);
 
 for (const build of ['the checkbox build', 'the radio build', 'the grid checkbox build', 'the grid radio build'] as const) {
@@ -97,79 +89,6 @@ for (const build of ['the checkbox build', 'the radio build', 'the grid checkbox
       expect(slidDown(frames)).not.toEqual([]);
     });
   }
-}
-
-const shareOfTheTimeForEachQuarter = (frames: Moment[]): number[] => {
-  const from = frames.at(0);
-  const to = frames.at(-1);
-  if (!from || !to) {
-    return [];
-  }
-  const settled = frames.find(({height}) => height === to.height) ?? to;
-  const duration = settled.at - from.at;
-  const travel = to.height - from.height;
-  const reached = (share: number): number =>
-    (frames.find(({height}) => (height - from.height) / travel >= share) ?? settled).at - from.at;
-  const marks = [0, reached(0.25), reached(0.5), reached(0.75), duration];
-  return marks.slice(1).map((mark, at) => Math.round((mark - marks[at]) / duration * 100) / 100);
-};
-
-const unevenQuarters = (frames: Moment[]): number[] =>
-  shareOfTheTimeForEachQuarter(frames).filter(share => !(share >= 1 / 10 && share <= 1 / 2));
-
-const motionSliding = {
-  open: async (part: Part): Promise<Moment[]> => {
-    await expect(part.fold).toBeVisible();
-    const moving = motionOf(part.fold);
-    await part.open();
-    return moving;
-  },
-  closed: async (part: Part): Promise<Moment[]> => {
-    await part.open();
-    await heightOnceSettled(part.fold);
-    const moving = motionOf(part.fold);
-    await part.close();
-    return moving;
-  }
-};
-
-const putAway = async (part: Part): Promise<void> => {
-  await heightOnceSettled(part.fold);
-  if (await part.isOpen()) {
-    await part.close();
-    await heightOnceSettled(part.fold);
-  }
-};
-
-const byTextLength = async (parts: Part[]): Promise<Part[]> => {
-  const lengths = await Promise.all(parts.map(async part => (await textOf(part).textContent() ?? '').length));
-  return parts.map((part, at) => ({part, length: lengths[at]})).sort((one, other) => other.length - one.length).map(({part}) => part);
-};
-
-for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: desktop}]) {
-  test.describe(`at ${size} wide`, () => {
-    test.use(device);
-
-    for (const build of ['the checkbox build', 'the radio build'] as const) {
-      for (const style of ['reveal', 'drawer'] as const) {
-        for (const direction of ['open', 'closed'] as const) {
-          test(`the longest and shortest parts of ${build} slide ${direction} by the ${style} in one even motion`, async ({page}) => {
-            await page.goto(showing(build, style));
-            await expect(accordionsTab(page).firstPartOf(build).fold).toBeVisible();
-            const parts = await byTextLength(await accordionsTab(page).partsOf(build));
-            const longest = await motionSliding[direction](parts[0]);
-            await putAway(parts[0]);
-            const shortest = await motionSliding[direction](parts.at(-1) ?? parts[0]);
-
-            for (const frames of [longest, shortest]) {
-              heightMoved[direction](frames);
-              expect(unevenQuarters(frames)).toEqual([]);
-            }
-          });
-        }
-      }
-    }
-  });
 }
 
 test('a details fold opens at once, fully, where the browser cannot animate it', async ({page, browserName}) => {
@@ -217,24 +136,6 @@ for (const {reader, device, layout} of [
   });
 }
 
-for (const build of builds) {
-  test(`a reader who asks for less motion gets ${build} open at once`, async ({page, browserName}) => {
-    test.skip(build.includes('details') && browserName !== 'chromium', 'only chromium animates a details element to its natural height');
-    await page.emulateMedia({reducedMotion: 'reduce'});
-    await page.goto(showing(build));
-    const part = accordionsTab(page).firstPartOf(build);
-    await expect(part.fold).toBeVisible();
-    const closed = await heightByTheNextFrame(part.fold);
-
-    const firstMoved = firstHeightAfter(part.fold, closed);
-    await part.open();
-    await expect.poll(part.isOpen).toBe(true);
-
-    expect(await firstMoved).toBeGreaterThan(closed);
-    expect(await firstMoved).toBe(await heightOnceSettled(part.fold));
-  });
-}
-
 for (const build of ['the grid checkbox build', 'the grid radio build'] as const) {
   test(`a closed fold in ${build} shows only its bar`, async ({page}) => {
     await page.goto(showing(build));
@@ -269,19 +170,6 @@ test.describe('a desktop', () => {
     });
   }
 });
-
-for (const build of builds.filter(build => build !== 'the details build')) {
-  test(`a keyboard reader opens the first fold of ${build} and reads its text`, async ({page}) => {
-    await page.goto(showing(build));
-    const part = accordionsTab(page).firstPartOf(build);
-    await expect(part.fold).toBeVisible();
-
-    await part.openByKeyboard();
-
-    await expect.poll(part.isOpen).toBe(true);
-    await expect.poll(part.showsText).toBe(true);
-  });
-}
 
 for (const build of ['the checkbox build', 'the inclusive details build', 'the grid checkbox build'] as const) {
   test(`a reader opens two parts of ${build} and both stay open`, async ({page}) => {
@@ -347,7 +235,7 @@ test('a link to the exclusive type opens the tab on it, and it stays after a rel
   await page.reload();
 
   await expect(exclusive).toBeChecked();
-  await expect(page.getByRole('heading', {name: 'Accordion using a radio group'})).toBeVisible();
+  await expect(page.getByRole('heading', {name: 'Accordion using a radio group and a known height'})).toBeVisible();
 });
 
 test('the space bar closes a part of the grid radio build the arrow keys opened', async ({page}) => {
@@ -362,35 +250,6 @@ test('the space bar closes a part of the grid radio build the arrow keys opened'
   await expect.poll(second.isOpen).toBe(false);
   await expect.poll(first.isOpen).toBe(false);
 });
-
-for (const build of ['the checkbox build', 'the radio build', 'the inclusive details build', 'the details build', 'the grid checkbox build', 'the grid radio build'] as const) {
-  test(`a reader who asks for less motion gets ${build} open at once under the drawer`, async ({page}) => {
-    await page.emulateMedia({reducedMotion: 'reduce'});
-    await page.goto(showing(build, 'drawer'));
-    const part = accordionsTab(page).firstPartOf(build);
-    const closed = await heightByTheNextFrame(part.fold);
-    const firstMoved = firstHeightAfter(part.fold, closed);
-
-    await part.open();
-
-    expect(await firstMoved).toBeGreaterThan(closed);
-    expect(await firstMoved).toBe(await heightOnceSettled(part.fold));
-  });
-}
-
-for (const build of builds) {
-  test(`with Static chosen, a fold in ${build} opens fully in one frame`, async ({page}) => {
-    await page.goto(showing(build, 'static'));
-    const part = accordionsTab(page).firstPartOf(build);
-    const closedHeight = await heightByTheNextFrame(part.fold);
-    const firstMoved = firstHeightAfter(part.fold, closedHeight);
-
-    await part.open();
-
-    expect(await firstMoved).toBeGreaterThan(closedHeight);
-    expect(await firstMoved).toBe(await heightOnceSettled(part.fold));
-  });
-}
 
 test('a keyboard reader tabs from an open part\'s bar into its text and past a closed part', async ({page, browserName}) => {
   const tabKey = browserName === 'webkit' ? 'Alt+Tab' : 'Tab';
@@ -423,3 +282,6 @@ test('a keyboard reader tabs from an open radio part into its text and past the 
 
   await expect.poll(() => accordionsTab(page).holdsFocus('the radio build')).toBe(false);
 });
+
+everyBuildJourneys(builds);
+evenMotionJourneys(['the checkbox build', 'the radio build']);

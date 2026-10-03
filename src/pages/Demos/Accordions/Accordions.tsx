@@ -3,6 +3,7 @@ import {Maybe, nothing, some} from '@ryandur/sand';
 import {classNames} from '@components/class-names';
 import {PropsWithClassName} from '../types';
 import {FoldMotion} from './fold-motion';
+import {foldMeasured} from './measured';
 import './Accordions.css';
 
 const openAfter = (pressed: string, open?: string): Maybe<string> => open === pressed ? nothing() : some(pressed);
@@ -39,7 +40,7 @@ export const InclusiveAccordion: FC<PropsWithClassName & ContentProps & {motion:
   motion
 }) => <article className={classNames('inclusive-accordion', motion, className)}>
   <header>
-    <h4 className="sub-title bold">Accordion using checkboxes</h4>
+    <h4 className="sub-title bold">Accordion using checkboxes and a known height</h4>
     <p>no Javascript needed to pull this off.</p>
   </header>
   <fieldset>
@@ -65,7 +66,7 @@ export const ExclusiveAccordion: FC<PropsWithClassName & ContentProps & {motion:
   motion
 }) => <article className={classNames('exclusive-accordion', motion, className)}>
   <header>
-    <h4 className="sub-title bold">Accordion using a radio group</h4>
+    <h4 className="sub-title bold">Accordion using a radio group and a known height</h4>
     <p>no Javascript needed to pull this off.</p>
   </header>
   <fieldset>
@@ -170,6 +171,58 @@ export const ExclusiveRadioToggleAccordion: FC<PropsWithClassName & ContentProps
             <input type="radio" name="exclusive-radio-toggle" value={key} className="off-screen"/>
           </label>
           <p className="fold-clip"><span className="fold-clip-item"><span className="fold-text">{value}</span></span></p>
+        </li>)}
+    </ul>
+  </fieldset>
+</article>;
+
+export const InclusiveMeasuredAccordion: FC<PropsWithClassName & ContentProps & {motion: FoldMotion}> = ({
+  className,
+  content,
+  motion
+}) => <article className={classNames('inclusive-accordion', motion, className)}>
+  <header>
+    <h4 className="sub-title bold">Accordion using checkboxes and a measured height</h4>
+    <p>a few lines of script measure each part’s height.</p>
+  </header>
+  <fieldset>
+    <legend className="off-screen">parts</legend>
+    <ul className="accordion" onChange={foldMeasured}>
+      {content.map(({value, key}, id) =>
+        <li key={key} className="fold">
+          <input id={`measured-fold-${id}-checkbox`} className="info-toggle off-screen" type="checkbox"/>
+          <label className="info-label" htmlFor={`measured-fold-${id}-checkbox`}>{key}</label>
+          <div className="info-measured">
+            <p className="info-paragraph">{value}</p>
+          </div>
+        </li>)}
+    </ul>
+  </fieldset>
+</article>;
+
+export const ExclusiveMeasuredAccordion: FC<PropsWithClassName & ContentProps & {motion: FoldMotion}> = ({
+  className,
+  content,
+  motion
+}) => <article className={classNames('exclusive-accordion', motion, className)}>
+  <header>
+    <h4 className="sub-title bold">Accordion using a radio group and a measured height</h4>
+    <p>a few lines of script measure each part’s height.</p>
+  </header>
+  <fieldset>
+    <legend className="off-screen">parts</legend>
+    <ul className="accordion" onChange={foldMeasured}>
+      <li className="fold close">
+        <input id="measured-close-radio" defaultChecked={true} className="info-toggle off-screen" type="radio" name="measured-group"/>
+        <label className="info-label" htmlFor="measured-close-radio">Close</label>
+      </li>
+      {content.map(({value, key}, id) =>
+        <li className="fold" key={key}>
+          <input id={`measured-fold-${id}-radio`} className="info-toggle off-screen" type="radio" name="measured-group"/>
+          <label className="info-label" htmlFor={`measured-fold-${id}-radio`}>{key}</label>
+          <div className="info-measured">
+            <p className="info-paragraph">{value}</p>
+          </div>
         </li>)}
     </ul>
   </fieldset>

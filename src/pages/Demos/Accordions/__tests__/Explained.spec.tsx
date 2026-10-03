@@ -31,10 +31,10 @@ describe('the accordions tab', () => {
   });
 
   test.each([
-    ['inclusive', parts[0], ['Accordion using checkboxes']],
+    ['inclusive', parts[0], ['Accordion using checkboxes and a measured height', 'Accordion using checkboxes and a known height']],
     ['inclusive', parts[1], ['Inclusive accordion using details elements']],
     ['inclusive', parts[2], ['Inclusive accordion using checkboxes']],
-    ['exclusive', parts[0], ['Accordion using a radio group']],
+    ['exclusive', parts[0], ['Accordion using a radio group and a measured height', 'Accordion using a radio group and a known height']],
     ['exclusive', parts[1], ['Exclusive accordion using details elements']],
     ['exclusive', parts[2], ['Exclusive accordion using radio group']]
   ])('should show, with %s chosen, under "%s" the build of that type', async (type, part, builds) => {
@@ -336,13 +336,13 @@ describe('the max-height guess', () => {
   });
 
   test.each([
-    ['inclusive', 'Accordion using checkboxes'],
-    ['exclusive', 'Accordion using a radio group']
-  ])('should outline part one, with %s chosen, as the guess and then the build', async (type, build) => {
+    ['inclusive', 'Accordion using checkboxes and a measured height', 'Accordion using checkboxes and a known height'],
+    ['exclusive', 'Accordion using a radio group and a measured height', 'Accordion using a radio group and a known height']
+  ])('should outline part one, with %s chosen, as the guess, the measured height, then the known height', async (type, measured, known) => {
     render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(within(oldWay).getAllByRole('heading', {level: 4}).map(heading => heading.textContent)).toEqual(['The max-height guess', build]);
+    expect(within(oldWay).getAllByRole('heading', {level: 4}).map(heading => heading.textContent)).toEqual(['The max-height guess', measured, known]);
   });
 });
