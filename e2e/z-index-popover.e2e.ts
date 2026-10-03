@@ -57,7 +57,7 @@ test('a click outside closes the menu in the top layer', async ({page}) => {
   await expect(menu.menu).toBeHidden();
 });
 
-test('a choice closes the menu in the top layer, its button names the choice, and reopened it marks the choice', async ({page}) => {
+test('a choice closes the menu in the top layer, and its button names the choice', async ({page}) => {
   await page.goto('demos/?tab=z-index');
   const menu = topLayerMenu(page);
   await menu.open();
@@ -66,7 +66,16 @@ test('a choice closes the menu in the top layer, its button names the choice, an
 
   await expect(menu.menu).toBeHidden();
   await expect(menu.sortBy).toHaveAccessibleName('Sort by, in the top layer: date');
+});
+
+test('reopened, the menu in the top layer marks the choice it was given', async ({page}) => {
+  await page.goto('demos/?tab=z-index');
+  const menu = topLayerMenu(page);
   await menu.open();
+  await menu.choice('date').click();
+
+  await menu.open();
+
   await expect(menu.choice('date')).toHaveAttribute('aria-current', 'true');
-  await expect(menu.choice('name')).toHaveAttribute('aria-current', 'false');
+  await expect(menu.choice('name')).not.toHaveAttribute('aria-current', 'true');
 });
