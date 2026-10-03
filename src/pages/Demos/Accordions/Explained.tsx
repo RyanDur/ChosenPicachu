@@ -114,20 +114,29 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
           ]}/>
         </li>
         <li className="run">
-          <p className="paragraph">Closing runs the other way: the script sets the open height as a number, then
-            lets the stylesheet’s 0 take over. Firefox and Safari have already applied a pressed box’s new style
-            when the change event fires, so the script first pins where the motion starts, with the height’s
-            transition switched off for that moment, then sets where it ends.</p>
+          <p className="paragraph">Closing runs the other way. The script hands each height to the stylesheet
+            through a custom property, a value the stylesheet can read, named --measured-height, and while the
+            class sized is on, the panel’s height reads it. To close, the script sets the open height, then 0, and
+            the transition moves between them. Firefox and Safari have already applied a pressed box’s new style
+            when the change event fires, so the script first pins where the motion starts, with a second class,
+            unmoving, that switches the height’s transition off for that moment.</p>
           <Snippet label="TS" lines={[
             ...unit(measuredSource, 'const setsHeight'), gap,
             ...unit(measuredSource, 'const startsAt'), gap,
-            ...unit(measuredSource, 'const stillMoving'), gap,
-            ...unit(measuredSource, 'const movesTo'), gap,
             ...unit(measuredSource, 'const closed')
           ]}/>
           <Snippet label="CSS" lines={[
             ...unit(accordionsCss, '.info-toggle ~ .info-measured.sized {'), gap,
             ...unit(accordionsCss, '.info-toggle ~ .info-measured.unmoving {')
+          ]}/>
+        </li>
+        <li className="run">
+          <p className="paragraph">A press while the panel moves keeps sized on and only sets a new end, so the
+            panel turns around from where it is. If that end is where the panel already stands, no motion is left
+            to run, and the script takes the number away at once.</p>
+          <Snippet label="TS" lines={[
+            ...unit(measuredSource, 'const movesTo'), gap,
+            ...unit(measuredSource, 'const stillMoving')
           ]}/>
         </li>
         <li className="run">
