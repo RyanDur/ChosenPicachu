@@ -18,7 +18,8 @@
     text-wrap: pretty;
   }
 
-  .paragraph:only-child {
+  .paragraph:only-child,
+  .run-title {
     grid-column: 1 / -1;
   }
 

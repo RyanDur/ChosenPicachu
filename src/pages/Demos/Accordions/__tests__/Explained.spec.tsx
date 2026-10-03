@@ -31,10 +31,10 @@ describe('the accordions tab', () => {
   });
 
   test.each([
-    ['inclusive', parts[0], ['Accordion using checkboxes']],
+    ['inclusive', parts[0], ['The max-height guess', 'Accordion using checkboxes']],
     ['inclusive', parts[1], ['Inclusive accordion using details elements']],
     ['inclusive', parts[2], ['Inclusive accordion using checkboxes']],
-    ['exclusive', parts[0], ['Accordion using a radio group']],
+    ['exclusive', parts[0], ['The max-height guess', 'Accordion using a radio group']],
     ['exclusive', parts[1], ['Exclusive accordion using details elements']],
     ['exclusive', parts[2], ['Exclusive accordion using radio group']]
   ])('should show, with %s chosen, under "%s" the build of that type', async (type, part, builds) => {
@@ -76,13 +76,6 @@ describe('the accordions explanation', () => {
 });
 
 describe('the words and the code chosen by type', () => {
-  test.each(['inclusive', 'exclusive'])('should open part one, with %s chosen, on the code of the max-height guess', async type => {
-    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
-
-    const oldWay = await screen.findByRole('region', {name: parts[0]});
-
-    expect(within(oldWay).getAllByRole('code')[0]).toHaveTextContent(/max-height: 0;.*transition: max-height .3s ease-in-out;.*max-height: 1000px;/);
-  });
 
   test.each([
     {type: 'inclusive', input: 'checkbox', announced: /a checkbox, checked or not checked\./, carvedInput: 'type="checkbox"'},
@@ -307,8 +300,8 @@ describe('how every fold moves', () => {
 
 describe('the accordions diagrams', () => {
   test.each([
-    ['inclusive', parts[0], ['The max-height guess', 'Off screen, not gone', 'The sheet reads the box', 'Two borders, turned', 'Focus on the box, drawn on the bar', 'The known height']],
-    ['exclusive', parts[0], ['The max-height guess', 'Off screen, not gone', 'The sheet reads the box', 'Two borders, turned', 'Focus on the box, drawn on the bar', 'The known height', 'One name, one choice']],
+    ['inclusive', parts[0], ['One guess, two parts', 'Off screen, not gone', 'The sheet reads the box', 'Two borders, turned', 'Focus on the box, drawn on the bar', 'The known height']],
+    ['exclusive', parts[0], ['One guess, two parts', 'Off screen, not gone', 'The sheet reads the box', 'Two borders, turned', 'Focus on the box, drawn on the bar', 'The known height', 'One name, one choice']],
     ['inclusive', parts[1], ['One job, two ways', 'Three pieces become two', 'Sized to the text']],
     ['exclusive', parts[1], ['One job, two ways', 'Three pieces become two', 'Sized to the text']]
   ])('should draw, with %s chosen, under "%s" each mechanism in order, named by its title and one sentence', async (type, part, titles) => {
@@ -329,5 +322,15 @@ describe('the accordions diagrams', () => {
     expect(within(promises).getByRole('row', {name: 'checkbox yes no'})).toBeInTheDocument();
     expect(within(promises).getByRole('row', {name: 'radio no yes'})).toBeInTheDocument();
     expect(within(promises).getByRole('row', {name: 'details with a name yes yes'})).toBeInTheDocument();
+  });
+});
+
+describe('the max-height guess', () => {
+  test('should open part one on the code of the guess, beside its heading', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const guess = await screen.findByRole('region', {name: 'The max-height guess'});
+
+    expect(within(guess).getByRole('code')).toHaveTextContent(/max-height: 0;.*transition: max-height .3s ease-in-out;.*max-height: 1000px;/);
   });
 });

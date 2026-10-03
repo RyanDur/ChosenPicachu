@@ -67,7 +67,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
     <PillGlider label="fold motion" name="fold-motion" options={foldMotions} chosen={motion} onChosen={onMotionChosen}/>
     <section aria-labelledby="old-way-heading" className="accordion-part">
       <h3 id="old-way-heading" className="title bold">How we used to build a fold</h3>
-      <section className={toldRun}>
+      <section className={toldRun} aria-labelledby="max-height-guess-heading">
+        <h4 id="max-height-guess-heading" className="run-title sub-title bold">The max-height guess</h4>
         <p className="paragraph">Before a known height, most of us slid a fold open with a guess. A transition
           can move a height to a number but not to auto, the height the text needs, so we moved
           the panel’s <Mdn path="Web/CSS/max-height">max-height</Mdn> instead: from 0 to a number taller
