@@ -266,8 +266,8 @@ describe('the review report', () => {
     expect(summary).toContain('**Keep doing.**');
   });
 
-  test('a finding that fits no habit is told on its own after the habits: its problem, where, why it matters and the next step, in the open', () => {
-    const stray = aDelta({habit: 'nothing of the sort', severity: 'concern', file: 'src/s.tsx', line: 7, happened: 'a stray thing', why: 'it costs a reader', change: 'put it right', principle: 'the door says so', checked: 'read the file'});
+  test('a finding that fits no habit is told on its own after the habits: its problem, where, why it matters and the next step, then the door\'s words, in the open', () => {
+    const stray = aDelta({habit: 'nothing of the sort', severity: 'concern', file: 'src/s.tsx', line: 7, happened: 'a stray thing', why: 'it costs a reader', change: 'put it right', principle: 'the door says so on strays', checked: 'read the file'});
     const summary = summaryOf(review([], [note, stray], [heading]));
     const at = needle => placeOf(summary, needle);
     expect(at('#### 1. a section is named by its heading')).toBeLessThan(at('#### 2. Concern at `src/s.tsx:7`'));
@@ -275,7 +275,8 @@ describe('the review report', () => {
     expect(at('**Problem.** a stray thing')).toBeLessThan(at('**Where.** `src/s.tsx:7`'));
     expect(at('**Where.** `src/s.tsx:7`')).toBeLessThan(at('**Why it matters.** it costs a reader'));
     expect(at('**Why it matters.** it costs a reader')).toBeLessThan(at('**Next step.** put it right'));
-    expect(at('**Next step.** put it right')).toBeLessThan(at('<details><summary>what was checked</summary>\n\nread the file'));
+    expect(at('**Next step.** put it right')).toBeLessThan(at('> the door says so on strays'));
+    expect(at('> the door says so on strays')).toBeLessThan(at('<details><summary>what was checked</summary>\n\nread the file'));
     expect(summary).not.toContain('<details><summary>concern · structure · src/s.tsx:7');
   });
 
