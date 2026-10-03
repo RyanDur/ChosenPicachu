@@ -79,6 +79,15 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
       await expect(menu.contextChoice).not.toBeChecked();
     });
 
+    test('every fold of the accordion in HTML alone takes a finger', async ({page}) => {
+      await page.goto('demos/?tab=accordions');
+      const part = page.getByRole('region', {name: 'An accordion in HTML alone'});
+      const bars = ['basalt', 'cinder', 'meadow'].map(name => part.getByRole('group').filter({hasText: name}).getByText(name, {exact: true}));
+      await expect(bars[0]).toBeVisible();
+
+      expect(await shortOfAFinger(bars)).toEqual([]);
+    });
+
     test('closes a banner with a finger that lands just off its dismiss', async ({page}) => {
       await page.goto('demos/?tab=z-index');
       await bannerTrap(page).raiseNew.tap();

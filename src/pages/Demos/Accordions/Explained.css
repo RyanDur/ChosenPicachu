@@ -3,3 +3,15 @@
   gap: var(--base-x-3);
 }
 
+
+.tab-introduction {
+  display: grid;
+  gap: var(--base);
+  max-inline-size: var(--measure);
+}
+
+@media (pointer: coarse) {
+  .html-alone {
+    line-height: var(--finger-reach);
+  }
+}

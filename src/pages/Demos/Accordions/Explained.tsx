@@ -71,27 +71,33 @@ type Props = {
 export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, motion, onMotionChosen}) => {
   const input = inputOf[type];
   return <>
-    <p className="paragraph">An accordion is a list of parts. Each part has a bar you press to show or hide the text
-      under it. This page calls one part a fold.</p>
-    <p className="paragraph">Showing and hiding is easy. The motion is hard. A fold should slide open to the height of
-      its own text, at an even pace. For years the only way was to guess a height in advance, and a wrong guess makes
-      the motion uneven.</p>
-    <p className="paragraph">A web page is written in three languages. HTML says what is on the page, CSS says how it
-      looks and moves, and script says what happens when you act. This page starts with HTML alone, and brings in CSS
-      and then script only where they are needed.</p>
-    <p className="paragraph">By the end you can build an accordion in HTML alone, make it slide with CSS, keep one fold
-      open at a time, and say why the older ways moved unevenly. The first accordion below is HTML alone.</p>
+    <header className="tab-introduction">
+      <p className="paragraph">An accordion is a list of parts. Each part has a bar you press to show or hide the text
+        under it. This page calls one part a fold.</p>
+      <p className="paragraph">Showing and hiding is easy. The motion is hard. A fold should slide open to the height of
+        its own text, at an even pace. For years the only way was to guess a height in advance, and a wrong guess makes
+        the motion uneven.</p>
+      <p className="paragraph">A web page is written in three languages. HTML says what is on the page, CSS says how it
+        looks and moves, and script says what happens when you act. This page starts with HTML alone, and brings in CSS
+        and then script only where they are needed.</p>
+      <p className="paragraph">By the end you can build an accordion in HTML alone, make it slide with CSS, keep one fold
+        open at a time, and say why the older ways moved unevenly. The first accordion below is HTML alone.</p>
+    </header>
     <section aria-labelledby="html-alone-heading" className="accordion-part">
       <h3 id="html-alone-heading" className="title bold">An accordion in HTML alone</h3>
       <ol className={runs}>
+        <li className="run html-alone">
+          <HtmlAloneAccordion/>
+          <Snippet label="HTML" lines={span(htmlAloneSource, '<ul>', '</ul>')}/>
+        </li>
         <li className="run">
           <p className="paragraph">A details element holds a summary and the content it hides. The summary is the bar.
             Press it and the browser shows the rest. Press it again and the browser hides it.</p>
-          <Snippet label="HTML" lines={span(htmlAloneSource, '<ul>', '</ul>')}/>
+        </li>
+        <li className="run">
           <p className="paragraph">The browser also remembers whether each fold is open, and says so to a screen reader,
             which is software that reads the page aloud. It does not slide. The parts below are about making it slide,
             starting with how it was done before the browser could.</p>
-          <HtmlAloneAccordion/>
         </li>
       </ol>
     </section>
