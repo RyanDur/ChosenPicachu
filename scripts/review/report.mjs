@@ -71,8 +71,8 @@ const places = (deltas, commit) => deltas.length === 0 ? [] : [
 
 const entries = (deltas, commit) => [...deltas].sort(bySeverity).flatMap(delta => [deltaOf(delta, commit), '']);
 
-const keepTold = (plusses, commit) => plusses.length === 0 ? [] : [
-  '**Keep doing.**',
+const keepTold = (plusses, commit, lead = '**Keep doing.**') => plusses.length === 0 ? [] : [
+  lead,
   '',
   ...plusses.map(plus => `- ${placeOf(plus, commit)}. ${told(plus.happened)}`),
   '',
@@ -114,8 +114,26 @@ export const unplaced = review => {
   return deltas.length + plusses.length;
 };
 
-const straysTold = ({deltas, plusses}, commit) =>
-  deltas.length + plusses.length === 0 ? [] : ['#### One more thing', '', ...places(deltas, commit), ...entries(deltas, commit), ...keepTold(plusses, commit)];
+const aloneTold = (delta, at, commit) => [
+  `#### ${at + 1}. ${named(delta.severity)} at \`${asText(`${delta.file}:${delta.line}`)}\``,
+  '',
+  `**Problem.** ${told(delta.happened)}`,
+  '',
+  `**Where.** ${placeOf(delta, commit)}${delta.evidence === 'inferred' ? ' · inferred' : ''}`,
+  '',
+  `**Why it matters.** ${told(delta.why)}`,
+  '',
+  `**Next step.** ${told(delta.change)}`,
+  '',
+  `> ${told(delta.principle)}`,
+  '',
+  ...checkedFold(delta)
+];
+
+const straysTold = ({deltas, plusses}, after, commit) => [
+  ...[...deltas].sort(bySeverity).flatMap((delta, at) => aloneTold(delta, after + at, commit)),
+  ...keepTold(plusses, commit, '#### Keep doing')
+];
 
 const listed = (habits, review) => habits
   .map(habit => gathered(habit, review))
@@ -154,12 +172,12 @@ export const summaryOf = (review, {commit, subject} = {}) => {
     ...stepsTold(nextSteps),
     '### What the review found',
     '',
-    `${countsOf(review)} ${plural(habits.length, 'habit')}.`,
+    `${countsOf(review)}${habits.length === 0 ? '' : ` ${plural(habits.length, 'habit')}.`}`,
     '',
     ...(habits.length < 2 ? [] : [...listed(habits, review), '']),
     ...(empty(deferred) ? [] : [`**Deferred:** ${told(deferred)}`, '']),
     ...habits.flatMap((habit, at) => [...habitTold(gathered(habit, review), at, commit), '']),
-    ...straysTold(strays(review), commit)
+    ...straysTold(strays(review), habits.length, commit)
   ].join('\n').trimEnd();
 };
 

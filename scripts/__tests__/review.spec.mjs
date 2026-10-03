@@ -266,13 +266,34 @@ describe('the review report', () => {
     expect(summary).toContain('**Keep doing.**');
   });
 
-  test('an entry whose habit matches none stands under one more thing, after the habits', () => {
-    const stray = aDelta({habit: 'nothing of the sort', file: 'src/s.tsx', line: 7, happened: 'a stray thing'});
-    const summary = summaryOf(review([aPlus({habit: 'nothing of the sort', file: 'src/k.tsx', line: 8, happened: 'a stray keep'})], [note, stray], [heading]));
-    expect(placeOf(summary, '#### 1. a section is named by its heading')).toBeLessThan(placeOf(summary, '#### One more thing'));
-    expect(placeOf(summary, '#### One more thing')).toBeLessThan(placeOf(summary, '**Where.**\n\n- **Note.** `src/s.tsx:7`. a stray thing'));
-    expect(placeOf(summary, '- **Note.** `src/s.tsx:7`.')).toBeLessThan(placeOf(summary, '**Keep doing.**\n\n- `src/k.tsx:8`. a stray keep'));
-    expect(summaryOf(review([], [note], [heading]))).not.toContain('#### One more thing');
+  test('a finding that fits no habit is told on its own after the habits: its problem, where, why it matters and the next step, in the open', () => {
+    const stray = aDelta({habit: 'nothing of the sort', severity: 'concern', file: 'src/s.tsx', line: 7, happened: 'a stray thing', why: 'it costs a reader', change: 'put it right', principle: 'the door says so', checked: 'read the file'});
+    const summary = summaryOf(review([], [note, stray], [heading]));
+    const at = needle => placeOf(summary, needle);
+    expect(at('#### 1. a section is named by its heading')).toBeLessThan(at('#### 2. Concern at `src/s.tsx:7`'));
+    expect(at('#### 2. Concern at `src/s.tsx:7`')).toBeLessThan(at('**Problem.** a stray thing'));
+    expect(at('**Problem.** a stray thing')).toBeLessThan(at('**Where.** `src/s.tsx:7`'));
+    expect(at('**Where.** `src/s.tsx:7`')).toBeLessThan(at('**Why it matters.** it costs a reader'));
+    expect(at('**Why it matters.** it costs a reader')).toBeLessThan(at('**Next step.** put it right'));
+    expect(at('**Next step.** put it right')).toBeLessThan(at('<details><summary>what was checked</summary>\n\nread the file'));
+    expect(summary).not.toContain('<details><summary>concern · structure · src/s.tsx:7');
+  });
+
+  test('findings that fit no habit are told worst first, and say when they are inferred', () => {
+    const alone = traits => aDelta({habit: 'nothing of the sort', ...traits});
+    const summary = summaryOf(review([], [alone({file: 'src/n.tsx'}), alone({severity: 'violation', file: 'src/v.tsx', evidence: 'inferred'})], []), {commit: {repository: 'RyanDur/ChosenPicachu', sha: 'abc123'}});
+    expect(placeOf(summary, '#### 1. Violation at `src/v.tsx:1`')).toBeLessThan(placeOf(summary, '#### 2. Note at `src/n.tsx:1`'));
+    expect(summary).toContain('**Where.** [`src/v.tsx:1`](https://github.com/RyanDur/ChosenPicachu/blob/abc123/src/v.tsx#L1) · inferred');
+  });
+
+  test('a plus that fits no habit stands under keep doing, after the findings', () => {
+    const summary = summaryOf(review([aPlus({habit: 'nothing of the sort', file: 'src/k.tsx', line: 8, happened: 'a stray keep'})], [note], [heading]));
+    expect(placeOf(summary, '#### 1. a section is named by its heading')).toBeLessThan(placeOf(summary, '#### Keep doing\n\n- `src/k.tsx:8`. a stray keep'));
+    expect(summaryOf(review([], [note], [heading]))).not.toContain('#### Keep doing');
+  });
+
+  test('a review with no habits leaves them out of the count', () => {
+    expect(summaryOf(review([], [aDelta({habit: 'nothing of the sort'})], []))).toContain('0 plusses. 1 note.\n');
   });
 
   test('the run says on stderr how many entries named a habit the review did not list', () => {
@@ -282,7 +303,7 @@ describe('the review report', () => {
 
     expect(run.status).toBe(0);
     expect(run.stderr).toBe('1 entry named a habit the review did not list\n');
-    expect(run.stdout).toContain('#### One more thing');
+    expect(run.stdout).toContain('#### 2. Note at `src/somewhere.tsx:1`');
   });
 
   test('the run heads the summary with the subject it is given', () => {
