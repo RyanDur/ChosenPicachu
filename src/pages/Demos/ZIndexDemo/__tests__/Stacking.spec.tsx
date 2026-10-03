@@ -5,6 +5,14 @@ import {demosAt} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
 
 describe('the stacking pile', () => {
+  test('should name the pile by its caption, inside the part that asks why Third is on top', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+
+    const part = await screen.findByRole('region', {name: 'Why Third is on top'});
+
+    expect(within(part).getByRole('figure', {name: 'The pile. Three cards, First, Second and Third, in the order the code lists them.'})).toBeInTheDocument();
+  });
+
   test('should open with no card raised', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
 

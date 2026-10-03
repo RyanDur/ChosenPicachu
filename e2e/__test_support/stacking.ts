@@ -5,8 +5,8 @@ export type Card = 'First' | 'Second' | 'Third';
 const order: ('None' | Card)[] = ['None', 'First', 'Second', 'Third'];
 
 export const stackingPile = (page: Page) => {
-  const raisedGroup = page.getByRole('group', {name: 'card raised'});
-  const pile = page.getByRole('region', {name: 'Why Third is on top'}).getByRole('figure').filter({has: raisedGroup});
+  const pile = page.getByRole('figure', {name: /^The pile\./});
+  const raisedGroup = pile.getByRole('group', {name: 'card raised'});
   return {
     cards: () => pile.getByRole('listitem'),
     cardsFromTheTop: (): Promise<string[]> => pile.getByRole('list').evaluate(list => {
