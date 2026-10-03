@@ -2,7 +2,7 @@ import {FC, PropsWithChildren} from 'react';
 import {Figure} from './Figure';
 import './Drawing.css';
 
-export type Kind = 'piece' | 'native' | 'unseen' | 'clipped' | 'clip' | 'ring' | 'unseen-ring';
+export type Kind = 'piece' | 'native' | 'unseen' | 'clipped' | 'clip' | 'ring' | 'unseen-ring' | 'topmost';
 export type At = {x: number; y: number};
 type Sized = At & {width: number; height: number};
 
@@ -17,7 +17,7 @@ export const Part: FC<Sized & {kind: Kind; name: string}> = ({name, ...box}) => 
   <text className="drawn-caption" x={box.x + box.width / 2} y={box.y + box.height / 2 + 4} textAnchor="middle">{name}</text>
 </>;
 
-export const Words: FC<At & {children: string; anchor?: 'start' | 'middle' | 'end'}> = ({x, y, anchor = 'middle', children}) =>
+export const Label: FC<At & {children: string; anchor?: 'start' | 'middle' | 'end'}> = ({x, y, anchor = 'middle', children}) =>
   <text className="drawn-caption" x={x} y={y} textAnchor={anchor}>{children}</text>;
 
 const head = (from: At, to: At): string => {

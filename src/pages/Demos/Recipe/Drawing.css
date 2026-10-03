@@ -26,6 +26,13 @@
     stroke-dasharray: 4 3;
   }
 
+  .topmost {
+    fill: var(--paper);
+    stroke: var(--charcoal);
+    stroke-width: var(--hairline-x-2);
+    vector-effect: non-scaling-stroke;
+  }
+
   .clip {
     fill: none;
     stroke: var(--charcoal);
