@@ -67,7 +67,7 @@ export const SortMenu: FC = () => {
     });
   };
   const onListBlur = ({relatedTarget}: FocusEvent<HTMLUListElement>): void => {
-    if (relatedTarget !== null && !within(relatedTarget, list)) {
+    if (!within(relatedTarget, list)) {
       updateOpen(false);
     }
   };

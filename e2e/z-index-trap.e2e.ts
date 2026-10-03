@@ -77,6 +77,18 @@ test('pressing Sort by again closes its menu', async ({page}) => {
   await expect(page.getByRole('menu')).toHaveCount(0);
 });
 
+test('Shift+Tab from a choice closes the menu, wherever focus lands', async ({page}) => {
+  await page.goto('demos/?tab=z-index');
+  const menu = trappedMenu(page);
+  await menu.openByKeyboard();
+  await expect(menu.choice('name')).toBeFocused();
+
+  await page.keyboard.press('Shift+Tab');
+
+  await expect(page.getByRole('menu')).toHaveCount(0);
+  await expect(menu.sortBy).toHaveAttribute('aria-expanded', 'false');
+});
+
 test('a press outside the open menu closes it', async ({page}) => {
   await page.goto('demos/?tab=z-index');
   const menu = trappedMenu(page);
