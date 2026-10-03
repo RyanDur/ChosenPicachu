@@ -18,6 +18,7 @@ export const trappedMenu = (page: Page) => {
       await page.keyboard.press('Enter');
     },
     onTopAt: async (name: SortChoice): Promise<string> => choice(name).evaluate((element, cardTwo) => {
+      element.scrollIntoView({block: 'center'});
       const {left, top, width, height} = element.getBoundingClientRect();
       const topmost = document.elementFromPoint(left + width / 2, top + height / 2);
       if (element.contains(topmost)) {
@@ -45,6 +46,7 @@ export const topLayerMenu = (page: Page) => {
         list.x < cardTwo.x + cardTwo.width && cardTwo.x < list.x + list.width;
     },
     onTopAt: (name: SortChoice): Promise<boolean> => choice(name).evaluate(element => {
+      element.scrollIntoView({block: 'center'});
       const {left, top, width, height} = element.getBoundingClientRect();
       return element.contains(document.elementFromPoint(left + width / 2, top + height / 2));
     })
