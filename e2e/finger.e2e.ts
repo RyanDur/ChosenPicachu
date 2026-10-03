@@ -1,5 +1,5 @@
 import {Page, expect, test} from '@playwright/test';
-import {fingerTap, iPhone, phoneSideways, shortOfAFinger, topLayerMenu, trappedMenu} from './__test_support';
+import {bannerTrap, fingerTap, iPhone, phoneSideways, shortOfAFinger, topLayerMenu, trappedMenu} from './__test_support';
 
 const doorFold = (page: Page) => page.getByRole('group').filter({has: page.getByText('how I organize it', {exact: true})}).first();
 const explainer = (page: Page) => page.getByRole('group').filter({has: page.getByText('what am I looking at?', {exact: true})}).first();
@@ -61,6 +61,15 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
       expect(await shortOfAFinger(controls)).toEqual([]);
     });
 
+    test('the banners\' buttons and the old banner\'s dismiss take a finger', async ({page}) => {
+      await page.goto('demos/?tab=z-index');
+      const banners = bannerTrap(page);
+      await banners.raiseOld.click();
+      const controls = [banners.raiseOld, banners.raiseNew, banners.dismissOld];
+
+      expect(await shortOfAFinger(controls)).toEqual([]);
+    });
+
     test('changes the trap with a finger that lands just off the checkbox\'s words', async ({page}) => {
       await page.goto('demos/?tab=z-index');
       const menu = trappedMenu(page);
@@ -72,7 +81,7 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
 
     test('closes a banner with a finger that lands just off its dismiss', async ({page}) => {
       await page.goto('demos/?tab=z-index');
-      await page.getByRole('button', {name: 'raise a banner'}).tap();
+      await page.getByRole('button', {name: 'Raise a banner, in the top layer'}).tap();
       const dismiss = page.getByRole('alert').getByRole('button', {name: /^dismiss/}).first();
       await expect(dismiss).toBeVisible();
 

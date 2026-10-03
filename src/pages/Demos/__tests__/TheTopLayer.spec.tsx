@@ -20,7 +20,7 @@ describe('the top layer', () => {
     await openZIndexTab();
 
     expect(await screen.findByRole('heading', {name: 'Why Third is on top'})).toBeInTheDocument();
-    expect(screen.getByRole('heading', {name: 'the top layer'})).toBeInTheDocument();
+    expect(screen.getByRole('heading', {name: 'Why a fixed banner still loses'})).toBeInTheDocument();
   });
 
   test('the user raises a banner from the demo', async () => {
@@ -28,7 +28,7 @@ describe('the top layer', () => {
     const alert = screen.getByRole('alert', {hidden: true});
     const alreadyStanding = troublesIn(alert).length;
 
-    await userEvent.click(await screen.findByRole('button', {name: 'raise a banner'}));
+    await userEvent.click(await screen.findByRole('button', {name: 'Raise a banner, in the top layer'}));
 
     expect(troublesIn(alert)).toHaveLength(alreadyStanding + 1);
   });
@@ -37,7 +37,7 @@ describe('the top layer', () => {
     await openZIndexTab();
     const alert = screen.getByRole('alert', {hidden: true});
     const alreadyStanding = troublesIn(alert).length;
-    await userEvent.click(await screen.findByRole('button', {name: 'raise a banner'}));
+    await userEvent.click(await screen.findByRole('button', {name: 'Raise a banner, in the top layer'}));
     const raised = troublesIn(alert);
     const newest = raised[raised.length - 1];
     const item = within(alert).getAllByRole('listitem', {hidden: true}).find(standing => standing.contains(newest));
@@ -55,7 +55,7 @@ describe('the top layer', () => {
     await openZIndexTab();
     const alert = screen.getByRole('alert', {hidden: true});
     const alreadyStanding = troublesIn(alert).length;
-    const raise = await screen.findByRole('button', {name: 'raise a banner'});
+    const raise = await screen.findByRole('button', {name: 'Raise a banner, in the top layer'});
 
     await userEvent.click(raise);
     await userEvent.click(raise);

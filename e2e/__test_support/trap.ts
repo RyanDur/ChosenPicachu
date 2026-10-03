@@ -1,4 +1,4 @@
-import type {Page} from '@playwright/test';
+import type {Locator, Page} from '@playwright/test';
 
 export type SortChoice = 'name' | 'date' | 'size';
 
@@ -48,5 +48,31 @@ export const topLayerMenu = (page: Page) => {
       const {left, top, width, height} = element.getBoundingClientRect();
       return element.contains(document.elementFromPoint(left + width / 2, top + height / 2));
     })
+  };
+};
+
+export const bannerTrap = (page: Page) => {
+  const trap = page.getByRole('figure', {name: /^The banners\./});
+  const cardTwo = trap.getByRole('listitem').filter({hasText: /^Card two\./});
+  const oldBanner = page.getByRole('alert').filter({hasText: /^An old banner\./});
+  const topLayerBanner = page.getByRole('alert').filter({hasNot: page.getByText(/^An old banner\./)}).getByRole('listitem').last();
+  return {
+    raiseOld: trap.getByRole('button', {name: 'Raise the old banner'}),
+    raiseNew: trap.getByRole('button', {name: 'Raise a banner, in the top layer'}),
+    oldBanner,
+    topLayerBanner,
+    dismissOld: page.getByRole('button', {name: 'dismiss the old banner'}),
+    scrollCardTwoOnto: async (banner: Locator): Promise<void> => {
+      const [card, strip] = await Promise.all([cardTwo.boundingBox(), banner.boundingBox()]);
+      await page.mouse.wheel(0, (card?.y ?? 0) + (card?.height ?? 0) / 2 - (strip?.y ?? 0) - (strip?.height ?? 0) / 2);
+    },
+    onTopOf: async (banner: Locator, where: 'middle' | 'start'): Promise<string> => banner.evaluate((element, {at, card}) => {
+      const {left, top, width, height} = element.getBoundingClientRect();
+      const topmost = document.elementFromPoint(at === 'middle' ? left + width / 2 : left + 2, top + height / 2);
+      if (element.contains(topmost)) {
+        return 'the banner';
+      }
+      return card?.contains(topmost) ?? false ? 'card two' : 'something else';
+    }, {at: where, card: await cardTwo.elementHandle()})
   };
 };

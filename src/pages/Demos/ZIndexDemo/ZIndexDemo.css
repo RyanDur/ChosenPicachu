@@ -47,20 +47,8 @@
     }
 }
 
-.top-layer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--base-x-1_25);
-    padding-block: var(--base-x-2_5);
 
-    .pitch {
-        text-align: center;
-    }
-
-}
-
-.trapped-menu {
+:is(.trapped-menu, .banner-trap) {
     display: grid;
     gap: var(--base-x-1_25);
 
@@ -87,6 +75,13 @@
         .paragraph {
             flex-basis: 100%;
         }
+
+        .button {
+            max-inline-size: 100%;
+            block-size: auto;
+            padding-block: var(--base-x-0_5);
+            white-space: normal;
+        }
     }
 
     .forms-context {
@@ -107,4 +102,23 @@
         padding: var(--base) var(--base-x-2);
         text-align: start;
     }
+}
+
+.old-banner {
+    position: fixed;
+    inset-inline: var(--base-x-2);
+    inset-block-end: var(--base-x-2);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: var(--base);
+    padding: var(--base) var(--base-x-2);
+
+    .dismiss {
+        margin-inline-start: auto;
+    }
+}
+
+:where(.trapped-menu, .banner-trap) :where(.old-way-card .button) {
+    min-block-size: var(--base-x-5);
 }
