@@ -130,6 +130,14 @@ describe('the two together', () => {
 });
 
 describe('the measured build', () => {
+  test('should show the script that measures, then lets go, beside the run that opens a part', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const explained = await screen.findByRole('region', {name: parts[0]});
+
+    expect(codeBeside(explained, /When the motion ends, the script takes the number away/)).toHaveTextContent(/const opened[^]*const settled[^]*const letsGo/);
+  });
+
   test('should show the classes that hold the height beside the run that closes it', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
