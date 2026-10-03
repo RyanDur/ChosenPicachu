@@ -1,4 +1,4 @@
-import {expect, type Locator} from '@playwright/test';
+import {expect} from '@playwright/test';
 import {
   accordionsTab,
   desktop,
@@ -81,42 +81,11 @@ for (const build of measuredBuilds) {
   });
 }
 
-type Turn = {before: number; turned: number; end: number};
-
-const pressedAgainAtAQuarter = async (fold: Locator, first: Locator, second: Locator, travel: {from: number; to: number}): Promise<Turn> =>
-  fold.evaluate((element, {firstPress, secondPress, from, to}) => new Promise<Turn>(resolve => {
-    const height = (): number => element.getBoundingClientRect().height;
-    const moving = (): boolean => element.getAnimations({subtree: true})
-      .some(motion => motion instanceof CSSTransition && motion.transitionProperty === 'height');
-    const quarter = from + (to - from) / 4;
-    const atEnd = (turn: Omit<Turn, 'end'>) => (): void => {
-      if (moving()) {
-        requestAnimationFrame(atEnd(turn));
-      } else {
-        resolve({...turn, end: height()});
-      }
-    };
-    const watched = (): void => {
-      const before = height();
-      if (to > from ? before <= quarter : before >= quarter) {
-        requestAnimationFrame(watched);
-      } else if (secondPress instanceof HTMLElement) {
-        secondPress.click();
-        requestAnimationFrame(atEnd({before, turned: height()}));
-      }
-    };
-    if (firstPress instanceof HTMLElement) {
-      firstPress.click();
-      requestAnimationFrame(watched);
-    }
-  }), {firstPress: await first.elementHandle(), secondPress: await second.elementHandle(), ...travel});
-
 for (const build of measuredBuilds) {
   for (const {first, start} of [{first: 'open', start: 'shut'}, {first: 'close', start: 'open'}] as const) {
     test(`a part of ${build} pressed again while it moves turns around from where it is, ${first} first`, async ({page}) => {
       await page.goto(showing(build));
       const part = accordionsTab(page).firstPartOf(build);
-      const {opens, shuts} = accordionsTab(page).pressesOfTheFirstPart(build);
       const shut = await heightOnceSettled(part.fold);
       await part.open();
       const open = await heightOnceSettled(part.fold);
@@ -125,9 +94,7 @@ for (const build of measuredBuilds) {
         await heightOnceSettled(part.fold);
       }
 
-      const turn = first === 'open'
-        ? await pressedAgainAtAQuarter(part.fold, opens, shuts, {from: shut, to: open})
-        : await pressedAgainAtAQuarter(part.fold, shuts, opens, {from: open, to: shut});
+      const turn = await accordionsTab(page).pressesTheFirstPartAgainAtAQuarter(build, first, first === 'open' ? {from: shut, to: open} : {from: open, to: shut});
 
       for (const height of [turn.before, turn.turned]) {
         expect(height).toBeGreaterThan(shut + layoutRounding);
@@ -138,17 +105,6 @@ for (const build of measuredBuilds) {
   }
 }
 
-const pressedInTheFrameMotionStarts = async (first: Locator, second: Locator): Promise<void> =>
-  first.evaluate((firstPress, secondPress) => new Promise<void>(resolve => {
-    if (firstPress instanceof HTMLElement && secondPress instanceof HTMLElement) {
-      firstPress.click();
-      requestAnimationFrame(() => {
-        secondPress.click();
-        resolve();
-      });
-    }
-  }), await second.elementHandle());
-
 for (const build of measuredBuilds) {
   test.describe('a desktop', () => {
     test.use(desktop);
@@ -156,29 +112,27 @@ for (const build of measuredBuilds) {
     test(`an opening part of ${build} switched to Static mid-motion still ends at its text after the window narrows`, async ({page}) => {
       await page.goto(showing(build));
       const part = accordionsTab(page).firstPartOf(build);
+      const shut = await heightOnceSettled(part.fold);
+      await part.open();
+      const open = await heightOnceSettled(part.fold);
+      await part.close();
       await heightOnceSettled(part.fold);
 
-      await pressedInTheFrameMotionStarts(
-        accordionsTab(page).pressesOfTheFirstPart(build).opens,
-        page.getByRole('group', {name: 'fold motion'}).getByRole('radio', {name: 'Static'}));
+      const {before: chosenAt} = await accordionsTab(page).opensTheFirstPartThenChoosesAtAQuarter(build, 'Static', {from: shut, to: open});
       await page.setViewportSize({width: 390, height: 900});
 
+      expect(chosenAt).toBeGreaterThan(shut + layoutRounding);
+      expect(chosenAt).toBeLessThan(open - layoutRounding);
       await expect.poll(() => gapUnderItsText(part)).toBeLessThanOrEqual(layoutRounding);
     });
 
     test(`an open part of ${build} closed and opened again in one frame still ends at its text after the window narrows`, async ({page}) => {
       await page.goto(showing(build));
       const part = accordionsTab(page).firstPartOf(build);
-      const {opens, shuts} = accordionsTab(page).pressesOfTheFirstPart(build);
       await part.open();
       await heightOnceSettled(part.fold);
 
-      await shuts.evaluate((shut, open) => {
-        if (shut instanceof HTMLElement && open instanceof HTMLElement) {
-          shut.click();
-          open.click();
-        }
-      }, await opens.elementHandle());
+      await accordionsTab(page).closesThenOpensTheFirstPartInOneFrame(build);
       await heightOnceSettled(part.fold);
       await page.setViewportSize({width: 390, height: 900});
 

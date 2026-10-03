@@ -104,11 +104,52 @@ const detailsBuilds: Build[] = ['the inclusive details build', 'the details buil
 
 const closeBarsBeforeTheParts = (build: Build): number => build === 'the radio build' || build === 'the measured radio build' ? 1 : 0;
 
+export type Travel = {from: number; to: number};
+
+export type Turn = {before: number; turned: number; end: number};
+
+const pressedAtAQuarter = async (fold: Locator, first: Locator, second: Locator, travel: Travel): Promise<Turn> =>
+  fold.evaluate((element, {firstPress, secondPress, from, to}) => new Promise<Turn>((resolve, reject) => {
+    if (!(firstPress instanceof HTMLElement && secondPress instanceof HTMLElement)) {
+      reject(new Error('a press is not an element that can be clicked'));
+      return;
+    }
+    const height = (): number => element.getBoundingClientRect().height;
+    const moving = (): boolean => element.getAnimations({subtree: true})
+      .some(motion => motion instanceof CSSTransition && motion.transitionProperty === 'height');
+    const passedAQuarter = (reached: number): boolean => to > from ? reached > from + (to - from) / 4 : reached < from - (from - to) / 4;
+    const atEnd = (turn: Omit<Turn, 'end'>) => (): void => {
+      if (moving()) {
+        requestAnimationFrame(atEnd(turn));
+      } else {
+        resolve({...turn, end: height()});
+      }
+    };
+    const watched = (): void => {
+      const before = height();
+      if (passedAQuarter(before)) {
+        secondPress.click();
+        requestAnimationFrame(atEnd({before, turned: height()}));
+      } else if (moving()) {
+        requestAnimationFrame(watched);
+      } else {
+        resolve({before, turned: before, end: before});
+      }
+    };
+    firstPress.click();
+    requestAnimationFrame(watched);
+  }), {firstPress: await first.elementHandle(), secondPress: await second.elementHandle(), ...travel});
+
 export const accordionsTab = (page: Page) => {
   const built = (build: Build): Locator =>
     page.getByRole('article').filter({has: page.getByRole('heading', {name: headings[build], exact: true})}).first();
   const folds = (build: Build): Locator =>
     detailsBuilds.includes(build) ? built(build).getByRole('group') : built(build).getByRole('listitem');
+  const pressesOfTheFirstPart = (build: Build): {opens: Locator; shuts: Locator} => {
+    const fold = folds(build).nth(closeBarsBeforeTheParts(build));
+    const opens = fold.getByRole(exclusiveBuilds.includes(build) ? 'radio' : 'checkbox');
+    return {opens, shuts: exclusiveBuilds.includes(build) ? built(build).getByRole('radio', {name: 'Close', exact: true}).first() : opens};
+  };
   const partOf = (build: Build, index: number): Part => {
     const fold = folds(build).nth(index + closeBarsBeforeTheParts(build));
     return {...partIn[build]({page, fold, article: built(build), index}), showsText: textShownIn(fold)};
@@ -117,11 +158,23 @@ export const accordionsTab = (page: Page) => {
     partOf,
     holdsFocus: (build: Build): Promise<boolean> => built(build).evaluate(article => article.contains(document.activeElement)),
     firstPartOf: (build: Build): Part => partOf(build, 0),
-    pressesOfTheFirstPart: (build: Build): {opens: Locator; shuts: Locator} => {
-      const fold = folds(build).nth(closeBarsBeforeTheParts(build));
-      const opens = fold.getByRole(exclusiveBuilds.includes(build) ? 'radio' : 'checkbox');
-      return {opens, shuts: exclusiveBuilds.includes(build) ? built(build).getByRole('radio', {name: 'Close', exact: true}).first() : opens};
+    closesThenOpensTheFirstPartInOneFrame: async (build: Build): Promise<void> => {
+      const {opens, shuts} = pressesOfTheFirstPart(build);
+      await shuts.evaluate((shut, open) => {
+        if (shut instanceof HTMLElement && open instanceof HTMLElement) {
+          shut.click();
+          open.click();
+        }
+      }, await opens.elementHandle());
     },
+    pressesTheFirstPartAgainAtAQuarter: async (build: Build, first: 'open' | 'close', travel: Travel): Promise<Turn> => {
+      const {opens, shuts} = pressesOfTheFirstPart(build);
+      const fold = partOf(build, 0).fold;
+      return first === 'open' ? pressedAtAQuarter(fold, opens, shuts, travel) : pressedAtAQuarter(fold, shuts, opens, travel);
+    },
+    opensTheFirstPartThenChoosesAtAQuarter: async (build: Build, motion: 'Static', travel: Travel): Promise<Turn> =>
+      pressedAtAQuarter(partOf(build, 0).fold, pressesOfTheFirstPart(build).opens,
+        page.getByRole('group', {name: 'fold motion'}).getByRole('radio', {name: motion}), travel),
     partsOf: async (build: Build): Promise<Part[]> =>
       (await folds(build).all()).slice(closeBarsBeforeTheParts(build)).map((_fold, index) => partOf(build, index))
   };
