@@ -33,7 +33,7 @@ export const PopoverExplained: FC = () =>
           menu. Each choice is a
           button that closes the menu with popovertargetaction set to hide. The <Mdn path="Web/API/Popover_API">Popover
             API</Mdn> does all of it.</p>
-        <Snippet label="HTML" lines={span(topLayerSource, '<button type="button" tabIndex={0} className="button primary reachable" popoverTarget', '</menu>')}/>
+        <Snippet label="HTML" lines={span(topLayerSource, '<button type="button"', '</menu>')}/>
       </li>
       <li className="run">
         <p className="paragraph">With the old way, any card around the menu that forms a stacking context traps it, and

@@ -1,9 +1,6 @@
 import {FC, FocusEvent, KeyboardEvent, useEffect, useId, useState} from 'react';
 import {Maybe, maybe, nothing, some} from '@ryandur/sand';
-
-const choices = ['name', 'date', 'size'] as const;
-
-type Choice = typeof choices[number];
+import {SortChoice, sortChoices} from './sort-choices';
 
 const steps: Partial<Record<string, (at: number, count: number) => number>> = {
   ArrowDown: (at, count) => (at + 1) % count,
@@ -28,7 +25,7 @@ const within = (target: EventTarget | null, id: string): boolean => target insta
 
 export const SortMenu: FC = () => {
   const [open, updateOpen] = useState(false);
-  const [chosen, updateChosen] = useState<Maybe<Choice>>(nothing());
+  const [chosen, updateChosen] = useState<Maybe<SortChoice>>(nothing());
   const button = useId();
   const list = useId();
 
@@ -53,7 +50,7 @@ export const SortMenu: FC = () => {
       closeToButton();
       return;
     }
-    nextChoice(event.key, at, choices.length).map(next => {
+    nextChoice(event.key, at, sortChoices.length).map(next => {
       event.preventDefault();
       choiceAt(list, next).map(focusOn);
     });
@@ -68,7 +65,7 @@ export const SortMenu: FC = () => {
     <button id={button} type="button" className="button primary reachable" aria-haspopup="menu" aria-expanded={open} aria-controls={list}
       onMouseDown={event => event.preventDefault()} onClick={() => open ? closeToButton() : updateOpen(true)} onKeyDown={onButtonKey}>{chosen.map(choice => `Sort by: ${choice}`).orElse('Sort by')}</button>
     {open && <ul id={list} role="menu" aria-labelledby={button} className="sort-choices card rounded-corners floating" onBlur={onListBlur}>
-      {choices.map((choice, at) =>
+      {sortChoices.map((choice, at) =>
         <li key={choice} role="none">
           <button type="button" role="menuitem" tabIndex={-1} className="sort-choice reachable borderless unfilled attentive"
             onClick={() => {

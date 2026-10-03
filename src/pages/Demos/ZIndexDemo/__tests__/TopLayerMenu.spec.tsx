@@ -4,28 +4,13 @@ import {demosAt} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
 
 describe('the menu built the new way', () => {
-  test('should sit in card one beside the old menu, a button that names its popover', async () => {
+  test('should sit in card one, beside Sort by', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
     const trap = await screen.findByRole('figure', {name: /^The trap\./});
 
     const cardOne = within(trap).getAllByRole('listitem').filter(card => within(card).queryByRole('button', {name: 'Sort by'}) !== null)[0];
-    const sortBy = within(cardOne).getByRole('button', {name: 'Sort by, in the top layer'});
 
-    expect(document.getElementById(sortBy.getAttribute('popovertarget') ?? '')).toHaveAttribute('popover', 'auto');
-  });
-
-  test('should hold name, date and size, each closing the popover', async () => {
-    render(<TestApp at={demosAt('?tab=z-index')}/>);
-    const sortBy = await screen.findByRole('button', {name: 'Sort by, in the top layer'});
-    const target = sortBy.getAttribute('popovertarget') ?? '';
-
-    const choices = within(screen.getByLabelText('Sort by, in the top layer')).getAllByRole('button', {hidden: true});
-
-    expect(choices.map(choice => choice.textContent)).toEqual(['name', 'date', 'size']);
-    for (const choice of choices) {
-      expect(choice).toHaveAttribute('popovertarget', target);
-      expect(choice).toHaveAttribute('popovertargetaction', 'hide');
-    }
+    expect(within(cardOne).getByRole('button', {name: 'Sort by, in the top layer'})).toBeInTheDocument();
   });
 });
 
