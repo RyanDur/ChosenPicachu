@@ -181,7 +181,7 @@ test.describe('an iPad held upright', () => {
   test.use(iPadUpright);
 
   for (const {name, at, table} of stages) {
-    test(`a column carried by a finger stays under it from the press, in ${name}`, async ({page, browserName}) => {
+    test(`a column carried by a finger from its header's middle stays under it from the press, in ${name}`, async ({page, browserName}) => {
       test.skip(browserName !== 'chromium', 'only Chromium\'s DevTools protocol moves a finger through a drag');
       await page.goto(at);
       const trades = dragSortTable(page, table(page));
