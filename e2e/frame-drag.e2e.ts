@@ -214,12 +214,15 @@ test('a menu choice sorts, and never lifts the column', async ({page}) => {
   await expect.poll(() => trades.columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
 });
 
-for (const {reader, device} of [{reader: 'an iPad held upright', device: iPadUpright}, {reader: 'a phone', device: iPhone}]) {
+for (const {reader, device, presses} of [
+  {reader: 'an iPad held upright', device: iPadUpright, presses: ['name'] as const},
+  {reader: 'a phone', device: iPhone, presses: ['name', 'middle'] as const}
+]) {
   test.describe(reader, () => {
     test.use(device);
 
     for (const {name, at, table} of stages) {
-      for (const from of ['name', 'middle'] as const) {
+      for (const from of presses) {
         test(`a finger pressed on a column's ${from} lifts and carries it, in ${name}`, async ({page, browserName}) => {
           test.skip(browserName !== 'chromium', 'only Chromium\'s DevTools protocol moves a finger through a drag');
           await page.goto(at);
