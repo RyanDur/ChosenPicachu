@@ -286,16 +286,15 @@ test('a keyboard reader tabs from an open radio part into its text and past the 
 everyBuildJourneys(builds);
 evenMotionJourneys(['the checkbox build', 'the radio build']);
 
-test('the accordion in HTML alone opens and closes a fold by pointer and by keyboard', async ({page}) => {
+test('a fold of the accordion in HTML alone opens by pointer and closes by keyboard', async ({page}) => {
   await page.goto('demos/?tab=accordions');
-  const fold = page.getByRole('region', {name: 'An accordion in HTML alone'}).getByRole('group').filter({hasText: 'basalt'});
-  const text = fold.getByText('Opens and closes with no CSS and no script.');
-  await expect(text).toBeHidden();
+  const fold = accordionsTab(page).htmlAloneFold('basalt');
+  await expect.poll(fold.showsText).toBe(false);
 
-  await fold.getByText('basalt', {exact: true}).click();
-  await expect(text).toBeVisible();
-  await fold.getByText('basalt', {exact: true}).focus();
+  await fold.open();
+  await expect.poll(fold.showsText).toBe(true);
+  await nameOn(fold.fold).focus();
   await page.keyboard.press('Enter');
 
-  await expect(text).toBeHidden();
+  await expect.poll(fold.showsText).toBe(false);
 });

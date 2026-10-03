@@ -417,18 +417,22 @@ describe('the accordion in HTML alone', () => {
     const introduction = within(tab).getByText(/^An accordion is a list of parts/);
 
     expect(introduction.compareDocumentPosition(within(tab).getAllByRole('group')[0])).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
-    const folds = within(within(tab).getByRole('region', {name: htmlAlone})).getAllByRole('group');
+  });
+
+  test('should hold three folds, basalt, cinder and meadow, in that order', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const folds = within(await screen.findByRole('region', {name: htmlAlone})).getAllByRole('group');
+
     expect(folds).toHaveLength(3);
     ['basalt', 'cinder', 'meadow'].forEach((name, at) => expect(within(folds[at]).getByText(name)).toBeInTheDocument());
   });
 
-  test('should open its part with the folds and their whole markup beside them, with no class and no script', async () => {
+  test('should show the folds’ whole markup in the part’s first run, with no class and no script', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
     const firstRun = within(await screen.findByRole('region', {name: htmlAlone})).getAllByRole('listitem')[0];
     const code = within(firstRun).getAllByRole('code').map(sample => sample.textContent).join();
-
-    expect(within(firstRun).getAllByRole('group')).toHaveLength(3);
 
     expect(code).toMatch(/<ul>[^]*<details>[^]*<summary>basalt<\/summary>[^]*<summary>meadow<\/summary>[^]*<\/ul>/);
     expect(code).not.toMatch(/className|on[A-Z]\w*=/);

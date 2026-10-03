@@ -154,8 +154,14 @@ export const accordionsTab = (page: Page) => {
     const fold = folds(build).nth(index + closeBarsBeforeTheParts(build));
     return {...partIn[build]({page, fold, article: built(build), index}), showsText: textShownIn(fold)};
   };
+  const htmlAloneFold = (name: string): Part => {
+    const fold = page.getByRole('region', {name: 'An accordion in HTML alone'}).getByRole('group').filter({hasText: name});
+    return {...detailsPart(page, fold), showsText: textShownIn(fold)};
+  };
   return {
     partOf,
+    htmlAloneFold,
+    htmlAloneFolds: (): Part[] => ['basalt', 'cinder', 'meadow'].map(htmlAloneFold),
     holdsFocus: (build: Build): Promise<boolean> => built(build).evaluate(article => article.contains(document.activeElement)),
     firstPartOf: (build: Build): Part => partOf(build, 0),
     closesThenOpensTheFirstPartInOneFrame: async (build: Build): Promise<void> => {

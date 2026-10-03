@@ -1,5 +1,5 @@
 import {Page, expect, test} from '@playwright/test';
-import {bannerTrap, fingerTap, iPhone, phoneSideways, shortOfAFinger, topLayerMenu, trappedMenu} from './__test_support';
+import {accordionsTab, bannerTrap, fingerTap, iPhone, nameOn, phoneSideways, shortOfAFinger, topLayerMenu, trappedMenu} from './__test_support';
 
 const doorFold = (page: Page) => page.getByRole('group').filter({has: page.getByText('how I organize it', {exact: true})}).first();
 const explainer = (page: Page) => page.getByRole('group').filter({has: page.getByText('what am I looking at?', {exact: true})}).first();
@@ -81,8 +81,7 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
 
     test('every fold of the accordion in HTML alone takes a finger', async ({page}) => {
       await page.goto('demos/?tab=accordions');
-      const part = page.getByRole('region', {name: 'An accordion in HTML alone'});
-      const bars = ['basalt', 'cinder', 'meadow'].map(name => part.getByRole('group').filter({hasText: name}).getByText(name, {exact: true}));
+      const bars = accordionsTab(page).htmlAloneFolds().map(fold => nameOn(fold.fold));
       await expect(bars[0]).toBeVisible();
 
       expect(await shortOfAFinger(bars)).toEqual([]);
