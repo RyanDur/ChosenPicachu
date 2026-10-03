@@ -100,7 +100,10 @@
         display: block;
         inline-size: 100%;
         padding: var(--base) var(--base-x-2);
-        background: none;
         text-align: start;
+    }
+
+    :where(.sort-choice) {
+        background: none;
     }
 }
