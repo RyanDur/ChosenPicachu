@@ -57,12 +57,12 @@ export const SortMenu: FC = () => {
   };
 
   return <>
-    <button id={button} type="button" className="button primary" aria-haspopup="menu" aria-expanded={open} aria-controls={list}
+    <button id={button} type="button" className="button primary reachable" aria-haspopup="menu" aria-expanded={open} aria-controls={list}
       onClick={() => updateOpen(!open)} onKeyDown={onButtonKey}>{chosen ? `Sort by: ${chosen}` : 'Sort by'}</button>
     {open && <ul id={list} role="menu" aria-labelledby={button} className="sort-choices card rounded-corners floating" onBlur={onListBlur}>
       {choices.map(choice =>
         <li key={choice} role="none">
-          <button type="button" role="menuitem" tabIndex={-1} className="sort-choice"
+          <button type="button" role="menuitem" tabIndex={-1} className="sort-choice reachable"
             onClick={() => {
               updateChosen(choice);
               closeToButton();

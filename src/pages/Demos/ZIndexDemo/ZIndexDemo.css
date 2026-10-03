@@ -64,9 +64,16 @@
     display: grid;
     gap: var(--base-x-1_25);
 
+    .context-choice {
+        display: flex;
+        align-items: center;
+        gap: var(--base);
+    }
+
     .old-way-cards {
         display: grid;
         gap: var(--base-x-2_5);
+        padding-block-end: var(--base-x-7);
     }
 
     .old-way-card {

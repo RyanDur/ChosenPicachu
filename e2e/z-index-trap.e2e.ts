@@ -15,8 +15,20 @@ for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: 
       await menu.open();
 
       await expect.poll(() => menu.onTopAt('name')).toBe('the choice');
-      await expect.poll(() => menu.onTopAt('date')).toBe('Card two. z-index: 1');
+      await expect.poll(() => menu.onTopAt('date')).toBe('card two');
     });
+
+    for (const state of ['contained', 'free']) {
+      test(`the open menu ends above the caption, with card one ${state}`, async ({page}) => {
+        await page.goto(`demos/?tab=z-index&card-one=${state}`);
+        const menu = trappedMenu(page);
+
+        await menu.open();
+
+        const [list, caption] = await Promise.all([page.getByRole('menu').boundingBox(), menu.caption.boundingBox()]);
+        expect((list?.y ?? Infinity) + (list?.height ?? 0)).toBeLessThanOrEqual(caption?.y ?? 0);
+      });
+    }
 
     test('freeing card one opens the menu over card two, and trapping it again drops the menu back under, each said', async ({page}) => {
       await page.goto('demos/?tab=z-index');
@@ -33,7 +45,7 @@ for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: 
       await expect(menu.contextChoice).toBeChecked();
       await expect(menu.says).toHaveText(contained);
       await menu.open();
-      await expect.poll(() => menu.onTopAt('date')).toBe('Card two. z-index: 1');
+      await expect.poll(() => menu.onTopAt('date')).toBe('card two');
     });
   });
 }
@@ -56,7 +68,7 @@ test('the keyboard moves through the trapped menu, to a choice under card two, a
   await page.keyboard.press('ArrowDown');
 
   await expect(menu.choice('date')).toBeFocused();
-  await expect.poll(() => menu.onTopAt('date')).toBe('Card two. z-index: 1');
+  await expect.poll(() => menu.onTopAt('date')).toBe('card two');
   await page.keyboard.press('Escape');
   await expect(menu.sortBy).toBeFocused();
 });

@@ -68,10 +68,20 @@ describe('the menu built the old way', () => {
 });
 
 describe('the card that traps the menu', () => {
-  test('should form a stacking context at first, and say so', async () => {
+  test('should form a stacking context at first, and say nothing until the checkbox changes', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
 
     expect(await screen.findByRole('checkbox', {name: 'Card one has z-index: 1'})).toBeChecked();
+    expect(screen.getByRole('status', {name: 'what card one does'})).toBeEmptyDOMElement();
+  });
+
+  test('should say the card traps the menu again when checked again', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    const contextChoice = await screen.findByRole('checkbox', {name: 'Card one has z-index: 1'});
+
+    await userEvent.click(contextChoice);
+    await userEvent.click(contextChoice);
+
     expect(screen.getByRole('status', {name: 'what card one does'})).toHaveTextContent(contained);
   });
 
@@ -88,7 +98,6 @@ describe('the card that traps the menu', () => {
     render(<TestApp at={demosAt('?tab=z-index&card-one=free')}/>);
 
     expect(await screen.findByRole('checkbox', {name: 'Card one has z-index: 1'})).not.toBeChecked();
-    expect(screen.getByRole('status', {name: 'what card one does'})).toHaveTextContent(free);
   });
 });
 

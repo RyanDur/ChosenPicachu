@@ -1,5 +1,5 @@
 import {Page, expect, test} from '@playwright/test';
-import {fingerTap, iPhone, phoneSideways} from './__test_support';
+import {fingerTap, iPhone, phoneSideways, trappedMenu} from './__test_support';
 
 const doorFold = (page: Page) => page.getByRole('group').filter({has: page.getByText('how I organize it', {exact: true})}).first();
 const explainer = (page: Page) => page.getByRole('group').filter({has: page.getByText('what am I looking at?', {exact: true})}).first();
@@ -41,6 +41,26 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
 
       await fingerTap(page, fold.getByText('what am I looking at?', {exact: true}));
       await expect(told).toBeHidden();
+    });
+
+    test('every control in the trap takes a finger', async ({page}) => {
+      await page.goto('demos/?tab=z-index');
+      const menu = trappedMenu(page);
+      await menu.open();
+      const controls = [...menu.controls(), menu.choice('name'), menu.choice('date'), menu.choice('size')];
+
+      const heights = await Promise.all(controls.map(async control => Math.round((await control.boundingBox())?.height ?? 0)));
+
+      expect(heights.filter(height => height < 44)).toEqual([]);
+    });
+
+    test('changes the trap with a finger that lands just off the checkbox\'s words', async ({page}) => {
+      await page.goto('demos/?tab=z-index');
+      const menu = trappedMenu(page);
+
+      await fingerTap(page, menu.controls()[0]);
+
+      await expect(menu.contextChoice).not.toBeChecked();
     });
 
     test('closes a banner with a finger that lands just off its dismiss', async ({page}) => {

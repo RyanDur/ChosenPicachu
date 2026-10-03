@@ -50,7 +50,7 @@ export const MenuExplained: FC<Props> = ({cardOne, onCardOne}) =>
           its 9999 is compared with card two’s 1. The list opens over card two. Check it again, and the card forms
           its layer again, with the list inside it.</p>
         <Snippet label="HTML" lines={[
-          ...span(trappedSource, '<label className="context-choice">', '</label>'), gap,
+          ...span(trappedSource, '<label className="context-choice', '</label>'), gap,
           ...span(trappedSource, "<li className={classNames('old-way-card", "'forms-context')}>")
         ]}/>
       </li>
