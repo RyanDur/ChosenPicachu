@@ -1,8 +1,11 @@
-import {expect, test} from '@playwright/test';
+import {Page, expect, test} from '@playwright/test';
 import {codedStepLayouts, desktop, iPad13Sideways, iPadSideways, iPadUpright} from './__test_support';
 
 const bigPhoneSideways = {viewport: {width: 956, height: 440}, hasTouch: true};
-const tutorials = [{name: 'the z-index tutorial', at: 'demos/?tab=z-index&news=top,many'}, {name: 'the price chart tutorial', at: 'demos/charts/price/?graph=price'}];
+const tutorials = [
+  {name: 'the z-index tutorial', at: 'demos/?tab=z-index&news=top,many', steps: (page: Page) => page.getByRole('region', {name: 'let’s build this feature'})},
+  {name: 'the price chart tutorial', at: 'demos/charts/price/?graph=price', steps: (page: Page) => page}
+];
 
 for (const {reader, device, layout} of [
   {reader: 'a big phone held sideways', device: bigPhoneSideways, layout: 'code below prose'},
@@ -19,7 +22,7 @@ for (const {reader, device, layout} of [
         await page.goto(tutorial.at);
         await expect(page.getByRole('code').first()).toBeVisible({timeout: 30_000});
 
-        await expect.poll(async () => [...new Set(await codedStepLayouts(page))]).toEqual([layout]);
+        await expect.poll(async () => [...new Set(await codedStepLayouts(page, tutorial.steps(page)))]).toEqual([layout]);
       });
     }
   });
