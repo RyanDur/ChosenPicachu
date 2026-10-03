@@ -81,26 +81,6 @@ for (const build of measuredBuilds) {
   });
 }
 
-const heightsWhile = (part: Part, act: () => Promise<void>): Promise<number[]> => Promise.all([
-  part.fold.evaluate(fold => new Promise<number[]>(resolve => {
-    const heights: number[] = [];
-    const until = performance.now() + 900;
-    const record = (): void => {
-      heights.push(fold.getBoundingClientRect().height);
-      if (performance.now() < until) {
-        requestAnimationFrame(record);
-      } else {
-        resolve(heights);
-      }
-    };
-    requestAnimationFrame(record);
-  })),
-  act()
-]).then(([heights]) => heights);
-
-const largestStep = (heights: number[]): number =>
-  Math.max(...heights.slice(1).map((height, at) => Math.abs(height - heights[at])));
-
 for (const build of measuredBuilds) {
   for (const {first, second, start} of [
     {first: 'open', second: 'close', start: 'shut'},
@@ -116,14 +96,49 @@ for (const build of measuredBuilds) {
         await part.close();
         await heightOnceSettled(part.fold);
       }
+      const quarter = (open - shut) / 4;
 
-      const heights = await heightsWhile(part, async () => {
-        await part[first]();
-        await page.waitForTimeout(100);
-        await part[second]();
-      });
+      await part[first]();
+      const movedAQuarter = (height: number): boolean => first === 'open' ? height > shut + quarter : height < open - quarter;
+      await expect.poll(async () => movedAQuarter(await heightByTheNextFrame(part.fold))).toBe(true);
+      await part[second]();
+      const turning = await motionOf(part.fold);
 
-      expect(largestStep(heights)).toBeLessThan((open - shut) * 0.3);
+      expect(turning.at(0)?.height).toBeGreaterThan(shut + layoutRounding);
+      expect(turning.at(0)?.height).toBeLessThan(open - layoutRounding);
+      expect(Math.abs((turning.at(-1)?.height ?? 0) - (second === 'close' ? shut : open))).toBeLessThanOrEqual(layoutRounding);
     });
   }
+}
+
+for (const build of measuredBuilds) {
+  test.describe('a desktop', () => {
+    test.use(desktop);
+
+    test(`an opening part of ${build} switched to Static mid-motion still ends at its text after the window narrows`, async ({page}) => {
+      await page.goto(showing(build));
+      const part = accordionsTab(page).firstPartOf(build);
+      const shut = await heightOnceSettled(part.fold);
+      await part.open();
+      await expect.poll(() => heightByTheNextFrame(part.fold)).toBeGreaterThan(shut + layoutRounding);
+
+      await page.getByRole('group', {name: 'fold motion'}).getByText('Static', {exact: true}).click();
+      await page.setViewportSize({width: 390, height: 900});
+
+      await expect.poll(() => gapUnderItsText(part)).toBeLessThanOrEqual(layoutRounding);
+    });
+
+    test(`an open part of ${build} closed and opened again in one frame still ends at its text after the window narrows`, async ({page}) => {
+      await page.goto(showing(build));
+      const part = accordionsTab(page).firstPartOf(build);
+      await part.open();
+      await heightOnceSettled(part.fold);
+
+      await accordionsTab(page).closesThenOpensTheFirstPartInOneFrame(build);
+      await heightOnceSettled(part.fold);
+      await page.setViewportSize({width: 390, height: 900});
+
+      await expect.poll(() => gapUnderItsText(part)).toBeLessThanOrEqual(layoutRounding);
+    });
+  });
 }

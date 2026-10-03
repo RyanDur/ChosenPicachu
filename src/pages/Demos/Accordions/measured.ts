@@ -2,34 +2,43 @@ const moves = (panel: HTMLElement): boolean => parseFloat(getComputedStyle(panel
 
 const textHeight = (panel: HTMLElement): number => panel.firstElementChild?.getBoundingClientRect().height ?? 0;
 
-const heading = (panel: HTMLElement, height: number): void => {
+const setsHeight = (panel: HTMLElement, height: number): void => {
   panel.style.setProperty('--measured-height', `${height}px`);
   void panel.offsetHeight;
 };
 
 const startsAt = (panel: HTMLElement, height: number): void => {
   panel.classList.add('unmoving', 'sized');
-  heading(panel, height);
+  setsHeight(panel, height);
   panel.classList.remove('unmoving');
 };
 
-const settles = (panel: HTMLElement): void => {
-  const settled = (event: TransitionEvent): void => {
-    if (event.target === panel && event.propertyName === 'height') {
-      panel.classList.remove('sized');
-      panel.style.removeProperty('--measured-height');
-      panel.removeEventListener('transitionend', settled);
-    }
-  };
-  panel.addEventListener('transitionend', settled);
+const stillMoving = (panel: HTMLElement): boolean =>
+  panel.getAnimations().some(motion => motion instanceof CSSTransition && motion.transitionProperty === 'height');
+
+const letsGo = (panel: HTMLElement): void => {
+  panel.classList.remove('sized');
+  panel.style.removeProperty('--measured-height');
+};
+
+const settled = ({target, currentTarget: panel, propertyName}: TransitionEvent): void => {
+  if (target !== panel || propertyName !== 'height' || !(panel instanceof HTMLElement)) {
+    return;
+  }
+  letsGo(panel);
+  panel.removeEventListener('transitionend', settled);
 };
 
 const movesTo = (panel: HTMLElement, from: () => number, to: number): void => {
   if (!panel.classList.contains('sized')) {
     startsAt(panel, from());
   }
-  heading(panel, to);
-  settles(panel);
+  setsHeight(panel, to);
+  if (stillMoving(panel)) {
+    panel.addEventListener('transitionend', settled);
+  } else {
+    letsGo(panel);
+  }
 };
 
 const opened = (panel: HTMLElement): void => {

@@ -109,7 +109,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             stale: narrow the window, the text wraps onto more lines, and a fixed height cuts it off.</p>
           <Snippet label="TS" lines={[
             ...unit(measuredSource, 'const opened'), gap,
-            ...unit(measuredSource, 'const settles')
+            ...unit(measuredSource, 'const letsGo'), gap,
+            ...unit(measuredSource, 'const settled')
           ]}/>
         </li>
         <li className="run">
@@ -118,9 +119,15 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             when the change event fires, so the script first pins where the motion starts, with the height’s
             transition switched off for that moment, then sets where it ends.</p>
           <Snippet label="TS" lines={[
+            ...unit(measuredSource, 'const setsHeight'), gap,
             ...unit(measuredSource, 'const startsAt'), gap,
+            ...unit(measuredSource, 'const stillMoving'), gap,
             ...unit(measuredSource, 'const movesTo'), gap,
             ...unit(measuredSource, 'const closed')
+          ]}/>
+          <Snippet label="CSS" lines={[
+            ...unit(accordionsCss, '.info-toggle ~ .info-measured.sized {'), gap,
+            ...unit(accordionsCss, '.info-toggle ~ .info-measured.unmoving {')
           ]}/>
         </li>
         <li className="run">
