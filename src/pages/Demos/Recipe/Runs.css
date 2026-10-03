@@ -18,7 +18,7 @@
     grid-column: 1 / -1;
   }
 
-  &:has(.recipe-figure, .promises) .snippet {
+  &:has(.recipe-figure) .snippet {
     grid-row: span 2;
   }
 }

@@ -11,3 +11,7 @@
     text-align: start;
   }
 }
+
+.run:has(.promises) .snippet {
+  grid-row: span 2;
+}
