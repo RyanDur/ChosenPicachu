@@ -57,8 +57,25 @@ const dropAt = async (page: Page, {pressed, held, watched = held}: {pressed: Loc
   return carriedTo;
 };
 
-// Chrome moves a touch onto a control within a fingertip of it, so a finger pressed low on the header lands on its sort toggle
-const fingerClearOfTheToggle = 10;
+export type FingerPress = 'name' | 'middle';
+
+const nameWithin = (header: Locator): Promise<Point> => header.evaluate(cell => {
+  const words = document.createTreeWalker(cell, NodeFilter.SHOW_TEXT, {acceptNode: text => (text.textContent ?? '').trim() === '' ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT}).nextNode();
+  const range = document.createRange();
+  range.selectNodeContents(words ?? cell);
+  const word = range.getBoundingClientRect();
+  const box = cell.getBoundingClientRect();
+  return {x: word.x - box.x + word.width / 2, y: word.y - box.y + word.height / 2};
+});
+
+const pressedOn = async (header: Locator, where: FingerPress): Promise<Point> => {
+  const box = await boxOf(header);
+  if (where === 'middle') {
+    return centreOf(box);
+  }
+  const within = await nameWithin(header);
+  return {x: box.x + within.x, y: box.y + within.y};
+};
 
 const nextFrame = (locator: Locator): Promise<unknown> => locator.evaluate(() => new Promise(requestAnimationFrame));
 
@@ -128,11 +145,11 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
       await heldStill(columnHeader(name));
       return Math.abs(carried.x - (pressed.x + by));
     },
-    howFarAFingersCarryTrails: async (name: string, {by, steps}: {by: number; steps: number}): Promise<number> => {
+    howFarAFingersCarryTrails: async (name: string, {by, steps, from}: {by: number; steps: number; from: FingerPress}): Promise<number> => {
       const devtools = await page.context().newCDPSession(page);
+      await columnHeader(name).scrollIntoViewIfNeeded();
       const before = centreOf(await boxOf(columnHeader(name)));
-      const {x, y, width} = await boxOf(columnHeader(name));
-      const pressed = {x: x + width / 2, y: y + fingerClearOfTheToggle};
+      const pressed = await pressedOn(columnHeader(name), from);
       const touch = (type: 'touchStart' | 'touchMove' | 'touchEnd', x: number): Promise<unknown> =>
         devtools.send('Input.dispatchTouchEvent', {type, touchPoints: type === 'touchEnd' ? [] : [{x, y: pressed.y}]});
       await touch('touchStart', pressed.x);

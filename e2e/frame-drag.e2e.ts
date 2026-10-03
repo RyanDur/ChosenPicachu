@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import {dragSortTable, iPadUpright, stages} from './__test_support';
+import {dragSortTable, iPadUpright, iPhone, stages} from './__test_support';
 
 for (const {name, at, table} of stages) {
   test(`a trader drags a column and a row into new seats without the page erring, in ${name}`, async ({page}) => {
@@ -190,7 +190,7 @@ test.describe('an iPad held upright', () => {
 
       for (const by of [120, -120]) {
         for (const steps of [1, 20]) {
-          const trail = await trades.howFarAFingersCarryTrails('trades', {by, steps});
+          const trail = await trades.howFarAFingersCarryTrails('trades', {by, steps, from: 'middle'});
           if (trail > 1) {
             trails.push(`${by}px in ${steps}: ${trail.toFixed(1)}px`);
           }
@@ -213,3 +213,22 @@ test('a menu choice sorts, and never lifts the column', async ({page}) => {
   await expect(trades.columnHeader('trades')).toHaveAttribute('aria-sort', 'descending');
   await expect.poll(() => trades.columnOrder()).toEqual(['window', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
 });
+
+for (const {reader, device} of [{reader: 'an iPad held upright', device: iPadUpright}, {reader: 'a phone', device: iPhone}]) {
+  test.describe(reader, () => {
+    test.use(device);
+
+    for (const {name, at, table} of stages) {
+      for (const from of ['name', 'middle'] as const) {
+        test(`a finger pressed on a column's ${from} lifts and carries it, in ${name}`, async ({page, browserName}) => {
+          test.skip(browserName !== 'chromium', 'only Chromium\'s DevTools protocol moves a finger through a drag');
+          await page.goto(at);
+          const trades = dragSortTable(page, table(page));
+          await expect(trades.columnHeader('trades')).toBeVisible();
+
+          expect(await trades.howFarAFingersCarryTrails('trades', {by: 120, steps: 20, from})).toBeLessThanOrEqual(1);
+        });
+      }
+    }
+  });
+}

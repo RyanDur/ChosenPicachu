@@ -50,10 +50,12 @@
 
     /* on touch the word keeps the cell's whole width, and the sort toggle and the resize handle share a finger-high row beneath it */
     @media (pointer: coarse) {
+      --lifting-row: var(--base-x-9);
+
       &,
       &:has(> .resize-handle),
       &:has(> .menu-toggle) {
-        height: auto;
+        height: calc(var(--lifting-row) + var(--finger-reach));
         vertical-align: top;
         padding-block: var(--base) var(--finger-reach);
         padding-inline-end: var(--base);
