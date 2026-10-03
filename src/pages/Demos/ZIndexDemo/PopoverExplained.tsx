@@ -29,7 +29,8 @@ export const PopoverExplained: FC = () =>
       <li className="run">
         <p className="paragraph">The button names its menu with popovertarget, and the menu is marked{' '}
           <Mdn path="Web/HTML/Global_attributes/popover">popover</Mdn>. With that, the browser opens and closes it with
-          no script, closes it on Escape or a click outside it, and gives focus back to the button. Each choice is a
+          no script, closes it on Escape or a click outside it, and gives focus back to the button when focus was in the
+          menu. Each choice is a
           button that closes the menu with popovertargetaction set to hide. The <Mdn path="Web/API/Popover_API">Popover
             API</Mdn> does all of it.</p>
         <Snippet label="HTML" lines={span(topLayerSource, '<button type="button" tabIndex={0} className="button primary reachable" popoverTarget', '</menu>')}/>
