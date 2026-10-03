@@ -10,5 +10,12 @@ export const fingerTap = async (page: Page, aimedAt: Locator): Promise<void> => 
   await page.touchscreen.tap(box.x + box.width / 2, box.y + box.height / 2 + fingertipMiss);
 };
 
-export const shortOfAFinger = async (controls: Locator[]): Promise<number[]> =>
-  (await Promise.all(controls.map(async control => Math.round((await control.boundingBox())?.height ?? 0)))).filter(height => height < 44);
+const fingerReach = 44;
+
+export const shortOfAFinger = async (controls: Locator[]): Promise<string[]> => {
+  const measured = await Promise.all(controls.map(async control => ({
+    name: (await control.textContent())?.trim() ?? '',
+    height: Math.round((await control.boundingBox())?.height ?? 0)
+  })));
+  return measured.filter(({height}) => height < fingerReach).map(({name, height}) => `${name}: ${height}px`);
+};

@@ -36,6 +36,16 @@ test('Escape from a choice closes the menu in the top layer and gives focus back
   await expect(menu.sortBy).toBeFocused();
 });
 
+test('Tab from Sort by reaches Sort by, in the top layer', async ({page}) => {
+  await page.goto('demos/?tab=z-index');
+  const menu = topLayerMenu(page);
+  await trappedMenu(page).sortBy.focus();
+
+  await page.keyboard.press('Tab');
+
+  await expect(menu.sortBy).toBeFocused();
+});
+
 test('a click outside closes the menu in the top layer', async ({page}) => {
   await page.goto('demos/?tab=z-index');
   const menu = topLayerMenu(page);
