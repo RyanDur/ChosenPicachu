@@ -36,8 +36,8 @@ export const StackingExplained: FC<Props> = ({raised, onRaised}) => <>
       <PileFromTheSide/>
     </li>
     <li className="run">
-      <p className="paragraph">Choose a card under card raised, and the page adds the class raised to it. The
-        stylesheet gives raised a z-index of 1. A positioned card with a z-index of 1 is painted after every
+      <p className="paragraph">Choose a card with the pills above the pile, and the page adds the class raised to
+        it. The stylesheet gives raised a z-index of 1. A positioned card with a z-index of 1 is painted after every
         card left at auto, so the raised card lands on top. The others keep their order under it: they are
         still at auto, and still painted in the order the code lists them. A z-index only shows where cards
         overlap. Expand the pile, and a raise changes nothing you can see. Collapse it again, and the raised
