@@ -30,7 +30,7 @@ export const trappedMenu = (page: Page) => {
 
 export const topLayerMenu = (page: Page) => {
   const trap = page.getByRole('figure', {name: /^The trap\./});
-  const sortBy = trap.getByRole('button', {name: 'Sort by, in the top layer'});
+  const sortBy = trap.getByRole('button', {name: /^Sort by, in the top layer/});
   const menu = page.getByLabel('Sort by, in the top layer', {exact: true}).and(page.getByRole('list'));
   const choice = (name: SortChoice) => menu.getByRole('button', {name, exact: true});
   return {

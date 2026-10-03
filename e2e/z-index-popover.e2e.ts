@@ -47,7 +47,7 @@ test('a click outside closes the menu in the top layer', async ({page}) => {
   await expect(menu.menu).toBeHidden();
 });
 
-test('a choice closes the menu in the top layer', async ({page}) => {
+test('a choice closes the menu in the top layer, and its button names the choice', async ({page}) => {
   await page.goto('demos/?tab=z-index');
   const menu = topLayerMenu(page);
   await menu.open();
@@ -55,4 +55,5 @@ test('a choice closes the menu in the top layer', async ({page}) => {
   await menu.choice('date').click();
 
   await expect(menu.menu).toBeHidden();
+  await expect(menu.sortBy).toHaveAccessibleName('Sort by, in the top layer: date');
 });

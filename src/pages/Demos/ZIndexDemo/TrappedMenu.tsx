@@ -39,6 +39,6 @@ export const TrappedMenu: FC<Props> = ({cardOne, onCardOneChosen}) => {
         <p className="paragraph">Card two. <code>.forms-context {'{'} z-index: 1 {'}'}</code></p>
       </li>
     </ol>
-    <figcaption className="caption"><strong>The trap.</strong> Open Sort by, then change the checkbox and open Sort by again.</figcaption>
+    <figcaption className="caption"><strong>The trap.</strong> Open Sort by, then change the checkbox and open Sort by again. Open Sort by, in the top layer, either way.</figcaption>
   </figure>;
 };

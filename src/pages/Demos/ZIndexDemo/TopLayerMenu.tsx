@@ -1,15 +1,20 @@
-import {FC, useId} from 'react';
-import {sortChoices} from './sort-choices';
+import {FC, useId, useState} from 'react';
+import {Maybe, nothing, some} from '@ryandur/sand';
+import {SortChoice, sortChoices} from './sort-choices';
 
 export const TopLayerMenu: FC = () => {
   const menu = useId();
+  const [chosen, updateChosen] = useState<Maybe<SortChoice>>(nothing());
 
   return <>
-    <button type="button" tabIndex={0} className="button primary reachable" popoverTarget={menu}>Sort by, in the top layer</button>
+    <button type="button" tabIndex={0} className="button primary reachable" popoverTarget={menu}>
+      {chosen.map(choice => `Sort by, in the top layer: ${choice}`).orElse('Sort by, in the top layer')}
+    </button>
     <menu id={menu} popover="auto" className="menu card rounded-corners lifted" aria-label="Sort by, in the top layer">
       {sortChoices.map(choice =>
         <li className="entry" key={choice}>
-          <button type="button" tabIndex={0} className="item sub-title reachable" popoverTarget={menu} popoverTargetAction="hide">{choice}</button>
+          <button type="button" tabIndex={0} className="item sub-title reachable" popoverTarget={menu} popoverTargetAction="hide"
+            onClick={() => updateChosen(some(choice))}>{choice}</button>
         </li>)}
     </menu>
   </>;
