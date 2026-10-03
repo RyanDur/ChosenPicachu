@@ -1,42 +1,48 @@
 const moves = (panel: HTMLElement): boolean => parseFloat(getComputedStyle(panel).transitionDuration) > 0;
 
-const textHeight = (panel: HTMLElement): string => `${panel.firstElementChild?.getBoundingClientRect().height ?? 0}px`;
+const textHeight = (panel: HTMLElement): number => panel.firstElementChild?.getBoundingClientRect().height ?? 0;
 
-const startsAt = (panel: HTMLElement, height: string): void => {
-  panel.style.transitionProperty = 'visibility';
-  panel.style.height = height;
+const heading = (panel: HTMLElement, height: number): void => {
+  panel.style.setProperty('--measured-height', `${height}px`);
   void panel.offsetHeight;
-  panel.style.removeProperty('transition-property');
 };
 
-const landsOnAuto = (panel: HTMLElement): void => {
-  const landed = (event: TransitionEvent): void => {
+const startsAt = (panel: HTMLElement, height: number): void => {
+  panel.classList.add('unmoving', 'sized');
+  heading(panel, height);
+  panel.classList.remove('unmoving');
+};
+
+const settles = (panel: HTMLElement): void => {
+  const settled = (event: TransitionEvent): void => {
     if (event.target === panel && event.propertyName === 'height') {
-      panel.style.removeProperty('height');
-      panel.removeEventListener('transitionend', landed);
-      panel.removeEventListener('transitioncancel', landed);
+      panel.classList.remove('sized');
+      panel.style.removeProperty('--measured-height');
+      panel.removeEventListener('transitionend', settled);
     }
   };
-  panel.addEventListener('transitionend', landed);
-  panel.addEventListener('transitioncancel', landed);
+  panel.addEventListener('transitionend', settled);
+};
+
+const movesTo = (panel: HTMLElement, from: () => number, to: number): void => {
+  if (!panel.classList.contains('sized')) {
+    startsAt(panel, from());
+  }
+  heading(panel, to);
+  settles(panel);
 };
 
 const opened = (panel: HTMLElement): void => {
   panel.dataset.shown = '';
   if (moves(panel)) {
-    startsAt(panel, '0');
-    panel.style.height = textHeight(panel);
-    void panel.offsetHeight;
-    landsOnAuto(panel);
+    movesTo(panel, () => 0, textHeight(panel));
   }
 };
 
 const closed = (panel: HTMLElement): void => {
   delete panel.dataset.shown;
   if (moves(panel)) {
-    startsAt(panel, textHeight(panel));
-    panel.style.removeProperty('height');
-    void panel.offsetHeight;
+    movesTo(panel, () => textHeight(panel), 0);
   }
 };
 

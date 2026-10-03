@@ -250,6 +250,14 @@
       height: 0;
       visibility: hidden;
     }
+
+    .info-toggle ~ .info-measured.sized {
+      height: var(--measured-height, auto);
+    }
+
+    .info-toggle ~ .info-measured.unmoving {
+      transition-property: visibility;
+    }
   }
 }
 

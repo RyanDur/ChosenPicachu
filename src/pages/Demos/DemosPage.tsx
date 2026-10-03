@@ -48,8 +48,8 @@ export const DemosPage = () => {
   const [accordionContents] = useState(() => ({
     measuredCheckbox: paragraphs(5),
     measuredRadio: paragraphs(5),
-    checkbox: paragraphs(5),
-    radio: paragraphs(5),
+    knownCheckbox: paragraphs(5),
+    knownRadio: paragraphs(5),
     inclusiveDetails: paragraphs(5),
     exclusiveDetails: paragraphs(5),
     inclusiveCheckboxes: paragraphs(5),

@@ -41,8 +41,8 @@ import './Explained.css';
 export type Contents = {
   measuredCheckbox: Fold[];
   measuredRadio: Fold[];
-  checkbox: Fold[];
-  radio: Fold[];
+  knownCheckbox: Fold[];
+  knownRadio: Fold[];
   inclusiveDetails: Fold[];
   exclusiveDetails: Fold[];
   inclusiveCheckboxes: Fold[];
@@ -109,7 +109,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             stale: narrow the window, the text wraps onto more lines, and a fixed height cuts it off.</p>
           <Snippet label="TS" lines={[
             ...unit(measuredSource, 'const opened'), gap,
-            ...unit(measuredSource, 'const landsOnAuto')
+            ...unit(measuredSource, 'const settles')
           ]}/>
         </li>
         <li className="run">
@@ -119,6 +119,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             transition switched off for that moment, then sets where it ends.</p>
           <Snippet label="TS" lines={[
             ...unit(measuredSource, 'const startsAt'), gap,
+            ...unit(measuredSource, 'const movesTo'), gap,
             ...unit(measuredSource, 'const closed')
           ]}/>
         </li>
@@ -141,8 +142,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         </li>
       </ol>
       {type === 'inclusive'
-        ? <InclusiveAccordion className={exhibit} content={contents.checkbox} motion={motion}/>
-        : <ExclusiveAccordion className={exhibit} content={contents.radio} motion={motion}/>}
+        ? <InclusiveAccordion className={exhibit} content={contents.knownCheckbox} motion={motion}/>
+        : <ExclusiveAccordion className={exhibit} content={contents.knownRadio} motion={motion}/>}
       <ol className={runs}>
         <li className="run">
           <p className="paragraph">This build is a disclosure: a bar you press to show the text under it. It has

@@ -39,10 +39,10 @@ export const InclusiveAccordion: FC<PropsWithClassName & ContentProps & {motion:
   content,
   motion
 }) => <article className={classNames('inclusive-accordion', motion, className)}>
-  <header>
+  <hgroup>
     <h4 className="sub-title bold">Accordion using checkboxes and a known height</h4>
     <p>no Javascript needed to pull this off.</p>
-  </header>
+  </hgroup>
   <fieldset>
     <legend className="off-screen">parts</legend>
     <ul className="accordion">
@@ -65,10 +65,10 @@ export const ExclusiveAccordion: FC<PropsWithClassName & ContentProps & {motion:
   content,
   motion
 }) => <article className={classNames('exclusive-accordion', motion, className)}>
-  <header>
+  <hgroup>
     <h4 className="sub-title bold">Accordion using a radio group and a known height</h4>
     <p>no Javascript needed to pull this off.</p>
-  </header>
+  </hgroup>
   <fieldset>
     <legend className="off-screen">parts</legend>
     <ul className="accordion">
@@ -181,10 +181,10 @@ export const InclusiveMeasuredAccordion: FC<PropsWithClassName & ContentProps & 
   content,
   motion
 }) => <article className={classNames('inclusive-accordion', motion, className)}>
-  <header>
+  <hgroup>
     <h4 className="sub-title bold">Accordion using checkboxes and a measured height</h4>
     <p>a few lines of script measure each part’s height.</p>
-  </header>
+  </hgroup>
   <fieldset>
     <legend className="off-screen">parts</legend>
     <ul className="accordion" onChange={foldMeasured}>
@@ -205,10 +205,10 @@ export const ExclusiveMeasuredAccordion: FC<PropsWithClassName & ContentProps & 
   content,
   motion
 }) => <article className={classNames('exclusive-accordion', motion, className)}>
-  <header>
+  <hgroup>
     <h4 className="sub-title bold">Accordion using a radio group and a measured height</h4>
     <p>a few lines of script measure each part’s height.</p>
-  </header>
+  </hgroup>
   <fieldset>
     <legend className="off-screen">parts</legend>
     <ul className="accordion" onChange={foldMeasured}>

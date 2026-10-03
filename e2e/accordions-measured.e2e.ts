@@ -61,13 +61,12 @@ test.describe('a desktop', () => {
   }
 });
 
+const pressesNeverReachTheScript = (): void => ['click', 'change'].forEach(press =>
+  window.addEventListener(press, event => event.stopImmediatePropagation(), true));
+
 for (const build of measuredBuilds) {
-  test(`with its script failing, a part of ${build} still opens and closes, at once`, async ({page}) => {
-    await page.addInitScript(() => Object.defineProperty(HTMLElement.prototype, 'dataset', {
-      get: () => {
-        throw new Error('the measuring script fails');
-      }
-    }));
+  test(`with its script never hearing the press, a part of ${build} still opens and closes, at once`, async ({page}) => {
+    await page.addInitScript(pressesNeverReachTheScript);
     await page.goto(showing(build));
     const part = accordionsTab(page).firstPartOf(build);
     await expect(part.fold).toBeVisible();
@@ -80,4 +79,51 @@ for (const build of measuredBuilds) {
     await part.close();
     await expect.poll(part.showsText).toBe(false);
   });
+}
+
+const heightsWhile = (part: Part, act: () => Promise<void>): Promise<number[]> => Promise.all([
+  part.fold.evaluate(fold => new Promise<number[]>(resolve => {
+    const heights: number[] = [];
+    const until = performance.now() + 900;
+    const record = (): void => {
+      heights.push(fold.getBoundingClientRect().height);
+      if (performance.now() < until) {
+        requestAnimationFrame(record);
+      } else {
+        resolve(heights);
+      }
+    };
+    requestAnimationFrame(record);
+  })),
+  act()
+]).then(([heights]) => heights);
+
+const largestStep = (heights: number[]): number =>
+  Math.max(...heights.slice(1).map((height, at) => Math.abs(height - heights[at])));
+
+for (const build of measuredBuilds) {
+  for (const {first, second, start} of [
+    {first: 'open', second: 'close', start: 'shut'},
+    {first: 'close', second: 'open', start: 'open'}
+  ] as const) {
+    test(`a part of ${build} pressed again while it moves turns around from where it is, ${first} then ${second}`, async ({page}) => {
+      await page.goto(showing(build));
+      const part = accordionsTab(page).firstPartOf(build);
+      const shut = await heightOnceSettled(part.fold);
+      await part.open();
+      const open = await heightOnceSettled(part.fold);
+      if (start === 'shut') {
+        await part.close();
+        await heightOnceSettled(part.fold);
+      }
+
+      const heights = await heightsWhile(part, async () => {
+        await part[first]();
+        await page.waitForTimeout(100);
+        await part[second]();
+      });
+
+      expect(largestStep(heights)).toBeLessThan((open - shut) * 0.3);
+    });
+  }
 }
