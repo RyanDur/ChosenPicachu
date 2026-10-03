@@ -161,10 +161,11 @@ export const accordionsTab = (page: Page) => {
     closesThenOpensTheFirstPartInOneFrame: async (build: Build): Promise<void> => {
       const {opens, shuts} = pressesOfTheFirstPart(build);
       await shuts.evaluate((shut, open) => {
-        if (shut instanceof HTMLElement && open instanceof HTMLElement) {
-          shut.click();
-          open.click();
+        if (!(shut instanceof HTMLElement && open instanceof HTMLElement)) {
+          throw new Error('a press is not an element that can be clicked');
         }
+        shut.click();
+        open.click();
       }, await opens.elementHandle());
     },
     pressesTheFirstPartAgainAtAQuarter: async (build: Build, first: 'open' | 'close', travel: Travel): Promise<Turn> => {
