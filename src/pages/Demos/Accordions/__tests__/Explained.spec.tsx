@@ -329,8 +329,20 @@ describe('the max-height guess', () => {
   test('should open part one on the code of the guess, beside its heading', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
-    const guess = await screen.findByRole('region', {name: 'The max-height guess'});
+    const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(within(guess).getByRole('code')).toHaveTextContent(/max-height: 0;.*transition: max-height .3s ease-in-out;.*max-height: 1000px;/);
+    expect(within(within(oldWay).getByRole('region', {name: 'The max-height guess'})).getByRole('code'))
+      .toHaveTextContent(/max-height: 0;.*transition: max-height .3s ease-in-out;.*max-height: 1000px;/);
+  });
+
+  test.each([
+    ['inclusive', 'Accordion using checkboxes'],
+    ['exclusive', 'Accordion using a radio group']
+  ])('should outline part one, with %s chosen, as the guess and then the build', async (type, build) => {
+    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
+
+    const oldWay = await screen.findByRole('region', {name: parts[0]});
+
+    expect(within(oldWay).getAllByRole('heading', {level: 4}).map(heading => heading.textContent)).toEqual(['The max-height guess', build]);
   });
 });
