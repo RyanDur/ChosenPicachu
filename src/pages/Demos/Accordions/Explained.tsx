@@ -36,6 +36,7 @@ import {
 } from './Diagrams';
 import {FoldInput, FoldType} from './fold-type';
 import {FoldMotion} from './fold-motion';
+import '../Recipe/Runs.css';
 import './Explained.css';
 
 export type Contents = {
