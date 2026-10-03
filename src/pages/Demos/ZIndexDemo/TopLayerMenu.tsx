@@ -14,6 +14,7 @@ export const TopLayerMenu: FC = () => {
       {sortChoices.map(choice =>
         <li className="entry" key={choice}>
           <button type="button" tabIndex={0} className="item sub-title reachable" popoverTarget={menu} popoverTargetAction="hide"
+            aria-current={chosen.map(picked => picked === choice).orElse(false)}
             onClick={() => updateChosen(some(choice))}>{choice}</button>
         </li>)}
     </menu>
