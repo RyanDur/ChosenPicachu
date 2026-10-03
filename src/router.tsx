@@ -37,10 +37,10 @@ const Site: FC<{closed?: boolean}> = ({closed = false}) => {
   return <BannerProvider><PageNameProvider>
     <Provider>
       <HeaderRegion/>
-      <div className="rail">
+      <section className="rail" aria-label="pages and feedback">
         <SideNav/>
         <Feedback/>
-      </div>
+      </section>
       {AsideRegion && <AsideRegion/>}
       <main className={classNames('app-main', 'field', mainClassName)}>
         {closed ? <PageError/> : <Outlet/>}

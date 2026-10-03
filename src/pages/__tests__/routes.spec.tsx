@@ -1,5 +1,5 @@
 import {TestApp} from '@__test_support/TestApp';
-import {render, screen, waitFor} from '@testing-library/react';
+import {render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {Paths} from '@pages/Paths';
 import {Route} from 'react-router';
@@ -77,6 +77,16 @@ describe('the skeleton', () => {
     const nav = screen.getByRole('navigation', {name: 'site'});
     expect(screen.queryByRole('complementary')).not.toBeInTheDocument();
     expect(nav.compareDocumentPosition(screen.getByRole('main'))).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+  });
+
+  test('the site nav and Feedback sit together in a region named for what it holds', async () => {
+    render(<TestApp at="/"/>);
+    await site.pageTitled();
+
+    const rail = screen.getByRole('region', {name: 'pages and feedback'});
+
+    expect(within(rail).getByRole('navigation', {name: 'site'})).toBeInTheDocument();
+    expect(within(rail).getByRole('button', {name: 'Feedback'})).toBeInTheDocument();
   });
 });
 
