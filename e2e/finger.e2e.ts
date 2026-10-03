@@ -1,5 +1,5 @@
 import {Page, expect, test} from '@playwright/test';
-import {fingerTap, iPhone, phoneSideways, topLayerMenu, trappedMenu} from './__test_support';
+import {fingerTap, iPhone, phoneSideways, shortOfAFinger, topLayerMenu, trappedMenu} from './__test_support';
 
 const doorFold = (page: Page) => page.getByRole('group').filter({has: page.getByText('how I organize it', {exact: true})}).first();
 const explainer = (page: Page) => page.getByRole('group').filter({has: page.getByText('what am I looking at?', {exact: true})}).first();
@@ -49,9 +49,7 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
       await menu.open();
       const controls = [menu.contextWords, menu.sortBy, menu.choice('name'), menu.choice('date'), menu.choice('size')];
 
-      const heights = await Promise.all(controls.map(async control => Math.round((await control.boundingBox())?.height ?? 0)));
-
-      expect(heights.filter(height => height < 44)).toEqual([]);
+      expect(await shortOfAFinger(controls)).toEqual([]);
     });
 
     test('the menu in the top layer and its choices take a finger', async ({page}) => {
@@ -60,9 +58,7 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
       await menu.open();
       const controls = [menu.sortBy, menu.choice('name'), menu.choice('date'), menu.choice('size')];
 
-      const heights = await Promise.all(controls.map(async control => Math.round((await control.boundingBox())?.height ?? 0)));
-
-      expect(heights.filter(height => height < 44)).toEqual([]);
+      expect(await shortOfAFinger(controls)).toEqual([]);
     });
 
     test('changes the trap with a finger that lands just off the checkbox\'s words', async ({page}) => {

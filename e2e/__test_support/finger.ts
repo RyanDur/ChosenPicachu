@@ -9,3 +9,6 @@ export const fingerTap = async (page: Page, aimedAt: Locator): Promise<void> => 
   if (box === null) throw new Error('nothing to aim at');
   await page.touchscreen.tap(box.x + box.width / 2, box.y + box.height / 2 + fingertipMiss);
 };
+
+export const shortOfAFinger = async (controls: Locator[]): Promise<number[]> =>
+  (await Promise.all(controls.map(async control => Math.round((await control.boundingBox())?.height ?? 0)))).filter(height => height < 44);

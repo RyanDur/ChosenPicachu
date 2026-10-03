@@ -10,7 +10,7 @@ export {documentScrollY, paneScrollTop} from './scrolling';
 export {siteFrame} from './site';
 export {feedbackOn, github} from './feedback';
 export {tablesDemo} from './tables';
-export {fingerTap, fingertipMiss} from './finger';
+export {fingerTap, fingertipMiss, shortOfAFinger} from './finger';
 export {sortableList} from './lists';
 export {headingsTakingMoreLinesThanWords} from './headings';
 export {codedStepLayouts, misplacedPictures} from './recipes';

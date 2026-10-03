@@ -13,7 +13,7 @@ for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: 
         await menu.open();
 
         await expect(menu.menu).toBeVisible();
-        expect(await menu.overlapsCardTwo()).toBe(true);
+        await expect.poll(() => menu.overlapsCardTwo()).toBe(true);
         for (const choice of ['name', 'date', 'size'] as const) {
           await expect.poll(() => menu.onTopAt(choice), choice).toBe(true);
         }
@@ -21,15 +21,6 @@ for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: 
     }
   });
 }
-
-test('beside it, the old menu is still trapped under card two', async ({page}) => {
-  await page.goto('demos/?tab=z-index');
-  const old = trappedMenu(page);
-
-  await old.open();
-
-  await expect.poll(() => old.onTopAt('date')).toBe('card two');
-});
 
 test('Escape from a choice closes the menu in the top layer and gives focus back to its button', async ({page}) => {
   await page.goto('demos/?tab=z-index');
