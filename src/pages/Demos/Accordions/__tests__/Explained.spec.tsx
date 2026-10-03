@@ -2,20 +2,7 @@ import {render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {TestApp} from '@__test_support/TestApp';
 import {demosAt} from '@pages/Demos/__test_support';
-
-const runTelling = (part: HTMLElement, words: RegExp): HTMLElement =>
-  within(part).getAllByRole('listitem').filter(run => within(run).queryByText(words) !== null)[0];
-
-const captionsIn = (part: HTMLElement): string[] => {
-  const captions: string[] = [];
-  within(part).getAllByRole('figure', {name: caption => captions.push(caption) > 0});
-  return captions;
-};
-
-const codeBeside = (part: HTMLElement, words: RegExp): HTMLElement => within(runTelling(part, words)).getByRole('code');
-
-const everyCodeBeside = (part: HTMLElement, words: RegExp): string[] =>
-  within(runTelling(part, words)).getAllByRole('code').map(code => code.textContent);
+import {explanation} from '@pages/Demos/Recipe/__test_support';
 
 const parts = ['How we used to build a fold', 'What the platform gives now', 'The two together', 'How every fold moves'];
 
@@ -99,7 +86,7 @@ describe('the words and the code chosen by type', () => {
 
     expect(within(oldWay).getByText(new RegExp(`so you hide the ${input}\\.`))).toBeInTheDocument();
     expect(oldWay).toHaveTextContent(announced);
-    expect(codeBeside(oldWay, /To open and close a part/)).toHaveTextContent(carvedInput);
+    expect(explanation.codeBeside(oldWay, /To open and close a part/)).toHaveTextContent(carvedInput);
     expect(within(platform).getByRole('figure', {name: new RegExp(`needs a ${input},`)})).toBeInTheDocument();
   });
 });
@@ -113,7 +100,7 @@ describe('what the platform gives now', () => {
 
     const explained = await screen.findByRole('region', {name: parts[1]});
 
-    expect(codeBeside(explained, /HTML now has a disclosure of its own/)).toHaveTextContent(carved);
+    expect(explanation.codeBeside(explained, /HTML now has a disclosure of its own/)).toHaveTextContent(carved);
   });
 });
 
@@ -123,7 +110,7 @@ describe('the two together', () => {
 
     const explained = await screen.findByRole('region', {name: parts[2]});
 
-    expect(codeBeside(explained, /The inclusive build is a checkbox build again/)).toHaveTextContent('type="checkbox"');
+    expect(explanation.codeBeside(explained, /The inclusive build is a checkbox build again/)).toHaveTextContent('type="checkbox"');
   });
 
   test('should show, with exclusive chosen, the script that lets a radio close beside its run', async () => {
@@ -131,7 +118,7 @@ describe('the two together', () => {
 
     const explained = await screen.findByRole('region', {name: parts[2]});
 
-    expect(codeBeside(explained, /The exclusive build is a radio group/)).toHaveTextContent('const openAfter');
+    expect(explanation.codeBeside(explained, /The exclusive build is a radio group/)).toHaveTextContent('const openAfter');
   });
 });
 
@@ -141,7 +128,7 @@ describe('the measured build', () => {
 
     const explained = await screen.findByRole('region', {name: parts[0]});
 
-    expect(codeBeside(explained, /When the motion ends, the script takes the number away/)).toHaveTextContent(/const opened[^]*const settled[^]*const letsGo/);
+    expect(explanation.codeBeside(explained, /When the motion ends, the script takes the number away/)).toHaveTextContent(/const opened[^]*const settled[^]*const letsGo/);
   });
 
   test('should show the classes that hold the height beside the run that closes it', async () => {
@@ -149,7 +136,7 @@ describe('the measured build', () => {
 
     const explained = await screen.findByRole('region', {name: parts[0]});
 
-    expect(everyCodeBeside(explained, /Closing runs the other way/).join()).toMatch(/\.info-measured\.sized[^]*\.info-measured\.unmoving/);
+    expect(explanation.everyCodeBeside(explained, /Closing runs the other way/).join()).toMatch(/\.info-measured\.sized[^]*\.info-measured\.unmoving/);
   });
 
   test('should show the script that turns a part around beside the run that tells it', async () => {
@@ -157,7 +144,7 @@ describe('the measured build', () => {
 
     const explained = await screen.findByRole('region', {name: parts[0]});
 
-    expect(codeBeside(explained, /turns around from where it is/)).toHaveTextContent(/const movesTo[^]*const stillMoving/);
+    expect(explanation.codeBeside(explained, /turns around from where it is/)).toHaveTextContent(/const movesTo[^]*const stillMoving/);
   });
 });
 
@@ -218,7 +205,7 @@ describe('the fold motion', () => {
 
     const platform = await screen.findByRole('region', {name: parts[1]});
 
-    expect(codeBeside(platform, /This replaces the three old ways/)).toHaveTextContent('.drawer &::details-content');
+    expect(explanation.codeBeside(platform, /This replaces the three old ways/)).toHaveTextContent('.drawer &::details-content');
   });
 
   test.each(['reveal', 'static'])('should carve no details drawer rule under %s', async style => {
@@ -226,7 +213,7 @@ describe('the fold motion', () => {
 
     const platform = await screen.findByRole('region', {name: parts[1]});
 
-    expect(codeBeside(platform, /This replaces the three old ways/)).not.toHaveTextContent('.drawer &::details-content');
+    expect(explanation.codeBeside(platform, /This replaces the three old ways/)).not.toHaveTextContent('.drawer &::details-content');
   });
 
   const knownHeight = ['.info, .info-text { height: 10lh;', '.info { overflow: hidden;', '.info-text { overflow-y: auto;', '.info-paragraph { box-sizing', '.info-toggle:not(:checked) ~ .info { height: 0;'];
@@ -251,10 +238,10 @@ describe('the fold motion', () => {
       expect(within(oldWay).queryByText(partOneSays[other])).not.toBeInTheDocument();
     }
     for (const rule of carves) {
-      expect(codeBeside(oldWay, partOneSays[style])).toHaveTextContent(rule);
+      expect(explanation.codeBeside(oldWay, partOneSays[style])).toHaveTextContent(rule);
     }
     for (const rule of omits) {
-      expect(codeBeside(oldWay, partOneSays[style])).not.toHaveTextContent(rule);
+      expect(explanation.codeBeside(oldWay, partOneSays[style])).not.toHaveTextContent(rule);
     }
   });
 
@@ -392,7 +379,7 @@ describe('what the newer builds end', () => {
 
     const platform = await screen.findByRole('region', {name: parts[1]});
 
-    expect(runTelling(platform, /This replaces the three old ways/)).toHaveTextContent(/the max-height guess, the height measured by script, and the known height/);
+    expect(explanation.runTelling(platform, /This replaces the three old ways/)).toHaveTextContent(/the max-height guess, the height measured by script, and the known height/);
   });
 
   test('should say the grid row guesses, measures and fixes nothing, and scrolls no text', async () => {
@@ -400,7 +387,7 @@ describe('what the newer builds end', () => {
 
     const together = await screen.findByRole('region', {name: parts[2]});
 
-    expect(runTelling(together, /The row always ends at the content’s own height/))
+    expect(explanation.runTelling(together, /The row always ends at the content’s own height/))
       .toHaveTextContent(/nothing is guessed, nothing is measured by script, nothing is fixed, and no text has to scroll/);
   });
 
@@ -408,7 +395,7 @@ describe('what the newer builds end', () => {
     render(<TestApp at={demosAt(`?tab=accordions&type=${type}&style=${style}`)}/>);
 
     const tab = await screen.findByRole('region', {name: 'Accordions'});
-    const sentences = [...within(tab).getAllByRole('paragraph').map(paragraph => paragraph.textContent ?? ''), ...captionsIn(tab)]
+    const sentences = [...within(tab).getAllByRole('paragraph').map(paragraph => paragraph.textContent ?? ''), ...explanation.captionsIn(tab)]
       .flatMap(text => text.split(/(?<=[.!?])\s+/))
       .map(sentence => sentence.trim())
       .filter(sentence => sentence.length > 0);
