@@ -1,5 +1,5 @@
 import {FC, FocusEvent, KeyboardEvent, useEffect, useId, useState} from 'react';
-import {Maybe, maybe, nothing} from '@ryandur/sand';
+import {Maybe, maybe, nothing, some} from '@ryandur/sand';
 
 const choices = ['name', 'date', 'size'] as const;
 
@@ -14,16 +14,17 @@ const steps: Partial<Record<string, (at: number, count: number) => number>> = {
 
 const nextChoice = (key: string, at: number, count: number): Maybe<number> => maybe(steps[key]).map(step => step(at, count));
 
-const focusOn = (element: Element | null | undefined): void => {
-  if (element instanceof HTMLElement) {
-    element.focus();
-  }
-};
+const focusOn = (element: HTMLElement): void => element.focus();
 
-const choiceAt = (list: string, at: number): Element | undefined => document.getElementById(list)?.querySelectorAll('[role="menuitem"]')[at];
+const elementWithId = (id: string): Maybe<HTMLElement> => maybe(document.getElementById(id));
+
+const choiceAt = (list: string, at: number): Maybe<HTMLElement> => elementWithId(list).mBind(menu => {
+  const choice = menu.querySelectorAll('[role="menuitem"]').item(at);
+  return choice instanceof HTMLElement ? some(choice) : nothing();
+});
 
 const within = (target: EventTarget | null, ...ids: string[]): boolean => target instanceof Node &&
-  ids.some(id => document.getElementById(id)?.contains(target) ?? false);
+  ids.some(id => elementWithId(id).map(part => part.contains(target)).orElse(false));
 
 export const SortMenu: FC = () => {
   const [open, updateOpen] = useState(false);
@@ -35,7 +36,7 @@ export const SortMenu: FC = () => {
     if (!open) {
       return;
     }
-    focusOn(choiceAt(list, 0));
+    choiceAt(list, 0).map(focusOn);
     const pressedOutside = ({target}: PointerEvent): void => {
       if (!within(target, list, button)) {
         updateOpen(false);
@@ -47,7 +48,7 @@ export const SortMenu: FC = () => {
 
   const closeToButton = (): void => {
     updateOpen(false);
-    focusOn(document.getElementById(button));
+    elementWithId(button).map(focusOn);
   };
   const onButtonKey = (event: KeyboardEvent<HTMLButtonElement>): void => {
     if (event.key === 'ArrowDown') {
@@ -62,24 +63,24 @@ export const SortMenu: FC = () => {
     }
     nextChoice(event.key, at, choices.length).map(next => {
       event.preventDefault();
-      focusOn(choiceAt(list, next));
+      choiceAt(list, next).map(focusOn);
     });
   };
   const onListBlur = ({relatedTarget}: FocusEvent<HTMLUListElement>): void => {
-    if (relatedTarget !== null && !within(relatedTarget, list, button)) {
+    if (relatedTarget !== null && !within(relatedTarget, list)) {
       updateOpen(false);
     }
   };
 
   return <>
     <button id={button} type="button" className="button primary reachable" aria-haspopup="menu" aria-expanded={open} aria-controls={list}
-      onClick={() => updateOpen(!open)} onKeyDown={onButtonKey}>{chosen.map(choice => `Sort by: ${choice}`).orElse('Sort by')}</button>
+      onMouseDown={event => event.preventDefault()} onClick={() => updateOpen(!open)} onKeyDown={onButtonKey}>{chosen.map(choice => `Sort by: ${choice}`).orElse('Sort by')}</button>
     {open && <ul id={list} role="menu" aria-labelledby={button} className="sort-choices card rounded-corners floating" onBlur={onListBlur}>
       {choices.map((choice, at) =>
         <li key={choice} role="none">
-          <button type="button" role="menuitem" tabIndex={-1} className="sort-choice reachable borderless attentive"
+          <button type="button" role="menuitem" tabIndex={-1} className="sort-choice reachable borderless unfilled attentive"
             onClick={() => {
-              updateChosen(maybe(choice));
+              updateChosen(some(choice));
               closeToButton();
             }}
             onKeyDown={onChoiceKey(at)}>{choice}</button>

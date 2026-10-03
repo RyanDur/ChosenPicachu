@@ -77,6 +77,17 @@ test('pressing Sort by again closes its menu', async ({page}) => {
   await expect(page.getByRole('menu')).toHaveCount(0);
 });
 
+test('a press outside the open menu closes it', async ({page}) => {
+  await page.goto('demos/?tab=z-index');
+  const menu = trappedMenu(page);
+  await menu.open();
+  await expect(page.getByRole('menu')).toBeVisible();
+
+  await menu.caption.click();
+
+  await expect(page.getByRole('menu')).toHaveCount(0);
+});
+
 test('a choice looks different under the pointer and in keyboard focus than at rest', async ({page}) => {
   await page.goto('demos/?tab=z-index&card-one=free');
   const menu = trappedMenu(page);

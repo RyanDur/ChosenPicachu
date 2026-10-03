@@ -102,8 +102,4 @@
         padding: var(--base) var(--base-x-2);
         text-align: start;
     }
-
-    :where(.sort-choice) {
-        background: none;
-    }
 }

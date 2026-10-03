@@ -66,14 +66,23 @@ describe('the menu built the old way', () => {
     expect(screen.getByRole('menuitem', {name: 'name'})).toHaveFocus();
   });
 
-  test('should close when its button is pressed again', async () => {
+  test('should close when the reader presses outside it', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
-    const sortBy = await screen.findByRole('button', {name: 'Sort by'});
+    await userEvent.click(await screen.findByRole('button', {name: 'Sort by'}));
 
-    await userEvent.click(sortBy);
-    await userEvent.click(sortBy);
+    await userEvent.click(screen.getByText(/Open Sort by, then change the checkbox/));
 
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+  });
+
+  test('should close when the reader leaves a choice by Shift+Tab', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    await userEvent.click(await screen.findByRole('button', {name: 'Sort by'}));
+
+    await userEvent.tab({shift: true});
+
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', {name: 'Sort by'})).toHaveAttribute('aria-expanded', 'false');
   });
 
   test('should close when focus leaves it', async () => {
