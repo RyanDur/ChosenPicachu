@@ -25,6 +25,7 @@ import {
   RowToItsContent,
   SizedToTheText,
   TheKnownHeight,
+  TheMaxHeightGuess,
   TheSheetReadsTheBox,
   ThreeBecomeTwo,
   TwoBordersTurned,
@@ -65,6 +66,31 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
     <PillGlider label="fold motion" name="fold-motion" options={foldMotions} chosen={motion} onChosen={onMotionChosen}/>
     <section aria-labelledby="old-way-heading" className="accordion-part">
       <h3 id="old-way-heading" className="title bold">How we used to build a fold</h3>
+      <ol className={runs}>
+        <li className="run">
+          <p className="paragraph">Before a known height, most of us slid a fold open with a guess. A transition
+            can move a height to a number but not to auto, the height the text needs, so we moved
+            the panel’s <Mdn path="Web/CSS/max-height">max-height</Mdn> instead: from 0 to a number taller
+            than any part would ever need, like 1000px. The panel stopped at its own text, so nothing
+            scrolled and nothing was left empty. The cost was the timing. The transition spent its whole
+            time crossing the guess, and the text filled only the start of it. So a short part opened in a
+            rush and then sat still. On closing, it waited, unmoving, while the guess fell to its text,
+            then shut at once. The bigger the guess, the worse the rush and the wait. A guess too small
+            cut the text off.</p>
+          <Snippet label="CSS" lines={[
+            plain('.info {'),
+            plain('  max-height: 0;'),
+            plain('  overflow: hidden;'),
+            plain('  transition: max-height .3s ease-in-out;'),
+            plain('}'),
+            gap,
+            plain('.info-toggle:checked ~ .info {'),
+            plain('  max-height: 1000px;'),
+            plain('}')
+          ]}/>
+          <TheMaxHeightGuess/>
+        </li>
+      </ol>
       {type === 'inclusive'
         ? <InclusiveAccordion className={exhibit} content={contents.checkbox} motion={motion}/>
         : <ExclusiveAccordion className={exhibit} content={contents.radio} motion={motion}/>}
@@ -162,8 +188,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         </li>
         <li className="run">
           <p className="paragraph">The text should slide open, not appear at once. A transition cannot move a
-            height to auto, the height the content needs. Before grid, the way to a smooth slide was a
-            height you knew. Each part’s panel is ten lines tall. The lh unit is the height of one line,
+            height to auto, the height the content needs. Before grid, the way past the guess’s rush and
+            wait was a height you knew. Each part’s panel is ten lines tall. The lh unit is the height of one line,
             so the panel grows with the text size. It is the one size in the sheet off the page’s
             spacing scale, because it is counted in the text’s own lines. Closed, the panel’s height is 0, and overflow
             hidden hides the text. Inside it, a section of the same height holds the paragraph and
@@ -351,7 +377,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
             contains, so :has(:checked) makes that row 1fr when the fold holds a checked input. A
             row in fr is a number, so 0fr to 1fr is a number growing, which a transition can move.
             The paragraph’s overflow hidden hides whatever its row does not hold. The row always ends at the content’s own height, so no part needs a known height, and
-            no text has to scroll.</p>
+            no text has to scroll. It needs no guess and no known height, and it moves the same way in every
+            browser.</p>
           <Snippet label="CSS" lines={[
             ...unit(accordionsCss, '.fold-clip {'), gap,
             ...unit(accordionsCss, '&:has(:checked) .fold-clip {')

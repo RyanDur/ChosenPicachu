@@ -97,6 +97,20 @@ export const FocusOnTheBar: FC = () =>
     <Words x={88} y={104}>:focus-visible ~</Words>
   </Diagram>;
 
+export const TheMaxHeightGuess: FC = () =>
+  <Diagram title="The max-height guess" height={170}
+    says="Both parts stop at their own text, but the motion crosses the whole guess, so the short part is open almost at once and shuts only after a wait.">
+    <Words x={160} y={18}>max-height: the guess</Words>
+    <Box x={40} y={30} width={100} height={110} kind="unseen"/>
+    <Box x={40} y={30} width={100} height={30} kind="clip"/>
+    <Box x={50} y={36} width={80} height={18} kind="native"/>
+    <Words x={90} y={160}>short: guess mostly empty</Words>
+    <Box x={180} y={30} width={100} height={110} kind="unseen"/>
+    <Box x={180} y={30} width={100} height={80} kind="clip"/>
+    <Box x={190} y={36} width={80} height={68} kind="native"/>
+    <Words x={230} y={160}>tall: less of it empty</Words>
+  </Diagram>;
+
 export const TheKnownHeight: FC = () =>
   <Diagram title="The known height" height={150}
     says="Every panel opens to the same ten lines, so a short part leaves room under its text and a tall one scrolls inside its panel.">

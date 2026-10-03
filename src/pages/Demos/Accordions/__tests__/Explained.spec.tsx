@@ -299,8 +299,8 @@ describe('how every fold moves', () => {
 
 describe('the accordions diagrams', () => {
   test.each([
-    ['inclusive', parts[0], ['Off screen, not gone', 'The sheet reads the box', 'Two borders, turned', 'Focus on the box, drawn on the bar', 'The known height']],
-    ['exclusive', parts[0], ['Off screen, not gone', 'The sheet reads the box', 'Two borders, turned', 'Focus on the box, drawn on the bar', 'The known height', 'One name, one choice']],
+    ['inclusive', parts[0], ['The max-height guess', 'Off screen, not gone', 'The sheet reads the box', 'Two borders, turned', 'Focus on the box, drawn on the bar', 'The known height']],
+    ['exclusive', parts[0], ['The max-height guess', 'Off screen, not gone', 'The sheet reads the box', 'Two borders, turned', 'Focus on the box, drawn on the bar', 'The known height', 'One name, one choice']],
     ['inclusive', parts[1], ['One job, two ways', 'Three pieces become two', 'Sized to the text']],
     ['exclusive', parts[1], ['One job, two ways', 'Three pieces become two', 'Sized to the text']]
   ])('should draw, with %s chosen, under "%s" each mechanism in order, named by its title and one sentence', async (type, part, titles) => {
