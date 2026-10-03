@@ -21,6 +21,10 @@ type Point = {x: number; y: number};
 
 const centreOf = ({x, y, width, height}: Box): Point => ({x: x + width / 2, y: y + height / 2});
 
+const liesWithin = (inner: Box, outer: Box): boolean =>
+  Math.round(inner.x) >= Math.round(outer.x) && Math.round(inner.x + inner.width) <= Math.round(outer.x + outer.width) &&
+  Math.round(inner.y) >= Math.round(outer.y) && Math.round(inner.y + inner.height) <= Math.round(outer.y + outer.height);
+
 const carry = async (page: Page, from: Box, to: Point): Promise<void> => {
   const start = centreOf(from);
   await page.mouse.move(start.x, start.y);
@@ -189,6 +193,25 @@ export const dragSortTable = (page: Page, table: Locator | FrameLocator) => {
       await page.mouse.up();
     },
     resizeHandle,
+    controlsPastTheirHeader: async (): Promise<string[]> => {
+      const strays: string[] = [];
+      for (const header of await table.getByRole('columnheader').all()) {
+        const edges = await boxOf(header);
+        for (const control of await header.getByRole('button').all()) {
+          if (!liesWithin(await boxOf(control), edges)) {
+            strays.push(String(await control.getAttribute('aria-label')));
+          }
+        }
+      }
+      return strays;
+    },
+    dragFromWhereHeadersMeet: async (column: string, by: number): Promise<void> => {
+      const handle = resizeHandle(column);
+      await handle.scrollIntoViewIfNeeded();
+      const box = await boxOf(handle);
+      const edge = {...box, x: box.x + box.width - 1, width: 0};
+      await dragTo(page, edge, edge.x + by, edge.y + edge.height / 2);
+    },
     columnOrder: (): Promise<(string | null)[]> =>
       table.getByRole('columnheader').evaluateAll(headers => headers.map(header => header.getAttribute('aria-label'))),
     rowOrder: (): Promise<string[]> =>
