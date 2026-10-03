@@ -1,6 +1,7 @@
 import {FC, useState} from 'react';
 import {classNames} from '@components/class-names';
 import {SortMenu} from './SortMenu';
+import {TopLayerMenu} from './TopLayerMenu';
 import {CardOne} from './card-one';
 
 const says: Record<CardOne, string> = {
@@ -29,8 +30,10 @@ export const TrappedMenu: FC<Props> = ({cardOne, onCardOneChosen}) => {
       <li className={classNames('old-way-card card rounded-corners floating', cardOne === 'contained' && 'forms-context')}>
         <p className="paragraph"><code>.old-way-card {'{'} position: relative {'}'}</code><br/>
           {cardOne === 'contained' && <><code>.forms-context {'{'} z-index: 1 {'}'}</code><br/></>}
-          <code>.sort-choices {'{'} position: absolute; z-index: 9999 {'}'}</code></p>
+          <code>.sort-choices {'{'} position: absolute; z-index: 9999 {'}'}</code><br/>
+          <code>.menu {'{'} position-area: block-end span-inline-start {'}'}</code></p>
         <SortMenu/>
+        <TopLayerMenu/>
       </li>
       <li className="old-way-card card rounded-corners floating forms-context">
         <p className="paragraph">Card two. <code>.forms-context {'{'} z-index: 1 {'}'}</code></p>

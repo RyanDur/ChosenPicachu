@@ -15,7 +15,7 @@ import {
   LazyKeepStaticList
 } from './DragAndDrop';
 import {demoTopicParam, DemoTopics} from './types';
-import {cardOneParam, MenuExplained, raisedParam, StackingExplained, TopLayer} from './ZIndexDemo';
+import {cardOneParam, MenuExplained, PopoverExplained, raisedParam, StackingExplained, TopLayer} from './ZIndexDemo';
 import {Tutorials} from './Tables/Tutorials';
 import {ListTutorials} from './DragAndDrop/Tutorials';
 import {ChartsTutorial} from './Charts/Tutorial';
@@ -71,6 +71,7 @@ export const DemosPage = () => {
           <h2 className="title bold">Z-Index Demo.</h2>
           <StackingExplained raised={raised} onRaised={next => updateSearchParams({raised: next})}/>
           <MenuExplained cardOne={cardOne} onCardOneChosen={next => updateSearchParams({'card-one': next})}/>
+          <PopoverExplained/>
           <TopLayer className="card rounded-corners lifted padded"/>
           <TopLayerTutorial/>
         </>,

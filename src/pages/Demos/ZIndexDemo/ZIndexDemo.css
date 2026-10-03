@@ -78,10 +78,15 @@
 
     .old-way-card {
         position: relative;
-        display: grid;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
         gap: var(--base);
-        justify-items: start;
         padding: var(--base-x-1_25);
+
+        .paragraph {
+            flex-basis: 100%;
+        }
     }
 
     .forms-context {

@@ -107,7 +107,7 @@ describe('the card that traps the menu', () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
     const trap = await screen.findByRole('figure', {name: /^The trap\./});
     const cardOne = (): HTMLElement => within(trap).getAllByRole('listitem')
-      .filter(card => within(card).queryByRole('button', {name: /^Sort by/}) !== null)[0];
+      .filter(card => within(card).queryByRole('button', {name: 'Sort by'}) !== null)[0];
     expect(within(cardOne()).getByText('.forms-context { z-index: 1 }')).toBeInTheDocument();
 
     await userEvent.click(screen.getByRole('checkbox', {name: 'Card one has z-index: 1'}));

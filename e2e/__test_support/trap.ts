@@ -4,7 +4,7 @@ export type SortChoice = 'name' | 'date' | 'size';
 
 export const trappedMenu = (page: Page) => {
   const trap = page.getByRole('figure', {name: /^The trap\./});
-  const sortBy = trap.getByRole('button', {name: /^Sort by/});
+  const sortBy = trap.getByRole('button', {name: /^Sort by(: \w+)?$/});
   const choice = (name: SortChoice) => trap.getByRole('menuitem', {name});
   return {
     sortBy,
@@ -25,5 +25,28 @@ export const trappedMenu = (page: Page) => {
       }
       return cardTwo?.contains(topmost) ?? false ? 'card two' : 'something else';
     }, await trap.getByRole('listitem').filter({hasText: /^Card two\./}).elementHandle())
+  };
+};
+
+export const topLayerMenu = (page: Page) => {
+  const trap = page.getByRole('figure', {name: /^The trap\./});
+  const sortBy = trap.getByRole('button', {name: 'Sort by, in the top layer'});
+  const menu = page.getByLabel('Sort by, in the top layer', {exact: true}).and(page.getByRole('list'));
+  const choice = (name: SortChoice) => menu.getByRole('button', {name, exact: true});
+  return {
+    sortBy,
+    menu,
+    choice,
+    open: (): Promise<void> => sortBy.click(),
+    overlapsCardTwo: async (): Promise<boolean> => {
+      const [list, cardTwo] = await Promise.all([menu.boundingBox(), trap.getByRole('listitem').filter({hasText: /^Card two\./}).boundingBox()]);
+      return list !== null && cardTwo !== null &&
+        list.y < cardTwo.y + cardTwo.height && cardTwo.y < list.y + list.height &&
+        list.x < cardTwo.x + cardTwo.width && cardTwo.x < list.x + list.width;
+    },
+    onTopAt: (name: SortChoice): Promise<boolean> => choice(name).evaluate(element => {
+      const {left, top, width, height} = element.getBoundingClientRect();
+      return element.contains(document.elementFromPoint(left + width / 2, top + height / 2));
+    })
   };
 };
