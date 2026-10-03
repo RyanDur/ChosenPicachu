@@ -47,6 +47,7 @@ export type Contents = {
 const exhibit = 'card rounded-corners lifted padded';
 const gap = plain(' ');
 const runs = 'runs card rounded-corners lifted padded';
+const toldRun = 'run card rounded-corners lifted padded';
 const inputOf: Record<FoldType, FoldInput> = {inclusive: 'checkbox', exclusive: 'radio'};
 const foldTypes = [{display: 'Inclusive', value: 'inclusive'}, {display: 'Exclusive', value: 'exclusive'}] as const;
 const foldMotions = [{display: 'Reveal', value: 'reveal'}, {display: 'Drawer', value: 'drawer'}, {display: 'Static', value: 'static'}] as const;
@@ -66,31 +67,29 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
     <PillGlider label="fold motion" name="fold-motion" options={foldMotions} chosen={motion} onChosen={onMotionChosen}/>
     <section aria-labelledby="old-way-heading" className="accordion-part">
       <h3 id="old-way-heading" className="title bold">How we used to build a fold</h3>
-      <ol className={runs}>
-        <li className="run">
-          <p className="paragraph">Before a known height, most of us slid a fold open with a guess. A transition
-            can move a height to a number but not to auto, the height the text needs, so we moved
-            the panel’s <Mdn path="Web/CSS/max-height">max-height</Mdn> instead: from 0 to a number taller
-            than any part would ever need, like 1000px. The panel stopped at its own text, so nothing
-            scrolled and nothing was left empty. The cost was the timing. The transition spent its whole
-            time crossing the guess, and the text filled only the start of it. So a short part opened in a
-            rush and then sat still. On closing, it waited, unmoving, while the guess fell to its text,
-            then shut at once. The bigger the guess, the worse the rush and the wait. A guess too small
-            cut the text off.</p>
-          <Snippet label="CSS" lines={[
-            plain('.info {'),
-            plain('  max-height: 0;'),
-            plain('  overflow: hidden;'),
-            plain('  transition: max-height .3s ease-in-out;'),
-            plain('}'),
-            gap,
-            plain('.info-toggle:checked ~ .info {'),
-            plain('  max-height: 1000px;'),
-            plain('}')
-          ]}/>
-          <TheMaxHeightGuess/>
-        </li>
-      </ol>
+      <section className={toldRun}>
+        <p className="paragraph">Before a known height, most of us slid a fold open with a guess. A transition
+          can move a height to a number but not to auto, the height the text needs, so we moved
+          the panel’s <Mdn path="Web/CSS/max-height">max-height</Mdn> instead: from 0 to a number taller
+          than any part would ever need, like 1000px. The panel stopped at its own text, so nothing
+          scrolled and nothing was left empty. The cost was the timing. The transition spent its whole
+          time crossing the guess, and the text filled only the start of it. So a short part opened in a
+          rush and then sat still. On closing, it waited, unmoving, while the guess fell to its text,
+          then shut at once. The bigger the guess, the worse the rush and the wait. A guess too small
+          cut the text off.</p>
+        <Snippet label="CSS" lines={[
+          plain('.info {'),
+          plain('  max-height: 0;'),
+          plain('  overflow: hidden;'),
+          plain('  transition: max-height .3s ease-in-out;'),
+          plain('}'),
+          gap,
+          plain('.info-toggle:checked ~ .info {'),
+          plain('  max-height: 1000px;'),
+          plain('}')
+        ]}/>
+        <TheMaxHeightGuess/>
+      </section>
       {type === 'inclusive'
         ? <InclusiveAccordion className={exhibit} content={contents.checkbox} motion={motion}/>
         : <ExclusiveAccordion className={exhibit} content={contents.radio} motion={motion}/>}

@@ -76,6 +76,14 @@ describe('the accordions explanation', () => {
 });
 
 describe('the words and the code chosen by type', () => {
+  test.each(['inclusive', 'exclusive'])('should open part one, with %s chosen, on the code of the max-height guess', async type => {
+    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
+
+    const oldWay = await screen.findByRole('region', {name: parts[0]});
+
+    expect(within(oldWay).getAllByRole('code')[0]).toHaveTextContent(/max-height: 0;.*transition: max-height .3s ease-in-out;.*max-height: 1000px;/);
+  });
+
   test.each([
     {type: 'inclusive', input: 'checkbox', announced: /a checkbox, checked or not checked\./, carvedInput: 'type="checkbox"'},
     {type: 'exclusive', input: 'radio', announced: /a radio, one of six\./, carvedInput: 'type="radio" name="group"'}
