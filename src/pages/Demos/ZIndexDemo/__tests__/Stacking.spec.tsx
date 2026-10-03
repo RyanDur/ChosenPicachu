@@ -10,7 +10,7 @@ describe('the stacking pile', () => {
 
     const part = await screen.findByRole('region', {name: 'Why Third is on top'});
 
-    expect(within(part).getByRole('figure', {name: 'The pile. Three cards, First, Second and Third, in the order the code lists them.'})).toBeInTheDocument();
+    expect(within(part).getByRole('figure', {name: 'The pile. Raise a card over the others with the pills above it.'})).toBeInTheDocument();
   });
 
   test('should open with no card raised', async () => {
