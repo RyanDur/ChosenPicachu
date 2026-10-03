@@ -70,7 +70,7 @@ export const DemosPage = () => {
         [DemoTopics.zIndex]: <>
           <h2 className="title bold">Z-Index Demo.</h2>
           <StackingExplained raised={raised} onRaised={next => updateSearchParams({raised: next})}/>
-          <MenuExplained cardOne={cardOne} onCardOne={next => updateSearchParams({'card-one': next})}/>
+          <MenuExplained cardOne={cardOne} onCardOneChosen={next => updateSearchParams({'card-one': next})}/>
           <TopLayer className="card rounded-corners lifted padded"/>
           <TopLayerTutorial/>
         </>,

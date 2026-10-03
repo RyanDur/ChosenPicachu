@@ -10,17 +10,17 @@ const says: Record<CardOne, string> = {
 
 type Props = {
   cardOne: CardOne;
-  onCardOne: (cardOne: CardOne) => void;
+  onCardOneChosen: (cardOne: CardOne) => void;
 };
 
-export const TrappedMenu: FC<Props> = ({cardOne, onCardOne}) => {
+export const TrappedMenu: FC<Props> = ({cardOne, onCardOneChosen}) => {
   const [changed, updateChanged] = useState(false);
 
   return <figure className="trapped-menu card rounded-corners lifted padded">
     <label className="context-choice reachable">
       <input type="checkbox" checked={cardOne === 'contained'} onChange={({currentTarget}) => {
         updateChanged(true);
-        onCardOne(currentTarget.checked ? 'contained' : 'free');
+        onCardOneChosen(currentTarget.checked ? 'contained' : 'free');
       }}/>
       Card one has z-index: 1
     </label>

@@ -100,15 +100,7 @@
         display: block;
         inline-size: 100%;
         padding: var(--base) var(--base-x-2);
-        border: 0;
         background: none;
-        color: inherit;
-        font: inherit;
         text-align: start;
-        cursor: pointer;
-
-        &:focus-visible {
-            outline: var(--hairline-x-2) solid var(--ring);
-        }
     }
 }

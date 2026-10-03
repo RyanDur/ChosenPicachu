@@ -57,6 +57,25 @@ describe('the menu built the old way', () => {
     expect(screen.getByRole('button', {name: 'Sort by'})).toHaveFocus();
   });
 
+  test('should open from ArrowDown on its button, with its first choice in focus', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    (await screen.findByRole('button', {name: 'Sort by'})).focus();
+
+    await userEvent.keyboard('{ArrowDown}');
+
+    expect(screen.getByRole('menuitem', {name: 'name'})).toHaveFocus();
+  });
+
+  test('should close when its button is pressed again', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    const sortBy = await screen.findByRole('button', {name: 'Sort by'});
+
+    await userEvent.click(sortBy);
+    await userEvent.click(sortBy);
+
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+  });
+
   test('should close when focus leaves it', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
     await userEvent.click(await screen.findByRole('button', {name: 'Sort by'}));
@@ -92,6 +111,18 @@ describe('the card that traps the menu', () => {
 
     expect(screen.getByRole('status', {name: 'what card one does'})).toHaveTextContent(free);
     expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('card-one=free');
+  });
+
+  test('card one should show its z-index: 1 rule only while the checkbox is checked', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+    const trap = await screen.findByRole('figure', {name: /^The trap\./});
+    const cardOne = (): HTMLElement => within(trap).getAllByRole('listitem')
+      .filter(card => within(card).queryByRole('button', {name: /^Sort by/}) !== null)[0];
+    expect(within(cardOne()).getByText('.forms-context { z-index: 1 }')).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole('checkbox', {name: 'Card one has z-index: 1'}));
+
+    expect(within(cardOne()).queryByText('.forms-context { z-index: 1 }')).not.toBeInTheDocument();
   });
 
   test('should open freed when the address says so', async () => {

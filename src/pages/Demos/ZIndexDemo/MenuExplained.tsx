@@ -12,13 +12,13 @@ const gap = plain(' ');
 
 type Props = {
   cardOne: CardOne;
-  onCardOne: (cardOne: CardOne) => void;
+  onCardOneChosen: (cardOne: CardOne) => void;
 };
 
-export const MenuExplained: FC<Props> = ({cardOne, onCardOne}) =>
+export const MenuExplained: FC<Props> = ({cardOne, onCardOneChosen}) =>
   <section aria-labelledby="9999-still-loses-heading" className="stacking-part">
     <h3 id="9999-still-loses-heading" className="title bold">Why 9999 still loses</h3>
-    <TrappedMenu cardOne={cardOne} onCardOne={onCardOne}/>
+    <TrappedMenu cardOne={cardOne} onCardOneChosen={onCardOneChosen}/>
     <ol className="runs card rounded-corners lifted padded">
       <li className="run">
         <p className="paragraph">Open Sort by. The list has a z-index of 9999, and card two has a z-index of 1,
