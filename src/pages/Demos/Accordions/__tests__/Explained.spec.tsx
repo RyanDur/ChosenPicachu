@@ -47,7 +47,7 @@ describe('the accordions tab', () => {
 });
 
 describe('the accordions explanation', () => {
-  test.each(parts.slice(0, 3))('should tell, with inclusive chosen, nothing under "%s" of a shared name, a Close radio or one part open', async part => {
+  test.each(parts.slice(0, 3))('should show, with inclusive chosen, none of the radio builds’ words or code under "%s"', async part => {
     render(<TestApp at={demosAt('?tab=accordions&type=inclusive')}/>);
 
     const explained = await screen.findByRole('region', {name: part});
@@ -57,7 +57,7 @@ describe('the accordions explanation', () => {
     }
   });
 
-  test('should tell, with exclusive chosen, of a shared name, a Close radio and one part open', async () => {
+  test('should show, with exclusive chosen, the radio builds’ words and code', async () => {
     render(<TestApp at={demosAt('?tab=accordions&type=exclusive')}/>);
 
     const tab = await screen.findByRole('region', {name: 'Accordions'});
