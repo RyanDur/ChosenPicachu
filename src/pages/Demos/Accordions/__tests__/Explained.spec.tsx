@@ -6,6 +6,12 @@ import {demosAt} from '@pages/Demos/__test_support';
 const runTelling = (part: HTMLElement, words: RegExp): HTMLElement =>
   within(part).getAllByRole('listitem').filter(run => within(run).queryByText(words) !== null)[0];
 
+const captionsIn = (part: HTMLElement): string[] => {
+  const captions: string[] = [];
+  within(part).getAllByRole('figure', {name: caption => captions.push(caption) > 0});
+  return captions;
+};
+
 const codeBeside = (part: HTMLElement, words: RegExp): HTMLElement => within(runTelling(part, words)).getByRole('code');
 
 const everyCodeBeside = (part: HTMLElement, words: RegExp): string[] =>
@@ -402,9 +408,7 @@ describe('what the newer builds end', () => {
     render(<TestApp at={demosAt(`?tab=accordions&type=${type}&style=${style}`)}/>);
 
     const tab = await screen.findByRole('region', {name: 'Accordions'});
-    const captions: string[] = [];
-    within(tab).getAllByRole('figure', {name: caption => captions.push(caption) > 0});
-    const sentences = [...within(tab).getAllByRole('paragraph').map(paragraph => paragraph.textContent ?? ''), ...captions]
+    const sentences = [...within(tab).getAllByRole('paragraph').map(paragraph => paragraph.textContent ?? ''), ...captionsIn(tab)]
       .flatMap(text => text.split(/(?<=[.!?])\s+/))
       .map(sentence => sentence.trim())
       .filter(sentence => sentence.length > 0);
