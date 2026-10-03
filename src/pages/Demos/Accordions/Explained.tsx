@@ -92,8 +92,9 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
           <Snippet label="HTML" lines={span(htmlAloneSource, '<ul>', '</ul>')}/>
         </li>
         <li className="run">
-          <p className="paragraph">An HTML page is made of elements. Each is a pair of tags, such as {'<details>'} and
-            {' </details>'}, around what it holds. A <Mdn path="Web/HTML/Element/details">details</Mdn> element holds
+          <p className="paragraph">An HTML page is made of elements. Most are a pair of tags, such
+            as <code>{'<details>'}</code> and <code>{'</details>'}</code>, around what they hold. A few, such
+            as <code>{'<input>'}</code>, are a single tag and hold nothing. A <Mdn path="Web/HTML/Element/details">details</Mdn> element holds
             a <Mdn path="Web/HTML/Element/summary">summary</Mdn> and the content it hides. The summary is the bar. Press
             it and the browser shows the rest. Press it again and the browser hides it.</p>
         </li>
