@@ -1,6 +1,11 @@
 import {expect, test} from '@playwright/test';
 import {bannerTrap, desktop, iPhone} from './__test_support';
 
+const isOnTopAtItsFirstLine = (element: Element): boolean => {
+  const {left, top} = element.getBoundingClientRect();
+  return element.contains(document.elementFromPoint(left + 4, top + 4));
+};
+
 for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: desktop}]) {
   test.describe(`at ${size} wide`, () => {
     test.use(device);
@@ -27,14 +32,15 @@ for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: 
 
       await expect.poll(() => banners.onTopOf(banners.topLayerBanner, 'middle')).toBe('the banner');
     });
+
+    test('the tutorial below brings the step that makes the banner a popover into view, with its story heading clear of the tab bar', async ({page}) => {
+      await page.goto('demos/?tab=z-index');
+      const part = page.getByRole('region', {name: 'Why a fixed banner still loses'});
+
+      await part.getByRole('link', {name: 'the tutorial below'}).click();
+
+      await expect(page.getByText('Claim the top layer')).toBeInViewport();
+      await expect.poll(() => page.getByText('The user sees the news above everything').evaluate(isOnTopAtItsFirstLine)).toBe(true);
+    });
   });
 }
-
-test('the tutorial below brings the step that makes the banner a popover into view', async ({page}) => {
-  await page.goto('demos/?tab=z-index');
-  const part = page.getByRole('region', {name: 'Why a fixed banner still loses'});
-
-  await part.getByRole('link', {name: 'the tutorial below'}).click();
-
-  await expect(page.getByText('Claim the top layer')).toBeInViewport();
-});
