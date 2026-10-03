@@ -10,21 +10,20 @@ export const trappedMenu = (page: Page) => {
     sortBy,
     choice,
     contextChoice: trap.getByRole('checkbox', {name: 'Card one has z-index: 1'}),
-    says: trap.getByRole('status', {name: 'what card one does'}),
+    contextWords: trap.getByText('Card one has z-index: 1'),
     caption: trap.getByText(/Open Sort by, then change the checkbox/),
-    controls: () => [trap.getByText('Card one has z-index: 1'), sortBy] as const,
     open: (): Promise<void> => sortBy.click(),
     openByKeyboard: async (): Promise<void> => {
       await sortBy.focus();
       await page.keyboard.press('Enter');
     },
-    onTopAt: (name: SortChoice): Promise<string> => choice(name).evaluate(element => {
+    onTopAt: async (name: SortChoice): Promise<string> => choice(name).evaluate((element, cardTwo) => {
       const {left, top, width, height} = element.getBoundingClientRect();
       const topmost = document.elementFromPoint(left + width / 2, top + height / 2);
       if (element.contains(topmost)) {
         return 'the choice';
       }
-      return topmost?.closest('li')?.textContent?.startsWith('Card two.') ?? false ? 'card two' : 'something else';
-    })
+      return cardTwo?.contains(topmost) ?? false ? 'card two' : 'something else';
+    }, await trap.getByRole('listitem').filter({hasText: /^Card two\./}).elementHandle())
   };
 };

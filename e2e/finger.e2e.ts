@@ -47,7 +47,7 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
       await page.goto('demos/?tab=z-index');
       const menu = trappedMenu(page);
       await menu.open();
-      const controls = [...menu.controls(), menu.choice('name'), menu.choice('date'), menu.choice('size')];
+      const controls = [menu.contextWords, menu.sortBy, menu.choice('name'), menu.choice('date'), menu.choice('size')];
 
       const heights = await Promise.all(controls.map(async control => Math.round((await control.boundingBox())?.height ?? 0)));
 
@@ -58,7 +58,7 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
       await page.goto('demos/?tab=z-index');
       const menu = trappedMenu(page);
 
-      await fingerTap(page, menu.controls()[0]);
+      await fingerTap(page, menu.contextWords);
 
       await expect(menu.contextChoice).not.toBeChecked();
     });
