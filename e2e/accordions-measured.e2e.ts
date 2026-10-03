@@ -1,4 +1,4 @@
-import {expect} from '@playwright/test';
+import {expect, type Locator} from '@playwright/test';
 import {
   accordionsTab,
   desktop,
@@ -81,14 +81,42 @@ for (const build of measuredBuilds) {
   });
 }
 
+type Turn = {before: number; turned: number; end: number};
+
+const pressedAgainAtAQuarter = async (fold: Locator, first: Locator, second: Locator, travel: {from: number; to: number}): Promise<Turn> =>
+  fold.evaluate((element, {firstPress, secondPress, from, to}) => new Promise<Turn>(resolve => {
+    const height = (): number => element.getBoundingClientRect().height;
+    const moving = (): boolean => element.getAnimations({subtree: true})
+      .some(motion => motion instanceof CSSTransition && motion.transitionProperty === 'height');
+    const quarter = from + (to - from) / 4;
+    const atEnd = (turn: Omit<Turn, 'end'>) => (): void => {
+      if (moving()) {
+        requestAnimationFrame(atEnd(turn));
+      } else {
+        resolve({...turn, end: height()});
+      }
+    };
+    const watched = (): void => {
+      const before = height();
+      if (to > from ? before <= quarter : before >= quarter) {
+        requestAnimationFrame(watched);
+      } else if (secondPress instanceof HTMLElement) {
+        secondPress.click();
+        requestAnimationFrame(atEnd({before, turned: height()}));
+      }
+    };
+    if (firstPress instanceof HTMLElement) {
+      firstPress.click();
+      requestAnimationFrame(watched);
+    }
+  }), {firstPress: await first.elementHandle(), secondPress: await second.elementHandle(), ...travel});
+
 for (const build of measuredBuilds) {
-  for (const {first, second, start} of [
-    {first: 'open', second: 'close', start: 'shut'},
-    {first: 'close', second: 'open', start: 'open'}
-  ] as const) {
-    test(`a part of ${build} pressed again while it moves turns around from where it is, ${first} then ${second}`, async ({page}) => {
+  for (const {first, start} of [{first: 'open', start: 'shut'}, {first: 'close', start: 'open'}] as const) {
+    test(`a part of ${build} pressed again while it moves turns around from where it is, ${first} first`, async ({page}) => {
       await page.goto(showing(build));
       const part = accordionsTab(page).firstPartOf(build);
+      const {opens, shuts} = accordionsTab(page).pressesOfTheFirstPart(build);
       const shut = await heightOnceSettled(part.fold);
       await part.open();
       const open = await heightOnceSettled(part.fold);
@@ -96,20 +124,30 @@ for (const build of measuredBuilds) {
         await part.close();
         await heightOnceSettled(part.fold);
       }
-      const quarter = (open - shut) / 4;
 
-      await part[first]();
-      const movedAQuarter = (height: number): boolean => first === 'open' ? height > shut + quarter : height < open - quarter;
-      await expect.poll(async () => movedAQuarter(await heightByTheNextFrame(part.fold))).toBe(true);
-      await part[second]();
-      const turning = await motionOf(part.fold);
+      const turn = first === 'open'
+        ? await pressedAgainAtAQuarter(part.fold, opens, shuts, {from: shut, to: open})
+        : await pressedAgainAtAQuarter(part.fold, shuts, opens, {from: open, to: shut});
 
-      expect(turning.at(0)?.height).toBeGreaterThan(shut + layoutRounding);
-      expect(turning.at(0)?.height).toBeLessThan(open - layoutRounding);
-      expect(Math.abs((turning.at(-1)?.height ?? 0) - (second === 'close' ? shut : open))).toBeLessThanOrEqual(layoutRounding);
+      for (const height of [turn.before, turn.turned]) {
+        expect(height).toBeGreaterThan(shut + layoutRounding);
+        expect(height).toBeLessThan(open - layoutRounding);
+      }
+      expect(Math.abs(turn.end - (first === 'open' ? shut : open))).toBeLessThanOrEqual(layoutRounding);
     });
   }
 }
+
+const pressedInTheFrameMotionStarts = async (first: Locator, second: Locator): Promise<void> =>
+  first.evaluate((firstPress, secondPress) => new Promise<void>(resolve => {
+    if (firstPress instanceof HTMLElement && secondPress instanceof HTMLElement) {
+      firstPress.click();
+      requestAnimationFrame(() => {
+        secondPress.click();
+        resolve();
+      });
+    }
+  }), await second.elementHandle());
 
 for (const build of measuredBuilds) {
   test.describe('a desktop', () => {
@@ -118,11 +156,11 @@ for (const build of measuredBuilds) {
     test(`an opening part of ${build} switched to Static mid-motion still ends at its text after the window narrows`, async ({page}) => {
       await page.goto(showing(build));
       const part = accordionsTab(page).firstPartOf(build);
-      const shut = await heightOnceSettled(part.fold);
-      await part.open();
-      await expect.poll(() => heightByTheNextFrame(part.fold)).toBeGreaterThan(shut + layoutRounding);
+      await heightOnceSettled(part.fold);
 
-      await page.getByRole('group', {name: 'fold motion'}).getByText('Static', {exact: true}).click();
+      await pressedInTheFrameMotionStarts(
+        accordionsTab(page).pressesOfTheFirstPart(build).opens,
+        page.getByRole('group', {name: 'fold motion'}).getByRole('radio', {name: 'Static'}));
       await page.setViewportSize({width: 390, height: 900});
 
       await expect.poll(() => gapUnderItsText(part)).toBeLessThanOrEqual(layoutRounding);
@@ -131,10 +169,16 @@ for (const build of measuredBuilds) {
     test(`an open part of ${build} closed and opened again in one frame still ends at its text after the window narrows`, async ({page}) => {
       await page.goto(showing(build));
       const part = accordionsTab(page).firstPartOf(build);
+      const {opens, shuts} = accordionsTab(page).pressesOfTheFirstPart(build);
       await part.open();
       await heightOnceSettled(part.fold);
 
-      await accordionsTab(page).closesThenOpensTheFirstPartInOneFrame(build);
+      await shuts.evaluate((shut, open) => {
+        if (shut instanceof HTMLElement && open instanceof HTMLElement) {
+          shut.click();
+          open.click();
+        }
+      }, await opens.elementHandle());
       await heightOnceSettled(part.fold);
       await page.setViewportSize({width: 390, height: 900});
 

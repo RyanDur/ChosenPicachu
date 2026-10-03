@@ -117,15 +117,10 @@ export const accordionsTab = (page: Page) => {
     partOf,
     holdsFocus: (build: Build): Promise<boolean> => built(build).evaluate(article => article.contains(document.activeElement)),
     firstPartOf: (build: Build): Part => partOf(build, 0),
-    closesThenOpensTheFirstPartInOneFrame: async (build: Build): Promise<void> => {
+    pressesOfTheFirstPart: (build: Build): {opens: Locator; shuts: Locator} => {
       const fold = folds(build).nth(closeBarsBeforeTheParts(build));
-      const shut = exclusiveBuilds.includes(build) ? built(build).getByRole('radio', {name: 'Close', exact: true}).first() : fold.getByRole('checkbox');
-      await fold.getByRole(exclusiveBuilds.includes(build) ? 'radio' : 'checkbox').evaluate((open, close) => {
-        if (close instanceof HTMLElement && open instanceof HTMLElement) {
-          close.click();
-          open.click();
-        }
-      }, await shut.elementHandle());
+      const opens = fold.getByRole(exclusiveBuilds.includes(build) ? 'radio' : 'checkbox');
+      return {opens, shuts: exclusiveBuilds.includes(build) ? built(build).getByRole('radio', {name: 'Close', exact: true}).first() : opens};
     },
     partsOf: async (build: Build): Promise<Part[]> =>
       (await folds(build).all()).slice(closeBarsBeforeTheParts(build)).map((_fold, index) => partOf(build, index))
