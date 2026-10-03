@@ -139,6 +139,12 @@ jobs:
   journeys:
     needs: build_test
     runs-on: ubuntu-24.04
+    name: journeys (${{ matrix.browser }} ${{ matrix.shard }})
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+        shard: [1/2, 2/2]
     steps:
       - uses: actions/checkout@v5
       - name: Set up Node.js
@@ -156,13 +162,13 @@ jobs:
         uses: actions/cache@v6
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('node_modules/@playwright/test/package.json') }}
-      - name: Install browsers
+          key: playwright-${{ runner.os }}-${{ matrix.browser }}-${{ hashFiles('node_modules/@playwright/test/package.json') }}
+      - name: Install the browser
         if: steps.browsers.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps chromium firefox webkit
-      - name: Install the browsers' system libraries
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+      - name: Install the browser's system libraries
         if: steps.browsers.outputs.cache-hit == 'true'
-        run: npx playwright install-deps chromium firefox webkit
+        run: npx playwright install-deps ${{ matrix.browser }}
       - name: Take the shipped bundle
         uses: actions/download-artifact@v7
         with:
@@ -171,10 +177,10 @@ jobs:
       - name: Walk the journeys on the stub stage
         env:
           PLAYWRIGHT_JSON_OUTPUT_NAME: journeys.json
-        run: npx playwright test --reporter=line,json
+        run: npx playwright test --project=${{ matrix.browser }} --shard=${{ matrix.shard }} --reporter=line,json
       - name: Read the journeys in the run
         if: always() && hashFiles('journeys.json') != ''
-        run: node scripts/playwright/summary.mjs journeys journeys.json >> "$GITHUB_STEP_SUMMARY"
+        run: node scripts/playwright/summary.mjs "journeys, ${{ matrix.browser }} ${{ matrix.shard }}" journeys.json >> "$GITHUB_STEP_SUMMARY"
 
   smoke:
     needs: pages

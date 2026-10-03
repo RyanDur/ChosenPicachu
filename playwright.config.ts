@@ -8,7 +8,7 @@ export default defineConfig({
   testMatch: '**/*.e2e.ts',
   testIgnore: '**/smoke.e2e.ts',
   retries: 2,
-  workers: has(process.env.CI) ? 1 : undefined,
+  workers: has(process.env.CI) ? 2 : undefined,
   timeout: 60_000,
   use: {
     baseURL: stage,
