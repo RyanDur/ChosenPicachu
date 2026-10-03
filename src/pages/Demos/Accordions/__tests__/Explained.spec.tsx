@@ -428,6 +428,15 @@ describe('the accordion in HTML alone', () => {
     ['basalt', 'cinder', 'meadow'].forEach((name, at) => expect(within(folds[at]).getByText(name)).toBeInTheDocument());
   });
 
+  test('should open its part on the three folds, in the same run as their markup', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const firstRun = within(await screen.findByRole('region', {name: htmlAlone})).getAllByRole('listitem')[0];
+
+    expect(within(firstRun).getAllByRole('group')).toHaveLength(3);
+    expect(within(firstRun).getByRole('code')).toBeInTheDocument();
+  });
+
   test('should show the folds’ whole markup in the part’s first run, with no class and no script', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 

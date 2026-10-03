@@ -154,9 +154,9 @@ export const accordionsTab = (page: Page) => {
     const fold = folds(build).nth(index + closeBarsBeforeTheParts(build));
     return {...partIn[build]({page, fold, article: built(build), index}), showsText: textShownIn(fold)};
   };
-  const htmlAloneFold = (name: string): Part => {
+  const htmlAloneFold = (name: string): Part & {closeByKeyboard: () => Promise<void>} => {
     const fold = page.getByRole('region', {name: 'An accordion in HTML alone'}).getByRole('group').filter({hasText: name});
-    return {...detailsPart(page, fold), showsText: textShownIn(fold)};
+    return {...detailsPart(page, fold), showsText: textShownIn(fold), closeByKeyboard: () => focusAndPress(page, nameOn(fold), 'Enter')};
   };
   return {
     partOf,

@@ -1,6 +1,12 @@
 import type {Locator, Page} from '@playwright/test';
+import {not} from '@ryandur/sand';
 
 export type StepLayout = 'code below prose' | 'code beside prose';
+
+type Box = {x: number; y: number; width: number; height: number};
+
+const insideOf = (outer: Box) => (inner: Box): boolean =>
+  inner.x >= outer.x && inner.y >= outer.y && inner.x + inner.width <= outer.x + outer.width && inner.y + inner.height <= outer.y + outer.height;
 
 export const codedStepLayouts = async (page: Page, within: Page | Locator = page): Promise<StepLayout[]> => {
   const steps = within.getByRole('article').or(within.getByRole('listitem'))
@@ -8,8 +14,9 @@ export const codedStepLayouts = async (page: Page, within: Page | Locator = page
     .filter({has: page.getByRole('paragraph')});
   const layouts = await Promise.all((await steps.all()).map(async step => {
     const words = await step.getByRole('paragraph').first().boundingBox();
-    const code = await step.getByRole('code').first().boundingBox();
-    return words === null || code === null ? [] : [code.y >= words.y + words.height ? 'code below prose' as const : 'code beside prose' as const];
+    const codes = await Promise.all((await step.getByRole('code').all()).map(code => code.boundingBox()));
+    const sample = codes.find(code => code !== null && words !== null && not(insideOf(words)(code)));
+    return sample && words ? [sample.y >= words.y + words.height ? 'code below prose' as const : 'code beside prose' as const] : [];
   }));
   return layouts.flat();
 };

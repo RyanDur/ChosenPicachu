@@ -293,8 +293,7 @@ test('a fold of the accordion in HTML alone opens by pointer and closes by keybo
 
   await fold.open();
   await expect.poll(fold.showsText).toBe(true);
-  await nameOn(fold.fold).focus();
-  await page.keyboard.press('Enter');
+  await fold.closeByKeyboard();
 
   await expect.poll(fold.showsText).toBe(false);
 });
