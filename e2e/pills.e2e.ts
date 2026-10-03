@@ -4,7 +4,7 @@ import {fingerTap, iPadUpright, iPhone, phoneSideways} from './__test_support';
 const choicesOn = [
   {demo: 'the accordions demo', at: 'demos/?tab=accordions', groups: ['fold type', 'fold motion']},
   {demo: 'the tables demo', at: 'demos/?tab=tables', groups: ['world', 'pace', 'origin', 'motion']},
-  {demo: 'the z-index demo', at: 'demos/?tab=z-index', groups: ['side', 'align', 'entrance', 'stack']}
+  {demo: 'the z-index demo', at: 'demos/?tab=z-index', groups: ['card raised', 'side', 'align', 'entrance', 'stack']}
 ];
 
 const pillHeights = async (page: Page, group: string): Promise<number[]> => {
