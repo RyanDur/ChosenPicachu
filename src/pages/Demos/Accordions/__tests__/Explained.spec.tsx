@@ -3,8 +3,13 @@ import userEvent from '@testing-library/user-event';
 import {TestApp} from '@__test_support/TestApp';
 import {demosAt} from '@pages/Demos/__test_support';
 
-const codeBeside = (part: HTMLElement, words: RegExp): HTMLElement =>
-  within(within(part).getAllByRole('listitem').filter(run => within(run).queryByText(words) !== null)[0]).getByRole('code');
+const runTelling = (part: HTMLElement, words: RegExp): HTMLElement =>
+  within(part).getAllByRole('listitem').filter(run => within(run).queryByText(words) !== null)[0];
+
+const codeBeside = (part: HTMLElement, words: RegExp): HTMLElement => within(runTelling(part, words)).getByRole('code');
+
+const everyCodeBeside = (part: HTMLElement, words: RegExp): string[] =>
+  within(runTelling(part, words)).getAllByRole('code').map(code => code.textContent);
 
 const parts = ['How we used to build a fold', 'What the platform gives now', 'The two together', 'How every fold moves'];
 
@@ -121,6 +126,24 @@ describe('the two together', () => {
     const explained = await screen.findByRole('region', {name: parts[2]});
 
     expect(codeBeside(explained, /The exclusive build is a radio group/)).toHaveTextContent('const openAfter');
+  });
+});
+
+describe('the measured build', () => {
+  test('should show the classes that hold the height beside the run that closes it', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const explained = await screen.findByRole('region', {name: parts[0]});
+
+    expect(everyCodeBeside(explained, /Closing runs the other way/).join()).toMatch(/\.info-measured\.sized[^]*\.info-measured\.unmoving/);
+  });
+
+  test('should show the script that turns a part around beside the run that tells it', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const explained = await screen.findByRole('region', {name: parts[0]});
+
+    expect(codeBeside(explained, /turns around from where it is/)).toHaveTextContent(/const movesTo[^]*const stillMoving/);
   });
 });
 
