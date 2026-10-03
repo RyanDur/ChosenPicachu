@@ -20,7 +20,7 @@ describe('page error boundaries', () => {
 
     expect(await site.roomSays('This room is closed.')).toBeVisible();
     expect(site.pageTitle()).toHaveTextContent('Closed room');
-    expect(await site.rail()).toBeInTheDocument();
+    expect(await site.nav()).toBeInTheDocument();
     expect(site.frontDoor()).toHaveAttribute('href', Paths.home);
   });
 
@@ -49,7 +49,7 @@ describe('page error boundaries', () => {
     expect(await site.roomSays('There is no room at this address.')).toBeVisible();
     expect(site.pageTitle()).toHaveTextContent('No such room');
     expect(site.frontDoor()).toHaveAttribute('href', Paths.home);
-    expect(await site.rail()).toBeInTheDocument();
+    expect(await site.nav()).toBeInTheDocument();
     expect(site.announced('There is no room at this address.')).toBeInTheDocument();
   });
 
@@ -63,7 +63,7 @@ describe('page error boundaries', () => {
   test('a room still loading is not called closed', async () => {
     render(<TestApp><Route path="/" lazy={() => new Promise(() => undefined)}/></TestApp>);
 
-    await site.rail();
+    await site.nav();
     expect(screen.queryByRole('heading', {level: 1})).not.toBeInTheDocument();
     expect(screen.queryByText('This room is closed.')).not.toBeInTheDocument();
   });
@@ -83,7 +83,7 @@ describe('the skeleton', () => {
     render(<TestApp at="/"/>);
     await site.pageTitled();
 
-    const rail = screen.getByRole('region', {name: 'pages and feedback'});
+    const rail = await site.rail();
 
     expect(within(rail).getByRole('navigation', {name: 'site'})).toBeInTheDocument();
     expect(within(rail).getByRole('button', {name: 'Feedback'})).toBeInTheDocument();

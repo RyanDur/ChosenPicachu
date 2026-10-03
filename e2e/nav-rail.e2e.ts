@@ -1,5 +1,5 @@
 import {Browser, expect, test} from '@playwright/test';
-import {desktop, homePage, iPad11Upright, iPad13Upright, iPadSideways, iPadUpright, justPastAPhone, phoneSideways, siteFrame, wideAndShort, widestNavInARow} from './__test_support';
+import {desktop, homePage, iPhone, iPad11Upright, iPad13Upright, iPadSideways, iPadUpright, justPastAPhone, phoneSideways, siteFrame, wideAndShort, widestNavInARow} from './__test_support';
 
 const openerHeightOn = async (browser: Browser, device: {viewport: {width: number; height: number}; hasTouch: boolean}): Promise<number> => {
   const context = await browser.newContext(device);
@@ -59,5 +59,18 @@ for (const device of [justPastAPhone, iPadUpright, iPad13Upright, widestNavInARo
 
       await expect.poll(async () => await site.roomAfterFeedback() - await site.roomBeforeHome()).toBeGreaterThanOrEqual(-aHundredthOfAPixel);
     });
+  });
+}
+
+for (const {size, device} of [{size: 'a phone', device: iPhone}, {size: 'a tablet', device: iPadUpright}, {size: 'a desktop', device: desktop}]) {
+  test(`on ${size}, the site nav and Feedback sit in the region named pages and feedback`, async ({browser}) => {
+    const context = await browser.newContext(device);
+    const page = await context.newPage();
+    await page.goto('');
+    const rail = page.getByRole('region', {name: 'pages and feedback'});
+
+    await expect(rail.getByRole('navigation', {name: 'site'})).toBeVisible();
+    await expect(rail.getByRole('button', {name: 'Feedback'})).toBeVisible();
+    await context.close();
   });
 }
