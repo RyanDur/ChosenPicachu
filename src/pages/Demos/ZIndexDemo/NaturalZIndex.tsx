@@ -23,8 +23,7 @@ export const NaturalZIndex: FC<Props> = ({className, raised, onRaised}) => {
   const onClick = () => updateCollapsed(toggle(isCollapsed));
   const layer = (card: RaisedCard) => classNames('layer card rounded-corners floating', isCollapsed && 'closed', raised === card && 'raised');
 
-  return <section aria-labelledby="natural-z-index-heading" className={classNames('natural-z-index', className)}>
-    <h3 id="natural-z-index-heading" className="off-screen">stacking with z-index</h3>
+  return <figure className={classNames('natural-z-index', className)}>
     <button className="button primary" aria-expanded={!isCollapsed} aria-controls="z-index-layers"
       onClick={onClick}>{isCollapsed ? 'Expand' : 'Collapse'}</button>
     <PillGlider label="card raised" name="card-raised" options={cardsToRaise} chosen={raised} onChosen={onRaised}/>
@@ -33,5 +32,5 @@ export const NaturalZIndex: FC<Props> = ({className, raised, onRaised}) => {
       <li className={layer('second')}>Second</li>
       <li className={layer('third')}>Third</li>
     </ol>
-  </section>;
+  </figure>;
 };

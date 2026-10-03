@@ -5,9 +5,10 @@ export type Card = 'First' | 'Second' | 'Third';
 const order: ('None' | Card)[] = ['None', 'First', 'Second', 'Third'];
 
 export const stackingPile = (page: Page) => {
-  const pile = page.getByRole('region', {name: 'stacking with z-index'});
-  const raisedGroup = pile.getByRole('group', {name: 'card raised'});
+  const raisedGroup = page.getByRole('group', {name: 'card raised'});
+  const pile = page.getByRole('region', {name: 'Why Third is on top'}).getByRole('figure').filter({has: raisedGroup});
   return {
+    cards: () => pile.getByRole('listitem'),
     cardsFromTheTop: (): Promise<string[]> => pile.getByRole('list').evaluate(list => {
       const cards = [...list.children];
       const {left, top, width, height} = cards[cards.length - 1].getBoundingClientRect();

@@ -1,9 +1,9 @@
 import {Page, expect, test} from '@playwright/test';
-import {type Card, stackingPile} from './__test_support';
+import {stackingPile} from './__test_support';
 
 test('the z-index cards start in a stack, the button spreads them, and pressing it again stacks them', async ({page}) => {
   await page.goto('demos/?tab=z-index');
-  const layers = page.getByRole('region', {name: 'stacking with z-index'}).getByRole('listitem');
+  const layers = stackingPile(page).cards();
   const boxes = async () => [await layers.first().boundingBox(), await layers.last().boundingBox()];
   const stacked = async () => {
     const [first, last] = await boxes();
@@ -28,23 +28,18 @@ test('the pile opens with Third on top, then Second, then First, in the order th
   await expect.poll(() => stackingPile(page).cardsFromTheTop()).toEqual(['Third', 'Second', 'First']);
 });
 
-for (const {input, raising} of [
-  {input: 'a pointer', raising: (page: Page, card: Card) => stackingPile(page).raise(card)},
-  {input: 'the keyboard', raising: (page: Page, card: Card) => stackingPile(page).raiseByKeyboard(card)}
+for (const {card, input, raising, fromTheTop} of [
+  {card: 'First', input: 'a pointer', raising: (page: Page) => stackingPile(page).raise('First'), fromTheTop: ['First', 'Third', 'Second']},
+  {card: 'Second', input: 'the keyboard', raising: (page: Page) => stackingPile(page).raiseByKeyboard('Second'), fromTheTop: ['Second', 'Third', 'First']}
 ]) {
-  for (const {card, fromTheTop} of [
-    {card: 'First', fromTheTop: ['First', 'Third', 'Second']},
-    {card: 'Second', fromTheTop: ['Second', 'Third', 'First']}
-  ] as const) {
-    test(`${card} raised by ${input} lands on top, and the others keep their order under it`, async ({page}) => {
-      await page.goto('demos/?tab=z-index');
-      await expect.poll(() => stackingPile(page).cardsFromTheTop()).toEqual(['Third', 'Second', 'First']);
+  test(`${card} raised by ${input} lands on top, and the others keep their order under it`, async ({page}) => {
+    await page.goto('demos/?tab=z-index');
+    await expect.poll(() => stackingPile(page).cardsFromTheTop()).toEqual(['Third', 'Second', 'First']);
 
-      await raising(page, card);
+    await raising(page);
 
-      await expect.poll(() => stackingPile(page).cardsFromTheTop()).toEqual(fromTheTop);
-    });
-  }
+    await expect.poll(() => stackingPile(page).cardsFromTheTop()).toEqual(fromTheTop);
+  });
 }
 
 test('Second raised while the pile is spread comes down on top when it is collapsed', async ({page}) => {

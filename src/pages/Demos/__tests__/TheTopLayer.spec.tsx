@@ -19,7 +19,7 @@ describe('the top layer', () => {
   test('the z-index demos name themselves in the heading outline', async () => {
     await openZIndexTab();
 
-    expect(await screen.findByRole('heading', {name: 'stacking with z-index'})).toBeInTheDocument();
+    expect(await screen.findByRole('heading', {name: 'Why Third is on top'})).toBeInTheDocument();
     expect(screen.getByRole('heading', {name: 'the top layer'})).toBeInTheDocument();
   });
 

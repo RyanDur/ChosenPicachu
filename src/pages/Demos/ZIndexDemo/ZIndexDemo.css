@@ -1,3 +1,8 @@
+.stacking-part {
+    display: grid;
+    gap: var(--base-x-3);
+}
+
 .natural-z-index {
     display: flex;
     flex-direction: column;
