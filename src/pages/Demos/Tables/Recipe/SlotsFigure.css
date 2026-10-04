@@ -17,11 +17,4 @@
   .inner {
     fill: var(--faded-mint);
   }
-
-  .midline {
-    stroke: var(--charcoal);
-    stroke-width: var(--hairline);
-    vector-effect: non-scaling-stroke;
-    stroke-dasharray: 4 3;
-  }
 }

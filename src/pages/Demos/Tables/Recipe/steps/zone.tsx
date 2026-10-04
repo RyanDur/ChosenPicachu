@@ -14,13 +14,15 @@ export const deadZone =
         cure is hysteresis: a crossing has to earn some dead ground before it counts.</Says>
     </Words>
     <Reveal>
-      <Says>This step is JavaScript alone. Position is a walk over cumulative column widths. A
-        neighbour only yields once the pointer reaches its inner half; the outer quarter is dead
-        ground, without which the reorder oscillates when a wide column passes a narrow one.
-        After a swap the pointer sits over the carried column itself, a no-op, so reversing
-        means deliberately reaching the neighbour’s inner half again. Hysteresis, for free,
-        from geometry. The decision lives in struckPast, one function with no axis in it; the vertical
-        turn will reuse it unchanged.</Says>
+      <Says>This step is JavaScript alone. To find the column under the pointer, the code adds the columns’ widths from
+        the left until the total passes the pointer’s x.</Says>
+      <Says>That column gives way only once the pointer is past a dead zone on the side it came in by. The dead zone is a
+        quarter of that column’s width, or half the difference between it and the carried column when that is more,
+        which is the case when a narrow column passes a much wider one.</Says>
+      <Says>After a switch the pointer is over the carried column itself, which does nothing. Going back means crossing
+        the neighbour’s dead zone again.</Says>
+      <Says>The decision is in struckPast, one function that doesn’t know which axis it is on. The step for rows uses it
+        unchanged.</Says>
       <SlotsFigure/>
       <Codes>
         <Snippet label="TS" lines={[

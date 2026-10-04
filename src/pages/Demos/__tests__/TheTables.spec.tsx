@@ -833,6 +833,18 @@ describe('the drag sort recipe’s words', () => {
     expect(within(await dragSortRecipe()).getByRole('figure', {name: /^Where a switch counts\. /})).toBeInTheDocument();
   });
 
+  test.each([
+    ['the drawing', 'A dead zone at the near edge of its neighbour holds still: a quarter of the neighbour’s width, or more when the neighbour is much the wider. Past it, the two switch.'],
+    ['the walk', 'To find the column under the pointer, the code adds the columns’ widths from the left until the total passes the pointer’s x.'],
+    ['the dead zone', 'The dead zone is a quarter of that column’s width, or half the difference between it and the carried column when that is more,']
+  ])('should say where a switch counts as the code decides it, in %s', async (_where, sentence) => {
+    expect(await dragSortRecipe()).toHaveTextContent(sentence);
+  });
+
+  test('should not say only the inner half switches', async () => {
+    expect(await dragSortRecipe()).not.toHaveTextContent(/inner half/);
+  });
+
   test('should define reconcile in plain words where the drag sort recipe first uses it', async () => {
     const [defined] = within(await dragSortRecipe()).getAllByLabelText('reconcile');
 

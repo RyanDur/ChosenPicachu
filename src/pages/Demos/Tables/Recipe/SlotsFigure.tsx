@@ -4,18 +4,17 @@ import './SlotsFigure.css';
 
 export const SlotsFigure: FC = () =>
   <Figure className="slots" viewBox="0 -20 480 150" title="Where a switch counts" says={<>
-    Pointer x walks cumulative slot widths across the survey. The outer quarter of a
-    neighbor is a dead zone; only its inner half accepts the switch.
+    The carried column is moving right. A dead zone at the near edge of its neighbour holds still: a quarter of the
+    neighbour’s width, or more when the neighbour is much the wider. Past it, the two switch. Coming back the other way,
+    the dead zone is at the other edge.
   </>}>
-    <rect className="slot" x="10" y="20" width="130" height="70"/>
-    <rect className="slot" x="140" y="20" width="90" height="70"/>
-    <rect className="slot" x="230" y="20" width="120" height="70"/>
-    <rect className="slot" x="350" y="20" width="120" height="70"/>
-    <rect className="dead" x="230" y="20" width="30" height="70"/>
-    <rect className="inner" x="260" y="20" width="60" height="70"/>
-    <rect className="dead" x="320" y="20" width="30" height="70"/>
-    <line className="midline" x1="290" y1="14" x2="290" y2="96"/>
-    <text className="drawn-caption" x="290" y="110" textAnchor="middle">inner half switches</text>
-    <text className="drawn-caption" x="245" y="12" textAnchor="middle">dead</text>
-    <text className="drawn-caption" x="335" y="12" textAnchor="middle">dead</text>
+    <rect className="slot" x="10" y="20" width="110" height="70"/>
+    <rect className="slot" x="120" y="20" width="160" height="70"/>
+    <rect className="slot" x="280" y="20" width="90" height="70"/>
+    <rect className="slot" x="370" y="20" width="100" height="70"/>
+    <rect className="dead" x="120" y="20" width="40" height="70"/>
+    <rect className="inner" x="160" y="20" width="120" height="70"/>
+    <text className="drawn-caption" x="65" y="60" textAnchor="middle">carried</text>
+    <text className="drawn-caption" x="140" y="12" textAnchor="middle">dead</text>
+    <text className="drawn-caption" x="220" y="110" textAnchor="middle">a switch counts</text>
   </Figure>;
