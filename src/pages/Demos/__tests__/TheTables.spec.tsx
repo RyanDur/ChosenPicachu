@@ -286,7 +286,7 @@ describe('the tables demo', () => {
     expect(living).toHaveTextContent(/The exchange is middleware/);
     expect(living).toHaveTextContent(/export const demosStore/);
     expect(living).toHaveTextContent(/a socket comes next/);
-    expect(living).toHaveTextContent(/Hydrate with one fetch/);
+    expect(living).toHaveTextContent(/Start with the recent past, in one fetch/);
     expect(living).toHaveTextContent(/where a number comes from/);
     expect(living).toHaveTextContent(/Drawn, not recorded/);
   });
@@ -768,5 +768,42 @@ describe('the tables demo', () => {
       expect(card).toContainElement(frame);
       await waitFor(() => expect(within(card).queryByRole('table')).not.toBeInTheDocument());
     });
+  });
+});
+
+describe('the living table’s terms', () => {
+  const livingTable = async (): Promise<HTMLElement> => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    return screen.findByRole('region', {name: 'the living table'});
+  };
+
+  test.each([
+    ['store', 'one object that holds the state. You read the state from it, send it an action with dispatch to change it, and subscribe to be told when it has changed'],
+    ['action', 'a plain record of something that happened: a type that names it, and the facts about it. dispatch hands it to the reducer'],
+    ['reducer', 'the function that takes the state as it was and an action, and returns the state as it now is. It never changes the old state'],
+    ['slice', 'a reducer together with the state it starts from. A store with more than one concern joins several slices, each under its own key and each seeing only its own part'],
+    ['selector', 'a named function that takes the state and returns one answer from it. Its name says what is being asked'],
+    ['middleware', 'code that sits between dispatch and the reducer. It sees every action first, passes it on or not, and can dispatch actions of its own'],
+    ['provider', 'a React component that makes one value, here the store’s state and its dispatch, available to every component inside it'],
+    ['hook', 'a function, named use and something, that a React component calls to get state or behaviour from React'],
+    ['effect', 'code React runs after it has updated the page. This one asks for the feed when the page arrives and releases it when the page leaves'],
+    ['hydrate', 'fill the table with the recent past, fetched once, and join it to the live trades']
+  ])('should define %s in plain words where the living table first uses it', async (term, definition) => {
+    const [defined] = within(await livingTable()).getAllByLabelText(term);
+
+    expect(defined).toHaveTextContent(definition);
+  });
+
+  test('should define the ledger in plain words where the still table first uses it', async () => {
+    await livingTable();
+    const [defined] = within(screen.getByRole('region', {name: 'the still table'})).getAllByLabelText('ledger');
+
+    expect(defined).toHaveTextContent('the table’s record of each column’s share of the width. It starts when a width is first changed, and what one column gains its neighbour gives up');
+  });
+
+  test('should say what useSyncExternalStore is where the React world subscribes through it', async () => {
+    expect(await livingTable()).toHaveTextContent('useSyncExternalStore, React’s hook for reading a store kept outside React');
   });
 });

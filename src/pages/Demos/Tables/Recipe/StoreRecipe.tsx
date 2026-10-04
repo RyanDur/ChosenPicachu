@@ -39,7 +39,7 @@ const oneState = (world: World): ReactNode =>
         last step of this story.</Says>
       {world === 'react'
         ? <Says>The page creates its store once, with the exchange as its middleware, and hands it
-          to a provider; the charts and the tables below the provider read the same trades and the
+          to a <Term word="provider">provider</Term>; the charts and the tables below the provider read the same trades and the
           same arrangement. The table element creates its own store once, empty, and every part
           inside it reads and writes through that one.</Says>
         : <Says>The mount creates the same stores: the trades, with the same exchange as
@@ -167,7 +167,8 @@ const exchangeIsMiddleware = (world: World): ReactNode =>
         the page or the mount knows a socket exists: they dispatch that they want the feed, and
         they see the store change.</Says>
       {world === 'react'
-        ? <Says>A hook builds the store with the layer, and its one effect dispatches the request
+        ? <Says>A <Term word="hook">hook</Term> builds the store with the layer, and its
+          one <Term word="effect">effect</Term> dispatches the request
           when the page arrives and the release when it leaves.</Says>
         : <Says>The mount builds the store with the same layer and dispatches the request last,
           once every listener is wired, and the frame’s socket lives as long as the frame
@@ -201,7 +202,7 @@ const whoSubscribes = (world: World): ReactNode =>
     <Reveal>
       {world === 'react'
         ? <Says>The page’s provider and the table element each subscribe through
-          useSyncExternalStore, so a trade or a move re-renders the page’s rows and a drag
+          useSyncExternalStore, React’s hook for reading a store kept outside React, so a trade or a move re-renders the page’s rows and a drag
           re-renders the hand’s marks; the markup renders through the new state, and React
           reconciles the real DOM, moving only the nodes whose place changed. The table raises
           what the hand did as an event, onColumnMoved, onRowMoved, onSorted, and the page

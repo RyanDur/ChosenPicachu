@@ -17,6 +17,7 @@ import widthsSource from '@pages/Demos/Tables/Aggregations/Aggregations.css?raw'
 import tableSource from '../Frame/table.html?raw';
 import {DataPath} from './DataPath';
 import '../../Recipe/Recipe.css';
+import {Term} from './Term';
 
 const gap = plain(' ');
 
@@ -30,7 +31,7 @@ const dealPlans: Record<World, ReactNode> = {
       widths govern their whole columns: the table always fills its container, and the
       columns hold still while the values change.</Says>
     <Says>And no JavaScript knows these widths at all, because nothing needs to know the
-      size until you touch something. The resize ledger is born at the first touch by
+      size until you touch something. The resize <Term word="ledger">ledger</Term> is born at the first touch by
       measuring the headers as they stand, and the drag surveys them at the lift; a value
       that changes at runtime is state, and until then nothing has changed.</Says>
   </>,
@@ -154,14 +155,14 @@ const flowStory = (world: World) =>
       so a long session cannot grow forever. {refolds[world]}</Tell>
     <DataPath/>
     <Steps>
-      <Step title="Hydrate with one fetch">
+      <Step title="Start with the recent past, in one fetch">
         <Words want="An empty table at open is a lie about the market; the trader arrives mid-session, so the recent past comes first, and it is just a fetch.">
           <Says>The recent past is not a stream problem: it is one request, and the only care is
             the seam where the fetch and the socket overlap.</Says>
         </Words>
         <Reveal>
           <Says>One GET for the last thousand trades, decoded and cleaned. When the stream is
-            also running, hydrated merges the two, drops whatever the stream already delivered,
+            also running, the function <Term word="hydrate">hydrated</Term> merges the two, drops whatever the stream already delivered,
             and keeps everything in time order.</Says>
           <Codes>
             <Snippet label="TS" lines={[
