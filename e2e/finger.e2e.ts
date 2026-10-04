@@ -79,6 +79,29 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
       await expect(menu.contextChoice).not.toBeChecked();
     });
 
+    for (const {where, at, folds} of [
+      {where: 'home', at: '', folds: (page: Page) => page.getByRole('group').filter({has: page.getByText('the fuller story', {exact: true})})},
+      {where: 'the drag sort tab', at: 'demos/?tab=dragAndDrop', folds: (page: Page) => page.getByRole('group', {name: 'settings', exact: true})},
+      {where: 'the gallery', at: 'gallery/?tab=vam', folds: (page: Page) => page.getByRole('group', {name: 'gallery settings'})}
+    ]) {
+      test(`every closed fold on ${where} is a finger tall`, async ({page}) => {
+        await page.goto(at);
+        await expect(folds(page).first()).toBeVisible();
+
+        expect(await shortOfAFinger(await folds(page).all())).toEqual([]);
+      });
+    }
+
+    test('every closed fold in an open story on the tables tab is a finger tall', async ({page}) => {
+      await page.goto('demos/?tab=tables');
+      const story = page.getByRole('group').filter({has: page.getByText(/^so that /)}).first();
+      await story.getByText(/^so that /).click();
+      const reveals = story.getByRole('group', {name: 'how we built it'});
+      await expect(reveals.first()).toBeVisible();
+
+      expect(await shortOfAFinger(await reveals.all())).toEqual([]);
+    });
+
     test('every fold of the accordion in HTML alone takes a finger', async ({page}) => {
       await page.goto('demos/?tab=accordions');
       const bars = accordionsTab(page).htmlAloneFolds().map(fold => nameOn(fold.fold));

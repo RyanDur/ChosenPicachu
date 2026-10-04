@@ -83,6 +83,7 @@
 
 @media (width <= 1100px) and (height <= 600px) {
   #art-gallery {
+    padding-block-start: var(--base-x-2_5);
     grid-template-columns: repeat(2, 1fr);
     grid-template-areas:
       'field field'

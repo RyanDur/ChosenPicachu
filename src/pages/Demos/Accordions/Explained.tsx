@@ -87,7 +87,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
     <section aria-labelledby="html-alone-heading" className="accordion-part">
       <h3 id="html-alone-heading" className="title bold">An accordion in HTML alone</h3>
       <ol className={runs}>
-        <li className="run html-alone">
+        <li className="run">
           <HtmlAloneAccordion/>
           <Snippet label="HTML" lines={span(htmlAloneSource, '<ul>', '</ul>')}/>
         </li>
