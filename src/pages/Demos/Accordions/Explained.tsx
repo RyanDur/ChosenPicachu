@@ -240,7 +240,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                     A <Mdn path="Web/HTML/Element/input/checkbox">checkbox</Mdn> remembers: it is either
                     checked or not, and pressing it switches between the two. So each part is a list item
                     holding three things, in this order: the checkbox, its label, and the text. An attribute is a
-                    name, often with a value, written inside an element’s opening tag. The
+                    name, often with a value, written inside an element’s opening tag. An id is an attribute
+                    that gives an element a name no other element on the page shares. The
                     label’s <Mdn path="Web/HTML/Attributes/for">for</Mdn> attribute names the checkbox’s
                     id. That link makes a press anywhere on the label press the checkbox. Each id includes
                     the part’s place in the list, so no two checkboxes share one.</p>
@@ -249,7 +250,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                     not. Radios that share a name form a group, and checking one unchecks the others. So each
                     part is a list item holding three things, in this order: the radio, its label, and the
                     text. An attribute is a name, often with a value, written inside an element’s opening
-                    tag. The label’s <Mdn path="Web/HTML/Attributes/for">for</Mdn> attribute names the
+                    tag. An id is an attribute that gives an element a name no other element on the page
+                    shares. The label’s <Mdn path="Web/HTML/Attributes/for">for</Mdn> attribute names the
                     radio’s id. That link makes a press anywhere on the label press the radio. Each id
                     includes the part’s place in the list, so no two radios share one.</p>}
                 <Snippet label="TS" lines={type === 'inclusive'
@@ -427,8 +429,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   drew one from two borders. List-style none removes that marker, and the bar draws the {input} build’s
                   arrow in its place, so this bar reads the same as the bars of the known-height and
                   measured builds. The arrow points right while the part is closed. When the part opens, the
-                  browser adds open to the details’ opening tag. A name written there is called an
-                  attribute. <code>[open]</code> is a piece of a CSS rule that picks an element with that attribute, and its
+                  browser adds open to the details in the page it is showing, as if it were written in the
+                  opening tag. A name in that place is called an attribute. <code>[open]</code> is a piece of a CSS rule that picks an element with that attribute, and its
                   rule turns the arrow down.</p>
                 <Snippet label="CSS" lines={unit(accordionsCss, '&[open] > .info-label::after {')}/>
               </li>

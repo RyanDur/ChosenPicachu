@@ -599,12 +599,12 @@ describe('the runs in view, with the folds shut', () => {
 });
 
 describe('the word attribute', () => {
-  test.each(['inclusive', 'exclusive'])('should be said, with %s chosen, before the label’s for attribute', async type => {
+  test.each(['inclusive', 'exclusive'])('should be said, with %s chosen, and then what an id is, before the label’s for attribute', async type => {
     render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
 
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
-    expect(within(oldWay).getByText(/To open and close a part/)).toHaveTextContent(/An attribute is a name, often with a value, written inside an element’s opening tag\. The label’s for attribute names the/);
+    expect(within(oldWay).getByText(/To open and close a part/)).toHaveTextContent(/An attribute is a name, often with a value, written inside an element’s opening tag\. An id is an attribute that gives an element a name no other element on the page shares\. The label’s for attribute names the/);
   });
 });
 
@@ -625,7 +625,7 @@ describe('the platform build’s bars', () => {
 
     const platform = await screen.findByRole('region', {name: parts[1]});
 
-    expect(explanation.runTelling(platform, /Summary also draws its own arrow/)).toHaveTextContent('The arrow points right while the part is closed. When the part opens, the browser adds open to the details’ opening tag. A name written there is called an attribute. [open] is a piece of a CSS rule that picks an element with that attribute, and its rule turns the arrow down.');
+    expect(explanation.runTelling(platform, /Summary also draws its own arrow/)).toHaveTextContent('The arrow points right while the part is closed. When the part opens, the browser adds open to the details in the page it is showing, as if it were written in the opening tag. A name in that place is called an attribute. [open] is a piece of a CSS rule that picks an element with that attribute, and its rule turns the arrow down.');
   });
 
   test('should keep the bar’s own run to the row, its focus and its border', async () => {
