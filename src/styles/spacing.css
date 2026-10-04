@@ -55,8 +55,7 @@
   --radius-soft: 2rem;
   --radius-pill: 8rem;
 
-  /* prose — a line length stated in characters */
-  --measure: 75ch;
+  /* a readable line's least width: words beside code, and a definition on a phone */
   --measure-floor: 45ch;
 
   /* a finger's reach: how wide and tall a touch target stands */
