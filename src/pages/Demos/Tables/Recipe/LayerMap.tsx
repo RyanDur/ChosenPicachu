@@ -19,7 +19,7 @@ export const LayerMap: FC = () =>
       machine has a mouse and a keyboard, so every arrangement a hand can make, a key can make
       too. Both axes, every layer, or the layer is not done.
     </p>
-    <table className="tutorial-table layer-map contained">
+    <table className="tutorial-table contained">
       <caption className="off-screen">the layers</caption>
       <thead className="tutorial-headings">
         <tr className="ink-underline">
@@ -30,7 +30,7 @@ export const LayerMap: FC = () =>
       <tbody className="tutorial-rows hairline-separated">
         {layers.map(([layer, askedFor, mouse, keyboard]) =>
           <tr className="tutorial-row" key={layer}>
-            <th className="tutorial-cell layer" scope="row">{layer}</th>
+            <th className="tutorial-cell" scope="row">{layer}</th>
             <td className="tutorial-cell clue"><CellHeading>{heading.askedFor}</CellHeading><span className="italic">{askedFor}</span></td>
             <td className="tutorial-cell muted-ink"><CellHeading>{heading.mouse}</CellHeading>{mouse}</td>
             <td className="tutorial-cell muted-ink"><CellHeading>{heading.keyboard}</CellHeading>{keyboard}</td>
