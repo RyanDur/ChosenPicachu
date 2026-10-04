@@ -28,3 +28,4 @@ export {definitionTapped, type DefinitionFit} from './terms';
 export {focusStandsOut} from './focus';
 export {reachesAcross} from './reach';
 export {designSketch} from './design-sketch';
+export {pageScrollsSideways, piecesPastTheirParts} from './fit';

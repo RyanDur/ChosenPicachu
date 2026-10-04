@@ -9,6 +9,7 @@ const namedLines = (): number[] =>
 const ownLines: Record<string, number[]> = {
   '/src/pages/Users/UserInformation/Address/Address.css': [456],
   '/src/components/Feedback/Feedback.css': [500],
+  '/src/components/PillGlider/PillGlider.css': [390],
   '/src/pages/Demos/Charts/Workspace.css': [870]
 };
 

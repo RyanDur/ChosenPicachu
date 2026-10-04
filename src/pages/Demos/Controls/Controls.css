@@ -1,3 +1,4 @@
 .demo-settings > .prompt .readout {
   margin-inline-start: auto;
+  overflow-wrap: anywhere;
 }

@@ -59,6 +59,11 @@
     height: var(--base-x-5);
     padding: 0 var(--base-x-2);
     white-space: nowrap;
+
+    /* four pills at full padding are wider than the smallest phones' cards; half the padding fits them, at full height */
+    @media (width < 390px) {
+      padding: 0 var(--base-x-0_75);
+    }
     border-radius: var(--radius);
     background: transparent;
     transition: color 0.2s;
