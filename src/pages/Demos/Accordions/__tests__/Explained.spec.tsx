@@ -294,6 +294,15 @@ describe('the fold motion', () => {
     expect(within(together).getByText(/With the drawer, the text slides down/)).toBeInTheDocument();
   });
 
+  test('should keep the words around the drawer run’s quoted CSS apart', async () => {
+    render(<TestApp at={demosAt('?tab=accordions&style=drawer')}/>);
+
+    const together = await screen.findByRole('region', {name: parts[2]});
+
+    expect(within(together).getByText(/With the drawer, the text slides down/))
+      .toHaveTextContent('so align-content: end sets the row at the paragraph’s bottom. Then align-self: end sets the item at the row’s bottom');
+  });
+
   test.each(['reveal', 'static'])('should tell no drawer run under %s', async style => {
     render(<TestApp at={demosAt(`?tab=accordions&style=${style}`)}/>);
 
