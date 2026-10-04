@@ -809,6 +809,26 @@ describe('the living table’s terms', () => {
     expect(defined).toHaveTextContent('changing the page’s elements to match the state, touching only the ones that differ');
   });
 
+  test('should say what Redux is where the store story first names it', async () => {
+    expect(await livingTable()).toHaveTextContent('Redux is a JavaScript library that keeps an application’s state in one store, and this page borrows that shape and none of its code.');
+  });
+
+  test('should open the store story with the terms its steps lean on', async () => {
+    const story = recipeFolds.story(await livingTable(), 'The page is a store, and so is the table');
+    const opening = within(story).getByText(/^One value holds the trades/);
+
+    ['action', 'reducer', 'selector', 'middleware'].forEach(term => expect(within(opening).getByLabelText(term)).toBeInTheDocument());
+  });
+
+  test.each([
+    ['the page’s store is three slices', 'The page’s store is three: the trades, the candles and the arrangement.'],
+    ['the exchange answers three actions', 'The exchange is that layer, in both worlds, and it answers three actions.'],
+    ['the exchange fetches candles', 'On candlesAsked it fetches the candles for one period, and dispatches candlesArrived or candlesRefused.'],
+    ['the table’s reducer combines four', 'The table’s reducer is four small reducers combined, one per concern: motion, widths, dragging and sorting.']
+  ])('should say %s, as the code does', async (_fact, sentence) => {
+    expect(await livingTable()).toHaveTextContent(sentence);
+  });
+
   test('should say what useSyncExternalStore is where the React world subscribes through it', async () => {
     expect(await livingTable()).toHaveTextContent('useSyncExternalStore, React’s hook for reading a store kept outside React');
   });
