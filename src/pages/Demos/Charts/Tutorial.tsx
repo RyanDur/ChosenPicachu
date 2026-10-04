@@ -2,6 +2,7 @@ import {FC, ReactNode, useId} from 'react';
 import {ChartKind} from './kinds';
 import {Codes, Mdn, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, plain} from '../Recipe';
 import {span, unit} from '../Recipe/carve';
+import {AThirdFromTheHand} from './Diagrams';
 import shapesSource from './Candles/shapes.ts?raw';
 import sparklineSource from './sparkline.ts?raw';
 import periodSource from './period.ts?raw';
@@ -366,23 +367,24 @@ const workspaceStory =
   <Story param="graph" id="workspace"
     can="The trader can lay out the workspace"
     soThat="the charts they watch sit where they put them">
-    <Tell>One chart is dealt on arrival, and the workspace is the URL: add, sort,
-      remove, refresh, share, and the layout survives all of it, because the address
-      is the state.</Tell>
-    <Tell>Sorting rides a native drag from a grip that only shows itself to a hover. The
-      origin whispers in its seat, the displaced chart slides home on a keyframe,
-      and the swap fires when the hand strays a third of the seat’s height from
-      where it settled, the same distance up as down; every swap re-anchors to the
-      hand, so reversing always costs a fresh third.</Tell>
-    <Tell>The keyboard needs no grip: the card itself is the widget. Arrows walk it and
-      focus rides along, delete removes it, and a lone chart offers neither grip nor
-      remove, because a workspace cannot lose its last window.</Tell>
+    <Tell>Adding a chart, sorting, removing one and choosing a period are each written into the page’s address.
+      That is all a reload or a shared link needs to bring the layout back.</Tell>
+    <Tell>Sorting uses the browser’s own drag and drop, which HTML turns on with the draggable attribute. A chart is
+      draggable only while its grip is pressed, and the grip shows when the pointer is over the chart. While a chart is
+      held it fades almost to nothing where it sits, and the browser draws a copy of it under the hand. It swaps with
+      its neighbour once the hand has moved a third of the chart’s height from where it grabbed, up or down, and the
+      neighbour slides into the place it left.</Tell>
+    <Tell>The keyboard does not need the grip. With a chart in focus, meaning it is the one the keyboard is on, the up
+      and down arrows move it one place and focus stays on it. Delete removes it. When one chart is left it has no
+      grip and no remove button, and Delete does nothing, so the workspace always has a chart.</Tell>
     <Steps>
-      <Step title="Deal the workspace from the address">
-        <Words want="The layout is the trader’s, so it must survive a refresh and travel in a link.">
-          <Says>The charts param is a comma list of kinds; absent, the trader starts
-            with one price chart. Adding prepends, so the newest chart lands under the
-            hand, and the plus rides the heading with its menu anchored above it.</Says>
+      <Step title="Read the charts from the address">
+        <Words want="The layout is the trader’s, so it has to come back after a reload and travel in a link.">
+          <Says>The address’s query string, the part after the question mark, carries a value named charts: a list
+            of chart names with commas between them. A name the page doesn’t know is skipped, a name given twice
+            counts once, and with no list the page shows one price chart. A new chart goes to the front of the list,
+            so it appears at the top, next to the + that added it. The + opens a menu of the charts not yet on the
+            page.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -395,13 +397,19 @@ const workspaceStory =
           ]}/>
         </Codes>
       </Step>
-      <Step title="Sort by a third’s stray">
-        <Words want="The card is huge and the hand holds only its grip; the swap has to key on the hand, not the card’s far edge.">
-          <Says>The drag anchors where the hand grabbed the seat. A swap fires when
-            the hand strays a third of the seat’s height from that anchor, either
-            direction, and the anchor re-derives at each swap from where the seat
-            lands under the hand: hysteresis by bookkeeping, so mixed chart heights
-            cannot jitter.</Says>
+      <Step title="A chart swaps once the hand has moved a third of its height">
+        <Words want="A chart is large and the hand holds only its grip. So the swap is measured from the hand, not from the chart’s far edge.">
+          <Says>On dragstart, the event the browser sends when a drag begins, the code marks where on the chart the
+            hand is. On every dragover, the event it sends as the hand moves over a chart, the code compares the hand
+            with that mark. A third of the held chart’s height below the mark, the chart swaps with the one under it;
+            a third above, with the one over it. Then the mark is set again to where the hand is.</Says>
+          <Says>That matters when the charts differ in height. A short chart that passes a tall one drops by the tall
+            one’s height. A mark left on the chart would now be far from the hand, and the two would swap straight
+            back.</Says>
+          <AThirdFromTheHand/>
+          <Says>The neighbour’s slide is a keyframe animation, one whose start is written in an @keyframes rule. It
+            starts its own height away and runs to its new place in 150 milliseconds. No swap happens while the
+            neighbour is still sliding.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -414,11 +422,11 @@ const workspaceStory =
           ]}/>
         </Codes>
       </Step>
-      <Step title="The card answers keys">
-        <Words want="The grip and the remove only show to a hover; the keyboard speaks to the card itself.">
-          <Says>Focus the card: arrows walk it seat by seat and focus rides along, so
-            a held arrow keeps moving the same chart. Delete removes it, guarded like
-            everything else by the last-chart rule.</Says>
+      <Step title="The arrow keys move a chart, and Delete removes it">
+        <Words want="The grip and the remove button show only under a pointer. A keyboard works on the chart itself.">
+          <Says>Each chart is a link, so Tab reaches it. With a chart in focus, the up and down arrows move it one
+            place, stopping at the ends, and focus stays on it, so holding an arrow keeps moving the same chart.
+            Delete or Backspace removes it, unless it is the last chart.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -426,11 +434,10 @@ const workspaceStory =
           ]}/>
         </Codes>
       </Step>
-      <Step title="Never the last">
-        <Words want="An empty workspace shows nothing and teaches nothing; the last chart holds its post.">
-          <Says>The grip and the remove are dealt only while more than one chart
-            stands. With one left, hover finds nothing, delete falls silent, and only
-            the plus remains.</Says>
+      <Step title="The last chart can’t be removed">
+        <Words want="An empty workspace shows nothing and teaches nothing, so one chart always stays.">
+          <Says>The grip and the remove button are drawn only while there is more than one chart. With one chart left
+            there is no grip and no remove button, and Delete does nothing. The + is still there.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -463,8 +470,8 @@ export const ChartsTutorial: FC = () => {
         target="_blank"
         rel="noreferrer">user story</a>. Open a card and you get the plan for that feature and
       the steps that build it, with the real code from this site, so what you read is what
-      runs. Each chart above is a doorway too: click it, or press enter on it, and that
-      chart’s own tutorial opens. The links go to MDN if you want more.
+      runs. Each chart above opens its own tutorial: click it, or press Enter on it. The links go to MDN, Mozilla’s
+      web reference, if you want more.
     </p>
     <figure className="feedback">
       <blockquote className="quote paragraph italic">

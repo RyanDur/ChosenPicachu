@@ -235,7 +235,7 @@ describe('a list of charts', () => {
     expect(screen.getByText(/the shape of the session/)).toBeVisible();
     const recipe = screen.getByRole('region', {name: 'build the charts yourself'});
     expect(recipeFolds.story(recipe, 'The trader can lay out the workspace')).toHaveAttribute('open');
-    expect(recipe).toHaveTextContent(/strays a third of the seat’s height/);
+    expect(recipe).toHaveTextContent(/A third of the held chart’s height below the mark, the chart swaps with the one under it/);
     expect(recipe).toHaveTextContent(/export const strayed/);
   });
 
@@ -326,7 +326,7 @@ describe('a list of charts', () => {
     await feedIsSubscribed(feed);
 
     expect(await screen.findByRole('heading', {name: 'The trader can lay out the workspace', level: 3})).toBeInTheDocument();
-    expect(screen.getByRole('heading', {name: 'Deal the workspace from the address', level: 4})).toBeInTheDocument();
+    expect(screen.getByRole('heading', {name: 'Read the charts from the address', level: 4})).toBeInTheDocument();
   });
 
   test('the pressure chart is a doorway to its tutorial', async () => {
@@ -704,5 +704,53 @@ describe('the charts tab’s introduction', () => {
     const shown = [...paragraphs.map(paragraph => within(tab).getByText(paragraph)), headline];
     const eachBeforeTheNext = shown.slice(1).map((next, at) => shown[at].compareDocumentPosition(next) & Node.DOCUMENT_POSITION_FOLLOWING);
     expect(eachBeforeTheNext).toEqual(paragraphs.map(() => Node.DOCUMENT_POSITION_FOLLOWING));
+  });
+});
+
+describe('the workspace story', () => {
+  const workspaceStory = async (): Promise<HTMLElement> => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=charts&graph=workspace')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    return recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), 'The trader can lay out the workspace');
+  };
+
+  test('should head each step with what happens', async () => {
+    expect(recipeFolds.stepTitles(await workspaceStory())).toEqual([
+      'Read the charts from the address',
+      'A chart swaps once the hand has moved a third of its height',
+      'The arrow keys move a chart, and Delete removes it',
+      'The last chart can’t be removed'
+    ]);
+  });
+
+  test.each([
+    ['the address', 'Adding a chart, sorting, removing one and choosing a period are each written into the page’s address. That is all a reload or a shared link needs to bring the layout back.'],
+    ['draggable', 'Sorting uses the browser’s own drag and drop, which HTML turns on with the draggable attribute.'],
+    ['focus', 'With a chart in focus, meaning it is the one the keyboard is on, the up and down arrows move it one place and focus stays on it.'],
+    ['the query string', 'The address’s query string, the part after the question mark, carries a value named charts: a list of chart names with commas between them.'],
+    ['dragstart and dragover', 'On dragstart, the event the browser sends when a drag begins, the code marks where on the chart the hand is. On every dragover, the event it sends as the hand moves over a chart, the code compares the hand with that mark.'],
+    ['a keyframe animation', 'The neighbour’s slide is a keyframe animation, one whose start is written in an @keyframes rule.'],
+    ['the last chart', 'With one chart left there is no grip and no remove button, and Delete does nothing. The + is still there.']
+  ])('should say %s in plain words', async (_term, sentence) => {
+    expect(await workspaceStory()).toHaveTextContent(sentence);
+  });
+
+  test('should draw the mark moving to the hand in step 2', async () => {
+    const swap = recipeFolds.steps(await workspaceStory())[1];
+
+    expect(within(swap).getByRole('figure', {name: /^A third from the hand\./})).toHaveTextContent(/the mark moves to where the hand is/);
+  });
+
+  test('should drop the figures of speech from its words', async () => {
+    const words = within(await workspaceStory()).getAllByRole('paragraph').map(paragraph => paragraph.textContent).join(' ');
+
+    expect(words).not.toMatch(/dealt|whispers|slides home|strays|rides|walks|the address is the state|holds its post/);
+  });
+
+  test('should say each chart opens its own tutorial, and name MDN as Mozilla’s web reference', async () => {
+    await workspaceStory();
+
+    expect(screen.getByText(/Each chart above opens its own tutorial: click it, or press Enter on it\. The links go to MDN, Mozilla’s web reference, if you want more\./)).toBeInTheDocument();
   });
 });
