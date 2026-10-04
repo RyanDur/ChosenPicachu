@@ -60,11 +60,11 @@ export const Pressure: FC<Props> = ({trades, actions}) => {
     <details className="explainer">
       <summary className="prompt">what am I looking at?</summary>
       <p className="explanation">
-        Every trade takes a side: a buyer lifted the ask, or a seller hit the bid. Each
-        bar bundles one minute — bought size rises above the line, sold size falls below,
-        both on the same scale, so the taller side is the side in charge. History does
-        not say who started each trade, so this card counts only what streams in while
-        you watch.
+        Every trade has two orders: one that was waiting, and one that came and took it. When the one that came was a
+        buyer, the trade counts as bought. When it was a seller, it counts as sold. Each bar is one minute. Bought size
+        rises above the line and sold size falls below it, both on the same scale, so the taller side is the side that
+        was pushing. The fetched past doesn’t say who took each trade, so this chart counts only the trades that arrive
+        while you watch.
       </p>
     </details>
   </section>;

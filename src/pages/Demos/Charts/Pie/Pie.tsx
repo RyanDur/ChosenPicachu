@@ -67,10 +67,10 @@ export const Pie: FC<Props> = ({trades, actions}) => {
       </figcaption>
     </figure>
     <Explainer>
-      The whole pot, one circle: everything traded since you arrived, split by who
-      started it. The green slice is the size the buyers took; the orange slice is the
-      size the sellers gave. History does not say who started each trade, so the pie
-      grows from nothing and counts only the session it watched.
+      Everything traded since you arrived, as one circle, split by who came and took each trade. The green slice is the
+      size buyers took from waiting sellers. The orange slice is the size sellers took from waiting buyers. The fetched
+      past doesn’t say who took each trade, so the pie starts empty and counts only the trades that arrive while you
+      watch.
     </Explainer>
   </section>;
 };

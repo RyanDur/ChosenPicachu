@@ -377,6 +377,63 @@ describe('a list of charts', () => {
     });
   });
 
+  describe('the pressure chart’s story', () => {
+    const pressureStory = async (): Promise<HTMLElement> => {
+      const feed = await listeningFeed();
+      render(<TestApp at={chartPageAt('pressure', '?graph=pressure')} feed={feed}/>);
+      await screen.findByRole('heading', {name: 'pressure tutorial', level: 2});
+      return recipeFolds.story(document.body, 'The trader can see who is driving the move');
+    };
+
+    test('should head each step with what happens', async () => {
+      expect(recipeFolds.stepTitles(await pressureStory())).toEqual([
+        'Sum each minute by who took the trade',
+        'Scale both sides by the larger one',
+        'Draw the bars, and label them in bitcoin'
+      ]);
+    });
+
+    test.each([
+      ['what Coinbase’s mark means', 'Coinbase marks the waiting order’s side, so a buyer took the trade when the mark is sell.'],
+      ['the bars grow', 'When a minute’s sums change, its bars grow to their new size over 300 milliseconds.'],
+      ['each bar has an edge', 'Each bar has a second rectangle set just behind it, which gives it an edge.']
+    ])('should say what the code does: %s', async (_claim, sentence) => {
+      expect(await pressureStory()).toHaveTextContent(sentence);
+    });
+
+    test('should not say a match names its taker’s side', async () => {
+      expect(await pressureStory()).not.toHaveTextContent(/names its taker’s side/);
+    });
+  });
+
+  describe('the pie’s story', () => {
+    const pieStory = async (): Promise<HTMLElement> => {
+      const feed = await listeningFeed();
+      render(<TestApp at={chartPageAt('pie', '?graph=pie')} feed={feed}/>);
+      await screen.findByRole('heading', {name: 'pie tutorial', level: 2});
+      return recipeFolds.story(document.body, 'The trader can see who owns the session');
+    };
+
+    test('should head each step with what happens', async () => {
+      expect(recipeFolds.stepTitles(await pieStory())).toEqual([
+        'Add up each side',
+        'Cut the circle with rotations only',
+        'Print each share'
+      ]);
+    });
+
+    test.each([
+      ['the whole pie stays put', 'Each slice is also pushed a little way out from the centre, along its own middle, unless it is the whole pie.'],
+      ['what a rotation is', 'A rotation asks for less: the shape stays the same, and only where it is drawn changes.']
+    ])('should say what the code does: %s', async (_claim, sentence) => {
+      expect(await pieStory()).toHaveTextContent(sentence);
+    });
+
+    test('should not promise the compositor or that no special case survives', async () => {
+      expect(await pieStory()).not.toHaveTextContent(/compositor|no special case survives/);
+    });
+  });
+
   test('the workspace tutorial names its story and steps in the heading outline', async () => {
     const feed = await listeningFeed();
 

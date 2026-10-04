@@ -86,4 +86,10 @@ describe('the pie', () => {
     expect(card).not.toHaveTextContent('%');
     expect(card).toHaveTextContent('waiting for the first trade');
   });
+
+  test('should explain bought and sold by who came and took the trade', () => {
+    render(<Pie trades={[]}/>);
+
+    expect(screen.getByRole('region', {name: 'pie'})).toHaveTextContent('The green slice is the size buyers took from waiting sellers. The orange slice is the size sellers took from waiting buyers.');
+  });
 });

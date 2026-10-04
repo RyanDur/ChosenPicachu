@@ -75,4 +75,10 @@ describe('pressure', () => {
 
     expect(screen.getByRole('region', {name: 'pressure'})).not.toHaveTextContent('BTC');
   });
+
+  test('should explain bought and sold by who came and took the trade', () => {
+    render(<Pressure trades={[]}/>);
+
+    expect(screen.getByRole('region', {name: 'pressure'})).toHaveTextContent('When the one that came was a buyer, the trade counts as bought. When it was a seller, it counts as sold.');
+  });
 });

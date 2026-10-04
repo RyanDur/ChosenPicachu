@@ -236,34 +236,36 @@ const pressureStory =
   <Story param="graph" id="pressure"
     can="The trader can see who is driving the move"
     soThat="a push and a retreat stop looking alike">
-    <Tell>We could infer the driver from the direction of the price, but a rise on
-      heavy buying and a rise on sellers stepping away draw the same line; so the
-      card reads each match’s side, a fact the stream already carries, and folds
-      every minute into bought size and sold size.</Tell>
-    <Tell>History’s candles never say who started a trade; so the card counts only the
-      session it watches, and says so. The heaviest side sets one scale for both
-      directions, which keeps the taller side an honest answer.</Tell>
+    <Tell>We could guess who is pushing from the direction of the price. But a rise on heavy buying and a rise because
+      sellers stepped back draw the same line.</Tell>
+    <Tell>So this chart reads something the feed already carries. Every trade has an order that was waiting and one that
+      came and took it, and Coinbase marks each trade with the side of the one that was waiting. A trade marked sell is
+      one a buyer took. The chart sums each minute into the size buyers took and the size sellers took.</Tell>
+    <Tell>The fetched past is candles, and a candle doesn’t say who took a trade. So the chart counts only the trades that
+      arrive while it is open, and its caption says so. The larger side sets one scale for both directions, so a taller
+      bar always means more size.</Tell>
     <Steps>
-      <Step title="Split each window by side">
-        <Words want="Volume alone says how much traded, never who pushed; the split has to survive the bucketing.">
-          <Says>Every match names its taker’s side, and the decoder makes that a
-            fact: a frame whose side is not buy or sell never becomes a Trade. The
-            fold mirrors the candles’ bucketing, but keeps two sums per window:
-            bought size and sold size.</Says>
+      <Step title="Sum each minute by who took the trade">
+        <Words want="Volume says how much was traded, never who pushed. The split has to survive the grouping.">
+          <Says>The decoder accepts a match only if its side is buy or sell, so every Trade has one. takerBought says what
+            the mark means: Coinbase marks the waiting order’s side, so a buyer took the trade when the mark is sell.</Says>
+          <Says>bucketPressure groups the trades into minutes the way the candles are grouped, and keeps two sums for each
+            minute: the size buyers took and the size sellers took. The chart shows the newest 60 minutes.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
             ...unit(coinbaseSource, 'const MatchDecoder'), gap,
+            ...unit(coinbaseSource, 'export const takerBought'), gap,
             ...unit(pressureSource, 'const fold'), gap,
             ...unit(pressureSource, 'export const bucketPressure')
           ]}/>
         </Codes>
       </Step>
-      <Step title="One scale, both directions">
-        <Words want="Comparing the sides only works if both wear the same ruler; a taller bar must mean more size, nothing else.">
-          <Says>The heaviest single side sets the scale. Bought rises from the
-            midline, sold falls from it, and a window that bought four and sold two
-            shows bars in exactly that proportion.</Says>
+      <Step title="Scale both sides by the larger one">
+        <Words want="The two sides can only be compared on one scale. A taller bar has to mean more size and nothing else.">
+          <Says>heaviestSide finds the largest single side of any minute on the chart, and that sets the scale. Bought
+            rises from the middle line and sold falls from it. A minute that bought four and sold two shows bars in that
+            proportion.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -273,13 +275,13 @@ const pressureStory =
           ]}/>
         </Codes>
       </Step>
-      <Step title="Bars around a midline">
-        <Words want="The eye should read dominance at a glance, and the axes must speak size, not dollars.">
-          <Says>Two rects per window around a hairline midline, wearing the colors
-            the candles taught: mint above, orange below. Axes learned a second
-            tongue for it: a label prop formats the reach in bitcoin instead of
-            dollars, and the caption claims only what the card can honestly claim:
-            the session it watched.</Says>
+      <Step title="Draw the bars, and label them in bitcoin">
+        <Words want="The reader should see which side is larger at a glance, and the labels should give size, not dollars.">
+          <Says>Each minute is a bar above a thin middle line for bought and a bar below it for sold: green above, orange
+            below. Each bar has a second rectangle set just behind it, which gives it an edge.</Says>
+          <Says>When a minute’s sums change, its bars grow to their new size over 300 milliseconds.</Says>
+          <Says>Axes takes a function for its labels on this chart, so the scale reads in bitcoin instead of dollars. The
+            caption says how many minutes are on show, and that the count began when you arrived.</Says>
         </Words>
         <Codes>
           <Snippet label="HTML" lines={[
@@ -302,46 +304,45 @@ const pieStory =
   <Story param="graph" id="pie"
     can="The trader can see who owns the session"
     soThat="the whole pot reads in one circle">
-    <Tell>Pressure answers minute by minute; the pie answers the whole pot:
-      everything traded since arrival, one slice per side. The same decoded
-      stream feeds it, and like pressure it counts only the session it watched,
-      because history never says who started a trade.</Tell>
-    <Tell>The circle is cut by arithmetic that can move: each slice is two half-discs
-      behind two fixed gates, and a share is how far its halves swing open. Swings,
-      turns, and the explode are all transforms, one of the few properties the
-      compositor animates without repainting, so a shifting split glides for free.</Tell>
+    <Tell>The pressure chart answers minute by minute. The pie answers for the whole visit: everything traded since you
+      arrived, one slice for the size buyers took and one for the size sellers took.</Tell>
+    <Tell>It reads the same trades with the same rule for who took each one, and like the pressure chart it counts only
+      what arrives while it is open.</Tell>
+    <Tell>The circle has to move as the split changes, and move smoothly. So each slice is made of two half-discs that are
+      only ever rotated, and a share is how far they have turned into view.</Tell>
     <Steps>
-      <Step title="Total the sides">
-        <Words want="One number per side for the whole session; the pie asks nothing about time.">
-          <Says>sideTotals folds every trade into two sums, bought size and sold
-            size, the same side the decoder proved. No buckets, no windows: the pie
-            is the session’s aggregate, which is exactly why it stays honest as a
-            pair of totals.</Says>
+      <Step title="Add up each side">
+        <Words want="One number for each side, for the whole visit. The pie asks nothing about time.">
+          <Says>sideTotals goes through every trade and adds its size to one of two sums, bought or sold, using
+            takerBought. There are no minutes and no spans here: the pie is the whole visit as a pair of totals.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
+            ...unit(coinbaseSource, 'export const takerBought'), gap,
             ...unit(pieSource, 'export const sideTotals')
           ]}/>
         </Codes>
       </Step>
-      <Step title="Cut the circle">
-        <Words want="Shares must become drawable shapes that can move; a split that shifts with every trade must glide, not jump, and glide cheaply.">
-          <Says>You could paint the split with a conic gradient, but a painted
-            background has no parts: nothing to class, nothing to label, nothing for a
-            test to find. Honest arc paths came next, and the stream taught us better:
-            an arc’s large-arc flag flips at half and cannot tween, so a moving split
-            jumps. A dashed circle stroke tweens, but stroke geometry repaints every
-            frame on the main thread. The compositor animates only a few properties
-            without repainting — translate, rotate, scale,
-            and <Mdn path="Web/CSS/opacity">opacity</Mdn> — so the cut is built from
-            rotation alone: each slice is two half-discs behind two fixed gates, each a
-            nested <Mdn path="Web/SVG/Element/svg">SVG viewport</Mdn> that shows only
-            its own half-plane. The first gate owns the first half-turn, the second
-            owns the rest, and a share is how far its halves swing open, in plain
-            degrees; a slice under half a turn parks its closing half where its gate
-            cannot see it, because a half-disc's span wraps. Nothing changes shape;
-            everything that moves is a transform. A side that took everything is
-            both gates fully open: no special case survives.</Says>
+      <Step title="Cut the circle with rotations only">
+        <Words want="The shares have to become shapes that can move. A split that changes with every trade should turn smoothly, not jump.">
+          <Says>You could paint the split with a conic gradient, a background that sweeps colour round a point. But a
+            painted background has no parts: nothing to give a class, nothing to label, nothing for a test to find.</Says>
+          <Says>Arc paths were the next try. An SVG arc carries a flag that flips when the arc passes half the circle, and a
+            flag can’t be moved gradually, so a split that crosses half jumps.</Says>
+          <Says>A dashed stroke on a circle can be moved gradually, but the browser has to draw the stroke again on every
+            frame.</Says>
+          <Says>A rotation asks for less: the shape stays the same, and only where it is drawn changes. So the cut is built
+            from rotation alone.</Says>
+          <Says>Each slice is two half-discs. Each half-disc sits behind its own window, a
+            nested <Mdn path="Web/SVG/Element/svg">SVG viewport</Mdn>, that shows one half of the circle and hides the
+            other.</Says>
+          <Says>The first window shows the first half-turn of the slice, and the second shows the rest. A share is how far
+            the two half-discs have turned into their windows, in degrees. A slice of less than half a turn leaves its
+            second half-disc turned out of sight.</Says>
+          <Says>A side that took everything is both half-discs fully in view. Nothing changes shape. Everything that moves is
+            a rotation or a shift, each over 300 milliseconds.</Says>
+          <Says>Each slice is also pushed a little way out from the centre, along its own middle, unless it is the whole
+            pie. And each is drawn twice, once a little lower, which gives the pie its edge.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -356,11 +357,10 @@ const pieStory =
           ]}/>
         </Codes>
       </Step>
-      <Step title="Name the shares">
-        <Words want="A circle without numbers is an impression; the trader wants the split spoken.">
-          <Says>The legend prints each share as a percentage in the slice’s own
-            color class, and the caption claims only what the card can honestly
-            claim: the session’s volume by side, since you arrived.</Says>
+      <Step title="Print each share">
+        <Words want="A circle without numbers is only an impression. The trader wants the split in figures.">
+          <Says>The legend prints each share as a whole percentage, in its slice’s colour. The caption says what the pie is:
+            the size traded on each side since you arrived.</Says>
         </Words>
         <Codes>
           <Snippet label="HTML" lines={[
