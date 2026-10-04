@@ -13,37 +13,36 @@ import '../../Recipe/Recipe.css';
 const gap = plain(' ');
 
 const stackFact: Record<Stack, string> = {
-  down: 'the pile grows downward and the slot is a row: a keyframe animation opens it from 0fr on arrival, and the gap below rides along as a margin the banner owns itself.',
-  up: 'the pile grows upward and the slot is a row: a keyframe animation opens it from 0fr on arrival, and the gap the banner owns rides along as a margin.',
-  left: 'the pile grows leftward and the slot is a column: a keyframe animation opens it from 0fr on arrival, and the gap beside the banner rides along as a margin.',
-  right: 'the pile grows rightward and the slot is a column: a keyframe animation opens it from 0fr on arrival, and the gap beside the banner rides along as a margin.'
+  down: 'the stack grows downward, so the track is a row.',
+  up: 'the stack grows upward, so the track is a row.',
+  left: 'the stack grows leftward, so the track is a column.',
+  right: 'the stack grows rightward, so the track is a column.'
 };
 
 const enterFact: Record<Entrance, string> = {
-  above: 'This entrance starts a full viewport above the screen,',
-  below: 'This entrance starts a full viewport beneath the screen,',
-  left: 'This entrance starts a full viewport past the left edge,',
-  right: 'This entrance starts a full viewport past the right edge,'
+  above: 'Here the banner starts a full window’s height above the window.',
+  below: 'Here the banner starts a full window’s height below the window.',
+  left: 'Here the banner starts a full window’s width to the left of the window.',
+  right: 'Here the banner starts a full window’s width to the right of the window.'
 };
 
 const sideways = (stack: Stack): boolean => stack === 'left' || stack === 'right';
 
-const slotKeyframes = (stack: Stack): string => sideways(stack) ? '@keyframes open-column' : '@keyframes open-slot';
-
 const settleStep = (
-  <Step title="Let the heights settle">
-    <Words want="Sideways piles squeeze their cards, and text that rewraps changes height in a snap.">
-      <Says>A ResizeObserver pins each card’s height to a measured value, so a wrap
-        becomes a property change and the transition can carry it. The pin releases
-        before it measures, because scrollHeight never reads below the box it is
-        measuring; a pin that measures through itself can only ratchet taller.</Says>
+  <Step title="Change a banner’s height smoothly when its text rewraps">
+    <Words want="A sideways stack squeezes its banners, and text that rewraps changes height in one jump.">
+      <Says>A ResizeObserver, a browser object that calls back when an element changes size, sets each message’s
+        height to a measured number of pixels. A rewrap then changes one number to another, and the transition on
+        block-size, the CSS name for height on this page, runs between them. Before it measures, the code removes the
+        height it set last time. scrollHeight is never less than the element’s own height, so a message measured with
+        the old height still on it could only grow.</Says>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
         ...unit(bannersSource, 'const settler = new ResizeObserver(')
       ]}/>
       <Snippet label="CSS" lines={[
-        ...span(bannersCss, 'transition: block-size', 'transition: block-size 0.3s;')
+        ...span(bannersCss, 'block-size: var(--news-block-size', 'transition: block-size 0.3s, padding 0.3s, border-width 0.3s;')
       ]}/>
     </Codes>
   </Step>
@@ -55,18 +54,18 @@ export const MultipleRecipe: FC = () => {
   return <Story param="news" id="many"
     can="The user can have multiple banners"
     soThat="no message waits for another to leave">
-    <Tell>News rarely arrives alone, so the banners stand in a pile. Every arrival is a
-      small play in two acts: the pile opens a slot while the newcomer is still off
-      screen, and only then does the newcomer fly in. Leaving runs the play
-      backwards.</Tell>
-    <Tell>Platform traps live here: a starting style
-      that silently cannot start, and a variable that silently does not resolve.</Tell>
+    <Tell>More than one message can be up at once, so the banners stack. A banner arrives in two moves: the stack
+      opens a gap for it while it is still off screen, and then it slides in. Leaving is the same two moves in the
+      other order: the banner slides out, and then the gap closes.</Tell>
+    <Tell>Both moves are transitions. A transition changes a CSS value over a set time instead of at once. A banner
+      that has just been added has no earlier value to change from, so a starting style, written @starting-style,
+      gives it one.</Tell>
     <Steps>
-      <Step title="Refuse the duplicate">
+      <Step title="Skip a message that is already up">
         <Words want="Multiple means different. The second copy of the same sentence adds noise, not information.">
-          <Says>raise looks for its message among the standing banners and appends only
-            when it is new. Dismiss a banner and the same message may stand again; the
-            pile remembers what stands, not what stood.</Says>
+          <Says>raise is the function a page calls with a message. It looks for that message among the banners that
+            are up and adds a banner only when it finds none. Once a banner has been dismissed and has gone, the same
+            message can be raised again.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -74,28 +73,26 @@ export const MultipleRecipe: FC = () => {
           ]}/>
         </Codes>
       </Step>
-      <Step title="Open the slot before the flight" dial={<StackDial name="journey-stack"/>}>
-        <Words want="The standing banners should glide apart while nobody is watching. The newcomer is still a full screen away.">
-          <Says>Each banner is a one-track grid, and here {stackFact[stack]} It is an
-            animation rather than a transition because Chrome never starts a grid-track
-            transition from a starting style; keyframes always run on first
-            render.</Says>
+      <Step title="Open a gap in the stack first" dial={<StackDial name="journey-stack"/>}>
+        <Words want="The banners already up should move apart before the new one is seen. It is still a full screen away.">
+          <Says>Each banner is a grid with a single row or column, called a track. Here {stackFact[stack]} The
+            starting style sets the track to 0fr, which is no size at all, and the banner’s own rule sets it to 1fr,
+            the size of its content, so the transition opens the gap over 0.3 seconds. The margin between banners
+            opens over the same time.</Says>
         </Words>
         <Codes>
-          <Snippet label="CSS" lines={[
-            ...slotLines(stack), gap,
-            ...unit(bannersCss, slotKeyframes(stack))
-          ]}/>
+          <Snippet label="CSS" lines={slotLines(stack)}/>
         </Codes>
       </Step>
-      <Step title="Arrive from beyond the edge" dial={<EntranceDial name="journey-entrance"/>}>
-        <Words want="A slide from beside yourself reads as a pop. The flight has to start where the screen ends.">
-          <Says>{enterFact[enter]} and the leaving rule will reuse the same value, so
-            you will be tempted to name it once as a custom property. Resist it in the
-            starting style: Chrome resolves no var() there, the start computes to
-            nothing, and the banner materializes in place. The flight is only visible
-            at all because the panel overrides the UA popover stylesheet, whose overflow
-            would clip the whole journey to the panel’s own box.</Says>
+      <Step title="Slide in from off screen" dial={<EntranceDial name="journey-entrance"/>}>
+        <Words want="A banner that slides in from just beside its place looks like it popped up. The slide has to start off screen.">
+          <Says>{enterFact[enter]} The distance is a custom property: a value given a name once, here --arrive, and
+            read back with var(). The starting style reads it to place the banner before the slide, and the leaving
+            rule reads it again to send the banner back. The slide waits 0.3 seconds, which is the time the gap takes
+            to open. It can be seen only because the panel sets overflow to visible. The panel is a popover, as <a
+            className="signpost" href="#popover-wins-heading"><cite>Why the popover wins</cite></a> explains, and the
+            browser’s own stylesheet gives a popover overflow: auto. That would clip the slide to the panel’s own
+            box.</Says>
         </Words>
         <Codes>
           <Snippet label="CSS" lines={[
@@ -104,15 +101,15 @@ export const MultipleRecipe: FC = () => {
           ]}/>
         </Codes>
       </Step>
-      <Step title="Leave the way you came">
-        <Words want="A dismissed banner should fly out first and only then let the pile close ranks.">
-          <Says>The leaving class reverses the order: the flight runs at once, the slot
-            and its gap close after it, and the removal itself listens for the track
-            transition to end. Remove the element any earlier and the survivors
-            snap.</Says>
+      <Step title="Slide out, then close the gap">
+        <Words want="A dismissed banner should slide out first, and only then should the others close the gap.">
+          <Says>Dismissing a banner gives it the class leaving, which runs the two moves in the other order: the
+            banner slides out at once, and the track and its margin close after it. The code takes the banner out of
+            the list only when the track’s transition has ended. Taken out any sooner, it would leave the others to
+            jump into its place.</Says>
         </Words>
         <Codes>
-          <Snippet label="CSS" lines={leavingLines(stack, enter)}/>
+          <Snippet label="CSS" lines={leavingLines(stack)}/>
           <Snippet label="TS" lines={[
             ...unit(bannersSource, 'const left = ')
           ]}/>

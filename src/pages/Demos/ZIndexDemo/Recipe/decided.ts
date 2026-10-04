@@ -2,11 +2,11 @@ import {Entrance, Stack} from '@components/Banners/params';
 import {Line} from '../../Recipe/Snippet';
 import {plain} from '../../Recipe';
 
-export const arriveFrom: Record<Entrance, string> = {
-  above: 'translate: 0 -100dvh;',
-  below: 'translate: 0 100dvh;',
-  left: 'translate: -100dvw 0;',
-  right: 'translate: 100dvw 0;'
+export const arriveDistance: Record<Entrance, string> = {
+  above: '&.from-above { --arrive: 0 -100dvh; }',
+  below: '&.from-below { --arrive: 0 100dvh; }',
+  left: '&.from-left { --arrive: -100dvw 0; }',
+  right: '&.from-right { --arrive: 100dvw 0; }'
 };
 
 export const slotTrack: Record<Stack, string> = {
@@ -16,11 +16,18 @@ export const slotTrack: Record<Stack, string> = {
   right: 'grid-template-columns: 1fr;'
 };
 
-export const slotOpening: Record<Stack, string> = {
-  down: 'animation: open-slot 0.3s;',
-  up: 'animation: open-slot 0.3s;',
-  left: 'animation: open-column 0.3s;',
-  right: 'animation: open-column 0.3s;'
+export const closedSlot: Record<Stack, string> = {
+  down: 'grid-template-rows: 0fr;',
+  up: 'grid-template-rows: 0fr;',
+  left: 'grid-template-columns: 0fr;',
+  right: 'grid-template-columns: 0fr;'
+};
+
+export const closedGap: Record<Stack, string> = {
+  down: 'margin-block-end: 0;',
+  up: 'margin-block-end: 0;',
+  left: 'margin-inline-end: 0;',
+  right: 'margin-inline-end: 0;'
 };
 
 export const ownedGap: Record<Stack, string> = {
@@ -28,13 +35,6 @@ export const ownedGap: Record<Stack, string> = {
   up: '.trouble:not(:first-child) { margin-block-end: var(--base); }',
   right: '.trouble:not(:last-child) { margin-inline-end: var(--base); }',
   left: '.trouble:not(:first-child) { margin-inline-end: var(--base); }'
-};
-
-export const closingSlot: Record<Stack, string> = {
-  down: 'grid-template-rows: 0fr;',
-  up: 'grid-template-rows: 0fr;',
-  left: 'grid-template-columns: 0fr;',
-  right: 'grid-template-columns: 0fr;'
 };
 
 export const closingTransition: Record<Stack, string> = {
@@ -48,24 +48,30 @@ export const slotLines = (stack: Stack): Line[] => [
   plain('.trouble {'),
   plain('  display: grid;'),
   plain(`  ${slotTrack[stack]}`),
-  plain(`  ${slotOpening[stack]}`),
+  plain('  @starting-style {'),
+  plain(`    ${closedSlot[stack]}`),
+  plain(`    ${closedGap[stack]}`),
+  plain('  }'),
   plain('}'),
   plain(' '),
   plain(ownedGap[stack])
 ];
 
 export const arrivalLines = (enter: Entrance): Line[] => [
+  plain(arriveDistance[enter]),
+  plain(' '),
   plain('.trouble {'),
+  plain('  transition: translate 0.6s cubic-bezier(0.45, 0, 0.15, 1) 0.3s;'),
   plain('  @starting-style {'),
-  plain(`    ${arriveFrom[enter]}`),
+  plain('    translate: var(--arrive);'),
   plain('  }'),
   plain('}')
 ];
 
-export const leavingLines = (stack: Stack, enter: Entrance): Line[] => [
+export const leavingLines = (stack: Stack): Line[] => [
   plain('.trouble.leaving {'),
-  plain(`  ${closingSlot[stack]}`),
-  plain(`  ${arriveFrom[enter]}`),
+  plain(`  ${closedSlot[stack]}`),
+  plain('  translate: var(--arrive);'),
   plain('  transition:'),
   plain('    translate 0.6s cubic-bezier(0.45, 0, 0.15, 1),'),
   plain(`    ${closingTransition[stack]}`)

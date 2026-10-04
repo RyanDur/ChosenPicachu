@@ -94,11 +94,11 @@ describe('the top layer', () => {
     await openZIndexTab();
     const controls = await screen.findByRole('region', {name: 'banner controls'});
 
-    expect(screen.getByText(/the slot is a row/)).toBeInTheDocument();
+    expect(screen.getByText(/the stack grows downward, so the track is a row\./)).toBeInTheDocument();
 
     await userEvent.click(within(within(controls).getByRole('group', {name: 'stack'})).getByRole('radio', {name: 'Left'}));
 
-    expect(screen.getByText(/the slot is a column/)).toBeInTheDocument();
+    expect(screen.getByText(/the stack grows leftward, so the track is a column\./)).toBeInTheDocument();
   });
 
   test('the cards start stacked', async () => {
@@ -171,5 +171,70 @@ describe('the banner tutorial’s first story', () => {
     await openZIndexTab();
 
     expect(await screen.findByText(/The links go to MDN, Mozilla’s web reference, if you want more\./)).toBeInTheDocument();
+  });
+});
+
+describe('the banner tutorial’s second story', () => {
+  const story = 'The user can have multiple banners';
+  const secondStory = async (): Promise<HTMLElement> =>
+    recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
+
+  test('should head each step with what happens, with the height step only for a sideways stack', async () => {
+    render(<TestApp at={demosAt('?tab=z-index&stack=left')}/>);
+    const many = await recipeFolds.press(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
+
+    expect(recipeFolds.steps(many).map(step => within(step).getAllByRole('heading')[0].textContent)).toEqual([
+      'Skip a message that is already up',
+      'Open a gap in the stack first',
+      'Slide in from off screen',
+      'Slide out, then close the gap',
+      'Change a banner’s height smoothly when its text rewraps'
+    ]);
+  });
+
+  test('should open on the two moves, and say what a transition and a starting style are', async () => {
+    await openZIndexTab();
+    const many = await secondStory();
+
+    expect(many).toHaveTextContent('A banner arrives in two moves: the stack opens a gap for it while it is still off screen, and then it slides in.');
+    expect(many).toHaveTextContent('A transition changes a CSS value over a set time instead of at once. A banner that has just been added has no earlier value to change from, so a starting style, written @starting-style, gives it one.');
+  });
+
+  test('should give no browser as the reason for the code', async () => {
+    await openZIndexTab();
+
+    expect(await secondStory()).not.toHaveTextContent(/Chrome|Platform traps|keyframe/);
+  });
+
+  test.each([
+    ['a track', 'Each banner is a grid with a single row or column, called a track.'],
+    ['0fr and 1fr', 'The starting style sets the track to 0fr, which is no size at all, and the banner’s own rule sets it to 1fr, the size of its content, so the transition opens the gap over 0.3 seconds.'],
+    ['a custom property', 'The distance is a custom property: a value given a name once, here --arrive, and read back with var().'],
+    ['the leaving class', 'Dismissing a banner gives it the class leaving, which runs the two moves in the other order'],
+    ['raise', 'raise is the function a page calls with a message.']
+  ])('should say what %s is where the reader meets it', async (_term, sentence) => {
+    await openZIndexTab();
+
+    expect(await secondStory()).toHaveTextContent(sentence);
+  });
+
+  test('should say what a ResizeObserver and block-size are, for a sideways stack', async () => {
+    render(<TestApp at={demosAt('?tab=z-index&stack=right')}/>);
+
+    expect(await secondStory()).toHaveTextContent('A ResizeObserver, a browser object that calls back when an element changes size, sets each message’s height to a measured number of pixels. A rewrap then changes one number to another, and the transition on block-size, the CSS name for height on this page, runs between them.');
+  });
+
+  test('should point the popover up to Why the popover wins, where it is taught', async () => {
+    await openZIndexTab();
+    const many = await secondStory();
+
+    expect(many).toHaveTextContent('The panel is a popover, as Why the popover wins explains, and the browser’s own stylesheet gives a popover overflow: auto.');
+    expect(within(many).getByRole('link', {name: 'Why the popover wins'})).toHaveAttribute('href', '#popover-wins-heading');
+  });
+
+  test('should say where the banner starts, for the entrance chosen', async () => {
+    render(<TestApp at={demosAt('?tab=z-index&enter=left')}/>);
+
+    expect(await secondStory()).toHaveTextContent('Here the banner starts a full window’s width to the left of the window. The distance is a custom property');
   });
 });

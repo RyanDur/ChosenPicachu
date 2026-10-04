@@ -23,3 +23,4 @@ export {stackingPile, type Card} from './stacking';
 export {bannerTrap, topLayerMenu, trappedMenu, type SortChoice} from './trap';
 export {pressTab} from './keyboard';
 export {seedRandom} from './random';
+export {bannerLeavesBeforeTheGapCloses, bannerMotion, gapOpensBeforeTheBannerIsSeen} from './banner-motion';
