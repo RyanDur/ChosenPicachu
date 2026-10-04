@@ -9,5 +9,4 @@
 .tab-introduction {
   display: grid;
   gap: var(--base);
-  max-inline-size: var(--measure);
 }
