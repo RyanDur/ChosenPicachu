@@ -1,7 +1,6 @@
 import {Page, expect, test} from '@playwright/test';
-import {accordionsTab, bannerTrap, fingerTap, foldBarsShortOfAFinger, galleryPage, homePage, iPhone, nameOn, phoneSideways, shortOfAFinger, tablesDemo, topLayerMenu, trappedMenu} from './__test_support';
+import {accordionsTab, bannerTrap, demoSettings, fingerTap, foldBarsShortOfAFinger, galleryPage, homePage, iPhone, nameOn, phoneSideways, shortOfAFinger, tablesDemo, topLayerMenu, trappedMenu} from './__test_support';
 
-const doorFold = (page: Page) => page.getByRole('group').filter({has: page.getByText('how I organize it', {exact: true})}).first();
 const explainer = (page: Page) => page.getByRole('group').filter({has: page.getByText('what am I looking at?', {exact: true})}).first();
 
 for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a phone held sideways', device: phoneSideways}]) {
@@ -18,7 +17,7 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
 
     test('opens and closes how I organize it with a finger that lands just off the line', async ({page}) => {
       await page.goto('');
-      const fold = doorFold(page);
+      const fold = homePage(page).doorFolds.first();
       const told = fold.getByRole('paragraph', {includeHidden: true}).first();
       await expect(told).toBeHidden();
 
@@ -82,14 +81,15 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
     test('every fold on home has a bar a finger tall', async ({page}) => {
       await page.goto('');
       const home = homePage(page);
+      await expect(home.timelineStories.first()).toBeVisible();
       await expect(home.researchFold).toBeVisible();
 
-      expect(await foldBarsShortOfAFinger([...await home.timelineStories.all(), home.researchFold])).toEqual([]);
+      expect(await foldBarsShortOfAFinger([...await home.timelineStories.all(), ...await home.doorFolds.all(), home.researchFold])).toEqual([]);
     });
 
     test('the settings fold on the drag sort tab has a bar a finger tall', async ({page}) => {
       await page.goto('demos/?tab=dragAndDrop');
-      const settings = tablesDemo(page).settingsFold;
+      const settings = demoSettings(page).fold;
       await expect(settings).toBeVisible();
 
       expect(await foldBarsShortOfAFinger([settings])).toEqual([]);

@@ -70,7 +70,7 @@ for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader:
 
       await world.choose('Vanilla');
 
-      await expect(page.getByRole('group', {name: 'world', exact: true}).getByRole('radio', {name: 'Vanilla', includeHidden: true})).toBeChecked();
+      await expect(world.pill('Vanilla')).toBeChecked();
       await expect.poll(world.stillMoving).toBe(0);
       expect(await world.paintedWrong()).toEqual([]);
     });
@@ -82,7 +82,7 @@ for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader:
 
       await foldType.choose('Exclusive');
 
-      await expect(page.getByRole('group', {name: 'fold type', exact: true}).getByRole('radio', {name: 'Exclusive', includeHidden: true})).toBeChecked();
+      await expect(foldType.pill('Exclusive')).toBeChecked();
       expect(await foldType.paintedWrong()).toEqual([]);
     });
   });

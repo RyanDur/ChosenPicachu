@@ -11,6 +11,7 @@ export {siteFrame} from './site';
 export {unpaintedPixels} from './paint';
 export {feedbackOn, github} from './feedback';
 export {tablesDemo} from './tables';
+export {demoSettings} from './demo-settings';
 export {fingerTap, fingertipMiss, foldBarsShortOfAFinger, shortOfAFinger} from './finger';
 export {pillSwitch, shownPillSwitches} from './pills';
 export {sortableList} from './lists';

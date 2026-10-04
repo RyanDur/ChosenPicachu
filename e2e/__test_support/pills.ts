@@ -1,4 +1,4 @@
-import type {Page} from '@playwright/test';
+import type {Locator, Page} from '@playwright/test';
 
 type Pill = {name: string; chosen: boolean; x: number; y: number; width: number; height: number};
 
@@ -44,6 +44,7 @@ export const pillSwitch = (page: Page, name: string) => {
   return {
     choose: (pill: string): Promise<void> => group.getByText(pill, {exact: true}).click(),
     hover: (pill: string): Promise<void> => group.getByText(pill, {exact: true}).hover(),
+    pill: (name: string): Locator => group.getByRole('radio', {name, includeHidden: true}),
     stillMoving: (): Promise<number> => group.evaluate(element => element.getAnimations({subtree: true})
       .filter(animation => animation.playState === 'running').length),
     paintedWrong,
