@@ -2,7 +2,6 @@
   width: 100%;
 
   > .prompt {
-    cursor: pointer;
     display: flex;
     align-items: center;
     gap: var(--base-x-2);

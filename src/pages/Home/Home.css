@@ -154,7 +154,6 @@
   .fuller-story,
   .door-fold {
     .prompt {
-      cursor: pointer;
       width: fit-content;
       font-size: var(--text-caption);
       color: var(--ink-muted);
@@ -184,7 +183,6 @@
     gap: var(--base-x-2_5);
 
     .prompt {
-      cursor: pointer;
       width: fit-content;
     }
   }

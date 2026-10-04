@@ -1,10 +1,6 @@
 .explainer {
   margin-top: var(--base-x-2);
 
-  .prompt {
-    cursor: pointer;
-  }
-
   .explanation {
     margin-top: var(--base-x-0_75);
     max-width: var(--measure);
