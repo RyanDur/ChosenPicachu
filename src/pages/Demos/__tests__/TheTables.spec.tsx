@@ -565,6 +565,8 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/position-area/);
     expect(recipe).toHaveTextContent(/The sort keeps sorting/);
     expect(recipe).toHaveTextContent(/A hand ends the sort/);
+    expect(recipe).toHaveTextContent(/should stop a press from bubbling up to the header around them, so the header never hears it/);
+    expect(recipe).not.toHaveTextContent(/descent/);
     expect(recipe).toHaveTextContent(/onSorted\?\.\(\{column, direction}\)/);
     expect(recipe).not.toHaveTextContent(/Dress the menu as a card/);
     expect(within(recipe).getByRole('link', {name: 'position-area'}))

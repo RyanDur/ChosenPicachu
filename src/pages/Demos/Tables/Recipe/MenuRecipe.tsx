@@ -251,10 +251,9 @@ const rankStory = (build: Build) => {
       </Step>
       <Step title="The press never becomes a drag">
         <Words want="The menu lives inside a draggable header, where an unguarded press on the toggle would lift the whole column.">
-          <Says>Both the toggle and the menu
-            should <Mdn path="Web/API/Event/stopPropagation">stop pointer descent</Mdn> so the
-            header never hears the press, and a menu should exist only where ranking the column
-            means something.</Says>
+          <Says>Both the toggle and the menu should <Mdn path="Web/API/Event/stopPropagation">stop a press from
+            bubbling</Mdn> up to the header around them, so the header never hears it, and a menu should exist only
+            where ranking the column means something.</Says>
         </Words>
         <Reveal>
           {world === 'react'
