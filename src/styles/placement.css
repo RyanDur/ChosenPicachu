@@ -11,6 +11,14 @@
   right: 1000vw;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .when-motion-allowed { display: none; }
+}
+
+@media not (prefers-reduced-motion: reduce) {
+  .when-less-motion { display: none; }
+}
+
 .stand-in {
   display: block;
   margin: auto;

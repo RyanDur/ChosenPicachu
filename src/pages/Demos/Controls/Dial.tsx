@@ -8,7 +8,7 @@ type Props<T extends string> = {
   options: readonly {display: ReactNode; value: T}[];
   chosen: T;
   onChosen: (value: T) => void;
-  reading: string;
+  reading: ReactNode;
 };
 
 export const Dial = <T extends string>({label, reading, ...pills}: Props<T>) =>

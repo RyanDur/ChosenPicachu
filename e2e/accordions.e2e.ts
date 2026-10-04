@@ -425,3 +425,32 @@ for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader:
     });
   });
 }
+
+const lessMotion = 'Your system asks for less motion, so every fold here opens at once, whichever you choose.';
+
+for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader: 'a phone', device: iPhone}]) {
+  test.describe(reader, () => {
+    test.use(device);
+
+    for (const {motion, reading} of [
+      {motion: 'Reveal', reading: 'The text is uncovered from its first line down.'},
+      {motion: 'Drawer', reading: 'The text slides down from under its bar.'},
+      {motion: 'Static', reading: 'The fold opens in one frame, with nothing moving.'}
+    ]) {
+      test(`with ${motion} chosen, the fold motion reads that no fold moves for a reader who asks for less motion, and reads ${motion} for one who does not`, async ({page}) => {
+        await page.goto(`demos/?tab=accordions&style=${motion.toLowerCase()}`);
+        const row = page.getByRole('listitem').filter({has: page.getByRole('group', {name: 'fold motion', exact: true})}).last();
+        const status = row.getByRole('status');
+        await status.scrollIntoViewIfNeeded();
+
+        await expect(status).toHaveText(reading, {useInnerText: true});
+        await expect(status).toMatchAriaSnapshot(`- status: ${reading}`);
+
+        await page.emulateMedia({reducedMotion: 'reduce'});
+
+        await expect(status).toHaveText(lessMotion, {useInnerText: true});
+        await expect(status).toMatchAriaSnapshot(`- status: ${lessMotion}`);
+      });
+    }
+  });
+}

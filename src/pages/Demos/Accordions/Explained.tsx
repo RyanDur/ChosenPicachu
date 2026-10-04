@@ -119,7 +119,10 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
     </section>
     <ul className="dials">
       <Dial label="fold type" name="fold-type" options={foldTypes} chosen={type} onChosen={onTypeChosen} reading={typeReadings[type]}/>
-      <Dial label="fold motion" name="fold-motion" options={foldMotions} chosen={motion} onChosen={onMotionChosen} reading={motionReadings[motion]}/>
+      <Dial label="fold motion" name="fold-motion" options={foldMotions} chosen={motion} onChosen={onMotionChosen} reading={<>
+        <span className="when-motion-allowed">{motionReadings[motion]}</span>
+        <span className="when-less-motion">Your system asks for less motion, so every fold here opens at once, whichever you choose.</span>
+      </>}/>
     </ul>
     <section aria-labelledby="old-way-heading" className="accordion-part">
       <h3 id="old-way-heading" className="title bold">How we used to build a fold</h3>
