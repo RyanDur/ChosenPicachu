@@ -309,8 +309,6 @@
   margin-right: var(--base);
 }
 
-/* the two exhibits that teach the snap keep it: HTML alone, and an accordion whose motion is static */
-.snapping details::details-content,
 .static .fold::details-content {
   transition: none;
 }
