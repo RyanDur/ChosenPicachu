@@ -38,7 +38,8 @@
   --faded-mint: rgb(from var(--mint) r g b / 0.5);
   --faded-international-orange-engineering: rgb(from var(--international-orange-engineering) r g b / 0.4);
   --paper-veil: rgb(from var(--paper) r g b / 0.7);
-  --charcoal-veil: rgb(from var(--charcoal) r g b / 0.5);
+  --veil-opacity: 0.5;
+  --charcoal-veil: rgb(from var(--charcoal) r g b / var(--veil-opacity));
   --white-clear: rgb(from var(--white) r g b / 0);
   --faint-shadow: rgb(from var(--black) r g b / 0.12);
   --shadow: rgb(from var(--black) r g b / 0.19);
