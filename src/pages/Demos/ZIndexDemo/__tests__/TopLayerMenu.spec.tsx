@@ -38,10 +38,10 @@ describe('why the popover wins', () => {
 
     const part = await screen.findByRole('region', {name: 'Why the popover wins'});
     const runs = within(part).getAllByRole('listitem');
-    const scripts = runs.indexOf(explanation.runTelling(part, /A toggle on the menu/));
+    const scriptsAt = runs.indexOf(explanation.runTelling(part, /A toggle on the menu/));
 
     expect(explanation.everyCodeBeside(part, /The button names its menu with popovertarget/).join()).toMatch(/onToggle=/);
-    expect(runs[scripts - 1]).toBe(explanation.runTelling(part, /The button names its menu with popovertarget/));
+    expect(runs[scriptsAt - 1]).toBe(explanation.runTelling(part, /The button names its menu with popovertarget/));
   });
 
   test('should show the site’s menu placement and its fallback beside the run that says how the sheet places it', async () => {
