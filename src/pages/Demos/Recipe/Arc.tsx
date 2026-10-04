@@ -54,7 +54,7 @@ export const Design: FC<DesignProps> = ({sketch, answers, unanswered}) =>
       questions, not guesses.
     </p>
     <figure className="design-still field rounded-corners">
-      <div className="design-sketch" aria-hidden="true">{sketch}</div>
+      {sketch}
       <figcaption className="reel-note paragraph">{answers}</figcaption>
     </figure>
     <aside className="unanswered field rounded-corners" aria-label="what a design cannot tell you">

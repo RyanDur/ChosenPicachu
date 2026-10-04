@@ -14,13 +14,14 @@ const clues: [string, string][] = [
   ['see it stay where I dropped it', 'The drop is the commit, and the landing has to be visible.']
 ];
 
-const sketch = <>
-  {['first', 'second', 'third', 'fourth'].map(item =>
-    <div className="design-item" key={item}>
-      <span className="design-grip">≡</span>
-      <span className="design-line"/>
-    </div>)}
-</>;
+const sketch =
+  <div className="design-sketch" aria-hidden="true">
+    {['first', 'second', 'third', 'fourth'].map(item =>
+      <div className="design-item" key={item}>
+        <span className="design-grip">≡</span>
+        <span className="design-line"/>
+      </div>)}
+  </div>;
 
 const unanswered = [
   'Whether the list should make room as you hover, or hold still until the drop.',

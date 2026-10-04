@@ -114,6 +114,7 @@
     justify-self: stretch;
     padding: var(--base-x-3);
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--base-x-2_5);
     justify-items: start;
   }
@@ -202,7 +203,6 @@
 
   .design-still {
     margin: 0;
-    min-width: 0;
     justify-self: stretch;
     padding: var(--base-x-2_5);
     border: var(--hairline-x-2) dashed var(--charcoal);
@@ -210,11 +210,9 @@
     gap: var(--base-x-2);
   }
 
-  /* a sketch wider than a phone scrolls inside its own frame, as the real tables do, so the page holds still */
   .design-sketch {
     display: grid;
     gap: var(--base);
-    overflow-x: auto;
   }
 
   .design-table {
@@ -242,6 +240,33 @@
     text-align: start;
     vertical-align: middle;
     white-space: nowrap;
+  }
+
+  /* on a phone the six measures stand on their sides, read bottom to top, and a window's name may take two lines,
+     so the whole sketch fits and nothing in it scrolls */
+  @media (width < 600px) {
+    .design-still {
+      padding: var(--base);
+    }
+
+    .design-table {
+      border-spacing: var(--base-x-0_5);
+      margin: calc(-1 * var(--base-x-0_5));
+    }
+
+    .design-measure {
+      vertical-align: bottom;
+    }
+
+    .design-table .design-column.design-measure {
+      writing-mode: vertical-rl;
+      rotate: 180deg;
+      text-align: start;
+    }
+
+    .design-window {
+      white-space: normal;
+    }
   }
 
   .sliced {
