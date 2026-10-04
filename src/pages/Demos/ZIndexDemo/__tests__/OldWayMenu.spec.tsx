@@ -1,9 +1,9 @@
 import {render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {not} from '@ryandur/sand';
 import {TestApp} from '@__test_support/TestApp';
 import {demosAt} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
+import {controlsBeforeTheSteps} from '@pages/Demos/ZIndexDemo/__test_support';
 
 const under = 'The list opened under card two. Its 9999 counts only inside card one.';
 const over = 'The list opened over card two. Card one has no z-index now, so the 9999 is compared with card two’s 1.';
@@ -99,8 +99,7 @@ describe('the card that traps the menu', () => {
       'Uncheck “Card one has z-index: 1”, and press Sort by again.',
       'Press Sort by, in the top layer, with the box checked or not.'
     ]);
-    expect([...within(trap).getAllByRole('button'), within(trap).getByRole('checkbox')]
-      .filter(control => not(steps.compareDocumentPosition(control) & Node.DOCUMENT_POSITION_FOLLOWING))).toEqual([]);
+    expect(controlsBeforeTheSteps(steps, [...within(trap).getAllByRole('button'), within(trap).getByRole('checkbox')])).toEqual([]);
   });
 
   test('should keep the checkbox in card one, and tell each card’s z-index in a sentence', async () => {

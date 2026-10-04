@@ -1,9 +1,9 @@
 import {render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {not} from '@ryandur/sand';
 import {TestApp} from '@__test_support/TestApp';
 import {demosAt} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
+import {controlsBeforeTheSteps} from '@pages/Demos/ZIndexDemo/__test_support';
 
 const oldBanner = /^An old banner\./;
 
@@ -19,8 +19,7 @@ describe('the banner exhibit', () => {
       'Scroll until card two reaches the bottom of the window, and watch it pass over the banner.',
       'Press Raise a banner, in the top layer, and scroll again.'
     ]);
-    expect(within(banners).getAllByRole('button')
-      .filter(control => not(steps.compareDocumentPosition(control) & Node.DOCUMENT_POSITION_FOLLOWING))).toEqual([]);
+    expect(controlsBeforeTheSteps(steps, within(banners).getAllByRole('button'))).toEqual([]);
   });
 
   test('should tell each card’s z-index, and the old banner’s place, in a sentence', async () => {
