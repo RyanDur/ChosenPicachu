@@ -135,6 +135,12 @@ describe('the banner tutorial’s first story', () => {
     expect(recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story)).toHaveTextContent('or that is a child of a flex or grid container, the two CSS layouts that arrange their children along a line or in rows and columns.');
   });
 
+  test('should say what inset: 0 does where step 3 first names it', async () => {
+    await openZIndexTab();
+
+    expect(recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story)).toHaveTextContent('inset: 0 and margin: auto. inset: 0 lets the panel reach each edge of the window. It takes only the room its content needs, and the auto margins share the rest, which centres it in the window.');
+  });
+
   test('should not call stacking contexts a cascade', async () => {
     await openZIndexTab();
 
