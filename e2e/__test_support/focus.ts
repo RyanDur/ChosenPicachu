@@ -1,4 +1,5 @@
 import type {Locator, Page} from '@playwright/test';
+import {decodedShot, type Pixels} from './shots';
 
 const margin = 4;
 
@@ -12,10 +13,23 @@ const around = async (marked: readonly Locator[]): Promise<Box> => {
   return {x: left, y: top, width: right - left, height: bottom - top};
 };
 
-const shot = async (page: Page, marked: readonly Locator[]): Promise<string> => {
+const shot = async (page: Page, marked: readonly Locator[]): Promise<Pixels> => {
   const box = await around(marked);
   const clip = {x: box.x - margin, y: box.y - margin, width: box.width + 2 * margin, height: box.height + 2 * margin};
-  return (await page.screenshot({clip, scale: 'css', animations: 'disabled'})).toString('base64');
+  return decodedShot(page, await page.screenshot({clip, scale: 'css', animations: 'disabled'}));
+};
+
+const linear = (channel: number): number => {
+  const value = channel / 255;
+  return value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+};
+
+const luminance = ({rgba}: Pixels, at: number): number =>
+  0.2126 * linear(rgba[at * 4]) + 0.7152 * linear(rgba[at * 4 + 1]) + 0.0722 * linear(rgba[at * 4 + 2]);
+
+const contrast = (was: Pixels, now: Pixels, at: number): number => {
+  const [lighter, darker] = [luminance(was, at), luminance(now, at)].sort((a, b) => b - a);
+  return (lighter + 0.05) / (darker + 0.05);
 };
 
 // a focus indicator counts where the focused pixel differs from the unfocused one by 3:1 or more; it must cover a ring
@@ -29,29 +43,7 @@ export const focusStandsOut = async (page: Page, control: Locator, marked: reado
   const after = await shot(page, marked);
   const box = await around(marked);
   const ring = 2 * (box.width + box.height);
-  const changed = await page.evaluate(async ([unfocused, focused]) => {
-    const pixels = async (src: string): Promise<Uint8ClampedArray> => {
-      const image = new Image();
-      image.src = `data:image/png;base64,${src}`;
-      await image.decode();
-      const canvas = new OffscreenCanvas(image.width, image.height);
-      const context = canvas.getContext('2d');
-      context?.drawImage(image, 0, 0);
-      return context?.getImageData(0, 0, image.width, image.height).data ?? new Uint8ClampedArray();
-    };
-    const linear = (channel: number): number => {
-      const value = channel / 255;
-      return value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
-    };
-    const luminance = (data: Uint8ClampedArray, at: number): number =>
-      0.2126 * linear(data[at]) + 0.7152 * linear(data[at + 1]) + 0.0722 * linear(data[at + 2]);
-    const [was, now] = await Promise.all([pixels(unfocused), pixels(focused)]);
-    let count = 0;
-    for (let at = 0; at < Math.min(was.length, now.length); at += 4) {
-      const [lighter, darker] = [luminance(was, at), luminance(now, at)].sort((a, b) => b - a);
-      if ((lighter + 0.05) / (darker + 0.05) >= 3) count++;
-    }
-    return count;
-  }, [before, after]);
+  const pixels = Math.min(before.rgba.length, after.rgba.length) / 4;
+  const changed = Array.from({length: pixels}, (_, at) => contrast(before, after, at)).filter(ratio => ratio >= 3).length;
   return {changed, ring};
 };
