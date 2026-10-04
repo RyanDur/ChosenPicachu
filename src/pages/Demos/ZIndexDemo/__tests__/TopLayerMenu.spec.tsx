@@ -33,6 +33,16 @@ describe('why the popover wins', () => {
     expect(run).toHaveTextContent(/like the old list above, has no anchor, so it is left out\./);
   });
 
+  test('should show the buttons’ tabIndex beside the run that says what it asks, and why Safari needs it', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+
+    const part = await screen.findByRole('region', {name: 'Why the popover wins'});
+    const run = explanation.runTelling(part, /Each button carries a tabIndex of 0/);
+
+    expect(explanation.everyCodeBeside(part, /Each button carries a tabIndex of 0/).join()).toMatch(/tabIndex=\{0\}/);
+    expect(run).toHaveTextContent(/HTML attribute tabindex, and 0 asks the browser to stop/);
+  });
+
   test('should name the toggle in the run that follows the markup that holds it', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
 
