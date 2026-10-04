@@ -42,7 +42,7 @@ Each rule gives its reason, and a source where one exists outside this repo. A r
 
 - The reviewers' rubrics below are the style: the three doors on the home page, `scripts/review/design.md`, `scripts/review/tests.md`, and `scripts/review/plain.md` for words.
 - The semantic element first; a `div` is the last resort. Native elements before ARIA roles.
-- CSS: structure in the component's own sheet, shared needs from `src/styles`, and type only from `src/styles/typography.css` classes on the element.
+- CSS: structure in the component's own sheet, shared needs from `src/styles`, and type only from `src/styles/typography.css` classes on the element. A tag is styled only in the reset; everywhere else a rule names a class, so a table's cells and a fold's parts wear a word. Why: the home page's Presentation door says "Tag selectors are for resets only". A rule on a bare tag reaches every such element a later change puts inside the component, and the class list no longer says what the element is.
 - `npm run format` formats with ESLint Stylistic.
 
 ## Commits and pushes
