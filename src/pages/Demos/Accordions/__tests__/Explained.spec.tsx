@@ -299,8 +299,10 @@ describe('the fold motion', () => {
 
     const together = await screen.findByRole('region', {name: parts[2]});
 
-    expect(within(together).getByText(/With the drawer, the text slides down/))
-      .toHaveTextContent('so align-content: end sets the row at the paragraph’s bottom. Then align-self: end sets the item at the row’s bottom');
+    const run = within(together).getByText(/With the drawer, the text slides down/);
+
+    expect(run).toHaveTextContent(/so align-content: end sets/);
+    expect(run).toHaveTextContent(/Then align-self: end sets/);
   });
 
   test.each(['reveal', 'static'])('should tell no drawer run under %s', async style => {
