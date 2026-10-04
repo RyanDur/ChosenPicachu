@@ -565,6 +565,16 @@ describe('the runs in view, with the folds shut', () => {
   });
 });
 
+describe('the word attribute', () => {
+  test.each(['inclusive', 'exclusive'])('should be said, with %s chosen, before the label’s for attribute', async type => {
+    render(<TestApp at={demosAt(`?tab=accordions&type=${type}`)}/>);
+
+    const oldWay = await screen.findByRole('region', {name: parts[0]});
+
+    expect(within(oldWay).getByText(/To open and close a part/)).toHaveTextContent(/An attribute is a name, often with a value, written inside an element’s opening tag\. The label’s for attribute names the/);
+  });
+});
+
 describe('the platform build’s bars', () => {
   test('should say the bar draws the old build’s arrow in the marker’s place, beside the rule that turns it', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
@@ -582,7 +592,7 @@ describe('the platform build’s bars', () => {
 
     const platform = await screen.findByRole('region', {name: parts[1]});
 
-    expect(explanation.runTelling(platform, /Summary also draws its own arrow/)).toHaveTextContent('The arrow points right while the part is closed. When the part opens, the browser adds the attribute open to the details, as if it were written in the opening tag. [open] is a piece of a CSS rule that picks an element with that attribute, and its rule turns the arrow down.');
+    expect(explanation.runTelling(platform, /Summary also draws its own arrow/)).toHaveTextContent('The arrow points right while the part is closed. When the part opens, the browser adds open to the details’ opening tag. A name written there is called an attribute. [open] is a piece of a CSS rule that picks an element with that attribute, and its rule turns the arrow down.');
   });
 
   test('should keep the bar’s own run to the row, its focus and its border', async () => {
@@ -592,7 +602,9 @@ describe('the platform build’s bars', () => {
 
     expect(explanation.runTelling(platform, /The bar is the same flex row/)).toHaveTextContent(/^The bar is the same flex row as the label in the checkbox build, now on summary, in the same colours\. Summary takes focus and hover itself, where the checkbox build carried focus from the hidden checkbox to the label\. The hairline border draws the line between one bar and the next\./);
   });
+});
 
+describe('the known-height build’s bars', () => {
   test('should show the known-height build’s own hover rule beside the run that lights its bar', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 
@@ -609,6 +621,13 @@ describe('the platform build’s bars', () => {
     const oldWay = await screen.findByRole('region', {name: parts[0]});
 
     expect(explanation.everyCodeBeside(oldWay, /Each bar shows an arrow/).join()).toMatch(/\.opening-arrow::after \{[^]*rotate\(45deg\)/);
+  });
+
+  test('should say the arrow’s borders are drawn in currentcolor, so the arrow changes colour with the words', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const oldWay = await screen.findByRole('region', {name: parts[0]});
+
     expect(explanation.runTelling(oldWay, /Each bar shows an arrow/)).toHaveTextContent('turned 45 degrees so the corner points right. Its borders are drawn in currentcolor, a keyword for the element’s own text colour, so the arrow changes colour with the bar’s words. When the');
   });
 });
