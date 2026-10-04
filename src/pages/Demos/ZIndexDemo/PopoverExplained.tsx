@@ -2,6 +2,7 @@ import {FC} from 'react';
 import {Mdn, plain, Snippet} from '../Recipe';
 import {span, unit} from '../Recipe/carve';
 import {AboveThePage} from './Diagrams';
+import {popoverWinsHeading} from './part-headings';
 import topLayerSource from './TopLayerMenu.tsx?raw';
 import menuCss from '../../../styles/menu.css?raw';
 import '../Recipe/Runs.css';
@@ -9,8 +10,8 @@ import '../Recipe/Runs.css';
 const gap = plain(' ');
 
 export const PopoverExplained: FC = () =>
-  <section aria-labelledby="popover-wins-heading" className="stacking-part">
-    <h3 id="popover-wins-heading" className="title bold">Why the popover wins</h3>
+  <section aria-labelledby={popoverWinsHeading} className="stacking-part">
+    <h3 id={popoverWinsHeading} className="title bold">Why the popover wins</h3>
     <ol className="runs card rounded-corners lifted padded">
       <li className="run">
         <p className="paragraph">The list from Sort by, in the top layer, opens over card two every time, with the box

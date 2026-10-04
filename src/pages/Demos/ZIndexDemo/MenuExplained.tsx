@@ -4,6 +4,7 @@ import {span, unit} from '../Recipe/carve';
 import {TrappedMenu} from './TrappedMenu';
 import {ANumberInsideALayer, Where9999IsCompared} from './Diagrams';
 import {CardOne} from './card-one';
+import {stillLosesHeading} from './part-headings';
 import trappedSource from './TrappedMenu.tsx?raw';
 import zIndexCss from './ZIndexDemo.css?raw';
 import '../Recipe/Runs.css';
@@ -16,8 +17,8 @@ type Props = {
 };
 
 export const MenuExplained: FC<Props> = ({cardOne, onCardOneChosen}) =>
-  <section aria-labelledby="9999-still-loses-heading" className="stacking-part">
-    <h3 id="9999-still-loses-heading" className="title bold">Why 9999 still loses</h3>
+  <section aria-labelledby={stillLosesHeading} className="stacking-part">
+    <h3 id={stillLosesHeading} className="title bold">Why 9999 still loses</h3>
     <TrappedMenu cardOne={cardOne} onCardOneChosen={onCardOneChosen}/>
     <ol className="runs card rounded-corners lifted padded">
       <li className="run">

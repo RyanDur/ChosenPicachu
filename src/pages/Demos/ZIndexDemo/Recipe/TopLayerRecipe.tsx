@@ -4,6 +4,7 @@ import {Align, Side, alignParam, sideParam} from '@components/Banners/params';
 import {Codes, Mdn, Says, Snippet, Step, Steps, Story, Words, Tell, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
 import {AlignDial, SideDial} from '../../Controls';
+import {popoverWinsHeading, stillLosesHeading} from '../part-headings';
 import bannersSource from '@components/Banners/Banners.tsx?raw';
 import bannersCss from '@components/Banners/Banners.css?raw';
 import placementCss from '../../../../styles/placement.css?raw';
@@ -33,14 +34,13 @@ export const TopLayerRecipe: FC = () => {
     can="The user sees the news above everything"
     soThat="no stacking context can bury the news">
     <Tell>We could give the banner a huge z-index. But a z-index counts only inside its own stacking context, the
-      term taught above in <a className="signpost" href="#9999-still-loses-heading"><cite>Why 9999 still loses</cite></a>. An
+      term taught above in <a className="signpost" href={`#${stillLosesHeading}`}><cite>Why 9999 still loses</cite></a>. An
       element around the banner starts a new one when its CSS gives it a transform or a filter. A z-index other than
       auto starts one too, but only on an element that is positioned, meaning its position is not static, or that is a
       child of a flex or grid container. Inside a new one, the banner’s 9999 is compared with nothing outside it. So
-      the panel is a <Mdn path="Web/API/Popover_API">popover</Mdn>: an element with the popover attribute, hidden until
-      the code shows it. While it is shown, the browser draws it in
-      the <Mdn path="Glossary/Top_layer">top layer</Mdn>, which it keeps above the whole page. No z-index on the page
-      can put anything over the top layer.</Tell>
+      the panel is a popover, drawn in the top layer like the new menu
+      above. <a className="signpost" href={`#${popoverWinsHeading}`}><cite>Why the popover wins</cite></a> says what
+      both are.</Tell>
     <Steps>
       <Step title="Make the panel a popover">
         <Words want="A bigger number does not get the banner out of a stacking context. The news needs a layer above all of them.">

@@ -4,6 +4,7 @@ import {Entrance, Stack, enterParam, stackParam} from '@components/Banners/param
 import {Codes, Says, Snippet, Step, Steps, Story, Words, Tell, plain} from '../../Recipe';
 import {span, unit} from '../../Recipe/carve';
 import {EntranceDial, StackDial} from '../../Controls';
+import {popoverWinsHeading} from '../part-headings';
 import {arrivalLines, leavingLines, slotLines} from './decided';
 import bannersSource from '@components/Banners/Banners.tsx?raw';
 import providerSource from '@components/Banners/BannerProvider.tsx?raw';
@@ -90,7 +91,7 @@ export const MultipleRecipe: FC = () => {
             read back with var(). The starting style reads it to place the banner before the slide, and the leaving
             rule reads it again to send the banner back. The slide waits 0.3 seconds, which is the time the gap takes
             to open. It can be seen only because the panel sets overflow to visible. The panel is a popover, as <a
-            className="signpost" href="#popover-wins-heading"><cite>Why the popover wins</cite></a> explains, and the
+            className="signpost" href={`#${popoverWinsHeading}`}><cite>Why the popover wins</cite></a> explains, and the
             browser’s own stylesheet gives a popover overflow: auto. That would clip the slide to the panel’s own
             box.</Says>
         </Words>

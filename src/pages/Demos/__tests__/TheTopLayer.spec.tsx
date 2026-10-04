@@ -126,8 +126,22 @@ describe('the banner tutorial’s first story', () => {
     const news = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
 
     expect(news).toHaveTextContent('A z-index other than auto starts one too, but only on an element that is positioned, meaning its position is not static, or that is a child of a flex or grid container.');
-    expect(within(news).getByRole('link', {name: 'Why 9999 still loses'})).toHaveAttribute('href', '#9999-still-loses-heading');
-    expect(news).not.toHaveTextContent(/cascade/);
+    expect(within(news).getByRole('link', {name: 'Why 9999 still loses'})).toHaveAttribute('href', `#${screen.getByRole('heading', {name: 'Why 9999 still loses'}).id}`);
+  });
+
+  test('should not call stacking contexts a cascade', async () => {
+    await openZIndexTab();
+
+    expect(recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story)).not.toHaveTextContent(/cascade/);
+  });
+
+  test('should call the panel a popover drawn in the top layer, and point up to Why the popover wins instead of defining both again', async () => {
+    await openZIndexTab();
+    const news = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
+
+    expect(news).toHaveTextContent('So the panel is a popover, drawn in the top layer like the new menu above. Why the popover wins says what both are.');
+    expect(within(news).getByRole('link', {name: 'Why the popover wins'})).toHaveAttribute('href', `#${screen.getByRole('heading', {name: 'Why the popover wins'}).id}`);
+    expect(news).not.toHaveTextContent(/hidden until the code shows it|No z-index on the page can put anything over the top layer/);
   });
 
   test('should head each step with what happens', async () => {
@@ -144,10 +158,17 @@ describe('the banner tutorial’s first story', () => {
     ['a React effect', 'A React effect, code that React runs after it has updated the page, runs when the number of banners changes.'],
     ['the browser’s own stylesheet', 'The browser’s own stylesheet, the styles every page starts with, gives a popover a fixed position, a size that fits its content, inset: 0 and margin: auto.'],
     ['margin-block and margin-inline', 'On this page margin-block is the margins above and below the panel, and margin-inline is the ones to its left and right.']
-  ])('should say what %s is where the reader meets it', async (_term, sentence) => {
+  ])('should define %s in the first story', async (_term, sentence) => {
     await openZIndexTab();
 
     expect(recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story)).toHaveTextContent(sentence);
+  });
+
+  test('should say where the placement classes put the panel with no dials set', async () => {
+    await openZIndexTab();
+
+    expect(recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story))
+      .toHaveTextContent('Here, top sets the margin above the panel and leaves the one below at auto. And center sets the margins to the left and right to auto again.');
   });
 
   test('should say where each placement class puts the panel, for the dials chosen', async () => {
