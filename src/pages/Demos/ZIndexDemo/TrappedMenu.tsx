@@ -5,7 +5,9 @@ import {SortMenu} from './SortMenu';
 import {TopLayerMenu} from './TopLayerMenu';
 import {CardOne} from './card-one';
 
-const opened: Record<CardOne | 'top layer', string> = {
+type Opened = CardOne | 'top layer';
+
+const whereItOpened: Record<Opened, string> = {
   contained: 'The list opened under card two. Its 9999 counts only inside card one.',
   free: 'The list opened over card two. Card one has no z-index now, so the 9999 is compared with card two’s 1.',
   'top layer': 'The list opened in the top layer, over both cards. No z-index is compared there.'
@@ -17,13 +19,13 @@ type Props = {
 };
 
 export const TrappedMenu: FC<Props> = ({cardOne, onCardOneChosen}) => {
-  const [said, updateSaid] = useState<Maybe<string>>(nothing());
+  const [opened, updateOpened] = useState<Maybe<Opened>>(nothing());
   const trap = useId();
 
   useEffect(() => {
     const topLayerOpened = ({target}: Event): void => {
       if (target instanceof HTMLElement && target.matches(':popover-open')) {
-        updateSaid(some(opened['top layer']));
+        updateOpened(some<Opened>('top layer'));
       }
     };
     const figure = maybe(document.getElementById(trap));
@@ -44,20 +46,20 @@ export const TrappedMenu: FC<Props> = ({cardOne, onCardOneChosen}) => {
         <label className="context-choice reachable">
           <input type="checkbox" checked={cardOne === 'contained'}
             onChange={({currentTarget}) => {
-              updateSaid(nothing());
+              updateOpened(nothing());
               onCardOneChosen(currentTarget.checked ? 'contained' : 'free');
             }}/>
           Card one has z-index: 1
         </label>
         <p className="paragraph">Its list has z-index: 9999.</p>
-        <SortMenu onOpened={() => updateSaid(some(opened[cardOne]))}/>
+        <SortMenu onOpened={() => updateOpened(some(cardOne))}/>
         <TopLayerMenu/>
       </li>
       <li className="old-way-card card rounded-corners floating forms-context">
         <p className="paragraph">Card two has z-index: 1, and comes later in the code.</p>
       </li>
     </ol>
-    <output aria-label="where the list opened" className="paragraph">{said.orElse('')}</output>
+    <output aria-label="where the list opened" className="paragraph">{opened.map(place => whereItOpened[place]).orElse('')}</output>
     <figcaption className="caption"><strong>The trap.</strong> A list with z-index: 9999 opens under a card with z-index: 1.</figcaption>
   </figure>;
 };
