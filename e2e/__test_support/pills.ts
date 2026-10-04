@@ -1,4 +1,5 @@
 import type {Locator, Page} from '@playwright/test';
+import {decodedShot} from './shots';
 
 type Pill = {name: string; chosen: boolean; x: number; y: number; width: number; height: number};
 
@@ -16,23 +17,19 @@ export const pillSwitch = (page: Page, name: string) => {
       const {x, y, width, height} = label.getBoundingClientRect();
       return [{name: label.textContent.trim(), chosen: radio.checked, x, y, width, height}];
     }))).map(pill => ({...pill, x: pill.x - (ground?.x ?? 0), y: pill.y - (ground?.y ?? 0)}));
-    const shot = (await group.screenshot({scale: 'css'})).toString('base64');
-    const darkShares: number[] = await page.evaluate(async ({src, boxes}) => {
-      const image = new Image();
-      image.src = `data:image/png;base64,${src}`;
-      await image.decode();
-      const canvas = new OffscreenCanvas(image.width, image.height);
-      const context = canvas.getContext('2d');
-      context?.drawImage(image, 0, 0);
-      return boxes.map(({x, y, width, height}) => {
-        const pixels = context?.getImageData(Math.round(x), Math.round(y), Math.round(width), Math.round(height)).data ?? new Uint8ClampedArray();
-        let dark = 0;
-        for (let at = 0; at < pixels.length; at += 4) {
-          if (0.2126 * pixels[at] + 0.7152 * pixels[at + 1] + 0.0722 * pixels[at + 2] < 60) dark++;
+    const {width, rgba} = await decodedShot(page, await group.screenshot({scale: 'css'}));
+    const darkShares = pills.map(({x, y, width: across, height}) => {
+      let dark = 0;
+      let counted = 0;
+      for (let row = Math.round(y); row < Math.round(y + height); row++) {
+        for (let column = Math.round(x); column < Math.round(x + across); column++) {
+          const at = (row * width + column) * 4;
+          if (0.2126 * rgba[at] + 0.7152 * rgba[at + 1] + 0.0722 * rgba[at + 2] < 60) dark++;
+          counted++;
         }
-        return dark / Math.max(1, pixels.length / 4);
-      });
-    }, {src: shot, boxes: pills});
+      }
+      return dark / Math.max(1, counted);
+    });
     return pills.flatMap(({name, chosen}, at) => {
       const dark = darkShares[at] > mostly;
       if (chosen && !dark) return [`${name}, chosen, painted light`];

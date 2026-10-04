@@ -47,6 +47,7 @@ export const chartsPage = (page: Page) => {
   const priceCard = page.getByRole('region', {name: 'live trades'});
   const periodMenu = page.getByLabel('price period by');
   return {
+    explainer: page.getByRole('group').filter({has: page.getByText('what am I looking at?', {exact: true})}).first(),
     priceCard,
     priceCardScope: async (): Promise<string> => `section[aria-labelledby="${await priceCard.getAttribute('aria-labelledby')}"]`,
     priceDelta: priceCard.getByText(/^[+-]\$/),

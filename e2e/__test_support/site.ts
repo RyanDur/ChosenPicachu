@@ -19,6 +19,7 @@ export const siteFrame = (page: Page) => {
     nav,
     main,
     title: page.getByRole('heading', {level: 1}),
+    home: nav.getByRole('link', {name: 'Home', exact: true}),
     roomBeforeHome: (): Promise<number> => roomBefore(nav.getByRole('link', {name: 'Home'})),
     roomAfterFeedback: (): Promise<number> => roomAfter(page.getByRole('button', {name: 'Feedback', exact: true})),
     railBesideThePage: async (): Promise<boolean> => {

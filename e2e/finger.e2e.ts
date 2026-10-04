@@ -1,7 +1,5 @@
-import {Page, expect, test} from '@playwright/test';
-import {accordionsTab, bannerTrap, demoSettings, fingerTap, foldBarsShortOfAFinger, galleryPage, homePage, iPhone, nameOn, phoneSideways, shortOfAFinger, tablesDemo, topLayerMenu, trappedMenu} from './__test_support';
-
-const explainer = (page: Page) => page.getByRole('group').filter({has: page.getByText('what am I looking at?', {exact: true})}).first();
+import {expect, test} from '@playwright/test';
+import {accordionsTab, bannerTrap, chartsPage, demoSettings, fingerTap, foldBarsShortOfAFinger, galleryPage, homePage, iPhone, nameOn, phoneSideways, shortOfAFinger, tablesDemo, topLayerMenu, trappedMenu} from './__test_support';
 
 for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a phone held sideways', device: phoneSideways}]) {
   test.describe(reader, () => {
@@ -30,7 +28,7 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
 
     test('opens and closes what am I looking at with a finger that lands just off the line', async ({page}) => {
       await page.goto('demos/?tab=charts');
-      const fold = explainer(page);
+      const fold = chartsPage(page).explainer;
       const told = fold.getByRole('paragraph', {includeHidden: true}).first();
       await expect(fold).toBeVisible({timeout: 30_000});
       await expect(told).toBeHidden();
