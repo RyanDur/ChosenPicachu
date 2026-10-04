@@ -4,6 +4,11 @@
 }
 
 
+.fold-choices {
+  display: grid;
+  gap: var(--base);
+}
+
 .tab-introduction {
   display: grid;
   gap: var(--base);

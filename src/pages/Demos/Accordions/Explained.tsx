@@ -117,15 +117,17 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         </li>
       </ol>
     </section>
-    <p className="paragraph">Two choices set the accordions in the three parts below. The one above is HTML alone, so
-      they don’t change it.</p>
-    <ul className="dials">
-      <DialRow label="fold type" name="fold-type" options={foldTypes} chosen={type} onChosen={onTypeChosen} reading={typeReadings[type]}/>
-      <DialRow label="fold motion" name="fold-motion" options={foldMotions} chosen={motion} onChosen={onMotionChosen} reading={<>
-        <span className="when-motion-allowed">{motionReadings[motion]}</span>
-        <span className="when-less-motion">Your system asks for less motion, so every fold here opens at once, whichever you choose.</span>
-      </>}/>
-    </ul>
+    <section className="fold-choices">
+      <p className="paragraph">Two choices set the accordions in the three parts below. The one above is HTML alone, so
+        they don’t change it.</p>
+      <ul className="dials">
+        <DialRow label="fold type" name="fold-type" options={foldTypes} chosen={type} onChosen={onTypeChosen} reading={typeReadings[type]}/>
+        <DialRow label="fold motion" name="fold-motion" options={foldMotions} chosen={motion} onChosen={onMotionChosen} reading={<>
+          <span className="when-motion-allowed">{motionReadings[motion]}</span>
+          <span className="when-less-motion">Your system asks for less motion, so every fold here opens at once, whichever you choose.</span>
+        </>}/>
+      </ul>
+    </section>
     <section aria-labelledby="old-way-heading" className="accordion-part">
       <h3 id="old-way-heading" className="title bold">How we used to build a fold</h3>
       <section className={toldRun} aria-labelledby="max-height-guess-heading">
