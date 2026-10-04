@@ -3,18 +3,16 @@ import {empty, not} from '@ryandur/sand';
 
 export type DialGroup = {names: string; pillEdges: number};
 
-const rereadAfter = 500;
-
 type DialRow = {name: {y: number; height: number}; pills: {x: number; y: number}};
 
 const boxesOf = async (name: Locator, pills: Locator): Promise<DialRow[]> => {
-  const [nameBox, pillsBox] = await Promise.all([name.boundingBox({timeout: rereadAfter}), pills.boundingBox({timeout: rereadAfter})]);
+  const [nameBox, pillsBox] = await Promise.all([name.boundingBox(), pills.boundingBox()]);
   return nameBox && pillsBox ? [{name: nameBox, pills: pillsBox}] : [];
 };
 
 const shownDialRow = async (row: Locator, dials: Locator): Promise<DialRow[]> => {
   const pills = row.locator(dials).first();
-  const [, groupName = ''] = /group "([^"]+)"/.exec(await pills.ariaSnapshot({timeout: rereadAfter})) ?? [];
+  const [, groupName = ''] = /group "([^"]+)"/.exec(await pills.ariaSnapshot()) ?? [];
   const nameInTheRow = row.getByText(groupName, {exact: true});
   return not(empty(groupName)) && await nameInTheRow.count() > 0 ? boxesOf(nameInTheRow.first(), pills) : [];
 };
