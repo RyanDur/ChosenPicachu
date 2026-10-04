@@ -222,9 +222,10 @@
     margin: calc(-1 * var(--base));
   }
 
-  /* six equal shares of the width, a preference a table column still widens past to fit its name */
+  /* six equal shares of the width, a preference a table column still widens past to fit its name; width, not inline-size,
+     since a name turned on its side would read inline-size as its height */
   .design-column {
-    inline-size: 14%;
+    width: 14%;
   }
 
   .design-measure {
@@ -258,10 +259,15 @@
       vertical-align: bottom;
     }
 
+    /* the cell stays upright and centres the name; only the name turns, so every engine centres it the same way */
     .design-table .design-column.design-measure {
+      text-align: center;
+    }
+
+    .design-name {
+      display: inline-block;
       writing-mode: vertical-rl;
       rotate: 180deg;
-      text-align: start;
     }
 
     .design-window {

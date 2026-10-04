@@ -16,7 +16,8 @@ const sketch =
     <thead>
       <tr>
         <th className="design-measure" scope="col">window</th>
-        {measures.map(measure => <th className="design-measure design-column" scope="col" key={measure}>{measure}</th>)}
+        {measures.map(measure =>
+          <th className="design-measure design-column" scope="col" key={measure}><span className="design-name">{measure}</span></th>)}
       </tr>
     </thead>
     <tbody>

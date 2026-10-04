@@ -18,3 +18,17 @@ for (const width of [320, 344, 360, 390, 430, 507, 600, 820, 1440]) {
     });
   });
 }
+
+for (const width of [320, 344, 390, 507, 599]) {
+  test.describe(`a ${width}px phone, where the names stand on their sides`, () => {
+    test.use({viewport: {width, height: 900}, hasTouch: true});
+
+    test('stands each name over the middle of its column, with no band above them', async ({page}) => {
+      await page.goto('demos/?tab=tables');
+      const sketch = designSketch(page);
+
+      expect(await sketch.namesOffTheirColumns()).toEqual([]);
+      expect(await sketch.roomAboveTheNames()).toBeLessThanOrEqual(8);
+    });
+  });
+}
