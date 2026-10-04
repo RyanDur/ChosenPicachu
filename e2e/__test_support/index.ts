@@ -8,6 +8,7 @@ export {violationsOf} from './axe';
 export {phone, phoneSideways, iPhone, iPadSplitView, iPadUpright, iPadSideways, iPad13Sideways, iPad13Upright, iPad11Upright, splitViewWide, justPastAPhone, widestNavInARow, wideAndShort, desktop} from './devices';
 export {documentScrollY, paneScrollTop} from './scrolling';
 export {siteFrame} from './site';
+export {unpaintedPixels} from './paint';
 export {feedbackOn, github} from './feedback';
 export {tablesDemo} from './tables';
 export {fingerTap, fingertipMiss, foldBarsShortOfAFinger, shortOfAFinger} from './finger';

@@ -52,7 +52,8 @@
     box-shadow: initial;
   }
 }
-.hung { filter: drop-shadow(var(--shadow-far) var(--shadow)) drop-shadow(var(--shadow-near) var(--dark-shadow)); }
+/* a box-shadow, not a drop-shadow: WebKit leaves the page's top-left corner unpainted while a filter is on the wall */
+.hung { box-shadow: var(--shadow-far) var(--shadow), var(--shadow-near) var(--dark-shadow); }
 .backdrop { background: var(--backdrop); }
 
 .pressable {

@@ -1,5 +1,5 @@
-import {Locator, expect, test} from '@playwright/test';
-import {desktop, galleryPage, iPad13Upright, iPadSideways, iPadUpright, iPhone, phoneSideways} from './__test_support';
+import {Locator, Page, expect, test} from '@playwright/test';
+import {desktop, galleryPage, unpaintedPixels, iPad13Upright, iPadSideways, iPadUpright, iPhone, phoneSideways} from './__test_support';
 
 const focusIsIn = (region: Locator): Promise<boolean> => region.evaluate(element => element.contains(document.activeElement));
 
@@ -186,3 +186,21 @@ test.describe('a phone, while another museum has not answered', () => {
     await expect(page.getByRole('progressbar', {name: 'loading gallery'})).toHaveCount(0);
   });
 });
+
+for (const {reader, device} of [...handhelds, {reader: 'a desktop', device: desktop}]) {
+  test.describe(`${reader}, looking at the corner`, () => {
+    test.use(device);
+
+    const corner = (page: Page) => [page.getByRole('link', {name: 'Home', exact: true}), page.getByRole('heading', {name: 'Gallery', exact: true})];
+
+    test('paints the title and Home whole once the wall has hung', async ({page}) => {
+      const gallery = galleryPage(page);
+      await page.goto('gallery/?tab=vam');
+      await expect(gallery.wall.first()).toBeVisible();
+
+      for (const part of corner(page)) {
+        expect(await unpaintedPixels(page, part)).toBe(0);
+      }
+    });
+  });
+}
