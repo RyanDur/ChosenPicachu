@@ -116,3 +116,17 @@ h1, h2, h3, h4, h5, h6, p {
 :root {
   interpolate-size: allow-keywords;
 }
+
+/* every fold slides open and shut as the accordion's do; where a size can't be interpolated, it opens at once.
+   clip, not hidden: a hidden box is a scroll container, and scrolling to a step inside an opening fold would scroll it */
+details::details-content {
+  block-size: 0;
+  overflow: clip;
+  transition:
+    block-size .3s ease-in-out,
+    content-visibility .3s allow-discrete;
+}
+
+details[open]::details-content {
+  block-size: auto;
+}

@@ -27,6 +27,7 @@ globalThis.AnimationEvent ??= class extends Event {
 };
 HTMLElement.prototype.setPointerCapture = () => undefined;
 Element.prototype.getAnimations = () => [];
+Document.prototype.getAnimations = () => [];
 HTMLElement.prototype.showPopover = () => undefined;
 Element.prototype.scrollIntoView = () => undefined;
 window.scrollTo = () => undefined;

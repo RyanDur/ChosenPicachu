@@ -94,7 +94,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
       <p className="paragraph">By the end you can build an accordion in HTML alone, make it slide with CSS, keep one fold
         open at a time, and say which language each job needed and why. The first accordion below is HTML alone.</p>
     </header>
-    <section aria-labelledby="html-alone-heading" className="accordion-part">
+    <section aria-labelledby="html-alone-heading" className="accordion-part snapping">
       <h3 id="html-alone-heading" className="title bold">An accordion in HTML alone</h3>
       <ol className={runs}>
         <li className="run">
