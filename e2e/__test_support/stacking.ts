@@ -10,6 +10,7 @@ export const stackingPile = (page: Page) => {
   return {
     cards: () => pile.getByRole('listitem'),
     cardsFromTheTop: (): Promise<string[]> => pile.getByRole('list').evaluate(list => {
+      list.scrollIntoView({block: 'center'});
       const cards = [...list.children];
       const {left, top, width, height} = cards[cards.length - 1].getBoundingClientRect();
       return document.elementsFromPoint(left + width / 2, top + height / 2)
