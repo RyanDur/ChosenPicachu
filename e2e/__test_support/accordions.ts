@@ -1,5 +1,6 @@
 import type {Locator, Page} from '@playwright/test';
-import {decodedShot} from './shots';
+import {not} from '@ryandur/sand';
+import {decodedShot, type Pixels} from './shots';
 
 export type Build = 'the measured checkbox build' | 'the measured radio build' | 'the checkbox build' | 'the radio build' | 'the inclusive details build' | 'the details build' | 'the grid checkbox build' | 'the grid radio build';
 
@@ -25,6 +26,9 @@ export type Pointing = 'right' | 'down' | 'nowhere';
 export type HoveredPaint = {ground: string; words: number[]};
 
 export type FocusedPaint = {ground: string; edge: number[]};
+
+export const farthestChannel = (colour: number[], from: number[]): number =>
+  Math.max(...colour.map((channel, at) => Math.abs(channel - from[at])));
 
 export type Part = {
   fold: Locator;
@@ -172,21 +176,24 @@ export const accordionsTab = (page: Page) => {
     page.waitForFunction(() => document.getAnimations().every(motion => motion.playState !== 'running'));
   const boxOf = async (shown: Locator): Promise<Box> => {
     await shown.scrollIntoViewIfNeeded();
-    return shown.evaluate(element => new Promise<Box>(resolve => {
-      const steady = (before: DOMRect, frames: number): void => {
+    return shown.evaluate(element => new Promise<Box>((resolve, reject) => {
+      const steady = (before: DOMRect, stillFor: number, waited: number): void => {
         const now = element.getBoundingClientRect();
         const moved = now.x !== before.x || now.y !== before.y || now.width !== before.width || now.height !== before.height;
-        if (frames >= 10) {
+        if (now.width === 0 || now.height === 0) {
+          reject(new Error('a bar is not shown'));
+        } else if (stillFor >= 10) {
           resolve({x: now.x, y: now.y, width: now.width, height: now.height});
+        } else if (waited >= 300) {
+          reject(new Error('a bar did not hold still'));
         } else {
-          requestAnimationFrame(() => steady(now, moved ? 0 : frames + 1));
+          requestAnimationFrame(() => steady(now, moved ? 0 : stillFor + 1, waited + 1));
         }
       };
-      requestAnimationFrame(() => steady(element.getBoundingClientRect(), 0));
+      requestAnimationFrame(() => steady(element.getBoundingClientRect(), 0, 0));
     }));
   };
-  const shotOf = async (clip: Box): Promise<number[]> =>
-    (await decodedShot(page, await page.screenshot({clip, scale: 'css'}))).rgba;
+  const shotOf = async (clip: Box): Promise<Pixels> => decodedShot(page, await page.screenshot({clip, scale: 'css'}));
   const lightAt = (rgba: number[], pixel: number): boolean =>
     0.2126 * rgba[pixel * 4] + 0.7152 * rgba[pixel * 4 + 1] + 0.0722 * rgba[pixel * 4 + 2] > 150;
   const pointingIn = (rgba: number[], width: number): Pointing => {
@@ -201,7 +208,8 @@ export const accordionsTab = (page: Page) => {
     await settled();
     const {x, y, width, height} = await boxOf(bar);
     const end = {x: x + width - 52, y: y + 4, width: 44, height: height - 8};
-    return pointingIn(await shotOf(end), end.width);
+    const {rgba, width: across} = await shotOf(end);
+    return pointingIn(rgba, across);
   };
   const paintOf = (rgba: number[]): HoveredPaint => {
     const counts = new Map<string, number>();
@@ -222,28 +230,33 @@ export const accordionsTab = (page: Page) => {
     const along = {start: 8, middle: bar.width / 2, end: bar.width - 8}[spot];
     await page.mouse.move(bar.x + along, bar.y + bar.height / 2);
     await settled();
-    return paintOf(await shotOf(insideTheHairlines(bar)));
+    return paintOf((await shotOf(insideTheHairlines(bar))).rgba);
   };
   const restingAt = async (build: Build): Promise<HoveredPaint> => {
     await page.mouse.move(0, 0);
     const bar = await boxOf(partOf(build, 0).fold);
     await settled();
-    return paintOf(await shotOf(insideTheHairlines(bar)));
+    return paintOf((await shotOf(insideTheHairlines(bar))).rgba);
   };
   const focusedByKeyboard = async (build: Build): Promise<FocusedPaint> => {
     await page.mouse.move(0, 0);
-    await partOf(build, 0).fold.getByRole(exclusiveBuilds.includes(build) ? 'radio' : 'checkbox').first().focus();
+    const tabKey = page.context().browser()?.browserType().name() === 'webkit' ? 'Alt+Tab' : 'Tab';
+    const input = partOf(build, 0).fold.getByRole(exclusiveBuilds.includes(build) ? 'radio' : 'checkbox').first();
+    await input.focus();
+    await page.keyboard.press(`Shift+${tabKey}`);
+    await page.keyboard.press(tabKey);
+    if (not(await input.evaluate(element => element === document.activeElement))) throw new Error(`Tab did not reach the first bar of ${build}`);
     const bar = await boxOf(partOf(build, 0).fold);
     await settled();
-    const rgba = await shotOf(insideTheHairlines(bar));
-    const middleRow = Math.floor((bar.height - 8) / 2) * Math.round(bar.width) * 4;
-    return {ground: paintOf(rgba).ground, edge: rgba.slice(middleRow, middleRow + 3)};
+    const {rgba, width, height} = await shotOf(insideTheHairlines(bar));
+    const insideTheEdge = (Math.floor(height / 2) * width + 1) * 4;
+    return {ground: paintOf(rgba).ground, edge: rgba.slice(insideTheEdge, insideTheEdge + 3)};
   };
   const endOfTheFirstBarLitAfterATap = async (build: Build): Promise<boolean> => {
     const bar = await boxOf(partOf(build, 0).fold);
     await page.touchscreen.tap(bar.x + bar.width / 2, bar.y + bar.height / 2);
     await settled();
-    return lightShare(await shotOf(insideTheHairlines({...bar, x: bar.x + bar.width - 80, width: 80}))) > 0.4;
+    return lightShare((await shotOf(insideTheHairlines({...bar, x: bar.x + bar.width - 80, width: 80}))).rgba) > 0.4;
   };
   return {
     arrowsOf: async (build: Build): Promise<Pointing[]> => {

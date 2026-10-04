@@ -6,6 +6,7 @@ import {
   codedStepLayouts,
   demoSettings,
   desktop,
+  farthestChannel,
   firstHeightAfter,
   framesWhileMoving,
   heightByTheNextFrame,
@@ -345,7 +346,7 @@ test.describe('a desktop', () => {
       for (const spot of ['start', 'middle', 'end'] as const) {
         const {ground, words} = await tab.hoveredAt(build, spot);
         expect(ground, `${spot}: the bar's ground`).toBe(lit.ground);
-        expect(Math.max(...words.map((channel, at) => Math.abs(channel - lit.words[at]))), `${spot}: the words' colour, off by`).toBeLessThanOrEqual(antialiasing);
+        expect(farthestChannel(words, lit.words), `${spot}: the words' colour, off by`).toBeLessThanOrEqual(antialiasing);
       }
       await page.mouse.down();
       await page.mouse.up();
@@ -358,11 +359,12 @@ test.describe('a desktop', () => {
       const focused = await tab.focusedByKeyboard('the checkbox build');
       await page.goto(showing(build));
       expect(focused.ground, 'a focused bar of the checkbox build').not.toBe((await tab.restingAt(build)).ground);
+      expect(farthestChannel(focused.edge, focused.ground.split(',').map(Number)), 'the ring against the fill of a focused bar of the checkbox build').toBeGreaterThan(antialiasing);
 
       const {ground, edge} = await tab.focusedByKeyboard(build);
 
       expect(ground, 'the bar\'s ground').toBe(focused.ground);
-      expect(Math.max(...edge.map((channel, at) => Math.abs(channel - focused.edge[at]))), 'the ring inside the bar\'s edge, off by').toBeLessThanOrEqual(antialiasing);
+      expect(farthestChannel(edge, focused.edge), 'the ring inside the bar\'s edge, off by').toBeLessThanOrEqual(antialiasing);
     });
   }
 });
