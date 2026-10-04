@@ -4,14 +4,18 @@ import {Pie} from '@pages/Demos/Charts/Pie';
 import {Trade} from '@pages/Demos/Charts/coinbase';
 
 const trade = (overrides: Partial<Trade>): Trade =>
-  ({id: 1, price: 65000, tradedAt: 1700000000000, size: 1, side: 'buy', ...overrides});
+  ({id: 1, price: 65000, tradedAt: 1700000000000, size: 1, side: 'sell', ...overrides});
 
 describe('the pie', () => {
+  test('should count a trade Coinbase marks sell as bought, since its waiting order was the seller and a buyer took it', () => {
+    expect(sideTotals([trade({size: 2, side: 'sell'}), trade({id: 2, size: 5, side: 'buy'})])).toEqual({bought: 2, sold: 5});
+  });
+
   test('the session totals by side', () => {
     expect(sideTotals([
-      trade({size: 2, side: 'buy'}),
-      trade({id: 2, size: 1, side: 'sell'}),
-      trade({id: 3, size: 3, side: 'sell'})
+      trade({size: 2, side: 'sell'}),
+      trade({id: 2, size: 1, side: 'buy'}),
+      trade({id: 3, size: 3, side: 'buy'})
     ])).toEqual({bought: 2, sold: 4});
   });
 
@@ -48,8 +52,8 @@ describe('the pie', () => {
 
   test('the card cuts the session into a bought and a sold slice, and says each share', () => {
     render(<Pie trades={[
-      trade({size: 3, side: 'buy'}),
-      trade({id: 2, size: 1, side: 'sell'})
+      trade({size: 3, side: 'sell'}),
+      trade({id: 2, size: 1, side: 'buy'})
     ]}/>);
 
     const card = screen.getByRole('region', {name: 'pie'});
@@ -58,7 +62,7 @@ describe('the pie', () => {
   });
 
   test('the card says the session started when the trader arrived', () => {
-    render(<Pie trades={[trade({size: 3, side: 'buy'})]}/>);
+    render(<Pie trades={[trade({size: 3, side: 'sell'})]}/>);
 
     expect(screen.getByRole('region', {name: 'pie'})).toHaveTextContent('since you arrived');
   });
@@ -68,7 +72,7 @@ describe('the pie', () => {
   });
 
   test('the card reads a one-sided session as all bought', () => {
-    render(<Pie trades={[trade({size: 2, side: 'buy'})]}/>);
+    render(<Pie trades={[trade({size: 2, side: 'sell'})]}/>);
 
     const card = screen.getByRole('region', {name: 'pie'});
     expect(card).toHaveTextContent('100% bought');

@@ -1,4 +1,4 @@
-import {Trade} from '../coinbase';
+import {Trade, takerBought} from '../coinbase';
 
 export type SideTotals = {
   bought: number;
@@ -7,8 +7,8 @@ export type SideTotals = {
 
 export const sideTotals = (trades: readonly Trade[]): SideTotals =>
   trades.reduce((totals, trade) => ({
-    bought: totals.bought + (trade.side === 'buy' ? trade.size : 0),
-    sold: totals.sold + (trade.side === 'sell' ? trade.size : 0)
+    bought: totals.bought + (takerBought(trade) ? trade.size : 0),
+    sold: totals.sold + (takerBought(trade) ? 0 : trade.size)
   }), {bought: 0, sold: 0});
 
 export type Slice = {

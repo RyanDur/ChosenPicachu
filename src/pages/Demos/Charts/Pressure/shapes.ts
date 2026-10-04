@@ -1,5 +1,5 @@
 import {has} from '@ryandur/sand';
-import {Trade} from '../coinbase';
+import {Trade, takerBought} from '../coinbase';
 import {windowSlots} from '../slots';
 
 export type Pressure = {
@@ -10,8 +10,8 @@ export type Pressure = {
 
 const fold = (pressure: Pressure, trade: Trade): Pressure => ({
   ...pressure,
-  bought: pressure.bought + (trade.side === 'buy' ? trade.size : 0),
-  sold: pressure.sold + (trade.side === 'sell' ? trade.size : 0)
+  bought: pressure.bought + (takerBought(trade) ? trade.size : 0),
+  sold: pressure.sold + (takerBought(trade) ? 0 : trade.size)
 });
 
 const openedBy = (trade: Trade, bucketMs: number): Pressure =>

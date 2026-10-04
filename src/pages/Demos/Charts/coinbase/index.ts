@@ -20,6 +20,9 @@ export type Trade = {
   side: 'buy' | 'sell';
 };
 
+// Coinbase marks a match with the side of the order that was waiting, so a buyer took the trade when that order sold
+export const takerBought = (trade: Trade): boolean => trade.side === 'sell';
+
 export const subscribeTo = (product: string): string => JSON.stringify({
   type: 'subscribe',
   channels: [{name: 'matches', product_ids: [product]}]
