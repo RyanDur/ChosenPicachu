@@ -1,5 +1,5 @@
 import {Page, expect, test} from '@playwright/test';
-import {codedStepLayouts, desktop, iPad13Sideways, iPadSideways, iPadUpright} from './__test_support';
+import {codedStepLayouts, desktop, iPad13Sideways, iPadSideways, iPadUpright, iPhone, roomUnderShutFolds} from './__test_support';
 
 const bigPhoneSideways = {viewport: {width: 956, height: 440}, hasTouch: true};
 const tutorials = [
@@ -23,6 +23,23 @@ for (const {reader, device, layout} of [
         await expect(page.getByRole('code').first()).toBeVisible({timeout: 30_000});
 
         await expect.poll(async () => [...new Set(await codedStepLayouts(page, tutorial.steps(page)))]).toEqual([layout]);
+      });
+    }
+  });
+}
+
+for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a desktop', device: desktop}] as const) {
+  test.describe(reader, () => {
+    test.use(device);
+
+    for (const {tab, story} of [
+      {tab: 'tables', story: 'The page is a store, and so is the table'},
+      {tab: 'tables', story: 'The trader can watch the market live, in windows'}
+    ]) {
+      test(`a shut “how we built it” in “${story}” leaves the same room under it, however much it holds`, async ({page}) => {
+        await page.goto(`demos/?tab=${tab}`);
+
+        expect(new Set(await roomUnderShutFolds(page, story)).size).toBe(1);
       });
     }
   });

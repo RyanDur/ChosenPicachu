@@ -49,3 +49,16 @@ export const misplacedPictures = async (page: Page): Promise<string[]> => {
   }));
   return runs.count().then(count => count === 0 ? ['no run has a picture'] : misplaced.flat());
 };
+
+export const roomUnderShutFolds = async (page: Page, story: string): Promise<number[]> => {
+  const fold = page.getByRole('group', {name: story, exact: true}).first();
+  await fold.getByRole('heading', {name: story, exact: true}).click();
+  const listed = fold.getByRole('list', {name: 'the steps'}).getByRole('listitem')
+    .filter({has: page.getByText('how we built it', {exact: true})});
+  await listed.first().waitFor();
+  const steps = await listed.all();
+  return (await Promise.all(steps.map(async step => {
+    const [whole, bar] = await Promise.all([step.boundingBox(), step.getByText('how we built it', {exact: true}).boundingBox()]);
+    return whole && bar ? [Math.round(whole.y + whole.height - bar.y - bar.height)] : [];
+  }))).flat();
+};

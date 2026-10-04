@@ -91,6 +91,10 @@
 
     &::details-content {
       margin-top: var(--base-x-2);
+    }
+
+    /* WebKit keeps the grid's gaps between a shut fold's hidden paragraphs, so the fold is a grid only while open */
+    &[open]::details-content {
       display: grid;
       gap: var(--base-x-2);
     }
