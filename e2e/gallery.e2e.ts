@@ -1,5 +1,5 @@
 import {Locator, expect, test} from '@playwright/test';
-import {desktop, galleryPage, siteFrame, unpaintedPixels, iPad13Upright, iPadSideways, iPadUpright, iPhone, phoneSideways} from './__test_support';
+import {desktop, galleryPage, siteFrame, unpaintedPixels, iPad13Upright, iPadSideways, iPadUpright, iPhone, phoneSideways, pressTab} from './__test_support';
 
 const focusIsIn = (region: Locator): Promise<boolean> => region.evaluate(element => element.contains(document.activeElement));
 
@@ -157,13 +157,13 @@ test.describe('a desktop window made narrow', () => {
 test.describe('a keyboard reader on a desktop', () => {
   test.use(desktop);
 
-  test('meets the gallery right after the page controls', async ({page, browserName}) => {
+  test('meets the gallery right after the page controls', async ({page}) => {
     const gallery = galleryPage(page);
     await page.goto('gallery/?tab=vam');
     await expect(gallery.wall.first()).toBeVisible();
     await gallery.settingsPanel.getByRole('button', {name: 'Go'}).focus();
 
-    await page.keyboard.press(browserName === 'webkit' ? 'Alt+Tab' : 'Tab');
+    await pressTab(page);
 
     await expect.poll(() => focusIsIn(page.getByRole('main'))).toBe(true);
   });

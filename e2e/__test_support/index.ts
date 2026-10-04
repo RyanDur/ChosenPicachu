@@ -21,3 +21,4 @@ export {firstHeightAfter, framesWhileMoving, heightByTheNextFrame, heightOnceSet
 export {accordionsTab, builds, farthestChannel, measuredBuilds, textOf, type Build, showing, type Part, nameOn} from './accordions';
 export {stackingPile, type Card} from './stacking';
 export {bannerTrap, topLayerMenu, trappedMenu, type SortChoice} from './trap';
+export {pressTab} from './keyboard';

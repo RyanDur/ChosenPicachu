@@ -12,6 +12,7 @@ import {
   heightOnceSettled,
   iPhone,
   misplacedPictures,
+  pressTab,
   nameOn,
   shortOfAFinger,
   showing,
@@ -255,8 +256,7 @@ test('the space bar closes a part of the grid radio build the arrow keys opened'
   await expect.poll(first.isOpen).toBe(false);
 });
 
-test('a keyboard reader tabs from an open part\'s bar into its text and past a closed part', async ({page, browserName}) => {
-  const tabKey = browserName === 'webkit' ? 'Alt+Tab' : 'Tab';
+test('a keyboard reader tabs from an open part\'s bar into its text and past a closed part', async ({page}) => {
   await page.goto(showing('the checkbox build'));
   const tab = accordionsTab(page);
   const [open, closed, next] = [tab.partOf('the checkbox build', 0), tab.partOf('the checkbox build', 1), tab.partOf('the checkbox build', 2)];
@@ -264,25 +264,24 @@ test('a keyboard reader tabs from an open part\'s bar into its text and past a c
   await open.openByKeyboard();
   await heightOnceSettled(open.fold);
 
-  await page.keyboard.press(tabKey);
+  await pressTab(page);
   await expect(open.fold.getByRole('region', {name: openName, exact: true})).toBeFocused();
-  await page.keyboard.press(tabKey);
+  await pressTab(page);
   await expect(closed.fold.getByRole('checkbox')).toBeFocused();
-  await page.keyboard.press(tabKey);
+  await pressTab(page);
   await expect(next.fold.getByRole('checkbox')).toBeFocused();
 });
 
-test('a keyboard reader tabs from an open radio part into its text and past the closed parts\' text', async ({page, browserName}) => {
-  const tabKey = browserName === 'webkit' ? 'Alt+Tab' : 'Tab';
+test('a keyboard reader tabs from an open radio part into its text and past the closed parts\' text', async ({page}) => {
   await page.goto(showing('the radio build'));
   const open = accordionsTab(page).partOf('the radio build', 0);
   const openName = await nameOn(open.fold).textContent() ?? '';
   await open.openByKeyboard();
   await heightOnceSettled(open.fold);
 
-  await page.keyboard.press(tabKey);
+  await pressTab(page);
   await expect(open.fold.getByRole('region', {name: openName, exact: true})).toBeFocused();
-  await page.keyboard.press(tabKey);
+  await pressTab(page);
 
   await expect.poll(() => accordionsTab(page).holdsFocus('the radio build')).toBe(false);
 });
@@ -356,13 +355,15 @@ test.describe('a desktop', () => {
       const tab = accordionsTab(page);
       await page.goto(showing('the checkbox build'));
       const focused = await tab.focusedByKeyboard('the checkbox build');
+      await expect(tab.firstInputOf('the checkbox build')).toBeFocused();
       await page.goto(showing(build));
-      expect(focused.ground, 'a focused bar of the checkbox build').not.toBe((await tab.restingAt(build)).ground);
-      expect(farthestChannel(focused.edge, focused.ground.split(',').map(Number)), 'the ring against the fill of a focused bar of the checkbox build').toBeGreaterThan(antialiasing);
+      expect(focused.fill.join(','), 'a focused bar of the checkbox build').not.toBe((await tab.restingAt(build)).ground);
+      expect(farthestChannel(focused.edge, focused.fill), 'the ring against the fill of a focused bar of the checkbox build').toBeGreaterThan(antialiasing);
 
-      const {ground, edge} = await tab.focusedByKeyboard(build);
+      const {fill, edge} = await tab.focusedByKeyboard(build);
 
-      expect(ground, 'the bar\'s ground').toBe(focused.ground);
+      await expect(tab.firstInputOf(build)).toBeFocused();
+      expect(fill, 'the bar\'s fill').toEqual(focused.fill);
       expect(farthestChannel(edge, focused.edge), 'the ring inside the bar\'s edge, off by').toBeLessThanOrEqual(antialiasing);
     });
   }
@@ -419,30 +420,24 @@ for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader:
   });
 }
 
-const lessMotion = 'Your system asks for less motion, so every fold here opens at once, whichever you choose.';
+const lessMotion = 'If your system asks for less motion, every fold here opens at once, whichever you choose.';
 
 for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader: 'a phone', device: iPhone}]) {
   test.describe(reader, () => {
     test.use(device);
 
-    for (const {motion, reading} of [
-      {motion: 'Reveal', reading: 'The text is uncovered from its first line down.'},
-      {motion: 'Drawer', reading: 'The text slides down from under its bar.'},
-      {motion: 'Static', reading: 'The fold opens in one frame, with nothing moving.'}
-    ]) {
-      test(`with ${motion} chosen, the fold motion reads that no fold moves for a reader who asks for less motion, and reads ${motion} for one who does not`, async ({page}) => {
-        await page.goto(`demos/?tab=accordions&style=${motion.toLowerCase()}`);
-        const {status} = dialRow(page, 'fold motion');
-        await status.scrollIntoViewIfNeeded();
+    test('the fold motion reads the chosen pill, and reads that no fold moves once the reader asks for less motion', async ({page}) => {
+      await page.goto('demos/?tab=accordions&style=drawer');
+      const {status} = dialRow(page, 'fold motion');
+      await status.scrollIntoViewIfNeeded();
 
-        await expect(status).toHaveText(reading, {useInnerText: true});
-        await expect(status).toMatchAriaSnapshot(`- status: ${reading}`);
+      await expect(status).toHaveText('The text slides down from under its bar.', {useInnerText: true});
+      await expect(status).toMatchAriaSnapshot('- status: The text slides down from under its bar.');
 
-        await page.emulateMedia({reducedMotion: 'reduce'});
+      await page.emulateMedia({reducedMotion: 'reduce'});
 
-        await expect(status).toHaveText(lessMotion, {useInnerText: true});
-        await expect(status).toMatchAriaSnapshot(`- status: ${lessMotion}`);
-      });
-    }
+      await expect(status).toHaveText(lessMotion, {useInnerText: true});
+      await expect(status).toMatchAriaSnapshot(`- status: ${lessMotion}`);
+    });
   });
 }

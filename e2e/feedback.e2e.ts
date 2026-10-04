@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import {desktop, feedbackOn, github, iPadUpright, iPhone, phoneSideways, siteFrame} from './__test_support';
+import {desktop, feedbackOn, github, iPadUpright, iPhone, phoneSideways, pressTab, siteFrame} from './__test_support';
 
 for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader: 'a phone held upright', device: iPhone}] as const) {
   test.describe(reader, () => {
@@ -53,7 +53,7 @@ test('a click inside the dialog’s edge keeps Feedback open', async ({page}) =>
   await expect(feedback.dialog).toBeVisible();
 });
 
-test('Tab never lands on the page behind the open dialog', async ({page, browserName}) => {
+test('Tab never lands on the page behind the open dialog', async ({page}) => {
   await github(page);
   const feedback = feedbackOn(page);
   await page.goto('demos/?tab=accordions');
@@ -62,7 +62,7 @@ test('Tab never lands on the page behind the open dialog', async ({page, browser
   await expect(feedback.words).toBeFocused();
 
   for (let step = 0; step < 8; step += 1) {
-    await page.keyboard.press(browserName === 'webkit' ? 'Alt+Tab' : 'Tab');
+    await pressTab(page);
     expect(await feedback.dialog.evaluate(dialog => dialog.contains(document.activeElement) || document.activeElement === document.body)).toBe(true);
   }
 });

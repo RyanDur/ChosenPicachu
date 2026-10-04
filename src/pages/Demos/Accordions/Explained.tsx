@@ -123,8 +123,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
       <ul className="dials">
         <DialRow label="fold type" name="fold-type" options={foldTypes} chosen={type} onChosen={onTypeChosen} reading={typeReadings[type]}/>
         <DialRow label="fold motion" name="fold-motion" options={foldMotions} chosen={motion} onChosen={onMotionChosen} reading={<>
-          <span className="when-motion-allowed">{motionReadings[motion]}</span>
-          <span className="when-less-motion">Your system asks for less motion, so every fold here opens at once, whichever you choose.</span>
+          <span className="when-motion-allowed">{motionReadings[motion]}</span>{' '}
+          <span className="when-less-motion">If your system asks for less motion, every fold here opens at once, whichever you choose.</span>
         </>}/>
       </ul>
     </section>

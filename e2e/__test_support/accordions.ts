@@ -1,5 +1,5 @@
 import type {Locator, Page} from '@playwright/test';
-import {not} from '@ryandur/sand';
+import {pressTab} from './keyboard';
 import {decodedShot, type Pixels} from './shots';
 
 export type Build = 'the measured checkbox build' | 'the measured radio build' | 'the checkbox build' | 'the radio build' | 'the inclusive details build' | 'the details build' | 'the grid checkbox build' | 'the grid radio build';
@@ -25,7 +25,7 @@ export type Pointing = 'right' | 'down' | 'nowhere';
 
 export type HoveredPaint = {ground: string; words: number[]};
 
-export type FocusedPaint = {ground: string; edge: number[]};
+export type FocusedPaint = {fill: number[]; edge: number[]};
 
 export const farthestChannel = (colour: number[], from: number[]): number =>
   Math.max(...colour.map((channel, at) => Math.abs(channel - from[at])));
@@ -238,19 +238,17 @@ export const accordionsTab = (page: Page) => {
     await settled();
     return paintOf((await shotOf(insideTheHairlines(bar))).rgba);
   };
+  const firstInputOf = (build: Build): Locator => partOf(build, 0).fold.getByRole(exclusiveBuilds.includes(build) ? 'radio' : 'checkbox').first();
   const focusedByKeyboard = async (build: Build): Promise<FocusedPaint> => {
     await page.mouse.move(0, 0);
-    const tabKey = page.context().browser()?.browserType().name() === 'webkit' ? 'Alt+Tab' : 'Tab';
-    const input = partOf(build, 0).fold.getByRole(exclusiveBuilds.includes(build) ? 'radio' : 'checkbox').first();
-    await input.focus();
-    await page.keyboard.press(`Shift+${tabKey}`);
-    await page.keyboard.press(tabKey);
-    if (not(await input.evaluate(element => element === document.activeElement))) throw new Error(`Tab did not reach the first bar of ${build}`);
+    await firstInputOf(build).focus();
+    await pressTab(page, {backwards: true});
+    await pressTab(page);
     const bar = await boxOf(partOf(build, 0).fold);
     await settled();
     const {rgba, width, height} = await shotOf(insideTheHairlines(bar));
     const insideTheEdge = (Math.floor(height / 2) * width + 1) * 4;
-    return {ground: paintOf(rgba).ground, edge: rgba.slice(insideTheEdge, insideTheEdge + 3)};
+    return {fill: paintOf(rgba).ground.split(',').map(Number), edge: rgba.slice(insideTheEdge, insideTheEdge + 3)};
   };
   const endOfTheFirstBarLitAfterATap = async (build: Build): Promise<boolean> => {
     const bar = await boxOf(partOf(build, 0).fold);
@@ -271,6 +269,7 @@ export const accordionsTab = (page: Page) => {
     hoveredAt,
     restingAt,
     focusedByKeyboard,
+    firstInputOf,
     endOfTheFirstBarLitAfterATap,
     partOf,
     htmlAloneFold,
