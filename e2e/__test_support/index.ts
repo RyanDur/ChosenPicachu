@@ -26,3 +26,4 @@ export {seedRandom} from './random';
 export {bannerLeavesBeforeTheGapCloses, bannerMotion, gapOpensBeforeTheBannerIsSeen} from './banner-motion';
 export {definitionTapped, type DefinitionFit} from './terms';
 export {focusStandsOut} from './focus';
+export {reachesAcross} from './reach';

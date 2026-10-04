@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import {desktop} from './__test_support';
+import {desktop, reachesAcross} from './__test_support';
 
 test.use(desktop);
 
@@ -12,11 +12,7 @@ for (const {tab, at, opening} of [
     await page.goto(at);
     const region = page.getByRole('region', {name: tab, exact: true});
 
-    const [paragraph, heading] = await Promise.all([
-      region.getByText(opening).first().boundingBox(),
-      region.getByRole('heading', {level: 2, name: tab, exact: true}).boundingBox()
-    ]);
-
-    expect(paragraph && heading && Math.round(paragraph.x + paragraph.width)).toBe(heading && Math.round(heading.x + heading.width));
+    await expect.poll(() => reachesAcross(region.getByText(opening).first(), region.getByRole('heading', {level: 2, name: tab, exact: true})))
+      .toBe(true);
   });
 }
