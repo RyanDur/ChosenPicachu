@@ -1,4 +1,5 @@
 import type {Locator, Page} from '@playwright/test';
+import {decodedShot} from './shots';
 
 export type Build = 'the measured checkbox build' | 'the measured radio build' | 'the checkbox build' | 'the radio build' | 'the inclusive details build' | 'the details build' | 'the grid checkbox build' | 'the grid radio build';
 
@@ -158,7 +159,31 @@ export const accordionsTab = (page: Page) => {
     const fold = page.getByRole('region', {name: 'An accordion in HTML alone'}).getByRole('group').filter({hasText: name});
     return {...detailsPart(page, fold), showsText: textShownIn(fold), closeByKeyboard: () => focusAndPress(page, nameOn(fold), 'Enter')};
   };
+  const barAt = (build: Build, at: number): Promise<{name: string; x: number; y: number; width: number; height: number} | null> =>
+    built(build).evaluate((article, index) => {
+      const bars = [
+        ...[...article.querySelectorAll('input')].map(input => input.labels?.item(0)),
+        ...[...article.querySelectorAll('details')].map(fold => fold.querySelector(':scope > summary'))
+      ].filter((found): found is Element => found instanceof Element && found.textContent.trim() !== 'Close');
+      if (index >= bars.length) return null;
+      const bar = bars[index];
+      bar.scrollIntoView({block: 'center'});
+      const {x, y, width, height} = bar.getBoundingClientRect();
+      return {name: bar.textContent.trim(), x, y, width, height};
+    }, at);
+  const barsWithoutAnArrow = async (build: Build): Promise<string[]> => {
+    await page.mouse.move(0, 0);
+    const missing: string[] = [];
+    for (let at = 0, bar = await barAt(build, at); bar; at++, bar = await barAt(build, at)) {
+      const end = {x: bar.x + bar.width - 48, y: bar.y + 4, width: 48, height: bar.height - 8};
+      const {rgba} = await decodedShot(page, await page.screenshot({clip: end, scale: 'css'}));
+      const light = rgba.filter((_, i) => i % 4 === 0 && 0.2126 * rgba[i] + 0.7152 * rgba[i + 1] + 0.0722 * rgba[i + 2] > 150).length;
+      if (light < 10) missing.push(bar.name);
+    }
+    return missing;
+  };
   return {
+    barsWithoutAnArrow,
     partOf,
     htmlAloneFold,
     htmlAloneFolds: (): Part[] => ['basalt', 'cinder', 'meadow'].map(htmlAloneFold),

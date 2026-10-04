@@ -13,6 +13,7 @@ import {
   nameOn,
   showing,
   textOf,
+  type Build,
   type Frame,
   type Part
 } from './__test_support';
@@ -297,3 +298,17 @@ test('a fold of the accordion in HTML alone opens by pointer and closes by keybo
 
   await expect.poll(fold.showsText).toBe(false);
 });
+
+for (const {type, arrowed} of [
+  {type: 'inclusive', arrowed: ['the checkbox build', 'the measured checkbox build', 'the inclusive details build'] as Build[]},
+  {type: 'exclusive', arrowed: ['the radio build', 'the measured radio build', 'the details build'] as Build[]}
+]) {
+  test(`every bar of the ${type} builds that turn an arrow draws one`, async ({page}) => {
+    await page.goto(`demos/?tab=accordions&type=${type}`);
+    const tab = accordionsTab(page);
+
+    for (const build of arrowed) {
+      expect(await tab.barsWithoutAnArrow(build), build).toEqual([]);
+    }
+  });
+}
