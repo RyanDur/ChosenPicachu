@@ -683,3 +683,26 @@ describe('the demos page', () => {
     });
   });
 });
+
+describe('the charts tab’s introduction', () => {
+  const paragraphs = [
+    'A live chart draws numbers that are still arriving. The charts on this page follow every trade of bitcoin for US dollars on Coinbase, an exchange where it is bought and sold, as the trades happen.',
+    'Drawing is the easy part. The hard parts are in the data. Trades arrive faster than anyone can read them. The past has to be fetched and joined to what is arriving now. And two charts of the same trades must not disagree.',
+    'This page’s view is that a chart is arithmetic over data the page already holds, so there is no chart library here. The page holds one live feed, a connection that delivers each trade as it happens, and one history. Each chart is worked out from those every time the page redraws. The layout is kept in the page’s address, so a reload or a shared link brings back the same charts in the same order.',
+    'By the end you can draw a live line chart, candles, which show how the price opened, closed and reached in each span of time, and two charts of who is buying and who is selling, all from one feed. You can also let a reader add, sort and remove charts. The exhibit below starts with one chart, the price line. Press + to add another, and press a chart to open the steps that build it. The last part of this page builds the workspace the charts sit in.'
+  ];
+
+  test('should name the tab Charts, put the live headline under it, and tell the problem, the page’s view and what a reader can do after, before the workspace', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=charts')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    const tab = await screen.findByRole('region', {name: 'Charts'});
+    const headline = within(tab).getByRole('heading', {level: 3, name: /^Bitcoin, live/});
+
+    expect(within(tab).getAllByRole('heading', {level: 2})[0]).toHaveTextContent(/^Charts$/);
+    const shown = [...paragraphs.map(paragraph => within(tab).getByText(paragraph)), headline];
+    const eachBeforeTheNext = shown.slice(1).map((next, at) => shown[at].compareDocumentPosition(next) & Node.DOCUMENT_POSITION_FOLLOWING);
+    expect(eachBeforeTheNext).toEqual(paragraphs.map(() => Node.DOCUMENT_POSITION_FOLLOWING));
+  });
+});

@@ -53,7 +53,7 @@ export const chartsPage = (page: Page) => {
     priceDelta: priceCard.getByText(/^[+-]\$/),
     periodToggle: page.getByRole('button', {name: 'price period'}),
     whereTheFeedStatusSits: async (): Promise<'under the title' | 'beside the title'> => {
-      const title = await page.getByRole('heading', {level: 2, name: /^Bitcoin, live/}).elementHandle();
+      const title = await page.getByRole('heading', {level: 3, name: /^Bitcoin, live/}).elementHandle();
       const under = await page.getByRole('status', {name: 'feed'}).evaluate((status, heading) => {
         if (heading === null) throw new Error('the charts tab has no title');
         return status.getBoundingClientRect().top >= heading.getBoundingClientRect().bottom;

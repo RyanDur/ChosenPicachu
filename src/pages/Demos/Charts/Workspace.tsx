@@ -66,7 +66,7 @@ export const Workspace: FC<Props> = ({product}) => {
 
   return <>
     <header className="charts-heading">
-      <h2 className="headline">{`Bitcoin, live — every ${product} trade on Coinbase`}</h2>
+      <h3 className="headline">{`Bitcoin, live — every ${product} trade on Coinbase`}</h3>
       <output className={classNames('status', status)} aria-label="feed">{statusCopy[status]}</output>
       <output className="off-screen" aria-label="desk report">{report}</output>
       {absentKinds.length > 0 &&

@@ -25,6 +25,7 @@ import {AccordionsExplained, foldMotionParam, foldTypeParam} from './Accordions'
 import {motionParam, originParam, paceParam} from './Controls';
 import {Aggregations, trackParam, tutorialParam, worldParam} from './Tables';
 import {Workspace} from './Charts/Workspace';
+import {ChartsIntroduction} from './Charts/Introduction';
 import {useEnv} from '@components/Env';
 
 const paragraphs = (count: number) =>
@@ -78,6 +79,8 @@ export const DemosPage = () => {
           <TopLayerTutorial/>
         </>,
         [DemoTopics.charts]: <>
+          <h2 className="title bold">Charts</h2>
+          <ChartsIntroduction/>
           <Workspace product={tradeProduct}/>
           <ChartsTutorial/>
         </>,
