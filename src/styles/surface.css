@@ -72,6 +72,12 @@
 
 .alarm-ink { color: var(--alarm-ink); }
 
+.muted-ink { color: var(--ink-muted); }
+
+.ink-underline { border-block-end: var(--hairline-x-2) solid var(--ink); }
+
+.hairline-separated > * + * { border-block-start: var(--hairline) solid var(--shadow); }
+
 .padded {
   padding: var(--base-x-4);
 

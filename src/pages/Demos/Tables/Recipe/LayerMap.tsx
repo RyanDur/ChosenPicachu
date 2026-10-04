@@ -7,6 +7,11 @@ const layers: [string, string, string, string][] = [
   ['Widen a column', 'precision they can actually read', 'drag the edge', 'arrows on the handle']
 ];
 
+const heading = {layer: 'the layer', askedFor: 'asked for by', mouse: 'by mouse', keyboard: 'by keyboard'};
+
+const CellHeading: FC<{children: string}> = ({children}) =>
+  <span className="cell-heading caption uppercase" aria-hidden="true">{children}</span>;
+
 export const LayerMap: FC = () =>
   <>
     <p className="overview paragraph">
@@ -16,21 +21,19 @@ export const LayerMap: FC = () =>
     </p>
     <table className="tutorial-table layer-map contained">
       <caption className="off-screen">the layers</caption>
-      <thead>
-        <tr>
-          <th scope="col">the layer</th>
-          <th scope="col">asked for by</th>
-          <th scope="col">by mouse</th>
-          <th scope="col">by keyboard</th>
+      <thead className="tutorial-headings">
+        <tr className="ink-underline">
+          {Object.values(heading).map(name =>
+            <th className="tutorial-cell caption uppercase" scope="col" key={name}>{name}</th>)}
         </tr>
       </thead>
-      <tbody>
+      <tbody className="tutorial-rows hairline-separated">
         {layers.map(([layer, askedFor, mouse, keyboard]) =>
-          <tr key={layer}>
-            <th scope="row" className="layer">{layer}</th>
-            <td className="clue">{askedFor}</td>
-            <td className="tells">{mouse}</td>
-            <td className="tells">{keyboard}</td>
+          <tr className="tutorial-row" key={layer}>
+            <th className="tutorial-cell layer" scope="row">{layer}</th>
+            <td className="tutorial-cell clue"><CellHeading>{heading.askedFor}</CellHeading><span className="italic">{askedFor}</span></td>
+            <td className="tutorial-cell muted-ink"><CellHeading>{heading.mouse}</CellHeading>{mouse}</td>
+            <td className="tutorial-cell muted-ink"><CellHeading>{heading.keyboard}</CellHeading>{keyboard}</td>
           </tr>)}
       </tbody>
     </table>

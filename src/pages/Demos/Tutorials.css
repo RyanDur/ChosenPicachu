@@ -159,45 +159,55 @@
     justify-self: stretch;
     border-collapse: collapse;
 
-    @media (width <= 600px) {
-      display: block;
-      overflow-x: auto;
-    }
-
-    th,
-    td {
+    .tutorial-cell {
       padding: var(--base-x-1_5) var(--base-x-2);
-      border-block-end: var(--hairline) solid var(--shadow);
       text-align: start;
       vertical-align: top;
-    }
 
-    thead th {
-      font-size: var(--text-caption);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--ink-muted);
-      border-block-end: var(--hairline-x-2) solid var(--ink);
-    }
-
-    th:first-child,
-    td:first-child {
-      padding-inline-start: 0;
-    }
-
-    tbody tr:last-child th,
-    tbody tr:last-child td {
-      border-block-end: none;
+      &:first-child {
+        padding-inline-start: 0;
+      }
     }
 
     .clue {
-      font-style: italic;
-      font-weight: normal;
       min-width: 18ch;
     }
 
-    .tells {
-      color: var(--ink-muted);
+    .cell-heading {
+      display: none;
+    }
+
+    @media (width <= 600px) {
+      display: block;
+
+      .tutorial-headings {
+        position: absolute;
+        right: 1000vw;
+      }
+
+      .tutorial-rows,
+      .tutorial-row,
+      .tutorial-cell {
+        display: block;
+      }
+
+      .tutorial-row {
+        padding-block: var(--base-x-1_5);
+      }
+
+      .tutorial-cell {
+        padding: 0;
+      }
+
+      .tutorial-cell + .tutorial-cell {
+        margin-block-start: var(--base-x-0_5);
+      }
+
+      .cell-heading {
+        display: inline;
+        margin-inline-end: var(--base);
+        white-space: nowrap;
+      }
     }
   }
 

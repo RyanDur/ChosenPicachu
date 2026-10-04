@@ -21,17 +21,17 @@ export const Clues: FC<CluesProps> = ({quote, by, clues, verdict}) => <>
     </figure>
     <table className="tutorial-table contained">
       <caption className="off-screen">the clues</caption>
-      <thead>
-        <tr>
-          <th scope="col">the clue</th>
-          <th scope="col">what it tells you</th>
+      <thead className="tutorial-headings">
+        <tr className="ink-underline">
+          <th className="tutorial-cell caption uppercase" scope="col">the clue</th>
+          <th className="tutorial-cell caption uppercase" scope="col">what it tells you</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody className="tutorial-rows hairline-separated">
         {clues.map(([clue, tells]) =>
-          <tr key={clue}>
-            <th scope="row" className="clue">“{clue}”</th>
-            <td className="tells">{tells}</td>
+          <tr className="tutorial-row" key={clue}>
+            <th className="tutorial-cell clue italic" scope="row">“{clue}”</th>
+            <td className="tutorial-cell muted-ink">{tells}</td>
           </tr>)}
       </tbody>
     </table>

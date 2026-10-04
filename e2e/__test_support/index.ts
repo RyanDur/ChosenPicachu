@@ -31,3 +31,4 @@ export {designSketch} from './design-sketch';
 export {pageScrollsSideways, piecesPastTheirParts} from './fit';
 export {dialGroups, dialGroupsLaidOutTwoWays, type DialGroup} from './dial-groups';
 export {heightsBetween, ringPixelsLeftOf} from './fold-motion';
+export {tutorialTable} from './tutorial-tables';
