@@ -803,6 +803,10 @@ describe('the living table’s terms', () => {
     expect(defined).toHaveTextContent('the table’s record of each column’s share of the width. It starts at the first touch of a resize handle, by focus or by press, and what one column gains its neighbour gives up');
   });
 
+  test('should title the slots drawing as its twin on the drag sort tab is titled', async () => {
+    expect(within(await dragSortRecipe()).getByRole('figure', {name: /^Where a switch counts\. Pointer x walks/})).toBeInTheDocument();
+  });
+
   test('should define reconcile in plain words where the drag sort recipe first uses it', async () => {
     const [defined] = within(await dragSortRecipe()).getAllByLabelText('reconcile');
 
