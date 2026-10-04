@@ -1,3 +1,27 @@
+@property --explode-x {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+
+@property --explode-y {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+
+@property --turn {
+  syntax: '<angle>';
+  inherits: true;
+  initial-value: 0deg;
+}
+
+@property --swing {
+  syntax: '<angle>';
+  inherits: true;
+  initial-value: -180deg;
+}
+
 .pie {
 
   .split {
@@ -9,18 +33,18 @@
     transform: scaleY(0.82);
 
     .slice {
-      transform: translate(var(--explode-x, 0), var(--explode-y, 0));
+      transform: translate(var(--explode-x), var(--explode-y));
       transition: transform 300ms ease-out;
 
       .spin {
-        transform: rotate(var(--turn, 0deg));
+        transform: rotate(var(--turn));
         transition: transform 300ms ease-out;
       }
 
       .half {
         transform-box: fill-box;
         transform-origin: left center;
-        transform: rotate(var(--swing, -180deg));
+        transform: rotate(var(--swing));
         transition: transform 300ms ease-out;
       }
     }

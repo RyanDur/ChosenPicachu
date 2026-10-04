@@ -1,3 +1,57 @@
+@property --seat-x {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+
+@property --seat-y {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+
+@property --drift-x {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+
+@property --drift-y {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+
+@property --settle-x {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+
+@property --settle-y {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+
+@property --settle-drift-x {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+
+@property --settle-drift-y {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+
+@property --shoved-by {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+
 .sortable .carried {
   position: relative;
   z-index: 1;
@@ -5,7 +59,7 @@
 }
 
 .sortable.hide .carried {
-  translate: calc(var(--seat-x, 0px) + var(--drift-x, 0px)) calc(var(--seat-y, 0px) + var(--drift-y, 0px));
+  translate: calc(var(--seat-x) + var(--drift-x)) calc(var(--seat-y) + var(--drift-y));
 }
 
 .sortable :is(.settling, .shoved-start, .shoved-end, .shoved-up, .shoved-down) {
@@ -42,36 +96,36 @@
 
 @keyframes settle {
   from {
-    translate: var(--settle-x, 0px) var(--settle-y, 0px);
+    translate: var(--settle-x) var(--settle-y);
   }
 }
 
 @keyframes settle-from-pointer {
   from {
-    translate: calc(var(--settle-x, 0px) + var(--settle-drift-x, 0px)) calc(var(--settle-y, 0px) + var(--settle-drift-y, 0px));
+    translate: calc(var(--settle-x) + var(--settle-drift-x)) calc(var(--settle-y) + var(--settle-drift-y));
   }
 }
 
 @keyframes shoved-start {
   from {
-    translate: var(--shoved-by, 0px) 0;
+    translate: var(--shoved-by) 0;
   }
 }
 
 @keyframes shoved-end {
   from {
-    translate: calc(-1 * var(--shoved-by, 0px)) 0;
+    translate: calc(-1 * var(--shoved-by)) 0;
   }
 }
 
 @keyframes shoved-up {
   from {
-    translate: 0 var(--shoved-by, 0px);
+    translate: 0 var(--shoved-by);
   }
 }
 
 @keyframes shoved-down {
   from {
-    translate: 0 calc(-1 * var(--shoved-by, 0px));
+    translate: 0 calc(-1 * var(--shoved-by));
   }
 }

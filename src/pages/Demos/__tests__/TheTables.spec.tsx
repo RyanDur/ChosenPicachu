@@ -324,7 +324,7 @@ describe('the tables demo', () => {
     expect(recipe).toHaveTextContent(/export type Store<State, Action>/);
     expect(recipe).toHaveTextContent(/Commit inside the move/);
     expect(recipe).toHaveTextContent(/Carry the real thing/);
-    expect(recipe).toHaveTextContent(/translate: calc\(var\(--seat-x, 0px\) \+ var\(--drift-x, 0px\)\)/);
+    expect(recipe).toHaveTextContent(/translate: calc\(var\(--seat-x\) \+ var\(--drift-x\)\)/);
     expect(within(recipe).getAllByRole('link', {name: 'the implementation'})[0])
       .toHaveAttribute('href', 'https://github.com/RyanDur/ChosenPicachu/tree/main/src/pages/Demos/Tables/Builds/EagerTable');
     expect(recipe).toHaveTextContent(/Let the column settle/);

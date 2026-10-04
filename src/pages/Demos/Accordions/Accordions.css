@@ -1,3 +1,9 @@
+@property --measured-height {
+  syntax: '<length> | auto';
+  inherits: true;
+  initial-value: auto;
+}
+
 .new-accordion {
   .fold {
     &::details-content {
@@ -261,7 +267,7 @@
     }
 
     .info-toggle ~ .info-measured.sized {
-      height: var(--measured-height, auto);
+      height: var(--measured-height);
     }
 
     .info-toggle ~ .info-measured.unmoving {

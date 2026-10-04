@@ -1,3 +1,9 @@
+@property --news-block-size {
+  syntax: '<length> | auto';
+  inherits: true;
+  initial-value: auto;
+}
+
 .banners {
   /* the browser's own stylesheet gives a popover overflow: auto, which would clip the slide */
   overflow: visible;
@@ -97,7 +103,7 @@
   &.from-right { --arrive: 100dvw 0; }
 
   .news {
-    block-size: var(--news-block-size, auto);
+    block-size: var(--news-block-size);
     min-block-size: 0;
     min-inline-size: 0;
     margin: 0;
