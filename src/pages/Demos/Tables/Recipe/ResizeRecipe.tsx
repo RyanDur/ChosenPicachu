@@ -225,10 +225,11 @@ const widenStory = (world: World) =>
         </Words>
         <Reveal>
           <Says>Whatever one column gains, the next gives, clamped so neither side drops below its
-            floor. A column’s floor is the room its header’s controls need, and never less than the slimmest share.
+            floor. A column’s floor is the room its header’s controls need, and never less than the slimmest share, 5% of the table.
             The invariant is not checked; it is built in.</Says>
           <Codes>
             <Snippet label="TS" lines={[
+              ...unit(sharesSource, 'const SLIMMEST'), gap,
               ...unit(sharesSource, 'const floorOf'), gap,
               ...unit(sharesSource, 'export const traded')
             ]}/>

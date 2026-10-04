@@ -467,7 +467,8 @@ describe('the tables demo', () => {
 
     const resize = await screen.findByRole('region', {name: 'build the drag resize yourself'});
     expect(resize).toHaveTextContent(/neither side drops below its floor/);
-    expect(resize).toHaveTextContent(/const floorOf = [^]*Math\.max\(SLIMMEST[^]*export const traded/);
+    expect(resize).toHaveTextContent(/never less than the slimmest share, 5% of the table/);
+    expect(resize).toHaveTextContent(/const SLIMMEST = 5;[^]*const floorOf = [^]*Math\.max\(SLIMMEST[^]*export const traded/);
   });
 
   test('choosing drag sort brings the sort tutorial back', async () => {
