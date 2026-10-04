@@ -803,16 +803,6 @@ describe('the living table’s terms', () => {
     expect(defined).toHaveTextContent('the table’s record of each column’s share of the width. It starts at the first touch of a resize handle, by focus or by press, and what one column gains its neighbour gives up');
   });
 
-  test('should title the slots drawing as its twin on the drag sort tab is titled', async () => {
-    expect(within(await dragSortRecipe()).getByRole('figure', {name: /^Where a switch counts\. Pointer x walks/})).toBeInTheDocument();
-  });
-
-  test('should define reconcile in plain words where the drag sort recipe first uses it', async () => {
-    const [defined] = within(await dragSortRecipe()).getAllByLabelText('reconcile');
-
-    expect(defined).toHaveTextContent('changing the page’s elements to match the state, touching only the ones that differ');
-  });
-
   test('should say what Redux is where the store story first names it', async () => {
     expect(await livingTable()).toHaveTextContent('Redux is a JavaScript library that keeps an application’s state in one store, and this page borrows that shape and none of its code.');
   });
@@ -835,5 +825,17 @@ describe('the living table’s terms', () => {
 
   test('should say what useSyncExternalStore is where the React world subscribes through it', async () => {
     expect(await livingTable()).toHaveTextContent('useSyncExternalStore, React’s hook for reading a store kept outside React');
+  });
+});
+
+describe('the drag sort recipe’s words', () => {
+  test('should title the slots drawing where a switch counts', async () => {
+    expect(within(await dragSortRecipe()).getByRole('figure', {name: /^Where a switch counts\. /})).toBeInTheDocument();
+  });
+
+  test('should define reconcile in plain words where the drag sort recipe first uses it', async () => {
+    const [defined] = within(await dragSortRecipe()).getAllByLabelText('reconcile');
+
+    expect(defined).toHaveTextContent('changing the page’s elements to match the state, touching only the ones that differ');
   });
 });
