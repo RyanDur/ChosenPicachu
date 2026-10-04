@@ -5,6 +5,8 @@ import {tableReducer} from '../reducer';
 import {resting, widthsOf} from '../table-state';
 import {arrangementOf, arrangementReducer, arrived, columnMoved, rowMoved, sorted, standingOf} from '../arrangement';
 
+const noFloors = {};
+
 const widths = (state: typeof resting): readonly number[] => Object.values(widthsOf(state) ?? {});
 
 describe('the table store', () => {
@@ -13,14 +15,14 @@ describe('the table store', () => {
     const heard: (readonly number[])[] = [];
     store.subscribe(() => heard.push(widths(store.state)));
 
-    store.dispatch(measured(columnShares(40, 30), {}));
+    store.dispatch(measured(columnShares(40, 30), noFloors));
 
     expect(widths(store.state)).toEqual([40, 30, 30]);
     expect(heard).toEqual([[40, 30, 30]]);
   });
 
   test('the reducer applies its own actions', () => {
-    const measuredState = tableReducer(resting, measured(columnShares(40, 30), {}));
+    const measuredState = tableReducer(resting, measured(columnShares(40, 30), noFloors));
 
     expect(widths(measuredState)).toEqual([40, 30, 30]);
   });
@@ -36,9 +38,9 @@ describe('the table store', () => {
     let heard = 0;
     const leave = store.subscribe(() => heard++);
 
-    store.dispatch(measured(columnShares(40, 30), {}));
+    store.dispatch(measured(columnShares(40, 30), noFloors));
     leave();
-    store.dispatch(measured(columnShares(50, 20), {}));
+    store.dispatch(measured(columnShares(50, 20), noFloors));
 
     expect(heard).toBe(1);
   });
@@ -47,7 +49,7 @@ describe('the table store', () => {
     const store = tableStore();
 
     expect(store.state).toBe(store.state);
-    store.dispatch(measured(columnShares(40, 30), {}));
+    store.dispatch(measured(columnShares(40, 30), noFloors));
     expect(store.state).toBe(store.state);
   });
 
@@ -59,7 +61,7 @@ describe('the table store', () => {
     };
     const store = tableStore(watching);
 
-    store.dispatch(measured(columnShares(40, 30), {}));
+    store.dispatch(measured(columnShares(40, 30), noFloors));
 
     expect(seen).toEqual([[]]);
     expect(widths(store.state)).toEqual([40, 30, 30]);
@@ -86,12 +88,12 @@ describe('the table store', () => {
       passed.push('inner');
       next(action);
       if (passed.length === 2) {
-        api.dispatch(measured(columnShares(50, 20), {}));
+        api.dispatch(measured(columnShares(50, 20), noFloors));
       }
     };
     const store = tableStore(outer, inner);
 
-    store.dispatch(measured(columnShares(40, 30), {}));
+    store.dispatch(measured(columnShares(40, 30), noFloors));
 
     expect(passed).toEqual(['outer', 'inner', 'outer', 'inner']);
     expect(widths(store.state)).toEqual([50, 20, 30]);
@@ -103,11 +105,11 @@ describe('the table store', () => {
     store.subscribe((previous, current, dispatch) => {
       heard.push([widths(previous), widths(current())]);
       if (heard.length === 1) {
-        dispatch(measured(columnShares(50, 20), {}));
+        dispatch(measured(columnShares(50, 20), noFloors));
       }
     });
 
-    store.dispatch(measured(columnShares(40, 30), {}));
+    store.dispatch(measured(columnShares(40, 30), noFloors));
 
     expect(heard).toEqual([
       [[], [40, 30, 30]],
@@ -125,7 +127,7 @@ describe('the table store', () => {
     const store = tableStore(layer);
     store.subscribe(previous => order.push(`listener saw ${widths(previous).join()} become ${widths(store.state).join()}`));
 
-    store.dispatch(measured(columnShares(40, 30), {}));
+    store.dispatch(measured(columnShares(40, 30), noFloors));
 
     expect(order).toEqual(['middleware', 'listener saw  become 40,30,30', 'middleware after']);
   });
@@ -182,7 +184,7 @@ describe('a sizing', () => {
 
   test('says nothing when it ends on the whole percent it began at, however far the fractions drifted', () => {
     const ended = after(
-      measured({window: 12.999544950163525, trades: 40, buys: 47.000455049836475}, {}),
+      measured({window: 12.999544950163525, trades: 40, buys: 47.000455049836475}, noFloors),
       tradedBy('window', 'trades', 1),
       tradedBy('window', 'trades', -1.000012166),
       arrowLifted('window'));
@@ -192,7 +194,7 @@ describe('a sizing', () => {
 
   test('says the new share when it ends on another whole percent', () => {
     const ended = after(
-      measured({window: 12.999544950163525, trades: 40, buys: 47.000455049836475}, {}),
+      measured({window: 12.999544950163525, trades: 40, buys: 47.000455049836475}, noFloors),
       tradedBy('window', 'trades', 2),
       arrowLifted('window'));
 
@@ -201,7 +203,7 @@ describe('a sizing', () => {
 
   test('an arrow on another handle ends a keyboard resize and says its new share', () => {
     const ended = after(
-      measured({window: 13, trades: 40, buys: 47}, {}),
+      measured({window: 13, trades: 40, buys: 47}, noFloors),
       tradedBy('window', 'trades', 2),
       tradedBy('trades', 'buys', 1));
 
@@ -210,7 +212,7 @@ describe('a sizing', () => {
 
   test('a press on another handle ends a keyboard resize and says its new share', () => {
     const ended = after(
-      measured({window: 13, trades: 40, buys: 47}, {}),
+      measured({window: 13, trades: 40, buys: 47}, noFloors),
       tradedBy('window', 'trades', 2),
       gripped('trades', {fromX: 100, pxPerShare: 10}));
 
@@ -219,7 +221,7 @@ describe('a sizing', () => {
 
   test('a lifted arrow leaves a pointer drag of the same column under way', () => {
     const dragged = after(
-      measured({window: 13, trades: 40, buys: 47}, {}),
+      measured({window: 13, trades: 40, buys: 47}, noFloors),
       gripped('window', {fromX: 100, pxPerShare: 10}),
       tradedBy('window', 'trades', 1),
       arrowLifted('window'),
@@ -230,7 +232,7 @@ describe('a sizing', () => {
 
   test('a pointer moving while an arrow holds the resize trades nothing', () => {
     const keyed = after(
-      measured({window: 13, trades: 40, buys: 47}, {}),
+      measured({window: 13, trades: 40, buys: 47}, noFloors),
       tradedBy('window', 'trades', 1),
       handleDragged('window', 'trades', 200));
 
@@ -239,7 +241,7 @@ describe('a sizing', () => {
 
   test('a pointer move on a handle that holds no grip trades nothing', () => {
     const elsewhere = after(
-      measured({window: 13, trades: 40, buys: 47}, {}),
+      measured({window: 13, trades: 40, buys: 47}, noFloors),
       gripped('window', {fromX: 100, pxPerShare: 10}),
       handleDragged('trades', 'buys', 120));
 
@@ -248,7 +250,7 @@ describe('a sizing', () => {
 
   test('a release on another handle leaves the grip under way', () => {
     const dragged = after(
-      measured({window: 13, trades: 40, buys: 47}, {}),
+      measured({window: 13, trades: 40, buys: 47}, noFloors),
       gripped('window', {fromX: 100, pxPerShare: 10}),
       handleReleased('trades'),
       handleDragged('window', 'trades', 120));
@@ -258,7 +260,7 @@ describe('a sizing', () => {
 
   test('a release on the gripped handle ends the grip and says its new share', () => {
     const released = after(
-      measured({window: 13, trades: 40, buys: 47}, {}),
+      measured({window: 13, trades: 40, buys: 47}, noFloors),
       gripped('window', {fromX: 100, pxPerShare: 10}),
       handleDragged('window', 'trades', 120),
       handleReleased('window'),

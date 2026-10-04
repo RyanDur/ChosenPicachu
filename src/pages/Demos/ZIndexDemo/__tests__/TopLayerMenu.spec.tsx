@@ -47,6 +47,15 @@ describe('why the popover wins', () => {
     expect(run).toHaveTextContent(/by default Safari moves Tab only to text fields and to elements that ask for it/);
   });
 
+  test('should show a choice carrying tabIndex={0} in the menu sample the tabIndex run points to', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+
+    const part = await screen.findByRole('region', {name: 'Why the popover wins'});
+
+    expect(explanation.everyCodeBeside(part, /The button names its menu with popovertarget/).join())
+      .toMatch(/<button type="button" tabIndex=\{0\} className="item sub-title reachable"/);
+  });
+
   test('should name the toggle in a run after the markup that holds it', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
 

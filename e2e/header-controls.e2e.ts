@@ -31,7 +31,7 @@ for (const stage of stages) {
         const table = dragSortTable(page, stage.table(page));
         const before = await table.columnWidth('sells');
 
-        await table.dragEdge('buys', {by: 60, moves: 20});
+        await table.dragEdge('buys', {by: before, moves: 20});
 
         await expect.poll(() => table.columnWidth('sells')).toBeLessThan(before);
         expect(await table.controlsPastTheirHeader()).toEqual([]);
@@ -48,7 +48,7 @@ for (const stage of stages) {
 
         await keyed.narrowByKeys('buys', 40);
 
-        expect(await keyed.columnWidth('buys')).toBeLessThan(before);
+        await expect.poll(() => keyed.columnWidth('buys')).toBeLessThan(before);
 
         expect(Math.abs(await keyed.columnWidth('buys') - await dragged.columnWidth('buys'))).toBeLessThanOrEqual(1);
         expect(await keyed.controlsPastTheirHeader()).toEqual([]);
