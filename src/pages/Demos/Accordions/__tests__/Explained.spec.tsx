@@ -539,3 +539,23 @@ describe('the runs in view, with the folds shut', () => {
       .toHaveTextContent(/today\. Grid is the CSS layout that sets a box out in rows and columns\. Under the bar[^]*while the fold is closed\. :has\(\) is a piece of a CSS rule that picks an element/);
   });
 });
+
+describe('the platform build’s bars', () => {
+  test('should say the bar draws the old build’s arrow in the marker’s place, beside the rule that turns it', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const platform = await screen.findByRole('region', {name: parts[1]});
+    const run = explanation.runTelling(platform, /The bar is the same flex row/);
+
+    expect(run).toHaveTextContent('List-style none removes that marker, and the bar draws the checkbox build’s arrow in its place, so a bar reads the same in every build. The arrow points right while the part is closed and down while it is open.');
+    expect(explanation.everyCodeBeside(platform, /The bar is the same flex row/).join()).toMatch(/&\[open\] > \.info-label::after \{[^]*rotate\(135deg\)/);
+  });
+
+  test('should show the arrow’s one shared shape beside the run that draws it', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const oldWay = await screen.findByRole('region', {name: parts[0]});
+
+    expect(explanation.everyCodeBeside(oldWay, /Each bar shows an arrow/).join()).toMatch(/\.opening-arrow::after \{[^]*rotate\(45deg\)/);
+  });
+});

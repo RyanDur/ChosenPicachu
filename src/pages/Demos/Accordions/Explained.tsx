@@ -288,6 +288,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   bar’s edge.</p>
                 <Snippet label="CSS" lines={[
                   ...unit(accordionsCss, '&:not(.close) .info-label {'), gap,
+                  ...unit(accordionsCss, '.opening-arrow::after {'), gap,
                   ...unit(accordionsCss, '.info-toggle:checked ~ .info-label::after {'), gap,
                   ...unit(accordionsCss, ':is(.reveal, .drawer) &:not(.close) .info-toggle ~ .info-label::after {')
                 ]}/>
@@ -404,9 +405,13 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   summary, in the same colours. Summary takes focus and hover itself, where the {input}
                   build carried focus from the hidden {input} to the label. Summary also draws its own
                   arrow, called a marker, where the {input} build drew one from two borders. List-style
-                  none removes that marker, because this bar shows open and closed by its word alone. The
-                  hairline border draws the line between one bar and the next.</p>
-                <Snippet label="CSS" lines={unit(accordionsCss, '.info-label {\n      display: flex;\n      padding')}/>
+                  none removes that marker, and the bar draws the {input} build’s arrow in its place, so a bar reads
+                  the same in every build. The arrow points right while the part is closed and down while it is open.
+                  The hairline border draws the line between one bar and the next.</p>
+                <Snippet label="CSS" lines={[
+                  ...unit(accordionsCss, '.info-label {\n      display: flex;\n      padding'), gap,
+                  ...unit(accordionsCss, '&[open] > .info-label::after {')
+                ]}/>
               </li>
               <li className="run">
                 <p className="paragraph">A pseudo-element is a part of an element

@@ -49,7 +49,7 @@ export const InclusiveAccordion: FC<PropsWithClassName & ContentProps & {motion:
       {content.map(({value, key}, id) =>
         <li key={key} className="fold">
           <input id={`fold-${id}-checkbox`} className="info-toggle off-screen" type="checkbox"/>
-          <label id={`fold-${id}-checkbox-label`} className="info-label" htmlFor={`fold-${id}-checkbox`}>{key}</label>
+          <label id={`fold-${id}-checkbox-label`} className="info-label opening-arrow" htmlFor={`fold-${id}-checkbox`}>{key}</label>
           <div className="info">
             <section className="info-text" tabIndex={0} aria-labelledby={`fold-${id}-checkbox-label`}>
               <p className="info-paragraph">{value}</p>
@@ -79,7 +79,7 @@ export const ExclusiveAccordion: FC<PropsWithClassName & ContentProps & {motion:
       {content.map(({value, key}, id) =>
         <li className="fold" key={key}>
           <input id={`fold-${id}-radio`} className="info-toggle off-screen" type="radio" name="group"/>
-          <label id={`fold-${id}-radio-label`} className="info-label" htmlFor={`fold-${id}-radio`}>{key}</label>
+          <label id={`fold-${id}-radio-label`} className="info-label opening-arrow" htmlFor={`fold-${id}-radio`}>{key}</label>
           <div className="info">
             <section className="info-text" tabIndex={0} aria-labelledby={`fold-${id}-radio-label`}>
               <p className="info-paragraph">{value}</p>
@@ -102,7 +102,7 @@ export const InclusiveToggleAccordion: FC<PropsWithClassName & ContentProps & {m
     {content.map(({value, key}) =>
       <li key={key}>
         <details className="fold">
-          <summary className="info-label">{key}</summary>
+          <summary className="info-label opening-arrow">{key}</summary>
           <p className="info">{value}</p>
         </details>
       </li>)}
@@ -121,7 +121,7 @@ export const ExclusiveToggleAccordion: FC<PropsWithClassName & ContentProps & {m
     {content.map(({value, key}) =>
       <li key={key}>
         <details className="fold" name="exclusive-toggle-accordion">
-          <summary className="info-label">{key}</summary>
+          <summary className="info-label opening-arrow">{key}</summary>
           <p className="info">{value}</p>
         </details>
       </li>)}

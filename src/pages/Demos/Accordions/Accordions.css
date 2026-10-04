@@ -24,11 +24,34 @@
     .info-label {
       display: flex;
       padding: var(--base-x-2);
+      justify-content: space-between;
       align-items: center;
       list-style: none;
       color: var(--field);
       background: var(--field-inverse);
       border: var(--hairline) solid var(--field);
+
+      @media (hover: hover) {
+        &:hover {
+          background: var(--approach);
+          color: var(--ink);
+        }
+      }
+
+      &:focus-visible {
+        background: var(--approach);
+        color: var(--ink);
+        outline: var(--hairline-x-2) solid var(--ring);
+        outline-offset: calc(var(--hairline-x-2) * -1);
+      }
+    }
+
+    &[open] > .info-label::after {
+      transform: rotate(135deg);
+    }
+
+    :is(.reveal, .drawer) & > .info-label::after {
+      transition: transform 500ms ease;
     }
 
     .info {
@@ -135,15 +158,6 @@
       color: var(--field);
       background: var(--field-inverse);
 
-      &::after {
-        content: "";
-        width: var(--base);
-        height: var(--base);
-        border-right: var(--hairline-x-2) solid var(--field);
-        border-top: var(--hairline-x-2) solid var(--field);
-        transform: rotate(45deg);
-        margin-right: var(--base);
-      }
     }
 
     .info,
@@ -216,9 +230,6 @@
         background: var(--approach);
         color: var(--ink);
 
-        &::after {
-          border-color: var(--ink);
-        }
       }
     }
 
@@ -227,10 +238,6 @@
       color: var(--ink);
       outline: var(--hairline-x-2) solid var(--ring);
       outline-offset: calc(var(--hairline-x-2) * -1);
-
-      &::after {
-        border-color: var(--ink);
-      }
     }
 
     .info-toggle:checked ~ .info-label::after {
@@ -288,4 +295,14 @@
       align-self: end;
     }
   }
+}
+
+.opening-arrow::after {
+  content: "";
+  width: var(--base);
+  height: var(--base);
+  border-right: var(--hairline-x-2) solid currentcolor;
+  border-top: var(--hairline-x-2) solid currentcolor;
+  transform: rotate(45deg);
+  margin-right: var(--base);
 }
