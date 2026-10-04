@@ -213,6 +213,15 @@ describe('the banner tutorial’s second story', () => {
     ]);
   });
 
+  test('should tell steps 2 and 3 in two paragraphs each', async () => {
+    await openZIndexTab();
+    const steps = recipeFolds.steps(await secondStory());
+
+    expect(within(steps[1]).getByText(/^A track closes only as far/)).toHaveTextContent(/The banner has one transition list, so the slide in the next step is in it too\.$/);
+    expect(within(steps[2]).getByText(/^The slide can be seen only because/)).toHaveTextContent(/That would clip the slide to the panel’s own box\.$/);
+    expect(steps[2]).toHaveTextContent('In the transition list in step 2’s sample, the slide waits 0.3 seconds, the time the gap takes to open.');
+  });
+
   test('should leave out the height step for a stack that grows down', async () => {
     render(<TestApp at={demosAt('?tab=z-index&stack=down')}/>);
     const many = await recipeFolds.press(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
@@ -235,10 +244,11 @@ describe('the banner tutorial’s second story', () => {
   });
 
   test.each([
-    ['a track', 'Each banner is a grid with a single row or column, called a track.'],
-    ['0fr and 1fr', 'The starting style sets the track to 0fr, which is no size at all, and the banner’s own rule sets it to 1fr, the size of its content, so the transition opens the gap over 0.3 seconds.'],
+    ['a grid and a track', 'Each banner is a grid, a layout of rows and columns, with a single row or column, called a track.'],
+    ['fr', 'A track’s size can be given in fr, its share of the grid’s room: at 1fr this one track takes all of it, and at 0fr it takes none.'],
+    ['why the message shrinks to nothing', 'A track closes only as far as what is inside it can shrink, so the message has a minimum size of 0, and its padding and border start at 0 as well.'],
     ['a custom property', 'The distance is a custom property: a value given a name once, here --arrive, and read back with var().'],
-    ['the leaving class', 'Dismissing a banner gives it the class leaving, which runs the two moves in the other order'],
+    ['the leaving class', 'Dismissing a banner gives it the class leaving. That rule sends the banner back the way it came at once, and holds the track, the margin and the message’s padding and border for 0.6 seconds, the time the slide takes, before closing them.'],
     ['raise', 'raise is the function a page calls with a message.']
   ])('should define %s in the second story', async (_term, sentence) => {
     await openZIndexTab();
@@ -274,6 +284,6 @@ describe('the banner tutorial’s second story', () => {
   test('should say where the banner starts, for the entrance chosen', async () => {
     render(<TestApp at={demosAt('?tab=z-index&enter=left')}/>);
 
-    expect(await secondStory()).toHaveTextContent('Here the banner starts a full window’s width to the left of the window. The distance is a custom property');
+    expect(await secondStory()).toHaveTextContent('Here the banner starts a full window’s width to the left of its place. The distance is a custom property');
   });
 });

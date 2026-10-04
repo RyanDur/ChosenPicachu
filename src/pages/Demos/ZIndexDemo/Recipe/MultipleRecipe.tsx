@@ -21,10 +21,10 @@ const stackFact: Record<Stack, string> = {
 };
 
 const enterFact: Record<Entrance, string> = {
-  above: 'Here the banner starts a full window’s height above the window.',
-  below: 'Here the banner starts a full window’s height below the window.',
-  left: 'Here the banner starts a full window’s width to the left of the window.',
-  right: 'Here the banner starts a full window’s width to the right of the window.'
+  above: 'Here the banner starts a full window’s height above its place.',
+  below: 'Here the banner starts a full window’s height below its place.',
+  left: 'Here the banner starts a full window’s width to the left of its place.',
+  right: 'Here the banner starts a full window’s width to the right of its place.'
 };
 
 const sideways = (stack: Stack): boolean => stack === 'left' || stack === 'right';
@@ -76,10 +76,13 @@ export const MultipleRecipe: FC = () => {
       </Step>
       <Step title="Open a gap in the stack first" dial={<StackDial name="journey-stack"/>}>
         <Words want="The banners already up should move apart before the new one is seen. It is still a full screen away.">
-          <Says>Each banner is a grid with a single row or column, called a track. Here {stackFact[stack]} The
-            starting style sets the track to 0fr, which is no size at all, and the banner’s own rule sets it to 1fr,
-            the size of its content, so the transition opens the gap over 0.3 seconds. The margin between banners
-            opens over the same time.</Says>
+          <Says>Each banner is a grid, a layout of rows and columns, with a single row or column, called a
+            track. Here {stackFact[stack]} A track’s size can be given in fr, its share of the grid’s room: at 1fr this
+            one track takes all of it, and at 0fr it takes none. The starting style sets the track to 0fr and the
+            banner’s own rule sets it to 1fr, so the transition opens the gap over 0.3 seconds.</Says>
+          <Says>A track closes only as far as what is inside it can shrink, so the message has a minimum size of 0,
+            and its padding and border start at 0 as well. The margin between banners opens over the same time. The
+            banner has one transition list, so the slide in the next step is in it too.</Says>
         </Words>
         <Codes>
           <Snippet label="CSS" lines={slotLines(stack)}/>
@@ -89,11 +92,12 @@ export const MultipleRecipe: FC = () => {
         <Words want="A banner that slides in from just beside its place looks like it popped up. The slide has to start off screen.">
           <Says>{enterFact[enter]} The distance is a custom property: a value given a name once, here --arrive, and
             read back with var(). The starting style reads it to place the banner before the slide, and the leaving
-            rule reads it again to send the banner back. The slide waits 0.3 seconds, which is the time the gap takes
-            to open. It can be seen only because the panel sets overflow to visible. The panel is a popover, as <a
-            className="signpost" href={`#${popoverWinsHeading}`}><cite>Why the popover wins</cite></a> explains, and the
-            browser’s own stylesheet gives a popover overflow: auto. That would clip the slide to the panel’s own
-            box.</Says>
+            rule reads it again to send the banner back. In the transition list in step 2’s sample, the slide waits
+            0.3 seconds, the time the gap takes to open.</Says>
+          <Says>The slide can be seen only because the panel sets overflow to visible. The panel is a popover,
+            as <a className="signpost" href={`#${popoverWinsHeading}`}><cite>Why the popover wins</cite></a> explains,
+            and the browser’s own stylesheet gives a popover overflow: auto. That would clip the slide to the panel’s
+            own box.</Says>
         </Words>
         <Codes>
           <Snippet label="CSS" lines={[
@@ -104,10 +108,10 @@ export const MultipleRecipe: FC = () => {
       </Step>
       <Step title="Slide out, then close the gap">
         <Words want="A dismissed banner should slide out first, and only then should the others close the gap.">
-          <Says>Dismissing a banner gives it the class leaving, which runs the two moves in the other order: the
-            banner slides out at once, and the track and its margin close after it. The code takes the banner out of
-            the list only when the track’s transition has ended. Taken out any sooner, it would leave the others to
-            jump into its place.</Says>
+          <Says>Dismissing a banner gives it the class leaving. That rule sends the banner back the way it came at
+            once, and holds the track, the margin and the message’s padding and border for 0.6 seconds, the time the
+            slide takes, before closing them. The code takes the banner out of the list only when the track’s
+            transition has ended. Taken out any sooner, it would leave the others to jump into its place.</Says>
         </Words>
         <Codes>
           <Snippet label="CSS" lines={leavingLines(stack)}/>
