@@ -72,6 +72,10 @@ button {
   color: inherit;
 }
 
+summary {
+  cursor: pointer;
+}
+
 button:disabled {
   cursor: revert;
 }

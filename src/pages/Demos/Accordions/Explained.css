@@ -11,8 +11,7 @@
 }
 
 .part-depth {
-  .depth-opener {
-    cursor: pointer;
+  .opener {
     padding-block: var(--base);
   }
 

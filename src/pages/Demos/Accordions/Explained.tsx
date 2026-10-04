@@ -164,7 +164,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         </li>
         <li className="part-depth">
           <details aria-labelledby="measured-depth">
-            <summary id="measured-depth" className="depth-opener bold">How the measured height works</summary>
+            <summary id="measured-depth" className="opener bold">How the measured height works</summary>
             <ol className="runs">
               <li className="run">
                 <p className="paragraph">Closing runs the other way. The script hands each height to the stylesheet
@@ -222,7 +222,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         </li>
         <li className="part-depth">
           <details aria-labelledby="known-depth">
-            <summary id="known-depth" className="depth-opener bold">How the known height works</summary>
+            <summary id="known-depth" className="opener bold">How the known height works</summary>
             <ol className="runs">
               <li className="run">
                 {type === 'inclusive'
@@ -396,7 +396,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         </li>
         <li className="part-depth">
           <details aria-labelledby="details-depth">
-            <summary id="details-depth" className="depth-opener bold">How details works</summary>
+            <summary id="details-depth" className="opener bold">How details works</summary>
             <ol className="runs">
               {type === 'exclusive' && <li className="run">
                 <p className="paragraph">This replaces the radio group. Give every details the
@@ -491,7 +491,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
         </li>
         <li className="part-depth">
           <details aria-labelledby="together-depth">
-            <summary id="together-depth" className="depth-opener bold">How the two work together</summary>
+            <summary id="together-depth" className="opener bold">How the two work together</summary>
             <ol className="runs">
               <li className="run">
                 <p className="paragraph">The bar is named by its part. The label holds the part’s name, and that
