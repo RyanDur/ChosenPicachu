@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Dial} from '../Controls/Dial';
+import {DialRow} from '../Controls/DialRow';
 import {
   ExclusiveAccordion,
   ExclusiveMeasuredAccordion,
@@ -118,8 +118,8 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
       </ol>
     </section>
     <ul className="dials">
-      <Dial label="fold type" name="fold-type" options={foldTypes} chosen={type} onChosen={onTypeChosen} reading={typeReadings[type]}/>
-      <Dial label="fold motion" name="fold-motion" options={foldMotions} chosen={motion} onChosen={onMotionChosen} reading={<>
+      <DialRow label="fold type" name="fold-type" options={foldTypes} chosen={type} onChosen={onTypeChosen} reading={typeReadings[type]}/>
+      <DialRow label="fold motion" name="fold-motion" options={foldMotions} chosen={motion} onChosen={onMotionChosen} reading={<>
         <span className="when-motion-allowed">{motionReadings[motion]}</span>
         <span className="when-less-motion">Your system asks for less motion, so every fold here opens at once, whichever you choose.</span>
       </>}/>

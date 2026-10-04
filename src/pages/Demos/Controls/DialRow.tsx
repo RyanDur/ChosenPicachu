@@ -1,6 +1,6 @@
 import {ReactNode} from 'react';
 import {PillGlider} from '@components/PillGlider';
-import './Dial.css';
+import './DialRow.css';
 
 type Props<T extends string> = {
   label: string;
@@ -11,8 +11,8 @@ type Props<T extends string> = {
   reading: ReactNode;
 };
 
-export const Dial = <T extends string>({label, reading, ...pills}: Props<T>) =>
-  <li className="control">
+export const DialRow = <T extends string>({label, reading, ...pills}: Props<T>) =>
+  <li className="dial-row">
     <span className="axis caption uppercase" aria-hidden>{label}</span>
     <PillGlider label={label} {...pills}/>
     <output className="reading paragraph">{reading}</output>

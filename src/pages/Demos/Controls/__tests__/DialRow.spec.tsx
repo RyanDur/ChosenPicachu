@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {isInaccessible, render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {not} from '@ryandur/sand';
-import {Dial} from '../Dial';
+import {DialRow} from '../DialRow';
 
 type Pace = 'eager' | 'lazy';
 
@@ -14,7 +14,7 @@ const readings: Record<Pace, string> = {
 const PaceRow = () => {
   const [pace, setPace] = useState<Pace>('eager');
   return <ul>
-    <Dial label="pace"
+    <DialRow label="pace"
       name="pace"
       options={[{display: 'Eager', value: 'eager'}, {display: 'Lazy', value: 'lazy'}]}
       chosen={pace}
@@ -23,7 +23,7 @@ const PaceRow = () => {
   </ul>;
 };
 
-describe('a dial', () => {
+describe('a dial row', () => {
   test('should say its name once to a screen reader, as the legend of its pills', () => {
     render(<PaceRow/>);
 

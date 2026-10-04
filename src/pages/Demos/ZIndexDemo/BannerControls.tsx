@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Align, Entrance, Side, Stack} from '@components/Banners/params';
-import {Dial} from '../Controls/Dial';
+import {DialRow} from '../Controls/DialRow';
 
 type Copy = {
   side: Record<Side, string>;
@@ -49,7 +49,7 @@ export const BannerControls: FC<BannerControlsProps> = ({side, align, enter, sta
   <section aria-labelledby="banner-controls-heading" className="controls">
     <h3 id="banner-controls-heading" className="off-screen">banner controls</h3>
     <ul className="dials">
-      <Dial label="side"
+      <DialRow label="side"
         name="banner-side"
         options={[
           {display: 'Top', value: 'top'},
@@ -59,7 +59,7 @@ export const BannerControls: FC<BannerControlsProps> = ({side, align, enter, sta
         chosen={side}
         onChosen={onSideChosen}
         reading={copy.side[side]}/>
-      <Dial label="align"
+      <DialRow label="align"
         name="banner-align"
         options={[
           {display: 'Left', value: 'left'},
@@ -69,7 +69,7 @@ export const BannerControls: FC<BannerControlsProps> = ({side, align, enter, sta
         chosen={align}
         onChosen={onAlignChosen}
         reading={copy.align[align]}/>
-      <Dial label="entrance"
+      <DialRow label="entrance"
         name="banner-entrance"
         options={[
           {display: 'Above', value: 'above'},
@@ -80,7 +80,7 @@ export const BannerControls: FC<BannerControlsProps> = ({side, align, enter, sta
         chosen={enter}
         onChosen={onEnterChosen}
         reading={copy.enter[enter]}/>
-      <Dial label="stack"
+      <DialRow label="stack"
         name="banner-stack"
         options={[
           {display: 'Down', value: 'down'},

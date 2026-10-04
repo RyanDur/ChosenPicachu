@@ -3,7 +3,7 @@ import * as schema from 'schemawax';
 import {DragStyle} from '@components/DragSortableTable';
 import {Disclosure} from '@components/Disclosure';
 import {roomToStandOpen} from '@components/room';
-import {Dial} from './Dial';
+import {DialRow} from './DialRow';
 import './Controls.css';
 
 export type Pace = 'eager' | 'lazy';
@@ -48,7 +48,7 @@ export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({c
     <section aria-labelledby={heading} className="controls">
       <h4 id={heading} className="off-screen">{copy.kind} controls</h4>
       <ul className="dials">
-        <Dial label="pace"
+        <DialRow label="pace"
           name={`${copy.kind}-pace`}
           options={[
             {display: 'Eager', value: 'eager'},
@@ -57,7 +57,7 @@ export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({c
           chosen={pace}
           onChosen={onPaceChosen}
           reading={copy.pace[pace]}/>
-        <Dial label="origin"
+        <DialRow label="origin"
           name={`${copy.kind}-origin`}
           options={[
             {display: 'Keep', value: 'keep'},
@@ -66,7 +66,7 @@ export const Controls: FC<PropsWithChildren<ControlsProps & {copy: Copy}>> = ({c
           chosen={origin}
           onChosen={onOriginChosen}
           reading={copy.origin[origin]}/>
-        <Dial label="motion"
+        <DialRow label="motion"
           name={`${copy.kind}-motion`}
           options={[
             {display: 'Animate', value: 'animated'},
