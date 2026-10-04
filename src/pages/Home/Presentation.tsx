@@ -17,7 +17,7 @@ export const Presentation: FC = () =>
       wears it, and nothing owned that the content already says.
     </p>
     <details className="door-fold">
-      <summary className="prompt reachable">how I organize it</summary>
+      <summary className="prompt">how I organize it</summary>
       <p className="paragraph">I write CSS in two vocabularies. Component sheets own structure:
         the grid, the placement, the bones of one component, named for it and kept beside it.
         Needs live at the top scope as plain words like rounded-corners, lifted, and
