@@ -39,7 +39,7 @@ for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: 
 
       await part.getByRole('link', {name: 'the tutorial below'}).click();
 
-      await expect(page.getByText('Claim the top layer')).toBeInViewport();
+      await expect(page.getByText('Make the panel a popover')).toBeInViewport();
       await expect.poll(() => page.getByText('The user sees the news above everything').evaluate(isOnTopAtItsFirstLine)).toBe(true);
     });
   });

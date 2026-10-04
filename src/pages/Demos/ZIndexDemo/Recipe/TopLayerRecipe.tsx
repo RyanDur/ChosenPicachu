@@ -13,15 +13,15 @@ import '../../Recipe/Recipe.css';
 const gap = plain(' ');
 
 const sideFact: Record<Side, string> = {
-  top: 'top turns the first block auto into a gap, and the top edge is pinned.',
-  middle: 'middle restates the platform’s own centering, so the choice still reads in the markup.',
-  bottom: 'bottom turns the second block auto into a gap, and the bottom edge is pinned.'
+  top: 'top sets the margin above the panel and leaves the one below at auto.',
+  middle: 'middle sets the margins above and below to auto again.',
+  bottom: 'bottom sets the margin below the panel and leaves the one above at auto.'
 };
 
 const alignFact: Record<Align, string> = {
-  left: 'left turns the first inline auto into a gap, and the panel holds left.',
-  center: 'center restates the platform’s own centering, so the choice still reads in the markup.',
-  right: 'right turns the second inline auto into a gap, and the panel holds right.'
+  left: 'left sets the margin to the panel’s left and leaves the one to its right at auto.',
+  center: 'center sets the margins to the left and right to auto again.',
+  right: 'right sets the margin to the panel’s right and leaves the one to its left at auto.'
 };
 
 export const topLayerStory = {param: 'news', id: 'top'} as const;
@@ -32,19 +32,23 @@ export const TopLayerRecipe: FC = () => {
   return <Story {...topLayerStory}
     can="The user sees the news above everything"
     soThat="no stacking context can bury the news">
-    <Tell>We could give the banner a huge z-index, but z-index only ranks siblings inside
-      one stacking context, and any ancestor with a transform, a filter, or a z-index of
-      its own starts a new one; your 9999 is local the moment that happens. So the panel
-      is a <Mdn path="Web/API/Popover_API">popover</Mdn>, and the platform lifts it to
-      the <Mdn path="Glossary/Top_layer">top layer</Mdn>, a place the cascade of stacking
-      contexts cannot reach.</Tell>
+    <Tell>We could give the banner a huge z-index. But a z-index counts only inside its own stacking context, the
+      term taught above in <a className="signpost" href="#9999-still-loses-heading"><cite>Why 9999 still loses</cite></a>. An
+      element around the banner starts a new one when its CSS gives it a transform or a filter. A z-index other than
+      auto starts one too, but only on an element that is positioned, meaning its position is not static, or that is a
+      child of a flex or grid container. Inside a new one, the banner’s 9999 is compared with nothing outside it. So
+      the panel is a <Mdn path="Web/API/Popover_API">popover</Mdn>: an element with the popover attribute, hidden until
+      the code shows it. While it is shown, the browser draws it in
+      the <Mdn path="Glossary/Top_layer">top layer</Mdn>, which it keeps above the whole page. No z-index on the page
+      can put anything over the top layer.</Tell>
     <Steps>
-      <Step title="Claim the top layer">
-        <Words want="A bigger number cannot win an argument with a stacking context. The news needs a layer that sits above all of them.">
-          <Says>The panel is a section with popover set to manual: manual keeps light
-            dismiss out of it, so the news does not vanish on a stray click. Its role
-            is <Mdn path="Web/Accessibility/ARIA/Reference/Roles/alert_role">alert</Mdn>,
-            so a screen reader announces what arrives without being asked to look.</Says>
+      <Step title="Make the panel a popover">
+        <Words want="A bigger number does not get the banner out of a stacking context. The news needs a layer above all of them.">
+          <Says>The panel is a section with the popover attribute set to manual. The usual value, auto, gives a
+            popover light dismiss: a click outside it or the Escape key closes it. A manual popover has no light
+            dismiss, so the news stays through a stray click and goes when the code hides it. Its role
+            is <Mdn path="Web/Accessibility/ARIA/Reference/Roles/alert_role">alert</Mdn>, so a screen reader, the
+            program that reads a page aloud, announces what arrives without being asked.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -53,10 +57,10 @@ export const TopLayerRecipe: FC = () => {
         </Codes>
       </Step>
       <Step title="Show it when there is news">
-        <Words want="The top layer is not a place you sit; it is a place you enter. The panel should rise when news arrives and leave when the last of it is dismissed.">
-          <Says>An effect watches the count. showPopover lifts the panel when the first
-            banner arrives, hidePopover returns it when the wall is clear, and
-            matches(':popover-open') keeps both calls honest so neither runs twice.</Says>
+        <Words want="A popover is in the top layer only while it is shown. The panel should be shown when news arrives and hidden when the last of it is dismissed.">
+          <Says>A React effect, code that React runs after it has updated the page, runs when the number of banners
+            changes. showPopover shows the panel when the first banner arrives, and hidePopover hides it when the last
+            one has gone. matches(':popover-open') says whether the panel is shown, so neither call is made twice.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -64,12 +68,15 @@ export const TopLayerRecipe: FC = () => {
           ]}/>
         </Codes>
       </Step>
-      <Step title="Stand at your station"
+      <Step title="Place the panel with two class names"
         dial={<><SideDial name="station-side"/><AlignDial name="station-align"/></>}>
-        <Words want="Nine stations, and no arithmetic: the platform already centers a popover.">
-          <Says>The UA stylesheet gives every popover inset 0 and margin auto, which is
-            centering; the placement vocabulary turns auto margins into gaps, and the
-            panel wears its station as two words.
+        <Words want="Nine places, and no arithmetic: the browser already centres a popover.">
+          <Says>The browser’s own stylesheet, the styles every page starts with, gives a popover a fixed position, a
+            size that fits its content, inset: 0 and margin: auto. The auto margins share the spare room around the
+            panel, which centres it in the window. A class for an edge sets the margin on that edge to a fixed gap, so
+            the auto margin opposite takes the spare room and the panel holds to that edge. middle and center set auto
+            again: they change nothing, and they are there so the choice shows in the class names. On this page
+            margin-block is the margins above and below the panel, and margin-inline is the ones to its left and right.
             Here, {sideFact[side]} And {alignFact[align]}</Says>
         </Words>
         <Codes>
@@ -82,12 +89,12 @@ export const TopLayerRecipe: FC = () => {
           ]}/>
         </Codes>
       </Step>
-      <Step title="Dress the news">
+      <Step title="Style each banner">
         <Words want="A banner is read at a glance, in the corner of an eye already busy with something else.">
-          <Says>The card is the news element inside each banner, wearing the house
-            vocabulary: card, rounded corners, floating off the page, and a hairline outline
-            that borrows the ink it stands beside. The dismiss button gives the whole
-            target height so a hurried pointer still lands.</Says>
+          <Says>Each message sits in a paragraph with the class news. Its look comes from classes shared across this
+            site: field for the background, rounded-corners, floating for the shadow, and hairline-outline for a thin
+            border in the colour of the message’s text. The dismiss button is a square of fixed size that does not
+            shrink when the message is long.</Says>
         </Words>
         <Codes>
           <Snippet label="CSS" lines={[

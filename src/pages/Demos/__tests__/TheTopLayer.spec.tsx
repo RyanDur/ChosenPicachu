@@ -3,6 +3,7 @@ import {demosAt} from '@pages/Demos/__test_support';
 import {fireEvent, render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {seed} from '@components/fibs';
+import {recipeFolds} from '@pages/Demos/Recipe/__test_support';
 
 beforeEach(() => seed('top-layer'));
 
@@ -114,5 +115,51 @@ describe('the top layer', () => {
 
     expect(screen.getByRole('button', {name: 'Collapse', expanded: true})).toBeInTheDocument();
     expect(screen.queryByRole('button', {name: 'Expand'})).not.toBeInTheDocument();
+  });
+});
+
+describe('the banner tutorial’s first story', () => {
+  const story = 'The user sees the news above everything';
+
+  test('should say a z-index starts a stacking context only on a positioned element or a flex or grid item, and point up to where the term is taught', async () => {
+    await openZIndexTab();
+    const news = recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
+
+    expect(news).toHaveTextContent('A z-index other than auto starts one too, but only on an element that is positioned, meaning its position is not static, or that is a child of a flex or grid container.');
+    expect(within(news).getByRole('link', {name: 'Why 9999 still loses'})).toHaveAttribute('href', '#9999-still-loses-heading');
+    expect(news).not.toHaveTextContent(/cascade/);
+  });
+
+  test('should head each step with what happens', async () => {
+    await openZIndexTab();
+    const news = await recipeFolds.press(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
+
+    expect(recipeFolds.steps(news).map(step => within(step).getAllByRole('heading')[0].textContent))
+      .toEqual(['Make the panel a popover', 'Show it when there is news', 'Place the panel with two class names', 'Style each banner']);
+  });
+
+  test.each([
+    ['light dismiss', 'The usual value, auto, gives a popover light dismiss: a click outside it or the Escape key closes it.'],
+    ['a screen reader', 'a screen reader, the program that reads a page aloud, announces what arrives without being asked.'],
+    ['a React effect', 'A React effect, code that React runs after it has updated the page, runs when the number of banners changes.'],
+    ['the browser’s own stylesheet', 'The browser’s own stylesheet, the styles every page starts with, gives a popover a fixed position, a size that fits its content, inset: 0 and margin: auto.'],
+    ['margin-block and margin-inline', 'On this page margin-block is the margins above and below the panel, and margin-inline is the ones to its left and right.']
+  ])('should say what %s is where the reader meets it', async (_term, sentence) => {
+    await openZIndexTab();
+
+    expect(recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story)).toHaveTextContent(sentence);
+  });
+
+  test('should say where each placement class puts the panel, for the dials chosen', async () => {
+    render(<TestApp at={demosAt('?tab=z-index&side=bottom&align=right')}/>);
+
+    expect(recipeFolds.story(await screen.findByRole('region', {name: 'let’s build this feature'}), story))
+      .toHaveTextContent('Here, bottom sets the margin below the panel and leaves the one above at auto. And right sets the margin to the panel’s right and leaves the one to its left at auto.');
+  });
+
+  test('should name MDN as Mozilla’s web reference', async () => {
+    await openZIndexTab();
+
+    expect(await screen.findByText(/The links go to MDN, Mozilla’s web reference, if you want more\./)).toBeInTheDocument();
   });
 });

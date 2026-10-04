@@ -111,7 +111,7 @@ describe('why a fixed banner still loses', () => {
 
     await userEvent.click(within(part).getByRole('link', {name: 'the tutorial below'}));
 
-    expect(screen.getByText('Claim the top layer')).toBeVisible();
+    expect(screen.getByText('Make the panel a popover')).toBeVisible();
     expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('raised=second');
   });
 });
