@@ -13,7 +13,7 @@ export {feedbackOn, github} from './feedback';
 export {tablesDemo} from './tables';
 export {demoSettings} from './demo-settings';
 export {fingerTap, fingertipMiss, foldBarsShortOfAFinger, shortOfAFinger} from './finger';
-export {pillSwitch, shownPillSwitches} from './pills';
+export {dialRow, pillSwitch, shownPillSwitches} from './pills';
 export {sortableList} from './lists';
 export {headingsTakingMoreLinesThanWords} from './headings';
 export {codedStepLayouts, misplacedPictures} from './recipes';

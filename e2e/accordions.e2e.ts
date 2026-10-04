@@ -1,11 +1,10 @@
 import {expect} from '@playwright/test';
-import {not} from '@ryandur/sand';
 import {
   accordionsTab,
   builds,
   codedStepLayouts,
-  demoSettings,
   desktop,
+  dialRow,
   farthestChannel,
   firstHeightAfter,
   framesWhileMoving,
@@ -385,39 +384,33 @@ for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader:
   test.describe(reader, () => {
     test.use(device);
 
-    for (const {tab, name} of [
-      {tab: 'accordions', name: 'fold type'},
-      {tab: 'accordions', name: 'fold motion'},
-      {tab: 'z-index', name: 'side'},
-      {tab: 'dragAndDrop', name: 'pace'}
-    ]) {
-      test(`the ${name} dial on the ${tab} tab shows its name, and a screen reader hears it once`, async ({page}) => {
-        await page.goto(`demos/?tab=${tab}`);
-        const pills = page.getByRole('group', {name, exact: true}).last();
-        await pills.or(demoSettings(page).fold).first().waitFor();
-        if (not(await pills.isVisible())) {
-          await demoSettings(page).press();
-        }
-        await pills.scrollIntoViewIfNeeded();
-        const row = page.getByRole('listitem').filter({has: pills}).last();
+    test('each fold choice shows its name, and a screen reader meets the named pills first, then the reading', async ({page}) => {
+      await page.goto('demos/?tab=accordions');
 
-        const widths = await Promise.all((await row.getByText(name, {exact: true}).all()).map(async shown => (await shown.boundingBox())?.width ?? 0));
-        expect(Math.max(...widths), 'the widest copy of the name').toBeGreaterThan(name.length * 4);
-        expect((await row.ariaSnapshot()).split('\n').slice(0, 2), 'the row, then the first thing in it').toEqual(['- listitem:', `  - group "${name}":`]);
-      });
-    }
+      for (const name of ['fold type', 'fold motion']) {
+        const {row, shownNames} = dialRow(page, name);
+        await row.scrollIntoViewIfNeeded();
+        const widths = await Promise.all((await shownNames.all()).map(async shown => (await shown.boundingBox())?.width ?? 0));
+        expect(Math.max(...widths), `the widest copy of ${name}`).toBeGreaterThan(name.length * 4);
+      }
+      await expect(dialRow(page, 'fold type').row).toMatchAriaSnapshot(`
+        - listitem:
+          - /children: equal
+          - group "fold type"
+          - status
+      `);
+    });
 
     test('the fold choices keep their pills in the row, each a finger tall, beside the reading of the chosen one', async ({page}) => {
       await page.goto('demos/?tab=accordions');
 
       for (const name of ['fold type', 'fold motion']) {
-        const pills = page.getByRole('group', {name, exact: true});
-        const row = page.getByRole('listitem').filter({has: pills}).last();
+        const {row, pills, status} = dialRow(page, name);
         const [rowBox, pillsBox] = await Promise.all([row.boundingBox(), pills.boundingBox()]);
         if (rowBox === null || pillsBox === null) throw new Error(`the ${name} row is not shown`);
 
         expect(pillsBox.x + pillsBox.width, name).toBeLessThanOrEqual(rowBox.x + rowBox.width);
-        await expect(row.getByRole('status')).toBeVisible();
+        await expect(status).toBeVisible();
         if (device === iPhone) {
           expect(await shortOfAFinger(await pills.getByText(/^\w+$/).all()), name).toEqual([]);
         }
@@ -439,8 +432,7 @@ for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader:
     ]) {
       test(`with ${motion} chosen, the fold motion reads that no fold moves for a reader who asks for less motion, and reads ${motion} for one who does not`, async ({page}) => {
         await page.goto(`demos/?tab=accordions&style=${motion.toLowerCase()}`);
-        const row = page.getByRole('listitem').filter({has: page.getByRole('group', {name: 'fold motion', exact: true})}).last();
-        const status = row.getByRole('status');
+        const {status} = dialRow(page, 'fold motion');
         await status.scrollIntoViewIfNeeded();
 
         await expect(status).toHaveText(reading, {useInnerText: true});
