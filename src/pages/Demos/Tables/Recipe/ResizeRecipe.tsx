@@ -229,6 +229,7 @@ const widenStory = (world: World) =>
             The invariant is not checked; it is built in.</Says>
           <Codes>
             <Snippet label="TS" lines={[
+              ...unit(sharesSource, 'const floorOf'), gap,
               ...unit(sharesSource, 'export const traded')
             ]}/>
           </Codes>

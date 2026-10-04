@@ -458,6 +458,18 @@ describe('the tables demo', () => {
     expect(screen.getByRole('region', {name: 'the living table'})).toBeVisible();
   });
 
+  test('the resize build shows a column’s floor beside the trade that clamps to it', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('?tab=tables')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    await userEvent.click(await screen.findByRole('radio', {name: 'Drag resize'}));
+
+    const resize = await screen.findByRole('region', {name: 'build the drag resize yourself'});
+    expect(resize).toHaveTextContent(/neither side drops below its floor/);
+    expect(resize).toHaveTextContent(/const floorOf = [^]*Math\.max\(SLIMMEST[^]*export const traded/);
+  });
+
   test('choosing drag sort brings the sort tutorial back', async () => {
     const feed = await listeningFeed();
 
