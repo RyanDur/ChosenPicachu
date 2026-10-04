@@ -213,6 +213,13 @@ describe('the banner tutorial’s second story', () => {
     ]);
   });
 
+  test('should leave out the height step for a stack that grows down', async () => {
+    render(<TestApp at={demosAt('?tab=z-index&stack=down')}/>);
+    const many = await recipeFolds.press(await screen.findByRole('region', {name: 'let’s build this feature'}), story);
+
+    expect(recipeFolds.steps(many).map(step => within(step).getAllByRole('heading')[0].textContent)).not.toContain('Change a banner’s height smoothly when its text rewraps');
+  });
+
   test('should open on the two moves, and say what a transition and a starting style are', async () => {
     await openZIndexTab();
     const many = await secondStory();
@@ -233,7 +240,7 @@ describe('the banner tutorial’s second story', () => {
     ['a custom property', 'The distance is a custom property: a value given a name once, here --arrive, and read back with var().'],
     ['the leaving class', 'Dismissing a banner gives it the class leaving, which runs the two moves in the other order'],
     ['raise', 'raise is the function a page calls with a message.']
-  ])('should say what %s is where the reader meets it', async (_term, sentence) => {
+  ])('should define %s in the second story', async (_term, sentence) => {
     await openZIndexTab();
 
     expect(await secondStory()).toHaveTextContent(sentence);
@@ -250,15 +257,18 @@ describe('the banner tutorial’s second story', () => {
     const many = await secondStory();
 
     expect(many).toHaveTextContent('The panel is a popover, as Why the popover wins explains, and the browser’s own stylesheet gives a popover overflow: auto.');
-    expect(within(many).getByRole('link', {name: 'Why the popover wins'})).toHaveAttribute('href', '#popover-wins-heading');
+    expect(within(many).getByRole('link', {name: 'Why the popover wins'})).toHaveAttribute('href', `#${screen.getByRole('heading', {name: 'Why the popover wins'}).id}`);
   });
 
-  test('should show the transition that opens the gap in step 2’s sample, and the whole leaving rule in step 4’s', async () => {
+  test('should show the banner’s one transition list and the message’s rules in step 2’s sample, none in step 3’s, and the whole leaving rules in step 4’s', async () => {
     await openZIndexTab();
     const steps = recipeFolds.steps(await secondStory());
 
-    expect(steps[1]).toHaveTextContent(/transition: grid-template-rows 0\.3s, margin-block-end 0\.3s; @starting-style/);
+    expect(steps[1]).toHaveTextContent(/transition: translate 0\.6s cubic-bezier\(0\.45, 0, 0\.15, 1\) 0\.3s, grid-template-rows 0\.3s, margin-block-end 0\.3s; @starting-style/);
+    expect(steps[1]).toHaveTextContent(/\.news \{ min-block-size: 0; transition: padding 0\.3s, border-width 0\.3s; @starting-style \{ padding-block: 0; border-block-width: 0; \} \}/);
+    expect(steps[2]).not.toHaveTextContent(/transition:/);
     expect(steps[3]).toHaveTextContent(/margin-block-end: 0;[^]*grid-template-rows 0\.3s 0\.6s, margin-block-end 0\.3s 0\.6s; \}/);
+    expect(steps[3]).toHaveTextContent(/\.trouble\.leaving \.news \{ padding-block: 0; border-block-width: 0; transition: padding 0\.3s 0\.6s, border-width 0\.3s 0\.6s; \}/);
   });
 
   test('should say where the banner starts, for the entrance chosen', async () => {

@@ -2,9 +2,9 @@ import type {Locator, Page} from '@playwright/test';
 
 export type Frame = {track: number; seen: boolean; gone: boolean};
 
-const sampled = (page: Page, which: 'newest' | 'oldest', sideways: boolean): Promise<Frame[]> => page.evaluate(({which, sideways}) =>
+const sampled = (page: Page, which: 'newest' | 'oldest', sideways: boolean): Promise<Frame[]> => page.getByRole('alert', {includeHidden: true}).first().evaluate((alert, {which, sideways}) =>
   new Promise<Frame[]>(resolve => {
-    const list = document.querySelector('#banners ul');
+    const list = alert.querySelector('ul');
     if (list === null) throw new Error('the banners have no list');
     const before = [...list.children];
     const frames: Frame[] = [];
