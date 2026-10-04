@@ -20,7 +20,7 @@ type Props = {
 
 export const TrappedMenu: FC<Props> = ({cardOne, onCardOneChosen}) => {
   const [opened, updateOpened] = useState<Maybe<Opened>>(nothing());
-  const stillTrue = opened.mBind(place => place === 'top layer' || place === cardOne ? some(place) : nothing());
+  const openedAsTheCardsAre = opened.mBind(place => place === 'top layer' || place === cardOne ? some(place) : nothing());
 
   return <figure className="trapped-menu card rounded-corners lifted padded">
     <ol className="trap-steps">
@@ -48,7 +48,7 @@ export const TrappedMenu: FC<Props> = ({cardOne, onCardOneChosen}) => {
         <p className="paragraph">Card two has z-index: 1, and comes later in the code.</p>
       </li>
     </ol>
-    <output aria-label="where the list opened" className="paragraph">{stillTrue.map(place => whereItOpened[place]).orElse('')}</output>
+    <output aria-label="where the list opened" className="paragraph">{openedAsTheCardsAre.map(place => whereItOpened[place]).orElse('')}</output>
     <figcaption className="caption"><strong>The trap.</strong> A list with z-index: 9999 opens under a card with z-index: 1.</figcaption>
   </figure>;
 };

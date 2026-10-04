@@ -1,3 +1,4 @@
+import {computeAccessibleName} from 'dom-accessibility-api';
 import {not} from '@ryandur/sand';
 
 const comesAfter = (steps: HTMLElement, control: HTMLElement): boolean =>
@@ -5,4 +6,4 @@ const comesAfter = (steps: HTMLElement, control: HTMLElement): boolean =>
 
 export const controlsBeforeTheSteps = (steps: HTMLElement, controls: HTMLElement[]): string[] => controls
   .filter(control => not(comesAfter(steps, control)))
-  .map(control => control.getAttribute('aria-label') ?? control.textContent);
+  .map(control => computeAccessibleName(control));
