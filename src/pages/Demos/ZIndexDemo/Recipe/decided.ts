@@ -1,6 +1,6 @@
 import {Entrance, Stack} from '@components/Banners/params';
 import {Line} from '../../Recipe/Snippet';
-import {plain} from '../../Recipe';
+import bannersCss from '@components/Banners/Banners.css?sample';
 
 export const arriveDistance: Record<Entrance, string> = {
   above: '&.from-above { --arrive: 0 -100dvh; }',
@@ -91,55 +91,71 @@ export const flatNews: Record<Stack, string[]> = {
 
 const ended = (declaration: string): string => declaration.replace(/,$/, ';');
 
-export const slotLines = (stack: Stack): Line[] => [
-  plain('.trouble {'),
-  plain('  display: grid;'),
-  plain(`  ${slotTrack[stack]}`),
-  plain('  transition:'),
-  plain(`    ${slideTransition}`),
-  plain(`    ${openingTransition[stack]}`),
-  plain(`    ${ended(gapTransition[stack])}`),
-  plain('  @starting-style {'),
-  plain(`    ${closedSlot[stack]}`),
-  plain(`    ${closedGap[stack]}`),
-  plain('  }'),
-  plain('}'),
-  plain(' '),
-  plain(ownedGap[stack]),
-  plain(' '),
-  plain('.news {'),
-  plain(`  ${newsShrinks[stack]}`),
-  plain(`  transition: ${newsTransition}`),
-  plain('  @starting-style {'),
-  ...flatNews[stack].map(declaration => plain(`    ${declaration}`)),
-  plain('  }'),
-  plain('}')
-];
+const fileLines = bannersCss.text.split('\n').map(line => line.trim());
 
-export const arrivalLines = (enter: Entrance): Line[] => [
-  plain(arriveDistance[enter]),
-  plain(' '),
-  plain('.trouble {'),
-  plain('  @starting-style {'),
-  plain(`    ${arriveStart}`),
-  plain('  }'),
-  plain('}')
-];
+const lineOf = (text: string, after: number): number => {
+  const onward = fileLines.indexOf(text, after);
+  return onward >= 0 ? onward : fileLines.indexOf(text);
+};
 
-export const leavingLines = (stack: Stack): Line[] => [
-  plain('.trouble.leaving {'),
-  plain(`  ${closedSlot[stack]}`),
-  plain(`  ${closedGap[stack]}`),
-  plain(`  ${arriveStart}`),
-  plain('  transition:'),
-  plain(`    ${slideOutTransition}`),
-  plain(`    ${closingTransition[stack]}`),
-  plain(`    ${closingGapTransition[stack]}`),
-  plain('}'),
-  plain(' '),
-  plain('.trouble.leaving .news {'),
-  ...flatNews[stack].map(declaration => plain(`  ${declaration}`)),
-  plain('  transition:'),
-  ...newsClosingTransition.map(declaration => plain(`    ${declaration}`)),
-  plain('}')
-];
+// each declaration is the file's own line, looked up from the last one placed so a repeated selector lands in order
+const placed = (texts: readonly string[]): Line[] =>
+  texts.reduce<{lines: Line[]; after: number}>(({lines, after}, text) => {
+    const at = /^[{}]?$/.test(text.trim()) ? -1 : lineOf(text.trim(), after);
+    return at < 0
+      ? {lines: [...lines, {text}], after}
+      : {lines: [...lines, {text, from: {sample: bannersCss, line: at + 1}}], after: at + 1};
+  }, {lines: [], after: 0}).lines;
+
+export const slotLines = (stack: Stack): Line[] => placed([
+  '.trouble {',
+  '  display: grid;',
+  `  ${slotTrack[stack]}`,
+  '  transition:',
+  `    ${slideTransition}`,
+  `    ${openingTransition[stack]}`,
+  `    ${ended(gapTransition[stack])}`,
+  '  @starting-style {',
+  `    ${closedSlot[stack]}`,
+  `    ${closedGap[stack]}`,
+  '  }',
+  '}',
+  ' ',
+  ownedGap[stack],
+  ' ',
+  '.news {',
+  `  ${newsShrinks[stack]}`,
+  `  transition: ${newsTransition}`,
+  '  @starting-style {',
+  ...flatNews[stack].map(declaration => `    ${declaration}`),
+  '  }',
+  '}'
+]);
+
+export const arrivalLines = (enter: Entrance): Line[] => placed([
+  arriveDistance[enter],
+  ' ',
+  '.trouble {',
+  '  @starting-style {',
+  `    ${arriveStart}`,
+  '  }',
+  '}'
+]);
+
+export const leavingLines = (stack: Stack): Line[] => placed([
+  '.trouble.leaving {',
+  `  ${closedSlot[stack]}`,
+  `  ${closedGap[stack]}`,
+  `  ${arriveStart}`,
+  '  transition:',
+  `    ${slideOutTransition}`,
+  `    ${closingTransition[stack]}`,
+  `    ${closingGapTransition[stack]}`,
+  '}',
+  ' ',
+  '.trouble.leaving .news {',
+  ...flatNews[stack].map(declaration => `  ${declaration}`),
+  '  transition:',
+  ...newsClosingTransition.map(declaration => `    ${declaration}`),
+  '}'
+]);

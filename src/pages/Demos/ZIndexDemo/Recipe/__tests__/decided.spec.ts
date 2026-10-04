@@ -1,6 +1,8 @@
 import bannersCss from '@components/Banners/Banners.css?sample';
+import {not} from '@ryandur/sand';
 import {span} from '../../../Recipe/carve';
 import {
+  arrivalLines, leavingLines, slotLines,
   arriveDistance, arriveStart, closedGap, closedSlot, closingGapTransition, closingTransition, flatNews, gapTransition,
   newsClosingTransition, newsShrinks, newsTransition, openingTransition, ownedGap, slideOutTransition, slideTransition, slotTrack
 } from '../decided';
@@ -45,5 +47,24 @@ describe('the decided-world fragments still tell the truth of Banners.css', () =
     const [selector, declaration] = rule.split(' { ');
     expect(bannersCss.text).toContain(selector.replace('.trouble', '.trouble:where('));
     expect(bannersCss.text).toContain(declaration.replace(' }', ''));
+  });
+});
+
+describe('the decided-world samples point at the lines of Banners.css they show', () => {
+  const fileLines = bannersCss.text.split('\n').map(line => line.trim());
+  const stacks = ['down', 'up', 'left', 'right'] as const;
+  const entrances = ['above', 'below', 'left', 'right'] as const;
+
+  test.each([
+    ...entrances.map(enter => [`the ${enter} arrival`, arrivalLines(enter)] as const),
+    ...stacks.map(stack => [`the ${stack} slot`, slotLines(stack)] as const),
+    ...stacks.map(stack => [`the ${stack} leaving`, leavingLines(stack)] as const)
+  ])('should place every line of %s that is a line of the file on that line', (_sample, lines) => {
+    const misplaced = lines
+      .filter(({text}) => not(/^\s*[{}]?\s*$/.test(text)) && fileLines.includes(text.trim()))
+      .filter(({text, from}) => from?.sample !== bannersCss || fileLines[from.line - 1] !== text.trim())
+      .map(({text}) => text);
+
+    expect(misplaced).toEqual([]);
   });
 });
