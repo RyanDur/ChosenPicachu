@@ -24,9 +24,13 @@
 }
 
 .attentive:where(:not(:disabled)) {
+  /* the approach fill is soft against a light control, so focus also wears a ring; inside the control, since many sit
+     against dark borders that a ring outside would land on */
   &:focus-visible,
   &:has(:focus-visible) {
     background-color: var(--approach);
+    outline: var(--hairline-x-2) solid var(--ring);
+    outline-offset: calc(var(--hairline-x-2) * -1);
   }
 
   @media (hover: hover) {
