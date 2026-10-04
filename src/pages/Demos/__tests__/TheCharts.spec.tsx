@@ -342,7 +342,8 @@ describe('a list of charts', () => {
       ['the popover is taught on the z-index tab', 'It is a popover, the kind of menu the z-index tab explains.'],
       ['the three periods', 'The hour has candles of a minute, 60 of them, marked every ten minutes. The day has candles of an hour, 24 of them, marked every hour. The week has candles of six hours, 28 of them, marked every day.'],
       ['only the dot moves', 'Nothing on the page is measured, and the line is never animated: it is drawn again. Only the dot on the newest point moves, sliding to its new place over 300 milliseconds.'],
-      ['the three price labels', 'At the side it labels the highest price, the lowest, and the one midway between them.']
+      ['the three price labels', 'At the side it labels the highest price, the lowest, and the one midway between them.'],
+      ['what is stored', 'The page stores the trades and the fetched candles. The candles made from live trades, the joined series and the points are not stored: every time React redraws the chart, they are worked out again.']
     ])('should say what the code does: %s', async (_claim, sentence) => {
       expect(await priceStory()).toHaveTextContent(sentence);
     });
@@ -367,7 +368,8 @@ describe('a list of charts', () => {
 
     test.each([
       ['charts on the same period agree', 'So two charts set to the same period are drawn from the same candles and cannot disagree.'],
-      ['the volume is a second SVG', 'The bars are a second SVG under the candles, in the same slots, so each bar sits under its candle.']
+      ['the volume is a second SVG', 'The bars are a second SVG under the candles, in the same slots, so each bar sits under its candle.'],
+      ['what each span shows', 'each span of time shows its open, its close, its high and low, and its volume']
     ])('should say what the code does: %s', async (_claim, sentence) => {
       expect(await candlesStory()).toHaveTextContent(sentence);
     });

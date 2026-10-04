@@ -38,11 +38,12 @@ const priceStory =
     soThat="the session reads at a glance">
     <Tell>We could reach for a chart library, but this chart is one line and two axes. So the line is drawn with SVG, the
       browser’s own format for shapes, and its points are arithmetic over the trades the page already holds.</Tell>
-    <Tell>The candles and the points are never stored. Every time React redraws the chart, they are worked out again
-      from the trades.</Tell>
     <Tell>Trades arrive faster than anyone can read, so they are grouped into equal spans of time. Each span becomes one
-      candle: a record of where the price opened, how high and how low it reached, and where it closed. The past is
-      fetched and fills the left of the line, the live feed fills the right, and the two are joined in time order.</Tell>
+      candle: a record of where the price opened, how high and how low it reached, and where it closed.</Tell>
+    <Tell>The past is fetched as candles and fills the left of the line. The live feed fills the right. The two are joined
+      in time order.</Tell>
+    <Tell>The page stores the trades and the fetched candles. The candles made from live trades, the joined series and the
+      points are not stored: every time React redraws the chart, they are worked out again.</Tell>
     <Steps>
       <Step title="Open a socket, and keep only what decodes">
         <Words want="A live chart starts with a connection to the exchange, and nothing it sends is trusted until it has been checked.">
@@ -150,7 +151,7 @@ const priceStory =
 const candlesStory =
   <Story param="graph" id="candles"
     can="The trader can read the same trades as candles"
-    soThat="each window answers open, close, reach, and volume">
+    soThat="each span of time shows its open, its close, its high and low, and its volume">
     <Tell>A line shows where the price went. A candle shows what each span of time did: where the price opened and
       closed, how high and how low it reached, and how much was traded.</Tell>
     <Tell>This chart needs no new data and keeps none of its own. It is given the same trades as the price line, and it
