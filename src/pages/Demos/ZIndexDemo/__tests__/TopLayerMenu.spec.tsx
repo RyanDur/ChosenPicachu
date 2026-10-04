@@ -23,6 +23,14 @@ describe('why the popover wins', () => {
     expect(explanation.everyCodeBeside(part, /The button names its menu with popovertarget/).join()).toMatch(/popoverTarget=[^]*popover="auto"[^]*popoverTargetAction="hide"/);
   });
 
+  test('should name the toggle listener beside the markup that holds it', async () => {
+    render(<TestApp at={demosAt('?tab=z-index')}/>);
+
+    const part = await screen.findByRole('region', {name: 'Why the popover wins'});
+
+    expect(explanation.everyCodeBeside(part, /The menu also listens for toggle/).join()).toMatch(/onToggle=/);
+  });
+
   test('should show the site’s menu placement and its fallback beside the run that says what each way costs', async () => {
     render(<TestApp at={demosAt('?tab=z-index')}/>);
 
