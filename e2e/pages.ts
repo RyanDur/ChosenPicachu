@@ -20,7 +20,7 @@ export const pages: readonly SitePage[] = [
     name: 'tables',
     path: 'demos/?tab=tables',
     ready: 'navigation',
-    loaded: page => page.getByRole('columnheader', {name: 'trades'}),
+    loaded: page => page.getByRole('region', {name: 'live aggregations'}).getByRole('columnheader', {name: 'trades'}),
     budgeted: true
   },
   {
