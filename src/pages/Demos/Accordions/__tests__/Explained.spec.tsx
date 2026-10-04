@@ -593,6 +593,16 @@ describe('the platform build’s bars', () => {
     expect(explanation.runTelling(platform, /The bar is the same flex row/)).toHaveTextContent(/^The bar is the same flex row as the label in the checkbox build, now on summary, in the same colours\. Summary takes focus and hover itself, where the checkbox build carried focus from the hidden checkbox to the label\. The hairline border draws the line between one bar and the next\./);
   });
 
+  test('should show the known-height build’s own hover rule beside the run that lights its bar', async () => {
+    render(<TestApp at={demosAt('?tab=accordions')}/>);
+
+    const oldWay = await screen.findByRole('region', {name: parts[0]});
+    const beside = explanation.everyCodeBeside(oldWay, /A keyboard user needs to see which bar they are on/).join();
+
+    expect(beside).toMatch(/@media \(hover: hover\) \{\s*\.info-toggle:hover ~ \.info-label \{/);
+    expect(beside).not.toMatch(/&:hover/);
+  });
+
   test('should show the arrow’s one shared shape beside the run that draws it', async () => {
     render(<TestApp at={demosAt('?tab=accordions')}/>);
 

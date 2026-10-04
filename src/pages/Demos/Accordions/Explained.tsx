@@ -306,7 +306,7 @@ export const AccordionsExplained: FC<Props> = ({contents, type, onTypeChosen, mo
                   pointer can hover, so a tap on a phone does not leave the bar lit. In both, the arrow’s
                   borders take the ink colour with the words.</p>
                 <Snippet label="CSS" lines={[
-                  ...unit(accordionsCss, '@media (hover: hover) {'), gap,
+                  ...unit(accordionsCss, '@media (hover: hover) {\n      .info-toggle:hover'), gap,
                   ...unit(accordionsCss, '.info-toggle:focus-visible ~ .info-label {')
                 ]}/>
                 <FocusOnTheBar/>

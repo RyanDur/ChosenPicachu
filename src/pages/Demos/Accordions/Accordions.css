@@ -229,7 +229,6 @@
       .info-toggle:hover ~ .info-label {
         background: var(--approach);
         color: var(--ink);
-
       }
     }
 
