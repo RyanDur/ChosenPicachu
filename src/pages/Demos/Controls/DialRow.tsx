@@ -13,7 +13,7 @@ const fitsBeside = (row: Element): boolean => {
 };
 
 export const DialGroup: FC<PropsWithChildren> = ({children}) => {
-  const id = useId();
+  const id = `dials${useId()}`;
   const [stacked, setStacked] = useState(false);
 
   // the pills are watched too: their words settle when the font arrives, and the group's own width does not change then
