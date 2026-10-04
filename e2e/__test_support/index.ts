@@ -30,4 +30,4 @@ export {reachesAcross} from './reach';
 export {designSketch} from './design-sketch';
 export {pageScrollsSideways, piecesPastTheirParts} from './fit';
 export {dialGroups, dialGroupsLaidOutTwoWays, type DialGroup} from './dial-groups';
-export {heightsBetween} from './fold-motion';
+export {heightsBetween, ringPixelsLeftOf} from './fold-motion';

@@ -1,6 +1,6 @@
 import {Page, expect, test} from '@playwright/test';
 import {maybe} from '@ryandur/sand';
-import {heightsBetween} from './__test_support';
+import {heightsBetween, ringPixelsLeftOf} from './__test_support';
 
 const folds: {fold: string; at: string; story?: string; find: (page: Page) => ReturnType<Page['getByRole']>; bar: string | RegExp}[] = [
   {fold: 'a home page door', at: '', find: (page: Page) => page.getByRole('group').filter({has: page.getByText('how I organize it', {exact: true})}).first(), bar: 'how I organize it'},
@@ -38,6 +38,21 @@ test.describe('a desk', () => {
     await fold.scrollIntoViewIfNeeded();
 
     expect(await heightsBetween(fold, fold.getByText('basalt', {exact: true}))).toBe(0);
+  });
+});
+
+test.describe('a desk, at a link that starts a line in a fold', () => {
+  test.use({viewport: {width: 1440, height: 900}});
+
+  test('keeps the left side of its focus ring', async ({page, browserName}) => {
+    test.skip(browserName === 'webkit', 'WebKit’s Tab passes over links, as Safari’s does, so no ring is drawn to keep');
+    await page.goto('');
+    const door = page.getByRole('group').filter({has: page.getByText('how I organize it', {exact: true})}).first();
+    await door.getByText('how I organize it', {exact: true}).click();
+    const link = door.getByRole('link', {name: 'progress', exact: true});
+    await expect(link).toBeVisible();
+
+    expect(await ringPixelsLeftOf(page, link)).toBeGreaterThan(0);
   });
 });
 
