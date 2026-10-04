@@ -46,7 +46,7 @@
       .scrim:focus .piece,
     .scrim:hover .piece {
       transform: translateY(calc(var(--base) * -1));
-      box-shadow: 0 24px 48px var(--shadow), 0 18px 20px var(--dark-shadow);
+      box-shadow: var(--shadow-lifted-far) var(--shadow), var(--shadow-lifted-near) var(--dark-shadow);
     }
 
     .placard {

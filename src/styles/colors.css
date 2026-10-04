@@ -50,6 +50,8 @@
   0 1px 2px rgb(from var(--black) r g b / 0.24);
   --shadow-far: 0 14px 28px;
   --shadow-near: 0 10px 10px;
+  --shadow-lifted-far: 0 24px 48px;
+  --shadow-lifted-near: 0 18px 20px;
   --drop-shadow: var(--shadow-far) rgb(from var(--black) r g b / 0.25),
   var(--shadow-near) rgb(from var(--black) r g b / 0.22);
   --raised: 0 10px 14px var(--faint-shadow);
