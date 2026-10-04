@@ -41,6 +41,7 @@ describe('why the popover wins', () => {
 
     expect(explanation.everyCodeBeside(part, /Each button carries a tabIndex of 0/).join()).toMatch(/tabIndex=\{0\}/);
     expect(run).toHaveTextContent(/HTML attribute tabindex, and 0 asks the browser to stop/);
+    expect(run).toHaveTextContent(/by default Safari moves Tab only to text fields and to elements that ask for it/);
   });
 
   test('should name the toggle in the run that follows the markup that holds it', async () => {
