@@ -48,7 +48,7 @@ export const Image: FC<ImageProps> = (
         src={noImage}/> :
       (<>
         <Framed door={door} title={piece.title}>
-          <img className={classNames('image', className)}
+          <img className={classNames('image', className, picture === 'arriving' && 'arriving')}
             referrerPolicy="no-referrer"
             onError={() => pictured('missing')}
             onLoad={() => pictured('shown')}

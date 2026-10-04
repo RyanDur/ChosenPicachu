@@ -15,3 +15,9 @@
     }
   }
 }
+
+/* the browser gives a loading picture a placeholder box, and growing that box to the picture counts as a layout shift */
+.image.arriving {
+  position: absolute;
+  visibility: hidden;
+}
